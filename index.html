@@ -521,7 +521,6 @@ let state = {
 
 // ══ API — appels directs navigateur vers data.gouv.fr (CORS ouvert) ══
 function searchLocal(query, page, pageSize) {
-  // Recherche dans les données locales enrichies
   const q = query.toLowerCase().trim();
   let results = LOCAL_DATASETS;
   if (q) {
@@ -538,45 +537,17 @@ function searchLocal(query, page, pageSize) {
   return { data: results.slice(start, start + pageSize), total: results.length };
 }
 
-function detailLocal(id) {
-  return LOCAL_DATASETS.find(d => d.id === id) || null;
-}
-
-async function searchAPI(query, page, pageSize) {
-  return searchLocal(query, page, pageSize);
-}
-
-async function detailAPI(id) {
-  const local = detailLocal(id);
-  if (local) return local;
-  throw new Error('Dataset non trouvé');
-}
-
 // ══ FETCH DATASETS ══
-async function fetchDatasets() {
-  setStatus('loading', 'Recherche en cours…');
-  const grid = document.getElementById('ds-grid');
-  grid.innerHTML = '<div class="loader" style="grid-column:1/-1;"><div class="ld"></div><div class="ld"></div><div class="ld"></div><span style="margin-left:8px;">Chargement…</span></div>';
-
-  try {
-    const data = searchLocal(state.query, state.page, 15);
-
-    state.datasets   = data.data  || [];
-    state.total      = data.total || 0;
-    state.totalPages = Math.ceil(state.total / 15) || 1;
-
-    document.getElementById('cnt-ds').textContent =
-      state.total > 999 ? Math.round(state.total / 1000) + 'k+' : state.total;
-
-    let shown = applyFilters(state.datasets);
-    setStatus('ok', 'API data.gouv.fr — CONNECTÉE · ' + state.total.toLocaleString('fr-FR') + ' datasets');
-    renderCards(shown);
-    updatePag();
-    populateOrgSelect(state.datasets);
-  } catch(e) {
-    setStatus('err', 'Erreur API — ' + e.message);
-    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><div class="empty-ico">⚠️</div><p style="font-size:13px;">Impossible de contacter data.gouv.fr.<br><small>' + e.message + '</small></p></div>';
-  }
+function fetchDatasets() {
+  // Instantané — données en mémoire, 0ms de latence
+  const data = searchLocal(state.query, state.page, 15);
+  state.datasets   = data.data  || [];
+  state.total      = data.total || 0;
+  state.totalPages = Math.ceil(state.total / 15) || 1;
+  document.getElementById('cnt-ds').textContent = LOCAL_DATASETS.length;
+  setStatus('ok', state.total + ' dataset' + (state.total > 1 ? 's' : '') + ' — data.gouv.fr');
+  renderCards(applyFilters(state.datasets));
+  updatePag();
 }
 
 function applyFilters(datasets) {
@@ -609,17 +580,12 @@ function renderCards(datasets) {
 }
 
 // ══ SELECT DATASET ══
-async function selectDs(id, el) {
+function selectDs(id, el) {
+  // Instantané — lookup direct dans LOCAL_DATASETS
   document.querySelectorAll('.ds-card').forEach(c => c.classList.remove('sel'));
   el.classList.add('sel');
-  const panel = document.getElementById('detail-panel');
-  panel.innerHTML = '<div class="loader" style="min-height:200px;"><div class="ld"></div><div class="ld"></div><div class="ld"></div><span style="margin-left:8px;">Chargement…</span></div>';
-  try {
-    const ds = await detailAPI(id);
-    renderDetail(ds);
-  } catch(e) {
-    panel.innerHTML = '<div class="dp-empty"><div class="dp-empty-ico">⚠️</div><p style="font-size:13px;">Erreur: ' + e.message + '</p></div>';
-  }
+  const ds = LOCAL_DATASETS.find(d => d.id === id);
+  if (ds) renderDetail(ds);
 }
 
 function renderDetail(ds) {
@@ -749,20 +715,7 @@ function doSearch() {
   fetchDatasets();
 }
 
-function populateOrgSelect(datasets) {
-  const sel = document.getElementById('sel-org');
-  const existing = new Set(Array.from(sel.options).map(o => o.value));
-  const orgs = [...new Set(datasets.map(ds => ds.organization?.name).filter(Boolean))];
-  orgs.forEach(name => {
-    if (!existing.has(name)) {
-      const o = document.createElement('option');
-      o.value = name;
-      o.textContent = name.length > 42 ? name.substring(0,42)+'…' : name;
-      sel.appendChild(o);
-    }
-  });
-  document.getElementById('cnt-org').textContent = sel.options.length - 1;
-}
+
 
 // ══ PAGINATION ══
 function updatePag() {
