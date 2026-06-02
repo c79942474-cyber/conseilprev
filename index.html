@@ -486,6 +486,9 @@ data = connector.search(<span class="cs">"intelligence artificielle"</span>)
 </footer>
 
 <script>
+// ══ CONFIG ══
+const DATAGOUV = 'https://www.data.gouv.fr/api/1';
+
 // ══ STATE ══
 let state = {
   query: 'intelligence artificielle',
@@ -497,90 +500,80 @@ let state = {
   datasets: []
 };
 
-// ══ API — Appels via backend Flask (proxy) ══
-const DATAGOUV = 'https://www.data.gouv.fr/api/1';
+// ══ API — appels directs navigateur vers data.gouv.fr (CORS ouvert) ══
+async function searchAPI(query, page, pageSize) {
+  const params = new URLSearchParams();
+  params.append('q', query);
+  params.append('page', String(page));
+  params.append('page_size', String(pageSize));
+  params.append('sort', 'reuse_count');
+  const url = DATAGOUV + '/datasets/?' + params.toString();
+  const r = await fetch(url, { headers: { 'Accept': 'application/json' } });
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  return r.json();
+}
 
-async function apiGet(path, params = {}) {
-  // data.gouv.fr a le CORS ouvert — appel direct depuis le navigateur
-  let url, qs;
-  if (path.startsWith('/datasets') && !path.includes('/datasets/')) {
-    // Search → paramètres différents
-    qs = new URLSearchParams({
-      q: params.query || 'données',
-      page: params.page || 1,
-      page_size: params.page_size || 15,
-      sort: 'reuse_count'
-    }).toString();
-    url = `${DATAGOUV}/datasets/?${qs}`;
-  } else {
-    // Detail
-    url = `${DATAGOUV}${path}/`;
-  }
-  const r = await fetch(url, {
-    headers: { 'Accept': 'application/json', 'X-Fields': 'data,total,page,page_size' }
-  });
-  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+async function detailAPI(id) {
+  const url = DATAGOUV + '/datasets/' + id + '/';
+  const r = await fetch(url, { headers: { 'Accept': 'application/json' } });
+  if (!r.ok) throw new Error('HTTP ' + r.status);
   return r.json();
 }
 
 // ══ FETCH DATASETS ══
 async function fetchDatasets() {
-  setStatus('loading', 'Interrogation de data.gouv.fr…');
+  setStatus('loading', 'Connexion à data.gouv.fr…');
   const grid = document.getElementById('ds-grid');
-  grid.innerHTML = `<div class="loader" style="grid-column:1/-1;"><div class="ld"></div><div class="ld"></div><div class="ld"></div><span style="margin-left:8px;">Chargement…</span></div>`;
+  grid.innerHTML = '<div class="loader" style="grid-column:1/-1;"><div class="ld"></div><div class="ld"></div><div class="ld"></div><span style="margin-left:8px;">Chargement…</span></div>';
 
   try {
-    const data = await apiGet('/datasets', {
-      query: state.query,
-      page: state.page,
-      page_size: 15
-    });
+    const data = await searchAPI(state.query, state.page, 15);
 
-    state.datasets = data.data || [];
-    state.total    = data.total || 0;
+    state.datasets   = data.data  || [];
+    state.total      = data.total || 0;
     state.totalPages = Math.ceil(state.total / 15) || 1;
 
-    // Mise à jour stats
     document.getElementById('cnt-ds').textContent =
-      state.total > 999 ? Math.round(state.total/1000)+'k+' : state.total;
+      state.total > 999 ? Math.round(state.total / 1000) + 'k+' : state.total;
 
-    // Filtres côté client
-    let shown = [...state.datasets];
-    if (state.orgFilter)
-      shown = shown.filter(ds => (ds.organization?.name || '').toLowerCase().includes(state.orgFilter.toLowerCase()));
-    if (state.fmtFilter)
-      shown = shown.filter(ds =>
-        (ds.resources || []).some(r =>
-          (r.format || r.mime_type || '').toLowerCase().includes(state.fmtFilter)));
-
-    setStatus('ok', `API data.gouv.fr — CONNECTÉE · ${state.total.toLocaleString('fr-FR')} datasets`);
+    let shown = applyFilters(state.datasets);
+    setStatus('ok', 'API data.gouv.fr — CONNECTÉE · ' + state.total.toLocaleString('fr-FR') + ' datasets');
     renderCards(shown);
     updatePag();
     populateOrgSelect(state.datasets);
   } catch(e) {
-    setStatus('err', `Erreur API — ${e.message}`);
-    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><div class="empty-ico">⚠️</div><p style="font-size:13px;">Impossible de contacter le serveur.<br>Vérifiez que conseilprev.onrender.com est actif.</p></div>`;
+    setStatus('err', 'Erreur API — ' + e.message);
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><div class="empty-ico">⚠️</div><p style="font-size:13px;">Impossible de contacter data.gouv.fr.<br><small>' + e.message + '</small></p></div>';
   }
+}
+
+function applyFilters(datasets) {
+  let out = [...datasets];
+  if (state.orgFilter)
+    out = out.filter(ds => (ds.organization?.name || '').toLowerCase().includes(state.orgFilter.toLowerCase()));
+  if (state.fmtFilter)
+    out = out.filter(ds => (ds.resources || []).some(r =>
+      (r.format || r.mime_type || '').toLowerCase().includes(state.fmtFilter)));
+  return out;
 }
 
 // ══ RENDER CARDS ══
 function renderCards(datasets) {
   const grid = document.getElementById('ds-grid');
   if (!datasets.length) {
-    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><div class="empty-ico">🔍</div><p style="font-size:13px;">Aucun dataset trouvé pour cette recherche.<br>Essayez un autre terme ou filtre.</p></div>`;
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><div class="empty-ico">🔍</div><p style="font-size:13px;">Aucun dataset trouvé.<br>Essayez un autre terme.</p></div>';
     return;
   }
   grid.innerHTML = datasets.map(ds => `
-    <div class="ds-card" onclick="selectDs('${ds.id}', this)" data-id="${ds.id}">
+    <div class="ds-card" onclick="selectDs('${ds.id}', this)">
       <div class="dc-title">${ds.title || 'Sans titre'}</div>
       <div class="dc-org">${ds.organization?.name || ds.owner?.fullname || 'Organisation inconnue'}</div>
       <div class="dc-meta">
         <span class="badge br">↺ ${ds.metrics?.reuses || 0}</span>
         <span class="badge bf">📎 ${(ds.resources || []).length}</span>
-        ${ds.metrics?.views ? `<span class="badge bv">👁 ${ds.metrics.views}</span>` : ''}
+        ${ds.metrics?.views ? '<span class="badge bv">👁 ' + ds.metrics.views + '</span>' : ''}
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
 // ══ SELECT DATASET ══
@@ -588,25 +581,25 @@ async function selectDs(id, el) {
   document.querySelectorAll('.ds-card').forEach(c => c.classList.remove('sel'));
   el.classList.add('sel');
   const panel = document.getElementById('detail-panel');
-  panel.innerHTML = `<div class="loader" style="min-height:200px;"><div class="ld"></div><div class="ld"></div><div class="ld"></div><span style="margin-left:8px;">Chargement…</span></div>`;
+  panel.innerHTML = '<div class="loader" style="min-height:200px;"><div class="ld"></div><div class="ld"></div><div class="ld"></div><span style="margin-left:8px;">Chargement…</span></div>';
   try {
-    const ds = await apiGet(`/datasets/${id}`);
+    const ds = await detailAPI(id);
     renderDetail(ds);
   } catch(e) {
-    panel.innerHTML = `<div class="dp-empty"><div class="dp-empty-ico">⚠️</div><p style="font-size:13px;">Erreur de chargement</p></div>`;
+    panel.innerHTML = '<div class="dp-empty"><div class="dp-empty-ico">⚠️</div><p style="font-size:13px;">Erreur: ' + e.message + '</p></div>';
   }
 }
 
 function renderDetail(ds) {
   const panel = document.getElementById('detail-panel');
   const res = ds.resources || [];
-  const tags = (ds.tags || []).slice(0,6);
+  const tags = (ds.tags || []).slice(0, 6);
   panel.innerHTML = `
     <div class="dp-head">
       <div class="dp-title">${ds.title || 'Sans titre'}</div>
       <div class="dp-org">${ds.organization?.name || ds.owner?.fullname || ''}</div>
-      <div class="dp-desc">${(ds.description || '').replace(/[#*_>\[\]]/g,'').substring(0,180)}…</div>
-      ${tags.length ? `<div class="dp-tags">${tags.map(t=>`<span class="dtag">${t}</span>`).join('')}</div>` : ''}
+      <div class="dp-desc">${(ds.description || '').replace(/[#*_>\[\]]/g,'').substring(0,200)}…</div>
+      ${tags.length ? '<div class="dp-tags">' + tags.map(t=>'<span class="dtag">'+t+'</span>').join('') + '</div>' : ''}
     </div>
     <div class="dp-body">
       <div class="mrow">
@@ -616,16 +609,15 @@ function renderDetail(ds) {
       </div>
       <div class="rlbl">📎 Ressources</div>
       <div class="rlist">
-        ${res.length ? res.slice(0,8).map(r=>`
+        ${res.slice(0,8).map(r=>`
           <div class="ri">
             <div class="rn">${r.title||r.description||'Ressource'}</div>
             <span class="rf">${(r.format||r.mime_type||'—').toUpperCase().substring(0,6)}</span>
-            ${r.url?`<a class="rl" href="${r.url}" target="_blank">↗</a>`:''}
-          </div>`).join('')
-          : '<p style="font-size:12px;color:var(--muted);">Aucune ressource publique</p>'}
+            ${r.url?'<a class="rl" href="'+r.url+'" target="_blank">↗</a>':''}
+          </div>`).join('') || '<p style="font-size:12px;color:var(--muted);">Aucune ressource publique</p>'}
       </div>
       <div class="dp-actions">
-        ${ds.page?`<a href="${ds.page}" target="_blank" class="btn btn-p btn-sm">data.gouv.fr ↗</a>`:''}
+        ${ds.page?'<a href="'+ds.page+'" target="_blank" class="btn btn-p btn-sm">data.gouv.fr ↗</a>':''}
         <button onclick="navigator.clipboard.writeText('${ds.id}').then(()=>alert('ID copié!'))" class="btn btn-s btn-sm">Copier ID</button>
       </div>
     </div>`;
@@ -642,18 +634,12 @@ function onTheme() {
 
 function onOrg() {
   state.orgFilter = document.getElementById('sel-org').value;
-  renderCards(state.datasets.filter(ds =>
-    !state.orgFilter || (ds.organization?.name||'').toLowerCase().includes(state.orgFilter.toLowerCase())
-  ));
+  renderCards(applyFilters(state.datasets));
 }
 
 function onFmt() {
   state.fmtFilter = document.getElementById('sel-fmt').value;
-  let shown = [...state.datasets];
-  if (state.fmtFilter)
-    shown = shown.filter(ds => (ds.resources||[]).some(r =>
-      (r.format||r.mime_type||'').toLowerCase().includes(state.fmtFilter)));
-  renderCards(shown);
+  renderCards(applyFilters(state.datasets));
 }
 
 function quickTheme(btn, q) {
@@ -662,7 +648,6 @@ function quickTheme(btn, q) {
   state.query = q;
   state.page = 1;
   document.getElementById('s-input').value = q;
-  // Sync select
   const sel = document.getElementById('sel-theme');
   for (let o of sel.options) { if (o.value === q) { sel.value = q; break; } }
   fetchDatasets();
@@ -670,12 +655,15 @@ function quickTheme(btn, q) {
 
 function syncThemeNav(q) {
   document.querySelectorAll('.theme-btn').forEach(b => {
-    b.classList.toggle('active', b.getAttribute('onclick').includes(q));
+    const onclick = b.getAttribute('onclick') || '';
+    b.classList.toggle('active', onclick.includes("'" + q + "'"));
   });
 }
 
 function doSearch() {
-  state.query = document.getElementById('s-input').value.trim() || 'données';
+  const val = document.getElementById('s-input').value.trim();
+  if (!val) return;
+  state.query = val;
   state.page = 1;
   fetchDatasets();
 }
@@ -701,7 +689,7 @@ function updatePag() {
   if (state.totalPages <= 1) { pag.style.display = 'none'; return; }
   pag.style.display = 'flex';
   document.getElementById('pag-info').textContent =
-    `Page ${state.page} / ${state.totalPages} — ${state.total.toLocaleString('fr-FR')} résultats`;
+    'Page ' + state.page + ' / ' + state.totalPages + ' — ' + state.total.toLocaleString('fr-FR') + ' résultats';
   document.getElementById('btn-prev').disabled = state.page <= 1;
   document.getElementById('btn-next').disabled = state.page >= state.totalPages;
 }
@@ -717,7 +705,7 @@ function changePage(dir) {
 // ══ STATUS ══
 function setStatus(type, msg) {
   const bar = document.getElementById('status-bar');
-  bar.className = `status-bar ${type}`;
+  bar.className = 'status-bar ' + type;
   document.getElementById('status-txt').textContent = msg;
 }
 
@@ -733,8 +721,6 @@ function ctab(btn, id) {
 document.getElementById('s-input').addEventListener('keydown', e => {
   if (e.key === 'Enter') doSearch();
 });
-
-// Smooth scroll
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
     const t = document.querySelector(a.getAttribute('href'));
