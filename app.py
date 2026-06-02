@@ -92,7 +92,26 @@ def get_dataset(did):
         data = cached_get(f"{DGF}/datasets/{did}/", {})
         return jsonify(data)
     except Exception as e:
-        return jsonify({"error": str(e), "id": did}), 500
+        # Fallback : chercher dans les données de démo par ID
+        return jsonify(fallback_detail(did)), 200
+
+def fallback_detail(did):
+    """Retourne le détail d'un dataset de démo par son ID"""
+    all_demos = fallback_datasets('')['data']
+    for ds in all_demos:
+        if ds['id'] == did:
+            return ds
+    # Dataset non trouvé — retourner un placeholder générique
+    return {
+        "id": did,
+        "title": "Dataset data.gouv.fr",
+        "organization": {"name": "data.gouv.fr"},
+        "description": "Détails disponibles directement sur data.gouv.fr. Cliquez sur le bouton ci-dessous pour accéder aux informations complètes du dataset.",
+        "tags": [],
+        "metrics": {"reuses": 0, "views": 0},
+        "resources": [],
+        "page": f"https://www.data.gouv.fr/fr/datasets/{did}/"
+    }
 
 def fallback_datasets(query):
     """Données de démo si data.gouv.fr est inaccessible depuis Render"""
