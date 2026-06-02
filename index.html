@@ -3,210 +3,214 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CONSEILPREV — Connecteur MCP data.gouv.fr | IA · Data · Cyber</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>CONSEILPREV — Connecteur MCP data.gouv.fr</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --bg:#0e0720;--bg2:#160b30;--card:rgba(255,255,255,0.04);--card2:rgba(255,255,255,0.07);
-  --border:rgba(196,181,232,0.15);--pm:#7c5cbf;--pl:#a685e8;--pp:#c4b5e8;
-  --gold:#d4a843;--teal:#3cc9b0;--red:#e85c6a;--white:#f5f0ff;--muted:rgba(196,181,232,0.55);--r:12px;
+  --bg:#0e0720;--bg2:#160b30;--card:rgba(255,255,255,.04);--card2:rgba(255,255,255,.08);
+  --border:rgba(196,181,232,.15);--pm:#7c5cbf;--pl:#a685e8;--pp:#c4b5e8;
+  --teal:#3cc9b0;--gold:#d4a843;--red:#e85c6a;--white:#f5f0ff;--muted:rgba(196,181,232,.55);
 }
 html{scroll-behavior:smooth;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);overflow-x:hidden;line-height:1.6;}
-body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");opacity:.4;pointer-events:none;z-index:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);overflow-x:hidden;}
 
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;background:rgba(14,7,32,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
-.nav-logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--white);letter-spacing:.05em;}
-.nav-logo span{color:var(--pl);}
-.nav-links{display:flex;gap:28px;list-style:none;}
-.nav-links a{font-size:13px;color:var(--muted);text-decoration:none;letter-spacing:.08em;text-transform:uppercase;transition:color .2s;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 32px;display:flex;align-items:center;justify-content:space-between;background:rgba(14,7,32,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;} .logo span{color:var(--pl);}
+.nav-links{display:flex;gap:24px;list-style:none;}
+.nav-links a{font-size:12px;color:var(--muted);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;transition:color .2s;}
 .nav-links a:hover{color:var(--white);}
-.nav-cta{background:var(--pm);color:#fff;padding:8px 20px;border-radius:6px;font-size:13px;font-weight:500;text-decoration:none;transition:background .2s;}
-.nav-cta:hover{background:var(--pl);}
+.nav-cta{background:var(--pm);color:#fff;padding:8px 20px;border-radius:6px;font-size:13px;text-decoration:none;}
 
 /* HERO */
-.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;position:relative;overflow:hidden;}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:110px 24px 80px;position:relative;overflow:hidden;}
 .orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;}
-.o1{width:600px;height:600px;background:radial-gradient(circle,rgba(124,92,191,0.35),transparent 70%);top:-100px;left:-100px;}
-.o2{width:500px;height:500px;background:radial-gradient(circle,rgba(60,201,176,0.12),transparent 70%);bottom:-50px;right:-100px;}
-.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);margin-bottom:28px;position:relative;opacity:0;animation:fadeUp .7s ease .1s forwards;}
-.hero-eyebrow::before,.hero-eyebrow::after{content:'';width:32px;height:1px;background:var(--teal);}
-.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(44px,7vw,96px);font-weight:700;line-height:.95;letter-spacing:-.02em;margin-bottom:8px;position:relative;opacity:0;animation:fadeUp .8s ease .2s forwards;}
-.hero h1 .l2{color:var(--pl);font-style:italic;}
-.hero-sub{font-size:clamp(14px,1.8vw,17px);font-weight:300;color:var(--muted);max-width:600px;margin:24px auto 0;line-height:1.75;position:relative;opacity:0;animation:fadeUp .7s ease .4s forwards;}
-.hero-pills{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:32px;position:relative;opacity:0;animation:fadeUp .7s ease .55s forwards;}
-.pill{font-family:'Space Mono',monospace;font-size:10px;padding:5px 14px;border-radius:100px;border:1px solid var(--border);color:var(--pp);letter-spacing:.08em;}
-.hero-actions{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:40px;position:relative;opacity:0;animation:fadeUp .7s ease .65s forwards;}
-.btn-p{background:linear-gradient(135deg,var(--pm),var(--pl));color:#fff;padding:14px 36px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 24px rgba(124,92,191,.4);}
+.o1{width:600px;height:600px;background:radial-gradient(circle,rgba(124,92,191,.35),transparent 70%);top:-100px;left:-100px;}
+.o2{width:400px;height:400px;background:radial-gradient(circle,rgba(60,201,176,.12),transparent 70%);bottom:0;right:-80px;}
+.eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);margin-bottom:24px;display:flex;align-items:center;gap:10px;opacity:0;animation:fu .7s ease .1s forwards;}
+.eyebrow::before,.eyebrow::after{content:'';width:28px;height:1px;background:var(--teal);}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(42px,7vw,90px);font-weight:700;line-height:.95;letter-spacing:-.02em;opacity:0;animation:fu .8s ease .2s forwards;}
+.hero h1 em{font-style:italic;color:var(--pl);}
+.hero-sub{font-size:clamp(14px,1.8vw,17px);font-weight:300;color:var(--muted);max-width:580px;margin:22px auto 0;line-height:1.75;opacity:0;animation:fu .7s ease .4s forwards;}
+.pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:28px;opacity:0;animation:fu .7s ease .55s forwards;}
+.pill{font-family:'Space Mono',monospace;font-size:10px;padding:4px 12px;border-radius:100px;border:1px solid var(--border);color:var(--pp);}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:36px;opacity:0;animation:fu .7s ease .65s forwards;}
+.btn{display:inline-block;padding:13px 32px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;cursor:pointer;border:none;transition:all .22s;}
+.btn-p{background:linear-gradient(135deg,var(--pm),var(--pl));color:#fff;box-shadow:0 4px 24px rgba(124,92,191,.4);}
 .btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(124,92,191,.55);}
-.btn-s{background:transparent;border:1px solid var(--border);color:var(--white);padding:14px 36px;border-radius:8px;font-size:14px;cursor:pointer;text-decoration:none;transition:border-color .2s,background .2s;}
+.btn-s{background:transparent;border:1px solid var(--border);color:var(--white);}
 .btn-s:hover{border-color:var(--pl);background:rgba(166,133,232,.08);}
 
 /* STATS */
-.stats-bar{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:28px 24px;}
+.stats{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:24px;}
 .stats-inner{max-width:1080px;margin:0 auto;display:flex;flex-wrap:wrap;}
-.stat-item{flex:1;min-width:140px;text-align:center;padding:16px;border-right:1px solid var(--border);}
-.stat-item:last-child{border-right:none;}
-.stat-val{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:700;color:var(--pl);}
-.stat-lbl{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-top:4px;}
+.sv{flex:1;min-width:130px;text-align:center;padding:12px;border-right:1px solid var(--border);}
+.sv:last-child{border-right:none;}
+.sn{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:var(--pl);}
+.sl{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:4px;}
+
+/* SECTIONS */
+.sec{padding:80px 24px;}
+.sec-alt{background:var(--bg2);}
+.con{max-width:1080px;margin:0 auto;}
+.lbl{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.lbl::before{content:'';width:22px;height:1px;background:var(--teal);}
+.ttl{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,4vw,50px);font-weight:700;line-height:1.1;margin-bottom:16px;}
+.ttl em{font-style:italic;color:var(--pl);}
+.dsc{font-size:15px;font-weight:300;color:var(--muted);max-width:560px;line-height:1.8;}
 
 /* NORMES */
-.section{padding:88px 24px;position:relative;}
-.section-alt{background:var(--bg2);}
-.con{max-width:1080px;margin:0 auto;}
-.s-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:16px;display:flex;align-items:center;gap:12px;}
-.s-label::before{content:'';width:24px;height:1px;background:var(--teal);}
-.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,52px);font-weight:700;line-height:1.1;margin-bottom:18px;}
-.s-title em{font-style:italic;color:var(--pl);}
-.s-desc{font-size:16px;font-weight:300;color:var(--muted);max-width:580px;line-height:1.8;}
-.normes-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:52px;}
-@media(max-width:900px){.normes-grid{grid-template-columns:repeat(3,1fr);}}
-@media(max-width:500px){.normes-grid{grid-template-columns:repeat(2,1fr);}}
-.nc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px 16px;text-align:center;transition:transform .25s,border-color .25s,background .25s;}
-.nc:hover{transform:translateY(-6px);border-color:var(--pm);background:var(--card2);}
-.nc.active-n{border-color:var(--pl);background:rgba(166,133,232,.08);}
-.nc-ico{font-size:28px;margin-bottom:14px;display:block;}
-.nc-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;margin-bottom:8px;}
-.nc-desc{font-size:11px;color:var(--muted);line-height:1.6;}
+.ng{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:44px;}
+@media(max-width:900px){.ng{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:480px){.ng{grid-template-columns:repeat(2,1fr);}}
+.nc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px 14px;text-align:center;transition:transform .25s,border-color .25s;}
+.nc:hover{transform:translateY(-5px);border-color:var(--pm);}
+.nc.on{border-color:var(--pl);background:rgba(166,133,232,.08);}
+.ni{font-size:26px;margin-bottom:12px;}
+.nn{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;margin-bottom:6px;}
+.nd{font-size:11px;color:var(--muted);line-height:1.5;}
 
 /* ══ DASHBOARD ══ */
-.dash-wrap{margin-top:52px;}
-
-/* SELECTS ROW */
-.selects-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;}
-@media(max-width:760px){.selects-row{grid-template-columns:1fr;}}
-
-.select-group{display:flex;flex-direction:column;gap:6px;}
-.select-group label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--teal);}
-.custom-select{position:relative;}
-.custom-select select{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;padding:12px 40px 12px 16px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--white);outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;transition:border-color .2s;}
-.custom-select select:focus{border-color:var(--pm);}
-.custom-select select option{background:#1a0f42;color:var(--white);}
-.custom-select::after{content:'▾';position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--pl);pointer-events:none;font-size:14px;}
-.select-loading{position:absolute;right:36px;top:50%;transform:translateY(-50%);width:12px;height:12px;border:2px solid var(--border);border-top-color:var(--pl);border-radius:50%;animation:spin 1s linear infinite;display:none;}
-.select-loading.show{display:block;}
-
-/* SEARCH BAR */
-.search-row{display:flex;gap:12px;margin-bottom:24px;}
-.search-wrap{flex:1;position:relative;}
-.search-input{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;padding:12px 44px 12px 16px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--white);outline:none;transition:border-color .2s;}
-.search-input:focus{border-color:var(--pm);}
-.search-input::placeholder{color:var(--muted);}
-.search-ico{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:16px;}
-.btn-search{background:var(--pm);color:#fff;border:none;border-radius:8px;padding:12px 24px;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;transition:background .2s;}
+/* CONTROLS */
+.ctrl-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:20px;}
+.ctrl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px;}
+@media(max-width:720px){.ctrl-grid{grid-template-columns:1fr;}}
+.sel-group label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:6px;}
+.sel-wrap{position:relative;}
+select{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;padding:11px 38px 11px 14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--white);outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;transition:border-color .2s;}
+select:focus{border-color:var(--pm);}
+select option{background:#1a0f42;color:var(--white);}
+.sel-arrow{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--pl);pointer-events:none;font-size:12px;}
+.search-row{display:flex;gap:10px;}
+.s-input{flex:1;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;padding:11px 16px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--white);outline:none;transition:border-color .2s;}
+.s-input:focus{border-color:var(--pm);}
+.s-input::placeholder{color:var(--muted);}
+.btn-search{background:var(--pm);color:#fff;border:none;border-radius:8px;padding:11px 24px;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;transition:background .2s;}
 .btn-search:hover{background:var(--pl);}
 
-/* DATASET TABLE */
-.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
-.panel-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
-.panel-head h3{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px;}
-.panel-dot{width:8px;height:8px;border-radius:50%;background:var(--teal);animation:blink 2s ease-in-out infinite;display:inline-block;}
-.result-count{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);}
+/* STATUS BAR */
+.status-bar{display:flex;align-items:center;gap:8px;padding:9px 18px;border-radius:8px;font-family:'Space Mono',monospace;font-size:10px;margin-bottom:16px;}
+.status-bar.ok{background:rgba(60,201,176,.08);border:1px solid rgba(60,201,176,.2);color:var(--teal);}
+.status-bar.err{background:rgba(232,92,106,.08);border:1px solid rgba(232,92,106,.2);color:var(--red);}
+.status-bar.loading{background:rgba(166,133,232,.08);border:1px solid rgba(166,133,232,.2);color:var(--pl);}
+.sdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.ok .sdot{background:var(--teal);animation:blink 1.8s ease-in-out infinite;}
+.err .sdot{background:var(--red);}
+.loading .sdot{background:var(--pl);animation:blink .8s ease-in-out infinite;}
 
-/* GRID LAYOUT */
-.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px;}
-@media(max-width:900px){.dash-grid{grid-template-columns:1fr;}}
+/* THEMES BLOCS */
+.themes-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
+.theme-btn{font-family:'Space Mono',monospace;font-size:10px;padding:6px 14px;border-radius:100px;border:1px solid var(--border);color:var(--muted);background:none;cursor:pointer;transition:all .2s;letter-spacing:.06em;display:flex;align-items:center;gap:6px;}
+.theme-btn:hover{border-color:var(--pl);color:var(--white);}
+.theme-btn.active{background:var(--pm);border-color:var(--pm);color:#fff;}
+.theme-btn .tc{font-size:9px;background:rgba(255,255,255,.2);padding:1px 5px;border-radius:8px;}
 
-/* DATASET LIST */
-.ds-list{max-height:480px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--pm) transparent;}
-.ds-item{padding:16px 20px;border-bottom:1px solid rgba(196,181,232,.08);cursor:pointer;transition:background .2s;}
-.ds-item:hover{background:rgba(255,255,255,.04);}
-.ds-item.sel{background:rgba(124,92,191,.12);border-left:3px solid var(--pm);}
-.ds-title{font-size:13px;font-weight:500;color:var(--white);margin-bottom:5px;line-height:1.4;}
-.ds-org{font-family:'Space Mono',monospace;font-size:10px;color:var(--teal);letter-spacing:.05em;}
-.ds-meta{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;}
-.badge{font-family:'Space Mono',monospace;font-size:9px;padding:2px 8px;border-radius:4px;letter-spacing:.05em;}
-.b-r{background:rgba(60,201,176,.15);color:var(--teal);border:1px solid rgba(60,201,176,.2);}
-.b-f{background:rgba(166,133,232,.15);color:var(--pl);border:1px solid rgba(166,133,232,.2);}
-.b-v{background:rgba(212,168,67,.15);color:var(--gold);border:1px solid rgba(212,168,67,.2);}
-.b-t{background:rgba(232,92,106,.15);color:var(--red);border:1px solid rgba(232,92,106,.2);}
+/* LAYOUT GRILLE */
+.dash-layout{display:grid;grid-template-columns:1fr 420px;gap:20px;align-items:start;}
+@media(max-width:1000px){.dash-layout{grid-template-columns:1fr;}}
 
-/* DETAIL PANEL */
-.detail-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;min-height:300px;color:var(--muted);gap:12px;}
-.detail-empty-ico{font-size:40px;opacity:.3;}
-.detail-head{padding:20px 24px;border-bottom:1px solid var(--border);}
-.detail-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;margin-bottom:8px;line-height:1.3;}
-.detail-desc{font-size:13px;color:var(--muted);line-height:1.7;max-height:80px;overflow:hidden;}
-.detail-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
-.dtag{font-size:11px;padding:3px 9px;border-radius:100px;border:1px solid var(--border);color:var(--pp);}
-.detail-body{padding:20px 24px;}
-.metrics-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;}
-.metric-box{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;}
-.metric-val{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--pl);}
-.metric-lbl{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:3px;}
-.res-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:8px;}
-.res-list{display:flex;flex-direction:column;gap:6px;max-height:180px;overflow-y:auto;}
-.res-item{background:rgba(255,255,255,.03);border:1px solid rgba(196,181,232,.1);border-radius:6px;padding:10px 12px;display:flex;align-items:center;gap:10px;}
-.res-name{font-size:12px;color:var(--white);flex:1;line-height:1.3;}
-.res-fmt{font-family:'Space Mono',monospace;font-size:9px;padding:2px 6px;border-radius:3px;background:rgba(124,92,191,.2);color:var(--pl);}
-.res-link{font-size:11px;color:var(--teal);text-decoration:none;flex-shrink:0;}
-.res-link:hover{text-decoration:underline;}
-.detail-actions{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;}
-.btn-sm{font-size:12px;padding:8px 16px;border-radius:6px;}
+/* DATASET CARDS GRID */
+.ds-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+@media(max-width:700px){.ds-cards{grid-template-columns:1fr;}}
 
-/* STATUS */
-.api-status{display:flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-size:10px;padding:8px 20px;background:rgba(60,201,176,.06);border-bottom:1px solid rgba(60,201,176,.15);color:var(--teal);}
-.status-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:blink 1.5s ease-in-out infinite;display:inline-block;}
-.api-status.err{background:rgba(232,92,106,.06);border-color:rgba(232,92,106,.15);color:var(--red);}
-.api-status.err .status-dot{background:var(--red);animation:none;}
-
-/* LOADER */
-.loader{display:flex;gap:6px;align-items:center;justify-content:center;padding:40px;color:var(--muted);font-family:'Space Mono',monospace;font-size:11px;}
-.ld{width:6px;height:6px;border-radius:50%;background:var(--pm);animation:ldot .8s ease-in-out infinite;}
-.ld:nth-child(2){animation-delay:.15s;}
-.ld:nth-child(3){animation-delay:.3s;}
+.ds-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
+.ds-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--pm),var(--pl));opacity:0;transition:opacity .2s;}
+.ds-card:hover{border-color:rgba(166,133,232,.4);background:var(--card2);transform:translateY(-2px);}
+.ds-card:hover::before,.ds-card.sel::before{opacity:1;}
+.ds-card.sel{border-color:var(--pm);background:rgba(124,92,191,.1);}
+.dc-title{font-size:13px;font-weight:500;line-height:1.4;margin-bottom:8px;color:var(--white);}
+.dc-org{font-family:'Space Mono',monospace;font-size:10px;color:var(--teal);margin-bottom:8px;letter-spacing:.04em;}
+.dc-meta{display:flex;gap:6px;flex-wrap:wrap;}
+.badge{font-family:'Space Mono',monospace;font-size:9px;padding:2px 7px;border-radius:4px;}
+.br{background:rgba(60,201,176,.12);color:var(--teal);border:1px solid rgba(60,201,176,.2);}
+.bf{background:rgba(166,133,232,.12);color:var(--pl);border:1px solid rgba(166,133,232,.2);}
+.bv{background:rgba(212,168,67,.12);color:var(--gold);border:1px solid rgba(212,168,67,.2);}
 
 /* PAGINATION */
-.pagination{display:flex;align-items:center;justify-content:center;gap:8px;padding:16px;border-top:1px solid var(--border);}
-.page-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:6px;font-family:'Space Mono',monospace;font-size:11px;cursor:pointer;transition:all .2s;}
-.page-btn:hover:not(:disabled){border-color:var(--pm);color:var(--white);}
-.page-btn:disabled{opacity:.3;cursor:default;}
-.page-info{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);}
+.pag{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding:12px 0;}
+.pag-info{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);}
+.pag-btns{display:flex;gap:8px;}
+.pb{background:none;border:1px solid var(--border);color:var(--muted);padding:7px 16px;border-radius:6px;font-family:'Space Mono',monospace;font-size:11px;cursor:pointer;transition:all .2s;}
+.pb:hover:not(:disabled){border-color:var(--pm);color:var(--white);}
+.pb:disabled{opacity:.3;cursor:default;}
 
-/* API CODE */
-.code-section{margin-top:20px;}
-.code-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);}
-.code-tab{font-family:'Space Mono',monospace;font-size:11px;padding:10px 18px;background:none;border:none;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;letter-spacing:.06em;transition:all .2s;}
-.code-tab.active{color:var(--pl);border-bottom-color:var(--pl);}
-.code-content{display:none;padding:20px;}
-.code-content.active{display:block;}
-.code-block{background:#0a0520;border:1px solid var(--border);border-radius:8px;padding:16px;font-family:'Space Mono',monospace;font-size:12px;color:#c4e0b5;overflow-x:auto;line-height:1.65;}
+/* DETAIL STICKY */
+.detail-sticky{position:sticky;top:90px;}
+.detail-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.dp-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;gap:14px;color:var(--muted);}
+.dp-empty-ico{font-size:44px;opacity:.25;}
+.dp-head{padding:20px 22px;border-bottom:1px solid var(--border);}
+.dp-title{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700;line-height:1.25;margin-bottom:8px;}
+.dp-org{font-family:'Space Mono',monospace;font-size:10px;color:var(--teal);margin-bottom:10px;}
+.dp-desc{font-size:12px;color:var(--muted);line-height:1.65;max-height:72px;overflow:hidden;}
+.dp-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;}
+.dtag{font-size:11px;padding:2px 8px;border-radius:100px;border:1px solid var(--border);color:var(--pp);}
+.dp-body{padding:18px 22px;}
+.mrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;}
+.mb{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;}
+.mv{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--pl);}
+.ml{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:3px;}
+.rlbl{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:8px;}
+.rlist{display:flex;flex-direction:column;gap:5px;max-height:200px;overflow-y:auto;}
+.ri{background:rgba(255,255,255,.03);border:1px solid rgba(196,181,232,.1);border-radius:6px;padding:9px 11px;display:flex;align-items:center;gap:8px;}
+.rn{font-size:11px;color:var(--white);flex:1;line-height:1.3;}
+.rf{font-family:'Space Mono',monospace;font-size:9px;padding:2px 6px;border-radius:3px;background:rgba(124,92,191,.2);color:var(--pl);}
+.rl{font-size:11px;color:var(--teal);text-decoration:none;}
+.rl:hover{text-decoration:underline;}
+.dp-actions{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;}
+.btn-sm{font-size:12px;padding:8px 16px;border-radius:6px;}
+
+/* LOADER */
+.loader{display:flex;gap:5px;align-items:center;justify-content:center;padding:48px 20px;color:var(--muted);font-family:'Space Mono',monospace;font-size:11px;}
+.ld{width:6px;height:6px;border-radius:50%;background:var(--pm);animation:ldot .8s ease-in-out infinite;}
+.ld:nth-child(2){animation-delay:.15s;}.ld:nth-child(3){animation-delay:.3s;}
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:56px;gap:12px;color:var(--muted);}
+.empty-ico{font-size:38px;opacity:.25;}
+
+/* CODE */
+.code-panel{margin-top:20px;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.code-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+.code-head h3{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;}
+.ctabs{display:flex;gap:0;border-bottom:1px solid var(--border);}
+.ct{font-family:'Space Mono',monospace;font-size:11px;padding:10px 16px;background:none;border:none;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;letter-spacing:.06em;transition:all .2s;}
+.ct.on{color:var(--pl);border-bottom-color:var(--pl);}
+.cc{display:none;padding:16px 20px;}
+.cc.on{display:block;}
+pre.cb{background:#0a0520;border:1px solid var(--border);border-radius:8px;padding:16px;font-family:'Space Mono',monospace;font-size:11px;color:#c4e0b5;overflow-x:auto;line-height:1.65;}
 .cm{color:var(--muted);}.ck{color:var(--pl);}.cv{color:var(--teal);}.cs{color:var(--gold);}
 
 /* SERVICES */
-.services-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:52px;}
-@media(max-width:640px){.services-grid{grid-template-columns:1fr;}}
-.svc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:32px;transition:border-color .25s,transform .25s;}
-.svc:hover{border-color:var(--pm);transform:translateY(-4px);}
-.svc-ico{font-size:28px;margin-bottom:18px;display:block;}
-.svc h3{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;margin-bottom:10px;}
-.svc p{font-size:13px;color:var(--muted);line-height:1.75;}
-.svc-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px;}
-.svc-tag{font-family:'Space Mono',monospace;font-size:10px;padding:3px 10px;border-radius:100px;border:1px solid var(--border);color:var(--muted);}
+.sg{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:44px;}
+@media(max-width:640px){.sg{grid-template-columns:1fr;}}
+.sv2{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px;transition:border-color .25s,transform .25s;}
+.sv2:hover{border-color:var(--pm);transform:translateY(-4px);}
+.sv2-ico{font-size:26px;margin-bottom:16px;}
+.sv2 h3{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700;margin-bottom:8px;}
+.sv2 p{font-size:13px;color:var(--muted);line-height:1.75;}
+.stags{display:flex;flex-wrap:wrap;gap:5px;margin-top:14px;}
+.stag{font-family:'Space Mono',monospace;font-size:10px;padding:3px 9px;border-radius:100px;border:1px solid var(--border);color:var(--muted);}
 
-/* CTA & FOOTER */
-.cta-s{text-align:center;padding:100px 24px;position:relative;}
-.cta-s::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(124,92,191,.15) 0%,transparent 70%);pointer-events:none;}
-.cta-s h2{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5vw,64px);font-weight:700;margin-bottom:16px;position:relative;}
-.cta-s p{font-size:17px;color:var(--muted);max-width:500px;margin:0 auto 40px;line-height:1.75;position:relative;}
-footer{background:var(--bg2);border-top:1px solid var(--border);padding:40px 24px 24px;}
-.footer-inner{max-width:1080px;margin:0 auto;}
-.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;margin-bottom:32px;}
-@media(max-width:640px){.footer-top{grid-template-columns:1fr;}}
-.footer-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;margin-bottom:10px;}
-.footer-logo span{color:var(--pl);}
-.footer-desc{font-size:13px;color:var(--muted);line-height:1.7;}
-.fc h4{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--pp);margin-bottom:12px;}
+/* CTA / FOOTER */
+.cta{text-align:center;padding:90px 24px;position:relative;}
+.cta::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(124,92,191,.14) 0%,transparent 70%);pointer-events:none;}
+.cta h2{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,5vw,62px);font-weight:700;margin-bottom:14px;position:relative;}
+.cta p{font-size:16px;color:var(--muted);max-width:480px;margin:0 auto 36px;line-height:1.75;position:relative;}
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:36px 24px 20px;}
+.fi{max-width:1080px;margin:0 auto;}
+.ft{display:grid;grid-template-columns:2fr 1fr 1fr;gap:36px;margin-bottom:28px;}
+@media(max-width:640px){.ft{grid-template-columns:1fr;}}
+.flogo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;margin-bottom:8px;}
+.flogo span{color:var(--pl);}
+.fdesc{font-size:13px;color:var(--muted);line-height:1.65;}
+.fc h4{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--pp);margin-bottom:10px;}
 .fc ul{list-style:none;}
-.fc ul li{margin-bottom:7px;}
-.fc ul li a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s;}
-.fc ul li a:hover{color:var(--white);}
-.footer-bottom{border-top:1px solid var(--border);padding-top:20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);}
+.fc li{margin-bottom:6px;}
+.fc a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s;}
+.fc a:hover{color:var(--white);}
+.fb{border-top:1px solid var(--border);padding-top:16px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);}
 
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fu{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
 @keyframes ldot{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
 @keyframes spin{to{transform:rotate(360deg);}}
@@ -215,103 +219,99 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:40px 24p
 <body>
 
 <nav>
-  <div class="nav-logo">CONSEIL<span>PREV</span></div>
+  <div class="logo">CONSEIL<span>PREV</span></div>
   <ul class="nav-links">
     <li><a href="#normes">Normes</a></li>
-    <li><a href="#dashboard">Data.gouv</a></li>
+    <li><a href="#dashboard">Données</a></li>
     <li><a href="#services">Services</a></li>
   </ul>
-  <a href="#contact" class="nav-cta">Nous contacter</a>
+  <a href="#contact" class="nav-cta">Contact</a>
 </nav>
 
 <section class="hero">
   <div class="orb o1"></div><div class="orb o2"></div>
-  <div class="hero-eyebrow">MCP Connector · data.gouv.fr · Paris 2025</div>
-  <h1>Conformité <span class="l2">IA · Data · Cyber</span><br>pilotée par la donnée</h1>
-  <p class="hero-sub">CONSEILPREV connecte votre entreprise aux données publiques françaises via notre connecteur MCP data.gouv.fr — pour une gouvernance IA et cyber ancrée dans la réalité réglementaire.</p>
-  <div class="hero-pills">
+  <div class="eyebrow">MCP Connector · data.gouv.fr · Paris 2025</div>
+  <h1>Conformité <em>IA · Data · Cyber</em><br>pilotée par la donnée</h1>
+  <p class="hero-sub">CONSEILPREV connecte votre entreprise aux données publiques françaises — conformité IA Act, NIS2, RGPD ancrée dans la réalité réglementaire officielle.</p>
+  <div class="pills">
     <span class="pill">IA Act</span><span class="pill">NIS2</span><span class="pill">ISO 27001</span>
     <span class="pill">DORA</span><span class="pill">ISO 42001</span><span class="pill">RGPD</span>
-    <span class="pill">data.gouv.fr API</span><span class="pill">MCP Python</span>
+    <span class="pill">data.gouv.fr</span><span class="pill">MCP Python</span>
   </div>
-  <div class="hero-actions">
-    <a href="#dashboard" class="btn-p">Explorer les données →</a>
-    <a href="#services" class="btn-s">Nos services</a>
+  <div class="hero-btns">
+    <a href="#dashboard" class="btn btn-p">Explorer les données →</a>
+    <a href="#services" class="btn btn-s">Nos services</a>
   </div>
 </section>
 
-<div class="stats-bar">
+<div class="stats">
   <div class="stats-inner">
-    <div class="stat-item"><div class="stat-val">32</div><div class="stat-lbl">Années expertise</div></div>
-    <div class="stat-item"><div class="stat-val">8</div><div class="stat-lbl">Risques systémiques</div></div>
-    <div class="stat-item"><div class="stat-val">6</div><div class="stat-lbl">Normes couvertes</div></div>
-    <div class="stat-item"><div class="stat-val" id="ds-count">—</div><div class="stat-lbl">Datasets indexés</div></div>
-    <div class="stat-item"><div class="stat-val" id="org-count">—</div><div class="stat-lbl">Organisations</div></div>
+    <div class="sv"><div class="sn">32</div><div class="sl">Années expertise</div></div>
+    <div class="sv"><div class="sn">8</div><div class="sl">Risques systémiques</div></div>
+    <div class="sv"><div class="sn">6</div><div class="sl">Normes couvertes</div></div>
+    <div class="sv"><div class="sn" id="cnt-ds">—</div><div class="sl">Datasets indexés</div></div>
+    <div class="sv"><div class="sn" id="cnt-org">—</div><div class="sl">Organisations</div></div>
   </div>
 </div>
 
-<section class="section" id="normes">
+<section class="sec" id="normes">
   <div class="con">
-    <p class="s-label">Conformité réglementaire</p>
-    <h2 class="s-title">6 normes maîtrisées,<br><em>une approche intégrée</em></h2>
-    <p class="s-desc">Notre Business Unit adresse l'ensemble du périmètre réglementaire IA & Cyber européen.</p>
-    <div class="normes-grid">
-      <div class="nc active-n"><span class="nc-ico">🧠</span><div class="nc-name">IA Act</div><div class="nc-desc">Règlement européen sur l'IA — usage éthique et sécurisé</div></div>
-      <div class="nc"><span class="nc-ico">⚙️</span><div class="nc-name">ISO 42001</div><div class="nc-desc">Norme internationale pour la gestion de l'IA</div></div>
-      <div class="nc"><span class="nc-ico">🔒</span><div class="nc-name">ISO 27001</div><div class="nc-desc">Sécurité de l'information et gestion des risques</div></div>
-      <div class="nc"><span class="nc-ico">🏛️</span><div class="nc-name">DORA</div><div class="nc-desc">Résilience opérationnelle numérique — finance</div></div>
-      <div class="nc"><span class="nc-ico">🌐</span><div class="nc-name">NIS2</div><div class="nc-desc">Directive cybersécurité — entités essentielles</div></div>
-      <div class="nc"><span class="nc-ico">🔷</span><div class="nc-name">RGPD</div><div class="nc-desc">Protection des données — Privacy by Design</div></div>
+    <p class="lbl">Conformité réglementaire</p>
+    <h2 class="ttl">6 normes maîtrisées,<br><em>une approche intégrée</em></h2>
+    <p class="dsc">Notre BU adresse l'ensemble du périmètre réglementaire IA & Cyber européen.</p>
+    <div class="ng">
+      <div class="nc on"><div class="ni">🧠</div><div class="nn">IA Act</div><div class="nd">Règlement IA — usage éthique & sécurisé</div></div>
+      <div class="nc"><div class="ni">⚙️</div><div class="nn">ISO 42001</div><div class="nd">Norme gestion responsable de l'IA</div></div>
+      <div class="nc"><div class="ni">🔒</div><div class="nn">ISO 27001</div><div class="nd">Sécurité information & risques</div></div>
+      <div class="nc"><div class="ni">🏛️</div><div class="nn">DORA</div><div class="nd">Résilience numérique — finance</div></div>
+      <div class="nc"><div class="ni">🌐</div><div class="nn">NIS2</div><div class="nd">Cybersécurité — entités essentielles</div></div>
+      <div class="nc"><div class="ni">🔷</div><div class="nn">RGPD</div><div class="nd">Protection données — Privacy by Design</div></div>
     </div>
   </div>
 </section>
 
-<!-- ══ DASHBOARD ══ -->
-<section class="section section-alt" id="dashboard">
+<!-- ══ DASHBOARD DATA.GOUV.FR ══ -->
+<section class="sec sec-alt" id="dashboard">
   <div class="con">
-    <p class="s-label">Connecteur MCP · data.gouv.fr</p>
-    <h2 class="s-title">Données publiques <em>en temps réel</em></h2>
-    <p class="s-desc">Explorez les datasets officiels sur l'IA, la cybersécurité et la conformité directement depuis data.gouv.fr.</p>
+    <p class="lbl">Connecteur MCP · data.gouv.fr</p>
+    <h2 class="ttl">Données publiques <em>en temps réel</em></h2>
+    <p class="dsc">Explorez les datasets officiels via 3 filtres combinables : thématique, organisation, format.</p>
 
-    <div class="dash-wrap">
-
-      <!-- LISTES DÉROULANTES -->
-      <div class="selects-row">
-        <div class="select-group">
+    <!-- CONTROLES -->
+    <div class="ctrl-wrap" style="margin-top:40px;">
+      <div class="ctrl-grid">
+        <div class="sel-group">
           <label>🏷️ Thématique</label>
-          <div class="custom-select">
-            <select id="sel-theme" onchange="onThemeChange()">
-              <option value="">— Choisir une thématique —</option>
-              <option value="intelligence artificielle" selected>Intelligence Artificielle</option>
-              <option value="cybersécurité">Cybersécurité</option>
-              <option value="RGPD protection données">RGPD & Protection des données</option>
-              <option value="gouvernance numérique">Gouvernance numérique</option>
-              <option value="santé numérique">Santé numérique</option>
-              <option value="énergie transition">Énergie & Transition</option>
-              <option value="transport mobilité">Transport & Mobilité</option>
-              <option value="finance économie">Finance & Économie</option>
-              <option value="éducation formation">Éducation & Formation</option>
-              <option value="environnement">Environnement</option>
+          <div class="sel-wrap">
+            <select id="sel-theme" onchange="onTheme()">
+              <option value="intelligence artificielle">Intelligence Artificielle</option>
+              <option value="cybersecurite">Cybersécurité</option>
+              <option value="RGPD donnees personnelles">RGPD & Données personnelles</option>
+              <option value="sante numerique">Santé numérique</option>
+              <option value="energie transition">Énergie & Transition</option>
+              <option value="transport mobilite">Transport & Mobilité</option>
+              <option value="finance economie">Finance & Économie</option>
+              <option value="education formation">Éducation & Formation</option>
+              <option value="environnement ecologie">Environnement</option>
+              <option value="logement immobilier">Logement & Immobilier</option>
             </select>
-            <div class="select-loading" id="load-theme"></div>
+            <div class="sel-arrow">▾</div>
           </div>
         </div>
-
-        <div class="select-group">
+        <div class="sel-group">
           <label>🏢 Organisation</label>
-          <div class="custom-select">
-            <select id="sel-org" onchange="onOrgChange()">
-              <option value="">— Toutes les organisations —</option>
+          <div class="sel-wrap">
+            <select id="sel-org" onchange="onOrg()">
+              <option value="">— Toutes —</option>
             </select>
-            <div class="select-loading" id="load-org"></div>
+            <div class="sel-arrow">▾</div>
           </div>
         </div>
-
-        <div class="select-group">
-          <label>📂 Format de données</label>
-          <div class="custom-select">
-            <select id="sel-format" onchange="onFormatChange()">
-              <option value="">— Tous les formats —</option>
+        <div class="sel-group">
+          <label>📂 Format</label>
+          <div class="sel-wrap">
+            <select id="sel-fmt" onchange="onFmt()">
+              <option value="">— Tous formats —</option>
               <option value="csv">CSV</option>
               <option value="json">JSON</option>
               <option value="xlsx">Excel (XLSX)</option>
@@ -319,403 +319,401 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:40px 24p
               <option value="xml">XML</option>
               <option value="geojson">GeoJSON</option>
               <option value="shp">Shapefile</option>
-              <option value="rdf">RDF / Linked Data</option>
             </select>
+            <div class="sel-arrow">▾</div>
           </div>
         </div>
       </div>
-
-      <!-- BARRE DE RECHERCHE -->
       <div class="search-row">
-        <div class="search-wrap">
-          <input class="search-input" id="searchInput" type="text" placeholder="Rechercher un dataset (ex: intelligence artificielle, NIS2, conformité…)" value="intelligence artificielle">
-          <span class="search-ico">🔍</span>
+        <input class="s-input" id="s-input" type="text" placeholder="Recherche libre (ex: conformité, NIS2, données santé…)" value="intelligence artificielle">
+        <button class="btn-search" onclick="doSearch()">🔍 Rechercher</button>
+      </div>
+    </div>
+
+    <!-- STATUS -->
+    <div class="status-bar loading" id="status-bar">
+      <div class="sdot"></div>
+      <span id="status-txt">Connexion à data.gouv.fr…</span>
+    </div>
+
+    <!-- THEMES QUICK NAV -->
+    <div class="themes-nav" id="themes-nav">
+      <button class="theme-btn active" onclick="quickTheme(this,'intelligence artificielle')">🤖 IA</button>
+      <button class="theme-btn" onclick="quickTheme(this,'cybersecurite')">🛡️ Cyber</button>
+      <button class="theme-btn" onclick="quickTheme(this,'RGPD donnees personnelles')">🔒 RGPD</button>
+      <button class="theme-btn" onclick="quickTheme(this,'sante numerique')">🏥 Santé</button>
+      <button class="theme-btn" onclick="quickTheme(this,'energie transition')">⚡ Énergie</button>
+      <button class="theme-btn" onclick="quickTheme(this,'transport mobilite')">🚆 Transport</button>
+      <button class="theme-btn" onclick="quickTheme(this,'finance economie')">💰 Finance</button>
+      <button class="theme-btn" onclick="quickTheme(this,'environnement ecologie')">🌿 Environnement</button>
+    </div>
+
+    <!-- LAYOUT PRINCIPAL -->
+    <div class="dash-layout">
+
+      <!-- CARTES DATASETS -->
+      <div>
+        <div id="ds-grid" class="ds-cards">
+          <div class="loader" style="grid-column:1/-1;"><div class="ld"></div><div class="ld"></div><div class="ld"></div><span style="margin-left:8px;">Chargement des datasets…</span></div>
         </div>
-        <button class="btn-search btn-p btn-sm" onclick="doSearch()">Rechercher</button>
+        <div class="pag" id="pag" style="display:none;">
+          <div class="pag-info" id="pag-info">Page 1 / 1 — 0 résultats</div>
+          <div class="pag-btns">
+            <button class="pb" id="btn-prev" onclick="changePage(-1)" disabled>← Préc.</button>
+            <button class="pb" id="btn-next" onclick="changePage(1)">Suiv. →</button>
+          </div>
+        </div>
       </div>
 
-      <!-- PANEL PRINCIPAL -->
-      <div class="panel">
-        <div id="api-status-bar" class="api-status">
-          <div class="status-dot"></div>
-          <span id="api-status-txt">Connexion à data.gouv.fr…</span>
-        </div>
-        <div class="panel-head">
-          <h3><span class="panel-dot"></span> Datasets disponibles</h3>
-          <span class="result-count" id="result-count"></span>
-        </div>
-
-        <div class="dash-grid">
-          <!-- LISTE -->
-          <div>
-            <div class="ds-list" id="datasetList">
-              <div class="loader"><div class="ld"></div><div class="ld"></div><div class="ld"></div><span style="margin-left:8px;">Chargement…</span></div>
-            </div>
-            <div class="pagination" id="pagination" style="display:none;">
-              <button class="page-btn" id="btn-prev" onclick="changePage(-1)" disabled>← Préc.</button>
-              <span class="page-info" id="page-info">Page 1</span>
-              <button class="page-btn" id="btn-next" onclick="changePage(1)">Suiv. →</button>
-            </div>
-          </div>
-
-          <!-- DETAIL -->
-          <div class="panel" id="detailPanel" style="border:none;background:transparent;">
-            <div class="detail-empty">
-              <div class="detail-empty-ico">📊</div>
-              <p style="font-size:13px;text-align:center;">Sélectionnez un dataset<br>pour afficher ses détails</p>
-            </div>
+      <!-- DETAIL PANEL STICKY -->
+      <div class="detail-sticky">
+        <div class="detail-panel" id="detail-panel">
+          <div class="dp-empty">
+            <div class="dp-empty-ico">📊</div>
+            <p style="font-size:13px;text-align:center;line-height:1.6;">Cliquez sur un dataset<br>pour afficher ses détails,<br>ressources et métriques</p>
           </div>
         </div>
       </div>
 
-      <!-- CODE -->
-      <div class="code-section">
-        <div class="panel">
-          <div class="panel-head"><h3><span class="panel-dot" style="background:var(--gold);"></span> API Explorer</h3></div>
-          <div class="code-tabs">
-            <button class="code-tab active" onclick="switchTab(this,'t1')">Python SDK</button>
-            <button class="code-tab" onclick="switchTab(this,'t2')">Flask API</button>
-            <button class="code-tab" onclick="switchTab(this,'t3')">MCP Config</button>
-            <button class="code-tab" onclick="switchTab(this,'t4')">Filtres</button>
-          </div>
-          <div class="code-content active" id="t1">
-            <pre class="code-block"><span class="cm"># CONSEILPREV — Data.gouv.fr MCP Connector</span>
+    </div>
+
+    <!-- CODE API -->
+    <div class="code-panel">
+      <div class="code-head"><span style="width:8px;height:8px;border-radius:50%;background:var(--gold);display:inline-block;animation:blink 2s infinite;"></span><h3>API Explorer — Connecteur MCP Python</h3></div>
+      <div class="ctabs">
+        <button class="ct on" onclick="ctab(this,'c1')">Python SDK</button>
+        <button class="ct" onclick="ctab(this,'c2')">Flask Routes</button>
+        <button class="ct" onclick="ctab(this,'c3')">MCP Config</button>
+        <button class="ct" onclick="ctab(this,'c4')">Filtres sectoriels</button>
+      </div>
+      <div class="cc on" id="c1"><pre class="cb"><span class="cm"># CONSEILPREV — Data.gouv.fr MCP Connector</span>
 <span class="ck">import</span> requests
 
 <span class="ck">class</span> <span class="cv">DataGouvFRConnector</span>:
     <span class="ck">def</span> <span class="cv">__init__</span>(self):
-        self.base_url = <span class="cs">"https://www.data.gouv.fr/api/1"</span>
+        self.base = <span class="cs">"https://www.data.gouv.fr/api/1"</span>
+        self.session = requests.Session()
 
-    <span class="ck">def</span> <span class="cv">search_datasets</span>(self, query, page_size=<span class="cs">20</span>):
-        r = requests.get(f<span class="cs">"{self.base_url}/datasets/"</span>,
-            params={<span class="cs">"q"</span>: query, <span class="cs">"page_size"</span>: page_size})
+    <span class="ck">def</span> <span class="cv">search</span>(self, query, page=<span class="cs">1</span>, page_size=<span class="cs">15</span>):
+        r = self.session.get(f<span class="cs">"{self.base}/datasets/"</span>, params={
+            <span class="cs">"q"</span>: query, <span class="cs">"page"</span>: page,
+            <span class="cs">"page_size"</span>: page_size, <span class="cs">"sort"</span>: <span class="cs">"reuse_count"</span>
+        }, timeout=<span class="cs">15</span>)
+        <span class="ck">return</span> r.json()
+
+    <span class="ck">def</span> <span class="cv">get_detail</span>(self, dataset_id):
+        r = self.session.get(f<span class="cs">"{self.base}/datasets/{dataset_id}/"</span>)
         <span class="ck">return</span> r.json()
 
 connector = <span class="cv">DataGouvFRConnector</span>()
-data = connector.search_datasets(<span class="cs">"intelligence artificielle"</span>)
-<span class="ck">print</span>(f<span class="cs">"Total: {data['total']} datasets"</span>)</pre>
-          </div>
-          <div class="code-content" id="t2">
-            <pre class="code-block"><span class="cm"># Flask — Route principale + API proxy</span>
-<span class="ck">from</span> flask <span class="ck">import</span> Flask, send_from_directory, jsonify, request
-app = <span class="cv">Flask</span>(__name__, static_folder=<span class="cs">'.'</span>)
-
-<span class="cs">@app.route</span>(<span class="cs">'/'</span>)
-<span class="ck">def</span> <span class="cv">index</span>(): <span class="ck">return</span> send_from_directory(<span class="cs">'.'</span>, <span class="cs">'index.html'</span>)
-
+data = connector.search(<span class="cs">"intelligence artificielle"</span>)
+<span class="ck">print</span>(f<span class="cs">"✅ {data['total']} datasets trouvés"</span>)</pre></div>
+      <div class="cc" id="c2"><pre class="cb"><span class="cm"># Flask — Proxy routes vers data.gouv.fr</span>
 <span class="cs">@app.route</span>(<span class="cs">'/api/datasets'</span>)
-<span class="ck">def</span> <span class="cv">datasets</span>():
-    q = request.args.get(<span class="cs">"query"</span>, <span class="cs">"IA"</span>)
-    <span class="ck">return</span> <span class="cv">jsonify</span>(connector.search_datasets(q))</pre>
-          </div>
-          <div class="code-content" id="t3">
-            <pre class="code-block"><span class="cm"># MCP Server Config — Claude Desktop</span>
+<span class="ck">def</span> <span class="cv">get_datasets</span>():
+    query = request.args.get(<span class="cs">'query'</span>, <span class="cs">'IA'</span>)
+    page  = request.args.get(<span class="cs">'page'</span>, <span class="cs">'1'</span>)
+    r = SESSION.get(<span class="cs">"https://www.data.gouv.fr/api/1/datasets/"</span>,
+        params={<span class="cs">"q"</span>: query, <span class="cs">"page"</span>: page, <span class="cs">"page_size"</span>: <span class="cs">"15"</span>,
+                <span class="cs">"sort"</span>: <span class="cs">"reuse_count"</span>}, timeout=<span class="cs">15</span>)
+    <span class="ck">return</span> jsonify(r.json())
+
+<span class="cs">@app.route</span>(<span class="cs">'/api/datasets/&lt;id&gt;'</span>)
+<span class="ck">def</span> <span class="cv">get_detail</span>(id):
+    r = SESSION.get(f<span class="cs">"https://www.data.gouv.fr/api/1/datasets/{id}/"</span>)
+    <span class="ck">return</span> jsonify(r.json())</pre></div>
+      <div class="cc" id="c3"><pre class="cb"><span class="cm"># MCP Config — Claude Desktop / Claude Code</span>
 {
   <span class="cs">"mcpServers"</span>: {
     <span class="cs">"conseilprev-datagouv"</span>: {
-      <span class="cs">"url"</span>: <span class="cs">"https://conseilprev.onrender.com"</span>
+      <span class="cs">"url"</span>: <span class="cs">"https://conseilprev.onrender.com"</span>,
+      <span class="cs">"tools"</span>: [<span class="cs">"search_datasets"</span>, <span class="cs">"get_detail"</span>, <span class="cs">"filter_sector"</span>]
     },
     <span class="cs">"wpcom-mcp"</span>: {
       <span class="cs">"url"</span>: <span class="cs">"https://public-api.wordpress.com/wpcom/v2/mcp/v1"</span>
     }
   }
-}</pre>
-          </div>
-          <div class="code-content" id="t4">
-            <pre class="code-block"><span class="cm"># Filtres sectoriels</span>
-<span class="ck">def</span> <span class="cv">filter_by_sector</span>(datasets, sector):
-    <span class="ck">return</span> [ds <span class="ck">for</span> ds <span class="ck">in</span> datasets
-            <span class="ck">if</span> sector.lower() <span class="ck">in</span>
-            (ds.get(<span class="cs">"title"</span>,<span class="cs">""</span>) + ds.get(<span class="cs">"description"</span>,<span class="cs">""</span>)).lower()]
-
-sectors = [<span class="cs">"santé"</span>, <span class="cs">"énergie"</span>, <span class="cs">"finance"</span>, <span class="cs">"transport"</span>]
-<span class="ck">for</span> s <span class="ck">in</span> sectors:
-    filtered = filter_by_sector(data[<span class="cs">"data"</span>], s)
-    <span class="ck">print</span>(f<span class="cs">"[{s}] → {len(filtered)} datasets"</span>)</pre>
-          </div>
-        </div>
-      </div>
-
+}</pre></div>
+      <div class="cc" id="c4"><pre class="cb"><span class="cm"># Filtres sectoriels combinables</span>
+<span class="ck">def</span> <span class="cv">filter_sector</span>(datasets, sector, fmt=<span class="cv">None</span>):
+    result = []
+    <span class="ck">for</span> ds <span class="ck">in</span> datasets:
+        text = (ds.get(<span class="cs">"title"</span>,<span class="cs">""</span>) +
+                ds.get(<span class="cs">"description"</span>,<span class="cs">""</span>) +
+                <span class="cs">" "</span>.join(ds.get(<span class="cs">"tags"</span>,[])))
+        <span class="ck">if</span> sector.lower() <span class="ck">not in</span> text.lower(): <span class="ck">continue</span>
+        <span class="ck">if</span> fmt:
+            fmts = [r.get(<span class="cs">"format"</span>,<span class="cs">""</span>).lower() <span class="ck">for</span> r <span class="ck">in</span> ds.get(<span class="cs">"resources"</span>,[])]
+            <span class="ck">if not any</span>(fmt <span class="ck">in</span> f <span class="ck">for</span> f <span class="ck">in</span> fmts): <span class="ck">continue</span>
+        result.append(ds)
+    <span class="ck">return</span> result</pre></div>
     </div>
+
   </div>
 </section>
 
-<section class="section" id="services">
+<section class="sec" id="services">
   <div class="con">
-    <p class="s-label">Offre de services</p>
-    <h2 class="s-title">Conseil, Audit &<br><em>Intelligence Data</em></h2>
-    <div class="services-grid">
-      <div class="svc"><span class="svc-ico">🔍</span><h3>Audit IA & Cyber</h3><p>Évaluation complète maturité IA et cyber, cartographie des risques via les données officielles data.gouv.fr.</p><div class="svc-tags"><span class="svc-tag">IA Act</span><span class="svc-tag">ISO 42001</span><span class="svc-tag">NIS2</span></div></div>
-      <div class="svc"><span class="svc-ico">⚠️</span><h3>8 Risques Systémiques IA</h3><p>Analyse complète : juridictionnel, économique, data, opérationnel, géopolitique, cyber, supply chain, environnemental.</p><div class="svc-tags"><span class="svc-tag">Risk Matrix</span><span class="svc-tag">AIA</span><span class="svc-tag">ESG</span></div></div>
-      <div class="svc"><span class="svc-ico">📡</span><h3>Connecteur MCP data.gouv.fr</h3><p>Intégration directe des datasets officiels dans vos workflows. API REST Python, filtres sectoriels, monitoring temps réel.</p><div class="svc-tags"><span class="svc-tag">Python</span><span class="svc-tag">Flask</span><span class="svc-tag">MCP</span></div></div>
-      <div class="svc"><span class="svc-ico">🏗️</span><h3>Gouvernance & GRC</h3><p>Cadres de gouvernance IA/Cyber intégrés : politiques, comités, KPIs et reporting conformité.</p><div class="svc-tags"><span class="svc-tag">GRC</span><span class="svc-tag">DORA</span><span class="svc-tag">RGPD</span></div></div>
+    <p class="lbl">Offre de services</p>
+    <h2 class="ttl">Conseil, Audit & <em>Intelligence Data</em></h2>
+    <div class="sg">
+      <div class="sv2"><div class="sv2-ico">🔍</div><h3>Audit IA & Cyber</h3><p>Évaluation maturité IA et cyber, cartographie des risques via les données officielles data.gouv.fr.</p><div class="stags"><span class="stag">IA Act</span><span class="stag">ISO 42001</span><span class="stag">NIS2</span></div></div>
+      <div class="sv2"><div class="sv2-ico">⚠️</div><h3>8 Risques Systémiques IA</h3><p>Juridictionnel, économique, data, opérationnel, géopolitique, cyber, supply chain, environnemental.</p><div class="stags"><span class="stag">Risk Matrix</span><span class="stag">AIA</span><span class="stag">ESG</span></div></div>
+      <div class="sv2"><div class="sv2-ico">📡</div><h3>Connecteur MCP data.gouv.fr</h3><p>Intégration datasets officiels dans vos workflows. API REST Python, filtres sectoriels, temps réel.</p><div class="stags"><span class="stag">Python</span><span class="stag">Flask</span><span class="stag">MCP</span></div></div>
+      <div class="sv2"><div class="sv2-ico">🏗️</div><h3>Gouvernance & GRC</h3><p>Cadres de gouvernance IA/Cyber : politiques, comités, KPIs et reporting conformité investisseurs.</p><div class="stags"><span class="stag">GRC</span><span class="stag">DORA</span><span class="stag">RGPD</span></div></div>
     </div>
   </div>
 </section>
 
-<section class="cta-s" id="contact">
+<section class="cta" id="contact">
   <h2>Construisons l'avenir<br><em style="color:var(--pl);">ensemble</em></h2>
   <p>Investisseur, partenaire ou client ? Explorons comment CONSEILPREV peut créer de la valeur avec vous.</p>
-  <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative;">
-    <a href="mailto:contact@i-aes.com" class="btn-p">Contacter CONSEILPREV →</a>
-    <a href="#dashboard" class="btn-s">Explorer les données</a>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;">
+    <a href="mailto:contact@i-aes.com" class="btn btn-p">Contacter CONSEILPREV →</a>
+    <a href="#dashboard" class="btn btn-s">Explorer les données</a>
   </div>
 </section>
 
 <footer>
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div><div class="footer-logo">CONSEIL<span>PREV</span></div><p class="footer-desc">Business Unit IA · Data · Cyber<br>Connecteur MCP data.gouv.fr · Paris 2025</p></div>
-      <div class="fc"><h4>Services</h4><ul><li><a href="#services">Audit IA & Cyber</a></li><li><a href="#services">8 Risques Systémiques</a></li><li><a href="#services">Connecteur MCP</a></li><li><a href="#services">Gouvernance GRC</a></li></ul></div>
-      <div class="fc"><h4>Normes</h4><ul><li><a href="#normes">IA Act</a></li><li><a href="#normes">ISO 42001</a></li><li><a href="#normes">NIS2 · ISO 27001</a></li><li><a href="#normes">DORA · RGPD</a></li></ul></div>
+  <div class="fi">
+    <div class="ft">
+      <div><div class="flogo">CONSEIL<span>PREV</span></div><p class="fdesc">Business Unit IA · Data · Cyber<br>Connecteur MCP data.gouv.fr · Paris 2025</p></div>
+      <div class="fc"><h4>Services</h4><ul><li><a href="#services">Audit IA & Cyber</a></li><li><a href="#services">8 Risques Systémiques</a></li><li><a href="#services">Connecteur MCP</a></li></ul></div>
+      <div class="fc"><h4>Normes</h4><ul><li><a href="#normes">IA Act · ISO 42001</a></li><li><a href="#normes">NIS2 · ISO 27001</a></li><li><a href="#normes">DORA · RGPD</a></li></ul></div>
     </div>
-    <div class="footer-bottom">
-      <span>© 2025 CONSEILPREV · ERSIA IA MANAGEMENT · i-aes.com</span>
-      <span>MCP CONNECTOR · DATA.GOUV.FR · PARIS</span>
-    </div>
+    <div class="fb"><span>© 2025 CONSEILPREV · ERSIA IA MANAGEMENT · i-aes.com</span><span>MCP · DATA.GOUV.FR · PARIS</span></div>
   </div>
 </footer>
 
 <script>
-// ══ CONFIG ══
-// En production sur Render, les appels API passent par le backend Flask
-// En local, appel direct à data.gouv.fr
-const IS_PROD = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
-const API_BASE = IS_PROD ? '/api' : 'https://www.data.gouv.fr/api/1';
+// ══ STATE ══
+let state = {
+  query: 'intelligence artificielle',
+  page: 1,
+  totalPages: 1,
+  total: 0,
+  orgFilter: '',
+  fmtFilter: '',
+  datasets: []
+};
 
-let currentQuery = 'intelligence artificielle';
-let currentPage = 1;
-let totalPages = 1;
-let currentFormat = '';
-let allOrgs = [];
-
-// ══ API CALLS ══
-async function apiFetch(path, params = {}) {
-  let url;
-  if (IS_PROD) {
-    // Via backend Flask (proxy)
-    const qs = new URLSearchParams(params).toString();
-    url = `${API_BASE}${path}${qs ? '?' + qs : ''}`;
-  } else {
-    // Direct data.gouv.fr (local dev)
-    const qs = new URLSearchParams(params).toString();
-    url = `https://www.data.gouv.fr/api/1${path}${qs ? '?' + qs : ''}`;
-  }
-  const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.json();
+// ══ API — Appels via backend Flask (proxy) ══
+async function apiGet(path, params = {}) {
+  const qs = new URLSearchParams(params).toString();
+  const url = `/api${path}${qs ? '?' + qs : ''}`;
+  const r = await fetch(url, { headers: { 'Accept': 'application/json' } });
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return r.json();
 }
 
-// ══ SEARCH ══
-async function fetchDatasets(query, page = 1) {
-  const list = document.getElementById('datasetList');
-  list.innerHTML = `<div class="loader"><div class="ld"></div><div class="ld"></div><div class="ld"></div><span style="margin-left:8px;">Recherche en cours…</span></div>`;
-  setStatus('loading', 'Connexion à data.gouv.fr…');
+// ══ FETCH DATASETS ══
+async function fetchDatasets() {
+  setStatus('loading', 'Interrogation de data.gouv.fr…');
+  const grid = document.getElementById('ds-grid');
+  grid.innerHTML = `<div class="loader" style="grid-column:1/-1;"><div class="ld"></div><div class="ld"></div><div class="ld"></div><span style="margin-left:8px;">Chargement…</span></div>`;
 
   try {
-    let data;
-    if (IS_PROD) {
-      data = await apiFetch('/datasets', { query, page, page_size: 15 });
-    } else {
-      data = await apiFetch('/datasets/', { q: query, page, page_size: 15, sort: 'reuse_count' });
-    }
+    const data = await apiGet('/datasets', {
+      query: state.query,
+      page: state.page,
+      page_size: 15
+    });
 
-    const datasets = data.data || [];
-    const total = data.total || 0;
-    totalPages = Math.ceil(total / 15);
-    currentPage = page;
+    state.datasets = data.data || [];
+    state.total    = data.total || 0;
+    state.totalPages = Math.ceil(state.total / 15) || 1;
 
-    // Update stats
-    document.getElementById('ds-count').textContent = total > 999 ? Math.round(total/1000)+'k+' : total;
-    document.getElementById('result-count').textContent = `${total.toLocaleString('fr-FR')} résultats`;
+    // Mise à jour stats
+    document.getElementById('cnt-ds').textContent =
+      state.total > 999 ? Math.round(state.total/1000)+'k+' : state.total;
 
-    // Filter by format if selected
-    let filtered = datasets;
-    if (currentFormat) {
-      filtered = datasets.filter(ds =>
+    // Filtres côté client
+    let shown = [...state.datasets];
+    if (state.orgFilter)
+      shown = shown.filter(ds => (ds.organization?.name || '').toLowerCase().includes(state.orgFilter.toLowerCase()));
+    if (state.fmtFilter)
+      shown = shown.filter(ds =>
         (ds.resources || []).some(r =>
-          (r.format || r.mime || '').toLowerCase().includes(currentFormat)
-        )
-      );
-    }
+          (r.format || r.mime_type || '').toLowerCase().includes(state.fmtFilter)));
 
-    setStatus('ok', `API data.gouv.fr — CONNECTÉE · ${total.toLocaleString('fr-FR')} datasets`);
-    renderDatasets(filtered.length ? filtered : datasets);
-    updatePagination();
-
-    // Load orgs from results
-    loadOrgsFromDatasets(datasets);
+    setStatus('ok', `API data.gouv.fr — CONNECTÉE · ${state.total.toLocaleString('fr-FR')} datasets`);
+    renderCards(shown);
+    updatePag();
+    populateOrgSelect(state.datasets);
   } catch(e) {
     setStatus('err', `Erreur API — ${e.message}`);
-    list.innerHTML = `<div class="loader" style="color:var(--red);">⚠ Impossible de contacter data.gouv.fr</div>`;
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><div class="empty-ico">⚠️</div><p style="font-size:13px;">Impossible de contacter le serveur.<br>Vérifiez que conseilprev.onrender.com est actif.</p></div>`;
   }
 }
 
-function renderDatasets(datasets) {
-  const list = document.getElementById('datasetList');
+// ══ RENDER CARDS ══
+function renderCards(datasets) {
+  const grid = document.getElementById('ds-grid');
   if (!datasets.length) {
-    list.innerHTML = `<div class="loader" style="flex-direction:column;gap:12px;color:var(--muted);">
-      <span style="font-size:32px;opacity:.3;">🔍</span>
-      <span>Aucun dataset trouvé pour cette recherche</span>
-    </div>`;
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><div class="empty-ico">🔍</div><p style="font-size:13px;">Aucun dataset trouvé pour cette recherche.<br>Essayez un autre terme ou filtre.</p></div>`;
     return;
   }
-  list.innerHTML = datasets.map(ds => `
-    <div class="ds-item" onclick="selectDataset('${ds.id}', this)">
-      <div class="ds-title">${ds.title || 'Sans titre'}</div>
-      <div class="ds-org">${ds.organization?.name || ds.owner?.fullname || 'Organisation inconnue'}</div>
-      <div class="ds-meta">
-        <span class="badge b-r">↺ ${ds.metrics?.reuses || 0} réutilisations</span>
-        <span class="badge b-f">📎 ${(ds.resources || []).length} fichiers</span>
-        ${ds.metrics?.views ? `<span class="badge b-v">👁 ${ds.metrics.views}</span>` : ''}
-        ${ds.frequency ? `<span class="badge b-t">${ds.frequency}</span>` : ''}
+  grid.innerHTML = datasets.map(ds => `
+    <div class="ds-card" onclick="selectDs('${ds.id}', this)" data-id="${ds.id}">
+      <div class="dc-title">${ds.title || 'Sans titre'}</div>
+      <div class="dc-org">${ds.organization?.name || ds.owner?.fullname || 'Organisation inconnue'}</div>
+      <div class="dc-meta">
+        <span class="badge br">↺ ${ds.metrics?.reuses || 0}</span>
+        <span class="badge bf">📎 ${(ds.resources || []).length}</span>
+        ${ds.metrics?.views ? `<span class="badge bv">👁 ${ds.metrics.views}</span>` : ''}
       </div>
     </div>
   `).join('');
 }
 
-// ══ DETAIL ══
-async function selectDataset(id, el) {
-  document.querySelectorAll('.ds-item').forEach(i => i.classList.remove('sel'));
+// ══ SELECT DATASET ══
+async function selectDs(id, el) {
+  document.querySelectorAll('.ds-card').forEach(c => c.classList.remove('sel'));
   el.classList.add('sel');
-  const panel = document.getElementById('detailPanel');
+  const panel = document.getElementById('detail-panel');
   panel.innerHTML = `<div class="loader" style="min-height:200px;"><div class="ld"></div><div class="ld"></div><div class="ld"></div><span style="margin-left:8px;">Chargement…</span></div>`;
-
   try {
-    let ds;
-    if (IS_PROD) {
-      ds = await apiFetch(`/datasets/${id}`);
-    } else {
-      ds = await apiFetch(`/datasets/${id}/`);
-    }
+    const ds = await apiGet(`/datasets/${id}`);
     renderDetail(ds);
   } catch(e) {
-    panel.innerHTML = `<div class="detail-empty"><div class="detail-empty-ico">⚠️</div><p>Erreur de chargement</p></div>`;
+    panel.innerHTML = `<div class="dp-empty"><div class="dp-empty-ico">⚠️</div><p style="font-size:13px;">Erreur de chargement</p></div>`;
   }
 }
 
 function renderDetail(ds) {
-  const panel = document.getElementById('detailPanel');
-  const resources = ds.resources || [];
-  const tags = (ds.tags || []).slice(0, 6);
+  const panel = document.getElementById('detail-panel');
+  const res = ds.resources || [];
+  const tags = (ds.tags || []).slice(0,6);
   panel.innerHTML = `
-    <div class="detail-head">
-      <div class="detail-title">${ds.title || 'Sans titre'}</div>
-      <div class="detail-desc">${(ds.description || 'Pas de description.').replace(/[#*_]/g,'').substring(0,180)}…</div>
-      ${tags.length ? `<div class="detail-tags">${tags.map(t=>`<span class="dtag">${t}</span>`).join('')}</div>` : ''}
+    <div class="dp-head">
+      <div class="dp-title">${ds.title || 'Sans titre'}</div>
+      <div class="dp-org">${ds.organization?.name || ds.owner?.fullname || ''}</div>
+      <div class="dp-desc">${(ds.description || '').replace(/[#*_>\[\]]/g,'').substring(0,180)}…</div>
+      ${tags.length ? `<div class="dp-tags">${tags.map(t=>`<span class="dtag">${t}</span>`).join('')}</div>` : ''}
     </div>
-    <div class="detail-body">
-      <div class="metrics-row">
-        <div class="metric-box"><div class="metric-val">${ds.metrics?.reuses || 0}</div><div class="metric-lbl">Réutilisations</div></div>
-        <div class="metric-box"><div class="metric-val">${ds.metrics?.views || 0}</div><div class="metric-lbl">Vues</div></div>
-        <div class="metric-box"><div class="metric-val">${resources.length}</div><div class="metric-lbl">Ressources</div></div>
+    <div class="dp-body">
+      <div class="mrow">
+        <div class="mb"><div class="mv">${ds.metrics?.reuses||0}</div><div class="ml">Réutilisations</div></div>
+        <div class="mb"><div class="mv">${ds.metrics?.views||0}</div><div class="ml">Vues</div></div>
+        <div class="mb"><div class="mv">${res.length}</div><div class="ml">Ressources</div></div>
       </div>
-      <div class="res-label">📎 Ressources disponibles</div>
-      <div class="res-list">
-        ${resources.length ? resources.slice(0,8).map(r => `
-          <div class="res-item">
-            <div class="res-name">${r.title || r.description || 'Ressource'}</div>
-            <span class="res-fmt">${(r.format || r.mime_type || '—').toUpperCase().substring(0,8)}</span>
-            ${r.url ? `<a class="res-link" href="${r.url}" target="_blank">↗</a>` : ''}
-          </div>
-        `).join('') : '<p style="font-size:12px;color:var(--muted);padding:10px 0;">Aucune ressource publique</p>'}
+      <div class="rlbl">📎 Ressources</div>
+      <div class="rlist">
+        ${res.length ? res.slice(0,8).map(r=>`
+          <div class="ri">
+            <div class="rn">${r.title||r.description||'Ressource'}</div>
+            <span class="rf">${(r.format||r.mime_type||'—').toUpperCase().substring(0,6)}</span>
+            ${r.url?`<a class="rl" href="${r.url}" target="_blank">↗</a>`:''}
+          </div>`).join('')
+          : '<p style="font-size:12px;color:var(--muted);">Aucune ressource publique</p>'}
       </div>
-      <div class="detail-actions">
-        ${ds.page ? `<a href="${ds.page}" target="_blank" class="btn-p btn-sm">Voir sur data.gouv.fr ↗</a>` : ''}
-        <button onclick="navigator.clipboard.writeText('${ds.id}').then(()=>alert('ID copié !'))" class="btn-s btn-sm">Copier l'ID</button>
+      <div class="dp-actions">
+        ${ds.page?`<a href="${ds.page}" target="_blank" class="btn btn-p btn-sm">data.gouv.fr ↗</a>`:''}
+        <button onclick="navigator.clipboard.writeText('${ds.id}').then(()=>alert('ID copié!'))" class="btn btn-s btn-sm">Copier ID</button>
       </div>
-    </div>
-  `;
+    </div>`;
 }
 
 // ══ SELECTS ══
-function onThemeChange() {
-  const val = document.getElementById('sel-theme').value;
-  if (!val) return;
-  currentQuery = val;
-  document.getElementById('searchInput').value = val;
-  currentPage = 1;
-  fetchDatasets(val, 1);
+function onTheme() {
+  state.query = document.getElementById('sel-theme').value;
+  document.getElementById('s-input').value = state.query;
+  state.page = 1;
+  syncThemeNav(state.query);
+  fetchDatasets();
 }
 
-function onFormatChange() {
-  currentFormat = document.getElementById('sel-format').value;
-  fetchDatasets(currentQuery, currentPage);
+function onOrg() {
+  state.orgFilter = document.getElementById('sel-org').value;
+  renderCards(state.datasets.filter(ds =>
+    !state.orgFilter || (ds.organization?.name||'').toLowerCase().includes(state.orgFilter.toLowerCase())
+  ));
 }
 
-function onOrgChange() {
-  const val = document.getElementById('sel-org').value;
-  if (val) {
-    currentQuery = val;
-    document.getElementById('searchInput').value = val;
-    fetchDatasets(val, 1);
-  }
+function onFmt() {
+  state.fmtFilter = document.getElementById('sel-fmt').value;
+  let shown = [...state.datasets];
+  if (state.fmtFilter)
+    shown = shown.filter(ds => (ds.resources||[]).some(r =>
+      (r.format||r.mime_type||'').toLowerCase().includes(state.fmtFilter)));
+  renderCards(shown);
 }
 
-function loadOrgsFromDatasets(datasets) {
-  const sel = document.getElementById('sel-org');
-  const seen = new Set();
-  datasets.forEach(ds => {
-    const name = ds.organization?.name;
-    if (name && !seen.has(name)) {
-      seen.add(name);
-    }
+function quickTheme(btn, q) {
+  document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  state.query = q;
+  state.page = 1;
+  document.getElementById('s-input').value = q;
+  // Sync select
+  const sel = document.getElementById('sel-theme');
+  for (let o of sel.options) { if (o.value === q) { sel.value = q; break; } }
+  fetchDatasets();
+}
+
+function syncThemeNav(q) {
+  document.querySelectorAll('.theme-btn').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('onclick').includes(q));
   });
-  // Rebuild options keeping existing
-  const existing = Array.from(sel.options).map(o => o.value);
-  seen.forEach(name => {
-    if (!existing.includes(name)) {
-      const opt = document.createElement('option');
-      opt.value = name;
-      opt.textContent = name.length > 45 ? name.substring(0,45)+'…' : name;
-      sel.appendChild(opt);
-    }
-  });
-  document.getElementById('org-count').textContent = sel.options.length - 1;
 }
 
-// ══ SEARCH ══
 function doSearch() {
-  currentQuery = document.getElementById('searchInput').value;
-  currentPage = 1;
-  fetchDatasets(currentQuery, 1);
+  state.query = document.getElementById('s-input').value.trim() || 'données';
+  state.page = 1;
+  fetchDatasets();
+}
+
+function populateOrgSelect(datasets) {
+  const sel = document.getElementById('sel-org');
+  const existing = new Set(Array.from(sel.options).map(o => o.value));
+  const orgs = [...new Set(datasets.map(ds => ds.organization?.name).filter(Boolean))];
+  orgs.forEach(name => {
+    if (!existing.has(name)) {
+      const o = document.createElement('option');
+      o.value = name;
+      o.textContent = name.length > 42 ? name.substring(0,42)+'…' : name;
+      sel.appendChild(o);
+    }
+  });
+  document.getElementById('cnt-org').textContent = sel.options.length - 1;
 }
 
 // ══ PAGINATION ══
-function updatePagination() {
-  const pag = document.getElementById('pagination');
-  if (totalPages <= 1) { pag.style.display = 'none'; return; }
+function updatePag() {
+  const pag = document.getElementById('pag');
+  if (state.totalPages <= 1) { pag.style.display = 'none'; return; }
   pag.style.display = 'flex';
-  document.getElementById('page-info').textContent = `Page ${currentPage} / ${totalPages}`;
-  document.getElementById('btn-prev').disabled = currentPage <= 1;
-  document.getElementById('btn-next').disabled = currentPage >= totalPages;
+  document.getElementById('pag-info').textContent =
+    `Page ${state.page} / ${state.totalPages} — ${state.total.toLocaleString('fr-FR')} résultats`;
+  document.getElementById('btn-prev').disabled = state.page <= 1;
+  document.getElementById('btn-next').disabled = state.page >= state.totalPages;
 }
 
 function changePage(dir) {
-  const newPage = currentPage + dir;
-  if (newPage < 1 || newPage > totalPages) return;
-  fetchDatasets(currentQuery, newPage);
-  document.getElementById('dashboard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const np = state.page + dir;
+  if (np < 1 || np > state.totalPages) return;
+  state.page = np;
+  fetchDatasets();
+  document.getElementById('dashboard').scrollIntoView({ behavior: 'smooth' });
 }
 
 // ══ STATUS ══
 function setStatus(type, msg) {
-  const bar = document.getElementById('api-status-bar');
-  const txt = document.getElementById('api-status-txt');
-  bar.className = 'api-status' + (type === 'err' ? ' err' : '');
-  txt.textContent = msg;
+  const bar = document.getElementById('status-bar');
+  bar.className = `status-bar ${type}`;
+  document.getElementById('status-txt').textContent = msg;
 }
 
-// ══ TABS ══
-function switchTab(btn, id) {
-  document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.code-content').forEach(c => c.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById(id).classList.add('active');
+// ══ CODE TABS ══
+function ctab(btn, id) {
+  document.querySelectorAll('.ct').forEach(t => t.classList.remove('on'));
+  document.querySelectorAll('.cc').forEach(c => c.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById(id).classList.add('on');
 }
 
 // ══ KEYBOARD ══
-document.getElementById('searchInput').addEventListener('keydown', e => {
+document.getElementById('s-input').addEventListener('keydown', e => {
   if (e.key === 'Enter') doSearch();
 });
 
@@ -728,7 +726,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 });
 
 // ══ INIT ══
-fetchDatasets(currentQuery, 1);
+fetchDatasets();
 </script>
 </body>
 </html>
