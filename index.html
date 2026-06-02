@@ -662,23 +662,53 @@ function renderDetail(ds) {
 
 // ══ SELECTS ══
 function onTheme() {
-  state.query = document.getElementById('sel-theme').value;
-  document.getElementById('s-input').value = state.query;
+  const theme = document.getElementById('sel-theme').value;
+  state.query = theme;
+  state.orgFilter = '';
+  document.getElementById('s-input').value = '';
+  document.getElementById('sel-org').value = '';
   state.page = 1;
-  syncThemeNav(state.query);
+  syncThemeNav(theme);
+  updateOrgSelect(theme);  // Met à jour les orgs selon la thématique
   fetchDatasets();
 }
 
+function updateOrgSelect(theme) {
+  const sel = document.getElementById('sel-org');
+  // Filtrer les datasets par thème pour extraire les orgs correspondantes
+  const filtered = theme
+    ? LOCAL_DATASETS.filter(d => d.theme === theme || d.sector === theme)
+    : LOCAL_DATASETS;
+  const orgs = [...new Set(filtered.map(d => d.organization?.name).filter(Boolean))].sort();
+  // Reconstruire le select
+  sel.innerHTML = '<option value="">— Toutes les organisations —</option>';
+  orgs.forEach(name => {
+    const o = document.createElement('option');
+    o.value = name;
+    o.textContent = name;
+    sel.appendChild(o);
+  });
+  document.getElementById('cnt-org').textContent = orgs.length;
+}
+
 function onOrg() {
-  state.orgFilter = document.getElementById('sel-org').value;
-  // Si org sélectionnée : recherche par org
-  if (state.orgFilter) {
+  const org = document.getElementById('sel-org').value;
+  state.orgFilter = org;
+  state.page = 1;
+  if (org) {
+    // Filtrer les datasets par thème + org
+    const theme = document.getElementById('sel-theme').value;
     const filtered = LOCAL_DATASETS.filter(d =>
-      (d.organization?.name || '') === state.orgFilter);
+      (!theme || d.theme === theme) &&
+      (d.organization?.name || '') === org
+    );
     state.datasets = filtered;
+    state.total = filtered.length;
+    state.totalPages = 1;
     renderCards(filtered);
-    document.getElementById('result-count').textContent = filtered.length + ' résultats';
-    setStatus('ok', 'Filtre organisation : ' + state.orgFilter + ' — ' + filtered.length + ' datasets');
+    document.getElementById('result-count').textContent = filtered.length + ' résultat' + (filtered.length > 1 ? 's' : '');
+    setStatus('ok', org + ' — ' + filtered.length + ' dataset' + (filtered.length > 1 ? 's' : ''));
+    updatePag();
   } else {
     fetchDatasets();
   }
@@ -693,10 +723,14 @@ function quickTheme(btn, q) {
   document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   state.query = q;
+  state.orgFilter = '';
   state.page = 1;
-  document.getElementById('s-input').value = q;
+  document.getElementById('s-input').value = '';
+  document.getElementById('sel-org').value = '';
+  // Sync select thème
   const sel = document.getElementById('sel-theme');
   for (let o of sel.options) { if (o.value === q) { sel.value = q; break; } }
+  updateOrgSelect(q);  // Orgs correspondant à ce thème
   fetchDatasets();
 }
 
@@ -777,17 +811,9 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 
 // ══ INIT ══
 // Peupler le select organisation avec toutes les orgs
-(function populateOrgOnLoad() {
-  const sel = document.getElementById('sel-org');
-  ORG_LIST.forEach(name => {
-    const o = document.createElement('option');
-    o.value = name;
-    o.textContent = name.length > 42 ? name.substring(0,42)+'…' : name;
-    sel.appendChild(o);
-  });
-  document.getElementById('cnt-org').textContent = ORG_LIST.length;
-  document.getElementById('cnt-ds').textContent = LOCAL_DATASETS.length;
-})();
+// Init : charger les orgs selon thème par défaut (IA)
+updateOrgSelect('ia');
+document.getElementById('cnt-ds').textContent = LOCAL_DATASETS.length;
 
 fetchDatasets();
 </script>
