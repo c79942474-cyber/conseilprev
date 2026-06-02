@@ -54,6 +54,12 @@ def index():
 def favicon():
     return '', 204
 
+@app.route('/datasets.json')
+def serve_datasets():
+    return send_from_directory('.', 'datasets.json',
+        mimetype='application/json',
+        max_age=3600)  # Cache 1h
+
 @app.route('/api/health')
 def health():
     try:
