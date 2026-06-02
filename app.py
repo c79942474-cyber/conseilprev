@@ -1,15 +1,26 @@
 #!/usr/bin/env python3
 """
 CONSEILPREV — Data.gouv.fr MCP Connector
-API Flask + connecteur data.gouv.fr + filtres sectoriels
+API Flask + connecteur data.gouv.fr + site statique
 """
 
+import os
 import requests
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='.', static_url_path='')
 CORS(app)
+
+# ══ ROUTE PRINCIPALE — sert index.html ══
+
+@app.route('/')
+def index():
+    return send_from_directory('.', 'index.html')
+
+@app.route('/favicon.ico')
+def favicon():
+    return '', 204
 
 # ══ CONNECTEUR DATA.GOUV.FR ══
 
@@ -64,17 +75,21 @@ class DataGouvFRConnector:
         except requests.RequestException as e:
             return {"error": str(e)}
 
-    def get_reuses(self, dataset_id):
-        url = f"{self.base_url}/datasets/{dataset_id}/reuses/"
-        try:
-            response = self.session.get(url, timeout=10)
-            response.raise_for_status()
-            return response.json()
-        except requests.RequestException as e:
-            return {"error": str(e)}
+    def get_ia_compliance_datasets(self):
+        queries = ["intelligence artificielle", "cybersécurité", "conformité RGPD", "données publiques"]
+        all_datasets = []
+        for q in queries:
+            result = self.search_datasets(q, page_size=5)
+            all_datasets.extend(result.get("data", []))
+        seen = set()
+        unique = []
+        for ds in all_datasets:
+            if ds.get("id") not in seen:
+                seen.add(ds.get("id"))
+                unique.append(ds)
+        return unique
 
     def filter_datasets_by_sector(self, datasets, sector):
-        """Filtre les datasets par secteur (titre, description, tags)"""
         results = []
         for ds in datasets:
             title = ds.get("title", "").lower()
@@ -84,25 +99,8 @@ class DataGouvFRConnector:
                 results.append(ds)
         return results
 
-    def get_ia_compliance_datasets(self):
-        """Datasets spécifiques IA, cybersécurité, conformité"""
-        queries = ["intelligence artificielle", "cybersécurité", "conformité RGPD", "données publiques"]
-        all_datasets = []
-        for q in queries:
-            result = self.search_datasets(q, page_size=5)
-            all_datasets.extend(result.get("data", []))
-        # Dédupliquer par ID
-        seen = set()
-        unique = []
-        for ds in all_datasets:
-            if ds.get("id") not in seen:
-                seen.add(ds.get("id"))
-                unique.append(ds)
-        return unique
-
 
 connector = DataGouvFRConnector()
-
 
 # ══ ROUTES API ══
 
@@ -153,6 +151,6 @@ def filter_datasets():
 
 
 if __name__ == "__main__":
-    print("🚀 CONSEILPREV MCP Connector — data.gouv.fr")
-    print("📡 API: http://localhost:5000")
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    print(f"🚀 CONSEILPREV MCP Connector — http://0.0.0.0:{port}")
+    app.run(debug=False, host="0.0.0.0", port=port)
