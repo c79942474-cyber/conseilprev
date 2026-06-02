@@ -502,19 +502,20 @@ let state = {
 
 // ══ API — appels directs navigateur vers data.gouv.fr (CORS ouvert) ══
 async function searchAPI(query, page, pageSize) {
-  const params = new URLSearchParams();
-  params.append('q', query);
-  params.append('page', String(page));
-  params.append('page_size', String(pageSize));
-  params.append('sort', 'reuse_count');
-  const url = DATAGOUV + '/datasets/?' + params.toString();
+  // Proxy Flask sur Render — évite le blocage IP de data.gouv.fr
+  const params = new URLSearchParams({
+    query: query,
+    page: String(page),
+    page_size: String(pageSize)
+  });
+  const url = '/api/datasets?' + params.toString();
   const r = await fetch(url, { headers: { 'Accept': 'application/json' } });
   if (!r.ok) throw new Error('HTTP ' + r.status);
   return r.json();
 }
 
 async function detailAPI(id) {
-  const url = DATAGOUV + '/datasets/' + id + '/';
+  const url = '/api/datasets/' + id;
   const r = await fetch(url, { headers: { 'Accept': 'application/json' } });
   if (!r.ok) throw new Error('HTTP ' + r.status);
   return r.json();
