@@ -498,10 +498,27 @@ let state = {
 };
 
 // ══ API — Appels via backend Flask (proxy) ══
+const DATAGOUV = 'https://www.data.gouv.fr/api/1';
+
 async function apiGet(path, params = {}) {
-  const qs = new URLSearchParams(params).toString();
-  const url = `/api${path}${qs ? '?' + qs : ''}`;
-  const r = await fetch(url, { headers: { 'Accept': 'application/json' } });
+  // data.gouv.fr a le CORS ouvert — appel direct depuis le navigateur
+  let url, qs;
+  if (path.startsWith('/datasets') && !path.includes('/datasets/')) {
+    // Search → paramètres différents
+    qs = new URLSearchParams({
+      q: params.query || 'données',
+      page: params.page || 1,
+      page_size: params.page_size || 15,
+      sort: 'reuse_count'
+    }).toString();
+    url = `${DATAGOUV}/datasets/?${qs}`;
+  } else {
+    // Detail
+    url = `${DATAGOUV}${path}/`;
+  }
+  const r = await fetch(url, {
+    headers: { 'Accept': 'application/json', 'X-Fields': 'data,total,page,page_size' }
+  });
   if (!r.ok) throw new Error(`HTTP ${r.status}`);
   return r.json();
 }
