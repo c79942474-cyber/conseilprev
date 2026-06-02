@@ -300,6 +300,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:36px 24p
               <option value="tourisme">✈️ Tourisme & Loisirs</option>
               <option value="rh">👥 RH & Emploi</option>
               <option value="justice">⚖️ Justice & Juridique</option>
+              <option value="collectivites">🏛️ Collectivités & Territoires</option>
             </select>
             <div class="sel-arrow">▾</div>
           </div>
@@ -358,6 +359,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:36px 24p
       <button class="theme-btn" onclick="quickTheme(this,'agriculture')">🌾 Agriculture</button>
       <button class="theme-btn" onclick="quickTheme(this,'rh')">👥 RH & Emploi</button>
       <button class="theme-btn" onclick="quickTheme(this,'justice')">⚖️ Justice</button>
+      <button class="theme-btn" onclick="quickTheme(this,'collectivites')">🏛️ Collectivités</button>
     </div>
 
     <!-- LAYOUT PRINCIPAL -->
@@ -542,7 +544,7 @@ function fetchDatasets() {
   state.total      = data.total || 0;
   state.totalPages = Math.ceil(state.total / 15) || 1;
   document.getElementById('cnt-ds').textContent = LOCAL_DATASETS.length;
-  setStatus('ok', state.total + ' dataset' + (state.total > 1 ? 's' : '') + ' — data.gouv.fr');
+  setStatus('ok', state.total + ' dataset' + (state.total > 1 ? 's' : '') + ' disponible' + (state.total > 1 ? 's' : ''));
   renderCards(applyFilters(state.datasets));
   updatePag();
 }
