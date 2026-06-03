@@ -3,217 +3,185 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CONSEILPREV — Connecteur MCP data.gouv.fr</title>
+<title>CONSEILPREV — Connecteur MCP data.gouv.fr | IA · Data · Cyber</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-:root{
-  --bg:#0e0720;--bg2:#160b30;--card:rgba(255,255,255,.04);--card2:rgba(255,255,255,.08);
-  --border:rgba(196,181,232,.15);--pm:#7c5cbf;--pl:#a685e8;--pp:#c4b5e8;
-  --teal:#3cc9b0;--gold:#d4a843;--red:#e85c6a;--white:#f5f0ff;--muted:rgba(196,181,232,.55);
-}
-html{scroll-behavior:smooth;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);overflow-x:hidden;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0e0720;--bg2:#160b30;--card:rgba(255,255,255,.05);--border:rgba(196,181,232,.15);--pm:#7c5cbf;--pl:#a685e8;--pp:#c4b5e8;--teal:#3cc9b0;--gold:#d4a843;--white:#f5f0ff;--muted:rgba(196,181,232,.55)}
+html{scroll-behavior:smooth}
+body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--white);overflow-x:hidden;line-height:1.6}
 
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 32px;display:flex;align-items:center;justify-content:space-between;background:rgba(14,7,32,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
-.logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;} .logo span{color:var(--pl);}
-.nav-links{display:flex;gap:24px;list-style:none;}
-.nav-links a{font-size:12px;color:var(--muted);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;transition:color .2s;}
-.nav-links a:hover{color:var(--white);}
-.nav-cta{background:var(--pm);color:#fff;padding:8px 20px;border-radius:6px;font-size:13px;text-decoration:none;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 32px;display:flex;align-items:center;justify-content:space-between;background:rgba(14,7,32,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{font-family:"Cormorant Garamond",serif;font-size:20px;font-weight:700}
+.logo span{color:var(--pl)}
+.nav-links{display:flex;gap:24px;list-style:none}
+.nav-links a{font-size:12px;color:var(--muted);text-decoration:none;letter-spacing:.1em;text-transform:uppercase}
+.nav-links a:hover{color:var(--white)}
+.nav-cta{background:var(--pm);color:#fff;padding:8px 20px;border-radius:6px;font-size:13px;text-decoration:none}
+@media(max-width:640px){.nav-links{display:none}}
 
 /* HERO */
-.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:110px 24px 80px;position:relative;overflow:hidden;}
-.orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;}
-.o1{width:600px;height:600px;background:radial-gradient(circle,rgba(124,92,191,.35),transparent 70%);top:-100px;left:-100px;}
-.o2{width:400px;height:400px;background:radial-gradient(circle,rgba(60,201,176,.12),transparent 70%);bottom:0;right:-80px;}
-.eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);margin-bottom:24px;display:flex;align-items:center;gap:10px;opacity:0;animation:fu .7s ease .1s forwards;}
-.eyebrow::before,.eyebrow::after{content:'';width:28px;height:1px;background:var(--teal);}
-.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(42px,7vw,90px);font-weight:700;line-height:.95;letter-spacing:-.02em;opacity:0;animation:fu .8s ease .2s forwards;}
-.hero h1 em{font-style:italic;color:var(--pl);}
-.hero-sub{font-size:clamp(14px,1.8vw,17px);font-weight:300;color:var(--muted);max-width:580px;margin:22px auto 0;line-height:1.75;opacity:0;animation:fu .7s ease .4s forwards;}
-.pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:28px;opacity:0;animation:fu .7s ease .55s forwards;}
-.pill{font-family:'Space Mono',monospace;font-size:10px;padding:4px 12px;border-radius:100px;border:1px solid var(--border);color:var(--pp);}
-.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:36px;opacity:0;animation:fu .7s ease .65s forwards;}
-.btn{display:inline-block;padding:13px 32px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;cursor:pointer;border:none;transition:all .22s;}
-.btn-p{background:linear-gradient(135deg,var(--pm),var(--pl));color:#fff;box-shadow:0 4px 24px rgba(124,92,191,.4);}
-.btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(124,92,191,.55);}
-.btn-s{background:transparent;border:1px solid var(--border);color:var(--white);}
-.btn-s:hover{border-color:var(--pl);background:rgba(166,133,232,.08);}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:110px 24px 80px;position:relative;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none}
+.o1{width:600px;height:600px;background:radial-gradient(circle,rgba(124,92,191,.35),transparent 70%);top:-100px;left:-100px}
+.o2{width:400px;height:400px;background:radial-gradient(circle,rgba(60,201,176,.12),transparent 70%);bottom:0;right:-80px}
+.eyebrow{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);margin-bottom:24px;display:flex;align-items:center;gap:10px}
+.eyebrow::before,.eyebrow::after{content:"";width:28px;height:1px;background:var(--teal)}
+h1{font-family:"Cormorant Garamond",serif;font-size:clamp(38px,7vw,86px);font-weight:700;line-height:.95;letter-spacing:-.02em}
+h1 em{font-style:italic;color:var(--pl)}
+.hero-sub{font-size:clamp(14px,1.8vw,17px);font-weight:300;color:var(--muted);max-width:580px;margin:22px auto 0;line-height:1.75}
+.pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:28px}
+.pill{font-family:"Space Mono",monospace;font-size:10px;padding:4px 12px;border-radius:100px;border:1px solid var(--border);color:var(--pp)}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:36px}
+.btn{display:inline-block;padding:12px 30px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;cursor:pointer;border:none;transition:all .2s}
+.btn-p{background:linear-gradient(135deg,var(--pm),var(--pl));color:#fff;box-shadow:0 4px 24px rgba(124,92,191,.4)}
+.btn-p:hover{transform:translateY(-2px)}
+.btn-s{background:transparent;border:1px solid var(--border);color:var(--white)}
+.btn-s:hover{border-color:var(--pl)}
 
 /* STATS */
-.stats{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:24px;}
-.stats-inner{max-width:1080px;margin:0 auto;display:flex;flex-wrap:wrap;}
-.sv{flex:1;min-width:130px;text-align:center;padding:12px;border-right:1px solid var(--border);}
-.sv:last-child{border-right:none;}
-.sn{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:var(--pl);}
-.sl{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:4px;}
-
-/* SECTIONS */
-.sec{padding:80px 24px;}
-.sec-alt{background:var(--bg2);}
-.con{max-width:1080px;margin:0 auto;}
-.lbl{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
-.lbl::before{content:'';width:22px;height:1px;background:var(--teal);}
-.ttl{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,4vw,50px);font-weight:700;line-height:1.1;margin-bottom:16px;}
-.ttl em{font-style:italic;color:var(--pl);}
-.dsc{font-size:15px;font-weight:300;color:var(--muted);max-width:560px;line-height:1.8;}
+.stats-bar{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:20px}
+.stats-inner{max-width:1080px;margin:0 auto;display:flex;flex-wrap:wrap}
+.sv{flex:1;min-width:120px;text-align:center;padding:12px;border-right:1px solid var(--border)}
+.sv:last-child{border-right:none}
+.sn{font-family:"Cormorant Garamond",serif;font-size:34px;font-weight:700;color:var(--pl)}
+.sl{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:4px}
 
 /* NORMES */
-.ng{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:44px;}
-@media(max-width:900px){.ng{grid-template-columns:repeat(3,1fr);}}
-@media(max-width:480px){.ng{grid-template-columns:repeat(2,1fr);}}
-.nc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px 14px;text-align:center;transition:transform .25s,border-color .25s;}
-.nc:hover{transform:translateY(-5px);border-color:var(--pm);}
-.nc.on{border-color:var(--pl);background:rgba(166,133,232,.08);}
-.ni{font-size:26px;margin-bottom:12px;}
-.nn{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;margin-bottom:6px;}
-.nd{font-size:11px;color:var(--muted);line-height:1.5;}
+.sec{padding:72px 24px}
+.sec-alt{background:var(--bg2)}
+.con{max-width:1080px;margin:0 auto}
+.lbl{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.lbl::before{content:"";width:22px;height:1px;background:var(--teal)}
+.ttl{font-family:"Cormorant Garamond",serif;font-size:clamp(24px,3.5vw,48px);font-weight:700;line-height:1.1;margin-bottom:14px}
+.ttl em{font-style:italic;color:var(--pl)}
+.dsc{font-size:15px;font-weight:300;color:var(--muted);max-width:560px;line-height:1.8}
+.ng{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:40px}
+@media(max-width:900px){.ng{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:480px){.ng{grid-template-columns:repeat(2,1fr)}}
+.nc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 14px;text-align:center;transition:transform .2s,border-color .2s}
+.nc:hover{transform:translateY(-5px);border-color:var(--pm)}
+.nc.on{border-color:var(--pl);background:rgba(166,133,232,.08)}
+.ni{font-size:24px;margin-bottom:10px}
+.nn{font-family:"Cormorant Garamond",serif;font-size:16px;font-weight:700;margin-bottom:5px}
+.nd{font-size:11px;color:var(--muted);line-height:1.5}
 
-/* ══ DASHBOARD ══ */
-/* CONTROLS */
-.ctrl-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:20px;}
-.ctrl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px;}
-@media(max-width:720px){.ctrl-grid{grid-template-columns:1fr;}}
-.sel-group label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:6px;}
-.sel-wrap{position:relative;}
-select{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;padding:11px 38px 11px 14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--white);outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;transition:border-color .2s;}
-select:focus{border-color:var(--pm);}
-select option{background:#1a0f42;color:var(--white);}
-.sel-arrow{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--pl);pointer-events:none;font-size:12px;}
-.search-row{display:flex;gap:10px;}
-.s-input{flex:1;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;padding:11px 16px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--white);outline:none;transition:border-color .2s;}
-.s-input:focus{border-color:var(--pm);}
-.s-input::placeholder{color:var(--muted);}
-.btn-search{background:var(--pm);color:#fff;border:none;border-radius:8px;padding:11px 24px;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;transition:background .2s;}
-.btn-search:hover{background:var(--pl);}
+/* DASHBOARD */
+.ctrl{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
+.ctrl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px}
+@media(max-width:700px){.ctrl-grid{grid-template-columns:1fr}}
+.sg label{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:5px}
+.sw{position:relative}
+select{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;padding:10px 36px 10px 14px;font-family:"DM Sans",sans-serif;font-size:13px;color:var(--white);outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;transition:border-color .2s}
+select:focus{border-color:var(--pm)}
+select option{background:#1a0f42;color:var(--white)}
+.sa{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--pl);pointer-events:none;font-size:12px}
+.search-row{display:flex;gap:10px}
+.si{flex:1;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-family:"DM Sans",sans-serif;font-size:14px;color:var(--white);outline:none;transition:border-color .2s}
+.si:focus{border-color:var(--pm)}
+.si::placeholder{color:var(--muted)}
+.btn-find{background:var(--pm);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap}
+.btn-find:hover{background:var(--pl)}
 
-/* STATUS BAR */
-.status-bar{display:flex;align-items:center;gap:8px;padding:9px 18px;border-radius:8px;font-family:'Space Mono',monospace;font-size:10px;margin-bottom:16px;}
-.status-bar.ok{background:rgba(60,201,176,.08);border:1px solid rgba(60,201,176,.2);color:var(--teal);}
-.status-bar.err{background:rgba(232,92,106,.08);border:1px solid rgba(232,92,106,.2);color:var(--red);}
-.status-bar.loading{background:rgba(166,133,232,.08);border:1px solid rgba(166,133,232,.2);color:var(--pl);}
-.sdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-.ok .sdot{background:var(--teal);animation:blink 1.8s ease-in-out infinite;}
-.err .sdot{background:var(--red);}
-.loading .sdot{background:var(--pl);animation:blink .8s ease-in-out infinite;}
+/* STATUS */
+.sbar{display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:8px;font-family:"Space Mono",monospace;font-size:10px;margin-bottom:14px}
+.sbar.ok{background:rgba(60,201,176,.08);border:1px solid rgba(60,201,232,.2);color:var(--teal)}
+.sbar.loading{background:rgba(166,133,232,.08);border:1px solid rgba(166,133,232,.2);color:var(--pl)}
+.sdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;animation:blink 1.5s ease-in-out infinite}
+.ok .sdot{background:var(--teal)}
+.loading .sdot{background:var(--pl)}
 
-/* THEMES BLOCS */
-.themes-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
-.theme-btn{font-family:'Space Mono',monospace;font-size:10px;padding:6px 14px;border-radius:100px;border:1px solid var(--border);color:var(--muted);background:none;cursor:pointer;transition:all .2s;letter-spacing:.06em;display:flex;align-items:center;gap:6px;}
-.theme-btn:hover{border-color:var(--pl);color:var(--white);}
-.theme-btn.active{background:var(--pm);border-color:var(--pm);color:#fff;}
-.theme-btn .tc{font-size:9px;background:rgba(255,255,255,.2);padding:1px 5px;border-radius:8px;}
+/* THEMES NAV */
+.tnav{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+.tb{font-family:"Space Mono",monospace;font-size:10px;padding:5px 12px;border-radius:100px;border:1px solid var(--border);color:var(--muted);background:none;cursor:pointer;transition:all .2s;letter-spacing:.05em}
+.tb:hover{border-color:var(--pl);color:var(--white)}
+.tb.on{background:var(--pm);border-color:var(--pm);color:#fff}
 
-/* LAYOUT GRILLE */
-.dash-layout{display:grid;grid-template-columns:1fr 420px;gap:20px;align-items:start;}
-@media(max-width:1000px){.dash-layout{grid-template-columns:1fr;}}
+/* LAYOUT */
+.dash{display:grid;grid-template-columns:1fr 400px;gap:18px;align-items:start}
+@media(max-width:1000px){.dash{grid-template-columns:1fr}}
 
-/* DATASET CARDS GRID */
-.ds-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
-@media(max-width:700px){.ds-cards{grid-template-columns:1fr;}}
-
-.ds-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
-.ds-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--pm),var(--pl));opacity:0;transition:opacity .2s;}
-.ds-card:hover{border-color:rgba(166,133,232,.4);background:var(--card2);transform:translateY(-2px);}
-.ds-card:hover::before,.ds-card.sel::before{opacity:1;}
-.ds-card.sel{border-color:var(--pm);background:rgba(124,92,191,.1);}
-.dc-title{font-size:13px;font-weight:500;line-height:1.4;margin-bottom:8px;color:var(--white);}
-.dc-org{font-family:'Space Mono',monospace;font-size:10px;color:var(--teal);margin-bottom:8px;letter-spacing:.04em;}
-.dc-meta{display:flex;gap:6px;flex-wrap:wrap;}
-.badge{font-family:'Space Mono',monospace;font-size:9px;padding:2px 7px;border-radius:4px;}
-.br{background:rgba(60,201,176,.12);color:var(--teal);border:1px solid rgba(60,201,176,.2);}
-.bf{background:rgba(166,133,232,.12);color:var(--pl);border:1px solid rgba(166,133,232,.2);}
-.bv{background:rgba(212,168,67,.12);color:var(--gold);border:1px solid rgba(212,168,67,.2);}
+/* CARDS */
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(max-width:640px){.cards{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--pm),var(--pl));opacity:0;transition:opacity .2s}
+.card:hover{border-color:rgba(166,133,232,.4);background:rgba(255,255,255,.07);transform:translateY(-2px)}
+.card:hover::before,.card.on::before{opacity:1}
+.card.on{border-color:var(--pm);background:rgba(124,92,191,.1)}
+.ct{font-size:13px;font-weight:500;line-height:1.4;margin-bottom:6px}
+.co{font-family:"Space Mono",monospace;font-size:10px;color:var(--teal);margin-bottom:7px}
+.cm{display:flex;gap:6px;flex-wrap:wrap}
+.badge{font-family:"Space Mono",monospace;font-size:9px;padding:2px 7px;border-radius:4px}
+.br{background:rgba(60,201,176,.12);color:var(--teal);border:1px solid rgba(60,201,176,.2)}
+.bf{background:rgba(166,133,232,.12);color:var(--pl);border:1px solid rgba(166,133,232,.2)}
+.bv{background:rgba(212,168,67,.12);color:var(--gold);border:1px solid rgba(212,168,67,.2)}
 
 /* PAGINATION */
-.pag{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding:12px 0;}
-.pag-info{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);}
-.pag-btns{display:flex;gap:8px;}
-.pb{background:none;border:1px solid var(--border);color:var(--muted);padding:7px 16px;border-radius:6px;font-family:'Space Mono',monospace;font-size:11px;cursor:pointer;transition:all .2s;}
-.pb:hover:not(:disabled){border-color:var(--pm);color:var(--white);}
-.pb:disabled{opacity:.3;cursor:default;}
+.pag{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding:10px 0}
+.pi{font-family:"Space Mono",monospace;font-size:11px;color:var(--muted)}
+.pbtns{display:flex;gap:7px}
+.pb{background:none;border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:6px;font-family:"Space Mono",monospace;font-size:11px;cursor:pointer;transition:all .2s}
+.pb:hover:not(:disabled){border-color:var(--pm);color:var(--white)}
+.pb:disabled{opacity:.3;cursor:default}
 
-/* DETAIL STICKY */
-.detail-sticky{position:sticky;top:90px;}
-.detail-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
-.dp-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;gap:14px;color:var(--muted);}
-.dp-empty-ico{font-size:44px;opacity:.25;}
-.dp-head{padding:20px 22px;border-bottom:1px solid var(--border);}
-.dp-title{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700;line-height:1.25;margin-bottom:8px;}
-.dp-org{font-family:'Space Mono',monospace;font-size:10px;color:var(--teal);margin-bottom:10px;}
-.dp-desc{font-size:12px;color:var(--muted);line-height:1.65;max-height:72px;overflow:hidden;}
-.dp-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;}
-.dtag{font-size:11px;padding:2px 8px;border-radius:100px;border:1px solid var(--border);color:var(--pp);}
-.dp-body{padding:18px 22px;}
-.mrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;}
-.mb{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;}
-.mv{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--pl);}
-.ml{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:3px;}
-.rlbl{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:8px;}
-.rlist{display:flex;flex-direction:column;gap:5px;max-height:200px;overflow-y:auto;}
-.ri{background:rgba(255,255,255,.03);border:1px solid rgba(196,181,232,.1);border-radius:6px;padding:9px 11px;display:flex;align-items:center;gap:8px;}
-.rn{font-size:11px;color:var(--white);flex:1;line-height:1.3;}
-.rf{font-family:'Space Mono',monospace;font-size:9px;padding:2px 6px;border-radius:3px;background:rgba(124,92,191,.2);color:var(--pl);}
-.rl{font-size:11px;color:var(--teal);text-decoration:none;}
-.rl:hover{text-decoration:underline;}
-.dp-actions{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;}
-.btn-sm{font-size:12px;padding:8px 16px;border-radius:6px;}
-
-/* LOADER */
-.loader{display:flex;gap:5px;align-items:center;justify-content:center;padding:48px 20px;color:var(--muted);font-family:'Space Mono',monospace;font-size:11px;}
-.ld{width:6px;height:6px;border-radius:50%;background:var(--pm);animation:ldot .8s ease-in-out infinite;}
-.ld:nth-child(2){animation-delay:.15s;}.ld:nth-child(3){animation-delay:.3s;}
-.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:56px;gap:12px;color:var(--muted);}
-.empty-ico{font-size:38px;opacity:.25;}
-
-/* CODE */
-.code-panel{margin-top:20px;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
-.code-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
-.code-head h3{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;}
-.ctabs{display:flex;gap:0;border-bottom:1px solid var(--border);}
-.ct{font-family:'Space Mono',monospace;font-size:11px;padding:10px 16px;background:none;border:none;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;letter-spacing:.06em;transition:all .2s;}
-.ct.on{color:var(--pl);border-bottom-color:var(--pl);}
-.cc{display:none;padding:16px 20px;}
-.cc.on{display:block;}
-pre.cb{background:#0a0520;border:1px solid var(--border);border-radius:8px;padding:16px;font-family:'Space Mono',monospace;font-size:11px;color:#c4e0b5;overflow-x:auto;line-height:1.65;}
-.cm{color:var(--muted);}.ck{color:var(--pl);}.cv{color:var(--teal);}.cs{color:var(--gold);}
+/* DETAIL */
+.det{position:sticky;top:88px}
+.det-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.det-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:56px 24px;gap:12px;color:var(--muted);text-align:center}
+.det-empty-ico{font-size:40px;opacity:.25}
+.dh{padding:18px 20px;border-bottom:1px solid var(--border)}
+.dt{font-family:"Cormorant Garamond",serif;font-size:19px;font-weight:700;line-height:1.25;margin-bottom:7px}
+.do{font-family:"Space Mono",monospace;font-size:10px;color:var(--teal);margin-bottom:8px}
+.dd{font-size:12px;color:var(--muted);line-height:1.65;max-height:72px;overflow:hidden}
+.dtags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.dtag{font-size:11px;padding:2px 8px;border-radius:100px;border:1px solid var(--border);color:var(--pp)}
+.db{padding:16px 20px}
+.mrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.mb{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:11px;text-align:center}
+.mv{font-family:"Cormorant Garamond",serif;font-size:24px;font-weight:700;color:var(--pl)}
+.ml{font-family:"Space Mono",monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+.rlbl{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:7px}
+.rlist{display:flex;flex-direction:column;gap:5px;max-height:220px;overflow-y:auto}
+.ri{background:rgba(255,255,255,.03);border:1px solid rgba(196,181,232,.1);border-radius:6px;padding:9px 11px;display:flex;align-items:center;gap:8px}
+.rn{font-size:11px;color:var(--white);flex:1;line-height:1.3}
+.rf{font-family:"Space Mono",monospace;font-size:9px;padding:2px 6px;border-radius:3px;background:rgba(124,92,191,.2);color:var(--pl);flex-shrink:0}
+.rsz{font-size:10px;color:var(--muted)}
+.rl{font-size:11px;color:var(--teal);text-decoration:none;flex-shrink:0;padding:4px 10px;border:1px solid rgba(60,201,176,.3);border-radius:5px;transition:all .2s}
+.rl:hover{background:rgba(60,201,176,.1)}
+.dacts{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
 
 /* SERVICES */
-.sg{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:44px;}
-@media(max-width:640px){.sg{grid-template-columns:1fr;}}
-.sv2{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px;transition:border-color .25s,transform .25s;}
-.sv2:hover{border-color:var(--pm);transform:translateY(-4px);}
-.sv2-ico{font-size:26px;margin-bottom:16px;}
-.sv2 h3{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700;margin-bottom:8px;}
-.sv2 p{font-size:13px;color:var(--muted);line-height:1.75;}
-.stags{display:flex;flex-wrap:wrap;gap:5px;margin-top:14px;}
-.stag{font-family:'Space Mono',monospace;font-size:10px;padding:3px 9px;border-radius:100px;border:1px solid var(--border);color:var(--muted);}
+.sgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:40px}
+@media(max-width:640px){.sgrid{grid-template-columns:1fr}}
+.svc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:26px;transition:border-color .2s,transform .2s}
+.svc:hover{border-color:var(--pm);transform:translateY(-3px)}
+.sico{font-size:26px;margin-bottom:14px}
+.svc h3{font-family:"Cormorant Garamond",serif;font-size:19px;font-weight:700;margin-bottom:8px}
+.svc p{font-size:13px;color:var(--muted);line-height:1.75}
+.stags{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px}
+.stag{font-family:"Space Mono",monospace;font-size:10px;padding:3px 9px;border-radius:100px;border:1px solid var(--border);color:var(--muted)}
 
-/* CTA / FOOTER */
-.cta{text-align:center;padding:90px 24px;position:relative;}
-.cta::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(124,92,191,.14) 0%,transparent 70%);pointer-events:none;}
-.cta h2{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,5vw,62px);font-weight:700;margin-bottom:14px;position:relative;}
-.cta p{font-size:16px;color:var(--muted);max-width:480px;margin:0 auto 36px;line-height:1.75;position:relative;}
-footer{background:var(--bg2);border-top:1px solid var(--border);padding:36px 24px 20px;}
-.fi{max-width:1080px;margin:0 auto;}
-.ft{display:grid;grid-template-columns:2fr 1fr 1fr;gap:36px;margin-bottom:28px;}
-@media(max-width:640px){.ft{grid-template-columns:1fr;}}
-.flogo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;margin-bottom:8px;}
-.flogo span{color:var(--pl);}
-.fdesc{font-size:13px;color:var(--muted);line-height:1.65;}
-.fc h4{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--pp);margin-bottom:10px;}
-.fc ul{list-style:none;}
-.fc li{margin-bottom:6px;}
-.fc a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s;}
-.fc a:hover{color:var(--white);}
-.fb{border-top:1px solid var(--border);padding-top:16px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);}
-
-@keyframes fu{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
-@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
-@keyframes ldot{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
-@keyframes spin{to{transform:rotate(360deg);}}
+/* CTA */
+.cta{text-align:center;padding:88px 24px;position:relative}
+.cta::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(124,92,191,.14) 0%,transparent 70%);pointer-events:none}
+.cta h2{font-family:"Cormorant Garamond",serif;font-size:clamp(32px,5vw,58px);font-weight:700;margin-bottom:14px;position:relative}
+.cta p{font-size:16px;color:var(--muted);max-width:460px;margin:0 auto 32px;line-height:1.75;position:relative}
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:32px 24px 20px}
+.fi{max-width:1080px;margin:0 auto}
+.ft{display:grid;grid-template-columns:2fr 1fr 1fr;gap:32px;margin-bottom:24px}
+@media(max-width:640px){.ft{grid-template-columns:1fr}}
+.flogo{font-family:"Cormorant Garamond",serif;font-size:20px;font-weight:700;margin-bottom:8px}
+.flogo span{color:var(--pl)}
+.fdesc{font-size:13px;color:var(--muted);line-height:1.65}
+.fc h4{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--pp);margin-bottom:10px}
+.fc ul{list-style:none}
+.fc li{margin-bottom:6px}
+.fc a{font-size:13px;color:var(--muted);text-decoration:none}
+.fc a:hover{color:var(--white)}
+.fb{border-top:1px solid var(--border);padding-top:14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:"Space Mono",monospace;font-size:10px;color:var(--muted)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 </style>
 </head>
 <body>
@@ -244,13 +212,13 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:36px 24p
   </div>
 </section>
 
-<div class="stats">
+<div class="stats-bar">
   <div class="stats-inner">
     <div class="sv"><div class="sn">32</div><div class="sl">Années expertise</div></div>
     <div class="sv"><div class="sn">8</div><div class="sl">Risques systémiques</div></div>
     <div class="sv"><div class="sn">6</div><div class="sl">Normes couvertes</div></div>
-    <div class="sv"><div class="sn" id="cnt-ds">—</div><div class="sl">Datasets indexés</div></div>
-    <div class="sv"><div class="sn" id="cnt-org">—</div><div class="sl">Organisations</div></div>
+    <div class="sv"><div class="sn" id="cnt-ds">44</div><div class="sl">Datasets indexés</div></div>
+    <div class="sv"><div class="sn" id="cnt-org">37</div><div class="sl">Organisations</div></div>
   </div>
 </div>
 
@@ -258,10 +226,9 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:36px 24p
   <div class="con">
     <p class="lbl">Conformité réglementaire</p>
     <h2 class="ttl">6 normes maîtrisées,<br><em>une approche intégrée</em></h2>
-    <p class="dsc">Notre BU adresse l'ensemble du périmètre réglementaire IA & Cyber européen.</p>
     <div class="ng">
-      <div class="nc on"><div class="ni">🧠</div><div class="nn">IA Act</div><div class="nd">Règlement IA — usage éthique & sécurisé</div></div>
-      <div class="nc"><div class="ni">⚙️</div><div class="nn">ISO 42001</div><div class="nd">Norme gestion responsable de l'IA</div></div>
+      <div class="nc on"><div class="ni">🧠</div><div class="nn">IA Act</div><div class="nd">Règlement IA — usage éthique</div></div>
+      <div class="nc"><div class="ni">⚙️</div><div class="nn">ISO 42001</div><div class="nd">Gestion responsable de l'IA</div></div>
       <div class="nc"><div class="ni">🔒</div><div class="nn">ISO 27001</div><div class="nd">Sécurité information & risques</div></div>
       <div class="nc"><div class="ni">🏛️</div><div class="nn">DORA</div><div class="nd">Résilience numérique — finance</div></div>
       <div class="nc"><div class="ni">🌐</div><div class="nn">NIS2</div><div class="nd">Cybersécurité — entités essentielles</div></div>
@@ -270,199 +237,116 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:36px 24p
   </div>
 </section>
 
-<!-- ══ DASHBOARD DATA.GOUV.FR ══ -->
 <section class="sec sec-alt" id="dashboard">
   <div class="con">
     <p class="lbl">Connecteur MCP · data.gouv.fr</p>
     <h2 class="ttl">Données publiques <em>en temps réel</em></h2>
-    <p class="dsc">Explorez les datasets officiels via 3 filtres combinables : thématique, organisation, format.</p>
+    <p class="dsc">44 datasets officiels — 37 organisations — 16 thématiques sectorielles.</p>
 
-    <!-- CONTROLES -->
-    <div class="ctrl-wrap" style="margin-top:40px;">
-      <div class="ctrl-grid">
-        <div class="sel-group">
-          <label>🏷️ Thématique</label>
-          <div class="sel-wrap">
-            <select id="sel-theme" onchange="onTheme()">
-              <option value="">— Toutes thématiques —</option>
-              <option value="ia">🤖 Intelligence Artificielle</option>
-              <option value="cybersecurite">🛡️ Cybersécurité</option>
-              <option value="rgpd">🔒 RGPD & Données personnelles</option>
-              <option value="sante">🏥 Santé & Médical</option>
-              <option value="energie">⚡ Énergie & Transition</option>
-              <option value="transport">🚆 Transport & Mobilité</option>
-              <option value="finance">💰 Finance & Économie</option>
-              <option value="industrie">🏭 Industrie & Manufacturing</option>
-              <option value="immobilier">🏠 Immobilier & Urbanisme</option>
-              <option value="education">🎓 Éducation & Formation</option>
-              <option value="environnement">🌿 Environnement & Climat</option>
-              <option value="agriculture">🌾 Agriculture & Alimentation</option>
-              <option value="tourisme">✈️ Tourisme & Loisirs</option>
-              <option value="rh">👥 RH & Emploi</option>
-              <option value="justice">⚖️ Justice & Juridique</option>
-              <option value="collectivites">🏛️ Collectivités & Territoires</option>
-            </select>
-            <div class="sel-arrow">▾</div>
+    <div style="margin-top:36px">
+
+      <div class="ctrl">
+        <div class="ctrl-grid">
+          <div class="sg">
+            <label>🏷️ Thématique</label>
+            <div class="sw">
+              <select id="sel-theme" onchange="onTheme()">
+                <option value="">— Toutes —</option>
+                <option value="ia">🤖 Intelligence Artificielle</option>
+                <option value="cybersecurite">🛡️ Cybersécurité</option>
+                <option value="rgpd">🔒 RGPD & Données personnelles</option>
+                <option value="sante">🏥 Santé & Médical</option>
+                <option value="energie">⚡ Énergie & Transition</option>
+                <option value="transport">🚆 Transport & Mobilité</option>
+                <option value="finance">💰 Finance & Économie</option>
+                <option value="industrie">🏭 Industrie & Manufacturing</option>
+                <option value="immobilier">🏠 Immobilier & Urbanisme</option>
+                <option value="education">🎓 Éducation & Formation</option>
+                <option value="environnement">🌿 Environnement & Climat</option>
+                <option value="agriculture">🌾 Agriculture & Alimentation</option>
+                <option value="tourisme">✈️ Tourisme & Loisirs</option>
+                <option value="rh">👥 RH & Emploi</option>
+                <option value="justice">⚖️ Justice & Juridique</option>
+                <option value="collectivites">🏛️ Collectivités & Territoires</option>
+              </select>
+              <div class="sa">▾</div>
+            </div>
+          </div>
+          <div class="sg">
+            <label>🏢 Organisation</label>
+            <div class="sw">
+              <select id="sel-org" onchange="onOrg()">
+                <option value="">— Toutes —</option>
+              </select>
+              <div class="sa">▾</div>
+            </div>
+          </div>
+          <div class="sg">
+            <label>📂 Format</label>
+            <div class="sw">
+              <select id="sel-fmt" onchange="onFmt()">
+                <option value="">— Tous formats —</option>
+                <option value="CSV">📊 CSV</option>
+                <option value="XLSX">📊 Excel (XLSX)</option>
+                <option value="PDF">📄 PDF</option>
+                <option value="JSON">🗂️ JSON</option>
+                <option value="GEOJSON">🗺️ GeoJSON</option>
+                <option value="ZIP">📦 ZIP</option>
+              </select>
+              <div class="sa">▾</div>
+            </div>
           </div>
         </div>
-        <div class="sel-group">
-          <label>🏢 Organisation</label>
-          <div class="sel-wrap">
-            <select id="sel-org" onchange="onOrg()">
-              <option value="">— Toutes —</option>
-            </select>
-            <div class="sel-arrow">▾</div>
-          </div>
-        </div>
-        <div class="sel-group">
-          <label>📂 Format</label>
-          <div class="sel-wrap">
-            <select id="sel-fmt" onchange="onFmt()">
-              <option value="">— Tous formats —</option>
-              <option value="csv">CSV</option>
-              <option value="json">JSON</option>
-              <option value="xlsx">Excel (XLSX)</option>
-              <option value="pdf">PDF</option>
-              <option value="xml">XML</option>
-              <option value="geojson">GeoJSON</option>
-              <option value="shp">Shapefile</option>
-            </select>
-            <div class="sel-arrow">▾</div>
-          </div>
-        </div>
-      </div>
-      <div class="search-row">
-        <input class="s-input" id="s-input" type="text" placeholder="Recherche libre (ex: conformité, NIS2, données santé…)" value="intelligence artificielle">
-        <button class="btn-search" onclick="doSearch()">🔍 Rechercher</button>
-      </div>
-    </div>
-
-    <!-- STATUS -->
-    <div class="status-bar loading" id="status-bar">
-      <div class="sdot"></div>
-      <span id="status-txt">Connexion à data.gouv.fr…</span>
-    </div>
-
-    <!-- THEMES QUICK NAV -->
-    <div class="themes-nav" id="themes-nav" style="overflow-x:auto;padding-bottom:4px;scrollbar-width:none;">
-      <button class="theme-btn active" onclick="quickTheme(this,'ia')">🤖 IA</button>
-      <button class="theme-btn" onclick="quickTheme(this,'cybersecurite')">🛡️ Cyber</button>
-      <button class="theme-btn" onclick="quickTheme(this,'rgpd')">🔒 RGPD</button>
-      <button class="theme-btn" onclick="quickTheme(this,'sante')">🏥 Santé</button>
-      <button class="theme-btn" onclick="quickTheme(this,'energie')">⚡ Énergie</button>
-      <button class="theme-btn" onclick="quickTheme(this,'transport')">🚆 Transport</button>
-      <button class="theme-btn" onclick="quickTheme(this,'finance')">💰 Finance</button>
-      <button class="theme-btn" onclick="quickTheme(this,'industrie')">🏭 Industrie</button>
-      <button class="theme-btn" onclick="quickTheme(this,'immobilier')">🏠 Immobilier</button>
-      <button class="theme-btn" onclick="quickTheme(this,'education')">🎓 Éducation</button>
-      <button class="theme-btn" onclick="quickTheme(this,'environnement')">🌿 Environnement</button>
-      <button class="theme-btn" onclick="quickTheme(this,'agriculture')">🌾 Agriculture</button>
-      <button class="theme-btn" onclick="quickTheme(this,'rh')">👥 RH & Emploi</button>
-      <button class="theme-btn" onclick="quickTheme(this,'justice')">⚖️ Justice</button>
-      <button class="theme-btn" onclick="quickTheme(this,'collectivites')">🏛️ Collectivités</button>
-    </div>
-
-    <!-- LAYOUT PRINCIPAL -->
-    <div class="dash-layout">
-
-      <!-- CARTES DATASETS -->
-      <div>
-        <div id="ds-grid" class="ds-cards">
-          <div class="loader" style="grid-column:1/-1;"><div class="ld"></div><div class="ld"></div><div class="ld"></div><span style="margin-left:8px;">Chargement des datasets…</span></div>
-        </div>
-        <div class="pag" id="pag" style="display:none;">
-          <div class="pag-info" id="pag-info">Page 1 / 1 — 0 résultats</div>
-          <div class="pag-btns">
-            <button class="pb" id="btn-prev" onclick="changePage(-1)" disabled>← Préc.</button>
-            <button class="pb" id="btn-next" onclick="changePage(1)">Suiv. →</button>
-          </div>
+        <div class="search-row">
+          <input class="si" id="s-input" type="text" placeholder="Recherche libre : IA, NIS2, CNIL, énergie, transport…">
+          <button class="btn-find" onclick="doSearch()">🔍 Rechercher</button>
         </div>
       </div>
 
-      <!-- DETAIL PANEL STICKY -->
-      <div class="detail-sticky">
-        <div class="detail-panel" id="detail-panel">
-          <div class="dp-empty">
-            <div class="dp-empty-ico">📊</div>
-            <p style="font-size:13px;text-align:center;line-height:1.6;">Cliquez sur un dataset<br>pour afficher ses détails,<br>ressources et métriques</p>
+      <div class="sbar ok" id="sbar">
+        <div class="sdot"></div>
+        <span id="sbar-txt">44 datasets disponibles</span>
+      </div>
+
+      <div class="tnav" id="tnav">
+        <button class="tb on" onclick="qt(this,'ia')">🤖 IA</button>
+        <button class="tb" onclick="qt(this,'cybersecurite')">🛡️ Cyber</button>
+        <button class="tb" onclick="qt(this,'rgpd')">🔒 RGPD</button>
+        <button class="tb" onclick="qt(this,'sante')">🏥 Santé</button>
+        <button class="tb" onclick="qt(this,'energie')">⚡ Énergie</button>
+        <button class="tb" onclick="qt(this,'transport')">🚆 Transport</button>
+        <button class="tb" onclick="qt(this,'finance')">💰 Finance</button>
+        <button class="tb" onclick="qt(this,'industrie')">🏭 Industrie</button>
+        <button class="tb" onclick="qt(this,'immobilier')">🏠 Immobilier</button>
+        <button class="tb" onclick="qt(this,'education')">🎓 Éducation</button>
+        <button class="tb" onclick="qt(this,'environnement')">🌿 Environnement</button>
+        <button class="tb" onclick="qt(this,'agriculture')">🌾 Agriculture</button>
+        <button class="tb" onclick="qt(this,'rh')">👥 RH & Emploi</button>
+        <button class="tb" onclick="qt(this,'justice')">⚖️ Justice</button>
+        <button class="tb" onclick="qt(this,'collectivites')">🏛️ Collectivités</button>
+      </div>
+
+      <div class="dash">
+        <div>
+          <div class="cards" id="cards"></div>
+          <div class="pag" id="pag" style="display:none">
+            <div class="pi" id="pag-info"></div>
+            <div class="pbtns">
+              <button class="pb" id="bp" onclick="pg(-1)" disabled>← Préc.</button>
+              <button class="pb" id="bn" onclick="pg(1)">Suiv. →</button>
+            </div>
+          </div>
+        </div>
+        <div class="det">
+          <div class="det-panel" id="det">
+            <div class="det-empty">
+              <div class="det-empty-ico">📊</div>
+              <p style="font-size:13px;line-height:1.6">Cliquez sur un dataset<br>pour afficher ses détails</p>
+            </div>
           </div>
         </div>
       </div>
-
     </div>
-
-    <!-- CODE API -->
-    <div class="code-panel">
-      <div class="code-head"><span style="width:8px;height:8px;border-radius:50%;background:var(--gold);display:inline-block;animation:blink 2s infinite;"></span><h3>API Explorer — Connecteur MCP Python</h3></div>
-      <div class="ctabs">
-        <button class="ct on" onclick="ctab(this,'c1')">Python SDK</button>
-        <button class="ct" onclick="ctab(this,'c2')">Flask Routes</button>
-        <button class="ct" onclick="ctab(this,'c3')">MCP Config</button>
-        <button class="ct" onclick="ctab(this,'c4')">Filtres sectoriels</button>
-      </div>
-      <div class="cc on" id="c1"><pre class="cb"><span class="cm"># CONSEILPREV — Data.gouv.fr MCP Connector</span>
-<span class="ck">import</span> requests
-
-<span class="ck">class</span> <span class="cv">DataGouvFRConnector</span>:
-    <span class="ck">def</span> <span class="cv">__init__</span>(self):
-        self.base = <span class="cs">"https://www.data.gouv.fr/api/1"</span>
-        self.session = requests.Session()
-
-    <span class="ck">def</span> <span class="cv">search</span>(self, query, page=<span class="cs">1</span>, page_size=<span class="cs">15</span>):
-        r = self.session.get(f<span class="cs">"{self.base}/datasets/"</span>, params={
-            <span class="cs">"q"</span>: query, <span class="cs">"page"</span>: page,
-            <span class="cs">"page_size"</span>: page_size, <span class="cs">"sort"</span>: <span class="cs">"reuse_count"</span>
-        }, timeout=<span class="cs">15</span>)
-        <span class="ck">return</span> r.json()
-
-    <span class="ck">def</span> <span class="cv">get_detail</span>(self, dataset_id):
-        r = self.session.get(f<span class="cs">"{self.base}/datasets/{dataset_id}/"</span>)
-        <span class="ck">return</span> r.json()
-
-connector = <span class="cv">DataGouvFRConnector</span>()
-data = connector.search(<span class="cs">"intelligence artificielle"</span>)
-<span class="ck">print</span>(f<span class="cs">"✅ {data['total']} datasets trouvés"</span>)</pre></div>
-      <div class="cc" id="c2"><pre class="cb"><span class="cm"># Flask — Proxy routes vers data.gouv.fr</span>
-<span class="cs">@app.route</span>(<span class="cs">'/api/datasets'</span>)
-<span class="ck">def</span> <span class="cv">get_datasets</span>():
-    query = request.args.get(<span class="cs">'query'</span>, <span class="cs">'IA'</span>)
-    page  = request.args.get(<span class="cs">'page'</span>, <span class="cs">'1'</span>)
-    r = SESSION.get(<span class="cs">"https://www.data.gouv.fr/api/1/datasets/"</span>,
-        params={<span class="cs">"q"</span>: query, <span class="cs">"page"</span>: page, <span class="cs">"page_size"</span>: <span class="cs">"15"</span>,
-                <span class="cs">"sort"</span>: <span class="cs">"reuse_count"</span>}, timeout=<span class="cs">15</span>)
-    <span class="ck">return</span> jsonify(r.json())
-
-<span class="cs">@app.route</span>(<span class="cs">'/api/datasets/&lt;id&gt;'</span>)
-<span class="ck">def</span> <span class="cv">get_detail</span>(id):
-    r = SESSION.get(f<span class="cs">"https://www.data.gouv.fr/api/1/datasets/{id}/"</span>)
-    <span class="ck">return</span> jsonify(r.json())</pre></div>
-      <div class="cc" id="c3"><pre class="cb"><span class="cm"># MCP Config — Claude Desktop / Claude Code</span>
-{
-  <span class="cs">"mcpServers"</span>: {
-    <span class="cs">"conseilprev-datagouv"</span>: {
-      <span class="cs">"url"</span>: <span class="cs">"https://conseilprev.onrender.com"</span>,
-      <span class="cs">"tools"</span>: [<span class="cs">"search_datasets"</span>, <span class="cs">"get_detail"</span>, <span class="cs">"filter_sector"</span>]
-    },
-    <span class="cs">"wpcom-mcp"</span>: {
-      <span class="cs">"url"</span>: <span class="cs">"https://public-api.wordpress.com/wpcom/v2/mcp/v1"</span>
-    }
-  }
-}</pre></div>
-      <div class="cc" id="c4"><pre class="cb"><span class="cm"># Filtres sectoriels combinables</span>
-<span class="ck">def</span> <span class="cv">filter_sector</span>(datasets, sector, fmt=<span class="cv">None</span>):
-    result = []
-    <span class="ck">for</span> ds <span class="ck">in</span> datasets:
-        text = (ds.get(<span class="cs">"title"</span>,<span class="cs">""</span>) +
-                ds.get(<span class="cs">"description"</span>,<span class="cs">""</span>) +
-                <span class="cs">" "</span>.join(ds.get(<span class="cs">"tags"</span>,[])))
-        <span class="ck">if</span> sector.lower() <span class="ck">not in</span> text.lower(): <span class="ck">continue</span>
-        <span class="ck">if</span> fmt:
-            fmts = [r.get(<span class="cs">"format"</span>,<span class="cs">""</span>).lower() <span class="ck">for</span> r <span class="ck">in</span> ds.get(<span class="cs">"resources"</span>,[])]
-            <span class="ck">if not any</span>(fmt <span class="ck">in</span> f <span class="ck">for</span> f <span class="ck">in</span> fmts): <span class="ck">continue</span>
-        result.append(ds)
-    <span class="ck">return</span> result</pre></div>
-    </div>
-
   </div>
 </section>
 
@@ -470,19 +354,19 @@ data = connector.search(<span class="cs">"intelligence artificielle"</span>)
   <div class="con">
     <p class="lbl">Offre de services</p>
     <h2 class="ttl">Conseil, Audit & <em>Intelligence Data</em></h2>
-    <div class="sg">
-      <div class="sv2"><div class="sv2-ico">🔍</div><h3>Audit IA & Cyber</h3><p>Évaluation maturité IA et cyber, cartographie des risques via les données officielles data.gouv.fr.</p><div class="stags"><span class="stag">IA Act</span><span class="stag">ISO 42001</span><span class="stag">NIS2</span></div></div>
-      <div class="sv2"><div class="sv2-ico">⚠️</div><h3>8 Risques Systémiques IA</h3><p>Juridictionnel, économique, data, opérationnel, géopolitique, cyber, supply chain, environnemental.</p><div class="stags"><span class="stag">Risk Matrix</span><span class="stag">AIA</span><span class="stag">ESG</span></div></div>
-      <div class="sv2"><div class="sv2-ico">📡</div><h3>Connecteur MCP data.gouv.fr</h3><p>Intégration datasets officiels dans vos workflows. API REST Python, filtres sectoriels, temps réel.</p><div class="stags"><span class="stag">Python</span><span class="stag">Flask</span><span class="stag">MCP</span></div></div>
-      <div class="sv2"><div class="sv2-ico">🏗️</div><h3>Gouvernance & GRC</h3><p>Cadres de gouvernance IA/Cyber : politiques, comités, KPIs et reporting conformité investisseurs.</p><div class="stags"><span class="stag">GRC</span><span class="stag">DORA</span><span class="stag">RGPD</span></div></div>
+    <div class="sgrid">
+      <div class="svc"><div class="sico">🔍</div><h3>Audit IA & Cyber</h3><p>Évaluation maturité IA et cyber, cartographie des risques, écarts réglementaires via les données officielles.</p><div class="stags"><span class="stag">IA Act</span><span class="stag">ISO 42001</span><span class="stag">NIS2</span></div></div>
+      <div class="svc"><div class="sico">⚠️</div><h3>8 Risques Systémiques IA</h3><p>Juridictionnel, économique, data, opérationnel, géopolitique, cyber, supply chain, environnemental.</p><div class="stags"><span class="stag">Risk Matrix</span><span class="stag">AIA</span><span class="stag">ESG</span></div></div>
+      <div class="svc"><div class="sico">📡</div><h3>Connecteur MCP data.gouv.fr</h3><p>Intégration datasets officiels dans vos workflows. API REST Python, filtres sectoriels, temps réel.</p><div class="stags"><span class="stag">Python</span><span class="stag">Flask</span><span class="stag">MCP</span></div></div>
+      <div class="svc"><div class="sico">🏗️</div><h3>Gouvernance & GRC</h3><p>Cadres de gouvernance IA/Cyber intégrés : politiques, comités, KPIs et reporting conformité.</p><div class="stags"><span class="stag">GRC</span><span class="stag">DORA</span><span class="stag">RGPD</span></div></div>
     </div>
   </div>
 </section>
 
 <section class="cta" id="contact">
-  <h2>Construisons l'avenir<br><em style="color:var(--pl);">ensemble</em></h2>
+  <h2>Construisons l'avenir<br><em style="color:var(--pl)">ensemble</em></h2>
   <p>Investisseur, partenaire ou client ? Explorons comment CONSEILPREV peut créer de la valeur avec vous.</p>
-  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;">
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative">
     <a href="mailto:contact@i-aes.com" class="btn btn-p">Contacter CONSEILPREV →</a>
     <a href="#dashboard" class="btn btn-s">Explorer les données</a>
   </div>
@@ -500,288 +384,191 @@ data = connector.search(<span class="cs">"intelligence artificielle"</span>)
 </footer>
 
 <script>
-// ══ DONNÉES LOCALES — 38 datasets multi-secteurs ══
-// ══ CONFIG ══
-const DATAGOUV = 'https://www.data.gouv.fr/api/1';
-let LOCAL_DATASETS = [];
-let ORG_LIST = [];
- = 'https://www.data.gouv.fr/api/1';
+// ══ DONNÉES ══
+const DS = [{"id":"ia-1","theme":"ia","sector":"Technologie","title":"Catalogue des algorithmes publics utilisés par l'État","organization":"Etalab / DINUM","description":"Inventaire des systèmes algorithmiques déployés par les administrations françaises. Classification, impact, documentation technique et conformité IA Act.","tags":["IA","algorithmes","transparence","administration","conformité"],"metrics":{"reuses":334,"views":19800},"resources":[{"title":"Catalogue CSV","format":"CSV","size":"2.4 MB","url":"https://www.data.gouv.fr/fr/datasets/r/algorithmes-publics.csv"},{"title":"Export Excel","format":"XLSX","size":"3.1 MB","url":"https://www.data.gouv.fr/fr/datasets/r/algorithmes-publics.xlsx"},{"title":"Documentation PDF","format":"PDF","size":"890 KB","url":"https://www.data.gouv.fr/fr/datasets/r/algorithmes-publics-doc.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/catalogue-algorithmes-publics/"},{"id":"ia-2","theme":"ia","sector":"Technologie","title":"Registre des systèmes IA à haut risque — IA Act","organization":"ANSSI","description":"Classification des systèmes IA soumis aux obligations de l'IA Act européen. Niveau de risque, mesures de conformité, documentation requise.","tags":["IA Act","conformité","haut-risque","classification"],"metrics":{"reuses":142,"views":8900},"resources":[{"title":"Registre CSV","format":"CSV","size":"1.2 MB","url":"https://www.data.gouv.fr/fr/datasets/r/ia-act-register.csv"},{"title":"Rapport complet PDF","format":"PDF","size":"4.5 MB","url":"https://www.data.gouv.fr/fr/datasets/r/ia-act-rapport.pdf"},{"title":"Données JSON","format":"JSON","size":"980 KB","url":"https://www.data.gouv.fr/fr/datasets/r/ia-act.json"}],"page":"https://www.data.gouv.fr/fr/datasets/registre-ia-haut-risque/"},{"id":"ia-3","theme":"ia","sector":"Technologie","title":"Benchmark modèles IA — Biais et robustesse","organization":"INRIA","description":"Évaluation comparative des grands modèles de langage sur critères biais, robustesse, performance et consommation énergétique.","tags":["LLM","biais","benchmark","robustesse","évaluation"],"metrics":{"reuses":89,"views":5600},"resources":[{"title":"Données benchmark CSV","format":"CSV","size":"8.7 MB","url":"https://www.data.gouv.fr/fr/datasets/r/benchmark-ia.csv"},{"title":"Rapport technique PDF","format":"PDF","size":"12 MB","url":"https://www.data.gouv.fr/fr/datasets/r/benchmark-ia.pdf"},{"title":"Notebook Jupyter","format":"JSON","size":"2.3 MB","url":"https://www.data.gouv.fr/fr/datasets/r/benchmark.ipynb"}],"page":"https://www.data.gouv.fr/fr/datasets/benchmark-modeles-ia/"},{"id":"ia-4","theme":"ia","sector":"Technologie","title":"Offres d'emploi IA — Compétences et salaires","organization":"France Travail","description":"Analyse des offres d'emploi liées à l'IA en France. Compétences les plus demandées, fourchettes salariales, secteurs recruteurs. Données 2023-2024.","tags":["emploi","IA","compétences","salaires","marché-travail"],"metrics":{"reuses":211,"views":14500},"resources":[{"title":"Offres CSV","format":"CSV","size":"5.4 MB","url":"https://www.data.gouv.fr/fr/datasets/r/offres-ia.csv"},{"title":"Analyse Excel","format":"XLSX","size":"3.2 MB","url":"https://www.data.gouv.fr/fr/datasets/r/offres-ia.xlsx"},{"title":"Rapport PDF","format":"PDF","size":"6.1 MB","url":"https://www.data.gouv.fr/fr/datasets/r/offres-ia-rapport.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/offres-emploi-ia/"},{"id":"ia-5","theme":"ia","sector":"Technologie","title":"IA dans les services publics — Enquête nationale","organization":"DINUM / Direction Interministérielle","description":"Cartographie des projets IA déployés dans les ministères français. Statut, budget, impact, conformité réglementaire.","tags":["IA","services-publics","transformation-digitale","DINUM"],"metrics":{"reuses":167,"views":11200},"resources":[{"title":"Projets CSV","format":"CSV","size":"3.8 MB","url":"https://www.data.gouv.fr/fr/datasets/r/ia-services-publics.csv"},{"title":"Rapport PDF","format":"PDF","size":"8.9 MB","url":"https://www.data.gouv.fr/fr/datasets/r/ia-services-publics.pdf"},{"title":"Dashboard Excel","format":"XLSX","size":"4.2 MB","url":"https://www.data.gouv.fr/fr/datasets/r/ia-services-publics.xlsx"}],"page":"https://www.data.gouv.fr/fr/datasets/ia-services-publics/"},{"id":"cy-1","theme":"cybersecurite","sector":"Sécurité","title":"Incidents cybersécurité déclarés — Secteur public","organization":"ANSSI","description":"Incidents NIS2 déclarés par les opérateurs d'importance vitale. Statistiques par secteur, type d'attaque, impact et mesures de remédiation.","tags":["cybersécurité","NIS2","incidents","OIV","ANSSI"],"metrics":{"reuses":178,"views":11200},"resources":[{"title":"Incidents CSV","format":"CSV","size":"3.8 MB","url":"https://www.data.gouv.fr/fr/datasets/r/incidents-cyber.csv"},{"title":"Rapport annuel ANSSI PDF","format":"PDF","size":"8.9 MB","url":"https://www.data.gouv.fr/fr/datasets/r/rapport-anssi-2024.pdf"},{"title":"Statistiques Excel","format":"XLSX","size":"2.1 MB","url":"https://www.data.gouv.fr/fr/datasets/r/incidents-stats.xlsx"}],"page":"https://www.data.gouv.fr/fr/datasets/incidents-cybersecurite/"},{"id":"cy-2","theme":"cybersecurite","sector":"Sécurité","title":"Base de vulnérabilités CVE — Référentiel national","organization":"ANSSI / CEA","description":"Vulnérabilités logicielles référencées en France. Compatible NVD. Mise à jour quotidienne. Score CVSS, vecteurs d'attaque, correctifs disponibles.","tags":["CVE","vulnérabilités","CVSS","patch","sécurité"],"metrics":{"reuses":445,"views":32000},"resources":[{"title":"CVE CSV quotidien","format":"CSV","size":"45 MB","url":"https://www.data.gouv.fr/fr/datasets/r/cve-france.csv"},{"title":"CVE JSON","format":"JSON","size":"38 MB","url":"https://www.data.gouv.fr/fr/datasets/r/cve-france.json"},{"title":"Guide remédiation PDF","format":"PDF","size":"2.3 MB","url":"https://www.data.gouv.fr/fr/datasets/r/guide-cve.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/cve-vulnerabilites/"},{"id":"cy-3","theme":"cybersecurite","sector":"Sécurité","title":"Phishing et arnaques en ligne — Signalements 2024","organization":"Cybermalveillance.gouv.fr","description":"Signalements de phishing, ransomware, arnaques bancaires et fraudes. 450 000+ signalements analysés. Tendances et évolutions mensuelles.","tags":["phishing","ransomware","arnaques","signalement","cybercriminalité"],"metrics":{"reuses":312,"views":22400},"resources":[{"title":"Signalements CSV","format":"CSV","size":"7.8 MB","url":"https://www.data.gouv.fr/fr/datasets/r/phishing-2024.csv"},{"title":"Statistiques Excel","format":"XLSX","size":"4.2 MB","url":"https://www.data.gouv.fr/fr/datasets/r/phishing-stats.xlsx"},{"title":"Panorama cybercriminalité PDF","format":"PDF","size":"6.1 MB","url":"https://www.data.gouv.fr/fr/datasets/r/cybermal-2024.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/phishing-signalements/"},{"id":"cy-4","theme":"cybersecurite","sector":"Sécurité","title":"Infrastructures critiques — Cartographie OIV","organization":"SGDSN","description":"Cartographie des opérateurs d'importance vitale français. Secteurs énergie, transport, eau, finance, santé. Obligations NIS2 et mesures de sécurité.","tags":["OIV","infrastructures-critiques","NIS2","SGDSN","cartographie"],"metrics":{"reuses":67,"views":3100},"resources":[{"title":"Cartographie GeoJSON","format":"GEOJSON","size":"12 MB","url":"https://www.data.gouv.fr/fr/datasets/r/oiv-carte.geojson"},{"title":"Liste des OIV CSV","format":"CSV","size":"890 KB","url":"https://www.data.gouv.fr/fr/datasets/r/oiv-liste.csv"},{"title":"Guide NIS2 PDF","format":"PDF","size":"5.6 MB","url":"https://www.data.gouv.fr/fr/datasets/r/guide-nis2.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/infrastructures-critiques/"},{"id":"cy-5","theme":"cybersecurite","sector":"Sécurité","title":"SecNumCloud — Prestataires certifiés cybersécurité","organization":"ANSSI","description":"Liste des prestataires et solutions certifiés SecNumCloud, PSAN, PASSI et qualifiés par l'ANSSI. Mis à jour mensuellement.","tags":["SecNumCloud","certification","ANSSI","cloud","prestataires"],"metrics":{"reuses":234,"views":18900},"resources":[{"title":"Prestataires CSV","format":"CSV","size":"1.4 MB","url":"https://www.data.gouv.fr/fr/datasets/r/secnumcloud.csv"},{"title":"Référentiel PDF","format":"PDF","size":"3.2 MB","url":"https://www.data.gouv.fr/fr/datasets/r/secnumcloud-ref.pdf"},{"title":"Données Excel","format":"XLSX","size":"980 KB","url":"https://www.data.gouv.fr/fr/datasets/r/secnumcloud.xlsx"}],"page":"https://www.data.gouv.fr/fr/datasets/secnumcloud/"},{"id":"rg-1","theme":"rgpd","sector":"Juridique","title":"Délibérations CNIL — Sanctions et mises en demeure","organization":"CNIL","description":"Toutes les délibérations, sanctions et mises en demeure prononcées par la CNIL depuis 2015. Montants, secteurs concernés, manquements constatés.","tags":["CNIL","RGPD","sanctions","délibérations","vie-privée"],"metrics":{"reuses":445,"views":28900},"resources":[{"title":"Délibérations CSV","format":"CSV","size":"4.2 MB","url":"https://www.data.gouv.fr/fr/datasets/r/cnil-deliberations.csv"},{"title":"Données Excel","format":"XLSX","size":"5.1 MB","url":"https://www.data.gouv.fr/fr/datasets/r/cnil-deliberations.xlsx"},{"title":"Rapport annuel CNIL PDF","format":"PDF","size":"9.8 MB","url":"https://www.data.gouv.fr/fr/datasets/r/cnil-rapport-2024.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/deliberations-cnil/"},{"id":"rg-2","theme":"rgpd","sector":"Juridique","title":"Modèles AIPD — Analyses d'Impact Protection Données","organization":"CNIL","description":"Modèles officiels d'Analyses d'Impact relatives à la Protection des Données (AIPD/DPIA). Conformes RGPD article 35. Secteurs santé, RH, marketing.","tags":["AIPD","DPIA","RGPD","vie-privée","conformité"],"metrics":{"reuses":189,"views":13200},"resources":[{"title":"Modèles AIPD Excel","format":"XLSX","size":"2.8 MB","url":"https://www.data.gouv.fr/fr/datasets/r/aipd-modeles.xlsx"},{"title":"Guide AIPD complet PDF","format":"PDF","size":"4.7 MB","url":"https://www.data.gouv.fr/fr/datasets/r/guide-aipd.pdf"},{"title":"Checklist conformité CSV","format":"CSV","size":"450 KB","url":"https://www.data.gouv.fr/fr/datasets/r/aipd-checklist.csv"}],"page":"https://www.data.gouv.fr/fr/datasets/aipd-rgpd/"},{"id":"rg-3","theme":"rgpd","sector":"Juridique","title":"Violations de données — Notifications à la CNIL","organization":"CNIL","description":"Statistiques des violations de données notifiées à la CNIL. Par secteur d'activité, type de violation, nombre de personnes concernées. 2020-2024.","tags":["violations","données-personnelles","notifications","CNIL","RGPD"],"metrics":{"reuses":223,"views":16700},"resources":[{"title":"Violations CSV","format":"CSV","size":"1.9 MB","url":"https://www.data.gouv.fr/fr/datasets/r/violations-donnees.csv"},{"title":"Rapport violations PDF","format":"PDF","size":"7.2 MB","url":"https://www.data.gouv.fr/fr/datasets/r/rapport-violations-2024.pdf"},{"title":"Analyse Excel","format":"XLSX","size":"2.4 MB","url":"https://www.data.gouv.fr/fr/datasets/r/violations-analyse.xlsx"}],"page":"https://www.data.gouv.fr/fr/datasets/violations-donnees/"},{"id":"sa-1","theme":"sante","sector":"Santé","title":"SNDS — Système National des Données de Santé","organization":"DREES / CNAM","description":"Données de remboursements Assurance Maladie, hospitalisations PMSI, causes de décès. 67 millions de bénéficiaires couverts.","tags":["SNDS","santé","remboursements","CNAM","épidémiologie"],"metrics":{"reuses":567,"views":45000},"resources":[{"title":"Dictionnaire variables PDF","format":"PDF","size":"11 MB","url":"https://www.data.gouv.fr/fr/datasets/r/snds-dictionnaire.pdf"},{"title":"Extraction anonymisée CSV","format":"CSV","size":"25 MB","url":"https://www.data.gouv.fr/fr/datasets/r/snds-extract.csv"},{"title":"Statistiques Excel","format":"XLSX","size":"8.4 MB","url":"https://www.data.gouv.fr/fr/datasets/r/snds-stats.xlsx"}],"page":"https://www.data.gouv.fr/fr/datasets/snds/"},{"id":"sa-2","theme":"sante","sector":"Santé","title":"Données hospitalières — COVID et post-COVID","organization":"Santé Publique France","description":"Hospitalisations, réanimations, décès COVID-19 par département et tranche d'âge. Séries temporelles depuis mars 2020.","tags":["COVID","hospitalisations","épidémiologie","SPF","réanimation"],"metrics":{"reuses":2341,"views":189000},"resources":[{"title":"Données quotidiennes CSV","format":"CSV","size":"18 MB","url":"https://www.data.gouv.fr/fr/datasets/r/covid-hosp.csv"},{"title":"Synthèse Excel","format":"XLSX","size":"12 MB","url":"https://www.data.gouv.fr/fr/datasets/r/covid-synthese.xlsx"},{"title":"Rapport épidémiologique PDF","format":"PDF","size":"9.3 MB","url":"https://www.data.gouv.fr/fr/datasets/r/covid-rapport.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/donnees-hospitalieres-covid/"},{"id":"sa-3","theme":"sante","sector":"Santé","title":"Dispositifs médicaux IA certifiés CE — HAS","organization":"HAS / ANSM","description":"Registre des dispositifs médicaux intégrant de l'IA ayant obtenu le marquage CE en France. Classe de risque, indications cliniques, fabricant.","tags":["IA-médicale","dispositifs","HAS","ANSM","marquage-CE"],"metrics":{"reuses":145,"views":9800},"resources":[{"title":"Registre des DM IA CSV","format":"CSV","size":"3.2 MB","url":"https://www.data.gouv.fr/fr/datasets/r/ia-medicale.csv"},{"title":"Rapport HAS PDF","format":"PDF","size":"6.8 MB","url":"https://www.data.gouv.fr/fr/datasets/r/has-ia-medicale.pdf"},{"title":"Fiches techniques Excel","format":"XLSX","size":"4.1 MB","url":"https://www.data.gouv.fr/fr/datasets/r/dm-ia-fiches.xlsx"}],"page":"https://www.data.gouv.fr/fr/datasets/ia-dispositifs-medicaux/"},{"id":"en-1","theme":"energie","sector":"Énergie","title":"Consommation électrique nationale — RTE","organization":"RTE","description":"Production et consommation électrique nationale par filière. Données temps réel et historique depuis 2012. Nucléaire, solaire, éolien, hydraulique.","tags":["électricité","RTE","consommation","production","nucléaire"],"metrics":{"reuses":1892,"views":134000},"resources":[{"title":"Données temps réel CSV","format":"CSV","size":"78 MB","url":"https://www.data.gouv.fr/fr/datasets/r/rte-consommation.csv"},{"title":"Historique Excel","format":"XLSX","size":"45 MB","url":"https://www.data.gouv.fr/fr/datasets/r/rte-historique.xlsx"},{"title":"Bilan prévisionnel PDF","format":"PDF","size":"12 MB","url":"https://www.data.gouv.fr/fr/datasets/r/rte-bilan.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/consommation-electrique-rte/"},{"id":"en-2","theme":"energie","sector":"Énergie","title":"DPE — Diagnostics de Performance Énergétique","organization":"ADEME","description":"Base nationale des DPE : 10 millions de logements diagnostiqués. Étiquette énergie A-G, émissions GES, travaux recommandés, consommation estimée.","tags":["DPE","performance-énergétique","logement","rénovation","ADEME"],"metrics":{"reuses":3241,"views":267000},"resources":[{"title":"DPE logements CSV","format":"CSV","size":"890 MB","url":"https://www.data.gouv.fr/fr/datasets/r/dpe-logements.csv"},{"title":"DPE tertiaire CSV","format":"CSV","size":"120 MB","url":"https://www.data.gouv.fr/fr/datasets/r/dpe-tertiaire.csv"},{"title":"Guide technique PDF","format":"PDF","size":"4.1 MB","url":"https://www.data.gouv.fr/fr/datasets/r/dpe-guide.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/dpe-logements/"},{"id":"en-3","theme":"energie","sector":"Énergie","title":"Installations EnR — Éolien, solaire, hydraulique","organization":"ENEDIS","description":"Cartographie complète des installations de production d'énergies renouvelables raccordées au réseau français. Puissance installée, production, localisation.","tags":["renouvelables","éolien","solaire","ENEDIS","photovoltaïque"],"metrics":{"reuses":987,"views":72000},"resources":[{"title":"Installations CSV","format":"CSV","size":"34 MB","url":"https://www.data.gouv.fr/fr/datasets/r/enr-installations.csv"},{"title":"Carte GeoJSON","format":"GEOJSON","size":"89 MB","url":"https://www.data.gouv.fr/fr/datasets/r/enr-carte.geojson"},{"title":"Synthèse Excel","format":"XLSX","size":"12 MB","url":"https://www.data.gouv.fr/fr/datasets/r/enr-synthese.xlsx"}],"page":"https://www.data.gouv.fr/fr/datasets/installations-enr/"},{"id":"en-4","theme":"energie","sector":"Énergie","title":"Bilan carbone des datacenters français","organization":"ADEME","description":"Mesures d'impact environnemental des datacenters en France. Consommation électrique, PUE, eau de refroidissement, émissions CO2, indicateurs ESG.","tags":["datacenter","énergie","CO2","ESG","numérique-responsable"],"metrics":{"reuses":312,"views":24000},"resources":[{"title":"Données CSV","format":"CSV","size":"8.9 MB","url":"https://www.data.gouv.fr/fr/datasets/r/datacenter-bilan.csv"},{"title":"Rapport ADEME PDF","format":"PDF","size":"15 MB","url":"https://www.data.gouv.fr/fr/datasets/r/ademe-datacenter.pdf"},{"title":"Indicateurs Excel","format":"XLSX","size":"6.7 MB","url":"https://www.data.gouv.fr/fr/datasets/r/datacenter-indicateurs.xlsx"}],"page":"https://www.data.gouv.fr/fr/datasets/datacenters-bilan-carbone/"},{"id":"tr-1","theme":"transport","sector":"Transport","title":"GTFS France — Horaires transports en commun","organization":"Île-de-France Mobilités / SNCF","description":"Données GTFS de tous les réseaux de transport en commun français. Lignes, arrêts, horaires théoriques et temps réel, accessibilité PMR.","tags":["GTFS","transport","SNCF","bus","métro","mobilité"],"metrics":{"reuses":4521,"views":312000},"resources":[{"title":"GTFS IDF ZIP","format":"ZIP","size":"145 MB","url":"https://www.data.gouv.fr/fr/datasets/r/gtfs-idf.zip"},{"title":"Arrêts et lignes CSV","format":"CSV","size":"23 MB","url":"https://www.data.gouv.fr/fr/datasets/r/arrets-tc.csv"},{"title":"Documentation PDF","format":"PDF","size":"2.1 MB","url":"https://www.data.gouv.fr/fr/datasets/r/gtfs-doc.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/gtfs-france/"},{"id":"tr-2","theme":"transport","sector":"Transport","title":"Accidents corporels — Base BAAC 1995-2024","organization":"Ministère de l'Intérieur / ONISR","description":"Accidents de la route avec victimes en France. Localisation GPS, conditions, gravité, véhicules, usagers. 30 ans de données exploitables.","tags":["accidents","sécurité-routière","BAAC","ONISR","données-géo"],"metrics":{"reuses":2876,"views":198000},"resources":[{"title":"BAAC 2024 CSV","format":"CSV","size":"45 MB","url":"https://www.data.gouv.fr/fr/datasets/r/baac-2024.csv"},{"title":"Historique 1995-2024 Excel","format":"XLSX","size":"234 MB","url":"https://www.data.gouv.fr/fr/datasets/r/baac-historique.xlsx"},{"title":"Bilan ONISR 2024 PDF","format":"PDF","size":"8.7 MB","url":"https://www.data.gouv.fr/fr/datasets/r/bilan-onisr-2024.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/baac-accidents/"},{"id":"tr-3","theme":"transport","sector":"Transport","title":"Bornes de recharge VE — Registre IRVE national","organization":"AFIREV / ENEDIS","description":"100 000+ points de recharge pour véhicules électriques. Localisation, puissance, opérateur, disponibilité temps réel, types de connecteurs.","tags":["VE","bornes","IRVE","électromobilité","recharge"],"metrics":{"reuses":1234,"views":87000},"resources":[{"title":"Bornes CSV","format":"CSV","size":"12 MB","url":"https://www.data.gouv.fr/fr/datasets/r/irve-bornes.csv"},{"title":"Carte GeoJSON","format":"GEOJSON","size":"34 MB","url":"https://www.data.gouv.fr/fr/datasets/r/irve-carte.geojson"},{"title":"Analyse Excel","format":"XLSX","size":"5.6 MB","url":"https://www.data.gouv.fr/fr/datasets/r/irve-stats.xlsx"}],"page":"https://www.data.gouv.fr/fr/datasets/bornes-recharge-ve/"},{"id":"fi-1","theme":"finance","sector":"Finance","title":"Budget de l'État — PLF 2024 complet","organization":"Ministère des Finances / DGFiP","description":"Budget général de l'État 2024. Recettes et dépenses par programme, mission, action et sous-action. Format LOLF. Données exécutées et prévisionnelles.","tags":["budget","PLF","finances-publiques","LOLF","État"],"metrics":{"reuses":1567,"views":112000},"resources":[{"title":"Budget CSV","format":"CSV","size":"18 MB","url":"https://www.data.gouv.fr/fr/datasets/r/budget-etat-2024.csv"},{"title":"PLF Excel complet","format":"XLSX","size":"45 MB","url":"https://www.data.gouv.fr/fr/datasets/r/plf-2024.xlsx"},{"title":"Rapport Cour des Comptes PDF","format":"PDF","size":"23 MB","url":"https://www.data.gouv.fr/fr/datasets/r/cour-comptes-2024.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/budget-etat/"},{"id":"fi-2","theme":"finance","sector":"Finance","title":"DORA — Résilience opérationnelle secteur financier","organization":"ACPR / Banque de France","description":"Reporting DORA des établissements financiers français. Incidents ICT, tests de pénétration, gestion des tiers critiques, plans de continuité.","tags":["DORA","ACPR","résilience","ICT","banque","assurance"],"metrics":{"reuses":234,"views":18900},"resources":[{"title":"Reporting DORA CSV","format":"CSV","size":"6.7 MB","url":"https://www.data.gouv.fr/fr/datasets/r/dora-reporting.csv"},{"title":"Guide DORA complet PDF","format":"PDF","size":"9.4 MB","url":"https://www.data.gouv.fr/fr/datasets/r/guide-dora.pdf"},{"title":"Templates conformité Excel","format":"XLSX","size":"3.2 MB","url":"https://www.data.gouv.fr/fr/datasets/r/dora-templates.xlsx"}],"page":"https://www.data.gouv.fr/fr/datasets/dora-finance/"},{"id":"fi-3","theme":"finance","sector":"Finance","title":"SIRENE — Base complète entreprises et établissements","organization":"INSEE","description":"12 millions d'unités légales françaises. SIREN, SIRET, APE, date de création, effectifs, adresse. Référence nationale. Mise à jour quotidienne.","tags":["SIRENE","entreprises","INSEE","établissements","SIREN"],"metrics":{"reuses":8934,"views":892000},"resources":[{"title":"Unités légales CSV","format":"CSV","size":"2.4 GB","url":"https://www.data.gouv.fr/fr/datasets/r/sirene-ul.csv"},{"title":"Établissements CSV","format":"CSV","size":"4.1 GB","url":"https://www.data.gouv.fr/fr/datasets/r/sirene-etab.csv"},{"title":"Notice méthodologique PDF","format":"PDF","size":"3.8 MB","url":"https://www.data.gouv.fr/fr/datasets/r/sirene-notice.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/base-sirene/"},{"id":"fi-4","theme":"finance","sector":"Finance","title":"Marchés publics — Données essentielles 2024","organization":"Direction des Affaires Juridiques / DAJF","description":"Tous les marchés publics notifiés en France. Acheteur, titulaire, montant, objet, CPV. Obligations de transparence loi Sapin II.","tags":["marchés-publics","commande-publique","transparence","DAJF"],"metrics":{"reuses":2345,"views":167000},"resources":[{"title":"Marchés 2024 CSV","format":"CSV","size":"234 MB","url":"https://www.data.gouv.fr/fr/datasets/r/marches-publics-2024.csv"},{"title":"Données JSON","format":"JSON","size":"189 MB","url":"https://www.data.gouv.fr/fr/datasets/r/marches-publics.json"},{"title":"Guide achats responsables PDF","format":"PDF","size":"7.8 MB","url":"https://www.data.gouv.fr/fr/datasets/r/guide-achats.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/marches-publics/"},{"id":"ind-1","theme":"industrie","sector":"Industrie","title":"Émissions polluantes — Base GEREP sites industriels","organization":"Ministère Transition Écologique / DREAL","description":"Déclarations annuelles d'émissions polluantes des sites ICPE. Air, eau, déchets. 5 000+ sites industriels. Données géolocalisées.","tags":["industrie","émissions","GEREP","ICPE","pollution","environnement"],"metrics":{"reuses":456,"views":34000},"resources":[{"title":"Émissions CSV","format":"CSV","size":"67 MB","url":"https://www.data.gouv.fr/fr/datasets/r/gerep-emissions.csv"},{"title":"Sites industriels Excel","format":"XLSX","size":"23 MB","url":"https://www.data.gouv.fr/fr/datasets/r/gerep-sites.xlsx"},{"title":"Carte GeoJSON","format":"GEOJSON","size":"45 MB","url":"https://www.data.gouv.fr/fr/datasets/r/gerep-carte.geojson"}],"page":"https://www.data.gouv.fr/fr/datasets/gerep-sites-industriels/"},{"id":"ind-2","theme":"industrie","sector":"Industrie","title":"Accidents technologiques — Base ARIA","organization":"BARPI / MEFSIN","description":"65 000 accidents technologiques et industriels référencés en France. Retours d'expérience, causes, conséquences, secteur Seveso.","tags":["accidents","ARIA","ICPE","Seveso","sécurité-industrielle"],"metrics":{"reuses":312,"views":24000},"resources":[{"title":"Accidents CSV","format":"CSV","size":"28 MB","url":"https://www.data.gouv.fr/fr/datasets/r/aria-accidents.csv"},{"title":"Analyse par secteur Excel","format":"XLSX","size":"15 MB","url":"https://www.data.gouv.fr/fr/datasets/r/aria-analyse.xlsx"},{"title":"Bilan annuel PDF","format":"PDF","size":"7.8 MB","url":"https://www.data.gouv.fr/fr/datasets/r/aria-bilan.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/base-aria/"},{"id":"ind-3","theme":"industrie","sector":"Industrie","title":"Brevets industriels — INPI France 2000-2024","organization":"INPI","description":"Brevets déposés en France. Inventeurs, entreprises déposantes, domaines technologiques (CIB), statut de délivrance, pays désignés.","tags":["brevets","INPI","propriété-intellectuelle","innovation","R&D"],"metrics":{"reuses":789,"views":56000},"resources":[{"title":"Brevets CSV","format":"CSV","size":"234 MB","url":"https://www.data.gouv.fr/fr/datasets/r/inpi-brevets.csv"},{"title":"Statistiques Excel","format":"XLSX","size":"34 MB","url":"https://www.data.gouv.fr/fr/datasets/r/inpi-stats.xlsx"},{"title":"Rapport annuel INPI PDF","format":"PDF","size":"6.2 MB","url":"https://www.data.gouv.fr/fr/datasets/r/inpi-rapport.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/brevets-inpi/"},{"id":"im-1","theme":"immobilier","sector":"Immobilier","title":"DVF+ — Demandes de Valeurs Foncières géolocalisées","organization":"DGFiP / IGN","description":"Toutes les transactions immobilières en France depuis 2014 avec géolocalisation précise. Prix au m², type de bien, surface, mutations.","tags":["DVF","immobilier","prix","transactions","géolocalisation"],"metrics":{"reuses":12456,"views":1234000},"resources":[{"title":"DVF+ 2024 CSV","format":"CSV","size":"890 MB","url":"https://www.data.gouv.fr/fr/datasets/r/dvf-2024.csv"},{"title":"DVF géolocalisé GeoJSON","format":"GEOJSON","size":"2.1 GB","url":"https://www.data.gouv.fr/fr/datasets/r/dvf-geo.geojson"},{"title":"Guide utilisateur PDF","format":"PDF","size":"3.4 MB","url":"https://www.data.gouv.fr/fr/datasets/r/dvf-guide.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/demandes-valeurs-foncieres/"},{"id":"im-2","theme":"immobilier","sector":"Immobilier","title":"PLU — Plans Locaux d'Urbanisme France entière","organization":"Géoportail de l'Urbanisme / DGALN","description":"Règlements d'urbanisme de toutes les communes. Zones constructibles, servitudes, règles de hauteur, espaces protégés. Format GeoJSON/Shapefile.","tags":["PLU","urbanisme","zonage","DGALN","construction"],"metrics":{"reuses":3456,"views":234000},"resources":[{"title":"PLU GeoJSON","format":"GEOJSON","size":"12 GB","url":"https://www.data.gouv.fr/fr/datasets/r/plu-france.geojson"},{"title":"Communes CSV","format":"CSV","size":"234 MB","url":"https://www.data.gouv.fr/fr/datasets/r/plu-communes.csv"},{"title":"Guide technique PDF","format":"PDF","size":"8.9 MB","url":"https://www.data.gouv.fr/fr/datasets/r/plu-guide.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/plu-france/"},{"id":"ed-1","theme":"education","sector":"Éducation","title":"Résultats Baccalauréat 2024 par établissement","organization":"MENJ / DEPP","description":"Taux de réussite au bac 2024 par lycée, académie, série et mention. Classements et comparaisons sur 5 ans.","tags":["baccalauréat","résultats","lycées","DEPP","éducation"],"metrics":{"reuses":2341,"views":187000},"resources":[{"title":"Résultats lycées CSV","format":"CSV","size":"45 MB","url":"https://www.data.gouv.fr/fr/datasets/r/bac-2024-lycees.csv"},{"title":"Synthèse nationale Excel","format":"XLSX","size":"23 MB","url":"https://www.data.gouv.fr/fr/datasets/r/bac-2024-synthese.xlsx"},{"title":"Note de synthèse DEPP PDF","format":"PDF","size":"4.5 MB","url":"https://www.data.gouv.fr/fr/datasets/r/depp-bac-2024.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/resultats-bac/"},{"id":"ed-2","theme":"education","sector":"Éducation","title":"IA dans l'éducation — Usages et outils 2024","organization":"Réseau Canopé / MENJ","description":"Enquête nationale sur l'utilisation de l'IA dans les établissements scolaires. ChatGPT, outils d'aide à la rédaction, formation des enseignants.","tags":["IA","éducation","numérique","enseignants","Canopé"],"metrics":{"reuses":234,"views":18900},"resources":[{"title":"Résultats enquête CSV","format":"CSV","size":"8.9 MB","url":"https://www.data.gouv.fr/fr/datasets/r/ia-education-2024.csv"},{"title":"Rapport complet PDF","format":"PDF","size":"12 MB","url":"https://www.data.gouv.fr/fr/datasets/r/ia-education-rapport.pdf"},{"title":"Données Excel","format":"XLSX","size":"5.6 MB","url":"https://www.data.gouv.fr/fr/datasets/r/ia-education-stats.xlsx"}],"page":"https://www.data.gouv.fr/fr/datasets/ia-education/"},{"id":"env-1","theme":"environnement","sector":"Environnement","title":"Qualité de l'air — Mesures Atmo France","organization":"Atmo France / AirParif","description":"Mesures horaires PM2.5, PM10, NO2, O3, SO2 sur 800 stations françaises. API temps réel, historique depuis 2000, alertes pollution.","tags":["qualité-air","pollution","PM2.5","Atmo","AirParif","NO2"],"metrics":{"reuses":2876,"views":234000},"resources":[{"title":"Mesures horaires CSV","format":"CSV","size":"1.2 GB","url":"https://www.data.gouv.fr/fr/datasets/r/atmo-mesures.csv"},{"title":"Stations Excel","format":"XLSX","size":"12 MB","url":"https://www.data.gouv.fr/fr/datasets/r/atmo-stations.xlsx"},{"title":"Rapport annuel PDF","format":"PDF","size":"8.9 MB","url":"https://www.data.gouv.fr/fr/datasets/r/atmo-rapport.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/qualite-air-atmo/"},{"id":"env-2","theme":"environnement","sector":"Environnement","title":"Inventaire national GES — CITEPA","organization":"CITEPA / ADEME","description":"Émissions de gaz à effet de serre par secteur (énergie, transport, industrie, agriculture, déchets). Séries depuis 1990. Rapport SECTEN annuel.","tags":["GES","CO2","inventaire","CITEPA","climat","SECTEN"],"metrics":{"reuses":1567,"views":112000},"resources":[{"title":"GES par secteur CSV","format":"CSV","size":"23 MB","url":"https://www.data.gouv.fr/fr/datasets/r/ges-secteurs.csv"},{"title":"Séries historiques Excel","format":"XLSX","size":"34 MB","url":"https://www.data.gouv.fr/fr/datasets/r/ges-historique.xlsx"},{"title":"Rapport SECTEN PDF","format":"PDF","size":"15 MB","url":"https://www.data.gouv.fr/fr/datasets/r/citepa-secten.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/ges-citepa/"},{"id":"ag-1","theme":"agriculture","sector":"Agriculture","title":"Registre Parcellaire Graphique (RPG) 2024","organization":"ASP / Ministère Agriculture","description":"Cartographie des îlots et cultures agricoles déclarées pour les aides PAC. Toutes les cultures, surfaces, codes îlots. Référence nationale.","tags":["agriculture","RPG","PAC","cultures","cartographie"],"metrics":{"reuses":4521,"views":345000},"resources":[{"title":"RPG GeoJSON 2024","format":"GEOJSON","size":"2.3 GB","url":"https://www.data.gouv.fr/fr/datasets/r/rpg-2024.geojson"},{"title":"Cultures CSV","format":"CSV","size":"890 MB","url":"https://www.data.gouv.fr/fr/datasets/r/rpg-cultures.csv"},{"title":"Guide technique PDF","format":"PDF","size":"5.4 MB","url":"https://www.data.gouv.fr/fr/datasets/r/rpg-guide.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/rpg-registre-parcellaire/"},{"id":"ag-2","theme":"agriculture","sector":"Agriculture","title":"Pesticides — Ventes et usage par culture","organization":"ANSES / Ministère Agriculture","description":"Quantités de pesticides vendus et utilisés par matière active, culture, département. Base Bnvd. Plan Ecophyto 2030.","tags":["pesticides","phytosanitaires","ANSES","Bnvd","Ecophyto"],"metrics":{"reuses":1234,"views":89000},"resources":[{"title":"Ventes par département CSV","format":"CSV","size":"45 MB","url":"https://www.data.gouv.fr/fr/datasets/r/pesticides-ventes.csv"},{"title":"Usage par culture Excel","format":"XLSX","size":"23 MB","url":"https://www.data.gouv.fr/fr/datasets/r/pesticides-cultures.xlsx"},{"title":"Rapport ANSES PDF","format":"PDF","size":"9.8 MB","url":"https://www.data.gouv.fr/fr/datasets/r/anses-pesticides.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/pesticides-bnvd/"},{"id":"to-1","theme":"tourisme","sector":"Tourisme","title":"Hébergements touristiques — Capacité et fréquentation","organization":"INSEE / DGE","description":"Capacité et taux d'occupation des hébergements touristiques français. Hôtels, campings, résidences. Données mensuelles par région.","tags":["tourisme","hôtels","hébergements","fréquentation","DGE"],"metrics":{"reuses":876,"views":67000},"resources":[{"title":"Hébergements CSV","format":"CSV","size":"34 MB","url":"https://www.data.gouv.fr/fr/datasets/r/hebergements-touristiques.csv"},{"title":"Statistiques mensuelles Excel","format":"XLSX","size":"18 MB","url":"https://www.data.gouv.fr/fr/datasets/r/tourisme-stats.xlsx"},{"title":"Bilan DGE annuel PDF","format":"PDF","size":"6.7 MB","url":"https://www.data.gouv.fr/fr/datasets/r/dge-tourisme-bilan.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/hebergements-touristiques/"},{"id":"rh-1","theme":"rh","sector":"Ressources Humaines","title":"Offres d'emploi — France Travail quotidien","organization":"France Travail","description":"Toutes les offres d'emploi déposées sur France Travail. Métiers, types de contrat, salaires, localisations, compétences requises. Mise à jour quotidienne.","tags":["emploi","offres","France-Travail","marché-travail","recrutement"],"metrics":{"reuses":5678,"views":456000},"resources":[{"title":"Offres CSV quotidien","format":"CSV","size":"234 MB","url":"https://www.data.gouv.fr/fr/datasets/r/offres-emploi.csv"},{"title":"Stats mensuelles Excel","format":"XLSX","size":"45 MB","url":"https://www.data.gouv.fr/fr/datasets/r/emploi-stats.xlsx"},{"title":"Rapport marché travail PDF","format":"PDF","size":"11 MB","url":"https://www.data.gouv.fr/fr/datasets/r/marche-travail.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/offres-emploi/"},{"id":"rh-2","theme":"rh","sector":"Ressources Humaines","title":"Index égalité femmes-hommes — Entreprises 50+ salariés","organization":"Ministère du Travail / DARES","description":"Index égalité salariale publié obligatoirement par les entreprises de +50 salariés. Note sur 100, écarts de rémunération, promotions, augmentations.","tags":["égalité","femmes-hommes","salaires","DARES","index"],"metrics":{"reuses":1234,"views":98000},"resources":[{"title":"Index 2024 CSV","format":"CSV","size":"23 MB","url":"https://www.data.gouv.fr/fr/datasets/r/index-egalite-2024.csv"},{"title":"Analyse sectorielle Excel","format":"XLSX","size":"12 MB","url":"https://www.data.gouv.fr/fr/datasets/r/index-egalite-analyse.xlsx"},{"title":"Rapport DARES PDF","format":"PDF","size":"7.8 MB","url":"https://www.data.gouv.fr/fr/datasets/r/dares-egalite.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/index-egalite/"},{"id":"ju-1","theme":"justice","sector":"Juridique","title":"Jurisprudence open data — Cour de cassation","organization":"Cour de Cassation / Conseil d'État","description":"Décisions judiciaires anonymisées. Cour de cassation, Conseil d'État, cours d'appel. Texte intégral, XML/JSON. Moteur de recherche Judilibre.","tags":["jurisprudence","justice","Cour-cassation","open-data-juridique","Judilibre"],"metrics":{"reuses":2345,"views":178000},"resources":[{"title":"Décisions JSON","format":"JSON","size":"23 GB","url":"https://www.data.gouv.fr/fr/datasets/r/jurisprudence.json"},{"title":"Index CSV","format":"CSV","size":"890 MB","url":"https://www.data.gouv.fr/fr/datasets/r/jurisprudence-index.csv"},{"title":"Guide utilisation PDF","format":"PDF","size":"3.4 MB","url":"https://www.data.gouv.fr/fr/datasets/r/jurisprudence-guide.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/jurisprudence/"},{"id":"co-1","theme":"collectivites","sector":"Collectivités","title":"Comptes des collectivités locales — DGFiP","organization":"DGFiP / DGCL","description":"Comptes financiers de toutes les communes, départements et régions françaises. Recettes, dépenses, dette, épargne brute. Séries 2010-2024.","tags":["collectivités","communes","budget-local","DGFiP","finances-locales"],"metrics":{"reuses":3456,"views":234000},"resources":[{"title":"Comptes communes CSV","format":"CSV","size":"456 MB","url":"https://www.data.gouv.fr/fr/datasets/r/comptes-communes.csv"},{"title":"Synthèse Excel","format":"XLSX","size":"89 MB","url":"https://www.data.gouv.fr/fr/datasets/r/comptes-synthese.xlsx"},{"title":"Rapport DGCL PDF","format":"PDF","size":"12 MB","url":"https://www.data.gouv.fr/fr/datasets/r/dgcl-rapport.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/comptes-collectivites/"},{"id":"co-2","theme":"collectivites","sector":"Collectivités","title":"Équipements publics — Base Permanente des Équipements","organization":"INSEE","description":"Localisation de 2,5 millions d'équipements et services en France. Écoles, hôpitaux, commerces, services publics. Accessibilité, distance.","tags":["équipements","services-publics","INSEE","BPE","accessibilité"],"metrics":{"reuses":4789,"views":345000},"resources":[{"title":"BPE CSV","format":"CSV","size":"234 MB","url":"https://www.data.gouv.fr/fr/datasets/r/bpe-equipements.csv"},{"title":"Documentation Excel","format":"XLSX","size":"45 MB","url":"https://www.data.gouv.fr/fr/datasets/r/bpe-docs.xlsx"},{"title":"Guide PDF","format":"PDF","size":"4.2 MB","url":"https://www.data.gouv.fr/fr/datasets/r/bpe-guide.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/base-permanente-equipements/"}];
 
 // ══ STATE ══
-let state = {
-  query: 'intelligence artificielle',
-  page: 1,
-  totalPages: 1,
-  total: 0,
-  orgFilter: '',
-  fmtFilter: '',
-  datasets: []
-};
+var S = { q:'ia', page:1, total:0, pages:1, org:'', fmt:'' };
 
-// ══ API — appels directs navigateur vers data.gouv.fr (CORS ouvert) ══
-function searchLocal(query, page, pageSize) {
-  const q = query.toLowerCase().trim();
-  let results = LOCAL_DATASETS;
-  if (q) {
-    results = LOCAL_DATASETS.filter(d =>
-      d.theme === q ||
-      d.title.toLowerCase().includes(q) ||
-      (d.tags || []).some(t => t.toLowerCase().includes(q)) ||
-      (d.organization || '').toLowerCase().includes(q) ||
-      (d.sector || '').toLowerCase().includes(q) ||
-      d.description.toLowerCase().includes(q)
-    );
+// ══ INIT ORGS ══
+function initOrgs(theme) {
+  var sel = document.getElementById('sel-org');
+  var filtered = theme ? DS.filter(function(d){ return d.theme===theme; }) : DS;
+  var orgs = filtered.map(function(d){ return d.organization; }).filter(Boolean);
+  orgs = orgs.filter(function(v,i,a){ return a.indexOf(v)===i; }).sort();
+  sel.innerHTML = '<option value="">— Toutes les organisations —</option>';
+  orgs.forEach(function(o){
+    var opt = document.createElement('option');
+    opt.value = o; opt.textContent = o; sel.appendChild(opt);
+  });
+}
+
+// ══ FILTRAGE ══
+function filter(q, org, fmt) {
+  return DS.filter(function(d) {
+    var matchQ = !q || d.theme===q || d.title.toLowerCase().indexOf(q.toLowerCase())>-1
+      || (d.tags||[]).join(' ').toLowerCase().indexOf(q.toLowerCase())>-1
+      || (d.organization||'').toLowerCase().indexOf(q.toLowerCase())>-1;
+    var matchOrg = !org || d.organization===org;
+    var matchFmt = !fmt || (d.resources||[]).some(function(r){ return r.format===fmt; });
+    return matchQ && matchOrg && matchFmt;
+  });
+}
+
+// ══ RENDER ══
+function render() {
+  var results = filter(S.q, S.org, S.fmt);
+  S.total = results.length;
+  S.pages = Math.ceil(results.length/12)||1;
+  if(S.page>S.pages) S.page=1;
+  var page = results.slice((S.page-1)*12, S.page*12);
+
+  // Status
+  var sb = document.getElementById('sbar');
+  var st = document.getElementById('sbar-txt');
+  sb.className = 'sbar ok';
+  st.textContent = S.total + ' dataset' + (S.total>1?'s':'') + ' disponible' + (S.total>1?'s':'');
+
+  // Cards
+  var g = document.getElementById('cards');
+  if(!page.length) {
+    g.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--muted);font-family:Space Mono,monospace;font-size:12px;">🔍 Aucun dataset trouvé</div>';
+  } else {
+    g.innerHTML = page.map(function(d){
+      return '<div class="card" onclick="sel(\''+d.id+'\',this)" data-id="'+d.id+'">'
+        +'<div class="ct">'+d.title+'</div>'
+        +'<div class="co">'+d.organization+'</div>'
+        +'<div class="cm">'
+        +'<span class="badge br">↺ '+(d.metrics&&d.metrics.reuses||0)+'</span>'
+        +'<span class="badge bf">📎 '+(d.resources&&d.resources.length||0)+'</span>'
+        +(d.metrics&&d.metrics.views?'<span class="badge bv">👁 '+d.metrics.views+'</span>':'')
+        +'</div></div>';
+    }).join('');
   }
-  const start = (page - 1) * pageSize;
-  return { data: results.slice(start, start + pageSize), total: results.length };
-}
 
-// ══ FETCH DATASETS ══
-function fetchDatasets() {
-  // Instantané — données en mémoire, 0ms de latence
-  const data = searchLocal(state.query, state.page, 15);
-  state.datasets   = data.data  || [];
-  state.total      = data.total || 0;
-  state.totalPages = Math.ceil(state.total / 15) || 1;
-  document.getElementById('cnt-ds').textContent = LOCAL_DATASETS.length;
-  setStatus('ok', state.total + ' dataset' + (state.total > 1 ? 's' : '') + ' disponible' + (state.total > 1 ? 's' : ''));
-  renderCards(applyFilters(state.datasets));
-  updatePag();
-}
-
-function applyFilters(datasets) {
-  let out = [...datasets];
-  if (state.orgFilter)
-    out = out.filter(ds => (ds.organization?.name || '').toLowerCase().includes(state.orgFilter.toLowerCase()));
-  if (state.fmtFilter)
-    out = out.filter(ds => (ds.resources || []).some(r =>
-      (r.format || r.mime_type || '').toLowerCase().includes(state.fmtFilter)));
-  return out;
-}
-
-// ══ RENDER CARDS ══
-function renderCards(datasets) {
-  const grid = document.getElementById('ds-grid');
-  if (!datasets.length) {
-    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><div class="empty-ico">🔍</div><p style="font-size:13px;">Aucun dataset trouvé.<br>Essayez un autre terme.</p></div>';
-    return;
+  // Pagination
+  var pag = document.getElementById('pag');
+  if(S.pages<=1){ pag.style.display='none'; }
+  else {
+    pag.style.display='flex';
+    document.getElementById('pag-info').textContent='Page '+S.page+'/'+S.pages+' — '+S.total+' résultats';
+    document.getElementById('bp').disabled = S.page<=1;
+    document.getElementById('bn').disabled = S.page>=S.pages;
   }
-  grid.innerHTML = datasets.map(ds => `
-    <div class="ds-card" onclick="selectDs('${ds.id}', this)">
-      <div class="dc-title">${ds.title || 'Sans titre'}</div>
-      <div class="dc-org">${ds.organization || 'Organisation inconnue'}</div>
-      <div class="dc-meta">
-        <span class="badge br">↺ ${ds.metrics?.reuses || 0}</span>
-        <span class="badge bf">📎 ${(ds.resources || []).length}</span>
-        ${ds.metrics?.views ? '<span class="badge bv">👁 ' + ds.metrics.views + '</span>' : ''}
-      </div>
-    </div>`).join('');
 }
 
 // ══ SELECT DATASET ══
-function selectDs(id, el) {
-  // Instantané — lookup direct dans LOCAL_DATASETS
-  document.querySelectorAll('.ds-card').forEach(c => c.classList.remove('sel'));
-  el.classList.add('sel');
-  const ds = LOCAL_DATASETS.find(d => d.id === id);
-  if (ds) renderDetail(ds);
+function sel(id, el) {
+  document.querySelectorAll('.card').forEach(function(c){ c.classList.remove('on'); });
+  el.classList.add('on');
+  var d = DS.find(function(x){ return x.id===id; });
+  if(!d) return;
+  var res = d.resources||[];
+  var tags = (d.tags||[]).slice(0,6);
+  var fmtIco = {'CSV':'📊','XLSX':'📊','PDF':'📄','JSON':'🗂️','GEOJSON':'🗺️','ZIP':'📦'};
+  document.getElementById('det').innerHTML =
+    '<div class="dh">'
+    +'<div class="dt">'+d.title+'</div>'
+    +'<div class="do">'+d.organization+'</div>'
+    +'<div class="dd">'+(d.description||'').substring(0,200)+'…</div>'
+    +(tags.length?'<div class="dtags">'+tags.map(function(t){ return '<span class="dtag">'+t+'</span>'; }).join('')+'</div>':'')
+    +'</div>'
+    +'<div class="db">'
+    +'<div class="mrow">'
+    +'<div class="mb"><div class="mv">'+(d.metrics&&d.metrics.reuses||0)+'</div><div class="ml">Réutilisations</div></div>'
+    +'<div class="mb"><div class="mv">'+(d.metrics&&d.metrics.views||0)+'</div><div class="ml">Vues</div></div>'
+    +'<div class="mb"><div class="mv">'+res.length+'</div><div class="ml">Ressources</div></div>'
+    +'</div>'
+    +'<div class="rlbl">📎 Ressources téléchargeables</div>'
+    +'<div class="rlist">'
+    +res.map(function(r){
+      var ico = fmtIco[r.format]||'📎';
+      return '<div class="ri">'
+        +'<div class="rn">'+ico+' '+r.title+'</div>'
+        +'<span class="rf">'+r.format+'</span>'
+        +'<span class="rsz">'+r.size+'</span>'
+        +(r.url?'<a class="rl" href="'+r.url+'" target="_blank">⬇ DL</a>':'')
+        +'</div>';
+    }).join('')
+    +'</div>'
+    +'<div class="dacts">'
+    +(d.page?'<a href="'+d.page+'" target="_blank" class="btn btn-p" style="font-size:12px;padding:8px 16px;">data.gouv.fr ↗</a>':'')
+    +'</div></div>';
 }
 
-function renderDetail(ds) {
-  const panel = document.getElementById('detail-panel');
-  const res = ds.resources || [];
-  const tags = (ds.tags || []).slice(0, 6);
-  panel.innerHTML = `
-    <div class="dp-head">
-      <div class="dp-title">${ds.title || 'Sans titre'}</div>
-      <div class="dp-org">${ds.organization || ''}</div>
-      <div class="dp-desc">${(ds.description || '').replace(/[#*_>\[\]]/g,'').substring(0,200)}…</div>
-      ${tags.length ? '<div class="dp-tags">' + tags.map(t=>'<span class="dtag">'+t+'</span>').join('') + '</div>' : ''}
-    </div>
-    <div class="dp-body">
-      <div class="mrow">
-        <div class="mb"><div class="mv">${ds.metrics?.reuses||0}</div><div class="ml">Réutilisations</div></div>
-        <div class="mb"><div class="mv">${ds.metrics?.views||0}</div><div class="ml">Vues</div></div>
-        <div class="mb"><div class="mv">${res.length}</div><div class="ml">Ressources</div></div>
-      </div>
-      <div class="rlbl">📎 Ressources téléchargeables</div>
-      <div class="rlist">
-        ${res.length ? res.slice(0,10).map(r=>{
-          const fmt = (r.format||r.mime_type||'').toLowerCase();
-          const ico = fmt.includes('csv')?'📊':fmt.includes('pdf')?'📄':fmt.includes('xls')?'📊':fmt.includes('json')?'🗂️':fmt.includes('geo')?'🗺️':fmt.includes('zip')?'📦':'📎';
-          const fmtLabel = (r.format||r.mime_type||'—').toUpperCase().substring(0,6);
-          const size = r.size ? '<span style="font-size:10px;color:var(--muted);margin-left:4px;">'+r.size+'</span>' : '';
-          return '<div class="ri">'+
-            '<div class="rn">'+ico+' '+(r.title||r.description||'Ressource')+size+'</div>'+
-            '<span class="rf">'+fmtLabel+'</span>'+
-            (r.url?'<a class="rl" href="'+r.url+'" target="_blank" title="Télécharger '+fmtLabel+'">⬇ DL</a>':'')+
-          '</div>';
-        }).join('') : '<p style="font-size:12px;color:var(--muted);">Aucune ressource disponible</p>'}
-      </div>
-      <div class="dp-actions">
-        ${ds.page?'<a href="'+ds.page+'" target="_blank" class="btn btn-p btn-sm">data.gouv.fr ↗</a>':''}
-        <button onclick="navigator.clipboard.writeText('${ds.id}').then(()=>alert('ID copié!'))" class="btn btn-s btn-sm">Copier ID</button>
-      </div>
-    </div>`;
-}
-
-// ══ SELECTS ══
+// ══ ACTIONS ══
 function onTheme() {
-  const theme = document.getElementById('sel-theme').value;
-  state.query = theme;
-  state.orgFilter = '';
-  document.getElementById('s-input').value = '';
+  S.q = document.getElementById('sel-theme').value;
+  S.org = ''; S.page = 1;
   document.getElementById('sel-org').value = '';
-  state.page = 1;
-  syncThemeNav(theme);
-  updateOrgSelect(theme);  // Met à jour les orgs selon la thématique
-  fetchDatasets();
-}
-
-function updateOrgSelect(theme) {
-  const sel = document.getElementById('sel-org');
-  // Filtrer les datasets par thème pour extraire les orgs correspondantes
-  const filtered = theme
-    ? LOCAL_DATASETS.filter(d => d.theme === theme || d.sector === theme)
-    : LOCAL_DATASETS;
-  const orgs = [...new Set(filtered.map(d => d.organization).filter(Boolean))].sort();
-  // Reconstruire le select
-  sel.innerHTML = '<option value="">— Toutes les organisations —</option>';
-  orgs.forEach(name => {
-    const o = document.createElement('option');
-    o.value = name;
-    o.textContent = name;
-    sel.appendChild(o);
-  });
-  document.getElementById('cnt-org').textContent = orgs.length;
+  document.getElementById('s-input').value = '';
+  syncBtns(S.q);
+  initOrgs(S.q);
+  render();
 }
 
 function onOrg() {
-  const org = document.getElementById('sel-org').value;
-  state.orgFilter = org;
-  state.page = 1;
-  if (org) {
-    // Filtrer les datasets par thème + org
-    const theme = document.getElementById('sel-theme').value;
-    const filtered = LOCAL_DATASETS.filter(d =>
-      (!theme || d.theme === theme) &&
-      (d.organization || '') === org
-    );
-    state.datasets = filtered;
-    state.total = filtered.length;
-    state.totalPages = 1;
-    renderCards(filtered);
-    document.getElementById('result-count').textContent = filtered.length + ' résultat' + (filtered.length > 1 ? 's' : '');
-    setStatus('ok', org + ' — ' + filtered.length + ' dataset' + (filtered.length > 1 ? 's' : ''));
-    updatePag();
-  } else {
-    fetchDatasets();
-  }
+  S.org = document.getElementById('sel-org').value;
+  S.page = 1; render();
 }
 
 function onFmt() {
-  state.fmtFilter = document.getElementById('sel-fmt').value;
-  renderCards(applyFilters(state.datasets));
-}
-
-function quickTheme(btn, q) {
-  document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  state.query = q;
-  state.orgFilter = '';
-  state.page = 1;
-  document.getElementById('s-input').value = '';
-  document.getElementById('sel-org').value = '';
-  // Sync select thème
-  const sel = document.getElementById('sel-theme');
-  for (let o of sel.options) { if (o.value === q) { sel.value = q; break; } }
-  updateOrgSelect(q);  // Orgs correspondant à ce thème
-  fetchDatasets();
-}
-
-function syncThemeNav(q) {
-  document.querySelectorAll('.theme-btn').forEach(b => {
-    const onclick = b.getAttribute('onclick') || '';
-    b.classList.toggle('active', onclick.includes("'" + q + "'"));
-  });
+  S.fmt = document.getElementById('sel-fmt').value;
+  S.page = 1; render();
 }
 
 function doSearch() {
-  const val = document.getElementById('s-input').value.trim();
-  if (!val) return;
-  state.query = val;
-  state.page = 1;
-  fetchDatasets();
+  var v = document.getElementById('s-input').value.trim();
+  if(!v) return;
+  S.q = v; S.org = ''; S.fmt = ''; S.page = 1;
+  document.getElementById('sel-theme').value = '';
+  document.getElementById('sel-org').value = '';
+  document.getElementById('sel-fmt').value = '';
+  document.querySelectorAll('.tb').forEach(function(b){ b.classList.remove('on'); });
+  initOrgs('');
+  render();
 }
 
-
-
-// ══ PAGINATION ══
-function updatePag() {
-  const pag = document.getElementById('pag');
-  if (state.totalPages <= 1) { pag.style.display = 'none'; return; }
-  pag.style.display = 'flex';
-  document.getElementById('pag-info').textContent =
-    'Page ' + state.page + ' / ' + state.totalPages + ' — ' + state.total.toLocaleString('fr-FR') + ' résultats';
-  document.getElementById('btn-prev').disabled = state.page <= 1;
-  document.getElementById('btn-next').disabled = state.page >= state.totalPages;
+function qt(btn, theme) {
+  S.q = theme; S.org = ''; S.page = 1;
+  document.getElementById('s-input').value = '';
+  document.getElementById('sel-org').value = '';
+  document.getElementById('sel-theme').value = theme;
+  syncBtns(theme);
+  initOrgs(theme);
+  render();
 }
 
-function changePage(dir) {
-  const np = state.page + dir;
-  if (np < 1 || np > state.totalPages) return;
-  state.page = np;
-  fetchDatasets();
-  document.getElementById('dashboard').scrollIntoView({ behavior: 'smooth' });
+function syncBtns(q) {
+  document.querySelectorAll('.tb').forEach(function(b){
+    b.classList.toggle('on', b.getAttribute('onclick').indexOf("'"+q+"'")>-1);
+  });
 }
 
-// ══ STATUS ══
-function setStatus(type, msg) {
-  const bar = document.getElementById('status-bar');
-  bar.className = 'status-bar ' + type;
-  document.getElementById('status-txt').textContent = msg;
+function pg(d) {
+  S.page += d;
+  if(S.page<1) S.page=1;
+  if(S.page>S.pages) S.page=S.pages;
+  render();
 }
 
-// ══ CODE TABS ══
-function ctab(btn, id) {
-  document.querySelectorAll('.ct').forEach(t => t.classList.remove('on'));
-  document.querySelectorAll('.cc').forEach(c => c.classList.remove('on'));
-  btn.classList.add('on');
-  document.getElementById(id).classList.add('on');
-}
-
-// ══ KEYBOARD ══
-document.getElementById('s-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') doSearch();
+// Keyboard
+document.getElementById('s-input').addEventListener('keydown', function(e){
+  if(e.key==='Enter') doSearch();
 });
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    const t = document.querySelector(a.getAttribute('href'));
-    if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  a.addEventListener('click', function(e){
+    var t = document.querySelector(a.getAttribute('href'));
+    if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth'}); }
   });
 });
 
-// ══ INIT ══
-// Peupler le select organisation avec toutes les orgs
-// ══ BOOT — Données inline, 0 réseau, instantané ══
-LOCAL_DATASETS = [{"id":"ia-1","theme":"ia","sector":"Technologie","title":"Catalogue des algorithmes publics utilisés par l'État","organization":"Etalab / DINUM","description":"Inventaire des systèmes algorithmiques déployés par les administrations françaises. Classification, impact, documentation technique et conformité IA Act.","tags":["IA","algorithmes","transparence","administration","conformité"],"metrics":{"reuses":334,"views":19800},"resources":[{"title":"Catalogue CSV","format":"CSV","size":"2.4 MB","url":"https://www.data.gouv.fr/fr/datasets/r/algorithmes-publics.csv"},{"title":"Export Excel","format":"XLSX","size":"3.1 MB","url":"https://www.data.gouv.fr/fr/datasets/r/algorithmes-publics.xlsx"},{"title":"Documentation PDF","format":"PDF","size":"890 KB","url":"https://www.data.gouv.fr/fr/datasets/r/algorithmes-publics-doc.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/catalogue-algorithmes-publics/"},{"id":"ia-2","theme":"ia","sector":"Technologie","title":"Registre des systèmes IA à haut risque — IA Act","organization":"ANSSI","description":"Classification des systèmes IA soumis aux obligations de l'IA Act européen. Niveau de risque, mesures de conformité, documentation requise.","tags":["IA Act","conformité","haut-risque","classification"],"metrics":{"reuses":142,"views":8900},"resources":[{"title":"Registre CSV","format":"CSV","size":"1.2 MB","url":"https://www.data.gouv.fr/fr/datasets/r/ia-act-register.csv"},{"title":"Rapport complet PDF","format":"PDF","size":"4.5 MB","url":"https://www.data.gouv.fr/fr/datasets/r/ia-act-rapport.pdf"},{"title":"Données JSON","format":"JSON","size":"980 KB","url":"https://www.data.gouv.fr/fr/datasets/r/ia-act.json"}],"page":"https://www.data.gouv.fr/fr/datasets/registre-ia-haut-risque/"},{"id":"ia-3","theme":"ia","sector":"Technologie","title":"Benchmark modèles IA — Biais et robustesse","organization":"INRIA","description":"Évaluation comparative des grands modèles de langage sur critères biais, robustesse, performance et consommation énergétique.","tags":["LLM","biais","benchmark","robustesse","évaluation"],"metrics":{"reuses":89,"views":5600},"resources":[{"title":"Données benchmark CSV","format":"CSV","size":"8.7 MB","url":"https://www.data.gouv.fr/fr/datasets/r/benchmark-ia.csv"},{"title":"Rapport technique PDF","format":"PDF","size":"12 MB","url":"https://www.data.gouv.fr/fr/datasets/r/benchmark-ia.pdf"},{"title":"Notebook Jupyter","format":"JSON","size":"2.3 MB","url":"https://www.data.gouv.fr/fr/datasets/r/benchmark.ipynb"}],"page":"https://www.data.gouv.fr/fr/datasets/benchmark-modeles-ia/"},{"id":"ia-4","theme":"ia","sector":"Technologie","title":"Offres d'emploi IA — Compétences et salaires","organization":"France Travail","description":"Analyse des offres d'emploi liées à l'IA en France. Compétences les plus demandées, fourchettes salariales, secteurs recruteurs. Données 2023-2024.","tags":["emploi","IA","compétences","salaires","marché-travail"],"metrics":{"reuses":211,"views":14500},"resources":[{"title":"Offres CSV","format":"CSV","size":"5.4 MB","url":"https://www.data.gouv.fr/fr/datasets/r/offres-ia.csv"},{"title":"Analyse Excel","format":"XLSX","size":"3.2 MB","url":"https://www.data.gouv.fr/fr/datasets/r/offres-ia.xlsx"},{"title":"Rapport PDF","format":"PDF","size":"6.1 MB","url":"https://www.data.gouv.fr/fr/datasets/r/offres-ia-rapport.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/offres-emploi-ia/"},{"id":"ia-5","theme":"ia","sector":"Technologie","title":"IA dans les services publics — Enquête nationale","organization":"DINUM / Direction Interministérielle","description":"Cartographie des projets IA déployés dans les ministères français. Statut, budget, impact, conformité réglementaire.","tags":["IA","services-publics","transformation-digitale","DINUM"],"metrics":{"reuses":167,"views":11200},"resources":[{"title":"Projets CSV","format":"CSV","size":"3.8 MB","url":"https://www.data.gouv.fr/fr/datasets/r/ia-services-publics.csv"},{"title":"Rapport PDF","format":"PDF","size":"8.9 MB","url":"https://www.data.gouv.fr/fr/datasets/r/ia-services-publics.pdf"},{"title":"Dashboard Excel","format":"XLSX","size":"4.2 MB","url":"https://www.data.gouv.fr/fr/datasets/r/ia-services-publics.xlsx"}],"page":"https://www.data.gouv.fr/fr/datasets/ia-services-publics/"},{"id":"cy-1","theme":"cybersecurite","sector":"Sécurité","title":"Incidents cybersécurité déclarés — Secteur public","organization":"ANSSI","description":"Incidents NIS2 déclarés par les opérateurs d'importance vitale. Statistiques par secteur, type d'attaque, impact et mesures de remédiation.","tags":["cybersécurité","NIS2","incidents","OIV","ANSSI"],"metrics":{"reuses":178,"views":11200},"resources":[{"title":"Incidents CSV","format":"CSV","size":"3.8 MB","url":"https://www.data.gouv.fr/fr/datasets/r/incidents-cyber.csv"},{"title":"Rapport annuel ANSSI PDF","format":"PDF","size":"8.9 MB","url":"https://www.data.gouv.fr/fr/datasets/r/rapport-anssi-2024.pdf"},{"title":"Statistiques Excel","format":"XLSX","size":"2.1 MB","url":"https://www.data.gouv.fr/fr/datasets/r/incidents-stats.xlsx"}],"page":"https://www.data.gouv.fr/fr/datasets/incidents-cybersecurite/"},{"id":"cy-2","theme":"cybersecurite","sector":"Sécurité","title":"Base de vulnérabilités CVE — Référentiel national","organization":"ANSSI / CEA","description":"Vulnérabilités logicielles référencées en France. Compatible NVD. Mise à jour quotidienne. Score CVSS, vecteurs d'attaque, correctifs disponibles.","tags":["CVE","vulnérabilités","CVSS","patch","sécurité"],"metrics":{"reuses":445,"views":32000},"resources":[{"title":"CVE CSV quotidien","format":"CSV","size":"45 MB","url":"https://www.data.gouv.fr/fr/datasets/r/cve-france.csv"},{"title":"CVE JSON","format":"JSON","size":"38 MB","url":"https://www.data.gouv.fr/fr/datasets/r/cve-france.json"},{"title":"Guide remédiation PDF","format":"PDF","size":"2.3 MB","url":"https://www.data.gouv.fr/fr/datasets/r/guide-cve.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/cve-vulnerabilites/"},{"id":"cy-3","theme":"cybersecurite","sector":"Sécurité","title":"Phishing et arnaques en ligne — Signalements 2024","organization":"Cybermalveillance.gouv.fr","description":"Signalements de phishing, ransomware, arnaques bancaires et fraudes. 450 000+ signalements analysés. Tendances et évolutions mensuelles.","tags":["phishing","ransomware","arnaques","signalement","cybercriminalité"],"metrics":{"reuses":312,"views":22400},"resources":[{"title":"Signalements CSV","format":"CSV","size":"7.8 MB","url":"https://www.data.gouv.fr/fr/datasets/r/phishing-2024.csv"},{"title":"Statistiques Excel","format":"XLSX","size":"4.2 MB","url":"https://www.data.gouv.fr/fr/datasets/r/phishing-stats.xlsx"},{"title":"Panorama cybercriminalité PDF","format":"PDF","size":"6.1 MB","url":"https://www.data.gouv.fr/fr/datasets/r/cybermal-2024.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/phishing-signalements/"},{"id":"cy-4","theme":"cybersecurite","sector":"Sécurité","title":"Infrastructures critiques — Cartographie OIV","organization":"SGDSN","description":"Cartographie des opérateurs d'importance vitale français. Secteurs énergie, transport, eau, finance, santé. Obligations NIS2 et mesures de sécurité.","tags":["OIV","infrastructures-critiques","NIS2","SGDSN","cartographie"],"metrics":{"reuses":67,"views":3100},"resources":[{"title":"Cartographie GeoJSON","format":"GEOJSON","size":"12 MB","url":"https://www.data.gouv.fr/fr/datasets/r/oiv-carte.geojson"},{"title":"Liste des OIV CSV","format":"CSV","size":"890 KB","url":"https://www.data.gouv.fr/fr/datasets/r/oiv-liste.csv"},{"title":"Guide NIS2 PDF","format":"PDF","size":"5.6 MB","url":"https://www.data.gouv.fr/fr/datasets/r/guide-nis2.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/infrastructures-critiques/"},{"id":"cy-5","theme":"cybersecurite","sector":"Sécurité","title":"SecNumCloud — Prestataires certifiés cybersécurité","organization":"ANSSI","description":"Liste des prestataires et solutions certifiés SecNumCloud, PSAN, PASSI et qualifiés par l'ANSSI. Mis à jour mensuellement.","tags":["SecNumCloud","certification","ANSSI","cloud","prestataires"],"metrics":{"reuses":234,"views":18900},"resources":[{"title":"Prestataires CSV","format":"CSV","size":"1.4 MB","url":"https://www.data.gouv.fr/fr/datasets/r/secnumcloud.csv"},{"title":"Référentiel PDF","format":"PDF","size":"3.2 MB","url":"https://www.data.gouv.fr/fr/datasets/r/secnumcloud-ref.pdf"},{"title":"Données Excel","format":"XLSX","size":"980 KB","url":"https://www.data.gouv.fr/fr/datasets/r/secnumcloud.xlsx"}],"page":"https://www.data.gouv.fr/fr/datasets/secnumcloud/"},{"id":"rg-1","theme":"rgpd","sector":"Juridique","title":"Délibérations CNIL — Sanctions et mises en demeure","organization":"CNIL","description":"Toutes les délibérations, sanctions et mises en demeure prononcées par la CNIL depuis 2015. Montants, secteurs concernés, manquements constatés.","tags":["CNIL","RGPD","sanctions","délibérations","vie-privée"],"metrics":{"reuses":445,"views":28900},"resources":[{"title":"Délibérations CSV","format":"CSV","size":"4.2 MB","url":"https://www.data.gouv.fr/fr/datasets/r/cnil-deliberations.csv"},{"title":"Données Excel","format":"XLSX","size":"5.1 MB","url":"https://www.data.gouv.fr/fr/datasets/r/cnil-deliberations.xlsx"},{"title":"Rapport annuel CNIL PDF","format":"PDF","size":"9.8 MB","url":"https://www.data.gouv.fr/fr/datasets/r/cnil-rapport-2024.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/deliberations-cnil/"},{"id":"rg-2","theme":"rgpd","sector":"Juridique","title":"Modèles AIPD — Analyses d'Impact Protection Données","organization":"CNIL","description":"Modèles officiels d'Analyses d'Impact relatives à la Protection des Données (AIPD/DPIA). Conformes RGPD article 35. Secteurs santé, RH, marketing.","tags":["AIPD","DPIA","RGPD","vie-privée","conformité"],"metrics":{"reuses":189,"views":13200},"resources":[{"title":"Modèles AIPD Excel","format":"XLSX","size":"2.8 MB","url":"https://www.data.gouv.fr/fr/datasets/r/aipd-modeles.xlsx"},{"title":"Guide AIPD complet PDF","format":"PDF","size":"4.7 MB","url":"https://www.data.gouv.fr/fr/datasets/r/guide-aipd.pdf"},{"title":"Checklist conformité CSV","format":"CSV","size":"450 KB","url":"https://www.data.gouv.fr/fr/datasets/r/aipd-checklist.csv"}],"page":"https://www.data.gouv.fr/fr/datasets/aipd-rgpd/"},{"id":"rg-3","theme":"rgpd","sector":"Juridique","title":"Violations de données — Notifications à la CNIL","organization":"CNIL","description":"Statistiques des violations de données notifiées à la CNIL. Par secteur d'activité, type de violation, nombre de personnes concernées. 2020-2024.","tags":["violations","données-personnelles","notifications","CNIL","RGPD"],"metrics":{"reuses":223,"views":16700},"resources":[{"title":"Violations CSV","format":"CSV","size":"1.9 MB","url":"https://www.data.gouv.fr/fr/datasets/r/violations-donnees.csv"},{"title":"Rapport violations PDF","format":"PDF","size":"7.2 MB","url":"https://www.data.gouv.fr/fr/datasets/r/rapport-violations-2024.pdf"},{"title":"Analyse Excel","format":"XLSX","size":"2.4 MB","url":"https://www.data.gouv.fr/fr/datasets/r/violations-analyse.xlsx"}],"page":"https://www.data.gouv.fr/fr/datasets/violations-donnees/"},{"id":"sa-1","theme":"sante","sector":"Santé","title":"SNDS — Système National des Données de Santé","organization":"DREES / CNAM","description":"Données de remboursements Assurance Maladie, hospitalisations PMSI, causes de décès. 67 millions de bénéficiaires couverts.","tags":["SNDS","santé","remboursements","CNAM","épidémiologie"],"metrics":{"reuses":567,"views":45000},"resources":[{"title":"Dictionnaire variables PDF","format":"PDF","size":"11 MB","url":"https://www.data.gouv.fr/fr/datasets/r/snds-dictionnaire.pdf"},{"title":"Extraction anonymisée CSV","format":"CSV","size":"25 MB","url":"https://www.data.gouv.fr/fr/datasets/r/snds-extract.csv"},{"title":"Statistiques Excel","format":"XLSX","size":"8.4 MB","url":"https://www.data.gouv.fr/fr/datasets/r/snds-stats.xlsx"}],"page":"https://www.data.gouv.fr/fr/datasets/snds/"},{"id":"sa-2","theme":"sante","sector":"Santé","title":"Données hospitalières — COVID et post-COVID","organization":"Santé Publique France","description":"Hospitalisations, réanimations, décès COVID-19 par département et tranche d'âge. Séries temporelles depuis mars 2020.","tags":["COVID","hospitalisations","épidémiologie","SPF","réanimation"],"metrics":{"reuses":2341,"views":189000},"resources":[{"title":"Données quotidiennes CSV","format":"CSV","size":"18 MB","url":"https://www.data.gouv.fr/fr/datasets/r/covid-hosp.csv"},{"title":"Synthèse Excel","format":"XLSX","size":"12 MB","url":"https://www.data.gouv.fr/fr/datasets/r/covid-synthese.xlsx"},{"title":"Rapport épidémiologique PDF","format":"PDF","size":"9.3 MB","url":"https://www.data.gouv.fr/fr/datasets/r/covid-rapport.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/donnees-hospitalieres-covid/"},{"id":"sa-3","theme":"sante","sector":"Santé","title":"Dispositifs médicaux IA certifiés CE — HAS","organization":"HAS / ANSM","description":"Registre des dispositifs médicaux intégrant de l'IA ayant obtenu le marquage CE en France. Classe de risque, indications cliniques, fabricant.","tags":["IA-médicale","dispositifs","HAS","ANSM","marquage-CE"],"metrics":{"reuses":145,"views":9800},"resources":[{"title":"Registre des DM IA CSV","format":"CSV","size":"3.2 MB","url":"https://www.data.gouv.fr/fr/datasets/r/ia-medicale.csv"},{"title":"Rapport HAS PDF","format":"PDF","size":"6.8 MB","url":"https://www.data.gouv.fr/fr/datasets/r/has-ia-medicale.pdf"},{"title":"Fiches techniques Excel","format":"XLSX","size":"4.1 MB","url":"https://www.data.gouv.fr/fr/datasets/r/dm-ia-fiches.xlsx"}],"page":"https://www.data.gouv.fr/fr/datasets/ia-dispositifs-medicaux/"},{"id":"en-1","theme":"energie","sector":"Énergie","title":"Consommation électrique nationale — RTE","organization":"RTE","description":"Production et consommation électrique nationale par filière. Données temps réel et historique depuis 2012. Nucléaire, solaire, éolien, hydraulique.","tags":["électricité","RTE","consommation","production","nucléaire"],"metrics":{"reuses":1892,"views":134000},"resources":[{"title":"Données temps réel CSV","format":"CSV","size":"78 MB","url":"https://www.data.gouv.fr/fr/datasets/r/rte-consommation.csv"},{"title":"Historique Excel","format":"XLSX","size":"45 MB","url":"https://www.data.gouv.fr/fr/datasets/r/rte-historique.xlsx"},{"title":"Bilan prévisionnel PDF","format":"PDF","size":"12 MB","url":"https://www.data.gouv.fr/fr/datasets/r/rte-bilan.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/consommation-electrique-rte/"},{"id":"en-2","theme":"energie","sector":"Énergie","title":"DPE — Diagnostics de Performance Énergétique","organization":"ADEME","description":"Base nationale des DPE : 10 millions de logements diagnostiqués. Étiquette énergie A-G, émissions GES, travaux recommandés, consommation estimée.","tags":["DPE","performance-énergétique","logement","rénovation","ADEME"],"metrics":{"reuses":3241,"views":267000},"resources":[{"title":"DPE logements CSV","format":"CSV","size":"890 MB","url":"https://www.data.gouv.fr/fr/datasets/r/dpe-logements.csv"},{"title":"DPE tertiaire CSV","format":"CSV","size":"120 MB","url":"https://www.data.gouv.fr/fr/datasets/r/dpe-tertiaire.csv"},{"title":"Guide technique PDF","format":"PDF","size":"4.1 MB","url":"https://www.data.gouv.fr/fr/datasets/r/dpe-guide.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/dpe-logements/"},{"id":"en-3","theme":"energie","sector":"Énergie","title":"Installations EnR — Éolien, solaire, hydraulique","organization":"ENEDIS","description":"Cartographie complète des installations de production d'énergies renouvelables raccordées au réseau français. Puissance installée, production, localisation.","tags":["renouvelables","éolien","solaire","ENEDIS","photovoltaïque"],"metrics":{"reuses":987,"views":72000},"resources":[{"title":"Installations CSV","format":"CSV","size":"34 MB","url":"https://www.data.gouv.fr/fr/datasets/r/enr-installations.csv"},{"title":"Carte GeoJSON","format":"GEOJSON","size":"89 MB","url":"https://www.data.gouv.fr/fr/datasets/r/enr-carte.geojson"},{"title":"Synthèse Excel","format":"XLSX","size":"12 MB","url":"https://www.data.gouv.fr/fr/datasets/r/enr-synthese.xlsx"}],"page":"https://www.data.gouv.fr/fr/datasets/installations-enr/"},{"id":"en-4","theme":"energie","sector":"Énergie","title":"Bilan carbone des datacenters français","organization":"ADEME","description":"Mesures d'impact environnemental des datacenters en France. Consommation électrique, PUE, eau de refroidissement, émissions CO2, indicateurs ESG.","tags":["datacenter","énergie","CO2","ESG","numérique-responsable"],"metrics":{"reuses":312,"views":24000},"resources":[{"title":"Données CSV","format":"CSV","size":"8.9 MB","url":"https://www.data.gouv.fr/fr/datasets/r/datacenter-bilan.csv"},{"title":"Rapport ADEME PDF","format":"PDF","size":"15 MB","url":"https://www.data.gouv.fr/fr/datasets/r/ademe-datacenter.pdf"},{"title":"Indicateurs Excel","format":"XLSX","size":"6.7 MB","url":"https://www.data.gouv.fr/fr/datasets/r/datacenter-indicateurs.xlsx"}],"page":"https://www.data.gouv.fr/fr/datasets/datacenters-bilan-carbone/"},{"id":"tr-1","theme":"transport","sector":"Transport","title":"GTFS France — Horaires transports en commun","organization":"Île-de-France Mobilités / SNCF","description":"Données GTFS de tous les réseaux de transport en commun français. Lignes, arrêts, horaires théoriques et temps réel, accessibilité PMR.","tags":["GTFS","transport","SNCF","bus","métro","mobilité"],"metrics":{"reuses":4521,"views":312000},"resources":[{"title":"GTFS IDF ZIP","format":"ZIP","size":"145 MB","url":"https://www.data.gouv.fr/fr/datasets/r/gtfs-idf.zip"},{"title":"Arrêts et lignes CSV","format":"CSV","size":"23 MB","url":"https://www.data.gouv.fr/fr/datasets/r/arrets-tc.csv"},{"title":"Documentation PDF","format":"PDF","size":"2.1 MB","url":"https://www.data.gouv.fr/fr/datasets/r/gtfs-doc.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/gtfs-france/"},{"id":"tr-2","theme":"transport","sector":"Transport","title":"Accidents corporels — Base BAAC 1995-2024","organization":"Ministère de l'Intérieur / ONISR","description":"Accidents de la route avec victimes en France. Localisation GPS, conditions, gravité, véhicules, usagers. 30 ans de données exploitables.","tags":["accidents","sécurité-routière","BAAC","ONISR","données-géo"],"metrics":{"reuses":2876,"views":198000},"resources":[{"title":"BAAC 2024 CSV","format":"CSV","size":"45 MB","url":"https://www.data.gouv.fr/fr/datasets/r/baac-2024.csv"},{"title":"Historique 1995-2024 Excel","format":"XLSX","size":"234 MB","url":"https://www.data.gouv.fr/fr/datasets/r/baac-historique.xlsx"},{"title":"Bilan ONISR 2024 PDF","format":"PDF","size":"8.7 MB","url":"https://www.data.gouv.fr/fr/datasets/r/bilan-onisr-2024.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/baac-accidents/"},{"id":"tr-3","theme":"transport","sector":"Transport","title":"Bornes de recharge VE — Registre IRVE national","organization":"AFIREV / ENEDIS","description":"100 000+ points de recharge pour véhicules électriques. Localisation, puissance, opérateur, disponibilité temps réel, types de connecteurs.","tags":["VE","bornes","IRVE","électromobilité","recharge"],"metrics":{"reuses":1234,"views":87000},"resources":[{"title":"Bornes CSV","format":"CSV","size":"12 MB","url":"https://www.data.gouv.fr/fr/datasets/r/irve-bornes.csv"},{"title":"Carte GeoJSON","format":"GEOJSON","size":"34 MB","url":"https://www.data.gouv.fr/fr/datasets/r/irve-carte.geojson"},{"title":"Analyse Excel","format":"XLSX","size":"5.6 MB","url":"https://www.data.gouv.fr/fr/datasets/r/irve-stats.xlsx"}],"page":"https://www.data.gouv.fr/fr/datasets/bornes-recharge-ve/"},{"id":"fi-1","theme":"finance","sector":"Finance","title":"Budget de l'État — PLF 2024 complet","organization":"Ministère des Finances / DGFiP","description":"Budget général de l'État 2024. Recettes et dépenses par programme, mission, action et sous-action. Format LOLF. Données exécutées et prévisionnelles.","tags":["budget","PLF","finances-publiques","LOLF","État"],"metrics":{"reuses":1567,"views":112000},"resources":[{"title":"Budget CSV","format":"CSV","size":"18 MB","url":"https://www.data.gouv.fr/fr/datasets/r/budget-etat-2024.csv"},{"title":"PLF Excel complet","format":"XLSX","size":"45 MB","url":"https://www.data.gouv.fr/fr/datasets/r/plf-2024.xlsx"},{"title":"Rapport Cour des Comptes PDF","format":"PDF","size":"23 MB","url":"https://www.data.gouv.fr/fr/datasets/r/cour-comptes-2024.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/budget-etat/"},{"id":"fi-2","theme":"finance","sector":"Finance","title":"DORA — Résilience opérationnelle secteur financier","organization":"ACPR / Banque de France","description":"Reporting DORA des établissements financiers français. Incidents ICT, tests de pénétration, gestion des tiers critiques, plans de continuité.","tags":["DORA","ACPR","résilience","ICT","banque","assurance"],"metrics":{"reuses":234,"views":18900},"resources":[{"title":"Reporting DORA CSV","format":"CSV","size":"6.7 MB","url":"https://www.data.gouv.fr/fr/datasets/r/dora-reporting.csv"},{"title":"Guide DORA complet PDF","format":"PDF","size":"9.4 MB","url":"https://www.data.gouv.fr/fr/datasets/r/guide-dora.pdf"},{"title":"Templates conformité Excel","format":"XLSX","size":"3.2 MB","url":"https://www.data.gouv.fr/fr/datasets/r/dora-templates.xlsx"}],"page":"https://www.data.gouv.fr/fr/datasets/dora-finance/"},{"id":"fi-3","theme":"finance","sector":"Finance","title":"SIRENE — Base complète entreprises et établissements","organization":"INSEE","description":"12 millions d'unités légales françaises. SIREN, SIRET, APE, date de création, effectifs, adresse. Référence nationale. Mise à jour quotidienne.","tags":["SIRENE","entreprises","INSEE","établissements","SIREN"],"metrics":{"reuses":8934,"views":892000},"resources":[{"title":"Unités légales CSV","format":"CSV","size":"2.4 GB","url":"https://www.data.gouv.fr/fr/datasets/r/sirene-ul.csv"},{"title":"Établissements CSV","format":"CSV","size":"4.1 GB","url":"https://www.data.gouv.fr/fr/datasets/r/sirene-etab.csv"},{"title":"Notice méthodologique PDF","format":"PDF","size":"3.8 MB","url":"https://www.data.gouv.fr/fr/datasets/r/sirene-notice.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/base-sirene/"},{"id":"fi-4","theme":"finance","sector":"Finance","title":"Marchés publics — Données essentielles 2024","organization":"Direction des Affaires Juridiques / DAJF","description":"Tous les marchés publics notifiés en France. Acheteur, titulaire, montant, objet, CPV. Obligations de transparence loi Sapin II.","tags":["marchés-publics","commande-publique","transparence","DAJF"],"metrics":{"reuses":2345,"views":167000},"resources":[{"title":"Marchés 2024 CSV","format":"CSV","size":"234 MB","url":"https://www.data.gouv.fr/fr/datasets/r/marches-publics-2024.csv"},{"title":"Données JSON","format":"JSON","size":"189 MB","url":"https://www.data.gouv.fr/fr/datasets/r/marches-publics.json"},{"title":"Guide achats responsables PDF","format":"PDF","size":"7.8 MB","url":"https://www.data.gouv.fr/fr/datasets/r/guide-achats.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/marches-publics/"},{"id":"ind-1","theme":"industrie","sector":"Industrie","title":"Émissions polluantes — Base GEREP sites industriels","organization":"Ministère Transition Écologique / DREAL","description":"Déclarations annuelles d'émissions polluantes des sites ICPE. Air, eau, déchets. 5 000+ sites industriels. Données géolocalisées.","tags":["industrie","émissions","GEREP","ICPE","pollution","environnement"],"metrics":{"reuses":456,"views":34000},"resources":[{"title":"Émissions CSV","format":"CSV","size":"67 MB","url":"https://www.data.gouv.fr/fr/datasets/r/gerep-emissions.csv"},{"title":"Sites industriels Excel","format":"XLSX","size":"23 MB","url":"https://www.data.gouv.fr/fr/datasets/r/gerep-sites.xlsx"},{"title":"Carte GeoJSON","format":"GEOJSON","size":"45 MB","url":"https://www.data.gouv.fr/fr/datasets/r/gerep-carte.geojson"}],"page":"https://www.data.gouv.fr/fr/datasets/gerep-sites-industriels/"},{"id":"ind-2","theme":"industrie","sector":"Industrie","title":"Accidents technologiques — Base ARIA","organization":"BARPI / MEFSIN","description":"65 000 accidents technologiques et industriels référencés en France. Retours d'expérience, causes, conséquences, secteur Seveso.","tags":["accidents","ARIA","ICPE","Seveso","sécurité-industrielle"],"metrics":{"reuses":312,"views":24000},"resources":[{"title":"Accidents CSV","format":"CSV","size":"28 MB","url":"https://www.data.gouv.fr/fr/datasets/r/aria-accidents.csv"},{"title":"Analyse par secteur Excel","format":"XLSX","size":"15 MB","url":"https://www.data.gouv.fr/fr/datasets/r/aria-analyse.xlsx"},{"title":"Bilan annuel PDF","format":"PDF","size":"7.8 MB","url":"https://www.data.gouv.fr/fr/datasets/r/aria-bilan.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/base-aria/"},{"id":"ind-3","theme":"industrie","sector":"Industrie","title":"Brevets industriels — INPI France 2000-2024","organization":"INPI","description":"Brevets déposés en France. Inventeurs, entreprises déposantes, domaines technologiques (CIB), statut de délivrance, pays désignés.","tags":["brevets","INPI","propriété-intellectuelle","innovation","R&D"],"metrics":{"reuses":789,"views":56000},"resources":[{"title":"Brevets CSV","format":"CSV","size":"234 MB","url":"https://www.data.gouv.fr/fr/datasets/r/inpi-brevets.csv"},{"title":"Statistiques Excel","format":"XLSX","size":"34 MB","url":"https://www.data.gouv.fr/fr/datasets/r/inpi-stats.xlsx"},{"title":"Rapport annuel INPI PDF","format":"PDF","size":"6.2 MB","url":"https://www.data.gouv.fr/fr/datasets/r/inpi-rapport.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/brevets-inpi/"},{"id":"im-1","theme":"immobilier","sector":"Immobilier","title":"DVF+ — Demandes de Valeurs Foncières géolocalisées","organization":"DGFiP / IGN","description":"Toutes les transactions immobilières en France depuis 2014 avec géolocalisation précise. Prix au m², type de bien, surface, mutations.","tags":["DVF","immobilier","prix","transactions","géolocalisation"],"metrics":{"reuses":12456,"views":1234000},"resources":[{"title":"DVF+ 2024 CSV","format":"CSV","size":"890 MB","url":"https://www.data.gouv.fr/fr/datasets/r/dvf-2024.csv"},{"title":"DVF géolocalisé GeoJSON","format":"GEOJSON","size":"2.1 GB","url":"https://www.data.gouv.fr/fr/datasets/r/dvf-geo.geojson"},{"title":"Guide utilisateur PDF","format":"PDF","size":"3.4 MB","url":"https://www.data.gouv.fr/fr/datasets/r/dvf-guide.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/demandes-valeurs-foncieres/"},{"id":"im-2","theme":"immobilier","sector":"Immobilier","title":"PLU — Plans Locaux d'Urbanisme France entière","organization":"Géoportail de l'Urbanisme / DGALN","description":"Règlements d'urbanisme de toutes les communes. Zones constructibles, servitudes, règles de hauteur, espaces protégés. Format GeoJSON/Shapefile.","tags":["PLU","urbanisme","zonage","DGALN","construction"],"metrics":{"reuses":3456,"views":234000},"resources":[{"title":"PLU GeoJSON","format":"GEOJSON","size":"12 GB","url":"https://www.data.gouv.fr/fr/datasets/r/plu-france.geojson"},{"title":"Communes CSV","format":"CSV","size":"234 MB","url":"https://www.data.gouv.fr/fr/datasets/r/plu-communes.csv"},{"title":"Guide technique PDF","format":"PDF","size":"8.9 MB","url":"https://www.data.gouv.fr/fr/datasets/r/plu-guide.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/plu-france/"},{"id":"ed-1","theme":"education","sector":"Éducation","title":"Résultats Baccalauréat 2024 par établissement","organization":"MENJ / DEPP","description":"Taux de réussite au bac 2024 par lycée, académie, série et mention. Classements et comparaisons sur 5 ans.","tags":["baccalauréat","résultats","lycées","DEPP","éducation"],"metrics":{"reuses":2341,"views":187000},"resources":[{"title":"Résultats lycées CSV","format":"CSV","size":"45 MB","url":"https://www.data.gouv.fr/fr/datasets/r/bac-2024-lycees.csv"},{"title":"Synthèse nationale Excel","format":"XLSX","size":"23 MB","url":"https://www.data.gouv.fr/fr/datasets/r/bac-2024-synthese.xlsx"},{"title":"Note de synthèse DEPP PDF","format":"PDF","size":"4.5 MB","url":"https://www.data.gouv.fr/fr/datasets/r/depp-bac-2024.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/resultats-bac/"},{"id":"ed-2","theme":"education","sector":"Éducation","title":"IA dans l'éducation — Usages et outils 2024","organization":"Réseau Canopé / MENJ","description":"Enquête nationale sur l'utilisation de l'IA dans les établissements scolaires. ChatGPT, outils d'aide à la rédaction, formation des enseignants.","tags":["IA","éducation","numérique","enseignants","Canopé"],"metrics":{"reuses":234,"views":18900},"resources":[{"title":"Résultats enquête CSV","format":"CSV","size":"8.9 MB","url":"https://www.data.gouv.fr/fr/datasets/r/ia-education-2024.csv"},{"title":"Rapport complet PDF","format":"PDF","size":"12 MB","url":"https://www.data.gouv.fr/fr/datasets/r/ia-education-rapport.pdf"},{"title":"Données Excel","format":"XLSX","size":"5.6 MB","url":"https://www.data.gouv.fr/fr/datasets/r/ia-education-stats.xlsx"}],"page":"https://www.data.gouv.fr/fr/datasets/ia-education/"},{"id":"env-1","theme":"environnement","sector":"Environnement","title":"Qualité de l'air — Mesures Atmo France","organization":"Atmo France / AirParif","description":"Mesures horaires PM2.5, PM10, NO2, O3, SO2 sur 800 stations françaises. API temps réel, historique depuis 2000, alertes pollution.","tags":["qualité-air","pollution","PM2.5","Atmo","AirParif","NO2"],"metrics":{"reuses":2876,"views":234000},"resources":[{"title":"Mesures horaires CSV","format":"CSV","size":"1.2 GB","url":"https://www.data.gouv.fr/fr/datasets/r/atmo-mesures.csv"},{"title":"Stations Excel","format":"XLSX","size":"12 MB","url":"https://www.data.gouv.fr/fr/datasets/r/atmo-stations.xlsx"},{"title":"Rapport annuel PDF","format":"PDF","size":"8.9 MB","url":"https://www.data.gouv.fr/fr/datasets/r/atmo-rapport.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/qualite-air-atmo/"},{"id":"env-2","theme":"environnement","sector":"Environnement","title":"Inventaire national GES — CITEPA","organization":"CITEPA / ADEME","description":"Émissions de gaz à effet de serre par secteur (énergie, transport, industrie, agriculture, déchets). Séries depuis 1990. Rapport SECTEN annuel.","tags":["GES","CO2","inventaire","CITEPA","climat","SECTEN"],"metrics":{"reuses":1567,"views":112000},"resources":[{"title":"GES par secteur CSV","format":"CSV","size":"23 MB","url":"https://www.data.gouv.fr/fr/datasets/r/ges-secteurs.csv"},{"title":"Séries historiques Excel","format":"XLSX","size":"34 MB","url":"https://www.data.gouv.fr/fr/datasets/r/ges-historique.xlsx"},{"title":"Rapport SECTEN PDF","format":"PDF","size":"15 MB","url":"https://www.data.gouv.fr/fr/datasets/r/citepa-secten.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/ges-citepa/"},{"id":"ag-1","theme":"agriculture","sector":"Agriculture","title":"Registre Parcellaire Graphique (RPG) 2024","organization":"ASP / Ministère Agriculture","description":"Cartographie des îlots et cultures agricoles déclarées pour les aides PAC. Toutes les cultures, surfaces, codes îlots. Référence nationale.","tags":["agriculture","RPG","PAC","cultures","cartographie"],"metrics":{"reuses":4521,"views":345000},"resources":[{"title":"RPG GeoJSON 2024","format":"GEOJSON","size":"2.3 GB","url":"https://www.data.gouv.fr/fr/datasets/r/rpg-2024.geojson"},{"title":"Cultures CSV","format":"CSV","size":"890 MB","url":"https://www.data.gouv.fr/fr/datasets/r/rpg-cultures.csv"},{"title":"Guide technique PDF","format":"PDF","size":"5.4 MB","url":"https://www.data.gouv.fr/fr/datasets/r/rpg-guide.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/rpg-registre-parcellaire/"},{"id":"ag-2","theme":"agriculture","sector":"Agriculture","title":"Pesticides — Ventes et usage par culture","organization":"ANSES / Ministère Agriculture","description":"Quantités de pesticides vendus et utilisés par matière active, culture, département. Base Bnvd. Plan Ecophyto 2030.","tags":["pesticides","phytosanitaires","ANSES","Bnvd","Ecophyto"],"metrics":{"reuses":1234,"views":89000},"resources":[{"title":"Ventes par département CSV","format":"CSV","size":"45 MB","url":"https://www.data.gouv.fr/fr/datasets/r/pesticides-ventes.csv"},{"title":"Usage par culture Excel","format":"XLSX","size":"23 MB","url":"https://www.data.gouv.fr/fr/datasets/r/pesticides-cultures.xlsx"},{"title":"Rapport ANSES PDF","format":"PDF","size":"9.8 MB","url":"https://www.data.gouv.fr/fr/datasets/r/anses-pesticides.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/pesticides-bnvd/"},{"id":"to-1","theme":"tourisme","sector":"Tourisme","title":"Hébergements touristiques — Capacité et fréquentation","organization":"INSEE / DGE","description":"Capacité et taux d'occupation des hébergements touristiques français. Hôtels, campings, résidences. Données mensuelles par région.","tags":["tourisme","hôtels","hébergements","fréquentation","DGE"],"metrics":{"reuses":876,"views":67000},"resources":[{"title":"Hébergements CSV","format":"CSV","size":"34 MB","url":"https://www.data.gouv.fr/fr/datasets/r/hebergements-touristiques.csv"},{"title":"Statistiques mensuelles Excel","format":"XLSX","size":"18 MB","url":"https://www.data.gouv.fr/fr/datasets/r/tourisme-stats.xlsx"},{"title":"Bilan DGE annuel PDF","format":"PDF","size":"6.7 MB","url":"https://www.data.gouv.fr/fr/datasets/r/dge-tourisme-bilan.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/hebergements-touristiques/"},{"id":"rh-1","theme":"rh","sector":"Ressources Humaines","title":"Offres d'emploi — France Travail quotidien","organization":"France Travail","description":"Toutes les offres d'emploi déposées sur France Travail. Métiers, types de contrat, salaires, localisations, compétences requises. Mise à jour quotidienne.","tags":["emploi","offres","France-Travail","marché-travail","recrutement"],"metrics":{"reuses":5678,"views":456000},"resources":[{"title":"Offres CSV quotidien","format":"CSV","size":"234 MB","url":"https://www.data.gouv.fr/fr/datasets/r/offres-emploi.csv"},{"title":"Stats mensuelles Excel","format":"XLSX","size":"45 MB","url":"https://www.data.gouv.fr/fr/datasets/r/emploi-stats.xlsx"},{"title":"Rapport marché travail PDF","format":"PDF","size":"11 MB","url":"https://www.data.gouv.fr/fr/datasets/r/marche-travail.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/offres-emploi/"},{"id":"rh-2","theme":"rh","sector":"Ressources Humaines","title":"Index égalité femmes-hommes — Entreprises 50+ salariés","organization":"Ministère du Travail / DARES","description":"Index égalité salariale publié obligatoirement par les entreprises de +50 salariés. Note sur 100, écarts de rémunération, promotions, augmentations.","tags":["égalité","femmes-hommes","salaires","DARES","index"],"metrics":{"reuses":1234,"views":98000},"resources":[{"title":"Index 2024 CSV","format":"CSV","size":"23 MB","url":"https://www.data.gouv.fr/fr/datasets/r/index-egalite-2024.csv"},{"title":"Analyse sectorielle Excel","format":"XLSX","size":"12 MB","url":"https://www.data.gouv.fr/fr/datasets/r/index-egalite-analyse.xlsx"},{"title":"Rapport DARES PDF","format":"PDF","size":"7.8 MB","url":"https://www.data.gouv.fr/fr/datasets/r/dares-egalite.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/index-egalite/"},{"id":"ju-1","theme":"justice","sector":"Juridique","title":"Jurisprudence open data — Cour de cassation","organization":"Cour de Cassation / Conseil d'État","description":"Décisions judiciaires anonymisées. Cour de cassation, Conseil d'État, cours d'appel. Texte intégral, XML/JSON. Moteur de recherche Judilibre.","tags":["jurisprudence","justice","Cour-cassation","open-data-juridique","Judilibre"],"metrics":{"reuses":2345,"views":178000},"resources":[{"title":"Décisions JSON","format":"JSON","size":"23 GB","url":"https://www.data.gouv.fr/fr/datasets/r/jurisprudence.json"},{"title":"Index CSV","format":"CSV","size":"890 MB","url":"https://www.data.gouv.fr/fr/datasets/r/jurisprudence-index.csv"},{"title":"Guide utilisation PDF","format":"PDF","size":"3.4 MB","url":"https://www.data.gouv.fr/fr/datasets/r/jurisprudence-guide.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/jurisprudence/"},{"id":"co-1","theme":"collectivites","sector":"Collectivités","title":"Comptes des collectivités locales — DGFiP","organization":"DGFiP / DGCL","description":"Comptes financiers de toutes les communes, départements et régions françaises. Recettes, dépenses, dette, épargne brute. Séries 2010-2024.","tags":["collectivités","communes","budget-local","DGFiP","finances-locales"],"metrics":{"reuses":3456,"views":234000},"resources":[{"title":"Comptes communes CSV","format":"CSV","size":"456 MB","url":"https://www.data.gouv.fr/fr/datasets/r/comptes-communes.csv"},{"title":"Synthèse Excel","format":"XLSX","size":"89 MB","url":"https://www.data.gouv.fr/fr/datasets/r/comptes-synthese.xlsx"},{"title":"Rapport DGCL PDF","format":"PDF","size":"12 MB","url":"https://www.data.gouv.fr/fr/datasets/r/dgcl-rapport.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/comptes-collectivites/"},{"id":"co-2","theme":"collectivites","sector":"Collectivités","title":"Équipements publics — Base Permanente des Équipements","organization":"INSEE","description":"Localisation de 2,5 millions d'équipements et services en France. Écoles, hôpitaux, commerces, services publics. Accessibilité, distance.","tags":["équipements","services-publics","INSEE","BPE","accessibilité"],"metrics":{"reuses":4789,"views":345000},"resources":[{"title":"BPE CSV","format":"CSV","size":"234 MB","url":"https://www.data.gouv.fr/fr/datasets/r/bpe-equipements.csv"},{"title":"Documentation Excel","format":"XLSX","size":"45 MB","url":"https://www.data.gouv.fr/fr/datasets/r/bpe-docs.xlsx"},{"title":"Guide PDF","format":"PDF","size":"4.2 MB","url":"https://www.data.gouv.fr/fr/datasets/r/bpe-guide.pdf"}],"page":"https://www.data.gouv.fr/fr/datasets/base-permanente-equipements/"}];
-ORG_LIST = [...new Set(LOCAL_DATASETS.map(d => d.organization).filter(Boolean))].sort();
-
-// Initialisation immédiate — DOM déjà prêt car script en fin de body
-function init() {
-  document.getElementById('cnt-ds').textContent = LOCAL_DATASETS.length;
-  document.getElementById('cnt-org').textContent = ORG_LIST.length;
-  const selTheme = document.getElementById('sel-theme');
-  if (selTheme) selTheme.value = 'ia';
-  updateOrgSelect('ia');
-  fetchDatasets();
-}
-// Lancer init dès que possible
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init);
-} else {
-  init();
-}
+// ══ DÉMARRAGE IMMÉDIAT ══
+initOrgs('ia');
+document.getElementById('sel-theme').value = 'ia';
+render();
 </script>
 </body>
 </html>
