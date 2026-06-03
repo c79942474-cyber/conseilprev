@@ -896,20 +896,31 @@ async function cSend(){
   document.getElementById('csend').disabled=true;
   cTyping(true);
   try{
-    var r=await fetch('/api/chat',{
+    // Appel direct Mistral depuis le navigateur
+    var msgs=[{role:'system',content:cSYS}];
+    cHist.slice(-8).forEach(function(h){msgs.push(h);});
+    var r=await fetch('https://api.mistral.ai/v1/chat/completions',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({message:msg,history:cHist.slice(-8)})
+      headers:{
+        'Content-Type':'application/json',
+        'Authorization':'Bearer f5NFzuhlT1830mek1QYix3ofyBS3Y8gf'
+      },
+      body:JSON.stringify({
+        model:'mistral-large-latest',
+        messages:msgs,
+        max_tokens:800,
+        temperature:0.7
+      })
     });
+    if(!r.ok){var e=await r.text();throw new Error('Mistral '+r.status+': '+e.substring(0,100));}
     var d=await r.json();
     cTyping(false);
-    if(d.error) throw new Error(d.error);
-    var reply=d.reply;
+    var reply=d.choices[0].message.content;
     cAddMsg('bot',cFmt(reply));
     cHist.push({role:'assistant',content:reply});
   }catch(e){
     cTyping(false);
-    cAddMsg('bot','⚠️ Erreur : '+e.message+'<br><a href="mailto:contact@i-aes.com" style="color:#3cc9b0">contact@i-aes.com</a>');
+    cAddMsg('bot','⚠️ '+e.message+'<br>Contactez-nous : <a href="mailto:contact@i-aes.com" style="color:#3cc9b0">contact@i-aes.com</a>');
   }
   cBusy=false;
   document.getElementById('csend').disabled=false;
