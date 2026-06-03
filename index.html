@@ -893,24 +893,19 @@ function hideTyping() {
 }
 
 async function callMistral(userMsg) {
-  var messages = [{role:'system', content: SYSTEM_PROMPT}];
-  chatHistory.slice(-6).forEach(function(m){ messages.push(m); });
-  messages.push({role:'user', content: userMsg});
-
-  var res = await fetch('https://api.anthropic.com/v1/messages', {
+  // Appel via proxy Flask sur Render (évite le blocage CORS)
+  var res = await fetch('/api/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1024,
-      system: SYSTEM_PROMPT,
-      messages: chatHistory.slice(-6).concat([{role:'user', content: userMsg}])
+      message: userMsg,
+      history: chatHistory.slice(-6)
     })
   });
-
-  if (!res.ok) throw new Error('API ' + res.status);
+  if (!res.ok) throw new Error('HTTP ' + res.status);
   var data = await res.json();
-  return data.content[0].text;
+  if (data.error) throw new Error(data.error);
+  return data.reply;
 }
 
 async function sendMsg() {
