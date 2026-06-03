@@ -5,12 +5,11 @@
     "sector": "Technologie",
     "title": "Catalogue des algorithmes publics de l'État",
     "organization": "Etalab / DINUM",
-    "description": "Inventaire des systèmes algorithmiques déployés par les administrations françaises. Classification, impact, documentation technique et conformité IA Act.",
+    "description": "Inventaire des systèmes algorithmiques déployés par les administrations françaises.",
     "tags": [
       "IA",
       "algorithmes",
-      "transparence",
-      "administration"
+      "transparence"
     ],
     "metrics": {
       "reuses": 334,
@@ -18,22 +17,16 @@
     },
     "resources": [
       {
-        "title": "Catalogue CSV",
+        "title": "Accéder au catalogue (data.gouv.fr)",
         "format": "CSV",
-        "size": "2.4 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/catalogue-des-algorithmes-publics-de-letat/#/resources"
-      },
-      {
-        "title": "Rapport Etalab PDF",
-        "format": "PDF",
-        "size": "890 KB",
-        "url": "https://www.etalab.gouv.fr/wp-content/uploads/2020/01/Rapport-Etalab-Algorithmes-publics-Partage-dexperiences.pdf"
-      },
-      {
-        "title": "Page dataset",
-        "format": "HTML",
         "size": "—",
         "url": "https://www.data.gouv.fr/fr/datasets/catalogue-des-algorithmes-publics-de-letat/"
+      },
+      {
+        "title": "Rapport Etalab algorithmes publics",
+        "format": "PDF",
+        "size": "—",
+        "url": "https://etalab.github.io/algorithmes-publics/"
       }
     ],
     "page": "https://www.data.gouv.fr/fr/datasets/catalogue-des-algorithmes-publics-de-letat/"
@@ -42,13 +35,12 @@
     "id": "ia-2",
     "theme": "ia",
     "sector": "Technologie",
-    "title": "Guide conformité IA Act — ANSSI",
+    "title": "Guide sécurité IA — ANSSI",
     "organization": "ANSSI",
-    "description": "Classification des systèmes IA soumis aux obligations de l'IA Act européen. Niveau de risque, mesures de conformité requises.",
+    "description": "Guide de sécurité pour les systèmes d'intelligence artificielle. Recommandations ANSSI.",
     "tags": [
       "IA Act",
-      "conformité",
-      "haut-risque",
+      "sécurité",
       "ANSSI"
     ],
     "metrics": {
@@ -57,32 +49,32 @@
     },
     "resources": [
       {
-        "title": "Guide IA Act ANSSI PDF",
+        "title": "Guide sécurité IA ANSSI (PDF)",
         "format": "PDF",
-        "size": "4.5 MB",
-        "url": "https://www.ssi.gouv.fr/uploads/2023/06/anssi-guide-securite-ia.pdf"
+        "size": "—",
+        "url": "https://www.ssi.gouv.fr/guide/securite-de-lia/"
       },
       {
-        "title": "Page officielle ANSSI",
+        "title": "Règlement IA — page ANSSI",
         "format": "HTML",
         "size": "—",
         "url": "https://www.ssi.gouv.fr/entreprise/reglementation/reglement-ia/"
       }
     ],
-    "page": "https://www.ssi.gouv.fr/entreprise/reglementation/reglement-ia/"
+    "page": "https://www.ssi.gouv.fr/guide/securite-de-lia/"
   },
   {
     "id": "ia-3",
     "theme": "ia",
     "sector": "Technologie",
-    "title": "Benchmark modèles IA — Biais et robustesse INRIA",
+    "title": "Livres blancs IA — INRIA",
     "organization": "INRIA",
-    "description": "Évaluation comparative des grands modèles de langage sur critères biais, robustesse, performance et consommation énergétique.",
+    "description": "Publications de recherche INRIA sur l'intelligence artificielle, biais et robustesse des modèles.",
     "tags": [
       "LLM",
       "biais",
       "benchmark",
-      "robustesse"
+      "INRIA"
     ],
     "metrics": {
       "reuses": 89,
@@ -90,32 +82,31 @@
     },
     "resources": [
       {
-        "title": "Rapport IA INRIA PDF",
+        "title": "Livre blanc IA INRIA",
         "format": "PDF",
-        "size": "12 MB",
-        "url": "https://inria.hal.science/hal-03800743/document"
+        "size": "—",
+        "url": "https://www.inria.fr/fr/intelligence-artificielle-enjeux-sociaux-et-technologiques"
       },
       {
-        "title": "Page INRIA IA",
+        "title": "Publications HAL INRIA IA",
         "format": "HTML",
         "size": "—",
-        "url": "https://www.inria.fr/fr/intelligence-artificielle-defis-enjeux"
+        "url": "https://hal.inria.fr/search/index/?q=intelligence+artificielle&rows=30"
       }
     ],
-    "page": "https://www.inria.fr/fr/intelligence-artificielle-defis-enjeux"
+    "page": "https://www.inria.fr/fr/intelligence-artificielle-enjeux-sociaux-et-technologiques"
   },
   {
     "id": "ia-4",
     "theme": "ia",
     "sector": "Technologie",
-    "title": "Offres d'emploi IA — France Travail",
+    "title": "Offres d'emploi — France Travail (données ouvertes)",
     "organization": "France Travail",
-    "description": "Analyse des offres d'emploi liées à l'IA en France. Compétences demandées, salaires, secteurs recruteurs. Données 2023-2024.",
+    "description": "Offres d'emploi liées à l'IA et au numérique. Données ouvertes France Travail.",
     "tags": [
       "emploi",
       "IA",
-      "compétences",
-      "salaires"
+      "numérique"
     ],
     "metrics": {
       "reuses": 211,
@@ -123,16 +114,16 @@
     },
     "resources": [
       {
-        "title": "Offres emploi CSV",
+        "title": "Dataset offres emploi (data.gouv.fr)",
         "format": "CSV",
-        "size": "5.4 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/97f37c8e-bb0e-4c3c-b4fd-8b9a54f9a3dc"
-      },
-      {
-        "title": "Page dataset France Travail",
-        "format": "HTML",
         "size": "—",
         "url": "https://www.data.gouv.fr/fr/datasets/offres-demploi-de-france-travail/"
+      },
+      {
+        "title": "API offres France Travail",
+        "format": "JSON",
+        "size": "—",
+        "url": "https://francetravail.io/data/api"
       }
     ],
     "page": "https://www.data.gouv.fr/fr/datasets/offres-demploi-de-france-travail/"
@@ -141,14 +132,13 @@
     "id": "ia-5",
     "theme": "ia",
     "sector": "Technologie",
-    "title": "IA dans les services publics — DINUM",
+    "title": "IA et services publics — DINUM",
     "organization": "DINUM",
-    "description": "Cartographie des projets IA déployés dans les ministères français. Statut, budget, impact, conformité réglementaire.",
+    "description": "Ressources et publications DINUM sur l'IA dans les services publics français.",
     "tags": [
       "IA",
       "services-publics",
-      "DINUM",
-      "transformation"
+      "DINUM"
     ],
     "metrics": {
       "reuses": 167,
@@ -156,16 +146,16 @@
     },
     "resources": [
       {
-        "title": "Guide IA DINUM PDF",
+        "title": "Guide IA secteur public — DINUM",
         "format": "PDF",
-        "size": "8.9 MB",
-        "url": "https://www.numerique.gouv.fr/uploads/guide-ia-secteur-public.pdf"
-      },
-      {
-        "title": "Page DINUM IA",
-        "format": "HTML",
         "size": "—",
         "url": "https://www.numerique.gouv.fr/publications/guide-ia/"
+      },
+      {
+        "title": "Tableau de bord IA État",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.data.gouv.fr/fr/datasets/?tag=intelligence-artificielle"
       }
     ],
     "page": "https://www.numerique.gouv.fr/publications/guide-ia/"
@@ -174,15 +164,13 @@
     "id": "cy-1",
     "theme": "cybersecurite",
     "sector": "Sécurité",
-    "title": "Panorama de la cybermenace ANSSI 2024",
+    "title": "Panorama de la cybermenace ANSSI",
     "organization": "ANSSI",
-    "description": "Incidents NIS2 déclarés par les opérateurs d'importance vitale. Statistiques par secteur, type d'attaque, impact.",
+    "description": "Rapport annuel ANSSI sur les cybermenaces. Incidents, tendances, acteurs malveillants.",
     "tags": [
       "cybersécurité",
-      "NIS2",
-      "incidents",
-      "OIV",
-      "ANSSI"
+      "ANSSI",
+      "incidents"
     ],
     "metrics": {
       "reuses": 178,
@@ -190,38 +178,36 @@
     },
     "resources": [
       {
-        "title": "Panorama cybermenace 2024 PDF",
+        "title": "Panorama cybermenace 2024 (PDF)",
         "format": "PDF",
-        "size": "8.9 MB",
-        "url": "https://www.ssi.gouv.fr/uploads/2024/01/anssi-panorama-cybermenaces-2024.pdf"
+        "size": "—",
+        "url": "https://www.ssi.gouv.fr/actualite/le-panorama-de-la-cybermenace-2024/"
       },
       {
-        "title": "CERT-FR alertes CSV",
-        "format": "CSV",
-        "size": "3.8 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/8b0d77cd-2eaf-44a3-a7a2-5ffcf4b39e5b"
-      },
-      {
-        "title": "Page ANSSI CERT",
+        "title": "Rapports ANSSI",
         "format": "HTML",
         "size": "—",
-        "url": "https://www.cert.ssi.gouv.fr/"
+        "url": "https://www.ssi.gouv.fr/actualite/panorama-de-la-cybermenace/"
+      },
+      {
+        "title": "Avis CERT-FR",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.cert.ssi.gouv.fr/avis/"
       }
     ],
-    "page": "https://www.ssi.gouv.fr/actualite/anssi-panorama-de-la-cybermenace-2024/"
+    "page": "https://www.ssi.gouv.fr/actualite/le-panorama-de-la-cybermenace-2024/"
   },
   {
     "id": "cy-2",
     "theme": "cybersecurite",
     "sector": "Sécurité",
-    "title": "Avis et alertes CERT-FR — Vulnérabilités",
+    "title": "Alertes et avis CERT-FR — Vulnérabilités",
     "organization": "ANSSI / CERT-FR",
-    "description": "Vulnérabilités logicielles référencées par le CERT-FR. Mise à jour quotidienne. Score CVSS, vecteurs d'attaque, correctifs.",
+    "description": "Base de vulnérabilités et alertes de sécurité publiées par le CERT-FR. Mise à jour quotidienne.",
     "tags": [
       "CVE",
       "vulnérabilités",
-      "CVSS",
-      "patch",
       "CERT-FR"
     ],
     "metrics": {
@@ -230,22 +216,22 @@
     },
     "resources": [
       {
-        "title": "Flux CERT-FR JSON",
-        "format": "JSON",
-        "size": "38 MB",
-        "url": "https://www.cert.ssi.gouv.fr/feed/"
-      },
-      {
-        "title": "Alertes CERT-FR",
+        "title": "Alertes CERT-FR en ligne",
         "format": "HTML",
         "size": "—",
         "url": "https://www.cert.ssi.gouv.fr/alerte/"
       },
       {
-        "title": "Guide patch PDF",
-        "format": "PDF",
-        "size": "2.3 MB",
-        "url": "https://www.ssi.gouv.fr/guide/recommandations-relatives-a-la-securite-des-systemes-dinformation/"
+        "title": "Avis de sécurité CERT-FR",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.cert.ssi.gouv.fr/avis/"
+      },
+      {
+        "title": "Flux RSS CERT-FR",
+        "format": "RSS",
+        "size": "—",
+        "url": "https://www.cert.ssi.gouv.fr/feed/"
       }
     ],
     "page": "https://www.cert.ssi.gouv.fr/"
@@ -254,13 +240,12 @@
     "id": "cy-3",
     "theme": "cybersecurite",
     "sector": "Sécurité",
-    "title": "Bilan Cybermalveillance.gouv.fr 2024",
+    "title": "Statistiques Cybermalveillance.gouv.fr",
     "organization": "Cybermalveillance.gouv.fr",
-    "description": "Signalements de phishing, ransomware, arnaques bancaires. 450 000+ signalements analysés annuellement.",
+    "description": "Données de signalement phishing, ransomware, arnaques. Rapport d'activité annuel.",
     "tags": [
       "phishing",
       "ransomware",
-      "arnaques",
       "signalement"
     ],
     "metrics": {
@@ -269,38 +254,38 @@
     },
     "resources": [
       {
-        "title": "Rapport activité 2024 PDF",
+        "title": "Rapport activité 2023",
         "format": "PDF",
-        "size": "6.1 MB",
+        "size": "—",
         "url": "https://www.cybermalveillance.gouv.fr/tous-nos-contenus/actualites/rapport-activite-2023"
       },
       {
-        "title": "Statistiques CSV",
+        "title": "Dataset statistiques (data.gouv.fr)",
         "format": "CSV",
-        "size": "7.8 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/6692e41f-e48e-4b09-b4d6-4c8c5c6e3a8f"
+        "size": "—",
+        "url": "https://www.data.gouv.fr/fr/search/?q=cybermalveillance"
       },
       {
-        "title": "Page dataset",
-        "format": "HTML",
+        "title": "Aide-mémoire cyberattaques",
+        "format": "PDF",
         "size": "—",
-        "url": "https://www.data.gouv.fr/fr/datasets/statistiques-de-cybermalveillance-gouv-fr/"
+        "url": "https://www.cybermalveillance.gouv.fr/tous-nos-contenus/kits-de-sensibilisation"
       }
     ],
-    "page": "https://www.data.gouv.fr/fr/datasets/statistiques-de-cybermalveillance-gouv-fr/"
+    "page": "https://www.cybermalveillance.gouv.fr/"
   },
   {
     "id": "cy-4",
     "theme": "cybersecurite",
     "sector": "Sécurité",
-    "title": "Guide NIS2 — Infrastructures critiques SGDSN",
-    "organization": "SGDSN / ANSSI",
-    "description": "Cartographie des opérateurs d'importance vitale. Guide NIS2 pour entités essentielles et importantes.",
+    "title": "Guide NIS2 — ANSSI",
+    "organization": "ANSSI / SGDSN",
+    "description": "Guide NIS2 pour les opérateurs d'importance vitale et entités essentielles françaises.",
     "tags": [
-      "OIV",
       "NIS2",
-      "SGDSN",
-      "infrastructures-critiques"
+      "OIV",
+      "ANSSI",
+      "infrastructures"
     ],
     "metrics": {
       "reuses": 67,
@@ -308,33 +293,33 @@
     },
     "resources": [
       {
-        "title": "Guide NIS2 ANSSI PDF",
+        "title": "Guide NIS2 ANSSI",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.ssi.gouv.fr/entreprise/reglementation/directive-nis-2/"
+      },
+      {
+        "title": "FAQ NIS2",
         "format": "PDF",
-        "size": "5.6 MB",
-        "url": "https://www.ssi.gouv.fr/uploads/2023/12/anssi-guide-nis2-operateurs.pdf"
+        "size": "—",
+        "url": "https://www.ssi.gouv.fr/uploads/2023/01/anssi-nis2-faq.pdf"
       },
       {
-        "title": "Liste OIV secteurs",
+        "title": "OIV — Protection des infrastructures",
         "format": "HTML",
         "size": "—",
-        "url": "https://www.ssi.gouv.fr/entreprise/protection-des-oiv/la-protection-des-oiv/"
-      },
-      {
-        "title": "Page NIS2 officielle",
-        "format": "HTML",
-        "size": "—",
-        "url": "https://www.ssi.gouv.fr/entreprise/reglementation/directive-nis/"
+        "url": "https://www.ssi.gouv.fr/entreprise/protection-des-oiv/"
       }
     ],
-    "page": "https://www.ssi.gouv.fr/entreprise/reglementation/directive-nis/"
+    "page": "https://www.ssi.gouv.fr/entreprise/reglementation/directive-nis-2/"
   },
   {
     "id": "cy-5",
     "theme": "cybersecurite",
     "sector": "Sécurité",
-    "title": "Prestataires qualifiés SecNumCloud ANSSI",
+    "title": "Prestataires qualifiés ANSSI — SecNumCloud",
     "organization": "ANSSI",
-    "description": "Liste des prestataires certifiés SecNumCloud, PSAN, PASSI qualifiés par l'ANSSI. Mise à jour mensuelle.",
+    "description": "Liste officielle des prestataires et solutions qualifiés par l'ANSSI (SecNumCloud, PASSI, PSAN).",
     "tags": [
       "SecNumCloud",
       "certification",
@@ -347,22 +332,22 @@
     },
     "resources": [
       {
-        "title": "Liste prestataires qualifiés CSV",
-        "format": "CSV",
-        "size": "1.4 MB",
-        "url": "https://www.ssi.gouv.fr/uploads/liste-prestataires-qualifies.csv"
-      },
-      {
-        "title": "Référentiel SecNumCloud V3.2 PDF",
-        "format": "PDF",
-        "size": "3.2 MB",
-        "url": "https://www.ssi.gouv.fr/uploads/2022/11/anssi-secnumcloud_referentiel-v3.2.pdf"
-      },
-      {
-        "title": "Page qualification ANSSI",
+        "title": "Liste prestataires qualifiés ANSSI",
         "format": "HTML",
         "size": "—",
         "url": "https://www.ssi.gouv.fr/entreprise/qualifications/prestataires-de-services-de-confiance-qualifies/"
+      },
+      {
+        "title": "Référentiel SecNumCloud PDF",
+        "format": "PDF",
+        "size": "—",
+        "url": "https://www.ssi.gouv.fr/administration/qualifications/prestataires-de-services-de-confiance-qualifies/"
+      },
+      {
+        "title": "Catalogue SecNumCloud",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://secnumcloud.fr/"
       }
     ],
     "page": "https://www.ssi.gouv.fr/entreprise/qualifications/"
@@ -371,9 +356,9 @@
     "id": "rg-1",
     "theme": "rgpd",
     "sector": "Juridique",
-    "title": "Délibérations CNIL — Sanctions et mises en demeure",
+    "title": "Délibérations et sanctions CNIL",
     "organization": "CNIL",
-    "description": "Toutes les délibérations, sanctions et mises en demeure prononcées par la CNIL depuis 2015. Montants, secteurs, manquements.",
+    "description": "Toutes les délibérations, sanctions et mises en demeure prononcées par la CNIL depuis 2015.",
     "tags": [
       "CNIL",
       "RGPD",
@@ -386,38 +371,37 @@
     },
     "resources": [
       {
-        "title": "Délibérations CNIL CSV",
-        "format": "CSV",
-        "size": "4.2 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/5fec31ab-6e1f-4f8c-9b5f-6d1b5e3f6b2a"
+        "title": "Décisions CNIL (legifrance.gouv.fr)",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.legifrance.gouv.fr/cnil/list?pageSize=10&page=1"
       },
       {
-        "title": "Rapport annuel CNIL 2023 PDF",
+        "title": "Rapport annuel CNIL 2023",
         "format": "PDF",
-        "size": "9.8 MB",
-        "url": "https://www.cnil.fr/sites/cnil/files/2024-06/cnil-44e-rapport-annuel-2023.pdf"
+        "size": "—",
+        "url": "https://www.cnil.fr/fr/le-rapport-dactivite-2023-de-la-cnil"
       },
       {
-        "title": "Page sanctions CNIL",
+        "title": "Sanctions CNIL en ligne",
         "format": "HTML",
         "size": "—",
         "url": "https://www.cnil.fr/fr/les-sanctions-prononcees-par-la-cnil"
       }
     ],
-    "page": "https://www.data.gouv.fr/fr/datasets/deliberations-de-la-cnil/"
+    "page": "https://www.cnil.fr/fr/les-sanctions-prononcees-par-la-cnil"
   },
   {
     "id": "rg-2",
     "theme": "rgpd",
     "sector": "Juridique",
-    "title": "Outil PIA CNIL — Analyses d'Impact Protection Données",
+    "title": "Outil PIA CNIL — Analyses d'Impact RGPD",
     "organization": "CNIL",
-    "description": "Logiciel open source et modèles officiels d'AIPD/DPIA conformes RGPD article 35. Secteurs santé, RH, marketing.",
+    "description": "Logiciel open source officiel CNIL pour réaliser les Analyses d'Impact Protection Données (AIPD).",
     "tags": [
       "AIPD",
       "DPIA",
       "RGPD",
-      "vie-privée",
       "conformité"
     ],
     "metrics": {
@@ -426,22 +410,22 @@
     },
     "resources": [
       {
-        "title": "Logiciel PIA (téléchargement)",
+        "title": "Télécharger logiciel PIA (GitHub)",
         "format": "ZIP",
-        "size": "45 MB",
+        "size": "—",
         "url": "https://github.com/LINCnil/pia/releases/latest"
       },
       {
-        "title": "Guide AIPD CNIL PDF",
+        "title": "Guide méthode PIA CNIL",
         "format": "PDF",
-        "size": "4.7 MB",
-        "url": "https://www.cnil.fr/sites/cnil/files/atoms/files/cnil-pia-1-methode.pdf"
+        "size": "—",
+        "url": "https://www.cnil.fr/fr/outil-pia-telechargez-et-installez-le-logiciel-de-la-cnil"
       },
       {
-        "title": "Modèles AIPD Excel",
-        "format": "XLSX",
-        "size": "2.8 MB",
-        "url": "https://www.cnil.fr/sites/cnil/files/atoms/files/pia-modeles-de-traitement.xlsx"
+        "title": "Modèles de traitements AIPD",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.cnil.fr/fr/les-modeles-de-registre-de-la-cnil"
       }
     ],
     "page": "https://www.cnil.fr/fr/outil-pia-telechargez-et-installez-le-logiciel-de-la-cnil"
@@ -452,11 +436,10 @@
     "sector": "Juridique",
     "title": "Violations de données personnelles — CNIL",
     "organization": "CNIL",
-    "description": "Statistiques des violations de données notifiées à la CNIL. Par secteur, type de violation, gravité. 2020-2024.",
+    "description": "Statistiques des violations de données notifiées à la CNIL par secteur et type.",
     "tags": [
       "violations",
       "données-personnelles",
-      "notifications",
       "CNIL"
     ],
     "metrics": {
@@ -465,25 +448,25 @@
     },
     "resources": [
       {
-        "title": "Violations données CSV",
+        "title": "Dataset violations (data.gouv.fr)",
         "format": "CSV",
-        "size": "1.9 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/c4b31f5e-8f2d-4a6e-9c3b-2e1d4f5a6b7c"
+        "size": "—",
+        "url": "https://www.data.gouv.fr/fr/search/?q=violations+données+CNIL"
       },
       {
-        "title": "Bilan notifications PDF",
-        "format": "PDF",
-        "size": "7.2 MB",
+        "title": "Bilan notifications violations",
+        "format": "HTML",
+        "size": "—",
         "url": "https://www.cnil.fr/fr/bilan-des-notifications-de-violations-de-donnees-personnelles"
       },
       {
-        "title": "Page dataset",
+        "title": "Notifier une violation à la CNIL",
         "format": "HTML",
         "size": "—",
-        "url": "https://www.data.gouv.fr/fr/datasets/violations-de-donnees-personnelles-notifiees-a-la-cnil/"
+        "url": "https://www.cnil.fr/fr/notifier-une-violation-de-donnees-personnelles"
       }
     ],
-    "page": "https://www.data.gouv.fr/fr/datasets/violations-de-donnees-personnelles-notifiees-a-la-cnil/"
+    "page": "https://www.cnil.fr/fr/bilan-des-notifications-de-violations-de-donnees-personnelles"
   },
   {
     "id": "sa-1",
@@ -491,7 +474,7 @@
     "sector": "Santé",
     "title": "SNDS — Système National des Données de Santé",
     "organization": "DREES / CNAM",
-    "description": "Données de remboursements Assurance Maladie, hospitalisations PMSI, causes de décès. 67 millions de bénéficiaires.",
+    "description": "Données de remboursements Assurance Maladie, hospitalisations PMSI, causes de décès.",
     "tags": [
       "SNDS",
       "santé",
@@ -504,22 +487,22 @@
     },
     "resources": [
       {
-        "title": "Documentation SNDS PDF",
-        "format": "PDF",
-        "size": "11 MB",
-        "url": "https://www.snds.gouv.fr/SNDS/Ressources-documentaires"
-      },
-      {
-        "title": "Dépenses AM CSV",
-        "format": "CSV",
-        "size": "25 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/be4e4f4e-8f2d-4a6e-9c3b-2e1d4f5a6b7c"
-      },
-      {
-        "title": "Page SNDS officielle",
+        "title": "Portail SNDS officiel",
         "format": "HTML",
         "size": "—",
         "url": "https://www.snds.gouv.fr/SNDS/Accueil"
+      },
+      {
+        "title": "Dépenses AM — data.gouv.fr",
+        "format": "CSV",
+        "size": "—",
+        "url": "https://www.data.gouv.fr/fr/search/?q=assurance+maladie+remboursements"
+      },
+      {
+        "title": "Documentation SNDS",
+        "format": "PDF",
+        "size": "—",
+        "url": "https://www.snds.gouv.fr/SNDS/Ressources-documentaires"
       }
     ],
     "page": "https://www.snds.gouv.fr/SNDS/Accueil"
@@ -530,7 +513,7 @@
     "sector": "Santé",
     "title": "Données hospitalières COVID-19 — Santé Publique France",
     "organization": "Santé Publique France",
-    "description": "Hospitalisations, réanimations, décès COVID-19 par département et âge. Séries depuis mars 2020.",
+    "description": "Hospitalisations, réanimations, décès COVID-19 par département et âge. Séries depuis 2020.",
     "tags": [
       "COVID",
       "hospitalisations",
@@ -543,22 +526,22 @@
     },
     "resources": [
       {
-        "title": "Données hospitalières COVID CSV",
+        "title": "Données hospitalières COVID (data.gouv.fr)",
         "format": "CSV",
-        "size": "18 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/63352e38-d353-4b54-bfd1-f1b3ee1cabd7"
-      },
-      {
-        "title": "Synthèse indicateurs CSV",
-        "format": "CSV",
-        "size": "12 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/d2671c6c-c0eb-4e12-b69a-8e8f87fc224c"
-      },
-      {
-        "title": "Page dataset COVID",
-        "format": "HTML",
         "size": "—",
         "url": "https://www.data.gouv.fr/fr/datasets/donnees-hospitalieres-relatives-a-lepidemie-de-covid-19/"
+      },
+      {
+        "title": "Synthèse indicateurs COVID",
+        "format": "CSV",
+        "size": "—",
+        "url": "https://www.data.gouv.fr/fr/datasets/synthese-des-indicateurs-de-suivi-de-lepidemie-covid-19/"
+      },
+      {
+        "title": "Tableau de bord SPF",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.santepubliquefrance.fr/dossiers/coronavirus-covid-19"
       }
     ],
     "page": "https://www.data.gouv.fr/fr/datasets/donnees-hospitalieres-relatives-a-lepidemie-de-covid-19/"
@@ -567,14 +550,14 @@
     "id": "sa-3",
     "theme": "sante",
     "sector": "Santé",
-    "title": "Dispositifs médicaux IA certifiés CE — HAS",
+    "title": "Dispositifs médicaux IA — HAS",
     "organization": "HAS / ANSM",
-    "description": "Registre des dispositifs médicaux intégrant de l'IA certifiés CE. Classe de risque, indications cliniques.",
+    "description": "Évaluation et certification des dispositifs médicaux intégrant de l'IA. Guide HAS.",
     "tags": [
       "IA-médicale",
-      "dispositifs",
       "HAS",
-      "ANSM"
+      "ANSM",
+      "CE"
     ],
     "metrics": {
       "reuses": 145,
@@ -582,22 +565,22 @@
     },
     "resources": [
       {
-        "title": "Guide IA médicale HAS PDF",
-        "format": "PDF",
-        "size": "6.8 MB",
-        "url": "https://www.has-sante.fr/upload/docs/application/pdf/2023-01/guide_ia_systemes_dispositifs_medicaux.pdf"
+        "title": "Guide IA dispositifs médicaux HAS",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.has-sante.fr/jcms/p_3488397/fr/intelligence-artificielle"
       },
       {
-        "title": "Base EUDAMED dispositifs",
+        "title": "Base EUDAMED (UE)",
         "format": "HTML",
         "size": "—",
         "url": "https://ec.europa.eu/tools/eudamed/"
       },
       {
-        "title": "Page HAS IA",
+        "title": "Base ANSM dispositifs médicaux",
         "format": "HTML",
         "size": "—",
-        "url": "https://www.has-sante.fr/jcms/p_3488397/fr/intelligence-artificielle"
+        "url": "https://www.ansm.sante.fr/Activites/Surveillance-du-marche-des-dispositifs-medicaux"
       }
     ],
     "page": "https://www.has-sante.fr/jcms/p_3488397/fr/intelligence-artificielle"
@@ -606,9 +589,9 @@
     "id": "en-1",
     "theme": "energie",
     "sector": "Énergie",
-    "title": "Consommation électrique nationale — RTE",
+    "title": "Consommation électrique nationale — RTE Open Data",
     "organization": "RTE",
-    "description": "Production et consommation électrique nationale par filière. Données temps réel et historique depuis 2012.",
+    "description": "Production et consommation électrique nationale. Données temps réel et historique depuis 2012.",
     "tags": [
       "électricité",
       "RTE",
@@ -621,25 +604,25 @@
     },
     "resources": [
       {
-        "title": "Consommation par région CSV",
-        "format": "CSV",
-        "size": "78 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/2a7ccb9d-5fd3-4f5c-9f2e-3a6e4b5a7c8d"
-      },
-      {
-        "title": "Éco2mix données CSV",
-        "format": "CSV",
-        "size": "45 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/088ef9f5-0a70-4cdd-b85e-a56b54a3ab17"
-      },
-      {
-        "title": "Open Data RTE",
+        "title": "Open Data RTE — portail",
         "format": "HTML",
         "size": "—",
         "url": "https://data.rte-france.com/"
+      },
+      {
+        "title": "Consommation par région (data.gouv.fr)",
+        "format": "CSV",
+        "size": "—",
+        "url": "https://www.data.gouv.fr/fr/datasets/consommation-electrique-par-secteur-dactivite-et-par-region/"
+      },
+      {
+        "title": "Bilan prévisionnel RTE 2050",
+        "format": "PDF",
+        "size": "—",
+        "url": "https://www.rte-france.com/analyses-tendances-et-prospectives/bilan-previsionnel-2050-futurs-energetiques"
       }
     ],
-    "page": "https://www.data.gouv.fr/fr/datasets/consommation-electrique-par-secteur-dactivite-et-par-region/"
+    "page": "https://data.rte-france.com/"
   },
   {
     "id": "en-2",
@@ -647,12 +630,11 @@
     "sector": "Énergie",
     "title": "DPE Logements — Diagnostics Performance Énergétique",
     "organization": "ADEME / SGPE",
-    "description": "Base nationale des DPE : 10 millions de logements. Étiquette A-G, émissions GES, consommation estimée.",
+    "description": "Base nationale DPE : 10 millions de logements diagnostiqués. Étiquette A-G, GES, consommation.",
     "tags": [
       "DPE",
       "performance-énergétique",
-      "logement",
-      "ADEME"
+      "logement"
     ],
     "metrics": {
       "reuses": 3241,
@@ -660,22 +642,22 @@
     },
     "resources": [
       {
-        "title": "DPE logements depuis 2021 CSV",
+        "title": "DPE logements depuis 2021 (data.gouv.fr)",
         "format": "CSV",
         "size": "890 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/4d595928-0492-458c-9ebb-7a7ea3a4c5e4"
+        "url": "https://www.data.gouv.fr/fr/datasets/dpe-logements-depuis-juillet-2021/"
       },
       {
-        "title": "DPE tertiaire CSV",
+        "title": "DPE tertiaire (data.gouv.fr)",
         "format": "CSV",
         "size": "120 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/50f6b2ad-7a27-4d14-8c98-bf5d17fbc8d3"
+        "url": "https://www.data.gouv.fr/fr/datasets/dpe-tertiaire-depuis-juillet-2021/"
       },
       {
-        "title": "Page dataset DPE",
+        "title": "Observatoire DPE ADEME",
         "format": "HTML",
         "size": "—",
-        "url": "https://www.data.gouv.fr/fr/datasets/dpe-logements-depuis-juillet-2021/"
+        "url": "https://observatoire-dpe.ademe.fr/"
       }
     ],
     "page": "https://www.data.gouv.fr/fr/datasets/dpe-logements-depuis-juillet-2021/"
@@ -686,7 +668,7 @@
     "sector": "Énergie",
     "title": "Installations EnR — Registre national ENEDIS",
     "organization": "ENEDIS",
-    "description": "Cartographie des installations renouvelables raccordées au réseau. Éolien, solaire, hydraulique.",
+    "description": "Cartographie des installations renouvelables raccordées. Éolien, solaire, hydraulique.",
     "tags": [
       "renouvelables",
       "éolien",
@@ -699,22 +681,22 @@
     },
     "resources": [
       {
-        "title": "Registre installations EnR CSV",
+        "title": "Registre installations EnR (data.gouv.fr)",
         "format": "CSV",
-        "size": "34 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/5a7f3e2d-8b4c-4a6e-9c2f-3a5e6b7c8d9e"
-      },
-      {
-        "title": "Panorama énergies renouvelables PDF",
-        "format": "PDF",
-        "size": "8.9 MB",
-        "url": "https://www.enedis.fr/media/2586/download"
-      },
-      {
-        "title": "Page dataset",
-        "format": "HTML",
         "size": "—",
         "url": "https://www.data.gouv.fr/fr/datasets/registre-national-des-installations-de-production-et-de-stockage-delectricite/"
+      },
+      {
+        "title": "Open Data ENEDIS",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://data.enedis.fr/"
+      },
+      {
+        "title": "Panorama énergies renouvelables",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.enedis.fr/les-energies-renouvelables"
       }
     ],
     "page": "https://www.data.gouv.fr/fr/datasets/registre-national-des-installations-de-production-et-de-stockage-delectricite/"
@@ -723,12 +705,12 @@
     "id": "en-4",
     "theme": "energie",
     "sector": "Énergie",
-    "title": "Bilan carbone datacenters — ADEME",
-    "organization": "ADEME",
-    "description": "Impact environnemental des datacenters en France. Consommation électrique, PUE, eau, CO2, ESG.",
+    "title": "Impact environnemental du numérique — ADEME & ARCEP",
+    "organization": "ADEME / ARCEP",
+    "description": "Empreinte carbone des datacenters et du numérique en France. Rapport ADEME-ARCEP.",
     "tags": [
       "datacenter",
-      "énergie",
+      "numérique",
       "CO2",
       "ESG"
     ],
@@ -738,31 +720,31 @@
     },
     "resources": [
       {
-        "title": "Face cachée numérique PDF",
+        "title": "Rapport ADEME-ARCEP numérique environnement",
         "format": "PDF",
-        "size": "15 MB",
-        "url": "https://www.ademe.fr/sites/default/files/assets/documents/guide-pratique-face-cachee-numerique.pdf"
+        "size": "—",
+        "url": "https://www.arcep.fr/la-regulation/grands-dossiers-thematiques-transverses/lempreinte-environnementale-du-numerique.html"
       },
       {
-        "title": "Empreinte environnementale numérique PDF",
-        "format": "PDF",
-        "size": "8.9 MB",
-        "url": "https://www.arcep.fr/uploads/tx_gspublication/etude-numerique-environnement-ademe-arcep-2eme-volet-juillet2022.pdf"
-      },
-      {
-        "title": "Page ADEME numérique",
+        "title": "Guide face cachée du numérique ADEME",
         "format": "HTML",
         "size": "—",
-        "url": "https://www.ademe.fr/expertise/numerique/"
+        "url": "https://www.ademe.fr/expertises/numerique/passer-a-laction/fiche/la-face-cachee-du-numerique/"
+      },
+      {
+        "title": "Données numérique responsable",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.data.gouv.fr/fr/search/?q=empreinte+numerique"
       }
     ],
-    "page": "https://www.ademe.fr/expertise/numerique/"
+    "page": "https://www.arcep.fr/la-regulation/grands-dossiers-thematiques-transverses/lempreinte-environnementale-du-numerique.html"
   },
   {
     "id": "tr-1",
     "theme": "transport",
     "sector": "Transport",
-    "title": "GTFS France — Transports en commun",
+    "title": "GTFS France — Transport.data.gouv.fr",
     "organization": "transport.data.gouv.fr",
     "description": "Données GTFS de tous les réseaux de transport en commun français. Lignes, arrêts, horaires.",
     "tags": [
@@ -777,22 +759,22 @@
     },
     "resources": [
       {
-        "title": "Agrégat GTFS national ZIP",
-        "format": "ZIP",
-        "size": "145 MB",
-        "url": "https://transport.data.gouv.fr/datasets/aggregation-des-jeux-de-donnees-de-transport-en-commun-disponibles-sur-transport-data-gouv-fr"
-      },
-      {
-        "title": "Jeux de données transport",
+        "title": "Portail transport.data.gouv.fr",
         "format": "HTML",
         "size": "—",
         "url": "https://transport.data.gouv.fr/"
       },
       {
-        "title": "Documentation GTFS PDF",
-        "format": "PDF",
-        "size": "2.1 MB",
-        "url": "https://transport.data.gouv.fr/guide"
+        "title": "Jeux de données GTFS nationaux",
+        "format": "ZIP",
+        "size": "—",
+        "url": "https://transport.data.gouv.fr/datasets?type=public-transit"
+      },
+      {
+        "title": "API temps réel SNCF",
+        "format": "JSON",
+        "size": "—",
+        "url": "https://data.sncf.com/explore/"
       }
     ],
     "page": "https://transport.data.gouv.fr/"
@@ -801,9 +783,9 @@
     "id": "tr-2",
     "theme": "transport",
     "sector": "Transport",
-    "title": "Accidents corporels de la circulation — BAAC",
+    "title": "Accidents corporels de la route — BAAC",
     "organization": "Ministère Intérieur / ONISR",
-    "description": "Accidents de la route avec victimes. Localisation GPS, conditions, gravité, véhicules. 30 ans de données.",
+    "description": "Accidents de la route avec victimes en France. 30 ans de données géolocalisées.",
     "tags": [
       "accidents",
       "sécurité-routière",
@@ -816,22 +798,22 @@
     },
     "resources": [
       {
-        "title": "Caractéristiques accidents 2023 CSV",
+        "title": "Base BAAC accidents (data.gouv.fr)",
         "format": "CSV",
-        "size": "45 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/b4aaeede-1a80-4399-baed-ea8f1d2a9c3f"
+        "size": "—",
+        "url": "https://www.data.gouv.fr/fr/datasets/bases-de-donnees-annuelles-des-accidents-corporels-de-la-circulation-routiere-annees-de-2005-a-2022/"
       },
       {
-        "title": "Lieux accidents 2023 CSV",
-        "format": "CSV",
-        "size": "32 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/9a7b3e4f-2c6d-4a8e-b1f2-3e4a5b6c7d8e"
-      },
-      {
-        "title": "Bilan ONISR 2023 PDF",
+        "title": "Bilan accidentalité 2023 ONISR",
         "format": "PDF",
-        "size": "8.7 MB",
-        "url": "https://www.securite-routiere.gouv.fr/les-medias/nos-publications/bilan-de-laccidentalite-de-lannee-2023"
+        "size": "—",
+        "url": "https://www.onisr.securite-routiere.gouv.fr/etat-de-linsecurite-routiere/bilans-annuels-de-laccidentalite/bilan-de-lannee-2023"
+      },
+      {
+        "title": "Open data sécurité routière",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.data.gouv.fr/fr/search/?q=accidents+route"
       }
     ],
     "page": "https://www.data.gouv.fr/fr/datasets/bases-de-donnees-annuelles-des-accidents-corporels-de-la-circulation-routiere-annees-de-2005-a-2022/"
@@ -840,9 +822,9 @@
     "id": "tr-3",
     "theme": "transport",
     "sector": "Transport",
-    "title": "Bornes de recharge VE — Registre IRVE",
-    "organization": "AFIREV / Min. Transition Énergétique",
-    "description": "100 000+ points de recharge véhicules électriques. Localisation, puissance, opérateur, types connecteurs.",
+    "title": "Bornes de recharge VE — IRVE",
+    "organization": "Min. Transition Énergétique",
+    "description": "100 000+ points de recharge véhicules électriques géolocalisés. Puissance, opérateur, connecteurs.",
     "tags": [
       "VE",
       "bornes",
@@ -855,22 +837,22 @@
     },
     "resources": [
       {
-        "title": "Fichier consolidé IRVE CSV",
+        "title": "Fichier IRVE consolidé (data.gouv.fr)",
         "format": "CSV",
-        "size": "12 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/8d9c1e2f-3a4b-5c6d-7e8f-9a0b1c2d3e4f"
-      },
-      {
-        "title": "Données temps réel JSON",
-        "format": "JSON",
-        "size": "8 MB",
+        "size": "—",
         "url": "https://www.data.gouv.fr/fr/datasets/fichier-consolide-des-bornes-de-recharge-pour-vehicules-electriques/"
       },
       {
-        "title": "Page dataset IRVE",
+        "title": "Carte bornes recharge",
         "format": "HTML",
         "size": "—",
         "url": "https://www.data.gouv.fr/fr/datasets/fichier-consolide-des-bornes-de-recharge-pour-vehicules-electriques/"
+      },
+      {
+        "title": "API IRVE temps réel",
+        "format": "JSON",
+        "size": "—",
+        "url": "https://transport.data.gouv.fr/datasets?type=charging-stations"
       }
     ],
     "page": "https://www.data.gouv.fr/fr/datasets/fichier-consolide-des-bornes-de-recharge-pour-vehicules-electriques/"
@@ -879,14 +861,13 @@
     "id": "fi-1",
     "theme": "finance",
     "sector": "Finance",
-    "title": "Budget de l'État — Données PLF 2024",
+    "title": "Budget de l'État — Données ouvertes",
     "organization": "Ministère des Finances / DGFiP",
-    "description": "Budget général de l'État 2024. Recettes et dépenses par programme, mission, action. Format LOLF.",
+    "description": "Budget général de l'État. Recettes et dépenses par programme, mission, action. Format LOLF.",
     "tags": [
       "budget",
       "PLF",
-      "finances-publiques",
-      "LOLF"
+      "finances-publiques"
     ],
     "metrics": {
       "reuses": 1567,
@@ -894,22 +875,22 @@
     },
     "resources": [
       {
-        "title": "Données budget synthèse CSV",
+        "title": "Budget ouvert — budget.gouv.fr",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.budget.gouv.fr/documentation/open-data"
+      },
+      {
+        "title": "Dataset budget synthèse (data.gouv.fr)",
         "format": "CSV",
-        "size": "18 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/2a3b4c5d-6e7f-8a9b-0c1d-2e3f4a5b6c7d"
+        "size": "—",
+        "url": "https://www.data.gouv.fr/fr/datasets/budget-de-letat-donnees-de-synthese/"
       },
       {
-        "title": "PLF 2024 documents",
+        "title": "Rapport Cour des Comptes 2024",
         "format": "PDF",
-        "size": "45 MB",
-        "url": "https://www.budget.gouv.fr/budget-et-comptes-de-letat/le-budget-de-letat-2024"
-      },
-      {
-        "title": "Rapport Cour des Comptes 2023 PDF",
-        "format": "PDF",
-        "size": "23 MB",
-        "url": "https://www.ccomptes.fr/system/files/2024-04/20240425-RAGF-2023.pdf"
+        "size": "—",
+        "url": "https://www.ccomptes.fr/fr/publications/le-budget-de-letat-en-2023"
       }
     ],
     "page": "https://www.data.gouv.fr/fr/datasets/budget-de-letat-donnees-de-synthese/"
@@ -918,9 +899,9 @@
     "id": "fi-2",
     "theme": "finance",
     "sector": "Finance",
-    "title": "DORA — Résilience opérationnelle secteur financier",
+    "title": "DORA — Résilience opérationnelle numérique",
     "organization": "ACPR / Banque de France",
-    "description": "Reporting DORA des établissements financiers. Incidents ICT, tests de résilience, tiers critiques.",
+    "description": "Règlement DORA : résilience opérationnelle numérique pour le secteur financier européen.",
     "tags": [
       "DORA",
       "ACPR",
@@ -934,22 +915,22 @@
     },
     "resources": [
       {
-        "title": "Guide DORA EBA PDF",
-        "format": "PDF",
-        "size": "9.4 MB",
-        "url": "https://www.eba.europa.eu/sites/default/files/2023-11/a9c29e98-2b2e-4a2a-b7f0-dd1d2f1e4f6e/DORA%20implementation%20guide.pdf"
-      },
-      {
-        "title": "Templates RTS DORA Excel",
-        "format": "XLSX",
-        "size": "3.2 MB",
-        "url": "https://www.eba.europa.eu/regulation-and-policy/digital-operational-resilience-act-dora"
-      },
-      {
-        "title": "Page ACPR DORA",
+        "title": "Page DORA — ACPR",
         "format": "HTML",
         "size": "—",
         "url": "https://acpr.banque-france.fr/dora"
+      },
+      {
+        "title": "Texte règlement DORA (EUR-Lex)",
+        "format": "PDF",
+        "size": "—",
+        "url": "https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX%3A32022R2554"
+      },
+      {
+        "title": "RTS/ITS DORA — EBA",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.eba.europa.eu/regulation-and-policy/digital-operational-resilience-act-dora"
       }
     ],
     "page": "https://acpr.banque-france.fr/dora"
@@ -960,7 +941,7 @@
     "sector": "Finance",
     "title": "Base SIRENE — Entreprises et établissements",
     "organization": "INSEE",
-    "description": "12 millions d'unités légales françaises. SIREN, SIRET, APE, date création, effectifs. Mise à jour quotidienne.",
+    "description": "12 millions d'unités légales françaises. SIREN, SIRET, APE, date création, effectifs.",
     "tags": [
       "SIRENE",
       "entreprises",
@@ -973,22 +954,22 @@
     },
     "resources": [
       {
-        "title": "StockUniteLegale CSV",
+        "title": "Base SIRENE (data.gouv.fr)",
         "format": "CSV",
         "size": "2.4 GB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/825f4199-cadd-486c-ac46-a65a8ea1a047"
+        "url": "https://www.data.gouv.fr/fr/datasets/base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret/"
       },
       {
-        "title": "StockEtablissement CSV",
-        "format": "CSV",
-        "size": "4.1 GB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/0651fb76-bcf3-4f6a-a38d-bc04fa708576"
+        "title": "Annuaire entreprises — API Sirene",
+        "format": "JSON",
+        "size": "—",
+        "url": "https://api.insee.fr/catalogue/site/themes/wso2/subthemes/insee/pages/item-info.jag?name=Sirene&version=V3.11&provider=insee"
       },
       {
-        "title": "Page SIRENE officielle",
+        "title": "Explorateur entreprises",
         "format": "HTML",
         "size": "—",
-        "url": "https://www.data.gouv.fr/fr/datasets/base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret/"
+        "url": "https://annuaire-entreprises.data.gouv.fr/"
       }
     ],
     "page": "https://www.data.gouv.fr/fr/datasets/base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret/"
@@ -997,13 +978,13 @@
     "id": "fi-4",
     "theme": "finance",
     "sector": "Finance",
-    "title": "Marchés publics — Données essentielles 2024",
+    "title": "Marchés publics — Données essentielles",
     "organization": "Direction des Affaires Juridiques",
-    "description": "Tous les marchés publics notifiés en France. Acheteur, titulaire, montant, objet, CPV.",
+    "description": "Marchés publics notifiés en France. Acheteur, titulaire, montant, objet. Loi Sapin II.",
     "tags": [
       "marchés-publics",
-      "commande-publique",
-      "transparence"
+      "transparence",
+      "commande-publique"
     ],
     "metrics": {
       "reuses": 2345,
@@ -1011,22 +992,22 @@
     },
     "resources": [
       {
-        "title": "DECP marchés publics 2024",
-        "format": "HTML",
+        "title": "DECP marchés publics (data.gouv.fr)",
+        "format": "CSV",
         "size": "—",
         "url": "https://www.data.gouv.fr/fr/datasets/donnees-essentielles-de-la-commande-publique-fichiers-consolides/"
       },
       {
-        "title": "Guide marchés publics PDF",
-        "format": "PDF",
-        "size": "7.8 MB",
-        "url": "https://www.economie.gouv.fr/daj/guide-bonnes-pratiques-achat-public-0"
+        "title": "Explorateur marchés publics",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.marches-publics.info/"
       },
       {
-        "title": "API marchés JSON",
-        "format": "JSON",
-        "size": "189 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/donnees-essentielles-de-la-commande-publique-fichiers-consolides/"
+        "title": "Guide commande publique PDF",
+        "format": "PDF",
+        "size": "—",
+        "url": "https://www.economie.gouv.fr/files/files/directions_services/daj/marches_publics/guides/guide-acheteurs-2019.pdf"
       }
     ],
     "page": "https://www.data.gouv.fr/fr/datasets/donnees-essentielles-de-la-commande-publique-fichiers-consolides/"
@@ -1036,14 +1017,13 @@
     "theme": "industrie",
     "sector": "Industrie",
     "title": "Émissions polluantes ICPE — Base GEREP",
-    "organization": "Min. Transition Écologique / DREAL",
-    "description": "Déclarations d'émissions polluantes des sites ICPE. Air, eau, déchets. 5000+ sites industriels géolocalisés.",
+    "organization": "Min. Transition Écologique",
+    "description": "Déclarations d'émissions polluantes des sites industriels ICPE. Air, eau, déchets.",
     "tags": [
       "industrie",
       "émissions",
       "GEREP",
-      "ICPE",
-      "pollution"
+      "ICPE"
     ],
     "metrics": {
       "reuses": 456,
@@ -1051,22 +1031,22 @@
     },
     "resources": [
       {
-        "title": "Émissions polluants CSV",
+        "title": "Émissions industrielles (data.gouv.fr)",
         "format": "CSV",
-        "size": "67 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/b4aaeede-1a80-4399-baed-ea8f1d2a9c3e"
+        "size": "—",
+        "url": "https://www.data.gouv.fr/fr/datasets/emissions-de-polluants-atmospheriques-et-de-gaz-a-effet-de-serre-declarees-par-les-industriels/"
       },
       {
-        "title": "Base installations classées CSV",
-        "format": "CSV",
-        "size": "23 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/7c8d9e0f-1a2b-3c4d-5e6f-7a8b9c0d1e2f"
-      },
-      {
-        "title": "Géorisques ICPE",
+        "title": "Base installations classées",
         "format": "HTML",
         "size": "—",
         "url": "https://www.georisques.gouv.fr/risques/installations-industrielles"
+      },
+      {
+        "title": "Portail des données industrielles",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.data.gouv.fr/fr/search/?q=ICPE+émissions"
       }
     ],
     "page": "https://www.data.gouv.fr/fr/datasets/emissions-de-polluants-atmospheriques-et-de-gaz-a-effet-de-serre-declarees-par-les-industriels/"
@@ -1077,13 +1057,12 @@
     "sector": "Industrie",
     "title": "Accidents technologiques — Base ARIA BARPI",
     "organization": "BARPI / MEFSIN",
-    "description": "65 000 accidents technologiques et industriels français. Retours d'expérience, causes, conséquences, Seveso.",
+    "description": "65 000 accidents technologiques et industriels. Retours d'expérience, Seveso.",
     "tags": [
       "accidents",
       "ARIA",
       "ICPE",
-      "Seveso",
-      "sécurité-industrielle"
+      "Seveso"
     ],
     "metrics": {
       "reuses": 312,
@@ -1091,38 +1070,37 @@
     },
     "resources": [
       {
-        "title": "Accidents ARIA CSV",
-        "format": "CSV",
-        "size": "28 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/c5d6e7f8-9a0b-1c2d-3e4f-5a6b7c8d9e0f"
-      },
-      {
-        "title": "Bilan BARPI annuel PDF",
-        "format": "PDF",
-        "size": "7.8 MB",
-        "url": "https://www.aria.developpement-durable.gouv.fr/bilan/"
-      },
-      {
         "title": "Base ARIA en ligne",
         "format": "HTML",
         "size": "—",
         "url": "https://www.aria.developpement-durable.gouv.fr/"
+      },
+      {
+        "title": "Dataset ARIA (data.gouv.fr)",
+        "format": "CSV",
+        "size": "—",
+        "url": "https://www.data.gouv.fr/fr/search/?q=accidents+technologiques+ARIA"
+      },
+      {
+        "title": "Bilan accidents industriels",
+        "format": "PDF",
+        "size": "—",
+        "url": "https://www.aria.developpement-durable.gouv.fr/bilan/"
       }
     ],
-    "page": "https://www.data.gouv.fr/fr/datasets/base-de-donnees-accidents-technologiques-aria/"
+    "page": "https://www.aria.developpement-durable.gouv.fr/"
   },
   {
     "id": "ind-3",
     "theme": "industrie",
     "sector": "Industrie",
-    "title": "Brevets industriels — Base INPI France",
+    "title": "Brevets industriels — INPI Open Data",
     "organization": "INPI",
-    "description": "Brevets déposés en France. Inventeurs, déposants, domaines technologiques (CIB), statut de délivrance.",
+    "description": "Brevets déposés en France. Inventeurs, déposants, domaines technologiques, statut.",
     "tags": [
       "brevets",
       "INPI",
-      "propriété-intellectuelle",
-      "innovation"
+      "propriété-intellectuelle"
     ],
     "metrics": {
       "reuses": 789,
@@ -1130,22 +1108,22 @@
     },
     "resources": [
       {
-        "title": "Données brevets CSV",
-        "format": "CSV",
-        "size": "234 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/d6e7f8a9-0b1c-2d3e-4f5a-6b7c8d9e0f1a"
-      },
-      {
-        "title": "Open Data INPI brevets",
+        "title": "Open Data brevets INPI",
         "format": "HTML",
         "size": "—",
         "url": "https://data.inpi.fr/brevets"
       },
       {
-        "title": "Rapport INPI 2023 PDF",
+        "title": "Dataset brevets (data.gouv.fr)",
+        "format": "CSV",
+        "size": "—",
+        "url": "https://www.data.gouv.fr/fr/search/?q=brevets+INPI"
+      },
+      {
+        "title": "Rapport activité INPI 2023",
         "format": "PDF",
-        "size": "6.2 MB",
-        "url": "https://www.inpi.fr/sites/default/files/inpi_bilan_activite_2023_0.pdf"
+        "size": "—",
+        "url": "https://www.inpi.fr/sites/default/files/inpi_bilan_activite_2023.pdf"
       }
     ],
     "page": "https://data.inpi.fr/brevets"
@@ -1154,9 +1132,9 @@
     "id": "im-1",
     "theme": "immobilier",
     "sector": "Immobilier",
-    "title": "DVF+ — Demandes de Valeurs Foncières géolocalisées",
+    "title": "DVF — Demandes de Valeurs Foncières",
     "organization": "DGFiP / IGN",
-    "description": "Toutes les transactions immobilières depuis 2014 avec géolocalisation. Prix au m², type de bien, surface.",
+    "description": "Toutes les transactions immobilières depuis 2014 avec géolocalisation. Prix au m².",
     "tags": [
       "DVF",
       "immobilier",
@@ -1169,22 +1147,22 @@
     },
     "resources": [
       {
-        "title": "DVF Gouv (accès direct)",
+        "title": "DVF sur data.gouv.fr",
         "format": "CSV",
-        "size": "890 MB",
+        "size": "—",
         "url": "https://www.data.gouv.fr/fr/datasets/demandes-de-valeurs-foncieres/"
       },
       {
-        "title": "DVF+ géolocalisé CSV",
+        "title": "DVF géolocalisé",
         "format": "CSV",
-        "size": "2.1 GB",
+        "size": "—",
         "url": "https://www.data.gouv.fr/fr/datasets/demandes-de-valeurs-foncieres-geolocalisees/"
       },
       {
         "title": "Explorateur DVF",
         "format": "HTML",
         "size": "—",
-        "url": "https://explore.data.gouv.fr/immobilier?floors_min=1"
+        "url": "https://app.dvf.etalab.gouv.fr/"
       }
     ],
     "page": "https://www.data.gouv.fr/fr/datasets/demandes-de-valeurs-foncieres/"
@@ -1193,9 +1171,9 @@
     "id": "im-2",
     "theme": "immobilier",
     "sector": "Immobilier",
-    "title": "PLU — Plans Locaux d'Urbanisme France entière",
+    "title": "PLU — Plans Locaux d'Urbanisme",
     "organization": "Géoportail Urbanisme / DGALN",
-    "description": "Règlements d'urbanisme de toutes les communes. Zones constructibles, servitudes, règles de hauteur.",
+    "description": "Règlements d'urbanisme de toutes les communes françaises. Zones, servitudes, hauteurs.",
     "tags": [
       "PLU",
       "urbanisme",
@@ -1208,22 +1186,22 @@
     },
     "resources": [
       {
-        "title": "GPU - Géoportail Urbanisme",
+        "title": "Géoportail de l'Urbanisme",
         "format": "HTML",
         "size": "—",
         "url": "https://www.geoportail-urbanisme.gouv.fr/"
       },
       {
-        "title": "WFS PLU GeoJSON",
+        "title": "GPU — Données PLU",
         "format": "GEOJSON",
-        "size": "12 GB",
-        "url": "https://www.data.gouv.fr/fr/datasets/plan-local-durbanisme/"
+        "size": "—",
+        "url": "https://www.geoportail-urbanisme.gouv.fr/"
       },
       {
-        "title": "Documentation GPU PDF",
-        "format": "PDF",
-        "size": "8.9 MB",
-        "url": "https://www.geoportail-urbanisme.gouv.fr/aide"
+        "title": "Dataset PLU (data.gouv.fr)",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.data.gouv.fr/fr/search/?q=plan+local+urbanisme"
       }
     ],
     "page": "https://www.geoportail-urbanisme.gouv.fr/"
@@ -1232,9 +1210,9 @@
     "id": "ed-1",
     "theme": "education",
     "sector": "Éducation",
-    "title": "Résultats Baccalauréat 2024 par établissement",
+    "title": "Résultats Baccalauréat par établissement",
     "organization": "MENJ / DEPP",
-    "description": "Taux de réussite 2024 par lycée, académie, série et mention. Comparaisons sur 5 ans.",
+    "description": "Taux de réussite bac 2024 par lycée, académie, série, mention.",
     "tags": [
       "baccalauréat",
       "résultats",
@@ -1247,22 +1225,22 @@
     },
     "resources": [
       {
-        "title": "Résultats bac par lycée CSV",
+        "title": "Résultats bac par lycée (data.gouv.fr)",
         "format": "CSV",
-        "size": "45 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/aafc1e0c-3e6c-4f59-8e8b-1c2d3e4f5a6b"
-      },
-      {
-        "title": "Note DEPP bac 2024 PDF",
-        "format": "PDF",
-        "size": "4.5 MB",
-        "url": "https://www.education.gouv.fr/les-resultats-definitifs-du-baccalaureat-2024-380951"
-      },
-      {
-        "title": "Page dataset",
-        "format": "HTML",
         "size": "—",
         "url": "https://www.data.gouv.fr/fr/datasets/le-baccalaureat-par-academie/"
+      },
+      {
+        "title": "Indicateurs lycées MENJ",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.education.gouv.fr/les-indicateurs-de-resultats-des-lycees-8025"
+      },
+      {
+        "title": "Note DEPP résultats bac 2024",
+        "format": "PDF",
+        "size": "—",
+        "url": "https://www.education.gouv.fr/les-resultats-definitifs-du-baccalaureat-2024-380951"
       }
     ],
     "page": "https://www.data.gouv.fr/fr/datasets/le-baccalaureat-par-academie/"
@@ -1271,9 +1249,9 @@
     "id": "ed-2",
     "theme": "education",
     "sector": "Éducation",
-    "title": "IA dans l'éducation — Usages numériques 2024",
+    "title": "IA dans l'éducation — Ressources Canopé",
     "organization": "Réseau Canopé / MENJ",
-    "description": "Enquête sur l'utilisation de l'IA dans les établissements scolaires. ChatGPT, outils pédagogiques, formation.",
+    "description": "Ressources et rapports sur l'IA dans les établissements scolaires. Formation enseignants.",
     "tags": [
       "IA",
       "éducation",
@@ -1286,39 +1264,38 @@
     },
     "resources": [
       {
-        "title": "Enquête numérique enseignement CSV",
-        "format": "CSV",
-        "size": "8.9 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/3f4e5d6c-7b8a-9e0f-1a2b-3c4d5e6f7a8b"
-      },
-      {
-        "title": "Rapport Canopé IA PDF",
-        "format": "PDF",
-        "size": "12 MB",
-        "url": "https://www.reseau-canope.fr/fileadmin/user_upload/Projets/conseil_scientifique_education_nationale/IA_rapport.pdf"
-      },
-      {
-        "title": "Page Canopé IA",
+        "title": "Ressources IA Canopé",
         "format": "HTML",
         "size": "—",
-        "url": "https://www.reseau-canope.fr/intelligence-artificielle.html"
+        "url": "https://www.reseau-canope.fr/"
+      },
+      {
+        "title": "Données éducation numérique (data.gouv.fr)",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.data.gouv.fr/fr/search/?q=education+numerique"
+      },
+      {
+        "title": "Données enseignement sup numérique",
+        "format": "CSV",
+        "size": "—",
+        "url": "https://www.data.gouv.fr/fr/datasets/le-numerique-dans-lenseignement-superieur/"
       }
     ],
-    "page": "https://www.data.gouv.fr/fr/datasets/usage-du-numerique-dans-lenseignement-superieur/"
+    "page": "https://www.reseau-canope.fr/"
   },
   {
     "id": "env-1",
     "theme": "environnement",
     "sector": "Environnement",
-    "title": "Qualité de l'air — Mesures Atmo France",
+    "title": "Qualité de l'air — Données Atmo France",
     "organization": "Atmo France / AirParif",
-    "description": "Mesures horaires PM2.5, PM10, NO2, O3, SO2 sur 800 stations françaises. Historique depuis 2000.",
+    "description": "Mesures horaires PM2.5, PM10, NO2, O3, SO2 sur 800 stations françaises.",
     "tags": [
       "qualité-air",
       "pollution",
       "PM2.5",
-      "Atmo",
-      "AirParif"
+      "Atmo"
     ],
     "metrics": {
       "reuses": 2876,
@@ -1326,22 +1303,22 @@
     },
     "resources": [
       {
-        "title": "Mesures polluants CSV",
+        "title": "Données qualité air (data.gouv.fr)",
         "format": "CSV",
-        "size": "1.2 GB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/944df1e7-7f4b-41e8-bc44-1d8b26f5d1a9"
-      },
-      {
-        "title": "API qualité air temps réel",
-        "format": "JSON",
-        "size": "—",
-        "url": "https://api.atmo-aura.fr/"
-      },
-      {
-        "title": "Page dataset Atmo",
-        "format": "HTML",
         "size": "—",
         "url": "https://www.data.gouv.fr/fr/datasets/donnees-temps-reel-de-mesure-des-concentrations-de-polluants-atmospheriques-reglementes-1/"
+      },
+      {
+        "title": "Portail Atmo France",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.atmo-france.org/"
+      },
+      {
+        "title": "AirParif données Paris",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.airparif.fr/surveiller-la-pollution/les-donnees-en-open-data"
       }
     ],
     "page": "https://www.data.gouv.fr/fr/datasets/donnees-temps-reel-de-mesure-des-concentrations-de-polluants-atmospheriques-reglementes-1/"
@@ -1350,9 +1327,9 @@
     "id": "env-2",
     "theme": "environnement",
     "sector": "Environnement",
-    "title": "Inventaire national GES — CITEPA SECTEN",
+    "title": "Inventaire GES national — CITEPA SECTEN",
     "organization": "CITEPA / ADEME",
-    "description": "Émissions GES par secteur (énergie, transport, industrie, agriculture). Séries depuis 1990. Rapport SECTEN.",
+    "description": "Émissions GES par secteur depuis 1990. Rapport SECTEN annuel. Format standardisé CCNUCC.",
     "tags": [
       "GES",
       "CO2",
@@ -1366,22 +1343,22 @@
     },
     "resources": [
       {
-        "title": "SECTEN données CSV",
-        "format": "CSV",
-        "size": "23 MB",
-        "url": "https://www.citepa.org/wp-content/uploads/Secten_ed2024_rapport_chiffres.xlsx"
-      },
-      {
-        "title": "Rapport SECTEN 2024 PDF",
-        "format": "PDF",
-        "size": "15 MB",
-        "url": "https://www.citepa.org/wp-content/uploads/Secten_ed2024_rapport_complet.pdf"
-      },
-      {
-        "title": "Page CITEPA SECTEN",
+        "title": "Rapport SECTEN 2024 — CITEPA",
         "format": "HTML",
         "size": "—",
         "url": "https://www.citepa.org/fr/secten/"
+      },
+      {
+        "title": "Données GES (data.gouv.fr)",
+        "format": "CSV",
+        "size": "—",
+        "url": "https://www.data.gouv.fr/fr/search/?q=inventaire+gaz+effet+serre"
+      },
+      {
+        "title": "Bilan GES France — ADEME",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://bilans-ges.ademe.fr/"
       }
     ],
     "page": "https://www.citepa.org/fr/secten/"
@@ -1392,13 +1369,12 @@
     "sector": "Agriculture",
     "title": "Registre Parcellaire Graphique (RPG) 2023",
     "organization": "ASP / Ministère Agriculture",
-    "description": "Cartographie des îlots et cultures agricoles pour les aides PAC. Toutes les cultures, surfaces, codes îlots.",
+    "description": "Cartographie des cultures agricoles pour les aides PAC. Toutes les cultures géolocalisées.",
     "tags": [
       "agriculture",
       "RPG",
       "PAC",
-      "cultures",
-      "cartographie"
+      "cultures"
     ],
     "metrics": {
       "reuses": 4521,
@@ -1406,22 +1382,22 @@
     },
     "resources": [
       {
-        "title": "RPG 2023 GeoPackage",
+        "title": "RPG 2023 (data.gouv.fr)",
         "format": "GEOJSON",
         "size": "2.3 GB",
         "url": "https://www.data.gouv.fr/fr/datasets/registre-parcellaire-graphique-rpg-contours-des-parcelles-et-ilots-culturaux-et-leur-groupe-de-cultures-majoritaire/"
       },
       {
-        "title": "RPG cultures CSV",
-        "format": "CSV",
-        "size": "890 MB",
+        "title": "RPG — GéoServices IGN",
+        "format": "HTML",
+        "size": "—",
         "url": "https://geoservices.ign.fr/rpg"
       },
       {
-        "title": "Page dataset RPG",
+        "title": "Open Data agriculture",
         "format": "HTML",
         "size": "—",
-        "url": "https://www.data.gouv.fr/fr/datasets/registre-parcellaire-graphique-rpg-contours-des-parcelles-et-ilots-culturaux-et-leur-groupe-de-cultures-majoritaire/"
+        "url": "https://www.data.gouv.fr/fr/search/?q=agriculture+parcelles"
       }
     ],
     "page": "https://www.data.gouv.fr/fr/datasets/registre-parcellaire-graphique-rpg-contours-des-parcelles-et-ilots-culturaux-et-leur-groupe-de-cultures-majoritaire/"
@@ -1432,12 +1408,12 @@
     "sector": "Agriculture",
     "title": "Pesticides — Ventes et usage Bnvd ANSES",
     "organization": "ANSES / Ministère Agriculture",
-    "description": "Quantités de pesticides vendus par matière active, culture, département. Plan Ecophyto 2030.",
+    "description": "Quantités de pesticides vendus par matière active et département. Plan Ecophyto.",
     "tags": [
       "pesticides",
-      "phytosanitaires",
       "ANSES",
-      "Bnvd"
+      "Bnvd",
+      "Ecophyto"
     ],
     "metrics": {
       "reuses": 1234,
@@ -1445,22 +1421,22 @@
     },
     "resources": [
       {
-        "title": "Ventes pesticides par département CSV",
+        "title": "Ventes pesticides (data.gouv.fr)",
         "format": "CSV",
-        "size": "45 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/88d7c18f-7b3c-4a6e-9d2f-3a4b5c6d7e8f"
-      },
-      {
-        "title": "Rapport ANSES Bnvd PDF",
-        "format": "PDF",
-        "size": "9.8 MB",
-        "url": "https://www.anses.fr/fr/system/files/PPV-Ra-Bnvd2022.pdf"
-      },
-      {
-        "title": "Page Bnvd",
-        "format": "HTML",
         "size": "—",
         "url": "https://www.data.gouv.fr/fr/datasets/ventes-de-produits-phytopharmaceutiques-par-departement/"
+      },
+      {
+        "title": "Base Bnvd ANSES",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://bnvd.anses.fr/"
+      },
+      {
+        "title": "Rapport ANSES pesticides",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.anses.fr/fr/content/bilan-des-ventes-de-produits-phytopharmaceutiques"
       }
     ],
     "page": "https://www.data.gouv.fr/fr/datasets/ventes-de-produits-phytopharmaceutiques-par-departement/"
@@ -1471,12 +1447,11 @@
     "sector": "Tourisme",
     "title": "Hébergements touristiques — Capacité France",
     "organization": "INSEE / DGE",
-    "description": "Capacité et fréquentation des hébergements touristiques. Hôtels, campings, résidences. Données mensuelles.",
+    "description": "Capacité et fréquentation des hébergements touristiques français. Données mensuelles.",
     "tags": [
       "tourisme",
       "hôtels",
-      "hébergements",
-      "fréquentation"
+      "hébergements"
     ],
     "metrics": {
       "reuses": 876,
@@ -1484,22 +1459,22 @@
     },
     "resources": [
       {
-        "title": "Hébergements collectifs CSV",
+        "title": "Hébergements collectifs (data.gouv.fr)",
         "format": "CSV",
-        "size": "34 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
-      },
-      {
-        "title": "Bilan tourisme DGE PDF",
-        "format": "PDF",
-        "size": "6.7 MB",
-        "url": "https://www.entreprises.gouv.fr/files/files/secteurs-professionnels/tourisme/chiffres-cles-tourisme-2023.pdf"
-      },
-      {
-        "title": "Page dataset",
-        "format": "HTML",
         "size": "—",
         "url": "https://www.data.gouv.fr/fr/datasets/hebergements-collectifs-de-tourisme/"
+      },
+      {
+        "title": "Chiffres clés tourisme 2023",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.entreprises.gouv.fr/fr/tourisme/chiffres-du-tourisme"
+      },
+      {
+        "title": "Open data tourisme",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.data.gouv.fr/fr/search/?q=tourisme+hébergements"
       }
     ],
     "page": "https://www.data.gouv.fr/fr/datasets/hebergements-collectifs-de-tourisme/"
@@ -1508,9 +1483,9 @@
     "id": "rh-1",
     "theme": "rh",
     "sector": "Ressources Humaines",
-    "title": "Offres d'emploi — France Travail",
+    "title": "Offres d'emploi — France Travail Open Data",
     "organization": "France Travail",
-    "description": "Offres déposées sur France Travail. Métiers, contrats, salaires, localisations. Mise à jour quotidienne.",
+    "description": "Offres déposées sur France Travail. Métiers, contrats, salaires, localisations.",
     "tags": [
       "emploi",
       "offres",
@@ -1523,22 +1498,22 @@
     },
     "resources": [
       {
-        "title": "Offres emploi CSV",
+        "title": "Dataset offres emploi (data.gouv.fr)",
         "format": "CSV",
-        "size": "234 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/97f37c8e-bb0e-4c3c-b4fd-8b9a54f9a3dc"
-      },
-      {
-        "title": "Statistiques mensuelles Excel",
-        "format": "XLSX",
-        "size": "45 MB",
-        "url": "https://statistiques.pole-emploi.org/offres/"
-      },
-      {
-        "title": "Page dataset France Travail",
-        "format": "HTML",
         "size": "—",
         "url": "https://www.data.gouv.fr/fr/datasets/offres-demploi-de-france-travail/"
+      },
+      {
+        "title": "API offres France Travail",
+        "format": "JSON",
+        "size": "—",
+        "url": "https://francetravail.io/data/api/offres-emploi"
+      },
+      {
+        "title": "Statistiques emploi",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://statistiques.pole-emploi.org/"
       }
     ],
     "page": "https://www.data.gouv.fr/fr/datasets/offres-demploi-de-france-travail/"
@@ -1547,9 +1522,9 @@
     "id": "rh-2",
     "theme": "rh",
     "sector": "Ressources Humaines",
-    "title": "Index égalité femmes-hommes — Entreprises 50+",
+    "title": "Index égalité femmes-hommes — DARES",
     "organization": "Ministère du Travail / DARES",
-    "description": "Index égalité salariale obligatoire pour entreprises 50+ salariés. Note /100, écarts de rémunération.",
+    "description": "Index égalité salariale obligatoire pour entreprises 50+ salariés. Note /100.",
     "tags": [
       "égalité",
       "femmes-hommes",
@@ -1562,22 +1537,22 @@
     },
     "resources": [
       {
-        "title": "Index égalité 2024 CSV",
+        "title": "Index égalité (data.gouv.fr)",
         "format": "CSV",
-        "size": "23 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/2c3d4e5f-6a7b-8c9d-0e1f-2a3b4c5d6e7f"
-      },
-      {
-        "title": "Rapport DARES égalité PDF",
-        "format": "PDF",
-        "size": "7.8 MB",
-        "url": "https://dares.travail-emploi.gouv.fr/publication/index-de-legalite-professionnelle"
-      },
-      {
-        "title": "Page dataset index égalité",
-        "format": "HTML",
         "size": "—",
         "url": "https://www.data.gouv.fr/fr/datasets/index-egalite-professionnelle/"
+      },
+      {
+        "title": "Simulateur index égalité",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://index-egapro.travail.gouv.fr/"
+      },
+      {
+        "title": "Publication DARES égalité",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://dares.travail-emploi.gouv.fr/publication/index-de-legalite-professionnelle"
       }
     ],
     "page": "https://www.data.gouv.fr/fr/datasets/index-egalite-professionnelle/"
@@ -1588,12 +1563,11 @@
     "sector": "Juridique",
     "title": "Jurisprudence open data — Judilibre",
     "organization": "Cour de Cassation / Conseil d'État",
-    "description": "Décisions judiciaires anonymisées. Cour de cassation, Conseil d'État, cours d'appel. Texte intégral.",
+    "description": "Décisions judiciaires anonymisées. Cour de cassation, Conseil d'État, cours d'appel.",
     "tags": [
       "jurisprudence",
       "justice",
-      "Judilibre",
-      "open-data-juridique"
+      "Judilibre"
     ],
     "metrics": {
       "reuses": 2345,
@@ -1601,33 +1575,33 @@
     },
     "resources": [
       {
-        "title": "API Judilibre JSON",
-        "format": "JSON",
-        "size": "23 GB",
-        "url": "https://api.piste.gouv.fr/cassation/judilibre/v1.0"
+        "title": "Moteur Judilibre — recherche",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.courdecassation.fr/recherche-judilibre"
       },
       {
-        "title": "Dataset jurisprudence",
-        "format": "HTML",
+        "title": "Dataset jurisprudence (data.gouv.fr)",
+        "format": "JSON",
         "size": "—",
         "url": "https://www.data.gouv.fr/fr/datasets/jurisprudence-de-la-cour-de-cassation/"
       },
       {
-        "title": "Guide Judilibre PDF",
-        "format": "PDF",
-        "size": "3.4 MB",
-        "url": "https://www.courdecassation.fr/jurisprudence/judilibre"
+        "title": "API PISTE Judilibre",
+        "format": "JSON",
+        "size": "—",
+        "url": "https://piste.gouv.fr/"
       }
     ],
-    "page": "https://www.data.gouv.fr/fr/datasets/jurisprudence-de-la-cour-de-cassation/"
+    "page": "https://www.courdecassation.fr/recherche-judilibre"
   },
   {
     "id": "co-1",
     "theme": "collectivites",
     "sector": "Collectivités",
-    "title": "Comptes des collectivités locales — DGFiP",
+    "title": "Comptes des collectivités locales",
     "organization": "DGFiP / DGCL",
-    "description": "Comptes financiers de communes, départements et régions. Recettes, dépenses, dette. Séries 2010-2024.",
+    "description": "Comptes financiers de communes, départements et régions. Recettes, dépenses, dette.",
     "tags": [
       "collectivités",
       "communes",
@@ -1640,22 +1614,22 @@
     },
     "resources": [
       {
-        "title": "Comptes communes CSV",
+        "title": "Comptes communes (data.gouv.fr)",
         "format": "CSV",
-        "size": "456 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/a3b4c5d6-e7f8-9a0b-1c2d-3e4f5a6b7c8d"
-      },
-      {
-        "title": "Rapport DGCL PDF",
-        "format": "PDF",
-        "size": "12 MB",
-        "url": "https://www.collectivites-locales.gouv.fr/files/2024-07/2024-07-BIS-2024.pdf"
-      },
-      {
-        "title": "Page dataset collectivités",
-        "format": "HTML",
         "size": "—",
         "url": "https://www.data.gouv.fr/fr/datasets/comptes-individuels-des-communes/"
+      },
+      {
+        "title": "Portail finances locales",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.collectivites-locales.gouv.fr/finances-locales/les-finances-des-collectivites-locales"
+      },
+      {
+        "title": "Open data collectivités",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.data.gouv.fr/fr/search/?q=collectivités+budget"
       }
     ],
     "page": "https://www.data.gouv.fr/fr/datasets/comptes-individuels-des-communes/"
@@ -1666,13 +1640,12 @@
     "sector": "Collectivités",
     "title": "Base Permanente des Équipements — INSEE",
     "organization": "INSEE",
-    "description": "Localisation de 2,5 millions d'équipements et services. Écoles, hôpitaux, commerces, services publics.",
+    "description": "2,5 millions d'équipements et services localisés. Écoles, hôpitaux, commerces, services publics.",
     "tags": [
       "équipements",
       "services-publics",
       "INSEE",
-      "BPE",
-      "accessibilité"
+      "BPE"
     ],
     "metrics": {
       "reuses": 4789,
@@ -1680,22 +1653,22 @@
     },
     "resources": [
       {
-        "title": "BPE 2023 CSV",
+        "title": "BPE 2023 (data.gouv.fr)",
         "format": "CSV",
-        "size": "234 MB",
-        "url": "https://www.data.gouv.fr/fr/datasets/r/9d0e1f2a-3b4c-5d6e-7f8a-9b0c1d2e3f4a"
-      },
-      {
-        "title": "Documentation BPE PDF",
-        "format": "PDF",
-        "size": "4.2 MB",
-        "url": "https://www.insee.fr/fr/metadonnees/source/serie/s1161"
-      },
-      {
-        "title": "Page BPE INSEE",
-        "format": "HTML",
         "size": "—",
         "url": "https://www.data.gouv.fr/fr/datasets/base-permanente-des-equipements/"
+      },
+      {
+        "title": "BPE — INSEE",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.insee.fr/fr/statistiques/3568638"
+      },
+      {
+        "title": "Carte équipements France",
+        "format": "HTML",
+        "size": "—",
+        "url": "https://www.data.gouv.fr/fr/search/?q=equipements+locaux"
       }
     ],
     "page": "https://www.data.gouv.fr/fr/datasets/base-permanente-des-equipements/"
