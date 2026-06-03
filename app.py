@@ -1,27 +1,30 @@
-import os, json, requests
+import os, requests
 from flask import Flask, send_from_directory, jsonify, request
 from flask_cors import CORS
 
 app = Flask(__name__, static_folder='.', static_url_path='')
 CORS(app)
 
-SYSTEM_PROMPT = """Tu es un expert senior en IA, conformité réglementaire et cybersécurité chez CONSEILPREV, une startup parisienne spécialisée en Business Unit IA · Data · Cyber.
+MISTRAL_API_KEY = os.environ.get('MISTRAL_API_KEY', 'f5NFzuhlT1830mek1QYix3ofyBS3Y8gf')
+MISTRAL_URL = "https://api.mistral.ai/v1/chat/completions"
 
-Ton rôle : guider les visiteurs (entreprises, investisseurs, DSI, DPO, RSSI) avec des réponses précises, professionnelles et actionnables.
+SYSTEM_PROMPT = """Tu es un expert senior en IA, conformité réglementaire et cybersécurité chez CONSEILPREV, startup parisienne spécialisée en Business Unit IA · Data · Cyber.
+
+Ton rôle : guider les visiteurs (entreprises, investisseurs, DSI, DPO, RSSI) avec des réponses précises, professionnelles et actionnables en français.
 
 Tes domaines d'expertise :
-- IA Act européen : classification des risques, obligations de conformité, systèmes interdits
-- ISO 42001 : management des systèmes IA, certification, documentation
-- NIS2 : entités essentielles et importantes, mesures de sécurité, délais de notification
+- IA Act européen : classification des risques, obligations, systèmes interdits
+- ISO 42001 : management IA, certification, documentation
+- NIS2 : entités essentielles, mesures de sécurité, délais de notification
 - ISO 27001 : SMSI, analyse de risques, certification
-- DORA : résilience opérationnelle numérique, secteur financier, ICT tiers
-- RGPD : AIPD, violations de données, DPO, Privacy by Design
+- DORA : résilience opérationnelle numérique, secteur financier
+- RGPD : AIPD, violations, DPO, Privacy by Design
 - 8 risques systémiques IA : juridictionnel, économique, data, opérationnel, géopolitique, cyber, supply chain, environnemental
 - Gouvernance IA/Cyber : GRC, politiques, comités, KPIs
 
-Offre CONSEILPREV : Audit IA & Cyber, Évaluation des 8 risques systémiques, Plan de conformité 5 étapes, Gouvernance GRC.
+Offre CONSEILPREV : Audit IA & Cyber, 8 risques systémiques, Plan conformité 5 étapes, Gouvernance GRC.
 
-Style : professionnel, structuré, concis (max 280 mots). Termine en proposant d'approfondir ou de contacter contact@i-aes.com."""
+Style : professionnel, structuré avec des listes courtes, concis (max 280 mots). Réponds toujours en français. Termine en proposant d'approfondir ou contacter contact@i-aes.com."""
 
 @app.route('/')
 def index():
@@ -37,7 +40,7 @@ def favicon():
 
 @app.route('/api/health')
 def health():
-    return jsonify({"status": "ok", "version": "6.0"})
+    return jsonify({"status": "ok", "version": "7.0", "model": "mistral"})
 
 @app.route('/api/chat', methods=['POST'])
 def chat():
@@ -50,40 +53,38 @@ def chat():
             return jsonify({"error": "Message vide"}), 400
 
         # Construire les messages
-        messages = []
-        for h in history[-6:]:
+        messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+        for h in history[-8:]:
             if h.get('role') in ('user', 'assistant') and h.get('content'):
                 messages.append({"role": h['role'], "content": h['content']})
         messages.append({"role": "user", "content": user_msg})
 
-        # Appel Anthropic API
-        api_key = os.environ.get('ANTHROPIC_API_KEY', '')
-        if not api_key:
-            return jsonify({"reply": "⚠️ Clé API non configurée. Contactez-nous : contact@i-aes.com"}), 200
-
+        # Appel Mistral AI
         resp = requests.post(
-            "https://api.anthropic.com/v1/messages",
+            MISTRAL_URL,
             headers={
                 "Content-Type": "application/json",
-                "anthropic-version": "2023-06-01",
-                "x-api-key": api_key
+                "Authorization": f"Bearer {MISTRAL_API_KEY}"
             },
             json={
-                "model": "claude-haiku-4-5-20251001",
+                "model": "mistral-large-latest",
+                "messages": messages,
                 "max_tokens": 1024,
-                "system": SYSTEM_PROMPT,
-                "messages": messages
+                "temperature": 0.7
             },
             timeout=30
         )
 
         if not resp.ok:
-            return jsonify({"error": f"API error {resp.status_code}"}), 500
+            err = resp.text[:200]
+            return jsonify({"error": f"Mistral API {resp.status_code}: {err}"}), 500
 
         result = resp.json()
-        reply = result['content'][0]['text']
-        return jsonify({"reply": reply})
+        reply = result['choices'][0]['message']['content']
+        return jsonify({"reply": reply, "model": "mistral-large-latest"})
 
+    except requests.Timeout:
+        return jsonify({"error": "Délai d'attente dépassé, réessayez"}), 504
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
