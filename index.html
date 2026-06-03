@@ -188,9 +188,9 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:32px 24p
 .chat-btn:hover{transform:scale(1.1);box-shadow:0 8px 32px rgba(124,92,191,.7)}
 .chat-btn .notif{position:absolute;top:-2px;right:-2px;width:14px;height:14px;border-radius:50%;background:#3cc9b0;border:2px solid #0e0720;animation:blink 2s ease-in-out infinite}
 
-.chat-win{position:fixed;bottom:96px;right:28px;z-index:998;width:380px;max-height:600px;background:#160b30;border:1px solid rgba(196,181,232,.2);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.6);display:flex;flex-direction:column;overflow:hidden;transform:scale(0) translateY(20px);transform-origin:bottom right;opacity:0;transition:transform .25s ease,opacity .25s ease;pointer-events:none}
-.chat-win.open{transform:scale(1) translateY(0);opacity:1;pointer-events:all}
-@media(max-width:440px){.chat-win{width:calc(100vw - 32px);right:16px;bottom:88px}}
+.chat-box{position:fixed;bottom:96px;right:28px;z-index:998;width:380px;max-height:600px;background:#160b30;border:1px solid rgba(196,181,232,.2);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.6);display:flex;flex-direction:column;overflow:hidden;transform:scale(0) translateY(20px);transform-origin:bottom right;opacity:0;transition:transform .25s ease,opacity .25s ease;pointer-events:none}
+.chat-box.open{transform:scale(1) translateY(0);opacity:1;pointer-events:all}
+@media(max-width:440px){.chat-box{width:calc(100vw - 32px);right:16px;bottom:88px}}
 
 .chat-header{padding:16px 18px;background:linear-gradient(135deg,rgba(124,92,191,.3),rgba(166,133,232,.15));border-bottom:1px solid rgba(196,181,232,.15);display:flex;align-items:center;gap:12px}
 .chat-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#7c5cbf,#a685e8);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
@@ -665,139 +665,6 @@ render();
 </button>
 
 <!-- ══ FENÊTRE CHAT ══ -->
-<div class="chat-win" id="chat-win">
-  <div class="chat-header">
-    <div class="chat-avatar">🤖</div>
-    <div class="chat-info">
-      <h4>Expert CONSEILPREV</h4>
-      <p>● IA · Cyber · Conformité · GRC</p>
-    </div>
-    <button class="chat-close" onclick="toggleChat()">✕</button>
-  </div>
-
-  <div class="chat-msgs" id="chat-msgs">
-    <div class="msg bot">
-      <div class="msg-ico">🤖</div>
-      <div class="msg-bubble">Bonjour ! Je suis l'expert IA de CONSEILPREV, spécialisé en conformité <strong>IA Act</strong>, <strong>NIS2</strong>, <strong>ISO 27001</strong>, <strong>DORA</strong> et <strong>RGPD</strong>.<br><br>Comment puis-je vous aider aujourd'hui ?</div>
-    </div>
-  </div>
-
-  <div class="chat-suggestions" id="sug-wrap">
-    <button class="sug" onclick="sendSug(this)">Qu'est-ce que l'IA Act ?</button>
-    <button class="sug" onclick="sendSug(this)">Comment se conformer à NIS2 ?</button>
-    <button class="sug" onclick="sendSug(this)">8 risques systémiques IA</button>
-    <button class="sug" onclick="sendSug(this)">Opportunité d'investissement</button>
-    <button class="sug" onclick="sendSug(this)">DORA pour les banques</button>
-    <button class="sug" onclick="sendSug(this)">Audit cybersécurité</button>
-  </div>
-
-  <div class="chat-input-row">
-    <input class="chat-input" id="chat-input" type="text" placeholder="Posez votre question…" onkeydown="if(event.key==='Enter')sendMsg()">
-    <button class="chat-send" id="chat-send" onclick="sendMsg()">➤</button>
-  </div>
-  <div class="powered">Propulsé par Mistral AI · CONSEILPREV 2025</div>
-</div>
-
-<script>
-// ══ CHAT MISTRAL ══
-var chatOpen = false;
-var chatHistory = [];
-var chatBusy = false;
-
-var SYSTEM_PROMPT = `Tu es l'expert IA de CONSEILPREV, une startup parisienne spécialisée en conseil, audit et conformité dans les domaines Intelligence Artificielle, Cybersécurité et Data.
-
-Ton rôle : guider les visiteurs (investisseurs, clients, partenaires) avec des réponses précises, professionnelles et bienveillantes.
-
-Tes domaines d'expertise :
-- IA Act européen : classification des risques, obligations, conformité, calendrier de mise en œuvre
-- ISO 42001 : norme internationale pour la gestion responsable de l'IA
-- NIS2 : directive cybersécurité, entités essentielles et importantes, obligations
-- ISO 27001 : SMSI, gestion des risques, certification
-- DORA : résilience opérationnelle numérique pour le secteur financier
-- RGPD : protection des données, AIPD, DPO, sanctions CNIL
-- Les 8 risques systémiques IA : juridictionnel, économique, data, opérationnel, géopolitique, cyber, supply chain, environnemental
-- CONSEILPREV Business Unit IA·Data·Cyber : services, offres, investissement, roadmap
-
-Style : professionnel mais accessible, réponses concises (3-5 phrases max sauf demande détaillée), toujours proposer une action concrète à la fin. Réponds en français.`;
-
-function toggleChat() {
-  chatOpen = !chatOpen;
-  document.getElementById('chat-win').classList.toggle('open', chatOpen);
-  document.getElementById('chat-btn').innerHTML = chatOpen ? '✕<div class="notif"></div>' : '💬<div class="notif"></div>';
-  if(chatOpen) setTimeout(function(){ document.getElementById('chat-input').focus(); }, 300);
-}
-
-function addMsg(role, text) {
-  var msgs = document.getElementById('chat-msgs');
-  var div = document.createElement('div');
-  div.className = 'msg ' + role;
-  var ico = role==='bot' ? '<div class="msg-ico">🤖</div>' : '<div class="msg-ico" style="font-size:14px">👤</div>';
-  div.innerHTML = ico + '<div class="msg-bubble">' + text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>') + '</div>';
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
-  return div;
-}
-
-function showTyping() {
-  var msgs = document.getElementById('chat-msgs');
-  var div = document.createElement('div');
-  div.className = 'msg bot'; div.id = 'typing-indicator';
-  div.innerHTML = '<div class="msg-ico">🤖</div><div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div>';
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
-}
-
-function hideTyping() {
-  var t = document.getElementById('typing-indicator');
-  if(t) t.remove();
-}
-
-function sendSug(btn) {
-  document.getElementById('chat-input').value = btn.textContent;
-  document.getElementById('sug-wrap').style.display = 'none';
-  sendMsg();
-}
-
-async function sendMsg() {
-  if(chatBusy) return;
-  var input = document.getElementById('chat-input');
-  var text = input.value.trim();
-  if(!text) return;
-  input.value = '';
-  chatBusy = true;
-  document.getElementById('chat-send').disabled = true;
-  document.getElementById('sug-wrap').style.display = 'none';
-
-  addMsg('user', text);
-  chatHistory.push({role:'user', content:text});
-  showTyping();
-
-  try {
-    var messages = [{role:'system', content:SYSTEM_PROMPT}].concat(chatHistory.slice(-10));
-    var res = await fetch('/api/chat', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({messages:messages})
-    });
-    var data = await res.json();
-    hideTyping();
-    if(data.error) {
-      addMsg('bot', '⚠️ ' + data.error + '<br><small>Vérifiez que MISTRAL_API_KEY est configurée sur Render.</small>');
-    } else {
-      var reply = data.choices[0].message.content;
-      addMsg('bot', reply);
-      chatHistory.push({role:'assistant', content:reply});
-    }
-  } catch(e) {
-    hideTyping();
-    addMsg('bot', '⚠️ Connexion impossible. Vérifiez que le serveur est actif.');
-  }
-  chatBusy = false;
-  document.getElementById('chat-send').disabled = false;
-}
-</script>
-
-
 <!-- ══ CHAT MISTRAL ══ -->
 <button id="chat-btn" onclick="toggleChat()" title="Parler à notre expert IA">
   🤖<div class="notif"></div>
