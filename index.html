@@ -157,7 +157,41 @@ footer{background:var(--bg2);border-top:1px solid var(--bdr);padding:32px 24px 2
 #xsnd{background:var(--pm);color:#fff;border:none;border-radius:8px;padding:9px 14px;font-size:18px;cursor:pointer;flex-shrink:0;transition:background .2s}
 #xsnd:hover{background:var(--pl)}#xsnd:disabled{opacity:.4;cursor:default}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-@keyframes xtdot{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-4px);opacity:1}}</style>
+@keyframes xtdot{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-4px);opacity:1}}
+/* ── Formulaire projet ── */
+.dl-strip{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:rgba(166,133,232,.08);border:1px solid rgba(166,133,232,.2);border-radius:10px;padding:14px 20px;margin-bottom:32px}
+.dl-ico{font-size:20px}.dl-txt{font-size:13px;color:var(--pp);font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.05em}
+.dl-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:6px;border:1px solid rgba(166,133,232,.3);color:var(--pl);font-size:12px;text-decoration:none;font-family:"Space Mono",monospace;transition:all .2s}
+.dl-btn:hover{background:rgba(166,133,232,.15);border-color:var(--pl)}
+.pform{max-width:860px;margin:0 auto;background:var(--card);border:1px solid var(--bdr);border-radius:16px;padding:40px 44px}
+@media(max-width:640px){.pform{padding:24px 20px}}
+.pg2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+@media(max-width:640px){.pg2{grid-template-columns:1fr}}
+.pf{display:flex;flex-direction:column;gap:6px}
+.pf-full{grid-column:1/-1;margin-bottom:18px}
+.pl{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+.req{color:#e85c6a;font-size:12px}
+.pi2{background:rgba(255,255,255,.05);border:1px solid var(--bdr);border-radius:8px;padding:12px 16px;font-family:"DM Sans",sans-serif;font-size:14px;color:var(--wh);outline:none;transition:border-color .2s;width:100%}
+.pi2:focus{border-color:var(--pm);background:rgba(255,255,255,.07)}
+.pi2::placeholder{color:var(--mu)}
+textarea.pi2{resize:vertical;min-height:110px;line-height:1.6}
+.psel-wrap{position:relative}
+.psel{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--bdr);border-radius:8px;padding:12px 40px 12px 16px;font-family:"DM Sans",sans-serif;font-size:13px;color:var(--wh);outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;transition:border-color .2s}
+.psel:focus{border-color:var(--pm)}
+.psel option,.psel optgroup{background:#1a0f42;color:var(--wh)}
+.psel-arrow{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--pl);pointer-events:none;font-size:13px}
+.pconsent{display:flex;gap:12px;align-items:flex-start;background:rgba(255,255,255,.03);border:1px solid var(--bdr);border-radius:8px;padding:16px;margin:20px 0;cursor:pointer;font-size:13px;color:var(--mu);line-height:1.7}
+.pconsent input[type="checkbox"]{width:18px;height:18px;min-width:18px;accent-color:var(--pm);margin-top:2px;cursor:pointer}
+.pclink{color:var(--teal);text-decoration:none}.pclink:hover{text-decoration:underline}
+.pbtn{width:100%;background:linear-gradient(135deg,var(--pm),var(--pl));color:#fff;border:none;border-radius:10px;padding:16px 32px;font-family:"DM Sans",sans-serif;font-size:16px;font-weight:600;cursor:pointer;transition:all .2s;box-shadow:0 4px 24px rgba(124,92,191,.4);display:flex;align-items:center;justify-content:center;gap:10px}
+.pbtn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(124,92,191,.55)}
+.pbtn:disabled{opacity:.5;cursor:default;transform:none}
+.preply{text-align:center;font-size:12px;color:var(--mu);margin-top:12px;font-family:"Space Mono",monospace}
+.pfst{font-size:13px;padding:12px 16px;border-radius:8px;display:none;margin-top:14px;line-height:1.6}
+.pfst.ok{background:rgba(60,201,176,.1);border:1px solid rgba(60,201,176,.25);color:var(--teal)}
+.pfst.err{background:rgba(232,92,106,.1);border:1px solid rgba(232,92,106,.25);color:#e85c6a}
+.pfst.rl{background:rgba(212,168,67,.1);border:1px solid rgba(212,168,67,.2);color:var(--gold)}
+</style>
 </head>
 <body>
 
@@ -295,33 +329,270 @@ footer{background:var(--bg2);border-top:1px solid var(--bdr);padding:32px 24px 2
 </section>
 
 <section class="sec sec-a" id="contact">
-  <div class="con" style="display:flex;flex-direction:column;align-items:center;text-align:center">
-    <p class="lb" data-i18n="ct.lbl">Contact</p>
-    <h2 class="tt" data-i18n="ct.ttl">Construisons l'avenir <em>ensemble</em></h2>
-    <p class="ds" style="max-width:500px" data-i18n="ct.sub">Investisseur, partenaire ou client ?</p>
-    <div class="cform">
-      <h3 data-i18n="fm.ttl">Nous contacter</h3>
-      <p class="csub" data-i18n="fm.sub">Réponse sous 24h · contact@i-aes.com</p>
-      <form id="cform" novalidate>
-        <div class="cfg">
-          <input class="fi2" type="text" id="fn" placeholder="Votre nom *" data-i18n-ph="fm.name" required>
-          <input class="fi2" type="email" id="fe" placeholder="Email professionnel *" data-i18n-ph="fm.email" required>
-          <input class="fi2" type="text" id="fc" placeholder="Entreprise" data-i18n-ph="fm.co">
-          <select class="fi2" id="fs">
-            <option value="" data-i18n="fm.sub2">Sujet</option>
-            <option value="audit" data-i18n="fm.s1">Audit IA / Cyber</option>
-            <option value="conformite" data-i18n="fm.s2">Conformité réglementaire</option>
-            <option value="investissement" data-i18n="fm.s3">Investissement</option>
-            <option value="partenariat" data-i18n="fm.s4">Partenariat</option>
-            <option value="autre" data-i18n="fm.s5">Autre</option>
-          </select>
-          <textarea class="fi2" id="fm2" placeholder="Votre message *" data-i18n-ph="fm.msg" rows="4" required></textarea>
-          <div class="hp-field" aria-hidden="true"><input type="text" id="hp" name="website" tabindex="-1" autocomplete="off" value=""></div>
-          <button type="submit" class="btn bp" style="width:100%;justify-content:center" data-i18n="fm.send">Envoyer</button>
-        </div>
-        <div class="fst" id="fst"></div>
-      </form>
+  <div class="con">
+    <div style="text-align:center;margin-bottom:40px">
+      <p class="lb" data-i18n="ct.lbl">Contact</p>
+      <h2 class="tt" data-i18n="ct.ttl">Soumettre votre projet <em>IA &amp; Cyber</em></h2>
+      <p class="ds" style="max-width:600px;margin:0 auto" data-i18n="ct.sub">Partagez votre besoin, nous vous revenons sous 24h ouvrées avec une proposition personnalisée.</p>
     </div>
+
+    <!-- Téléchargements offre -->
+    <div class="dl-strip">
+      <span class="dl-ico">📄</span>
+      <span class="dl-txt" data-i18n="ct.dl">Télécharger notre offre :</span>
+      <a href="mailto:christophe.cerf@outlook.com?subject=[CONSEILPREV] Demande offre PDF&body=Bonjour, je souhaite recevoir votre offre de services en PDF." class="dl-btn">📥 PDF</a>
+      <a href="mailto:christophe.cerf@outlook.com?subject=[CONSEILPREV] Demande offre Word&body=Bonjour, je souhaite recevoir votre offre de services en Word." class="dl-btn">📝 Word</a>
+    </div>
+
+    <form id="cform" novalidate class="pform">
+
+      <!-- ── Grille 2 colonnes ── -->
+      <div class="pg2">
+        <div class="pf">
+          <label class="pl">Prénom <span class="req">*</span></label>
+          <input class="pi2" type="text" id="pf-prenom" placeholder="Jean" required>
+        </div>
+        <div class="pf">
+          <label class="pl">Nom <span class="req">*</span></label>
+          <input class="pi2" type="text" id="pf-nom" placeholder="Dupont" required>
+        </div>
+        <div class="pf">
+          <label class="pl">Adresse e-mail <span class="req">*</span></label>
+          <input class="pi2" type="email" id="pf-email" placeholder="jean.dupont@entreprise.com" required>
+        </div>
+        <div class="pf">
+          <label class="pl">Téléphone</label>
+          <input class="pi2" type="tel" id="pf-tel" placeholder="+33 6 00 00 00 00">
+        </div>
+        <div class="pf">
+          <label class="pl">Entreprise <span class="req">*</span></label>
+          <input class="pi2" type="text" id="pf-co" placeholder="Nom de votre société" required>
+        </div>
+        <div class="pf">
+          <label class="pl">Poste / Fonction</label>
+          <input class="pi2" type="text" id="pf-role" placeholder="DSI, RSSI, DPO, CTO…">
+        </div>
+      </div>
+
+      <!-- ── Sélecteurs ── -->
+      <div class="pg2">
+        <div class="pf">
+          <label class="pl">Secteur d'activité <span class="req">*</span></label>
+          <div class="psel-wrap">
+            <select class="psel" id="pf-sector" required>
+              <option value="">— Sélectionnez un secteur —</option>
+              <option value="energie">⚡ Énergie & Utilities</option>
+              <option value="oil-gas">🛢️ Oil & Gas</option>
+              <option value="industrie">🏭 Industrie & Manufacturing</option>
+              <option value="finance">💰 Banque & Finance</option>
+              <option value="assurance">🛡️ Assurance</option>
+              <option value="sante">🏥 Santé & Pharma</option>
+              <option value="transport">🚆 Transport & Logistique</option>
+              <option value="immobilier">🏠 Immobilier & Construction</option>
+              <option value="telecom">📡 Télécoms & Médias</option>
+              <option value="retail">🛒 Retail & Distribution</option>
+              <option value="public">🏛️ Secteur Public & Collectivités</option>
+              <option value="defense">🎖️ Défense & Sécurité</option>
+              <option value="agroalimentaire">🌾 Agroalimentaire</option>
+              <option value="tech">💻 Tech & Startups</option>
+              <option value="conseil">🎯 Conseil & Services</option>
+              <option value="autre">➕ Autre</option>
+            </select>
+            <span class="psel-arrow">▾</span>
+          </div>
+        </div>
+        <div class="pf">
+          <label class="pl">Taille de l'entreprise</label>
+          <div class="psel-wrap">
+            <select class="psel" id="pf-size">
+              <option value="">— Effectif —</option>
+              <option value="1-10">1 – 10 salariés</option>
+              <option value="11-50">11 – 50 salariés</option>
+              <option value="51-250">51 – 250 salariés</option>
+              <option value="251-1000">251 – 1 000 salariés</option>
+              <option value="1001-5000">1 001 – 5 000 salariés</option>
+              <option value="5000+">5 000+ salariés</option>
+            </select>
+            <span class="psel-arrow">▾</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Type de projet ── -->
+      <div class="pf pf-full">
+        <label class="pl">Type de projet IA / Cyber <span class="req">*</span></label>
+        <div class="psel-wrap">
+          <select class="psel" id="pf-project" required>
+            <option value="">— Sélectionnez un type de projet —</option>
+            <optgroup label="🧠 IA & Gouvernance">
+              <option value="audit-ia">Audit de conformité IA Act (ISO 42001)</option>
+              <option value="gouvernance-ia">Gouvernance IA — Comité & Politiques</option>
+              <option value="risques-ia">Évaluation 8 risques systémiques IA</option>
+              <option value="aipd">Analyse d'Impact IA (AIPD / DPIA)</option>
+              <option value="chatbot-ia">Déploiement IA conversationnelle / LLM</option>
+              <option value="ia-industrielle">IA industrielle — Maintenance prédictive, vision</option>
+              <option value="formation-ia">Formation & sensibilisation IA Act</option>
+            </optgroup>
+            <optgroup label="🛡️ Cybersécurité">
+              <option value="audit-nis2">Audit NIS2 — Entités essentielles / importantes</option>
+              <option value="audit-iso27">Audit ISO 27001 / SMSI</option>
+              <option value="dora">Conformité DORA — Résilience opérationnelle</option>
+              <option value="pen-test">Test d'intrusion / Red Team</option>
+              <option value="soc">SOC & détection d'incidents</option>
+              <option value="grc">GRC — Gouvernance, Risques, Conformité</option>
+            </optgroup>
+            <optgroup label="🔒 RGPD & Données">
+              <option value="rgpd">Mise en conformité RGPD</option>
+              <option value="dpo">Délégué à la Protection des Données (DPO)</option>
+              <option value="violations">Gestion des violations de données</option>
+            </optgroup>
+            <optgroup label="📊 Data & MCP">
+              <option value="mcp-datagouv">Connecteur MCP data.gouv.fr</option>
+              <option value="data-strategy">Stratégie Data & IA</option>
+              <option value="dashboard">Dashboard IA — Tableau de bord décisionnel</option>
+            </optgroup>
+            <optgroup label="🏭 Industrie & OT">
+              <option value="cybersec-ot">Cybersécurité OT/ICS/SCADA</option>
+              <option value="oiv">Protection OIV / Seveso</option>
+              <option value="continuity">Plan de continuité d'activité (PCA/PRA)</option>
+            </optgroup>
+            <option value="autre">➕ Autre projet</option>
+          </select>
+          <span class="psel-arrow">▾</span>
+        </div>
+      </div>
+
+      <!-- ── Budget & Délai ── -->
+      <div class="pg2">
+        <div class="pf">
+          <label class="pl">Budget indicatif</label>
+          <div class="psel-wrap">
+            <select class="psel" id="pf-budget">
+              <option value="">— Fourchette budgétaire —</option>
+              <optgroup label="€ Euros">
+                <option value="&lt;10k-eur">&lt; 10 000 €</option>
+                <option value="10-25k-eur">10 000 – 25 000 €</option>
+                <option value="25-50k-eur">25 000 – 50 000 €</option>
+                <option value="50-100k-eur">50 000 – 100 000 €</option>
+                <option value="100-250k-eur">100 000 – 250 000 €</option>
+                <option value="250k+-eur">&gt; 250 000 €</option>
+              </optgroup>
+              <optgroup label="$ USD">
+                <option value="&lt;10k-usd">&lt; $10 000</option>
+                <option value="10-25k-usd">$10 000 – $25 000</option>
+                <option value="25-50k-usd">$25 000 – $50 000</option>
+                <option value="50-100k-usd">$50 000 – $100 000</option>
+                <option value="100-250k-usd">$100 000 – $250 000</option>
+                <option value="250k+-usd">&gt; $250 000</option>
+              </optgroup>
+            </select>
+            <span class="psel-arrow">▾</span>
+          </div>
+        </div>
+        <div class="pf">
+          <label class="pl">Délai souhaité</label>
+          <div class="psel-wrap">
+            <select class="psel" id="pf-delay">
+              <option value="">— Horizon de démarrage —</option>
+              <option value="urgent">🔴 Urgent — sous 2 semaines</option>
+              <option value="1mois">🟠 Dans le mois</option>
+              <option value="3mois">🟡 Sous 3 mois</option>
+              <option value="6mois">🟢 Sous 6 mois</option>
+              <option value="annee">📅 Horizon 1 an</option>
+              <option value="exploration">💡 Phase d'exploration</option>
+            </select>
+            <span class="psel-arrow">▾</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Pays & Normes ── -->
+      <div class="pg2">
+        <div class="pf">
+          <label class="pl">Pays / Région</label>
+          <div class="psel-wrap">
+            <select class="psel" id="pf-country">
+              <option value="">— Pays —</option>
+              <option value="FR">🇫🇷 France</option>
+              <option value="BE">🇧🇪 Belgique</option>
+              <option value="CH">🇨🇭 Suisse</option>
+              <option value="LU">🇱🇺 Luxembourg</option>
+              <option value="MC">🇲🇨 Monaco</option>
+              <option value="DE">🇩🇪 Allemagne</option>
+              <option value="UK">🇬🇧 Royaume-Uni</option>
+              <option value="US">🇺🇸 États-Unis</option>
+              <option value="CA">🇨🇦 Canada</option>
+              <option value="AE">🇦🇪 EAU / Moyen-Orient</option>
+              <option value="OTHER">🌍 Autre</option>
+            </select>
+            <span class="psel-arrow">▾</span>
+          </div>
+        </div>
+        <div class="pf">
+          <label class="pl">Normes ciblées</label>
+          <div class="psel-wrap">
+            <select class="psel" id="pf-norm">
+              <option value="">— Référentiel —</option>
+              <option value="ia-act">IA Act européen</option>
+              <option value="iso42001">ISO 42001</option>
+              <option value="nis2">NIS2</option>
+              <option value="iso27001">ISO 27001</option>
+              <option value="dora">DORA</option>
+              <option value="rgpd">RGPD / GDPR</option>
+              <option value="soc2">SOC 2</option>
+              <option value="hds">HDS (Santé)</option>
+              <option value="pci-dss">PCI-DSS</option>
+              <option value="nist">NIST CSF</option>
+              <option value="multi">Plusieurs normes</option>
+            </select>
+            <span class="psel-arrow">▾</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Description ── -->
+      <div class="pf pf-full">
+        <label class="pl">Description de votre besoin <span class="req">*</span></label>
+        <textarea class="pi2" id="pf-msg" rows="5" placeholder="Décrivez votre projet, vos enjeux, vos contraintes réglementaires ou toute question que vous souhaitez nous soumettre…" required></textarea>
+      </div>
+
+      <!-- ── Comment nous avez-vous connus ── -->
+      <div class="pf pf-full">
+        <label class="pl">Comment nous avez-vous connus ?</label>
+        <div class="psel-wrap">
+          <select class="psel" id="pf-source">
+            <option value="">— Source —</option>
+            <option value="linkedin">LinkedIn</option>
+            <option value="google">Google / Moteur de recherche</option>
+            <option value="recommandation">Recommandation</option>
+            <option value="evenement">Événement / Conférence</option>
+            <option value="presse">Presse / Article</option>
+            <option value="data-gouv">Portail data.gouv.fr</option>
+            <option value="autre">Autre</option>
+          </select>
+          <span class="psel-arrow">▾</span>
+        </div>
+      </div>
+
+      <!-- HONEYPOT -->
+      <div style="position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden" aria-hidden="true">
+        <input type="text" id="hp" name="website" tabindex="-1" autocomplete="off" value="">
+      </div>
+
+      <!-- ── RGPD Consent ── -->
+      <label class="pconsent">
+        <input type="checkbox" id="pf-consent" required>
+        <span>J'accepte que mes données soient traitées par <strong>CONSEILPREV</strong> dans le cadre de ma demande de contact, conformément à la <a href="#" class="pclink">politique de confidentialité</a>. Aucune donnée n'est partagée avec des tiers. <span class="req">*</span></span>
+      </label>
+
+      <!-- ── Submit ── -->
+      <button type="submit" class="pbtn">
+        <span id="pbtn-txt">📨 Envoyer ma demande</span>
+      </button>
+      <p class="preply">Réponse garantie sous 24h ouvrées · <a href="mailto:christophe.cerf@outlook.com" class="pclink">christophe.cerf@outlook.com</a></p>
+
+      <div class="pfst" id="pfst"></div>
+    </form>
   </div>
 </section>
 
@@ -434,29 +705,93 @@ function xSyncBtns(q){document.querySelectorAll('.tb').forEach(function(b){b.cla
 function xPg(d){XS.page+=d;if(XS.page<1)XS.page=1;if(XS.page>XS.pages)XS.page=XS.pages;xRender();}
 document.getElementById('xsearch').addEventListener('keydown',function(e){if(e.key==='Enter')xSearch();});
 
-// Anti-spam form
+// ── Formulaire projet — Anti-spam + soumission ──
 var _fTs=[],_fStart=Date.now();
 document.getElementById('cform').addEventListener('submit',function(e){
   e.preventDefault();
-  var st=document.getElementById('fst');
-  function show(cls,msg){st.className='fst '+cls;st.textContent=msg;st.style.display='block';}
-  if(document.getElementById('hp').value!==''){show('err',ii('fm.spam'));return;}
-  if(Date.now()-_fStart<2000){show('err',ii('fm.spam'));return;}
+  var st=document.getElementById('pfst');
+  var btn=document.getElementById('pbtn-txt');
+  function show(cls,msg){st.className='pfst '+cls;st.innerHTML=msg;st.style.display='block';}
+
+  // 1. Honeypot
+  if(document.getElementById('hp').value!==''){show('err','Erreur de validation.');return;}
+  // 2. Timer anti-bot
+  if(Date.now()-_fStart<2000){show('err','Erreur de validation.');return;}
+  // 3. Rate-limit 3/60s
   var now=Date.now();
   _fTs=_fTs.filter(function(t){return now-t<60000;});
-  if(_fTs.length>=3){show('rl',ii('fm.rl'));return;}
-  var name=document.getElementById('fn').value.trim();
-  var email=document.getElementById('fe').value.trim();
-  var msg=document.getElementById('fm2').value.trim();
-  if(!name||!email||!msg){show('err',ii('fm.req'));return;}
+  if(_fTs.length>=3){show('rl','⏳ Trop de tentatives. Veuillez patienter 60 secondes.');return;}
+
+  // 4. Validation champs requis
+  var prenom=document.getElementById('pf-prenom').value.trim();
+  var nom=document.getElementById('pf-nom').value.trim();
+  var email=document.getElementById('pf-email').value.trim();
+  var co=document.getElementById('pf-co').value.trim();
+  var sector=document.getElementById('pf-sector').value;
+  var project=document.getElementById('pf-project').value;
+  var msg=document.getElementById('pf-msg').value.trim();
+  var consent=document.getElementById('pf-consent').checked;
+
+  if(!prenom||!nom||!email||!co||!sector||!project||!msg){
+    show('err','⚠️ Veuillez remplir tous les champs obligatoires (marqués *).');return;
+  }
   var at=email.indexOf('@');
-  if(at<1||email.indexOf('.',at)<at+2){show('err',ii('fm.inv'));return;}
+  if(at<1||email.indexOf('.',at)<at+2){show('err','⚠️ Adresse e-mail invalide.');return;}
+  if(!consent){show('err','⚠️ Veuillez accepter la politique de confidentialité.');return;}
+
   _fTs.push(now);
-  var subj=encodeURIComponent('[CONSEILPREV] '+(document.getElementById('fs').value||'Contact'));
-  var co=document.getElementById('fc').value.trim();
-  var body=encodeURIComponent('De: '+name+'\nEmail: '+email+(co?'\nEntreprise: '+co:'')+'\n\n'+msg);
-  window.open('mailto:contact@i-aes.com?subject='+subj+'&body='+body);
-  show('ok',ii('fm.ok'));e.target.reset();_fStart=Date.now();
+
+  // 5. Construire le corps du mail
+  var tel=document.getElementById('pf-tel').value.trim();
+  var role=document.getElementById('pf-role').value.trim();
+  var size=document.getElementById('pf-size').value;
+  var budget=document.getElementById('pf-budget').value;
+  var delay=document.getElementById('pf-delay').value;
+  var country=document.getElementById('pf-country').value;
+  var norm=document.getElementById('pf-norm').value;
+  var source=document.getElementById('pf-source').value;
+
+  var lines=[
+    '═══════════════════════════════════',
+    'NOUVELLE DEMANDE PROJET — CONSEILPREV',
+    '═══════════════════════════════════',
+    '',
+    '👤 CONTACT',
+    'Prénom : '+prenom,
+    'Nom : '+nom,
+    'Email : '+email,
+    tel?'Téléphone : '+tel:'',
+    '',
+    '🏢 ENTREPRISE',
+    'Société : '+co,
+    role?'Fonction : '+role:'',
+    size?'Effectif : '+size:'',
+    sector?'Secteur : '+sector:'',
+    country?'Pays : '+country:'',
+    '',
+    '🎯 PROJET',
+    'Type de projet : '+project,
+    norm?'Norme(s) ciblée(s) : '+norm:'',
+    budget?'Budget indicatif : '+budget:'',
+    delay?'Délai souhaité : '+delay:'',
+    source?'Source : '+source:'',
+    '',
+    '📝 DESCRIPTION',
+    msg,
+    '',
+    '─────────────────────────────────',
+    'Envoyé depuis conseilprev.onrender.com',
+    new Date().toLocaleString('fr-FR')
+  ].filter(function(l){return l!==null&&l!==undefined;}).join('\n');
+
+  var subj=encodeURIComponent('[CONSEILPREV] Demande projet — '+prenom+' '+nom+' — '+co);
+  var body=encodeURIComponent(lines);
+
+  window.open('mailto:christophe.cerf@outlook.com?subject='+subj+'&body='+body);
+
+  show('ok','✅ <strong>Merci '+prenom+' !</strong><br>Votre demande a été préparée. Si votre client mail ne s\'est pas ouvert automatiquement, contactez-nous directement à <a href="mailto:christophe.cerf@outlook.com" style="color:var(--teal)">christophe.cerf@outlook.com</a><br><br>⏱️ Réponse garantie sous 24h ouvrées.');
+  document.getElementById('cform').reset();
+  _fStart=Date.now();
 });
 
 // Chat
