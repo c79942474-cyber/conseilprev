@@ -34,6 +34,10 @@ def index():
 def datasets():
     return send_from_directory('.', 'datasets.json', mimetype='application/json')
 
+@app.route('/hero-bg.jpg')
+def hero_bg():
+    return send_from_directory('.', 'hero-bg.jpg', mimetype='image/jpeg')
+
 @app.route('/livre-blanc')
 def livre_blanc():
     return send_from_directory('.', 'livre-blanc.html')
