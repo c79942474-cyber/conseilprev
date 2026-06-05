@@ -160,6 +160,24 @@ footer{background:var(--bg2);border-top:1px solid var(--bdr);padding:32px 24px 2
 @keyframes xtdot{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-4px);opacity:1}}
 
 
+
+/* ═══ CTA "Construisons l'avenir" ═══ */
+.avenir-sec{position:relative;padding:120px 24px;text-align:center;overflow:hidden;background:var(--bg2)}
+.avenir-bg{position:absolute;inset:0;background:
+  radial-gradient(ellipse 90% 70% at 50% 50%, rgba(124,92,191,.22) 0%, transparent 65%),
+  radial-gradient(ellipse 40% 50% at 20% 80%, rgba(60,201,176,.07) 0%, transparent 60%),
+  radial-gradient(ellipse 40% 40% at 80% 20%, rgba(166,133,232,.07) 0%, transparent 60%);
+  pointer-events:none}
+.avenir-inner{position:relative;z-index:1;max-width:700px;margin:0 auto}
+.avenir-title{font-family:"Cormorant Garamond",serif;font-size:clamp(38px,7vw,80px);font-weight:700;line-height:.95;letter-spacing:-.025em;color:var(--wh);margin-bottom:10px}
+.avenir-sub-em{font-family:"Cormorant Garamond",serif;font-size:clamp(40px,8vw,90px);font-weight:600;font-style:italic;color:var(--pl);line-height:.9;margin-bottom:32px;display:block;opacity:.9}
+.avenir-sub{font-size:clamp(14px,1.8vw,17px);font-weight:300;color:var(--mu);line-height:1.75;margin-bottom:44px}
+.avenir-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.avenir-btn-p{display:inline-flex;align-items:center;gap:8px;background:var(--pm);color:#fff;padding:16px 36px;border-radius:10px;font-size:15px;font-weight:600;text-decoration:none;transition:all .25s;box-shadow:0 4px 28px rgba(124,92,191,.45)}
+.avenir-btn-p:hover{background:var(--pl);transform:translateY(-2px);box-shadow:0 8px 36px rgba(166,133,232,.55)}
+.avenir-btn-s{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.2);color:var(--wh);padding:16px 36px;border-radius:10px;font-size:15px;font-weight:500;text-decoration:none;transition:all .25s;backdrop-filter:blur(10px)}
+.avenir-btn-s:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.4);transform:translateY(-2px)}
+
 /* ═══ HERO 2 — Conformité IA & Cyber ═══ */
 .hero2-sec{position:relative;padding:100px 24px;overflow:hidden;text-align:center;background:var(--bg2)}
 .h2-bg{position:absolute;inset:0;background:
@@ -563,12 +581,26 @@ textarea.pi2{resize:vertical;min-height:110px;line-height:1.6}
   </div>
 </section>
 
+
+<section class="avenir-sec" id="avenir">
+  <div class="avenir-bg"></div>
+  <div class="avenir-inner">
+    <h2 class="avenir-title">Construisons l'avenir</h2>
+    <p class="avenir-sub-em">ensemble</p>
+    <p class="avenir-sub">Investisseur, partenaire ou client ? Explorons comment<br>CONSEILPREV peut créer de la valeur avec vous.</p>
+    <div class="avenir-btns">
+      <a href="#contact" class="avenir-btn-p">Contacter CONSEILPREV</a>
+      <a href="#data" class="avenir-btn-s">Explorer les données</a>
+    </div>
+  </div>
+</section>
+
 <section class="sec sec-a" id="contact">
   <div class="con">
-    <div style="text-align:center;margin-bottom:40px">
-      <p class="lb" data-i18n="ct.lbl">Contact</p>
-      <h2 class="tt" data-i18n="ct.ttl">Soumettre votre projet <em>IA &amp; Cyber</em></h2>
-      <p class="ds" style="max-width:600px;margin:0 auto" data-i18n="ct.sub">Partagez votre besoin, nous vous revenons sous 24h ouvrées avec une proposition personnalisée.</p>
+    <div style="text-align:center;margin-bottom:36px">
+      <p class="lb">Formulaire de projet</p>
+      <h2 class="tt">Soumettre votre projet <em>IA &amp; Cyber</em></h2>
+      <p class="ds" style="max-width:580px;margin:0 auto">Décrivez votre besoin — réponse garantie sous 24h ouvrées avec une proposition personnalisée.</p>
     </div>
 
     <!-- Téléchargements offre -->
