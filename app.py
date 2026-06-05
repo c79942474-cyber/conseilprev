@@ -34,6 +34,10 @@ def index():
 def datasets():
     return send_from_directory('.', 'datasets.json', mimetype='application/json')
 
+@app.route('/livre-blanc')
+def livre_blanc():
+    return send_from_directory('.', 'livre-blanc.html')
+
 @app.route('/favicon.ico')
 def favicon():
     return '', 204
