@@ -465,10 +465,10 @@ textarea.pi2{resize:vertical;min-height:110px;line-height:1.6}
         <div class="hp-timer-label">⏱ Offre limitée – Plus que</div>
         <div class="hp-progress-wrap"><div class="hp-progress" id="hp-prog" style="width:65%"></div></div>
         <div class="hp-timer" id="hero-timer">
-          <div class="hp-t"><span id="ht-d">20</span><small>Jours</small></div>
-          <div class="hp-t"><span id="ht-h">08</span><small>Heures</small></div>
-          <div class="hp-t"><span id="ht-m">22</span><small>Min</small></div>
-          <div class="hp-t"><span id="ht-s">23</span><small>Sec</small></div>
+          <div class="hp-t"><span id="ht-d">29</span><small>Jours</small></div>
+          <div class="hp-t"><span id="ht-h">11</span><small>Heures</small></div>
+          <div class="hp-t"><span id="ht-m">59</span><small>Min</small></div>
+          <div class="hp-t"><span id="ht-s">59</span><small>Sec</small></div>
         </div>
         <a href="#contact" class="hp-cta">Profiter de l'offre →</a>
       </div>
@@ -1142,9 +1142,8 @@ document.getElementById('xinp').addEventListener('keydown',function(e){if(e.key=
 // ── Compte à rebours hero LIVE ──
 (function(){
   // Date de fin fixe : 20 jours après le lancement (25 juin 2025 23:59:59)
-  var end = new Date('2025-06-25T23:59:59');
-  var totalDur = 20 * 86400000; // 20 jours en ms
-  var startTime = end.getTime() - totalDur;
+  var end = new Date('2026-07-04T23:59:59');
+  var totalDur = (end.getTime() - new Date('2026-06-05T00:00:00').getTime()); // durée réelle depuis aujourd'hui
 
   function pad(n){ return n < 10 ? '0'+n : String(n); }
 
