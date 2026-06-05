@@ -159,6 +159,27 @@ footer{background:var(--bg2);border-top:1px solid var(--bdr);padding:32px 24px 2
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 @keyframes xtdot{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-4px);opacity:1}}
 
+
+/* ═══ HERO 2 — Conformité IA & Cyber ═══ */
+.hero2-sec{position:relative;padding:100px 24px;overflow:hidden;text-align:center;background:var(--bg2)}
+.h2-bg{position:absolute;inset:0;background:
+  radial-gradient(ellipse 80% 60% at 50% 0%, rgba(124,92,191,.28) 0%, transparent 65%),
+  radial-gradient(ellipse 60% 40% at 20% 80%, rgba(60,201,176,.1) 0%, transparent 60%),
+  radial-gradient(ellipse 50% 50% at 80% 70%, rgba(166,133,232,.1) 0%, transparent 60%);
+  pointer-events:none}
+.h2-inner{position:relative;z-index:1;max-width:900px}
+.h2-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(124,92,191,.18);border:1px solid rgba(124,92,191,.35);border-radius:100px;padding:8px 20px;font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.1em;color:var(--pp);margin-bottom:32px}
+.h2-dot{width:7px;height:7px;border-radius:50%;background:var(--pl);animation:blink 2s ease-in-out infinite;flex-shrink:0}
+.h2-title{font-family:"Cormorant Garamond",serif;font-size:clamp(32px,5.5vw,66px);font-weight:700;line-height:1.05;letter-spacing:-.02em;color:var(--wh);margin-bottom:22px}
+.h2-title em{font-style:italic;color:var(--pl)}
+.h2-sub{font-size:clamp(14px,1.8vw,17px);font-weight:300;color:var(--mu);max-width:680px;margin:0 auto 36px;line-height:1.8}
+.h2-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.h2-btn-p{display:inline-flex;align-items:center;gap:8px;background:var(--pm);color:#fff;padding:14px 32px;border-radius:100px;font-size:15px;font-weight:600;text-decoration:none;transition:all .2s;box-shadow:0 4px 24px rgba(124,92,191,.45)}
+.h2-btn-p:hover{background:var(--pl);transform:translateY(-2px);box-shadow:0 8px 32px rgba(166,133,232,.5)}
+.h2-arr{font-size:18px;font-weight:400}
+.h2-btn-s{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.2);color:var(--wh);padding:14px 32px;border-radius:100px;font-size:15px;font-weight:500;text-decoration:none;transition:all .2s;backdrop-filter:blur(8px)}
+.h2-btn-s:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.35);transform:translateY(-2px)}
+
 /* ═══ SECTEURS ═══ */
 .sector-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 @media(max-width:900px){.sector-grid{grid-template-columns:repeat(3,1fr)}}
@@ -332,6 +353,28 @@ textarea.pi2{resize:vertical;min-height:110px;line-height:1.6}
       <div class="sector-card sc-lime"><span class="sc-ico">🚛</span> Logistique</div>
       <div class="sector-card sc-blue"><span class="sc-ico">✈️</span> Aérospatial</div>
       <div class="sector-card sc-violet"><span class="sc-ico">🏛️</span> Secteur Public</div>
+    </div>
+  </div>
+</section>
+
+
+<section class="sec hero2-sec" id="proposition">
+  <div class="h2-bg"></div>
+  <div class="con h2-inner">
+    <div class="h2-badge">
+      <span class="h2-dot"></span>
+      Conseil en conformité IA &amp; Cybersécurité
+    </div>
+    <h2 class="h2-title">
+      Conformité aux normes et régulations<br>
+      <em>en matière d'IA et de Cybersécurité</em>
+    </h2>
+    <p class="h2-sub">
+      CONSEILPREV vous accompagne dans la mise en conformité de vos systèmes d'intelligence artificielle et de cybersécurité selon les standards internationaux les plus exigeants.
+    </p>
+    <div class="h2-btns">
+      <a href="#contact" class="h2-btn-p">Nous contacter <span class="h2-arr">›</span></a>
+      <a href="mailto:christophe.cerf@outlook.com?subject=[CONSEILPREV] Livre Blanc&body=Bonjour, je souhaite recevoir votre Livre Blanc sur la conformité IA et Cybersécurité." class="h2-btn-s">📄 Télécharger le Livre Blanc</a>
     </div>
   </div>
 </section>
@@ -1282,6 +1325,27 @@ footer{background:var(--bg2);border-top:1px solid var(--bdr);padding:32px 24px 2
 #xsnd:hover{background:var(--pl)}#xsnd:disabled{opacity:.4;cursor:default}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 @keyframes xtdot{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-4px);opacity:1}}
+
+
+/* ═══ HERO 2 — Conformité IA & Cyber ═══ */
+.hero2-sec{position:relative;padding:100px 24px;overflow:hidden;text-align:center;background:var(--bg2)}
+.h2-bg{position:absolute;inset:0;background:
+  radial-gradient(ellipse 80% 60% at 50% 0%, rgba(124,92,191,.28) 0%, transparent 65%),
+  radial-gradient(ellipse 60% 40% at 20% 80%, rgba(60,201,176,.1) 0%, transparent 60%),
+  radial-gradient(ellipse 50% 50% at 80% 70%, rgba(166,133,232,.1) 0%, transparent 60%);
+  pointer-events:none}
+.h2-inner{position:relative;z-index:1;max-width:900px}
+.h2-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(124,92,191,.18);border:1px solid rgba(124,92,191,.35);border-radius:100px;padding:8px 20px;font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.1em;color:var(--pp);margin-bottom:32px}
+.h2-dot{width:7px;height:7px;border-radius:50%;background:var(--pl);animation:blink 2s ease-in-out infinite;flex-shrink:0}
+.h2-title{font-family:"Cormorant Garamond",serif;font-size:clamp(32px,5.5vw,66px);font-weight:700;line-height:1.05;letter-spacing:-.02em;color:var(--wh);margin-bottom:22px}
+.h2-title em{font-style:italic;color:var(--pl)}
+.h2-sub{font-size:clamp(14px,1.8vw,17px);font-weight:300;color:var(--mu);max-width:680px;margin:0 auto 36px;line-height:1.8}
+.h2-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.h2-btn-p{display:inline-flex;align-items:center;gap:8px;background:var(--pm);color:#fff;padding:14px 32px;border-radius:100px;font-size:15px;font-weight:600;text-decoration:none;transition:all .2s;box-shadow:0 4px 24px rgba(124,92,191,.45)}
+.h2-btn-p:hover{background:var(--pl);transform:translateY(-2px);box-shadow:0 8px 32px rgba(166,133,232,.5)}
+.h2-arr{font-size:18px;font-weight:400}
+.h2-btn-s{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.2);color:var(--wh);padding:14px 32px;border-radius:100px;font-size:15px;font-weight:500;text-decoration:none;transition:all .2s;backdrop-filter:blur(8px)}
+.h2-btn-s:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.35);transform:translateY(-2px)}
 
 /* ═══ SECTEURS ═══ */
 .sector-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
