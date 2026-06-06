@@ -497,42 +497,47 @@ textarea.pi2{resize:vertical;min-height:110px;line-height:1.6}
 </section>
 <!-- Timer compte à rebours - script isolé -->
 <script>
-var _timerEnd = new Date("2026-07-04T23:59:59").getTime();
-var _timerTotal = _timerEnd - new Date("2026-06-05T00:00:00").getTime();
-var _timerInterval = null;
+(function(){
+  "use strict";
+  var TEND  = new Date("2026-07-04T23:59:59").getTime();
+  var TTOT  = TEND - new Date("2026-06-05T00:00:00").getTime();
+  var TINT  = null;
 
-function _runTimer(){
-  var now  = Date.now();
-  var diff = Math.max(0, _timerEnd - now);
-  var d = Math.floor(diff / 86400000);
-  var h = Math.floor((diff % 86400000) / 3600000);
-  var m = Math.floor((diff % 3600000)  / 60000);
-  var s = Math.floor((diff % 60000)    / 1000);
-  var p = (d < 10 ? "0" : "") + d;
-  function fmt(n){ return (n < 10 ? "0" : "") + n; }
-  var eD = document.getElementById("ht-d");
-  var eH = document.getElementById("ht-h");
-  var eM = document.getElementById("ht-m");
-  var eS = document.getElementById("ht-s");
-  var eP = document.getElementById("hp-prog");
-  if(eD) eD.textContent = fmt(d);
-  if(eH) eH.textContent = fmt(h);
-  if(eM) eM.textContent = fmt(m);
-  if(eS){ eS.textContent = fmt(s); eS.style.opacity = (s % 2 === 0) ? "0.5" : "1"; }
-  if(eP){ eP.style.width = Math.max(0, Math.min(100, diff / _timerTotal * 100)).toFixed(1) + "%"; }
-}
+  function tfmt(n){ return (n < 10 ? "0" : "") + n; }
 
-function _startTimer(){
-  _runTimer();
-  if(_timerInterval) clearInterval(_timerInterval);
-  _timerInterval = setInterval(_runTimer, 1000);
-}
+  function trun(){
+    var tnow  = Date.now();
+    var tdiff = Math.max(0, TEND - tnow);
+    var tdays = Math.floor(tdiff / 86400000);
+    var thrs  = Math.floor((tdiff % 86400000) / 3600000);
+    var tmins = Math.floor((tdiff % 3600000)  / 60000);
+    var tsecs = Math.floor((tdiff % 60000)    / 1000);
 
-if(document.readyState === "loading"){
-  document.addEventListener("DOMContentLoaded", _startTimer);
-} else {
-  _startTimer();
-}
+    var eD = document.getElementById("ht-d");
+    var eH = document.getElementById("ht-h");
+    var eM = document.getElementById("ht-m");
+    var eS = document.getElementById("ht-s");
+    var eP = document.getElementById("hp-prog");
+
+    if(eD) eD.textContent = tfmt(tdays);
+    if(eH) eH.textContent = tfmt(thrs);
+    if(eM) eM.textContent = tfmt(tmins);
+    if(eS){ eS.textContent = tfmt(tsecs); eS.style.opacity = (tsecs % 2 === 0) ? "0.5" : "1"; }
+    if(eP){ eP.style.width = Math.max(0, Math.min(100, tdiff / TTOT * 100)).toFixed(1) + "%"; }
+  }
+
+  function tstart(){
+    trun();
+    if(TINT) clearInterval(TINT);
+    TINT = setInterval(trun, 1000);
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", tstart);
+  } else {
+    tstart();
+  }
+})();
 </script>
 
 
