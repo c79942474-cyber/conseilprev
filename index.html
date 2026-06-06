@@ -495,6 +495,46 @@ textarea.pi2{resize:vertical;min-height:110px;line-height:1.6}
 
   </div>
 </section>
+<!-- Timer compte à rebours - script isolé -->
+<script>
+var _timerEnd = new Date("2026-07-04T23:59:59").getTime();
+var _timerTotal = _timerEnd - new Date("2026-06-05T00:00:00").getTime();
+var _timerInterval = null;
+
+function _runTimer(){
+  var now  = Date.now();
+  var diff = Math.max(0, _timerEnd - now);
+  var d = Math.floor(diff / 86400000);
+  var h = Math.floor((diff % 86400000) / 3600000);
+  var m = Math.floor((diff % 3600000)  / 60000);
+  var s = Math.floor((diff % 60000)    / 1000);
+  var p = (d < 10 ? "0" : "") + d;
+  function fmt(n){ return (n < 10 ? "0" : "") + n; }
+  var eD = document.getElementById("ht-d");
+  var eH = document.getElementById("ht-h");
+  var eM = document.getElementById("ht-m");
+  var eS = document.getElementById("ht-s");
+  var eP = document.getElementById("hp-prog");
+  if(eD) eD.textContent = fmt(d);
+  if(eH) eH.textContent = fmt(h);
+  if(eM) eM.textContent = fmt(m);
+  if(eS){ eS.textContent = fmt(s); eS.style.opacity = (s % 2 === 0) ? "0.5" : "1"; }
+  if(eP){ eP.style.width = Math.max(0, Math.min(100, diff / _timerTotal * 100)).toFixed(1) + "%"; }
+}
+
+function _startTimer(){
+  _runTimer();
+  if(_timerInterval) clearInterval(_timerInterval);
+  _timerInterval = setInterval(_runTimer, 1000);
+}
+
+if(document.readyState === "loading"){
+  document.addEventListener("DOMContentLoaded", _startTimer);
+} else {
+  _startTimer();
+}
+</script>
+
 
 <div class="sb2"><div class="si">
   <div class="sv"><div class="sn">32</div><div class="slb" data-i18n="stats.a">Années expertise</div></div>
@@ -1139,58 +1179,7 @@ document.getElementById('xinp').addEventListener('keydown',function(e){if(e.key=
 })();
 
 
-// ── Compte à rebours hero LIVE ──
-(function(){
-  // Date de fin fixe : 20 jours après le lancement (25 juin 2025 23:59:59)
-  var end = new Date('2026-07-04T23:59:59');
-  var totalDur = (end.getTime() - new Date('2026-06-05T00:00:00').getTime()); // durée réelle depuis aujourd'hui
 
-  function pad(n){ return n < 10 ? '0'+n : String(n); }
-
-  function tick(){
-    var now = Date.now();
-    var diff = Math.max(0, end.getTime() - now);
-    var d = Math.floor(diff / 86400000);
-    var h = Math.floor((diff % 86400000) / 3600000);
-    var m = Math.floor((diff % 3600000) / 60000);
-    var s = Math.floor((diff % 60000) / 1000);
-
-    var ed=document.getElementById('ht-d');
-    var eh=document.getElementById('ht-h');
-    var em2=document.getElementById('ht-m');
-    var es=document.getElementById('ht-s');
-    var prog=document.getElementById('hp-prog');
-
-    if(ed) ed.textContent=pad(d);
-    if(eh) eh.textContent=pad(h);
-    if(em2) em2.textContent=pad(m);
-    if(es) es.textContent=pad(s);
-
-    // Barre de progression (100% au début, 0% à la fin)
-    if(prog){
-      var pct = Math.max(0, Math.min(100, (diff / totalDur) * 100));
-      prog.style.width = pct.toFixed(1) + '%';
-    }
-
-    // Clignotement des secondes
-    if(es && s % 2 === 0){
-      es.style.opacity='0.6';
-    } else if(es){
-      es.style.opacity='1';
-    }
-
-    if(diff === 0){
-      // Offre expirée
-      var label = document.querySelector('.hp-label');
-      if(label) label.textContent = '🔔 OFFRE TERMINÉE';
-      var cta = document.querySelector('.hp-cta');
-      if(cta){ cta.textContent = 'Nous contacter'; cta.href='#contact'; }
-    }
-  }
-
-  tick();
-  setInterval(tick, 1000);
-})();
 
 document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener('click',function(e){var t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}});});
 (function(){var u=new URL(window.location.href);var lp=u.searchParams.get('lang');LANG=lp==='en'?'en':lp==='fr'?'fr':(navigator.language||'fr').startsWith('en')?'en':'fr';document.querySelectorAll('.lbtn').forEach(function(b){b.classList.toggle('on',b.dataset.lang===LANG);});applyLang();xInitOrgs('ia');document.getElementById('xtheme').value='ia';})();
