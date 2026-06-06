@@ -1020,11 +1020,16 @@ function applyLang(){
   document.querySelectorAll('#xsugg .xsg').forEach(function(b,idx){if(qs[idx])b.textContent=ii(qs[idx]);});
   xRender();
 }
-function setLang(lang){
-  LANG=lang;
-  document.querySelectorAll('.lbtn').forEach(function(b){b.classList.toggle('on',b.dataset.lang===lang);});
-  var u=new URL(window.location.href);u.searchParams.set('lang',lang);history.replaceState({},'',u);
-  applyLang();
+var LANG = 'fr'; 
+function setLang(lang) {
+  LANG = lang;
+  document.querySelectorAll('.lbtn').forEach(function(b) {
+    b.classList.toggle('on', b.dataset.lang === lang);
+  });
+  var u = new URL(window.location.href);
+  u.searchParams.set('lang', lang);
+  history.replaceState({}, '', u);
+  applyLang(); // À définir (voir Correction 2)
 }
 function xInitOrgs(theme){
   var sel=document.getElementById('xorg');
