@@ -1026,6 +1026,7 @@ function applyLang(){
     if(qs[idx])b.textContent=ii(qs[idx]);
   });
   if(typeof xRender==='function')xRender();
+  if(typeof updateFormSelects==='function')updateFormSelects();
 }
 function setLang(lang){
   LANG=lang;
@@ -1036,6 +1037,105 @@ function setLang(lang){
   u.searchParams.set('lang',lang);
   history.replaceState({},'',u);
   applyLang();
+}
+var FORM_OPTS={"sector":{"fr":[["","— Sélectionnez un secteur —"],["energie","⚡ Énergie & Utilities"],["oil-gas","🛢️ Oil & Gas"],["industrie","🏭 Industrie & Manufacturing"],["finance","💰 Banque & Finance"],["assurance","🛡️ Assurance"],["sante","🏥 Santé & Pharma"],["transport","🚆 Transport & Logistique"],["immobilier","🏠 Immobilier & Construction"],["telecom","📡 Télécoms & Médias"],["retail","🛒 Retail & Distribution"],["public","🏛️ Secteur Public & Collectivités"],["defense","🎖️ Défense & Sécurité"],["agroalimentaire","🌾 Agroalimentaire"],["tech","💻 Tech & Startups"],["conseil","🎯 Conseil & Services"],["autre","➕ Autre"]],"en":[["","— Select a sector —"],["energie","⚡ Energy & Utilities"],["oil-gas","🛢️ Oil & Gas"],["industrie","🏭 Industry & Manufacturing"],["finance","💰 Banking & Finance"],["assurance","🛡️ Insurance"],["sante","🏥 Healthcare & Pharma"],["transport","🚆 Transport & Logistics"],["immobilier","🏠 Real Estate & Construction"],["telecom","📡 Telecoms & Media"],["retail","🛒 Retail & Distribution"],["public","🏛️ Public Sector & Local Government"],["defense","🎖️ Defence & Security"],["agroalimentaire","🌾 Agri-food"],["tech","💻 Tech & Startups"],["conseil","🎯 Consulting & Services"],["autre","➕ Other"]],"de":[["","— Sektor auswählen —"],["energie","⚡ Energie & Versorgung"],["oil-gas","🛢️ Öl & Gas"],["industrie","🏭 Industrie & Fertigung"],["finance","💰 Banken & Finanzen"],["assurance","🛡️ Versicherung"],["sante","🏥 Gesundheit & Pharma"],["transport","🚆 Transport & Logistik"],["immobilier","🏠 Immobilien & Bau"],["telecom","📡 Telekommunikation & Medien"],["retail","🛒 Einzelhandel & Vertrieb"],["public","🏛️ Öffentlicher Sektor"],["defense","🎖️ Verteidigung & Sicherheit"],["agroalimentaire","🌾 Lebensmittelindustrie"],["tech","💻 Tech & Startups"],["conseil","🎯 Beratung & Dienstleistungen"],["autre","➕ Sonstiges"]]},"size":{"fr":[["","— Effectif —"],["1-10","1 – 10 salariés"],["11-50","11 – 50 salariés"],["51-250","51 – 250 salariés"],["251-1000","251 – 1 000 salariés"],["1001-5000","1 001 – 5 000 salariés"],["5000+","5 000+ salariés"]],"en":[["","— Company size —"],["1-10","1 – 10 employees"],["11-50","11 – 50 employees"],["51-250","51 – 250 employees"],["251-1000","251 – 1,000 employees"],["1001-5000","1,001 – 5,000 employees"],["5000+","5,000+ employees"]],"de":[["","— Mitarbeiterzahl —"],["1-10","1 – 10 Mitarbeiter"],["11-50","11 – 50 Mitarbeiter"],["51-250","51 – 250 Mitarbeiter"],["251-1000","251 – 1 000 Mitarbeiter"],["1001-5000","1 001 – 5 000 Mitarbeiter"],["5000+","5 000+ Mitarbeiter"]]},"delay":{"fr":[["","— Horizon de démarrage —"],["urgent","🔴 Urgent — sous 2 semaines"],["1mois","🟠 Dans le mois"],["3mois","🟡 Sous 3 mois"],["6mois","🟢 Sous 6 mois"],["annee","📅 Horizon 1 an"],["exploration","💡 Phase d'exploration"]],"en":[["","— Start timeline —"],["urgent","🔴 Urgent — within 2 weeks"],["1mois","🟠 Within the month"],["3mois","🟡 Within 3 months"],["6mois","🟢 Within 6 months"],["annee","📅 Within 1 year"],["exploration","💡 Exploration phase"]],"de":[["","— Startzeitraum —"],["urgent","🔴 Dringend — innerhalb 2 Wochen"],["1mois","🟠 Innerhalb des Monats"],["3mois","🟡 Innerhalb 3 Monate"],["6mois","🟢 Innerhalb 6 Monate"],["annee","📅 Innerhalb 1 Jahr"],["exploration","💡 Explorationsphase"]]},"country":{"fr":[["","— Pays —"],["FR","🇫🇷 France"],["BE","🇧🇪 Belgique"],["CH","🇨🇭 Suisse"],["LU","🇱🇺 Luxembourg"],["MC","🇲🇨 Monaco"],["DE","🇩🇪 Allemagne"],["UK","🇬🇧 Royaume-Uni"],["US","🇺🇸 États-Unis"],["CA","🇨🇦 Canada"],["AE","🇦🇪 EAU / Moyen-Orient"],["OTHER","🌍 Autre"]],"en":[["","— Country —"],["FR","🇫🇷 France"],["BE","🇧🇪 Belgium"],["CH","🇨🇭 Switzerland"],["LU","🇱🇺 Luxembourg"],["MC","🇲🇨 Monaco"],["DE","🇩🇪 Germany"],["UK","🇬🇧 United Kingdom"],["US","🇺🇸 United States"],["CA","🇨🇦 Canada"],["AE","🇦🇪 UAE / Middle East"],["OTHER","🌍 Other"]],"de":[["","— Land —"],["FR","🇫🇷 Frankreich"],["BE","🇧🇪 Belgien"],["CH","🇨🇭 Schweiz"],["LU","🇱🇺 Luxemburg"],["MC","🇲🇨 Monaco"],["DE","🇩🇪 Deutschland"],["UK","🇬🇧 Vereinigtes Königreich"],["US","🇺🇸 Vereinigte Staaten"],["CA","🇨🇦 Kanada"],["AE","🇦🇪 VAE / Nahost"],["OTHER","🌍 Sonstiges"]]},"norm":{"fr":[["","— Référentiel —"],["ia-act","IA Act européen"],["iso42001","ISO 42001"],["nis2","NIS2"],["iso27001","ISO 27001"],["dora","DORA"],["rgpd","RGPD / GDPR"],["soc2","SOC 2"],["hds","HDS (Santé)"],["pci-dss","PCI-DSS"],["nist","NIST CSF"],["multi","Plusieurs normes"]],"en":[["","— Framework —"],["ia-act","EU AI Act"],["iso42001","ISO 42001"],["nis2","NIS2"],["iso27001","ISO 27001"],["dora","DORA"],["rgpd","GDPR"],["soc2","SOC 2"],["hds","HDS (Healthcare)"],["pci-dss","PCI-DSS"],["nist","NIST CSF"],["multi","Multiple standards"]],"de":[["","— Referenzrahmen —"],["ia-act","EU-KI-Act"],["iso42001","ISO 42001"],["nis2","NIS2"],["iso27001","ISO 27001"],["dora","DORA"],["rgpd","DSGVO"],["soc2","SOC 2"],["hds","HDS (Gesundheit)"],["pci-dss","PCI-DSS"],["nist","NIST CSF"],["multi","Mehrere Normen"]]},"source":{"fr":[["","— Source —"],["linkedin","LinkedIn"],["google","Google / Moteur de recherche"],["recommandation","Recommandation"],["evenement","Événement / Conférence"],["presse","Presse / Article"],["data-gouv","Portail data.gouv.fr"],["autre","Autre"]],"en":[["","— Source —"],["linkedin","LinkedIn"],["google","Google / Search engine"],["recommandation","Recommendation"],["evenement","Event / Conference"],["presse","Press / Article"],["data-gouv","data.gouv.fr portal"],["autre","Other"]],"de":[["","— Quelle —"],["linkedin","LinkedIn"],["google","Google / Suchmaschine"],["recommandation","Empfehlung"],["evenement","Veranstaltung / Konferenz"],["presse","Presse / Artikel"],["data-gouv","data.gouv.fr-Portal"],["autre","Sonstiges"]]},"project":{"fr":{"og-ia":["🧠 IA & Gouvernance",[["audit-ia","Audit de conformité IA Act (ISO 42001)"],["gouvernance-ia","Gouvernance IA — Comité & Politiques"],["risques-ia","Évaluation 8 risques systémiques IA"],["aipd","Analyse d'Impact IA (AIPD / DPIA)"],["chatbot-ia","Déploiement IA conversationnelle / LLM"],["ia-industrielle","IA industrielle — Maintenance prédictive, vision"],["ia-ingenierie","IA ingénierie industrielle"],["formation-ia","Formation & sensibilisation IA Act"]]],"og-cyber":["🛡️ Cybersécurité",[["audit-nis2","Audit NIS2 — Entités essentielles / importantes"],["audit-iso27","Audit ISO 27001 / SMSI"],["dora","Conformité DORA — Résilience opérationnelle"],["pen-test","Test d'intrusion / Red Team"],["soc","SOC & détection d'incidents"],["grc","GRC — Gouvernance, Risques, Conformité"]]],"og-rgpd":["🔒 RGPD & Données",[["rgpd","Mise en conformité RGPD"],["dpo","Délégué à la Protection des Données (DPO)"],["violations","Gestion des violations de données"]]],"og-data":["📊 Data & MCP",[["mcp-datagouv","Connecteur MCP data.gouv.fr"],["data-strategy","Stratégie Data & IA"],["dashboard","Dashboard IA — Tableau de bord décisionnel"]]],"og-ot":["🏭 Industrie & OT",[["cybersec-ot","Cybersécurité OT/ICS/SCADA"],["oiv","Protection OIV / Seveso"],["continuity","Plan de continuité d'activité (PCA/PRA)"]]]},"en":{"og-ia":["🧠 AI & Governance",[["audit-ia","AI Act compliance audit (ISO 42001)"],["gouvernance-ia","AI Governance — Committee & Policies"],["risques-ia","8 systemic AI risks assessment"],["aipd","AI Impact Assessment (AIPD / DPIA)"],["chatbot-ia","Conversational AI / LLM deployment"],["ia-industrielle","Industrial AI — Predictive maintenance, vision"],["ia-ingenierie","Industrial engineering AI"],["formation-ia","AI Act training & awareness"]]],"og-cyber":["🛡️ Cybersecurity",[["audit-nis2","NIS2 Audit — Essential / important entities"],["audit-iso27","ISO 27001 / ISMS Audit"],["dora","DORA Compliance — Operational resilience"],["pen-test","Penetration test / Red Team"],["soc","SOC & incident detection"],["grc","GRC — Governance, Risk, Compliance"]]],"og-rgpd":["🔒 GDPR & Data",[["rgpd","GDPR compliance"],["dpo","Data Protection Officer (DPO)"],["violations","Data breach management"]]],"og-data":["📊 Data & MCP",[["mcp-datagouv","MCP Connector data.gouv.fr"],["data-strategy","Data & AI Strategy"],["dashboard","AI Dashboard — Decision support"]]],"og-ot":["🏭 Industry & OT",[["cybersec-ot","OT/ICS/SCADA Cybersecurity"],["oiv","OIV / Seveso Protection"],["continuity","Business continuity plan (BCP/DRP)"]]]},"de":{"og-ia":["🧠 KI & Governance",[["audit-ia","KI-Act Konformitätsprüfung (ISO 42001)"],["gouvernance-ia","KI-Governance — Ausschuss & Richtlinien"],["risques-ia","Bewertung 8 systemischer KI-Risiken"],["aipd","KI-Folgenabschätzung (AIPD / DPIA)"],["chatbot-ia","Konversations-KI / LLM-Einsatz"],["ia-industrielle","Industrielle KI — Prädiktive Wartung, Vision"],["ia-ingenierie","Industrie-Engineering KI"],["formation-ia","KI-Act Schulung & Sensibilisierung"]]],"og-cyber":["🛡️ Cybersicherheit",[["audit-nis2","NIS2-Audit — Wesentliche / wichtige Einrichtungen"],["audit-iso27","ISO 27001 / ISMS-Audit"],["dora","DORA-Compliance — Operative Resilienz"],["pen-test","Penetrationstest / Red Team"],["soc","SOC & Vorfallserkennung"],["grc","GRC — Governance, Risiko, Compliance"]]],"og-rgpd":["🔒 DSGVO & Daten",[["rgpd","DSGVO-Compliance"],["dpo","Datenschutzbeauftragter (DSB)"],["violations","Datenpannenverwaltung"]]],"og-data":["📊 Daten & MCP",[["mcp-datagouv","MCP-Connector data.gouv.fr"],["data-strategy","Daten- & KI-Strategie"],["dashboard","KI-Dashboard — Entscheidungsunterstützung"]]],"og-ot":["🏭 Industrie & OT",[["cybersec-ot","OT/ICS/SCADA Cybersicherheit"],["oiv","OIV / Seveso Schutz"],["continuity","Geschäftskontinuitätsplan (BCP/DRP)"]]]}}};
+function updateFormSelects(){
+  (function(){
+    var sel=document.getElementById('pf-sector');
+    if(!sel)return;
+    var cur=sel.value;
+    var opts=FORM_OPTS['sector'][LANG]||FORM_OPTS['sector']['fr'];
+    sel.innerHTML='';
+    opts.forEach(function(o){
+      var el=document.createElement('option');
+      el.value=o[0];el.textContent=o[1];
+      if(o[0]===cur)el.selected=true;
+      sel.appendChild(el);
+    });
+  })();
+  (function(){
+    var sel=document.getElementById('pf-size');
+    if(!sel)return;
+    var cur=sel.value;
+    var opts=FORM_OPTS['size'][LANG]||FORM_OPTS['size']['fr'];
+    sel.innerHTML='';
+    opts.forEach(function(o){
+      var el=document.createElement('option');
+      el.value=o[0];el.textContent=o[1];
+      if(o[0]===cur)el.selected=true;
+      sel.appendChild(el);
+    });
+  })();
+  (function(){
+    var sel=document.getElementById('pf-delay');
+    if(!sel)return;
+    var cur=sel.value;
+    var opts=FORM_OPTS['delay'][LANG]||FORM_OPTS['delay']['fr'];
+    sel.innerHTML='';
+    opts.forEach(function(o){
+      var el=document.createElement('option');
+      el.value=o[0];el.textContent=o[1];
+      if(o[0]===cur)el.selected=true;
+      sel.appendChild(el);
+    });
+  })();
+  (function(){
+    var sel=document.getElementById('pf-country');
+    if(!sel)return;
+    var cur=sel.value;
+    var opts=FORM_OPTS['country'][LANG]||FORM_OPTS['country']['fr'];
+    sel.innerHTML='';
+    opts.forEach(function(o){
+      var el=document.createElement('option');
+      el.value=o[0];el.textContent=o[1];
+      if(o[0]===cur)el.selected=true;
+      sel.appendChild(el);
+    });
+  })();
+  (function(){
+    var sel=document.getElementById('pf-norm');
+    if(!sel)return;
+    var cur=sel.value;
+    var opts=FORM_OPTS['norm'][LANG]||FORM_OPTS['norm']['fr'];
+    sel.innerHTML='';
+    opts.forEach(function(o){
+      var el=document.createElement('option');
+      el.value=o[0];el.textContent=o[1];
+      if(o[0]===cur)el.selected=true;
+      sel.appendChild(el);
+    });
+  })();
+  (function(){
+    var sel=document.getElementById('pf-source');
+    if(!sel)return;
+    var cur=sel.value;
+    var opts=FORM_OPTS['source'][LANG]||FORM_OPTS['source']['fr'];
+    sel.innerHTML='';
+    opts.forEach(function(o){
+      var el=document.createElement('option');
+      el.value=o[0];el.textContent=o[1];
+      if(o[0]===cur)el.selected=true;
+      sel.appendChild(el);
+    });
+  })();
+  (function(){
+    var sel=document.getElementById('pf-project');
+    if(!sel)return;
+    var cur=sel.value;
+    var groups=FORM_OPTS['project'][LANG]||FORM_OPTS['project']['fr'];
+    sel.innerHTML='<option value="">'+ii('fs.project')+'</option>';
+    Object.keys(groups).forEach(function(ogId){
+      var og=document.createElement('optgroup');
+      og.label=groups[ogId][0];
+      groups[ogId][1].forEach(function(o){
+        var el=document.createElement('option');
+        el.value=o[0];el.textContent=o[1];
+        if(o[0]===cur)el.selected=true;
+        og.appendChild(el);
+      });
+      sel.appendChild(og);
+    });
+  })();
 }
 (function(){
   var u=new URL(window.location.href);
