@@ -408,7 +408,7 @@ textarea.pi2{resize:vertical;min-height:110px;line-height:1.6}
   <ul class="nl">
     <li><a href="#secteurs" data-i18n="nav.secteurs">Secteurs</a></li>
     <li><a href="#risques" data-i18n="nav.risques">Risques IA</a></li>
-    <li><a href="#poles" data-i18n="nav.expertise" onclick="event.preventDefault();var el=document.getElementById('poles');if(el){var top=el.getBoundingClientRect().top+window.scrollY-70;window.scrollTo({top:top,behavior:'smooth'});}">Expertise</a></li>
+    <li><a href="#poles" data-i18n="nav.expertise" id="nav-expertise">Expertise</a></li>
     <li><a href="#services" data-i18n="nav.svc">Services</a></li>
     <li><a href="/donnees" target="_blank" rel="noopener" data-i18n="nav.donnees">Données</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -1145,6 +1145,32 @@ function updateFormSelects(){
     });
   })();
 }
+
+// Scroll vers #poles avec offset nav
+function scrollToPoles(e){
+  if(e) e.preventDefault();
+  var el=document.getElementById('poles');
+  if(!el) return;
+  var navH=document.querySelector('nav')?document.querySelector('nav').offsetHeight:70;
+  var top=el.getBoundingClientRect().top+window.scrollY-navH-8;
+  window.scrollTo({top:top,behavior:'smooth'});
+}
+// Attacher au lien nav (résiste aux innerHTML rewrites de applyLang)
+document.addEventListener('DOMContentLoaded',function(){
+  var link=document.getElementById('nav-expertise');
+  if(link) link.addEventListener('click',scrollToPoles);
+});
+// Re-attacher après chaque applyLang
+var _origApplyLang=applyLang;
+applyLang=function(){
+  _origApplyLang.apply(this,arguments);
+  var link=document.getElementById('nav-expertise');
+  if(link && !link._scrollAttached){
+    link.addEventListener('click',scrollToPoles);
+    link._scrollAttached=true;
+  }
+};
+
 (function(){
   var u=new URL(window.location.href);
   var lp=u.searchParams.get('lang');
