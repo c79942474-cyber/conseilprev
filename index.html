@@ -408,7 +408,7 @@ textarea.pi2{resize:vertical;min-height:110px;line-height:1.6}
   <ul class="nl">
     <li><a href="#secteurs" data-i18n="nav.secteurs">Secteurs</a></li>
     <li><a href="#risques" data-i18n="nav.risques">Risques IA</a></li>
-    <li><a href="#poles" data-i18n="nav.expertise">Expertise</a></li>
+    <li><a href="#poles" data-i18n="nav.expertise" onclick="event.preventDefault();var el=document.getElementById('poles');if(el){var top=el.getBoundingClientRect().top+window.scrollY-70;window.scrollTo({top:top,behavior:'smooth'});}">Expertise</a></li>
     <li><a href="#services" data-i18n="nav.svc">Services</a></li>
     <li><a href="/donnees" target="_blank" rel="noopener" data-i18n="nav.donnees">Données</a></li>
     <li><a href="#contact">Contact</a></li>
