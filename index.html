@@ -435,6 +435,89 @@ footer{background:#0a0518;border-top:1px solid rgba(196,181,232,.12);padding:52p
 /* Barre bas */
 .ft-bar{border-top:1px solid rgba(196,181,232,.1);padding:16px 0 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;font-family:"Space Mono",monospace;font-size:10px;color:var(--mu);letter-spacing:.05em}
 
+
+/* ═══ WIDGET VEILLE IA ═══ */
+#vbtn{position:fixed;bottom:90px;left:24px;z-index:9997;width:52px;height:52px;border-radius:50%;
+  background:linear-gradient(135deg,#1a3a6e,#2d6abf);
+  border:2px solid rgba(45,106,191,.6);color:#fff;font-size:18px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(45,106,191,.5);transition:transform .2s}
+#vbtn:hover{transform:scale(1.1)}
+#vbtn .vbtn-live{position:absolute;top:2px;right:2px;width:10px;height:10px;background:#22c55e;
+  border-radius:50%;border:2px solid var(--bg);animation:vlive 1.5s ease-in-out infinite}
+@keyframes vlive{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.3)}}
+#vbox{position:fixed;bottom:152px;left:24px;z-index:9997;width:400px;
+  max-width:calc(100vw - 48px);height:540px;
+  background:rgba(10,8,35,.97);border:1px solid rgba(45,106,191,.35);
+  border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.7);
+  display:none;flex-direction:column;overflow:hidden;backdrop-filter:blur(20px)}
+#vbox.open{display:flex}
+/* Header */
+#vhead{background:linear-gradient(135deg,rgba(26,58,110,.9),rgba(20,15,60,.9));
+  padding:14px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;
+  border-bottom:1px solid rgba(45,106,191,.25)}
+#vhead-ico{width:36px;height:36px;border-radius:10px;background:rgba(45,106,191,.3);
+  display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+#vhead-info{flex:1}
+#vhead-info h4{font-family:"DM Sans",sans-serif;font-size:14px;font-weight:600;color:#fff;margin:0}
+#vhead-info p{font-size:10px;color:rgba(196,181,232,.6);margin:0;font-family:"Space Mono",monospace}
+#vhead-acts{display:flex;align-items:center;gap:6px}
+#vhead-acts button{background:none;border:none;color:rgba(196,181,232,.5);cursor:pointer;font-size:14px;padding:3px;transition:color .2s}
+#vhead-acts button:hover{color:#fff}
+#vlive-badge{display:flex;align-items:center;gap:5px;background:rgba(34,197,94,.12);
+  border:1px solid rgba(34,197,94,.3);border-radius:100px;padding:3px 10px;
+  font-family:"Space Mono",monospace;font-size:9px;color:#22c55e;white-space:nowrap}
+#vlive-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;
+  animation:vlive 1.5s ease-in-out infinite}
+/* Filtres */
+#vfilters{display:flex;gap:5px;padding:10px 14px;flex-wrap:wrap;
+  border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0;background:rgba(255,255,255,.02)}
+.vf-btn{font-family:"Space Mono",monospace;font-size:9px;padding:3px 9px;
+  border-radius:100px;border:1px solid rgba(196,181,232,.15);
+  color:rgba(196,181,232,.5);background:none;cursor:pointer;transition:all .2s;letter-spacing:.04em}
+.vf-btn:hover{border-color:rgba(166,133,232,.4);color:rgba(196,181,232,.85)}
+.vf-btn.on{background:rgba(45,106,191,.25);border-color:rgba(45,106,191,.6);color:#93c5fd}
+/* Items */
+#vitems{flex:1;overflow-y:auto;padding:8px 0}
+#vitems::-webkit-scrollbar{width:4px}
+#vitems::-webkit-scrollbar-track{background:transparent}
+#vitems::-webkit-scrollbar-thumb{background:rgba(196,181,232,.2);border-radius:2px}
+.vi{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.05);cursor:pointer;
+  transition:background .15s;display:flex;gap:10px;align-items:flex-start}
+.vi:hover{background:rgba(255,255,255,.04)}
+.vi-ico{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;
+  justify-content:center;font-size:14px;flex-shrink:0;margin-top:2px}
+.vi-ico.cat-regl{background:rgba(124,92,191,.2)}
+.vi-ico.cat-secu{background:rgba(220,38,38,.15)}
+.vi-ico.cat-innov{background:rgba(60,201,176,.15)}
+.vi-ico.cat-intl{background:rgba(59,130,246,.15)}
+.vi-ico.cat-fr{background:rgba(212,168,67,.15)}
+.vi-ico.cat-ai{background:rgba(166,133,232,.15)}
+.vi-body{flex:1;min-width:0}
+.vi-title{font-size:13px;font-weight:500;color:rgba(245,240,255,.9);
+  line-height:1.4;margin-bottom:5px;display:-webkit-box;
+  -webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.vi-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.vi-tag{font-family:"Space Mono",monospace;font-size:9px;padding:2px 7px;
+  border-radius:4px;font-weight:600}
+.tag-regl{background:rgba(124,92,191,.25);color:#c4b5e8}
+.tag-secu{background:rgba(220,38,38,.2);color:#fca5a5}
+.tag-innov{background:rgba(60,201,176,.2);color:#5eead4}
+.tag-intl{background:rgba(59,130,246,.2);color:#93c5fd}
+.tag-fr{background:rgba(212,168,67,.2);color:#fde68a}
+.tag-ai{background:rgba(166,133,232,.2);color:var(--pl)}
+.vi-date{font-size:10px;color:rgba(196,181,232,.4);font-family:"Space Mono",monospace;display:flex;align-items:center;gap:3px}
+.vi-source{font-size:10px;color:rgba(196,181,232,.35)}
+#vstatus{padding:8px 16px;font-family:"Space Mono",monospace;font-size:10px;
+  color:rgba(196,181,232,.4);border-top:1px solid rgba(255,255,255,.05);flex-shrink:0;
+  display:flex;align-items:center;justify-content:space-between}
+.vstatus-dot{width:6px;height:6px;border-radius:50%;background:rgba(196,181,232,.3);animation:blink 2s ease-in-out infinite}
+#vloading{padding:24px;text-align:center;color:rgba(196,181,232,.4);font-size:13px;display:none}
+.vspinner{width:20px;height:20px;border:2px solid rgba(196,181,232,.15);
+  border-top-color:rgba(45,106,191,.8);border-radius:50%;
+  animation:vspin .8s linear infinite;margin:0 auto 10px}
+@keyframes vspin{to{transform:rotate(360deg)}}
+
 /* ── Formulaire projet ── */
 .dl-strip{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:rgba(166,133,232,.08);border:1px solid rgba(166,133,232,.2);border-radius:10px;padding:14px 20px;margin-bottom:32px}
 .dl-ico{font-size:20px}.dl-txt{font-size:13px;color:var(--pp);font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.05em}
@@ -1057,6 +1140,42 @@ textarea.pi2{resize:vertical;min-height:110px;line-height:1.6}
 
 <button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Retour en haut">↑</button>
 
+
+<!-- WIDGET VEILLE IA -->
+<button id="vbtn" onclick="vOpen()" title="Veille IA · Actualités en direct">
+  📰<span class="vbtn-live"></span>
+</button>
+
+<div id="vbox">
+  <div id="vhead">
+    <div id="vhead-ico">📰</div>
+    <div id="vhead-info">
+      <h4>Actualités IA</h4>
+      <p>Veille réglementaire en temps réel</p>
+    </div>
+    <div id="vhead-acts">
+      <div id="vlive-badge"><div id="vlive-dot"></div>Live</div>
+      <button onclick="vRefresh()" title="Rafraîchir">↻</button>
+      <button onclick="vOpen()" title="Fermer">✕</button>
+    </div>
+  </div>
+  <div id="vfilters">
+    <button class="vf-btn on" data-cat="all" onclick="vFilter(this,'all')">Tout</button>
+    <button class="vf-btn" data-cat="regl" onclick="vFilter(this,'regl')">Réglementation</button>
+    <button class="vf-btn" data-cat="innov" onclick="vFilter(this,'innov')">Innovation</button>
+    <button class="vf-btn" data-cat="secu" onclick="vFilter(this,'secu')">Sécurité</button>
+    <button class="vf-btn" data-cat="intl" onclick="vFilter(this,'intl')">International</button>
+    <button class="vf-btn" data-cat="fr" onclick="vFilter(this,'fr')">France</button>
+    <button class="vf-btn" data-cat="ai" onclick="vFilter(this,'ai')">Mistral / IA</button>
+  </div>
+  <div id="vloading"><div class="vspinner"></div>Chargement des actualités…</div>
+  <div id="vitems"></div>
+  <div id="vstatus">
+    <span><span class="vstatus-dot"></span> <span id="vstatus-txt">Chargement…</span></span>
+    <a href="#" onclick="vRefresh();return false;" style="color:rgba(45,106,191,.7);text-decoration:none;font-size:9px">↻ Actualiser</a>
+  </div>
+</div>
+
 <button id="xbtn" onclick="xOpen()">💬</button>
 <div id="xbox">
   <div id="xhead">
@@ -1258,6 +1377,174 @@ function ftNlSubmit(e){
   st.textContent=LANG==='en'?'✅ Subscribed! Check your inbox.':LANG==='de'?'✅ Angemeldet!':'✅ Inscription enregistrée !';
   e.target.reset();
 }
+
+
+// ════════════════════════════════════════
+// WIDGET VEILLE IA — Flux RSS multi-sources
+// ════════════════════════════════════════
+(function(){
+  "use strict";
+
+  var V_OPEN = false;
+  var V_CAT  = "all";
+  var V_ITEMS = [];
+  var V_INTERVAL = null;
+  var V_LOADING = false;
+
+  // Sources RSS via proxy public (rss2json ou allorigins)
+  var V_SOURCES = [
+    {name:"ActuIA",         url:"https://www.actuia.com/feed/",                      cat:"ai",    ico:"🤖"},
+    {name:"ANSSI",          url:"https://cyber.gouv.fr/feed",                         cat:"secu",  ico:"🛡️"},
+    {name:"CNIL",           url:"https://www.cnil.fr/fr/rss.xml",                    cat:"regl",  ico:"🔒"},
+    {name:"LMI",            url:"https://www.lemondeinformatique.fr/rss/rss-actu.xml",cat:"innov", ico:"💻"},
+    {name:"Usine Digitale", url:"https://www.usine-digitale.fr/rss/all",             cat:"innov", ico:"🏭"},
+    {name:"AI Act EU",      url:"https://artificialintelligenceact.eu/feed/",         cat:"regl",  ico:"⚖️"},
+    {name:"EU Digital",     url:"https://digital-strategy.ec.europa.eu/en/rss.xml",  cat:"intl",  ico:"🇪🇺"},
+    {name:"Cybersec-info",  url:"https://cybersecurite-info.fr/feed/",               cat:"secu",  ico:"🔐"},
+  ];
+
+  // Catégories -> icônes et labels
+  var V_CAT_MAP = {
+    regl: {label:"Réglementation", cls:"tag-regl", icoCls:"cat-regl"},
+    secu: {label:"Sécurité",       cls:"tag-secu", icoCls:"cat-secu"},
+    innov:{label:"Innovation",     cls:"tag-innov", icoCls:"cat-innov"},
+    intl: {label:"International",  cls:"tag-intl", icoCls:"cat-intl"},
+    fr:   {label:"France",         cls:"tag-fr",   icoCls:"cat-fr"},
+    ai:   {label:"IA & Mistral",   cls:"tag-ai",   icoCls:"cat-ai"},
+  };
+
+  function vOpen(){
+    V_OPEN = !V_OPEN;
+    var box = document.getElementById("vbox");
+    if(V_OPEN){
+      box.classList.add("open");
+      if(!V_ITEMS.length) vFetch();
+    } else {
+      box.classList.remove("open");
+    }
+  }
+  window.vOpen = vOpen;
+
+  function vFilter(btn, cat){
+    document.querySelectorAll(".vf-btn").forEach(function(b){b.classList.remove("on");});
+    btn.classList.add("on");
+    V_CAT = cat;
+    vRender();
+  }
+  window.vFilter = vFilter;
+
+  function vRefresh(){
+    V_ITEMS = [];
+    vFetch();
+  }
+  window.vRefresh = vRefresh;
+
+  function vDateFmt(d){
+    try {
+      var dt = new Date(d);
+      var now = new Date();
+      var diff = Math.floor((now - dt) / 60000);
+      if(diff < 1) return "À l\'instant";
+      if(diff < 60) return diff + " min";
+      if(diff < 1440) return Math.floor(diff/60) + "h";
+      return dt.toLocaleDateString("fr-FR",{day:"numeric",month:"short"});
+    } catch(e){ return ""; }
+  }
+
+  function vCatDetect(title, src){
+    var t = (title||"").toLowerCase();
+    if(/mistral|gemini|gpt|llm|generat|ia|intelligence artif/i.test(t)) return "ai";
+    if(/france|cnil|anssi|dinum|gouvernement|sénat|assemblée/i.test(t)) return "fr";
+    if(/rgpd|gdpr|ia act|nist|iso|conformit|règlement|directive|légis/i.test(t)) return "regl";
+    if(/cyber|attaque|malware|ransomware|phish|sécurit|vulnerab|breach/i.test(t)) return "secu";
+    if(/europe|usa|chine|international|mondial|onu|ocde|g7/i.test(t)) return "intl";
+    return src || "innov";
+  }
+
+  function vFetch(){
+    if(V_LOADING) return;
+    V_LOADING = true;
+    var loading = document.getElementById("vloading");
+    var items   = document.getElementById("vitems");
+    if(loading){ loading.style.display = "block"; }
+    if(items)  { items.innerHTML = ""; }
+    document.getElementById("vstatus-txt").textContent = "Chargement…";
+
+    var proxy = "https://api.rss2json.com/v1/api.json?rss_url=";
+    var apiKey = ""; // gratuit sans clé (10 req/h par source)
+    var done = 0;
+    var results = [];
+    var total = V_SOURCES.length;
+
+    V_SOURCES.forEach(function(src){
+      var url = proxy + encodeURIComponent(src.url) + "&count=8";
+      fetch(url)
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          if(data && data.items){
+            data.items.forEach(function(item){
+              var cat = vCatDetect(item.title, src.cat);
+              results.push({
+                title:  item.title || "",
+                link:   item.link || item.guid || "#",
+                date:   item.pubDate || item.published || "",
+                source: src.name,
+                ico:    src.ico,
+                cat:    cat,
+              });
+            });
+          }
+        })
+        .catch(function(){}) // erreur silencieuse si source indisponible
+        .finally(function(){
+          done++;
+          if(done >= total){
+            V_LOADING = false;
+            // Trier par date décroissante
+            results.sort(function(a,b){
+              return new Date(b.date) - new Date(a.date);
+            });
+            V_ITEMS = results;
+            if(loading) loading.style.display = "none";
+            vRender();
+            document.getElementById("vstatus-txt").textContent =
+              V_ITEMS.length + " actualités · " + new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
+          }
+        });
+    });
+  }
+
+  function vRender(){
+    var container = document.getElementById("vitems");
+    if(!container) return;
+    var list = V_CAT === "all" ? V_ITEMS : V_ITEMS.filter(function(i){ return i.cat === V_CAT; });
+    if(!list.length){
+      container.innerHTML = "<div style=\"padding:32px;text-align:center;color:rgba(196,181,232,.4);font-size:13px;\">Aucune actualité dans cette catégorie.<br><small>Essayez \"Tout\"</small></div>";
+      return;
+    }
+    var catMap = V_CAT_MAP;
+    container.innerHTML = list.slice(0,30).map(function(item){
+      var cm = catMap[item.cat] || catMap.innov;
+      return "<a href=\""+item.link+"\" target=\"_blank\" rel=\"noopener\" class=\"vi\" style=\"text-decoration:none;\">"
+        +"<div class=\"vi-ico " + cm.icoCls + "\">" + item.ico + "</div>"
+        +"<div class=\"vi-body\">"
+        +"<div class=\"vi-title\">" + item.title.replace(/</g,"&lt;").replace(/>/g,"&gt;") + "</div>"
+        +"<div class=\"vi-meta\">"
+        +"<span class=\"vi-tag " + cm.cls + "\">" + cm.label + "</span>"
+        +(item.date?"<span class=\"vi-date\">📅 " + vDateFmt(item.date) + "</span>":"")
+        +"</div>"
+        +"<div class=\"vi-source\">" + item.source + "</div>"
+        +"</div>"
+        +"</a>";
+    }).join("");
+  }
+
+  // Auto-refresh toutes les 10 minutes
+  V_INTERVAL = setInterval(function(){
+    if(V_OPEN) vFetch();
+  }, 600000);
+
+})();
 
 (function(){
   var u=new URL(window.location.href);
