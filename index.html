@@ -555,6 +555,76 @@ textarea.pi2{resize:vertical;min-height:110px;line-height:1.6}
 .pfst.ok{background:rgba(60,201,176,.1);border:1px solid rgba(60,201,176,.25);color:var(--teal)}
 .pfst.err{background:rgba(232,92,106,.1);border:1px solid rgba(232,92,106,.25);color:#e85c6a}
 .pfst.rl{background:rgba(212,168,67,.1);border:1px solid rgba(212,168,67,.2);color:var(--gold)}
+
+/* ═══ BACKGROUND GLOBAL — Bandeau LinkedIn ═══ */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background-image:url('/hero-bg.jpg');
+  background-size:cover;
+  background-position:center 55%;
+  background-repeat:no-repeat;
+  background-attachment:fixed;
+  opacity:.10;
+  z-index:-1;
+  pointer-events:none;
+}
+/* Sections sombres — overlay plus fort pour lisibilité */
+.sec-a::before,
+.clients-band::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(14,7,32,.55);
+  z-index:0;
+  pointer-events:none;
+}
+.sec-a{position:relative}
+.sec-a > *{position:relative;z-index:1}
+.clients-band{position:relative}
+.clients-band > *{position:relative;z-index:1}
+
+/* Hero — image pleine avec overlay fort déjà géré, renforcer l'opacité */
+.hero-bg-img{opacity:.45!important}
+.hero-overlay{background:linear-gradient(
+  180deg,
+  rgba(8,4,24,.78) 0%,
+  rgba(14,7,32,.68) 40%,
+  rgba(8,4,24,.85) 100%
+)!important}
+
+/* Sections normales (.sec sans .sec-a) — léger tint pour profondeur */
+.sec{position:relative}
+.sec::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(10,5,30,.50);
+  z-index:0;
+  pointer-events:none;
+}
+.sec > .con{position:relative;z-index:1}
+
+/* Footer — fond plus opaque */
+footer{position:relative}
+footer::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(5,2,20,.88);
+  z-index:0;
+  pointer-events:none;
+}
+footer > .ft-inner{position:relative;z-index:1}
+
+/* Avenir section */
+.avenir-sec{position:relative}
+.avenir-sec > *{position:relative;z-index:1}
+
+/* Hero2 */
+.hero2-sec{position:relative}
+.hero2-sec > *{position:relative;z-index:1}
 </style>
 </head>
 <body>

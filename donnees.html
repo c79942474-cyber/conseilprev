@@ -339,6 +339,9 @@ textarea.pi2{resize:vertical;min-height:110px;line-height:1.6}
 #btt{position:fixed;bottom:24px;right:24px;z-index:9998;width:42px;height:42px;border-radius:50%;background:rgba(22,11,48,.9);border:1px solid rgba(196,181,232,.25);color:var(--pp);font-size:18px;cursor:pointer;display:none;align-items:center;justify-content:center;transition:all .2s;backdrop-filter:blur(10px)}
 #btt:hover{background:var(--pm);border-color:var(--pm);color:#fff;transform:translateY(-3px)}
 #btt.vis{display:flex}
+
+/* Background global */
+body::before{content:"";position:fixed;inset:0;background-image:url('/hero-bg.jpg');background-size:cover;background-position:center 55%;background-repeat:no-repeat;background-attachment:fixed;opacity:.10;z-index:-1;pointer-events:none;}
 </style>
 </head>
 <body>

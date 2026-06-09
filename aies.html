@@ -112,6 +112,9 @@ body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--wh);overf
 .ft-mini a{color:var(--teal);text-decoration:none}.ft-mini a:hover{color:var(--wh)}
 
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* Background global */
+body::before{content:"";position:fixed;inset:0;background-image:url('/hero-bg.jpg');background-size:cover;background-position:center 55%;background-repeat:no-repeat;background-attachment:fixed;opacity:.10;z-index:-1;pointer-events:none;}
 </style>
 </head>
 <body>
