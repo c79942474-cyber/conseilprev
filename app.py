@@ -26,6 +26,74 @@ Offre CONSEILPREV : Audit IA & Cyber, 8 risques systémiques, Plan conformité 5
 
 Style : professionnel, structuré avec des listes courtes, concis (max 280 mots). Réponds toujours en français. Termine en proposant d'approfondir ou contacter contact@i-aes.com."""
 
+
+import feedparser, time
+
+RSS_SOURCES = [
+    {"name": "ActuIA",          "url": "https://www.actuia.com/feed/",                         "cat": "ai",    "ico": "🤖"},
+    {"name": "ANSSI",           "url": "https://cyber.gouv.fr/feed",                            "cat": "secu",  "ico": "🛡️"},
+    {"name": "CNIL",            "url": "https://www.cnil.fr/fr/rss.xml",                        "cat": "regl",  "ico": "🔒"},
+    {"name": "LMI",             "url": "https://www.lemondeinformatique.fr/rss/rss-actu.xml",   "cat": "innov", "ico": "💻"},
+    {"name": "Usine Digitale",  "url": "https://www.usine-digitale.fr/rss/all",                "cat": "innov", "ico": "🏭"},
+    {"name": "AI Act EU",       "url": "https://artificialintelligenceact.eu/feed/",            "cat": "regl",  "ico": "⚖️"},
+    {"name": "EU Digital",      "url": "https://digital-strategy.ec.europa.eu/en/rss.xml",     "cat": "intl",  "ico": "🇪🇺"},
+    {"name": "Cybersec-info",   "url": "https://cybersecurite-info.fr/feed/",                  "cat": "secu",  "ico": "🔐"},
+]
+
+_news_cache = {"data": [], "ts": 0}
+CACHE_TTL = 600  # 10 min
+
+import re as _re
+def _detect_cat(title, default_cat):
+    t = (title or "").lower()
+    if _re.search(r"mistral|gemini|gpt|llm|ia g.n.r|generat|intelligence artif", t): return "ai"
+    if _re.search(r"france|cnil|anssi|gouvernement|s.nat|assemblée|dinum", t): return "fr"
+    if _re.search(r"rgpd|gdpr|ia act|nist|iso|conformit|r.glement|directive", t): return "regl"
+    if _re.search(r"cyber|attaque|malware|ransomware|phish|s.curit|vulnerab|breach|faille", t): return "secu"
+    if _re.search(r"europe|usa|chine|international|mondial|onu|ocde|g7", t): return "intl"
+    return default_cat
+
+@app.route('/api/news')
+def news():
+    global _news_cache
+    now = time.time()
+    if now - _news_cache["ts"] < CACHE_TTL and _news_cache["data"]:
+        return jsonify({"items": _news_cache["data"], "cached": True, "count": len(_news_cache["data"])})
+
+    all_items = []
+    for src in RSS_SOURCES:
+        try:
+            feed = feedparser.parse(src["url"])
+            for entry in (feed.entries or [])[:8]:
+                title = entry.get("title", "").strip()
+                if not title: continue
+                link  = entry.get("link") or entry.get("id") or "#"
+                pub   = entry.get("published") or entry.get("updated") or ""
+                cat   = _detect_cat(title, src["cat"])
+                all_items.append({
+                    "title":  title,
+                    "link":   link,
+                    "date":   pub,
+                    "source": src["name"],
+                    "ico":    src["ico"],
+                    "cat":    cat,
+                })
+        except Exception:
+            pass
+
+    # Trier par date desc, dédupliquer
+    seen = set()
+    unique = []
+    for item in sorted(all_items, key=lambda x: x.get("date",""), reverse=True):
+        key = item["title"][:60]
+        if key not in seen:
+            seen.add(key)
+            unique.append(item)
+
+    _news_cache = {"data": unique[:60], "ts": now}
+    return jsonify({"items": unique[:60], "cached": False, "count": len(unique)})
+
+
 @app.route('/')
 def index():
     return send_from_directory('.', 'index.html')

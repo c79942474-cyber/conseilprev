@@ -1470,48 +1470,33 @@ function ftNlSubmit(e){
     if(items)  { items.innerHTML = ""; }
     document.getElementById("vstatus-txt").textContent = "Chargement…";
 
-    var proxy = "https://api.rss2json.com/v1/api.json?rss_url=";
-    var apiKey = ""; // gratuit sans clé (10 req/h par source)
-    var done = 0;
-    var results = [];
-    var total = V_SOURCES.length;
+    fetch("/api/news")
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        V_LOADING = false;
+        if(loading) loading.style.display = "none";
+        if(data && data.items && data.items.length){
+          V_ITEMS = data.items;
+          vRender();
+          document.getElementById("vstatus-txt").textContent =
+            data.count + " actualités · " + new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
+        } else {
+          vShowError("Aucune actualité disponible.");
+        }
+      })
+      .catch(function(e){
+        V_LOADING = false;
+        if(loading) loading.style.display = "none";
+        vShowError("Erreur de connexion. Réessayez.");
+      });
+  }
 
-    V_SOURCES.forEach(function(src){
-      var url = proxy + encodeURIComponent(src.url) + "&count=8";
-      fetch(url)
-        .then(function(r){ return r.json(); })
-        .then(function(data){
-          if(data && data.items){
-            data.items.forEach(function(item){
-              var cat = vCatDetect(item.title, src.cat);
-              results.push({
-                title:  item.title || "",
-                link:   item.link || item.guid || "#",
-                date:   item.pubDate || item.published || "",
-                source: src.name,
-                ico:    src.ico,
-                cat:    cat,
-              });
-            });
-          }
-        })
-        .catch(function(){}) // erreur silencieuse si source indisponible
-        .finally(function(){
-          done++;
-          if(done >= total){
-            V_LOADING = false;
-            // Trier par date décroissante
-            results.sort(function(a,b){
-              return new Date(b.date) - new Date(a.date);
-            });
-            V_ITEMS = results;
-            if(loading) loading.style.display = "none";
-            vRender();
-            document.getElementById("vstatus-txt").textContent =
-              V_ITEMS.length + " actualités · " + new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
-          }
-        });
-    });
+  function vShowError(msg){
+    var items = document.getElementById("vitems");
+    if(items) items.innerHTML = "<div style=\"padding:24px;text-align:center;color:rgba(196,181,232,.5);font-size:13px;\">"
+      +"<div style=\"font-size:32px;margin-bottom:10px;\">📡</div>"
+      + msg + "<br><small style=\"opacity:.6;\">Cliquez ↻ pour réessayer</small></div>";
+    document.getElementById("vstatus-txt").textContent = "Erreur de chargement";
   }
 
   function vRender(){
