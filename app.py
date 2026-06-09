@@ -38,6 +38,7 @@ RSS_SOURCES = [
     {"name": "AI Act EU",       "url": "https://artificialintelligenceact.eu/feed/",            "cat": "regl",  "ico": "⚖️"},
     {"name": "EU Digital",      "url": "https://digital-strategy.ec.europa.eu/en/rss.xml",     "cat": "intl",  "ico": "🇪🇺"},
     {"name": "Cybersec-info",   "url": "https://cybersecurite-info.fr/feed/",                  "cat": "secu",  "ico": "🔐"},
+    {"name": "Infosecurity Mag", "url": "https://www.infosecurity-magazine.com/rss/news/",        "cat": "secu",  "ico": "🔏"},
 ]
 
 _news_cache = {"data": [], "ts": 0}
