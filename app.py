@@ -103,6 +103,10 @@ def index():
 def datasets():
     return send_from_directory('.', 'datasets.json', mimetype='application/json')
 
+@app.route('/demo')
+def demo():
+    return send_from_directory('.', 'demo.html')
+
 @app.route('/aies')
 def aies():
     return send_from_directory('.', 'aies.html')
@@ -110,6 +114,10 @@ def aies():
 @app.route('/donnees')
 def donnees():
     return send_from_directory('.', 'donnees.html')
+
+@app.route('/demo.mp4')
+def demo_video():
+    return send_from_directory('.', 'demo.mp4', mimetype='video/mp4')
 
 @app.route('/hero-bg.jpg')
 def hero_bg():

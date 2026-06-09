@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Démonstration Interactive AIES — CONSEILPREV</title>
+<meta name="description" content="Découvrez AIES en action : démonstration vidéo de la plateforme de gouvernance IA, conformité AI Act & RGPD.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0d0a2e;--bg2:#160b30;--pm:#7c5cbf;--pl:#a685e8;--pp:#c4b5e8;--teal:#3cc9b0;--gold:#d4a843;--wh:#f5f0ff;--mu:rgba(196,181,232,.55);--bdr:rgba(196,181,232,.15)}
+body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--wh);min-height:100vh;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;background-image:url('/hero-bg.jpg');background-size:cover;background-position:center 55%;background-repeat:no-repeat;background-attachment:fixed;opacity:.10;z-index:-1;pointer-events:none}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(13,10,46,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.nav-logo{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:700;text-decoration:none;color:var(--wh)}.nav-logo span{color:var(--pl)}
+.nav-back{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--mu);text-decoration:none;font-family:"Space Mono",monospace;transition:color .2s;letter-spacing:.05em}.nav-back:hover{color:var(--wh)}
+.nav-cta{background:var(--pm);color:#fff;padding:8px 18px;border-radius:6px;font-size:13px;text-decoration:none;transition:background .2s}.nav-cta:hover{background:var(--pl)}
+
+/* HERO */
+.hero{padding:56px 24px 40px;text-align:center;position:relative}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 70% at 50% 0%,rgba(124,92,191,.25) 0%,transparent 65%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(124,92,191,.18);border:1px solid rgba(124,92,191,.35);border-radius:100px;padding:6px 18px;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;color:var(--pp);margin-bottom:18px;position:relative}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:blink 2s ease-in-out infinite}
+h1{font-family:"Cormorant Garamond",serif;font-size:clamp(28px,5vw,58px);font-weight:700;line-height:1.05;letter-spacing:-.025em;margin-bottom:12px;position:relative}
+h1 em{font-style:italic;color:var(--pl)}
+.hero-sub{font-size:15px;color:var(--mu);max-width:540px;margin:0 auto;position:relative;line-height:1.75}
+
+/* VIDEO PLAYER */
+.video-wrap{max-width:1000px;margin:36px auto 0;padding:0 20px}
+.video-container{position:relative;background:rgba(0,0,0,.6);border:1px solid rgba(196,181,232,.2);border-radius:16px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.6),0 0 0 1px rgba(124,92,191,.15)}
+.video-container::before{content:"";position:absolute;inset:0;border-radius:16px;background:linear-gradient(135deg,rgba(124,92,191,.08),transparent 60%);z-index:1;pointer-events:none}
+video{width:100%;display:block;border-radius:15px;position:relative;z-index:2;max-height:70vh;object-fit:contain;background:#000}
+/* Barre infos sous la vidéo */
+.video-meta{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:rgba(255,255,255,.03);border-top:1px solid var(--bdr);flex-wrap:wrap;gap:10px}
+.vm-title{font-family:"Cormorant Garamond",serif;font-size:17px;font-weight:700;color:var(--wh)}
+.vm-badges{display:flex;gap:7px;flex-wrap:wrap}
+.vm-badge{font-family:"Space Mono",monospace;font-size:9px;padding:3px 10px;border-radius:100px}
+.b-regl{background:rgba(124,92,191,.18);color:var(--pl);border:1px solid rgba(124,92,191,.3)}
+.b-ia{background:rgba(60,201,176,.12);color:var(--teal);border:1px solid rgba(60,201,176,.25)}
+.b-live{background:rgba(34,197,94,.12);color:#4ade80;border:1px solid rgba(34,197,94,.25)}
+.vm-actions{display:flex;gap:8px}
+.vm-btn{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:7px 14px;border-radius:7px;text-decoration:none;transition:all .2s;cursor:pointer;border:none;font-family:"DM Sans",sans-serif}
+.vm-btn-p{background:var(--pm);color:#fff}.vm-btn-p:hover{background:var(--pl)}
+.vm-btn-s{background:rgba(255,255,255,.07);border:1px solid var(--bdr);color:var(--wh)}.vm-btn-s:hover{border-color:var(--pl)}
+
+/* FEATURES */
+.features{max-width:1000px;margin:40px auto;padding:0 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:700px){.features{grid-template-columns:1fr}}
+.feat{background:rgba(255,255,255,.04);border:1px solid var(--bdr);border-radius:12px;padding:20px;transition:border-color .2s}
+.feat:hover{border-color:rgba(166,133,232,.35)}
+.feat-ico{font-size:22px;margin-bottom:10px}
+.feat-t{font-family:"Cormorant Garamond",serif;font-size:16px;font-weight:700;color:var(--wh);margin-bottom:6px}
+.feat-d{font-size:12px;color:var(--mu);line-height:1.6}
+
+/* CTA */
+.cta{text-align:center;padding:48px 24px;background:rgba(124,92,191,.06);border-top:1px solid rgba(124,92,191,.15)}
+.btn-p{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--pm),var(--pl));color:#fff;padding:13px 28px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;transition:all .2s;box-shadow:0 4px 20px rgba(124,92,191,.4)}.btn-p:hover{transform:translateY(-2px)}
+.btn-s{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid var(--bdr);color:var(--wh);padding:13px 28px;border-radius:8px;font-size:14px;text-decoration:none;transition:all .2s}.btn-s:hover{border-color:var(--pl)}
+
+/* Footer mini */
+.ft-mini{background:rgba(5,2,20,.92);border-top:1px solid var(--bdr);padding:18px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;font-family:"Space Mono",monospace;font-size:10px;color:var(--mu)}
+.ft-mini a{color:var(--teal);text-decoration:none}.ft-mini a:hover{color:var(--wh)}
+
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">CONSEIL<span>PREV</span></a>
+  <a href="/" class="nav-back">← Retour au site</a>
+  <a href="/#contact" class="nav-cta">Demander une démo personnalisée</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge"><span class="badge-dot"></span> Démonstration Interactive · AIES Platform</div>
+  <h1>AIES en action — <em>Gouvernance IA</em><br>en temps réel</h1>
+  <p class="hero-sub">Découvrez comment AIES Platform centralise votre conformité IA Act, RGPD et cybersécurité dans une interface unifiée et intelligente.</p>
+</section>
+
+<!-- VIDÉO -->
+<div class="video-wrap">
+  <div class="video-container">
+    <video controls autoplay muted loop playsinline preload="auto" poster="">
+      <source src="/demo.mp4" type="video/mp4">
+      Votre navigateur ne supporte pas la lecture vidéo.
+    </video>
+    <div class="video-meta">
+      <div>
+        <div class="vm-title">AIES — AI Ethics System · Démonstration Plateforme</div>
+        <div class="vm-badges" style="margin-top:6px">
+          <span class="vm-badge b-regl">IA Act</span>
+          <span class="vm-badge b-regl">ISO 42001</span>
+          <span class="vm-badge b-ia">Gouvernance IA</span>
+          <span class="vm-badge b-ia">RGPD</span>
+          <span class="vm-badge b-live">● Live Demo</span>
+        </div>
+      </div>
+      <div class="vm-actions">
+        <a href="https://ersia.org/?preview=true" target="_blank" rel="noopener" class="vm-btn vm-btn-p">Accéder à AIES →</a>
+        <a href="/#contact" class="vm-btn vm-btn-s">Contacter</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div class="features">
+  <div class="feat"><div class="feat-ico">🗂️</div><div class="feat-t">Inventaire IA</div><div class="feat-d">Cataloguez et gérez tous vos systèmes IA avec traçabilité complète.</div></div>
+  <div class="feat"><div class="feat-ico">⚠️</div><div class="feat-t">Évaluation des Risques</div><div class="feat-d">Scoring automatique selon l'IA Act, RGPD et les 8 risques systémiques.</div></div>
+  <div class="feat"><div class="feat-ico">✅</div><div class="feat-t">Plans d'Action</div><div class="feat-d">Suivi personnalisé des actions correctives avec calendrier intégré.</div></div>
+  <div class="feat"><div class="feat-ico">📊</div><div class="feat-t">Analytics & Reporting</div><div class="feat-d">Tableaux de bord conformité et rapports exécutifs en temps réel.</div></div>
+  <div class="feat"><div class="feat-ico">🤖</div><div class="feat-t">Assistant IA Intégré</div><div class="feat-d">Mistral AI pour répondre à toutes vos questions de conformité.</div></div>
+  <div class="feat"><div class="feat-ico">🔔</div><div class="feat-t">Veille Réglementaire</div><div class="feat-d">Alertes automatiques sur les évolutions de l'IA Act et NIS2.</div></div>
+</div>
+
+<!-- CTA -->
+<section class="cta">
+  <p style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:14px">Prêt à démarrer ?</p>
+  <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(24px,4vw,44px);font-weight:700;margin-bottom:12px">Accédez à AIES <em style="font-style:italic;color:var(--pl)">maintenant</em></h2>
+  <p style="font-size:14px;color:var(--mu);margin-bottom:28px;max-width:420px;margin-left:auto;margin-right:auto;line-height:1.75">Déployez votre gouvernance IA en quelques clics. Accompagnement CONSEILPREV inclus.</p>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <a href="https://ersia.org/?preview=true" target="_blank" rel="noopener" class="btn-p">Accéder à AIES →</a>
+    <a href="/#contact" class="btn-s">Soumettre un projet</a>
+  </div>
+</section>
+
+<div class="ft-mini">
+  <span>© 2025 CONSEILPREV · ERSIA IA MANAGEMENT · <a href="/">conseilprev.onrender.com</a></span>
+  <a href="/">← Retour au site CONSEILPREV</a>
+</div>
+
+</body>
+</html>
