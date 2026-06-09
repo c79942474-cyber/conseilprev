@@ -34,6 +34,10 @@ def index():
 def datasets():
     return send_from_directory('.', 'datasets.json', mimetype='application/json')
 
+@app.route('/aies')
+def aies():
+    return send_from_directory('.', 'aies.html')
+
 @app.route('/donnees')
 def donnees():
     return send_from_directory('.', 'donnees.html')
