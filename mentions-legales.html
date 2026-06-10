@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mentions légales — CONSEILPREV</title>
+<meta name="description" content="Mentions légales de CONSEILPREV — Éditeur du site, hébergeur, directeur de publication, propriété intellectuelle.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0620;--pm:#8b5cf6;--pl:#b48af7;--pp:#d4baff;--pf:#d946ef;--teal:#5eead4;--wh:#f8f4ff;--mu:rgba(212,186,255,.52);--bdr:rgba(180,138,247,.18)}
+html{scroll-behavior:smooth}
+body{font-family:"DM Sans",sans-serif;background:linear-gradient(160deg,#0d0825,#110a2e,#0e0820);color:var(--wh);min-height:100vh;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;background-image:url("/hero-bg.jpg");background-size:cover;background-position:center 55%;background-attachment:fixed;opacity:.38;z-index:-2;pointer-events:none}
+#bc{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.bl{position:absolute;border-radius:50%;filter:blur(45px);mix-blend-mode:screen}
+#b1{width:420px;height:420px;background:radial-gradient(circle,#7c3aed,#4f46e5 40%,transparent 70%);opacity:.42;animation:bm 22s ease-in-out infinite alternate;top:5%;left:5%}
+#b2{width:360px;height:360px;background:radial-gradient(circle,#db2777,#be185d 35%,transparent 75%);opacity:.35;animation:bm2 28s ease-in-out infinite alternate;top:50%;right:8%}
+@keyframes bm{0%{transform:translate(0,0)}100%{transform:translate(80px,-60px)}}
+@keyframes bm2{0%{transform:translate(0,0)}100%{transform:translate(-60px,80px)}}
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(10,6,32,.93);backdrop-filter:blur(24px);border-bottom:1px solid var(--bdr);padding:13px 28px;display:flex;align-items:center;gap:12px}
+.nl{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:700;text-decoration:none;color:var(--wh);margin-right:auto}.nl span{color:var(--pl)}
+.nb{font-size:12px;color:var(--mu);text-decoration:none;font-family:"Space Mono",monospace;transition:color .2s}.nb:hover{color:var(--wh)}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(6px);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;animation:fdin .2s ease}
+@keyframes fdin{from{opacity:0}to{opacity:1}}
+.modal-box{background:#18103a;border:1px solid rgba(180,138,247,.25);border-radius:18px;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.7);animation:slin .25s ease}
+@keyframes slin{from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-box::-webkit-scrollbar{width:4px}
+.modal-box::-webkit-scrollbar-thumb{background:rgba(180,138,247,.3);border-radius:2px}
+.modal-head{padding:22px 28px 16px;border-bottom:1px solid rgba(180,138,247,.12);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#18103a;z-index:2;border-radius:18px 18px 0 0}
+.modal-title{font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:700;color:var(--wh)}
+.modal-close{background:rgba(255,255,255,.07);border:1px solid rgba(180,138,247,.2);color:var(--mu);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .2s;text-decoration:none}.modal-close:hover{color:var(--wh);border-color:var(--pl)}
+.modal-body{padding:20px 28px 28px}
+/* Contenu */
+.ml-section{margin-bottom:22px;padding-bottom:22px;border-bottom:1px solid rgba(180,138,247,.1)}
+.ml-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.ml-h{font-size:14px;font-weight:700;color:var(--wh);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.ml-h::before{content:"";width:3px;height:14px;background:linear-gradient(180deg,var(--pm),var(--pf));border-radius:2px;flex-shrink:0}
+.ml-p{font-size:13px;color:rgba(212,186,255,.75);line-height:1.8;margin-bottom:6px}
+.ml-p strong{color:var(--pp)}
+.ml-p a{color:var(--teal);text-decoration:none}.ml-p a:hover{text-decoration:underline}
+.ml-list{list-style:none;display:flex;flex-direction:column;gap:4px;margin-top:4px}
+.ml-list li{font-size:13px;color:rgba(212,186,255,.7);padding-left:14px;position:relative;line-height:1.7}
+.ml-list li::before{content:"·";position:absolute;left:4px;color:var(--pm)}
+/* Page de fond (si lien direct /mentions-legales) */
+.page-wrap{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:48px 20px}
+.page-card{background:rgba(18,8,48,.92);border:1px solid rgba(180,138,247,.2);border-radius:18px;width:100%;max-width:680px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+/* Footer mini */
+.ft-mini{background:rgba(5,2,20,.92);border-top:1px solid var(--bdr);padding:14px 24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:"Space Mono",monospace;font-size:10px;color:var(--mu);margin-top:auto}
+.ft-mini a{color:var(--teal);text-decoration:none}
+body{-webkit-user-select:none;user-select:none}
+input,textarea{-webkit-user-select:text!important;user-select:text!important}
+</style>
+</head>
+<body>
+<div id="bc" aria-hidden="true">
+  <div class="bl" id="b1"></div>
+  <div class="bl" id="b2"></div>
+</div>
+
+<nav>
+  <a href="/" class="nl">CONSEIL<span>PREV</span></a>
+  <a href="/" class="nb">← Retour au site</a>
+</nav>
+
+<div class="page-wrap">
+  <div class="page-card">
+
+    <div class="modal-head">
+      <div class="modal-title">Mentions légales</div>
+      <a href="/" class="modal-close" aria-label="Retour">✕</a>
+    </div>
+
+    <div class="modal-body">
+
+      <!-- Éditeur -->
+      <div class="ml-section">
+        <div class="ml-h">Éditeur du site</div>
+        <p class="ml-p">Le site est édité par <strong>Conseilprev, Société SARL</strong>.</p>
+        <ul class="ml-list">
+          <li>Siège social : <strong>19 rue Auguste Chabrières, 75015 Paris</strong></li>
+          <li>Adresse e-mail : <a href="mailto:c79942474@gmail.com">c79942474@gmail.com</a></li>
+          <li>RCS Paris : <strong>494 530 157</strong></li>
+          <li>Capital social : <strong>8.000 euros</strong></li>
+        </ul>
+      </div>
+
+      <!-- Directeur publication -->
+      <div class="ml-section">
+        <div class="ml-h">Directeur de la publication</div>
+        <p class="ml-p"><strong>Monsieur CERF Christophe</strong></p>
+        <p class="ml-p">Contact : <a href="mailto:christophe.cerf@outlook.com">christophe.cerf@outlook.com</a> · <a href="tel:+33660692145">+33 6 60 69 21 45</a></p>
+      </div>
+
+      <!-- Hébergement -->
+      <div class="ml-section">
+        <div class="ml-h">Hébergeur</div>
+        <ul class="ml-list">
+          <li>Société : <strong>Render Services, Inc.</strong></li>
+          <li>Adresse : 525 Brannan Street, Suite 300, San Francisco, CA 94107, États-Unis</li>
+          <li>Site web : <a href="https://render.com" target="_blank" rel="noopener">render.com</a></li>
+        </ul>
+      </div>
+
+      <!-- Propriété intellectuelle -->
+      <div class="ml-section">
+        <div class="ml-h">Propriété intellectuelle</div>
+        <p class="ml-p">L'ensemble du contenu de ce site (textes, images, graphismes, logo, icônes, sons, logiciels) est la propriété exclusive de <strong>CONSEILPREV / ERSIA IA Management</strong>, sauf mention contraire, et est protégé par les lois françaises et internationales relatives à la propriété intellectuelle.</p>
+        <p class="ml-p">Toute reproduction, représentation, modification, publication, adaptation totale ou partielle des éléments du site, quel que soit le moyen ou le procédé utilisé, est <strong>interdite sans l'autorisation écrite préalable</strong> de CONSEILPREV.</p>
+      </div>
+
+      <!-- Données personnelles -->
+      <div class="ml-section">
+        <div class="ml-h">Données personnelles & RGPD</div>
+        <p class="ml-p">Conformément au Règlement Général sur la Protection des Données (RGPD – UE 2016/679), vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation et d'opposition au traitement de vos données personnelles.</p>
+        <ul class="ml-list">
+          <li>Responsable du traitement : <strong>CERF Christophe — CONSEILPREV</strong></li>
+          <li>DPO : <a href="mailto:christophe.cerf@outlook.com">christophe.cerf@outlook.com</a></li>
+          <li>Durée de conservation : <strong>13 mois</strong> (conformément aux recommandations CNIL)</li>
+          <li>Droit de réclamation : <a href="https://www.cnil.fr" target="_blank" rel="noopener">CNIL — cnil.fr</a></li>
+        </ul>
+      </div>
+
+      <!-- Cookies -->
+      <div class="ml-section">
+        <div class="ml-h">Cookies</div>
+        <p class="ml-p">Ce site utilise des cookies pour améliorer l'expérience utilisateur et analyser l'audience. Conformément à la loi n°78-17 du 6 janvier 1978 et au RGPD, vous pouvez paramétrer vos préférences via le bouton 🍪 en bas à gauche de chaque page.</p>
+      </div>
+
+      <!-- Droit applicable -->
+      <div class="ml-section">
+        <div class="ml-h">Droit applicable & juridiction</div>
+        <p class="ml-p">Les présentes mentions légales sont soumises au droit français. En cas de litige, les tribunaux français seront seuls compétents, sous réserve d'une attribution de compétence spécifique découlant d'un texte de loi ou réglementaire particulier.</p>
+        <p class="ml-p" style="font-size:11px;color:rgba(212,186,255,.4);font-family:'Space Mono',monospace;margin-top:12px">Dernière mise à jour : Juin 2025 · © CONSEILPREV / ERSIA IA Management</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="ft-mini">
+  <span>© 2025 CONSEILPREV · Mentions légales · <a href="/">conseilprev.onrender.com</a></span>
+  <a href="/">← Retour au site</a>
+</div>
+
+<script>
+document.addEventListener('contextmenu',function(e){e.preventDefault();});
+document.addEventListener('keydown',function(e){if(e.key==='F12'||(e.ctrlKey&&['u','s'].includes(e.key.toLowerCase())))e.preventDefault();});
+window.addEventListener('scroll',function(){
+  var p=document.getElementById('rp');if(p){var s=window.scrollY,t=document.body.scrollHeight-window.innerHeight;p.style.width=(t>0?Math.round(s/t*100):0)+'%';}
+},{passive:true});
+</script>
+</body>
+</html>

@@ -449,6 +449,7 @@ def chat():
 PAGES = {
     '/':              'index.html',
     '/support':       'support.html',
+    '/mentions-legales': 'mentions-legales.html',
     '/donnees':       'donnees.html',
     '/aies':          'aies.html',
     '/demo':          'demo.html',
