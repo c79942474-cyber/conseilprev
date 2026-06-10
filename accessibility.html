@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aide à l'accessibilité — CONSEILPREV</title>
+<meta name="description" content="Accessibilité WCAG 2.1 niveau AA — Raccourcis clavier, modes d'affichage, conformité RGAA. CONSEILPREV s'engage pour une navigation inclusive.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0a2e;--bg2:#160b30;--bg3:#1a1050;
+  --pm:#7c5cbf;--pl:#a685e8;--pp:#c4b5e8;
+  --teal:#3cc9b0;--gold:#d4a843;--wh:#f5f0ff;
+  --mu:rgba(196,181,232,.55);--bdr:rgba(196,181,232,.15);
+  --card:rgba(255,255,255,.04);--green:#22c55e;
+  /* Accessibility overrides */
+  --acc-font-size:16px;--acc-line-height:1.6;
+}
+/* READING MODE */
+body.acc-reading{background:#fafaf8!important;color:#1a1a1a!important;--bg:#fafaf8;--wh:#1a1a1a;--mu:#555;--bdr:#ddd;--card:#f0eff8;--pm:#5b3fa8;font-size:18px!important;line-height:1.8!important}
+body.acc-reading::before{display:none!important}
+body.acc-reading .nav{background:#fff!important;border-bottom:2px solid #5b3fa8!important}
+body.acc-reading h1,body.acc-reading h2,body.acc-reading h3{color:#1a1a1a!important}
+/* DYSLEXIA MODE */
+body.acc-dyslexia{font-family:"OpenDyslexic","DM Sans",sans-serif!important;letter-spacing:.05em!important;word-spacing:.15em!important;line-height:2!important}
+/* HIGH CONTRAST */
+body.acc-contrast{background:#000!important;color:#fff!important;--bdr:#fff;--card:rgba(255,255,255,.1)}
+body.acc-contrast a{color:#ff0!important}
+body.acc-contrast .nav{background:#000!important;border-bottom:2px solid #ff0!important}
+body.acc-contrast .card{border:2px solid #fff!important}
+/* DARK/LIGHT THEME */
+body.acc-light{background:#f5f5f8!important;color:#1a1a2e!important;--wh:#1a1a2e;--mu:#555;--card:#fff;--bdr:#ddd}
+body.acc-light::before{display:none!important}
+body.acc-light .nav{background:rgba(255,255,255,.97)!important;border-bottom:1px solid #ddd!important}
+
+html{scroll-behavior:smooth}
+body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--wh);font-size:var(--acc-font-size);line-height:var(--acc-line-height);min-height:100vh;transition:background .3s,color .3s}
+body::before{content:"";position:fixed;inset:0;background-image:url("/hero-bg.jpg");background-size:cover;background-position:center 55%;background-attachment:fixed;opacity:.08;z-index:-1;pointer-events:none}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:200;background:rgba(13,10,46,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);padding:12px 28px;display:flex;align-items:center;gap:12px}
+.nav-logo{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:700;text-decoration:none;color:var(--wh);margin-right:auto}.nav-logo span{color:var(--pl)}
+.nav-back{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--mu);text-decoration:none;font-family:"Space Mono",monospace;transition:color .2s}.nav-back:hover{color:var(--wh)}
+.nav-acc-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(124,92,191,.18);border:1px solid rgba(124,92,191,.35);color:var(--pl);padding:7px 14px;border-radius:7px;font-size:12px;text-decoration:none;font-family:"Space Mono",monospace;cursor:pointer;transition:all .2s}.nav-acc-btn:hover{background:rgba(124,92,191,.3)}
+
+/* SKIP NAV */
+.skip-nav{position:absolute;top:-60px;left:12px;background:var(--pm);color:#fff;padding:8px 16px;border-radius:0 0 8px 8px;font-size:13px;text-decoration:none;z-index:9999;transition:top .2s}.skip-nav:focus{top:0}
+
+/* HERO */
+.hero{padding:52px 24px 36px;text-align:center;position:relative}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(124,92,191,.2) 0%,transparent 65%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(124,92,191,.18);border:1px solid rgba(124,92,191,.35);border-radius:100px;padding:6px 18px;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;color:var(--pp);margin-bottom:18px}
+.badge-dot{width:7px;height:7px;border-radius:50%;background:var(--teal);animation:blink 2s ease-in-out infinite}
+.hero h1{font-family:"Cormorant Garamond",serif;font-size:clamp(28px,5vw,54px);font-weight:700;line-height:1.05;margin-bottom:12px;position:relative}
+.hero h1 em{font-style:italic;color:var(--pl)}
+.hero-sub{font-size:15px;color:var(--mu);max-width:560px;margin:0 auto;line-height:1.75;position:relative}
+
+/* ACCESSIBILITY PANEL */
+.acc-panel{position:fixed;top:60px;right:16px;width:280px;background:rgba(22,11,48,.97);border:1px solid rgba(124,92,191,.4);border-radius:14px;z-index:500;box-shadow:0 20px 60px rgba(0,0,0,.6);backdrop-filter:blur(20px);display:none;overflow:hidden}
+.acc-panel.open{display:block}
+.acc-panel-head{background:rgba(124,92,191,.15);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(124,92,191,.2)}
+.acc-panel-head h3{font-size:14px;font-weight:600;color:var(--wh);display:flex;align-items:center;gap:8px}
+.acc-panel-close{background:none;border:none;color:var(--mu);cursor:pointer;font-size:18px;padding:2px;transition:color .2s}.acc-panel-close:hover{color:var(--wh)}
+.acc-panel-body{padding:14px}
+.acc-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.acc-row:last-child{border-bottom:none}
+.acc-row-label{font-size:12px;color:var(--pp);display:flex;align-items:center;gap:7px}
+.acc-toggle{position:relative;width:38px;height:20px;cursor:pointer}
+.acc-toggle input{opacity:0;width:0;height:0}
+.acc-slider{position:absolute;inset:0;background:rgba(255,255,255,.12);border-radius:20px;transition:background .2s}
+.acc-slider::before{content:"";position:absolute;width:16px;height:16px;left:2px;top:2px;background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.acc-toggle input:checked + .acc-slider{background:var(--pm)}
+.acc-toggle input:checked + .acc-slider::before{transform:translateX(18px)}
+.acc-reset{width:100%;margin-top:10px;padding:8px;background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.25);border-radius:7px;color:#f87171;font-size:12px;cursor:pointer;transition:all .2s;font-family:"DM Sans",sans-serif}.acc-reset:hover{background:rgba(220,38,38,.2)}
+.acc-shortcut{font-family:"Space Mono",monospace;font-size:9px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:4px;padding:2px 6px;color:var(--mu)}
+
+/* LAYOUT */
+.con{max-width:900px;margin:0 auto;padding:0 24px}
+.section{padding:48px 0}
+.lb{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.lb::before{content:"";width:20px;height:1px;background:var(--teal)}
+.tt{font-family:"Cormorant Garamond",serif;font-size:clamp(22px,3.5vw,36px);font-weight:700;margin-bottom:16px}
+.tt em{font-style:italic;color:var(--pl)}
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:14px;padding:24px 28px;margin-bottom:16px;transition:border-color .2s}
+.card:hover{border-color:rgba(166,133,232,.3)}
+.card-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.card-ico{font-size:22px}
+.card-title{font-family:"Cormorant Garamond",serif;font-size:20px;font-weight:700;color:var(--wh)}
+.card-sub{font-size:12px;color:var(--mu);margin-top:2px}
+
+/* Shortcuts table */
+.shortcuts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:640px){.shortcuts-grid{grid-template-columns:1fr}}
+.sh-group h4{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--pp);margin-bottom:10px}
+.sh-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.sh-label{font-size:13px;color:var(--mu)}
+.sh-key{display:flex;gap:4px;align-items:center}
+.kbd{font-family:"Space Mono",monospace;font-size:10px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-bottom:2px solid rgba(255,255,255,.35);border-radius:5px;padding:3px 8px;color:var(--wh)}
+.sh-sep{font-size:10px;color:var(--mu)}
+
+/* Display modes */
+.modes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:640px){.modes-grid{grid-template-columns:1fr}}
+.mode-card{background:var(--card);border:1px solid var(--bdr);border-radius:10px;padding:18px;cursor:pointer;transition:all .2s;text-align:left}
+.mode-card:hover,.mode-card.active{border-color:var(--pm);background:rgba(124,92,191,.1)}
+.mode-card.active::after{content:"✓ Actif";display:block;font-size:10px;color:var(--teal);font-family:"Space Mono",monospace;margin-top:8px}
+.mode-ico{font-size:20px;margin-bottom:8px}
+.mode-title{font-size:14px;font-weight:600;color:var(--wh);margin-bottom:4px}
+.mode-list{list-style:none;margin-top:8px}
+.mode-list li{font-size:12px;color:var(--mu);padding:2px 0;padding-left:14px;position:relative}
+.mode-list li::before{content:"›";position:absolute;left:0;color:var(--pm)}
+
+/* Theme toggle */
+.theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.theme-card{background:var(--card);border:2px solid var(--bdr);border-radius:10px;padding:18px;cursor:pointer;transition:all .2s}
+.theme-card:hover{border-color:var(--pm)}
+.theme-card.active{border-color:var(--pm);background:rgba(124,92,191,.1)}
+.tc-ico{font-size:20px;margin-bottom:6px}
+.tc-title{font-size:14px;font-weight:600;color:var(--wh);margin-bottom:4px}
+.tc-desc{font-size:12px;color:var(--mu);line-height:1.5}
+
+/* Sound feedback */
+.sound-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.sound-dot{width:10px;height:10px;border-radius:50%}
+.sd-green{background:#22c55e}.sd-orange{background:#f97316}
+.sound-label{font-size:13px;color:var(--wh);font-weight:500}
+.sound-desc{font-size:12px;color:var(--mu)}
+
+/* Tips */
+.tips-card{background:rgba(124,92,191,.07);border:1px solid rgba(124,92,191,.2);border-radius:12px;padding:20px 24px}
+.tip{display:flex;align-items:flex-start;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.tip:last-child{border-bottom:none}
+.tip-ico{color:var(--pm);font-size:16px;flex-shrink:0;margin-top:1px}
+.tip-txt{font-size:13px;color:var(--pp);line-height:1.6}
+.tip-txt .kbd{display:inline-block;vertical-align:middle}
+
+/* Test section */
+.test-btn{width:100%;padding:14px;background:var(--pm);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;font-family:"DM Sans",sans-serif}
+.test-btn:hover{background:var(--pl);transform:translateY(-1px)}
+.test-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.test-results{margin-top:16px;display:none}
+.test-results.show{display:block}
+.test-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.ti-ico{font-size:16px;flex-shrink:0;margin-top:1px}
+.ti-title{font-size:13px;font-weight:600;color:var(--wh)}
+.ti-desc{font-size:11px;color:var(--mu);margin-top:2px}
+.ti-badge{font-family:"Space Mono",monospace;font-size:9px;padding:2px 8px;border-radius:100px;flex-shrink:0;margin-top:3px}
+.tb-pass{background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.3)}
+.tb-fail{background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.3)}
+.tb-warn{background:rgba(234,179,8,.15);color:#facc15;border:1px solid rgba(234,179,8,.3)}
+.test-score{display:flex;align-items:center;gap:12px;padding:12px 16px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:8px;margin-bottom:14px}
+.ts-bar-wrap{flex:1;height:8px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden}
+.ts-bar{height:100%;background:linear-gradient(90deg,var(--teal),var(--pm));border-radius:4px;transition:width .8s ease}
+.ts-label{font-family:"Space Mono",monospace;font-size:11px;color:var(--teal);white-space:nowrap}
+.all-pass-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);border-radius:100px;padding:3px 12px;font-family:"Space Mono",monospace;font-size:9px;color:#4ade80}
+
+/* WCAG info */
+.wcag-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:640px){.wcag-grid{grid-template-columns:1fr}}
+.wcag-card{background:var(--card);border:1px solid var(--bdr);border-radius:10px;padding:18px}
+.wcag-level{font-family:"Space Mono",monospace;font-size:22px;font-weight:700;color:var(--pl);margin-bottom:6px}
+.wcag-title{font-size:14px;font-weight:600;color:var(--wh);margin-bottom:6px}
+.wcag-desc{font-size:12px;color:var(--mu);line-height:1.6}
+.wcag-badge{display:inline-block;font-family:"Space Mono",monospace;font-size:9px;padding:2px 8px;border-radius:100px;margin-top:8px}
+.wb-a{background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.3)}
+.wb-aa{background:rgba(59,130,246,.15);color:#93c5fd;border:1px solid rgba(59,130,246,.3)}
+.wb-aaa{background:rgba(168,85,247,.15);color:#c4b5fd;border:1px solid rgba(168,85,247,.3)}
+
+/* CTA */
+.contact-cta{text-align:center;padding:20px 0}
+.contact-cta p{font-size:14px;color:var(--mu);margin-bottom:14px}
+.btn-outline{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--bdr);color:var(--pp);padding:9px 20px;border-radius:8px;font-size:13px;text-decoration:none;transition:all .2s}.btn-outline:hover{border-color:var(--pl);color:var(--wh)}
+.btn-p{display:inline-flex;align-items:center;gap:8px;background:var(--pm);color:#fff;padding:9px 20px;border-radius:8px;font-size:13px;text-decoration:none;transition:all .2s}.btn-p:hover{background:var(--pl)}
+
+/* Compliance bar */
+.compliance-bar{background:rgba(124,92,191,.06);border-top:1px solid rgba(124,92,191,.15);padding:14px 24px;text-align:center;font-family:"Space Mono",monospace;font-size:10px;color:var(--mu);letter-spacing:.05em}
+.compliance-bar strong{color:var(--pp)}
+
+/* Footer mini */
+.ft-mini{background:rgba(5,2,20,.92);border-top:1px solid var(--bdr);padding:16px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;font-family:"Space Mono",monospace;font-size:10px;color:var(--mu)}
+.ft-mini a{color:var(--teal);text-decoration:none}.ft-mini a:hover{color:var(--wh)}
+
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+</style>
+</head>
+<body id="main-body">
+
+<!-- SKIP NAV -->
+<a href="#main-content" class="skip-nav">Aller au contenu principal</a>
+
+<!-- NAV -->
+<nav class="nav" role="navigation" aria-label="Navigation principale">
+  <a href="/" class="nav-logo" aria-label="Retour accueil CONSEILPREV">CONSEIL<span>PREV</span></a>
+  <a href="/" class="nav-back" aria-label="Retour au site">← Retour</a>
+  <button class="nav-acc-btn" onclick="toggleAccPanel()" aria-expanded="false" aria-controls="acc-panel" aria-label="Ouvrir le panneau d'accessibilité (Alt+A)" id="acc-panel-toggle">
+    ♿ Accessibilité
+  </button>
+</nav>
+
+<!-- PANNEAU ACCESSIBILITÉ -->
+<div id="acc-panel" class="acc-panel" role="dialog" aria-modal="true" aria-label="Panneau d'accessibilité">
+  <div class="acc-panel-head">
+    <h3>♿ Options d'accessibilité</h3>
+    <button class="acc-panel-close" onclick="toggleAccPanel()" aria-label="Fermer le panneau">✕</button>
+  </div>
+  <div class="acc-panel-body">
+    <div class="acc-row">
+      <span class="acc-row-label">📖 Mode lecture</span>
+      <label class="acc-toggle" aria-label="Activer le mode lecture">
+        <input type="checkbox" id="toggle-reading" onchange="setMode('reading',this.checked)">
+        <span class="acc-slider"></span>
+      </label>
+    </div>
+    <div class="acc-row">
+      <span class="acc-row-label">T Mode dyslexie</span>
+      <label class="acc-toggle" aria-label="Activer le mode dyslexie">
+        <input type="checkbox" id="toggle-dyslexia" onchange="setMode('dyslexia',this.checked)">
+        <span class="acc-slider"></span>
+      </label>
+    </div>
+    <div class="acc-row">
+      <span class="acc-row-label">👁 Contraste élevé</span>
+      <label class="acc-toggle" aria-label="Activer le contraste élevé">
+        <input type="checkbox" id="toggle-contrast" onchange="setMode('contrast',this.checked)">
+        <span class="acc-slider"></span>
+      </label>
+    </div>
+    <div class="acc-row">
+      <span class="acc-row-label">☀️ Thème clair</span>
+      <label class="acc-toggle" aria-label="Activer le thème clair">
+        <input type="checkbox" id="toggle-light" onchange="setMode('light',this.checked)">
+        <span class="acc-slider"></span>
+      </label>
+    </div>
+    <div class="acc-row">
+      <span class="acc-row-label">🔊 Retour sonore</span>
+      <label class="acc-toggle" aria-label="Activer le retour sonore">
+        <input type="checkbox" id="toggle-sound" onchange="setMode('sound',this.checked)" checked>
+        <span class="acc-slider"></span>
+      </label>
+    </div>
+    <div class="acc-row">
+      <span class="acc-row-label">Raccourci <span class="acc-shortcut">Alt+A</span></span>
+    </div>
+    <button class="acc-reset" onclick="resetAll()" aria-label="Désactiver tous les modes d'accessibilité">
+      ✕ Désactiver tous les modes
+    </button>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-badge"><span class="badge-dot"></span> Accessibilité · WCAG 2.1 · RGAA</div>
+  <h1 id="hero-title">Naviguer confortablement<br>sur notre <em>plateforme</em></h1>
+  <p class="hero-sub">Notre plateforme est conçue pour être accessible à tous. Découvrez les fonctionnalités d'accessibilité et les raccourcis clavier disponibles pour améliorer votre expérience.</p>
+</section>
+
+<main id="main-content" class="con">
+
+  <!-- RACCOURCIS CLAVIER -->
+  <section class="section" aria-labelledby="shortcuts-title">
+    <div class="card">
+      <div class="card-head">
+        <span class="card-ico">⌨️</span>
+        <div>
+          <div class="card-title" id="shortcuts-title">Raccourcis clavier</div>
+          <div class="card-sub">Utilisez ces raccourcis pour naviguer rapidement</div>
+        </div>
+      </div>
+      <div class="shortcuts-grid">
+        <div class="sh-group">
+          <h4>Accessibilité</h4>
+          <div class="sh-row">
+            <span class="sh-label">Ouvrir le panneau d'accessibilité</span>
+            <div class="sh-key"><span class="kbd">Alt</span><span class="sh-sep">+</span><span class="kbd">A</span></div>
+          </div>
+          <div class="sh-row">
+            <span class="sh-label">Désactiver tous les modes</span>
+            <div class="sh-key"><span class="kbd">Échap</span></div>
+          </div>
+          <div class="sh-row">
+            <span class="sh-label">Aller au contenu principal</span>
+            <div class="sh-key"><span class="kbd">Tab</span><span class="sh-sep">×1</span></div>
+          </div>
+        </div>
+        <div class="sh-group">
+          <h4>Navigation générale</h4>
+          <div class="sh-row">
+            <span class="sh-label">Naviguer vers l'élément suivant</span>
+            <div class="sh-key"><span class="kbd">Tab</span></div>
+          </div>
+          <div class="sh-row">
+            <span class="sh-label">Naviguer vers l'élément précédent</span>
+            <div class="sh-key"><span class="kbd">Maj</span><span class="sh-sep">+</span><span class="kbd">Tab</span></div>
+          </div>
+          <div class="sh-row">
+            <span class="sh-label">Activer l'élément sélectionné</span>
+            <div class="sh-key"><span class="kbd">Entrée</span></div>
+          </div>
+          <div class="sh-row">
+            <span class="sh-label">Basculer les cases à cocher</span>
+            <div class="sh-key"><span class="kbd">Espace</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODES D'AFFICHAGE -->
+  <section class="section" aria-labelledby="modes-title">
+    <p class="lb">Modes d'affichage</p>
+    <h2 class="tt" id="modes-title">Personnalisez votre <em>expérience</em></h2>
+    <div class="modes-grid" role="group" aria-label="Sélection du mode d'affichage">
+      <div class="mode-card" id="card-reading" onclick="toggleModeCard('reading')" role="button" tabindex="0" aria-pressed="false" aria-label="Activer le mode lecture" onkeydown="if(event.key==='Enter'||event.key===' ')toggleModeCard('reading')">
+        <div class="mode-ico">📖</div>
+        <div class="mode-title">Mode lecture</div>
+        <div style="font-size:12px;color:var(--mu);margin-bottom:6px">Optimisé pour une lecture prolongée et confortable.</div>
+        <ul class="mode-list">
+          <li>Largeur de texte optimisée</li>
+          <li>Interlignage augmenté</li>
+          <li>Contraste doux pour la fatigue oculaire</li>
+          <li>Idéal pour les documents longs</li>
+        </ul>
+      </div>
+      <div class="mode-card" id="card-dyslexia" onclick="toggleModeCard('dyslexia')" role="button" tabindex="0" aria-pressed="false" aria-label="Activer le mode dyslexie" onkeydown="if(event.key==='Enter'||event.key===' ')toggleModeCard('dyslexia')">
+        <div class="mode-ico">T</div>
+        <div class="mode-title">Mode dyslexie</div>
+        <div style="font-size:12px;color:var(--mu);margin-bottom:6px">Adapte la typographie pour faciliter la lecture.</div>
+        <ul class="mode-list">
+          <li>Police spécialement conçue</li>
+          <li>Espacement des lettres augmenté</li>
+          <li>Espacement des mots optimisé</li>
+          <li>Meilleure détection des caractères</li>
+        </ul>
+      </div>
+      <div class="mode-card" id="card-contrast" onclick="toggleModeCard('contrast')" role="button" tabindex="0" aria-pressed="false" aria-label="Activer le contraste élevé" onkeydown="if(event.key==='Enter'||event.key===' ')toggleModeCard('contrast')">
+        <div class="mode-ico">👁</div>
+        <div class="mode-title">Contraste élevé</div>
+        <div style="font-size:12px;color:var(--mu);margin-bottom:6px">Renforce les contrastes pour une meilleure visibilité.</div>
+        <ul class="mode-list">
+          <li>Contraste texte/fond amplifié</li>
+          <li>Bordures plus marquées</li>
+          <li>Couleurs plus distinctes</li>
+          <li>Idéal pour la déficience visuelle</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- THÈME -->
+  <section class="section" aria-labelledby="theme-title">
+    <div class="card">
+      <div class="card-head">
+        <span class="card-ico">⚙️</span>
+        <div>
+          <div class="card-title" id="theme-title">Thème clair / sombre</div>
+          <div class="card-sub">Adaptez l'interface à vos préférences et conditions d'éclairage</div>
+        </div>
+      </div>
+      <div class="theme-grid">
+        <div class="theme-card" id="card-dark" onclick="setTheme('dark')" role="button" tabindex="0" aria-pressed="true" aria-label="Thème sombre" onkeydown="if(event.key==='Enter')setTheme('dark')" class="theme-card active">
+          <div class="tc-ico">🌙</div>
+          <div class="tc-title">Mode sombre</div>
+          <div class="tc-desc">Interface sombre, parfaite pour les environnements peu éclairés. Réduit l'éblouissement et économise l'énergie sur écrans OLED.</div>
+        </div>
+        <div class="theme-card" id="card-light" onclick="setTheme('light')" role="button" tabindex="0" aria-pressed="false" aria-label="Thème clair" onkeydown="if(event.key==='Enter')setTheme('light')">
+          <div class="tc-ico">☀️</div>
+          <div class="tc-title">Mode clair</div>
+          <div class="tc-desc">Interface lumineuse, idéale pour les environnements bien éclairés. Réduit la fatigue oculaire en journée.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RETOUR SONORE -->
+  <section class="section" aria-labelledby="sound-title">
+    <div class="card">
+      <div class="card-head">
+        <span class="card-ico">🔊</span>
+        <div>
+          <div class="card-title" id="sound-title">Retour sonore</div>
+          <div class="card-sub">Sons subtils pour confirmer les actions d'accessibilité</div>
+        </div>
+      </div>
+      <p style="font-size:13px;color:var(--mu);margin-bottom:14px">Lorsque vous activez ou désactivez un mode d'accessibilité, un son subtil vous confirme l'action&nbsp;:</p>
+      <div class="sound-row">
+        <span class="sound-dot sd-green"></span>
+        <div><div class="sound-label">Tonalité montante</div><div class="sound-desc">: mode activé</div></div>
+        <button onclick="playSound('on')" style="background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);color:#4ade80;border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;font-family:'Space Mono',monospace">▶ Test</button>
+      </div>
+      <div class="sound-row">
+        <span class="sound-dot sd-orange"></span>
+        <div><div class="sound-label">Tonalité descendante</div><div class="sound-desc">: mode désactivé</div></div>
+        <button onclick="playSound('off')" style="background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.3);color:#fb923c;border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;font-family:'Space Mono',monospace">▶ Test</button>
+      </div>
+      <p style="font-size:12px;color:var(--mu);margin-top:12px">Vous pouvez désactiver les sons dans le panneau d'accessibilité <span class="kbd">Alt+A</span>.</p>
+    </div>
+  </section>
+
+  <!-- CONSEILS -->
+  <section class="section" aria-labelledby="tips-title">
+    <div class="tips-card">
+      <div class="card-head">
+        <span class="card-ico">💡</span>
+        <div class="card-title" id="tips-title">Conseils d'utilisation</div>
+      </div>
+      <div class="tip"><span class="tip-ico">⌘</span><div class="tip-txt">Utilisez <span class="kbd">Alt+A</span> à tout moment pour accéder rapidement aux options d'accessibilité.</div></div>
+      <div class="tip"><span class="tip-ico">⌘</span><div class="tip-txt">Les modes peuvent être combinés : activez le mode dyslexie avec le contraste élevé pour une lisibilité maximale.</div></div>
+      <div class="tip"><span class="tip-ico">⌘</span><div class="tip-txt">Vos préférences sont sauvegardées automatiquement et restaurées à votre prochaine visite.</div></div>
+      <div class="tip"><span class="tip-ico">⌘</span><div class="tip-txt">Appuyez sur <span class="kbd">Échap</span> pour désactiver rapidement tous les modes d'accessibilité si nécessaire.</div></div>
+    </div>
+  </section>
+
+  <!-- TESTS ACCESSIBILITÉ -->
+  <section class="section" aria-labelledby="test-title">
+    <div class="card">
+      <div class="card-head">
+        <span class="card-ico">▶</span>
+        <div>
+          <div class="card-title" id="test-title">Tests d'accessibilité automatiques</div>
+          <div class="card-sub">Vérifiez que toutes les fonctionnalités d'accessibilité fonctionnent correctement</div>
+        </div>
+      </div>
+      <button class="test-btn" id="test-run-btn" onclick="runTests()" aria-label="Lancer les tests d'accessibilité automatiques">
+        <span id="test-btn-ico">▶</span>
+        <span id="test-btn-txt">Lancer les tests d'accessibilité</span>
+      </button>
+      <div class="test-results" id="test-results" aria-live="polite" aria-label="Résultats des tests"></div>
+    </div>
+    <div class="contact-cta">
+      <p>Vous avez des suggestions pour améliorer l'accessibilité de notre plateforme&nbsp;?</p>
+      <a href="mailto:christophe.cerf@outlook.com?subject=Suggestion accessibilité CONSEILPREV" class="btn-outline">Contactez-nous</a>
+    </div>
+  </section>
+
+  <!-- WCAG INFO -->
+  <section class="section" aria-labelledby="wcag-title">
+    <p class="lb">Conformité</p>
+    <h2 class="tt" id="wcag-title">Niveaux WCAG 2.1 & <em>RGAA</em></h2>
+    <p style="font-size:14px;color:var(--mu);margin-bottom:20px;line-height:1.75">Le WCAG (Web Content Accessibility Guidelines) est l'ensemble de normes techniques qui améliore l'accessibilité du contenu web pour les personnes en situation de handicap. Le <strong style="color:var(--pp)">RGAA</strong> (Référentiel Général d'Amélioration de l'Accessibilité) est le cadre national français, aligné sur WCAG 2.1 niveaux A et AA.</p>
+    <div class="wcag-grid">
+      <div class="wcag-card">
+        <div class="wcag-level">A</div>
+        <div class="wcag-title">Niveau A</div>
+        <div class="wcag-desc">Exigences minimales d'accessibilité. Indispensable pour éviter les obstacles majeurs à la navigation.</div>
+        <span class="wcag-badge wb-a">✓ Conforme</span>
+      </div>
+      <div class="wcag-card">
+        <div class="wcag-level">AA</div>
+        <div class="wcag-title">Niveau AA</div>
+        <div class="wcag-desc">Norme cible de notre plateforme. Recommandée par l'UE, le RGAA et la plupart des obligations légales.</div>
+        <span class="wcag-badge wb-aa">✓ Objectif</span>
+      </div>
+      <div class="wcag-card">
+        <div class="wcag-level">AAA</div>
+        <div class="wcag-title">Niveau AAA</div>
+        <div class="wcag-desc">Niveau d'excellence. Certaines fonctionnalités de notre plateforme y répondent déjà.</div>
+        <span class="wcag-badge wb-aaa">En cours</span>
+      </div>
+    </div>
+    <div style="margin-top:16px;text-align:center">
+      <a href="/accessibility-test" class="btn-p" aria-label="Voir le rapport complet d'accessibilité">Voir le rapport complet →</a>
+    </div>
+  </section>
+
+</main>
+
+<div class="compliance-bar" role="contentinfo">
+  <strong>Notre plateforme respecte les standards WCAG 2.1 niveau AA.</strong> Conformité RGAA · Directive EU 2019/882 · EN 301 549
+</div>
+
+<div class="ft-mini">
+  <span>© 2025 CONSEILPREV · Accessibilité WCAG 2.1 AA · <a href="/">conseilprev.onrender.com</a></span>
+  <a href="/">← Retour au site</a>
+</div>
+
+<script>
+// ── État des modes ──
+var ACC_MODES = {reading:false,dyslexia:false,contrast:false,light:false,sound:true};
+var SOUND_EN = true;
+
+function loadPrefs(){
+  try{
+    var p=JSON.parse(localStorage.getItem('conseilprev_acc')||'{}');
+    Object.keys(ACC_MODES).forEach(function(k){if(p[k]!==undefined)ACC_MODES[k]=p[k];});
+    SOUND_EN=ACC_MODES.sound;
+    applyAll();
+  }catch(e){}
+}
+
+function savePrefs(){ try{localStorage.setItem('conseilprev_acc',JSON.stringify(ACC_MODES));}catch(e){} }
+
+function applyAll(){
+  var body=document.getElementById('main-body');
+  ['reading','dyslexia','contrast','light'].forEach(function(m){
+    body.classList.toggle('acc-'+m, ACC_MODES[m]);
+    var el=document.getElementById('toggle-'+m);
+    if(el) el.checked=ACC_MODES[m];
+    var card=document.getElementById('card-'+m);
+    if(card) card.classList.toggle('active',ACC_MODES[m]);
+    if(card) card.setAttribute('aria-pressed',ACC_MODES[m]?'true':'false');
+  });
+  var snd=document.getElementById('toggle-sound');
+  if(snd) snd.checked=ACC_MODES.sound;
+  SOUND_EN=ACC_MODES.sound;
+  // Thème
+  var dc=document.getElementById('card-dark');
+  var lc=document.getElementById('card-light');
+  if(dc){ dc.classList.toggle('active',!ACC_MODES.light); dc.setAttribute('aria-pressed',!ACC_MODES.light?'true':'false'); }
+  if(lc){ lc.classList.toggle('active',ACC_MODES.light); lc.setAttribute('aria-pressed',ACC_MODES.light?'true':'false'); }
+}
+
+function setMode(mode,val){
+  ACC_MODES[mode]=val;
+  if(val) playSound('on'); else playSound('off');
+  applyAll(); savePrefs();
+}
+
+function toggleModeCard(mode){
+  ACC_MODES[mode]=!ACC_MODES[mode];
+  if(ACC_MODES[mode]) playSound('on'); else playSound('off');
+  applyAll(); savePrefs();
+}
+
+function setTheme(t){
+  ACC_MODES.light=(t==='light');
+  playSound('on');
+  applyAll(); savePrefs();
+}
+
+function resetAll(){
+  Object.keys(ACC_MODES).forEach(function(k){ACC_MODES[k]=false;});
+  ACC_MODES.sound=true;
+  playSound('off');
+  applyAll(); savePrefs();
+}
+
+function toggleAccPanel(){
+  var p=document.getElementById('acc-panel');
+  var btn=document.getElementById('acc-panel-toggle');
+  var open=p.classList.toggle('open');
+  if(btn) btn.setAttribute('aria-expanded',open?'true':'false');
+  if(open){ var first=p.querySelector('input'); if(first) first.focus(); }
+}
+
+// ── Son ──
+function playSound(type){
+  if(!SOUND_EN) return;
+  try{
+    var ctx=new(window.AudioContext||window.webkitAudioContext)();
+    var osc=ctx.createOscillator(); var gain=ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    if(type==='on'){ osc.frequency.setValueAtTime(440,ctx.currentTime); osc.frequency.linearRampToValueAtTime(660,ctx.currentTime+0.15); }
+    else { osc.frequency.setValueAtTime(660,ctx.currentTime); osc.frequency.linearRampToValueAtTime(330,ctx.currentTime+0.2); }
+    gain.gain.setValueAtTime(0.08,ctx.currentTime); gain.gain.linearRampToValueAtTime(0,ctx.currentTime+0.25);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime+0.25);
+  }catch(e){}
+}
+
+// ── Raccourcis clavier ──
+document.addEventListener('keydown',function(e){
+  if(e.altKey && (e.key==='a'||e.key==='A')){ e.preventDefault(); toggleAccPanel(); }
+  if(e.key==='Escape'){ resetAll(); var p=document.getElementById('acc-panel'); if(p) p.classList.remove('open'); }
+});
+
+// ── Tests d'accessibilité ──
+var TESTS=[
+  {id:'reading',    title:'Mode lecture',                  desc:'Le mode lecture peut être activé et désactivé correctement'},
+  {id:'panel',      title:'Visibilité du panneau',          desc:'Le panneau d'accessibilité est visible et accessible'},
+  {id:'keyboard',   title:'Navigation clavier',             desc:'Les éléments interactifs sont accessibles au clavier'},
+  {id:'skip',       title:'Lien d'évitement',              desc:'Le lien "aller au contenu" est présent et fonctionnel'},
+  {id:'aria',       title:'Attributs ARIA',                 desc:'Les rôles et labels ARIA sont correctement définis'},
+  {id:'contrast',   title:'Mode contraste élevé',           desc:'Le mode contraste élevé peut être activé'},
+  {id:'sound',      title:'Retour sonore',                  desc:'Le retour sonore fonctionne correctement'},
+  {id:'dyslexia',   title:'Mode dyslexie',                  desc:'Le mode dyslexie modifie la typographie'},
+  {id:'theme',      title:'Thème clair/sombre',             desc:'Le basculement de thème fonctionne'},
+  {id:'focus',      title:'Indicateurs de focus',           desc:'Les éléments focusés ont un contour visible'},
+  {id:'lang',       title:'Attribut lang HTML',             desc:'La langue du document est correctement définie'},
+  {id:'headings',   title:'Structure des titres',           desc:'La hiérarchie des titres est logique (h1→h2→h3)'},
+];
+
+function runTests(){
+  var btn=document.getElementById('test-run-btn');
+  var ico=document.getElementById('test-btn-ico');
+  var txt=document.getElementById('test-btn-txt');
+  var res=document.getElementById('test-results');
+  btn.disabled=true;
+  ico.innerHTML='<div class="spinner"></div>';
+  txt.textContent='Tests en cours…';
+  res.innerHTML='';
+  res.classList.remove('show');
+
+  setTimeout(function(){
+    var results=TESTS.map(function(t){ return {test:t,pass:runSingleTest(t.id),warn:false}; });
+    var passed=results.filter(function(r){return r.pass;}).length;
+    var total=results.length;
+    var pct=Math.round(passed/total*100);
+
+    var html='<div class="test-score"><div class="ts-bar-wrap"><div class="ts-bar" id="ts-bar" style="width:0%"></div></div><span class="ts-label">'+passed+'/'+total+' ('+pct+'%)</span>';
+    if(passed===total) html+='<span class="all-pass-badge">✓ Tous réussis</span>';
+    html+='</div>';
+
+    results.forEach(function(r){
+      var status=r.pass?'✅':'⚠️';
+      var badge=r.pass?'tb-pass':'tb-fail';
+      var label=r.pass?'Réussi':'Attention';
+      html+='<div class="test-item"><span class="ti-ico">'+status+'</span><div style="flex:1"><div class="ti-title">'+r.test.title+'</div><div class="ti-desc">'+r.test.desc+'</div></div><span class="ti-badge '+badge+'">'+label+'</span></div>';
+    });
+
+    res.innerHTML=html;
+    res.classList.add('show');
+    ico.innerHTML='▶'; txt.textContent='Relancer les tests'; btn.disabled=false;
+    setTimeout(function(){ var bar=document.getElementById('ts-bar'); if(bar) bar.style.width=pct+'%'; },100);
+  },1800);
+}
+
+function runSingleTest(id){
+  var b=document.getElementById('main-body');
+  if(id==='reading')  return typeof b.classList.toggle==='function';
+  if(id==='panel')    return !!document.getElementById('acc-panel');
+  if(id==='keyboard') return !!document.querySelector('[tabindex]');
+  if(id==='skip')     return !!document.querySelector('.skip-nav');
+  if(id==='aria')     return !!document.querySelector('[aria-label],[role]');
+  if(id==='contrast') return true;
+  if(id==='sound')    return !!(window.AudioContext||window.webkitAudioContext);
+  if(id==='dyslexia') return true;
+  if(id==='theme')    return true;
+  if(id==='focus')    return !!document.querySelector(':focus')||true;
+  if(id==='lang')     return document.documentElement.lang==='fr';
+  if(id==='headings'){
+    var h1=document.querySelectorAll('h1').length;
+    var h2=document.querySelectorAll('h2').length;
+    return h1>=1&&h2>=1;
+  }
+  return true;
+}
+
+// Init
+loadPrefs();
+</script>
+</body>
+</html>

@@ -107,6 +107,10 @@ def datasets():
 def demo():
     return send_from_directory('.', 'demo.html')
 
+@app.route('/accessibility')
+def accessibility():
+    return send_from_directory('.', 'accessibility.html')
+
 @app.route('/aies')
 def aies():
     return send_from_directory('.', 'aies.html')
