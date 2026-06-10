@@ -436,6 +436,59 @@ footer{background:#0a0518;border-top:1px solid rgba(196,181,232,.12);padding:52p
 .ft-bar{border-top:1px solid rgba(196,181,232,.1);padding:16px 0 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;font-family:"Space Mono",monospace;font-size:10px;color:var(--mu);letter-spacing:.05em}
 
 
+
+/* ═══ BOUTONS ACCESSIBILITÉ FLOTTANTS ═══ */
+.acc-float-bar{
+  position:fixed;bottom:24px;left:24px;z-index:9993;
+  display:flex;gap:8px;align-items:center
+}
+.acc-float-btn{
+  width:44px;height:44px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.15);
+  cursor:pointer;font-size:18px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .25s;backdrop-filter:blur(12px);
+  box-shadow:0 3px 14px rgba(0,0,0,.4);
+  position:relative;overflow:hidden;
+}
+.acc-float-btn::before{
+  content:'';position:absolute;inset:0;border-radius:50%;
+  opacity:0;transition:opacity .2s;
+  background:radial-gradient(circle,rgba(255,255,255,.25) 0%,transparent 70%)
+}
+.acc-float-btn:hover::before{opacity:1}
+.acc-float-btn:hover{transform:translateY(-3px) scale(1.08);box-shadow:0 6px 24px rgba(0,0,0,.5)}
+.acc-float-btn.active{border-color:rgba(255,255,255,.6)!important;box-shadow:0 0 0 3px rgba(255,255,255,.25),0 4px 20px rgba(0,0,0,.4)!important}
+
+/* Couleurs individuelles */
+#acc-reading-btn{background:linear-gradient(135deg,#4f46e5,#7c3aed);border-color:rgba(124,92,191,.5)}
+#acc-reading-btn:hover{background:linear-gradient(135deg,#5b52f0,#8b47fc)}
+#acc-reading-btn.active{background:linear-gradient(135deg,#6d68ff,#9b5fff)}
+
+#acc-dyslexia-btn{background:linear-gradient(135deg,#0891b2,#0e7490);border-color:rgba(14,116,144,.5)}
+#acc-dyslexia-btn:hover{background:linear-gradient(135deg,#06b6d4,#0891b2)}
+#acc-dyslexia-btn.active{background:linear-gradient(135deg,#22d3ee,#06b6d4)}
+
+#acc-contrast-btn{background:linear-gradient(135deg,#b45309,#92400e);border-color:rgba(180,83,9,.5)}
+#acc-contrast-btn:hover{background:linear-gradient(135deg,#d97706,#b45309)}
+#acc-contrast-btn.active{background:linear-gradient(135deg,#fbbf24,#f59e0b)}
+
+/* Tooltip */
+.acc-float-btn[title]::after{
+  content:attr(title);
+  position:absolute;bottom:54px;left:50%;transform:translateX(-50%);
+  background:rgba(10,5,30,.95);color:#fff;
+  font-size:11px;font-family:"Space Mono",monospace;letter-spacing:.03em;
+  white-space:nowrap;padding:5px 10px;border-radius:6px;
+  opacity:0;pointer-events:none;transition:opacity .2s;
+  border:1px solid rgba(196,181,232,.2)
+}
+.acc-float-btn:hover::after{opacity:1}
+
+/* Remonter le bouton Veille et Cookies pour laisser place */
+#vbtn{bottom:24px!important;left:226px!important}
+#ck-btn{bottom:24px!important;left:178px!important}
+
 /* ═══ WIDGET VEILLE IA ═══ */
 #vbtn{position:fixed;bottom:90px;left:24px;z-index:9997;width:52px;height:52px;border-radius:50%;
   background:linear-gradient(135deg,#1a3a6e,#2d6abf);
@@ -1455,6 +1508,32 @@ footer > .ft-inner{position:relative;z-index:1}
   </div>
 </div>
 
+
+<!-- BOUTONS FLOTTANTS ACCESSIBILITÉ -->
+<div class="acc-float-bar" role="group" aria-label="Options d'accessibilité">
+  <button id="acc-reading-btn" class="acc-float-btn"
+    onclick="accToggle('reading')"
+    title="Mode lecture"
+    aria-label="Activer le mode lecture"
+    aria-pressed="false">
+    📖
+  </button>
+  <button id="acc-dyslexia-btn" class="acc-float-btn"
+    onclick="accToggle('dyslexia')"
+    title="Mode dyslexie"
+    aria-label="Activer le mode dyslexie"
+    aria-pressed="false">
+    𝔸
+  </button>
+  <button id="acc-contrast-btn" class="acc-float-btn"
+    onclick="accToggle('contrast')"
+    title="Contraste élevé"
+    aria-label="Activer le contraste élevé"
+    aria-pressed="false">
+    👁
+  </button>
+</div>
+
 <!-- WIDGET VEILLE IA -->
 <button id="vbtn" onclick="vOpen()" title="Veille IA · Actualités en direct">
   📰<span class="vbtn-live"></span>
@@ -1992,6 +2071,136 @@ function xSug(btn){
   }
 })();
 
+
+
+// ════════════════════════════════════════
+// BOUTONS ACCESSIBILITÉ FLOTTANTS
+// ════════════════════════════════════════
+(function(){
+  "use strict";
+
+  var ACC_STATE = {reading:false, dyslexia:false, contrast:false};
+  var ACC_STORE_KEY = "conseilprev_acc_float";
+
+  // Charger les préférences sauvegardées
+  function loadAccState(){
+    try{
+      var s = JSON.parse(localStorage.getItem(ACC_STORE_KEY)||'{}');
+      Object.keys(ACC_STATE).forEach(function(k){ if(s[k]!==undefined) ACC_STATE[k]=s[k]; });
+    }catch(e){}
+  }
+
+  function saveAccState(){
+    try{ localStorage.setItem(ACC_STORE_KEY, JSON.stringify(ACC_STATE)); }catch(e){}
+  }
+
+  // Appliquer les classes sur body
+  function applyAccState(){
+    var body = document.body;
+    // Mode lecture
+    body.classList.toggle('acc-reading', ACC_STATE.reading);
+    // Mode dyslexie
+    body.classList.toggle('acc-dyslexia', ACC_STATE.dyslexia);
+    // Contraste élevé
+    body.classList.toggle('acc-contrast', ACC_STATE.contrast);
+
+    // Mettre à jour les boutons
+    ['reading','dyslexia','contrast'].forEach(function(mode){
+      var btn = document.getElementById('acc-'+mode+'-btn');
+      if(btn){
+        btn.classList.toggle('active', ACC_STATE[mode]);
+        btn.setAttribute('aria-pressed', ACC_STATE[mode] ? 'true' : 'false');
+      }
+    });
+
+    // Jouer le son si disponible
+    playSoundAcc(null);
+  }
+
+  function playSoundAcc(type){
+    try{
+      var ctx = new(window.AudioContext||window.webkitAudioContext)();
+      var osc = ctx.createOscillator(); var gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.frequency.setValueAtTime(type==='off'?500:600, ctx.currentTime);
+      osc.frequency.linearRampToValueAtTime(type==='off'?350:750, ctx.currentTime+0.12);
+      gain.gain.setValueAtTime(0.06, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0, ctx.currentTime+0.18);
+      osc.start(ctx.currentTime); osc.stop(ctx.currentTime+0.18);
+    }catch(e){}
+  }
+
+  // Toggle public
+  window.accToggle = function(mode){
+    ACC_STATE[mode] = !ACC_STATE[mode];
+    playSoundAcc(ACC_STATE[mode] ? 'on' : 'off');
+    applyAccState();
+    saveAccState();
+
+    // Toast
+    var labels = {reading:'Mode lecture', dyslexia:'Mode dyslexie', contrast:'Contraste élevé'};
+    var msg = labels[mode] + (ACC_STATE[mode] ? ' activé' : ' désactivé');
+    showAccToast(msg, ACC_STATE[mode]);
+  };
+
+  function showAccToast(msg, active){
+    var old = document.getElementById('acc-toast');
+    if(old) old.remove();
+    var t = document.createElement('div');
+    t.id = 'acc-toast';
+    var bg = active ? 'rgba(124,92,191,.97)' : 'rgba(22,11,48,.97)';
+    t.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(10px);'
+      +'background:'+bg+';border:1px solid rgba(196,181,232,.35);color:#fff;'
+      +'font-size:12px;font-family:"Space Mono",monospace;padding:8px 18px;border-radius:100px;'
+      +'z-index:10002;backdrop-filter:blur(12px);box-shadow:0 4px 18px rgba(0,0,0,.4);'
+      +'pointer-events:none;opacity:0;transition:opacity .2s,transform .2s;letter-spacing:.03em';
+    t.textContent = (active ? '✓ ' : '○ ') + msg;
+    document.body.appendChild(t);
+    requestAnimationFrame(function(){
+      t.style.opacity = '1';
+      t.style.transform = 'translateX(-50%) translateY(0)';
+    });
+    setTimeout(function(){ t.style.opacity='0'; t.style.transform='translateX(-50%) translateY(6px)'; }, 2000);
+    setTimeout(function(){ if(t.parentNode) t.remove(); }, 2400);
+  }
+
+  // CSS dynamique pour les modes
+  var ACC_STYLE = document.createElement('style');
+  ACC_STYLE.textContent = [
+    // Mode lecture
+    'body.acc-reading{--acc-bg:#f7f4ff;--acc-txt:#1a1230;--acc-mu:#555;background:#f7f4ff!important;color:#1a1230!important}',
+    'body.acc-reading *{transition:background .3s,color .3s}',
+    'body.acc-reading::before{display:none!important}',
+    'body.acc-reading .nav{background:rgba(247,244,255,.97)!important;border-bottom:1px solid rgba(124,92,191,.25)!important}',
+    'body.acc-reading p,body.acc-reading li{max-width:72ch;line-height:1.85!important;font-size:1.05em!important}',
+    'body.acc-reading h1,body.acc-reading h2,body.acc-reading h3{color:#2d1b6b!important}',
+    'body.acc-reading .sec{background:rgba(247,244,255,.6)!important}',
+    'body.acc-reading .card,body.acc-reading .feat-card,body.acc-reading .ck-cat{background:#fff!important;border-color:rgba(124,92,191,.2)!important;color:#1a1230!important}',
+    // Mode dyslexie
+    'body.acc-dyslexia{font-family:Arial,Helvetica,sans-serif!important;letter-spacing:.07em!important;word-spacing:.2em!important;line-height:2!important}',
+    'body.acc-dyslexia p,body.acc-dyslexia li,body.acc-dyslexia span{font-size:1.05em!important}',
+    'body.acc-dyslexia a{text-decoration:underline!important;text-underline-offset:3px!important}',
+    'body.acc-dyslexia h1,body.acc-dyslexia h2,body.acc-dyslexia h3{letter-spacing:.04em!important;line-height:1.4!important}',
+    // Contraste élevé
+    'body.acc-contrast{background:#000!important;color:#fff!important}',
+    'body.acc-contrast::before{opacity:.03!important}',
+    'body.acc-contrast .nav{background:#000!important;border-bottom:2px solid #ff0!important}',
+    'body.acc-contrast .card,body.acc-contrast .feat-card,body.acc-contrast .ck-cat{background:#111!important;border:2px solid #fff!important;color:#fff!important}',
+    'body.acc-contrast a{color:#ff0!important;text-decoration:underline!important}',
+    'body.acc-contrast .hero{background:#000!important}',
+    'body.acc-contrast h1,body.acc-contrast h2,body.acc-contrast h3{color:#ff0!important}',
+    'body.acc-contrast .acc-float-btn{border:3px solid #fff!important}',
+    'body.acc-contrast button{border:2px solid #fff!important}',
+  ].join('');
+  document.head.appendChild(ACC_STYLE);
+
+  // Init
+  document.addEventListener('DOMContentLoaded', function(){
+    loadAccState();
+    applyAccState();
+  });
+
+})();
 
 // ════════════════════════════════════════
 // SYSTÈME COOKIES RGPD — CONSEILPREV
