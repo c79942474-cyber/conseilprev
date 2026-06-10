@@ -452,6 +452,7 @@ PAGES = {
     '/mentions-legales': 'mentions-legales.html',
     '/protection-donnees': 'protection-donnees.html',
     '/cgv':               'cgv.html',
+    '/confidentialite':   'confidentialite.html',
     '/donnees':       'donnees.html',
     '/aies':          'aies.html',
     '/demo':          'demo.html',

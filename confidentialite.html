@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Politique de Confidentialité — CONSEILPREV</title>
+<meta name="description" content="Politique de confidentialité CONSEILPREV — collecte, utilisation et protection de vos données personnelles. Conforme RGPD et AI Act.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--pm:#8b5cf6;--pl:#b48af7;--pp:#d4baff;--pf:#d946ef;--teal:#5eead4;--wh:#f8f4ff;--mu:rgba(212,186,255,.52);--bdr:rgba(180,138,247,.18)}
+html{scroll-behavior:smooth}
+body{font-family:"DM Sans",sans-serif;background:linear-gradient(160deg,#0d0825,#110a2e,#0e0820);color:var(--wh);min-height:100vh}
+body::before{content:"";position:fixed;inset:0;background-image:url("/hero-bg.jpg");background-size:cover;background-position:center 55%;background-attachment:fixed;opacity:.35;z-index:-2;pointer-events:none}
+#bc{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.bl{position:absolute;border-radius:50%;filter:blur(45px);mix-blend-mode:screen}
+#b1{width:380px;height:380px;background:radial-gradient(circle,#7c3aed,#4f46e5 40%,transparent 70%);opacity:.38;animation:bm 22s ease-in-out infinite alternate;top:5%;left:5%}
+#b2{width:320px;height:320px;background:radial-gradient(circle,#db2777,#be185d 35%,transparent 75%);opacity:.30;animation:bm2 28s ease-in-out infinite alternate;bottom:10%;right:5%}
+@keyframes bm{0%{transform:translate(0,0)}100%{transform:translate(80px,-60px)}}
+@keyframes bm2{0%{transform:translate(0,0)}100%{transform:translate(-60px,80px)}}
+nav{position:sticky;top:0;z-index:100;background:rgba(10,6,32,.93);backdrop-filter:blur(24px);border-bottom:1px solid var(--bdr);padding:13px 28px;display:flex;align-items:center;gap:12px}
+.nl{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:700;text-decoration:none;color:var(--wh);margin-right:auto}.nl span{color:var(--pl)}
+.nb{font-size:12px;color:var(--mu);text-decoration:none;font-family:"Space Mono",monospace;transition:color .2s}.nb:hover{color:var(--wh)}
+/* HERO */
+.hero{text-align:center;padding:40px 20px 24px;position:relative}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(139,92,246,.18),transparent 65%);pointer-events:none}
+.hbadge{display:inline-flex;align-items:center;gap:8px;background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);border-radius:100px;padding:5px 16px;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.12em;color:var(--pp);margin-bottom:16px}
+.bdot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:blink 2s ease-in-out infinite}
+h1{font-family:"Cormorant Garamond",serif;font-size:clamp(26px,4.5vw,46px);font-weight:700;margin-bottom:10px;position:relative}
+h1 em{font-style:italic;background:linear-gradient(135deg,#818cf8,#c084fc,#e879f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:13px;color:var(--mu);line-height:1.75;max-width:520px;margin:0 auto;position:relative}
+.con{max-width:800px;margin:0 auto;padding:0 20px 60px}
+/* TOC */
+.toc{background:rgba(139,92,246,.08);border:1px solid rgba(180,138,247,.2);border-radius:12px;padding:18px 22px;margin-bottom:32px}
+.toc-title{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--pp);margin-bottom:12px}
+.toc-list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:4px 16px}
+@media(max-width:500px){.toc-list{grid-template-columns:1fr}}
+.toc-list a{font-size:12px;color:var(--mu);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s;font-family:"Space Mono",monospace;padding:3px 0}
+.toc-list a::before{content:"›";color:var(--pm);font-size:13px;flex-shrink:0}
+.toc-list a:hover{color:var(--wh)}
+/* Sections */
+.pc-section{margin-bottom:32px;padding-bottom:32px;border-bottom:1px solid rgba(180,138,247,.1)}
+.pc-section:last-child{border-bottom:none}
+.pc-h{font-family:"Cormorant Garamond",serif;font-size:20px;font-weight:700;color:var(--wh);margin-bottom:14px;display:flex;align-items:center;gap:10px;scroll-margin-top:80px}
+.pc-h-num{font-family:"Space Mono",monospace;font-size:11px;background:linear-gradient(135deg,var(--pm),var(--pf));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-weight:700}
+.pc-h2{font-size:14px;font-weight:700;color:var(--pp);margin:16px 0 8px;display:flex;align-items:center;gap:8px}
+.pc-h2::before{content:"";width:3px;height:13px;background:linear-gradient(180deg,var(--pm),var(--pf));border-radius:2px;flex-shrink:0}
+.pc-p{font-size:13px;color:rgba(212,186,255,.78);line-height:1.85;margin-bottom:10px}
+.pc-p strong{color:var(--pp)}
+.pc-p a{color:var(--teal);text-decoration:none}.pc-p a:hover{text-decoration:underline}
+.pc-list{list-style:none;display:flex;flex-direction:column;gap:5px;margin:8px 0 12px}
+.pc-list li{font-size:13px;color:rgba(212,186,255,.72);padding-left:18px;position:relative;line-height:1.75}
+.pc-list li::before{content:"›";position:absolute;left:4px;color:var(--pm);font-weight:600}
+.pc-list li strong{color:var(--pp)}
+/* Tableau cookies */
+.cookie-table{width:100%;border-collapse:collapse;margin:14px 0;border-radius:10px;overflow:hidden;font-size:12px}
+.cookie-table th{background:rgba(139,92,246,.2);padding:9px 12px;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--pp);text-align:left}
+.cookie-table td{padding:9px 12px;color:rgba(212,186,255,.72);border-bottom:1px solid rgba(180,138,247,.08);line-height:1.5}
+.cookie-table tr:last-child td{border-bottom:none}
+.cookie-table tr:hover td{background:rgba(139,92,246,.04)}
+.ck-badge{font-family:"Space Mono",monospace;font-size:9px;padding:2px 7px;border-radius:100px;white-space:nowrap}
+.ck-req{background:rgba(34,197,94,.12);color:#4ade80;border:1px solid rgba(34,197,94,.25)}
+.ck-opt{background:rgba(217,70,239,.12);color:#f0abfc;border:1px solid rgba(217,70,239,.25)}
+/* Alert */
+.alert{border-radius:10px;padding:13px 17px;margin:13px 0;display:flex;gap:12px;align-items:flex-start}
+.al-info{background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.2)}
+.al-warn{background:rgba(234,179,8,.07);border:1px solid rgba(234,179,8,.2)}
+.al-ok{background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2)}
+.alert-ico{font-size:16px;flex-shrink:0;margin-top:1px}
+.alert-txt{font-size:12px;line-height:1.7}
+.al-info .alert-txt{color:rgba(147,197,253,.85)}
+.al-warn .alert-txt{color:rgba(252,211,77,.85)}
+.al-ok .alert-txt{color:rgba(74,222,128,.85)}
+.alert-txt strong{color:inherit}
+.alert-txt a{text-decoration:underline}
+/* Contact card */
+.contact-card{background:linear-gradient(135deg,rgba(139,92,246,.12),rgba(217,70,239,.08));border:1px solid rgba(180,138,247,.25);border-radius:12px;padding:18px 22px}
+.cc-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:13px;color:var(--mu)}
+.cc-row:last-child{border-bottom:none}
+.cc-row strong{color:var(--pp);min-width:160px;font-size:11px;font-family:"Space Mono",monospace}
+.cc-row a{color:var(--teal);text-decoration:none}
+/* Dates */
+.dates-bar{background:rgba(255,255,255,.03);border-radius:8px;padding:12px 16px;margin:24px 0 0;font-family:"Space Mono",monospace;font-size:10px;color:var(--mu);display:flex;gap:20px;flex-wrap:wrap}
+.dates-bar span strong{color:var(--pp)}
+/* Footer */
+.ft-mini{background:rgba(5,2,20,.92);border-top:1px solid var(--bdr);padding:14px 24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:"Space Mono",monospace;font-size:10px;color:var(--mu)}
+.ft-mini a{color:var(--teal);text-decoration:none}
+body{-webkit-user-select:none;user-select:none}
+input,textarea{-webkit-user-select:text!important;user-select:text!important}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+</style>
+</head>
+<body>
+<div id="bc" aria-hidden="true"><div class="bl" id="b1"></div><div class="bl" id="b2"></div></div>
+
+<nav>
+  <a href="/" class="nl">CONSEIL<span>PREV</span></a>
+  <a href="/" class="nb">← Retour au site</a>
+</nav>
+
+<div class="hero">
+  <div class="hbadge"><span class="bdot"></span> RGPD · Confidentialité · AI Act</div>
+  <h1>Politique de<br><em>Confidentialité</em></h1>
+  <p class="hero-sub">Nous nous engageons à protéger votre vie privée et à respecter les réglementations applicables, notamment le RGPD et l'AI Act européen.</p>
+</div>
+
+<div class="con">
+
+  <!-- TOC -->
+  <nav class="toc" aria-label="Sommaire">
+    <div class="toc-title">Sommaire</div>
+    <ul class="toc-list">
+      <li><a href="#intro">1. Introduction</a></li>
+      <li><a href="#responsable">2. Responsable du Traitement</a></li>
+      <li><a href="#donnees">3. Données Collectées</a></li>
+      <li><a href="#finalites">4. Finalités du Traitement</a></li>
+      <li><a href="#base-legale">5. Base Légale du Traitement</a></li>
+      <li><a href="#recaptcha">6. Protection par reCAPTCHA</a></li>
+      <li><a href="#cookies">7. Cookies & Technologies Similaires</a></li>
+      <li><a href="#partage">8. Partage des Données</a></li>
+      <li><a href="#conservation">9. Conservation des Données</a></li>
+      <li><a href="#droits">10. Vos Droits</a></li>
+      <li><a href="#transferts">11. Transferts Internationaux</a></li>
+      <li><a href="#ia-act">12. IA Act & Systèmes Automatisés</a></li>
+      <li><a href="#securite">13. Sécurité</a></li>
+      <li><a href="#contact">14. Nous Contacter</a></li>
+    </ul>
+  </nav>
+
+  <!-- 1. INTRODUCTION -->
+  <section class="pc-section" id="intro">
+    <h2 class="pc-h"><span class="pc-h-num">1.</span> Introduction</h2>
+    <p class="pc-p">La présente politique de confidentialité décrit comment nous collectons, utilisons, stockons et protégeons vos données personnelles lorsque vous utilisez notre plateforme de conformité réglementaire pour l'IA.</p>
+    <p class="pc-p">Nous nous engageons à protéger votre vie privée et à respecter les réglementations applicables, notamment le <strong>Règlement Général sur la Protection des Données (RGPD)</strong> et l'AI Act européen.</p>
+    <div class="alert al-ok">
+      <span class="alert-ico">🔒</span>
+      <div class="alert-txt">Cette politique s'applique à <strong>conseilprev.onrender.com</strong>, à la plateforme <strong>AIES (ersia.org)</strong> et à toutes nos communications. Elle est conforme au <strong>RGPD (UE 2016/679)</strong>, à la <strong>loi Informatique et Libertés</strong> et aux recommandations de la <strong>CNIL</strong>.</div>
+    </div>
+  </section>
+
+  <!-- 2. RESPONSABLE -->
+  <section class="pc-section" id="responsable">
+    <h2 class="pc-h"><span class="pc-h-num">2.</span> Responsable du Traitement</h2>
+    <div class="contact-card">
+      <div class="cc-row"><strong>Nom :</strong> CONSEILPREV — ERSIA IA Management</div>
+      <div class="cc-row"><strong>Email principal :</strong> <a href="mailto:christophe.cerf@outlook.com">christophe.cerf@outlook.com</a></div>
+      <div class="cc-row"><strong>Email alternatif :</strong> <a href="mailto:c79942474@gmail.com">c79942474@gmail.com</a></div>
+      <div class="cc-row"><strong>Téléphone :</strong> <a href="tel:+33660692145">+33 6 60 69 21 45</a></div>
+      <div class="cc-row"><strong>Siège social :</strong> 19 rue Auguste Chabrières, 75015 Paris</div>
+      <div class="cc-row"><strong>RCS Paris :</strong> 494 530 157</div>
+    </div>
+    <p class="pc-p" style="margin-top:12px">Pour toutes questions concernant vos données personnelles, vous pouvez nous contacter aux adresses email ci-dessus.</p>
+  </section>
+
+  <!-- 3. DONNÉES COLLECTÉES -->
+  <section class="pc-section" id="donnees">
+    <h2 class="pc-h"><span class="pc-h-num">3.</span> Données Collectées</h2>
+
+    <h3 class="pc-h2">3.1 Données d'Identification</h3>
+    <ul class="pc-list">
+      <li>Nom et prénom</li>
+      <li>Adresse email professionnelle</li>
+      <li>Numéro de téléphone</li>
+      <li>Nom de l'entreprise et poste occupé</li>
+      <li>Secteur d'activité et taille de l'organisation</li>
+    </ul>
+
+    <h3 class="pc-h2">3.2 Données de Connexion</h3>
+    <ul class="pc-list">
+      <li>Identifiants de connexion à la plateforme AIES</li>
+      <li>Mots de passe (chiffrés — non accessibles en clair)</li>
+      <li>Adresse IP et géolocalisation approximative</li>
+      <li>Logs de connexion (horodatage, durée)</li>
+      <li>Type de navigateur et système d'exploitation</li>
+    </ul>
+
+    <h3 class="pc-h2">3.3 Données d'Utilisation</h3>
+    <ul class="pc-list">
+      <li>Historique des évaluations de risques IA réalisées</li>
+      <li>Projets créés et paramètres configurés</li>
+      <li>Plans d'action générés et leur progression</li>
+      <li>Documents téléchargés et générés via AIES</li>
+      <li>Préférences d'interface et paramétrages</li>
+    </ul>
+
+    <h3 class="pc-h2">3.4 Données Techniques</h3>
+    <ul class="pc-list">
+      <li>Cookies et technologies similaires (voir section 7)</li>
+      <li>Données de performance de l'application</li>
+      <li>Journaux d'erreurs et de débogage (anonymisés)</li>
+      <li>Données de sécurité (tentatives d'accès, anti-DDoS)</li>
+    </ul>
+  </section>
+
+  <!-- 4. FINALITÉS -->
+  <section class="pc-section" id="finalites">
+    <h2 class="pc-h"><span class="pc-h-num">4.</span> Finalités du Traitement</h2>
+    <p class="pc-p">Nous utilisons vos données personnelles pour :</p>
+    <ul class="pc-list">
+      <li>Gérer votre compte utilisateur et votre authentification</li>
+      <li>Fournir les services de la plateforme (évaluations, analyses, rapports)</li>
+      <li>Personnaliser votre expérience utilisateur et adapter les recommandations</li>
+      <li>Communiquer avec vous concernant votre compte et nos services</li>
+      <li>Améliorer nos services et dépanner les incidents techniques</li>
+      <li>Assurer la sécurité et prévenir la fraude et les intrusions</li>
+      <li>Respecter nos obligations légales et réglementaires (RGPD, AI Act, NIS2)</li>
+      <li>Envoyer des alertes et notifications relatives à la conformité réglementaire</li>
+      <li>Réaliser des analyses statistiques anonymisées pour améliorer nos services</li>
+    </ul>
+  </section>
+
+  <!-- 5. BASE LÉGALE -->
+  <section class="pc-section" id="base-legale">
+    <h2 class="pc-h"><span class="pc-h-num">5.</span> Base Légale du Traitement</h2>
+    <p class="pc-p">Le traitement de vos données repose sur les bases légales suivantes (Art. 6 RGPD) :</p>
+    <ul class="pc-list">
+      <li><strong>Exécution du contrat</strong> (Art. 6.1.b) : fourniture des services souscrits et gestion de votre compte</li>
+      <li><strong>Obligation légale</strong> (Art. 6.1.c) : respect des réglementations en vigueur (fiscalité, comptabilité)</li>
+      <li><strong>Intérêt légitime</strong> (Art. 6.1.f) : amélioration de nos services, sécurité, prévention de la fraude</li>
+      <li><strong>Consentement</strong> (Art. 6.1.a) : communications marketing, newsletters, cookies non essentiels</li>
+    </ul>
+    <div class="alert al-info">
+      <span class="alert-ico">ℹ️</span>
+      <div class="alert-txt">Vous pouvez retirer votre consentement à tout moment sans que cela n'affecte la licéité des traitements effectués avant ce retrait.</div>
+    </div>
+  </section>
+
+  <!-- 6. RECAPTCHA -->
+  <section class="pc-section" id="recaptcha">
+    <h2 class="pc-h"><span class="pc-h-num">6.</span> Protection par reCAPTCHA</h2>
+    <p class="pc-p">Notre site utilise reCAPTCHA de Google pour protéger les formulaires contre le spam et les bots. L'utilisation de reCAPTCHA est soumise aux <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Règles de confidentialité</a> et aux <a href="https://policies.google.com/terms" target="_blank" rel="noopener">Conditions d'utilisation</a> de Google.</p>
+    <p class="pc-p">reCAPTCHA collecte des informations matérielles et logicielles, telles que les données sur les appareils et les applications, et envoie ces données à Google pour analyse.</p>
+    <div class="alert al-warn">
+      <span class="alert-ico">⚠️</span>
+      <div class="alert-txt">Ces données sont traitées par Google LLC (USA) dans le cadre de garanties appropriées (Clauses Contractuelles Types). Vous pouvez configurer vos préférences dans les <strong>paramètres de confidentialité Google</strong>.</div>
+    </div>
+  </section>
+
+  <!-- 7. COOKIES -->
+  <section class="pc-section" id="cookies">
+    <h2 class="pc-h"><span class="pc-h-num">7.</span> Cookies & Technologies Similaires</h2>
+    <p class="pc-p">Nous utilisons les types de cookies suivants :</p>
+    <table class="cookie-table">
+      <thead>
+        <tr><th>Type</th><th>Description</th><th>Durée</th><th>Consentement</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Nécessaires</strong></td>
+          <td>Session, authentification, sécurité, préférences langue/accessibilité</td>
+          <td>Session / 13 mois</td>
+          <td><span class="ck-badge ck-req">Requis</span></td>
+        </tr>
+        <tr>
+          <td><strong>Fonctionnels</strong></td>
+          <td>Mémorisation des préférences d'affichage, mode sombre/clair</td>
+          <td>13 mois</td>
+          <td><span class="ck-badge ck-opt">Optionnel</span></td>
+        </tr>
+        <tr>
+          <td><strong>Analytiques</strong></td>
+          <td>Mesure d'audience anonymisée (Google Analytics si activé)</td>
+          <td>13 mois</td>
+          <td><span class="ck-badge ck-opt">Optionnel</span></td>
+        </tr>
+        <tr>
+          <td><strong>Marketing</strong></td>
+          <td>Publicité ciblée, remarketing (désactivé par défaut)</td>
+          <td>13 mois</td>
+          <td><span class="ck-badge ck-opt">Optionnel</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="pc-h2">7.1 Cookies Essentiels</h3>
+    <p class="pc-p">Nécessaires au fonctionnement du site (authentification, sécurité, préférences de session). Ces cookies ne peuvent pas être désactivés sans altérer le fonctionnement du site.</p>
+
+    <h3 class="pc-h2">7.2 Cookies Analytiques</h3>
+    <p class="pc-p">Nous permettent de comprendre comment vous utilisez le site pour améliorer nos services. Activés uniquement avec votre consentement.</p>
+
+    <h3 class="pc-h2">7.3 Gestion des Cookies</h3>
+    <p class="pc-p">Vous pouvez gérer vos préférences de cookies via le bouton <strong>🍪 Cookies</strong> en bas à gauche de chaque page, ou via les paramètres de votre navigateur. Notez que la désactivation de certains cookies peut affecter la fonctionnalité du site.</p>
+  </section>
+
+  <!-- 8. PARTAGE -->
+  <section class="pc-section" id="partage">
+    <h2 class="pc-h"><span class="pc-h-num">8.</span> Partage des Données</h2>
+    <p class="pc-p">Nous ne vendons jamais vos données personnelles. Nous pouvons partager vos données avec :</p>
+    <ul class="pc-list">
+      <li><strong>Prestataires de services</strong> : hébergement (Render), infrastructure cloud (Mistral AI pour le chat)</li>
+      <li><strong>Outils tiers</strong> : pour les fonctionnalités du site et la gestion du contenu</li>
+      <li><strong>Autorités légales</strong> : en cas d'obligation légale ou de demande judiciaire</li>
+      <li><strong>Partenaires commerciaux</strong> : uniquement avec votre consentement explicite préalable</li>
+    </ul>
+    <p class="pc-p">Tout transfert à des sous-traitants est encadré par un contrat conforme à l'Art. 28 RGPD garantissant un niveau de protection équivalent.</p>
+  </section>
+
+  <!-- 9. CONSERVATION -->
+  <section class="pc-section" id="conservation">
+    <h2 class="pc-h"><span class="pc-h-num">9.</span> Conservation des Données</h2>
+    <ul class="pc-list">
+      <li><strong>Données de compte actif :</strong> durée de la relation contractuelle</li>
+      <li><strong>Données de compte résilié :</strong> 3 ans après clôture (sauf obligation légale)</li>
+      <li><strong>Données de prospect :</strong> 3 ans à compter du dernier contact</li>
+      <li><strong>Cookies :</strong> 13 mois maximum (recommandation CNIL)</li>
+      <li><strong>Logs de sécurité :</strong> 12 mois (anti-DDoS, intrusion)</li>
+      <li><strong>Données comptables :</strong> 10 ans (obligation légale)</li>
+      <li><strong>Chat IA :</strong> session uniquement — non persistées sur nos serveurs</li>
+    </ul>
+  </section>
+
+  <!-- 10. DROITS -->
+  <section class="pc-section" id="droits">
+    <h2 class="pc-h"><span class="pc-h-num">10.</span> Vos Droits</h2>
+    <p class="pc-p">Conformément aux articles 15 à 22 du RGPD, vous disposez des droits suivants :</p>
+    <ul class="pc-list">
+      <li><strong>Accès (Art. 15) :</strong> obtenir une copie de vos données et des informations sur leur traitement</li>
+      <li><strong>Rectification (Art. 16) :</strong> corriger vos données inexactes ou incomplètes</li>
+      <li><strong>Effacement (Art. 17) :</strong> demander la suppression de vos données (droit à l'oubli)</li>
+      <li><strong>Limitation (Art. 18) :</strong> suspendre temporairement le traitement</li>
+      <li><strong>Portabilité (Art. 20) :</strong> recevoir vos données dans un format structuré lisible par machine</li>
+      <li><strong>Opposition (Art. 21) :</strong> vous opposer au traitement, notamment à des fins commerciales</li>
+      <li><strong>Décisions automatisées (Art. 22) :</strong> ne pas faire l'objet de décisions entièrement automatisées</li>
+    </ul>
+    <div class="alert al-ok">
+      <span class="alert-ico">⚖️</span>
+      <div class="alert-txt">Pour exercer vos droits : <strong><a href="mailto:christophe.cerf@outlook.com">christophe.cerf@outlook.com</a></strong> — Réponse sous <strong>30 jours</strong>. En cas de litige : <strong><a href="https://www.cnil.fr/fr/plaintes" target="_blank" rel="noopener">CNIL plaintes →</a></strong></div>
+    </div>
+  </section>
+
+  <!-- 11. TRANSFERTS -->
+  <section class="pc-section" id="transferts">
+    <h2 class="pc-h"><span class="pc-h-num">11.</span> Transferts Internationaux</h2>
+    <p class="pc-p">Certains de nos prestataires sont établis hors UE. Ces transferts s'effectuent dans le respect du chapitre V du RGPD :</p>
+    <ul class="pc-list">
+      <li><strong>Render (USA) :</strong> Clauses Contractuelles Types (CCT) approuvées par la Commission européenne</li>
+      <li><strong>Mistral AI (France/UE) :</strong> traitement intégralement en Europe — conformité RGPD native</li>
+      <li><strong>Google (reCAPTCHA, Fonts) :</strong> CCT et Privacy Shield successeur (DPF)</li>
+      <li><strong>GitHub/Microsoft (code) :</strong> CCT — Microsoft Ireland Operations Ltd</li>
+    </ul>
+  </section>
+
+  <!-- 12. IA ACT -->
+  <section class="pc-section" id="ia-act">
+    <h2 class="pc-h"><span class="pc-h-num">12.</span> IA Act & Systèmes Automatisés</h2>
+    <p class="pc-p">Notre plateforme utilise des systèmes d'intelligence artificielle (notamment Mistral AI) pour fournir des recommandations de conformité. Conformément à l'<strong>AI Act européen</strong> :</p>
+    <ul class="pc-list">
+      <li>Notre assistant IA est classé <strong>risque limité</strong> (obligation de transparence)</li>
+      <li>Vous êtes informé que vous interagissez avec un système IA</li>
+      <li>Aucune décision juridiquement contraignante n'est prise automatiquement sans supervision humaine</li>
+      <li>Les recommandations de conformité générées par l'IA sont indicatives et doivent être validées par un expert</li>
+      <li>Documentation technique disponible sur demande (Art. 11 AI Act)</li>
+    </ul>
+    <div class="alert al-info">
+      <span class="alert-ico">🤖</span>
+      <div class="alert-txt">Conformément à l'Art. 22 RGPD, vous disposez du droit de ne pas faire l'objet d'une décision fondée uniquement sur un traitement automatisé. Notre équipe d'experts reste disponible pour toute décision significative.</div>
+    </div>
+  </section>
+
+  <!-- 13. SÉCURITÉ -->
+  <section class="pc-section" id="securite">
+    <h2 class="pc-h"><span class="pc-h-num">13.</span> Sécurité</h2>
+    <p class="pc-p">Nous mettons en œuvre des mesures techniques et organisationnelles appropriées (Art. 32 RGPD) :</p>
+    <ul class="pc-list">
+      <li><strong>Chiffrement :</strong> HTTPS/TLS 1.3 pour toutes les communications</li>
+      <li><strong>Mots de passe :</strong> hachage sécurisé (bcrypt) — jamais stockés en clair</li>
+      <li><strong>Anti-DDoS :</strong> rate limiting, blocage IP, honeypots</li>
+      <li><strong>Anti-scraping :</strong> filtrage des bots malveillants (35+ signatures)</li>
+      <li><strong>Headers sécurité :</strong> CSP, HSTS, X-Frame-Options, X-Content-Type-Options</li>
+      <li><strong>Contrôle d'accès :</strong> accès aux données limité au personnel autorisé</li>
+      <li><strong>Notification violations :</strong> CNIL dans les 72h, personnes concernées sans délai (Art. 33-34)</li>
+    </ul>
+  </section>
+
+  <!-- 14. CONTACT -->
+  <section class="pc-section" id="contact">
+    <h2 class="pc-h"><span class="pc-h-num">14.</span> Nous Contacter</h2>
+    <div class="contact-card">
+      <div class="cc-row"><strong>DPO :</strong> Monsieur CERF Christophe</div>
+      <div class="cc-row"><strong>Email :</strong> <a href="mailto:christophe.cerf@outlook.com">christophe.cerf@outlook.com</a></div>
+      <div class="cc-row"><strong>Email alt. :</strong> <a href="mailto:c79942474@gmail.com">c79942474@gmail.com</a></div>
+      <div class="cc-row"><strong>Téléphone :</strong> <a href="tel:+33660692145">+33 6 60 69 21 45</a></div>
+      <div class="cc-row"><strong>Adresse :</strong> 19 rue Auguste Chabrières, 75015 Paris</div>
+      <div class="cc-row"><strong>Délai légal :</strong> 30 jours calendaires</div>
+      <div class="cc-row"><strong>Autorité de contrôle :</strong> <a href="https://www.cnil.fr/fr/plaintes" target="_blank" rel="noopener">CNIL — cnil.fr/plaintes</a></div>
+    </div>
+  </section>
+
+  <div class="dates-bar">
+    <span><strong>Version :</strong> 2.1</span>
+    <span><strong>En vigueur depuis :</strong> 1er Janvier 2025</span>
+    <span><strong>Dernière mise à jour :</strong> 10 Juin 2026</span>
+    <span><strong>Prochaine révision :</strong> Juin 2027</span>
+  </div>
+
+</div>
+
+<div class="ft-mini">
+  <span>© 2025 CONSEILPREV · Politique de confidentialité · <a href="/mentions-legales">Mentions légales</a> · <a href="/cgv">CGV</a> · <a href="/protection-donnees">Données personnelles</a></span>
+  <a href="/">← Retour au site</a>
+</div>
+
+<script>
+document.addEventListener("contextmenu",function(e){e.preventDefault();});
+document.addEventListener("keydown",function(e){if(e.key==="F12"||(e.ctrlKey&&["u","s"].includes(e.key.toLowerCase())))e.preventDefault();});
+</script>
+</body>
+</html>
