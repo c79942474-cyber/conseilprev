@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Conditions Générales de Vente — CONSEILPREV</title>
+<meta name="description" content="CGV CONSEILPREV — Conditions générales de vente des services IA Act, RGPD, cybersécurité et plateforme AIES. Droit français.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0620;--pm:#8b5cf6;--pl:#b48af7;--pp:#d4baff;--pf:#d946ef;--teal:#5eead4;--wh:#f8f4ff;--mu:rgba(212,186,255,.52);--bdr:rgba(180,138,247,.18)}
+html{scroll-behavior:smooth}
+body{font-family:"DM Sans",sans-serif;background:linear-gradient(160deg,#0d0825,#110a2e,#0e0820);color:var(--wh);min-height:100vh}
+body::before{content:"";position:fixed;inset:0;background-image:url("/hero-bg.jpg");background-size:cover;background-position:center 55%;background-attachment:fixed;opacity:.35;z-index:-2;pointer-events:none}
+#bc{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.bl{position:absolute;border-radius:50%;filter:blur(45px);mix-blend-mode:screen}
+#b1{width:380px;height:380px;background:radial-gradient(circle,#7c3aed,#4f46e5 40%,transparent 70%);opacity:.38;animation:bm 22s ease-in-out infinite alternate;top:5%;left:5%}
+#b2{width:320px;height:320px;background:radial-gradient(circle,#db2777,#be185d 35%,transparent 75%);opacity:.30;animation:bm2 28s ease-in-out infinite alternate;bottom:10%;right:5%}
+@keyframes bm{0%{transform:translate(0,0)}100%{transform:translate(80px,-60px)}}
+@keyframes bm2{0%{transform:translate(0,0)}100%{transform:translate(-60px,80px)}}
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(10,6,32,.93);backdrop-filter:blur(24px);border-bottom:1px solid var(--bdr);padding:13px 28px;display:flex;align-items:center;gap:12px}
+.nl{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:700;text-decoration:none;color:var(--wh);margin-right:auto}.nl span{color:var(--pl)}
+.nb{font-size:12px;color:var(--mu);text-decoration:none;font-family:"Space Mono",monospace;transition:color .2s}.nb:hover{color:var(--wh)}
+/* HERO */
+.hero{text-align:center;padding:40px 20px 24px;position:relative}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(139,92,246,.18),transparent 65%);pointer-events:none}
+.hbadge{display:inline-flex;align-items:center;gap:8px;background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);border-radius:100px;padding:5px 16px;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.12em;color:var(--pp);margin-bottom:16px}
+.bdot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:blink 2s ease-in-out infinite}
+h1{font-family:"Cormorant Garamond",serif;font-size:clamp(26px,4.5vw,46px);font-weight:700;margin-bottom:10px;position:relative}
+h1 em{font-style:italic;background:linear-gradient(135deg,#818cf8,#c084fc,#e879f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:13px;color:var(--mu);line-height:1.75;max-width:500px;margin:0 auto;position:relative}
+/* LAYOUT */
+.con{max-width:800px;margin:0 auto;padding:0 20px 60px}
+/* TABLE DES MATIÈRES */
+.toc{background:rgba(139,92,246,.08);border:1px solid rgba(180,138,247,.2);border-radius:12px;padding:18px 22px;margin-bottom:32px}
+.toc-title{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--pp);margin-bottom:12px}
+.toc-list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:4px 16px}
+@media(max-width:500px){.toc-list{grid-template-columns:1fr}}
+.toc-list a{font-size:12px;color:var(--mu);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s;font-family:"Space Mono",monospace;padding:3px 0}
+.toc-list a::before{content:"›";color:var(--pm);font-size:13px;flex-shrink:0}
+.toc-list a:hover{color:var(--wh)}
+/* Sections */
+.cgv-section{margin-bottom:32px;padding-bottom:32px;border-bottom:1px solid rgba(180,138,247,.1)}
+.cgv-section:last-child{border-bottom:none}
+.cgv-h{font-family:"Cormorant Garamond",serif;font-size:20px;font-weight:700;color:var(--wh);margin-bottom:14px;display:flex;align-items:center;gap:10px;scroll-margin-top:80px}
+.cgv-h-num{font-family:"Space Mono",monospace;font-size:11px;background:linear-gradient(135deg,var(--pm),var(--pf));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-weight:700}
+.cgv-h2{font-size:14px;font-weight:700;color:var(--pp);margin:16px 0 8px;display:flex;align-items:center;gap:8px}
+.cgv-h2::before{content:"";width:3px;height:13px;background:linear-gradient(180deg,var(--pm),var(--pf));border-radius:2px;flex-shrink:0}
+.cgv-p{font-size:13px;color:rgba(212,186,255,.78);line-height:1.85;margin-bottom:10px}
+.cgv-p strong{color:var(--pp)}
+.cgv-p a{color:var(--teal);text-decoration:none}.cgv-p a:hover{text-decoration:underline}
+.cgv-list{list-style:none;display:flex;flex-direction:column;gap:5px;margin:8px 0 12px}
+.cgv-list li{font-size:13px;color:rgba(212,186,255,.72);padding-left:18px;position:relative;line-height:1.75}
+.cgv-list li::before{content:"›";position:absolute;left:4px;color:var(--pm);font-weight:600}
+.cgv-list li strong{color:var(--pp)}
+/* Tableau tarifs */
+.price-table{width:100%;border-collapse:collapse;margin:14px 0;border-radius:10px;overflow:hidden}
+.price-table th{background:rgba(139,92,246,.2);padding:10px 14px;font-size:11px;font-family:"Space Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--pp);text-align:left}
+.price-table td{padding:10px 14px;font-size:13px;color:rgba(212,186,255,.78);border-bottom:1px solid rgba(180,138,247,.08)}
+.price-table tr:last-child td{border-bottom:none}
+.price-table tr:hover td{background:rgba(139,92,246,.05)}
+.price-badge{font-family:"Space Mono",monospace;font-size:9px;padding:2px 8px;border-radius:100px}
+.pb-free{background:rgba(34,197,94,.12);color:#4ade80;border:1px solid rgba(34,197,94,.25)}
+.pb-pro{background:rgba(139,92,246,.2);color:var(--pl);border:1px solid rgba(139,92,246,.3)}
+.pb-ent{background:rgba(217,70,239,.15);color:#f0abfc;border:1px solid rgba(217,70,239,.25)}
+/* Alert box */
+.alert{border-radius:10px;padding:14px 18px;margin:14px 0;display:flex;gap:12px;align-items:flex-start}
+.alert-info{background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.2)}
+.alert-warn{background:rgba(234,179,8,.07);border:1px solid rgba(234,179,8,.2)}
+.alert-ok{background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2)}
+.alert-ico{font-size:16px;flex-shrink:0;margin-top:1px}
+.alert-txt{font-size:12px;line-height:1.7}
+.alert-info .alert-txt{color:rgba(147,197,253,.85)}
+.alert-warn .alert-txt{color:rgba(252,211,77,.85)}
+.alert-ok .alert-txt{color:rgba(74,222,128,.85)}
+.alert-txt strong{color:inherit}
+.alert-txt a{text-decoration:none;text-decoration:underline}
+/* Dates */
+.dates-bar{background:rgba(255,255,255,.03);border-radius:8px;padding:12px 16px;margin:24px 0 0;font-family:"Space Mono",monospace;font-size:10px;color:var(--mu);display:flex;gap:20px;flex-wrap:wrap}
+.dates-bar span strong{color:var(--pp)}
+/* Footer */
+.ft-mini{background:rgba(5,2,20,.92);border-top:1px solid var(--bdr);padding:14px 24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:"Space Mono",monospace;font-size:10px;color:var(--mu)}
+.ft-mini a{color:var(--teal);text-decoration:none}
+body{-webkit-user-select:none;user-select:none}
+input,textarea{-webkit-user-select:text!important;user-select:text!important}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+</style>
+</head>
+<body>
+<div id="bc" aria-hidden="true"><div class="bl" id="b1"></div><div class="bl" id="b2"></div></div>
+
+<nav>
+  <a href="/" class="nl">CONSEIL<span>PREV</span></a>
+  <a href="/" class="nb">← Retour au site</a>
+</nav>
+
+<div class="hero">
+  <div class="hbadge"><span class="bdot"></span> CGV · Droit français</div>
+  <h1>Conditions Générales<br>de <em>Vente</em></h1>
+  <p class="hero-sub">Les présentes CGV régissent les relations contractuelles entre CONSEILPREV et ses clients pour l'achat de services proposés sur notre plateforme.</p>
+</div>
+
+<div class="con">
+
+  <!-- TABLE DES MATIÈRES -->
+  <nav class="toc" aria-label="Sommaire CGV">
+    <div class="toc-title">Sommaire</div>
+    <ul class="toc-list">
+      <li><a href="#objet">1. Objet</a></li>
+      <li><a href="#services">2. Services proposés</a></li>
+      <li><a href="#tarifs">3. Tarifs & paiement</a></li>
+      <li><a href="#retractation">4. Droit de rétractation</a></li>
+      <li><a href="#resiliation">5. Résiliation & remboursement</a></li>
+      <li><a href="#garanties">6. Garanties & responsabilités</a></li>
+      <li><a href="#donnees">7. Protection des données</a></li>
+      <li><a href="#pi">8. Propriété intellectuelle</a></li>
+      <li><a href="#modifications">9. Modifications des CGV</a></li>
+      <li><a href="#juridiction">10. Droit applicable & juridiction</a></li>
+    </ul>
+  </nav>
+
+  <!-- 1. OBJET -->
+  <section class="cgv-section" id="objet">
+    <h2 class="cgv-h"><span class="cgv-h-num">1.</span> Objet</h2>
+    <p class="cgv-p">Les présentes Conditions Générales de Vente (CGV) régissent les relations contractuelles entre <strong>CONSEILPREV</strong> (ci-après "le Prestataire"), société SARL immatriculée au RCS de Paris sous le numéro <strong>494 530 157</strong>, dont le siège social est situé 19 rue Auguste Chabrières, 75015 Paris, et ses <strong>clients</strong> (ci-après "le Client") pour l'achat de services proposés sur notre plateforme.</p>
+    <p class="cgv-p">En souscrivant à nos services, vous acceptez sans réserve les présentes CGV. CONSEILPREV se réserve le droit de les modifier à tout moment, les nouvelles conditions s'appliquant aux nouvelles souscriptions.</p>
+    <div class="alert alert-info">
+      <span class="alert-ico">ℹ️</span>
+      <div class="alert-txt">Ces CGV s'appliquent exclusivement aux <strong>professionnels</strong> (B2B). Les relations avec les consommateurs sont soumises au Code de la consommation français en sus des présentes.</div>
+    </div>
+  </section>
+
+  <!-- 2. SERVICES -->
+  <section class="cgv-section" id="services">
+    <h2 class="cgv-h"><span class="cgv-h-num">2.</span> Services proposés</h2>
+    <p class="cgv-p">CONSEILPREV propose une plateforme SaaS dédiée à la conformité réglementaire en matière d'intelligence artificielle et de protection des données. Nos services incluent :</p>
+    <ul class="cgv-list">
+      <li><strong>Plateforme AIES</strong> — Gouvernance IA, inventaire des systèmes, évaluation des risques IA Act</li>
+      <li><strong>Évaluation des risques</strong> liés aux systèmes d'IA (8 risques systémiques)</li>
+      <li><strong>Génération de documentation</strong> de conformité (IA Act, RGPD, ISO 42001)</li>
+      <li><strong>Veille réglementaire</strong> automatisée en temps réel</li>
+      <li><strong>Plans d'action</strong> personnalisés</li>
+      <li><strong>Conseil et accompagnement</strong> par nos experts (audit, formation, GRC)</li>
+      <li><strong>Analytics & reporting</strong> de conformité</li>
+    </ul>
+    <p class="cgv-p">Les caractéristiques détaillées des services sont disponibles sur <a href="/aies">la page AIES</a> et dans les fiches produits correspondantes.</p>
+  </section>
+
+  <!-- 3. TARIFS -->
+  <section class="cgv-section" id="tarifs">
+    <h2 class="cgv-h"><span class="cgv-h-num">3.</span> Tarifs & modalités de paiement</h2>
+
+    <h3 class="cgv-h2">3.1 Tarifs</h3>
+    <p class="cgv-p">Les tarifs de nos services sont indiqués en euros (€) toutes taxes comprises (TTC). Nous proposons différentes formules d'abonnement adaptées aux besoins de chaque organisation :</p>
+    <table class="price-table">
+      <thead><tr><th>Formule</th><th>Périmètre</th><th>Facturation</th><th>Statut</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Plan Gratuit</strong></td><td>1 système IA, fonctions de base</td><td>Gratuit</td><td><span class="price-badge pb-free">Disponible</span></td></tr>
+        <tr><td><strong>Plan Pro ⭐</strong></td><td>Systèmes illimités, toutes fonctions</td><td>Mensuel ou annuel</td><td><span class="price-badge pb-pro">Populaire</span></td></tr>
+        <tr><td><strong>Plan Enterprise</strong></td><td>Multi-entités, API, SLA garanti</td><td>Sur devis annuel</td><td><span class="price-badge pb-ent">Sur devis</span></td></tr>
+        <tr><td><strong>Conseil &amp; Audit</strong></td><td>Prestation sur mesure (jours/homme)</td><td>Facturation à la mission</td><td><span class="price-badge pb-pro">À définir</span></td></tr>
+      </tbody>
+    </table>
+    <p class="cgv-p">Les tarifs sont susceptibles d'être modifiés à tout moment. Les tarifs applicables sont ceux en vigueur au moment de la validation de votre commande.</p>
+
+    <h3 class="cgv-h2">3.2 Modalités de paiement</h3>
+    <p class="cgv-p">Le paiement s'effectue exclusivement en ligne par :</p>
+    <ul class="cgv-list">
+      <li>Carte bancaire (Visa, Mastercard, American Express)</li>
+      <li>Virement bancaire pour les entreprises (sur demande)</li>
+      <li>Prélèvement SEPA pour les abonnements récurrents</li>
+    </ul>
+    <p class="cgv-p">Le paiement est sécurisé par notre partenaire <strong>Stripe</strong>, qui respecte les normes PCI-DSS. Aucune information bancaire n'est conservée sur nos serveurs.</p>
+
+    <h3 class="cgv-h2">3.3 Facturation</h3>
+    <p class="cgv-p">Une facture est automatiquement générée et envoyée par email à chaque paiement. Les factures sont également accessibles depuis votre espace client. Pour tout abonnement mensuel, le paiement est prélevé automatiquement à la date anniversaire de souscription. Pour les abonnements annuels, le paiement est effectué en une seule fois.</p>
+
+    <h3 class="cgv-h2">3.4 Défaut de paiement</h3>
+    <p class="cgv-p">En cas de défaut de paiement, nous nous réservons le droit de suspendre l'accès aux services après un délai de <strong>15 jours</strong> suivant une mise en demeure restée sans effet. Des pénalités de retard de <strong>10% du montant dû par mois</strong> sont applicables.</p>
+  </section>
+
+  <!-- 4. RÉTRACTATION -->
+  <section class="cgv-section" id="retractation">
+    <h2 class="cgv-h"><span class="cgv-h-num">4.</span> Droit de rétractation</h2>
+    <p class="cgv-p">Conformément à l'article L221-18 du Code de la consommation, vous disposez d'un délai de <strong>14 jours</strong> à compter de la souscription pour exercer votre droit de rétractation, sans avoir à justifier de motif ni à payer de pénalités.</p>
+    <p class="cgv-p">Pour exercer ce droit, vous devez nous adresser une décision non équivoque par email à l'adresse <a href="mailto:c79942474@gmail.com">c79942474@gmail.com</a> ou par courrier recommandé avec accusé de réception à notre adresse.</p>
+    <p class="cgv-p">En cas de rétractation, nous vous rembourserons tous les paiements reçus dans un délai de <strong>14 jours</strong> à compter de la date à laquelle nous sommes informés de votre décision.</p>
+    <div class="alert alert-warn">
+      <span class="alert-ico">⚠️</span>
+      <div class="alert-txt">Le droit de rétractation <strong>ne s'applique pas</strong> si vous avez expressément demandé l'exécution immédiate du service avant la fin du délai de rétractation et que celui-ci a été pleinement exécuté (Art. L221-28 Code de la consommation).</div>
+    </div>
+  </section>
+
+  <!-- 5. RÉSILIATION -->
+  <section class="cgv-section" id="resiliation">
+    <h2 class="cgv-h"><span class="cgv-h-num">5.</span> Résiliation & remboursement</h2>
+
+    <h3 class="cgv-h2">5.1 Résiliation par le client</h3>
+    <p class="cgv-p">Vous pouvez résilier votre abonnement à tout moment depuis votre espace client. La résiliation prendra effet à la fin de la période d'abonnement en cours. <strong>Aucun remboursement au prorata</strong> ne sera effectué pour la période déjà payée.</p>
+
+    <h3 class="cgv-h2">5.2 Résiliation par CONSEILPREV</h3>
+    <p class="cgv-p">Nous nous réservons le droit de résilier votre abonnement en cas de :</p>
+    <ul class="cgv-list">
+      <li>Non-paiement après mise en demeure restée sans réponse</li>
+      <li>Violation des conditions d'utilisation</li>
+      <li>Utilisation frauduleuse des services</li>
+      <li>Comportement nuisible envers notre plateforme ou d'autres utilisateurs</li>
+      <li>Demande d'une autorité judiciaire ou réglementaire compétente</li>
+    </ul>
+
+    <h3 class="cgv-h2">5.3 Politique de remboursement</h3>
+    <p class="cgv-p">Les remboursements sont possibles dans les cas suivants :</p>
+    <ul class="cgv-list">
+      <li>Exercice du droit de rétractation légal (14 jours)</li>
+      <li>Erreur de facturation avérée</li>
+      <li>Indisponibilité prolongée du service (plus de <strong>72h consécutives</strong>)</li>
+      <li>Non-conformité majeure du service par rapport aux engagements contractuels</li>
+    </ul>
+    <p class="cgv-p">Les remboursements s'effectuent par le même moyen de paiement que celui utilisé pour la transaction initiale, sauf accord contraire, dans un délai maximum de <strong>14 jours</strong>.</p>
+  </section>
+
+  <!-- 6. GARANTIES -->
+  <section class="cgv-section" id="garanties">
+    <h2 class="cgv-h"><span class="cgv-h-num">6.</span> Garanties & responsabilités</h2>
+
+    <h3 class="cgv-h2">6.1 Disponibilité du service</h3>
+    <p class="cgv-p">Nous nous engageons à maintenir une disponibilité du service de <strong>99,5% sur une base mensuelle</strong>, hors opérations de maintenance planifiées communiquées à l'avance. En cas de dépassement, un avoir proportionnel sera accordé.</p>
+
+    <h3 class="cgv-h2">6.2 Limitation de responsabilité</h3>
+    <p class="cgv-p">Notre plateforme fournit des outils d'aide à la conformité réglementaire. Toutefois, nous ne garantissons pas la conformité totale aux réglementations applicables. Il appartient au client de valider et d'implémenter nos recommandations à son contexte spécifique.</p>
+    <p class="cgv-p">Notre responsabilité est limitée au montant des sommes effectivement versées par le client au cours des <strong>12 derniers mois</strong> précédant le fait générateur de responsabilité.</p>
+    <div class="alert alert-ok">
+      <span class="alert-ico">✅</span>
+      <div class="alert-txt">CONSEILPREV s'engage à fournir ses services avec <strong>diligence et professionnalisme</strong>, conformément aux règles de l'art et aux meilleures pratiques du secteur. Nos experts sont certifiés et disposent d'une expérience de plus de 32 ans dans les domaines IA, cybersécurité et conformité.</div>
+    </div>
+  </section>
+
+  <!-- 7. DONNÉES -->
+  <section class="cgv-section" id="donnees">
+    <h2 class="cgv-h"><span class="cgv-h-num">7.</span> Protection des données</h2>
+    <p class="cgv-p">Le traitement de vos données personnelles est régi par notre <a href="/protection-donnees">Politique de protection des données</a>, conforme au RGPD. Vos données de paiement sont traitées de façon sécurisée par notre partenaire Stripe et ne sont jamais stockées sur nos serveurs.</p>
+    <p class="cgv-p">En tant que client, vous disposez d'un droit d'accès, de rectification, de suppression et de portabilité de vos données. Pour exercer ces droits, contactez notre DPO à l'adresse <a href="mailto:c79942474@gmail.com">c79942474@gmail.com</a>.</p>
+    <p class="cgv-p">Dans le cadre de la fourniture des services AIES, CONSEILPREV peut agir en tant que <strong>sous-traitant</strong> des données que vous nous confiez. Un Accord de Traitement des Données (DPA) peut être signé sur demande.</p>
+  </section>
+
+  <!-- 8. PROPRIÉTÉ INTELLECTUELLE -->
+  <section class="cgv-section" id="pi">
+    <h2 class="cgv-h"><span class="cgv-h-num">8.</span> Propriété intellectuelle</h2>
+    <p class="cgv-p">L'ensemble des éléments de la plateforme (logiciel, interface, contenus, bases de données) est protégé par le droit de la propriété intellectuelle. Toute reproduction, représentation ou exploitation non autorisée est interdite.</p>
+    <p class="cgv-p">Les contenus générés par le client via notre plateforme lui appartiennent. Nous nous engageons à ne pas les utiliser à d'autres fins que la fourniture du service.</p>
+    <p class="cgv-p">L'utilisation de la marque <strong>CONSEILPREV</strong>, du logo et de la dénomination <strong>AIES</strong> est strictement réservée à CONSEILPREV / ERSIA IA Management.</p>
+  </section>
+
+  <!-- 9. MODIFICATIONS -->
+  <section class="cgv-section" id="modifications">
+    <h2 class="cgv-h"><span class="cgv-h-num">9.</span> Modifications des CGV</h2>
+    <p class="cgv-p">Nous nous réservons le droit de modifier les présentes CGV à tout moment. Les clients seront informés de toute modification significative par email au moins <strong>30 jours avant</strong> leur entrée en vigueur.</p>
+    <p class="cgv-p">La poursuite de l'utilisation des services après l'entrée en vigueur des nouvelles CGV vaut acceptation de celles-ci. Si vous refusez les modifications, vous pouvez résilier votre abonnement conformément aux conditions prévues à l'article 5.</p>
+  </section>
+
+  <!-- 10. JURIDICTION -->
+  <section class="cgv-section" id="juridiction">
+    <h2 class="cgv-h"><span class="cgv-h-num">10.</span> Droit applicable & juridiction</h2>
+    <p class="cgv-p">Les présentes CGV sont régies par le <strong>droit français</strong>. En cas de litige, les parties s'engagent à rechercher une solution amiable avant toute action judiciaire.</p>
+    <p class="cgv-p">À défaut d'accord amiable dans un délai de <strong>30 jours</strong>, le litige sera porté devant les <strong>tribunaux compétents de Paris</strong>.</p>
+    <p class="cgv-p">Pour toute réclamation ou litige lié à un achat en ligne, vous pouvez également recourir à la plateforme de résolution en ligne des litiges de la Commission Européenne : <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener">ec.europa.eu/consumers/odr</a>.</p>
+    <div class="alert alert-info">
+      <span class="alert-ico">⚖️</span>
+      <div class="alert-txt">Contact pour tout litige ou réclamation : <strong><a href="mailto:c79942474@gmail.com">c79942474@gmail.com</a></strong> ou <strong><a href="mailto:christophe.cerf@outlook.com">christophe.cerf@outlook.com</a></strong> · CONSEILPREV, 19 rue Auguste Chabrières, 75015 Paris</div>
+    </div>
+  </section>
+
+  <div class="dates-bar">
+    <span><strong>Version :</strong> 3.0</span>
+    <span><strong>Entrée en vigueur :</strong> 1er Janvier 2025</span>
+    <span><strong>Dernière mise à jour :</strong> 10 Juin 2026</span>
+    <span><strong>Prochaine révision :</strong> Janvier 2027</span>
+  </div>
+
+</div>
+
+<div class="ft-mini">
+  <span>© 2025 CONSEILPREV · CGV · <a href="/mentions-legales">Mentions légales</a> · <a href="/protection-donnees">Données personnelles</a> · <a href="/">conseilprev.onrender.com</a></span>
+  <a href="/">← Retour au site</a>
+</div>
+
+<script>
+document.addEventListener('contextmenu',function(e){e.preventDefault();});
+document.addEventListener('keydown',function(e){if(e.key==='F12'||(e.ctrlKey&&['u','s'].includes(e.key.toLowerCase())))e.preventDefault();});
+</script>
+</body>
+</html>
