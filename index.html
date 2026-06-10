@@ -489,6 +489,113 @@ footer{background:#0a0518;border-top:1px solid rgba(196,181,232,.12);padding:52p
 #vbtn{bottom:24px!important;left:226px!important}
 #ck-btn{bottom:24px!important;left:178px!important}
 
+
+/* ═══ FOND GRAPHIQUE ÉCLAIRCI + BLOBS FLOTTANTS ═══ */
+
+/* Fond principal plus visible */
+body::before{
+  content:"";
+  position:fixed;inset:0;
+  background-image:url('/hero-bg.jpg');
+  background-size:cover;
+  background-position:center 55%;
+  background-repeat:no-repeat;
+  background-attachment:fixed;
+  opacity:.22;
+  z-index:-2;
+  pointer-events:none
+}
+
+/* Conteneur blobs */
+#blob-canvas{
+  position:fixed;inset:0;
+  z-index:-1;
+  pointer-events:none;
+  overflow:hidden
+}
+
+/* Blob 1 — violet dominant */
+.blob{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(80px);
+  mix-blend-mode:screen;
+  opacity:0;
+  animation:blob-fade-in .8s ease forwards
+}
+@keyframes blob-fade-in{to{opacity:1}}
+
+#blob1{
+  width:520px;height:520px;
+  background:radial-gradient(circle at 40% 40%, #7c3aed 0%, #4f46e5 40%, transparent 70%);
+  opacity:.28;
+  animation:blob1-move 22s ease-in-out infinite alternate
+}
+@keyframes blob1-move{
+  0%  {transform:translate(0px, 0px) scale(1)}
+  25% {transform:translate(120px, -80px) scale(1.08)}
+  50% {transform:translate(60px, 140px) scale(.95)}
+  75% {transform:translate(-90px, 60px) scale(1.05)}
+  100%{transform:translate(40px, -120px) scale(1.02)}
+}
+
+/* Blob 2 — fuchsia/rose */
+#blob2{
+  width:440px;height:440px;
+  background:radial-gradient(circle at 55% 45%, #db2777 0%, #be185d 35%, #9d174d 60%, transparent 75%);
+  opacity:.22;
+  animation:blob2-move 28s ease-in-out infinite alternate
+}
+@keyframes blob2-move{
+  0%  {transform:translate(0px, 0px) scale(1)}
+  20% {transform:translate(-100px, 80px) scale(1.06)}
+  45% {transform:translate(80px, -60px) scale(.92)}
+  70% {transform:translate(130px, 100px) scale(1.1)}
+  100%{transform:translate(-60px, -90px) scale(.98)}
+}
+
+/* Blob 3 — bleu électrique */
+#blob3{
+  width:380px;height:380px;
+  background:radial-gradient(circle at 50% 50%, #2563eb 0%, #1d4ed8 40%, #1e40af 65%, transparent 78%);
+  opacity:.20;
+  animation:blob3-move 34s ease-in-out infinite alternate
+}
+@keyframes blob3-move{
+  0%  {transform:translate(0px,0px) scale(1)}
+  30% {transform:translate(150px, 120px) scale(1.12)}
+  60% {transform:translate(-80px, -100px) scale(.88)}
+  100%{transform:translate(60px, 80px) scale(1.06)}
+}
+
+/* Blob 4 — cyan/teal accent */
+#blob4{
+  width:300px;height:300px;
+  background:radial-gradient(circle at 50% 50%, #0891b2 0%, #0e7490 50%, transparent 75%);
+  opacity:.15;
+  animation:blob4-move 40s ease-in-out infinite alternate
+}
+@keyframes blob4-move{
+  0%  {transform:translate(0px,0px) scale(1)}
+  40% {transform:translate(-120px, 150px) scale(1.15)}
+  80% {transform:translate(100px, -80px) scale(.9)}
+  100%{transform:translate(-50px, 60px) scale(1.08)}
+}
+
+/* Blob 5 — violet clair doux */
+#blob5{
+  width:460px;height:260px;
+  background:radial-gradient(ellipse at 50% 50%, #8b5cf6 0%, #7c3aed 45%, transparent 72%);
+  opacity:.18;
+  animation:blob5-move 25s ease-in-out infinite alternate
+}
+@keyframes blob5-move{
+  0%  {transform:translate(0px,0px) rotate(0deg) scale(1)}
+  33% {transform:translate(80px,-60px) rotate(15deg) scale(1.1)}
+  66% {transform:translate(-100px,100px) rotate(-10deg) scale(.9)}
+  100%{transform:translate(40px,40px) rotate(8deg) scale(1.05)}
+}
+
 /* ═══ WIDGET VEILLE IA ═══ */
 #vbtn{position:fixed;bottom:90px;left:24px;z-index:9997;width:52px;height:52px;border-radius:50%;
   background:linear-gradient(135deg,#1a3a6e,#2d6abf);
@@ -712,20 +819,7 @@ textarea.pi2{resize:vertical;min-height:110px;line-height:1.6}
 .pfst.err{background:rgba(232,92,106,.1);border:1px solid rgba(232,92,106,.25);color:#e85c6a}
 .pfst.rl{background:rgba(212,168,67,.1);border:1px solid rgba(212,168,67,.2);color:var(--gold)}
 
-/* ═══ BACKGROUND GLOBAL — Bandeau LinkedIn ═══ */
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background-image:url('/hero-bg.jpg');
-  background-size:cover;
-  background-position:center 55%;
-  background-repeat:no-repeat;
-  background-attachment:fixed;
-  opacity:.10;
-  z-index:-1;
-  pointer-events:none;
-}
+/* fond géré dans BLOB_CSS */
 /* Sections sombres — overlay plus fort pour lisibilité */
 .sec-a::before,
 .clients-band::before{
@@ -784,6 +878,16 @@ footer > .ft-inner{position:relative;z-index:1}
 </style>
 </head>
 <body>
+
+<!-- BLOBS FLOTTANTS FOND GRAPHIQUE -->
+<div id="blob-canvas" aria-hidden="true">
+  <div class="blob" id="blob1" style="top:8%;left:5%"></div>
+  <div class="blob" id="blob2" style="top:50%;right:10%"></div>
+  <div class="blob" id="blob3" style="bottom:15%;left:30%"></div>
+  <div class="blob" id="blob4" style="top:20%;right:35%"></div>
+  <div class="blob" id="blob5" style="bottom:40%;left:55%"></div>
+</div>
+
 
 <nav>
   <div class="logo">CONSEIL<span>PREV</span></div>
