@@ -679,6 +679,128 @@ body::before{
 [data-tooltip-left]:hover::after{transform:translateX(0) translateY(0)}
 [data-tooltip-left]::before{left:auto;right:14px;transform:none}
 
+
+/* ═══════════════════════════════════════
+   NAVIGATION FLÈCHES — UX AMÉLIORÉE
+   ═══════════════════════════════════════ */
+
+/* Conteneur flèches droite */
+#nav-arrows{
+  position:fixed;
+  right:24px;
+  top:50%;
+  transform:translateY(-50%);
+  z-index:9990;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  align-items:center;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .3s
+}
+#nav-arrows.visible{opacity:1;pointer-events:all}
+
+/* Flèche individuelle */
+.nav-arrow-btn{
+  width:36px;height:36px;
+  border-radius:50%;
+  border:1px solid rgba(180,138,247,.25);
+  background:rgba(10,6,32,.78);
+  backdrop-filter:blur(12px);
+  color:rgba(212,186,255,.7);
+  font-size:14px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .22s;
+  box-shadow:0 2px 12px rgba(0,0,0,.3)
+}
+.nav-arrow-btn:hover{
+  background:rgba(139,92,246,.25);
+  border-color:rgba(217,70,239,.45);
+  color:var(--wh);
+  transform:scale(1.1);
+  box-shadow:0 4px 20px rgba(139,92,246,.35)
+}
+.nav-arrow-btn:active{transform:scale(.95)}
+.nav-arrow-btn:disabled{opacity:.25;cursor:default;pointer-events:none}
+
+/* Indicateur section (point central) */
+#nav-section-dots{
+  display:flex;flex-direction:column;gap:5px;
+  align-items:center;padding:4px 0
+}
+.nav-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:rgba(180,138,247,.3);
+  cursor:pointer;transition:all .2s
+}
+.nav-dot.active{
+  background:var(--pl);
+  width:7px;height:7px;
+  box-shadow:0 0 6px rgba(180,138,247,.5)
+}
+.nav-dot:hover{background:rgba(217,70,239,.6);transform:scale(1.3)}
+
+/* Label section flottant */
+#nav-section-label{
+  position:fixed;right:72px;
+  background:rgba(10,6,32,.9);
+  border:1px solid rgba(180,138,247,.2);
+  border-radius:7px;padding:5px 12px;
+  font-family:"Space Mono",monospace;
+  font-size:10px;letter-spacing:.06em;
+  color:var(--pp);white-space:nowrap;
+  opacity:0;pointer-events:none;
+  transition:opacity .25s;z-index:9989;
+  backdrop-filter:blur(10px)
+}
+#nav-section-label.show{opacity:1}
+
+/* Flèches haut/bas absolues — ancrées en bas de chaque section */
+.section-nav{
+  display:flex;justify-content:center;
+  gap:12px;padding:18px 0 8px;
+  position:relative;z-index:2
+}
+.sec-nav-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(139,92,246,.08);
+  border:1px solid rgba(180,138,247,.2);
+  border-radius:100px;
+  color:rgba(212,186,255,.6);
+  font-size:11px;font-family:"Space Mono",monospace;
+  letter-spacing:.06em;
+  padding:6px 14px;cursor:pointer;
+  transition:all .2s;backdrop-filter:blur(6px)
+}
+.sec-nav-btn:hover{
+  background:rgba(139,92,246,.18);
+  border-color:rgba(217,70,239,.35);
+  color:var(--wh);transform:translateY(-1px)
+}
+.sec-nav-btn .arr{font-size:12px;transition:transform .2s}
+.sec-nav-btn:hover .arr{transform:translateY(-2px)}
+.sec-nav-btn.down:hover .arr{transform:translateY(2px)}
+
+/* Barre de progression de lecture */
+#read-progress{
+  position:fixed;top:0;left:0;
+  height:2px;width:0%;
+  background:linear-gradient(90deg,#6366f1,#8b5cf6,#d946ef);
+  z-index:10001;
+  transition:width .1s linear;
+  box-shadow:0 0 8px rgba(217,70,239,.5)
+}
+
+/* Remplacer le #btt existant par le nouveau dans la colonne droite */
+#btt{display:none!important}
+
+/* Responsive : masquer sur mobile */
+@media(max-width:640px){
+  #nav-arrows{display:none}
+  #nav-section-label{display:none}
+}
+
 /* ═══ WIDGET VEILLE IA ═══ */
 #vbtn{position:fixed;bottom:90px;left:24px;z-index:9997;width:52px;height:52px;border-radius:50%;
   background:linear-gradient(135deg,#1a3a6e,#2d6abf);
@@ -1098,6 +1220,30 @@ input:focus,textarea:focus,select:focus{
 </style>
 </head>
 <body>
+
+
+<!-- BARRE DE PROGRESSION LECTURE -->
+<div id="read-progress" aria-hidden="true"></div>
+
+<!-- FLÈCHES DE NAVIGATION LATÉRALES -->
+<div id="nav-arrows" aria-label="Navigation sections" role="navigation">
+  <button class="nav-arrow-btn" id="nav-up"
+    onclick="navSection(-1)"
+    aria-label="Section précédente"
+    data-tooltip="Section précédente"
+    title="Section précédente">
+    ▲
+  </button>
+  <div id="nav-section-dots" role="tablist" aria-label="Sections de la page"></div>
+  <button class="nav-arrow-btn" id="nav-down"
+    onclick="navSection(1)"
+    aria-label="Section suivante"
+    data-tooltip="Section suivante"
+    title="Section suivante">
+    ▼
+  </button>
+</div>
+<div id="nav-section-label" aria-live="polite"></div>
 
 <!-- BLOBS FLOTTANTS FOND GRAPHIQUE -->
 <div id="blob-canvas" aria-hidden="true">
@@ -2522,6 +2668,144 @@ function xSug(btn){
   document.addEventListener('DOMContentLoaded', function(){
     loadAccState();
     applyAccState();
+  });
+
+})();
+
+
+// ════════════════════════════════════════
+// NAVIGATION FLÈCHES — SECTIONS
+// ════════════════════════════════════════
+(function(){
+  "use strict";
+
+  // Sections à naviguer (dans l'ordre de la page)
+  var SECTION_IDS = ['hero','secteurs','normes','risques','poles','services','differenciateurs','avenir','contact','clients'];
+  var SECTION_LABELS = {
+    'hero':        '🏠 Accueil',
+    'secteurs':    '🏭 Secteurs',
+    'normes':      '📋 Normes',
+    'risques':     '⚠️ Risques IA',
+    'poles':       '💡 Expertise',
+    'services':    '🛠 Services',
+    'differenciateurs': '✨ Différenciateurs',
+    'avenir':      '🚀 Construisons',
+    'contact':     '📩 Contact',
+    'clients':     '🏆 Clients',
+  };
+
+  var currentSection = 0;
+  var isScrolling = false;
+
+  // Initialiser les points de navigation
+  function initDots(){
+    var container = document.getElementById('nav-section-dots');
+    if(!container) return;
+    SECTION_IDS.forEach(function(id, i){
+      var dot = document.createElement('div');
+      dot.className = 'nav-dot' + (i===0?' active':'');
+      dot.setAttribute('role','tab');
+      dot.setAttribute('aria-label', SECTION_LABELS[id]||id);
+      dot.setAttribute('title', SECTION_LABELS[id]||id);
+      dot.addEventListener('click', function(){ goToSection(i); });
+      container.appendChild(dot);
+    });
+  }
+
+  // Aller à une section
+  function goToSection(idx){
+    if(idx < 0) idx = 0;
+    if(idx >= SECTION_IDS.length) idx = SECTION_IDS.length-1;
+    var id = SECTION_IDS[idx];
+    var el = document.getElementById(id);
+    if(!el) return;
+    isScrolling = true;
+    var navH = document.querySelector('nav')?document.querySelector('nav').offsetHeight:70;
+    var top = el.getBoundingClientRect().top + window.scrollY - navH - 8;
+    window.scrollTo({top: top, behavior:'smooth'});
+    currentSection = idx;
+    updateArrows();
+    showSectionLabel(id);
+    setTimeout(function(){ isScrolling=false; }, 800);
+  }
+  window.goToSection = goToSection;
+
+  // Navigation +1/-1
+  window.navSection = function(dir){
+    goToSection(currentSection + dir);
+  };
+
+  // Mettre à jour les boutons et points
+  function updateArrows(){
+    var up   = document.getElementById('nav-up');
+    var down = document.getElementById('nav-down');
+    if(up)   up.disabled   = (currentSection === 0);
+    if(down) down.disabled = (currentSection === SECTION_IDS.length-1);
+    document.querySelectorAll('.nav-dot').forEach(function(d,i){
+      d.classList.toggle('active', i===currentSection);
+    });
+  }
+
+  // Afficher le label section
+  var labelTimer = null;
+  function showSectionLabel(id){
+    var lbl = document.getElementById('nav-section-label');
+    if(!lbl) return;
+    lbl.textContent = SECTION_LABELS[id]||id;
+    lbl.classList.add('show');
+    clearTimeout(labelTimer);
+    labelTimer = setTimeout(function(){ lbl.classList.remove('show'); }, 2000);
+    // Positionner verticalement au niveau de la flèche active
+    var arrows = document.getElementById('nav-arrows');
+    if(arrows) lbl.style.top = (arrows.getBoundingClientRect().top + window.scrollY + 40) + 'px';
+  }
+
+  // Détecter la section active au scroll
+  function onScroll(){
+    // Barre de progression
+    var prog = document.getElementById('read-progress');
+    if(prog){
+      var scrolled = window.scrollY;
+      var total = document.body.scrollHeight - window.innerHeight;
+      prog.style.width = (total > 0 ? Math.round(scrolled/total*100) : 0) + '%';
+    }
+
+    // Section active
+    var navH = document.querySelector('nav')?document.querySelector('nav').offsetHeight:70;
+    var midScreen = window.scrollY + navH + (window.innerHeight-navH)/3;
+    var found = 0;
+    SECTION_IDS.forEach(function(id, i){
+      var el = document.getElementById(id);
+      if(el){
+        var top = el.getBoundingClientRect().top + window.scrollY;
+        if(top <= midScreen) found = i;
+      }
+    });
+    if(found !== currentSection && !isScrolling){
+      currentSection = found;
+      updateArrows();
+    }
+
+    // Afficher/masquer la colonne
+    var arrows = document.getElementById('nav-arrows');
+    if(arrows) arrows.classList.toggle('visible', window.scrollY > 200);
+  }
+
+  // Raccourcis clavier
+  document.addEventListener('keydown', function(e){
+    if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if(e.altKey && e.key === 'ArrowUp'){   e.preventDefault(); navSection(-1); }
+    if(e.altKey && e.key === 'ArrowDown'){ e.preventDefault(); navSection(1);  }
+    if(e.altKey && e.key === 'Home'){      e.preventDefault(); goToSection(0); }
+    if(e.altKey && e.key === 'End'){       e.preventDefault(); goToSection(SECTION_IDS.length-1); }
+  });
+
+  // Init
+  document.addEventListener('DOMContentLoaded', function(){
+    initDots();
+    updateArrows();
+    window.addEventListener('scroll', onScroll, {passive:true});
+    onScroll();
   });
 
 })();

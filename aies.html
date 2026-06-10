@@ -264,7 +264,7 @@ footer{background:linear-gradient(180deg,rgba(10,6,32,.95),rgba(8,4,20,.98))!imp
 #vbox{border:1px solid rgba(99,102,241,.3)!important;background:rgba(8,4,24,.97)!important}
 
 /* ── Bouton back-to-top ── */
-#btt{background:rgba(139,92,246,.15)!important;border:1px solid rgba(180,138,247,.25)!important}
+#btt{display:none!important}
 
 /* ── Cookie banner ── */
 #ck-banner{background:rgba(10,6,32,.97)!important;border-top:1px solid rgba(217,70,239,.2)!important}
@@ -289,6 +289,15 @@ input:focus,textarea:focus,select:focus{
 
 /* ── Sélection de texte ── */
 ::selection{background:rgba(217,70,239,.25);color:#fff}
+
+
+/* ═══ NAVIGATION SIMPLE — Autres pages ═══ */
+#read-progress{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,#6366f1,#8b5cf6,#d946ef);z-index:10001;transition:width .1s linear;box-shadow:0 0 8px rgba(217,70,239,.5)}
+#page-nav-btns{position:fixed;right:24px;bottom:24px;z-index:9990;display:flex;flex-direction:column;gap:8px;opacity:0;transition:opacity .3s;pointer-events:none}
+#page-nav-btns.visible{opacity:1;pointer-events:all}
+.pnb{width:38px;height:38px;border-radius:50%;border:1px solid rgba(180,138,247,.25);background:rgba(10,6,32,.82);backdrop-filter:blur(12px);color:rgba(212,186,255,.7);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .22s;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.pnb:hover{background:rgba(139,92,246,.25);border-color:rgba(217,70,239,.45);color:#fff;transform:scale(1.1)}
+#btt{display:none!important}
 
 </style>
 </head>
