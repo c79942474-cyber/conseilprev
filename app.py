@@ -448,6 +448,7 @@ def chat():
 # ── Pages statiques ──
 PAGES = {
     '/':              'index.html',
+    '/support':       'support.html',
     '/donnees':       'donnees.html',
     '/aies':          'aies.html',
     '/demo':          'demo.html',

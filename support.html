@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Support & Centre d'aide — CONSEILPREV</title>
+<meta name="description" content="Contactez l'équipe CONSEILPREV. Support par email, téléphone ou chat. Formulaire de contact détaillé pour vos projets IA Act, RGPD et cybersécurité.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0620;--bg2:#120830;--pm:#8b5cf6;--pl:#b48af7;--pp:#d4baff;
+  --pf:#d946ef;--teal:#5eead4;--wh:#f8f4ff;--mu:rgba(212,186,255,.52);
+  --bdr:rgba(180,138,247,.18);--card:rgba(139,92,246,.06)
+}
+html{scroll-behavior:smooth}
+body{font-family:"DM Sans",sans-serif;background:linear-gradient(160deg,#0d0825,#110a2e,#0e0820);color:var(--wh);min-height:100vh;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;background-image:url("/hero-bg.jpg");background-size:cover;background-position:center 55%;background-attachment:fixed;opacity:.40;z-index:-2;pointer-events:none}
+/* Blobs */
+#blob-canvas{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.blob{position:absolute;border-radius:50%;filter:blur(45px);mix-blend-mode:screen}
+#blob1{width:520px;height:520px;background:radial-gradient(circle at 40% 40%,#7c3aed,#4f46e5 40%,transparent 70%);opacity:.48;animation:b1 22s ease-in-out infinite alternate}
+#blob2{width:440px;height:440px;background:radial-gradient(circle at 55% 45%,#db2777,#be185d 35%,transparent 75%);opacity:.40;animation:b2 28s ease-in-out infinite alternate}
+@keyframes b1{0%{transform:translate(0,0) scale(1)}50%{transform:translate(120px,-80px) scale(1.08)}100%{transform:translate(40px,-120px) scale(1.02)}}
+@keyframes b2{0%{transform:translate(0,0) scale(1)}50%{transform:translate(-100px,80px) scale(1.06)}100%{transform:translate(-60px,-90px) scale(.98)}}
+/* Barre progression */
+#read-progress{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,#6366f1,#8b5cf6,#d946ef);z-index:10001}
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(10,6,32,.93);backdrop-filter:blur(24px);border-bottom:1px solid var(--bdr);padding:13px 28px;display:flex;align-items:center;gap:12px}
+.nav-logo{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:700;text-decoration:none;color:var(--wh);margin-right:auto}.nav-logo span{color:var(--pl)}
+.nav-back{font-size:12px;color:var(--mu);text-decoration:none;font-family:"Space Mono",monospace;transition:color .2s}.nav-back:hover{color:var(--wh)}
+.nav-cta{background:linear-gradient(135deg,#8b5cf6,#d946ef);color:#fff;padding:8px 18px;border-radius:7px;font-size:13px;text-decoration:none;font-weight:600}
+/* HERO */
+.hero{padding:50px 24px 32px;text-align:center;position:relative}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(139,92,246,.2),transparent 65%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);border-radius:100px;padding:6px 18px;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;color:var(--pp);margin-bottom:16px}
+.bdot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:blink 2s ease-in-out infinite}
+h1{font-family:"Cormorant Garamond",serif;font-size:clamp(28px,5vw,52px);font-weight:700;line-height:1.05;margin-bottom:10px;position:relative}
+h1 em{font-style:italic;background:linear-gradient(135deg,#818cf8,#c084fc,#e879f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:14px;color:var(--mu);max-width:480px;margin:0 auto;line-height:1.75;position:relative}
+/* LAYOUT */
+.con{max-width:860px;margin:0 auto;padding:0 20px}
+/* CONTACT CARDS */
+.contact-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:32px 0 24px}
+@media(max-width:600px){.contact-cards{grid-template-columns:1fr}}
+.cc{background:rgba(139,92,246,.07);border:1px solid rgba(180,138,247,.2);border-radius:14px;padding:24px 20px;text-align:center;transition:all .2s;cursor:default}
+.cc:hover{border-color:rgba(217,70,239,.4);background:rgba(139,92,246,.13);transform:translateY(-2px)}
+.cc-ico{width:48px;height:48px;border-radius:12px;background:rgba(139,92,246,.2);border:1px solid rgba(180,138,247,.3);display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 12px}
+.cc-title{font-size:14px;font-weight:600;color:var(--wh);margin-bottom:6px}
+.cc-val{font-size:13px;color:var(--teal);text-decoration:none;display:block}
+.cc-val:hover{text-decoration:underline}
+.cc-note{font-size:11px;color:var(--mu);margin-top:4px;font-family:"Space Mono",monospace}
+/* FORMULAIRE */
+.form-wrap{background:rgba(139,92,246,.06);border:1px solid rgba(180,138,247,.18);border-radius:16px;padding:32px 36px;margin-bottom:32px}
+@media(max-width:600px){.form-wrap{padding:20px 16px}}
+.form-title{font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:700;color:var(--wh);margin-bottom:6px}
+.form-sub{font-size:12px;color:var(--mu);margin-bottom:24px;font-family:"Space Mono",monospace}
+/* Champs */
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+@media(max-width:580px){.frow{grid-template-columns:1fr}}
+.fgroup{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.fgroup.half{}
+label.fl{font-size:12px;color:var(--pp);font-family:"Space Mono",monospace;letter-spacing:.04em}
+label.fl span{color:var(--pf)}
+.finput,.fselect,.ftextarea{
+  width:100%;padding:11px 14px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(180,138,247,.2);
+  border-radius:8px;
+  color:var(--wh);
+  font-size:13px;font-family:"DM Sans",sans-serif;
+  outline:none;transition:border-color .2s,box-shadow .2s;
+  -webkit-user-select:text!important;user-select:text!important
+}
+.finput:focus,.fselect:focus,.ftextarea:focus{
+  border-color:rgba(217,70,239,.5);
+  box-shadow:0 0 0 3px rgba(139,92,246,.15)
+}
+.finput::placeholder,.ftextarea::placeholder{color:rgba(212,186,255,.35)}
+.fselect{cursor:pointer;-webkit-appearance:none;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23b48af7' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;padding-right:32px
+}
+.fselect option{background:#120830;color:var(--wh)}
+.ftextarea{resize:vertical;min-height:120px;line-height:1.6}
+/* Indicatif téléphone */
+.phone-wrap{display:flex;gap:8px}
+.phone-prefix{width:90px;flex-shrink:0}
+.phone-num{flex:1}
+/* reCAPTCHA notice */
+.recaptcha-note{font-size:11px;color:rgba(212,186,255,.4);line-height:1.6;margin-bottom:18px;font-family:"Space Mono",monospace}
+.recaptcha-note a{color:var(--teal);text-decoration:none}.recaptcha-note a:hover{text-decoration:underline}
+/* Boutons */
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn-submit{background:linear-gradient(135deg,#8b5cf6,#d946ef);color:#fff;border:none;padding:13px 28px;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;font-family:"DM Sans",sans-serif;transition:all .2s;box-shadow:0 4px 20px rgba(139,92,246,.4)}
+.btn-submit:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(217,70,239,.5)}
+.btn-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.btn-reset{background:rgba(255,255,255,.06);border:1px solid rgba(180,138,247,.25);color:var(--mu);padding:13px 22px;border-radius:9px;font-size:14px;cursor:pointer;font-family:"DM Sans",sans-serif;transition:all .2s}
+.btn-reset:hover{border-color:var(--pl);color:var(--pp)}
+/* Status */
+.form-status{padding:12px 16px;border-radius:8px;font-size:13px;margin-top:12px;display:none}
+.form-status.ok{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#4ade80;display:block}
+.form-status.err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#f87171;display:block}
+/* FAQ mini */
+.faq-mini{padding:24px 0}
+.faq-mini-title{font-family:"Cormorant Garamond",serif;font-size:20px;font-weight:700;color:var(--wh);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.faq-mini-item{border:1px solid rgba(180,138,247,.15);border-radius:9px;overflow:hidden;margin-bottom:6px;background:rgba(139,92,246,.04)}
+.faq-mini-item.open{border-color:rgba(139,92,246,.35)}
+.faq-mini-q{width:100%;text-align:left;padding:12px 16px;background:none;border:none;color:var(--wh);font-size:13px;font-weight:500;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;font-family:"DM Sans",sans-serif;transition:color .2s}
+.faq-mini-q:hover,.faq-mini-item.open .faq-mini-q{color:var(--pl)}
+.faq-mini-arr{flex-shrink:0;font-size:11px;color:var(--mu);transition:transform .3s}
+.faq-mini-item.open .faq-mini-arr{transform:rotate(180deg);color:var(--pl)}
+.faq-mini-a{max-height:0;overflow:hidden;transition:max-height .3s ease,padding .2s}
+.faq-mini-item.open .faq-mini-a{max-height:200px;padding:0 16px 12px}
+.faq-mini-a p{font-size:12px;color:rgba(212,186,255,.7);line-height:1.7;border-left:2px solid rgba(139,92,246,.3);padding-left:12px}
+/* Infos pratiques */
+.info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;padding:24px 0 36px}
+@media(max-width:600px){.info-grid{grid-template-columns:1fr}}
+.info-card{background:rgba(139,92,246,.05);border:1px solid rgba(180,138,247,.15);border-radius:12px;padding:18px 20px}
+.info-card-title{font-size:13px;font-weight:600;color:var(--pp);margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.info-card-body{font-size:12px;color:var(--mu);line-height:1.75}
+.info-card-body strong{color:var(--wh)}
+/* Footer mini */
+.ft-mini{background:rgba(5,2,20,.92);border-top:1px solid var(--bdr);padding:16px 24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:"Space Mono",monospace;font-size:10px;color:var(--mu)}
+.ft-mini a{color:var(--teal);text-decoration:none}.ft-mini a:hover{color:var(--wh)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+/* Anti-copie */
+body{-webkit-user-select:none;-moz-user-select:none;user-select:none}
+input,textarea,select{-webkit-user-select:text!important;user-select:text!important}
+img{-webkit-user-drag:none;pointer-events:none}
+</style>
+</head>
+<body>
+<div id="blob-canvas" aria-hidden="true">
+  <div class="blob" id="blob1" style="top:5%;left:5%"></div>
+  <div class="blob" id="blob2" style="top:45%;right:8%"></div>
+</div>
+<div id="read-progress" aria-hidden="true"></div>
+
+<nav>
+  <a href="/" class="nav-logo">CONSEIL<span>PREV</span></a>
+  <a href="/" class="nav-back">← Retour</a>
+  <a href="/#contact" class="nav-cta">Soumettre un projet</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge"><span class="bdot"></span> Support · Centre d'aide</div>
+  <h1>Support<br><em>&amp; Centre d'aide</em></h1>
+  <p class="hero-sub">Besoin d'aide ? Nous sommes là pour vous répondre sous 24h ouvrées.</p>
+</section>
+
+<main class="con" id="main-content">
+
+  <!-- CARTES CONTACT -->
+  <div class="contact-cards">
+    <div class="cc">
+      <div class="cc-ico">✉️</div>
+      <div class="cc-title">Email</div>
+      <a class="cc-val" href="mailto:christophe.cerf@outlook.com">christophe.cerf@outlook.com</a>
+      <div class="cc-note">Réponse sous 24h ouvrées</div>
+    </div>
+    <div class="cc">
+      <div class="cc-ico">📞</div>
+      <div class="cc-title">Téléphone</div>
+      <a class="cc-val" href="tel:+33660692145">+33 6 60 69 21 45</a>
+      <div class="cc-note">Lun-Ven 9h-18h (Paris)</div>
+    </div>
+    <div class="cc">
+      <div class="cc-ico">💬</div>
+      <div class="cc-title">Chat IA</div>
+      <a class="cc-val" href="/">Chat CONSEILPREV →</a>
+      <div class="cc-note">Lun-Ven 9h-18h</div>
+    </div>
+  </div>
+
+  <!-- FORMULAIRE DE CONTACT -->
+  <div class="form-wrap" id="contact-form">
+    <div class="form-title">Formulaire de Contact Détaillé</div>
+    <div class="form-sub">Remplissez le formulaire ci-dessous selon le type de votre demande</div>
+
+    <form id="support-form" onsubmit="submitSupport(event)" novalidate>
+
+      <!-- Type de demande -->
+      <div class="fgroup">
+        <label class="fl" for="sp-type">Type de demande <span>*</span></label>
+        <select class="fselect" id="sp-type" required>
+          <option value="">Sélectionnez le type de demande</option>
+          <optgroup label="🤝 Commercial">
+            <option value="devis">Demande de devis</option>
+            <option value="demo">Demande de démonstration</option>
+            <option value="partenariat">Partenariat / Investissement</option>
+          </optgroup>
+          <optgroup label="🛠 Support technique">
+            <option value="bug">Signalement d'anomalie</option>
+            <option value="acces">Problème d'accès</option>
+            <option value="integration">Question d'intégration</option>
+          </optgroup>
+          <optgroup label="⚖️ Conformité & Expertise">
+            <option value="ia-act">Question IA Act</option>
+            <option value="rgpd">Question RGPD / DPO</option>
+            <option value="audit">Demande d'audit</option>
+            <option value="formation">Formation & accompagnement</option>
+          </optgroup>
+          <optgroup label="📋 Administratif">
+            <option value="facturation">Facturation</option>
+            <option value="contrat">Contrat / CGV</option>
+            <option value="rgpd-droits">Exercice de droits RGPD</option>
+            <option value="autre">Autre</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <!-- Nom + Email -->
+      <div class="frow">
+        <div class="fgroup">
+          <label class="fl" for="sp-name">Nom complet <span>*</span></label>
+          <input class="finput" type="text" id="sp-name" placeholder="Prénom Nom" required autocomplete="name">
+        </div>
+        <div class="fgroup">
+          <label class="fl" for="sp-email">Email <span>*</span></label>
+          <input class="finput" type="email" id="sp-email" placeholder="votre@email.com" required autocomplete="email">
+        </div>
+      </div>
+
+      <!-- Téléphone + Entreprise -->
+      <div class="frow">
+        <div class="fgroup">
+          <label class="fl" for="sp-phone">Téléphone <span>*</span></label>
+          <div class="phone-wrap">
+            <select class="fselect phone-prefix" id="sp-prefix">
+              <option value="+33">🇫🇷 +33</option>
+              <option value="+32">🇧🇪 +32</option>
+              <option value="+41">🇨🇭 +41</option>
+              <option value="+352">🇱🇺 +352</option>
+              <option value="+49">🇩🇪 +49</option>
+              <option value="+44">🇬🇧 +44</option>
+              <option value="+1">🇺🇸 +1</option>
+              <option value="+971">🇦🇪 +971</option>
+            </select>
+            <input class="finput phone-num" type="tel" id="sp-phone" placeholder="6 00 00 00 00" required autocomplete="tel">
+          </div>
+        </div>
+        <div class="fgroup">
+          <label class="fl" for="sp-company">Entreprise <span>*</span></label>
+          <input class="finput" type="text" id="sp-company" placeholder="Rechercher ou saisir une entreprise..." required autocomplete="organization">
+        </div>
+      </div>
+
+      <!-- Secteur -->
+      <div class="fgroup">
+        <label class="fl" for="sp-sector">Secteur d'activité (NACE)</label>
+        <select class="fselect" id="sp-sector">
+          <option value="">Sélectionnez votre secteur d'activité...</option>
+          <optgroup label="Industrie">
+            <option value="energie">Énergie & Utilities</option>
+            <option value="oil-gas">Oil & Gas</option>
+            <option value="industrie">Industrie & Manufacturing</option>
+            <option value="chimie">Chimie & Raffinage</option>
+            <option value="aero">Aérospatial & Défense</option>
+          </optgroup>
+          <optgroup label="Services">
+            <option value="finance">Banque & Finance</option>
+            <option value="assurance">Assurance</option>
+            <option value="sante">Santé & Pharma</option>
+            <option value="telecom">Télécoms & Médias</option>
+            <option value="retail">Retail & Distribution</option>
+            <option value="transport">Transport & Logistique</option>
+          </optgroup>
+          <optgroup label="Public & Tech">
+            <option value="public">Secteur Public</option>
+            <option value="tech">Tech & Startups</option>
+            <option value="conseil">Conseil & Services</option>
+            <option value="autre">Autre</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <!-- Sujet -->
+      <div class="fgroup">
+        <label class="fl" for="sp-subject">Sujet <span>*</span></label>
+        <input class="finput" type="text" id="sp-subject" placeholder="Résumé de votre demande" required>
+      </div>
+
+      <!-- Description -->
+      <div class="fgroup">
+        <label class="fl" for="sp-message">Description détaillée <span>*</span></label>
+        <textarea class="ftextarea" id="sp-message" placeholder="Décrivez en détail votre demande, vos besoins, vos attentes..." required rows="5"></textarea>
+      </div>
+
+      <!-- reCAPTCHA notice -->
+      <div class="recaptcha-note">
+        Ce site est protégé par reCAPTCHA et les
+        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Règles de confidentialité</a>
+        et
+        <a href="https://policies.google.com/terms" target="_blank" rel="noopener">Conditions d'utilisation</a>
+        de Google s'appliquent.
+      </div>
+
+      <!-- Boutons -->
+      <div class="btn-row">
+        <button type="submit" class="btn-submit" id="sp-submit">
+          <span id="sp-btn-txt">Envoyer la demande</span>
+        </button>
+        <button type="button" class="btn-reset" onclick="resetSupport()">Réinitialiser</button>
+      </div>
+
+      <div class="form-status" id="sp-status"></div>
+
+    </form>
+  </div>
+
+  <!-- FAQ RAPIDE -->
+  <div class="faq-mini">
+    <div class="faq-mini-title">💡 Questions fréquentes</div>
+    <div id="sp-faq-list">
+      <div class="faq-mini-item" id="spf0">
+        <button class="faq-mini-q" onclick="spFaq('spf0')">Quel est le délai de réponse ? <span class="faq-mini-arr">▼</span></button>
+        <div class="faq-mini-a"><p>Nous répondons à toutes les demandes sous <strong>24 heures ouvrées</strong>. Pour les urgences techniques, contactez-nous directement par téléphone au +33 6 60 69 21 45.</p></div>
+      </div>
+      <div class="faq-mini-item" id="spf1">
+        <button class="faq-mini-q" onclick="spFaq('spf1')">Comment accéder à la plateforme AIES ? <span class="faq-mini-arr">▼</span></button>
+        <div class="faq-mini-a"><p>Rendez-vous sur <a href="https://ersia.org/?preview=true" target="_blank" style="color:var(--teal)">ersia.org</a> pour accéder à AIES. Un compte gratuit est disponible. Pour un accès Pro ou Enterprise, contactez-nous via ce formulaire.</p></div>
+      </div>
+      <div class="faq-mini-item" id="spf2">
+        <button class="faq-mini-q" onclick="spFaq('spf2')">Proposez-vous des formations sur site ? <span class="faq-mini-arr">▼</span></button>
+        <div class="faq-mini-a"><p>Oui, nous intervenons en <strong>présentiel à Paris et en région</strong>, ainsi qu'en distanciel. Nos formations couvrent l'IA Act, NIS2, ISO 42001 et la gouvernance IA/Cyber. Durées : 0,5 à 3 jours selon le programme.</p></div>
+      </div>
+      <div class="faq-mini-item" id="spf3">
+        <button class="faq-mini-q" onclick="spFaq('spf3')">Où trouver les CGV et mentions légales ? <span class="faq-mini-arr">▼</span></button>
+        <div class="faq-mini-a"><p>Nos <a href="https://ersia.org/?preview=true#cgv" target="_blank" style="color:var(--teal)">Conditions Générales de Vente</a> et <a href="https://ersia.org/?preview=true#mentions" target="_blank" style="color:var(--teal)">Mentions légales</a> sont disponibles sur ersia.org. Pour exercer vos droits RGPD, utilisez le formulaire ci-dessus (type : Exercice de droits RGPD).</p></div>
+      </div>
+      <div style="margin-top:12px;text-align:right">
+        <a href="/faq" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--teal);text-decoration:none">Voir toutes les questions →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- INFOS PRATIQUES -->
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-card-title">📍 Localisation</div>
+      <div class="info-card-body">
+        <strong>CONSEILPREV / ERSIA IA Management</strong><br>
+        Paris, Île-de-France, France<br>
+        Interventions : France · Europe · Moyen-Orient · Amérique du Nord
+      </div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-title">🕐 Disponibilité</div>
+      <div class="info-card-body">
+        <strong>Lun – Ven :</strong> 9h00 – 18h00 (Paris UTC+1)<br>
+        <strong>Email :</strong> 24h/7j — réponse sous 24h ouvrées<br>
+        <strong>Urgences :</strong> +33 6 60 69 21 45
+      </div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-title">🔒 Confidentialité</div>
+      <div class="info-card-body">
+        Vos données sont traitées conformément au <strong>RGPD</strong>. Aucune donnée partagée avec des tiers. Conservation : 13 mois max. Contact DPO : <a href="mailto:christophe.cerf@outlook.com" style="color:var(--teal)">christophe.cerf@outlook.com</a>
+      </div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-title">💼 Ressources</div>
+      <div class="info-card-body">
+        <a href="/faq" style="color:var(--teal)">FAQ complète →</a><br>
+        <a href="/aies" style="color:var(--teal)">Plateforme AIES →</a><br>
+        <a href="/livre-blanc" style="color:var(--teal)">Livre Blanc IA & ROI →</a><br>
+        <a href="/accessibility" style="color:var(--teal)">Accessibilité →</a>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div class="ft-mini">
+  <span>© 2025 CONSEILPREV · Support &amp; Centre d'aide · <a href="/">conseilprev.onrender.com</a></span>
+  <a href="/">← Retour au site</a>
+</div>
+
+<script>
+// ── Progression lecture ──
+window.addEventListener('scroll',function(){
+  var p=document.getElementById('read-progress');
+  if(p){var s=window.scrollY,t=document.body.scrollHeight-window.innerHeight;p.style.width=(t>0?Math.round(s/t*100):0)+'%';}
+},{passive:true});
+
+// ── Soumission formulaire ──
+function submitSupport(e){
+  e.preventDefault();
+  var type    = document.getElementById('sp-type').value;
+  var name    = document.getElementById('sp-name').value.trim();
+  var email   = document.getElementById('sp-email').value.trim();
+  var prefix  = document.getElementById('sp-prefix').value;
+  var phone   = document.getElementById('sp-phone').value.trim();
+  var company = document.getElementById('sp-company').value.trim();
+  var subject = document.getElementById('sp-subject').value.trim();
+  var msg     = document.getElementById('sp-message').value.trim();
+  var status  = document.getElementById('sp-status');
+  var btn     = document.getElementById('sp-submit');
+  var btnTxt  = document.getElementById('sp-btn-txt');
+
+  // Validation
+  if(!type||!name||!email||!phone||!company||!subject||!msg){
+    status.className='form-status err';
+    status.textContent='⚠ Veuillez remplir tous les champs obligatoires.';
+    return;
+  }
+  var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if(!emailRe.test(email)){
+    status.className='form-status err';
+    status.textContent='⚠ Adresse email invalide.';
+    return;
+  }
+
+  // Construction email
+  btn.disabled=true; btnTxt.textContent='Envoi en cours...';
+  var body = [
+    'Type de demande: '+type,
+    'Nom: '+name,
+    'Email: '+email,
+    'Téléphone: '+prefix+' '+phone,
+    'Entreprise: '+company,
+    'Sujet: '+subject,
+    '',
+    'Message:',
+    msg,
+    '',
+    '---',
+    'Envoyé depuis conseilprev.onrender.com/support'
+  ].join('
+');
+
+  var mailto = 'mailto:christophe.cerf@outlook.com'
+    +'?subject='+encodeURIComponent('[SUPPORT] '+subject+' — '+name)
+    +'&body='+encodeURIComponent(body);
+
+  window.location.href = mailto;
+
+  setTimeout(function(){
+    status.className='form-status ok';
+    status.textContent='✅ Votre client email va s'ouvrir. Si ce n'est pas le cas, écrivez directement à christophe.cerf@outlook.com';
+    btn.disabled=false; btnTxt.textContent='Envoyer la demande';
+  }, 1200);
+}
+
+function resetSupport(){
+  document.getElementById('support-form').reset();
+  var s=document.getElementById('sp-status');
+  s.className='form-status'; s.textContent='';
+}
+
+// ── FAQ mini ──
+function spFaq(id){
+  var item=document.getElementById(id);
+  var siblings=document.querySelectorAll('.faq-mini-item.open');
+  siblings.forEach(function(s){if(s.id!==id)s.classList.remove('open');});
+  item.classList.toggle('open');
+}
+
+// ── Anti-copie ──
+document.addEventListener('contextmenu',function(e){e.preventDefault();return false;});
+document.addEventListener('keydown',function(e){
+  if((e.ctrlKey||e.metaKey)&&['c','x','u','s'].indexOf(e.key.toLowerCase())>-1){
+    if(e.target.tagName!=='INPUT'&&e.target.tagName!=='TEXTAREA')e.preventDefault();
+  }
+  if(e.key==='F12'){e.preventDefault();}
+});
+document.addEventListener('selectstart',function(e){
+  if(e.target.tagName!=='INPUT'&&e.target.tagName!=='TEXTAREA'&&e.target.tagName!=='SELECT')
+    e.preventDefault();
+});
+</script>
+</body>
+</html>

@@ -3233,7 +3233,7 @@ function xSug(btn){
         <ul class="ft-links">
           <li><a href="/aies" target="_blank" rel="noopener" data-i18n="ft.prod.l1">Fonctionnalités AIES</a></li>
           <li><a href="/demo" target="_blank" rel="noopener" data-i18n="ft.prod.l2">Démonstration interactive</a></li>
-          <li><a href="https://ersia.org/?preview=true#tutoriels" target="_blank" rel="noopener" data-i18n="ft.prod.l3">Tutoriels vidéo</a></li>
+          
           <li><a href="/accessibility" target="_blank" rel="noopener" data-i18n="ft.prod.l4">Aide &amp; accessibilité</a></li>
         </ul>
         <h4 class="ft-col-title" style="margin-top:18px" data-i18n="ft.plans.lbl">Abonnements</h4>
@@ -3250,7 +3250,7 @@ function xSug(btn){
         <ul class="ft-links">
           <li><a href="mailto:christophe.cerf@outlook.com" data-i18n="ft.support.l1">Contact</a></li>
           <li><a href="/faq" target="_blank" rel="noopener" data-i18n="ft.support.l2">FAQ</a></li>
-          <li><a href="https://ersia.org/?preview=true#aide" target="_blank" rel="noopener" data-i18n="ft.support.l3">Centre d'aide</a></li>
+          <li><a href="/support" target="_blank" rel="noopener" data-i18n="ft.support.l3">Centre d'aide</a></li>
         </ul>
         <h4 class="ft-col-title" style="margin-top:18px" data-i18n="ft.legal.lbl">Légal</h4>
         <ul class="ft-links">
@@ -3519,7 +3519,11 @@ function xSug(btn){
   document.head.appendChild(printStyle);
 
 })();
-
+var T={
+  fr:JSON.parse('{"ft.support.l3":"Centre d\'aide"}'),
+  en:JSON.parse('{"ft.support.l3":"Help center"}'),
+  de:JSON.parse('{"ft.support.l3":"Hilfecenter"}')
+}
 </script>
 </body>
 </html>
