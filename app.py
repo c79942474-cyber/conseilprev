@@ -453,6 +453,7 @@ PAGES = {
     '/protection-donnees': 'protection-donnees.html',
     '/cgv':               'cgv.html',
     '/confidentialite':   'confidentialite.html',
+    '/dsa':               'dsa.html',
     '/donnees':       'donnees.html',
     '/aies':          'aies.html',
     '/demo':          'demo.html',

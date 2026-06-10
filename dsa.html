@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Notre conformité au DSA — CONSEILPREV</title>
+<meta name="description" content="Digital Services Act (DSA) — Comment CONSEILPREV respecte le règlement européen sur les services numériques : transparence, lutte contre les contenus illicites, protection des utilisateurs.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--pm:#8b5cf6;--pl:#b48af7;--pp:#d4baff;--pf:#d946ef;--teal:#5eead4;--wh:#f8f4ff;--mu:rgba(212,186,255,.52);--bdr:rgba(180,138,247,.18);--blue:#6366f1;--indigo:#4f46e5}
+html{scroll-behavior:smooth}
+body{font-family:"DM Sans",sans-serif;background:linear-gradient(160deg,#0d0825,#110a2e,#0e0820);color:var(--wh);min-height:100vh}
+body::before{content:"";position:fixed;inset:0;background-image:url("/hero-bg.jpg");background-size:cover;background-position:center 55%;background-attachment:fixed;opacity:.35;z-index:-2;pointer-events:none}
+#bc{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.bl{position:absolute;border-radius:50%;filter:blur(45px);mix-blend-mode:screen}
+#b1{width:380px;height:380px;background:radial-gradient(circle,#6366f1,#4f46e5 40%,transparent 70%);opacity:.40;animation:bm 22s ease-in-out infinite alternate;top:5%;left:5%}
+#b2{width:320px;height:320px;background:radial-gradient(circle,#db2777,#be185d 35%,transparent 75%);opacity:.28;animation:bm2 28s ease-in-out infinite alternate;bottom:10%;right:5%}
+#b3{width:280px;height:280px;background:radial-gradient(circle,#8b5cf6,#7c3aed 40%,transparent 70%);opacity:.30;animation:bm3 30s ease-in-out infinite alternate;top:40%;right:15%}
+@keyframes bm{0%{transform:translate(0,0) scale(1)}100%{transform:translate(80px,-60px) scale(1.08)}}
+@keyframes bm2{0%{transform:translate(0,0) scale(1)}100%{transform:translate(-60px,80px) scale(.95)}}
+@keyframes bm3{0%{transform:translate(0,0) scale(1)}100%{transform:translate(-40px,-70px) scale(1.05)}}
+nav{position:sticky;top:0;z-index:100;background:rgba(10,6,32,.93);backdrop-filter:blur(24px);border-bottom:1px solid var(--bdr);padding:13px 28px;display:flex;align-items:center;gap:12px}
+.nl{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:700;text-decoration:none;color:var(--wh);margin-right:auto}.nl span{color:var(--pl)}
+.nb{font-size:12px;color:var(--mu);text-decoration:none;font-family:"Space Mono",monospace;transition:color .2s}.nb:hover{color:var(--wh)}
+/* HERO */
+.hero{text-align:center;padding:52px 20px 32px;position:relative}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(99,102,241,.22),transparent 65%);pointer-events:none}
+.hbadge{display:inline-flex;align-items:center;gap:8px;background:rgba(99,102,241,.18);border:1px solid rgba(99,102,241,.4);border-radius:100px;padding:6px 18px;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;color:#a5b4fc;margin-bottom:20px}
+.bdot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:blink 2s ease-in-out infinite}
+h1{font-family:"Cormorant Garamond",serif;font-size:clamp(30px,5.5vw,58px);font-weight:700;margin-bottom:14px;position:relative;line-height:1.05}
+h1 em{font-style:italic;background:linear-gradient(135deg,#818cf8,#a5b4fc,#c4b5fd,#e879f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:14px;color:var(--mu);line-height:1.8;max-width:560px;margin:0 auto;position:relative}
+/* LAYOUT */
+.con{max-width:900px;margin:0 auto;padding:0 20px 64px}
+/* Sections */
+.dsa-sec{margin-bottom:36px;padding-bottom:36px;border-bottom:1px solid rgba(180,138,247,.1)}
+.dsa-sec:last-child{border-bottom:none}
+.dsa-h{font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:700;color:var(--wh);margin-bottom:16px;display:flex;align-items:center;gap:10px;scroll-margin-top:80px}
+.dsa-h-ico{font-size:20px}
+.dsa-h-num{font-family:"Space Mono",monospace;font-size:10px;background:linear-gradient(90deg,var(--blue),var(--pm));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-weight:700;letter-spacing:.1em}
+.dsa-p{font-size:13px;color:rgba(212,186,255,.78);line-height:1.85;margin-bottom:10px}
+.dsa-p strong{color:var(--pp)}
+.dsa-p a{color:var(--teal);text-decoration:none}.dsa-p a:hover{text-decoration:underline}
+/* Context card */
+.ctx-card{background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.25);border-radius:14px;padding:22px 26px;margin-bottom:32px}
+.ctx-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.ctx-ico{width:36px;height:36px;background:rgba(99,102,241,.2);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ctx-title{font-size:15px;font-weight:700;color:var(--wh)}
+/* 3 pilliers */
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:24px 0}
+@media(max-width:680px){.pillars{grid-template-columns:1fr}}
+.pillar{background:rgba(255,255,255,.04);border:1px solid rgba(180,138,247,.18);border-radius:13px;padding:20px 18px;transition:border-color .2s}
+.pillar:hover{border-color:rgba(217,70,239,.35)}
+.pillar-ico{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:12px}
+.pi-blue{background:rgba(99,102,241,.2)}
+.pi-orange{background:rgba(249,115,22,.15)}
+.pi-green{background:rgba(34,197,94,.12)}
+.pillar-title{font-size:14px;font-weight:700;color:var(--wh);margin-bottom:8px}
+.pillar-list{list-style:none;display:flex;flex-direction:column;gap:4px}
+.pillar-list li{font-size:11px;color:var(--mu);display:flex;align-items:flex-start;gap:6px;line-height:1.5}
+.pillar-list li::before{content:"✓";color:var(--teal);flex-shrink:0;font-size:10px;margin-top:1px}
+/* Engagements */
+.eng-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);border-radius:100px;padding:5px 14px;font-family:"Space Mono",monospace;font-size:9px;letter-spacing:.12em;color:var(--pp);margin-bottom:20px}
+.eng-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px}
+@media(max-width:680px){.eng-grid{grid-template-columns:1fr}}
+.eng-card{background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.18);border-radius:11px;padding:17px 16px;transition:all .2s}
+.eng-card:hover{border-color:rgba(99,102,241,.4);background:rgba(99,102,241,.12)}
+.eng-ico{font-size:20px;margin-bottom:10px}
+.eng-title{font-size:13px;font-weight:700;color:var(--wh);margin-bottom:6px}
+.eng-desc{font-size:12px;color:var(--mu);line-height:1.6}
+/* Pratiques interdites */
+.forbidden-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
+@media(max-width:560px){.forbidden-grid{grid-template-columns:1fr}}
+.forbidden-card{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.18);border-radius:10px;padding:14px 16px}
+.forbidden-card:hover{border-color:rgba(239,68,68,.3)}
+.fc-head{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.fc-ico{font-size:16px}
+.fc-title{font-size:13px;font-weight:700;color:#fca5a5}
+.fc-desc{font-size:12px;color:rgba(252,165,165,.65);line-height:1.6}
+/* Signal form */
+.signal-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+@media(max-width:560px){.signal-grid{grid-template-columns:1fr}}
+.signal-box{background:rgba(255,255,255,.04);border:1px solid rgba(180,138,247,.18);border-radius:11px;padding:18px}
+.signal-box-title{font-size:13px;font-weight:700;color:var(--wh);margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.signal-list{list-style:none;display:flex;flex-direction:column;gap:5px}
+.signal-list li{font-size:12px;color:var(--mu);padding-left:14px;position:relative;line-height:1.6}
+.signal-list li::before{content:"•";position:absolute;left:4px;color:var(--pm)}
+/* Signal buttons */
+.signal-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.sbtn{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;transition:all .2s;cursor:pointer;border:none;font-family:"DM Sans",sans-serif}
+.sbtn-p{background:linear-gradient(135deg,var(--pm),var(--pf));color:#fff;box-shadow:0 4px 18px rgba(139,92,246,.35)}
+.sbtn-p:hover{transform:translateY(-2px);box-shadow:0 6px 26px rgba(217,70,239,.4)}
+.sbtn-s{background:rgba(255,255,255,.06);border:1px solid var(--bdr)!important;color:var(--mu)}
+.sbtn-s:hover{border-color:var(--pl)!important;color:var(--wh)}
+/* Transparency algo */
+.algo-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+@media(max-width:560px){.algo-grid{grid-template-columns:1fr}}
+.algo-card{background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.18);border-radius:10px;padding:16px}
+.algo-card.neg{background:rgba(239,68,68,.05);border-color:rgba(239,68,68,.18)}
+.ac-ico{font-size:18px;margin-bottom:8px}
+.ac-title{font-size:13px;font-weight:700;color:var(--wh);margin-bottom:6px}
+.ac-desc{font-size:12px;color:var(--mu);line-height:1.65}
+.algo-card.neg .ac-title{color:#fca5a5}
+.algo-card.neg .ac-desc{color:rgba(252,165,165,.65)}
+/* Alert */
+.alert{border-radius:10px;padding:14px 18px;margin:14px 0;display:flex;gap:12px;align-items:flex-start}
+.al-info{background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.2)}
+.al-ok{background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2)}
+.alert-ico{font-size:16px;flex-shrink:0;margin-top:1px}
+.alert-txt{font-size:12px;line-height:1.7}
+.al-info .alert-txt{color:rgba(147,197,253,.85)}
+.al-ok .alert-txt{color:rgba(74,222,128,.85)}
+.alert-txt strong{color:inherit}
+.alert-txt a{text-decoration:underline}
+/* Footer ref */
+.ref-bar{background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2);border-radius:10px;padding:14px 18px;margin-top:28px;font-size:12px;color:var(--mu);line-height:1.7}
+.ref-bar strong{color:#a5b4fc}
+/* Footer */
+.ft-mini{background:rgba(5,2,20,.92);border-top:1px solid var(--bdr);padding:14px 24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:"Space Mono",monospace;font-size:10px;color:var(--mu)}
+.ft-mini a{color:var(--teal);text-decoration:none}
+body{-webkit-user-select:none;user-select:none}
+input,textarea{-webkit-user-select:text!important;user-select:text!important}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+</style>
+</head>
+<body>
+<div id="bc" aria-hidden="true">
+  <div class="bl" id="b1"></div>
+  <div class="bl" id="b2"></div>
+  <div class="bl" id="b3"></div>
+</div>
+
+<nav>
+  <a href="/" class="nl">CONSEIL<span>PREV</span></a>
+  <a href="/" class="nb">← Retour au site</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hbadge"><span class="bdot"></span> Digital Services Act (DSA)</div>
+  <h1>Notre conformité<br>au <em>DSA</em></h1>
+  <p class="hero-sub">Le règlement européen sur les services numériques (DSA) vise à créer un espace numérique plus sûr. Découvrez comment notre plateforme respecte ses principes fondamentaux.</p>
+</section>
+
+<main class="con" id="main-content">
+
+  <!-- CONTEXTE RÉGLEMENTAIRE -->
+  <section class="dsa-sec" id="contexte">
+    <div class="ctx-card">
+      <div class="ctx-head">
+        <div class="ctx-ico">⚖️</div>
+        <div class="ctx-title">Contexte réglementaire</div>
+      </div>
+      <p class="dsa-p">Le <strong>Digital Services Act (DSA)</strong> (Règlement UE 2022/2065) est entré en application le <strong>17 février 2024</strong> pour tous les prestataires de services numériques. Ce règlement européen impose des obligations accrues aux prestataires de services numériques en matière de <strong>transparence</strong>, de <strong>lutte contre les contenus illicites</strong> et de <strong>protection des utilisateurs</strong>.</p>
+      <p class="dsa-p">Le DSA reprend le principe d'immunité des prestataires du fait des contenus illicites qu'ils hébergent, dès lors que ceux-ci n'ont pas connaissance de leur caractère illicite ou qu'ils agissent promptement pour les retirer ou en rendre impossible l'accès dès qu'ils en ont connaissance.</p>
+    </div>
+
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--wh);text-align:center;margin-bottom:20px">Les trois piliers du DSA</h3>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-ico pi-blue">🔍</div>
+        <div class="pillar-title">Transparence</div>
+        <ul class="pillar-list">
+          <li>Conditions générales claires et accessibles</li>
+          <li>Informations sur les pratiques de modération</li>
+          <li>Précisions sur les algorithmes automatisés</li>
+          <li>Rapports réguliers sur la modération</li>
+        </ul>
+      </div>
+      <div class="pillar">
+        <div class="pillar-ico pi-orange">🛡️</div>
+        <div class="pillar-title">Lutte contre les contenus illicites</div>
+        <ul class="pillar-list">
+          <li>Mécanisme de signalement facilement accessible</li>
+          <li>Réglementation sur la publicité ciblée</li>
+          <li>Traitement prioritaire des signalements de confiance</li>
+          <li>En-têtes de modération explicites</li>
+        </ul>
+      </div>
+      <div class="pillar">
+        <div class="pillar-ico pi-green">👥</div>
+        <div class="pillar-title">Protection des utilisateurs</div>
+        <ul class="pillar-list">
+          <li>Interdiction des dark patterns</li>
+          <li>Protection des données sensibles</li>
+          <li>Pas de profilage des données sensibles</li>
+          <li>Protection des mineurs — publicités ciblées</li>
+          <li>Choix du système de recommandation transparent</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOS ENGAGEMENTS -->
+  <section class="dsa-sec" id="engagements">
+    <div style="text-align:center;margin-bottom:20px">
+      <span class="eng-badge">Nos engagements</span>
+    </div>
+    <h2 class="dsa-h" style="justify-content:center;text-align:center"><span class="dsa-h-ico">✅</span> Comment nous appliquons le DSA</h2>
+    <p class="dsa-p" style="text-align:center;margin-bottom:20px">Notre plateforme a été conçue et est maintenue dans le respect des principes du DSA.</p>
+
+    <div class="eng-grid">
+      <div class="eng-card">
+        <div class="eng-ico">♿</div>
+        <div class="eng-title">Signalement accessible</div>
+        <div class="eng-desc">Notre dispositif de signalement est facilement accessible et utilisable par tous les visiteurs du site.</div>
+      </div>
+      <div class="eng-card">
+        <div class="eng-ico">📋</div>
+        <div class="eng-title">CGU transparentes</div>
+        <div class="eng-desc">Nos conditions générales d'utilisation intègrent toutes les exigences de transparence du DSA.</div>
+      </div>
+      <div class="eng-card">
+        <div class="eng-ico">🤝</div>
+        <div class="eng-title">Modération responsable</div>
+        <div class="eng-desc">Nos procédures de modération respectent clairement les standards imposés et assurent la liberté d'expression.</div>
+      </div>
+    </div>
+    <div class="eng-grid">
+      <div class="eng-card">
+        <div class="eng-ico">🚫</div>
+        <div class="eng-title">Pas de dark patterns</div>
+        <div class="eng-desc">Notre interface ne comporte aucune manipulation incluant les utilisateurs à des actions non souhaitées.</div>
+      </div>
+      <div class="eng-card">
+        <div class="eng-ico">🔒</div>
+        <div class="eng-title">Protection des données</div>
+        <div class="eng-desc">Nous protégeons avant tout vos données via des mesures sécurisées (systèmes politiques, religieux, orientations sexuelles).</div>
+      </div>
+      <div class="eng-card">
+        <div class="eng-ico">⚖️</div>
+        <div class="eng-title">Recours disponibles</div>
+        <div class="eng-desc">Les utilisateurs peuvent contester les décisions de modération via un mécanisme de recours interne.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRATIQUES INTERDITES -->
+  <section class="dsa-sec" id="pratiques">
+    <h2 class="dsa-h"><span class="dsa-h-ico">🚫</span> Pratiques interdites</h2>
+    <p class="dsa-p">Conformément au DSA, notre plateforme n'utilise <strong>pas</strong> :</p>
+    <div class="forbidden-grid">
+      <div class="forbidden-card">
+        <div class="fc-head"><span class="fc-ico">❌</span><div class="fc-title">Dark patterns</div></div>
+        <div class="fc-desc">Aucune technique manipulant les utilisateurs à l'insu de leur volonté ou à des fins non souhaitées.</div>
+      </div>
+      <div class="forbidden-card">
+        <div class="fc-head"><span class="fc-ico">❌</span><div class="fc-title">Profilage sensible</div></div>
+        <div class="fc-desc">Aucun profilage basé sur les opinions politiques, croyances religieuses ou orientation sexuelle.</div>
+      </div>
+      <div class="forbidden-card">
+        <div class="fc-head"><span class="fc-ico">❌</span><div class="fc-title">Publicité ciblée aux mineurs</div></div>
+        <div class="fc-desc">Aucune publicité ciblée basée sur des données personnelles des mineurs (-18 ans).</div>
+      </div>
+      <div class="forbidden-card">
+        <div class="fc-head"><span class="fc-ico">❌</span><div class="fc-title">Recommandations opaques</div></div>
+        <div class="fc-desc">Nos algorithmes de recommandation sont documentés et transparents. Aucune boîte noire.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIGNALER UN CONTENU -->
+  <section class="dsa-sec" id="signalement">
+    <h2 class="dsa-h"><span class="dsa-h-ico">🚩</span> Signaler un contenu <span style="font-family:'Space Mono',monospace;font-size:11px;color:var(--blue);background:rgba(99,102,241,.15);padding:3px 9px;border-radius:100px;margin-left:8px">DSA Art. 16</span></h2>
+    <p class="dsa-p">Conformément au DSA, vous pouvez signaler tout contenu que vous estimez illicite. Notre équipe examine chaque signalement et prend les mesures appropriées dans les meilleurs délais.</p>
+    <div class="signal-grid">
+      <div class="signal-box">
+        <div class="signal-box-title">📝 Votre signalement doit contenir :</div>
+        <ul class="signal-list">
+          <li>L'URL ou l'emplacement exact du contenu</li>
+          <li>Les raisons pour lesquelles le contenu est illicite</li>
+          <li>Vos coordonnées de contact</li>
+        </ul>
+      </div>
+      <div class="signal-box">
+        <div class="signal-box-title">🤝 Notre engagement :</div>
+        <ul class="signal-list">
+          <li>Accusé de réception sous 48h</li>
+          <li>Réponse sur les mesures prises ou envisagées</li>
+          <li>Décision motivée communiquée</li>
+          <li>Possibilité de recours en cas de désaccord</li>
+        </ul>
+      </div>
+    </div>
+    <div class="signal-btns">
+      <a href="mailto:christophe.cerf@outlook.com?subject=[DSA]%20Signalement%20de%20contenu%20illicite&body=URL%20du%20contenu%20:%0ARaison%20du%20signalement%20:%0ACoordonnées%20:" class="sbtn sbtn-p">🚩 Signaler un contenu illicite</a>
+      <a href="/support" class="sbtn sbtn-s">📋 Déposer une réclamation</a>
+      <a href="mailto:christophe.cerf@outlook.com?subject=[DSA]%20Contestation%20décision" class="sbtn sbtn-s">⚖️ Contester une décision</a>
+    </div>
+    <div class="alert al-info" style="margin-top:16px">
+      <span class="alert-ico">ℹ️</span>
+      <div class="alert-txt">Conformément à l'Art. 17 DSA, toute décision de modération fait l'objet d'une <strong>notification motivée</strong> à l'utilisateur concerné, avec indication des voies de recours disponibles.</div>
+    </div>
+  </section>
+
+  <!-- TRANSPARENCE ALGORITHMIQUE -->
+  <section class="dsa-sec" id="algo">
+    <h2 class="dsa-h"><span class="dsa-h-ico">🔮</span> Transparence algorithmique <span style="font-family:'Space Mono',monospace;font-size:11px;color:var(--blue);background:rgba(99,102,241,.15);padding:3px 9px;border-radius:100px;margin-left:8px">DSA Art. 27</span></h2>
+    <p class="dsa-p">Notre plateforme utilise des algorithmes pour améliorer votre expérience. Voici comment ils fonctionnent :</p>
+    <div class="algo-grid">
+      <div class="algo-card">
+        <div class="ac-ico">🧭</div>
+        <div class="ac-title">Recommandations de formation</div>
+        <div class="ac-desc">Basées sur votre historique de navigation sur la plateforme et les réglementations pertinentes pour votre secteur d'activité.</div>
+      </div>
+      <div class="algo-card">
+        <div class="ac-ico">📊</div>
+        <div class="ac-title">Évaluations de conformité</div>
+        <div class="ac-desc">Algorithme déterministe qui score vos questionnaires selon des critères réglementaires définis (RGPD, IA Act, NIS2, DORA).</div>
+      </div>
+      <div class="algo-card">
+        <div class="ac-ico">📄</div>
+        <div class="ac-title">Génération de rapports</div>
+        <div class="ac-desc">Consolidation des données saisies et des résultats d'évaluations avec modélisation et interprétation par l'IA.</div>
+      </div>
+      <div class="algo-card neg">
+        <div class="ac-ico">🚫</div>
+        <div class="ac-title">Ce que nous NE faisons PAS</div>
+        <div class="ac-desc">Aucun algorithme basé sur les données sensibles (religion, opinions). Aucune décision entièrement automatisée sans possibilité de recours humain.</div>
+      </div>
+    </div>
+    <div class="alert al-ok">
+      <span class="alert-ico">✅</span>
+      <div class="alert-txt">Conformément à l'Art. 27 DSA et à l'Art. 22 RGPD, vous pouvez à tout moment <strong>demander une explication</strong> sur une décision algorithmique vous concernant et <strong>contester celle-ci</strong> auprès de notre équipe.</div>
+    </div>
+  </section>
+
+  <!-- RAPPORT DE TRANSPARENCE -->
+  <section class="dsa-sec" id="rapport">
+    <h2 class="dsa-h"><span class="dsa-h-ico">📈</span> Rapport de transparence DSA</h2>
+    <p class="dsa-p">Conformément à l'Art. 15 DSA, nous publions des informations sur nos activités de modération :</p>
+    <div class="eng-grid" style="grid-template-columns:repeat(2,1fr)">
+      <div class="eng-card">
+        <div class="eng-ico">📊</div>
+        <div class="eng-title">Signalements reçus</div>
+        <div class="eng-desc">Nombre de signalements traités, catégories de contenus concernés, délais de traitement. Rapport publié semestriellement.</div>
+      </div>
+      <div class="eng-card">
+        <div class="eng-ico">⚖️</div>
+        <div class="eng-title">Décisions de modération</div>
+        <div class="eng-desc">Nombre de contenus retirés ou restreints, motifs des décisions, taux de recours et issues.</div>
+      </div>
+      <div class="eng-card">
+        <div class="eng-ico">🤖</div>
+        <div class="eng-title">Modération automatisée</div>
+        <div class="eng-desc">Proportion de décisions prises automatiquement vs. manuellement. Taux d'erreur et corrections humaines.</div>
+      </div>
+      <div class="eng-card">
+        <div class="eng-ico">📬</div>
+        <div class="eng-title">Demander le rapport complet</div>
+        <div class="eng-desc">Le rapport de transparence complet est disponible sur demande à <a href="mailto:christophe.cerf@outlook.com" style="color:var(--teal)">christophe.cerf@outlook.com</a>.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT DSA -->
+  <section class="dsa-sec" id="contact">
+    <h2 class="dsa-h"><span class="dsa-h-ico">📬</span> Nous contacter — DSA</h2>
+    <p class="dsa-p">Pour toute question relative au DSA, signalement ou recours :</p>
+    <div class="signal-grid">
+      <div class="signal-box">
+        <div class="signal-box-title">👤 Point de contact DSA</div>
+        <ul class="signal-list">
+          <li><strong>Responsable :</strong> CERF Christophe</li>
+          <li><strong>Email :</strong> <a href="mailto:christophe.cerf@outlook.com" style="color:var(--teal)">christophe.cerf@outlook.com</a></li>
+          <li><strong>Alt. :</strong> <a href="mailto:c79942474@gmail.com" style="color:var(--teal)">c79942474@gmail.com</a></li>
+          <li><strong>Tél. :</strong> <a href="tel:+33660692145" style="color:var(--teal)">+33 6 60 69 21 45</a></li>
+          <li><strong>Délai :</strong> 48h (accusé), 30j (réponse complète)</li>
+        </ul>
+      </div>
+      <div class="signal-box">
+        <div class="signal-box-title">🏛️ Autorités compétentes</div>
+        <ul class="signal-list">
+          <li><strong>France :</strong> <a href="https://www.arcom.fr" target="_blank" rel="noopener" style="color:var(--teal)">ARCOM (arcom.fr)</a></li>
+          <li><strong>UE :</strong> <a href="https://digital-strategy.ec.europa.eu" target="_blank" rel="noopener" style="color:var(--teal)">Commission européenne</a></li>
+          <li><strong>Résolution en ligne :</strong> <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener" style="color:var(--teal)">ec.europa.eu/consumers/odr</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="ref-bar">
+    <strong>Référence réglementaire :</strong> Règlement (UE) 2022/2065 du Parlement européen et du Conseil du 19 octobre 2022 relatif à un marché unique des services numériques (Digital Services Act). Entré en vigueur le <strong>17 février 2024</strong>. <a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32022R2065" target="_blank" rel="noopener">Texte officiel JOUE →</a>
+  </div>
+
+</main>
+
+<div class="ft-mini">
+  <span>© 2025 CONSEILPREV · DSA Impact · <a href="/mentions-legales">Mentions légales</a> · <a href="/confidentialite">Confidentialité</a> · <a href="/cgv">CGV</a></span>
+  <a href="/">← Retour au site</a>
+</div>
+
+<script>
+document.addEventListener("contextmenu",function(e){e.preventDefault();});
+document.addEventListener("keydown",function(e){if(e.key==="F12"||(e.ctrlKey&&["u","s"].includes(e.key.toLowerCase())))e.preventDefault();});
+// Progress bar
+window.addEventListener("scroll",function(){
+  var p=document.getElementById("rp");if(p){var s=window.scrollY,t=document.body.scrollHeight-window.innerHeight;p.style.width=(t>0?Math.round(s/t*100):0)+"%";}
+},{passive:true});
+</script>
+</body>
+</html>
