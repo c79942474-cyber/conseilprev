@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Politique de protection des données — CONSEILPREV</title>
+<meta name="description" content="Politique de protection des données personnelles CONSEILPREV — RGPD, droits des personnes, cookies, transferts internationaux, sécurité.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0620;--pm:#8b5cf6;--pl:#b48af7;--pp:#d4baff;--pf:#d946ef;--teal:#5eead4;--wh:#f8f4ff;--mu:rgba(212,186,255,.52);--bdr:rgba(180,138,247,.18)}
+html{scroll-behavior:smooth}
+body{font-family:"DM Sans",sans-serif;background:linear-gradient(160deg,#0d0825,#110a2e,#0e0820);color:var(--wh);min-height:100vh;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;background-image:url("/hero-bg.jpg");background-size:cover;background-position:center 55%;background-attachment:fixed;opacity:.38;z-index:-2;pointer-events:none}
+#bc{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.bl{position:absolute;border-radius:50%;filter:blur(45px);mix-blend-mode:screen}
+#b1{width:420px;height:420px;background:radial-gradient(circle,#7c3aed,#4f46e5 40%,transparent 70%);opacity:.42;animation:bm 22s ease-in-out infinite alternate;top:5%;left:5%}
+#b2{width:360px;height:360px;background:radial-gradient(circle,#db2777,#be185d 35%,transparent 75%);opacity:.35;animation:bm2 28s ease-in-out infinite alternate;top:50%;right:8%}
+@keyframes bm{0%{transform:translate(0,0)}100%{transform:translate(80px,-60px)}}
+@keyframes bm2{0%{transform:translate(0,0)}100%{transform:translate(-60px,80px)}}
+nav{position:sticky;top:0;z-index:100;background:rgba(10,6,32,.93);backdrop-filter:blur(24px);border-bottom:1px solid var(--bdr);padding:13px 28px;display:flex;align-items:center;gap:12px}
+.nl{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:700;text-decoration:none;color:var(--wh);margin-right:auto}.nl span{color:var(--pl)}
+.nb{font-size:12px;color:var(--mu);text-decoration:none;font-family:"Space Mono",monospace;transition:color .2s}.nb:hover{color:var(--wh)}
+.page-wrap{max-width:720px;margin:0 auto;padding:40px 20px 60px}
+/* Table des matières */
+.toc{background:rgba(139,92,246,.08);border:1px solid rgba(180,138,247,.2);border-radius:12px;padding:18px 22px;margin-bottom:32px}
+.toc-title{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--pp);margin-bottom:12px}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:5px}
+.toc-list a{font-size:12px;color:var(--mu);text-decoration:none;display:flex;align-items:center;gap:7px;transition:color .2s;font-family:"Space Mono",monospace}
+.toc-list a::before{content:"›";color:var(--pm);font-size:14px}
+.toc-list a:hover{color:var(--wh)}
+/* Hero */
+.hero{text-align:center;padding:40px 0 28px}
+.hbadge{display:inline-flex;align-items:center;gap:8px;background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);border-radius:100px;padding:5px 16px;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.12em;color:var(--pp);margin-bottom:16px}
+.bdot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:blink 2s ease-in-out infinite}
+h1{font-family:"Cormorant Garamond",serif;font-size:clamp(26px,4.5vw,46px);font-weight:700;margin-bottom:10px}
+h1 em{font-style:italic;background:linear-gradient(135deg,#818cf8,#c084fc,#e879f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:13px;color:var(--mu);line-height:1.75;max-width:500px;margin:0 auto}
+/* Sections */
+.ml-section{margin-bottom:28px;padding-bottom:28px;border-bottom:1px solid rgba(180,138,247,.1)}
+.ml-section:last-child{border-bottom:none}
+.ml-h{font-size:16px;font-weight:700;color:var(--wh);margin-bottom:12px;display:flex;align-items:center;gap:10px;scroll-margin-top:80px}
+.ml-h::before{content:"";width:3px;height:16px;background:linear-gradient(180deg,var(--pm),var(--pf));border-radius:2px;flex-shrink:0}
+.ml-p{font-size:13px;color:rgba(212,186,255,.78);line-height:1.85;margin-bottom:10px}
+.ml-p strong{color:var(--pp)}
+.ml-p a{color:var(--teal);text-decoration:none}.ml-p a:hover{text-decoration:underline}
+.ml-list{list-style:none;display:flex;flex-direction:column;gap:6px;margin:10px 0}
+.ml-list li{font-size:13px;color:rgba(212,186,255,.72);padding-left:18px;position:relative;line-height:1.75}
+.ml-list li::before{content:"›";position:absolute;left:4px;color:var(--pm);font-weight:600}
+.ml-list li strong{color:var(--pp)}
+/* Tableau des droits */
+.rights-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:14px 0}
+@media(max-width:560px){.rights-grid{grid-template-columns:1fr}}
+.right-card{background:rgba(139,92,246,.07);border:1px solid rgba(180,138,247,.18);border-radius:10px;padding:14px 16px}
+.right-art{font-family:"Space Mono",monospace;font-size:9px;color:var(--pm);letter-spacing:.1em;margin-bottom:5px}
+.right-title{font-size:13px;font-weight:600;color:var(--wh);margin-bottom:4px}
+.right-desc{font-size:11px;color:var(--mu);line-height:1.6}
+/* Alert CNIL */
+.alert-cnil{background:rgba(60,201,176,.07);border:1px solid rgba(60,201,176,.2);border-radius:10px;padding:14px 18px;margin:14px 0;display:flex;gap:12px;align-items:flex-start}
+.alert-ico{font-size:18px;flex-shrink:0}
+.alert-txt{font-size:12px;color:rgba(94,234,212,.8);line-height:1.7}
+.alert-txt strong{color:var(--teal)}
+.alert-txt a{color:var(--teal)}
+/* Contact DPO */
+.dpo-card{background:linear-gradient(135deg,rgba(139,92,246,.12),rgba(217,70,239,.08));border:1px solid rgba(180,138,247,.25);border-radius:12px;padding:20px 24px;margin-top:14px}
+.dpo-title{font-size:14px;font-weight:700;color:var(--wh);margin-bottom:10px}
+.dpo-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:13px;color:var(--mu)}
+.dpo-row:last-child{border-bottom:none}
+.dpo-row strong{color:var(--pp);min-width:140px;font-size:12px;font-family:"Space Mono",monospace}
+.dpo-row a{color:var(--teal);text-decoration:none}
+/* Dates */
+.dates-bar{background:rgba(255,255,255,.03);border-radius:8px;padding:12px 16px;margin-top:20px;font-family:"Space Mono",monospace;font-size:10px;color:var(--mu);display:flex;gap:20px;flex-wrap:wrap}
+.dates-bar span strong{color:var(--pp)}
+/* Footer */
+.ft-mini{background:rgba(5,2,20,.92);border-top:1px solid var(--bdr);padding:14px 24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:"Space Mono",monospace;font-size:10px;color:var(--mu);margin-top:40px}
+.ft-mini a{color:var(--teal);text-decoration:none}
+body{-webkit-user-select:none;user-select:none}
+input,textarea{-webkit-user-select:text!important;user-select:text!important}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+</style>
+</head>
+<body>
+<div id="bc" aria-hidden="true"><div class="bl" id="b1"></div><div class="bl" id="b2"></div></div>
+
+<nav>
+  <a href="/" class="nl">CONSEIL<span>PREV</span></a>
+  <a href="/" class="nb">← Retour au site</a>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hbadge"><span class="bdot"></span> RGPD · UE 2016/679</div>
+    <h1>Politique de <em>protection<br>des données</em></h1>
+    <p class="hero-sub">CONSEILPREV s'engage à protéger vos données personnelles conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi française Informatique et Libertés.</p>
+  </div>
+
+  <!-- TABLE DES MATIÈRES -->
+  <nav class="toc" aria-label="Table des matières">
+    <div class="toc-title">Sommaire</div>
+    <ul class="toc-list">
+      <li><a href="#preambule">Préambule</a></li>
+      <li><a href="#responsable">Responsable du traitement</a></li>
+      <li><a href="#donnees-collectees">Données collectées</a></li>
+      <li><a href="#finalites">Finalités & bases légales</a></li>
+      <li><a href="#droits">Vos droits (Art. 15-22)</a></li>
+      <li><a href="#conservation">Durée de conservation</a></li>
+      <li><a href="#transferts">Transferts & sous-traitants</a></li>
+      <li><a href="#securite">Sécurité</a></li>
+      <li><a href="#cookies">Cookies</a></li>
+      <li><a href="#contact">Contact DPO</a></li>
+    </ul>
+  </nav>
+
+  <!-- 1. PRÉAMBULE -->
+  <section class="ml-section" id="preambule">
+    <h2 class="ml-h">Préambule</h2>
+    <p class="ml-p">Le RGPD fixe le cadre juridique applicable aux traitements de données à caractère personnel au sein de l'Union Européenne. <strong>CONSEILPREV</strong>, en tant que responsable de traitement, s'engage à collecter et traiter uniquement les données strictement nécessaires à ses activités, dans le respect de vos droits fondamentaux à la vie privée.</p>
+    <p class="ml-p">La présente politique s'applique à toutes les données personnelles collectées via le site <strong>conseilprev.onrender.com</strong>, la plateforme <strong>AIES</strong> (ersia.org), nos formulaires de contact et nos communications commerciales.</p>
+    <div class="alert-cnil">
+      <span class="alert-ico">ℹ️</span>
+      <div class="alert-txt">Cette politique est conforme au <strong>RGPD (UE 2016/679)</strong>, à la <strong>loi Informatique et Libertés</strong> (modifiée en 2018), au <strong>RGAA</strong> et aux recommandations de la <strong>CNIL</strong>. <a href="https://www.cnil.fr" target="_blank" rel="noopener">cnil.fr →</a></div>
+    </div>
+  </section>
+
+  <!-- 2. RESPONSABLE -->
+  <section class="ml-section" id="responsable">
+    <h2 class="ml-h">Responsable du traitement</h2>
+    <ul class="ml-list">
+      <li><strong>Société :</strong> Conseilprev — ERSIA IA Management, SARL</li>
+      <li><strong>Siège social :</strong> 19 rue Auguste Chabrières, 75015 Paris, France</li>
+      <li><strong>RCS Paris :</strong> 494 530 157</li>
+      <li><strong>DPO / Responsable :</strong> Monsieur CERF Christophe</li>
+      <li><strong>Email :</strong> <a href="mailto:christophe.cerf@outlook.com">christophe.cerf@outlook.com</a></li>
+      <li><strong>Email alternatif :</strong> <a href="mailto:c79942474@gmail.com">c79942474@gmail.com</a></li>
+      <li><strong>Téléphone :</strong> <a href="tel:+33660692145">+33 6 60 69 21 45</a></li>
+    </ul>
+  </section>
+
+  <!-- 3. DONNÉES COLLECTÉES -->
+  <section class="ml-section" id="donnees-collectees">
+    <h2 class="ml-h">Données collectées</h2>
+    <p class="ml-p">Nous collectons uniquement les données nécessaires aux finalités décrites ci-après :</p>
+    <ul class="ml-list">
+      <li><strong>Identité :</strong> nom, prénom, titre de civilité</li>
+      <li><strong>Coordonnées :</strong> adresse email professionnelle, numéro de téléphone</li>
+      <li><strong>Entreprise :</strong> raison sociale, secteur d'activité, taille</li>
+      <li><strong>Navigation :</strong> adresse IP, pages visitées, durée de session (via cookies analytics, si consentement)</li>
+      <li><strong>Messages :</strong> contenu des formulaires de contact et du chat IA</li>
+      <li><strong>Préférences :</strong> langue, accessibilité, cookies (stockés localement)</li>
+    </ul>
+    <p class="ml-p">Nous ne collectons <strong>aucune donnée sensible</strong> (santé, opinions politiques, religion, biométrie, etc.) sans consentement explicite préalable.</p>
+  </section>
+
+  <!-- 4. FINALITÉS -->
+  <section class="ml-section" id="finalites">
+    <h2 class="ml-h">Finalités & bases légales</h2>
+    <ul class="ml-list">
+      <li><strong>Réponse aux demandes de contact</strong> — Base légale : exécution d'un contrat / intérêt légitime (Art. 6.1.b/f RGPD)</li>
+      <li><strong>Fourniture des services CONSEILPREV / AIES</strong> — Base légale : exécution d'un contrat (Art. 6.1.b)</li>
+      <li><strong>Newsletter et communications commerciales</strong> — Base légale : consentement explicite (Art. 6.1.a)</li>
+      <li><strong>Amélioration du site et analytics</strong> — Base légale : consentement (Art. 6.1.a) via gestion des cookies</li>
+      <li><strong>Respect des obligations légales</strong> — Base légale : obligation légale (Art. 6.1.c)</li>
+      <li><strong>Chat IA (Mistral)</strong> — Base légale : consentement / intérêt légitime. Les messages sont traités par Mistral AI (voir politique Mistral)</li>
+    </ul>
+  </section>
+
+  <!-- 5. VOS DROITS -->
+  <section class="ml-section" id="droits">
+    <h2 class="ml-h">Vos droits (Articles 15-22 RGPD)</h2>
+    <p class="ml-p">Conformément au RGPD, vous disposez des droits suivants :</p>
+    <div class="rights-grid">
+      <div class="right-card">
+        <div class="right-art">Article 15</div>
+        <div class="right-title">Droit d'accès</div>
+        <div class="right-desc">Obtenir une copie de vos données personnelles traitées et les informations relatives au traitement.</div>
+      </div>
+      <div class="right-card">
+        <div class="right-art">Article 16</div>
+        <div class="right-title">Droit de rectification</div>
+        <div class="right-desc">Corriger vos données inexactes ou incomplètes sans délai injustifié.</div>
+      </div>
+      <div class="right-card">
+        <div class="right-art">Article 17</div>
+        <div class="right-title">Droit à l'effacement</div>
+        <div class="right-desc">Obtenir l'effacement de vos données (droit à l'oubli), sous réserve des obligations légales.</div>
+      </div>
+      <div class="right-card">
+        <div class="right-art">Article 18</div>
+        <div class="right-title">Droit de limitation</div>
+        <div class="right-desc">Suspendre temporairement le traitement de vos données dans certains cas.</div>
+      </div>
+      <div class="right-card">
+        <div class="right-art">Article 20</div>
+        <div class="right-title">Droit à la portabilité</div>
+        <div class="right-desc">Recevoir vos données dans un format structuré, lisible par machine, et les transmettre à un autre responsable.</div>
+      </div>
+      <div class="right-card">
+        <div class="right-art">Article 21</div>
+        <div class="right-title">Droit d'opposition</div>
+        <div class="right-desc">Vous opposer au traitement de vos données, notamment à des fins de prospection commerciale.</div>
+      </div>
+      <div class="right-card">
+        <div class="right-art">Article 22</div>
+        <div class="right-title">Décisions automatisées</div>
+        <div class="right-desc">Ne pas faire l'objet d'une décision fondée uniquement sur un traitement automatisé produisant des effets juridiques.</div>
+      </div>
+      <div class="right-card">
+        <div class="right-art">Article 7</div>
+        <div class="right-title">Retrait du consentement</div>
+        <div class="right-desc">Retirer votre consentement à tout moment, sans que cela n'affecte la licéité du traitement antérieur.</div>
+      </div>
+    </div>
+    <div class="alert-cnil">
+      <span class="alert-ico">⚖️</span>
+      <div class="alert-txt">Pour exercer vos droits, contactez notre DPO : <strong><a href="mailto:christophe.cerf@outlook.com">christophe.cerf@outlook.com</a></strong>. Réponse garantie sous <strong>30 jours</strong> (délai légal RGPD). En cas de litige, vous pouvez saisir la <strong><a href="https://www.cnil.fr/fr/plaintes" target="_blank" rel="noopener">CNIL</a></strong>.</div>
+    </div>
+  </section>
+
+  <!-- 6. CONSERVATION -->
+  <section class="ml-section" id="conservation">
+    <h2 class="ml-h">Durée de conservation</h2>
+    <ul class="ml-list">
+      <li><strong>Données de contact & prospects :</strong> 3 ans à compter du dernier contact</li>
+      <li><strong>Données clients :</strong> 5 ans après la fin du contrat (obligation légale comptable)</li>
+      <li><strong>Préférences cookies :</strong> <strong>13 mois</strong> (recommandation CNIL)</li>
+      <li><strong>Logs de sécurité :</strong> 12 mois (détection d'intrusion, anti-DDoS)</li>
+      <li><strong>Newsletter :</strong> jusqu'au désabonnement + 3 ans</li>
+      <li><strong>Données de chat IA :</strong> session uniquement — non persistées sur nos serveurs</li>
+    </ul>
+  </section>
+
+  <!-- 7. TRANSFERTS -->
+  <section class="ml-section" id="transferts">
+    <h2 class="ml-h">Transferts & sous-traitants</h2>
+    <p class="ml-p">Certains de nos prestataires techniques sont établis hors de l'Union Européenne. Ces transferts s'effectuent dans le cadre de garanties appropriées :</p>
+    <ul class="ml-list">
+      <li><strong>Render Services (hébergement) :</strong> USA — Clauses contractuelles types (CCT) approuvées par la Commission européenne</li>
+      <li><strong>Mistral AI (chat IA) :</strong> France/UE — Conformité RGPD native, données traitées en Europe</li>
+      <li><strong>GitHub (code source) :</strong> USA — Microsoft Ireland Operations Ltd, CCT</li>
+      <li><strong>Google Fonts (typographies) :</strong> USA — CCT</li>
+    </ul>
+    <p class="ml-p">Nous ne vendons, louons ni ne partageons vos données personnelles avec des tiers à des fins commerciales.</p>
+  </section>
+
+  <!-- 8. SÉCURITÉ -->
+  <section class="ml-section" id="securite">
+    <h2 class="ml-h">Sécurité des données</h2>
+    <p class="ml-p">CONSEILPREV met en œuvre les mesures techniques et organisationnelles appropriées pour protéger vos données contre tout accès non autorisé, modification, divulgation ou destruction :</p>
+    <ul class="ml-list">
+      <li><strong>Transport :</strong> HTTPS/TLS 1.3 — chiffrement de toutes les communications</li>
+      <li><strong>Anti-DDoS :</strong> rate limiting, blocage IP, détection d'intrusion</li>
+      <li><strong>Anti-scraping :</strong> filtrage des bots malveillants, honeypots</li>
+      <li><strong>Headers de sécurité :</strong> CSP, HSTS, X-Frame-Options, X-Content-Type-Options</li>
+      <li><strong>Contrôle d'accès :</strong> accès aux données limité au personnel autorisé</li>
+    </ul>
+    <p class="ml-p">En cas de violation de données, nous notifierons la CNIL dans les <strong>72 heures</strong> (Art. 33 RGPD) et les personnes concernées dans les meilleurs délais (Art. 34).</p>
+  </section>
+
+  <!-- 9. COOKIES -->
+  <section class="ml-section" id="cookies">
+    <h2 class="ml-h">Cookies & traceurs</h2>
+    <p class="ml-p">Notre site utilise des cookies. Conformément à la recommandation CNIL du 17 septembre 2020, nous recueillons votre consentement avant tout dépôt de cookies non essentiels.</p>
+    <ul class="ml-list">
+      <li><strong>Cookies nécessaires :</strong> fonctionnement du site, session — exemptés de consentement</li>
+      <li><strong>Cookies fonctionnels :</strong> préférences langue, accessibilité — consentement recommandé</li>
+      <li><strong>Cookies analytiques :</strong> mesure d'audience anonymisée — consentement requis</li>
+      <li><strong>Cookies marketing :</strong> publicité ciblée — consentement requis</li>
+    </ul>
+    <p class="ml-p">Vous pouvez gérer vos préférences à tout moment via le bouton <strong>🍪 Cookies</strong> en bas à gauche de chaque page, ou contacter notre DPO.</p>
+  </section>
+
+  <!-- 10. CONTACT DPO -->
+  <section class="ml-section" id="contact">
+    <h2 class="ml-h">Contact — Délégué à la Protection des Données</h2>
+    <div class="dpo-card">
+      <div class="dpo-title">🔒 Exercer vos droits RGPD</div>
+      <div class="dpo-row"><strong>DPO :</strong> Monsieur CERF Christophe</div>
+      <div class="dpo-row"><strong>Email principal :</strong> <a href="mailto:christophe.cerf@outlook.com">christophe.cerf@outlook.com</a></div>
+      <div class="dpo-row"><strong>Email alternatif :</strong> <a href="mailto:c79942474@gmail.com">c79942474@gmail.com</a></div>
+      <div class="dpo-row"><strong>Téléphone :</strong> <a href="tel:+33660692145">+33 6 60 69 21 45</a></div>
+      <div class="dpo-row"><strong>Adresse postale :</strong> 19 rue Auguste Chabrières, 75015 Paris</div>
+      <div class="dpo-row"><strong>Délai de réponse :</strong> 30 jours (délai légal RGPD)</div>
+      <div class="dpo-row"><strong>Autorité de contrôle :</strong> <a href="https://www.cnil.fr/fr/plaintes" target="_blank" rel="noopener">CNIL — cnil.fr/plaintes</a></div>
+    </div>
+  </section>
+
+  <div class="dates-bar">
+    <span><strong>Version :</strong> 2.0</span>
+    <span><strong>Entrée en vigueur :</strong> Janvier 2025</span>
+    <span><strong>Dernière mise à jour :</strong> Juin 2025</span>
+    <span><strong>Prochaine révision :</strong> Janvier 2026</span>
+  </div>
+
+</div>
+
+<div class="ft-mini">
+  <span>© 2025 CONSEILPREV · Politique de protection des données · <a href="/">conseilprev.onrender.com</a></span>
+  <a href="/">← Retour au site</a>
+</div>
+
+<script>
+document.addEventListener('contextmenu',function(e){e.preventDefault();});
+document.addEventListener('keydown',function(e){if(e.key==='F12'||(e.ctrlKey&&['u','s'].includes(e.key.toLowerCase())))e.preventDefault();});
+</script>
+</body>
+</html>

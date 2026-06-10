@@ -450,6 +450,7 @@ PAGES = {
     '/':              'index.html',
     '/support':       'support.html',
     '/mentions-legales': 'mentions-legales.html',
+    '/protection-donnees': 'protection-donnees.html',
     '/donnees':       'donnees.html',
     '/aies':          'aies.html',
     '/demo':          'demo.html',
