@@ -808,6 +808,155 @@ nav{
 .nav-cta,.ncta{background:linear-gradient(135deg,#8b5cf6,#d946ef)!important;color:#fff!important;padding:8px 18px!important;border-radius:8px!important;font-size:12px!important;font-family:"Space Mono",monospace!important;letter-spacing:.04em!important;font-weight:700!important;box-shadow:0 4px 16px rgba(217,70,239,.4)!important;transition:all .2s!important;text-decoration:none}
 .nav-cta:hover,.ncta:hover{transform:translateY(-1px)!important;box-shadow:0 6px 24px rgba(217,70,239,.55)!important}
 
+
+/* ══ ÉCLAIRCISSEMENT GLOBAL DU SITE ══ */
+
+/* Fond body plus lumineux */
+body{
+  background:linear-gradient(160deg,
+    #1a0f3e 0%,
+    #1e1248 25%,
+    #160e38 50%,
+    #1c1044 75%,
+    #180c3c 100%
+  ) !important;
+}
+
+/* Image de fond plus visible */
+body::before{
+  opacity:.52 !important;
+}
+
+/* Blobs plus lumineux */
+#b1,#blob1{opacity:.55 !important}
+#b2,#blob2{opacity:.48 !important}
+#b3,#blob3{opacity:.42 !important}
+#b4,#blob4{opacity:.34 !important}
+#b5,#blob5{opacity:.40 !important}
+
+/* Texte principal plus blanc */
+body{color:#f0eaff !important}
+
+/* Variables de couleur plus lumineuses */
+:root{
+  --bg:#1a0f3e !important;
+  --bg2:#1e1248 !important;
+  --card:rgba(180,138,247,.10) !important;
+  --bdr:rgba(180,138,247,.28) !important;
+  --mu:rgba(220,200,255,.72) !important;
+  --pp:#e2d0ff !important;
+  --wh:#f4eeff !important;
+}
+
+/* Cartes et blocs — fonds plus clairs */
+.card,.feat-card,.diff-card,.svc2-card,.svc2,
+.risk-card,.norm-card,.nc,.ia-card,.ux-card,
+.rm-item,.pole-card,.pillar,.eng-card,
+.right-card,.faq-item,.ck-cat,.wcag-card,
+.info-card,.algo-card,.signal-box,
+.mode-card,.theme-card,.cc,.member-card,
+.job-card,.val-card,.perk,.res-card,
+.toc,.cgv-section,.pc-section,
+.ml-section,.ctx-card,.dpo-card,.contact-card,
+.tips-card,.score-board,.faq-mini-item,
+.ft-newsletter{
+  background:rgba(180,138,247,.11) !important;
+  border-color:rgba(180,138,247,.28) !important;
+}
+
+/* Textes secondaires (mu) plus lisibles */
+.card p,.feat-card p,.diff-card p,.svc2 p,
+.risk-card p,.norm-card p,.pillar p,
+.eng-card p,.right-card p,.faq-item p,
+.info-card p,.algo-card p,.signal-box p,
+.res-card p,.job-card p,.val-card p,
+.dsa-p,.cgv-p,.pc-p,.ml-p,.hero-sub,
+.member-desc,.perk-body .perk-desc,
+.dd-desc,.form-sub{
+  color:rgba(220,200,255,.80) !important;
+}
+
+/* Sections sombres */
+.sec,.sec-a,.sec-dark{
+  background:rgba(26,15,62,.6) !important;
+}
+
+/* Nav plus lumineux */
+nav{
+  background:linear-gradient(135deg,
+    rgba(26,12,64,.97) 0%,
+    rgba(32,14,72,.96) 50%,
+    rgba(22,10,54,.97) 100%
+  ) !important;
+}
+
+/* Footer plus clair */
+footer{
+  background:linear-gradient(180deg,
+    rgba(20,10,50,.97) 0%,
+    rgba(16,8,42,.99) 100%
+  ) !important;
+}
+
+/* Stats bar */
+.sb2,.stats-bar{
+  background:linear-gradient(90deg,
+    rgba(99,102,241,.16),
+    rgba(139,92,246,.14),
+    rgba(217,70,239,.10)
+  ) !important;
+}
+
+/* Contexte cards pages légales */
+.ml-section,.cgv-section,.pc-section,.dsa-sec{
+  border-bottom-color:rgba(180,138,247,.18) !important;
+}
+
+/* Hero sections */
+.hero,.page-wrap{
+  position:relative;
+}
+
+/* Chat widget */
+#xbox,#xbox{
+  background:rgba(22,10,54,.97) !important;
+}
+
+/* Cookie modal */
+#ck-modal-box{
+  background:linear-gradient(160deg,#1a0a40,#1e0e48) !important;
+}
+
+/* Dropdown nav */
+.nav-dropdown{
+  background:rgba(18,8,46,.98) !important;
+}
+.dd-item:hover{
+  background:rgba(139,92,246,.22) !important;
+}
+
+/* Inputs */
+.finput,.fselect,.ftextarea,.nl-input{
+  background:rgba(255,255,255,.09) !important;
+  border-color:rgba(180,138,247,.3) !important;
+  color:#f0eaff !important;
+}
+
+/* Faq items */
+.faq-item,.faq-mini-item{
+  background:rgba(139,92,246,.09) !important;
+}
+
+/* Page card (mentions légales etc) */
+.page-card{
+  background:rgba(22,10,50,.95) !important;
+}
+
+/* Tooltips */
+[data-tooltip]::after{
+  background:rgba(18,8,46,.98) !important;
+}
+
 </style>
 </head>
 <body>
