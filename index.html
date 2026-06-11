@@ -2196,6 +2196,95 @@ footer::after{
   transition:opacity .28s ease, transform .28s ease, filter .28s ease !important;
 }
 
+
+/* ══════════════════════════════════════════════════
+   HOVER ZOOM — Conseil, Audit & Conformité IA (.svc2)
+   ══════════════════════════════════════════════════ */
+
+.svc-grid{
+  perspective:1400px;
+  position:relative;
+}
+
+.svc2{
+  transition:
+    transform .38s cubic-bezier(.34,1.56,.64,1),
+    border-color .28s ease,
+    box-shadow .32s ease,
+    background .28s ease !important;
+  transform-origin:center center;
+  position:relative;
+  z-index:1;
+  will-change:transform;
+  cursor:default;
+}
+
+.svc2:hover{
+  transform:scale(1.07) translateY(-10px) !important;
+  z-index:20 !important;
+  border-color:rgba(217,70,239,.6) !important;
+  background:linear-gradient(145deg,
+    rgba(139,92,246,.16) 0%,
+    rgba(99,102,241,.12) 50%,
+    rgba(217,70,239,.10) 100%
+  ) !important;
+  box-shadow:
+    0 20px 56px rgba(139,92,246,.38),
+    0 8px 24px rgba(217,70,239,.25),
+    0 0 0 1px rgba(217,70,239,.28),
+    inset 0 1px 0 rgba(255,255,255,.1) !important;
+}
+
+/* Icône */
+.svc2 .svc2-ico{
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1), filter .3s ease;
+  display:inline-block;
+}
+.svc2:hover .svc2-ico{
+  transform:scale(1.32) rotate(-6deg) !important;
+  filter:drop-shadow(0 0 10px rgba(217,70,239,.65));
+}
+
+/* Titre */
+.svc2 .svc2-title{
+  transition:color .25s ease, text-shadow .25s ease;
+}
+.svc2:hover .svc2-title{
+  color:#fff !important;
+  text-shadow:0 0 16px rgba(139,92,246,.55);
+}
+
+/* Description */
+.svc2 .svc2-desc{
+  transition:color .25s ease;
+}
+.svc2:hover .svc2-desc{
+  color:rgba(212,186,255,.9) !important;
+}
+
+/* Liste items */
+.svc2 .svc2-list{
+  transition:border-color .25s ease;
+}
+.svc2:hover .svc2-list{
+  border-top-color:rgba(139,92,246,.35) !important;
+}
+.svc2 .svc2-list li{
+  transition:color .25s ease, padding-left .2s ease;
+}
+.svc2:hover .svc2-list li{
+  color:rgba(212,186,255,.82) !important;
+  padding-left:4px !important;
+}
+
+/* Atténuer les voisins */
+.svc-grid:has(.svc2:hover) .svc2:not(:hover){
+  opacity:.58;
+  transform:scale(.97) !important;
+  filter:brightness(.72);
+  transition:opacity .28s ease, transform .28s ease, filter .28s ease !important;
+}
+
 </style>
 </head>
 <body>
