@@ -122,6 +122,226 @@ h1 em{font-style:italic;background:linear-gradient(135deg,#818cf8,#a5b4fc,#c4b5f
 body{-webkit-user-select:none;user-select:none}
 input,textarea{-webkit-user-select:text!important;user-select:text!important}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ══════════════════════════════════════════════════════
+   EFFET LUEUR BLOB — Fuchsia / Bleu / Violet clair
+   Animation lente, fluide, différente par bloc
+   ══════════════════════════════════════════════════════ */
+
+/* Keyframes de déplacement des lueurs dans les blocs */
+@keyframes glow-drift-1{
+  0%  {background-position: 0% 0%}
+  25% {background-position: 100% 30%}
+  50% {background-position: 60% 100%}
+  75% {background-position: 20% 60%}
+  100%{background-position: 0% 0%}
+}
+@keyframes glow-drift-2{
+  0%  {background-position: 100% 100%}
+  30% {background-position: 0% 50%}
+  60% {background-position: 80% 0%}
+  100%{background-position: 100% 100%}
+}
+@keyframes glow-drift-3{
+  0%  {background-position: 50% 0%}
+  40% {background-position: 0% 100%}
+  70% {background-position: 100% 60%}
+  100%{background-position: 50% 0%}
+}
+@keyframes glow-drift-4{
+  0%  {background-position: 20% 80%}
+  35% {background-position: 90% 10%}
+  65% {background-position: 30% 50%}
+  100%{background-position: 20% 80%}
+}
+@keyframes glow-drift-5{
+  0%  {background-position: 80% 20%}
+  45% {background-position: 10% 70%}
+  80% {background-position: 60% 30%}
+  100%{background-position: 80% 20%}
+}
+
+/* Mixin blob appliqué aux cartes — overlay pseudo-element */
+.card,.feat-card,.diff-card,.svc2-card,.risk-card,.norm-card,
+.ia-card,.ux-card,.rm-item,.pole-card,.pillar,.eng-card,
+.right-card,.faq-item,.ck-cat,.wcag-card,.info-card,
+.algo-card,.signal-box,.mode-card,.theme-card,.cc,
+.tips-card,.contact-card,.dpo-card,
+.cgv-section,.pc-section,.dsa-sec .signal-box,
+.ml-section,.score-board{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+}
+
+/* Pseudo-element blob lumineux sur chaque carte */
+.card::before,.feat-card::before,.diff-card::before,
+.svc2-card::before,.risk-card::before,.norm-card::before,
+.ia-card::before,.ux-card::before,.rm-item::before,
+.pole-card::before,.pillar::before,.eng-card::before,
+.right-card::before,.faq-item::before,.ck-cat::before,
+.wcag-card::before,.info-card::before,
+.algo-card::before,.signal-box::before,
+.mode-card::before,.theme-card::before,.cc::before{
+  content:"";
+  position:absolute;
+  inset:-60%;
+  border-radius:50%;
+  opacity:0;
+  pointer-events:none;
+  z-index:0;
+  transition:opacity .6s ease;
+  background:radial-gradient(
+    ellipse 55% 55% at 50% 50%,
+    rgba(217,70,239,.22) 0%,
+    rgba(139,92,246,.18) 30%,
+    rgba(99,102,241,.12) 55%,
+    transparent 72%
+  );
+  background-size:300% 300%;
+  animation:glow-drift-1 18s ease-in-out infinite;
+  filter:blur(18px);
+}
+
+/* Variation de timing et direction par position nth */
+.card:nth-child(2n)::before,.feat-card:nth-child(2n)::before,
+.norm-card:nth-child(2n)::before,.eng-card:nth-child(2n)::before,
+.right-card:nth-child(2n)::before,.pillar:nth-child(2n)::before{
+  animation-name:glow-drift-2;
+  animation-duration:22s;
+  background:radial-gradient(
+    ellipse 55% 55% at 50% 50%,
+    rgba(99,102,241,.22) 0%,
+    rgba(139,92,246,.16) 30%,
+    rgba(217,70,239,.10) 55%,
+    transparent 72%
+  );
+}
+.card:nth-child(3n)::before,.feat-card:nth-child(3n)::before,
+.norm-card:nth-child(3n)::before,.eng-card:nth-child(3n)::before,
+.right-card:nth-child(3n)::before,.pillar:nth-child(3n)::before{
+  animation-name:glow-drift-3;
+  animation-duration:26s;
+  background:radial-gradient(
+    ellipse 55% 55% at 50% 50%,
+    rgba(168,85,247,.20) 0%,
+    rgba(217,70,239,.14) 30%,
+    rgba(99,102,241,.10) 55%,
+    transparent 72%
+  );
+}
+.card:nth-child(4n)::before,.risk-card:nth-child(4n)::before,
+.diff-card:nth-child(4n)::before,.svc2-card:nth-child(4n)::before{
+  animation-name:glow-drift-4;
+  animation-duration:20s;
+  background:radial-gradient(
+    ellipse 55% 55% at 50% 50%,
+    rgba(139,92,246,.24) 0%,
+    rgba(99,102,241,.16) 30%,
+    rgba(168,85,247,.10) 55%,
+    transparent 72%
+  );
+}
+.card:nth-child(5n)::before,.diff-card:nth-child(5n)::before{
+  animation-name:glow-drift-5;
+  animation-duration:24s;
+  background:radial-gradient(
+    ellipse 55% 55% at 50% 50%,
+    rgba(196,181,232,.18) 0%,
+    rgba(168,85,247,.14) 28%,
+    rgba(217,70,239,.09) 55%,
+    transparent 72%
+  );
+}
+
+/* Activer la lueur au chargement (progressive) */
+.card::before,.feat-card::before,.diff-card::before,
+.svc2-card::before,.risk-card::before,.norm-card::before,
+.ia-card::before,.ux-card::before,.rm-item::before,
+.pole-card::before,.pillar::before,.eng-card::before,
+.right-card::before,.faq-item::before,.ck-cat::before,
+.wcag-card::before,.info-card::before,
+.algo-card::before,.signal-box::before,
+.mode-card::before,.theme-card::before,.cc::before{
+  opacity:1;
+}
+
+/* Intensifier la lueur au hover */
+.card:hover::before,.feat-card:hover::before,
+.diff-card:hover::before,.svc2-card:hover::before,
+.risk-card:hover::before,.norm-card:hover::before,
+.pillar:hover::before,.eng-card:hover::before,
+.right-card:hover::before,.faq-item:hover::before,
+.ck-cat:hover::before,.wcag-card:hover::before,
+.info-card:hover::before,.algo-card:hover::before,
+.signal-box:hover::before,.mode-card:hover::before,
+.theme-card:hover::before,.cc:hover::before{
+  filter:blur(12px);
+  opacity:1;
+  /* Teinte fuchsia plus forte au hover */
+  background:radial-gradient(
+    ellipse 60% 60% at 50% 50%,
+    rgba(217,70,239,.32) 0%,
+    rgba(139,92,246,.24) 28%,
+    rgba(99,102,241,.16) 52%,
+    transparent 70%
+  )!important;
+}
+
+/* Contenu au-dessus du blob */
+.card > *,.feat-card > *,.diff-card > *,
+.svc2-card > *,.risk-card > *,.norm-card > *,
+.ia-card > *,.ux-card > *,.rm-item > *,
+.pole-card > *,.pillar > *,.eng-card > *,
+.right-card > *,.faq-item > *,.ck-cat > *,
+.wcag-card > *,.info-card > *,.algo-card > *,
+.signal-box > *,.mode-card > *,.theme-card > *,
+.cc > *{
+  position:relative;
+  z-index:1;
+}
+
+/* Bordures légèrement illuminées */
+.card,.feat-card,.diff-card,.risk-card,.norm-card,
+.ia-card,.ux-card,.rm-item,.pole-card,.pillar,
+.eng-card,.right-card,.wcag-card,.info-card,
+.algo-card,.signal-box,.mode-card,.theme-card,.cc{
+  border-color:rgba(180,138,247,.22)!important;
+  transition:border-color .3s ease, box-shadow .3s ease;
+}
+
+/* Lueur de bordure au hover */
+.card:hover,.feat-card:hover,.diff-card:hover,
+.risk-card:hover,.pillar:hover,.eng-card:hover,
+.right-card:hover,.wcag-card:hover,.info-card:hover,
+.algo-card:hover,.signal-box:hover,.mode-card:hover,
+.cc:hover{
+  border-color:rgba(217,70,239,.45)!important;
+  box-shadow:
+    0 0 20px rgba(217,70,239,.1),
+    0 0 40px rgba(139,92,246,.08),
+    inset 0 0 20px rgba(139,92,246,.04)!important;
+}
+
+/* Sections hero et grandes sections — lueur d'ambiance */
+.sec,.sec-a,.sec-dark{
+  position:relative;
+}
+.sec::after,.sec-a::after{
+  content:"";
+  position:absolute;
+  width:60%;
+  height:60%;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:0;
+  filter:blur(80px);
+  opacity:.06;
+  background:radial-gradient(circle,#d946ef 0%,#8b5cf6 40%,#6366f1 70%,transparent 100%);
+  animation:glow-drift-3 30s ease-in-out infinite;
+  top:20%;left:20%;
+}
+
 </style>
 </head>
 <body>
