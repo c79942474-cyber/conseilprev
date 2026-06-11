@@ -2034,6 +2034,58 @@ footer::after{
   transition:opacity .3s ease, transform .3s ease, filter .3s ease !important;
 }
 
+
+/* ══════════════════════════════════════════════════
+   HOVER — Logos clients défilants
+   Pause du défilement + zoom + lueur sur le logo
+   ══════════════════════════════════════════════════ */
+
+/* Pause l'animation sur toute la rangée quand on survole un logo */
+.clients-track:has(.client-logo:hover){
+  animation-play-state:paused !important;
+}
+
+/* Logo survolé — zoom et mise en avant */
+.client-logo{
+  transition:
+    transform .35s cubic-bezier(.34,1.56,.64,1),
+    border-color .25s ease,
+    background .25s ease,
+    box-shadow .3s ease !important;
+  cursor:default;
+  position:relative;
+  z-index:1;
+}
+
+.client-logo:hover{
+  transform:scale(1.22) translateY(-4px) !important;
+  z-index:20 !important;
+  border-color:rgba(217,70,239,.55) !important;
+  background:linear-gradient(135deg,rgba(139,92,246,.2),rgba(217,70,239,.13)) !important;
+  box-shadow:
+    0 8px 28px rgba(217,70,239,.35),
+    0 3px 12px rgba(139,92,246,.3),
+    0 0 0 1px rgba(217,70,239,.25),
+    inset 0 1px 0 rgba(255,255,255,.1) !important;
+}
+
+/* Le texte/nom du logo s'illumine */
+.client-logo:hover span{
+  filter:brightness(1.4) drop-shadow(0 0 8px currentColor) !important;
+  transition:filter .3s ease !important;
+}
+.client-logo span{
+  transition:filter .25s ease;
+}
+
+/* Atténuer les logos voisins dans la même rangée */
+.clients-track:has(.client-logo:hover) .client-logo:not(:hover){
+  opacity:.5;
+  transform:scale(.96) !important;
+  filter:brightness(.7) saturate(.6);
+  transition:opacity .3s ease, transform .3s ease, filter .3s ease !important;
+}
+
 </style>
 </head>
 <body>
