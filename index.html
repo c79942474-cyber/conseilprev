@@ -1775,6 +1775,64 @@ footer::after{
   box-shadow:0 2px 12px rgba(139,92,246,.35)!important;
 }
 
+
+/* ══ HERO TITLE ROTATOR ══ */
+.hero-em{
+  display:inline-block;
+  position:relative;
+  min-height:1.15em;
+  vertical-align:bottom;
+}
+/* Conteneur du texte animé */
+#hero-rotating{
+  display:inline-block;
+  position:relative;
+  overflow:hidden;
+  vertical-align:bottom;
+}
+/* Chaque mot dans la rotation */
+.rot-word{
+  display:inline-block;
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%) translateY(100%);
+  opacity:0;
+  white-space:nowrap;
+  transition:none;
+  /* héritage du style de .hero-em */
+  font-style:italic;
+  background:inherit;
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.rot-word.entering{
+  animation:rot-in .55s cubic-bezier(.16,1,.3,1) forwards;
+}
+.rot-word.visible{
+  transform:translateX(-50%) translateY(0%);
+  opacity:1;
+}
+.rot-word.leaving{
+  animation:rot-out .45s cubic-bezier(.7,0,.84,0) forwards;
+}
+@keyframes rot-in{
+  0%  {transform:translateX(-50%) translateY(110%);opacity:0;filter:blur(6px)}
+  60% {opacity:1;filter:blur(0)}
+  100%{transform:translateX(-50%) translateY(0%);opacity:1;filter:blur(0)}
+}
+@keyframes rot-out{
+  0%  {transform:translateX(-50%) translateY(0%);opacity:1;filter:blur(0)}
+  100%{transform:translateX(-50%) translateY(-110%);opacity:0;filter:blur(4px)}
+}
+/* Spacer invisible pour réserver la hauteur */
+#rot-spacer{
+  display:inline-block;
+  visibility:hidden;
+  white-space:nowrap;
+  pointer-events:none;
+}
+
 </style>
 </head>
 <body>
@@ -1846,7 +1904,9 @@ footer::after{
     <!-- Titre principal -->
     <h1 class="hero-main-title">
       <span data-i18n="hero.title1">Votre Tour de Contrôle</span><br>
-      <em class="hero-em" data-i18n="hero.title2">Gouvernance IA</em>
+      <em class="hero-em" id="hero-rotating">
+        <span id="rot-spacer">Gouvernance IA</span>
+      </em>
     </h1>
 
     <!-- Sous-titre -->
@@ -3093,6 +3153,100 @@ function xSug(btn){
 })();
 
 
+
+
+// ══════════════════════════════════════════════════
+// HERO TITLE ROTATOR
+// Séquence : Gouvernance IA → Risk Management →
+// Compliance → Conformité IA → IA Industrielle
+// ══════════════════════════════════════════════════
+(function(){
+  "use strict";
+
+  var WORDS = [
+    "Gouvernance IA",
+    "Risk Management",
+    "Compliance",
+    "Conformité IA",
+    "IA Industrielle"
+  ];
+
+  var COLORS = [
+    "linear-gradient(135deg,#a78bfa,#e879f9)",   // violet → fuchsia
+    "linear-gradient(135deg,#818cf8,#c084fc)",   // bleu → violet
+    "linear-gradient(135deg,#c084fc,#f0abfc)",   // violet → lilas
+    "linear-gradient(135deg,#e879f9,#a78bfa)",   // fuchsia → violet
+    "linear-gradient(135deg,#93c5fd,#a78bfa)",   // bleu ciel → violet
+  ];
+
+  var INTERVAL = 3000;  // ms entre chaque mot
+  var ANIM_OUT = 450;   // durée animation sortie
+
+  var container = document.getElementById('hero-rotating');
+  var spacer    = document.getElementById('rot-spacer');
+  if(!container) return;
+
+  var currentIndex = 0;
+  var currentEl    = null;
+
+  function makeWord(text, color){
+    var el = document.createElement('span');
+    el.className   = 'rot-word';
+    el.textContent = text;
+    el.style.background = color;
+    el.style.webkitBackgroundClip = 'text';
+    el.style.backgroundClip = 'text';
+    el.style.webkitTextFillColor = 'transparent';
+    // Aligner la largeur du spacer sur le mot le plus long
+    return el;
+  }
+
+  function updateSpacerWidth(){
+    // Trouver le mot le plus large et réserver cet espace
+    var maxWord = WORDS.reduce(function(a,b){ return b.length > a.length ? b : a; });
+    spacer.textContent = maxWord;
+  }
+
+  function showWord(index){
+    var text  = WORDS[index];
+    var color = COLORS[index % COLORS.length];
+    var newEl = makeWord(text, color);
+
+    // Animer la sortie du mot actuel
+    if(currentEl){
+      var old = currentEl;
+      old.classList.remove('visible');
+      old.classList.add('leaving');
+      setTimeout(function(){ if(old.parentNode) old.parentNode.removeChild(old); }, ANIM_OUT);
+    }
+
+    // Insérer et animer l'entrée du nouveau mot
+    container.appendChild(newEl);
+    // Forcer reflow
+    newEl.getBoundingClientRect();
+    newEl.classList.add('entering');
+
+    // Passer à "visible" après la fin de l'animation d'entrée
+    setTimeout(function(){
+      newEl.classList.remove('entering');
+      newEl.classList.add('visible');
+    }, 550);
+
+    currentEl    = newEl;
+    currentIndex = index;
+  }
+
+  // Init
+  updateSpacerWidth();
+  showWord(0);
+
+  // Boucle
+  setInterval(function(){
+    var next = (currentIndex + 1) % WORDS.length;
+    showWord(next);
+  }, INTERVAL);
+
+})();
 
 // ════════════════════════════════════════
 // BOUTONS ACCESSIBILITÉ FLOTTANTS
