@@ -1833,6 +1833,137 @@ footer::after{
   pointer-events:none;
 }
 
+
+/* ══════════════════════════════════════════════════
+   HOVER ZOOM — Normes & Risques systémiques
+   ══════════════════════════════════════════════════ */
+
+/* Grille normes : gérer le scale sans débordement */
+.ng{
+  perspective:1200px;
+}
+
+/* ── Carte norme .nc — zoom au hover ── */
+.nc{
+  transition:
+    transform .38s cubic-bezier(.34,1.56,.64,1),
+    border-color .3s ease,
+    box-shadow .3s ease,
+    background .3s ease,
+    z-index 0s !important;
+  transform-origin:center center;
+  position:relative;
+  z-index:1;
+  cursor:default;
+}
+.nc:hover{
+  transform:scale(1.18) translateY(-6px) !important;
+  z-index:20 !important;
+  border-color:rgba(217,70,239,.6) !important;
+  background:linear-gradient(135deg,rgba(139,92,246,.18),rgba(217,70,239,.12)) !important;
+  box-shadow:
+    0 12px 40px rgba(217,70,239,.35),
+    0 4px 16px rgba(139,92,246,.3),
+    0 0 0 1px rgba(217,70,239,.3),
+    inset 0 1px 0 rgba(255,255,255,.1) !important;
+}
+/* Icône norme grossit aussi */
+.nc:hover .ni{
+  transform:scale(1.2);
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1);
+  filter:drop-shadow(0 0 8px rgba(217,70,239,.6));
+}
+.nc .ni{
+  transition:transform .3s ease, filter .3s ease;
+}
+/* Nom norme */
+.nc:hover .nn{
+  color:#fff !important;
+  text-shadow:0 0 12px rgba(217,70,239,.5);
+}
+.nc .nn{
+  transition:color .25s ease, text-shadow .25s ease;
+}
+/* Description norme */
+.nc:hover .nd{
+  color:rgba(212,186,255,.85) !important;
+}
+.nc .nd{
+  transition:color .25s ease;
+}
+
+/* ── Grille risques : isolation pour le z-index ── */
+.risk-grid{
+  perspective:1400px;
+  position:relative;
+}
+
+/* ── Carte risque .risk-card — zoom au hover ── */
+.risk-card{
+  transition:
+    transform .38s cubic-bezier(.34,1.56,.64,1),
+    border-color .3s ease,
+    box-shadow .35s ease,
+    background .3s ease !important;
+  transform-origin:center center;
+  position:relative;
+  z-index:1;
+  cursor:default;
+  will-change:transform;
+}
+.risk-card:hover{
+  transform:scale(1.10) translateY(-8px) !important;
+  z-index:20 !important;
+  border-color:rgba(99,102,241,.65) !important;
+  background:linear-gradient(135deg,rgba(99,102,241,.18),rgba(139,92,246,.14),rgba(217,70,239,.08)) !important;
+  box-shadow:
+    0 16px 48px rgba(139,92,246,.4),
+    0 6px 20px rgba(99,102,241,.3),
+    0 0 0 1px rgba(139,92,246,.35),
+    inset 0 1px 0 rgba(255,255,255,.08) !important;
+}
+/* Icône risque */
+.nc:hover .risk-ico,
+.risk-card:hover .risk-ico{
+  transform:scale(1.25) rotate(-5deg);
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1), filter .3s ease;
+  filter:drop-shadow(0 0 10px rgba(139,92,246,.7));
+  display:inline-block;
+}
+.risk-card .risk-ico{
+  transition:transform .3s ease, filter .3s ease;
+  display:inline-block;
+}
+/* Titre risque */
+.risk-card:hover .risk-title{
+  color:#fff !important;
+  text-shadow:0 0 14px rgba(139,92,246,.55);
+}
+.risk-card .risk-title{
+  transition:color .25s ease, text-shadow .25s ease;
+}
+/* Description risque */
+.risk-card:hover .risk-desc{
+  color:rgba(212,186,255,.88) !important;
+}
+.risk-card .risk-desc{
+  transition:color .25s ease;
+}
+
+/* ── Atténuer les voisins au hover (focus visuel) ── */
+.ng:has(.nc:hover) .nc:not(:hover){
+  opacity:.65;
+  transform:scale(.97) !important;
+  filter:brightness(.8);
+  transition:opacity .3s ease, transform .3s ease, filter .3s ease !important;
+}
+.risk-grid:has(.risk-card:hover) .risk-card:not(:hover){
+  opacity:.65;
+  transform:scale(.97) !important;
+  filter:brightness(.8);
+  transition:opacity .3s ease, transform .3s ease, filter .3s ease !important;
+}
+
 </style>
 </head>
 <body>
