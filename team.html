@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Notre Équipe — CONSEILPREV</title>
+<meta name="description" content="L'équipe CONSEILPREV : internationale, expérimentée, professionnelle et diversifiée. Experts IA Act, RGPD, cybersécurité et gouvernance IA.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--pm:#8b5cf6;--pl:#b48af7;--pp:#d4baff;--pf:#d946ef;--teal:#5eead4;--wh:#f8f4ff;--mu:rgba(212,186,255,.52);--bdr:rgba(180,138,247,.18)}
+html{scroll-behavior:smooth}
+body{font-family:"DM Sans",sans-serif;background:linear-gradient(160deg,#0d0825,#110a2e,#0e0820);color:var(--wh);min-height:100vh}
+body::before{content:"";position:fixed;inset:0;background-image:url("/hero-bg.jpg");background-size:cover;background-position:center 55%;background-attachment:fixed;opacity:.35;z-index:-2;pointer-events:none}
+#bc{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.bl{position:absolute;border-radius:50%;filter:blur(45px);mix-blend-mode:screen}
+#b1{width:420px;height:420px;background:radial-gradient(circle,#7c3aed,#4f46e5 40%,transparent 70%);opacity:.38;animation:bm1 22s ease-in-out infinite alternate;top:5%;left:5%}
+#b2{width:360px;height:360px;background:radial-gradient(circle,#db2777,#be185d 35%,transparent 75%);opacity:.30;animation:bm2 28s ease-in-out infinite alternate;top:50%;right:8%}
+#b3{width:300px;height:300px;background:radial-gradient(circle,#8b5cf6,#6366f1 40%,transparent 70%);opacity:.28;animation:bm3 34s ease-in-out infinite alternate;bottom:15%;left:30%}
+@keyframes bm1{0%{transform:translate(0,0)}100%{transform:translate(80px,-60px)}}
+@keyframes bm2{0%{transform:translate(0,0)}100%{transform:translate(-60px,80px)}}
+@keyframes bm3{0%{transform:translate(0,0)}100%{transform:translate(50px,50px)}}
+nav{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,rgba(15,8,42,.97),rgba(20,10,52,.96));backdrop-filter:blur(32px);border-bottom:1px solid rgba(180,138,247,.22);padding:0 28px;height:60px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 32px rgba(0,0,0,.45)}
+.nl{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:700;text-decoration:none;color:#fff;margin-right:auto;text-shadow:0 0 20px rgba(180,138,247,.4)}.nl span{background:linear-gradient(135deg,#c084fc,#e879f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.nb{font-size:11px;color:rgba(196,181,232,.5);text-decoration:none;font-family:"Space Mono",monospace;padding:5px 10px;border-radius:7px;border:1px solid transparent;transition:all .2s}.nb:hover{color:#fff;background:rgba(139,92,246,.15);border-color:rgba(180,138,247,.2)}
+.nav-cta{background:linear-gradient(135deg,#8b5cf6,#d946ef);color:#fff;padding:8px 18px;border-radius:8px;font-size:12px;font-family:"Space Mono",monospace;letter-spacing:.04em;font-weight:700;text-decoration:none;box-shadow:0 4px 16px rgba(217,70,239,.4);transition:all .2s}.nav-cta:hover{transform:translateY(-1px)}
+/* HERO */
+.hero{text-align:center;padding:52px 20px 32px;position:relative}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(139,92,246,.2),transparent 65%);pointer-events:none}
+.hbadge{display:inline-flex;align-items:center;gap:8px;background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);border-radius:100px;padding:6px 18px;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;color:var(--pp);margin-bottom:18px}
+.bdot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:blink 2s ease-in-out infinite}
+h1{font-family:"Cormorant Garamond",serif;font-size:clamp(28px,5vw,52px);font-weight:700;line-height:1.1;margin-bottom:14px;position:relative}
+h1 em{font-style:italic;background:linear-gradient(135deg,#818cf8,#c084fc,#e879f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:14px;color:var(--mu);max-width:560px;margin:0 auto;line-height:1.75;position:relative}
+/* TEAM GRID */
+.con{max-width:1040px;margin:0 auto;padding:0 20px 64px}
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:40px}
+@media(max-width:760px){.team-grid{grid-template-columns:1fr}}
+@media(max-width:1000px) and (min-width:761px){.team-grid{grid-template-columns:repeat(2,1fr)}}
+/* Carte membre */
+.member-card{
+  background:rgba(139,92,246,.07);
+  border:1px solid rgba(180,138,247,.18);
+  border-radius:16px;padding:28px 24px;
+  transition:transform .38s cubic-bezier(.34,1.56,.64,1),border-color .28s,box-shadow .3s,background .28s;
+  position:relative;overflow:hidden;isolation:isolate;cursor:default;
+}
+.member-card::before{content:"";position:absolute;inset:-60%;border-radius:50%;opacity:.18;pointer-events:none;z-index:0;background:radial-gradient(ellipse 55% 55% at 50% 50%,rgba(217,70,239,.25),rgba(139,92,246,.18) 35%,transparent 70%);background-size:300% 300%;animation:glow-drift 22s ease-in-out infinite alternate;filter:blur(18px)}
+@keyframes glow-drift{0%{background-position:0% 0%}50%{background-position:100% 60%}100%{background-position:30% 100%}}
+.member-card:hover{transform:scale(1.04) translateY(-8px);border-color:rgba(217,70,239,.5);box-shadow:0 16px 48px rgba(217,70,239,.28),0 0 0 1px rgba(217,70,239,.22)}
+.member-card > *{position:relative;z-index:1}
+/* Avatar */
+.member-avatar{width:90px;height:90px;border-radius:50%;margin-bottom:16px;object-fit:cover;border:3px solid rgba(139,92,246,.4);box-shadow:0 0 20px rgba(139,92,246,.3);display:block}
+.avatar-placeholder{width:90px;height:90px;border-radius:50%;margin-bottom:16px;display:flex;align-items:center;justify-content:center;font-size:32px;background:linear-gradient(135deg,rgba(139,92,246,.25),rgba(217,70,239,.15));border:3px solid rgba(139,92,246,.4);box-shadow:0 0 20px rgba(139,92,246,.3)}
+/* Infos membre */
+.member-name{font-family:"Space Mono",monospace;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--wh);margin-bottom:4px}
+.member-role{font-family:"Cormorant Garamond",serif;font-size:17px;font-weight:700;color:var(--pl);margin-bottom:6px;line-height:1.3}
+.member-badge{display:inline-block;font-family:"Space Mono",monospace;font-size:9px;padding:2px 9px;border-radius:100px;background:rgba(94,234,212,.1);border:1px solid rgba(94,234,212,.25);color:var(--teal);margin-bottom:10px;letter-spacing:.06em}
+.member-desc{font-size:12px;color:rgba(212,186,255,.65);line-height:1.75}
+/* Lien LinkedIn */
+.member-li{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:11px;color:rgba(147,197,253,.6);text-decoration:none;font-family:"Space Mono",monospace;transition:color .2s}
+.member-li:hover{color:var(--teal)}
+/* Stats */
+.team-stats{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;padding:36px 0 12px;border-top:1px solid rgba(180,138,247,.1);margin-top:32px}
+.ts{text-align:center}.ts-n{font-family:"Space Mono",monospace;font-size:24px;font-weight:700;color:var(--pl)}.ts-l{font-size:11px;color:var(--mu);text-transform:uppercase;letter-spacing:.1em;margin-top:3px}
+/* CTA */
+.team-cta{text-align:center;padding:40px 24px;background:rgba(139,92,246,.06);border-top:1px solid rgba(139,92,246,.15)}
+.btn-p{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#8b5cf6,#d946ef);color:#fff;padding:13px 28px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;transition:all .2s;box-shadow:0 4px 20px rgba(139,92,246,.4)}.btn-p:hover{transform:translateY(-2px)}
+.btn-s{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid var(--bdr);color:var(--wh);padding:13px 28px;border-radius:8px;font-size:14px;text-decoration:none;transition:all .2s}.btn-s:hover{border-color:var(--pl)}
+.ft-mini{background:rgba(5,2,20,.92);border-top:1px solid var(--bdr);padding:14px 24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:"Space Mono",monospace;font-size:10px;color:var(--mu)}
+.ft-mini a{color:var(--teal);text-decoration:none}
+body{-webkit-user-select:none;user-select:none}
+input,textarea{-webkit-user-select:text!important;user-select:text!important}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+</style>
+</head>
+<body>
+<div id="bc" aria-hidden="true"><div class="bl" id="b1"></div><div class="bl" id="b2"></div><div class="bl" id="b3"></div></div>
+
+<nav>
+  <a href="/" class="nl">CONSEIL<span>PREV</span></a>
+  <a href="/" class="nb">← Retour</a>
+  <a href="/careers" class="nb">Rejoignez-nous →</a>
+  <a href="/#contact" class="nav-cta">Nous contacter</a>
+</nav>
+
+<section class="hero">
+  <div class="hbadge"><span class="bdot"></span> Équipe · Team</div>
+  <h1>Notre équipe : <em>internationale,<br>expérimentée & diversifiée</em></h1>
+  <p class="hero-sub">Des experts passionnés réunis autour d'une mission commune : rendre la conformité IA accessible à toutes les organisations.</p>
+</section>
+
+<main class="con" id="main-content">
+  <div class="team-grid">
+
+    <!-- Christophe CERF -->
+    <div class="member-card">
+      <div class="avatar-placeholder">👤</div>
+      <div class="member-name">Christophe CERF</div>
+      <div class="member-role">CEO & Fondateur</div>
+      <div class="member-badge">Fondateur · Paris</div>
+      <p class="member-desc">Expert en stratégie d'entreprise et innovation en IA, avec une solide expérience en conformité réglementaire. 33+ ans d'expertise dans l'énergie, oil & gas, industrie et cybersécurité.</p>
+      <a class="member-li" href="https://www.linkedin.com/in/christophecerf" target="_blank" rel="noopener">in LinkedIn →</a>
+    </div>
+
+    <!-- Milette DS -->
+    <div class="member-card">
+      <div class="avatar-placeholder">👩‍💻</div>
+      <div class="member-name">Milette DS</div>
+      <div class="member-role">Directrice Technique (CTO) & RH</div>
+      <div class="member-badge">CTO · Asie-Pacifique</div>
+      <p class="member-desc">Product Owner et Architecte logiciel avec une expertise reconnue dans le développement de plateformes IA et la sécurité des données. Pilote le développement d'AIES.</p>
+      <a class="member-li" href="#" target="_blank" rel="noopener">in LinkedIn →</a>
+    </div>
+
+    <!-- Alexander W. BASSEY -->
+    <div class="member-card">
+      <div class="avatar-placeholder">👔</div>
+      <div class="member-name">Alexander W. BASSEY</div>
+      <div class="member-role">Directeur des Opérations (COO)</div>
+      <div class="member-badge">COO · Ex Startuper</div>
+      <p class="member-desc">Expert en développement commercial et opérations, chargé de piloter la croissance et l'excellence opérationnelle de CONSEILPREV. Solide expérience en scale-up technologique.</p>
+      <a class="member-li" href="#" target="_blank" rel="noopener">in LinkedIn →</a>
+    </div>
+
+    <!-- Cécile POUTEAU -->
+    <div class="member-card">
+      <div class="avatar-placeholder">👩‍💼</div>
+      <div class="member-name">Cécile POUTEAU</div>
+      <div class="member-role">Assistante de Gestion Administrative</div>
+      <div class="member-badge">Admin · Paris</div>
+      <p class="member-desc">Pilote l'administration et la croissance de CONSEILPREV pour accélérer l'adoption de la plateforme auprès des entreprises. Expertise en office management et coordination.</p>
+      <a class="member-li" href="#" target="_blank" rel="noopener">in LinkedIn →</a>
+    </div>
+
+    <!-- Myriam POUTEAU -->
+    <div class="member-card">
+      <div class="avatar-placeholder">⚖️</div>
+      <div class="member-name">Myriam POUTEAU</div>
+      <div class="member-role">Juriste en Droit du Numérique</div>
+      <div class="member-badge">Juriste · BDO Partenaire</div>
+      <p class="member-desc">Assure la conformité juridique de CONSEILPREV, du RGPD et des standards internationaux. Conseille l'équipe sur les enjeux de responsabilité, de propriété intellectuelle et de contrats technologiques.</p>
+      <a class="member-li" href="#" target="_blank" rel="noopener">in LinkedIn →</a>
+    </div>
+
+    <!-- Frédéric FAHY -->
+    <div class="member-card">
+      <div class="avatar-placeholder">📣</div>
+      <div class="member-name">Frédéric FAHY</div>
+      <div class="member-role">CMO Brand Content</div>
+      <div class="member-badge">CMO · Ex Startuper</div>
+      <p class="member-desc">Expert en développement et stratégie publicitaire, avec une solide expérience dans la vente d'espaces médias et la création de contenus de marque (brand content). Pilote la visibilité de CONSEILPREV.</p>
+      <a class="member-li" href="#" target="_blank" rel="noopener">in LinkedIn →</a>
+    </div>
+
+  </div>
+
+  <div class="team-stats">
+    <div class="ts"><div class="ts-n">6</div><div class="ts-l">Experts</div></div>
+    <div class="ts"><div class="ts-n">33+</div><div class="ts-l">Années d'exp.</div></div>
+    <div class="ts"><div class="ts-n">4</div><div class="ts-l">Continents</div></div>
+    <div class="ts"><div class="ts-n">12</div><div class="ts-l">Secteurs</div></div>
+    <div class="ts"><div class="ts-n">3</div><div class="ts-l">Langues</div></div>
+  </div>
+</main>
+
+<section class="team-cta">
+  <p style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:14px">Vous souhaitez nous rejoindre ?</p>
+  <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(22px,4vw,40px);font-weight:700;margin-bottom:12px">L'innovation commence avec <em style="font-style:italic;color:var(--pl)">des gens</em></h2>
+  <p style="font-size:13px;color:var(--mu);margin-bottom:24px;max-width:440px;margin-left:auto;margin-right:auto;line-height:1.75">Nous recherchons des talents passionnés par l'IA, la conformité et la transformation digitale.</p>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <a href="/careers" class="btn-p">Voir nos offres →</a>
+    <a href="/#contact" class="btn-s">Nous contacter</a>
+  </div>
+</section>
+
+<div class="ft-mini">
+  <span>© 2025 CONSEILPREV · Our Team · <a href="/">conseilprev.onrender.com</a></span>
+  <a href="/">← Retour au site</a>
+</div>
+<script>
+document.addEventListener("contextmenu",function(e){e.preventDefault();});
+document.addEventListener("keydown",function(e){if(e.key==="F12")e.preventDefault();});
+</script>
+</body>
+</html>

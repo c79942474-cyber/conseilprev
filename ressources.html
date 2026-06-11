@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ressources — News, Blogs, Vidéos & Podcasts | CONSEILPREV</title>
+<meta name="description" content="Toutes les ressources CONSEILPREV : actualités IA Act & RGPD, analyses d'experts, vidéos et podcasts sur la gouvernance IA.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--pm:#8b5cf6;--pl:#b48af7;--pp:#d4baff;--pf:#d946ef;--teal:#5eead4;--wh:#f8f4ff;--mu:rgba(212,186,255,.52);--bdr:rgba(180,138,247,.18)}
+html{scroll-behavior:smooth}
+body{font-family:"DM Sans",sans-serif;background:linear-gradient(160deg,#0d0825,#110a2e,#0e0820);color:var(--wh);min-height:100vh}
+body::before{content:"";position:fixed;inset:0;background-image:url("/hero-bg.jpg");background-size:cover;background-position:center 55%;background-attachment:fixed;opacity:.35;z-index:-2;pointer-events:none}
+#bc{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.bl{position:absolute;border-radius:50%;filter:blur(45px);mix-blend-mode:screen}
+#b1{width:420px;height:420px;background:radial-gradient(circle,#7c3aed,#4f46e5 40%,transparent 70%);opacity:.38;animation:bm1 22s ease-in-out infinite alternate;top:5%;left:5%}
+#b2{width:360px;height:360px;background:radial-gradient(circle,#db2777,#be185d 35%,transparent 75%);opacity:.30;animation:bm2 28s ease-in-out infinite alternate;top:50%;right:8%}
+@keyframes bm1{0%{transform:translate(0,0)}100%{transform:translate(80px,-60px)}}
+@keyframes bm2{0%{transform:translate(0,0)}100%{transform:translate(-60px,80px)}}
+nav{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,rgba(15,8,42,.97),rgba(20,10,52,.96));backdrop-filter:blur(32px);border-bottom:1px solid rgba(180,138,247,.22);padding:0 28px;height:60px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 32px rgba(0,0,0,.45)}
+.nl{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:700;text-decoration:none;color:#fff;margin-right:auto;text-shadow:0 0 20px rgba(180,138,247,.4)}.nl span{background:linear-gradient(135deg,#c084fc,#e879f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.nb{font-size:11px;color:rgba(196,181,232,.5);text-decoration:none;font-family:"Space Mono",monospace;padding:5px 10px;border-radius:7px;border:1px solid transparent;transition:all .2s}.nb:hover{color:#fff;background:rgba(139,92,246,.15);border-color:rgba(180,138,247,.2)}
+.nav-cta{background:linear-gradient(135deg,#8b5cf6,#d946ef);color:#fff;padding:8px 18px;border-radius:8px;font-size:12px;font-family:"Space Mono",monospace;letter-spacing:.04em;font-weight:700;text-decoration:none;box-shadow:0 4px 16px rgba(217,70,239,.4);transition:all .2s}.nav-cta:hover{transform:translateY(-1px)}
+/* HERO */
+.hero{text-align:center;padding:48px 20px 32px;position:relative}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(139,92,246,.2),transparent 65%);pointer-events:none}
+.hbadge{display:inline-flex;align-items:center;gap:8px;background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);border-radius:100px;padding:6px 18px;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;color:var(--pp);margin-bottom:16px}
+.bdot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:blink 2s ease-in-out infinite}
+h1{font-family:"Cormorant Garamond",serif;font-size:clamp(32px,6vw,72px);font-weight:700;margin-bottom:10px;position:relative}
+.hero-sub{font-size:14px;color:var(--mu);max-width:500px;margin:0 auto;line-height:1.75;position:relative}
+/* TABS */
+.tabs-wrap{position:sticky;top:60px;z-index:50;background:rgba(10,6,32,.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(180,138,247,.12);padding:0 24px}
+.tabs{display:flex;gap:0;max-width:900px;margin:0 auto;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{display:flex;align-items:center;gap:7px;padding:14px 20px;font-size:13px;font-family:"DM Sans",sans-serif;font-weight:600;color:rgba(196,181,232,.5);text-decoration:none;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;cursor:pointer;background:none;border-left:none;border-right:none;border-top:none}
+.tab:hover{color:var(--pp)}
+.tab.active{color:var(--pl);border-bottom-color:var(--pm)}
+.tab-ico{font-size:15px}
+/* LAYOUT */
+.con{max-width:900px;margin:0 auto;padding:36px 20px 64px}
+.section-label{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.section-label::before{content:"";width:20px;height:1px;background:var(--teal)}
+.section-title{font-family:"Cormorant Garamond",serif;font-size:clamp(22px,3.5vw,34px);font-weight:700;margin-bottom:24px;scroll-margin-top:120px}
+.section-title em{font-style:italic;background:linear-gradient(135deg,#a78bfa,#e879f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+/* Cards ressources */
+.res-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:48px}
+@media(max-width:640px){.res-grid{grid-template-columns:1fr}}
+.res-card{background:rgba(139,92,246,.07);border:1px solid rgba(180,138,247,.18);border-radius:14px;overflow:hidden;transition:transform .35s cubic-bezier(.34,1.56,.64,1),border-color .25s,box-shadow .28s;position:relative}
+.res-card:hover{transform:translateY(-6px) scale(1.02);border-color:rgba(217,70,239,.45);box-shadow:0 12px 36px rgba(217,70,239,.25)}
+.res-header{padding:20px 22px 14px;position:relative}
+.res-cat{font-family:"Space Mono",monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border-radius:100px;margin-bottom:10px;display:inline-block}
+.cat-news{background:rgba(34,197,94,.12);color:#4ade80;border:1px solid rgba(34,197,94,.25)}
+.cat-blog{background:rgba(139,92,246,.18);color:var(--pl);border:1px solid rgba(139,92,246,.3)}
+.cat-video{background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.25)}
+.cat-podcast{background:rgba(234,179,8,.12);color:#facc15;border:1px solid rgba(234,179,8,.25)}
+.res-title{font-size:15px;font-weight:700;color:var(--wh);margin-bottom:6px;line-height:1.35}
+.res-desc{font-size:12px;color:var(--mu);line-height:1.65}
+.res-footer{padding:12px 22px;border-top:1px solid rgba(180,138,247,.1);display:flex;align-items:center;justify-content:space-between}
+.res-date{font-family:"Space Mono",monospace;font-size:10px;color:rgba(196,181,232,.4)}
+.res-link{font-size:11px;color:var(--teal);text-decoration:none;font-family:"Space Mono",monospace;transition:color .2s}.res-link:hover{color:#fff}
+/* Veille live */
+.live-banner{background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.25);border-radius:12px;padding:16px 22px;display:flex;align-items:center;gap:14px;margin-bottom:32px}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;animation:blink 1.5s ease-in-out infinite;flex-shrink:0;box-shadow:0 0 8px rgba(74,222,128,.5)}
+.live-txt{font-size:13px;color:rgba(212,186,255,.8)}.live-txt strong{color:var(--wh)}
+/* Newsletter */
+.nl-box{background:linear-gradient(135deg,rgba(139,92,246,.14),rgba(217,70,239,.09));border:1px solid rgba(180,138,247,.25);border-radius:16px;padding:32px;text-align:center;margin-top:32px}
+.nl-title{font-family:"Cormorant Garamond",serif;font-size:24px;font-weight:700;margin-bottom:8px}
+.nl-sub{font-size:13px;color:var(--mu);margin-bottom:20px}
+.nl-form{display:flex;gap:8px;max-width:440px;margin:0 auto;flex-wrap:wrap;justify-content:center}
+.nl-input{flex:1;min-width:200px;padding:11px 14px;background:rgba(255,255,255,.07);border:1px solid rgba(180,138,247,.22);border-radius:8px;color:var(--wh);font-size:13px;font-family:"DM Sans",sans-serif;outline:none;transition:border-color .2s;-webkit-user-select:text!important;user-select:text!important}
+.nl-input:focus{border-color:rgba(217,70,239,.45);box-shadow:0 0 0 3px rgba(139,92,246,.15)}
+.nl-btn{padding:11px 22px;background:linear-gradient(135deg,#8b5cf6,#d946ef);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:"DM Sans",sans-serif;transition:all .2s;box-shadow:0 3px 14px rgba(139,92,246,.35)}.nl-btn:hover{transform:translateY(-1px)}
+.ft-mini{background:rgba(5,2,20,.92);border-top:1px solid var(--bdr);padding:14px 24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:"Space Mono",monospace;font-size:10px;color:var(--mu)}
+.ft-mini a{color:var(--teal);text-decoration:none}
+body{-webkit-user-select:none;user-select:none}
+input{-webkit-user-select:text!important;user-select:text!important}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+</style>
+</head>
+<body>
+<div id="bc" aria-hidden="true"><div class="bl" id="b1"></div><div class="bl" id="b2"></div></div>
+<nav>
+  <a href="/" class="nl">CONSEIL<span>PREV</span></a>
+  <a href="/" class="nb">← Retour</a>
+  <a href="/#contact" class="nav-cta">Nous contacter</a>
+</nav>
+
+<section class="hero">
+  <div class="hbadge"><span class="bdot"></span> Centre de Ressources</div>
+  <h1>Ressources</h1>
+  <p class="hero-sub">Actualités, analyses d'experts, vidéos et podcasts sur l'IA Act, le RGPD et la gouvernance IA.</p>
+</section>
+
+<!-- TABS -->
+<div class="tabs-wrap">
+  <div class="tabs" role="tablist">
+    <a class="tab active" href="#all" onclick="filterTab('all',this)"><span class="tab-ico">📚</span> Tous</a>
+    <a class="tab" href="#news" onclick="filterTab('news',this)"><span class="tab-ico">📰</span> Actualités</a>
+    <a class="tab" href="#blogs" onclick="filterTab('blogs',this)"><span class="tab-ico">✍️</span> Blogs</a>
+    <a class="tab" href="#videos" onclick="filterTab('videos',this)"><span class="tab-ico">▶️</span> Vidéos</a>
+    <a class="tab" href="#podcasts" onclick="filterTab('podcasts',this)"><span class="tab-ico">🎙️</span> Podcasts</a>
+  </div>
+</div>
+
+<main class="con" id="main-content">
+
+  <div class="live-banner">
+    <span class="live-dot"></span>
+    <div class="live-txt"><strong>Veille en direct</strong> — Fil d'actualité IA Act, RGPD et cybersécurité disponible sur le site principal. <a href="/" style="color:var(--teal)">Voir la veille →</a></div>
+  </div>
+
+  <!-- ALL / NEWS -->
+  <div id="section-news">
+    <div class="section-label" id="news">News</div>
+    <h2 class="section-title">Dernières <em>actualités</em></h2>
+    <div class="res-grid">
+      <div class="res-card">
+        <div class="res-header"><span class="res-cat cat-news">News</span><div class="res-title">AI Act : le calendrier d'application 2025-2027 décrypté</div><div class="res-desc">Quelles obligations s'appliquent à partir d'août 2025 ? Détail des délais par catégorie de système IA.</div></div>
+        <div class="res-footer"><span class="res-date">Juin 2025</span><a class="res-link" href="/faq#s0q3">Lire →</a></div>
+      </div>
+      <div class="res-card">
+        <div class="res-header"><span class="res-cat cat-news">News</span><div class="res-title">RGPD : la CNIL renforce les contrôles sur les chatbots IA en 2025</div><div class="res-desc">Les nouvelles lignes directrices CNIL sur l'usage des IA conversationnelles en entreprise.</div></div>
+        <div class="res-footer"><span class="res-date">Mai 2025</span><a class="res-link" href="/faq">Lire →</a></div>
+      </div>
+      <div class="res-card">
+        <div class="res-header"><span class="res-cat cat-news">News</span><div class="res-title">NIS2 : les premières sanctions tombent en Europe</div><div class="res-desc">Retour sur les premières amendes liées à la Directive NIS2 et les secteurs les plus touchés.</div></div>
+        <div class="res-footer"><span class="res-date">Avril 2025</span><a class="res-link" href="/#contact">Nous contacter</a></div>
+      </div>
+      <div class="res-card">
+        <div class="res-header"><span class="res-cat cat-news">News</span><div class="res-title">ISO 42001 : la norme de management des systèmes IA est arrivée</div><div class="res-desc">Tout ce qu'il faut savoir sur la certification ISO 42001 et son lien avec l'AI Act.</div></div>
+        <div class="res-footer"><span class="res-date">Mars 2025</span><a class="res-link" href="/faq#s3q4">Lire →</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOGS -->
+  <div id="section-blogs">
+    <div class="section-label" id="blogs">Blogs</div>
+    <h2 class="section-title">Analyses & <em>insights</em></h2>
+    <div class="res-grid">
+      <div class="res-card">
+        <div class="res-header"><span class="res-cat cat-blog">Blog</span><div class="res-title">8 risques systémiques de l'IA que votre entreprise doit maîtriser</div><div class="res-desc">Analyse détaillée des risques IA industrielle : biais, opacité, cybersécurité, dépendance technologique et plus.</div></div>
+        <div class="res-footer"><span class="res-date">Juin 2025</span><a class="res-link" href="/#risques">Voir →</a></div>
+      </div>
+      <div class="res-card">
+        <div class="res-header"><span class="res-cat cat-blog">Blog</span><div class="res-title">AIES vs gestion manuelle : ROI comparatif sur 24 mois</div><div class="res-desc">Une PME peut économiser 60-80% de son budget conformité avec une plateforme GRC dédiée à l'IA.</div></div>
+        <div class="res-footer"><span class="res-date">Mai 2025</span><a class="res-link" href="/aies">Voir AIES →</a></div>
+      </div>
+      <div class="res-card">
+        <div class="res-header"><span class="res-cat cat-blog">Blog</span><div class="res-title">Privacy by Design appliqué aux LLMs : guide pratique</div><div class="res-desc">Comment intégrer le RGPD dès la conception de vos systèmes IA génératifs.</div></div>
+        <div class="res-footer"><span class="res-date">Avril 2025</span><a class="res-link" href="/faq#s1q7">Lire →</a></div>
+      </div>
+      <div class="res-card">
+        <div class="res-header"><span class="res-cat cat-blog">Blog</span><div class="res-title">Scoring crédit IA : haut risque AI Act + Art. 22 RGPD</div><div class="res-desc">Ce que les établissements financiers doivent mettre en place avant août 2026.</div></div>
+        <div class="res-footer"><span class="res-date">Mars 2025</span><a class="res-link" href="/faq#s2q4">Lire →</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIDÉOS -->
+  <div id="section-videos">
+    <div class="section-label" id="videos">Vidéos</div>
+    <h2 class="section-title">Démonstrations & <em>interviews</em></h2>
+    <div class="res-grid">
+      <div class="res-card">
+        <div class="res-header"><span class="res-cat cat-video">Vidéo</span><div class="res-title">Démonstration AIES Platform — Gouvernance IA en temps réel</div><div class="res-desc">Tour complet de la plateforme : inventaire IA, scoring risques, génération documentation, analytics conformité.</div></div>
+        <div class="res-footer"><span class="res-date">Juin 2025</span><a class="res-link" href="/demo">Voir la démo →</a></div>
+      </div>
+      <div class="res-card">
+        <div class="res-header"><span class="res-cat cat-video">Vidéo</span><div class="res-title">Interview CEO : l'AI Act vu depuis Paris</div><div class="res-desc">Christophe CERF décrypte les enjeux de l'AI Act pour les entreprises industrielles françaises.</div></div>
+        <div class="res-footer"><span class="res-date">Mai 2025</span><a class="res-link" href="https://www.youtube.com/watch?v=QZNBXs-UsWU" target="_blank" rel="noopener">YouTube →</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PODCASTS -->
+  <div id="section-podcasts">
+    <div class="section-label" id="podcasts">Podcasts</div>
+    <h2 class="section-title">IA & conformité <em>en profondeur</em></h2>
+    <div class="res-grid">
+      <div class="res-card">
+        <div class="res-header"><span class="res-cat cat-podcast">Podcast</span><div class="res-title">Épisode 1 — L'AI Act expliqué à votre DSI</div><div class="res-desc">40 minutes pour comprendre ce que l'AI Act implique concrètement pour votre infrastructure IT.</div></div>
+        <div class="res-footer"><span class="res-date">Bientôt</span><span class="res-date" style="color:rgba(139,92,246,.6)">🔔 À paraître</span></div>
+      </div>
+      <div class="res-card">
+        <div class="res-header"><span class="res-cat cat-podcast">Podcast</span><div class="res-title">Épisode 2 — RGPD & IA générative : les pièges à éviter</div><div class="res-desc">Myriam Pouteau et Christophe Cerf dialoguent sur les risques juridiques de ChatGPT en entreprise.</div></div>
+        <div class="res-footer"><span class="res-date">Bientôt</span><span class="res-date" style="color:rgba(139,92,246,.6)">🔔 À paraître</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEWSLETTER -->
+  <div class="nl-box">
+    <div class="nl-title">Restez informé</div>
+    <p class="nl-sub">Recevez chaque semaine notre sélection d'actualités IA Act, RGPD et cybersécurité.</p>
+    <div class="nl-form">
+      <input class="nl-input" type="email" placeholder="votre@email.com" id="nl-email">
+      <button class="nl-btn" onclick="nlSubscribe()">S'abonner →</button>
+    </div>
+    <p id="nl-msg" style="font-size:12px;color:var(--teal);margin-top:10px;display:none">✓ Inscription enregistrée !</p>
+  </div>
+
+</main>
+
+<div class="ft-mini">
+  <span>© 2025 CONSEILPREV · Ressources · <a href="/faq">FAQ</a> · <a href="/">conseilprev.onrender.com</a></span>
+  <a href="/">← Retour au site</a>
+</div>
+
+<script>
+function filterTab(cat, el){
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+  el.classList.add('active');
+  var sections=['news','blogs','videos','podcasts'];
+  sections.forEach(function(s){
+    var sec=document.getElementById('section-'+s);
+    if(sec) sec.style.display=(cat==='all'||cat===s)?'block':'none';
+  });
+}
+function nlSubscribe(){
+  var email=document.getElementById('nl-email');
+  var msg=document.getElementById('nl-msg');
+  if(email&&email.value.includes('@')){
+    msg.style.display='block';
+    email.value='';
+    setTimeout(function(){msg.style.display='none';},4000);
+  }
+}
+document.addEventListener("contextmenu",function(e){e.preventDefault();});
+</script>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Careers — L'innovation commence avec des gens | CONSEILPREV</title>
+<meta name="description" content="Rejoignez CONSEILPREV — Experts IA Act, RGPD, cybersécurité et gouvernance IA. L'innovation commence avec des gens passionnés.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--pm:#8b5cf6;--pl:#b48af7;--pp:#d4baff;--pf:#d946ef;--teal:#5eead4;--wh:#f8f4ff;--mu:rgba(212,186,255,.52);--bdr:rgba(180,138,247,.18)}
+html{scroll-behavior:smooth}
+body{font-family:"DM Sans",sans-serif;background:linear-gradient(160deg,#0d0825,#110a2e,#0e0820);color:var(--wh);min-height:100vh}
+body::before{content:"";position:fixed;inset:0;background-image:url("/hero-bg.jpg");background-size:cover;background-position:center 55%;background-attachment:fixed;opacity:.38;z-index:-2;pointer-events:none}
+#bc{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.bl{position:absolute;border-radius:50%;filter:blur(45px);mix-blend-mode:screen}
+#b1{width:500px;height:500px;background:radial-gradient(circle,#7c3aed,#4f46e5 40%,transparent 70%);opacity:.42;animation:bm1 22s ease-in-out infinite alternate;top:-5%;left:-5%}
+#b2{width:400px;height:400px;background:radial-gradient(circle,#db2777,#be185d 35%,transparent 75%);opacity:.32;animation:bm2 28s ease-in-out infinite alternate;bottom:5%;right:5%}
+@keyframes bm1{0%{transform:translate(0,0)}100%{transform:translate(80px,-60px)}}
+@keyframes bm2{0%{transform:translate(0,0)}100%{transform:translate(-60px,80px)}}
+nav{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,rgba(15,8,42,.97),rgba(20,10,52,.96));backdrop-filter:blur(32px);border-bottom:1px solid rgba(180,138,247,.22);padding:0 28px;height:60px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 32px rgba(0,0,0,.45)}
+.nl{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:700;text-decoration:none;color:#fff;margin-right:auto;text-shadow:0 0 20px rgba(180,138,247,.4)}.nl span{background:linear-gradient(135deg,#c084fc,#e879f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.nb{font-size:11px;color:rgba(196,181,232,.5);text-decoration:none;font-family:"Space Mono",monospace;padding:5px 10px;border-radius:7px;border:1px solid transparent;transition:all .2s}.nb:hover{color:#fff;background:rgba(139,92,246,.15);border-color:rgba(180,138,247,.2)}
+.nav-cta{background:linear-gradient(135deg,#8b5cf6,#d946ef);color:#fff;padding:8px 18px;border-radius:8px;font-size:12px;font-family:"Space Mono",monospace;letter-spacing:.04em;font-weight:700;text-decoration:none;box-shadow:0 4px 16px rgba(217,70,239,.4);transition:all .2s}.nav-cta:hover{transform:translateY(-1px)}
+/* HERO */
+.hero{padding:70px 24px 52px;text-align:center;position:relative}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 80% 70% at 50% 0%,rgba(139,92,246,.22),transparent 65%);pointer-events:none}
+.hbadge{display:inline-flex;align-items:center;gap:8px;background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);border-radius:100px;padding:6px 18px;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;color:var(--pp);margin-bottom:20px}
+.bdot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:blink 2s ease-in-out infinite}
+h1{font-family:"Cormorant Garamond",serif;font-size:clamp(34px,7vw,80px);font-weight:700;line-height:1.0;margin-bottom:18px;position:relative}
+h1 em{font-style:italic;background:linear-gradient(135deg,#818cf8,#c084fc,#e879f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:16px;color:var(--mu);max-width:560px;margin:0 auto 32px;line-height:1.8;position:relative}
+/* Valeurs */
+.con{max-width:960px;margin:0 auto;padding:0 20px 64px}
+.values{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:48px}
+@media(max-width:640px){.values{grid-template-columns:1fr}}
+.val-card{background:rgba(139,92,246,.08);border:1px solid rgba(180,138,247,.18);border-radius:14px;padding:24px 20px;text-align:center;transition:transform .35s cubic-bezier(.34,1.56,.64,1),border-color .25s,box-shadow .28s}
+.val-card:hover{transform:scale(1.07) translateY(-6px);border-color:rgba(217,70,239,.5);box-shadow:0 12px 36px rgba(217,70,239,.28)}
+.val-ico{font-size:32px;margin-bottom:12px;display:block}
+.val-title{font-size:16px;font-weight:700;color:var(--wh);margin-bottom:6px}
+.val-desc{font-size:12px;color:var(--mu);line-height:1.65}
+/* Section postes */
+.section-title{font-family:"Cormorant Garamond",serif;font-size:clamp(22px,4vw,38px);font-weight:700;margin-bottom:8px}
+.section-title em{font-style:italic;background:linear-gradient(135deg,#a78bfa,#e879f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.section-sub{font-size:13px;color:var(--mu);margin-bottom:28px;line-height:1.7}
+/* Cartes offres */
+.job-grid{display:flex;flex-direction:column;gap:14px;margin-bottom:40px}
+.job-card{background:rgba(139,92,246,.06);border:1px solid rgba(180,138,247,.18);border-radius:13px;padding:22px 24px;display:flex;align-items:center;gap:20px;transition:all .28s;cursor:pointer}
+.job-card:hover{border-color:rgba(217,70,239,.45);background:rgba(139,92,246,.14);transform:translateX(4px);box-shadow:0 8px 28px rgba(139,92,246,.2)}
+.job-ico{width:48px;height:48px;border-radius:12px;background:rgba(139,92,246,.2);border:1px solid rgba(180,138,247,.25);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;transition:box-shadow .25s}
+.job-card:hover .job-ico{box-shadow:0 0 16px rgba(217,70,239,.4)}
+.job-body{flex:1}
+.job-title{font-size:16px;font-weight:700;color:var(--wh);margin-bottom:4px}
+.job-tags{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:6px}
+.job-tag{font-family:"Space Mono",monospace;font-size:9px;padding:2px 9px;border-radius:100px}
+.t-remote{background:rgba(94,234,212,.12);color:var(--teal);border:1px solid rgba(94,234,212,.25)}
+.t-type{background:rgba(139,92,246,.15);color:var(--pl);border:1px solid rgba(139,92,246,.28)}
+.t-urgent{background:rgba(217,70,239,.12);color:#f0abfc;border:1px solid rgba(217,70,239,.25)}
+.job-desc{font-size:12px;color:var(--mu);line-height:1.6}
+.job-arrow{font-size:20px;color:rgba(180,138,247,.4);transition:transform .2s,color .2s;flex-shrink:0}
+.job-card:hover .job-arrow{transform:translateX(4px);color:var(--pf)}
+/* Candidature spontanée */
+.spont-card{background:linear-gradient(135deg,rgba(139,92,246,.14),rgba(217,70,239,.09));border:1px solid rgba(139,92,246,.3);border-radius:16px;padding:32px;text-align:center;margin-bottom:40px}
+.spont-title{font-family:"Cormorant Garamond",serif;font-size:24px;font-weight:700;color:var(--wh);margin-bottom:10px}
+.spont-sub{font-size:13px;color:var(--mu);margin-bottom:20px;line-height:1.7}
+.btn-p{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#8b5cf6,#d946ef);color:#fff;padding:13px 28px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;transition:all .2s;box-shadow:0 4px 20px rgba(139,92,246,.4)}.btn-p:hover{transform:translateY(-2px)}
+.btn-s{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid var(--bdr);color:var(--wh);padding:13px 28px;border-radius:8px;font-size:14px;text-decoration:none;transition:all .2s}.btn-s:hover{border-color:var(--pl)}
+/* Perks */
+.perks{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:40px}
+@media(max-width:560px){.perks{grid-template-columns:1fr}}
+.perk{background:rgba(255,255,255,.04);border:1px solid rgba(180,138,247,.12);border-radius:10px;padding:16px 18px;display:flex;align-items:flex-start;gap:12px}
+.perk-ico{font-size:20px;flex-shrink:0}
+.perk-body .perk-title{font-size:13px;font-weight:700;color:var(--wh);margin-bottom:3px}
+.perk-body .perk-desc{font-size:11px;color:var(--mu);line-height:1.55}
+.ft-mini{background:rgba(5,2,20,.92);border-top:1px solid var(--bdr);padding:14px 24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:"Space Mono",monospace;font-size:10px;color:var(--mu)}
+.ft-mini a{color:var(--teal);text-decoration:none}
+body{-webkit-user-select:none;user-select:none}
+input,textarea{-webkit-user-select:text!important;user-select:text!important}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+</style>
+</head>
+<body>
+<div id="bc" aria-hidden="true"><div class="bl" id="b1"></div><div class="bl" id="b2"></div></div>
+<nav>
+  <a href="/" class="nl">CONSEIL<span>PREV</span></a>
+  <a href="/team" class="nb">← Our Team</a>
+  <a href="/#contact" class="nav-cta">Postuler</a>
+</nav>
+
+<section class="hero">
+  <div class="hbadge"><span class="bdot"></span> Careers · Rejoignez-nous</div>
+  <h1>L'innovation commence<br>avec des <em>gens</em></h1>
+  <p class="hero-sub">Rejoignez une équipe internationale de passionnés qui réinventent la conformité IA pour les entreprises mondiales.</p>
+  <a href="#offres" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#8b5cf6,#d946ef);color:#fff;padding:13px 28px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;box-shadow:0 4px 20px rgba(139,92,246,.4);transition:all .2s">Voir les postes ouverts ↓</a>
+</section>
+
+<main class="con" id="main-content">
+  <!-- VALEURS -->
+  <div class="values">
+    <div class="val-card"><span class="val-ico">🌍</span><div class="val-title">Impact mondial</div><div class="val-desc">Nous travaillons avec des entreprises sur 4 continents pour sécuriser leur conformité IA.</div></div>
+    <div class="val-card"><span class="val-ico">🚀</span><div class="val-title">Innovation continue</div><div class="val-desc">IA générative, AIES, data.gouv.fr — nous construisons les outils de demain aujourd'hui.</div></div>
+    <div class="val-card"><span class="val-ico">🤝</span><div class="val-title">Équipe diversifiée</div><div class="val-desc">6 nationalités, 3 langues, expertise croisée tech-juridique-business.</div></div>
+    <div class="val-card"><span class="val-ico">📚</span><div class="val-title">Apprentissage</div><div class="val-desc">Formation continue, veille réglementaire en temps réel, conférences et certifications financées.</div></div>
+    <div class="val-card"><span class="val-ico">⚖️</span><div class="val-title">Éthique & Responsabilité</div><div class="val-desc">Notre mission : rendre l'IA Act et le RGPD accessibles. Chaque ligne de code a un impact.</div></div>
+    <div class="val-card"><span class="val-ico">🏡</span><div class="val-title">Flexibilité</div><div class="val-desc">Remote-first, horaires flexibles, équipe répartie sur plusieurs fuseaux horaires.</div></div>
+  </div>
+
+  <!-- POSTES OUVERTS -->
+  <h2 class="section-title" id="offres">Postes <em>ouverts</em></h2>
+  <p class="section-sub">Nous recrutons activement des talents pour accélérer notre croissance.</p>
+  <div class="job-grid">
+    <div class="job-card" onclick="window.location='/careers#apply'">
+      <div class="job-ico">🤖</div>
+      <div class="job-body">
+        <div class="job-title">Ingénieur(e) IA / ML</div>
+        <div class="job-tags"><span class="job-tag t-remote">Remote</span><span class="job-tag t-type">CDI</span><span class="job-tag t-urgent">Urgent</span></div>
+        <div class="job-desc">Développement des modules IA d'AIES — scoring de conformité, génération de documents, assistant Mistral. Stack : Python, FastAPI, Mistral AI.</div>
+      </div>
+      <span class="job-arrow">›</span>
+    </div>
+    <div class="job-card" onclick="window.location='/careers#apply'">
+      <div class="job-ico">⚖️</div>
+      <div class="job-body">
+        <div class="job-title">Juriste / Expert(e) conformité IA</div>
+        <div class="job-tags"><span class="job-tag t-remote">Hybride</span><span class="job-tag t-type">CDI / Freelance</span></div>
+        <div class="job-desc">Veille réglementaire IA Act & RGPD, rédaction de guides de conformité, accompagnement clients. Connaissance DORA/NIS2 appréciée.</div>
+      </div>
+      <span class="job-arrow">›</span>
+    </div>
+    <div class="job-card" onclick="window.location='/careers#apply'">
+      <div class="job-ico">🎨</div>
+      <div class="job-body">
+        <div class="job-title">Développeur(se) Frontend</div>
+        <div class="job-tags"><span class="job-tag t-remote">Remote</span><span class="job-tag t-type">CDI</span></div>
+        <div class="job-desc">Refonte et évolution d'AIES Platform — React, design system, accessibilité WCAG 2.1, animations. Intérêt pour l'UX/UI obligatoire.</div>
+      </div>
+      <span class="job-arrow">›</span>
+    </div>
+    <div class="job-card" onclick="window.location='/careers#apply'">
+      <div class="job-ico">📊</div>
+      <div class="job-body">
+        <div class="job-title">Business Developer</div>
+        <div class="job-tags"><span class="job-tag t-remote">Hybride</span><span class="job-tag t-type">CDI</span></div>
+        <div class="job-desc">Développement commercial B2B Europe — grands comptes industrie, énergie, finance. Réseau décideurs C-level apprécié.</div>
+      </div>
+      <span class="job-arrow">›</span>
+    </div>
+  </div>
+
+  <!-- CANDIDATURE SPONTANÉE -->
+  <div class="spont-card" id="apply">
+    <div class="spont-title">Candidature spontanée</div>
+    <p class="spont-sub">Vous ne trouvez pas le poste idéal ? Envoyez-nous votre profil. Nous cherchons toujours des talents exceptionnels dans les domaines IA, droit, tech et business.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a href="mailto:christophe.cerf@outlook.com?subject=Candidature%20spontanée%20CONSEILPREV&body=Bonjour,%0A%0AJe%20souhaite%20rejoindre%20CONSEILPREV.%0A%0AMon%20profil%20:%0A" class="btn-p">📧 Envoyer ma candidature</a>
+      <a href="/team" class="btn-s">Voir l'équipe</a>
+    </div>
+  </div>
+
+  <!-- AVANTAGES -->
+  <h2 class="section-title">Pourquoi nous <em>rejoindre ?</em></h2>
+  <p class="section-sub">Ce que nous offrons à nos collaborateurs.</p>
+  <div class="perks">
+    <div class="perk"><span class="perk-ico">🌍</span><div class="perk-body"><div class="perk-title">Remote-first</div><div class="perk-desc">Travaillez depuis Paris, Bruxelles, Singapour ou Lagos.</div></div></div>
+    <div class="perk"><span class="perk-ico">📈</span><div class="perk-body"><div class="perk-title">Impact réel</div><div class="perk-desc">Votre travail aide des centaines d'entreprises à se conformer à l'IA Act.</div></div></div>
+    <div class="perk"><span class="perk-ico">🎓</span><div class="perk-body"><div class="perk-title">Formation continue</div><div class="perk-desc">Certifications IA, RGPD, cybersécurité financées.</div></div></div>
+    <div class="perk"><span class="perk-ico">⚡</span><div class="perk-body"><div class="perk-title">Stack moderne</div><div class="perk-desc">Mistral AI, Python, React, AIES — toujours à la pointe.</div></div></div>
+    <div class="perk"><span class="perk-ico">🤝</span><div class="perk-body"><div class="perk-title">Équité & Inclusion</div><div class="perk-desc">Équipe diverse, prise de décision participative, zéro discrimination.</div></div></div>
+    <div class="perk"><span class="perk-ico">💡</span><div class="perk-body"><div class="perk-title">Autonomie</div><div class="perk-desc">Vos idées comptent. Chaque membre de l'équipe peut proposer et piloter des projets.</div></div></div>
+  </div>
+</main>
+
+<div class="ft-mini">
+  <span>© 2025 CONSEILPREV · Careers · <a href="/team">Our Team</a> · <a href="/">conseilprev.onrender.com</a></span>
+  <a href="/">← Retour au site</a>
+</div>
+<script>document.addEventListener("contextmenu",function(e){e.preventDefault();});</script>
+</body>
+</html>

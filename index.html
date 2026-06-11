@@ -2285,6 +2285,131 @@ footer::after{
   transition:opacity .28s ease, transform .28s ease, filter .28s ease !important;
 }
 
+
+/* ══════════════════════════════════════════════════
+   MEGA MENUS DÉROULANTS — Entreprise & Ressources
+   ══════════════════════════════════════════════════ */
+.nl li.has-dropdown{position:relative}
+.nl li.has-dropdown > a{
+  display:flex;align-items:center;gap:5px;
+}
+.nl li.has-dropdown > a::after{
+  content:"▾";
+  font-size:10px;
+  opacity:.6;
+  transition:transform .25s ease, opacity .2s;
+  display:inline-block;
+}
+.nl li.has-dropdown:hover > a::after,
+.nl li.has-dropdown.open > a::after{
+  transform:rotate(180deg);
+  opacity:1;
+}
+.nl li.has-dropdown > a.active-drop{
+  color:var(--pl)!important;
+  background:rgba(139,92,246,.15)!important;
+  border-color:rgba(139,92,246,.3)!important;
+}
+
+/* Panneau dropdown */
+.nav-dropdown{
+  position:absolute;
+  top:calc(100% + 10px);
+  left:50%;
+  transform:translateX(-50%) translateY(-6px);
+  min-width:340px;
+  background:rgba(12,6,36,.98);
+  border:1px solid rgba(180,138,247,.25);
+  border-radius:14px;
+  padding:12px;
+  box-shadow:
+    0 16px 48px rgba(0,0,0,.6),
+    0 4px 16px rgba(139,92,246,.2),
+    inset 0 1px 0 rgba(255,255,255,.06);
+  backdrop-filter:blur(28px);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .22s ease, transform .22s ease;
+  z-index:500;
+}
+.nl li.has-dropdown:hover .nav-dropdown,
+.nl li.has-dropdown.open .nav-dropdown{
+  opacity:1;
+  pointer-events:all;
+  transform:translateX(-50%) translateY(0);
+}
+
+/* Grille 2 colonnes */
+.nav-dropdown.grid2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:4px;
+}
+/* Colonne unique */
+.nav-dropdown.col1{
+  display:flex;flex-direction:column;gap:4px;
+  min-width:280px;
+}
+
+/* Item de dropdown */
+.dd-item{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:12px 14px;border-radius:9px;
+  text-decoration:none;
+  transition:background .18s ease, border-color .18s ease;
+  border:1px solid transparent;
+  color:inherit;
+  cursor:pointer;
+}
+.dd-item:hover{
+  background:rgba(139,92,246,.15);
+  border-color:rgba(180,138,247,.22);
+}
+.dd-item:hover .dd-title{color:#fff!important}
+.dd-icon{
+  width:34px;height:34px;border-radius:9px;
+  background:rgba(139,92,246,.18);
+  border:1px solid rgba(180,138,247,.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;
+  transition:background .18s, box-shadow .18s;
+}
+.dd-item:hover .dd-icon{
+  background:rgba(139,92,246,.32);
+  box-shadow:0 0 12px rgba(139,92,246,.3);
+}
+.dd-body{}
+.dd-title{
+  font-size:13px;font-weight:700;
+  color:rgba(212,186,255,.9);
+  font-family:"DM Sans",sans-serif;
+  margin-bottom:3px;
+  display:block;
+  transition:color .18s;
+}
+.dd-desc{
+  font-size:11px;
+  color:rgba(196,181,232,.45);
+  line-height:1.5;
+  font-family:"DM Sans",sans-serif;
+}
+
+/* Séparateur */
+.dd-sep{
+  grid-column:1/-1;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(139,92,246,.2),transparent);
+  margin:4px 0;
+}
+
+/* Indicateur active */
+.nl li.has-dropdown > a span.dd-ind{
+  display:inline-block;width:5px;height:5px;
+  border-radius:50%;background:var(--teal);
+  margin-left:4px;vertical-align:middle;
+  box-shadow:0 0 6px rgba(94,234,212,.5);
+}
+
 </style>
 </head>
 <body>
@@ -2331,6 +2456,70 @@ footer::after{
     <li><a href="#poles" data-i18n="nav.expertise" id="nav-expertise" onclick="scrollToPoles(event)" data-tooltip="IA · Data · Cyber — notre expertise tripolaire">Expertise</a></li>
     <li><a href="#services" data-i18n="nav.svc" data-tooltip="Audit, conformité, formation, gouvernance">Services</a></li>
     <li><a href="/donnees" target="_blank" rel="noopener" data-i18n="nav.donnees" data-tooltip="44 datasets data.gouv.fr en temps réel">Données</a></li>
+
+    <!-- ▼ Entreprise dropdown -->
+    <li class="has-dropdown" id="dd-entreprise">
+      <a href="#" onclick="toggleDrop('dd-entreprise',event)" data-tooltip="Notre équipe & carrières">Entreprise</a>
+      <div class="nav-dropdown grid2">
+        <a class="dd-item" href="/team" target="_blank">
+          <div class="dd-icon">👥</div>
+          <div class="dd-body">
+            <span class="dd-title">Our Team</span>
+            <span class="dd-desc">Rencontrez l'équipe CONSEILPREV</span>
+          </div>
+        </a>
+        <a class="dd-item" href="/careers" target="_blank">
+          <div class="dd-icon">💼</div>
+          <div class="dd-body">
+            <span class="dd-title">Careers</span>
+            <span class="dd-desc">Rejoignez une équipe internationale</span>
+          </div>
+        </a>
+      </div>
+    </li>
+
+    <!-- ▼ Ressources dropdown -->
+    <li class="has-dropdown" id="dd-ressources">
+      <a href="#" onclick="toggleDrop('dd-ressources',event)" data-tooltip="Actualités, blogs, vidéos & podcasts">Ressources</a>
+      <div class="nav-dropdown col1">
+        <a class="dd-item" href="/ressources" target="_blank">
+          <div class="dd-icon">📚</div>
+          <div class="dd-body">
+            <span class="dd-title">All</span>
+            <span class="dd-desc">Toutes nos ressources</span>
+          </div>
+        </a>
+        <a class="dd-item" href="/ressources#news" target="_blank">
+          <div class="dd-icon">📰</div>
+          <div class="dd-body">
+            <span class="dd-title">News</span>
+            <span class="dd-desc">Actualités IA Act, RGPD, cybersécurité</span>
+          </div>
+        </a>
+        <a class="dd-item" href="/ressources#blogs" target="_blank">
+          <div class="dd-icon">✍️</div>
+          <div class="dd-body">
+            <span class="dd-title">Blogs</span>
+            <span class="dd-desc">Analyses et insights de nos experts</span>
+          </div>
+        </a>
+        <a class="dd-item" href="/ressources#videos" target="_blank">
+          <div class="dd-icon">▶️</div>
+          <div class="dd-body">
+            <span class="dd-title">Vidéos</span>
+            <span class="dd-desc">Démonstrations et interviews</span>
+          </div>
+        </a>
+        <a class="dd-item" href="/ressources#podcasts" target="_blank">
+          <div class="dd-icon">🎙️</div>
+          <div class="dd-body">
+            <span class="dd-title">Podcasts</span>
+            <span class="dd-desc">IA & conformité en profondeur</span>
+          </div>
+        </a>
+      </div>
+    </li>
+
     <li><a href="#contact">Contact</a></li>
   </ul>
   <div style="display:flex;align-items:center;gap:12px">
@@ -3966,6 +4155,30 @@ function xSug(btn){
   });
 
 })();
+
+
+// ── Dropdown menus ──
+function toggleDrop(id, e){
+  if(e){ e.preventDefault(); e.stopPropagation(); }
+  var li = document.getElementById(id);
+  if(!li) return;
+  var wasOpen = li.classList.contains('open');
+  // Fermer tous
+  document.querySelectorAll('.has-dropdown.open').forEach(function(el){ el.classList.remove('open'); });
+  if(!wasOpen) li.classList.add('open');
+}
+// Fermer au clic extérieur
+document.addEventListener('click', function(e){
+  if(!e.target.closest('.has-dropdown')){
+    document.querySelectorAll('.has-dropdown.open').forEach(function(el){ el.classList.remove('open'); });
+  }
+});
+// Fermer au Echap
+document.addEventListener('keydown', function(e){
+  if(e.key==='Escape'){
+    document.querySelectorAll('.has-dropdown.open').forEach(function(el){ el.classList.remove('open'); });
+  }
+});
 
 // ════════════════════════════════════════
 // SYSTÈME COOKIES RGPD — CONSEILPREV
