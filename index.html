@@ -2086,6 +2086,116 @@ footer::after{
   transition:opacity .3s ease, transform .3s ease, filter .3s ease !important;
 }
 
+
+/* ══════════════════════════════════════════════════
+   HOVER ZOOM — Secteurs d'intervention
+   ══════════════════════════════════════════════════ */
+
+.sector-grid{
+  perspective:1400px;
+  position:relative;
+}
+
+.sector-card{
+  transition:
+    transform .38s cubic-bezier(.34,1.56,.64,1),
+    border-color .28s ease,
+    box-shadow .32s ease,
+    background .28s ease,
+    color .25s ease !important;
+  transform-origin:center center;
+  position:relative;
+  z-index:1;
+  will-change:transform;
+  cursor:default;
+}
+
+.sector-card:hover{
+  transform:scale(1.14) translateY(-6px) !important;
+  z-index:20 !important;
+  box-shadow:
+    0 12px 36px rgba(217,70,239,.32),
+    0 4px 14px rgba(139,92,246,.28),
+    0 0 0 1px rgba(217,70,239,.28),
+    inset 0 1px 0 rgba(255,255,255,.12) !important;
+}
+
+/* Conserver la couleur propre de chaque secteur au hover, juste plus lumineuse */
+.sc-teal:hover{
+  background:rgba(60,201,176,.22) !important;
+  border-color:rgba(60,201,176,.75) !important;
+  color:#5ef5d8 !important;
+  box-shadow:0 12px 36px rgba(60,201,176,.3),0 0 0 1px rgba(60,201,176,.35) !important;
+  text-shadow:0 0 12px rgba(60,201,176,.6) !important;
+}
+.sc-orange:hover{
+  background:rgba(255,140,0,.22) !important;
+  border-color:rgba(255,140,0,.75) !important;
+  color:#ffa733 !important;
+  box-shadow:0 12px 36px rgba(255,140,0,.28),0 0 0 1px rgba(255,140,0,.35) !important;
+  text-shadow:0 0 12px rgba(255,140,0,.55) !important;
+}
+.sc-blue:hover{
+  background:rgba(59,130,246,.22) !important;
+  border-color:rgba(59,130,246,.75) !important;
+  color:#7cb9fd !important;
+  box-shadow:0 12px 36px rgba(59,130,246,.28),0 0 0 1px rgba(59,130,246,.35) !important;
+  text-shadow:0 0 12px rgba(59,130,246,.55) !important;
+}
+.sc-violet:hover,.sc-purple:hover{
+  background:rgba(139,92,246,.25) !important;
+  border-color:rgba(139,92,246,.75) !important;
+  color:#c4b5fd !important;
+  box-shadow:0 12px 36px rgba(139,92,246,.32),0 0 0 1px rgba(139,92,246,.38) !important;
+  text-shadow:0 0 12px rgba(139,92,246,.6) !important;
+}
+.sc-red:hover{
+  background:rgba(239,68,68,.2) !important;
+  border-color:rgba(239,68,68,.7) !important;
+  color:#fca5a5 !important;
+  box-shadow:0 12px 36px rgba(239,68,68,.25),0 0 0 1px rgba(239,68,68,.32) !important;
+  text-shadow:0 0 12px rgba(239,68,68,.5) !important;
+}
+.sc-gold:hover,.sc-yellow:hover{
+  background:rgba(234,179,8,.18) !important;
+  border-color:rgba(234,179,8,.7) !important;
+  color:#fde047 !important;
+  box-shadow:0 12px 36px rgba(234,179,8,.25),0 0 0 1px rgba(234,179,8,.32) !important;
+  text-shadow:0 0 12px rgba(234,179,8,.5) !important;
+}
+.sc-green:hover{
+  background:rgba(34,197,94,.18) !important;
+  border-color:rgba(34,197,94,.7) !important;
+  color:#86efac !important;
+  box-shadow:0 12px 36px rgba(34,197,94,.25),0 0 0 1px rgba(34,197,94,.32) !important;
+  text-shadow:0 0 12px rgba(34,197,94,.5) !important;
+}
+.sc-pink:hover{
+  background:rgba(236,72,153,.2) !important;
+  border-color:rgba(236,72,153,.7) !important;
+  color:#f9a8d4 !important;
+  box-shadow:0 12px 36px rgba(236,72,153,.28),0 0 0 1px rgba(236,72,153,.32) !important;
+  text-shadow:0 0 12px rgba(236,72,153,.5) !important;
+}
+
+/* Icône secteur */
+.sector-card .sc-ico{
+  transition:transform .38s cubic-bezier(.34,1.56,.64,1), filter .3s ease;
+  display:inline-block;
+}
+.sector-card:hover .sc-ico{
+  transform:scale(1.35) rotate(-8deg) !important;
+  filter:drop-shadow(0 0 6px currentColor);
+}
+
+/* Atténuer les voisins */
+.sector-grid:has(.sector-card:hover) .sector-card:not(:hover){
+  opacity:.55;
+  transform:scale(.96) !important;
+  filter:brightness(.72) saturate(.55);
+  transition:opacity .28s ease, transform .28s ease, filter .28s ease !important;
+}
+
 </style>
 </head>
 <body>
