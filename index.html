@@ -2597,6 +2597,22 @@ footer{
   color:var(--teal,#5eead4);margin-bottom:6px;display:block
 }
 
+
+/* ── Tags articles RGPD ── */
+.consent-rgpd-refs{
+  display:flex;flex-wrap:wrap;gap:6px;
+  margin-top:10px;
+}
+.rgpd-tag{
+  font-family:"Space Mono",monospace;
+  font-size:9px;letter-spacing:.05em;
+  padding:3px 9px;border-radius:100px;
+  background:rgba(139,92,246,.15);
+  border:1px solid rgba(180,138,247,.25);
+  color:rgba(196,181,232,.75);
+  white-space:nowrap;
+}
+
 </style>
 </head>
 <body>
@@ -3265,11 +3281,7 @@ footer{
         <input type="text" id="hp" name="website" tabindex="-1" autocomplete="off" value="">
       </div>
 
-      <!-- ── RGPD Consent ── -->
-      <label class="pconsent">
-        <input type="checkbox" id="pf-consent" required>
-        <span><span data-i18n="form.consent">J'accepte que mes données soient traitées par <strong>CONSEILPREV</strong> dans le cadre de ma demande de contact, conformément à la <a href="#" class="pclink">politique de confidentialité</a>. Aucune donnée n'est partagée avec des tiers.</span> <span class="req">*</span></span>
-      </label>
+
 
       <!-- ── Comment nous avez-vous connus ── -->
       <div class="pf pf-source" style="margin-bottom:18px">
@@ -3291,6 +3303,12 @@ footer{
         <input type="checkbox" id="pf-consent" name="consent" required>
         <span class="consent-label">
           J'accepte que mes données soient traitées par <strong>CONSEILPREV</strong> dans le cadre de ma demande de contact, conformément à la <a href="/confidentialite" target="_blank" rel="noopener">politique de confidentialité</a>. Aucune donnée n'est partagée avec des tiers. <span class="req">*</span>
+          <span class="consent-rgpd-refs">
+            <span class="rgpd-tag">Art. 6.1.a — Consentement</span>
+            <span class="rgpd-tag">Art. 7.1 — Preuve du consentement</span>
+            <span class="rgpd-tag">Art. 13 — Information</span>
+            <span class="rgpd-tag">Art. 17 — Droit à l'effacement</span>
+          </span>
         </span>
       </label>
 
