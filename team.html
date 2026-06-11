@@ -49,7 +49,18 @@ h1 em{font-style:italic;background:linear-gradient(135deg,#818cf8,#c084fc,#e879f
 .member-card:hover{transform:scale(1.04) translateY(-8px);border-color:rgba(217,70,239,.5);box-shadow:0 16px 48px rgba(217,70,239,.28),0 0 0 1px rgba(217,70,239,.22)}
 .member-card > *{position:relative;z-index:1}
 /* Avatar */
-.member-avatar{width:90px;height:90px;border-radius:50%;margin-bottom:16px;object-fit:cover;border:3px solid rgba(139,92,246,.4);box-shadow:0 0 20px rgba(139,92,246,.3);display:block}
+.member-avatar{
+  width:96px;height:96px;border-radius:50%;
+  margin-bottom:16px;object-fit:cover;
+  border:3px solid rgba(139,92,246,.45);
+  box-shadow:0 0 24px rgba(139,92,246,.4),0 0 0 1px rgba(180,138,247,.2);
+  display:block;
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;
+}
+.member-card:hover .member-avatar{
+  transform:scale(1.08);
+  box-shadow:0 0 32px rgba(217,70,239,.5),0 0 0 2px rgba(217,70,239,.3);
+}
 .avatar-placeholder{width:90px;height:90px;border-radius:50%;margin-bottom:16px;display:flex;align-items:center;justify-content:center;font-size:32px;background:linear-gradient(135deg,rgba(139,92,246,.25),rgba(217,70,239,.15));border:3px solid rgba(139,92,246,.4);box-shadow:0 0 20px rgba(139,92,246,.3)}
 /* Infos membre */
 .member-name{font-family:"Space Mono",monospace;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--wh);margin-bottom:4px}
@@ -243,7 +254,7 @@ footer{
 
     <!-- Christophe CERF -->
     <div class="member-card">
-      <div class="avatar-placeholder">👤</div>
+      <img src="/photo-cerf.jpg" alt="Christophe CERF" class="member-avatar">
       <div class="member-name">Christophe CERF</div>
       <div class="member-role">CEO & Fondateur</div>
       <div class="member-badge">Fondateur · Paris</div>
@@ -253,7 +264,7 @@ footer{
 
     <!-- Milette DS -->
     <div class="member-card">
-      <div class="avatar-placeholder">👩‍💻</div>
+      <img src="/photo-milette.jpg" alt="Milette DS" class="member-avatar">
       <div class="member-name">Milette DS</div>
       <div class="member-role">Directrice Technique (CTO) & RH</div>
       <div class="member-badge">CTO · Asie-Pacifique</div>
@@ -263,7 +274,7 @@ footer{
 
     <!-- Alexander W. BASSEY -->
     <div class="member-card">
-      <div class="avatar-placeholder">👔</div>
+      <img src="/photo-bassey.jpg" alt="Alexander W. BASSEY" class="member-avatar">
       <div class="member-name">Alexander W. BASSEY</div>
       <div class="member-role">Directeur des Opérations (COO)</div>
       <div class="member-badge">COO · Ex Startuper</div>
@@ -273,7 +284,7 @@ footer{
 
     <!-- Cécile POUTEAU -->
     <div class="member-card">
-      <div class="avatar-placeholder">👩‍💼</div>
+      <img src="/photo-cecile.jpg" alt="Cécile POUTEAU" class="member-avatar">
       <div class="member-name">Cécile POUTEAU</div>
       <div class="member-role">Assistante de Gestion Administrative</div>
       <div class="member-badge">Admin · Paris</div>
@@ -283,7 +294,7 @@ footer{
 
     <!-- Cabinet BDO -->
     <div class="member-card">
-      <div class="avatar-placeholder" style="background:linear-gradient(135deg,rgba(30,60,120,.35),rgba(20,40,90,.25));border-color:rgba(59,130,246,.45);font-size:28px">🏢</div>
+      <img src="/photo-bdo.jpg" alt="Cabinet BDO" class="member-avatar" style="object-fit:contain;background:#fff;padding:6px;border-radius:12px">
       <div class="member-name">Cabinet BDO</div>
       <div class="member-role">Partenaire Juridique & Audit</div>
       <div class="member-badge">Partenaire · Droit du Numérique</div>
@@ -293,7 +304,7 @@ footer{
 
     <!-- Good Timing -->
     <div class="member-card">
-      <div class="avatar-placeholder" style="background:linear-gradient(135deg,rgba(217,70,239,.25),rgba(139,92,246,.18));border-color:rgba(217,70,239,.45);font-size:28px">⏱️</div>
+      <img src="/photo-goodtiming.jpg" alt="Good Timing" class="member-avatar" style="object-fit:contain;background:#fff;padding:6px;border-radius:12px">
       <div class="member-name">Good Timing</div>
       <div class="member-role">Partenaire Brand Content & CMO</div>
       <div class="member-badge">Partenaire · Communication & Médias</div>

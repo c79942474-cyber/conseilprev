@@ -484,6 +484,13 @@ def datasets():
 def demo_video():
     return send_from_directory('.', 'demo.mp4', mimetype='video/mp4')
 
+@app.route('/photo-<name>.jpg')
+def team_photo(name):
+    allowed = ['cerf','milette','bassey','cecile','bdo','goodtiming']
+    if name in allowed:
+        return send_from_directory('.', f'photo-{name}.jpg', mimetype='image/jpeg')
+    return '', 404
+
 @app.route('/hero-bg.jpg')
 def hero_bg():
     return send_from_directory('.', 'hero-bg.jpg', mimetype='image/jpeg')
