@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Plateforme B2B Recrutement IT/IA — CONSEILPREV</title>
-<meta name="description" content="Plateforme B2B de recrutement IT, IA, Data, Cyber. Matching IA, profilage humain, contrats automatisés, signature électronique.">
+<meta name="description" content="Plateforme B2B de recrutement IT, IA, Data, Cyber. Matching IA, carte de France des candidats, sélection multiple, contrats automatisés.">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -21,16 +21,20 @@ nav{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,rgba(30,
 .nl{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:700;text-decoration:none;color:#fff;margin-right:auto;text-shadow:0 0 20px rgba(196,181,232,.4)}.nl span{background:linear-gradient(135deg,#c084fc,#e879f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .nb{font-size:11px;color:rgba(196,181,232,.5);text-decoration:none;font-family:"Space Mono",monospace;padding:5px 10px;border-radius:7px;border:1px solid transparent;transition:all .2s}.nb:hover{color:#fff;background:rgba(157,111,232,.2)}
 .nav-cta{background:linear-gradient(135deg,#6d28d9,#9d6fe8,#d946ef);color:#fff;padding:8px 18px;border-radius:8px;font-size:12px;font-family:"Space Mono",monospace;font-weight:700;text-decoration:none;box-shadow:0 4px 16px rgba(217,70,239,.4);transition:all .2s}
+/* Cart badge nav */
+.cart-badge{position:relative;font-size:18px;cursor:pointer;padding:6px;border-radius:8px;transition:background .2s;text-decoration:none}
+.cart-badge:hover{background:rgba(157,111,232,.2)}
+.cart-count{position:absolute;top:-2px;right:-4px;background:linear-gradient(135deg,#d946ef,#9333ea);color:#fff;font-size:10px;font-weight:700;font-family:"Space Mono",monospace;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 8px rgba(217,70,239,.5)}
 /* HERO */
-.hero{text-align:center;padding:52px 28px 36px;position:relative;max-width:1100px;margin:0 auto}
+.hero{text-align:center;padding:48px 28px 32px;position:relative;max-width:1100px;margin:0 auto}
 .hbadge{display:inline-flex;align-items:center;gap:8px;background:rgba(196,181,232,.15);border:1px solid rgba(196,181,232,.35);border-radius:100px;padding:6px 18px;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;color:var(--pp);margin-bottom:18px}
 .bdot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:blink 2s ease-in-out infinite}
-h1{font-family:"Cormorant Garamond",serif;font-size:clamp(26px,4.5vw,50px);font-weight:700;line-height:1.1;margin-bottom:14px}
+h1{font-family:"Cormorant Garamond",serif;font-size:clamp(26px,4.5vw,48px);font-weight:700;line-height:1.1;margin-bottom:14px}
 h1 em{font-style:italic;background:linear-gradient(135deg,#a78bfa,#c084fc,#e879f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .hero-sub{font-size:14px;color:rgba(216,180,254,.78);max-width:620px;margin:0 auto;line-height:1.8}
-/* STEPPER */
 .con{max-width:1100px;margin:0 auto;padding:0 28px 64px}
-.stepper{display:flex;justify-content:center;gap:0;margin:32px auto 40px;max-width:760px}
+/* STEPPER */
+.stepper{display:flex;justify-content:center;gap:0;margin:28px auto 36px;max-width:760px}
 .step-item{flex:1;text-align:center;position:relative;cursor:default}
 .step-item::after{content:"";position:absolute;top:17px;left:calc(50% + 22px);width:calc(100% - 44px);height:2px;background:rgba(196,181,232,.18)}
 .step-item:last-child::after{display:none}
@@ -40,11 +44,10 @@ h1 em{font-style:italic;background:linear-gradient(135deg,#a78bfa,#c084fc,#e879f
 .step-item.done .step-dot{background:rgba(94,234,212,.15);border-color:var(--teal);color:var(--teal)}
 .step-lbl{font-size:11px;color:rgba(216,180,254,.6);font-family:"Space Mono",monospace;letter-spacing:.04em}
 .step-item.active .step-lbl{color:#fff}
-/* PANELS */
 .panel{display:none;animation:fadeIn .4s ease}
 .panel.show{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-/* SERVICES GRID */
+/* SERVICES */
 .svc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:36px}
 @media(max-width:680px){.svc-grid{grid-template-columns:1fr}}
 .svc-card{background:rgba(255,255,255,.08);border:1px solid rgba(196,181,232,.2);border-radius:14px;padding:24px;transition:all .28s}
@@ -52,7 +55,6 @@ h1 em{font-style:italic;background:linear-gradient(135deg,#a78bfa,#c084fc,#e879f
 .svc-ico{font-size:26px;margin-bottom:12px;display:block}
 .svc-title{font-size:16px;font-weight:700;color:#fff;margin-bottom:8px}
 .svc-desc{font-size:13px;color:rgba(216,180,254,.74);line-height:1.7}
-/* GARANTIES */
 .gar-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:40px}
 @media(max-width:760px){.gar-grid{grid-template-columns:1fr 1fr}}
 .gar-item{background:rgba(255,255,255,.06);border:1px solid rgba(196,181,232,.15);border-radius:11px;padding:18px 16px;text-align:center}
@@ -71,22 +73,15 @@ h1 em{font-style:italic;background:linear-gradient(135deg,#a78bfa,#c084fc,#e879f
 .bf-group{display:flex;flex-direction:column;gap:6px}
 .bf-label{font-size:11px;font-family:"Space Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:rgba(216,180,254,.65)}
 .bf-label .req{color:#f87171}
-.bf-input,.bf-select,.bf-textarea{
-  background:rgba(255,255,255,.08);border:1px solid rgba(196,181,232,.28);border-radius:9px;
-  color:#fff;font-size:14px;font-family:"DM Sans",sans-serif;padding:11px 14px;outline:none;
-  transition:border-color .2s,box-shadow .2s;width:100%;
-  -webkit-user-select:text!important;user-select:text!important;
-}
+.bf-input,.bf-select,.bf-textarea{background:rgba(255,255,255,.08);border:1px solid rgba(196,181,232,.28);border-radius:9px;color:#fff;font-size:14px;font-family:"DM Sans",sans-serif;padding:11px 14px;outline:none;transition:border-color .2s,box-shadow .2s;width:100%;-webkit-user-select:text!important;user-select:text!important}
 .bf-input:focus,.bf-select:focus,.bf-textarea:focus{border-color:rgba(217,70,239,.55);box-shadow:0 0 0 3px rgba(157,111,232,.15)}
 .bf-select option{background:#2d1b69;color:#fff}
 .bf-textarea{resize:vertical;min-height:90px;line-height:1.6}
-/* Skills tags input */
 .skills-wrap{display:flex;flex-wrap:wrap;gap:6px;padding:8px;background:rgba(255,255,255,.08);border:1px solid rgba(196,181,232,.28);border-radius:9px;min-height:48px;cursor:text}
 .skill-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(157,111,232,.25);border:1px solid rgba(157,111,232,.4);border-radius:100px;padding:4px 12px;font-size:12px;color:#fff}
 .skill-tag button{background:none;border:none;color:rgba(255,255,255,.6);cursor:pointer;font-size:14px;padding:0;line-height:1}
 .skill-tag button:hover{color:#fff}
 .skills-input{background:none;border:none;outline:none;color:#fff;font-size:13px;flex:1;min-width:120px;font-family:"DM Sans",sans-serif;-webkit-user-select:text!important;user-select:text!important}
-/* Consent */
 .bf-consent{display:flex;align-items:flex-start;gap:12px;background:rgba(157,111,232,.1);border:1px solid rgba(196,181,232,.25);border-radius:10px;padding:14px 16px;margin-bottom:22px;cursor:pointer;transition:all .2s}
 .bf-consent:has(input:checked){border-color:rgba(94,234,212,.4);background:rgba(94,234,212,.06)}
 .bf-consent.error{border-color:rgba(248,113,113,.6)!important;background:rgba(239,68,68,.08)!important;animation:shake .3s}
@@ -94,66 +89,113 @@ h1 em{font-style:italic;background:linear-gradient(135deg,#a78bfa,#c084fc,#e879f
 .bf-consent input{width:18px;height:18px;margin-top:2px;accent-color:var(--teal);cursor:pointer;flex-shrink:0}
 .bf-consent-txt{font-size:12px;color:rgba(216,180,254,.78);line-height:1.65}
 .bf-consent-txt a{color:var(--teal);text-decoration:none}
-/* Boutons */
 .btn-launch{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#6d28d9,#9d6fe8,#d946ef);color:#fff;padding:14px 32px;border-radius:10px;font-size:15px;font-weight:700;font-family:"DM Sans",sans-serif;border:none;cursor:pointer;box-shadow:0 4px 22px rgba(217,70,239,.4);transition:all .25s}
 .btn-launch:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(217,70,239,.5)}
-.btn-launch:disabled{opacity:.6;cursor:wait}
+.btn-launch:disabled{opacity:.55;cursor:not-allowed;transform:none}
 .btn-sec{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(196,181,232,.3);color:rgba(216,180,254,.85);padding:13px 26px;border-radius:10px;font-size:14px;font-family:"DM Sans",sans-serif;cursor:pointer;transition:all .22s;text-decoration:none}
 .btn-sec:hover{background:rgba(255,255,255,.15);color:#fff}
-/* SEARCH ANIMATION */
+/* SEARCH ANIM (sans sources) */
 .search-anim{text-align:center;padding:48px 24px;max-width:640px;margin:0 auto}
-.radar{width:120px;height:120px;margin:0 auto 28px;position:relative}
+.radar{width:130px;height:130px;margin:0 auto 28px;position:relative}
 .radar-ring{position:absolute;inset:0;border:2px solid rgba(157,111,232,.3);border-radius:50%;animation:radar-pulse 2s ease-out infinite}
 .radar-ring:nth-child(2){animation-delay:.6s}
 .radar-ring:nth-child(3){animation-delay:1.2s}
-@keyframes radar-pulse{0%{transform:scale(.5);opacity:1}100%{transform:scale(1.4);opacity:0}}
-.radar-core{position:absolute;inset:35px;background:linear-gradient(135deg,#6d28d9,#d946ef);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 0 30px rgba(217,70,239,.5)}
+@keyframes radar-pulse{0%{transform:scale(.5);opacity:1}100%{transform:scale(1.45);opacity:0}}
+.radar-core{position:absolute;inset:38px;background:linear-gradient(135deg,#6d28d9,#d946ef);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 0 30px rgba(217,70,239,.5)}
 .search-status{font-family:"Space Mono",monospace;font-size:13px;color:var(--teal);margin-bottom:8px;min-height:20px}
-.search-srcs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:24px}
-.src-chip{font-family:"Space Mono",monospace;font-size:10px;padding:5px 13px;border-radius:100px;background:rgba(255,255,255,.06);border:1px solid rgba(196,181,232,.2);color:rgba(216,180,254,.55);transition:all .4s}
-.src-chip.scanning{background:rgba(157,111,232,.25);border-color:rgba(157,111,232,.5);color:#fff;box-shadow:0 0 12px rgba(157,111,232,.3)}
-.src-chip.done{background:rgba(94,234,212,.12);border-color:rgba(94,234,212,.35);color:var(--teal)}
+.search-detail{font-size:12px;color:rgba(216,180,254,.55);margin-top:8px;line-height:1.7}
 .progress-bar{height:6px;background:rgba(255,255,255,.08);border-radius:100px;overflow:hidden;margin-top:28px}
 .progress-fill{height:100%;width:0;background:linear-gradient(90deg,#6d28d9,#9d6fe8,#d946ef);border-radius:100px;transition:width .5s ease}
+/* ═══ CARTE DE FRANCE 3D ═══ */
+.map-section{max-width:920px;margin:0 auto 32px;position:relative}
+.map-3d-wrap{perspective:1100px;display:flex;justify-content:center}
+.map-3d{transform:rotateX(28deg) rotateZ(-2deg);transform-style:preserve-3d;transition:transform .5s ease;position:relative}
+.map-3d:hover{transform:rotateX(20deg) rotateZ(-1deg) scale(1.02)}
+.map-svg{filter:drop-shadow(0 24px 32px rgba(0,0,0,.45));overflow:visible}
+.fr-base{fill:#1a0f44;opacity:.85}
+.fr-body{fill:url(#frGrad);stroke:rgba(196,181,232,.45);stroke-width:1.5}
+.fr-grid{stroke:rgba(196,181,232,.10);stroke-width:.5;fill:none}
+/* Pins */
+.map-pin{cursor:pointer}
+.map-pin .pin-pulse{animation:pin-pulse 2s ease-out infinite;transform-origin:center;transform-box:fill-box}
+@keyframes pin-pulse{0%{opacity:.8;transform:scale(.6)}100%{opacity:0;transform:scale(2.2)}}
+.map-pin .pin-core{transition:r .2s}
+.map-pin:hover .pin-core{r:9}
+.map-pin.in-cart .pin-core{fill:#5eead4;stroke:#fff}
+/* Tooltip carte */
+.map-tooltip{position:absolute;background:rgba(20,12,55,.97);border:1px solid rgba(196,181,232,.4);border-radius:11px;padding:12px 16px;font-size:12px;color:#fff;pointer-events:none;opacity:0;transition:opacity .18s;z-index:50;min-width:200px;box-shadow:0 8px 28px rgba(0,0,0,.5);backdrop-filter:blur(12px)}
+.map-tooltip.show{opacity:1}
+.mt-name{font-weight:700;font-size:13px;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.mt-row{display:flex;justify-content:space-between;gap:14px;padding:2px 0;color:rgba(216,180,254,.78);font-size:11px}
+.mt-row b{color:#fff;font-weight:600}
+.mt-score{color:var(--teal);font-family:"Space Mono",monospace;font-weight:700}
+.map-legend{display:flex;gap:18px;justify-content:center;margin-top:14px;font-size:11px;color:rgba(216,180,254,.6);font-family:"Space Mono",monospace}
+.map-legend span{display:inline-flex;align-items:center;gap:6px}
+.lg-dot{width:9px;height:9px;border-radius:50%}
 /* MATCHES */
-.match-grid{display:flex;flex-direction:column;gap:14px;max-width:860px;margin:0 auto}
-.match-card{background:rgba(255,255,255,.08);border:1px solid rgba(196,181,232,.2);border-radius:14px;padding:22px 24px;display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;transition:all .26s;cursor:pointer}
-.match-card:hover{background:rgba(255,255,255,.13);border-color:rgba(217,70,239,.42);transform:translateX(4px)}
-.match-card.selected{border-color:var(--teal)!important;background:rgba(94,234,212,.08)!important;box-shadow:0 0 0 1px rgba(94,234,212,.3)}
-.match-avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,rgba(109,40,217,.5),rgba(217,70,239,.35));display:flex;align-items:center;justify-content:center;font-size:22px;border:2px solid rgba(196,181,232,.3);position:relative}
-.match-avatar::after{content:"🔒";position:absolute;bottom:-4px;right:-4px;font-size:13px;background:#2d1b69;border-radius:50%;padding:2px}
-.match-body{min-width:0}
+.match-grid{display:flex;flex-direction:column;gap:14px;max-width:920px;margin:0 auto}
+.match-card{background:rgba(255,255,255,.08);border:1px solid rgba(196,181,232,.2);border-radius:14px;padding:20px 22px;display:grid;grid-template-columns:auto 1fr auto auto;gap:16px;align-items:center;transition:all .26s}
+@media(max-width:680px){.match-card{grid-template-columns:auto 1fr;gap:12px}}
+.match-card:hover{background:rgba(255,255,255,.12);border-color:rgba(217,70,239,.4)}
+.match-card.in-cart{border-color:var(--teal)!important;background:rgba(94,234,212,.07)!important;box-shadow:0 0 0 1px rgba(94,234,212,.3)}
+.match-avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,rgba(109,40,217,.5),rgba(217,70,239,.35));display:flex;align-items:center;justify-content:center;font-size:21px;border:2px solid rgba(196,181,232,.3);position:relative}
+.match-avatar::after{content:"🔒";position:absolute;bottom:-4px;right:-4px;font-size:12px;background:#2d1b69;border-radius:50%;padding:2px}
 .match-name{font-size:15px;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .match-anon{font-family:"Space Mono",monospace;font-size:9px;background:rgba(196,181,232,.15);border:1px solid rgba(196,181,232,.25);padding:2px 8px;border-radius:100px;color:rgba(216,180,254,.7)}
-.match-meta{font-size:12px;color:rgba(216,180,254,.65);margin-top:4px;display:flex;gap:14px;flex-wrap:wrap}
+.match-meta{font-size:12px;color:rgba(216,180,254,.65);margin-top:4px;display:flex;gap:12px;flex-wrap:wrap}
 .match-skills{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
 .mskill{font-family:"Space Mono",monospace;font-size:9px;padding:2px 9px;border-radius:100px;background:rgba(157,111,232,.18);border:1px solid rgba(157,111,232,.3);color:rgba(216,180,254,.85)}
-.match-score-wrap{text-align:center}
-.match-score{font-family:"Cormorant Garamond",serif;font-size:32px;font-weight:700;background:linear-gradient(135deg,#5eead4,#a78bfa);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
-.match-score-lbl{font-family:"Space Mono",monospace;font-size:9px;color:rgba(216,180,254,.5);letter-spacing:.1em;text-transform:uppercase}
-.match-bar{width:70px;height:4px;background:rgba(255,255,255,.1);border-radius:100px;margin:6px auto 0;overflow:hidden}
-.match-bar-fill{height:100%;background:linear-gradient(90deg,#5eead4,#a78bfa);border-radius:100px}
-/* Anonymat notice */
-.anon-notice{background:rgba(94,234,212,.07);border:1px solid rgba(94,234,212,.25);border-radius:11px;padding:14px 18px;display:flex;gap:12px;align-items:flex-start;margin-bottom:20px;max-width:860px;margin-left:auto;margin-right:auto}
+.match-score{font-family:"Cormorant Garamond",serif;font-size:30px;font-weight:700;background:linear-gradient(135deg,#5eead4,#a78bfa);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1;text-align:center}
+.match-score-lbl{font-family:"Space Mono",monospace;font-size:9px;color:rgba(216,180,254,.5);letter-spacing:.1em;text-transform:uppercase;text-align:center}
+.btn-add{padding:9px 18px;border-radius:9px;font-size:12px;font-weight:700;font-family:"DM Sans",sans-serif;border:1px solid rgba(157,111,232,.4);background:rgba(157,111,232,.18);color:#fff;cursor:pointer;transition:all .22s;white-space:nowrap}
+.btn-add:hover{background:rgba(157,111,232,.35)}
+.btn-add.added{background:rgba(94,234,212,.15);border-color:rgba(94,234,212,.45);color:var(--teal)}
+.anon-notice{background:rgba(94,234,212,.07);border:1px solid rgba(94,234,212,.25);border-radius:11px;padding:14px 18px;display:flex;gap:12px;align-items:flex-start;margin:0 auto 20px;max-width:920px}
 .anon-notice-ico{font-size:18px;flex-shrink:0}
 .anon-notice-txt{font-size:12px;color:rgba(94,234,212,.85);line-height:1.65}
+/* PANIER */
+.cart-panel{background:rgba(255,255,255,.06);border:1px solid rgba(196,181,232,.22);border-radius:16px;padding:24px;max-width:920px;margin:28px auto 0}
+.cart-title{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--teal);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.cart-empty{font-size:12px;color:rgba(216,180,254,.5);text-align:center;padding:14px}
+.cart-item{display:flex;align-items:center;gap:12px;padding:10px 12px;background:rgba(255,255,255,.05);border:1px solid rgba(196,181,232,.15);border-radius:10px;margin-bottom:8px}
+.cart-item-ico{font-size:18px}
+.cart-item-body{flex:1;min-width:0}
+.cart-item-name{font-size:13px;font-weight:700;color:#fff}
+.cart-item-meta{font-size:11px;color:rgba(216,180,254,.6)}
+.cart-rm{background:none;border:none;color:rgba(248,113,113,.7);font-size:16px;cursor:pointer;padding:4px;transition:color .2s}
+.cart-rm:hover{color:#f87171}
 /* CONTRACTS */
-.contract-flow{max-width:860px;margin:0 auto}
-.cf-pair{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:28px}
+.contract-flow{max-width:920px;margin:0 auto}
+.mutual-notice{background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.3);border-radius:12px;padding:16px 20px;display:flex;gap:12px;align-items:flex-start;margin-bottom:24px}
+.mutual-notice-ico{font-size:20px;flex-shrink:0}
+.mutual-notice-txt{font-size:12.5px;color:rgba(253,230,138,.9);line-height:1.7}
+.mutual-notice-txt strong{color:#fde68a}
+.cand-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.cand-tab{padding:9px 18px;border-radius:9px;font-size:12px;font-weight:700;font-family:"DM Sans",sans-serif;border:1px solid rgba(196,181,232,.3);background:rgba(255,255,255,.06);color:rgba(216,180,254,.75);cursor:pointer;transition:all .2s}
+.cand-tab.active{background:linear-gradient(135deg,rgba(109,40,217,.45),rgba(217,70,239,.3));border-color:rgba(217,70,239,.5);color:#fff}
+.marge-band{background:linear-gradient(135deg,rgba(109,40,217,.25),rgba(217,70,239,.15));border:1px solid rgba(217,70,239,.3);border-radius:12px;padding:18px 24px;margin-bottom:20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.marge-num{font-family:"Cormorant Garamond",serif;font-size:34px;font-weight:700;background:linear-gradient(135deg,#c4b5fd,#e879f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.marge-txt{font-size:12px;color:rgba(216,180,254,.78);line-height:1.6;flex:1;min-width:240px}
+.marge-txt strong{color:#fff}
+.cf-pair{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px}
 @media(max-width:680px){.cf-pair{grid-template-columns:1fr}}
 .contract-card{background:rgba(255,255,255,.07);border:1px solid rgba(196,181,232,.22);border-radius:14px;overflow:hidden}
 .cc-head{background:linear-gradient(135deg,rgba(109,40,217,.4),rgba(217,70,239,.25));padding:16px 20px;border-bottom:1px solid rgba(196,181,232,.18)}
 .cc-head-title{font-size:14px;font-weight:700;color:#fff}
 .cc-head-sub{font-size:11px;color:rgba(216,180,254,.65);margin-top:3px;font-family:"Space Mono",monospace}
-.cc-body{padding:18px 20px}
-.cc-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(196,181,232,.08);font-size:12px}
+.cc-body{padding:16px 20px;max-height:420px;overflow-y:auto}
+.cc-body::-webkit-scrollbar{width:5px}
+.cc-body::-webkit-scrollbar-thumb{background:rgba(157,111,232,.4);border-radius:100px}
+.cc-row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid rgba(196,181,232,.08);font-size:12px}
 .cc-row:last-child{border-bottom:none}
-.cc-row .ck{color:rgba(216,180,254,.6)}
+.cc-row .ck{color:rgba(216,180,254,.6);flex-shrink:0}
 .cc-row .cv{color:#fff;font-weight:600;text-align:right}
 .cc-row .cv.hl{color:var(--teal)}
-.cc-foot{padding:14px 20px;border-top:1px solid rgba(196,181,232,.15);display:flex;gap:10px;flex-wrap:wrap}
-/* Signature pad */
-.sig-zone{background:rgba(255,255,255,.05);border:1px dashed rgba(196,181,232,.35);border-radius:10px;padding:14px;margin-top:10px}
+.cc-art{margin-top:12px;padding-top:12px;border-top:1px solid rgba(196,181,232,.15)}
+.cc-art-title{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--pl);margin-bottom:6px}
+.cc-art-txt{font-size:11px;color:rgba(216,180,254,.68);line-height:1.65}
+.cc-foot{padding:14px 20px;border-top:1px solid rgba(196,181,232,.15);display:flex;flex-direction:column;gap:10px}
+.sig-zone{background:rgba(255,255,255,.05);border:1px dashed rgba(196,181,232,.35);border-radius:10px;padding:14px}
 .sig-zone-lbl{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(216,180,254,.55);margin-bottom:8px}
 .sig-canvas{width:100%;height:80px;background:rgba(255,255,255,.07);border-radius:8px;cursor:crosshair;touch-action:none;display:block}
 .sig-actions{display:flex;gap:8px;margin-top:8px}
@@ -162,17 +204,14 @@ h1 em{font-style:italic;background:linear-gradient(135deg,#a78bfa,#c084fc,#e879f
 .sig-btn.validate{background:rgba(94,234,212,.12);border-color:rgba(94,234,212,.35);color:var(--teal)}
 .sig-status{font-size:11px;font-family:"Space Mono",monospace;margin-top:6px;display:none}
 .sig-status.signed{display:block;color:var(--teal)}
-/* Marge bandeau */
-.marge-band{background:linear-gradient(135deg,rgba(109,40,217,.25),rgba(217,70,239,.15));border:1px solid rgba(217,70,239,.3);border-radius:12px;padding:18px 24px;margin-bottom:24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
-.marge-num{font-family:"Cormorant Garamond",serif;font-size:36px;font-weight:700;background:linear-gradient(135deg,#c4b5fd,#e879f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
-.marge-txt{font-size:12px;color:rgba(216,180,254,.78);line-height:1.6;flex:1;min-width:240px}
-.marge-txt strong{color:#fff}
-/* Success final */
-.final-box{text-align:center;padding:48px 24px;max-width:600px;margin:0 auto}
+.final-box{text-align:center;padding:44px 24px;max-width:620px;margin:0 auto}
 .final-ico{width:90px;height:90px;margin:0 auto 24px;background:rgba(94,234,212,.12);border:2px solid rgba(94,234,212,.4);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:38px;box-shadow:0 0 40px rgba(94,234,212,.25)}
+.email-status{margin-top:16px;padding:12px 18px;border-radius:10px;font-size:12px;font-family:"Space Mono",monospace;display:none}
+.email-status.ok{display:block;background:rgba(94,234,212,.08);border:1px solid rgba(94,234,212,.3);color:var(--teal)}
+.email-status.warn{display:block;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.35);color:#fde68a;text-align:left;line-height:1.7}
 .section-h{font-family:"Cormorant Garamond",serif;font-size:clamp(20px,3.5vw,32px);font-weight:700;margin-bottom:8px;text-align:center}
 .section-h em{font-style:italic;background:linear-gradient(135deg,#a78bfa,#e879f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.section-s{font-size:13px;color:rgba(216,180,254,.7);text-align:center;margin-bottom:28px;line-height:1.7}
+.section-s{font-size:13px;color:rgba(216,180,254,.7);text-align:center;margin-bottom:24px;line-height:1.7}
 .ft-mini{background:rgba(20,12,55,.96);border-top:1px solid rgba(196,181,232,.12);padding:14px 24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:"Space Mono",monospace;font-size:10px;color:rgba(196,181,232,.45)}
 .ft-mini a{color:var(--teal);text-decoration:none}
 body{-webkit-user-select:none;user-select:none}
@@ -185,75 +224,51 @@ input,textarea,select{-webkit-user-select:text!important;user-select:text!import
 
 <nav>
   <a href="/" class="nl">CONSEIL<span>PREV</span></a>
+  <a href="#" class="cart-badge" onclick="goStep(4);return false" title="Ma sélection">🗂️<span class="cart-count" id="cart-count">0</span></a>
   <a href="/sourcing" class="nb">← Sourcing</a>
-  <a href="#brief" class="nav-cta">Lancer une recherche</a>
+  <a href="#" class="nav-cta" onclick="goStep(2);return false">Nouvelle recherche</a>
 </nav>
 
-<!-- HERO -->
 <div class="hero">
   <div class="hbadge"><span class="bdot"></span> Plateforme B2B · Recrutement IT / IA / Data / Cyber</div>
   <h1>Votre plateforme de recrutement<br><em>boostée à l'intelligence artificielle</em></h1>
-  <p class="hero-sub">Décrivez votre besoin, notre IA recherche sur tous les jobboards français, vous matche avec les meilleurs consultants — contrats générés et signés électroniquement.</p>
+  <p class="hero-sub">Décrivez vos besoins, notre IA recherche les meilleurs consultants en France, visualisez-les sur la carte, constituez votre sélection — contrats préparés automatiquement.</p>
 </div>
 
 <main class="con" id="main-content">
 
-<!-- STEPPER -->
 <div class="stepper" id="stepper">
   <div class="step-item active" data-step="1"><div class="step-dot">1</div><div class="step-lbl">Services</div></div>
   <div class="step-item" data-step="2"><div class="step-dot">2</div><div class="step-lbl">Votre brief</div></div>
   <div class="step-item" data-step="3"><div class="step-dot">3</div><div class="step-lbl">Recherche IA</div></div>
-  <div class="step-item" data-step="4"><div class="step-dot">4</div><div class="step-lbl">Matchs</div></div>
+  <div class="step-item" data-step="4"><div class="step-dot">4</div><div class="step-lbl">Candidats</div></div>
   <div class="step-item" data-step="5"><div class="step-dot">5</div><div class="step-lbl">Contrats</div></div>
 </div>
 
-<!-- ═══════════ PANEL 1 — SERVICES ═══════════ -->
+<!-- ═══ PANEL 1 — SERVICES ═══ -->
 <section class="panel show" id="panel-1">
   <h2 class="section-h">Nos prestations de <em>recrutement IT</em></h2>
   <p class="section-s">Méthode de « profilage humain » + matching IA — des consultants aux compétences rares, reconnus sur le marché.</p>
-
   <div class="svc-grid">
-    <div class="svc-card">
-      <span class="svc-ico">🎯</span>
-      <div class="svc-title">Recruter un profil IT</div>
-      <div class="svc-desc">Notre méthode de <strong>« profilage humain »</strong> nous permet de vous proposer des consultants avec des compétences rares et reconnues sur le marché. Validation des compétences par méthodes éprouvées avant toute présentation.</div>
-    </div>
-    <div class="svc-card">
-      <span class="svc-ico">⚡</span>
-      <div class="svc-title">Régie / Assistance Technique</div>
-      <div class="svc-desc">Notre <strong>vivier qualifié</strong> vous propose les meilleures compétences pour vos besoins de renforts ou remplacements au sein de vos équipes. Missions longues ou courtes — choisissez la flexibilité de la prestation.</div>
-    </div>
-    <div class="svc-card">
-      <span class="svc-ico">🏢</span>
-      <div class="svc-title">Recrutement en interne</div>
-      <div class="svc-desc">Vous préférez internaliser directement les compétences dans votre équipe ? Choisissez notre prestation de <strong>CABINET IT</strong> — chasse, qualification et intégration de talents en CDI/CDD.</div>
-    </div>
-    <div class="svc-card">
-      <span class="svc-ico">🔓</span>
-      <div class="svc-title">Clause de non-sollicitation libérée</div>
-      <div class="svc-desc">Notre modèle au service de nos clients permet de <strong>« libérer » contractuellement</strong> les consultants en mission, en toute flexibilité, en cas de volonté mutuelle d'internalisation.</div>
-    </div>
+    <div class="svc-card"><span class="svc-ico">🎯</span><div class="svc-title">Recruter un profil IT</div><div class="svc-desc">Notre méthode de <strong>« profilage humain »</strong> nous permet de vous proposer des consultants avec des compétences rares et reconnues sur le marché. Validation des compétences par méthodes éprouvées avant toute présentation.</div></div>
+    <div class="svc-card"><span class="svc-ico">⚡</span><div class="svc-title">Régie / Assistance Technique</div><div class="svc-desc">Notre <strong>vivier qualifié</strong> vous propose les meilleures compétences pour vos besoins de renforts ou remplacements. Missions longues ou courtes — choisissez la flexibilité de la prestation.</div></div>
+    <div class="svc-card"><span class="svc-ico">🏢</span><div class="svc-title">Recrutement en interne</div><div class="svc-desc">Vous préférez internaliser directement les compétences ? Choisissez notre prestation de <strong>CABINET IT</strong> — chasse, qualification et intégration de talents en CDI/CDD.</div></div>
+    <div class="svc-card"><span class="svc-ico">🔓</span><div class="svc-title">Clause de non-sollicitation libérée</div><div class="svc-desc">Notre modèle permet de <strong>« libérer » contractuellement</strong> les consultants en mission, en toute flexibilité, en cas de volonté mutuelle d'internalisation.</div></div>
   </div>
-
   <div class="gar-grid">
     <div class="gar-item"><span class="gar-ico">🌍</span><div class="gar-title">Expertise & réseau national</div><div class="gar-desc">Vivier de consultants national et international, connaissance fine du marché IT/IA.</div></div>
     <div class="gar-item"><span class="gar-ico">🤝</span><div class="gar-title">INGE IT dédié</div><div class="gar-desc">Votre interlocuteur principal et bras droit pour constituer votre meilleure équipe.</div></div>
     <div class="gar-item"><span class="gar-ico">⏱️</span><div class="gar-title">Gain de temps</div><div class="gar-desc">Logistique, entretiens, démarrages, suivis — nous nous chargeons de tout.</div></div>
     <div class="gar-item"><span class="gar-ico">🔒</span><div class="gar-title">Rigueur & confidentialité</div><div class="gar-desc">NDA signé par nos BD et consultants. Adaptation totale à vos process internes.</div></div>
   </div>
-
-  <div style="text-align:center">
-    <button class="btn-launch" onclick="goStep(2)">🚀 Décrire mon besoin →</button>
-  </div>
+  <div style="text-align:center"><button class="btn-launch" onclick="goStep(2)">🚀 Décrire mon besoin →</button></div>
 </section>
 
-<!-- ═══════════ PANEL 2 — BRIEF FORM ═══════════ -->
+<!-- ═══ PANEL 2 — BRIEF ═══ -->
 <section class="panel" id="panel-2">
   <h2 class="section-h" id="brief">Décrivez votre <em>besoin</em></h2>
-  <p class="section-s">Plus votre brief est précis, plus le matching IA sera pertinent.</p>
-
+  <p class="section-s">Plus votre brief est précis, plus le matching IA sera pertinent. Vous pouvez lancer plusieurs recherches successives.</p>
   <form class="brief-form" id="brief-form" novalidate>
-
     <div class="bf-sec">
       <div class="bf-sec-title">Vos coordonnées</div>
       <div class="bf-row">
@@ -269,7 +284,6 @@ input,textarea,select{-webkit-user-select:text!important;user-select:text!import
         <div class="bf-group"><label class="bf-label">Votre fonction</label><input class="bf-input" id="c-fonction" placeholder="DSI, CTO, RH..."></div>
       </div>
     </div>
-
     <div class="bf-sec">
       <div class="bf-sec-title">Le profil recherché</div>
       <div class="bf-row">
@@ -332,12 +346,10 @@ input,textarea,select{-webkit-user-select:text!important;user-select:text!import
         <textarea class="bf-textarea" id="p-desc" placeholder="Contexte, enjeux, équipe, stack technique, livrables attendus..."></textarea>
       </div>
     </div>
-
     <label class="bf-consent" for="bf-consent-cb">
       <input type="checkbox" id="bf-consent-cb" required>
       <span class="bf-consent-txt">J'accepte que mes données soient traitées par <strong>CONSEILPREV</strong> pour cette recherche de profil, conformément à la <a href="/protection-donnees" target="_blank">politique de protection des données</a> (Art. 6.1.a RGPD). Confidentialité totale garantie sur vos projets et stratégies SI. <span style="color:#f87171">*</span></span>
     </label>
-
     <div style="display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap">
       <button type="button" class="btn-sec" onclick="goStep(1)">← Retour</button>
       <button type="submit" class="btn-launch">🤖 Lancer la recherche IA →</button>
@@ -345,7 +357,7 @@ input,textarea,select{-webkit-user-select:text!important;user-select:text!import
   </form>
 </section>
 
-<!-- ═══════════ PANEL 3 — RECHERCHE IA ═══════════ -->
+<!-- ═══ PANEL 3 — RECHERCHE IA (sans sources) ═══ -->
 <section class="panel" id="panel-3">
   <div class="search-anim">
     <div class="radar">
@@ -354,81 +366,123 @@ input,textarea,select{-webkit-user-select:text!important;user-select:text!import
     </div>
     <h2 class="section-h">Recherche <em>en cours</em></h2>
     <div class="search-status" id="search-status">Initialisation du moteur IA…</div>
-    <div class="search-srcs" id="search-srcs">
-      <span class="src-chip" data-src="ftl">Free-Work</span>
-      <span class="src-chip" data-src="malt">Malt</span>
-      <span class="src-chip" data-src="comet">Comet</span>
-      <span class="src-chip" data-src="apec">APEC</span>
-      <span class="src-chip" data-src="wttj">Welcome to the Jungle</span>
-      <span class="src-chip" data-src="li">LinkedIn</span>
-      <span class="src-chip" data-src="ftj">France Travail</span>
-      <span class="src-chip" data-src="cw">Codeur.com</span>
-      <span class="src-chip" data-src="vivier">Vivier CONSEILPREV</span>
-    </div>
+    <p class="search-detail">Notre moteur de sourcing interroge l'ensemble de nos sources partenaires<br>et le vivier CONSEILPREV en temps réel.</p>
     <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
   </div>
 </section>
 
-<!-- ═══════════ PANEL 4 — MATCHES ═══════════ -->
+<!-- ═══ PANEL 4 — CANDIDATS (carte + liste + panier) ═══ -->
 <section class="panel" id="panel-4">
-  <h2 class="section-h">Vos <em>matchs IA</em></h2>
-  <p class="section-s" id="match-subtitle">Profils anonymisés classés par score de compatibilité avec votre brief.</p>
+  <h2 class="section-h">Candidats <em>localisés en France</em></h2>
+  <p class="section-s" id="match-subtitle">Survolez les points sur la carte pour découvrir les profils.</p>
 
   <div class="anon-notice">
     <span class="anon-notice-ico">🔒</span>
-    <div class="anon-notice-txt"><strong>Anonymat protégé</strong> — Les coordonnées des candidats ne sont jamais affichées. Sélectionnez un profil : CONSEILPREV est notifié et organise la mise en relation après double validation (vous + nous). Conformité RGPD totale.</div>
+    <div class="anon-notice-txt"><strong>Anonymat protégé</strong> — Les coordonnées des candidats (identité, contact, CV) ne sont jamais affichées sur la plateforme. Elles sont transmises exclusivement à CONSEILPREV après validation de votre sélection, pour organiser la mise en relation après double accord.</div>
   </div>
 
+  <!-- CARTE DE FRANCE 3D -->
+  <div class="map-section">
+    <div class="map-3d-wrap">
+      <div class="map-3d">
+        <svg class="map-svg" width="540" height="520" viewBox="0 0 600 580" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="frGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#4a2d8a"/>
+              <stop offset="45%" stop-color="#5b3a9e"/>
+              <stop offset="100%" stop-color="#3b2280"/>
+            </linearGradient>
+          </defs>
+          <!-- Couche 3D base (extrusion) -->
+          <path class="fr-base" transform="translate(0,16)" d="M 320 40 L 360 60 L 420 130 L 480 150 L 500 200 L 470 260 L 490 320 L 460 380 L 490 440 L 430 480 L 380 490 L 330 470 L 280 490 L 240 470 L 160 440 L 180 380 L 140 320 L 120 260 L 80 230 L 60 200 L 30 190 L 60 160 L 120 170 L 150 140 L 200 120 L 240 100 L 280 70 Z"/>
+          <!-- Corps France -->
+          <path class="fr-body" d="M 320 40 L 360 60 L 420 130 L 480 150 L 500 200 L 470 260 L 490 320 L 460 380 L 490 440 L 430 480 L 380 490 L 330 470 L 280 490 L 240 470 L 160 440 L 180 380 L 140 320 L 120 260 L 80 230 L 60 200 L 30 190 L 60 160 L 120 170 L 150 140 L 200 120 L 240 100 L 280 70 Z"/>
+          <!-- Grille déco -->
+          <g class="fr-grid">
+            <line x1="60" y1="200" x2="500" y2="200"/>
+            <line x1="80" y1="300" x2="490" y2="300"/>
+            <line x1="140" y1="400" x2="480" y2="400"/>
+            <line x1="200" y1="80" x2="200" y2="470"/>
+            <line x1="320" y1="45" x2="320" y2="475"/>
+            <line x1="430" y1="135" x2="430" y2="480"/>
+          </g>
+          <!-- Pins candidats injectés par JS -->
+          <g id="map-pins"></g>
+        </svg>
+      </div>
+    </div>
+    <div class="map-tooltip" id="map-tooltip"></div>
+    <div class="map-legend">
+      <span><span class="lg-dot" style="background:#d946ef"></span> Candidat disponible</span>
+      <span><span class="lg-dot" style="background:#5eead4"></span> Dans ma sélection</span>
+    </div>
+  </div>
+
+  <!-- LISTE -->
   <div class="match-grid" id="match-grid"></div>
 
+  <!-- PANIER -->
+  <div class="cart-panel">
+    <div class="cart-title">🗂️ Ma sélection de candidats <span id="cart-title-count" style="color:#fff">(0)</span></div>
+    <div id="cart-list"><div class="cart-empty">Aucun candidat sélectionné. Cliquez « + Sélectionner » sur les profils qui vous intéressent — vous pouvez cumuler plusieurs recherches.</div></div>
+  </div>
+
   <div style="text-align:center;margin-top:28px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-    <button class="btn-sec" onclick="goStep(2)">← Modifier le brief</button>
-    <button class="btn-launch" id="btn-validate-match" onclick="validateMatch()" disabled>✓ Valider ce profil →</button>
+    <button class="btn-sec" onclick="newSearch()">🔁 Nouvelle recherche</button>
+    <button class="btn-launch" id="btn-validate-cart" onclick="validateCart()" disabled>✓ Valider ma sélection →</button>
   </div>
 </section>
 
-<!-- ═══════════ PANEL 5 — CONTRATS ═══════════ -->
+<!-- ═══ PANEL 5 — CONTRATS ═══ -->
 <section class="panel" id="panel-5">
-  <h2 class="section-h">Génération des <em>contrats</em></h2>
-  <p class="section-s">Deux contrats générés automatiquement depuis votre brief — prêts pour signature électronique.</p>
+  <h2 class="section-h">Prévisualisation des <em>contrats</em></h2>
+  <p class="section-s">Deux projets de contrat générés automatiquement par candidat sélectionné.</p>
 
   <div class="contract-flow">
+
+    <div class="mutual-notice">
+      <span class="mutual-notice-ico">⚖️</span>
+      <div class="mutual-notice-txt"><strong>Important — Accord définitif mutuel requis.</strong> Les contrats ci-dessous sont des <strong>prévisualisations / propositions de partenariat</strong>. Les signatures apposées sur cette plateforme valent <strong>accord de principe uniquement</strong>. Les <strong>2 contrats définitifs seront établis, envoyés et signés après accord définitif mutuel entre toutes les parties</strong> (client, consultant et CONSEILPREV), suite à la vérification des références et l'entretien de mise en relation.</div>
+    </div>
+
+    <div class="cand-tabs" id="cand-tabs"></div>
+
     <div class="marge-band">
       <div>
         <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:4px">Marge CONSEILPREV</div>
-        <div class="marge-num">+15%</div>
+        <div class="marge-num">15%</div>
       </div>
       <div class="marge-txt">
-        Le TJM consultant est facturé au client final avec une marge de <strong>15% HT</strong>. Exemple : TJM consultant <strong id="m-tjm-base">—</strong> → Prix de vente client <strong id="m-tjm-vente" style="color:var(--teal)">—</strong>. Cette marge couvre le sourcing, la contractualisation, le suivi de mission et la garantie de remplacement.
+        Le client paie le <strong>TJM plein</strong> (<strong id="m-tjm-client">—</strong>) à CONSEILPREV. Le consultant est rémunéré <strong>TJM − 15%</strong> (<strong id="m-tjm-conseil" style="color:var(--teal)">—</strong>). La marge couvre le sourcing IA, la contractualisation, le suivi de mission par votre INGE IT dédié et la garantie de remplacement sous 2 semaines.
       </div>
     </div>
 
     <div class="cf-pair">
-      <!-- CONTRAT 1 : CONSEILPREV ↔ FREELANCE -->
+      <!-- CONTRAT 1 : CONSEILPREV ↔ CONSULTANT -->
       <div class="contract-card">
         <div class="cc-head">
           <div class="cc-head-title">📄 Contrat 1 — Prestations Freelance</div>
-          <div class="cc-head-sub">CONSEILPREV ↔ Consultant</div>
+          <div class="cc-head-sub">CONSEILPREV ↔ Consultant · TJM − 15%</div>
         </div>
         <div class="cc-body" id="contract1-body"></div>
-        <div class="cc-foot" style="flex-direction:column">
+        <div class="cc-foot">
           <div class="sig-zone">
-            <div class="sig-zone-lbl">✍️ Signature CONSEILPREV (Prestataire-Mandant)</div>
+            <div class="sig-zone-lbl">✍️ Accord de principe — CONSEILPREV</div>
             <canvas class="sig-canvas" id="sig-c1-cp" width="360" height="80"></canvas>
             <div class="sig-actions">
               <button class="sig-btn" onclick="clearSig('sig-c1-cp')">Effacer</button>
-              <button class="sig-btn validate" onclick="signOk('sig-c1-cp','st-c1-cp')">Valider la signature</button>
+              <button class="sig-btn validate" onclick="signOk('sig-c1-cp','st-c1-cp')">Valider</button>
             </div>
-            <div class="sig-status" id="st-c1-cp">✓ Signé électroniquement — <span class="sig-date"></span></div>
+            <div class="sig-status" id="st-c1-cp">✓ Accord de principe — <span class="sig-date"></span></div>
           </div>
           <div class="sig-zone">
-            <div class="sig-zone-lbl">✍️ Signature Consultant</div>
+            <div class="sig-zone-lbl">✍️ Accord de principe — Consultant</div>
             <canvas class="sig-canvas" id="sig-c1-fl" width="360" height="80"></canvas>
             <div class="sig-actions">
               <button class="sig-btn" onclick="clearSig('sig-c1-fl')">Effacer</button>
-              <button class="sig-btn validate" onclick="signOk('sig-c1-fl','st-c1-fl')">Valider la signature</button>
+              <button class="sig-btn validate" onclick="signOk('sig-c1-fl','st-c1-fl')">Valider</button>
             </div>
-            <div class="sig-status" id="st-c1-fl">✓ Signé électroniquement — <span class="sig-date"></span></div>
+            <div class="sig-status" id="st-c1-fl">✓ Accord de principe — <span class="sig-date"></span></div>
           </div>
         </div>
       </div>
@@ -437,47 +491,43 @@ input,textarea,select{-webkit-user-select:text!important;user-select:text!import
       <div class="contract-card">
         <div class="cc-head">
           <div class="cc-head-title">📑 Contrat 2 — Mise à disposition</div>
-          <div class="cc-head-sub">CONSEILPREV ↔ Client final (+15%)</div>
+          <div class="cc-head-sub">CONSEILPREV ↔ Client final · TJM plein</div>
         </div>
         <div class="cc-body" id="contract2-body"></div>
-        <div class="cc-foot" style="flex-direction:column">
+        <div class="cc-foot">
           <div class="sig-zone">
-            <div class="sig-zone-lbl">✍️ Signature CONSEILPREV (Prestataire)</div>
+            <div class="sig-zone-lbl">✍️ Accord de principe — CONSEILPREV</div>
             <canvas class="sig-canvas" id="sig-c2-cp" width="360" height="80"></canvas>
             <div class="sig-actions">
               <button class="sig-btn" onclick="clearSig('sig-c2-cp')">Effacer</button>
-              <button class="sig-btn validate" onclick="signOk('sig-c2-cp','st-c2-cp')">Valider la signature</button>
+              <button class="sig-btn validate" onclick="signOk('sig-c2-cp','st-c2-cp')">Valider</button>
             </div>
-            <div class="sig-status" id="st-c2-cp">✓ Signé électroniquement — <span class="sig-date"></span></div>
+            <div class="sig-status" id="st-c2-cp">✓ Accord de principe — <span class="sig-date"></span></div>
           </div>
           <div class="sig-zone">
-            <div class="sig-zone-lbl">✍️ Signature Client</div>
+            <div class="sig-zone-lbl">✍️ Accord de principe — Client</div>
             <canvas class="sig-canvas" id="sig-c2-cl" width="360" height="80"></canvas>
             <div class="sig-actions">
               <button class="sig-btn" onclick="clearSig('sig-c2-cl')">Effacer</button>
-              <button class="sig-btn validate" onclick="signOk('sig-c2-cl','st-c2-cl')">Valider la signature</button>
+              <button class="sig-btn validate" onclick="signOk('sig-c2-cl','st-c2-cl')">Valider</button>
             </div>
-            <div class="sig-status" id="st-c2-cl">✓ Signé électroniquement — <span class="sig-date"></span></div>
+            <div class="sig-status" id="st-c2-cl">✓ Accord de principe — <span class="sig-date"></span></div>
           </div>
         </div>
       </div>
     </div>
 
-    <div style="font-size:11px;color:rgba(216,180,254,.5);text-align:center;margin-bottom:20px;line-height:1.7">
-      Contrats types : durée 6 mois renouvelable tacitement · résiliation préavis 60 jours · paiement à 30 jours ·
-      confidentialité étendue post-contrat · déclaration d'indépendance réciproque · droit français.<br>
-      <em>Ces contrats sont des propositions de partenariat. La version finale sera établie après discussion.</em>
+    <div style="text-align:center;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <button class="btn-sec" onclick="goStep(4)">← Retour aux candidats</button>
+      <button class="btn-launch" id="btn-finalize" onclick="finalizeAll()">📨 Envoyer le dossier à CONSEILPREV</button>
     </div>
 
-    <div style="text-align:center;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-      <button class="btn-sec" onclick="goStep(4)">← Retour aux matchs</button>
-      <button class="btn-launch" id="btn-finalize" onclick="finalizeAll()">📨 Finaliser & envoyer à CONSEILPREV</button>
-    </div>
+    <div class="email-status" id="email-status"></div>
 
     <div class="final-box" id="final-box" style="display:none">
       <div class="final-ico">🎉</div>
       <h2 class="section-h">Dossier <em>envoyé !</em></h2>
-      <p class="section-s">CONSEILPREV a reçu votre sélection et les contrats signés.<br>Notre INGE IT dédié vous contacte sous <strong style="color:var(--teal)">48h ouvrées</strong> pour organiser la mise en relation et le démarrage de la mission.</p>
+      <p class="section-s">CONSEILPREV a reçu votre sélection complète avec les accords de principe.<br>Les <strong style="color:#fde68a">contrats définitifs seront établis et signés après accord mutuel</strong> entre toutes les parties.<br>Votre INGE IT dédié vous contacte sous <strong style="color:var(--teal)">48h ouvrées</strong>.</p>
       <a href="/" class="btn-sec">← Retour à l'accueil</a>
     </div>
   </div>
@@ -493,14 +543,40 @@ input,textarea,select{-webkit-user-select:text!important;user-select:text!import
 <script>
 "use strict";
 // ════════════════════════════════════════
-// PLATEFORME B2B RECRUTEMENT — Logique
+// PLATEFORME B2B v2 — multi-sélection, carte France 3D
 // ════════════════════════════════════════
 var BRIEF = {};
 var HARD_SKILLS = [];
 var SOFT_SKILLS = [];
-var SELECTED_MATCH = null;
-var MATCHES = [];
+var MATCHES = [];        // recherche courante
+var CART = [];           // sélection cumulée multi-recherches
+var SEARCH_COUNT = 0;
 var SIGNED = {};
+var ACTIVE_CAND = 0;     // onglet contrat actif
+
+// Villes françaises (coordonnées sur le viewBox de la carte)
+var CITIES = [
+  {name:'Paris',      x:310, y:175},
+  {name:'Lyon',       x:390, y:330},
+  {name:'Marseille',  x:400, y:462},
+  {name:'Toulouse',   x:268, y:445},
+  {name:'Bordeaux',   x:205, y:378},
+  {name:'Nantes',     x:158, y:248},
+  {name:'Lille',      x:328, y:82},
+  {name:'Strasbourg', x:474, y:178},
+  {name:'Rennes',     x:148, y:198},
+  {name:'Nice',       x:472, y:444}
+];
+
+// Identités candidat CONFIDENTIELLES (jamais affichées au client,
+// transmises uniquement à CONSEILPREV par email)
+var IDENT_POOL = [
+  {prenom:'Karim',  nom:'Benali',    email:'k.benali@pro-mail.fr',     tel:'+33 6 12 45 78 90', cv:'CV_KBenali_DataScience.pdf'},
+  {prenom:'Sophie', nom:'Marchand',  email:'sophie.marchand@dev.io',   tel:'+33 6 98 32 11 04', cv:'CV_SMarchand_IA.pdf'},
+  {prenom:'Thomas', nom:'Lefèvre',   email:'t.lefevre@cyberpro.fr',    tel:'+33 7 45 22 89 13', cv:'CV_TLefevre_Cyber.pdf'},
+  {prenom:'Amina',  nom:'Diallo',    email:'amina.diallo@datapro.eu',  tel:'+33 6 77 54 20 36', cv:'CV_ADiallo_MLOps.pdf'},
+  {prenom:'Julien', nom:'Rousseau',  email:'j.rousseau@freelance.dev', tel:'+33 6 30 18 92 47', cv:'CV_JRousseau_DevOps.pdf'}
+];
 
 // ── Stepper ──
 function goStep(n){
@@ -517,7 +593,6 @@ function goStep(n){
 // ── Skills tags ──
 function setupSkills(inputId, wrapId, arr){
   var input = document.getElementById(inputId);
-  var wrap  = document.getElementById(wrapId);
   input.addEventListener('keydown', function(e){
     if(e.key === 'Enter' || e.key === ','){
       e.preventDefault();
@@ -571,9 +646,9 @@ document.getElementById('brief-form').addEventListener('submit', function(e){
   var required = ['c-prenom','c-nom','c-email','c-entreprise','p-titre','p-domaine','p-contrat','p-tjm','p-lieu'];
   var missing = required.filter(function(id){ return !document.getElementById(id).value.trim(); });
   if(missing.length){
-    document.getElementById(missing[0]).focus();
-    document.getElementById(missing[0]).style.borderColor = 'rgba(248,113,113,.7)';
-    setTimeout(function(){ document.getElementById(missing[0]).style.borderColor=''; }, 2500);
+    var el = document.getElementById(missing[0]);
+    el.focus(); el.style.borderColor = 'rgba(248,113,113,.7)';
+    setTimeout(function(){ el.style.borderColor=''; }, 2500);
     return;
   }
   if(!HARD_SKILLS.length){
@@ -582,7 +657,6 @@ document.getElementById('brief-form').addEventListener('submit', function(e){
     setTimeout(function(){ document.getElementById('hard-wrap').style.borderColor=''; }, 2500);
     return;
   }
-
   BRIEF = {
     prenom:     document.getElementById('c-prenom').value.trim(),
     nom:        document.getElementById('c-nom').value.trim(),
@@ -601,214 +675,387 @@ document.getElementById('brief-form').addEventListener('submit', function(e){
     soft:       SOFT_SKILLS.slice(),
     desc:       document.getElementById('p-desc').value.trim(),
   };
-
+  SEARCH_COUNT++;
   goStep(3);
   runSearch();
 });
 
-// ── Recherche IA animée ──
+// ── Nouvelle recherche (conserve le panier) ──
+function newSearch(){
+  document.getElementById('p-titre').value = '';
+  HARD_SKILLS.length = 0; SOFT_SKILLS.length = 0;
+  renderSkills('hard-wrap', HARD_SKILLS, 'hard-input');
+  renderSkills('soft-wrap', SOFT_SKILLS, 'soft-input');
+  goStep(2);
+}
+
+// ── Recherche IA animée (sans noms de sources) ──
 function runSearch(){
-  var chips = document.querySelectorAll('.src-chip');
-  var fill  = document.getElementById('progress-fill');
-  var status= document.getElementById('search-status');
+  var fill   = document.getElementById('progress-fill');
+  var status = document.getElementById('search-status');
   var msgs = [
     'Analyse sémantique de votre brief…',
     'Extraction des compétences clés : ' + BRIEF.hard.slice(0,3).join(', ') + '…',
-    'Scan des jobboards français…',
-    'Interrogation du vivier CONSEILPREV…',
+    'Interrogation de nos sources partenaires…',
+    'Consultation du vivier CONSEILPREV…',
     'Scoring de compatibilité IA…',
     'Vérification des disponibilités…',
+    'Géolocalisation des candidats…',
     'Classement final des profils…'
   ];
   var i = 0;
-  chips.forEach(function(c){ c.classList.remove('scanning','done'); });
   fill.style.width = '0%';
-
   var interval = setInterval(function(){
-    if(i < chips.length){
-      if(i > 0) chips[i-1].classList.replace('scanning','done');
-      chips[i].classList.add('scanning');
-      status.textContent = msgs[Math.min(i, msgs.length-1)];
-      fill.style.width = Math.round((i+1)/chips.length*100) + '%';
+    if(i < msgs.length){
+      status.textContent = msgs[i];
+      fill.style.width = Math.round((i+1)/msgs.length*100) + '%';
       i++;
     } else {
-      chips[chips.length-1].classList.replace('scanning','done');
-      status.textContent = '✓ Recherche terminée — ' + genMatches() + ' profils compatibles trouvés';
+      status.textContent = '✓ Recherche terminée — ' + genMatches() + ' profils compatibles localisés';
       clearInterval(interval);
-      setTimeout(function(){ goStep(4); renderMatches(); }, 1100);
+      setTimeout(function(){ goStep(4); renderAll(); }, 1100);
     }
-  }, 620);
+  }, 580);
 }
 
-// ── Génération matches (simulation IA basée sur le brief) ──
+// ── Génération matches ──
 function genMatches(){
-  var noms = ['Consultant A','Consultant B','Consultant C','Consultant D','Consultant E'];
   var seniorities = ['Senior · 8 ans','Expert · 12 ans','Confirmé · 5 ans','Senior · 9 ans','Expert · 15 ans'];
   var bases = [97, 92, 88, 84, 79];
   var avatars = ['👨‍💻','👩‍💻','🧑‍💻','👨‍🔬','👩‍🔬'];
-  var sources = ['Vivier CONSEILPREV','Malt','Free-Work','LinkedIn','APEC'];
   var dispo = ['Immédiate','Sous 2 semaines','Immédiate','Sous 1 mois','Sous 2 semaines'];
+  // Villes : mélanger pour varier
+  var cityPick = CITIES.slice().sort(function(){ return Math.random()-.5; }).slice(0,5);
 
-  MATCHES = noms.map(function(n, i){
+  MATCHES = bases.map(function(score, i){
     var tjmVar = [0, -30, 20, -50, 40][i];
     var skills = BRIEF.hard.slice(0, 4);
     if(BRIEF.soft.length) skills = skills.concat(BRIEF.soft.slice(0,2));
+    var uid = 'S' + SEARCH_COUNT + '-C' + (i+1);
     return {
-      id: i,
-      label: n,
+      uid: uid,
+      label: 'Consultant ' + uid,
       avatar: avatars[i],
       seniority: seniorities[i],
-      score: bases[i],
+      score: score,
       tjm: Math.max(150, BRIEF.tjm + tjmVar),
-      source: sources[i],
       dispo: dispo[i],
       skills: skills,
+      city: cityPick[i],
+      titre: BRIEF.titre,
+      domaine: BRIEF.domaine,
+      duree: BRIEF.duree,
       lieu: BRIEF.lieu,
+      start: BRIEF.start,
+      contrat: BRIEF.contrat,
+      // Identité CONFIDENTIELLE (email CONSEILPREV uniquement)
+      ident: IDENT_POOL[i],
     };
   });
   return MATCHES.length;
 }
 
+function isInCart(uid){
+  return CART.some(function(c){ return c.uid === uid; });
+}
+
+// ── Rendu global panel 4 ──
+function renderAll(){
+  renderMap();
+  renderMatches();
+  renderCart();
+}
+
+// ── CARTE DE FRANCE — pins + tooltips ──
+function renderMap(){
+  var g = document.getElementById('map-pins');
+  g.innerHTML = '';
+  var tooltip = document.getElementById('map-tooltip');
+
+  MATCHES.forEach(function(m){
+    var pin = document.createElementNS('http://www.w3.org/2000/svg','g');
+    pin.setAttribute('class', 'map-pin' + (isInCart(m.uid) ? ' in-cart' : ''));
+    pin.dataset.uid = m.uid;
+
+    var pulse = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    pulse.setAttribute('cx', m.city.x); pulse.setAttribute('cy', m.city.y);
+    pulse.setAttribute('r', 12);
+    pulse.setAttribute('fill', 'rgba(217,70,239,.35)');
+    pulse.setAttribute('class','pin-pulse');
+
+    var core = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    core.setAttribute('cx', m.city.x); core.setAttribute('cy', m.city.y);
+    core.setAttribute('r', 7);
+    core.setAttribute('fill', isInCart(m.uid) ? '#5eead4' : '#d946ef');
+    core.setAttribute('stroke', '#fff');
+    core.setAttribute('stroke-width', '1.5');
+    core.setAttribute('class','pin-core');
+
+    var lbl = document.createElementNS('http://www.w3.org/2000/svg','text');
+    lbl.setAttribute('x', m.city.x); lbl.setAttribute('y', m.city.y + 24);
+    lbl.setAttribute('text-anchor','middle');
+    lbl.setAttribute('font-size','11');
+    lbl.setAttribute('fill','rgba(237,233,254,.75)');
+    lbl.setAttribute('font-family','Space Mono, monospace');
+    lbl.textContent = m.city.name;
+
+    pin.appendChild(pulse); pin.appendChild(core); pin.appendChild(lbl);
+
+    // Tooltip — caractéristiques minimales (sans identité)
+    pin.addEventListener('mouseenter', function(ev){
+      tooltip.innerHTML =
+        '<div class="mt-name">' + m.avatar + ' ' + m.label + ' <span class="mt-score">' + m.score + '%</span></div>' +
+        '<div class="mt-row"><span>Poste</span><b>' + m.titre + '</b></div>' +
+        '<div class="mt-row"><span>Séniorité</span><b>' + m.seniority + '</b></div>' +
+        '<div class="mt-row"><span>TJM</span><b>' + m.tjm + ' € HT</b></div>' +
+        '<div class="mt-row"><span>Ville</span><b>' + m.city.name + '</b></div>' +
+        '<div class="mt-row"><span>Dispo</span><b>' + m.dispo + '</b></div>';
+      tooltip.classList.add('show');
+      positionTooltip(ev);
+    });
+    pin.addEventListener('mousemove', positionTooltip);
+    pin.addEventListener('mouseleave', function(){ tooltip.classList.remove('show'); });
+    pin.addEventListener('click', function(){ toggleCart(m.uid); });
+
+    g.appendChild(pin);
+  });
+
+  function positionTooltip(ev){
+    var section = document.querySelector('.map-section');
+    var rect = section.getBoundingClientRect();
+    var x = ev.clientX - rect.left + 16;
+    var y = ev.clientY - rect.top - 10;
+    if(x + 220 > rect.width) x -= 240;
+    tooltip.style.left = x + 'px';
+    tooltip.style.top  = y + 'px';
+  }
+}
+
+// ── Liste matches ──
 function renderMatches(){
   var grid = document.getElementById('match-grid');
   grid.innerHTML = '';
   document.getElementById('match-subtitle').textContent =
-    MATCHES.length + ' profils ' + BRIEF.domaine + ' anonymisés — classés par score IA pour « ' + BRIEF.titre + ' »';
+    MATCHES.length + ' profils ' + BRIEF.domaine + ' localisés pour « ' + BRIEF.titre + ' » — recherche n°' + SEARCH_COUNT;
   MATCHES.forEach(function(m){
+    var inCart = isInCart(m.uid);
     var card = document.createElement('div');
-    card.className = 'match-card';
-    card.dataset.id = m.id;
-    card.onclick = function(){ selectMatch(m.id); };
-    card.innerHTML =
-      '<div class="match-avatar">' + m.avatar + '</div>' +
-      '<div class="match-body">' +
-        '<div class="match-name">' + m.label + ' <span class="match-anon">🔒 Anonymisé</span></div>' +
-        '<div class="match-meta"><span>📊 ' + m.seniority + '</span><span>💰 TJM ' + m.tjm + ' € HT</span><span>📍 ' + m.lieu + '</span><span>🕐 ' + m.dispo + '</span><span>🔗 ' + m.source + '</span></div>' +
-        '<div class="match-skills">' + m.skills.map(function(s){ return '<span class="mskill">' + s + '</span>'; }).join('') + '</div>' +
-      '</div>' +
-      '<div class="match-score-wrap">' +
-        '<div class="match-score">' + m.score + '%</div>' +
-        '<div class="match-score-lbl">Match IA</div>' +
-        '<div class="match-bar"><div class="match-bar-fill" style="width:' + m.score + '%"></div></div>' +
-      '</div>';
+    card.className = 'match-card' + (inCart ? ' in-cart' : '');
+    card.dataset.uid = m.uid;
+
+    var av = document.createElement('div');
+    av.className = 'match-avatar'; av.textContent = m.avatar;
+
+    var body = document.createElement('div');
+    body.innerHTML =
+      '<div class="match-name">' + m.label + ' <span class="match-anon">🔒 Anonymisé</span></div>' +
+      '<div class="match-meta"><span>📊 ' + m.seniority + '</span><span>💰 TJM ' + m.tjm + ' € HT</span><span>📍 ' + m.city.name + '</span><span>🕐 ' + m.dispo + '</span></div>' +
+      '<div class="match-skills">' + m.skills.map(function(s){ return '<span class="mskill">' + s + '</span>'; }).join('') + '</div>';
+
+    var scoreWrap = document.createElement('div');
+    scoreWrap.innerHTML = '<div class="match-score">' + m.score + '%</div><div class="match-score-lbl">Match IA</div>';
+
+    var btn = document.createElement('button');
+    btn.className = 'btn-add' + (inCart ? ' added' : '');
+    btn.textContent = inCart ? '✓ Sélectionné' : '+ Sélectionner';
+    btn.onclick = function(e){ e.stopPropagation(); toggleCart(m.uid); };
+
+    card.appendChild(av); card.appendChild(body); card.appendChild(scoreWrap); card.appendChild(btn);
     grid.appendChild(card);
   });
 }
 
-function selectMatch(id){
-  SELECTED_MATCH = MATCHES[id];
-  document.querySelectorAll('.match-card').forEach(function(c){
-    c.classList.toggle('selected', parseInt(c.dataset.id) === id);
+// ── Panier multi-recherches ──
+function toggleCart(uid){
+  var idx = CART.findIndex(function(c){ return c.uid === uid; });
+  if(idx >= 0){
+    CART.splice(idx, 1);
+  } else {
+    var m = MATCHES.find(function(x){ return x.uid === uid; });
+    if(m) CART.push(m);
+  }
+  renderAll();
+}
+function removeFromCart(uid){
+  var idx = CART.findIndex(function(c){ return c.uid === uid; });
+  if(idx >= 0){ CART.splice(idx, 1); renderAll(); }
+}
+function renderCart(){
+  var list = document.getElementById('cart-list');
+  var count = document.getElementById('cart-count');
+  var titleCount = document.getElementById('cart-title-count');
+  count.textContent = CART.length;
+  titleCount.textContent = '(' + CART.length + ')';
+  document.getElementById('btn-validate-cart').disabled = CART.length === 0;
+
+  if(!CART.length){
+    list.innerHTML = '<div class="cart-empty">Aucun candidat sélectionné. Cliquez « + Sélectionner » sur les profils qui vous intéressent — vous pouvez cumuler plusieurs recherches.</div>';
+    return;
+  }
+  list.innerHTML = '';
+  CART.forEach(function(c){
+    var item = document.createElement('div');
+    item.className = 'cart-item';
+    var rm = document.createElement('button');
+    rm.className = 'cart-rm'; rm.textContent = '✕';
+    rm.onclick = function(){ removeFromCart(c.uid); };
+    item.innerHTML =
+      '<span class="cart-item-ico">' + c.avatar + '</span>' +
+      '<div class="cart-item-body">' +
+        '<div class="cart-item-name">' + c.label + ' — ' + c.titre + '</div>' +
+        '<div class="cart-item-meta">' + c.seniority + ' · TJM ' + c.tjm + ' € · ' + c.city.name + ' · Match ' + c.score + '%</div>' +
+      '</div>';
+    item.appendChild(rm);
+    list.appendChild(item);
   });
-  document.getElementById('btn-validate-match').disabled = false;
 }
 
-// ── Validation match → notification CONSEILPREV + contrats ──
-function validateMatch(){
-  if(!SELECTED_MATCH) return;
+// ── Validation sélection → email CONSEILPREV avec identités CONFIDENTIELLES ──
+function validateCart(){
+  if(!CART.length) return;
 
-  // Notifier CONSEILPREV via /api/apply (sans coordonnées candidat visibles)
+  var lines = [
+    'SÉLECTION CLIENT VALIDÉE — ' + CART.length + ' candidat(s)',
+    '═══════════════════════════════════════',
+    'CLIENT : ' + BRIEF.prenom + ' ' + BRIEF.nom + ' — ' + BRIEF.entreprise,
+    'Email : ' + BRIEF.email + ' · Tél : ' + (BRIEF.tel || '—'),
+    '',
+  ];
+  CART.forEach(function(c, i){
+    var tjmConsultant = Math.round(c.tjm * 0.85);
+    lines.push('CANDIDAT ' + (i+1) + ' — ' + c.label + ' (Match ' + c.score + '%)');
+    lines.push('  Poste : ' + c.titre + ' (' + c.domaine + ') · ' + c.seniority);
+    lines.push('  TJM client : ' + c.tjm + ' € HT → Rémunération consultant (−15%) : ' + tjmConsultant + ' € HT');
+    lines.push('  Localisation : ' + c.city.name + ' · Dispo : ' + c.dispo + ' · Durée : ' + c.duree);
+    lines.push('  ┌─ 🔒 CONFIDENTIEL — RÉSERVÉ CONSEILPREV (ne pas transmettre au client) ─┐');
+    lines.push('  │ Identité : ' + c.ident.prenom + ' ' + c.ident.nom);
+    lines.push('  │ Email : ' + c.ident.email);
+    lines.push('  │ Téléphone : ' + c.ident.tel);
+    lines.push('  │ CV disponible : ' + c.ident.cv);
+    lines.push('  │ Disponibilité : ' + c.dispo);
+    lines.push('  └────────────────────────────────────────┘');
+    lines.push('');
+  });
+  lines.push('═══════════════════════════════════════');
+  lines.push('ACTION : vérifier références, organiser entretiens, double validation.');
+
   var fd = new FormData();
-  fd.append('form_type',  'match_validation');
+  fd.append('form_type',  'selection_candidats');
   fd.append('prenom',     BRIEF.prenom);
   fd.append('nom',        BRIEF.nom);
   fd.append('email',      BRIEF.email);
   fd.append('telephone',  BRIEF.tel);
   fd.append('entreprise', BRIEF.entreprise);
   fd.append('fonction',   BRIEF.fonction);
-  fd.append('message',
-    'MATCH VALIDÉ PAR LE CLIENT\n' +
-    '═══════════════════════\n' +
-    'Poste : ' + BRIEF.titre + ' (' + BRIEF.domaine + ')\n' +
-    'Profil sélectionné : ' + SELECTED_MATCH.label + ' — Score ' + SELECTED_MATCH.score + '%\n' +
-    'Séniorité : ' + SELECTED_MATCH.seniority + '\n' +
-    'Source : ' + SELECTED_MATCH.source + '\n' +
-    'TJM consultant : ' + SELECTED_MATCH.tjm + ' € HT\n' +
-    'TJM vente client (+15%) : ' + Math.round(SELECTED_MATCH.tjm * 1.15) + ' € HT\n' +
-    'Contrat : ' + BRIEF.contrat + ' · Durée : ' + BRIEF.duree + ' · Lieu : ' + BRIEF.lieu + '\n' +
-    'Démarrage : ' + BRIEF.start + '\n' +
-    'Hard skills : ' + BRIEF.hard.join(', ') + '\n' +
-    'Soft skills : ' + (BRIEF.soft.join(', ') || '—') + '\n' +
-    'Description : ' + (BRIEF.desc || '—') + '\n' +
-    '═══════════════════════\n' +
-    'ACTION REQUISE : double validation puis mise en relation.'
-  );
+  fd.append('message',    lines.join('\n'));
   fd.append('consent',    'true');
   fd.append('source_url', '/platform');
 
   fetch('/api/apply', { method:'POST', body:fd })
     .then(function(r){ return r.json(); })
-    .catch(function(){ /* silencieux — le client continue */ });
+    .catch(function(){});
 
+  ACTIVE_CAND = 0;
   goStep(5);
+  renderContractTabs();
   renderContracts();
 }
 
-// ── Génération contrats ──
+// ── Onglets candidats (multi-contrats) ──
+function renderContractTabs(){
+  var tabs = document.getElementById('cand-tabs');
+  tabs.innerHTML = '';
+  CART.forEach(function(c, i){
+    var t = document.createElement('button');
+    t.className = 'cand-tab' + (i === ACTIVE_CAND ? ' active' : '');
+    t.textContent = c.avatar + ' ' + c.label + ' · ' + c.tjm + '€';
+    t.onclick = function(){ ACTIVE_CAND = i; renderContractTabs(); renderContracts(); };
+    tabs.appendChild(t);
+  });
+}
+
+// ── Contrats détaillés (11 articles, TJM client / TJM−15% consultant) ──
 function renderContracts(){
-  var m = SELECTED_MATCH;
-  var tjmVente = Math.round(m.tjm * 1.15);
+  var c = CART[ACTIVE_CAND];
+  if(!c) return;
+  var tjmClient     = c.tjm;
+  var tjmConsultant = Math.round(c.tjm * 0.85);
   var today = new Date().toLocaleDateString('fr-FR');
 
-  document.getElementById('m-tjm-base').textContent  = m.tjm + ' € HT';
-  document.getElementById('m-tjm-vente').textContent = tjmVente + ' € HT';
+  document.getElementById('m-tjm-client').textContent  = tjmClient + ' € HT';
+  document.getElementById('m-tjm-conseil').textContent = tjmConsultant + ' € HT';
 
-  // Contrat 1 : CONSEILPREV ↔ Freelance
+  var articles1 =
+    art('Art. 1 — Objet & Missions', 'Prestations informatiques et de conseil en intelligence artificielle : conseil en conformité réglementaire IA (AI Act, RGPD) · audit et évaluation des systèmes IA · formation et accompagnement sur les bonnes pratiques IA · développement de solutions de gouvernance IA. Ci-après la « Mission ».') +
+    art('Art. 2 — Modalités de réalisation', 'Le Consultant réalise la Mission avec le plus grand professionnalisme, dans le respect des dispositions légales et réglementaires applicables, et mobilise les moyens techniques nécessaires. CONSEILPREV coopère pleinement et transmet en temps utile les informations nécessaires.') +
+    art('Art. 3 — Reporting', 'Un état d\u2019avancement de la mission est transmis une fois par semaine.') +
+    art('Art. 4 — Usage des résultats', 'Le Consultant s\u2019interdit de faire état des résultats de la mission à des tiers et de les utiliser, étant précisé que cette stipulation n\u2019interdit pas l\u2019usage libre de son propre savoir-faire.') +
+    art('Art. 5 — Durée', 'Effet à la date de signature, durée de 6 (six) mois, renouvelable par tacite reconduction sauf résiliation notifiée au plus tard 2 mois avant expiration.') +
+    art('Art. 6 — Résiliation anticipée', 'En cas de manquement à une obligation essentielle, notification par LRAR. La résiliation prend effet après un préavis de 60 jours.') +
+    art('Art. 7 — Honoraires & paiement', 'TJM consultant : ' + tjmConsultant + ' € HT (TJM client − 15%). Facture avec mentions légales. Paiement à 30 jours après réception de facture.') +
+    art('Art. 8 — Indépendance réciproque', 'Relation d\u2019entreprises indépendantes et autonomes. Aucun lien de subordination. Le Consultant s\u2019organise librement dans l\u2019exécution du Contrat.') +
+    art('Art. 9 — Confidentialité', 'Le Consultant considère comme confidentielles toutes informations relatives à CONSEILPREV et ses clients. Obligation valable pendant le Contrat et persistant après son extinction pour une durée indéterminée.') +
+    art('Art. 10 — Responsabilité & assurance', 'Chaque partie est responsable de la bonne exécution de ses obligations. Le Consultant déclare avoir souscrit une assurance responsabilité civile professionnelle.') +
+    art('Art. 11 — Loi applicable', 'Droit français. Différends soumis aux tribunaux compétents.');
+
   document.getElementById('contract1-body').innerHTML =
     row('Prestataire-Mandant', 'CONSEILPREV — ERSIA IA Management, SARL') +
-    row('Consultant', m.label + ' (identité dévoilée après validation)') +
-    row('Objet', 'Prestations ' + BRIEF.domaine + ' — ' + BRIEF.titre) +
-    row('Missions', 'Conseil conformité IA (AI Act, RGPD) · Audit & évaluation systèmes IA · Accompagnement bonnes pratiques') +
-    row('TJM consultant', m.tjm + ' € HT', true) +
-    row('Durée', '6 mois — tacite reconduction') +
-    row('Lieu', BRIEF.lieu) +
-    row('Démarrage', BRIEF.start) +
-    row('Reporting', "État d'avancement hebdomadaire") +
-    row('Paiement', '30 jours après réception facture') +
-    row('Résiliation', 'Préavis 60 jours — LRAR') +
-    row('Confidentialité', 'Étendue, persiste après extinction') +
-    row('Indépendance', 'Aucun lien de subordination') +
-    row('Loi applicable', 'Droit français') +
-    row('Date', today);
+    row('Consultant', c.label + ' — identité dévoilée après accord mutuel') +
+    row('Poste', c.titre + ' (' + c.domaine + ')') +
+    row('Séniorité', c.seniority) +
+    row('TJM consultant', tjmConsultant + ' € HT (TJM − 15%)', true) +
+    row('Durée', c.duree + ' — tacite reconduction') +
+    row('Lieu', c.lieu + ' (' + c.city.name + ')') +
+    row('Démarrage', c.start) +
+    row('Date prévisualisation', today) +
+    articles1 +
+    '<div class="cc-art"><div class="cc-art-txt" style="color:#fde68a">⚖️ Prévisualisation — le contrat définitif sera établi, envoyé et signé après accord définitif mutuel entre les parties.</div></div>';
 
-  // Contrat 2 : CONSEILPREV ↔ Client (+15%)
+  var articles2 =
+    art('Art. 1 — Objet', 'Mise à disposition du Consultant pour la réalisation de la mission « ' + c.titre + ' » au bénéfice du Client, incluant : conseil conformité IA (AI Act, RGPD), audit des systèmes IA, accompagnement et gouvernance.') +
+    art('Art. 2 — Engagements', 'CONSEILPREV garantit la qualification du Consultant (profilage humain + validation IA). Le Client coopère pleinement : ne rien faire qui empêche l\u2019exécution de la Mission, transmettre en temps utile les informations nécessaires, informer de tout élément d\u2019impact.') +
+    art('Art. 3 — Reporting', 'État d\u2019avancement hebdomadaire transmis au Client par le Consultant via CONSEILPREV.') +
+    art('Art. 4 — Usage des résultats', 'Les livrables de la Mission sont la propriété exclusive du Client. CONSEILPREV et le Consultant s\u2019interdisent d\u2019en faire état à des tiers.') +
+    art('Art. 5 — Durée', 'Mission de ' + c.duree + ', renouvelable par tacite reconduction sauf résiliation notifiée 2 mois avant expiration.') +
+    art('Art. 6 — Résiliation anticipée', 'Manquement à une obligation essentielle : notification LRAR, préavis 60 jours.') +
+    art('Art. 7 — Honoraires & paiement', 'TJM facturé au Client : ' + tjmClient + ' € HT. Facture mensuelle avec mentions légales. Paiement à 30 jours après réception.') +
+    art('Art. 8 — Non-sollicitation libérée', 'En cas de volonté mutuelle d\u2019internalisation du Consultant par le Client, CONSEILPREV libère contractuellement le Consultant en toute flexibilité.') +
+    art('Art. 9 — Confidentialité', 'NDA total sur les projets et stratégies SI du Client. Tous BD et consultants CONSEILPREV signent un accord de confidentialité. Persiste après extinction du contrat.') +
+    art('Art. 10 — Garantie & responsabilité', 'Remplacement du Consultant sous 2 semaines en cas d\u2019inadéquation constatée. CONSEILPREV déclare avoir souscrit une assurance RC professionnelle.') +
+    art('Art. 11 — Loi applicable', 'Droit français. Tribunaux compétents.');
+
   document.getElementById('contract2-body').innerHTML =
     row('Prestataire', 'CONSEILPREV — ERSIA IA Management, SARL') +
     row('Client', BRIEF.entreprise + ' — ' + BRIEF.prenom + ' ' + BRIEF.nom) +
     row('Email client', BRIEF.email) +
-    row('Objet', 'Mise à disposition consultant ' + BRIEF.domaine + ' — ' + BRIEF.titre) +
-    row('Consultant', m.label + ' — ' + m.seniority) +
-    row('TJM facturé client', tjmVente + ' € HT (TJM + 15%)', true) +
-    row('Durée mission', BRIEF.duree) +
-    row('Lieu', BRIEF.lieu) +
-    row('Démarrage', BRIEF.start) +
-    row('Clause non-sollicitation', 'Libération contractuelle si internalisation mutuelle') +
-    row('Garantie', 'Remplacement sous 2 semaines si inadéquation') +
-    row('Paiement', '30 jours après réception facture') +
-    row('Résiliation', 'Préavis 60 jours — LRAR') +
-    row('Confidentialité', 'NDA total sur projets & stratégie SI') +
-    row('Loi applicable', 'Droit français') +
-    row('Date', today);
+    row('Consultant mis à disposition', c.label + ' — ' + c.seniority) +
+    row('Poste', c.titre + ' (' + c.domaine + ')') +
+    row('TJM facturé client', tjmClient + ' € HT (TJM plein)', true) +
+    row('Durée mission', c.duree) +
+    row('Lieu', c.lieu + ' (' + c.city.name + ')') +
+    row('Démarrage', c.start) +
+    row('Date prévisualisation', today) +
+    articles2 +
+    '<div class="cc-art"><div class="cc-art-txt" style="color:#fde68a">⚖️ Prévisualisation — le contrat définitif sera établi, envoyé et signé après accord définitif mutuel entre les parties.</div></div>';
 
-  // Init signatures
   ['sig-c1-cp','sig-c1-fl','sig-c2-cp','sig-c2-cl'].forEach(initSig);
 }
 
 function row(k, v, hl){
   return '<div class="cc-row"><span class="ck">' + k + '</span><span class="cv' + (hl ? ' hl' : '') + '">' + v + '</span></div>';
 }
+function art(title, txt){
+  return '<div class="cc-art"><div class="cc-art-title">' + title + '</div><div class="cc-art-txt">' + txt + '</div></div>';
+}
 
-// ── Signature électronique (canvas) ──
+// ── Signature électronique ──
 function initSig(id){
   var canvas = document.getElementById(id);
   if(!canvas || canvas.dataset.init) return;
   canvas.dataset.init = '1';
   var ctx = canvas.getContext('2d');
-  ctx.strokeStyle = '#c4b5fd';
-  ctx.lineWidth = 2;
-  ctx.lineCap = 'round';
+  ctx.strokeStyle = '#c4b5fd'; ctx.lineWidth = 2; ctx.lineCap = 'round';
   var drawing = false, lx, ly;
-
   function pos(e){
     var r = canvas.getBoundingClientRect();
     var sx = canvas.width / r.width, sy = canvas.height / r.height;
@@ -826,7 +1073,6 @@ function initSig(id){
     e.preventDefault();
   }
   function end(){ drawing = false; }
-
   canvas.addEventListener('mousedown', start);
   canvas.addEventListener('mousemove', move);
   canvas.addEventListener('mouseup', end);
@@ -835,18 +1081,14 @@ function initSig(id){
   canvas.addEventListener('touchmove', move, {passive:false});
   canvas.addEventListener('touchend', end);
 }
-
 function clearSig(id){
   var canvas = document.getElementById(id);
-  var ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
   canvas.dataset.signed = '';
-  var statusId = id.replace('sig-','st-');
-  var st = document.getElementById(statusId);
-  if(st){ st.classList.remove('signed'); }
+  var st = document.getElementById(id.replace('sig-','st-'));
+  if(st) st.classList.remove('signed');
   SIGNED[id] = false;
 }
-
 function signOk(canvasId, statusId){
   var canvas = document.getElementById(canvasId);
   if(!canvas.dataset.signed){
@@ -860,60 +1102,89 @@ function signOk(canvasId, statusId){
   SIGNED[canvasId] = true;
 }
 
-// ── Finalisation : envoi dossier complet ──
+// ── Finalisation : envoi dossier complet détaillé ──
 function finalizeAll(){
   var allSigned = ['sig-c1-cp','sig-c1-fl','sig-c2-cp','sig-c2-cl'].every(function(id){ return SIGNED[id]; });
   if(!allSigned){
-    alert('⚠ Veuillez signer et valider les 4 zones de signature (2 par contrat) avant de finaliser.');
+    alert('⚠ Veuillez signer et valider les 4 zones (accords de principe) avant de finaliser.');
     return;
   }
-  var m = SELECTED_MATCH;
-  var tjmVente = Math.round(m.tjm * 1.15);
   var btn = document.getElementById('btn-finalize');
   btn.disabled = true;
   btn.textContent = 'Envoi en cours…';
 
+  var lines = [
+    'DOSSIER COMPLET — ACCORDS DE PRINCIPE SIGNÉS',
+    '⚖️ LES CONTRATS DÉFINITIFS SERONT ÉTABLIS, ENVOYÉS ET SIGNÉS',
+    'APRÈS ACCORD DÉFINITIF MUTUEL ENTRE TOUTES LES PARTIES.',
+    '═══════════════════════════════════════',
+    'CLIENT : ' + BRIEF.prenom + ' ' + BRIEF.nom + ' — ' + BRIEF.entreprise,
+    'Email : ' + BRIEF.email + ' · Tél : ' + (BRIEF.tel || '—'),
+    'Signatures (accord de principe) horodatées : ' + new Date().toLocaleString('fr-FR'),
+    '',
+  ];
+  CART.forEach(function(c, i){
+    var tjmClient = c.tjm;
+    var tjmConsultant = Math.round(c.tjm * 0.85);
+    var marge = tjmClient - tjmConsultant;
+    lines.push('━━━ CANDIDAT ' + (i+1) + ' — ' + c.label + ' (Match ' + c.score + '%) ━━━');
+    lines.push('CONTRAT 1 (CONSEILPREV ↔ Consultant) :');
+    lines.push('  · Rémunération consultant : ' + tjmConsultant + ' € HT/jour (TJM − 15%)');
+    lines.push('  · Durée : ' + c.duree + ' · 6 mois tacite reconduction · Préavis 60j LRAR');
+    lines.push('  · Paiement 30j · RC pro · Confidentialité étendue · Droit français');
+    lines.push('CONTRAT 2 (CONSEILPREV ↔ ' + BRIEF.entreprise + ') :');
+    lines.push('  · TJM facturé client : ' + tjmClient + ' € HT/jour (TJM plein)');
+    lines.push('  · Marge CONSEILPREV : ' + marge + ' €/jour (15%)');
+    lines.push('  · Non-sollicitation libérée · Garantie remplacement 2 sem · NDA total');
+    lines.push('MISSION : ' + c.titre + ' (' + c.domaine + ') · ' + c.lieu + ' · Démarrage ' + c.start);
+    lines.push('┌─ 🔒 CONFIDENTIEL — RÉSERVÉ CONSEILPREV ─┐');
+    lines.push('│ ' + c.ident.prenom + ' ' + c.ident.nom + ' · ' + c.ident.email + ' · ' + c.ident.tel);
+    lines.push('│ CV : ' + c.ident.cv + ' · Dispo : ' + c.dispo + ' · ' + c.city.name);
+    lines.push('└──────────────────────────────┘');
+    lines.push('');
+  });
+  lines.push('═══════════════════════════════════════');
+  lines.push('ACTIONS : 1) Vérifier références  2) Entretiens de mise en relation');
+  lines.push('3) Accord définitif mutuel  4) Établir et faire signer les contrats définitifs.');
+
   var fd = new FormData();
-  fd.append('form_type',  'contrats_signes');
+  fd.append('form_type',  'dossier_contrats');
   fd.append('prenom',     BRIEF.prenom);
   fd.append('nom',        BRIEF.nom);
   fd.append('email',      BRIEF.email);
   fd.append('telephone',  BRIEF.tel);
   fd.append('entreprise', BRIEF.entreprise);
-  fd.append('message',
-    'CONTRATS SIGNÉS ÉLECTRONIQUEMENT — DOSSIER COMPLET\n' +
-    '═══════════════════════════════════\n' +
-    'CONTRAT 1 (CONSEILPREV ↔ Consultant) : signé 2/2\n' +
-    '  · Consultant : ' + m.label + ' (' + m.seniority + ')\n' +
-    '  · TJM consultant : ' + m.tjm + ' € HT\n' +
-    '  · Source : ' + m.source + '\n' +
-    '\n' +
-    'CONTRAT 2 (CONSEILPREV ↔ ' + BRIEF.entreprise + ') : signé 2/2\n' +
-    '  · TJM vente client : ' + tjmVente + ' € HT (+15%)\n' +
-    '  · Marge CONSEILPREV : ' + (tjmVente - m.tjm) + ' €/jour\n' +
-    '\n' +
-    'MISSION : ' + BRIEF.titre + ' (' + BRIEF.domaine + ')\n' +
-    '  · Durée : ' + BRIEF.duree + ' · Lieu : ' + BRIEF.lieu + '\n' +
-    '  · Démarrage : ' + BRIEF.start + ' · Contrat : ' + BRIEF.contrat + '\n' +
-    '  · Hard skills : ' + BRIEF.hard.join(', ') + '\n' +
-    '═══════════════════════════════════\n' +
-    'Signatures horodatées : ' + new Date().toLocaleString('fr-FR') + '\n' +
-    'ACTION : révéler les coordonnées candidat et organiser le démarrage.'
-  );
+  fd.append('message',    lines.join('\n'));
   fd.append('consent',    'true');
   fd.append('source_url', '/platform');
 
   fetch('/api/apply', { method:'POST', body:fd })
     .then(function(r){ return r.json(); })
     .then(function(res){
+      var status = document.getElementById('email-status');
+      if(res.ok && res.email_sent){
+        status.className = 'email-status ok';
+        status.textContent = '✓ Email envoyé à CONSEILPREV avec le dossier complet';
+      } else if(res.ok && !res.email_sent){
+        status.className = 'email-status warn';
+        status.innerHTML = '⚠ <strong>Dossier reçu et sauvegardé par CONSEILPREV</strong>, mais l\u2019email n\u2019a pas pu partir : le serveur SMTP n\u2019est pas encore configuré.<br>→ Administrateur : ajoutez les variables <strong>SMTP_USER</strong> et <strong>SMTP_PASSWORD</strong> (mot de passe d\u2019application Gmail) dans Render → Environment, puis redéployez.';
+      } else {
+        status.className = 'email-status warn';
+        status.textContent = '⚠ ' + (res.error || 'Erreur lors de l\u2019envoi');
+        btn.disabled = false;
+        btn.textContent = '📨 Envoyer le dossier à CONSEILPREV';
+        return;
+      }
       btn.style.display = 'none';
       document.getElementById('final-box').style.display = 'block';
       document.getElementById('final-box').scrollIntoView({behavior:'smooth',block:'center'});
     })
     .catch(function(){
       btn.disabled = false;
-      btn.textContent = '📨 Finaliser & envoyer à CONSEILPREV';
-      alert('Erreur réseau — réessayez.');
+      btn.textContent = '📨 Envoyer le dossier à CONSEILPREV';
+      var status = document.getElementById('email-status');
+      status.className = 'email-status warn';
+      status.textContent = '⚠ Erreur réseau — réessayez.';
     });
 }
 
