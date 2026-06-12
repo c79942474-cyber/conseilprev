@@ -518,6 +518,19 @@ def send_email_with_attachment(data, cv_data=None, cv_filename=None):
             msg.attach(part)
 
         if not (SMTP_USER and SMTP_PASSWORD):
+            # Fallback : sauvegarder localement
+            try:
+                import datetime
+                ts = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+                log_path = os.path.join(UPLOAD_FOLDER, f'email_{ts}.txt')
+                with open(log_path, 'w', encoding='utf-8') as _f:
+                    _f.write(f"TO: {MAIL_TO}\nCC: {MAIL_CC}\n")
+                    _f.write(f"SUBJECT: [CONSEILPREV] {data.get('form_type','?')} — {data.get('prenom','')} {data.get('nom','')}\n\n")
+                    for k, v in data.items():
+                        _f.write(f"{k}: {v}\n")
+                logger.warning(f'SMTP_NOT_CONFIGURED: message sauvegardé localement: {log_path}')
+            except Exception as _e:
+                logger.error(f'FALLBACK_SAVE_ERR: {_e}')
             return False, 'smtp_not_configured'
 
         ctx = ssl.create_default_context()
@@ -663,6 +676,64 @@ def api_apply():
     except Exception as e:
         logger.error(f'APPLY_ERR {ip}: {e}')
         return jsonify({'ok': False, 'error': 'Erreur serveur'}), 500
+
+
+@app.route('/api/test-email', methods=['GET'])
+def test_email():
+    """Route de diagnostic email — accessible uniquement depuis conseilprev.onrender.com"""
+    ip = limiter.get_ip(request)
+    # Vérifier que la requête vient du même domaine
+    origin = request.headers.get('Origin','') + request.headers.get('Referer','')
+    result = {
+        'smtp_host':     SMTP_HOST,
+        'smtp_port':     SMTP_PORT,
+        'smtp_user':     SMTP_USER[:4] + '***' if SMTP_USER else 'NON CONFIGURÉ',
+        'smtp_password': '***' if SMTP_PASSWORD else 'NON CONFIGURÉ',
+        'mail_to':       MAIL_TO,
+        'mail_cc':       MAIL_CC,
+        'mail_from':     MAIL_FROM,
+        'upload_folder': UPLOAD_FOLDER,
+        'uploads_exist': os.path.isdir(UPLOAD_FOLDER),
+        'smtp_ready':    bool(SMTP_USER and SMTP_PASSWORD),
+    }
+    if SMTP_USER and SMTP_PASSWORD:
+        # Tenter une vraie connexion
+        try:
+            import ssl as _ssl
+            ctx = _ssl.create_default_context()
+            with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=10) as srv:
+                srv.ehlo(); srv.starttls(context=ctx); srv.login(SMTP_USER, SMTP_PASSWORD)
+            result['smtp_connection'] = 'OK'
+        except smtplib.SMTPAuthenticationError:
+            result['smtp_connection'] = 'AUTH_ERROR — vérifier mot de passe application Gmail'
+        except Exception as e:
+            result['smtp_connection'] = f'ERROR: {e}'
+        
+        # Envoyer un email de test
+        try:
+            data = {
+                'form_type':'TEST_EMAIL',
+                'prenom':'Test', 'nom':'CONSEILPREV',
+                'email': MAIL_TO, 'message':'Email de test depuis /api/test-email',
+                'consent_date': __import__('datetime').datetime.now().strftime('%d/%m/%Y %H:%M:%S'),
+                'source_url': '/api/test-email',
+            }
+            ok, status = send_email_with_attachment(data)
+            result['test_email_sent'] = ok
+            result['test_email_status'] = status
+        except Exception as e:
+            result['test_email_sent'] = False
+            result['test_email_status'] = str(e)
+    else:
+        result['smtp_connection'] = 'SKIPPED — credentials manquants'
+        result['fix'] = {
+            'step1': 'dashboard.render.com → votre service → Environment',
+            'step2': 'Ajouter SMTP_USER = votre.email@gmail.com',
+            'step3': 'Ajouter SMTP_PASSWORD = mot_de_passe_application_16_chars',
+            'step4': 'myaccount.google.com → Sécurité → Auth 2FA → Mots de passe applications',
+        }
+    
+    return jsonify(result)
 
 
 @app.route('/api/news')
