@@ -869,6 +869,56 @@ em,.hero-em{
 [data-tooltip]::after{ background:rgba(20,12,55,.98) !important; border-color:rgba(196,181,232,.25) !important; }
 ::-webkit-scrollbar-thumb{ background:linear-gradient(#9d6fe8,#d946ef) !important; }
 
+
+/* ══ HERO PLEINE LARGEUR ══ */
+.hero {
+  padding: 60px 32px 40px !important;
+  max-width: 100% !important;
+}
+.hero h1 {
+  font-size: clamp(36px,6vw,72px) !important;
+  margin-bottom: 16px !important;
+}
+.hero-sub {
+  font-size: 15px !important;
+  max-width: 640px !important;
+  color: rgba(216,180,254,.82) !important;
+}
+/* Con pleine largeur */
+.con {
+  max-width: 1100px !important;
+  padding: 0 28px 64px !important;
+}
+/* Tabs wrap sticky */
+.tabs-wrap {
+  padding: 0 28px !important;
+}
+/* Team grid */
+.team-grid {
+  grid-template-columns: repeat(3,1fr) !important;
+  gap: 24px !important;
+}
+@media(max-width:900px) {
+  .team-grid { grid-template-columns: repeat(2,1fr) !important; }
+}
+@media(max-width:580px) {
+  .team-grid { grid-template-columns: 1fr !important; }
+}
+/* Values grid careers */
+.values {
+  grid-template-columns: repeat(3,1fr) !important;
+  gap: 16px !important;
+}
+/* Ressources grid */
+.res-grid {
+  grid-template-columns: repeat(2,1fr) !important;
+  gap: 18px !important;
+}
+/* Nav largeur */
+nav {
+  padding: 0 40px !important;
+}
+
 </style>
 </head>
 <body>
