@@ -457,6 +457,7 @@ PAGES = {
     '/team':              'team.html',
     '/careers':           'careers.html',
     '/ressources':        'ressources.html',
+    '/sourcing':          'sourcing.html',
     '/donnees':       'donnees.html',
     '/aies':          'aies.html',
     '/demo':          'demo.html',
