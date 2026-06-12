@@ -1094,6 +1094,71 @@ nav {
   text-transform:uppercase;
 }
 
+
+/* ══ SOUS-MENU CAREERS — Barre horizontale ══ */
+.careers-submenu{
+  background:linear-gradient(135deg,
+    rgba(15,10,48,.96) 0%,
+    rgba(20,12,58,.95) 50%,
+    rgba(12,8,40,.96) 100%
+  );
+  border-bottom:1px solid rgba(196,181,232,.15);
+  padding:0;
+  position:relative;
+  z-index:90;
+}
+.careers-submenu-top{
+  display:flex;
+  justify-content:flex-end;
+  gap:24px;
+  padding:8px 40px 0;
+  border-bottom:1px solid rgba(196,181,232,.08);
+}
+.careers-submenu-top a{
+  font-size:12px;
+  color:rgba(196,181,232,.55);
+  text-decoration:none;
+  font-family:"DM Sans",sans-serif;
+  transition:color .2s;
+}
+.careers-submenu-top a:hover{ color:rgba(196,181,232,.9); }
+
+.careers-submenu-main{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 40px;
+  max-width:1200px;
+  margin:0 auto;
+  width:100%;
+  box-sizing:border-box;
+}
+.csm-link{
+  font-family:"DM Sans",sans-serif;
+  font-size:15px;
+  font-weight:500;
+  color:rgba(216,180,254,.80);
+  text-decoration:none;
+  padding:18px 12px;
+  display:inline-block;
+  border-bottom:2px solid transparent;
+  transition:color .22s, border-color .22s;
+  white-space:nowrap;
+}
+.csm-link:hover{
+  color:#fff;
+  border-bottom-color:rgba(196,181,232,.5);
+}
+.csm-link.active{
+  color:#fff;
+  border-bottom-color:var(--teal,#5eead4);
+}
+@media(max-width:680px){
+  .careers-submenu-top{ padding:6px 20px 0; gap:16px; }
+  .careers-submenu-main{ padding:0 20px; flex-wrap:wrap; gap:0; }
+  .csm-link{ font-size:13px; padding:14px 8px; }
+}
+
 </style>
 </head>
 <body>
@@ -1103,6 +1168,22 @@ nav {
   <a href="/team" class="nb">← Our Team</a>
   <a href="/#contact" class="nav-cta">Postuler</a>
 </nav>
+
+<!-- ══ SOUS-MENU CAREERS ══ -->
+<div class="careers-submenu" role="navigation" aria-label="Navigation Careers">
+  <!-- Ligne secondaire : Newsroom + Qui sommes-nous -->
+  <div class="careers-submenu-top">
+    <a href="/ressources#news">Newsroom</a>
+    <a href="/team">Qui sommes-nous ?</a>
+  </div>
+  <!-- Ligne principale -->
+  <div class="careers-submenu-main">
+    <a class="csm-link" href="#offres">Nos annonces</a>
+    <a class="csm-link active" href="#orbit-team">Devenir expert IA & Conformité</a>
+    <a class="csm-link" href="/team">Trouver un profil CONSEILPREV</a>
+    <a class="csm-link" href="/#contact">Contact</a>
+  </div>
+</div>
 
 <section class="hero">
   <div class="hbadge"><span class="bdot"></span> Careers · Rejoignez-nous</div>
