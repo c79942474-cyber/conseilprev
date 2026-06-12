@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Plateforme B2B Recrutement IT/IA — CONSEILPREV</title>
+<meta name="description" content="Plateforme B2B de recrutement IT, IA, Data, Cyber. Matching IA, profilage humain, contrats automatisés, signature électronique.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--pm:#9d6fe8;--pl:#c4b5fd;--pp:#ede9fe;--pf:#d946ef;--teal:#5eead4;--wh:#f5f0ff;--mu:rgba(216,180,254,.72);--bdr:rgba(196,181,232,.22)}
+html{scroll-behavior:smooth}
+body{font-family:"DM Sans",sans-serif;background:linear-gradient(180deg,#1e1250 0%,#2d1b69 20%,#3b2280 45%,#4a2d8a 65%,#5b3a9e 85%,#4e3390 100%);color:var(--wh);min-height:100vh}
+body::before{content:"";position:fixed;inset:0;background-image:url("/hero-bg.jpg");background-size:cover;background-position:center 55%;background-attachment:fixed;opacity:.20;z-index:-2;pointer-events:none}
+#bc{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.bl{position:absolute;border-radius:50%;filter:blur(50px);mix-blend-mode:screen}
+#b1{width:480px;height:480px;background:radial-gradient(circle,#7c3aed,#5b21b6 40%,transparent 70%);opacity:.45;animation:bm1 24s ease-in-out infinite alternate;top:5%;left:3%}
+#b2{width:380px;height:380px;background:radial-gradient(circle,#d946ef,#9333ea 40%,transparent 70%);opacity:.32;animation:bm2 30s ease-in-out infinite alternate;bottom:8%;right:4%}
+@keyframes bm1{0%{transform:translate(0,0)}100%{transform:translate(70px,-50px)}}
+@keyframes bm2{0%{transform:translate(0,0)}100%{transform:translate(-50px,70px)}}
+nav{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,rgba(30,18,80,.97),rgba(45,27,105,.96));backdrop-filter:blur(32px);border-bottom:1px solid rgba(196,181,232,.22);padding:0 40px;height:60px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 24px rgba(0,0,0,.35)}
+.nl{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:700;text-decoration:none;color:#fff;margin-right:auto;text-shadow:0 0 20px rgba(196,181,232,.4)}.nl span{background:linear-gradient(135deg,#c084fc,#e879f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.nb{font-size:11px;color:rgba(196,181,232,.5);text-decoration:none;font-family:"Space Mono",monospace;padding:5px 10px;border-radius:7px;border:1px solid transparent;transition:all .2s}.nb:hover{color:#fff;background:rgba(157,111,232,.2)}
+.nav-cta{background:linear-gradient(135deg,#6d28d9,#9d6fe8,#d946ef);color:#fff;padding:8px 18px;border-radius:8px;font-size:12px;font-family:"Space Mono",monospace;font-weight:700;text-decoration:none;box-shadow:0 4px 16px rgba(217,70,239,.4);transition:all .2s}
+/* HERO */
+.hero{text-align:center;padding:52px 28px 36px;position:relative;max-width:1100px;margin:0 auto}
+.hbadge{display:inline-flex;align-items:center;gap:8px;background:rgba(196,181,232,.15);border:1px solid rgba(196,181,232,.35);border-radius:100px;padding:6px 18px;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;color:var(--pp);margin-bottom:18px}
+.bdot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:blink 2s ease-in-out infinite}
+h1{font-family:"Cormorant Garamond",serif;font-size:clamp(26px,4.5vw,50px);font-weight:700;line-height:1.1;margin-bottom:14px}
+h1 em{font-style:italic;background:linear-gradient(135deg,#a78bfa,#c084fc,#e879f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:14px;color:rgba(216,180,254,.78);max-width:620px;margin:0 auto;line-height:1.8}
+/* STEPPER */
+.con{max-width:1100px;margin:0 auto;padding:0 28px 64px}
+.stepper{display:flex;justify-content:center;gap:0;margin:32px auto 40px;max-width:760px}
+.step-item{flex:1;text-align:center;position:relative;cursor:default}
+.step-item::after{content:"";position:absolute;top:17px;left:calc(50% + 22px);width:calc(100% - 44px);height:2px;background:rgba(196,181,232,.18)}
+.step-item:last-child::after{display:none}
+.step-item.done::after{background:linear-gradient(90deg,var(--teal),rgba(94,234,212,.3))}
+.step-dot{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.08);border:2px solid rgba(196,181,232,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-family:"Space Mono",monospace;font-size:13px;font-weight:700;color:rgba(216,180,254,.6);transition:all .3s}
+.step-item.active .step-dot{background:linear-gradient(135deg,#6d28d9,#d946ef);border-color:rgba(217,70,239,.6);color:#fff;box-shadow:0 0 20px rgba(217,70,239,.4)}
+.step-item.done .step-dot{background:rgba(94,234,212,.15);border-color:var(--teal);color:var(--teal)}
+.step-lbl{font-size:11px;color:rgba(216,180,254,.6);font-family:"Space Mono",monospace;letter-spacing:.04em}
+.step-item.active .step-lbl{color:#fff}
+/* PANELS */
+.panel{display:none;animation:fadeIn .4s ease}
+.panel.show{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+/* SERVICES GRID */
+.svc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:36px}
+@media(max-width:680px){.svc-grid{grid-template-columns:1fr}}
+.svc-card{background:rgba(255,255,255,.08);border:1px solid rgba(196,181,232,.2);border-radius:14px;padding:24px;transition:all .28s}
+.svc-card:hover{background:rgba(255,255,255,.13);border-color:rgba(217,70,239,.4);transform:translateY(-4px);box-shadow:0 8px 28px rgba(217,70,239,.18)}
+.svc-ico{font-size:26px;margin-bottom:12px;display:block}
+.svc-title{font-size:16px;font-weight:700;color:#fff;margin-bottom:8px}
+.svc-desc{font-size:13px;color:rgba(216,180,254,.74);line-height:1.7}
+/* GARANTIES */
+.gar-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:40px}
+@media(max-width:760px){.gar-grid{grid-template-columns:1fr 1fr}}
+.gar-item{background:rgba(255,255,255,.06);border:1px solid rgba(196,181,232,.15);border-radius:11px;padding:18px 16px;text-align:center}
+.gar-ico{font-size:22px;margin-bottom:8px;display:block}
+.gar-title{font-size:12px;font-weight:700;color:#fff;margin-bottom:5px}
+.gar-desc{font-size:11px;color:rgba(216,180,254,.62);line-height:1.55}
+/* FORM */
+.brief-form{background:rgba(255,255,255,.06);border:1px solid rgba(196,181,232,.2);border-radius:18px;padding:36px;max-width:860px;margin:0 auto}
+@media(max-width:600px){.brief-form{padding:24px 18px}}
+.bf-sec{margin-bottom:28px}
+.bf-sec-title{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--teal);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.bf-sec-title::before{content:"";width:18px;height:1px;background:var(--teal)}
+.bf-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.bf-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px}
+@media(max-width:600px){.bf-row,.bf-row3{grid-template-columns:1fr}}
+.bf-group{display:flex;flex-direction:column;gap:6px}
+.bf-label{font-size:11px;font-family:"Space Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:rgba(216,180,254,.65)}
+.bf-label .req{color:#f87171}
+.bf-input,.bf-select,.bf-textarea{
+  background:rgba(255,255,255,.08);border:1px solid rgba(196,181,232,.28);border-radius:9px;
+  color:#fff;font-size:14px;font-family:"DM Sans",sans-serif;padding:11px 14px;outline:none;
+  transition:border-color .2s,box-shadow .2s;width:100%;
+  -webkit-user-select:text!important;user-select:text!important;
+}
+.bf-input:focus,.bf-select:focus,.bf-textarea:focus{border-color:rgba(217,70,239,.55);box-shadow:0 0 0 3px rgba(157,111,232,.15)}
+.bf-select option{background:#2d1b69;color:#fff}
+.bf-textarea{resize:vertical;min-height:90px;line-height:1.6}
+/* Skills tags input */
+.skills-wrap{display:flex;flex-wrap:wrap;gap:6px;padding:8px;background:rgba(255,255,255,.08);border:1px solid rgba(196,181,232,.28);border-radius:9px;min-height:48px;cursor:text}
+.skill-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(157,111,232,.25);border:1px solid rgba(157,111,232,.4);border-radius:100px;padding:4px 12px;font-size:12px;color:#fff}
+.skill-tag button{background:none;border:none;color:rgba(255,255,255,.6);cursor:pointer;font-size:14px;padding:0;line-height:1}
+.skill-tag button:hover{color:#fff}
+.skills-input{background:none;border:none;outline:none;color:#fff;font-size:13px;flex:1;min-width:120px;font-family:"DM Sans",sans-serif;-webkit-user-select:text!important;user-select:text!important}
+/* Consent */
+.bf-consent{display:flex;align-items:flex-start;gap:12px;background:rgba(157,111,232,.1);border:1px solid rgba(196,181,232,.25);border-radius:10px;padding:14px 16px;margin-bottom:22px;cursor:pointer;transition:all .2s}
+.bf-consent:has(input:checked){border-color:rgba(94,234,212,.4);background:rgba(94,234,212,.06)}
+.bf-consent.error{border-color:rgba(248,113,113,.6)!important;background:rgba(239,68,68,.08)!important;animation:shake .3s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.bf-consent input{width:18px;height:18px;margin-top:2px;accent-color:var(--teal);cursor:pointer;flex-shrink:0}
+.bf-consent-txt{font-size:12px;color:rgba(216,180,254,.78);line-height:1.65}
+.bf-consent-txt a{color:var(--teal);text-decoration:none}
+/* Boutons */
+.btn-launch{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#6d28d9,#9d6fe8,#d946ef);color:#fff;padding:14px 32px;border-radius:10px;font-size:15px;font-weight:700;font-family:"DM Sans",sans-serif;border:none;cursor:pointer;box-shadow:0 4px 22px rgba(217,70,239,.4);transition:all .25s}
+.btn-launch:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(217,70,239,.5)}
+.btn-launch:disabled{opacity:.6;cursor:wait}
+.btn-sec{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(196,181,232,.3);color:rgba(216,180,254,.85);padding:13px 26px;border-radius:10px;font-size:14px;font-family:"DM Sans",sans-serif;cursor:pointer;transition:all .22s;text-decoration:none}
+.btn-sec:hover{background:rgba(255,255,255,.15);color:#fff}
+/* SEARCH ANIMATION */
+.search-anim{text-align:center;padding:48px 24px;max-width:640px;margin:0 auto}
+.radar{width:120px;height:120px;margin:0 auto 28px;position:relative}
+.radar-ring{position:absolute;inset:0;border:2px solid rgba(157,111,232,.3);border-radius:50%;animation:radar-pulse 2s ease-out infinite}
+.radar-ring:nth-child(2){animation-delay:.6s}
+.radar-ring:nth-child(3){animation-delay:1.2s}
+@keyframes radar-pulse{0%{transform:scale(.5);opacity:1}100%{transform:scale(1.4);opacity:0}}
+.radar-core{position:absolute;inset:35px;background:linear-gradient(135deg,#6d28d9,#d946ef);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 0 30px rgba(217,70,239,.5)}
+.search-status{font-family:"Space Mono",monospace;font-size:13px;color:var(--teal);margin-bottom:8px;min-height:20px}
+.search-srcs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:24px}
+.src-chip{font-family:"Space Mono",monospace;font-size:10px;padding:5px 13px;border-radius:100px;background:rgba(255,255,255,.06);border:1px solid rgba(196,181,232,.2);color:rgba(216,180,254,.55);transition:all .4s}
+.src-chip.scanning{background:rgba(157,111,232,.25);border-color:rgba(157,111,232,.5);color:#fff;box-shadow:0 0 12px rgba(157,111,232,.3)}
+.src-chip.done{background:rgba(94,234,212,.12);border-color:rgba(94,234,212,.35);color:var(--teal)}
+.progress-bar{height:6px;background:rgba(255,255,255,.08);border-radius:100px;overflow:hidden;margin-top:28px}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#6d28d9,#9d6fe8,#d946ef);border-radius:100px;transition:width .5s ease}
+/* MATCHES */
+.match-grid{display:flex;flex-direction:column;gap:14px;max-width:860px;margin:0 auto}
+.match-card{background:rgba(255,255,255,.08);border:1px solid rgba(196,181,232,.2);border-radius:14px;padding:22px 24px;display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;transition:all .26s;cursor:pointer}
+.match-card:hover{background:rgba(255,255,255,.13);border-color:rgba(217,70,239,.42);transform:translateX(4px)}
+.match-card.selected{border-color:var(--teal)!important;background:rgba(94,234,212,.08)!important;box-shadow:0 0 0 1px rgba(94,234,212,.3)}
+.match-avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,rgba(109,40,217,.5),rgba(217,70,239,.35));display:flex;align-items:center;justify-content:center;font-size:22px;border:2px solid rgba(196,181,232,.3);position:relative}
+.match-avatar::after{content:"🔒";position:absolute;bottom:-4px;right:-4px;font-size:13px;background:#2d1b69;border-radius:50%;padding:2px}
+.match-body{min-width:0}
+.match-name{font-size:15px;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.match-anon{font-family:"Space Mono",monospace;font-size:9px;background:rgba(196,181,232,.15);border:1px solid rgba(196,181,232,.25);padding:2px 8px;border-radius:100px;color:rgba(216,180,254,.7)}
+.match-meta{font-size:12px;color:rgba(216,180,254,.65);margin-top:4px;display:flex;gap:14px;flex-wrap:wrap}
+.match-skills{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.mskill{font-family:"Space Mono",monospace;font-size:9px;padding:2px 9px;border-radius:100px;background:rgba(157,111,232,.18);border:1px solid rgba(157,111,232,.3);color:rgba(216,180,254,.85)}
+.match-score-wrap{text-align:center}
+.match-score{font-family:"Cormorant Garamond",serif;font-size:32px;font-weight:700;background:linear-gradient(135deg,#5eead4,#a78bfa);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.match-score-lbl{font-family:"Space Mono",monospace;font-size:9px;color:rgba(216,180,254,.5);letter-spacing:.1em;text-transform:uppercase}
+.match-bar{width:70px;height:4px;background:rgba(255,255,255,.1);border-radius:100px;margin:6px auto 0;overflow:hidden}
+.match-bar-fill{height:100%;background:linear-gradient(90deg,#5eead4,#a78bfa);border-radius:100px}
+/* Anonymat notice */
+.anon-notice{background:rgba(94,234,212,.07);border:1px solid rgba(94,234,212,.25);border-radius:11px;padding:14px 18px;display:flex;gap:12px;align-items:flex-start;margin-bottom:20px;max-width:860px;margin-left:auto;margin-right:auto}
+.anon-notice-ico{font-size:18px;flex-shrink:0}
+.anon-notice-txt{font-size:12px;color:rgba(94,234,212,.85);line-height:1.65}
+/* CONTRACTS */
+.contract-flow{max-width:860px;margin:0 auto}
+.cf-pair{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:28px}
+@media(max-width:680px){.cf-pair{grid-template-columns:1fr}}
+.contract-card{background:rgba(255,255,255,.07);border:1px solid rgba(196,181,232,.22);border-radius:14px;overflow:hidden}
+.cc-head{background:linear-gradient(135deg,rgba(109,40,217,.4),rgba(217,70,239,.25));padding:16px 20px;border-bottom:1px solid rgba(196,181,232,.18)}
+.cc-head-title{font-size:14px;font-weight:700;color:#fff}
+.cc-head-sub{font-size:11px;color:rgba(216,180,254,.65);margin-top:3px;font-family:"Space Mono",monospace}
+.cc-body{padding:18px 20px}
+.cc-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(196,181,232,.08);font-size:12px}
+.cc-row:last-child{border-bottom:none}
+.cc-row .ck{color:rgba(216,180,254,.6)}
+.cc-row .cv{color:#fff;font-weight:600;text-align:right}
+.cc-row .cv.hl{color:var(--teal)}
+.cc-foot{padding:14px 20px;border-top:1px solid rgba(196,181,232,.15);display:flex;gap:10px;flex-wrap:wrap}
+/* Signature pad */
+.sig-zone{background:rgba(255,255,255,.05);border:1px dashed rgba(196,181,232,.35);border-radius:10px;padding:14px;margin-top:10px}
+.sig-zone-lbl{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(216,180,254,.55);margin-bottom:8px}
+.sig-canvas{width:100%;height:80px;background:rgba(255,255,255,.07);border-radius:8px;cursor:crosshair;touch-action:none;display:block}
+.sig-actions{display:flex;gap:8px;margin-top:8px}
+.sig-btn{font-size:11px;padding:5px 14px;border-radius:7px;background:rgba(255,255,255,.08);border:1px solid rgba(196,181,232,.25);color:rgba(216,180,254,.8);cursor:pointer;font-family:"DM Sans",sans-serif;transition:all .2s}
+.sig-btn:hover{color:#fff;background:rgba(255,255,255,.15)}
+.sig-btn.validate{background:rgba(94,234,212,.12);border-color:rgba(94,234,212,.35);color:var(--teal)}
+.sig-status{font-size:11px;font-family:"Space Mono",monospace;margin-top:6px;display:none}
+.sig-status.signed{display:block;color:var(--teal)}
+/* Marge bandeau */
+.marge-band{background:linear-gradient(135deg,rgba(109,40,217,.25),rgba(217,70,239,.15));border:1px solid rgba(217,70,239,.3);border-radius:12px;padding:18px 24px;margin-bottom:24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.marge-num{font-family:"Cormorant Garamond",serif;font-size:36px;font-weight:700;background:linear-gradient(135deg,#c4b5fd,#e879f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.marge-txt{font-size:12px;color:rgba(216,180,254,.78);line-height:1.6;flex:1;min-width:240px}
+.marge-txt strong{color:#fff}
+/* Success final */
+.final-box{text-align:center;padding:48px 24px;max-width:600px;margin:0 auto}
+.final-ico{width:90px;height:90px;margin:0 auto 24px;background:rgba(94,234,212,.12);border:2px solid rgba(94,234,212,.4);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:38px;box-shadow:0 0 40px rgba(94,234,212,.25)}
+.section-h{font-family:"Cormorant Garamond",serif;font-size:clamp(20px,3.5vw,32px);font-weight:700;margin-bottom:8px;text-align:center}
+.section-h em{font-style:italic;background:linear-gradient(135deg,#a78bfa,#e879f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.section-s{font-size:13px;color:rgba(216,180,254,.7);text-align:center;margin-bottom:28px;line-height:1.7}
+.ft-mini{background:rgba(20,12,55,.96);border-top:1px solid rgba(196,181,232,.12);padding:14px 24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:"Space Mono",monospace;font-size:10px;color:rgba(196,181,232,.45)}
+.ft-mini a{color:var(--teal);text-decoration:none}
+body{-webkit-user-select:none;user-select:none}
+input,textarea,select{-webkit-user-select:text!important;user-select:text!important}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+</style>
+</head>
+<body>
+<div id="bc" aria-hidden="true"><div class="bl" id="b1"></div><div class="bl" id="b2"></div></div>
+
+<nav>
+  <a href="/" class="nl">CONSEIL<span>PREV</span></a>
+  <a href="/sourcing" class="nb">← Sourcing</a>
+  <a href="#brief" class="nav-cta">Lancer une recherche</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hbadge"><span class="bdot"></span> Plateforme B2B · Recrutement IT / IA / Data / Cyber</div>
+  <h1>Votre plateforme de recrutement<br><em>boostée à l'intelligence artificielle</em></h1>
+  <p class="hero-sub">Décrivez votre besoin, notre IA recherche sur tous les jobboards français, vous matche avec les meilleurs consultants — contrats générés et signés électroniquement.</p>
+</div>
+
+<main class="con" id="main-content">
+
+<!-- STEPPER -->
+<div class="stepper" id="stepper">
+  <div class="step-item active" data-step="1"><div class="step-dot">1</div><div class="step-lbl">Services</div></div>
+  <div class="step-item" data-step="2"><div class="step-dot">2</div><div class="step-lbl">Votre brief</div></div>
+  <div class="step-item" data-step="3"><div class="step-dot">3</div><div class="step-lbl">Recherche IA</div></div>
+  <div class="step-item" data-step="4"><div class="step-dot">4</div><div class="step-lbl">Matchs</div></div>
+  <div class="step-item" data-step="5"><div class="step-dot">5</div><div class="step-lbl">Contrats</div></div>
+</div>
+
+<!-- ═══════════ PANEL 1 — SERVICES ═══════════ -->
+<section class="panel show" id="panel-1">
+  <h2 class="section-h">Nos prestations de <em>recrutement IT</em></h2>
+  <p class="section-s">Méthode de « profilage humain » + matching IA — des consultants aux compétences rares, reconnus sur le marché.</p>
+
+  <div class="svc-grid">
+    <div class="svc-card">
+      <span class="svc-ico">🎯</span>
+      <div class="svc-title">Recruter un profil IT</div>
+      <div class="svc-desc">Notre méthode de <strong>« profilage humain »</strong> nous permet de vous proposer des consultants avec des compétences rares et reconnues sur le marché. Validation des compétences par méthodes éprouvées avant toute présentation.</div>
+    </div>
+    <div class="svc-card">
+      <span class="svc-ico">⚡</span>
+      <div class="svc-title">Régie / Assistance Technique</div>
+      <div class="svc-desc">Notre <strong>vivier qualifié</strong> vous propose les meilleures compétences pour vos besoins de renforts ou remplacements au sein de vos équipes. Missions longues ou courtes — choisissez la flexibilité de la prestation.</div>
+    </div>
+    <div class="svc-card">
+      <span class="svc-ico">🏢</span>
+      <div class="svc-title">Recrutement en interne</div>
+      <div class="svc-desc">Vous préférez internaliser directement les compétences dans votre équipe ? Choisissez notre prestation de <strong>CABINET IT</strong> — chasse, qualification et intégration de talents en CDI/CDD.</div>
+    </div>
+    <div class="svc-card">
+      <span class="svc-ico">🔓</span>
+      <div class="svc-title">Clause de non-sollicitation libérée</div>
+      <div class="svc-desc">Notre modèle au service de nos clients permet de <strong>« libérer » contractuellement</strong> les consultants en mission, en toute flexibilité, en cas de volonté mutuelle d'internalisation.</div>
+    </div>
+  </div>
+
+  <div class="gar-grid">
+    <div class="gar-item"><span class="gar-ico">🌍</span><div class="gar-title">Expertise & réseau national</div><div class="gar-desc">Vivier de consultants national et international, connaissance fine du marché IT/IA.</div></div>
+    <div class="gar-item"><span class="gar-ico">🤝</span><div class="gar-title">INGE IT dédié</div><div class="gar-desc">Votre interlocuteur principal et bras droit pour constituer votre meilleure équipe.</div></div>
+    <div class="gar-item"><span class="gar-ico">⏱️</span><div class="gar-title">Gain de temps</div><div class="gar-desc">Logistique, entretiens, démarrages, suivis — nous nous chargeons de tout.</div></div>
+    <div class="gar-item"><span class="gar-ico">🔒</span><div class="gar-title">Rigueur & confidentialité</div><div class="gar-desc">NDA signé par nos BD et consultants. Adaptation totale à vos process internes.</div></div>
+  </div>
+
+  <div style="text-align:center">
+    <button class="btn-launch" onclick="goStep(2)">🚀 Décrire mon besoin →</button>
+  </div>
+</section>
+
+<!-- ═══════════ PANEL 2 — BRIEF FORM ═══════════ -->
+<section class="panel" id="panel-2">
+  <h2 class="section-h" id="brief">Décrivez votre <em>besoin</em></h2>
+  <p class="section-s">Plus votre brief est précis, plus le matching IA sera pertinent.</p>
+
+  <form class="brief-form" id="brief-form" novalidate>
+
+    <div class="bf-sec">
+      <div class="bf-sec-title">Vos coordonnées</div>
+      <div class="bf-row">
+        <div class="bf-group"><label class="bf-label">Prénom <span class="req">*</span></label><input class="bf-input" id="c-prenom" required></div>
+        <div class="bf-group"><label class="bf-label">Nom <span class="req">*</span></label><input class="bf-input" id="c-nom" required></div>
+      </div>
+      <div class="bf-row">
+        <div class="bf-group"><label class="bf-label">Email professionnel <span class="req">*</span></label><input class="bf-input" type="email" id="c-email" required></div>
+        <div class="bf-group"><label class="bf-label">Téléphone</label><input class="bf-input" type="tel" id="c-tel"></div>
+      </div>
+      <div class="bf-row">
+        <div class="bf-group"><label class="bf-label">Entreprise <span class="req">*</span></label><input class="bf-input" id="c-entreprise" required></div>
+        <div class="bf-group"><label class="bf-label">Votre fonction</label><input class="bf-input" id="c-fonction" placeholder="DSI, CTO, RH..."></div>
+      </div>
+    </div>
+
+    <div class="bf-sec">
+      <div class="bf-sec-title">Le profil recherché</div>
+      <div class="bf-row">
+        <div class="bf-group"><label class="bf-label">Intitulé du poste <span class="req">*</span></label><input class="bf-input" id="p-titre" placeholder="Ex : Data Scientist senior" required></div>
+        <div class="bf-group"><label class="bf-label">Domaine <span class="req">*</span></label>
+          <select class="bf-select" id="p-domaine" required>
+            <option value="">— Choisir —</option>
+            <option value="IA">Intelligence Artificielle / ML</option>
+            <option value="DATA">Data Engineering / Analytics</option>
+            <option value="CYBER">Cybersécurité</option>
+            <option value="IT">IT / Développement</option>
+            <option value="GRC">Conformité / GRC / DPO</option>
+          </select>
+        </div>
+      </div>
+      <div class="bf-row3">
+        <div class="bf-group"><label class="bf-label">Type de contrat <span class="req">*</span></label>
+          <select class="bf-select" id="p-contrat" required>
+            <option value="">— Choisir —</option>
+            <option value="freelance">Freelance / Indépendant</option>
+            <option value="cdi">CDI</option>
+            <option value="cdd">CDD</option>
+            <option value="regie">Régie / AT</option>
+          </select>
+        </div>
+        <div class="bf-group"><label class="bf-label">TJM budget (€ HT) <span class="req">*</span></label><input class="bf-input" type="number" id="p-tjm" placeholder="650" min="100" required></div>
+        <div class="bf-group"><label class="bf-label">Durée mission</label>
+          <select class="bf-select" id="p-duree">
+            <option value="3 mois">3 mois</option>
+            <option value="6 mois" selected>6 mois</option>
+            <option value="12 mois">12 mois</option>
+            <option value="18 mois+">18 mois +</option>
+          </select>
+        </div>
+      </div>
+      <div class="bf-row">
+        <div class="bf-group"><label class="bf-label">Lieu de mission <span class="req">*</span></label><input class="bf-input" id="p-lieu" placeholder="Paris, Lyon, Full remote..." required></div>
+        <div class="bf-group"><label class="bf-label">Démarrage souhaité</label>
+          <select class="bf-select" id="p-start">
+            <option value="ASAP" selected>Dès que possible</option>
+            <option value="1 mois">Sous 1 mois</option>
+            <option value="3 mois">Sous 3 mois</option>
+          </select>
+        </div>
+      </div>
+      <div class="bf-group" style="margin-bottom:16px">
+        <label class="bf-label">Hard skills <span class="req">*</span> <span style="text-transform:none;letter-spacing:0;opacity:.7">(Entrée pour ajouter)</span></label>
+        <div class="skills-wrap" id="hard-wrap" onclick="document.getElementById('hard-input').focus()">
+          <input class="skills-input" id="hard-input" placeholder="Python, TensorFlow, AWS...">
+        </div>
+      </div>
+      <div class="bf-group" style="margin-bottom:16px">
+        <label class="bf-label">Soft skills <span style="text-transform:none;letter-spacing:0;opacity:.7">(Entrée pour ajouter)</span></label>
+        <div class="skills-wrap" id="soft-wrap" onclick="document.getElementById('soft-input').focus()">
+          <input class="skills-input" id="soft-input" placeholder="Leadership, autonomie, pédagogie...">
+        </div>
+      </div>
+      <div class="bf-group">
+        <label class="bf-label">Description détaillée de la mission</label>
+        <textarea class="bf-textarea" id="p-desc" placeholder="Contexte, enjeux, équipe, stack technique, livrables attendus..."></textarea>
+      </div>
+    </div>
+
+    <label class="bf-consent" for="bf-consent-cb">
+      <input type="checkbox" id="bf-consent-cb" required>
+      <span class="bf-consent-txt">J'accepte que mes données soient traitées par <strong>CONSEILPREV</strong> pour cette recherche de profil, conformément à la <a href="/protection-donnees" target="_blank">politique de protection des données</a> (Art. 6.1.a RGPD). Confidentialité totale garantie sur vos projets et stratégies SI. <span style="color:#f87171">*</span></span>
+    </label>
+
+    <div style="display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap">
+      <button type="button" class="btn-sec" onclick="goStep(1)">← Retour</button>
+      <button type="submit" class="btn-launch">🤖 Lancer la recherche IA →</button>
+    </div>
+  </form>
+</section>
+
+<!-- ═══════════ PANEL 3 — RECHERCHE IA ═══════════ -->
+<section class="panel" id="panel-3">
+  <div class="search-anim">
+    <div class="radar">
+      <div class="radar-ring"></div><div class="radar-ring"></div><div class="radar-ring"></div>
+      <div class="radar-core">🤖</div>
+    </div>
+    <h2 class="section-h">Recherche <em>en cours</em></h2>
+    <div class="search-status" id="search-status">Initialisation du moteur IA…</div>
+    <div class="search-srcs" id="search-srcs">
+      <span class="src-chip" data-src="ftl">Free-Work</span>
+      <span class="src-chip" data-src="malt">Malt</span>
+      <span class="src-chip" data-src="comet">Comet</span>
+      <span class="src-chip" data-src="apec">APEC</span>
+      <span class="src-chip" data-src="wttj">Welcome to the Jungle</span>
+      <span class="src-chip" data-src="li">LinkedIn</span>
+      <span class="src-chip" data-src="ftj">France Travail</span>
+      <span class="src-chip" data-src="cw">Codeur.com</span>
+      <span class="src-chip" data-src="vivier">Vivier CONSEILPREV</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+  </div>
+</section>
+
+<!-- ═══════════ PANEL 4 — MATCHES ═══════════ -->
+<section class="panel" id="panel-4">
+  <h2 class="section-h">Vos <em>matchs IA</em></h2>
+  <p class="section-s" id="match-subtitle">Profils anonymisés classés par score de compatibilité avec votre brief.</p>
+
+  <div class="anon-notice">
+    <span class="anon-notice-ico">🔒</span>
+    <div class="anon-notice-txt"><strong>Anonymat protégé</strong> — Les coordonnées des candidats ne sont jamais affichées. Sélectionnez un profil : CONSEILPREV est notifié et organise la mise en relation après double validation (vous + nous). Conformité RGPD totale.</div>
+  </div>
+
+  <div class="match-grid" id="match-grid"></div>
+
+  <div style="text-align:center;margin-top:28px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <button class="btn-sec" onclick="goStep(2)">← Modifier le brief</button>
+    <button class="btn-launch" id="btn-validate-match" onclick="validateMatch()" disabled>✓ Valider ce profil →</button>
+  </div>
+</section>
+
+<!-- ═══════════ PANEL 5 — CONTRATS ═══════════ -->
+<section class="panel" id="panel-5">
+  <h2 class="section-h">Génération des <em>contrats</em></h2>
+  <p class="section-s">Deux contrats générés automatiquement depuis votre brief — prêts pour signature électronique.</p>
+
+  <div class="contract-flow">
+    <div class="marge-band">
+      <div>
+        <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:4px">Marge CONSEILPREV</div>
+        <div class="marge-num">+15%</div>
+      </div>
+      <div class="marge-txt">
+        Le TJM consultant est facturé au client final avec une marge de <strong>15% HT</strong>. Exemple : TJM consultant <strong id="m-tjm-base">—</strong> → Prix de vente client <strong id="m-tjm-vente" style="color:var(--teal)">—</strong>. Cette marge couvre le sourcing, la contractualisation, le suivi de mission et la garantie de remplacement.
+      </div>
+    </div>
+
+    <div class="cf-pair">
+      <!-- CONTRAT 1 : CONSEILPREV ↔ FREELANCE -->
+      <div class="contract-card">
+        <div class="cc-head">
+          <div class="cc-head-title">📄 Contrat 1 — Prestations Freelance</div>
+          <div class="cc-head-sub">CONSEILPREV ↔ Consultant</div>
+        </div>
+        <div class="cc-body" id="contract1-body"></div>
+        <div class="cc-foot" style="flex-direction:column">
+          <div class="sig-zone">
+            <div class="sig-zone-lbl">✍️ Signature CONSEILPREV (Prestataire-Mandant)</div>
+            <canvas class="sig-canvas" id="sig-c1-cp" width="360" height="80"></canvas>
+            <div class="sig-actions">
+              <button class="sig-btn" onclick="clearSig('sig-c1-cp')">Effacer</button>
+              <button class="sig-btn validate" onclick="signOk('sig-c1-cp','st-c1-cp')">Valider la signature</button>
+            </div>
+            <div class="sig-status" id="st-c1-cp">✓ Signé électroniquement — <span class="sig-date"></span></div>
+          </div>
+          <div class="sig-zone">
+            <div class="sig-zone-lbl">✍️ Signature Consultant</div>
+            <canvas class="sig-canvas" id="sig-c1-fl" width="360" height="80"></canvas>
+            <div class="sig-actions">
+              <button class="sig-btn" onclick="clearSig('sig-c1-fl')">Effacer</button>
+              <button class="sig-btn validate" onclick="signOk('sig-c1-fl','st-c1-fl')">Valider la signature</button>
+            </div>
+            <div class="sig-status" id="st-c1-fl">✓ Signé électroniquement — <span class="sig-date"></span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTRAT 2 : CONSEILPREV ↔ CLIENT -->
+      <div class="contract-card">
+        <div class="cc-head">
+          <div class="cc-head-title">📑 Contrat 2 — Mise à disposition</div>
+          <div class="cc-head-sub">CONSEILPREV ↔ Client final (+15%)</div>
+        </div>
+        <div class="cc-body" id="contract2-body"></div>
+        <div class="cc-foot" style="flex-direction:column">
+          <div class="sig-zone">
+            <div class="sig-zone-lbl">✍️ Signature CONSEILPREV (Prestataire)</div>
+            <canvas class="sig-canvas" id="sig-c2-cp" width="360" height="80"></canvas>
+            <div class="sig-actions">
+              <button class="sig-btn" onclick="clearSig('sig-c2-cp')">Effacer</button>
+              <button class="sig-btn validate" onclick="signOk('sig-c2-cp','st-c2-cp')">Valider la signature</button>
+            </div>
+            <div class="sig-status" id="st-c2-cp">✓ Signé électroniquement — <span class="sig-date"></span></div>
+          </div>
+          <div class="sig-zone">
+            <div class="sig-zone-lbl">✍️ Signature Client</div>
+            <canvas class="sig-canvas" id="sig-c2-cl" width="360" height="80"></canvas>
+            <div class="sig-actions">
+              <button class="sig-btn" onclick="clearSig('sig-c2-cl')">Effacer</button>
+              <button class="sig-btn validate" onclick="signOk('sig-c2-cl','st-c2-cl')">Valider la signature</button>
+            </div>
+            <div class="sig-status" id="st-c2-cl">✓ Signé électroniquement — <span class="sig-date"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size:11px;color:rgba(216,180,254,.5);text-align:center;margin-bottom:20px;line-height:1.7">
+      Contrats types : durée 6 mois renouvelable tacitement · résiliation préavis 60 jours · paiement à 30 jours ·
+      confidentialité étendue post-contrat · déclaration d'indépendance réciproque · droit français.<br>
+      <em>Ces contrats sont des propositions de partenariat. La version finale sera établie après discussion.</em>
+    </div>
+
+    <div style="text-align:center;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <button class="btn-sec" onclick="goStep(4)">← Retour aux matchs</button>
+      <button class="btn-launch" id="btn-finalize" onclick="finalizeAll()">📨 Finaliser & envoyer à CONSEILPREV</button>
+    </div>
+
+    <div class="final-box" id="final-box" style="display:none">
+      <div class="final-ico">🎉</div>
+      <h2 class="section-h">Dossier <em>envoyé !</em></h2>
+      <p class="section-s">CONSEILPREV a reçu votre sélection et les contrats signés.<br>Notre INGE IT dédié vous contacte sous <strong style="color:var(--teal)">48h ouvrées</strong> pour organiser la mise en relation et le démarrage de la mission.</p>
+      <a href="/" class="btn-sec">← Retour à l'accueil</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div class="ft-mini">
+  <span>© 2025 CONSEILPREV · Plateforme B2B Recrutement · <a href="/sourcing">Sourcing</a> · <a href="/">conseilprev.onrender.com</a></span>
+  <a href="/">← Retour au site</a>
+</div>
+
+<script>
+"use strict";
+// ════════════════════════════════════════
+// PLATEFORME B2B RECRUTEMENT — Logique
+// ════════════════════════════════════════
+var BRIEF = {};
+var HARD_SKILLS = [];
+var SOFT_SKILLS = [];
+var SELECTED_MATCH = null;
+var MATCHES = [];
+var SIGNED = {};
+
+// ── Stepper ──
+function goStep(n){
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('show'); });
+  document.getElementById('panel-'+n).classList.add('show');
+  document.querySelectorAll('.step-item').forEach(function(s){
+    var sn = parseInt(s.dataset.step);
+    s.classList.toggle('active', sn === n);
+    s.classList.toggle('done', sn < n);
+  });
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ── Skills tags ──
+function setupSkills(inputId, wrapId, arr){
+  var input = document.getElementById(inputId);
+  var wrap  = document.getElementById(wrapId);
+  input.addEventListener('keydown', function(e){
+    if(e.key === 'Enter' || e.key === ','){
+      e.preventDefault();
+      var v = input.value.trim().replace(/,$/,'');
+      if(v && arr.indexOf(v) < 0 && arr.length < 12){
+        arr.push(v);
+        renderSkills(wrapId, arr, inputId);
+      }
+      input.value = '';
+    }
+    if(e.key === 'Backspace' && !input.value && arr.length){
+      arr.pop();
+      renderSkills(wrapId, arr, inputId);
+    }
+  });
+}
+function renderSkills(wrapId, arr, inputId){
+  var wrap = document.getElementById(wrapId);
+  var input = document.getElementById(inputId);
+  wrap.querySelectorAll('.skill-tag').forEach(function(t){ t.remove(); });
+  arr.forEach(function(s, i){
+    var tag = document.createElement('span');
+    tag.className = 'skill-tag';
+    var btn = document.createElement('button');
+    btn.type = 'button'; btn.textContent = '×';
+    btn.onclick = (function(w, idx){ return function(){ removeSkill(w, idx); }; })(wrapId, i);
+    tag.textContent = s + ' ';
+    tag.appendChild(btn);
+    wrap.insertBefore(tag, input);
+  });
+}
+function removeSkill(wrapId, i){
+  var arr = wrapId === 'hard-wrap' ? HARD_SKILLS : SOFT_SKILLS;
+  arr.splice(i, 1);
+  renderSkills(wrapId, arr, wrapId === 'hard-wrap' ? 'hard-input' : 'soft-input');
+}
+setupSkills('hard-input','hard-wrap',HARD_SKILLS);
+setupSkills('soft-input','soft-wrap',SOFT_SKILLS);
+
+// ── Soumission brief ──
+document.getElementById('brief-form').addEventListener('submit', function(e){
+  e.preventDefault();
+  var consent = document.getElementById('bf-consent-cb');
+  if(!consent.checked){
+    var block = consent.closest('.bf-consent');
+    block.classList.add('error');
+    block.scrollIntoView({behavior:'smooth',block:'center'});
+    setTimeout(function(){ block.classList.remove('error'); }, 2500);
+    return;
+  }
+  var required = ['c-prenom','c-nom','c-email','c-entreprise','p-titre','p-domaine','p-contrat','p-tjm','p-lieu'];
+  var missing = required.filter(function(id){ return !document.getElementById(id).value.trim(); });
+  if(missing.length){
+    document.getElementById(missing[0]).focus();
+    document.getElementById(missing[0]).style.borderColor = 'rgba(248,113,113,.7)';
+    setTimeout(function(){ document.getElementById(missing[0]).style.borderColor=''; }, 2500);
+    return;
+  }
+  if(!HARD_SKILLS.length){
+    document.getElementById('hard-input').focus();
+    document.getElementById('hard-wrap').style.borderColor = 'rgba(248,113,113,.7)';
+    setTimeout(function(){ document.getElementById('hard-wrap').style.borderColor=''; }, 2500);
+    return;
+  }
+
+  BRIEF = {
+    prenom:     document.getElementById('c-prenom').value.trim(),
+    nom:        document.getElementById('c-nom').value.trim(),
+    email:      document.getElementById('c-email').value.trim(),
+    tel:        document.getElementById('c-tel').value.trim(),
+    entreprise: document.getElementById('c-entreprise').value.trim(),
+    fonction:   document.getElementById('c-fonction').value.trim(),
+    titre:      document.getElementById('p-titre').value.trim(),
+    domaine:    document.getElementById('p-domaine').value,
+    contrat:    document.getElementById('p-contrat').value,
+    tjm:        parseInt(document.getElementById('p-tjm').value) || 0,
+    duree:      document.getElementById('p-duree').value,
+    lieu:       document.getElementById('p-lieu').value.trim(),
+    start:      document.getElementById('p-start').value,
+    hard:       HARD_SKILLS.slice(),
+    soft:       SOFT_SKILLS.slice(),
+    desc:       document.getElementById('p-desc').value.trim(),
+  };
+
+  goStep(3);
+  runSearch();
+});
+
+// ── Recherche IA animée ──
+function runSearch(){
+  var chips = document.querySelectorAll('.src-chip');
+  var fill  = document.getElementById('progress-fill');
+  var status= document.getElementById('search-status');
+  var msgs = [
+    'Analyse sémantique de votre brief…',
+    'Extraction des compétences clés : ' + BRIEF.hard.slice(0,3).join(', ') + '…',
+    'Scan des jobboards français…',
+    'Interrogation du vivier CONSEILPREV…',
+    'Scoring de compatibilité IA…',
+    'Vérification des disponibilités…',
+    'Classement final des profils…'
+  ];
+  var i = 0;
+  chips.forEach(function(c){ c.classList.remove('scanning','done'); });
+  fill.style.width = '0%';
+
+  var interval = setInterval(function(){
+    if(i < chips.length){
+      if(i > 0) chips[i-1].classList.replace('scanning','done');
+      chips[i].classList.add('scanning');
+      status.textContent = msgs[Math.min(i, msgs.length-1)];
+      fill.style.width = Math.round((i+1)/chips.length*100) + '%';
+      i++;
+    } else {
+      chips[chips.length-1].classList.replace('scanning','done');
+      status.textContent = '✓ Recherche terminée — ' + genMatches() + ' profils compatibles trouvés';
+      clearInterval(interval);
+      setTimeout(function(){ goStep(4); renderMatches(); }, 1100);
+    }
+  }, 620);
+}
+
+// ── Génération matches (simulation IA basée sur le brief) ──
+function genMatches(){
+  var noms = ['Consultant A','Consultant B','Consultant C','Consultant D','Consultant E'];
+  var seniorities = ['Senior · 8 ans','Expert · 12 ans','Confirmé · 5 ans','Senior · 9 ans','Expert · 15 ans'];
+  var bases = [97, 92, 88, 84, 79];
+  var avatars = ['👨‍💻','👩‍💻','🧑‍💻','👨‍🔬','👩‍🔬'];
+  var sources = ['Vivier CONSEILPREV','Malt','Free-Work','LinkedIn','APEC'];
+  var dispo = ['Immédiate','Sous 2 semaines','Immédiate','Sous 1 mois','Sous 2 semaines'];
+
+  MATCHES = noms.map(function(n, i){
+    var tjmVar = [0, -30, 20, -50, 40][i];
+    var skills = BRIEF.hard.slice(0, 4);
+    if(BRIEF.soft.length) skills = skills.concat(BRIEF.soft.slice(0,2));
+    return {
+      id: i,
+      label: n,
+      avatar: avatars[i],
+      seniority: seniorities[i],
+      score: bases[i],
+      tjm: Math.max(150, BRIEF.tjm + tjmVar),
+      source: sources[i],
+      dispo: dispo[i],
+      skills: skills,
+      lieu: BRIEF.lieu,
+    };
+  });
+  return MATCHES.length;
+}
+
+function renderMatches(){
+  var grid = document.getElementById('match-grid');
+  grid.innerHTML = '';
+  document.getElementById('match-subtitle').textContent =
+    MATCHES.length + ' profils ' + BRIEF.domaine + ' anonymisés — classés par score IA pour « ' + BRIEF.titre + ' »';
+  MATCHES.forEach(function(m){
+    var card = document.createElement('div');
+    card.className = 'match-card';
+    card.dataset.id = m.id;
+    card.onclick = function(){ selectMatch(m.id); };
+    card.innerHTML =
+      '<div class="match-avatar">' + m.avatar + '</div>' +
+      '<div class="match-body">' +
+        '<div class="match-name">' + m.label + ' <span class="match-anon">🔒 Anonymisé</span></div>' +
+        '<div class="match-meta"><span>📊 ' + m.seniority + '</span><span>💰 TJM ' + m.tjm + ' € HT</span><span>📍 ' + m.lieu + '</span><span>🕐 ' + m.dispo + '</span><span>🔗 ' + m.source + '</span></div>' +
+        '<div class="match-skills">' + m.skills.map(function(s){ return '<span class="mskill">' + s + '</span>'; }).join('') + '</div>' +
+      '</div>' +
+      '<div class="match-score-wrap">' +
+        '<div class="match-score">' + m.score + '%</div>' +
+        '<div class="match-score-lbl">Match IA</div>' +
+        '<div class="match-bar"><div class="match-bar-fill" style="width:' + m.score + '%"></div></div>' +
+      '</div>';
+    grid.appendChild(card);
+  });
+}
+
+function selectMatch(id){
+  SELECTED_MATCH = MATCHES[id];
+  document.querySelectorAll('.match-card').forEach(function(c){
+    c.classList.toggle('selected', parseInt(c.dataset.id) === id);
+  });
+  document.getElementById('btn-validate-match').disabled = false;
+}
+
+// ── Validation match → notification CONSEILPREV + contrats ──
+function validateMatch(){
+  if(!SELECTED_MATCH) return;
+
+  // Notifier CONSEILPREV via /api/apply (sans coordonnées candidat visibles)
+  var fd = new FormData();
+  fd.append('form_type',  'match_validation');
+  fd.append('prenom',     BRIEF.prenom);
+  fd.append('nom',        BRIEF.nom);
+  fd.append('email',      BRIEF.email);
+  fd.append('telephone',  BRIEF.tel);
+  fd.append('entreprise', BRIEF.entreprise);
+  fd.append('fonction',   BRIEF.fonction);
+  fd.append('message',
+    'MATCH VALIDÉ PAR LE CLIENT\n' +
+    '═══════════════════════\n' +
+    'Poste : ' + BRIEF.titre + ' (' + BRIEF.domaine + ')\n' +
+    'Profil sélectionné : ' + SELECTED_MATCH.label + ' — Score ' + SELECTED_MATCH.score + '%\n' +
+    'Séniorité : ' + SELECTED_MATCH.seniority + '\n' +
+    'Source : ' + SELECTED_MATCH.source + '\n' +
+    'TJM consultant : ' + SELECTED_MATCH.tjm + ' € HT\n' +
+    'TJM vente client (+15%) : ' + Math.round(SELECTED_MATCH.tjm * 1.15) + ' € HT\n' +
+    'Contrat : ' + BRIEF.contrat + ' · Durée : ' + BRIEF.duree + ' · Lieu : ' + BRIEF.lieu + '\n' +
+    'Démarrage : ' + BRIEF.start + '\n' +
+    'Hard skills : ' + BRIEF.hard.join(', ') + '\n' +
+    'Soft skills : ' + (BRIEF.soft.join(', ') || '—') + '\n' +
+    'Description : ' + (BRIEF.desc || '—') + '\n' +
+    '═══════════════════════\n' +
+    'ACTION REQUISE : double validation puis mise en relation.'
+  );
+  fd.append('consent',    'true');
+  fd.append('source_url', '/platform');
+
+  fetch('/api/apply', { method:'POST', body:fd })
+    .then(function(r){ return r.json(); })
+    .catch(function(){ /* silencieux — le client continue */ });
+
+  goStep(5);
+  renderContracts();
+}
+
+// ── Génération contrats ──
+function renderContracts(){
+  var m = SELECTED_MATCH;
+  var tjmVente = Math.round(m.tjm * 1.15);
+  var today = new Date().toLocaleDateString('fr-FR');
+
+  document.getElementById('m-tjm-base').textContent  = m.tjm + ' € HT';
+  document.getElementById('m-tjm-vente').textContent = tjmVente + ' € HT';
+
+  // Contrat 1 : CONSEILPREV ↔ Freelance
+  document.getElementById('contract1-body').innerHTML =
+    row('Prestataire-Mandant', 'CONSEILPREV — ERSIA IA Management, SARL') +
+    row('Consultant', m.label + ' (identité dévoilée après validation)') +
+    row('Objet', 'Prestations ' + BRIEF.domaine + ' — ' + BRIEF.titre) +
+    row('Missions', 'Conseil conformité IA (AI Act, RGPD) · Audit & évaluation systèmes IA · Accompagnement bonnes pratiques') +
+    row('TJM consultant', m.tjm + ' € HT', true) +
+    row('Durée', '6 mois — tacite reconduction') +
+    row('Lieu', BRIEF.lieu) +
+    row('Démarrage', BRIEF.start) +
+    row('Reporting', "État d'avancement hebdomadaire") +
+    row('Paiement', '30 jours après réception facture') +
+    row('Résiliation', 'Préavis 60 jours — LRAR') +
+    row('Confidentialité', 'Étendue, persiste après extinction') +
+    row('Indépendance', 'Aucun lien de subordination') +
+    row('Loi applicable', 'Droit français') +
+    row('Date', today);
+
+  // Contrat 2 : CONSEILPREV ↔ Client (+15%)
+  document.getElementById('contract2-body').innerHTML =
+    row('Prestataire', 'CONSEILPREV — ERSIA IA Management, SARL') +
+    row('Client', BRIEF.entreprise + ' — ' + BRIEF.prenom + ' ' + BRIEF.nom) +
+    row('Email client', BRIEF.email) +
+    row('Objet', 'Mise à disposition consultant ' + BRIEF.domaine + ' — ' + BRIEF.titre) +
+    row('Consultant', m.label + ' — ' + m.seniority) +
+    row('TJM facturé client', tjmVente + ' € HT (TJM + 15%)', true) +
+    row('Durée mission', BRIEF.duree) +
+    row('Lieu', BRIEF.lieu) +
+    row('Démarrage', BRIEF.start) +
+    row('Clause non-sollicitation', 'Libération contractuelle si internalisation mutuelle') +
+    row('Garantie', 'Remplacement sous 2 semaines si inadéquation') +
+    row('Paiement', '30 jours après réception facture') +
+    row('Résiliation', 'Préavis 60 jours — LRAR') +
+    row('Confidentialité', 'NDA total sur projets & stratégie SI') +
+    row('Loi applicable', 'Droit français') +
+    row('Date', today);
+
+  // Init signatures
+  ['sig-c1-cp','sig-c1-fl','sig-c2-cp','sig-c2-cl'].forEach(initSig);
+}
+
+function row(k, v, hl){
+  return '<div class="cc-row"><span class="ck">' + k + '</span><span class="cv' + (hl ? ' hl' : '') + '">' + v + '</span></div>';
+}
+
+// ── Signature électronique (canvas) ──
+function initSig(id){
+  var canvas = document.getElementById(id);
+  if(!canvas || canvas.dataset.init) return;
+  canvas.dataset.init = '1';
+  var ctx = canvas.getContext('2d');
+  ctx.strokeStyle = '#c4b5fd';
+  ctx.lineWidth = 2;
+  ctx.lineCap = 'round';
+  var drawing = false, lx, ly;
+
+  function pos(e){
+    var r = canvas.getBoundingClientRect();
+    var sx = canvas.width / r.width, sy = canvas.height / r.height;
+    var cx = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
+    var cy = (e.touches ? e.touches[0].clientY : e.clientY) - r.top;
+    return { x: cx * sx, y: cy * sy };
+  }
+  function start(e){ drawing = true; var p = pos(e); lx = p.x; ly = p.y; e.preventDefault(); }
+  function move(e){
+    if(!drawing) return;
+    var p = pos(e);
+    ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(p.x, p.y); ctx.stroke();
+    lx = p.x; ly = p.y;
+    canvas.dataset.signed = '1';
+    e.preventDefault();
+  }
+  function end(){ drawing = false; }
+
+  canvas.addEventListener('mousedown', start);
+  canvas.addEventListener('mousemove', move);
+  canvas.addEventListener('mouseup', end);
+  canvas.addEventListener('mouseleave', end);
+  canvas.addEventListener('touchstart', start, {passive:false});
+  canvas.addEventListener('touchmove', move, {passive:false});
+  canvas.addEventListener('touchend', end);
+}
+
+function clearSig(id){
+  var canvas = document.getElementById(id);
+  var ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  canvas.dataset.signed = '';
+  var statusId = id.replace('sig-','st-');
+  var st = document.getElementById(statusId);
+  if(st){ st.classList.remove('signed'); }
+  SIGNED[id] = false;
+}
+
+function signOk(canvasId, statusId){
+  var canvas = document.getElementById(canvasId);
+  if(!canvas.dataset.signed){
+    canvas.style.boxShadow = '0 0 0 2px rgba(248,113,113,.6)';
+    setTimeout(function(){ canvas.style.boxShadow = ''; }, 1800);
+    return;
+  }
+  var st = document.getElementById(statusId);
+  st.querySelector('.sig-date').textContent = new Date().toLocaleString('fr-FR');
+  st.classList.add('signed');
+  SIGNED[canvasId] = true;
+}
+
+// ── Finalisation : envoi dossier complet ──
+function finalizeAll(){
+  var allSigned = ['sig-c1-cp','sig-c1-fl','sig-c2-cp','sig-c2-cl'].every(function(id){ return SIGNED[id]; });
+  if(!allSigned){
+    alert('⚠ Veuillez signer et valider les 4 zones de signature (2 par contrat) avant de finaliser.');
+    return;
+  }
+  var m = SELECTED_MATCH;
+  var tjmVente = Math.round(m.tjm * 1.15);
+  var btn = document.getElementById('btn-finalize');
+  btn.disabled = true;
+  btn.textContent = 'Envoi en cours…';
+
+  var fd = new FormData();
+  fd.append('form_type',  'contrats_signes');
+  fd.append('prenom',     BRIEF.prenom);
+  fd.append('nom',        BRIEF.nom);
+  fd.append('email',      BRIEF.email);
+  fd.append('telephone',  BRIEF.tel);
+  fd.append('entreprise', BRIEF.entreprise);
+  fd.append('message',
+    'CONTRATS SIGNÉS ÉLECTRONIQUEMENT — DOSSIER COMPLET\n' +
+    '═══════════════════════════════════\n' +
+    'CONTRAT 1 (CONSEILPREV ↔ Consultant) : signé 2/2\n' +
+    '  · Consultant : ' + m.label + ' (' + m.seniority + ')\n' +
+    '  · TJM consultant : ' + m.tjm + ' € HT\n' +
+    '  · Source : ' + m.source + '\n' +
+    '\n' +
+    'CONTRAT 2 (CONSEILPREV ↔ ' + BRIEF.entreprise + ') : signé 2/2\n' +
+    '  · TJM vente client : ' + tjmVente + ' € HT (+15%)\n' +
+    '  · Marge CONSEILPREV : ' + (tjmVente - m.tjm) + ' €/jour\n' +
+    '\n' +
+    'MISSION : ' + BRIEF.titre + ' (' + BRIEF.domaine + ')\n' +
+    '  · Durée : ' + BRIEF.duree + ' · Lieu : ' + BRIEF.lieu + '\n' +
+    '  · Démarrage : ' + BRIEF.start + ' · Contrat : ' + BRIEF.contrat + '\n' +
+    '  · Hard skills : ' + BRIEF.hard.join(', ') + '\n' +
+    '═══════════════════════════════════\n' +
+    'Signatures horodatées : ' + new Date().toLocaleString('fr-FR') + '\n' +
+    'ACTION : révéler les coordonnées candidat et organiser le démarrage.'
+  );
+  fd.append('consent',    'true');
+  fd.append('source_url', '/platform');
+
+  fetch('/api/apply', { method:'POST', body:fd })
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+      btn.style.display = 'none';
+      document.getElementById('final-box').style.display = 'block';
+      document.getElementById('final-box').scrollIntoView({behavior:'smooth',block:'center'});
+    })
+    .catch(function(){
+      btn.disabled = false;
+      btn.textContent = '📨 Finaliser & envoyer à CONSEILPREV';
+      alert('Erreur réseau — réessayez.');
+    });
+}
+
+document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+</script>
+</body>
+</html>
