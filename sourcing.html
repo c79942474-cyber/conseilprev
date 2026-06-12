@@ -453,20 +453,38 @@ document.getElementById('sourcing-form').addEventListener('submit', function(e){
   if(!prenom||!nom||!email||!profil){ return; }
   var btn = document.getElementById('sf-submit');
   var txt = document.getElementById('sf-txt');
-  btn.disabled = true; txt.textContent = 'Envoi...';
-  var body = 'Prénom: '+prenom+'\nNom: '+nom+'\nEmail: '+email
-    +'\nTél: '+document.getElementById('sf-tel').value
-    +'\nEntreprise: '+document.getElementById('sf-entreprise').value
-    +'\nFonction: '+document.getElementById('sf-fonction').value
-    +'\n\nProfil recherché:\n'+profil
-    +'\n\n---\nEnvoyé depuis conseilprev.onrender.com/sourcing';
-  window.location.href = 'mailto:christophe.cerf@outlook.com'
-    +'?subject='+encodeURIComponent('[SOURCING] Demande de profil — '+prenom+' '+nom)
-    +'&body='+encodeURIComponent(body);
-  setTimeout(function(){
-    document.getElementById('sf-msg').style.display='block';
-    btn.disabled=false; txt.textContent='Envoyer';
-  }, 1200);
+  btn.disabled = true; txt.textContent = 'Envoi…';
+
+  var fd = new FormData();
+  fd.append('form_type',   'sourcing_profil');
+  fd.append('prenom',      prenom);
+  fd.append('nom',         nom);
+  fd.append('email',       email);
+  fd.append('telephone',   document.getElementById('sf-tel').value.trim());
+  fd.append('entreprise',  document.getElementById('sf-entreprise').value.trim());
+  fd.append('fonction',    document.getElementById('sf-fonction').value.trim());
+  fd.append('message',     profil);
+  fd.append('consent',     'true');
+  fd.append('source_url',  window.location.pathname);
+
+  fetch('/api/apply', { method:'POST', body:fd })
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+      btn.disabled = false;
+      if(res.ok){
+        txt.textContent = 'Envoyé ✓';
+        var msg = document.getElementById('sf-msg');
+        if(msg){ msg.style.display='block'; }
+        document.getElementById('sourcing-form').reset();
+      } else {
+        txt.textContent = 'Envoyer';
+        alert('Erreur : ' + (res.error || 'Veuillez réessayer'));
+      }
+    })
+    .catch(function(){
+      btn.disabled = false; txt.textContent = 'Envoyer';
+      alert('Erreur réseau, réessayez.');
+    });
 });
 document.addEventListener('contextmenu',function(e){e.preventDefault();});
 </script>

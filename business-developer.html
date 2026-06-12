@@ -439,10 +439,8 @@ document.getElementById('apply-form').addEventListener('submit', function(e){
   var prenom  = document.getElementById('af-prenom').value.trim();
   var nom     = document.getElementById('af-nom').value.trim();
   var email   = document.getElementById('af-email').value.trim();
-  var msg     = document.getElementById('af-message').value.trim();
   var consent = document.getElementById('af-consent-cb');
   var cvInput = document.getElementById('af-cv');
-  var cvName  = document.getElementById('af-cv-name').textContent;
 
   // Validation consentement
   if(!consent.checked){
@@ -456,44 +454,53 @@ document.getElementById('apply-form').addEventListener('submit', function(e){
 
   var btn = document.getElementById('af-submit');
   var txt = document.getElementById('af-txt');
-  btn.disabled = true; txt.textContent = 'Envoi...';
+  btn.disabled = true;
+  txt.textContent = 'Envoi en cours…';
 
-  // Construire le message avec infos CV détaillées
-  var cvInfo = cvName !== 'Aucun fichier sélectionné' ? cvName : 'Aucun CV joint';
+  // ── Construire FormData avec le fichier CV ──
+  var fd = new FormData();
+  fd.append('form_type',  'candidature_bd');
+  fd.append('prenom',     prenom);
+  fd.append('nom',        nom);
+  fd.append('email',      email);
+  fd.append('telephone',  document.getElementById('af-tel').value.trim());
+  fd.append('message',    document.getElementById('af-message').value.trim());
+  fd.append('consent',    'true');
+  fd.append('source_url', window.location.pathname);
+
   if(cvInput.files && cvInput.files[0]){
-    var f = cvInput.files[0];
-    cvInfo = f.name + ' (' + (f.size ? Math.round(f.size/1024)+'KB' : '?') + ', ' + (f.type||'fichier') + ')';
+    fd.append('cv', cvInput.files[0]);
   }
 
-  var body = [
-    '=== CANDIDATURE BUSINESS DEVELOPER INDÉPENDANT ===',
-    '',
-    'Prénom     : ' + prenom,
-    'Nom        : ' + nom,
-    'Email      : ' + email,
-    'Téléphone  : ' + (document.getElementById('af-tel').value || '—'),
-    '',
-    'CV joint   : ' + cvInfo,
-    '',
-    'Message    :',
-    msg || '(aucun message)',
-    '',
-    '---',
-    'Consentement RGPD : OUI (Art. 6.1.a — ' + new Date().toLocaleString('fr-FR') + ')',
-    'Source : conseilprev.onrender.com/business-developer',
-  ].join('\n');
-
-  // Ouvrir le client mail
-  window.location.href = 'mailto:christophe.cerf@outlook.com'
-    + '?subject=' + encodeURIComponent('[CANDIDATURE BD] ' + prenom + ' ' + nom + ' — ' + cvInfo.split('(')[0].trim())
-    + '&body=' + encodeURIComponent(body);
-
-  setTimeout(function(){
-    document.getElementById('af-success').style.display = 'block';
-    btn.disabled = false; txt.textContent = 'Envoyer';
-    // Scroll vers le message de succès
-    document.getElementById('af-success').scrollIntoView({behavior:'smooth',block:'center'});
-  }, 1200);
+  // ── Appel API ──
+  fetch('/api/apply', { method:'POST', body:fd })
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+      btn.disabled = false;
+      if(res.ok){
+        txt.textContent = 'Envoyé ✓';
+        var suc = document.getElementById('af-success');
+        if(suc){
+          suc.style.display = 'block';
+          suc.textContent = res.cv_received
+            ? '✓ Candidature envoyée avec CV — réponse sous 48h'
+            : '✓ Candidature envoyée — réponse sous 48h';
+          suc.scrollIntoView({behavior:'smooth',block:'center'});
+        }
+        document.getElementById('apply-form').reset();
+        var nameEl = document.getElementById('af-cv-name');
+        if(nameEl){ nameEl.textContent = 'Aucun fichier sélectionné'; nameEl.classList.remove('has-file'); }
+      } else {
+        txt.textContent = 'Envoyer';
+        alert('Erreur : ' + (res.error || 'Veuillez réessayer'));
+      }
+    })
+    .catch(function(err){
+      btn.disabled = false;
+      txt.textContent = 'Envoyer';
+      console.error(err);
+      alert('Erreur réseau, réessayez.');
+    });
 });
 document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
 </script>

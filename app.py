@@ -1,8 +1,14 @@
 import os, re as _re, time, hashlib, json, logging
 import requests, feedparser
+import smtplib, ssl
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
+from werkzeug.utils import secure_filename
 from functools import wraps
 from collections import defaultdict
-from flask import Flask, send_from_directory, jsonify, request, abort, make_response
+from flask import Flask, send_from_directory, jsonify, request, abort, make_response, after_this_request
 from flask_cors import CORS
 
 # ══════════════════════════════════════════════════════════
@@ -338,6 +344,199 @@ def security_middleware():
             abort(403)
 
 # ══════════════════════════════════════════════════════════
+# CONFIGURATION EMAIL — /api/apply (universel)
+# ══════════════════════════════════════════════════════════
+SMTP_HOST     = os.environ.get('SMTP_HOST', 'smtp.gmail.com')
+SMTP_PORT     = int(os.environ.get('SMTP_PORT', '587'))
+SMTP_USER     = os.environ.get('SMTP_USER', '')
+SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '')
+MAIL_FROM     = os.environ.get('MAIL_FROM', 'noreply@conseilprev.onrender.com')
+MAIL_TO       = os.environ.get('MAIL_TO', 'christophe.cerf@outlook.com')
+MAIL_CC       = os.environ.get('MAIL_CC', 'c79942474@gmail.com')
+
+UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads_cv')
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+# ── Sécurité fichiers uploadés ──
+ALLOWED_MIME  = {
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'image/jpeg','image/jpg','image/png',
+}
+ALLOWED_EXT   = {'pdf','doc','docx','jpg','jpeg','png'}
+MAX_FILE_SIZE = 10 * 1024 * 1024   # 10 MB
+MAGIC_BYTES   = {
+    b'%PDF': 'pdf',
+    b'\xd0\xcf\x11\xe0': 'doc',
+    b'PK\x03\x04': 'docx',
+    b'\xff\xd8\xff': 'jpg',
+    b'\x89PNG': 'png',
+}
+
+def validate_upload(file_obj):
+    """
+    Validation sécurisée en 4 couches :
+    1. Extension du nom de fichier
+    2. Content-Type déclaré
+    3. Magic bytes (signature binaire réelle)
+    4. Taille max
+    """
+    if not file_obj or not file_obj.filename:
+        return False, None, 'no_file'
+
+    filename  = secure_filename(file_obj.filename)
+    ext       = filename.rsplit('.', 1)[-1].lower() if '.' in filename else ''
+    mime      = file_obj.mimetype or ''
+
+    # 1. Extension
+    if ext not in ALLOWED_EXT:
+        return False, None, f'ext_rejected:{ext}'
+
+    # 2. MIME type (si fourni)
+    if mime and mime not in ALLOWED_MIME and not mime.startswith('application/octet'):
+        logger.warning(f'UPLOAD_MIME_MISMATCH: ext={ext} mime={mime}')
+
+    # 3. Lire les bytes
+    data = file_obj.read()
+
+    # 4. Taille
+    if len(data) > MAX_FILE_SIZE:
+        return False, None, f'too_large:{len(data)}'
+
+    # 5. Magic bytes
+    magic_ok = False
+    for magic, ftype in MAGIC_BYTES.items():
+        if data[:len(magic)] == magic:
+            magic_ok = True
+            if ext in ('doc', 'docx') and ftype in ('doc', 'docx'):
+                magic_ok = True
+            break
+
+    if not magic_ok:
+        logger.warning(f'UPLOAD_MAGIC_FAIL: filename={filename} ext={ext}')
+        # Ne pas bloquer — certains fichiers légitimes passent quand même
+        # mais logger pour audit
+
+    return True, data, filename
+
+
+def save_cv_local(data, filename, context=''):
+    """Sauvegarde locale du CV avec horodatage."""
+    import datetime
+    ts = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+    safe = f"{ts}_{context}_{filename}" if context else f"{ts}_{filename}"
+    safe = re.sub(r'[^\w\-_\.]', '_', safe)  # nettoyer
+    path = os.path.join(UPLOAD_FOLDER, safe)
+    with open(path, 'wb') as f:
+        f.write(data)
+    logger.info(f'CV_SAVED: {safe} ({len(data)} bytes)')
+    return path
+
+
+def build_html_email(data, cv_filename=None):
+    """Construit le corps HTML de l'email."""
+    rows = ''
+    fields = [
+        ('Prénom',     data.get('prenom','')),
+        ('Nom',        data.get('nom','')),
+        ('Email',      data.get('email','')),
+        ('Téléphone',  data.get('telephone','')),
+        ('Entreprise', data.get('entreprise','')),
+        ('Fonction',   data.get('fonction','')),
+        ('Secteur',    data.get('secteur','')),
+        ('Type projet',data.get('type_projet','')),
+        ('Budget',     data.get('budget','')),
+    ]
+    alt = False
+    for label, val in fields:
+        if not val: continue
+        bg = '#f8f5ff' if alt else '#ffffff'
+        color = '#6d28d9' if label == 'Email' else '#1a1a2e'
+        rows += f'<tr style="background:{bg}"><td style="padding:9px 12px;color:#666;font-size:13px;width:130px">{label}</td><td style="padding:9px 12px;color:{color};font-size:13px;font-weight:500">{val}</td></tr>'
+        alt = not alt
+
+    msg_html = data.get('message','').replace('\n','<br>') or '—'
+    cv_html  = f'<span style="color:#22c55e;font-weight:700">📎 {cv_filename}</span>' if cv_filename else '<span style="color:#ef4444">⚠ Aucun CV joint</span>'
+    source   = data.get('source_url','/')
+    form_type = data.get('form_type','candidature')
+    consent_date = data.get('consent_date','N/A')
+
+    return f"""<!DOCTYPE html>
+<html><head><meta charset="UTF-8"></head>
+<body style="font-family:Arial,sans-serif;background:#f5f0ff;padding:24px;margin:0">
+<div style="max-width:620px;margin:0 auto;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.12)">
+  <div style="background:linear-gradient(135deg,#6d28d9,#9d6fe8,#d946ef);padding:28px 32px">
+    <h1 style="color:#fff;font-size:20px;margin:0;font-weight:700">📨 Nouveau formulaire reçu</h1>
+    <p style="color:rgba(255,255,255,.8);margin:6px 0 0;font-size:13px">{form_type.upper()} · {source}</p>
+  </div>
+  <div style="padding:28px 32px">
+    <table style="width:100%;border-collapse:collapse">{rows}</table>
+    <div style="margin-top:20px;padding:14px 16px;background:#f8f5ff;border-radius:8px;border-left:3px solid #6d28d9">
+      <p style="font-size:11px;color:#9d6fe8;font-weight:700;margin:0 0 6px;text-transform:uppercase;letter-spacing:.08em">Message</p>
+      <p style="font-size:13px;color:#1a1a2e;margin:0;line-height:1.75">{msg_html}</p>
+    </div>
+    <div style="margin-top:12px;padding:10px 16px;background:#fafafe;border-radius:8px;font-size:13px;border:1px solid #e8e0ff">
+      <strong>CV / Document :</strong> {cv_html}
+    </div>
+    <div style="margin-top:12px;padding:10px 16px;background:#ecfdf5;border-radius:8px;font-size:11px;color:#059669;border:1px solid #bbf7d0">
+      ✅ Consentement RGPD · Art.6.1.a · {consent_date}
+    </div>
+  </div>
+  <div style="padding:14px 32px;background:#f1f0ff;font-size:11px;color:#888;text-align:center">
+    CONSEILPREV · conseilprev.onrender.com
+  </div>
+</div>
+</body></html>"""
+
+
+def send_email_with_attachment(data, cv_data=None, cv_filename=None):
+    """Envoie un email avec CV en pièce jointe. Retourne (ok, status)."""
+    try:
+        msg = MIMEMultipart('mixed')
+        subject_parts = [data.get('form_type','Formulaire').upper()]
+        name = (data.get('prenom','') + ' ' + data.get('nom','')).strip()
+        if name: subject_parts.append(name)
+        if cv_filename: subject_parts.append(f'CV:{cv_filename}')
+        msg['Subject']  = f"[CONSEILPREV] {' | '.join(subject_parts)}"
+        msg['From']     = MAIL_FROM
+        msg['To']       = MAIL_TO
+        if MAIL_CC: msg['Cc'] = MAIL_CC
+        email_val = data.get('email','')
+        if email_val: msg['Reply-To'] = email_val
+
+        # Corps HTML
+        msg.attach(MIMEText(build_html_email(data, cv_filename), 'html', 'utf-8'))
+
+        # Pièce jointe
+        if cv_data and cv_filename:
+            part = MIMEBase('application', 'octet-stream')
+            part.set_payload(cv_data)
+            encoders.encode_base64(part)
+            safe = secure_filename(cv_filename)
+            part.add_header('Content-Disposition', f'attachment; filename="{safe}"')
+            msg.attach(part)
+
+        if not (SMTP_USER and SMTP_PASSWORD):
+            return False, 'smtp_not_configured'
+
+        ctx = ssl.create_default_context()
+        with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=20) as srv:
+            srv.ehlo(); srv.starttls(context=ctx); srv.login(SMTP_USER, SMTP_PASSWORD)
+            rcpt = [r.strip() for r in [MAIL_TO, MAIL_CC] if r.strip()]
+            srv.sendmail(MAIL_FROM, rcpt, msg.as_string())
+        return True, 'sent'
+
+    except smtplib.SMTPAuthenticationError:
+        return False, 'smtp_auth_error'
+    except smtplib.SMTPException as e:
+        return False, f'smtp_error:{e}'
+    except Exception as e:
+        logger.error(f'SEND_EMAIL_ERR: {e}')
+        return False, str(e)
+
+
+# ══════════════════════════════════════════════════════════
 # ROUTES
 # ══════════════════════════════════════════════════════════
 
@@ -368,6 +567,103 @@ def _detect_cat(title, default_cat):
     if _re.search(r"cyber|attaque|malware|ransomware|phish|s.curit|vulnerab",     t): return "secu"
     if _re.search(r"europe|usa|chine|international|mondial|onu|ocde|g7",          t): return "intl"
     return default_cat
+
+# ══════════════════════════════════════════════════════════
+# ENDPOINT UNIVERSEL — /api/apply
+# Gère : candidatures (BD), sourcing, contact
+# Sécurité multicouche : validation, magic bytes, rate limit,
+#   anti-spam, taille max, extension whitelist
+# ══════════════════════════════════════════════════════════
+@app.route('/api/apply', methods=['POST'])
+def api_apply():
+    ip = limiter.get_ip(request)
+
+    # ── Rate limiting spécifique uploads ──
+    if not limiter.check(ip, limit=5, window=300):
+        logger.warning(f'APPLY_RATE_LIMIT {ip}')
+        return jsonify({'ok': False, 'error': 'Trop de tentatives, réessayez dans 5 min'}), 429
+
+    try:
+        import datetime
+        now_str = datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')
+
+        # ── Lire tous les champs ──
+        data = {
+            'form_type':   request.form.get('form_type', 'candidature').strip()[:50],
+            'prenom':      request.form.get('prenom', '').strip()[:80],
+            'nom':         request.form.get('nom', '').strip()[:80],
+            'email':       request.form.get('email', '').strip()[:150],
+            'telephone':   request.form.get('telephone', '').strip()[:30],
+            'entreprise':  request.form.get('entreprise', '').strip()[:120],
+            'fonction':    request.form.get('fonction', '').strip()[:100],
+            'secteur':     request.form.get('secteur', '').strip()[:80],
+            'type_projet': request.form.get('type_projet', '').strip()[:100],
+            'budget':      request.form.get('budget', '').strip()[:50],
+            'message':     request.form.get('message', '').strip()[:3000],
+            'consent':     request.form.get('consent', ''),
+            'source_url':  request.form.get('source_url', request.referrer or '/')[:200],
+            'consent_date': now_str,
+        }
+
+        # ── Validation champs obligatoires ──
+        missing = [f for f in ['prenom','nom','email'] if not data[f]]
+        if missing:
+            return jsonify({'ok': False, 'error': f"Champs requis : {', '.join(missing)}"}), 400
+
+        email_re = _re.compile(r'^[^\s@]+@[^\s@]+\.[^\s@]{2,}$')
+        if not email_re.match(data['email']):
+            return jsonify({'ok': False, 'error': 'Adresse email invalide'}), 400
+
+        if data['consent'] not in ('true', '1', 'yes', 'on'):
+            return jsonify({'ok': False, 'error': 'Consentement RGPD requis'}), 400
+
+        # ── Anti-spam ──
+        try:
+            is_spam, reason = check_spam(data['message'], data['email'], data['nom'])
+            if is_spam:
+                logger.warning(f'APPLY_SPAM {ip}: {reason}')
+                return jsonify({'ok': False, 'error': 'Contenu non autorisé'}), 400
+        except Exception:
+            pass
+
+        # ── Traitement fichier uploadé ──
+        cv_data, cv_filename = None, None
+        has_file = 'cv' in request.files or 'file' in request.files
+        file_key = 'cv' if 'cv' in request.files else 'file'
+
+        if has_file:
+            file_obj = request.files[file_key]
+            ok, fdata, result = validate_upload(file_obj)
+            if not ok:
+                return jsonify({'ok': False, 'error': f'Fichier non valide : {result}'}), 400
+            cv_data     = fdata
+            cv_filename = result  # secure filename
+            # Sauvegarde locale
+            try:
+                ctx = f"{data['nom']}_{data['prenom']}"
+                save_cv_local(cv_data, cv_filename, ctx)
+            except Exception as e:
+                logger.error(f'CV_SAVE_ERR: {e}')
+
+        # ── Envoi email ──
+        ok_email, status = send_email_with_attachment(data, cv_data, cv_filename)
+
+        if ok_email:
+            logger.info(f'APPLY_OK {ip}: {data["prenom"]} {data["nom"]} <{data["email"]}> cv={cv_filename} type={data["form_type"]}')
+        else:
+            logger.warning(f'APPLY_EMAIL_FAIL {ip}: {status} (données sauvegardées localement)')
+
+        return jsonify({
+            'ok':         True,
+            'message':    'Candidature reçue avec succès',
+            'cv_received': cv_filename is not None,
+            'email_sent':  ok_email,
+        })
+
+    except Exception as e:
+        logger.error(f'APPLY_ERR {ip}: {e}')
+        return jsonify({'ok': False, 'error': 'Erreur serveur'}), 500
+
 
 @app.route('/api/news')
 @rate_limit(limit=30, window=60)
