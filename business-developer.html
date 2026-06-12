@@ -171,6 +171,51 @@ h1 em{font-style:italic;background:linear-gradient(135deg,#a78bfa,#c084fc,#e879f
 body{-webkit-user-select:none;user-select:none}
 input,textarea{-webkit-user-select:text!important;user-select:text!important}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ══ CONSENTEMENT FORMULAIRE CANDIDATURE ══ */
+.af-consent{
+  display:flex;align-items:flex-start;gap:12px;
+  background:rgba(157,111,232,.1);
+  border:1px solid rgba(196,181,232,.25);
+  border-radius:10px;
+  padding:14px 16px;
+  margin-bottom:22px;
+  cursor:pointer;
+  transition:border-color .2s,background .2s;
+}
+.af-consent:has(input:checked){
+  border-color:rgba(94,234,212,.4);
+  background:rgba(94,234,212,.07);
+}
+.af-consent input[type="checkbox"]{
+  width:18px;height:18px;flex-shrink:0;margin-top:2px;
+  accent-color:var(--teal,#5eead4);cursor:pointer;
+  -webkit-user-select:none!important;user-select:none!important;
+}
+.af-consent-txt{
+  font-size:12px;color:rgba(216,180,254,.78);line-height:1.65;
+}
+.af-consent-txt strong{color:#fff}
+.af-consent-txt a{color:var(--teal,#5eead4);text-decoration:none}
+.af-consent-txt a:hover{text-decoration:underline}
+.af-consent-txt .req{color:#f87171;margin-left:2px}
+.af-consent-tags{
+  display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;
+}
+.af-consent-tag{
+  font-family:"Space Mono",monospace;font-size:9px;
+  padding:2px 8px;border-radius:100px;
+  background:rgba(196,181,232,.12);border:1px solid rgba(196,181,232,.22);
+  color:rgba(196,181,232,.7);
+}
+/* Erreur consentement */
+.af-consent.error{
+  border-color:rgba(248,113,113,.6) !important;
+  background:rgba(239,68,68,.08) !important;
+  animation:shake .3s ease;
+}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
 </style>
 </head>
 <body>
@@ -284,8 +329,19 @@ input,textarea{-webkit-user-select:text!important;user-select:text!important}
         <label class="af-label" for="af-message">Votre message</label>
       </div>
 
-      <!-- RGPD -->
-      <p class="af-rgpd">Les données saisies dans ce formulaire sont conservées par nos soins afin de pouvoir répondre au mieux à votre demande. Nous accordons de l'importance à la gestion de vos données, <a href="/protection-donnees" target="_blank" rel="noopener">en savoir plus sur notre démarche Données Personnelles</a>.</p>
+
+      <!-- ── Consentement RGPD candidature ── -->
+      <label class="af-consent" for="af-consent-cb">
+        <input type="checkbox" id="af-consent-cb" name="consent" required>
+        <span class="af-consent-txt">
+          J'accepte que mes données (dont mon <strong>CV</strong>) soient traitées par <strong>CONSEILPREV</strong> dans le cadre de ma candidature, conformément à la <a href="/protection-donnees" target="_blank" rel="noopener">politique de protection des données</a>. Conservation : <strong>24 mois</strong> max. <span class="req">*</span>
+          <div class="af-consent-tags">
+            <span class="af-consent-tag">Art. 6.1.a — Consentement</span>
+            <span class="af-consent-tag">Art. 7.1 — Preuve</span>
+            <span class="af-consent-tag">Art. 17 — Effacement</span>
+          </div>
+        </span>
+      </label>
 
       <button type="submit" class="af-submit" id="af-submit">
         <span class="af-dot"></span>
@@ -384,22 +440,59 @@ document.getElementById('apply-form').addEventListener('submit', function(e){
   var nom     = document.getElementById('af-nom').value.trim();
   var email   = document.getElementById('af-email').value.trim();
   var msg     = document.getElementById('af-message').value.trim();
+  var consent = document.getElementById('af-consent-cb');
+  var cvInput = document.getElementById('af-cv');
+  var cvName  = document.getElementById('af-cv-name').textContent;
+
+  // Validation consentement
+  if(!consent.checked){
+    var block = consent.closest('.af-consent');
+    block.classList.add('error');
+    block.scrollIntoView({behavior:'smooth',block:'center'});
+    setTimeout(function(){ block.classList.remove('error'); }, 2500);
+    return;
+  }
   if(!prenom || !nom || !email){ return; }
+
   var btn = document.getElementById('af-submit');
   var txt = document.getElementById('af-txt');
   btn.disabled = true; txt.textContent = 'Envoi...';
-  var cvName = document.getElementById('af-cv-name').textContent;
-  var body = 'Prénom: '+prenom+'\nNom: '+nom+'\nEmail: '+email
-    +'\nTél: '+document.getElementById('af-tel').value
-    +'\nCV: '+cvName
-    +'\n\nMessage:\n'+(msg||'—')
-    +'\n\n---\nCandidature Business Developer depuis conseilprev.onrender.com/business-developer';
+
+  // Construire le message avec infos CV détaillées
+  var cvInfo = cvName !== 'Aucun fichier sélectionné' ? cvName : 'Aucun CV joint';
+  if(cvInput.files && cvInput.files[0]){
+    var f = cvInput.files[0];
+    cvInfo = f.name + ' (' + (f.size ? Math.round(f.size/1024)+'KB' : '?') + ', ' + (f.type||'fichier') + ')';
+  }
+
+  var body = [
+    '=== CANDIDATURE BUSINESS DEVELOPER INDÉPENDANT ===',
+    '',
+    'Prénom     : ' + prenom,
+    'Nom        : ' + nom,
+    'Email      : ' + email,
+    'Téléphone  : ' + (document.getElementById('af-tel').value || '—'),
+    '',
+    'CV joint   : ' + cvInfo,
+    '',
+    'Message    :',
+    msg || '(aucun message)',
+    '',
+    '---',
+    'Consentement RGPD : OUI (Art. 6.1.a — ' + new Date().toLocaleString('fr-FR') + ')',
+    'Source : conseilprev.onrender.com/business-developer',
+  ].join('\n');
+
+  // Ouvrir le client mail
   window.location.href = 'mailto:christophe.cerf@outlook.com'
-    +'?subject='+encodeURIComponent('[CANDIDATURE] Business Developer — '+prenom+' '+nom)
-    +'&body='+encodeURIComponent(body);
+    + '?subject=' + encodeURIComponent('[CANDIDATURE BD] ' + prenom + ' ' + nom + ' — ' + cvInfo.split('(')[0].trim())
+    + '&body=' + encodeURIComponent(body);
+
   setTimeout(function(){
     document.getElementById('af-success').style.display = 'block';
     btn.disabled = false; txt.textContent = 'Envoyer';
+    // Scroll vers le message de succès
+    document.getElementById('af-success').scrollIntoView({behavior:'smooth',block:'center'});
   }, 1200);
 });
 document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
