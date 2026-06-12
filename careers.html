@@ -919,6 +919,181 @@ nav {
   padding: 0 40px !important;
 }
 
+
+/* ══════════════════════════════════════════
+   SECTION ORBIT — Présentation dynamique équipe
+   ══════════════════════════════════════════ */
+.orbit-section{
+  width:100%;
+  padding:0 0 20px;
+  position:relative;
+  overflow:hidden;
+  min-height:360px;
+}
+.orbit-stage{
+  position:relative;
+  width:100%;
+  height:340px;
+  max-width:900px;
+  margin:0 auto;
+}
+/* Ellipse orbitale */
+.orbit-ellipse{
+  position:absolute;
+  top:50%; left:50%;
+  width:82%;
+  height:55%;
+  transform:translate(-50%,-50%) rotateX(65deg);
+  border:1px solid rgba(196,181,232,.22);
+  border-radius:50%;
+  pointer-events:none;
+}
+.orbit-ellipse-2{
+  position:absolute;
+  top:50%; left:50%;
+  width:90%;
+  height:60%;
+  transform:translate(-50%,-50%) rotateX(65deg);
+  border:1px solid rgba(196,181,232,.08);
+  border-radius:50%;
+  pointer-events:none;
+}
+/* Avatar orbital */
+.orbit-avatar{
+  position:absolute;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:0;
+  transform:translate(-50%,-50%);
+  pointer-events:all;
+  cursor:pointer;
+  transition:transform .3s ease;
+  z-index:2;
+}
+.orbit-avatar:hover{ z-index:10; }
+.orbit-img{
+  width:68px; height:68px;
+  border-radius:50%;
+  object-fit:cover;
+  border:3px solid rgba(196,181,232,.45);
+  box-shadow:0 0 20px rgba(157,111,232,.55), 0 0 0 1px rgba(196,181,232,.2);
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .3s;
+  display:block;
+}
+.orbit-img-logo{
+  object-fit:contain;
+  background:#fff;
+  padding:6px;
+  border-radius:14px;
+}
+.orbit-dot{
+  width:8px; height:8px;
+  border-radius:50%;
+  background:var(--teal,#5eead4);
+  box-shadow:0 0 8px rgba(94,234,212,.6);
+  margin:-3px auto 0;
+  flex-shrink:0;
+}
+/* Bulle tooltip role */
+.orbit-bubble{
+  position:absolute;
+  top:-10px;
+  left:calc(100% + 10px);
+  background:rgba(109,40,217,.92);
+  border:1px solid rgba(196,181,232,.35);
+  border-radius:10px;
+  padding:8px 13px;
+  white-space:nowrap;
+  font-family:"DM Sans",sans-serif;
+  font-size:12px;
+  font-weight:600;
+  color:#fff;
+  backdrop-filter:blur(10px);
+  box-shadow:0 4px 16px rgba(0,0,0,.35);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s ease, transform .25s ease;
+  transform:translateY(4px);
+  z-index:20;
+}
+.orbit-bubble::before{
+  content:"";
+  position:absolute;
+  left:-6px; top:12px;
+  border:6px solid transparent;
+  border-right-color:rgba(109,40,217,.92);
+}
+.orbit-bubble .ob-name{
+  font-size:11px;
+  color:rgba(216,180,254,.8);
+  font-family:"Space Mono",monospace;
+  letter-spacing:.04em;
+  margin-bottom:2px;
+  display:block;
+}
+.orbit-bubble .ob-role{
+  font-size:13px;
+  font-weight:700;
+  color:#fff;
+  display:block;
+}
+/* Bulle à gauche pour les avatars à droite */
+.orbit-avatar.left .orbit-bubble{
+  left:auto;
+  right:calc(100% + 10px);
+  transform:translateY(4px);
+}
+.orbit-avatar.left .orbit-bubble::before{
+  left:auto;
+  right:-6px;
+  border-right-color:transparent;
+  border-left-color:rgba(109,40,217,.92);
+}
+.orbit-avatar:hover .orbit-bubble,
+.orbit-avatar.active .orbit-bubble{
+  opacity:1;
+  transform:translateY(0);
+}
+/* Lueur centrale */
+.orbit-center-glow{
+  position:absolute;
+  top:50%; left:50%;
+  width:120px; height:120px;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(157,111,232,.3) 0%,transparent 70%);
+  border-radius:50%;
+  animation:glow-pulse 3s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes glow-pulse{
+  0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.6}
+  50%{transform:translate(-50%,-50%) scale(1.3);opacity:1}
+}
+/* Tag CONSEILPREV centre */
+.orbit-center-tag{
+  position:absolute;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  font-family:"Cormorant Garamond",serif;
+  font-size:22px;
+  font-weight:700;
+  color:#fff;
+  text-shadow:0 0 20px rgba(196,181,232,.6);
+  text-align:center;
+  line-height:1.2;
+  pointer-events:none;
+}
+.orbit-center-tag span{
+  display:block;
+  font-family:"Space Mono",monospace;
+  font-size:9px;
+  letter-spacing:.2em;
+  color:rgba(196,181,232,.6);
+  margin-top:4px;
+  text-transform:uppercase;
+}
+
 </style>
 </head>
 <body>
@@ -934,6 +1109,80 @@ nav {
   <h1>L'innovation commence<br>avec des <em>gens</em></h1>
   <p class="hero-sub">Rejoignez une équipe internationale de passionnés qui réinventent la conformité IA pour les entreprises mondiales.</p>
   <a href="#offres" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#8b5cf6,#d946ef);color:#fff;padding:13px 28px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;box-shadow:0 4px 20px rgba(139,92,246,.4);transition:all .2s">Voir les postes ouverts ↓</a>
+</section>
+
+
+<!-- ══ SECTION ORBIT — Présentation dynamique équipe ══ -->
+<section class="orbit-section" id="orbit-team" aria-label="L'équipe CONSEILPREV en orbite">
+  <div class="orbit-stage" id="orbit-stage">
+
+    <!-- Ellipses orbitales -->
+    <div class="orbit-ellipse" aria-hidden="true"></div>
+    <div class="orbit-ellipse-2" aria-hidden="true"></div>
+
+    <!-- Centre -->
+    <div class="orbit-center-glow" aria-hidden="true"></div>
+    <div class="orbit-center-tag" aria-hidden="true">
+      CONSEILPREV
+      <span>Équipe · Team</span>
+    </div>
+
+    <!-- 6 avatars — positionnés par JS sur l'ellipse -->
+    <div class="orbit-avatar" data-idx="0" aria-label="Christophe CERF, CEO & Fondateur">
+      <img src="/photo-cerf.jpg" alt="Christophe CERF" class="orbit-img">
+      <div class="orbit-dot"></div>
+      <div class="orbit-bubble">
+        <span class="ob-name">Christophe CERF</span>
+        <span class="ob-role">CEO & Fondateur</span>
+      </div>
+    </div>
+
+    <div class="orbit-avatar left" data-idx="1" aria-label="Milette DS, CTO & RH">
+      <img src="/photo-milette.jpg" alt="Milette DS" class="orbit-img">
+      <div class="orbit-dot"></div>
+      <div class="orbit-bubble">
+        <span class="ob-name">Milette DS</span>
+        <span class="ob-role">Directrice Technique (CTO)</span>
+      </div>
+    </div>
+
+    <div class="orbit-avatar" data-idx="2" aria-label="Alexander W. Bassey, COO">
+      <img src="/photo-bassey.jpg" alt="Alexander W. Bassey" class="orbit-img">
+      <div class="orbit-dot"></div>
+      <div class="orbit-bubble">
+        <span class="ob-name">Alexander W. BASSEY</span>
+        <span class="ob-role">Directeur des Opérations (COO)</span>
+      </div>
+    </div>
+
+    <div class="orbit-avatar left" data-idx="3" aria-label="Cécile Pouteau, Admin">
+      <img src="/photo-cecile.jpg" alt="Cécile Pouteau" class="orbit-img">
+      <div class="orbit-dot"></div>
+      <div class="orbit-bubble">
+        <span class="ob-name">Cécile POUTEAU</span>
+        <span class="ob-role">Assistante de Gestion</span>
+      </div>
+    </div>
+
+    <div class="orbit-avatar" data-idx="4" aria-label="Cabinet BDO, Partenaire juridique">
+      <img src="/photo-bdo.jpg" alt="Cabinet BDO" class="orbit-img orbit-img-logo">
+      <div class="orbit-dot" style="background:#ef4444;box-shadow:0 0 8px rgba(239,68,68,.6)"></div>
+      <div class="orbit-bubble">
+        <span class="ob-name">Partenaire</span>
+        <span class="ob-role">Cabinet BDO</span>
+      </div>
+    </div>
+
+    <div class="orbit-avatar left" data-idx="5" aria-label="Good Timing, Partenaire Brand Content">
+      <img src="/photo-goodtiming.jpg" alt="Good Timing" class="orbit-img orbit-img-logo">
+      <div class="orbit-dot" style="background:#f59e0b;box-shadow:0 0 8px rgba(245,158,11,.6)"></div>
+      <div class="orbit-bubble">
+        <span class="ob-name">Partenaire</span>
+        <span class="ob-role">Good Timing</span>
+      </div>
+    </div>
+
+  </div>
 </section>
 
 <main class="con" id="main-content">
@@ -1017,5 +1266,74 @@ nav {
   <a href="/">← Retour au site</a>
 </div>
 <script>document.addEventListener("contextmenu",function(e){e.preventDefault();});</script>
+
+<script>
+
+// ══ ORBIT ANIMATION ══
+(function(){
+  var stage = document.getElementById('orbit-stage');
+  if(!stage) return;
+
+  var avatars = stage.querySelectorAll('.orbit-avatar');
+  var n = avatars.length;
+  var angleOffset = 0;       // angle de rotation global
+  var speed = 0.008;         // radians par frame (~1 tour/13s)
+  var paused = false;
+  var raf;
+
+  function getEllipsePos(angle, W, H){
+    // Ellipse projetée en 3D (vue de dessus légèrement inclinée)
+    var rx = W * 0.40;
+    var ry = H * 0.22;
+    var x = W/2 + rx * Math.cos(angle);
+    var y = H/2 + ry * Math.sin(angle) * 0.55;
+    // z-index selon position verticale (devant/derrière)
+    var z = Math.sin(angle);
+    return {x:x, y:y, z:z};
+  }
+
+  function render(){
+    var W = stage.offsetWidth;
+    var H = stage.offsetHeight;
+    if(W === 0 || H === 0){ raf = requestAnimationFrame(render); return; }
+
+    avatars.forEach(function(av, i){
+      var angle = angleOffset + (i / n) * Math.PI * 2;
+      var pos = getEllipsePos(angle, W, H);
+      av.style.left = pos.x + 'px';
+      av.style.top  = pos.y + 'px';
+      // Scale: plus grand quand devant (z>0), plus petit derrière
+      var scale = 0.72 + 0.38 * ((pos.z + 1) / 2);
+      av.style.transform = 'translate(-50%,-50%) scale(' + scale.toFixed(3) + ')';
+      // z-index
+      av.style.zIndex = Math.round((pos.z + 1) * 5) + 1;
+      // Opacité: plus visible devant
+      av.style.opacity = (0.55 + 0.45 * ((pos.z + 1) / 2)).toFixed(2);
+    });
+
+    if(!paused) angleOffset += speed;
+    raf = requestAnimationFrame(render);
+  }
+
+  // Pause sur hover
+  avatars.forEach(function(av){
+    av.addEventListener('mouseenter', function(){
+      paused = true;
+      av.classList.add('active');
+    });
+    av.addEventListener('mouseleave', function(){
+      paused = false;
+      av.classList.remove('active');
+    });
+  });
+
+  // Touch support
+  stage.addEventListener('touchstart', function(){ paused = true; }, {passive:true});
+  stage.addEventListener('touchend',   function(){ setTimeout(function(){ paused = false; }, 2000); }, {passive:true});
+
+  render();
+})();
+
+</script>
 </body>
 </html>
