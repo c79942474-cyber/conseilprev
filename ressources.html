@@ -952,6 +952,21 @@ nav {
     <div class="live-txt"><strong>Veille en direct</strong> — Fil d'actualité IA Act, RGPD et cybersécurité disponible sur le site principal. <a href="/" style="color:var(--teal)">Voir la veille →</a></div>
   </div>
 
+  <!-- SYNTHÈSE IA DU JOUR -->
+  <div id="ai-digest" style="background:linear-gradient(135deg,rgba(109,40,217,.18),rgba(217,70,239,.10));border:1px solid rgba(157,111,232,.3);border-radius:16px;padding:24px 28px;margin-bottom:32px;position:relative;overflow:hidden">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+      <span style="font-size:20px">🤖</span>
+      <div>
+        <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--teal)">Synthèse IA · Mise à jour automatique</div>
+        <div style="font-size:15px;font-weight:700;color:#fff">L'essentiel de l'actualité IA, Conformité & Cyber</div>
+      </div>
+    </div>
+    <div id="digest-content" style="font-size:14px;color:rgba(216,180,254,.85);line-height:1.75">
+      <span style="opacity:.6">⏳ Génération de la synthèse en cours…</span>
+    </div>
+    <div id="digest-model" style="font-family:'Space Mono',monospace;font-size:10px;color:rgba(196,181,232,.4);margin-top:12px"></div>
+  </div>
+
   <!-- ALL / NEWS -->
   <div id="section-news">
     <div class="section-label" id="news">News</div>
@@ -1070,6 +1085,28 @@ function nlSubscribe(){
   }
 }
 document.addEventListener("contextmenu",function(e){e.preventDefault();});
+</script>
+<script>
+// Charger la synthèse IA des actualités
+(function loadDigest(){
+  fetch('/api/news/digest')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      var content = document.getElementById('digest-content');
+      var modelEl = document.getElementById('digest-model');
+      if(data.digest){
+        content.textContent = data.digest;
+        if(data.model){
+          modelEl.textContent = '✨ Généré par ' + data.model + (data.cached ? ' · en cache' : '');
+        }
+      } else {
+        content.innerHTML = '<span style="opacity:.6">Synthèse momentanément indisponible.</span>';
+      }
+    })
+    .catch(function(){
+      document.getElementById('digest-content').innerHTML = '<span style="opacity:.6">Synthèse momentanément indisponible.</span>';
+    });
+})();
 </script>
 </body>
 </html>

@@ -1085,6 +1085,95 @@ def news_digest():
     return jsonify({"digest": reply, "model": model_used, "cached": False})
 
 
+
+@app.route('/api/match', methods=['POST'])
+@rate_limit(limit=10, window=60)
+def api_match():
+    """Matching IA des candidats via Claude (fallback Mistral).
+    Génère des profils anonymisés scorés selon le brief client."""
+    ip = limiter.get_ip(request)
+    try:
+        brief = request.get_json(force=True, silent=True) or {}
+        titre   = str(brief.get('titre', '')).strip()[:120]
+        domaine = str(brief.get('domaine', '')).strip()[:40]
+        tjm     = int(brief.get('tjm', 0) or 0)
+        hard    = brief.get('hard', [])[:12]
+        soft    = brief.get('soft', [])[:8]
+        lieu    = str(brief.get('lieu', '')).strip()[:80]
+        contrat = str(brief.get('contrat', '')).strip()[:40]
+        duree   = str(brief.get('duree', '')).strip()[:40]
+
+        if not titre or not domaine:
+            return jsonify({'ok': False, 'error': 'Brief incomplet'}), 400
+
+        # Villes françaises pour géolocalisation
+        villes = ['Paris','Lyon','Marseille','Toulouse','Bordeaux','Nantes','Lille','Strasbourg','Rennes','Nice']
+
+        prompt = (
+            f"Tu es le moteur de matching IA de CONSEILPREV, cabinet de recrutement IT/IA.\n"
+            f"Génère exactement 5 profils de consultants ANONYMISÉS correspondant à ce besoin :\n\n"
+            f"Poste : {titre}\n"
+            f"Domaine : {domaine}\n"
+            f"TJM cible : {tjm} EUR\n"
+            f"Hard skills requis : {', '.join(hard)}\n"
+            f"Soft skills : {', '.join(soft) if soft else 'non précisé'}\n"
+            f"Lieu : {lieu}\n"
+            f"Contrat : {contrat} / Durée : {duree}\n\n"
+            f"Réponds UNIQUEMENT en JSON valide (aucun texte avant/après), tableau de 5 objets :\n"
+            f'[{{"seniority":"Senior - 8 ans","score":97,"tjm":650,"dispo":"Immediate",'
+            f'"ville":"Paris","skills":["...","..."],"highlight":"Atout distinctif en 1 phrase"}}]\n\n'
+            f"Contraintes : score entre 79 et 97 (decroissant et realiste selon adequation), "
+            f"tjm proche de {tjm} (+/- 60 EUR), ville parmi {villes}, "
+            f"dispo parmi [Immediate, Sous 2 semaines, Sous 1 mois], "
+            f"skills = sous-ensemble pertinent des hard skills + 1-2 complementaires credibles, "
+            f"highlight specifique et professionnel. Pas d'identite, pas de nom."
+        )
+        system = "Tu es un moteur de matching de recrutement IT expert. Tu réponds exclusivement en JSON valide, sans markdown ni texte additionnel."
+
+        ok, reply, model_used = ai_complete(
+            [{"role": "user", "content": prompt}],
+            system=system, max_tokens=1200, temperature=0.6, prefer='claude'
+        )
+
+        if not ok:
+            return jsonify({'ok': False, 'error': 'matching_unavailable', 'fallback': True}), 200
+
+        # Parser le JSON renvoyé par l'IA
+        import json as _json
+        clean = reply.strip()
+        # Retirer d'éventuels fences markdown
+        clean = _re.sub(r'^```(?:json)?\s*', '', clean)
+        clean = _re.sub(r'\s*```$', '', clean)
+        # Extraire le tableau JSON
+        m = _re.search(r'\[.*\]', clean, _re.DOTALL)
+        if m:
+            clean = m.group(0)
+        try:
+            profiles = _json.loads(clean)
+            if not isinstance(profiles, list) or not profiles:
+                raise ValueError('format')
+            # Validation/nettoyage
+            safe = []
+            for i, p in enumerate(profiles[:5]):
+                safe.append({
+                    'seniority': str(p.get('seniority',''))[:40],
+                    'score':     max(60, min(99, int(p.get('score', 85)))),
+                    'tjm':       max(150, int(p.get('tjm', tjm or 500))),
+                    'dispo':     str(p.get('dispo','Sous 2 semaines'))[:30],
+                    'ville':     str(p.get('ville','Paris'))[:40],
+                    'skills':    [str(s)[:30] for s in (p.get('skills',[]) or [])[:6]],
+                    'highlight': str(p.get('highlight',''))[:160],
+                })
+            return jsonify({'ok': True, 'profiles': safe, 'model': model_used})
+        except Exception as e:
+            logger.warning(f'MATCH_PARSE_FAIL {ip}: {e}')
+            return jsonify({'ok': False, 'error': 'parse_error', 'fallback': True}), 200
+
+    except Exception as e:
+        logger.error(f'MATCH_ERR {ip}: {e}')
+        return jsonify({'ok': False, 'error': 'server_error', 'fallback': True}), 200
+
+
 @app.route('/api/chat', methods=['POST'])
 @rate_limit(limit=10, window=60)
 def chat():

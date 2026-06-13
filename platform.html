@@ -551,6 +551,7 @@ var SOFT_SKILLS = [];
 var MATCHES = [];        // recherche courante
 var CART = [];           // sélection cumulée multi-recherches
 var SEARCH_COUNT = 0;
+var AI_MODEL = null;
 var SIGNED = {};
 var ACTIVE_CAND = 0;     // onglet contrat actif
 
@@ -698,24 +699,86 @@ function runSearch(){
     'Extraction des compétences clés : ' + BRIEF.hard.slice(0,3).join(', ') + '…',
     'Interrogation de nos sources partenaires…',
     'Consultation du vivier CONSEILPREV…',
-    'Scoring de compatibilité IA…',
+    'Matching IA des profils (Claude)…',
     'Vérification des disponibilités…',
     'Géolocalisation des candidats…',
     'Classement final des profils…'
   ];
   var i = 0;
   fill.style.width = '0%';
+
+  // Lancer l'appel IA en parallèle de l'animation
+  var aiDone = false, aiSuccess = false;
+  fetch('/api/match', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      titre: BRIEF.titre, domaine: BRIEF.domaine, tjm: BRIEF.tjm,
+      hard: BRIEF.hard, soft: BRIEF.soft, lieu: BRIEF.lieu,
+      contrat: BRIEF.contrat, duree: BRIEF.duree
+    })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(res){
+    aiDone = true;
+    if(res.ok && res.profiles && res.profiles.length){
+      buildMatchesFromAI(res.profiles);
+      aiSuccess = true;
+      AI_MODEL = res.model || 'IA';
+    }
+  })
+  .catch(function(){ aiDone = true; });
+
   var interval = setInterval(function(){
     if(i < msgs.length){
       status.textContent = msgs[i];
       fill.style.width = Math.round((i+1)/msgs.length*100) + '%';
       i++;
     } else {
-      status.textContent = '✓ Recherche terminée — ' + genMatches() + ' profils compatibles localisés';
       clearInterval(interval);
-      setTimeout(function(){ goStep(4); renderAll(); }, 1100);
+      // Attendre la fin de l'appel IA (max ~3s de plus)
+      var waited = 0;
+      var waitAI = setInterval(function(){
+        waited += 200;
+        if(aiDone || waited > 6000){
+          clearInterval(waitAI);
+          if(!aiSuccess){ genMatches(); }  // fallback local
+          status.textContent = '✓ Recherche terminée — ' + MATCHES.length + ' profils compatibles localisés'
+            + (aiSuccess ? ' (matching IA)' : '');
+          setTimeout(function(){ goStep(4); renderAll(); }, 600);
+        }
+      }, 200);
     }
-  }, 580);
+  }, 500);
+}
+
+// Construire MATCHES à partir des profils générés par Claude
+function buildMatchesFromAI(profiles){
+  var avatars = ['👨‍💻','👩‍💻','🧑‍💻','👨‍🔬','👩‍🔬'];
+  MATCHES = profiles.map(function(p, i){
+    // Retrouver la ville dans CITIES (coords)
+    var city = CITIES.find(function(c){ return c.name === p.ville; }) || CITIES[i % CITIES.length];
+    var uid = 'S' + SEARCH_COUNT + '-C' + (i+1);
+    return {
+      uid: uid,
+      label: 'Consultant ' + uid,
+      avatar: avatars[i % avatars.length],
+      seniority: p.seniority,
+      score: p.score,
+      tjm: p.tjm,
+      dispo: p.dispo,
+      skills: p.skills && p.skills.length ? p.skills : BRIEF.hard.slice(0,4),
+      highlight: p.highlight || '',
+      city: city,
+      titre: BRIEF.titre,
+      domaine: BRIEF.domaine,
+      duree: BRIEF.duree,
+      lieu: BRIEF.lieu,
+      start: BRIEF.start,
+      contrat: BRIEF.contrat,
+      ident: IDENT_POOL[i % IDENT_POOL.length],
+    };
+  });
 }
 
 // ── Génération matches ──
@@ -836,7 +899,8 @@ function renderMatches(){
   var grid = document.getElementById('match-grid');
   grid.innerHTML = '';
   document.getElementById('match-subtitle').textContent =
-    MATCHES.length + ' profils ' + BRIEF.domaine + ' localisés pour « ' + BRIEF.titre + ' » — recherche n°' + SEARCH_COUNT;
+    MATCHES.length + ' profils ' + BRIEF.domaine + ' localisés pour « ' + BRIEF.titre + ' » — recherche n°' + SEARCH_COUNT
+    + (AI_MODEL ? ' · matching ' + AI_MODEL : '');
   MATCHES.forEach(function(m){
     var inCart = isInCart(m.uid);
     var card = document.createElement('div');
@@ -847,10 +911,12 @@ function renderMatches(){
     av.className = 'match-avatar'; av.textContent = m.avatar;
 
     var body = document.createElement('div');
+    var highlightHtml = m.highlight ? '<div style="font-size:12px;color:rgba(94,234,212,.85);margin-top:6px;font-style:italic">💡 ' + m.highlight + '</div>' : '';
     body.innerHTML =
       '<div class="match-name">' + m.label + ' <span class="match-anon">🔒 Anonymisé</span></div>' +
       '<div class="match-meta"><span>📊 ' + m.seniority + '</span><span>💰 TJM ' + m.tjm + ' € HT</span><span>📍 ' + m.city.name + '</span><span>🕐 ' + m.dispo + '</span></div>' +
-      '<div class="match-skills">' + m.skills.map(function(s){ return '<span class="mskill">' + s + '</span>'; }).join('') + '</div>';
+      '<div class="match-skills">' + m.skills.map(function(s){ return '<span class="mskill">' + s + '</span>'; }).join('') + '</div>' +
+      highlightHtml;
 
     var scoreWrap = document.createElement('div');
     scoreWrap.innerHTML = '<div class="match-score">' + m.score + '%</div><div class="match-score-lbl">Match IA</div>';
