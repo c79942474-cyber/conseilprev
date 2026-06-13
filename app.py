@@ -24,8 +24,10 @@ app = Flask(__name__, static_folder='.', static_url_path='')
 CORS(app, resources={r"/api/*": {"origins": ["https://conseilprev.onrender.com"]}})
 
 # ── Secrets & config ──
-MISTRAL_API_KEY = os.environ.get('MISTRAL_API_KEY', 'f5NFzuhlT1830mek1QYix3ofyBS3Y8gf')
+MISTRAL_API_KEY = os.environ.get('MISTRAL_API_KEY', '')
 MISTRAL_URL     = "https://api.mistral.ai/v1/chat/completions"
+ANTHROPIC_URL   = "https://api.anthropic.com/v1/messages"
+ANTHROPIC_MODEL = os.environ.get('ANTHROPIC_MODEL', 'claude-haiku-4-5-20251001')
 SECRET_SALT     = os.environ.get('SECRET_SALT', 'conseilprev_security_2025_xK9#mP')
 
 # ══════════════════════════════════════════════════════════
@@ -268,12 +270,12 @@ def add_security_headers(response):
     # Content Security Policy
     csp = (
         "default-src 'self'; "
-        "script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://api.mistral.ai; "
+        "script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://api.mistral.ai https://api.anthropic.com; "
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
         "font-src 'self' https://fonts.gstatic.com; "
         "img-src 'self' data: blob: https:; "
         "media-src 'self' blob:; "
-        "connect-src 'self' https://api.mistral.ai https://api.rss2json.com https://rss2json.com; "
+        "connect-src 'self' https://api.mistral.ai https://api.anthropic.com https://api.rss2json.com https://rss2json.com; "
         "frame-ancestors 'none'; "
         "base-uri 'self'; "
         "form-action 'self' mailto:;"
@@ -583,6 +585,7 @@ RSS_SOURCES = [
 ]
 
 _news_cache = {"data": [], "ts": 0}
+_digest_cache = {"data": None, "model": None, "ts": 0}
 CACHE_TTL   = 600
 
 def _detect_cat(title, default_cat):
@@ -910,6 +913,100 @@ body{{background:linear-gradient(180deg,#1e1250,#3b2280);color:#1a1a2e;padding:2
     return html
 
 
+
+# ══════════════════════════════════════════════════════════
+# MOTEUR IA HYBRIDE — Claude (primaire) + Mistral (fallback)
+# ══════════════════════════════════════════════════════════
+def call_anthropic(messages, system='', max_tokens=800, temperature=0.7):
+    """Appelle Claude. Retourne (ok, reply_or_error)."""
+    if not ANTHROPIC_API_KEY:
+        return False, 'no_anthropic_key'
+    try:
+        # Anthropic sépare le system du tableau messages
+        anthropic_msgs = [m for m in messages if m.get('role') in ('user', 'assistant')]
+        resp = requests.post(
+            ANTHROPIC_URL,
+            headers={
+                'x-api-key': ANTHROPIC_API_KEY,
+                'anthropic-version': '2023-06-01',
+                'content-type': 'application/json',
+            },
+            json={
+                'model': ANTHROPIC_MODEL,
+                'max_tokens': max_tokens,
+                'temperature': temperature,
+                'system': system,
+                'messages': anthropic_msgs,
+            },
+            timeout=30,
+        )
+        if resp.status_code == 200:
+            blocks = resp.json().get('content', [])
+            text = ''.join(b.get('text', '') for b in blocks if b.get('type') == 'text')
+            return (True, text) if text.strip() else (False, 'empty_response')
+        elif resp.status_code == 401:
+            logger.error('ANTHROPIC_AUTH_ERROR')
+            return False, 'auth_error'
+        else:
+            logger.warning(f'ANTHROPIC_HTTP_{resp.status_code}')
+            return False, f'http_{resp.status_code}'
+    except requests.Timeout:
+        return False, 'timeout'
+    except Exception as e:
+        logger.error(f'ANTHROPIC_ERR: {e}')
+        return False, str(e)
+
+
+def call_mistral(messages, max_tokens=800, temperature=0.7):
+    """Appelle Mistral. Retourne (ok, reply_or_error)."""
+    if not MISTRAL_API_KEY:
+        return False, 'no_mistral_key'
+    try:
+        resp = requests.post(
+            MISTRAL_URL,
+            headers={'Content-Type': 'application/json', 'Authorization': f'Bearer {MISTRAL_API_KEY}'},
+            json={'model': 'mistral-large-latest', 'messages': messages,
+                  'max_tokens': max_tokens, 'temperature': temperature},
+            timeout=30,
+        )
+        if resp.ok:
+            reply = resp.json()['choices'][0]['message']['content']
+            return (True, reply) if reply.strip() else (False, 'empty_response')
+        return False, f'http_{resp.status_code}'
+    except requests.Timeout:
+        return False, 'timeout'
+    except Exception as e:
+        logger.error(f'MISTRAL_ERR: {e}')
+        return False, str(e)
+
+
+def ai_complete(messages, system='', max_tokens=800, temperature=0.7, prefer='claude'):
+    """
+    Moteur hybride. Essaie le moteur préféré, bascule sur l'autre en cas d'échec.
+    Retourne (ok, reply, model_used).
+    """
+    # Pour Mistral, le system est dans messages ; pour Claude, séparé.
+    msgs_with_system = ([{'role': 'system', 'content': system}] + messages) if system else messages
+
+    if prefer == 'claude':
+        ok, reply = call_anthropic(messages, system, max_tokens, temperature)
+        if ok:
+            return True, reply, 'claude'
+        # Fallback Mistral
+        ok2, reply2 = call_mistral(msgs_with_system, max_tokens, temperature)
+        if ok2:
+            return True, reply2, 'mistral (fallback)'
+        return False, reply2, None
+    else:
+        ok, reply = call_mistral(msgs_with_system, max_tokens, temperature)
+        if ok:
+            return True, reply, 'mistral'
+        ok2, reply2 = call_anthropic(messages, system, max_tokens, temperature)
+        if ok2:
+            return True, reply2, 'claude (fallback)'
+        return False, reply2, None
+
+
 @app.route('/api/news')
 @rate_limit(limit=30, window=60)
 def news():
@@ -942,6 +1039,52 @@ def news():
     _news_cache = {"data": unique[:60], "ts": now}
     return jsonify({"items": unique[:60], "cached": False, "count": len(unique)})
 
+
+@app.route('/api/news/digest', methods=['GET'])
+@rate_limit(limit=10, window=60)
+def news_digest():
+    """Synthèse IA des actualités du jour (Claude primaire, Mistral fallback).
+    Mise en cache 1h pour limiter les appels API."""
+    global _digest_cache
+    now = time.time()
+    if now - _digest_cache["ts"] < 3600 and _digest_cache["data"]:
+        return jsonify({"digest": _digest_cache["data"], "model": _digest_cache["model"], "cached": True})
+
+    # Récupérer les titres récents (réutilise le cache news)
+    titles = []
+    if _news_cache["data"]:
+        titles = [it["title"] for it in _news_cache["data"][:15]]
+    else:
+        for src in RSS_SOURCES[:5]:
+            try:
+                feed = feedparser.parse(src["url"])
+                for entry in (feed.entries or [])[:3]:
+                    t = entry.get("title", "").strip()
+                    if t: titles.append(t)
+            except Exception: pass
+
+    if not titles:
+        return jsonify({"digest": "Aucune actualité disponible pour le moment.", "model": None})
+
+    prompt = (
+        "Voici les titres d'actualités récentes sur l'IA, la conformité et la cybersécurité :\n\n"
+        + "\n".join(f"- {t}" for t in titles[:15])
+        + "\n\nRédige une synthèse executive de 3-4 phrases en français, professionnelle, "
+        "qui dégage les tendances clés pour un dirigeant. Termine par une recommandation d'action concrète."
+    )
+    system = "Tu es un analyste senior CONSEILPREV en gouvernance IA et cybersécurité. Sois concis, factuel, orienté décision."
+
+    ok, reply, model_used = ai_complete(
+        [{"role": "user", "content": prompt}],
+        system=system, max_tokens=400, temperature=0.5, prefer='claude'
+    )
+    if not ok:
+        return jsonify({"digest": "Synthèse temporairement indisponible.", "model": None}), 503
+
+    _digest_cache = {"data": reply, "model": model_used, "ts": now}
+    return jsonify({"digest": reply, "model": model_used, "cached": False})
+
+
 @app.route('/api/chat', methods=['POST'])
 @rate_limit(limit=10, window=60)
 def chat():
@@ -962,24 +1105,24 @@ def chat():
         if is_spam:
             logger.warning(f"CHAT_SPAM {ip}: {reason}")
             return jsonify({"error": "Message non autorisé."}), 400
-        # Construire messages
-        messages = [{"role": "system", "content": MISTRAL_SYSTEM}]
+        # Construire l'historique (sans system — géré par le moteur)
+        messages = []
         for h in history[-8:]:
             if h.get('role') in ('user','assistant') and h.get('content'):
                 messages.append({"role": h['role'], "content": str(h['content'])[:1000]})
         messages.append({"role": "user", "content": user_msg})
-        resp = requests.post(
-            MISTRAL_URL,
-            headers={"Content-Type":"application/json","Authorization":f"Bearer {MISTRAL_API_KEY}"},
-            json={"model":"mistral-large-latest","messages":messages,"max_tokens":800,"temperature":0.7},
-            timeout=30
+
+        # Moteur hybride : Claude primaire, Mistral fallback
+        ok, reply, model_used = ai_complete(
+            messages, system=MISTRAL_SYSTEM,
+            max_tokens=800, temperature=0.7, prefer='claude'
         )
-        if not resp.ok:
+        if not ok:
             bf_protector.record_attempt(bf_key, success=False)
-            return jsonify({"error": f"API error {resp.status_code}"}), 500
+            logger.error(f"CHAT_ALL_FAILED {ip}: {reply}")
+            return jsonify({"error": "Service IA temporairement indisponible, réessayez"}), 503
         bf_protector.record_attempt(bf_key, success=True)
-        reply = resp.json()['choices'][0]['message']['content']
-        return jsonify({"reply": reply, "model": "mistral-large-latest"})
+        return jsonify({"reply": reply, "model": model_used})
     except requests.Timeout:
         return jsonify({"error": "Délai dépassé, réessayez"}), 504
     except Exception as e:
