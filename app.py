@@ -75,6 +75,15 @@ class RateLimiter:
             return False
         return True
 
+    def check_soft(self, ip, limit=20, window=300):
+        """Rate limit souple SANS blocage prolongé — pour workflows légitimes
+        qui font plusieurs appels (plateforme B2B). Glisse simplement sur la fenêtre."""
+        now = time.time()
+        key = ip + ':soft'
+        self.requests[key] = [t for t in self.requests[key] if now - t < window]
+        self.requests[key].append(now)
+        return len(self.requests[key]) <= limit
+
     def check_chat(self, ip, limit=10, window=60):
         """Rate limit spécifique au chat (anti-spam IA)."""
         if self.is_blocked(ip): return False
@@ -591,10 +600,11 @@ def _detect_cat(title, default_cat):
 def api_apply():
     ip = limiter.get_ip(request)
 
-    # ── Rate limiting spécifique uploads ──
-    if not limiter.check(ip, limit=5, window=300):
+    # ── Rate limiting souple (workflow plateforme = plusieurs appels légitimes) ──
+    # 20 requêtes / 5 min, sans blocage prolongé
+    if not limiter.check_soft(ip, limit=20, window=300):
         logger.warning(f'APPLY_RATE_LIMIT {ip}')
-        return jsonify({'ok': False, 'error': 'Trop de tentatives, réessayez dans 5 min'}), 429
+        return jsonify({'ok': False, 'error': 'Trop de requêtes. Patientez 1 minute.'}), 429
 
     try:
         import datetime

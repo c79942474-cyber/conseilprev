@@ -1172,7 +1172,7 @@ function finalizeAll(){
         status.className = 'email-status warn';
         status.textContent = '⚠ ' + (res.error || 'Erreur lors de l\u2019envoi');
         btn.disabled = false;
-        btn.textContent = '📨 Envoyer le dossier à CONSEILPREV';
+        btn.textContent = '📨 Réessayer l\u2019envoi';
         return;
       }
       btn.style.display = 'none';
@@ -1181,10 +1181,10 @@ function finalizeAll(){
     })
     .catch(function(){
       btn.disabled = false;
-      btn.textContent = '📨 Envoyer le dossier à CONSEILPREV';
+      btn.textContent = '📨 Réessayer l\u2019envoi';
       var status = document.getElementById('email-status');
       status.className = 'email-status warn';
-      status.textContent = '⚠ Erreur réseau — réessayez.';
+      status.textContent = '⚠ Erreur réseau — patientez quelques secondes puis réessayez.';
     });
 }
 
