@@ -188,9 +188,9 @@ SPAM_KEYWORDS = [
 
 SPAM_PATTERNS = [
     _re.compile(r'https?://[^\s]{50,}'),           # URLs très longues
-    _re.compile(r'(.)\1{8,}'),                     # Répétitions de chars (aaaaaaa)
+    _re.compile(r'(.)\1{40,}'),                    # Répétitions de chars (spam réel, pas barres déco)
     _re.compile(r'\b\d{10,}\b'),                   # Grands nombres
-    _re.compile(r'[^\w\s@.,!?\'"-]{5,}'),          # Trop de caractères spéciaux
+    _re.compile(r'[^\w\s@.,!?\u2500-\u257F\u2014\u2013=:()/\u20ac\[\]|+\u2022-]{8,}'),          # Trop de caractères spéciaux
     _re.compile(r'(https?://\S+\s*){3,}'),         # Plusieurs URLs
 ]
 
@@ -640,14 +640,18 @@ def api_apply():
         if data['consent'] not in ('true', '1', 'yes', 'on'):
             return jsonify({'ok': False, 'error': 'Consentement RGPD requis'}), 400
 
-        # ── Anti-spam ──
-        try:
-            is_spam, reason = check_spam(data['message'], data['email'], data['nom'])
-            if is_spam:
-                logger.warning(f'APPLY_SPAM {ip}: {reason}')
-                return jsonify({'ok': False, 'error': 'Contenu non autorisé'}), 400
-        except Exception:
-            pass
+        # ── Anti-spam (sauf form_types internes de la plateforme B2B) ──
+        # Les dossiers générés par la plateforme contiennent des barres
+        # décoratives et du contenu structuré légitime — on les exempte.
+        TRUSTED_FORMS = {'selection_candidats','dossier_contrats','match_validation','contrats_signes'}
+        if data['form_type'] not in TRUSTED_FORMS:
+            try:
+                is_spam, reason = check_spam(data['message'], data['email'], data['nom'])
+                if is_spam:
+                    logger.warning(f'APPLY_SPAM {ip}: {reason}')
+                    return jsonify({'ok': False, 'error': 'Contenu non autorisé'}), 400
+            except Exception:
+                pass
 
         # ── Traitement fichier uploadé ──
         cv_data, cv_filename = None, None
