@@ -363,6 +363,10 @@ MAIL_FROM     = os.environ.get('MAIL_FROM', 'noreply@conseilprev.onrender.com')
 MAIL_TO       = os.environ.get('MAIL_TO', 'christophe.cerf@outlook.com')
 MAIL_CC       = os.environ.get('MAIL_CC', 'c79942474@gmail.com')
 
+# ── Clés API IA ──
+ANTHROPIC_API_KEY = os.environ.get('ANTHROPIC_API_KEY', '')
+MISTRAL_API_KEY   = os.environ.get('MISTRAL_API_KEY', '')
+
 UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads_cv')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
@@ -748,6 +752,162 @@ def test_email():
         }
     
     return jsonify(result)
+
+
+@app.route('/api/health', methods=['GET'])
+def health_check():
+    """Diagnostic complet : SMTP, clés API, système. Format HTML lisible ou JSON."""
+    import datetime
+
+    # ── SMTP ──
+    smtp_ready = bool(SMTP_USER and SMTP_PASSWORD)
+    smtp_conn = 'NON TESTÉ'
+    if smtp_ready:
+        try:
+            import ssl as _ssl
+            ctx = _ssl.create_default_context()
+            with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=10) as srv:
+                srv.ehlo(); srv.starttls(context=ctx); srv.login(SMTP_USER, SMTP_PASSWORD)
+            smtp_conn = 'OK'
+        except smtplib.SMTPAuthenticationError:
+            smtp_conn = 'AUTH_ERROR'
+        except Exception as e:
+            smtp_conn = f'ERROR: {str(e)[:60]}'
+
+    # ── Anthropic ──
+    anthropic_ready = bool(ANTHROPIC_API_KEY)
+    anthropic_valid = None
+    anthropic_msg = 'Clé absente'
+    if anthropic_ready:
+        if not ANTHROPIC_API_KEY.startswith('sk-ant-'):
+            anthropic_valid = False
+            anthropic_msg = 'Format invalide (doit commencer par sk-ant-)'
+        else:
+            try:
+                r = requests.post(
+                    'https://api.anthropic.com/v1/messages',
+                    headers={
+                        'x-api-key': ANTHROPIC_API_KEY,
+                        'anthropic-version': '2023-06-01',
+                        'content-type': 'application/json',
+                    },
+                    json={
+                        'model': 'claude-haiku-4-5-20251001',
+                        'max_tokens': 10,
+                        'messages': [{'role': 'user', 'content': 'ping'}],
+                    },
+                    timeout=15,
+                )
+                if r.status_code == 200:
+                    anthropic_valid = True
+                    anthropic_msg = 'OK — clé valide et fonctionnelle'
+                elif r.status_code == 401:
+                    anthropic_valid = False
+                    anthropic_msg = 'AUTH_ERROR — clé invalide ou révoquée'
+                elif r.status_code == 400:
+                    # Modèle peut être différent — la clé est valide si pas 401
+                    anthropic_valid = True
+                    anthropic_msg = 'Clé valide (vérifier nom du modèle)'
+                elif r.status_code == 429:
+                    anthropic_valid = True
+                    anthropic_msg = 'Clé valide (quota/rate limit atteint)'
+                else:
+                    anthropic_valid = False
+                    anthropic_msg = f'HTTP {r.status_code}'
+            except Exception as e:
+                anthropic_valid = None
+                anthropic_msg = f'Test impossible: {str(e)[:50]}'
+
+    # ── Mistral ──
+    mistral_ready = bool(MISTRAL_API_KEY)
+
+    data = {
+        'timestamp': datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S'),
+        'smtp': {
+            'host': SMTP_HOST, 'port': SMTP_PORT,
+            'user': (SMTP_USER[:4] + '***') if SMTP_USER else 'NON CONFIGURÉ',
+            'password': '***' if SMTP_PASSWORD else 'NON CONFIGURÉ',
+            'mail_to': MAIL_TO, 'mail_cc': MAIL_CC,
+            'ready': smtp_ready, 'connection': smtp_conn,
+        },
+        'anthropic': {
+            'key': (ANTHROPIC_API_KEY[:12] + '***') if ANTHROPIC_API_KEY else 'NON CONFIGURÉ',
+            'ready': anthropic_ready, 'valid': anthropic_valid, 'status': anthropic_msg,
+        },
+        'mistral': {
+            'key': (MISTRAL_API_KEY[:6] + '***') if MISTRAL_API_KEY else 'NON CONFIGURÉ',
+            'ready': mistral_ready,
+        },
+        'uploads_folder': os.path.isdir(UPLOAD_FOLDER),
+    }
+
+    # Réponse JSON si demandée
+    if request.args.get('format') == 'json':
+        return jsonify(data)
+
+    # Sinon page HTML lisible
+    def badge(ok, label_ok='OK', label_ko='À CONFIGURER'):
+        if ok is True:
+            return f'<span style="background:#dcfce7;color:#166534;padding:3px 12px;border-radius:100px;font-size:13px;font-weight:600">✓ {label_ok}</span>'
+        elif ok is False:
+            return f'<span style="background:#fee2e2;color:#991b1b;padding:3px 12px;border-radius:100px;font-size:13px;font-weight:600">✗ {label_ko}</span>'
+        else:
+            return f'<span style="background:#fef3c7;color:#92400e;padding:3px 12px;border-radius:100px;font-size:13px;font-weight:600">? NON TESTÉ</span>'
+
+    smtp_ok = smtp_ready and smtp_conn == 'OK'
+    anthro_ok = anthropic_valid is True
+
+    html = f"""<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Diagnostic CONSEILPREV</title>
+<style>
+*{{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}}
+body{{background:linear-gradient(180deg,#1e1250,#3b2280);color:#1a1a2e;padding:24px;min-height:100vh}}
+.card{{max-width:640px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.3)}}
+.head{{background:linear-gradient(135deg,#6d28d9,#d946ef);padding:28px 32px;color:#fff}}
+.head h1{{font-size:22px;margin-bottom:4px}}
+.head p{{opacity:.85;font-size:13px}}
+.sec{{padding:22px 32px;border-bottom:1px solid #eee}}
+.sec:last-child{{border-bottom:none}}
+.sec-title{{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#888;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}}
+.row{{display:flex;justify-content:space-between;padding:7px 0;font-size:14px}}
+.row .k{{color:#666}}.row .v{{font-weight:600;font-family:monospace}}
+.fix{{background:#fef3c7;border-radius:10px;padding:14px 16px;margin-top:12px;font-size:13px;color:#92400e;line-height:1.7}}
+.fix a{{color:#6d28d9}}
+.foot{{padding:18px 32px;background:#f8f5ff;font-size:12px;color:#888;text-align:center}}
+</style></head><body>
+<div class="card">
+  <div class="head"><h1>🔍 Diagnostic CONSEILPREV</h1><p>{data['timestamp']}</p></div>
+
+  <div class="sec">
+    <div class="sec-title">📧 Email SMTP {badge(smtp_ok)}</div>
+    <div class="row"><span class="k">Serveur</span><span class="v">{SMTP_HOST}:{SMTP_PORT}</span></div>
+    <div class="row"><span class="k">SMTP_USER</span><span class="v">{data['smtp']['user']}</span></div>
+    <div class="row"><span class="k">SMTP_PASSWORD</span><span class="v">{data['smtp']['password']}</span></div>
+    <div class="row"><span class="k">Destinataire</span><span class="v">{MAIL_TO}</span></div>
+    <div class="row"><span class="k">Connexion test</span><span class="v">{smtp_conn}</span></div>
+    {'<div class="fix">⚠ SMTP non configuré. Ajoutez <b>SMTP_USER</b> et <b>SMTP_PASSWORD</b> (mot de passe application Gmail 16 car.) dans Render → votre service → Environment → Save Changes.</div>' if not smtp_ready else ''}
+    {'<div class="fix">⚠ AUTH_ERROR : le mot de passe d_application Gmail est incorrect. Régénérez-le sur myaccount.google.com/apppasswords</div>' if smtp_conn == 'AUTH_ERROR' else ''}
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">🤖 Claude (Anthropic) {badge(anthro_ok)}</div>
+    <div class="row"><span class="k">ANTHROPIC_API_KEY</span><span class="v">{data['anthropic']['key']}</span></div>
+    <div class="row"><span class="k">Statut</span><span class="v">{anthropic_msg}</span></div>
+    {'<div class="fix">⚠ Clé Anthropic absente. Créez-la sur <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> → API Keys, puis ajoutez <b>ANTHROPIC_API_KEY</b> dans Render → Environment.</div>' if not anthropic_ready else ''}
+    {'<div class="fix">⚠ Clé invalide ou révoquée. Vérifiez-la sur console.anthropic.com → API Keys.</div>' if anthropic_valid is False else ''}
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">🔵 Mistral (chatbot actuel) {badge(mistral_ready)}</div>
+    <div class="row"><span class="k">MISTRAL_API_KEY</span><span class="v">{data['mistral']['key']}</span></div>
+    {'<div class="fix">ℹ La clé Mistral est encore en dur dans index.html. À migrer en variable d_environnement <b>MISTRAL_API_KEY</b> pour la sécurité.</div>' if not mistral_ready else ''}
+  </div>
+
+  <div class="foot">Pour la version JSON : ajoutez <b>?format=json</b> à l_URL</div>
+</div>
+</body></html>"""
+    return html
 
 
 @app.route('/api/news')
