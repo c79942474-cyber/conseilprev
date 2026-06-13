@@ -475,14 +475,21 @@ input,textarea,select{-webkit-user-select:text!important;user-select:text!import
             </div>
             <div class="sig-status" id="st-c1-cp">✓ Accord de principe — <span class="sig-date"></span></div>
           </div>
-          <div class="sig-zone">
-            <div class="sig-zone-lbl">✍️ Accord de principe — Consultant</div>
+          <div class="sig-zone" style="opacity:.85">
+            <div class="sig-zone-lbl" style="display:flex;align-items:center;justify-content:space-between">
+              <span>✍️ Accord de principe — Consultant <span style="color:rgba(253,230,138,.8);font-size:9px;margin-left:6px">(FACULTATIF)</span></span>
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:11px;color:rgba(216,180,254,.65)">
+                <input type="checkbox" id="skip-cand-sig" style="accent-color:#5eead4;cursor:pointer" onchange="toggleCandSig(this.checked)">
+                Déjà signé hors ligne
+              </label>
+            </div>
             <canvas class="sig-canvas" id="sig-c1-fl" width="360" height="80"></canvas>
             <div class="sig-actions">
               <button class="sig-btn" onclick="clearSig('sig-c1-fl')">Effacer</button>
               <button class="sig-btn validate" onclick="signOk('sig-c1-fl','st-c1-fl')">Valider</button>
             </div>
             <div class="sig-status" id="st-c1-fl">✓ Accord de principe — <span class="sig-date"></span></div>
+            <div id="sig-skip-notice" style="display:none;font-size:11px;color:var(--teal);font-family:'Space Mono',monospace;margin-top:6px">✓ Signature candidat collectée hors ligne — contrat transmis à CONSEILPREV pour recueil.</div>
           </div>
         </div>
       </div>
@@ -1115,6 +1122,29 @@ function art(title, txt){
 }
 
 // ── Signature électronique ──
+function toggleCandSig(skip){
+  var canvas = document.getElementById('sig-c1-fl');
+  var notice = document.getElementById('sig-skip-notice');
+  var zone   = canvas.closest('.sig-zone');
+  if(skip){
+    canvas.style.opacity = '0.3';
+    canvas.style.pointerEvents = 'none';
+    notice.style.display = 'block';
+    SIGNED['sig-c1-fl'] = true;  // Marquer comme signé
+    document.getElementById('st-c1-fl').classList.add('signed');
+    document.getElementById('st-c1-fl').querySelector('.sig-date').textContent = 'hors ligne';
+  } else {
+    canvas.style.opacity = '1';
+    canvas.style.pointerEvents = 'auto';
+    notice.style.display = 'none';
+    // Remettre à l'état réel de la signature
+    SIGNED['sig-c1-fl'] = !!canvas.dataset.signed;
+    if(!SIGNED['sig-c1-fl']){
+      document.getElementById('st-c1-fl').classList.remove('signed');
+    }
+  }
+}
+
 function initSig(id){
   var canvas = document.getElementById(id);
   if(!canvas || canvas.dataset.init) return;
@@ -1170,9 +1200,14 @@ function signOk(canvasId, statusId){
 
 // ── Finalisation : envoi dossier complet détaillé ──
 function finalizeAll(){
-  var allSigned = ['sig-c1-cp','sig-c1-fl','sig-c2-cp','sig-c2-cl'].every(function(id){ return SIGNED[id]; });
+  var skipCand = document.getElementById('skip-cand-sig') && document.getElementById('skip-cand-sig').checked;
+  var required = ['sig-c1-cp','sig-c2-cp','sig-c2-cl'];
+  if(!skipCand) required.push('sig-c1-fl');
+  var allSigned = required.every(function(id){ return SIGNED[id]; });
   if(!allSigned){
-    alert('⚠ Veuillez signer et valider les 4 zones (accords de principe) avant de finaliser.');
+    var missing = required.filter(function(id){ return !SIGNED[id]; });
+    var labels = {'sig-c1-cp':'CONSEILPREV (contrat 1)','sig-c1-fl':'Consultant','sig-c2-cp':'CONSEILPREV (contrat 2)','sig-c2-cl':'Client'};
+    alert('⚠ Signature(s) manquante(s) : ' + missing.map(function(id){ return labels[id]||id; }).join(', ') + '.\nSi le consultant n\'est pas disponible, cochez « Déjà signé hors ligne ».');
     return;
   }
   var btn = document.getElementById('btn-finalize');

@@ -584,6 +584,99 @@ RSS_SOURCES = [
     {"name": "Infosecurity Mag","url": "https://www.infosecurity-magazine.com/rss/news/",        "cat": "secu",  "ico": "🔏"},
 ]
 
+# ══════════════════════════════════════════════════════════
+# SOURCES JOBBOARD OPEN SOURCE — usage backend uniquement
+# Les noms ne sont JAMAIS exposés au client (demande RGPD/commercial).
+# Alimentent le matching IA en arrière-plan via flux RSS/API publics gratuits.
+# ══════════════════════════════════════════════════════════
+JOBBOARD_SOURCES = [
+    # Flux RSS publics gratuits — noms masqués côté client (usage interne uniquement)
+    # France Travail / Pôle Emploi offres IT (open data)
+    {"url": "https://api.francetravail.io/partenaire/offresdemploi/v2/offres/search?domaine=M&rss=true", "type": "rss"},
+    # RemoteOK — flux RSS offres remote IT/dev/data
+    {"url": "https://remoteok.com/remote-jobs.rss", "type": "rss"},
+    # We Work Remotely — IT & Programming RSS
+    {"url": "https://weworkremotely.com/categories/remote-programming-jobs.rss", "type": "rss"},
+    # Hacker News Who's Hiring (mensuel, via RSS non officiel)
+    {"url": "https://hnhiring.com/rss.xml", "type": "rss"},
+    # Remixjobs — offres IT France
+    {"url": "https://remixjobs.com/rss/informatique-telecoms", "type": "rss"},
+    # Stack Overflow Jobs RSS
+    {"url": "https://stackoverflow.com/jobs/feed?l=France&r=true", "type": "rss"},
+    # InfoJobs RSS (IT)
+    {"url": "https://www.regionsjob.com/rss/offres-informatique-internet.xml", "type": "rss"},
+    # Freelance Informatique RSS
+    {"url": "https://www.freelance-informatique.fr/rss-missions.php", "type": "rss"},
+    # Indeed France IT (public)
+    {"url": "https://fr.indeed.com/rss?q=data+scientist&l=France&sort=date", "type": "rss"},
+]
+# API France Travail (open data, nécessite identifiants gratuits si configurés)
+FRANCETRAVAIL_ID     = os.environ.get('FRANCETRAVAIL_ID', '')
+FRANCETRAVAIL_SECRET = os.environ.get('FRANCETRAVAIL_SECRET', '')
+
+_jobboard_cache = {"data": [], "ts": 0}
+JOBBOARD_TTL = 1800  # 30 min
+
+def fetch_jobboard_signals(domaine='', skills=None):
+    """Récupère des signaux marché depuis les jobboards open source.
+    Les titres sont agrégés et anonymisés — les noms de sources ne sont
+    JAMAIS transmis au client ni au modèle IA (usage interne uniquement).
+    Utilisé pour enrichir le prompt de matching avec des données réelles."""
+    global _jobboard_cache
+    now = time.time()
+    cache_key = domaine.lower()[:20]
+    if (now - _jobboard_cache["ts"] < JOBBOARD_TTL
+            and _jobboard_cache.get("key") == cache_key
+            and _jobboard_cache["data"]):
+        return _jobboard_cache["data"]
+
+    # Mots-clés de filtrage par domaine
+    domain_kw = {
+        'IA':    ['ia','ml','machine learning','data scien','llm','nlp','ai','deep learning'],
+        'DATA':  ['data','analytics','etl','pipeline','bigdata','bi ','databricks','spark'],
+        'CYBER': ['cyber','sécurité','pentest','soc','rssi','iso 27','nist','vuln'],
+        'IT':    ['dev','backend','frontend','fullstack','python','java','cloud','devops'],
+        'GRC':   ['conformit','rgpd','gdpr','dpo','grc','audit','compliance','risk'],
+    }.get(domaine.upper(), [])
+
+    signals = []
+    skills_lower = [s.lower() for s in (skills or [])]
+
+    for src in JOBBOARD_SOURCES:
+        try:
+            headers = {'User-Agent': 'Mozilla/5.0 CONSEILPREV-Bot/1.0'}
+            import urllib.request
+            req = urllib.request.Request(src["url"], headers=headers)
+            import io
+            raw = urllib.request.urlopen(req, timeout=6).read()
+            feed = feedparser.parse(io.BytesIO(raw))
+            for entry in (feed.entries or [])[:12]:
+                title = (entry.get("title", "") or "").strip()
+                if not title or len(title) < 5:
+                    continue
+                tl = title.lower()
+                # Filtrer par domaine si précisé
+                if domain_kw and not any(kw in tl for kw in domain_kw):
+                    # Vérifier aussi les skills
+                    if not any(sk in tl for sk in skills_lower):
+                        continue
+                # Garder UNIQUEMENT le titre — jamais la source
+                signals.append(title[:100])
+        except Exception:
+            continue  # Source indisponible → silencieux
+
+    # Dédoublonnage
+    seen, unique = set(), []
+    for s in signals:
+        k = s.lower()[:50]
+        if k not in seen:
+            seen.add(k); unique.append(s)
+
+    logger.info(f'JOBBOARD_SIGNALS: {len(unique)} titres collectés (domaine={domaine})')
+    _jobboard_cache = {"data": unique[:50], "ts": now, "key": cache_key}
+    return unique[:50]
+
+
 _news_cache = {"data": [], "ts": 0}
 _digest_cache = {"data": None, "model": None, "ts": 0}
 CACHE_TTL   = 600
@@ -1109,6 +1202,24 @@ def api_match():
         # Villes françaises pour géolocalisation
         villes = ['Paris','Lyon','Marseille','Toulouse','Bordeaux','Nantes','Lille','Strasbourg','Rennes','Nice']
 
+        # Enrichir avec des signaux marché réels (anonymisés, sources masquées)
+        market_signals = []
+        try:
+            raw_signals = fetch_jobboard_signals(domaine, hard)
+            if raw_signals:
+                market_signals = raw_signals[:12]
+        except Exception:
+            pass
+
+        market_ctx = ""
+        if market_signals:
+            market_ctx = (
+                f"\n\nDonnées marché temps réel (titres d'offres similaires actives en France "
+                f"— source confidentielle, à utiliser pour calibrer les scores et les TJM) :\n"
+                + "\n".join(f"- {s}" for s in market_signals)
+                + "\n"
+            )
+
         prompt = (
             f"Tu es le moteur de matching IA de CONSEILPREV, cabinet de recrutement IT/IA.\n"
             f"Génère exactement 5 profils de consultants ANONYMISÉS correspondant à ce besoin :\n\n"
@@ -1118,15 +1229,18 @@ def api_match():
             f"Hard skills requis : {', '.join(hard)}\n"
             f"Soft skills : {', '.join(soft) if soft else 'non précisé'}\n"
             f"Lieu : {lieu}\n"
-            f"Contrat : {contrat} / Durée : {duree}\n\n"
-            f"Réponds UNIQUEMENT en JSON valide (aucun texte avant/après), tableau de 5 objets :\n"
+            f"Contrat : {contrat} / Durée : {duree}\n"
+            + market_ctx +
+            f"\nRéponds UNIQUEMENT en JSON valide (aucun texte avant/après), tableau de 5 objets :\n"
             f'[{{"seniority":"Senior - 8 ans","score":97,"tjm":650,"dispo":"Immediate",'
             f'"ville":"Paris","skills":["...","..."],"highlight":"Atout distinctif en 1 phrase"}}]\n\n'
             f"Contraintes : score entre 79 et 97 (decroissant et realiste selon adequation), "
-            f"tjm proche de {tjm} (+/- 60 EUR), ville parmi {villes}, "
+            f"tjm calibré sur les offres marché réelles ci-dessus (si disponibles) sinon proche de {tjm} (+/- 60 EUR), "
+            f"ville parmi {villes}, "
             f"dispo parmi [Immediate, Sous 2 semaines, Sous 1 mois], "
             f"skills = sous-ensemble pertinent des hard skills + 1-2 complementaires credibles, "
-            f"highlight specifique et professionnel. Pas d'identite, pas de nom."
+            f"highlight specifique et professionnel. Pas d'identite, pas de nom. "
+            f"Ne mentionne JAMAIS les sources de données dans ta réponse JSON."
         )
         system = "Tu es un moteur de matching de recrutement IT expert. Tu réponds exclusivement en JSON valide, sans markdown ni texte additionnel."
 
