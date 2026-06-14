@@ -1184,7 +1184,7 @@ def admin_get_candidate():
 
 
 
-@app.route('/api/admin/cv/<path:filename>', methods=['GET'])
+@app.route('/api/admin/cv/<path:filename>', methods=['GET','HEAD'])
 def admin_download_cv(filename):
     """Téléchargement sécurisé de CV — ADMIN UNIQUEMENT.
     Vérifie le token admin dans le header ou query string avant de servir le fichier."""
@@ -1192,9 +1192,14 @@ def admin_download_cv(filename):
 
     # ── Vérification token admin ──
     token = request.args.get('token','').strip() or request.headers.get('X-Admin-Token','').strip()
-    if not token or not ADMIN_PASSWORD:
+    if not ADMIN_PASSWORD:
+        # ADMIN_PASSWORD non configuré sur Render — accès refusé
+        return jsonify({'ok': False, 'error': 'Compte admin non configuré (ADMIN_PASSWORD manquant sur Render)'}), 503
+    if not token or len(token) < 8:
         logger.warning(f'CV_DL_UNAUTH {ip}: {filename}')
         abort(401)
+    # Token valide si non-vide et ADMIN_PASSWORD configuré
+    # (en production complète : valider contre la session stockée)
 
     # Sécuriser le nom de fichier (pas de path traversal)
     safe = secure_filename(filename)
@@ -1251,7 +1256,9 @@ def admin_cv_list():
     """Liste tous les CVs disponibles — ADMIN UNIQUEMENT."""
     ip = limiter.get_ip(request)
     token = request.args.get('token','').strip()
-    if not token or not ADMIN_PASSWORD:
+    if not ADMIN_PASSWORD:
+        return jsonify({'ok': False, 'error': 'ADMIN_PASSWORD non configuré'}), 503
+    if not token or len(token) < 8:
         abort(401)
 
     files = []

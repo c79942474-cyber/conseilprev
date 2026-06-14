@@ -654,11 +654,11 @@ var CITIES = [
 // Identités candidat CONFIDENTIELLES (jamais affichées au client,
 // transmises uniquement à CONSEILPREV par email)
 var IDENT_POOL = [
-  {prenom:'Karim',  nom:'Benali',    email:'k.benali@pro-mail.fr',     tel:'+33 6 12 45 78 90', cv:'CV_KBenali_DataScience.pdf'},
-  {prenom:'Sophie', nom:'Marchand',  email:'sophie.marchand@dev.io',   tel:'+33 6 98 32 11 04', cv:'CV_SMarchand_IA.pdf'},
-  {prenom:'Thomas', nom:'Lefèvre',   email:'t.lefevre@cyberpro.fr',    tel:'+33 7 45 22 89 13', cv:'CV_TLefevre_Cyber.pdf'},
-  {prenom:'Amina',  nom:'Diallo',    email:'amina.diallo@datapro.eu',  tel:'+33 6 77 54 20 36', cv:'CV_ADiallo_MLOps.pdf'},
-  {prenom:'Julien', nom:'Rousseau',  email:'j.rousseau@freelance.dev', tel:'+33 6 30 18 92 47', cv:'CV_JRousseau_DevOps.pdf'}
+  {prenom:'Karim',  nom:'Benali',    email:'k.benali@pro-mail.fr',     tel:'+33 6 12 45 78 90', cv:'20260614_181515_Karim_Benali.pdf'},
+  {prenom:'Sophie', nom:'Marchand',  email:'sophie.marchand@dev.io',   tel:'+33 6 98 32 11 04', cv:'20260614_181515_Sophie_Marchand.pdf'},
+  {prenom:'Thomas', nom:'Lefèvre',   email:'t.lefevre@cyberpro.fr',    tel:'+33 7 45 22 89 13', cv:'20260614_181515_Thomas_Lefevre.pdf'},
+  {prenom:'Amina',  nom:'Diallo',    email:'amina.diallo@datapro.eu',  tel:'+33 6 77 54 20 36', cv:'20260614_181515_Amina_Diallo.pdf'},
+  {prenom:'Julien', nom:'Rousseau',  email:'j.rousseau@freelance.dev', tel:'+33 6 30 18 92 47', cv:'20260614_181515_Julien_Rousseau.pdf'}
 ];
 
 // ── Stepper ──
@@ -1078,32 +1078,37 @@ function requestCV(uid, cvName){
   var token = '';
   try{ token = sessionStorage.getItem('cp_token') || ''; }catch(e){}
 
-  // Construire l'URL de téléchargement sécurisé
+  if(!token){
+    alert('⚠ Session expirée. Reconnectez-vous via /sourcing → Espace CONSEILPREV');
+    return;
+  }
+
   var dlUrl = '/api/admin/cv/' + encodeURIComponent(cvName) + '?token=' + encodeURIComponent(token);
 
-  // Tenter le téléchargement via fetch pour vérifier si le fichier existe
-  fetch(dlUrl, {method:'HEAD'})
+  // Vérifier via fetch JSON si le fichier existe avant de déclencher le DL
+  fetch(dlUrl + '&check=1')
     .then(function(r){
-      if(r.ok){
-        // Fichier présent → télécharger directement
+      if(r.ok && r.headers.get('Content-Type') && r.headers.get('Content-Type').indexOf('json') < 0){
+        // C'est un fichier → déclencher le téléchargement
         var a = document.createElement('a');
         a.href = dlUrl;
         a.download = cvName;
-        a.target = '_blank';
+        a.style.display = 'none';
         document.body.appendChild(a);
         a.click();
-        document.body.removeChild(a);
-      } else if(r.status === 404){
-        // CV pas encore uploadé → afficher aide
-        showCvHelp(cvName);
-      } else if(r.status === 401){
-        alert('⚠ Session admin expirée. Reconnectez-vous via /sourcing');
+        setTimeout(function(){ document.body.removeChild(a); }, 1000);
       } else {
-        alert('⚠ Erreur accès CV (HTTP ' + r.status + ')');
+        return r.json().then(function(d){
+          if(d && d.ok === false){
+            if(r.status === 404){ showCvHelp(cvName); }
+            else if(r.status === 401 || r.status === 503){ alert('⚠ ' + (d.error || 'Accès refusé')); }
+            else { showCvHelp(cvName); }
+          }
+        });
       }
     })
     .catch(function(){
-      // En cas d'erreur réseau — ouvrir directement (laisse le serveur gérer)
+      // Fallback : ouvrir dans nouvel onglet
       window.open(dlUrl, '_blank');
     });
 }
