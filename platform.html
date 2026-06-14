@@ -1662,6 +1662,95 @@ function adminCvList(){
   window.open('/api/admin/cv-list?token=' + encodeURIComponent(token), '_blank');
 }
 
+function sendSelectionNotifications(){
+  // Construire le payload avec client + candidats (identités si admin)
+  var payload = {
+    client: {
+      prenom:     BRIEF.prenom     || '',
+      nom:        BRIEF.nom        || '',
+      email:      BRIEF.email      || '',
+      tel:        BRIEF.tel        || '',
+      entreprise: BRIEF.entreprise || '',
+      fonction:   BRIEF.fonction   || '',
+    },
+    candidates: CART.map(function(c){
+      return {
+        uid:      c.uid,
+        label:    c.label,
+        titre:    c.titre,
+        domaine:  c.domaine,
+        seniority:c.seniority,
+        score:    c.score,
+        tjm:      c.tjm,
+        dispo:    c.dispo,
+        ville:    c.city ? c.city.name : '',
+        lieu:     c.lieu,
+        start:    c.start,
+        duree:    c.duree,
+        contrat:  c.contrat,
+        skills:   c.skills || [],
+        highlight:c.highlight || '',
+        // Identité complète (incluse côté serveur, CONSEILPREV only)
+        ident: c.ident ? {
+          prenom:      c.ident.prenom,
+          nom:         c.ident.nom,
+          email:       c.ident.email,
+          tel:         c.ident.tel,
+          cv:          c.ident.cv,
+          source:      c.ident.source || '—',
+          date_source: c.ident.date_source || '',
+        } : {},
+      };
+    }),
+  };
+
+  fetch('/api/notify-selection', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(payload),
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(res){
+    if(res.ok){
+      var msg = '';
+      if(res.client_email){
+        msg += '📧 Email de confirmation envoyé à ' + BRIEF.email + '\n';
+      }
+      if(res.conseilprev_email){
+        msg += '🔐 Dossier confidentiel envoyé à CONSEILPREV';
+      }
+      if(!res.smtp_configured){
+        msg = '⚠ Notifications sauvegardées (SMTP à configurer sur Render)';
+      }
+      // Afficher une notification discrète
+      showNotif(msg || res.message, res.client_email ? 'success' : 'warn');
+    }
+  })
+  .catch(function(e){ console.warn('Notification error:', e); });
+}
+
+function showNotif(msg, type){
+  var el = document.getElementById('notif-bar');
+  if(!el){
+    el = document.createElement('div');
+    el.id = 'notif-bar';
+    el.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:9999;font-family:Space Mono,monospace;font-size:11px;padding:12px 24px;border-radius:100px;max-width:520px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.4);transition:opacity .4s;white-space:nowrap';
+    document.body.appendChild(el);
+  }
+  if(type === 'success'){
+    el.style.background = 'rgba(6,95,70,.95)';
+    el.style.border     = '1px solid rgba(94,234,212,.5)';
+    el.style.color      = '#5eead4';
+  } else {
+    el.style.background = 'rgba(120,53,15,.95)';
+    el.style.border     = '1px solid rgba(251,191,36,.5)';
+    el.style.color      = '#fde68a';
+  }
+  el.textContent = msg;
+  el.style.opacity = '1';
+  setTimeout(function(){ el.style.opacity = '0'; }, 5000);
+}
+
 function toggleCart(uid){
   var idx = CART.findIndex(function(c){ return c.uid === uid; });
   if(idx >= 0){
@@ -1722,6 +1811,9 @@ function renderCart(){
 // ── Validation sélection → email CONSEILPREV avec identités CONFIDENTIELLES ──
 function validateCart(){
   if(!CART.length) return;
+
+  // ── Envoyer notifications email (client + CONSEILPREV) ──
+  sendSelectionNotifications();
 
   var lines = [
     'SÉLECTION CLIENT VALIDÉE — ' + CART.length + ' candidat(s)',

@@ -1147,6 +1147,331 @@ def auth_delete():
 
 
 
+
+# ══════════════════════════════════════════════════════════════
+# NOTIFICATIONS SÉLECTION CANDIDAT(S)
+# Double envoi : client (confirmation + pré-contrat) + CONSEILPREV
+# ══════════════════════════════════════════════════════════════
+def build_precontract_html(client, candidates):
+    """Génère le HTML du pré-contrat client."""
+    import datetime
+    today = datetime.datetime.now().strftime("%d/%m/%Y")
+    cands_html = ""
+    for i, c in enumerate(candidates):
+        tjm_client     = c.get("tjm", 0)
+        tjm_consultant = round(tjm_client * 0.85)
+        mission_days   = 20  # moyenne mensuelle
+        est_mois       = round(tjm_client * mission_days)
+        cands_html += f"""
+        <div style="background:#f8f5ff;border-radius:10px;padding:18px 20px;margin-bottom:16px;border-left:4px solid #6d28d9">
+          <div style="font-size:15px;font-weight:700;color:#1a1a2e;margin-bottom:10px">
+            Candidat {i+1} — {c.get("label","Consultant")}
+            <span style="font-size:11px;background:#6d28d9;color:#fff;padding:2px 10px;border-radius:100px;margin-left:8px">Match {c.get("score",0)}%</span>
+          </div>
+          <table style="width:100%;border-collapse:collapse;font-size:13px">
+            <tr><td style="padding:5px 0;color:#666;width:180px">Poste</td><td style="font-weight:600;color:#1a1a2e">{c.get("titre","")}</td></tr>
+            <tr style="background:#f0ebff"><td style="padding:5px 6px;color:#666">Domaine</td><td style="padding:5px 6px;font-weight:600;color:#1a1a2e">{c.get("domaine","")}</td></tr>
+            <tr><td style="padding:5px 0;color:#666">Séniorité</td><td style="font-weight:600;color:#1a1a2e">{c.get("seniority","")}</td></tr>
+            <tr style="background:#f0ebff"><td style="padding:5px 6px;color:#666">Localisation</td><td style="padding:5px 6px;font-weight:600;color:#1a1a2e">{c.get("ville","")} ({c.get("lieu","")})</td></tr>
+            <tr><td style="padding:5px 0;color:#666">Disponibilité</td><td style="font-weight:600;color:#22c55e">{c.get("dispo","")}</td></tr>
+            <tr style="background:#f0ebff"><td style="padding:5px 6px;color:#666">Démarrage</td><td style="padding:5px 6px;font-weight:600;color:#1a1a2e">{c.get("start","ASAP")}</td></tr>
+            <tr><td style="padding:5px 0;color:#666">Durée mission</td><td style="font-weight:600;color:#1a1a2e">{c.get("duree","6 mois")}</td></tr>
+            <tr style="background:#f0ebff"><td style="padding:5px 6px;color:#666">Type contrat</td><td style="padding:5px 6px;font-weight:600;color:#1a1a2e">{c.get("contrat","").upper()}</td></tr>
+            <tr><td style="padding:5px 0;color:#666;font-weight:700">TJM consultant</td><td style="font-weight:700;color:#6d28d9;font-size:15px">{tjm_consultant} € HT <span style="font-size:11px;color:#888">(TJM −15%)</span></td></tr>
+            <tr style="background:#f0ebff"><td style="padding:5px 6px;color:#666;font-weight:700">TJM facturé client</td><td style="padding:5px 6px;font-weight:700;color:#d946ef;font-size:15px">{tjm_client} € HT</td></tr>
+            <tr><td style="padding:5px 0;color:#666">Estimation mensuelle</td><td style="font-weight:600;color:#1a1a2e">~{est_mois:,} € HT ({mission_days}j)</td></tr>
+          </table>
+          <div style="margin-top:12px;font-size:11px;color:#888">
+            Hard skills : {", ".join(c.get("skills",[])[:6]) or "—"}
+          </div>
+        </div>"""
+
+    return f"""<!DOCTYPE html>
+<html><head><meta charset="UTF-8"></head>
+<body style="font-family:Arial,sans-serif;background:#f5f0ff;padding:24px;margin:0">
+<div style="max-width:660px;margin:0 auto">
+
+  <!-- En-tête -->
+  <div style="background:linear-gradient(135deg,#6d28d9,#9d6fe8,#d946ef);padding:32px;border-radius:14px 14px 0 0">
+    <h1 style="color:#fff;font-size:22px;margin:0 0 6px">✓ Sélection confirmée</h1>
+    <p style="color:rgba(255,255,255,.85);margin:0;font-size:14px">Plateforme B2B Recrutement IT/IA · CONSEILPREV</p>
+  </div>
+
+  <!-- Corps -->
+  <div style="background:#fff;padding:28px 32px;border:1px solid #e8e0ff;border-top:none">
+    <p style="font-size:15px;color:#1a1a2e;line-height:1.7">
+      Bonjour <strong>{client.get("prenom","")} {client.get("nom","")}</strong>,<br><br>
+      Nous avons bien reçu votre sélection de <strong>{len(candidates)} candidat(s)</strong>.
+      Notre équipe CONSEILPREV vous contactera sous <strong>48h ouvrées</strong> pour organiser
+      la mise en relation et confirmer les modalités définitives.
+    </p>
+
+    <!-- Avertissement pré-contrat -->
+    <div style="background:#fef3c7;border:1px solid #fcd34d;border-radius:10px;padding:14px 18px;margin:20px 0;font-size:13px;color:#92400e;line-height:1.7">
+      <strong>⚖️ Document de pré-accord</strong><br>
+      Ce document est un <em>pré-contrat à titre indicatif</em>. Les contrats définitifs seront
+      établis, envoyés et signés électroniquement <strong>après accord définitif mutuel</strong>
+      entre toutes les parties (client, consultant et CONSEILPREV), suite à la vérification
+      des références et à l'entretien de validation.
+    </div>
+
+    <!-- Récapitulatif client -->
+    <div style="background:#f8f5ff;border-radius:10px;padding:14px 18px;margin-bottom:20px;font-size:13px">
+      <div style="font-weight:700;color:#6d28d9;margin-bottom:8px">📋 Vos coordonnées</div>
+      <div style="color:#444;line-height:1.8">
+        {client.get("prenom","")} {client.get("nom","")} · {client.get("email","")}
+        {" · " + client.get("tel","") if client.get("tel") else ""}
+        {" · " + client.get("entreprise","") if client.get("entreprise") else ""}
+      </div>
+    </div>
+
+    <!-- Candidats sélectionnés -->
+    <div style="font-size:16px;font-weight:700;color:#1a1a2e;margin-bottom:16px">
+      Candidat(s) sélectionné(s) — Pré-accord tarifaire
+    </div>
+    {cands_html}
+
+    <!-- Articles pré-contrat résumés -->
+    <div style="background:#f0ebff;border-radius:10px;padding:16px 20px;margin-top:20px">
+      <div style="font-size:14px;font-weight:700;color:#6d28d9;margin-bottom:12px">📄 Conditions générales (résumé)</div>
+      <table style="width:100%;font-size:12px;border-collapse:collapse;color:#444">
+        <tr><td style="padding:5px 0;border-bottom:1px solid #ddd8f8;width:160px;color:#666">Durée</td><td style="padding:5px 0;border-bottom:1px solid #ddd8f8">6 mois renouvelable par tacite reconduction</td></tr>
+        <tr><td style="padding:5px 0;border-bottom:1px solid #ddd8f8;color:#666">Résiliation</td><td style="padding:5px 0;border-bottom:1px solid #ddd8f8">Préavis 60 jours — lettre recommandée avec AR</td></tr>
+        <tr><td style="padding:5px 0;border-bottom:1px solid #ddd8f8;color:#666">Paiement</td><td style="padding:5px 0;border-bottom:1px solid #ddd8f8">30 jours après réception de facture</td></tr>
+        <tr><td style="padding:5px 0;border-bottom:1px solid #ddd8f8;color:#666">Reporting</td><td style="padding:5px 0;border-bottom:1px solid #ddd8f8">État d'avancement hebdomadaire</td></tr>
+        <tr><td style="padding:5px 0;border-bottom:1px solid #ddd8f8;color:#666">Non-sollicitation</td><td style="padding:5px 0;border-bottom:1px solid #ddd8f8">Libération contractuelle possible (internalisation mutuelle)</td></tr>
+        <tr><td style="padding:5px 0;border-bottom:1px solid #ddd8f8;color:#666">Confidentialité</td><td style="padding:5px 0;border-bottom:1px solid #ddd8f8">NDA total sur projets & stratégie SI — persistante</td></tr>
+        <tr><td style="padding:5px 0;color:#666">Loi applicable</td><td style="padding:5px 0">Droit français · Tribunaux compétents</td></tr>
+      </table>
+    </div>
+
+    <!-- Prochaines étapes -->
+    <div style="margin-top:20px;padding:16px 20px;background:#ecfdf5;border-radius:10px;border:1px solid #bbf7d0">
+      <div style="font-size:13px;font-weight:700;color:#065f46;margin-bottom:8px">🔜 Prochaines étapes</div>
+      <ol style="font-size:13px;color:#065f46;padding-left:18px;line-height:2">
+        <li>Notre INGE IT dédié vous contacte sous <strong>48h</strong></li>
+        <li>Vérification des références et entretien de validation</li>
+        <li>Accord définitif mutuel (client + consultant + CONSEILPREV)</li>
+        <li>Établissement et signature des contrats définitifs</li>
+        <li>Démarrage de la mission</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- Pied de page -->
+  <div style="background:#f1f0ff;padding:16px 32px;border-radius:0 0 14px 14px;text-align:center;font-size:11px;color:#888;line-height:1.7">
+    <strong>CONSEILPREV · ERSIA IA Management</strong><br>
+    christophe.cerf@outlook.com · conseilprev.onrender.com<br>
+    Ce document est confidentiel — usage strictement réservé aux parties désignées<br>
+    {today}
+  </div>
+</div>
+</body></html>"""
+
+
+def build_conseilprev_notif_html(client, candidates):
+    """Email interne CONSEILPREV — identités complètes + sources."""
+    import datetime
+    today = datetime.datetime.now().strftime("%d/%m/%Y %H:%M")
+    cands_rows = ""
+    for i, c in enumerate(candidates):
+        ident = c.get("ident", {})
+        tjm_client = c.get("tjm", 0)
+        tjm_cons   = round(tjm_client * 0.85)
+        marge      = tjm_client - tjm_cons
+        cands_rows += f"""
+        <tr style="background:{'#f8f5ff' if i%2==0 else '#fff'}">
+          <td style="padding:10px;border:1px solid #e0d8f8;font-weight:700;color:#6d28d9">{i+1}</td>
+          <td style="padding:10px;border:1px solid #e0d8f8">
+            <div style="font-weight:700">{c.get("label","")}</div>
+            <div style="font-size:11px;color:#666">{c.get("titre","")} · {c.get("domaine","")}</div>
+          </td>
+          <td style="padding:10px;border:1px solid #e0d8f8">
+            <div style="font-weight:700;color:#22c55e">{ident.get("prenom","")} {ident.get("nom","")}</div>
+            <div style="font-size:11px"><a href="mailto:{ident.get("email","")}" style="color:#6d28d9">{ident.get("email","")}</a></div>
+            <div style="font-size:11px;color:#666">{ident.get("tel","")}</div>
+            <div style="font-size:10px;color:#888;margin-top:3px">CV : {ident.get("cv","—")}</div>
+          </td>
+          <td style="padding:10px;border:1px solid #e0d8f8;text-align:center">
+            <div style="font-weight:700;color:#d946ef">{tjm_client} €</div>
+            <div style="font-size:10px;color:#666">client</div>
+            <div style="font-weight:700;color:#6d28d9">{tjm_cons} €</div>
+            <div style="font-size:10px;color:#666">consultant</div>
+            <div style="font-weight:700;color:#22c55e">+{marge} €/j</div>
+            <div style="font-size:10px;color:#666">marge</div>
+          </td>
+          <td style="padding:10px;border:1px solid #e0d8f8">
+            <div style="font-size:11px;color:#9333ea">{ident.get("source","—")}</div>
+            <div style="font-size:10px;color:#888">{ident.get("date_source","")}</div>
+            <div style="font-size:11px;margin-top:4px;color:#22c55e">Dispo : {c.get("dispo","")}</div>
+            <div style="font-size:11px;color:#444">{c.get("ville","")}</div>
+          </td>
+          <td style="padding:10px;border:1px solid #e0d8f8;font-size:11px;color:#666;font-weight:700;color:#e67e22">{c.get("score",0)}%</td>
+        </tr>"""
+
+    return f"""<!DOCTYPE html>
+<html><head><meta charset="UTF-8"></head>
+<body style="font-family:Arial,sans-serif;background:#f5f0ff;padding:24px;margin:0">
+<div style="max-width:860px;margin:0 auto">
+  <div style="background:linear-gradient(135deg,#1e1250,#6d28d9);padding:24px 32px;border-radius:14px 14px 0 0">
+    <h1 style="color:#fff;font-size:20px;margin:0 0 4px">🔐 Nouvelle sélection client — CONFIDENTIEL</h1>
+    <p style="color:rgba(255,255,255,.75);margin:0;font-size:13px">CONSEILPREV · Plateforme B2B · {today}</p>
+  </div>
+  <div style="background:#fff;padding:24px 32px;border:1px solid #e8e0ff;border-top:none">
+
+    <!-- Client -->
+    <div style="background:#f0ebff;border-radius:10px;padding:14px 18px;margin-bottom:20px">
+      <div style="font-weight:700;color:#6d28d9;font-size:13px;margin-bottom:8px">👤 Client demandeur</div>
+      <table style="font-size:13px;border-collapse:collapse;width:100%">
+        <tr><td style="color:#666;width:120px;padding:3px 0">Nom</td><td style="font-weight:600">{client.get("prenom","")} {client.get("nom","")}</td>
+            <td style="color:#666;width:120px;padding:3px 0">Entreprise</td><td style="font-weight:600">{client.get("entreprise","—")}</td></tr>
+        <tr><td style="color:#666;padding:3px 0">Email</td><td><a href="mailto:{client.get("email","")}" style="color:#6d28d9">{client.get("email","")}</a></td>
+            <td style="color:#666;padding:3px 0">Téléphone</td><td>{client.get("tel","—")}</td></tr>
+      </table>
+    </div>
+
+    <!-- Tableau candidats -->
+    <div style="font-size:15px;font-weight:700;color:#1a1a2e;margin-bottom:12px">
+      {len(candidates)} candidat(s) sélectionné(s)
+    </div>
+    <table style="width:100%;border-collapse:collapse;font-size:12px">
+      <thead>
+        <tr style="background:#6d28d9;color:#fff">
+          <th style="padding:10px;border:1px solid #5b21b6;text-align:left">#</th>
+          <th style="padding:10px;border:1px solid #5b21b6;text-align:left">Profil</th>
+          <th style="padding:10px;border:1px solid #5b21b6;text-align:left">🔐 Identité (confidentiel)</th>
+          <th style="padding:10px;border:1px solid #5b21b6;text-align:center">TJM / Marge</th>
+          <th style="padding:10px;border:1px solid #5b21b6;text-align:left">Source & Dispo</th>
+          <th style="padding:10px;border:1px solid #5b21b6;text-align:center">Score</th>
+        </tr>
+      </thead>
+      <tbody>{cands_rows}</tbody>
+    </table>
+
+    <!-- Actions requises -->
+    <div style="margin-top:20px;padding:16px 20px;background:#fef3c7;border-radius:10px;border:1px solid #fcd34d">
+      <div style="font-size:13px;font-weight:700;color:#92400e;margin-bottom:8px">⚡ Actions requises</div>
+      <ol style="font-size:13px;color:#92400e;padding-left:18px;line-height:2;margin:0">
+        <li>Contacter le(s) candidat(s) pour vérification références</li>
+        <li>Organiser l'entretien client ↔ candidat</li>
+        <li>Obtenir accord définitif mutuel</li>
+        <li>Établir et faire signer les contrats définitifs</li>
+      </ol>
+    </div>
+  </div>
+  <div style="background:#f1f0ff;padding:14px 32px;border-radius:0 0 14px 14px;text-align:center;font-size:11px;color:#888">
+    CONSEILPREV · Document confidentiel · Usage interne uniquement · {today}
+  </div>
+</div>
+</body></html>"""
+
+
+@app.route('/api/notify-selection', methods=['POST'])
+def notify_selection():
+    """
+    Déclenche 2 emails simultanés lors de la sélection d'un ou plusieurs candidats :
+    1. Email CLIENT  → confirmation + récapitulatif + pré-contrat (sans identités candidats)
+    2. Email CONSEILPREV → dossier complet confidentiel (identités, sources, marges)
+    """
+    ip = limiter.get_ip(request)
+    if not limiter.check_soft(ip, limit=10, window=300):
+        return jsonify({'ok': False, 'error': 'Trop de requêtes'}), 429
+
+    try:
+        d = request.get_json(force=True, silent=True) or {}
+
+        client = d.get('client', {})
+        candidates = d.get('candidates', [])
+
+        if not client.get('email'):
+            return jsonify({'ok': False, 'error': 'Email client manquant'}), 400
+        if not candidates:
+            return jsonify({'ok': False, 'error': 'Aucun candidat sélectionné'}), 400
+
+        import datetime
+        now_str = datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')
+        results = {'client_email': False, 'conseilprev_email': False}
+
+        # ── EMAIL 1 : CLIENT (confirmation + pré-contrat, anonyme) ──
+        try:
+            msg1 = MIMEMultipart('mixed')
+            nb = len(candidates)
+            msg1['Subject'] = f"[CONSEILPREV] Votre sélection — {nb} candidat(s) | Pré-accord"
+            msg1['From']    = MAIL_FROM
+            msg1['To']      = client['email']
+            if MAIL_CC:
+                msg1['Cc'] = MAIL_CC
+            msg1['Reply-To'] = MAIL_TO  # répondre à CONSEILPREV
+
+            msg1.attach(MIMEText(
+                build_precontract_html(client, candidates),
+                'html', 'utf-8'
+            ))
+
+            if SMTP_USER and SMTP_PASSWORD:
+                ctx = ssl.create_default_context()
+                with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=20) as srv:
+                    srv.ehlo(); srv.starttls(context=ctx)
+                    srv.login(SMTP_USER, SMTP_PASSWORD)
+                    rcpt = [client['email']]
+                    if MAIL_CC: rcpt.append(MAIL_CC)
+                    srv.sendmail(MAIL_FROM, rcpt, msg1.as_string())
+                results['client_email'] = True
+                logger.info(f'NOTIFY_CLIENT_OK {ip}: {client["email"]} ({nb} cands)')
+            else:
+                logger.warning(f'NOTIFY_CLIENT_NO_SMTP: {client["email"]}')
+
+        except Exception as e:
+            logger.error(f'NOTIFY_CLIENT_ERR {ip}: {e}')
+
+        # ── EMAIL 2 : CONSEILPREV (confidentiel, identités + sources + marges) ──
+        try:
+            msg2 = MIMEMultipart('mixed')
+            msg2['Subject'] = f"[CONSEILPREV] 🔐 Sélection — {client.get('prenom','')} {client.get('nom','')} — {len(candidates)} candidat(s)"
+            msg2['From']    = MAIL_FROM
+            msg2['To']      = MAIL_TO
+            msg2['Reply-To'] = client.get('email', MAIL_TO)
+
+            msg2.attach(MIMEText(
+                build_conseilprev_notif_html(client, candidates),
+                'html', 'utf-8'
+            ))
+
+            if SMTP_USER and SMTP_PASSWORD:
+                ctx = ssl.create_default_context()
+                with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=20) as srv:
+                    srv.ehlo(); srv.starttls(context=ctx)
+                    srv.login(SMTP_USER, SMTP_PASSWORD)
+                    srv.sendmail(MAIL_FROM, [MAIL_TO], msg2.as_string())
+                results['conseilprev_email'] = True
+                logger.info(f'NOTIFY_CP_OK {ip}: → {MAIL_TO}')
+            else:
+                logger.warning(f'NOTIFY_CP_NO_SMTP')
+                # Sauvegarder localement
+                import os, datetime as _dt
+                ts = _dt.datetime.now().strftime('%Y%m%d_%H%M%S')
+                path = os.path.join(UPLOAD_FOLDER, f'selection_{ts}_{client.get("nom","")}.html')
+                with open(path, 'w', encoding='utf-8') as f:
+                    f.write(build_conseilprev_notif_html(client, candidates))
+                logger.info(f'NOTIFY_CP_SAVED: {path}')
+
+        except Exception as e:
+            logger.error(f'NOTIFY_CP_ERR {ip}: {e}')
+
+        smtp_ok = SMTP_USER and SMTP_PASSWORD
+        return jsonify({
+            'ok': True,
+            'client_email':      results['client_email'],
+            'conseilprev_email': results['conseilprev_email'],
+            'smtp_configured':   smtp_ok,
+            'message': 'Notifications envoyées' if smtp_ok else 'Sélection reçue (SMTP non configuré — sauvegardé localement)',
+        })
+
+    except Exception as e:
+        logger.error(f'NOTIFY_SEL_ERR {ip}: {e}')
+        return jsonify({'ok': False, 'error': 'Erreur serveur'}), 500
+
+
 @app.route('/api/admin/candidate', methods=['POST'])
 def admin_get_candidate():
     """Retourne les coordonnées complètes d'un candidat — ADMIN UNIQUEMENT.
