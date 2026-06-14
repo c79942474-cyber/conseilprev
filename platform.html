@@ -217,6 +217,70 @@ h1 em{font-style:italic;background:linear-gradient(135deg,#a78bfa,#c084fc,#e879f
 body{-webkit-user-select:none;user-select:none}
 input,textarea,select{-webkit-user-select:text!important;user-select:text!important}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ══ PANNEAU IDENTITÉ ADMIN (visible seulement si admin connecté) ══ */
+.admin-ident{
+  display:none;
+  margin-top:14px;
+  background:linear-gradient(135deg,rgba(30,18,80,.9),rgba(45,27,105,.85));
+  border:1px solid rgba(217,70,239,.45);
+  border-radius:12px;
+  padding:16px 18px;
+  position:relative;
+  overflow:hidden;
+}
+.admin-ident::before{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(217,70,239,.08),transparent 60%);
+  pointer-events:none;
+}
+.admin-ident-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:"Space Mono",monospace;font-size:9px;letter-spacing:.15em;
+  text-transform:uppercase;color:#f0abfc;
+  background:rgba(217,70,239,.18);border:1px solid rgba(217,70,239,.35);
+  border-radius:100px;padding:3px 10px;margin-bottom:12px;
+}
+.admin-ident-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;
+}
+@media(max-width:580px){.admin-ident-grid{grid-template-columns:1fr}}
+.admin-ident-row{
+  display:flex;flex-direction:column;gap:3px;
+}
+.admin-ident-lbl{
+  font-family:"Space Mono",monospace;font-size:9px;letter-spacing:.12em;
+  text-transform:uppercase;color:rgba(217,70,239,.7);
+}
+.admin-ident-val{
+  font-size:13px;color:#fff;font-weight:600;
+  display:flex;align-items:center;gap:8px;
+}
+.admin-ident-val a{color:var(--teal);text-decoration:none;font-size:12px}
+.admin-ident-val a:hover{text-decoration:underline}
+.admin-cv-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.06em;
+  background:rgba(94,234,212,.15);border:1px solid rgba(94,234,212,.35);
+  color:var(--teal);padding:5px 12px;border-radius:7px;
+  text-decoration:none;cursor:pointer;transition:all .2s;
+}
+.admin-cv-btn:hover{background:rgba(94,234,212,.25);border-color:rgba(94,234,212,.6)}
+.admin-locked{
+  display:flex;align-items:center;gap:8px;
+  font-size:12px;color:rgba(216,180,254,.45);
+  margin-top:12px;font-family:"Space Mono",monospace;font-size:10px;
+}
+/* Admin mode banner */
+.admin-mode-banner{
+  text-align:center;background:linear-gradient(135deg,rgba(109,40,217,.25),rgba(217,70,239,.18));
+  border:1px solid rgba(217,70,239,.3);border-radius:10px;
+  padding:10px 16px;margin-bottom:20px;max-width:920px;margin-left:auto;margin-right:auto;
+  font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.1em;
+  color:#f0abfc;display:none;
+}
+.admin-mode-banner.show{display:block}
+
 </style>
 </head>
 <body>
@@ -376,9 +440,13 @@ input,textarea,select{-webkit-user-select:text!important;user-select:text!import
   <h2 class="section-h">Candidats <em>localisés en France</em></h2>
   <p class="section-s" id="match-subtitle">Survolez les points sur la carte pour découvrir les profils.</p>
 
-  <div class="anon-notice">
+  <div class="anon-notice" id="client-anon-notice">
     <span class="anon-notice-ico">🔒</span>
     <div class="anon-notice-txt"><strong>Anonymat protégé</strong> — Les coordonnées des candidats (identité, contact, CV) ne sont jamais affichées sur la plateforme. Elles sont transmises exclusivement à CONSEILPREV après validation de votre sélection, pour organiser la mise en relation après double accord.</div>
+  </div>
+
+  <div class="admin-mode-banner" id="admin-mode-banner">
+    🔐 MODE ADMINISTRATEUR CONSEILPREV — Coordonnées complètes des candidats visibles
   </div>
 
   <!-- CARTE DE FRANCE 3D -->
@@ -559,6 +627,12 @@ var MATCHES = [];        // recherche courante
 var CART = [];           // sélection cumulée multi-recherches
 var SEARCH_COUNT = 0;
 var AI_MODEL = null;
+
+// ── Mode admin : chargé depuis sessionStorage (set par /sourcing après login admin) ──
+var IS_ADMIN = false;
+try {
+  IS_ADMIN = sessionStorage.getItem('cp_admin') === '1';
+} catch(e){}
 var SIGNED = {};
 var ACTIVE_CAND = 0;     // onglet contrat actif
 
@@ -834,6 +908,21 @@ function renderAll(){
   renderMap();
   renderMatches();
   renderCart();
+  // Afficher/masquer banner admin + notice anonymat
+  document.getElementById('admin-mode-banner').classList.toggle('show', IS_ADMIN);
+  document.getElementById('client-anon-notice').style.display = IS_ADMIN ? 'none' : '';
+  // Afficher les panneaux identité pour les candidats sélectionnés
+  if(IS_ADMIN){
+    document.querySelectorAll('.admin-ident').forEach(function(el){
+      // Afficher automatiquement si le candidat est dans le panier
+      var card = el.closest('.match-card');
+      if(card && card.classList.contains('in-cart')){
+        el.style.display = 'block';
+      } else {
+        el.style.display = 'block'; // Admin voit tout en permanence
+      }
+    });
+  }
 }
 
 // ── CARTE DE FRANCE — pins + tooltips ──
@@ -919,11 +1008,55 @@ function renderMatches(){
 
     var body = document.createElement('div');
     var highlightHtml = m.highlight ? '<div style="font-size:12px;color:rgba(94,234,212,.85);margin-top:6px;font-style:italic">💡 ' + m.highlight + '</div>' : '';
+
+    // Panneau identité — visible seulement si admin connecté
+    var identHtml = '';
+    if(IS_ADMIN && m.ident){
+      identHtml =
+        '<div class="admin-ident" id="ident-'+m.uid+'">' +
+          '<div class="admin-ident-badge">🔐 Admin CONSEILPREV — Données confidentielles</div>' +
+          '<div class="admin-ident-grid">' +
+            '<div class="admin-ident-row">' +
+              '<span class="admin-ident-lbl">Prénom</span>' +
+              '<span class="admin-ident-val">' + m.ident.prenom + '</span>' +
+            '</div>' +
+            '<div class="admin-ident-row">' +
+              '<span class="admin-ident-lbl">Nom</span>' +
+              '<span class="admin-ident-val">' + m.ident.nom + '</span>' +
+            '</div>' +
+            '<div class="admin-ident-row">' +
+              '<span class="admin-ident-lbl">Email</span>' +
+              '<span class="admin-ident-val"><a href="mailto:' + m.ident.email + '">' + m.ident.email + '</a></span>' +
+            '</div>' +
+            '<div class="admin-ident-row">' +
+              '<span class="admin-ident-lbl">Téléphone</span>' +
+              '<span class="admin-ident-val"><a href="tel:' + m.ident.tel + '">' + m.ident.tel + '</a></span>' +
+            '</div>' +
+            '<div class="admin-ident-row">' +
+              '<span class="admin-ident-lbl">Disponibilité</span>' +
+              '<span class="admin-ident-val">' + m.dispo + '</span>' +
+            '</div>' +
+            '<div class="admin-ident-row">' +
+              '<span class="admin-ident-lbl">CV</span>' +
+              '<span class="admin-ident-val">' +
+                '<span class="admin-cv-btn" onclick="requestCV(\'' + m.uid + '\',\'' + m.ident.cv + '\')">📄 ' + m.ident.cv + '</span>' +
+              '</span>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+    }
+
     body.innerHTML =
-      '<div class="match-name">' + m.label + ' <span class="match-anon">🔒 Anonymisé</span></div>' +
+      '<div class="match-name">' + m.label +
+        (IS_ADMIN
+          ? ' <span style="font-family:Space Mono,monospace;font-size:9px;background:rgba(217,70,239,.2);border:1px solid rgba(217,70,239,.4);padding:2px 8px;border-radius:100px;color:#f0abfc">🔐 Admin</span>'
+          : ' <span class="match-anon">🔒 Anonymisé</span>'
+        ) +
+      '</div>' +
       '<div class="match-meta"><span>📊 ' + m.seniority + '</span><span>💰 TJM ' + m.tjm + ' € HT</span><span>📍 ' + m.city.name + '</span><span>🕐 ' + m.dispo + '</span></div>' +
       '<div class="match-skills">' + m.skills.map(function(s){ return '<span class="mskill">' + s + '</span>'; }).join('') + '</div>' +
-      highlightHtml;
+      highlightHtml +
+      identHtml;
 
     var scoreWrap = document.createElement('div');
     scoreWrap.innerHTML = '<div class="match-score">' + m.score + '%</div><div class="match-score-lbl">Match IA</div>';
@@ -939,6 +1072,11 @@ function renderMatches(){
 }
 
 // ── Panier multi-recherches ──
+function requestCV(uid, cvName){
+  // Admin uniquement — affiche info CV (dans une vraie implémentation, ouvre le CV depuis le backend)
+  alert('📄 Demande de CV admin\n\nFichier : ' + cvName + '\n\nEn production : le CV est récupéré depuis la base candidats CONSEILPREV.\nConservé dans : uploads_cv/ (Render)');
+}
+
 function toggleCart(uid){
   var idx = CART.findIndex(function(c){ return c.uid === uid; });
   if(idx >= 0){
@@ -972,11 +1110,21 @@ function renderCart(){
     var rm = document.createElement('button');
     rm.className = 'cart-rm'; rm.textContent = '✕';
     rm.onclick = function(){ removeFromCart(c.uid); };
+    var adminCartInfo = '';
+    if(IS_ADMIN && c.ident){
+      adminCartInfo =
+        '<div style="font-size:11px;color:#f0abfc;margin-top:4px;font-family:Space Mono,monospace">' +
+        '🔐 ' + c.ident.prenom + ' ' + c.ident.nom +
+        ' · <a href="mailto:' + c.ident.email + '" style="color:var(--teal);text-decoration:none">' + c.ident.email + '</a>' +
+        ' · ' + c.ident.tel +
+        '</div>';
+    }
     item.innerHTML =
       '<span class="cart-item-ico">' + c.avatar + '</span>' +
       '<div class="cart-item-body">' +
         '<div class="cart-item-name">' + c.label + ' — ' + c.titre + '</div>' +
         '<div class="cart-item-meta">' + c.seniority + ' · TJM ' + c.tjm + ' € · ' + c.city.name + ' · Match ' + c.score + '%</div>' +
+        adminCartInfo +
       '</div>';
     item.appendChild(rm);
     list.appendChild(item);
@@ -1290,6 +1438,20 @@ function finalizeAll(){
 }
 
 document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+
+// Au chargement : vérifier le mode admin
+window.addEventListener('DOMContentLoaded', function(){
+  try{
+    IS_ADMIN = sessionStorage.getItem('cp_admin') === '1';
+  }catch(e){}
+  if(IS_ADMIN){
+    // Afficher petit badge discret dans le nav
+    var badge = document.createElement('span');
+    badge.style.cssText = 'font-family:Space Mono,monospace;font-size:9px;letter-spacing:.1em;color:rgba(240,171,252,.7);padding:3px 10px;background:rgba(217,70,239,.15);border:1px solid rgba(217,70,239,.3);border-radius:100px;';
+    badge.textContent = '🔐 ADMIN';
+    document.querySelector('nav').appendChild(badge);
+  }
+});
 </script>
 </body>
 </html>
