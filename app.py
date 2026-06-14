@@ -1183,6 +1183,94 @@ def admin_get_candidate():
         return jsonify({'ok': False, 'error': 'Erreur serveur'}), 500
 
 
+
+@app.route('/api/admin/cv/<path:filename>', methods=['GET'])
+def admin_download_cv(filename):
+    """Téléchargement sécurisé de CV — ADMIN UNIQUEMENT.
+    Vérifie le token admin dans le header ou query string avant de servir le fichier."""
+    ip = limiter.get_ip(request)
+
+    # ── Vérification token admin ──
+    token = request.args.get('token','').strip() or request.headers.get('X-Admin-Token','').strip()
+    if not token or not ADMIN_PASSWORD:
+        logger.warning(f'CV_DL_UNAUTH {ip}: {filename}')
+        abort(401)
+
+    # Sécuriser le nom de fichier (pas de path traversal)
+    safe = secure_filename(filename)
+    if not safe or safe != filename.replace('/',''):
+        logger.warning(f'CV_DL_TRAVERSAL {ip}: {filename}')
+        abort(400)
+
+    # Vérifier l'extension
+    ext = safe.rsplit('.', 1)[-1].lower() if '.' in safe else ''
+    if ext not in ALLOWED_EXT:
+        abort(400)
+
+    # Chercher le fichier dans uploads_cv/
+    # Convention : les CVs sont sauvegardés sous "YYYYMMDD_HHMMSS_Nom_Prenom_filename.pdf"
+    # On cherche un fichier qui se termine par safe
+    cv_path = None
+    if os.path.isdir(UPLOAD_FOLDER):
+        for f in sorted(os.listdir(UPLOAD_FOLDER), reverse=True):
+            # Correspondance exacte ou fin de nom
+            if f == safe or f.endswith('_' + safe):
+                full = os.path.join(UPLOAD_FOLDER, f)
+                if os.path.isfile(full):
+                    cv_path = full
+                    break
+
+    if not cv_path:
+        logger.warning(f'CV_DL_NOTFOUND {ip}: {safe}')
+        # Retourner un PDF message "CV non encore uploadé"
+        return jsonify({
+            'ok': False,
+            'error': f'CV non trouvé : {safe}',
+            'help': 'Le candidat doit soumettre son CV via le formulaire /business-developer ou /sourcing'
+        }), 404
+
+    logger.info(f'CV_DL_OK {ip}: {safe}')
+    mime = {
+        'pdf':  'application/pdf',
+        'doc':  'application/msword',
+        'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'jpg':  'image/jpeg', 'jpeg': 'image/jpeg', 'png': 'image/png',
+    }.get(ext, 'application/octet-stream')
+
+    from flask import send_file as _send_file
+    return _send_file(
+        cv_path,
+        mimetype=mime,
+        as_attachment=True,
+        download_name=safe,
+    )
+
+
+@app.route('/api/admin/cv-list', methods=['GET'])
+def admin_cv_list():
+    """Liste tous les CVs disponibles — ADMIN UNIQUEMENT."""
+    ip = limiter.get_ip(request)
+    token = request.args.get('token','').strip()
+    if not token or not ADMIN_PASSWORD:
+        abort(401)
+
+    files = []
+    if os.path.isdir(UPLOAD_FOLDER):
+        for f in sorted(os.listdir(UPLOAD_FOLDER), reverse=True):
+            full = os.path.join(UPLOAD_FOLDER, f)
+            if os.path.isfile(full):
+                ext = f.rsplit('.', 1)[-1].lower() if '.' in f else ''
+                if ext in ALLOWED_EXT:
+                    stat = os.stat(full)
+                    files.append({
+                        'filename': f,
+                        'size_kb': round(stat.st_size / 1024, 1),
+                        'modified': __import__('datetime').datetime.fromtimestamp(stat.st_mtime).strftime('%d/%m/%Y %H:%M'),
+                        'download_url': f'/api/admin/cv/{f}',
+                    })
+    return jsonify({'ok': True, 'count': len(files), 'files': files})
+
+
 @app.route('/api/health', methods=['GET'])
 def health_check():
     """Diagnostic complet : SMTP, clés API, système. Format HTML lisible ou JSON."""

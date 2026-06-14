@@ -445,8 +445,9 @@ input,textarea,select{-webkit-user-select:text!important;user-select:text!import
     <div class="anon-notice-txt"><strong>Anonymat protégé</strong> — Les coordonnées des candidats (identité, contact, CV) ne sont jamais affichées sur la plateforme. Elles sont transmises exclusivement à CONSEILPREV après validation de votre sélection, pour organiser la mise en relation après double accord.</div>
   </div>
 
-  <div class="admin-mode-banner" id="admin-mode-banner">
-    🔐 MODE ADMINISTRATEUR CONSEILPREV — Coordonnées complètes des candidats visibles
+  <div class="admin-mode-banner" id="admin-mode-banner" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+    <span>🔐 MODE ADMINISTRATEUR CONSEILPREV — Coordonnées complètes des candidats visibles</span>
+    <button onclick="adminCvList()" style="background:rgba(94,234,212,.15);border:1px solid rgba(94,234,212,.35);color:var(--teal);font-family:Space Mono,monospace;font-size:9px;letter-spacing:.1em;padding:5px 12px;border-radius:7px;cursor:pointer;white-space:nowrap">📋 LISTE DES CVS</button>
   </div>
 
   <!-- CARTE DE FRANCE 3D -->
@@ -1073,8 +1074,75 @@ function renderMatches(){
 
 // ── Panier multi-recherches ──
 function requestCV(uid, cvName){
-  // Admin uniquement — affiche info CV (dans une vraie implémentation, ouvre le CV depuis le backend)
-  alert('📄 Demande de CV admin\n\nFichier : ' + cvName + '\n\nEn production : le CV est récupéré depuis la base candidats CONSEILPREV.\nConservé dans : uploads_cv/ (Render)');
+  if(!IS_ADMIN){ return; }
+  var token = '';
+  try{ token = sessionStorage.getItem('cp_token') || ''; }catch(e){}
+
+  // Construire l'URL de téléchargement sécurisé
+  var dlUrl = '/api/admin/cv/' + encodeURIComponent(cvName) + '?token=' + encodeURIComponent(token);
+
+  // Tenter le téléchargement via fetch pour vérifier si le fichier existe
+  fetch(dlUrl, {method:'HEAD'})
+    .then(function(r){
+      if(r.ok){
+        // Fichier présent → télécharger directement
+        var a = document.createElement('a');
+        a.href = dlUrl;
+        a.download = cvName;
+        a.target = '_blank';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      } else if(r.status === 404){
+        // CV pas encore uploadé → afficher aide
+        showCvHelp(cvName);
+      } else if(r.status === 401){
+        alert('⚠ Session admin expirée. Reconnectez-vous via /sourcing');
+      } else {
+        alert('⚠ Erreur accès CV (HTTP ' + r.status + ')');
+      }
+    })
+    .catch(function(){
+      // En cas d'erreur réseau — ouvrir directement (laisse le serveur gérer)
+      window.open(dlUrl, '_blank');
+    });
+}
+
+function showCvHelp(cvName){
+  var msg = document.createElement('div');
+  msg.setAttribute('data-cvhelp','1');
+  msg.style.cssText = 'position:fixed;inset:0;background:rgba(10,6,30,.88);z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px';
+  var inner = document.createElement('div');
+  inner.style.cssText = 'background:linear-gradient(135deg,#1e1250,#2d1b69);border:1px solid rgba(217,70,239,.4);border-radius:16px;padding:32px;max-width:480px;width:100%;position:relative';
+  var closeBtn = document.createElement('button');
+  closeBtn.textContent = '×';
+  closeBtn.style.cssText = 'position:absolute;top:12px;right:14px;background:none;border:none;color:rgba(216,180,254,.6);font-size:22px;cursor:pointer';
+  closeBtn.onclick = function(){ document.body.removeChild(msg); };
+  var body = document.createElement('div');
+  body.innerHTML =
+    '<div style="font-size:20px;margin-bottom:10px">📄</div>' +
+    '<div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:8px">CV non disponible en ligne</div>' +
+    '<div style="font-size:13px;color:rgba(216,180,254,.78);line-height:1.7;margin-bottom:16px">' +
+      'Le fichier <strong style="color:#f0abfc">' + cvName + '</strong> n\'est pas encore sur le serveur.<br><br>' +
+      'Pour qu\'il soit disponible, le candidat doit l\'avoir soumis via :<br>' +
+      '→ <a href="/business-developer" target="_blank" style="color:#5eead4">Formulaire Business Developer</a><br>' +
+      '→ <a href="/sourcing#tester" target="_blank" style="color:#5eead4">Formulaire Testez nos services</a><br><br>' +
+      'Une fois uploadé, il sera accessible ici automatiquement.' +
+    '</div>' +
+    '<div style="font-size:11px;color:rgba(196,181,232,.4);font-family:Space Mono,monospace">CVs stockés dans : uploads_cv/ (Render)</div>';
+  inner.appendChild(closeBtn);
+  inner.appendChild(body);
+  msg.appendChild(inner);
+  msg.onclick = function(e){ if(e.target===msg){ document.body.removeChild(msg); } };
+  document.body.appendChild(msg);
+}
+
+function adminCvList(){
+  // Ouvre la liste de tous les CVs disponibles sur le serveur
+  if(!IS_ADMIN){ return; }
+  var token = '';
+  try{ token = sessionStorage.getItem('cp_token') || ''; }catch(e){}
+  window.open('/api/admin/cv-list?token=' + encodeURIComponent(token), '_blank');
 }
 
 function toggleCart(uid){
