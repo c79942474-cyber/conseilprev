@@ -281,6 +281,116 @@ input,textarea,select{-webkit-user-select:text!important;user-select:text!import
 }
 .admin-mode-banner.show{display:block}
 
+
+/* ══ CARTE FRANCE RÉGIONS ══ */
+.map-section{max-width:980px;margin:0 auto 32px;position:relative}
+.map-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.map-title{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--teal)}
+.map-filter-btns{display:flex;gap:6px;flex-wrap:wrap}
+.mfb{font-family:"Space Mono",monospace;font-size:9px;letter-spacing:.06em;padding:5px 12px;border-radius:100px;border:1px solid rgba(196,181,232,.25);background:rgba(255,255,255,.05);color:rgba(216,180,254,.7);cursor:pointer;transition:all .2s}
+.mfb.active{background:rgba(157,111,232,.3);border-color:rgba(157,111,232,.5);color:#fff}
+.mfb:hover{background:rgba(255,255,255,.1);color:#fff}
+
+.map-wrap{display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:start}
+@media(max-width:780px){.map-wrap{grid-template-columns:1fr}}
+
+/* SVG région */
+.fr-region{
+  cursor:pointer;
+  transition:all .25s;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.3));
+}
+.fr-region:hover{
+  filter:drop-shadow(0 4px 12px rgba(157,111,232,.5));
+}
+.fr-region path.region-fill{
+  stroke:rgba(255,255,255,.35);stroke-width:1.2;
+  transition:all .25s;
+}
+.fr-region:hover path.region-fill{
+  stroke:rgba(255,255,255,.8);stroke-width:1.6;
+}
+.fr-region.has-candidates path.region-fill{
+  stroke:rgba(94,234,212,.6);stroke-width:1.4;
+}
+.fr-region.active path.region-fill{
+  stroke:#fff;stroke-width:2;
+}
+
+/* Pin candidat */
+.cand-pin{cursor:pointer;transition:all .3s}
+.cand-pin:hover{transform-origin:center;transform:scale(1.3)}
+.pin-ring{animation:ring-pulse 2.5s ease-out infinite;transform-origin:center;transform-box:fill-box;opacity:0}
+.pin-ring-2{animation:ring-pulse 2.5s ease-out infinite .8s;transform-origin:center;transform-box:fill-box;opacity:0}
+@keyframes ring-pulse{
+  0%{opacity:.7;r:8px}
+  100%{opacity:0;r:22px}
+}
+
+/* Tooltip riche */
+.map-tooltip-v2{
+  position:absolute;
+  background:rgba(15,8,40,.98);
+  border:1px solid rgba(196,181,232,.4);
+  border-radius:14px;
+  padding:0;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .18s,transform .18s;
+  z-index:50;
+  min-width:220px;max-width:280px;
+  box-shadow:0 12px 40px rgba(0,0,0,.6);
+  backdrop-filter:blur(16px);
+  transform:translateY(6px);
+  overflow:hidden;
+}
+.map-tooltip-v2.show{opacity:1;transform:translateY(0)}
+.tt-head{
+  background:linear-gradient(135deg,rgba(109,40,217,.5),rgba(217,70,239,.3));
+  padding:12px 14px;
+  display:flex;align-items:center;gap:10px;
+  border-bottom:1px solid rgba(196,181,232,.15);
+}
+.tt-avatar{
+  width:40px;height:40px;border-radius:50%;
+  background:linear-gradient(135deg,rgba(109,40,217,.6),rgba(217,70,239,.4));
+  border:2px solid rgba(196,181,232,.4);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;
+  overflow:hidden;
+}
+.tt-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.tt-name{font-size:13px;font-weight:700;color:#fff;line-height:1.3}
+.tt-score{font-family:"Space Mono",monospace;font-size:10px;color:var(--teal);display:flex;align-items:center;gap:4px}
+.tt-body{padding:10px 14px}
+.tt-row{display:flex;justify-content:space-between;gap:8px;padding:4px 0;font-size:11px;border-bottom:1px solid rgba(196,181,232,.07)}
+.tt-row:last-child{border:none}
+.tt-k{color:rgba(216,180,254,.55);font-family:"Space Mono",monospace;font-size:9px;letter-spacing:.06em;text-transform:uppercase}
+.tt-v{color:#fff;font-weight:500;text-align:right}
+.tt-skills{display:flex;flex-wrap:wrap;gap:4px;padding:8px 14px 12px;border-top:1px solid rgba(196,181,232,.07)}
+.tt-skill{font-family:"Space Mono",monospace;font-size:8px;padding:2px 7px;border-radius:100px;background:rgba(157,111,232,.2);border:1px solid rgba(157,111,232,.3);color:rgba(216,180,254,.85)}
+.tt-cart-btn{
+  margin:0 14px 12px;
+  display:block;text-align:center;
+  padding:7px;border-radius:8px;
+  font-family:"Space Mono",monospace;font-size:9px;letter-spacing:.08em;
+  background:rgba(94,234,212,.12);border:1px solid rgba(94,234,212,.3);
+  color:var(--teal);cursor:pointer;transition:all .2s;
+}
+.tt-cart-btn:hover{background:rgba(94,234,212,.25)}
+.tt-cart-btn.added{background:rgba(94,234,212,.25);border-color:var(--teal)}
+
+/* Panel latéral régions */
+.region-panel{background:rgba(255,255,255,.05);border:1px solid rgba(196,181,232,.18);border-radius:14px;padding:16px}
+.rp-title{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:12px}
+.rp-region{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;cursor:pointer;transition:background .2s;margin-bottom:4px}
+.rp-region:hover{background:rgba(255,255,255,.07)}
+.rp-region.active{background:rgba(157,111,232,.2);border:1px solid rgba(157,111,232,.3)}
+.rp-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.rp-name{font-size:12px;color:rgba(216,180,254,.8);flex:1}
+.rp-count{font-family:"Space Mono",monospace;font-size:10px;color:rgba(216,180,254,.5)}
+.rp-count.has{color:var(--teal);font-weight:700}
+
 </style>
 </head>
 <body>
@@ -450,40 +560,50 @@ input,textarea,select{-webkit-user-select:text!important;user-select:text!import
     <button onclick="adminCvList()" style="background:rgba(94,234,212,.15);border:1px solid rgba(94,234,212,.35);color:var(--teal);font-family:Space Mono,monospace;font-size:9px;letter-spacing:.1em;padding:5px 12px;border-radius:7px;cursor:pointer;white-space:nowrap">📋 LISTE DES CVS</button>
   </div>
 
-  <!-- CARTE DE FRANCE 3D -->
+  <!-- CARTE FRANCE RÉGIONS INTERACTIVES -->
   <div class="map-section">
-    <div class="map-3d-wrap">
-      <div class="map-3d">
-        <svg class="map-svg" width="540" height="520" viewBox="0 0 600 580" xmlns="http://www.w3.org/2000/svg">
+    <div class="map-header">
+      <span class="map-title">📍 Localisation des candidats par région</span>
+      <div class="map-filter-btns">
+        <button class="mfb active" onclick="filterRegion(null,this)">Toutes les régions</button>
+        <button class="mfb" onclick="filterRegion('Île-de-France',this)">Île-de-France</button>
+        <button class="mfb" onclick="filterRegion('Auvergne-Rhône-Alpes',this)">ARA</button>
+        <button class="mfb" onclick="filterRegion('Occitanie',this)">Occitanie</button>
+        <button class="mfb" onclick="filterRegion('remote',this)">🌐 Remote</button>
+      </div>
+    </div>
+    <div class="map-wrap">
+      <!-- SVG CARTE -->
+      <div style="position:relative">
+        <svg id="france-map" width="100%" viewBox="0 0 490 490" xmlns="http://www.w3.org/2000/svg" style="display:block">
           <defs>
-            <linearGradient id="frGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#4a2d8a"/>
-              <stop offset="45%" stop-color="#5b3a9e"/>
-              <stop offset="100%" stop-color="#3b2280"/>
-            </linearGradient>
+            <filter id="region-glow">
+              <feGaussianBlur stdDeviation="3" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
           </defs>
-          <!-- Couche 3D base (extrusion) -->
-          <path class="fr-base" transform="translate(0,16)" d="M 320 40 L 360 60 L 420 130 L 480 150 L 500 200 L 470 260 L 490 320 L 460 380 L 490 440 L 430 480 L 380 490 L 330 470 L 280 490 L 240 470 L 160 440 L 180 380 L 140 320 L 120 260 L 80 230 L 60 200 L 30 190 L 60 160 L 120 170 L 150 140 L 200 120 L 240 100 L 280 70 Z"/>
-          <!-- Corps France -->
-          <path class="fr-body" d="M 320 40 L 360 60 L 420 130 L 480 150 L 500 200 L 470 260 L 490 320 L 460 380 L 490 440 L 430 480 L 380 490 L 330 470 L 280 490 L 240 470 L 160 440 L 180 380 L 140 320 L 120 260 L 80 230 L 60 200 L 30 190 L 60 160 L 120 170 L 150 140 L 200 120 L 240 100 L 280 70 Z"/>
-          <!-- Grille déco -->
-          <g class="fr-grid">
-            <line x1="60" y1="200" x2="500" y2="200"/>
-            <line x1="80" y1="300" x2="490" y2="300"/>
-            <line x1="140" y1="400" x2="480" y2="400"/>
-            <line x1="200" y1="80" x2="200" y2="470"/>
-            <line x1="320" y1="45" x2="320" y2="475"/>
-            <line x1="430" y1="135" x2="430" y2="480"/>
-          </g>
+          <!-- Fond mer -->
+          <rect width="490" height="490" rx="12" fill="rgba(15,10,40,.6)" stroke="rgba(196,181,232,.15)" stroke-width="1"/>
+          <!-- Régions injectées par JS -->
+          <g id="fr-regions"></g>
+          <!-- Labels régions injectés par JS -->
+          <g id="fr-labels"></g>
           <!-- Pins candidats injectés par JS -->
           <g id="map-pins"></g>
         </svg>
+        <!-- Tooltip riche -->
+        <div class="map-tooltip-v2" id="map-tooltip-v2"></div>
+      </div>
+      <!-- PANEL LATÉRAL -->
+      <div class="region-panel" id="region-panel">
+        <div class="rp-title">Régions</div>
+        <div id="rp-list"></div>
       </div>
     </div>
-    <div class="map-tooltip" id="map-tooltip"></div>
-    <div class="map-legend">
-      <span><span class="lg-dot" style="background:#d946ef"></span> Candidat disponible</span>
-      <span><span class="lg-dot" style="background:#5eead4"></span> Dans ma sélection</span>
+    <div class="map-legend" style="margin-top:14px">
+      <span><span class="lg-dot" style="background:#d946ef;box-shadow:0 0 6px rgba(217,70,239,.6)"></span> Candidat disponible</span>
+      <span><span class="lg-dot" style="background:#5eead4;box-shadow:0 0 6px rgba(94,234,212,.6)"></span> Dans ma sélection</span>
+      <span><span class="lg-dot" style="background:rgba(157,111,232,.4);border:1px solid rgba(157,111,232,.6)"></span> Région avec candidat(s)</span>
     </div>
   </div>
 
@@ -942,69 +1062,263 @@ function renderAll(){
   }
 }
 
-// ── CARTE DE FRANCE — pins + tooltips ──
+// ═══════════════════════════════════════════════════════════
+// CARTE FRANCE — RÉGIONS INTERACTIVES AVEC CANDIDATS
+// ═══════════════════════════════════════════════════════════
+
+// Données géographiques : 13 régions métropolitaines
+var FR_REGIONS = [
+  {id:'hdf', name:'Hauts-de-France',    color:'#1d4ed8', path:'M 238 38 L 272 30 L 308 34 L 332 44 L 340 62 L 322 76 L 298 84 L 276 82 L 254 72 L 240 58 Z', lx:290, ly:58, cities:['Lille','Amiens']},
+  {id:'nor', name:'Normandie',           color:'#065f46', path:'M 148 66 L 194 54 L 234 60 L 240 78 L 222 98 L 192 108 L 162 102 L 138 86 Z', lx:190, ly:82, cities:['Rouen','Caen']},
+  {id:'bre', name:'Bretagne',            color:'#7c2d12', path:'M 52 96 L 100 84 L 136 84 L 148 100 L 142 130 L 118 144 L 80 140 L 54 124 Z', lx:100, ly:114, cities:['Rennes','Brest']},
+  {id:'pdl', name:'Pays de la Loire',    color:'#b45309', path:'M 118 142 L 150 130 L 182 134 L 204 148 L 208 172 L 192 192 L 164 200 L 134 192 L 114 174 Z', lx:162, ly:166, cities:['Nantes','Le Mans']},
+  {id:'cvl', name:'Centre-Val de Loire', color:'#0369a1', path:'M 202 148 L 244 138 L 274 142 L 278 158 L 272 182 L 248 200 L 218 204 L 194 192 L 208 172 Z', lx:236, ly:172, cities:['Orléans','Tours']},
+  {id:'idf', name:'Île-de-France',       color:'#7c3aed', path:'M 276 148 L 296 142 L 310 148 L 314 162 L 306 176 L 290 180 L 274 172 L 272 158 Z', lx:293, ly:162, cities:['Paris']},
+  {id:'ges', name:'Grand Est',           color:'#c2410c', path:'M 312 32 L 356 28 L 396 42 L 416 64 L 412 94 L 386 112 L 354 114 L 322 102 L 298 82 L 322 76 Z', lx:358, ly:72, cities:['Strasbourg','Reims']},
+  {id:'bfc', name:'Bourgogne-Franche-Comté', color:'#5b21b6', path:'M 278 176 L 308 182 L 332 174 L 360 180 L 364 208 L 346 226 L 316 234 L 288 226 L 274 202 L 272 182 Z', lx:318, ly:204, cities:['Dijon','Besançon']},
+  {id:'naq', name:'Nouvelle-Aquitaine',  color:'#6d28d9', path:'M 116 192 L 166 200 L 194 212 L 206 246 L 198 286 L 174 318 L 138 336 L 102 328 L 78 300 L 72 264 L 88 230 Z', lx:140, ly:264, cities:['Bordeaux','Poitiers']},
+  {id:'ara', name:'Auvergne-Rhône-Alpes',color:'#0f766e', path:'M 286 224 L 318 232 L 350 228 L 378 244 L 392 274 L 380 308 L 350 324 L 316 320 L 290 300 L 278 268 L 278 242 Z', lx:334, ly:278, cities:['Lyon','Grenoble']},
+  {id:'occ', name:'Occitanie',           color:'#92400e', path:'M 174 318 L 200 296 L 232 292 L 272 296 L 288 318 L 282 350 L 256 368 L 220 370 L 186 352 L 164 334 Z', lx:228, ly:332, cities:['Toulouse','Montpellier']},
+  {id:'pac', name:"Provence-Alpes-Côte d'Azur", color:'#0c4a6e', path:'M 316 318 L 350 322 L 380 330 L 408 350 L 406 378 L 380 392 L 348 388 L 320 372 L 308 350 L 312 330 Z', lx:358, ly:356, cities:['Marseille','Nice']},
+  {id:'cor', name:'Corse',               color:'#1e3a5f', path:'M 418 394 L 428 384 L 440 390 L 446 408 L 440 426 L 428 430 L 418 422 L 414 408 Z', lx:430, ly:408, cities:[]},
+];
+
+// Correspondance ville → région
+var CITY_REGION = {
+  'Paris':'idf','Lille':'hdf','Rouen':'nor','Caen':'nor',
+  'Rennes':'bre','Brest':'bre','Nantes':'pdl','Lyon':'ara',
+  'Marseille':'pac','Nice':'pac','Toulouse':'occ','Montpellier':'occ',
+  'Bordeaux':'naq','Strasbourg':'ges','Dijon':'bfc','Grenoble':'ara',
+  'Orléans':'cvl','Tours':'cvl','Le Mans':'pdl','Reims':'ges',
+  'Amiens':'hdf','Besançon':'bfc','Poitiers':'naq','Angers':'pdl',
+};
+
+// Photos démo candidats (avatars générés)
+var CAND_PHOTOS = {
+  'Karim Benali':   'https://api.dicebear.com/7.x/personas/svg?seed=karim&backgroundColor=6d28d9',
+  'Sophie Marchand':'https://api.dicebear.com/7.x/personas/svg?seed=sophie&backgroundColor=9d6fe8',
+  'Thomas Lefèvre': 'https://api.dicebear.com/7.x/personas/svg?seed=thomas&backgroundColor=1d4ed8',
+  'Amina Diallo':   'https://api.dicebear.com/7.x/personas/svg?seed=amina&backgroundColor=0f766e',
+  'Julien Rousseau':'https://api.dicebear.com/7.x/personas/svg?seed=julien&backgroundColor=c2410c',
+};
+
+var _activeRegion = null;
+
 function renderMap(){
-  var g = document.getElementById('map-pins');
-  g.innerHTML = '';
-  var tooltip = document.getElementById('map-tooltip');
+  renderRegions();
+  renderPins();
+  renderRegionPanel();
+}
 
+// ── Dessiner les régions ──
+function renderRegions(){
+  var g = document.getElementById('fr-regions');
+  var gl = document.getElementById('fr-labels');
+  if(!g) return;
+  g.innerHTML = ''; gl.innerHTML = '';
+
+  // Quels IDs de région ont des candidats ?
+  var regionsWithCands = {};
   MATCHES.forEach(function(m){
-    var pin = document.createElementNS('http://www.w3.org/2000/svg','g');
-    pin.setAttribute('class', 'map-pin' + (isInCart(m.uid) ? ' in-cart' : ''));
-    pin.dataset.uid = m.uid;
-
-    var pulse = document.createElementNS('http://www.w3.org/2000/svg','circle');
-    pulse.setAttribute('cx', m.city.x); pulse.setAttribute('cy', m.city.y);
-    pulse.setAttribute('r', 12);
-    pulse.setAttribute('fill', 'rgba(217,70,239,.35)');
-    pulse.setAttribute('class','pin-pulse');
-
-    var core = document.createElementNS('http://www.w3.org/2000/svg','circle');
-    core.setAttribute('cx', m.city.x); core.setAttribute('cy', m.city.y);
-    core.setAttribute('r', 7);
-    core.setAttribute('fill', isInCart(m.uid) ? '#5eead4' : '#d946ef');
-    core.setAttribute('stroke', '#fff');
-    core.setAttribute('stroke-width', '1.5');
-    core.setAttribute('class','pin-core');
-
-    var lbl = document.createElementNS('http://www.w3.org/2000/svg','text');
-    lbl.setAttribute('x', m.city.x); lbl.setAttribute('y', m.city.y + 24);
-    lbl.setAttribute('text-anchor','middle');
-    lbl.setAttribute('font-size','11');
-    lbl.setAttribute('fill','rgba(237,233,254,.75)');
-    lbl.setAttribute('font-family','Space Mono, monospace');
-    lbl.textContent = m.city.name;
-
-    pin.appendChild(pulse); pin.appendChild(core); pin.appendChild(lbl);
-
-    // Tooltip — caractéristiques minimales (sans identité)
-    pin.addEventListener('mouseenter', function(ev){
-      tooltip.innerHTML =
-        '<div class="mt-name">' + m.avatar + ' ' + m.label + ' <span class="mt-score">' + m.score + '%</span></div>' +
-        '<div class="mt-row"><span>Poste</span><b>' + m.titre + '</b></div>' +
-        '<div class="mt-row"><span>Séniorité</span><b>' + m.seniority + '</b></div>' +
-        '<div class="mt-row"><span>TJM</span><b>' + m.tjm + ' € HT</b></div>' +
-        '<div class="mt-row"><span>Ville</span><b>' + m.city.name + '</b></div>' +
-        '<div class="mt-row"><span>Dispo</span><b>' + m.dispo + '</b></div>';
-      tooltip.classList.add('show');
-      positionTooltip(ev);
-    });
-    pin.addEventListener('mousemove', positionTooltip);
-    pin.addEventListener('mouseleave', function(){ tooltip.classList.remove('show'); });
-    pin.addEventListener('click', function(){ toggleCart(m.uid); });
-
-    g.appendChild(pin);
+    var rid = CITY_REGION[m.city.name];
+    if(rid){ regionsWithCands[rid] = (regionsWithCands[rid]||0) + 1; }
   });
 
-  function positionTooltip(ev){
-    var section = document.querySelector('.map-section');
-    var rect = section.getBoundingClientRect();
-    var x = ev.clientX - rect.left + 16;
+  FR_REGIONS.forEach(function(reg){
+    var hasCands = !!regionsWithCands[reg.id];
+    var isActive = _activeRegion === reg.id;
+    var fillColor = isActive ? reg.color : (hasCands ? reg.color + 'dd' : reg.color + '55');
+    var strokeColor = isActive ? '#fff' : (hasCands ? 'rgba(94,234,212,.7)' : 'rgba(255,255,255,.2)');
+    var sw = isActive ? '2' : (hasCands ? '1.4' : '0.8');
+
+    var gr = document.createElementNS('http://www.w3.org/2000/svg','g');
+    gr.setAttribute('class','fr-region' + (hasCands?' has-candidates':'') + (isActive?' active':''));
+    gr.dataset.rid = reg.id;
+
+    var path = document.createElementNS('http://www.w3.org/2000/svg','path');
+    path.setAttribute('class','region-fill');
+    path.setAttribute('d', reg.path);
+    path.setAttribute('fill', fillColor);
+    path.setAttribute('stroke', strokeColor);
+    path.setAttribute('stroke-width', sw);
+    path.setAttribute('stroke-linejoin','round');
+
+    gr.appendChild(path);
+    g.appendChild(gr);
+
+    // Clic région → filtrer
+    gr.addEventListener('click', function(){
+      filterRegion(isActive ? null : reg.name, null);
+    });
+
+    // Label région si suffisamment grande
+    if(reg.id !== 'idf' && reg.id !== 'cor'){
+      var abbrev = {
+        'hdf':'HDF','nor':'Normandie','bre':'Bretagne','pdl':'Pays-de-Loire',
+        'cvl':'Centre-V.L.','ges':'Grand Est','bfc':'Bourg.-F.C.',
+        'naq':'Nouv.-Aquitaine','ara':'ARA','occ':'Occitanie','pac':'PACA',
+      }[reg.id] || reg.name.split(' ')[0];
+
+      var lbl = document.createElementNS('http://www.w3.org/2000/svg','text');
+      lbl.setAttribute('x', reg.lx); lbl.setAttribute('y', reg.ly);
+      lbl.setAttribute('text-anchor','middle');
+      lbl.setAttribute('font-size', hasCands ? '8' : '7');
+      lbl.setAttribute('font-family','Space Mono, monospace');
+      lbl.setAttribute('fill', hasCands ? 'rgba(255,255,255,.9)' : 'rgba(255,255,255,.4)');
+      lbl.setAttribute('font-weight', hasCands ? '700' : '400');
+      lbl.setAttribute('pointer-events','none');
+      lbl.textContent = abbrev + (regionsWithCands[reg.id] ? ' ('+regionsWithCands[reg.id]+')' : '');
+      gl.appendChild(lbl);
+    }
+  });
+}
+
+// ── Dessiner les pins candidats ──
+function renderPins(){
+  var g = document.getElementById('map-pins');
+  var tooltip = document.getElementById('map-tooltip-v2');
+  if(!g||!tooltip) return;
+  g.innerHTML = '';
+
+  var visible = _activeRegion
+    ? MATCHES.filter(function(m){ return CITY_REGION[m.city.name] === _activeRegion; })
+    : MATCHES;
+
+  visible.forEach(function(m){
+    var inCart = isInCart(m.uid);
+    var pinColor = inCart ? '#5eead4' : '#d946ef';
+    var ringColor = inCart ? 'rgba(94,234,212,.4)' : 'rgba(217,70,239,.4)';
+
+    var gr = document.createElementNS('http://www.w3.org/2000/svg','g');
+    gr.setAttribute('class','cand-pin');
+    gr.dataset.uid = m.uid;
+
+    // Anneaux pulsants
+    var r1 = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    r1.setAttribute('cx',m.city.x); r1.setAttribute('cy',m.city.y);
+    r1.setAttribute('r','8'); r1.setAttribute('fill',ringColor);
+    r1.setAttribute('class','pin-ring');
+
+    var r2 = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    r2.setAttribute('cx',m.city.x); r2.setAttribute('cy',m.city.y);
+    r2.setAttribute('r','8'); r2.setAttribute('fill',ringColor);
+    r2.setAttribute('class','pin-ring-2');
+
+    // Corps du pin (cercle)
+    var core = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    core.setAttribute('cx',m.city.x); core.setAttribute('cy',m.city.y);
+    core.setAttribute('r','9');
+    core.setAttribute('fill', pinColor);
+    core.setAttribute('stroke','#fff'); core.setAttribute('stroke-width','1.8');
+    core.setAttribute('filter','url(#region-glow)');
+
+    // Score text dans le pin
+    var score = document.createElementNS('http://www.w3.org/2000/svg','text');
+    score.setAttribute('x',m.city.x); score.setAttribute('y',m.city.y+4);
+    score.setAttribute('text-anchor','middle');
+    score.setAttribute('font-size','7');
+    score.setAttribute('font-family','Space Mono,monospace');
+    score.setAttribute('font-weight','700');
+    score.setAttribute('fill','#fff');
+    score.setAttribute('pointer-events','none');
+    score.textContent = m.score+'%';
+
+    gr.appendChild(r1); gr.appendChild(r2); gr.appendChild(core); gr.appendChild(score);
+    g.appendChild(gr);
+
+    // ── Tooltip riche ──
+    gr.addEventListener('mouseenter', function(ev){
+      var ident = (IS_ADMIN && m.ident) ? m.ident : null;
+      var photoUrl = ident ? (CAND_PHOTOS[ident.prenom+' '+ident.nom] || '') : '';
+      var adminSection = '';
+      if(ident){
+        adminSection =
+          '<div class="tt-row"><span class="tt-k">🔐 Identité</span><span class="tt-v">'+ident.prenom+' '+ident.nom+'</span></div>'+
+          '<div class="tt-row"><span class="tt-k">Email</span><span class="tt-v" style="font-size:10px"><a href="mailto:'+ident.email+'" style="color:#5eead4">'+ident.email+'</a></span></div>'+
+          '<div class="tt-row"><span class="tt-k">Tél</span><span class="tt-v">'+ident.tel+'</span></div>'+
+          '<div class="tt-row"><span class="tt-k">🔍 Source</span><span class="tt-v" style="color:#f0abfc">'+(ident.source||'—')+'</span></div>';
+      }
+      tooltip.innerHTML =
+        '<div class="tt-head">'+
+          '<div class="tt-avatar">'+(photoUrl ? '<img src="'+photoUrl+'" alt="">' : m.avatar)+'</div>'+
+          '<div>'+
+            '<div class="tt-name">'+m.label+'</div>'+
+            '<div class="tt-score">⭐ '+m.score+'% match · '+m.domaine+'</div>'+
+          '</div>'+
+        '</div>'+
+        '<div class="tt-body">'+
+          '<div class="tt-row"><span class="tt-k">Poste</span><span class="tt-v">'+m.titre+'</span></div>'+
+          '<div class="tt-row"><span class="tt-k">Séniorité</span><span class="tt-v">'+m.seniority+'</span></div>'+
+          '<div class="tt-row"><span class="tt-k">TJM</span><span class="tt-v">'+m.tjm+' € HT</span></div>'+
+          '<div class="tt-row"><span class="tt-k">Ville</span><span class="tt-v">'+m.city.name+'</span></div>'+
+          '<div class="tt-row"><span class="tt-k">Dispo</span><span class="tt-v">'+m.dispo+'</span></div>'+
+          adminSection+
+        '</div>'+
+        (m.skills.length ? '<div class="tt-skills">'+m.skills.slice(0,4).map(function(s){ return '<span class="tt-skill">'+s+'</span>'; }).join('')+'</div>' : '')+
+        '<div class="tt-cart-btn'+(isInCart(m.uid)?' added':'')+'" data-uid="'+m.uid+'">'+
+          (isInCart(m.uid) ? '✓ Dans ma sélection' : '+ Sélectionner ce profil')+
+        '</div>';
+      tooltip.classList.add('show');
+      posTooltip(ev);
+    });
+    gr.addEventListener('mousemove', posTooltip);
+    gr.addEventListener('mouseleave', function(){ tooltip.classList.remove('show'); });
+    gr.addEventListener('click', function(){ toggleCart(m.uid); renderAll(); });
+  });
+
+  // Délégation click pour le bouton cart dans le tooltip
+  if(!tooltip._delegated){
+    tooltip._delegated = true;
+    tooltip.addEventListener('click', function(e){
+      var btn = e.target.closest('.tt-cart-btn');
+      if(btn && btn.dataset.uid){ toggleCart(btn.dataset.uid); renderAll(); }
+    });
+  }
+
+  function posTooltip(ev){
+    var wrap = document.querySelector('.map-section');
+    if(!wrap) return;
+    var rect = wrap.getBoundingClientRect();
+    var x = ev.clientX - rect.left + 14;
     var y = ev.clientY - rect.top - 10;
-    if(x + 220 > rect.width) x -= 240;
+    var w = tooltip.offsetWidth || 240;
+    if(x + w > rect.width - 10) x = ev.clientX - rect.left - w - 14;
+    if(y < 0) y = 10;
     tooltip.style.left = x + 'px';
     tooltip.style.top  = y + 'px';
   }
+}
+
+// ── Panel latéral des régions ──
+function renderRegionPanel(){
+  var list = document.getElementById('rp-list');
+  if(!list) return;
+  var regionsWithCands = {};
+  MATCHES.forEach(function(m){
+    var rid = CITY_REGION[m.city.name];
+    if(rid) regionsWithCands[rid] = (regionsWithCands[rid]||0) + 1;
+  });
+  list.innerHTML = FR_REGIONS.filter(function(r){ return r.id!=='cor'; }).map(function(reg){
+    var n = regionsWithCands[reg.id] || 0;
+    var isActive = _activeRegion === reg.id;
+    return '<div class="rp-region'+(isActive?' active':'')+'" onclick="filterRegion('+(isActive?'null':'"'+reg.name+'"')+',null)">'+
+      '<span class="rp-dot" style="background:'+reg.color+(n?'':'88')+'"></span>'+
+      '<span class="rp-name">'+reg.name+'</span>'+
+      '<span class="rp-count'+(n?' has':'')+'">'+( n ? n+' profil'+(n>1?'s':'') : '—' )+'</span>'+
+    '</div>';
+  }).join('');
+}
+
+// ── Filtre par région ──
+function filterRegion(regionName, btn){
+  _activeRegion = regionName
+    ? FR_REGIONS.find(function(r){ return r.name===regionName; })?.id || null
+    : null;
+  // Sync boutons filtres
+  document.querySelectorAll('.mfb').forEach(function(b){ b.classList.remove('active'); });
+  if(btn){ btn.classList.add('active'); }
+  else if(!regionName){ document.querySelector('.mfb')?.classList.add('active'); }
+  renderAll();
 }
 
 // ── Liste matches ──
