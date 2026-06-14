@@ -214,6 +214,44 @@ input,textarea{-webkit-user-select:text!important;user-select:text!important}
   max-width:150px;margin:0 auto;
 }
 
+
+/* ══ BLOC AUTHENTIFICATION CLIENT ══ */
+.auth-section{max-width:480px;margin:0 auto 48px;padding:0 20px}
+.auth-card{background:rgba(255,255,255,.07);border:1px solid rgba(196,181,232,.22);border-radius:18px;padding:32px 28px;backdrop-filter:blur(12px)}
+.auth-tabs{display:flex;gap:6px;background:rgba(255,255,255,.05);border-radius:12px;padding:5px;margin-bottom:24px}
+.auth-tab{flex:1;padding:11px;border-radius:9px;font-size:13px;font-weight:700;font-family:"DM Sans",sans-serif;border:none;background:transparent;color:rgba(216,180,254,.65);cursor:pointer;transition:all .2s}
+.auth-tab.active{background:linear-gradient(135deg,#6d28d9,#d946ef);color:#fff;box-shadow:0 4px 16px rgba(217,70,239,.3)}
+.auth-form{display:none;flex-direction:column;gap:16px}
+.auth-form.show{display:flex}
+.auth-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:440px){.auth-row{grid-template-columns:1fr}}
+.auth-field{display:flex;flex-direction:column;gap:6px}
+.auth-label{font-size:11px;font-family:"Space Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:rgba(216,180,254,.6)}
+.auth-input{background:rgba(255,255,255,.08);border:1px solid rgba(196,181,232,.28);border-radius:9px;color:#fff;font-size:14px;font-family:"DM Sans",sans-serif;padding:12px 14px;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-user-select:text!important;user-select:text!important}
+.auth-input:focus{border-color:rgba(217,70,239,.55);box-shadow:0 0 0 3px rgba(157,111,232,.15)}
+.pw-strength{font-size:11px;margin-top:4px;font-family:"Space Mono",monospace}
+.pw-rules{font-size:10px;color:rgba(216,180,254,.5);line-height:1.6;margin-top:4px}
+.pw-rule.ok{color:var(--teal)}
+.auth-consent{display:flex;align-items:flex-start;gap:10px;background:rgba(157,111,232,.1);border:1px solid rgba(196,181,232,.25);border-radius:9px;padding:12px 14px;cursor:pointer}
+.auth-consent:has(input:checked){border-color:rgba(94,234,212,.4);background:rgba(94,234,212,.06)}
+.auth-consent input{width:16px;height:16px;margin-top:2px;accent-color:var(--teal);cursor:pointer;flex-shrink:0}
+.auth-consent-txt{font-size:11px;color:rgba(216,180,254,.78);line-height:1.6}
+.auth-consent-txt a{color:var(--teal);text-decoration:none}
+.auth-btn{background:linear-gradient(135deg,#6d28d9,#9d6fe8,#d946ef);color:#fff;padding:14px;border-radius:10px;font-size:15px;font-weight:700;font-family:"DM Sans",sans-serif;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(217,70,239,.35);transition:all .25s}
+.auth-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(217,70,239,.45)}
+.auth-btn:disabled{opacity:.6;cursor:wait;transform:none}
+.auth-msg{font-size:12px;padding:12px 14px;border-radius:9px;display:none;line-height:1.6}
+.auth-msg.success{display:block;background:rgba(94,234,212,.1);border:1px solid rgba(94,234,212,.3);color:var(--teal)}
+.auth-msg.error{display:block;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.35);color:#fca5a5}
+.auth-msg.info{display:block;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.3);color:#fde68a}
+.auth-logged{text-align:center}
+.auth-logged-avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#6d28d9,#d946ef);display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 14px;box-shadow:0 0 24px rgba(217,70,239,.3)}
+.auth-logged-name{font-size:18px;font-weight:700;color:#fff;margin-bottom:4px}
+.auth-logged-email{font-size:12px;color:rgba(216,180,254,.6);margin-bottom:20px;font-family:"Space Mono",monospace}
+.auth-logout{background:rgba(255,255,255,.08);border:1px solid rgba(196,181,232,.3);color:rgba(216,180,254,.8);padding:10px 22px;border-radius:9px;font-size:13px;cursor:pointer;transition:all .2s}
+.auth-logout:hover{background:rgba(255,255,255,.15);color:#fff}
+.auth-lead{text-align:center;font-size:13px;color:rgba(216,180,254,.7);margin-bottom:20px;line-height:1.7}
+
 </style>
 </head>
 <body>
@@ -280,6 +318,59 @@ input,textarea{-webkit-user-select:text!important;user-select:text!important}
     <div class="ticker-item"><strong>ISO 27001 Lead</strong> <span class="tag">Audit</span></div>
     <div class="ticker-item"><strong>LLM Specialist</strong> <span class="tag">IA Gen</span></div>
     <div class="ticker-item"><strong>Privacy Counsel</strong> <span class="tag">RGPD</span></div>
+  </div>
+</div>
+
+
+<!-- ══ BLOC AUTHENTIFICATION CLIENT ══ -->
+<div class="auth-section" id="auth-section">
+  <div class="auth-card" id="auth-card">
+    <p class="auth-lead">🔐 Créez votre compte client sécurisé pour accéder à la plateforme de sourcing IA.</p>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="switchAuth('login')">Connexion</button>
+      <button class="auth-tab" id="tab-register" onclick="switchAuth('register')">Inscription</button>
+    </div>
+
+    <!-- LOGIN -->
+    <form class="auth-form show" id="form-login" novalidate>
+      <div class="auth-field">
+        <label class="auth-label">Email</label>
+        <input class="auth-input" type="email" id="login-email" autocomplete="email" required>
+      </div>
+      <div class="auth-field">
+        <label class="auth-label">Mot de passe</label>
+        <input class="auth-input" type="password" id="login-password" autocomplete="current-password" required>
+      </div>
+      <div class="auth-msg" id="login-msg"></div>
+      <button type="submit" class="auth-btn" id="login-btn">Se connecter</button>
+    </form>
+
+    <!-- REGISTER -->
+    <form class="auth-form" id="form-register" novalidate>
+      <div class="auth-row">
+        <div class="auth-field"><label class="auth-label">Prénom</label><input class="auth-input" id="reg-prenom" autocomplete="given-name" required></div>
+        <div class="auth-field"><label class="auth-label">Nom</label><input class="auth-input" id="reg-nom" autocomplete="family-name" required></div>
+      </div>
+      <div class="auth-field"><label class="auth-label">Entreprise</label><input class="auth-input" id="reg-entreprise" autocomplete="organization"></div>
+      <div class="auth-field"><label class="auth-label">Email professionnel</label><input class="auth-input" type="email" id="reg-email" autocomplete="email" required></div>
+      <div class="auth-field">
+        <label class="auth-label">Mot de passe</label>
+        <input class="auth-input" type="password" id="reg-password" autocomplete="new-password" required oninput="checkPwStrength()">
+        <div class="pw-rules" id="pw-rules">
+          <span class="pw-rule" id="r-len">○ 8 caractères min</span> ·
+          <span class="pw-rule" id="r-maj">○ 1 majuscule</span> ·
+          <span class="pw-rule" id="r-min">○ 1 minuscule</span> ·
+          <span class="pw-rule" id="r-num">○ 1 chiffre</span>
+        </div>
+      </div>
+      <label class="auth-consent" for="reg-consent">
+        <input type="checkbox" id="reg-consent" required>
+        <span class="auth-consent-txt">J'accepte que mes données soient traitées par <strong>CONSEILPREV</strong> pour la création de mon compte et l'accès à la plateforme, conformément à la <a href="/protection-donnees" target="_blank">politique de protection des données</a> (RGPD Art. 6.1.a). Je peux demander leur suppression à tout moment.</span>
+      </label>
+      <div class="auth-msg" id="reg-msg"></div>
+      <button type="submit" class="auth-btn" id="reg-btn">Créer mon compte</button>
+    </form>
   </div>
 </div>
 
@@ -489,5 +580,119 @@ document.getElementById('sourcing-form').addEventListener('submit', function(e){
 });
 document.addEventListener('contextmenu',function(e){e.preventDefault();});
 </script>
+
+<script>
+// ════════ AUTHENTIFICATION CLIENT ════════
+function switchAuth(mode){
+  document.getElementById('tab-login').classList.toggle('active', mode==='login');
+  document.getElementById('tab-register').classList.toggle('active', mode==='register');
+  document.getElementById('form-login').classList.toggle('show', mode==='login');
+  document.getElementById('form-register').classList.toggle('show', mode==='register');
+}
+
+function checkPwStrength(){
+  var pw = document.getElementById('reg-password').value;
+  function set(id, ok){
+    var el = document.getElementById(id);
+    el.classList.toggle('ok', ok);
+    el.textContent = (ok?'● ':'○ ') + el.textContent.slice(2);
+  }
+  set('r-len', pw.length>=8);
+  set('r-maj', /[A-Z]/.test(pw));
+  set('r-min', /[a-z]/.test(pw));
+  set('r-num', /[0-9]/.test(pw));
+}
+
+function showAuthMsg(id, type, text){
+  var el = document.getElementById(id);
+  el.className = 'auth-msg ' + type;
+  el.innerHTML = text;
+}
+
+// Inscription
+document.getElementById('form-register').addEventListener('submit', function(e){
+  e.preventDefault();
+  var consent = document.getElementById('reg-consent');
+  if(!consent.checked){ showAuthMsg('reg-msg','error','⚠ Le consentement RGPD est requis.'); return; }
+  var btn = document.getElementById('reg-btn');
+  btn.disabled = true; btn.textContent = 'Création…';
+  fetch('/api/auth/register', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      prenom: document.getElementById('reg-prenom').value.trim(),
+      nom: document.getElementById('reg-nom').value.trim(),
+      entreprise: document.getElementById('reg-entreprise').value.trim(),
+      email: document.getElementById('reg-email').value.trim(),
+      password: document.getElementById('reg-password').value,
+      consent: true
+    })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(res){
+    btn.disabled = false; btn.textContent = 'Créer mon compte';
+    if(res.ok){
+      var extra = res.email_sent
+        ? '📧 Un email de validation vous a été envoyé. Cliquez sur le lien pour activer votre compte.'
+        : '⚠ Compte créé mais l_email de validation n_a pas pu partir (SMTP non configuré). ' + (res._dev_link ? '<a href="'+res._dev_link+'" style="color:#fde68a">Lien de validation direct →</a>' : '');
+      showAuthMsg('reg-msg', res.email_sent?'success':'info', '✓ ' + res.message + '<br>' + extra);
+      document.getElementById('form-register').reset();
+    } else {
+      showAuthMsg('reg-msg','error','⚠ ' + (res.error||'Erreur'));
+    }
+  })
+  .catch(function(){ btn.disabled=false; btn.textContent='Créer mon compte'; showAuthMsg('reg-msg','error','⚠ Erreur réseau'); });
+});
+
+// Connexion
+document.getElementById('form-login').addEventListener('submit', function(e){
+  e.preventDefault();
+  var btn = document.getElementById('login-btn');
+  btn.disabled = true; btn.textContent = 'Connexion…';
+  fetch('/api/auth/login', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      email: document.getElementById('login-email').value.trim(),
+      password: document.getElementById('login-password').value
+    })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(res){
+    btn.disabled = false; btn.textContent = 'Se connecter';
+    if(res.ok){
+      try{ sessionStorage.setItem('cp_user', JSON.stringify(res.user)); sessionStorage.setItem('cp_token', res.token); }catch(e){}
+      showLoggedIn(res.user);
+    } else {
+      showAuthMsg('login-msg','error','⚠ ' + (res.error||'Erreur'));
+    }
+  })
+  .catch(function(){ btn.disabled=false; btn.textContent='Se connecter'; showAuthMsg('login-msg','error','⚠ Erreur réseau'); });
+});
+
+function showLoggedIn(user){
+  var card = document.getElementById('auth-card');
+  card.innerHTML =
+    '<div class="auth-logged">'+
+      '<div class="auth-logged-avatar">'+(user.prenom?user.prenom[0].toUpperCase():'👤')+'</div>'+
+      '<div class="auth-logged-name">Bienvenue, '+user.prenom+' !</div>'+
+      '<div class="auth-logged-email">'+user.email+(user.entreprise?' · '+user.entreprise:'')+'</div>'+
+      '<a href="/platform" class="auth-btn" style="display:inline-block;text-decoration:none;margin-bottom:14px">🚀 Accéder à la plateforme B2B →</a>'+
+      '<div><button class="auth-logout" onclick="logout()">Se déconnecter</button></div>'+
+    '</div>';
+}
+
+function logout(){
+  try{ sessionStorage.removeItem('cp_user'); sessionStorage.removeItem('cp_token'); }catch(e){}
+  location.reload();
+}
+
+// Restaurer la session au chargement
+(function(){
+  try{
+    var u = sessionStorage.getItem('cp_user');
+    if(u){ showLoggedIn(JSON.parse(u)); }
+  }catch(e){}
+})();
+</script>
+
 </body>
 </html>

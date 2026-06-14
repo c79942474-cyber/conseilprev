@@ -743,7 +743,7 @@ def api_apply():
         # ── Anti-spam (sauf form_types internes de la plateforme B2B) ──
         # Les dossiers générés par la plateforme contiennent des barres
         # décoratives et du contenu structuré légitime — on les exempte.
-        TRUSTED_FORMS = {'selection_candidats','dossier_contrats','match_validation','contrats_signes'}
+        TRUSTED_FORMS = {'selection_candidats','dossier_contrats','match_validation','contrats_signes','sourcing_profil','candidature_bd'}
         if data['form_type'] not in TRUSTED_FORMS:
             try:
                 is_spam, reason = check_spam(data['message'], data['email'], data['nom'])
@@ -848,6 +848,253 @@ def test_email():
         }
     
     return jsonify(result)
+
+
+
+# ══════════════════════════════════════════════════════════
+# AUTHENTIFICATION CLIENT — Inscription, validation email, login
+# Conforme RGPD : consentement, hash sécurisé, droit à l'effacement
+# ══════════════════════════════════════════════════════════
+import hashlib as _hashlib
+import secrets as _secrets
+import hmac as _hmac
+
+USERS_FILE = os.path.join(os.path.dirname(__file__), 'users_db.json')
+SESSION_SECRET = os.environ.get('SESSION_SECRET', _secrets.token_hex(32))
+
+def _load_users():
+    try:
+        if os.path.isfile(USERS_FILE):
+            with open(USERS_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+    except Exception as e:
+        logger.error(f'USERS_LOAD_ERR: {e}')
+    return {}
+
+def _save_users(users):
+    try:
+        with open(USERS_FILE, 'w', encoding='utf-8') as f:
+            json.dump(users, f, ensure_ascii=False, indent=2)
+        return True
+    except Exception as e:
+        logger.error(f'USERS_SAVE_ERR: {e}')
+        return False
+
+def _hash_password(password, salt=None):
+    """PBKDF2-HMAC-SHA256, 200k itérations."""
+    if salt is None:
+        salt = _secrets.token_hex(16)
+    dk = _hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt.encode('utf-8'), 200000)
+    return salt + '$' + dk.hex()
+
+def _verify_password(password, stored):
+    try:
+        salt, _ = stored.split('$', 1)
+        return _hmac.compare_digest(_hash_password(password, salt), stored)
+    except Exception:
+        return False
+
+def _make_token():
+    return _secrets.token_urlsafe(32)
+
+def _validate_password_strength(pw):
+    """Min 8 car, 1 maj, 1 min, 1 chiffre."""
+    if len(pw) < 8:
+        return False, 'Le mot de passe doit faire au moins 8 caractères'
+    if not _re.search(r'[A-Z]', pw):
+        return False, 'Au moins une majuscule requise'
+    if not _re.search(r'[a-z]', pw):
+        return False, 'Au moins une minuscule requise'
+    if not _re.search(r'[0-9]', pw):
+        return False, 'Au moins un chiffre requis'
+    return True, 'ok'
+
+def send_validation_email(email, prenom, token):
+    """Envoie l'email de validation de compte."""
+    base_url = os.environ.get('BASE_URL', 'https://conseilprev.onrender.com')
+    validate_link = f"{base_url}/api/auth/verify?token={token}&email={email}"
+    data = {
+        'form_type': 'validation_compte',
+        'prenom': prenom, 'nom': '', 'email': email,
+        'message': f'Lien de validation : {validate_link}',
+        'consent_date': '', 'source_url': '/sourcing',
+    }
+    # Email vers le CLIENT (pas CONSEILPREV) — override du destinataire
+    try:
+        msg = MIMEMultipart('mixed')
+        msg['Subject'] = 'Validez votre compte CONSEILPREV'
+        msg['From'] = MAIL_FROM
+        msg['To'] = email
+        html = f"""<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;background:#f5f0ff;padding:24px">
+<div style="max-width:520px;margin:0 auto;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.1)">
+  <div style="background:linear-gradient(135deg,#6d28d9,#d946ef);padding:28px 32px">
+    <h1 style="color:#fff;font-size:20px;margin:0">Bienvenue chez CONSEILPREV</h1>
+  </div>
+  <div style="padding:32px">
+    <p style="font-size:15px;color:#1a1a2e;line-height:1.7">Bonjour {prenom},</p>
+    <p style="font-size:14px;color:#444;line-height:1.7">Merci de votre inscription à la plateforme Sourcing IA / Data / Cyber. Validez votre adresse email pour activer votre compte :</p>
+    <div style="text-align:center;margin:28px 0">
+      <a href="{validate_link}" style="display:inline-block;background:linear-gradient(135deg,#6d28d9,#d946ef);color:#fff;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px">Valider mon compte</a>
+    </div>
+    <p style="font-size:12px;color:#888;line-height:1.6">Si le bouton ne fonctionne pas, copiez ce lien :<br><span style="color:#6d28d9;word-break:break-all">{validate_link}</span></p>
+    <p style="font-size:11px;color:#aaa;margin-top:24px;line-height:1.6">Ce lien expire dans 24h. Si vous n'êtes pas à l'origine de cette inscription, ignorez cet email. Conformément au RGPD, vous pouvez demander la suppression de vos données à tout moment.</p>
+  </div>
+</div></body></html>"""
+        msg.attach(MIMEText(html, 'html', 'utf-8'))
+        if SMTP_USER and SMTP_PASSWORD:
+            ctx = ssl.create_default_context()
+            with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=20) as srv:
+                srv.ehlo(); srv.starttls(context=ctx); srv.login(SMTP_USER, SMTP_PASSWORD)
+                srv.sendmail(MAIL_FROM, [email], msg.as_string())
+            return True, validate_link
+        else:
+            logger.warning(f'VALIDATION_EMAIL_NO_SMTP: {email} — lien: {validate_link}')
+            return False, validate_link
+    except Exception as e:
+        logger.error(f'VALIDATION_EMAIL_ERR: {e}')
+        return False, validate_link
+
+
+@app.route('/api/auth/register', methods=['POST'])
+def auth_register():
+    ip = limiter.get_ip(request)
+    if not limiter.check_soft(ip, limit=10, window=600):
+        return jsonify({'ok': False, 'error': 'Trop de tentatives, réessayez plus tard'}), 429
+    try:
+        d = request.get_json(force=True, silent=True) or {}
+        email   = str(d.get('email','')).strip().lower()[:150]
+        password= str(d.get('password',''))[:128]
+        prenom  = str(d.get('prenom','')).strip()[:80]
+        nom     = str(d.get('nom','')).strip()[:80]
+        entreprise = str(d.get('entreprise','')).strip()[:120]
+        consent = d.get('consent', False)
+
+        # Validations
+        if not _re.match(r'^[^\s@]+@[^\s@]+\.[^\s@]{2,}$', email):
+            return jsonify({'ok': False, 'error': 'Email invalide'}), 400
+        if not prenom or not nom:
+            return jsonify({'ok': False, 'error': 'Prénom et nom requis'}), 400
+        if consent not in (True, 'true', '1', 'on'):
+            return jsonify({'ok': False, 'error': 'Consentement RGPD requis'}), 400
+        ok_pw, msg_pw = _validate_password_strength(password)
+        if not ok_pw:
+            return jsonify({'ok': False, 'error': msg_pw}), 400
+
+        users = _load_users()
+        if email in users and users[email].get('verified'):
+            return jsonify({'ok': False, 'error': 'Un compte existe déjà avec cet email'}), 409
+
+        import datetime
+        token = _make_token()
+        users[email] = {
+            'email': email,
+            'password': _hash_password(password),
+            'prenom': prenom, 'nom': nom, 'entreprise': entreprise,
+            'verified': False,
+            'verify_token': token,
+            'token_created': time.time(),
+            'consent': True,
+            'consent_date': datetime.datetime.now().isoformat(),
+            'created': datetime.datetime.now().isoformat(),
+            'ip': ip,
+        }
+        _save_users(users)
+
+        sent, link = send_validation_email(email, prenom, token)
+        logger.info(f'AUTH_REGISTER {ip}: {email} (email_sent={sent})')
+        return jsonify({
+            'ok': True,
+            'message': 'Compte créé. Vérifiez votre email pour valider votre inscription.',
+            'email_sent': sent,
+            '_dev_link': link if not sent else None,  # affiché si SMTP non configuré
+        })
+    except Exception as e:
+        logger.error(f'AUTH_REGISTER_ERR {ip}: {e}')
+        return jsonify({'ok': False, 'error': 'Erreur serveur'}), 500
+
+
+@app.route('/api/auth/verify', methods=['GET'])
+def auth_verify():
+    email = request.args.get('email','').strip().lower()
+    token = request.args.get('token','').strip()
+    users = _load_users()
+    user = users.get(email)
+    if not user or user.get('verify_token') != token:
+        return _verify_page(False, 'Lien invalide ou expiré')
+    # Token expire après 24h
+    if time.time() - user.get('token_created', 0) > 86400:
+        return _verify_page(False, 'Lien expiré (24h). Veuillez vous réinscrire.')
+    user['verified'] = True
+    user['verify_token'] = None
+    user['verified_date'] = __import__('datetime').datetime.now().isoformat()
+    _save_users(users)
+    logger.info(f'AUTH_VERIFIED: {email}')
+    return _verify_page(True, 'Votre compte est validé ! Vous pouvez maintenant vous connecter.')
+
+
+def _verify_page(success, message):
+    color = '#22c55e' if success else '#ef4444'
+    icon = '✓' if success else '✗'
+    html = f"""<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Validation compte</title>
+<style>body{{font-family:-apple-system,sans-serif;background:linear-gradient(180deg,#1e1250,#3b2280);min-height:100vh;display:flex;align-items:center;justify-content:center;margin:0;padding:24px}}
+.box{{background:#fff;border-radius:18px;padding:44px;text-align:center;max-width:420px;box-shadow:0 12px 40px rgba(0,0,0,.3)}}
+.ic{{width:72px;height:72px;border-radius:50%;background:{color}22;border:2px solid {color};color:{color};display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 20px}}
+h1{{font-size:20px;color:#1a1a2e;margin:0 0 10px}}p{{font-size:14px;color:#666;line-height:1.6;margin:0 0 24px}}
+a{{display:inline-block;background:linear-gradient(135deg,#6d28d9,#d946ef);color:#fff;padding:13px 28px;border-radius:10px;text-decoration:none;font-weight:700;font-size:14px}}</style></head>
+<body><div class="box"><div class="ic">{icon}</div><h1>{'Compte validé' if success else 'Échec de validation'}</h1>
+<p>{message}</p><a href="/sourcing">{'Se connecter →' if success else '← Retour'}</a></div></body></html>"""
+    return html
+
+
+@app.route('/api/auth/login', methods=['POST'])
+def auth_login():
+    ip = limiter.get_ip(request)
+    if not limiter.check_soft(ip, limit=10, window=300):
+        return jsonify({'ok': False, 'error': 'Trop de tentatives, réessayez dans 5 min'}), 429
+    try:
+        d = request.get_json(force=True, silent=True) or {}
+        email = str(d.get('email','')).strip().lower()[:150]
+        password = str(d.get('password',''))[:128]
+        users = _load_users()
+        user = users.get(email)
+        if not user or not _verify_password(password, user.get('password','')):
+            return jsonify({'ok': False, 'error': 'Email ou mot de passe incorrect'}), 401
+        if not user.get('verified'):
+            return jsonify({'ok': False, 'error': 'Compte non validé. Vérifiez votre email.'}), 403
+        # Session token simple (signé)
+        session_token = _make_token()
+        user['session'] = session_token
+        user['last_login'] = __import__('datetime').datetime.now().isoformat()
+        _save_users(users)
+        logger.info(f'AUTH_LOGIN {ip}: {email}')
+        return jsonify({
+            'ok': True, 'token': session_token,
+            'user': {'prenom': user['prenom'], 'nom': user['nom'],
+                     'email': email, 'entreprise': user.get('entreprise','')},
+        })
+    except Exception as e:
+        logger.error(f'AUTH_LOGIN_ERR {ip}: {e}')
+        return jsonify({'ok': False, 'error': 'Erreur serveur'}), 500
+
+
+@app.route('/api/auth/delete', methods=['POST'])
+def auth_delete():
+    """Droit à l'effacement RGPD (Art. 17)."""
+    try:
+        d = request.get_json(force=True, silent=True) or {}
+        email = str(d.get('email','')).strip().lower()
+        password = str(d.get('password',''))
+        users = _load_users()
+        user = users.get(email)
+        if not user or not _verify_password(password, user.get('password','')):
+            return jsonify({'ok': False, 'error': 'Identifiants incorrects'}), 401
+        del users[email]
+        _save_users(users)
+        logger.info(f'AUTH_DELETE: {email}')
+        return jsonify({'ok': True, 'message': 'Compte et données supprimés (RGPD Art. 17)'})
+    except Exception as e:
+        return jsonify({'ok': False, 'error': 'Erreur serveur'}), 500
 
 
 @app.route('/api/health', methods=['GET'])
