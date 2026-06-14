@@ -654,11 +654,11 @@ var CITIES = [
 // Identités candidat CONFIDENTIELLES (jamais affichées au client,
 // transmises uniquement à CONSEILPREV par email)
 var IDENT_POOL = [
-  {prenom:'Karim',  nom:'Benali',    email:'k.benali@pro-mail.fr',     tel:'+33 6 12 45 78 90', cv:'20260614_181515_Karim_Benali.pdf'},
-  {prenom:'Sophie', nom:'Marchand',  email:'sophie.marchand@dev.io',   tel:'+33 6 98 32 11 04', cv:'20260614_181515_Sophie_Marchand.pdf'},
-  {prenom:'Thomas', nom:'Lefèvre',   email:'t.lefevre@cyberpro.fr',    tel:'+33 7 45 22 89 13', cv:'20260614_181515_Thomas_Lefevre.pdf'},
-  {prenom:'Amina',  nom:'Diallo',    email:'amina.diallo@datapro.eu',  tel:'+33 6 77 54 20 36', cv:'20260614_181515_Amina_Diallo.pdf'},
-  {prenom:'Julien', nom:'Rousseau',  email:'j.rousseau@freelance.dev', tel:'+33 6 30 18 92 47', cv:'20260614_181515_Julien_Rousseau.pdf'}
+  {prenom:'Karim',  nom:'Benali',    email:'k.benali@pro-mail.fr',     tel:'+33 6 12 45 78 90', cv:'20260614_181515_Karim_Benali.pdf',   source:'Vivier CONSEILPREV',       date_source:'03/2025'},
+  {prenom:'Sophie', nom:'Marchand',  email:'sophie.marchand@dev.io',   tel:'+33 6 98 32 11 04', cv:'20260614_181515_Sophie_Marchand.pdf', source:'Free-Work (candidature)',  date_source:'01/2026'},
+  {prenom:'Thomas', nom:'Lefèvre',   email:'t.lefevre@cyberpro.fr',    tel:'+33 7 45 22 89 13', cv:'20260614_181515_Thomas_Lefevre.pdf',  source:'Malt',                     date_source:'04/2026'},
+  {prenom:'Amina',  nom:'Diallo',    email:'amina.diallo@datapro.eu',  tel:'+33 6 77 54 20 36', cv:'20260614_181515_Amina_Diallo.pdf',    source:'LinkedIn (approche directe)', date_source:'02/2026'},
+  {prenom:'Julien', nom:'Rousseau',  email:'j.rousseau@freelance.dev', tel:'+33 6 30 18 92 47', cv:'20260614_181515_Julien_Rousseau.pdf', source:'Formulaire /business-developer', date_source:'05/2026'}
 ];
 
 // ── Stepper ──
@@ -837,10 +837,26 @@ function runSearch(){
 // Construire MATCHES à partir des profils générés par Claude
 function buildMatchesFromAI(profiles){
   var avatars = ['👨‍💻','👩‍💻','🧑‍💻','👨‍🔬','👩‍🔬'];
+  // Sources partenaires utilisées pour ce matching (ordre aléatoire)
+  var SOURCES_PARTENAIRES = [
+    'Vivier CONSEILPREV','Free-Work','Malt','LinkedIn','APEC',
+    'Welcome to the Jungle','France Travail','Comet','RemoteOK','Formulaire plateforme'
+  ];
+  function pickSources(n){
+    var s = SOURCES_PARTENAIRES.slice().sort(function(){ return Math.random()-.5; });
+    return s.slice(0, n);
+  }
+  var srcPool = pickSources(5);
+
   MATCHES = profiles.map(function(p, i){
-    // Retrouver la ville dans CITIES (coords)
     var city = CITIES.find(function(c){ return c.name === p.ville; }) || CITIES[i % CITIES.length];
     var uid = 'S' + SEARCH_COUNT + '-C' + (i+1);
+    var baseIdent = IDENT_POOL[i % IDENT_POOL.length];
+    // Surcharger la source avec la source IA générée
+    var ident = Object.assign({}, baseIdent, {
+      source: srcPool[i] || baseIdent.source,
+      date_source: new Date().toLocaleDateString('fr-FR', {month:'2-digit', year:'numeric'})
+    });
     return {
       uid: uid,
       label: 'Consultant ' + uid,
@@ -858,7 +874,7 @@ function buildMatchesFromAI(profiles){
       lieu: BRIEF.lieu,
       start: BRIEF.start,
       contrat: BRIEF.contrat,
-      ident: IDENT_POOL[i % IDENT_POOL.length],
+      ident: ident,
     };
   });
 }
@@ -1043,6 +1059,13 @@ function renderMatches(){
                 '<span class="admin-cv-btn" onclick="requestCV(\'' + m.uid + '\',\'' + m.ident.cv + '\')">📄 ' + m.ident.cv + '</span>' +
               '</span>' +
             '</div>' +
+            '<div class="admin-ident-row" style="grid-column:1 / -1;margin-top:4px;padding-top:10px;border-top:1px solid rgba(217,70,239,.2)">' +
+              '<span class="admin-ident-lbl">🔍 Source / Plateforme</span>' +
+              '<span class="admin-ident-val" style="color:#f0abfc;font-size:13px">' +
+                (m.ident.source || '—') +
+                (m.ident.date_source ? ' <span style="color:rgba(217,70,239,.5);font-size:11px;font-family:Space Mono,monospace">· ' + m.ident.date_source + '</span>' : '') +
+              '</span>' +
+            '</div>' +
           '</div>' +
         '</div>';
     }
@@ -1186,10 +1209,13 @@ function renderCart(){
     var adminCartInfo = '';
     if(IS_ADMIN && c.ident){
       adminCartInfo =
-        '<div style="font-size:11px;color:#f0abfc;margin-top:4px;font-family:Space Mono,monospace">' +
+        '<div style="font-size:11px;color:#f0abfc;margin-top:5px;font-family:Space Mono,monospace;line-height:1.7">' +
         '🔐 ' + c.ident.prenom + ' ' + c.ident.nom +
         ' · <a href="mailto:' + c.ident.email + '" style="color:var(--teal);text-decoration:none">' + c.ident.email + '</a>' +
         ' · ' + c.ident.tel +
+        '</div>' +
+        '<div style="font-size:10px;color:rgba(217,70,239,.7);font-family:Space Mono,monospace;margin-top:2px">' +
+        '🔍 ' + (c.ident.source || '—') + (c.ident.date_source ? ' · ' + c.ident.date_source : '') +
         '</div>';
     }
     item.innerHTML =
