@@ -410,11 +410,75 @@ footer{background:#0a0518;border-top:1px solid rgba(196,181,232,.12);padding:52p
 .clients-track:hover{animation-play-state:paused}
 @keyframes scroll-fwd{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 @keyframes scroll-rev{0%{transform:translateX(-50%)}100%{transform:translateX(0)}}
-.client-logo{background:rgba(255,255,255,.06);border:1px solid rgba(196,181,232,.12);border-radius:10px;padding:12px 22px;display:flex;align-items:center;justify-content:center;min-width:130px;height:64px;flex-shrink:0;transition:all .25s;filter:grayscale(100%) brightness(.7);white-space:nowrap}
-.client-logo:hover{filter:grayscale(0%) brightness(1);border-color:rgba(166,133,232,.4);background:rgba(166,133,232,.08);transform:translateY(-2px)}
-.client-logo span{font-family:"Space Mono",monospace;font-size:12px;font-weight:700;letter-spacing:.08em;color:rgba(255,255,255,.75)}
-.clients-sectors{text-align:center;margin-top:22px;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.12em;color:var(--mu)}
-.clients-sectors span{color:var(--pl)}
+.client-logo{
+  position:relative;
+  border-radius:12px;padding:0;
+  display:flex;align-items:center;justify-content:center;
+  min-width:148px;height:68px;flex-shrink:0;
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);
+  white-space:nowrap;overflow:visible;cursor:default;
+}
+.client-logo:hover{transform:translateY(-5px) scale(1.05);z-index:10;box-shadow:0 12px 32px rgba(0,0,0,.4)}
+.cl-inner{
+  width:100%;height:100%;
+  border-radius:12px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 20px;
+  border:1px solid rgba(255,255,255,.12);
+  transition:border-color .3s;
+  position:relative;overflow:hidden;
+}
+.cl-inner::before{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.12),transparent 60%);
+  border-radius:12px;pointer-events:none;
+}
+.client-logo:hover .cl-inner{border-color:rgba(255,255,255,.35)}
+.cl-ico{font-size:16px;flex-shrink:0;position:relative;z-index:1}
+.cl-name{font-family:"Space Mono",monospace;font-size:11px;font-weight:700;letter-spacing:.06em;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.4);position:relative;z-index:1}
+/* Tooltip secteur */
+.cl-tooltip{
+  position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);
+  background:rgba(15,8,40,.97);border:1px solid rgba(196,181,232,.35);
+  border-radius:9px;padding:8px 14px;
+  font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.08em;
+  color:rgba(216,180,254,.9);white-space:nowrap;
+  pointer-events:none;opacity:0;transition:opacity .18s;
+  box-shadow:0 8px 24px rgba(0,0,0,.5);z-index:50;
+}
+.cl-tooltip::after{
+  content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:5px solid transparent;border-top-color:rgba(196,181,232,.35);
+}
+.client-logo:hover .cl-tooltip{opacity:1}
+/* Couleurs par secteur */
+.cl-energie   .cl-inner{background:linear-gradient(135deg,#b45309,#d97706,#92400e)}
+.cl-transport .cl-inner{background:linear-gradient(135deg,#0369a1,#0284c7,#075985)}
+.cl-telecom   .cl-inner{background:linear-gradient(135deg,#c2410c,#ea580c,#9a3412)}
+.cl-defense   .cl-inner{background:linear-gradient(135deg,#1e3a5f,#1d4ed8,#1e40af)}
+.cl-nucleaire .cl-inner{background:linear-gradient(135deg,#14532d,#16a34a,#15803d)}
+.cl-industrie .cl-inner{background:linear-gradient(135deg,#3b0764,#7c3aed,#6d28d9)}
+.cl-finance   .cl-inner{background:linear-gradient(135deg,#064e3b,#059669,#047857)}
+.cl-conseil   .cl-inner{background:linear-gradient(135deg,#4c0519,#be123c,#9f1239)}
+.cl-btp       .cl-inner{background:linear-gradient(135deg,#422006,#b45309,#78350f)}
+.cl-sante     .cl-inner{background:linear-gradient(135deg,#701a75,#a21caf,#86198f)}
+.cl-aero      .cl-inner{background:linear-gradient(135deg,#0c4a6e,#0369a1,#0284c7)}
+.cl-env       .cl-inner{background:linear-gradient(135deg,#14532d,#15803d,#166534)}
+.cl-it        .cl-inner{background:linear-gradient(135deg,#1e1b4b,#4338ca,#3730a3)}
+/* Secteurs grid */
+.clients-sectors-grid{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:10px;
+  max-width:900px;margin:28px auto 0;padding:0 24px;
+}
+.cs-badge{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:9px 18px;border-radius:100px;
+  font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  border:1px solid rgba(196,181,232,.2);
+  transition:all .25s;cursor:default;
+}
+.cs-badge:hover{transform:translateY(-2px);border-color:rgba(196,181,232,.5)}
+.cs-badge .cs-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 
 
 /* ═══ FOOTER REDESIGNÉ ═══ */
@@ -5452,19 +5516,10 @@ document.addEventListener('keydown', function(e){
 <section class="clients-band" id="clients">
   <p class="clients-band-title" data-i18n="clients.title">50 entreprises de tous secteurs nous font confiance depuis 2014</p>
   <div class="clients-track-wrap">
-    <!-- Rangée 1 — gauche vers droite -->
-    <div class="clients-track fwd">
-      <div class="client-logo"><span style="color:#0099DC">ALSTOM</span></div><div class="client-logo"><span style="color:#2D7DD2">ATOS</span></div><div class="client-logo"><span style="color:#FF6B35">TALAN</span></div><div class="client-logo"><span style="color:#ED0000">TotalEnergies</span></div><div class="client-logo"><span style="color:#6B4E9B">ANDRA</span></div><div class="client-logo"><span style="color:#005B8E">Wärtsilä</span></div><div class="client-logo"><span style="color:#E8490F">EIFFAGE</span></div><div class="client-logo"><span style="color:#004C97">LNE</span></div><div class="client-logo"><span style="color:#2C3E50">RG GROUP</span></div><div class="client-logo"><span style="color:#1A936F">MONTEIRO</span></div><div class="client-logo"><span style="color:#2E4057">IBD</span></div><div class="client-logo"><span style="color:#FF8C00">AREVA</span></div><div class="client-logo"><span style="color:#0099DC">ALSTOM</span></div><div class="client-logo"><span style="color:#2D7DD2">ATOS</span></div><div class="client-logo"><span style="color:#FF6B35">TALAN</span></div><div class="client-logo"><span style="color:#ED0000">TotalEnergies</span></div><div class="client-logo"><span style="color:#6B4E9B">ANDRA</span></div><div class="client-logo"><span style="color:#005B8E">Wärtsilä</span></div><div class="client-logo"><span style="color:#E8490F">EIFFAGE</span></div><div class="client-logo"><span style="color:#004C97">LNE</span></div><div class="client-logo"><span style="color:#2C3E50">RG GROUP</span></div><div class="client-logo"><span style="color:#1A936F">MONTEIRO</span></div><div class="client-logo"><span style="color:#2E4057">IBD</span></div><div class="client-logo"><span style="color:#FF8C00">AREVA</span></div>
-    </div>
-    <!-- Rangée 2 — droite vers gauche -->
-    <div class="clients-track rev">
-      <div class="client-logo"><span style="color:#009870">BNP PARIBAS</span></div><div class="client-logo"><span style="color:#F16E00">ORANGE</span></div><div class="client-logo"><span style="color:#00205B">THALES</span></div><div class="client-logo"><span style="color:#6B2D8B">SANOFI</span></div><div class="client-logo"><span style="color:#1B1B1B">MICHELIN</span></div><div class="client-logo"><span style="color:#0033A0">SAFRAN</span></div><div class="client-logo"><span style="color:#00205B">AIRBUS</span></div><div class="client-logo"><span style="color:#0070AD">CAPGEMINI</span></div><div class="client-logo"><span style="color:#E4002B">SOPRA</span></div><div class="client-logo"><span style="color:#59A608">VEOLIA</span></div><div class="client-logo"><span style="color:#00AAFF">ENGIE</span></div><div class="client-logo"><span style="color:#003087">DASSAULT</span></div><div class="client-logo"><span style="color:#009870">BNP PARIBAS</span></div><div class="client-logo"><span style="color:#F16E00">ORANGE</span></div><div class="client-logo"><span style="color:#00205B">THALES</span></div><div class="client-logo"><span style="color:#6B2D8B">SANOFI</span></div><div class="client-logo"><span style="color:#1B1B1B">MICHELIN</span></div><div class="client-logo"><span style="color:#0033A0">SAFRAN</span></div><div class="client-logo"><span style="color:#00205B">AIRBUS</span></div><div class="client-logo"><span style="color:#0070AD">CAPGEMINI</span></div><div class="client-logo"><span style="color:#E4002B">SOPRA</span></div><div class="client-logo"><span style="color:#59A608">VEOLIA</span></div><div class="client-logo"><span style="color:#00AAFF">ENGIE</span></div><div class="client-logo"><span style="color:#003087">DASSAULT</span></div>
-    </div>
+    <div class="clients-track fwd"><div class="client-logo cl-transport"><div class="cl-inner"><span class="cl-ico">🚆</span><span class="cl-name">ALSTOM</span></div><div class="cl-tooltip">Transport ferroviaire</div></div><div class="client-logo cl-it"><div class="cl-inner"><span class="cl-ico">💻</span><span class="cl-name">ATOS</span></div><div class="cl-tooltip">IT & Cloud</div></div><div class="client-logo cl-conseil"><div class="cl-inner"><span class="cl-ico">🎯</span><span class="cl-name">TALAN</span></div><div class="cl-tooltip">Conseil & Digital</div></div><div class="client-logo cl-energie"><div class="cl-inner"><span class="cl-ico">⚡</span><span class="cl-name">TotalEnergies</span></div><div class="cl-tooltip">Énergie & Pétrole</div></div><div class="client-logo cl-nucleaire"><div class="cl-inner"><span class="cl-ico">☢️</span><span class="cl-name">ANDRA</span></div><div class="cl-tooltip">Gestion déchets nucléaires</div></div><div class="client-logo cl-industrie"><div class="cl-inner"><span class="cl-ico">⚙️</span><span class="cl-name">Wärtsilä</span></div><div class="cl-tooltip">Industrie maritime</div></div><div class="client-logo cl-btp"><div class="cl-inner"><span class="cl-ico">🏗️</span><span class="cl-name">EIFFAGE</span></div><div class="cl-tooltip">BTP & Construction</div></div><div class="client-logo cl-conseil"><div class="cl-inner"><span class="cl-ico">🔬</span><span class="cl-name">LNE</span></div><div class="cl-tooltip">Métrologie & Normes</div></div><div class="client-logo cl-it"><div class="cl-inner"><span class="cl-ico">🖥️</span><span class="cl-name">RG GROUP</span></div><div class="cl-tooltip">Services IT</div></div><div class="client-logo cl-industrie"><div class="cl-inner"><span class="cl-ico">🏭</span><span class="cl-name">MONTEIRO</span></div><div class="cl-tooltip">Industrie & Ingénierie</div></div><div class="client-logo cl-conseil"><div class="cl-inner"><span class="cl-ico">📊</span><span class="cl-name">IBD</span></div><div class="cl-tooltip">Conseil & Management</div></div><div class="client-logo cl-nucleaire"><div class="cl-inner"><span class="cl-ico">⚛️</span><span class="cl-name">AREVA</span></div><div class="cl-tooltip">Énergie nucléaire</div></div><div class="client-logo cl-transport"><div class="cl-inner"><span class="cl-ico">🚆</span><span class="cl-name">ALSTOM</span></div><div class="cl-tooltip">Transport ferroviaire</div></div><div class="client-logo cl-it"><div class="cl-inner"><span class="cl-ico">💻</span><span class="cl-name">ATOS</span></div><div class="cl-tooltip">IT & Cloud</div></div><div class="client-logo cl-conseil"><div class="cl-inner"><span class="cl-ico">🎯</span><span class="cl-name">TALAN</span></div><div class="cl-tooltip">Conseil & Digital</div></div><div class="client-logo cl-energie"><div class="cl-inner"><span class="cl-ico">⚡</span><span class="cl-name">TotalEnergies</span></div><div class="cl-tooltip">Énergie & Pétrole</div></div><div class="client-logo cl-nucleaire"><div class="cl-inner"><span class="cl-ico">☢️</span><span class="cl-name">ANDRA</span></div><div class="cl-tooltip">Gestion déchets nucléaires</div></div><div class="client-logo cl-industrie"><div class="cl-inner"><span class="cl-ico">⚙️</span><span class="cl-name">Wärtsilä</span></div><div class="cl-tooltip">Industrie maritime</div></div><div class="client-logo cl-btp"><div class="cl-inner"><span class="cl-ico">🏗️</span><span class="cl-name">EIFFAGE</span></div><div class="cl-tooltip">BTP & Construction</div></div><div class="client-logo cl-conseil"><div class="cl-inner"><span class="cl-ico">🔬</span><span class="cl-name">LNE</span></div><div class="cl-tooltip">Métrologie & Normes</div></div><div class="client-logo cl-it"><div class="cl-inner"><span class="cl-ico">🖥️</span><span class="cl-name">RG GROUP</span></div><div class="cl-tooltip">Services IT</div></div><div class="client-logo cl-industrie"><div class="cl-inner"><span class="cl-ico">🏭</span><span class="cl-name">MONTEIRO</span></div><div class="cl-tooltip">Industrie & Ingénierie</div></div><div class="client-logo cl-conseil"><div class="cl-inner"><span class="cl-ico">📊</span><span class="cl-name">IBD</span></div><div class="cl-tooltip">Conseil & Management</div></div><div class="client-logo cl-nucleaire"><div class="cl-inner"><span class="cl-ico">⚛️</span><span class="cl-name">AREVA</span></div><div class="cl-tooltip">Énergie nucléaire</div></div></div>
+    <div class="clients-track rev"><div class="client-logo cl-finance"><div class="cl-inner"><span class="cl-ico">🏦</span><span class="cl-name">BNP PARIBAS</span></div><div class="cl-tooltip">Banque & Finance</div></div><div class="client-logo cl-telecom"><div class="cl-inner"><span class="cl-ico">📡</span><span class="cl-name">ORANGE</span></div><div class="cl-tooltip">Télécommunications</div></div><div class="client-logo cl-defense"><div class="cl-inner"><span class="cl-ico">🛡️</span><span class="cl-name">THALES</span></div><div class="cl-tooltip">Défense & Sécurité</div></div><div class="client-logo cl-sante"><div class="cl-inner"><span class="cl-ico">💊</span><span class="cl-name">SANOFI</span></div><div class="cl-tooltip">Pharmaceutique & Santé</div></div><div class="client-logo cl-industrie"><div class="cl-inner"><span class="cl-ico">🚗</span><span class="cl-name">MICHELIN</span></div><div class="cl-tooltip">Pneumatiques & Mobilité</div></div><div class="client-logo cl-aero"><div class="cl-inner"><span class="cl-ico">✈️</span><span class="cl-name">SAFRAN</span></div><div class="cl-tooltip">Aéronautique & Défense</div></div><div class="client-logo cl-aero"><div class="cl-inner"><span class="cl-ico">🛩️</span><span class="cl-name">AIRBUS</span></div><div class="cl-tooltip">Aéronautique & Spatial</div></div><div class="client-logo cl-it"><div class="cl-inner"><span class="cl-ico">💡</span><span class="cl-name">CAPGEMINI</span></div><div class="cl-tooltip">Conseil IT & IA</div></div><div class="client-logo cl-it"><div class="cl-inner"><span class="cl-ico">🖥️</span><span class="cl-name">SOPRA STERIA</span></div><div class="cl-tooltip">Services Numériques</div></div><div class="client-logo cl-env"><div class="cl-inner"><span class="cl-ico">♻️</span><span class="cl-name">VEOLIA</span></div><div class="cl-tooltip">Environnement & Eau</div></div><div class="client-logo cl-energie"><div class="cl-inner"><span class="cl-ico">🌿</span><span class="cl-name">ENGIE</span></div><div class="cl-tooltip">Énergie & Transition</div></div><div class="client-logo cl-aero"><div class="cl-inner"><span class="cl-ico">✈️</span><span class="cl-name">DASSAULT</span></div><div class="cl-tooltip">Aviation & Systèmes</div></div><div class="client-logo cl-finance"><div class="cl-inner"><span class="cl-ico">🏦</span><span class="cl-name">BNP PARIBAS</span></div><div class="cl-tooltip">Banque & Finance</div></div><div class="client-logo cl-telecom"><div class="cl-inner"><span class="cl-ico">📡</span><span class="cl-name">ORANGE</span></div><div class="cl-tooltip">Télécommunications</div></div><div class="client-logo cl-defense"><div class="cl-inner"><span class="cl-ico">🛡️</span><span class="cl-name">THALES</span></div><div class="cl-tooltip">Défense & Sécurité</div></div><div class="client-logo cl-sante"><div class="cl-inner"><span class="cl-ico">💊</span><span class="cl-name">SANOFI</span></div><div class="cl-tooltip">Pharmaceutique & Santé</div></div><div class="client-logo cl-industrie"><div class="cl-inner"><span class="cl-ico">🚗</span><span class="cl-name">MICHELIN</span></div><div class="cl-tooltip">Pneumatiques & Mobilité</div></div><div class="client-logo cl-aero"><div class="cl-inner"><span class="cl-ico">✈️</span><span class="cl-name">SAFRAN</span></div><div class="cl-tooltip">Aéronautique & Défense</div></div><div class="client-logo cl-aero"><div class="cl-inner"><span class="cl-ico">🛩️</span><span class="cl-name">AIRBUS</span></div><div class="cl-tooltip">Aéronautique & Spatial</div></div><div class="client-logo cl-it"><div class="cl-inner"><span class="cl-ico">💡</span><span class="cl-name">CAPGEMINI</span></div><div class="cl-tooltip">Conseil IT & IA</div></div><div class="client-logo cl-it"><div class="cl-inner"><span class="cl-ico">🖥️</span><span class="cl-name">SOPRA STERIA</span></div><div class="cl-tooltip">Services Numériques</div></div><div class="client-logo cl-env"><div class="cl-inner"><span class="cl-ico">♻️</span><span class="cl-name">VEOLIA</span></div><div class="cl-tooltip">Environnement & Eau</div></div><div class="client-logo cl-energie"><div class="cl-inner"><span class="cl-ico">🌿</span><span class="cl-name">ENGIE</span></div><div class="cl-tooltip">Énergie & Transition</div></div><div class="client-logo cl-aero"><div class="cl-inner"><span class="cl-ico">✈️</span><span class="cl-name">DASSAULT</span></div><div class="cl-tooltip">Aviation & Systèmes</div></div></div>
   </div>
-  <p class="clients-sectors" data-i18n="clients.sectors">
-    <span>Technologies</span> · <span>Finance</span> · <span>Santé</span> · 
-    <span>Assurance</span> · <span>Énergie</span> · <span>Industrie</span> · <span>Retail</span>
-  </p>
+<div class="clients-sectors-grid"><div class="cs-badge" style="background:rgba(255,255,255,.05);color:rgba(216,180,254,.85)"><span class="cs-dot" style="background:#0369a1"></span>🚆 Transport</div><div class="cs-badge" style="background:rgba(255,255,255,.05);color:rgba(216,180,254,.85)"><span class="cs-dot" style="background:#d97706"></span>⚡ Énergie</div><div class="cs-badge" style="background:rgba(255,255,255,.05);color:rgba(216,180,254,.85)"><span class="cs-dot" style="background:#0284c7"></span>✈️ Aéronautique</div><div class="cs-badge" style="background:rgba(255,255,255,.05);color:rgba(216,180,254,.85)"><span class="cs-dot" style="background:#059669"></span>🏦 Finance</div><div class="cs-badge" style="background:rgba(255,255,255,.05);color:rgba(216,180,254,.85)"><span class="cs-dot" style="background:#7c3aed"></span>⚙️ Industrie</div><div class="cs-badge" style="background:rgba(255,255,255,.05);color:rgba(216,180,254,.85)"><span class="cs-dot" style="background:#be123c"></span>🎯 Conseil</div><div class="cs-badge" style="background:rgba(255,255,255,.05);color:rgba(216,180,254,.85)"><span class="cs-dot" style="background:#a21caf"></span>💊 Santé</div><div class="cs-badge" style="background:rgba(255,255,255,.05);color:rgba(216,180,254,.85)"><span class="cs-dot" style="background:#ea580c"></span>📡 Télécoms</div><div class="cs-badge" style="background:rgba(255,255,255,.05);color:rgba(216,180,254,.85)"><span class="cs-dot" style="background:#16a34a"></span>♻️ Environnement</div><div class="cs-badge" style="background:rgba(255,255,255,.05);color:rgba(216,180,254,.85)"><span class="cs-dot" style="background:#1d4ed8"></span>🛡️ Défense</div></div>
 </section>
 
 <footer>
