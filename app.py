@@ -862,6 +862,10 @@ import hmac as _hmac
 USERS_FILE = os.path.join(os.path.dirname(__file__), 'users_db.json')
 SESSION_SECRET = os.environ.get('SESSION_SECRET', _secrets.token_hex(32))
 
+# ── Administrateur CONSEILPREV (accès réservé, hors flux client) ──
+ADMIN_EMAIL    = os.environ.get('ADMIN_EMAIL', 'christophe.cerf@outlook.com').strip().lower()
+ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', '')  # défini sur Render — JAMAIS en dur
+
 def _load_users():
     try:
         if os.path.isfile(USERS_FILE):
@@ -980,6 +984,10 @@ def auth_register():
         if not ok_pw:
             return jsonify({'ok': False, 'error': msg_pw}), 400
 
+        # L'email admin ne peut PAS s'inscrire via le flux client
+        if email == ADMIN_EMAIL:
+            return jsonify({'ok': False, 'error': 'Cet email est réservé. Utilisez l_accès administrateur.'}), 403
+
         users = _load_users()
         if email in users and users[email].get('verified'):
             return jsonify({'ok': False, 'error': 'Un compte existe déjà avec cet email'}), 409
@@ -1075,6 +1083,47 @@ def auth_login():
         })
     except Exception as e:
         logger.error(f'AUTH_LOGIN_ERR {ip}: {e}')
+        return jsonify({'ok': False, 'error': 'Erreur serveur'}), 500
+
+
+
+@app.route('/api/auth/admin-login', methods=['POST'])
+def auth_admin_login():
+    """Connexion administrateur CONSEILPREV — contourne l'inscription client.
+    Accès réservé à ADMIN_EMAIL, pas de validation email requise."""
+    ip = limiter.get_ip(request)
+    if not limiter.check_soft(ip, limit=8, window=300):
+        return jsonify({'ok': False, 'error': 'Trop de tentatives, réessayez dans 5 min'}), 429
+    try:
+        d = request.get_json(force=True, silent=True) or {}
+        email = str(d.get('email','')).strip().lower()[:150]
+        password = str(d.get('password',''))[:128]
+
+        # Vérifier que c'est bien l'admin
+        if email != ADMIN_EMAIL:
+            logger.warning(f'ADMIN_LOGIN_WRONG_EMAIL {ip}: {email}')
+            return jsonify({'ok': False, 'error': 'Accès administrateur refusé'}), 403
+
+        # Si ADMIN_PASSWORD n'est pas configuré côté serveur
+        if not ADMIN_PASSWORD:
+            logger.error('ADMIN_PASSWORD_NOT_SET')
+            return jsonify({'ok': False, 'error': 'Compte admin non configuré (variable ADMIN_PASSWORD manquante sur le serveur)'}), 503
+
+        # Comparaison sécurisée (constant-time)
+        if not _hmac.compare_digest(password, ADMIN_PASSWORD):
+            logger.warning(f'ADMIN_LOGIN_FAIL {ip}')
+            return jsonify({'ok': False, 'error': 'Mot de passe administrateur incorrect'}), 401
+
+        # Succès — générer une session admin
+        session_token = _make_token()
+        logger.info(f'ADMIN_LOGIN_OK {ip}: {email}')
+        return jsonify({
+            'ok': True, 'token': session_token, 'admin': True,
+            'user': {'prenom': 'Administrateur', 'nom': 'CONSEILPREV',
+                     'email': ADMIN_EMAIL, 'entreprise': 'CONSEILPREV', 'role': 'admin'},
+        })
+    except Exception as e:
+        logger.error(f'ADMIN_LOGIN_ERR {ip}: {e}')
         return jsonify({'ok': False, 'error': 'Erreur serveur'}), 500
 
 
