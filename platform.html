@@ -575,22 +575,170 @@ input,textarea,select{-webkit-user-select:text!important;user-select:text!import
     <div class="map-wrap">
       <!-- SVG CARTE -->
       <div style="position:relative">
-        <svg id="france-map" width="100%" viewBox="0 0 490 490" xmlns="http://www.w3.org/2000/svg" style="display:block">
-          <defs>
-            <filter id="region-glow">
-              <feGaussianBlur stdDeviation="3" result="blur"/>
-              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
-          </defs>
-          <!-- Fond mer -->
-          <rect width="490" height="490" rx="12" fill="rgba(15,10,40,.6)" stroke="rgba(196,181,232,.15)" stroke-width="1"/>
-          <!-- Régions injectées par JS -->
-          <g id="fr-regions"></g>
-          <!-- Labels régions injectés par JS -->
-          <g id="fr-labels"></g>
-          <!-- Pins candidats injectés par JS -->
-          <g id="map-pins"></g>
-        </svg>
+        <svg id="france-map" width="100%" viewBox="0 0 560 620" xmlns="http://www.w3.org/2000/svg" style="display:block;filter:drop-shadow(0 8px 24px rgba(0,0,0,.5))">
+  <defs>
+    <filter id="rglow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="rgba(0,0,0,0.5)"/>
+    </filter>
+  </defs>
+
+  <!-- Fond -->
+  <rect width="560" height="620" rx="16" fill="rgba(10,6,32,.85)" stroke="rgba(196,181,232,.2)" stroke-width="1"/>
+
+  <!-- Mer / océan décoratif -->
+  <text x="38" y="320" font-size="9" font-family="Space Mono,monospace" fill="rgba(147,197,253,.25)" transform="rotate(-90,38,320)">OCÉAN ATLANTIQUE</text>
+  <text x="200" y="580" font-size="9" font-family="Space Mono,monospace" fill="rgba(147,197,253,.25)">MER MÉDITERRANÉE</text>
+  <text x="370" y="55" font-size="9" font-family="Space Mono,monospace" fill="rgba(147,197,253,.25)">MER DU NORD</text>
+  <text x="430" y="200" font-size="9" font-family="Space Mono,monospace" fill="rgba(147,197,253,.25)" transform="rotate(90,430,200)">MANCHE</text>
+
+  <!-- RÉGIONS — paths fidèles à la géo réelle -->
+
+  <!-- Hauts-de-France (nord) -->
+  <g class="fr-region" id="reg-hdf" data-name="Hauts-de-France">
+    <path class="region-fill" d="
+      M 248 52 L 268 38 L 300 34 L 330 38 L 356 46 L 372 62 L 366 80
+      L 344 92 L 320 96 L 296 94 L 272 86 L 252 74 Z"
+      fill="#1a56a0" stroke="rgba(255,255,255,.5)" stroke-width="1.2" stroke-linejoin="round"/>
+    <text x="312" y="70" text-anchor="middle" font-size="8.5" font-family="DM Sans,sans-serif" font-weight="700" fill="rgba(255,255,255,.9)" pointer-events="none">Hauts-de-France</text>
+  </g>
+
+  <!-- Normandie -->
+  <g class="fr-region" id="reg-nor" data-name="Normandie">
+    <path class="region-fill" d="
+      M 144 72 L 190 60 L 232 64 L 250 74 L 252 92 L 234 112
+      L 206 124 L 176 122 L 152 108 L 136 90 Z"
+      fill="#2e7d52" stroke="rgba(255,255,255,.5)" stroke-width="1.2" stroke-linejoin="round"/>
+    <text x="193" y="95" text-anchor="middle" font-size="8.5" font-family="DM Sans,sans-serif" font-weight="700" fill="rgba(255,255,255,.9)" pointer-events="none">Normandie</text>
+  </g>
+
+  <!-- Bretagne -->
+  <g class="fr-region" id="reg-bre" data-name="Bretagne">
+    <path class="region-fill" d="
+      M 52 96 L 80 80 L 116 76 L 144 84 L 148 100 L 152 108
+      L 136 128 L 116 148 L 84 152 L 60 140 L 44 120 Z"
+      fill="#c05621" stroke="rgba(255,255,255,.5)" stroke-width="1.2" stroke-linejoin="round"/>
+    <text x="100" y="118" text-anchor="middle" font-size="8.5" font-family="DM Sans,sans-serif" font-weight="700" fill="rgba(255,255,255,.9)" pointer-events="none">Bretagne</text>
+  </g>
+
+  <!-- Grand Est -->
+  <g class="fr-region" id="reg-ges" data-name="Grand Est">
+    <path class="region-fill" d="
+      M 332 38 L 368 32 L 404 40 L 428 56 L 444 78 L 440 108
+      L 418 126 L 392 136 L 360 132 L 336 118 L 322 100 L 320 96
+      L 344 92 L 366 80 Z"
+      fill="#9c4221" stroke="rgba(255,255,255,.5)" stroke-width="1.2" stroke-linejoin="round"/>
+    <text x="383" y="88" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif" font-weight="700" fill="rgba(255,255,255,.9)" pointer-events="none">Grand Est</text>
+  </g>
+
+  <!-- Île-de-France (petite, au centre-nord) -->
+  <g class="fr-region" id="reg-idf" data-name="Île-de-France">
+    <path class="region-fill" d="
+      M 272 96 L 298 90 L 318 96 L 322 112 L 314 124 L 296 128
+      L 278 122 L 270 108 Z"
+      fill="#6d28d9" stroke="rgba(255,255,255,.7)" stroke-width="1.5" stroke-linejoin="round"
+      filter="url(#rglow)"/>
+    <text x="296" y="112" text-anchor="middle" font-size="7.5" font-family="DM Sans,sans-serif" font-weight="700" fill="#fff" pointer-events="none">Île-de-France</text>
+  </g>
+
+  <!-- Pays de la Loire -->
+  <g class="fr-region" id="reg-pdl" data-name="Pays de la Loire">
+    <path class="region-fill" d="
+      M 100 152 L 136 140 L 154 146 L 174 148 L 196 156 L 204 172
+      L 202 196 L 180 216 L 152 220 L 124 210 L 106 192 L 98 172 Z"
+      fill="#b07c2a" stroke="rgba(255,255,255,.5)" stroke-width="1.2" stroke-linejoin="round"/>
+    <text x="152" y="186" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif" font-weight="700" fill="rgba(255,255,255,.9)" pointer-events="none"><tspan x="152" dy="0">Pays de</tspan><tspan x="152" dy="11">la Loire</tspan></text>
+  </g>
+
+  <!-- Centre-Val de Loire -->
+  <g class="fr-region" id="reg-cvl" data-name="Centre-Val de Loire">
+    <path class="region-fill" d="
+      M 196 128 L 228 122 L 270 116 L 296 130 L 300 148 L 296 172
+      L 270 192 L 242 202 L 206 196 L 202 172 L 204 152 Z"
+      fill="#0e6b9e" stroke="rgba(255,255,255,.5)" stroke-width="1.2" stroke-linejoin="round"/>
+    <text x="250" y="165" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif" font-weight="700" fill="rgba(255,255,255,.9)" pointer-events="none"><tspan x="250" dy="0">Centre-</tspan><tspan x="250" dy="11">Val de Loire</tspan></text>
+  </g>
+
+  <!-- Bourgogne-Franche-Comté -->
+  <g class="fr-region" id="reg-bfc" data-name="Bourgogne-Franche-Comté">
+    <path class="region-fill" d="
+      M 296 130 L 322 116 L 358 120 L 390 136 L 406 160 L 402 192
+      L 376 216 L 344 226 L 312 220 L 290 200 L 286 174 L 296 150 Z"
+      fill="#5b21b6" stroke="rgba(255,255,255,.5)" stroke-width="1.2" stroke-linejoin="round"/>
+    <text x="346" y="177" text-anchor="middle" font-size="7.5" font-family="DM Sans,sans-serif" font-weight="700" fill="rgba(255,255,255,.9)" pointer-events="none"><tspan x="346" dy="0">Bourgogne-</tspan><tspan x="346" dy="11">Franche-Comté</tspan></text>
+  </g>
+
+  <!-- Nouvelle-Aquitaine -->
+  <g class="fr-region" id="reg-naq" data-name="Nouvelle-Aquitaine">
+    <path class="region-fill" d="
+      M 100 216 L 152 222 L 200 220 L 218 236 L 228 270 L 220 316
+      L 198 354 L 162 372 L 124 366 L 92 342 L 76 304 L 74 264
+      L 84 234 Z"
+      fill="#7e22ce" stroke="rgba(255,255,255,.5)" stroke-width="1.2" stroke-linejoin="round"/>
+    <text x="152" y="293" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif" font-weight="700" fill="rgba(255,255,255,.9)" pointer-events="none"><tspan x="152" dy="0">Nouvelle-</tspan><tspan x="152" dy="11">Aquitaine</tspan></text>
+  </g>
+
+  <!-- Auvergne-Rhône-Alpes -->
+  <g class="fr-region" id="reg-ara" data-name="Auvergne-Rhône-Alpes">
+    <path class="region-fill" d="
+      M 290 202 L 314 222 L 348 228 L 382 220 L 414 238 L 432 268
+      L 428 306 L 404 334 L 368 350 L 330 344 L 302 320 L 286 286
+      L 284 252 Z"
+      fill="#0d766e" stroke="rgba(255,255,255,.5)" stroke-width="1.2" stroke-linejoin="round"/>
+    <text x="358" y="284" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif" font-weight="700" fill="rgba(255,255,255,.9)" pointer-events="none"><tspan x="358" dy="0">Auvergne-</tspan><tspan x="358" dy="11">Rhône-Alpes</tspan></text>
+  </g>
+
+  <!-- Occitanie -->
+  <g class="fr-region" id="reg-occ" data-name="Occitanie">
+    <path class="region-fill" d="
+      M 162 374 L 200 358 L 230 352 L 268 356 L 298 362 L 318 382
+      L 320 414 L 298 438 L 262 450 L 224 446 L 190 426 L 166 398 Z"
+      fill="#92400e" stroke="rgba(255,255,255,.5)" stroke-width="1.2" stroke-linejoin="round"/>
+    <text x="243" y="403" text-anchor="middle" font-size="8" font-family="DM Sans,sans-serif" font-weight="700" fill="rgba(255,255,255,.9)" pointer-events="none"><tspan x="243" dy="0">Occitanie</tspan></text>
+  </g>
+
+  <!-- Provence-Alpes-Côte d'Azur -->
+  <g class="fr-region" id="reg-pac" data-name="Provence-Alpes-Côte d'Azur">
+    <path class="region-fill" d="
+      M 320 346 L 366 352 L 402 342 L 434 358 L 452 384 L 444 416
+      L 412 436 L 374 438 L 344 424 L 320 402 L 316 374 Z"
+      fill="#1a5276" stroke="rgba(255,255,255,.5)" stroke-width="1.2" stroke-linejoin="round"/>
+    <text x="384" y="394" text-anchor="middle" font-size="7.5" font-family="DM Sans,sans-serif" font-weight="700" fill="rgba(255,255,255,.9)" pointer-events="none"><tspan x="384" dy="0">Provence-Alpes-</tspan><tspan x="384" dy="10">Côte d'Azur</tspan></text>
+  </g>
+
+  <!-- Corse (en bas à droite) -->
+  <g class="fr-region" id="reg-cor" data-name="Corse">
+    <path class="region-fill" d="
+      M 462 440 L 474 428 L 488 434 L 498 450 L 496 470 L 484 486
+      L 470 490 L 458 480 L 452 462 Z"
+      fill="#1c4980" stroke="rgba(255,255,255,.5)" stroke-width="1.2" stroke-linejoin="round"/>
+    <text x="476" y="460" text-anchor="middle" font-size="7" font-family="DM Sans,sans-serif" font-weight="700" fill="rgba(255,255,255,.9)" pointer-events="none">Corse</text>
+  </g>
+
+  <!-- DOM-TOM mini (en bas à gauche, style carte de référence) -->
+  <g opacity=".7">
+    <!-- Guadeloupe -->
+    <rect x="28" y="430" width="36" height="28" rx="4" fill="rgba(30,80,160,.25)" stroke="rgba(196,181,232,.3)" stroke-width="0.8"/>
+    <text x="46" y="447" text-anchor="middle" font-size="6" font-family="DM Sans,sans-serif" fill="rgba(216,180,254,.7)">Guadeloupe</text>
+    <!-- Martinique -->
+    <rect x="28" y="466" width="36" height="22" rx="4" fill="rgba(30,80,160,.25)" stroke="rgba(196,181,232,.3)" stroke-width="0.8"/>
+    <text x="46" y="480" text-anchor="middle" font-size="6" font-family="DM Sans,sans-serif" fill="rgba(216,180,254,.7)">Martinique</text>
+    <!-- Réunion -->
+    <rect x="28" y="496" width="36" height="22" rx="4" fill="rgba(30,80,160,.25)" stroke="rgba(196,181,232,.3)" stroke-width="0.8"/>
+    <text x="46" y="510" text-anchor="middle" font-size="6" font-family="DM Sans,sans-serif" fill="rgba(216,180,254,.7)">Réunion</text>
+    <!-- Guyane -->
+    <rect x="28" y="526" width="36" height="32" rx="4" fill="rgba(30,80,160,.25)" stroke="rgba(196,181,232,.3)" stroke-width="0.8"/>
+    <text x="46" y="545" text-anchor="middle" font-size="6" font-family="DM Sans,sans-serif" fill="rgba(216,180,254,.7)">Guyane</text>
+  </g>
+
+  <!-- Pins candidats injectés par JS -->
+  <g id="map-pins"></g>
+  <!-- Labels régions injectés par JS (surcharge au hover) -->
+  <g id="fr-labels"></g>
+</svg>
         <!-- Tooltip riche -->
         <div class="map-tooltip-v2" id="map-tooltip-v2"></div>
       </div>
@@ -759,16 +907,33 @@ var ACTIVE_CAND = 0;     // onglet contrat actif
 
 // Villes françaises (coordonnées sur le viewBox de la carte)
 var CITIES = [
-  {name:'Paris',      x:310, y:175},
-  {name:'Lyon',       x:390, y:330},
-  {name:'Marseille',  x:400, y:462},
-  {name:'Toulouse',   x:268, y:445},
-  {name:'Bordeaux',   x:205, y:378},
-  {name:'Nantes',     x:158, y:248},
-  {name:'Lille',      x:328, y:82},
-  {name:'Strasbourg', x:474, y:178},
-  {name:'Rennes',     x:148, y:198},
-  {name:'Nice',       x:472, y:444}
+  {name:'Paris',              x:296, y:112, rid:'idf'},
+  {name:'Lille',              x:310, y:60,  rid:'hdf'},
+  {name:'Rouen',              x:204, y:90,  rid:'nor'},
+  {name:'Caen',               x:164, y:96,  rid:'nor'},
+  {name:'Rennes',             x:118, y:118, rid:'bre'},
+  {name:'Brest',              x:68,  y:106, rid:'bre'},
+  {name:'Nantes',             x:140, y:186, rid:'pdl'},
+  {name:'Le Mans',            x:196, y:164, rid:'pdl'},
+  {name:'Orléans',            x:256, y:164, rid:'cvl'},
+  {name:'Tours',              x:224, y:178, rid:'cvl'},
+  {name:'Strasbourg',         x:428, y:98,  rid:'ges'},
+  {name:'Reims',              x:346, y:74,  rid:'ges'},
+  {name:'Nancy',              x:400, y:112, rid:'ges'},
+  {name:'Dijon',              x:350, y:192, rid:'bfc'},
+  {name:'Besançon',           x:398, y:186, rid:'bfc'},
+  {name:'Bordeaux',           x:130, y:312, rid:'naq'},
+  {name:'Poitiers',           x:196, y:232, rid:'naq'},
+  {name:'Limoges',            x:208, y:268, rid:'naq'},
+  {name:'Lyon',               x:374, y:264, rid:'ara'},
+  {name:'Grenoble',           x:408, y:302, rid:'ara'},
+  {name:'Clermont-Ferrand',   x:306, y:282, rid:'ara'},
+  {name:'Toulouse',           x:218, y:406, rid:'occ'},
+  {name:'Montpellier',        x:296, y:424, rid:'occ'},
+  {name:'Nîmes',              x:316, y:408, rid:'occ'},
+  {name:'Marseille',          x:386, y:430, rid:'pac'},
+  {name:'Nice',               x:440, y:400, rid:'pac'},
+  {name:'Toulon',             x:406, y:442, rid:'pac'},
 ];
 
 // Identités candidat CONFIDENTIELLES (jamais affichées au client,
@@ -1068,29 +1233,34 @@ function renderAll(){
 
 // Données géographiques : 13 régions métropolitaines
 var FR_REGIONS = [
-  {id:'hdf', name:'Hauts-de-France',    color:'#1d4ed8', path:'M 238 38 L 272 30 L 308 34 L 332 44 L 340 62 L 322 76 L 298 84 L 276 82 L 254 72 L 240 58 Z', lx:290, ly:58, cities:['Lille','Amiens']},
-  {id:'nor', name:'Normandie',           color:'#065f46', path:'M 148 66 L 194 54 L 234 60 L 240 78 L 222 98 L 192 108 L 162 102 L 138 86 Z', lx:190, ly:82, cities:['Rouen','Caen']},
-  {id:'bre', name:'Bretagne',            color:'#7c2d12', path:'M 52 96 L 100 84 L 136 84 L 148 100 L 142 130 L 118 144 L 80 140 L 54 124 Z', lx:100, ly:114, cities:['Rennes','Brest']},
-  {id:'pdl', name:'Pays de la Loire',    color:'#b45309', path:'M 118 142 L 150 130 L 182 134 L 204 148 L 208 172 L 192 192 L 164 200 L 134 192 L 114 174 Z', lx:162, ly:166, cities:['Nantes','Le Mans']},
-  {id:'cvl', name:'Centre-Val de Loire', color:'#0369a1', path:'M 202 148 L 244 138 L 274 142 L 278 158 L 272 182 L 248 200 L 218 204 L 194 192 L 208 172 Z', lx:236, ly:172, cities:['Orléans','Tours']},
-  {id:'idf', name:'Île-de-France',       color:'#7c3aed', path:'M 276 148 L 296 142 L 310 148 L 314 162 L 306 176 L 290 180 L 274 172 L 272 158 Z', lx:293, ly:162, cities:['Paris']},
-  {id:'ges', name:'Grand Est',           color:'#c2410c', path:'M 312 32 L 356 28 L 396 42 L 416 64 L 412 94 L 386 112 L 354 114 L 322 102 L 298 82 L 322 76 Z', lx:358, ly:72, cities:['Strasbourg','Reims']},
-  {id:'bfc', name:'Bourgogne-Franche-Comté', color:'#5b21b6', path:'M 278 176 L 308 182 L 332 174 L 360 180 L 364 208 L 346 226 L 316 234 L 288 226 L 274 202 L 272 182 Z', lx:318, ly:204, cities:['Dijon','Besançon']},
-  {id:'naq', name:'Nouvelle-Aquitaine',  color:'#6d28d9', path:'M 116 192 L 166 200 L 194 212 L 206 246 L 198 286 L 174 318 L 138 336 L 102 328 L 78 300 L 72 264 L 88 230 Z', lx:140, ly:264, cities:['Bordeaux','Poitiers']},
-  {id:'ara', name:'Auvergne-Rhône-Alpes',color:'#0f766e', path:'M 286 224 L 318 232 L 350 228 L 378 244 L 392 274 L 380 308 L 350 324 L 316 320 L 290 300 L 278 268 L 278 242 Z', lx:334, ly:278, cities:['Lyon','Grenoble']},
-  {id:'occ', name:'Occitanie',           color:'#92400e', path:'M 174 318 L 200 296 L 232 292 L 272 296 L 288 318 L 282 350 L 256 368 L 220 370 L 186 352 L 164 334 Z', lx:228, ly:332, cities:['Toulouse','Montpellier']},
-  {id:'pac', name:"Provence-Alpes-Côte d'Azur", color:'#0c4a6e', path:'M 316 318 L 350 322 L 380 330 L 408 350 L 406 378 L 380 392 L 348 388 L 320 372 L 308 350 L 312 330 Z', lx:358, ly:356, cities:['Marseille','Nice']},
-  {id:'cor', name:'Corse',               color:'#1e3a5f', path:'M 418 394 L 428 384 L 440 390 L 446 408 L 440 426 L 428 430 L 418 422 L 414 408 Z', lx:430, ly:408, cities:[]},
+  {id:'hdf', name:'Hauts-de-France',    color:'#1a56a0', lx:312, ly:65,  cities:['Lille','Amiens']},
+  {id:'nor', name:'Normandie',           color:'#2e7d52', lx:193, ly:92,  cities:['Rouen','Caen']},
+  {id:'bre', name:'Bretagne',            color:'#c05621', lx:100, ly:115, cities:['Rennes','Brest']},
+  {id:'pdl', name:'Pays de la Loire',    color:'#b07c2a', lx:152, ly:186, cities:['Nantes','Le Mans']},
+  {id:'cvl', name:'Centre-Val de Loire', color:'#0e6b9e', lx:250, ly:160, cities:['Orléans','Tours']},
+  {id:'idf', name:'Île-de-France',       color:'#6d28d9', lx:296, ly:112, cities:['Paris']},
+  {id:'ges', name:'Grand Est',           color:'#9c4221', lx:383, ly:85,  cities:['Strasbourg','Reims','Nancy']},
+  {id:'bfc', name:'Bourgogne-Franche-Comté', color:'#5b21b6', lx:346, ly:170, cities:['Dijon','Besançon']},
+  {id:'naq', name:'Nouvelle-Aquitaine',  color:'#7e22ce', lx:152, ly:290, cities:['Bordeaux','Poitiers','Limoges']},
+  {id:'ara', name:'Auvergne-Rhône-Alpes',color:'#0d766e', lx:358, ly:280, cities:['Lyon','Grenoble','Clermont-Ferrand']},
+  {id:'occ', name:'Occitanie',           color:'#92400e', lx:243, ly:400, cities:['Toulouse','Montpellier','Nîmes']},
+  {id:'pac', name:"Provence-Alpes-Côte d'Azur", color:'#1a5276', lx:384, ly:388, cities:['Marseille','Nice','Toulon']},
+  {id:'cor', name:'Corse',               color:'#1c4980', lx:476, ly:458, cities:[]},
 ];
 
 // Correspondance ville → région
 var CITY_REGION = {
-  'Paris':'idf','Lille':'hdf','Rouen':'nor','Caen':'nor',
-  'Rennes':'bre','Brest':'bre','Nantes':'pdl','Lyon':'ara',
-  'Marseille':'pac','Nice':'pac','Toulouse':'occ','Montpellier':'occ',
-  'Bordeaux':'naq','Strasbourg':'ges','Dijon':'bfc','Grenoble':'ara',
-  'Orléans':'cvl','Tours':'cvl','Le Mans':'pdl','Reims':'ges',
-  'Amiens':'hdf','Besançon':'bfc','Poitiers':'naq','Angers':'pdl',
+  'Paris':'idf','Versailles':'idf',
+  'Lille':'hdf','Amiens':'hdf','Valenciennes':'hdf','Calais':'hdf',
+  'Rouen':'nor','Caen':'nor','Le Havre':'nor','Cherbourg':'nor',
+  'Rennes':'bre','Brest':'bre','Nantes':'pdl','Le Mans':'pdl','Angers':'pdl',
+  'Lyon':'ara','Grenoble':'ara','Clermont-Ferrand':'ara','Saint-Étienne':'ara',
+  'Marseille':'pac','Nice':'pac','Toulon':'pac','Aix-en-Provence':'pac',
+  'Toulouse':'occ','Montpellier':'occ','Nîmes':'occ','Perpignan':'occ',
+  'Bordeaux':'naq','Poitiers':'naq','Limoges':'naq','La Rochelle':'naq',
+  'Strasbourg':'ges','Reims':'ges','Nancy':'ges','Metz':'ges',
+  'Dijon':'bfc','Besançon':'bfc',
+  'Orléans':'cvl','Tours':'cvl',
 };
 
 // Photos démo candidats (avatars générés)
@@ -1110,67 +1280,72 @@ function renderMap(){
   renderRegionPanel();
 }
 
-// ── Dessiner les régions ──
+// ── Colorier les régions (dans le nouveau SVG statique) ──
 function renderRegions(){
-  var g = document.getElementById('fr-regions');
-  var gl = document.getElementById('fr-labels');
-  if(!g) return;
-  g.innerHTML = ''; gl.innerHTML = '';
-
-  // Quels IDs de région ont des candidats ?
+  // Quelles régions ont des candidats ?
   var regionsWithCands = {};
   MATCHES.forEach(function(m){
-    var rid = CITY_REGION[m.city.name];
-    if(rid){ regionsWithCands[rid] = (regionsWithCands[rid]||0) + 1; }
+    var rid = m.city && m.city.rid ? m.city.rid : CITY_REGION[m.city.name];
+    if(rid) regionsWithCands[rid] = (regionsWithCands[rid]||0) + 1;
   });
 
   FR_REGIONS.forEach(function(reg){
+    var el = document.getElementById('reg-' + reg.id);
+    if(!el) return;
+    var path = el.querySelector('.region-fill');
+    if(!path) return;
+
     var hasCands = !!regionsWithCands[reg.id];
     var isActive = _activeRegion === reg.id;
-    var fillColor = isActive ? reg.color : (hasCands ? reg.color + 'dd' : reg.color + '55');
-    var strokeColor = isActive ? '#fff' : (hasCands ? 'rgba(94,234,212,.7)' : 'rgba(255,255,255,.2)');
-    var sw = isActive ? '2' : (hasCands ? '1.4' : '0.8');
+    var filtered = _activeRegion && !isActive;
 
-    var gr = document.createElementNS('http://www.w3.org/2000/svg','g');
-    gr.setAttribute('class','fr-region' + (hasCands?' has-candidates':'') + (isActive?' active':''));
-    gr.dataset.rid = reg.id;
+    if(isActive){
+      path.setAttribute('fill', reg.color);
+      path.setAttribute('stroke', '#fff');
+      path.setAttribute('stroke-width', '2.5');
+      path.setAttribute('filter','url(#rglow)');
+      el.style.opacity = '1';
+    } else if(filtered){
+      path.setAttribute('fill', reg.color + '33');
+      path.setAttribute('stroke', 'rgba(255,255,255,.2)');
+      path.setAttribute('stroke-width', '0.8');
+      path.removeAttribute('filter');
+      el.style.opacity = '0.4';
+    } else if(hasCands){
+      path.setAttribute('fill', reg.color + 'ee');
+      path.setAttribute('stroke', 'rgba(94,234,212,.7)');
+      path.setAttribute('stroke-width', '1.8');
+      path.removeAttribute('filter');
+      el.style.opacity = '1';
+    } else {
+      path.setAttribute('fill', reg.color + '55');
+      path.setAttribute('stroke', 'rgba(255,255,255,.25)');
+      path.setAttribute('stroke-width', '1');
+      path.removeAttribute('filter');
+      el.style.opacity = '0.75';
+    }
 
-    var path = document.createElementNS('http://www.w3.org/2000/svg','path');
-    path.setAttribute('class','region-fill');
-    path.setAttribute('d', reg.path);
-    path.setAttribute('fill', fillColor);
-    path.setAttribute('stroke', strokeColor);
-    path.setAttribute('stroke-width', sw);
-    path.setAttribute('stroke-linejoin','round');
-
-    gr.appendChild(path);
-    g.appendChild(gr);
-
-    // Clic région → filtrer
-    gr.addEventListener('click', function(){
-      filterRegion(isActive ? null : reg.name, null);
-    });
-
-    // Label région si suffisamment grande
-    if(reg.id !== 'idf' && reg.id !== 'cor'){
-      var abbrev = {
-        'hdf':'HDF','nor':'Normandie','bre':'Bretagne','pdl':'Pays-de-Loire',
-        'cvl':'Centre-V.L.','ges':'Grand Est','bfc':'Bourg.-F.C.',
-        'naq':'Nouv.-Aquitaine','ara':'ARA','occ':'Occitanie','pac':'PACA',
-      }[reg.id] || reg.name.split(' ')[0];
-
-      var lbl = document.createElementNS('http://www.w3.org/2000/svg','text');
-      lbl.setAttribute('x', reg.lx); lbl.setAttribute('y', reg.ly);
-      lbl.setAttribute('text-anchor','middle');
-      lbl.setAttribute('font-size', hasCands ? '8' : '7');
-      lbl.setAttribute('font-family','Space Mono, monospace');
-      lbl.setAttribute('fill', hasCands ? 'rgba(255,255,255,.9)' : 'rgba(255,255,255,.4)');
-      lbl.setAttribute('font-weight', hasCands ? '700' : '400');
-      lbl.setAttribute('pointer-events','none');
-      lbl.textContent = abbrev + (regionsWithCands[reg.id] ? ' ('+regionsWithCands[reg.id]+')' : '');
-      gl.appendChild(lbl);
+    // Hover sur la région
+    if(!el._hoverSet){
+      el._hoverSet = true;
+      el.addEventListener('mouseenter', function(){
+        if(_activeRegion !== reg.id){
+          path.setAttribute('stroke','rgba(255,255,255,.7)');
+          path.setAttribute('stroke-width','2');
+        }
+      });
+      el.addEventListener('mouseleave', function(){
+        renderRegions();
+      });
+      el.addEventListener('click', function(){
+        filterRegion(_activeRegion === reg.id ? null : reg.name, null);
+      });
+      el.style.cursor = 'pointer';
     }
   });
+
+  // Panel latéral
+  renderRegionPanel();
 }
 
 // ── Dessiner les pins candidats ──
