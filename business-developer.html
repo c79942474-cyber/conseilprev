@@ -478,28 +478,81 @@ document.getElementById('apply-form').addEventListener('submit', function(e){
     .then(function(res){
       btn.disabled = false;
       if(res.ok){
-        txt.textContent = 'Envoyé ✓';
+        var cvOk   = res.cv_received;
+        var mailOk = res.email_sent;
         var suc = document.getElementById('af-success');
-        if(suc){
-          suc.style.display = 'block';
-          suc.textContent = res.cv_received
-            ? '✓ Candidature envoyée avec CV — réponse sous 48h'
-            : '✓ Candidature envoyée — réponse sous 48h';
-          suc.scrollIntoView({behavior:'smooth',block:'center'});
+
+        if(mailOk){
+          // ✅ Email envoyé avec CV
+          txt.textContent = 'Envoyé ✓';
+          if(suc){
+            suc.style.display = 'block';
+            suc.style.background = 'rgba(94,234,212,.1)';
+            suc.style.border = '1px solid rgba(94,234,212,.3)';
+            suc.innerHTML = '✓ Candidature' + (cvOk ? ' + CV' : '') + ' envoyée à CONSEILPREV — réponse sous 48h ouvrées';
+          }
+        } else {
+          // ⚠ SMTP non configuré → fallback mailto
+          txt.textContent = 'Relancer →';
+          if(suc){
+            suc.style.display = 'block';
+            suc.style.background = 'rgba(251,191,36,.08)';
+            suc.style.border = '1px solid rgba(251,191,36,.3)';
+            suc.style.color = '#fde68a';
+            suc.innerHTML =
+              '✓ Candidature sauvegardée.<br>' +
+              '<span style="font-size:11px;opacity:.85">Pour garantir la réception par CONSEILPREV, ' +
+              'cliquez le bouton ci-dessous pour envoyer aussi par email :</span>';
+          }
+          // Fallback mailto automatique avec toutes les infos
+          setTimeout(function(){
+            var cvName = document.getElementById('af-cv-name').textContent;
+            var body = encodeURIComponent(
+              '=== CANDIDATURE BUSINESS DEVELOPER INDÉPENDANT ===\n\n' +
+              'Prénom    : ' + prenom + '\n' +
+              'Nom       : ' + nom + '\n' +
+              'Email     : ' + email + '\n' +
+              'Téléphone : ' + (document.getElementById('af-tel').value.trim() || '—') + '\n\n' +
+              'CV        : ' + (cvOk ? res.cv_filename || cvName : cvName + ' (joindre manuellement)') + '\n\n' +
+              'Message   :\n' + (document.getElementById('af-message').value.trim() || '—') + '\n\n' +
+              '---\n' +
+              'Consentement RGPD : OUI (Art. 6.1.a) — ' + new Date().toLocaleString('fr-FR') + '\n' +
+              'Source : conseilprev.onrender.com/business-developer'
+            );
+            window.location.href =
+              'mailto:christophe.cerf@outlook.com' +
+              '?subject=' + encodeURIComponent('[CANDIDATURE BD] ' + prenom + ' ' + nom) +
+              '&body=' + body;
+          }, 800);
         }
+
+        if(suc) suc.scrollIntoView({behavior:'smooth',block:'center'});
         document.getElementById('apply-form').reset();
         var nameEl = document.getElementById('af-cv-name');
         if(nameEl){ nameEl.textContent = 'Aucun fichier sélectionné'; nameEl.classList.remove('has-file'); }
+
       } else {
-        txt.textContent = 'Envoyer';
-        alert('Erreur : ' + (res.error || 'Veuillez réessayer'));
+        txt.textContent = 'Réessayer';
+        var suc = document.getElementById('af-success');
+        if(suc){
+          suc.style.display = 'block';
+          suc.style.background = 'rgba(248,113,113,.08)';
+          suc.style.border = '1px solid rgba(248,113,113,.3)';
+          suc.style.color = '#fca5a5';
+          suc.textContent = '⚠ ' + (res.error || 'Erreur — réessayez');
+        }
       }
     })
     .catch(function(err){
       btn.disabled = false;
-      txt.textContent = 'Envoyer';
-      console.error(err);
-      alert('Erreur réseau, réessayez.');
+      txt.textContent = 'Réessayer';
+      // Fallback direct mailto si erreur réseau
+      var body = encodeURIComponent(
+        'Candidature Business Developer\n\n' +
+        'Prénom : ' + prenom + '\nNom : ' + nom + '\nEmail : ' + email
+      );
+      window.location.href = 'mailto:christophe.cerf@outlook.com?subject=' +
+        encodeURIComponent('[CANDIDATURE BD] ' + prenom + ' ' + nom) + '&body=' + body;
     });
 });
 document.addEventListener('contextmenu', function(e){ e.preventDefault(); });

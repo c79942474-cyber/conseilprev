@@ -441,7 +441,7 @@ def save_cv_local(data, filename, context=''):
     import datetime
     ts = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
     safe = f"{ts}_{context}_{filename}" if context else f"{ts}_{filename}"
-    safe = re.sub(r'[^\w\-_\.]', '_', safe)  # nettoyer
+    safe = _re.sub(r'[^\w\-_\.]', '_', safe)  # nettoyer
     path = os.path.join(UPLOAD_FOLDER, safe)
     with open(path, 'wb') as f:
         f.write(data)
@@ -781,10 +781,12 @@ def api_apply():
             logger.warning(f'APPLY_EMAIL_FAIL {ip}: {status} (données sauvegardées localement)')
 
         return jsonify({
-            'ok':         True,
-            'message':    'Candidature reçue avec succès',
-            'cv_received': cv_filename is not None,
-            'email_sent':  ok_email,
+            'ok':           True,
+            'message':      'Candidature reçue avec succès',
+            'cv_received':  cv_filename is not None,
+            'cv_filename':  cv_filename,
+            'email_sent':   ok_email,
+            'smtp_ready':   bool(SMTP_USER and SMTP_PASSWORD),
         })
 
     except Exception as e:
