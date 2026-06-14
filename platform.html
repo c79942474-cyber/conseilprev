@@ -870,9 +870,24 @@ input,textarea,select{-webkit-user-select:text!important;user-select:text!import
 
     <div class="final-box" id="final-box" style="display:none">
       <div class="final-ico">🎉</div>
-      <h2 class="section-h">Dossier <em>envoyé !</em></h2>
-      <p class="section-s">CONSEILPREV a reçu votre sélection complète avec les accords de principe.<br>Les <strong style="color:#fde68a">contrats définitifs seront établis et signés après accord mutuel</strong> entre toutes les parties.<br>Votre INGE IT dédié vous contacte sous <strong style="color:var(--teal)">48h ouvrées</strong>.</p>
-      <a href="/" class="btn-sec">← Retour à l'accueil</a>
+      <h2 class="section-h">Dossier <em>traité !</em></h2>
+      <p class="section-s">
+        Votre sélection a été transmise à CONSEILPREV avec les accords de principe.<br>
+        <strong style="color:#fde68a">Les contrats définitifs seront établis et signés après accord mutuel</strong> entre toutes les parties.<br>
+        Votre INGE IT dédié vous contacte sous <strong style="color:var(--teal)">48h ouvrées</strong>.
+      </p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px">
+        <button class="btn-sec" onclick="triggerMailtoFallback()" style="font-size:12px;padding:10px 18px">
+          📨 Renvoyer à CONSEILPREV
+        </button>
+        <button class="btn-sec" onclick="triggerMailtoClient()" style="font-size:12px;padding:10px 18px">
+          📧 Renvoyer au client
+        </button>
+        <button class="btn-sec" onclick="newSearch()" style="font-size:12px;padding:10px 18px">
+          🔁 Nouvelle recherche
+        </button>
+        <a href="/" class="btn-sec" style="font-size:12px;padding:10px 18px">← Accueil</a>
+      </div>
     </div>
   </div>
 </section>
@@ -2027,6 +2042,103 @@ function signOk(canvasId, statusId){
 }
 
 // ── Finalisation : envoi dossier complet détaillé ──
+// ── Helpers mailto fallback (si SMTP absent) ──
+function buildContractSummary(){
+  var m = CART[ACTIVE_CAND] || CART[0];
+  if(!m) return '';
+  var tjmC = m.tjm;
+  var tjmCons = Math.round(m.tjm * 0.85);
+  var today = new Date().toLocaleDateString('fr-FR');
+  var lines = [
+    '=== DOSSIER CONTRATS CONSEILPREV ===',
+    'Date : ' + today,
+    '',
+    'CLIENT',
+    'Nom        : ' + BRIEF.prenom + ' ' + BRIEF.nom,
+    'Email      : ' + BRIEF.email,
+    'Tél        : ' + (BRIEF.tel || '—'),
+    'Entreprise : ' + (BRIEF.entreprise || '—'),
+    '',
+    'SÉLECTION (' + CART.length + ' candidat(s))',
+  ];
+  CART.forEach(function(c, i){
+    lines.push('');
+    lines.push('Candidat ' + (i+1) + ' — ' + c.label + ' (Match ' + c.score + '%)');
+    lines.push('  Poste    : ' + c.titre + ' (' + c.domaine + ')');
+    lines.push('  Ville    : ' + (c.city ? c.city.name : c.lieu));
+    lines.push('  Dispo    : ' + c.dispo + ' | Durée : ' + c.duree);
+    lines.push('  TJM fact. client    : ' + c.tjm + ' EUR HT');
+    lines.push('  TJM rémun. consult. : ' + Math.round(c.tjm * 0.85) + ' EUR HT (−15%)');
+    lines.push('  Marge CONSEILPREV   : ' + (c.tjm - Math.round(c.tjm * 0.85)) + ' EUR/j');
+    if(c.ident){
+      lines.push('  [CONFIDENTIEL] ' + c.ident.prenom + ' ' + c.ident.nom + ' · ' + c.ident.email + ' · ' + c.ident.tel);
+      lines.push('  Source : ' + (c.ident.source || '—'));
+    }
+  });
+  lines.push('');
+  lines.push('CONTRATS');
+  lines.push('Durée : 6 mois tacite reconduction | Préavis résiliation : 60j LRAR');
+  lines.push('Paiement : 30j réception facture | Reporting : hebdomadaire');
+  lines.push('Accord de principe — contrats DÉFINITIFS après accord mutuel toutes parties.');
+  lines.push('');
+  lines.push('Signatures horodatées : ' + new Date().toLocaleString('fr-FR'));
+  return lines.join('\n');
+}
+
+function triggerMailtoFallback(){
+  // Mailto vers CONSEILPREV avec dossier complet
+  var subject = '[DOSSIER CONTRATS] ' + BRIEF.prenom + ' ' + BRIEF.nom +
+    ' — ' + CART.length + ' candidat(s)';
+  var body = buildContractSummary();
+  window.open(
+    'mailto:christophe.cerf@outlook.com' +
+    '?subject=' + encodeURIComponent(subject) +
+    '&body=' + encodeURIComponent(body),
+    '_blank'
+  );
+}
+
+function triggerMailtoClient(){
+  if(!BRIEF.email){ alert('Email client manquant dans le brief'); return; }
+  var m = CART[0];
+  var subject = 'Votre sélection CONSEILPREV — Accord de principe';
+  var body = [
+    'Bonjour ' + BRIEF.prenom + ' ' + BRIEF.nom + ',',
+    '',
+    'Nous avons bien reçu votre sélection de ' + CART.length + ' candidat(s).',
+    'Notre équipe CONSEILPREV vous contactera sous 48h ouvrées pour organiser',
+    'la mise en relation et confirmer les modalités définitives.',
+    '',
+    '=== VOS CANDIDATS SÉLECTIONNÉS ===',
+  ].concat(CART.map(function(c, i){
+    return [
+      '',
+      'Candidat ' + (i+1) + ' — ' + c.label + ' (Match ' + c.score + '%)',
+      '  Poste : ' + c.titre + ' (' + c.domaine + ')',
+      '  TJM : ' + c.tjm + ' EUR HT | Dispo : ' + c.dispo,
+      '  Durée : ' + c.duree + ' | Démarrage : ' + c.start,
+    ].join('\n');
+  })).concat([
+    '',
+    '=== ACCORD DE PRINCIPE ===',
+    'Ce document est un pré-accord. Les contrats DÉFINITIFS seront établis',
+    'et signés après accord définitif mutuel entre toutes les parties.',
+    '',
+    'Durée : 6 mois renouvelable | Résiliation : 60j préavis LRAR',
+    'Paiement : 30 jours après facture',
+    '',
+    'Cordialement,',
+    'L\u2019équipe CONSEILPREV',
+    'christophe.cerf@outlook.com | conseilprev.onrender.com',
+  ]).join('\n');
+  window.open(
+    'mailto:' + encodeURIComponent(BRIEF.email) +
+    '?subject=' + encodeURIComponent(subject) +
+    '&body=' + encodeURIComponent(body),
+    '_blank'
+  );
+}
+
 function finalizeAll(){
   var skipCand = document.getElementById('skip-cand-sig') && document.getElementById('skip-cand-sig').checked;
   var required = ['sig-c1-cp','sig-c2-cp','sig-c2-cl'];
@@ -2091,30 +2203,58 @@ function finalizeAll(){
     .then(function(r){ return r.json(); })
     .then(function(res){
       var status = document.getElementById('email-status');
+      btn.disabled = false;
+
       if(res.ok && res.email_sent){
+        // ✅ CAS 1 : SMTP configuré → emails envoyés aux deux parties
         status.className = 'email-status ok';
-        status.textContent = '✓ Email envoyé à CONSEILPREV avec le dossier complet';
+        status.innerHTML =
+          '✓ Email de confirmation envoyé au client (' + BRIEF.email + ')<br>' +
+          '✓ Dossier confidentiel envoyé à CONSEILPREV<br>' +
+          '<span style="font-size:10px;opacity:.75">Contrats préliminaires inclus — accord définitif mutuel requis avant finalisation.</span>';
+        btn.style.display = 'none';
+        document.getElementById('final-box').style.display = 'block';
+        document.getElementById('final-box').scrollIntoView({behavior:'smooth',block:'center'});
+
       } else if(res.ok && !res.email_sent){
+        // ⚠ CAS 2 : SMTP absent → dossier sauvegardé + fallback mailto automatique
         status.className = 'email-status warn';
-        status.innerHTML = '⚠ <strong>Dossier reçu et sauvegardé par CONSEILPREV</strong>, mais l\u2019email n\u2019a pas pu partir : le serveur SMTP n\u2019est pas encore configuré.<br>→ Administrateur : ajoutez les variables <strong>SMTP_USER</strong> et <strong>SMTP_PASSWORD</strong> (mot de passe d\u2019application Gmail) dans Render → Environment, puis redéployez.';
+        status.innerHTML =
+          '⚠ <strong>Dossier sauvegardé</strong> — SMTP non configuré sur Render.<br>' +
+          'Envoi automatique par email dans 1 seconde…';
+        btn.style.display = 'none';
+
+        setTimeout(function(){
+          // Ouvrir mailto CONSEILPREV (avec résumé complet)
+          triggerMailtoFallback();
+          // Afficher le final-box
+          document.getElementById('final-box').style.display = 'block';
+          document.getElementById('final-box').scrollIntoView({behavior:'smooth',block:'center'});
+          status.innerHTML =
+            '⚠ SMTP non configuré — votre client mail a été ouvert pour envoyer à CONSEILPREV.<br>' +
+            '<span style="font-size:10px">Le dossier est aussi sauvegardé sur le serveur.</span><br>' +
+            '<a href="#" onclick="triggerMailtoClient();return false;" style="color:#fde68a;font-size:11px;margin-top:6px;display:inline-block">' +
+            '→ Envoyer aussi la confirmation au client (' + BRIEF.email + ')</a>';
+        }, 900);
+
       } else {
+        // ❌ CAS 3 : Erreur
         status.className = 'email-status warn';
-        status.textContent = '⚠ ' + (res.error || 'Erreur lors de l\u2019envoi');
+        status.textContent = '⚠ ' + (res.error || 'Erreur serveur');
         btn.disabled = false;
-        btn.textContent = '📨 Réessayer l\u2019envoi';
-        return;
+        btn.textContent = '📨 Réessayer';
       }
-      btn.style.display = 'none';
-      document.getElementById('final-box').style.display = 'block';
-      document.getElementById('final-box').scrollIntoView({behavior:'smooth',block:'center'});
     })
     .catch(function(){
+      // ❌ CAS 4 : Erreur réseau → fallback mailto d'urgence
       btn.disabled = false;
-      btn.textContent = '📨 Réessayer l\u2019envoi';
+      btn.textContent = '📨 Réessayer';
       var status = document.getElementById('email-status');
       status.className = 'email-status warn';
-      status.textContent = '⚠ Erreur réseau — patientez quelques secondes puis réessayez.';
+      status.innerHTML = '⚠ Erreur réseau — ouverture du client mail…';
+      setTimeout(triggerMailtoFallback, 600);
     });
+
 }
 
 document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
