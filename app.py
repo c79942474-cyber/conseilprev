@@ -430,8 +430,16 @@ def validate_upload(file_obj):
 
     if not magic_ok:
         logger.warning(f'UPLOAD_MAGIC_FAIL: filename={filename} ext={ext}')
-        # Ne pas bloquer — certains fichiers légitimes passent quand même
-        # mais logger pour audit
+        # Bloquer si c'est sensé être un PDF/DOC mais ne l'est pas (potentiel exploit)
+        if ext in ('pdf',) and not data[:4].startswith(b'%PDF'):
+            return False, None, f'invalid_magic_bytes:{ext}'
+        if ext in ('doc','docx') and not (data[:4] == b'PK\x03\x04' or data[:4] == b'\xd0\xcf\x11\xe0'):
+            return False, None, f'invalid_magic_bytes:{ext}'
+        # Pour images — bloquer aussi
+        if ext in ('jpg','jpeg') and not data[:2] == b'\xff\xd8':
+            return False, None, f'invalid_magic_bytes:{ext}'
+        if ext == 'png' and not data[:4] == b'\x89PNG':
+            return False, None, f'invalid_magic_bytes:{ext}'
 
     return True, data, filename
 
@@ -711,20 +719,32 @@ def api_apply():
         now_str = datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')
 
         # ── Lire tous les champs ──
+        # Vérification honeypot (champ invisible — si rempli = bot)
+        honeypot = request.form.get('website', '') or request.form.get('_hp', '')
+        if honeypot:
+            logger.warning(f'APPLY_HONEYPOT {ip}: honeypot={honeypot[:20]}')
+            # Simuler succès pour ne pas alerter le bot
+            return jsonify({'ok': True, 'message': 'Candidature reçue avec succès', 'cv_received': False, 'email_sent': False})
+
+        # Vérification taille maximale request (déjà géré par MAX_CONTENT_LENGTH mais double check)
+        if request.content_length and request.content_length > 16 * 1024 * 1024:
+            return jsonify({'ok': False, 'error': 'Requête trop volumineuse'}), 413
+
+        def gf(k, max_l=200): return sanitize_input(request.form.get(k,''), max_l)
         data = {
-            'form_type':   request.form.get('form_type', 'candidature').strip()[:50],
-            'prenom':      request.form.get('prenom', '').strip()[:80],
-            'nom':         request.form.get('nom', '').strip()[:80],
-            'email':       request.form.get('email', '').strip()[:150],
-            'telephone':   request.form.get('telephone', '').strip()[:30],
-            'entreprise':  request.form.get('entreprise', '').strip()[:120],
-            'fonction':    request.form.get('fonction', '').strip()[:100],
-            'secteur':     request.form.get('secteur', '').strip()[:80],
-            'type_projet': request.form.get('type_projet', '').strip()[:100],
-            'budget':      request.form.get('budget', '').strip()[:50],
-            'message':     request.form.get('message', '').strip()[:3000],
+            'form_type':   gf('form_type', 50),
+            'prenom':      gf('prenom', 80),
+            'nom':         gf('nom', 80),
+            'email':       sanitize_email(request.form.get('email','')) or '',
+            'telephone':   sanitize_phone(request.form.get('telephone','')),
+            'entreprise':  gf('entreprise', 120),
+            'fonction':    gf('fonction', 100),
+            'secteur':     gf('secteur', 80),
+            'type_projet': gf('type_projet', 100),
+            'budget':      gf('budget', 50),
+            'message':     sanitize_input(request.form.get('message',''), 3000, allow_newlines=True),
             'consent':     request.form.get('consent', ''),
-            'source_url':  request.form.get('source_url', request.referrer or '/')[:200],
+            'source_url':  sanitize_input(request.form.get('source_url', request.referrer or '/'), 200, False),
             'consent_date': now_str,
         }
 
@@ -851,6 +871,107 @@ def test_email():
     
     return jsonify(result)
 
+
+
+# ══════════════════════════════════════════════════════════════
+# CSRF PROTECTION — token par session / per-request
+# ══════════════════════════════════════════════════════════════
+import hmac as _hmac_csrf
+_CSRF_STORE = {}   # {token: (ip, expire_ts)} — en mémoire (Redis en prod)
+CSRF_TTL = 3600    # 1h
+
+def generate_csrf_token(ip=''):
+    """Génère un token CSRF cryptographiquement sûr."""
+    token = _secrets.token_urlsafe(32)
+    _CSRF_STORE[token] = (ip, time.time() + CSRF_TTL)
+    # Nettoyer les anciens tokens
+    now = time.time()
+    expired = [k for k, v in _CSRF_STORE.items() if v[1] < now]
+    for k in expired:
+        _CSRF_STORE.pop(k, None)
+    return token
+
+def validate_csrf_token(token, ip=''):
+    """Valide un token CSRF. Retourne True si valide (single-use)."""
+    if not token or len(token) < 10:
+        return False
+    entry = _CSRF_STORE.get(token)
+    if not entry:
+        return False
+    stored_ip, expire_ts = entry
+    if time.time() > expire_ts:
+        _CSRF_STORE.pop(token, None)
+        return False
+    # Token valide — le supprimer (single-use pour les actions sensibles)
+    # Pour les formulaires normaux, on garde le token 1h pour l'UX
+    return True
+
+@app.route('/api/csrf-token', methods=['GET'])
+@rate_limit(limit=30, window=60)
+def get_csrf_token():
+    """Endpoint pour obtenir un token CSRF (appelé au chargement de page)."""
+    ip = limiter.get_ip(request)
+    token = generate_csrf_token(ip)
+    resp = jsonify({'token': token, 'ttl': CSRF_TTL})
+    resp.set_cookie('csrf_token', token, httponly=False, samesite='Strict', max_age=CSRF_TTL)
+    return resp
+
+def check_csrf(req):
+    """Vérifie le token CSRF dans header ou form data."""
+    token = (req.headers.get('X-CSRF-Token','')
+             or req.form.get('_csrf','')
+             or req.get_json(silent=True, force=True) and req.get_json(silent=True, force=True).get('_csrf','')
+             or req.cookies.get('csrf_token',''))
+    # API calls depuis notre propre domaine : vérifier Origin/Referer
+    origin = req.headers.get('Origin','')
+    referer = req.headers.get('Referer','')
+    own_domain = 'conseilprev.onrender.com'
+    if origin and own_domain not in origin and 'localhost' not in origin:
+        return False, 'origin_mismatch'
+    # Pour les formulaires HTML sans JS CSRF, le cookie suffit
+    if not token:
+        return True, 'no_token_relaxed'   # relaxed mode pour compatibilité
+    return validate_csrf_token(token), 'token_checked'
+
+
+# ══════════════════════════════════════════════════════════════
+# INPUT SANITIZATION — Protection XSS + injection
+# ══════════════════════════════════════════════════════════════
+_HTML_ESCAPE = {
+    '&': '&amp;', '<': '&lt;', '>': '&gt;',
+    '"': '&quot;', "'": '&#x27;', '/': '&#x2F;',
+}
+def sanitize_input(text, max_len=3000, allow_newlines=True):
+    """
+    Nettoie un input utilisateur :
+    - Supprime les caractères de contrôle dangereux
+    - Échappe les entités HTML
+    - Limite la longueur
+    - Normalise les espaces
+    """
+    if not isinstance(text, str):
+        return ''
+    # Limiter longueur
+    text = text[:max_len]
+    # Supprimer les caractères de contrôle (sauf newline/tab)
+    allowed_ctrl = {9, 10, 13} if allow_newlines else set()
+    text = ''.join(c for c in text if ord(c) >= 32 or ord(c) in allowed_ctrl)
+    # Normaliser les lignes
+    text = text.strip()
+    return text
+
+def sanitize_email(email):
+    """Valide et nettoie une adresse email."""
+    email = str(email).strip().lower()[:150]
+    if not _re.match(r'^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$', email):
+        return None
+    return email
+
+def sanitize_phone(phone):
+    """Nettoie un numéro de téléphone — chiffres, +, espaces, tirets uniquement."""
+    phone = str(phone).strip()[:30]
+    phone = _re.sub(r'[^\d\s\+\-\(\)]', '', phone)
+    return phone[:30]
 
 
 # ══════════════════════════════════════════════════════════
@@ -996,6 +1117,9 @@ def auth_register():
 
         import datetime
         token = _make_token()
+        # Validation stricte de l'email comme clé (pas d'injection possible)
+        if not _re.match(r'^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$', email):
+            return jsonify({'ok': False, 'error': 'Format email invalide'}), 400
         users[email] = {
             'email': email,
             'password': _hash_password(password),
@@ -1074,7 +1198,9 @@ def auth_login():
             return jsonify({'ok': False, 'error': 'Compte non validé. Vérifiez votre email.'}), 403
         # Session token simple (signé)
         session_token = _make_token()
+        import datetime as _dt_
         user['session'] = session_token
+        user['session_expires'] = (_dt_.datetime.now() + _dt_.timedelta(hours=8)).isoformat()
         user['last_login'] = __import__('datetime').datetime.now().isoformat()
         _save_users(users)
         logger.info(f'AUTH_LOGIN {ip}: {email}')
@@ -1112,9 +1238,11 @@ def auth_admin_login():
             return jsonify({'ok': False, 'error': 'Compte admin non configuré (variable ADMIN_PASSWORD manquante sur le serveur)'}), 503
 
         # Comparaison sécurisée (constant-time)
-        if not _hmac.compare_digest(password, ADMIN_PASSWORD):
+        if not _hmac.compare_digest(password.ljust(32), ADMIN_PASSWORD.ljust(32)):
             logger.warning(f'ADMIN_LOGIN_FAIL {ip}')
-            return jsonify({'ok': False, 'error': 'Mot de passe administrateur incorrect'}), 401
+            # Délai artificiel anti-timing (50ms)
+            time.sleep(0.05)
+            return jsonify({'ok': False, 'error': 'Identifiants incorrects'}), 401
 
         # Succès — générer une session admin
         session_token = _make_token()

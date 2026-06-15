@@ -939,5 +939,68 @@ function openMailtoSourcing(){
     +'&body='+encodeURIComponent(body),'_blank');
 }
 </script>
+
+<script>
+/* ══ SÉCURITÉ FORMULAIRES — Protection universelle ══ */
+(function(){
+  // 1. Débounce sur tous les boutons submit (évite double-clic)
+  document.addEventListener('DOMContentLoaded', function(){
+    document.querySelectorAll('form').forEach(function(form){
+      form.addEventListener('submit', function(){
+        var btns = form.querySelectorAll('[type="submit"]');
+        btns.forEach(function(btn){
+          if(!btn.dataset.debounced){
+            btn.dataset.debounced = '1';
+            // Ré-activer après 5s max (en cas d'erreur réseau)
+            setTimeout(function(){ btn.disabled = false; delete btn.dataset.debounced; }, 5000);
+          }
+        });
+      });
+    });
+
+    // 2. Limiter longueur visible des champs texte
+    var limits = {
+      'pf-prenom':80,'pf-nom':80,'pf-email':150,'pf-tel':30,'pf-co':120,
+      'pf-role':100,'pf-msg':3000,'sf-prenom':80,'sf-nom':80,'sf-email':150,
+      'sf-profil':2000,'af-prenom':80,'af-nom':80,'af-email':150,'af-message':2000
+    };
+    Object.keys(limits).forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) el.setAttribute('maxlength', limits[id]);
+    });
+
+    // 3. Détection auto-fill suspect (bots)
+    var hpFields = document.querySelectorAll('#hp, #_hp, [name="website"], [name="_hp"]');
+    hpFields.forEach(function(el){
+      el.value = '';
+      el.setAttribute('tabindex','-1');
+      el.setAttribute('autocomplete','off');
+    });
+
+    // 4. Protection copier-coller sur champs sensibles (optionnel)
+    // Désactivé pour l'UX
+
+    // 5. Timeout session visuel (avertissement après 25min d'inactivité)
+    var inactiveTimer;
+    var SESSION_WARNING = 25 * 60 * 1000;
+    function resetTimer(){
+      clearTimeout(inactiveTimer);
+      inactiveTimer = setTimeout(function(){
+        // Avertissement discret si formulaire en cours de remplissage
+        var hasInput = Array.from(document.querySelectorAll('input,textarea'))
+          .some(function(el){ return el.value.trim().length > 0; });
+        if(hasInput){
+          console.info('CONSEILPREV: session bientôt expirée');
+        }
+      }, SESSION_WARNING);
+    }
+    ['mousemove','keydown','click','touchstart'].forEach(function(e){
+      document.addEventListener(e, resetTimer, {passive:true});
+    });
+    resetTimer();
+  });
+})();
+</script>
+
 </body>
 </html>
