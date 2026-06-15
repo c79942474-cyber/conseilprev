@@ -500,9 +500,15 @@ document.getElementById('apply-form').addEventListener('submit', function(e){
             suc.style.border = '1px solid rgba(251,191,36,.3)';
             suc.style.color = '#fde68a';
             suc.innerHTML =
-              '✓ Candidature sauvegardée.<br>' +
-              '<span style="font-size:11px;opacity:.85">Pour garantir la réception par CONSEILPREV, ' +
-              'cliquez le bouton ci-dessous pour envoyer aussi par email :</span>';
+              '✓ Candidature sauvegardée sur le serveur.<br><br>' +
+              '<span style="font-size:11px;line-height:1.7">Pour garantir la réception par CONSEILPREV, ' +
+              'cliquez ce bouton :</span><br><br>' +
+              '<button onclick="openMailtoFallback()" style="' +
+                'background:linear-gradient(135deg,#6d28d9,#d946ef);' +
+                'color:#fff;border:none;padding:10px 22px;border-radius:9px;' +
+                'font-size:13px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif;' +
+                'box-shadow:0 4px 16px rgba(217,70,239,.4);' +
+              '">📨 Ouvrir mon email →</button>';
           }
           // Fallback mailto automatique avec toutes les infos
           setTimeout(function(){
@@ -556,6 +562,14 @@ document.getElementById('apply-form').addEventListener('submit', function(e){
     });
 });
 document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+
+function openMailtoFallback(){
+  if(window._mailtoFallback){
+    window.open(window._mailtoFallback, '_blank');
+  } else {
+    window.open('mailto:christophe.cerf@outlook.com?subject=[CANDIDATURE BD]', '_blank');
+  }
+}
 </script>
 </body>
 </html>

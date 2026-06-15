@@ -266,6 +266,41 @@ input,textarea{-webkit-user-select:text!important;user-select:text!important}
 .admin-close{position:absolute;top:0;right:0;background:none;border:none;color:rgba(216,180,254,.5);font-size:22px;cursor:pointer;padding:8px;transition:color .2s}
 .admin-close:hover{color:#fff}
 
+
+/* ══ CONSENTEMENT SOURCING ══ */
+.sf-consent{
+  display:flex;align-items:flex-start;gap:12px;
+  background:rgba(157,111,232,.1);
+  border:1px solid rgba(196,181,232,.25);
+  border-radius:10px;padding:14px 16px;
+  cursor:pointer;transition:border-color .2s,background .2s;
+  margin-bottom:0;
+}
+.sf-consent:has(input:checked){
+  border-color:rgba(94,234,212,.4);background:rgba(94,234,212,.07);
+}
+.sf-consent.error{
+  border-color:rgba(248,113,113,.6)!important;
+  background:rgba(239,68,68,.08)!important;
+  animation:sf-shake .3s ease;
+}
+@keyframes sf-shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.sf-consent input[type="checkbox"]{
+  width:18px;height:18px;flex-shrink:0;margin-top:2px;
+  accent-color:var(--teal,#5eead4);cursor:pointer;
+}
+.sf-consent-txt{font-size:11.5px;color:rgba(216,180,254,.82);line-height:1.65}
+.sf-consent-txt strong{color:#fff}
+.sf-consent-txt a{color:var(--teal,#5eead4);text-decoration:none}
+.sf-consent-txt a:hover{text-decoration:underline}
+.sf-consent-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.sf-consent-tag{
+  font-family:"Space Mono",monospace;font-size:9px;
+  padding:2px 9px;border-radius:100px;
+  background:rgba(196,181,232,.12);border:1px solid rgba(196,181,232,.22);
+  color:rgba(196,181,232,.75);
+}
+
 </style>
 </head>
 <body>
@@ -525,6 +560,22 @@ input,textarea{-webkit-user-select:text!important;user-select:text!important}
         <label for="sf-profil">Quel profil recherchez-vous ? *</label>
         <textarea class="tf-profil-field" id="sf-profil" rows="3" placeholder="Ex : Data Scientist senior, expérience LLM, connaissance IA Act requise..." required></textarea>
       </div>
+            <!-- Consentement RGPD -->
+      <label class="sf-consent" for="sf-consent-cb">
+        <input type="checkbox" id="sf-consent-cb" required>
+        <span class="sf-consent-txt">
+          J'accepte que mes données soient traitées par <strong>CONSEILPREV</strong>
+          dans le cadre de ma demande de sourcing, conformément à la
+          <a href="/protection-donnees" target="_blank" rel="noopener">politique de protection des données</a>.
+          Conservation : <strong>24 mois</strong> max.&nbsp;<span style="color:#f87171">*</span>
+          <div class="sf-consent-tags">
+            <span class="sf-consent-tag">Art. 6.1.a — Consentement</span>
+            <span class="sf-consent-tag">Art. 7.1 — Preuve</span>
+            <span class="sf-consent-tag">Art. 17 — Effacement</span>
+          </div>
+        </span>
+      </label>
+
       <button type="submit" class="tf-submit" id="sf-submit">
         <span class="tf-dot"></span>
         <span id="sf-txt">Envoyer</span>
@@ -557,6 +608,16 @@ document.getElementById('sourcing-form').addEventListener('submit', function(e){
   var email  = document.getElementById('sf-email').value.trim();
   var profil = document.getElementById('sf-profil').value.trim();
   if(!prenom||!nom||!email||!profil){ return; }
+  var consent = document.getElementById('sf-consent-cb');
+  if(!consent || !consent.checked){
+    var block = consent ? consent.closest('.sf-consent') : null;
+    if(block){
+      block.classList.add('error');
+      block.scrollIntoView({behavior:'smooth',block:'center'});
+      setTimeout(function(){ block.classList.remove('error'); }, 2500);
+    }
+    return;
+  }
   var btn = document.getElementById('sf-submit');
   var txt = document.getElementById('sf-txt');
   btn.disabled = true; txt.textContent = 'Envoi…';
@@ -593,6 +654,8 @@ document.getElementById('sourcing-form').addEventListener('submit', function(e){
           if(msg){
             msg.style.display='block';
             msg.style.color='#fde68a';
+            msg.style.background='rgba(251,191,36,.08)';
+            msg.style.border='1px solid rgba(251,191,36,.3)';
             msg.textContent='⚠ Envoi par votre client mail dans 1s…';
           }
           setTimeout(function(){
@@ -622,11 +685,16 @@ document.getElementById('sourcing-form').addEventListener('submit', function(e){
             txt.textContent = 'Envoyé ✓';
             if(msg){
               msg.style.color='var(--teal)';
-              msg.textContent='✓ Demande transmise par email — réponse sous 48h';
+              msg.style.background='rgba(94,234,212,.08)';
+              msg.style.border='1px solid rgba(94,234,212,.25)';
+              msg.innerHTML='✓ Demande transmise — réponse sous 48h.<br>' +
+                '<span style="font-size:10px;opacity:.75">Email ouvert dans votre client mail.</span>';
             }
           }, 900);
         }
         document.getElementById('sourcing-form').reset();
+        var cb = document.getElementById('sf-consent-cb');
+        if(cb){ cb.checked = false; }
       } else {
         txt.textContent = 'Envoyer';
         if(msg){
