@@ -529,7 +529,7 @@ input,textarea{-webkit-user-select:text!important;user-select:text!important}
         <span class="tf-dot"></span>
         <span id="sf-txt">Envoyer</span>
       </button>
-      <p id="sf-msg" style="font-size:12px;color:var(--teal);display:none;text-align:right;font-family:'Space Mono',monospace">✓ Demande envoyée — réponse sous 48h</p>
+      <p id="sf-msg" style="font-size:12px;display:none;text-align:right;font-family:'Space Mono',monospace;padding:10px 14px;border-radius:8px;margin-top:10px;background:rgba(94,234,212,.08);border:1px solid rgba(94,234,212,.2);">✓ Demande envoyée — réponse sous 48h</p>
     </form>
   </div>
 
@@ -577,19 +577,74 @@ document.getElementById('sourcing-form').addEventListener('submit', function(e){
     .then(function(r){ return r.json(); })
     .then(function(res){
       btn.disabled = false;
+      var msg = document.getElementById('sf-msg');
       if(res.ok){
-        txt.textContent = 'Envoyé ✓';
-        var msg = document.getElementById('sf-msg');
-        if(msg){ msg.style.display='block'; }
+        if(res.email_sent){
+          // ✅ Email envoyé
+          txt.textContent = 'Envoyé ✓';
+          if(msg){
+            msg.style.display='block';
+            msg.style.color='var(--teal)';
+            msg.textContent='✓ Demande envoyée — réponse sous 48h ouvrées';
+          }
+        } else {
+          // ⚠ SMTP absent → fallback mailto automatique
+          txt.textContent = 'Envoi alternatif…';
+          if(msg){
+            msg.style.display='block';
+            msg.style.color='#fde68a';
+            msg.textContent='⚠ Envoi par votre client mail dans 1s…';
+          }
+          setTimeout(function(){
+            var body = [
+              '=== DEMANDE SOURCING CONSEILPREV ===',
+              '',
+              'Prénom     : ' + prenom,
+              'Nom        : ' + nom,
+              'Email      : ' + email,
+              'Téléphone  : ' + document.getElementById('sf-tel').value.trim(),
+              'Entreprise : ' + document.getElementById('sf-entreprise').value.trim(),
+              'Fonction   : ' + document.getElementById('sf-fonction').value.trim(),
+              '',
+              'Profil recherché :',
+              profil,
+              '',
+              '---',
+              'Source : conseilprev.onrender.com/sourcing',
+              'Date   : ' + new Date().toLocaleString('fr-FR'),
+            ].join('\n');
+            window.open(
+              'mailto:christophe.cerf@outlook.com'
+              + '?subject=' + encodeURIComponent('[SOURCING] ' + prenom + ' ' + nom + ' — ' + profil.slice(0,40))
+              + '&body='    + encodeURIComponent(body),
+              '_blank'
+            );
+            txt.textContent = 'Envoyé ✓';
+            if(msg){
+              msg.style.color='var(--teal)';
+              msg.textContent='✓ Demande transmise par email — réponse sous 48h';
+            }
+          }, 900);
+        }
         document.getElementById('sourcing-form').reset();
       } else {
         txt.textContent = 'Envoyer';
-        alert('Erreur : ' + (res.error || 'Veuillez réessayer'));
+        if(msg){
+          msg.style.display='block';
+          msg.style.color='#fca5a5';
+          msg.textContent='⚠ ' + (res.error || 'Erreur — réessayez');
+        }
       }
     })
     .catch(function(){
-      btn.disabled = false; txt.textContent = 'Envoyer';
-      alert('Erreur réseau, réessayez.');
+      // Erreur réseau → fallback mailto direct
+      btn.disabled = false; txt.textContent = 'Réessayer';
+      window.open(
+        'mailto:christophe.cerf@outlook.com'
+        + '?subject=' + encodeURIComponent('[SOURCING] ' + prenom + ' ' + nom)
+        + '&body='    + encodeURIComponent('Demande sourcing de ' + prenom + ' ' + nom + ' (' + email + ')\n\nProfil : ' + profil),
+        '_blank'
+      );
     });
 });
 document.addEventListener('contextmenu',function(e){e.preventDefault();});
