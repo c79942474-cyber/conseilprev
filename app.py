@@ -763,7 +763,7 @@ def api_apply():
         # ── Anti-spam (sauf form_types internes de la plateforme B2B) ──
         # Les dossiers générés par la plateforme contiennent des barres
         # décoratives et du contenu structuré légitime — on les exempte.
-        TRUSTED_FORMS = {'selection_candidats','dossier_contrats','match_validation','contrats_signes','sourcing_profil','candidature_bd'}
+        TRUSTED_FORMS = {'selection_candidats','dossier_contrats','match_validation','contrats_signes','sourcing_profil','candidature_bd','contact_projet'}
         if data['form_type'] not in TRUSTED_FORMS:
             try:
                 is_spam, reason = check_spam(data['message'], data['email'], data['nom'])

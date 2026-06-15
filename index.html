@@ -6916,10 +6916,13 @@ document.addEventListener('keydown', function(e){
 
   var form = document.getElementById('cform');
   if(!form) return;
+
   form.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    // ── 1. Vérif consentement ──
     var consent = document.getElementById('pf-consent');
     if(consent && !consent.checked){
-      e.preventDefault();
       var block = consent.closest('.consent-block');
       if(block){
         block.style.borderColor = 'rgba(248,113,113,.7)';
@@ -6927,14 +6930,119 @@ document.addEventListener('keydown', function(e){
         block.style.boxShadow   = '0 0 0 3px rgba(239,68,68,.2)';
         block.scrollIntoView({behavior:'smooth', block:'center'});
         setTimeout(function(){
-          block.style.borderColor = '';
-          block.style.background  = '';
-          block.style.boxShadow   = '';
+          block.style.borderColor=''; block.style.background=''; block.style.boxShadow='';
         }, 2800);
       }
       return false;
     }
+
+    // ── 2. Vérif champs obligatoires ──
+    var prenom  = (document.getElementById('pf-prenom')  || {value:''}).value.trim();
+    var nom     = (document.getElementById('pf-nom')     || {value:''}).value.trim();
+    var email   = (document.getElementById('pf-email')   || {value:''}).value.trim();
+    var co      = (document.getElementById('pf-co')      || {value:''}).value.trim();
+    var sector  = (document.getElementById('pf-sector')  || {value:''}).value.trim();
+    var project = (document.getElementById('pf-project') || {value:''}).value.trim();
+    var msg     = (document.getElementById('pf-msg')     || {value:''}).value.trim();
+    var tel     = (document.getElementById('pf-tel')     || {value:''}).value.trim();
+    var role    = (document.getElementById('pf-role')    || {value:''}).value.trim();
+    var budget  = (document.getElementById('pf-budget')  || {value:''}).value.trim();
+    var delay   = (document.getElementById('pf-delay')   || {value:''}).value.trim();
+    var country = (document.getElementById('pf-country') || {value:''}).value.trim();
+    var norm    = (document.getElementById('pf-norm')    || {value:''}).value.trim();
+    var size    = (document.getElementById('pf-size')    || {value:''}).value.trim();
+    var source  = (document.getElementById('pf-source')  || {value:''}).value.trim();
+    var honeypot= (document.getElementById('hp')         || {value:''}).value;
+
+    if(!prenom || !nom || !email || !co || !sector || !project || !msg){
+      showPfStatus('error', '⚠ Veuillez remplir tous les champs obligatoires (*)');
+      return;
+    }
+
+    // ── 3. Honeypot ──
+    if(honeypot){ return; }  // bot détecté — silencieux
+
+    // ── 4. Envoi ──
+    var btn = document.getElementById('pbtn-txt');
+    if(btn){ btn.textContent = '⏳ Envoi en cours…'; }
+    var submitBtn = form.querySelector('[type="submit"]');
+    if(submitBtn) submitBtn.disabled = true;
+
+    var fd = new FormData();
+    fd.append('form_type',  'contact_projet');
+    fd.append('prenom',     prenom);
+    fd.append('nom',        nom);
+    fd.append('email',      email);
+    fd.append('telephone',  tel);
+    fd.append('entreprise', co);
+    fd.append('fonction',   role);
+    fd.append('secteur',    sector);
+    fd.append('type_projet',project);
+    fd.append('budget',     budget);
+    fd.append('message',
+      'PROJET : ' + project +
+      '\nSECTEUR : ' + sector +
+      '\nPAYS : ' + country +
+      '\nTAILLE : ' + size +
+      '\nNORME : ' + norm +
+      '\nDÉLAI : ' + delay +
+      '\nBUDGET : ' + budget +
+      '\nSOURCE : ' + source +
+      '\n\nDESCRIPTION :\n' + msg
+    );
+    fd.append('consent',    'true');
+    fd.append('source_url', window.location.pathname);
+
+    fetch('/api/apply', { method:'POST', body: fd })
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        if(submitBtn) submitBtn.disabled = false;
+        if(res.ok){
+          if(res.email_sent){
+            // ✅ Email SMTP envoyé
+            showPfStatus('success',
+              '✓ Votre demande a bien été envoyée à CONSEILPREV !<br>' +
+              '<span style="font-size:11px;opacity:.85">Réponse garantie sous 24h ouvrées.</span>'
+            );
+            if(btn) btn.textContent = '✓ Demande envoyée';
+            form.reset();
+          } else {
+            // ⚠ SMTP absent → ouvrir mailto automatiquement
+            showPfStatus('warn',
+              '✓ Demande sauvegardée — ouverture de votre messagerie dans 1 seconde…<br>' +
+              '<span style="font-size:11px">Cliquez aussi le bouton bleu ci-dessous si besoin.</span>'
+            );
+            if(btn) btn.textContent = '📨 Relancer →';
+            setTimeout(openMailtoContact, 900);
+          }
+        } else {
+          // ❌ Erreur serveur
+          showPfStatus('error', '⚠ ' + (res.error || 'Erreur — réessayez ou utilisez le bouton email ci-dessous'));
+          if(btn) btn.textContent = '📨 Envoyer ma demande';
+          setTimeout(openMailtoContact, 1200);
+        }
+      })
+      .catch(function(){
+        if(submitBtn) submitBtn.disabled = false;
+        if(btn) btn.textContent = '📨 Envoyer ma demande';
+        showPfStatus('warn', '⚠ Erreur réseau — ouverture de votre messagerie…');
+        setTimeout(openMailtoContact, 600);
+      });
   });
+
+  function showPfStatus(type, html_content){
+    var el = document.getElementById('pfst');
+    if(!el) return;
+    var styles = {
+      success: 'background:rgba(6,95,70,.15);border:1px solid rgba(94,234,212,.4);color:#5eead4',
+      warn:    'background:rgba(120,53,15,.18);border:1px solid rgba(251,191,36,.4);color:#fde68a',
+      error:   'background:rgba(127,29,29,.15);border:1px solid rgba(248,113,113,.4);color:#fca5a5',
+    };
+    el.style.cssText = 'margin-top:16px;padding:14px 18px;border-radius:10px;font-size:13px;font-family:"DM Sans",sans-serif;line-height:1.65;' + (styles[type]||styles.error);
+    el.innerHTML = html_content;
+    el.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+
 })();
 </script>
 
