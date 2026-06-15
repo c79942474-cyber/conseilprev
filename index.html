@@ -1,3 +1,130 @@
+(function(){
+  "use strict";
+
+  // ── openMailtoContact ──
+
+  // ── Formulaire contact principal (cform) ──
+  var form = document.getElementById('cform');
+  if(!form) return;
+  var _submitBtn = form.querySelector('[type="submit"]');
+  var _btn = document.getElementById('pbtn-txt');
+
+  // ── showPfStatus : feedback visuel sous le formulaire ──
+  function showPfStatus(type, html_content){
+    var el = document.getElementById('pfst');
+    if(!el) return;
+    var styles = {
+      success: 'background:rgba(6,95,70,.15);border:1px solid rgba(94,234,212,.4);color:#5eead4',
+      warn:    'background:rgba(120,53,15,.18);border:1px solid rgba(251,191,36,.4);color:#fde68a',
+      error:   'background:rgba(127,29,29,.15);border:1px solid rgba(248,113,113,.4);color:#fca5a5',
+    };
+    el.style.cssText = 'margin-top:16px;padding:14px 18px;border-radius:10px;font-size:13px;font-family:"DM Sans",sans-serif;line-height:1.65;' + (styles[type]||styles.error);
+    el.innerHTML = html_content;
+    el.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    // Vérif consentement
+    var consent = document.getElementById('pf-consent');
+    if(consent && !consent.checked){
+      var block = consent.closest('.consent-block');
+      if(block){
+        block.style.borderColor='rgba(248,113,113,.7)';
+        block.style.background='rgba(239,68,68,.1)';
+        block.style.boxShadow='0 0 0 3px rgba(239,68,68,.2)';
+        block.scrollIntoView({behavior:'smooth',block:'center'});
+        setTimeout(function(){block.style.borderColor='';block.style.background='';block.style.boxShadow='';},2800);
+      }
+      return false;
+    }
+
+    // Lire les champs
+    var v = function(id){ var el=document.getElementById(id); return (el&&el.value)?el.value.trim():''; };
+    var prenom=v('pf-prenom'), nom=v('pf-nom'), email=v('pf-email'), co=v('pf-co');
+    var tel=v('pf-tel'), role=v('pf-role'), sector=v('pf-sector'), project=v('pf-project');
+    var budget=v('pf-budget'), delay=v('pf-delay'), country=v('pf-country');
+    var norm=v('pf-norm'), size=v('pf-size'), source=v('pf-source'), msg=v('pf-msg');
+    var hp=v('hp'); // honeypot
+
+    // Honeypot bot
+    if(hp){ return; }
+
+    // Champs obligatoires
+    if(!prenom||!nom||!email||!co||!sector||!project||!msg){
+      showPfStatus('error','⚠ Veuillez remplir tous les champs obligatoires (*).');
+      return;
+    }
+
+    // Lancer envoi
+    if(_submitBtn){ _submitBtn.disabled=true; }
+    if(_btn){ _btn.textContent='⏳ Envoi en cours…'; }
+    showPfStatus('warn','⏳ Envoi en cours…');
+
+    var fd = new FormData();
+    fd.append('form_type','contact_projet');
+    fd.append('prenom',prenom); fd.append('nom',nom);
+    fd.append('email',email); fd.append('telephone',tel);
+    fd.append('entreprise',co); fd.append('fonction',role);
+    fd.append('secteur',sector); fd.append('type_projet',project);
+    fd.append('budget',budget);
+    fd.append('message',
+      'PROJET : '+project+'\nSECTEUR : '+sector+
+      '\nPAYS : '+country+'\nTAILLE : '+size+
+      '\nNORME : '+norm+'\nDÉLAI : '+delay+
+      '\nBUDGET : '+budget+'\nSOURCE : '+source+
+      '\n\nDESCRIPTION :\n'+msg
+    );
+    fd.append('consent','true');
+    fd.append('source_url',window.location.pathname);
+
+    fetch('/api/apply',{method:'POST',body:fd})
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        if(_submitBtn){ _submitBtn.disabled=false; }
+        if(res.ok){
+          if(res.email_sent){
+            // ✅ SMTP ok — email envoyé
+            showPfStatus('success',
+              '✓ Votre demande a bien été envoyée à CONSEILPREV !<br>'+
+              '<span style="font-size:11px;opacity:.85">Réponse garantie sous 24h ouvrées.</span>'
+            );
+            if(_btn){ _btn.textContent='✓ Demande envoyée'; }
+            form.reset();
+          } else {
+            // 🟡 SMTP absent — mailto auto
+            showPfStatus('warn',
+              '✓ Demande sauvegardée sur le serveur.<br>'+
+              '<span style="font-size:11px">Votre messagerie va s'ouvrir dans 1 seconde avec votre demande pré-remplie.</span><br><br>'+
+              '<button onclick="openMailtoContact()" style="background:linear-gradient(135deg,#1d4ed8,#2563eb);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif">📧 Ouvrir ma messagerie →</button>'
+            );
+            if(_btn){ _btn.textContent='📨 Relancer →'; }
+            setTimeout(openMailtoContact, 1000);
+          }
+        } else {
+          // 🔴 Erreur serveur
+          showPfStatus('error',
+            '⚠ '+(res.error||'Erreur serveur')+'<br>'+
+            '<button onclick="openMailtoContact()" style="background:linear-gradient(135deg,#1d4ed8,#2563eb);color:#fff;border:none;padding:8px 16px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;margin-top:8px;font-family:DM Sans,sans-serif">📧 Envoyer par messagerie</button>'
+          );
+          if(_btn){ _btn.textContent='📨 Envoyer ma demande'; }
+          setTimeout(openMailtoContact, 1500);
+        }
+      })
+      .catch(function(){
+        if(_submitBtn){ _submitBtn.disabled=false; }
+        if(_btn){ _btn.textContent='📨 Envoyer ma demande'; }
+        showPfStatus('error',
+          '⚠ Erreur réseau — votre messagerie s'ouvre maintenant.<br>'+
+          '<button onclick="openMailtoContact()" style="background:linear-gradient(135deg,#1d4ed8,#2563eb);color:#fff;border:none;padding:8px 16px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;margin-top:8px;font-family:DM Sans,sans-serif">📧 Renvoyer</button>'
+        );
+        setTimeout(openMailtoContact, 700);
+      });
+  });
+
+})();
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -6875,175 +7002,7 @@ document.addEventListener('keydown', function(e){
 
 
 // ── Validation consentement formulaire contact ──
-(function(){
-  // ── Fonction mailto contact ──
-  window.openMailtoContact = function(){
-    var v = function(id){ var el = document.getElementById(id); return el ? el.value.trim() : ''; };
-    var prenom  = v('pf-prenom'), nom = v('pf-nom'), email = v('pf-email');
-    var tel     = v('pf-tel'),    co  = v('pf-co'), role   = v('pf-role');
-    var sector  = v('pf-sector'), msg = v('pf-msg'), project = v('pf-project');
-    var budget  = v('pf-budget'), delay = v('pf-delay'), country = v('pf-country');
-    var body = [
-      '=== DEMANDE DE CONTACT CONSEILPREV ===',
-      '',
-      'Prénom      : ' + (prenom || '—'),
-      'Nom         : ' + (nom    || '—'),
-      'Email       : ' + (email  || '—'),
-      'Téléphone   : ' + (tel    || '—'),
-      'Entreprise  : ' + (co     || '—'),
-      'Fonction    : ' + (role   || '—'),
-      'Secteur     : ' + (sector || '—'),
-      'Pays        : ' + (country|| '—'),
-      '',
-      'Projet      : ' + (project|| '—'),
-      'Budget      : ' + (budget || '—'),
-      'Délai       : ' + (delay  || '—'),
-      '',
-      'Message :',
-      msg || '—',
-      '',
-      '---',
-      'Envoyé depuis conseilprev.onrender.com',
-      'Date : ' + new Date().toLocaleString('fr-FR'),
-    ].join('\n');
-    window.open(
-      'mailto:christophe.cerf@outlook.com'
-      + '?subject=' + encodeURIComponent('[CONTACT] ' + (prenom||'') + ' ' + (nom||'') + ' — ' + (co||'') + ' (' + (project||'projet') + ')')
-      + '&body='    + encodeURIComponent(body),
-      '_blank'
-    );
-  };
 
-  var form = document.getElementById('cform');
-  if(!form) return;
-
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
-
-    // ── 1. Vérif consentement ──
-    var consent = document.getElementById('pf-consent');
-    if(consent && !consent.checked){
-      var block = consent.closest('.consent-block');
-      if(block){
-        block.style.borderColor = 'rgba(248,113,113,.7)';
-        block.style.background  = 'rgba(239,68,68,.1)';
-        block.style.boxShadow   = '0 0 0 3px rgba(239,68,68,.2)';
-        block.scrollIntoView({behavior:'smooth', block:'center'});
-        setTimeout(function(){
-          block.style.borderColor=''; block.style.background=''; block.style.boxShadow='';
-        }, 2800);
-      }
-      return false;
-    }
-
-    // ── 2. Vérif champs obligatoires ──
-    var prenom  = (document.getElementById('pf-prenom')  || {value:''}).value.trim();
-    var nom     = (document.getElementById('pf-nom')     || {value:''}).value.trim();
-    var email   = (document.getElementById('pf-email')   || {value:''}).value.trim();
-    var co      = (document.getElementById('pf-co')      || {value:''}).value.trim();
-    var sector  = (document.getElementById('pf-sector')  || {value:''}).value.trim();
-    var project = (document.getElementById('pf-project') || {value:''}).value.trim();
-    var msg     = (document.getElementById('pf-msg')     || {value:''}).value.trim();
-    var tel     = (document.getElementById('pf-tel')     || {value:''}).value.trim();
-    var role    = (document.getElementById('pf-role')    || {value:''}).value.trim();
-    var budget  = (document.getElementById('pf-budget')  || {value:''}).value.trim();
-    var delay   = (document.getElementById('pf-delay')   || {value:''}).value.trim();
-    var country = (document.getElementById('pf-country') || {value:''}).value.trim();
-    var norm    = (document.getElementById('pf-norm')    || {value:''}).value.trim();
-    var size    = (document.getElementById('pf-size')    || {value:''}).value.trim();
-    var source  = (document.getElementById('pf-source')  || {value:''}).value.trim();
-    var honeypot= (document.getElementById('hp')         || {value:''}).value;
-
-    if(!prenom || !nom || !email || !co || !sector || !project || !msg){
-      showPfStatus('error', '⚠ Veuillez remplir tous les champs obligatoires (*)');
-      return;
-    }
-
-    // ── 3. Honeypot ──
-    if(honeypot){ return; }  // bot détecté — silencieux
-
-    // ── 4. Envoi ──
-    var btn = document.getElementById('pbtn-txt');
-    if(btn){ btn.textContent = '⏳ Envoi en cours…'; }
-    var submitBtn = form.querySelector('[type="submit"]');
-    if(submitBtn) submitBtn.disabled = true;
-
-    var fd = new FormData();
-    fd.append('form_type',  'contact_projet');
-    fd.append('prenom',     prenom);
-    fd.append('nom',        nom);
-    fd.append('email',      email);
-    fd.append('telephone',  tel);
-    fd.append('entreprise', co);
-    fd.append('fonction',   role);
-    fd.append('secteur',    sector);
-    fd.append('type_projet',project);
-    fd.append('budget',     budget);
-    fd.append('message',
-      'PROJET : ' + project +
-      '\nSECTEUR : ' + sector +
-      '\nPAYS : ' + country +
-      '\nTAILLE : ' + size +
-      '\nNORME : ' + norm +
-      '\nDÉLAI : ' + delay +
-      '\nBUDGET : ' + budget +
-      '\nSOURCE : ' + source +
-      '\n\nDESCRIPTION :\n' + msg
-    );
-    fd.append('consent',    'true');
-    fd.append('source_url', window.location.pathname);
-
-    fetch('/api/apply', { method:'POST', body: fd })
-      .then(function(r){ return r.json(); })
-      .then(function(res){
-        if(submitBtn) submitBtn.disabled = false;
-        if(res.ok){
-          if(res.email_sent){
-            // ✅ Email SMTP envoyé
-            showPfStatus('success',
-              '✓ Votre demande a bien été envoyée à CONSEILPREV !<br>' +
-              '<span style="font-size:11px;opacity:.85">Réponse garantie sous 24h ouvrées.</span>'
-            );
-            if(btn) btn.textContent = '✓ Demande envoyée';
-            form.reset();
-          } else {
-            // ⚠ SMTP absent → ouvrir mailto automatiquement
-            showPfStatus('warn',
-              '✓ Demande sauvegardée — ouverture de votre messagerie dans 1 seconde…<br>' +
-              '<span style="font-size:11px">Cliquez aussi le bouton bleu ci-dessous si besoin.</span>'
-            );
-            if(btn) btn.textContent = '📨 Relancer →';
-            setTimeout(openMailtoContact, 900);
-          }
-        } else {
-          // ❌ Erreur serveur
-          showPfStatus('error', '⚠ ' + (res.error || 'Erreur — réessayez ou utilisez le bouton email ci-dessous'));
-          if(btn) btn.textContent = '📨 Envoyer ma demande';
-          setTimeout(openMailtoContact, 1200);
-        }
-      })
-      .catch(function(){
-        if(submitBtn) submitBtn.disabled = false;
-        if(btn) btn.textContent = '📨 Envoyer ma demande';
-        showPfStatus('warn', '⚠ Erreur réseau — ouverture de votre messagerie…');
-        setTimeout(openMailtoContact, 600);
-      });
-  });
-
-  function showPfStatus(type, html_content){
-    var el = document.getElementById('pfst');
-    if(!el) return;
-    var styles = {
-      success: 'background:rgba(6,95,70,.15);border:1px solid rgba(94,234,212,.4);color:#5eead4',
-      warn:    'background:rgba(120,53,15,.18);border:1px solid rgba(251,191,36,.4);color:#fde68a',
-      error:   'background:rgba(127,29,29,.15);border:1px solid rgba(248,113,113,.4);color:#fca5a5',
-    };
-    el.style.cssText = 'margin-top:16px;padding:14px 18px;border-radius:10px;font-size:13px;font-family:"DM Sans",sans-serif;line-height:1.65;' + (styles[type]||styles.error);
-    el.innerHTML = html_content;
-    el.scrollIntoView({behavior:'smooth', block:'nearest'});
-  }
-
-})();
 </script>
 
 
@@ -7109,5 +7068,193 @@ document.addEventListener('keydown', function(e){
 })();
 </script>
 
+<script>
+/* ════ FORMULAIRE CONTACT PROJET IA — CONSEILPREV ════ */
+(function(){
+  'use strict';
+
+  /* 1. Feedback visuel */
+  function pfStatus(type, content){
+    var el = document.getElementById('pfst');
+    if(!el) return;
+    var bg = {
+      success: 'rgba(6,95,70,.2)',
+      warn:    'rgba(120,53,15,.25)',
+      error:   'rgba(127,29,29,.2)'
+    };
+    var bd = {
+      success: 'rgba(94,234,212,.5)',
+      warn:    'rgba(251,191,36,.5)',
+      error:   'rgba(248,113,113,.5)'
+    };
+    var col = {
+      success: '#5eead4',
+      warn:    '#fde68a',
+      error:   '#fca5a5'
+    };
+    el.style.cssText = [
+      'display:block',
+      'margin-top:18px',
+      'padding:16px 20px',
+      'border-radius:11px',
+      'font-size:13px',
+      'line-height:1.7',
+      'font-family:"DM Sans",sans-serif',
+      'background:' + (bg[type]||bg.error),
+      'border:1px solid ' + (bd[type]||bd.error),
+      'color:' + (col[type]||col.error),
+    ].join(';');
+    el.innerHTML = content;
+    el.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+
+  /* 2. Mailto fallback */
+  function openMailto(){
+    var v = function(id){
+      var e = document.getElementById(id);
+      return e && e.value ? e.value.trim() : '';
+    };
+    var lines = [
+      '=== DEMANDE DE PROJET IA / CYBER — CONSEILPREV ===', '',
+      'Prénom      : ' + (v('pf-prenom')||'—'),
+      'Nom         : ' + (v('pf-nom')||'—'),
+      'Email       : ' + (v('pf-email')||'—'),
+      'Téléphone   : ' + (v('pf-tel')||'—'),
+      'Entreprise  : ' + (v('pf-co')||'—'),
+      'Fonction    : ' + (v('pf-role')||'—'),
+      'Secteur     : ' + (v('pf-sector')||'—'),
+      'Pays        : ' + (v('pf-country')||'—'),
+      'Taille      : ' + (v('pf-size')||'—'), '',
+      'Projet      : ' + (v('pf-project')||'—'),
+      'Norme       : ' + (v('pf-norm')||'—'),
+      'Budget      : ' + (v('pf-budget')||'—'),
+      'Délai       : ' + (v('pf-delay')||'—'),
+      'Source      : ' + (v('pf-source')||'—'), '',
+      'Description :',
+      v('pf-msg')||'—', '',
+      '---',
+      'conseilprev.onrender.com · ' + new Date().toLocaleString('fr-FR'),
+    ];
+    var subj = '[PROJET IA] ' + (v('pf-prenom')||'') + ' ' + (v('pf-nom')||'')
+               + ' — ' + (v('pf-co')||'') + ' (' + (v('pf-project')||'demande') + ')';
+    window.open(
+      'mailto:christophe.cerf@outlook.com'
+      + '?subject=' + encodeURIComponent(subj)
+      + '&body='    + encodeURIComponent(lines.join('\n')),
+      '_blank'
+    );
+  }
+  // Exposer pour le bouton mailto secours
+  window.openMailtoContact = openMailto;
+
+  /* 3. Submit */
+  var form = document.getElementById('cform');
+  if(!form){ return; }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    // Consentement
+    var consent = document.getElementById('pf-consent');
+    if(consent && !consent.checked){
+      var block = consent.closest('.consent-block');
+      if(block){
+        block.style.cssText += ';border-color:rgba(248,113,113,.7)!important;background:rgba(239,68,68,.1);';
+        block.scrollIntoView({behavior:'smooth',block:'center'});
+        setTimeout(function(){ block.style.cssText=''; }, 2800);
+      }
+      pfStatus('error','⚠ Veuillez accepter les conditions de traitement de vos données.');
+      return;
+    }
+
+    // Champs
+    var v = function(id){ var e=document.getElementById(id); return e&&e.value?e.value.trim():''; };
+    var prenom=v('pf-prenom'), nom=v('pf-nom'), email=v('pf-email');
+    var co=v('pf-co'), sector=v('pf-sector'), project=v('pf-project'), msg=v('pf-msg');
+
+    if(!prenom||!nom||!email||!co||!sector||!project||!msg){
+      pfStatus('error','⚠ Veuillez remplir tous les champs obligatoires (*).');
+      return;
+    }
+
+    // Honeypot
+    if(v('hp')){ return; }
+
+    // Envoi
+    var sbtn = form.querySelector('[type="submit"]');
+    var btxt = document.getElementById('pbtn-txt');
+    if(sbtn) sbtn.disabled = true;
+    if(btxt) btxt.textContent = '⏳ Envoi en cours…';
+    pfStatus('warn','⏳ Envoi de votre demande en cours…');
+
+    var fd = new FormData();
+    fd.append('form_type',  'contact_projet');
+    fd.append('prenom',     prenom);
+    fd.append('nom',        nom);
+    fd.append('email',      email);
+    fd.append('telephone',  v('pf-tel'));
+    fd.append('entreprise', co);
+    fd.append('fonction',   v('pf-role'));
+    fd.append('secteur',    sector);
+    fd.append('type_projet',project);
+    fd.append('budget',     v('pf-budget'));
+    fd.append('message',
+      'PROJET : '+project+'\nSECTEUR : '+sector+
+      '\nPAYS : '+v('pf-country')+'\nTAILLE : '+v('pf-size')+
+      '\nNORME : '+v('pf-norm')+'\nDÉLAI : '+v('pf-delay')+
+      '\nBUDGET : '+v('pf-budget')+'\nSOURCE : '+v('pf-source')+
+      '\n\nDESCRIPTION :\n'+msg
+    );
+    fd.append('consent',    'true');
+    fd.append('source_url', window.location.pathname);
+
+    fetch('/api/apply', {method:'POST', body:fd})
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        if(sbtn) sbtn.disabled = false;
+        if(res.ok){
+          if(res.email_sent){
+            // ✅ Vert — email SMTP envoyé
+            pfStatus('success',
+              '✓ Votre demande a bien été envoyée à CONSEILPREV !<br>'+
+              '<span style="font-size:11px;opacity:.85">Réponse garantie sous 24h ouvrées · christophe.cerf@outlook.com</span>'
+            );
+            if(btxt) btxt.textContent = '✓ Demande envoyée';
+            form.reset();
+          } else {
+            // 🟡 Orange — SMTP absent, mailto auto
+            pfStatus('warn',
+              '✓ Demande sauvegardée — ouverture de votre messagerie dans 1 seconde…<br>'+
+              '<button onclick="openMailtoContact()" style="margin-top:10px;background:linear-gradient(135deg,#1d4ed8,#2563eb);color:#fff;border:none;padding:10px 22px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif">'+
+              '📧 Ouvrir ma messagerie maintenant</button>'
+            );
+            if(btxt) btxt.textContent = '📨 Relancer →';
+            setTimeout(openMailto, 1000);
+          }
+        } else {
+          // 🔴 Rouge — erreur
+          pfStatus('error',
+            '⚠ '+(res.error||'Erreur serveur — réessayez.')+'<br>'+
+            '<button onclick="openMailtoContact()" style="margin-top:10px;background:linear-gradient(135deg,#7c3aed,#d946ef);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif">'+
+            '📧 Envoyer directement par messagerie</button>'
+          );
+          if(btxt) btxt.textContent = '📨 Envoyer ma demande';
+          setTimeout(openMailto, 1500);
+        }
+      })
+      .catch(function(){
+        if(sbtn) sbtn.disabled = false;
+        if(btxt) btxt.textContent = '📨 Envoyer ma demande';
+        // 🔴 Erreur réseau
+        pfStatus('error',
+          '⚠ Erreur réseau — votre messagerie s\'ouvre maintenant.<br>'+
+          '<button onclick="openMailtoContact()" style="margin-top:8px;background:linear-gradient(135deg,#1d4ed8,#2563eb);color:#fff;border:none;padding:9px 18px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif">'+
+          '📧 Renvoyer</button>'
+        );
+        setTimeout(openMailto, 700);
+      });
+  });
+})();
+</script>
 </body>
 </html>
