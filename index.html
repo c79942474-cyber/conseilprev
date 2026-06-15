@@ -61,11 +61,79 @@
   --glow2:rgba(217,70,239,.15);
 }
 html{scroll-behavior:smooth}body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--wh);overflow-x:hidden;line-height:1.6}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;background:rgba(14,7,32,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr)}
-.logo{font-family:"Cormorant Garamond",serif;font-size:20px;font-weight:700}.logo span{color:var(--pl)}
-.nl{display:flex;gap:20px;list-style:none}.nl a{font-size:12px;color:var(--mu);text-decoration:none;letter-spacing:.1em;text-transform:uppercase}.nl a:hover{color:var(--wh)}
-.lsw{display:flex;gap:4px}.lbtn{background:none;border:1px solid var(--bdr);color:var(--mu);padding:4px 10px;border-radius:4px;font-size:11px;cursor:pointer;font-family:"Space Mono",monospace;transition:all .2s}.lbtn.on{background:var(--pm);border-color:var(--pm);color:#fff}.lbtn:hover:not(.on){border-color:var(--pl);color:var(--wh)}
-.ncta{background:var(--pm);color:#fff;padding:8px 18px;border-radius:6px;font-size:13px;text-decoration:none}
+/* ══ HEADER / NAVIGATION ══ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:0 32px;height:62px;
+  display:flex;align-items:center;justify-content:space-between;
+  /* Fond clair translucide — bien lisible */
+  background:rgba(52,28,110,.97);
+  backdrop-filter:blur(28px) saturate(1.4);
+  -webkit-backdrop-filter:blur(28px) saturate(1.4);
+  border-bottom:1px solid rgba(196,181,232,.28);
+  box-shadow:0 2px 18px rgba(0,0,0,.28),
+             0 1px 0 rgba(255,255,255,.04) inset;
+}
+.logo{font-family:"Cormorant Garamond",serif;font-size:20px;font-weight:700}
+.logo span{color:var(--pl)}
+
+/* ── Liens de navigation ── */
+.nl{display:flex;gap:6px;list-style:none;align-items:center}
+.nl > li > a,
+.nl > li > span[onclick]{
+  font-size:13px;
+  color:rgba(248,246,255,.92);          /* texte blanc cassé très lisible */
+  text-decoration:none;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+  font-weight:600;
+  transition:
+    color .18s ease,
+    transform .2s cubic-bezier(.34,1.56,.64,1),
+    text-shadow .18s ease,
+    font-size .2s cubic-bezier(.34,1.56,.64,1);
+  display:inline-flex;align-items:center;gap:4px;
+  padding:6px 10px;
+  border-radius:8px;
+  position:relative;
+  cursor:pointer;
+}
+/* Soulignement animé */
+.nl > li > a::after,
+.nl > li > span[onclick]::after{
+  content:"";
+  position:absolute;bottom:4px;left:10px;right:10px;
+  height:1.5px;
+  background:linear-gradient(90deg,var(--teal),var(--pf));
+  transform:scaleX(0);transform-origin:left center;
+  transition:transform .22s cubic-bezier(.34,1.56,.64,1);
+  border-radius:2px;
+}
+/* Hover : grossissement + couleur #fff + lueur */
+.nl > li > a:hover,
+.nl > li > span[onclick]:hover,
+.nl > li:hover > a,
+.nl > li:hover > span[onclick]{
+  color:#fff;
+  font-size:14px;                        /* grossissement texte */
+  transform:translateY(-1px);
+  text-shadow:0 0 14px rgba(216,180,254,.55),
+              0 0 28px rgba(157,111,232,.25);
+  background:rgba(255,255,255,.07);
+}
+.nl > li > a:hover::after,
+.nl > li > span[onclick]:hover::after,
+.nl > li:hover > a::after,
+.nl > li:hover > span[onclick]::after{
+  transform:scaleX(1);
+}
+/* Lien actif */
+.nl > li > a.active-nav{
+  color:var(--teal) !important;
+  background:rgba(94,234,212,.08);
+}
+.lsw{display:flex;gap:4px}.lbtn{background:rgba(255,255,255,.06);border:1px solid rgba(196,181,232,.3);color:rgba(248,246,255,.88);padding:4px 11px;border-radius:6px;font-size:11px;cursor:pointer;font-family:"Space Mono",monospace;transition:all .2s;font-weight:600}.lbtn.on{background:var(--pm);border-color:var(--pm);color:#fff;box-shadow:0 0 10px rgba(157,111,232,.3)}.lbtn:hover:not(.on){border-color:rgba(196,181,232,.6);color:#fff;background:rgba(255,255,255,.1);transform:scale(1.1) translateY(-1px)}
+.ncta{background:linear-gradient(135deg,#7c3aed,#a855f7,#ec4899);color:#fff;padding:9px 22px;border-radius:8px;font-size:13px;text-decoration:none;font-weight:700;letter-spacing:.04em;box-shadow:0 3px 16px rgba(217,70,239,.4),0 1px 0 rgba(255,255,255,.15) inset;transition:all .22s cubic-bezier(.34,1.56,.64,1);display:inline-block}.ncta:hover{transform:scale(1.1) translateY(-2px);box-shadow:0 8px 24px rgba(217,70,239,.55)}
 @media(max-width:640px){.nl{display:none}}
 @media(max-width:640px){.lsw{display:flex !important;gap:4px}}
 /* ═══ HERO — TOUR DE CONTRÔLE ═══ */
@@ -2360,7 +2428,7 @@ footer::after{
 .nl li.has-dropdown > a::after{
   content:"▾";
   font-size:10px;
-  opacity:.6;
+  opacity:.85;
   transition:transform .25s ease, opacity .2s;
   display:inline-block;
 }
@@ -2382,8 +2450,8 @@ footer::after{
   left:50%;
   transform:translateX(-50%) translateY(-6px);
   min-width:340px;
-  background:rgba(12,6,36,.98);
-  border:1px solid rgba(180,138,247,.25);
+  background:rgba(46,24,100,.99);
+  border:1px solid rgba(196,181,232,.40);
   border-radius:14px;
   padding:12px;
   box-shadow:
@@ -2426,7 +2494,7 @@ footer::after{
   cursor:pointer;
 }
 .dd-item:hover{
-  background:rgba(139,92,246,.15);
+  background:rgba(109,40,217,.28);
   border-color:rgba(180,138,247,.22);
 }
 .dd-item:hover .dd-title{color:#fff!important}
@@ -2445,7 +2513,7 @@ footer::after{
 .dd-body{}
 .dd-title{
   font-size:13px;font-weight:700;
-  color:rgba(212,186,255,.9);
+  color:rgba(252,250,255,1.0);
   font-family:"DM Sans",sans-serif;
   margin-bottom:3px;
   display:block;
