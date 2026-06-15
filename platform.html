@@ -391,6 +391,12 @@ input,textarea,select{-webkit-user-select:text!important;user-select:text!import
 .rp-count{font-family:"Space Mono",monospace;font-size:10px;color:rgba(216,180,254,.5)}
 .rp-count.has{color:var(--teal);font-weight:700}
 
+
+.mailto-fallback{text-align:center;margin-top:16px;padding-top:14px;border-top:1px dashed rgba(196,181,232,.2)}
+.mailto-fallback-label{font-size:10px;color:rgba(196,181,232,.5);font-family:"Space Mono",monospace;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;display:block}
+.mailto-btn{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(135deg,#1e3a5f,#1d4ed8,#2563eb);color:#fff;border:none;padding:12px 26px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:"DM Sans",sans-serif;box-shadow:0 4px 18px rgba(37,99,235,.35);transition:all .22s cubic-bezier(.34,1.56,.64,1)}
+.mailto-btn:hover{transform:scale(1.07) translateY(-2px);box-shadow:0 8px 24px rgba(37,99,235,.5)}
+
 </style>
 </head>
 <body>
@@ -527,6 +533,14 @@ input,textarea,select{-webkit-user-select:text!important;user-select:text!import
     <div style="display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap">
       <button type="button" class="btn-sec" onclick="goStep(1)">← Retour</button>
       <button type="submit" class="btn-launch">🤖 Lancer la recherche IA →</button>
+    </div>
+
+    <!-- Bouton mailto secours -->
+    <div class="mailto-fallback" style="margin-top:20px">
+      <span class="mailto-fallback-label">— besoin de contacter directement CONSEILPREV ? —</span>
+      <button type="button" class="mailto-btn" onclick="openMailtoPlatform()">
+        📧 Ouvrir Outlook / votre messagerie
+      </button>
     </div>
   </form>
 </section>

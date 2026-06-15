@@ -4244,6 +4244,24 @@ em,.hero-em{
       <p class="preply"><span data-i18n="form.reply">Réponse garantie sous 24h ouvrées · <a href="mailto:christophe.cerf@outlook.com" class="pclink">christophe.cerf@outlook.com</a></span></p>
 
       <div class="pfst" id="pfst"></div>
+
+      <!-- Bouton mailto secours — toujours visible -->
+      <div style="text-align:center;margin-top:18px">
+        <div style="font-size:11px;color:rgba(216,180,254,.55);font-family:'Space Mono',monospace;margin-bottom:10px;letter-spacing:.06em">
+          — OU ENVOYEZ DIRECTEMENT —
+        </div>
+        <button type="button" onclick="openMailtoContact()" style="
+          display:inline-flex;align-items:center;gap:9px;
+          background:linear-gradient(135deg,#1e3a5f,#2563eb,#1d4ed8);
+          color:#fff;border:none;padding:12px 26px;border-radius:10px;
+          font-size:13px;font-weight:700;cursor:pointer;
+          font-family:'DM Sans',sans-serif;
+          box-shadow:0 4px 18px rgba(37,99,235,.4);
+          transition:all .22s cubic-bezier(.34,1.56,.64,1);
+        " onmouseover="this.style.transform='scale(1.06) translateY(-2px)'" onmouseout="this.style.transform=''">
+          📧 Ouvrir Outlook / votre messagerie
+        </button>
+      </div>
     </form>
   </div>
 </section>
@@ -6858,6 +6876,44 @@ document.addEventListener('keydown', function(e){
 
 // ── Validation consentement formulaire contact ──
 (function(){
+  // ── Fonction mailto contact ──
+  window.openMailtoContact = function(){
+    var v = function(id){ var el = document.getElementById(id); return el ? el.value.trim() : ''; };
+    var prenom  = v('pf-prenom'), nom = v('pf-nom'), email = v('pf-email');
+    var tel     = v('pf-tel'),    co  = v('pf-co'), role   = v('pf-role');
+    var sector  = v('pf-sector'), msg = v('pf-msg'), project = v('pf-project');
+    var budget  = v('pf-budget'), delay = v('pf-delay'), country = v('pf-country');
+    var body = [
+      '=== DEMANDE DE CONTACT CONSEILPREV ===',
+      '',
+      'Prénom      : ' + (prenom || '—'),
+      'Nom         : ' + (nom    || '—'),
+      'Email       : ' + (email  || '—'),
+      'Téléphone   : ' + (tel    || '—'),
+      'Entreprise  : ' + (co     || '—'),
+      'Fonction    : ' + (role   || '—'),
+      'Secteur     : ' + (sector || '—'),
+      'Pays        : ' + (country|| '—'),
+      '',
+      'Projet      : ' + (project|| '—'),
+      'Budget      : ' + (budget || '—'),
+      'Délai       : ' + (delay  || '—'),
+      '',
+      'Message :',
+      msg || '—',
+      '',
+      '---',
+      'Envoyé depuis conseilprev.onrender.com',
+      'Date : ' + new Date().toLocaleString('fr-FR'),
+    ].join('\n');
+    window.open(
+      'mailto:christophe.cerf@outlook.com'
+      + '?subject=' + encodeURIComponent('[CONTACT] ' + (prenom||'') + ' ' + (nom||'') + ' — ' + (co||'') + ' (' + (project||'projet') + ')')
+      + '&body='    + encodeURIComponent(body),
+      '_blank'
+    );
+  };
+
   var form = document.getElementById('cform');
   if(!form) return;
   form.addEventListener('submit', function(e){

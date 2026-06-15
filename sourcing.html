@@ -301,6 +301,32 @@ input,textarea{-webkit-user-select:text!important;user-select:text!important}
   color:rgba(196,181,232,.75);
 }
 
+
+/* ══ BOUTON MAILTO SECOURS — universel ══ */
+.mailto-fallback{
+  text-align:center;margin-top:18px;padding-top:16px;
+  border-top:1px dashed rgba(196,181,232,.22);
+}
+.mailto-fallback-label{
+  font-size:10px;color:rgba(196,181,232,.5);
+  font-family:"Space Mono",monospace;letter-spacing:.1em;
+  text-transform:uppercase;margin-bottom:10px;display:block;
+}
+.mailto-btn{
+  display:inline-flex;align-items:center;gap:9px;
+  background:linear-gradient(135deg,#1e3a5f,#1d4ed8,#2563eb);
+  color:#fff;border:none;padding:12px 26px;border-radius:10px;
+  font-size:13px;font-weight:700;cursor:pointer;
+  font-family:"DM Sans",sans-serif;
+  box-shadow:0 4px 18px rgba(37,99,235,.35);
+  transition:all .22s cubic-bezier(.34,1.56,.64,1);
+  text-decoration:none;
+}
+.mailto-btn:hover{
+  transform:scale(1.07) translateY(-2px);
+  box-shadow:0 8px 24px rgba(37,99,235,.5);
+}
+
 </style>
 </head>
 <body>
@@ -580,6 +606,14 @@ input,textarea{-webkit-user-select:text!important;user-select:text!important}
         <span class="tf-dot"></span>
         <span id="sf-txt">Envoyer</span>
       </button>
+      <!-- Bouton mailto secours -->
+      <div class="mailto-fallback">
+        <span class="mailto-fallback-label">— ou envoyez directement —</span>
+        <button type="button" class="mailto-btn" onclick="openMailtoSourcing()">
+          📧 Ouvrir Outlook / votre messagerie
+        </button>
+      </div>
+
       <p id="sf-msg" style="font-size:12px;display:none;text-align:right;font-family:'Space Mono',monospace;padding:10px 14px;border-radius:8px;margin-top:10px;background:rgba(94,234,212,.08);border:1px solid rgba(94,234,212,.2);">✓ Demande envoyée — réponse sous 48h</p>
     </form>
   </div>
@@ -886,6 +920,24 @@ document.getElementById('form-admin').addEventListener('submit', function(e){
 document.getElementById('admin-modal').addEventListener('click', function(e){
   if(e.target === this) this.classList.remove('show');
 });
+</script>
+<script>
+function openMailtoSourcing(){
+  var v = function(id){ var el = document.getElementById(id); return (el && el.value) ? el.value.trim() : ''; };
+  var prenom = v('sf-prenom'), nom = v('sf-nom'), email = v('sf-email');
+  var tel = v('sf-tel'), ent = v('sf-entreprise'), fn_ = v('sf-fonction');
+  var profil = v('sf-profil');
+  var body = ['=== DEMANDE SOURCING CONSEILPREV ===','',
+    'Prénom : '+(prenom||'—'),'Nom : '+(nom||'—'),'Email : '+(email||'—'),
+    'Tél : '+(tel||'—'),'Entreprise : '+(ent||'—'),'Fonction : '+(fn_||'—'),'',
+    'Profil recherché :', profil||'—','','---',
+    'Source : conseilprev.onrender.com/sourcing',
+    'Date : '+new Date().toLocaleString('fr-FR')
+  ].join('\n');
+  window.open('mailto:christophe.cerf@outlook.com'
+    +'?subject='+encodeURIComponent('[SOURCING] '+(prenom||'')+' '+(nom||''))
+    +'&body='+encodeURIComponent(body),'_blank');
+}
 </script>
 </body>
 </html>
