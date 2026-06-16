@@ -360,7 +360,7 @@ def security_middleware():
 # ── BREVO (ex-Sendinblue) — SMTP + API transactionnelle ──
 # Paramètres SMTP Brevo (priorité sur variables d'env Render)
 SMTP_HOST     = os.environ.get('SMTP_HOST', 'smtp-relay.brevo.com')
-SMTP_PORT     = int(os.environ.get('SMTP_PORT', '465'))  # Brevo : 465 (SSL) recommandé sur Render
+SMTP_PORT     = int(os.environ.get('SMTP_PORT', '2525'))  # Brevo : 2525 (STARTTLS) ou 465 (SSL)
 SMTP_USER     = os.environ.get('SMTP_USER', '')      # Votre email Brevo (login)
 SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '')  # Clé SMTP Brevo (pas votre mdp)
 BREVO_API_KEY = os.environ.get('BREVO_API_KEY', '')  # Clé API Brevo (v3)
@@ -1905,24 +1905,49 @@ def health_check():
 
     # ── SMTP ──
     smtp_ready = bool(SMTP_USER and SMTP_PASSWORD)
-    smtp_conn = 'NON TESTÉ'
-    if smtp_ready:
+    smtp_conn  = 'NON TESTÉ'
+
+    # ── Test API Brevo (HTTP — aucun port SMTP, fonctionne sur Render) ──
+    brevo_api_ok  = False
+    brevo_api_msg = 'BREVO_API_KEY non configurée'
+    if BREVO_API_KEY:
         try:
-            import ssl as _ssl
-            ctx = _ssl.create_default_context()
-            if SMTP_PORT == 465:
-                with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, context=ctx, timeout=10) as srv:
-                    srv.ehlo(); srv.login(SMTP_USER, SMTP_PASSWORD)
+            r_brevo = requests.get(
+                'https://api.brevo.com/v3/account',
+                headers={'api-key': BREVO_API_KEY, 'Accept': 'application/json'},
+                timeout=8
+            )
+            if r_brevo.status_code == 200:
+                brevo_api_ok  = True
+                info = r_brevo.json()
+                email_acct = info.get('email', '?')
+                plan_type  = (info.get('plan') or [{}])[0].get('type', '?')
+                brevo_api_msg = f"✅ Connecté — {email_acct} ({plan_type})"
+            elif r_brevo.status_code == 401:
+                brevo_api_msg = '❌ Clé invalide — vérifier BREVO_API_KEY'
             else:
-                with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=10) as srv:
-                    srv.ehlo(); srv.starttls(context=ctx); srv.login(SMTP_USER, SMTP_PASSWORD)
+                brevo_api_msg = f'HTTP {r_brevo.status_code}'
+        except Exception as e:
+            brevo_api_msg = f'Erreur: {str(e)[:60]}'
+
+    # ── Test SMTP uniquement si API indisponible (éviter timeout sur Render) ──
+    if smtp_ready and not brevo_api_ok:
+        try:
+            import ssl as _ssl2
+            _ctx = _ssl2.create_default_context()
+            if SMTP_PORT == 465:
+                with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, context=_ctx, timeout=8) as _s:
+                    _s.ehlo(); _s.login(SMTP_USER, SMTP_PASSWORD)
+            else:
+                with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=8) as _s:
+                    _s.ehlo(); _s.starttls(context=_ctx); _s.login(SMTP_USER, SMTP_PASSWORD)
             smtp_conn = 'OK'
         except smtplib.SMTPAuthenticationError:
-            smtp_conn = 'AUTH_ERROR'
+            smtp_conn = '❌ AUTH_ERROR — vérifier clé SMTP Brevo'
         except Exception as e:
-            smtp_conn = f'ERROR: {str(e)[:60]}'
-
-    # ── Anthropic ──
+            smtp_conn = f'❌ {str(e)[:60]}'
+    elif brevo_api_ok:
+        smtp_conn = '✅ Non nécessaire (API Brevo active)'
     anthropic_ready = bool(ANTHROPIC_API_KEY)
     anthropic_valid = None
     anthropic_msg = 'Clé absente'
@@ -1977,6 +2002,15 @@ def health_check():
             'password': '***' if SMTP_PASSWORD else 'NON CONFIGURÉ',
             'mail_to': MAIL_TO, 'mail_cc': MAIL_CC,
             'ready': smtp_ready, 'connection': smtp_conn,
+        },
+        'brevo': {
+            'api_ready':  brevo_api_ok,
+            'api_status': brevo_api_msg,
+            'smtp_host':  SMTP_HOST,
+            'smtp_port':  SMTP_PORT,
+            'smtp_conn':  smtp_conn,
+            'mode':       '✅ API HTTP (recommandé)' if brevo_api_ok else ('⚠ SMTP' if smtp_conn=='OK' else '❌ non configuré'),
+            'conseil':    '✅ Opérationnel' if brevo_api_ok else '→ Ajouter BREVO_API_KEY dans Render → Environment',
         },
         'anthropic': {
             'key': (ANTHROPIC_API_KEY[:12] + '***') if ANTHROPIC_API_KEY else 'NON CONFIGURÉ',
