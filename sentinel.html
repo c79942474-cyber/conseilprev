@@ -455,6 +455,97 @@ textarea.form-el{min-height:86px;resize:vertical}
   .sb.open{transform:translateX(0)}
   .main,.topbar{margin-left:0;left:0}
 }
+
+/* ══ NOUVELLES PAGES ══ */
+/* Registre systèmes */
+.reg-sys-row{display:grid;grid-template-columns:28px 1fr 90px 100px 80px 70px;gap:12px;align-items:center;padding:12px 20px;border-bottom:1px solid var(--rule);transition:background .1s;cursor:pointer}
+.reg-sys-row:hover{background:var(--bg)}.reg-sys-row:last-child{border-bottom:none}
+.rs-ico{font-size:16px;text-align:center}
+.rs-name{font-size:13px;font-weight:500;color:var(--ink)}
+.rs-type{font-size:11px;color:var(--muted);margin-top:1px}
+.rs-risk{font-size:11px;font-family:var(--mono)}
+
+/* Matrice risques */
+.matrix-wrap{overflow-x:auto;margin-bottom:24px}
+.matrix-grid{display:grid;grid-template-columns:80px repeat(5,1fr);gap:2px;min-width:540px}
+.matrix-cell{aspect-ratio:1.4;display:flex;align-items:center;justify-content:center;border-radius:2px;font-size:9px;font-family:var(--mono);letter-spacing:.04em;text-align:center;padding:4px;transition:opacity .15s}
+.matrix-cell:hover{opacity:.8;cursor:pointer}
+.mc-h{background:rgba(184,50,34,.75);color:#fff}
+.mc-m{background:rgba(196,124,26,.65);color:#fff}
+.mc-l{background:rgba(45,122,71,.6);color:#fff}
+.mc-vl{background:rgba(45,122,71,.3);color:var(--green)}
+.mc-lbl{background:transparent;font-weight:600;color:var(--muted);font-size:9px;justify-content:flex-end;padding-right:6px}
+.mc-head{background:var(--bg);color:var(--muted);aspect-ratio:auto;padding:6px 4px}
+
+/* Radar chart */
+.radar-svg{width:100%;max-width:380px;display:block;margin:0 auto}
+
+/* Articles */
+.art-list{display:flex;flex-direction:column;gap:1px}
+.art-item{background:var(--white);border:1px solid var(--rule);padding:16px 20px;cursor:pointer;transition:border-color .15s}
+.art-item:hover{border-color:var(--accent)}
+.art-num{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.1em;margin-bottom:4px}
+.art-title{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:4px}
+.art-scope{font-size:11px;color:var(--muted);line-height:1.5}
+.art-chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+
+/* Contrôles */
+.ctrl-row{display:grid;grid-template-columns:24px 1fr 100px 80px 60px;gap:12px;align-items:center;padding:12px 20px;border-bottom:1px solid var(--rule);cursor:pointer;transition:background .1s}
+.ctrl-row:hover{background:var(--bg)}.ctrl-row:last-child{border-bottom:none}
+.ctrl-check{width:16px;height:16px;border:2px solid var(--rule2);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.ctrl-check.done{background:var(--accent);border-color:var(--accent);color:#fff}
+.ctrl-check.na{background:var(--bg2);border-color:var(--rule2);color:var(--muted)}
+
+/* Roadmap */
+.road-phase{margin-bottom:28px}
+.road-phase-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.road-phase-num{font-family:var(--mono);font-size:10px;background:var(--accent);color:#fff;padding:2px 8px;border-radius:2px;letter-spacing:.06em}
+.road-phase-title{font-size:14px;font-weight:600;color:var(--ink)}
+.road-phase-date{font-size:11px;font-family:var(--mono);color:var(--muted2)}
+.road-items{display:flex;flex-direction:column;gap:6px;padding-left:24px;border-left:2px solid var(--rule)}
+.road-item{display:flex;gap:10px;align-items:flex-start;font-size:12px;padding:8px 0}
+.road-status{font-family:var(--mono);font-size:9px;letter-spacing:.06em;white-space:nowrap;margin-top:2px}
+.rs-todo{color:var(--muted2)}.rs-doing{color:var(--orange)}.rs-done{color:var(--green)}
+
+/* Calculateur sanctions */
+.sanc-calc{background:var(--white);border:1px solid var(--rule);border-radius:4px;padding:24px;max-width:640px;margin-bottom:20px}
+.sanc-result{background:var(--white);border:1px solid var(--rule);border-left:3px solid var(--accent);border-radius:0 4px 4px 0;padding:22px;max-width:640px;display:none;margin-bottom:20px}
+.sanc-result.on{display:block}
+.sanc-amount{font-family:var(--serif);font-size:40px;color:var(--accent);letter-spacing:-.03em;line-height:1;margin-bottom:4px}
+.sanc-basis{font-size:10px;font-family:var(--mono);color:var(--muted);letter-spacing:.1em;margin-bottom:16px;text-transform:uppercase}
+.sanc-detail-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--rule);font-size:12px}
+.sanc-detail-row:last-child{border-bottom:none;font-weight:600}
+
+/* Benchmark */
+.bench-row{display:grid;grid-template-columns:1fr 60px 140px 60px;gap:14px;align-items:center;padding:12px 20px;border-bottom:1px solid var(--rule);transition:background .1s}
+.bench-row:hover{background:var(--bg)}.bench-row:last-child{border-bottom:none}
+.bench-sector{font-size:13px;font-weight:500;color:var(--ink)}
+.bench-score{font-family:var(--serif);font-size:18px;color:var(--ink);text-align:right;letter-spacing:-.02em}
+.bench-you{font-size:9px;font-family:var(--mono);color:var(--accent);text-align:center;display:block}
+.bench-bar-wrap{width:100%}
+.bench-track{height:3px;background:var(--bg2);border-radius:2px;overflow:hidden;margin-bottom:3px}
+.bench-fill{height:100%;border-radius:2px}
+.bench-fill-you{background:var(--accent)}
+.bench-fill-avg{background:var(--muted2)}
+
+/* Templates / Docs */
+.doc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:24px}
+.doc-card{background:var(--white);border:1px solid var(--rule);border-radius:4px;padding:20px;display:flex;gap:14px;align-items:flex-start;cursor:pointer;transition:border-color .15s}
+.doc-card:hover{border-color:var(--accent)}
+.doc-icon{width:36px;height:36px;background:var(--bg2);border:1px solid var(--rule);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.doc-name{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:3px}
+.doc-desc{font-size:11px;color:var(--muted);line-height:1.5}
+.doc-meta{font-size:9px;font-family:var(--mono);color:var(--muted2);margin-top:6px}
+
+/* FRIA */
+.fria-step{background:var(--white);border:1px solid var(--rule);border-radius:4px;padding:20px 22px;margin-bottom:10px}
+.fria-step-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.fria-step-num{width:24px;height:24px;background:var(--accent);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-family:var(--mono);font-weight:600;flex-shrink:0}
+.fria-step-title{font-size:13px;font-weight:600;color:var(--ink)}
+.fria-score-ring{display:flex;align-items:center;justify-content:center;flex-direction:column;width:90px;height:90px;border-radius:50%;border:3px solid var(--accent);margin:0 auto 12px;font-family:var(--serif)}
+.fria-ring-val{font-size:24px;color:var(--accent);line-height:1;letter-spacing:-.02em}
+.fria-ring-lbl{font-size:8px;font-family:var(--mono);color:var(--muted2);letter-spacing:.1em}
+
 </style>
 </head>
 <body>
@@ -495,6 +586,16 @@ textarea.form-el{min-height:86px;resize:vertical}
       <span class="sb-badge sb-badge-new">Bêta</span>
     </div>
 
+    <div class="sb-section">Risques & Systèmes</div>
+    <div class="sb-item" onclick="go('registre',this,'REGISTRE','Systèmes IA')">
+      <span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg></span>Registre IA
+    </div>
+    <div class="sb-item" onclick="go('matrice',this,'RISQUES','Matrice risques')">
+      <span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>Matrice risques
+    </div>
+    <div class="sb-item" onclick="go('radar',this,'RISQUES','Radar multi-critères')">
+      <span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg></span>Radar des risques
+    </div>
     <div class="sb-section">Conformité</div>
     <div class="sb-item" onclick="go('regs',this,'CONFORMITÉ','Réglementations')">
       <span class="sb-icon">
@@ -523,6 +624,16 @@ textarea.form-el{min-height:86px;resize:vertical}
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
       </span>Audit de conformité
     </div>
+    <div class="sb-item" onclick="go('articles',this,'EU AI ACT','Articles & Obligations')">
+      <span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 6h16M4 10h16M4 14h10M4 18h7"/></svg></span>Articles AI Act
+    </div>
+    <div class="sb-item" onclick="go('controles',this,'CONFORMITÉ','Bibliothèque de contrôles')">
+      <span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 11l3 3 8-8M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>Contrôles
+      <span class="sb-badge" style="background:var(--green)">23</span>
+    </div>
+    <div class="sb-item" onclick="go('fria',this,'CONFORMITÉ','Évaluation FRIA')">
+      <span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg></span>FRIA
+    </div>
 
     <div class="sb-section">Espace</div>
     <div class="sb-item" onclick="go('equipe',this,'ESPACE','Équipe')">
@@ -539,6 +650,18 @@ textarea.form-el{min-height:86px;resize:vertical}
       <span class="sb-icon">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
       </span>Mon Espace
+    </div>
+    <div class="sb-item" onclick="go('roadmap',this,'PLANIFICATION','Plan d\'action')">
+      <span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg></span>Roadmap
+    </div>
+    <div class="sb-item" onclick="go('sanctions',this,'OUTILS','Calculateur sanctions')">
+      <span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></span>Calculateur sanctions
+    </div>
+    <div class="sb-item" onclick="go('benchmark',this,'ANALYSE','Benchmark sectoriel')">
+      <span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>Benchmark
+    </div>
+    <div class="sb-item" onclick="go('templates',this,'RESSOURCES','Documentation & Modèles')">
+      <span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>Templates &amp; Docs
     </div>
     <div class="sb-item" onclick="go('report',this,'REPORTING','Dashboard')">
       <span class="sb-icon">
@@ -835,6 +958,246 @@ textarea.form-el{min-height:86px;resize:vertical}
   </div>
 </div>
 
+
+<!-- ══════ REGISTRE SYSTÈMES IA ══════ -->
+<div class="page" id="p-registre">
+  <span class="eyebrow">Registre</span>
+  <h1 class="page-h">Registre des <em>systèmes IA</em></h1>
+  <p class="page-lead">Inventaire complet de vos déploiements IA classifiés selon l'EU AI Act. Obligatoire pour les systèmes haut risque (Art. 51).</p>
+  <div class="tbl-wrap">
+    <div class="tbl-head">
+      <span class="tbl-title">Systèmes enregistrés — 4 déploiements</span>
+      <span class="tbl-link" onclick="go('audit',null,'AUDIT','Audit de conformité')">+ Ajouter un système</span>
+    </div>
+    <div class="comp-head-row" id="reg-sys-head" style="grid-template-columns:28px 1fr 110px 120px 90px 80px;padding:9px 20px;display:grid;background:var(--bg);border-bottom:2px solid var(--rule)">
+      <div class="comp-cell"></div>
+      <div class="comp-cell">Système IA</div>
+      <div class="comp-cell">Type</div>
+      <div class="comp-cell">Classification AI Act</div>
+      <div class="comp-cell">Secteur</div>
+      <div class="comp-cell">Score risque</div>
+    </div>
+    <div id="reg-sys-body"></div>
+  </div>
+</div>
+
+<!-- ══════ MATRICE RISQUES ══════ -->
+<div class="page" id="p-matrice">
+  <span class="eyebrow">Analyse de risques</span>
+  <h1 class="page-h">Matrice <em>risques / impact</em></h1>
+  <p class="page-lead">Positionnement de vos systèmes IA selon la probabilité de non-conformité et l'impact potentiel. Mise à jour automatique à chaque évaluation.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start">
+    <div>
+      <div class="tbl-wrap" style="margin-bottom:16px">
+        <div class="tbl-head"><span class="tbl-title">Matrice Probabilité × Impact</span></div>
+        <div style="padding:20px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <span style="font-size:9px;font-family:var(--mono);color:var(--muted2);text-transform:uppercase;letter-spacing:.12em">Impact →</span>
+          </div>
+          <div class="matrix-grid" id="matrix-grid"></div>
+          <div style="display:flex;gap:16px;margin-top:12px;flex-wrap:wrap">
+            <span style="font-size:10px;font-family:var(--mono);color:var(--muted2)"><span style="display:inline-block;width:10px;height:10px;background:rgba(184,50,34,.75);border-radius:1px;margin-right:4px;vertical-align:middle"></span>Critique</span>
+            <span style="font-size:10px;font-family:var(--mono);color:var(--muted2)"><span style="display:inline-block;width:10px;height:10px;background:rgba(196,124,26,.65);border-radius:1px;margin-right:4px;vertical-align:middle"></span>Élevé</span>
+            <span style="font-size:10px;font-family:var(--mono);color:var(--muted2)"><span style="display:inline-block;width:10px;height:10px;background:rgba(45,122,71,.6);border-radius:1px;margin-right:4px;vertical-align:middle"></span>Modéré / Faible</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="tbl-wrap">
+        <div class="tbl-head"><span class="tbl-title">Systèmes en zone critique</span></div>
+        <div id="matrice-critical"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ RADAR DES RISQUES ══════ -->
+<div class="page" id="p-radar">
+  <span class="eyebrow">Radar multi-critères</span>
+  <h1 class="page-h">Radar des <em>risques IA</em></h1>
+  <p class="page-lead">Visualisation hexagonale de votre posture de conformité sur 6 dimensions réglementaires clés. Comparez votre profil à la moyenne sectorielle.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start">
+    <div class="tbl-wrap" style="padding:24px">
+      <div class="tbl-head" style="border:none;padding:0 0 16px"><span class="tbl-title">Votre profil de risque</span><span style="font-size:10px;font-family:var(--mono);color:var(--muted2)">vs. Moyenne secteur</span></div>
+      <svg class="radar-svg" viewBox="0 0 300 280" id="radar-svg"></svg>
+      <div style="display:flex;gap:16px;margin-top:14px;justify-content:center;flex-wrap:wrap">
+        <span style="font-size:10px;font-family:var(--mono);color:var(--muted2);display:flex;align-items:center;gap:5px"><span style="width:16px;height:2px;background:var(--accent);display:inline-block"></span>Votre profil</span>
+        <span style="font-size:10px;font-family:var(--mono);color:var(--muted2);display:flex;align-items:center;gap:5px"><span style="width:16px;height:2px;background:var(--muted2);display:inline-block;border-top:2px dashed var(--muted2)"></span>Moyenne secteur</span>
+      </div>
+    </div>
+    <div>
+      <div class="reg-stack" id="radar-scores"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ ARTICLES EU AI ACT ══════ -->
+<div class="page" id="p-articles">
+  <span class="eyebrow">EU AI Act — Article par article</span>
+  <h1 class="page-h">Obligations <em>article par article</em></h1>
+  <p class="page-lead">Référence structurée des 113 articles de l'EU AI Act. Chaque article est lié à vos systèmes enregistrés et aux contrôles correspondants.</p>
+  <div class="art-list" id="art-list"></div>
+</div>
+
+<!-- ══════ BIBLIOTHÈQUE DE CONTRÔLES ══════ -->
+<div class="page" id="p-controles">
+  <span class="eyebrow">Bibliothèque de contrôles</span>
+  <h1 class="page-h">Contrôles <em>par obligation</em></h1>
+  <p class="page-lead">23 contrôles mappés sur les obligations EU AI Act, NIS2 et RGPD. Cochez les contrôles mis en place pour suivre votre avancement.</p>
+  <div style="display:flex;gap:16px;margin-bottom:20px">
+    <div class="kpi" style="flex:1;padding:14px 16px"><div class="kpi-lbl">Complétés</div><div class="kpi-val" style="font-size:24px">8</div></div>
+    <div class="kpi" style="flex:1;padding:14px 16px"><div class="kpi-lbl">En cours</div><div class="kpi-val" style="font-size:24px">9</div></div>
+    <div class="kpi" style="flex:1;padding:14px 16px"><div class="kpi-lbl">À faire</div><div class="kpi-val" style="font-size:24px;color:var(--accent)">6</div></div>
+    <div class="kpi" style="flex:1;padding:14px 16px"><div class="kpi-lbl">Progression</div><div class="kpi-val" style="font-size:24px">35%</div></div>
+  </div>
+  <div class="tbl-wrap">
+    <div class="comp-head-row" style="display:grid;grid-template-columns:24px 1fr 100px 80px 60px;padding:9px 20px;background:var(--bg);border-bottom:2px solid var(--rule)">
+      <div class="comp-cell"></div>
+      <div class="comp-cell">Contrôle</div>
+      <div class="comp-cell">Référence</div>
+      <div class="comp-cell">Priorité</div>
+      <div class="comp-cell">Statut</div>
+    </div>
+    <div id="ctrl-list"></div>
+  </div>
+</div>
+
+<!-- ══════ ROADMAP CONFORMITÉ ══════ -->
+<div class="page" id="p-roadmap">
+  <span class="eyebrow">Plan d'action</span>
+  <h1 class="page-h">Roadmap <em>conformité</em></h1>
+  <p class="page-lead">Plan d'action priorisé sur 18 mois, aligné sur les échéances EU AI Act, NIS2 et DORA. Généré à partir de vos évaluations.</p>
+  <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px">
+    <div id="roadmap-content"></div>
+    <div>
+      <div class="tbl-wrap" style="margin-bottom:14px">
+        <div class="tbl-head"><span class="tbl-title">Prochaine échéance critique</span></div>
+        <div style="padding:16px 20px">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.1em;margin-bottom:6px">02 AOÛT 2026</div>
+          <div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px">AI Act — Systèmes haut risque</div>
+          <div style="font-size:11px;color:var(--muted)">Articles 6, 9, 10, 11, 12, 13, 14, 15 obligatoires</div>
+          <div style="margin-top:10px;height:4px;background:var(--bg2);border-radius:2px;overflow:hidden"><div style="height:100%;width:72%;background:var(--accent);border-radius:2px"></div></div>
+          <div style="font-size:10px;font-family:var(--mono);color:var(--muted2);margin-top:4px">72% — 47 jours restants</div>
+        </div>
+      </div>
+      <div class="tbl-wrap">
+        <div class="tbl-head"><span class="tbl-title">Résumé avancement</span></div>
+        <div style="padding:14px 20px" id="road-summary"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ CALCULATEUR SANCTIONS ══════ -->
+<div class="page" id="p-sanctions">
+  <span class="eyebrow">Outils</span>
+  <h1 class="page-h">Calculateur de <em>sanctions AI Act</em></h1>
+  <p class="page-lead">Estimez l'exposition financière en cas de non-conformité selon le type de violation et le chiffre d'affaires de votre entreprise.</p>
+  <div class="sanc-calc">
+    <div class="form-grid2">
+      <div class="form-row">
+        <label class="form-lbl">Type de violation</label>
+        <select class="form-el" id="s-type">
+          <option value="interdit">Pratique interdite (Art. 5)</option>
+          <option value="haut" selected>Système haut risque non conforme</option>
+          <option value="transparence">Obligation de transparence</option>
+          <option value="info">Informations incorrectes aux autorités</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label class="form-lbl">Chiffre d'affaires annuel mondial</label>
+        <input class="form-el" type="number" id="s-ca" placeholder="Ex : 50000000" value="50000000">
+      </div>
+    </div>
+    <div class="form-grid2">
+      <div class="form-row">
+        <label class="form-lbl">Taille de l'entreprise</label>
+        <select class="form-el" id="s-size">
+          <option value="tpe">TPE / Startup (&lt; 10 salariés)</option>
+          <option value="pme">PME (10–250 salariés)</option>
+          <option value="eti" selected>ETI (250–5000)</option>
+          <option value="ge">Grande entreprise (&gt; 5000)</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label class="form-lbl">Récidive ?</label>
+        <select class="form-el" id="s-recid">
+          <option value="non">Non — première infraction</option>
+          <option value="oui">Oui — infraction répétée</option>
+        </select>
+      </div>
+    </div>
+    <button class="submit" onclick="calcSanctions()">Calculer l'exposition →</button>
+  </div>
+  <div class="sanc-result" id="sanc-result">
+    <div style="display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:start">
+      <div>
+        <div class="sanc-basis">Amende maximale estimée</div>
+        <div class="sanc-amount" id="sanc-amount">—</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px" id="sanc-basis-txt"></div>
+      </div>
+      <div id="sanc-details"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ BENCHMARK SECTORIEL ══════ -->
+<div class="page" id="p-benchmark">
+  <span class="eyebrow">Analyse</span>
+  <h1 class="page-h">Benchmark <em>sectoriel</em></h1>
+  <p class="page-lead">Comparez votre score de conformité IA avec la moyenne de votre secteur et les meilleurs élèves. Données issues d'audits CONSEILPREV 2025–2026.</p>
+  <div class="col12" style="margin-bottom:24px">
+    <div class="kpi"><div class="kpi-lbl">Votre score</div><div class="kpi-val" style="color:var(--accent)">68%</div><div class="kpi-tr dn">↓ −12 pts vs. meilleurs</div></div>
+    <div class="kpi"><div class="kpi-lbl">Moyenne Énergie</div><div class="kpi-val">74%</div><div class="kpi-tr up">↑ +6 pts ce trimestre</div></div>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-head"><span class="tbl-title">Scores par secteur — Conformité EU AI Act</span><span class="tbl-link">↓ Rapport complet</span></div>
+    <div class="comp-head-row" style="display:grid;grid-template-columns:1fr 60px 160px 60px;padding:9px 20px;background:var(--bg);border-bottom:2px solid var(--rule)">
+      <div class="comp-cell">Secteur</div>
+      <div class="comp-cell">Score</div>
+      <div class="comp-cell">Répartition</div>
+      <div class="comp-cell">vs. vous</div>
+    </div>
+    <div id="bench-list"></div>
+  </div>
+</div>
+
+<!-- ══════ TEMPLATES & DOCS ══════ -->
+<div class="page" id="p-templates">
+  <span class="eyebrow">Ressources</span>
+  <h1 class="page-h">Documentation &amp; <em>modèles</em></h1>
+  <p class="page-lead">Templates conformes EU AI Act, RGPD et NIS2 — prêts à compléter. Rédigés par les experts CONSEILPREV et mis à jour à chaque évolution réglementaire.</p>
+  <div class="doc-grid" id="doc-grid"></div>
+  <div class="rule"></div>
+  <div class="sec-h" style="margin-bottom:6px">Guides pratiques</div>
+  <div class="sec-sub">Fiches synthétiques téléchargeables</div>
+  <div class="doc-grid" id="guides-grid"></div>
+</div>
+
+<!-- ══════ FRIA ══════ -->
+<div class="page" id="p-fria">
+  <span class="eyebrow">Évaluation FRIA</span>
+  <h1 class="page-h">Fundamental Rights <em>Impact Assessment</em></h1>
+  <p class="page-lead">Évaluation structurée de l'impact sur les droits fondamentaux — obligatoire pour les systèmes haut risque (Art. 9 EU AI Act). Cadre en 6 étapes.</p>
+  <div style="display:grid;grid-template-columns:1fr 200px;gap:24px;align-items:start">
+    <div id="fria-steps"></div>
+    <div>
+      <div class="tbl-wrap" style="margin-bottom:14px;padding:18px;text-align:center">
+        <div class="tbl-head" style="border:none;padding:0 0 12px"><span class="tbl-title">Score FRIA global</span></div>
+        <div class="fria-score-ring"><div class="fria-ring-val">6.2</div><div class="fria-ring-lbl">/ 10</div></div>
+        <div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.6">Risque modéré — Des mesures d'atténuation sont requises avant déploiement.</div>
+      </div>
+      <div class="tbl-wrap" style="padding:14px 16px">
+        <div style="font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em;color:var(--muted2);margin-bottom:10px">Actions requises</div>
+        <div class="act-item"><div class="act-dot"></div><div class="act-t" style="font-size:11px">Réviser la politique de supervision humaine</div></div>
+        <div class="act-item"><div class="act-dot"></div><div class="act-t" style="font-size:11px">Documenter les biais identifiés (Art. 9.7)</div></div>
+        <div class="act-item"><div class="act-dot"></div><div class="act-t" style="font-size:11px">Enregistrer dans la base EU AI (Art. 51)</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 </main>
 
 <script>
@@ -958,7 +1321,7 @@ function jRow(j){ return '<div class="jrow"><div class="jrow-n">'+j.n+'</div><di
 /* Veille */
 (function(){
   var b = document.getElementById('veille-list'); if(!b) return;
-  [{tags:[{c:'chip-b',t:'EU'}],h:"EU AI Act : le premier délai d'août 2026 approche — ce que votre entreprise doit savoir",p:"Les obligations de l'Article 5 (pratiques interdites) s'appliquent depuis le 2 février 2025. Le prochain palier concerne les systèmes haut risque.",d:"15 juin 2026"},{tags:[{c:'chip-g',t:'FR'}],h:"ANSSI publie son guide de sécurité des systèmes IA industriels",p:"Le guide couvre les exigences NIS2 pour les OES utilisant de l'IA dans leurs processus critiques.",d:"10 juin 2026"},{tags:[{c:'chip-b',t:'EU'},{c:'chip-n',t:'ISO'}],h:"ISO/IEC 42001 : comment l'aligner avec l'AI Act ?",p:"Le standard de management des systèmes IA devient un outil central dans la démonstration de conformité.",d:"5 juin 2026"},{tags:[{c:'chip-n',t:'GLOBAL'}],h:"Géopolitique normative : l'EU AI Act s'exporte dans 40 pays",p:"Les négociations commerciales intègrent désormais la réciprocité réglementaire IA. Le modèle bruxellois influence les législations en Afrique francophone.",d:"1 juin 2026"}].forEach(function(v){
+  [{tags:[{c:'chip-b',t:'EU'}],h:"EU AI Act : le premier délai d'août 2026 approche — ce que votre entreprise doit savoir",p:"Les obligations de l Article 5 (pratiques interdites) s appliquent depuis le 2 février 2025. Le prochain palier concerne les systèmes haut risque.",d:"15 juin 2026"},{tags:[{c:'chip-g',t:'FR'}],h:"ANSSI publie son guide de sécurité des systèmes IA industriels",p:"Le guide couvre les exigences NIS2 pour les OES utilisant de l IA dans leurs processus critiques.",d:"10 juin 2026"},{tags:[{c:'chip-b',t:'EU'},{c:'chip-n',t:'ISO'}],h:"ISO/IEC 42001 : comment l aligner avec l AI Act ?",p:"Le standard de management des systèmes IA devient un outil central dans la démonstration de conformité.",d:"5 juin 2026"},{tags:[{c:'chip-n',t:'GLOBAL'}],h:"Géopolitique normative : l EU AI Act s exporte dans 40 pays",p:"Les négociations commerciales intègrent désormais la réciprocité réglementaire IA. Le modèle bruxellois influence les législations en Afrique francophone.",d:"1 juin 2026"}].forEach(function(v){
     var tags = v.tags.map(function(t){ return '<span class="chip '+t.c+'">'+t.t+'</span>'; }).join(' ');
     b.innerHTML += '<div class="veille-item"><div class="veille-top"><div class="veille-h">'+v.h+'</div><div class="veille-date">'+v.d+'</div></div><div class="veille-tags">'+tags+'</div><div class="veille-p">'+v.p+'</div></div>';
   });
@@ -1060,6 +1423,330 @@ function runCheck(){
   r.classList.add('on');
   r.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
+
+
+/* ══ REGISTRE SYSTÈMES IA ══ */
+var SYSTEMS = [
+  {ico:'⚡',name:'Système de prédiction énergétique',type:'Prédiction ML',classif:'Haut risque',classif_cls:'chip-r',secteur:'Énergie',score:8.2,score_cls:'dn'},
+  {ico:'🏦',name:'Scoring crédit automatisé',type:'Décision automatisée',classif:'Haut risque',classif_cls:'chip-r',secteur:'Finance',score:7.1,score_cls:'dn'},
+  {ico:'🏭',name:'Détection anomalies industrielles',type:'Surveillance OT',classif:'Risque limité',classif_cls:'chip-o',secteur:'Industrie',score:4.5,score_cls:'up'},
+  {ico:'💬',name:'Chatbot service client',type:'IA générative',classif:'Risque minimal',classif_cls:'chip-g',secteur:'IT',score:2.8,score_cls:'up'},
+];
+(function(){
+  var b = document.getElementById('reg-sys-body'); if(!b) return;
+  b.innerHTML = SYSTEMS.map(function(s){
+    return '<div class="reg-sys-row">'
+      +'<div class="rs-ico">'+s.ico+'</div>'
+      +'<div><div class="rs-name">'+s.name+'</div><div class="rs-type">'+s.type+'</div></div>'
+      +'<div><span class="chip '+s.classif_cls+'">'+s.classif+'</span></div>'
+      +'<div><span class="chip chip-b">'+s.secteur+'</span></div>'
+      +'<div class="rs-risk kpi-tr '+s.score_cls+'" style="font-family:var(--serif);font-size:16px;color:var(--ink)">'+s.score+'</div>'
+      +'</div>';
+  }).join('');
+})();
+
+/* ══ MATRICE RISQUES ══ */
+(function(){
+  var g = document.getElementById('matrix-grid'); if(!g) return;
+  var PROB = ['Très élevée','Élevée','Moyenne','Faible','Très faible'];
+  var IMP  = ['Négligeable','Faible','Modéré','Élevé','Critique'];
+  // Header row
+  var head = '<div class="matrix-cell mc-lbl"></div>'
+    + IMP.map(function(l){ return '<div class="matrix-cell mc-head">'+l+'</div>'; }).join('');
+  // Data cells (probability rows × impact cols)
+  var LEVELS = [
+    ['mc-h','mc-h','mc-h','mc-h','mc-h'],
+    ['mc-m','mc-h','mc-h','mc-h','mc-h'],
+    ['mc-l','mc-m','mc-h','mc-h','mc-h'],
+    ['mc-vl','mc-l','mc-m','mc-m','mc-h'],
+    ['mc-vl','mc-vl','mc-l','mc-l','mc-m'],
+  ];
+  var dots = {
+    '1-3':'⚡','0-4':'🏦','2-1':'🏭','3-0':'💬'
+  };
+  var rows = PROB.map(function(p, pi){
+    return '<div class="matrix-cell mc-lbl" style="writing-mode:vertical-lr;transform:rotate(180deg);font-size:8px;justify-content:center">'+p+'</div>'
+      + LEVELS[pi].map(function(cls, ci){
+        var key = pi+'-'+ci;
+        var dot = dots[key] ? '<div style="font-size:14px;line-height:1">'+dots[key]+'</div>' : '';
+        return '<div class="matrix-cell '+cls+'">'+dot+'</div>';
+      }).join('');
+  }).join('');
+  g.innerHTML = head + rows;
+  var c = document.getElementById('matrice-critical'); if(!c) return;
+  c.innerHTML = SYSTEMS.filter(function(s){ return s.score >= 6; }).map(function(s){
+    return '<div class="eval-row"><div class="eval-ico">'+s.ico+'</div>'
+      +'<div class="eval-body"><div class="eval-n">'+s.name+'</div><div class="eval-d">'+s.classif+' · '+s.secteur+'</div></div>'
+      +'<div class="eval-sc">'+s.score+'</div></div>';
+  }).join('');
+})();
+
+/* ══ RADAR RISQUES ══ */
+(function(){
+  var svg = document.getElementById('radar-svg'); if(!svg) return;
+  var DIM = ['Gouvernance','Transparence','Sécurité','Données','Supervision','Droits'];
+  var YOU = [0.55,0.70,0.80,0.65,0.45,0.60];
+  var AVG = [0.72,0.68,0.75,0.70,0.65,0.72];
+  var CX=150, CY=148, R=100, N=DIM.length;
+  function pt(val,i,r){ var a=(Math.PI*2*i/N)-Math.PI/2; return [CX+Math.cos(a)*r*val, CY+Math.sin(a)*r*val]; }
+  // Grilles
+  var gridLines = [0.25,0.5,0.75,1].map(function(r){
+    var pts = DIM.map(function(_,i){ return pt(1,i,R*r).join(','); });
+    return '<polygon points="'+pts.join(' ')+'" fill="none" stroke="var(--rule)" stroke-width="0.8"/>';
+  }).join('');
+  // Axes
+  var axes = DIM.map(function(_,i){
+    var p = pt(1,i,R); return '<line x1="'+CX+'" y1="'+CY+'" x2="'+p[0]+'" y2="'+p[1]+'" stroke="var(--rule)" stroke-width="0.8"/>';
+  }).join('');
+  // Labels
+  var labels = DIM.map(function(d,i){
+    var p = pt(1,i,R+22);
+    return '<text x="'+p[0]+'" y="'+p[1]+'" text-anchor="middle" dominant-baseline="middle" font-size="9" font-family="var(--mono)" fill="var(--muted)" letter-spacing=".04em">'+d+'</text>';
+  }).join('');
+  // Polygones
+  function poly(vals,stroke,fill,opacity){
+    var pts = vals.map(function(v,i){ return pt(v,i,R).join(','); });
+    return '<polygon points="'+pts.join(' ')+'" fill="'+fill+'" fill-opacity="'+opacity+'" stroke="'+stroke+'" stroke-width="2" stroke-linejoin="round"/>';
+  }
+  svg.innerHTML = gridLines+axes+labels
+    +poly(AVG,'var(--muted2)','var(--muted2)',0.12)
+    +poly(YOU,'var(--accent)','var(--accent)',0.18);
+  // Scores sidebar
+  var sc = document.getElementById('radar-scores'); if(!sc) return;
+  sc.innerHTML = DIM.map(function(d,i){
+    var pct = Math.round(YOU[i]*100);
+    return '<div class="reg-item">'
+      +'<div class="reg-name">'+d+'</div>'
+      +'<div style="display:flex;align-items:center;gap:10px">'
+      +'<div class="reg-val" style="font-size:18px">'+pct+'%</div>'
+      +'<div class="reg-bar" style="flex:1"><div class="reg-fill" style="width:'+pct+'%"></div></div>'
+      +'</div></div>';
+  }).join('');
+})();
+
+/* ══ ARTICLES AI ACT ══ */
+(function(){
+  var b = document.getElementById('art-list'); if(!b) return;
+  var ARTS = [
+    {num:'Art. 5',title:'Pratiques IA interdites',scope:'Manipulation comportementale, systemes de notation sociale, identification biometrique en temps reel dans les espaces publics.',tags:['chip-r Interdit'],actif:true},
+    {num:'Art. 6',title:'Classification des systèmes IA à haut risque',scope:'Annexe III : 8 domaines. Annexe II : produits soumis à législation harmonisée UE.',tags:['chip-r Haut risque'],actif:true},
+    {num:'Art. 9',title:'Système de gestion des risques',scope:'Documentation, tests, évaluation continue — obligatoire pour les systèmes haut risque. Inclut évaluation FRIA.',tags:['chip-r Haut risque','chip-o Obligatoire'],actif:true},
+    {num:'Art. 10',title:'Données et gouvernance',scope:'Qualite des donnees utilisees en entrainement, validation, test.',tags:['chip-r Haut risque'],actif:true},
+    {num:'Art. 11',title:'Documentation technique',scope:'Dossier technique complet avant mise sur le marché. Mise à jour à chaque modification substantielle.',tags:['chip-r Haut risque','chip-o Art. 11'],actif:true},
+    {num:'Art. 12',title:'Tenue de registres (journalisation)',scope:'Capacité de journalisation automatique. Conservation des logs pour la durée déterminée par le fournisseur.',tags:['chip-r Haut risque'],actif:true},
+    {num:'Art. 13',title:'Transparence et information',scope:'Notice claire pour les deployeurs. Capacites, limites, conditions.',tags:['chip-o Risque limite'],actif:true},
+    {num:'Art. 14',title:'Supervision humaine',scope:'Mesures permettant à une personne physique de surveiller, comprendre, intervenir et stopper le système.',tags:['chip-r Haut risque'],actif:true},
+    {num:'Art. 51',title:'Enregistrement dans la base de données EU',scope:'Enregistrement obligatoire avant déploiement pour les systèmes haut risque. Base de données publique EUAIA.',tags:['chip-r Haut risque','chip-o Déployeurs'],actif:false},
+  ];
+  b.innerHTML = ARTS.map(function(a){
+    var tags = a.tags.map(function(t){ var p=t.split(' '); return '<span class="chip '+p[0]+'">'+p.slice(1).join(' ')+'</span>'; }).join('');
+    return '<div class="art-item">'
+      +'<div class="art-num">'+a.num+(a.actif?' <span style="color:var(--green);font-size:9px">● ACTIF</span>':' <span style="color:var(--muted2);font-size:9px">○ 2027</span>')+'</div>'
+      +'<div class="art-title">'+a.title+'</div>'
+      +'<div class="art-scope">'+a.scope+'</div>'
+      +'<div class="art-chips">'+tags+'</div>'
+      +'</div>';
+  }).join('');
+})();
+
+/* ══ CONTRÔLES ══ */
+(function(){
+  var b = document.getElementById('ctrl-list'); if(!b) return;
+  var CTRLS = [
+    {done:true,  name:'Inventaire complet des systèmes IA',ref:'Art. 51',prio:'P1',stat:'done'},
+    {done:true,  name:'Classification des risques (Annexe III)',ref:'Art. 6',prio:'P1',stat:'done'},
+    {done:false, name:'Système de gestion des risques documenté',ref:'Art. 9',prio:'P1',stat:'doing'},
+    {done:false, name:'Gouvernance des données d entraînement',ref:'Art. 10',prio:'P1',stat:'doing'},
+    {done:false, name:'Documentation technique (dossier Art. 11)',ref:'Art. 11',prio:'P1',stat:'todo'},
+    {done:true,  name:'Journalisation des décisions automatiques',ref:'Art. 12',prio:'P2',stat:'done'},
+    {done:false, name:'Notice deployeurs Art. 13',ref:'Art. 13',prio:'P2',stat:'doing'},
+    {done:false, name:'Mécanismes de supervision humaine',ref:'Art. 14',prio:'P1',stat:'todo'},
+    {done:false, name:'Tests de robustesse et précision',ref:'Art. 15',prio:'P2',stat:'todo'},
+    {done:true,  name:'Politique RGPD sur les données IA',ref:'RGPD Art. 22',prio:'P2',stat:'done'},
+    {done:false, name:'Analyse impact FRIA réalisée',ref:'Art. 9.7',prio:'P1',stat:'doing'},
+    {done:false, name:'Enregistrement base EU AI Office',ref:'Art. 51',prio:'P1',stat:'todo'},
+  ];
+  var colors = {done:'var(--green)',doing:'var(--orange)',todo:'var(--muted2)'};
+  var labels = {done:'Complété',doing:'En cours',todo:'À faire'};
+  b.innerHTML = CTRLS.map(function(c){
+    return '<div class="ctrl-row">'
+      +'<div class="ctrl-check '+(c.done?'done':'')+(c.stat==='na'?'na':'')+'">'+( c.done?'✓':'' )+'</div>'
+      +'<div><div style="font-size:13px;font-weight:'+(c.done?'400':'500')+';color:'+(c.done?'var(--muted)':'var(--ink)')+'">'+c.name+'</div></div>'
+      +'<div style="font-family:var(--mono);font-size:10px;color:var(--muted2)">'+c.ref+'</div>'
+      +'<div><span class="chip chip-'+(c.prio==='P1'?'r':'n')+'">'+c.prio+'</span></div>'
+      +'<div style="font-size:9px;font-family:var(--mono);color:'+colors[c.stat]+'">'+labels[c.stat]+'</div>'
+      +'</div>';
+  }).join('');
+})();
+
+/* ══ ROADMAP ══ */
+(function(){
+  var b = document.getElementById('roadmap-content'); if(!b) return;
+  var PHASES = [
+    {num:'PHASE 01',title:'Fondations — Inventaire & Classification',date:'Juin–Août 2026',items:[
+      {t:'Compléter le registre des systèmes IA',s:'done'},{t:'Classifier selon Annexe III EU AI Act',s:'done'},
+      {t:'Prioriser par niveau de risque',s:'done'},{t:'Enregistrer dans la base EU AI Office',s:'todo'},
+    ]},
+    {num:'PHASE 02',title:'Conformité technique — Systèmes haut risque',date:'Août–Déc. 2026',items:[
+      {t:'Système de gestion des risques (Art. 9)',s:'doing'},{t:'Documentation technique Art. 11',s:'todo'},
+      {t:'Mise en place journalisation Art. 12',s:'doing'},{t:'Mécanismes supervision humaine Art. 14',s:'todo'},
+    ]},
+    {num:'PHASE 03',title:'Gouvernance & Certification',date:'Jan.–Juin 2027',items:[
+      {t:'Audit interne de conformité complet',s:'todo'},{t:'Évaluation de conformité tierce partie',s:'todo'},
+      {t:'ISO 42001 — Certification SMIA',s:'todo'},{t:'Rapport annuel conformité IA',s:'todo'},
+    ]},
+  ];
+  var sc = {done:'rs-done ● Fait',doing:'rs-doing ◐ En cours',todo:'rs-todo ○ À planifier'};
+  b.innerHTML = PHASES.map(function(p){
+    return '<div class="road-phase">'
+      +'<div class="road-phase-head">'
+      +'<span class="road-phase-num">'+p.num+'</span>'
+      +'<span class="road-phase-title">'+p.title+'</span>'
+      +'<span class="road-phase-date" style="margin-left:auto">'+p.date+'</span>'
+      +'</div>'
+      +'<div class="road-items">'+p.items.map(function(i){
+        var parts = sc[i.s].split(' ');
+        return '<div class="road-item">'
+          +'<span class="road-status '+parts[0]+'">'+parts.slice(1).join(' ')+'</span>'
+          +'<span style="color:var(--ink2);line-height:1.5">'+i.t+'</span>'
+          +'</div>';
+      }).join('')+'</div>'
+      +'</div>';
+  }).join('');
+  var rs = document.getElementById('road-summary'); if(rs){
+    rs.innerHTML = [['Complétées','3','var(--green)'],['En cours','4','var(--orange)'],['À planifier','5','var(--muted2)']].map(function(r){
+      return '<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--rule);font-size:11px">'
+        +'<div>'+r[0]+'</div><div style="font-family:var(--mono);color:'+r[2]+'">'+r[1]+' tâches</div></div>';
+    }).join('');
+  }
+})();
+
+/* ══ CALCULATEUR SANCTIONS ══ */
+function calcSanctions(){
+  var type = document.getElementById('s-type').value;
+  var ca   = parseFloat(document.getElementById('s-ca').value) || 50000000;
+  var size = document.getElementById('s-size').value;
+  var rec  = document.getElementById('s-recid').value;
+  var pct = {interdit:0.07, haut:0.03, transparence:0.02, info:0.015}[type];
+  var flat = {interdit:35000000, haut:15000000, transparence:7500000, info:7500000}[type];
+  var label= {interdit:'Pratique interdite (Art. 5)',haut:'Système haut risque (Art. 6)',transparence:'Transparence (Art. 13)',info:'Informations incorrectes (Art. 9.7)'}[type];
+  var max = Math.min(ca*pct, flat);
+  if(size==='pme') max = Math.min(max, flat*0.5);
+  if(size==='tpe') max = Math.min(max, flat*0.25);
+  if(rec==='oui')  max = Math.min(max*1.5, flat);
+  var r = document.getElementById('sanc-result');
+  document.getElementById('sanc-amount').textContent = new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(max);
+  document.getElementById('sanc-basis-txt').textContent = label;
+  document.getElementById('sanc-details').innerHTML = [
+    ['Plafond % CA',new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(ca*pct)],
+    ['Plafond fixe',new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(flat)],
+    ['Réduction PME/TPE',size==='ge'?'—':'Applicable'],
+    ['Majoration récidive',rec==='oui'?'× 1,5 (plafonné)':'—'],
+    ['Amende estimée',new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(max)],
+  ].map(function(r){ return '<div class="sanc-detail-row"><div>'+r[0]+'</div><div>'+r[1]+'</div></div>'; }).join('');
+  r.classList.add('on');
+  r.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+/* ══ BENCHMARK ══ */
+(function(){
+  var b = document.getElementById('bench-list'); if(!b) return;
+  var BENCH = [
+    {s:'Banque & Finance',you:79,avg:74,diff:'+5'},
+    {s:'Santé',you:null,avg:82,diff:null},
+    {s:'Énergie / Utilities',you:68,avg:74,diff:'-6'},
+    {s:'Industrie & Manufacturing',you:null,avg:61,diff:null},
+    {s:'Transport & Logistique',you:null,avg:58,diff:null},
+    {s:'Retail & e-commerce',you:null,avg:48,diff:null},
+    {s:'Secteur public',you:null,avg:71,diff:null},
+  ];
+  b.innerHTML = BENCH.map(function(r){
+    var vs = r.diff ? '<span style="font-family:var(--mono);font-size:10px;color:'+(r.diff.startsWith('+')?'var(--green)':'var(--accent)')+'">'+r.diff+' pts</span>' : '<span style="font-size:10px;color:var(--muted2)">—</span>';
+    return '<div class="bench-row">'
+      +'<div class="bench-sector">'+r.s+(r.you!==null?' <span style="font-size:9px;font-family:var(--mono);color:var(--accent)">● VOUS</span>':'')+'</div>'
+      +'<div class="bench-score">'+r.avg+'%</div>'
+      +'<div class="bench-bar-wrap">'
+      +(r.you!==null ? '<div class="bench-track"><div class="bench-fill bench-fill-you" style="width:'+r.you+'%"></div></div><span class="bench-you">vous '+r.you+'%</span>' : '')
+      +'<div class="bench-track"><div class="bench-fill bench-fill-avg" style="width:'+r.avg+'%"></div></div>'
+      +'</div>'
+      +'<div>'+vs+'</div>'
+      +'</div>';
+  }).join('');
+})();
+
+/* ══ TEMPLATES & DOCS ══ */
+(function(){
+  var DOCS = [
+    {ico:'📄',name:'Dossier technique EU AI Act',desc:'Modèle complet Art. 11 — 12 sections structurées selon l Annexe IV.',meta:'PDF · 24 pages · Mis à jour juin 2026'},
+    {ico:'⚖️',name:'FRIA — Formulaire d evaluation',desc:'Évaluation d impact sur les droits fondamentaux en 6 étapes (Art. 9.7).',meta:'DOCX · 18 pages · Mis à jour mai 2026'},
+    {ico:'📋',name:'Notice deployeur',desc:'Template de notice Art. 13 — transparent et compréhensible.',meta:'PDF · 6 pages · Mis à jour avr. 2026'},
+    {ico:'🔒',name:'Politique NDA données IA',desc:'Clause de non-divulgation spécifique aux données d entraînement et de test.',meta:'DOCX · 4 pages · Standard légal CONSEILPREV'},
+    {ico:'📊',name:'Registre des systèmes IA (Excel)',desc:'Tableur de cartographie conforme Annexe III avec scoring automatique.',meta:'XLSX · 8 onglets · Mis à jour juin 2026'},
+    {ico:'🛡️',name:'Plan de gestion des risques',desc:'Modèle Art. 9 — identification, analyse, atténuation, suivi.',meta:'DOCX · 20 pages · Méthodologie CONSEILPREV'},
+  ];
+  var dg = document.getElementById('doc-grid'); if(dg) dg.innerHTML = DOCS.map(function(d){
+    return '<div class="doc-card" onclick="requestDoc(d.name)">'
+      +'<div class="doc-icon">'+d.ico+'</div>'
+      +'<div><div class="doc-name">'+d.name+'</div><div class="doc-desc">'+d.desc+'</div><div class="doc-meta">'+d.meta+'</div></div>'
+      +'</div>';
+  }).join('');
+  var GUIDES = [
+    {ico:'📌',name:'Fiche synthèse EU AI Act — 2 pages',desc:'Les 20 points essentiels à retenir pour 2026.',meta:'PDF · 2 pages'},
+    {ico:'🗺️',name:'Calendrier des obligations 2025–2027',desc:'Toutes les dates clés phase par phase.',meta:'PDF · 1 page'},
+    {ico:'🔍',name:'Grille d auto-évaluation Annexe III',desc:'8 domaines, 24 questions — 10 minutes.',meta:'PDF · 4 pages'},
+    {ico:'💡',name:'Guide NIS2 pour les systèmes IA',desc:'Obligations OES & OIE intégrant des systèmes IA.',meta:'PDF · 8 pages'},
+  ];
+  var gg = document.getElementById('guides-grid'); if(gg) gg.innerHTML = GUIDES.map(function(g){
+    return '<div class="doc-card" onclick="requestDoc(g.name)">'
+      +'<div class="doc-icon">'+g.ico+'</div>'
+      +'<div><div class="doc-name">'+g.name+'</div><div class="doc-desc">'+g.desc+'</div><div class="doc-meta">'+g.meta+'</div></div>'
+      +'</div>';
+  }).join('');
+})();
+
+/* ══ FRIA ══ */
+(function(){
+  var b = document.getElementById('fria-steps'); if(!b) return;
+  var STEPS = [
+    {t:'Description du système IA',txt:'Identifier précisément le système : finalité, périmètre, données traitées, population affectée. Score actuel : 8/10 — documenté.',score:8},
+    {t:'Droits fondamentaux concernés',txt:'Cartographier les droits potentiellement affectés : vie privée, non-discrimination, liberté d expression, accès aux services essentiels.',score:6},
+    {t:'Analyse des risques par droit',txt:'Pour chaque droit : probabilité d impact, gravité, réversibilité. Documenter les biais identifiés dans les données d entraînement.',score:5},
+    {t:'Mesures d atténuation',txt:'Définir les garde-fous techniques et organisationnels. Supervision humaine Art. 14, mécanismes de contestation, auditabilité.',score:7},
+    {t:'Résidus de risque',txt:'Risques résiduels après atténuation. Justification de l acceptabilité. Seuils de déclenchement d une révision.',score:6},
+    {t:'Plan de suivi',txt:'Monitoring continu, indicateurs de dérive, fréquence de re-évaluation. Responsable désigné (IA Officer ou DPO).',score:5},
+  ];
+  b.innerHTML = STEPS.map(function(s,i){
+    var pct = s.score*10;
+    return '<div class="fria-step">'
+      +'<div class="fria-step-head">'
+      +'<div class="fria-step-num">'+(i+1)+'</div>'
+      +'<div class="fria-step-title">'+s.t+'</div>'
+      +'<div style="margin-left:auto;display:flex;align-items:center;gap:8px">'
+      +'<div style="font-family:var(--serif);font-size:16px;color:'+(s.score>=7?'var(--green)':s.score>=5?'var(--orange)':'var(--accent)')+'">'+s.score+'<span style="font-size:11px;color:var(--muted)">/10</span></div>'
+      +'</div>'
+      +'</div>'
+      +'<div style="height:2px;background:var(--bg2);border-radius:1px;overflow:hidden;margin-bottom:10px"><div style="height:100%;width:'+pct+'%;background:'+(s.score>=7?'var(--green)':s.score>=5?'var(--orange)':'var(--accent)')+';border-radius:1px"></div></div>'
+      +'<div style="font-size:12px;color:var(--muted);line-height:1.65">'+s.txt+'</div>'
+      +'</div>';
+  }).join('');
+})();
+
+function requestDoc(name){
+  window.open('mailto:christophe.cerf@outlook.com?subject=[Sentinel AI] Demande: '+encodeURIComponent(name),'_blank');
+}
+
+/* ══ PAGE_META étendu ══ */
+Object.assign(PAGE_META, {
+  registre:  {section:'REGISTRE',       label:'Systèmes IA'},
+  matrice:   {section:'RISQUES',         label:'Matrice risques'},
+  radar:     {section:'RISQUES',         label:'Radar multi-critères'},
+  articles:  {section:'EU AI ACT',       label:'Articles & Obligations'},
+  controles: {section:'CONFORMITÉ',      label:'Bibliothèque de contrôles'},
+  fria:      {section:'CONFORMITÉ',      label:'Évaluation FRIA'},
+  roadmap:   {section:'PLANIFICATION',   label:'Plan d action'},
+  sanctions: {section:'OUTILS',          label:'Calculateur sanctions'},
+  benchmark: {section:'ANALYSE',         label:'Benchmark sectoriel'},
+  templates: {section:'RESSOURCES',      label:'Documentation & Modèles'},
+});
+
 </script>
-</body>
-</html>
