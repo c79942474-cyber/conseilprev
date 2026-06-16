@@ -360,7 +360,7 @@ def security_middleware():
 # ── BREVO (ex-Sendinblue) — SMTP + API transactionnelle ──
 # Paramètres SMTP Brevo (priorité sur variables d'env Render)
 SMTP_HOST     = os.environ.get('SMTP_HOST', 'smtp-relay.brevo.com')
-SMTP_PORT     = int(os.environ.get('SMTP_PORT', '587'))
+SMTP_PORT     = int(os.environ.get('SMTP_PORT', '465'))  # Brevo : 465 (SSL) recommandé sur Render
 SMTP_USER     = os.environ.get('SMTP_USER', '')      # Votre email Brevo (login)
 SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '')  # Clé SMTP Brevo (pas votre mdp)
 BREVO_API_KEY = os.environ.get('BREVO_API_KEY', '')  # Clé API Brevo (v3)
@@ -415,9 +415,17 @@ def send_email_smart(to_email, to_name, subject, html_content,
             if reply_to: msg['Reply-To'] = reply_to
             msg.attach(_MT(html_content, 'html', 'utf-8'))
             ctx = ssl.create_default_context()
-            with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=20) as srv:
-                srv.ehlo(); srv.starttls(context=ctx); srv.login(SMTP_USER, SMTP_PASSWORD)
-                srv.sendmail(MAIL_FROM, [to_email], msg.as_string())
+            if SMTP_PORT == 465:
+                # SSL direct (port 465) — recommandé sur Render
+                with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, context=ctx, timeout=20) as srv:
+                    srv.ehlo()
+                    srv.login(SMTP_USER, SMTP_PASSWORD)
+                    srv.sendmail(MAIL_FROM, [to_email], msg.as_string())
+            else:
+                # STARTTLS (port 587/2525)
+                with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=20) as srv:
+                    srv.ehlo(); srv.starttls(context=ctx); srv.login(SMTP_USER, SMTP_PASSWORD)
+                    srv.sendmail(MAIL_FROM, [to_email], msg.as_string())
             logger.info(f'BREVO_SMTP_OK: {to_email}')
             return True, 'brevo_smtp'
         except Exception as e:
@@ -650,10 +658,16 @@ def send_email_with_attachment(data, cv_data=None, cv_filename=None):
             return False, 'smtp_not_configured'
 
         ctx = ssl.create_default_context()
-        with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=20) as srv:
-            srv.ehlo(); srv.starttls(context=ctx); srv.login(SMTP_USER, SMTP_PASSWORD)
-            rcpt = [r.strip() for r in [MAIL_TO, MAIL_CC] if r.strip()]
-            srv.sendmail(MAIL_FROM, rcpt, msg.as_string())
+        if SMTP_PORT == 465:
+            with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, context=ctx, timeout=20) as srv:
+                srv.ehlo(); srv.login(SMTP_USER, SMTP_PASSWORD)
+                rcpt = [r.strip() for r in [MAIL_TO, MAIL_CC] if r.strip()]
+                srv.sendmail(MAIL_FROM, rcpt, msg.as_string())
+        else:
+            with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=20) as srv:
+                srv.ehlo(); srv.starttls(context=ctx); srv.login(SMTP_USER, SMTP_PASSWORD)
+                rcpt = [r.strip() for r in [MAIL_TO, MAIL_CC] if r.strip()]
+                srv.sendmail(MAIL_FROM, rcpt, msg.as_string())
         return True, 'sent'
 
     except smtplib.SMTPAuthenticationError:
@@ -930,8 +944,12 @@ def test_email():
         try:
             import ssl as _ssl
             ctx = _ssl.create_default_context()
-            with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=10) as srv:
-                srv.ehlo(); srv.starttls(context=ctx); srv.login(SMTP_USER, SMTP_PASSWORD)
+            if SMTP_PORT == 465:
+                with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, context=ctx, timeout=10) as srv:
+                    srv.ehlo(); srv.login(SMTP_USER, SMTP_PASSWORD)
+            else:
+                with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=10) as srv:
+                    srv.ehlo(); srv.starttls(context=ctx); srv.login(SMTP_USER, SMTP_PASSWORD)
             result['smtp_connection'] = 'OK'
         except smtplib.SMTPAuthenticationError:
             result['smtp_connection'] = 'AUTH_ERROR — vérifier mot de passe application Gmail'
@@ -1892,8 +1910,12 @@ def health_check():
         try:
             import ssl as _ssl
             ctx = _ssl.create_default_context()
-            with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=10) as srv:
-                srv.ehlo(); srv.starttls(context=ctx); srv.login(SMTP_USER, SMTP_PASSWORD)
+            if SMTP_PORT == 465:
+                with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, context=ctx, timeout=10) as srv:
+                    srv.ehlo(); srv.login(SMTP_USER, SMTP_PASSWORD)
+            else:
+                with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=10) as srv:
+                    srv.ehlo(); srv.starttls(context=ctx); srv.login(SMTP_USER, SMTP_PASSWORD)
             smtp_conn = 'OK'
         except smtplib.SMTPAuthenticationError:
             smtp_conn = 'AUTH_ERROR'
