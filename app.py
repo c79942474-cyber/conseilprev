@@ -2232,6 +2232,7 @@ PAGES = {
     '/platform':          'platform.html',
     '/donnees':       'donnees.html',
     '/aies':          'aies.html',
+    '/sentinel':      'sentinel.html',
     '/demo':          'demo.html',
     '/faq':           'faq.html',
     '/livre-blanc':   'livre-blanc.html',
