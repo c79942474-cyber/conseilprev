@@ -357,10 +357,103 @@ def security_middleware():
 # ══════════════════════════════════════════════════════════
 # CONFIGURATION EMAIL — /api/apply (universel)
 # ══════════════════════════════════════════════════════════
-SMTP_HOST     = os.environ.get('SMTP_HOST', 'smtp.gmail.com')
+# ── BREVO (ex-Sendinblue) — SMTP + API transactionnelle ──
+# Paramètres SMTP Brevo (priorité sur variables d'env Render)
+SMTP_HOST     = os.environ.get('SMTP_HOST', 'smtp-relay.brevo.com')
 SMTP_PORT     = int(os.environ.get('SMTP_PORT', '587'))
-SMTP_USER     = os.environ.get('SMTP_USER', '')
-SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '')
+SMTP_USER     = os.environ.get('SMTP_USER', '')      # Votre email Brevo (login)
+SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '')  # Clé SMTP Brevo (pas votre mdp)
+BREVO_API_KEY = os.environ.get('BREVO_API_KEY', '')  # Clé API Brevo (v3)
+BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email'
+
+
+# ══════════════════════════════════════════════════════════════
+# BREVO — Fonctions d'envoi email (API + SMTP + fallback local)
+# ══════════════════════════════════════════════════════════════
+def send_via_brevo_api(to_email, to_name, subject, html_content,
+                       reply_to=None, attachments=None, tags=None):
+    if not BREVO_API_KEY:
+        return False, 'no_brevo_api_key'
+    try:
+        payload = {
+            'sender':      {'name': 'CONSEILPREV', 'email': MAIL_FROM},
+            'to':          [{'email': to_email, 'name': to_name or to_email}],
+            'subject':     subject,
+            'htmlContent': html_content,
+        }
+        if reply_to:    payload['replyTo']    = {'email': reply_to}
+        if tags:        payload['tags']       = tags[:10]
+        if attachments: payload['attachment'] = attachments
+        resp = requests.post(BREVO_API_URL,
+            headers={'api-key': BREVO_API_KEY, 'Content-Type': 'application/json', 'Accept': 'application/json'},
+            json=payload, timeout=20)
+        if resp.status_code in (201, 200):
+            mid = resp.json().get('messageId', 'ok')
+            logger.info(f'BREVO_API_OK: {to_email} — {mid}')
+            return True, mid
+        logger.error(f'BREVO_API_ERR {resp.status_code}: {resp.text[:200]}')
+        return False, f'http_{resp.status_code}'
+    except Exception as e:
+        logger.error(f'BREVO_API_EXCEPTION: {e}')
+        return False, str(e)
+
+
+def send_email_smart(to_email, to_name, subject, html_content,
+                     reply_to=None, tags=None):
+    """Brevo API → SMTP Brevo → sauvegarde locale."""
+    if BREVO_API_KEY:
+        ok, result = send_via_brevo_api(to_email, to_name, subject, html_content,
+                                        reply_to=reply_to, tags=tags)
+        if ok: return True, 'brevo_api'
+        logger.warning(f'BREVO_API_FAILED: {result}')
+    if SMTP_USER and SMTP_PASSWORD:
+        try:
+            from email.mime.multipart import MIMEMultipart as _MM
+            from email.mime.text import MIMEText as _MT
+            msg = _MM('mixed')
+            msg['Subject'] = subject; msg['From'] = MAIL_FROM; msg['To'] = to_email
+            if reply_to: msg['Reply-To'] = reply_to
+            msg.attach(_MT(html_content, 'html', 'utf-8'))
+            ctx = ssl.create_default_context()
+            with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=20) as srv:
+                srv.ehlo(); srv.starttls(context=ctx); srv.login(SMTP_USER, SMTP_PASSWORD)
+                srv.sendmail(MAIL_FROM, [to_email], msg.as_string())
+            logger.info(f'BREVO_SMTP_OK: {to_email}')
+            return True, 'brevo_smtp'
+        except Exception as e:
+            logger.error(f'BREVO_SMTP_FAILED: {e}')
+    import datetime as _dt
+    ts   = _dt.datetime.now().strftime('%Y%m%d_%H%M%S')
+    path = os.path.join(UPLOAD_FOLDER, f'email_{ts}_{to_email.split("@")[0]}.html')
+    try:
+        with open(path, 'w', encoding='utf-8') as f:
+            f.write(f'<!-- To: {to_email} | Subject: {subject} -->\n' + html_content)
+        logger.warning(f'EMAIL_SAVED_LOCAL: {path}')
+    except Exception: pass
+    return False, 'saved_locally'
+
+
+def add_contact_to_brevo(email, prenom, nom, entreprise='', liste_id=None):
+    if not BREVO_API_KEY: return False, 'no_brevo_api_key'
+    try:
+        payload = {
+            'email': email,
+            'attributes': {'PRENOM': prenom, 'NOM': nom, 'ENTREPRISE': entreprise or '', 'SOURCE': 'CONSEILPREV'},
+            'updateEnabled': True,
+        }
+        if liste_id: payload['listIds'] = [int(liste_id)]
+        resp = requests.post('https://api.brevo.com/v3/contacts',
+            headers={'api-key': BREVO_API_KEY, 'Content-Type': 'application/json'},
+            json=payload, timeout=15)
+        if resp.status_code in (201, 204):
+            logger.info(f'BREVO_CONTACT_OK: {email}')
+            return True, 'ok'
+        return False, f'http_{resp.status_code}'
+    except Exception as e:
+        logger.error(f'BREVO_CONTACT_ERR: {e}')
+        return False, str(e)
+
+
 MAIL_FROM     = os.environ.get('MAIL_FROM', 'noreply@conseilprev.onrender.com')
 MAIL_TO       = os.environ.get('MAIL_TO', 'christophe.cerf@outlook.com')
 MAIL_CC       = os.environ.get('MAIL_CC', 'c79942474@gmail.com')
@@ -1068,14 +1161,19 @@ def send_validation_email(email, prenom, token):
   </div>
 </div></body></html>"""
         msg.attach(MIMEText(html, 'html', 'utf-8'))
-        if SMTP_USER and SMTP_PASSWORD:
-            ctx = ssl.create_default_context()
-            with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=20) as srv:
-                srv.ehlo(); srv.starttls(context=ctx); srv.login(SMTP_USER, SMTP_PASSWORD)
-                srv.sendmail(MAIL_FROM, [email], msg.as_string())
+        # Utiliser send_email_smart (Brevo API puis SMTP)
+        ok, method = send_email_smart(
+            email, f'{prenom}',
+            'Validez votre compte CONSEILPREV',
+            html,
+            reply_to=MAIL_TO,
+            tags=['validation', 'compte-client']
+        )
+        if ok:
+            logger.info(f'VALIDATION_EMAIL_OK via {method}: {email}')
             return True, validate_link
         else:
-            logger.warning(f'VALIDATION_EMAIL_NO_SMTP: {email} — lien: {validate_link}')
+            logger.warning(f'VALIDATION_EMAIL_FAIL ({method}): {email} — lien: {validate_link}')
             return False, validate_link
     except Exception as e:
         logger.error(f'VALIDATION_EMAIL_ERR: {e}')
@@ -1133,6 +1231,14 @@ def auth_register():
             'ip': ip,
         }
         _save_users(users)
+
+        # Ajouter le contact dans Brevo CRM (liste clients)
+        BREVO_LISTE_CLIENTS = os.environ.get('BREVO_LISTE_CLIENTS', '')
+        if BREVO_API_KEY:
+            add_contact_to_brevo(
+                email, prenom, nom, entreprise,
+                liste_id=BREVO_LISTE_CLIENTS if BREVO_LISTE_CLIENTS else None
+            )
 
         sent, link = send_validation_email(email, prenom, token)
         logger.info(f'AUTH_REGISTER {ip}: {email} (email_sent={sent})')
@@ -1538,18 +1644,18 @@ def notify_selection():
                 'html', 'utf-8'
             ))
 
-            if SMTP_USER and SMTP_PASSWORD:
-                ctx = ssl.create_default_context()
-                with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=20) as srv:
-                    srv.ehlo(); srv.starttls(context=ctx)
-                    srv.login(SMTP_USER, SMTP_PASSWORD)
-                    rcpt = [client['email']]
-                    if MAIL_CC: rcpt.append(MAIL_CC)
-                    srv.sendmail(MAIL_FROM, rcpt, msg1.as_string())
+            ok_c, method_c = send_email_smart(
+                client['email'], f'{client.get("prenom","")} {client.get("nom","")}',
+                f'[CONSEILPREV] Votre sélection — {nb} candidat(s) | Pré-accord',
+                build_precontract_html(client, candidates),
+                reply_to=MAIL_TO,
+                tags=['selection', 'precontrat']
+            )
+            if ok_c:
                 results['client_email'] = True
-                logger.info(f'NOTIFY_CLIENT_OK {ip}: {client["email"]} ({nb} cands)')
+                logger.info(f'NOTIFY_CLIENT_OK via {method_c} {ip}: {client["email"]}')
             else:
-                logger.warning(f'NOTIFY_CLIENT_NO_SMTP: {client["email"]}')
+                logger.warning(f'NOTIFY_CLIENT_FAIL: {client["email"]}')
 
         except Exception as e:
             logger.error(f'NOTIFY_CLIENT_ERR {ip}: {e}')
@@ -1567,16 +1673,18 @@ def notify_selection():
                 'html', 'utf-8'
             ))
 
-            if SMTP_USER and SMTP_PASSWORD:
-                ctx = ssl.create_default_context()
-                with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=20) as srv:
-                    srv.ehlo(); srv.starttls(context=ctx)
-                    srv.login(SMTP_USER, SMTP_PASSWORD)
-                    srv.sendmail(MAIL_FROM, [MAIL_TO], msg2.as_string())
+            ok_cp, method_cp = send_email_smart(
+                MAIL_TO, 'CONSEILPREV',
+                f'[CONSEILPREV] 🔐 Sélection — {client.get("prenom","")} {client.get("nom","")} — {len(candidates)} candidat(s)',
+                build_conseilprev_notif_html(client, candidates),
+                reply_to=client.get('email', MAIL_TO),
+                tags=['selection', 'confidentiel', 'interne']
+            )
+            if ok_cp:
                 results['conseilprev_email'] = True
-                logger.info(f'NOTIFY_CP_OK {ip}: → {MAIL_TO}')
+                logger.info(f'NOTIFY_CP_OK via {method_cp} {ip}: → {MAIL_TO}')
             else:
-                logger.warning(f'NOTIFY_CP_NO_SMTP')
+                logger.warning(f'NOTIFY_CP_FAIL')
                 # Sauvegarder localement
                 import os, datetime as _dt
                 ts = _dt.datetime.now().strftime('%Y%m%d_%H%M%S')
@@ -1600,6 +1708,45 @@ def notify_selection():
     except Exception as e:
         logger.error(f'NOTIFY_SEL_ERR {ip}: {e}')
         return jsonify({'ok': False, 'error': 'Erreur serveur'}), 500
+
+
+
+@app.route('/api/brevo/webhook', methods=['POST'])
+def brevo_webhook():
+    """
+    Webhook Brevo — reçoit les événements email :
+    delivered, opened, clicked, bounced, unsubscribed.
+    À configurer dans Brevo : Paramètres > Webhooks > Transactionnel
+    URL : https://conseilprev.onrender.com/api/brevo/webhook
+    """
+    try:
+        events = request.get_json(force=True, silent=True)
+        if not events:
+            return jsonify({'ok': True}), 200
+        if isinstance(events, list):
+            for evt in events:
+                _process_brevo_event(evt)
+        else:
+            _process_brevo_event(events)
+        return jsonify({'ok': True}), 200
+    except Exception as e:
+        logger.error(f'BREVO_WEBHOOK_ERR: {e}')
+        return jsonify({'ok': False}), 200  # Toujours 200 pour Brevo
+
+
+def _process_brevo_event(evt):
+    """Traite un événement Brevo."""
+    event_type = evt.get('event', '')
+    email      = evt.get('email', '')
+    msg_id     = evt.get('message-id', '')
+    ts         = evt.get('ts_epoch', 0)
+    tags       = evt.get('tags', [])
+    logger.info(f'BREVO_EVT: {event_type} | {email} | tags={tags} | msg={msg_id[:20]}')
+    if event_type in ('hard_bounce', 'soft_bounce', 'blocked'):
+        logger.warning(f'BREVO_BOUNCE: {email} ({event_type})')
+    elif event_type == 'unsubscribe':
+        logger.warning(f'BREVO_UNSUB: {email}')
+        # TODO: marquer comme désabonné dans users_db.json
 
 
 @app.route('/api/admin/candidate', methods=['POST'])
