@@ -3,1510 +3,1063 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sentinel AI — Cartographie des Risques Réglementaires IA</title>
-<meta name="description" content="Sentinel AI par CONSEILPREV — Plateforme de veille réglementaire IA, cartographie des risques, audit conformité IA Act, NIS2, RGPD. 60+ juridictions couvertes.">
+<title>Sentinel AI — Cartographie des Risques</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;450;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* ════════════════════════════════════════════════════
-   SENTINEL AI — Design System
-   Palette : Ivoire #F7F4EF · Ardoise #1A1A1A · Cinabre #C0392B · Gris #6B6B6B · Bordure #E2DDD6
-   Type : Libre Baskerville (display) · Inter (body) · JetBrains Mono (data)
-   Signature : score-bar rouge cinabre sur fond ivoire texturé
-   ════════════════════════════════════════════════════ */
-
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
 
 :root{
-  --ivory:    #F7F4EF;
-  --ivory-d:  #EDE9E1;
-  --slate:    #1A1A1A;
-  --slate-2:  #2D2D2D;
-  --cin:      #C0392B;   /* cinabre — accent signature */
-  --cin-l:    #E74C3C;
-  --gray:     #6B6B6B;
-  --gray-l:   #9A9A9A;
-  --border:   #E2DDD6;
-  --border-d: #CCC8BF;
+  --bg:       #F5F2ED;
+  --bg2:      #EDEAE4;
   --white:    #FFFFFF;
-  --nav-w:    240px;
-  --font-disp:'Libre Baskerville',Georgia,serif;
-  --font-body:'Inter',-apple-system,sans-serif;
-  --font-mono:'JetBrains Mono',monospace;
+  --ink:      #1C1C1C;
+  --ink2:     #3D3D3D;
+  --muted:    #767676;
+  --muted2:   #A8A8A8;
+  --rule:     #E0DDD8;
+  --rule2:    #D4D0CA;
+  --accent:   #B83222;
+  --accent2:  #D94030;
+  --green:    #2D7A47;
+  --orange:   #C47C1A;
+  --blue:     #1C5A8A;
+  --sidebar:  240px;
+  --topbar:   52px;
+  --serif:    'Instrument Serif', Georgia, serif;
+  --sans:     'Inter', system-ui, sans-serif;
+  --mono:     'JetBrains Mono', monospace;
 }
 
 body{
-  font-family:var(--font-body);
-  background:var(--ivory);
-  color:var(--slate);
+  font-family:var(--sans);
+  background:var(--bg);
+  color:var(--ink);
   display:flex;
-  min-height:100vh;
   font-size:14px;
-  line-height:1.6;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
 }
 
-/* ── SIDEBAR ── */
-.sidebar{
-  width:var(--nav-w);
-  min-height:100vh;
+/* ══ SCROLLBAR ══ */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--rule2);border-radius:2px}
+
+/* ══ SIDEBAR ══ */
+.sb{
+  width:var(--sidebar);
   background:var(--white);
-  border-right:1px solid var(--border);
-  display:flex;
-  flex-direction:column;
-  position:fixed;
-  top:0;left:0;bottom:0;
-  z-index:100;
-  overflow-y:auto;
-}
-.sidebar-brand{
-  padding:28px 20px 20px;
-  border-bottom:1px solid var(--border);
-}
-.brand-name{
-  font-family:var(--font-disp);
-  font-size:20px;
-  font-weight:700;
-  color:var(--slate);
-  letter-spacing:-.02em;
-  display:flex;align-items:center;gap:6px;
-}
-.brand-name .brand-ai{
-  font-size:10px;font-family:var(--font-mono);
-  background:var(--cin);color:#fff;
-  padding:2px 6px;border-radius:3px;
-  font-weight:500;letter-spacing:.06em;
-  vertical-align:middle;
-}
-.brand-sub{
-  font-size:10px;font-family:var(--font-mono);
-  text-transform:uppercase;letter-spacing:.14em;
-  color:var(--gray-l);margin-top:4px;
+  border-right:1px solid var(--rule);
+  position:fixed;top:0;left:0;bottom:0;
+  display:flex;flex-direction:column;
+  z-index:200;overflow-y:auto;overflow-x:hidden;
 }
 
-.nav-section{
-  padding:20px 0 8px;
+.sb-brand{
+  padding:20px 20px 18px;
+  border-bottom:1px solid var(--rule);
 }
-.nav-label{
-  font-size:9px;font-family:var(--font-mono);
-  text-transform:uppercase;letter-spacing:.18em;
-  color:var(--gray-l);
-  padding:0 20px 8px;
-  display:block;
+.sb-logo{
+  display:flex;align-items:baseline;gap:5px;
+  font-family:var(--serif);font-size:21px;
+  color:var(--ink);letter-spacing:-.01em;
+  font-weight:400;line-height:1.1;margin-bottom:3px;
 }
-.nav-item{
+.sb-logo-ai{
+  font-family:var(--mono);font-size:9px;
+  background:var(--accent);color:var(--white);
+  padding:1px 5px;border-radius:2px;
+  letter-spacing:.08em;font-weight:500;
+  transform:translateY(-1px);
+}
+.sb-sub{
+  font-size:9px;font-family:var(--mono);
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted2);
+}
+
+/* Navigation */
+.sb-nav{padding:12px 0;flex:1}
+.sb-section{padding:16px 16px 4px;font-size:9px;font-family:var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted2)}
+.sb-item{
   display:flex;align-items:center;gap:10px;
-  padding:9px 20px;
-  font-size:13px;font-weight:500;
-  color:var(--gray);
-  cursor:pointer;
-  transition:all .15s;
+  padding:8px 18px;font-size:12.5px;font-weight:450;
+  color:var(--muted);cursor:pointer;
+  transition:color .12s,background .12s;
   border-left:2px solid transparent;
-  user-select:none;
+  position:relative;user-select:none;
 }
-.nav-item:hover{
-  color:var(--slate);
-  background:var(--ivory);
+.sb-item:hover{color:var(--ink);background:var(--bg)}
+.sb-item.on{
+  color:var(--ink);background:var(--bg);
+  border-left-color:var(--accent);font-weight:500;
 }
-.nav-item.active{
-  color:var(--slate);
-  border-left-color:var(--cin);
-  background:var(--ivory);
-  font-weight:600;
-}
-.nav-item.active .nav-ico{color:var(--cin)}
-.nav-ico{
-  width:16px;height:16px;
-  opacity:.6;flex-shrink:0;
-  font-size:14px;line-height:1;
-}
-.nav-item.active .nav-ico{opacity:1}
-.nav-item:hover .nav-ico{opacity:.85}
-
-.nav-badge{
-  margin-left:auto;
-  font-size:9px;font-family:var(--font-mono);
-  background:var(--cin);color:#fff;
-  padding:1px 6px;border-radius:3px;
-}
-.nav-badge-new{
-  background:transparent;color:var(--cin);
-  border:1px solid var(--cin);
-}
-
-.sidebar-footer{
-  margin-top:auto;
-  padding:16px 20px;
-  border-top:1px solid var(--border);
-}
-.sidebar-user{
-  display:flex;align-items:center;gap:10px;
-}
-.user-avatar{
-  width:30px;height:30px;border-radius:50%;
-  background:var(--slate-2);
+.sb-icon{
+  width:15px;height:15px;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
-  font-size:11px;font-weight:700;color:#fff;
-  flex-shrink:0;
 }
-.user-info{font-size:11px}
-.user-name{font-weight:600;color:var(--slate)}
-.user-role{color:var(--gray-l);font-size:10px}
+.sb-badge{
+  margin-left:auto;
+  font-size:9px;font-family:var(--mono);font-weight:500;
+  background:var(--accent);color:#fff;
+  padding:1px 5px;border-radius:2px;min-width:16px;
+  text-align:center;
+}
+.sb-badge-new{background:var(--bg2);color:var(--muted);border:1px solid var(--rule2)}
 
-/* ── MAIN CONTENT ── */
-.main{
-  margin-left:var(--nav-w);
-  flex:1;
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
+/* Sidebar pager */
+.sb-pager{
+  display:flex;align-items:center;gap:2px;
+  padding:12px 18px;border-top:1px solid var(--rule);
 }
-
-/* ── TOP BAR ── */
-.topbar{
-  height:56px;
-  background:var(--white);
-  border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 32px;
-  position:sticky;top:0;z-index:50;
+.sb-pager-btn{
+  width:24px;height:24px;border-radius:3px;border:1px solid var(--rule);
+  background:transparent;display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:var(--muted);cursor:pointer;transition:all .12s;
 }
-.topbar-left{
-  display:flex;align-items:center;gap:8px;
-}
-.topbar-section{
-  font-size:10px;font-family:var(--font-mono);
-  text-transform:uppercase;letter-spacing:.14em;
-  color:var(--cin);font-weight:500;
-}
-.topbar-slash{color:var(--border-d)}
-.topbar-page{
-  font-size:14px;font-weight:600;color:var(--slate);
-}
-.topbar-right{
-  display:flex;align-items:center;gap:16px;
-}
-.topbar-date{
-  font-size:11px;font-family:var(--font-mono);
-  color:var(--gray-l);
-}
-.topbar-btn{
-  font-size:11px;font-family:var(--font-mono);
-  padding:6px 14px;border-radius:4px;
-  border:1px solid var(--border);
-  background:transparent;color:var(--gray);
-  cursor:pointer;transition:all .15s;letter-spacing:.04em;
-}
-.topbar-btn:hover{background:var(--ivory);color:var(--slate)}
-.topbar-btn.primary{
-  background:var(--cin);color:#fff;border-color:var(--cin);
-}
-.topbar-btn.primary:hover{background:#a93226}
-.notif-dot{
-  width:8px;height:8px;background:var(--cin);
-  border-radius:50%;display:inline-block;
-  animation:pulse-cin 2s ease infinite;
-}
-@keyframes pulse-cin{0%,100%{opacity:1}50%{opacity:.4}}
-
-/* ── PAGE CONTENT ── */
-.page{display:none;padding:40px 40px 60px;flex:1}
-.page.active{display:block}
-
-/* ── TYPOGRAPHY ── */
-.eyebrow{
-  font-size:10px;font-family:var(--font-mono);
-  text-transform:uppercase;letter-spacing:.18em;
-  color:var(--cin);margin-bottom:10px;display:block;
-}
-.page-title{
-  font-family:var(--font-disp);
-  font-size:36px;font-weight:700;
-  color:var(--slate);line-height:1.2;
-  letter-spacing:-.02em;margin-bottom:10px;
-}
-.page-sub{
-  font-size:14px;color:var(--gray);
-  max-width:600px;line-height:1.7;margin-bottom:36px;
-}
-.section-title{
-  font-family:var(--font-disp);
-  font-size:18px;font-weight:700;
-  color:var(--slate);margin-bottom:4px;
-  letter-spacing:-.01em;
-}
-.section-sub{font-size:12px;color:var(--gray-l);margin-bottom:20px}
-
-/* ── DIVIDER ── */
-.divider{
-  height:1px;background:var(--border);
-  margin:32px 0;
-}
-
-/* ── STAT CARDS ── */
-.stats-row{
-  display:grid;grid-template-columns:repeat(4,1fr);
-  gap:1px;background:var(--border);
-  border:1px solid var(--border);
-  border-radius:6px;overflow:hidden;
-  margin-bottom:32px;
-}
-.stat-card{
-  background:var(--white);
-  padding:24px 24px 20px;
-}
-.stat-label{
-  font-size:9px;font-family:var(--font-mono);
-  text-transform:uppercase;letter-spacing:.16em;
-  color:var(--gray-l);margin-bottom:10px;
-}
-.stat-value{
-  font-family:var(--font-disp);
-  font-size:38px;font-weight:700;
-  color:var(--slate);line-height:1;
-  letter-spacing:-.03em;margin-bottom:6px;
-}
-.stat-desc{font-size:11px;color:var(--gray)}
-
-/* ── CARDS GRID ── */
-.cards-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:16px;margin-bottom:32px;
-}
-.card{
-  background:var(--white);
-  border:1px solid var(--border);
-  border-radius:6px;padding:24px;
-  cursor:pointer;transition:all .2s;
+.sb-pager-btn:hover{background:var(--bg);color:var(--ink)}
+.sb-bell{
+  margin-left:auto;width:24px;height:24px;
+  border:1px solid var(--rule);border-radius:3px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;color:var(--muted);cursor:pointer;
   position:relative;
 }
-.card:hover{border-color:var(--border-d);box-shadow:0 2px 12px rgba(0,0,0,.06)}
-.card-icon{
-  font-size:20px;margin-bottom:16px;display:block;
-  color:var(--gray);
+.sb-bell::after{
+  content:'';position:absolute;top:3px;right:3px;
+  width:5px;height:5px;background:var(--accent);
+  border-radius:50%;border:1px solid var(--white);
 }
-.card-arrow{
-  position:absolute;top:20px;right:20px;
-  font-size:16px;color:var(--border-d);
-  transition:transform .2s,color .2s;
-}
-.card:hover .card-arrow{transform:translate(2px,-2px);color:var(--cin)}
-.card-title{
-  font-family:var(--font-disp);
-  font-size:17px;font-weight:700;
-  color:var(--slate);margin-bottom:6px;
-  letter-spacing:-.01em;
-}
-.card-desc{font-size:12px;color:var(--gray);line-height:1.6}
-
-/* ── JURIDICTIONS TABLE ── */
-.table-wrap{
-  background:var(--white);border:1px solid var(--border);
-  border-radius:6px;overflow:hidden;margin-bottom:24px;
-}
-.table-header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:16px 20px;border-bottom:1px solid var(--border);
-}
-.table-title-sm{font-size:13px;font-weight:600;color:var(--slate)}
-.table-link{
-  font-size:11px;font-family:var(--font-mono);
-  color:var(--cin);cursor:pointer;letter-spacing:.04em;
-}
-.table-link:hover{text-decoration:underline}
-.jur-row{
-  display:grid;grid-template-columns:40px 60px 1fr 180px 60px;
-  align-items:center;gap:16px;
-  padding:14px 20px;border-bottom:1px solid var(--border);
-  transition:background .15s;
-}
-.jur-row:last-child{border-bottom:none}
-.jur-row:hover{background:var(--ivory)}
-.jur-num{
-  font-size:11px;font-family:var(--font-mono);
-  color:var(--gray-l);
-}
-.jur-flag{
-  font-size:18px;display:flex;align-items:center;gap:6px;
-}
-.jur-code{
-  font-size:9px;font-family:var(--font-mono);
-  color:var(--gray-l);display:block;
-  letter-spacing:.08em;
-}
-.jur-name{font-size:13px;font-weight:600;color:var(--slate)}
-.jur-reg{font-size:11px;color:var(--gray);margin-top:1px}
-.score-bar-wrap{width:100%}
-.score-bar-track{
-  height:3px;background:var(--border);border-radius:2px;
-  margin-bottom:4px;overflow:hidden;
-}
-.score-bar-fill{
-  height:100%;background:var(--cin);border-radius:2px;
-  transition:width .6s ease;
-}
-.score-label{
-  font-size:10px;font-family:var(--font-mono);
-  color:var(--slate);font-weight:600;
-}
-.jur-score{
-  font-family:var(--font-disp);font-size:18px;
-  font-weight:700;color:var(--slate);text-align:right;
+.sb-edition{
+  padding:6px 18px 14px;
+  font-size:9px;font-family:var(--mono);
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted2);
 }
 
-/* ── REGION PANEL ── */
-.region-grid{
-  display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;
+/* Sidebar user */
+.sb-user{
+  padding:14px 18px;border-top:1px solid var(--rule);
+  display:flex;align-items:center;gap:10px;
 }
-.region-card{
-  background:var(--white);border:1px solid var(--border);
-  border-radius:6px;padding:20px;
+.sb-avatar{
+  width:26px;height:26px;border-radius:50%;
+  background:var(--ink2);display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:600;color:#fff;flex-shrink:0;
 }
-.region-name{
-  font-size:11px;font-family:var(--font-mono);
-  text-transform:uppercase;letter-spacing:.12em;
-  color:var(--gray);margin-bottom:6px;
+.sb-uname{font-size:12px;font-weight:500;color:var(--ink);line-height:1.2}
+.sb-urole{
+  font-size:9px;font-family:var(--mono);
+  color:var(--muted2);letter-spacing:.04em;
+  display:flex;align-items:center;gap:4px;
 }
-.region-score-val{
-  font-family:var(--font-disp);font-size:28px;
-  font-weight:700;color:var(--slate);margin-bottom:10px;
-}
-.region-bar{height:2px;background:var(--border);border-radius:1px;overflow:hidden;margin-bottom:8px}
-.region-bar-fill{height:100%;background:var(--cin);border-radius:1px}
-.region-desc{font-size:11px;color:var(--gray);line-height:1.5}
+.sb-role-dot{width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0}
 
-/* ── COMPLIANCE CHECKER ── */
-.checker-form{
-  background:var(--white);border:1px solid var(--border);
-  border-radius:6px;padding:28px;margin-bottom:24px;max-width:700px;
+/* ══ TOPBAR ══ */
+.topbar{
+  position:fixed;top:0;left:var(--sidebar);right:0;
+  height:var(--topbar);background:var(--white);
+  border-bottom:1px solid var(--rule);
+  display:flex;align-items:center;padding:0 28px;
+  z-index:100;gap:0;
 }
-.form-row{margin-bottom:18px}
-.form-label{
-  font-size:10px;font-family:var(--font-mono);
-  text-transform:uppercase;letter-spacing:.14em;
-  color:var(--gray);display:block;margin-bottom:6px;
+.tb-breadcrumb{
+  display:flex;align-items:center;gap:6px;
+  font-size:11px;font-family:var(--mono);
 }
-.form-select,.form-input,.form-textarea{
-  width:100%;padding:10px 14px;
-  border:1px solid var(--border);border-radius:4px;
-  font-family:var(--font-body);font-size:13px;
-  color:var(--slate);background:var(--ivory);
-  outline:none;transition:border-color .15s;
+.tb-section{color:var(--accent);letter-spacing:.1em;text-transform:uppercase}
+.tb-sep{color:var(--rule2)}
+.tb-page{color:var(--ink2);font-weight:500}
+.tb-right{
+  margin-left:auto;display:flex;align-items:center;gap:10px;
 }
-.form-select:focus,.form-input:focus,.form-textarea:focus{
-  border-color:var(--cin);background:var(--white);
+.tb-date{font-size:10px;font-family:var(--mono);color:var(--muted2);letter-spacing:.06em}
+.tb-btn{
+  font-size:11px;font-family:var(--mono);letter-spacing:.06em;
+  padding:6px 14px;border-radius:3px;cursor:pointer;
+  border:1px solid var(--rule2);background:transparent;
+  color:var(--muted);transition:all .12s;
 }
-.form-textarea{min-height:90px;resize:vertical}
-.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.submit-btn{
-  display:inline-flex;align-items:center;gap:8px;
-  background:var(--cin);color:#fff;
-  padding:11px 24px;border-radius:4px;
-  border:none;font-family:var(--font-mono);
-  font-size:12px;letter-spacing:.06em;
-  cursor:pointer;transition:all .2s;font-weight:500;
+.tb-btn:hover{background:var(--bg);color:var(--ink)}
+.tb-btn-primary{
+  background:var(--accent);color:#fff;border-color:var(--accent);
 }
-.submit-btn:hover{background:#a93226;transform:translateY(-1px)}
+.tb-btn-primary:hover{background:var(--accent2)}
 
-/* ── RESULT CARD ── */
-.result-card{
-  background:var(--white);border:1px solid var(--border);
-  border-left:3px solid var(--cin);border-radius:0 6px 6px 0;
-  padding:24px 28px;margin-bottom:16px;
-  display:none;
-}
-.result-card.show{display:block}
-.result-score-big{
-  font-family:var(--font-disp);font-size:48px;
-  font-weight:700;color:var(--cin);line-height:1;
-  margin-bottom:4px;
-}
-.result-label{
-  font-size:10px;font-family:var(--font-mono);
-  text-transform:uppercase;letter-spacing:.16em;color:var(--gray);
-}
-.result-grid{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:start}
-.result-actions{display:flex;gap:10px;margin-top:16px}
-.result-tag{
-  font-size:10px;font-family:var(--font-mono);
-  padding:3px 10px;border-radius:3px;letter-spacing:.06em;
-  background:rgba(192,57,43,.1);color:var(--cin);border:1px solid rgba(192,57,43,.2);
-}
-.result-tag.ok{background:rgba(39,174,96,.1);color:#1a7a3c;border-color:rgba(39,174,96,.2)}
+/* ══ MAIN ══ */
+.main{margin-left:var(--sidebar);padding-top:var(--topbar);min-height:100vh}
+.page{display:none;padding:40px 40px 64px;max-width:1200px}
+.page.on{display:block}
 
-/* ── ALERT ITEMS ── */
-.alert-item{
-  display:flex;gap:16px;align-items:flex-start;
-  padding:16px 20px;border-bottom:1px solid var(--border);
-  background:var(--white);
-  transition:background .15s;cursor:pointer;
+/* ══ TYPOGRAPHY ══ */
+.eyebrow{
+  font-size:10px;font-family:var(--mono);
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--accent);display:block;margin-bottom:12px;
 }
-.alert-item:hover{background:var(--ivory)}
-.alert-item:last-child{border-bottom:none}
-.alert-dot-wrap{margin-top:2px}
-.alert-dot{
-  width:8px;height:8px;border-radius:50%;flex-shrink:0;
-}
-.alert-dot.high{background:var(--cin)}
-.alert-dot.med{background:#E67E22}
-.alert-dot.low{background:#27AE60}
-.alert-content{flex:1}
-.alert-title{font-size:13px;font-weight:600;color:var(--slate);margin-bottom:3px}
-.alert-meta{font-size:11px;color:var(--gray)}
-.alert-date{font-size:10px;font-family:var(--font-mono);color:var(--gray-l);white-space:nowrap}
-
-/* ── COMPARISON TABLE ── */
-.comp-table{
-  background:var(--white);border:1px solid var(--border);
-  border-radius:6px;overflow:hidden;margin-bottom:24px;
-}
-.comp-head{
-  display:grid;background:var(--ivory);
-  border-bottom:2px solid var(--border);
-}
-.comp-body-row{
-  display:grid;border-bottom:1px solid var(--border);
-  align-items:center;
-}
-.comp-body-row:last-child{border-bottom:none}
-.comp-body-row:hover{background:var(--ivory)}
-.comp-cell{
-  padding:12px 16px;font-size:12px;color:var(--slate);
-}
-.comp-head .comp-cell{
-  font-size:9px;font-family:var(--font-mono);
-  text-transform:uppercase;letter-spacing:.14em;
-  color:var(--gray);font-weight:600;padding:10px 16px;
-}
-.chip{
-  display:inline-block;font-size:9px;font-family:var(--font-mono);
-  padding:2px 8px;border-radius:3px;letter-spacing:.06em;
-  font-weight:600;
-}
-.chip-red{background:rgba(192,57,43,.12);color:var(--cin)}
-.chip-green{background:rgba(39,174,96,.12);color:#1a7a3c}
-.chip-orange{background:rgba(230,126,34,.12);color:#a0521a}
-.chip-gray{background:rgba(107,107,107,.1);color:var(--gray)}
-
-/* ── VEILLE ITEMS ── */
-.veille-grid{display:flex;flex-direction:column;gap:1px}
-.veille-item{
-  background:var(--white);border:1px solid var(--border);
-  padding:20px 24px;cursor:pointer;transition:all .2s;
-}
-.veille-item:hover{border-color:var(--cin);z-index:1}
-.veille-header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:8px}
-.veille-title{font-family:var(--font-disp);font-size:16px;font-weight:700;color:var(--slate);line-height:1.3}
-.veille-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.veille-tag{font-size:9px;font-family:var(--font-mono);padding:2px 8px;border-radius:3px;letter-spacing:.06em}
-.veille-tag-eu{background:rgba(41,128,185,.12);color:#1a5c87}
-.veille-tag-fr{background:rgba(46,139,87,.12);color:#1a5c3a}
-.veille-tag-int{background:rgba(142,68,173,.12);color:#6a2a8a}
-.veille-excerpt{font-size:12px;color:var(--gray);line-height:1.6}
-.veille-date{font-size:10px;font-family:var(--font-mono);color:var(--gray-l);white-space:nowrap;margin-top:2px}
-
-/* ── EVALS ── */
-.eval-row{
-  display:flex;align-items:center;gap:16px;
-  padding:16px 20px;background:var(--white);
-  border-bottom:1px solid var(--border);
-  cursor:pointer;transition:background .15s;
-}
-.eval-row:hover{background:var(--ivory)}
-.eval-num{font-size:11px;font-family:var(--font-mono);color:var(--gray-l);width:24px}
-.eval-icon{font-size:18px}
-.eval-info{flex:1}
-.eval-name{font-size:13px;font-weight:600;color:var(--slate)}
-.eval-desc{font-size:11px;color:var(--gray)}
-.eval-score{
-  font-family:var(--font-disp);font-size:20px;
-  font-weight:700;width:48px;text-align:right;
-}
-.eval-score.high{color:var(--cin)}
-.eval-score.med{color:#E67E22}
-.eval-score.low{color:#27AE60}
-.eval-date{font-size:10px;font-family:var(--font-mono);color:var(--gray-l);width:80px;text-align:right}
-
-/* ── TRAINING ── */
-.training-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:24px}
-.training-card{
-  background:var(--white);border:1px solid var(--border);
-  border-radius:6px;padding:22px;cursor:pointer;transition:all .2s;
-}
-.training-card:hover{border-color:var(--cin);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.06)}
-.training-badge{
-  display:inline-block;font-size:9px;font-family:var(--font-mono);
-  padding:2px 8px;border-radius:3px;letter-spacing:.06em;
+.page-h{
+  font-family:var(--serif);font-size:42px;
+  font-weight:400;line-height:1.12;
+  letter-spacing:-.02em;color:var(--ink);
   margin-bottom:14px;
 }
-.tb-req{background:rgba(192,57,43,.1);color:var(--cin)}
-.tb-opt{background:rgba(107,107,107,.1);color:var(--gray)}
-.training-title{font-family:var(--font-disp);font-size:15px;font-weight:700;color:var(--slate);margin-bottom:6px;line-height:1.3}
-.training-desc{font-size:11px;color:var(--gray);line-height:1.6;margin-bottom:14px}
-.training-footer{display:flex;justify-content:space-between;align-items:center}
-.training-duration{font-size:10px;font-family:var(--font-mono);color:var(--gray-l)}
-.training-progress{height:2px;background:var(--border);border-radius:1px;flex:1;margin:0 12px;overflow:hidden}
-.training-fill{height:100%;background:var(--cin);border-radius:1px}
+.page-h em{font-style:italic;color:var(--ink)}
+.page-lead{
+  font-size:14px;color:var(--muted);
+  max-width:620px;line-height:1.7;margin-bottom:40px;
+}
+.sec-h{
+  font-family:var(--serif);font-size:20px;
+  font-weight:400;color:var(--ink);
+  letter-spacing:-.01em;margin-bottom:4px;
+}
+.sec-sub{font-size:11px;color:var(--muted2);margin-bottom:20px}
+.rule{height:1px;background:var(--rule);margin:36px 0}
 
-/* ── CHAT ── */
-.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 56px - 80px);max-width:760px}
-.chat-messages{flex:1;overflow-y:auto;padding-bottom:16px}
-.chat-msg{margin-bottom:20px;display:flex;gap:12px;align-items:flex-start}
-.chat-msg.user{flex-direction:row-reverse}
-.chat-bubble{
-  max-width:480px;padding:13px 16px;border-radius:6px;
-  font-size:13px;line-height:1.65;
+/* ══ STAT CARDS ══ */
+.stats-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border:1px solid var(--rule);border-radius:4px;
+  overflow:hidden;margin-bottom:36px;
+  background:var(--rule);gap:1px;
 }
-.chat-msg.bot .chat-bubble{background:var(--white);border:1px solid var(--border);color:var(--slate)}
-.chat-msg.user .chat-bubble{background:var(--cin);color:#fff}
-.chat-avatar{
-  width:28px;height:28px;border-radius:50%;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-size:11px;font-weight:700;
+.stat{background:var(--white);padding:22px 22px 18px}
+.stat-lbl{
+  font-size:9px;font-family:var(--mono);
+  letter-spacing:.16em;text-transform:uppercase;
+  color:var(--muted2);margin-bottom:10px;
 }
-.chat-avatar.bot{background:var(--slate);color:#fff}
-.chat-avatar.user{background:var(--cin);color:#fff}
-.chat-input-row{
-  display:flex;gap:10px;align-items:flex-end;
-  padding-top:16px;border-top:1px solid var(--border);
+.stat-val{
+  font-family:var(--serif);font-size:40px;
+  font-weight:400;color:var(--ink);line-height:1;
+  letter-spacing:-.03em;margin-bottom:6px;
 }
-.chat-input{
-  flex:1;padding:11px 16px;border:1px solid var(--border);
-  border-radius:4px;font-family:var(--font-body);font-size:13px;
-  color:var(--slate);background:var(--white);outline:none;resize:none;
-  min-height:44px;max-height:120px;
-}
-.chat-input:focus{border-color:var(--cin)}
-.chat-send{
-  padding:11px 18px;background:var(--cin);color:#fff;
-  border:none;border-radius:4px;cursor:pointer;
-  font-family:var(--font-mono);font-size:12px;
-  letter-spacing:.04em;transition:background .15s;flex-shrink:0;
-}
-.chat-send:hover{background:#a93226}
-.chat-tag{
-  font-size:9px;font-family:var(--font-mono);
-  background:var(--ivory);border:1px solid var(--border);
-  padding:3px 8px;border-radius:3px;color:var(--gray);
-  margin:0 4px 4px 0;display:inline-block;cursor:pointer;
-  letter-spacing:.04em;
-}
-.chat-tag:hover{border-color:var(--cin);color:var(--cin)}
+.stat-desc{font-size:11px;color:var(--muted)}
 
-/* ── MON ESPACE ── */
-.espace-grid{display:grid;grid-template-columns:2fr 1fr;gap:24px}
-.espace-card{
-  background:var(--white);border:1px solid var(--border);
-  border-radius:6px;padding:22px;margin-bottom:16px;
+/* ══ FEATURE CARDS ══ */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:36px}
+.feat{
+  background:var(--white);border:1px solid var(--rule);
+  border-radius:4px;padding:22px;cursor:pointer;
+  transition:box-shadow .15s,border-color .15s;
+  position:relative;
 }
-.espace-card-title{font-size:12px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.12em;color:var(--gray);margin-bottom:16px}
-.activity-item{
-  display:flex;gap:12px;align-items:flex-start;
-  padding:10px 0;border-bottom:1px solid var(--border);font-size:12px;
+.feat:hover{border-color:var(--rule2);box-shadow:0 2px 14px rgba(0,0,0,.07)}
+.feat-icon{
+  width:32px;height:32px;border:1px solid var(--rule);
+  border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:14px;
+  margin-bottom:18px;color:var(--accent);
 }
-.activity-item:last-child{border-bottom:none}
-.act-dot{width:7px;height:7px;border-radius:50%;background:var(--cin);margin-top:5px;flex-shrink:0}
-.act-text{color:var(--slate);flex:1;line-height:1.5}
-.act-date{font-size:10px;font-family:var(--font-mono);color:var(--gray-l)}
+.feat-arr{
+  position:absolute;top:20px;right:20px;
+  font-size:16px;color:var(--rule2);
+  transition:all .15s;
+}
+.feat:hover .feat-arr{color:var(--accent);transform:translate(2px,-2px)}
+.feat-h{font-family:var(--serif);font-size:18px;color:var(--ink);margin-bottom:6px;letter-spacing:-.01em}
+.feat-p{font-size:12px;color:var(--muted);line-height:1.65}
 
-/* ── REPORT ── */
-.report-kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px}
-.kpi-card{
-  background:var(--white);border:1px solid var(--border);
-  border-radius:6px;padding:20px;
+/* ══ TABLE ══ */
+.tbl-wrap{background:var(--white);border:1px solid var(--rule);border-radius:4px;overflow:hidden;margin-bottom:24px}
+.tbl-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 20px;border-bottom:1px solid var(--rule);
 }
-.kpi-label{font-size:9px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.16em;color:var(--gray-l);margin-bottom:8px}
-.kpi-value{font-family:var(--font-disp);font-size:30px;font-weight:700;color:var(--slate);line-height:1;margin-bottom:4px}
-.kpi-trend{font-size:10px;font-family:var(--font-mono)}
-.kpi-trend.up{color:#27AE60}
-.kpi-trend.down{color:var(--cin)}
+.tbl-title{font-size:13px;font-weight:500;color:var(--ink)}
+.tbl-link{font-size:10px;font-family:var(--mono);color:var(--accent);cursor:pointer;letter-spacing:.06em}
+.tbl-link:hover{text-decoration:underline}
 
-/* ── BACK BTN ── */
-.back-btn{
-  display:inline-flex;align-items:center;gap:6px;
-  font-size:11px;font-family:var(--font-mono);
-  color:var(--gray);cursor:pointer;letter-spacing:.04em;
-  margin-bottom:24px;padding:6px 0;
-  transition:color .15s;
+.jrow{
+  display:grid;grid-template-columns:36px 64px 1fr 200px 52px;
+  gap:14px;align-items:center;
+  padding:13px 20px;border-bottom:1px solid var(--rule);
+  transition:background .1s;cursor:pointer;
 }
-.back-btn:hover{color:var(--cin)}
+.jrow:last-child{border-bottom:none}
+.jrow:hover{background:var(--bg)}
+.jrow-n{font-size:11px;font-family:var(--mono);color:var(--muted2)}
+.jrow-flag{font-size:18px;line-height:1;display:flex;flex-direction:column;align-items:flex-start}
+.jrow-code{font-size:8px;font-family:var(--mono);color:var(--muted2);letter-spacing:.1em;margin-top:1px}
+.jrow-name{font-size:13px;font-weight:500;color:var(--ink)}
+.jrow-reg{font-size:11px;color:var(--muted);margin-top:1px}
+.sbar-wrap{width:100%}
+.sbar-track{height:2px;background:var(--bg2);border-radius:1px;margin-bottom:5px;overflow:hidden}
+.sbar-fill{height:100%;background:var(--accent);border-radius:1px}
+.sbar-lbl{font-size:10px;font-family:var(--mono);color:var(--muted)}
+.jrow-score{font-family:var(--serif);font-size:20px;color:var(--ink);text-align:right;letter-spacing:-.02em}
 
-/* ── MOBILE ── */
-@media(max-width:768px){
-  .sidebar{transform:translateX(-100%)}
-  .sidebar.open{transform:translateX(0)}
-  .main{margin-left:0}
-  .page{padding:20px}
-  .stats-row{grid-template-columns:1fr 1fr}
-  .cards-grid{grid-template-columns:1fr}
-  .comp-table{overflow-x:auto}
-  .region-grid{grid-template-columns:1fr}
-  .training-grid{grid-template-columns:1fr}
-  .espace-grid{grid-template-columns:1fr}
+/* ══ REGION CARDS ══ */
+.reg-stack{display:flex;flex-direction:column;gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:4px;overflow:hidden}
+.reg-item{background:var(--white);padding:16px 18px}
+.reg-name{font-size:9px;font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);margin-bottom:6px}
+.reg-val{font-family:var(--serif);font-size:26px;color:var(--ink);letter-spacing:-.02em;line-height:1;margin-bottom:8px}
+.reg-bar{height:2px;background:var(--bg2);border-radius:1px;overflow:hidden;margin-bottom:6px}
+.reg-fill{height:100%;background:var(--accent);border-radius:1px}
+.reg-txt{font-size:11px;color:var(--muted)}
+
+/* ══ LAYOUT HELPERS ══ */
+.col2{display:grid;grid-template-columns:2fr 1fr;gap:28px}
+.col3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px}
+.col12{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* ══ CHIPS ══ */
+.chip{display:inline-block;font-size:9px;font-family:var(--mono);padding:2px 7px;border-radius:2px;letter-spacing:.06em;font-weight:500}
+.chip-r{background:rgba(184,50,34,.1);color:var(--accent)}
+.chip-g{background:rgba(45,122,71,.1);color:var(--green)}
+.chip-o{background:rgba(196,124,26,.1);color:var(--orange)}
+.chip-b{background:rgba(28,90,138,.1);color:var(--blue)}
+.chip-n{background:var(--bg2);color:var(--muted)}
+
+/* ══ COMP TABLE ══ */
+.comp-wrap{background:var(--white);border:1px solid var(--rule);border-radius:4px;overflow:hidden;margin-bottom:24px}
+.comp-head-row{display:grid;background:var(--bg);border-bottom:2px solid var(--rule)}
+.comp-row{display:grid;border-bottom:1px solid var(--rule);transition:background .1s}
+.comp-row:last-child{border-bottom:none}
+.comp-row:hover{background:var(--bg)}
+.comp-cell{padding:11px 16px;font-size:12px;color:var(--ink)}
+.comp-head-row .comp-cell{font-size:9px;font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:9px 16px}
+
+/* ══ ALERTES ══ */
+.alert-list{background:var(--white);border:1px solid var(--rule);border-radius:4px;overflow:hidden}
+.alert-item{display:flex;gap:14px;align-items:flex-start;padding:15px 20px;border-bottom:1px solid var(--rule);cursor:pointer;transition:background .1s}
+.alert-item:last-child{border-bottom:none}
+.alert-item:hover{background:var(--bg)}
+.alert-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.ad-h{background:var(--accent)}
+.ad-m{background:var(--orange)}
+.ad-l{background:var(--green)}
+.alert-body{flex:1}
+.alert-t{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:3px}
+.alert-s{font-size:11px;color:var(--muted)}
+.alert-date{font-size:10px;font-family:var(--mono);color:var(--muted2);white-space:nowrap;margin-top:1px}
+
+/* ══ VEILLE ══ */
+.veille-list{display:flex;flex-direction:column;gap:1px}
+.veille-item{background:var(--white);border:1px solid var(--rule);padding:20px 22px;cursor:pointer;transition:border-color .15s}
+.veille-item:hover{border-color:var(--accent)}
+.veille-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}
+.veille-h{font-family:var(--serif);font-size:16px;color:var(--ink);line-height:1.3;letter-spacing:-.01em}
+.veille-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
+.veille-p{font-size:12px;color:var(--muted);line-height:1.65}
+.veille-date{font-size:10px;font-family:var(--mono);color:var(--muted2);white-space:nowrap}
+
+/* ══ FORMULAIRE ══ */
+.form-block{background:var(--white);border:1px solid var(--rule);border-radius:4px;padding:26px;margin-bottom:20px;max-width:680px}
+.form-row{margin-bottom:16px}
+.form-lbl{font-size:9px;font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px}
+.form-el{
+  width:100%;padding:9px 13px;
+  border:1px solid var(--rule2);border-radius:3px;
+  font-family:var(--sans);font-size:13px;color:var(--ink);
+  background:var(--bg);outline:none;transition:border-color .12s,background .12s;
+}
+.form-el:focus{border-color:var(--accent);background:var(--white)}
+textarea.form-el{min-height:86px;resize:vertical}
+.form-grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.submit{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--accent);color:#fff;border:none;
+  padding:10px 22px;border-radius:3px;font-family:var(--mono);
+  font-size:11px;letter-spacing:.07em;cursor:pointer;
+  transition:background .12s;font-weight:500;
+}
+.submit:hover{background:var(--accent2)}
+
+/* ══ RESULT ══ */
+.result{background:var(--white);border:1px solid var(--rule);border-left:3px solid var(--accent);border-radius:0 4px 4px 0;padding:24px;max-width:680px;display:none;margin-bottom:20px}
+.result.on{display:block}
+.res-score{font-family:var(--serif);font-size:52px;color:var(--accent);line-height:1;letter-spacing:-.03em}
+.res-lbl{font-size:9px;font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;display:block}
+.res-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.res-txt{font-size:13px;color:var(--ink2);line-height:1.7}
+.res-actions{display:flex;gap:10px;margin-top:18px}
+
+/* ══ TRAINING ══ */
+.training-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:28px}
+.t-card{background:var(--white);border:1px solid var(--rule);border-radius:4px;padding:20px;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.t-card:hover{border-color:var(--rule2);box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.t-badge{display:inline-block;font-size:8px;font-family:var(--mono);padding:2px 7px;border-radius:2px;letter-spacing:.07em;margin-bottom:12px}
+.t-req{background:rgba(184,50,34,.1);color:var(--accent)}
+.t-opt{background:var(--bg2);color:var(--muted)}
+.t-title{font-family:var(--serif);font-size:15px;color:var(--ink);margin-bottom:6px;line-height:1.3;letter-spacing:-.01em}
+.t-desc{font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.t-foot{display:flex;align-items:center;gap:10px}
+.t-dur{font-size:10px;font-family:var(--mono);color:var(--muted2)}
+.t-prog-track{flex:1;height:2px;background:var(--rule);border-radius:1px;overflow:hidden}
+.t-prog-fill{height:100%;background:var(--accent);border-radius:1px}
+.t-pct{font-size:10px;font-family:var(--mono);color:var(--muted2)}
+
+/* ══ CHAT ══ */
+.chat-outer{display:flex;flex-direction:column;height:calc(100vh - var(--topbar) - 160px);max-width:720px}
+.chat-msgs{flex:1;overflow-y:auto;padding-bottom:12px}
+.c-msg{display:flex;gap:10px;margin-bottom:18px;align-items:flex-start}
+.c-msg.u{flex-direction:row-reverse}
+.c-av{width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600}
+.c-av.bot{background:var(--ink);color:#fff}
+.c-av.u{background:var(--accent);color:#fff}
+.c-bubble{max-width:480px;padding:11px 15px;border-radius:4px;font-size:13px;line-height:1.65}
+.c-msg.bot .c-bubble{background:var(--white);border:1px solid var(--rule);color:var(--ink)}
+.c-msg.u .c-bubble{background:var(--accent);color:#fff}
+.chat-bar{display:flex;gap:10px;align-items:flex-end;padding-top:14px;border-top:1px solid var(--rule)}
+.chat-in{flex:1;padding:10px 14px;border:1px solid var(--rule2);border-radius:3px;font-family:var(--sans);font-size:13px;color:var(--ink);background:var(--white);outline:none;resize:none;min-height:42px;max-height:110px}
+.chat-in:focus{border-color:var(--accent)}
+.chat-send{padding:10px 18px;background:var(--accent);color:#fff;border:none;border-radius:3px;font-family:var(--mono);font-size:11px;letter-spacing:.05em;cursor:pointer;transition:background .12s;flex-shrink:0}
+.chat-send:hover{background:var(--accent2)}
+.chat-tag{display:inline-block;font-size:10px;font-family:var(--mono);border:1px solid var(--rule2);background:var(--white);padding:3px 9px;border-radius:2px;color:var(--muted);cursor:pointer;margin:0 4px 4px 0;letter-spacing:.04em;transition:all .12s}
+.chat-tag:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ══ KPI ROW ══ */
+.kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px}
+.kpi{background:var(--white);border:1px solid var(--rule);border-radius:4px;padding:18px 20px}
+.kpi-lbl{font-size:9px;font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);margin-bottom:8px}
+.kpi-val{font-family:var(--serif);font-size:32px;color:var(--ink);line-height:1;letter-spacing:-.02em;margin-bottom:4px}
+.kpi-tr{font-size:10px;font-family:var(--mono)}
+.up{color:var(--green)}.dn{color:var(--accent)}
+
+/* ══ ACTIVITY ══ */
+.act-item{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--rule);font-size:12px}
+.act-item:last-child{border-bottom:none}
+.act-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);margin-top:5px;flex-shrink:0}
+.act-t{color:var(--ink);flex:1;line-height:1.5}
+.act-d{font-size:10px;font-family:var(--mono);color:var(--muted2);white-space:nowrap}
+
+/* ══ TIMELINE ══ */
+.timeline{border-left:2px solid var(--accent);padding-left:22px;margin-left:8px}
+.tl-item{position:relative;margin-bottom:22px}
+.tl-item::before{content:'';position:absolute;left:-27px;top:6px;width:8px;height:8px;background:var(--accent);border-radius:50%;border:2px solid var(--bg)}
+.tl-year{font-size:10px;font-family:var(--mono);color:var(--accent);letter-spacing:.1em;margin-bottom:3px}
+.tl-t{font-size:13px;font-weight:500;color:var(--ink)}
+
+/* ══ EVAL ROW ══ */
+.eval-row{display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid var(--rule);cursor:pointer;transition:background .1s}
+.eval-row:last-child{border-bottom:none}
+.eval-row:hover{background:var(--bg)}
+.eval-ico{font-size:18px;width:28px;text-align:center}
+.eval-body{flex:1}
+.eval-n{font-size:13px;font-weight:500;color:var(--ink)}
+.eval-d{font-size:11px;color:var(--muted)}
+.eval-sc{font-family:var(--serif);font-size:20px;color:var(--accent);width:44px;text-align:right;letter-spacing:-.02em}
+.eval-date{font-size:10px;font-family:var(--mono);color:var(--muted2);width:80px;text-align:right}
+
+/* ══ MOBILE ══ */
+@media(max-width:860px){
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .feat-grid,.col3{grid-template-columns:1fr}
+  .col2{grid-template-columns:1fr}
+  .training-grid,.kpi-row,.col12{grid-template-columns:1fr}
+  .form-grid2{grid-template-columns:1fr}
+  .sb{transform:translateX(-100%);transition:transform .2s}
+  .sb.open{transform:translateX(0)}
+  .main,.topbar{margin-left:0;left:0}
 }
 </style>
 </head>
 <body>
 
-<!-- ══ SIDEBAR ══ -->
-<aside class="sidebar" id="sidebar">
-  <div class="sidebar-brand">
-    <div class="brand-name">Sentinel <span class="brand-ai">AI</span></div>
-    <div class="brand-sub">Cartographie des risques</div>
+<!-- ══════ SIDEBAR ══════ -->
+<aside class="sb" id="sb">
+  <div class="sb-brand">
+    <div class="sb-logo">Sentinel <span class="sb-logo-ai">AI</span></div>
+    <div class="sb-sub">Cartographie des risques</div>
   </div>
 
-  <nav>
-    <div class="nav-section">
-      <span class="nav-label">Navigation</span>
-      <div class="nav-item active" onclick="showPage('apercu')">
-        <span class="nav-ico">◉</span> Aperçu
-      </div>
-      <div class="nav-item" onclick="showPage('carto')">
-        <span class="nav-ico">⊕</span> Cartographie
-      </div>
-      <div class="nav-item" onclick="showPage('comparateur')">
-        <span class="nav-ico">⇌</span> Comparateur
-      </div>
-      <div class="nav-item" onclick="showPage('geopolitique')">
-        <span class="nav-ico">◎</span> Géopolitique
-      </div>
-      <div class="nav-item" onclick="showPage('decision')">
-        <span class="nav-ico">✦</span> Aide à la décision
-        <span class="nav-badge nav-badge-new">Nouveau</span>
-      </div>
+  <nav class="sb-nav">
+    <div class="sb-section">Navigation</div>
+    <div class="sb-item on" onclick="go('apercu',this,'ÉDITION DU JOUR','Aperçu')">
+      <span class="sb-icon">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>
+      </span>Aperçu
+    </div>
+    <div class="sb-item" onclick="go('carto',this,'CARTOGRAPHIE','Carte mondiale')">
+      <span class="sb-icon">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3.6 9h16.8M3.6 15h16.8M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg>
+      </span>Cartographie
+    </div>
+    <div class="sb-item" onclick="go('comp',this,'ANALYSE','Comparateur')">
+      <span class="sb-icon">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M8 4v16M16 4v16M3 8h18M3 16h18"/></svg>
+      </span>Comparateur
+    </div>
+    <div class="sb-item" onclick="go('geo',this,'GÉOPOLITIQUE','Tensions normatives')">
+      <span class="sb-icon">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M2 12h20M12 2v20"/></svg>
+      </span>Géopolitique
+    </div>
+    <div class="sb-item" onclick="go('decision',this,'AIDE À LA DÉCISION','Simuler un déploiement')">
+      <span class="sb-icon">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg>
+      </span>Aide à la décision
+      <span class="sb-badge sb-badge-new">Bêta</span>
     </div>
 
-    <div class="nav-section">
-      <span class="nav-label">Conformité</span>
-      <div class="nav-item" onclick="showPage('reglementations')">
-        <span class="nav-ico">≡</span> Réglementations
-      </div>
-      <div class="nav-item" onclick="showPage('evals')">
-        <span class="nav-ico">◈</span> Mes évaluations
-        <span class="nav-badge">3</span>
-      </div>
-      <div class="nav-item" onclick="showPage('alertes')">
-        <span class="nav-ico">◇</span> Alertes
-        <span class="nav-badge">7</span>
-      </div>
-      <div class="nav-item" onclick="showPage('veille')">
-        <span class="nav-ico">⊙</span> Veille réglementaire
-      </div>
-      <div class="nav-item" onclick="showPage('audit')">
-        <span class="nav-ico">□</span> Audit de conformité
-      </div>
+    <div class="sb-section">Conformité</div>
+    <div class="sb-item" onclick="go('regs',this,'CONFORMITÉ','Réglementations')">
+      <span class="sb-icon">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 8h10M7 12h7M7 16h5"/></svg>
+      </span>Réglementations
+    </div>
+    <div class="sb-item" onclick="go('evals',this,'CONFORMITÉ','Mes évaluations')">
+      <span class="sb-icon">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      </span>Mes évaluations
+      <span class="sb-badge">3</span>
+    </div>
+    <div class="sb-item" onclick="go('alertes',this,'ALERTES','7 alertes actives')">
+      <span class="sb-icon">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+      </span>Alertes
+      <span class="sb-badge">7</span>
+    </div>
+    <div class="sb-item" onclick="go('veille',this,'VEILLE','Actualités')">
+      <span class="sb-icon">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11a2 2 0 012 2v3"/><rect x="9" y="11" width="14" height="10" rx="2"/></svg>
+      </span>Veille réglementaire
+    </div>
+    <div class="sb-item" onclick="go('audit',this,'AUDIT','Audit de conformité')">
+      <span class="sb-icon">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
+      </span>Audit de conformité
     </div>
 
-    <div class="nav-section">
-      <span class="nav-label">Espace</span>
-      <div class="nav-item" onclick="showPage('equipe')">
-        <span class="nav-ico">⊞</span> Espace équipe
-      </div>
-      <div class="nav-item" onclick="showPage('training')">
-        <span class="nav-ico">▷</span> Hub Training
-      </div>
-      <div class="nav-item" onclick="showPage('espace')">
-        <span class="nav-ico">◱</span> Mon Espace
-      </div>
-      <div class="nav-item" onclick="showPage('reporting')">
-        <span class="nav-ico">▣</span> Reporting
-      </div>
-      <div class="nav-item" onclick="showPage('chat')">
-        <span class="nav-ico">◌</span> Chat Conformité
-        <span class="notif-dot" style="margin-left:auto"></span>
-      </div>
+    <div class="sb-section">Espace</div>
+    <div class="sb-item" onclick="go('equipe',this,'ESPACE','Équipe')">
+      <span class="sb-icon">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      </span>Espace équipe
+    </div>
+    <div class="sb-item" onclick="go('training',this,'FORMATION','Hub Training')">
+      <span class="sb-icon">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      </span>Hub Training
+    </div>
+    <div class="sb-item" onclick="go('espace',this,'MON ESPACE','Tableau de bord')">
+      <span class="sb-icon">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      </span>Mon Espace
+    </div>
+    <div class="sb-item" onclick="go('report',this,'REPORTING','Dashboard')">
+      <span class="sb-icon">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </span>Reporting
+    </div>
+    <div class="sb-item" onclick="go('chat',this,'ASSISTANT IA','Chat Conformité')">
+      <span class="sb-icon">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      </span>Chat Conformité
+      <span class="sb-badge" style="background:var(--green)">●</span>
     </div>
   </nav>
 
-  <div class="sidebar-footer">
-    <div class="sidebar-user">
-      <div class="user-avatar">CC</div>
-      <div class="user-info">
-        <div class="user-name">Christophe Cerf</div>
-        <div class="user-role">Analyste Réglementaire</div>
-      </div>
+  <div class="sb-pager">
+    <button class="sb-pager-btn">‹</button>
+    <button class="sb-pager-btn">›</button>
+    <div class="sb-bell">🔔</div>
+  </div>
+  <div class="sb-edition">Édition</div>
+
+  <div class="sb-user">
+    <div class="sb-avatar">CC</div>
+    <div>
+      <div class="sb-uname">Christophe Cerf</div>
+      <div class="sb-urole"><span class="sb-role-dot"></span>Analyste Réglementaire</div>
     </div>
   </div>
 </aside>
 
-<!-- ══ MAIN ══ -->
+<!-- ══════ TOPBAR ══════ -->
+<header class="topbar">
+  <div class="tb-breadcrumb">
+    <span class="tb-section" id="tb-sec">ÉDITION DU JOUR</span>
+    <span class="tb-sep">/</span>
+    <span class="tb-page" id="tb-pg">Aperçu</span>
+  </div>
+  <div class="tb-right">
+    <span class="tb-date" id="tb-date"></span>
+    <button class="tb-btn" onclick="window.open('/aies','_blank')">← AIES Platform</button>
+    <button class="tb-btn tb-btn-primary" onclick="go('audit',null,'AUDIT','Audit de conformité')">Lancer un audit</button>
+  </div>
+</header>
+
+<!-- ══════ PAGES ══════ -->
 <main class="main">
-  <!-- TOPBAR -->
-  <div class="topbar" id="topbar">
-    <div class="topbar-left">
-      <span class="topbar-section" id="tb-section">ÉDITION DU JOUR</span>
-      <span class="topbar-slash"> / </span>
-      <span class="topbar-page" id="tb-page">Aperçu</span>
+
+<!-- APERÇU -->
+<div class="page on" id="p-apercu">
+  <span class="eyebrow">Édition du jour</span>
+  <h1 class="page-h">L'état mondial de la<br><em>régulation IA</em></h1>
+  <p class="page-lead">Une lecture éditoriale des risques réglementaires et géopolitiques de l'intelligence artificielle, à travers 60+ juridictions et les standards internationaux.</p>
+
+  <div class="stats-grid">
+    <div class="stat"><div class="stat-lbl">Juridictions couvertes</div><div class="stat-val" id="c1">0</div><div class="stat-desc">pays &amp; régions suivis</div></div>
+    <div class="stat"><div class="stat-lbl">Sévérité moyenne</div><div class="stat-val">7.4</div><div class="stat-desc">sur 10 — contrainte réglementaire</div></div>
+    <div class="stat"><div class="stat-lbl">Régimes stricts</div><div class="stat-val" id="c2">0</div><div class="stat-desc">score ≥ 7/10</div></div>
+    <div class="stat"><div class="stat-lbl">Stratégies adoptées</div><div class="stat-val" id="c3">0</div><div class="stat-desc">cadres nationaux en vigueur</div></div>
+  </div>
+
+  <div class="feat-grid">
+    <div class="feat" onclick="go('carto',null,'CARTOGRAPHIE','Carte mondiale')">
+      <div class="feat-arr">→</div>
+      <div class="feat-icon">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3.6 9h16.8M3.6 15h16.8M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg>
+      </div>
+      <div class="feat-h">Explorer la carte</div>
+      <p class="feat-p">Vue mondiale des juridictions et réglementations IA.</p>
     </div>
-    <div class="topbar-right">
-      <span class="topbar-date" id="tb-date"></span>
-      <button class="topbar-btn" onclick="window.open('/aies','_blank')">← AIES Platform</button>
-      <button class="topbar-btn primary" onclick="showPage('audit')">Lancer un audit</button>
+    <div class="feat" onclick="go('comp',null,'ANALYSE','Comparateur')">
+      <div class="feat-arr">→</div>
+      <div class="feat-icon">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M8 4v16M16 4v16M3 8h18M3 16h18"/></svg>
+      </div>
+      <div class="feat-h">Comparer les pays</div>
+      <p class="feat-p">Benchmark côte-à-côte des frameworks nationaux.</p>
+    </div>
+    <div class="feat" onclick="go('decision',null,'AIDE À LA DÉCISION','Simuler un déploiement')">
+      <div class="feat-arr">→</div>
+      <div class="feat-icon">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg>
+      </div>
+      <div class="feat-h">Simuler un déploiement</div>
+      <p class="feat-p">Évaluer la conformité pour votre cas d'usage.</p>
     </div>
   </div>
 
-  <!-- ════ PAGE : APERÇU ════ -->
-  <div class="page active" id="page-apercu">
-    <span class="eyebrow">Édition du jour</span>
-    <h1 class="page-title">L'état mondial de la<br>régulation IA</h1>
-    <p class="page-sub">Une lecture éditoriale des risques réglementaires et géopolitiques de l'intelligence artificielle, à travers 60+ juridictions et les standards internationaux.</p>
+  <div class="rule"></div>
 
-    <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-label">Juridictions couvertes</div>
-        <div class="stat-value" data-count="60">0</div>
-        <div class="stat-desc">pays &amp; régions suivis</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Sévérité moyenne</div>
-        <div class="stat-value">7.4</div>
-        <div class="stat-desc">sur 10 — contrainte réglementaire</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Régimes stricts</div>
-        <div class="stat-value" data-count="14">0</div>
-        <div class="stat-desc">score ≥ 7/10</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Stratégies adoptées</div>
-        <div class="stat-value" data-count="38">0</div>
-        <div class="stat-desc">cadres nationaux en vigueur</div>
+  <div class="col2">
+    <div>
+      <div class="tbl-wrap">
+        <div class="tbl-head"><span class="tbl-title">Les juridictions les plus contraignantes</span><span class="tbl-link" onclick="go('carto',null,'CARTOGRAPHIE','Carte mondiale')">Voir tout ↗</span></div>
+        <div id="ap-jur"></div>
       </div>
     </div>
-
-    <div class="cards-grid">
-      <div class="card" onclick="showPage('carto')">
-        <span class="card-arrow">→</span>
-        <span class="card-icon">⊕</span>
-        <div class="card-title">Explorer la carte</div>
-        <p class="card-desc">Vue mondiale des juridictions et réglementations IA.</p>
-      </div>
-      <div class="card" onclick="showPage('comparateur')">
-        <span class="card-arrow">→</span>
-        <span class="card-icon">⇌</span>
-        <div class="card-title">Comparer les pays</div>
-        <p class="card-desc">Benchmark côte-à-côte des frameworks nationaux.</p>
-      </div>
-      <div class="card" onclick="showPage('audit')">
-        <span class="card-arrow">→</span>
-        <span class="card-icon">✦</span>
-        <div class="card-title">Simuler un déploiement</div>
-        <p class="card-desc">Évaluer la conformité pour votre cas d'usage.</p>
-      </div>
+    <div>
+      <div class="sec-h" style="margin-bottom:4px">Sévérité par région</div>
+      <div class="sec-sub">Score moyen de contrainte réglementaire (0–10)</div>
+      <div class="reg-stack" id="ap-reg"></div>
     </div>
+  </div>
+</div>
 
-    <div class="divider"></div>
+<!-- CARTOGRAPHIE -->
+<div class="page" id="p-carto">
+  <span class="eyebrow">Cartographie</span>
+  <h1 class="page-h">Carte mondiale des<br><em>régulations IA</em></h1>
+  <p class="page-lead">60+ juridictions analysées selon 12 critères : portée, sanctions, obligations IA haut risque, transparence, droits fondamentaux.</p>
+  <div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title">Toutes les juridictions — triées par sévérité</span><span class="tbl-link">↓ Exporter CSV</span></div><div id="carto-all"></div></div>
+</div>
 
-    <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px">
+<!-- COMPARATEUR -->
+<div class="page" id="p-comp">
+  <span class="eyebrow">Comparateur</span>
+  <h1 class="page-h">Comparer les <em>frameworks</em></h1>
+  <p class="page-lead">Benchmark côte-à-côte sur les critères clés de réglementation IA.</p>
+  <div class="comp-wrap"><div class="comp-head-row" style="grid-template-columns:200px repeat(4,1fr)" id="comp-head"></div><div id="comp-body"></div></div>
+</div>
+
+<!-- GÉOPOLITIQUE -->
+<div class="page" id="p-geo">
+  <span class="eyebrow">Géopolitique</span>
+  <h1 class="page-h">Tensions &amp; alliances<br><em>réglementaires</em></h1>
+  <p class="page-lead">Compétition normative sur l'IA : blocs réglementaires, fragmentation et influence des standards.</p>
+  <div class="col3">
+    <div class="feat"><div class="feat-arr">→</div><div class="feat-h">Bloc européen</div><p class="feat-p">L'EU AI Act comme standard d'exportation — influence sur 40+ pays.</p></div>
+    <div class="feat"><div class="feat-arr">→</div><div class="feat-h">Modèle américain</div><p class="feat-p">Approche sectorielle et autorégulation — concurrence normative avec l'UE.</p></div>
+    <div class="feat"><div class="feat-arr">→</div><div class="feat-h">Doctrine chinoise</div><p class="feat-p">Contrôle algorithmique d'État — double enjeu souveraineté/compétitivité.</p></div>
+  </div>
+  <div class="rule"></div>
+  <div class="sec-h" style="margin-bottom:20px">Chronologie réglementaire 2020–2026</div>
+  <div class="timeline" id="geo-tl"></div>
+</div>
+
+<!-- AIDE À LA DÉCISION -->
+<div class="page" id="p-decision">
+  <span class="eyebrow">Aide à la décision</span>
+  <h1 class="page-h">Simuler un<br><em>déploiement IA</em></h1>
+  <p class="page-lead">Évaluez la conformité de votre cas d'usage IA selon l'EU AI Act, NIS2 et RGPD en 3 minutes.</p>
+  <div class="form-block">
+    <div class="form-grid2">
+      <div class="form-row"><label class="form-lbl">Secteur</label><select class="form-el" id="d-sec"><option value="">Choisir…</option><option value="energie">Énergie / Utilities</option><option value="sante">Santé</option><option value="finance">Finance / Banque</option><option value="industrie">Industrie</option><option value="transport">Transport</option><option value="it">IT / Tech</option><option value="public">Secteur public</option></select></div>
+      <div class="form-row"><label class="form-lbl">Type de système IA</label><select class="form-el" id="d-sys"><option value="">Choisir…</option><option value="prediction">Système de prédiction</option><option value="decision">Aide à la décision</option><option value="bio">Reconnaissance biométrique</option><option value="gen">IA générative / LLM</option><option value="monitor">Surveillance / Monitoring</option><option value="reco">Recommandation</option></select></div>
+    </div>
+    <div class="form-row"><label class="form-lbl">Description du cas d'usage</label><textarea class="form-el" id="d-desc" placeholder="Ex : Système de scoring crédit automatisé utilisant un modèle ML…"></textarea></div>
+    <div class="form-grid2">
+      <div class="form-row"><label class="form-lbl">Juridiction principale</label><select class="form-el" id="d-jur"><option value="eu">Union Européenne</option><option value="fr">France</option><option value="uk">Royaume-Uni</option><option value="us">États-Unis</option></select></div>
+      <div class="form-row"><label class="form-lbl">Impact sur des personnes ?</label><select class="form-el" id="d-imp"><option value="high">Oui — décisions individuelles</option><option value="med">Oui — indirectement</option><option value="low">Non — usage interne</option></select></div>
+    </div>
+    <button class="submit" onclick="runCheck()">Analyser la conformité →</button>
+  </div>
+  <div class="result" id="d-result">
+    <div style="display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:start">
+      <div><span class="res-lbl">Score de risque</span><div class="res-score" id="r-score">—</div></div>
       <div>
-        <div class="table-wrap">
-          <div class="table-header">
-            <span class="table-title-sm">Les juridictions les plus contraignantes</span>
-            <span class="table-link" onclick="showPage('carto')">Voir tout →</span>
-          </div>
-          <div class="jur-row">
-            <div class="jur-num">01</div>
-            <div class="jur-flag">🇪🇺<span class="jur-code">EU</span></div>
-            <div><div class="jur-name">Union européenne</div><div class="jur-reg">EU AI Act (Règlement 2024/1689)</div></div>
-            <div class="score-bar-wrap"><div class="score-bar-track"><div class="score-bar-fill" style="width:92%"></div></div><span class="score-label">9.2 / 10</span></div>
-            <div class="jur-score">9.2</div>
-          </div>
-          <div class="jur-row">
-            <div class="jur-num">02</div>
-            <div class="jur-flag">🇨🇳<span class="jur-code">CN</span></div>
-            <div><div class="jur-name">Chine</div><div class="jur-reg">CAC Deep Synthesis Rules 2023</div></div>
-            <div class="score-bar-wrap"><div class="score-bar-track"><div class="score-bar-fill" style="width:88%"></div></div><span class="score-label">8.8 / 10</span></div>
-            <div class="jur-score">8.8</div>
-          </div>
-          <div class="jur-row">
-            <div class="jur-num">03</div>
-            <div class="jur-flag">🇬🇧<span class="jur-code">UK</span></div>
-            <div><div class="jur-name">Royaume-Uni</div><div class="jur-reg">AI Governance Framework 2024</div></div>
-            <div class="score-bar-wrap"><div class="score-bar-track"><div class="score-bar-fill" style="width:74%"></div></div><span class="score-label">7.4 / 10</span></div>
-            <div class="jur-score">7.4</div>
-          </div>
-          <div class="jur-row">
-            <div class="jur-num">04</div>
-            <div class="jur-flag">🇺🇸<span class="jur-code">US</span></div>
-            <div><div class="jur-name">États-Unis</div><div class="jur-reg">EO 14110 — Safe AI (Biden 2023)</div></div>
-            <div class="score-bar-wrap"><div class="score-bar-track"><div class="score-bar-fill" style="width:66%"></div></div><span class="score-label">6.6 / 10</span></div>
-            <div class="jur-score">6.6</div>
-          </div>
-          <div class="jur-row">
-            <div class="jur-num">05</div>
-            <div class="jur-flag">🇯🇵<span class="jur-code">JP</span></div>
-            <div><div class="jur-name">Japon</div><div class="jur-reg">AI Strategy Council Guidelines</div></div>
-            <div class="score-bar-wrap"><div class="score-bar-track"><div class="score-bar-fill" style="width:58%"></div></div><span class="score-label">5.8 / 10</span></div>
-            <div class="jur-score">5.8</div>
-          </div>
-        </div>
+        <div style="font-size:12px;font-weight:500;color:var(--ink);margin-bottom:8px" id="r-level"></div>
+        <div class="res-tags" id="r-tags"></div>
+        <div class="res-txt" id="r-txt"></div>
       </div>
-      <div>
-        <div class="section-title" style="margin-bottom:16px">Sévérité par région</div>
-        <div style="font-size:11px;color:var(--gray-l);margin-bottom:16px;font-family:var(--font-mono)">Score moyen de contrainte réglementaire (0–10)</div>
-        <div class="region-grid" style="grid-template-columns:1fr">
-          <div class="region-card"><div class="region-name">Europe</div><div class="region-score-val">8.1</div><div class="region-bar"><div class="region-bar-fill" style="width:81%"></div></div><div class="region-desc">AI Act + RGPD + NIS2</div></div>
-          <div class="region-card"><div class="region-name">Asie-Pacifique</div><div class="region-score-val">6.9</div><div class="region-bar"><div class="region-bar-fill" style="width:69%"></div></div><div class="region-desc">Chine, Japon, Corée</div></div>
-          <div class="region-card"><div class="region-name">Amériques</div><div class="region-score-val">5.4</div><div class="region-bar"><div class="region-bar-fill" style="width:54%"></div></div><div class="region-desc">US EO + Canada AIDA</div></div>
-          <div class="region-card"><div class="region-name">Afrique &amp; MO</div><div class="region-score-val">3.2</div><div class="region-bar"><div class="region-bar-fill" style="width:32%"></div></div><div class="region-desc">Cadres émergents</div></div>
-        </div>
-      </div>
+    </div>
+    <div class="res-actions">
+      <button class="submit" onclick="go('audit',null,'AUDIT','Audit de conformité')">Lancer un audit complet →</button>
+      <button class="tb-btn" onclick="window.open('mailto:christophe.cerf@outlook.com?subject=[Sentinel AI] Demande audit&body=Bonjour,\n\nSuite à mon analyse Sentinel AI je souhaite initier un audit.\n\n','_blank')">Contacter CONSEILPREV</button>
     </div>
   </div>
+</div>
 
-  <!-- ════ PAGE : CARTOGRAPHIE ════ -->
-  <div class="page" id="page-carto">
-    <span class="eyebrow">Cartographie</span>
-    <h1 class="page-title">Carte mondiale des régulations IA</h1>
-    <p class="page-sub">60+ juridictions analysées selon 12 critères : portée, sanctions, obligations IA haut risque, transparence, droits fondamentaux.</p>
-    <div class="table-wrap">
-      <div class="table-header">
-        <span class="table-title-sm">Toutes les juridictions — triées par sévérité</span>
-        <span class="table-link">↓ Exporter CSV</span>
-      </div>
-      <div id="carto-table-body"></div>
-    </div>
+<!-- RÉGLEMENTATIONS -->
+<div class="page" id="p-regs">
+  <span class="eyebrow">Réglementations</span>
+  <h1 class="page-h">Base documentaire</h1>
+  <p class="page-lead">Textes de référence, guides d'application et jurisprudence IA classifiés par régime.</p>
+  <div class="alert-list" id="regs-list"></div>
+</div>
+
+<!-- ÉVALUATIONS -->
+<div class="page" id="p-evals">
+  <span class="eyebrow">Mes évaluations</span>
+  <h1 class="page-h">Historique des analyses</h1>
+  <p class="page-lead">Vos évaluations de conformité sauvegardées avec score et recommandations.</p>
+  <div class="tbl-wrap"><div id="evals-rows"></div></div>
+</div>
+
+<!-- ALERTES -->
+<div class="page" id="p-alertes">
+  <span class="eyebrow">Alertes</span>
+  <h1 class="page-h">7 alertes <em>actives</em></h1>
+  <p class="page-lead">Modifications réglementaires susceptibles d'impacter vos déploiements IA.</p>
+  <div class="alert-list" id="alerts-list"></div>
+</div>
+
+<!-- VEILLE -->
+<div class="page" id="p-veille">
+  <span class="eyebrow">Veille réglementaire</span>
+  <h1 class="page-h">Actualités &amp; publications</h1>
+  <p class="page-lead">Suivi des évolutions normatives IA, RGPD, NIS2 et cybersécurité.</p>
+  <div class="veille-list" id="veille-list"></div>
+</div>
+
+<!-- AUDIT -->
+<div class="page" id="p-audit">
+  <span class="eyebrow">Audit de conformité</span>
+  <h1 class="page-h">Lancer un <em>audit IA Act</em></h1>
+  <p class="page-lead">Audit structuré en 5 étapes — méthodologie CONSEILPREV, conforme EU AI Act + NIS2 + RGPD.</p>
+  <div class="col3">
+    <div class="feat"><div class="feat-h" style="margin-bottom:6px">① Cartographier</div><p class="feat-p">Inventaire et classification selon l'annexe III de l'AI Act.</p></div>
+    <div class="feat"><div class="feat-h" style="margin-bottom:6px">② Évaluer</div><p class="feat-p">Scoring multicritère : droits fondamentaux, sécurité, performance.</p></div>
+    <div class="feat"><div class="feat-h" style="margin-bottom:6px">③ Planifier</div><p class="feat-p">Feuille de route priorisée avec délais réglementaires.</p></div>
   </div>
-
-  <!-- ════ PAGE : COMPARATEUR ════ -->
-  <div class="page" id="page-comparateur">
-    <span class="eyebrow">Comparateur</span>
-    <h1 class="page-title">Comparer les frameworks</h1>
-    <p class="page-sub">Sélectionnez jusqu'à 4 juridictions pour un benchmark côte-à-côte sur les critères clés.</p>
-    <div class="comp-table">
-      <div class="comp-head" style="grid-template-columns:220px repeat(4,1fr)">
-        <div class="comp-cell">Critère</div>
-        <div class="comp-cell">🇪🇺 EU AI Act</div>
-        <div class="comp-cell">🇺🇸 US EO 14110</div>
-        <div class="comp-cell">🇬🇧 UK AI Framework</div>
-        <div class="comp-cell">🇨🇳 CAC Rules</div>
-      </div>
-      <div id="comp-rows"></div>
-    </div>
+  <div class="rule"></div>
+  <div class="form-block" style="max-width:540px">
+    <div class="sec-h" style="margin-bottom:4px">Démarrer un audit assisté</div>
+    <div class="sec-sub" style="margin-bottom:20px">Un expert CONSEILPREV vous accompagne à chaque étape.</div>
+    <div class="form-row"><label class="form-lbl">Votre nom</label><input class="form-el" placeholder="Prénom Nom"></div>
+    <div class="form-row"><label class="form-lbl">Email professionnel</label><input class="form-el" type="email" placeholder="vous@entreprise.com"></div>
+    <div class="form-row"><label class="form-lbl">Entreprise</label><input class="form-el" placeholder="Raison sociale"></div>
+    <div class="form-row"><label class="form-lbl">Périmètre</label><textarea class="form-el" placeholder="Décrivez vos systèmes IA à auditer…"></textarea></div>
+    <button class="submit" onclick="window.open('mailto:christophe.cerf@outlook.com?subject=[Sentinel AI] Demande audit conformité IA Act','_blank')">Soumettre la demande →</button>
   </div>
+</div>
 
-  <!-- ════ PAGE : GÉOPOLITIQUE ════ -->
-  <div class="page" id="page-geopolitique">
-    <span class="eyebrow">Géopolitique</span>
-    <h1 class="page-title">Tensions &amp; alliances réglementaires</h1>
-    <p class="page-sub">Lecture géopolitique de la compétition normative sur l'IA : blocs réglementaires, fragmentation, influence des standards.</p>
-    <div class="cards-grid">
-      <div class="card"><span class="card-arrow">→</span><span class="card-icon">🌐</span><div class="card-title">Bloc européen</div><p class="card-desc">L'EU AI Act comme standard d'exportation — influence sur 40+ pays.</p></div>
-      <div class="card"><span class="card-arrow">→</span><span class="card-icon">🔵</span><div class="card-title">Modèle américain</div><p class="card-desc">Approche sectorielle et autorégulation — concurrence normative avec l'UE.</p></div>
-      <div class="card"><span class="card-arrow">→</span><span class="card-icon">🔴</span><div class="card-title">Doctrine chinoise</div><p class="card-desc">Contrôle algorithmique d'État — double enjeu souveraineté/compétitivité.</p></div>
-    </div>
-    <div class="divider"></div>
-    <div class="section-title" style="margin-bottom:16px">Chronologie réglementaire 2020–2026</div>
-    <div id="timeline-wrap"></div>
-  </div>
+<!-- ÉQUIPE -->
+<div class="page" id="p-equipe">
+  <span class="eyebrow">Espace équipe</span>
+  <h1 class="page-h">Gestion des accès</h1>
+  <p class="page-lead">Partagez vos analyses et rapports avec votre équipe conformité.</p>
+  <div class="tbl-wrap" style="max-width:600px"><div class="tbl-head"><span class="tbl-title">Membres actifs</span><button class="submit" style="font-size:10px;padding:6px 14px" onclick="window.open('mailto:christophe.cerf@outlook.com?subject=[Sentinel AI] Invitation équipe','_blank')">+ Inviter</button></div><div id="team-rows"></div></div>
+</div>
 
-  <!-- ════ PAGE : AIDE À LA DÉCISION ════ -->
-  <div class="page" id="page-decision">
-    <span class="eyebrow">Aide à la décision</span>
-    <h1 class="page-title">Simuler un déploiement IA</h1>
-    <p class="page-sub">Évaluez la conformité de votre cas d'usage IA selon l'EU AI Act, NIS2 et RGPD en 3 minutes.</p>
-    <div class="checker-form">
-      <div class="form-row-2">
-        <div class="form-row">
-          <label class="form-label">Secteur d'activité</label>
-          <select class="form-select" id="dec-sector">
-            <option value="">Choisir un secteur...</option>
-            <option value="energie">Énergie / Utilities</option>
-            <option value="sante">Santé</option>
-            <option value="finance">Finance / Banque</option>
-            <option value="industrie">Industrie</option>
-            <option value="transport">Transport</option>
-            <option value="it">IT / Tech</option>
-            <option value="public">Secteur public</option>
-          </select>
-        </div>
-        <div class="form-row">
-          <label class="form-label">Type de système IA</label>
-          <select class="form-select" id="dec-system">
-            <option value="">Choisir un système...</option>
-            <option value="prediction">Système de prédiction</option>
-            <option value="decision">Aide à la décision</option>
-            <option value="reconnaissance">Reconnaissance biométrique</option>
-            <option value="generatif">IA générative / LLM</option>
-            <option value="monitoring">Surveillance / Monitoring</option>
-            <option value="recommandation">Recommandation</option>
-          </select>
-        </div>
+<!-- TRAINING -->
+<div class="page" id="p-training">
+  <span class="eyebrow">Hub Training</span>
+  <h1 class="page-h">Formations conformité <em>IA</em></h1>
+  <p class="page-lead">Modules certifiants sur l'EU AI Act, NIS2, RGPD et la gouvernance IA.</p>
+  <div class="training-grid" id="training-grid"></div>
+</div>
+
+<!-- MON ESPACE -->
+<div class="page" id="p-espace">
+  <span class="eyebrow">Mon Espace</span>
+  <h1 class="page-h">Tableau de bord <em>personnel</em></h1>
+  <div class="col2">
+    <div>
+      <div class="tbl-wrap" style="margin-bottom:16px">
+        <div class="tbl-head"><span class="tbl-title">Activité récente</span></div>
+        <div style="padding:0 20px" id="act-list"></div>
       </div>
-      <div class="form-row">
-        <label class="form-label">Description du cas d'usage</label>
-        <textarea class="form-textarea" id="dec-desc" placeholder="Ex : Système de scoring de crédit automatisé utilisant un modèle ML pour évaluer les demandes en temps réel..."></textarea>
+      <div class="tbl-wrap">
+        <div class="tbl-head"><span class="tbl-title">Mes favoris</span></div>
+        <div style="padding:14px 20px;font-size:12px;color:var(--muted);line-height:2">EU AI Act · Risques haut risque · NIS2 Article 21 · RGPD Article 22</div>
       </div>
-      <div class="form-row-2">
-        <div class="form-row">
-          <label class="form-label">Juridiction principale</label>
-          <select class="form-select" id="dec-jur">
-            <option value="eu">Union Européenne</option>
-            <option value="fr">France (EU + droit national)</option>
-            <option value="uk">Royaume-Uni</option>
-            <option value="us">États-Unis</option>
-          </select>
-        </div>
-        <div class="form-row">
-          <label class="form-label">Impact sur des personnes ?</label>
-          <select class="form-select" id="dec-impact">
-            <option value="high">Oui — décisions individuelles</option>
-            <option value="med">Oui — indirectement</option>
-            <option value="low">Non — usage interne uniquement</option>
-          </select>
-        </div>
-      </div>
-      <button class="submit-btn" onclick="runAuditCheck()">✦ Analyser la conformité →</button>
     </div>
-    <div class="result-card" id="audit-result">
-      <div class="result-grid">
-        <div>
-          <div class="result-label">Score de risque</div>
-          <div class="result-score-big" id="res-score">7.8</div>
-          <div style="font-size:11px;color:var(--gray);margin-top:4px" id="res-level">Haut risque — Article 6(2) AI Act</div>
-        </div>
-        <div style="flex:1">
-          <div style="font-size:12px;font-weight:600;color:var(--slate);margin-bottom:10px">Obligations identifiées</div>
-          <div id="res-obligations" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px"></div>
-          <div style="font-size:12px;color:var(--gray);line-height:1.6" id="res-text"></div>
+    <div>
+      <div class="tbl-wrap" style="margin-bottom:16px">
+        <div class="tbl-head"><span class="tbl-title">Score de veille</span></div>
+        <div style="padding:20px">
+          <div style="font-family:var(--serif);font-size:52px;color:var(--ink);line-height:1;margin-bottom:6px">94<span style="font-size:24px;color:var(--muted)">/100</span></div>
+          <div style="font-size:11px;color:var(--muted)">Régularité de consultation et évaluations.</div>
         </div>
       </div>
-      <div class="result-actions">
-        <button class="submit-btn" onclick="showPage('audit')">Lancer un audit complet →</button>
-        <button class="topbar-btn" onclick="window.open('mailto:christophe.cerf@outlook.com?subject=[Sentinel AI] Audit conformité IA&body=Bonjour,\n\nSuite à mon analyse sur Sentinel AI, je souhaite initier un audit de conformité.\n','_blank')">Contacter CONSEILPREV</button>
+      <div class="tbl-wrap">
+        <div class="tbl-head"><span class="tbl-title">Prochaines échéances</span></div>
+        <div id="deadlines" style="padding:0 20px 8px"></div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- ════ PAGE : RÉGLEMENTATIONS ════ -->
-  <div class="page" id="page-reglementations">
-    <span class="eyebrow">Réglementations</span>
-    <h1 class="page-title">Base documentaire</h1>
-    <p class="page-sub">Textes de référence, guides d'application et jurisprudence IA classifiés par régime.</p>
-    <div id="reg-list"></div>
+<!-- REPORTING -->
+<div class="page" id="p-report">
+  <span class="eyebrow">Reporting</span>
+  <h1 class="page-h">Dashboard <em>conformité</em></h1>
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-lbl">Systèmes audités</div><div class="kpi-val">12</div><div class="kpi-tr up">↑ +3 ce mois</div></div>
+    <div class="kpi"><div class="kpi-lbl">Score conformité moyen</div><div class="kpi-val">68%</div><div class="kpi-tr up">↑ +8 pts</div></div>
+    <div class="kpi"><div class="kpi-lbl">Actions en attente</div><div class="kpi-val">7</div><div class="kpi-tr dn">↓ −2 ce mois</div></div>
   </div>
+  <div class="comp-wrap"><div class="tbl-head" style="border-bottom:1px solid var(--rule);display:flex;padding:14px 20px"><span class="tbl-title">Rapport par système</span><span class="tbl-link" style="margin-left:auto">↓ Exporter PDF</span></div><div class="comp-head-row" style="grid-template-columns:2fr 120px 100px 120px 70px" id="rep-head"></div><div id="rep-body"></div></div>
+</div>
 
-  <!-- ════ PAGE : ÉVALUATIONS ════ -->
-  <div class="page" id="page-evals">
-    <span class="eyebrow">Mes évaluations</span>
-    <h1 class="page-title">Historique des analyses</h1>
-    <p class="page-sub">Vos évaluations de conformité sauvegardées, avec score de risque et recommandations.</p>
-    <div class="table-wrap" id="evals-list"></div>
-  </div>
-
-  <!-- ════ PAGE : ALERTES ════ -->
-  <div class="page" id="page-alertes">
-    <span class="eyebrow">Alertes</span>
-    <h1 class="page-title">7 alertes actives</h1>
-    <p class="page-sub">Modifications réglementaires et nouvelles obligations susceptibles d'impacter vos déploiements IA.</p>
-    <div class="table-wrap" id="alerts-list"></div>
-  </div>
-
-  <!-- ════ PAGE : VEILLE ════ -->
-  <div class="page" id="page-veille">
-    <span class="eyebrow">Veille réglementaire</span>
-    <h1 class="page-title">Actualités &amp; publications</h1>
-    <p class="page-sub">Suivi en temps réel des évolutions normatives IA, RGPD, NIS2 et cybersécurité industrielle.</p>
-    <div class="veille-grid" id="veille-list"></div>
-  </div>
-
-  <!-- ════ PAGE : AUDIT ════ -->
-  <div class="page" id="page-audit">
-    <span class="eyebrow">Audit de conformité</span>
-    <h1 class="page-title">Lancer un audit IA Act</h1>
-    <p class="page-sub">Audit structuré en 5 étapes selon la méthodologie CONSEILPREV — conforme EU AI Act + NIS2 + RGPD.</p>
-    <div class="cards-grid">
-      <div class="card"><span class="card-icon">①</span><div class="card-title">Cartographier les systèmes IA</div><p class="card-desc">Inventaire et classification selon l'annexe III de l'AI Act.</p></div>
-      <div class="card"><span class="card-icon">②</span><div class="card-title">Évaluer les risques</div><p class="card-desc">Scoring multicritère : droits fondamentaux, sécurité, performance.</p></div>
-      <div class="card"><span class="card-icon">③</span><div class="card-title">Plan de mise en conformité</div><p class="card-desc">Feuille de route priorisée avec délais réglementaires.</p></div>
-    </div>
-    <div class="divider"></div>
-    <div class="checker-form" style="max-width:560px">
-      <div class="section-title" style="margin-bottom:6px">Démarrer un audit assisté</div>
-      <div style="font-size:12px;color:var(--gray);margin-bottom:20px">Un expert CONSEILPREV vous accompagne à chaque étape.</div>
-      <div class="form-row"><label class="form-label">Votre nom</label><input class="form-input" placeholder="Prénom Nom"></div>
-      <div class="form-row"><label class="form-label">Email professionnel</label><input class="form-input" type="email" placeholder="vous@entreprise.com"></div>
-      <div class="form-row"><label class="form-label">Entreprise</label><input class="form-input" placeholder="Raison sociale"></div>
-      <div class="form-row"><label class="form-label">Périmètre de l'audit</label><textarea class="form-textarea" placeholder="Décrivez vos systèmes IA à auditer..."></textarea></div>
-      <button class="submit-btn" onclick="window.open('mailto:christophe.cerf@outlook.com?subject=[Sentinel AI] Demande d audit conformité IA Act','_blank')">Soumettre la demande d'audit →</button>
+<!-- CHAT -->
+<div class="page" id="p-chat">
+  <span class="eyebrow">Chat Conformité</span>
+  <h1 class="page-h" style="margin-bottom:8px">Assistant <em>réglementaire</em></h1>
+  <p class="page-lead" style="margin-bottom:16px">Posez vos questions sur l'EU AI Act, NIS2, RGPD — réponses fondées sur les textes officiels.</p>
+  <div style="margin-bottom:14px" id="chat-tags-wrap"></div>
+  <div class="chat-outer">
+    <div class="chat-msgs" id="chat-msgs"></div>
+    <div class="chat-bar">
+      <textarea class="chat-in" id="chat-in" placeholder="Posez votre question réglementaire…" rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();doChat();}"></textarea>
+      <button class="chat-send" onclick="doChat()">Envoyer →</button>
     </div>
   </div>
-
-  <!-- ════ PAGE : ÉQUIPE ════ -->
-  <div class="page" id="page-equipe">
-    <span class="eyebrow">Espace équipe</span>
-    <h1 class="page-title">Gestion des accès</h1>
-    <p class="page-sub">Partagez vos analyses et rapports avec votre équipe conformité.</p>
-    <div class="espace-card" style="max-width:640px">
-      <div class="espace-card-title">Membres actifs</div>
-      <div id="team-list"></div>
-    </div>
-    <div style="margin-top:16px">
-      <button class="submit-btn" onclick="window.open('mailto:christophe.cerf@outlook.com?subject=[Sentinel AI] Accès équipe','_blank')">+ Inviter un collaborateur</button>
-    </div>
-  </div>
-
-  <!-- ════ PAGE : TRAINING ════ -->
-  <div class="page" id="page-training">
-    <span class="eyebrow">Hub Training</span>
-    <h1 class="page-title">Formations conformité IA</h1>
-    <p class="page-sub">Modules certifiants sur l'EU AI Act, NIS2, RGPD et la gouvernance IA — réalisés par les experts CONSEILPREV.</p>
-    <div class="training-grid" id="training-grid"></div>
-  </div>
-
-  <!-- ════ PAGE : MON ESPACE ════ -->
-  <div class="page" id="page-espace">
-    <span class="eyebrow">Mon Espace</span>
-    <h1 class="page-title">Tableau de bord personnel</h1>
-    <div class="espace-grid">
-      <div>
-        <div class="espace-card">
-          <div class="espace-card-title">Activité récente</div>
-          <div id="activity-list"></div>
-        </div>
-        <div class="espace-card">
-          <div class="espace-card-title">Mes favoris</div>
-          <div style="font-size:12px;color:var(--gray)">EU AI Act · Risques haut risque · NIS2 Article 21 · RGPD Article 22</div>
-        </div>
-      </div>
-      <div>
-        <div class="espace-card">
-          <div class="espace-card-title">Mon score de veille</div>
-          <div style="font-family:var(--font-disp);font-size:48px;font-weight:700;color:var(--slate);line-height:1;margin-bottom:8px">94<span style="font-size:24px;color:var(--gray)">/100</span></div>
-          <div style="font-size:11px;color:var(--gray)">Basé sur votre régularité de consultation et vos évaluations.</div>
-        </div>
-        <div class="espace-card">
-          <div class="espace-card-title">Prochaines échéances</div>
-          <div id="deadlines-list"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ════ PAGE : REPORTING ════ -->
-  <div class="page" id="page-reporting">
-    <span class="eyebrow">Reporting</span>
-    <h1 class="page-title">Tableau de bord conformité</h1>
-    <div class="report-kpi-row">
-      <div class="kpi-card"><div class="kpi-label">Systèmes IA audités</div><div class="kpi-value">12</div><div class="kpi-trend up">↑ +3 ce mois</div></div>
-      <div class="kpi-card"><div class="kpi-label">Score conformité moyen</div><div class="kpi-value">68%</div><div class="kpi-trend up">↑ +8pts</div></div>
-      <div class="kpi-card"><div class="kpi-label">Actions en attente</div><div class="kpi-value">7</div><div class="kpi-trend down">↓ −2 ce mois</div></div>
-    </div>
-    <div class="table-wrap">
-      <div class="table-header"><span class="table-title-sm">Rapport détaillé par système</span><span class="table-link">↓ Exporter PDF</span></div>
-      <div id="report-table"></div>
-    </div>
-  </div>
-
-  <!-- ════ PAGE : CHAT ════ -->
-  <div class="page" id="page-chat">
-    <span class="eyebrow">Chat Conformité</span>
-    <h1 class="page-title" style="margin-bottom:8px">Assistant réglementaire IA</h1>
-    <p class="page-sub" style="margin-bottom:20px">Posez vos questions sur l'EU AI Act, NIS2, RGPD — réponses basées sur les textes officiels.</p>
-    <div style="margin-bottom:12px">
-      <span class="chat-tag" onclick="askQuestion('Qu\'est-ce que l\'article 6 de l\'AI Act ?')">Art. 6 AI Act</span>
-      <span class="chat-tag" onclick="askQuestion('Quelles sont les obligations NIS2 pour mon secteur ?')">Obligations NIS2</span>
-      <span class="chat-tag" onclick="askQuestion('Comment classifier mon système IA selon l\'AI Act ?')">Classification IA</span>
-      <span class="chat-tag" onclick="askQuestion('Quelles sanctions prévoit l\'AI Act ?')">Sanctions AI Act</span>
-    </div>
-    <div class="chat-wrap">
-      <div class="chat-messages" id="chat-messages">
-        <div class="chat-msg bot">
-          <div class="chat-avatar bot">S</div>
-          <div class="chat-bubble">Bonjour, je suis votre assistant réglementaire Sentinel AI, propulsé par CONSEILPREV.<br><br>Je peux vous aider sur l'<strong>EU AI Act</strong>, <strong>NIS2</strong>, <strong>RGPD</strong> et la gouvernance IA. Posez votre question directement, ou sélectionnez un thème ci-dessus.</div>
-        </div>
-      </div>
-      <div class="chat-input-row">
-        <textarea class="chat-input" id="chat-input" placeholder="Posez votre question réglementaire…" rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat();}"></textarea>
-        <button class="chat-send" onclick="sendChat()">Envoyer →</button>
-      </div>
-    </div>
-  </div>
+</div>
 
 </main>
 
 <script>
-// ════ SENTINEL AI — Application Logic ════
 'use strict';
 
-// ── Page navigation ──
-var PAGE_META = {
-  apercu:         {section:'ÉDITION DU JOUR', label:'Aperçu'},
-  carto:          {section:'CARTOGRAPHIE', label:'Carte mondiale'},
-  comparateur:    {section:'ANALYSE', label:'Comparateur'},
-  geopolitique:   {section:'GÉOPOLITIQUE', label:'Tensions normatives'},
-  decision:       {section:'AIDE À LA DÉCISION', label:'Simuler un déploiement'},
-  reglementations:{section:'CONFORMITÉ', label:'Réglementations'},
-  evals:          {section:'CONFORMITÉ', label:'Mes évaluations'},
-  alertes:        {section:'ALERTES', label:'7 alertes actives'},
-  veille:         {section:'VEILLE', label:'Actualités'},
-  audit:          {section:'CONFORMITÉ', label:'Audit IA Act'},
-  equipe:         {section:'ESPACE', label:'Équipe'},
-  training:       {section:'FORMATION', label:'Hub Training'},
-  espace:         {section:'MON ESPACE', label:'Tableau de bord'},
-  reporting:      {section:'REPORTING', label:'Dashboard'},
-  chat:           {section:'ASSISTANT IA', label:'Chat Conformité'},
-};
-
-function showPage(id){
-  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
-  document.querySelectorAll('.nav-item').forEach(function(n){ n.classList.remove('active'); });
-  var pg = document.getElementById('page-'+id);
-  if(pg) pg.classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(function(n){
-    if(n.getAttribute('onclick') && n.getAttribute('onclick').indexOf("'"+id+"'") >= 0)
-      n.classList.add('active');
+/* ── Navigation ── */
+function go(id, el, sec, pg) {
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('on'); });
+  document.querySelectorAll('.sb-item').forEach(function(i){ i.classList.remove('on'); });
+  var p = document.getElementById('p-'+id);
+  if (p) p.classList.add('on');
+  if (el) el.classList.add('on');
+  else document.querySelectorAll('.sb-item').forEach(function(i){
+    if (i.getAttribute('onclick') && i.getAttribute('onclick').indexOf("'"+id+"'") >= 0) i.classList.add('on');
   });
-  var meta = PAGE_META[id] || {section:'SENTINEL AI', label:id};
-  document.getElementById('tb-section').textContent = meta.section;
-  document.getElementById('tb-page').textContent = meta.label;
+  if (sec) document.getElementById('tb-sec').textContent = sec;
+  if (pg) document.getElementById('tb-pg').textContent = pg;
   window.scrollTo(0,0);
 }
 
-// ── Date ──
-(function(){
-  var d = new Date();
-  var opts = {weekday:'long',day:'numeric',month:'long',year:'numeric'};
-  document.getElementById('tb-date').textContent = d.toLocaleDateString('fr-FR',opts).toUpperCase();
-})();
+/* ── Date ── */
+document.getElementById('tb-date').textContent = new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).toUpperCase();
 
-// ── Animated counters ──
-document.querySelectorAll('[data-count]').forEach(function(el){
-  var target = parseInt(el.dataset.count);
-  var start = Date.now(), dur = 1200;
-  var raf = function(){
-    var p = Math.min(1,(Date.now()-start)/dur);
-    el.textContent = Math.round(p * target);
-    if(p < 1) requestAnimationFrame(raf);
-  };
-  requestAnimationFrame(raf);
+/* ── Counters ── */
+[['c1',60],['c2',14],['c3',38]].forEach(function(pair){
+  var el = document.getElementById(pair[0]), target = pair[1];
+  if (!el) return;
+  var t0 = Date.now();
+  (function raf(){
+    var p = Math.min(1,(Date.now()-t0)/1100);
+    el.textContent = Math.round(p*target);
+    if (p < 1) requestAnimationFrame(raf);
+  })();
 });
 
-// ── DATA ──
-var JURIDICTIONS = [
-  {num:'01',flag:'🇪🇺',code:'EU',name:'Union européenne',reg:'EU AI Act (Règlement 2024/1689)',score:9.2},
-  {num:'02',flag:'🇨🇳',code:'CN',name:'Chine',reg:'CAC Deep Synthesis Rules 2023',score:8.8},
-  {num:'03',flag:'🇬🇧',code:'UK',name:'Royaume-Uni',reg:'AI Governance Framework 2024',score:7.4},
-  {num:'04',flag:'🇺🇸',code:'US',name:'États-Unis',reg:'EO 14110 — Safe AI (Biden 2023)',score:6.6},
-  {num:'05',flag:'🇯🇵',code:'JP',name:'Japon',reg:'AI Strategy Council Guidelines',score:5.8},
-  {num:'06',flag:'🇰🇷',code:'KR',name:'Corée du Sud',reg:'AI Industry Promotion Act 2023',score:5.6},
-  {num:'07',flag:'🇨🇦',code:'CA',name:'Canada',reg:'Artificial Intelligence and Data Act (AIDA)',score:5.2},
-  {num:'08',flag:'🇧🇷',code:'BR',name:'Brésil',reg:'PL 2338/2023 — AI Governance',score:4.8},
-  {num:'09',flag:'🇸🇬',code:'SG',name:'Singapour',reg:'AI Governance Framework v2',score:4.4},
-  {num:'10',flag:'🇦🇪',code:'AE',name:'Émirats arabes unis',reg:'UAE AI Strategy 2031',score:4.0},
+/* ── Data ── */
+var JURS = [
+  {n:'01',f:'🇪🇺',c:'EU',name:'Union européenne',reg:'EU AI Act — Règlement 2024/1689',s:9.2},
+  {n:'02',f:'🇨🇳',c:'CN',name:'Chine',reg:'CAC Deep Synthesis Rules 2023',s:8.8},
+  {n:'03',f:'🇬🇧',c:'UK',name:'Royaume-Uni',reg:'AI Governance Framework 2024',s:7.4},
+  {n:'04',f:'🇺🇸',c:'US',name:'États-Unis',reg:'EO 14110 — Safe AI (Biden 2023)',s:6.6},
+  {n:'05',f:'🇯🇵',c:'JP',name:'Japon',reg:'AI Strategy Council Guidelines',s:5.8},
+  {n:'06',f:'🇰🇷',c:'KR',name:'Corée du Sud',reg:'AI Industry Promotion Act 2023',s:5.6},
+  {n:'07',f:'🇨🇦',c:'CA',name:'Canada',reg:'Artificial Intelligence & Data Act (AIDA)',s:5.2},
+  {n:'08',f:'🇧🇷',c:'BR',name:'Brésil',reg:'PL 2338/2023 — AI Governance',s:4.8},
+  {n:'09',f:'🇸🇬',c:'SG',name:'Singapour',reg:'AI Governance Framework v2',s:4.4},
+  {n:'10',f:'🇦🇪',c:'AE',name:'Émirats arabes unis',reg:'UAE AI Strategy 2031',s:4.0},
+  {n:'11',f:'🇮🇳',c:'IN',name:'Inde',reg:'MEITY AI Principles 2023',s:3.8},
+  {n:'12',f:'🇦🇺',c:'AU',name:'Australie',reg:'AI Ethics Framework CSIRO',s:3.6},
 ];
 
-var COMPARATEUR_ROWS = [
-  {label:'Portée',          eu:'Toute chaîne IA',    us:'Fédéral limité',    uk:'Sectoriel',         cn:'Contenu génératif'},
-  {label:'Classification',  eu:'4 niveaux risque',   us:'Sectorielle',       uk:'Principes',         cn:'Catégories contenu'},
-  {label:'Sanctions',       eu:'35M€ / 7% CA',       us:'Variable / DoJ',    uk:'ICO discrétion',    cn:'3× bénéfices'},
-  {label:'IA haut risque',  eu:'Annexe III — 8 cat', us:'Non défini',        uk:'Case by case',      cn:'Oui — recommandation'},
-  {label:'Transparence',    eu:'Obligatoire',         us:'Volontaire',        uk:'Best practice',     cn:'Marque obligatoire'},
-  {label:'Droits fondamentaux', eu:'Éval. FRIA requise', us:'EO exec. only', uk:'Recommandé',       cn:'N/A'},
-  {label:'Entrée en vigueur', eu:'Phased 2025–2027', us:'Actif (EO)',        uk:'Actif (guidance)',  cn:'Actif'},
-  {label:'Extraterritorialité', eu:'Oui — marché UE', us:'Partielle',        uk:'Oui — UK market',  cn:'CN-only'},
-];
+function jRow(j){ return '<div class="jrow"><div class="jrow-n">'+j.n+'</div><div class="jrow-flag">'+j.f+'<span class="jrow-code">'+j.c+'</span></div><div><div class="jrow-name">'+j.name+'</div><div class="jrow-reg">'+j.reg+'</div></div><div class="sbar-wrap"><div class="sbar-track"><div class="sbar-fill" style="width:'+Math.round(j.s*10)+'%"></div></div><span class="sbar-lbl">'+j.s+' / 10</span></div><div class="jrow-score">'+j.s+'</div></div>'; }
 
-var ALERTS = [
-  {level:'high', title:"EU AI Act — Entrée en vigueur des obligations IA haut risque", meta:"Article 6(2) — Systèmes affectant les infrastructures critiques", date:"15 août 2026"},
-  {level:'high', title:"NIS2 — Date limite transposition nationale", meta:"Directive 2022/2555 — Non-conformité ANSSI signalée", date:"12 août 2026"},
-  {level:'med',  title:"RGPD — Nouvelle décision CEPD sur les LLM", meta:"Traitement données d'entraînement — Base légale requis", date:"08 août 2026"},
-  {level:'med',  title:"DORA — Exigences tests de résilience ICT", meta:"Art. 26 DORA — Entités financières critiques", date:"03 août 2026"},
-  {level:'high', title:"AI Act — Guide ENISA systèmes cybersécurité IA", meta:"Interaction IA Act × NIS2 — Nouvelle guidance", date:"28 juil. 2026"},
-  {level:'low',  title:"ISO 42001 — Nouvelle version publiée", meta:"Gouvernance IA — Alignement EU AI Act confirmé", date:"20 juil. 2026"},
-  {level:'med',  title:"US EO 14110 — Révision imminente sous admin. Trump", meta:"Impact sur accords bilatéraux UE-US IA", date:"15 juil. 2026"},
-];
-
-var VEILLE = [
-  {tags:[{cls:'veille-tag-eu',txt:'EU'}], title:"EU AI Act : le premier délai d'août 2026 approche — ce que votre entreprise doit savoir", excerpt:"Les obligations de l'Article 5 (pratiques interdites) s'appliquent depuis le 2 février 2025. Le prochain palier concerne les systèmes haut risque et entre en vigueur le 2 août 2026.", date:"15 juin 2026"},
-  {tags:[{cls:'veille-tag-fr',txt:'FR'}], title:"ANSSI publie son guide de sécurité des systèmes IA industriels", excerpt:"Le guide couvre les exigences NIS2 pour les OES utilisant de l'IA dans leurs processus critiques, avec une grille d'analyse des risques spécifique IA.", date:"10 juin 2026"},
-  {tags:[{cls:'veille-tag-eu',txt:'EU'},{cls:'veille-tag-int',txt:'ISO'}], title:"ISO/IEC 42001 : comment l'aligner avec l'AI Act ?", excerpt:"Le standard de management des systèmes IA devient un outil central dans la démonstration de conformité. Analyse de l'alignement avec les exigences des articles 9 à 15 de l'AI Act.", date:"5 juin 2026"},
-  {tags:[{cls:'veille-tag-int',txt:'GLOBAL'}], title:"Géopolitique normative : l'EU AI Act s'exporte dans 40 pays", excerpt:"Les négociations commerciales intègrent désormais la réciprocité réglementaire IA. Le modèle bruxellois influence les législations en Afrique francophone, Amérique latine et Asie du Sud-Est.", date:"1 juin 2026"},
-];
-
-var REGLEMENTS = [
-  {icon:'🇪🇺', name:'EU AI Act', full:'Règlement 2024/1689', date:'Août 2026', status:'high', desc:'Cadre horizontal, classification par niveaux de risque, obligations FRIA, pénalités jusqu\'à 7% CA.'},
-  {icon:'🔒', name:'NIS2', full:'Directive 2022/2555', date:'Oct. 2024', status:'ok', desc:'Sécurité des réseaux et systèmes d\'information — inclut les systèmes IA critiques.'},
-  {icon:'📋', name:'RGPD', full:'Règlement 2016/679', date:'Mai 2018', status:'ok', desc:'Protection des données personnelles — Art. 22 sur les décisions automatisées.'},
-  {icon:'💰', name:'DORA', full:'Règlement 2022/2554', date:'Jan. 2025', status:'med', desc:'Résilience opérationnelle numérique du secteur financier.'},
-  {icon:'🌐', name:'CRA', full:'Cyber Resilience Act 2024', date:'2027', status:'gray', desc:'Exigences de cybersécurité pour les produits connectés, incluant ceux intégrant IA.'},
-];
-
-var TRAININGS = [
-  {badge:'tb-req', title:'EU AI Act — Fondamentaux', desc:'Classification des risques, obligations par catégorie, calendrier de mise en conformité.', duration:'3h', progress:75},
-  {badge:'tb-req', title:'NIS2 pour les équipes IA', desc:'Obligations de sécurité pour les opérateurs essentiels utilisant des systèmes IA.', duration:'2h', progress:40},
-  {badge:'tb-opt', title:'RGPD & Données d\'entraînement', desc:'Base légale, minimisation, droits des personnes dans les systèmes IA générateurs.', duration:'2h30', progress:100},
-  {badge:'tb-opt', title:'Gouvernance IA — ISO 42001', desc:'Mise en place d\'un système de management IA conforme au standard international.', duration:'4h', progress:0},
-];
-
-var EVALS_DATA = [
-  {icon:'⚡', name:'Système de prédiction énergétique', desc:'Secteur Énergie — EU AI Act Art.6(2)', score:8.2, cls:'high', date:'14/06/2026'},
-  {icon:'🏦', name:'Scoring crédit automatisé', desc:'Finance — RGPD Art.22 + DORA', score:7.1, cls:'high', date:'10/06/2026'},
-  {icon:'🏭', name:'Détection d\'anomalies industrielles', desc:'Industrie — NIS2 OES', score:4.5, cls:'low', date:'02/06/2026'},
-];
-
-// ── Render Carto ──
+/* Aperçu — top 5 */
+(function(){ var b = document.getElementById('ap-jur'); if(!b) return; b.innerHTML = JURS.slice(0,5).map(jRow).join(''); })();
+/* Aperçu — régions */
 (function(){
-  var body = document.getElementById('carto-table-body');
-  if(!body) return;
-  body.innerHTML = JURIDICTIONS.map(function(j){
-    return '<div class="jur-row">' +
-      '<div class="jur-num">'+j.num+'</div>' +
-      '<div class="jur-flag">'+j.flag+'<span class="jur-code">'+j.code+'</span></div>' +
-      '<div><div class="jur-name">'+j.name+'</div><div class="jur-reg">'+j.reg+'</div></div>' +
-      '<div class="score-bar-wrap"><div class="score-bar-track"><div class="score-bar-fill" style="width:'+Math.round(j.score*10)+'%"></div></div><span class="score-label">'+j.score+' / 10</span></div>' +
-      '<div class="jur-score">'+j.score+'</div>' +
-      '</div>';
-  }).join('');
+  var b = document.getElementById('ap-reg'); if(!b) return;
+  [['Europe','8.1','81%','AI Act + RGPD + NIS2'],['Asie-Pacifique','6.9','69%','Chine, Japon, Corée'],['Amériques','5.4','54%','US EO + Canada AIDA'],['Afrique & MO','3.2','32%','Cadres émergents']].forEach(function(r){
+    b.innerHTML += '<div class="reg-item"><div class="reg-name">'+r[0]+'</div><div class="reg-val">'+r[1]+'</div><div class="reg-bar"><div class="reg-fill" style="width:'+r[2]+'"></div></div><div class="reg-txt">'+r[3]+'</div></div>';
+  });
 })();
+/* Carto all */
+(function(){ var b = document.getElementById('carto-all'); if(!b) return; b.innerHTML = JURS.map(jRow).join(''); })();
 
-// ── Render Comparateur ──
+/* Comparateur */
 (function(){
-  var body = document.getElementById('comp-rows');
-  if(!body) return;
-  var chips = function(v){
-    if(v.includes('Obligatoire')||v.includes('requis')||v.includes('35M')||v.includes('Toute')) return '<span class="chip chip-red">'+v+'</span>';
-    if(v.includes('Actif')||v.includes('Oui')) return '<span class="chip chip-green">'+v+'</span>';
-    if(v.includes('limité')||v.includes('Partielle')) return '<span class="chip chip-orange">'+v+'</span>';
-    if(v.includes('N/A')||v.includes('Non défini')||v.includes('Volontaire')) return '<span class="chip chip-gray">'+v+'</span>';
+  var COLS = ['Critère','🇪🇺 EU AI Act','🇺🇸 US EO 14110','🇬🇧 UK Framework','🇨🇳 CAC Rules'];
+  var grid = 'grid-template-columns:200px repeat(4,1fr)';
+  var h = document.getElementById('comp-head'); if(!h) return;
+  h.innerHTML = COLS.map(function(c){ return '<div class="comp-cell">'+c+'</div>'; }).join('');
+  h.style.cssText = 'display:grid;'+grid+';background:var(--bg);border-bottom:2px solid var(--rule)';
+  var ROWS = [
+    ['Portée','Toute chaîne IA','Fédéral limité','Sectoriel','Contenu génératif'],
+    ['Classification','4 niveaux risque','Sectorielle','Principes','Catégories contenu'],
+    ['Sanctions','35 M€ / 7% CA','Variable DoJ','ICO discrétion','3× bénéfices'],
+    ['IA haut risque','Annexe III — 8 cat','Non défini','Case by case','Oui — recommandation'],
+    ['Transparence','Obligatoire','Volontaire','Best practice','Marque obligatoire'],
+    ['Droits fondamentaux','FRIA requise','EO exec. only','Recommandé','N/A'],
+    ['Entrée en vigueur','Phasée 2025–2027','Actif (EO)','Actif (guidance)','Actif'],
+    ['Extraterritorialité','Oui — marché UE','Partielle','Oui — UK market','CN-only'],
+  ];
+  var b = document.getElementById('comp-body'); if(!b) return;
+  function chip(v){
+    if(/Obligatoire|requis|35 M|Toute|FRIA/.test(v)) return '<span class="chip chip-r">'+v+'</span>';
+    if(/Actif|Oui/.test(v)) return '<span class="chip chip-g">'+v+'</span>';
+    if(/limité|Partielle|Variable/.test(v)) return '<span class="chip chip-o">'+v+'</span>';
+    if(/N\/A|Non défini|Volontaire/.test(v)) return '<span class="chip chip-n">'+v+'</span>';
     return v;
-  };
-  body.innerHTML = COMPARATEUR_ROWS.map(function(r){
-    return '<div class="comp-body-row" style="grid-template-columns:220px repeat(4,1fr)">' +
-      '<div class="comp-cell" style="font-weight:600;color:var(--slate)">'+r.label+'</div>' +
-      '<div class="comp-cell">'+chips(r.eu)+'</div>' +
-      '<div class="comp-cell">'+chips(r.us)+'</div>' +
-      '<div class="comp-cell">'+chips(r.uk)+'</div>' +
-      '<div class="comp-cell">'+chips(r.cn)+'</div>' +
-      '</div>';
+  }
+  b.innerHTML = ROWS.map(function(r){
+    return '<div class="comp-row" style="display:grid;'+grid+'">'+r.map(function(c,i){ return '<div class="comp-cell"'+(i===0?' style="font-weight:500"':'')+'>'+chip(c)+'</div>'; }).join('')+'</div>';
   }).join('');
 })();
 
-// ── Render Alertes ──
+/* Géopolitique timeline */
 (function(){
-  var body = document.getElementById('alerts-list');
-  if(!body) return;
-  body.innerHTML = ALERTS.map(function(a){
-    return '<div class="alert-item">' +
-      '<div class="alert-dot-wrap"><div class="alert-dot '+a.level+'"></div></div>' +
-      '<div class="alert-content"><div class="alert-title">'+a.title+'</div><div class="alert-meta">'+a.meta+'</div></div>' +
-      '<div class="alert-date">'+a.date+'</div>' +
-      '</div>';
-  }).join('');
+  var b = document.getElementById('geo-tl'); if(!b) return;
+  [['2020','RGPD pleinement opérationnel'],['2021','Proposition EU AI Act publiée'],['2022','NIS2 adoptée — Directive 2022/2555'],['2023','Biden EO 14110 · CAC Rules CN · G7 Hiroshima Process'],['2024','EU AI Act adopté (Règl. 2024/1689) · DORA · CRA'],['2025','Art. 5 AI Act effectif · DORA en vigueur · ISO 42001 v2'],['2026','Obligations systèmes haut risque AI Act']].forEach(function(i){
+    b.innerHTML += '<div class="tl-item"><div class="tl-year">'+i[0]+'</div><div class="tl-t">'+i[1]+'</div></div>';
+  });
 })();
 
-// ── Render Veille ──
+/* Réglementations */
 (function(){
-  var body = document.getElementById('veille-list');
-  if(!body) return;
-  body.innerHTML = VEILLE.map(function(v){
-    var tags = v.tags.map(function(t){ return '<span class="veille-tag '+t.cls+'">'+t.txt+'</span>'; }).join('');
-    return '<div class="veille-item">' +
-      '<div class="veille-header">' +
-        '<div class="veille-title">'+v.title+'</div>' +
-        '<div class="veille-date">'+v.date+'</div>' +
-      '</div>' +
-      '<div class="veille-meta" style="margin-bottom:8px">'+tags+'</div>' +
-      '<div class="veille-excerpt">'+v.excerpt+'</div>' +
-      '</div>';
-  }).join('');
+  var b = document.getElementById('regs-list'); if(!b) return;
+  [['🇪🇺','EU AI Act','Règlement 2024/1689','Août 2026','chip-r','Actif — Critique','Cadre horizontal, classification par niveaux de risque, pénalités jusqu\'à 7% CA.'],['🔒','NIS2','Directive 2022/2555','Oct. 2024','chip-g','Actif','Sécurité des réseaux et systèmes d\'information incluant les systèmes IA critiques.'],['📋','RGPD','Règlement 2016/679','Mai 2018','chip-g','Actif','Protection des données personnelles — Art. 22 sur les décisions automatisées.'],['💰','DORA','Règlement 2022/2554','Jan. 2025','chip-o','En préparation','Résilience opérationnelle numérique du secteur financier.'],['🌐','CRA','Cyber Resilience Act 2024','2027','chip-n','Futur','Exigences cybersécurité pour produits connectés intégrant de l\'IA.']].forEach(function(r){
+    b.innerHTML += '<div class="alert-item"><div style="font-size:20px;width:28px;text-align:center;flex-shrink:0">'+r[0]+'</div><div class="alert-body"><div class="alert-t">'+r[1]+' <span class="chip '+r[4]+'" style="margin-left:6px;vertical-align:middle">'+r[5]+'</span></div><div class="alert-s">'+r[2]+' · Depuis : '+r[3]+'</div><div style="font-size:11px;color:var(--muted);margin-top:4px;line-height:1.6">'+r[6]+'</div></div><div class="alert-date" style="color:var(--accent);font-size:13px">→</div></div>';
+  });
 })();
 
-// ── Render Réglementations ──
+/* Alertes */
 (function(){
-  var body = document.getElementById('reg-list');
-  if(!body) return;
-  var statusMap = {high:'chip-red',ok:'chip-green',med:'chip-orange',gray:'chip-gray'};
-  var statusLbl = {high:'Actif — Critique',ok:'Actif',med:'En vigueur — Préparation',gray:'Futur'};
-  body.innerHTML = '<div class="table-wrap">'+REGLEMENTS.map(function(r){
-    return '<div class="alert-item">' +
-      '<div style="font-size:22px;width:32px;text-align:center;flex-shrink:0">'+r.icon+'</div>' +
-      '<div class="alert-content">' +
-        '<div class="alert-title">'+r.name+' <span class="chip '+statusMap[r.status]+'" style="vertical-align:middle;margin-left:8px">'+statusLbl[r.status]+'</span></div>' +
-        '<div class="alert-meta">'+r.full+' · Depuis : '+r.date+'</div>' +
-        '<div style="font-size:11px;color:var(--gray);margin-top:4px;line-height:1.6">'+r.desc+'</div>' +
-      '</div>' +
-      '<div class="alert-date" style="font-size:12px;color:var(--cin);cursor:pointer;font-family:var(--font-mono)">→</div>' +
-      '</div>';
-  }).join('')+'</div>';
+  var b = document.getElementById('alerts-list'); if(!b) return;
+  [['h','EU AI Act — Entrée en vigueur obligations IA haut risque','Article 6(2) — Systèmes affectant les infrastructures critiques','15 août 2026'],['h','NIS2 — Date limite transposition nationale','Directive 2022/2555 — Non-conformité ANSSI signalée','12 août 2026'],['m','RGPD — Nouvelle décision CEPD sur les LLM','Traitement données d\'entraînement — Base légale requis','08 août 2026'],['m','DORA — Exigences tests de résilience ICT','Art. 26 DORA — Entités financières critiques','03 août 2026'],['h','AI Act — Guide ENISA systèmes cybersécurité IA','Interaction IA Act × NIS2 — Nouvelle guidance','28 juil. 2026'],['l','ISO 42001 — Nouvelle version publiée','Gouvernance IA — Alignement EU AI Act confirmé','20 juil. 2026'],['m','US EO 14110 — Révision imminente','Impact sur accords bilatéraux UE-US IA','15 juil. 2026']].forEach(function(a){
+    var cl = a[0]==='h'?'ad-h':a[0]==='m'?'ad-m':'ad-l';
+    b.innerHTML += '<div class="alert-item"><div class="alert-dot '+cl+'"></div><div class="alert-body"><div class="alert-t">'+a[1]+'</div><div class="alert-s">'+a[2]+'</div></div><div class="alert-date">'+a[3]+'</div></div>';
+  });
 })();
 
-// ── Render Évaluations ──
+/* Veille */
 (function(){
-  var body = document.getElementById('evals-list');
-  if(!body) return;
-  body.innerHTML = EVALS_DATA.map(function(e,i){
-    return '<div class="eval-row">' +
-      '<div class="eval-num">0'+(i+1)+'</div>' +
-      '<div class="eval-icon">'+e.icon+'</div>' +
-      '<div class="eval-info"><div class="eval-name">'+e.name+'</div><div class="eval-desc">'+e.desc+'</div></div>' +
-      '<div class="eval-score '+e.cls+'">'+e.score+'</div>' +
-      '<div class="eval-date">'+e.date+'</div>' +
-      '</div>';
-  }).join('');
+  var b = document.getElementById('veille-list'); if(!b) return;
+  [{tags:[{c:'chip-b',t:'EU'}],h:"EU AI Act : le premier délai d'août 2026 approche — ce que votre entreprise doit savoir",p:"Les obligations de l'Article 5 (pratiques interdites) s'appliquent depuis le 2 février 2025. Le prochain palier concerne les systèmes haut risque.",d:"15 juin 2026"},{tags:[{c:'chip-g',t:'FR'}],h:"ANSSI publie son guide de sécurité des systèmes IA industriels",p:"Le guide couvre les exigences NIS2 pour les OES utilisant de l'IA dans leurs processus critiques.",d:"10 juin 2026"},{tags:[{c:'chip-b',t:'EU'},{c:'chip-n',t:'ISO'}],h:"ISO/IEC 42001 : comment l'aligner avec l'AI Act ?",p:"Le standard de management des systèmes IA devient un outil central dans la démonstration de conformité.",d:"5 juin 2026"},{tags:[{c:'chip-n',t:'GLOBAL'}],h:"Géopolitique normative : l'EU AI Act s'exporte dans 40 pays",p:"Les négociations commerciales intègrent désormais la réciprocité réglementaire IA. Le modèle bruxellois influence les législations en Afrique francophone.",d:"1 juin 2026"}].forEach(function(v){
+    var tags = v.tags.map(function(t){ return '<span class="chip '+t.c+'">'+t.t+'</span>'; }).join(' ');
+    b.innerHTML += '<div class="veille-item"><div class="veille-top"><div class="veille-h">'+v.h+'</div><div class="veille-date">'+v.d+'</div></div><div class="veille-tags">'+tags+'</div><div class="veille-p">'+v.p+'</div></div>';
+  });
 })();
 
-// ── Render Training ──
+/* Évaluations */
 (function(){
-  var body = document.getElementById('training-grid');
-  if(!body) return;
-  body.innerHTML = TRAININGS.map(function(t){
-    var done = t.progress===100;
-    return '<div class="training-card">' +
-      '<div class="training-badge '+t.badge+'">'+(t.badge==='tb-req'?'REQUIS':'OPTIONNEL')+'</div>' +
-      '<div class="training-title">'+t.title+'</div>' +
-      '<div class="training-desc">'+t.desc+'</div>' +
-      '<div class="training-footer">' +
-        '<div class="training-duration">'+t.duration+'</div>' +
-        '<div class="training-progress"><div class="training-fill" style="width:'+t.progress+'%"></div></div>' +
-        '<div style="font-size:10px;font-family:var(--font-mono);color:'+(done?'#27AE60':'var(--gray)')+'">'+t.progress+'%'+(done?' ✓':'')+'</div>' +
-      '</div>' +
-      '</div>';
-  }).join('');
+  var b = document.getElementById('evals-rows'); if(!b) return;
+  [['⚡','Système de prédiction énergétique','Secteur Énergie — EU AI Act Art.6(2)',8.2,'14/06/2026'],['🏦','Scoring crédit automatisé','Finance — RGPD Art.22 + DORA',7.1,'10/06/2026'],['🏭','Détection anomalies industrielles','Industrie — NIS2 OES',4.5,'02/06/2026']].forEach(function(e,i){
+    b.innerHTML += '<div class="eval-row"><div style="font-size:11px;font-family:var(--mono);color:var(--muted2);width:24px">0'+(i+1)+'</div><div class="eval-ico">'+e[0]+'</div><div class="eval-body"><div class="eval-n">'+e[1]+'</div><div class="eval-d">'+e[2]+'</div></div><div class="eval-sc">'+e[3]+'</div><div class="eval-date">'+e[4]+'</div></div>';
+  });
 })();
 
-// ── Render Timeline géopolitique ──
+/* Training */
 (function(){
-  var body = document.getElementById('timeline-wrap');
-  if(!body) return;
-  var items = [
-    {year:'2020',title:'RGPD pleinement opérationnel',tag:'EU'},
-    {year:'2021',title:'Proposition EU AI Act publiée',tag:'EU'},
-    {year:'2022',title:'NIS2 adoptée par le Parlement européen',tag:'EU'},
-    {year:'2023',title:'Biden EO 14110 · CAC Rules CN · G7 Hiroshima Process',tag:'INT'},
-    {year:'2024',title:'EU AI Act adopté (Règl. 2024/1689) · DORA · CRA',tag:'EU'},
-    {year:'2025',title:'Art. 5 AI Act effectif · DORA en vigueur · ISO 42001 v2',tag:'INT'},
-    {year:'2026',title:'Obligations systèmes haut risque AI Act · Révision EO US',tag:'EU'},
-  ];
-  body.innerHTML = '<div style="border-left:2px solid var(--cin);padding-left:24px;margin-left:12px">' +
-    items.map(function(it){
-      return '<div style="position:relative;margin-bottom:20px">' +
-        '<div style="position:absolute;left:-32px;top:4px;width:8px;height:8px;background:var(--cin);border-radius:50%;border:2px solid var(--ivory)"></div>' +
-        '<div style="font-size:10px;font-family:var(--font-mono);color:var(--cin);margin-bottom:4px;letter-spacing:.1em">'+it.year+'</div>' +
-        '<div style="font-size:13px;font-weight:600;color:var(--slate)">'+it.title+'</div>' +
-        '</div>';
-    }).join('') +
-    '</div>';
+  var b = document.getElementById('training-grid'); if(!b) return;
+  [['t-req','EU AI Act — Fondamentaux','Classification des risques, obligations par catégorie, calendrier de conformité.','3h',75],['t-req','NIS2 pour les équipes IA','Obligations de sécurité pour les opérateurs essentiels utilisant des systèmes IA.','2h',40],['t-opt','RGPD & Données d\'entraînement','Base légale, minimisation, droits des personnes dans les systèmes IA générateurs.','2h30',100],['t-opt','Gouvernance IA — ISO 42001','Mise en place d\'un système de management IA conforme au standard international.','4h',0]].forEach(function(t){
+    var done = t[4]===100;
+    b.innerHTML += '<div class="t-card"><div class="t-badge '+t[0]+'">'+(t[0]==='t-req'?'REQUIS':'OPTIONNEL')+'</div><div class="t-title">'+t[1]+'</div><div class="t-desc">'+t[2]+'</div><div class="t-foot"><div class="t-dur">'+t[3]+'</div><div class="t-prog-track"><div class="t-prog-fill" style="width:'+t[4]+'%"></div></div><div class="t-pct" style="color:'+(done?'var(--green)':'var(--muted2)')+'">'+t[4]+'%'+(done?' ✓':'')+'</div></div></div>';
+  });
 })();
 
-// ── Render Mon Espace ──
+/* Équipe */
 (function(){
-  var acts = [
-    {text:'Analyse EU AI Act — Système de prédiction énergétique', date:'Hier'},
-    {text:'Consultation Veille réglementaire — NIS2 Article 21', date:'Il y a 2j'},
-    {text:'Comparateur lancé : EU vs UK vs US', date:'Il y a 3j'},
-    {text:'Rapport conformité exporté — Q2 2026', date:'Il y a 5j'},
-  ];
-  var al = document.getElementById('activity-list');
-  if(al) al.innerHTML = acts.map(function(a){
-    return '<div class="activity-item"><div class="act-dot"></div><div class="act-text">'+a.text+'</div><div class="act-date">'+a.date+'</div></div>';
-  }).join('');
-  var dl = document.getElementById('deadlines-list');
-  if(dl) dl.innerHTML = [
-    {label:'AI Act — Systèmes haut risque', date:'02 août 2026', urgent:true},
-    {label:'NIS2 — Déclaration ANSSI', date:'30 sept. 2026', urgent:false},
-    {label:'DORA — Tests résilience ICT', date:'17 janv. 2027', urgent:false},
-  ].map(function(d){
-    return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:11px">' +
-      '<div style="color:var(--slate);font-weight:'+(d.urgent?'600':'400')+'">'+d.label+'</div>' +
-      '<div style="font-family:var(--font-mono);color:'+(d.urgent?'var(--cin)':'var(--gray-l)')+'">'+d.date+'</div>' +
-      '</div>';
-  }).join('');
+  var b = document.getElementById('team-rows'); if(!b) return;
+  [['CC','Christophe Cerf','Admin — Analyste senior',true],['ML','Marie Laurent','Expert conformité NIS2',true],['PD','Paul Dubois','DPO / RGPD',false]].forEach(function(m){
+    b.innerHTML += '<div class="eval-row"><div class="sb-avatar" style="background:'+(m[3]?'var(--ink)':'var(--muted2)')+'">'+m[0]+'</div><div class="eval-body"><div class="eval-n">'+m[1]+'</div><div class="eval-d">'+m[2]+'</div></div><div style="font-size:9px;font-family:var(--mono);color:'+(m[3]?'var(--green)':'var(--muted2)')+'">'+(m[3]?'● ACTIF':'○ INACTIF')+'</div></div>';
+  });
 })();
 
-// ── Render Équipe ──
+/* Mon Espace */
 (function(){
-  var tl = document.getElementById('team-list');
-  if(!tl) return;
-  var members = [
-    {init:'CC',name:'Christophe Cerf',role:'Admin — Analyste senior',active:true},
-    {init:'ML',name:'Marie Laurent',role:'Expert conformité NIS2',active:true},
-    {init:'PD',name:'Paul Dubois',role:'DPO / RGPD',active:false},
-  ];
-  tl.innerHTML = members.map(function(m){
-    return '<div class="activity-item">' +
-      '<div class="user-avatar" style="background:'+(m.active?'var(--slate)':'var(--gray-l)')+'">'+m.init+'</div>' +
-      '<div class="act-text"><div style="font-weight:600;color:var(--slate);font-size:13px">'+m.name+'</div><div style="color:var(--gray-l);font-size:11px">'+m.role+'</div></div>' +
-      '<div style="font-size:9px;font-family:var(--font-mono);color:'+(m.active?'#27AE60':'var(--gray-l)')+'">'+( m.active?'● ACTIF':'○ INACTIF')+'</div>' +
-      '</div>';
-  }).join('');
+  var a = document.getElementById('act-list'); if(a){
+    [['Analyse EU AI Act — Système de prédiction énergétique','Hier'],['Consultation Veille NIS2 Article 21','Il y a 2j'],['Comparateur EU vs UK vs US lancé','Il y a 3j'],['Rapport conformité exporté — Q2 2026','Il y a 5j']].forEach(function(x){
+      a.innerHTML += '<div class="act-item"><div class="act-dot"></div><div class="act-t">'+x[0]+'</div><div class="act-d">'+x[1]+'</div></div>';
+    });
+  }
+  var d = document.getElementById('deadlines'); if(d){
+    [['AI Act — Systèmes haut risque','02 août 2026',true],['NIS2 — Déclaration ANSSI','30 sept. 2026',false],['DORA — Tests résilience ICT','17 janv. 2027',false]].forEach(function(x){
+      d.innerHTML += '<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--rule);font-size:11px"><div style="color:var(--ink);font-weight:'+(x[2]?'500':'400')+'">'+x[0]+'</div><div style="font-family:var(--mono);font-size:10px;color:'+(x[2]?'var(--accent)':'var(--muted2)')+'">'+x[1]+'</div></div>';
+    });
+  }
 })();
 
-// ── Render Report ──
+/* Reporting */
 (function(){
-  var body = document.getElementById('report-table');
-  if(!body) return;
-  var cols = '2fr 120px 100px 120px 80px';
-  var head = '<div class="comp-head" style="grid-template-columns:'+cols+'">' +
-    ['Système IA','Juridiction','Score risque','Statut','Priorité'].map(function(h){ return '<div class="comp-cell">'+h+'</div>'; }).join('') + '</div>';
-  var rows_data = [
-    ['Prédiction énergétique','EU AI Act','8.2 / 10','<span class="chip chip-red">Critique</span>','<span class="chip chip-red">P1</span>'],
-    ['Scoring crédit auto','EU + RGPD','7.1 / 10','<span class="chip chip-orange">En cours</span>','<span class="chip chip-orange">P2</span>'],
-    ['Détection anomalies','NIS2','4.5 / 10','<span class="chip chip-green">Conforme</span>','<span class="chip chip-gray">P3</span>'],
-  ];
-  body.innerHTML = head + rows_data.map(function(r){
-    return '<div class="comp-body-row" style="grid-template-columns:'+cols+'">' +
-      r.map(function(c){ return '<div class="comp-cell">'+c+'</div>'; }).join('') + '</div>';
-  }).join('');
+  var H = ['Système IA','Juridiction','Score','Statut','Priorité'];
+  var g = '2fr 120px 100px 120px 60px';
+  var rh = document.getElementById('rep-head'); if(rh){ rh.innerHTML = H.map(function(h){ return '<div class="comp-cell">'+h+'</div>'; }).join(''); rh.style.cssText='display:grid;grid-template-columns:'+g+';background:var(--bg);border-bottom:2px solid var(--rule)'; }
+  var rb = document.getElementById('rep-body'); if(!rb) return;
+  [['Prédiction énergétique','EU AI Act','8.2 / 10','<span class="chip chip-r">Critique</span>','<span class="chip chip-r">P1</span>'],['Scoring crédit auto','EU + RGPD','7.1 / 10','<span class="chip chip-o">En cours</span>','<span class="chip chip-o">P2</span>'],['Détection anomalies','NIS2','4.5 / 10','<span class="chip chip-g">Conforme</span>','<span class="chip chip-n">P3</span>']].forEach(function(r){
+    rb.innerHTML += '<div class="comp-row" style="display:grid;grid-template-columns:'+g+'">'+r.map(function(c){ return '<div class="comp-cell">'+c+'</div>'; }).join('')+'</div>';
+  });
 })();
 
-// ── Audit check ──
-function runAuditCheck(){
-  var sector = document.getElementById('dec-sector').value;
-  var system = document.getElementById('dec-system').value;
-  var impact = document.getElementById('dec-impact').value;
-  if(!sector||!system){ alert('Veuillez sélectionner un secteur et un type de système.'); return; }
-  var score = impact==='high' ? 8.1 : impact==='med' ? 5.4 : 3.2;
-  if(sector==='sante'||sector==='finance') score = Math.min(9.5, score+1.2);
-  if(system==='reconnaissance') score = Math.min(9.8, score+1.5);
-  if(system==='generatif') score += 0.8;
-  score = Math.round(score*10)/10;
-  var r = document.getElementById('audit-result');
-  document.getElementById('res-score').textContent = score;
-  var level = score>=7 ? 'Haut risque — Article 6(2) AI Act' : score>=4 ? 'Risque modéré — Article 6(1) AI Act' : 'Risque limité — Article 6(3) AI Act';
-  document.getElementById('res-level').textContent = level;
-  var obs = [];
-  if(score>=7) obs = ['FRIA requise','Enregistrement EU DB','Doc. technique Art.11','Validation humaine'];
-  else if(score>=4) obs = ['Transparence Art.13','Journalisation Art.12','Robustesse Art.15'];
-  else obs = ['Bonnes pratiques','Documentation minimale'];
-  document.getElementById('res-obligations').innerHTML = obs.map(function(o){
-    return '<span class="result-tag'+(score<4?' ok':'')+'">'+o+'</span>';
-  }).join('');
-  document.getElementById('res-text').innerHTML =
-    'Sur la base de votre description, votre système IA présente un score de risque de <strong>'+score+'/10</strong>. '+
-    (score>=7 ? 'Une évaluation d\'impact sur les droits fondamentaux (FRIA) et un enregistrement dans la base de données EU sont requis avant déploiement.' :
-    score>=4 ? 'Des obligations de transparence et de documentation s\'appliquent.' :
-    'Votre système relève du régime allégé. Des bonnes pratiques sont recommandées.');
-  r.classList.add('show');
+/* Chat */
+(function(){
+  var TAGS = ['Art. 6 AI Act','Obligations NIS2','Classification IA','Sanctions AI Act'];
+  var w = document.getElementById('chat-tags-wrap'); if(w) w.innerHTML = TAGS.map(function(t){ return '<span class="chat-tag" onclick="doChat(\''+t+'\')">'+t+'</span>'; }).join('');
+  addMsg('bot','Bonjour, je suis votre assistant réglementaire <strong>Sentinel AI</strong>, propulsé par CONSEILPREV.<br><br>Je peux vous aider sur l\'<strong>EU AI Act</strong>, <strong>NIS2</strong>, <strong>RGPD</strong> et la gouvernance IA.');
+})();
+
+function addMsg(role, html){
+  var m = document.getElementById('chat-msgs'); if(!m) return;
+  var init = role==='bot'?'S':'CC';
+  m.innerHTML += '<div class="c-msg '+role+'"><div class="c-av '+role+'">'+init+'</div><div class="c-bubble">'+html+'</div></div>';
+  m.scrollTop = m.scrollHeight;
+}
+function doChat(preset){
+  var inp = document.getElementById('chat-in');
+  var txt = preset || (inp ? inp.value.trim() : '');
+  if(!txt) return;
+  if(inp) inp.value='';
+  addMsg('u', txt);
+  var R = {'art. 6':'L\'Article 6 de l\'EU AI Act établit la classification des systèmes IA à haut risque. Il distingue l\'Annexe II (sécurité de produits) et l\'Annexe III (domaines sensibles : biométrie, infrastructures, éducation, emploi, services publics, répression, migration, justice).','nis2':'NIS2 (Directive 2022/2555) s\'applique aux entités essentielles dans 18 secteurs. Pour l\'IA : les systèmes intégrés dans des processus critiques sont concernés par l\'Art. 21 (mesures de sécurité) et Art. 23 (notification incidents).','classifi':'La classification EU AI Act : ① Risque inacceptable (interdit), ② Haut risque (Annexe III — réglementé), ③ Risque limité (transparence), ④ Risque minimal (bonnes pratiques). L\'Annexe III liste 8 domaines à haut risque.','sanction':'Sanctions EU AI Act : 35 M€ ou 7% du CA mondial (systèmes haut risque), 15 M€ ou 3% CA (autres violations), 7,5 M€ ou 1,5% CA (informations incorrectes). PME : plafonds réduits.'};
+  setTimeout(function(){
+    var key = Object.keys(R).find(function(k){ return txt.toLowerCase().indexOf(k)>=0; });
+    addMsg('bot', key ? R[key] : 'Je traite votre question. Pour une analyse approfondie, nos experts CONSEILPREV sont disponibles à <a href="mailto:christophe.cerf@outlook.com" style="color:var(--accent)">christophe.cerf@outlook.com</a>.');
+  }, 700);
+}
+
+/* Aide à la décision */
+function runCheck(){
+  var sec = document.getElementById('d-sec').value;
+  var sys = document.getElementById('d-sys').value;
+  var imp = document.getElementById('d-imp').value;
+  if(!sec||!sys){ alert('Sélectionnez un secteur et un type de système.'); return; }
+  var s = imp==='high'?8.1:imp==='med'?5.4:3.2;
+  if(sec==='sante'||sec==='finance') s=Math.min(9.5,s+1.2);
+  if(sys==='bio') s=Math.min(9.8,s+1.5);
+  if(sys==='gen') s=Math.min(9.5,s+0.8);
+  s = Math.round(s*10)/10;
+  var r = document.getElementById('d-result'); if(!r) return;
+  document.getElementById('r-score').textContent = s;
+  document.getElementById('r-level').textContent = s>=7?'Haut risque — Article 6(2) AI Act':s>=4?'Risque modéré — Article 6(1) AI Act':'Risque limité — Article 6(3) AI Act';
+  var obs = s>=7?['FRIA requise','Enregistrement EU DB','Doc. technique Art.11','Validation humaine']:s>=4?['Transparence Art.13','Journalisation Art.12','Robustesse Art.15']:['Bonnes pratiques','Documentation minimale'];
+  document.getElementById('r-tags').innerHTML = obs.map(function(o){ return '<span class="chip '+(s<4?'chip-g':'chip-r')+'">'+o+'</span>'; }).join(' ');
+  document.getElementById('r-txt').innerHTML = 'Score de risque <strong>'+s+'/10</strong>. '+(s>=7?'Une FRIA et un enregistrement dans la base EU sont requis avant déploiement.':s>=4?'Des obligations de transparence et de documentation s\'appliquent.':'Votre système relève du régime allégé.');
+  r.classList.add('on');
   r.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
-
-// ── Chat ──
-function sendChat(msg){
-  var input = document.getElementById('chat-input');
-  var text = msg || input.value.trim();
-  if(!text) return;
-  input.value='';
-  var msgs = document.getElementById('chat-messages');
-  msgs.innerHTML += '<div class="chat-msg user"><div class="chat-avatar user">CC</div><div class="chat-bubble">'+text+'</div></div>';
-
-  // Réponse simulée IA
-  setTimeout(function(){
-    var responses = {
-      'article 6': 'L\'Article 6 de l\'EU AI Act établit la classification des systèmes IA à haut risque. Il distingue deux catégories : les systèmes listés à l\'Annexe II (sécurité de produits) et ceux listés à l\'Annexe III (domaines sensibles : biométrie, infrastructures, éducation, emploi, services publics, répression, migration, justice).',
-      'nis2': 'NIS2 (Directive 2022/2555) s\'applique aux entités essentielles et importantes dans 18 secteurs. Pour l\'IA : les systèmes IA intégrés dans des processus critiques sont concernés par les articles 21 (mesures de sécurité) et 23 (notification incidents). L\'ANSSI publie des guides sectoriels.',
-      'classifi': 'La classification EU AI Act repose sur 4 niveaux : ① Risque inacceptable (interdit), ② Haut risque (Annexe III — réglementé), ③ Risque limité (obligations de transparence), ④ Risque minimal (bonnes pratiques). L\'annexe III liste 8 domaines à haut risque.',
-      'sanction': 'Les sanctions EU AI Act varient selon la violation : 35 M€ ou 7% du CA mondial (non-conformité systèmes haut risque), 15 M€ ou 3% CA (autres violations), 7,5 M€ ou 1,5% CA (informations incorrectes). Les PME bénéficient de plafonds réduits.',
-    };
-    var reply = 'Je traite votre question sur la conformité IA réglementaire. Pour une analyse approfondie de votre cas spécifique, nos experts CONSEILPREV sont disponibles.';
-    Object.keys(responses).forEach(function(k){
-      if(text.toLowerCase().indexOf(k) >= 0) reply = responses[k];
-    });
-    msgs.innerHTML += '<div class="chat-msg bot"><div class="chat-avatar bot">S</div><div class="chat-bubble">'+reply+'</div></div>';
-    msgs.scrollTop = msgs.scrollHeight;
-  }, 800);
-  msgs.scrollTop = msgs.scrollHeight;
-}
-function askQuestion(q){ sendChat(q); showPage('chat'); }
 </script>
 </body>
 </html>
