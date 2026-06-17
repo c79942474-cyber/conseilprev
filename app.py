@@ -277,6 +277,7 @@ def add_security_headers(response):
         "media-src 'self' blob:; "
         "connect-src 'self' https://api.mistral.ai https://api.anthropic.com https://api.rss2json.com https://rss2json.com https://basemaps.cartocdn.com https://*.basemaps.cartocdn.com; "
         "frame-ancestors 'none'; "
+        "frame-src 'self'; "
         "base-uri 'self'; "
         "form-action 'self' mailto:;"
     )
@@ -2516,6 +2517,7 @@ PAGES = {
     '/faq':           'faq.html',
     '/livre-blanc':   'livre-blanc.html',
     '/accessibility': 'accessibility.html',
+    '/map':           'map.html',
 }
 
 for route, filename in PAGES.items():
