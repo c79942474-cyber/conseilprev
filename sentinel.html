@@ -516,21 +516,84 @@ textarea.form-el{min-height:86px;resize:vertical}
   <p class="page-lead">60+ juridictions analysées selon 12 critères : portée, sanctions, obligations IA haut risque, transparence, droits fondamentaux.</p>
 
   
-  <!-- ══ CARTE MONDIALE SVG ══ -->
+  <!-- ══ CARTE MONDIALE ══ -->
   <div style="margin-bottom:24px;border:1px solid var(--rule);border-radius:4px;overflow:hidden;background:var(--white)">
-    <div style="padding:12px 20px;border-bottom:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between">
-      <span style="font-size:13px;font-weight:500;color:var(--ink)">Vue interactive — Niveaux de contrainte réglementaire</span>
-      <div style="display:flex;gap:14px;align-items:center">
-        <span style="font-size:10px;font-family:var(--mono);color:var(--muted2);display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:50%;background:#B83222;display:inline-block"></span>Très strict ≥ 8</span>
-        <span style="font-size:10px;font-family:var(--mono);color:var(--muted2);display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:50%;background:#C47C1A;display:inline-block"></span>Modéré 5–8</span>
-        <span style="font-size:10px;font-family:var(--mono);color:var(--muted2);display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:50%;background:#2D7A47;display:inline-block"></span>Souple &lt; 5</span>
+    <div style="padding:12px 20px 10px;border-bottom:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between">
+      <span style="font-size:13px;font-weight:500;color:var(--ink)">Niveaux de contrainte réglementaire mondiale</span>
+      <div style="display:flex;gap:16px">
+        <span style="font-size:10px;font-family:var(--mono);color:var(--muted2);display:flex;align-items:center;gap:4px"><svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="#B83222"/></svg>Très strict ≥ 8</span>
+        <span style="font-size:10px;font-family:var(--mono);color:var(--muted2);display:flex;align-items:center;gap:4px"><svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="#C47C1A"/></svg>Modéré 5–8</span>
+        <span style="font-size:10px;font-family:var(--mono);color:var(--muted2);display:flex;align-items:center;gap:4px"><svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="#2D7A47"/></svg>Souple &lt; 5</span>
       </div>
     </div>
-    <div style="position:relative;width:100%;background:#d4e4ed;overflow:hidden" id="map-wrap">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/World_map_-_low_resolution.svg/2560px-World_map_-_low_resolution.svg.png"
-           style="width:100%;display:block;opacity:0.25" id="map-bg" onerror="this.style.display='none'">
-      <canvas id="map-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;cursor:crosshair"></canvas>
-      <div id="map-tooltip" style="display:none;position:absolute;background:var(--white);border:1px solid var(--rule);border-radius:4px;padding:10px 14px;pointer-events:none;z-index:10;min-width:190px;box-shadow:0 4px 16px rgba(0,0,0,.12)"></div>
+    <div style="position:relative;padding:0;overflow:hidden">
+      <svg id="world-map-svg" viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg"
+           style="width:100%;display:block;background:linear-gradient(180deg,#c8dce8 0%,#d4e8f0 100%)">
+
+        <!-- Continents simplified paths -->
+        <!-- Amérique du Nord -->
+        <path d="M80,120 L180,100 L240,110 L260,140 L250,180 L230,220 L200,260 L170,280 L140,300 L110,280 L90,250 L70,210 L60,170 Z" fill="#e8e0d0" stroke="#c8c0b0" stroke-width="0.8"/>
+        <!-- Amérique Centrale -->
+        <path d="M170,280 L200,260 L210,290 L200,320 L185,330 L175,310 Z" fill="#e8e0d0" stroke="#c8c0b0" stroke-width="0.8"/>
+        <!-- Amérique du Sud -->
+        <path d="M200,330 L250,310 L290,330 L310,380 L320,440 L300,490 L270,500 L240,480 L210,450 L195,410 L190,370 Z" fill="#e8e0d0" stroke="#c8c0b0" stroke-width="0.8"/>
+        <!-- Europe -->
+        <path d="M440,100 L500,90 L530,100 L545,120 L540,145 L520,155 L500,150 L480,160 L460,155 L445,140 L435,120 Z" fill="#e8e0d0" stroke="#c8c0b0" stroke-width="0.8"/>
+        <!-- Scandinavie -->
+        <path d="M470,60 L500,55 L510,75 L505,100 L490,105 L475,95 L465,75 Z" fill="#e8e0d0" stroke="#c8c0b0" stroke-width="0.8"/>
+        <!-- Russie -->
+        <path d="M530,70 L700,60 L780,80 L790,110 L760,130 L700,125 L640,130 L580,125 L545,120 L530,100 Z" fill="#e8e0d0" stroke="#c8c0b0" stroke-width="0.8"/>
+        <!-- Afrique -->
+        <path d="M450,185 L510,175 L540,185 L560,220 L570,280 L560,340 L540,390 L510,420 L480,415 L455,390 L440,340 L435,280 L440,220 Z" fill="#e8e0d0" stroke="#c8c0b0" stroke-width="0.8"/>
+        <!-- Moyen-Orient -->
+        <path d="M545,145 L600,140 L620,165 L610,195 L580,200 L555,190 L540,170 Z" fill="#e8e0d0" stroke="#c8c0b0" stroke-width="0.8"/>
+        <!-- Asie centrale + Inde -->
+        <path d="M600,100 L720,90 L760,110 L770,150 L750,180 L720,200 L690,220 L660,210 L640,180 L620,160 L600,140 Z" fill="#e8e0d0" stroke="#c8c0b0" stroke-width="0.8"/>
+        <!-- Inde -->
+        <path d="M660,210 L700,205 L715,240 L710,275 L690,295 L670,285 L655,255 L645,225 Z" fill="#e8e0d0" stroke="#c8c0b0" stroke-width="0.8"/>
+        <!-- Asie du Sud-Est -->
+        <path d="M760,200 L810,195 L830,220 L820,250 L790,255 L765,240 Z" fill="#e8e0d0" stroke="#c8c0b0" stroke-width="0.8"/>
+        <!-- Chine -->
+        <path d="M720,110 L810,100 L840,120 L850,155 L830,180 L800,190 L760,185 L730,165 L715,140 Z" fill="#e8e0d0" stroke="#c8c0b0" stroke-width="0.8"/>
+        <!-- Japon -->
+        <path d="M860,120 L875,110 L885,130 L878,150 L862,148 Z" fill="#e8e0d0" stroke="#c8c0b0" stroke-width="0.8"/>
+        <!-- Corée -->
+        <path d="M840,145 L855,140 L858,158 L845,162 Z" fill="#e8e0d0" stroke="#c8c0b0" stroke-width="0.8"/>
+        <!-- Australie -->
+        <path d="M800,330 L880,315 L920,335 L930,380 L910,420 L870,435 L820,425 L790,395 L780,360 Z" fill="#e8e0d0" stroke="#c8c0b0" stroke-width="0.8"/>
+
+        <!-- Graticule léger -->
+        <line x1="0" y1="250" x2="1000" y2="250" stroke="rgba(255,255,255,0.3)" stroke-width="0.5" stroke-dasharray="4,4"/>
+        <line x1="500" y1="0" x2="500" y2="500" stroke="rgba(255,255,255,0.2)" stroke-width="0.5" stroke-dasharray="4,4"/>
+
+        <!-- Points pays : cx cy = position sur le SVG 1000x500 -->
+        <!-- Europe/UE -->
+        <g class="map-dot" data-name="Union européenne" data-reg="EU AI Act 2024/1689" data-s="9.2"><circle cx="490" cy="128" r="12" fill="#B83222" fill-opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="490" y="132" text-anchor="middle" font-size="8" fill="white" font-weight="600">EU</text></g>
+        <g class="map-dot" data-name="France" data-reg="EU AI Act + CNIL" data-s="9.0"><circle cx="470" cy="138" r="11" fill="#B83222" fill-opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="470" y="142" text-anchor="middle" font-size="7" fill="white" font-weight="600">FR</text></g>
+        <g class="map-dot" data-name="Chine" data-reg="CAC Deep Synthesis Rules 2023" data-s="8.8"><circle cx="790" cy="148" r="12" fill="#B83222" fill-opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="790" y="152" text-anchor="middle" font-size="7" fill="white" font-weight="600">CN</text></g>
+        <g class="map-dot" data-name="Israël" data-reg="Policy on AI Regulation 2023" data-s="8.5"><circle cx="565" cy="185" r="10" fill="#B83222" fill-opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="565" y="189" text-anchor="middle" font-size="7" fill="white" font-weight="600">IL</text></g>
+        <g class="map-dot" data-name="Suisse" data-reg="LPD révisée + Convention IA" data-s="8.0"><circle cx="505" cy="140" r="10" fill="#B83222" fill-opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="505" y="144" text-anchor="middle" font-size="7" fill="white" font-weight="600">CH</text></g>
+        <g class="map-dot" data-name="Royaume-Uni" data-reg="AI Governance Framework 2024" data-s="7.4"><circle cx="460" cy="118" r="10" fill="#B83222" fill-opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="460" y="122" text-anchor="middle" font-size="7" fill="white" font-weight="600">UK</text></g>
+        <!-- Modérés -->
+        <g class="map-dot" data-name="États-Unis" data-reg="EO 14110 — Safe AI" data-s="6.6"><circle cx="165" cy="178" r="11" fill="#C47C1A" fill-opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="165" y="182" text-anchor="middle" font-size="7" fill="white" font-weight="600">US</text></g>
+        <g class="map-dot" data-name="Japon" data-reg="AI Strategy Council Guidelines" data-s="5.8"><circle cx="868" cy="148" r="10" fill="#C47C1A" fill-opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="868" y="152" text-anchor="middle" font-size="7" fill="white" font-weight="600">JP</text></g>
+        <g class="map-dot" data-name="Corée du Sud" data-reg="AI Industry Promotion Act" data-s="5.6"><circle cx="845" cy="163" r="9" fill="#C47C1A" fill-opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="845" y="167" text-anchor="middle" font-size="7" fill="white" font-weight="600">KR</text></g>
+        <g class="map-dot" data-name="Canada" data-reg="AIDA — AI &amp; Data Act" data-s="5.2"><circle cx="158" cy="138" r="10" fill="#C47C1A" fill-opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="158" y="142" text-anchor="middle" font-size="7" fill="white" font-weight="600">CA</text></g>
+        <g class="map-dot" data-name="Russie" data-reg="National AI Strategy 2030" data-s="5.5"><circle cx="660" cy="95" r="11" fill="#C47C1A" fill-opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="660" y="99" text-anchor="middle" font-size="7" fill="white" font-weight="600">RU</text></g>
+        <g class="map-dot" data-name="Arabie Saoudite" data-reg="National AI Strategy SDAIA" data-s="5.0"><circle cx="598" cy="210" r="9" fill="#C47C1A" fill-opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="598" y="214" text-anchor="middle" font-size="7" fill="white" font-weight="600">SA</text></g>
+        <g class="map-dot" data-name="Brésil" data-reg="PL 2338/2023" data-s="4.8"><circle cx="268" cy="370" r="10" fill="#C47C1A" fill-opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="268" y="374" text-anchor="middle" font-size="7" fill="white" font-weight="600">BR</text></g>
+        <g class="map-dot" data-name="Émirats Arabes Unis" data-reg="UAE AI Strategy 2031" data-s="4.0"><circle cx="625" cy="220" r="9" fill="#C47C1A" fill-opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="625" y="224" text-anchor="middle" font-size="7" fill="white" font-weight="600">AE</text></g>
+        <g class="map-dot" data-name="Singapour" data-reg="AI Governance Framework v2" data-s="4.4"><circle cx="798" cy="288" r="9" fill="#C47C1A" fill-opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="798" y="292" text-anchor="middle" font-size="7" fill="white" font-weight="600">SG</text></g>
+        <!-- Souples -->
+        <g class="map-dot" data-name="Inde" data-reg="MEITY AI Principles 2023" data-s="3.8"><circle cx="678" cy="255" r="10" fill="#2D7A47" fill-opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="678" y="259" text-anchor="middle" font-size="7" fill="white" font-weight="600">IN</text></g>
+        <g class="map-dot" data-name="Australie" data-reg="AI Ethics Framework CSIRO" data-s="3.6"><circle cx="858" cy="390" r="10" fill="#2D7A47" fill-opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="858" y="394" text-anchor="middle" font-size="7" fill="white" font-weight="600">AU</text></g>
+        <g class="map-dot" data-name="Afrique du Sud" data-reg="National AI Plan + POPIA" data-s="3.5"><circle cx="530" cy="400" r="9" fill="#2D7A47" fill-opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="530" y="404" text-anchor="middle" font-size="7" fill="white" font-weight="600">ZA</text></g>
+        <g class="map-dot" data-name="Mexique" data-reg="Initiatives sectorielles" data-s="3.5"><circle cx="178" cy="255" r="9" fill="#2D7A47" fill-opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="178" y="259" text-anchor="middle" font-size="7" fill="white" font-weight="600">MX</text></g>
+        <g class="map-dot" data-name="Argentine" data-reg="Recommandation éthique + L.25.326" data-s="4.0"><circle cx="248" cy="448" r="9" fill="#2D7A47" fill-opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="248" y="452" text-anchor="middle" font-size="7" fill="white" font-weight="600">AR</text></g>
+        <g class="map-dot" data-name="Nigéria" data-reg="National AI Strategy 2024" data-s="2.5"><circle cx="482" cy="298" r="8" fill="#2D7A47" fill-opacity="0.85" stroke="#fff" stroke-width="1.5"/><text x="482" y="302" text-anchor="middle" font-size="7" fill="white" font-weight="600">NG</text></g>
+      </svg>
+      <!-- Tooltip -->
+      <div id="map-tip" style="display:none;position:absolute;background:#fff;border:1px solid #E0DDD8;border-radius:4px;padding:10px 14px;pointer-events:none;z-index:20;min-width:190px;box-shadow:0 4px 16px rgba(0,0,0,.12);font-family:Inter,sans-serif"></div>
     </div>
   </div>
   <!-- ══ FIN CARTE ══ -->
@@ -1012,131 +1075,57 @@ function requestDoc(name){ window.open('mailto:christophe.cerf@outlook.com?subje
 
 
 
-/* ══ CARTE MONDIALE CANVAS ══ */
+
+
+
+/* ══ CARTE SVG TOOLTIP ══ */
 (function(){
-  var GEO = [
-    {name:'Union européenne',   reg:'EU AI Act 2024/1689',              s:9.2, x:0.518, y:0.295},
-    {name:'France',             reg:'EU AI Act + CNIL guidance',        s:9.0, x:0.494, y:0.305},
-    {name:'Allemagne',          reg:'EU AI Act + BfDI',                 s:9.0, x:0.514, y:0.278},
-    {name:'Chine',              reg:'CAC Deep Synthesis Rules 2023',    s:8.8, x:0.758, y:0.330},
-    {name:'Israël',             reg:'Policy on AI Regulation 2023',     s:8.5, x:0.572, y:0.360},
-    {name:'Suisse',             reg:'LPD révisée + Convention IA',      s:8.0, x:0.510, y:0.295},
-    {name:'Royaume-Uni',        reg:'AI Governance Framework 2024',     s:7.4, x:0.483, y:0.263},
-    {name:'États-Unis',         reg:'EO 14110 — Safe AI',               s:6.6, x:0.200, y:0.320},
-    {name:'Russie',             reg:'National AI Strategy 2030',        s:5.5, x:0.650, y:0.220},
-    {name:'Arabie Saoudite',    reg:'National AI Strategy SDAIA',       s:5.0, x:0.590, y:0.395},
-    {name:'Japon',              reg:'AI Strategy Council Guidelines',   s:5.8, x:0.840, y:0.315},
-    {name:'Corée du Sud',       reg:'AI Industry Promotion Act',        s:5.6, x:0.818, y:0.318},
-    {name:'Canada',             reg:'AIDA — AI & Data Act',             s:5.2, x:0.195, y:0.245},
-    {name:'Inde',               reg:'MEITY AI Principles 2023',         s:3.8, x:0.685, y:0.385},
-    {name:'Brésil',             reg:'PL 2338/2023',                     s:4.8, x:0.295, y:0.570},
-    {name:'Singapour',          reg:'AI Governance Framework v2',       s:4.4, x:0.776, y:0.465},
-    {name:'Émirats Arabes Unis',reg:'UAE AI Strategy 2031',             s:4.0, x:0.612, y:0.395},
-    {name:'Argentine',          reg:'Recommandation éthique + L.25326', s:4.0, x:0.270, y:0.700},
-    {name:'Mexique',            reg:'Initiatives sectorielles',          s:3.5, x:0.178, y:0.395},
-    {name:'Australie',          reg:'AI Ethics Framework CSIRO',        s:3.6, x:0.825, y:0.630},
-    {name:'Afrique du Sud',     reg:'National AI Plan + POPIA',         s:3.5, x:0.545, y:0.650},
-    {name:'Nigéria',            reg:'National AI Strategy 2024',        s:2.5, x:0.495, y:0.470},
-  ];
+  function initMapTooltip(){
+    var svg = document.getElementById('world-map-svg');
+    var tip = document.getElementById('map-tip');
+    if(!svg||!tip) return;
 
-  function col(s){ return s>=8?'#B83222':s>=5?'#C47C1A':'#2D7A47'; }
-  function rad(s){ return 6 + s*1.2; }
-
-  function drawMap(){
-    var wrap = document.getElementById('map-wrap');
-    var canvas = document.getElementById('map-canvas');
-    var tip = document.getElementById('map-tooltip');
-    if(!wrap||!canvas) return;
-
-    var W = wrap.offsetWidth;
-    var H = Math.round(W * 0.48);
-    wrap.style.height = H + 'px';
-    canvas.width  = W;
-    canvas.height = H;
-
-    var ctx = canvas.getContext('2d');
-
-    // Draw subtle grid lines
-    ctx.strokeStyle = 'rgba(255,255,255,0.3)';
-    ctx.lineWidth = 0.5;
-    for(var gx=0;gx<=10;gx++){ ctx.beginPath();ctx.moveTo(gx/10*W,0);ctx.lineTo(gx/10*W,H);ctx.stroke(); }
-    for(var gy=0;gy<=6;gy++){  ctx.beginPath();ctx.moveTo(0,gy/6*H);ctx.lineTo(W,gy/6*H);ctx.stroke(); }
-
-    // Draw dots
-    GEO.forEach(function(c){
-      var cx = c.x * W;
-      var cy = c.y * H;
-      var r  = rad(c.s);
-      var color = col(c.s);
-
-      // Shadow
-      ctx.shadowColor = 'rgba(0,0,0,0.18)';
-      ctx.shadowBlur  = 6;
-
-      // Fill
-      ctx.beginPath();
-      ctx.arc(cx, cy, r, 0, Math.PI*2);
-      ctx.fillStyle = color;
-      ctx.globalAlpha = 0.85;
-      ctx.fill();
-
-      // Border
-      ctx.shadowBlur = 0;
-      ctx.globalAlpha = 1;
-      ctx.strokeStyle = '#fff';
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-    });
-    ctx.shadowBlur = 0;
-
-    // Tooltip on mousemove
-    canvas.onmousemove = function(e){
-      var rect = canvas.getBoundingClientRect();
-      var mx = (e.clientX - rect.left) * (W / rect.width);
-      var my = (e.clientY - rect.top)  * (H / rect.height);
-      var found = null;
-      GEO.forEach(function(c){
-        var dx = c.x*W - mx, dy = c.y*H - my;
-        if(Math.sqrt(dx*dx+dy*dy) < rad(c.s)+4) found = c;
-      });
-      if(found){
-        canvas.style.cursor='pointer';
-        var lbl = found.s>=8?'Très strict':found.s>=5?'Modéré':'Souple';
-        var color = col(found.s);
+    var dots = svg.querySelectorAll('.map-dot');
+    dots.forEach(function(g){
+      g.style.cursor = 'pointer';
+      g.addEventListener('mouseenter', function(e){
+        var name = g.getAttribute('data-name');
+        var reg  = g.getAttribute('data-reg');
+        var s    = parseFloat(g.getAttribute('data-s'));
+        var col  = s>=8?'#B83222':s>=5?'#C47C1A':'#2D7A47';
+        var lbl  = s>=8?'Très strict':s>=5?'Modéré':'Souple';
         tip.innerHTML =
-          '<div style="font-size:13px;font-weight:600;color:#1C1C1C;margin-bottom:3px">'+found.name+'</div>'
-          +'<div style="font-size:11px;color:#767676;margin-bottom:8px;line-height:1.4">'+found.reg+'</div>'
-          +'<div style="font-family:Georgia,serif;font-size:22px;color:'+color+'">'+found.s
+          '<div style="font-size:13px;font-weight:600;color:#1C1C1C;margin-bottom:3px">'+name+'</div>'
+          +'<div style="font-size:11px;color:#767676;line-height:1.4;margin-bottom:8px">'+reg+'</div>'
+          +'<div style="font-family:Georgia,serif;font-size:22px;color:'+col+'">'+s
           +'<span style="font-size:12px;color:#A8A8A8">/10</span></div>'
-          +'<div style="font-size:9px;font-family:monospace;color:#A8A8A8;letter-spacing:.1em;text-transform:uppercase;margin-top:2px">'+lbl+'</div>';
+          +'<div style="font-size:9px;font-family:monospace;letter-spacing:.1em;color:#A8A8A8;text-transform:uppercase">'+lbl+'</div>';
         tip.style.display='block';
-        var tx = e.clientX - rect.left + 12;
-        var ty = e.clientY - rect.top  - 10;
-        if(tx + 210 > rect.width) tx = tx - 220;
+        // position relative to svg container
+        var svgRect = svg.getBoundingClientRect();
+        var circ = g.querySelector('circle');
+        var cx = parseFloat(circ.getAttribute('cx'));
+        var cy = parseFloat(circ.getAttribute('cy'));
+        var vb = svg.viewBox.baseVal;
+        var tx = (cx/vb.width)*svgRect.width + 14;
+        var ty = (cy/vb.height)*svgRect.height - 10;
+        if(tx+210 > svgRect.width) tx = tx - 230;
         tip.style.left = tx+'px';
         tip.style.top  = ty+'px';
-      } else {
-        canvas.style.cursor='crosshair';
+      });
+      g.addEventListener('mouseleave', function(){
         tip.style.display='none';
-      }
-    };
-    canvas.onmouseleave=function(){ tip.style.display='none'; };
+      });
+    });
   }
 
-  // Run on carto tab open — patch go()
-  var _goOrig2 = go;
+  // Init immediately + retry after go('carto')
+  document.addEventListener('DOMContentLoaded', initMapTooltip);
+  var _go3 = go;
   go = function(id,el,sec,pg){
-    _goOrig2(id,el,sec,pg);
-    if(id==='carto'){
-      setTimeout(drawMap, 80);
-    }
+    _go3(id,el,sec,pg);
+    if(id==='carto') setTimeout(initMapTooltip, 100);
   };
-
-  // Also draw on resize
-  window.addEventListener('resize', function(){
-    var pg = document.getElementById('p-carto');
-    if(pg && pg.classList.contains('on')) drawMap();
-  });
 })();
 
 </script>
