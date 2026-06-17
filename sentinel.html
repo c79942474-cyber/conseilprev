@@ -526,7 +526,7 @@ textarea.form-el{min-height:86px;resize:vertical}
         <span style="font-size:10px;font-family:var(--mono);color:var(--muted2);display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:50%;background:#2D7A47;display:inline-block"></span>Souple &lt; 5</span>
       </div>
     </div>
-    <iframe id="map-iframe" srcdoc="" style="width:100%;height:480px;border:none;display:block"></iframe>
+    <iframe src="/map" style="width:100%;height:480px;border:none;display:block" loading="lazy"></iframe>
   </div>
   <!-- ══ FIN CARTE ══ -->
   <div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title">Toutes les juridictions — triées par sévérité</span><span class="tbl-link">↓ Exporter CSV</span></div><div id="carto-all"></div></div>
@@ -1012,64 +1012,7 @@ function requestDoc(name){ window.open('mailto:christophe.cerf@outlook.com?subje
 
 
 
-/* ══ CARTE LEAFLET IFRAME ══ */
-(function(){
-  var MAP_HTML = '<!DOCTYPE html><html><head>'
-    + '<meta charset="UTF-8">'
-    + '<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>'
-    + '<style>*{margin:0;padding:0;box-sizing:border-box}html,body,#map{width:100%;height:100%}.leaflet-popup-content{font-family:Inter,sans-serif;min-width:180px}.pn{font-size:13px;font-weight:600;color:#1C1C1C;margin-bottom:3px}.pr{font-size:11px;color:#767676;line-height:1.4;margin-bottom:8px}.ps{font-family:Georgia,serif;font-size:22px;line-height:1}.pl{font-size:9px;font-family:monospace;letter-spacing:.1em;color:#A8A8A8;text-transform:uppercase}</style>'
-    + '</head><body>'
-    + '<div id="map"></div>'
-    + '<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"><\/script>'
-    + '<script>'
-    + 'var GEO=['
-    + '{n:"Union europ\\u00e9enne",r:"EU AI Act 2024/1689",s:9.2,lat:50.5,lng:15.0},'
-    + '{n:"France",r:"EU AI Act + CNIL",s:9.0,lat:46.2,lng:2.2},'
-    + '{n:"Allemagne",r:"EU AI Act + BfDI",s:9.0,lat:51.2,lng:10.4},'
-    + '{n:"Chine",r:"CAC Deep Synthesis Rules 2023",s:8.8,lat:35.8,lng:104.2},'
-    + '{n:"Isra\\u00ebl",r:"Policy on AI Regulation 2023",s:8.5,lat:31.5,lng:35.0},'
-    + '{n:"Suisse",r:"LPD r\\u00e9vis\\u00e9e + Convention IA",s:8.0,lat:46.8,lng:8.2},'
-    + '{n:"Royaume-Uni",r:"AI Governance Framework 2024",s:7.4,lat:54.0,lng:-2.5},'
-    + '{n:"\\u00c9tats-Unis",r:"EO 14110 \\u2014 Safe AI",s:6.6,lat:39.5,lng:-98.4},'
-    + '{n:"Russie",r:"National AI Strategy 2030",s:5.5,lat:61.5,lng:90.0},'
-    + '{n:"Japon",r:"AI Strategy Council Guidelines",s:5.8,lat:36.2,lng:138.2},'
-    + '{n:"Cor\\u00e9e du Sud",r:"AI Industry Promotion Act",s:5.6,lat:36.0,lng:127.9},'
-    + '{n:"Canada",r:"AIDA \\u2014 AI & Data Act",s:5.2,lat:56.1,lng:-106.3},'
-    + '{n:"Arabie Saoudite",r:"National AI Strategy SDAIA",s:5.0,lat:23.9,lng:45.1},'
-    + '{n:"Br\\u00e9sil",r:"PL 2338/2023",s:4.8,lat:-14.2,lng:-51.9},'
-    + '{n:"Singapour",r:"AI Governance Framework v2",s:4.4,lat:1.35,lng:103.8},'
-    + '{n:"\\u00c9mirats Arabes Unis",r:"UAE AI Strategy 2031",s:4.0,lat:23.4,lng:53.8},'
-    + '{n:"Argentine",r:"Recommandation \\u00e9thique + L.25.326",s:4.0,lat:-34.0,lng:-64.0},'
-    + '{n:"Inde",r:"MEITY AI Principles 2023",s:3.8,lat:20.6,lng:78.9},'
-    + '{n:"Australie",r:"AI Ethics Framework CSIRO",s:3.6,lat:-25.3,lng:133.8},'
-    + '{n:"Mexique",r:"Initiatives sectorielles",s:3.5,lat:23.6,lng:-102.6},'
-    + '{n:"Afrique du Sud",r:"National AI Plan + POPIA",s:3.5,lat:-28.5,lng:24.7},'
-    + '{n:"Nig\\u00e9ria",r:"National AI Strategy 2024",s:2.5,lat:9.1,lng:8.7}'
-    + '];'
-    + 'var map=L.map("map",{center:[25,15],zoom:2,minZoom:2,maxZoom:7,scrollWheelZoom:false});'
-    + 'L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",{attribution:"\\u00a9 OpenStreetMap \\u00a9 CARTO",subdomains:"abcd",maxZoom:19}).addTo(map);'
-    + 'function c(s){return s>=8?"#B83222":s>=5?"#C47C1A":"#2D7A47";}'
-    + 'GEO.forEach(function(g){'
-    + 'var m=L.circleMarker([g.lat,g.lng],{radius:6+g.s*1.1,fillColor:c(g.s),color:"#fff",weight:1.5,fillOpacity:0.85}).addTo(map);'
-    + 'var l=g.s>=8?"Tr\\u00e8s strict":g.s>=5?"Mod\\u00e9r\\u00e9":"Souple";'
-    + 'm.bindPopup("<div class=\'pn\'>"+g.n+"<\/div><div class=\'pr\'>"+g.r+"<\/div><div class=\'ps\' style=\'color:"+c(g.s)+"\'>"+g.s+"<span style=\'font-size:12px;color:#A8A8A8\'>/10<\/span><\/div><div class=\'pl\'>"+l+"<\/div>");'
-    + '});'
-    + '<\/script>'
-    + '</body></html>';
 
-  function initIframe(){
-    var iframe = document.getElementById('map-iframe');
-    if(!iframe || iframe.dataset.loaded) return;
-    iframe.srcdoc = MAP_HTML;
-    iframe.dataset.loaded = '1';
-  }
-
-  var _goMap = go;
-  go = function(id, el, sec, pg){
-    _goMap(id, el, sec, pg);
-    if(id === 'carto') setTimeout(initIframe, 100);
-  };
-})();
 
 </script>
 </body>
