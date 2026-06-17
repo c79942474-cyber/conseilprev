@@ -363,6 +363,15 @@ textarea.form-el{min-height:86px;resize:vertical}
 .rank-name{font-size:13px;font-weight:500;color:var(--ink)}
 .rank-reg{font-size:11px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rank-score{font-family:var(--serif);font-size:18px;color:var(--ink);text-align:right;letter-spacing:-.02em}
+
+/* ══ LEAFLET MAP ══ */
+.leaflet-container { font-family: var(--sans) !important; }
+.map-popup { font-family: var(--sans); min-width: 180px; }
+.map-popup-name { font-size: 13px; font-weight: 600; color: #1C1C1C; margin-bottom: 4px; }
+.map-popup-reg  { font-size: 11px; color: #767676; margin-bottom: 8px; line-height: 1.4; }
+.map-popup-score{ font-family: Georgia, serif; font-size: 22px; color: #B83222; line-height: 1; }
+.map-popup-lbl  { font-size: 9px; font-family: monospace; color: #A8A8A8; letter-spacing: .1em; text-transform: uppercase; }
+
 </style>
 </head>
 <body>
@@ -511,6 +520,20 @@ textarea.form-el{min-height:86px;resize:vertical}
   <span class="eyebrow">Cartographie</span>
   <h1 class="page-h">Carte mondiale des<br><em>régulations IA</em></h1>
   <p class="page-lead">60+ juridictions analysées selon 12 critères : portée, sanctions, obligations IA haut risque, transparence, droits fondamentaux.</p>
+
+  <!-- ══ CARTE LEAFLET ══ -->
+  <div style="margin-bottom:24px;border:1px solid var(--rule);border-radius:4px;overflow:hidden">
+    <div style="padding:12px 20px;border-bottom:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;background:var(--white)">
+      <span style="font-size:13px;font-weight:500;color:var(--ink)">Vue interactive — Niveaux de contrainte réglementaire</span>
+      <div style="display:flex;align-items:center;gap:14px">
+        <span style="font-size:10px;font-family:var(--mono);color:var(--muted2);display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:50%;background:#B83222;display:inline-block"></span>Très strict ≥ 8</span>
+        <span style="font-size:10px;font-family:var(--mono);color:var(--muted2);display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:50%;background:#C47C1A;display:inline-block"></span>Modéré 5–8</span>
+        <span style="font-size:10px;font-family:var(--mono);color:var(--muted2);display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:50%;background:#2D7A47;display:inline-block"></span>Souple &lt; 5</span>
+      </div>
+    </div>
+    <div id="sentinel-map" style="height:480px;width:100%;background:#dce8f0"></div>
+  </div>
+  <!-- ══ FIN CARTE ══ -->
   <div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title">Toutes les juridictions — triées par sévérité</span><span class="tbl-link">↓ Exporter CSV</span></div><div id="carto-all"></div></div>
 </div>
 
@@ -984,6 +1007,113 @@ function calcSanctions(){
 
 function openMailtoContact(subject){ var subj=subject||'[Sentinel AI] Demande de contact CONSEILPREV'; var body='Bonjour,\n\nJe souhaite vous contacter suite a ma consultation de Sentinel AI.\n\nCordialement'; window.open('mailto:christophe.cerf@outlook.com?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body),'_blank'); }
 function requestDoc(name){ window.open('mailto:christophe.cerf@outlook.com?subject=[Sentinel AI] Demande: '+encodeURIComponent(name),'_blank'); }
+
+/* ══ LEAFLET MAP INIT ══ */
+(function() {
+  function initMap() {
+    if (!document.getElementById('sentinel-map')) return;
+    if (typeof L === 'undefined') { setTimeout(initMap, 200); return; }
+
+    var map = L.map('sentinel-map', {
+      center: [25, 15],
+      zoom: 2,
+      minZoom: 2,
+      maxZoom: 6,
+      zoomControl: true,
+      attributionControl: true,
+      scrollWheelZoom: false
+    });
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | © <a href="https://carto.com/">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(map);
+
+    var GEO = [
+      {name:'Union européenne',   reg:'EU AI Act 2024/1689',          s:9.2, lat:50.8,  lng:10.4},
+      {name:'Chine',              reg:'CAC Deep Synthesis Rules 2023', s:8.8, lat:35.8,  lng:104.2},
+      {name:'Royaume-Uni',        reg:'AI Governance Framework 2024',  s:7.4, lat:54.0,  lng:-2.5},
+      {name:'États-Unis',         reg:'EO 14110 — Safe AI',           s:6.6, lat:39.5,  lng:-98.4},
+      {name:'Japon',              reg:'AI Strategy Council Guidelines',s:5.8, lat:36.2,  lng:138.2},
+      {name:'Corée du Sud',       reg:'AI Industry Promotion Act',    s:5.6, lat:36.5,  lng:127.9},
+      {name:'Canada',             reg:'AIDA — AI & Data Act',         s:5.2, lat:56.1,  lng:-106.3},
+      {name:'Brésil',             reg:'PL 2338/2023',                 s:4.8, lat:-14.2, lng:-51.9},
+      {name:'Singapour',          reg:'AI Governance Framework v2',   s:4.4, lat:1.35,  lng:103.8},
+      {name:'Émirats Arabes Unis',reg:'UAE AI Strategy 2031',         s:4.0, lat:23.4,  lng:53.8},
+      {name:'Inde',               reg:'MEITY AI Principles 2023',     s:3.8, lat:20.6,  lng:78.9},
+      {name:'Australie',          reg:'AI Ethics Framework CSIRO',    s:3.6, lat:-25.3, lng:133.8},
+      {name:'France',             reg:'EU AI Act + CNIL',             s:9.0, lat:46.2,  lng:2.2},
+      {name:'Allemagne',          reg:'EU AI Act + BfDI',             s:9.0, lat:51.2,  lng:10.4},
+      {name:'Suisse',             reg:'LPD révisée + Convention IA',  s:8.0, lat:46.8,  lng:8.2},
+      {name:'Israël',             reg:'Policy on AI Regulation 2023', s:8.5, lat:31.0,  lng:35.0},
+      {name:'Arabie Saoudite',    reg:'National AI Strategy SDAIA',   s:5.0, lat:23.9,  lng:45.1},
+      {name:'Afrique du Sud',     reg:'National AI Plan + POPIA',     s:3.5, lat:-28.5, lng:24.7},
+      {name:'Nigéria',            reg:'National AI Strategy 2024',    s:2.5, lat:9.1,   lng:8.7},
+      {name:'Argentine',          reg:'Recommandation éthique + L.25.326', s:4.0, lat:-38.4, lng:-63.6},
+      {name:'Mexique',            reg:'Initiatives sectorielles',      s:3.5, lat:23.6,  lng:-102.6},
+      {name:'Russie',             reg:'National AI Strategy 2030',    s:5.5, lat:61.5,  lng:105.3},
+    ];
+
+    function getColor(s) {
+      if (s >= 8) return '#B83222';
+      if (s >= 5) return '#C47C1A';
+      return '#2D7A47';
+    }
+    function getRadius(s) { return 8 + s * 1.4; }
+
+    GEO.forEach(function(c) {
+      var col = getColor(c.s);
+      var circle = L.circleMarker([c.lat, c.lng], {
+        radius: getRadius(c.s),
+        fillColor: col,
+        color: '#fff',
+        weight: 1.5,
+        opacity: 1,
+        fillOpacity: 0.78
+      }).addTo(map);
+
+      var label = c.s >= 8 ? 'Très strict' : c.s >= 5 ? 'Modéré' : 'Souple';
+      circle.bindPopup(
+        '<div class="map-popup">'
+        + '<div class="map-popup-name">' + c.name + '</div>'
+        + '<div class="map-popup-reg">'  + c.reg  + '</div>'
+        + '<div class="map-popup-score">' + c.s + '<span style="font-size:13px;color:#767676">/10</span></div>'
+        + '<div class="map-popup-lbl">'  + label  + '</div>'
+        + '</div>',
+        { maxWidth: 220, className: 'sentinel-popup' }
+      );
+    });
+
+    // Refresh map when carto tab is shown
+    document.querySelectorAll('.sb-item').forEach(function(el) {
+      if (el.getAttribute('onclick') && el.getAttribute('onclick').indexOf("'carto'") >= 0) {
+        el.addEventListener('click', function() {
+          setTimeout(function() { map.invalidateSize(); }, 100);
+        });
+      }
+    });
+  }
+
+  // Load Leaflet CSS + JS dynamically
+  if (!document.getElementById('leaflet-css')) {
+    var css = document.createElement('link');
+    css.id = 'leaflet-css';
+    css.rel = 'stylesheet';
+    css.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    document.head.appendChild(css);
+  }
+  if (!document.getElementById('leaflet-js')) {
+    var js = document.createElement('script');
+    js.id = 'leaflet-js';
+    js.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    js.onload = initMap;
+    document.head.appendChild(js);
+  } else {
+    initMap();
+  }
+})();
+
 </script>
 </body>
 </html>
