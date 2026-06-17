@@ -632,10 +632,13 @@ def send_email_with_attachment(data, cv_data=None, cv_filename=None):
     html_body = build_html_email(data, cv_filename)
 
     # ── 1. Brevo API (priorité absolue — HTTP, fonctionne sur Render) ──
-    if BREVO_API_KEY:
+    # Relecture dynamique au cas où la variable aurait été ajoutée après démarrage
+    _brevo_key = os.environ.get('BREVO_API_KEY', BREVO_API_KEY)
+    _mail_from = os.environ.get('MAIL_FROM', MAIL_FROM)
+    if _brevo_key:
         try:
             payload = {
-                'sender':      {'name': 'CONSEILPREV', 'email': MAIL_FROM},
+                'sender':      {'name': 'CONSEILPREV', 'email': _mail_from},
                 'to':          [{'email': MAIL_TO, 'name': 'CONSEILPREV'}],
                 'subject':     subject,
                 'htmlContent': html_body,
@@ -654,7 +657,7 @@ def send_email_with_attachment(data, cv_data=None, cv_filename=None):
             resp = requests.post(
                 BREVO_API_URL,
                 headers={
-                    'api-key':      BREVO_API_KEY,
+                    'api-key':      _brevo_key,
                     'Content-Type': 'application/json',
                     'Accept':       'application/json',
                 },
@@ -906,6 +909,92 @@ def api_apply():
     except Exception as e:
         logger.error(f'APPLY_ERR {ip}: {e}')
         return jsonify({'ok': False, 'error': 'Erreur serveur'}), 500
+
+
+@app.route('/api/test-brevo-cv', methods=['GET'])
+def test_brevo_cv():
+    """Test direct API Brevo avec pièce jointe — diagnostic CV."""
+    import base64 as _b64
+    ip = limiter.get_ip(request)
+
+    # Mini PDF valide (1 page)
+    mini_pdf = (
+        b'%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n'
+        b'2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj\n'
+        b'3 0 obj<</Type/Page/MediaBox[0 0 595 842]/Parent 2 0 R>>endobj\n'
+        b'xref\n0 4\n0000000000 65535 f\n'
+        b'trailer<</Size 4/Root 1 0 R>>\nstartxref\n9\n%%EOF'
+    )
+
+    result = {
+        'brevo_api_key_set':  bool(BREVO_API_KEY),
+        'brevo_api_key_len':  len(BREVO_API_KEY) if BREVO_API_KEY else 0,
+        'brevo_api_key_start': BREVO_API_KEY[:12] + '...' if BREVO_API_KEY else '',
+        'mail_from':  MAIL_FROM,
+        'mail_to':    MAIL_TO,
+    }
+
+    if not BREVO_API_KEY:
+        result['error'] = 'BREVO_API_KEY non configurée dans Render'
+        return jsonify(result), 400
+
+    # Test 1 : Appel API sans pièce jointe
+    try:
+        resp1 = requests.post(
+            BREVO_API_URL,
+            headers={'api-key': BREVO_API_KEY, 'Content-Type': 'application/json'},
+            json={
+                'sender':      {'name': 'CONSEILPREV TEST', 'email': MAIL_FROM},
+                'to':          [{'email': MAIL_TO}],
+                'subject':     '[TEST] Brevo API — sans CV',
+                'htmlContent': '<p>Test sans CV — <b>OK si vous recevez ceci</b></p>',
+                'tags':        ['test', 'diagnostic'],
+            },
+            timeout=15,
+        )
+        result['test1_no_cv'] = {
+            'status': resp1.status_code,
+            'ok':     resp1.status_code in (200, 201),
+            'body':   resp1.text[:200],
+        }
+    except Exception as e:
+        result['test1_no_cv'] = {'error': str(e)}
+
+    # Test 2 : Appel API avec CV en pièce jointe
+    try:
+        resp2 = requests.post(
+            BREVO_API_URL,
+            headers={'api-key': BREVO_API_KEY, 'Content-Type': 'application/json'},
+            json={
+                'sender':      {'name': 'CONSEILPREV TEST', 'email': MAIL_FROM},
+                'to':          [{'email': MAIL_TO}],
+                'subject':     '[TEST] Brevo API — AVEC CV joint',
+                'htmlContent': '<p>Test <b>avec CV joint</b> — vérifiez la pièce jointe</p>',
+                'attachment':  [{'name': 'CV_test.pdf', 'content': _b64.b64encode(mini_pdf).decode()}],
+                'tags':        ['test', 'cv-diagnostic'],
+            },
+            timeout=15,
+        )
+        result['test2_with_cv'] = {
+            'status': resp2.status_code,
+            'ok':     resp2.status_code in (200, 201),
+            'body':   resp2.text[:200],
+            'mid':    resp2.json().get('messageId','') if resp2.status_code in (200,201) else '',
+        }
+    except Exception as e:
+        result['test2_with_cv'] = {'error': str(e)}
+
+    # Résumé
+    t1_ok = result.get('test1_no_cv',{}).get('ok', False)
+    t2_ok = result.get('test2_with_cv',{}).get('ok', False)
+    result['summary'] = (
+        '✅ API OK + CV OK — vérifiez votre boîte mail' if t1_ok and t2_ok else
+        '⚠ API OK mais CV échoue — problème encodage' if t1_ok and not t2_ok else
+        '❌ API KO — vérifier BREVO_API_KEY et MAIL_FROM'
+    )
+
+    logger.info(f'BREVO_TEST_CV {ip}: t1={t1_ok} t2={t2_ok}')
+    return jsonify(result)
 
 
 @app.route('/api/test-email', methods=['GET'])
