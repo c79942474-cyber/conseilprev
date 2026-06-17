@@ -366,6 +366,44 @@ textarea.form-el{min-height:86px;resize:vertical}
 
 
 
+
+/* ══ FICHES JURIDICTIONS ══ */
+.fiche-back{font-size:11px;font-family:var(--mono);color:var(--accent);cursor:pointer;letter-spacing:.06em;margin-bottom:20px;display:inline-flex;align-items:center;gap:6px}
+.fiche-back:hover{text-decoration:underline}
+.fiche-region{font-size:9px;font-family:var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--muted2);margin-bottom:10px}
+.fiche-title{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+.fiche-code{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--ink2);background:var(--bg2);padding:4px 10px;border-radius:4px}
+.fiche-h{font-family:var(--serif);font-size:38px;font-weight:400;color:var(--ink);letter-spacing:-.02em}
+.fiche-badge{margin-left:auto;font-size:10px;font-family:var(--mono);padding:4px 10px;border-radius:3px;letter-spacing:.06em;font-weight:600;white-space:nowrap}
+.fiche-badge-h{background:rgba(184,50,34,.12);color:var(--accent);border:1px solid rgba(184,50,34,.25)}
+.fiche-badge-m{background:rgba(196,124,26,.12);color:var(--orange);border:1px solid rgba(196,124,26,.25)}
+.fiche-badge-l{background:rgba(45,122,71,.12);color:var(--green);border:1px solid rgba(45,122,71,.25)}
+.fiche-desc{font-size:13px;color:var(--muted);line-height:1.7;max-width:680px;margin-bottom:0}
+.fiche-divider{height:1px;background:var(--rule);margin:24px 0}
+.fiche-grid{display:grid;grid-template-columns:1fr 320px;gap:24px;align-items:start}
+.fiche-card{background:var(--white);border:1px solid var(--rule);border-radius:4px;padding:22px;margin-bottom:16px}
+.fiche-card-title{font-size:11px;font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);margin-bottom:14px}
+.fiche-req-list{list-style:none;padding:0}
+.fiche-req-item{display:flex;gap:12px;padding:8px 0;border-bottom:1px solid var(--rule);font-size:12px;color:var(--ink2);line-height:1.5}
+.fiche-req-item:last-child{border-bottom:none}
+.fiche-req-num{font-family:var(--mono);font-size:10px;color:var(--accent);min-width:20px;margin-top:1px}
+.fiche-score-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--rule)}
+.fiche-score-row:last-child{border-bottom:none}
+.fiche-score-lbl{font-size:12px;color:var(--ink2)}
+.fiche-score-val{font-family:var(--mono);font-size:11px;color:var(--muted2);min-width:50px;text-align:right}
+.fiche-score-bar{flex:1;height:3px;background:var(--bg2);border-radius:2px;overflow:hidden;margin:0 10px}
+.fiche-score-fill{height:100%;background:var(--accent);border-radius:2px}
+.fiche-geo{font-size:12px;color:var(--muted);line-height:1.7}
+.fiche-sectors{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.fiche-sector-chip{font-size:10px;font-family:var(--mono);background:var(--bg2);color:var(--muted);padding:3px 9px;border-radius:2px;border:1px solid var(--rule)}
+.fiche-law-item{background:var(--white);border:1px solid var(--rule);border-radius:4px;padding:16px 18px;margin-bottom:10px}
+.fiche-law-status{font-size:9px;font-family:var(--mono);letter-spacing:.1em;color:var(--accent);margin-bottom:6px}
+.fiche-law-name{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:6px}
+.fiche-law-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:8px}
+.fiche-law-sanction{font-size:11px;font-family:var(--mono);color:var(--ink2)}
+.fiche-law-sanction strong{color:var(--accent)}
+@media(max-width:860px){.fiche-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -709,6 +747,1711 @@ textarea.form-el{min-height:86px;resize:vertical}
   <div style="display:grid;grid-template-columns:1fr 200px;gap:24px;align-items:start"><div id="fria-steps"></div><div><div class="tbl-wrap" style="margin-bottom:14px;padding:18px;text-align:center"><div class="tbl-head" style="border:none;padding:0 0 12px"><span class="tbl-title">Score FRIA global</span></div><div class="fria-score-ring"><div class="fria-ring-val">6.2</div><div class="fria-ring-lbl">/ 10</div></div><div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.6">Risque modéré — Des mesures d'atténuation sont requises.</div></div><div class="tbl-wrap" style="padding:14px 16px"><div style="font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em;color:var(--muted2);margin-bottom:10px">Actions requises</div><div class="act-item"><div class="act-dot"></div><div class="act-t" style="font-size:11px">Réviser la politique de supervision humaine</div></div><div class="act-item"><div class="act-dot"></div><div class="act-t" style="font-size:11px">Documenter les biais identifiés (Art. 9.7)</div></div><div class="act-item"><div class="act-dot"></div><div class="act-t" style="font-size:11px">Enregistrer dans la base EU AI (Art. 51)</div></div></div></div></div>
 </div>
 
+
+<div class="page" id="p-fiche-eu">
+  <span class="fiche-back" onclick="go('carto',null,'CARTOGRAPHIE','Carte mondiale')">← Retour Cartographie</span>
+  <div class="fiche-region">EUROPE</div>
+  <div class="fiche-title">
+    <span class="fiche-code">EU</span>
+    <h1 class="fiche-h">Union européenne</h1>
+    <span class="fiche-badge fiche-badge-h">● RISQUE ÉLEVÉ</span>
+  </div>
+  <p class="fiche-desc">Premier cadre horizontal au monde, classifiant les IA par niveau de risque (inacceptable, élevé, limité, minimal). Entré en vigueur en août 2024 avec application progressive jusqu'en 2027.</p>
+  <div class="fiche-divider"></div>
+  <div class="fiche-grid">
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Cadre principal</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px">EU AI Act (Règlement 2024/1689)</div>
+        <div class="fiche-card-title">Exigences clés</div>
+        <ul class="fiche-req-list"><li class="fiche-req-item"><span class="fiche-req-num">01</span><span>Interdiction des systèmes à risque inacceptable (scoring social, manipulation subliminale)</span></li><li class="fiche-req-item"><span class="fiche-req-num">02</span><span>Évaluation de conformité obligatoire pour les IA à haut risque</span></li><li class="fiche-req-item"><span class="fiche-req-num">03</span><span>Documentation technique et traçabilité complète</span></li><li class="fiche-req-item"><span class="fiche-req-num">04</span><span>Surveillance humaine effective</span></li><li class="fiche-req-item"><span class="fiche-req-num">05</span><span>Transparence pour les systèmes génératifs (watermarking)</span></li></ul>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Contexte géopolitique</div>
+        <p class="fiche-geo">Puissance normative mondiale. Tensions récurrentes avec les États-Unis sur les transferts de données (post-Schrems II) et avec la Chine sur la souveraineté technologique.</p>
+      </div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:14px">Textes réglementaires</div>
+      <div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">EU Artificial Intelligence Act</div>
+          <div class="fiche-law-desc">Premier cadre réglementaire horizontal au monde pour l'IA. Classifie les systèmes par niveau de risque : inacceptable (interdit), élevé (conformité stricte), limité (transparence), minimal. Applicable progressivement entre 2024 et 2027.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>35 M€ ou 7% du CA mondial</strong></div>
+        </div><div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">RGPD</div>
+          <div class="fiche-law-desc">Règlement européen sur la protection des données personnelles. Transversal à toute IA traitant des données personnelles — bases légales, droits des personnes, décisions automatisées (Art. 22).</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>20 M€ ou 4% du CA mondial</strong></div>
+        </div>
+    </div>
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Scores de risque</div>
+        <div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sévérité globale</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:92%;background:#B83222"></div></div>
+          <span class="fiche-score-val">9.2/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Transparence exigée</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:95%;background:#B83222"></div></div>
+          <span class="fiche-score-val">9.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Responsabilité</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:90%;background:#B83222"></div></div>
+          <span class="fiche-score-val">9.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Souveraineté des données</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:90%;background:#B83222"></div></div>
+          <span class="fiche-score-val">9.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sanctions financières</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:95%;background:#B83222"></div></div>
+          <span class="fiche-score-val">9.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Ouverture à l'innovation</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:50%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.0/10</span>
+        </div>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Secteurs régulés</div>
+        <div class="fiche-sectors"><span class="fiche-sector-chip">santé</span><span class="fiche-sector-chip">finance</span><span class="fiche-sector-chip">transport</span><span class="fiche-sector-chip">biométrie</span><span class="fiche-sector-chip">emploi</span><span class="fiche-sector-chip">éducation</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page" id="p-fiche-de">
+  <span class="fiche-back" onclick="go('carto',null,'CARTOGRAPHIE','Carte mondiale')">← Retour Cartographie</span>
+  <div class="fiche-region">EUROPE</div>
+  <div class="fiche-title">
+    <span class="fiche-code">DE</span>
+    <h1 class="fiche-h">Allemagne</h1>
+    <span class="fiche-badge fiche-badge-h">● RISQUE ÉLEVÉ</span>
+  </div>
+  <p class="fiche-desc">Applique l'EU AI Act avec une rigueur nationale supplémentaire via le BfDI (protection des données) et des initiatives sectorielles dans l'industrie et la santé.</p>
+  <div class="fiche-divider"></div>
+  <div class="fiche-grid">
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Cadre principal</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px">EU AI Act + AI Strategy Update 2023</div>
+        <div class="fiche-card-title">Exigences clés</div>
+        <ul class="fiche-req-list"><li class="fiche-req-item"><span class="fiche-req-num">01</span><span>Application stricte de l'EU AI Act via les autorités nationales</span></li><li class="fiche-req-item"><span class="fiche-req-num">02</span><span>Supervision renforcée du BfDI sur les données IA</span></li><li class="fiche-req-item"><span class="fiche-req-num">03</span><span>Exigences sectorielles dans l'industrie 4.0</span></li><li class="fiche-req-item"><span class="fiche-req-num">04</span><span>Conformité NIS2 pour les infrastructures critiques</span></li><li class="fiche-req-item"><span class="fiche-req-num">05</span><span>Standards techniques DIN/ISO pour les systèmes IA</span></li></ul>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Contexte géopolitique</div>
+        <p class="fiche-geo">Leader industriel européen. Fort lobbying pour des standards IA favorables à l'industrie manufacturière. Tensions entre innovation tech et protection stricte des données héritée du RGPD.</p>
+      </div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:14px">Textes réglementaires</div>
+      <div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">EU AI Act (transposition DE)</div>
+          <div class="fiche-law-desc">L'Allemagne applique directement le règlement européen. Le BfDI supervise les aspects données personnelles dans les systèmes IA.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>35 M€ ou 7% du CA mondial</strong></div>
+        </div><div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">AI Strategy Update 2023</div>
+          <div class="fiche-law-desc">Stratégie nationale visant 3 Mds€ d'investissements IA d'ici 2025, avec focus sur l'IA industrielle et la recherche fondamentale.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Non contraignant</strong></div>
+        </div>
+    </div>
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Scores de risque</div>
+        <div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sévérité globale</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:88%;background:#B83222"></div></div>
+          <span class="fiche-score-val">8.8/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Transparence exigée</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:90%;background:#B83222"></div></div>
+          <span class="fiche-score-val">9.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Responsabilité</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:88%;background:#B83222"></div></div>
+          <span class="fiche-score-val">8.8/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Souveraineté des données</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:90%;background:#B83222"></div></div>
+          <span class="fiche-score-val">9.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sanctions financières</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:88%;background:#B83222"></div></div>
+          <span class="fiche-score-val">8.8/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Ouverture à l'innovation</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:55%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.5/10</span>
+        </div>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Secteurs régulés</div>
+        <div class="fiche-sectors"><span class="fiche-sector-chip">industrie</span><span class="fiche-sector-chip">santé</span><span class="fiche-sector-chip">finance</span><span class="fiche-sector-chip">automobile</span><span class="fiche-sector-chip">énergie</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page" id="p-fiche-fr">
+  <span class="fiche-back" onclick="go('carto',null,'CARTOGRAPHIE','Carte mondiale')">← Retour Cartographie</span>
+  <div class="fiche-region">EUROPE</div>
+  <div class="fiche-title">
+    <span class="fiche-code">FR</span>
+    <h1 class="fiche-h">France</h1>
+    <span class="fiche-badge fiche-badge-h">● RISQUE ÉLEVÉ</span>
+  </div>
+  <p class="fiche-desc">Acteur clé de la rédaction de l'EU AI Act. La CNIL publie des recommandations spécifiques pour les systèmes IA. Stratégie nationale IA dotée de 1,5 Mds€.</p>
+  <div class="fiche-divider"></div>
+  <div class="fiche-grid">
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Cadre principal</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px">EU AI Act + Stratégie nationale IA + CNIL</div>
+        <div class="fiche-card-title">Exigences clés</div>
+        <ul class="fiche-req-list"><li class="fiche-req-item"><span class="fiche-req-num">01</span><span>Application de l'EU AI Act via la CNIL et l'ANSSI</span></li><li class="fiche-req-item"><span class="fiche-req-num">02</span><span>Recommandations CNIL sur l'IA et la vie privée</span></li><li class="fiche-req-item"><span class="fiche-req-num">03</span><span>Exigences NIS2 pour les OES utilisant l'IA</span></li><li class="fiche-req-item"><span class="fiche-req-num">04</span><span>Décret IA dans la fonction publique</span></li><li class="fiche-req-item"><span class="fiche-req-num">05</span><span>Obligations RGPD renforcées pour les LLM</span></li></ul>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Contexte géopolitique</div>
+        <p class="fiche-geo">Co-architecte de la régulation IA européenne. Ambition de souveraineté numérique avec Mistral AI comme champion national. Tension entre innovation et régulation stricte.</p>
+      </div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:14px">Textes réglementaires</div>
+      <div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">EU AI Act (CNIL superviseur)</div>
+          <div class="fiche-law-desc">La CNIL est désignée comme autorité de surveillance pour les aspects protection des données dans les systèmes IA français.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>35 M€ ou 7% du CA</strong></div>
+        </div><div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">Stratégie nationale IA 2022-2025</div>
+          <div class="fiche-law-desc">Plan d'investissement de 1,5 Mds€ dans la recherche IA, incluant des exigences de conformité pour les projets financés.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Non contraignant</strong></div>
+        </div>
+    </div>
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Scores de risque</div>
+        <div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sévérité globale</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:85%;background:#B83222"></div></div>
+          <span class="fiche-score-val">8.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Transparence exigée</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:88%;background:#B83222"></div></div>
+          <span class="fiche-score-val">8.8/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Responsabilité</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:85%;background:#B83222"></div></div>
+          <span class="fiche-score-val">8.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Souveraineté des données</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:90%;background:#B83222"></div></div>
+          <span class="fiche-score-val">9.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sanctions financières</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:85%;background:#B83222"></div></div>
+          <span class="fiche-score-val">8.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Ouverture à l'innovation</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:60%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">6.0/10</span>
+        </div>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Secteurs régulés</div>
+        <div class="fiche-sectors"><span class="fiche-sector-chip">défense</span><span class="fiche-sector-chip">santé</span><span class="fiche-sector-chip">finance</span><span class="fiche-sector-chip">administration</span><span class="fiche-sector-chip">énergie</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page" id="p-fiche-cn">
+  <span class="fiche-back" onclick="go('carto',null,'CARTOGRAPHIE','Carte mondiale')">← Retour Cartographie</span>
+  <div class="fiche-region">ASIA</div>
+  <div class="fiche-title">
+    <span class="fiche-code">CN</span>
+    <h1 class="fiche-h">Chine</h1>
+    <span class="fiche-badge fiche-badge-h">● RISQUE ÉLEVÉ</span>
+  </div>
+  <p class="fiche-desc">Cadre réglementaire fragmenté mais dense, ciblant spécifiquement l'IA générative et les algorithmes de recommandation. Contrôle d'État fort sur les contenus et les données.</p>
+  <div class="fiche-divider"></div>
+  <div class="fiche-grid">
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Cadre principal</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px">Generative AI Measures + Algorithm Regulations + PIPL</div>
+        <div class="fiche-card-title">Exigences clés</div>
+        <ul class="fiche-req-list"><li class="fiche-req-item"><span class="fiche-req-num">01</span><span>Enregistrement obligatoire des modèles génératifs auprès du CAC</span></li><li class="fiche-req-item"><span class="fiche-req-num">02</span><span>Filigrane sur les contenus générés par IA</span></li><li class="fiche-req-item"><span class="fiche-req-num">03</span><span>Interdiction des contenus contraires aux valeurs socialistes</span></li><li class="fiche-req-item"><span class="fiche-req-num">04</span><span>Protection des données personnelles (PIPL)</span></li><li class="fiche-req-item"><span class="fiche-req-num">05</span><span>Audit de sécurité pour les algorithmes de recommandation</span></li></ul>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Contexte géopolitique</div>
+        <p class="fiche-geo">Compétition directe avec les États-Unis et l'UE pour la domination IA mondiale. Stratégie de substitution des technologies étrangères. Exportation du modèle réglementaire vers les pays BRI.</p>
+      </div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:14px">Textes réglementaires</div>
+      <div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">Generative AI Measures (2023)</div>
+          <div class="fiche-law-desc">Règles spécifiques aux IA génératives : enregistrement, filigrane, interdiction de contenus illicites, responsabilité des fournisseurs.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Jusqu'à 100 000 CNY + suspension</strong></div>
+        </div><div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">PIPL — Personal Information Protection Law</div>
+          <div class="fiche-law-desc">Équivalent chinois du RGPD. Contrôle strict des données traitées par les systèmes IA, avec exigences de localisation.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>4% du CA ou 50M CNY</strong></div>
+        </div>
+    </div>
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Scores de risque</div>
+        <div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sévérité globale</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:80%;background:#B83222"></div></div>
+          <span class="fiche-score-val">8.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Transparence exigée</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:75%;background:#B83222"></div></div>
+          <span class="fiche-score-val">7.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Responsabilité</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:80%;background:#B83222"></div></div>
+          <span class="fiche-score-val">8.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Souveraineté des données</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:100%;background:#B83222"></div></div>
+          <span class="fiche-score-val">10.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sanctions financières</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:70%;background:#B83222"></div></div>
+          <span class="fiche-score-val">7.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Ouverture à l'innovation</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:40%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.0/10</span>
+        </div>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Secteurs régulés</div>
+        <div class="fiche-sectors"><span class="fiche-sector-chip">média</span><span class="fiche-sector-chip">finance</span><span class="fiche-sector-chip">transport</span><span class="fiche-sector-chip">surveillance</span><span class="fiche-sector-chip">e-commerce</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page" id="p-fiche-ru">
+  <span class="fiche-back" onclick="go('carto',null,'CARTOGRAPHIE','Carte mondiale')">← Retour Cartographie</span>
+  <div class="fiche-region">EUROPE</div>
+  <div class="fiche-title">
+    <span class="fiche-code">RU</span>
+    <h1 class="fiche-h">Russie</h1>
+    <span class="fiche-badge fiche-badge-h">● RISQUE ÉLEVÉ</span>
+  </div>
+  <p class="fiche-desc">Approche volontariste avec un cadre expérimental à Moscou. Forte implication de l'État dans le développement IA. Restrictions croissantes sur les technologies étrangères.</p>
+  <div class="fiche-divider"></div>
+  <div class="fiche-grid">
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Cadre principal</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px">National AI Strategy + Digital Code</div>
+        <div class="fiche-card-title">Exigences clés</div>
+        <ul class="fiche-req-list"><li class="fiche-req-item"><span class="fiche-req-num">01</span><span>Expérimentation réglementaire dans des zones dédiées (Moscou)</span></li><li class="fiche-req-item"><span class="fiche-req-num">02</span><span>Localisation obligatoire des données IA</span></li><li class="fiche-req-item"><span class="fiche-req-num">03</span><span>Restrictions sur les technologies IA étrangères</span></li><li class="fiche-req-item"><span class="fiche-req-num">04</span><span>Supervision FSB pour les applications sensibles</span></li><li class="fiche-req-item"><span class="fiche-req-num">05</span><span>Certification obligatoire pour certains systèmes</span></li></ul>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Contexte géopolitique</div>
+        <p class="fiche-geo">Développement IA sous sanctions internationales. Dépendance réduite aux composants étrangers via substitution nationale. Coopération renforcée avec la Chine sur l'IA souveraine.</p>
+      </div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:14px">Textes réglementaires</div>
+      <div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">National AI Strategy 2030</div>
+          <div class="fiche-law-desc">Cadre stratégique national visant à faire de la Russie une puissance IA de premier plan. Financement public massif de la recherche.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Non contraignant</strong></div>
+        </div><div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">Digital Code (expérimental)</div>
+          <div class="fiche-law-desc">Cadre juridique expérimental autorisant des dérogations réglementaires pour tester des technologies IA dans des zones dédiées.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Variable</strong></div>
+        </div>
+    </div>
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Scores de risque</div>
+        <div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sévérité globale</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:75%;background:#B83222"></div></div>
+          <span class="fiche-score-val">7.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Transparence exigée</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:60%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">6.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Responsabilité</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:70%;background:#B83222"></div></div>
+          <span class="fiche-score-val">7.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Souveraineté des données</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:100%;background:#B83222"></div></div>
+          <span class="fiche-score-val">10.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sanctions financières</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:65%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">6.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Ouverture à l'innovation</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:50%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.0/10</span>
+        </div>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Secteurs régulés</div>
+        <div class="fiche-sectors"><span class="fiche-sector-chip">défense</span><span class="fiche-sector-chip">énergie</span><span class="fiche-sector-chip">finance</span><span class="fiche-sector-chip">transport</span><span class="fiche-sector-chip">administration</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page" id="p-fiche-kr">
+  <span class="fiche-back" onclick="go('carto',null,'CARTOGRAPHIE','Carte mondiale')">← Retour Cartographie</span>
+  <div class="fiche-region">ASIA</div>
+  <div class="fiche-title">
+    <span class="fiche-code">KR</span>
+    <h1 class="fiche-h">Corée du Sud</h1>
+    <span class="fiche-badge fiche-badge-h">● RISQUE ÉLEVÉ</span>
+  </div>
+  <p class="fiche-desc">L'AI Basic Act (2025) établit un cadre complet inspiré de l'EU AI Act, avec une approche fondée sur les risques et des obligations pour les systèmes à fort impact.</p>
+  <div class="fiche-divider"></div>
+  <div class="fiche-grid">
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Cadre principal</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px">AI Basic Act (2025)</div>
+        <div class="fiche-card-title">Exigences clés</div>
+        <ul class="fiche-req-list"><li class="fiche-req-item"><span class="fiche-req-num">01</span><span>Classification des IA à fort impact par secteur</span></li><li class="fiche-req-item"><span class="fiche-req-num">02</span><span>Obligations de transparence et d'explicabilité</span></li><li class="fiche-req-item"><span class="fiche-req-num">03</span><span>Évaluation d'impact obligatoire pour les IA sensibles</span></li><li class="fiche-req-item"><span class="fiche-req-num">04</span><span>Protection des droits des utilisateurs</span></li><li class="fiche-req-item"><span class="fiche-req-num">05</span><span>Certification des systèmes IA critiques</span></li></ul>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Contexte géopolitique</div>
+        <p class="fiche-geo">Troisième puissance IA mondiale après les États-Unis et la Chine. Industrie tech dominée par Samsung, LG, Kakao. Alignement croissant avec les standards européens.</p>
+      </div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:14px">Textes réglementaires</div>
+      <div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">AI Basic Act (2025)</div>
+          <div class="fiche-law-desc">Loi cadre fondée sur les risques. Obligations pour les fournisseurs et déployeurs de systèmes IA à fort impact sur les droits fondamentaux.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Jusqu'à 30M KRW</strong></div>
+        </div><div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">Personal Information Protection Act</div>
+          <div class="fiche-law-desc">Loi renforcée en 2023 pour couvrir les traitements IA de données personnelles.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>3% du CA</strong></div>
+        </div>
+    </div>
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Scores de risque</div>
+        <div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sévérité globale</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:70%;background:#B83222"></div></div>
+          <span class="fiche-score-val">7.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Transparence exigée</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:75%;background:#B83222"></div></div>
+          <span class="fiche-score-val">7.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Responsabilité</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:70%;background:#B83222"></div></div>
+          <span class="fiche-score-val">7.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Souveraineté des données</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:70%;background:#B83222"></div></div>
+          <span class="fiche-score-val">7.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sanctions financières</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:65%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">6.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Ouverture à l'innovation</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:60%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">6.0/10</span>
+        </div>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Secteurs régulés</div>
+        <div class="fiche-sectors"><span class="fiche-sector-chip">électronique</span><span class="fiche-sector-chip">santé</span><span class="fiche-sector-chip">finance</span><span class="fiche-sector-chip">transport</span><span class="fiche-sector-chip">médias</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page" id="p-fiche-ca">
+  <span class="fiche-back" onclick="go('carto',null,'CARTOGRAPHIE','Carte mondiale')">← Retour Cartographie</span>
+  <div class="fiche-region">NORTH AMERICA</div>
+  <div class="fiche-title">
+    <span class="fiche-code">CA</span>
+    <h1 class="fiche-h">Canada</h1>
+    <span class="fiche-badge fiche-badge-m">● RISQUE MODÉRÉ</span>
+  </div>
+  <p class="fiche-desc">L'AIDA (projet de loi C-27) est en cours d'adoption. Approche fondée sur les risques, avec un régulateur dédié. En parallèle, la loi sur la protection des données CPPA modernise le cadre existant.</p>
+  <div class="fiche-divider"></div>
+  <div class="fiche-grid">
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Cadre principal</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px">AIDA — AI & Data Act (en cours)</div>
+        <div class="fiche-card-title">Exigences clés</div>
+        <ul class="fiche-req-list"><li class="fiche-req-item"><span class="fiche-req-num">01</span><span>Classification des systèmes IA à impact élevé</span></li><li class="fiche-req-item"><span class="fiche-req-num">02</span><span>Évaluation d'impact obligatoire</span></li><li class="fiche-req-item"><span class="fiche-req-num">03</span><span>Obligations de transparence envers les utilisateurs</span></li><li class="fiche-req-item"><span class="fiche-req-num">04</span><span>Désignation d'un responsable IA</span></li><li class="fiche-req-item"><span class="fiche-req-num">05</span><span>Coopération avec le régulateur ISED</span></li></ul>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Contexte géopolitique</div>
+        <p class="fiche-geo">Alignement fort avec les États-Unis (CUSMA) mais inspiration européenne pour la régulation IA. Fort investissement fédéral dans la recherche IA (Montréal, Toronto, Edmonton).</p>
+      </div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:14px">Textes réglementaires</div>
+      <div class="fiche-law-item">
+          <div class="fiche-law-status">EN COURS</div>
+          <div class="fiche-law-name">AIDA — Artificial Intelligence and Data Act</div>
+          <div class="fiche-law-desc">Projet de loi C-27 créant un régime de responsabilité pour les systèmes IA à impact élevé. Création d'un poste de commissaire IA.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Jusqu'à 25M CAD ou 3% du CA</strong></div>
+        </div><div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">LPRPDE / CPPA</div>
+          <div class="fiche-law-desc">Loi sur la protection des données en cours de modernisation pour couvrir les systèmes IA traitant des données personnelles.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>100 000 CAD par violation</strong></div>
+        </div>
+    </div>
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Scores de risque</div>
+        <div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sévérité globale</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:65%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">6.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Transparence exigée</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:70%;background:#B83222"></div></div>
+          <span class="fiche-score-val">7.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Responsabilité</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:65%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">6.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Souveraineté des données</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:60%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">6.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sanctions financières</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:60%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">6.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Ouverture à l'innovation</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:70%;background:#B83222"></div></div>
+          <span class="fiche-score-val">7.0/10</span>
+        </div>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Secteurs régulés</div>
+        <div class="fiche-sectors"><span class="fiche-sector-chip">finance</span><span class="fiche-sector-chip">santé</span><span class="fiche-sector-chip">ressources naturelles</span><span class="fiche-sector-chip">transport</span><span class="fiche-sector-chip">gouvernement</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page" id="p-fiche-ch">
+  <span class="fiche-back" onclick="go('carto',null,'CARTOGRAPHIE','Carte mondiale')">← Retour Cartographie</span>
+  <div class="fiche-region">EUROPE</div>
+  <div class="fiche-title">
+    <span class="fiche-code">CH</span>
+    <h1 class="fiche-h">Suisse</h1>
+    <span class="fiche-badge fiche-badge-m">● RISQUE MODÉRÉ</span>
+  </div>
+  <p class="fiche-desc">Approche pragmatique combinant la nouvelle LPD révisée (2023) et l'adhésion à la Convention-cadre du Conseil de l'Europe sur l'IA. Position de hub neutre entre l'UE et les États-Unis.</p>
+  <div class="fiche-divider"></div>
+  <div class="fiche-grid">
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Cadre principal</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px">Convention-cadre IA Conseil Europe + LPD révisée</div>
+        <div class="fiche-card-title">Exigences clés</div>
+        <ul class="fiche-req-list"><li class="fiche-req-item"><span class="fiche-req-num">01</span><span>Application de la LPD révisée aux systèmes IA</span></li><li class="fiche-req-item"><span class="fiche-req-num">02</span><span>Conformité volontaire aux principes du Conseil de l'Europe</span></li><li class="fiche-req-item"><span class="fiche-req-num">03</span><span>Exigences de transparence pour les décisions automatisées</span></li><li class="fiche-req-item"><span class="fiche-req-num">04</span><span>Protection des données dès la conception</span></li><li class="fiche-req-item"><span class="fiche-req-num">05</span><span>Évaluation d'impact pour les traitements à risque élevé</span></li></ul>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Contexte géopolitique</div>
+        <p class="fiche-geo">Hub financier et technologique mondial. Accès au marché européen sans appartenir à l'UE. Cadre réglementaire attractif pour les entreprises souhaitant une conformité allégée.</p>
+      </div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:14px">Textes réglementaires</div>
+      <div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">LPD — Loi fédérale sur la protection des données</div>
+          <div class="fiche-law-desc">Révisée en 2023, elle renforce les droits des personnes face aux décisions automatisées et impose des analyses d'impact pour les traitements à risque élevé.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>250 000 CHF</strong></div>
+        </div><div class="fiche-law-item">
+          <div class="fiche-law-status">SIGNÉ</div>
+          <div class="fiche-law-name">Convention-cadre IA — Conseil de l'Europe</div>
+          <div class="fiche-law-desc">Premier traité international contraignant sur l'IA. La Suisse parmi les premiers signataires en 2024.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Droit souple</strong></div>
+        </div>
+    </div>
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Scores de risque</div>
+        <div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sévérité globale</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:65%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">6.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Transparence exigée</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:70%;background:#B83222"></div></div>
+          <span class="fiche-score-val">7.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Responsabilité</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:65%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">6.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Souveraineté des données</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:65%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">6.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sanctions financières</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:60%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">6.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Ouverture à l'innovation</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:75%;background:#B83222"></div></div>
+          <span class="fiche-score-val">7.5/10</span>
+        </div>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Secteurs régulés</div>
+        <div class="fiche-sectors"><span class="fiche-sector-chip">finance</span><span class="fiche-sector-chip">pharma</span><span class="fiche-sector-chip">horlogerie</span><span class="fiche-sector-chip">assurance</span><span class="fiche-sector-chip">données</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page" id="p-fiche-br">
+  <span class="fiche-back" onclick="go('carto',null,'CARTOGRAPHIE','Carte mondiale')">← Retour Cartographie</span>
+  <div class="fiche-region">SOUTH AMERICA</div>
+  <div class="fiche-title">
+    <span class="fiche-code">BR</span>
+    <h1 class="fiche-h">Brésil</h1>
+    <span class="fiche-badge fiche-badge-m">● RISQUE MODÉRÉ</span>
+  </div>
+  <p class="fiche-desc">Le projet de loi PL 2338/2023 est le cadre IA le plus avancé d'Amérique latine, inspiré de l'EU AI Act. La LGPD (protection des données) est déjà en vigueur.</p>
+  <div class="fiche-divider"></div>
+  <div class="fiche-grid">
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Cadre principal</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px">PL 2338/2023 (AI Bill) + LGPD</div>
+        <div class="fiche-card-title">Exigences clés</div>
+        <ul class="fiche-req-list"><li class="fiche-req-item"><span class="fiche-req-num">01</span><span>Classification des systèmes IA selon le niveau de risque</span></li><li class="fiche-req-item"><span class="fiche-req-num">02</span><span>Obligations pour les systèmes à haut risque</span></li><li class="fiche-req-item"><span class="fiche-req-num">03</span><span>Droits des personnes face aux décisions IA</span></li><li class="fiche-req-item"><span class="fiche-req-num">04</span><span>Protection des données (LGPD)</span></li><li class="fiche-req-item"><span class="fiche-req-num">05</span><span>Gouvernance et transparence algorithmique</span></li></ul>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Contexte géopolitique</div>
+        <p class="fiche-geo">Leader réglementaire en Amérique latine. Influence sur les pays voisins (Chili, Argentine). Marché numérique de 215M d'habitants attractif pour les grandes plateformes.</p>
+      </div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:14px">Textes réglementaires</div>
+      <div class="fiche-law-item">
+          <div class="fiche-law-status">EN COURS</div>
+          <div class="fiche-law-name">PL 2338/2023 — Projeto de Lei IA</div>
+          <div class="fiche-law-desc">Cadre fondé sur les risques inspiré de l'EU AI Act. En cours d'adoption au Sénat brésilien. Exigences pour les systèmes IA à haut risque.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Jusqu'à 50M BRL ou 2% du CA</strong></div>
+        </div><div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">LGPD — Lei Geral de Proteção de Dados</div>
+          <div class="fiche-law-desc">Équivalent brésilien du RGPD. S'applique à tout traitement de données personnelles par des systèmes IA.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>2% du CA brésilien, max 50M BRL</strong></div>
+        </div>
+    </div>
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Scores de risque</div>
+        <div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sévérité globale</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:60%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">6.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Transparence exigée</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:65%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">6.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Responsabilité</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:60%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">6.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Souveraineté des données</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:55%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sanctions financières</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:55%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Ouverture à l'innovation</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:65%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">6.5/10</span>
+        </div>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Secteurs régulés</div>
+        <div class="fiche-sectors"><span class="fiche-sector-chip">finance</span><span class="fiche-sector-chip">agritech</span><span class="fiche-sector-chip">santé</span><span class="fiche-sector-chip">e-commerce</span><span class="fiche-sector-chip">administration</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page" id="p-fiche-gb">
+  <span class="fiche-back" onclick="go('carto',null,'CARTOGRAPHIE','Carte mondiale')">← Retour Cartographie</span>
+  <div class="fiche-region">EUROPE</div>
+  <div class="fiche-title">
+    <span class="fiche-code">GB</span>
+    <h1 class="fiche-h">Royaume-Uni</h1>
+    <span class="fiche-badge fiche-badge-m">● RISQUE MODÉRÉ</span>
+  </div>
+  <p class="fiche-desc">Approche pro-innovation post-Brexit. Pas de législation IA horizontale mais des principes directeurs sectoriels. L'AI Safety Institute surveille les risques des modèles de fondation.</p>
+  <div class="fiche-divider"></div>
+  <div class="fiche-grid">
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Cadre principal</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px">Pro-innovation AI Regulation White Paper 2023</div>
+        <div class="fiche-card-title">Exigences clés</div>
+        <ul class="fiche-req-list"><li class="fiche-req-item"><span class="fiche-req-num">01</span><span>Application des principes IA par les régulateurs sectoriels existants</span></li><li class="fiche-req-item"><span class="fiche-req-num">02</span><span>Obligations de transparence pour les modèles de fondation</span></li><li class="fiche-req-item"><span class="fiche-req-num">03</span><span>Évaluation des risques par l'AI Safety Institute</span></li><li class="fiche-req-item"><span class="fiche-req-num">04</span><span>Reporting volontaire pour les développeurs de grands modèles</span></li><li class="fiche-req-item"><span class="fiche-req-num">05</span><span>Cadre de responsabilité civile en développement</span></li></ul>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Contexte géopolitique</div>
+        <p class="fiche-geo">Positionnement concurrentiel post-Brexit sur l'IA. Attraction des entreprises via une régulation plus légère qu'en UE. Risque de divergence normative avec le marché européen.</p>
+      </div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:14px">Textes réglementaires</div>
+      <div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">AI Regulation White Paper 2023</div>
+          <div class="fiche-law-desc">Cadre pro-innovation reposant sur les régulateurs sectoriels existants (FCA, ICO, CMA). Pas de loi horizontale — approche pragmatique et flexible.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Variable par secteur</strong></div>
+        </div><div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">UK GDPR + Data Protection Act</div>
+          <div class="fiche-law-desc">Version britannique post-Brexit du RGPD, avec des modifications en cours pour alléger les obligations sur certains traitements IA.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>17,5M GBP ou 4% du CA mondial</strong></div>
+        </div>
+    </div>
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Scores de risque</div>
+        <div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sévérité globale</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:55%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Transparence exigée</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:60%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">6.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Responsabilité</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:55%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Souveraineté des données</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:50%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sanctions financières</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:50%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Ouverture à l'innovation</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:85%;background:#B83222"></div></div>
+          <span class="fiche-score-val">8.5/10</span>
+        </div>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Secteurs régulés</div>
+        <div class="fiche-sectors"><span class="fiche-sector-chip">finance</span><span class="fiche-sector-chip">santé</span><span class="fiche-sector-chip">défense</span><span class="fiche-sector-chip">médias</span><span class="fiche-sector-chip">services</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page" id="p-fiche-tr">
+  <span class="fiche-back" onclick="go('carto',null,'CARTOGRAPHIE','Carte mondiale')">← Retour Cartographie</span>
+  <div class="fiche-region">MIDDLE EAST</div>
+  <div class="fiche-title">
+    <span class="fiche-code">TR</span>
+    <h1 class="fiche-h">Turquie</h1>
+    <span class="fiche-badge fiche-badge-m">● RISQUE MODÉRÉ</span>
+  </div>
+  <p class="fiche-desc">Stratégie nationale IA 2021-2025 avec un cadre légal en développement. La loi KVKK sur la protection des données s'applique aux systèmes IA traitant des données personnelles.</p>
+  <div class="fiche-divider"></div>
+  <div class="fiche-grid">
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Cadre principal</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px">National AI Strategy 2021-2025 + KVKK</div>
+        <div class="fiche-card-title">Exigences clés</div>
+        <ul class="fiche-req-list"><li class="fiche-req-item"><span class="fiche-req-num">01</span><span>Application de la KVKK aux décisions automatisées</span></li><li class="fiche-req-item"><span class="fiche-req-num">02</span><span>Exigences de transparence pour certains systèmes</span></li><li class="fiche-req-item"><span class="fiche-req-num">03</span><span>Audit de sécurité pour les systèmes critiques</span></li><li class="fiche-req-item"><span class="fiche-req-num">04</span><span>Localisation des données turques</span></li><li class="fiche-req-item"><span class="fiche-req-num">05</span><span>Conformité sectorielle dans la finance et la santé</span></li></ul>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Contexte géopolitique</div>
+        <p class="fiche-geo">Position géostratégique entre l'Europe et l'Asie. Candidature EU influençant le cadre réglementaire. Fort investissement dans l'IA défense et surveillance.</p>
+      </div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:14px">Textes réglementaires</div>
+      <div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">KVKK — Kişisel Verileri Koruma Kanunu</div>
+          <div class="fiche-law-desc">Loi de protection des données personnelles applicable aux systèmes IA. Obligations de transparence et d'information des personnes concernées.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Jusqu'à 1M TRY</strong></div>
+        </div><div class="fiche-law-item">
+          <div class="fiche-law-status">EN COURS</div>
+          <div class="fiche-law-name">National AI Strategy 2021-2025</div>
+          <div class="fiche-law-desc">Stratégie nationale définissant 8 axes prioritaires dont la gouvernance, la réglementation et l'éthique de l'IA.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Non contraignant</strong></div>
+        </div>
+    </div>
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Scores de risque</div>
+        <div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sévérité globale</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:55%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Transparence exigée</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:55%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Responsabilité</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:50%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Souveraineté des données</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:70%;background:#B83222"></div></div>
+          <span class="fiche-score-val">7.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sanctions financières</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:50%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Ouverture à l'innovation</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:60%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">6.0/10</span>
+        </div>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Secteurs régulés</div>
+        <div class="fiche-sectors"><span class="fiche-sector-chip">défense</span><span class="fiche-sector-chip">finance</span><span class="fiche-sector-chip">santé</span><span class="fiche-sector-chip">transport</span><span class="fiche-sector-chip">agriculture</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page" id="p-fiche-au">
+  <span class="fiche-back" onclick="go('carto',null,'CARTOGRAPHIE','Carte mondiale')">← Retour Cartographie</span>
+  <div class="fiche-region">ASIA-PACIFIC</div>
+  <div class="fiche-title">
+    <span class="fiche-code">AU</span>
+    <h1 class="fiche-h">Australie</h1>
+    <span class="fiche-badge fiche-badge-m">● RISQUE MODÉRÉ</span>
+  </div>
+  <p class="fiche-desc">Cadre volontaire avec des gardes-fous obligatoires en cours d'introduction pour les systèmes IA à haut risque. L'Australie s'aligne progressivement sur les standards internationaux.</p>
+  <div class="fiche-divider"></div>
+  <div class="fiche-grid">
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Cadre principal</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px">AI Ethics Framework + Mandatory Guardrails (proposed)</div>
+        <div class="fiche-card-title">Exigences clés</div>
+        <ul class="fiche-req-list"><li class="fiche-req-item"><span class="fiche-req-num">01</span><span>8 principes éthiques IA volontaires</span></li><li class="fiche-req-item"><span class="fiche-req-num">02</span><span>Gardes-fous obligatoires proposés pour l'IA à haut risque</span></li><li class="fiche-req-item"><span class="fiche-req-num">03</span><span>Transparence sur l'utilisation de l'IA dans les services gouvernementaux</span></li><li class="fiche-req-item"><span class="fiche-req-num">04</span><span>Évaluation d'impact pour les applications critiques</span></li><li class="fiche-req-item"><span class="fiche-req-num">05</span><span>Cadre de responsabilité en développement</span></li></ul>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Contexte géopolitique</div>
+        <p class="fiche-geo">Alignement avec les Five Eyes (USA, UK, Canada, NZ). Cadre réglementaire influencé par le Parlement européen mais adapté à une économie plus libérale.</p>
+      </div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:14px">Textes réglementaires</div>
+      <div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">AI Ethics Framework</div>
+          <div class="fiche-law-desc">8 principes volontaires : bénéfice humain, équité, confidentialité, fiabilité, sécurité, transparence, contestabilité, responsabilité.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Non contraignant</strong></div>
+        </div><div class="fiche-law-item">
+          <div class="fiche-law-status">EN COURS</div>
+          <div class="fiche-law-name">Mandatory Guardrails for High-Risk AI</div>
+          <div class="fiche-law-desc">Proposition de gardes-fous obligatoires pour les entreprises déployant des systèmes IA à haut risque, notamment dans les secteurs critiques.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>À définir</strong></div>
+        </div>
+    </div>
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Scores de risque</div>
+        <div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sévérité globale</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:55%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Transparence exigée</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:60%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">6.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Responsabilité</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:55%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Souveraineté des données</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:55%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sanctions financières</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:45%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Ouverture à l'innovation</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:75%;background:#B83222"></div></div>
+          <span class="fiche-score-val">7.5/10</span>
+        </div>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Secteurs régulés</div>
+        <div class="fiche-sectors"><span class="fiche-sector-chip">mines</span><span class="fiche-sector-chip">agriculture</span><span class="fiche-sector-chip">finance</span><span class="fiche-sector-chip">santé</span><span class="fiche-sector-chip">gouvernement</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page" id="p-fiche-cl">
+  <span class="fiche-back" onclick="go('carto',null,'CARTOGRAPHIE','Carte mondiale')">← Retour Cartographie</span>
+  <div class="fiche-region">SOUTH AMERICA</div>
+  <div class="fiche-title">
+    <span class="fiche-code">CL</span>
+    <h1 class="fiche-h">Chili</h1>
+    <span class="fiche-badge fiche-badge-m">● RISQUE MODÉRÉ</span>
+  </div>
+  <p class="fiche-desc">Le Chili est précurseur en Amérique latine avec une politique IA nationale et un projet de loi avancé. Premier pays de la région à consacrer constitutionnellement le droit aux données.</p>
+  <div class="fiche-divider"></div>
+  <div class="fiche-grid">
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Cadre principal</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px">National AI Policy + projet de loi IA 2024</div>
+        <div class="fiche-card-title">Exigences clés</div>
+        <ul class="fiche-req-list"><li class="fiche-req-item"><span class="fiche-req-num">01</span><span>Politique nationale IA adoptée en 2021</span></li><li class="fiche-req-item"><span class="fiche-req-num">02</span><span>Projet de loi IA inspiré de l'EU AI Act</span></li><li class="fiche-req-item"><span class="fiche-req-num">03</span><span>Obligations de transparence algorithmique</span></li><li class="fiche-req-item"><span class="fiche-req-num">04</span><span>Protection des données (Loi 19.628 en révision)</span></li><li class="fiche-req-item"><span class="fiche-req-num">05</span><span>Étude d'impact pour les systèmes à haut risque</span></li></ul>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Contexte géopolitique</div>
+        <p class="fiche-geo">Leader réglementaire en Amérique du Sud avec le Brésil. Économie ouverte et stable attirant les investissements tech. Influence chilienne sur les pays andins.</p>
+      </div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:14px">Textes réglementaires</div>
+      <div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">Política Nacional de IA (2021)</div>
+          <div class="fiche-law-desc">Cadre stratégique définissant les priorités nationales en matière d'IA : innovation, éthique, inclusion et souveraineté numérique.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Non contraignant</strong></div>
+        </div><div class="fiche-law-item">
+          <div class="fiche-law-status">EN COURS</div>
+          <div class="fiche-law-name">Projet de loi IA 2024</div>
+          <div class="fiche-law-desc">Proposition législative fondée sur les risques, alignée sur l'EU AI Act. En débat au Parlement chilien.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>À définir</strong></div>
+        </div>
+    </div>
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Scores de risque</div>
+        <div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sévérité globale</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:50%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Transparence exigée</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:55%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Responsabilité</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:50%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Souveraineté des données</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:50%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sanctions financières</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:45%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Ouverture à l'innovation</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:70%;background:#B83222"></div></div>
+          <span class="fiche-score-val">7.0/10</span>
+        </div>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Secteurs régulés</div>
+        <div class="fiche-sectors"><span class="fiche-sector-chip">mines</span><span class="fiche-sector-chip">agriculture</span><span class="fiche-sector-chip">finance</span><span class="fiche-sector-chip">énergie</span><span class="fiche-sector-chip">transport</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page" id="p-fiche-il">
+  <span class="fiche-back" onclick="go('carto',null,'CARTOGRAPHIE','Carte mondiale')">← Retour Cartographie</span>
+  <div class="fiche-region">MIDDLE EAST</div>
+  <div class="fiche-title">
+    <span class="fiche-code">IL</span>
+    <h1 class="fiche-h">Israël</h1>
+    <span class="fiche-badge fiche-badge-m">● RISQUE MODÉRÉ</span>
+  </div>
+  <p class="fiche-desc">Approche pragmatique fondée sur des directives sectorielles. L'Autorité de la protection de la vie privée publie des recommandations sur l'IA. Fort écosystème de startups IA (deeptech, cybersécurité).</p>
+  <div class="fiche-divider"></div>
+  <div class="fiche-grid">
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Cadre principal</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px">Policy on AI Regulation (2023)</div>
+        <div class="fiche-card-title">Exigences clés</div>
+        <ul class="fiche-req-list"><li class="fiche-req-item"><span class="fiche-req-num">01</span><span>Application sectorielle des principes IA</span></li><li class="fiche-req-item"><span class="fiche-req-num">02</span><span>Directives de l'Autorité protection vie privée</span></li><li class="fiche-req-item"><span class="fiche-req-num">03</span><span>Supervision renforcée dans les secteurs santé et défense</span></li><li class="fiche-req-item"><span class="fiche-req-num">04</span><span>Transparence pour les systèmes d'aide à la décision</span></li><li class="fiche-req-item"><span class="fiche-req-num">05</span><span>Certification optionnelle des systèmes IA</span></li></ul>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Contexte géopolitique</div>
+        <p class="fiche-geo">Hub mondial de la cybersécurité et de l'IA défense. Exportation de technologies IA vers de nombreux pays. Tension entre innovation rapide et encadrement éthique.</p>
+      </div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:14px">Textes réglementaires</div>
+      <div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">Policy on AI Regulation (2023)</div>
+          <div class="fiche-law-desc">Politique gouvernementale de régulation IA fondée sur les risques. Supervision par les régulateurs sectoriels existants plutôt que nouvelle agence.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Variable par secteur</strong></div>
+        </div><div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">Protection of Privacy Law</div>
+          <div class="fiche-law-desc">Loi sur la protection des données applicable aux systèmes IA traitant des informations personnelles.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Jusqu'à 50 000 ILS</strong></div>
+        </div>
+    </div>
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Scores de risque</div>
+        <div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sévérité globale</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:50%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Transparence exigée</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:55%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Responsabilité</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:50%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Souveraineté des données</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:55%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sanctions financières</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:45%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Ouverture à l'innovation</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:85%;background:#B83222"></div></div>
+          <span class="fiche-score-val">8.5/10</span>
+        </div>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Secteurs régulés</div>
+        <div class="fiche-sectors"><span class="fiche-sector-chip">cybersécurité</span><span class="fiche-sector-chip">défense</span><span class="fiche-sector-chip">santé</span><span class="fiche-sector-chip">agriculture</span><span class="fiche-sector-chip">finance</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page" id="p-fiche-sg">
+  <span class="fiche-back" onclick="go('carto',null,'CARTOGRAPHIE','Carte mondiale')">← Retour Cartographie</span>
+  <div class="fiche-region">ASIA</div>
+  <div class="fiche-title">
+    <span class="fiche-code">SG</span>
+    <h1 class="fiche-h">Singapour</h1>
+    <span class="fiche-badge fiche-badge-m">● RISQUE MODÉRÉ</span>
+  </div>
+  <p class="fiche-desc">Pionnier asiatique de la gouvernance IA avec le Model AI Governance Framework (2020) et AI Verify (outil de test). Approche volontariste et collaborative avec l'industrie.</p>
+  <div class="fiche-divider"></div>
+  <div class="fiche-grid">
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Cadre principal</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px">Model AI Governance Framework + AI Verify</div>
+        <div class="fiche-card-title">Exigences clés</div>
+        <ul class="fiche-req-list"><li class="fiche-req-item"><span class="fiche-req-num">01</span><span>Cadre de gouvernance IA volontaire mais très adopté</span></li><li class="fiche-req-item"><span class="fiche-req-num">02</span><span>Outil AI Verify pour tester et certifier les systèmes</span></li><li class="fiche-req-item"><span class="fiche-req-num">03</span><span>Principes d'éthique IA du gouvernement</span></li><li class="fiche-req-item"><span class="fiche-req-num">04</span><span>Supervision renforcée dans la finance (MAS) et la santé</span></li><li class="fiche-req-item"><span class="fiche-req-num">05</span><span>Partage de bonnes pratiques via l'IMDA</span></li></ul>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Contexte géopolitique</div>
+        <p class="fiche-geo">Hub financier et technologique de l'ASEAN. Modèle de régulation pro-innovation influençant toute la région. Partenariats bilatéraux avec l'UE sur la gouvernance IA.</p>
+      </div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:14px">Textes réglementaires</div>
+      <div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">Model AI Governance Framework v2</div>
+          <div class="fiche-law-desc">Cadre volontaire couvrant la prise de décision interne, opérations IA, gestion des données clients et transparence des parties prenantes.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Non contraignant</strong></div>
+        </div><div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">AI Verify</div>
+          <div class="fiche-law-desc">Outil de test open-source permettant aux entreprises de démontrer la conformité de leurs systèmes IA à des principes éthiques reconnus.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Non contraignant</strong></div>
+        </div>
+    </div>
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Scores de risque</div>
+        <div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sévérité globale</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:50%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Transparence exigée</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:55%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Responsabilité</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:50%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Souveraineté des données</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:50%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sanctions financières</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:40%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Ouverture à l'innovation</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:90%;background:#B83222"></div></div>
+          <span class="fiche-score-val">9.0/10</span>
+        </div>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Secteurs régulés</div>
+        <div class="fiche-sectors"><span class="fiche-sector-chip">finance</span><span class="fiche-sector-chip">logistique</span><span class="fiche-sector-chip">santé</span><span class="fiche-sector-chip">smart city</span><span class="fiche-sector-chip">médias</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page" id="p-fiche-in">
+  <span class="fiche-back" onclick="go('carto',null,'CARTOGRAPHIE','Carte mondiale')">← Retour Cartographie</span>
+  <div class="fiche-region">ASIA</div>
+  <div class="fiche-title">
+    <span class="fiche-code">IN</span>
+    <h1 class="fiche-h">Inde</h1>
+    <span class="fiche-badge fiche-badge-l">● RISQUE FAIBLE</span>
+  </div>
+  <p class="fiche-desc">Le Digital India Act (en préparation) et le DPDP Act (2023) posent les bases d'un cadre IA. L'Inde préfère une approche d'autorégulation favorisant l'innovation dans son vaste marché tech.</p>
+  <div class="fiche-divider"></div>
+  <div class="fiche-grid">
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Cadre principal</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px">Digital India Act (en préparation) + DPDP Act</div>
+        <div class="fiche-card-title">Exigences clés</div>
+        <ul class="fiche-req-list"><li class="fiche-req-item"><span class="fiche-req-num">01</span><span>Application du DPDP Act aux données traitées par IA</span></li><li class="fiche-req-item"><span class="fiche-req-num">02</span><span>Exigences de transparence pour les plateformes numériques</span></li><li class="fiche-req-item"><span class="fiche-req-num">03</span><span>Lignes directrices MeitY sur l'IA générative</span></li><li class="fiche-req-item"><span class="fiche-req-num">04</span><span>Supervision sectorielle (SEBI, IRDAI, RBI) pour la finance</span></li><li class="fiche-req-item"><span class="fiche-req-num">05</span><span>Cadre éthique IA non contraignant de NASSCOM</span></li></ul>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Contexte géopolitique</div>
+        <p class="fiche-geo">Troisième plus grand marché numérique mondial. Ambition de devenir un hub mondial d'IA responsable. Tension entre protection des données et accès aux données pour l'innovation.</p>
+      </div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:14px">Textes réglementaires</div>
+      <div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">DPDP Act — Digital Personal Data Protection</div>
+          <div class="fiche-law-desc">Loi de 2023 sur la protection des données personnelles applicable aux traitements IA. Obligations de consentement et de transparence.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Jusqu'à 250 Cr INR</strong></div>
+        </div><div class="fiche-law-item">
+          <div class="fiche-law-status">EN COURS</div>
+          <div class="fiche-law-name">Digital India Act</div>
+          <div class="fiche-law-desc">Refonte complète du cadre numérique indien incluant une section sur la gouvernance IA et la responsabilité des plateformes.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>À définir</strong></div>
+        </div>
+    </div>
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Scores de risque</div>
+        <div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sévérité globale</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:45%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Transparence exigée</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:50%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Responsabilité</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:45%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Souveraineté des données</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:55%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sanctions financières</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:40%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Ouverture à l'innovation</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:80%;background:#B83222"></div></div>
+          <span class="fiche-score-val">8.0/10</span>
+        </div>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Secteurs régulés</div>
+        <div class="fiche-sectors"><span class="fiche-sector-chip">IT</span><span class="fiche-sector-chip">finance</span><span class="fiche-sector-chip">agritech</span><span class="fiche-sector-chip">santé</span><span class="fiche-sector-chip">e-commerce</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page" id="p-fiche-my">
+  <span class="fiche-back" onclick="go('carto',null,'CARTOGRAPHIE','Carte mondiale')">← Retour Cartographie</span>
+  <div class="fiche-region">ASIA</div>
+  <div class="fiche-title">
+    <span class="fiche-code">MY</span>
+    <h1 class="fiche-h">Malaisie</h1>
+    <span class="fiche-badge fiche-badge-l">● RISQUE FAIBLE</span>
+  </div>
+  <p class="fiche-desc">La Malaisie développe son cadre IA via le National AI Roadmap et le PDPA. Approche progressive visant à attirer les investissements tech tout en protégeant les données des citoyens.</p>
+  <div class="fiche-divider"></div>
+  <div class="fiche-grid">
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Cadre principal</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px">National AI Roadmap 2021-2025 + PDPA</div>
+        <div class="fiche-card-title">Exigences clés</div>
+        <ul class="fiche-req-list"><li class="fiche-req-item"><span class="fiche-req-num">01</span><span>Application du PDPA aux systèmes IA</span></li><li class="fiche-req-item"><span class="fiche-req-num">02</span><span>Lignes directrices sectorielles de la BNM (banque centrale)</span></li><li class="fiche-req-item"><span class="fiche-req-num">03</span><span>Exigences de cybersécurité pour les systèmes IA critiques</span></li><li class="fiche-req-item"><span class="fiche-req-num">04</span><span>Transparence pour les systèmes d'aide à la décision</span></li><li class="fiche-req-item"><span class="fiche-req-num">05</span><span>Certification volontaire des produits IA</span></li></ul>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Contexte géopolitique</div>
+        <p class="fiche-geo">Hub régional ASEAN concurrent de Singapour. Attractivité renforcée par des coûts bas et des incitations fiscales. Influence croissante de la Chine sur le développement tech malaisien.</p>
+      </div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:14px">Textes réglementaires</div>
+      <div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">PDPA — Personal Data Protection Act</div>
+          <div class="fiche-law-desc">Loi de protection des données personnelles amendée pour couvrir les traitements automatisés. Base légale pour les systèmes IA traitant des données personnelles.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>500 000 MYR</strong></div>
+        </div><div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">National AI Roadmap 2021-2025</div>
+          <div class="fiche-law-desc">Feuille de route nationale pour le développement responsable de l'IA incluant des principes de gouvernance et d'éthique.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Non contraignant</strong></div>
+        </div>
+    </div>
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Scores de risque</div>
+        <div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sévérité globale</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:45%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Transparence exigée</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:45%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Responsabilité</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:45%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Souveraineté des données</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:50%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sanctions financières</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:40%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Ouverture à l'innovation</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:75%;background:#B83222"></div></div>
+          <span class="fiche-score-val">7.5/10</span>
+        </div>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Secteurs régulés</div>
+        <div class="fiche-sectors"><span class="fiche-sector-chip">finance</span><span class="fiche-sector-chip">palm oil</span><span class="fiche-sector-chip">manufacture</span><span class="fiche-sector-chip">smart city</span><span class="fiche-sector-chip">télécoms</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page" id="p-fiche-us">
+  <span class="fiche-back" onclick="go('carto',null,'CARTOGRAPHIE','Carte mondiale')">← Retour Cartographie</span>
+  <div class="fiche-region">NORTH AMERICA</div>
+  <div class="fiche-title">
+    <span class="fiche-code">US</span>
+    <h1 class="fiche-h">États-Unis</h1>
+    <span class="fiche-badge fiche-badge-l">● RISQUE FAIBLE</span>
+  </div>
+  <p class="fiche-desc">Approche fédérale décentralisée via l'Executive Order 14110 et le NIST AI RMF. Régulation sectorielle par la FTC, SEC, CFPB. Les États (Colorado, Californie) légifèrent indépendamment.</p>
+  <div class="fiche-divider"></div>
+  <div class="fiche-grid">
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Cadre principal</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px">NIST AI RMF + Executive Orders + State laws</div>
+        <div class="fiche-card-title">Exigences clés</div>
+        <ul class="fiche-req-list"><li class="fiche-req-item"><span class="fiche-req-num">01</span><span>Évaluation de sécurité pour les grands modèles (EO 14110)</span></li><li class="fiche-req-item"><span class="fiche-req-num">02</span><span>Application du NIST AI Risk Management Framework</span></li><li class="fiche-req-item"><span class="fiche-req-num">03</span><span>Supervision sectorielle FTC (pratiques déloyales IA)</span></li><li class="fiche-req-item"><span class="fiche-req-num">04</span><span>Lois étatiques sur la transparence algorithmique</span></li><li class="fiche-req-item"><span class="fiche-req-num">05</span><span>Obligations de reporting pour les systèmes IA critiques</span></li></ul>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Contexte géopolitique</div>
+        <p class="fiche-geo">Leader mondial en IA (OpenAI, Google, Meta, Anthropic). Positionnement anti-réglementaire sous influence des Big Tech. Fragmentation entre États pro et anti-régulation.</p>
+      </div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:14px">Textes réglementaires</div>
+      <div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">Executive Order 14110 on Safe AI</div>
+          <div class="fiche-law-desc">Ordre exécutif Biden (2023) imposant des évaluations de sécurité aux développeurs de grands modèles et des standards pour l'IA fédérale.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Non contraignant</strong></div>
+        </div><div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">NIST AI Risk Management Framework</div>
+          <div class="fiche-law-desc">Cadre volontaire de gestion des risques IA largement adopté par les entreprises américaines et référencé internationalement.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Non contraignant</strong></div>
+        </div>
+    </div>
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Scores de risque</div>
+        <div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sévérité globale</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:45%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Transparence exigée</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:50%;background:#C47C1A"></div></div>
+          <span class="fiche-score-val">5.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Responsabilité</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:45%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Souveraineté des données</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:40%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sanctions financières</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:45%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Ouverture à l'innovation</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:90%;background:#B83222"></div></div>
+          <span class="fiche-score-val">9.0/10</span>
+        </div>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Secteurs régulés</div>
+        <div class="fiche-sectors"><span class="fiche-sector-chip">tech</span><span class="fiche-sector-chip">finance</span><span class="fiche-sector-chip">santé</span><span class="fiche-sector-chip">défense</span><span class="fiche-sector-chip">transport</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page" id="p-fiche-ae">
+  <span class="fiche-back" onclick="go('carto',null,'CARTOGRAPHIE','Carte mondiale')">← Retour Cartographie</span>
+  <div class="fiche-region">MIDDLE EAST</div>
+  <div class="fiche-title">
+    <span class="fiche-code">AE</span>
+    <h1 class="fiche-h">Émirats Arabes Unis</h1>
+    <span class="fiche-badge fiche-badge-l">● RISQUE FAIBLE</span>
+  </div>
+  <p class="fiche-desc">Stratégie IA 2031 visant à faire des ÉAU une puissance IA mondiale. Approche pro-innovation avec peu de contraintes réglementaires. Ministère d'État à l'IA unique au monde.</p>
+  <div class="fiche-divider"></div>
+  <div class="fiche-grid">
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Cadre principal</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px">UAE AI Strategy 2031 + AI Charter</div>
+        <div class="fiche-card-title">Exigences clés</div>
+        <ul class="fiche-req-list"><li class="fiche-req-item"><span class="fiche-req-num">01</span><span>Adoption volontaire de l'AI Charter</span></li><li class="fiche-req-item"><span class="fiche-req-num">02</span><span>Exigences sectorielles dans la finance (DFSA, ADGM)</span></li><li class="fiche-req-item"><span class="fiche-req-num">03</span><span>Gouvernance IA dans les services gouvernementaux</span></li><li class="fiche-req-item"><span class="fiche-req-num">04</span><span>Éthique IA pour les systèmes déployés par l'État</span></li><li class="fiche-req-item"><span class="fiche-req-num">05</span><span>Certification optionnelle des produits IA</span></li></ul>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Contexte géopolitique</div>
+        <p class="fiche-geo">Hub régional pour l'IA au Moyen-Orient. Attraction de talents et d'entreprises via des régimes fiscaux avantageux. Investissements massifs dans l'IA via le fonds Mubadala.</p>
+      </div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:14px">Textes réglementaires</div>
+      <div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">UAE AI Strategy 2031</div>
+          <div class="fiche-law-desc">Stratégie nationale visant à contribuer 96 Mds USD au PIB grâce à l'IA d'ici 2031. Feuille de route pour tous les secteurs gouvernementaux.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Non contraignant</strong></div>
+        </div><div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">AI Ethics Charter</div>
+          <div class="fiche-law-desc">Principes éthiques volontaires pour le développement et le déploiement de l'IA aux Émirats. Focus sur la transparence et la sécurité.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Non contraignant</strong></div>
+        </div>
+    </div>
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Scores de risque</div>
+        <div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sévérité globale</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:40%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Transparence exigée</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:40%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Responsabilité</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:40%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Souveraineté des données</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:45%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sanctions financières</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:35%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">3.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Ouverture à l'innovation</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:90%;background:#B83222"></div></div>
+          <span class="fiche-score-val">9.0/10</span>
+        </div>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Secteurs régulés</div>
+        <div class="fiche-sectors"><span class="fiche-sector-chip">pétrole</span><span class="fiche-sector-chip">finance</span><span class="fiche-sector-chip">smart city</span><span class="fiche-sector-chip">tourisme</span><span class="fiche-sector-chip">logistique</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page" id="p-fiche-jp">
+  <span class="fiche-back" onclick="go('carto',null,'CARTOGRAPHIE','Carte mondiale')">← Retour Cartographie</span>
+  <div class="fiche-region">ASIA</div>
+  <div class="fiche-title">
+    <span class="fiche-code">JP</span>
+    <h1 class="fiche-h">Japon</h1>
+    <span class="fiche-badge fiche-badge-l">● RISQUE FAIBLE</span>
+  </div>
+  <p class="fiche-desc">Approche souple et pro-innovation via des guidelines non contraignantes. Le Japon co-préside le processus d'Hiroshima G7 sur l'IA. Pas de législation IA horizontale à ce stade.</p>
+  <div class="fiche-divider"></div>
+  <div class="fiche-grid">
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Cadre principal</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px">AI Guidelines for Business + Hiroshima AI Process</div>
+        <div class="fiche-card-title">Exigences clés</div>
+        <ul class="fiche-req-list"><li class="fiche-req-item"><span class="fiche-req-num">01</span><span>Application volontaire des AI Guidelines for Business</span></li><li class="fiche-req-item"><span class="fiche-req-num">02</span><span>Participation au cadre international de Hiroshima</span></li><li class="fiche-req-item"><span class="fiche-req-num">03</span><span>Supervision sectorielle (FSA, MHLW, METI)</span></li><li class="fiche-req-item"><span class="fiche-req-num">04</span><span>Transparence pour les systèmes génératifs</span></li><li class="fiche-req-item"><span class="fiche-req-num">05</span><span>Évaluation des risques recommandée pour les applications critiques</span></li></ul>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Contexte géopolitique</div>
+        <p class="fiche-geo">Ambition de leadership IA en Asie face à la Chine. Pénurie de main-d'oeuvre moteur d'adoption IA massive. Coopération avec l'UE sur les standards IA internationaux.</p>
+      </div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:14px">Textes réglementaires</div>
+      <div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">AI Guidelines for Business (2024)</div>
+          <div class="fiche-law-desc">Lignes directrices non contraignantes couvrant la transparence, la sécurité, la protection de la vie privée et l'équité pour les systèmes IA.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Non contraignant</strong></div>
+        </div><div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">Hiroshima AI Process</div>
+          <div class="fiche-law-desc">Initiative G7 co-présidée par le Japon établissant des principes internationaux pour les IA génératives avancées.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Non contraignant</strong></div>
+        </div>
+    </div>
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Scores de risque</div>
+        <div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sévérité globale</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:40%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Transparence exigée</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:45%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Responsabilité</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:40%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Souveraineté des données</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:40%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sanctions financières</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:35%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">3.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Ouverture à l'innovation</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:90%;background:#B83222"></div></div>
+          <span class="fiche-score-val">9.0/10</span>
+        </div>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Secteurs régulés</div>
+        <div class="fiche-sectors"><span class="fiche-sector-chip">automobile</span><span class="fiche-sector-chip">robots</span><span class="fiche-sector-chip">santé</span><span class="fiche-sector-chip">manufacture</span><span class="fiche-sector-chip">finance</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page" id="p-fiche-ar">
+  <span class="fiche-back" onclick="go('carto',null,'CARTOGRAPHIE','Carte mondiale')">← Retour Cartographie</span>
+  <div class="fiche-region">SOUTH AMERICA</div>
+  <div class="fiche-title">
+    <span class="fiche-code">AR</span>
+    <h1 class="fiche-h">Argentine</h1>
+    <span class="fiche-badge fiche-badge-l">● RISQUE FAIBLE</span>
+  </div>
+  <p class="fiche-desc">L'Argentine dispose d'une recommandation éthique IA et la loi 25.326 sur les données personnelles s'applique aux systèmes IA. Un projet de loi IA plus complet est en discussion.</p>
+  <div class="fiche-divider"></div>
+  <div class="fiche-grid">
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Cadre principal</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px">Recommandation éthique IA + Loi 25.326</div>
+        <div class="fiche-card-title">Exigences clés</div>
+        <ul class="fiche-req-list"><li class="fiche-req-item"><span class="fiche-req-num">01</span><span>Application de la Loi 25.326 aux décisions automatisées</span></li><li class="fiche-req-item"><span class="fiche-req-num">02</span><span>Recommandation éthique IA du gouvernement (non contraignante)</span></li><li class="fiche-req-item"><span class="fiche-req-num">03</span><span>Transparence pour les systèmes d'aide à la décision publics</span></li><li class="fiche-req-item"><span class="fiche-req-num">04</span><span>Supervision sectorielle par la BCRA (finance)</span></li><li class="fiche-req-item"><span class="fiche-req-num">05</span><span>Droits d'information sur les décisions automatisées</span></li></ul>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Contexte géopolitique</div>
+        <p class="fiche-geo">Deuxième économie d'Amérique du Sud. Écosystème tech en croissance malgré l'instabilité macroéconomique. Influence sur le cadre réglementaire des pays voisins.</p>
+      </div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:14px">Textes réglementaires</div>
+      <div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">Loi 25.326 sur la protection des données</div>
+          <div class="fiche-law-desc">Loi de 2000 applicable aux traitements automatisés, incluant le droit d'opposition aux décisions entièrement automatisées.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Jusqu'à 100 000 ARS</strong></div>
+        </div><div class="fiche-law-item">
+          <div class="fiche-law-status">EN COURS</div>
+          <div class="fiche-law-name">Recommandation éthique IA</div>
+          <div class="fiche-law-desc">Document gouvernemental non contraignant définissant des principes pour un développement responsable de l'IA en Argentine.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Non contraignant</strong></div>
+        </div>
+    </div>
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Scores de risque</div>
+        <div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sévérité globale</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:40%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Transparence exigée</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:40%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Responsabilité</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:40%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Souveraineté des données</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:40%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sanctions financières</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:35%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">3.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Ouverture à l'innovation</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:70%;background:#B83222"></div></div>
+          <span class="fiche-score-val">7.0/10</span>
+        </div>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Secteurs régulés</div>
+        <div class="fiche-sectors"><span class="fiche-sector-chip">agriculture</span><span class="fiche-sector-chip">finance</span><span class="fiche-sector-chip">énergie</span><span class="fiche-sector-chip">tech</span><span class="fiche-sector-chip">médias</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page" id="p-fiche-mx">
+  <span class="fiche-back" onclick="go('carto',null,'CARTOGRAPHIE','Carte mondiale')">← Retour Cartographie</span>
+  <div class="fiche-region">NORTH AMERICA</div>
+  <div class="fiche-title">
+    <span class="fiche-code">MX</span>
+    <h1 class="fiche-h">Mexique</h1>
+    <span class="fiche-badge fiche-badge-l">● RISQUE FAIBLE</span>
+  </div>
+  <p class="fiche-desc">Le Mexique n'a pas encore de cadre légal IA spécifique. Des initiatives sectorielles existent dans la finance et la santé. La protection des données (LFPDPPP) s'applique partiellement.</p>
+  <div class="fiche-divider"></div>
+  <div class="fiche-grid">
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Cadre principal</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px">Aucun cadre spécifique — initiatives sectorielles</div>
+        <div class="fiche-card-title">Exigences clés</div>
+        <ul class="fiche-req-list"><li class="fiche-req-item"><span class="fiche-req-num">01</span><span>Application de la LFPDPPP aux données IA</span></li><li class="fiche-req-item"><span class="fiche-req-num">02</span><span>Lignes directrices CNBV pour l'IA dans la finance</span></li><li class="fiche-req-item"><span class="fiche-req-num">03</span><span>Supervision IMSS pour l'IA médicale</span></li><li class="fiche-req-item"><span class="fiche-req-num">04</span><span>Absence de réglementation horizontale</span></li><li class="fiche-req-item"><span class="fiche-req-num">05</span><span>Initiatives volontaires sectorielles</span></li></ul>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Contexte géopolitique</div>
+        <p class="fiche-geo">Deuxième économie d'Amérique latine. Intégration forte avec les États-Unis (CUSMA). Marché attractif pour les entreprises cherchant une régulation minimale en Amérique du Nord.</p>
+      </div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:14px">Textes réglementaires</div>
+      <div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">LFPDPPP</div>
+          <div class="fiche-law-desc">Loi fédérale sur la protection des données dans le secteur privé. S'applique aux traitements automatisés de données personnelles par des systèmes IA.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Jusqu'à 320 000 UMAs</strong></div>
+        </div><div class="fiche-law-item">
+          <div class="fiche-law-status">SECTORIEL</div>
+          <div class="fiche-law-name">Lignes directrices CNBV IA</div>
+          <div class="fiche-law-desc">Recommandations sectorielles pour l'utilisation de l'IA dans les institutions financières mexicaines.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Sanctions administratives</strong></div>
+        </div>
+    </div>
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Scores de risque</div>
+        <div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sévérité globale</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:35%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">3.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Transparence exigée</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:35%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">3.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Responsabilité</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:35%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">3.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Souveraineté des données</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:40%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sanctions financières</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:30%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">3.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Ouverture à l'innovation</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:80%;background:#B83222"></div></div>
+          <span class="fiche-score-val">8.0/10</span>
+        </div>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Secteurs régulés</div>
+        <div class="fiche-sectors"><span class="fiche-sector-chip">automobile</span><span class="fiche-sector-chip">finance</span><span class="fiche-sector-chip">télécoms</span><span class="fiche-sector-chip">e-commerce</span><span class="fiche-sector-chip">pétrole</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page" id="p-fiche-za">
+  <span class="fiche-back" onclick="go('carto',null,'CARTOGRAPHIE','Carte mondiale')">← Retour Cartographie</span>
+  <div class="fiche-region">AFRICA</div>
+  <div class="fiche-title">
+    <span class="fiche-code">ZA</span>
+    <h1 class="fiche-h">Afrique du Sud</h1>
+    <span class="fiche-badge fiche-badge-l">● RISQUE FAIBLE</span>
+  </div>
+  <p class="fiche-desc">Le National AI Plan est en cours d'élaboration. La loi POPIA (protection des données) s'applique aux systèmes IA. L'Afrique du Sud est le leader réglementaire du continent africain.</p>
+  <div class="fiche-divider"></div>
+  <div class="fiche-grid">
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Cadre principal</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px">National AI Plan (draft) + POPIA</div>
+        <div class="fiche-card-title">Exigences clés</div>
+        <ul class="fiche-req-list"><li class="fiche-req-item"><span class="fiche-req-num">01</span><span>Application de la POPIA aux données IA</span></li><li class="fiche-req-item"><span class="fiche-req-num">02</span><span>Conditions pour les décisions automatisées (Section 71)</span></li><li class="fiche-req-item"><span class="fiche-req-num">03</span><span>Supervision de l'Information Regulator</span></li><li class="fiche-req-item"><span class="fiche-req-num">04</span><span>Plan national IA en cours de finalisation</span></li><li class="fiche-req-item"><span class="fiche-req-num">05</span><span>Cadre éthique IA pour le secteur public</span></li></ul>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Contexte géopolitique</div>
+        <p class="fiche-geo">Hub technologique africain avec un écosystème fintech et insurtech développé. Influence sur les cadres réglementaires des pays SADC. Pénurie de compétences IA freinant l'adoption.</p>
+      </div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:14px">Textes réglementaires</div>
+      <div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">POPIA — Protection of Personal Information Act</div>
+          <div class="fiche-law-desc">Loi de protection des données en vigueur depuis 2021. Section 71 encadre les décisions basées uniquement sur le traitement automatisé.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>10M ZAR ou 10 ans d'emprisonnement</strong></div>
+        </div><div class="fiche-law-item">
+          <div class="fiche-law-status">EN COURS</div>
+          <div class="fiche-law-name">National AI Plan</div>
+          <div class="fiche-law-desc">Plan stratégique national pour le développement responsable de l'IA en Afrique du Sud. En cours de finalisation par le DSIT.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Non contraignant</strong></div>
+        </div>
+    </div>
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Scores de risque</div>
+        <div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sévérité globale</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:35%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">3.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Transparence exigée</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:40%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Responsabilité</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:35%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">3.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Souveraineté des données</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:40%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">4.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sanctions financières</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:30%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">3.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Ouverture à l'innovation</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:75%;background:#B83222"></div></div>
+          <span class="fiche-score-val">7.5/10</span>
+        </div>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Secteurs régulés</div>
+        <div class="fiche-sectors"><span class="fiche-sector-chip">mines</span><span class="fiche-sector-chip">finance</span><span class="fiche-sector-chip">télécoms</span><span class="fiche-sector-chip">santé</span><span class="fiche-sector-chip">agriculture</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page" id="p-fiche-ng">
+  <span class="fiche-back" onclick="go('carto',null,'CARTOGRAPHIE','Carte mondiale')">← Retour Cartographie</span>
+  <div class="fiche-region">AFRICA</div>
+  <div class="fiche-title">
+    <span class="fiche-code">NG</span>
+    <h1 class="fiche-h">Nigéria</h1>
+    <span class="fiche-badge fiche-badge-l">● RISQUE FAIBLE</span>
+  </div>
+  <p class="fiche-desc">La National AI Strategy (2024) pose les bases d'une gouvernance IA. La NDPA (2023) sur la protection des données s'applique aux systèmes IA. Cadre encore embryonnaire.</p>
+  <div class="fiche-divider"></div>
+  <div class="fiche-grid">
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Cadre principal</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px">National AI Strategy (draft 2024) + NDPA</div>
+        <div class="fiche-card-title">Exigences clés</div>
+        <ul class="fiche-req-list"><li class="fiche-req-item"><span class="fiche-req-num">01</span><span>Application de la NDPA aux traitements IA</span></li><li class="fiche-req-item"><span class="fiche-req-num">02</span><span>Stratégie nationale IA en cours d'adoption</span></li><li class="fiche-req-item"><span class="fiche-req-num">03</span><span>Supervision NITDA pour le numérique</span></li><li class="fiche-req-item"><span class="fiche-req-num">04</span><span>Lignes directrices sectorielles CBN pour la fintech</span></li><li class="fiche-req-item"><span class="fiche-req-num">05</span><span>Absence de contraintes horizontales spécifiques à l'IA</span></li></ul>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Contexte géopolitique</div>
+        <p class="fiche-geo">Plus grande économie d'Afrique avec un écosystème fintech dynamique (Lagos). Marché de 220M de consommateurs attractif. Régulation IA naissante offrant de larges opportunités.</p>
+      </div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:14px">Textes réglementaires</div>
+      <div class="fiche-law-item">
+          <div class="fiche-law-status">IN FORCE</div>
+          <div class="fiche-law-name">NDPA — Nigeria Data Protection Act (2023)</div>
+          <div class="fiche-law-desc">Première loi complète de protection des données du Nigeria. S'applique aux systèmes IA traitant des données personnelles de résidents nigérians.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>2% du CA annuel ou 10M NGN</strong></div>
+        </div><div class="fiche-law-item">
+          <div class="fiche-law-status">EN COURS</div>
+          <div class="fiche-law-name">National AI Strategy (2024)</div>
+          <div class="fiche-law-desc">Stratégie nationale définissant la vision du Nigeria pour l'IA : éducation, infrastructure, gouvernance et innovation responsable.</div>
+          <div class="fiche-law-sanction">Sanction max : <strong>Non contraignant</strong></div>
+        </div>
+    </div>
+    <div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Scores de risque</div>
+        <div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sévérité globale</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:25%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">2.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Transparence exigée</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:25%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">2.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Responsabilité</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:25%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">2.5/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Souveraineté des données</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:30%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">3.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Sanctions financières</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:20%;background:#2D7A47"></div></div>
+          <span class="fiche-score-val">2.0/10</span>
+        </div><div class="fiche-score-row">
+          <span class="fiche-score-lbl">Ouverture à l'innovation</span>
+          <div class="fiche-score-bar"><div class="fiche-score-fill" style="width:85%;background:#B83222"></div></div>
+          <span class="fiche-score-val">8.5/10</span>
+        </div>
+      </div>
+      <div class="fiche-card">
+        <div class="fiche-card-title">Secteurs régulés</div>
+        <div class="fiche-sectors"><span class="fiche-sector-chip">fintech</span><span class="fiche-sector-chip">télécoms</span><span class="fiche-sector-chip">agriculture</span><span class="fiche-sector-chip">pétrole</span><span class="fiche-sector-chip">e-commerce</span></div>
+      </div>
+    </div>
+  </div>
+</div>
 </main>
 
 <script>
@@ -740,6 +2483,30 @@ var PAGE_META = {
   sanctions:{section:'OUTILS',          label:'Calculateur sanctions'},
   benchmark:{section:'ANALYSE',         label:'Benchmark sectoriel'},
   templates:{section:'RESSOURCES',      label:'Documentation & Modèles'},
+  'fiche-eu': {section:'JURIDICTION', label:'Union européenne'},
+  'fiche-de': {section:'JURIDICTION', label:'Allemagne'},
+  'fiche-fr': {section:'JURIDICTION', label:'France'},
+  'fiche-cn': {section:'JURIDICTION', label:'Chine'},
+  'fiche-ru': {section:'JURIDICTION', label:'Russie'},
+  'fiche-kr': {section:'JURIDICTION', label:'Corée du Sud'},
+  'fiche-ca': {section:'JURIDICTION', label:'Canada'},
+  'fiche-ch': {section:'JURIDICTION', label:'Suisse'},
+  'fiche-br': {section:'JURIDICTION', label:'Brésil'},
+  'fiche-gb': {section:'JURIDICTION', label:'Royaume-Uni'},
+  'fiche-tr': {section:'JURIDICTION', label:'Turquie'},
+  'fiche-au': {section:'JURIDICTION', label:'Australie'},
+  'fiche-cl': {section:'JURIDICTION', label:'Chili'},
+  'fiche-il': {section:'JURIDICTION', label:'Israël'},
+  'fiche-sg': {section:'JURIDICTION', label:'Singapour'},
+  'fiche-in': {section:'JURIDICTION', label:'Inde'},
+  'fiche-my': {section:'JURIDICTION', label:'Malaisie'},
+  'fiche-us': {section:'JURIDICTION', label:'États-Unis'},
+  'fiche-ae': {section:'JURIDICTION', label:'Émirats Arabes Unis'},
+  'fiche-jp': {section:'JURIDICTION', label:'Japon'},
+  'fiche-ar': {section:'JURIDICTION', label:'Argentine'},
+  'fiche-mx': {section:'JURIDICTION', label:'Mexique'},
+  'fiche-za': {section:'JURIDICTION', label:'Afrique du Sud'},
+  'fiche-ng': {section:'JURIDICTION', label:'Nigéria'}
 };
 
 function go(id, el, sec, pg) {
@@ -792,7 +2559,7 @@ var JURS = [
   {n:'24',f:'🇳🇬',c:'NG',name:'Nigéria',reg:'National AI Strategy (draft 2024) + NDPA',s:2.5},
 ];
 
-function jRow(j){ return '<div class="jrow"><div class="jrow-n">'+j.n+'</div><div class="jrow-flag">'+j.f+'<span class="jrow-code">'+j.c+'</span></div><div><div class="jrow-name">'+j.name+'</div><div class="jrow-reg">'+j.reg+'</div></div><div class="sbar-wrap"><div class="sbar-track"><div class="sbar-fill" style="width:'+Math.round(j.s*10)+'%"></div></div><span class="sbar-lbl">'+j.s+' / 10</span></div><div class="jrow-score">'+j.s+'</div></div>'; }
+function jRow(j){ var id=j.c.toLowerCase(); return '<div class="jrow" onclick="go(\'fiche-'+id+'\',null,\'FICHE\',\''+j.name+'\')" style="cursor:pointer"><div class="jrow-n">'+j.n+'</div><div class="jrow-flag">'+j.f+'<span class="jrow-code">'+j.c+'</span></div><div><div class="jrow-name">'+j.name+'</div><div class="jrow-reg">'+j.reg+'</div></div><div class="sbar-wrap"><div class="sbar-track"><div class="sbar-fill" style="width:'+Math.round(j.s*10)+'%"></div></div><span class="sbar-lbl">'+j.s+' / 10</span></div><div class="jrow-score">'+j.s+'</div><div style="font-size:18px;color:var(--rule2);padding-left:8px">›</div></div>'; }
 
 (function(){ var b=document.getElementById('ap-jur'); if(!b) return; b.innerHTML=JURS.slice(0,5).map(jRow).join(''); })();
 
