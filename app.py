@@ -267,6 +267,10 @@ bf_protector = BruteForceProtector()
 
 @app.after_request
 def add_security_headers(response):
+    # Autoriser iframe pour /map
+    if request.path == '/map':
+        response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+        return response
     # Content Security Policy
     csp = (
         "default-src 'self'; "
@@ -276,14 +280,14 @@ def add_security_headers(response):
         "img-src 'self' data: blob: https:; "
         "media-src 'self' blob:; "
         "connect-src 'self' https://api.mistral.ai https://api.anthropic.com https://api.rss2json.com https://rss2json.com https://basemaps.cartocdn.com https://*.basemaps.cartocdn.com; "
-        "frame-ancestors 'none'; "
+        "frame-ancestors 'self'; "
         "frame-src 'self'; "
         "base-uri 'self'; "
         "form-action 'self' mailto:;"
     )
     response.headers['Content-Security-Policy']    = csp
     response.headers['X-Content-Type-Options']     = 'nosniff'
-    response.headers['X-Frame-Options']            = 'DENY'
+    response.headers['X-Frame-Options']            = 'SAMEORIGIN'
     response.headers['X-XSS-Protection']           = '1; mode=block'
     response.headers['Referrer-Policy']            = 'strict-origin-when-cross-origin'
     response.headers['Permissions-Policy']         = 'geolocation=(), microphone=(), camera=()'
