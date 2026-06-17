@@ -480,6 +480,31 @@ textarea.form-el{min-height:86px;resize:vertical}
 .geo-tl-source:hover{background:rgba(28,90,138,.15)}
 .geo-disclaimer{font-size:10px;color:var(--muted2);font-style:italic;margin-top:20px;padding-top:14px;border-top:1px solid var(--rule);line-height:1.6}
 
+
+/* ══ BLOCS GÉOPOLITIQUES DÉVELOPPÉS ══ */
+.geo-bloc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px}
+.geo-bloc{background:var(--white);border:1px solid var(--rule);border-radius:4px;padding:24px;cursor:default;transition:border-color .15s}
+.geo-bloc:hover{border-color:var(--rule2)}
+.geo-bloc-flag{font-size:28px;margin-bottom:14px;display:block}
+.geo-bloc-tag{font-size:9px;font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;display:inline-block;padding:2px 7px;border-radius:2px}
+.geo-bloc-h{font-family:var(--serif);font-size:20px;color:var(--ink);margin-bottom:8px;letter-spacing:-.01em;line-height:1.2}
+.geo-bloc-lead{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:18px;border-bottom:1px solid var(--rule);padding-bottom:16px}
+.geo-bloc-kpi-row{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.geo-bloc-kpi{flex:1;min-width:70px;background:var(--bg);border-radius:3px;padding:10px 12px}
+.geo-bloc-kpi-val{font-family:var(--serif);font-size:20px;color:var(--ink);line-height:1;letter-spacing:-.02em}
+.geo-bloc-kpi-lbl{font-size:9px;font-family:var(--mono);color:var(--muted2);letter-spacing:.06em;margin-top:2px}
+.geo-bloc-section{margin-bottom:14px}
+.geo-bloc-section-title{font-size:9px;font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);margin-bottom:8px}
+.geo-bloc-list{list-style:none;padding:0}
+.geo-bloc-li{display:flex;gap:8px;font-size:11px;color:var(--ink2);padding:5px 0;border-bottom:1px solid var(--rule);line-height:1.4}
+.geo-bloc-li:last-child{border-bottom:none}
+.geo-bloc-li-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.geo-bloc-tension{font-size:11px;color:var(--muted);line-height:1.65;font-style:italic;border-left:3px solid var(--rule2);padding-left:10px;margin-top:12px}
+.geo-bloc-footer{margin-top:16px;padding-top:12px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center}
+.geo-bloc-score{font-family:var(--mono);font-size:10px;color:var(--muted2)}
+.geo-bloc-score strong{color:var(--ink);font-size:13px}
+@media(max-width:1000px){.geo-bloc-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -691,10 +716,131 @@ textarea.form-el{min-height:86px;resize:vertical}
   <span class="eyebrow">Géopolitique</span>
   <h1 class="page-h">Tensions &amp; alliances<br><em>réglementaires</em></h1>
   <p class="page-lead">Compétition normative sur l'IA : blocs réglementaires, fragmentation et influence des standards.</p>
-  <div class="col3">
-    <div class="feat"><div class="feat-arr">→</div><div class="feat-h">Bloc européen</div><p class="feat-p">L'EU AI Act comme standard d'exportation — influence sur 40+ pays.</p></div>
-    <div class="feat"><div class="feat-arr">→</div><div class="feat-h">Modèle américain</div><p class="feat-p">Approche sectorielle et autorégulation — concurrence normative avec l'UE.</p></div>
-    <div class="feat"><div class="feat-arr">→</div><div class="feat-h">Doctrine chinoise</div><p class="feat-p">Contrôle algorithmique d'État — double enjeu souveraineté/compétitivité.</p></div>
+  <div class="geo-bloc-grid">
+
+    <!-- ══ BLOC EUROPÉEN ══ -->
+    <div class="geo-bloc">
+      <span class="geo-bloc-flag">🇪🇺</span>
+      <span class="geo-bloc-tag chip-r">RÉGULATEUR MONDIAL</span>
+      <h3 class="geo-bloc-h">Bloc européen</h3>
+      <p class="geo-bloc-lead">L'EU AI Act (Règlement 2024/1689) s'impose comme le premier cadre horizontal contraignant au monde. Via le mécanisme d'extraterritorialité, il s'applique à toute entreprise visant le marché européen, exerçant un effet réglementaire mondial comparable au « Brussels Effect ».</p>
+
+      <div class="geo-bloc-kpi-row">
+        <div class="geo-bloc-kpi"><div class="geo-bloc-kpi-val">27</div><div class="geo-bloc-kpi-lbl">États membres</div></div>
+        <div class="geo-bloc-kpi"><div class="geo-bloc-kpi-val">40+</div><div class="geo-bloc-kpi-lbl">Pays influencés</div></div>
+        <div class="geo-bloc-kpi"><div class="geo-bloc-kpi-val">35M€</div><div class="geo-bloc-kpi-lbl">Amende max</div></div>
+      </div>
+
+      <div class="geo-bloc-section">
+        <div class="geo-bloc-section-title">Instruments clés</div>
+        <ul class="geo-bloc-list">
+          <li class="geo-bloc-li"><span class="geo-bloc-li-dot" style="background:#B83222"></span><span><strong>AI Act (Règl. 2024/1689)</strong> — cadre fondé sur les risques, applicatoin progressive 2024-2027. Art. 5 en vigueur depuis fév. 2025.</span></li>
+          <li class="geo-bloc-li"><span class="geo-bloc-li-dot" style="background:#B83222"></span><span><strong>RGPD (Règl. 2016/679)</strong> — Art. 22 encadrant les décisions entièrement automatisées.</span></li>
+          <li class="geo-bloc-li"><span class="geo-bloc-li-dot" style="background:#B83222"></span><span><strong>NIS2 (Dir. 2022/2555)</strong> — cybersécurité des IA déployées dans les entités critiques.</span></li>
+          <li class="geo-bloc-li"><span class="geo-bloc-li-dot" style="background:#C47C1A"></span><span><strong>DORA (Règl. 2022/2554)</strong> — résilience opérationnelle numérique du secteur financier, IA incluse.</span></li>
+          <li class="geo-bloc-li"><span class="geo-bloc-li-dot" style="background:#C47C1A"></span><span><strong>AI Omnibus (2025-2026)</strong> — simplification en cours, accord politique mai 2026, report systèmes haut risque à déc. 2027.</span></li>
+        </ul>
+      </div>
+
+      <div class="geo-bloc-section">
+        <div class="geo-bloc-section-title">Influence géopolitique</div>
+        <ul class="geo-bloc-list">
+          <li class="geo-bloc-li"><span class="geo-bloc-li-dot" style="background:#2D7A47"></span><span>Exportation du modèle vers le Brésil (PL 2338), le Chili, le Canada (AIDA)</span></li>
+          <li class="geo-bloc-li"><span class="geo-bloc-li-dot" style="background:#2D7A47"></span><span>Référence pour les pays africains francophones (Maroc, Sénégal, Côte d'Ivoire)</span></li>
+          <li class="geo-bloc-li"><span class="geo-bloc-li-dot" style="background:#1C5A8A"></span><span>Coopération avec Singapour sur la gouvernance IA (MOU EU-SG 2024)</span></li>
+        </ul>
+      </div>
+
+      <p class="geo-bloc-tension">Tension principale : l'AI Omnibus (2025-2026) introduit des simplifications qui divisent — défenseurs des droits fondamentaux vs. industrie. Risque de dilution du cadre originel.</p>
+
+      <div class="geo-bloc-footer">
+        <span class="geo-bloc-score">Sévérité : <strong>9.2/10</strong></span>
+        <span class="chip chip-r">Extraterritorial</span>
+      </div>
+    </div>
+
+    <!-- ══ MODÈLE AMÉRICAIN ══ -->
+    <div class="geo-bloc">
+      <span class="geo-bloc-flag">🇺🇸</span>
+      <span class="geo-bloc-tag chip-o">PIVOT DÉRÉGLEMENTAIRE</span>
+      <h3 class="geo-bloc-h">Modèle américain</h3>
+      <p class="geo-bloc-lead">Rupture majeure en janvier 2025 : l'administration Trump révoque l'EO 14110 (Biden) et signe l'EO 14179, réorientant la politique IA fédérale vers la « domination » compétitive et la dérégulation. La fragmentation entre États fédérés s'accentue.</p>
+
+      <div class="geo-bloc-kpi-row">
+        <div class="geo-bloc-kpi"><div class="geo-bloc-kpi-val">50</div><div class="geo-bloc-kpi-lbl">États + DC</div></div>
+        <div class="geo-bloc-kpi"><div class="geo-bloc-kpi-val">18+</div><div class="geo-bloc-kpi-lbl">Lois étatiques</div></div>
+        <div class="geo-bloc-kpi"><div class="geo-bloc-kpi-val">0</div><div class="geo-bloc-kpi-lbl">Loi fédérale IA</div></div>
+      </div>
+
+      <div class="geo-bloc-section">
+        <div class="geo-bloc-section-title">Instruments clés</div>
+        <ul class="geo-bloc-list">
+          <li class="geo-bloc-li"><span class="geo-bloc-li-dot" style="background:#B83222"></span><span><strong>EO 14179 (23 jan. 2025)</strong> — « Removing Barriers to American Leadership in AI ». Mandate un AI Action Plan en 180 jours, lève les obligations de reporting.</span></li>
+          <li class="geo-bloc-li"><span class="geo-bloc-li-dot" style="background:#C47C1A"></span><span><strong>NIST AI RMF (2023)</strong> — cadre volontaire de gestion des risques, largement adopté en pratique par les entreprises.</span></li>
+          <li class="geo-bloc-li"><span class="geo-bloc-li-dot" style="background:#C47C1A"></span><span><strong>Colorado SB 205 (2024)</strong> — premier État à légiférer sur les IA à haut risque. Modèle pour d'autres États.</span></li>
+          <li class="geo-bloc-li"><span class="geo-bloc-li-dot" style="background:#C47C1A"></span><span><strong>California AI laws (2024-2025)</strong> — SB 1047 (rejeté) puis série de lois sectorielles (santé, emploi, deepfakes).</span></li>
+          <li class="geo-bloc-li"><span class="geo-bloc-li-dot" style="background:#1C5A8A"></span><span><strong>FTC enforcement</strong> — utilisation des lois anti-pratiques déloyales pour encadrer les IA sans législation spécifique.</span></li>
+        </ul>
+      </div>
+
+      <div class="geo-bloc-section">
+        <div class="geo-bloc-section-title">Dynamiques de tension</div>
+        <ul class="geo-bloc-list">
+          <li class="geo-bloc-li"><span class="geo-bloc-li-dot" style="background:#B83222"></span><span>Friction UE-US : divergence croissante sur la sécurité des modèles de fondation et le transfert de données</span></li>
+          <li class="geo-bloc-li"><span class="geo-bloc-li-dot" style="background:#C47C1A"></span><span>Fragmentation interne : patchwork réglementaire étatique créant une incertitude pour les entreprises</span></li>
+          <li class="geo-bloc-li"><span class="geo-bloc-li-dot" style="background:#1C5A8A"></span><span>Contrôles à l'export de puces (BIS) : principal levier de politique IA internationale</span></li>
+        </ul>
+      </div>
+
+      <p class="geo-bloc-tension">Point critique : les entreprises US opérant en UE restent soumises à l'AI Act. Le découplage réglementaire contraint les multinationales à maintenir deux référentiels de conformité distincts.</p>
+
+      <div class="geo-bloc-footer">
+        <span class="geo-bloc-score">Sévérité fédérale : <strong>4.5/10</strong></span>
+        <span class="chip chip-o">Fragmenté</span>
+      </div>
+    </div>
+
+    <!-- ══ DOCTRINE CHINOISE ══ -->
+    <div class="geo-bloc">
+      <span class="geo-bloc-flag">🇨🇳</span>
+      <span class="geo-bloc-tag chip-b">CONTRÔLE SOUVERAIN</span>
+      <h3 class="geo-bloc-h">Doctrine chinoise</h3>
+      <p class="geo-bloc-lead">La Chine a développé un corpus réglementaire IA dense et ciblé, articulé autour du contrôle des contenus, de la souveraineté des données et de la sécurité algorithmique. Modèle alternatif à l'approche droits fondamentaux européenne, exporté via les routes numériques de la BRI.</p>
+
+      <div class="geo-bloc-kpi-row">
+        <div class="geo-bloc-kpi"><div class="geo-bloc-kpi-val">5+</div><div class="geo-bloc-kpi-lbl">Règlements IA</div></div>
+        <div class="geo-bloc-kpi"><div class="geo-bloc-kpi-val">1.4Md</div><div class="geo-bloc-kpi-lbl">Utilisateurs</div></div>
+        <div class="geo-bloc-kpi"><div class="geo-bloc-kpi-val">147</div><div class="geo-bloc-kpi-lbl">Pays BRI</div></div>
+      </div>
+
+      <div class="geo-bloc-section">
+        <div class="geo-bloc-section-title">Instruments clés</div>
+        <ul class="geo-bloc-list">
+          <li class="geo-bloc-li"><span class="geo-bloc-li-dot" style="background:#B83222"></span><span><strong>Generative AI Measures (2023)</strong> — enregistrement obligatoire des LLM, watermarking, interdiction des contenus contraires aux valeurs socialistes.</span></li>
+          <li class="geo-bloc-li"><span class="geo-bloc-li-dot" style="background:#B83222"></span><span><strong>Algorithm Recommendation Regulations (2022)</strong> — audit de sécurité, interdiction du ciblage discriminatoire.</span></li>
+          <li class="geo-bloc-li"><span class="geo-bloc-li-dot" style="background:#B83222"></span><span><strong>Deep Synthesis Regulations (2022)</strong> — encadrement des deepfakes et contenus synthétiques.</span></li>
+          <li class="geo-bloc-li"><span class="geo-bloc-li-dot" style="background:#C47C1A"></span><span><strong>PIPL (2021)</strong> — loi de protection des données personnelles avec exigences de localisation et transfert encadrés.</span></li>
+          <li class="geo-bloc-li"><span class="geo-bloc-li-dot" style="background:#1C5A8A"></span><span><strong>New Generation AI Governance Principles (2019)</strong> — cadre éthique non contraignant, base des règles ultérieures.</span></li>
+        </ul>
+      </div>
+
+      <div class="geo-bloc-section">
+        <div class="geo-bloc-section-title">Influence géopolitique</div>
+        <ul class="geo-bloc-list">
+          <li class="geo-bloc-li"><span class="geo-bloc-li-dot" style="background:#1C5A8A"></span><span>Export du modèle de surveillance IA via la BRI vers 40+ pays en développement</span></li>
+          <li class="geo-bloc-li"><span class="geo-bloc-li-dot" style="background:#1C5A8A"></span><span>DeepSeek, Qwen, Ernie Bot — écosystème souverain remettant en cause l'hégémonie US</span></li>
+          <li class="geo-bloc-li"><span class="geo-bloc-li-dot" style="background:#B83222"></span><span>Localisation des données : obstacle majeur aux déploiements multinationaux</span></li>
+        </ul>
+      </div>
+
+      <p class="geo-bloc-tension">Point critique : DeepSeek R1 (jan. 2025) a démontré qu'un modèle performant pouvait être développé avec des contraintes de puces de calcul, contournant partiellement les contrôles à l'export américains et modifiant l'équilibre stratégique mondial.</p>
+
+      <div class="geo-bloc-footer">
+        <span class="geo-bloc-score">Souveraineté données : <strong>10/10</strong></span>
+        <span class="chip chip-b">Extraterritorial CN</span>
+      </div>
+    </div>
+
   </div>
   <div class="rule"></div>
 
