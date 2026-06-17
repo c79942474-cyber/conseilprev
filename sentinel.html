@@ -513,7 +513,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 <div class="page" id="p-carto">
   <span class="eyebrow">Cartographie</span>
   <h1 class="page-h">Carte mondiale des<br><em>régulations IA</em></h1>
-  <p class="page-lead">60+ juridictions analysées selon 12 critères : portée, sanctions, obligations IA haut risque, transparence, droits fondamentaux.</p>
+  <p class="page-lead">65+ juridictions analysées selon 12 critères : portée, sanctions, obligations IA haut risque, transparence, droits fondamentaux.</p>
 
   
   <!-- ══ CARTE LEAFLET ══ -->
@@ -759,7 +759,7 @@ function go(id, el, sec, pg) {
 
 document.getElementById('tb-date').textContent = new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).toUpperCase();
 
-[['c1',60],['c2',14],['c3',38]].forEach(function(pair){
+[['c1',65],['c2',16],['c3',38]].forEach(function(pair){
   var el = document.getElementById(pair[0]), target = pair[1]; if (!el) return;
   var t0 = Date.now();
   (function raf(){ var p=Math.min(1,(Date.now()-t0)/1100); el.textContent=Math.round(p*target); if(p<1) requestAnimationFrame(raf); })();
@@ -767,17 +767,29 @@ document.getElementById('tb-date').textContent = new Date().toLocaleDateString('
 
 var JURS = [
   {n:'01',f:'🇪🇺',c:'EU',name:'Union européenne',reg:'EU AI Act — Règlement 2024/1689',s:9.2},
-  {n:'02',f:'🇨🇳',c:'CN',name:'Chine',reg:'CAC Deep Synthesis Rules 2023',s:8.8},
-  {n:'03',f:'🇬🇧',c:'UK',name:'Royaume-Uni',reg:'AI Governance Framework 2024',s:7.4},
-  {n:'04',f:'🇺🇸',c:'US',name:'États-Unis',reg:'EO 14110 — Safe AI (Biden 2023)',s:6.6},
-  {n:'05',f:'🇯🇵',c:'JP',name:'Japon',reg:'AI Strategy Council Guidelines',s:5.8},
-  {n:'06',f:'🇰🇷',c:'KR',name:'Corée du Sud',reg:'AI Industry Promotion Act 2023',s:5.6},
-  {n:'07',f:'🇨🇦',c:'CA',name:'Canada',reg:'Artificial Intelligence & Data Act (AIDA)',s:5.2},
-  {n:'08',f:'🇧🇷',c:'BR',name:'Brésil',reg:'PL 2338/2023 — AI Governance',s:4.8},
-  {n:'09',f:'🇸🇬',c:'SG',name:'Singapour',reg:'AI Governance Framework v2',s:4.4},
-  {n:'10',f:'🇦🇪',c:'AE',name:'Émirats arabes unis',reg:'UAE AI Strategy 2031',s:4.0},
-  {n:'11',f:'🇮🇳',c:'IN',name:'Inde',reg:'MEITY AI Principles 2023',s:3.8},
-  {n:'12',f:'🇦🇺',c:'AU',name:'Australie',reg:'AI Ethics Framework CSIRO',s:3.6},
+  {n:'02',f:'🇩🇪',c:'DE',name:'Allemagne',reg:'AI Act + AI Strategy Update 2023',s:8.8},
+  {n:'03',f:'🇫🇷',c:'FR',name:'France',reg:'AI Act + Stratégie nationale IA + CNIL',s:8.5},
+  {n:'04',f:'🇨🇳',c:'CN',name:'Chine',reg:'Generative AI Measures + Algorithm Regulations + PIPL',s:8.0},
+  {n:'05',f:'🇷🇺',c:'RU',name:'Russie',reg:'National AI Strategy + Digital Code',s:7.5},
+  {n:'06',f:'🇰🇷',c:'KR',name:'Corée du Sud',reg:'AI Basic Act (2025)',s:7.0},
+  {n:'07',f:'🇨🇦',c:'CA',name:'Canada',reg:'AIDA (Artificial Intelligence and Data Act) — en cours',s:6.5},
+  {n:'08',f:'🇨🇭',c:'CH',name:'Suisse',reg:'Convention-cadre IA Conseil de l'Europe + LPD révisée',s:6.5},
+  {n:'09',f:'🇧🇷',c:'BR',name:'Brésil',reg:'PL 2338/2023 (AI Bill) + LGPD',s:6.0},
+  {n:'10',f:'🇬🇧',c:'GB',name:'Royaume-Uni',reg:'Pro-innovation AI Regulation (White Paper 2023) + AI Safety Institute',s:5.5},
+  {n:'11',f:'🇹🇷',c:'TR',name:'Turquie',reg:'National AI Strategy 2021-2025 + KVKK',s:5.5},
+  {n:'12',f:'🇦🇺',c:'AU',name:'Australie',reg:'AI Ethics Framework + Mandatory Guardrails (proposed)',s:5.5},
+  {n:'13',f:'🇨🇱',c:'CL',name:'Chili',reg:'National AI Policy + projet de loi IA 2024',s:5.0},
+  {n:'14',f:'🇮🇱',c:'IL',name:'Israël',reg:'Policy on AI Regulation (2023)',s:5.0},
+  {n:'15',f:'🇸🇬',c:'SG',name:'Singapour',reg:'Model AI Governance Framework + AI Verify',s:5.0},
+  {n:'16',f:'🇮🇳',c:'IN',name:'Inde',reg:'Digital India Act (en préparation) + DPDP Act',s:4.5},
+  {n:'17',f:'🇲🇾',c:'MY',name:'Malaisie',reg:'National AI Roadmap 2021-2025 + PDPA',s:4.5},
+  {n:'18',f:'🇺🇸',c:'US',name:'États-Unis',reg:'NIST AI RMF + Executive Orders + State laws (Colorado, California)',s:4.5},
+  {n:'19',f:'🇦🇪',c:'AE',name:'Émirats Arabes Unis',reg:'UAE AI Strategy 2031 + AI Charter',s:4.0},
+  {n:'20',f:'🇯🇵',c:'JP',name:'Japon',reg:'AI Guidelines for Business + Hiroshima AI Process',s:4.0},
+  {n:'21',f:'🇦🇷',c:'AR',name:'Argentine',reg:'Recommandation éthique IA + Loi 25.326',s:4.0},
+  {n:'22',f:'🇲🇽',c:'MX',name:'Mexique',reg:'Aucun cadre spécifique — initiatives sectorielles',s:3.5},
+  {n:'23',f:'🇿🇦',c:'ZA',name:'Afrique du Sud',reg:'National AI Plan (draft) + POPIA',s:3.5},
+  {n:'24',f:'🇳🇬',c:'NG',name:'Nigéria',reg:'National AI Strategy (draft 2024) + NDPA',s:2.5},
 ];
 
 function jRow(j){ return '<div class="jrow"><div class="jrow-n">'+j.n+'</div><div class="jrow-flag">'+j.f+'<span class="jrow-code">'+j.c+'</span></div><div><div class="jrow-name">'+j.name+'</div><div class="jrow-reg">'+j.reg+'</div></div><div class="sbar-wrap"><div class="sbar-track"><div class="sbar-fill" style="width:'+Math.round(j.s*10)+'%"></div></div><span class="sbar-lbl">'+j.s+' / 10</span></div><div class="jrow-score">'+j.s+'</div></div>'; }
