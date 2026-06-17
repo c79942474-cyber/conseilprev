@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>html,body,#map{margin:0;padding:0;width:100%;height:100vh}</style>
+</head>
+<body>
+<div id="map"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+var map = L.map('map',{center:[25,15],zoom:2,scrollWheelZoom:false});
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
+  attribution:'© OpenStreetMap © CARTO',subdomains:'abcd'
+}).addTo(map);
+var pts=[
+  {n:'EU',s:9.2,lat:50.5,lng:15},{n:'CN',s:8.8,lat:35.8,lng:104},
+  {n:'US',s:6.6,lat:39.5,lng:-98},{n:'JP',s:5.8,lat:36.2,lng:138},
+  {n:'IN',s:3.8,lat:20.6,lng:78},{n:'AU',s:3.6,lat:-25,lng:133},
+  {n:'BR',s:4.8,lat:-14,lng:-52},{n:'NG',s:2.5,lat:9,lng:8}
+];
+function c(s){return s>=8?'#B83222':s>=5?'#C47C1A':'#2D7A47';}
+pts.forEach(function(p){
+  L.circleMarker([p.lat,p.lng],{radius:6+p.s,fillColor:c(p.s),color:'#fff',weight:1.5,fillOpacity:0.85})
+   .bindPopup('<b>'+p.n+'</b> — '+p.s+'/10').addTo(map);
+});
+</script>
+</body>
+</html>
