@@ -505,6 +505,46 @@ textarea.form-el{min-height:86px;resize:vertical}
 .geo-bloc-score strong{color:var(--ink);font-size:13px}
 @media(max-width:1000px){.geo-bloc-grid{grid-template-columns:1fr}}
 
+
+/* ══ GÉO DYNAMIQUE ══ */
+.geo-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+.geo-btn{font-size:11px;font-family:var(--mono);letter-spacing:.05em;padding:7px 14px;border-radius:3px;cursor:pointer;border:1px solid var(--rule2);background:var(--white);color:var(--ink2);transition:all .12s;display:inline-flex;align-items:center;gap:6px}
+.geo-btn:hover{border-color:var(--accent);color:var(--accent)}
+.geo-btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.geo-btn-primary:hover{background:var(--accent2);color:#fff}
+.geo-filter-chip{font-size:10px;font-family:var(--mono);padding:5px 11px;border-radius:20px;cursor:pointer;border:1px solid var(--rule2);background:var(--white);color:var(--muted);transition:all .12s;user-select:none}
+.geo-filter-chip:hover{border-color:var(--accent)}
+.geo-filter-chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.geo-bar-col{cursor:pointer}
+.geo-bar:hover{opacity:.82}
+.geo-tooltip{position:fixed;background:var(--ink);color:#fff;font-size:11px;font-family:var(--sans);padding:8px 12px;border-radius:4px;pointer-events:none;z-index:9999;display:none;max-width:220px;line-height:1.5;box-shadow:0 4px 16px rgba(0,0,0,.25)}
+.geo-tooltip-title{font-weight:600;margin-bottom:3px}
+.geo-tooltip-sub{font-size:10px;color:rgba(255,255,255,.7);font-family:var(--mono)}
+.geo-watch-card{cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.geo-watch-card:hover{border-color:var(--accent);box-shadow:0 2px 12px rgba(184,50,34,.1)}
+.geo-watch-add{border:1px dashed var(--rule2);display:flex;align-items:center;justify-content:center;min-height:90px;cursor:pointer;color:var(--muted);font-size:12px;font-family:var(--mono);transition:all .15s;border-radius:4px}
+.geo-watch-add:hover{border-color:var(--accent);color:var(--accent)}
+.geo-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+.geo-modal-overlay.on{display:flex}
+.geo-modal{background:var(--white);border-radius:6px;max-width:560px;width:100%;max-height:80vh;overflow-y:auto;padding:0}
+.geo-modal-head{padding:18px 22px;border-bottom:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--white);z-index:2}
+.geo-modal-title{font-size:14px;font-weight:600;color:var(--ink)}
+.geo-modal-close{cursor:pointer;font-size:20px;color:var(--muted);line-height:1;border:none;background:none}
+.geo-modal-close:hover{color:var(--accent)}
+.geo-modal-body{padding:18px 22px}
+.geo-pick-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:4px;cursor:pointer;transition:background .1s;border:1px solid transparent}
+.geo-pick-row:hover{background:var(--bg)}
+.geo-pick-row.picked{background:rgba(184,50,34,.05);border-color:rgba(184,50,34,.2)}
+.geo-pick-check{width:18px;height:18px;border:2px solid var(--rule2);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px}
+.geo-pick-check.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.geo-pick-code{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--ink2);background:var(--bg2);padding:2px 6px;border-radius:3px;min-width:32px;text-align:center}
+.geo-pick-name{font-size:13px;color:var(--ink);flex:1}
+.geo-pick-score{font-family:var(--mono);font-size:11px;color:var(--muted2)}
+.geo-tl-filterbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;align-items:center}
+.geo-tl-item-rich{transition:opacity .2s}
+.geo-tl-hidden{display:none}
+.geo-sort-select{font-size:11px;font-family:var(--mono);border:1px solid var(--rule2);border-radius:3px;padding:6px 10px;background:var(--white);color:var(--ink2);outline:none;cursor:pointer}
+
 </style>
 </head>
 <body>
@@ -849,10 +889,23 @@ textarea.form-el{min-height:86px;resize:vertical}
   <h2 class="geo-section-title">Analyse géopolitique des IA</h2>
   <p class="page-lead" style="margin-bottom:28px">Surveillance des tensions internationales, sanctions et alliances qui redessinent le paysage réglementaire de l'intelligence artificielle.</p>
 
+  <!-- Toolbar -->
+  <div class="geo-toolbar">
+    <button class="geo-btn geo-btn-primary" onclick="geoExportPDF()">⬇ Rapport d'analyse PDF</button>
+    <button class="geo-btn" onclick="geoExportCSV()">⬇ Données CSV</button>
+    <div style="margin-left:auto;display:flex;gap:6px;align-items:center">
+      <span style="font-size:10px;font-family:var(--mono);color:var(--muted2)">FILTRER :</span>
+      <span class="geo-filter-chip on" data-filter="all" onclick="geoFilterRisk('all',this)">Tous</span>
+      <span class="geo-filter-chip" data-filter="critical" onclick="geoFilterRisk('critical',this)">Critique</span>
+      <span class="geo-filter-chip" data-filter="high" onclick="geoFilterRisk('high',this)">Élevé</span>
+      <span class="geo-filter-chip" data-filter="moderate" onclick="geoFilterRisk('moderate',this)">Modéré</span>
+    </div>
+  </div>
+
   <!-- Distribution + Indicateurs -->
   <div class="geo-bars-wrap">
     <div class="geo-card">
-      <div class="geo-card-title">Distribution des risques géopolitiques</div>
+      <div class="geo-card-title">Distribution des risques géopolitiques <span style="font-size:9px;font-family:var(--mono);color:var(--muted2);font-weight:400">— survolez les barres</span></div>
       <div class="geo-chart" id="geo-chart"></div>
     </div>
     <div class="geo-card">
@@ -862,14 +915,41 @@ textarea.form-el{min-height:86px;resize:vertical}
   </div>
 
   <!-- Juridictions à surveiller -->
-  <div class="sec-h" style="font-size:18px;margin:28px 0 16px">Juridictions à surveiller</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin:28px 0 16px">
+    <div class="sec-h" style="font-size:18px;margin:0">Juridictions à surveiller</div>
+    <button class="geo-btn" onclick="geoOpenPicker()" style="font-size:10px;padding:5px 11px">⚙ Gérer la surveillance</button>
+  </div>
   <div class="geo-watch-grid" id="geo-watch"></div>
 
   <!-- Chronologie détaillée -->
-  <div class="sec-h" style="font-size:18px;margin:28px 0 20px">Chronologie des évolutions</div>
+  <div class="sec-h" style="font-size:18px;margin:28px 0 16px">Chronologie des évolutions</div>
+  <div class="geo-tl-filterbar">
+    <span style="font-size:10px;font-family:var(--mono);color:var(--muted2)">CATÉGORIE :</span>
+    <span class="geo-filter-chip on" data-cat="all" onclick="geoFilterCat('all',this)">Toutes</span>
+    <span class="geo-filter-chip" data-cat="ENTRÉE EN VIGUEUR" onclick="geoFilterCat('ENTRÉE EN VIGUEUR',this)">Entrée en vigueur</span>
+    <span class="geo-filter-chip" data-cat="CHANGEMENT POLITIQUE" onclick="geoFilterCat('CHANGEMENT POLITIQUE',this)">Politique</span>
+    <span class="geo-filter-chip" data-cat="RUPTURE TECHNOLOGIQUE" onclick="geoFilterCat('RUPTURE TECHNOLOGIQUE',this)">Technologie</span>
+    <select class="geo-sort-select" id="geo-tl-sort" onchange="geoSortTL(this.value)" style="margin-left:auto">
+      <option value="recent">Plus récent d'abord</option>
+      <option value="old">Plus ancien d'abord</option>
+      <option value="risk">Par niveau de risque</option>
+    </select>
+  </div>
   <div class="timeline" id="geo-tl-rich"></div>
 
   <p class="geo-disclaimer">Sources : textes officiels (Federal Register, EUR-Lex, Commission européenne, Cyberspace Administration of China) et analyses de cabinets juridiques. Les scores de risque sont des estimations CONSEILPREV à vocation d'aide à la décision et ne constituent pas un avis juridique. Dernière mise à jour : juin 2026.</p>
+
+  <!-- Tooltip + Modal picker -->
+  <div class="geo-tooltip" id="geo-tooltip"></div>
+  <div class="geo-modal-overlay" id="geo-picker-modal">
+    <div class="geo-modal">
+      <div class="geo-modal-head">
+        <span class="geo-modal-title">Gérer les juridictions à surveiller</span>
+        <button class="geo-modal-close" onclick="geoClosePicker()">×</button>
+      </div>
+      <div class="geo-modal-body" id="geo-picker-list"></div>
+    </div>
+  </div>
 </div>
 
 <!-- AIDE À LA DÉCISION -->
@@ -2898,144 +2978,242 @@ function jRow(j){ var id=j.c.toLowerCase(); return '<div class="jrow" onclick="g
 })();
 
 (function(){
-  /* ══ Distribution des risques (graphique en barres) ══ */
-  var DIST = [
-    {lbl:'low',      count:10, color:'#2D7A47'},
-    {lbl:'moderate', count:10, color:'#C9A227'},
-    {lbl:'elevated', count:3,  color:'#D9763A'},
-    {lbl:'high',     count:1,  color:'#C85A3A'},
-    {lbl:'critical', count:1,  color:'#C0282D'},
-  ];
+
+/* DONNEES */
+var GEO_DIST = [
+  {lbl:'low',      key:'moderate', count:10, color:'#2D7A47', label:'Faible',   desc:'Cadre souple, peu de contraintes'},
+  {lbl:'moderate', key:'moderate', count:10, color:'#C9A227', label:'Modere',   desc:'Regulation sectorielle en place'},
+  {lbl:'elevated', key:'high',     count:3,  color:'#D9763A', label:'Eleve',    desc:'Cadre contraignant, sanctions actives'},
+  {lbl:'high',     key:'high',     count:1,  color:'#C85A3A', label:'Haut',     desc:'Tensions geopolitiques majeures'},
+  {lbl:'critical', key:'critical', count:1,  color:'#C0282D', label:'Critique', desc:'Sous sanctions / isolement'},
+];
+
+var GEO_WATCH_ALL = {
+  'CN':{code:'CN',name:'Chine',region:'ASIA',risk:'high',badge:'RISQUE HAUT',badgeCls:'chip-r',score:8.0,
+    desc:"Tensions technologiques majeures avec les Etats-Unis (controles a l'export de semi-conducteurs avances). Ecosysteme souverain (DeepSeek, Qwen, Ernie). Risque de decouplage technologique."},
+  'RU':{code:'RU',name:'Russie',region:'EUROPE',risk:'critical',badge:'RISQUE CRITIQUE',badgeCls:'chip-r',score:7.5,
+    desc:"Sous sanctions internationales depuis 2022. Acces restreint aux semi-conducteurs et technologies occidentales. Ecosysteme IA isole, dependant de la substitution nationale et de la cooperation avec la Chine."},
+  'US':{code:'US',name:'Etats-Unis',region:'NORTH AMERICA',risk:'high',badge:'RISQUE HAUT',badgeCls:'chip-o',score:4.5,
+    desc:"Virage dereglementaire (EO 14179, jan. 2025). Fragmentation entre Etats federes. Controles a l'export de puces comme principal levier de politique IA internationale."},
+  'EU':{code:'EU',name:'Union europeenne',region:'EUROPE',risk:'moderate',badge:'REGULATEUR',badgeCls:'chip-r',score:9.2,
+    desc:"Regulateur mondial via l'AI Act. Tensions avec les US sur les transferts de donnees et avec la Chine sur la souverainete. AI Omnibus en cours de simplification."},
+  'IN':{code:'IN',name:'Inde',region:'ASIA',risk:'moderate',badge:'EMERGENT',badgeCls:'chip-o',score:4.5,
+    desc:"Marche numerique massif. Approche d'autoregulation pro-innovation. Digital India Act en preparation. Tension entre protection des donnees et acces pour l'innovation."},
+  'IL':{code:'IL',name:'Israel',region:'MIDDLE EAST',risk:'moderate',badge:'HUB DEEPTECH',badgeCls:'chip-o',score:5.0,
+    desc:"Hub mondial de la cybersecurite et de l'IA defense. Exportation de technologies sensibles. Tension entre innovation rapide et encadrement ethique."},
+  'GB':{code:'GB',name:'Royaume-Uni',region:'EUROPE',risk:'moderate',badge:'PRO-INNOVATION',badgeCls:'chip-o',score:5.5,
+    desc:"Positionnement post-Brexit pro-innovation. AI Safety Institute surveille les modeles de fondation. Risque de divergence normative avec l'UE."},
+  'AE':{code:'AE',name:'Emirats Arabes Unis',region:'MIDDLE EAST',risk:'moderate',badge:'HUB REGIONAL',badgeCls:'chip-g',score:4.0,
+    desc:"Strategie IA 2031 ambitieuse. Approche pro-innovation avec peu de contraintes. Investissements massifs via Mubadala. Ministere d'Etat a l'IA."},
+};
+
+var geoWatchSelected = ['CN','RU'];
+
+var GEO_TL = [
+  {date:'2 aout 2025', ts:20250802, cat:'ENTREE EN VIGUEUR', risk:'RISQUE ELEVE', riskRank:3, riskCls:'chip-o',
+    title:"Obligations GPAI et regime de sanctions de l'AI Act applicables",
+    body:"Les obligations pour les modeles d'IA a usage general (GPAI) deviennent applicables, ainsi que le regime de sanctions de l'Article 99. Les Etats membres devaient designer leurs autorites de surveillance du marche (MSA) a cette date.",
+    impact:"Les fournisseurs de modeles de fondation (GPAI) doivent se conformer aux obligations de transparence et de documentation. Les amendes de l'Article 5 deviennent executoires.",
+    sources:[{t:'Commission europeenne',u:'https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai'},{t:'EUR-Lex 2024/1689',u:'https://eur-lex.europa.eu/eli/reg/2024/1689/oj'}]},
+  {date:'4 fevrier 2025', ts:20250204, cat:'GUIDANCE', risk:'RISQUE MODERE', riskRank:2, riskCls:'chip-o',
+    title:"Lignes directrices de la Commission sur les pratiques interdites",
+    body:"La Commission europeenne publie ses Guidelines on Prohibited AI Practices detaillant les conditions cumulatives des 8 interdictions de l'Article 5, avec des cas d'usage pratiques. Document non contraignant, l'interpretation faisant autorite etant reservee a la CJUE.",
+    impact:"Referentiel d'interpretation essentiel pour les DPO et responsables conformite afin d'evaluer si un systeme releve d'une pratique interdite.",
+    sources:[{t:'EC Guidelines (4 fev. 2025)',u:'https://digital-strategy.ec.europa.eu/en/library/commission-publishes-guidelines-prohibited-artificial-intelligence-ai-practices-defined-ai-act'}]},
+  {date:'2 fevrier 2025', ts:20250202, cat:'ENTREE EN VIGUEUR', risk:'RISQUE CRITIQUE', riskRank:4, riskCls:'chip-r',
+    title:"Entree en application des pratiques IA interdites (Art. 5 AI Act)",
+    body:"Les 8 categories de pratiques a risque inacceptable deviennent directement applicables dans toute l'UE : manipulation subliminale, exploitation des vulnerabilites, notation sociale, police predictive par profilage, scraping non cible d'images faciales, reconnaissance emotionnelle au travail/education, categorisation biometrique de donnees sensibles, et identification biometrique a distance en temps reel. L'obligation de litteratie IA (Art. 4) s'applique aussi.",
+    impact:"Les entreprises operant en Europe doivent immediatement auditer leurs systemes. Amendes jusqu'a 35 M EUR ou 7 % du CA mondial. Premier jalon d'une application en cascade jusqu'en 2027.",
+    sources:[{t:'AI Act Art. 5',u:'https://artificialintelligenceact.eu/article/5/'},{t:'Commission europeenne',u:'https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai'}]},
+  {date:'28 janvier 2025', ts:20250128, cat:'RUPTURE TECHNOLOGIQUE', risk:'RISQUE HAUT', riskRank:3, riskCls:'chip-r',
+    title:"DeepSeek R1 bouleverse l'equilibre technologique US-Chine",
+    body:"La publication du modele open-weights DeepSeek R1, entraine pour des couts presentes comme tres inferieurs a ceux des laboratoires americains, remet en question l'efficacite des controles a l'export de puces et l'avance technologique americaine.",
+    impact:"Remise en question de la strategie americaine de containment. Debats sur la securite des modeles chinois deployes a l'international et sur la pertinence des restrictions a l'export.",
+    sources:[{t:'Squire Patton Boggs',u:'https://www.squirepattonboggs.com/insights/publications/key-insights-on-president-trumps-new-ai-executive-order-and-policy-regulatory-implications/'}]},
+  {date:'23 janvier 2025', ts:20250123, cat:'CHANGEMENT POLITIQUE', risk:'RISQUE HAUT', riskRank:3, riskCls:'chip-r',
+    title:"Nouvel Executive Order 14179 - virage pro-innovation americain",
+    body:"Apres la revocation de l'Executive Order 14110 de Biden le 20 janvier 2025 (via l'EO 14148), l'administration Trump signe l'EO 14179 Removing Barriers to American Leadership in Artificial Intelligence. Il leve les obligations de reporting des modeles de fondation et mandate un AI Action Plan sous 180 jours.",
+    impact:"Divergence normative accrue avec l'approche europeenne. Allegement des contraintes pour les developpeurs US, mais incertitude sur le reporting de securite. Les Etats (Colorado, Californie) continuent leur propre regulation.",
+    sources:[{t:'Federal Register (EO 14179)',u:'https://www.federalregister.gov/documents/2025/01/31/2025-02172/removing-barriers-to-american-leadership-in-artificial-intelligence'},{t:'White House',u:'https://www.whitehouse.gov/presidential-actions/2025/01/removing-barriers-to-american-leadership-in-artificial-intelligence/'}]},
+  {date:'20 janvier 2025', ts:20250120, cat:'CHANGEMENT POLITIQUE', risk:'RISQUE HAUT', riskRank:3, riskCls:'chip-r',
+    title:"Revocation de l'Executive Order 14110 (administration Trump)",
+    body:"Des son premier jour de mandat, le President Trump revoque l'EO 14110 de Biden sur l'IA sure, securisee et digne de confiance via l'Executive Order 14148, marquant l'abandon de l'approche federale fondee sur la gestion des risques.",
+    impact:"Fin des directives federales de safety testing imposees aux grands modeles. Bascule vers une logique de deregulation et de competitivite.",
+    sources:[{t:'EO 14179 - Wikipedia',u:'https://en.wikipedia.org/wiki/Executive_Order_14179'}]},
+  {date:'Sept. 2025 (effet)', ts:20250901, cat:'CHANGEMENT REGLEMENTAIRE', risk:'RISQUE MODERE', riskRank:2, riskCls:'chip-o',
+    title:"Renforcement de l'etiquetage des contenus IA en Chine",
+    body:"Les regles de la Cyberspace Administration of China (CAC) sur l'etiquetage des contenus generes par IA renforcent l'obligation de marquage visible et implicite (metadonnees) des contenus synthetiques, dans la continuite des Generative AI Measures de 2023.",
+    impact:"Nouveau standard de watermarking en Chine. Les plateformes doivent adapter leur chaine de distribution de contenu. Modele potentiellement exporte vers les pays partenaires.",
+    sources:[{t:'CAC / Generative AI Measures',u:'https://www.chinalawtranslate.com/'}]},
+];
+
+var geoTLSort = 'recent';
+var geoTLCatFilter = 'all';
+
+function geoRenderChart(){
   var chart = document.getElementById('geo-chart');
-  if(chart){
-    var maxV = 12;
-    // lignes de grille
-    [0,3,6,9,12].forEach(function(v){
-      var pct = (v/maxV)*100;
-      var line = document.createElement('div');
-      line.className='geo-chart-grid';
-      line.style.bottom = pct+'%';
-      line.textContent = v;
-      chart.appendChild(line);
-    });
-    DIST.forEach(function(d){
-      var col = document.createElement('div');
-      col.className='geo-bar-col';
-      var h = (d.count/maxV)*100;
-      col.innerHTML = '<div class="geo-bar-count">'+d.count+'</div>'
-        + '<div class="geo-bar" style="height:'+h+'%;background:'+d.color+'"></div>'
-        + '<div class="geo-bar-label">'+d.lbl+'</div>';
-      chart.appendChild(col);
-    });
-  }
+  if(!chart) return;
+  chart.innerHTML = '';
+  var maxV = 12;
+  [0,3,6,9,12].forEach(function(v){
+    var line = document.createElement('div');
+    line.className='geo-chart-grid';
+    line.style.bottom = (v/maxV*100)+'%';
+    line.textContent = v;
+    chart.appendChild(line);
+  });
+  GEO_DIST.forEach(function(d){
+    var col = document.createElement('div');
+    col.className='geo-bar-col';
+    var h = (d.count/maxV)*100;
+    col.innerHTML = '<div class="geo-bar-count">'+d.count+'</div><div class="geo-bar" style="height:'+h+'%;background:'+d.color+'"></div><div class="geo-bar-label">'+d.lbl+'</div>';
+    col.addEventListener('mousemove', function(e){ geoShowTip(e, '<div class="geo-tooltip-title">'+d.label+' - '+d.count+' juridictions</div><div class="geo-tooltip-sub">'+d.desc+'</div>'); });
+    col.addEventListener('mouseleave', geoHideTip);
+    col.addEventListener('click', function(){ geoFilterRisk(d.key, null); });
+    chart.appendChild(col);
+  });
+}
 
-  /* ══ Indicateurs ══ */
-  var IND = [
-    {icon:'⚠', lbl:'Juridictions à risque critique', val:'1'},
-    {icon:'↗', lbl:'Événements récents (30j)', val:'0'},
-    {icon:'⛉', lbl:'Juridictions stables', val:'10'},
-  ];
+function geoShowTip(e, html){
+  var tip = document.getElementById('geo-tooltip');
+  if(!tip) return;
+  tip.innerHTML = html;
+  tip.style.display = 'block';
+  var x = e.clientX + 14, y = e.clientY + 14;
+  if(x + 230 > window.innerWidth) x = e.clientX - 230;
+  tip.style.left = x+'px';
+  tip.style.top = y+'px';
+}
+function geoHideTip(){ var tip=document.getElementById('geo-tooltip'); if(tip) tip.style.display='none'; }
+
+function geoRenderIndicators(){
   var ind = document.getElementById('geo-indicators');
-  if(ind){
-    ind.innerHTML = IND.map(function(i){
-      return '<div class="geo-indic-row">'
-        +'<div class="geo-indic-icon">'+i.icon+'</div>'
-        +'<div><div class="geo-indic-lbl">'+i.lbl+'</div><div class="geo-indic-val">'+i.val+'</div></div>'
-        +'</div>';
-    }).join('');
-  }
-
-  /* ══ Juridictions à surveiller ══ */
-  var WATCH = [
-    {code:'CN', name:'Chine', region:'ASIA', badge:'RISQUE HAUT', badgeCls:'chip-r',
-     desc:"Tensions technologiques majeures avec les États-Unis (contrôles à l'export de semi-conducteurs avancés). Écosystème souverain (DeepSeek, Qwen, Ernie). Risque de découplage technologique (« tech decoupling »)."},
-    {code:'RU', name:'Russie', region:'EUROPE', badge:'RISQUE CRITIQUE', badgeCls:'chip-r',
-     desc:"Sous sanctions internationales depuis 2022. Accès restreint aux semi-conducteurs et technologies occidentales. Écosystème IA isolé, dépendant de la substitution nationale et de la coopération avec la Chine."},
+  if(!ind) return;
+  var critical = Object.keys(GEO_WATCH_ALL).filter(function(k){return GEO_WATCH_ALL[k].risk==='critical';}).length;
+  var IND = [
+    {icon:'!', lbl:'Juridictions a risque critique', val:String(critical)},
+    {icon:'+', lbl:'Evenements recents (30j)', val:'0'},
+    {icon:'=', lbl:'Juridictions stables', val:'10'},
+    {icon:'o', lbl:'Sous surveillance active', val:String(geoWatchSelected.length)},
   ];
+  ind.innerHTML = IND.map(function(i){
+    return '<div class="geo-indic-row"><div class="geo-indic-icon">'+i.icon+'</div><div><div class="geo-indic-lbl">'+i.lbl+'</div><div class="geo-indic-val">'+i.val+'</div></div></div>';
+  }).join('');
+}
+
+function geoRenderWatch(){
   var watch = document.getElementById('geo-watch');
-  if(watch){
-    watch.innerHTML = WATCH.map(function(w){
-      return '<div class="geo-watch-card">'
-        +'<div class="geo-watch-head">'
-        +'<span class="geo-watch-code">'+w.code+'</span>'
-        +'<div><div class="geo-watch-name">'+w.name+'</div><div class="geo-watch-region">'+w.region+'</div></div>'
-        +'<span class="geo-watch-badge '+w.badgeCls+'">● '+w.badge+'</span>'
-        +'</div>'
-        +'<div class="geo-watch-desc">'+w.desc+'</div>'
-        +'</div>';
-    }).join('');
-  }
+  if(!watch) return;
+  var html = geoWatchSelected.map(function(code){
+    var w = GEO_WATCH_ALL[code];
+    if(!w) return '';
+    return '<div class="geo-watch-card" onclick="geoFilterByCountry(\'' + code + '\')"><div class="geo-watch-head"><span class="geo-watch-code">'+w.code+'</span><div><div class="geo-watch-name">'+w.name+'</div><div class="geo-watch-region">'+w.region+'</div></div><span class="geo-watch-badge '+w.badgeCls+'">@ '+w.badge+'</span></div><div class="geo-watch-desc">'+w.desc+'</div></div>';
+  }).join('');
+  html += '<div class="geo-watch-add" onclick="geoOpenPicker()">+ Ajouter une juridiction a surveiller</div>';
+  watch.innerHTML = html;
+}
 
-  /* ══ Chronologie détaillée et sourcée ══ */
-  var TL = [
-    {
-      date:'2 août 2025', cat:'ENTRÉE EN VIGUEUR', risk:'RISQUE ÉLEVÉ', riskCls:'chip-o',
-      title:"Obligations GPAI et régime de sanctions de l'AI Act applicables",
-      body:"Les obligations pour les modèles d'IA à usage général (GPAI) deviennent applicables, ainsi que le régime de sanctions de l'Article 99. Les États membres devaient désigner leurs autorités de surveillance du marché (MSA) à cette date.",
-      impact:"Les fournisseurs de modèles de fondation (GPAI) doivent se conformer aux obligations de transparence et de documentation. Les amendes de l'Article 5 deviennent exécutoires.",
-      sources:[{t:'Commission européenne', u:'https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai'},{t:'EUR-Lex 2024/1689', u:'https://eur-lex.europa.eu/eli/reg/2024/1689/oj'}]
-    },
-    {
-      date:'4 février 2025', cat:'GUIDANCE', risk:'RISQUE MODÉRÉ', riskCls:'chip-o',
-      title:"Lignes directrices de la Commission sur les pratiques interdites",
-      body:"La Commission européenne publie ses « Guidelines on Prohibited AI Practices » détaillant les conditions cumulatives des 8 interdictions de l'Article 5, avec des cas d'usage pratiques. Document non contraignant, l'interprétation faisant autorité étant réservée à la CJUE.",
-      impact:"Référentiel d'interprétation essentiel pour les DPO et responsables conformité afin d'évaluer si un système relève d'une pratique interdite.",
-      sources:[{t:'EC Guidelines (4 fév. 2025)', u:'https://digital-strategy.ec.europa.eu/en/library/commission-publishes-guidelines-prohibited-artificial-intelligence-ai-practices-defined-ai-act'}]
-    },
-    {
-      date:'2 février 2025', cat:'ENTRÉE EN VIGUEUR', risk:'RISQUE CRITIQUE', riskCls:'chip-r',
-      title:"Entrée en application des pratiques IA interdites (Art. 5 AI Act)",
-      body:"Les 8 catégories de pratiques à risque inacceptable deviennent directement applicables dans toute l'UE : manipulation subliminale, exploitation des vulnérabilités, notation sociale, police prédictive par profilage, scraping non ciblé d'images faciales, reconnaissance émotionnelle au travail/éducation, catégorisation biométrique de données sensibles, et identification biométrique à distance en temps réel. L'obligation de littératie IA (Art. 4) s'applique aussi.",
-      impact:"Les entreprises opérant en Europe doivent immédiatement auditer leurs systèmes. Amendes jusqu'à 35 M€ ou 7 % du CA mondial. Premier jalon d'une application en cascade jusqu'en 2027.",
-      sources:[{t:'AI Act Art. 5', u:'https://artificialintelligenceact.eu/article/5/'},{t:'Commission européenne', u:'https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai'}]
-    },
-    {
-      date:'28 janvier 2025', cat:'RUPTURE TECHNOLOGIQUE', risk:'RISQUE HAUT', riskCls:'chip-r',
-      title:"DeepSeek R1 bouleverse l'équilibre technologique US-Chine",
-      body:"La publication du modèle open-weights DeepSeek R1, entraîné pour des coûts présentés comme très inférieurs à ceux des laboratoires américains, remet en question l'efficacité des contrôles à l'export de puces et l'avance technologique américaine.",
-      impact:"Remise en question de la stratégie américaine de containment. Débats sur la sécurité des modèles chinois déployés à l'international et sur la pertinence des restrictions à l'export.",
-      sources:[{t:'Squire Patton Boggs', u:'https://www.squirepattonboggs.com/insights/publications/key-insights-on-president-trumps-new-ai-executive-order-and-policy-regulatory-implications/'}]
-    },
-    {
-      date:'23 janvier 2025', cat:'CHANGEMENT POLITIQUE', risk:'RISQUE HAUT', riskCls:'chip-r',
-      title:"Nouvel Executive Order 14179 — virage pro-innovation américain",
-      body:"Après la révocation de l'Executive Order 14110 de Biden le 20 janvier 2025 (via l'EO 14148), l'administration Trump signe l'EO 14179 « Removing Barriers to American Leadership in Artificial Intelligence ». Il lève les obligations de reporting des modèles de fondation et mandate un AI Action Plan sous 180 jours, recentré sur la « domination » américaine.",
-      impact:"Divergence normative accrue avec l'approche européenne. Allègement des contraintes pour les développeurs US, mais incertitude sur le reporting de sécurité. Les États (Colorado, Californie) continuent leur propre régulation.",
-      sources:[{t:'Federal Register (EO 14179)', u:'https://www.federalregister.gov/documents/2025/01/31/2025-02172/removing-barriers-to-american-leadership-in-artificial-intelligence'},{t:'White House', u:'https://www.whitehouse.gov/presidential-actions/2025/01/removing-barriers-to-american-leadership-in-artificial-intelligence/'}]
-    },
-    {
-      date:'20 janvier 2025', cat:'CHANGEMENT POLITIQUE', risk:'RISQUE HAUT', riskCls:'chip-r',
-      title:"Révocation de l'Executive Order 14110 (administration Trump)",
-      body:"Dès son premier jour de mandat, le Président Trump révoque l'EO 14110 de Biden sur l'IA « sûre, sécurisée et digne de confiance » via l'Executive Order 14148, marquant l'abandon de l'approche fédérale fondée sur la gestion des risques.",
-      impact:"Fin des directives fédérales de safety testing imposées aux grands modèles. Bascule vers une logique de dérégulation et de compétitivité.",
-      sources:[{t:'EO 14179 — Wikipedia', u:'https://en.wikipedia.org/wiki/Executive_Order_14179'}]
-    },
-    {
-      date:'Sept. 2025 (effet)', cat:'CHANGEMENT RÉGLEMENTAIRE', risk:'RISQUE MODÉRÉ', riskCls:'chip-o',
-      title:"Renforcement de l'étiquetage des contenus IA en Chine",
-      body:"Les règles de la Cyberspace Administration of China (CAC) sur l'étiquetage des contenus générés par IA renforcent l'obligation de marquage visible et implicite (métadonnées) des contenus synthétiques, dans la continuité des Generative AI Measures de 2023.",
-      impact:"Nouveau standard de watermarking en Chine. Les plateformes doivent adapter leur chaîne de distribution de contenu. Modèle potentiellement exporté vers les pays partenaires.",
-      sources:[{t:'CAC / Generative AI Measures', u:'https://www.chinalawtranslate.com/'}]
-    },
-  ];
+window.geoFilterByCountry = function(code){
+  var w = GEO_WATCH_ALL[code];
+  alert(w.name + ' - ' + w.badge + '\n\nScore de severite : ' + w.score + '/10\n\n' + w.desc);
+};
 
+window.geoOpenPicker = function(){
+  var modal = document.getElementById('geo-picker-modal');
+  var list = document.getElementById('geo-picker-list');
+  if(!modal||!list) return;
+  list.innerHTML = Object.keys(GEO_WATCH_ALL).map(function(code){
+    var w = GEO_WATCH_ALL[code];
+    var picked = geoWatchSelected.indexOf(code) !== -1;
+    return '<div class="geo-pick-row '+(picked?'picked':'')+'" onclick="geoTogglePick(\'' + code + '\')"><div class="geo-pick-check '+(picked?'on':'')+'">'+(picked?'v':'')+'</div><span class="geo-pick-code">'+w.code+'</span><span class="geo-pick-name">'+w.name+'</span><span class="geo-pick-score">'+w.score+'/10</span></div>';
+  }).join('');
+  modal.classList.add('on');
+};
+window.geoClosePicker = function(){ document.getElementById('geo-picker-modal').classList.remove('on'); };
+window.geoTogglePick = function(code){
+  var i = geoWatchSelected.indexOf(code);
+  if(i === -1){ geoWatchSelected.push(code); }
+  else { geoWatchSelected.splice(i,1); }
+  geoOpenPicker();
+  geoRenderWatch();
+  geoRenderIndicators();
+};
+
+window.geoFilterCat = function(cat, el){
+  geoTLCatFilter = cat;
+  document.querySelectorAll('[data-cat]').forEach(function(c){ c.classList.remove('on'); });
+  if(el) el.classList.add('on');
+  geoRenderTL();
+};
+window.geoSortTL = function(val){ geoTLSort = val; geoRenderTL(); };
+
+window.geoFilterRisk = function(risk, el){
+  document.querySelectorAll('[data-filter]').forEach(function(c){ c.classList.remove('on'); });
+  if(el) el.classList.add('on');
+  else { var t=document.querySelector('[data-filter="'+risk+'"]'); if(t) t.classList.add('on'); }
+  geoRenderChart();
+};
+
+function geoRenderTL(){
   var tl = document.getElementById('geo-tl-rich');
-  if(tl){
-    tl.innerHTML = TL.map(function(e){
-      var srcs = e.sources.map(function(s){
-        return '<a class="geo-tl-source" href="'+s.u+'" target="_blank" rel="noopener">↗ '+s.t+'</a>';
-      }).join('');
-      return '<div class="tl-item geo-tl-item-rich">'
-        +'<div><span class="geo-tl-date">'+e.date+'</span>'
-        +'<span class="geo-tl-cat">'+e.cat+'</span>'
-        +'<span class="geo-tl-risk '+e.riskCls+'">● '+e.risk+'</span></div>'
-        +'<div class="geo-tl-title">'+e.title+'</div>'
-        +'<div class="geo-tl-body">'+e.body+'</div>'
-        +'<div class="geo-tl-impact">'+e.impact+'</div>'
-        +'<div class="geo-tl-sources">'+srcs+'</div>'
-        +'</div>';
-    }).join('');
+  if(!tl) return;
+  var items = GEO_TL.slice();
+  if(geoTLCatFilter !== 'all'){
+    items = items.filter(function(e){ return e.cat === geoTLCatFilter; });
   }
+  if(geoTLSort === 'recent'){ items.sort(function(a,b){ return b.ts - a.ts; }); }
+  else if(geoTLSort === 'old'){ items.sort(function(a,b){ return a.ts - b.ts; }); }
+  else if(geoTLSort === 'risk'){ items.sort(function(a,b){ return b.riskRank - a.riskRank; }); }
+
+  if(items.length === 0){
+    tl.innerHTML = '<p style="font-size:12px;color:var(--muted);font-style:italic;padding:20px 0">Aucun evenement pour ce filtre.</p>';
+    return;
+  }
+  tl.innerHTML = items.map(function(e){
+    var srcs = e.sources.map(function(s){ return '<a class="geo-tl-source" href="'+s.u+'" target="_blank" rel="noopener">> '+s.t+'</a>'; }).join('');
+    return '<div class="tl-item geo-tl-item-rich"><div><span class="geo-tl-date">'+e.date+'</span><span class="geo-tl-cat">'+e.cat+'</span><span class="geo-tl-risk '+e.riskCls+'">@ '+e.risk+'</span></div><div class="geo-tl-title">'+e.title+'</div><div class="geo-tl-body">'+e.body+'</div><div class="geo-tl-impact">'+e.impact+'</div><div class="geo-tl-sources">'+srcs+'</div></div>';
+  }).join('');
+}
+
+window.geoExportPDF = function(){
+  var w = window.open('', '_blank');
+  if(!w){ alert('Veuillez autoriser les pop-ups pour generer le rapport.'); return; }
+  var today = new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+  var watchHtml = geoWatchSelected.map(function(code){
+    var x = GEO_WATCH_ALL[code];
+    return '<div class="wcard"><div class="wh"><strong>'+x.code+' - '+x.name+'</strong> <span class="badge">'+x.badge+'</span></div><p>'+x.desc+'</p><p class="score">Score de severite : '+x.score+'/10</p></div>';
+  }).join('');
+  var tlHtml = GEO_TL.slice().sort(function(a,b){return b.ts-a.ts;}).map(function(e){
+    var srcs = e.sources.map(function(s){return s.t+' ('+s.u+')';}).join(' - ');
+    return '<div class="tlc"><div class="tlh"><strong>'+e.date+'</strong> - '+e.cat+' - '+e.risk+'</div><div class="tlt">'+e.title+'</div><p>'+e.body+'</p><p class="impact"><em>Impact : '+e.impact+'</em></p><p class="src">Sources : '+srcs+'</p></div>';
+  }).join('');
+  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Rapport Analyse Geopolitique IA - Sentinel AI</title><style>@page{margin:2cm}body{font-family:Georgia,serif;color:#1C1C1C;line-height:1.6;max-width:800px;margin:0 auto;padding:20px}h1{font-size:26px;border-bottom:3px solid #B83222;padding-bottom:10px;margin-bottom:4px}.sub{color:#767676;font-size:13px;margin-bottom:24px;font-family:Arial,sans-serif}h2{font-size:18px;color:#B83222;margin-top:28px;border-bottom:1px solid #ddd;padding-bottom:6px}.wcard,.tlc{border:1px solid #ddd;border-radius:4px;padding:14px;margin-bottom:12px;page-break-inside:avoid}.wh,.tlh{font-size:14px;margin-bottom:6px}.badge{font-size:10px;background:#f0e0dd;color:#B83222;padding:2px 8px;border-radius:3px;font-family:Arial}.tlt{font-size:15px;font-weight:bold;margin:4px 0}p{font-size:12px;margin:6px 0;font-family:Arial,sans-serif}.impact{color:#555}.src{color:#1C5A8A;font-size:10px}.score{color:#B83222;font-weight:bold;font-size:11px}.footer{margin-top:30px;padding-top:14px;border-top:1px solid #ddd;font-size:10px;color:#999;font-family:Arial}.disc{font-size:10px;color:#999;font-style:italic;margin-top:20px;font-family:Arial}</style></head><body><h1>Analyse geopolitique des IA</h1><div class="sub">Rapport strategique - Sentinel AI / CONSEILPREV - Genere le '+today+'</div><h2>Synthese des indicateurs</h2><p>Juridictions a risque critique : 1 - Juridictions stables : 10 - Sous surveillance active : '+geoWatchSelected.length+'</p><h2>Juridictions sous surveillance</h2>'+watchHtml+'<h2>Chronologie des evolutions reglementaires</h2>'+tlHtml+'<p class="disc">Les scores de risque sont des estimations CONSEILPREV a vocation d aide a la decision et ne constituent pas un avis juridique. Sources : textes officiels (Federal Register, EUR-Lex, Commission europeenne, CAC) et analyses de cabinets juridiques.</p><div class="footer">(c) CONSEILPREV - Sentinel AI - Cartographie des risques reglementaires IA - christophe.cerf@outlook.com</div><scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt></body></html>';
+  w.document.write(html);
+  w.document.close();
+};
+
+window.geoExportCSV = function(){
+  var rows = [['Date','Categorie','Risque','Titre','Impact','Sources']];
+  GEO_TL.forEach(function(e){
+    var srcs = e.sources.map(function(s){return s.t;}).join(' | ');
+    rows.push([e.date, e.cat, e.risk, e.title.replace(/"/g,'""'), e.impact.replace(/"/g,'""'), srcs]);
+  });
+  var csv = rows.map(function(r){ return r.map(function(c){ return '"'+c+'"'; }).join(','); }).join('\n');
+  var BOM = String.fromCharCode(0xFEFF);
+  var blob = new Blob([BOM+csv], {type:'text/csv;charset=utf-8;'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'analyse-geopolitique-IA-'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
+geoRenderChart();
+geoRenderIndicators();
+geoRenderWatch();
+geoRenderTL();
+
 })();
 
 (function(){
