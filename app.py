@@ -615,122 +615,109 @@ def build_html_email(data, cv_filename=None):
 
 
 def send_email_with_attachment(data, cv_data=None, cv_filename=None):
-    """Envoie un email avec CV en pièce jointe. Retourne (ok, status)."""
+    """
+    Envoie email candidature + CV en pièce jointe.
+    Flux: 1) Brevo API (HTTP, pas de port SMTP) → 2) SMTP Brevo → 3) local.
+    """
+    import base64 as _b64, datetime as _dt
+
+    prenom  = data.get('prenom','')
+    nom     = data.get('nom','')
+    email   = data.get('email','')
+    ftype   = data.get('form_type','candidature')
+    name    = f'{prenom} {nom}'.strip()
+    subject = f"[CONSEILPREV] {ftype.upper()} | {name}"
+    if cv_filename:
+        subject += f" | CV:{cv_filename}"
+    html_body = build_html_email(data, cv_filename)
+
+    # ── 1. Brevo API (priorité absolue — HTTP, fonctionne sur Render) ──
+    if BREVO_API_KEY:
+        try:
+            payload = {
+                'sender':      {'name': 'CONSEILPREV', 'email': MAIL_FROM},
+                'to':          [{'email': MAIL_TO, 'name': 'CONSEILPREV'}],
+                'subject':     subject,
+                'htmlContent': html_body,
+                'replyTo':     {'email': email or MAIL_TO, 'name': name},
+                'tags':        [ftype, 'candidature'],
+            }
+            if MAIL_CC:
+                payload['cc'] = [{'email': MAIL_CC}]
+            if cv_data and cv_filename:
+                safe_fn = secure_filename(cv_filename)
+                payload['attachment'] = [{
+                    'name':    safe_fn,
+                    'content': _b64.b64encode(cv_data).decode('ascii'),
+                }]
+                logger.info(f'BREVO_CV_ATTACH: {safe_fn} ({len(cv_data)} bytes)')
+            resp = requests.post(
+                BREVO_API_URL,
+                headers={
+                    'api-key':      BREVO_API_KEY,
+                    'Content-Type': 'application/json',
+                    'Accept':       'application/json',
+                },
+                json=payload,
+                timeout=25,
+            )
+            if resp.status_code in (201, 200):
+                mid = resp.json().get('messageId', 'ok')
+                logger.info(f'APPLY_BREVO_API_OK: {name} cv={cv_filename} → {mid}')
+                return True, 'brevo_api'
+            logger.error(f'APPLY_BREVO_API_ERR {resp.status_code}: {resp.text[:200]}')
+        except Exception as e:
+            logger.error(f'APPLY_BREVO_API_EXC: {e}')
+
+    # ── 2. SMTP Brevo (fallback avec pièce jointe MIME) ──
+    if SMTP_USER and SMTP_PASSWORD:
+        try:
+            msg = MIMEMultipart('mixed')
+            msg['Subject']  = subject
+            msg['From']     = MAIL_FROM
+            msg['To']       = MAIL_TO
+            if MAIL_CC:       msg['Cc']       = MAIL_CC
+            if email:         msg['Reply-To'] = email
+            msg.attach(MIMEText(html_body, 'html', 'utf-8'))
+            if cv_data and cv_filename:
+                part = MIMEBase('application', 'octet-stream')
+                part.set_payload(cv_data)
+                encoders.encode_base64(part)
+                safe = secure_filename(cv_filename)
+                part.add_header('Content-Disposition', f'attachment; filename="{safe}"')
+                msg.attach(part)
+            ctx  = ssl.create_default_context()
+            rcpt = [r.strip() for r in [MAIL_TO, MAIL_CC] if r.strip()]
+            if SMTP_PORT == 465:
+                with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, context=ctx, timeout=25) as srv:
+                    srv.ehlo(); srv.login(SMTP_USER, SMTP_PASSWORD)
+                    srv.sendmail(MAIL_FROM, rcpt, msg.as_string())
+            else:
+                with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=25) as srv:
+                    srv.ehlo(); srv.starttls(context=ctx); srv.login(SMTP_USER, SMTP_PASSWORD)
+                    srv.sendmail(MAIL_FROM, rcpt, msg.as_string())
+            logger.info(f'APPLY_SMTP_OK: {name} cv={cv_filename}')
+            return True, 'brevo_smtp'
+        except smtplib.SMTPAuthenticationError:
+            logger.error('APPLY_SMTP_AUTH: vérifier clé SMTP Brevo dans Render')
+            return False, 'smtp_auth_error'
+        except Exception as e:
+            logger.error(f'APPLY_SMTP_ERR: {e}')
+
+    # ── 3. Sauvegarde locale ──
     try:
-        msg = MIMEMultipart('mixed')
-        subject_parts = [data.get('form_type','Formulaire').upper()]
-        name = (data.get('prenom','') + ' ' + data.get('nom','')).strip()
-        if name: subject_parts.append(name)
-        if cv_filename: subject_parts.append(f'CV:{cv_filename}')
-        msg['Subject']  = f"[CONSEILPREV] {' | '.join(subject_parts)}"
-        msg['From']     = MAIL_FROM
-        msg['To']       = MAIL_TO
-        if MAIL_CC: msg['Cc'] = MAIL_CC
-        email_val = data.get('email','')
-        if email_val: msg['Reply-To'] = email_val
-
-        # Corps HTML
-        msg.attach(MIMEText(build_html_email(data, cv_filename), 'html', 'utf-8'))
-
-        # Pièce jointe
-        if cv_data and cv_filename:
-            part = MIMEBase('application', 'octet-stream')
-            part.set_payload(cv_data)
-            encoders.encode_base64(part)
-            safe = secure_filename(cv_filename)
-            part.add_header('Content-Disposition', f'attachment; filename="{safe}"')
-            msg.attach(part)
-
-        if not (SMTP_USER and SMTP_PASSWORD):
-            # Fallback : sauvegarder localement
-            try:
-                import datetime
-                ts = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-                log_path = os.path.join(UPLOAD_FOLDER, f'email_{ts}.txt')
-                with open(log_path, 'w', encoding='utf-8') as _f:
-                    _f.write(f"TO: {MAIL_TO}\nCC: {MAIL_CC}\n")
-                    _f.write(f"SUBJECT: [CONSEILPREV] {data.get('form_type','?')} — {data.get('prenom','')} {data.get('nom','')}\n\n")
-                    for k, v in data.items():
-                        _f.write(f"{k}: {v}\n")
-                logger.warning(f'SMTP_NOT_CONFIGURED: message sauvegardé localement: {log_path}')
-            except Exception as _e:
-                logger.error(f'FALLBACK_SAVE_ERR: {_e}')
-            return False, 'smtp_not_configured'
-
-        ctx = ssl.create_default_context()
-        if SMTP_PORT == 465:
-            with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, context=ctx, timeout=20) as srv:
-                srv.ehlo(); srv.login(SMTP_USER, SMTP_PASSWORD)
-                rcpt = [r.strip() for r in [MAIL_TO, MAIL_CC] if r.strip()]
-                srv.sendmail(MAIL_FROM, rcpt, msg.as_string())
-        else:
-            with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=20) as srv:
-                srv.ehlo(); srv.starttls(context=ctx); srv.login(SMTP_USER, SMTP_PASSWORD)
-                rcpt = [r.strip() for r in [MAIL_TO, MAIL_CC] if r.strip()]
-                srv.sendmail(MAIL_FROM, rcpt, msg.as_string())
-        return True, 'sent'
-
-    except smtplib.SMTPAuthenticationError:
-        return False, 'smtp_auth_error'
-    except smtplib.SMTPException as e:
-        return False, f'smtp_error:{e}'
-    except Exception as e:
-        logger.error(f'SEND_EMAIL_ERR: {e}')
-        return False, str(e)
-
-
-# ══════════════════════════════════════════════════════════
-# ROUTES
-# ══════════════════════════════════════════════════════════
-
-MISTRAL_SYSTEM = """Tu es un expert senior CONSEILPREV spécialisé en gouvernance IA, conformité et cybersécurité. Réponds en français, de manière professionnelle et concise (max 280 mots). Domaines : IA Act, ISO 42001, NIS2, ISO 27001, DORA, RGPD, 8 risques systémiques IA. Pour toute question de projet, oriente vers contact@i-aes.com ou le formulaire du site."""
-
-import feedparser, time
-
-RSS_SOURCES = [
-    {"name": "ActuIA",          "url": "https://www.actuia.com/feed/",                         "cat": "ai",    "ico": "🤖"},
-    {"name": "ANSSI",           "url": "https://cyber.gouv.fr/feed",                            "cat": "secu",  "ico": "🛡️"},
-    {"name": "CNIL",            "url": "https://www.cnil.fr/fr/rss.xml",                        "cat": "regl",  "ico": "🔒"},
-    {"name": "LMI",             "url": "https://www.lemondeinformatique.fr/rss/rss-actu.xml",   "cat": "innov", "ico": "💻"},
-    {"name": "Usine Digitale",  "url": "https://www.usine-digitale.fr/rss/all",                 "cat": "innov", "ico": "🏭"},
-    {"name": "AI Act EU",       "url": "https://artificialintelligenceact.eu/feed/",             "cat": "regl",  "ico": "⚖️"},
-    {"name": "EU Digital",      "url": "https://digital-strategy.ec.europa.eu/en/rss.xml",      "cat": "intl",  "ico": "🇪🇺"},
-    {"name": "Cybersec-info",   "url": "https://cybersecurite-info.fr/feed/",                   "cat": "secu",  "ico": "🔐"},
-    {"name": "Infosecurity Mag","url": "https://www.infosecurity-magazine.com/rss/news/",        "cat": "secu",  "ico": "🔏"},
-]
-
-# ══════════════════════════════════════════════════════════
-# SOURCES JOBBOARD OPEN SOURCE — usage backend uniquement
-# Les noms ne sont JAMAIS exposés au client (demande RGPD/commercial).
-# Alimentent le matching IA en arrière-plan via flux RSS/API publics gratuits.
-# ══════════════════════════════════════════════════════════
-JOBBOARD_SOURCES = [
-    # Flux RSS publics gratuits — noms masqués côté client (usage interne uniquement)
-    # France Travail / Pôle Emploi offres IT (open data)
-    {"url": "https://api.francetravail.io/partenaire/offresdemploi/v2/offres/search?domaine=M&rss=true", "type": "rss"},
-    # RemoteOK — flux RSS offres remote IT/dev/data
-    {"url": "https://remoteok.com/remote-jobs.rss", "type": "rss"},
-    # We Work Remotely — IT & Programming RSS
-    {"url": "https://weworkremotely.com/categories/remote-programming-jobs.rss", "type": "rss"},
-    # Hacker News Who's Hiring (mensuel, via RSS non officiel)
-    {"url": "https://hnhiring.com/rss.xml", "type": "rss"},
-    # Remixjobs — offres IT France
-    {"url": "https://remixjobs.com/rss/informatique-telecoms", "type": "rss"},
-    # Stack Overflow Jobs RSS
-    {"url": "https://stackoverflow.com/jobs/feed?l=France&r=true", "type": "rss"},
-    # InfoJobs RSS (IT)
-    {"url": "https://www.regionsjob.com/rss/offres-informatique-internet.xml", "type": "rss"},
-    # Freelance Informatique RSS
-    {"url": "https://www.freelance-informatique.fr/rss-missions.php", "type": "rss"},
-    # Indeed France IT (public)
-    {"url": "https://fr.indeed.com/rss?q=data+scientist&l=France&sort=date", "type": "rss"},
-]
-# API France Travail (open data, nécessite identifiants gratuits si configurés)
-FRANCETRAVAIL_ID     = os.environ.get('FRANCETRAVAIL_ID', '')
-FRANCETRAVAIL_SECRET = os.environ.get('FRANCETRAVAIL_SECRET', '')
-
-_jobboard_cache = {"data": [], "ts": 0}
-JOBBOARD_TTL = 1800  # 30 min
+        ts   = _dt.datetime.now().strftime('%Y%m%d_%H%M%S')
+        path = os.path.join(UPLOAD_FOLDER, f'email_{ts}.txt')
+        with open(path, 'w', encoding='utf-8') as _f:
+            _f.write(f"TO: {MAIL_TO}\nCC: {MAIL_CC}\nSUBJECT: {subject}\n\n")
+            for k, v in data.items():
+                _f.write(f"{k}: {v}\n")
+            if cv_filename:
+                _f.write(f"\nCV: {cv_filename} ({len(cv_data or b'')} bytes)\n")
+        logger.warning(f'APPLY_SAVED_LOCAL: {path}')
+    except Exception as _e:
+        logger.error(f'APPLY_SAVE_ERR: {_e}')
+    return False, 'smtp_not_configured'
 
 def fetch_jobboard_signals(domaine='', skills=None):
     """Récupère des signaux marché depuis les jobboards open source.
