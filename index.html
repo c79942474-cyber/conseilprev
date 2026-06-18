@@ -1054,6 +1054,15 @@ body::before{
 /* Items */
 #vitems{flex:1;overflow:hidden;padding:8px 0;position:relative}
 /* Défilement automatique vitems */
+
+/* ── Toggle langue news ── */
+#vlang-toggle{display:flex;gap:4px;align-items:center;padding:0 16px 8px;border-bottom:1px solid rgba(196,181,232,.1);margin-bottom:2px}
+.vl-btn{font-family:"Space Mono",monospace;font-size:9px;padding:3px 8px;border-radius:3px;cursor:pointer;border:1px solid rgba(196,181,232,.15);background:transparent;color:rgba(196,181,232,.4);letter-spacing:.06em;transition:all .15s}
+.vl-btn:hover{border-color:rgba(196,181,232,.4);color:rgba(196,181,232,.8)}
+.vl-btn.on{background:rgba(45,106,191,.3);border-color:rgba(45,106,191,.7);color:#93c5fd;font-weight:700}
+.vl-sep{color:rgba(196,181,232,.2);font-size:10px;margin:0 2px}
+.vl-lbl{font-family:"Space Mono",monospace;font-size:9px;color:rgba(196,181,232,.3);margin-right:4px;letter-spacing:.06em}
+
 #vitems-inner{display:flex;flex-direction:column;will-change:transform}
 #vitems-inner.paused{animation-play-state:paused!important}
 
@@ -4462,6 +4471,14 @@ em,.hero-em{
     <button class="vf-btn" data-cat="fr" onclick="vFilter(this,'fr')">France</button>
     <button class="vf-btn" data-cat="ai" onclick="vFilter(this,'ai')">Mistral / IA</button>
   </div>
+  <div id="vlang-toggle">
+    <span class="vl-lbl">LANGUE :</span>
+    <button class="vl-btn on" data-lang="all" onclick="vLang(this,'all')">ALL</button>
+    <span class="vl-sep">|</span>
+    <button class="vl-btn" data-lang="fr" onclick="vLang(this,'fr')">🇫🇷 FR</button>
+    <span class="vl-sep">|</span>
+    <button class="vl-btn" data-lang="en" onclick="vLang(this,'en')">🇬🇧 EN</button>
+  </div>
   <div id="vloading"><div class="vspinner"></div>Chargement des actualités…</div>
   <div id="vitems"></div>
   <div id="vstatus">
@@ -4674,6 +4691,7 @@ function ftNlSubmit(e){
 
   var V_OPEN = false;
   var V_CAT  = "all";
+  var V_LANG = "all";   // "all" | "fr" | "en"
   var V_ITEMS = [];
   var V_INTERVAL = null;
   var V_LOADING = false;
@@ -4722,6 +4740,14 @@ function ftNlSubmit(e){
     vRender();
   }
   window.vFilter = vFilter;
+
+  function vLang(btn, lang){
+    document.querySelectorAll(".vl-btn").forEach(function(b){b.classList.remove("on");});
+    btn.classList.add("on");
+    V_LANG = lang;
+    vRender();
+  }
+  window.vLang = vLang;
 
   function vRefresh(){
     V_ITEMS = [];
@@ -4797,7 +4823,11 @@ function ftNlSubmit(e){
   function vRender(){
     var container = document.getElementById("vitems");
     if(!container) return;
-    var list = V_CAT === "all" ? V_ITEMS : V_ITEMS.filter(function(i){ return i.cat === V_CAT; });
+    var list = V_ITEMS.filter(function(i){
+      var catOk  = (V_CAT  === "all") || (i.cat  === V_CAT);
+      var langOk = (V_LANG === "all") || (i.lang === V_LANG);
+      return catOk && langOk;
+    });
     if(!list.length){
       vStopScroll();
       container.innerHTML = "<div style=\"padding:32px;text-align:center;color:rgba(196,181,232,.4);font-size:13px;\">Aucune actualité dans cette catégorie.<br><small>Essayez \"Tout\"</small></div>";
