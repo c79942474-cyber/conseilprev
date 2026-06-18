@@ -628,6 +628,94 @@ textarea.form-el{min-height:86px;resize:vertical}
 .sim-reset-btn:hover{border-color:var(--accent);color:var(--accent)}
 @media(max-width:700px){.sim-checkbox-group{grid-template-columns:1fr}.sim-sanctions-box{grid-template-columns:1fr}}
 
+
+/* ══ ONGLET RÉGLEMENTATIONS — TABS ══ */
+.regs-tabbar{display:flex;gap:0;border-bottom:2px solid var(--rule);margin-bottom:28px}
+.regs-tab{font-size:11px;font-family:var(--mono);letter-spacing:.07em;padding:10px 20px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;text-transform:uppercase;white-space:nowrap}
+.regs-tab:hover{color:var(--ink)}
+.regs-tab.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+.regs-tabpanel{display:none}.regs-tabpanel.on{display:block}
+
+/* ── Textes réglementaires ── */
+.reg-doc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px}
+.reg-doc-card{background:var(--white);border:1px solid var(--rule);border-radius:4px;padding:18px 20px;cursor:pointer;transition:border-color .15s}
+.reg-doc-card:hover{border-color:var(--accent)}
+.reg-doc-badge{font-size:9px;font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:2px;margin-bottom:10px;display:inline-block}
+.reg-doc-title{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;line-height:1.3}
+.reg-doc-ref{font-size:10px;font-family:var(--mono);color:var(--muted2);margin-bottom:8px}
+.reg-doc-desc{font-size:11px;color:var(--muted);line-height:1.6}
+.reg-doc-footer{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:10px;border-top:1px solid var(--rule)}
+.reg-doc-sanction{font-size:10px;font-family:var(--mono);color:var(--accent);font-weight:600}
+.reg-doc-link{font-size:9px;font-family:var(--mono);color:var(--blue);text-decoration:none}
+.reg-doc-link:hover{text-decoration:underline}
+
+/* ── Audit IA Act ── */
+.audit-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding:18px 22px;background:var(--white);border:1px solid var(--rule);border-radius:4px}
+.audit-kpi-row{display:flex;gap:12px;margin-bottom:24px}
+.audit-kpi{flex:1;background:var(--white);border:1px solid var(--rule);border-radius:4px;padding:14px 16px;text-align:center}
+.audit-kpi-val{font-family:var(--serif);font-size:28px;color:var(--ink);line-height:1}
+.audit-kpi-lbl{font-size:9px;font-family:var(--mono);color:var(--muted2);letter-spacing:.06em;margin-top:4px;text-transform:uppercase}
+.audit-section{margin-bottom:24px}
+.audit-section-head{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--bg);border-radius:3px;cursor:pointer;user-select:none}
+.audit-section-title{font-size:13px;font-weight:600;color:var(--ink);flex:1}
+.audit-section-art{font-size:9px;font-family:var(--mono);color:var(--accent);background:rgba(184,50,34,.08);padding:2px 7px;border-radius:2px}
+.audit-section-score{font-family:var(--mono);font-size:11px;color:var(--muted2);margin-left:auto}
+.audit-section-body{padding:4px 0 8px}
+.audit-item{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;border-bottom:1px solid var(--rule);transition:background .1s}
+.audit-item:last-child{border-bottom:none}
+.audit-item:hover{background:var(--bg)}
+.audit-check{width:18px;height:18px;border:2px solid var(--rule2);border-radius:3px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;transition:all .15s;margin-top:1px}
+.audit-check:hover{border-color:var(--accent)}
+.audit-check.done{background:var(--green);border-color:var(--green);color:#fff}
+.audit-check.partial{background:var(--orange);border-color:var(--orange);color:#fff}
+.audit-item-body{flex:1}
+.audit-item-title{font-size:12px;font-weight:500;color:var(--ink);margin-bottom:2px}
+.audit-item-desc{font-size:11px;color:var(--muted);line-height:1.55}
+.audit-item-art{font-size:9px;font-family:var(--mono);color:var(--blue);margin-top:4px}
+.audit-item-prio{font-size:9px;font-family:var(--mono);padding:1px 6px;border-radius:2px;flex-shrink:0;margin-top:2px}
+.audit-item-prio.p1{background:rgba(184,50,34,.1);color:var(--accent)}
+.audit-item-prio.p2{background:rgba(196,124,26,.1);color:var(--orange)}
+.audit-item-prio.p3{background:rgba(45,122,71,.1);color:var(--green)}
+.audit-progress-bar{height:6px;background:var(--bg2);border-radius:3px;overflow:hidden;margin-top:6px}
+.audit-progress-fill{height:100%;border-radius:3px;background:var(--green);transition:width .4s}
+.audit-export-btn{font-size:11px;font-family:var(--mono);background:var(--ink);color:#fff;border:none;border-radius:3px;padding:8px 18px;cursor:pointer;letter-spacing:.05em}
+.audit-export-btn:hover{background:var(--accent)}
+
+/* ── Obligations article par article ── */
+.art-tabs-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+.art-filter-btn{font-size:10px;font-family:var(--mono);padding:5px 12px;border-radius:20px;border:1px solid var(--rule2);background:var(--white);color:var(--muted);cursor:pointer;transition:all .15s;letter-spacing:.04em}
+.art-filter-btn:hover{border-color:var(--accent);color:var(--accent)}
+.art-filter-btn.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.art-chapter{margin-bottom:24px}
+.art-chapter-head{font-size:9px;font-family:var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted2);padding:8px 0;border-bottom:2px solid var(--rule);margin-bottom:12px}
+.art-card{background:var(--white);border:1px solid var(--rule);border-radius:4px;margin-bottom:8px;overflow:hidden}
+.art-card-head{display:flex;align-items:center;gap:14px;padding:14px 18px;cursor:pointer;transition:background .12s}
+.art-card-head:hover{background:var(--bg)}
+.art-card-num{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--accent);min-width:54px}
+.art-card-title{font-size:13px;font-weight:500;color:var(--ink);flex:1}
+.art-card-chips{display:flex;gap:5px;flex-shrink:0}
+.art-card-chevron{font-size:12px;color:var(--muted2);transition:transform .2s;flex-shrink:0}
+.art-card.open .art-card-chevron{transform:rotate(180deg)}
+.art-card-body{display:none;padding:0 18px 16px;border-top:1px solid var(--rule)}
+.art-card.open .art-card-body{display:block}
+.art-card-status{font-size:9px;font-family:var(--mono);padding:2px 7px;border-radius:2px;letter-spacing:.06em}
+.art-card-status.actif{background:rgba(45,122,71,.12);color:var(--green)}
+.art-card-status.applicable{background:rgba(196,124,26,.12);color:var(--orange)}
+.art-card-status.futur{background:var(--bg2);color:var(--muted2)}
+.art-body-section{margin-top:14px}
+.art-body-section-title{font-size:9px;font-family:var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);margin-bottom:8px}
+.art-body-text{font-size:12px;color:var(--ink2);line-height:1.7}
+.art-body-list{list-style:none;padding:0;margin:0}
+.art-body-li{display:flex;gap:10px;font-size:12px;color:var(--ink2);padding:6px 0;border-bottom:1px solid var(--rule);line-height:1.5}
+.art-body-li:last-child{border-bottom:none}
+.art-body-li-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:6px}
+.art-sanction-box{display:flex;gap:12px;margin-top:14px}
+.art-sanction-pill{font-size:10px;font-family:var(--mono);background:rgba(184,50,34,.08);border:1px solid rgba(184,50,34,.2);color:var(--accent);padding:4px 12px;border-radius:3px}
+.art-who{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.art-who-tag{font-size:9px;font-family:var(--mono);background:rgba(28,90,138,.08);border:1px solid rgba(28,90,138,.15);color:var(--blue);padding:2px 8px;border-radius:2px}
+.art-official-link{font-size:10px;font-family:var(--mono);color:var(--blue);text-decoration:none;display:inline-flex;align-items:center;gap:4px;margin-top:10px}
+.art-official-link:hover{text-decoration:underline}
+
 </style>
 </head>
 <body>
@@ -1366,7 +1454,56 @@ textarea.form-el{min-height:86px;resize:vertical}
 </div>
 
 <!-- RÉGLEMENTATIONS -->
-<div class="page" id="p-regs"><span class="eyebrow">Réglementations</span><h1 class="page-h">Base documentaire</h1><p class="page-lead">Textes de référence, guides d'application et jurisprudence IA classifiés par régime.</p><div class="alert-list" id="regs-list"></div></div>
+<div class="page" id="p-regs">
+  <span class="eyebrow">Conformité · EU AI Act</span>
+  <h1 class="page-h">Réglementations & <em>Audit IA</em></h1>
+  <p class="page-lead">Textes officiels, audit structuré et obligations article par article — Règlement (UE) 2024/1689.</p>
+
+  <!-- Onglets -->
+  <div class="regs-tabbar">
+    <div class="regs-tab on" onclick="regsTab('textes',this)">Textes réglementaires</div>
+    <div class="regs-tab" onclick="regsTab('audit',this)">Audit IA Act</div>
+    <div class="regs-tab" onclick="regsTab('articles',this)">Obligations article par article</div>
+  </div>
+
+  <!-- ══ ONGLET 1 : Textes réglementaires ══ -->
+  <div class="regs-tabpanel on" id="regs-panel-textes">
+    <div class="reg-doc-grid" id="regs-list"></div>
+    <div class="alert-list" id="regs-list-extra"></div>
+  </div>
+
+  <!-- ══ ONGLET 2 : Audit IA Act ══ -->
+  <div class="regs-tabpanel" id="regs-panel-audit">
+    <div class="audit-header">
+      <div>
+        <div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px">Audit de conformité EU AI Act</div>
+        <div style="font-size:11px;color:var(--muted)">Règlement (UE) 2024/1689 — Méthodologie CONSEILPREV · 32 points de contrôle</div>
+      </div>
+      <button class="audit-export-btn" onclick="auditExportPDF()">↓ Rapport PDF</button>
+    </div>
+    <div class="audit-kpi-row">
+      <div class="audit-kpi"><div class="audit-kpi-val" id="audit-score-pct">0%</div><div class="audit-kpi-lbl">Score global</div></div>
+      <div class="audit-kpi"><div class="audit-kpi-val" style="color:var(--green)" id="audit-done-count">0</div><div class="audit-kpi-lbl">Conformes</div></div>
+      <div class="audit-kpi"><div class="audit-kpi-val" style="color:var(--orange)" id="audit-partial-count">0</div><div class="audit-kpi-lbl">En cours</div></div>
+      <div class="audit-kpi"><div class="audit-kpi-val" style="color:var(--accent)" id="audit-todo-count">32</div><div class="audit-kpi-lbl">À réaliser</div></div>
+    </div>
+    <div class="audit-progress-bar" style="margin-bottom:24px"><div class="audit-progress-fill" id="audit-progress-fill" style="width:0%"></div></div>
+    <div id="audit-sections"></div>
+  </div>
+
+  <!-- ══ ONGLET 3 : Obligations article par article ══ -->
+  <div class="regs-tabpanel" id="regs-panel-articles">
+    <div class="art-tabs-bar">
+      <div class="art-filter-btn on" data-who="all" onclick="artFilter('all',this)">Tous</div>
+      <div class="art-filter-btn" data-who="fournisseur" onclick="artFilter('fournisseur',this)">Fournisseurs</div>
+      <div class="art-filter-btn" data-who="deployeur" onclick="artFilter('deployeur',this)">Déployeurs</div>
+      <div class="art-filter-btn" data-who="gpai" onclick="artFilter('gpai',this)">GPAI</div>
+      <div class="art-filter-btn" data-who="actif" onclick="artFilter('actif',this)">En vigueur</div>
+      <div class="art-filter-btn" data-who="sanction" onclick="artFilter('sanction',this)">Avec sanctions</div>
+    </div>
+    <div id="art-chapters"></div>
+  </div>
+</div>
 
 <!-- ÉVALUATIONS -->
 <div class="page" id="p-evals"><span class="eyebrow">Mes évaluations</span><h1 class="page-h">Historique des analyses</h1><p class="page-lead">Vos évaluations de conformité sauvegardées avec score et recommandations.</p><div class="tbl-wrap"><div id="evals-rows"></div></div></div>
@@ -3600,10 +3737,464 @@ geoRenderTL();
 
 })();
 
+/* ══════════════════════════════════════════════════════
+   RÉGLEMENTATIONS — Tabs + Audit + Articles AI Act
+   Règlement (UE) 2024/1689 du 13 juin 2024
+   ══════════════════════════════════════════════════════ */
+
+/* ── Textes réglementaires ── */
 (function(){
-  var b=document.getElementById('regs-list'); if(!b) return;
-  [['🇪🇺','EU AI Act','Règlement 2024/1689','Août 2026','chip-r','Actif — Critique','Cadre horizontal, classification par niveaux de risque, pénalités jusqu\'à 7% CA.'],['🔒','NIS2','Directive 2022/2555','Oct. 2024','chip-g','Actif','Sécurité des réseaux et systèmes d\'information incluant les systèmes IA critiques.'],['📋','RGPD','Règlement 2016/679','Mai 2018','chip-g','Actif','Protection des données personnelles — Art. 22 sur les décisions automatisées.'],['💰','DORA','Règlement 2022/2554','Jan. 2025','chip-o','En préparation','Résilience opérationnelle numérique du secteur financier.'],['🌐','CRA','Cyber Resilience Act 2024','2027','chip-n','Futur','Exigences cybersécurité pour produits connectés intégrant de l\'IA.']].forEach(function(r){ b.innerHTML+='<div class="alert-item"><div style="font-size:20px;width:28px;text-align:center;flex-shrink:0">'+r[0]+'</div><div class="alert-body"><div class="alert-t">'+r[1]+' <span class="chip '+r[4]+'" style="margin-left:6px;vertical-align:middle">'+r[5]+'</span></div><div class="alert-s">'+r[2]+' · Depuis : '+r[3]+'</div><div style="font-size:11px;color:var(--muted);margin-top:4px;line-height:1.6">'+r[6]+'</div></div><div class="alert-date" style="color:var(--accent);font-size:13px">→</div></div>'; });
+  var DOCS = [
+    {
+      badge:'chip-r', badgeTxt:'EN VIGUEUR', title:'EU AI Act',
+      ref:'Règlement (UE) 2024/1689 — JO L du 12.7.2024',
+      desc:'Premier cadre horizontal mondial sur l\'IA. Classification par risque, obligations haut risque, pratiques interdites, GPAI, sanctions. Application progressive 2024-2027.',
+      sanction:'35 M€ ou 7% CA mondial',
+      url:'https://eur-lex.europa.eu/eli/reg/2024/1689/oj'
+    },
+    {
+      badge:'chip-r', badgeTxt:'EN VIGUEUR', title:'RGPD',
+      ref:'Règlement (UE) 2016/679 — JOUE L 119',
+      desc:'Règlement général protection données. Art. 22 : décisions entièrement automatisées. Art. 35 : AIPD obligatoire pour traitements IA à risque élevé.',
+      sanction:'20 M€ ou 4% CA mondial',
+      url:'https://eur-lex.europa.eu/eli/reg/2016/679/oj'
+    },
+    {
+      badge:'chip-r', badgeTxt:'EN VIGUEUR', title:'NIS2',
+      ref:'Directive (UE) 2022/2555 — Réseau & SI',
+      desc:'Cybersécurité des entités essentielles et importantes. Applicable aux systèmes IA dans les infrastructures critiques. Obligations de déclaration d\'incidents.',
+      sanction:'10 M€ ou 2% CA mondial',
+      url:'https://eur-lex.europa.eu/eli/dir/2022/2555/oj'
+    },
+    {
+      badge:'chip-r', badgeTxt:'EN VIGUEUR', title:'DORA',
+      ref:'Règlement (UE) 2022/2554 — Résilience numérique',
+      desc:'Résilience opérationnelle numérique du secteur financier. Couvre les systèmes IA utilisés par banques, assureurs, sociétés d\'investissement.',
+      sanction:'Sanctions administratives par autorité nationale',
+      url:'https://eur-lex.europa.eu/eli/reg/2022/2554/oj'
+    },
+    {
+      badge:'chip-o', badgeTxt:'GUIDELINES', title:'Lignes directrices Art. 5',
+      ref:'Commission européenne — 4 février 2025',
+      desc:'Interprétation officielle des 8 pratiques IA interdites (Art. 5). Conditions cumulatives, cas d\'usage pratiques, exemples sectoriels.',
+      sanction:'Référence pour l\'application des sanctions Art. 5',
+      url:'https://digital-strategy.ec.europa.eu/en/library/commission-publishes-guidelines-prohibited-artificial-intelligence-ai-practices-defined-ai-act'
+    },
+    {
+      badge:'chip-o', badgeTxt:'STANDARD', title:'ISO/IEC 42001:2023',
+      ref:'Système de management de l\'IA (SMIA)',
+      desc:'Standard international pour les systèmes de management de l\'IA. Aligné sur l\'AI Act (Art. 17). Outil clé pour démontrer la conformité aux exigences de gouvernance.',
+      sanction:'Référence pour conformité Art. 17 AI Act',
+      url:'https://www.iso.org/standard/81230.html'
+    }
+  ];
+
+  var g = document.getElementById('regs-list');
+  if(!g) return;
+  g.innerHTML = DOCS.map(function(d){
+    return '<div class="reg-doc-card" onclick="window.open(\''+d.url+'\',\'_blank\')">'
+      +'<span class="reg-doc-badge '+d.badge+'">'+d.badgeTxt+'</span>'
+      +'<div class="reg-doc-title">'+d.title+'</div>'
+      +'<div class="reg-doc-ref">'+d.ref+'</div>'
+      +'<div class="reg-doc-desc">'+d.desc+'</div>'
+      +'<div class="reg-doc-footer">'
+      +'<span class="reg-doc-sanction">'+d.sanction+'</span>'
+      +'<a class="reg-doc-link" href="'+d.url+'" target="_blank" rel="noopener">Texte officiel ↗</a>'
+      +'</div></div>';
+  }).join('');
 })();
+
+/* ── Navigation onglets ── */
+window.regsTab = function(tab, el){
+  document.querySelectorAll('.regs-tab').forEach(function(t){ t.classList.remove('on'); });
+  document.querySelectorAll('.regs-tabpanel').forEach(function(p){ p.classList.remove('on'); });
+  el.classList.add('on');
+  var panel = document.getElementById('regs-panel-'+tab);
+  if(panel) panel.classList.add('on');
+  if(tab === 'audit') auditInit();
+  if(tab === 'articles') artInit();
+};
+
+/* ══ ONGLET 2 : AUDIT IA ACT ══ */
+var AUDIT_STATE = {};
+
+var AUDIT_SECTIONS = [
+  {
+    id:'art5', title:'Pratiques interdites', art:'Art. 5', color:'var(--accent)',
+    items:[
+      {id:'a5_1', title:'Inventaire des pratiques potentiellement interdites', desc:'Vérifier qu\'aucun système n\'a recours à des techniques subliminales, ne manipule les vulnérabilités ou ne génère du scoring social.', art:'Art. 5(1)(a)(b)(c)', prio:'p1'},
+      {id:'a5_2', title:'Absence d\'identification biométrique à distance non autorisée', desc:'S\'assurer que toute identification biométrique en temps réel dans des espaces publics dispose d\'une autorisation légale explicite (forces de l\'ordre, Art. 5(1)(h)).', art:'Art. 5(1)(h)', prio:'p1'},
+      {id:'a5_3', title:'Vérification du périmètre émotionnel et de catégorisation', desc:'Confirmer l\'absence de systèmes de reconnaissance émotionnelle au travail/éducation ou de catégorisation biométrique de données sensibles non autorisés.', art:'Art. 5(1)(f)(g)', prio:'p1'},
+      {id:'a5_4', title:'Formation littératie IA (Art. 4)', desc:'Formation adéquate des équipes manipulant ou supervisant des systèmes IA. Documenté et régulièrement mis à jour.', art:'Art. 4', prio:'p2'},
+    ]
+  },
+  {
+    id:'art6', title:'Classification haut risque', art:'Art. 6 + Annexe III', color:'var(--accent)',
+    items:[
+      {id:'a6_1', title:'Cartographie complète des systèmes IA', desc:'Inventaire de tous les systèmes IA déployés ou en développement, avec identification de leur type, finalité et secteur d\'application.', art:'Art. 6, Art. 51', prio:'p1'},
+      {id:'a6_2', title:'Classification selon l\'Annexe III (8 domaines)', desc:'Évaluation formelle de chaque système contre les 8 domaines à haut risque de l\'Annexe III : biométrie, infrastructures critiques, éducation, emploi, services essentiels, application de la loi, migration, démocratie.', art:'Art. 6(2), Annexe III', prio:'p1'},
+      {id:'a6_3', title:'Documentation de la décision de classification', desc:'Pour les systèmes non classés haut risque issus de domaines Annexe III, documenter formellement l\'évaluation avant mise sur le marché (Art. 6(3)).', art:'Art. 6(3)', prio:'p2'},
+      {id:'a6_4', title:'Procédure de reclassification continue', desc:'Mécanisme de surveillance permettant de reclassifier un système si son usage ou ses capacités évoluent.', art:'Art. 6, Art. 9', prio:'p2'},
+    ]
+  },
+  {
+    id:'art9_10', title:'Gestion des risques & Gouvernance des données', art:'Art. 9-10', color:'var(--orange)',
+    items:[
+      {id:'a9_1', title:'Système de gestion des risques documenté et opérationnel', desc:'Processus itératif continu : identification des risques connus et prévisibles, estimation, évaluation, mesures de gestion. Planifié sur tout le cycle de vie.', art:'Art. 9(1)(2)', prio:'p1'},
+      {id:'a9_2', title:'Tests avant mise sur le marché', desc:'Tests des systèmes haut risque dans des conditions réelles avant déploiement pour identifier et corriger les risques.', art:'Art. 9(5)(6)', prio:'p1'},
+      {id:'a9_3', title:'Gouvernance des données d\'entraînement', desc:'Pratiques de gestion des données : choix de conception, collecte, origine, objectifs, nature, pertinence, exactitude, complétude, biais potentiels.', art:'Art. 10(2)', prio:'p1'},
+      {id:'a9_4', title:'Qualité des données de validation et de test', desc:'Jeux de validation et test satisfaisant aux critères de qualité : représentativité, absence de biais connus, adéquation à la finalité.', art:'Art. 10(3)(4)', prio:'p1'},
+      {id:'a9_5', title:'Données personnelles dans l\'entraînement', desc:'Base légale pour l\'utilisation de données personnelles en entraînement. Mesures de protection des données dès la conception.', art:'Art. 10(5), RGPD', prio:'p2'},
+    ]
+  },
+  {
+    id:'art11_12', title:'Documentation technique & Journalisation', art:'Art. 11-12', color:'var(--orange)',
+    items:[
+      {id:'a11_1', title:'Dossier technique complet (Annexe IV)', desc:'Documentation élaborée avant mise sur le marché : description générale, architecture, données utilisées, performances, méthode d\'entraînement, fiches tests.', art:'Art. 11, Annexe IV', prio:'p1'},
+      {id:'a11_2', title:'Mise à jour continue du dossier technique', desc:'Procédure de mise à jour du dossier lors de toute modification substantielle du système. Identification des versions.', art:'Art. 11(2)', prio:'p2'},
+      {id:'a12_1', title:'Journalisation automatique des décisions', desc:'Capacité d\'enregistrement automatique des événements : horodatage, identifiants, données d\'entrée, décisions de sortie, identité des opérateurs ayant validé.', art:'Art. 12(1)(2)', prio:'p1'},
+      {id:'a12_2', title:'Conservation des journaux', desc:'Journaux conservés au minimum pour la durée prescrite et accessibles aux autorités compétentes sur demande.', art:'Art. 12(3)', prio:'p2'},
+    ]
+  },
+  {
+    id:'art13_14', title:'Transparence & Supervision humaine', art:'Art. 13-14', color:'var(--orange)',
+    items:[
+      {id:'a13_1', title:'Notice d\'utilisation conforme Art. 13', desc:'Documentation claire pour les déployeurs : identité du fournisseur, capacités et limites, performances attendues, données d\'entrée requises, risques résiduels connus.', art:'Art. 13(3)', prio:'p1'},
+      {id:'a13_2', title:'Transparence envers les utilisateurs finaux (Art. 50)', desc:'Information claire que l\'utilisateur interagit avec un système IA (chatbot, agent). Marquage des contenus synthétiques (watermarking machine-readable).', art:'Art. 50(1)(2)', prio:'p1'},
+      {id:'a14_1', title:'Mécanismes de supervision humaine fonctionnels', desc:'Interfaces homme-machine permettant la compréhension des sorties, l\'interruption ou la correction du système par des opérateurs qualifiés.', art:'Art. 14(1)(3)', prio:'p1'},
+      {id:'a14_2', title:'Désignation et formation des superviseurs', desc:'Personnes responsables de la supervision formellement désignées, formées aux capacités et limites du système, aptes à détecter les anomalies.', art:'Art. 14(4)', prio:'p2'},
+    ]
+  },
+  {
+    id:'art15_17', title:'Robustesse, Exactitude & Qualité', art:'Art. 15-17', color:'var(--blue)',
+    items:[
+      {id:'a15_1', title:'Niveaux d\'exactitude définis et mesurés', desc:'Métriques de performance définies, mesurées avant déploiement et surveillées en continu. Documentation des variations acceptables.', art:'Art. 15(1)(3)', prio:'p1'},
+      {id:'a15_2', title:'Robustesse aux erreurs et aux manipulations', desc:'Tests de robustesse face aux erreurs, perturbations, attaques adversariales. Mesures de résilience documentées.', art:'Art. 15(4)(5)', prio:'p2'},
+      {id:'a17_1', title:'Système de gestion de la qualité (Art. 17)', desc:'SGQ documenté : stratégie réglementaire, techniques de conception, vérification, surveillance post-commercialisation, gestion des modifications, incidents.', art:'Art. 17', prio:'p1'},
+      {id:'a17_2', title:'Surveillance post-commercialisation', desc:'Plan de surveillance continue des performances et de la conformité après déploiement. Collecte et analyse des retours utilisateurs.', art:'Art. 17(1)(k), Art. 72', prio:'p2'},
+    ]
+  },
+  {
+    id:'art49_51', title:'Évaluation de conformité & Enregistrement', art:'Art. 43-49, 51', color:'var(--blue)',
+    items:[
+      {id:'a43_1', title:'Évaluation de conformité réalisée', desc:'Procédure d\'évaluation de conformité complète avant mise sur le marché : autoévaluation ou évaluation par organisme tiers selon la catégorie de système.', art:'Art. 43, 44', prio:'p1'},
+      {id:'a47_1', title:'Déclaration UE de conformité', desc:'Déclaration écrite signée par le fournisseur confirmant la conformité du système à l\'AI Act et aux autres règlements applicables.', art:'Art. 47', prio:'p1'},
+      {id:'a48_1', title:'Marquage CE apposé', desc:'Apposition du marquage CE visible sur le système ou l\'emballage après évaluation de conformité concluante.', art:'Art. 48', prio:'p2'},
+      {id:'a51_1', title:'Enregistrement dans la base de données EU', desc:'Enregistrement obligatoire dans la base de données EU AI Office avant mise sur le marché pour les systèmes haut risque.', art:'Art. 71, Art. 49', prio:'p1'},
+    ]
+  },
+  {
+    id:'gpai', title:'Modèles GPAI', art:'Art. 51-55', color:'var(--muted)',
+    items:[
+      {id:'g53_1', title:'Documentation GPAI (Art. 53)', desc:'Pour les fournisseurs GPAI : documentation technique, résumé du contenu d\'entraînement, politique de droits d\'auteur (Art. 53(1)(a)), résumé publiquement disponible.', art:'Art. 53(1)', prio:'p1'},
+      {id:'g53_2', title:'Politique de droits d\'auteur et droit d\'opposition', desc:'Respecter les réservations de droits des détenteurs de droits d\'auteur (Art. 53(1)(c)). Mécanisme d\'opt-out conforme.', art:'Art. 53(1)(c)', prio:'p1'},
+      {id:'g55_1', title:'Évaluation adversariale (modèles systémiques)', desc:'Pour les modèles >10^25 FLOPs : évaluation adversariale (red-teaming), évaluation des risques systémiques, rapport à la Commission.', art:'Art. 55(1)(a)(b)', prio:'p1'},
+      {id:'g55_2', title:'Signalement des incidents (GPAI systémiques)', desc:'Déclaration sans délai des incidents graves ou des actions correctives à l\'AI Office de la Commission.', art:'Art. 55(1)(d)', prio:'p1'},
+    ]
+  }
+];
+
+var auditInitDone = false;
+function auditInit(){
+  if(auditInitDone) return;
+  auditInitDone = true;
+  var container = document.getElementById('audit-sections');
+  if(!container) return;
+
+  var html = AUDIT_SECTIONS.map(function(sec){
+    var items = sec.items.map(function(item){
+      var state = AUDIT_STATE[item.id] || 'none';
+      var checkCls = state === 'done' ? 'done' : state === 'partial' ? 'partial' : '';
+      var checkTxt = state === 'done' ? '✓' : state === 'partial' ? '~' : '';
+      return '<div class="audit-item" id="aitem-'+item.id+'">'
+        +'<div class="audit-check '+checkCls+'" id="check-'+item.id+'" onclick="auditToggle(\''+item.id+'\')">'+checkTxt+'</div>'
+        +'<div class="audit-item-body">'
+        +'<div class="audit-item-title">'+item.title+'</div>'
+        +'<div class="audit-item-desc">'+item.desc+'</div>'
+        +'<div class="audit-item-art">'+item.art+'</div>'
+        +'</div>'
+        +'<span class="audit-item-prio '+item.prio+'">'+item.prio.toUpperCase()+'</span>'
+        +'</div>';
+    }).join('');
+
+    return '<div class="audit-section">'
+      +'<div class="audit-section-head" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display===\'none\'?\'block\':\'none\'">'
+      +'<div class="audit-section-title">'+sec.title+'</div>'
+      +'<span class="audit-section-art">'+sec.art+'</span>'
+      +'<span class="audit-section-score" id="sec-score-'+sec.id+'">0/'+sec.items.length+'</span>'
+      +'</div>'
+      +'<div class="audit-section-body">'+items+'</div>'
+      +'</div>';
+  }).join('');
+
+  container.innerHTML = html;
+  auditUpdateScore();
+}
+
+window.auditToggle = function(id){
+  var cur = AUDIT_STATE[id] || 'none';
+  var next = cur === 'none' ? 'done' : cur === 'done' ? 'partial' : 'none';
+  AUDIT_STATE[id] = next;
+  var check = document.getElementById('check-'+id);
+  if(check){
+    check.className = 'audit-check' + (next !== 'none' ? ' '+next : '');
+    check.textContent = next === 'done' ? '✓' : next === 'partial' ? '~' : '';
+  }
+  auditUpdateScore();
+};
+
+function auditUpdateScore(){
+  var total = 0, done = 0, partial = 0;
+  AUDIT_SECTIONS.forEach(function(sec){
+    var secDone = 0;
+    sec.items.forEach(function(item){
+      total++;
+      var st = AUDIT_STATE[item.id] || 'none';
+      if(st === 'done'){ done++; secDone++; }
+      else if(st === 'partial'){ partial++; secDone += 0.5; }
+    });
+    var el = document.getElementById('sec-score-'+sec.id);
+    if(el) el.textContent = Math.round(secDone)+'/'+sec.items.length;
+  });
+  var todo = total - done - partial;
+  var pct = Math.round((done + partial * 0.5) / total * 100);
+  var pctEl = document.getElementById('audit-score-pct');
+  var doneEl = document.getElementById('audit-done-count');
+  var partEl = document.getElementById('audit-partial-count');
+  var todoEl = document.getElementById('audit-todo-count');
+  var fillEl = document.getElementById('audit-progress-fill');
+  if(pctEl) pctEl.textContent = pct+'%';
+  if(doneEl) doneEl.textContent = done;
+  if(partEl) partEl.textContent = partial;
+  if(todoEl) todoEl.textContent = todo;
+  if(fillEl) fillEl.style.width = pct+'%';
+}
+
+window.auditExportPDF = function(){
+  var w = window.open('','_blank');
+  if(!w){ alert('Autorisez les pop-ups pour générer le rapport.'); return; }
+  var today = new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+  var done=0,partial=0,total=0;
+  AUDIT_SECTIONS.forEach(function(s){ s.items.forEach(function(i){ total++; var st=AUDIT_STATE[i.id]||'none'; if(st==='done')done++; else if(st==='partial')partial++; }); });
+  var pct = Math.round((done+partial*0.5)/total*100);
+  var sectHtml = AUDIT_SECTIONS.map(function(sec){
+    var rows = sec.items.map(function(item){
+      var st = AUDIT_STATE[item.id] || 'none';
+      var stLabel = {done:'Conforme',partial:'En cours',none:'A realiser'}[st];
+      var stColor = {done:'#2D7A47',partial:'#C47C1A',none:'#B83222'}[st];
+      return '<tr><td style="padding:8px;font-size:11px;border-bottom:1px solid #eee">'+item.title+'</td>'
+        +'<td style="padding:8px;font-size:10px;font-family:monospace;color:#666;border-bottom:1px solid #eee">'+item.art+'</td>'
+        +'<td style="padding:8px;font-size:10px;font-family:monospace;color:'+stColor+';border-bottom:1px solid #eee;font-weight:600">'+stLabel+'</td></tr>';
+    }).join('');
+    return '<h3 style="font-size:14px;color:#B83222;margin:20px 0 8px">'+sec.title+' — '+sec.art+'</h3>'
+      +'<table style="width:100%;border-collapse:collapse"><tr style="background:#f5f5f5"><th style="padding:8px;font-size:10px;text-align:left">Controle</th><th style="padding:8px;font-size:10px;text-align:left">Article</th><th style="padding:8px;font-size:10px;text-align:left">Statut</th></tr>'+rows+'</table>';
+  }).join('');
+  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Audit IA Act - CONSEILPREV</title>'
+    +'<style>@page{margin:2cm}body{font-family:Georgia,serif;color:#1C1C1C;max-width:800px;margin:0 auto;padding:20px}'
+    +'h1{font-size:24px;border-bottom:3px solid #B83222;padding-bottom:10px;margin-bottom:4px}'
+    +'.sub{color:#666;font-size:12px;margin-bottom:20px;font-family:Arial}'
+    +'.kpi-row{display:flex;gap:20px;margin:20px 0;padding:16px;background:#f8f7f5;border-radius:4px}'
+    +'.kpi{text-align:center}.kpi-v{font-size:28px;font-family:Georgia}.kpi-l{font-size:10px;color:#999;font-family:Arial}'
+    +'</style></head><body>'
+    +'<h1>Rapport d\'audit AI Act</h1>'
+    +'<div class="sub">Règlement (UE) 2024/1689 · Généré le '+today+' · CONSEILPREV</div>'
+    +'<div class="kpi-row">'
+    +'<div class="kpi"><div class="kpi-v">'+pct+'%</div><div class="kpi-l">Score global</div></div>'
+    +'<div class="kpi"><div class="kpi-v" style="color:#2D7A47">'+done+'</div><div class="kpi-l">Conformes</div></div>'
+    +'<div class="kpi"><div class="kpi-v" style="color:#C47C1A">'+partial+'</div><div class="kpi-l">En cours</div></div>'
+    +'<div class="kpi"><div class="kpi-v" style="color:#B83222">'+(total-done-partial)+'</div><div class="kpi-l">A realiser</div></div>'
+    +'</div>'
+    + sectHtml
+    +'<p style="font-size:10px;color:#999;margin-top:30px;font-family:Arial;font-style:italic">Les scores sont auto-declares. Cette evaluation ne constitue pas un avis juridique. Pour un audit certifie, contactez christophe.cerf@outlook.com</p>'
+    +'<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>'
+    +'</body></html>';
+  w.document.write(html);
+  w.document.close();
+};
+
+/* ══ ONGLET 3 : ARTICLES ══ */
+var ARTICLES = [
+  { chapter:'CHAPITRE I — Dispositions générales', arts:[
+    { num:'Art. 1', title:'Objet', status:'actif', who:[], sanction:null,
+      texte:'Le présent règlement établit des règles harmonisées concernant la mise sur le marché, la mise en service et l\'utilisation de systèmes d\'IA dans l\'Union, dans le respect des droits fondamentaux, de la démocratie, de l\'état de droit et de la durabilité environnementale.',
+      obligations:[], url:'https://artificialintelligenceact.eu/article/1/' },
+    { num:'Art. 2', title:'Champ d\'application', status:'actif', who:['fournisseur','deployeur'], sanction:null,
+      texte:'S\'applique aux fournisseurs mettant sur le marché de l\'UE, aux déployeurs établis dans l\'UE, aux fournisseurs/déployeurs établis dans un pays tiers quand les sorties du système sont utilisées dans l\'UE.',
+      obligations:['Vérifier si votre système est dans le champ territorial de l\'AI Act','Pour les organisations hors UE : désigner un mandataire UE (Art. 22) si le système est utilisé dans l\'UE'],
+      url:'https://artificialintelligenceact.eu/article/2/' },
+    { num:'Art. 3', title:'Définitions', status:'actif', who:[], sanction:null,
+      texte:'Définit 65 termes clés. Système d\'IA : machine utilisant des techniques d\'apprentissage automatique, de raisonnement ou d\'apprentissage profond, produisant des sorties influençant des environnements réels.',
+      obligations:['Qualifier formellement votre système selon la définition Art. 3(1) avant classification'],
+      url:'https://artificialintelligenceact.eu/article/3/' },
+    { num:'Art. 4', title:'Littératie IA', status:'actif', who:['fournisseur','deployeur'], sanction:null,
+      texte:'Fournisseurs et déployeurs doivent veiller à la littératie IA de leur personnel et de toute autre personne les représentant qui opère ou utilise des systèmes d\'IA.',
+      obligations:['Évaluer le niveau de littératie IA des équipes','Mettre en place des formations adaptées aux rôles (développeurs, gestionnaires de risques, opérateurs)','Documenter les actions de formation'],
+      url:'https://artificialintelligenceact.eu/article/4/' },
+  ]},
+  { chapter:'CHAPITRE II — Pratiques interdites', arts:[
+    { num:'Art. 5', title:'Pratiques interdites en matière d\'IA', status:'actif', who:['fournisseur','deployeur'], sanction:'35 M€ ou 7% CA mondial',
+      texte:'Interdit 8 catégories de pratiques : (a) manipulation subliminale, (b) exploitation des vulnérabilités, (c) notation sociale par autorités publiques, (d) police prédictive par profilage individuel, (e) base de données faciales par scraping, (f) inférence émotionnelle au travail/éducation, (g) catégorisation biométrique données sensibles, (h) identification biométrique à distance en temps réel dans espaces publics (sauf exceptions strictes).',
+      obligations:['Auditer l\'ensemble du portefeuille IA contre les 8 interdictions','Supprimer ou refondre tout système relevant d\'une pratique interdite','Vérifier les dérogations légales applicables pour l\'identification biométrique'],
+      url:'https://artificialintelligenceact.eu/article/5/' },
+  ]},
+  { chapter:'CHAPITRE III — Systèmes IA à haut risque', arts:[
+    { num:'Art. 6', title:'Classification des systèmes à haut risque', status:'actif', who:['fournisseur'], sanction:'15 M€ ou 3% CA mondial',
+      texte:'Un système est haut risque si : (1) composant de sécurité d\'un produit soumis à évaluation de conformité tierce (Annexe I), ou (2) système autonome utilisé dans l\'un des 8 domaines de l\'Annexe III.',
+      obligations:['Évaluer chaque système contre l\'Annexe III (8 domaines)','Documenter la décision de classification avant mise sur le marché','Tenir à jour un registre des systèmes haut risque'],
+      url:'https://artificialintelligenceact.eu/article/6/' },
+    { num:'Art. 9', title:'Système de gestion des risques', status:'applicable', who:['fournisseur'], sanction:'15 M€ ou 3% CA mondial',
+      texte:'Processus itératif continu sur tout le cycle de vie : identification et analyse des risques connus et prévisibles, estimation et évaluation, mesures de gestion appropriées, tests résidus.',
+      obligations:['Établir et documenter un système de gestion des risques','Mettre en place des tests systématiques avant et après déploiement','Révision périodique du système de gestion des risques','Intégrer les signalements de la surveillance post-commercialisation'],
+      url:'https://artificialintelligenceact.eu/article/9/' },
+    { num:'Art. 10', title:'Données et gouvernance des données', status:'applicable', who:['fournisseur'], sanction:'15 M€ ou 3% CA mondial',
+      texte:'Jeux de données d\'entraînement, validation et test soumis à des pratiques de gouvernance appropriées : choix de conception, collecte et origine des données, procédures de préparation, examen des biais possibles.',
+      obligations:['Documenter l\'origine et les caractéristiques des données d\'entraînement','Évaluer et corriger les biais dans les données','Maintenir des jeux de validation et test représentatifs','Documenter les procédures de préparation des données'],
+      url:'https://artificialintelligenceact.eu/article/10/' },
+    { num:'Art. 11', title:'Documentation technique', status:'applicable', who:['fournisseur'], sanction:'15 M€ ou 3% CA mondial',
+      texte:'Dossier technique complet établi avant mise sur le marché, conforme à l\'Annexe IV. Contient : description générale, architecture, données utilisées, évaluation de conformité, performances et limites.',
+      obligations:['Constituer le dossier technique conforme Annexe IV','Tenir le dossier à jour lors de toute modification substantielle','Conserver 10 ans après mise sur le marché'],
+      url:'https://artificialintelligenceact.eu/article/11/' },
+    { num:'Art. 12', title:'Tenue de registres (journalisation)', status:'applicable', who:['fournisseur'], sanction:'15 M€ ou 3% CA mondial',
+      texte:'Les systèmes haut risque journalisent automatiquement les événements. Journaux permettant de reconstituer les circonstances des incidents. Horodatage, données d\'entrée, identifiants de référence de la base de données.',
+      obligations:['Implémenter la journalisation automatique conforme Art. 12','Définir la durée de conservation des journaux','Garantir l\'intégrité et l\'accessibilité des journaux aux autorités'],
+      url:'https://artificialintelligenceact.eu/article/12/' },
+    { num:'Art. 13', title:'Transparence et information aux déployeurs', status:'applicable', who:['fournisseur'], sanction:'15 M€ ou 3% CA mondial',
+      texte:'Notice d\'utilisation accompagnant le système : identité du fournisseur, capacités et limites, niveau de performance, données d\'entrée requises, risques résiduels, mesures de supervision humaine recommandées.',
+      obligations:['Rédiger la notice d\'utilisation conforme Art. 13(3)','Inclure les métriques de performance vérifiées','Mentionner explicitement les cas d\'usage prévus et interdits'],
+      url:'https://artificialintelligenceact.eu/article/13/' },
+    { num:'Art. 14', title:'Contrôle humain', status:'applicable', who:['fournisseur','deployeur'], sanction:'15 M€ ou 3% CA mondial',
+      texte:'Interfaces homme-machine permettant la surveillance effective. Opérateurs capables de comprendre les capacités et limites du système, détecter les anomalies, ignorer ou interrompre le système.',
+      obligations:['Concevoir des interfaces permettant la supervision effective','Documenter les procédures de contrôle et d\'intervention','Former les opérateurs et déployeurs aux mécanismes de contrôle','Définir les critères déclenchant une intervention humaine'],
+      url:'https://artificialintelligenceact.eu/article/14/' },
+    { num:'Art. 15', title:'Exactitude, robustesse et cybersécurité', status:'applicable', who:['fournisseur'], sanction:'15 M€ ou 3% CA mondial',
+      texte:'Niveau approprié d\'exactitude, robustesse et cybersécurité tout au long du cycle de vie. Résilience face aux erreurs, perturbations, données corrompues ou attaques adversariales.',
+      obligations:['Définir et mesurer les niveaux d\'exactitude cibles','Tester la robustesse face aux données hors-distribution','Implémenter des protections contre les attaques adversariales','Documenter les métriques de performance dans le dossier technique'],
+      url:'https://artificialintelligenceact.eu/article/15/' },
+    { num:'Art. 16', title:'Obligations des fournisseurs', status:'applicable', who:['fournisseur'], sanction:'15 M€ ou 3% CA mondial',
+      texte:'Liste des 10 obligations principales des fournisseurs : conformité aux exigences, identification sur le système, système de gestion de la qualité, documentation technique, journalisation, évaluation de conformité, enregistrement EU, signalement des incidents.',
+      obligations:['Vérifier la complétude des obligations listées à l\'Art. 16','Mettre en place une checklist de suivi','Désigner un responsable conformité AI Act interne'],
+      url:'https://artificialintelligenceact.eu/article/16/' },
+    { num:'Art. 17', title:'Système de gestion de la qualité', status:'applicable', who:['fournisseur'], sanction:'15 M€ ou 3% CA mondial',
+      texte:'SGQ documenté couvrant : stratégie réglementaire, conception et contrôle, validation, gestion des risques et données, surveillance post-commercialisation, gestion des incidents et rappels.',
+      obligations:['Formaliser le SGQ en politiques et procédures écrites','Aligner le SGQ existant (ISO 9001) avec les exigences AI Act','Envisager la certification ISO 42001 (SMIA)'],
+      url:'https://artificialintelligenceact.eu/article/17/' },
+    { num:'Art. 22', title:'Mandataires (fournisseurs hors UE)', status:'actif', who:['fournisseur'], sanction:'15 M€ ou 3% CA mondial',
+      texte:'Fournisseurs établis hors UE doivent désigner un mandataire établi dans l\'UE par mandat écrit avant mise sur le marché européen.',
+      obligations:['Pour les fournisseurs hors UE : désigner un mandataire UE par mandat écrit','Définir le périmètre du mandat (vérification déclaration conformité, coopération autorités)','Enregistrer le mandataire dans la base de données EU'],
+      url:'https://artificialintelligenceact.eu/article/22/' },
+    { num:'Art. 26', title:'Obligations des déployeurs', status:'applicable', who:['deployeur'], sanction:'15 M€ ou 3% CA mondial',
+      texte:'Déployeurs : utiliser les systèmes conformément aux instructions fournisseur, assigner superviseurs compétents, surveiller le fonctionnement, suspendre en cas de risque, informer le fournisseur des incidents.',
+      obligations:['Lire et appliquer la notice d\'utilisation du fournisseur','Désigner et former des superviseurs humains compétents','Mettre en place un mécanisme de signalement des incidents au fournisseur','Réaliser une FRIA si impact significatif sur les droits fondamentaux'],
+      url:'https://artificialintelligenceact.eu/article/26/' },
+  ]},
+  { chapter:'CHAPITRE V — Modèles d\'IA à usage général (GPAI)', arts:[
+    { num:'Art. 50', title:'Transparence — systèmes interagissant avec des personnes', status:'actif', who:['fournisseur','deployeur'], sanction:'7,5 M€ ou 1% CA mondial',
+      texte:'Systèmes conçus pour interagir directement avec des personnes : obligation d\'information claire que l\'utilisateur interagit avec une IA. Contenus synthétiques (deepfakes, voix clonées) : marquage machine-readable obligatoire.',
+      obligations:['Afficher clairement la nature IA du système lors de toute interaction','Implémenter le watermarking machine-readable pour les contenus synthétiques','Vérifier que les utilisateurs peuvent distinguer contenus réels et générés'],
+      url:'https://artificialintelligenceact.eu/article/50/' },
+    { num:'Art. 51', title:'Classification GPAI à risque systémique', status:'actif', who:['gpai'], sanction:'15 M€ ou 3% CA mondial',
+      texte:'GPAI classé à risque systémique si : capacités à fort impact (présumé si entraînement >10^25 FLOPs) ou si la Commission le désigne sur la base de capacités équivalentes.',
+      obligations:['Évaluer si votre modèle dépasse le seuil de 10^25 FLOPs','Notifier la Commission dans les 2 semaines si le seuil est atteint','Demander une dérogation si le modèle ne présente pas de risque systémique malgré le seuil'],
+      url:'https://artificialintelligenceact.eu/article/51/' },
+    { num:'Art. 53', title:'Obligations des fournisseurs GPAI', status:'actif', who:['gpai'], sanction:'15 M€ ou 3% CA mondial',
+      texte:'Documentation technique, politique de droits d\'auteur respectant les réservations des détenteurs, résumé du contenu d\'entraînement publiquement disponible, coopération avec l\'AI Office.',
+      obligations:['Établir la documentation technique GPAI (Annexe XI)','Publier un résumé du contenu d\'entraînement','Implémenter une politique de droits d\'auteur avec mécanisme d\'opt-out','Enregistrer le modèle auprès de l\'AI Office'],
+      url:'https://artificialintelligenceact.eu/article/53/' },
+    { num:'Art. 55', title:'Obligations GPAI à risque systémique', status:'actif', who:['gpai'], sanction:'15 M€ ou 3% CA mondial',
+      texte:'Pour les GPAI à risque systémique : évaluation du modèle (red-teaming), évaluation et atténuation des risques systémiques, signalement des incidents à la Commission, mesures de cybersécurité.',
+      obligations:['Réaliser des évaluations adversariales (red-teaming) avant déploiement','Évaluer les risques systémiques et mettre en place des mesures d\'atténuation','Signaler tout incident grave à la Commission sans délai','Assurer la cybersécurité du modèle et de son infrastructure'],
+      url:'https://artificialintelligenceact.eu/article/55/' },
+  ]},
+  { chapter:'CHAPITRE VII — Gouvernance & Surveillance', arts:[
+    { num:'Art. 72', title:'Surveillance post-commercialisation', status:'actif', who:['fournisseur'], sanction:'15 M€ ou 3% CA mondial',
+      texte:'Plan de surveillance post-commercialisation documenté avant mise sur le marché. Collecte et analyse des données post-déploiement. Signalement des incidents graves aux autorités nationales.',
+      obligations:['Établir un plan de surveillance post-commercialisation','Mettre en place des mécanismes de collecte des retours et incidents','Définir les seuils déclenchant un signalement aux autorités'],
+      url:'https://artificialintelligenceact.eu/article/72/' },
+  ]},
+  { chapter:'CHAPITRE XII — Sanctions', arts:[
+    { num:'Art. 99', title:'Sanctions', status:'actif', who:['fournisseur','deployeur','gpai'], sanction:'35 M€ ou 7% CA mondial (max)',
+      texte:'Sanctions par États membres : jusqu\'à 35 M€ ou 7% CA mondial (Art. 5), 15 M€ ou 3% (systèmes haut risque), 7,5 M€ ou 1% (autres infractions). PME : proportionnalité garantie. Le montant le plus élevé des deux seuils s\'applique.',
+      obligations:['Mettre en place une veille des délibérations des autorités nationales','Identifier l\'autorité nationale de surveillance compétente dans chaque État membre de déploiement','Budgéter le risque de conformité dans l\'analyse financière'],
+      url:'https://artificialintelligenceact.eu/article/99/' },
+  ]},
+];
+
+var artFilterVal = 'all';
+var artInitDone = false;
+function artInit(){
+  if(artInitDone) return;
+  artInitDone = true;
+  artRender();
+}
+
+function artRender(){
+  var container = document.getElementById('art-chapters');
+  if(!container) return;
+
+  var html = ARTICLES.map(function(ch){
+    var filtered = ch.arts.filter(function(a){
+      if(artFilterVal === 'all') return true;
+      if(artFilterVal === 'actif') return a.status === 'actif';
+      if(artFilterVal === 'sanction') return !!a.sanction;
+      return a.who.indexOf(artFilterVal) !== -1;
+    });
+    if(!filtered.length) return '';
+
+    var artsHtml = filtered.map(function(a){
+      var statusTxt = {actif:'Applicable',applicable:'Applicable août 2026',futur:'Applicable 2027'}[a.status] || a.status;
+      var oblHtml = a.obligations.length ? '<ul class="art-body-list">'+a.obligations.map(function(o){
+        return '<li class="art-body-li"><span class="art-body-li-dot"></span><span>'+o+'</span></li>';
+      }).join('')+'</ul>' : '<p style="font-size:12px;color:var(--muted)">Article de référence sans obligation directe spécifique.</p>';
+      var whoHtml = a.who.length ? '<div class="art-who">'+a.who.map(function(w){
+        var labels={fournisseur:'Fournisseurs',deployeur:'Déployeurs',gpai:'GPAI'};
+        return '<span class="art-who-tag">'+labels[w]+'</span>';
+      }).join('')+'</div>' : '';
+      var sancHtml = a.sanction ? '<div class="art-sanction-box"><span class="art-sanction-pill">Max : '+a.sanction+'</span></div>' : '';
+
+      return '<div class="art-card" id="artcard-'+a.num.replace(/ /g,'_')+'">'
+        +'<div class="art-card-head" onclick="artToggle(\''+a.num.replace(/ /g,'_')+'\')">'
+        +'<span class="art-card-num">'+a.num+'</span>'
+        +'<span class="art-card-title">'+a.title+'</span>'
+        +'<div class="art-card-chips">'
+        +(a.sanction?'<span class="chip chip-r" style="font-size:9px;padding:2px 7px">Sanctionné</span>':'')
+        +'<span class="art-card-status '+a.status+'">'+statusTxt+'</span>'
+        +'</div>'
+        +'<span class="art-card-chevron">▾</span>'
+        +'</div>'
+        +'<div class="art-card-body">'
+        +'<div class="art-body-section">'
+        +'<div class="art-body-section-title">Texte officiel</div>'
+        +'<p class="art-body-text">'+a.texte+'</p>'
+        +'</div>'
+        +whoHtml
+        + sancHtml
+        +'<div class="art-body-section">'
+        +'<div class="art-body-section-title">Obligations pratiques</div>'
+        + oblHtml
+        +'</div>'
+        +'<a class="art-official-link" href="'+a.url+'" target="_blank" rel="noopener">↗ Texte officiel EUR-Lex / AI Act EU</a>'
+        +'</div>'
+        +'</div>';
+    }).join('');
+
+    return '<div class="art-chapter"><div class="art-chapter-head">'+ch.chapter+'</div>'+artsHtml+'</div>';
+  }).join('');
+
+  container.innerHTML = html || '<p style="font-size:13px;color:var(--muted);padding:20px 0">Aucun article pour ce filtre.</p>';
+}
+
+window.artToggle = function(id){
+  var card = document.getElementById('artcard-'+id);
+  if(card) card.classList.toggle('open');
+};
+
+window.artFilter = function(val, el){
+  artFilterVal = val;
+  document.querySelectorAll('.art-filter-btn').forEach(function(b){ b.classList.remove('on'); });
+  el.classList.add('on');
+  artRender();
+};
+
 
 (function(){
   var b=document.getElementById('alerts-list'); if(!b) return;
