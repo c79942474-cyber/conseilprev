@@ -787,6 +787,23 @@ def fetch_jobboard_signals(domaine='', skills=None):
     return unique[:50]
 
 
+# ══════════════════════════════════════════════════════════
+# SOURCES RSS — Veille actualités IA / cyber / réglementaire
+# Utilisées par l'endpoint /api/news (défilement actualités)
+# ══════════════════════════════════════════════════════════
+RSS_SOURCES = [
+    {"name": "ActuIA",          "url": "https://www.actuia.com/feed/",                       "cat": "ai",    "ico": "\U0001F916"},
+    {"name": "ANSSI",           "url": "https://cyber.gouv.fr/feed",                         "cat": "secu",  "ico": "\U0001F6E1"},
+    {"name": "CNIL",            "url": "https://www.cnil.fr/fr/rss.xml",                     "cat": "regl",  "ico": "\U0001F512"},
+    {"name": "Le Monde Info",   "url": "https://www.lemondeinformatique.fr/rss/rss-actu.xml","cat": "innov", "ico": "\U0001F4BB"},
+    {"name": "Usine Digitale",  "url": "https://www.usine-digitale.fr/rss/all",              "cat": "innov", "ico": "\U0001F3ED"},
+    {"name": "AI Act EU",       "url": "https://artificialintelligenceact.eu/feed/",         "cat": "regl",  "ico": "\u2696\uFE0F"},
+    {"name": "EU Digital",      "url": "https://digital-strategy.ec.europa.eu/en/rss.xml",   "cat": "intl",  "ico": "\U0001F1EA\U0001F1FA"},
+    {"name": "Infosecurity",    "url": "https://www.infosecurity-magazine.com/rss/news/",    "cat": "secu",  "ico": "\U0001F50F"},
+    {"name": "The Hacker News", "url": "https://feeds.feedburner.com/TheHackersNews",        "cat": "secu",  "ico": "\U0001F510"},
+    {"name": "MIT Tech Review", "url": "https://www.technologyreview.com/feed/",             "cat": "ai",    "ico": "\U0001F9E0"},
+]
+
 _news_cache = {"data": [], "ts": 0}
 _digest_cache = {"data": None, "model": None, "ts": 0}
 CACHE_TTL   = 600
@@ -2275,9 +2292,13 @@ def news():
     if now - _news_cache["ts"] < CACHE_TTL and _news_cache["data"]:
         return jsonify({"items": _news_cache["data"], "cached": True, "count": len(_news_cache["data"])})
     all_items = []
+    import socket as _socket
+    _old_timeout = _socket.getdefaulttimeout()
+    _socket.setdefaulttimeout(6)
+    _ua = "Mozilla/5.0 (compatible; CONSEILPREV-Veille/1.0)"
     for src in RSS_SOURCES:
         try:
-            feed = feedparser.parse(src["url"])
+            feed = feedparser.parse(src["url"], agent=_ua)
             for entry in (feed.entries or [])[:8]:
                 title = entry.get("title", "").strip()
                 if not title: continue
@@ -2290,12 +2311,22 @@ def news():
                     "cat":    _detect_cat(title, src["cat"]),
                 })
         except Exception: pass
+    _socket.setdefaulttimeout(_old_timeout)
     seen, unique = set(), []
     for item in sorted(all_items, key=lambda x: x.get("date",""), reverse=True):
         key = item["title"][:60]
         if key not in seen:
             seen.add(key)
             unique.append(item)
+    # Fallback : si tous les feeds échouent, servir un contenu statique minimal
+    if not unique:
+        unique = [
+            {"title": "EU AI Act : les obligations GPAI applicables depuis aout 2025", "link": "https://artificialintelligenceact.eu/", "date": "", "source": "AI Act EU", "ico": "\u2696\uFE0F", "cat": "regl"},
+            {"title": "ANSSI : recommandations de securite pour les systemes d'IA", "link": "https://cyber.gouv.fr/", "date": "", "source": "ANSSI", "ico": "\U0001F6E1", "cat": "secu"},
+            {"title": "CNIL : fiches pratiques sur l'IA et le RGPD", "link": "https://www.cnil.fr/fr/intelligence-artificielle", "date": "", "source": "CNIL", "ico": "\U0001F512", "cat": "regl"},
+        ]
+        _news_cache = {"data": unique, "ts": now - CACHE_TTL + 60}  # cache court pour reessayer vite
+        return jsonify({"items": unique, "cached": False, "count": len(unique), "fallback": True})
     _news_cache = {"data": unique[:60], "ts": now}
     return jsonify({"items": unique[:60], "cached": False, "count": len(unique)})
 
