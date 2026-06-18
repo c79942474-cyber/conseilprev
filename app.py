@@ -792,16 +792,20 @@ def fetch_jobboard_signals(domaine='', skills=None):
 # Utilisées par l'endpoint /api/news (défilement actualités)
 # ══════════════════════════════════════════════════════════
 RSS_SOURCES = [
-    {"name": "ActuIA",          "url": "https://www.actuia.com/feed/",                       "cat": "ai",    "ico": "\U0001F916"},
-    {"name": "ANSSI",           "url": "https://cyber.gouv.fr/feed",                         "cat": "secu",  "ico": "\U0001F6E1"},
-    {"name": "CNIL",            "url": "https://www.cnil.fr/fr/rss.xml",                     "cat": "regl",  "ico": "\U0001F512"},
-    {"name": "Le Monde Info",   "url": "https://www.lemondeinformatique.fr/rss/rss-actu.xml","cat": "innov", "ico": "\U0001F4BB"},
-    {"name": "Usine Digitale",  "url": "https://www.usine-digitale.fr/rss/all",              "cat": "innov", "ico": "\U0001F3ED"},
-    {"name": "AI Act EU",       "url": "https://artificialintelligenceact.eu/feed/",         "cat": "regl",  "ico": "\u2696\uFE0F"},
-    {"name": "EU Digital",      "url": "https://digital-strategy.ec.europa.eu/en/rss.xml",   "cat": "intl",  "ico": "\U0001F1EA\U0001F1FA"},
-    {"name": "Infosecurity",    "url": "https://www.infosecurity-magazine.com/rss/news/",    "cat": "secu",  "ico": "\U0001F50F"},
-    {"name": "The Hacker News", "url": "https://feeds.feedburner.com/TheHackersNews",        "cat": "secu",  "ico": "\U0001F510"},
-    {"name": "MIT Tech Review", "url": "https://www.technologyreview.com/feed/",             "cat": "ai",    "ico": "\U0001F9E0"},
+    # ── Sources francophones ──
+    {"name": "ActuIA",          "url": "https://www.actuia.com/feed/",                        "cat": "ai",    "ico": "\U0001F916", "lang": "fr"},
+    {"name": "ANSSI",           "url": "https://cyber.gouv.fr/feed",                          "cat": "secu",  "ico": "\U0001F6E1", "lang": "fr"},
+    {"name": "CNIL",            "url": "https://www.cnil.fr/fr/rss.xml",                      "cat": "regl",  "ico": "\U0001F512", "lang": "fr"},
+    {"name": "Le Monde Info",   "url": "https://www.lemondeinformatique.fr/rss/rss-actu.xml", "cat": "innov", "ico": "\U0001F4BB", "lang": "fr"},
+    {"name": "Usine Digitale",  "url": "https://www.usine-digitale.fr/rss/all",               "cat": "innov", "ico": "\U0001F3ED", "lang": "fr"},
+    {"name": "Cybersec-info",   "url": "https://cybersecurite-info.fr/feed/",                 "cat": "secu",  "ico": "\U0001F510", "lang": "fr"},
+    # ── Sources anglophones ──
+    {"name": "AI Act EU",       "url": "https://artificialintelligenceact.eu/feed/",          "cat": "regl",  "ico": "\u2696\uFE0F", "lang": "en"},
+    {"name": "EU Digital",      "url": "https://digital-strategy.ec.europa.eu/en/rss.xml",    "cat": "intl",  "ico": "\U0001F1EA\U0001F1FA", "lang": "en"},
+    {"name": "Infosecurity",    "url": "https://www.infosecurity-magazine.com/rss/news/",     "cat": "secu",  "ico": "\U0001F50F", "lang": "en"},
+    {"name": "The Hacker News", "url": "https://feeds.feedburner.com/TheHackersNews",         "cat": "secu",  "ico": "\U0001F513", "lang": "en"},
+    {"name": "MIT Tech Review", "url": "https://www.technologyreview.com/feed/",              "cat": "ai",    "ico": "\U0001F9E0", "lang": "en"},
+    {"name": "TechCrunch AI",   "url": "https://techcrunch.com/category/artificial-intelligence/feed/", "cat": "ai", "ico": "\U0001F680", "lang": "en"},
 ]
 
 _news_cache = {"data": [], "ts": 0}
@@ -2309,6 +2313,7 @@ def news():
                     "source": src["name"],
                     "ico":    src["ico"],
                     "cat":    _detect_cat(title, src["cat"]),
+                    "lang":   src.get("lang", "fr"),
                 })
         except Exception: pass
     _socket.setdefaulttimeout(_old_timeout)
@@ -2321,9 +2326,10 @@ def news():
     # Fallback : si tous les feeds échouent, servir un contenu statique minimal
     if not unique:
         unique = [
-            {"title": "EU AI Act : les obligations GPAI applicables depuis aout 2025", "link": "https://artificialintelligenceact.eu/", "date": "", "source": "AI Act EU", "ico": "\u2696\uFE0F", "cat": "regl"},
-            {"title": "ANSSI : recommandations de securite pour les systemes d'IA", "link": "https://cyber.gouv.fr/", "date": "", "source": "ANSSI", "ico": "\U0001F6E1", "cat": "secu"},
-            {"title": "CNIL : fiches pratiques sur l'IA et le RGPD", "link": "https://www.cnil.fr/fr/intelligence-artificielle", "date": "", "source": "CNIL", "ico": "\U0001F512", "cat": "regl"},
+            {"title": "EU AI Act : les obligations GPAI applicables depuis aout 2025", "link": "https://artificialintelligenceact.eu/", "date": "", "source": "AI Act EU", "ico": "\u2696\uFE0F", "cat": "regl", "lang": "en"},
+            {"title": "ANSSI : recommandations de securite pour les systemes d'IA", "link": "https://cyber.gouv.fr/", "date": "", "source": "ANSSI", "ico": "\U0001F6E1", "cat": "secu", "lang": "fr"},
+            {"title": "CNIL : fiches pratiques sur l'IA et le RGPD", "link": "https://www.cnil.fr/fr/intelligence-artificielle", "date": "", "source": "CNIL", "ico": "\U0001F512", "cat": "regl", "lang": "fr"},
+            {"title": "AI safety testing requirements under EO 14179", "link": "https://www.federalregister.gov/", "date": "", "source": "Federal Register", "ico": "\U0001F1FA\U0001F1F8", "cat": "regl", "lang": "en"},
         ]
         _news_cache = {"data": unique, "ts": now - CACHE_TTL + 60}  # cache court pour reessayer vite
         return jsonify({"items": unique, "cached": False, "count": len(unique), "fallback": True})
