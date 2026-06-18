@@ -719,43 +719,112 @@ textarea.form-el{min-height:86px;resize:vertical}
 
 </style>
 <style id="cpc-styles">
-#cpcBtn{position:fixed;bottom:28px;right:28px;z-index:10002;width:52px;height:52px;border-radius:50%;background:#1C1C1C;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(0,0,0,.28);transition:all .2s}
+/* ══ CHATBOT SENTINEL AI — CONSEILPREV ══ */
+#cpcBtn{position:fixed;bottom:28px;right:28px;z-index:10002;width:52px;height:52px;
+  border-radius:50%;background:#1C1C1C;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 24px rgba(0,0,0,.28);transition:all .2s}
 #cpcBtn:hover{background:#B83222;transform:scale(1.07)}
 #cpcBtn svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:1.6}
-.cpc-notif{position:absolute;top:4px;right:4px;width:10px;height:10px;background:#B83222;border-radius:50%;border:2px solid #1C1C1C;display:none}
+.cpc-notif{position:absolute;top:4px;right:4px;width:10px;height:10px;
+  background:#B83222;border-radius:50%;border:2px solid #1C1C1C;display:none}
 #cpcBtn.has-notif .cpc-notif{display:block}
-#cpcPanel{position:fixed;bottom:92px;right:28px;z-index:10002;width:400px;max-width:calc(100vw - 40px);background:#fff;border-radius:6px;border:1px solid #E0DDD8;box-shadow:0 12px 48px rgba(0,0,0,.15);display:none;flex-direction:column;overflow:hidden;max-height:calc(100vh - 130px)}
+#cpcPanel{position:fixed;bottom:92px;right:28px;z-index:10002;width:420px;
+  max-width:calc(100vw - 40px);background:#fff;border-radius:6px;
+  border:1px solid #E0DDD8;box-shadow:0 12px 48px rgba(0,0,0,.15);
+  display:none;flex-direction:column;overflow:hidden;
+  max-height:calc(100vh - 130px)}
 #cpcPanel.open{display:flex}
-.cpc-head{background:#1C1C1C;padding:18px 44px 14px 18px;flex-shrink:0;position:relative}
-.cpc-eyebrow{font-size:9px;font-family:var(--mono,monospace);letter-spacing:.18em;text-transform:uppercase;color:#B83222;margin-bottom:4px}
-.cpc-title{font-size:20px;font-family:var(--serif,Georgia,serif);color:#fff;letter-spacing:-.02em;line-height:1.15}
+/* Head */
+.cpc-head{background:#1C1C1C;padding:16px 42px 12px 18px;flex-shrink:0;position:relative}
+.cpc-eyebrow{font-size:9px;font-family:var(--mono,monospace);letter-spacing:.18em;
+  text-transform:uppercase;color:#B83222;margin-bottom:4px}
+.cpc-title-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.cpc-title{font-size:19px;font-family:var(--serif,Georgia,serif);color:#fff;
+  letter-spacing:-.02em;line-height:1.15}
 .cpc-title em{font-style:italic}
-.cpc-ctx{font-size:9px;font-family:var(--mono,monospace);color:rgba(255,255,255,.35);margin-top:5px;letter-spacing:.04em}
-.cpc-close{position:absolute;top:10px;right:12px;background:none;border:none;color:rgba(255,255,255,.4);font-size:20px;cursor:pointer;padding:4px 8px;border-radius:3px;line-height:1}
+/* Sélecteur API */
+.cpc-api-sel{display:flex;gap:4px;flex-shrink:0}
+.cpc-api-btn{font-size:8px;font-family:var(--mono,monospace);padding:2px 7px;
+  border-radius:2px;border:1px solid rgba(255,255,255,.15);background:transparent;
+  color:rgba(255,255,255,.4);cursor:pointer;letter-spacing:.04em;transition:all .15s}
+.cpc-api-btn:hover{border-color:rgba(255,255,255,.4);color:#fff}
+.cpc-api-btn.on{background:rgba(184,50,34,.6);border-color:#B83222;color:#fff;font-weight:600}
+/* Indicateur de page */
+.cpc-ctx-bar{display:flex;align-items:center;gap:6px;margin-top:8px;
+  padding-top:8px;border-top:1px solid rgba(255,255,255,.07)}
+.cpc-ctx-dot{width:5px;height:5px;border-radius:50%;background:#B83222;flex-shrink:0}
+.cpc-ctx-label{font-size:9px;font-family:var(--mono,monospace);
+  color:rgba(255,255,255,.4);letter-spacing:.04em;flex:1;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.cpc-api-indicator{font-size:8px;font-family:var(--mono,monospace);
+  color:rgba(255,255,255,.3);letter-spacing:.04em}
+.cpc-close{position:absolute;top:10px;right:12px;background:none;border:none;
+  color:rgba(255,255,255,.35);font-size:18px;cursor:pointer;
+  padding:3px 7px;border-radius:3px;line-height:1}
 .cpc-close:hover{color:#fff;background:rgba(255,255,255,.1)}
-.cpc-tags{padding:9px 12px;display:flex;flex-wrap:wrap;gap:5px;border-bottom:1px solid #F0EDE8;flex-shrink:0;background:#FAFAF8}
-.cpc-tag{font-size:10px;font-family:var(--mono,monospace);padding:3px 9px;border-radius:2px;border:1px solid #E0DDD8;background:#fff;color:#767676;cursor:pointer;transition:all .12s;letter-spacing:.02em}
+/* Tags */
+.cpc-tags{padding:9px 12px;display:flex;flex-wrap:wrap;gap:5px;
+  border-bottom:1px solid #F0EDE8;flex-shrink:0;background:#FAFAF8;
+  min-height:38px;align-content:flex-start}
+.cpc-tag{font-size:10px;font-family:var(--mono,monospace);padding:3px 9px;
+  border-radius:2px;border:1px solid #E0DDD8;background:#fff;
+  color:#767676;cursor:pointer;transition:all .12s;letter-spacing:.02em;
+  white-space:nowrap;max-width:200px;overflow:hidden;text-overflow:ellipsis}
 .cpc-tag:hover{border-color:#B83222;color:#B83222;background:rgba(184,50,34,.04)}
-.cpc-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px;min-height:160px;max-height:280px;background:#FAFAF8}
-.cpc-msgs::-webkit-scrollbar{width:3px}.cpc-msgs::-webkit-scrollbar-thumb{background:#E0DDD8;border-radius:2px}
-.cpc-msg{display:flex;gap:8px;align-items:flex-start}
+/* Messages */
+.cpc-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;
+  flex-direction:column;gap:10px;min-height:160px;max-height:280px;
+  background:#FAFAF8}
+.cpc-msgs::-webkit-scrollbar{width:3px}
+.cpc-msgs::-webkit-scrollbar-thumb{background:#E0DDD8;border-radius:2px}
+.cpc-msg{display:flex;gap:8px;align-items:flex-start;animation:cpcFadeIn .2s ease}
+@keyframes cpcFadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 .cpc-msg.user{flex-direction:row-reverse}
-.cpc-av{width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:var(--mono,monospace)}
+.cpc-av{width:26px;height:26px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;font-family:var(--mono,monospace)}
 .cpc-av.bot{background:#1C1C1C;color:#fff}
 .cpc-av.user{background:#B83222;color:#fff}
-.cpc-bubble{max-width:calc(100% - 38px);font-size:12px;line-height:1.65;color:#1C1C1C;background:#fff;padding:9px 12px;border-radius:4px;border:1px solid #F0EDE8}
+.cpc-bubble{max-width:calc(100% - 38px);font-size:12px;line-height:1.68;
+  color:#1C1C1C;background:#fff;padding:9px 12px;border-radius:4px;
+  border:1px solid #F0EDE8;word-break:break-word}
 .cpc-msg.user .cpc-bubble{background:#1C1C1C;color:#fff;border-color:#1C1C1C}
-.cpc-bubble a{color:#B83222}.cpc-bubble strong{font-weight:600}
+.cpc-bubble a{color:#B83222;text-decoration:none}
+.cpc-bubble a:hover{text-decoration:underline}
+.cpc-bubble strong,.cpc-bubble b{font-weight:600}
+.cpc-bubble code{font-family:var(--mono,monospace);font-size:10px;
+  background:rgba(0,0,0,.06);padding:1px 5px;border-radius:2px}
+.cpc-source-badge{display:inline-block;font-size:8px;font-family:var(--mono,monospace);
+  padding:1px 6px;border-radius:2px;margin-top:6px;letter-spacing:.04em}
+.cpc-source-mistral{background:rgba(255,113,0,.1);color:#ff7100;border:1px solid rgba(255,113,0,.2)}
+.cpc-source-claude{background:rgba(184,50,34,.1);color:#B83222;border:1px solid rgba(184,50,34,.2)}
+/* Typing */
 .cpc-typing{display:flex;gap:4px;align-items:center;padding:3px 0}
-.cpc-typing span{width:5px;height:5px;background:#B83222;border-radius:50%;animation:cpcBounce .7s infinite alternate;opacity:.3}
-.cpc-typing span:nth-child(2){animation-delay:.2s}.cpc-typing span:nth-child(3){animation-delay:.4s}
+.cpc-typing span{width:5px;height:5px;background:#B83222;border-radius:50%;
+  animation:cpcBounce .7s infinite alternate;opacity:.3}
+.cpc-typing span:nth-child(2){animation-delay:.2s}
+.cpc-typing span:nth-child(3){animation-delay:.4s}
 @keyframes cpcBounce{to{opacity:1;transform:translateY(-3px)}}
-.cpc-bar{border-top:1px solid #F0EDE8;display:flex;align-items:flex-end;padding:8px 10px;gap:7px;flex-shrink:0;background:#fff}
-.cpc-input{flex:1;border:1px solid #E0DDD8;border-radius:3px;font-size:12px;font-family:var(--sans,Inter,sans-serif);color:#1C1C1C;padding:7px 10px;resize:none;outline:none;max-height:80px;line-height:1.5;background:#FAFAF8}
+/* Barre input */
+.cpc-bar{border-top:1px solid #F0EDE8;display:flex;align-items:flex-end;
+  padding:8px 10px;gap:7px;flex-shrink:0;background:#fff}
+.cpc-input{flex:1;border:1px solid #E0DDD8;border-radius:3px;
+  font-size:12px;font-family:var(--sans,Inter,sans-serif);color:#1C1C1C;
+  padding:7px 10px;resize:none;outline:none;max-height:80px;
+  line-height:1.5;background:#FAFAF8}
 .cpc-input:focus{border-color:#1C1C1C}
-.cpc-send{background:#1C1C1C;color:#fff;border:none;border-radius:3px;padding:7px 12px;font-size:10px;font-family:var(--mono,monospace);letter-spacing:.04em;cursor:pointer;flex-shrink:0;align-self:flex-end;transition:background .15s}
+.cpc-send{background:#1C1C1C;color:#fff;border:none;border-radius:3px;
+  padding:7px 12px;font-size:10px;font-family:var(--mono,monospace);
+  letter-spacing:.04em;cursor:pointer;flex-shrink:0;align-self:flex-end;
+  transition:background .15s}
 .cpc-send:hover{background:#B83222}
-.cpc-foot{font-size:9px;font-family:var(--mono,monospace);color:#B0ABA4;text-align:center;padding:5px;border-top:1px solid #F0EDE8;background:#FAFAF8;flex-shrink:0;letter-spacing:.04em}
+.cpc-send:disabled{opacity:.5;cursor:not-allowed}
+/* Footer */
+.cpc-foot{font-size:9px;font-family:var(--mono,monospace);
+  color:#B0ABA4;text-align:center;padding:5px;
+  border-top:1px solid #F0EDE8;background:#FAFAF8;
+  flex-shrink:0;letter-spacing:.04em}
 </style>
 </head>
 <body>
@@ -5390,7 +5459,7 @@ window.cjRemove = cjRemove;
 })();
 
 </script>
-<!-- CHATBOT CONSEILPREV SENTINEL -->
+<!-- CHATBOT CONSEILPREV SENTINEL v2 -->
 <button id="cpcBtn" onclick="cpcToggle()" aria-label="Assistant Sentinel">
   <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
   <div class="cpc-notif"></div>
@@ -5398,115 +5467,324 @@ window.cjRemove = cjRemove;
 <div id="cpcPanel">
   <div class="cpc-head">
     <button class="cpc-close" onclick="cpcToggle()">x</button>
-    <div class="cpc-eyebrow">Chat Conformite</div>
-    <div class="cpc-title">Assistant <em>reglementaire</em></div>
-    <div class="cpc-ctx" id="cpcCtxLabel">Sentinel AI -- CONSEILPREV</div>
+    <div class="cpc-eyebrow">Chat Conformite -- Sentinel AI</div>
+    <div class="cpc-title-row">
+      <div class="cpc-title">Assistant <em>reglementaire</em></div>
+      <div class="cpc-api-sel">
+        <button class="cpc-api-btn on" id="cpcApiMistral" onclick="cpcSetApi('mistral')">Mistral</button>
+        <button class="cpc-api-btn" id="cpcApiClaude" onclick="cpcSetApi('claude')">Claude</button>
+      </div>
+    </div>
+    <div class="cpc-ctx-bar">
+      <div class="cpc-ctx-dot"></div>
+      <div class="cpc-ctx-label" id="cpcCtxLabel">Sentinel AI</div>
+      <div class="cpc-api-indicator" id="cpcApiIndicator">Mistral Large</div>
+    </div>
   </div>
   <div class="cpc-tags" id="cpcTags"></div>
   <div class="cpc-msgs" id="cpcMsgs"></div>
   <div class="cpc-bar">
     <textarea class="cpc-input" id="cpcInput" rows="1"
-      placeholder="Votre question..."
+      placeholder="Votre question reglementaire..."
       onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();cpcSend()}"
       oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,80)+'px'"></textarea>
-    <button class="cpc-send" onclick="cpcSend()">Envoyer</button>
+    <button class="cpc-send" id="cpcSendBtn" onclick="cpcSend()">Envoyer</button>
   </div>
-  <div class="cpc-foot">Sentinel AI -- CONSEILPREV -- christophe.cerf@outlook.com</div>
+  <div class="cpc-foot">EU AI Act -- NIS2 -- RGPD -- CONSEILPREV Paris</div>
 </div>
 </body>
 </html>
 </body>
 
 <script>
-/* CHATBOT CONSEILPREV */
+/* ══ CHATBOT SENTINEL AI v2 — Mistral + Claude ══ */
 (function(){
-var KEY='g0Dqgfe3v3op1LPV6lxaUCEVTEZ6GYXU';
-var OPEN=false,HIST=[],BUSY=false,READY=false;
-var SYS='Tu es Sentinel, expert reglementaire CONSEILPREV (Paris). Tu reponds en francais, avec precision et concision (max 280 mots). Domaines : EU AI Act (Regl. 2024/1689), NIS2, RGPD, DORA, ISO 42001, ISO 27001, gouvernance IA, cybersecurite industrielle. Tu aides aussi a naviguer sur le site CONSEILPREV et Sentinel AI. Pour tout projet ou audit, oriente vers christophe.cerf@outlook.com. Pas d avis juridique - orientations expertes.';
-var TAGS=['Art. 6 AI Act','Obligations NIS2','Classification IA','Sanctions AI Act','Comment utiliser Sentinel AI ?','Audit de conformite'];
-var WELCOME='Bonjour, je suis <strong>Sentinel</strong>, votre assistant reglementaire propulse par CONSEILPREV.<br><br>Je peux vous aider sur l\'<strong>EU AI Act</strong>, <strong>NIS2</strong>, <strong>RGPD</strong> et la gouvernance IA, ainsi que sur la navigation dans Sentinel AI.';
+'use strict';
 
-window.cpcToggle=function(){
-  OPEN=!OPEN;
-  var p=document.getElementById('cpcPanel');
-  var b=document.getElementById('cpcBtn');
+var MISTRAL_KEY = 'g0Dqgfe3v3op1LPV6lxaUCEVTEZ6GYXU';
+var CLAUDE_KEY  = '';  /* Anthropic key injected via API proxy */
+var OPEN = false, HIST = [], BUSY = false, READY = false;
+var CUR_API = 'mistral'; /* 'mistral' | 'claude' */
+
+/* Contexte riche par section de Sentinel AI */
+var PAGE_CTX = {
+  'apercu': {
+    label: 'Vue d\'ensemble — Apercu Sentinel AI',
+    apiLabel: { mistral:'Mistral Large', claude:'Claude Sonnet' },
+    tags: ['Qu\'est-ce que l\'EU AI Act ?','Comment classifier mon IA ?','Differents niveaux de risque ?','Sanctions AI Act ?','Qu\'est-ce que Sentinel AI ?'],
+    sys: 'L\'utilisateur est sur la page Apercu de Sentinel AI (CONSEILPREV). Cette page presente : 24 juridictions analysees, scores de risque par pays, distribution mondiale des cadres reglementaires IA, classement par innovation et severite. Contexte technique : EU AI Act Regl. 2024/1689, 4 niveaux de risque (inacceptable, haut, limite, minimal), 8 domaines Annexe III.'
+  },
+  'carto': {
+    label: 'Cartographie mondiale des risques IA',
+    apiLabel: { mistral:'Mistral Large', claude:'Claude Sonnet' },
+    tags: ['Pays le plus regulateur ?','Risque IA en Chine ?','EU vs USA sur l\'IA ?','Juridiction la plus favorable ?','Comment lire la carte ?'],
+    sys: 'L\'utilisateur consulte la Cartographie mondiale interactive de Sentinel AI. Carte avec 24 juridictions colorees par score de severite : rouge (>=8, haut risque), orange (5-8, modere), vert (<5, faible). Scores : EU 9.2, DE 8.8, FR 8.5, CN 8.0, RU 7.5, KR 7.0, CA 6.5, CH 6.5, BR 6.0, GB 5.5, SG 5.0, US 4.5, JP 4.0, AE 4.0, NG 2.5. Chaque juridiction a une fiche detail avec obligations, sanctions et textes.'
+  },
+  'comp': {
+    label: 'Comparateur de juridictions',
+    apiLabel: { mistral:'Mistral Large', claude:'Claude Sonnet' },
+    tags: ['Quelle juridiction pour mon IA ?','Comparer EU et USA ?','Ou deployer avec moins de contraintes ?','Avantages Singapour ?','Difference sanctions EU vs UK ?'],
+    sys: 'L\'utilisateur utilise le Comparateur interactif de juridictions (jusqu\'a 4 pays). Radar 6 dimensions : Severite, Transparence, Responsabilite, Souverainete donnees, Sanctions, Innovation. Tableau comparatif avec barres et badge risque geopolitique. Donnees : EU (severite 9.2, innovation 5.0), US (severite 4.5, innovation 9.0), SG (severite 5.0, innovation 9.0), CH (severite 6.5, innovation 7.5).'
+  },
+  'geo': {
+    label: 'Analyse geopolitique IA',
+    apiLabel: { mistral:'Mistral Large', claude:'Claude Sonnet' },
+    tags: ['Impact EO 14179 Trump ?','Risque reglementaire Chine ?','EU AI Act vs regulation US ?','DeepSeek et les sanctions US ?','Chronologie AI Act 2025-2027 ?'],
+    sys: 'L\'utilisateur consulte l\'Analyse geopolitique Sentinel AI. 3 blocs : Bloc europeen (EU AI Act standard d\'exportation, extraterritorialite, 40+ pays influences), Modele americain (EO 14179 jan 2025 pro-innovation, fragmentation etats, NIST RMF), Doctrine chinoise (controle souverain, PIPL, Generative AI Measures, BRI 147 pays). Chronologie : Art. 5 applicables fev 2025, GPAI aout 2025, haut risque aout 2026. EO 14110 revoque 20 jan 2025 par EO 14148, remplace EO 14179 23 jan 2025.'
+  },
+  'regs': {
+    label: 'Reglementations & Textes officiels',
+    apiLabel: { mistral:'Mistral Large', claude:'Claude Sonnet' },
+    tags: ['Quand s\'applique l\'AI Act ?','Texte officiel EU AI Act ?','Difference AI Act et NIS2 ?','Obligations RGPD pour l\'IA ?','DORA s\'applique a quoi ?'],
+    sys: 'L\'utilisateur consulte les Textes reglementaires de Sentinel AI. Textes couverts : EU AI Act (Regl. 2024/1689, JO L 12.7.2024, sanctions 35M EUR ou 7% CA), RGPD (Regl. 2016/679, Art. 22 decisions automatisees, 20M EUR ou 4%), NIS2 (Dir. 2022/2555, entites essentielles, 10M EUR ou 2%), DORA (Regl. 2022/2554, secteur financier), Lignes directrices Art. 5 (Commission, 4 fev 2025), ISO 42001 (management IA).'
+  },
+  'simulateur': {
+    label: 'Simulateur de conformite AI Act',
+    apiLabel: { mistral:'Mistral Large', claude:'Claude Sonnet' },
+    tags: ['Mon systeme est-il haut risque ?','Que signifie Annexe III ?','Comment verifier Art. 5 ?','Obligations GPAI ?','Comment calculer les sanctions ?'],
+    sys: 'L\'utilisateur utilise le Simulateur de conformite AI Act 5 etapes : (1) Identification systeme — secteur (Annexe III), type IA, description ; (2) Classification risque — Art. 5 pratiques interdites, biometrie temps reel, Annexe III 8 domaines ; (3) Obligations — Art. 9 gestion risques, Art. 10 donnees, Art. 11 documentation, Art. 12 logs, Art. 13 transparence, Art. 14 supervision, Art. 17 qualite ; (4) GPAI — Art. 51-55, seuil 10^25 FLOPs, RGPD ; (5) Resultats — score, classification, checklist, sanctions calculees.'
+  },
+  'audit': {
+    label: 'Audit de conformite AI Act — 32 points',
+    apiLabel: { mistral:'Mistral Large', claude:'Claude Sonnet' },
+    tags: ['Priorite P1 vs P2 vs P3 ?','Art. 9 — que faire concretement ?','Documentation technique Art. 11 ?','Evaluation de conformite Art. 43 ?','Comment exporter le rapport audit ?'],
+    sys: 'L\'utilisateur realise l\'Audit de conformite AI Act (32 points de controle, 8 sections). Sections : Art. 5 pratiques interdites (4 pts), Art. 6 classification haut risque (4 pts), Art. 9-10 gestion risques et donnees (5 pts), Art. 11-12 documentation et logs (4 pts), Art. 13-14 transparence et supervision (4 pts), Art. 15-17 robustesse et qualite (4 pts), Art. 43-49 evaluation et enregistrement (4 pts), GPAI Art. 51-55 (4 pts). 3 etats : Conforme (vert), En cours (orange), A realiser (rouge). Score en % et export PDF.'
+  },
+  'articles': {
+    label: 'Obligations article par article',
+    apiLabel: { mistral:'Mistral Large', claude:'Claude Sonnet' },
+    tags: ['Art. 5 — pratiques interdites ?','Art. 9 — gestion des risques ?','Art. 14 — supervision humaine ?','Art. 50 — transparence chatbots ?','Art. 99 — calcul sanctions ?'],
+    sys: 'L\'utilisateur consulte les Obligations article par article du Regl. 2024/1689. Articles couverts : Art. 1 (objet), Art. 2 (champ application extraterritorial), Art. 4 (litteratie IA), Art. 5 (8 pratiques interdites, sanctions 35M ou 7%), Art. 6 (classification haut risque + Annexe III), Art. 9-17 (obligations fournisseurs : gestion risques, donnees, documentation, logs, transparence, supervision, robustesse, qualite), Art. 22 (mandataire UE hors-EU), Art. 26 (obligations deployeurs), Art. 50 (transparence interactions IA, watermarking), Art. 51-55 (GPAI, seuil 10^25 FLOPs, risque systemique), Art. 72 (surveillance post-commercialisation), Art. 99 (sanctions progressives).'
+  },
+  'decision': {
+    label: 'Simulateur deploiement IA',
+    apiLabel: { mistral:'Mistral Large', claude:'Claude Sonnet' },
+    tags: ['Etapes du simulateur ?','Comment interpreter mon score ?','Que faire si haut risque ?','Quelle difference haut risque / limite ?','Obligations GPAI concretes ?'],
+    sys: 'L\'utilisateur utilise le Simulateur de deploiement IA Act (page Aide a la decision). Moteur de classification fonde sur Art. 5 (pratiques interdites), Art. 6(2) + Annexe III (haut risque), Art. 50 (transparence, risque limite), Art. 51-55 (GPAI). Calcul des sanctions selon Art. 99 en fonction du CA. Obligations detaillees par article avec statut de conformite.'
+  },
+  'default': {
+    label: 'Sentinel AI — CONSEILPREV',
+    apiLabel: { mistral:'Mistral Large', claude:'Claude Sonnet' },
+    tags: ['Qu\'est-ce que l\'EU AI Act ?','Comment classifier mon IA ?','Sanctions AI Act ?','Comment utiliser Sentinel AI ?','Contacter CONSEILPREV ?'],
+    sys: 'L\'utilisateur navigue sur Sentinel AI, la plateforme de cartographie des risques reglementaires IA de CONSEILPREV (Paris). Fonctionnalites : cartographie 24 juridictions, simulateur conformite AI Act 5 etapes, audit 32 points, comparateur juridictions, analyse geopolitique, textes officiels, obligations article par article.'
+  }
+};
+
+var SYS_BASE = 'Tu es Sentinel, expert reglementaire IA de CONSEILPREV (Paris, France). Reponds en francais avec precision et concision (max 320 mots). Domaines : EU AI Act (Regl. 2024/1689), NIS2, RGPD, DORA, ISO 42001, ISO 27001, gouvernance IA, cybersecurite. Pour tout audit ou projet : christophe.cerf@outlook.com. Pas d\'avis juridique — orientations expertes. Contexte page actuelle : ';
+
+/* Detection de la page active */
+function cpcCurrentPageId(){
+  /* Methode 1 : variable globale Sentinel */
+  if(typeof curPage !== 'undefined' && curPage) return curPage;
+  /* Methode 2 : page visible dans le DOM */
+  var pages = document.querySelectorAll('.page');
+  for(var i=0;i<pages.length;i++){
+    var s = window.getComputedStyle(pages[i]);
+    if(s.display !== 'none' && s.visibility !== 'hidden'){
+      var id = pages[i].id.replace('p-','');
+      return id;
+    }
+  }
+  /* Methode 3 : item actif dans sidebar */
+  var active = document.querySelector('.sb-item.on, .sb-item.active');
+  if(active){
+    var oc = active.getAttribute('onclick') || '';
+    var m = oc.match(/'([^']+)'/);
+    if(m) return m[1];
+  }
+  return 'default';
+}
+
+function cpcGetCtx(){
+  var pid = cpcCurrentPageId();
+  return PAGE_CTX[pid] || PAGE_CTX['default'];
+}
+
+/* Mise a jour de l'UI selon la page et l'API */
+function cpcRefreshUI(){
+  var ctx = cpcGetCtx();
+  var labelEl = document.getElementById('cpcCtxLabel');
+  var indEl   = document.getElementById('cpcApiIndicator');
+  if(labelEl) labelEl.textContent = ctx.label;
+  if(indEl)   indEl.textContent   = (ctx.apiLabel || {})[CUR_API] || CUR_API;
+
+  var tagsEl = document.getElementById('cpcTags');
+  if(tagsEl){
+    tagsEl.innerHTML = (ctx.tags || []).map(function(tg){
+      var safe = tg.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+      var display = tg.length > 30 ? tg.substring(0,29) + '...' : tg;
+      return '<button class="cpc-tag" onclick="cpcSend(\'' + safe + '\')">' + display + '</button>';
+    }).join('');
+  }
+}
+
+/* Boutons sélecteur API */
+window.cpcSetApi = function(api){
+  CUR_API = api;
+  document.getElementById('cpcApiMistral').classList.toggle('on', api==='mistral');
+  document.getElementById('cpcApiClaude').classList.toggle('on', api==='claude');
+  cpcRefreshUI();
+};
+
+/* Toggle ouverture panel */
+window.cpcToggle = function(){
+  OPEN = !OPEN;
+  var p = document.getElementById('cpcPanel');
+  var b = document.getElementById('cpcBtn');
   if(!p) return;
   if(OPEN){
     p.classList.add('open');
     if(b) b.classList.remove('has-notif');
-    if(!READY){cpcInit();READY=true;}
-    setTimeout(function(){var i=document.getElementById('cpcInput');if(i)i.focus();},100);
+    if(!READY){ cpcInit(); READY = true; }
+    else { cpcRefreshUI(); }
+    setTimeout(function(){ var i=document.getElementById('cpcInput'); if(i) i.focus(); }, 100);
   } else {
     p.classList.remove('open');
   }
 };
 
 function cpcInit(){
-  var t=document.getElementById('cpcTags');
-  if(t) t.innerHTML=TAGS.map(function(tg){
-    return '<button class="cpc-tag" onclick="cpcSend(\''+tg.replace(/'/g,'\\\'')+'\')">'+(tg.length>22?tg.substring(0,22)+'…':tg)+'</button>';
-  }).join('');
-  cpcAdd('bot',WELCOME);
+  cpcRefreshUI();
+  cpcAddMsg('bot',
+    'Bonjour, je suis <strong>Sentinel</strong>, votre assistant reglementaire propulse par CONSEILPREV.<br><br>' +
+    'Je suis connecte a <strong>Mistral Large</strong> et <strong>Claude Sonnet</strong> — choisissez votre moteur IA en haut.' +
+    '<br><br>Je connais le contenu de chaque page de Sentinel AI et adapte mes reponses en consequence.'
+  );
 }
 
-function cpcAdd(role,html){
-  var m=document.getElementById('cpcMsgs');
+function cpcAddMsg(role, html, apiName){
+  var m = document.getElementById('cpcMsgs');
   if(!m) return;
-  var d=document.createElement('div');
-  d.className='cpc-msg '+role;
-  d.innerHTML='<div class="cpc-av '+role+'">'+(role==='bot'?'S':'V')+'</div>'
-    +'<div class="cpc-bubble">'+html+'</div>';
+  var d = document.createElement('div');
+  d.className = 'cpc-msg ' + role;
+  var badge = (role==='bot' && apiName)
+    ? '<div><span class="cpc-source-badge cpc-source-' + (apiName==='claude'?'claude':'mistral') + '">' + apiName + '</span></div>'
+    : '';
+  d.innerHTML = '<div class="cpc-av ' + role + '">' + (role==='bot'?'S':'V') + '</div>'
+    + '<div style="flex:1"><div class="cpc-bubble">' + html + '</div>' + badge + '</div>';
   m.appendChild(d);
-  m.scrollTop=m.scrollHeight;
-}
-
-function cpcTyping(){
-  var m=document.getElementById('cpcMsgs');
-  if(!m) return null;
-  var d=document.createElement('div');
-  d.className='cpc-msg bot';d.id='cpcTyping';
-  d.innerHTML='<div class="cpc-av bot">S</div>'
-    +'<div class="cpc-bubble"><div class="cpc-typing"><span></span><span></span><span></span></div></div>';
-  m.appendChild(d);
-  m.scrollTop=m.scrollHeight;
+  m.scrollTop = m.scrollHeight;
   return d;
 }
 
-window.cpcSend=function(preset){
-  if(BUSY) return;
-  var inp=document.getElementById('cpcInput');
-  var txt=preset||(inp?inp.value.trim():'');
-  if(!txt) return;
-  if(inp){inp.value='';inp.style.height='auto';}
-  cpcAdd('user',txt.replace(/</g,'&lt;').replace(/>/g,'&gt;'));
-  HIST.push({role:'user',content:txt});
-  BUSY=true;
-  var ty=cpcTyping();
+function cpcTypingIndicator(){
+  var m = document.getElementById('cpcMsgs');
+  if(!m) return null;
+  var d = document.createElement('div');
+  d.className = 'cpc-msg bot'; d.id = 'cpcTyping';
+  d.innerHTML = '<div class="cpc-av bot">S</div>'
+    + '<div class="cpc-bubble"><div class="cpc-typing"><span></span><span></span><span></span></div></div>';
+  m.appendChild(d);
+  m.scrollTop = m.scrollHeight;
+  return d;
+}
+
+/* Appel Mistral */
+function cpcCallMistral(messages, sysPrompt, cb){
   fetch('https://api.mistral.ai/v1/chat/completions',{
     method:'POST',
-    headers:{'Content-Type':'application/json','Authorization':'Bearer '+KEY},
-    body:JSON.stringify({model:'mistral-large-latest',
-      messages:[{role:'system',content:SYS}].concat(HIST.slice(-8)),
-      max_tokens:500,temperature:0.5})
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+MISTRAL_KEY},
+    body:JSON.stringify({
+      model:'mistral-large-latest',
+      messages:[{role:'system',content:sysPrompt}].concat(messages),
+      max_tokens:550,
+      temperature:0.45
+    })
   })
-  .then(function(r){return r.json();})
+  .then(function(r){ return r.json(); })
   .then(function(d){
-    if(ty)ty.remove();
-    var rep=d.choices&&d.choices[0]?d.choices[0].message.content:'Erreur de connexion.';
-    HIST.push({role:'assistant',content:rep});
-    cpcAdd('bot',rep.replace(/\n/g,'<br>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>'));
-    BUSY=false;
+    var rep = d.choices&&d.choices[0] ? d.choices[0].message.content : null;
+    cb(null, rep, 'Mistral');
   })
-  .catch(function(){
-    if(ty)ty.remove();
-    cpcAdd('bot','Connexion indisponible. Contactez-nous : <a href="mailto:christophe.cerf@outlook.com">christophe.cerf@outlook.com</a>');
-    BUSY=false;
+  .catch(function(e){ cb(e, null, 'Mistral'); });
+}
+
+/* Appel Anthropic via proxy Sentinel AI */
+function cpcCallClaude(messages, sysPrompt, cb){
+  fetch('/api/chat/claude',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      model:'claude-sonnet-4-6',
+      system:sysPrompt,
+      messages:messages,
+      max_tokens:550
+    })
+  })
+  .then(function(r){
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    return r.json();
+  })
+  .then(function(d){
+    var rep = d.content && d.content[0] ? d.content[0].text : null;
+    cb(null, rep, 'Claude');
+  })
+  .catch(function(e){
+    /* Fallback : Mistral si Claude indisponible */
+    console.warn('Claude indisponible, fallback Mistral');
+    cpcCallMistral(messages, sysPrompt, function(err2, rep2, name2){
+      cb(err2, rep2, rep2 ? 'Mistral (fallback)' : 'error');
+    });
   });
+}
+
+/* Envoi de message */
+window.cpcSend = function(preset){
+  if(BUSY) return;
+  var inp = document.getElementById('cpcInput');
+  var sendBtn = document.getElementById('cpcSendBtn');
+  var txt = preset || (inp ? inp.value.trim() : '');
+  if(!txt) return;
+  if(inp){ inp.value=''; inp.style.height='auto'; }
+
+  cpcAddMsg('user', txt.replace(/</g,'&lt;').replace(/>/g,'&gt;'));
+  HIST.push({role:'user', content:txt});
+  BUSY = true;
+  if(sendBtn) sendBtn.disabled = true;
+
+  var ctx = cpcGetCtx();
+  var sysPrompt = SYS_BASE + ctx.sys;
+  var messages  = HIST.slice(-10);
+  var ty = cpcTypingIndicator();
+
+  function onReply(err, reply, apiName){
+    if(ty) ty.remove();
+    if(err || !reply){
+      cpcAddMsg('bot','Connexion indisponible. Contactez : <a href="mailto:christophe.cerf@outlook.com">christophe.cerf@outlook.com</a>', null);
+    } else {
+      HIST.push({role:'assistant', content:reply});
+      var formatted = reply
+        .replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        .replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')
+        .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+        .replace(/`([^`]+)`/g,'<code>$1</code>');
+      cpcAddMsg('bot','<p>'+formatted+'</p>', apiName);
+    }
+    BUSY = false;
+    if(sendBtn) sendBtn.disabled = false;
+  }
+
+  if(CUR_API === 'claude'){
+    cpcCallClaude(messages, sysPrompt, onReply);
+  } else {
+    cpcCallMistral(messages, sysPrompt, onReply);
+  }
 };
 
+/* Hook sur navigation Sentinel pour changer le contexte */
+var _origGo = window.go;
+window.go = function(){
+  var res = _origGo ? _origGo.apply(this, arguments) : undefined;
+  setTimeout(function(){ if(OPEN) cpcRefreshUI(); }, 150);
+  return res;
+};
+
+/* Badge notification apres 15s */
 setTimeout(function(){
-  if(!OPEN){var b=document.getElementById('cpcBtn');if(b)b.classList.add('has-notif');}
-},10000);
+  if(!OPEN){ var b=document.getElementById('cpcBtn'); if(b) b.classList.add('has-notif'); }
+}, 15000);
+
 })();
+
 </script>
 </html>
