@@ -545,6 +545,89 @@ textarea.form-el{min-height:86px;resize:vertical}
 .geo-tl-hidden{display:none}
 .geo-sort-select{font-size:11px;font-family:var(--mono);border:1px solid var(--rule2);border-radius:3px;padding:6px 10px;background:var(--white);color:var(--ink2);outline:none;cursor:pointer}
 
+
+/* ══ SIMULATEUR AI ACT ══ */
+.sim-wrap{max-width:860px}
+.sim-stepper{display:flex;gap:0;margin-bottom:32px;position:relative}
+.sim-stepper::before{content:'';position:absolute;top:14px;left:0;right:0;height:1px;background:var(--rule);z-index:0}
+.sim-step-dot{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;cursor:pointer;position:relative;z-index:1}
+.sim-step-circle{width:28px;height:28px;border-radius:50%;border:2px solid var(--rule);background:var(--white);font-family:var(--mono);font-size:10px;display:flex;align-items:center;justify-content:center;color:var(--muted2);transition:all .2s;font-weight:600}
+.sim-step-lbl{font-size:9px;font-family:var(--mono);color:var(--muted2);letter-spacing:.06em;text-align:center;text-transform:uppercase}
+.sim-step-dot.active .sim-step-circle{background:var(--ink);border-color:var(--ink);color:#fff}
+.sim-step-dot.done .sim-step-circle{background:var(--green);border-color:var(--green);color:#fff}
+.sim-step-dot.active .sim-step-lbl,.sim-step-dot.done .sim-step-lbl{color:var(--ink)}
+.sim-panel{display:none}.sim-panel.on{display:block}
+.sim-panel-title{font-family:var(--serif);font-size:22px;color:var(--ink);margin-bottom:4px;letter-spacing:-.01em}
+.sim-panel-sub{font-size:12px;color:var(--muted);margin-bottom:24px}
+.sim-ref{font-size:9px;font-family:var(--mono);color:var(--blue);background:rgba(28,90,138,.08);border:1px solid rgba(28,90,138,.2);border-radius:2px;padding:2px 7px;letter-spacing:.04em;display:inline-block;margin-bottom:20px}
+.sim-q{margin-bottom:22px}
+.sim-q-label{font-size:12px;font-weight:500;color:var(--ink);margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.sim-q-hint{font-size:10px;color:var(--muted);font-weight:400;font-style:italic}
+.sim-q-art{font-size:9px;font-family:var(--mono);color:var(--accent);background:rgba(184,50,34,.08);padding:1px 6px;border-radius:2px}
+.sim-select,.sim-input,.sim-textarea{width:100%;font-size:12px;font-family:var(--sans);color:var(--ink);background:var(--white);border:1px solid var(--rule2);border-radius:3px;padding:9px 12px;outline:none;transition:border-color .15s;box-sizing:border-box}
+.sim-select:focus,.sim-input:focus,.sim-textarea:focus{border-color:var(--accent)}
+.sim-textarea{resize:vertical;min-height:70px;line-height:1.5}
+.sim-radio-group{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.sim-radio-opt{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border:1px solid var(--rule);border-radius:3px;cursor:pointer;transition:all .15s;background:var(--white)}
+.sim-radio-opt:hover{border-color:var(--accent);background:rgba(184,50,34,.03)}
+.sim-radio-opt.selected{border-color:var(--accent);background:rgba(184,50,34,.05)}
+.sim-radio-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--rule2);flex-shrink:0;margin-top:1px;transition:all .15s;display:flex;align-items:center;justify-content:center}
+.sim-radio-opt.selected .sim-radio-dot{border-color:var(--accent);background:var(--accent)}
+.sim-radio-dot::after{content:'';width:5px;height:5px;border-radius:50%;background:#fff;display:none}
+.sim-radio-opt.selected .sim-radio-dot::after{display:block}
+.sim-radio-text{font-size:12px;color:var(--ink);line-height:1.4}
+.sim-radio-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.sim-checkbox-group{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+.sim-checkbox-opt{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--rule);border-radius:3px;cursor:pointer;font-size:11px;color:var(--ink2);transition:all .15s}
+.sim-checkbox-opt:hover{border-color:var(--accent)}
+.sim-checkbox-opt.checked{border-color:var(--accent);background:rgba(184,50,34,.05);color:var(--ink)}
+.sim-checkbox-box{width:14px;height:14px;border:2px solid var(--rule2);border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px}
+.sim-checkbox-opt.checked .sim-checkbox-box{background:var(--accent);border-color:var(--accent);color:#fff}
+.sim-nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px;padding-top:20px;border-top:1px solid var(--rule)}
+.sim-btn-prev{font-size:11px;font-family:var(--mono);color:var(--muted);cursor:pointer;background:none;border:none;padding:0;letter-spacing:.04em}
+.sim-btn-prev:hover{color:var(--ink)}
+.sim-btn-next{font-family:var(--mono);font-size:11px;background:var(--ink);color:#fff;border:none;border-radius:3px;padding:10px 22px;cursor:pointer;letter-spacing:.05em;transition:background .15s}
+.sim-btn-next:hover{background:var(--accent)}
+.sim-progress{font-size:10px;font-family:var(--mono);color:var(--muted2)}
+
+/* Résultats */
+.sim-result{background:var(--white);border:1px solid var(--rule);border-radius:4px;padding:28px;margin-top:4px}
+.sim-result-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;padding-bottom:18px;border-bottom:1px solid var(--rule)}
+.sim-result-badge{font-size:11px;font-family:var(--mono);padding:5px 12px;border-radius:3px;letter-spacing:.06em;font-weight:600}
+.sim-result-score{font-family:var(--serif);font-size:52px;color:var(--ink);line-height:1;letter-spacing:-.03em}
+.sim-result-score-lbl{font-size:10px;font-family:var(--mono);color:var(--muted2);letter-spacing:.06em;margin-top:2px}
+.sim-result-classif{font-family:var(--serif);font-size:20px;color:var(--ink);margin-bottom:6px}
+.sim-result-art{font-size:11px;color:var(--muted);font-family:var(--mono)}
+.sim-obligations{margin-bottom:20px}
+.sim-obl-title{font-size:11px;font-family:var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);margin-bottom:12px}
+.sim-obl-item{display:flex;gap:12px;padding:10px 14px;border-radius:3px;margin-bottom:6px;font-size:12px;border:1px solid var(--rule)}
+.sim-obl-item.critical{border-color:rgba(184,50,34,.3);background:rgba(184,50,34,.04)}
+.sim-obl-item.warning{border-color:rgba(196,124,26,.3);background:rgba(196,124,26,.04)}
+.sim-obl-item.ok{border-color:rgba(45,122,71,.3);background:rgba(45,122,71,.04)}
+.sim-obl-prio{font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:2px;flex-shrink:0;margin-top:1px;height:fit-content}
+.sim-obl-prio.p1{background:rgba(184,50,34,.12);color:var(--accent)}
+.sim-obl-prio.p2{background:rgba(196,124,26,.12);color:var(--orange)}
+.sim-obl-prio.p3{background:rgba(45,122,71,.12);color:var(--green)}
+.sim-obl-body{flex:1}
+.sim-obl-name{font-weight:500;color:var(--ink);margin-bottom:2px}
+.sim-obl-desc{font-size:11px;color:var(--muted);line-height:1.5}
+.sim-obl-refs{margin-top:4px;display:flex;gap:6px;flex-wrap:wrap}
+.sim-obl-ref-tag{font-size:9px;font-family:var(--mono);color:var(--blue);background:rgba(28,90,138,.08);border:1px solid rgba(28,90,138,.15);padding:1px 6px;border-radius:2px}
+.sim-sanctions-box{background:var(--bg);border-radius:3px;padding:16px;margin-bottom:20px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sim-sanc-item{display:flex;flex-direction:column;gap:2px}
+.sim-sanc-lbl{font-size:9px;font-family:var(--mono);color:var(--muted2);letter-spacing:.08em;text-transform:uppercase}
+.sim-sanc-val{font-family:var(--serif);font-size:20px;color:var(--accent)}
+.sim-timeline-box{margin-bottom:20px}
+.sim-tl-step{display:flex;gap:14px;padding:10px 0;border-bottom:1px solid var(--rule)}
+.sim-tl-step:last-child{border-bottom:none}
+.sim-tl-date{font-family:var(--mono);font-size:10px;color:var(--muted2);min-width:90px;margin-top:2px}
+.sim-tl-text{font-size:12px;color:var(--ink2);line-height:1.5}
+.sim-tl-tag{font-size:9px;font-family:var(--mono);padding:1px 6px;border-radius:2px;margin-left:6px}
+.sim-result-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;padding-top:16px;border-top:1px solid var(--rule)}
+.sim-reset-btn{font-size:10px;font-family:var(--mono);color:var(--muted);cursor:pointer;background:none;border:1px solid var(--rule2);border-radius:3px;padding:7px 14px;letter-spacing:.04em}
+.sim-reset-btn:hover{border-color:var(--accent);color:var(--accent)}
+@media(max-width:700px){.sim-checkbox-group{grid-template-columns:1fr}.sim-sanctions-box{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -956,27 +1039,328 @@ textarea.form-el{min-height:86px;resize:vertical}
 <div class="page" id="p-decision">
   <span class="eyebrow">Aide à la décision</span>
   <h1 class="page-h">Simuler un<br><em>déploiement IA</em></h1>
-  <p class="page-lead">Évaluez la conformité de votre cas d'usage IA selon l'EU AI Act, NIS2 et RGPD en 3 minutes.</p>
-  <div class="form-block">
-    <div class="form-grid2">
-      <div class="form-row"><label class="form-lbl">Secteur</label><select class="form-el" id="d-sec"><option value="">Choisir…</option><option value="energie">Énergie / Utilities</option><option value="sante">Santé</option><option value="finance">Finance / Banque</option><option value="industrie">Industrie</option><option value="transport">Transport</option><option value="it">IT / Tech</option><option value="public">Secteur public</option></select></div>
-      <div class="form-row"><label class="form-lbl">Type de système IA</label><select class="form-el" id="d-sys"><option value="">Choisir…</option><option value="prediction">Système de prédiction</option><option value="decision">Aide à la décision</option><option value="bio">Reconnaissance biométrique</option><option value="gen">IA générative / LLM</option><option value="monitor">Surveillance / Monitoring</option><option value="reco">Recommandation</option></select></div>
+  <p class="page-lead">Évaluez la conformité de votre système IA selon le Règlement (UE) 2024/1689 (EU AI Act) — classification, obligations et sanctions en 5 étapes.</p>
+  <span class="sim-ref">Règlement (UE) 2024/1689 du 13 juin 2024 — Texte officiel Journal officiel L du 12.7.2024</span>
+
+  <div class="sim-wrap">
+    <!-- Stepper -->
+    <div class="sim-stepper">
+      <div class="sim-step-dot active" id="step-dot-1" onclick="simGoto(1)">
+        <div class="sim-step-circle" id="step-circle-1">1</div>
+        <div class="sim-step-lbl">Système</div>
+      </div>
+      <div class="sim-step-dot" id="step-dot-2" onclick="simGoto(2)">
+        <div class="sim-step-circle" id="step-circle-2">2</div>
+        <div class="sim-step-lbl">Classification</div>
+      </div>
+      <div class="sim-step-dot" id="step-dot-3" onclick="simGoto(3)">
+        <div class="sim-step-circle" id="step-circle-3">3</div>
+        <div class="sim-step-lbl">Obligations</div>
+      </div>
+      <div class="sim-step-dot" id="step-dot-4" onclick="simGoto(4)">
+        <div class="sim-step-circle" id="step-circle-4">4</div>
+        <div class="sim-step-lbl">GPAI / Données</div>
+      </div>
+      <div class="sim-step-dot" id="step-dot-5" onclick="simGoto(5)">
+        <div class="sim-step-circle" id="step-circle-5">5</div>
+        <div class="sim-step-lbl">Résultats</div>
+      </div>
     </div>
-    <div class="form-row"><label class="form-lbl">Description du cas d'usage</label><textarea class="form-el" id="d-desc" placeholder="Ex : Système de scoring crédit automatisé utilisant un modèle ML…"></textarea></div>
-    <div class="form-grid2">
-      <div class="form-row"><label class="form-lbl">Juridiction principale</label><select class="form-el" id="d-jur"><option value="eu">Union Européenne</option><option value="fr">France</option><option value="uk">Royaume-Uni</option><option value="us">États-Unis</option></select></div>
-      <div class="form-row"><label class="form-lbl">Impact sur des personnes ?</label><select class="form-el" id="d-imp"><option value="high">Oui — décisions individuelles</option><option value="med">Oui — indirectement</option><option value="low">Non — usage interne</option></select></div>
+
+    <!-- ÉTAPE 1 — Identification du système -->
+    <div class="sim-panel on" id="sim-panel-1">
+      <div class="sim-panel-title">Identification du système IA</div>
+      <div class="sim-panel-sub">Décrivez votre système et son contexte de déploiement.</div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Nom du système IA <span class="sim-q-art">Art. 11 — Documentation technique</span></div>
+        <input class="sim-input" id="sim-name" type="text" placeholder="Ex : CreditScore-Pro v2.1, MedDiag-AI, ChatSupport…">
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Secteur d'activité <span class="sim-q-art">Annexe III — Domaines à haut risque</span></div>
+        <div class="sim-q-hint">Certains secteurs sont explicitement listés à l'Annexe III comme présentant un haut risque.</div>
+        <select class="sim-select" id="sim-secteur">
+          <option value="">Sélectionnez votre secteur…</option>
+          <optgroup label="Secteurs Annexe III — Risque élevé">
+            <option value="bio">Biométrie (identification, catégorisation, reconnaissance émotionnelle)</option>
+            <option value="infra">Infrastructures critiques (eau, gaz, électricité, trafic, finance)</option>
+            <option value="education">Éducation et formation professionnelle</option>
+            <option value="emploi">Emploi, gestion des travailleurs, accès à l'emploi indépendant</option>
+            <option value="essentiels">Services essentiels (aide sociale, logement, crédit, urgences)</option>
+            <option value="law">Application de la loi, justice, démocratie</option>
+            <option value="migration">Migration, asile, contrôle aux frontières</option>
+          </optgroup>
+          <optgroup label="Autres secteurs">
+            <option value="sante">Santé / Médical (hors dispositifs médicaux réglementés)</option>
+            <option value="finance">Finance / Assurance / Banque</option>
+            <option value="industrie">Industrie / Manufacturing</option>
+            <option value="transport">Transport / Automobile / Aérien</option>
+            <option value="energie">Énergie / Utilities</option>
+            <option value="media">Médias / Communication / Marketing</option>
+            <option value="it">IT / Tech / SaaS</option>
+            <option value="public">Administration publique</option>
+            <option value="autre">Autre secteur</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Type de système IA <span class="sim-q-art">Art. 3(1) — Définition système IA</span></div>
+        <select class="sim-select" id="sim-type">
+          <option value="">Sélectionnez le type de système…</option>
+          <optgroup label="Systèmes décisionnels">
+            <option value="scoring">Scoring / Notation automatisée (crédit, risque, employabilité)</option>
+            <option value="decision_auto">Décision entièrement automatisée (sans intervention humaine)</option>
+            <option value="aide_decision">Aide à la décision (recommandation soumise à validation humaine)</option>
+            <option value="triage">Tri / Priorisation de dossiers ou personnes</option>
+          </optgroup>
+          <optgroup label="Systèmes de reconnaissance">
+            <option value="bio_remote">Identification biométrique à distance en temps réel</option>
+            <option value="bio_post">Identification biométrique a posteriori</option>
+            <option value="emotion">Reconnaissance émotionnelle</option>
+            <option value="face_reco">Reconnaissance faciale / catégorisation biométrique</option>
+            <option value="voix">Reconnaissance vocale / Analyse de la voix</option>
+          </optgroup>
+          <optgroup label="IA générative et conversationnelle">
+            <option value="llm_gen">LLM / IA générative (texte, image, code, audio)</option>
+            <option value="deepfake">Synthèse de contenus (deepfake, voix clonée)</option>
+            <option value="chatbot">Chatbot / Agent conversationnel</option>
+            <option value="copilot">Assistant IA / Copilot (code, rédaction)</option>
+          </optgroup>
+          <optgroup label="Systèmes de surveillance et monitoring">
+            <option value="surveillance">Surveillance de masse / monitoring comportemental</option>
+            <option value="ot_monitor">Surveillance OT / Systèmes industriels</option>
+            <option value="cyber_ai">Détection de cybermenaces par IA</option>
+            <option value="predictif">Maintenance prédictive / Anomalie industrielle</option>
+          </optgroup>
+          <optgroup label="Systèmes de recommandation et contenu">
+            <option value="reco">Système de recommandation personnalisée</option>
+            <option value="content_moderation">Modération de contenu automatisée</option>
+            <option value="seo_ai">Génération / Optimisation de contenu</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Description du cas d'usage</div>
+        <textarea class="sim-textarea" id="sim-desc" placeholder="Décrivez brièvement le fonctionnement, l'objectif et le contexte d'utilisation de votre système IA. Ex : Modèle ML de scoring crédit analysant 200+ variables pour prédire la solvabilité des demandeurs et déclencher automatiquement l'octroi ou le refus de prêt."></textarea>
+      </div>
+
+      <div class="sim-nav">
+        <span></span>
+        <span class="sim-progress">Étape 1 / 4</span>
+        <button class="sim-btn-next" onclick="simNext(1)">Suivant →</button>
+      </div>
     </div>
-    <button class="submit" onclick="runCheck()">Analyser la conformité →</button>
-  </div>
-  <div class="result" id="d-result">
-    <div style="display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:start">
-      <div><span class="res-lbl">Score de risque</span><div class="res-score" id="r-score">—</div></div>
-      <div><div style="font-size:12px;font-weight:500;color:var(--ink);margin-bottom:8px" id="r-level"></div><div class="res-tags" id="r-tags"></div><div class="res-txt" id="r-txt"></div></div>
+
+    <!-- ÉTAPE 2 — Classification du risque -->
+    <div class="sim-panel" id="sim-panel-2">
+      <div class="sim-panel-title">Classification du niveau de risque</div>
+      <div class="sim-panel-sub">Ces questions déterminent si votre système relève des pratiques interdites (Art. 5), du régime haut risque (Art. 6), ou d'un régime allégé.</div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Votre système utilise-t-il des techniques subliminales ou manipulatrices ? <span class="sim-q-art">Art. 5(1)(a)</span></div>
+        <div class="sim-q-hint">Techniques au-dessous du seuil de conscience, exploitation des vulnérabilités (âge, handicap), altération substantielle du comportement.</div>
+        <div class="sim-radio-group" id="r-subliminal">
+          <div class="sim-radio-opt" onclick="simRadio('r-subliminal','oui')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui<div class="sim-radio-sub">Le système vise à influencer les comportements de manière non transparente</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-subliminal','non')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Non<div class="sim-radio-sub">Pas de techniques manipulatrices ou subliminales</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-subliminal','incertain')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Incertain — à analyser<div class="sim-radio-sub">Des techniques de personnalisation pourraient être concernées</div></div></div>
+        </div>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Votre système effectue-t-il une identification biométrique à distance en temps réel dans des espaces publics ? <span class="sim-q-art">Art. 5(1)(h)</span></div>
+        <div class="sim-radio-group" id="r-biometrie">
+          <div class="sim-radio-opt" onclick="simRadio('r-biometrie','oui')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — identification temps réel en espace public<div class="sim-radio-sub">Caméras de surveillance avec reconnaissance faciale en direct</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-biometrie','aposteriori')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Identification biométrique a posteriori uniquement<div class="sim-radio-sub">Analyse de vidéos ou images enregistrées</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-biometrie','non')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Non — pas d'identification biométrique publique<div class="sim-radio-sub">Aucun traitement biométrique dans des espaces publics accessibles</div></div></div>
+        </div>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Votre système est-il utilisé dans l'un des domaines à haut risque de l'Annexe III ? <span class="sim-q-art">Art. 6(2) + Annexe III</span></div>
+        <div class="sim-q-hint">Sélectionnez tous les domaines applicables.</div>
+        <div class="sim-checkbox-group" id="cb-annexe3">
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-bio')"><div class="sim-checkbox-box">✓</div>Biométrie</div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-infra')"><div class="sim-checkbox-box">✓</div>Infrastructures critiques</div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-edu')"><div class="sim-checkbox-box">✓</div>Éducation / Formation</div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-emploi')"><div class="sim-checkbox-box">✓</div>Emploi / RH / Recrutement</div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-essentiels')"><div class="sim-checkbox-box">✓</div>Services essentiels / Crédit / Aides</div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-law')"><div class="sim-checkbox-box">✓</div>Application de la loi / Justice</div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-migration')"><div class="sim-checkbox-box">✓</div>Migration / Asile / Frontières</div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-demo')"><div class="sim-checkbox-box">✓</div>Démocratie / Élections</div>
+        </div>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Quel est l'impact du système sur les personnes ? <span class="sim-q-art">Art. 6(1) — Évaluation du risque</span></div>
+        <div class="sim-radio-group" id="r-impact">
+          <div class="sim-radio-opt" onclick="simRadio('r-impact','individuel')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Décisions individuelles contraignantes<div class="sim-radio-sub">Octroi/refus de crédit, recrutement, accès à des services, décision médicale</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-impact','groupe')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Impact sur des groupes de personnes<div class="sim-radio-sub">Ciblage publicitaire, recommandation de contenu, modération, scoring collectif</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-impact','interne')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Usage interne — pas de décision directe sur des personnes<div class="sim-radio-sub">Maintenance prédictive, optimisation de processus, outil interne sans impact externe</div></div></div>
+        </div>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Votre système est-il destiné à interagir directement avec des utilisateurs finaux ? <span class="sim-q-art">Art. 50 — Transparence</span></div>
+        <div class="sim-radio-group" id="r-interaction">
+          <div class="sim-radio-opt" onclick="simRadio('r-interaction','oui')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — chatbot, assistant, agent conversationnel<div class="sim-radio-sub">Obligation d'information que l'utilisateur interagit avec une IA (Art. 50.1)</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-interaction','genere')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Génère des contenus synthétiques (texte, image, voix, vidéo)<div class="sim-radio-sub">Obligation de marquage et de watermarking (Art. 50.2-4)</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-interaction','non')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Non — système backend sans interaction directe<div class="sim-radio-sub">Pas d'obligation de transparence Art. 50</div></div></div>
+        </div>
+      </div>
+
+      <div class="sim-nav">
+        <button class="sim-btn-prev" onclick="simPrev(2)">← Retour</button>
+        <span class="sim-progress">Étape 2 / 4</span>
+        <button class="sim-btn-next" onclick="simNext(2)">Suivant →</button>
+      </div>
     </div>
-    <div class="res-actions">
-      <button class="submit" onclick="go('audit',null,'AUDIT','Audit de conformité')">Lancer un audit complet →</button>
-      <button class="tb-btn" onclick="openMailtoContact('[Sentinel AI] Demande audit conformité')">Contacter CONSEILPREV</button>
+
+    <!-- ÉTAPE 3 — Obligations existantes -->
+    <div class="sim-panel" id="sim-panel-3">
+      <div class="sim-panel-title">État de vos obligations de conformité</div>
+      <div class="sim-panel-sub">Indiquez ce que vous avez déjà mis en place. Cela permettra de calculer votre gap de conformité.</div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Système de gestion des risques <span class="sim-q-art">Art. 9</span></div>
+        <div class="sim-q-hint">Processus itératif documenté couvrant l'identification, estimation et gestion des risques tout au long du cycle de vie.</div>
+        <select class="sim-select" id="sim-art9">
+          <option value="none">Non — pas encore mis en place</option>
+          <option value="partial">En cours — partiellement documenté</option>
+          <option value="done">Oui — système de gestion des risques complet et documenté</option>
+        </select>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Gouvernance des données d'entraînement <span class="sim-q-art">Art. 10</span></div>
+        <div class="sim-q-hint">Qualité, représentativité, absence de biais, traçabilité des jeux de données d'entraînement, validation et test.</div>
+        <select class="sim-select" id="sim-art10">
+          <option value="none">Non — aucune gouvernance formalisée</option>
+          <option value="partial">Partielle — quelques contrôles qualité en place</option>
+          <option value="done">Oui — gouvernance complète (origine, qualité, biais, traçabilité)</option>
+        </select>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Documentation technique <span class="sim-q-art">Art. 11 + Annexe IV</span></div>
+        <div class="sim-q-hint">Dossier technique complet : description du système, architecture, données, performances, limites, mesures de conformité.</div>
+        <select class="sim-select" id="sim-art11">
+          <option value="none">Non — aucune documentation formelle</option>
+          <option value="partial">Partielle — documentation interne basique</option>
+          <option value="done">Oui — dossier technique conforme Annexe IV AI Act</option>
+        </select>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Journalisation et enregistrement des décisions <span class="sim-q-art">Art. 12</span></div>
+        <div class="sim-q-hint">Capacité de journalisation automatique permettant de reconstituer les décisions et de vérifier la conformité a posteriori.</div>
+        <select class="sim-select" id="sim-art12">
+          <option value="none">Non — pas de journalisation IA</option>
+          <option value="partial">Partielle — logs applicatifs basiques</option>
+          <option value="done">Oui — journalisation conforme Art. 12 (horodatage, entrées, sorties, identifiants)</option>
+        </select>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Supervision humaine effective <span class="sim-q-art">Art. 14</span></div>
+        <div class="sim-q-hint">Mesures permettant à des personnes physiques de surveiller, comprendre, corriger ou stopper le système en cours de fonctionnement.</div>
+        <select class="sim-select" id="sim-art14">
+          <option value="none">Non — décision entièrement automatisée sans supervision</option>
+          <option value="partial">Partielle — validation humaine disponible mais non systématique</option>
+          <option value="done">Oui — supervision humaine effective et documentée (Art. 14.4)</option>
+        </select>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Transparence envers les déployeurs <span class="sim-q-art">Art. 13</span></div>
+        <div class="sim-q-hint">Notice d'utilisation claire sur les capacités, limites, performances, conditions d'utilisation prévue.</div>
+        <select class="sim-select" id="sim-art13">
+          <option value="none">Non — aucune notice formelle</option>
+          <option value="partial">Partielle — documentation utilisateur basique</option>
+          <option value="done">Oui — notice conforme Art. 13.3 (capacités, limites, performances, instructions)</option>
+        </select>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Système de gestion de la qualité <span class="sim-q-art">Art. 17</span></div>
+        <div class="sim-q-hint">Politiques et procédures documentées de conception, test, surveillance post-commercialisation, gestion des incidents.</div>
+        <select class="sim-select" id="sim-art17">
+          <option value="none">Non — pas de SGQ formel</option>
+          <option value="partial">Partielle — ISO 9001 ou équivalent sans volet IA spécifique</option>
+          <option value="done">Oui — SGQ complet incluant l'IA (ou ISO 42001 en cours)</option>
+        </select>
+      </div>
+
+      <div class="sim-nav">
+        <button class="sim-btn-prev" onclick="simPrev(3)">← Retour</button>
+        <span class="sim-progress">Étape 3 / 4</span>
+        <button class="sim-btn-next" onclick="simNext(3)">Suivant →</button>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 4 — GPAI et données -->
+    <div class="sim-panel" id="sim-panel-4">
+      <div class="sim-panel-title">Modèles à usage général (GPAI) et données</div>
+      <div class="sim-panel-sub">Questions spécifiques aux modèles de fondation, LLM et aux enjeux de données personnelles.</div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Votre système est-il un modèle d'IA à usage général (GPAI) ? <span class="sim-q-art">Art. 51-55</span></div>
+        <div class="sim-q-hint">Modèle entraîné sur large quantité de données, polyvalent, utilisable dans de multiples contextes (LLM, modèle de vision généraliste, modèle audio).</div>
+        <div class="sim-radio-group" id="r-gpai">
+          <div class="sim-radio-opt" onclick="simRadio('r-gpai','oui_sys')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — je développe/fournis un modèle GPAI<div class="sim-radio-sub">Obligations spécifiques Art. 53 (documentation, politique de droits d'auteur, résumé de données)</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-gpai','oui_flop')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — GPAI à capacités systémiques (seuil 10^25 FLOPs)<div class="sim-radio-sub">Obligations renforcées Art. 55 : évaluation adversariale, signalement incidents, cybersécurité</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-gpai','deploie')"><div class="sim-radio-opt" onclick="simRadio('r-gpai','deploie')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Je déploie un GPAI tiers (OpenAI, Anthropic, Mistral…)<div class="sim-radio-sub">Obligations de déployeur : vérification des politiques fournisseur, transparence utilisateurs</div></div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-gpai','non')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Non — système IA spécifique à une tâche<div class="sim-radio-sub">Pas soumis au régime GPAI des Art. 51-55</div></div></div>
+        </div>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Votre système traite-t-il des données personnelles ? <span class="sim-q-art">RGPD Art. 22 + AI Act Art. 10</span></div>
+        <div class="sim-radio-group" id="r-rgpd">
+          <div class="sim-radio-opt" onclick="simRadio('r-rgpd','sensibles')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — données sensibles (santé, biométrie, opinions politiques, origine ethnique…)<div class="sim-radio-sub">AIPD obligatoire, base légale Art. 9 RGPD, restrictions strictes</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-rgpd','standard')"><div class="sim-radio-opt" onclick="simRadio('r-rgpd','standard')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — données personnelles standard<div class="sim-radio-sub">RGPD applicable, AIPD si risque élevé, droit d'opposition aux décisions automatisées (Art. 22)</div></div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-rgpd','non')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Non — données anonymisées ou techniques uniquement<div class="sim-radio-sub">RGPD non applicable — vérifier réelle anonymisation</div></div></div>
+        </div>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Chiffre d'affaires annuel mondial de votre organisation <span class="sim-q-art">Art. 99 — Calcul des sanctions</span></div>
+        <div class="sim-q-hint">Utilisé pour calculer le plafond de sanction applicable (en % du CA mondial).</div>
+        <select class="sim-select" id="sim-ca">
+          <option value="startup">Startup / PME — moins de 10 M€</option>
+          <option value="sme">PME — 10 à 50 M€</option>
+          <option value="mid">ETI — 50 M€ à 250 M€</option>
+          <option value="large">Grande entreprise — 250 M€ à 1 Mds€</option>
+          <option value="xlarge">Multinationale — plus de 1 Mds€</option>
+        </select>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Votre organisation est-elle établie dans l'UE ou vise-t-elle le marché européen ? <span class="sim-q-art">Art. 2 — Champ d'application territorial</span></div>
+        <div class="sim-radio-group" id="r-territoire">
+          <div class="sim-radio-opt" onclick="simRadio('r-territoire','ue')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Établie dans l'UE — fournisseur ou déployeur<div class="sim-radio-sub">AI Act pleinement applicable</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-territoire','hors_ue')"><div class="sim-radio-opt" onclick="simRadio('r-territoire','hors_ue')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Hors UE — mais système utilisé dans l'UE ou affectant des personnes dans l'UE<div class="sim-radio-sub">AI Act applicable par extraterritorialité — mandataire UE requis (Art. 22)</div></div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-territoire','hors')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Hors UE — système uniquement utilisé hors UE<div class="sim-radio-sub">AI Act non applicable — vérifier les réglementations locales</div></div></div>
+        </div>
+      </div>
+
+      <div class="sim-nav">
+        <button class="sim-btn-prev" onclick="simPrev(4)">← Retour</button>
+        <span class="sim-progress">Étape 4 / 4</span>
+        <button class="sim-btn-next" onclick="simCompute()">Analyser →</button>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 5 — Résultats -->
+    <div class="sim-panel" id="sim-panel-5">
+      <div id="sim-result-container"></div>
+      <div class="sim-nav" style="margin-top:8px">
+        <button class="sim-reset-btn" onclick="simReset()">↺ Nouvelle simulation</button>
+        <span></span>
+        <button class="sim-btn-next" onclick="go('audit',null,'AUDIT','Audit de conformité')">Lancer l'audit complet →</button>
+      </div>
     </div>
   </div>
 </div>
@@ -3262,22 +3646,358 @@ geoRenderTL();
 function addMsg(role,html){ var m=document.getElementById('chat-msgs'); if(!m) return; var init=role==='bot'?'S':'CC'; m.innerHTML+='<div class="c-msg '+role+'"><div class="c-av '+role+'">'+init+'</div><div class="c-bubble">'+html+'</div></div>'; m.scrollTop=m.scrollHeight; }
 function doChat(preset){ var inp=document.getElementById('chat-in'); var txt=preset||(inp?inp.value.trim():''); if(!txt) return; if(inp) inp.value=''; addMsg('u',txt); var R={'art. 6':'L\'Article 6 de l\'EU AI Act établit la classification des systèmes IA à haut risque.','nis2':'NIS2 (Directive 2022/2555) s\'applique aux entités essentielles dans 18 secteurs.','classifi':'La classification EU AI Act : ① Risque inacceptable, ② Haut risque, ③ Risque limité, ④ Risque minimal.','sanction':'Sanctions EU AI Act : 35 M€ ou 7% du CA mondial (systèmes haut risque).'}; setTimeout(function(){ var key=Object.keys(R).find(function(k){ return txt.toLowerCase().indexOf(k)>=0; }); addMsg('bot',key?R[key]:'Je traite votre question. Pour une analyse approfondie, nos experts CONSEILPREV sont disponibles à <a href="mailto:christophe.cerf@outlook.com" style="color:var(--accent)">christophe.cerf@outlook.com</a>.'); },700); }
 
-function runCheck(){
-  var sec=document.getElementById('d-sec').value; var sys=document.getElementById('d-sys').value; var imp=document.getElementById('d-imp').value;
-  if(!sec||!sys){ alert('Sélectionnez un secteur et un type de système.'); return; }
-  var s=imp==='high'?8.1:imp==='med'?5.4:3.2;
-  if(sec==='sante'||sec==='finance') s=Math.min(9.5,s+1.2);
-  if(sys==='bio') s=Math.min(9.8,s+1.5);
-  if(sys==='gen') s=Math.min(9.5,s+0.8);
-  s=Math.round(s*10)/10;
-  var r=document.getElementById('d-result'); if(!r) return;
-  document.getElementById('r-score').textContent=s;
-  document.getElementById('r-level').textContent=s>=7?'Haut risque — Article 6(2) AI Act':s>=4?'Risque modéré — Article 6(1) AI Act':'Risque limité — Article 6(3) AI Act';
-  var obs=s>=7?['FRIA requise','Enregistrement EU DB','Doc. technique Art.11','Validation humaine']:s>=4?['Transparence Art.13','Journalisation Art.12','Robustesse Art.15']:['Bonnes pratiques','Documentation minimale'];
-  document.getElementById('r-tags').innerHTML=obs.map(function(o){ return '<span class="chip '+(s<4?'chip-g':'chip-r')+'">'+o+'</span>'; }).join(' ');
-  document.getElementById('r-txt').innerHTML='Score de risque <strong>'+s+'/10</strong>. '+(s>=7?'Une FRIA et un enregistrement dans la base EU sont requis avant déploiement.':s>=4?'Des obligations de transparence et de documentation s\'appliquent.':'Votre système relève du régime allégé.');
-  r.classList.add('on'); r.scrollIntoView({behavior:'smooth',block:'nearest'});
+/* ══════════════════════════════════════════════════════
+   SIMULATEUR AI ACT — Logique complète
+   Règlement (UE) 2024/1689 du 13 juin 2024
+   ══════════════════════════════════════════════════════ */
+(function(){
+
+var SIM_STEP = 1;
+var SIM_DATA = {};
+
+/* ── Navigation ── */
+window.simGoto = function(step){
+  if(step >= SIM_STEP || step < 1) return;
+  simShowPanel(step);
+};
+window.simNext = function(from){
+  if(from === 1){
+    SIM_DATA.name = document.getElementById('sim-name').value.trim() || 'Système IA';
+    SIM_DATA.secteur = document.getElementById('sim-secteur').value;
+    SIM_DATA.type = document.getElementById('sim-type').value;
+    SIM_DATA.desc = document.getElementById('sim-desc').value;
+    if(!SIM_DATA.secteur || !SIM_DATA.type){ alert('Veuillez sélectionner un secteur et un type de système.'); return; }
+  }
+  if(from === 2){
+    SIM_DATA.subliminal = simGetRadio('r-subliminal');
+    SIM_DATA.biometrie = simGetRadio('r-biometrie');
+    SIM_DATA.annexe3 = simGetCheckboxes('cb-annexe3');
+    SIM_DATA.impact = simGetRadio('r-impact');
+    SIM_DATA.interaction = simGetRadio('r-interaction');
+  }
+  if(from === 3){
+    SIM_DATA.art9 = document.getElementById('sim-art9').value;
+    SIM_DATA.art10 = document.getElementById('sim-art10').value;
+    SIM_DATA.art11 = document.getElementById('sim-art11').value;
+    SIM_DATA.art12 = document.getElementById('sim-art12').value;
+    SIM_DATA.art13 = document.getElementById('sim-art13').value;
+    SIM_DATA.art14 = document.getElementById('sim-art14').value;
+    SIM_DATA.art17 = document.getElementById('sim-art17').value;
+  }
+  simShowPanel(from + 1);
+};
+window.simPrev = function(from){ simShowPanel(from - 1); };
+window.simCompute = function(){
+  SIM_DATA.gpai = simGetRadio('r-gpai');
+  SIM_DATA.rgpd = simGetRadio('r-rgpd');
+  SIM_DATA.ca = document.getElementById('sim-ca').value;
+  SIM_DATA.territoire = simGetRadio('r-territoire');
+  simShowPanel(5);
+  simRender();
+};
+window.simReset = function(){
+  SIM_DATA = {};
+  SIM_STEP = 1;
+  document.querySelectorAll('.sim-radio-opt').forEach(function(el){ el.classList.remove('selected'); });
+  document.querySelectorAll('.sim-checkbox-opt').forEach(function(el){ el.classList.remove('checked'); });
+  ['sim-name','sim-desc'].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=''; });
+  ['sim-secteur','sim-type','sim-art9','sim-art10','sim-art11','sim-art12','sim-art13','sim-art14','sim-art17','sim-ca'].forEach(function(id){ var el=document.getElementById(id); if(el) el.selectedIndex=0; });
+  simShowPanel(1);
+};
+
+function simShowPanel(step){
+  SIM_STEP = step;
+  for(var i=1;i<=5;i++){
+    var panel = document.getElementById('sim-panel-'+i);
+    var dot = document.getElementById('step-dot-'+i);
+    var circle = document.getElementById('step-circle-'+i);
+    if(panel) panel.classList.toggle('on', i===step);
+    if(dot){
+      dot.classList.remove('active','done');
+      if(i===step) dot.classList.add('active');
+      else if(i<step) dot.classList.add('done');
+    }
+    if(circle) circle.textContent = i < step ? '✓' : String(i);
+  }
 }
+
+/* ── Helpers ── */
+window.simRadio = function(groupId, value){
+  document.querySelectorAll('#'+groupId+' .sim-radio-opt').forEach(function(el){ el.classList.remove('selected'); });
+  var opts = document.querySelectorAll('#'+groupId+' .sim-radio-opt');
+  var vals = Array.prototype.map.call(opts, function(el){ return el.getAttribute('onclick') || ''; });
+  opts.forEach(function(el){
+    var oc = el.getAttribute('onclick') || '';
+    if(oc.indexOf("'"+value+"'") !== -1) el.classList.add('selected');
+  });
+};
+function simGetRadio(groupId){
+  var selected = null;
+  document.querySelectorAll('#'+groupId+' .sim-radio-opt').forEach(function(el){
+    if(el.classList.contains('selected')){
+      var oc = el.getAttribute('onclick') || '';
+      var m = oc.match(/'([^']+)'\)$/);
+      if(m) selected = m[1];
+    }
+  });
+  return selected;
+}
+window.simCheckbox = function(el, val){
+  el.classList.toggle('checked');
+  el.setAttribute('data-val', val);
+};
+function simGetCheckboxes(groupId){
+  var checked = [];
+  document.querySelectorAll('#'+groupId+' .sim-checkbox-opt.checked').forEach(function(el){
+    checked.push(el.getAttribute('data-val'));
+  });
+  return checked;
+}
+
+/* ══ MOTEUR DE CLASSIFICATION ══ */
+function simClassify(){
+  var d = SIM_DATA;
+  var result = { level: 'minimal', score: 2.0, art5: false, article: 'Art. 6(3)', color: 'var(--green)', badge: 'RISQUE MINIMAL', obligations: [], gaps: [], sanctions: {}, timeline: [] };
+
+  /* Art. 5 — Pratiques interdites */
+  var isInterdit = false;
+  if(d.subliminal === 'oui') isInterdit = true;
+  if(d.biometrie === 'oui') isInterdit = true;
+  if(['bio_remote'].includes(d.type)) isInterdit = true;
+
+  if(isInterdit){
+    result.level = 'interdit';
+    result.score = 10.0;
+    result.art5 = true;
+    result.article = 'Art. 5 — Pratiques interdites';
+    result.color = '#8B0000';
+    result.badge = 'PRATIQUE INTERDITE';
+    result.sanctions = { max_pct: '7% du CA mondial', max_flat: '35 000 000 €', art: 'Art. 99(3)' };
+    return result;
+  }
+
+  /* Art. 6(2) + Annexe III — Haut risque */
+  var isHautRisque = false;
+  var hautRisqueFactor = 1.0;
+
+  var annexe3Secteurs = ['bio','infra','education','emploi','essentiels','law','migration'];
+  if(annexe3Secteurs.includes(d.secteur)) isHautRisque = true;
+  if(d.annexe3 && d.annexe3.length > 0) isHautRisque = true;
+  if(['scoring','decision_auto','triage','bio_post','emotion','face_reco','surveillance'].includes(d.type)) isHautRisque = true;
+  if(d.impact === 'individuel') hautRisqueFactor = 1.3;
+  if(['sante','finance','public','law','infra','migration'].includes(d.secteur)) hautRisqueFactor = Math.max(hautRisqueFactor, 1.2);
+
+  if(isHautRisque){
+    result.level = 'haut';
+    result.score = Math.min(9.5, 6.5 * hautRisqueFactor);
+    result.article = 'Art. 6(2) + Annexe III';
+    result.color = 'var(--accent)';
+    result.badge = 'HAUT RISQUE';
+    result.sanctions = { max_pct: '3% du CA mondial', max_flat: '15 000 000 €', art: 'Art. 99(2)' };
+    if(['bio','infra','law','migration'].includes(d.secteur)){
+      result.score = Math.min(9.5, result.score + 0.5);
+    }
+  } else if(d.interaction === 'oui' || d.interaction === 'genere' || ['llm_gen','chatbot','copilot','deepfake'].includes(d.type)){
+    result.level = 'limite';
+    result.score = 4.5;
+    result.article = 'Art. 50 — Transparence';
+    result.color = 'var(--orange)';
+    result.badge = 'RISQUE LIMITE';
+    result.sanctions = { max_pct: '1% du CA mondial', max_flat: '7 500 000 €', art: 'Art. 99(4)' };
+  } else {
+    result.score = d.impact === 'groupe' ? 3.2 : 2.0;
+  }
+
+  /* GPAI */
+  if(d.gpai === 'oui_sys') result.score = Math.min(9.5, result.score + 0.5);
+  if(d.gpai === 'oui_flop'){ result.score = Math.min(9.5, result.score + 1.5); if(result.level !== 'haut') result.level = 'haut'; }
+
+  /* RGPD */
+  if(d.rgpd === 'sensibles') result.score = Math.min(9.5, result.score + 0.8);
+  if(d.rgpd === 'standard') result.score = Math.min(9.5, result.score + 0.3);
+
+  result.score = Math.round(result.score * 10) / 10;
+
+  /* Hors UE */
+  result.extra_territorial = (d.territoire === 'hors_ue');
+
+  return result;
+}
+
+/* Calcul du gap conformité */
+function simGap(classif){
+  var d = SIM_DATA;
+  var gaps = [];
+  var ALL_OBL = [
+    { id:'art9', name:'Système de gestion des risques', desc:'Processus itératif documenté : identification, estimation, évaluation et gestion des risques tout au long du cycle de vie.', refs:['Art. 9'], prio:'p1', level:'haut' },
+    { id:'art10', name:'Gouvernance des données', desc:'Qualité, représentativité, traçabilité des données d\'entraînement, validation et test. Absence de biais vérifiée.', refs:['Art. 10'], prio:'p1', level:'haut' },
+    { id:'art11', name:'Documentation technique (Annexe IV)', desc:'Dossier technique complet avant mise sur le marché : architecture, données, performances, limitations, évaluation de conformité.', refs:['Art. 11','Annexe IV'], prio:'p1', level:'haut' },
+    { id:'art12', name:'Journalisation automatique des décisions', desc:'Capacité de journalisation : horodatage, identifiants, entrées/sorties, événements. Conservation minimale 6 mois.', refs:['Art. 12'], prio:'p1', level:'haut' },
+    { id:'art13', name:'Notice d\'utilisation pour déployeurs', desc:'Documentation claire sur les capacités, limites, performances, conditions d\'utilisation prévue et restrictions.', refs:['Art. 13'], prio:'p2', level:'haut' },
+    { id:'art14', name:'Mécanismes de supervision humaine', desc:'Interfaces permettant la compréhension des sorties, l\'interruption ou la correction du système par des opérateurs compétents.', refs:['Art. 14'], prio:'p1', level:'haut' },
+    { id:'art17', name:'Système de gestion de la qualité', desc:'Politiques et procédures : stratégie réglementaire, conception, tests, incidents, surveillance post-commercialisation.', refs:['Art. 17'], prio:'p2', level:'haut' },
+  ];
+
+  var TRANSPARENCY_OBL = [
+    { id:'art50_chat', name:'Information obligatoire — interaction IA', desc:'Informer les utilisateurs qu\'ils interagissent avec un système IA, sauf si cela ressort clairement du contexte.', refs:['Art. 50(1)'], prio:'p1', level:'limite' },
+    { id:'art50_content', name:'Marquage des contenus synthétiques', desc:'Marquage machine-readable des contenus générés artificiellement (texte, image, audio, vidéo). Watermarking obligatoire.', refs:['Art. 50(2)','Art. 50(4)'], prio:'p1', level:'limite' },
+  ];
+
+  var GPAI_OBL = [
+    { id:'art53', name:'Documentation GPAI (Art. 53)', desc:'Résumé du contenu d\'entraînement, politique de droits d\'auteur, résumé des évaluations de performance.', refs:['Art. 53'], prio:'p1', level:'gpai' },
+    { id:'art55', name:'Évaluation adversariale et cybersécurité', desc:'Red-teaming, évaluation des risques systémiques, signalement d\'incidents à la Commission. Obligatoire si >10^25 FLOPs.', refs:['Art. 55'], prio:'p1', level:'gpai_sys' },
+  ];
+
+  var RGPD_OBL = [
+    { id:'aipd', name:'Analyse d\'impact (AIPD/DPIA) RGPD', desc:'Analyse d\'impact obligatoire si traitement à risque élevé, incluant les systèmes IA de profilage ou décision automatisée.', refs:['RGPD Art. 35','AI Act Art. 9.7'], prio:'p1', level:'rgpd' },
+    { id:'art22', name:'Droit d\'opposition aux décisions automatisées', desc:'Les personnes ont le droit de ne pas faire l\'objet d\'une décision exclusivement automatisée ayant des effets juridiques.', refs:['RGPD Art. 22'], prio:'p1', level:'rgpd' },
+  ];
+
+  var EXTRA_OBL = [
+    { id:'art22_rep', name:'Mandataire UE obligatoire', desc:'Un représentant établi dans l\'UE doit être désigné par mandat écrit avant mise sur le marché ou en service dans l\'UE.', refs:['Art. 22'], prio:'p1', level:'extra' },
+  ];
+
+  var activeObls = [];
+  if(classif.level === 'haut'){
+    ALL_OBL.forEach(function(o){
+      var val = d[o.id] || 'none';
+      var severity = val === 'none' ? 'critical' : val === 'partial' ? 'warning' : 'ok';
+      activeObls.push({ obl:o, severity:severity, status:val });
+    });
+  }
+  if(d.interaction === 'oui' || d.interaction === 'genere'){
+    TRANSPARENCY_OBL.forEach(function(o){ activeObls.push({ obl:o, severity:'warning', status:'partial' }); });
+  }
+  if(d.gpai === 'oui_sys' || d.gpai === 'oui_flop' || d.gpai === 'deploie'){
+    activeObls.push({ obl:GPAI_OBL[0], severity:'warning', status:'partial' });
+    if(d.gpai === 'oui_flop') activeObls.push({ obl:GPAI_OBL[1], severity:'critical', status:'none' });
+  }
+  if(d.rgpd === 'sensibles' || d.rgpd === 'standard'){
+    RGPD_OBL.forEach(function(o){ activeObls.push({ obl:o, severity:'warning', status:'partial' }); });
+  }
+  if(classif.extra_territorial){
+    activeObls.push({ obl:EXTRA_OBL[0], severity:'critical', status:'none' });
+  }
+
+  return activeObls;
+}
+
+/* Timeline d'application */
+function simTimeline(classif){
+  var tl = [
+    { date:'2 fév. 2025', tag:'ACTIF', tagCls:'chip-r', text:'Art. 5 — Pratiques interdites applicables. Obligation de littératie IA (Art. 4).' },
+    { date:'2 août 2025', tag:'ACTIF', tagCls:'chip-r', text:'Art. 51-55 — Obligations GPAI et modèles à risque systémique. Régime de sanctions Art. 99.' },
+    { date:'2 août 2026', tag:'A VENIR', tagCls:'chip-o', text:'Art. 6(2) — Systèmes haut risque (Annexe III) : obligations complètes de conformité.' },
+    { date:'2 août 2027', tag:'A VENIR', tagCls:'chip-o', text:'Art. 6(1) — Systèmes haut risque composants de sécurité (Annexe II). Codes de conduite GPAI.' },
+  ];
+  if(classif.level === 'haut') tl[2].urgent = true;
+  if(classif.art5) tl[0].urgent = true;
+  return tl;
+}
+
+/* Calcul des sanctions */
+function simSanctions(classif){
+  var ca_map = { startup:5000000, sme:30000000, mid:150000000, large:500000000, xlarge:2000000000 };
+  var ca = ca_map[SIM_DATA.ca] || 50000000;
+  var pct_map = { interdit:0.07, haut:0.03, limite:0.015, minimal:0.01 };
+  var pct = pct_map[classif.level] || 0.01;
+  var flat_map = { interdit:35000000, haut:15000000, limite:7500000, minimal:7500000 };
+  var flat = flat_map[classif.level] || 7500000;
+  var maxSanc = Math.max(ca * pct, flat);
+  function fmt(n){ if(n>=1000000000) return (n/1000000000).toFixed(1)+' Mds€'; if(n>=1000000) return (n/1000000).toFixed(0)+' M€'; return (n/1000).toFixed(0)+' K€'; }
+  return { sanction_ca: fmt(ca * pct), sanction_flat: fmt(flat), sanction_max: fmt(maxSanc), pct: Math.round(pct*100)+'%' };
+}
+
+/* ══ RENDU ══ */
+function simRender(){
+  var classif = simClassify();
+  var obligations = simGap(classif);
+  var tl = simTimeline(classif);
+  var sanc = simSanctions(classif);
+  var d = SIM_DATA;
+
+  var container = document.getElementById('sim-result-container');
+  if(!container) return;
+
+  var oblHtml = obligations.map(function(item){
+    var tags = item.obl.refs.map(function(r){ return '<span class="sim-obl-ref-tag">'+r+'</span>'; }).join('');
+    var statusLabel = { none:'Non réalisé', partial:'En cours', ok:'Conforme' }[item.status] || '';
+    var statusColor = { none:'var(--accent)', partial:'var(--orange)', ok:'var(--green)' }[item.status] || '';
+    return '<div class="sim-obl-item '+item.severity+'">'
+      +'<span class="sim-obl-prio '+item.obl.prio+'">'+item.obl.prio.toUpperCase()+'</span>'
+      +'<div class="sim-obl-body">'
+      +'<div class="sim-obl-name">'+item.obl.name
+      +(statusLabel ? '<span style="margin-left:10px;font-size:9px;font-family:var(--mono);color:'+statusColor+'">● '+statusLabel+'</span>' : '')
+      +'</div>'
+      +'<div class="sim-obl-desc">'+item.obl.desc+'</div>'
+      +'<div class="sim-obl-refs">'+tags+'</div>'
+      +'</div></div>';
+  }).join('') || '<div style="font-size:12px;color:var(--green);padding:12px 0">Aucune obligation critique identifiée pour ce niveau de risque.</div>';
+
+  var tlHtml = tl.map(function(t){
+    return '<div class="sim-tl-step'+( t.urgent?' style="background:rgba(184,50,34,.04);border-radius:3px;padding:10px;margin:0 -10px"':'' )+'">'
+      +'<div class="sim-tl-date">'+t.date
+      +'<span class="sim-tl-tag '+t.tagCls+'">'+t.tag+'</span>'
+      +'</div>'
+      +'<div class="sim-tl-text">'+t.text+'</div>'
+      +'</div>';
+  }).join('');
+
+  var badgeColor = { interdit:'#8B0000', haut:'var(--accent)', limite:'var(--orange)', minimal:'var(--green)' }[classif.level];
+
+  var extra = "";
+  if(classif.extra_territorial){
+    extra = "<div style=\"background:rgba(28,90,138,.08);border:1px solid rgba(28,90,138,.2);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--blue);margin-bottom:16px\"><strong>Extraterritorialite (Art. 2)</strong> : Organisation hors UE visant le marche EU. Mandataire UE obligatoire avant mise sur le marche (Art. 22).</div>";
+  }
+  var gpaiInfo = "";
+  if(d.gpai && d.gpai !== 'non'){
+    var gpaiMsg = d.gpai==='oui_flop' ? "Modele a risque systemique (seuil 10^25 FLOPs) - Art. 55 applicables." : d.gpai==='oui_sys' ? "Fournisseur GPAI - Art. 53 applicables (documentation, policy droits auteur, evaluations)." : "Deployeur GPAI tiers - verifiez les politiques fournisseur et obligations Art. 50.";
+    gpaiInfo = "<div style=\"background:rgba(196,124,26,.06);border:1px solid rgba(196,124,26,.2);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--orange);margin-bottom:16px\"><strong>GPAI :</strong> " + gpaiMsg + "</div>";
+  }
+
+  var scoreColor = classif.level === 'interdit' ? '#8B0000' : classif.level === 'haut' ? 'var(--accent)' : classif.level === 'limite' ? 'var(--orange)' : 'var(--green)';
+
+  container.innerHTML =
+    '<div class="sim-result">'
+    +'<div class="sim-result-header">'
+    +'<div>'
+    +'<div class="sim-result-score" style="color:'+scoreColor+'">'+ classif.score +'<span style="font-size:22px;color:var(--muted2)">/10</span></div>'
+    +'<div class="sim-result-score-lbl">Score de risque</div>'
+    +'</div>'
+    +'<div>'
+    +'<span class="sim-result-badge chip" style="background:'+badgeColor+';color:#fff;border-color:'+badgeColor+';font-size:11px;padding:5px 14px">'+classif.badge+'</span>'
+    +'<div class="sim-result-classif" style="margin-top:10px">'+d.name+'</div>'
+    +'<div class="sim-result-art">'+classif.article+' — Règlement (UE) 2024/1689</div>'
+    +'</div>'
+    +'</div>'
+
+    + (classif.art5 ? '<div style="background:rgba(139,0,0,.08);border:2px solid rgba(139,0,0,.4);border-radius:4px;padding:16px;margin-bottom:20px;font-size:12px;color:#8B0000"><strong>Pratique interdite — Art. 5</strong><br>Ce type de système est formellement interdit par l\'EU AI Act. La mise sur le marché, la mise en service ou l\'utilisation est prohibée dans toute l\'UE. Amendes pouvant atteindre 35 M€ ou 7% du CA mondial. Une refonte complète du système est nécessaire avant tout déploiement.</div>' : '')
+
+    + extra + gpaiInfo
+
+    +'<div class="sim-obligations">'
+    +'<div class="sim-obl-title">Obligations identifiées et gaps de conformité</div>'
+    + oblHtml
+    +'</div>'
+
+    +'<div class="sim-obl-title">Sanctions applicables — Art. 99</div>'
+    +'<div class="sim-sanctions-box">'
+    +'<div class="sim-sanc-item"><div class="sim-sanc-lbl">Sanction max (% CA)</div><div class="sim-sanc-val">'+sanc.sanction_ca+'</div><div style="font-size:9px;font-family:var(--mono);color:var(--muted2)">'+sanc.pct+' du CA mondial</div></div>'
+    +'<div class="sim-sanc-item"><div class="sim-sanc-lbl">Sanction fixe max</div><div class="sim-sanc-val">'+sanc.sanction_flat+'</div><div style="font-size:9px;font-family:var(--mono);color:var(--muted2)">'+classif.sanctions.art+'</div></div>'
+    +'<div class="sim-sanc-item"><div class="sim-sanc-lbl">Exposition maximale estimée</div><div class="sim-sanc-val" style="font-size:24px">'+sanc.sanction_max+'</div><div style="font-size:9px;font-family:var(--mono);color:var(--muted2)">Le plus élevé des deux plafonds s\'applique</div></div>'
+    +'<div class="sim-sanc-item"><div class="sim-sanc-lbl">Note</div><div style="font-size:10px;color:var(--muted);line-height:1.5;margin-top:4px">Les PME bénéficient d\'une proportionnalité (Art. 99.1). Les sanctions sont effectives depuis août 2025.</div></div>'
+    +'</div>'
+
+    +'<div class="sim-obl-title" style="margin-top:20px">Calendrier d\'application (Règl. 2024/1689)</div>'
+    +'<div class="sim-timeline-box">'+tlHtml+'</div>'
+
+    +'<div style="font-size:10px;color:var(--muted2);font-style:italic;margin-top:16px;padding-top:12px;border-top:1px solid var(--rule)">Cette simulation est basée sur le Règlement (UE) 2024/1689 du Parlement européen et du Conseil du 13 juin 2024, JO L du 12.7.2024. Elle constitue une aide à la décision et ne remplace pas un avis juridique. CONSEILPREV, Paris.</div>'
+
+    +'</div>';
+}
+
+})();
+
 
 var SYSTEMS=[{ico:'⚡',name:'Système de prédiction énergétique',type:'Prédiction ML',classif:'Haut risque',classif_cls:'chip-r',secteur:'Énergie',score:8.2,score_cls:'dn'},{ico:'🏦',name:'Scoring crédit automatisé',type:'Décision automatisée',classif:'Haut risque',classif_cls:'chip-r',secteur:'Finance',score:7.1,score_cls:'dn'},{ico:'🏭',name:'Détection anomalies industrielles',type:'Surveillance OT',classif:'Risque limité',classif_cls:'chip-o',secteur:'Industrie',score:4.5,score_cls:'up'},{ico:'💬',name:'Chatbot service client',type:'IA générative',classif:'Risque minimal',classif_cls:'chip-g',secteur:'IT',score:2.8,score_cls:'up'}];
 
