@@ -742,8 +742,6 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-item" onclick="go('evals',this,'CONFORMITÉ','Mes évaluations')"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>Mes évaluations<span class="sb-badge">3</span></div>
     <div class="sb-item" onclick="go('alertes',this,'ALERTES','7 alertes actives')"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg></span>Alertes<span class="sb-badge">7</span></div>
     <div class="sb-item" onclick="go('veille',this,'VEILLE','Actualités')"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11a2 2 0 012 2v3"/><rect x="9" y="11" width="14" height="10" rx="2"/></svg></span>Veille réglementaire</div>
-    <div class="sb-item" onclick="go('audit',this,'AUDIT','Audit de conformité')"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg></span>Audit de conformité</div>
-    <div class="sb-item" onclick="go('articles',this,'EU AI ACT','Articles & Obligations')"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 6h16M4 10h16M4 14h10M4 18h7"/></svg></span>Articles AI Act</div>
     <div class="sb-item" onclick="go('controles',this,'CONFORMITÉ','Bibliothèque de contrôles')"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 11l3 3 8-8M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>Contrôles<span class="sb-badge" style="background:var(--green)">23</span></div>
     <div class="sb-item" onclick="go('fria',this,'CONFORMITÉ','Évaluation FRIA')"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg></span>FRIA</div>
     <div class="sb-section">Espace</div>
@@ -1474,6 +1472,35 @@ textarea.form-el{min-height:86px;resize:vertical}
 
   <!-- ══ ONGLET 2 : Audit IA Act ══ -->
   <div class="regs-tabpanel" id="regs-panel-audit">
+    <!-- Bloc Lancer un audit -->
+    <div style="margin-bottom:28px">
+      <div class="col3" style="margin-bottom:20px">
+        <div class="feat">
+          <div class="feat-h" style="margin-bottom:6px">① Cartographier</div>
+          <p class="feat-p">Inventaire et classification selon l'annexe III de l'AI Act. Identification des systèmes à haut risque.</p>
+        </div>
+        <div class="feat">
+          <div class="feat-h" style="margin-bottom:6px">② Évaluer</div>
+          <p class="feat-p">Scoring multicritère : droits fondamentaux, sécurité, performance, gouvernance des données.</p>
+        </div>
+        <div class="feat">
+          <div class="feat-h" style="margin-bottom:6px">③ Planifier</div>
+          <p class="feat-p">Feuille de route priorisée avec délais réglementaires et plan d'action CONSEILPREV.</p>
+        </div>
+      </div>
+      <div class="rule" style="margin-bottom:20px"></div>
+      <div class="form-block" style="max-width:540px">
+        <div class="sec-h" style="margin-bottom:4px">Démarrer un audit assisté</div>
+        <div class="sec-sub" style="margin-bottom:20px">Un expert CONSEILPREV vous accompagne à chaque étape.</div>
+        <div class="form-row"><label class="form-lbl">Votre nom</label><input class="form-el" id="audit-nom" placeholder="Prénom Nom"></div>
+        <div class="form-row"><label class="form-lbl">Email professionnel</label><input class="form-el" id="audit-email" type="email" placeholder="vous@entreprise.com"></div>
+        <div class="form-row"><label class="form-lbl">Entreprise</label><input class="form-el" id="audit-entreprise" placeholder="Raison sociale"></div>
+        <div class="form-row"><label class="form-lbl">Périmètre</label><textarea class="form-el" id="audit-perimetre" placeholder="Décrivez vos systèmes IA à auditer…"></textarea></div>
+        <button class="submit" onclick="(function(){var n=document.getElementById('audit-nom').value,e=document.getElementById('audit-email').value,c=document.getElementById('audit-entreprise').value,p=document.getElementById('audit-perimetre').value;if(!n||!e){alert('Merci de renseigner votre nom et email.');return;}var subj=encodeURIComponent('[Sentinel AI] Demande audit conformité IA Act');var body=encodeURIComponent('Nom : '+n+'\nEmail : '+e+'\nEntreprise : '+c+'\nPérimètre : '+p);window.open('mailto:christophe.cerf@outlook.com?subject='+subj+'&body='+body,'_blank');})()">Soumettre la demande →</button>
+      </div>
+      <div class="rule" style="margin:28px 0 24px"></div>
+    </div>
+
     <div class="audit-header">
       <div>
         <div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px">Audit de conformité EU AI Act</div>
