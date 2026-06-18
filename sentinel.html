@@ -887,7 +887,7 @@ textarea.form-el{min-height:86px;resize:vertical}
   <div class="tb-right">
     <span class="tb-date" id="tb-date"></span>
     <button class="tb-btn" onclick="window.open('/aies','_blank')">← AIES Platform</button>
-    <button class="tb-btn tb-btn-primary" onclick="go('audit',null,'AUDIT','Audit de conformité')">Lancer un audit</button>
+    <button class="tb-btn tb-btn-primary" onclick="openAuditTab()">Lancer un audit</button>
   </div>
 </header>
 
@@ -1552,7 +1552,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       <div class="sim-nav" style="margin-top:8px">
         <button class="sim-reset-btn" onclick="simReset()">↺ Nouvelle simulation</button>
         <span></span>
-        <button class="sim-btn-next" onclick="go('audit',null,'AUDIT','Audit de conformité')">Lancer l'audit complet →</button>
+        <button class="sim-btn-next" onclick="openAuditTab()">Lancer l'audit complet →</button>
       </div>
     </div>
   </div>
@@ -1913,7 +1913,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       <div class="sim-nav" style="margin-top:8px">
         <button class="sim-reset-btn" onclick="simReset()">↺ Nouvelle simulation</button>
         <span></span>
-        <button class="sim-btn-next" onclick="go('audit',null,'AUDIT','Audit de conformité')">Lancer l'audit complet →</button>
+        <button class="sim-btn-next" onclick="openAuditTab()">Lancer l'audit complet →</button>
       </div>
     </div>
   </div>
@@ -2044,7 +2044,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 <!-- REGISTRE -->
 <div class="page" id="p-registre">
   <span class="eyebrow">Registre</span><h1 class="page-h">Registre des <em>systèmes IA</em></h1><p class="page-lead">Inventaire complet de vos déploiements IA classifiés selon l'EU AI Act. Obligatoire pour les systèmes haut risque (Art. 51).</p>
-  <div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title">Systèmes enregistrés — 4 déploiements</span><span class="tbl-link" onclick="go('audit',null,'AUDIT','Audit de conformité')">+ Ajouter un système</span></div><div class="comp-head-row" id="reg-sys-head" style="grid-template-columns:28px 1fr 110px 120px 90px 80px;padding:9px 20px;display:grid;background:var(--bg);border-bottom:2px solid var(--rule)"><div class="comp-cell"></div><div class="comp-cell">Système IA</div><div class="comp-cell">Type</div><div class="comp-cell">Classification AI Act</div><div class="comp-cell">Secteur</div><div class="comp-cell">Score risque</div></div><div id="reg-sys-body"></div></div>
+  <div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title">Systèmes enregistrés — 4 déploiements</span><span class="tbl-link" onclick="openAuditTab()">+ Ajouter un système</span></div><div class="comp-head-row" id="reg-sys-head" style="grid-template-columns:28px 1fr 110px 120px 90px 80px;padding:9px 20px;display:grid;background:var(--bg);border-bottom:2px solid var(--rule)"><div class="comp-cell"></div><div class="comp-cell">Système IA</div><div class="comp-cell">Type</div><div class="comp-cell">Classification AI Act</div><div class="comp-cell">Secteur</div><div class="comp-cell">Score risque</div></div><div id="reg-sys-body"></div></div>
 </div>
 
 <!-- MATRICE -->
@@ -4285,12 +4285,25 @@ geoRenderTL();
 window.regsTab = function(tab, el){
   document.querySelectorAll('.regs-tab').forEach(function(t){ t.classList.remove('on'); });
   document.querySelectorAll('.regs-tabpanel').forEach(function(p){ p.classList.remove('on'); });
-  el.classList.add('on');
+  /* el peut etre null (appel programmatique) */
+  if(el) el.classList.add('on');
+  else {
+    /* Activer le bon onglet visuellement */
+    var tabBtns = document.querySelectorAll('.regs-tab');
+    tabBtns.forEach(function(t){
+      if((t.getAttribute('onclick')||'').indexOf("'"+tab+"'")!==-1) t.classList.add('on');
+    });
+  }
   var panel = document.getElementById('regs-panel-'+tab);
   if(panel) panel.classList.add('on');
   if(tab === 'audit') auditInit();
   if(tab === 'articles') artInit();
-  if(tab === 'simulateur') simReset && typeof simReset === 'function' && false; // sim auto-init
+};
+
+/* Helper : naviguer vers Reglementations + ouvrir l'onglet Audit */
+window.openAuditTab = function(){
+  go('regs', null, 'RÉGLEMENTATIONS', 'Réglementations & Audit IA');
+  setTimeout(function(){ regsTab('audit', null); }, 80);
 };
 
 /* ══ ONGLET 2 : AUDIT IA ACT ══ */
