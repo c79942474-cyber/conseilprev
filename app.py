@@ -2561,6 +2561,48 @@ PAGES = {
     '/map':           'map.html',
 }
 
+
+@app.route('/api/chat/claude', methods=['POST'])
+@rate_limit(limit=20, window=60)
+def chat_claude():
+    """Proxy Anthropic Claude pour le chatbot Sentinel AI."""
+    import os, json as _json
+    try:
+        data = request.get_json(force=True) or {}
+        model    = data.get('model', 'claude-sonnet-4-6')
+        system   = data.get('system', '')
+        messages = data.get('messages', [])
+        max_tok  = min(int(data.get('max_tokens', 550)), 1000)
+
+        ANTHROPIC_KEY = os.environ.get('ANTHROPIC_API_KEY', '')
+        if not ANTHROPIC_KEY:
+            return jsonify({"error": "ANTHROPIC_API_KEY non configuree"}), 503
+
+        import urllib.request as _req
+        payload = _json.dumps({
+            "model": model,
+            "max_tokens": max_tok,
+            "system": system,
+            "messages": messages
+        }).encode('utf-8')
+
+        req = _req.Request(
+            "https://api.anthropic.com/v1/messages",
+            data=payload,
+            headers={
+                "Content-Type": "application/json",
+                "x-api-key": ANTHROPIC_KEY,
+                "anthropic-version": "2023-06-01"
+            },
+            method="POST"
+        )
+        with _req.urlopen(req, timeout=30) as r:
+            result = _json.loads(r.read().decode('utf-8'))
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 for route, filename in PAGES.items():
     def make_view(fn):
         @rate_limit(limit=60, window=60)
