@@ -716,6 +716,78 @@ textarea.form-el{min-height:86px;resize:vertical}
 .art-official-link{font-size:10px;font-family:var(--mono);color:var(--blue);text-decoration:none;display:inline-flex;align-items:center;gap:4px;margin-top:10px}
 .art-official-link:hover{text-decoration:underline}
 
+
+/* CHATBOT CONSEILPREV */
+#cpcBtn{position:fixed;bottom:28px;right:28px;z-index:10002;width:54px;height:54px;
+  border-radius:50%;background:#1C1C1C;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 24px rgba(0,0,0,.3);transition:all .2s}
+#cpcBtn:hover{background:#B83222;transform:scale(1.07)}
+#cpcBtn svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:1.6}
+.cpc-notif{position:absolute;top:4px;right:4px;width:10px;height:10px;
+  background:#B83222;border-radius:50%;border:2px solid #fff;display:none}
+#cpcBtn.has-notif .cpc-notif{display:block}
+#cpcPanel{position:fixed;bottom:96px;right:28px;z-index:10002;width:400px;
+  max-width:calc(100vw - 40px);background:#fff;border-radius:6px;
+  border:1px solid #E0DDD8;box-shadow:0 12px 48px rgba(0,0,0,.18);
+  display:none;flex-direction:column;overflow:hidden;
+  max-height:calc(100vh - 130px);font-family:Inter,sans-serif}
+#cpcPanel.open{display:flex}
+.cpc-head{background:#1C1C1C;padding:18px 44px 16px 20px;flex-shrink:0;position:relative}
+.cpc-eyebrow{font-size:9px;font-family:'JetBrains Mono',monospace;
+  letter-spacing:.18em;text-transform:uppercase;color:#B83222;margin-bottom:5px}
+.cpc-title{font-size:21px;font-family:'Instrument Serif',Georgia,serif;
+  color:#fff;letter-spacing:-.02em;line-height:1.15}
+.cpc-title em{font-style:italic}
+.cpc-sub{font-size:10px;color:rgba(255,255,255,.45);margin-top:5px;line-height:1.4}
+.cpc-close{position:absolute;top:12px;right:14px;background:none;border:none;
+  color:rgba(255,255,255,.4);font-size:20px;cursor:pointer;padding:4px 8px;
+  border-radius:3px;line-height:1}
+.cpc-close:hover{color:#fff;background:rgba(255,255,255,.1)}
+.cpc-tags{padding:10px 12px;display:flex;flex-wrap:wrap;gap:5px;
+  border-bottom:1px solid #F0EDE8;flex-shrink:0;background:#FAFAF8}
+.cpc-tag{font-size:10px;font-family:'JetBrains Mono',monospace;padding:4px 10px;
+  border-radius:2px;border:1px solid #E0DDD8;background:#fff;color:#767676;
+  cursor:pointer;transition:all .12s;letter-spacing:.02em}
+.cpc-tag:hover{border-color:#B83222;color:#B83222}
+.cpc-msgs{flex:1;overflow-y:auto;padding:14px 12px;
+  display:flex;flex-direction:column;gap:10px;
+  min-height:160px;max-height:300px}
+.cpc-msgs::-webkit-scrollbar{width:3px}
+.cpc-msgs::-webkit-scrollbar-thumb{background:#E0DDD8;border-radius:2px}
+.cpc-msg{display:flex;gap:9px;align-items:flex-start}
+.cpc-msg.user{flex-direction:row-reverse}
+.cpc-av{width:26px;height:26px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;font-family:'JetBrains Mono',monospace}
+.cpc-av.bot{background:#1C1C1C;color:#fff}
+.cpc-av.user{background:#B83222;color:#fff}
+.cpc-bubble{max-width:calc(100% - 40px);font-size:12px;line-height:1.65;
+  color:#1C1C1C;background:#F5F2ED;padding:9px 12px;border-radius:4px}
+.cpc-msg.user .cpc-bubble{background:#1C1C1C;color:#fff}
+.cpc-bubble a{color:#B83222}
+.cpc-typing{display:flex;gap:4px;align-items:center;padding:4px 0}
+.cpc-typing span{width:5px;height:5px;background:#B83222;border-radius:50%;
+  animation:cpcBounce .7s infinite alternate;opacity:.35}
+.cpc-typing span:nth-child(2){animation-delay:.2s}
+.cpc-typing span:nth-child(3){animation-delay:.4s}
+@keyframes cpcBounce{to{opacity:1;transform:translateY(-3px)}}
+.cpc-bar{border-top:1px solid #F0EDE8;display:flex;align-items:flex-end;
+  padding:9px 10px;gap:7px;flex-shrink:0}
+.cpc-input{flex:1;border:1px solid #E0DDD8;border-radius:3px;
+  font-size:12px;font-family:Inter,sans-serif;color:#1C1C1C;
+  padding:7px 10px;resize:none;outline:none;max-height:90px;
+  line-height:1.5;background:#FAFAF8}
+.cpc-input:focus{border-color:#1C1C1C}
+.cpc-send{background:#1C1C1C;color:#fff;border:none;border-radius:3px;
+  padding:7px 13px;font-size:10px;font-family:'JetBrains Mono',monospace;
+  letter-spacing:.04em;cursor:pointer;flex-shrink:0;align-self:flex-end;
+  transition:background .15s}
+.cpc-send:hover{background:#B83222}
+.cpc-foot{font-size:9px;font-family:'JetBrains Mono',monospace;
+  color:#B0ABA4;text-align:center;padding:5px;
+  border-top:1px solid #F0EDE8;background:#FAFAF8;flex-shrink:0;letter-spacing:.04em}
+
 </style>
 </head>
 <body>
@@ -4076,7 +4148,30 @@ window.geoExportPDF = function(){
     var srcs = e.sources.map(function(s){return s.t+' ('+s.u+')';}).join(' - ');
     return '<div class="tlc"><div class="tlh"><strong>'+e.date+'</strong> - '+e.cat+' - '+e.risk+'</div><div class="tlt">'+e.title+'</div><p>'+e.body+'</p><p class="impact"><em>Impact : '+e.impact+'</em></p><p class="src">Sources : '+srcs+'</p></div>';
   }).join('');
-  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Rapport Analyse Geopolitique IA - Sentinel AI</title><style>@page{margin:2cm}body{font-family:Georgia,serif;color:#1C1C1C;line-height:1.6;max-width:800px;margin:0 auto;padding:20px}h1{font-size:26px;border-bottom:3px solid #B83222;padding-bottom:10px;margin-bottom:4px}.sub{color:#767676;font-size:13px;margin-bottom:24px;font-family:Arial,sans-serif}h2{font-size:18px;color:#B83222;margin-top:28px;border-bottom:1px solid #ddd;padding-bottom:6px}.wcard,.tlc{border:1px solid #ddd;border-radius:4px;padding:14px;margin-bottom:12px;page-break-inside:avoid}.wh,.tlh{font-size:14px;margin-bottom:6px}.badge{font-size:10px;background:#f0e0dd;color:#B83222;padding:2px 8px;border-radius:3px;font-family:Arial}.tlt{font-size:15px;font-weight:bold;margin:4px 0}p{font-size:12px;margin:6px 0;font-family:Arial,sans-serif}.impact{color:#555}.src{color:#1C5A8A;font-size:10px}.score{color:#B83222;font-weight:bold;font-size:11px}.footer{margin-top:30px;padding-top:14px;border-top:1px solid #ddd;font-size:10px;color:#999;font-family:Arial}.disc{font-size:10px;color:#999;font-style:italic;margin-top:20px;font-family:Arial}</style></head><body><h1>Analyse geopolitique des IA</h1><div class="sub">Rapport strategique - Sentinel AI / CONSEILPREV - Genere le '+today+'</div><h2>Synthese des indicateurs</h2><p>Juridictions a risque critique : 1 - Juridictions stables : 10 - Sous surveillance active : '+geoWatchSelected.length+'</p><h2>Juridictions sous surveillance</h2>'+watchHtml+'<h2>Chronologie des evolutions reglementaires</h2>'+tlHtml+'<p class="disc">Les scores de risque sont des estimations CONSEILPREV a vocation d aide a la decision et ne constituent pas un avis juridique. Sources : textes officiels (Federal Register, EUR-Lex, Commission europeenne, CAC) et analyses de cabinets juridiques.</p><div class="footer">(c) CONSEILPREV - Sentinel AI - Cartographie des risques reglementaires IA - christophe.cerf@outlook.com</div><scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt></body></html>';
+  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Rapport Analyse Geopolitique IA - Sentinel AI</title><style>@page{margin:2cm}body{font-family:Georgia,serif;color:#1C1C1C;line-height:1.6;max-width:800px;margin:0 auto;padding:20px}h1{font-size:26px;border-bottom:3px solid #B83222;padding-bottom:10px;margin-bottom:4px}.sub{color:#767676;font-size:13px;margin-bottom:24px;font-family:Arial,sans-serif}h2{font-size:18px;color:#B83222;margin-top:28px;border-bottom:1px solid #ddd;padding-bottom:6px}.wcard,.tlc{border:1px solid #ddd;border-radius:4px;padding:14px;margin-bottom:12px;page-break-inside:avoid}.wh,.tlh{font-size:14px;margin-bottom:6px}.badge{font-size:10px;background:#f0e0dd;color:#B83222;padding:2px 8px;border-radius:3px;font-family:Arial}.tlt{font-size:15px;font-weight:bold;margin:4px 0}p{font-size:12px;margin:6px 0;font-family:Arial,sans-serif}.impact{color:#555}.src{color:#1C5A8A;font-size:10px}.score{color:#B83222;font-weight:bold;font-size:11px}.footer{margin-top:30px;padding-top:14px;border-top:1px solid #ddd;font-size:10px;color:#999;font-family:Arial}.disc{font-size:10px;color:#999;font-style:italic;margin-top:20px;font-family:Arial}</style></head><body><h1>Analyse geopolitique des IA</h1><div class="sub">Rapport strategique - Sentinel AI / CONSEILPREV - Genere le '+today+'</div><h2>Synthese des indicateurs</h2><p>Juridictions a risque critique : 1 - Juridictions stables : 10 - Sous surveillance active : '+geoWatchSelected.length+'</p><h2>Juridictions sous surveillance</h2>'+watchHtml+'<h2>Chronologie des evolutions reglementaires</h2>'+tlHtml+'<p class="disc">Les scores de risque sont des estimations CONSEILPREV a vocation d aide a la decision et ne constituent pas un avis juridique. Sources : textes officiels (Federal Register, EUR-Lex, Commission europeenne, CAC) et analyses de cabinets juridiques.</p><div class="footer">(c) CONSEILPREV - Sentinel AI - Cartographie des risques reglementaires IA - christophe.cerf@outlook.com</div><scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt><!-- CHATBOT CONSEILPREV -->
+<button id="cpcBtn" onclick="cpcToggle()" aria-label="Assistant réglementaire">
+  <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+  <div class="cpc-notif"></div>
+</button>
+<div id="cpcPanel">
+  <div class="cpc-head">
+    <button class="cpc-close" onclick="cpcToggle()">×</button>
+    <div class="cpc-eyebrow">Chat Conformité</div>
+    <div class="cpc-title">Assistant <em>réglementaire</em></div>
+    <div class="cpc-sub">EU AI Act · NIS2 · RGPD — fondé sur les textes officiels</div>
+  </div>
+  <div class="cpc-tags" id="cpcTags"></div>
+  <div class="cpc-msgs" id="cpcMsgs"></div>
+  <div class="cpc-bar">
+    <textarea class="cpc-input" id="cpcInput" rows="1"
+      placeholder="Posez votre question réglementaire…"
+      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();cpcSend()}"
+      oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,90)+'px'"></textarea>
+    <button class="cpc-send" onclick="cpcSend()">Envoyer</button>
+  </div>
+  <div class="cpc-foot">Sentinel AI · CONSEILPREV Paris · christophe.cerf@outlook.com</div>
+</div>
+</body></html>';
   w.document.write(html);
   w.document.close();
 };
@@ -5349,6 +5444,96 @@ window.cjRemove = cjRemove;
 
 })();
 
+/* CHATBOT CONSEILPREV */
+(function(){
+var KEY='g0Dqgfe3v3op1LPV6lxaUCEVTEZ6GYXU';
+var OPEN=false,HIST=[],BUSY=false,READY=false;
+var SYS='Tu es Sentinel, expert reglementaire CONSEILPREV (Paris). Tu reponds en francais, avec precision et concision (max 280 mots). Domaines : EU AI Act (Regl. 2024/1689), NIS2, RGPD, DORA, ISO 42001, ISO 27001, gouvernance IA, cybersecurite industrielle. Tu aides aussi a naviguer sur le site CONSEILPREV et Sentinel AI. Pour tout projet ou audit, oriente vers christophe.cerf@outlook.com. Pas d avis juridique - orientations expertes.';
+var TAGS=['Art. 6 AI Act','Obligations NIS2','Classification IA','Sanctions AI Act','Comment utiliser Sentinel AI ?','Audit de conformite'];
+var WELCOME='Bonjour, je suis <strong>Sentinel</strong>, votre assistant reglementaire propulse par CONSEILPREV.<br><br>Je peux vous aider sur l\'<strong>EU AI Act</strong>, <strong>NIS2</strong>, <strong>RGPD</strong> et la gouvernance IA, ainsi que sur la navigation dans Sentinel AI.';
+
+window.cpcToggle=function(){
+  OPEN=!OPEN;
+  var p=document.getElementById('cpcPanel');
+  var b=document.getElementById('cpcBtn');
+  if(!p) return;
+  if(OPEN){
+    p.classList.add('open');
+    if(b) b.classList.remove('has-notif');
+    if(!READY){cpcInit();READY=true;}
+    setTimeout(function(){var i=document.getElementById('cpcInput');if(i)i.focus();},100);
+  } else {
+    p.classList.remove('open');
+  }
+};
+
+function cpcInit(){
+  var t=document.getElementById('cpcTags');
+  if(t) t.innerHTML=TAGS.map(function(tg){
+    return '<button class="cpc-tag" onclick="cpcSend(\''+tg.replace(/'/g,'\\\'')+'\')">'+(tg.length>22?tg.substring(0,22)+'…':tg)+'</button>';
+  }).join('');
+  cpcAdd('bot',WELCOME);
+}
+
+function cpcAdd(role,html){
+  var m=document.getElementById('cpcMsgs');
+  if(!m) return;
+  var d=document.createElement('div');
+  d.className='cpc-msg '+role;
+  d.innerHTML='<div class="cpc-av '+role+'">'+(role==='bot'?'S':'V')+'</div>'
+    +'<div class="cpc-bubble">'+html+'</div>';
+  m.appendChild(d);
+  m.scrollTop=m.scrollHeight;
+}
+
+function cpcTyping(){
+  var m=document.getElementById('cpcMsgs');
+  if(!m) return null;
+  var d=document.createElement('div');
+  d.className='cpc-msg bot';d.id='cpcTyping';
+  d.innerHTML='<div class="cpc-av bot">S</div>'
+    +'<div class="cpc-bubble"><div class="cpc-typing"><span></span><span></span><span></span></div></div>';
+  m.appendChild(d);
+  m.scrollTop=m.scrollHeight;
+  return d;
+}
+
+window.cpcSend=function(preset){
+  if(BUSY) return;
+  var inp=document.getElementById('cpcInput');
+  var txt=preset||(inp?inp.value.trim():'');
+  if(!txt) return;
+  if(inp){inp.value='';inp.style.height='auto';}
+  cpcAdd('user',txt.replace(/</g,'&lt;').replace(/>/g,'&gt;'));
+  HIST.push({role:'user',content:txt});
+  BUSY=true;
+  var ty=cpcTyping();
+  fetch('https://api.mistral.ai/v1/chat/completions',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+KEY},
+    body:JSON.stringify({model:'mistral-large-latest',
+      messages:[{role:'system',content:SYS}].concat(HIST.slice(-8)),
+      max_tokens:500,temperature:0.5})
+  })
+  .then(function(r){return r.json();})
+  .then(function(d){
+    if(ty)ty.remove();
+    var rep=d.choices&&d.choices[0]?d.choices[0].message.content:'Erreur de connexion.';
+    HIST.push({role:'assistant',content:rep});
+    cpcAdd('bot',rep.replace(/\n/g,'<br>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>'));
+    BUSY=false;
+  })
+  .catch(function(){
+    if(ty)ty.remove();
+    cpcAdd('bot','Connexion indisponible. Contactez-nous : <a href="mailto:christophe.cerf@outlook.com">christophe.cerf@outlook.com</a>');
+    BUSY=false;
+  });
+};
+
+setTimeout(function(){
+  if(!OPEN){var b=document.getElementById('cpcBtn');if(b)b.classList.add('has-notif');}
+},10000);
+})();
 </script>
 </body>
 </html>
