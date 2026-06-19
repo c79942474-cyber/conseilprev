@@ -2028,6 +2028,7 @@ textarea.form-el{min-height:86px;resize:vertical}
         <div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px">Audit de conformité EU AI Act</div>
         <div style="font-size:11px;color:var(--muted)">Règlement (UE) 2024/1689 — Méthodologie CONSEILPREV · 32 points de contrôle</div>
       </div>
+      <button class="audit-export-btn" id="cpEvalSaveBtn" onclick="cpEvalSaveAudit()" style="background:var(--green);margin-right:8px">💾 Enregistrer l'evaluation</button>
       <button class="audit-export-btn" onclick="auditExportPDF()">↓ Rapport PDF</button>
     </div>
     <div class="audit-kpi-row">
@@ -2055,7 +2056,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 </div>
 
 <!-- ÉVALUATIONS -->
-<div class="page" id="p-evals"><span class="eyebrow">Mes évaluations</span><h1 class="page-h">Historique des analyses</h1><p class="page-lead">Vos évaluations de conformité sauvegardées avec score et recommandations.</p><div class="tbl-wrap"><div id="evals-rows"></div></div></div>
+<div class="page" id="p-evals"><span class="eyebrow">Mes évaluations</span><h1 class="page-h">Historique des analyses</h1><p class="page-lead">Vos évaluations de conformité sauvegardées avec score et recommandations.</p><div style="margin:-8px 0 16px"><button onclick="cpEvalClearAll()" style="font-size:10px;font-family:var(--mono);color:var(--muted);background:none;border:1px solid var(--rule2);border-radius:3px;padding:5px 12px;cursor:pointer">Effacer l'historique</button></div><div class="tbl-wrap"><div id="evals-rows"></div></div></div>
 
 <!-- ALERTES -->
 
@@ -4780,10 +4781,7 @@ window.artFilter = function(val, el){
 })();
 
 
-(function(){
-  var b=document.getElementById('evals-rows'); if(!b) return;
-  [['⚡','Système de prédiction énergétique','Secteur Énergie — EU AI Act Art.6(2)',8.2,'14/06/2026'],['🏦','Scoring crédit automatisé','Finance — RGPD Art.22 + DORA',7.1,'10/06/2026'],['🏭','Détection anomalies industrielles','Industrie — NIS2 OES',4.5,'02/06/2026']].forEach(function(e,i){ b.innerHTML+='<div class="eval-row"><div style="font-size:11px;font-family:var(--mono);color:var(--muted2);width:24px">0'+(i+1)+'</div><div class="eval-ico">'+e[0]+'</div><div class="eval-body"><div class="eval-n">'+e[1]+'</div><div class="eval-d">'+e[2]+'</div></div><div class="eval-sc">'+e[3]+'</div><div class="eval-date">'+e[4]+'</div></div>'; });
-})();
+/* Remplace par cpEvalRenderList() — voir module Mes evaluations en fin de fichier */
 
 (function(){
   var b=document.getElementById('training-grid'); if(!b) return;
@@ -5159,6 +5157,8 @@ function simRender(){
     +'<div style="font-size:10px;color:var(--muted2);font-style:italic;margin-top:16px;padding-top:12px;border-top:1px solid var(--rule)">Cette simulation est basée sur le Règlement (UE) 2024/1689 du Parlement européen et du Conseil du 13 juin 2024, JO L du 12.7.2024. Elle constitue une aide à la décision et ne remplace pas un avis juridique. CONSEILPREV, Paris.</div>'
 
     +'</div>';
+
+  if(typeof cpEvalSaveSim === 'function'){ cpEvalSaveSim(d, classif, sanc); }
 }
 
 })();
@@ -6121,6 +6121,202 @@ window.go = function(){
   setTimeout(function(){ if(SRC_OPEN) cpcSrcRender(); }, 150);
   return res;
 };
+
+})();
+
+</script>
+</body>
+
+<script>
+/* ══ MES EVALUATIONS — Historique connecte Audit + Simulateur ══ */
+(function(){
+'use strict';
+
+var STORE_KEY = "cpEvaluations";
+
+function cpEvalGetAll(){
+  try{
+    var raw = localStorage.getItem(STORE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch(e){ return []; }
+}
+
+function cpEvalSetAll(list){
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify(list)); } catch(e){}
+}
+
+function cpEvalAdd(entry){
+  var list = cpEvalGetAll();
+  entry.id = Date.now() + Math.floor(Math.random()*1000);
+  entry.date = new Date().toISOString();
+  list.unshift(entry);
+  if(list.length > 50) list = list.slice(0,50);
+  cpEvalSetAll(list);
+  cpEvalUpdateBadge();
+  cpEvalRenderList();
+}
+
+window.cpEvalRemove = function(id){
+  var list = cpEvalGetAll().filter(function(e){ return e.id !== id; });
+  cpEvalSetAll(list);
+  cpEvalUpdateBadge();
+  cpEvalRenderList();
+};
+
+window.cpEvalClearAll = function(){
+  if(!confirm("Effacer tout l historique des evaluations ?")) return;
+  cpEvalSetAll([]);
+  cpEvalUpdateBadge();
+  cpEvalRenderList();
+};
+
+function cpEvalUpdateBadge(){
+  var n = cpEvalGetAll().length;
+  document.querySelectorAll(".sb-item").forEach(function(it){
+    var oc = it.getAttribute("onclick") || "";
+    if(oc.indexOf("'evals'") !== -1){
+      var badge = it.querySelector(".sb-badge");
+      if(badge) badge.textContent = n;
+    }
+  });
+}
+
+/* ── Sauvegarde depuis le Simulateur (appelee a la fin de simRender) ── */
+window.cpEvalSaveSim = function(d, classif, sanc){
+  var secteurLabels = {
+    bio:"Biometrie", infra:"Infrastructures critiques", education:"Education",
+    emploi:"Emploi / RH", essentiels:"Services essentiels", law:"Justice",
+    migration:"Migration", sante:"Sante", finance:"Finance", industrie:"Industrie",
+    transport:"Transport", energie:"Energie", media:"Medias", it:"IT / Tech",
+    public:"Administration publique", autre:"Autre"
+  };
+  var ico = classif.level === "interdit" ? "\u26D4" : classif.level === "haut" ? "\u26A0" : classif.level === "limite" ? "\u25CB" : "\u2713";
+  cpEvalAdd({
+    type: "simulateur",
+    title: d.name || "Systeme IA",
+    subtitle: (secteurLabels[d.secteur] || d.secteur || "Secteur non precise") + " -- " + classif.article,
+    score: classif.score,
+    scoreMax: 10,
+    badge: classif.badge,
+    level: classif.level,
+    icon: ico,
+    extra: "Exposition max : " + (sanc.sanction_max || "n/c")
+  });
+};
+
+/* ── Sauvegarde depuis l Audit (bouton dedie) ── */
+window.cpEvalSaveAudit = function(){
+  if(typeof AUDIT_SECTIONS === "undefined" || typeof AUDIT_STATE === "undefined"){
+    alert("Le module audit n est pas encore charge. Ouvrez d abord l onglet Audit IA Act.");
+    return;
+  }
+  var total = 0, done = 0, partial = 0;
+  AUDIT_SECTIONS.forEach(function(sec){
+    sec.items.forEach(function(item){
+      total++;
+      var st = AUDIT_STATE[item.id] || "none";
+      if(st === "done") done++;
+      else if(st === "partial") partial++;
+    });
+  });
+  var pct = total > 0 ? Math.round((done + partial * 0.5) / total * 100) : 0;
+  var todo = total - done - partial;
+  var badge = pct >= 80 ? "CONFORME" : pct >= 40 ? "EN COURS" : "A DEMARRER";
+  var level = pct >= 80 ? "minimal" : pct >= 40 ? "limite" : "haut";
+
+  cpEvalAdd({
+    type: "audit",
+    title: "Audit de conformite IA Act",
+    subtitle: total + " points de controle -- " + done + " conformes, " + partial + " en cours, " + todo + " a realiser",
+    score: pct,
+    scoreMax: 100,
+    badge: badge,
+    level: level,
+    icon: "\u2611",
+    extra: null
+  });
+
+  var btn = document.getElementById("cpEvalSaveBtn");
+  if(btn){
+    var old = btn.textContent;
+    btn.textContent = "\u2713 Enregistre";
+    setTimeout(function(){ btn.textContent = old; }, 1800);
+  }
+};
+
+/* ── Rendu de la page Mes evaluations ── */
+function cpEvalFmtDate(iso){
+  try{
+    var dt = new Date(iso);
+    return dt.toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit",year:"numeric"});
+  } catch(e){ return ""; }
+}
+
+function cpEvalBadgeColor(level){
+  if(level === "interdit") return "#8B0000";
+  if(level === "haut") return "var(--accent)";
+  if(level === "limite") return "var(--orange)";
+  return "var(--green)";
+}
+
+window.cpEvalGoto = function(type){
+  if(type === "simulateur"){
+    if(typeof openAuditTab === "function"){
+      go("regs", null, "RÉGLEMENTATIONS", "Réglementations & Audit IA");
+      setTimeout(function(){ regsTab("simulateur", null); }, 80);
+    }
+  } else {
+    if(typeof openAuditTab === "function") openAuditTab();
+  }
+};
+
+function cpEvalRenderList(){
+  var b = document.getElementById("evals-rows");
+  if(!b) return;
+  var list = cpEvalGetAll();
+
+  if(list.length === 0){
+    b.innerHTML = '<div style="padding:32px 0;text-align:center;font-size:12px;color:var(--muted);font-style:italic">'
+      + "Aucune evaluation enregistree pour le moment.<br>"
+      + 'Completez une <a href="#" onclick="cpEvalGoto(\'simulateur\');return false;" style="color:var(--accent)">simulation IA Act</a> '
+      + 'ou un <a href="#" onclick="cpEvalGoto(\'audit\');return false;" style="color:var(--accent)">audit de conformite</a> pour commencer.'
+      + "</div>";
+    return;
+  }
+
+  b.innerHTML = list.map(function(e, i){
+    var num = String(i+1).padStart(2,"0");
+    var color = cpEvalBadgeColor(e.level);
+    var scoreTxt = e.scoreMax === 100 ? (e.score + "%") : (e.score + " / 10");
+    var typeLbl = e.type === "simulateur" ? "SIMULATEUR" : "AUDIT";
+    return '<div class="eval-row" style="cursor:pointer" onclick="cpEvalGoto(\'' + e.type + '\')">'
+      + '<div style="font-size:11px;font-family:var(--mono);color:var(--muted2);width:24px">' + num + '</div>'
+      + '<div class="eval-ico">' + e.icon + '</div>'
+      + '<div class="eval-body">'
+      +   '<div class="eval-n">' + e.title + '</div>'
+      +   '<div class="eval-d">' + e.subtitle + '</div>'
+      + '</div>'
+      + '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;margin-right:10px">'
+      +   '<span style="font-size:9px;font-family:var(--mono);letter-spacing:.05em;color:' + color + '">' + e.badge + '</span>'
+      +   '<span style="font-size:8px;font-family:var(--mono);color:var(--muted2)">' + typeLbl + '</span>'
+      + '</div>'
+      + '<div class="eval-sc" style="color:' + color + '">' + scoreTxt + '</div>'
+      + '<div class="eval-date">' + cpEvalFmtDate(e.date) + '</div>'
+      + '<div onclick="event.stopPropagation();cpEvalRemove(' + e.id + ')" style="font-size:14px;color:var(--rule2);cursor:pointer;padding:0 4px" title="Supprimer">\u00D7</div>'
+      + '</div>';
+  }).join("");
+}
+
+/* Init au chargement */
+document.addEventListener("DOMContentLoaded", function(){
+  cpEvalUpdateBadge();
+  cpEvalRenderList();
+});
+/* Si DOM deja charge (script en fin de page) */
+if(document.readyState !== "loading"){
+  cpEvalUpdateBadge();
+  cpEvalRenderList();
+}
 
 })();
 
