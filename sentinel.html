@@ -723,6 +723,91 @@ textarea.form-el{min-height:86px;resize:vertical}
 .sim-alerts-title{font-family:var(--serif);font-size:20px;color:var(--ink);letter-spacing:-.01em}
 .sim-alerts-sub{font-size:12px;color:var(--muted);margin-bottom:16px}
 
+
+/* ══ AUDIT DE MATURITÉ IA ══ */
+.mat-sector-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.mat-sector-btn{display:flex;align-items:center;gap:7px;font-size:12px;padding:8px 14px;border-radius:4px;border:1px solid var(--rule2);background:var(--white);color:var(--ink2);cursor:pointer;transition:all .15s}
+.mat-sector-btn:hover{border-color:var(--accent);color:var(--accent)}
+.mat-sector-btn.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.mat-sector-btn .mat-ico{font-size:15px}
+.mat-hero{background:var(--white);border:1px solid var(--rule);border-radius:6px;padding:24px 28px;margin-bottom:24px}
+.mat-hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:16px}
+.mat-hero-ico{font-size:34px;line-height:1}
+.mat-hero-title{font-family:var(--serif);font-size:26px;color:var(--ink);letter-spacing:-.02em;margin-bottom:4px}
+.mat-hero-desc{font-size:13px;color:var(--muted);line-height:1.6;max-width:620px}
+.mat-hero-score{text-align:center;flex-shrink:0}
+.mat-hero-score-val{font-family:var(--serif);font-size:46px;line-height:1;color:var(--accent)}
+.mat-hero-score-lbl{font-size:9px;font-family:var(--mono);color:var(--muted2);letter-spacing:.06em;text-transform:uppercase;margin-top:2px}
+.mat-regs{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.mat-reg-chip{font-size:10px;font-family:var(--mono);padding:3px 9px;border-radius:3px;background:rgba(28,90,138,.08);color:var(--blue);border:1px solid rgba(28,90,138,.15)}
+.mat-section{margin-bottom:32px}
+.mat-section-h{font-family:var(--serif);font-size:19px;color:var(--ink);margin-bottom:4px;letter-spacing:-.01em}
+.mat-section-sub{font-size:12px;color:var(--muted);margin-bottom:16px}
+/* Radar 8 piliers */
+.mat-radar-wrap{display:grid;grid-template-columns:340px 1fr;gap:28px;align-items:center}
+.mat-radar-svg{width:100%;max-width:340px}
+.mat-pillars-list{display:flex;flex-direction:column;gap:8px}
+.mat-pillar-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--rule)}
+.mat-pillar-row:last-child{border-bottom:none}
+.mat-pillar-info{flex:1}
+.mat-pillar-name{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:1px}
+.mat-pillar-desc{font-size:10px;color:var(--muted);line-height:1.4}
+.mat-pillar-bar{width:90px;height:6px;background:var(--bg2);border-radius:3px;overflow:hidden;flex-shrink:0}
+.mat-pillar-fill{height:100%;border-radius:3px}
+.mat-pillar-score{font-family:var(--mono);font-size:12px;font-weight:600;width:30px;text-align:right;flex-shrink:0}
+/* Systèmes IA typiques */
+.mat-sys-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.mat-sys-card{background:var(--white);border:1px solid var(--rule);border-radius:4px;padding:12px 14px;font-size:12px;color:var(--ink2);display:flex;align-items:center;gap:8px}
+.mat-sys-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0}
+/* Spécificités */
+.mat-spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mat-spec-card{background:var(--white);border:1px solid var(--rule);border-radius:4px;padding:14px 16px;border-left:3px solid var(--accent)}
+.mat-spec-t{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.mat-spec-d{font-size:11px;color:var(--muted);line-height:1.55}
+/* KPIs */
+.mat-kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.mat-kpi{background:var(--white);border:1px solid var(--rule);border-radius:4px;padding:14px 16px}
+.mat-kpi-cat{font-size:9px;font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted2);margin-bottom:6px}
+.mat-kpi-val{font-family:var(--serif);font-size:24px;color:var(--ink);line-height:1}
+.mat-kpi-name{font-size:11px;color:var(--ink2);margin-top:4px;line-height:1.4}
+.mat-kpi-tool{font-size:9px;font-family:var(--mono);color:var(--blue);margin-top:6px}
+/* Phases / timeline */
+.mat-phase{display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--rule)}
+.mat-phase:last-child{border-bottom:none}
+.mat-phase-num{width:34px;height:34px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;flex-shrink:0}
+.mat-phase-body{flex:1}
+.mat-phase-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px}
+.mat-phase-meta{font-size:10px;font-family:var(--mono);color:var(--muted2);margin-bottom:6px}
+.mat-phase-desc{font-size:11px;color:var(--muted);line-height:1.55}
+.mat-phase-deliv{font-size:10px;color:var(--green);margin-top:4px;font-family:var(--mono)}
+/* Budget table */
+.mat-budget-table{width:100%;border-collapse:collapse;font-size:12px}
+.mat-budget-table th{text-align:left;font-size:9px;font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted2);padding:8px 10px;border-bottom:2px solid var(--rule)}
+.mat-budget-table td{padding:9px 10px;border-bottom:1px solid var(--rule);color:var(--ink2)}
+.mat-budget-table tr:last-child td{border-bottom:none;font-weight:600;color:var(--ink)}
+.mat-budget-cost{font-family:var(--mono);text-align:right;white-space:nowrap}
+/* Procédure audit */
+.mat-proc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.mat-proc-step{background:var(--white);border:1px solid var(--rule);border-radius:4px;padding:14px;text-align:center}
+.mat-proc-num{font-family:var(--mono);font-size:10px;color:var(--accent);margin-bottom:6px}
+.mat-proc-name{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.mat-proc-desc{font-size:10px;color:var(--muted);line-height:1.45}
+/* Livrables */
+.mat-deliv-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mat-deliv-card{background:var(--white);border:1px solid var(--rule);border-radius:4px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start}
+.mat-deliv-check{color:var(--green);font-size:13px;flex-shrink:0;margin-top:1px}
+.mat-deliv-t{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:2px}
+.mat-deliv-d{font-size:10px;color:var(--muted);line-height:1.5}
+/* Export buttons */
+.mat-export-bar{display:flex;gap:10px;flex-wrap:wrap;margin:24px 0;padding:18px;background:var(--bg);border-radius:6px}
+.mat-export-btn{font-size:12px;font-family:var(--mono);padding:10px 18px;border-radius:4px;border:none;cursor:pointer;letter-spacing:.04em;display:flex;align-items:center;gap:8px}
+.mat-export-pdf{background:var(--accent);color:#fff}
+.mat-export-pdf:hover{background:#9a2a1d}
+.mat-export-word{background:var(--blue);color:#fff}
+.mat-export-word:hover{background:#164a73}
+.mat-export-info{font-size:11px;color:var(--muted);align-self:center;flex:1;min-width:200px}
+@media(max-width:760px){.mat-radar-wrap{grid-template-columns:1fr}.mat-spec-grid,.mat-deliv-grid{grid-template-columns:1fr}.mat-proc-grid{grid-template-columns:1fr 1fr}}
+
 </style>
 <style id="cpc-styles">
 /* ══ CHATBOT SENTINEL AI — CONSEILPREV ══ */
@@ -906,6 +991,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-item" onclick="go('comp',this,'ANALYSE','Comparateur')"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M8 4v16M16 4v16M3 8h18M3 16h18"/></svg></span>Comparateur</div>
     <div class="sb-item" onclick="go('geo',this,'GÉOPOLITIQUE','Tensions normatives')"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M2 12h20M12 2v20"/></svg></span>Géopolitique</div>
     <div class="sb-section">Risques &amp; Systèmes</div>
+    <div class="sb-item" onclick="go('maturite',this,'AUDIT DE MATURITÉ','Audit de maturité IA')"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 3 5-6"/></svg></span>Audit de maturité IA</div>
     <div class="sb-item" onclick="go('registre',this,'REGISTRE','Systèmes IA')"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg></span>Registre IA</div>
     <div class="sb-item" onclick="go('matrice',this,'RISQUES','Matrice risques')"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>Matrice risques</div>
     <div class="sb-item" onclick="go('radar',this,'RISQUES','Radar multi-critères')"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg></span>Radar des risques</div>
@@ -1785,6 +1871,15 @@ textarea.form-el{min-height:86px;resize:vertical}
 </div>
 
 <!-- REGISTRE -->
+<div class="page" id="p-maturite">
+  <span class="eyebrow">Audit de maturité IA · CONSEILPREV</span>
+  <h1 class="page-h">Audit de <em>maturité IA</em></h1>
+  <p class="page-lead">Évaluation structurée selon les 8 piliers de l'EU AI Act, déclinée par secteur d'activité. Analyse, scoring, plan d'action et livrables téléchargeables.</p>
+
+  <div class="mat-sector-bar" id="mat-sector-bar"></div>
+  <div id="mat-content"></div>
+</div>
+
 <div class="page" id="p-registre">
   <span class="eyebrow">Registre</span><h1 class="page-h">Registre des <em>systèmes IA</em></h1><p class="page-lead">Inventaire complet de vos déploiements IA classifiés selon l'EU AI Act. Obligatoire pour les systèmes haut risque (Art. 51).</p>
   <div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title">Systèmes enregistrés — 4 déploiements</span><span class="tbl-link" onclick="openAuditTab()">+ Ajouter un système</span></div><div class="comp-head-row" id="reg-sys-head" style="grid-template-columns:28px 1fr 110px 120px 90px 80px;padding:9px 20px;display:grid;background:var(--bg);border-bottom:2px solid var(--rule)"><div class="comp-cell"></div><div class="comp-cell">Système IA</div><div class="comp-cell">Type</div><div class="comp-cell">Classification AI Act</div><div class="comp-cell">Secteur</div><div class="comp-cell">Score risque</div></div><div id="reg-sys-body"></div></div>
@@ -3573,6 +3668,7 @@ var PAGE_META = {
   espace:   {section:'MON ESPACE',      label:'Tableau de bord'},
   report:   {section:'REPORTING',       label:'Dashboard'},
   chat:     {section:'ASSISTANT IA',    label:'Chat Conformité'},
+  maturite: {section:'AUDIT DE MATURITÉ', label:'Audit de maturité IA'},
   registre: {section:'REGISTRE',        label:'Systèmes IA'},
   matrice:  {section:'RISQUES',         label:'Matrice risques'},
   radar:    {section:'RISQUES',         label:'Radar multi-critères'},
@@ -5992,4 +6088,336 @@ if(document.readyState !== "loading"){
 
 </script>
 </body>
+
+<script>
+/* ══ AUDIT DE MATURITÉ IA — Module sectoriel ══ */
+(function(){
+'use strict';
+
+var MAT_SECTORS = {"telecom": {"label": "Télécom", "icon": "📶", "desc": "Opérateurs, équipementiers réseau, fournisseurs de services de communication.", "systems": ["Chatbots service client", "Maintenance prédictive réseau", "Analyse de données réseau (QoS)", "Détection de fraude", "Optimisation allocation spectre"], "regs": ["EU AI Act", "RGPD", "NIS2", "ePrivacy", "ETSI", "3GPP"], "pillars": {"explicabilite": 2, "controlabilite": 3, "transparence": 2, "surete": 3, "equite": 2, "gouvernance": 2, "confidentialite": 4, "robustesse": 3}, "specifics": [{"t": "Données sensibles", "d": "Protection renforcée des données clients (RGPD, ePrivacy). Chiffrement des communications et des métadonnées de connexion."}, {"t": "Résilience des infrastructures", "d": "Sécurité des réseaux (NIS2) et continuité de service. Tests de robustesse des systèmes IA critiques (maintenance prédictive)."}, {"t": "IA générative et chatbots", "d": "Contrôle des réponses (éviter désinformation, biais). Transparence sur les données utilisées (historique des conversations)."}, {"t": "Conformité client", "d": "Respect des engagements contractuels (SLA, RGPD). Gestion des réclamations liées à l'IA (erreurs de facturation automatisée)."}, {"t": "Réglementations internationales", "d": "Alignement avec les normes locales (ex. lois chinoises sur la cybersécurité pour les filiales asiatiques)."}], "budget": 430000, "duree": 24}, "energie": {"label": "Énergie / Utilities", "icon": "⚡", "desc": "Production, transport et distribution d'énergie, opérateurs de réseaux électriques et gaziers.", "systems": ["Prévision de demande énergétique", "Maintenance prédictive turbines/réseaux", "Optimisation smart grid", "Détection d'anomalies SCADA", "Trading énergétique algorithmique"], "regs": ["EU AI Act", "RGPD", "NIS2", "Directive CER", "IEC 62443"], "pillars": {"explicabilite": 2, "controlabilite": 3, "transparence": 2, "surete": 4, "equite": 2, "gouvernance": 3, "confidentialite": 3, "robustesse": 4}, "specifics": [{"t": "Infrastructures critiques", "d": "Systèmes IA classés haut risque (Annexe III) — gestion du trafic, distribution d'eau/gaz/électricité. Conformité NIS2 et directive CER (résilience des entités critiques)."}, {"t": "Sûreté industrielle (OT/SCADA)", "d": "Sécurité des systèmes de contrôle industriel. Tests de robustesse face aux cyberattaques et défaillances. IEC 62443."}, {"t": "Continuité de service", "d": "Tolérance zéro aux interruptions. Supervision humaine effective (Art. 14) sur les décisions automatisées de délestage ou répartition."}, {"t": "Trading et marchés", "d": "Algorithmes de trading énergétique : explicabilité des décisions, prévention de la manipulation de marché (REMIT)."}], "budget": 480000, "duree": 26}, "sante": {"label": "Santé / Médical", "icon": "🩺", "desc": "Hôpitaux, cliniques, laboratoires, éditeurs de dispositifs médicaux et de logiciels de santé.", "systems": ["Aide au diagnostic (imagerie)", "Prédiction de risque patient", "Triage automatisé", "Optimisation parcours de soins", "Analyse de dossiers médicaux"], "regs": ["EU AI Act", "RGPD", "MDR/IVDR", "Règlement dispositifs médicaux", "HDS"], "pillars": {"explicabilite": 2, "controlabilite": 2, "transparence": 2, "surete": 3, "equite": 2, "gouvernance": 2, "confidentialite": 3, "robustesse": 3}, "specifics": [{"t": "Systèmes haut risque (Annexe III + MDR)", "d": "Double régime : EU AI Act + Règlement dispositifs médicaux (MDR/IVDR). Évaluation de conformité par organisme notifié obligatoire."}, {"t": "Données de santé (catégorie spéciale)", "d": "Données sensibles RGPD Art. 9. Hébergement HDS (Hébergeur de Données de Santé) certifié obligatoire en France."}, {"t": "Explicabilité clinique", "d": "Les praticiens doivent comprendre et pouvoir contester les recommandations IA. Supervision humaine renforcée (Art. 14) sur toute décision médicale."}, {"t": "Équité et biais", "d": "Prévention des biais discriminatoires (genre, origine, âge) dans les modèles de diagnostic ou de triage. Représentativité des données d'entraînement."}], "budget": 520000, "duree": 28}, "finance": {"label": "Finance / Banque / Assurance", "icon": "🏦", "desc": "Banques, assureurs, sociétés de gestion, fintechs et établissements de paiement.", "systems": ["Scoring crédit automatisé", "Détection de fraude", "Lutte anti-blanchiment (AML)", "Trading algorithmique", "Tarification assurance", "Robo-advisors"], "regs": ["EU AI Act", "RGPD", "DORA", "NIS2", "ACPR", "MiFID II"], "pillars": {"explicabilite": 2, "controlabilite": 3, "transparence": 2, "surete": 3, "equite": 1, "gouvernance": 3, "confidentialite": 3, "robustesse": 3}, "specifics": [{"t": "Décisions individuelles (Annexe III)", "d": "Scoring crédit et tarification = haut risque. Droit d'opposition aux décisions automatisées (RGPD Art. 22). Obligation d'explication des refus."}, {"t": "Résilience opérationnelle (DORA)", "d": "Règlement DORA applicable depuis janvier 2025. Tests de résilience, gestion des risques liés aux prestataires TIC tiers, signalement d'incidents."}, {"t": "Équité et non-discrimination", "d": "Risque majeur de biais dans le scoring (origine, genre, code postal). Surveillance ACPR. Documentation des variables et de leur justification."}, {"t": "Lutte anti-fraude et AML", "d": "Équilibre entre détection efficace et minimisation des faux positifs. Traçabilité des alertes pour les régulateurs (TRACFIN, ACPR)."}], "budget": 550000, "duree": 28}, "industrie": {"label": "Industrie / Manufacturing", "icon": "🏭", "desc": "Industrie manufacturière, automobile, aéronautique, chimie et biens d'équipement.", "systems": ["Maintenance prédictive", "Contrôle qualité par vision", "Optimisation de production", "Robotique collaborative", "Jumeaux numériques"], "regs": ["EU AI Act", "RGPD", "NIS2", "Directive Machines", "ISO 9001"], "pillars": {"explicabilite": 3, "controlabilite": 3, "transparence": 3, "surete": 3, "equite": 3, "gouvernance": 2, "confidentialite": 3, "robustesse": 3}, "specifics": [{"t": "Composants de sécurité (Annexe I)", "d": "IA intégrée à des machines = haut risque sous Directive Machines. Évaluation de conformité avant mise sur le marché. Marquage CE."}, {"t": "Sécurité au travail", "d": "Robotique collaborative et systèmes de vision : prévention des accidents. Supervision humaine et arrêt d'urgence (Art. 14)."}, {"t": "Robustesse opérationnelle", "d": "Tolérance aux entrées erronées, dérives capteurs, conditions dégradées. Tests en conditions réelles avant déploiement (Art. 9)."}, {"t": "Propriété intellectuelle", "d": "Protection des modèles et des jeux de données industriels. Confidentialité des procédés (secret des affaires)."}], "budget": 410000, "duree": 24}, "transport": {"label": "Transport / Mobilité", "icon": "🚇", "desc": "Transport ferroviaire, aérien, routier, logistique et constructeurs automobiles.", "systems": ["Conduite assistée / autonome", "Optimisation logistique", "Maintenance prédictive flotte", "Gestion du trafic", "Détection de fatigue conducteur"], "regs": ["EU AI Act", "RGPD", "NIS2", "Règlement véhicules", "EASA"], "pillars": {"explicabilite": 2, "controlabilite": 2, "transparence": 2, "surete": 2, "equite": 3, "gouvernance": 2, "confidentialite": 3, "robustesse": 2}, "specifics": [{"t": "Systèmes critiques de sécurité", "d": "Conduite autonome et gestion du trafic = haut risque. Robustesse et sûreté maximales. Homologation sectorielle (EASA aérien, UNECE automobile)."}, {"t": "Supervision humaine", "d": "Capacité de reprise en main immédiate. Surveillance de la vigilance de l'opérateur. Boîte noire et journalisation (Art. 12)."}, {"t": "Robustesse environnementale", "d": "Fonctionnement fiable en conditions variables (météo, luminosité, signalisation dégradée). Tests adversariaux obligatoires."}, {"t": "Données de géolocalisation", "d": "Protection des données de déplacement (RGPD). Minimisation et anonymisation des traces de mobilité."}], "budget": 490000, "duree": 26}, "it": {"label": "IT / Tech / SaaS", "icon": "💻", "desc": "Éditeurs de logiciels, fournisseurs cloud, ESN, startups tech et plateformes numériques.", "systems": ["Modèles GPAI / LLM", "Copilotes de code", "Modération de contenu", "Recommandation", "Cybersécurité par IA", "Assistants conversationnels"], "regs": ["EU AI Act", "RGPD", "NIS2", "DSA", "ISO 42001", "ISO 27001"], "pillars": {"explicabilite": 3, "controlabilite": 3, "transparence": 3, "surete": 3, "equite": 3, "gouvernance": 3, "confidentialite": 3, "robustesse": 3}, "specifics": [{"t": "Modèles GPAI (Art. 51-55)", "d": "Fournisseurs de modèles de fondation : documentation technique, résumé d'entraînement, politique de droits d'auteur. Seuil 10^25 FLOPs pour risque systémique."}, {"t": "Transparence (Art. 50)", "d": "Marquage des contenus générés (watermarking). Information des utilisateurs qu'ils interagissent avec une IA. Détection des deepfakes."}, {"t": "Modération et DSA", "d": "Plateformes : articulation EU AI Act / Digital Services Act. Transparence des systèmes de recommandation et de modération."}, {"t": "Sécurité by design", "d": "Protection contre les attaques adversariales, prompt injection, exfiltration de données. ISO 27001 et ISO 42001."}], "budget": 380000, "duree": 22}, "public": {"label": "Secteur public / Administration", "icon": "🏛", "desc": "Administrations centrales et territoriales, organismes publics, collectivités.", "systems": ["Attribution d'aides sociales", "Détection de fraude fiscale", "Traitement de demandes citoyennes", "Vidéosurveillance algorithmique", "Aide à la décision juridique"], "regs": ["EU AI Act", "RGPD", "NIS2", "Référentiel CNIL", "RGAA"], "pillars": {"explicabilite": 1, "controlabilite": 2, "transparence": 1, "surete": 2, "equite": 1, "gouvernance": 2, "confidentialite": 2, "robustesse": 2}, "specifics": [{"t": "Services essentiels (Annexe III)", "d": "Attribution d'aides, services publics essentiels = haut risque. Transparence renforcée envers les citoyens. Droit au recours."}, {"t": "Équité et égalité de traitement", "d": "Risque majeur de discrimination dans l'accès aux droits. Documentation exhaustive des critères. Contrôle CNIL et Défenseur des droits."}, {"t": "Transparence démocratique", "d": "Obligation d'information des citoyens sur l'usage de l'IA. Publication des analyses d'impact. Explicabilité des décisions administratives."}, {"t": "Vidéosurveillance", "d": "Encadrement strict (Art. 5 sur l'identification biométrique). Bases légales spécifiques requises. Proportionnalité."}], "budget": 460000, "duree": 26}};
+var MAT_PILLARS = [{"id": "explicabilite", "label": "Explicabilité", "desc": "Comprendre et évaluer les réponses du système."}, {"id": "controlabilite", "label": "Contrôlabilité", "desc": "Disposer de mécanismes pour surveiller et orienter le comportement des systèmes d'IA."}, {"id": "transparence", "label": "Transparence", "desc": "Permettre aux parties prenantes de faire des choix éclairés concernant leur engagement dans un système d'IA."}, {"id": "surete", "label": "Sûreté", "desc": "Prévention des réponses nuisibles et des utilisations abusives du système."}, {"id": "equite", "label": "Équité", "desc": "Prise en compte des impacts sur les différents groupes de parties prenantes."}, {"id": "gouvernance", "label": "Gouvernance", "desc": "Intégrer les meilleures pratiques dans la chaîne d'approvisionnement de l'IA, y compris fournisseurs et sous-traitants."}, {"id": "confidentialite", "label": "Confidentialité & Sécurité", "desc": "Obtenir, utiliser et protéger correctement les données et les modèles."}, {"id": "robustesse", "label": "Robustesse & Véracité", "desc": "Obtenir des réponses correctes du système, même en cas d'entrées erronées ou contradictoires."}];
+var MAT_CUR = "telecom";
+
+/* Phases du programme (issues du cahier des charges CONSEILPREV) */
+var MAT_PHASES = [
+  {n:1, title:"Diagnostic initial", duree:"3–4 semaines", dates:"01/07 – 28/07",
+   desc:"Cartographier l'existant et identifier les écarts de conformité (EU AI Act, 8 piliers). Kick-off, audit documentaire, cartographie RACI, recensement des systèmes IA, évaluation des risques (outil AIRI), benchmark réglementaire, pré-audit technique.",
+   deliv:"Rapport de diagnostic + Registre IA préliminaire + Matrice des écarts"},
+  {n:2, title:"Conception du cadre de gouvernance", duree:"4–6 semaines", dates:"29/07 – 08/09",
+   desc:"Construire un cadre de gouvernance aligné EU AI Act. Définition des rôles (Responsable IA, DPO, Comité), élaboration des politiques IA, registre centralisé, processus de contrôle, intégration des 8 piliers, veille réglementaire.",
+   deliv:"Cadre de gouvernance + Politiques + Matrice RACI + Système de veille"},
+  {n:3, title:"Déploiement opérationnel", duree:"8–12 semaines", dates:"09/09 – 01/12",
+   desc:"Déployer le cadre et former les équipes. Formation (EU AI Act, 8 piliers), déploiement des outils, audit terrain complémentaire, mise en œuvre des processus, tests de conformité, intégration aux systèmes existants (CRM, ERP, SIEM).",
+   deliv:"Environnement opérationnel + Rapports d'audit + Équipes formées (100%)"},
+  {n:4, title:"Maintenance et amélioration continue", duree:"Continu", dates:"À partir du 02/12",
+   desc:"Assurer la conformité dans la durée. Audits trimestriels, mises à jour réglementaires, amélioration continue (KPIs), veille technologique, reporting exécutif au Comex, gestion des incidents IA.",
+   deliv:"Rapports trimestriels + Mises à jour + Plan d'amélioration continue"}
+];
+
+/* Procédure d'audit (4 étapes) */
+var MAT_PROC = [
+  {n:"01", name:"Pré-audit", desc:"Revue d'applicabilité du système d'IA."},
+  {n:"02", name:"Audit documentaire", desc:"Analyse automatisée des processus et de la documentation."},
+  {n:"03", name:"Audit terrain", desc:"Évaluation sur site avec les équipes métiers."},
+  {n:"04", name:"Tests directs", desc:"Invocation directe du système d'IA pour tester les propriétés critiques."}
+];
+
+/* Livrables finaux */
+var MAT_DELIV = [
+  {t:"Registre des systèmes IA", d:"Liste exhaustive classée par niveau de risque + fiches techniques (données, modèles, conformité)."},
+  {t:"Manuel de gouvernance IA", d:"Politiques et procédures conformes à l'EU AI Act + guides pratiques par équipe."},
+  {t:"Rapport d'audit de maturité", d:"Score de maturité (1–5) pour chacun des 8 piliers + recommandations prioritaires."},
+  {t:"Programme de formation", d:"Supports pédagogiques (vidéos, PDF, quiz) + certificats de formation."},
+  {t:"Outils de gouvernance", d:"Registre IA (OneTrust/ServiceNow), tableau de bord (Power BI), outil AIRI CONSEILPREV."},
+  {t:"Plan de maintenance", d:"Calendrier des audits trimestriels + processus de veille réglementaire et technologique."}
+];
+
+/* KPIs (tableau de bord de pilotage) */
+var MAT_KPIS = [
+  {cat:"Conformité réglementaire", val:"100%", name:"Systèmes IA conformes à l'EU AI Act", tool:"AIRI + Registre IA"},
+  {cat:"Gouvernance", val:"100%", name:"Systèmes IA enregistrés", tool:"Registre IA"},
+  {cat:"Sécurité", val:"≤ 5/an", name:"Incidents IA (biais, fuites, attaques)", tool:"SIEM"},
+  {cat:"Formation", val:"100%", name:"Employés formés aux bonnes pratiques IA", tool:"LMS"},
+  {cat:"Efficacité", val:"≤ 15j", name:"Temps moyen de validation d'un projet IA", tool:"Workflow de contrôle"},
+  {cat:"Transparence", val:"100%", name:"Systèmes IA avec documentation complète", tool:"Registre IA"}
+];
+
+/* Budget de référence (adapté par secteur via multiplicateur) */
+function matBudget(sectorBudget){
+  var ref = 430000;
+  var k = sectorBudget / ref;
+  return [
+    {poste:"Ressources humaines", detail:"1 Directeur de Programme (6 mois)", cost:Math.round(90000*k), resp:"CONSEILPREV"},
+    {poste:"", detail:"2 Consultants Senior (6 mois)", cost:Math.round(120000*k), resp:"CONSEILPREV"},
+    {poste:"", detail:"1 Expert Data/Gouvernance (6 mois)", cost:Math.round(70000*k), resp:"CONSEILPREV"},
+    {poste:"", detail:"1 Juriste (6 mois)", cost:Math.round(60000*k), resp:"CONSEILPREV"},
+    {poste:"Outils", detail:"Licence AIRI (CONSEILPREV)", cost:20000, resp:"CONSEILPREV"},
+    {poste:"", detail:"Logiciel de registre IA (OneTrust)", cost:15000, resp:"Client"},
+    {poste:"", detail:"Outils de veille (Feedly, Meltwater)", cost:5000, resp:"Client"},
+    {poste:"Formation", detail:"Sessions de formation (50 personnes)", cost:10000, resp:"CONSEILPREV"},
+    {poste:"Audit et tests", detail:"Pré-audit + Audit terrain", cost:Math.round(30000*k), resp:"CONSEILPREV"},
+    {poste:"Frais divers", detail:"Déplacements, documentation", cost:10000, resp:"Client"}
+  ];
+}
+
+function matFmtEur(n){ return n.toLocaleString("fr-FR") + " €"; }
+
+function matPillarColor(score){
+  if(score <= 2) return "#B83222";
+  if(score === 3) return "#C47C1A";
+  return "#2D7A47";
+}
+
+/* Radar SVG 8 piliers */
+function matRadar(pillars){
+  var cx=170, cy=160, R=120;
+  var keys = MAT_PILLARS.map(function(p){return p.id;});
+  var n = keys.length;
+  var pts = [], axisLines = [], labels = [], rings = [];
+  /* anneaux 1-5 */
+  for(var r=1;r<=5;r++){
+    var ringPts = [];
+    for(var i=0;i<n;i++){
+      var ang = (Math.PI*2*i/n) - Math.PI/2;
+      ringPts.push((cx + Math.cos(ang)*R*r/5).toFixed(1) + "," + (cy + Math.sin(ang)*R*r/5).toFixed(1));
+    }
+    rings.push('<polygon points="'+ringPts.join(" ")+'" fill="none" stroke="#E0DDD8" stroke-width="0.5"/>');
+  }
+  for(var i=0;i<n;i++){
+    var ang = (Math.PI*2*i/n) - Math.PI/2;
+    var val = pillars[keys[i]] || 0;
+    var px = cx + Math.cos(ang)*R*val/5;
+    var py = cy + Math.sin(ang)*R*val/5;
+    pts.push(px.toFixed(1)+","+py.toFixed(1));
+    var ex = cx + Math.cos(ang)*R, ey = cy + Math.sin(ang)*R;
+    axisLines.push('<line x1="'+cx+'" y1="'+cy+'" x2="'+ex.toFixed(1)+'" y2="'+ey.toFixed(1)+'" stroke="#E0DDD8" stroke-width="0.5"/>');
+    var lx = cx + Math.cos(ang)*(R+18), ly = cy + Math.sin(ang)*(R+18);
+    var anchor = Math.abs(Math.cos(ang)) < 0.3 ? "middle" : (Math.cos(ang) > 0 ? "start" : "end");
+    var short = MAT_PILLARS[i].label.split(" ")[0].substring(0,11);
+    labels.push('<text x="'+lx.toFixed(1)+'" y="'+ly.toFixed(1)+'" font-size="8" font-family="monospace" fill="#767676" text-anchor="'+anchor+'" dominant-baseline="middle">'+short+'</text>');
+  }
+  return '<svg class="mat-radar-svg" viewBox="0 0 340 320" xmlns="http://www.w3.org/2000/svg">'
+    + rings.join("") + axisLines.join("")
+    + '<polygon points="'+pts.join(" ")+'" fill="rgba(184,50,34,0.12)" stroke="#B83222" stroke-width="1.5"/>'
+    + labels.join("")
+    + '</svg>';
+}
+
+function matRender(){
+  var s = MAT_SECTORS[MAT_CUR];
+  if(!s) return;
+  var avg = (Object.keys(s.pillars).reduce(function(a,k){return a+s.pillars[k];},0) / 8).toFixed(1);
+
+  /* Barre secteurs */
+  var bar = document.getElementById("mat-sector-bar");
+  if(bar){
+    bar.innerHTML = Object.keys(MAT_SECTORS).map(function(k){
+      var sec = MAT_SECTORS[k];
+      return '<button class="mat-sector-btn'+(k===MAT_CUR?' on':'')+'" onclick="matSelect(\''+k+'\')"><span class="mat-ico">'+sec.icon+'</span>'+sec.label+'</button>';
+    }).join("");
+  }
+
+  var c = document.getElementById("mat-content");
+  if(!c) return;
+
+  /* Hero */
+  var html = '<div class="mat-hero">'
+    + '<div class="mat-hero-top">'
+    + '<div style="display:flex;gap:16px;align-items:flex-start">'
+    + '<div class="mat-hero-ico">'+s.icon+'</div>'
+    + '<div><div class="mat-hero-title">'+s.label+'</div><div class="mat-hero-desc">'+s.desc+'</div>'
+    + '<div class="mat-regs">'+s.regs.map(function(r){return '<span class="mat-reg-chip">'+r+'</span>';}).join("")+'</div></div>'
+    + '</div>'
+    + '<div class="mat-hero-score"><div class="mat-hero-score-val">'+avg+'</div><div class="mat-hero-score-lbl">Maturité / 5</div></div>'
+    + '</div></div>';
+
+  /* Export bar */
+  html += '<div class="mat-export-bar">'
+    + '<button class="mat-export-btn mat-export-pdf" onclick="matExportPDF()">↓ Rapport PDF</button>'
+    + '<button class="mat-export-btn mat-export-word" onclick="matExportWord()">↓ Document Word</button>'
+    + '<span class="mat-export-info">Rapport complet : tableau de bord KPIs, budget, calendrier, spécificités sectorielles, 8 piliers, procédure d\'audit et livrables.</span>'
+    + '</div>';
+
+  /* Systèmes IA */
+  html += '<div class="mat-section"><div class="mat-section-h">Systèmes IA typiques du secteur</div>'
+    + '<div class="mat-section-sub">Cas d\'usage couramment rencontrés et à inscrire au registre des systèmes IA.</div>'
+    + '<div class="mat-sys-grid">'
+    + s.systems.map(function(sy){return '<div class="mat-sys-card"><span class="mat-sys-dot"></span>'+sy+'</div>';}).join("")
+    + '</div></div>';
+
+  /* 8 piliers + radar */
+  html += '<div class="mat-section"><div class="mat-section-h">Évaluation des 8 piliers de maturité IA</div>'
+    + '<div class="mat-section-sub">Score de maturité (1–5) par pilier, issus de l\'EU AI Act. Profil sectoriel de référence CONSEILPREV.</div>'
+    + '<div class="mat-radar-wrap"><div>'+matRadar(s.pillars)+'</div><div class="mat-pillars-list">'
+    + MAT_PILLARS.map(function(p){
+        var v = s.pillars[p.id] || 0;
+        var col = matPillarColor(v);
+        return '<div class="mat-pillar-row"><div class="mat-pillar-info"><div class="mat-pillar-name">'+p.label+'</div><div class="mat-pillar-desc">'+p.desc+'</div></div>'
+          + '<div class="mat-pillar-bar"><div class="mat-pillar-fill" style="width:'+(v*20)+'%;background:'+col+'"></div></div>'
+          + '<div class="mat-pillar-score" style="color:'+col+'">'+v+'/5</div></div>';
+      }).join("")
+    + '</div></div></div>';
+
+  /* Spécificités secteur */
+  html += '<div class="mat-section"><div class="mat-section-h">Spécificités du secteur '+s.label+'</div>'
+    + '<div class="mat-section-sub">Enjeux propres pris en compte dans le plan d\'action (données sensibles, résilience, IA générative).</div>'
+    + '<div class="mat-spec-grid">'
+    + s.specifics.map(function(sp){return '<div class="mat-spec-card"><div class="mat-spec-t">'+sp.t+'</div><div class="mat-spec-d">'+sp.d+'</div></div>';}).join("")
+    + '</div></div>';
+
+  /* KPIs */
+  html += '<div class="mat-section"><div class="mat-section-h">Tableau de bord de pilotage (KPIs)</div>'
+    + '<div class="mat-section-sub">Indicateurs de suivi de la conformité et de la gouvernance IA.</div>'
+    + '<div class="mat-kpi-grid">'
+    + MAT_KPIS.map(function(k){return '<div class="mat-kpi"><div class="mat-kpi-cat">'+k.cat+'</div><div class="mat-kpi-val">'+k.val+'</div><div class="mat-kpi-name">'+k.name+'</div><div class="mat-kpi-tool">'+k.tool+'</div></div>';}).join("")
+    + '</div></div>';
+
+  /* Phases / calendrier */
+  html += '<div class="mat-section"><div class="mat-section-h">Plan d\'action — 4 phases</div>'
+    + '<div class="mat-section-sub">Programme de mise en conformité sur '+s.duree+' semaines environ.</div>';
+  MAT_PHASES.forEach(function(p){
+    html += '<div class="mat-phase"><div class="mat-phase-num">'+p.n+'</div><div class="mat-phase-body">'
+      + '<div class="mat-phase-title">Phase '+p.n+' — '+p.title+'</div>'
+      + '<div class="mat-phase-meta">'+p.duree+' · '+p.dates+'</div>'
+      + '<div class="mat-phase-desc">'+p.desc+'</div>'
+      + '<div class="mat-phase-deliv">▸ '+p.deliv+'</div></div></div>';
+  });
+  html += '</div>';
+
+  /* Procédure d'audit */
+  html += '<div class="mat-section"><div class="mat-section-h">Procédure d\'audit de maturité</div>'
+    + '<div class="mat-section-sub">4 étapes méthodologiques CONSEILPREV.</div>'
+    + '<div class="mat-proc-grid">'
+    + MAT_PROC.map(function(p){return '<div class="mat-proc-step"><div class="mat-proc-num">'+p.n+'</div><div class="mat-proc-name">'+p.name+'</div><div class="mat-proc-desc">'+p.desc+'</div></div>';}).join("")
+    + '</div></div>';
+
+  /* Budget */
+  var budget = matBudget(s.budget);
+  var total = budget.reduce(function(a,b){return a+b.cost;},0);
+  html += '<div class="mat-section"><div class="mat-section-h">Budget prévisionnel</div>'
+    + '<div class="mat-section-sub">Estimation adaptée au secteur '+s.label+'.</div>'
+    + '<table class="mat-budget-table"><thead><tr><th>Poste</th><th>Détail</th><th style="text-align:right">Coût</th><th>Responsable</th></tr></thead><tbody>'
+    + budget.map(function(b){return '<tr><td>'+b.poste+'</td><td>'+b.detail+'</td><td class="mat-budget-cost">'+matFmtEur(b.cost)+'</td><td>'+b.resp+'</td></tr>';}).join("")
+    + '<tr><td>Total</td><td></td><td class="mat-budget-cost">'+matFmtEur(total)+'</td><td></td></tr>'
+    + '</tbody></table></div>';
+
+  /* Livrables finaux */
+  html += '<div class="mat-section"><div class="mat-section-h">Livrables finaux</div>'
+    + '<div class="mat-section-sub">Remis à la Direction à l\'issue du programme.</div>'
+    + '<div class="mat-deliv-grid">'
+    + MAT_DELIV.map(function(d){return '<div class="mat-deliv-card"><span class="mat-deliv-check">✓</span><div><div class="mat-deliv-t">'+d.t+'</div><div class="mat-deliv-d">'+d.d+'</div></div></div>';}).join("")
+    + '</div></div>';
+
+  c.innerHTML = html;
+}
+
+window.matSelect = function(k){ MAT_CUR = k; matRender(); window.scrollTo({top:0,behavior:"smooth"}); };
+
+/* ── Export PDF ── */
+window.matExportPDF = function(){
+  var w = window.open("","_blank");
+  if(!w){ alert("Autorisez les pop-ups pour générer le rapport."); return; }
+  w.document.write(matBuildReportHTML(true));
+  w.document.close();
+};
+
+/* ── Export Word ── */
+window.matExportWord = function(){
+  var s = MAT_SECTORS[MAT_CUR];
+  var html = matBuildReportHTML(false);
+  var blob = new Blob(['\ufeff'+html], {type:"application/msword"});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url;
+  a.download = "Audit-maturite-IA-"+s.label.replace(/[^a-zA-Z]/g,"")+".doc";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
+
+function matBuildReportHTML(forPrint){
+  var s = MAT_SECTORS[MAT_CUR];
+  var avg = (Object.keys(s.pillars).reduce(function(a,k){return a+s.pillars[k];},0)/8).toFixed(1);
+  var budget = matBudget(s.budget);
+  var total = budget.reduce(function(a,b){return a+b.cost;},0);
+  var today = new Date().toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"});
+
+  var h = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Audit de maturite IA - '+s.label+'</title>';
+  h += '<style>@page{margin:2cm}body{font-family:Georgia,serif;color:#1C1C1C;max-width:820px;margin:0 auto;padding:20px;line-height:1.5}';
+  h += 'h1{font-size:24px;border-bottom:3px solid #B83222;padding-bottom:10px;margin-bottom:4px}';
+  h += 'h2{font-size:16px;color:#B83222;margin-top:28px;border-bottom:1px solid #E0DDD8;padding-bottom:4px}';
+  h += 'h3{font-size:13px;margin-top:16px;margin-bottom:4px}';
+  h += '.sub{color:#666;font-size:12px;margin-bottom:20px;font-family:Arial,sans-serif}';
+  h += 'table{width:100%;border-collapse:collapse;font-size:11px;margin:10px 0;font-family:Arial,sans-serif}';
+  h += 'th{background:#f5f2ed;text-align:left;padding:7px;font-size:10px}td{padding:7px;border-bottom:1px solid #eee}';
+  h += '.kpi-box{display:inline-block;width:30%;margin:5px 1%;padding:10px;background:#f8f7f5;border-radius:4px;font-family:Arial,sans-serif;vertical-align:top}';
+  h += '.kpi-v{font-size:20px;color:#B83222}.kpi-n{font-size:10px;color:#666}';
+  h += '.pill{font-family:Arial,sans-serif;font-size:11px;padding:4px 0;border-bottom:1px solid #eee}';
+  h += '.spec{font-family:Arial,sans-serif;font-size:11px;margin:8px 0;padding-left:12px;border-left:3px solid #B83222}';
+  h += '.score-big{font-size:40px;color:#B83222;font-family:Georgia}';
+  h += '.right{text-align:right}.deliv{font-family:Arial,sans-serif;font-size:11px;margin:6px 0}</style></head><body>';
+
+  h += '<h1>Audit de maturite IA</h1>';
+  h += '<div class="sub">Secteur '+s.label+' &nbsp;·&nbsp; Genere le '+today+' &nbsp;·&nbsp; CONSEILPREV</div>';
+  h += '<p style="font-size:12px;font-family:Arial,sans-serif">'+s.desc+'</p>';
+  h += '<p style="font-family:Arial,sans-serif;font-size:11px"><strong>Reglementations applicables :</strong> '+s.regs.join(", ")+'</p>';
+  h += '<p><span class="score-big">'+avg+'</span><span style="font-size:14px;color:#999"> / 5 &mdash; Score de maturite global</span></p>';
+
+  /* KPIs */
+  h += '<h2>Tableau de bord de pilotage (KPIs)</h2>';
+  MAT_KPIS.forEach(function(k){
+    h += '<div class="kpi-box"><div style="font-size:9px;color:#999;text-transform:uppercase">'+k.cat+'</div><div class="kpi-v">'+k.val+'</div><div class="kpi-n">'+k.name+'</div><div style="font-size:9px;color:#1C5A8A">'+k.tool+'</div></div>';
+  });
+
+  /* 8 piliers */
+  h += '<h2>8 piliers de l\'audit de maturite IA</h2>';
+  MAT_PILLARS.forEach(function(p){
+    var v = s.pillars[p.id]||0;
+    h += '<div class="pill"><strong>'+p.label+' : '+v+'/5</strong> &mdash; '+p.desc+'</div>';
+  });
+
+  /* Specificites */
+  h += '<h2>Specificites du secteur '+s.label+'</h2>';
+  s.specifics.forEach(function(sp){
+    h += '<div class="spec"><strong>'+sp.t+'</strong><br>'+sp.d+'</div>';
+  });
+
+  /* Procedure */
+  h += '<h2>Procedure d\'audit</h2><table><tr><th>Etape</th><th>Description</th></tr>';
+  MAT_PROC.forEach(function(p){ h += '<tr><td><strong>'+p.n+' '+p.name+'</strong></td><td>'+p.desc+'</td></tr>'; });
+  h += '</table>';
+
+  /* Calendrier / phases */
+  h += '<h2>Calendrier previsionnel (4 phases)</h2><table><tr><th>Phase</th><th>Duree</th><th>Dates</th><th>Jalons</th></tr>';
+  MAT_PHASES.forEach(function(p){ h += '<tr><td><strong>Phase '+p.n+'</strong><br>'+p.title+'</td><td>'+p.duree+'</td><td>'+p.dates+'</td><td>'+p.deliv+'</td></tr>'; });
+  h += '</table>';
+
+  /* Budget */
+  h += '<h2>Budget previsionnel</h2><table><tr><th>Poste</th><th>Detail</th><th class="right">Cout</th><th>Responsable</th></tr>';
+  budget.forEach(function(b){ h += '<tr><td>'+b.poste+'</td><td>'+b.detail+'</td><td class="right">'+matFmtEur(b.cost)+'</td><td>'+b.resp+'</td></tr>'; });
+  h += '<tr><td><strong>Total</strong></td><td></td><td class="right"><strong>'+matFmtEur(total)+'</strong></td><td></td></tr></table>';
+
+  /* Livrables */
+  h += '<h2>Livrables finaux</h2>';
+  MAT_DELIV.forEach(function(d){ h += '<div class="deliv">&#10003; <strong>'+d.t+'</strong> &mdash; '+d.d+'</div>'; });
+
+  h += '<p style="font-size:10px;color:#999;margin-top:30px;font-family:Arial,sans-serif;font-style:italic">Ce rapport est une aide a la decision basee sur des profils sectoriels de reference. Il ne constitue pas un avis juridique. Pour un audit personnalise : Christophe CERF, CONSEILPREV - +33 6 60 69 21 45 - christophe.cerf@outlook.com</p>';
+
+  if(forPrint){
+    h += '<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>';
+  }
+  h += '</body></html>';
+  return h;
+}
+
+/* Init au chargement de la page maturite */
+var _matOrigGo = window.go;
+window.go = function(id){
+  var r = _matOrigGo ? _matOrigGo.apply(this, arguments) : undefined;
+  if(id === "maturite"){ setTimeout(matRender, 50); }
+  return r;
+};
+
+})();
+
+</script>
 </html>
