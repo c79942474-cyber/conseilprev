@@ -717,6 +717,12 @@ textarea.form-el{min-height:86px;resize:vertical}
 .art-official-link:hover{text-decoration:underline}
 
 
+
+.sim-alerts-section{margin-top:32px;padding-top:24px;border-top:1px solid var(--rule)}
+.sim-alerts-head{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+.sim-alerts-title{font-family:var(--serif);font-size:20px;color:var(--ink);letter-spacing:-.01em}
+.sim-alerts-sub{font-size:12px;color:var(--muted);margin-bottom:16px}
+
 </style>
 <style id="cpc-styles">
 /* ══ CHATBOT SENTINEL AI — CONSEILPREV ══ */
@@ -906,7 +912,6 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-section">Conformité</div>
     <div class="sb-item" onclick="go('regs',this,'CONFORMITÉ','Réglementations')"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 8h10M7 12h7M7 16h5"/></svg></span>Réglementations</div>
     <div class="sb-item" onclick="go('evals',this,'CONFORMITÉ','Mes évaluations')"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>Mes évaluations<span class="sb-badge">3</span></div>
-    <div class="sb-item" onclick="go('alertes',this,'ALERTES','7 alertes actives')"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg></span>Alertes<span class="sb-badge">7</span></div>
     <div class="sb-item" onclick="go('controles',this,'CONFORMITÉ','Bibliothèque de contrôles')"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 11l3 3 8-8M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>Contrôles<span class="sb-badge" style="background:var(--green)">23</span></div>
     <div class="sb-item" onclick="go('fria',this,'CONFORMITÉ','Évaluation FRIA')"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg></span>FRIA</div>
     <div class="sb-section">Espace</div>
@@ -1977,6 +1982,15 @@ textarea.form-el{min-height:86px;resize:vertical}
   </div>
 </div>
 
+  <div class="sim-alerts-section">
+    <div class="sim-alerts-head">
+      <span class="sim-alerts-title">Alertes <em>actives</em></span>
+      <span class="chip chip-r" style="font-size:10px">7</span>
+    </div>
+    <p class="sim-alerts-sub">Modifications réglementaires susceptibles d'impacter vos déploiements IA.</p>
+    <div class="alert-list" id="alerts-list"></div>
+  </div>
+
   </div>
 
   <div class="regs-tabpanel" id="regs-panel-audit">
@@ -2044,7 +2058,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 <div class="page" id="p-evals"><span class="eyebrow">Mes évaluations</span><h1 class="page-h">Historique des analyses</h1><p class="page-lead">Vos évaluations de conformité sauvegardées avec score et recommandations.</p><div class="tbl-wrap"><div id="evals-rows"></div></div></div>
 
 <!-- ALERTES -->
-<div class="page" id="p-alertes"><span class="eyebrow">Alertes</span><h1 class="page-h">7 alertes <em>actives</em></h1><p class="page-lead">Modifications réglementaires susceptibles d'impacter vos déploiements IA.</p><div class="alert-list" id="alerts-list"></div></div>
+
 
 <!-- VEILLE -->
 <div class="page" id="p-veille"><span class="eyebrow">Veille réglementaire</span><h1 class="page-h">Actualités &amp; publications</h1><p class="page-lead">Suivi des évolutions normatives IA, RGPD, NIS2 et cybersécurité.</p><div class="veille-list" id="veille-list"></div></div>
