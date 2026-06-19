@@ -808,6 +808,64 @@ textarea.form-el{min-height:86px;resize:vertical}
 .mat-export-info{font-size:11px;color:var(--muted);align-self:center;flex:1;min-width:200px}
 @media(max-width:760px){.mat-radar-wrap{grid-template-columns:1fr}.mat-spec-grid,.mat-deliv-grid{grid-template-columns:1fr}.mat-proc-grid{grid-template-columns:1fr 1fr}}
 
+/* ══ AUDIT MATURITÉ v2 — Questionnaire, tooltips, modal ══ */
+.matq-global-box{display:flex;align-items:center;gap:20px;background:var(--white);border:1px solid var(--rule);border-radius:6px;padding:18px 22px;margin-bottom:18px}
+.matq-global-lbl{font-size:10px;font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted2);margin-bottom:4px}
+.matq-global-val{font-family:var(--serif);font-size:38px;line-height:1}
+.matq-level-badge{font-size:13px;font-weight:600;margin-left:10px}
+.matq-level-desc{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5}
+.matq-pillar{background:var(--white);border:1px solid var(--rule);border-radius:5px;padding:14px 16px;margin-bottom:10px}
+.matq-pillar-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--rule)}
+.matq-pillar-name{font-size:13px;font-weight:600;color:var(--ink)}
+.matq-pillar-score-mini{font-family:var(--mono);font-size:13px;font-weight:600}
+.matq-q{margin-bottom:12px}
+.matq-q:last-child{margin-bottom:0}
+.matq-q-text{font-size:12px;color:var(--ink2);line-height:1.5;margin-bottom:6px}
+.matq-q-art{font-size:9px;font-family:var(--mono);color:var(--blue);background:rgba(28,90,138,.08);padding:1px 6px;border-radius:2px;white-space:nowrap}
+.matq-opts{display:flex;gap:6px}
+.matq-opt{font-size:11px;font-family:var(--mono);padding:5px 16px;border-radius:3px;border:1px solid var(--rule2);background:var(--white);color:var(--muted);cursor:pointer;transition:all .12s}
+.matq-opt:hover{border-color:var(--accent)}
+.matq-opt.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+/* Tooltips */
+.mat-tooltip-wrap{position:relative;display:inline-block;margin-left:6px;vertical-align:middle}
+.mat-tooltip-icon{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:var(--blue);color:#fff;font-size:9px;font-family:var(--mono);font-style:italic;cursor:help}
+.mat-tooltip{position:absolute;bottom:130%;left:50%;transform:translateX(-50%);width:260px;background:var(--ink);color:#fff;font-size:11px;line-height:1.5;padding:10px 12px;border-radius:5px;opacity:0;visibility:hidden;transition:opacity .15s;z-index:100;font-weight:400;text-transform:none;letter-spacing:0;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.mat-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--ink)}
+.mat-tooltip-wrap:hover .mat-tooltip{opacity:1;visibility:visible}
+/* Deliverables interactifs */
+.mat-deliv-apibar{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.mat-deliv-apilbl{font-size:11px;font-family:var(--mono);color:var(--muted2);letter-spacing:.04em}
+.mat-api-btn{font-size:10px;font-family:var(--mono);padding:4px 12px;border-radius:3px;border:1px solid var(--rule2);background:var(--white);color:var(--muted);cursor:pointer;transition:all .12s}
+.mat-api-btn:hover{border-color:var(--accent);color:var(--accent)}
+.mat-api-btn.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.mat-deliv-clickable{cursor:pointer;transition:all .15s}
+.mat-deliv-clickable:hover{border-color:var(--accent);box-shadow:0 3px 12px rgba(184,50,34,.1);transform:translateY(-1px)}
+.mat-deliv-ico{font-size:22px;flex-shrink:0}
+.mat-deliv-gen{font-size:10px;font-family:var(--mono);color:var(--accent);margin-top:8px;letter-spacing:.04em}
+/* Modal livrable */
+.mat-modal{position:fixed;inset:0;z-index:10020;background:rgba(28,28,28,.55);display:none;align-items:center;justify-content:center;padding:20px}
+.mat-modal.on{display:flex}
+.mat-modal-box{background:var(--white);border-radius:8px;width:100%;max-width:760px;max-height:88vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.mat-modal-head{display:flex;align-items:flex-start;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--rule);flex-shrink:0}
+.mat-modal-eyebrow{font-size:9px;font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.mat-modal-title{font-family:var(--serif);font-size:21px;color:var(--ink)}
+.mat-modal-close{background:none;border:none;font-size:22px;color:var(--muted2);cursor:pointer;padding:2px 8px;line-height:1}
+.mat-modal-close:hover{color:var(--ink)}
+.mat-modal-body{flex:1;overflow-y:auto;padding:22px}
+.mat-modal-loading{text-align:center;padding:50px 20px;font-size:13px;color:var(--ink2);line-height:1.7}
+.mat-spinner{width:32px;height:32px;border:3px solid var(--rule);border-top-color:var(--accent);border-radius:50%;animation:matSpin .8s linear infinite;margin:0 auto 16px}
+@keyframes matSpin{to{transform:rotate(360deg)}}
+.mat-deliv-content{font-size:13px;line-height:1.7;color:var(--ink2)}
+.mat-deliv-content h2{font-family:var(--serif);font-size:18px;color:var(--ink);margin:20px 0 8px}
+.mat-deliv-content h3{font-size:14px;color:var(--ink);margin:16px 0 6px}
+.mat-deliv-content ul{margin:8px 0;padding-left:20px}
+.mat-deliv-content li{margin:4px 0}
+.mat-deliv-content strong{font-weight:600;color:var(--ink)}
+.mat-deliv-content table{width:100%;border-collapse:collapse;font-size:11px;margin:10px 0}
+.mat-deliv-content th,.mat-deliv-content td{border:1px solid var(--rule);padding:6px 8px;text-align:left}
+.mat-deliv-content th{background:var(--bg)}
+.mat-modal-foot{display:flex;gap:10px;padding:14px 22px;border-top:1px solid var(--rule);flex-shrink:0}
+
 </style>
 <style id="cpc-styles">
 /* ══ CHATBOT SENTINEL AI — CONSEILPREV ══ */
@@ -6097,6 +6155,9 @@ if(document.readyState !== "loading"){
 var MAT_SECTORS = {"telecom": {"label": "Télécom", "icon": "📶", "desc": "Opérateurs, équipementiers réseau, fournisseurs de services de communication.", "systems": ["Chatbots service client", "Maintenance prédictive réseau", "Analyse de données réseau (QoS)", "Détection de fraude", "Optimisation allocation spectre"], "regs": ["EU AI Act", "RGPD", "NIS2", "ePrivacy", "ETSI", "3GPP"], "pillars": {"explicabilite": 2, "controlabilite": 3, "transparence": 2, "surete": 3, "equite": 2, "gouvernance": 2, "confidentialite": 4, "robustesse": 3}, "specifics": [{"t": "Données sensibles", "d": "Protection renforcée des données clients (RGPD, ePrivacy). Chiffrement des communications et des métadonnées de connexion."}, {"t": "Résilience des infrastructures", "d": "Sécurité des réseaux (NIS2) et continuité de service. Tests de robustesse des systèmes IA critiques (maintenance prédictive)."}, {"t": "IA générative et chatbots", "d": "Contrôle des réponses (éviter désinformation, biais). Transparence sur les données utilisées (historique des conversations)."}, {"t": "Conformité client", "d": "Respect des engagements contractuels (SLA, RGPD). Gestion des réclamations liées à l'IA (erreurs de facturation automatisée)."}, {"t": "Réglementations internationales", "d": "Alignement avec les normes locales (ex. lois chinoises sur la cybersécurité pour les filiales asiatiques)."}], "budget": 430000, "duree": 24}, "energie": {"label": "Énergie / Utilities", "icon": "⚡", "desc": "Production, transport et distribution d'énergie, opérateurs de réseaux électriques et gaziers.", "systems": ["Prévision de demande énergétique", "Maintenance prédictive turbines/réseaux", "Optimisation smart grid", "Détection d'anomalies SCADA", "Trading énergétique algorithmique"], "regs": ["EU AI Act", "RGPD", "NIS2", "Directive CER", "IEC 62443"], "pillars": {"explicabilite": 2, "controlabilite": 3, "transparence": 2, "surete": 4, "equite": 2, "gouvernance": 3, "confidentialite": 3, "robustesse": 4}, "specifics": [{"t": "Infrastructures critiques", "d": "Systèmes IA classés haut risque (Annexe III) — gestion du trafic, distribution d'eau/gaz/électricité. Conformité NIS2 et directive CER (résilience des entités critiques)."}, {"t": "Sûreté industrielle (OT/SCADA)", "d": "Sécurité des systèmes de contrôle industriel. Tests de robustesse face aux cyberattaques et défaillances. IEC 62443."}, {"t": "Continuité de service", "d": "Tolérance zéro aux interruptions. Supervision humaine effective (Art. 14) sur les décisions automatisées de délestage ou répartition."}, {"t": "Trading et marchés", "d": "Algorithmes de trading énergétique : explicabilité des décisions, prévention de la manipulation de marché (REMIT)."}], "budget": 480000, "duree": 26}, "sante": {"label": "Santé / Médical", "icon": "🩺", "desc": "Hôpitaux, cliniques, laboratoires, éditeurs de dispositifs médicaux et de logiciels de santé.", "systems": ["Aide au diagnostic (imagerie)", "Prédiction de risque patient", "Triage automatisé", "Optimisation parcours de soins", "Analyse de dossiers médicaux"], "regs": ["EU AI Act", "RGPD", "MDR/IVDR", "Règlement dispositifs médicaux", "HDS"], "pillars": {"explicabilite": 2, "controlabilite": 2, "transparence": 2, "surete": 3, "equite": 2, "gouvernance": 2, "confidentialite": 3, "robustesse": 3}, "specifics": [{"t": "Systèmes haut risque (Annexe III + MDR)", "d": "Double régime : EU AI Act + Règlement dispositifs médicaux (MDR/IVDR). Évaluation de conformité par organisme notifié obligatoire."}, {"t": "Données de santé (catégorie spéciale)", "d": "Données sensibles RGPD Art. 9. Hébergement HDS (Hébergeur de Données de Santé) certifié obligatoire en France."}, {"t": "Explicabilité clinique", "d": "Les praticiens doivent comprendre et pouvoir contester les recommandations IA. Supervision humaine renforcée (Art. 14) sur toute décision médicale."}, {"t": "Équité et biais", "d": "Prévention des biais discriminatoires (genre, origine, âge) dans les modèles de diagnostic ou de triage. Représentativité des données d'entraînement."}], "budget": 520000, "duree": 28}, "finance": {"label": "Finance / Banque / Assurance", "icon": "🏦", "desc": "Banques, assureurs, sociétés de gestion, fintechs et établissements de paiement.", "systems": ["Scoring crédit automatisé", "Détection de fraude", "Lutte anti-blanchiment (AML)", "Trading algorithmique", "Tarification assurance", "Robo-advisors"], "regs": ["EU AI Act", "RGPD", "DORA", "NIS2", "ACPR", "MiFID II"], "pillars": {"explicabilite": 2, "controlabilite": 3, "transparence": 2, "surete": 3, "equite": 1, "gouvernance": 3, "confidentialite": 3, "robustesse": 3}, "specifics": [{"t": "Décisions individuelles (Annexe III)", "d": "Scoring crédit et tarification = haut risque. Droit d'opposition aux décisions automatisées (RGPD Art. 22). Obligation d'explication des refus."}, {"t": "Résilience opérationnelle (DORA)", "d": "Règlement DORA applicable depuis janvier 2025. Tests de résilience, gestion des risques liés aux prestataires TIC tiers, signalement d'incidents."}, {"t": "Équité et non-discrimination", "d": "Risque majeur de biais dans le scoring (origine, genre, code postal). Surveillance ACPR. Documentation des variables et de leur justification."}, {"t": "Lutte anti-fraude et AML", "d": "Équilibre entre détection efficace et minimisation des faux positifs. Traçabilité des alertes pour les régulateurs (TRACFIN, ACPR)."}], "budget": 550000, "duree": 28}, "industrie": {"label": "Industrie / Manufacturing", "icon": "🏭", "desc": "Industrie manufacturière, automobile, aéronautique, chimie et biens d'équipement.", "systems": ["Maintenance prédictive", "Contrôle qualité par vision", "Optimisation de production", "Robotique collaborative", "Jumeaux numériques"], "regs": ["EU AI Act", "RGPD", "NIS2", "Directive Machines", "ISO 9001"], "pillars": {"explicabilite": 3, "controlabilite": 3, "transparence": 3, "surete": 3, "equite": 3, "gouvernance": 2, "confidentialite": 3, "robustesse": 3}, "specifics": [{"t": "Composants de sécurité (Annexe I)", "d": "IA intégrée à des machines = haut risque sous Directive Machines. Évaluation de conformité avant mise sur le marché. Marquage CE."}, {"t": "Sécurité au travail", "d": "Robotique collaborative et systèmes de vision : prévention des accidents. Supervision humaine et arrêt d'urgence (Art. 14)."}, {"t": "Robustesse opérationnelle", "d": "Tolérance aux entrées erronées, dérives capteurs, conditions dégradées. Tests en conditions réelles avant déploiement (Art. 9)."}, {"t": "Propriété intellectuelle", "d": "Protection des modèles et des jeux de données industriels. Confidentialité des procédés (secret des affaires)."}], "budget": 410000, "duree": 24}, "transport": {"label": "Transport / Mobilité", "icon": "🚇", "desc": "Transport ferroviaire, aérien, routier, logistique et constructeurs automobiles.", "systems": ["Conduite assistée / autonome", "Optimisation logistique", "Maintenance prédictive flotte", "Gestion du trafic", "Détection de fatigue conducteur"], "regs": ["EU AI Act", "RGPD", "NIS2", "Règlement véhicules", "EASA"], "pillars": {"explicabilite": 2, "controlabilite": 2, "transparence": 2, "surete": 2, "equite": 3, "gouvernance": 2, "confidentialite": 3, "robustesse": 2}, "specifics": [{"t": "Systèmes critiques de sécurité", "d": "Conduite autonome et gestion du trafic = haut risque. Robustesse et sûreté maximales. Homologation sectorielle (EASA aérien, UNECE automobile)."}, {"t": "Supervision humaine", "d": "Capacité de reprise en main immédiate. Surveillance de la vigilance de l'opérateur. Boîte noire et journalisation (Art. 12)."}, {"t": "Robustesse environnementale", "d": "Fonctionnement fiable en conditions variables (météo, luminosité, signalisation dégradée). Tests adversariaux obligatoires."}, {"t": "Données de géolocalisation", "d": "Protection des données de déplacement (RGPD). Minimisation et anonymisation des traces de mobilité."}], "budget": 490000, "duree": 26}, "it": {"label": "IT / Tech / SaaS", "icon": "💻", "desc": "Éditeurs de logiciels, fournisseurs cloud, ESN, startups tech et plateformes numériques.", "systems": ["Modèles GPAI / LLM", "Copilotes de code", "Modération de contenu", "Recommandation", "Cybersécurité par IA", "Assistants conversationnels"], "regs": ["EU AI Act", "RGPD", "NIS2", "DSA", "ISO 42001", "ISO 27001"], "pillars": {"explicabilite": 3, "controlabilite": 3, "transparence": 3, "surete": 3, "equite": 3, "gouvernance": 3, "confidentialite": 3, "robustesse": 3}, "specifics": [{"t": "Modèles GPAI (Art. 51-55)", "d": "Fournisseurs de modèles de fondation : documentation technique, résumé d'entraînement, politique de droits d'auteur. Seuil 10^25 FLOPs pour risque systémique."}, {"t": "Transparence (Art. 50)", "d": "Marquage des contenus générés (watermarking). Information des utilisateurs qu'ils interagissent avec une IA. Détection des deepfakes."}, {"t": "Modération et DSA", "d": "Plateformes : articulation EU AI Act / Digital Services Act. Transparence des systèmes de recommandation et de modération."}, {"t": "Sécurité by design", "d": "Protection contre les attaques adversariales, prompt injection, exfiltration de données. ISO 27001 et ISO 42001."}], "budget": 380000, "duree": 22}, "public": {"label": "Secteur public / Administration", "icon": "🏛", "desc": "Administrations centrales et territoriales, organismes publics, collectivités.", "systems": ["Attribution d'aides sociales", "Détection de fraude fiscale", "Traitement de demandes citoyennes", "Vidéosurveillance algorithmique", "Aide à la décision juridique"], "regs": ["EU AI Act", "RGPD", "NIS2", "Référentiel CNIL", "RGAA"], "pillars": {"explicabilite": 1, "controlabilite": 2, "transparence": 1, "surete": 2, "equite": 1, "gouvernance": 2, "confidentialite": 2, "robustesse": 2}, "specifics": [{"t": "Services essentiels (Annexe III)", "d": "Attribution d'aides, services publics essentiels = haut risque. Transparence renforcée envers les citoyens. Droit au recours."}, {"t": "Équité et égalité de traitement", "d": "Risque majeur de discrimination dans l'accès aux droits. Documentation exhaustive des critères. Contrôle CNIL et Défenseur des droits."}, {"t": "Transparence démocratique", "d": "Obligation d'information des citoyens sur l'usage de l'IA. Publication des analyses d'impact. Explicabilité des décisions administratives."}, {"t": "Vidéosurveillance", "d": "Encadrement strict (Art. 5 sur l'identification biométrique). Bases légales spécifiques requises. Proportionnalité."}], "budget": 460000, "duree": 26}};
 var MAT_PILLARS = [{"id": "explicabilite", "label": "Explicabilité", "desc": "Comprendre et évaluer les réponses du système."}, {"id": "controlabilite", "label": "Contrôlabilité", "desc": "Disposer de mécanismes pour surveiller et orienter le comportement des systèmes d'IA."}, {"id": "transparence", "label": "Transparence", "desc": "Permettre aux parties prenantes de faire des choix éclairés concernant leur engagement dans un système d'IA."}, {"id": "surete", "label": "Sûreté", "desc": "Prévention des réponses nuisibles et des utilisations abusives du système."}, {"id": "equite", "label": "Équité", "desc": "Prise en compte des impacts sur les différents groupes de parties prenantes."}, {"id": "gouvernance", "label": "Gouvernance", "desc": "Intégrer les meilleures pratiques dans la chaîne d'approvisionnement de l'IA, y compris fournisseurs et sous-traitants."}, {"id": "confidentialite", "label": "Confidentialité & Sécurité", "desc": "Obtenir, utiliser et protéger correctement les données et les modèles."}, {"id": "robustesse", "label": "Robustesse & Véracité", "desc": "Obtenir des réponses correctes du système, même en cas d'entrées erronées ou contradictoires."}];
 var MAT_CUR = "telecom";
+window.MAT_SECTORS = MAT_SECTORS;
+window.MAT_PILLARS = MAT_PILLARS;
+window.matGetCur = function(){ return MAT_CUR; };
 
 /* Phases du programme (issues du cahier des charges CONSEILPREV) */
 var MAT_PHASES = [
@@ -6206,7 +6267,7 @@ function matRadar(pillars){
 function matRender(){
   var s = MAT_SECTORS[MAT_CUR];
   if(!s) return;
-  var avg = (Object.keys(s.pillars).reduce(function(a,k){return a+s.pillars[k];},0) / 8).toFixed(1);
+  var avg = (window.matGlobalScore ? window.matGlobalScore(MAT_CUR) : (Object.keys(s.pillars).reduce(function(a,k){return a+s.pillars[k];},0)/8)).toFixed(1);
 
   /* Barre secteurs */
   var bar = document.getElementById("mat-sector-bar");
@@ -6245,18 +6306,55 @@ function matRender(){
     + s.systems.map(function(sy){return '<div class="mat-sys-card"><span class="mat-sys-dot"></span>'+sy+'</div>';}).join("")
     + '</div></div>';
 
-  /* 8 piliers + radar */
+  /* Scores dynamiques issus du questionnaire (ou profil de reference) */
+  if(window.matInitAnswers) window.matInitAnswers(MAT_CUR);
+  function curPillarScore(pid){ return window.matPillarScore ? window.matPillarScore(MAT_CUR, pid) : (s.pillars[pid]||0); }
+  var dynPillars = {};
+  MAT_PILLARS.forEach(function(p){ dynPillars[p.id] = curPillarScore(p.id); });
+
+  /* 8 piliers + radar (scores dynamiques) */
   html += '<div class="mat-section"><div class="mat-section-h">Évaluation des 8 piliers de maturité IA</div>'
-    + '<div class="mat-section-sub">Score de maturité (1–5) par pilier, issus de l\'EU AI Act. Profil sectoriel de référence CONSEILPREV.</div>'
-    + '<div class="mat-radar-wrap"><div>'+matRadar(s.pillars)+'</div><div class="mat-pillars-list">'
+    + '<div class="mat-section-sub">Score de maturité (1–5) par pilier, mappé aux articles du Règlement (UE) 2024/1689. Répondez au questionnaire ci-dessous pour ajuster les scores.</div>'
+    + '<div class="mat-radar-wrap"><div id="mat-radar-holder">'+matRadar(dynPillars)+'</div><div class="mat-pillars-list">'
     + MAT_PILLARS.map(function(p){
-        var v = s.pillars[p.id] || 0;
-        var col = matPillarColor(v);
-        return '<div class="mat-pillar-row"><div class="mat-pillar-info"><div class="mat-pillar-name">'+p.label+'</div><div class="mat-pillar-desc">'+p.desc+'</div></div>'
-          + '<div class="mat-pillar-bar"><div class="mat-pillar-fill" style="width:'+(v*20)+'%;background:'+col+'"></div></div>'
-          + '<div class="mat-pillar-score" style="color:'+col+'">'+v+'/5</div></div>';
+        var v = curPillarScore(p.id);
+        var col = matPillarColor(Math.round(v));
+        var arts = (window.PILLAR_ARTICLES && window.PILLAR_ARTICLES[p.id]) ? window.PILLAR_ARTICLES[p.id].arts.join(" · ") : "";
+        return '<div class="mat-pillar-row"><div class="mat-pillar-info"><div class="mat-pillar-name">'+p.label+' <span style="font-size:8px;font-family:var(--mono);color:var(--blue)">'+arts+'</span></div><div class="mat-pillar-desc">'+p.desc+'</div></div>'
+          + '<div class="mat-pillar-bar"><div class="mat-pillar-fill" id="matq-bar-'+p.id+'" style="width:'+(v*20)+'%;background:'+col+'"></div></div>'
+          + '<div class="mat-pillar-score" id="matq-score-'+p.id+'" style="color:'+col+'">'+v.toFixed(1)+'/5</div></div>';
       }).join("")
     + '</div></div></div>';
+
+  /* Questionnaire d'auto-evaluation */
+  if(window.MAT_QUESTIONS){
+    var g = window.matGlobalScore(MAT_CUR);
+    var lvl = window.matMaturityLevel(g);
+    html += '<div class="mat-section"><div class="mat-section-h">Questionnaire d\'auto-évaluation</div>'
+      + '<div class="mat-section-sub">16 questions fondées sur les exigences du Règlement (UE) 2024/1689. Vos réponses recalculent les scores de maturité en temps réel.</div>'
+      + '<div class="matq-global-box"><div><div class="matq-global-lbl">Score global de maturité</div>'
+      + '<div><span class="matq-global-val" id="matq-global" style="color:'+lvl.color+'">'+g.toFixed(1)+'</span><span style="font-size:16px;color:var(--muted2)">/5</span> '
+      + '<span class="matq-level-badge" id="matq-level" style="color:'+lvl.color+'">'+lvl.label+'</span></div>'
+      + '<div class="matq-level-desc" id="matq-level-desc">'+lvl.desc+'</div></div></div>';
+    MAT_PILLARS.forEach(function(p){
+      var qs = window.MAT_QUESTIONS[p.id] || [];
+      var sc = curPillarScore(p.id);
+      var col = matPillarColor(Math.round(sc));
+      html += '<div class="matq-pillar"><div class="matq-pillar-head"><span class="matq-pillar-name">'+p.label+'</span>'
+        + '<span class="matq-pillar-score-mini" id="matq-score-'+p.id+'" style="color:'+col+'">'+sc.toFixed(1)+'/5</span></div>';
+      qs.forEach(function(qo,i){
+        var cur = (window.MAT_ANSWERS[MAT_CUR] && window.MAT_ANSWERS[MAT_CUR][p.id]) ? window.MAT_ANSWERS[MAT_CUR][p.id][i] : 0;
+        html += '<div class="matq-q"><div class="matq-q-text">'+qo.q+' <span class="matq-q-art">'+qo.art+'</span></div>'
+          + '<div class="matq-opts">'
+          + '<button class="matq-opt'+(cur===0?' on':'')+'" id="matq-'+p.id+'-'+i+'-0" onclick="matAnswer(\''+p.id+'\','+i+',0)">Non</button>'
+          + '<button class="matq-opt'+(cur===0.5?' on':'')+'" id="matq-'+p.id+'-'+i+'-0.5" onclick="matAnswer(\''+p.id+'\','+i+',0.5)">Partiel</button>'
+          + '<button class="matq-opt'+(cur===1?' on':'')+'" id="matq-'+p.id+'-'+i+'-1" onclick="matAnswer(\''+p.id+'\','+i+',1)">Oui</button>'
+          + '</div></div>';
+      });
+      html += '</div>';
+    });
+    html += '</div>';
+  }
 
   /* Spécificités secteur */
   html += '<div class="mat-section"><div class="mat-section-h">Spécificités du secteur '+s.label+'</div>'
@@ -6301,17 +6399,33 @@ function matRender(){
     + '<tr><td>Total</td><td></td><td class="mat-budget-cost">'+matFmtEur(total)+'</td><td></td></tr>'
     + '</tbody></table></div>';
 
-  /* Livrables finaux */
-  html += '<div class="mat-section"><div class="mat-section-h">Livrables finaux</div>'
-    + '<div class="mat-section-sub">Remis à la Direction à l\'issue du programme.</div>'
-    + '<div class="mat-deliv-grid">'
-    + MAT_DELIV.map(function(d){return '<div class="mat-deliv-card"><span class="mat-deliv-check">✓</span><div><div class="mat-deliv-t">'+d.t+'</div><div class="mat-deliv-d">'+d.d+'</div></div></div>';}).join("")
-    + '</div></div>';
+  /* Livrables finaux generes par IA */
+  if(window.MAT_DELIVERABLES){
+    var curApi = window.MAT_DELIV_API || "mistral";
+    html += '<div class="mat-section"><div class="mat-section-h">Livrables finaux générés par IA</div>'
+      + '<div class="mat-section-sub">Cliquez sur un livrable pour le générer avec l\'IA à partir des résultats de votre audit, puis téléchargez-le en PDF ou Word.</div>'
+      + '<div class="mat-deliv-apibar">'
+      + '<span class="mat-deliv-apilbl">Moteur IA :</span>'
+      + '<button class="mat-api-btn'+(curApi==="mistral"?" on":"")+'" id="mat-api-mistral" onclick="matSetDelivApi(\'mistral\')">Mistral Large</button>'
+      + '<button class="mat-api-btn'+(curApi==="claude"?" on":"")+'" id="mat-api-claude" onclick="matSetDelivApi(\'claude\')">Claude Sonnet</button>'
+      + '</div>'
+      + '<div class="mat-deliv-grid">'
+      + window.MAT_DELIVERABLES.map(function(d){
+          return '<div class="mat-deliv-card mat-deliv-clickable" onclick="matGenerateDeliverable(\''+d.id+'\')">'
+            + '<span class="mat-deliv-ico">'+d.icon+'</span>'
+            + '<div style="flex:1"><div class="mat-deliv-t">'+d.title
+            + '<span class="mat-tooltip-wrap"><span class="mat-tooltip-icon">i</span><span class="mat-tooltip">'+d.tooltip+'</span></span>'
+            + '</div>'
+            + '<div class="mat-deliv-d">'+d.tooltip.substring(0,90)+'…</div>'
+            + '<div class="mat-deliv-gen">Générer avec IA →</div></div></div>';
+        }).join("")
+      + '</div></div>';
+  }
 
   c.innerHTML = html;
 }
 
-window.matSelect = function(k){ MAT_CUR = k; matRender(); window.scrollTo({top:0,behavior:"smooth"}); };
+window.matSelect = function(k){ MAT_CUR = k; if(window.matInitAnswers) window.matInitAnswers(k); matRender(); if(window.matRefreshScores) setTimeout(window.matRefreshScores, 30); window.scrollTo({top:0,behavior:"smooth"}); };
 
 /* ── Export PDF ── */
 window.matExportPDF = function(){
@@ -6415,6 +6529,374 @@ window.go = function(id){
   var r = _matOrigGo ? _matOrigGo.apply(this, arguments) : undefined;
   if(id === "maturite"){ setTimeout(matRender, 50); }
   return r;
+};
+
+})();
+
+</script>
+
+<script>
+/* ══ AUDIT DE MATURITÉ IA v2 — Scoring AI Act + Livrables IA ══ */
+(function(){
+'use strict';
+
+/* Mapping des 8 piliers vers les articles du Règlement (UE) 2024/1689 */
+var PILLAR_ARTICLES = {
+  explicabilite:    {arts:["Art. 13","Art. 86"], label:"Transparence & explication aux déployeurs et personnes concernées"},
+  controlabilite:   {arts:["Art. 14"],            label:"Contrôle humain effectif"},
+  transparence:     {arts:["Art. 13","Art. 50"],  label:"Transparence et fourniture d'informations"},
+  surete:           {arts:["Art. 9","Art. 15"],   label:"Gestion des risques, exactitude et sécurité"},
+  equite:           {arts:["Art. 10"],            label:"Gouvernance des données et prévention des biais"},
+  gouvernance:      {arts:["Art. 17","Art. 16","Art. 26"], label:"Système de gestion de la qualité et obligations"},
+  confidentialite:  {arts:["Art. 15","Art. 10"],  label:"Cybersécurité et protection des données"},
+  robustesse:       {arts:["Art. 15","Art. 9"],   label:"Robustesse, exactitude et résilience"}
+};
+
+/* Questionnaire d'auto-évaluation — 2 questions par pilier (16 au total) */
+/* Chaque réponse vaut 0 (non), 0.5 (partiel), 1 (oui) → score pilier sur 5 */
+var MAT_QUESTIONS = {
+  explicabilite: [
+    {q:"Les décisions du système IA peuvent-elles être expliquées aux utilisateurs et personnes concernées ?", art:"Art. 13 / Art. 86"},
+    {q:"Une notice d'utilisation documente-t-elle les capacités, limites et performances du système ?", art:"Art. 13(3)"}
+  ],
+  controlabilite: [
+    {q:"Existe-t-il des mécanismes de supervision humaine permettant d'interrompre ou corriger le système ?", art:"Art. 14"},
+    {q:"Les opérateurs sont-ils formés et habilités à superviser le système IA ?", art:"Art. 14(4)"}
+  ],
+  transparence: [
+    {q:"Les utilisateurs sont-ils informés qu'ils interagissent avec un système d'IA ?", art:"Art. 50(1)"},
+    {q:"Les contenus générés par IA sont-ils marqués (watermarking) de façon lisible par machine ?", art:"Art. 50(2)"}
+  ],
+  surete: [
+    {q:"Un système de gestion des risques documenté est-il établi et tenu à jour ?", art:"Art. 9"},
+    {q:"Des tests sont-ils réalisés avant déploiement pour identifier et atténuer les risques ?", art:"Art. 9(6)-(8)"}
+  ],
+  equite: [
+    {q:"Les jeux de données d'entraînement sont-ils examinés pour détecter et corriger les biais ?", art:"Art. 10(2)(f)"},
+    {q:"Les données sont-elles pertinentes, représentatives et de qualité pour la finalité visée ?", art:"Art. 10(3)"}
+  ],
+  gouvernance: [
+    {q:"Un système de gestion de la qualité (SGQ) couvrant l'IA est-il en place ?", art:"Art. 17"},
+    {q:"Les rôles et responsabilités (Responsable IA, DPO, Comité) sont-ils définis et documentés ?", art:"Art. 17 / Art. 26"}
+  ],
+  confidentialite: [
+    {q:"Des mesures de cybersécurité protègent-elles le système contre les attaques adversariales ?", art:"Art. 15(5)"},
+    {q:"Les données personnelles sont-elles protégées conformément au RGPD et minimisées ?", art:"Art. 10(5)"}
+  ],
+  robustesse: [
+    {q:"Le système maintient-il un niveau d'exactitude approprié, mesuré et documenté ?", art:"Art. 15(1)-(3)"},
+    {q:"Le système est-il résilient face aux erreurs, entrées erronées ou conditions dégradées ?", art:"Art. 15(4)"}
+  ]
+};
+
+/* État des réponses : { secteur: { pilier: [v1, v2] } } */
+var MAT_ANSWERS = {};
+
+function matInitAnswers(sectorKey){
+  if(!MAT_ANSWERS[sectorKey]){
+    MAT_ANSWERS[sectorKey] = {};
+    var ref = (window.MAT_SECTORS && window.MAT_SECTORS[sectorKey]) ? window.MAT_SECTORS[sectorKey].pillars : {};
+    Object.keys(MAT_QUESTIONS).forEach(function(p){
+      /* Pré-remplir selon le profil sectoriel de référence (score/5 → 2 réponses) */
+      var refScore = ref[p] || 3;
+      var perQ = refScore / 5; /* 0..1 */
+      MAT_ANSWERS[sectorKey][p] = [
+        perQ >= 0.6 ? 1 : perQ >= 0.3 ? 0.5 : 0,
+        perQ >= 0.8 ? 1 : perQ >= 0.5 ? 0.5 : 0
+      ];
+    });
+  }
+  return MAT_ANSWERS[sectorKey];
+}
+
+/* Calcul du score d'un pilier sur 5 à partir des 2 réponses */
+window.matPillarScore = function(sectorKey, pillar){
+  var a = (MAT_ANSWERS[sectorKey] && MAT_ANSWERS[sectorKey][pillar]) || [0,0];
+  var sum = a[0] + a[1]; /* 0..2 */
+  return Math.round(sum / 2 * 5 * 10) / 10; /* 0..5 */
+};
+
+window.matGlobalScore = function(sectorKey){
+  var keys = Object.keys(MAT_QUESTIONS);
+  var sum = keys.reduce(function(acc,p){ return acc + matPillarScore(sectorKey,p); },0);
+  return Math.round(sum / keys.length * 10) / 10;
+};
+
+/* Niveau de maturité textuel */
+window.matMaturityLevel = function(score){
+  if(score < 1.5) return {label:"Initial", color:"#B83222", desc:"Pratiques absentes ou ad hoc. Risque de non-conformité élevé."};
+  if(score < 2.5) return {label:"Émergent", color:"#C47C1A", desc:"Premières mesures en place mais incomplètes et non systématiques."};
+  if(score < 3.5) return {label:"Défini", color:"#C47C1A", desc:"Processus documentés mais déploiement partiel."};
+  if(score < 4.5) return {label:"Maîtrisé", color:"#2D7A47", desc:"Conformité largement atteinte, processus mesurés."};
+  return {label:"Optimisé", color:"#2D7A47", desc:"Excellence opérationnelle, amélioration continue."};
+};
+
+/* Réponse à une question */
+window.matAnswer = function(pillar, idx, val){
+  var s = MAT_CUR_SECTOR();
+  matInitAnswers(s);
+  MAT_ANSWERS[s][pillar][idx] = val;
+  matRefreshScores();
+};
+
+function MAT_CUR_SECTOR(){
+  return (typeof window.matGetCur === "function") ? window.matGetCur() : "telecom";
+}
+
+/* Rafraîchit l'affichage des scores après réponse (sans re-render complet) */
+function matRefreshScores(){
+  var s = MAT_CUR_SECTOR();
+  Object.keys(MAT_QUESTIONS).forEach(function(p){
+    var sc = matPillarScore(s,p);
+    var el = document.getElementById("matq-score-"+p);
+    if(el){ el.textContent = sc.toFixed(1)+"/5"; el.style.color = sc<=2?"#B83222":sc<3.5?"#C47C1A":"#2D7A47"; }
+    var bar = document.getElementById("matq-bar-"+p);
+    if(bar){ bar.style.width = (sc*20)+"%"; bar.style.background = sc<=2?"#B83222":sc<3.5?"#C47C1A":"#2D7A47"; }
+  });
+  var g = matGlobalScore(s);
+  var lvl = matMaturityLevel(g);
+  var gEl = document.getElementById("matq-global");
+  if(gEl){ gEl.textContent = g.toFixed(1); gEl.style.color = lvl.color; }
+  var lEl = document.getElementById("matq-level");
+  if(lEl){ lEl.textContent = lvl.label; lEl.style.color = lvl.color; }
+  var dEl = document.getElementById("matq-level-desc");
+  if(dEl){ dEl.textContent = lvl.desc; }
+  /* Mise à jour des boutons radio visuels */
+  Object.keys(MAT_QUESTIONS).forEach(function(p){
+    MAT_QUESTIONS[p].forEach(function(_,i){
+      [0,0.5,1].forEach(function(v){
+        var btn = document.getElementById("matq-"+p+"-"+i+"-"+v);
+        if(btn){ btn.classList.toggle("on", MAT_ANSWERS[s][p][i]===v); }
+      });
+    });
+  });
+}
+
+window.matRefreshScores = matRefreshScores;
+window.matInitAnswers = matInitAnswers;
+window.MAT_QUESTIONS = MAT_QUESTIONS;
+window.PILLAR_ARTICLES = PILLAR_ARTICLES;
+window.MAT_ANSWERS = MAT_ANSWERS;
+
+})();
+
+</script>
+<script>
+/* ══ LIVRABLES FINAUX GÉNÉRÉS PAR IA (Mistral / Claude) ══ */
+(function(){
+'use strict';
+
+var MISTRAL_KEY = 'g0Dqgfe3v3op1LPV6lxaUCEVTEZ6GYXU';
+
+/* Définition des 6 livrables avec tooltips */
+var DELIVERABLES = [
+  {
+    id:"registre",
+    title:"Registre des systèmes IA",
+    tooltip:"Liste exhaustive des systèmes IA classés par niveau de risque (Annexe III), avec fiches techniques : données utilisées, modèles, finalité et conformité. Obligatoire pour les systèmes à haut risque (Art. 49, 71).",
+    icon:"\U0001F4CB",
+    prompt:"Genere un REGISTRE DES SYSTEMES IA pour une entreprise du secteur {SECTEUR}. Pour chacun des systemes IA typiques suivants : {SYSTEMS}. Presente un tableau structure avec pour chaque systeme : nom, finalite, donnees utilisees, type de modele, classification de risque selon l'EU AI Act (inacceptable/haut/limite/minimal) avec justification par rapport a l'Annexe III, et statut de conformite. Ajoute une synthese des obligations applicables. Format professionnel, en francais."
+  },
+  {
+    id:"manuel",
+    title:"Manuel de gouvernance IA",
+    tooltip:"Politiques et procédures conformes à l'EU AI Act (gestion des données, développement responsable, contrôle des modèles, transparence). Inclut les rôles (Responsable IA, DPO, Comité de Gouvernance) — Art. 17.",
+    icon:"\U0001F4D8",
+    prompt:"Redige un MANUEL DE GOUVERNANCE IA pour une entreprise du secteur {SECTEUR}, conforme a l'EU AI Act (Art. 17 - systeme de gestion de la qualite). Structure : 1) Politique de gouvernance IA et engagement de la direction, 2) Roles et responsabilites (Responsable IA, DPO, Comite de Gouvernance IA), 3) Procedures de gestion des donnees (Art. 10), 4) Developpement responsable et controle des modeles, 5) Transparence et information (Art. 13, 50), 6) Supervision humaine (Art. 14), 7) Gestion des risques (Art. 9). Tiens compte des specificites sectorielles : {SPECIFICS}. Format professionnel structure, en francais."
+  },
+  {
+    id:"rapport",
+    title:"Rapport d'audit de maturité",
+    tooltip:"Score de maturité (1–5) pour chacun des 8 piliers de l'EU AI Act, avec recommandations prioritaires pour atteindre la conformité. Évaluation adaptée au niveau de risque du système.",
+    icon:"\U0001F4CA",
+    prompt:"Redige un RAPPORT D'AUDIT DE MATURITE IA pour une entreprise du secteur {SECTEUR}. Score global de maturite : {GLOBAL}/5 (niveau {LEVEL}). Scores par pilier (sur 5) : {PILLARS}. Pour chaque pilier, analyse le niveau atteint, identifie les ecarts de conformite par rapport aux articles de l'EU AI Act concernes, et formule 1 a 2 recommandations prioritaires et actionnables. Termine par une feuille de route synthetique des actions prioritaires classees par urgence. Format rapport professionnel, en francais."
+  },
+  {
+    id:"formation",
+    title:"Programme de formation",
+    tooltip:"Supports pédagogiques (modules, quiz) et plan de formation pour les équipes (Métiers, IT, Data, Juridique) sur l'EU AI Act, les 8 piliers et les processus de gouvernance. Certificats de participation — Art. 4 (littératie IA).",
+    icon:"\U0001F393",
+    prompt:"Concois un PROGRAMME DE FORMATION sur la conformite IA pour une entreprise du secteur {SECTEUR}, conforme a l'obligation de litteratie IA (Art. 4 EU AI Act). Structure : 1) Objectifs pedagogiques, 2) Publics cibles (Metiers, IT, Data, Juridique, Direction) avec modules adaptes, 3) Plan detaille des modules (EU AI Act, 8 piliers, processus de gouvernance, specificites du secteur {SECTEUR}), 4) Modalites (durees, formats, quiz d'evaluation), 5) Systeme de certification. Format professionnel, en francais."
+  },
+  {
+    id:"outils",
+    title:"Outils de gouvernance IA",
+    tooltip:"Recommandations d'outils : registre IA (OneTrust/ServiceNow), tableau de bord de conformité (Power BI/Tableau), outil AIRI (CONSEILPREV) pour l'analyse automatisée des risques. Spécifications de mise en œuvre.",
+    icon:"\U0001F6E0",
+    prompt:"Redige une note de cadrage OUTILS DE GOUVERNANCE IA pour une entreprise du secteur {SECTEUR}. Presente : 1) Registre des systemes IA (outils recommandes : OneTrust, ServiceNow - criteres de choix), 2) Tableau de bord de conformite (Power BI / Tableau) avec les KPIs a suivre, 3) Outil d'analyse automatisee des risques AIRI (CONSEILPREV), 4) Outils de veille reglementaire (Feedly, Meltwater), 5) Architecture d'integration avec les systemes existants (CRM, ERP, SIEM). Pour chaque outil : finalite, fonctionnalites cles, modalites de mise en oeuvre. Format professionnel, en francais."
+  },
+  {
+    id:"maintenance",
+    title:"Plan de maintenance & amélioration continue",
+    tooltip:"Calendrier des audits trimestriels, processus de veille réglementaire et technologique, gestion des incidents IA, reporting exécutif. Assure la conformité dans la durée (Art. 72 - surveillance post-commercialisation).",
+    icon:"\U0001F504",
+    prompt:"Redige un PLAN DE MAINTENANCE ET D'AMELIORATION CONTINUE de la conformite IA pour une entreprise du secteur {SECTEUR}, conforme a l'obligation de surveillance post-commercialisation (Art. 72 EU AI Act). Structure : 1) Calendrier des audits (trimestriels) avec perimetres, 2) Processus de veille reglementaire (EU AI Act, RGPD, NIS2) et technologique, 3) Gestion des incidents IA (biais, fuites, attaques) avec procedure de reponse, 4) Indicateurs de performance (KPIs) et revue periodique, 5) Reporting executif au Comex. Tiens compte des specificites du secteur {SECTEUR}. Format professionnel, en francais."
+  }
+];
+
+window.MAT_DELIVERABLES = DELIVERABLES;
+
+/* Construit le prompt en injectant les données de l'audit */
+function matBuildPrompt(deliv, sectorKey){
+  var s = window.MAT_SECTORS[sectorKey];
+  var global = window.matGlobalScore(sectorKey);
+  var level = window.matMaturityLevel(global).label;
+  var pillars = window.MAT_PILLARS.map(function(p){
+    return p.label + " " + window.matPillarScore(sectorKey, p.id).toFixed(1) + "/5";
+  }).join(", ");
+  var specifics = s.specifics.map(function(sp){ return sp.t; }).join(", ");
+
+  return deliv.prompt
+    .replace(/{SECTEUR}/g, s.label)
+    .replace(/{SYSTEMS}/g, s.systems.join(", "))
+    .replace(/{SPECIFICS}/g, specifics)
+    .replace(/{GLOBAL}/g, global.toFixed(1))
+    .replace(/{LEVEL}/g, level)
+    .replace(/{PILLARS}/g, pillars);
+}
+
+/* Appel API (Mistral par défaut, Claude en option) */
+function matCallAI(prompt, api, cb){
+  var sys = "Tu es un expert en gouvernance IA et conformite reglementaire de CONSEILPREV (Paris). Tu rediges des livrables professionnels structures, precis et actionnables, en francais. Utilise des titres clairs (##), des listes et des tableaux markdown quand pertinent. Sois exhaustif mais concis.";
+
+  if(api === "claude"){
+    fetch('/api/chat/claude',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-6', system:sys, messages:[{role:'user',content:prompt}], max_tokens:2000})
+    })
+    .then(function(r){ if(!r.ok) throw new Error('http'); return r.json(); })
+    .then(function(d){ cb(null, d.content && d.content[0] ? d.content[0].text : null, "Claude"); })
+    .catch(function(){ matCallAI(prompt, "mistral", function(e,t){ cb(e,t,"Mistral (fallback)"); }); });
+  } else {
+    fetch('https://api.mistral.ai/v1/chat/completions',{
+      method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+MISTRAL_KEY},
+      body:JSON.stringify({model:'mistral-large-latest', messages:[{role:'system',content:sys},{role:'user',content:prompt}], max_tokens:2000, temperature:0.4})
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(d){ cb(null, d.choices&&d.choices[0] ? d.choices[0].message.content : null, "Mistral"); })
+    .catch(function(e){ cb(e, null, "Mistral"); });
+  }
+}
+
+/* Markdown simple → HTML */
+function matMdToHtml(md){
+  var h = md
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    .replace(/^# (.+)$/gm,'<h2>$1</h2>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/^\- (.+)$/gm,'<li>$1</li>')
+    .replace(/^\d+\. (.+)$/gm,'<li>$1</li>');
+  h = h.replace(/(<li>.*?<\/li>\n?)+/gs, function(m){ return '<ul>'+m+'</ul>'; });
+  /* Tables markdown */
+  h = h.replace(/\n\n/g,'</p><p>');
+  return '<p>'+h+'</p>';
+}
+
+/* Ouvre le livrable : génère via IA puis propose PDF + Word */
+window.matGenerateDeliverable = function(delivId){
+  var deliv = DELIVERABLES.find(function(d){ return d.id === delivId; });
+  if(!deliv) return;
+  var sectorKey = window.matGetCur();
+  var s = window.MAT_SECTORS[sectorKey];
+  var api = window.MAT_DELIV_API || "mistral";
+
+  /* Modal */
+  var modal = document.getElementById("mat-deliv-modal");
+  if(!modal){
+    modal = document.createElement("div");
+    modal.id = "mat-deliv-modal";
+    modal.className = "mat-modal";
+    document.body.appendChild(modal);
+  }
+  modal.innerHTML = '<div class="mat-modal-box">'
+    + '<div class="mat-modal-head">'
+    + '<div><div class="mat-modal-eyebrow">Livrable · '+s.label+' · '+(api==="claude"?"Claude":"Mistral")+'</div>'
+    + '<div class="mat-modal-title">'+deliv.icon+' '+deliv.title+'</div></div>'
+    + '<button class="mat-modal-close" onclick="matCloseDeliv()">×</button>'
+    + '</div>'
+    + '<div class="mat-modal-body" id="mat-modal-body">'
+    + '<div class="mat-modal-loading"><div class="mat-spinner"></div>'
+    + 'Génération du livrable par '+(api==="claude"?"Claude":"Mistral")+' en cours…<br>'
+    + '<span style="font-size:11px;color:var(--muted)">Analyse des résultats d\'audit et rédaction personnalisée pour le secteur '+s.label+'.</span></div>'
+    + '</div>'
+    + '<div class="mat-modal-foot" id="mat-modal-foot" style="display:none">'
+    + '<button class="mat-export-btn mat-export-pdf" onclick="matDelivPDF()">↓ PDF</button>'
+    + '<button class="mat-export-btn mat-export-word" onclick="matDelivWord()">↓ Word</button>'
+    + '<button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="matDelivRegen()">↻ Régénérer</button>'
+    + '</div>'
+    + '</div>';
+  modal.classList.add("on");
+
+  window.__matCurrentDeliv = {deliv:deliv, sectorKey:sectorKey, api:api, content:null};
+
+  var prompt = matBuildPrompt(deliv, sectorKey);
+  matCallAI(prompt, api, function(err, text, apiName){
+    var body = document.getElementById("mat-modal-body");
+    var foot = document.getElementById("mat-modal-foot");
+    if(err || !text){
+      if(body) body.innerHTML = '<div style="padding:24px;text-align:center;color:var(--accent)">Erreur de génération. Réessayez ou contactez christophe.cerf@outlook.com</div>';
+      return;
+    }
+    window.__matCurrentDeliv.content = text;
+    window.__matCurrentDeliv.apiName = apiName;
+    if(body) body.innerHTML = '<div class="mat-deliv-content">'+matMdToHtml(text)+'</div>';
+    if(foot) foot.style.display = "flex";
+  });
+};
+
+window.matCloseDeliv = function(){
+  var m = document.getElementById("mat-deliv-modal");
+  if(m) m.classList.remove("on");
+};
+
+window.matDelivRegen = function(){
+  if(window.__matCurrentDeliv) matGenerateDeliverable(window.__matCurrentDeliv.deliv.id);
+};
+
+function matDelivDocHTML(){
+  var cur = window.__matCurrentDeliv;
+  var s = window.MAT_SECTORS[cur.sectorKey];
+  var today = new Date().toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"});
+  var body = matMdToHtml(cur.content);
+  return '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+cur.deliv.title+' - '+s.label+'</title>'
+    + '<style>@page{margin:2cm}body{font-family:Georgia,serif;color:#1C1C1C;max-width:820px;margin:0 auto;padding:20px;line-height:1.6}'
+    + 'h1{font-size:23px;border-bottom:3px solid #B83222;padding-bottom:10px}'
+    + 'h2{font-size:16px;color:#B83222;margin-top:24px}h3{font-size:13px;margin-top:16px}'
+    + '.sub{color:#666;font-size:12px;font-family:Arial,sans-serif;margin-bottom:20px}'
+    + 'ul{margin:8px 0}li{margin:3px 0;font-size:12px}p{font-size:12px}'
+    + 'table{width:100%;border-collapse:collapse;font-size:11px;margin:10px 0}'
+    + 'th,td{border:1px solid #ddd;padding:6px;text-align:left}th{background:#f5f2ed}</style></head><body>'
+    + '<h1>'+cur.deliv.title+'</h1>'
+    + '<div class="sub">Secteur '+s.label+' · Généré le '+today+' · CONSEILPREV · '+(cur.apiName||"IA")+'</div>'
+    + body
+    + '<p style="font-size:10px;color:#999;margin-top:30px;font-family:Arial;font-style:italic">Document généré par IA à partir des résultats de l\'audit de maturité. À valider par un expert. CONSEILPREV — Christophe CERF — +33 6 60 69 21 45 — christophe.cerf@outlook.com</p>'
+    + '</body></html>';
+}
+
+window.matDelivPDF = function(){
+  var w = window.open("","_blank");
+  if(!w){ alert("Autorisez les pop-ups."); return; }
+  w.document.write(matDelivDocHTML() + '<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>');
+  w.document.close();
+};
+
+window.matDelivWord = function(){
+  var cur = window.__matCurrentDeliv;
+  var s = window.MAT_SECTORS[cur.sectorKey];
+  var blob = new Blob(['\ufeff'+matDelivDocHTML()], {type:"application/msword"});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url; a.download = cur.deliv.title.replace(/[^a-zA-Z]/g,"")+"-"+s.label.replace(/[^a-zA-Z]/g,"")+".doc";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
+
+window.matSetDelivApi = function(api){
+  window.MAT_DELIV_API = api;
+  document.getElementById("mat-api-mistral").classList.toggle("on", api==="mistral");
+  document.getElementById("mat-api-claude").classList.toggle("on", api==="claude");
 };
 
 })();
