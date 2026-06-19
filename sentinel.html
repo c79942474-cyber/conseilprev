@@ -826,6 +826,64 @@ textarea.form-el{min-height:86px;resize:vertical}
   border-top:1px solid #F0EDE8;background:#FAFAF8;
   flex-shrink:0;letter-spacing:.04em}
 </style>
+<style id="cpc-src-styles">
+/* ══ PANNEAU SOURCES — ACCES CONSEILPREV ══ */
+#cpcSrcTrigger{position:fixed;bottom:6px;left:6px;width:14px;height:14px;
+  z-index:10001;cursor:default;opacity:0;transition:opacity .3s}
+#cpcSrcTrigger:hover{opacity:.12;cursor:pointer}
+#cpcSrcGate{position:fixed;inset:0;z-index:10010;background:rgba(28,28,28,.55);
+  display:none;align-items:center;justify-content:center;padding:20px}
+#cpcSrcGate.on{display:flex}
+.cpc-src-gate-box{background:#fff;border-radius:6px;padding:26px 28px;
+  max-width:340px;width:100%;box-shadow:0 16px 50px rgba(0,0,0,.3)}
+.cpc-src-gate-eyebrow{font-size:9px;font-family:var(--mono,monospace);
+  letter-spacing:.16em;text-transform:uppercase;color:#B83222;margin-bottom:8px}
+.cpc-src-gate-title{font-size:18px;font-family:var(--serif,Georgia,serif);
+  color:#1C1C1C;margin-bottom:6px;letter-spacing:-.01em}
+.cpc-src-gate-sub{font-size:11px;color:#767676;margin-bottom:16px;line-height:1.5}
+.cpc-src-gate-input{width:100%;font-size:13px;font-family:var(--sans,Inter,sans-serif);
+  border:1px solid #E0DDD8;border-radius:3px;padding:9px 12px;outline:none;
+  box-sizing:border-box;margin-bottom:10px}
+.cpc-src-gate-input:focus{border-color:#1C1C1C}
+.cpc-src-gate-err{font-size:11px;color:#B83222;margin-bottom:10px;display:none}
+.cpc-src-gate-row{display:flex;gap:8px}
+.cpc-src-gate-btn{flex:1;font-size:11px;font-family:var(--mono,monospace);
+  letter-spacing:.04em;padding:9px;border-radius:3px;cursor:pointer;border:none}
+.cpc-src-gate-cancel{background:#F5F2ED;color:#767676}
+.cpc-src-gate-confirm{background:#1C1C1C;color:#fff}
+.cpc-src-gate-confirm:hover{background:#B83222}
+/* Panneau bas de page */
+#cpcSrcPanel{position:fixed;bottom:0;left:0;right:0;z-index:10005;
+  background:#1C1C1C;border-top:2px solid #B83222;
+  max-height:0;overflow:hidden;transition:max-height .25s ease;
+  font-family:var(--sans,Inter,sans-serif)}
+#cpcSrcPanel.open{max-height:46vh}
+.cpc-src-inner{padding:14px 22px 18px;max-height:46vh;overflow-y:auto}
+.cpc-src-head{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.1)}
+.cpc-src-head-left{display:flex;align-items:center;gap:10px}
+.cpc-src-eyebrow{font-size:9px;font-family:var(--mono,monospace);
+  letter-spacing:.16em;text-transform:uppercase;color:#B83222}
+.cpc-src-title{font-size:14px;font-family:var(--serif,Georgia,serif);color:#fff}
+.cpc-src-actions{display:flex;gap:8px}
+.cpc-src-action-btn{font-size:9px;font-family:var(--mono,monospace);
+  color:rgba(255,255,255,.45);background:none;border:1px solid rgba(255,255,255,.15);
+  border-radius:3px;padding:4px 10px;cursor:pointer;letter-spacing:.04em}
+.cpc-src-action-btn:hover{color:#fff;border-color:rgba(255,255,255,.4)}
+.cpc-src-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.cpc-src-item{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  border-radius:4px;padding:11px 13px}
+.cpc-src-item.cpc-src-warn{border-color:rgba(196,124,26,.4);background:rgba(196,124,26,.06)}
+.cpc-src-type{font-size:8px;font-family:var(--mono,monospace);letter-spacing:.08em;
+  text-transform:uppercase;color:#B83222;background:rgba(184,50,34,.12);
+  padding:2px 6px;border-radius:2px;display:inline-block;margin-bottom:6px}
+.cpc-src-label{font-size:12px;font-weight:600;color:#fff;margin-bottom:4px;line-height:1.35}
+.cpc-src-detail{font-size:10.5px;color:rgba(255,255,255,.55);line-height:1.55}
+.cpc-src-link{display:inline-block;font-size:9px;font-family:var(--mono,monospace);
+  color:#7fb3e0;margin-top:6px;text-decoration:none}
+.cpc-src-link:hover{text-decoration:underline}
+</style>
+
 </head>
 <body>
 
@@ -5505,10 +5563,6 @@ window.cjRemove = cjRemove;
   </div>
   <div class="cpc-foot">EU AI Act -- NIS2 -- RGPD -- CONSEILPREV Paris</div>
 </div>
-</body>
-</html>
-</body>
-
 <script>
 /* ══ CHATBOT SENTINEL AI v2 — Mistral + Claude ══ */
 (function(){
@@ -5800,4 +5854,262 @@ setTimeout(function(){
 })();
 
 </script>
+<!-- TRIGGER DISCRET SOURCES (CONSEILPREV uniquement — raccourci Ctrl+Alt+S) -->
+<div id="cpcSrcTrigger" onclick="cpcSrcAuth()"></div>
+
+<!-- Portail mot de passe -->
+<div id="cpcSrcGate">
+  <div class="cpc-src-gate-box">
+    <div class="cpc-src-gate-eyebrow">Acces restreint</div>
+    <div class="cpc-src-gate-title">Panneau Sources</div>
+    <div class="cpc-src-gate-sub">Reserve a CONSEILPREV. Saisissez le mot de passe pour consulter les sources et la methodologie de cette page.</div>
+    <input type="password" id="cpcSrcPassInput" class="cpc-src-gate-input" placeholder="Mot de passe" autocomplete="off">
+    <div class="cpc-src-gate-err" id="cpcSrcPassErr">Mot de passe incorrect.</div>
+    <div class="cpc-src-gate-row">
+      <button class="cpc-src-gate-btn cpc-src-gate-cancel" onclick="cpcSrcCloseGate()">Annuler</button>
+      <button class="cpc-src-gate-btn cpc-src-gate-confirm" onclick="cpcSrcCheckPass()">Valider</button>
+    </div>
+  </div>
+</div>
+
+<!-- Panneau Sources (bas de page) -->
+<div id="cpcSrcPanel">
+  <div class="cpc-src-inner">
+    <div class="cpc-src-head">
+      <div class="cpc-src-head-left">
+        <span class="cpc-src-eyebrow">Interne CONSEILPREV</span>
+        <span class="cpc-src-title" id="cpcSrcTitle">Sources</span>
+      </div>
+      <div class="cpc-src-actions">
+        <button class="cpc-src-action-btn" onclick="cpcSrcLogout()">Verrouiller</button>
+        <button class="cpc-src-action-btn" onclick="cpcSrcTogglePanel()">Fermer</button>
+      </div>
+    </div>
+    <div class="cpc-src-grid" id="cpcSrcBody"></div>
+  </div>
+</div>
+
+<script>
+/* ══ PANNEAU SOURCES — ACCES CONSEILPREV UNIQUEMENT ══ */
+(function(){
+'use strict';
+
+var SRC_PASS = "conseilprev2026";
+var SRC_AUTH_KEY = "cpcSrcAuth";
+var SRC_OPEN = false;
+
+var SOURCES_DATA = {
+  "apercu": {
+    title: "Apercu — Sources et methodologie",
+    items: [
+      { type:"Donnees", label:"Scores de severite (24 juridictions)", detail:"Estimations CONSEILPREV ponderees sur 6 dimensions (Severite, Transparence, Responsabilite, Souverainete des donnees, Sanctions, Innovation). Methodologie interne, pas de note officielle externe. A vocation d aide a la decision uniquement." },
+      { type:"Calcul", label:"Compteurs animes (c1, c2, c3)", detail:"Valeurs codees en dur dans le JS (65, 16, 38). A mettre a jour manuellement si les chiffres communiques evoluent." },
+      { type:"Donnees", label:"Classements Innovation / Severite", detail:"Tri croissant/decroissant sur le meme jeu de donnees JURS (tableau JS), pas de source distincte." }
+    ]
+  },
+  "carto": {
+    title: "Cartographie — Sources et methodologie",
+    items: [
+      { type:"Carte", label:"Fond de carte (map.html)", detail:"Leaflet.js + tuiles CARTO Voyager (basemaps.cartocdn.com), servi via iframe /map. Attribution CARTO / OpenStreetMap requise en cas d export commercial.", url:"https://carto.com/attributions" },
+      { type:"Donnees", label:"24 marqueurs geolocalises", detail:"Coordonnees approximatives (capitales ou centroides nationaux), couleur par seuil de score (rouge >= 8, orange >= 5, vert < 5). Geocodage non verifie officiellement." },
+      { type:"Donnees", label:"Fiches juridictions (detail par pays)", detail:"Texte redige par CONSEILPREV a partir de sources publiques generalistes par pays. Sanctions et cadre principal a verifier individuellement avant usage client (texte de loi nationale non audite systematiquement)." }
+    ]
+  },
+  "comp": {
+    title: "Comparateur — Sources et methodologie",
+    items: [
+      { type:"Donnees", label:"CJ_DATA (jeu de donnees du comparateur)", detail:"Duplication manuelle des scores du tableau JURS de la page Apercu. Risque de desynchronisation si les scores source sont modifies sans repercuter ici." },
+      { type:"Calcul", label:"Radar SVG (6 dimensions)", detail:"Geometrie calculee localement en JavaScript (pas de librairie graphique externe). Limite a 4 pays simultanes." }
+    ]
+  },
+  "geo": {
+    title: "Geopolitique — Sources officielles citees",
+    items: [
+      { type:"Texte officiel", label:"Commission europeenne — AI Act", detail:"Cadre reglementaire et lignes directrices Art. 5 (4 fevrier 2025).", url:"https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai" },
+      { type:"Texte officiel", label:"EUR-Lex — Reglement 2024/1689", detail:"Texte consolide du Journal officiel de l Union europeenne.", url:"https://eur-lex.europa.eu/eli/reg/2024/1689/oj" },
+      { type:"Texte officiel", label:"Federal Register — Executive Order 14179", detail:"Removing Barriers to American Leadership in Artificial Intelligence, 23 janvier 2025.", url:"https://www.federalregister.gov/documents/2025/01/31/2025-02172/removing-barriers-to-american-leadership-in-artificial-intelligence" },
+      { type:"Texte officiel", label:"White House — Presidential Actions", detail:"Texte de l Executive Order 14179.", url:"https://www.whitehouse.gov/presidential-actions/2025/01/removing-barriers-to-american-leadership-in-artificial-intelligence/" },
+      { type:"Analyse juridique", label:"Squire Patton Boggs", detail:"Analyse cabinet d avocats sur l Executive Order 14179 et DeepSeek R1 (a recouper avec une source primaire si reutilise client).", url:"https://www.squirepattonboggs.com/insights/publications/key-insights-on-president-trumps-new-ai-executive-order-and-policy-regulatory-implications/" },
+      { type:"Source secondaire", label:"China Law Translate", detail:"Traduction non officielle des Generative AI Measures chinoises (CAC).", url:"https://www.chinalawtranslate.com/" },
+      { type:"Avertissement", label:"KPIs des 3 blocs (EU / US / CN)", detail:"Chiffres d ordre de grandeur (ex. 147 pays BRI, 1,4 Md utilisateurs) non audites individuellement. A sourcer precisement avant diffusion a un client final." }
+    ]
+  },
+  "regs": {
+    title: "Reglementations (Textes) — Sources",
+    items: [
+      { type:"Texte officiel", label:"EU AI Act — Reglement 2024/1689", detail:"JOUE L du 12.7.2024.", url:"https://eur-lex.europa.eu/eli/reg/2024/1689/oj" },
+      { type:"Texte officiel", label:"RGPD — Reglement 2016/679", detail:"Protection des donnees personnelles.", url:"https://eur-lex.europa.eu/eli/reg/2016/679/oj" },
+      { type:"Texte officiel", label:"NIS2 — Directive 2022/2555", detail:"Cybersecurite des entites essentielles et importantes.", url:"https://eur-lex.europa.eu/eli/dir/2022/2555/oj" },
+      { type:"Texte officiel", label:"DORA — Reglement 2022/2554", detail:"Resilience operationnelle numerique du secteur financier.", url:"https://eur-lex.europa.eu/eli/reg/2022/2554/oj" },
+      { type:"Guideline", label:"Lignes directrices Art. 5", detail:"Commission europeenne, publiees le 4 fevrier 2025.", url:"https://digital-strategy.ec.europa.eu/en/library/commission-publishes-guidelines-prohibited-artificial-intelligence-ai-practices-defined-ai-act" },
+      { type:"Standard", label:"ISO/IEC 42001:2023", detail:"Systeme de management de l intelligence artificielle.", url:"https://www.iso.org/standard/81230.html" },
+      { type:"Avertissement", label:"Bloc Actualites integre a cet onglet", detail:"Contenu statique de demonstration (4 items codes en dur), DIFFERENT du flux RSS reel utilise sur la page Veille / page d accueil. Ne pas confondre avec /api/news." }
+    ]
+  },
+  "decision": {
+    title: "Simulateur IA Act — Sources et methodologie",
+    items: [
+      { type:"Texte source", label:"Reglement (UE) 2024/1689 — texte integral", detail:"PDF officiel fourni par le client, extrait via pdftotext. Articles couverts par le moteur : 1, 2, 3, 4, 5, 6, 9 a 17, 22, 50, 51, 53, 55, 99." },
+      { type:"Calcul", label:"Moteur de classification (simClassify)", detail:"Regles deduites du texte officiel par CONSEILPREV. Outil de pre-diagnostic, ne remplace pas un audit juridique formel." },
+      { type:"Calcul", label:"Calcul des sanctions (simSanctions)", detail:"Bareme Art. 99 (35M EUR / 7%, 15M EUR / 3%, 7,5M EUR / 1%) applique a la tranche de CA declaree par l utilisateur (tranches simplifiees, non verifiees)." }
+    ]
+  },
+  "audit": {
+    title: "Audit IA Act — Sources et methodologie",
+    items: [
+      { type:"Methodologie", label:"32 points de controle (8 sections)", detail:"Deduits des articles 5, 6, 9 a 17, 43 a 51 et 51 a 55 (GPAI) du Reglement 2024/1689. Grille proprietaire CONSEILPREV." },
+      { type:"Limite", label:"Auto-evaluation declarative", detail:"L utilisateur coche lui-meme son niveau de conformite. Aucune verification documentaire ni preuve n est demandee dans cette version." },
+      { type:"Export", label:"Rapport PDF", detail:"Genere cote client via window.print(). Aucune donnee n est stockee cote serveur ni transmise a CONSEILPREV automatiquement." }
+    ]
+  },
+  "articles": {
+    title: "Obligations article par article — Sources",
+    items: [
+      { type:"Texte source", label:"Reglement (UE) 2024/1689 — texte integral", detail:"PDF officiel fourni par le client (EU_IA_ACT.pdf). Articles retranscrits et vulgarises par CONSEILPREV." },
+      { type:"Source tierce", label:"artificialintelligenceact.eu", detail:"Site de reference non officiel mais largement utilise pour la vulgarisation par article. A distinguer d EUR-Lex qui reste la seule source juridique faisant foi.", url:"https://artificialintelligenceact.eu/" }
+    ]
+  },
+  "veille": {
+    title: "Veille reglementaire — Sources RSS",
+    items: [
+      { type:"Flux RSS (FR)", label:"ActuIA, ANSSI, CNIL, Le Monde Informatique, Usine Digitale, Cybersecurite-info", detail:"Recuperes via feedparser cote serveur (app.py), cache 600s." },
+      { type:"Flux RSS (EN)", label:"AI Act EU, EU Digital Strategy, Infosecurity Magazine, The Hacker News, MIT Technology Review, TechCrunch AI", detail:"Memes modalites techniques que les flux FR." },
+      { type:"Fallback", label:"Contenu de secours", detail:"3 a 4 items statiques affiches si tous les flux RSS echouent simultanement (timeout ou indisponibilite)." }
+    ]
+  },
+  "default": {
+    title: "Sentinel AI — Informations generales",
+    items: [
+      { type:"Plateforme", label:"Hebergement et code source", detail:"Application Flask/Python, hebergee sur Render (plan gratuit). Depot GitHub prive c79942474-cyber/conseilprev." },
+      { type:"Chatbot", label:"Moteur Mistral", detail:"API api.mistral.ai, modele mistral-large-latest. Cle API actuellement en dur dans le code source cote client — A MIGRER en variable d environnement pour la securite.", warn:true },
+      { type:"Chatbot", label:"Moteur Claude (Anthropic)", detail:"Proxy serveur /api/chat/claude (app.py), modele claude-sonnet-4-6. Cle ANTHROPIC_API_KEY lue depuis les variables d environnement Render — verifier qu elle est bien configuree." },
+      { type:"Chatbot", label:"Contexte par page", detail:"Prompts systeme codes en dur par identifiant de page (PAGE_CTX dans le JS). A maintenir manuellement si le contenu des pages evolue significativement." },
+      { type:"Avertissement general", label:"Usage interne uniquement", detail:"Ce panneau et son contenu sont reserves a CONSEILPREV. Les scores de risque affiches sur le site public sont des estimations internes et ne constituent pas un avis juridique." }
+    ]
+  }
+};
+
+function srcCurrentPageId(){
+  var pages = document.querySelectorAll(".page");
+  for(var i=0;i<pages.length;i++){
+    if(pages[i].classList.contains("on")){
+      return pages[i].id.replace("p-","");
+    }
+  }
+  return "default";
+}
+
+function srcResolveKey(id){
+  if(SOURCES_DATA[id]) return id;
+  if(id && id.indexOf("fiche-") === 0) return "carto";
+  if(id === "regs" || id === "simulateur") return SOURCES_DATA[id] ? id : "regs";
+  return "default";
+}
+
+window.cpcSrcAuth = function(){
+  if(sessionStorage.getItem(SRC_AUTH_KEY) === "1"){
+    cpcSrcOpenPanel();
+    return;
+  }
+  var overlay = document.getElementById("cpcSrcGate");
+  if(overlay) overlay.classList.add("on");
+  setTimeout(function(){
+    var inp = document.getElementById("cpcSrcPassInput");
+    if(inp) inp.focus();
+  }, 80);
+};
+
+window.cpcSrcCheckPass = function(){
+  var inp = document.getElementById("cpcSrcPassInput");
+  var err = document.getElementById("cpcSrcPassErr");
+  if(!inp) return;
+  if(inp.value === SRC_PASS){
+    sessionStorage.setItem(SRC_AUTH_KEY, "1");
+    document.getElementById("cpcSrcGate").classList.remove("on");
+    inp.value = "";
+    if(err) err.style.display = "none";
+    cpcSrcOpenPanel();
+  } else {
+    if(err) err.style.display = "block";
+    inp.value = "";
+    inp.focus();
+  }
+};
+
+window.cpcSrcCloseGate = function(){
+  document.getElementById("cpcSrcGate").classList.remove("on");
+};
+
+function cpcSrcOpenPanel(){
+  SRC_OPEN = true;
+  var panel = document.getElementById("cpcSrcPanel");
+  if(panel) panel.classList.add("open");
+  cpcSrcRender();
+}
+
+window.cpcSrcTogglePanel = function(){
+  SRC_OPEN = !SRC_OPEN;
+  var panel = document.getElementById("cpcSrcPanel");
+  if(!panel) return;
+  if(SRC_OPEN){ panel.classList.add("open"); cpcSrcRender(); }
+  else panel.classList.remove("open");
+};
+
+window.cpcSrcLogout = function(){
+  sessionStorage.removeItem(SRC_AUTH_KEY);
+  SRC_OPEN = false;
+  var panel = document.getElementById("cpcSrcPanel");
+  if(panel) panel.classList.remove("open");
+};
+
+function cpcSrcRender(){
+  var pid = srcResolveKey(srcCurrentPageId());
+  var data = SOURCES_DATA[pid] || SOURCES_DATA["default"];
+  var titleEl = document.getElementById("cpcSrcTitle");
+  var bodyEl  = document.getElementById("cpcSrcBody");
+  if(titleEl) titleEl.textContent = data.title;
+  if(bodyEl){
+    bodyEl.innerHTML = data.items.map(function(it){
+      var link = it.url ? '<a class="cpc-src-link" href="' + it.url + '" target="_blank" rel="noopener">Ouvrir la source &#8599;</a>' : "";
+      var warnCls = it.warn ? " cpc-src-warn" : "";
+      return '<div class="cpc-src-item' + warnCls + '">'
+        + '<span class="cpc-src-type">' + it.type + '</span>'
+        + '<div class="cpc-src-label">' + it.label + '</div>'
+        + '<div class="cpc-src-detail">' + it.detail + '</div>'
+        + link
+        + '</div>';
+    }).join("");
+  }
+}
+
+/* Raccourci clavier discret : Ctrl+Alt+S (ou Cmd+Alt+S sur Mac) */
+document.addEventListener("keydown", function(e){
+  if((e.ctrlKey || e.metaKey) && e.altKey && (e.key === "s" || e.key === "S")){
+    e.preventDefault();
+    cpcSrcAuth();
+  }
+});
+
+/* Entree clavier valide le mot de passe */
+document.addEventListener("DOMContentLoaded", function(){
+  var inp = document.getElementById("cpcSrcPassInput");
+  if(inp){
+    inp.addEventListener("keydown", function(e){
+      if(e.key === "Enter") cpcSrcCheckPass();
+    });
+  }
+});
+
+/* Rafraichir le panneau si ouvert lors d un changement de page */
+var _origGo2 = window.go;
+window.go = function(){
+  var res = _origGo2 ? _origGo2.apply(this, arguments) : undefined;
+  setTimeout(function(){ if(SRC_OPEN) cpcSrcRender(); }, 150);
+  return res;
+};
+
+})();
+
+</script>
+</body>
 </html>
