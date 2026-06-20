@@ -2617,8 +2617,8 @@ DATABASE_URL = os.environ.get('DATABASE_URL', '').strip()
 REGISTRE_USE_PG = bool(DATABASE_URL)
 
 if REGISTRE_USE_PG:
-    import psycopg2
-    import psycopg2.extras
+    import psycopg
+    import psycopg.rows
     # Render fournit parfois des URLs postgres:// (ancien schema) -> psycopg2 accepte les deux
     if DATABASE_URL.startswith('postgres://'):
         DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://', 1)
@@ -2627,7 +2627,7 @@ else:
 
 def registre_get_db():
     if REGISTRE_USE_PG:
-        conn = psycopg2.connect(DATABASE_URL, cursor_factory=psycopg2.extras.RealDictCursor)
+        conn = psycopg.connect(DATABASE_URL, row_factory=psycopg.rows.dict_row)
         return conn
     else:
         conn = sqlite3.connect(REGISTRE_SQLITE_PATH)
