@@ -2604,44 +2604,83 @@ def chat_claude():
 
 
 # ══════════════════════════════════════════════════════════
-# REGISTRE IA — Base de donnees SQLite persistante
-# NOTE IMPORTANTE : sur Render free tier, le systeme de fichiers
-# est ephemere et reinitialise a chaque redeploiement. Pour une
-# persistance garantie en production, ajouter un disque persistant
-# Render (plan payant) ou migrer vers une base externe (Postgres).
+# REGISTRE IA — Base de donnees externe geree (Postgres)
+# Utilise la variable d'environnement DATABASE_URL (standard
+# Render/Heroku/Neon/Supabase). Si absente (dev local), bascule
+# automatiquement sur SQLite en fichier local pour ne jamais
+# bloquer le developpement.
 # ══════════════════════════════════════════════════════════
 import sqlite3
 from datetime import datetime
 
-REGISTRE_DB = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'registre_ia.db')
+DATABASE_URL = os.environ.get('DATABASE_URL', '').strip()
+REGISTRE_USE_PG = bool(DATABASE_URL)
+
+if REGISTRE_USE_PG:
+    import psycopg2
+    import psycopg2.extras
+    # Render fournit parfois des URLs postgres:// (ancien schema) -> psycopg2 accepte les deux
+    if DATABASE_URL.startswith('postgres://'):
+        DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://', 1)
+else:
+    REGISTRE_SQLITE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'registre_ia.db')
 
 def registre_get_db():
-    conn = sqlite3.connect(REGISTRE_DB)
-    conn.row_factory = sqlite3.Row
-    return conn
+    if REGISTRE_USE_PG:
+        conn = psycopg2.connect(DATABASE_URL, cursor_factory=psycopg2.extras.RealDictCursor)
+        return conn
+    else:
+        conn = sqlite3.connect(REGISTRE_SQLITE_PATH)
+        conn.row_factory = sqlite3.Row
+        return conn
+
+def registre_sql(pg_query, sqlite_query):
+    """Retourne la requete adaptee au moteur actif (placeholders %s vs ?)."""
+    return pg_query if REGISTRE_USE_PG else sqlite_query
 
 def registre_init_db():
     conn = registre_get_db()
-    conn.execute('''CREATE TABLE IF NOT EXISTS systemes_ia (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nom TEXT NOT NULL,
-        finalite TEXT,
-        secteur TEXT,
-        type_systeme TEXT,
-        donnees_utilisees TEXT,
-        classification TEXT,
-        justification TEXT,
-        statut_conformite TEXT DEFAULT 'a_evaluer',
-        score_risque INTEGER DEFAULT 0,
-        responsable TEXT,
-        fournisseur TEXT,
-        date_creation TEXT,
-        date_maj TEXT
-    )''')
+    cur = conn.cursor()
+    if REGISTRE_USE_PG:
+        cur.execute('''CREATE TABLE IF NOT EXISTS systemes_ia (
+            id SERIAL PRIMARY KEY,
+            nom TEXT NOT NULL,
+            finalite TEXT,
+            secteur TEXT,
+            type_systeme TEXT,
+            donnees_utilisees TEXT,
+            classification TEXT,
+            justification TEXT,
+            statut_conformite TEXT DEFAULT 'a_evaluer',
+            score_risque INTEGER DEFAULT 0,
+            responsable TEXT,
+            fournisseur TEXT,
+            date_creation TEXT,
+            date_maj TEXT
+        )''')
+    else:
+        cur.execute('''CREATE TABLE IF NOT EXISTS systemes_ia (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nom TEXT NOT NULL,
+            finalite TEXT,
+            secteur TEXT,
+            type_systeme TEXT,
+            donnees_utilisees TEXT,
+            classification TEXT,
+            justification TEXT,
+            statut_conformite TEXT DEFAULT 'a_evaluer',
+            score_risque INTEGER DEFAULT 0,
+            responsable TEXT,
+            fournisseur TEXT,
+            date_creation TEXT,
+            date_maj TEXT
+        )''')
     conn.commit()
-    # Pré-remplissage avec les 4 systèmes de démonstration si la table est vide
-    cur = conn.execute('SELECT COUNT(*) AS n FROM systemes_ia')
-    if cur.fetchone()['n'] == 0:
+
+    cur.execute('SELECT COUNT(*) AS n FROM systemes_ia')
+    row = cur.fetchone()
+    count = row['n'] if isinstance(row, dict) else row[0]
+    if count == 0:
         now = datetime.utcnow().isoformat()
         demo = [
             ("Chatbot service client", "Repondre aux demandes clients de premier niveau", "Telecom", "LLM conversationnel", "Historique conversations, donnees compte client", "limite", "Art. 50 - obligation de transparence (interaction avec une IA)", "conforme", 4, "Responsable IA", "OpenAI/Interne", now, now),
@@ -2649,31 +2688,46 @@ def registre_init_db():
             ("Maintenance predictive reseau", "Anticiper les pannes sur infrastructure reseau", "Telecom", "Modele de regression / ML supervise", "Donnees capteurs, historique pannes", "minimal", "Hors Annexe III - usage interne sans impact direct sur les personnes", "conforme", 2, "Expert Data", "Interne", now, now),
             ("Detection de fraude transactionnelle", "Identifier les transactions suspectes", "Finance", "Clustering / Isolation Forest", "Donnees transactionnelles, comportementales", "haut", "Annexe III, Point 5 - detection de fraude financiere", "en_cours", 6, "Consultant Cybersecurite", "Interne", now, now),
         ]
-        conn.executemany('''INSERT INTO systemes_ia
-            (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)''', demo)
+        ins = registre_sql(
+            '''INSERT INTO systemes_ia (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj)
+               VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''',
+            '''INSERT INTO systemes_ia (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj)
+               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)'''
+        )
+        for row in demo:
+            cur.execute(ins, row)
         conn.commit()
     conn.close()
 
-registre_init_db()
+try:
+    registre_init_db()
+    logger.info(f"REGISTRE_IA — moteur actif : {'PostgreSQL (externe)' if REGISTRE_USE_PG else 'SQLite (local, fallback dev)'}")
+except Exception as _e:
+    logger.error(f"REGISTRE_IA — erreur init DB : {_e}")
 
 def registre_row_to_dict(row):
+    if isinstance(row, dict):
+        d = dict(row)
+    else:
+        d = {k: row[k] for k in row.keys()}
     return {
-        'id': row['id'], 'nom': row['nom'], 'finalite': row['finalite'],
-        'secteur': row['secteur'], 'type_systeme': row['type_systeme'],
-        'donnees_utilisees': row['donnees_utilisees'], 'classification': row['classification'],
-        'justification': row['justification'], 'statut_conformite': row['statut_conformite'],
-        'score_risque': row['score_risque'], 'responsable': row['responsable'],
-        'fournisseur': row['fournisseur'], 'date_creation': row['date_creation'], 'date_maj': row['date_maj']
+        'id': d['id'], 'nom': d['nom'], 'finalite': d['finalite'],
+        'secteur': d['secteur'], 'type_systeme': d['type_systeme'],
+        'donnees_utilisees': d['donnees_utilisees'], 'classification': d['classification'],
+        'justification': d['justification'], 'statut_conformite': d['statut_conformite'],
+        'score_risque': d['score_risque'], 'responsable': d['responsable'],
+        'fournisseur': d['fournisseur'], 'date_creation': d['date_creation'], 'date_maj': d['date_maj']
     }
 
 @app.route('/api/registre', methods=['GET'])
 @rate_limit(limit=60, window=60)
 def registre_list():
     conn = registre_get_db()
-    rows = conn.execute('SELECT * FROM systemes_ia ORDER BY date_maj DESC').fetchall()
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM systemes_ia ORDER BY date_maj DESC')
+    rows = cur.fetchall()
     conn.close()
-    return jsonify({'systemes': [registre_row_to_dict(r) for r in rows]})
+    return jsonify({'systemes': [registre_row_to_dict(r) for r in rows], 'moteur': 'postgres' if REGISTRE_USE_PG else 'sqlite'})
 
 @app.route('/api/registre', methods=['POST'])
 @rate_limit(limit=30, window=60)
@@ -2684,9 +2738,8 @@ def registre_create():
         return jsonify({'error': 'Le nom du systeme est obligatoire'}), 400
     now = datetime.utcnow().isoformat()
     conn = registre_get_db()
-    cur = conn.execute('''INSERT INTO systemes_ia
-        (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)''', (
+    cur = conn.cursor()
+    values = (
         nom,
         (data.get('finalite') or '')[:500],
         (data.get('secteur') or '')[:100],
@@ -2699,10 +2752,20 @@ def registre_create():
         (data.get('responsable') or '')[:100],
         (data.get('fournisseur') or '')[:100],
         now, now
-    ))
+    )
+    if REGISTRE_USE_PG:
+        cur.execute('''INSERT INTO systemes_ia
+            (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id''', values)
+        new_id = cur.fetchone()['id']
+    else:
+        cur.execute('''INSERT INTO systemes_ia
+            (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)''', values)
+        new_id = cur.lastrowid
     conn.commit()
-    new_id = cur.lastrowid
-    row = conn.execute('SELECT * FROM systemes_ia WHERE id=?', (new_id,)).fetchone()
+    cur.execute(registre_sql('SELECT * FROM systemes_ia WHERE id=%s', 'SELECT * FROM systemes_ia WHERE id=?'), (new_id,))
+    row = cur.fetchone()
     conn.close()
     return jsonify({'systeme': registre_row_to_dict(row)}), 201
 
@@ -2711,21 +2774,31 @@ def registre_create():
 def registre_update(sys_id):
     data = request.get_json(force=True) or {}
     conn = registre_get_db()
-    existing = conn.execute('SELECT * FROM systemes_ia WHERE id=?', (sys_id,)).fetchone()
+    cur = conn.cursor()
+    cur.execute(registre_sql('SELECT * FROM systemes_ia WHERE id=%s', 'SELECT * FROM systemes_ia WHERE id=?'), (sys_id,))
+    existing = cur.fetchone()
     if not existing:
         conn.close()
         return jsonify({'error': 'Systeme introuvable'}), 404
+    existing_d = registre_row_to_dict(existing)
     now = datetime.utcnow().isoformat()
     fields = ['nom','finalite','secteur','type_systeme','donnees_utilisees','classification','justification','statut_conformite','responsable','fournisseur']
-    vals = {f: data.get(f, existing[f]) for f in fields}
-    score = int(data.get('score_risque', existing['score_risque']) or 0)
-    conn.execute('''UPDATE systemes_ia SET nom=?, finalite=?, secteur=?, type_systeme=?, donnees_utilisees=?,
-        classification=?, justification=?, statut_conformite=?, responsable=?, fournisseur=?, score_risque=?, date_maj=?
-        WHERE id=?''', (vals['nom'], vals['finalite'], vals['secteur'], vals['type_systeme'], vals['donnees_utilisees'],
+    vals = {f: data.get(f, existing_d[f]) for f in fields}
+    score = int(data.get('score_risque', existing_d['score_risque']) or 0)
+    update_q = registre_sql(
+        '''UPDATE systemes_ia SET nom=%s, finalite=%s, secteur=%s, type_systeme=%s, donnees_utilisees=%s,
+           classification=%s, justification=%s, statut_conformite=%s, responsable=%s, fournisseur=%s, score_risque=%s, date_maj=%s
+           WHERE id=%s''',
+        '''UPDATE systemes_ia SET nom=?, finalite=?, secteur=?, type_systeme=?, donnees_utilisees=?,
+           classification=?, justification=?, statut_conformite=?, responsable=?, fournisseur=?, score_risque=?, date_maj=?
+           WHERE id=?'''
+    )
+    cur.execute(update_q, (vals['nom'], vals['finalite'], vals['secteur'], vals['type_systeme'], vals['donnees_utilisees'],
         vals['classification'], vals['justification'], vals['statut_conformite'], vals['responsable'], vals['fournisseur'],
         score, now, sys_id))
     conn.commit()
-    row = conn.execute('SELECT * FROM systemes_ia WHERE id=?', (sys_id,)).fetchone()
+    cur.execute(registre_sql('SELECT * FROM systemes_ia WHERE id=%s', 'SELECT * FROM systemes_ia WHERE id=?'), (sys_id,))
+    row = cur.fetchone()
     conn.close()
     return jsonify({'systeme': registre_row_to_dict(row)})
 
@@ -2733,14 +2806,26 @@ def registre_update(sys_id):
 @rate_limit(limit=30, window=60)
 def registre_delete(sys_id):
     conn = registre_get_db()
-    existing = conn.execute('SELECT id FROM systemes_ia WHERE id=?', (sys_id,)).fetchone()
+    cur = conn.cursor()
+    cur.execute(registre_sql('SELECT id FROM systemes_ia WHERE id=%s', 'SELECT id FROM systemes_ia WHERE id=?'), (sys_id,))
+    existing = cur.fetchone()
     if not existing:
         conn.close()
         return jsonify({'error': 'Systeme introuvable'}), 404
-    conn.execute('DELETE FROM systemes_ia WHERE id=?', (sys_id,))
+    cur.execute(registre_sql('DELETE FROM systemes_ia WHERE id=%s', 'DELETE FROM systemes_ia WHERE id=?'), (sys_id,))
     conn.commit()
     conn.close()
     return jsonify({'deleted': sys_id})
+
+@app.route('/api/registre/status', methods=['GET'])
+@rate_limit(limit=30, window=60)
+def registre_status():
+    return jsonify({
+        'moteur': 'postgres' if REGISTRE_USE_PG else 'sqlite',
+        'persistant': REGISTRE_USE_PG,
+        'message': 'Base de donnees externe geree (persistance garantie)' if REGISTRE_USE_PG else 'SQLite local — DATABASE_URL non configuree, donnees non persistantes entre deploiements'
+    })
+
 
 
 for route, filename in PAGES.items():
