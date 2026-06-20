@@ -995,6 +995,15 @@ textarea.form-el{min-height:86px;resize:vertical}
 .veille-qual-title:hover{color:var(--accent)}
 .veille-qual-raison{font-size:11px;color:var(--muted);line-height:1.5;font-style:italic}
 
+
+/* ══ TOGGLE LANGUE FR/EN — Veille qualifiée (adapte du widget d'accueil) ══ */
+#vlang-toggle{display:flex;gap:4px;align-items:center;padding:0 0 14px;margin-bottom:4px}
+.vl-lbl{font-family:var(--mono);font-size:9px;color:var(--muted2);margin-right:4px;letter-spacing:.06em}
+.vl-btn{font-family:var(--mono);font-size:9px;padding:3px 9px;border-radius:3px;cursor:pointer;border:1px solid var(--rule2);background:var(--white);color:var(--muted);letter-spacing:.06em;transition:all .15s}
+.vl-btn:hover{border-color:var(--accent);color:var(--accent)}
+.vl-btn.on{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:700}
+.vl-sep{color:var(--rule2);font-size:10px;margin:0 1px}
+
 </style>
 <style id="cpc-styles">
 /* ══ CHATBOT SENTINEL AI — CONSEILPREV ══ */
@@ -2014,6 +2023,14 @@ textarea.form-el{min-height:86px;resize:vertical}
   <div class="veille-tabs">
     <button class="veille-tab on" id="veille-tab-qual" onclick="veilleSwitchMode('qualifiee')">🎯 Veille qualifiée</button>
     <button class="veille-tab" id="veille-tab-brute" onclick="veilleSwitchMode('brute')">📡 Flux brut (12 sources)</button>
+  </div>
+  <div id="vlang-toggle">
+    <span class="vl-lbl">LANGUE :</span>
+    <button class="vl-btn on" data-lang="all" onclick="veilleLang(this,'all')">ALL</button>
+    <span class="vl-sep">|</span>
+    <button class="vl-btn" data-lang="fr" onclick="veilleLang(this,'fr')">🇫🇷 FR</button>
+    <span class="vl-sep">|</span>
+    <button class="vl-btn" data-lang="en" onclick="veilleLang(this,'en')">🇬🇧 EN</button>
   </div>
 
   <div id="veille-panel-qual">
@@ -8197,7 +8214,10 @@ window.go = function(id){
 'use strict';
 
 var VEILLE_MODE = "qualifiee"; /* "qualifiee" | "brute" */
+var VEILLE_LANG = "all"; /* "all" | "fr" | "en" */
 var VEILLE_DATA = [];
+var VEILLE_DATA_RAW = []; /* cache complet non filtre, pour la veille qualifiee */
+var VEILLE_BRUTE_RAW = []; /* cache complet non filtre, pour le flux brut */
 
 var IMPACT_LABELS = {
   haut:   {label:"Impact haut",   color:"#B83222", bg:"rgba(184,50,34,.08)"},
@@ -8217,7 +8237,10 @@ function veilleFetchQualifiee(){
     return fetch('/api/veille/qualifiee');
   }).then(function(r){ return r.json(); })
   .then(function(d){
-    VEILLE_DATA = d.items || [];
+    VEILLE_DATA_RAW = d.items || [];
+    window.__veilleLastPersonnalise = d.personnalise;
+    window.__veilleLastRegistreCount = d.registre_count;
+    window.__veilleLastModel = d.model;
     veilleRenderQualifiee(d);
   })
   .catch(function(){
@@ -8230,6 +8253,10 @@ function veilleRenderQualifiee(d){
   var banner = document.getElementById("veille-qual-banner");
   if(!holder) return;
 
+  var filtered = VEILLE_LANG === "all" ? VEILLE_DATA_RAW : VEILLE_DATA_RAW.filter(function(it){ return it.lang === VEILLE_LANG; });
+  VEILLE_DATA = filtered;
+  d = Object.assign({}, d, {items: filtered});
+
   if(banner){
     if(d.personnalise){
       banner.innerHTML = '🎯 Analyse personnalisee sur <strong>'+d.registre_count+' systeme(s)</strong> de votre Registre IA. Moteur : '+(d.model||"IA")+'.';
@@ -8241,7 +8268,7 @@ function veilleRenderQualifiee(d){
   }
 
   if(!d.items || d.items.length === 0){
-    holder.innerHTML = '<div class="reg-empty">Aucune actualite a analyser pour le moment.</div>';
+    holder.innerHTML = '<div class="reg-empty">Aucune actualite'+(VEILLE_LANG!=="all"?" dans la langue selectionnee":"")+' a analyser pour le moment.</div>';
     return;
   }
 
@@ -8264,6 +8291,17 @@ function veilleRenderQualifiee(d){
   var countEl = document.getElementById("veille-haut-count");
   if(countEl) countEl.textContent = hautCount;
 }
+
+window.veilleLang = function(btn, lang){
+  document.querySelectorAll("#p-veille .vl-btn").forEach(function(b){ b.classList.remove("on"); });
+  document.querySelectorAll("#p-veille .vl-btn[data-lang=\'"+lang+"\']").forEach(function(b){ b.classList.add("on"); });
+  VEILLE_LANG = lang;
+  if(VEILLE_MODE === "qualifiee"){
+    veilleRenderQualifiee({items: VEILLE_DATA_RAW, personnalise: VEILLE_DATA_RAW.length>0 && window.__veilleLastPersonnalise, registre_count: window.__veilleLastRegistreCount, model: window.__veilleLastModel});
+  } else {
+    veilleRenderBrute();
+  }
+};
 
 window.veilleNotifier = function(){
   var hauts = VEILLE_DATA.filter(function(it){ return it.impact === "haut"; });
@@ -8288,13 +8326,22 @@ function veilleFetchBrute(){
   var holder = document.getElementById("veille-brute-list");
   if(holder) holder.innerHTML = '<div class="reg-loading">Chargement des flux RSS…</div>';
   veilleFetchRaw().then(function(d){
-    var items = d.items || [];
-    if(!holder) return;
-    if(items.length === 0){ holder.innerHTML = '<div class="reg-empty">Aucune actualite disponible.</div>'; return; }
-    holder.innerHTML = items.map(function(it){
-      return '<div class="veille-item"><div class="veille-top"><a class="veille-h" href="'+(it.link||"#")+'" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">'+it.ico+' '+it.title+'</a><div class="veille-date">'+(it.source||"")+'</div></div></div>';
-    }).join("");
+    VEILLE_BRUTE_RAW = d.items || [];
+    veilleRenderBrute();
   });
+}
+
+function veilleRenderBrute(){
+  var holder = document.getElementById("veille-brute-list");
+  if(!holder) return;
+  var items = VEILLE_LANG === "all" ? VEILLE_BRUTE_RAW : VEILLE_BRUTE_RAW.filter(function(it){ return it.lang === VEILLE_LANG; });
+  if(items.length === 0){
+    holder.innerHTML = '<div class="reg-empty">Aucune actualite'+(VEILLE_LANG!=="all"?" dans la langue selectionnee":"")+'.</div>';
+    return;
+  }
+  holder.innerHTML = items.map(function(it){
+    return '<div class="veille-item"><div class="veille-top"><a class="veille-h" href="'+(it.link||"#")+'" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">'+it.ico+' '+it.title+'</a><div class="veille-date">'+(it.source||"")+'</div></div></div>';
+  }).join("");
 }
 
 /* Init page veille */
