@@ -1043,6 +1043,12 @@ textarea.form-el{min-height:86px;resize:vertical}
 .ctrl-section-tag{font-size:9px;font-family:var(--mono);color:var(--green);background:rgba(45,122,71,.1);padding:2px 8px;border-radius:3px;letter-spacing:.03em}
 .ctrl-section-tag-na{color:var(--muted2);background:var(--bg)}
 
+
+.audit-rel-tag{font-size:8px;font-family:var(--mono);padding:2px 7px;border-radius:3px;letter-spacing:.02em;margin-left:8px}
+.audit-rel-ok{background:rgba(45,122,71,.1);color:var(--green)}
+.audit-rel-na{background:var(--bg);color:var(--muted2)}
+.audit-section.audit-section-dim{opacity:.5}
+
 </style>
 <style id="cpc-styles">
 /* ══ CHATBOT SENTINEL AI — CONSEILPREV ══ */
@@ -1235,7 +1241,6 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-item" onclick="go('regs',this,'CONFORMITÉ','Réglementations')" title="Textes officiels, simulateur de conformite AI Act et audit structure par article."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 8h10M7 12h7M7 16h5"/></svg></span>Réglementations</div>
     <div class="sb-item" onclick="go('veille',this,'CONFORMITÉ','Veille qualifiée')" title="Actualites reglementaires evaluees par IA selon leur impact sur vos systemes IA reels."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12h3M19 12h3M12 2v3M12 19v3M5.6 5.6l2 2M16.4 16.4l2 2M5.6 18.4l2-2M16.4 7.6l2-2"/></svg></span>Veille qualifiée</div>
     <div class="sb-item" onclick="go('evals',this,'CONFORMITÉ','Mes évaluations')" title="Historique de vos simulations et audits de conformite enregistres."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>Mes évaluations<span class="sb-badge">3</span></div>
-    <div class="sb-item" onclick="go('controles',this,'CONFORMITÉ','Bibliothèque de contrôles')" title="Bibliotheque de 23 controles mappes sur les obligations EU AI Act, NIS2 et RGPD."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 11l3 3 8-8M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>Contrôles<span class="sb-badge" style="background:var(--green)">23</span></div>
     <div class="sb-item" onclick="go('fria',this,'CONFORMITÉ','Évaluation FRIA')" title="Evaluation d impact sur les droits fondamentaux (Fundamental Rights Impact Assessment)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg></span>FRIA</div>
     <div class="sb-section">Espace</div>
     <div class="sb-item" onclick="go('equipe',this,'ESPACE','Équipe')" title="Espace de collaboration pour l equipe en charge du programme de conformite IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></span>Espace équipe</div>
@@ -2016,6 +2021,8 @@ textarea.form-el{min-height:86px;resize:vertical}
       <div class="rule" style="margin:28px 0 24px"></div>
     </div>
 
+    <div class="radar-sector-bar" id="audit-sector-bar-holder"></div>
+    <div class="radar-registre-info" id="audit-registre-info"></div>
     <div class="audit-header">
       <div>
         <div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px">Audit de conformité EU AI Act</div>
@@ -2204,17 +2211,6 @@ textarea.form-el{min-height:86px;resize:vertical}
 <div class="page" id="p-articles"><span class="eyebrow">EU AI Act — Article par article</span><h1 class="page-h">Obligations <em>article par article</em></h1><p class="page-lead">Référence structurée des 113 articles de l'EU AI Act.</p><div class="art-list" id="art-list"></div></div>
 
 <!-- CONTROLES -->
-<div class="page" id="p-controles">
-  <span class="eyebrow">Bibliothèque de contrôles</span><h1 class="page-h">Contrôles <em>par obligation</em></h1><p class="page-lead">32 contrôles EU AI Act (mêmes points que l'Audit IA Act), filtrés par pertinence selon les systèmes réels de votre Registre IA par secteur. Cliquez un contrôle pour le mettre à jour dans l'audit.</p>
-
-  <div class="radar-sector-bar" id="ctrl-sector-bar-holder"></div>
-  <div class="radar-registre-info" id="ctrl-registre-info"></div>
-
-  <div style="display:flex;gap:16px;margin:20px 0" id="ctrl-kpis"></div>
-
-  <div id="ctrl-list"></div>
-</div>
-
 <!-- ROADMAP -->
 <div class="page" id="p-roadmap">
   <span class="eyebrow">Plan d'action</span><h1 class="page-h">Roadmap <em>conformité</em></h1><p class="page-lead">Plan d'action priorisé sur 18 mois, aligné sur les échéances EU AI Act, NIS2 et DORA.</p>
@@ -3977,7 +3973,6 @@ var PAGE_META = {
   matrice:  {section:'RISQUES',         label:'Matrice risques'},
   radar:    {section:'RISQUES',         label:'Radar multi-critères'},
   articles: {section:'EU AI ACT',       label:'Articles & Obligations'},
-  controles:{section:'CONFORMITÉ',      label:'Bibliothèque de contrôles'},
   fria:     {section:'CONFORMITÉ',      label:'Évaluation FRIA'},
   roadmap:  {section:'PLANIFICATION',   label:'Plan action'},
   sanctions:{section:'OUTILS',          label:'Calculateur sanctions'},
@@ -4565,6 +4560,7 @@ function auditInit(){
       +'<div class="audit-section-head" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display===\'none\'?\'block\':\'none\'">'
       +'<div class="audit-section-title">'+sec.title+'</div>'
       +'<span class="audit-section-art">'+sec.art+'</span>'
+      +'<span class="audit-section-relevance" id="sec-relevance-'+sec.id+'"></span>'
       +'<span class="audit-section-score" id="sec-score-'+sec.id+'">0/'+sec.items.length+'</span>'
       +'</div>'
       +'<div class="audit-section-body">'+items+'</div>'
@@ -4573,6 +4569,7 @@ function auditInit(){
 
   container.innerHTML = html;
   auditUpdateScore();
+  if(typeof auditInitSectorBar === "function"){ auditInitSectorBar(); auditRenderSectorRelevance(); }
 }
 
 window.auditToggle = function(id){
@@ -8993,150 +8990,95 @@ window.go = function(id){
 
 </script>
 
+
+
 <script>
-/* ══ CONTROLES PAR OBLIGATION — dynamique, sectoriel, connecte a l audit reel ══ */
+/* ══ AUDIT IA ACT — pertinence sectorielle (fusionne depuis Controles par obligation) ══ */
 (function(){
 'use strict';
 
-var CTRL_SECTOR = "telecom";
-var CTRL_REG_CACHE = [];
+var AUDIT_REL_SECTOR = "telecom";
+var AUDIT_REL_REG_CACHE = [];
 
-/* Mapping classification Registre IA -> sections de l audit concernees
-   (un systeme haut risque ou inacceptable rend pertinents davantage de controles) */
-function ctrlApplicableSections(classification){
+function auditRelApplicableSections(classification){
   if(classification === "inacceptable") return ["art5"];
   if(classification === "haut") return ["art5","art6","art9_10","art11_12","art13_14","art15_17","art43_49"];
   if(classification === "limite") return ["art5","art6","art13_14"];
   return ["art5","art6"];
 }
-
-function ctrlSectorLabel(){
-  return (window.MAT_SECTORS && window.MAT_SECTORS[CTRL_SECTOR]) ? window.MAT_SECTORS[CTRL_SECTOR].label : CTRL_SECTOR;
+function auditRelSectorLabel(){
+  return (window.MAT_SECTORS && window.MAT_SECTORS[AUDIT_REL_SECTOR]) ? window.MAT_SECTORS[AUDIT_REL_SECTOR].label : AUDIT_REL_SECTOR;
 }
-function ctrlMatchSector(sysSecteur){
+function auditRelMatchSector(sysSecteur){
   if(!sysSecteur) return false;
-  var lbl = ctrlSectorLabel().toLowerCase();
+  var lbl = auditRelSectorLabel().toLowerCase();
   var s = sysSecteur.toLowerCase();
   return s.indexOf(lbl.split(' ')[0].split('/')[0]) !== -1 || lbl.indexOf(s) !== -1;
 }
 
-function ctrlFetch(){
-  fetch('/api/registre').then(function(r){ return r.json(); }).then(function(d){
-    CTRL_REG_CACHE = d.systemes || [];
-    ctrlRenderAll();
-  }).catch(function(){ CTRL_REG_CACHE = []; ctrlRenderAll(); });
-}
-
-function ctrlInitSectorBar(){
-  var holder = document.getElementById("ctrl-sector-bar-holder");
-  if(!holder || !window.MAT_SECTORS) return;
+window.auditInitSectorBar = function(){
+  var holder = document.getElementById("audit-sector-bar-holder");
+  if(!holder || !window.MAT_SECTORS || holder.dataset.init) return;
+  holder.dataset.init = "1";
   var options = Object.keys(window.MAT_SECTORS).map(function(k){
     var s = window.MAT_SECTORS[k];
-    return '<option value="'+k+'"'+(k===CTRL_SECTOR?' selected':'')+'>'+s.icon+' '+s.label+'</option>';
+    return '<option value="'+k+'"'+(k===AUDIT_REL_SECTOR?' selected':'')+'>'+s.icon+' '+s.label+'</option>';
   }).join("");
-  holder.innerHTML = '<span class="radar-sector-lbl">Secteur d activite :</span>'
-    + '<select id="ctrl-sector-select" class="radar-sector-select" onchange="ctrlSelectSector(this.value)">'+options+'</select>'
-    + '<span style="font-size:10px;color:var(--muted);flex:1;min-width:200px">Affiche les systemes IA reels de ce secteur et les controles qui leur sont applicables.</span>';
-}
-
-window.ctrlSelectSector = function(sectorKey){
-  CTRL_SECTOR = sectorKey;
-  var sel = document.getElementById("ctrl-sector-select");
-  if(sel) sel.value = sectorKey;
-  ctrlRenderAll();
+  holder.innerHTML = '<span class="radar-sector-lbl">Pertinence sectorielle :</span>'
+    + '<select id="audit-sector-select" class="radar-sector-select" onchange="auditSelectRelSector(this.value)">'+options+'</select>'
+    + '<span style="font-size:10px;color:var(--muted);flex:1;min-width:200px">Indique pour chaque section, a partir des systemes reels du Registre IA, si elle est applicable au secteur selectionne.</span>';
 };
 
-function ctrlGetState(id){
-  return (window.AUDIT_STATE && window.AUDIT_STATE[id]) || "none";
-}
+window.auditSelectRelSector = function(sectorKey){
+  AUDIT_REL_SECTOR = sectorKey;
+  auditRenderSectorRelevance();
+};
 
-function ctrlRenderAll(){
+window.auditRenderSectorRelevance = function(){
+  fetch('/api/registre').then(function(r){ return r.json(); }).then(function(d){
+    AUDIT_REL_REG_CACHE = d.systemes || [];
+    auditApplySectorRelevance();
+  }).catch(function(){ AUDIT_REL_REG_CACHE = []; auditApplySectorRelevance(); });
+};
+
+function auditApplySectorRelevance(){
   if(!window.AUDIT_SECTIONS) return;
-
-  var sysSecteur = CTRL_REG_CACHE.filter(function(s){ return ctrlMatchSector(s.secteur); });
+  var sysSecteur = AUDIT_REL_REG_CACHE.filter(function(s){ return auditRelMatchSector(s.secteur); });
   var applicableSections = {};
   sysSecteur.forEach(function(s){
-    ctrlApplicableSections(s.classification).forEach(function(secId){
+    auditRelApplicableSections(s.classification).forEach(function(secId){
       if(!applicableSections[secId]) applicableSections[secId] = [];
       applicableSections[secId].push(s);
     });
   });
 
-  /* KPIs globaux dynamiques (sur l ensemble des 32 points, etat reel persistant) */
-  var total = 0, done = 0, partial = 0;
   window.AUDIT_SECTIONS.forEach(function(sec){
-    sec.items.forEach(function(item){
-      total++;
-      var st = ctrlGetState(item.id);
-      if(st === "done") done++; else if(st === "partial") partial++;
-    });
+    var el = document.getElementById("sec-relevance-"+sec.id);
+    var rowEl = el ? el.closest(".audit-section") : null;
+    var secSystems = applicableSections[sec.id] || [];
+    if(el){
+      if(secSystems.length > 0){
+        el.innerHTML = '<span class="audit-rel-tag audit-rel-ok">'+secSystems.length+' système(s) concerné(s)</span>';
+      } else if(sysSecteur.length > 0){
+        el.innerHTML = '<span class="audit-rel-tag audit-rel-na">Non applicable au secteur</span>';
+      } else {
+        el.innerHTML = '';
+      }
+    }
+    if(rowEl) rowEl.classList.toggle("audit-section-dim", sysSecteur.length > 0 && secSystems.length === 0);
   });
-  var todo = total - done - partial;
-  var pct = total > 0 ? Math.round((done + partial*0.5) / total * 100) : 0;
 
-  var kpiHolder = document.getElementById("ctrl-kpis");
-  if(kpiHolder){
-    kpiHolder.innerHTML =
-      '<div class="kpi" style="flex:1;padding:14px 16px"><div class="kpi-lbl">Complétés</div><div class="kpi-val" style="font-size:24px;color:var(--green)">'+done+'</div></div>'
-      + '<div class="kpi" style="flex:1;padding:14px 16px"><div class="kpi-lbl">En cours</div><div class="kpi-val" style="font-size:24px;color:var(--orange)">'+partial+'</div></div>'
-      + '<div class="kpi" style="flex:1;padding:14px 16px"><div class="kpi-lbl">À faire</div><div class="kpi-val" style="font-size:24px;color:var(--accent)">'+todo+'</div></div>'
-      + '<div class="kpi" style="flex:1;padding:14px 16px"><div class="kpi-lbl">Progression</div><div class="kpi-val" style="font-size:24px">'+pct+'%</div></div>';
-  }
-
-  /* Bandeau registre */
-  var info = document.getElementById("ctrl-registre-info");
+  var info = document.getElementById("audit-registre-info");
   if(info){
     if(sysSecteur.length > 0){
-      info.innerHTML = '📊 <strong>'+sysSecteur.length+' système(s)</strong> du Registre IA pour '+ctrlSectorLabel()+' déterminent les contrôles ci-dessous comme applicables.';
+      info.innerHTML = '📊 <strong>'+sysSecteur.length+' système(s)</strong> du Registre IA pour '+auditRelSectorLabel()+' déterminent les sections ci-dessous comme applicables ou non.';
       info.className = "radar-registre-info radar-registre-ok";
     } else {
-      info.innerHTML = '⚠️ Aucun système du secteur '+ctrlSectorLabel()+' dans le Registre IA — affichage des 32 contrôles génériques sans filtrage de pertinence.';
+      info.innerHTML = '⚠️ Aucun système du secteur '+auditRelSectorLabel()+' dans le Registre IA — les 32 points restent affichés sans filtrage de pertinence.';
       info.className = "radar-registre-info radar-registre-warn";
     }
   }
-
-  /* Liste des controles, groupes par section, avec etat reel + pertinence sectorielle */
-  var list = document.getElementById("ctrl-list");
-  if(!list) return;
-
-  var html = window.AUDIT_SECTIONS.map(function(sec){
-    var secSystems = applicableSections[sec.id] || [];
-    var relevant = sysSecteur.length === 0 || secSystems.length > 0;
-
-    var itemsHtml = sec.items.map(function(item){
-      var st = ctrlGetState(item.id);
-      var stColor = {done:'var(--green)', partial:'var(--orange)', none:'var(--muted2)'}[st];
-      var stLabel = {done:'Complété', partial:'En cours', none:'À faire'}[st];
-      return '<div class="ctrl-row" onclick="ctrlGoToAudit()" style="cursor:pointer" title="Cliquer pour ouvrir l Audit IA Act et modifier le statut.">'
-        + '<div class="ctrl-check'+(st==='done'?' done':'')+'" style="'+(st==='partial'?'background:var(--orange);color:#fff':'')+'">'+(st==='done'?'✓':st==='partial'?'~':'')+'</div>'
-        + '<div><div style="font-size:13px;font-weight:'+(st==='done'?'400':'500')+';color:'+(st==='done'?'var(--muted)':'var(--ink)')+'">'+item.title+'</div></div>'
-        + '<div style="font-family:var(--mono);font-size:10px;color:var(--muted2)">'+item.art+'</div>'
-        + '<div><span class="chip chip-'+(item.prio==='p1'?'r':'n')+'">'+item.prio.toUpperCase()+'</span></div>'
-        + '<div style="font-size:9px;font-family:var(--mono);color:'+stColor+'">'+stLabel+'</div>'
-        + '</div>';
-    }).join("");
-
-    return '<div class="ctrl-section'+(relevant?'':' ctrl-section-dim')+'">'
-      + '<div class="ctrl-section-head"><span class="ctrl-section-title">'+sec.title+' <span style="font-family:var(--mono);font-size:9px;color:var(--blue)">'+sec.art+'</span></span>'
-      + (secSystems.length>0 ? '<span class="ctrl-section-tag">'+secSystems.length+' système(s) concerné(s)</span>' : (sysSecteur.length>0 ? '<span class="ctrl-section-tag ctrl-section-tag-na">Non applicable au secteur</span>' : ''))
-      + '</div>'
-      + itemsHtml
-      + '</div>';
-  }).join("");
-
-  list.innerHTML = html;
 }
-
-window.ctrlGoToAudit = function(){
-  if(typeof openAuditTab === "function") openAuditTab();
-};
-
-var _ctrlOrigGo = window.go;
-window.go = function(id){
-  var r = _ctrlOrigGo ? _ctrlOrigGo.apply(this, arguments) : undefined;
-  if(id === "controles"){ setTimeout(function(){ ctrlInitSectorBar(); ctrlFetch(); }, 50); }
-  return r;
-};
 
 })();
 
