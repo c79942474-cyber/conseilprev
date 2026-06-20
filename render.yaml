@@ -7,3 +7,13 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
+      - key: DATABASE_URL
+        fromDatabase:
+          name: conseilprev-registre-db
+          property: connectionString
+
+databases:
+  - name: conseilprev-registre-db
+    plan: free
+    databaseName: registre_ia
+    user: conseilprev
