@@ -750,7 +750,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 .mat-pillar-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--rule)}
 .mat-pillar-row:last-child{border-bottom:none}
 .mat-pillar-info{flex:1}
-.mat-pillar-name{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:1px}
+.mat-pillar-name{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:1px;overflow:visible}
 .mat-pillar-desc{font-size:10px;color:var(--muted);line-height:1.4}
 .mat-pillar-bar{width:90px;height:6px;background:var(--bg2);border-radius:3px;overflow:hidden;flex-shrink:0}
 .mat-pillar-fill{height:100%;border-radius:3px}
@@ -816,7 +816,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 .matq-level-desc{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5}
 .matq-pillar{background:var(--white);border:1px solid var(--rule);border-radius:5px;padding:14px 16px;margin-bottom:10px}
 .matq-pillar-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--rule)}
-.matq-pillar-name{font-size:13px;font-weight:600;color:var(--ink)}
+.matq-pillar-name{font-size:13px;font-weight:600;color:var(--ink);overflow:visible}
 .matq-pillar-score-mini{font-family:var(--mono);font-size:13px;font-weight:600}
 .matq-q{margin-bottom:12px}
 .matq-q:last-child{margin-bottom:0}
@@ -6329,7 +6329,7 @@ function matRender(){
         var v = curPillarScore(p.id);
         var col = matPillarColor(Math.round(v));
         var arts = (window.PILLAR_ARTICLES && window.PILLAR_ARTICLES[p.id]) ? window.PILLAR_ARTICLES[p.id].arts.join(" · ") : "";
-        return '<div class="mat-pillar-row"><div class="mat-pillar-info"><div class="mat-pillar-name">'+p.label+' <span style="font-size:8px;font-family:var(--mono);color:var(--blue)">'+arts+'</span></div><div class="mat-pillar-desc">'+p.desc+'</div></div>'
+        return '<div class="mat-pillar-row"><div class="mat-pillar-info"><div class="mat-pillar-name">'+p.label+' <span style="font-size:8px;font-family:var(--mono);color:var(--blue)">'+arts+'</span>'+tip(PILLAR_TIPS[p.id]||p.desc)+'</div><div class="mat-pillar-desc">'+p.desc+'</div></div>'
           + '<div class="mat-pillar-bar"><div class="mat-pillar-fill matq-bar" data-pillar="'+p.id+'" style="width:'+(v*20)+'%;background:'+col+'"></div></div>'
           + '<div class="mat-pillar-score matq-score" data-pillar="'+p.id+'" style="color:'+col+'">'+v.toFixed(1)+'/5</div></div>';
       }).join("")
@@ -6349,7 +6349,7 @@ function matRender(){
       var qs = window.MAT_QUESTIONS[p.id] || [];
       var sc = curPillarScore(p.id);
       var col = matPillarColor(Math.round(sc));
-      html += '<div class="matq-pillar"><div class="matq-pillar-head"><span class="matq-pillar-name">'+p.label+'</span>'
+      html += '<div class="matq-pillar"><div class="matq-pillar-head"><span class="matq-pillar-name">'+p.label+tip(PILLAR_TIPS[p.id]||p.desc)+'</span>'
         + '<span class="matq-pillar-score-mini matq-score" data-pillar="'+p.id+'" style="color:'+col+'">'+sc.toFixed(1)+'/5</span></div>';
       qs.forEach(function(qo,i){
         var cur = (window.MAT_ANSWERS[MAT_CUR] && window.MAT_ANSWERS[MAT_CUR][p.id]) ? window.MAT_ANSWERS[MAT_CUR][p.id][i] : 0;
