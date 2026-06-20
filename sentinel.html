@@ -976,6 +976,25 @@ textarea.form-el{min-height:86px;resize:vertical}
 .reg-textarea{min-height:50px;resize:vertical}
 .reg-input:focus,.reg-textarea:focus{outline:none;border-color:var(--ink)}
 
+/* ══ VEILLE QUALIFIEE PAR IA ══ */
+.veille-tabs{display:flex;gap:8px;margin-bottom:16px}
+.veille-tab{font-size:12px;font-family:var(--mono);padding:8px 16px;border-radius:4px;border:1px solid var(--rule2);background:var(--white);color:var(--muted);cursor:pointer;transition:all .15s}
+.veille-tab:hover{border-color:var(--accent);color:var(--accent)}
+.veille-tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.veille-qual-banner{font-size:12px;padding:11px 16px;border-radius:5px;margin-bottom:16px;line-height:1.5}
+.veille-qual-ok{background:rgba(45,122,71,.08);color:var(--green);border:1px solid rgba(45,122,71,.2)}
+.veille-qual-warn{background:rgba(196,124,26,.08);color:var(--orange);border:1px solid rgba(196,124,26,.2)}
+.veille-qual-warn a{color:var(--accent);font-weight:600}
+.veille-qual-actions{display:none;align-items:center;gap:12px;background:rgba(184,50,34,.06);border:1px solid rgba(184,50,34,.2);border-radius:6px;padding:12px 16px;margin-bottom:16px}
+.veille-qual-actions-txt{font-size:12px;color:var(--ink2);flex:1}
+.veille-qual-item{background:var(--white);border:1px solid var(--rule);border-radius:5px;padding:13px 16px;margin-bottom:10px}
+.veille-qual-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+.veille-qual-badge{font-size:9px;font-family:var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:3px 9px;border-radius:3px;font-weight:600}
+.veille-qual-source{font-size:10px;color:var(--muted2);font-family:var(--mono)}
+.veille-qual-title{display:block;font-size:13px;font-weight:600;color:var(--ink);text-decoration:none;line-height:1.4;margin-bottom:5px}
+.veille-qual-title:hover{color:var(--accent)}
+.veille-qual-raison{font-size:11px;color:var(--muted);line-height:1.5;font-style:italic}
+
 </style>
 <style id="cpc-styles">
 /* ══ CHATBOT SENTINEL AI — CONSEILPREV ══ */
@@ -1987,7 +2006,28 @@ textarea.form-el{min-height:86px;resize:vertical}
 
 
 <!-- VEILLE -->
-<div class="page" id="p-veille"><span class="eyebrow">Veille réglementaire</span><h1 class="page-h">Actualités &amp; publications</h1><p class="page-lead">Suivi des évolutions normatives IA, RGPD, NIS2 et cybersécurité.</p><div class="veille-list" id="veille-list"></div></div>
+<div class="page" id="p-veille">
+  <span class="eyebrow">Veille réglementaire</span><h1 class="page-h">Veille <em>qualifiée par IA</em></h1>
+  <p class="page-lead">Chaque actualité est analysée par IA et croisée avec votre Registre IA réel pour évaluer son impact potentiel sur vos systèmes effectivement déployés.</p>
+
+  <div class="veille-tabs">
+    <button class="veille-tab on" id="veille-tab-qual" onclick="veilleSwitchMode('qualifiee')">🎯 Veille qualifiée</button>
+    <button class="veille-tab" id="veille-tab-brute" onclick="veilleSwitchMode('brute')">📡 Flux brut (12 sources)</button>
+  </div>
+
+  <div id="veille-panel-qual">
+    <div class="veille-qual-banner" id="veille-qual-banner">Analyse en cours…</div>
+    <div class="veille-qual-actions" id="veille-qual-actions">
+      <span class="veille-qual-actions-txt"><strong id="veille-haut-count">0</strong> actualité(s) à impact haut détectée(s)</span>
+      <button class="mat-export-btn" style="background:var(--accent);color:#fff" onclick="veilleNotifier()">✉ Notifier les parties prenantes</button>
+    </div>
+    <div id="veille-qual-list"></div>
+  </div>
+
+  <div id="veille-panel-brute" style="display:none">
+    <div id="veille-brute-list"></div>
+  </div>
+</div>
 
 <!-- AUDIT -->
 <div class="page" id="p-audit">
@@ -4715,10 +4755,7 @@ window.artFilter = function(val, el){
   [['h','EU AI Act — Entrée en vigueur obligations IA haut risque','Article 6(2) — Systèmes affectant les infrastructures critiques','15 août 2026'],['h','NIS2 — Date limite transposition nationale','Directive 2022/2555 — Non-conformité ANSSI signalée','12 août 2026'],['m','RGPD — Nouvelle décision CEPD sur les LLM','Traitement données d\'entraînement — Base légale requis','08 août 2026'],['m','DORA — Exigences tests de résilience ICT','Art. 26 DORA — Entités financières critiques','03 août 2026'],['h','AI Act — Guide ENISA systèmes cybersécurité IA','Interaction IA Act × NIS2 — Nouvelle guidance','28 juil. 2026'],['l','ISO 42001 — Nouvelle version publiée','Gouvernance IA — Alignement EU AI Act confirmé','20 juil. 2026'],['m','US EO 14110 — Révision imminente','Impact sur accords bilatéraux UE-US IA','15 juil. 2026']].forEach(function(a){ var cl=a[0]==='h'?'ad-h':a[0]==='m'?'ad-m':'ad-l'; b.innerHTML+='<div class="alert-item"><div class="alert-dot '+cl+'"></div><div class="alert-body"><div class="alert-t">'+a[1]+'</div><div class="alert-s">'+a[2]+'</div></div><div class="alert-date">'+a[3]+'</div></div>'; });
 })();
 
-(function(){
-  var b=document.getElementById('veille-list'); if(!b) return;
-  [{tags:[{c:'chip-b',t:'EU'}],h:"EU AI Act : le premier délai d'août 2026 approche — ce que votre entreprise doit savoir",p:"Les obligations de l Article 5 s appliquent depuis le 2 février 2025. Le prochain palier concerne les systèmes haut risque.",d:"15 juin 2026"},{tags:[{c:'chip-g',t:'FR'}],h:"ANSSI publie son guide de sécurité des systèmes IA industriels",p:"Le guide couvre les exigences NIS2 pour les OES utilisant de l IA dans leurs processus critiques.",d:"10 juin 2026"},{tags:[{c:'chip-b',t:'EU'},{c:'chip-n',t:'ISO'}],h:"ISO/IEC 42001 : comment l aligner avec l AI Act ?",p:"Le standard de management des systèmes IA devient un outil central dans la démonstration de conformité.",d:"5 juin 2026"},{tags:[{c:'chip-n',t:'GLOBAL'}],h:"Géopolitique normative : l EU AI Act s exporte dans 40 pays",p:"Les négociations commerciales intègrent désormais la réciprocité réglementaire IA.",d:"1 juin 2026"}].forEach(function(v){ var tags=v.tags.map(function(t){ return '<span class="chip '+t.c+'">'+t.t+'</span>'; }).join(' '); b.innerHTML+='<div class="veille-item"><div class="veille-top"><div class="veille-h">'+v.h+'</div><div class="veille-date">'+v.d+'</div></div><div class="veille-tags">'+tags+'</div><div class="veille-p">'+v.p+'</div></div>'; });
-})();
+/* Veille generique statique remplacee par module veille_module.js (qualifiee par IA) */
 
 (function(){
   var ITEMS = [{tags:[{c:'chip-b',t:'EU'}],h:"EU AI Act : le premier délai d'août 2026 approche",p:"Les obligations de l'Article 5 s'appliquent depuis le 2 février 2025. Le prochain palier concerne les systèmes haut risque.",d:"15 juin 2026"},{tags:[{c:'chip-g',t:'FR'}],h:"ANSSI publie son guide de sécurité des systèmes IA industriels",p:"Le guide couvre les exigences NIS2 pour les OES utilisant de l'IA dans leurs processus critiques.",d:"10 juin 2026"},{tags:[{c:'chip-b',t:'EU'},{c:'chip-n',t:'ISO'}],h:"ISO/IEC 42001 : comment l'aligner avec l'AI Act ?",p:"Le standard de management des systèmes IA devient un outil central dans la démonstration de conformité.",d:"5 juin 2026"},{tags:[{c:'chip-n',t:'GLOBAL'}],h:"Géopolitique normative : l'EU AI Act s'exporte dans 40 pays",p:"Les négociations commerciales intègrent désormais la réciprocité réglementaire IA.",d:"1 juin 2026"}];
@@ -8145,6 +8182,128 @@ var _regOrigGo = window.go;
 window.go = function(id){
   var r = _regOrigGo ? _regOrigGo.apply(this, arguments) : undefined;
   if(id === "registre") setTimeout(regFetch, 50);
+  return r;
+};
+
+})();
+
+</script>
+
+<script>
+/* ══ VEILLE QUALIFIEE PAR IA — connectee au Registre IA reel ══ */
+(function(){
+'use strict';
+
+var VEILLE_MODE = "qualifiee"; /* "qualifiee" | "brute" */
+var VEILLE_DATA = [];
+
+var IMPACT_LABELS = {
+  haut:   {label:"Impact haut",   color:"#B83222", bg:"rgba(184,50,34,.08)"},
+  moyen:  {label:"Impact moyen",  color:"#C47C1A", bg:"rgba(196,124,26,.08)"},
+  faible: {label:"Impact faible", color:"#2D7A47", bg:"rgba(45,122,71,.08)"}
+};
+
+function veilleFetchRaw(){
+  return fetch('/api/news').then(function(r){ return r.json(); });
+}
+
+function veilleFetchQualifiee(){
+  var holder = document.getElementById("veille-qual-list");
+  if(holder) holder.innerHTML = '<div class="reg-loading">Analyse en cours — l\'IA croise les actualites avec votre Registre IA…</div>';
+
+  veilleFetchRaw().then(function(){
+    return fetch('/api/veille/qualifiee');
+  }).then(function(r){ return r.json(); })
+  .then(function(d){
+    VEILLE_DATA = d.items || [];
+    veilleRenderQualifiee(d);
+  })
+  .catch(function(){
+    if(holder) holder.innerHTML = '<div class="reg-loading" style="color:var(--accent)">Erreur lors de l\'analyse. Reessayez.</div>';
+  });
+}
+
+function veilleRenderQualifiee(d){
+  var holder = document.getElementById("veille-qual-list");
+  var banner = document.getElementById("veille-qual-banner");
+  if(!holder) return;
+
+  if(banner){
+    if(d.personnalise){
+      banner.innerHTML = '🎯 Analyse personnalisee sur <strong>'+d.registre_count+' systeme(s)</strong> de votre Registre IA. Moteur : '+(d.model||"IA")+'.';
+      banner.className = "veille-qual-banner veille-qual-ok";
+    } else {
+      banner.innerHTML = "\u26A0\uFE0F Aucun systeme dans votre Registre IA \u2014 scoring generique non personnalise. <a href=\"#\" onclick=\"go(\'registre\',null,\'REGISTRE\',\'Syst\u00e8mes IA\');return false;\">Ajouter des systemes \u2192</a>";
+      banner.className = "veille-qual-banner veille-qual-warn";
+    }
+  }
+
+  if(!d.items || d.items.length === 0){
+    holder.innerHTML = '<div class="reg-empty">Aucune actualite a analyser pour le moment.</div>';
+    return;
+  }
+
+  var hautCount = d.items.filter(function(it){ return it.impact === "haut"; }).length;
+
+  holder.innerHTML = d.items.map(function(it){
+    var imp = IMPACT_LABELS[it.impact] || IMPACT_LABELS.moyen;
+    return '<div class="veille-qual-item" style="border-left:3px solid '+imp.color+'">'
+      + '<div class="veille-qual-top">'
+      + '<span class="veille-qual-badge" style="background:'+imp.bg+';color:'+imp.color+'">'+imp.label+'</span>'
+      + '<span class="veille-qual-source">'+(it.ico||"")+' '+it.source+'</span>'
+      + '</div>'
+      + '<a class="veille-qual-title" href="'+(it.link||"#")+'" target="_blank" rel="noopener">'+it.title+'</a>'
+      + '<div class="veille-qual-raison">'+(it.raison||"")+'</div>'
+      + '</div>';
+  }).join("");
+
+  var actions = document.getElementById("veille-qual-actions");
+  if(actions) actions.style.display = hautCount > 0 ? "flex" : "none";
+  var countEl = document.getElementById("veille-haut-count");
+  if(countEl) countEl.textContent = hautCount;
+}
+
+window.veilleNotifier = function(){
+  var hauts = VEILLE_DATA.filter(function(it){ return it.impact === "haut"; });
+  if(hauts.length === 0) return;
+  var lines = hauts.map(function(it){ return "- "+it.title+" ("+it.source+") : "+it.raison; }).join("\n");
+  var subj = encodeURIComponent("Alertes reglementaires a impact haut — Veille qualifiee Sentinel AI");
+  var body = encodeURIComponent("Bonjour,\n\nLes actualites suivantes presentent un impact potentiel haut sur nos systemes IA enregistres :\n\n"+lines+"\n\nGenere via Sentinel AI - CONSEILPREV.\n\nCordialement,");
+  window.location.href = "mailto:?subject="+subj+"&body="+body;
+};
+
+window.veilleSwitchMode = function(mode){
+  VEILLE_MODE = mode;
+  document.getElementById("veille-tab-qual").classList.toggle("on", mode==="qualifiee");
+  document.getElementById("veille-tab-brute").classList.toggle("on", mode==="brute");
+  document.getElementById("veille-panel-qual").style.display = mode==="qualifiee" ? "block" : "none";
+  document.getElementById("veille-panel-brute").style.display = mode==="brute" ? "block" : "none";
+  if(mode === "qualifiee" && VEILLE_DATA.length === 0) veilleFetchQualifiee();
+  if(mode === "brute") veilleFetchBrute();
+};
+
+function veilleFetchBrute(){
+  var holder = document.getElementById("veille-brute-list");
+  if(holder) holder.innerHTML = '<div class="reg-loading">Chargement des flux RSS…</div>';
+  veilleFetchRaw().then(function(d){
+    var items = d.items || [];
+    if(!holder) return;
+    if(items.length === 0){ holder.innerHTML = '<div class="reg-empty">Aucune actualite disponible.</div>'; return; }
+    holder.innerHTML = items.map(function(it){
+      return '<div class="veille-item"><div class="veille-top"><a class="veille-h" href="'+(it.link||"#")+'" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">'+it.ico+' '+it.title+'</a><div class="veille-date">'+(it.source||"")+'</div></div></div>';
+    }).join("");
+  });
+}
+
+/* Init page veille */
+window.veilleInitPage = function(){
+  veilleFetchQualifiee();
+};
+
+var _veilleOrigGo = window.go;
+window.go = function(id){
+  var r = _veilleOrigGo ? _veilleOrigGo.apply(this, arguments) : undefined;
+  if(id === "veille") setTimeout(window.veilleInitPage, 50);
   return r;
 };
 
