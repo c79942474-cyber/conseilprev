@@ -2242,19 +2242,20 @@ textarea.form-el{min-height:86px;resize:vertical}
 </div><!-- SANCTIONS -->
 <div class="page" id="p-sanctions">
   <span class="eyebrow">Outils</span><h1 class="page-h">Calculateur de <em>sanctions AI Act</em></h1><p class="page-lead">Estimez l'exposition financière en cas de non-conformité.</p>
+  <div id="sanc-prefill-holder"></div>
   <div class="sanc-calc"><div class="form-grid2"><div class="form-row"><label class="form-lbl">Type de violation</label><select class="form-el" id="s-type"><option value="interdit">Pratique interdite (Art. 5)</option><option value="haut" selected>Système haut risque non conforme</option><option value="transparence">Obligation de transparence</option><option value="info">Informations incorrectes aux autorités</option></select></div><div class="form-row"><label class="form-lbl">Chiffre d'affaires annuel mondial</label><input class="form-el" type="number" id="s-ca" placeholder="Ex : 50000000" value="50000000"></div></div><div class="form-grid2"><div class="form-row"><label class="form-lbl">Taille de l'entreprise</label><select class="form-el" id="s-size"><option value="tpe">TPE / Startup</option><option value="pme">PME</option><option value="eti" selected>ETI</option><option value="ge">Grande entreprise</option></select></div><div class="form-row"><label class="form-lbl">Récidive ?</label><select class="form-el" id="s-recid"><option value="non">Non — première infraction</option><option value="oui">Oui — infraction répétée</option></select></div></div><button class="submit" onclick="calcSanctions()" title="Calculer l exposition financiere estimee en cas de non-conformite.">Calculer l'exposition →</button></div>
   <div class="sanc-result" id="sanc-result"><div style="display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:start"><div><div class="sanc-basis">Amende maximale estimée</div><div class="sanc-amount" id="sanc-amount">—</div><div style="font-size:11px;color:var(--muted);margin-top:4px" id="sanc-basis-txt"></div></div><div id="sanc-details"></div></div></div>
 </div>
 
 <!-- BENCHMARK -->
 <div class="page" id="p-benchmark">
-  <span class="eyebrow">Analyse</span><h1 class="page-h">Benchmark <em>sectoriel</em></h1><p class="page-lead">Comparez votre score de conformité IA avec la moyenne de votre secteur.</p>
+  <span class="eyebrow">Analyse</span><h1 class="page-h">Benchmark <em>sectoriel</em></h1><p class="page-lead">Comparez le taux de conformité réel de vos systèmes (Registre IA) avec le score de maturité moyen calculé pour chaque secteur.</p>
   <div class="col12" style="margin-bottom:24px"><div class="kpi"><div class="kpi-lbl">Votre score</div><div class="kpi-val" style="color:var(--accent)">68%</div><div class="kpi-tr dn">↓ −12 pts vs. meilleurs</div></div><div class="kpi"><div class="kpi-lbl">Moyenne Énergie</div><div class="kpi-val">74%</div><div class="kpi-tr up">↑ +6 pts ce trimestre</div></div></div>
   <div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title">Scores par secteur</span><span class="tbl-link">↓ Rapport complet</span></div><div class="comp-head-row" style="display:grid;grid-template-columns:1fr 60px 160px 60px;padding:9px 20px;background:var(--bg);border-bottom:2px solid var(--rule)"><div class="comp-cell">Secteur</div><div class="comp-cell">Score</div><div class="comp-cell">Répartition</div><div class="comp-cell">vs. vous</div></div><div id="bench-list"></div></div>
 </div>
 
 <!-- TEMPLATES -->
-<div class="page" id="p-templates"><span class="eyebrow">Ressources</span><h1 class="page-h">Documentation &amp; <em>modèles</em></h1><p class="page-lead">Templates conformes EU AI Act, RGPD et NIS2 — prêts à compléter.</p><div class="doc-grid" id="doc-grid"></div><div class="rule"></div><div class="sec-h" style="margin-bottom:6px">Guides pratiques</div><div class="sec-sub">Fiches synthétiques téléchargeables</div><div class="doc-grid" id="guides-grid"></div></div>
+<div class="page" id="p-templates"><span class="eyebrow">Ressources</span><h1 class="page-h">Documentation &amp; <em>modèles</em></h1><p class="page-lead">Documents réellement générables dans Sentinel AI — cliquez pour accéder directement à l outil de génération.</p><div class="doc-grid" id="doc-grid"></div><div class="rule"></div><div class="sec-h" style="margin-bottom:6px">Guides pratiques</div><div class="sec-sub">Fiches synthétiques téléchargeables</div><div class="doc-grid" id="guides-grid"></div></div>
 
 <!-- FRIA -->
 <div class="page" id="p-fria">
@@ -5299,18 +5300,9 @@ function calcSanctions(){
   r.classList.add('on'); r.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
-(function(){
-  var b=document.getElementById('bench-list'); if(!b) return;
-  var BENCH=[{s:'Banque & Finance',you:79,avg:74,diff:'+5'},{s:'Santé',you:null,avg:82,diff:null},{s:'Énergie / Utilities',you:68,avg:74,diff:'-6'},{s:'Industrie & Manufacturing',you:null,avg:61,diff:null},{s:'Transport & Logistique',you:null,avg:58,diff:null},{s:'Retail & e-commerce',you:null,avg:48,diff:null},{s:'Secteur public',you:null,avg:71,diff:null}];
-  b.innerHTML=BENCH.map(function(r){ var vs=r.diff?'<span style="font-family:var(--mono);font-size:10px;color:'+(r.diff.startsWith('+')?'var(--green)':'var(--accent)')+'">'+r.diff+' pts</span>':'<span style="font-size:10px;color:var(--muted2)">—</span>'; return '<div class="bench-row"><div class="bench-sector">'+r.s+(r.you!==null?' <span style="font-size:9px;font-family:var(--mono);color:var(--accent)">● VOUS</span>':'')+'</div><div class="bench-score">'+r.avg+'%</div><div class="bench-bar-wrap">'+(r.you!==null?'<div class="bench-track"><div class="bench-fill bench-fill-you" style="width:'+r.you+'%"></div></div><span class="bench-you">vous '+r.you+'%</span>':'')+'<div class="bench-track"><div class="bench-fill bench-fill-avg" style="width:'+r.avg+'%"></div></div></div><div>'+vs+'</div></div>'; }).join('');
-})();
+/* Benchmark — remplace par espace_benchmark.js (donnees reelles) */
 
-(function(){
-  var DOCS=[{ico:'📄',name:'Dossier technique EU AI Act',desc:'Modèle complet Art. 11 — 12 sections structurées selon l Annexe IV.',meta:'PDF · 24 pages · Mis à jour juin 2026'},{ico:'⚖️',name:'FRIA — Formulaire d evaluation',desc:'Évaluation d impact sur les droits fondamentaux en 6 étapes (Art. 9.7).',meta:'DOCX · 18 pages · Mis à jour mai 2026'},{ico:'📋',name:'Notice deployeur',desc:'Template de notice Art. 13 — transparent et compréhensible.',meta:'PDF · 6 pages · Mis à jour avr. 2026'},{ico:'🔒',name:'Politique NDA données IA',desc:'Clause de non-divulgation spécifique aux données d entraînement.',meta:'DOCX · 4 pages · Standard légal CONSEILPREV'},{ico:'📊',name:'Registre des systèmes IA (Excel)',desc:'Tableur de cartographie conforme Annexe III avec scoring automatique.',meta:'XLSX · 8 onglets · Mis à jour juin 2026'},{ico:'🛡️',name:'Plan de gestion des risques',desc:'Modèle Art. 9 — identification, analyse, atténuation, suivi.',meta:'DOCX · 20 pages · Méthodologie CONSEILPREV'}];
-  var dg=document.getElementById('doc-grid'); if(dg) dg.innerHTML=DOCS.map(function(d){ return '<div class="doc-card"><div class="doc-icon">'+d.ico+'</div><div><div class="doc-name">'+d.name+'</div><div class="doc-desc">'+d.desc+'</div><div class="doc-meta">'+d.meta+'</div></div></div>'; }).join('');
-  var GUIDES=[{ico:'📌',name:'Fiche synthèse EU AI Act — 2 pages',desc:'Les 20 points essentiels à retenir pour 2026.',meta:'PDF · 2 pages'},{ico:'🗺️',name:'Calendrier des obligations 2025–2027',desc:'Toutes les dates clés phase par phase.',meta:'PDF · 1 page'},{ico:'🔍',name:'Grille d auto-évaluation Annexe III',desc:'8 domaines, 24 questions — 10 minutes.',meta:'PDF · 4 pages'},{ico:'💡',name:'Guide NIS2 pour les systèmes IA',desc:'Obligations OES & OIE intégrant des systèmes IA.',meta:'PDF · 8 pages'}];
-  var gg=document.getElementById('guides-grid'); if(gg) gg.innerHTML=GUIDES.map(function(g){ return '<div class="doc-card"><div class="doc-icon">'+g.ico+'</div><div><div class="doc-name">'+g.name+'</div><div class="doc-desc">'+g.desc+'</div><div class="doc-meta">'+g.meta+'</div></div></div>'; }).join('');
-})();
+/* Templates & Docs — remplace par espace_templates.js (livrables reels generables) */
 
 /* FRIA — remplace par fria_module.js (Art. 27, applicabilite reelle, Registre IA) */
 
@@ -9572,6 +9564,144 @@ var _reportOrigGo = window.go;
 window.go = function(id){
   var r = _reportOrigGo ? _reportOrigGo.apply(this, arguments) : undefined;
   if(id === "report") setTimeout(window.reportRenderPage, 80);
+  return r;
+};
+
+})();
+
+</script>
+
+<script>
+/* ══ CALCULATEUR SANCTIONS — connecte au Registre IA / Simulateur ══ */
+(function(){
+'use strict';
+
+window.sanctionsPrefillFromRegistry = function(){
+  fetch('/api/registre').then(function(r){ return r.json(); }).then(function(d){
+    var systemes = d.systemes || [];
+    var hautRisque = systemes.filter(function(s){ return s.classification==='haut' || s.classification==='inacceptable'; });
+    if(hautRisque.length === 0){
+      alert("Aucun systeme a haut risque ou inacceptable dans le Registre IA pour pre-remplir le calculateur.");
+      return;
+    }
+    var pire = hautRisque.sort(function(a,b){ return (b.score_risque||0)-(a.score_risque||0); })[0];
+    var typeSel = document.getElementById("s-type");
+    if(typeSel) typeSel.value = pire.classification === "inacceptable" ? "interdit" : "haut";
+    var info = document.getElementById("sanc-prefill-info");
+    if(info) info.textContent = "Pré-rempli depuis : " + pire.nom + " (" + (pire.secteur||"") + ")";
+  });
+};
+
+window.sanctionsInitPage = function(){
+  var holder = document.getElementById("sanc-prefill-holder");
+  if(!holder) return;
+  holder.innerHTML = '<button class="mat-export-btn" style="background:var(--blue);color:#fff;margin-bottom:14px" onclick="sanctionsPrefillFromRegistry()" title="Pré-remplit le calculateur avec le système le plus exposé de votre Registre IA.">📊 Pré-remplir depuis le Registre IA</button>'
+    + '<div id="sanc-prefill-info" style="font-size:10px;color:var(--muted);margin-bottom:14px"></div>';
+};
+
+var _sancOrigGo = window.go;
+window.go = function(id){
+  var r = _sancOrigGo ? _sancOrigGo.apply(this, arguments) : undefined;
+  if(id === "sanctions") setTimeout(window.sanctionsInitPage, 50);
+  return r;
+};
+
+})();
+
+</script>
+<script>
+/* ══ BENCHMARK SECTORIEL — scores reels par secteur (Registre IA + Audit) ══ */
+(function(){
+'use strict';
+
+window.benchmarkRenderPage = function(){
+  var holder = document.getElementById("bench-list");
+  if(!holder || !window.MAT_SECTORS) return;
+  holder.innerHTML = '<div class="reg-loading">Calcul des scores sectoriels…</div>';
+
+  fetch('/api/registre').then(function(r){ return r.json(); }).then(function(d){
+    var systemes = d.systemes || [];
+
+    function scoreFor(sectorLabel){
+      var lbl = sectorLabel.toLowerCase().split(' ')[0].split('/')[0];
+      var sys = systemes.filter(function(s){ return (s.secteur||"").toLowerCase().indexOf(lbl) !== -1; });
+      if(sys.length === 0) return null;
+      var avgRisk = sys.reduce(function(a,s){ return a+(s.score_risque||0); },0) / sys.length;
+      var conformes = sys.filter(function(s){ return s.statut_conformite==='conforme'; }).length;
+      var conformPct = Math.round(conformes/sys.length*100);
+      return {avgRisk: avgRisk, conformPct: conformPct, count: sys.length};
+    }
+
+    var rows = Object.keys(window.MAT_SECTORS).map(function(k){
+      var sec = window.MAT_SECTORS[k];
+      var data = scoreFor(sec.label);
+      var maturityAvg = (Object.keys(sec.pillars).reduce(function(a,p){ return a+sec.pillars[p]; },0) / 8) * 20; /* /5 -> % */
+      return {label: sec.icon+" "+sec.label, you: data ? data.conformPct : null, avg: Math.round(maturityAvg), count: data?data.count:0};
+    });
+
+    holder.innerHTML = rows.map(function(r){
+      var diff = r.you !== null ? (r.you - r.avg) : null;
+      var diffTxt = diff !== null ? (diff>=0?'+':'')+diff+' pts' : '—';
+      var diffColor = diff !== null ? (diff>=0?'var(--green)':'var(--accent)') : 'var(--muted2)';
+      return '<div class="bench-row"><div class="bench-sector">'+r.label+(r.you!==null?' <span style="font-size:9px;font-family:var(--mono);color:var(--accent)">● VOUS ('+r.count+' syst.)</span>':'')+'</div>'
+        + '<div class="bench-score">'+r.avg+'%</div>'
+        + '<div class="bench-bar-wrap">'+(r.you!==null?'<div class="bench-track"><div class="bench-fill bench-fill-you" style="width:'+r.you+'%"></div></div><span class="bench-you">vous '+r.you+'%</span>':'<span style="font-size:10px;color:var(--muted2)">Aucun système enregistré</span>')
+        + '<div class="bench-track"><div class="bench-fill bench-fill-avg" style="width:'+r.avg+'%"></div></div></div>'
+        + '<div><span style="font-family:var(--mono);font-size:10px;color:'+diffColor+'">'+diffTxt+'</span></div></div>';
+    }).join('');
+  }).catch(function(){
+    holder.innerHTML = '<div class="reg-empty">Erreur de chargement du Registre IA.</div>';
+  });
+};
+
+var _benchOrigGo = window.go;
+window.go = function(id){
+  var r = _benchOrigGo ? _benchOrigGo.apply(this, arguments) : undefined;
+  if(id === "benchmark") setTimeout(window.benchmarkRenderPage, 80);
+  return r;
+};
+
+})();
+
+</script>
+<script>
+/* ══ TEMPLATES & DOCS — connecte aux vrais livrables generables dans Sentinel ══ */
+(function(){
+'use strict';
+
+window.templatesRenderPage = function(){
+  var holder = document.getElementById("doc-grid");
+  if(!holder) return;
+
+  var items = [];
+
+  /* 6 livrables IA (Audit de maturite) */
+  if(window.MAT_DELIVERABLES){
+    window.MAT_DELIVERABLES.forEach(function(d){
+      items.push({ico:d.icon, name:d.title, desc:d.tooltip.substring(0,90)+"…", meta:"Généré par IA · Audit de maturité", action:"go('maturite',null,'AUDIT DE MATURITÉ','Audit de maturité IA')"});
+    });
+  }
+  /* 4 guides de procedure */
+  if(window.PROC_DOCS){
+    Object.keys(window.PROC_DOCS).forEach(function(k){
+      var p = window.PROC_DOCS[k];
+      items.push({ico:p.icon, name:p.docTitle, desc:p.tooltip.substring(0,90)+"…", meta:"Généré par IA · Procédure d'audit", action:"go('maturite',null,'AUDIT DE MATURITÉ','Audit de maturité IA')"});
+    });
+  }
+  /* Exports deja disponibles ailleurs */
+  items.push({ico:"📐", name:"Matrice RACI — Cartographie des parties prenantes", desc:"Export PDF/Word de votre matrice RACI actuelle, ou génération IA complète.", meta:"Disponible · Parties prenantes", action:"go('parties',null,'GOUVERNANCE','Parties prenantes')"});
+  items.push({ico:"📋", name:"Rapport d'audit de conformité (32 points)", desc:"Export PDF de votre audit EU AI Act avec statut réel de chaque contrôle.", meta:"Disponible · Audit IA Act", action:"openAuditTab()"});
+  items.push({ico:"⚖️", name:"Évaluation FRIA par système", desc:"Évaluation des 8 droits fondamentaux pour vos systèmes à haut risque.", meta:"Disponible · FRIA", action:"go('fria',null,'CONFORMITÉ','Évaluation FRIA')"});
+
+  holder.innerHTML = items.map(function(d){
+    return '<div class="doc-card" style="cursor:pointer" onclick="'+d.action+'"><div class="doc-icon">'+d.ico+'</div><div><div class="doc-name">'+d.name+'</div><div class="doc-desc">'+d.desc+'</div><div class="doc-meta">'+d.meta+'</div></div></div>';
+  }).join('');
+};
+
+var _tplOrigGo = window.go;
+window.go = function(id){
+  var r = _tplOrigGo ? _tplOrigGo.apply(this, arguments) : undefined;
+  if(id === "templates") setTimeout(window.templatesRenderPage, 80);
   return r;
 };
 
