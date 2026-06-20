@@ -933,6 +933,26 @@ textarea.form-el{min-height:86px;resize:vertical}
 .bud-disclaimer{font-size:10px;color:var(--muted2);font-style:italic;line-height:1.5;margin-top:14px}
 .kpi-table .kpi-cat-cell{font-family:var(--mono);font-size:9px;color:var(--blue);white-space:nowrap}
 
+/* ══ CARTOGRAPHIE DES PARTIES PRENANTES — RACI ══ */
+.raci-toolbar{display:flex;flex-direction:column;gap:14px;margin-bottom:20px}
+.raci-legend{display:flex;flex-wrap:wrap;gap:14px}
+.raci-legend-item{font-size:11px;color:var(--ink2);display:flex;align-items:center;gap:6px}
+.raci-legend-dot{width:14px;height:14px;border-radius:3px;flex-shrink:0;display:inline-block}
+.raci-actions{display:flex;flex-wrap:wrap;gap:8px}
+.raci-table-wrap{overflow-x:auto;border:1px solid var(--rule);border-radius:6px;background:var(--white)}
+.raci-table{min-width:1400px}
+.raci-row{display:grid;grid-template-columns:280px repeat(10,1fr);border-bottom:1px solid var(--rule)}
+.raci-row:last-child{border-bottom:none}
+.raci-row.raci-head{background:var(--ink);position:sticky;top:0;z-index:5}
+.raci-proc-cell{padding:11px 14px;border-right:1px solid var(--rule);background:var(--bg)}
+.raci-proc-head{background:transparent;display:flex;align-items:center;color:#fff;font-size:11px;font-family:var(--mono);letter-spacing:.03em;border-right:1px solid rgba(255,255,255,.15)}
+.raci-proc-label{font-size:12px;font-weight:600;color:var(--ink);line-height:1.4;margin-bottom:2px}
+.raci-proc-art{font-size:9px;font-family:var(--mono);color:var(--blue)}
+.raci-role-head{padding:10px 6px;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;font-size:10px;font-family:var(--mono);line-height:1.3;border-right:1px solid rgba(255,255,255,.1)}
+.raci-cell{display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;font-family:var(--mono);cursor:pointer;border-right:1px solid var(--rule);transition:all .12s;min-height:48px}
+.raci-cell:hover{opacity:.75;transform:scale(1.05)}
+.raci-help{font-size:11px;color:var(--muted);margin-top:12px;line-height:1.5;font-style:italic}
+
 </style>
 <style id="cpc-styles">
 /* ══ CHATBOT SENTINEL AI — CONSEILPREV ══ */
@@ -1117,6 +1137,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-item" onclick="go('geo',this,'GÉOPOLITIQUE','Tensions normatives')"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M2 12h20M12 2v20"/></svg></span>Géopolitique</div>
     <div class="sb-section">Risques &amp; Systèmes</div>
     <div class="sb-item" onclick="go('maturite',this,'AUDIT DE MATURITÉ','Audit de maturité IA')"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 3 5-6"/></svg></span>Audit de maturité IA</div>
+    <div class="sb-item" onclick="go('parties',this,'GOUVERNANCE','Parties prenantes')"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="9" cy="7" r="3"/><circle cx="17" cy="7" r="2.5"/><path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2M15 13.5c2.5 0 5 1.2 5 3.5v2"/></svg></span>Parties prenantes</div>
     <div class="sb-item" onclick="go('registre',this,'REGISTRE','Systèmes IA')"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg></span>Registre IA</div>
     <div class="sb-item" onclick="go('matrice',this,'RISQUES','Matrice risques')"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>Matrice risques</div>
     <div class="sb-item" onclick="go('radar',this,'RISQUES','Radar multi-critères')"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg></span>Radar des risques</div>
@@ -2003,6 +2024,13 @@ textarea.form-el{min-height:86px;resize:vertical}
 
   <div class="mat-sector-bar" id="mat-sector-bar"></div>
   <div id="mat-content"></div>
+</div>
+
+<div class="page" id="p-parties">
+  <span class="eyebrow">Gouvernance · Parties prenantes</span>
+  <h1 class="page-h">Cartographie des <em>parties prenantes</em></h1>
+  <p class="page-lead">Matrice RACI interactive (Responsable / Approbateur / Consulté / Informé) des processus de gouvernance IA. Cliquez sur une cellule pour assigner un rôle, puis générez le document complet par IA.</p>
+  <div id="raci-page-content"></div>
 </div>
 
 <div class="page" id="p-registre">
@@ -3794,6 +3822,7 @@ var PAGE_META = {
   report:   {section:'REPORTING',       label:'Dashboard'},
   chat:     {section:'ASSISTANT IA',    label:'Chat Conformité'},
   maturite: {section:'AUDIT DE MATURITÉ', label:'Audit de maturité IA'},
+  parties:  {section:'GOUVERNANCE',     label:'Parties prenantes'},
   registre: {section:'REGISTRE',        label:'Systèmes IA'},
   matrice:  {section:'RISQUES',         label:'Matrice risques'},
   radar:    {section:'RISQUES',         label:'Radar multi-critères'},
@@ -7634,6 +7663,259 @@ window.matKpiMail = function(){
   var lines = d.kpis.map(function(k){ return "- ["+k.cat+"] "+k.kpi+" : cible "+k.cible+" ("+k.freq+", "+k.outil+")"; }).join("\n");
   var body = encodeURIComponent("Bonjour,\n\nVoici les KPIs de pilotage de la conformite IA pour le secteur "+d.sector+" :\n\n"+lines+"\n\nGenere via Sentinel AI - CONSEILPREV.\n\nCordialement,");
   window.location.href = "mailto:?subject="+subj+"&body="+body;
+};
+
+})();
+
+</script>
+
+<script>
+/* ══ CARTOGRAPHIE DES PARTIES PRENANTES — Matrice RACI ══ */
+(function(){
+'use strict';
+
+/* Processus de gouvernance IA (lignes de la matrice RACI) */
+var RACI_PROCESSES = [
+  {id:"p1", label:"Identification et classification des systemes IA", art:"Art. 6 EU AI Act / Annexe III"},
+  {id:"p2", label:"Tenue du registre des systemes IA", art:"Art. 49, 71 EU AI Act"},
+  {id:"p3", label:"Evaluation des risques et impacts (FRIA)", art:"Art. 9 EU AI Act / ISO 42001 cl. 6.1"},
+  {id:"p4", label:"Validation des nouveaux projets IA avant deploiement", art:"Art. 9, 17 EU AI Act"},
+  {id:"p5", label:"Redaction et mise a jour des politiques IA", art:"Art. 17 EU AI Act / ISO 42001 cl. 5.2"},
+  {id:"p6", label:"Gestion des donnees d entrainement et de leur qualite", art:"Art. 10 EU AI Act / ISO 42001 A.7"},
+  {id:"p7", label:"Supervision humaine des systemes en production", art:"Art. 14 EU AI Act"},
+  {id:"p8", label:"Veille reglementaire et diffusion aux parties prenantes", art:"Continu"},
+  {id:"p9", label:"Audit interne et revue de conformite", art:"ISO 42001 cl. 9.2"},
+  {id:"p10", label:"Formation et sensibilisation des equipes", art:"Art. 4 EU AI Act / ISO 42001 cl. 7.2-7.3"},
+  {id:"p11", label:"Gestion des incidents IA (biais, fuites, attaques)", art:"ISO 42001 cl. 10.2"},
+  {id:"p12", label:"Reporting executif et revue de direction", art:"ISO 42001 cl. 9.3"},
+  {id:"p13", label:"Relation avec les fournisseurs et sous-traitants IA", art:"Art. 26 EU AI Act / ISO 42001 A.10"},
+  {id:"p14", label:"Reponses aux demandes clients sur la gouvernance IA", art:"Accompagnement commercial"}
+];
+
+/* Roles / parties prenantes (colonnes de la matrice) */
+var RACI_ROLES = [
+  {id:"direction", label:"Direction Generale / Comex"},
+  {id:"resp_ia", label:"Responsable IA"},
+  {id:"dpo", label:"DPO"},
+  {id:"comite", label:"Comite de Gouvernance IA"},
+  {id:"juridique", label:"Juridique / Conformite"},
+  {id:"data", label:"Data / Expert Gouvernance"},
+  {id:"it", label:"IT / Infrastructure"},
+  {id:"cyber", label:"Cybersecurite"},
+  {id:"metiers", label:"Equipes Metiers"},
+  {id:"commercial", label:"Commercial / Avant-vente"}
+];
+
+/* Valeurs RACI par defaut (R=Responsable execution, A=Approbateur final, C=Consulte, I=Informe) */
+function defaultRaci(){
+  var d = {};
+  RACI_PROCESSES.forEach(function(p){ d[p.id] = {}; RACI_ROLES.forEach(function(r){ d[p.id][r.id] = ""; }); });
+  var presets = {
+    p1:{resp_ia:"R", comite:"A", data:"C", juridique:"C", metiers:"I"},
+    p2:{data:"R", resp_ia:"A", it:"C", juridique:"I"},
+    p3:{resp_ia:"R", juridique:"A", dpo:"C", data:"C", metiers:"C"},
+    p4:{comite:"A", resp_ia:"R", juridique:"C", data:"C", cyber:"C", metiers:"I"},
+    p5:{resp_ia:"R", direction:"A", juridique:"C", comite:"C"},
+    p6:{data:"R", dpo:"A", juridique:"C", it:"I"},
+    p7:{metiers:"R", resp_ia:"A", comite:"I"},
+    p8:{juridique:"R", resp_ia:"A", comite:"I", direction:"I"},
+    p9:{comite:"R", direction:"A", resp_ia:"C", juridique:"C"},
+    p10:{resp_ia:"R", direction:"A", metiers:"I", commercial:"I"},
+    p11:{cyber:"R", resp_ia:"A", dpo:"C", direction:"I", juridique:"C"},
+    p12:{resp_ia:"R", comite:"A", direction:"I"},
+    p13:{juridique:"R", resp_ia:"A", data:"C", it:"C"},
+    p14:{commercial:"R", resp_ia:"A", juridique:"C"}
+  };
+  Object.keys(presets).forEach(function(pid){
+    Object.keys(presets[pid]).forEach(function(rid){ d[pid][rid] = presets[pid][rid]; });
+  });
+  return d;
+}
+
+var RACI_STATE = null;
+function raciInit(){ if(!RACI_STATE) RACI_STATE = defaultRaci(); }
+
+var RACI_LETTERS = {R:"#B83222", A:"#1C5A8A", C:"#C47C1A", I:"#2D7A47"};
+var RACI_LABELS = {R:"Responsable (execute)", A:"Approbateur (valide)", C:"Consulte (avis requis)", I:"Informe (tenu au courant)"};
+
+window.raciCycle = function(pid, rid){
+  raciInit();
+  var order = ["", "R", "A", "C", "I"];
+  var cur = RACI_STATE[pid][rid] || "";
+  var idx = (order.indexOf(cur) + 1) % order.length;
+  RACI_STATE[pid][rid] = order[idx];
+  raciRenderCell(pid, rid);
+};
+
+function raciRenderCell(pid, rid){
+  var el = document.getElementById("raci-"+pid+"-"+rid);
+  if(!el) return;
+  var v = RACI_STATE[pid][rid] || "";
+  el.textContent = v;
+  el.style.background = v ? RACI_LETTERS[v] : "transparent";
+  el.style.color = v ? "#fff" : "var(--muted2)";
+  el.title = v ? RACI_LABELS[v] : "Cliquer pour assigner";
+}
+
+function raciRenderTable(){
+  raciInit();
+  var head = '<div class="raci-row raci-head"><div class="raci-proc-cell raci-proc-head">Processus de gouvernance IA</div>'
+    + RACI_ROLES.map(function(r){ return '<div class="raci-role-head">'+r.label+'</div>'; }).join("")
+    + '</div>';
+  var rows = RACI_PROCESSES.map(function(p){
+    return '<div class="raci-row">'
+      + '<div class="raci-proc-cell"><div class="raci-proc-label">'+p.label+'</div><div class="raci-proc-art">'+p.art+'</div></div>'
+      + RACI_ROLES.map(function(r){
+          var v = RACI_STATE[p.id][r.id] || "";
+          return '<div class="raci-cell" id="raci-'+p.id+'-'+r.id+'" onclick="raciCycle(\''+p.id+'\',\''+r.id+'\')" style="background:'+(v?RACI_LETTERS[v]:"transparent")+';color:'+(v?"#fff":"var(--muted2)")+'" title="'+(v?RACI_LABELS[v]:"Cliquer pour assigner")+'">'+v+'</div>';
+        }).join("")
+      + '</div>';
+  }).join("");
+  return head + rows;
+}
+
+window.raciReset = function(){
+  if(!confirm("Reinitialiser la matrice RACI au profil de reference CONSEILPREV ?")) return;
+  RACI_STATE = defaultRaci();
+  var holder = document.getElementById("raci-table-holder");
+  if(holder) holder.innerHTML = raciRenderTable();
+};
+
+window.raciClearAll = function(){
+  if(!confirm("Vider entierement la matrice (toutes les cellules) ?")) return;
+  RACI_STATE = {};
+  RACI_PROCESSES.forEach(function(p){ RACI_STATE[p.id] = {}; RACI_ROLES.forEach(function(r){ RACI_STATE[p.id][r.id] = ""; }); });
+  var holder = document.getElementById("raci-table-holder");
+  if(holder) holder.innerHTML = raciRenderTable();
+};
+
+/* ── Rendu de la page complete ── */
+window.raciRenderPage = function(){
+  var holder = document.getElementById("raci-page-content");
+  if(!holder) return;
+  raciInit();
+
+  var html = '<div class="raci-toolbar">'
+    + '<div class="raci-legend">'
+    + Object.keys(RACI_LABELS).map(function(k){ return '<span class="raci-legend-item"><span class="raci-legend-dot" style="background:'+RACI_LETTERS[k]+'"></span>'+k+' — '+RACI_LABELS[k]+'</span>'; }).join("")
+    + '</div>'
+    + '<div class="raci-actions">'
+    + '<button class="mat-export-btn mat-export-pdf" onclick="raciExportPDF()">↓ PDF</button>'
+    + '<button class="mat-export-btn mat-export-word" onclick="raciExportWord()">↓ Word</button>'
+    + '<button class="mat-export-btn" style="background:var(--blue);color:#fff" onclick="raciMail()">✉ Envoyer a un collegue</button>'
+    + '<button class="mat-export-btn" style="background:#1C1C1C;color:#fff" onclick="raciGenerateDoc()">🤖 Generer la cartographie complete par IA</button>'
+    + '<button class="mat-export-btn" style="background:var(--bg);color:var(--muted);border:1px solid var(--rule2)" onclick="raciReset()">↻ Reinitialiser</button>'
+    + '</div></div>'
+    + '<div class="raci-table-wrap"><div class="raci-table" id="raci-table-holder">'+raciRenderTable()+'</div></div>'
+    + '<p class="raci-help">Cliquez sur une cellule pour faire defiler les assignations : vide → R → A → C → I → vide. Chaque processus ne devrait avoir qu un seul A (Approbateur) pour eviter les conflits de decision.</p>';
+
+  holder.innerHTML = html;
+};
+
+/* ── Génération du document complet par IA (reutilise les bridges existants) ── */
+window.raciGenerateDoc = function(){
+  var sectorKey = (typeof window.matGetCur === "function") ? window.matGetCur() : "telecom";
+  var s = (window.MAT_SECTORS && window.MAT_SECTORS[sectorKey]) ? window.MAT_SECTORS[sectorKey] : {label:"votre secteur"};
+  var api = window.MAT_DELIV_API || "mistral";
+
+  var modal = document.getElementById("raci-modal");
+  if(!modal){ modal = document.createElement("div"); modal.id = "raci-modal"; modal.className = "mat-modal"; document.body.appendChild(modal); }
+  modal.innerHTML = '<div class="mat-modal-box mat-modal-wide">'
+    + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Cartographie des parties prenantes · '+s.label+'</div>'
+    + '<div class="mat-modal-title">📐 Document de cartographie complet</div></div>'
+    + '<button class="mat-modal-close" onclick="raciCloseModal()">×</button></div>'
+    + '<div class="mat-modal-body" id="raci-modal-body"><div class="mat-modal-loading"><div class="mat-spinner"></div>Generation en cours par '+(api==="claude"?"Claude":"Mistral")+'…</div></div>'
+    + '<div class="mat-modal-foot" id="raci-modal-foot" style="display:none">'
+    + '<button class="mat-export-btn mat-export-pdf" onclick="raciDocPDF()">↓ PDF</button>'
+    + '<button class="mat-export-btn mat-export-word" onclick="raciDocWord()">↓ Word</button>'
+    + '</div></div>';
+  modal.classList.add("on");
+
+  var matrixSummary = RACI_PROCESSES.map(function(p){
+    var assigned = RACI_ROLES.filter(function(r){ return RACI_STATE[p.id][r.id]; })
+      .map(function(r){ return r.label+" ("+RACI_STATE[p.id][r.id]+")"; }).join(", ");
+    return "- "+p.label+" ["+p.art+"] : "+(assigned||"non assigne");
+  }).join("\n");
+
+  var prompt = "Redige un DOCUMENT DE CARTOGRAPHIE DES PARTIES PRENANTES ET MATRICE RACI pour un programme de gouvernance IA dans le secteur "+s.label+". "
+    + "Voici la matrice RACI actuelle (Responsable/Approbateur/Consulte/Informe) par processus :\n"+matrixSummary+"\n\n"
+    + "Structure attendue : 1) Introduction et objectifs de la cartographie des parties prenantes (interne et externe : metiers, IT, data, juridique, conformite, fournisseurs IA, clients), "
+    + "2) Presentation de la matrice RACI ci-dessus sous forme de tableau markdown clair (colonnes : Processus, Role Responsable, Role Approbateur, Roles Consultes, Roles Informes), "
+    + "3) Analyse des points de vigilance (processus sans Approbateur clair, processus avec plusieurs R, charge excessive sur un role), "
+    + "4) Recommandations pour structurer le Comite de Gouvernance IA (frequence des reunions, ordre du jour type, livrables attendus), "
+    + "5) Plan de communication aux parties prenantes (qui informer, a quelle frequence, par quel canal). Reference les articles EU AI Act (Art. 17, 26) et la norme ISO/IEC 42001:2023 (clause 5.3, Annexe A.3) pour les roles et responsabilites. Format professionnel, en francais.";
+
+  function onReply(err, text, apiName){
+    var body = document.getElementById("raci-modal-body");
+    var foot = document.getElementById("raci-modal-foot");
+    if(err || !text){
+      if(body) body.innerHTML = '<div style="padding:24px;text-align:center;color:var(--accent)">Erreur de generation. Reessayez ou contactez christophe.cerf@outlook.com</div>';
+      return;
+    }
+    window.__raciDoc = {content:text, apiName:apiName, sector:s.label};
+    if(body) body.innerHTML = '<div class="mat-deliv-content">'+window.matMdToHtmlBridge(text)+'</div>';
+    if(foot) foot.style.display = "flex";
+  }
+
+  if(window.matCallAIBridge){
+    window.matCallAIBridge(prompt, api, onReply);
+  }
+};
+
+window.raciCloseModal = function(){ var m = document.getElementById("raci-modal"); if(m) m.classList.remove("on"); };
+
+function raciDocHTML(){
+  var d = window.__raciDoc;
+  var today = new Date().toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"});
+  var body = window.matMdToHtmlBridge(d.content);
+  return '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Cartographie parties prenantes - '+d.sector+'</title>'
+    + '<style>@page{margin:2cm}body{font-family:Georgia,serif;color:#1C1C1C;max-width:880px;margin:0 auto;padding:20px;line-height:1.6}'
+    + 'h1{font-size:22px;border-bottom:3px solid #B83222;padding-bottom:10px}h2{font-size:15px;color:#B83222;margin-top:22px}'
+    + '.sub{color:#666;font-size:12px;font-family:Arial;margin-bottom:18px}table{width:100%;border-collapse:collapse;font-size:11px;margin:10px 0}'
+    + 'th{background:#1C1C1C;color:#fff;padding:7px;text-align:left;font-size:10px;font-family:Arial}td{border:1px solid #ddd;padding:6px 8px}</style></head><body>'
+    + '<h1>Cartographie des parties prenantes — Matrice RACI</h1><div class="sub">Secteur '+d.sector+' · '+today+' · CONSEILPREV · '+(d.apiName||"IA")+'</div>'
+    + body + '<p style="font-size:10px;color:#999;margin-top:24px;font-family:Arial;font-style:italic">CONSEILPREV — christophe.cerf@outlook.com — +33 6 60 69 21 45</p></body></html>';
+}
+window.raciDocPDF = function(){ var w = window.open("","_blank"); if(!w){alert("Autorisez les pop-ups.");return;} w.document.write(raciDocHTML()+'<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>'); w.document.close(); };
+window.raciDocWord = function(){ var d = window.__raciDoc; var blob = new Blob(['\ufeff'+raciDocHTML()],{type:"application/msword"}); var u = URL.createObjectURL(blob); var a = document.createElement("a"); a.href=u; a.download="Cartographie-parties-prenantes-"+d.sector.replace(/[^a-zA-Z]/g,"")+".doc"; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(u); };
+
+/* ── Export rapide de la matrice telle quelle (sans IA) ── */
+function raciTableDocHTML(){
+  raciInit();
+  var today = new Date().toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"});
+  var h = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Matrice RACI</title>'
+    + '<style>@page{margin:1cm;size:landscape}body{font-family:Arial,sans-serif;color:#1C1C1C;padding:10px}'
+    + 'h1{font-size:18px;border-bottom:3px solid #B83222;padding-bottom:6px}.sub{color:#666;font-size:11px;margin-bottom:14px}'
+    + 'table{width:100%;border-collapse:collapse;font-size:9px}th{background:#1C1C1C;color:#fff;padding:5px 4px;text-align:center}'
+    + 'td{border:1px solid #ddd;padding:5px 4px;text-align:center}td:first-child,th:first-child{text-align:left;max-width:180px}'
+    + '.R{background:#B83222;color:#fff}.A{background:#1C5A8A;color:#fff}.C{background:#C47C1A;color:#fff}.I{background:#2D7A47;color:#fff}</style></head><body>';
+  h += '<h1>Matrice RACI — Cartographie des parties prenantes</h1><div class="sub">'+today+' · CONSEILPREV · R=Responsable A=Approbateur C=Consulte I=Informe</div>';
+  h += '<table><tr><th>Processus</th>'+RACI_ROLES.map(function(r){return '<th>'+r.label+'</th>';}).join("")+'</tr>';
+  RACI_PROCESSES.forEach(function(p){
+    h += '<tr><td>'+p.label+'</td>'+RACI_ROLES.map(function(r){ var v=RACI_STATE[p.id][r.id]||""; return '<td class="'+v+'">'+v+'</td>'; }).join("")+'</tr>';
+  });
+  h += '</table></body></html>';
+  return h;
+}
+window.raciExportPDF = function(){ var w = window.open("","_blank"); if(!w){alert("Autorisez les pop-ups.");return;} w.document.write(raciTableDocHTML()+'<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>'); w.document.close(); };
+window.raciExportWord = function(){ var blob = new Blob(['\ufeff'+raciTableDocHTML()],{type:"application/msword"}); var u = URL.createObjectURL(blob); var a = document.createElement("a"); a.href=u; a.download="Matrice-RACI.doc"; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(u); };
+window.raciMail = function(){
+  raciInit();
+  var lines = RACI_PROCESSES.map(function(p){
+    var assigned = RACI_ROLES.filter(function(r){ return RACI_STATE[p.id][r.id]; }).map(function(r){ return r.label+" ("+RACI_STATE[p.id][r.id]+")"; }).join(", ");
+    return "- "+p.label+" : "+(assigned||"non assigne");
+  }).join("\n");
+  var subj = encodeURIComponent("Matrice RACI - Cartographie des parties prenantes IA");
+  var body = encodeURIComponent("Bonjour,\n\nVoici la matrice RACI de gouvernance IA :\n\n"+lines+"\n\nGenere via Sentinel AI - CONSEILPREV.\n\nCordialement,");
+  window.location.href = "mailto:?subject="+subj+"&body="+body;
+};
+
+/* Hook navigation */
+var _raciOrigGo = window.go;
+window.go = function(id){
+  var r = _raciOrigGo ? _raciOrigGo.apply(this, arguments) : undefined;
+  if(id === "parties") setTimeout(window.raciRenderPage, 50);
+  return r;
 };
 
 })();
