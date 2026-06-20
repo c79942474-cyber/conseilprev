@@ -6276,6 +6276,23 @@ function matRadar(pillars){
 function matRender(){
   var s = MAT_SECTORS[MAT_CUR];
   if(!s) return;
+
+  /* Helper tooltip reutilisable */
+  function tip(txt){
+    return ' <span class="mat-tooltip-wrap" onclick="event.stopPropagation()"><span class="mat-tooltip-icon">i</span><span class="mat-tooltip">'+txt+'</span></span>';
+  }
+
+  /* Details des tooltips par pilier (definition + articles AI Act + objet evalue) */
+  var PILLAR_TIPS = {
+    explicabilite: "EXPLICABILITE (Art. 13, 86). Capacite a comprendre et expliquer les decisions du systeme IA aux utilisateurs et personnes concernees. On evalue : la notice d utilisation, la clarte des sorties, le droit a l explication des decisions individuelles.",
+    controlabilite: "CONTROLABILITE (Art. 14). Mecanismes de supervision humaine permettant de surveiller, interrompre ou corriger le systeme. On evalue : les interfaces de controle, la capacite d arret, la formation des operateurs habilites.",
+    transparence: "TRANSPARENCE (Art. 13, 50). Information des parties prenantes sur l usage de l IA. On evalue : l information que l on interagit avec une IA, le marquage des contenus generes (watermarking), la documentation accessible.",
+    surete: "SURETE (Art. 9, 15). Prevention des reponses nuisibles et des usages abusifs. On evalue : le systeme de gestion des risques documente, les tests avant deploiement, les mesures d attenuation des risques residuels.",
+    equite: "EQUITE (Art. 10). Prise en compte des impacts sur les differents groupes. On evalue : l examen des biais dans les donnees d entrainement, la representativite et la qualite des jeux de donnees, la non-discrimination.",
+    gouvernance: "GOUVERNANCE (Art. 17, 16, 26). Integration des bonnes pratiques dans toute la chaine IA, y compris fournisseurs. On evalue : le systeme de gestion de la qualite (SGQ), la definition des roles (Responsable IA, DPO, Comite), les obligations fournisseurs/deployeurs.",
+    confidentialite: "CONFIDENTIALITE & SECURITE (Art. 15, 10). Protection des donnees et des modeles. On evalue : les mesures de cybersecurite contre les attaques adversariales, la protection RGPD et la minimisation des donnees personnelles.",
+    robustesse: "ROBUSTESSE & VERACITE (Art. 15, 9). Exactitude des reponses meme face a des entrees erronees. On evalue : le niveau d exactitude mesure et documente, la resilience aux erreurs et conditions degradees, les tests adversariaux."
+  };
   var avg = (window.matGlobalScore ? window.matGlobalScore(MAT_CUR) : (Object.keys(s.pillars).reduce(function(a,k){return a+s.pillars[k];},0)/8)).toFixed(1);
 
   /* Barre secteurs */
