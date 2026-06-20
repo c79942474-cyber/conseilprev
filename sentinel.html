@@ -1274,7 +1274,6 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-item" onclick="go('benchmark',this,'ANALYSE','Benchmark sectoriel')" title="Comparez votre niveau de conformite a celui d autres acteurs de votre secteur."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>Benchmark</div>
     <div class="sb-item" onclick="go('templates',this,'RESSOURCES','Documentation & Modèles')" title="Modeles de documents pretes a completer : politiques IA, registres, rapports."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>Templates &amp; Docs</div>
     <div class="sb-item" onclick="go('report',this,'REPORTING','Dashboard')" title="Tableau de bord executif : indicateurs cles de conformite pour la direction."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>Reporting</div>
-    <div class="sb-item" onclick="go('chat',this,'ASSISTANT IA','Chat Conformité')" title="Assistant reglementaire IA, contextualise selon la page consultee."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span>Chat Conformité<span class="sb-badge" style="background:var(--green)">●</span></div>
   </nav>
   <div class="sb-pager">
     <button class="sb-pager-btn">‹</button>
@@ -2132,10 +2131,10 @@ textarea.form-el{min-height:86px;resize:vertical}
 </div>
 
 <!-- ÉQUIPE -->
-<div class="page" id="p-equipe"><span class="eyebrow">Espace équipe</span><h1 class="page-h">Gestion des accès</h1><p class="page-lead">Partagez vos analyses et rapports avec votre équipe conformité.</p><div class="tbl-wrap" style="max-width:600px"><div class="tbl-head"><span class="tbl-title">Membres actifs</span><button class="submit" style="font-size:10px;padding:6px 14px" onclick="window.open('mailto:christophe.cerf@outlook.com?subject=[Sentinel AI] Invitation équipe','_blank')">+ Inviter</button></div><div id="team-rows"></div></div></div>
+<div class="page" id="p-equipe"><span class="eyebrow">Espace équipe</span><h1 class="page-h">Gestion des accès</h1><p class="page-lead">Roles de gouvernance IA issus de votre matrice RACI (Parties prenantes), avec statut d assignation reel.</p><div class="tbl-wrap" style="max-width:600px"><div class="tbl-head"><span class="tbl-title">Membres actifs</span><button class="submit" style="font-size:10px;padding:6px 14px" onclick="window.open('mailto:christophe.cerf@outlook.com?subject=[Sentinel AI] Invitation équipe','_blank')">+ Inviter</button></div><div id="team-rows"></div></div></div>
 
 <!-- TRAINING -->
-<div class="page" id="p-training"><span class="eyebrow">Hub Training</span><h1 class="page-h">Formations conformité <em>IA</em></h1><p class="page-lead">Modules certifiants sur l'EU AI Act, NIS2, RGPD et la gouvernance IA.</p><div class="training-grid" id="training-grid"></div></div>
+<div class="page" id="p-training"><span class="eyebrow">Hub Training</span><h1 class="page-h">Formations conformité <em>IA</em></h1><p class="page-lead">Modules certifiants — progression calculée à partir de vos scores réels de l Audit de maturité IA par pilier.</p><div class="training-grid" id="training-grid"></div></div>
 
 <!-- MON ESPACE -->
 <div class="page" id="p-espace">
@@ -2161,12 +2160,6 @@ textarea.form-el{min-height:86px;resize:vertical}
 </div>
 
 <!-- CHAT -->
-<div class="page" id="p-chat">
-  <span class="eyebrow">Chat Conformité</span><h1 class="page-h" style="margin-bottom:8px">Assistant <em>réglementaire</em></h1><p class="page-lead" style="margin-bottom:16px">Posez vos questions sur l'EU AI Act, NIS2, RGPD — réponses fondées sur les textes officiels.</p>
-  <div style="margin-bottom:14px" id="chat-tags-wrap"></div>
-  <div class="chat-outer"><div class="chat-msgs" id="chat-msgs"></div><div class="chat-bar"><textarea class="chat-in" id="chat-in" placeholder="Posez votre question réglementaire…" rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();doChat();}"></textarea><button class="chat-send" onclick="doChat()" title="Envoyer votre message au chatbot.">Envoyer →</button></div></div>
-</div>
-
 <!-- REGISTRE -->
 <div class="page" id="p-maturite">
   <span class="eyebrow">Audit de maturité IA · CONSEILPREV</span>
@@ -4887,23 +4880,16 @@ window.artFilter = function(val, el){
 
 /* Remplace par cpEvalRenderList() — voir module Mes evaluations en fin de fichier */
 
-(function(){
-  var b=document.getElementById('training-grid'); if(!b) return;
-  [['t-req','EU AI Act — Fondamentaux','Classification des risques, obligations par catégorie, calendrier de conformité.','3h',75],['t-req','NIS2 pour les équipes IA','Obligations de sécurité pour les opérateurs essentiels utilisant des systèmes IA.','2h',40],['t-opt','RGPD & Données d\'entraînement','Base légale, minimisation, droits des personnes dans les systèmes IA générateurs.','2h30',100],['t-opt','Gouvernance IA — ISO 42001','Mise en place d\'un système de management IA conforme au standard international.','4h',0]].forEach(function(t){ var done=t[4]===100; b.innerHTML+='<div class="t-card"><div class="t-badge '+t[0]+'">'+(t[0]==='t-req'?'REQUIS':'OPTIONNEL')+'</div><div class="t-title">'+t[1]+'</div><div class="t-desc">'+t[2]+'</div><div class="t-foot"><div class="t-dur">'+t[3]+'</div><div class="t-prog-track"><div class="t-prog-fill" style="width:'+t[4]+'%"></div></div><div class="t-pct" style="color:'+(done?'var(--green)':'var(--muted2)')+'">'+t[4]+'%'+(done?' ✓':'')+'</div></div></div>'; });
-})();
+/* Hub Training — remplace par espace_training.js (scores reels piliers maturite) */
 
 /* Mon Espace — remplace par espace_dashboard.js (donnees reelles) */
 
 /* Reporting — remplace par espace_reporting.js (donnees reelles) */
 
-(function(){
-  var TAGS=['Art. 6 AI Act','Obligations NIS2','Classification IA','Sanctions AI Act'];
-  var w=document.getElementById('chat-tags-wrap'); if(w) w.innerHTML=TAGS.map(function(t){ return '<span class="chat-tag" onclick="doChat(\''+t+'\')">'+t+'</span>'; }).join('');
-  addMsg('bot','Bonjour, je suis votre assistant réglementaire <strong>Sentinel AI</strong>, propulsé par CONSEILPREV.<br><br>Je peux vous aider sur l\'<strong>EU AI Act</strong>, <strong>NIS2</strong>, <strong>RGPD</strong> et la gouvernance IA.');
-})();
+/* Page Chat dediee supprimee — utiliser le widget global cpcBtn (Mistral/Claude reels, deja sur toutes les pages) */
 
 function addMsg(role,html){ var m=document.getElementById('chat-msgs'); if(!m) return; var init=role==='bot'?'S':'CC'; m.innerHTML+='<div class="c-msg '+role+'"><div class="c-av '+role+'">'+init+'</div><div class="c-bubble">'+html+'</div></div>'; m.scrollTop=m.scrollHeight; }
-function doChat(preset){ var inp=document.getElementById('chat-in'); var txt=preset||(inp?inp.value.trim():''); if(!txt) return; if(inp) inp.value=''; addMsg('u',txt); var R={'art. 6':'L\'Article 6 de l\'EU AI Act établit la classification des systèmes IA à haut risque.','nis2':'NIS2 (Directive 2022/2555) s\'applique aux entités essentielles dans 18 secteurs.','classifi':'La classification EU AI Act : ① Risque inacceptable, ② Haut risque, ③ Risque limité, ④ Risque minimal.','sanction':'Sanctions EU AI Act : 35 M€ ou 7% du CA mondial (systèmes haut risque).'}; setTimeout(function(){ var key=Object.keys(R).find(function(k){ return txt.toLowerCase().indexOf(k)>=0; }); addMsg('bot',key?R[key]:'Je traite votre question. Pour une analyse approfondie, nos experts CONSEILPREV sont disponibles à <a href="mailto:christophe.cerf@outlook.com" style="color:var(--accent)">christophe.cerf@outlook.com</a>.'); },700); }
+/* doChat() moteur factice supprime avec la page Chat dediee */
 
 /* ══════════════════════════════════════════════════════
    SIMULATEUR AI ACT — Logique complète
@@ -5306,10 +5292,7 @@ function calcSanctions(){
 
 /* FRIA — remplace par fria_module.js (Art. 27, applicabilite reelle, Registre IA) */
 
-(function(){
-  var b=document.getElementById('team-rows'); if(!b) return;
-  [['CC','Christophe Cerf','Admin — Analyste senior',true],['ML','Marie Laurent','Expert conformité NIS2',true],['PD','Paul Dubois','DPO / RGPD',false]].forEach(function(m){ b.innerHTML+='<div class="eval-row"><div class="sb-avatar" style="background:'+(m[3]?'var(--ink)':'var(--muted2)')+'">'+m[0]+'</div><div class="eval-body"><div class="eval-n">'+m[1]+'</div><div class="eval-d">'+m[2]+'</div></div><div style="font-size:9px;font-family:var(--mono);color:'+(m[3]?'var(--green)':'var(--muted2)')+'">'+(m[3]?'● ACTIF':'○ INACTIF')+'</div></div>'; });
-})();
+/* Espace equipe — remplace par espace_equipe.js (roles RACI reels) */
 
 function openMailtoContact(subject){ var subj=subject||'[Sentinel AI] Demande de contact CONSEILPREV'; var body='Bonjour,\n\nJe souhaite vous contacter suite a ma consultation de Sentinel AI.\n\nCordialement'; window.open('mailto:christophe.cerf@outlook.com?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body),'_blank'); }
 function requestDoc(name){ window.open('mailto:christophe.cerf@outlook.com?subject=[Sentinel AI] Demande: '+encodeURIComponent(name),'_blank'); }
@@ -9702,6 +9685,102 @@ var _tplOrigGo = window.go;
 window.go = function(id){
   var r = _tplOrigGo ? _tplOrigGo.apply(this, arguments) : undefined;
   if(id === "templates") setTimeout(window.templatesRenderPage, 80);
+  return r;
+};
+
+})();
+
+</script>
+
+<script>
+/* ══ ESPACE EQUIPE — Annuaire base sur les roles RACI reels (remplace les membres fictifs) ══ */
+(function(){
+'use strict';
+
+window.equipeRenderPage = function(){
+  var holder = document.getElementById("team-rows");
+  if(!holder) return;
+
+  var sector = (typeof window.matGetCur === "function") ? window.matGetCur() : "telecom";
+  var baseRoles = (window.RACI_ROLES_BASE) ? window.RACI_ROLES_BASE : [];
+  var sectorRoles = (window.RACI_SECTOR_ROLES && window.RACI_SECTOR_ROLES[sector]) ? window.RACI_SECTOR_ROLES[sector] : [];
+  var allRoles = baseRoles.concat(sectorRoles);
+
+  if(allRoles.length === 0){
+    holder.innerHTML = '<div class="reg-empty">Definissez vos roles dans <a href="#" onclick="go(\'parties\',null,\'GOUVERNANCE\',\'Parties prenantes\');return false;">Parties prenantes -&gt;</a></div>';
+    return;
+  }
+
+  /* Un role est "actif" si la matrice RACI lui a assigne au moins un processus */
+  function roleHasAssignment(roleId){
+    if(!window.RACI_STATE) return false;
+    return Object.keys(window.RACI_STATE).some(function(procId){
+      return window.RACI_STATE[procId] && window.RACI_STATE[procId][roleId];
+    });
+  }
+
+  holder.innerHTML = allRoles.map(function(r){
+    var initials = r.label.split(" ").map(function(w){ return w[0]; }).slice(0,2).join("").toUpperCase();
+    var active = roleHasAssignment(r.id);
+    return '<div class="eval-row" style="cursor:pointer" onclick="go(\'parties\',null,\'GOUVERNANCE\',\'Parties prenantes\')">'
+      + '<div class="sb-avatar" style="background:'+(active?'var(--ink)':'var(--muted2)')+'">'+initials+'</div>'
+      + '<div class="eval-body"><div class="eval-n">'+r.label+'</div><div class="eval-d">Rôle de gouvernance IA — secteur '+(window.MAT_SECTORS&&window.MAT_SECTORS[sector]?window.MAT_SECTORS[sector].label:sector)+'</div></div>'
+      + '<div style="font-size:9px;font-family:var(--mono);color:'+(active?'var(--green)':'var(--muted2)')+'">'+(active?'● ASSIGNÉ':'○ À DÉFINIR')+'</div>'
+      + '</div>';
+  }).join('');
+};
+
+var _equipeOrigGo = window.go;
+window.go = function(id){
+  var r = _equipeOrigGo ? _equipeOrigGo.apply(this, arguments) : undefined;
+  if(id === "equipe") setTimeout(window.equipeRenderPage, 80);
+  return r;
+};
+
+})();
+
+</script>
+<script>
+/* ══ HUB TRAINING — connecte aux scores reels des 8 piliers de maturite ══ */
+(function(){
+'use strict';
+
+window.trainingRenderPage = function(){
+  var holder = document.getElementById("training-grid");
+  if(!holder || typeof window.matPillarScore !== "function") return;
+
+  var sector = (typeof window.matGetCur === "function") ? window.matGetCur() : "telecom";
+
+  function pct(pillarIds){
+    var scores = pillarIds.map(function(p){ return window.matPillarScore(sector, p) || 0; });
+    var avg = scores.reduce(function(a,b){ return a+b; },0) / scores.length;
+    return Math.round(avg/5*100);
+  }
+
+  var MODULES = [
+    {badge:"t-req", title:"EU AI Act — Fondamentaux", desc:"Classification des risques, obligations par catégorie, calendrier de conformité.", dur:"3h", pillars:["gouvernance","transparence","explicabilite"]},
+    {badge:"t-req", title:"Cybersécurité IA (NIS2 / Sûreté)", desc:"Obligations de sécurité pour les systèmes IA dans les entités essentielles.", dur:"2h", pillars:["confidentialite","robustesse"]},
+    {badge:"t-opt", title:"RGPD & Données d'entraînement", desc:"Base légale, minimisation, droits des personnes dans les systèmes IA.", dur:"2h30", pillars:["confidentialite","equite"]},
+    {badge:"t-opt", title:"Gouvernance IA — ISO 42001", desc:"Mise en place d'un système de management IA conforme au standard international.", dur:"4h", pillars:["gouvernance","controlabilite"]}
+  ];
+
+  holder.innerHTML = MODULES.map(function(t){
+    var p = pct(t.pillars);
+    var done = p >= 80;
+    return '<div class="t-card"><div class="t-badge '+t.badge+'">'+(t.badge==='t-req'?'REQUIS':'OPTIONNEL')+'</div>'
+      + '<div class="t-title">'+t.title+'</div><div class="t-desc">'+t.desc+'</div>'
+      + '<div class="t-foot"><div class="t-dur">'+t.dur+'</div>'
+      + '<div class="t-prog-track"><div class="t-prog-fill" style="width:'+p+'%"></div></div>'
+      + '<div class="t-pct" style="color:'+(done?'var(--green)':p>=40?'var(--orange)':'var(--accent)')+'">'+p+'%'+(done?' ✓':'')+'</div></div>'
+      + '<div style="font-size:9px;color:var(--muted2);margin-top:6px">Basé sur vos scores réels (Audit de maturité, secteur '+(window.MAT_SECTORS&&window.MAT_SECTORS[sector]?window.MAT_SECTORS[sector].label:sector)+')</div>'
+      + '</div>';
+  }).join('');
+};
+
+var _trainOrigGo = window.go;
+window.go = function(id){
+  var r = _trainOrigGo ? _trainOrigGo.apply(this, arguments) : undefined;
+  if(id === "training") setTimeout(window.trainingRenderPage, 80);
   return r;
 };
 
