@@ -1013,6 +1013,11 @@ textarea.form-el{min-height:86px;resize:vertical}
 .raci-role-sector{position:relative}
 .raci-row-sector{background:rgba(184,50,34,.02)}
 
+
+.matrix-dot{display:inline-flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;transition:transform .12s}
+.matrix-dot:hover{transform:scale(1.3)}
+.matrix-dot-more{font-size:8px;font-family:var(--mono);color:var(--muted2);margin-left:2px}
+
 </style>
 <style id="cpc-styles">
 /* ══ CHATBOT SENTINEL AI — CONSEILPREV ══ */
@@ -1938,7 +1943,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       <div id="sim-result-container"></div>
       <div class="sim-nav" style="margin-top:8px">
         <button class="sim-reset-btn" onclick="simReset()" title="Recommencer une nouvelle simulation depuis le debut.">↺ Nouvelle simulation</button>
-        <span></span>
+        <button class="sim-btn-next" id="sim-add-registre-btn" onclick="simAddToRegistre()" style="background:var(--green)" title="Enregistrer ce systeme directement dans le Registre IA.">+ Ajouter au Registre IA</button>
         <button class="sim-btn-next" onclick="openAuditTab()" title="Ouvrir l audit de conformite EU AI Act complet (32 points de controle).">Lancer l'audit complet →</button>
       </div>
     </div>
@@ -5183,18 +5188,7 @@ var SYSTEMS=[{ico:'⚡',name:'Système de prédiction énergétique',type:'Préd
 
 /* Registre IA — remplace par le module registre_module.js (vraie base de donnees) */
 
-(function(){
-  var g=document.getElementById('matrix-grid'); if(!g) return;
-  var IMP=['Négligeable','Faible','Modéré','Élevé','Critique'];
-  var PROB=['Très élevée','Élevée','Moyenne','Faible','Très faible'];
-  var head='<div class="matrix-cell mc-lbl"></div>'+IMP.map(function(l){ return '<div class="matrix-cell mc-head">'+l+'</div>'; }).join('');
-  var LEVELS=[['mc-h','mc-h','mc-h','mc-h','mc-h'],['mc-m','mc-h','mc-h','mc-h','mc-h'],['mc-l','mc-m','mc-h','mc-h','mc-h'],['mc-vl','mc-l','mc-m','mc-m','mc-h'],['mc-vl','mc-vl','mc-l','mc-l','mc-m']];
-  var dots={'1-3':'⚡','0-4':'🏦','2-1':'🏭','3-0':'💬'};
-  var rows=PROB.map(function(p,pi){ return '<div class="matrix-cell mc-lbl" style="writing-mode:vertical-lr;transform:rotate(180deg);font-size:8px;justify-content:center">'+p+'</div>'+LEVELS[pi].map(function(cls,ci){ var key=pi+'-'+ci; var dot=dots[key]?'<div style="font-size:14px;line-height:1">'+dots[key]+'</div>':''; return '<div class="matrix-cell '+cls+'">'+dot+'</div>'; }).join(''); }).join('');
-  g.innerHTML=head+rows;
-  var c=document.getElementById('matrice-critical'); if(!c) return;
-  c.innerHTML=SYSTEMS.filter(function(s){ return s.score>=6; }).map(function(s){ return '<div class="eval-row"><div class="eval-ico">'+s.ico+'</div><div class="eval-body"><div class="eval-n">'+s.name+'</div><div class="eval-d">'+s.classif+' · '+s.secteur+'</div></div><div class="eval-sc">'+s.score+'</div></div>'; }).join('');
-})();
+/* Matrice risques — remplacee par matrice_registre.js (donnees reelles du Registre IA) */
 
 (function(){
   var svg=document.getElementById('radar-svg'); if(!svg) return;
@@ -8486,6 +8480,185 @@ window.go = function(id){
   var r = _veilleOrigGo ? _veilleOrigGo.apply(this, arguments) : undefined;
   if(id === "veille") setTimeout(window.veilleInitPage, 50);
   return r;
+};
+
+})();
+
+</script>
+
+<script>
+/* ══ MATRICE RISQUES/IMPACT — connectee au Registre IA reel ══ */
+(function(){
+'use strict';
+
+/* Mapping classification AI Act -> indice impact (0=Negligeable .. 4=Critique) */
+var IMPACT_MAP = { inacceptable:4, haut:3, limite:2, minimal:1, a_evaluer:0 };
+/* Mapping statut de conformite -> indice probabilite de non-conformite (0=Tres faible .. 4=Tres elevee) */
+var PROB_MAP = { non_conforme:4, a_evaluer:3, en_cours:2, conforme:0 };
+
+var IMP_LABELS = ['Négligeable','Faible','Modéré','Élevé','Critique'];
+var PROB_LABELS = ['Très faible','Faible','Moyenne','Élevée','Très élevée'];
+
+var LEVELS = [
+  ['mc-vl','mc-l','mc-m','mc-h','mc-h'],
+  ['mc-vl','mc-l','mc-m','mc-h','mc-h'],
+  ['mc-l','mc-m','mc-m','mc-h','mc-h'],
+  ['mc-l','mc-m','mc-h','mc-h','mc-h'],
+  ['mc-m','mc-h','mc-h','mc-h','mc-h']
+];
+
+var ICO_MAP = {
+  telecom:'📶', energie:'⚡', sante:'🩺', finance:'🏦', industrie:'🏭',
+  transport:'🚇', it:'💻', public:'🏛'
+};
+function matriceIco(secteur){
+  var key = (secteur||"").toLowerCase();
+  for(var k in ICO_MAP){ if(key.indexOf(k) !== -1) return ICO_MAP[k]; }
+  return '🤖';
+}
+
+function matriceRender(systemes){
+  var g = document.getElementById('matrix-grid');
+  if(!g) return;
+
+  var head = '<div class="matrix-cell mc-lbl"></div>' + IMP_LABELS.map(function(l){ return '<div class="matrix-cell mc-head">'+l+'</div>'; }).join('');
+
+  /* Positionner chaque systeme dans sa cellule (probIdx, impIdx) */
+  var cellSystems = {};
+  systemes.forEach(function(s){
+    var impIdx = IMPACT_MAP[s.classification] !== undefined ? IMPACT_MAP[s.classification] : 0;
+    var probIdx = PROB_MAP[s.statut_conformite] !== undefined ? PROB_MAP[s.statut_conformite] : 2;
+    var key = (4-probIdx) + '-' + impIdx; /* ligne 0 = Tres elevee (en haut) */
+    if(!cellSystems[key]) cellSystems[key] = [];
+    cellSystems[key].push(s);
+  });
+
+  var rows = PROB_LABELS.slice().reverse().map(function(p, pi){
+    var rowLabel = '<div class="matrix-cell mc-lbl" style="writing-mode:vertical-lr;transform:rotate(180deg);font-size:8px;justify-content:center">'+p+'</div>';
+    var cells = LEVELS[pi].map(function(cls, ci){
+      var key = pi + '-' + ci;
+      var inCell = cellSystems[key] || [];
+      var dots = inCell.slice(0,3).map(function(s){
+        return '<div class="matrix-dot" title="'+s.nom+' — '+(s.secteur||'')+'" onclick="matriceOpenSys('+s.id+')">'+matriceIco(s.secteur)+'</div>';
+      }).join('');
+      var more = inCell.length > 3 ? '<div class="matrix-dot-more">+'+(inCell.length-3)+'</div>' : '';
+      return '<div class="matrix-cell '+cls+'">'+dots+more+'</div>';
+    }).join('');
+    return rowLabel + cells;
+  }).join('');
+
+  g.innerHTML = head + rows;
+
+  /* Liste des systemes en zone critique (impact eleve/critique OU probabilite elevee/tres elevee) */
+  var c = document.getElementById('matrice-critical');
+  if(!c) return;
+  var critiques = systemes.filter(function(s){
+    var impIdx = IMPACT_MAP[s.classification] !== undefined ? IMPACT_MAP[s.classification] : 0;
+    var probIdx = PROB_MAP[s.statut_conformite] !== undefined ? PROB_MAP[s.statut_conformite] : 2;
+    return impIdx >= 3 || probIdx >= 3;
+  }).sort(function(a,b){
+    var sa = (IMPACT_MAP[a.classification]||0) + (PROB_MAP[a.statut_conformite]||0);
+    var sb = (IMPACT_MAP[b.classification]||0) + (PROB_MAP[b.statut_conformite]||0);
+    return sb - sa;
+  });
+
+  var CLASSIF_LABELS = {inacceptable:"Inacceptable", haut:"Haut risque", limite:"Risque limité", minimal:"Risque minimal", a_evaluer:"À évaluer"};
+  var STATUT_LABELS = {conforme:"Conforme", en_cours:"En cours", non_conforme:"Non conforme", a_evaluer:"À évaluer"};
+
+  if(critiques.length === 0){
+    c.innerHTML = '<div class="reg-empty">Aucun système en zone critique pour le moment.</div>';
+    return;
+  }
+  c.innerHTML = critiques.map(function(s){
+    return '<div class="eval-row" style="cursor:pointer" onclick="matriceOpenSys('+s.id+')">'
+      + '<div class="eval-ico">'+matriceIco(s.secteur)+'</div>'
+      + '<div class="eval-body"><div class="eval-n">'+s.nom+'</div><div class="eval-d">'+(CLASSIF_LABELS[s.classification]||s.classification)+' · '+(STATUT_LABELS[s.statut_conformite]||s.statut_conformite)+' · '+(s.secteur||"")+'</div></div>'
+      + '<div class="eval-sc">'+(s.score_risque||0)+'/10</div>'
+      + '</div>';
+  }).join('');
+}
+
+window.matriceOpenSys = function(id){
+  go('registre', null, 'REGISTRE', 'Systèmes IA');
+  setTimeout(function(){ if(typeof regOpenModal === 'function') regOpenModal(id); }, 150);
+};
+
+function matriceFetch(){
+  var g = document.getElementById('matrix-grid');
+  if(g) g.innerHTML = '<div class="reg-loading" style="grid-column:1/-1">Chargement du registre…</div>';
+  fetch('/api/registre').then(function(r){ return r.json(); }).then(function(d){
+    matriceRender(d.systemes || []);
+  }).catch(function(){
+    if(g) g.innerHTML = '<div class="reg-loading" style="grid-column:1/-1;color:var(--accent)">Erreur de chargement du registre.</div>';
+  });
+}
+
+window.matriceFetch = matriceFetch;
+
+var _matriceOrigGo = window.go;
+window.go = function(id){
+  var r = _matriceOrigGo ? _matriceOrigGo.apply(this, arguments) : undefined;
+  if(id === "matrice") setTimeout(matriceFetch, 50);
+  return r;
+};
+
+})();
+
+</script>
+<script>
+/* ══ SIMULATEUR — Ajout direct au Registre IA ══ */
+(function(){
+'use strict';
+
+var SECTEUR_LABELS = {
+  bio:"Biometrie", infra:"Infrastructures critiques", education:"Education",
+  emploi:"Emploi / RH", essentiels:"Services essentiels", law:"Justice",
+  migration:"Migration", sante:"Sante", finance:"Finance", industrie:"Industrie",
+  transport:"Transport", energie:"Energie", media:"Medias", it:"IT / Tech",
+  public:"Administration publique", autre:"Autre"
+};
+
+var LEVEL_TO_CLASSIF = { interdit:"inacceptable", haut:"haut", limite:"limite", minimal:"minimal" };
+
+window.simAddToRegistre = function(){
+  if(typeof SIM_DATA === "undefined" || !SIM_DATA.name){
+    alert("Aucune simulation a enregistrer. Completez d abord le simulateur.");
+    return;
+  }
+  var classif = simClassify();
+  var payload = {
+    nom: SIM_DATA.name,
+    finalite: SIM_DATA.desc || "",
+    secteur: SECTEUR_LABELS[SIM_DATA.secteur] || SIM_DATA.secteur || "",
+    type_systeme: SIM_DATA.type || "",
+    donnees_utilisees: "",
+    classification: LEVEL_TO_CLASSIF[classif.level] || "a_evaluer",
+    justification: classif.article || "",
+    statut_conformite: "a_evaluer",
+    score_risque: Math.round(classif.score || 0),
+    responsable: "",
+    fournisseur: ""
+  };
+
+  var btn = document.getElementById("sim-add-registre-btn");
+  if(btn){ btn.textContent = "Ajout en cours…"; btn.disabled = true; }
+
+  fetch('/api/registre', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)})
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if(d.error){ alert(d.error); if(btn){ btn.textContent = "+ Ajouter au Registre IA"; btn.disabled = false; } return; }
+      if(btn){ btn.textContent = "✓ Ajouté au Registre IA"; btn.style.background = "var(--green)"; }
+      setTimeout(function(){
+        if(confirm("Système ajouté au Registre IA. Voulez-vous l ouvrir maintenant pour completer les informations (donnees utilisees, responsable) ?")){
+          go('registre', null, 'REGISTRE', 'Systèmes IA');
+          setTimeout(function(){ if(typeof regOpenModal === 'function') regOpenModal(d.systeme.id); }, 150);
+        }
+      }, 400);
+    })
+    .catch(function(){
+      alert("Erreur lors de l ajout au registre.");
+      if(btn){ btn.textContent = "+ Ajouter au Registre IA"; btn.disabled = false; }
+    });
 };
 
 })();
