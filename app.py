@@ -2852,6 +2852,131 @@ def registre_status():
 
 
 
+# ══════════════════════════════════════════════════════════
+# VEILLE QUALIFIEE PAR IA — Scoring de pertinence
+# Croise les actualites RSS avec le Registre IA reel du client
+# (table systemes_ia) pour evaluer l'impact potentiel de chaque
+# article sur les systemes effectivement deployes.
+# ══════════════════════════════════════════════════════════
+_veille_cache = {"data": None, "ts": 0, "registre_hash": None}
+VEILLE_CACHE_TTL = 1800  # 30 min
+
+def veille_get_registre_summary():
+    """Recupere un resume textuel court du registre IA actif (Postgres ou SQLite)."""
+    try:
+        conn = registre_get_db()
+        cur = conn.cursor()
+        cur.execute('SELECT nom, secteur, classification, type_systeme FROM systemes_ia')
+        rows = cur.fetchall()
+        conn.close()
+        systemes = [registre_row_to_dict_partial(r) for r in rows]
+        return systemes
+    except Exception as _e:
+        logger.warning(f"VEILLE_QUALIFIEE — registre indisponible : {_e}")
+        return []
+
+def registre_row_to_dict_partial(row):
+    if isinstance(row, dict):
+        return {'nom': row.get('nom'), 'secteur': row.get('secteur'), 'classification': row.get('classification'), 'type_systeme': row.get('type_systeme')}
+    return {'nom': row[0], 'secteur': row[1], 'classification': row[2], 'type_systeme': row[3]}
+
+@app.route('/api/veille/qualifiee', methods=['GET'])
+@rate_limit(limit=15, window=60)
+def veille_qualifiee():
+    """Scoring de pertinence IA des actualites par rapport au registre reel du client.
+    Mise en cache 30 min pour limiter les appels API."""
+    global _veille_cache
+    now = time.time()
+
+    systemes = veille_get_registre_summary()
+    registre_hash = hashlib.md5(json.dumps(systemes, sort_keys=True).encode()).hexdigest() if systemes else "empty"
+
+    if (now - _veille_cache["ts"] < VEILLE_CACHE_TTL
+        and _veille_cache["data"]
+        and _veille_cache["registre_hash"] == registre_hash):
+        return jsonify({"items": _veille_cache["data"], "cached": True, "registre_count": len(systemes)})
+
+    # Récupérer les actualités (réutilise le cache /api/news si disponible)
+    items = _news_cache["data"][:20] if _news_cache["data"] else []
+    if not items:
+        return jsonify({"items": [], "cached": False, "registre_count": len(systemes), "message": "Aucune actualite disponible. Appelez /api/news d'abord."})
+
+    if not systemes:
+        # Pas de registre -> scoring generique sans personnalisation
+        secteurs_txt = "non specifie (aucun systeme enregistre)"
+        systemes_txt = "Aucun systeme IA enregistre dans le registre."
+    else:
+        secteurs = sorted(set(s['secteur'] for s in systemes if s.get('secteur')))
+        secteurs_txt = ", ".join(secteurs) if secteurs else "non specifie"
+        systemes_txt = "\n".join(f"- {s['nom']} ({s.get('type_systeme') or 'type non precise'}, secteur {s.get('secteur') or 'n/c'}, classification {s.get('classification') or 'a_evaluer'})" for s in systemes)
+
+    titres_numerotes = "\n".join(f"{i+1}. {it['title']} [source: {it['source']}]" for i, it in enumerate(items))
+
+    prompt = (
+        "Voici le registre des systemes IA reellement deployes par l'entreprise :\n"
+        f"{systemes_txt}\n\n"
+        f"Secteurs d'activite concernes : {secteurs_txt}\n\n"
+        "Voici une liste d'actualites reglementaires et technologiques recentes :\n"
+        f"{titres_numerotes}\n\n"
+        "Pour CHAQUE actualite numerotee, evalue son impact potentiel sur les systemes IA listes ci-dessus. "
+        "Reponds UNIQUEMENT en JSON valide, sous forme d'un tableau d'objets, un objet par actualite, dans l'ordre, avec exactement ces champs : "
+        '{"n": <numero>, "impact": "haut"|"moyen"|"faible", "raison": "<une phrase courte expliquant le lien avec un systeme du registre ou pourquoi impact faible>"}. '
+        "Ne mets aucun texte avant ou apres le JSON, aucun bloc de code markdown, juste le tableau JSON brut."
+    )
+    system = "Tu es un analyste reglementaire CONSEILPREV specialise en gouvernance IA. Tu evalues la pertinence d'actualites par rapport a un registre de systemes IA reel. Reponds uniquement en JSON strict, sans aucun texte additionnel."
+
+    ok, reply, model_used = ai_complete(
+        [{"role": "user", "content": prompt}],
+        system=system, max_tokens=1500, temperature=0.2, prefer='mistral'
+    )
+
+    scored_items = []
+    if ok and reply:
+        try:
+            cleaned = reply.strip()
+            if cleaned.startswith('```'):
+                cleaned = _re.sub(r'^```[a-zA-Z]*\n?', '', cleaned)
+                cleaned = _re.sub(r'```$', '', cleaned).strip()
+            scores = json.loads(cleaned)
+            score_map = {int(s['n']): s for s in scores if 'n' in s}
+        except Exception as _e:
+            logger.warning(f"VEILLE_QUALIFIEE — parsing JSON echoue : {_e}")
+            score_map = {}
+    else:
+        score_map = {}
+
+    impact_order = {"haut": 0, "moyen": 1, "faible": 2}
+    for i, it in enumerate(items):
+        s = score_map.get(i + 1, {})
+        scored_items.append({
+            **it,
+            "impact": s.get("impact", "moyen"),
+            "raison": s.get("raison", "Analyse non disponible — pertinence generale non personnalisee."),
+        })
+    scored_items.sort(key=lambda x: impact_order.get(x["impact"], 1))
+
+    _veille_cache = {"data": scored_items, "ts": now, "registre_hash": registre_hash}
+    return jsonify({
+        "items": scored_items,
+        "cached": False,
+        "registre_count": len(systemes),
+        "model": model_used,
+        "personnalise": len(systemes) > 0
+    })
+
+@app.route('/api/veille/notifier', methods=['POST'])
+@rate_limit(limit=10, window=60)
+def veille_notifier():
+    """Genere un lien mailto pre-rempli avec les alertes haut-impact (cote serveur, formatage uniquement)."""
+    data = request.get_json(force=True) or {}
+    items = data.get('items', [])[:10]
+    haut_impact = [it for it in items if it.get('impact') == 'haut']
+    if not haut_impact:
+        return jsonify({"message": "Aucune alerte a haut impact a notifier."})
+    lines = [f"- {it.get('title','')} ({it.get('source','')}) : {it.get('raison','')}" for it in haut_impact]
+    return jsonify({"count": len(haut_impact), "summary": "\n".join(lines)})
+
+
 for route, filename in PAGES.items():
     def make_view(fn):
         @rate_limit(limit=60, window=60)
