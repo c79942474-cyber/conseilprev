@@ -316,6 +316,13 @@ def security_middleware():
     if any(path.endswith(e) for e in static_exts):
         return  # Laisser passer
 
+    # ── Whitelist health check Render (HEAD / depuis localhost) ──
+    # Render verifie la disponibilite du service via une requete HEAD sur /
+    # avec un client Go (Go-http-client). Sans cette exception, ces checks
+    # legitimes sont bloques comme des bots, ce qui pollue les logs.
+    if request.method == 'HEAD' and ip in ('127.0.0.1', '::1'):
+        return  # Laisser passer le health check Render
+
     # ── Vérifier si IP bloquée ──
     if limiter.is_blocked(ip):
         logger.warning(f"BLOCKED_IP {ip} → {path}")
