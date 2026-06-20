@@ -861,9 +861,18 @@ textarea.form-el{min-height:86px;resize:vertical}
 .mat-deliv-content ul{margin:8px 0;padding-left:20px}
 .mat-deliv-content li{margin:4px 0}
 .mat-deliv-content strong{font-weight:600;color:var(--ink)}
-.mat-deliv-content table{width:100%;border-collapse:collapse;font-size:11px;margin:10px 0}
-.mat-deliv-content th,.mat-deliv-content td{border:1px solid var(--rule);padding:6px 8px;text-align:left}
-.mat-deliv-content th{background:var(--bg)}
+.mat-deliv-content h4{font-size:13px;color:var(--ink);margin:14px 0 5px;font-weight:600}
+.mat-deliv-content p{margin:8px 0}
+.mat-deliv-content ol{margin:8px 0;padding-left:22px}
+.mat-deliv-content ol li{margin:5px 0}
+.mat-deliv-content code{font-family:var(--mono);font-size:11px;background:rgba(0,0,0,.05);padding:1px 5px;border-radius:2px}
+.mat-deliv-content table{width:100%;border-collapse:collapse;font-size:11px;margin:14px 0;border:1px solid var(--rule);border-radius:4px;overflow:hidden}
+.mat-deliv-content thead{background:var(--ink)}
+.mat-deliv-content th{color:#fff;padding:9px 11px;text-align:left;font-size:10px;font-family:var(--mono);letter-spacing:.03em;font-weight:600;text-transform:uppercase}
+.mat-deliv-content td{padding:9px 11px;text-align:left;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.5}
+.mat-deliv-content tbody tr:nth-child(even){background:var(--bg)}
+.mat-deliv-content tbody tr:last-child td{border-bottom:none}
+.mat-deliv-content td strong{color:var(--accent)}
 .mat-modal-foot{display:flex;gap:10px;padding:14px 22px;border-top:1px solid var(--rule);flex-shrink:0}
 
 </style>
@@ -6757,7 +6766,7 @@ function matBuildPrompt(deliv, sectorKey){
 
 /* Appel API (Mistral par défaut, Claude en option) */
 function matCallAI(prompt, api, cb){
-  var sys = "Tu es un expert en gouvernance IA et conformite reglementaire de CONSEILPREV (Paris). Tu rediges des livrables professionnels structures, precis et actionnables, en francais. Utilise des titres clairs (##), des listes et des tableaux markdown quand pertinent. Sois exhaustif mais concis.";
+  var sys = "Tu es un expert en gouvernance IA et conformite reglementaire de CONSEILPREV (Paris). Tu rediges des livrables professionnels structures, precis et actionnables, en francais. REGLES DE MISE EN FORME STRICTES : utilise des titres markdown (## pour les sections, ### pour les sous-sections), des listes a puces avec des tirets, et des tableaux markdown propres. Dans les cellules de tableau, n utilise JAMAIS de balises HTML comme <br> : si tu dois lister plusieurs elements dans une cellule, separe-les par des virgules ou des points-virgules. Garde les cellules de tableau concises (une phrase courte maximum). N ajoute pas de lignes de tirets decoratives en dehors des tableaux. Sois exhaustif mais clair.";
 
   if(api === "claude"){
     fetch('/api/chat/claude',{
@@ -6780,18 +6789,91 @@ function matCallAI(prompt, api, cb){
 
 /* Markdown simple → HTML */
 function matMdToHtml(md){
-  var h = md
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
-    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
-    .replace(/^# (.+)$/gm,'<h2>$1</h2>')
-    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
-    .replace(/^\- (.+)$/gm,'<li>$1</li>')
-    .replace(/^\d+\. (.+)$/gm,'<li>$1</li>');
-  h = h.replace(/(<li>.*?<\/li>\n?)+/gs, function(m){ return '<ul>'+m+'</ul>'; });
-  /* Tables markdown */
-  h = h.replace(/\n\n/g,'</p><p>');
-  return '<p>'+h+'</p>';
+  if(!md) return '';
+  /* Normaliser : convertir les <br> litteraux du modele en vrais sauts de ligne */
+  md = md.replace(/<br\s*\/?>/gi, '\n');
+  /* Supprimer les lignes de separation de tableau pleines de tirets/pipes isolees hors tableau */
+  var lines = md.split('\n');
+  var out = [];
+  var i = 0;
+
+  function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function inline(s){
+    return esc(s)
+      .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+      .replace(/`([^`]+)`/g,'<code>$1</code>');
+  }
+
+  while(i < lines.length){
+    var line = lines[i];
+    var trimmed = line.trim();
+
+    /* Tableau markdown : ligne avec | suivie d'une ligne de separation |---|---| */
+    if(trimmed.indexOf('|') !== -1 && i+1 < lines.length && /^\s*\|?[\s:|-]+\|[\s:|-]*$/.test(lines[i+1]) && lines[i+1].indexOf('-') !== -1){
+      var headerCells = trimmed.replace(/^\||\|$/g,'').split('|').map(function(c){return c.trim();});
+      i += 2; /* sauter header + separateur */
+      var rows = [];
+      while(i < lines.length && lines[i].indexOf('|') !== -1 && lines[i].trim() !== ''){
+        var cells = lines[i].trim().replace(/^\||\|$/g,'').split('|').map(function(c){return c.trim();});
+        rows.push(cells);
+        i++;
+      }
+      var tbl = '<table><thead><tr>' + headerCells.map(function(c){return '<th>'+inline(c)+'</th>';}).join('') + '</tr></thead><tbody>';
+      rows.forEach(function(r){
+        tbl += '<tr>' + r.map(function(c){return '<td>'+inline(c)+'</td>';}).join('') + '</tr>';
+      });
+      tbl += '</tbody></table>';
+      out.push(tbl);
+      continue;
+    }
+
+    /* Titres */
+    if(/^####\s+/.test(trimmed)){ out.push('<h4>'+inline(trimmed.replace(/^####\s+/,''))+'</h4>'); i++; continue; }
+    if(/^###\s+/.test(trimmed)){ out.push('<h3>'+inline(trimmed.replace(/^###\s+/,''))+'</h3>'); i++; continue; }
+    if(/^##\s+/.test(trimmed)){ out.push('<h2>'+inline(trimmed.replace(/^##\s+/,''))+'</h2>'); i++; continue; }
+    if(/^#\s+/.test(trimmed)){ out.push('<h2>'+inline(trimmed.replace(/^#\s+/,''))+'</h2>'); i++; continue; }
+
+    /* Listes à puces (-, *, •) */
+    if(/^[-*•]\s+/.test(trimmed)){
+      var items = [];
+      while(i < lines.length && /^[-*•]\s+/.test(lines[i].trim())){
+        items.push('<li>'+inline(lines[i].trim().replace(/^[-*•]\s+/,''))+'</li>');
+        i++;
+      }
+      out.push('<ul>'+items.join('')+'</ul>');
+      continue;
+    }
+
+    /* Listes numérotées */
+    if(/^\d+\.\s+/.test(trimmed)){
+      var oitems = [];
+      while(i < lines.length && /^\d+\.\s+/.test(lines[i].trim())){
+        oitems.push('<li>'+inline(lines[i].trim().replace(/^\d+\.\s+/,''))+'</li>');
+        i++;
+      }
+      out.push('<ol>'+oitems.join('')+'</ol>');
+      continue;
+    }
+
+    /* Ligne de separation horizontale isolee (--- ou ***) : ignorer */
+    if(/^[-*_]{3,}$/.test(trimmed)){ i++; continue; }
+
+    /* Ligne vide */
+    if(trimmed === ''){ i++; continue; }
+
+    /* Paragraphe : accumuler les lignes consecutives non-speciales */
+    var para = [trimmed];
+    i++;
+    while(i < lines.length){
+      var nxt = lines[i].trim();
+      if(nxt === '' || /^[#\-*•]\s/.test(nxt) || /^\d+\.\s/.test(nxt) || nxt.indexOf('|') !== -1 || /^[-*_]{3,}$/.test(nxt)) break;
+      para.push(nxt);
+      i++;
+    }
+    out.push('<p>'+inline(para.join(' '))+'</p>');
+  }
+
+  return out.join('\n');
 }
 
 /* Ouvre le livrable : génère via IA puis propose PDF + Word */
@@ -6866,8 +6948,10 @@ function matDelivDocHTML(){
     + 'h2{font-size:16px;color:#B83222;margin-top:24px}h3{font-size:13px;margin-top:16px}'
     + '.sub{color:#666;font-size:12px;font-family:Arial,sans-serif;margin-bottom:20px}'
     + 'ul{margin:8px 0}li{margin:3px 0;font-size:12px}p{font-size:12px}'
-    + 'table{width:100%;border-collapse:collapse;font-size:11px;margin:10px 0}'
-    + 'th,td{border:1px solid #ddd;padding:6px;text-align:left}th{background:#f5f2ed}</style></head><body>'
+    + 'table{width:100%;border-collapse:collapse;font-size:11px;margin:14px 0}'
+    + 'th{background:#1C1C1C;color:#fff;padding:8px 10px;text-align:left;font-size:10px;font-family:Arial,sans-serif}'
+    + 'td{border:1px solid #ddd;padding:8px 10px;text-align:left;vertical-align:top;line-height:1.5}'
+    + 'tbody tr:nth-child(even){background:#faf9f7}td strong{color:#B83222}</style></head><body>'
     + '<h1>'+cur.deliv.title+'</h1>'
     + '<div class="sub">Secteur '+s.label+' · Généré le '+today+' · CONSEILPREV · '+(cur.apiName||"IA")+'</div>'
     + body
