@@ -2140,14 +2140,14 @@ textarea.form-el{min-height:86px;resize:vertical}
 <!-- MON ESPACE -->
 <div class="page" id="p-espace">
   <span class="eyebrow">Mon Espace</span><h1 class="page-h">Tableau de bord <em>personnel</em></h1>
+  <p class="page-lead">Vue d ensemble de votre conformité IA : activité réelle, actions prioritaires et indicateurs clés agrégés depuis le Registre IA et l Audit IA Act.</p>
+  <div style="display:flex;gap:16px;margin-bottom:20px" id="espace-kpis"></div>
   <div class="col2">
     <div>
       <div class="tbl-wrap" style="margin-bottom:16px"><div class="tbl-head"><span class="tbl-title">Activité récente</span></div><div style="padding:0 20px" id="act-list"></div></div>
-      <div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title">Mes favoris</span></div><div style="padding:14px 20px;font-size:12px;color:var(--muted);line-height:2">EU AI Act · Risques haut risque · NIS2 Article 21 · RGPD Article 22</div></div>
     </div>
     <div>
-      <div class="tbl-wrap" style="margin-bottom:16px"><div class="tbl-head"><span class="tbl-title">Score de veille</span></div><div style="padding:20px"><div style="font-family:var(--serif);font-size:52px;color:var(--ink);line-height:1;margin-bottom:6px">94<span style="font-size:24px;color:var(--muted)">/100</span></div><div style="font-size:11px;color:var(--muted)">Régularité de consultation et évaluations.</div></div></div>
-      <div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title">Prochaines échéances</span></div><div id="deadlines" style="padding:0 20px 8px"></div></div>
+      <div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title">Actions prioritaires</span></div><div style="padding:0 20px" id="espace-actions"></div></div>
     </div>
   </div>
 </div>
@@ -2155,8 +2155,9 @@ textarea.form-el{min-height:86px;resize:vertical}
 <!-- REPORTING -->
 <div class="page" id="p-report">
   <span class="eyebrow">Reporting</span><h1 class="page-h">Dashboard <em>conformité</em></h1>
-  <div class="kpi-row"><div class="kpi"><div class="kpi-lbl">Systèmes audités</div><div class="kpi-val">12</div><div class="kpi-tr up">↑ +3 ce mois</div></div><div class="kpi"><div class="kpi-lbl">Score conformité moyen</div><div class="kpi-val">68%</div><div class="kpi-tr up">↑ +8 pts</div></div><div class="kpi"><div class="kpi-lbl">Actions en attente</div><div class="kpi-val">7</div><div class="kpi-tr dn">↓ −2 ce mois</div></div></div>
-  <div class="comp-wrap"><div class="tbl-head" style="border-bottom:1px solid var(--rule);display:flex;padding:14px 20px"><span class="tbl-title">Rapport par système</span><span class="tbl-link" style="margin-left:auto">↓ Exporter PDF</span></div><div class="comp-head-row" style="grid-template-columns:2fr 120px 100px 120px 70px" id="rep-head"></div><div id="rep-body"></div></div>
+  <p class="page-lead">Tableau de bord exécutif — indicateurs réels agrégés depuis le Registre IA, l Audit IA Act et l historique des évaluations.</p>
+  <div class="kpi-row" id="report-kpi-row"></div>
+  <div id="report-detail"></div>
 </div>
 
 <!-- CHAT -->
@@ -2236,11 +2237,9 @@ textarea.form-el{min-height:86px;resize:vertical}
 <!-- CONTROLES -->
 <!-- ROADMAP -->
 <div class="page" id="p-roadmap">
-  <span class="eyebrow">Plan d'action</span><h1 class="page-h">Roadmap <em>conformité</em></h1><p class="page-lead">Plan d'action priorisé sur 18 mois, aligné sur les échéances EU AI Act, NIS2 et DORA.</p>
-  <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px"><div id="roadmap-content"></div><div><div class="tbl-wrap" style="margin-bottom:14px"><div class="tbl-head"><span class="tbl-title">Prochaine échéance critique</span></div><div style="padding:16px 20px"><div style="font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.1em;margin-bottom:6px">02 AOÛT 2026</div><div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px">AI Act — Systèmes haut risque</div><div style="font-size:11px;color:var(--muted)">Articles 6, 9, 10, 11, 12, 13, 14, 15 obligatoires</div><div style="margin-top:10px;height:4px;background:var(--bg2);border-radius:2px;overflow:hidden"><div style="height:100%;width:72%;background:var(--accent);border-radius:2px"></div></div><div style="font-size:10px;font-family:var(--mono);color:var(--muted2);margin-top:4px">72% — 47 jours restants</div></div></div><div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title">Résumé avancement</span></div><div style="padding:14px 20px" id="road-summary"></div></div></div></div>
-</div>
-
-<!-- SANCTIONS -->
+  <span class="eyebrow">Plan d'action</span><h1 class="page-h">Roadmap <em>conformité</em></h1><p class="page-lead">4 phases du programme CONSEILPREV (même méthodologie que l'Audit de maturité IA), avec progression calculée à partir de votre Registre IA et de l'Audit IA Act réels.</p>
+  <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px"><div id="roadmap-content"></div><div><div class="tbl-wrap" style="margin-bottom:14px"><div class="tbl-head"><span class="tbl-title">Prochaine échéance critique</span></div><div style="padding:16px 20px"><div style="font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.1em;margin-bottom:6px">02 AOÛT 2026</div><div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px">AI Act — Systèmes haut risque (Art. 113)</div><div style="font-size:11px;color:var(--muted)">Articles 6, 9, 10, 11, 12, 13, 14, 15 obligatoires</div><div style="margin-top:10px;height:4px;background:var(--bg2);border-radius:2px;overflow:hidden"><div style="height:100%;width:0%;background:var(--accent);border-radius:2px" id="road-next-deadline-bar"></div></div><div style="font-size:10px;font-family:var(--mono);color:var(--muted2);margin-top:4px" id="road-next-deadline-lbl">Calcul en cours…</div></div></div><div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title">Résumé avancement</span></div><div style="padding:14px 20px" id="road-summary"></div></div></div></div>
+</div><!-- SANCTIONS -->
 <div class="page" id="p-sanctions">
   <span class="eyebrow">Outils</span><h1 class="page-h">Calculateur de <em>sanctions AI Act</em></h1><p class="page-lead">Estimez l'exposition financière en cas de non-conformité.</p>
   <div class="sanc-calc"><div class="form-grid2"><div class="form-row"><label class="form-lbl">Type de violation</label><select class="form-el" id="s-type"><option value="interdit">Pratique interdite (Art. 5)</option><option value="haut" selected>Système haut risque non conforme</option><option value="transparence">Obligation de transparence</option><option value="info">Informations incorrectes aux autorités</option></select></div><div class="form-row"><label class="form-lbl">Chiffre d'affaires annuel mondial</label><input class="form-el" type="number" id="s-ca" placeholder="Ex : 50000000" value="50000000"></div></div><div class="form-grid2"><div class="form-row"><label class="form-lbl">Taille de l'entreprise</label><select class="form-el" id="s-size"><option value="tpe">TPE / Startup</option><option value="pme">PME</option><option value="eti" selected>ETI</option><option value="ge">Grande entreprise</option></select></div><div class="form-row"><label class="form-lbl">Récidive ?</label><select class="form-el" id="s-recid"><option value="non">Non — première infraction</option><option value="oui">Oui — infraction répétée</option></select></div></div><button class="submit" onclick="calcSanctions()" title="Calculer l exposition financiere estimee en cas de non-conformite.">Calculer l'exposition →</button></div>
@@ -4892,17 +4891,9 @@ window.artFilter = function(val, el){
   [['t-req','EU AI Act — Fondamentaux','Classification des risques, obligations par catégorie, calendrier de conformité.','3h',75],['t-req','NIS2 pour les équipes IA','Obligations de sécurité pour les opérateurs essentiels utilisant des systèmes IA.','2h',40],['t-opt','RGPD & Données d\'entraînement','Base légale, minimisation, droits des personnes dans les systèmes IA générateurs.','2h30',100],['t-opt','Gouvernance IA — ISO 42001','Mise en place d\'un système de management IA conforme au standard international.','4h',0]].forEach(function(t){ var done=t[4]===100; b.innerHTML+='<div class="t-card"><div class="t-badge '+t[0]+'">'+(t[0]==='t-req'?'REQUIS':'OPTIONNEL')+'</div><div class="t-title">'+t[1]+'</div><div class="t-desc">'+t[2]+'</div><div class="t-foot"><div class="t-dur">'+t[3]+'</div><div class="t-prog-track"><div class="t-prog-fill" style="width:'+t[4]+'%"></div></div><div class="t-pct" style="color:'+(done?'var(--green)':'var(--muted2)')+'">'+t[4]+'%'+(done?' ✓':'')+'</div></div></div>'; });
 })();
 
-(function(){
-  var a=document.getElementById('act-list'); if(a){ [['Analyse EU AI Act — Système de prédiction énergétique','Hier'],['Consultation Veille NIS2 Article 21','Il y a 2j'],['Comparateur EU vs UK vs US lancé','Il y a 3j'],['Rapport conformité exporté — Q2 2026','Il y a 5j']].forEach(function(x){ a.innerHTML+='<div class="act-item"><div class="act-dot"></div><div class="act-t">'+x[0]+'</div><div class="act-d">'+x[1]+'</div></div>'; }); }
-  var d=document.getElementById('deadlines'); if(d){ [['AI Act — Systèmes haut risque','02 août 2026',true],['NIS2 — Déclaration ANSSI','30 sept. 2026',false],['DORA — Tests résilience ICT','17 janv. 2027',false]].forEach(function(x){ d.innerHTML+='<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--rule);font-size:11px"><div style="color:var(--ink);font-weight:'+(x[2]?'500':'400')+'">'+x[0]+'</div><div style="font-family:var(--mono);font-size:10px;color:'+(x[2]?'var(--accent)':'var(--muted2)')+'">'+x[1]+'</div></div>'; }); }
-})();
+/* Mon Espace — remplace par espace_dashboard.js (donnees reelles) */
 
-(function(){
-  var H=['Système IA','Juridiction','Score','Statut','Priorité']; var g='2fr 120px 100px 120px 60px';
-  var rh=document.getElementById('rep-head'); if(rh){ rh.innerHTML=H.map(function(h){ return '<div class="comp-cell">'+h+'</div>'; }).join(''); rh.style.cssText='display:grid;grid-template-columns:'+g+';background:var(--bg);border-bottom:2px solid var(--rule)'; }
-  var rb=document.getElementById('rep-body'); if(!rb) return;
-  [['Prédiction énergétique','EU AI Act','8.2 / 10','<span class="chip chip-r">Critique</span>','<span class="chip chip-r">P1</span>'],['Scoring crédit auto','EU + RGPD','7.1 / 10','<span class="chip chip-o">En cours</span>','<span class="chip chip-o">P2</span>'],['Détection anomalies','NIS2','4.5 / 10','<span class="chip chip-g">Conforme</span>','<span class="chip chip-n">P3</span>']].forEach(function(r){ rb.innerHTML+='<div class="comp-row" style="display:grid;grid-template-columns:'+g+'">'+r.map(function(c){ return '<div class="comp-cell">'+c+'</div>'; }).join('')+'</div>'; });
-})();
+/* Reporting — remplace par espace_reporting.js (donnees reelles) */
 
 (function(){
   var TAGS=['Art. 6 AI Act','Obligations NIS2','Classification IA','Sanctions AI Act'];
@@ -9322,6 +9313,265 @@ var _friaOrigGo = window.go;
 window.go = function(id){
   var r = _friaOrigGo ? _friaOrigGo.apply(this, arguments) : undefined;
   if(id === "fria"){ setTimeout(function(){ friaInitSectorBar(); friaFetch(); }, 50); }
+  return r;
+};
+
+})();
+
+</script>
+
+<script>
+/* ══ ESPACE — Noyau commun : logger d activite + agregation de donnees reelles ══ */
+(function(){
+'use strict';
+
+/* ── Logger d activite leger (persistant) ── */
+function cpLogActivity(text, type){
+  try{
+    var log = JSON.parse(localStorage.getItem("cpActivityLog") || "[]");
+    log.unshift({text: text, type: type || "info", date: new Date().toISOString()});
+    if(log.length > 30) log = log.slice(0,30);
+    localStorage.setItem("cpActivityLog", JSON.stringify(log));
+  } catch(e){}
+}
+window.cpLogActivity = cpLogActivity;
+
+function cpGetActivityLog(){
+  try{ return JSON.parse(localStorage.getItem("cpActivityLog") || "[]"); } catch(e){ return []; }
+}
+window.cpGetActivityLog = cpGetActivityLog;
+
+/* ── Hooks discrets sur les actions cles deja existantes (sans alterer leur comportement) ── */
+function cpHook(fnName, makeMsg){
+  if(typeof window[fnName] !== "function") return;
+  var orig = window[fnName];
+  window[fnName] = function(){
+    var res = orig.apply(this, arguments);
+    try{ cpLogActivity(makeMsg(arguments), "action"); } catch(e){}
+    return res;
+  };
+}
+/* Ces hooks s'attachent une fois que les fonctions cibles existent (apres chargement complet) */
+function cpInstallHooks(){
+  cpHook("cpEvalSaveAudit", function(){ return "Audit IA Act enregistré dans Mes évaluations"; });
+  cpHook("regSave", function(){ return "Système IA ajouté/modifié dans le Registre"; });
+  cpHook("matGenerateDeliverable", function(args){ return "Livrable IA généré (Audit de maturité)"; });
+  cpHook("raciGenerateDoc", function(){ return "Cartographie des parties prenantes générée par IA"; });
+  cpHook("simAddToRegistre", function(){ return "Système simulé ajouté au Registre IA"; });
+}
+setTimeout(cpInstallHooks, 500);
+
+/* ── Agregation des donnees reelles pour Mon Espace / Reporting ── */
+window.cpGetDashboardData = function(callback){
+  var data = {
+    registre: [],
+    auditPct: 0, auditDone: 0, auditPartial: 0, auditTodo: 0, auditTotal: 0,
+    evaluations: [],
+    registreNonConforme: 0,
+    registreHautRisque: 0
+  };
+  fetch('/api/registre').then(function(r){ return r.json(); }).then(function(d){
+    data.registre = d.systemes || [];
+    data.registreNonConforme = data.registre.filter(function(s){ return s.statut_conformite==='non_conforme' || s.statut_conformite==='a_evaluer'; }).length;
+    data.registreHautRisque = data.registre.filter(function(s){ return s.classification==='haut' || s.classification==='inacceptable'; }).length;
+
+    if(window.AUDIT_SECTIONS){
+      window.AUDIT_SECTIONS.forEach(function(sec){
+        sec.items.forEach(function(item){
+          data.auditTotal++;
+          var st = (window.AUDIT_STATE && window.AUDIT_STATE[item.id]) || "none";
+          if(st === "done") data.auditDone++;
+          else if(st === "partial") data.auditPartial++;
+        });
+      });
+      data.auditTodo = data.auditTotal - data.auditDone - data.auditPartial;
+      data.auditPct = data.auditTotal>0 ? Math.round((data.auditDone + data.auditPartial*0.5)/data.auditTotal*100) : 0;
+    }
+
+    try{ data.evaluations = JSON.parse(localStorage.getItem("cpEvaluations") || "[]"); } catch(e){}
+
+    callback(data);
+  }).catch(function(){ callback(data); });
+};
+
+})();
+
+</script>
+<script>
+/* ══ MON ESPACE — Tableau de bord personnel reel ══ */
+(function(){
+'use strict';
+
+function espaceRenderActivity(){
+  var holder = document.getElementById("act-list");
+  if(!holder) return;
+  var log = cpGetActivityLog();
+  if(log.length === 0){
+    holder.innerHTML = '<div class="reg-empty">Aucune activité récente. Vos actions (audits, évaluations, livrables générés) apparaîtront ici.</div>';
+    return;
+  }
+  function timeAgo(iso){
+    var diff = Date.now() - new Date(iso).getTime();
+    var h = Math.floor(diff/3600000), d = Math.floor(h/24);
+    if(d > 0) return "Il y a "+d+"j";
+    if(h > 0) return "Il y a "+h+"h";
+    return "À l'instant";
+  }
+  holder.innerHTML = log.slice(0,8).map(function(a){
+    return '<div class="act-item"><div class="act-dot"></div><div class="act-t">'+a.text+'</div><div class="act-d">'+timeAgo(a.date)+'</div></div>';
+  }).join('');
+}
+
+function espaceRenderActions(){
+  var holder = document.getElementById("espace-actions");
+  if(!holder) return;
+  cpGetDashboardData(function(d){
+    var actions = [];
+    if(d.registreNonConforme > 0) actions.push({txt: d.registreNonConforme+" système(s) à évaluer ou non conformes", go:"registre", lbl:"Voir le Registre →"});
+    if(d.auditTodo > 0) actions.push({txt: d.auditTodo+" point(s) de l audit IA Act à compléter", go:"audit", lbl:"Ouvrir l audit →"});
+    if(d.registreHautRisque > 0) actions.push({txt: d.registreHautRisque+" système(s) à haut risque — vérifier FRIA applicable", go:"fria", lbl:"Vérifier FRIA →"});
+    if(actions.length === 0) actions.push({txt:"Aucune action urgente identifiée. Tout est à jour.", go:null});
+
+    holder.innerHTML = actions.map(function(a){
+      return '<div class="act-item" style="'+(a.go?'cursor:pointer':'')+'" '+(a.go?'onclick="'+(a.go==='audit'?'openAuditTab()':"go('"+a.go+"',null,'',\\'\\')")+'"':'')+'>'
+        + '<div class="act-dot"></div><div class="act-t">'+a.txt+(a.lbl?' <span style="color:var(--accent);font-size:10px;font-family:var(--mono)">'+a.lbl+'</span>':'')+'</div></div>';
+    }).join('');
+  });
+}
+
+function espaceRenderKpis(){
+  var holder = document.getElementById("espace-kpis");
+  if(!holder) return;
+  cpGetDashboardData(function(d){
+    holder.innerHTML =
+      '<div class="kpi" style="flex:1"><div class="kpi-lbl">Systèmes au Registre</div><div class="kpi-val">'+d.registre.length+'</div></div>'
+      + '<div class="kpi" style="flex:1"><div class="kpi-lbl">Conformité Audit IA Act</div><div class="kpi-val" style="color:'+(d.auditPct>=70?'var(--green)':d.auditPct>=40?'var(--orange)':'var(--accent)')+'">'+d.auditPct+'%</div></div>'
+      + '<div class="kpi" style="flex:1"><div class="kpi-lbl">Évaluations enregistrées</div><div class="kpi-val">'+d.evaluations.length+'</div></div>';
+  });
+}
+
+window.espaceRenderPage = function(){
+  espaceRenderActivity();
+  espaceRenderActions();
+  espaceRenderKpis();
+};
+
+var _espaceOrigGo = window.go;
+window.go = function(id){
+  var r = _espaceOrigGo ? _espaceOrigGo.apply(this, arguments) : undefined;
+  if(id === "espace") setTimeout(window.espaceRenderPage, 80);
+  return r;
+};
+
+})();
+
+</script>
+<script>
+/* ══ ROADMAP — connectee aux phases reelles de l Audit de maturite + progres Audit IA Act ══ */
+(function(){
+'use strict';
+
+window.roadmapRenderPage = function(){
+  var holder = document.getElementById("roadmap-content");
+  if(!holder) return;
+
+  cpGetDashboardData(function(d){
+    var phases = window.MAT_PHASES || [];
+    var html = phases.map(function(p, i){
+      /* Progression estimee : phase 1 (diagnostic) suit le % de remplissage Registre+Audit,
+         les phases suivantes restent planifiees tant que la phase precedente n est pas avancee */
+      var prog = 0;
+      if(i === 0) prog = Math.min(100, Math.round((d.registre.length>0?50:0) + d.auditPct*0.5));
+      else if(i === 1) prog = Math.round(d.auditPct);
+      else if(i === 2) prog = Math.round(d.auditPct * 0.6);
+      else prog = d.auditPct >= 80 ? 20 : 0;
+
+      return '<div class="ctrl-section"><div class="ctrl-section-head"><span class="ctrl-section-title">Phase '+p.n+' — '+p.title+' <span style="font-family:var(--mono);font-size:9px;color:var(--blue)">'+p.duree+'</span></span>'
+        + '<span class="audit-rel-tag '+(prog>=70?'audit-rel-ok':'')+'" style="background:'+(prog>=70?'rgba(45,122,71,.1)':'var(--bg)')+';color:'+(prog>=70?'var(--green)':'var(--muted2)')+'">'+prog+'%</span></div>'
+        + '<div style="padding:14px 16px"><div style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:8px">'+p.desc+'</div>'
+        + '<div style="height:4px;background:var(--bg2);border-radius:2px;overflow:hidden"><div style="height:100%;width:'+prog+'%;background:'+(prog>=70?'var(--green)':prog>=30?'var(--orange)':'var(--accent)')+';border-radius:2px"></div></div>'
+        + '<div style="font-size:10px;font-family:var(--mono);color:var(--green);margin-top:8px">▸ '+p.deliv+'</div></div></div>';
+    }).join('');
+
+    holder.innerHTML = html || '<div class="reg-empty">Données de phases indisponibles.</div>';
+
+    /* Résumé avancement */
+    var sum = document.getElementById("road-summary");
+    if(sum){
+      sum.innerHTML =
+        '<div class="act-item"><div class="act-dot"></div><div class="act-t">'+d.registre.length+' système(s) inventoriés</div></div>'
+        + '<div class="act-item"><div class="act-dot"></div><div class="act-t">'+d.auditDone+'/'+d.auditTotal+' contrôles conformes</div></div>'
+        + '<div class="act-item"><div class="act-dot"></div><div class="act-t">'+d.registreHautRisque+' système(s) à haut risque identifiés</div></div>';
+    }
+
+    /* Prochaine echeance critique : utilise la progression Audit reelle */
+    var eta = document.getElementById("road-next-deadline-bar");
+    if(eta){
+      eta.style.width = d.auditPct + "%";
+      var lbl = document.getElementById("road-next-deadline-lbl");
+      if(lbl) lbl.textContent = d.auditPct + "% — échéance 2 août 2026 (Art. 113, systèmes haut risque)";
+    }
+  });
+};
+
+var _roadOrigGo = window.go;
+window.go = function(id){
+  var r = _roadOrigGo ? _roadOrigGo.apply(this, arguments) : undefined;
+  if(id === "roadmap") setTimeout(window.roadmapRenderPage, 80);
+  return r;
+};
+
+})();
+
+</script>
+<script>
+/* ══ REPORTING — Dashboard executif agregeant toutes les pages reelles ══ */
+(function(){
+'use strict';
+
+window.reportRenderPage = function(){
+  var holder = document.getElementById("report-kpi-row");
+  if(!holder) return;
+
+  cpGetDashboardData(function(d){
+    holder.innerHTML =
+      '<div class="kpi"><div class="kpi-lbl">Systèmes au Registre IA</div><div class="kpi-val">'+d.registre.length+'</div></div>'
+      + '<div class="kpi"><div class="kpi-lbl">Conformité Audit IA Act</div><div class="kpi-val" style="color:'+(d.auditPct>=70?'var(--green)':d.auditPct>=40?'var(--orange)':'var(--accent)')+'">'+d.auditPct+'%</div></div>'
+      + '<div class="kpi"><div class="kpi-lbl">Systèmes à haut risque</div><div class="kpi-val" style="color:'+(d.registreHautRisque>0?'var(--accent)':'var(--green)')+'">'+d.registreHautRisque+'</div></div>'
+      + '<div class="kpi"><div class="kpi-lbl">Actions en attente</div><div class="kpi-val" style="color:var(--orange)">'+(d.auditTodo+d.registreNonConforme)+'</div></div>';
+
+    var detail = document.getElementById("report-detail");
+    if(detail){
+      var byClassif = {};
+      d.registre.forEach(function(s){ byClassif[s.classification] = (byClassif[s.classification]||0)+1; });
+      var CLASSIF_LABELS = {inacceptable:"Inacceptable", haut:"Haut risque", limite:"Risque limité", minimal:"Risque minimal", a_evaluer:"À évaluer"};
+      detail.innerHTML = '<div class="tbl-wrap" style="margin-bottom:16px"><div class="tbl-head"><span class="tbl-title">Répartition du Registre IA par classification</span></div><div style="padding:16px 20px">'
+        + Object.keys(CLASSIF_LABELS).map(function(k){
+            var n = byClassif[k] || 0;
+            var pct = d.registre.length>0 ? Math.round(n/d.registre.length*100) : 0;
+            return '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div style="width:120px;font-size:11px;color:var(--ink2)">'+CLASSIF_LABELS[k]+'</div><div class="reg-bar" style="flex:1"><div class="reg-fill" style="width:'+pct+'%"></div></div><div style="width:40px;text-align:right;font-family:var(--mono);font-size:11px">'+n+'</div></div>';
+          }).join('')
+        + '</div></div>'
+        + '<div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title">Historique des évaluations ('+d.evaluations.length+')</span></div><div style="padding:0 20px" id="report-evals-list"></div></div>';
+
+      var evalsList = document.getElementById("report-evals-list");
+      if(evalsList){
+        if(d.evaluations.length === 0){
+          evalsList.innerHTML = '<div class="reg-empty">Aucune évaluation enregistrée.</div>';
+        } else {
+          evalsList.innerHTML = d.evaluations.slice(0,6).map(function(e){
+            return '<div class="eval-row"><div class="eval-ico">'+(e.icon||'📋')+'</div><div class="eval-body"><div class="eval-n">'+e.title+'</div><div class="eval-d">'+e.subtitle+'</div></div><div class="eval-sc">'+e.score+(e.scoreMax===100?'%':'/10')+'</div></div>';
+          }).join('');
+        }
+      }
+    }
+  });
+};
+
+var _reportOrigGo = window.go;
+window.go = function(id){
+  var r = _reportOrigGo ? _reportOrigGo.apply(this, arguments) : undefined;
+  if(id === "report") setTimeout(window.reportRenderPage, 80);
   return r;
 };
 
