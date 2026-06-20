@@ -4,4 +4,4 @@ requests==2.31.0
 feedparser==6.0.11
 gunicorn==21.2.0
 werkzeug==3.0.1
-psycopg[binary]==3.2.3
+psycopg[binary]==3.2.10
