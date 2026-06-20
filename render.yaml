@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: conseilprev-mcp-connector
+    name: conseilprev
     env: python
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
