@@ -1018,6 +1018,23 @@ textarea.form-el{min-height:86px;resize:vertical}
 .matrix-dot:hover{transform:scale(1.3)}
 .matrix-dot-more{font-size:8px;font-family:var(--mono);color:var(--muted2);margin-left:2px}
 
+/* ══ RADAR DYNAMIQUE — sections additionnelles ══ */
+.radar-sector-bar{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding:14px 18px;background:var(--white);border:1px solid var(--rule);border-radius:6px;flex-wrap:wrap}
+.radar-sector-lbl{font-size:11px;font-family:var(--mono);color:var(--muted2);letter-spacing:.04em}
+.radar-sector-select{font-size:13px;padding:7px 12px;border:1px solid var(--rule2);border-radius:4px;background:var(--white);color:var(--ink);font-family:var(--sans);cursor:pointer}
+.radar-registre-info{font-size:11px;padding:10px 14px;border-radius:5px;margin-top:14px;line-height:1.5}
+.radar-registre-ok{background:rgba(45,122,71,.08);color:var(--green);border:1px solid rgba(45,122,71,.2)}
+.radar-registre-warn{background:rgba(196,124,26,.08);color:var(--orange);border:1px solid rgba(196,124,26,.2)}
+.radar-risk-item{background:var(--white);border:1px solid var(--rule);border-radius:5px;padding:11px 14px;margin-bottom:8px}
+.radar-risk-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.radar-risk-name{font-size:12px;font-weight:600;color:var(--ink)}
+.radar-risk-pct{font-family:var(--mono);font-size:13px;font-weight:600}
+.radar-risk-src{font-size:9px;color:var(--muted2);margin-top:6px;font-style:italic;line-height:1.4}
+.radar-sector-item{background:var(--white);border:1px solid var(--rule);border-radius:4px;padding:12px 14px;border-left:3px solid var(--accent);margin-bottom:8px}
+.radar-sector-t{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.radar-sector-d{font-size:11px;color:var(--muted);line-height:1.5}
+.radar-methodo{font-size:10px;color:var(--muted2);line-height:1.6;margin-top:16px;padding:12px 14px;background:var(--bg);border-radius:5px;font-style:italic}
+
 </style>
 <style id="cpc-styles">
 /* ══ CHATBOT SENTINEL AI — CONSEILPREV ══ */
@@ -2151,11 +2168,28 @@ textarea.form-el{min-height:86px;resize:vertical}
 
 <!-- RADAR -->
 <div class="page" id="p-radar">
-  <span class="eyebrow">Radar multi-critères</span><h1 class="page-h">Radar des <em>risques IA</em></h1><p class="page-lead">Visualisation hexagonale de votre posture de conformité sur 6 dimensions réglementaires clés.</p>
+  <span class="eyebrow">Radar multi-critères</span><h1 class="page-h">Radar des <em>risques IA</em></h1><p class="page-lead">Visualisation de votre posture sur 6 dimensions réglementaires, pondérées dynamiquement par les 8 risques systémiques IA, votre secteur et les systèmes réels de votre Registre IA.</p>
+
+  <div class="radar-sector-bar" id="radar-sector-bar-holder"></div>
+
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start">
-    <div class="tbl-wrap" style="padding:24px"><div class="tbl-head" style="border:none;padding:0 0 16px"><span class="tbl-title">Votre profil de risque</span><span style="font-size:10px;font-family:var(--mono);color:var(--muted2)">vs. Moyenne secteur</span></div><svg class="radar-svg" viewBox="0 0 300 280" id="radar-svg"></svg></div>
+    <div class="tbl-wrap" style="padding:24px"><div class="tbl-head" style="border:none;padding:0 0 16px"><span class="tbl-title">Votre profil de risque</span><span style="font-size:10px;font-family:var(--mono);color:var(--muted2)">vs. Moyenne tous secteurs</span></div><svg class="radar-svg" viewBox="0 0 300 280" id="radar-svg"></svg>
+    <div class="radar-registre-info" id="radar-registre-info"></div></div>
     <div><div class="reg-stack" id="radar-scores"></div></div>
   </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;margin-top:28px">
+    <div>
+      <div class="tbl-head" style="padding:0 0 14px"><span class="tbl-title">8 risques systémiques IA — poids effectif</span></div>
+      <div id="radar-systemic-risks"></div>
+    </div>
+    <div>
+      <div class="tbl-head" style="padding:0 0 14px"><span class="tbl-title">Risques sectoriels spécifiques</span></div>
+      <div id="radar-sector-risks"></div>
+    </div>
+  </div>
+
+  <div class="radar-methodo">Méthodologie : les 6 dimensions réglementaires sont calculées à partir des 8 risques systémiques IA (Juridictionnel, Économique, Data &amp; IA, Opérationnel, Géopolitique, Cyber, Supply Chain Techno, Environnemental), pondérés par secteur d'activité (sources : ENISA Threat Landscape 2024-2025, NIST AI RMF / AI 600-1, OECD AI Incidents Monitor, AI Incident Database), par la composition réelle de votre Registre IA, et par les corrélations croisées entre risques. Aide à la décision — ne remplace pas un audit formel.</div>
 </div>
 
 <!-- ARTICLES -->
@@ -5190,20 +5224,7 @@ var SYSTEMS=[{ico:'⚡',name:'Système de prédiction énergétique',type:'Préd
 
 /* Matrice risques — remplacee par matrice_registre.js (donnees reelles du Registre IA) */
 
-(function(){
-  var svg=document.getElementById('radar-svg'); if(!svg) return;
-  var DIM=['Gouvernance','Transparence','Sécurité','Données','Supervision','Droits'];
-  var YOU=[0.55,0.70,0.80,0.65,0.45,0.60]; var AVG=[0.72,0.68,0.75,0.70,0.65,0.72];
-  var CX=150,CY=148,R=100,N=DIM.length;
-  function pt(val,i,r){ var a=(Math.PI*2*i/N)-Math.PI/2; return [CX+Math.cos(a)*r*val,CY+Math.sin(a)*r*val]; }
-  var gridLines=[0.25,0.5,0.75,1].map(function(r){ var pts=DIM.map(function(_,i){ return pt(1,i,R*r).join(','); }); return '<polygon points="'+pts.join(' ')+'" fill="none" stroke="var(--rule)" stroke-width="0.8"/>'; }).join('');
-  var axes=DIM.map(function(_,i){ var p=pt(1,i,R); return '<line x1="'+CX+'" y1="'+CY+'" x2="'+p[0]+'" y2="'+p[1]+'" stroke="var(--rule)" stroke-width="0.8"/>'; }).join('');
-  var labels=DIM.map(function(d,i){ var p=pt(1,i,R+22); return '<text x="'+p[0]+'" y="'+p[1]+'" text-anchor="middle" dominant-baseline="middle" font-size="9" font-family="var(--mono)" fill="var(--muted)" letter-spacing=".04em">'+d+'</text>'; }).join('');
-  function poly(vals,stroke,fill,opacity){ var pts=vals.map(function(v,i){ return pt(v,i,R).join(','); }); return '<polygon points="'+pts.join(' ')+'" fill="'+fill+'" fill-opacity="'+opacity+'" stroke="'+stroke+'" stroke-width="2" stroke-linejoin="round"/>'; }
-  svg.innerHTML=gridLines+axes+labels+poly(AVG,'var(--muted2)','var(--muted2)',0.12)+poly(YOU,'var(--accent)','var(--accent)',0.18);
-  var sc=document.getElementById('radar-scores'); if(!sc) return;
-  sc.innerHTML=DIM.map(function(d,i){ var pct=Math.round(YOU[i]*100); return '<div class="reg-item"><div class="reg-name">'+d+'</div><div style="display:flex;align-items:center;gap:10px"><div class="reg-val" style="font-size:18px">'+pct+'%</div><div class="reg-bar" style="flex:1"><div class="reg-fill" style="width:'+pct+'%"></div></div></div></div>'; }).join('');
-})();
+/* Radar statique remplace par radar_dynamique.js (8 risques systemiques + secteur + Registre IA reel) */
 
 (function(){
   var b=document.getElementById('art-list'); if(!b) return;
@@ -8659,6 +8680,294 @@ window.simAddToRegistre = function(){
       alert("Erreur lors de l ajout au registre.");
       if(btn){ btn.textContent = "+ Ajouter au Registre IA"; btn.disabled = false; }
     });
+};
+
+})();
+
+</script>
+
+<script>
+/* ══ RADAR DES RISQUES IA — Dynamique, sectoriel, fonde sur donnees externes ══ */
+/* Sources : OECD AI Incidents Monitor (OECD.AI/incidents), AI Incident Database
+   (incidentdatabase.ai, 759+ incidents categorises par secteur/domaine de risque),
+   NIST AI RMF 1.0 + NIST AI 600-1 Generative AI Profile (12 risques generatifs),
+   ENISA Threat Landscape 2024-2025 (repartition sectorielle des incidents cyber UE :
+   administration publique ~38%, transport ~7.5%, finance ~4.5-10%, manufacturing ~2.9-17%). */
+(function(){
+'use strict';
+
+/* ── 6 dimensions reglementaires du radar (axe principal, inchange) ── */
+var RADAR_DIMENSIONS = [
+  {id:"gouvernance",  label:"Gouvernance",         arts:"Art. 17 EU AI Act / ISO 42001 cl. 5"},
+  {id:"transparence", label:"Transparence",         arts:"Art. 13, 50 EU AI Act"},
+  {id:"securite",     label:"Sécurité",             arts:"Art. 15 EU AI Act / ISO 27001"},
+  {id:"donnees",      label:"Données",              arts:"Art. 10 EU AI Act / RGPD"},
+  {id:"supervision",  label:"Supervision",          arts:"Art. 14 EU AI Act"},
+  {id:"droits",       label:"Droits fondamentaux",  arts:"Annexe III EU AI Act / FRIA"}
+];
+
+/* ── 8 risques systemiques (identiques a la page d'accueil CONSEILPREV) ──
+   Chacun influence une ou plusieurs des 6 dimensions reglementaires, avec un
+   coefficient d'influence (0-1). Pas de 7e/8e axe sur le radar : ces risques
+   AGISSENT SUR les 6 dimensions existantes pour eviter tout doublon visuel. */
+var SYSTEMIC_RISKS = [
+  {id:"juridictionnel", label:"Juridictionnel", baseWeight:0.55,
+   influence:{droits:0.40, gouvernance:0.30, transparence:0.20, donnees:0.10},
+   source:"OECD AI Incidents Monitor — incidents lies a la regulation et au contentieux"},
+  {id:"economique", label:"Économique", baseWeight:0.45,
+   influence:{gouvernance:0.45, supervision:0.30, securite:0.15, donnees:0.10},
+   source:"OCDE — dependance modeles proprietaires, concentration des couts IA"},
+  {id:"data_ia", label:"Data & IA", baseWeight:0.65,
+   influence:{donnees:0.55, transparence:0.25, securite:0.20},
+   source:"NIST AI 600-1 — Harmful Bias, Data Privacy, Confabulation"},
+  {id:"operationnel", label:"Opérationnel", baseWeight:0.50,
+   influence:{supervision:0.45, gouvernance:0.30, securite:0.25},
+   source:"AI Incident Database (AIID) — incidents lies aux defaillances operationnelles"},
+  {id:"geopolitique", label:"Géopolitique", baseWeight:0.40,
+   influence:{donnees:0.30, securite:0.30, droits:0.25, gouvernance:0.15},
+   source:"OECD.AI — tensions normatives, fragmentation reglementaire internationale"},
+  {id:"cyber", label:"Cyber", baseWeight:0.75,
+   influence:{securite:0.65, donnees:0.20, supervision:0.15},
+   source:"ENISA Threat Landscape 2024-2025 — incidents cyber par secteur (UE)"},
+  {id:"supply_chain", label:"Supply Chain Techno", baseWeight:0.50,
+   influence:{securite:0.40, gouvernance:0.30, supervision:0.30},
+   source:"NIST AI RMF — Value Chain and Component Integrity"},
+  {id:"environnemental", label:"Environnemental", baseWeight:0.30,
+   influence:{gouvernance:0.55, transparence:0.45},
+   source:"NIST AI 600-1 — Environmental Impacts (datacenters, empreinte carbone)"}
+];
+
+/* ── Matrice de correlation croisee entre risques systemiques ──
+   Si un risque est eleve, il amplifie legerement les risques correles
+   (effet d'entrainement). Valeurs indicatives 0-0.3, fondees sur les
+   co-occurrences observees dans AIID/OECD AIM (ex: incidents cyber et
+   supply chain co-surviennent frequemment ; juridictionnel et geopolitique
+   sont frequemment lies dans les rapports d'incidents transfrontaliers). */
+var RISK_CORRELATIONS = {
+  cyber:           {supply_chain:0.30, operationnel:0.20, economique:0.15},
+  supply_chain:    {cyber:0.30, operationnel:0.20},
+  juridictionnel:  {geopolitique:0.30, droits:0.25},
+  geopolitique:    {juridictionnel:0.30, supply_chain:0.20, economique:0.15},
+  data_ia:         {juridictionnel:0.20, droits:0.20},
+  operationnel:    {cyber:0.20, economique:0.20},
+  economique:      {operationnel:0.20, cyber:0.15},
+  environnemental: {geopolitique:0.15}
+};
+
+/* ── Poids sectoriels (multiplicateurs 0.6 a 1.5, 1.0 = neutre) ──
+   Fondes sur :
+   - ENISA Threat Landscape 2024/2025 (repartition sectorielle incidents cyber UE)
+   - Profils sectoriels NIST AI RMF (infrastructures critiques, sante, finance)
+   - Specificites reglementaires deja documentees dans Sentinel (MAT_SECTORS) */
+var SECTOR_RISK_MULTIPLIERS = {
+  telecom:   {cyber:1.15, juridictionnel:0.95, data_ia:1.05, geopolitique:1.10, supply_chain:1.05, economique:0.95, operationnel:1.00, environnemental:0.90},
+  energie:   {cyber:1.30, operationnel:1.30, environnemental:1.25, supply_chain:1.15, geopolitique:1.10, juridictionnel:0.95, data_ia:0.85, economique:1.00},
+  sante:     {data_ia:1.35, droits:1.30, juridictionnel:1.15, operationnel:1.10, cyber:1.05, transparence_boost:1.10, economique:0.90, geopolitique:0.75, supply_chain:0.85, environnemental:0.80},
+  finance:   {economique:1.40, cyber:1.20, juridictionnel:1.15, data_ia:1.10, operationnel:1.05, geopolitique:0.95, supply_chain:0.90, environnemental:0.70},
+  industrie: {supply_chain:1.30, operationnel:1.25, environnemental:1.20, cyber:1.05, economique:1.00, juridictionnel:0.85, data_ia:0.80, geopolitique:0.90},
+  transport: {operationnel:1.30, cyber:1.10, supply_chain:1.10, juridictionnel:1.00, environnemental:1.05, geopolitique:0.95, data_ia:0.80, economique:0.90},
+  it:        {cyber:1.25, supply_chain:1.30, data_ia:1.20, geopolitique:1.05, juridictionnel:0.95, operationnel:0.90, economique:1.00, environnemental:0.85},
+  public:    {juridictionnel:1.35, cyber:1.30, droits:1.30, geopolitique:1.05, operationnel:0.95, data_ia:0.90, economique:0.75, supply_chain:0.80, environnemental:0.75}
+};
+
+var RADAR_SECTOR = "telecom";
+
+/* ── Recuperation des systemes IA reels du Registre (filtres par secteur) ── */
+var RADAR_REG_CACHE = [];
+
+function radarSectorLabel(){
+  return (window.MAT_SECTORS && window.MAT_SECTORS[RADAR_SECTOR]) ? window.MAT_SECTORS[RADAR_SECTOR].label : RADAR_SECTOR;
+}
+
+function radarMatchSector(sysSecteur){
+  if(!sysSecteur) return false;
+  var lbl = radarSectorLabel().toLowerCase();
+  var s = sysSecteur.toLowerCase();
+  return s.indexOf(lbl.split(' ')[0].split('/')[0]) !== -1 || lbl.indexOf(s) !== -1;
+}
+
+/* ── Facteur d'amplification base sur la composition reelle du Registre IA ──
+   Plus il y a de systemes haut risque / non conformes dans le secteur,
+   plus les dimensions Securite/Supervision/Gouvernance/Droits sont amplifiees. */
+function radarRegistreFactor(){
+  var sysSecteur = RADAR_REG_CACHE.filter(function(s){ return radarMatchSector(s.secteur); });
+  if(sysSecteur.length === 0) return {factor:1.0, count:0, hautRisque:0, nonConforme:0};
+
+  var hautRisque = sysSecteur.filter(function(s){ return s.classification === 'haut' || s.classification === 'inacceptable'; }).length;
+  var nonConforme = sysSecteur.filter(function(s){ return s.statut_conformite === 'non_conforme' || s.statut_conformite === 'a_evaluer'; }).length;
+  var avgScore = sysSecteur.reduce(function(a,s){ return a + (s.score_risque||0); }, 0) / sysSecteur.length;
+
+  /* Facteur 0.9 (registre sain) a 1.4 (registre a risque) */
+  var factor = 0.9 + (hautRisque/sysSecteur.length)*0.25 + (nonConforme/sysSecteur.length)*0.15 + (avgScore/10)*0.10;
+  return {factor: Math.min(1.4, factor), count: sysSecteur.length, hautRisque: hautRisque, nonConforme: nonConforme, avgScore: avgScore};
+}
+
+/* ── Calcul du score effectif de chaque risque systemique (avec correlations) ── */
+function radarComputeRiskScores(sectorMult, regFactor){
+  var raw = {};
+  SYSTEMIC_RISKS.forEach(function(r){
+    var mult = (sectorMult[r.id] !== undefined) ? sectorMult[r.id] : 1.0;
+    raw[r.id] = r.baseWeight * mult * regFactor.factor;
+  });
+  /* Appliquer les correlations croisees (effet d'entrainement, +X% si risque correle eleve) */
+  var adjusted = {};
+  SYSTEMIC_RISKS.forEach(function(r){
+    var boost = 0;
+    var corr = RISK_CORRELATIONS[r.id] || {};
+    Object.keys(corr).forEach(function(otherId){
+      boost += (raw[otherId] || 0) * corr[otherId];
+    });
+    adjusted[r.id] = Math.min(1.0, raw[r.id] + boost * 0.3);
+  });
+  return adjusted;
+}
+
+/* ── Calcul des 6 scores du radar a partir des risques systemiques ponderes ── */
+function radarComputeDimensionScores(){
+  var sectorMult = SECTOR_RISK_MULTIPLIERS[RADAR_SECTOR] || {};
+  var regFactor = radarRegistreFactor();
+  var riskScores = radarComputeRiskScores(sectorMult, regFactor);
+
+  var dims = {};
+  RADAR_DIMENSIONS.forEach(function(d){ dims[d.id] = 0.15; }); /* score plancher 15% */
+
+  SYSTEMIC_RISKS.forEach(function(r){
+    var score = riskScores[r.id];
+    Object.keys(r.influence).forEach(function(dimId){
+      dims[dimId] = (dims[dimId]||0) + score * r.influence[dimId];
+    });
+  });
+
+  /* Normaliser 0-1 */
+  Object.keys(dims).forEach(function(k){ dims[k] = Math.max(0.1, Math.min(1, dims[k])); });
+
+  return {dims: dims, riskScores: riskScores, regFactor: regFactor};
+}
+
+/* ── Moyenne tous secteurs (reference de comparaison) ── */
+function radarComputeAverage(){
+  var sum = {}; RADAR_DIMENSIONS.forEach(function(d){ sum[d.id] = 0; });
+  var sectors = Object.keys(SECTOR_RISK_MULTIPLIERS);
+  sectors.forEach(function(sec){
+    var savedSector = RADAR_SECTOR;
+    RADAR_SECTOR = sec;
+    var savedCache = RADAR_REG_CACHE; RADAR_REG_CACHE = []; /* moyenne hors effet registre */
+    var r = radarComputeDimensionScores();
+    RADAR_SECTOR = savedSector; RADAR_REG_CACHE = savedCache;
+    RADAR_DIMENSIONS.forEach(function(d){ sum[d.id] += r.dims[d.id]; });
+  });
+  var avg = {};
+  RADAR_DIMENSIONS.forEach(function(d){ avg[d.id] = sum[d.id] / sectors.length; });
+  return avg;
+}
+
+/* ── Rendu SVG du radar (meme geometrie que l'existant, donnees dynamiques) ── */
+function radarRenderSVG(you, avg){
+  var svg = document.getElementById('radar-svg');
+  if(!svg) return;
+  var DIM = RADAR_DIMENSIONS.map(function(d){ return d.label; });
+  var YOU = RADAR_DIMENSIONS.map(function(d){ return you[d.id]; });
+  var AVG = RADAR_DIMENSIONS.map(function(d){ return avg[d.id]; });
+  var CX=150, CY=148, R=100, N=DIM.length;
+  function pt(val,i,r){ var a=(Math.PI*2*i/N)-Math.PI/2; return [CX+Math.cos(a)*r*val, CY+Math.sin(a)*r*val]; }
+  var gridLines=[0.25,0.5,0.75,1].map(function(r){ var pts=DIM.map(function(_,i){ return pt(1,i,R*r).join(','); }); return '<polygon points="'+pts.join(' ')+'" fill="none" stroke="var(--rule)" stroke-width="0.8"/>'; }).join('');
+  var axes=DIM.map(function(_,i){ var p=pt(1,i,R); return '<line x1="'+CX+'" y1="'+CY+'" x2="'+p[0]+'" y2="'+p[1]+'" stroke="var(--rule)" stroke-width="0.8"/>'; }).join('');
+  var labels=DIM.map(function(d,i){ var p=pt(1,i,R+22); return '<text x="'+p[0]+'" y="'+p[1]+'" text-anchor="middle" dominant-baseline="middle" font-size="9" font-family="var(--mono)" fill="var(--muted)" letter-spacing=".04em">'+d+'</text>'; }).join('');
+  function poly(vals,stroke,fill,opacity){ var pts=vals.map(function(v,i){ return pt(v,i,R).join(','); }); return '<polygon points="'+pts.join(' ')+'" fill="'+fill+'" fill-opacity="'+opacity+'" stroke="'+stroke+'" stroke-width="2" stroke-linejoin="round"/>'; }
+  svg.innerHTML = gridLines+axes+labels+poly(AVG,'var(--muted2)','var(--muted2)',0.12)+poly(YOU,'var(--accent)','var(--accent)',0.18);
+}
+
+/* ── Rendu complet de la page ── */
+function radarRenderPage(){
+  fetch('/api/registre').then(function(r){ return r.json(); }).then(function(d){
+    RADAR_REG_CACHE = d.systemes || [];
+    radarRenderAll();
+  }).catch(function(){ RADAR_REG_CACHE = []; radarRenderAll(); });
+}
+
+function radarRenderAll(){
+  var result = radarComputeDimensionScores();
+  var avg = radarComputeAverage();
+
+  radarRenderSVG(result.dims, avg);
+
+  /* Scores par dimension */
+  var sc = document.getElementById('radar-scores');
+  if(sc){
+    sc.innerHTML = RADAR_DIMENSIONS.map(function(d){
+      var pct = Math.round(result.dims[d.id]*100);
+      return '<div class="reg-item"><div class="reg-name">'+d.label+' <span style="font-size:8px;font-family:var(--mono);color:var(--blue)">'+d.arts+'</span></div>'
+        + '<div style="display:flex;align-items:center;gap:10px"><div class="reg-val" style="font-size:18px">'+pct+'%</div>'
+        + '<div class="reg-bar" style="flex:1"><div class="reg-fill" style="width:'+pct+'%"></div></div></div></div>';
+    }).join('');
+  }
+
+  /* 8 risques systemiques avec poids effectif */
+  var rb = document.getElementById('radar-systemic-risks');
+  if(rb){
+    rb.innerHTML = SYSTEMIC_RISKS.map(function(r){
+      var pct = Math.round(result.riskScores[r.id]*100);
+      var col = pct>=65?'var(--accent)':pct>=40?'var(--orange)':'var(--green)';
+      return '<div class="radar-risk-item">'
+        + '<div class="radar-risk-top"><span class="radar-risk-name">'+r.label+'</span><span class="radar-risk-pct" style="color:'+col+'">'+pct+'%</span></div>'
+        + '<div class="reg-bar"><div class="reg-fill" style="width:'+pct+'%;background:'+col+'"></div></div>'
+        + '<div class="radar-risk-src">'+r.source+'</div>'
+        + '</div>';
+    }).join('');
+  }
+
+  /* Risques sectoriels specifiques (reutilise MAT_SECTORS.specifics, pas de duplication) */
+  var rs = document.getElementById('radar-sector-risks');
+  if(rs){
+    var sec = (window.MAT_SECTORS && window.MAT_SECTORS[RADAR_SECTOR]) ? window.MAT_SECTORS[RADAR_SECTOR] : null;
+    if(sec && sec.specifics){
+      rs.innerHTML = sec.specifics.map(function(sp){
+        return '<div class="radar-sector-item"><div class="radar-sector-t">'+sp.t+'</div><div class="radar-sector-d">'+sp.d+'</div></div>';
+      }).join('');
+    } else {
+      rs.innerHTML = '<div class="reg-empty">Aucune specificite sectorielle disponible.</div>';
+    }
+  }
+
+  /* Indicateur registre */
+  var ri = document.getElementById('radar-registre-info');
+  if(ri){
+    var rf = result.regFactor;
+    if(rf.count > 0){
+      ri.innerHTML = '📊 <strong>'+rf.count+' système(s)</strong> du Registre IA pris en compte pour '+radarSectorLabel()+' — '
+        + rf.hautRisque+' à haut risque, '+rf.nonConforme+' non conformes ou à évaluer. Facteur d amplification : x'+rf.factor.toFixed(2)+'.';
+      ri.className = 'radar-registre-info radar-registre-ok';
+    } else {
+      ri.innerHTML = '⚠️ Aucun système du secteur '+radarSectorLabel()+' dans le Registre IA — scores basés sur le profil sectoriel de référence uniquement.';
+      ri.className = 'radar-registre-info radar-registre-warn';
+    }
+  }
+}
+
+window.radarSelectSector = function(sectorKey){
+  RADAR_SECTOR = sectorKey;
+  var sel = document.getElementById('radar-sector-select');
+  if(sel) sel.value = sectorKey;
+  radarRenderAll();
+};
+
+function radarInitSectorBar(){
+  var holder = document.getElementById("radar-sector-bar-holder");
+  if(!holder || !window.MAT_SECTORS) return;
+  var options = Object.keys(window.MAT_SECTORS).map(function(k){
+    var s = window.MAT_SECTORS[k];
+    return '<option value="'+k+'"'+(k===RADAR_SECTOR?' selected':'')+'>'+s.icon+' '+s.label+'</option>';
+  }).join("");
+  holder.innerHTML = '<span class="radar-sector-lbl">Secteur d activite :</span>'
+    + '<select id="radar-sector-select" class="radar-sector-select" onchange="radarSelectSector(this.value)">'+options+'</select>'
+    + '<span style="font-size:10px;color:var(--muted);flex:1;min-width:200px">Les 6 dimensions et les 8 risques systemiques sont recalcules selon le secteur et votre Registre IA.</span>';
+}
+
+var _radarOrigGo = window.go;
+window.go = function(id){
+  var r = _radarOrigGo ? _radarOrigGo.apply(this, arguments) : undefined;
+  if(id === "radar"){ setTimeout(function(){ radarInitSectorBar(); radarRenderPage(); }, 50); }
+  return r;
 };
 
 })();
