@@ -1049,6 +1049,29 @@ textarea.form-el{min-height:86px;resize:vertical}
 .audit-rel-na{background:var(--bg);color:var(--muted2)}
 .audit-section.audit-section-dim{opacity:.5}
 
+/* ══ FRIA — Art. 27 EU AI Act ══ */
+.fria-sys-card{background:var(--white);border:1px solid var(--rule);border-radius:6px;padding:18px 20px;margin-bottom:16px}
+.fria-sys-na{opacity:.65}
+.fria-sys-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:10px}
+.fria-sys-name{font-size:14px;font-weight:600;color:var(--ink)}
+.fria-sys-meta{font-size:11px;color:var(--muted);margin-top:2px}
+.fria-na-badge{font-size:9px;font-family:var(--mono);background:var(--bg);color:var(--muted2);padding:4px 10px;border-radius:3px;letter-spacing:.03em;flex-shrink:0}
+.fria-app-reason{font-size:11px;color:var(--muted);line-height:1.5;padding:10px 12px;background:var(--bg);border-radius:4px;margin-bottom:14px}
+.fria-rights-grid{display:flex;flex-direction:column;gap:10px}
+.fria-right-item{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid var(--rule)}
+.fria-right-item:last-child{border-bottom:none}
+.fria-right-q{font-size:11.5px;color:var(--ink2);line-height:1.55;flex:1}
+.fria-right-art{font-size:9px;font-family:var(--mono);color:var(--blue);background:rgba(28,90,138,.08);padding:1px 6px;border-radius:2px}
+.fria-opts{display:flex;gap:4px;flex-shrink:0}
+.fria-opt{width:26px;height:26px;border-radius:4px;border:1px solid var(--rule2);background:var(--white);color:var(--muted);font-family:var(--mono);font-size:11px;cursor:pointer;transition:all .12s}
+.fria-opt:hover{border-color:var(--accent)}
+.fria-opt.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.fria-actions-box{margin-top:14px;padding:12px 14px;background:rgba(184,50,34,.04);border:1px solid rgba(184,50,34,.15);border-radius:5px}
+.fria-actions-title{font-size:10px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:8px}
+.fria-score-ring{display:flex;align-items:center;justify-content:center;flex-direction:column;width:64px;height:64px;border-radius:50%;border:3px solid var(--rule2);font-family:var(--serif);flex-shrink:0}
+.fria-ring-val{font-size:18px;color:var(--ink);line-height:1}
+.fria-ring-lbl{font-size:8px;color:var(--muted2)}
+
 </style>
 <style id="cpc-styles">
 /* ══ CHATBOT SENTINEL AI — CONSEILPREV ══ */
@@ -1241,7 +1264,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-item" onclick="go('regs',this,'CONFORMITÉ','Réglementations')" title="Textes officiels, simulateur de conformite AI Act et audit structure par article."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 8h10M7 12h7M7 16h5"/></svg></span>Réglementations</div>
     <div class="sb-item" onclick="go('veille',this,'CONFORMITÉ','Veille qualifiée')" title="Actualites reglementaires evaluees par IA selon leur impact sur vos systemes IA reels."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12h3M19 12h3M12 2v3M12 19v3M5.6 5.6l2 2M16.4 16.4l2 2M5.6 18.4l2-2M16.4 7.6l2-2"/></svg></span>Veille qualifiée</div>
     <div class="sb-item" onclick="go('evals',this,'CONFORMITÉ','Mes évaluations')" title="Historique de vos simulations et audits de conformite enregistres."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>Mes évaluations<span class="sb-badge">3</span></div>
-    <div class="sb-item" onclick="go('fria',this,'CONFORMITÉ','Évaluation FRIA')" title="Evaluation d impact sur les droits fondamentaux (Fundamental Rights Impact Assessment)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg></span>FRIA</div>
+    <div class="sb-item" onclick="go('fria',this,'CONFORMITÉ','Évaluation FRIA')" title="Evaluation d impact sur les droits fondamentaux (Art. 27 EU AI Act) - obligation du deployeur, applicable a partir du 2 aout 2026."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg></span>FRIA</div>
     <div class="sb-section">Espace</div>
     <div class="sb-item" onclick="go('equipe',this,'ESPACE','Équipe')" title="Espace de collaboration pour l equipe en charge du programme de conformite IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></span>Espace équipe</div>
     <div class="sb-item" onclick="go('training',this,'FORMATION','Hub Training')" title="Modules de formation sur l EU AI Act, les 8 piliers et la gouvernance IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></span>Hub Training</div>
@@ -2236,8 +2259,14 @@ textarea.form-el{min-height:86px;resize:vertical}
 
 <!-- FRIA -->
 <div class="page" id="p-fria">
-  <span class="eyebrow">Évaluation FRIA</span><h1 class="page-h">Fundamental Rights <em>Impact Assessment</em></h1><p class="page-lead">Évaluation structurée de l'impact sur les droits fondamentaux — obligatoire pour les systèmes haut risque (Art. 9 EU AI Act).</p>
-  <div style="display:grid;grid-template-columns:1fr 200px;gap:24px;align-items:start"><div id="fria-steps"></div><div><div class="tbl-wrap" style="margin-bottom:14px;padding:18px;text-align:center"><div class="tbl-head" style="border:none;padding:0 0 12px"><span class="tbl-title">Score FRIA global</span></div><div class="fria-score-ring"><div class="fria-ring-val">6.2</div><div class="fria-ring-lbl">/ 10</div></div><div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.6">Risque modéré — Des mesures d'atténuation sont requises.</div></div><div class="tbl-wrap" style="padding:14px 16px"><div style="font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em;color:var(--muted2);margin-bottom:10px">Actions requises</div><div class="act-item"><div class="act-dot"></div><div class="act-t" style="font-size:11px">Réviser la politique de supervision humaine</div></div><div class="act-item"><div class="act-dot"></div><div class="act-t" style="font-size:11px">Documenter les biais identifiés (Art. 9.7)</div></div><div class="act-item"><div class="act-dot"></div><div class="act-t" style="font-size:11px">Enregistrer dans la base EU AI (Art. 51)</div></div></div></div></div>
+  <span class="eyebrow">Évaluation FRIA</span><h1 class="page-h">Fundamental Rights <em>Impact Assessment</em></h1><p class="page-lead">Évaluation d'impact sur les droits fondamentaux — Art. 27 EU AI Act, obligation du <strong>déployeur</strong> (distincte d'une DPIA RGPD). Applicable à partir du 2 août 2026 pour 3 catégories de déployeurs : organismes publics, prestataires de service public, et scoring crédit/assurance.</p>
+
+  <div class="radar-sector-bar" id="fria-sector-bar-holder"></div>
+  <div class="radar-registre-info" id="fria-registre-info"></div>
+
+  <div id="fria-list" style="margin-top:20px"></div>
+
+  <div class="radar-methodo">Méthodologie : l'applicabilité de la FRIA est déterminée automatiquement selon le secteur et la nature de chaque système du Registre IA (Art. 27(1)(a)(b)(c)(d)). Pour les systèmes concernés, 8 droits fondamentaux de la Charte UE sont évalués individuellement (0 = aucun impact, 3 = impact élevé). Le score global est recalculé en temps réel. Aide à la décision — une FRIA formelle doit être documentée et conservée conformément à l'Art. 27(3).</div>
 </div>
 
 
@@ -5292,11 +5321,7 @@ function calcSanctions(){
   var gg=document.getElementById('guides-grid'); if(gg) gg.innerHTML=GUIDES.map(function(g){ return '<div class="doc-card"><div class="doc-icon">'+g.ico+'</div><div><div class="doc-name">'+g.name+'</div><div class="doc-desc">'+g.desc+'</div><div class="doc-meta">'+g.meta+'</div></div></div>'; }).join('');
 })();
 
-(function(){
-  var b=document.getElementById('fria-steps'); if(!b) return;
-  var STEPS=[{t:'Description du système IA',txt:'Identifier précisément le système : finalité, périmètre, données traitées, population affectée.',score:8},{t:'Droits fondamentaux concernés',txt:'Cartographier les droits potentiellement affectés : vie privée, non-discrimination, liberté d expression.',score:6},{t:'Analyse des risques par droit',txt:'Pour chaque droit : probabilité d impact, gravité, réversibilité. Documenter les biais identifiés.',score:5},{t:'Mesures d atténuation',txt:'Définir les garde-fous techniques et organisationnels. Supervision humaine Art. 14, auditabilité.',score:7},{t:'Résidus de risque',txt:'Risques résiduels après atténuation. Justification de l acceptabilité.',score:6},{t:'Plan de suivi',txt:'Monitoring continu, indicateurs de dérive, fréquence de re-évaluation.',score:5}];
-  b.innerHTML=STEPS.map(function(s,i){ var pct=s.score*10; return '<div class="fria-step"><div class="fria-step-head"><div class="fria-step-num">'+(i+1)+'</div><div class="fria-step-title">'+s.t+'</div><div style="margin-left:auto"><div style="font-family:var(--serif);font-size:16px;color:'+(s.score>=7?'var(--green)':s.score>=5?'var(--orange)':'var(--accent)')+'">'+s.score+'<span style="font-size:11px;color:var(--muted)">/10</span></div></div></div><div style="height:2px;background:var(--bg2);border-radius:1px;overflow:hidden;margin-bottom:10px"><div style="height:100%;width:'+pct+'%;background:'+(s.score>=7?'var(--green)':s.score>=5?'var(--orange)':'var(--accent)')+';border-radius:1px"></div></div><div style="font-size:12px;color:var(--muted);line-height:1.65">'+s.txt+'</div></div>'; }).join('');
-})();
+/* FRIA — remplace par fria_module.js (Art. 27, applicabilite reelle, Registre IA) */
 
 (function(){
   var b=document.getElementById('team-rows'); if(!b) return;
@@ -9079,6 +9104,226 @@ function auditApplySectorRelevance(){
     }
   }
 }
+
+})();
+
+</script>
+
+<script>
+/* ══ FRIA — Fundamental Rights Impact Assessment (Art. 27 EU AI Act) ══ */
+/* Source : Art. 27 Reglement (UE) 2024/1689, applicable a partir du 2 aout 2026 (Art. 113).
+   Obligation du DEPLOYEUR (pas du fournisseur), distincte d une DPIA RGPD.
+   3 categories de deployeurs concernes (Art. 27(1)) :
+   1) Organismes publics deployant un systeme Annexe III (hors infrastructures critiques, point 2)
+   2) Entites privees fournissant des services publics deployant un systeme Annexe III
+   3) Tout deployeur utilisant un systeme pour evaluation de solvabilite/scoring credit (Annexe III 5b)
+      ou evaluation des risques et tarification en assurance vie/sante (Annexe III 5c) */
+(function(){
+'use strict';
+
+var FRIA_SECTOR = "telecom";
+var FRIA_REG_CACHE = [];
+var FRIA_ANSWERS = {}; /* { systemeId: { droitId: niveau (0-3) } } */
+
+/* 8 droits fondamentaux de la Charte UE les plus frequemment impliques (Art. 27(1)(a)) */
+var FRIA_RIGHTS = [
+  {id:"dignite", label:"Dignité humaine", art:"Art. 1 Charte UE", desc:"Le système traite-t-il les personnes de manière déshumanisante ou instrumentale (ex. notation, profilage intrusif) ?"},
+  {id:"non_discrimination", label:"Non-discrimination", art:"Art. 21 Charte UE", desc:"Le système peut-il produire des résultats différenciés selon origine, genre, âge, handicap, situation économique ?"},
+  {id:"vie_privee", label:"Respect de la vie privée", art:"Art. 7 Charte UE", desc:"Le système traite-t-il des données personnelles ou comportementales sensibles au-delà du strict nécessaire ?"},
+  {id:"protection_donnees", label:"Protection des données", art:"Art. 8 Charte UE", desc:"Existe-t-il un risque de traitement disproportionné ou insuffisamment sécurisé des données ?"},
+  {id:"liberte_expression", label:"Liberté d'expression et d'information", art:"Art. 11 Charte UE", desc:"Le système modère, classe ou influence-t-il l'accès à l'information ou l'expression des personnes ?"},
+  {id:"bonne_administration", label:"Droit à une bonne administration", art:"Art. 41 Charte UE", desc:"Les personnes concernées peuvent-elles comprendre, contester et obtenir réexamen humain d'une décision automatisée ?"},
+  {id:"voie_recours", label:"Droit à un recours effectif", art:"Art. 47 Charte UE", desc:"Existe-t-il une voie de recours claire en cas de décision défavorable issue du système IA ?"},
+  {id:"droits_enfant", label:"Droits de l'enfant", art:"Art. 24 Charte UE", desc:"Le système peut-il affecter directement ou indirectement des mineurs ?"}
+];
+
+/* Niveaux de reponse : 0=Aucun impact, 1=Impact faible, 2=Impact modere, 3=Impact eleve */
+var FRIA_LEVELS = [
+  {v:0, label:"Aucun impact identifié", color:"#2D7A47"},
+  {v:1, label:"Impact faible", color:"#2D7A47"},
+  {v:2, label:"Impact modéré", color:"#C47C1A"},
+  {v:3, label:"Impact élevé", color:"#B83222"}
+];
+
+/* ── Determination de l applicabilite Art. 27 selon secteur + classification du systeme ── */
+function friaApplicable(systeme, secteurLabel){
+  var sec = (secteurLabel || "").toLowerCase();
+  var classif = systeme.classification;
+  if(classif !== "haut" && classif !== "inacceptable") return {applicable:false, reason:"Système non classé haut risque — FRIA non requise (Art. 27 ne vise que les systèmes Annexe III à haut risque)."};
+
+  /* Categorie 3 : scoring credit / assurance (Annexe III 5b, 5c) — independant du secteur */
+  var typeOrFin = ((systeme.type_systeme||"") + " " + (systeme.finalite||"")).toLowerCase();
+  if(/credit|scoring|solvabilit|assurance|tarif/.test(typeOrFin)){
+    return {applicable:true, category:3, reason:"Catégorie 3 (Art. 27(1)(c)/(d)) — évaluation de solvabilité ou tarification assurance vie/santé."};
+  }
+
+  /* Categorie 1/2 : secteur public ou prestataire de service public */
+  if(sec.indexOf("public") !== -1 || sec.indexOf("administration") !== -1){
+    return {applicable:true, category:1, reason:"Catégorie 1 (Art. 27(1)(a)) — organisme public déployant un système Annexe III."};
+  }
+  if(sec.indexOf("énergie") !== -1 || sec.indexOf("energie") !== -1 || sec.indexOf("transport") !== -1 || sec.indexOf("télécom") !== -1 || sec.indexOf("telecom") !== -1){
+    return {applicable:false, reason:"Infrastructures critiques (Annexe III point 2) — exemptées de FRIA par l'Art. 27(1)(a), sauf si le déployeur est un organisme public assurant un service public au sens large."};
+  }
+  if(sec.indexOf("santé") !== -1 || sec.indexOf("sante") !== -1){
+    return {applicable:true, category:2, reason:"Catégorie 2 (Art. 27(1)(b)) — entité privée fournissant un service public (santé) déployant un système Annexe III."};
+  }
+
+  return {applicable:false, reason:"Le déployeur ne semble pas relever des 3 catégories de l'Art. 27(1) (organisme public, prestataire de service public, ou scoring crédit/assurance). FRIA recommandée à titre préventif mais non obligatoire en l'état."};
+}
+
+function friaSectorLabel(){
+  return (window.MAT_SECTORS && window.MAT_SECTORS[FRIA_SECTOR]) ? window.MAT_SECTORS[FRIA_SECTOR].label : FRIA_SECTOR;
+}
+function friaMatchSector(sysSecteur){
+  if(!sysSecteur) return false;
+  var lbl = friaSectorLabel().toLowerCase();
+  var s = sysSecteur.toLowerCase();
+  return s.indexOf(lbl.split(' ')[0].split('/')[0]) !== -1 || lbl.indexOf(s) !== -1;
+}
+
+/* ── Persistance des reponses (localStorage) ── */
+function friaLoadAnswers(){
+  try {
+    var saved = localStorage.getItem("cpFriaAnswers");
+    if(saved) FRIA_ANSWERS = JSON.parse(saved);
+  } catch(e){}
+}
+function friaSaveAnswers(){
+  try { localStorage.setItem("cpFriaAnswers", JSON.stringify(FRIA_ANSWERS)); } catch(e){}
+}
+friaLoadAnswers();
+
+function friaGetAnswer(sysId, droitId){
+  return (FRIA_ANSWERS[sysId] && FRIA_ANSWERS[sysId][droitId] !== undefined) ? FRIA_ANSWERS[sysId][droitId] : null;
+}
+
+window.friaAnswer = function(sysId, droitId, val){
+  if(!FRIA_ANSWERS[sysId]) FRIA_ANSWERS[sysId] = {};
+  FRIA_ANSWERS[sysId][droitId] = val;
+  friaSaveAnswers();
+  friaRefreshSystemScore(sysId);
+};
+
+function friaComputeScore(sysId){
+  var answers = FRIA_ANSWERS[sysId] || {};
+  var vals = FRIA_RIGHTS.map(function(r){ return answers[r.id] !== undefined ? answers[r.id] : null; });
+  var answered = vals.filter(function(v){ return v !== null; });
+  if(answered.length === 0) return null;
+  var sum = answered.reduce(function(a,b){ return a+b; }, 0);
+  var maxPossible = answered.length * 3;
+  var riskPct = sum / maxPossible; /* 0 = aucun risque, 1 = risque maximal */
+  var score10 = Math.round((1 - riskPct) * 100) / 10; /* score de conformité /10, inverse du risque */
+  return {score: score10, riskPct: riskPct, answeredCount: answered.length, totalCount: FRIA_RIGHTS.length};
+}
+
+function friaRefreshSystemScore(sysId){
+  var result = friaComputeScore(sysId);
+  var ring = document.getElementById("fria-score-"+sysId);
+  if(ring && result){
+    var color = result.score>=7?"var(--green)":result.score>=4?"var(--orange)":"var(--accent)";
+    ring.querySelector(".fria-ring-val").textContent = result.score.toFixed(1);
+    ring.style.borderColor = color;
+  }
+  FRIA_RIGHTS.forEach(function(r){
+    var val = friaGetAnswer(sysId, r.id);
+    [0,1,2,3].forEach(function(v){
+      var btn = document.getElementById("fria-opt-"+sysId+"-"+r.id+"-"+v);
+      if(btn) btn.classList.toggle("on", val === v);
+    });
+  });
+}
+
+/* ── Rendu d un systeme (carte avec applicabilite + questionnaire si applicable) ── */
+function friaRenderSysCard(systeme){
+  var app = friaApplicable(systeme, systeme.secteur);
+  var result = friaComputeScore(systeme.id);
+
+  var head = '<div class="fria-sys-card'+(app.applicable?'':' fria-sys-na')+'">'
+    + '<div class="fria-sys-head">'
+    + '<div><div class="fria-sys-name">'+systeme.nom+'</div><div class="fria-sys-meta">'+(systeme.secteur||'')+' · '+(systeme.type_systeme||'')+'</div></div>'
+    + (app.applicable
+        ? '<div class="fria-score-ring" id="fria-score-'+systeme.id+'"><div class="fria-ring-val">'+(result?result.score.toFixed(1):'—')+'</div><div class="fria-ring-lbl">/ 10</div></div>'
+        : '<span class="fria-na-badge">FRIA non requise</span>')
+    + '</div>'
+    + '<div class="fria-app-reason">'+app.reason+'</div>';
+
+  if(app.applicable){
+    head += '<div class="fria-rights-grid">' + FRIA_RIGHTS.map(function(r){
+      var val = friaGetAnswer(systeme.id, r.id);
+      return '<div class="fria-right-item">'
+        + '<div class="fria-right-q"><strong>'+r.label+'</strong> <span class="fria-right-art">'+r.art+'</span><br>'+r.desc+'</div>'
+        + '<div class="fria-opts">' + FRIA_LEVELS.map(function(lvl){
+            return '<button class="fria-opt'+(val===lvl.v?' on':'')+'" id="fria-opt-'+systeme.id+'-'+r.id+'-'+lvl.v+'" onclick="friaAnswer(\''+systeme.id+'\',\''+r.id+'\','+lvl.v+')" title="'+lvl.label+'">'+lvl.v+'</button>';
+          }).join('') + '</div></div>';
+    }).join('') + '</div>';
+
+    if(result && result.score < 5){
+      head += '<div class="fria-actions-box"><div class="fria-actions-title">Mesures d attenuation recommandees</div>'
+        + '<div class="act-item"><div class="act-dot"></div><div class="act-t">Réviser la politique de supervision humaine (Art. 14)</div></div>'
+        + '<div class="act-item"><div class="act-dot"></div><div class="act-t">Documenter les biais identifiés et leur traitement (Art. 10)</div></div>'
+        + '<div class="act-item"><div class="act-dot"></div><div class="act-t">Verifier l enregistrement dans la base UE (Art. 49, 71)</div></div></div>';
+    }
+  }
+
+  head += '</div>';
+  return head;
+}
+
+function friaInitSectorBar(){
+  var holder = document.getElementById("fria-sector-bar-holder");
+  if(!holder || !window.MAT_SECTORS) return;
+  var options = Object.keys(window.MAT_SECTORS).map(function(k){
+    var s = window.MAT_SECTORS[k];
+    return '<option value="'+k+'"'+(k===FRIA_SECTOR?' selected':'')+'>'+s.icon+' '+s.label+'</option>';
+  }).join("");
+  holder.innerHTML = '<span class="radar-sector-lbl">Secteur d activite :</span>'
+    + '<select id="fria-sector-select" class="radar-sector-select" onchange="friaSelectSector(this.value)">'+options+'</select>'
+    + '<span style="font-size:10px;color:var(--muted);flex:1;min-width:200px">Détermine, pour chaque système du Registre IA, si une FRIA est obligatoire au titre de l Art. 27.</span>';
+}
+
+window.friaSelectSector = function(sectorKey){
+  FRIA_SECTOR = sectorKey;
+  friaRenderAll();
+};
+
+function friaFetch(){
+  fetch('/api/registre').then(function(r){ return r.json(); }).then(function(d){
+    FRIA_REG_CACHE = d.systemes || [];
+    friaRenderAll();
+  }).catch(function(){ FRIA_REG_CACHE = []; friaRenderAll(); });
+}
+
+function friaRenderAll(){
+  var holder = document.getElementById("fria-list");
+  if(!holder) return;
+  var sysSecteur = FRIA_REG_CACHE.filter(function(s){ return friaMatchSector(s.secteur); });
+
+  var info = document.getElementById("fria-registre-info");
+  if(info){
+    if(sysSecteur.length === 0){
+      info.innerHTML = '⚠️ Aucun système du secteur '+friaSectorLabel()+' dans le Registre IA. Ajoutez vos systèmes pour une évaluation FRIA réelle.';
+      info.className = "radar-registre-info radar-registre-warn";
+    } else {
+      var nbApplicable = sysSecteur.filter(function(s){ return friaApplicable(s, s.secteur).applicable; }).length;
+      info.innerHTML = '📊 <strong>'+sysSecteur.length+' système(s)</strong> du secteur '+friaSectorLabel()+' — <strong>'+nbApplicable+' soumis à FRIA</strong> au titre de l Art. 27 EU AI Act.';
+      info.className = "radar-registre-info radar-registre-ok";
+    }
+  }
+
+  if(sysSecteur.length === 0){
+    holder.innerHTML = '<div class="reg-empty">Aucun système à évaluer pour ce secteur. <a href="#" onclick="go(\'registre\',null,\'REGISTRE\',\'Systemes IA\');return false;">Ajouter un système →</a></div>';
+    return;
+  }
+
+  holder.innerHTML = sysSecteur.map(friaRenderSysCard).join("");
+}
+
+var _friaOrigGo = window.go;
+window.go = function(id){
+  var r = _friaOrigGo ? _friaOrigGo.apply(this, arguments) : undefined;
+  if(id === "fria"){ setTimeout(function(){ friaInitSectorBar(); friaFetch(); }, 50); }
+  return r;
+};
 
 })();
 
