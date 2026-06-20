@@ -953,6 +953,26 @@ textarea.form-el{min-height:86px;resize:vertical}
 .raci-cell:hover{opacity:.75;transform:scale(1.05)}
 .raci-help{font-size:11px;color:var(--muted);margin-top:12px;line-height:1.5;font-style:italic}
 
+
+/* ══ REGISTRE IA — CRUD reel ══ */
+.reg-toolbar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.reg-search-input{flex:1;font-size:13px;padding:9px 14px;border:1px solid var(--rule2);border-radius:5px;background:var(--white);color:var(--ink);font-family:var(--sans)}
+.reg-search-input:focus{outline:none;border-color:var(--ink)}
+.reg-loading{padding:30px;text-align:center;font-size:12px;color:var(--muted)}
+.reg-empty{padding:30px;text-align:center;font-size:12px;color:var(--muted)}
+.reg-empty a{color:var(--accent)}
+.reg-sys-row{display:grid;grid-template-columns:28px 1fr 100px 100px 100px 60px 20px;padding:12px 20px;align-items:center;border-bottom:1px solid var(--rule);cursor:pointer;transition:background .12s}
+.reg-sys-row:hover{background:var(--bg)}
+.rs-del{font-size:16px;color:var(--rule2);text-align:center;cursor:pointer;transition:color .12s}
+.rs-del:hover{color:var(--accent)}
+.reg-form{display:flex;flex-direction:column;gap:14px}
+.reg-form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.reg-field{display:flex;flex-direction:column;gap:5px}
+.reg-label{font-size:10px;font-family:var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--muted2)}
+.reg-input,.reg-textarea{font-size:13px;padding:8px 11px;border:1px solid var(--rule2);border-radius:4px;background:var(--white);color:var(--ink);font-family:var(--sans);box-sizing:border-box;width:100%}
+.reg-textarea{min-height:50px;resize:vertical}
+.reg-input:focus,.reg-textarea:focus{outline:none;border-color:var(--ink)}
+
 </style>
 <style id="cpc-styles">
 /* ══ CHATBOT SENTINEL AI — CONSEILPREV ══ */
@@ -2034,8 +2054,14 @@ textarea.form-el{min-height:86px;resize:vertical}
 </div>
 
 <div class="page" id="p-registre">
-  <span class="eyebrow">Registre</span><h1 class="page-h">Registre des <em>systèmes IA</em></h1><p class="page-lead">Inventaire complet de vos déploiements IA classifiés selon l'EU AI Act. Obligatoire pour les systèmes haut risque (Art. 51).</p>
-  <div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title">Systèmes enregistrés — 4 déploiements</span><span class="tbl-link" onclick="openAuditTab()">+ Ajouter un système</span></div><div class="comp-head-row" id="reg-sys-head" style="grid-template-columns:28px 1fr 110px 120px 90px 80px;padding:9px 20px;display:grid;background:var(--bg);border-bottom:2px solid var(--rule)"><div class="comp-cell"></div><div class="comp-cell">Système IA</div><div class="comp-cell">Type</div><div class="comp-cell">Classification AI Act</div><div class="comp-cell">Secteur</div><div class="comp-cell">Score risque</div></div><div id="reg-sys-body"></div></div>
+  <span class="eyebrow">Registre</span><h1 class="page-h">Registre des <em>systèmes IA</em></h1><p class="page-lead">Inventaire complet de vos déploiements IA classifiés selon l'EU AI Act, connecté à une base de données persistante. Obligatoire pour les systèmes haut risque (Art. 49, 71).</p>
+  <div class="reg-toolbar">
+    <input type="text" id="reg-search" class="reg-search-input" placeholder="Rechercher par nom, secteur, type, responsable…" oninput="regSearch(this.value)">
+    <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="regOpenModal()">+ Ajouter un système</button>
+  </div>
+  <div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title" id="reg-count">Chargement…</span></div>
+  <div class="comp-head-row" id="reg-sys-head" style="grid-template-columns:28px 1fr 110px 100px 100px 60px 20px;padding:9px 20px;display:grid;background:var(--bg);border-bottom:2px solid var(--rule)"><div class="comp-cell"></div><div class="comp-cell">Système IA</div><div class="comp-cell">Classification</div><div class="comp-cell">Secteur</div><div class="comp-cell">Conformité</div><div class="comp-cell">Score</div><div class="comp-cell"></div></div>
+  <div id="reg-sys-body"></div></div>
 </div>
 
 <!-- MATRICE -->
@@ -5086,7 +5112,7 @@ function simRender(){
 
 var SYSTEMS=[{ico:'⚡',name:'Système de prédiction énergétique',type:'Prédiction ML',classif:'Haut risque',classif_cls:'chip-r',secteur:'Énergie',score:8.2,score_cls:'dn'},{ico:'🏦',name:'Scoring crédit automatisé',type:'Décision automatisée',classif:'Haut risque',classif_cls:'chip-r',secteur:'Finance',score:7.1,score_cls:'dn'},{ico:'🏭',name:'Détection anomalies industrielles',type:'Surveillance OT',classif:'Risque limité',classif_cls:'chip-o',secteur:'Industrie',score:4.5,score_cls:'up'},{ico:'💬',name:'Chatbot service client',type:'IA générative',classif:'Risque minimal',classif_cls:'chip-g',secteur:'IT',score:2.8,score_cls:'up'}];
 
-(function(){ var b=document.getElementById('reg-sys-body'); if(!b) return; b.innerHTML=SYSTEMS.map(function(s){ return '<div class="reg-sys-row"><div class="rs-ico">'+s.ico+'</div><div><div class="rs-name">'+s.name+'</div><div class="rs-type">'+s.type+'</div></div><div><span class="chip '+s.classif_cls+'">'+s.classif+'</span></div><div><span class="chip chip-b">'+s.secteur+'</span></div><div class="rs-risk kpi-tr '+s.score_cls+'" style="font-family:var(--serif);font-size:16px;color:var(--ink)">'+s.score+'</div></div>'; }).join(''); })();
+/* Registre IA — remplace par le module registre_module.js (vraie base de donnees) */
 
 (function(){
   var g=document.getElementById('matrix-grid'); if(!g) return;
@@ -7915,6 +7941,189 @@ var _raciOrigGo = window.go;
 window.go = function(id){
   var r = _raciOrigGo ? _raciOrigGo.apply(this, arguments) : undefined;
   if(id === "parties") setTimeout(window.raciRenderPage, 50);
+  return r;
+};
+
+})();
+
+</script>
+
+<script>
+/* ══ REGISTRE IA — Base de donnees reelle (CRUD) ══ */
+(function(){
+'use strict';
+
+var REG_DATA = [];
+var REG_FILTER = "";
+var REG_EDIT_ID = null;
+
+var CLASSIF_LABELS = {
+  inacceptable:{label:"Inacceptable", cls:"chip-r"},
+  haut:{label:"Haut risque", cls:"chip-r"},
+  limite:{label:"Risque limite", cls:"chip-o"},
+  minimal:{label:"Risque minimal", cls:"chip-g"},
+  a_evaluer:{label:"A evaluer", cls:"chip-b"}
+};
+var STATUT_LABELS = {
+  conforme:{label:"Conforme", cls:"chip-g"},
+  en_cours:{label:"En cours", cls:"chip-o"},
+  non_conforme:{label:"Non conforme", cls:"chip-r"},
+  a_evaluer:{label:"A evaluer", cls:"chip-b"}
+};
+
+function regFetch(){
+  var body = document.getElementById("reg-sys-body");
+  if(body) body.innerHTML = '<div class="reg-loading">Chargement du registre…</div>';
+  fetch('/api/registre')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      REG_DATA = d.systemes || [];
+      regRender();
+    })
+    .catch(function(){
+      if(body) body.innerHTML = '<div class="reg-loading" style="color:var(--accent)">Erreur de chargement. Verifiez la connexion au serveur.</div>';
+    });
+}
+
+function regFilteredData(){
+  if(!REG_FILTER) return REG_DATA;
+  var q = REG_FILTER.toLowerCase();
+  return REG_DATA.filter(function(s){
+    return (s.nom||"").toLowerCase().indexOf(q)!==-1
+      || (s.secteur||"").toLowerCase().indexOf(q)!==-1
+      || (s.type_systeme||"").toLowerCase().indexOf(q)!==-1
+      || (s.responsable||"").toLowerCase().indexOf(q)!==-1;
+  });
+}
+
+function regRender(){
+  var body = document.getElementById("reg-sys-body");
+  var countEl = document.getElementById("reg-count");
+  if(!body) return;
+  var data = regFilteredData();
+  if(countEl) countEl.textContent = data.length + (data.length===1 ? " déploiement" : " déploiements");
+
+  if(data.length === 0){
+    body.innerHTML = '<div class="reg-empty">Aucun système trouvé. <a href="#" onclick="regOpenModal();return false;">Ajouter le premier système IA →</a></div>';
+    return;
+  }
+
+  body.innerHTML = data.map(function(s){
+    var cl = CLASSIF_LABELS[s.classification] || CLASSIF_LABELS.a_evaluer;
+    var st = STATUT_LABELS[s.statut_conformite] || STATUT_LABELS.a_evaluer;
+    var scoreColor = s.score_risque>=7 ? "var(--accent)" : s.score_risque>=4 ? "var(--orange)" : "var(--green)";
+    return '<div class="reg-sys-row" onclick="regOpenModal('+s.id+')">'
+      + '<div class="rs-ico">🤖</div>'
+      + '<div><div class="rs-name">'+s.nom+'</div><div class="rs-type">'+(s.type_systeme||"—")+'</div></div>'
+      + '<div><span class="chip '+cl.cls+'">'+cl.label+'</span></div>'
+      + '<div><span class="chip chip-b">'+(s.secteur||"—")+'</span></div>'
+      + '<div><span class="chip '+st.cls+'">'+st.label+'</span></div>'
+      + '<div class="rs-risk" style="font-family:var(--serif);font-size:16px;color:'+scoreColor+'">'+s.score_risque+'/10</div>'
+      + '<div class="rs-del" onclick="event.stopPropagation();regDelete('+s.id+')" title="Supprimer">×</div>'
+      + '</div>';
+  }).join("");
+}
+
+window.regSearch = function(val){ REG_FILTER = val; regRender(); };
+
+/* ── Modale d'ajout / edition ── */
+window.regOpenModal = function(id){
+  REG_EDIT_ID = id || null;
+  var sys = id ? REG_DATA.find(function(s){ return s.id === id; }) : null;
+  var modal = document.getElementById("reg-modal");
+  if(!modal){ modal = document.createElement("div"); modal.id = "reg-modal"; modal.className = "mat-modal"; document.body.appendChild(modal); }
+
+  function val(field){ return sys ? (sys[field]||"") : ""; }
+  function sel(field, options){
+    return options.map(function(o){
+      return '<option value="'+o.v+'"'+(val(field)===o.v?' selected':'')+'>'+o.l+'</option>';
+    }).join("");
+  }
+
+  modal.innerHTML = '<div class="mat-modal-box">'
+    + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">'+(sys?"Modifier le système":"Nouveau système IA")+'</div>'
+    + '<div class="mat-modal-title">'+(sys?sys.nom:"Ajouter au registre")+'</div></div>'
+    + '<button class="mat-modal-close" onclick="regCloseModal()">×</button></div>'
+    + '<div class="mat-modal-body">'
+    + '<div class="reg-form">'
+    + regField("Nom du système *", '<input type="text" id="rf-nom" class="reg-input" value="'+val("nom")+'" placeholder="Ex: Chatbot service client">')
+    + regField("Finalité", '<textarea id="rf-finalite" class="reg-textarea" placeholder="Objectif et usage du système">'+val("finalite")+'</textarea>')
+    + regRow([
+        regField("Secteur", '<input type="text" id="rf-secteur" class="reg-input" value="'+val("secteur")+'" placeholder="Ex: Finance">'),
+        regField("Type de système", '<input type="text" id="rf-type" class="reg-input" value="'+val("type_systeme")+'" placeholder="Ex: LLM, scoring, vision...">')
+      ])
+    + regField("Données utilisées", '<textarea id="rf-donnees" class="reg-textarea" placeholder="Types de données traitées">'+val("donnees_utilisees")+'</textarea>')
+    + regRow([
+        regField("Classification AI Act", '<select id="rf-classif" class="reg-input">'+sel("classification",[
+            {v:"a_evaluer",l:"À évaluer"},{v:"minimal",l:"Risque minimal"},{v:"limite",l:"Risque limité"},{v:"haut",l:"Haut risque"},{v:"inacceptable",l:"Inacceptable"}
+          ])+'</select>'),
+        regField("Statut de conformité", '<select id="rf-statut" class="reg-input">'+sel("statut_conformite",[
+            {v:"a_evaluer",l:"À évaluer"},{v:"non_conforme",l:"Non conforme"},{v:"en_cours",l:"En cours"},{v:"conforme",l:"Conforme"}
+          ])+'</select>')
+      ])
+    + regField("Justification (Annexe III)", '<textarea id="rf-justif" class="reg-textarea" placeholder="Référence à l\'article ou point de l\'Annexe III">'+val("justification")+'</textarea>')
+    + regRow([
+        regField("Score de risque (0-10)", '<input type="number" id="rf-score" class="reg-input" min="0" max="10" value="'+(sys?sys.score_risque:0)+'">'),
+        regField("Responsable", '<input type="text" id="rf-resp" class="reg-input" value="'+val("responsable")+'" placeholder="Ex: Responsable IA">')
+      ])
+    + regField("Fournisseur / Éditeur", '<input type="text" id="rf-fournisseur" class="reg-input" value="'+val("fournisseur")+'" placeholder="Ex: Interne, OpenAI, fournisseur tiers">')
+    + '</div></div>'
+    + '<div class="mat-modal-foot">'
+    + '<button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="regSave()">'+(sys?"Enregistrer les modifications":"Ajouter au registre")+'</button>'
+    + (sys ? '<button class="mat-export-btn" style="background:var(--bg);color:var(--accent);border:1px solid var(--accent)" onclick="regDelete('+sys.id+')">Supprimer</button>' : '')
+    + '</div></div>';
+  modal.classList.add("on");
+};
+
+function regField(label, input){ return '<div class="reg-field"><label class="reg-label">'+label+'</label>'+input+'</div>'; }
+function regRow(fields){ return '<div class="reg-form-row">'+fields.join("")+'</div>'; }
+
+window.regCloseModal = function(){ var m = document.getElementById("reg-modal"); if(m) m.classList.remove("on"); };
+
+window.regSave = function(){
+  var payload = {
+    nom: document.getElementById("rf-nom").value.trim(),
+    finalite: document.getElementById("rf-finalite").value.trim(),
+    secteur: document.getElementById("rf-secteur").value.trim(),
+    type_systeme: document.getElementById("rf-type").value.trim(),
+    donnees_utilisees: document.getElementById("rf-donnees").value.trim(),
+    classification: document.getElementById("rf-classif").value,
+    statut_conformite: document.getElementById("rf-statut").value,
+    justification: document.getElementById("rf-justif").value.trim(),
+    score_risque: parseInt(document.getElementById("rf-score").value || "0", 10),
+    responsable: document.getElementById("rf-resp").value.trim(),
+    fournisseur: document.getElementById("rf-fournisseur").value.trim()
+  };
+  if(!payload.nom){ alert("Le nom du système est obligatoire."); return; }
+
+  var url = REG_EDIT_ID ? "/api/registre/"+REG_EDIT_ID : "/api/registre";
+  var method = REG_EDIT_ID ? "PUT" : "POST";
+
+  fetch(url, {method:method, headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload)})
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if(d.error){ alert(d.error); return; }
+      regCloseModal();
+      regFetch();
+    })
+    .catch(function(){ alert("Erreur lors de l'enregistrement."); });
+};
+
+window.regDelete = function(id){
+  if(!confirm("Supprimer définitivement ce système du registre ?")) return;
+  fetch("/api/registre/"+id, {method:"DELETE"})
+    .then(function(r){ return r.json(); })
+    .then(function(){
+      regCloseModal();
+      regFetch();
+    });
+};
+
+/* Hook navigation : charger le registre a l'ouverture de la page */
+var _regOrigGo = window.go;
+window.go = function(id){
+  var r = _regOrigGo ? _regOrigGo.apply(this, arguments) : undefined;
+  if(id === "registre") setTimeout(regFetch, 50);
   return r;
 };
 
