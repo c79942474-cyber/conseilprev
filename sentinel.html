@@ -1004,6 +1004,15 @@ textarea.form-el{min-height:86px;resize:vertical}
 .vl-btn.on{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:700}
 .vl-sep{color:var(--rule2);font-size:10px;margin:0 1px}
 
+
+.raci-sector-bar{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:14px 18px;background:var(--white);border:1px solid var(--rule);border-radius:6px;flex-wrap:wrap}
+.raci-sector-lbl{font-size:11px;font-family:var(--mono);color:var(--muted2);letter-spacing:.04em}
+.raci-sector-select{font-size:13px;padding:7px 12px;border:1px solid var(--rule2);border-radius:4px;background:var(--white);color:var(--ink);font-family:var(--sans);cursor:pointer}
+.raci-sector-note{font-size:10px;color:var(--muted);line-height:1.4;flex:1;min-width:200px}
+.raci-sector-tag{font-size:8px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.03em;background:rgba(184,50,34,.1);color:var(--accent);padding:1px 6px;border-radius:2px;margin-left:6px;vertical-align:middle}
+.raci-role-sector{position:relative}
+.raci-row-sector{background:rgba(184,50,34,.02)}
+
 </style>
 <style id="cpc-styles">
 /* ══ CHATBOT SENTINEL AI — CONSEILPREV ══ */
@@ -7756,12 +7765,89 @@ window.matKpiMail = function(){
 </script>
 
 <script>
+/* ══ DONNEES SECTORIELLES RACI — Roles metiers et processus specifiques ══ */
+
+/* Roles metiers specifiques par secteur (ajoutes aux 10 roles generiques) */
+var RACI_SECTOR_ROLES = {
+  telecom: [
+    {id:"reseau_ops", label:"Responsable Operations Reseau"},
+    {id:"relation_client", label:"Relation Client / Service Client"}
+  ],
+  energie: [
+    {id:"exploitant", label:"Exploitant Infrastructure Critique"},
+    {id:"securite_ot", label:"Securite OT/SCADA"}
+  ],
+  sante: [
+    {id:"medecin", label:"Praticien / Responsable Medical"},
+    {id:"qualite_dm", label:"Responsable Qualite Dispositifs Medicaux"}
+  ],
+  finance: [
+    {id:"risk_credit", label:"Direction des Risques / Credit"},
+    {id:"conformite_acpr", label:"Conformite ACPR / Regulateur"}
+  ],
+  industrie: [
+    {id:"production", label:"Responsable Production / QHSE"},
+    {id:"maintenance", label:"Responsable Maintenance Industrielle"}
+  ],
+  transport: [
+    {id:"exploitation_transport", label:"Responsable Exploitation / Securite Transport"},
+    {id:"homologation", label:"Charge d Homologation Reglementaire"}
+  ],
+  it: [
+    {id:"product_owner", label:"Product Owner / Tech Lead"},
+    {id:"devsecops", label:"DevSecOps"}
+  ],
+  public: [
+    {id:"agent_public", label:"Agent Instructeur / Service Public"},
+    {id:"defenseur_droits", label:"Correspondant Egalite de Traitement"}
+  ]
+};
+
+/* Processus de gouvernance specifiques par secteur (ajoutes aux 14 processus generiques) */
+var RACI_SECTOR_PROCESSES = {
+  telecom: [
+    {id:"st1", label:"Controle des reponses des chatbots (anti-desinformation, biais)", art:"Art. 50 EU AI Act / ISO 42001 A.9", roles:{reseau_ops:"C", resp_ia:"R", relation_client:"C", juridique:"I"}},
+    {id:"st2", label:"Chiffrement des metadonnees et donnees de communication", art:"ePrivacy / ISO 42001 A.7", roles:{cyber:"R", dpo:"A", it:"C"}}
+  ],
+  energie: [
+    {id:"st1", label:"Audit de robustesse des systemes IA sur infrastructures critiques (SCADA)", art:"NIS2 / ISO 42001 cl. 9.1", roles:{securite_ot:"R", exploitant:"A", cyber:"C", comite:"I"}},
+    {id:"st2", label:"Continuite de service et supervision humaine des decisions automatisees", art:"Art. 14 EU AI Act", roles:{exploitant:"R", resp_ia:"A", direction:"I"}}
+  ],
+  sante: [
+    {id:"st1", label:"Double evaluation de conformite (EU AI Act + MDR/IVDR)", art:"Art. 6 EU AI Act / Reglement MDR", roles:{qualite_dm:"R", juridique:"A", medecin:"C", resp_ia:"C"}},
+    {id:"st2", label:"Validation clinique et explicabilite des recommandations IA", art:"Art. 13, 14 EU AI Act", roles:{medecin:"R", resp_ia:"A", comite:"I"}}
+  ],
+  finance: [
+    {id:"st1", label:"Controle des biais dans le scoring credit et la tarification", art:"Annexe III EU AI Act / ISO 42001 A.7", roles:{risk_credit:"R", data:"C", conformite_acpr:"A", juridique:"C"}},
+    {id:"st2", label:"Tests de resilience operationnelle (DORA)", art:"Reglement DORA", roles:{cyber:"R", risk_credit:"A", it:"C", direction:"I"}}
+  ],
+  industrie: [
+    {id:"st1", label:"Marquage CE et conformite des composants de securite IA", art:"Directive Machines / Annexe I EU AI Act", roles:{production:"R", juridique:"A", resp_ia:"C"}},
+    {id:"st2", label:"Securite de la robotique collaborative et arret d urgence", art:"Art. 14 EU AI Act", roles:{maintenance:"R", production:"A", cyber:"C"}}
+  ],
+  transport: [
+    {id:"st1", label:"Homologation sectorielle des systemes critiques (EASA/UNECE)", art:"Reglement vehicules / EASA", roles:{homologation:"R", juridique:"A", exploitation_transport:"C"}},
+    {id:"st2", label:"Journalisation et boite noire des decisions automatisees", art:"Art. 12 EU AI Act", roles:{exploitation_transport:"R", resp_ia:"A", cyber:"C"}}
+  ],
+  it: [
+    {id:"st1", label:"Documentation technique et resume d entrainement des modeles GPAI", art:"Art. 53 EU AI Act / ISO 42001 A.6", roles:{product_owner:"R", resp_ia:"A", juridique:"C"}},
+    {id:"st2", label:"Securite by design contre attaques adversariales (prompt injection)", art:"ISO 27001 / ISO 42001 A.7", roles:{devsecops:"R", cyber:"A", product_owner:"C"}}
+  ],
+  public: [
+    {id:"st1", label:"Garantie d egalite de traitement et droit au recours citoyen", art:"Annexe III EU AI Act / Art. 5", roles:{defenseur_droits:"R", juridique:"A", agent_public:"C", direction:"I"}},
+    {id:"st2", label:"Publication des analyses d impact et transparence democratique", art:"Art. 13 EU AI Act / RGPD", roles:{dpo:"R", direction:"A", agent_public:"I"}}
+  ]
+};
+
+window.RACI_SECTOR_ROLES = RACI_SECTOR_ROLES;
+window.RACI_SECTOR_PROCESSES = RACI_SECTOR_PROCESSES;
+
 /* ══ CARTOGRAPHIE DES PARTIES PRENANTES — Matrice RACI ══ */
 (function(){
 'use strict';
 
 /* Processus de gouvernance IA (lignes de la matrice RACI) */
-var RACI_PROCESSES = [
+var RACI_PROCESSES_BASE = [
   {id:"p1", label:"Identification et classification des systemes IA", art:"Art. 6 EU AI Act / Annexe III"},
   {id:"p2", label:"Tenue du registre des systemes IA", art:"Art. 49, 71 EU AI Act"},
   {id:"p3", label:"Evaluation des risques et impacts (FRIA)", art:"Art. 9 EU AI Act / ISO 42001 cl. 6.1"},
@@ -7778,8 +7864,8 @@ var RACI_PROCESSES = [
   {id:"p14", label:"Reponses aux demandes clients sur la gouvernance IA", art:"Accompagnement commercial"}
 ];
 
-/* Roles / parties prenantes (colonnes de la matrice) */
-var RACI_ROLES = [
+/* Roles / parties prenantes generiques (colonnes de la matrice) */
+var RACI_ROLES_BASE = [
   {id:"direction", label:"Direction Generale / Comex"},
   {id:"resp_ia", label:"Responsable IA"},
   {id:"dpo", label:"DPO"},
@@ -7792,10 +7878,23 @@ var RACI_ROLES = [
   {id:"commercial", label:"Commercial / Avant-vente"}
 ];
 
+var RACI_SECTOR = "telecom"; /* secteur actif de la page Parties prenantes */
+
+function raciCurSectorRoles(){
+  return (window.RACI_SECTOR_ROLES && window.RACI_SECTOR_ROLES[RACI_SECTOR]) || [];
+}
+function raciCurSectorProcesses(){
+  return (window.RACI_SECTOR_PROCESSES && window.RACI_SECTOR_PROCESSES[RACI_SECTOR]) || [];
+}
+
+/* Roles/processus combines : generiques + specifiques au secteur actif (recalcules a chaque appel) */
+function raciGetRoles(){ return RACI_ROLES_BASE.concat(raciCurSectorRoles()); }
+function raciGetProcesses(){ return RACI_PROCESSES_BASE.concat(raciCurSectorProcesses()); }
+
 /* Valeurs RACI par defaut (R=Responsable execution, A=Approbateur final, C=Consulte, I=Informe) */
 function defaultRaci(){
   var d = {};
-  RACI_PROCESSES.forEach(function(p){ d[p.id] = {}; RACI_ROLES.forEach(function(r){ d[p.id][r.id] = ""; }); });
+  raciGetProcesses().forEach(function(p){ d[p.id] = {}; raciGetRoles().forEach(function(r){ d[p.id][r.id] = ""; }); });
   var presets = {
     p1:{resp_ia:"R", comite:"A", data:"C", juridique:"C", metiers:"I"},
     p2:{data:"R", resp_ia:"A", it:"C", juridique:"I"},
@@ -7812,8 +7911,13 @@ function defaultRaci(){
     p13:{juridique:"R", resp_ia:"A", data:"C", it:"C"},
     p14:{commercial:"R", resp_ia:"A", juridique:"C"}
   };
+  /* Presets des processus specifiques au secteur actif (deja definis dans RACI_SECTOR_PROCESSES) */
+  raciCurSectorProcesses().forEach(function(sp){
+    if(sp.roles) presets[sp.id] = sp.roles;
+  });
   Object.keys(presets).forEach(function(pid){
-    Object.keys(presets[pid]).forEach(function(rid){ d[pid][rid] = presets[pid][rid]; });
+    if(!d[pid]) return;
+    Object.keys(presets[pid]).forEach(function(rid){ if(d[pid][rid] !== undefined) d[pid][rid] = presets[pid][rid]; });
   });
   return d;
 }
@@ -7845,20 +7949,35 @@ function raciRenderCell(pid, rid){
 
 function raciRenderTable(){
   raciInit();
+  var sectorProcIds = raciCurSectorProcesses().map(function(p){ return p.id; });
+  var sectorRoleIds = raciCurSectorRoles().map(function(r){ return r.id; });
+  var roles = raciGetRoles();
   var head = '<div class="raci-row raci-head"><div class="raci-proc-cell raci-proc-head">Processus de gouvernance IA</div>'
-    + RACI_ROLES.map(function(r){ return '<div class="raci-role-head">'+r.label+'</div>'; }).join("")
+    + roles.map(function(r){ return '<div class="raci-role-head'+(sectorRoleIds.indexOf(r.id)!==-1?' raci-role-sector':'')+'">'+r.label+(sectorRoleIds.indexOf(r.id)!==-1?'<span class="raci-sector-tag">Sectoriel</span>':'')+'</div>'; }).join("")
     + '</div>';
-  var rows = RACI_PROCESSES.map(function(p){
-    return '<div class="raci-row">'
-      + '<div class="raci-proc-cell"><div class="raci-proc-label">'+p.label+'</div><div class="raci-proc-art">'+p.art+'</div></div>'
-      + RACI_ROLES.map(function(r){
-          var v = RACI_STATE[p.id][r.id] || "";
+  var rows = raciGetProcesses().map(function(p){
+    var isSector = sectorProcIds.indexOf(p.id) !== -1;
+    return '<div class="raci-row'+(isSector?' raci-row-sector':'')+'">'
+      + '<div class="raci-proc-cell"><div class="raci-proc-label">'+p.label+(isSector?' <span class="raci-sector-tag">Sectoriel</span>':'')+'</div><div class="raci-proc-art">'+p.art+'</div></div>'
+      + roles.map(function(r){
+          var v = (RACI_STATE[p.id] && RACI_STATE[p.id][r.id]) || "";
           return '<div class="raci-cell" id="raci-'+p.id+'-'+r.id+'" onclick="raciCycle(\''+p.id+'\',\''+r.id+'\')" style="background:'+(v?RACI_LETTERS[v]:"transparent")+';color:'+(v?"#fff":"var(--muted2)")+'" title="'+(v?RACI_LABELS[v]:"Cliquer pour assigner")+'">'+v+'</div>';
         }).join("")
       + '</div>';
   }).join("");
   return head + rows;
 }
+
+window.raciSelectSector = function(sectorKey){
+  RACI_SECTOR = sectorKey;
+  RACI_STATE = defaultRaci();
+  var sel = document.getElementById("raci-sector-select");
+  if(sel) sel.value = sectorKey;
+  var holder = document.getElementById("raci-table-holder");
+  if(holder) holder.innerHTML = raciRenderTable();
+  var lbl = document.getElementById("raci-sector-label");
+  if(lbl && window.MAT_SECTORS && window.MAT_SECTORS[sectorKey]) lbl.textContent = window.MAT_SECTORS[sectorKey].label;
+};
 
 window.raciReset = function(){
   if(!confirm("Reinitialiser la matrice RACI au profil de reference CONSEILPREV ?")) return;
@@ -7870,7 +7989,7 @@ window.raciReset = function(){
 window.raciClearAll = function(){
   if(!confirm("Vider entierement la matrice (toutes les cellules) ?")) return;
   RACI_STATE = {};
-  RACI_PROCESSES.forEach(function(p){ RACI_STATE[p.id] = {}; RACI_ROLES.forEach(function(r){ RACI_STATE[p.id][r.id] = ""; }); });
+  raciGetProcesses().forEach(function(p){ RACI_STATE[p.id] = {}; raciGetRoles().forEach(function(r){ RACI_STATE[p.id][r.id] = ""; }); });
   var holder = document.getElementById("raci-table-holder");
   if(holder) holder.innerHTML = raciRenderTable();
 };
@@ -7881,7 +8000,20 @@ window.raciRenderPage = function(){
   if(!holder) return;
   raciInit();
 
-  var html = '<div class="raci-toolbar">'
+  var sectorOptions = "";
+  if(window.MAT_SECTORS){
+    sectorOptions = Object.keys(window.MAT_SECTORS).map(function(k){
+      var s = window.MAT_SECTORS[k];
+      return '<option value="'+k+'"'+(k===RACI_SECTOR?' selected':'')+'>'+s.icon+' '+s.label+'</option>';
+    }).join("");
+  }
+
+  var html = '<div class="raci-sector-bar">'
+    + '<span class="raci-sector-lbl">Secteur d activite :</span>'
+    + '<select id="raci-sector-select" class="raci-sector-select" onchange="raciSelectSector(this.value)">'+sectorOptions+'</select>'
+    + '<span class="raci-sector-note">Les roles metiers et processus de gouvernance ci-dessous sont contextualises selon le secteur selectionne (EU AI Act + ISO/IEC 42001:2023).</span>'
+    + '</div>'
+    + '<div class="raci-toolbar">'
     + '<div class="raci-legend">'
     + Object.keys(RACI_LABELS).map(function(k){ return '<span class="raci-legend-item"><span class="raci-legend-dot" style="background:'+RACI_LETTERS[k]+'"></span>'+k+' — '+RACI_LABELS[k]+'</span>'; }).join("")
     + '</div>'
@@ -7917,8 +8049,8 @@ window.raciGenerateDoc = function(){
     + '</div></div>';
   modal.classList.add("on");
 
-  var matrixSummary = RACI_PROCESSES.map(function(p){
-    var assigned = RACI_ROLES.filter(function(r){ return RACI_STATE[p.id][r.id]; })
+  var matrixSummary = raciGetProcesses().map(function(p){
+    var assigned = raciGetRoles().filter(function(r){ return RACI_STATE[p.id][r.id]; })
       .map(function(r){ return r.label+" ("+RACI_STATE[p.id][r.id]+")"; }).join(", ");
     return "- "+p.label+" ["+p.art+"] : "+(assigned||"non assigne");
   }).join("\n");
@@ -7976,9 +8108,9 @@ function raciTableDocHTML(){
     + 'td{border:1px solid #ddd;padding:5px 4px;text-align:center}td:first-child,th:first-child{text-align:left;max-width:180px}'
     + '.R{background:#B83222;color:#fff}.A{background:#1C5A8A;color:#fff}.C{background:#C47C1A;color:#fff}.I{background:#2D7A47;color:#fff}</style></head><body>';
   h += '<h1>Matrice RACI — Cartographie des parties prenantes</h1><div class="sub">'+today+' · CONSEILPREV · R=Responsable A=Approbateur C=Consulte I=Informe</div>';
-  h += '<table><tr><th>Processus</th>'+RACI_ROLES.map(function(r){return '<th>'+r.label+'</th>';}).join("")+'</tr>';
-  RACI_PROCESSES.forEach(function(p){
-    h += '<tr><td>'+p.label+'</td>'+RACI_ROLES.map(function(r){ var v=RACI_STATE[p.id][r.id]||""; return '<td class="'+v+'">'+v+'</td>'; }).join("")+'</tr>';
+  h += '<table><tr><th>Processus</th>'+raciGetRoles().map(function(r){return '<th>'+r.label+'</th>';}).join("")+'</tr>';
+  raciGetProcesses().forEach(function(p){
+    h += '<tr><td>'+p.label+'</td>'+raciGetRoles().map(function(r){ var v=RACI_STATE[p.id][r.id]||""; return '<td class="'+v+'">'+v+'</td>'; }).join("")+'</tr>';
   });
   h += '</table></body></html>';
   return h;
@@ -7987,8 +8119,8 @@ window.raciExportPDF = function(){ var w = window.open("","_blank"); if(!w){aler
 window.raciExportWord = function(){ var blob = new Blob(['\ufeff'+raciTableDocHTML()],{type:"application/msword"}); var u = URL.createObjectURL(blob); var a = document.createElement("a"); a.href=u; a.download="Matrice-RACI.doc"; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(u); };
 window.raciMail = function(){
   raciInit();
-  var lines = RACI_PROCESSES.map(function(p){
-    var assigned = RACI_ROLES.filter(function(r){ return RACI_STATE[p.id][r.id]; }).map(function(r){ return r.label+" ("+RACI_STATE[p.id][r.id]+")"; }).join(", ");
+  var lines = raciGetProcesses().map(function(p){
+    var assigned = raciGetRoles().filter(function(r){ return RACI_STATE[p.id][r.id]; }).map(function(r){ return r.label+" ("+RACI_STATE[p.id][r.id]+")"; }).join(", ");
     return "- "+p.label+" : "+(assigned||"non assigne");
   }).join("\n");
   var subj = encodeURIComponent("Matrice RACI - Cartographie des parties prenantes IA");
