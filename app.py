@@ -2615,15 +2615,32 @@ from datetime import datetime
 
 DATABASE_URL = os.environ.get('DATABASE_URL', '').strip()
 REGISTRE_USE_PG = bool(DATABASE_URL)
+REGISTRE_SQLITE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'registre_ia.db')
 
 if REGISTRE_USE_PG:
     import psycopg
     import psycopg.rows
-    # Render fournit parfois des URLs postgres:// (ancien schema) -> psycopg2 accepte les deux
+    # Render fournit parfois des URLs postgres:// (ancien schema) -> psycopg accepte les deux
     if DATABASE_URL.startswith('postgres://'):
         DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://', 1)
-else:
-    REGISTRE_SQLITE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'registre_ia.db')
+
+    # Diagnostic : logger le host cible SANS exposer les identifiants
+    try:
+        from urllib.parse import urlparse as _urlparse
+        _parsed = _urlparse(DATABASE_URL)
+        logger.info(f"REGISTRE_IA — DATABASE_URL detectee, host cible : {_parsed.hostname}:{_parsed.port or 5432}, base : {_parsed.path.lstrip('/')}")
+    except Exception:
+        logger.info("REGISTRE_IA — DATABASE_URL detectee (parsing host impossible)")
+
+    # Test de connexion reel au demarrage : si echec, on bascule proprement sur SQLite
+    # plutot que de rester bloque sur un moteur Postgres inaccessible a chaque requete.
+    try:
+        _test_conn = psycopg.connect(DATABASE_URL, row_factory=psycopg.rows.dict_row, connect_timeout=5)
+        _test_conn.close()
+        logger.info("REGISTRE_IA — connexion Postgres testee avec succes")
+    except Exception as _conn_err:
+        logger.error(f"REGISTRE_IA — connexion Postgres impossible ({_conn_err}) — bascule sur SQLite local")
+        REGISTRE_USE_PG = False
 
 def registre_get_db():
     if REGISTRE_USE_PG:
