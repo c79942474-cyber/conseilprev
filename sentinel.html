@@ -900,6 +900,39 @@ textarea.form-el{min-height:86px;resize:vertical}
 .proc-generate-btn{width:100%;font-size:13px;font-family:var(--mono);padding:12px;border-radius:5px;border:none;background:var(--accent);color:#fff;cursor:pointer;letter-spacing:.03em;transition:background .15s}
 .proc-generate-btn:hover{background:#9a2a1d}
 
+
+/* ══ Cartes d'accès budget/KPI + modales larges ══ */
+.mat-access-card{display:flex;align-items:center;gap:16px;background:var(--white);border:1px solid var(--rule);border-radius:6px;padding:18px 20px;cursor:pointer;transition:all .15s}
+.mat-access-card:hover{border-color:var(--accent);box-shadow:0 4px 16px rgba(184,50,34,.1);transform:translateY(-1px)}
+.mat-access-budget:hover{border-color:var(--blue);box-shadow:0 4px 16px rgba(28,90,138,.1)}
+.mat-access-ico{font-size:30px;flex-shrink:0}
+.mat-access-body{flex:1}
+.mat-access-title{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.mat-access-desc{font-size:11px;color:var(--muted);line-height:1.5}
+.mat-access-btn{font-size:12px;font-family:var(--mono);color:var(--accent);flex-shrink:0;letter-spacing:.03em}
+.mat-access-budget .mat-access-btn{color:var(--blue)}
+.mat-modal-wide{max-width:880px}
+/* Budget synthese */
+.bud-synth{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.bud-synth-card{background:var(--bg);border:1px solid var(--rule);border-radius:5px;padding:12px 14px;text-align:center}
+.bud-synth-lbl{font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted2);margin-bottom:5px}
+.bud-synth-val{font-family:var(--serif);font-size:21px;color:var(--accent);line-height:1.1}
+.bud-synth-sub{font-size:9px;color:var(--muted);margin-top:3px}
+.bud-block{margin-bottom:22px}
+.bud-block-h{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.bud-block-sub{font-size:11px;color:var(--muted);margin-bottom:8px;line-height:1.4}
+.bud-table{width:100%;border-collapse:collapse;font-size:11px}
+.bud-table th{background:var(--ink);color:#fff;text-align:left;padding:7px 9px;font-size:9px;font-family:var(--mono);letter-spacing:.03em;text-transform:uppercase;font-weight:600}
+.bud-table td{padding:7px 9px;border-bottom:1px solid var(--rule);color:var(--ink2);vertical-align:top;line-height:1.45}
+.bud-table .r{text-align:right;white-space:nowrap}
+.bud-table td strong{color:var(--accent)}
+.bud-note{font-size:10px;color:var(--muted)}
+.bud-block-total{display:flex;justify-content:space-between;padding:8px 9px;background:var(--bg);border-radius:0 0 4px 4px;font-size:12px;font-weight:600;color:var(--ink);margin-top:-1px}
+.bud-grand{display:flex;justify-content:space-between;align-items:center;background:var(--accent);color:#fff;padding:14px 18px;border-radius:6px;font-family:var(--mono);font-size:13px;letter-spacing:.04em;margin:18px 0}
+.bud-grand span:last-child{font-size:18px;font-weight:700}
+.bud-disclaimer{font-size:10px;color:var(--muted2);font-style:italic;line-height:1.5;margin-top:14px}
+.kpi-table .kpi-cat-cell{font-family:var(--mono);font-size:9px;color:var(--blue);white-space:nowrap}
+
 </style>
 <style id="cpc-styles">
 /* ══ CHATBOT SENTINEL AI — CONSEILPREV ══ */
@@ -6414,12 +6447,14 @@ function matRender(){
     + s.specifics.map(function(sp){return '<div class="mat-spec-card"><div class="mat-spec-t">'+sp.t+'</div><div class="mat-spec-d">'+sp.d+'</div></div>';}).join("")
     + '</div></div>';
 
-  /* KPIs */
-  html += '<div class="mat-section"><div class="mat-section-h">Tableau de bord de pilotage (KPIs)'+tip("Indicateurs cles de suivi de la conformite et de la gouvernance IA, avec cibles et outils de mesure associes. Repris dans les livrables telechargeables.")+'</div>'
-    + '<div class="mat-section-sub">Indicateurs de suivi de la conformité et de la gouvernance IA.</div>'
-    + '<div class="mat-kpi-grid">'
-    + MAT_KPIS.map(function(k){return '<div class="mat-kpi"><div class="mat-kpi-cat">'+k.cat+'</div><div class="mat-kpi-val">'+k.val+'</div><div class="mat-kpi-name">'+k.name+tip("Cible : "+k.val+". Outil de mesure : "+k.tool+". Indicateur suivi dans le tableau de bord de pilotage de la conformite IA.")+'</div><div class="mat-kpi-tool">'+k.tool+'</div></div>';}).join("")
-    + '</div></div>';
+  /* KPIs — accessible via bouton (modale detaillee) */
+  html += '<div class="mat-section"><div class="mat-section-h">Tableau de bord de pilotage (KPIs)'+tip("Indicateurs cles de suivi de la conformite et de la gouvernance IA, avec cibles, frequences, outils et responsables. KPIs generiques + specifiques au secteur.")+'</div>'
+    + '<div class="mat-section-sub">Indicateurs de pilotage de la conformité IA, incluant des KPIs spécifiques au secteur '+s.label+'.</div>'
+    + '<div class="mat-access-card" onclick="matOpenKPIs()">'
+    + '<div class="mat-access-ico">📊</div>'
+    + '<div class="mat-access-body"><div class="mat-access-title">Consulter les KPIs sectoriels détaillés</div>'
+    + '<div class="mat-access-desc">7 indicateurs de pilotage + KPIs spécifiques '+s.label+' — cibles, fréquences, outils, responsables. Téléchargeable et partageable.</div></div>'
+    + '<div class="mat-access-btn">Ouvrir →</div></div>';
 
   /* Phases / calendrier */
   html += '<div class="mat-section"><div class="mat-section-h">Plan d\'action — 4 phases'+tip("Programme de mise en conformite en 4 phases : Diagnostic, Conception du cadre de gouvernance, Deploiement operationnel, Maintenance continue. Methodologie CONSEILPREV.")+'</div>'
@@ -6440,15 +6475,14 @@ function matRender(){
     + MAT_PROC.map(function(p){var pdoc=(window.PROC_DOCS&&window.PROC_DOCS[p.n])?window.PROC_DOCS[p.n]:null; return '<div class="mat-proc-step mat-proc-clickable" onclick="procOpenDoc(\''+p.n+'\')"><div class="mat-proc-num">'+p.n+'</div><div class="mat-proc-name">'+p.name+tip(pdoc?pdoc.tooltip:p.desc)+'</div><div class="mat-proc-desc">'+p.desc+'</div><div class="mat-proc-gen">'+(pdoc?pdoc.icon+' Générer le guide →':'')+'</div></div>';}).join("")
     + '</div></div>';
 
-  /* Budget */
-  var budget = matBudget(s.budget);
-  var total = budget.reduce(function(a,b){return a+b.cost;},0);
-  html += '<div class="mat-section"><div class="mat-section-h">Budget prévisionnel'+tip("Estimation budgetaire adaptee au secteur (ressources humaines, outils, formation, audit). Repartition entre charges CONSEILPREV et charges client.")+'</div>'
-    + '<div class="mat-section-sub">Estimation adaptée au secteur '+s.label+'.</div>'
-    + '<table class="mat-budget-table"><thead><tr><th>Poste</th><th>Détail</th><th style="text-align:right">Coût</th><th>Responsable</th></tr></thead><tbody>'
-    + budget.map(function(b){return '<tr><td>'+b.poste+'</td><td>'+b.detail+'</td><td class="mat-budget-cost">'+matFmtEur(b.cost)+'</td><td>'+b.resp+'</td></tr>';}).join("")
-    + '<tr><td>Total'+tip("Budget global estime pour le programme complet de mise en conformite. Inclut ressources humaines, outils, formation et audit. Adapte au secteur "+s.label+".")+'</td><td></td><td class="mat-budget-cost">'+matFmtEur(total)+'</td><td></td></tr>'
-    + '</tbody></table></div>';
+  /* Budget — accessible via bouton (modale detaillee) */
+  html += '<div class="mat-section"><div class="mat-section-h">Budget prévisionnel sectoriel'+tip("Budget detaille : couts structurels (RH au TJM, outils), operationnels, mensuels et annuels, couts caches et extra, duree moyenne du projet.")+'</div>'
+    + '<div class="mat-section-sub">Budget professionnel détaillé adapté au secteur '+s.label+'.</div>'
+    + '<div class="mat-access-card mat-access-budget" onclick="matOpenBudget()">'
+    + '<div class="mat-access-ico">💶</div>'
+    + '<div class="mat-access-body"><div class="mat-access-title">Consulter le budget prévisionnel détaillé</div>'
+    + '<div class="mat-access-desc">Coûts structurels (RH au TJM, outils), opérationnels, mensuels &amp; annuels, coûts cachés et extra, durée moyenne. Téléchargeable (PDF/Word) et partageable par email.</div></div>'
+    + '<div class="mat-access-btn">Ouvrir →</div></div>';
 
   /* Livrables finaux generes par IA */
   if(window.MAT_DELIVERABLES){
@@ -7282,6 +7316,324 @@ window.procWord = function(){
   a.href = url; a.download = cur.doc.docTitle.replace(/[^a-zA-Z]/g,"")+"-"+s.label.replace(/[^a-zA-Z]/g,"")+".doc";
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
+};
+
+})();
+
+</script>
+
+<script>
+/* ══ BUDGET DÉTAILLÉ + KPIs SECTORIELS — modales accessibles par bouton ══ */
+(function(){
+'use strict';
+
+function eur(n){ return Math.round(n).toLocaleString("fr-FR") + " €"; }
+function eur0(n){ return Math.round(n).toLocaleString("fr-FR"); }
+
+/* TJM moyens par role (taux journalier moyen, marche conseil IA/GRC France 2025) */
+var ROLE_DATA = {
+  directeur: {role:"Directeur de Programme IA Act", tjm:1100, salaire:90000, jours:120},
+  senior:    {role:"Consultant Senior GRC/IA", tjm:850, salaire:60000, jours:240},
+  expert:    {role:"Expert Data / Gouvernance", tjm:780, salaire:70000, jours:90},
+  juriste:   {role:"Juriste IA / Conformite", tjm:720, salaire:60000, jours:80},
+  cyber:     {role:"Consultant Cybersecurite", tjm:820, salaire:65000, jours:60}
+};
+
+/* Construit le budget detaille pour un secteur */
+function buildDetailedBudget(sectorKey){
+  var s = window.MAT_SECTORS[sectorKey];
+  var k = s.budget / 430000; /* facteur sectoriel */
+  var dureeMois = Math.round(s.duree / 4.33); /* semaines -> mois */
+
+  /* Cout structurel = ressources humaines (jours x TJM ajuste) */
+  var rh = [];
+  Object.keys(ROLE_DATA).forEach(function(key){
+    var r = ROLE_DATA[key];
+    var jours = Math.round(r.jours * k);
+    var cout = jours * r.tjm;
+    rh.push({role:r.role, tjm:r.tjm, jours:jours, salaire:r.salaire, cout:cout});
+  });
+  var totalRH = rh.reduce(function(a,b){return a+b.cout;},0);
+
+  /* Couts structurels (outils, licences, infra) */
+  var structurel = [
+    {poste:"Licence AIRI (analyse automatisee)", cout:20000, type:"Annuel"},
+    {poste:"Logiciel registre IA (OneTrust/ServiceNow)", cout:15000, type:"Annuel"},
+    {poste:"Outils de veille (Feedly, Meltwater)", cout:5000, type:"Annuel"},
+    {poste:"Tableau de bord conformite (Power BI)", cout:8000, type:"Annuel"},
+    {poste:"Infrastructure securisee / hebergement", cout:Math.round(12000*k), type:"Annuel"}
+  ];
+  var totalStruct = structurel.reduce(function(a,b){return a+b.cout;},0);
+
+  /* Couts operationnels (formation, audit, deplacements) */
+  var operationnel = [
+    {poste:"Sessions de formation (50 personnes)", cout:10000},
+    {poste:"Pre-audit + audit terrain", cout:Math.round(30000*k)},
+    {poste:"Tests directs automatises", cout:Math.round(15000*k)},
+    {poste:"Documentation et supports", cout:6000}
+  ];
+  var totalOp = operationnel.reduce(function(a,b){return a+b.cout;},0);
+
+  /* Couts caches et extra (souvent sous-estimes) */
+  var sousTotal = totalRH + totalStruct + totalOp;
+  var caches = [
+    {poste:"Provision pour aleas (contingence 8%)", cout:Math.round(sousTotal*0.08), note:"Imprevus, depassements, ajustements de perimetre"},
+    {poste:"Coordination interne client (temps equipes)", cout:Math.round(totalRH*0.10), note:"Mobilisation des equipes metier, IT, juridique"},
+    {poste:"Deplacements et frais de mission", cout:Math.round(10000*k), note:"Audit terrain sur sites multiples"},
+    {poste:"Maintenance post-projet (12 mois)", cout:Math.round(totalRH*0.12), note:"Audits trimestriels, mises a jour reglementaires"},
+    {poste:"Gestion du changement et adoption", cout:Math.round(8000*k), note:"Accompagnement, resistance au changement"}
+  ];
+  var totalCaches = caches.reduce(function(a,b){return a+b.cout;},0);
+
+  var totalGlobal = totalRH + totalStruct + totalOp + totalCaches;
+  var coutMensuel = totalGlobal / dureeMois;
+  var coutAnnuel = (totalStruct) + (coutMensuel * 12); /* recurrent annuel approx */
+  var tjmMoyen = rh.reduce(function(a,b){return a+b.tjm;},0) / rh.length;
+  var joursTotal = rh.reduce(function(a,b){return a+b.jours;},0);
+
+  return {
+    sector:s.label, dureeMois:dureeMois, dureeSemaines:s.duree,
+    rh:rh, totalRH:totalRH,
+    structurel:structurel, totalStruct:totalStruct,
+    operationnel:operationnel, totalOp:totalOp,
+    caches:caches, totalCaches:totalCaches,
+    totalGlobal:totalGlobal, coutMensuel:coutMensuel, coutAnnuel:coutAnnuel,
+    tjmMoyen:tjmMoyen, joursTotal:joursTotal
+  };
+}
+
+/* ── KPIs sectoriels detailles ── */
+function buildDetailedKPIs(sectorKey){
+  var s = window.MAT_SECTORS[sectorKey];
+  var base = [
+    {cat:"Conformite reglementaire", kpi:"Systemes IA conformes EU AI Act", cible:"100%", actuel:"-", freq:"Trimestriel", outil:"AIRI + Registre IA", resp:"Directeur Programme"},
+    {cat:"Gouvernance", kpi:"Systemes IA enregistres au registre", cible:"100%", actuel:"-", freq:"Mensuel", outil:"Registre IA", resp:"Expert Data/Gouvernance"},
+    {cat:"Securite", kpi:"Incidents IA (biais, fuites, attaques)", cible:"<= 5/an", actuel:"-", freq:"Continu", outil:"SIEM", resp:"Consultant Cybersecurite"},
+    {cat:"Formation", kpi:"Employes formes aux bonnes pratiques IA", cible:"100%", actuel:"-", freq:"Semestriel", outil:"LMS", resp:"Directeur Programme"},
+    {cat:"Efficacite operationnelle", kpi:"Delai moyen de validation d un projet IA", cible:"<= 15 jours", actuel:"-", freq:"Mensuel", outil:"Workflow de controle", resp:"Consultant Senior"},
+    {cat:"Transparence", kpi:"Systemes IA avec documentation complete", cible:"100%", actuel:"-", freq:"Trimestriel", outil:"Registre IA", resp:"Expert Data/Gouvernance"},
+    {cat:"Veille reglementaire", kpi:"Mises a jour reglementaires integrees", cible:"100%", actuel:"-", freq:"Mensuel", outil:"Tableau de bord de veille", resp:"Juriste"}
+  ];
+  /* KPIs specifiques au secteur */
+  var sectorKpis = {
+    telecom: [{cat:"Sectoriel Telecom", kpi:"Chatbots avec controle anti-desinformation", cible:"100%", actuel:"-", freq:"Mensuel", outil:"Tests directs", resp:"Consultant Cyber"},
+              {cat:"Sectoriel Telecom", kpi:"Metadonnees chiffrees (ePrivacy)", cible:"100%", actuel:"-", freq:"Trimestriel", outil:"Audit securite", resp:"DPO"}],
+    energie: [{cat:"Sectoriel Energie", kpi:"Systemes SCADA/OT audites (IEC 62443)", cible:"100%", actuel:"-", freq:"Trimestriel", outil:"Audit OT", resp:"Consultant Cyber"},
+              {cat:"Sectoriel Energie", kpi:"Disponibilite des systemes critiques", cible:">= 99,9%", actuel:"-", freq:"Continu", outil:"Supervision", resp:"Expert Data"}],
+    sante:   [{cat:"Sectoriel Sante", kpi:"Dispositifs IA certifies MDR/IVDR", cible:"100%", actuel:"-", freq:"Trimestriel", outil:"Registre + MDR", resp:"Juriste"},
+              {cat:"Sectoriel Sante", kpi:"Donnees de sante hebergees HDS", cible:"100%", actuel:"-", freq:"Annuel", outil:"Audit HDS", resp:"DPO"}],
+    finance: [{cat:"Sectoriel Finance", kpi:"Modeles de scoring sans biais detecte", cible:"100%", actuel:"-", freq:"Trimestriel", outil:"Audit biais", resp:"Expert Data"},
+              {cat:"Sectoriel Finance", kpi:"Conformite DORA (resilience TIC)", cible:"100%", actuel:"-", freq:"Trimestriel", outil:"Tests DORA", resp:"Consultant Cyber"}],
+    industrie:[{cat:"Sectoriel Industrie", kpi:"Systemes IA machines marques CE", cible:"100%", actuel:"-", freq:"Trimestriel", outil:"Audit conformite", resp:"Juriste"},
+              {cat:"Sectoriel Industrie", kpi:"Incidents securite robotique", cible:"0", actuel:"-", freq:"Continu", outil:"SIEM/OT", resp:"Consultant Cyber"}],
+    transport:[{cat:"Sectoriel Transport", kpi:"Systemes critiques homologues", cible:"100%", actuel:"-", freq:"Annuel", outil:"Homologation", resp:"Juriste"},
+              {cat:"Sectoriel Transport", kpi:"Tests adversariaux reussis", cible:"100%", actuel:"-", freq:"Trimestriel", outil:"Tests directs", resp:"Consultant Cyber"}],
+    it:      [{cat:"Sectoriel IT", kpi:"Modeles GPAI documentes (Art. 53)", cible:"100%", actuel:"-", freq:"Trimestriel", outil:"Documentation", resp:"Expert Data"},
+              {cat:"Sectoriel IT", kpi:"Contenus IA marques (watermarking)", cible:"100%", actuel:"-", freq:"Mensuel", outil:"Tests directs", resp:"Consultant Senior"}],
+    public:  [{cat:"Sectoriel Public", kpi:"Decisions automatisees avec recours", cible:"100%", actuel:"-", freq:"Trimestriel", outil:"Audit process", resp:"Juriste"},
+              {cat:"Sectoriel Public", kpi:"Analyses d impact publiees", cible:"100%", actuel:"-", freq:"Annuel", outil:"Registre public", resp:"DPO"}]
+  };
+  return base.concat(sectorKpis[sectorKey] || []);
+}
+
+/* ════ MODALE BUDGET ════ */
+window.matOpenBudget = function(){
+  var sectorKey = window.matGetCur();
+  var b = buildDetailedBudget(sectorKey);
+  var modal = ensureModal("mat-budget-modal");
+
+  var html = '<div class="mat-modal-box mat-modal-wide">'
+    + '<div class="mat-modal-head">'
+    + '<div><div class="mat-modal-eyebrow">Budget previsionnel detaille · '+b.sector+'</div>'
+    + '<div class="mat-modal-title">Budget previsionnel sectoriel</div></div>'
+    + '<button class="mat-modal-close" onclick="matCloseModal(\'mat-budget-modal\')">×</button>'
+    + '</div>'
+    + '<div class="mat-modal-body">' + budgetBodyHTML(b) + '</div>'
+    + '<div class="mat-modal-foot">'
+    + '<button class="mat-export-btn mat-export-pdf" onclick="matBudgetPDF()">↓ PDF</button>'
+    + '<button class="mat-export-btn mat-export-word" onclick="matBudgetWord()">↓ Word</button>'
+    + '<button class="mat-export-btn" style="background:var(--blue);color:#fff" onclick="matBudgetMail()">✉ Envoyer a un collegue</button>'
+    + '</div></div>';
+  modal.innerHTML = html;
+  modal.classList.add("on");
+  window.__matBudget = b;
+};
+
+function budgetBodyHTML(b){
+  var syn = '<div class="bud-synth">'
+    + synthCard("Cout total du projet", eur(b.totalGlobal), "Toutes charges incluses")
+    + synthCard("Duree moyenne", b.dureeMois+" mois", "("+b.dureeSemaines+" semaines)")
+    + synthCard("Cout mensuel moyen", eur(b.coutMensuel), "Lissage sur la duree")
+    + synthCard("TJM moyen", eur(b.tjmMoyen), b.joursTotal+" jours-homme au total")
+    + '</div>';
+
+  function tableBlock(title, sub, rows, totalLbl, totalVal){
+    return '<div class="bud-block"><div class="bud-block-h">'+title+'</div>'
+      + (sub?'<div class="bud-block-sub">'+sub+'</div>':'')
+      + '<table class="bud-table">'+rows+'</table>'
+      + '<div class="bud-block-total"><span>'+totalLbl+'</span><span>'+totalVal+'</span></div></div>';
+  }
+
+  /* RH */
+  var rhRows = '<thead><tr><th>Role</th><th class="r">TJM</th><th class="r">Jours</th><th class="r">Salaire/an (ref)</th><th class="r">Cout</th></tr></thead><tbody>'
+    + b.rh.map(function(r){return '<tr><td>'+r.role+'</td><td class="r">'+eur(r.tjm)+'</td><td class="r">'+r.jours+'</td><td class="r">'+eur(r.salaire)+'</td><td class="r"><strong>'+eur(r.cout)+'</strong></td></tr>';}).join("")
+    + '</tbody>';
+  var rhBlock = tableBlock("1. Cout structurel — Ressources humaines", "Equipe projet valorisee au taux journalier moyen (TJM) du marche conseil IA/GRC.", rhRows, "Sous-total RH", eur(b.totalRH));
+
+  /* Structurel outils */
+  var stRows = '<thead><tr><th>Poste</th><th class="r">Recurrence</th><th class="r">Cout</th></tr></thead><tbody>'
+    + b.structurel.map(function(r){return '<tr><td>'+r.poste+'</td><td class="r">'+r.type+'</td><td class="r"><strong>'+eur(r.cout)+'</strong></td></tr>';}).join("")
+    + '</tbody>';
+  var stBlock = tableBlock("2. Cout structurel — Outils et infrastructure", "Licences, plateformes et infrastructure securisee.", stRows, "Sous-total outils", eur(b.totalStruct));
+
+  /* Operationnel */
+  var opRows = '<thead><tr><th>Poste</th><th class="r">Cout</th></tr></thead><tbody>'
+    + b.operationnel.map(function(r){return '<tr><td>'+r.poste+'</td><td class="r"><strong>'+eur(r.cout)+'</strong></td></tr>';}).join("")
+    + '</tbody>';
+  var opBlock = tableBlock("3. Cout operationnel", "Formation, audits, tests et documentation.", opRows, "Sous-total operationnel", eur(b.totalOp));
+
+  /* Caches */
+  var caRows = '<thead><tr><th>Poste</th><th>Description</th><th class="r">Cout</th></tr></thead><tbody>'
+    + b.caches.map(function(r){return '<tr><td>'+r.poste+'</td><td class="bud-note">'+r.note+'</td><td class="r"><strong>'+eur(r.cout)+'</strong></td></tr>';}).join("")
+    + '</tbody>';
+  var caBlock = tableBlock("4. Couts caches et extra", "Postes frequemment sous-estimes — a anticiper pour un budget realiste.", caRows, "Sous-total couts caches", eur(b.totalCaches));
+
+  /* Recap mensuel / annuel */
+  var recap = '<div class="bud-block"><div class="bud-block-h">5. Synthese mensuelle et annuelle</div>'
+    + '<table class="bud-table"><tbody>'
+    + '<tr><td>Cout total du projet ('+b.dureeMois+' mois)</td><td class="r"><strong>'+eur(b.totalGlobal)+'</strong></td></tr>'
+    + '<tr><td>Cout mensuel moyen</td><td class="r"><strong>'+eur(b.coutMensuel)+'</strong></td></tr>'
+    + '<tr><td>Cout recurrent annuel (maintenance + outils)</td><td class="r"><strong>'+eur(b.coutAnnuel)+'</strong></td></tr>'
+    + '<tr><td>Part ressources humaines</td><td class="r">'+Math.round(b.totalRH/b.totalGlobal*100)+'%</td></tr>'
+    + '<tr><td>Part couts caches/extra</td><td class="r">'+Math.round(b.totalCaches/b.totalGlobal*100)+'%</td></tr>'
+    + '</tbody></table></div>';
+
+  var grandTotal = '<div class="bud-grand"><span>BUDGET GLOBAL ESTIME</span><span>'+eur(b.totalGlobal)+'</span></div>';
+
+  return syn + rhBlock + stBlock + opBlock + caBlock + recap + grandTotal
+    + '<p class="bud-disclaimer">Estimation indicative fondee sur les taux du marche conseil IA/GRC (France 2025) et un profil sectoriel de reference. Les couts reels dependent du perimetre precis. Document de travail CONSEILPREV.</p>';
+}
+
+function synthCard(label, val, sub){
+  return '<div class="bud-synth-card"><div class="bud-synth-lbl">'+label+'</div><div class="bud-synth-val">'+val+'</div><div class="bud-synth-sub">'+sub+'</div></div>';
+}
+
+/* ════ MODALE KPIs ════ */
+window.matOpenKPIs = function(){
+  var sectorKey = window.matGetCur();
+  var kpis = buildDetailedKPIs(sectorKey);
+  var s = window.MAT_SECTORS[sectorKey];
+  var modal = ensureModal("mat-kpi-modal");
+
+  var rows = kpis.map(function(k){
+    return '<tr><td class="kpi-cat-cell">'+k.cat+'</td><td>'+k.kpi+'</td><td class="r"><strong>'+k.cible+'</strong></td><td class="r">'+k.freq+'</td><td>'+k.outil+'</td><td>'+k.resp+'</td></tr>';
+  }).join("");
+
+  modal.innerHTML = '<div class="mat-modal-box mat-modal-wide">'
+    + '<div class="mat-modal-head">'
+    + '<div><div class="mat-modal-eyebrow">Tableau de bord · '+s.label+'</div>'
+    + '<div class="mat-modal-title">KPIs sectoriels detailles</div></div>'
+    + '<button class="mat-modal-close" onclick="matCloseModal(\'mat-kpi-modal\')">×</button>'
+    + '</div>'
+    + '<div class="mat-modal-body">'
+    + '<p class="proc-intro">Indicateurs de pilotage de la conformite IA, incluant '+(kpis.length-7)+' KPIs specifiques au secteur '+s.label+'. Cibles, frequences de mesure, outils et responsables.</p>'
+    + '<table class="bud-table kpi-table"><thead><tr><th>Categorie</th><th>Indicateur (KPI)</th><th class="r">Cible</th><th class="r">Frequence</th><th>Outil</th><th>Responsable</th></tr></thead><tbody>'
+    + rows + '</tbody></table></div>'
+    + '<div class="mat-modal-foot">'
+    + '<button class="mat-export-btn mat-export-pdf" onclick="matKpiPDF()">↓ PDF</button>'
+    + '<button class="mat-export-btn mat-export-word" onclick="matKpiWord()">↓ Word</button>'
+    + '<button class="mat-export-btn" style="background:var(--blue);color:#fff" onclick="matKpiMail()">✉ Envoyer a un collegue</button>'
+    + '</div></div>';
+  modal.classList.add("on");
+  window.__matKpis = {kpis:kpis, sector:s.label};
+};
+
+/* ── Helpers modale ── */
+function ensureModal(id){
+  var m = document.getElementById(id);
+  if(!m){ m = document.createElement("div"); m.id = id; m.className = "mat-modal"; document.body.appendChild(m); }
+  return m;
+}
+window.matCloseModal = function(id){ var m = document.getElementById(id); if(m) m.classList.remove("on"); };
+
+/* ── Exports budget ── */
+function budgetDocHTML(){
+  var b = window.__matBudget;
+  var today = new Date().toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"});
+  var rows = function(arr, cols){ return arr; };
+  var h = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Budget previsionnel - '+b.sector+'</title>'
+    + '<style>@page{margin:1.5cm}body{font-family:Georgia,serif;color:#1C1C1C;max-width:880px;margin:0 auto;padding:20px;line-height:1.5}'
+    + 'h1{font-size:22px;border-bottom:3px solid #B83222;padding-bottom:8px}h2{font-size:15px;color:#B83222;margin-top:20px}'
+    + '.sub{color:#666;font-size:12px;font-family:Arial;margin-bottom:16px}'
+    + 'table{width:100%;border-collapse:collapse;font-size:11px;margin:8px 0}'
+    + 'th{background:#1C1C1C;color:#fff;padding:7px 9px;text-align:left;font-size:10px;font-family:Arial}'
+    + 'td{border:1px solid #ddd;padding:6px 9px}.r{text-align:right}'
+    + '.tot{background:#f5f2ed;font-weight:bold}.grand{background:#B83222;color:#fff;font-size:14px;font-weight:bold;padding:12px}'
+    + '.synth td{background:#faf9f7;font-size:13px}</style></head><body>';
+  h += '<h1>Budget previsionnel sectoriel</h1><div class="sub">Secteur '+b.sector+' · '+today+' · CONSEILPREV · Christophe CERF</div>';
+  h += '<table class="synth"><tr><td>Cout total : <strong>'+eur(b.totalGlobal)+'</strong></td><td>Duree : <strong>'+b.dureeMois+' mois</strong></td><td>Cout mensuel : <strong>'+eur(b.coutMensuel)+'</strong></td><td>TJM moyen : <strong>'+eur(b.tjmMoyen)+'</strong></td></tr></table>';
+  h += '<h2>1. Ressources humaines (cout structurel)</h2><table><tr><th>Role</th><th class="r">TJM</th><th class="r">Jours</th><th class="r">Salaire/an</th><th class="r">Cout</th></tr>';
+  b.rh.forEach(function(r){ h += '<tr><td>'+r.role+'</td><td class="r">'+eur(r.tjm)+'</td><td class="r">'+r.jours+'</td><td class="r">'+eur(r.salaire)+'</td><td class="r">'+eur(r.cout)+'</td></tr>'; });
+  h += '<tr class="tot"><td colspan="4">Sous-total RH</td><td class="r">'+eur(b.totalRH)+'</td></tr></table>';
+  h += '<h2>2. Outils et infrastructure</h2><table><tr><th>Poste</th><th class="r">Recurrence</th><th class="r">Cout</th></tr>';
+  b.structurel.forEach(function(r){ h += '<tr><td>'+r.poste+'</td><td class="r">'+r.type+'</td><td class="r">'+eur(r.cout)+'</td></tr>'; });
+  h += '<tr class="tot"><td colspan="2">Sous-total outils</td><td class="r">'+eur(b.totalStruct)+'</td></tr></table>';
+  h += '<h2>3. Couts operationnels</h2><table><tr><th>Poste</th><th class="r">Cout</th></tr>';
+  b.operationnel.forEach(function(r){ h += '<tr><td>'+r.poste+'</td><td class="r">'+eur(r.cout)+'</td></tr>'; });
+  h += '<tr class="tot"><td>Sous-total operationnel</td><td class="r">'+eur(b.totalOp)+'</td></tr></table>';
+  h += '<h2>4. Couts caches et extra</h2><table><tr><th>Poste</th><th>Description</th><th class="r">Cout</th></tr>';
+  b.caches.forEach(function(r){ h += '<tr><td>'+r.poste+'</td><td>'+r.note+'</td><td class="r">'+eur(r.cout)+'</td></tr>'; });
+  h += '<tr class="tot"><td colspan="2">Sous-total couts caches</td><td class="r">'+eur(b.totalCaches)+'</td></tr></table>';
+  h += '<h2>5. Synthese mensuelle et annuelle</h2><table>'
+    + '<tr><td>Cout mensuel moyen</td><td class="r">'+eur(b.coutMensuel)+'</td></tr>'
+    + '<tr><td>Cout recurrent annuel</td><td class="r">'+eur(b.coutAnnuel)+'</td></tr></table>';
+  h += '<div class="grand">BUDGET GLOBAL ESTIME : '+eur(b.totalGlobal)+'</div>';
+  h += '<p style="font-size:10px;color:#999;margin-top:20px;font-family:Arial;font-style:italic">Estimation indicative (taux marche France 2025). CONSEILPREV — +33 6 60 69 21 45 — christophe.cerf@outlook.com</p></body></html>';
+  return h;
+}
+window.matBudgetPDF = function(){ var w = window.open("","_blank"); if(!w){alert("Autorisez les pop-ups.");return;} w.document.write(budgetDocHTML()+'<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>'); w.document.close(); };
+window.matBudgetWord = function(){ var b = window.__matBudget; var blob = new Blob(['\ufeff'+budgetDocHTML()],{type:"application/msword"}); var u = URL.createObjectURL(blob); var a = document.createElement("a"); a.href=u; a.download="Budget-"+b.sector.replace(/[^a-zA-Z]/g,"")+".doc"; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(u); };
+window.matBudgetMail = function(){
+  var b = window.__matBudget;
+  var subj = encodeURIComponent("Budget previsionnel - Audit maturite IA - secteur "+b.sector);
+  var body = encodeURIComponent(
+    "Bonjour,\n\nVoici la synthese du budget previsionnel pour la mise en conformite IA du secteur "+b.sector+" :\n\n"
+    + "- Cout total du projet : "+eur(b.totalGlobal)+"\n"
+    + "- Duree moyenne : "+b.dureeMois+" mois\n"
+    + "- Cout mensuel moyen : "+eur(b.coutMensuel)+"\n"
+    + "- TJM moyen : "+eur(b.tjmMoyen)+"\n"
+    + "- Ressources humaines : "+eur(b.totalRH)+"\n"
+    + "- Outils et infrastructure : "+eur(b.totalStruct)+"\n"
+    + "- Operationnel : "+eur(b.totalOp)+"\n"
+    + "- Couts caches et extra : "+eur(b.totalCaches)+"\n\n"
+    + "Genere via Sentinel AI - CONSEILPREV.\nPour le detail complet, voir le document joint (a exporter en PDF depuis l outil).\n\nCordialement,"
+  );
+  window.location.href = "mailto:?subject="+subj+"&body="+body;
+};
+
+/* ── Exports KPIs ── */
+function kpiDocHTML(){
+  var d = window.__matKpis;
+  var today = new Date().toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"});
+  var h = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>KPIs - '+d.sector+'</title>'
+    + '<style>@page{margin:1.5cm}body{font-family:Georgia,serif;color:#1C1C1C;max-width:920px;margin:0 auto;padding:20px}'
+    + 'h1{font-size:22px;border-bottom:3px solid #B83222;padding-bottom:8px}.sub{color:#666;font-size:12px;font-family:Arial;margin-bottom:16px}'
+    + 'table{width:100%;border-collapse:collapse;font-size:11px}th{background:#1C1C1C;color:#fff;padding:7px;text-align:left;font-size:10px;font-family:Arial}'
+    + 'td{border:1px solid #ddd;padding:6px 8px}.r{text-align:right}</style></head><body>';
+  h += '<h1>Tableau de bord — KPIs sectoriels</h1><div class="sub">Secteur '+d.sector+' · '+today+' · CONSEILPREV</div>';
+  h += '<table><tr><th>Categorie</th><th>Indicateur</th><th class="r">Cible</th><th class="r">Frequence</th><th>Outil</th><th>Responsable</th></tr>';
+  d.kpis.forEach(function(k){ h += '<tr><td>'+k.cat+'</td><td>'+k.kpi+'</td><td class="r">'+k.cible+'</td><td class="r">'+k.freq+'</td><td>'+k.outil+'</td><td>'+k.resp+'</td></tr>'; });
+  h += '</table><p style="font-size:10px;color:#999;margin-top:20px;font-family:Arial;font-style:italic">CONSEILPREV — christophe.cerf@outlook.com</p></body></html>';
+  return h;
+}
+window.matKpiPDF = function(){ var w = window.open("","_blank"); if(!w){alert("Autorisez les pop-ups.");return;} w.document.write(kpiDocHTML()+'<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>'); w.document.close(); };
+window.matKpiWord = function(){ var d = window.__matKpis; var blob = new Blob(['\ufeff'+kpiDocHTML()],{type:"application/msword"}); var u = URL.createObjectURL(blob); var a = document.createElement("a"); a.href=u; a.download="KPIs-"+d.sector.replace(/[^a-zA-Z]/g,"")+".doc"; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(u); };
+window.matKpiMail = function(){
+  var d = window.__matKpis;
+  var subj = encodeURIComponent("KPIs sectoriels - Audit maturite IA - "+d.sector);
+  var lines = d.kpis.map(function(k){ return "- ["+k.cat+"] "+k.kpi+" : cible "+k.cible+" ("+k.freq+", "+k.outil+")"; }).join("\n");
+  var body = encodeURIComponent("Bonjour,\n\nVoici les KPIs de pilotage de la conformite IA pour le secteur "+d.sector+" :\n\n"+lines+"\n\nGenere via Sentinel AI - CONSEILPREV.\n\nCordialement,");
+  window.location.href = "mailto:?subject="+subj+"&body="+body;
 };
 
 })();
