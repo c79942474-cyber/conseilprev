@@ -1093,6 +1093,10 @@ textarea.form-el{min-height:86px;resize:vertical}
 .card-live-badge{font-size:9px;font-family:var(--mono);font-weight:600;color:var(--accent);background:rgba(184,50,34,.08);padding:2px 8px;border-radius:3px;letter-spacing:.02em;float:right;vertical-align:middle}
 .card-cta{font-size:10px;font-family:var(--mono);color:var(--accent);margin-top:10px;letter-spacing:.03em}
 
+
+.t-card-clickable{cursor:pointer;transition:all .15s}
+.t-card-clickable:hover{border-color:var(--accent);box-shadow:0 4px 16px rgba(184,50,34,.1);transform:translateY(-1px)}
+
 </style>
 <style id="cpc-styles">
 /* ══ CHATBOT SENTINEL AI — CONSEILPREV ══ */
@@ -9744,21 +9748,22 @@ window.trainingRenderPage = function(){
   }
 
   var MODULES = [
-    {badge:"t-req", title:"EU AI Act — Fondamentaux", desc:"Classification des risques, obligations par catégorie, calendrier de conformité.", dur:"3h", pillars:["gouvernance","transparence","explicabilite"]},
-    {badge:"t-req", title:"Cybersécurité IA (NIS2 / Sûreté)", desc:"Obligations de sécurité pour les systèmes IA dans les entités essentielles.", dur:"2h", pillars:["confidentialite","robustesse"]},
-    {badge:"t-opt", title:"RGPD & Données d'entraînement", desc:"Base légale, minimisation, droits des personnes dans les systèmes IA.", dur:"2h30", pillars:["confidentialite","equite"]},
-    {badge:"t-opt", title:"Gouvernance IA — ISO 42001", desc:"Mise en place d'un système de management IA conforme au standard international.", dur:"4h", pillars:["gouvernance","controlabilite"]}
+    {key:"euaiact", badge:"t-req", title:"EU AI Act — Fondamentaux", desc:"Classification des risques, obligations par catégorie, calendrier de conformité.", dur:"3h", pillars:["gouvernance","transparence","explicabilite"]},
+    {key:"cyber", badge:"t-req", title:"Cybersécurité IA (NIS2 / Sûreté)", desc:"Obligations de sécurité pour les systèmes IA dans les entités essentielles.", dur:"2h", pillars:["confidentialite","robustesse"]},
+    {key:"rgpd", badge:"t-opt", title:"RGPD & Données d'entraînement", desc:"Base légale, minimisation, droits des personnes dans les systèmes IA.", dur:"2h30", pillars:["confidentialite","equite"]},
+    {key:"iso42001", badge:"t-opt", title:"Gouvernance IA — ISO 42001", desc:"Mise en place d'un système de management IA conforme au standard international.", dur:"4h", pillars:["gouvernance","controlabilite"]}
   ];
 
   holder.innerHTML = MODULES.map(function(t){
     var p = pct(t.pillars);
     var done = p >= 80;
-    return '<div class="t-card"><div class="t-badge '+t.badge+'">'+(t.badge==='t-req'?'REQUIS':'OPTIONNEL')+'</div>'
+    return '<div class="t-card t-card-clickable" onclick="trainingOpenFiche(\'' + t.key + '\')"><div class="t-badge '+t.badge+'">'+(t.badge==='t-req'?'REQUIS':'OPTIONNEL')+'</div>'
       + '<div class="t-title">'+t.title+'</div><div class="t-desc">'+t.desc+'</div>'
       + '<div class="t-foot"><div class="t-dur">'+t.dur+'</div>'
       + '<div class="t-prog-track"><div class="t-prog-fill" style="width:'+p+'%"></div></div>'
       + '<div class="t-pct" style="color:'+(done?'var(--green)':p>=40?'var(--orange)':'var(--accent)')+'">'+p+'%'+(done?' ✓':'')+'</div></div>'
       + '<div style="font-size:9px;color:var(--muted2);margin-top:6px">Basé sur vos scores réels (Audit de maturité, secteur '+(window.MAT_SECTORS&&window.MAT_SECTORS[sector]?window.MAT_SECTORS[sector].label:sector)+')</div>'
+      + '<div class="card-cta">Voir la fiche de formation →</div>'
       + '</div>';
   }).join('');
 };
@@ -10332,6 +10337,147 @@ if(typeof _cardsOrigToggle === "function"){
     return r;
   };
 }
+
+})();
+
+</script>
+
+<script>
+/* ══ HUB TRAINING — Fiches de formation detaillees ══ */
+(function(){
+'use strict';
+
+var TRAINING_FICHES = {
+  euaiact: {
+    title: "EU AI Act — Fondamentaux",
+    icon: "📘",
+    duree: "3h",
+    niveau: "Fondamental",
+    public: "Toutes équipes (Métiers, IT, Data, Juridique, Direction)",
+    objectifs: [
+      "Comprendre le champ d application et la portée extraterritoriale du Règlement (UE) 2024/1689",
+      "Savoir classifier un système IA selon les 4 niveaux de risque (Art. 5, 6, Annexe III)",
+      "Identifier les obligations applicables selon le rôle (fournisseur, déployeur, importateur)",
+      "Connaître le calendrier d application et les échéances clés jusqu en 2027"
+    ],
+    programme: [
+      {h:"Module 1 — Cadre général", pts:["Objet et champ d application (Art. 1, 2)", "Définitions clés : système IA, fournisseur, déployeur (Art. 3)", "Portée extraterritoriale : qui est concerné en dehors de l UE"]},
+      {h:"Module 2 — Classification des risques", pts:["Pratiques interdites (Art. 5) : 8 catégories", "Systèmes à haut risque et Annexe III (8 domaines)", "Risque limité (Art. 50) et risque minimal"]},
+      {h:"Module 3 — Obligations par acteur", pts:["Fournisseurs : gestion des risques, documentation, qualité (Art. 9-17)", "Déployeurs : supervision, FRIA, surveillance (Art. 26, 27)", "Cas pratiques par secteur"]},
+      {h:"Module 4 — Calendrier et sanctions", pts:["Échéances 2025-2027 (Art. 113)", "Sanctions : jusqu à 35M€ ou 7% du CA mondial (Art. 99)", "Quiz de validation"]}
+    ],
+    articles: ["Art. 1-3","Art. 5","Art. 6","Annexe III","Art. 9-17","Art. 99","Art. 113"],
+    quiz: 12,
+    certif: "Certificat de littératie IA (Art. 4 EU AI Act)"
+  },
+  cyber: {
+    title: "Cybersécurité IA (NIS2 / Sûreté)",
+    icon: "🛡",
+    duree: "2h",
+    niveau: "Intermédiaire",
+    public: "IT, Cybersécurité, DPO, Responsable IA",
+    objectifs: [
+      "Comprendre les exigences de sécurité applicables aux systèmes IA (Art. 15 EU AI Act)",
+      "Identifier les obligations NIS2 pour les entités essentielles utilisant de l IA",
+      "Reconnaître les principales menaces : attaques adversariales, prompt injection, data poisoning",
+      "Mettre en place des mesures de robustesse et de résilience"
+    ],
+    programme: [
+      {h:"Module 1 — Exigences réglementaires", pts:["Art. 15 EU AI Act : exactitude, robustesse, cybersécurité", "NIS2 (Dir. 2022/2555) : entités essentielles et importantes", "Articulation avec ISO 27001"]},
+      {h:"Module 2 — Menaces spécifiques à l IA", pts:["Attaques adversariales et empoisonnement de données", "Prompt injection et exfiltration de modèles", "OWASP Top 10 pour les LLM"]},
+      {h:"Module 3 — Mesures de protection", pts:["Tests de robustesse et red teaming", "Supervision humaine et plans de continuité", "Cas pratique : audit de sécurité d un système IA"]}
+    ],
+    articles: ["Art. 15 EU AI Act","NIS2 Dir. 2022/2555","ISO 27001"],
+    quiz: 8,
+    certif: "Attestation de sensibilisation cybersécurité IA"
+  },
+  rgpd: {
+    title: "RGPD & Données d entraînement",
+    icon: "🔒",
+    duree: "2h30",
+    niveau: "Intermédiaire",
+    public: "DPO, Data, Juridique, Responsable IA",
+    objectifs: [
+      "Identifier la base légale appropriée pour le traitement de données dans un système IA",
+      "Appliquer les principes de minimisation et de qualité des données (Art. 10 EU AI Act)",
+      "Garantir les droits des personnes concernées face aux décisions automatisées (Art. 22 RGPD)",
+      "Articuler RGPD et EU AI Act dans une même analyse d impact"
+    ],
+    programme: [
+      {h:"Module 1 — Bases légales et principes", pts:["Consentement, intérêt légitime, intérêt public", "Minimisation et limitation de la finalité", "Données sensibles (Art. 9 RGPD) et systèmes IA"]},
+      {h:"Module 2 — Gouvernance des données (Art. 10 EU AI Act)", pts:["Qualité, représentativité et traçabilité des données d entraînement", "Détection et correction des biais", "Documentation de la provenance des données"]},
+      {h:"Module 3 — Droits des personnes", pts:["Décisions entièrement automatisées (Art. 22 RGPD)", "Droit à l explication et droit de recours", "Articulation avec la FRIA (Art. 27 EU AI Act)"]}
+    ],
+    articles: ["Art. 9, 22 RGPD","Art. 10 EU AI Act","Art. 27 EU AI Act"],
+    quiz: 10,
+    certif: "Attestation RGPD appliqué à l IA"
+  },
+  iso42001: {
+    title: "Gouvernance IA — ISO 42001",
+    icon: "📐",
+    duree: "4h",
+    niveau: "Avancé",
+    public: "Responsable IA, Direction, Comité de Gouvernance",
+    objectifs: [
+      "Comprendre la structure d un système de management de l IA (SMIA) selon ISO/IEC 42001:2023",
+      "Mettre en place une politique IA et une gouvernance interne (clause 5)",
+      "Réaliser une appréciation des risques liés à l IA (clause 6.1)",
+      "Préparer une déclaration d applicabilité et un plan d audit interne"
+    ],
+    programme: [
+      {h:"Module 1 — Structure de la norme", pts:["Clauses 4 à 10 : contexte, leadership, planification, support, fonctionnement, évaluation, amélioration", "Annexe A : 10 catégories de mesures de référence", "Articulation avec l EU AI Act"]},
+      {h:"Module 2 — Leadership et planification", pts:["Politique IA (clause 5.2) et rôles (clause 5.3, Annexe A.3)", "Appréciation des risques liés à l IA (clause 6.1.2)", "Évaluation de l impact du système d IA (clause 6.1.4)"]},
+      {h:"Module 3 — Mise en œuvre opérationnelle", pts:["Cycle de vie des systèmes IA (Annexe A.6)", "Gestion des données et des tiers (Annexe A.7, A.10)", "Information des parties intéressées (Annexe A.8)"]},
+      {h:"Module 4 — Audit et amélioration continue", pts:["Audit interne (clause 9.2) et revue de direction (clause 9.3)", "Non-conformités et actions correctives (clause 10.2)", "Atelier : déclaration d applicabilité"]}
+    ],
+    articles: ["ISO 42001 cl. 4-10","Annexe A (10 catégories)"],
+    quiz: 15,
+    certif: "Préparation à la certification ISO/IEC 42001:2023"
+  }
+};
+window.TRAINING_FICHES = TRAINING_FICHES;
+
+window.trainingOpenFiche = function(key){
+  var f = TRAINING_FICHES[key];
+  if(!f) return;
+  var modal = document.getElementById("training-modal");
+  if(!modal){ modal = document.createElement("div"); modal.id = "training-modal"; modal.className = "mat-modal"; document.body.appendChild(modal); }
+
+  var objHtml = f.objectifs.map(function(o){ return '<div class="act-item"><div class="act-dot"></div><div class="act-t">'+o+'</div></div>'; }).join('');
+
+  var progHtml = f.programme.map(function(m){
+    return '<div class="ctrl-section"><div class="ctrl-section-head"><span class="ctrl-section-title">'+m.h+'</span></div>'
+      + '<div style="padding:12px 16px">'
+      + m.pts.map(function(p){ return '<div style="font-size:11.5px;color:var(--ink2);line-height:1.6;padding:4px 0;border-bottom:1px solid var(--rule)">• '+p+'</div>'; }).join('')
+      + '</div></div>';
+  }).join('');
+
+  var artHtml = f.articles.map(function(a){ return '<span class="proc-source-chip">'+a+'</span>'; }).join(' ');
+
+  modal.innerHTML = '<div class="mat-modal-box mat-modal-wide">'
+    + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Fiche de formation · '+f.duree+' · Niveau '+f.niveau+'</div>'
+    + '<div class="mat-modal-title">'+f.icon+' '+f.title+'</div></div>'
+    + '<button class="mat-modal-close" onclick="document.getElementById(\'training-modal\').classList.remove(\'on\')">×</button></div>'
+    + '<div class="mat-modal-body">'
+    + '<div class="radar-registre-info radar-registre-ok" style="margin-bottom:18px">👥 Public concerné : <strong>'+f.public+'</strong></div>'
+    + '<div class="sec-h" style="margin-bottom:10px;font-size:14px">Objectifs pédagogiques</div>'
+    + objHtml
+    + '<div class="sec-h" style="margin:22px 0 10px;font-size:14px">Programme détaillé</div>'
+    + progHtml
+    + '<div class="sec-h" style="margin:22px 0 8px;font-size:14px">Références réglementaires couvertes</div>'
+    + '<div class="proc-sources" style="margin-bottom:18px">'+artHtml+'</div>'
+    + '<div class="bud-synth">'
+    + '<div class="bud-synth-card"><div class="bud-synth-lbl">Durée</div><div class="bud-synth-val" style="font-size:18px">'+f.duree+'</div></div>'
+    + '<div class="bud-synth-card"><div class="bud-synth-lbl">Quiz final</div><div class="bud-synth-val" style="font-size:18px">'+f.quiz+' Q</div></div>'
+    + '<div class="bud-synth-card"><div class="bud-synth-lbl">Niveau</div><div class="bud-synth-val" style="font-size:18px">'+f.niveau+'</div></div>'
+    + '</div>'
+    + '<div class="fria-app-reason" style="margin-top:14px">🎓 '+f.certif+'</div>'
+    + '</div>'
+    + '<div class="mat-modal-foot">'
+    + '<button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="alert(\'Formation a planifier avec CONSEILPREV : christophe.cerf@outlook.com\')">Planifier cette formation</button>'
+    + '</div></div>';
+  modal.classList.add("on");
+};
 
 })();
 
