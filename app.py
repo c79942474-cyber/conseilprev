@@ -3035,3 +3035,4 @@ if __name__ == '__main__':
 # deploy trigger 2
 # deploy trigger - sync jurs/cj/sim
 # deploy trigger - fix simuler deploiement card
+# deploy trigger - fix comparateur crash
