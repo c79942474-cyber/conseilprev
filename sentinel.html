@@ -1075,6 +1075,18 @@ textarea.form-el{min-height:86px;resize:vertical}
 
 .jurs-maj-tag{font-size:8px;font-family:var(--mono);color:var(--blue);background:rgba(28,90,138,.08);padding:1px 5px;border-radius:2px;margin-left:6px;vertical-align:middle}
 
+
+.intl-compare-box{background:var(--white);border:1px solid var(--rule);border-radius:6px;padding:6px 0;margin-bottom:6px}
+.intl-row{display:grid;grid-template-columns:30px 1fr 70px 80px 80px;align-items:center;gap:8px;padding:9px 16px;border-bottom:1px solid var(--rule)}
+.intl-row:last-child{border-bottom:none}
+.intl-row.intl-head{font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.04em;color:var(--muted2);background:var(--bg)}
+.intl-flag{font-size:16px}
+.intl-name{font-size:12px;font-weight:600;color:var(--ink)}
+.intl-reg{font-size:10px;color:var(--muted);font-weight:400;margin-top:1px}
+.intl-score{font-family:var(--mono);font-size:13px;font-weight:600;text-align:center}
+.intl-niveau{font-size:10px;color:var(--muted);text-align:center}
+.intl-diff{font-family:var(--mono);font-size:11px;font-weight:600;text-align:right}
+
 </style>
 <style id="cpc-styles">
 /* ══ CHATBOT SENTINEL AI — CONSEILPREV ══ */
@@ -5260,6 +5272,8 @@ function simRender(){
     +'<div class="sim-sanc-item"><div class="sim-sanc-lbl">Note</div><div style="font-size:10px;color:var(--muted);line-height:1.5;margin-top:4px">Les PME bénéficient d\'une proportionnalité (Art. 99.1). Les sanctions sont effectives depuis août 2025.</div></div>'
     +'</div>'
 
+    + (typeof window.simBuildIntlComparison === 'function' ? window.simBuildIntlComparison(classif) : '')
+
     +'<div class="sim-obl-title" style="margin-top:20px">Calendrier d\'application (Règl. 2024/1689)</div>'
     +'<div class="sim-timeline-box">'+tlHtml+'</div>'
 
@@ -5341,82 +5355,9 @@ function requestDoc(name){ window.open('mailto:christophe.cerf@outlook.com?subje
 
 var CJ_COLORS = ['#B83222','#1C5A8A','#2D7A47','#C47C1A'];
 
-var CJ_DATA = {
-  'EU':{name:'Union européenne', flag:'🇪🇺', cadre:'EU AI Act (Règlement 2024/1689)',
-    scores:{Sévérité:9.2, Transparence:9.5, Responsabilité:9.0, Souveraineté:9.0, Sanctions:9.5, Innovation:5.0},
-    badge:'RISQUE ÉLEVÉ', badgeCls:'chip-r'},
-  'DE':{name:'Allemagne', flag:'🇩🇪', cadre:'EU AI Act + BDSG + AI Strategy 2023',
-    scores:{Sévérité:8.8, Transparence:9.0, Responsabilité:8.8, Souveraineté:9.0, Sanctions:8.8, Innovation:5.5},
-    badge:'RISQUE ÉLEVÉ', badgeCls:'chip-r'},
-  'FR':{name:'France', flag:'🇫🇷', cadre:'EU AI Act + Stratégie nationale IA + CNIL',
-    scores:{Sévérité:8.5, Transparence:8.8, Responsabilité:8.5, Souveraineté:9.0, Sanctions:8.5, Innovation:6.0},
-    badge:'RISQUE ÉLEVÉ', badgeCls:'chip-r'},
-  'CN':{name:'Chine', flag:'🇨🇳', cadre:'Generative AI Measures + Algorithm Regulations + PIPL',
-    scores:{Sévérité:8.0, Transparence:7.5, Responsabilité:8.0, Souveraineté:10.0, Sanctions:7.0, Innovation:4.0},
-    badge:'RISQUE ÉLEVÉ', badgeCls:'chip-r'},
-  'RU':{name:'Russie', flag:'🇷🇺', cadre:'National AI Strategy + Digital Code',
-    scores:{Sévérité:7.5, Transparence:6.0, Responsabilité:7.0, Souveraineté:10.0, Sanctions:6.5, Innovation:5.0},
-    badge:'RISQUE ÉLEVÉ', badgeCls:'chip-r'},
-  'KR':{name:'Corée du Sud', flag:'🇰🇷', cadre:'AI Basic Act (2025)',
-    scores:{Sévérité:7.0, Transparence:7.5, Responsabilité:7.0, Souveraineté:7.0, Sanctions:6.5, Innovation:6.0},
-    badge:'RISQUE ÉLEVÉ', badgeCls:'chip-r'},
-  'CA':{name:'Canada', flag:'🇨🇦', cadre:'AIDA (AI & Data Act) — en cours',
-    scores:{Sévérité:6.5, Transparence:7.0, Responsabilité:6.5, Souveraineté:6.0, Sanctions:6.0, Innovation:7.0},
-    badge:'RISQUE MODÉRÉ', badgeCls:'chip-o'},
-  'CH':{name:'Suisse', flag:'🇨🇭', cadre:'Convention-cadre IA Conseil Europe + LPD révisée',
-    scores:{Sévérité:6.5, Transparence:7.0, Responsabilité:6.5, Souveraineté:6.5, Sanctions:6.0, Innovation:7.5},
-    badge:'RISQUE MODÉRÉ', badgeCls:'chip-o'},
-  'BR':{name:'Brésil', flag:'🇧🇷', cadre:'PL 2338/2023 (AI Bill) + LGPD',
-    scores:{Sévérité:6.0, Transparence:6.5, Responsabilité:6.0, Souveraineté:5.5, Sanctions:5.5, Innovation:6.5},
-    badge:'RISQUE MODÉRÉ', badgeCls:'chip-o'},
-  'GB':{name:'Royaume-Uni', flag:'🇬🇧', cadre:'Pro-innovation AI Regulation (White Paper 2023)',
-    scores:{Sévérité:5.5, Transparence:6.0, Responsabilité:5.5, Souveraineté:5.0, Sanctions:5.0, Innovation:8.5},
-    badge:'RISQUE MODÉRÉ', badgeCls:'chip-o'},
-  'TR':{name:'Turquie', flag:'🇹🇷', cadre:'National AI Strategy 2021-2025 + KVKK',
-    scores:{Sévérité:5.5, Transparence:5.5, Responsabilité:5.0, Souveraineté:7.0, Sanctions:5.0, Innovation:6.0},
-    badge:'RISQUE MODÉRÉ', badgeCls:'chip-o'},
-  'AU':{name:'Australie', flag:'🇦🇺', cadre:'AI Ethics Framework + Mandatory Guardrails (proposed)',
-    scores:{Sévérité:5.5, Transparence:6.0, Responsabilité:5.5, Souveraineté:5.5, Sanctions:4.5, Innovation:7.5},
-    badge:'RISQUE MODÉRÉ', badgeCls:'chip-o'},
-  'CL':{name:'Chili', flag:'🇨🇱', cadre:'National AI Policy + projet de loi IA 2024',
-    scores:{Sévérité:5.0, Transparence:5.5, Responsabilité:5.0, Souveraineté:5.0, Sanctions:4.5, Innovation:7.0},
-    badge:'RISQUE MODÉRÉ', badgeCls:'chip-o'},
-  'IL':{name:'Israël', flag:'🇮🇱', cadre:'Policy on AI Regulation (2023)',
-    scores:{Sévérité:5.0, Transparence:5.5, Responsabilité:5.0, Souveraineté:5.5, Sanctions:4.5, Innovation:8.5},
-    badge:'RISQUE MODÉRÉ', badgeCls:'chip-o'},
-  'SG':{name:'Singapour', flag:'🇸🇬', cadre:'Model AI Governance Framework + AI Verify',
-    scores:{Sévérité:5.0, Transparence:5.5, Responsabilité:5.0, Souveraineté:5.0, Sanctions:4.0, Innovation:9.0},
-    badge:'RISQUE MODÉRÉ', badgeCls:'chip-o'},
-  'IN':{name:'Inde', flag:'🇮🇳', cadre:'Digital India Act + DPDP Act',
-    scores:{Sévérité:4.5, Transparence:5.0, Responsabilité:4.5, Souveraineté:5.5, Sanctions:4.0, Innovation:8.0},
-    badge:'RISQUE MODÉRÉ', badgeCls:'chip-o'},
-  'MY':{name:'Malaisie', flag:'🇲🇾', cadre:'National AI Roadmap 2021-2025 + PDPA',
-    scores:{Sévérité:4.5, Transparence:4.5, Responsabilité:4.5, Souveraineté:5.0, Sanctions:4.0, Innovation:7.5},
-    badge:'RISQUE MODÉRÉ', badgeCls:'chip-o'},
-  'US':{name:'États-Unis', flag:'🇺🇸', cadre:'NIST AI RMF + Executive Orders + State laws',
-    scores:{Sévérité:4.5, Transparence:5.0, Responsabilité:4.5, Souveraineté:4.0, Sanctions:4.5, Innovation:9.0},
-    badge:'RISQUE MODÉRÉ', badgeCls:'chip-o'},
-  'AE':{name:'Émirats Arabes Unis', flag:'🇦🇪', cadre:'UAE AI Strategy 2031 + AI Charter',
-    scores:{Sévérité:4.0, Transparence:4.0, Responsabilité:4.0, Souveraineté:4.5, Sanctions:3.5, Innovation:9.0},
-    badge:'RISQUE FAIBLE', badgeCls:'chip-g'},
-  'JP':{name:'Japon', flag:'🇯🇵', cadre:'AI Guidelines for Business + Hiroshima AI Process',
-    scores:{Sévérité:4.0, Transparence:4.5, Responsabilité:4.0, Souveraineté:4.0, Sanctions:3.5, Innovation:9.0},
-    badge:'RISQUE FAIBLE', badgeCls:'chip-g'},
-  'AR':{name:'Argentine', flag:'🇦🇷', cadre:'Recommandation éthique IA + Loi 25.326',
-    scores:{Sévérité:4.0, Transparence:4.0, Responsabilité:4.0, Souveraineté:4.0, Sanctions:3.5, Innovation:7.0},
-    badge:'RISQUE FAIBLE', badgeCls:'chip-g'},
-  'MX':{name:'Mexique', flag:'🇲🇽', cadre:'Initiatives sectorielles — pas de cadre spécifique',
-    scores:{Sévérité:3.5, Transparence:3.5, Responsabilité:3.5, Souveraineté:4.0, Sanctions:3.0, Innovation:8.0},
-    badge:'RISQUE FAIBLE', badgeCls:'chip-g'},
-  'ZA':{name:'Afrique du Sud', flag:'🇿🇦', cadre:'National AI Plan (draft) + POPIA',
-    scores:{Sévérité:3.5, Transparence:4.0, Responsabilité:3.5, Souveraineté:4.0, Sanctions:3.0, Innovation:7.5},
-    badge:'RISQUE FAIBLE', badgeCls:'chip-g'},
-  'NG':{name:'Nigéria', flag:'🇳🇬', cadre:'National AI Strategy (draft 2024) + NDPA',
-    scores:{Sévérité:2.5, Transparence:2.5, Responsabilité:2.5, Souveraineté:3.0, Sanctions:2.0, Innovation:8.5},
-    badge:'RISQUE FAIBLE', badgeCls:'chip-g'},
-};
+var CJ_DATA = {}; /* peuple dynamiquement depuis JURS via cjBuildDataFromJurs() */
+window.CJ_DATA = CJ_DATA;
 
-var cjSelected = ['DE','AU']; // défaut
 var CJ_DIMS = ['Sévérité','Transparence','Responsabilité','Souveraineté','Sanctions','Innovation'];
 
 function cjGetColor(i){ return CJ_COLORS[i % CJ_COLORS.length]; }
@@ -9964,6 +9905,7 @@ window.jursRefreshAI = function(code, name){
       }
       if(typeof jursRenderTable === "function") jursRenderTable();
       if(typeof window.mapSyncSend === "function") window.mapSyncSend();
+      if(typeof window.cjRefreshFromJurs === "function") window.cjRefreshFromJurs();
     } catch(e){
       alert("Erreur de traitement de la réponse IA.");
     }
@@ -10092,6 +10034,105 @@ window.go = function(id){
   var r = _mapSyncOrigGo ? _mapSyncOrigGo.apply(this, arguments) : undefined;
   if(id === 'carto') setTimeout(window.mapSyncSend, 300);
   return r;
+};
+
+})();
+
+</script>
+
+<script>
+/* ══ COMPARATEUR — CJ_DATA genere dynamiquement depuis JURS (synchronise) ══ */
+(function(){
+'use strict';
+
+function cjBuildDataFromJurs(){
+  if(!window.JURS) return;
+  var data = {};
+  window.JURS.forEach(function(j){
+    var detail = (window.JURS_DETAIL && window.JURS_DETAIL[j.c]) || null;
+    var s = j.s;
+    var transparence, responsabilite, souverainete, sanctions;
+    if(detail){
+      transparence = detail.transparence;
+      responsabilite = Math.round(((detail.supervision_humaine||0) + (detail.droits_fondamentaux||0)) / 2 * 10) / 10;
+      souverainete = Math.round(((detail.extraterritorialite||0) + (detail.contraignant||0)) / 2 * 10) / 10;
+      sanctions = detail.sanctions;
+    } else {
+      /* Variation cohérente derivee du score global si pas de detail disponible */
+      transparence = Math.max(0, Math.min(10, Math.round((s*0.92)*10)/10));
+      responsabilite = Math.max(0, Math.min(10, Math.round((s*0.95)*10)/10));
+      souverainete = Math.max(0, Math.min(10, Math.round((s*0.88)*10)/10));
+      sanctions = Math.max(0, Math.min(10, Math.round((s*0.85)*10)/10));
+    }
+    /* Innovation : dimension independante (pas dans JURS), estimee inversement correlee a la severite */
+    var innovation = Math.max(2, Math.min(9.5, Math.round((10 - s*0.55)*10)/10));
+
+    var badge = s>=7 ? 'RISQUE ÉLEVÉ' : s>=4.5 ? 'RISQUE MODÉRÉ' : 'RISQUE FAIBLE';
+    var badgeCls = s>=7 ? 'chip-r' : s>=4.5 ? 'chip-o' : 'chip-g';
+
+    data[j.c] = {
+      name: j.name, flag: j.f, cadre: j.reg,
+      scores: { 'Sévérité': s, 'Transparence': transparence, 'Responsabilité': responsabilite, 'Souveraineté': souverainete, 'Sanctions': sanctions, 'Innovation': innovation },
+      badge: badge, badgeCls: badgeCls
+    };
+  });
+  window.CJ_DATA = data;
+  return data;
+}
+
+window.cjBuildDataFromJurs = cjBuildDataFromJurs;
+window.cjRefreshFromJurs = function(){
+  cjBuildDataFromJurs();
+  if(typeof cjRender === "function") cjRender();
+};
+
+var _cjOrigGo = window.go;
+window.go = function(id){
+  var r = _cjOrigGo ? _cjOrigGo.apply(this, arguments) : undefined;
+  if(id === "comp") setTimeout(window.cjRefreshFromJurs, 50);
+  return r;
+};
+
+})();
+
+</script>
+<script>
+/* ══ SIMULATEUR — Comparaison internationale (connectee a JURS) ══ */
+(function(){
+'use strict';
+
+window.simBuildIntlComparison = function(classif){
+  if(!window.JURS || window.JURS.length === 0) return "";
+
+  /* Selectionner 5 juridictions representatives : UE (reference) + 4 contrastees par score */
+  var sorted = window.JURS.slice().sort(function(a,b){ return b.s - a.s; });
+  var eu = sorted.find(function(j){ return j.c === "EU"; });
+  var others = sorted.filter(function(j){ return j.c !== "EU"; });
+  var picks = [eu].filter(Boolean);
+  /* Prendre des juridictions a intervalles reguliers pour varier les niveaux de contrainte */
+  var step = Math.max(1, Math.floor(others.length / 4));
+  for(var i=0; i<others.length && picks.length<5; i+=step){ picks.push(others[i]); }
+
+  var euScore = eu ? eu.s : 9.2;
+
+  var rows = picks.map(function(j){
+    var diff = j.s - euScore;
+    var diffTxt = j.c === "EU" ? "Référence" : (diff>=0?'+':'') + diff.toFixed(1) + " pts";
+    var diffColor = j.c === "EU" ? "var(--muted2)" : diff >= 0 ? "var(--accent)" : "var(--green)";
+    var niveau = j.s>=8?"Très strict":j.s>=5?"Modéré":"Souple";
+    return '<div class="intl-row"><div class="intl-flag">'+j.f+'</div>'
+      + '<div class="intl-name">'+j.name+'<div class="intl-reg">'+j.reg.substring(0,60)+(j.reg.length>60?'…':'')+'</div></div>'
+      + '<div class="intl-score" style="color:'+(j.s>=8?'var(--accent)':j.s>=5?'var(--orange)':'var(--green)')+'">'+j.s+'/10</div>'
+      + '<div class="intl-niveau">'+niveau+'</div>'
+      + '<div class="intl-diff" style="color:'+diffColor+'">'+diffTxt+'</div></div>';
+  }).join('');
+
+  return '<div class="sim-obl-title" style="margin-top:20px">Comparaison internationale — où ce système serait-il moins contraint ?</div>'
+    + '<div class="intl-compare-box">'
+    + '<div class="intl-row intl-head"><div></div><div>Juridiction</div><div>Score</div><div>Niveau</div><div>vs. UE</div></div>'
+    + rows
+    + '<div style="font-size:10px;color:var(--muted2);margin-top:10px;font-style:italic">Comparaison à titre indicatif sur la sévérité réglementaire générale (cadre IA global), ne reflète pas une classification formelle de ce système dans chaque juridiction. Voir <a href="#" onclick="go(\'comp\',null,\'ANALYSE\',\'Comparateur\');return false;" style="color:var(--accent)">le Comparateur complet →</a></div>'
+    + '</div>';
 };
 
 })();
