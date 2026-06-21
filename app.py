@@ -3036,3 +3036,4 @@ if __name__ == '__main__':
 # deploy trigger - sync jurs/cj/sim
 # deploy trigger - fix simuler deploiement card
 # deploy trigger - fix comparateur crash
+# deploy trigger - pricing chart tooltips
