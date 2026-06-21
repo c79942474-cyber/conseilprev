@@ -2294,7 +2294,16 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="tbl-head" style="border:none;padding:0 0 16px"><span class="tbl-title">Paramètres de simulation</span></div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
       <div class="reg-field"><label class="reg-label">Nombre de systèmes IA</label><input type="number" id="pricing-nb-systemes" class="reg-input" value="10" onchange="pricingSimulate()"></div>
-      <div class="reg-field"><label class="reg-label">Score Audit IA Act de départ (%)</label><input type="number" id="pricing-audit-depart" class="reg-input" value="20" min="0" max="100" onchange="pricingSimulate()"></div>
+      <div class="reg-field">
+        <label class="reg-label">Score Audit IA Act de départ (%)</label>
+        <input type="number" id="pricing-audit-depart" class="reg-input" value="20" min="0" max="100" onchange="pricingSimulate()">
+        <div id="pricing-audit-mode-info" style="font-size:10px;color:var(--muted);margin-top:4px"></div>
+        <div id="pricing-audit-estim-buttons" style="display:none;gap:6px;margin-top:6px;flex-wrap:wrap">
+          <button type="button" class="mat-export-btn" style="background:var(--bg);color:var(--ink);border:1px solid var(--rule2);font-size:10px;padding:5px 10px" onclick="pricingSetEstim(10)" title="Aucune démarche de conformité engagée à ce jour">Aucune démarche (~10%)</button>
+          <button type="button" class="mat-export-btn" style="background:var(--bg);color:var(--ink);border:1px solid var(--rule2);font-size:10px;padding:5px 10px" onclick="pricingSetEstim(30)" title="Premières actions de gouvernance engagées">Démarche initiale (~30%)</button>
+          <button type="button" class="mat-export-btn" style="background:var(--bg);color:var(--ink);border:1px solid var(--rule2);font-size:10px;padding:5px 10px" onclick="pricingSetEstim(55)" title="Politiques et processus partiellement en place">Démarche avancée (~55%)</button>
+        </div>
+      </div>
       <div class="reg-field"><label class="reg-label">Chiffre d'affaires annuel (€)</label><input type="number" id="pricing-ca" class="reg-input" value="50000000" onchange="pricingSimulate()"></div>
     </div>
     <button class="mat-export-btn" style="background:var(--ink);color:#fff;margin-top:16px" onclick="pricingSimulate()">Recalculer la simulation</button>
@@ -10816,20 +10825,21 @@ var PRICING_PARAMS = {
 function pricingGetData(callback){
   fetch('/api/registre').then(function(r){ return r.json(); }).then(function(d){
     var registre = d.systemes || [];
-    var auditPct = 0, auditTotal = 0, auditDone = 0;
+    var auditPct = 0, auditTotal = 0, auditDone = 0, auditEngage = false;
     if(window.AUDIT_SECTIONS){
       window.AUDIT_SECTIONS.forEach(function(sec){
         sec.items.forEach(function(item){
           auditTotal++;
           var st = (window.AUDIT_STATE && window.AUDIT_STATE[item.id]) || "none";
           if(st === "done") auditDone++;
+          if(st !== "none") auditEngage = true; /* au moins un point coche (done ou partial) = audit reellement engage */
         });
       });
       auditPct = auditTotal>0 ? Math.round(auditDone/auditTotal*100) : 0;
     }
     var conformes = registre.filter(function(s){ return s.statut_conformite === 'conforme'; }).length;
-    callback({registre: registre, auditPct: auditPct, auditDone: auditDone, auditTotal: auditTotal, conformes: conformes});
-  }).catch(function(){ callback({registre:[], auditPct:0, auditDone:0, auditTotal:0, conformes:0}); });
+    callback({registre: registre, auditPct: auditPct, auditDone: auditDone, auditTotal: auditTotal, conformes: conformes, auditEngage: auditEngage});
+  }).catch(function(){ callback({registre:[], auditPct:0, auditDone:0, auditTotal:0, conformes:0, auditEngage:false}); });
 }
 
 function pricingComputeSaaS(nbSystemes){
@@ -10914,17 +10924,39 @@ window.pricingSimulate = function(){
   pricingRenderChart(saasMonthly, hybridResults);
 };
 
-/* Pre-remplir avec les vraies donnees du client si disponibles */
+window.pricingSetEstim = function(val){
+  var auditEl = document.getElementById('pricing-audit-depart');
+  if(auditEl){ auditEl.value = val; window.pricingSimulate(); }
+};
+
+/* Pre-remplir avec les vraies donnees du client si disponibles, ou basculer
+   en mode estimation manuelle assistee si aucun audit n a encore ete engage */
 window.pricingInitPage = function(){
   pricingGetData(function(d){
     var nbEl = document.getElementById('pricing-nb-systemes');
     var auditEl = document.getElementById('pricing-audit-depart');
+    var modeInfoEl = document.getElementById('pricing-audit-mode-info');
+    var estimBtnsEl = document.getElementById('pricing-audit-estim-buttons');
     if(nbEl && d.registre.length > 0) nbEl.value = d.registre.length;
-    if(auditEl) auditEl.value = d.auditPct;
+
+    if(d.auditEngage){
+      /* Cas 1 : un audit a ete reellement engage -> pre-remplissage automatique fiable */
+      if(auditEl) auditEl.value = d.auditPct;
+      if(modeInfoEl) modeInfoEl.innerHTML = '✅ Calculé depuis votre Audit IA Act réel ('+d.auditDone+'/'+d.auditTotal+' points conformes).';
+      if(estimBtnsEl) estimBtnsEl.style.display = 'none';
+    } else {
+      /* Cas 2 : aucun audit engage -> mode estimation manuelle assistee */
+      if(auditEl) auditEl.value = 15;
+      if(modeInfoEl) modeInfoEl.innerHTML = '✏️ Aucun audit réalisé sur Sentinel — estimez ce score avec les parties prenantes du prospect, ou utilisez un raccourci ci-dessous.';
+      if(estimBtnsEl) estimBtnsEl.style.display = 'flex';
+    }
+
     var infoEl = document.getElementById('pricing-prefill-info');
     if(infoEl){
-      if(d.registre.length > 0){
+      if(d.registre.length > 0 && d.auditEngage){
         infoEl.innerHTML = '✅ Pré-rempli avec vos données réelles : <strong>'+d.registre.length+' système(s)</strong> au Registre IA, score Audit actuel <strong>'+d.auditPct+'%</strong>.';
+      } else if(d.registre.length > 0){
+        infoEl.innerHTML = '📋 <strong>'+d.registre.length+' système(s)</strong> au Registre IA, mais aucun Audit IA Act réalisé — score de départ à estimer manuellement ci-dessous.';
       } else {
         infoEl.innerHTML = '⚠️ Aucune donnée réelle au Registre IA — valeurs par défaut utilisées. <a href="#" onclick="go(\'registre\',null,\'REGISTRE\',\'Systèmes IA\');return false;">Ajouter des systèmes →</a>';
       }
