@@ -10734,10 +10734,15 @@ var PAGE_GUIDES = {
   pricing: {
     title: "Tarification par résultats",
     sections: [
-      {h:"Connectée à vos vraies données", t:"La page se pré-remplit automatiquement avec le nombre réel de systèmes du Registre IA et le score Audit IA Act actuel du prospect/client."},
-      {h:"Trois paramètres ajustables", t:"Nombre de systèmes, score de départ, et chiffre d affaires annuel (pour le calcul de l exposition aux sanctions Art. 99)."},
-      {h:"Calcul du modèle hybride", t:"Basé sur 3 résultats mesurables — pas des promesses abstraites : progression du score Audit IA Act (45€/point gagné), réduction estimée de l exposition aux sanctions (0,4% de la réduction calculée), systèmes du Registre IA passés au statut conforme (65€/système)."},
-      {h:"À garder en tête", t:"C est un outil d aide à la décision commerciale pour cadrer une discussion avec un prospect, pas un engagement contractuel — les garde-fous (périmètre de responsabilité, plafond de facturation variable) restent à définir au contrat."}
+      {h:"Connectée à vos vraies données", t:"La page se pré-remplit automatiquement avec le secteur actif, le nombre réel de systèmes du Registre IA (pondérés par leur classification) et le score Audit IA Act actuel du prospect/client."},
+      {h:"Quatre paramètres ajustables", t:"Secteur d activité, nombre de systèmes, score Audit de départ, et chiffre d affaires annuel (pour le calcul de l exposition aux sanctions Art. 99). Le secteur influence directement la vitesse de progression réaliste."},
+      {h:"Score Audit : automatique ou estimé", t:"Si un audit a déjà été engagé sur Sentinel, le score se pré-remplit avec la vraie donnée mesurée. Sinon, la page bascule en mode estimation manuelle assistée avec 3 raccourcis (Aucune démarche ~10%, Démarche initiale ~30%, Démarche avancée ~55%) pour estimer collaborativement avec les parties prenantes du prospect."},
+      {h:"Calcul du modèle hybride (pondéré)", t:"Basé sur 3 résultats mesurables, pas des promesses abstraites : progression du score Audit IA Act (45€/point gagné), réduction estimée de l exposition aux sanctions (0,4% de la réduction calculée), systèmes du Registre IA passés au statut conforme (65€/système) — pondérés selon leur classification réelle (un système haut risque pèse 1,4× plus qu un système à risque minimal)."},
+      {h:"Vitesse de progression calibrée", t:"La progression mensuelle simulée dépend du secteur sélectionné et de la maturité organisationnelle réelle de référence (score de l Audit de maturité) — un secteur IT progresse généralement plus vite qu un secteur Santé ou Énergie, par exemple."},
+      {h:"Trois scénarios affichés", t:"Le graphique montre une courbe réaliste entourée d une fourchette pessimiste/optimiste (zone pointillée), plus réaliste qu une projection unique figée. La carte de résultats affiche aussi la fourchette chiffrée au mois 6."},
+      {h:"SaaS classique avec remise volume", t:"Le modèle de comparaison applique des paliers de remise (-6% à partir de 20 systèmes, -12% à 30, -20% à 50+), pour un comparatif plus réaliste qu un tarif linéaire."},
+      {h:"Garde-fou : plafond contractuel appliqué", t:"La part variable du modèle hybride est automatiquement plafonnée à 4× le socle fixe — si ce plafond est atteint, un badge (plafonné) apparaît dans les résultats. Ce n est plus juste une recommandation textuelle : c est intégré au calcul."},
+      {h:"À garder en tête", t:"C est un outil d aide à la décision commerciale pour cadrer une discussion avec un prospect, pas un engagement contractuel — le périmètre exact de responsabilité (actions du client vs résultat de l outil) reste à définir au contrat."}
     ]
   }
 };
