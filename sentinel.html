@@ -1348,7 +1348,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       <div class="feat-h">Comparer les pays</div>
       <p class="feat-p">Benchmark côte-à-côte des frameworks nationaux.</p>
     </div>
-    <div class="feat" onclick="go('decision',null,'AIDE À LA DÉCISION','Simuler un déploiement')">
+    <div class="feat" onclick="openSimulateurTab()">
       <div class="feat-arr">→</div>
       <div class="feat-icon"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg></div>
       <div class="feat-h">Simuler un déploiement</div>
@@ -3993,7 +3993,6 @@ var PAGE_META = {
   carto:    {section:'CARTOGRAPHIE',    label:'Carte mondiale'},
   comp:     {section:'ANALYSE',         label:'Comparateur'},
   geo:      {section:'GÉOPOLITIQUE',    label:'Tensions normatives'},
-  decision: {section:'AIDE À LA DÉCISION', label:'Simuler un déploiement'},
   regs:     {section:'CONFORMITÉ',      label:'Réglementations'},
   veille:   {section:'CONFORMITÉ',      label:'Veille qualifiée'},
   evals:    {section:'CONFORMITÉ',      label:'Mes évaluations'},
@@ -4503,6 +4502,11 @@ window.regsTab = function(tab, el){
 window.openAuditTab = function(){
   go('regs', null, 'RÉGLEMENTATIONS', 'Réglementations & Audit IA');
   setTimeout(function(){ regsTab('audit', null); }, 80);
+};
+
+window.openSimulateurTab = function(){
+  go('regs', null, 'RÉGLEMENTATIONS', 'Réglementations & Audit IA');
+  setTimeout(function(){ regsTab('simulateur', null); }, 80);
 };
 
 /* ══ ONGLET 2 : AUDIT IA ACT ══ */
