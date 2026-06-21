@@ -1097,6 +1097,17 @@ textarea.form-el{min-height:86px;resize:vertical}
 .t-card-clickable{cursor:pointer;transition:all .15s}
 .t-card-clickable:hover{border-color:var(--accent);box-shadow:0 4px 16px rgba(184,50,34,.1);transform:translateY(-1px)}
 
+/* ══ BOUTON GUIDE D UTILISATION — animation douce ══ */
+.page-guide-btn{display:inline-flex;align-items:center;gap:6px;margin:8px 0 4px;padding:6px 14px;
+  font-size:11px;font-family:var(--mono);letter-spacing:.03em;color:var(--accent);
+  background:rgba(184,50,34,.06);border:1px solid rgba(184,50,34,.25);border-radius:20px;
+  cursor:pointer;transition:all .2s;animation:guidePulse 2.8s ease-in-out infinite}
+.page-guide-btn:hover{background:rgba(184,50,34,.12);border-color:var(--accent);animation:none}
+@keyframes guidePulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(184,50,34,.18);opacity:.85}
+  50%{box-shadow:0 0 0 5px rgba(184,50,34,0);opacity:1}
+}
+
 </style>
 <style id="cpc-styles">
 /* ══ CHATBOT SENTINEL AI — CONSEILPREV ══ */
@@ -10478,6 +10489,238 @@ window.trainingOpenFiche = function(key){
     + '</div></div>';
   modal.classList.add("on");
 };
+
+})();
+
+</script>
+
+<script>
+/* ══ GUIDES D UTILISATION PAR PAGE — bouton discret avec animation douce ══ */
+(function(){
+'use strict';
+
+var PAGE_GUIDES = {
+  apercu: {
+    title: "Vue d ensemble",
+    sections: [
+      {h:"À quoi sert cette page", t:"Tableau de bord global : juridictions couvertes, sévérité réglementaire moyenne, classements innovation/sévérité. Point de départ pour explorer la conformité IA mondiale."},
+      {h:"Comment l utiliser", t:"Cliquez sur les 3 cartes (Explorer, Comparer, Simuler) pour accéder directement aux outils correspondants. Les listes de droite sont triées par score, cliquables vers les fiches détaillées."}
+    ]
+  },
+  carto: {
+    title: "Cartographie mondiale",
+    sections: [
+      {h:"À quoi sert cette page", t:"Visualise 46 juridictions sur 12 critères réglementaires (portée, sanctions, transparence...), avec mise à jour en temps réel par IA."},
+      {h:"Comment l utiliser", t:"La carte et le tableau sont synchronisés. Cliquez une juridiction pour voir son détail. Le bouton 🤖 Actualiser via IA interroge Mistral/Claude pour vérifier l état réglementaire actuel."},
+      {h:"Voir aussi", t:"Le lien Voir les 12 critères d évaluation → explique la méthodologie complète de scoring."}
+    ]
+  },
+  comp: {
+    title: "Comparateur de juridictions",
+    sections: [
+      {h:"À quoi sert cette page", t:"Compare jusqu à 4 juridictions côte à côte sur 6 dimensions (Sévérité, Transparence, Responsabilité, Souveraineté, Sanctions, Innovation)."},
+      {h:"Comment l utiliser", t:"Cliquez + Ajouter un pays pour sélectionner jusqu à 4 juridictions. Le radar et le tableau se mettent à jour automatiquement. Utile pour choisir où déployer un système IA avec le moins de contraintes."}
+    ]
+  },
+  geo: {
+    title: "Géopolitique réglementaire",
+    sections: [
+      {h:"À quoi sert cette page", t:"Analyse narrative des tensions normatives entre blocs (UE, USA, Chine) : extraterritorialité, fragmentation, influence des standards."},
+      {h:"Comment l utiliser", t:"Complémentaire à la Cartographie (qui est quantitative) : ici vous trouvez le contexte stratégique et les instruments clés de chaque bloc."}
+    ]
+  },
+  maturite: {
+    title: "Audit de maturité IA",
+    sections: [
+      {h:"À quoi sert cette page", t:"Évalue votre conformité sur les 8 piliers de l EU AI Act (Explicabilité, Contrôlabilité, Transparence, Sûreté, Équité, Gouvernance, Confidentialité, Robustesse), par secteur."},
+      {h:"Comment l utiliser", t:"1) Sélectionnez votre secteur en haut. 2) Répondez au questionnaire de 16 questions — les scores se recalculent en temps réel. 3) Générez les 6 livrables IA (registre, manuel de gouvernance, rapport, formation, outils, plan de maintenance) ou les 4 guides de procédure d audit, avec vos propres données si besoin."},
+      {h:"Astuce", t:"Le budget et les KPIs détaillés sont accessibles via les cartes dédiées, sans surcharger la page principale."}
+    ]
+  },
+  parties: {
+    title: "Parties prenantes",
+    sections: [
+      {h:"À quoi sert cette page", t:"Matrice RACI (Responsable / Approbateur / Consulté / Informé) pour 14 processus de gouvernance IA + spécificités sectorielles."},
+      {h:"Comment l utiliser", t:"Cliquez sur une cellule pour faire défiler son statut. Changez de secteur pour voir les rôles et processus spécifiques apparaître (badge Sectoriel). Le bouton 🤖 génère un document complet d analyse de votre matrice par IA."}
+    ]
+  },
+  registre: {
+    title: "Registre des systèmes IA",
+    sections: [
+      {h:"À quoi sert cette page", t:"Inventaire obligatoire (Art. 49, 71) de vos systèmes IA, connecté à une vraie base de données persistante (pas une démo)."},
+      {h:"Comment l utiliser", t:"+ Ajouter un système pour créer une fiche complète (classification, justification Annexe III, statut). Cliquez une ligne pour la modifier. La recherche filtre par nom, secteur, type ou responsable."},
+      {h:"Connexions", t:"Ce registre alimente automatiquement la Matrice des risques, le Radar, et peut être enrichi directement depuis le Simulateur."}
+    ]
+  },
+  matrice: {
+    title: "Matrice risques / impact",
+    sections: [
+      {h:"À quoi sert cette page", t:"Positionne vos systèmes réels du Registre IA sur une grille Probabilité de non-conformité × Impact, pour repérer en un coup d œil les priorités."},
+      {h:"Comment l utiliser", t:"Cliquez une icône dans la grille ou un système en zone critique pour ouvrir directement sa fiche dans le Registre IA."}
+    ]
+  },
+  radar: {
+    title: "Radar des risques IA",
+    sections: [
+      {h:"À quoi sert cette page", t:"Visualise votre posture sur 6 dimensions réglementaires, calculées à partir de 8 risques systémiques pondérés par secteur et par votre Registre IA réel."},
+      {h:"Comment l utiliser", t:"Changez de secteur pour recalculer le radar. Les sections du bas détaillent le poids de chaque risque systémique (avec sources : ENISA, NIST AI RMF, OCDE) et les risques sectoriels spécifiques."}
+    ]
+  },
+  regs: {
+    title: "Réglementations & Audit IA",
+    sections: [
+      {h:"4 onglets disponibles", t:"Textes réglementaires (sources officielles), Simulateur IA Act (classification pas à pas), Audit IA Act (32 points de contrôle), Obligations article par article (113 articles)."},
+      {h:"Comment l utiliser", t:"Commencez par le Simulateur si vous découvrez un système IA pour la première fois : il détermine sa classification et ses obligations en 5 étapes, puis propose de l ajouter au Registre IA ou de lancer l audit complet."}
+    ]
+  },
+  veille: {
+    title: "Veille qualifiée par IA",
+    sections: [
+      {h:"À quoi sert cette page", t:"Chaque actualité réglementaire est analysée par IA et croisée avec votre Registre IA réel pour évaluer son impact concret sur vos systèmes."},
+      {h:"Comment l utiliser", t:"L onglet Veille qualifiée affiche un score d impact (haut/moyen/faible) personnalisé. Le filtre FR/EN limite les sources par langue. Le bouton Notifier alerte par email sur les impacts hauts."}
+    ]
+  },
+  evals: {
+    title: "Mes évaluations",
+    sections: [
+      {h:"À quoi sert cette page", t:"Historique de toutes vos simulations et audits enregistrés, avec leur score et la date."},
+      {h:"Comment l utiliser", t:"Cliquez une ligne pour revenir directement à l outil correspondant (Simulateur ou Audit). Utile pour suivre votre progression dans le temps."}
+    ]
+  },
+  fria: {
+    title: "Évaluation FRIA",
+    sections: [
+      {h:"À quoi sert cette page", t:"Évaluation d impact sur les droits fondamentaux (Art. 27 EU AI Act) — obligation du déployeur, distincte d une DPIA RGPD, applicable à 3 catégories précises."},
+      {h:"Comment l utiliser", t:"L applicabilité est calculée automatiquement par système selon votre secteur. Si applicable, répondez au questionnaire sur les 8 droits fondamentaux — le score se met à jour en temps réel."}
+    ]
+  },
+  equipe: {
+    title: "Espace équipe",
+    sections: [
+      {h:"À quoi sert cette page", t:"Affiche les rôles de gouvernance IA définis dans votre matrice RACI, avec leur statut d assignation réel."},
+      {h:"Comment l utiliser", t:"Pour modifier les rôles ou leur assignation, rendez-vous sur la page Parties prenantes — cette page en est le reflet en lecture."}
+    ]
+  },
+  training: {
+    title: "Hub Training",
+    sections: [
+      {h:"À quoi sert cette page", t:"4 modules de formation dont la progression est calculée depuis vos scores réels de l Audit de maturité IA (un pilier faible = formation prioritaire)."},
+      {h:"Comment l utiliser", t:"Cliquez un module pour ouvrir sa fiche complète : objectifs, programme détaillé, articles couverts, quiz et certification visée."}
+    ]
+  },
+  espace: {
+    title: "Mes actions du jour",
+    sections: [
+      {h:"À quoi sert cette page", t:"Vue personnelle : votre activité récente et les actions à traiter en priorité (systèmes non conformes, points d audit à compléter, FRIA à vérifier)."},
+      {h:"Différence avec Reporting", t:"Cette page est orientée tâches individuelles. Pour une vue stratégique consolidée à présenter à votre direction, consultez Reporting."}
+    ]
+  },
+  sanctions: {
+    title: "Calculateur de sanctions",
+    sections: [
+      {h:"À quoi sert cette page", t:"Estime l exposition financière en cas de non-conformité, selon le barème de l Art. 99 EU AI Act (jusqu à 35M€ ou 7% du CA mondial)."},
+      {h:"Comment l utiliser", t:"Le bouton 📊 Pré-remplir depuis le Registre IA charge automatiquement le système le plus exposé de votre registre pour un calcul instantané."}
+    ]
+  },
+  benchmark: {
+    title: "Benchmark sectoriel",
+    sections: [
+      {h:"À quoi sert cette page", t:"Compare le taux de conformité réel de vos systèmes (Registre IA) à la moyenne de maturité calculée pour chaque secteur d activité."},
+      {h:"Comment l utiliser", t:"Les KPIs en haut et le tableau détaillé utilisent les mêmes données réelles — aucune incohérence entre les deux."}
+    ]
+  },
+  templates: {
+    title: "Documentation & modèles",
+    sections: [
+      {h:"À quoi sert cette page", t:"Catalogue de tous les documents réellement générables dans Sentinel AI (pas des fichiers statiques) : les 6 livrables IA, les 4 guides de procédure, la matrice RACI, le rapport d audit, l évaluation FRIA."},
+      {h:"Comment l utiliser", t:"Cliquez une carte pour être redirigé directement vers l outil qui génère ce document, avec vos données réelles déjà chargées."}
+    ]
+  },
+  report: {
+    title: "Vue direction",
+    sections: [
+      {h:"À quoi sert cette page", t:"Tableau de bord exécutif consolidé : KPIs stratégiques, répartition du registre par classification, dernières évaluations — pensé pour la présentation à votre direction ou client."},
+      {h:"Différence avec Mon Espace", t:"Cette page est orientée pilotage stratégique. Pour vos actions personnelles au quotidien, consultez Mon Espace."}
+    ]
+  },
+  roadmap: {
+    title: "Roadmap conformité",
+    sections: [
+      {h:"À quoi sert cette page", t:"Plan d action en 4 phases (même méthodologie que l Audit de maturité), avec progression calculée à partir de votre Registre IA et de l Audit IA Act réels — pas des chiffres figés."},
+      {h:"Échéance clé", t:"Le 2 août 2026 marque l entrée en application complète des obligations pour les systèmes à haut risque (Art. 113)."}
+    ]
+  }
+};
+window.PAGE_GUIDES = PAGE_GUIDES;
+
+function guideCurrentPageId(){
+  var pages = document.querySelectorAll(".page");
+  for(var i=0;i<pages.length;i++){
+    if(pages[i].classList.contains("on")) return pages[i].id.replace("p-","");
+  }
+  return null;
+}
+
+function guideInjectButton(){
+  var pid = guideCurrentPageId();
+  if(!pid) return;
+  var activePage = document.getElementById("p-"+pid);
+  if(!activePage) return;
+
+  /* Retirer un bouton precedent (page differente) */
+  var old = document.getElementById("page-guide-btn");
+  if(old) old.remove();
+
+  var guide = PAGE_GUIDES[pid];
+  var h1 = activePage.querySelector("h1.page-h");
+  if(!h1) return;
+
+  var btn = document.createElement("button");
+  btn.id = "page-guide-btn";
+  btn.className = "page-guide-btn";
+  btn.title = "Ouvrir le guide d utilisation de cette page";
+  btn.innerHTML = "❔ Guide d'utilisation";
+  btn.onclick = function(){ guideOpenModal(pid); };
+
+  h1.insertAdjacentElement("afterend", btn);
+}
+window.guideInjectButton = guideInjectButton;
+
+window.guideOpenModal = function(pid){
+  var guide = PAGE_GUIDES[pid];
+  var modal = document.getElementById("guide-modal");
+  if(!modal){ modal = document.createElement("div"); modal.id = "guide-modal"; modal.className = "mat-modal"; document.body.appendChild(modal); }
+
+  var bodyHtml;
+  if(guide){
+    bodyHtml = guide.sections.map(function(s){
+      return '<div class="ctrl-section" style="margin-bottom:12px"><div class="ctrl-section-head"><span class="ctrl-section-title">'+s.h+'</span></div>'
+        + '<div style="padding:12px 16px;font-size:12px;color:var(--ink2);line-height:1.65">'+s.t+'</div></div>';
+    }).join('');
+  } else {
+    bodyHtml = '<div class="reg-empty">Guide non encore disponible pour cette page. Contactez christophe.cerf@outlook.com pour toute question.</div>';
+  }
+
+  modal.innerHTML = '<div class="mat-modal-box">'
+    + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Guide d utilisation</div>'
+    + '<div class="mat-modal-title">'+(guide?guide.title:"Aide")+'</div></div>'
+    + '<button class="mat-modal-close" onclick="document.getElementById(\'guide-modal\').classList.remove(\'on\')">×</button></div>'
+    + '<div class="mat-modal-body">'+bodyHtml+'</div>'
+    + '</div>';
+  modal.classList.add("on");
+};
+
+/* Re-injecter le bouton a chaque navigation */
+var _guideOrigGo = window.go;
+window.go = function(){
+  var r = _guideOrigGo ? _guideOrigGo.apply(this, arguments) : undefined;
+  setTimeout(guideInjectButton, 120);
+  return r;
+};
+
+/* Injection initiale au chargement */
+document.addEventListener("DOMContentLoaded", function(){ setTimeout(guideInjectButton, 300); });
+if(document.readyState !== "loading"){ setTimeout(guideInjectButton, 300); }
 
 })();
 
