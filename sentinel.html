@@ -5418,6 +5418,7 @@ function cjRenderTags(){
   var html = '';
   cjSelected.forEach(function(code, i){
     var d = CJ_DATA[code];
+    if(!d) return; /* garde defensive : ignore les codes sans donnees encore chargees */
     html += '<span class="cj-tag">'
       + '<span class="cj-tag-dot" style="background:'+cjGetColor(i)+'"></span>'
       + '<span style="font-size:10px">'+d.flag+'</span>'
@@ -5543,13 +5544,16 @@ function cjRenderTable(){
   tbody.innerHTML=rows;
 }
 
-// Init
-cjRender();
-
-// Exposer globalement
+// Exposer globalement AVANT le premier rendu (pour que les boutons fonctionnent meme si cjRender() echoue)
 window.cjToggleAdd = cjToggleAdd;
 window.cjAddCountry = cjAddCountry;
 window.cjRemove = cjRemove;
+
+// Peupler CJ_DATA de facon synchrone depuis JURS (deja disponible) avant le premier rendu
+if(typeof window.cjBuildDataFromJurs === "function"){ window.cjBuildDataFromJurs(); }
+
+// Init (protege par try/catch pour ne jamais bloquer le reste du script)
+try { cjRender(); } catch(e){ console.error('cjRender init error:', e); }
 
 })();
 
