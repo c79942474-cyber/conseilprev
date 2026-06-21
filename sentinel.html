@@ -1108,6 +1108,11 @@ textarea.form-el{min-height:86px;resize:vertical}
   50%{box-shadow:0 0 0 5px rgba(184,50,34,0);opacity:1}
 }
 
+.reg-skeleton-row{display:grid;grid-template-columns:28px 1fr 100px 100px 100px 60px 20px;gap:12px;align-items:center;padding:12px 20px;border-bottom:1px solid var(--rule)}
+.reg-skel-block{height:14px;border-radius:4px;background:linear-gradient(90deg,var(--rule) 25%,var(--rule2) 37%,var(--rule) 63%);background-size:400% 100%;animation:regSkelShimmer 1.4s ease infinite}
+.reg-skel-ico{width:22px;height:22px;border-radius:50%}
+@keyframes regSkelShimmer{0%{background-position:100% 50%}100%{background-position:0 50%}}
+
 </style>
 <style id="cpc-styles">
 /* ══ CHATBOT SENTINEL AI — CONSEILPREV ══ */
@@ -8180,10 +8185,23 @@ function regCheckDbStatus(){
   }).catch(function(){});
 }
 
+function regSkeletonHTML(){
+  var row = '<div class="reg-skeleton-row">'
+    + '<div class="reg-skel-block reg-skel-ico"></div>'
+    + '<div class="reg-skel-block" style="width:'+(55+Math.random()*30)+'%"></div>'
+    + '<div class="reg-skel-block"></div>'
+    + '<div class="reg-skel-block"></div>'
+    + '<div class="reg-skel-block"></div>'
+    + '<div class="reg-skel-block" style="width:40px"></div>'
+    + '<div></div>'
+    + '</div>';
+  return new Array(5).fill(row).join('');
+}
+
 function regFetch(){
   regCheckDbStatus();
   var body = document.getElementById("reg-sys-body");
-  if(body) body.innerHTML = '<div class="reg-loading">Chargement du registre…</div>';
+  if(body) body.innerHTML = regSkeletonHTML();
   fetch('/api/registre')
     .then(function(r){ return r.json(); })
     .then(function(d){
