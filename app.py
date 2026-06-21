@@ -3034,3 +3034,4 @@ if __name__ == '__main__':
 # deploy trigger
 # deploy trigger 2
 # deploy trigger - sync jurs/cj/sim
+# deploy trigger - fix simuler deploiement card
