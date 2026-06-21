@@ -10076,7 +10076,14 @@ function cjBuildDataFromJurs(){
       badge: badge, badgeCls: badgeCls
     };
   });
-  window.CJ_DATA = data;
+  /* Muter l objet CJ_DATA existant en place (au lieu de le remplacer) pour que
+     la variable locale CJ_DATA de l IIFE du comparateur voie aussi les changements */
+  if(window.CJ_DATA){
+    Object.keys(window.CJ_DATA).forEach(function(k){ delete window.CJ_DATA[k]; });
+    Object.keys(data).forEach(function(k){ window.CJ_DATA[k] = data[k]; });
+  } else {
+    window.CJ_DATA = data;
+  }
   return data;
 }
 
