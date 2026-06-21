@@ -1113,6 +1113,9 @@ textarea.form-el{min-height:86px;resize:vertical}
 .reg-skel-ico{width:22px;height:22px;border-radius:50%}
 @keyframes regSkelShimmer{0%{background-position:100% 50%}100%{background-position:0 50%}}
 
+/* ══ TARIFICATION PAR RESULTATS ══ */
+.pricing-input{font-size:13px;padding:8px 11px;border:1px solid var(--rule2);border-radius:4px;width:100%;box-sizing:border-box}
+
 </style>
 <style id="cpc-styles">
 /* ══ CHATBOT SENTINEL AI — CONSEILPREV ══ */
@@ -1313,6 +1316,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-item" onclick="go('roadmap',this,'PLANIFICATION','Plan d\'action')"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg></span>Roadmap</div>
     <div class="sb-item" onclick="go('sanctions',this,'OUTILS','Calculateur sanctions')" title="Estimez l exposition financiere en cas de non-conformite a l EU AI Act."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></span>Calculateur sanctions</div>
     <div class="sb-item" onclick="go('benchmark',this,'ANALYSE','Benchmark sectoriel')" title="Comparez votre niveau de conformite a celui d autres acteurs de votre secteur."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>Benchmark</div>
+    <div class="sb-item" onclick="go('pricing',this,'ANALYSE','Tarification par résultats')" title="Simulateur de modele commercial hybride RaaS (resultats) vs SaaS classique."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span>Tarification résultats</div>
     <div class="sb-item" onclick="go('templates',this,'RESSOURCES','Documentation & Modèles')" title="Modeles de documents pretes a completer : politiques IA, registres, rapports."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>Templates &amp; Docs</div>
     <div class="sb-item" onclick="go('report',this,'REPORTING','Vue direction')" title="Tableau de bord executif : indicateurs cles de conformite pour la direction."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>Reporting</div>
   </nav>
@@ -2280,6 +2284,44 @@ textarea.form-el{min-height:86px;resize:vertical}
 </div>
 
 <!-- TEMPLATES -->
+<div class="page" id="p-pricing">
+  <span class="eyebrow">Modèle commercial innovant</span><h1 class="page-h">Tarification <em>par résultats</em></h1>
+  <p class="page-lead">Simulez un modèle hybride RaaS (Results-as-a-Service) — socle fixe réduit + part variable indexée sur vos résultats réels de conformité — comparé à un abonnement SaaS classique.</p>
+
+  <div id="pricing-prefill-info" class="radar-registre-info radar-registre-ok" style="margin-bottom:20px">Chargement de vos données…</div>
+
+  <div class="tbl-wrap" style="padding:24px;margin-bottom:24px">
+    <div class="tbl-head" style="border:none;padding:0 0 16px"><span class="tbl-title">Paramètres de simulation</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
+      <div class="reg-field"><label class="reg-label">Nombre de systèmes IA</label><input type="number" id="pricing-nb-systemes" class="reg-input" value="10" onchange="pricingSimulate()"></div>
+      <div class="reg-field"><label class="reg-label">Score Audit IA Act de départ (%)</label><input type="number" id="pricing-audit-depart" class="reg-input" value="20" min="0" max="100" onchange="pricingSimulate()"></div>
+      <div class="reg-field"><label class="reg-label">Chiffre d'affaires annuel (€)</label><input type="number" id="pricing-ca" class="reg-input" value="50000000" onchange="pricingSimulate()"></div>
+    </div>
+    <button class="mat-export-btn" style="background:var(--ink);color:#fff;margin-top:16px" onclick="pricingSimulate()">Recalculer la simulation</button>
+  </div>
+
+  <div id="pricing-results"></div>
+
+  <div class="tbl-wrap" style="padding:24px;margin-top:20px">
+    <div class="tbl-head" style="border:none;padding:0 0 16px"><span class="tbl-title">Projection sur 6 mois — SaaS classique vs Hybride RaaS</span></div>
+    <svg id="pricing-chart-svg" viewBox="0 0 600 280" style="width:100%;max-width:640px;display:block;margin:0 auto"></svg>
+  </div>
+
+  <div class="tbl-wrap" style="padding:24px;margin-top:20px">
+    <div class="tbl-head" style="border:none;padding:0 0 16px"><span class="tbl-title">Comment fonctionne le modèle hybride</span></div>
+    <div class="ctrl-section"><div class="ctrl-section-head"><span class="ctrl-section-title">① Socle fixe réduit (~900€/mois)</span></div>
+      <div style="padding:12px 16px;font-size:12px;color:var(--ink2);line-height:1.6">Couvre les coûts réels d'infrastructure (hébergement, API IA, base de données) — environ 30 à 40% du tarif SaaS classique équivalent.</div></div>
+    <div class="ctrl-section"><div class="ctrl-section-head"><span class="ctrl-section-title">② Part variable indexée sur 3 résultats mesurables</span></div>
+      <div style="padding:12px 16px;font-size:12px;color:var(--ink2);line-height:1.6">
+        • Progression du score Audit IA Act (45€/point gagné)<br>
+        • Réduction estimée de l'exposition aux sanctions Art. 99 (0,4% de la réduction calculée)<br>
+        • Systèmes du Registre IA passés au statut "conforme" (65€/système)
+      </div></div>
+    <div class="ctrl-section"><div class="ctrl-section-head"><span class="ctrl-section-title">③ Garde-fous contractuels recommandés</span></div>
+      <div style="padding:12px 16px;font-size:12px;color:var(--ink2);line-height:1.6">Les résultats dépendent aussi des actions du client (qualité des données fournies, adoption interne). Le contrat doit définir clairement le périmètre de responsabilité de chaque partie et un plafond/plancher de facturation variable.</div></div>
+  </div>
+</div>
+
 <div class="page" id="p-templates"><span class="eyebrow">Ressources</span><h1 class="page-h">Documentation &amp; <em>modèles</em></h1><p class="page-lead">Documents réellement générables dans Sentinel AI — cliquez pour accéder directement à l outil de génération.</p><div class="doc-grid" id="doc-grid"></div><div class="rule"></div><div class="sec-h" style="margin-bottom:6px">Guides pratiques</div><div class="sec-sub">Fiches synthétiques téléchargeables</div><div class="doc-grid" id="guides-grid"></div></div>
 
 <!-- FRIA -->
@@ -4030,6 +4072,7 @@ var PAGE_META = {
   roadmap:  {section:'PLANIFICATION',   label:'Plan action'},
   sanctions:{section:'OUTILS',          label:'Calculateur sanctions'},
   benchmark:{section:'ANALYSE',         label:'Benchmark sectoriel'},
+  pricing:{section:'ANALYSE',           label:'Tarification par résultats'},
   templates:{section:'RESSOURCES',      label:'Documentation & Modèles'},
   'fiche-eu': {section:'JURIDICTION', label:'Union européenne'},
   'fiche-de': {section:'JURIDICTION', label:'Allemagne'},
@@ -10739,6 +10782,154 @@ window.go = function(){
 /* Injection initiale au chargement */
 document.addEventListener("DOMContentLoaded", function(){ setTimeout(guideInjectButton, 300); });
 if(document.readyState !== "loading"){ setTimeout(guideInjectButton, 300); }
+
+})();
+
+</script>
+
+<script>
+/* ══ SIMULATEUR DE TARIFICATION PAR RESULTATS — RaaS/Service-as-Software ══ */
+/* Modele hybride : socle fixe reduit + variable a la performance, calcule
+   a partir des donnees reelles (Registre IA, Audit IA Act) plutot que de
+   chiffres fictifs. Outil d aide a la decision commerciale, pas un contrat. */
+(function(){
+'use strict';
+
+var PRICING_PARAMS = {
+  saasBase: 2400,        /* prix mensuel SaaS classique de reference (par 10 systemes) */
+  saasPerSystem: 180,    /* cout marginal SaaS par systeme au-dela de 10 */
+  hybridSocle: 900,      /* socle fixe mensuel modele hybride (infra reelle) */
+  pricePerAuditPoint: 45,    /* euros par point de progression du score Audit IA Act */
+  pricePerSanctionReduced: 0.004, /* % de la reduction d exposition aux sanctions calculee */
+  pricePerSystemClassified: 65    /* euros par systeme passe a 'conforme' */
+};
+
+function pricingGetData(callback){
+  fetch('/api/registre').then(function(r){ return r.json(); }).then(function(d){
+    var registre = d.systemes || [];
+    var auditPct = 0, auditTotal = 0, auditDone = 0;
+    if(window.AUDIT_SECTIONS){
+      window.AUDIT_SECTIONS.forEach(function(sec){
+        sec.items.forEach(function(item){
+          auditTotal++;
+          var st = (window.AUDIT_STATE && window.AUDIT_STATE[item.id]) || "none";
+          if(st === "done") auditDone++;
+        });
+      });
+      auditPct = auditTotal>0 ? Math.round(auditDone/auditTotal*100) : 0;
+    }
+    var conformes = registre.filter(function(s){ return s.statut_conformite === 'conforme'; }).length;
+    callback({registre: registre, auditPct: auditPct, auditDone: auditDone, auditTotal: auditTotal, conformes: conformes});
+  }).catch(function(){ callback({registre:[], auditPct:0, auditDone:0, auditTotal:0, conformes:0}); });
+}
+
+function pricingComputeSaaS(nbSystemes){
+  var extra = Math.max(0, nbSystemes - 10);
+  return PRICING_PARAMS.saasBase + extra * PRICING_PARAMS.saasPerSystem;
+}
+
+function pricingComputeHybrid(auditPctGagne, sanctionReduiteEur, nbSystemesClassifies){
+  var variable = (auditPctGagne * PRICING_PARAMS.pricePerAuditPoint)
+    + (sanctionReduiteEur * PRICING_PARAMS.pricePerSanctionReduced)
+    + (nbSystemesClassifies * PRICING_PARAMS.pricePerSystemClassified);
+  return { socle: PRICING_PARAMS.hybridSocle, variable: Math.round(variable), total: PRICING_PARAMS.hybridSocle + Math.round(variable) };
+}
+
+function pricingRenderChart(saasMonthly, hybridResults){
+  var svg = document.getElementById('pricing-chart-svg');
+  if(!svg) return;
+  var maxVal = Math.max(saasMonthly, hybridResults.map(function(h){return h.total;}).reduce(function(a,b){return Math.max(a,b);},0)) * 1.15;
+  var W = 600, H = 280, padL = 50, padB = 30, padT = 20, padR = 20;
+  var chartW = W - padL - padR, chartH = H - padT - padB;
+  var n = hybridResults.length;
+
+  function y(val){ return padT + chartH - (val/maxVal)*chartH; }
+  function x(i){ return padL + (i/(n-1))*chartW; }
+
+  var saasLine = 'M'+padL+','+y(saasMonthly)+' L'+(padL+chartW)+','+y(saasMonthly);
+  var hybridPts = hybridResults.map(function(h,i){ return x(i)+','+y(h.total); }).join(' ');
+
+  var gridLines = [0,0.25,0.5,0.75,1].map(function(f){
+    var yy = padT + chartH*(1-f);
+    return '<line x1="'+padL+'" y1="'+yy+'" x2="'+(padL+chartW)+'" y2="'+yy+'" stroke="var(--rule)" stroke-width="1"/>'
+      + '<text x="'+(padL-8)+'" y="'+(yy+4)+'" text-anchor="end" font-size="9" font-family="var(--mono)" fill="var(--muted2)">'+Math.round(maxVal*f)+'€</text>';
+  }).join('');
+
+  var xLabels = hybridResults.map(function(h,i){
+    return '<text x="'+x(i)+'" y="'+(padT+chartH+18)+'" text-anchor="middle" font-size="9" font-family="var(--mono)" fill="var(--muted2)">Mois '+(i+1)+'</text>';
+  }).join('');
+
+  svg.innerHTML = gridLines + xLabels
+    + '<path d="'+saasLine+'" stroke="var(--muted2)" stroke-width="2" stroke-dasharray="5,4" fill="none"/>'
+    + '<polyline points="'+hybridPts+'" stroke="var(--accent)" stroke-width="2.5" fill="none"/>'
+    + hybridResults.map(function(h,i){ return '<circle cx="'+x(i)+'" cy="'+y(h.total)+'" r="4" fill="var(--accent)"/>'; }).join('')
+    + '<text x="'+(padL+chartW-4)+'" y="'+(y(saasMonthly)-8)+'" text-anchor="end" font-size="10" font-family="var(--mono)" fill="var(--muted2)">SaaS classique</text>'
+    + '<text x="'+x(n-1)+'" y="'+(y(hybridResults[n-1].total)-12)+'" text-anchor="end" font-size="10" font-family="var(--mono)" fill="var(--accent)" font-weight="700">Hybride RaaS</text>';
+}
+
+window.pricingSimulate = function(){
+  var nbSystemes = parseInt(document.getElementById('pricing-nb-systemes').value || '10', 10);
+  var auditDepart = parseInt(document.getElementById('pricing-audit-depart').value || '20', 10);
+  var caAnnuel = parseInt(document.getElementById('pricing-ca').value || '50000000', 10);
+  var monthsProjected = 6;
+
+  var saasMonthly = pricingComputeSaaS(nbSystemes);
+
+  /* Projection de progression mensuelle realiste (courbe d adoption typique, plus rapide au debut) */
+  var hybridResults = [];
+  var cumAuditGain = 0;
+  for(var m = 1; m <= monthsProjected; m++){
+    var monthlyGain = m <= 2 ? 12 : m <= 4 ? 7 : 4; /* points de progression par mois, decroissant */
+    cumAuditGain = Math.min(100 - auditDepart, cumAuditGain + monthlyGain);
+    var sanctionReduite = caAnnuel * 0.07 * (cumAuditGain/100) * 0.3; /* estimation prudente : 30% du risque theorique reduit */
+    var systemesClassifies = Math.round(nbSystemes * Math.min(1, m/4));
+    hybridResults.push(pricingComputeHybrid(cumAuditGain, sanctionReduite, systemesClassifies));
+  }
+
+  var finalHybrid = hybridResults[monthsProjected-1];
+  var totalSaas6m = saasMonthly * monthsProjected;
+  var totalHybrid6m = hybridResults.reduce(function(a,h){ return a+h.total; }, 0);
+  var diff = totalSaas6m - totalHybrid6m;
+
+  var resultsEl = document.getElementById('pricing-results');
+  if(resultsEl){
+    resultsEl.innerHTML =
+      '<div class="bud-synth">'
+      + '<div class="bud-synth-card"><div class="bud-synth-lbl">SaaS classique / mois</div><div class="bud-synth-val">'+saasMonthly.toLocaleString('fr-FR')+'€</div></div>'
+      + '<div class="bud-synth-card"><div class="bud-synth-lbl">Hybride RaaS — mois 6</div><div class="bud-synth-val" style="color:var(--accent)">'+finalHybrid.total.toLocaleString('fr-FR')+'€</div><div class="bud-synth-sub">Socle '+finalHybrid.socle+'€ + variable '+finalHybrid.variable.toLocaleString('fr-FR')+'€</div></div>'
+      + '<div class="bud-synth-card"><div class="bud-synth-lbl">Écart sur 6 mois</div><div class="bud-synth-val" style="color:'+(diff>=0?'var(--green)':'var(--orange)')+'">'+(diff>=0?'+':'')+diff.toLocaleString('fr-FR')+'€</div><div class="bud-synth-sub">'+(diff>=0?'En faveur du modèle hybride':'En faveur du SaaS classique')+'</div></div>'
+      + '</div>'
+      + '<div class="radar-registre-info radar-registre-ok" style="margin-top:14px">📊 Hypothèses : progression de conformité réaliste (12 pts/mois les 2 premiers mois, puis ralentissement), réduction d\'exposition aux sanctions estimée prudemment à 30% du risque théorique réduit. <strong>Ceci est un outil d\'aide à la décision commerciale, pas un engagement contractuel.</strong></div>';
+  }
+
+  pricingRenderChart(saasMonthly, hybridResults);
+};
+
+/* Pre-remplir avec les vraies donnees du client si disponibles */
+window.pricingInitPage = function(){
+  pricingGetData(function(d){
+    var nbEl = document.getElementById('pricing-nb-systemes');
+    var auditEl = document.getElementById('pricing-audit-depart');
+    if(nbEl && d.registre.length > 0) nbEl.value = d.registre.length;
+    if(auditEl) auditEl.value = d.auditPct;
+    var infoEl = document.getElementById('pricing-prefill-info');
+    if(infoEl){
+      if(d.registre.length > 0){
+        infoEl.innerHTML = '✅ Pré-rempli avec vos données réelles : <strong>'+d.registre.length+' système(s)</strong> au Registre IA, score Audit actuel <strong>'+d.auditPct+'%</strong>.';
+      } else {
+        infoEl.innerHTML = '⚠️ Aucune donnée réelle au Registre IA — valeurs par défaut utilisées. <a href="#" onclick="go(\'registre\',null,\'REGISTRE\',\'Systèmes IA\');return false;">Ajouter des systèmes →</a>';
+      }
+    }
+    window.pricingSimulate();
+  });
+};
+
+var _pricingOrigGo = window.go;
+window.go = function(id){
+  var r = _pricingOrigGo ? _pricingOrigGo.apply(this, arguments) : undefined;
+  if(id === "pricing") setTimeout(window.pricingInitPage, 80);
+  return r;
+};
 
 })();
 
