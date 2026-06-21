@@ -10934,27 +10934,76 @@ function pricingRenderChart(saasMonthly, scenarios){
   function y(v){ return padT+chartH-(v/maxVal)*chartH; }
   function x(i){ return padL+(i/(n-1))*chartW; }
 
+  /* Legende HTML au-dessus du graphique */
+  var legendEl = document.getElementById('pricing-chart-legend');
+  if(legendEl){
+    legendEl.innerHTML =
+        '<span class="pricing-legend-item" title="Tarif mensuel fixe du modele SaaS classique, sans lien avec vos resultats reels"><span class="pricing-legend-swatch dashed" style="border-color:var(--muted2)"></span>SaaS classique</span>'
+      + '<span class="pricing-legend-item" title="Scenario central du modele hybride : socle fixe + part variable indexee sur vos resultats reels (Audit, sanctions evitees, systemes conformes)"><span class="pricing-legend-swatch" style="border-color:var(--accent)"></span>Hybride — réaliste</span>'
+      + '<span class="pricing-legend-item" title="Scenario prudent : progression de conformite plus lente que la moyenne (x0,55)"><span class="pricing-legend-swatch dashed" style="border-color:var(--accent);opacity:.6"></span>Hybride — pessimiste</span>'
+      + '<span class="pricing-legend-item" title="Scenario favorable : progression de conformite plus rapide que la moyenne (x1,5)"><span class="pricing-legend-swatch dashed" style="border-color:var(--green);opacity:.6"></span>Hybride — optimiste</span>';
+  }
+
   var gridLines=[0,0.25,0.5,0.75,1].map(function(f){
     var yy=padT+chartH*(1-f);
-    return '<line x1="'+padL+'" y1="'+yy+'" x2="'+(padL+chartW)+'" y2="'+yy+'" stroke="var(--rule)" stroke-width="1"/>'
-      +'<text x="'+(padL-8)+'" y="'+(yy+4)+'" text-anchor="end" font-size="9" font-family="var(--mono)" fill="var(--muted2)">'+Math.round(maxVal*f)+'€</text>';
+    var val = Math.round(maxVal*f);
+    return '<line x1="'+padL+'" y1="'+yy+'" x2="'+(padL+chartW)+'" y2="'+yy+'" stroke="var(--rule)" stroke-width="1"><title>Repère '+val+'€/mois</title></line>'
+      +'<text x="'+(padL-8)+'" y="'+(yy+4)+'" text-anchor="end" font-size="9" font-family="var(--mono)" fill="var(--muted2)">'+val+'€<title>Axe vertical : coût total mensuel en euros</title></text>';
   }).join('');
-  var xLabels=scenarios.realiste.map(function(h,i){ return '<text x="'+x(i)+'" y="'+(padT+chartH+18)+'" text-anchor="middle" font-size="9" font-family="var(--mono)" fill="var(--muted2)">M'+(i+1)+'</text>'; }).join('');
+  var xLabels=scenarios.realiste.map(function(h,i){
+    return '<text x="'+x(i)+'" y="'+(padT+chartH+18)+'" text-anchor="middle" font-size="9" font-family="var(--mono)" fill="var(--muted2)">M'+(i+1)+'<title>Mois '+(i+1)+' de la projection — axe horizontal : temps depuis le debut du contrat</title></text>';
+  }).join('');
 
   var saasLine = 'M'+padL+','+y(saasMonthly)+' L'+(padL+chartW)+','+y(saasMonthly);
 
   function poly(arr){ return arr.map(function(h,i){ return x(i)+','+y(h.total); }).join(' '); }
 
+  /* Zones de survol invisibles elargies (rayon 10) sur chaque scenario, pour declencher le tooltip HTML */
+  function hoverZones(arr, label, color){
+    return arr.map(function(h,i){
+      return '<circle class="pricing-chart-hover-zone" cx="'+x(i)+'" cy="'+y(h.total)+'" r="10" '
+        + 'onmouseenter="pricingShowTooltip(event,\''+label+'\',\''+(i+1)+'\','+h.socle+','+h.variable+','+h.total+',\''+color+'\')" '
+        + 'onmouseleave="pricingHideTooltip()"></circle>';
+    }).join('');
+  }
+
   svg.innerHTML = gridLines+xLabels
-    + '<path d="'+saasLine+'" stroke="var(--muted2)" stroke-width="2" stroke-dasharray="5,4" fill="none"/>'
+    + '<path d="'+saasLine+'" stroke="var(--muted2)" stroke-width="2" stroke-dasharray="5,4" fill="none"><title>SaaS classique : '+saasMonthly.toLocaleString('fr-FR')+'€/mois fixe, quel que soit le resultat obtenu</title></path>'
     + '<polyline points="'+poly(scenarios.pessimiste)+'" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="2,3" fill="none" opacity="0.6"/>'
     + '<polyline points="'+poly(scenarios.optimiste)+'" stroke="var(--green)" stroke-width="1.5" stroke-dasharray="2,3" fill="none" opacity="0.6"/>'
     + '<polyline points="'+poly(scenarios.realiste)+'" stroke="var(--accent)" stroke-width="2.5" fill="none"/>'
     + scenarios.realiste.map(function(h,i){ return '<circle cx="'+x(i)+'" cy="'+y(h.total)+'" r="4" fill="var(--accent)"/>'; }).join('')
+    + hoverZones(scenarios.realiste, "Hybride — réaliste", "var(--accent)")
+    + hoverZones(scenarios.pessimiste, "Hybride — pessimiste", "var(--accent)")
+    + hoverZones(scenarios.optimiste, "Hybride — optimiste", "var(--green)")
     + '<text x="'+(padL+chartW-4)+'" y="'+(y(saasMonthly)-8)+'" text-anchor="end" font-size="10" font-family="var(--mono)" fill="var(--muted2)">SaaS classique</text>'
-    + '<text x="'+x(n-1)+'" y="'+(y(scenarios.realiste[n-1].total)-12)+'" text-anchor="end" font-size="10" font-family="var(--mono)" fill="var(--accent)" font-weight="700">Hybride — réaliste</text>'
-    + '<text x="'+(padL+4)+'" y="'+(padT+12)+'" font-size="9" font-family="var(--mono)" fill="var(--muted2)">Zone pointillée = scénarios pessimiste/optimiste</text>';
+    + '<text x="'+x(n-1)+'" y="'+(y(scenarios.realiste[n-1].total)-12)+'" text-anchor="end" font-size="10" font-family="var(--mono)" fill="var(--accent)" font-weight="700">Hybride — réaliste</text>';
 }
+
+window.pricingShowTooltip = function(evt, label, month, socle, variable, total, color){
+  var tt = document.getElementById('pricing-chart-tooltip');
+  var svg = document.getElementById('pricing-chart-svg');
+  if(!tt || !svg) return;
+  var svgRect = svg.getBoundingClientRect();
+  var pt = svg.createSVGPoint ? null : null;
+  var scaleX = svgRect.width / 600;
+  var scaleY = svgRect.height / 280;
+  var cx = parseFloat(evt.target.getAttribute('cx')) * scaleX;
+  var cy = parseFloat(evt.target.getAttribute('cy')) * scaleY;
+
+  tt.innerHTML = '<div class="ptt-title" style="color:'+color+'">'+label+' — Mois '+month+'</div>'
+    + '<div class="ptt-row"><span>Socle fixe</span><span>'+socle.toLocaleString('fr-FR')+'€</span></div>'
+    + '<div class="ptt-row"><span>Part variable</span><span>'+variable.toLocaleString('fr-FR')+'€</span></div>'
+    + '<div class="ptt-row"><span><strong>Total</strong></span><span><strong>'+total.toLocaleString('fr-FR')+'€</strong></span></div>';
+  tt.style.left = cx + 'px';
+  tt.style.top = (cy - 8) + 'px';
+  tt.style.display = 'block';
+};
+
+window.pricingHideTooltip = function(){
+  var tt = document.getElementById('pricing-chart-tooltip');
+  if(tt) tt.style.display = 'none';
+};
 
 function pricingProjectScenario(auditDepart, paceMultiplier, caAnnuel, nbSystemes, poidsTotal, months){
   var results = [];
