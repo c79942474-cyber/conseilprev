@@ -1072,6 +1072,9 @@ textarea.form-el{min-height:86px;resize:vertical}
 .fria-ring-val{font-size:18px;color:var(--ink);line-height:1}
 .fria-ring-lbl{font-size:8px;color:var(--muted2)}
 
+
+.jurs-maj-tag{font-size:8px;font-family:var(--mono);color:var(--blue);background:rgba(28,90,138,.08);padding:1px 5px;border-radius:2px;margin-left:6px;vertical-align:middle}
+
 </style>
 <style id="cpc-styles">
 /* ══ CHATBOT SENTINEL AI — CONSEILPREV ══ */
@@ -1381,7 +1384,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 <div class="page" id="p-carto">
   <span class="eyebrow">Cartographie</span>
   <h1 class="page-h">Carte mondiale des<br><em>régulations IA</em></h1>
-  <p class="page-lead">65+ juridictions analysées selon 12 critères : portée, sanctions, obligations IA haut risque, transparence, droits fondamentaux.</p>
+  <p class="page-lead">46 juridictions analysées selon 12 critères réglementaires, avec mise à jour en temps réel par IA (Mistral / Claude). Triées par sévérité ci-dessous.</p>
 
   
   <!-- ══ CARTE LEAFLET ══ -->
@@ -1397,6 +1400,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <iframe src="/map" style="width:100%;height:480px;border:none;display:block" loading="lazy"></iframe>
   </div>
   <!-- ══ FIN CARTE ══ -->
+  <div id="jurs-toolbar-holder"></div>
   <div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title">Toutes les juridictions — triées par sévérité</span><span class="tbl-link">↓ Exporter CSV</span></div><div id="carto-all"></div></div>
 </div>
 
@@ -4050,31 +4054,54 @@ document.getElementById('tb-date').textContent = new Date().toLocaleDateString('
 });
 
 var JURS = [
-  {n:'01',f:'🇪🇺',c:'EU',name:'Union européenne',reg:'EU AI Act — Règlement 2024/1689',s:9.2},
-  {n:'02',f:'🇩🇪',c:'DE',name:'Allemagne',reg:'AI Act + AI Strategy Update 2023',s:8.8},
-  {n:'03',f:'🇫🇷',c:'FR',name:'France',reg:'AI Act + Stratégie nationale IA + CNIL',s:8.5},
-  {n:'04',f:'🇨🇳',c:'CN',name:'Chine',reg:'Generative AI Measures + Algorithm Regulations + PIPL',s:8.0},
-  {n:'05',f:'🇷🇺',c:'RU',name:'Russie',reg:'National AI Strategy + Digital Code',s:7.5},
-  {n:'06',f:'🇰🇷',c:'KR',name:'Corée du Sud',reg:'AI Basic Act (2025)',s:7.0},
-  {n:'07',f:'🇨🇦',c:'CA',name:'Canada',reg:'AIDA (Artificial Intelligence and Data Act) — en cours',s:6.5},
-  {n:'08',f:'🇨🇭',c:'CH',name:'Suisse',reg:'Convention-cadre IA Conseil Europe + LPD révisée',s:6.5},
-  {n:'09',f:'🇧🇷',c:'BR',name:'Brésil',reg:'PL 2338/2023 (AI Bill) + LGPD',s:6.0},
-  {n:'10',f:'🇬🇧',c:'GB',name:'Royaume-Uni',reg:'Pro-innovation AI Regulation (White Paper 2023) + AI Safety Institute',s:5.5},
-  {n:'11',f:'🇹🇷',c:'TR',name:'Turquie',reg:'National AI Strategy 2021-2025 + KVKK',s:5.5},
-  {n:'12',f:'🇦🇺',c:'AU',name:'Australie',reg:'AI Ethics Framework + Mandatory Guardrails (proposed)',s:5.5},
-  {n:'13',f:'🇨🇱',c:'CL',name:'Chili',reg:'National AI Policy + projet de loi IA 2024',s:5.0},
-  {n:'14',f:'🇮🇱',c:'IL',name:'Israël',reg:'Policy on AI Regulation (2023)',s:5.0},
-  {n:'15',f:'🇸🇬',c:'SG',name:'Singapour',reg:'Model AI Governance Framework + AI Verify',s:5.0},
-  {n:'16',f:'🇮🇳',c:'IN',name:'Inde',reg:'Digital India Act (en préparation) + DPDP Act',s:4.5},
-  {n:'17',f:'🇲🇾',c:'MY',name:'Malaisie',reg:'National AI Roadmap 2021-2025 + PDPA',s:4.5},
-  {n:'18',f:'🇺🇸',c:'US',name:'États-Unis',reg:'NIST AI RMF + Executive Orders + State laws (Colorado, California)',s:4.5},
-  {n:'19',f:'🇦🇪',c:'AE',name:'Émirats Arabes Unis',reg:'UAE AI Strategy 2031 + AI Charter',s:4.0},
-  {n:'20',f:'🇯🇵',c:'JP',name:'Japon',reg:'AI Guidelines for Business + Hiroshima AI Process',s:4.0},
-  {n:'21',f:'🇦🇷',c:'AR',name:'Argentine',reg:'Recommandation éthique IA + Loi 25.326',s:4.0},
-  {n:'22',f:'🇲🇽',c:'MX',name:'Mexique',reg:'Aucun cadre spécifique — initiatives sectorielles',s:3.5},
-  {n:'23',f:'🇿🇦',c:'ZA',name:'Afrique du Sud',reg:'National AI Plan (draft) + POPIA',s:3.5},
-  {n:'24',f:'🇳🇬',c:'NG',name:'Nigéria',reg:'National AI Strategy (draft 2024) + NDPA',s:2.5},
+  {n:'01',f:'\U0001F1EA\U0001F1FA',c:'EU',name:'Union européenne',reg:'EU AI Act — Règlement 2024/1689 (pleinement applicable 2 août 2026)',s:9.2,maj:'2026-02-03'},
+  {n:'02',f:'\U0001F1E9\U0001F1EA',c:'DE',name:'Allemagne',reg:'EU AI Act + loi nationale d application + BSI',s:8.8,maj:'2026-02-03'},
+  {n:'03',f:'\U0001F1EB\U0001F1F7',c:'FR',name:'France',reg:'EU AI Act + Stratégie nationale IA + CNIL',s:8.5,maj:'2026-02-03'},
+  {n:'04',f:'\U0001F1F0\U0001F1F7',c:'KR',name:'Corée du Sud',reg:'AI Basic Act — en vigueur depuis le 22 janvier 2026',s:8.3,maj:'2026-02-03'},
+  {n:'05',f:'\U0001F1E8\U0001F1F3',c:'CN',name:'Chine',reg:'Generative AI Measures + AI Labeling Rules + amendements loi cybersécurité (1er janv. 2026)',s:8.2,maj:'2026-02-03'},
+  {n:'06',f:'\U0001F1F7\U0001F1FA',c:'RU',name:'Russie',reg:'National AI Strategy + Digital Code',s:7.5,maj:'2026-01-15'},
+  {n:'07',f:'\U0001F1EA\U0001F1F8',c:'ES',name:'Espagne',reg:'EU AI Act + AESIA (agence nationale de supervision IA)',s:7.3,maj:'2026-02-03'},
+  {n:'08',f:'\U0001F1F8\U0001F1EC',c:'SG',name:'Singapour',reg:'Cadre de gouvernance Agentic AI (1er mondial, janv. 2026) + AI Verify',s:7.0,maj:'2026-02-03'},
+  {n:'09',f:'\U0001F1EF\U0001F1F5',c:'JP',name:'Japon',reg:'AI Promotion Act (mai 2025) + Hiroshima AI Process',s:6.8,maj:'2026-02-03'},
+  {n:'10',f:'\U0001F1E8\U0001F1E6',c:'CA',name:'Canada',reg:'AIDA (Artificial Intelligence and Data Act) — en cours d adoption',s:6.5,maj:'2026-01-10'},
+  {n:'11',f:'\U0001F1E8\U0001F1ED',c:'CH',name:'Suisse',reg:'Convention-cadre IA Conseil de l Europe + LPD révisée',s:6.5,maj:'2026-01-10'},
+  {n:'12',f:'\U0001F1F0\U0001F1FF',c:'KZ',name:'Kazakhstan',reg:'Loi sur l intelligence artificielle (interdit scoring social et manipulation)',s:6.3,maj:'2026-01-20'},
+  {n:'13',f:'\U0001F1E7\U0001F1F7',c:'BR',name:'Brésil',reg:'PL 2338/2023 (cadre IA complet, vote final attendu) + LGPD',s:6.2,maj:'2026-01-15'},
+  {n:'14',f:'\U0001F1EC\U0001F1E7',c:'GB',name:'Royaume-Uni',reg:'AI (Regulation) Bill au Parlement + approche sectorielle par régulateurs',s:6.0,maj:'2026-02-01'},
+  {n:'15',f:'\U0001F1F9\U0001F1F7',c:'TR',name:'Turquie',reg:'Projet de loi IA basé sur les risques (au Parlement) + KVKK',s:5.8,maj:'2026-01-20'},
+  {n:'16',f:'\U0001F1E6\U0001F1FA',c:'AU',name:'Australie',reg:'AI Ethics Framework + Mandatory Guardrails (proposé)',s:5.7,maj:'2026-01-10'},
+  {n:'17',f:'\U0001F1EE\U0001F1F3',c:'IN',name:'Inde',reg:'AI Ethics and Accountability Bill (déc. 2025) + obligations MeitY étiquetage (fév. 2026)',s:5.5,maj:'2026-02-03'},
+  {n:'18',f:'\U0001F1F3\U0001F1F1',c:'NL',name:'Pays-Bas',reg:'EU AI Act + régulateur algorithmique national renforcé',s:5.4,maj:'2026-01-15'},
+  {n:'19',f:'\U0001F1FA\U0001F1F8',c:'US',name:'États-Unis',reg:'NIST AI RMF + lois étatiques (Colorado, Texas, Californie 2026) + EO 14179',s:5.2,maj:'2026-02-03'},
+  {n:'20',f:'\U0001F1F8\U0001F1E6',c:'SA',name:'Arabie Saoudite',reg:'PDPL + décisions d application SDAIA (48 en 2025) — approche souple',s:5.0,maj:'2026-01-20'},
+  {n:'21',f:'\U0001F1F2\U0001F1E6',c:'MA',name:'Maroc',reg:'Loi protection des données (CNDP) + stratégie Maroc IA 2030',s:4.8,maj:'2026-01-12'},
+  {n:'22',f:'\U0001F1EC\U0001F1ED',c:'GH',name:'Ghana',reg:'Data Protection Act + National AI Strategy 10 ans (autorité IA responsable proposée)',s:4.7,maj:'2026-01-12'},
+  {n:'23',f:'\U0001F1F0\U0001F1EA',c:'KE',name:'Kenya',reg:'Data Protection Act contraignant + stratégie nationale IA',s:4.6,maj:'2026-01-12'},
+  {n:'24',f:'\U0001F1F7\U0001F1FC',c:'RW',name:'Rwanda',reg:'Politique nationale IA complète (référence Afrique) + loi protection données',s:4.5,maj:'2026-01-12'},
+  {n:'25',f:'\U0001F1FF\U0001F1E6',c:'ZA',name:'Afrique du Sud',reg:'National AI Policy Framework (projet) + loi protection données contraignante',s:4.4,maj:'2026-01-12'},
+  {n:'26',f:'\U0001F1F2\U0001F1FE',c:'MY',name:'Malaisie',reg:'National AI Roadmap 2021-2025 + PDPA',s:4.3,maj:'2025-12-01'},
+  {n:'27',f:'\U0001F1EC\U0001F1EA',c:'GE',name:'Géorgie',reg:'Loi protection données alignée RGPD (nouvelle) + service de protection des données',s:4.2,maj:'2026-01-12'},
+  {n:'28',f:'\U0001F1EF\U0001F1F4',c:'JO',name:'Jordanie',reg:'Feuille de route nationale IA (5 ans) + loi protection données récente',s:4.1,maj:'2026-01-12'},
+  {n:'29',f:'\U0001F1F1\U0001F1F0',c:'LK',name:'Sri Lanka',reg:'1ère loi protection données d Asie du Sud + nouvelle stratégie nationale IA',s:4.0,maj:'2026-01-12'},
+  {n:'30',f:'\U0001F1F5\U0001F1F0',c:'PK',name:'Pakistan',reg:'National AI Policy 2025 approuvée + loi protection données en projet',s:3.9,maj:'2026-01-12'},
+  {n:'31',f:'\U0001F1FA\U0001F1FE',c:'UY',name:'Uruguay',reg:'Régime de protection des données mature + stratégie nationale IA et éthique',s:3.8,maj:'2026-01-12'},
+  {n:'32',f:'\U0001F1F4\U0001F1F2',c:'OM',name:'Oman',reg:'Loi protection des données (MTCIT) + programme national IA',s:3.7,maj:'2026-01-12'},
+  {n:'33',f:'\U0001F1E8\U0001F1F7',c:'CR',name:'Costa Rica',reg:'Loi protection des données + stratégie nationale IA soutenue par l UNESCO',s:3.6,maj:'2026-01-12'},
+  {n:'34',f:'\U0001F1EE\U0001F1F1',c:'IL',name:'Israël',reg:'Politique de régulation de l IA (2023) + loi protection données',s:3.5,maj:'2025-11-01'},
+  {n:'35',f:'\U0001F1F9\U0001F1F3',c:'TN',name:'Tunisie',reg:'Loi protection des données de longue date + stratégies nationales IA successives',s:3.4,maj:'2026-01-12'},
+  {n:'36',f:'\U0001F1F6\U0001F1E6',c:'QA',name:'Qatar',reg:'Stratégie nationale IA + lignes directrices éthiques + loi vie privée contraignante',s:3.3,maj:'2026-01-12'},
+  {n:'37',f:'\U0001F1E7\U0001F1ED',c:'BH',name:'Bahreïn',reg:'Loi protection des données + politique IA secteur public en déploiement',s:3.2,maj:'2026-01-12'},
+  {n:'38',f:'\U0001F1F0\U0001F1FC',c:'KW',name:'Koweït',reg:'Régulation protection des données (CITRA) + stratégie et cadre de gouvernance IA émergents',s:3.1,maj:'2026-01-12'},
+  {n:'39',f:'\U0001F1E8\U0001F1F1',c:'CL',name:'Chili',reg:'National AI Policy + projet de loi IA',s:3.0,maj:'2025-10-01'},
+  {n:'40',f:'\U0001F1F5\U0001F1ED',c:'PH',name:'Philippines',reg:'Stratégie nationale IA + feuille de route DTI + loi vie privée contraignante',s:2.9,maj:'2026-01-12'},
+  {n:'41',f:'\U0001F1EA\U0001F1E8',c:'EC',name:'Équateur',reg:'Loi protection des données type RGPD + projets de loi IA en discussion',s:2.8,maj:'2026-01-12'},
+  {n:'42',f:'\U0001F1E6\U0001F1EA',c:'AE',name:'Émirats Arabes Unis',reg:'UAE AI Strategy 2031 + AI Charter',s:2.8,maj:'2025-09-01'},
+  {n:'43',f:'\U0001F1E6\U0001F1F7',c:'AR',name:'Argentine',reg:'Recommandation éthique IA + loi protection données (loi 25.326)',s:2.7,maj:'2025-09-01'},
+  {n:'44',f:'\U0001F1F0\U0001F1F4',c:'KH',name:'Cambodge / ASEAN',reg:'Cadre régional ASEAN sur la gouvernance IA + lois nationales émergentes',s:2.5,maj:'2025-12-01'},
+  {n:'45',f:'\U0001F1F2\U0001F1FD',c:'MX',name:'Mexique',reg:'Aucun cadre IA spécifique — initiatives sectorielles uniquement',s:2.4,maj:'2025-09-01'},
+  {n:'46',f:'\U0001F1F3\U0001F1EC',c:'NG',name:'Nigéria',reg:'National AI Strategy (projet 2024) + NDPA',s:2.3,maj:'2025-09-01'},
 ];
+window.JURS = JURS;
 
 function jRow(j){ var id=j.c.toLowerCase(); return '<div class="jrow" onclick="go(\'fiche-'+id+'\',null,\'FICHE\',\''+j.name+'\')" style="cursor:pointer"><div class="jrow-n">'+j.n+'</div><div class="jrow-flag">'+j.f+'<span class="jrow-code">'+j.c+'</span></div><div><div class="jrow-name">'+j.name+'</div><div class="jrow-reg">'+j.reg+'</div></div><div class="sbar-wrap"><div class="sbar-track"><div class="sbar-fill" style="width:'+Math.round(j.s*10)+'%"></div></div><span class="sbar-lbl">'+j.s+' / 10</span></div><div class="jrow-score">'+j.s+'</div><div style="font-size:18px;color:var(--rule2);padding-left:8px">›</div></div>'; }
 
@@ -4121,7 +4148,7 @@ function jRow(j){ var id=j.c.toLowerCase(); return '<div class="jrow" onclick="g
   if (bs) bs.innerHTML = SEV.map(function(j){ return rankRow(j,'var(--green)'); }).join('');
 })();
 
-(function(){ var b=document.getElementById('carto-all'); if(!b) return; b.innerHTML=JURS.map(jRow).join(''); })();
+/* Rendu remplace par jurs_render.js : tri par severite + tooltips + toolbar criteres/IA */
 
 (function(){
   var COLS=['Critère','🇪🇺 EU AI Act','🇺🇸 US EO 14110','🇬🇧 UK Framework','🇨🇳 CAC Rules'];
@@ -9781,6 +9808,228 @@ var _trainOrigGo = window.go;
 window.go = function(id){
   var r = _trainOrigGo ? _trainOrigGo.apply(this, arguments) : undefined;
   if(id === "training") setTimeout(window.trainingRenderPage, 80);
+  return r;
+};
+
+})();
+
+</script>
+
+<script>
+/* ══ 12 CRITERES D EVALUATION — Carte mondiale des regulations IA ══ */
+(function(){
+'use strict';
+
+var JURS_CRITERIA = [
+  {id:"portee", label:"Portée d'application", desc:"Le cadre couvre-t-il tous les secteurs (horizontal) ou seulement certains usages (sectoriel) ?"},
+  {id:"contraignant", label:"Caractère contraignant", desc:"Loi en vigueur, loi votée non encore applicable, projet de loi, ou simple stratégie/lignes directrices non obligatoires ?"},
+  {id:"sanctions", label:"Sanctions maximales", desc:"Montant et nature des sanctions prévues en cas de non-conformité (amendes, interdictions, sanctions pénales)."},
+  {id:"haut_risque", label:"Obligations systèmes à haut risque", desc:"Existence d'une classification par niveau de risque avec obligations renforcées pour les systèmes à fort impact."},
+  {id:"transparence", label:"Transparence", desc:"Obligation d'informer les personnes qu'elles interagissent avec une IA, marquage des contenus générés."},
+  {id:"droits_fondamentaux", label:"Droits fondamentaux", desc:"Protection explicite contre la discrimination, droit à l'explication, droit de recours contre une décision automatisée."},
+  {id:"supervision_humaine", label:"Supervision humaine", desc:"Obligation de maintenir un contrôle humain effectif sur les décisions ou actions du système IA."},
+  {id:"gouvernance_donnees", label:"Gouvernance des données", desc:"Exigences sur la qualité, la provenance et la gestion des données d'entraînement et d'usage."},
+  {id:"documentation", label:"Documentation technique", desc:"Obligation de produire et conserver une documentation technique détaillée du système."},
+  {id:"enregistrement", label:"Enregistrement obligatoire", desc:"Existence d'un registre national ou international où les systèmes à risque doivent être déclarés."},
+  {id:"extraterritorialite", label:"Portée extraterritoriale", desc:"Le cadre s'applique-t-il aux acteurs étrangers dont les systèmes affectent des personnes sur le territoire ?"},
+  {id:"maturite", label:"Maturité d'application", desc:"Niveau d'avancement réel : pleinement applicable, en phase transitoire, ou encore à l'état de projet."}
+];
+window.JURS_CRITERIA = JURS_CRITERIA;
+
+/* Scoring detaille (0-10 par critere) pour les juridictions majeures.
+   Methodologie : echelle 0 (absent) a 10 (exigence maximale et pleinement applicable).
+   Score global = moyenne ponderee, deja stocke dans JURS[i].s pour coherence avec l existant. */
+var JURS_DETAIL = {
+  EU: {portee:10, contraignant:9, sanctions:10, haut_risque:10, transparence:9, droits_fondamentaux:9, supervision_humaine:9, gouvernance_donnees:9, documentation:10, enregistrement:9, extraterritorialite:10, maturite:8},
+  CN: {portee:8, contraignant:9, sanctions:7, haut_risque:7, transparence:8, droits_fondamentaux:4, supervision_humaine:5, gouvernance_donnees:8, documentation:7, enregistrement:8, extraterritorialite:7, maturite:9},
+  KR: {portee:8, contraignant:9, sanctions:6, haut_risque:8, transparence:8, droits_fondamentaux:7, supervision_humaine:7, gouvernance_donnees:7, documentation:8, enregistrement:7, extraterritorialite:6, maturite:9},
+  US: {portee:3, contraignant:4, sanctions:4, haut_risque:3, transparence:4, droits_fondamentaux:5, supervision_humaine:4, gouvernance_donnees:4, documentation:3, enregistrement:2, extraterritorialite:2, maturite:6},
+  GB: {portee:5, contraignant:4, sanctions:3, haut_risque:4, transparence:5, droits_fondamentaux:6, supervision_humaine:5, gouvernance_donnees:6, documentation:5, enregistrement:2, extraterritorialite:3, maturite:5},
+  SG: {portee:6, contraignant:5, sanctions:3, haut_risque:6, transparence:7, droits_fondamentaux:6, supervision_humaine:7, gouvernance_donnees:7, documentation:7, enregistrement:5, extraterritorialite:3, maturite:8},
+  JP: {portee:6, contraignant:6, sanctions:4, haut_risque:5, transparence:6, droits_fondamentaux:6, supervision_humaine:6, gouvernance_donnees:6, documentation:6, enregistrement:3, extraterritorialite:3, maturite:7},
+  BR: {portee:8, contraignant:5, sanctions:6, haut_risque:7, transparence:7, droits_fondamentaux:8, supervision_humaine:7, gouvernance_donnees:7, documentation:6, enregistrement:5, extraterritorialite:6, maturite:5},
+  IN: {portee:5, contraignant:4, sanctions:4, haut_risque:4, transparence:6, droits_fondamentaux:5, supervision_humaine:4, gouvernance_donnees:5, documentation:4, enregistrement:2, extraterritorialite:3, maturite:5},
+  CA: {portee:7, contraignant:5, sanctions:5, haut_risque:6, transparence:6, droits_fondamentaux:7, supervision_humaine:6, gouvernance_donnees:7, documentation:6, enregistrement:4, extraterritorialite:4, maturite:5},
+  AU: {portee:5, contraignant:3, sanctions:3, haut_risque:5, transparence:5, droits_fondamentaux:6, supervision_humaine:5, gouvernance_donnees:6, documentation:5, enregistrement:2, extraterritorialite:2, maturite:4}
+};
+window.JURS_DETAIL = JURS_DETAIL;
+
+window.jursOpenCriteria = function(){
+  var modal = document.getElementById("jurs-criteria-modal");
+  if(!modal){ modal = document.createElement("div"); modal.id = "jurs-criteria-modal"; modal.className = "mat-modal"; document.body.appendChild(modal); }
+  modal.innerHTML = '<div class="mat-modal-box">'
+    + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Méthodologie Sentinel AI</div>'
+    + '<div class="mat-modal-title">12 critères d évaluation</div></div>'
+    + '<button class="mat-modal-close" onclick="document.getElementById(\'jurs-criteria-modal\').classList.remove(\'on\')">×</button></div>'
+    + '<div class="mat-modal-body">'
+    + '<p style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:16px">Chaque juridiction est évaluée sur ces 12 critères (échelle 0-10). Le score global affiché est une moyenne pondérée. Pour les juridictions majeures, le détail par critère est consultable via le bouton "Voir le détail" sur la fiche.</p>'
+    + JURS_CRITERIA.map(function(c,i){
+        return '<div class="ctrl-row" style="cursor:default"><div class="ctrl-check" style="background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px">'+(i+1)+'</div>'
+          + '<div><div style="font-size:13px;font-weight:600;color:var(--ink)">'+c.label+'</div><div style="font-size:11px;color:var(--muted);margin-top:2px">'+c.desc+'</div></div></div>';
+      }).join('')
+    + '</div></div>';
+  modal.classList.add("on");
+};
+
+/* ── Detail par juridiction (radar 12 criteres) ── */
+window.jursOpenDetail = function(code, name){
+  var detail = JURS_DETAIL[code];
+  var modal = document.getElementById("jurs-detail-modal");
+  if(!modal){ modal = document.createElement("div"); modal.id = "jurs-detail-modal"; modal.className = "mat-modal"; document.body.appendChild(modal); }
+
+  var bodyHtml;
+  if(detail){
+    bodyHtml = JURS_CRITERIA.map(function(c){
+      var v = detail[c.id] || 0;
+      var col = v>=7?"var(--accent)":v>=4?"var(--orange)":"var(--green)";
+      return '<div class="reg-item"><div class="reg-name">'+c.label+'</div><div style="display:flex;align-items:center;gap:10px"><div class="reg-val" style="font-size:14px;color:'+col+'">'+v+'/10</div><div class="reg-bar" style="flex:1"><div class="reg-fill" style="width:'+(v*10)+'%;background:'+col+'"></div></div></div></div>';
+    }).join('');
+  } else {
+    bodyHtml = '<div class="reg-empty">Détail par critère non encore disponible pour cette juridiction. Score global basé sur une évaluation synthétique. <br><br>Utilisez le bouton "Actualiser via IA" pour générer une analyse détaillée.</div>';
+  }
+
+  modal.innerHTML = '<div class="mat-modal-box">'
+    + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Détail des 12 critères</div>'
+    + '<div class="mat-modal-title">'+name+'</div></div>'
+    + '<button class="mat-modal-close" onclick="document.getElementById(\'jurs-detail-modal\').classList.remove(\'on\')">×</button></div>'
+    + '<div class="mat-modal-body">' + bodyHtml + '</div>'
+    + '<div class="mat-modal-foot"><button class="mat-export-btn" style="background:var(--blue);color:#fff" onclick="jursRefreshAI(\''+code+'\',\''+name+'\')">🤖 Actualiser via IA</button></div>'
+    + '</div>';
+  modal.classList.add("on");
+};
+
+})();
+
+</script>
+<script>
+/* ══ MISE A JOUR TEMPS REEL — Mistral / Claude ══ */
+(function(){
+'use strict';
+
+var JURS_AI_API = "mistral";
+
+window.jursSetApi = function(api){
+  JURS_AI_API = api;
+  var m = document.getElementById("jurs-api-mistral"), c = document.getElementById("jurs-api-claude");
+  if(m) m.classList.toggle("on", api==="mistral");
+  if(c) c.classList.toggle("on", api==="claude");
+};
+
+window.jursRefreshAI = function(code, name){
+  var btn = event && event.target ? event.target : null;
+  var oldTxt = btn ? btn.textContent : null;
+  if(btn){ btn.textContent = "Analyse en cours…"; btn.disabled = true; }
+
+  var prompt = "Fournis un etat des lieux factuel et a jour (debut 2026) de la regulation de l intelligence artificielle pour la juridiction suivante : "+name+" (code "+code+"). "
+    + "Reponds UNIQUEMENT en JSON valide avec exactement ces champs : "
+    + '{"reg": "<description courte du cadre reglementaire actuel, max 100 caracteres>", "score": <note globale de severite reglementaire sur 10, nombre decimal>, "resume": "<2-3 phrases expliquant la situation actuelle et les evolutions recentes>"}. '
+    + "Ne mets aucun texte avant ou apres le JSON, pas de bloc markdown.";
+
+  var apiCall;
+  if(JURS_AI_API === "claude" && window.matCallAIBridge){
+    apiCall = new Promise(function(resolve){
+      window.matCallAIBridge(prompt, "claude", function(err, text){ resolve(text); });
+    });
+  } else {
+    apiCall = fetch('https://api.mistral.ai/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer g0Dqgfe3v3op1LPV6lxaUCEVTEZ6GYXU'},
+      body:JSON.stringify({model:'mistral-large-latest', messages:[
+        {role:'system',content:'Tu es un analyste juridique specialise en regulation internationale de l IA. Reponds uniquement en JSON strict.'},
+        {role:'user',content:prompt}
+      ], max_tokens:400, temperature:0.3})
+    }).then(function(r){ return r.json(); }).then(function(d){ return d.choices&&d.choices[0]?d.choices[0].message.content:null; });
+  }
+
+  apiCall.then(function(text){
+    if(btn){ btn.textContent = oldTxt; btn.disabled = false; }
+    if(!text){ alert("Analyse indisponible. Réessayez."); return; }
+    try{
+      var cleaned = text.trim().replace(/^```[a-zA-Z]*\n?/,'').replace(/```$/,'').trim();
+      var data = JSON.parse(cleaned);
+      var jur = window.JURS.find(function(j){ return j.c === code; });
+      if(jur){
+        jur.reg = data.reg || jur.reg;
+        jur.s = typeof data.score === "number" ? data.score : jur.s;
+        jur.maj = new Date().toISOString().slice(0,10);
+      }
+      var resModal = document.getElementById("jurs-detail-modal");
+      if(resModal){
+        var body = resModal.querySelector(".mat-modal-body");
+        if(body){
+          body.innerHTML = '<div class="radar-registre-info radar-registre-ok" style="margin-bottom:14px">✅ Analyse mise à jour le '+new Date().toLocaleDateString('fr-FR')+' via '+(JURS_AI_API==="claude"?"Claude":"Mistral")+'.</div>'
+            + '<p style="font-size:12px;color:var(--ink2);line-height:1.6;margin-bottom:14px">'+data.resume+'</p>'
+            + '<div class="reg-item"><div class="reg-name">Score global actualisé</div><div class="reg-val" style="font-size:20px;color:var(--accent)">'+jur.s+' / 10</div></div>';
+        }
+      }
+      if(typeof jursRenderTable === "function") jursRenderTable();
+    } catch(e){
+      alert("Erreur de traitement de la réponse IA.");
+    }
+  }).catch(function(){
+    if(btn){ btn.textContent = oldTxt; btn.disabled = false; }
+    alert("Connexion IA indisponible.");
+  });
+};
+
+})();
+
+</script>
+<script>
+/* ══ RENDU ENRICHI — tooltips, tri severite, gestion clic fiche/modale ══ */
+(function(){
+'use strict';
+
+/* Codes pour lesquels une fiche dediee existe (les 9 premieres du jeu de donnees d origine + quelques unes) */
+var JURS_HAS_FICHE = ["EU","DE","FR","CN","RU","KR","CA","CH","BR","GB","SG","US","JP","AE","NG","TR","AU","CL","IL","IN","MY","AR","MX","ZA"];
+
+function jursTooltip(j){
+  var maj = j.maj ? new Date(j.maj).toLocaleDateString('fr-FR') : 'n/c';
+  return "Cadre : "+j.reg+" — Score "+j.s+"/10 — Dernière vérification : "+maj;
+}
+
+window.jRowEnhanced = function(j){
+  var id = j.c.toLowerCase();
+  var hasFiche = JURS_HAS_FICHE.indexOf(j.c) !== -1;
+  var clickAction = hasFiche
+    ? "go('fiche-"+id+"',null,'FICHE','"+j.name.replace(/'/g,"")+"')"
+    : "jursOpenDetail('"+j.c+"','"+j.name.replace(/'/g,"")+"')";
+  return '<div class="jrow" onclick="'+clickAction+'" style="cursor:pointer" title="'+jursTooltip(j).replace(/"/g,'&quot;')+'">'
+    + '<div class="jrow-n">'+j.n+'</div>'
+    + '<div class="jrow-flag">'+j.f+'<span class="jrow-code">'+j.c+'</span></div>'
+    + '<div><div class="jrow-name">'+j.name+(j.maj?' <span class="jurs-maj-tag" title="Dernière vérification">'+new Date(j.maj).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'2-digit'})+'</span>':'')+'</div><div class="jrow-reg">'+j.reg+'</div></div>'
+    + '<div class="sbar-wrap"><div class="sbar-track"><div class="sbar-fill" style="width:'+Math.round(j.s*10)+'%"></div></div><span class="sbar-lbl">'+j.s+' / 10</span></div>'
+    + '<div class="jrow-score">'+j.s+'</div>'
+    + '<div style="font-size:18px;color:var(--rule2);padding-left:8px">›</div>'
+    + '</div>';
+};
+
+window.jursRenderTable = function(){
+  var b = document.getElementById('carto-all');
+  if(!b || !window.JURS) return;
+  var sorted = window.JURS.slice().sort(function(a,b){ return b.s - a.s; });
+  b.innerHTML = sorted.map(window.jRowEnhanced).join('');
+};
+
+/* Init : ajouter la barre d outils (lien criteres + selecteur API + compteur) au-dessus du tableau */
+window.jursInitToolbar = function(){
+  var holder = document.getElementById('jurs-toolbar-holder');
+  if(!holder || !window.JURS) return;
+  holder.innerHTML = '<div class="radar-sector-bar" style="margin-bottom:14px">'
+    + '<span style="font-size:11px;color:var(--ink2)"><strong>'+window.JURS.length+'</strong> juridictions analysées sur <strong>12 critères</strong></span>'
+    + '<a href="#" onclick="jursOpenCriteria();return false;" style="font-size:11px;font-family:var(--mono);color:var(--accent);text-decoration:underline">Voir les 12 critères d évaluation →</a>'
+    + '<span style="flex:1"></span>'
+    + '<span class="radar-sector-lbl">Mise à jour IA :</span>'
+    + '<button class="mat-api-btn on" id="jurs-api-mistral" onclick="jursSetApi(\'mistral\')">Mistral</button>'
+    + '<button class="mat-api-btn" id="jurs-api-claude" onclick="jursSetApi(\'claude\')">Claude</button>'
+    + '</div>';
+};
+
+/* Re-render initial : appliquer le tri par severite et la toolbar au chargement */
+var _jursOrigGo = window.go;
+window.go = function(id){
+  var r = _jursOrigGo ? _jursOrigGo.apply(this, arguments) : undefined;
+  if(id === "carto"){ setTimeout(function(){ window.jursInitToolbar(); window.jursRenderTable(); }, 50); }
   return r;
 };
 
