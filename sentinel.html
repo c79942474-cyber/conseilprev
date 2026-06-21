@@ -1289,12 +1289,12 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-section">Espace</div>
     <div class="sb-item" onclick="go('equipe',this,'ESPACE','Équipe')" title="Espace de collaboration pour l equipe en charge du programme de conformite IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></span>Espace équipe</div>
     <div class="sb-item" onclick="go('training',this,'FORMATION','Hub Training')" title="Modules de formation sur l EU AI Act, les 8 piliers et la gouvernance IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></span>Hub Training</div>
-    <div class="sb-item" onclick="go('espace',this,'MON ESPACE','Tableau de bord')" title="Tableau de bord personnel : suivi de vos actions et de votre progression."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>Mon Espace</div>
+    <div class="sb-item" onclick="go('espace',this,'MON ESPACE','Mes actions du jour')" title="Tableau de bord personnel : suivi de vos actions et de votre progression."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>Mon Espace</div>
     <div class="sb-item" onclick="go('roadmap',this,'PLANIFICATION','Plan d\'action')"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg></span>Roadmap</div>
     <div class="sb-item" onclick="go('sanctions',this,'OUTILS','Calculateur sanctions')" title="Estimez l exposition financiere en cas de non-conformite a l EU AI Act."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></span>Calculateur sanctions</div>
     <div class="sb-item" onclick="go('benchmark',this,'ANALYSE','Benchmark sectoriel')" title="Comparez votre niveau de conformite a celui d autres acteurs de votre secteur."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>Benchmark</div>
     <div class="sb-item" onclick="go('templates',this,'RESSOURCES','Documentation & Modèles')" title="Modeles de documents pretes a completer : politiques IA, registres, rapports."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>Templates &amp; Docs</div>
-    <div class="sb-item" onclick="go('report',this,'REPORTING','Dashboard')" title="Tableau de bord executif : indicateurs cles de conformite pour la direction."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>Reporting</div>
+    <div class="sb-item" onclick="go('report',this,'REPORTING','Vue direction')" title="Tableau de bord executif : indicateurs cles de conformite pour la direction."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>Reporting</div>
   </nav>
   <div class="sb-pager">
     <button class="sb-pager-btn">‹</button>
@@ -1425,9 +1425,8 @@ textarea.form-el{min-height:86px;resize:vertical}
 <!-- COMPARATEUR -->
 <div class="page" id="p-comp">
   <span class="eyebrow">Comparateur</span>
-  <h1 class="page-h">Comparer les <em>frameworks</em></h1>
-  <p class="page-lead">Benchmark côte-à-côte sur les critères clés de réglementation IA.</p>
-  <div class="comp-wrap"><div class="comp-head-row" style="grid-template-columns:200px repeat(4,1fr)" id="comp-head"></div><div id="comp-body"></div></div>
+  <h1 class="page-h">Comparer les <em>juridictions</em></h1>
+  <p class="page-lead">Mettez en regard jusqu'à 4 juridictions parmi 46, sur 6 dimensions réglementaires, avec données synchronisées en temps réel.</p>
 
   <!-- ══ COMPARATEUR JURIDICTIONS ══ -->
   <div class="cj-wrap" id="cj-block">
@@ -2151,8 +2150,8 @@ textarea.form-el{min-height:86px;resize:vertical}
 
 <!-- MON ESPACE -->
 <div class="page" id="p-espace">
-  <span class="eyebrow">Mon Espace</span><h1 class="page-h">Tableau de bord <em>personnel</em></h1>
-  <p class="page-lead">Vue d ensemble de votre conformité IA : activité réelle, actions prioritaires et indicateurs clés agrégés depuis le Registre IA et l Audit IA Act.</p>
+  <span class="eyebrow">Mon Espace</span><h1 class="page-h">Mes actions <em>du jour</em></h1>
+  <p class="page-lead">Votre activité récente et les actions à traiter en priorité — pour une vue exécutive et des KPIs de pilotage, consultez le <a href="#" onclick="go('report',null,'REPORTING','Vue direction');return false;" style="color:var(--accent)">Reporting →</a>.</p>
   <div style="display:flex;gap:16px;margin-bottom:20px" id="espace-kpis"></div>
   <div class="col2">
     <div>
@@ -2166,8 +2165,8 @@ textarea.form-el{min-height:86px;resize:vertical}
 
 <!-- REPORTING -->
 <div class="page" id="p-report">
-  <span class="eyebrow">Reporting</span><h1 class="page-h">Dashboard <em>conformité</em></h1>
-  <p class="page-lead">Tableau de bord exécutif — indicateurs réels agrégés depuis le Registre IA, l Audit IA Act et l historique des évaluations.</p>
+  <span class="eyebrow">Reporting</span><h1 class="page-h">Vue <em>direction</em></h1>
+  <p class="page-lead">Indicateurs stratégiques consolidés, pensés pour la présentation à votre direction ou à votre client — pour vos actions personnelles au quotidien, voir <a href="#" onclick="go('espace',null,'MON ESPACE','Mes actions du jour');return false;" style="color:var(--accent)">Mon Espace →</a>.</p>
   <div class="kpi-row" id="report-kpi-row"></div>
   <div id="report-detail"></div>
 </div>
@@ -2256,7 +2255,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 <!-- BENCHMARK -->
 <div class="page" id="p-benchmark">
   <span class="eyebrow">Analyse</span><h1 class="page-h">Benchmark <em>sectoriel</em></h1><p class="page-lead">Comparez le taux de conformité réel de vos systèmes (Registre IA) avec le score de maturité moyen calculé pour chaque secteur.</p>
-  <div class="col12" style="margin-bottom:24px"><div class="kpi"><div class="kpi-lbl">Votre score</div><div class="kpi-val" style="color:var(--accent)">68%</div><div class="kpi-tr dn">↓ −12 pts vs. meilleurs</div></div><div class="kpi"><div class="kpi-lbl">Moyenne Énergie</div><div class="kpi-val">74%</div><div class="kpi-tr up">↑ +6 pts ce trimestre</div></div></div>
+  <div class="col12" style="margin-bottom:24px"><div class="kpi"><div class="kpi-lbl">Votre score moyen</div><div class="kpi-val" id="bench-top-you" style="color:var(--accent)">—</div><div class="kpi-tr" id="bench-top-you-tr"></div></div><div class="kpi"><div class="kpi-lbl" id="bench-top-sector-lbl">Moyenne secteur</div><div class="kpi-val" id="bench-top-avg">—</div><div class="kpi-tr" id="bench-top-avg-tr"></div></div></div>
   <div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title">Scores par secteur</span><span class="tbl-link">↓ Rapport complet</span></div><div class="comp-head-row" style="display:grid;grid-template-columns:1fr 60px 160px 60px;padding:9px 20px;background:var(--bg);border-bottom:2px solid var(--rule)"><div class="comp-cell">Secteur</div><div class="comp-cell">Score</div><div class="comp-cell">Répartition</div><div class="comp-cell">vs. vous</div></div><div id="bench-list"></div></div>
 </div>
 
@@ -3998,8 +3997,8 @@ var PAGE_META = {
   audit:    {section:'AUDIT',           label:'Audit de conformité'},
   equipe:   {section:'ESPACE',          label:'Équipe'},
   training: {section:'FORMATION',       label:'Hub Training'},
-  espace:   {section:'MON ESPACE',      label:'Tableau de bord'},
-  report:   {section:'REPORTING',       label:'Dashboard'},
+  espace: {section:'MON ESPACE', label:'Mes actions du jour'},
+  report: {section:'REPORTING', label:'Vue direction'},
   chat:     {section:'ASSISTANT IA',    label:'Chat Conformité'},
   maturite: {section:'AUDIT DE MATURITÉ', label:'Audit de maturité IA'},
   parties:  {section:'GOUVERNANCE',     label:'Parties prenantes'},
@@ -4158,17 +4157,7 @@ function jRow(j){ var id=j.c.toLowerCase(); return '<div class="jrow" onclick="g
 
 /* Rendu remplace par jurs_render.js : tri par severite + tooltips + toolbar criteres/IA */
 
-(function(){
-  var COLS=['Critère','🇪🇺 EU AI Act','🇺🇸 US EO 14110','🇬🇧 UK Framework','🇨🇳 CAC Rules'];
-  var grid='grid-template-columns:200px repeat(4,1fr)';
-  var h=document.getElementById('comp-head'); if(!h) return;
-  h.innerHTML=COLS.map(function(c){ return '<div class="comp-cell">'+c+'</div>'; }).join('');
-  h.style.cssText='display:grid;'+grid+';background:var(--bg);border-bottom:2px solid var(--rule)';
-  var ROWS=[['Portée','Toute chaîne IA','Fédéral limité','Sectoriel','Contenu génératif'],['Classification','4 niveaux risque','Sectorielle','Principes','Catégories contenu'],['Sanctions','35 M€ / 7% CA','Variable DoJ','ICO discrétion','3× bénéfices'],['IA haut risque','Annexe III — 8 cat','Non défini','Case by case','Oui — recommandation'],['Transparence','Obligatoire','Volontaire','Best practice','Marque obligatoire'],['Droits fondamentaux','FRIA requise','EO exec. only','Recommandé','N/A'],['Entrée en vigueur','Phasée 2025–2027','Actif (EO)','Actif (guidance)','Actif'],['Extraterritorialité','Oui — marché UE','Partielle','Oui — UK market','CN-only']];
-  var b=document.getElementById('comp-body'); if(!b) return;
-  function chip(v){ if(/Obligatoire|requis|35 M|Toute|FRIA/.test(v)) return '<span class="chip chip-r">'+v+'</span>'; if(/Actif|Oui/.test(v)) return '<span class="chip chip-g">'+v+'</span>'; if(/limité|Partielle|Variable/.test(v)) return '<span class="chip chip-o">'+v+'</span>'; if(/N\/A|Non défini|Volontaire/.test(v)) return '<span class="chip chip-n">'+v+'</span>'; return v; }
-  b.innerHTML=ROWS.map(function(r){ return '<div class="comp-row" style="display:grid;'+grid+'">'+r.map(function(c,i){ return '<div class="comp-cell"'+(i===0?' style="font-weight:500"':'')+'>'+chip(c)+'</div>'; }).join('')+'</div>'; }).join('');
-})();
+/* Tableau comparatif statique (EU/US/UK/CN figes) supprime - redondant avec le Comparateur dynamique 46 juridictions */
 
 (function(){
 
@@ -9502,7 +9491,7 @@ window.reportRenderPage = function(){
             return '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div style="width:120px;font-size:11px;color:var(--ink2)">'+CLASSIF_LABELS[k]+'</div><div class="reg-bar" style="flex:1"><div class="reg-fill" style="width:'+pct+'%"></div></div><div style="width:40px;text-align:right;font-family:var(--mono);font-size:11px">'+n+'</div></div>';
           }).join('')
         + '</div></div>'
-        + '<div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title">Historique des évaluations ('+d.evaluations.length+')</span></div><div style="padding:0 20px" id="report-evals-list"></div></div>';
+        + '<div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title">Dernières évaluations ('+Math.min(6,d.evaluations.length)+' sur '+d.evaluations.length+')</span><span class="tbl-link" onclick="go(\'evals\',null,\'CONFORMITÉ\',\'Mes évaluations\')">Voir tout →</span></div><div style="padding:0 20px" id="report-evals-list"></div></div>';
 
       var evalsList = document.getElementById("report-evals-list");
       if(evalsList){
@@ -9607,6 +9596,28 @@ window.benchmarkRenderPage = function(){
         + '<div class="bench-track"><div class="bench-fill bench-fill-avg" style="width:'+r.avg+'%"></div></div></div>'
         + '<div><span style="font-family:var(--mono);font-size:10px;color:'+diffColor+'">'+diffTxt+'</span></div></div>';
     }).join('');
+
+    /* KPIs de synthese en haut de page - calcules a partir des memes "rows" (evite toute incoherence) */
+    var withData = rows.filter(function(r){ return r.you !== null; });
+    var youEl = document.getElementById("bench-top-you");
+    var youTrEl = document.getElementById("bench-top-you-tr");
+    var avgEl = document.getElementById("bench-top-avg");
+    var avgTrEl = document.getElementById("bench-top-avg-tr");
+    var lblEl = document.getElementById("bench-top-sector-lbl");
+    if(withData.length > 0){
+      var youAvg = Math.round(withData.reduce(function(a,r){return a+r.you;},0) / withData.length);
+      var best = withData.slice().sort(function(a,b){return b.you-a.you;})[0];
+      var topSector = withData.slice().sort(function(a,b){return b.avg-a.avg;})[0];
+      if(youEl) youEl.textContent = youAvg + "%";
+      if(youTrEl){ var vsTop = youAvg - best.avg; youTrEl.innerHTML = (vsTop>=0?'↑ +':'↓ ')+vsTop+' pts vs. meilleur secteur ('+best.label.replace(/^\S+\s/,'')+')'; youTrEl.className = "kpi-tr " + (vsTop>=0?"up":"dn"); }
+      if(lblEl && topSector) lblEl.textContent = "Moyenne " + topSector.label.replace(/^\S+\s/,'');
+      if(avgEl && topSector) avgEl.textContent = topSector.avg + "%";
+      if(avgTrEl) avgTrEl.innerHTML = withData.length + " secteur(s) avec données réelles";
+    } else {
+      if(youEl) youEl.textContent = "—";
+      if(youTrEl) youTrEl.innerHTML = "Aucun système au Registre IA";
+      if(avgEl) avgEl.textContent = "—";
+    }
   }).catch(function(){
     holder.innerHTML = '<div class="reg-empty">Erreur de chargement du Registre IA.</div>';
   });
