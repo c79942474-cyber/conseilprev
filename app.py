@@ -3033,3 +3033,4 @@ if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0', port=port)
 # deploy trigger
 # deploy trigger 2
+# deploy trigger - sync jurs/cj/sim
