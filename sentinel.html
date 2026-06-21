@@ -5548,6 +5548,7 @@ function cjRenderTable(){
 window.cjToggleAdd = cjToggleAdd;
 window.cjAddCountry = cjAddCountry;
 window.cjRemove = cjRemove;
+window.cjRender = cjRender; /* indispensable pour que cj_dynamic.js puisse re-render apres synchronisation */
 
 // Peupler CJ_DATA de facon synchrone depuis JURS (deja disponible) avant le premier rendu
 if(typeof window.cjBuildDataFromJurs === "function"){ window.cjBuildDataFromJurs(); }
@@ -10099,7 +10100,7 @@ function cjBuildDataFromJurs(){
 window.cjBuildDataFromJurs = cjBuildDataFromJurs;
 window.cjRefreshFromJurs = function(){
   cjBuildDataFromJurs();
-  if(typeof cjRender === "function") cjRender();
+  if(typeof window.cjRender === "function") window.cjRender();
 };
 
 var _cjOrigGo = window.go;
