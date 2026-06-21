@@ -1087,6 +1087,12 @@ textarea.form-el{min-height:86px;resize:vertical}
 .intl-niveau{font-size:10px;color:var(--muted);text-align:center}
 .intl-diff{font-family:var(--mono);font-size:11px;font-weight:600;text-align:right}
 
+/* ══ 3 CARTES DYNAMIQUES — Audit IA Act (Cartographier/Évaluer/Planifier) ══ */
+.card-clickable{cursor:pointer;transition:all .15s;position:relative}
+.card-clickable:hover{border-color:var(--accent);box-shadow:0 4px 16px rgba(184,50,34,.1);transform:translateY(-1px)}
+.card-live-badge{font-size:9px;font-family:var(--mono);font-weight:600;color:var(--accent);background:rgba(184,50,34,.08);padding:2px 8px;border-radius:3px;letter-spacing:.02em;float:right;vertical-align:middle}
+.card-cta{font-size:10px;font-family:var(--mono);color:var(--accent);margin-top:10px;letter-spacing:.03em}
+
 </style>
 <style id="cpc-styles">
 /* ══ CHATBOT SENTINEL AI — CONSEILPREV ══ */
@@ -2032,19 +2038,10 @@ textarea.form-el{min-height:86px;resize:vertical}
   <div class="regs-tabpanel" id="regs-panel-audit">
     <!-- Bloc Lancer un audit -->
     <div style="margin-bottom:28px">
-      <div class="col3" style="margin-bottom:20px">
-        <div class="feat">
-          <div class="feat-h" style="margin-bottom:6px">① Cartographier</div>
-          <p class="feat-p">Inventaire et classification selon l'annexe III de l'AI Act. Identification des systèmes à haut risque.</p>
-        </div>
-        <div class="feat">
-          <div class="feat-h" style="margin-bottom:6px">② Évaluer</div>
-          <p class="feat-p">Scoring multicritère : droits fondamentaux, sécurité, performance, gouvernance des données.</p>
-        </div>
-        <div class="feat">
-          <div class="feat-h" style="margin-bottom:6px">③ Planifier</div>
-          <p class="feat-p">Feuille de route priorisée avec délais réglementaires et plan d'action CONSEILPREV.</p>
-        </div>
+      <div class="col3" style="margin-bottom:20px" id="audit-3cards-holder">
+        <div class="feat"><div class="feat-h" style="margin-bottom:6px">① Cartographier</div><p class="feat-p">Chargement…</p></div>
+        <div class="feat"><div class="feat-h" style="margin-bottom:6px">② Évaluer</div><p class="feat-p">Chargement…</p></div>
+        <div class="feat"><div class="feat-h" style="margin-bottom:6px">③ Planifier</div><p class="feat-p">Chargement…</p></div>
       </div>
       <div class="rule" style="margin-bottom:20px"></div>
       <div class="form-block" style="max-width:540px">
@@ -10151,6 +10148,179 @@ window.simBuildIntlComparison = function(classif){
     + '<div style="font-size:10px;color:var(--muted2);margin-top:10px;font-style:italic">Comparaison à titre indicatif sur la sévérité réglementaire générale (cadre IA global), ne reflète pas une classification formelle de ce système dans chaque juridiction. Voir <a href="#" onclick="go(\'comp\',null,\'ANALYSE\',\'Comparateur\');return false;" style="color:var(--accent)">le Comparateur complet →</a></div>'
     + '</div>';
 };
+
+})();
+
+</script>
+
+<script>
+/* ══ AUDIT IA ACT — 3 blocs dynamiques (Cartographier / Évaluer / Planifier) ══ */
+/* Connecte en temps reel : Registre IA (Annexe III), FRIA + Radar (scoring), Audit/Maturite (planning) */
+(function(){
+'use strict';
+
+var CARD_CLASSIF_LABELS = {inacceptable:"Inacceptable", haut:"Haut risque", limite:"Risque limité", minimal:"Risque minimal", a_evaluer:"À évaluer"};
+
+/* ── Donnees agregees pour les 3 cartes ── */
+function cardsGetData(callback){
+  fetch('/api/registre').then(function(r){ return r.json(); }).then(function(d){
+    var registre = d.systemes || [];
+    var byClassif = {};
+    registre.forEach(function(s){ byClassif[s.classification] = (byClassif[s.classification]||0)+1; });
+    var hautRisque = (byClassif.haut||0) + (byClassif.inacceptable||0);
+
+    var auditPct = 0, auditDone=0, auditTotal=0;
+    if(window.AUDIT_SECTIONS){
+      window.AUDIT_SECTIONS.forEach(function(sec){
+        sec.items.forEach(function(item){
+          auditTotal++;
+          var st = (window.AUDIT_STATE && window.AUDIT_STATE[item.id]) || "none";
+          if(st === "done") auditDone++;
+        });
+      });
+      auditPct = auditTotal>0 ? Math.round(auditDone/auditTotal*100) : 0;
+    }
+
+    /* FRIA : nb systemes evalues avec score connu */
+    var friaCount = 0, friaAvg = null;
+    try{
+      var friaAnswers = JSON.parse(localStorage.getItem("cpFriaAnswers")||"{}");
+      var scores = [];
+      registre.forEach(function(s){
+        var ans = friaAnswers[s.id];
+        if(ans){
+          var vals = Object.keys(ans).map(function(k){ return ans[k]; }).filter(function(v){ return v!==null && v!==undefined; });
+          if(vals.length>0){ friaCount++; var risk = vals.reduce(function(a,b){return a+b;},0)/(vals.length*3); scores.push((1-risk)*10); }
+        }
+      });
+      if(scores.length>0) friaAvg = Math.round(scores.reduce(function(a,b){return a+b;},0)/scores.length*10)/10;
+    } catch(e){}
+
+    /* Phases de planification (memes que l Audit de maturite) */
+    var phases = window.MAT_PHASES || [];
+
+    callback({registre:registre, byClassif:byClassif, hautRisque:hautRisque, auditPct:auditPct, auditDone:auditDone, auditTotal:auditTotal, friaCount:friaCount, friaAvg:friaAvg, phases:phases});
+  }).catch(function(){ callback({registre:[], byClassif:{}, hautRisque:0, auditPct:0, auditDone:0, auditTotal:0, friaCount:0, friaAvg:null, phases:window.MAT_PHASES||[]}); });
+}
+
+/* ── Rendu des 3 cartes (remplace le contenu statique) ── */
+function cardsRender(){
+  var holder = document.getElementById("audit-3cards-holder");
+  if(!holder) return;
+  cardsGetData(function(d){
+    holder.innerHTML =
+      '<div class="feat card-clickable" onclick="cardsOpenCartographier()">'
+      + '<div class="feat-h" style="margin-bottom:6px">① Cartographier <span class="card-live-badge">'+d.registre.length+' systèmes</span></div>'
+      + '<p class="feat-p">Inventaire et classification selon l\'Annexe III de l\'AI Act. <strong>'+d.hautRisque+' système(s)</strong> à haut risque identifié(s).</p>'
+      + '<div class="card-cta">Voir le détail →</div>'
+      + '</div>'
+      + '<div class="feat card-clickable" onclick="cardsOpenEvaluer()">'
+      + '<div class="feat-h" style="margin-bottom:6px">② Évaluer <span class="card-live-badge">'+(d.friaAvg!==null?d.friaAvg+'/10':'—')+'</span></div>'
+      + '<p class="feat-p">Scoring multicritère : droits fondamentaux (FRIA), sécurité, performance, gouvernance des données. <strong>'+d.friaCount+'</strong> système(s) évalué(s).</p>'
+      + '<div class="card-cta">Voir le détail →</div>'
+      + '</div>'
+      + '<div class="feat card-clickable" onclick="cardsOpenPlanifier()">'
+      + '<div class="feat-h" style="margin-bottom:6px">③ Planifier <span class="card-live-badge">'+d.auditPct+'% avancé</span></div>'
+      + '<p class="feat-p">Feuille de route priorisée avec délais réglementaires et plan d\'action CONSEILPREV. <strong>'+d.auditDone+'/'+d.auditTotal+'</strong> contrôles conformes.</p>'
+      + '<div class="card-cta">Voir le détail →</div>'
+      + '</div>';
+    window.__cardsData = d;
+  });
+}
+window.cardsRender = cardsRender;
+
+/* ── Modale generique ── */
+function cardsModal(title, eyebrow, bodyHtml, footHtml){
+  var modal = document.getElementById("cards-modal");
+  if(!modal){ modal = document.createElement("div"); modal.id = "cards-modal"; modal.className = "mat-modal"; document.body.appendChild(modal); }
+  modal.innerHTML = '<div class="mat-modal-box mat-modal-wide">'
+    + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">'+eyebrow+'</div><div class="mat-modal-title">'+title+'</div></div>'
+    + '<button class="mat-modal-close" onclick="document.getElementById(\'cards-modal\').classList.remove(\'on\')">×</button></div>'
+    + '<div class="mat-modal-body">'+bodyHtml+'</div>'
+    + (footHtml ? '<div class="mat-modal-foot">'+footHtml+'</div>' : '')
+    + '</div>';
+  modal.classList.add("on");
+}
+
+/* ── ① Cartographier : detail Annexe III ── */
+window.cardsOpenCartographier = function(){
+  var d = window.__cardsData;
+  if(!d) return;
+  var rows = Object.keys(CARD_CLASSIF_LABELS).map(function(k){
+    var n = d.byClassif[k] || 0;
+    var pct = d.registre.length>0 ? Math.round(n/d.registre.length*100) : 0;
+    var col = k==="inacceptable"||k==="haut" ? "var(--accent)" : k==="limite" ? "var(--orange)" : k==="minimal" ? "var(--green)" : "var(--muted2)";
+    return '<div class="reg-item"><div class="reg-name">'+CARD_CLASSIF_LABELS[k]+'</div><div style="display:flex;align-items:center;gap:10px"><div class="reg-val" style="font-size:16px;color:'+col+'">'+n+'</div><div class="reg-bar" style="flex:1"><div class="reg-fill" style="width:'+pct+'%;background:'+col+'"></div></div></div></div>';
+  }).join('');
+
+  var listHaut = d.registre.filter(function(s){ return s.classification==="haut"||s.classification==="inacceptable"; });
+  var listHtml = listHaut.length>0
+    ? listHaut.map(function(s){ return '<div class="eval-row" style="cursor:pointer" onclick="document.getElementById(\'cards-modal\').classList.remove(\'on\');go(\'registre\',null,\'REGISTRE\',\'Systèmes IA\')"><div class="eval-ico">⚠</div><div class="eval-body"><div class="eval-n">'+s.nom+'</div><div class="eval-d">'+(s.secteur||'')+' · '+(s.justification||'Justification Annexe III non renseignée')+'</div></div></div>'; }).join('')
+    : '<div class="reg-empty">Aucun système à haut risque ou inacceptable identifié.</div>';
+
+  cardsModal("Cartographie des systèmes IA", "① Cartographier · Annexe III EU AI Act",
+    '<p style="font-size:12px;color:var(--muted);margin-bottom:16px">Répartition de vos '+d.registre.length+' système(s) du Registre IA par classification de risque (Art. 6, Annexe III).</p>'
+    + rows
+    + '<div class="sec-h" style="margin:20px 0 8px;font-size:14px">Systèmes à haut risque / inacceptable</div>'
+    + listHtml,
+    '<button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="document.getElementById(\'cards-modal\').classList.remove(\'on\');go(\'registre\',null,\'REGISTRE\',\'Systèmes IA\')">Ouvrir le Registre IA →</button>'
+  );
+};
+
+/* ── ② Évaluer : FRIA + Radar ── */
+window.cardsOpenEvaluer = function(){
+  var d = window.__cardsData;
+  if(!d) return;
+  cardsModal("Scoring multicritère", "② Évaluer · Droits fondamentaux, sécurité, gouvernance",
+    '<div class="bud-synth" style="margin-bottom:16px">'
+    + '<div class="bud-synth-card"><div class="bud-synth-lbl">Score FRIA moyen</div><div class="bud-synth-val">'+(d.friaAvg!==null?d.friaAvg:'—')+'</div><div class="bud-synth-sub">Droits fondamentaux (Art. 27)</div></div>'
+    + '<div class="bud-synth-card"><div class="bud-synth-lbl">Systèmes évalués</div><div class="bud-synth-val">'+d.friaCount+'</div><div class="bud-synth-sub">sur '+d.registre.length+' au registre</div></div>'
+    + '<div class="bud-synth-card"><div class="bud-synth-lbl">Conformité Audit</div><div class="bud-synth-val">'+d.auditPct+'%</div><div class="bud-synth-sub">32 points de contrôle</div></div>'
+    + '</div>'
+    + '<p style="font-size:12px;color:var(--muted);line-height:1.6">Le scoring multicritère combine : <strong>droits fondamentaux</strong> (évaluation FRIA par système), <strong>sécurité</strong> et <strong>gouvernance des données</strong> (Radar des risques, 6 dimensions pondérées), et <strong>performance réglementaire</strong> (Audit de conformité, 32 points). Consultez chaque module pour le détail complet.</p>',
+    '<button class="mat-export-btn" style="background:var(--blue);color:#fff" onclick="document.getElementById(\'cards-modal\').classList.remove(\'on\');go(\'fria\',null,\'CONFORMITÉ\',\'Évaluation FRIA\')">Ouvrir FRIA →</button>'
+    + '<button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="document.getElementById(\'cards-modal\').classList.remove(\'on\');go(\'radar\',null,\'RISQUES\',\'Radar multi-critères\')">Ouvrir le Radar →</button>'
+  );
+};
+
+/* ── ③ Planifier : Roadmap reelle ── */
+window.cardsOpenPlanifier = function(){
+  var d = window.__cardsData;
+  if(!d) return;
+  var phasesHtml = d.phases.map(function(p,i){
+    var prog = i===0 ? Math.min(100, Math.round((d.registre.length>0?50:0)+d.auditPct*0.5))
+             : i===1 ? d.auditPct
+             : i===2 ? Math.round(d.auditPct*0.6)
+             : (d.auditPct>=80?20:0);
+    return '<div class="radar-risk-item"><div class="radar-risk-top"><span class="radar-risk-name">Phase '+p.n+' — '+p.title+'</span><span class="radar-risk-pct" style="color:'+(prog>=70?'var(--green)':'var(--orange)')+'">'+prog+'%</span></div>'
+      + '<div class="reg-bar"><div class="reg-fill" style="width:'+prog+'%"></div></div>'
+      + '<div class="radar-risk-src">'+p.duree+' · '+p.deliv+'</div></div>';
+  }).join('');
+
+  cardsModal("Feuille de route priorisée", "③ Planifier · Délais réglementaires",
+    '<p style="font-size:12px;color:var(--muted);margin-bottom:16px">Avancement calculé à partir de votre Registre IA ('+d.registre.length+' systèmes) et de l\'Audit de conformité ('+d.auditDone+'/'+d.auditTotal+' points).</p>'
+    + phasesHtml
+    + '<div class="radar-registre-info radar-registre-ok" style="margin-top:14px">📅 Échéance critique : <strong>2 août 2026</strong> — obligations complètes pour les systèmes haut risque (Art. 6(2), Annexe III).</div>',
+    '<button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="document.getElementById(\'cards-modal\').classList.remove(\'on\');go(\'roadmap\',null,\'PLANIFICATION\',\'Plan action\')">Ouvrir la Roadmap complète →</button>'
+  );
+};
+
+/* Rafraichir au chargement de la page Reglementations + apres chaque toggle d audit */
+var _cardsOrigGo = window.go;
+window.go = function(id){
+  var r = _cardsOrigGo ? _cardsOrigGo.apply(this, arguments) : undefined;
+  if(id === "regs") setTimeout(cardsRender, 100);
+  return r;
+};
+
+var _cardsOrigToggle = window.auditToggle;
+if(typeof _cardsOrigToggle === "function"){
+  window.auditToggle = function(){
+    var r = _cardsOrigToggle.apply(this, arguments);
+    setTimeout(cardsRender, 50);
+    return r;
+  };
+}
 
 })();
 
