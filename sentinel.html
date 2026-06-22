@@ -1133,6 +1133,16 @@ textarea.form-el{min-height:86px;resize:vertical}
 .pricing-chart-tooltip .ptt-row{display:flex;justify-content:space-between;gap:10px;color:rgba(255,255,255,.85)}
 .pricing-chart-hover-zone{fill:transparent;cursor:pointer}
 
+/* ══ BIBLIOTHEQUE DE CAS D USAGE IA ══ */
+.uc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.uc-card{background:var(--white);border:1px solid var(--rule);border-radius:8px;padding:16px;display:flex;flex-direction:column;gap:6px}
+.uc-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
+.uc-dir{font-size:9px;font-family:var(--mono);letter-spacing:.03em;text-transform:uppercase;color:var(--blue);background:rgba(28,90,138,.08);padding:2px 8px;border-radius:3px}
+.uc-nom{font-size:13px;font-weight:600;color:var(--ink);line-height:1.35}
+.uc-type{font-size:10px;font-family:var(--mono);color:var(--muted2)}
+.uc-desc{font-size:11px;color:var(--muted);line-height:1.5;flex:1}
+.uc-art{font-size:9px;font-family:var(--mono);color:var(--accent)}
+
 </style>
 <style id="cpc-styles">
 /* ══ CHATBOT SENTINEL AI — CONSEILPREV ══ */
@@ -2235,6 +2245,7 @@ textarea.form-el{min-height:86px;resize:vertical}
   <div class="reg-toolbar">
     <input type="text" id="reg-search" class="reg-search-input" placeholder="Rechercher par nom, secteur, type, responsable…" oninput="regSearch(this.value)">
     <span id="reg-db-badge" class="reg-db-badge">Vérification…</span>
+    <button class="mat-export-btn" style="background:var(--blue);color:#fff" onclick="ucOpenLibrary()" title="Explorer des cas d usage IA courants par direction metier, generiques ou specifiques a votre secteur.">📚 Cas d usage</button>
     <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="regOpenModal()" title="Ajouter un nouveau systeme IA au registre.">+ Ajouter un système</button>
   </div>
   <div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title" id="reg-count">Chargement…</span></div>
@@ -11149,6 +11160,150 @@ window.go = function(id){
 };
 
 })();
+
+})();
+
+</script>
+
+<script>
+/* ══ BIBLIOTHEQUE DE CAS D USAGE IA — generiques + sectoriels ══ */
+/* Aide a l identification de cas d usage pertinents avant inscription au Registre IA.
+   Sources : panorama d usages couramment observes par direction metier (IA generative,
+   ML predictif, NLP, vision), recoupes avec les 8 secteurs deja modelises dans Sentinel. */
+(function(){
+'use strict';
+
+/* Cas d usage GENERIQUES — pertinents quel que soit le secteur, par direction metier transverse */
+var USECASES_GENERIC = [
+  {dir:"RH", nom:"Assistant de pre-selection CV", type:"NLP / Classification", classif:"haut", art:"Annexe III, point 4(a) — recrutement", desc:"Tri et scoring automatique des candidatures sur criteres definis."},
+  {dir:"RH", nom:"Chatbot RH (questions paie, conges)", type:"LLM conversationnel", classif:"minimal", art:"Art. 50 — transparence", desc:"Reponses automatisees aux questions courantes des collaborateurs."},
+  {dir:"RH", nom:"Detection de risque de turnover", type:"ML predictif", classif:"limite", art:"Annexe III, point 4(b)", desc:"Score de risque de depart d un collaborateur a partir de signaux RH."},
+  {dir:"Finance", nom:"Detection de fraude transactionnelle", type:"ML / Anomaly detection", classif:"haut", art:"Annexe III, point 5", desc:"Identification de transactions suspectes en temps reel."},
+  {dir:"Finance", nom:"Prevision budgetaire automatisee", type:"ML predictif / Series temporelles", classif:"minimal", art:"Hors Annexe III", desc:"Projection des depenses et recettes a partir de l historique."},
+  {dir:"Finance", nom:"Scoring credit / solvabilite", type:"ML / Regression", classif:"haut", art:"Annexe III, point 5(b)", desc:"Evaluation automatisee de la capacite de remboursement d un client."},
+  {dir:"Commercial / Marketing", nom:"Assistant commercial generatif (emails, propositions)", type:"LLM generatif", classif:"minimal", art:"Art. 50 — transparence si contenu genere", desc:"Redaction assistee de propositions commerciales personnalisees."},
+  {dir:"Commercial / Marketing", nom:"Scoring de leads", type:"ML / Classification", classif:"limite", art:"Hors Annexe III en general", desc:"Priorisation automatique des prospects selon probabilite de conversion."},
+  {dir:"Commercial / Marketing", nom:"Personnalisation de contenu client", type:"ML / Recommandation", classif:"minimal", art:"Art. 50", desc:"Adaptation automatique des offres et messages selon le profil client."},
+  {dir:"IT / Operations", nom:"Detection d anomalies infrastructure (AIOps)", type:"ML / Anomaly detection", classif:"minimal", art:"Hors Annexe III", desc:"Identification proactive des incidents techniques avant impact utilisateur."},
+  {dir:"IT / Operations", nom:"Assistant de developpement (code generatif)", type:"LLM generatif", classif:"minimal", art:"Hors Annexe III", desc:"Suggestion et generation de code pour accelerer le developpement."},
+  {dir:"Juridique / Conformite", nom:"Analyse automatisee de contrats", type:"NLP / Extraction", classif:"limite", art:"Hors Annexe III en general", desc:"Extraction de clauses cles et detection de risques contractuels."},
+  {dir:"Service Client", nom:"Chatbot service client", type:"LLM conversationnel", classif:"limite", art:"Art. 50 — transparence", desc:"Reponse automatisee aux demandes clients de premier niveau."},
+  {dir:"Service Client", nom:"Analyse de sentiment / satisfaction", type:"NLP / Classification", classif:"minimal", art:"Hors Annexe III", desc:"Mesure automatisee de la satisfaction a partir des verbatims clients."}
+];
+
+/* Cas d usage SECTORIELS — specifiques par secteur d activite (8 secteurs Sentinel) */
+var USECASES_SECTOR = {
+  telecom: [
+    {dir:"Reseau / Operations", nom:"Maintenance predictive reseau", type:"ML predictif", classif:"minimal", art:"Hors Annexe III", desc:"Anticipation des pannes sur infrastructure reseau via capteurs IoT."},
+    {dir:"Relation Client", nom:"Optimisation des offres telecom", type:"ML / Recommandation", classif:"minimal", art:"Art. 50", desc:"Recommandation personnalisee de forfaits selon usage reel."}
+  ],
+  energie: [
+    {dir:"Exploitation", nom:"Prevision de la demande energetique", type:"ML predictif / Series temporelles", classif:"limite", art:"Annexe III point 2 (infra critique, selon usage)", desc:"Anticipation de la consommation pour optimiser la production."},
+    {dir:"Securite OT", nom:"Detection d intrusion sur reseaux SCADA", type:"ML / Anomaly detection", classif:"haut", art:"NIS2 / Annexe III point 2", desc:"Identification des cyberattaques sur infrastructures critiques."}
+  ],
+  sante: [
+    {dir:"Affaires Medicales", nom:"Aide au diagnostic par imagerie", type:"Vision par ordinateur / Deep Learning", classif:"haut", art:"Annexe III, point 5 / Reglement MDR", desc:"Detection assistee d anomalies sur imagerie medicale (radio, IRM)."},
+    {dir:"DSIS", nom:"Triage et orientation des patients", type:"ML / Classification", classif:"haut", art:"Annexe III, point 5", desc:"Priorisation automatisee des urgences selon la gravite estimee."}
+  ],
+  finance: [
+    {dir:"Risques", nom:"Modelisation du risque de credit (Bale)", type:"ML / Regression", classif:"haut", art:"Annexe III, point 5(b)", desc:"Calcul automatise des provisions et du capital reglementaire requis."},
+    {dir:"Conformite", nom:"Surveillance anti-blanchiment (AML)", type:"ML / Anomaly detection", classif:"haut", art:"Directive AML / Annexe III", desc:"Detection de schemas de transactions suspectes de blanchiment."}
+  ],
+  industrie: [
+    {dir:"Production / QHSE", nom:"Controle qualite par vision industrielle", type:"Vision par ordinateur", classif:"limite", art:"Directive Machines", desc:"Detection automatisee de defauts sur ligne de production."},
+    {dir:"Maintenance", nom:"Maintenance predictive equipements", type:"ML predictif", classif:"minimal", art:"Hors Annexe III", desc:"Anticipation des pannes machines via capteurs vibratoires/thermiques."}
+  ],
+  transport: [
+    {dir:"Exploitation", nom:"Optimisation des itineraires et flottes", type:"ML / Optimisation", classif:"minimal", art:"Hors Annexe III", desc:"Planification dynamique des trajets selon trafic et demande."},
+    {dir:"Securite Transport", nom:"Detection de fatigue / vigilance conducteur", type:"Vision par ordinateur", classif:"haut", art:"Reglement vehicules / Annexe III", desc:"Surveillance en temps reel de l etat de vigilance du conducteur."}
+  ],
+  it: [
+    {dir:"Produit / Tech", nom:"Assistant IA integre au produit (copilote)", type:"LLM generatif / Agentique", classif:"limite", art:"Art. 53 (GPAI) / Art. 50", desc:"Fonctionnalite IA conversationnelle integree au produit logiciel."},
+    {dir:"DevSecOps", nom:"Detection de vulnerabilites par IA", type:"ML / Analyse statique", classif:"minimal", art:"Hors Annexe III", desc:"Identification automatisee de failles de securite dans le code."}
+  ],
+  public: [
+    {dir:"Service Public", nom:"Instruction automatisee de dossiers administratifs", type:"NLP / Classification", classif:"haut", art:"Annexe III, point 5(a)", desc:"Pre-traitement et orientation des demandes citoyennes (aides, permis)."},
+    {dir:"Egalite de Traitement", nom:"Detection de discrimination dans l attribution de services", type:"ML / Audit de biais", classif:"haut", art:"Annexe III / Art. 5", desc:"Controle de l equite des decisions automatisees envers les citoyens."}
+  ]
+};
+
+window.USECASES_GENERIC = USECASES_GENERIC;
+window.USECASES_SECTOR = USECASES_SECTOR;
+
+var CLASSIF_BADGE = {inacceptable:"chip-r", haut:"chip-r", limite:"chip-o", minimal:"chip-g"};
+var CLASSIF_LABEL = {inacceptable:"Inacceptable", haut:"Haut risque", limite:"Risque limité", minimal:"Risque minimal"};
+
+function ucRenderCard(uc, secteurLabel){
+  return '<div class="uc-card">'
+    + '<div class="uc-card-top"><span class="uc-dir">'+uc.dir+'</span><span class="chip '+(CLASSIF_BADGE[uc.classif]||"chip-n")+'">'+(CLASSIF_LABEL[uc.classif]||uc.classif)+'</span></div>'
+    + '<div class="uc-nom">'+uc.nom+'</div>'
+    + '<div class="uc-type">'+uc.type+'</div>'
+    + '<div class="uc-desc">'+uc.desc+'</div>'
+    + '<div class="uc-art">'+uc.art+'</div>'
+    + '<button class="mat-export-btn" style="background:var(--ink);color:#fff;margin-top:10px;width:100%" onclick="ucAddToRegistre(\''+uc.nom.replace(/'/g,"")+'\',\''+uc.type+'\',\''+uc.classif+'\',\''+uc.art.replace(/'/g,"")+'\',\''+(secteurLabel||"").replace(/'/g,"")+'\')">+ Ajouter au Registre IA</button>'
+    + '</div>';
+}
+
+window.ucAddToRegistre = function(nom, type, classif, art, secteur){
+  if(typeof window.regOpenModal !== "function"){ alert("Le Registre IA n est pas encore chargé."); return; }
+  var modal = document.getElementById("cards-modal");
+  if(modal) modal.classList.remove("on");
+  var ucModal = document.getElementById("uc-modal");
+  if(ucModal) ucModal.classList.remove("on");
+  window.regOpenModal();
+  setTimeout(function(){
+    var nomEl = document.getElementById("rf-nom");
+    var typeEl = document.getElementById("rf-type");
+    var classifEl = document.getElementById("rf-classif");
+    var justifEl = document.getElementById("rf-justif");
+    var secteurEl = document.getElementById("rf-secteur");
+    if(nomEl) nomEl.value = nom;
+    if(typeEl) typeEl.value = type;
+    if(classifEl) classifEl.value = classif;
+    if(justifEl) justifEl.value = art;
+    if(secteurEl && secteur) secteurEl.value = secteur;
+  }, 150);
+};
+
+window.ucOpenLibrary = function(){
+  var modal = document.getElementById("uc-modal");
+  if(!modal){ modal = document.createElement("div"); modal.id = "uc-modal"; modal.className = "mat-modal"; document.body.appendChild(modal); }
+
+  var sectorOptions = Object.keys(window.MAT_SECTORS||{}).map(function(k){
+    var s = window.MAT_SECTORS[k];
+    return '<option value="'+k+'">'+s.icon+' '+s.label+'</option>';
+  }).join("");
+
+  modal.innerHTML = '<div class="mat-modal-box mat-modal-wide">'
+    + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Bibliothèque de cas d usage IA</div>'
+    + '<div class="mat-modal-title">📚 Identifier un cas d usage à étudier</div></div>'
+    + '<button class="mat-modal-close" onclick="document.getElementById(\'uc-modal\').classList.remove(\'on\')">×</button></div>'
+    + '<div class="mat-modal-body">'
+    + '<div class="radar-sector-bar" style="margin-bottom:18px"><span class="radar-sector-lbl">Filtrer par secteur :</span>'
+    + '<select id="uc-sector-select" class="radar-sector-select" onchange="ucRenderContent()"><option value="">— Cas génériques uniquement —</option>'+sectorOptions+'</select>'
+    + '<span style="font-size:10px;color:var(--muted);flex:1;min-width:200px">Les cas génériques (RH, Finance, Commercial, IT, Juridique, Service Client) s appliquent quel que soit votre secteur. Sélectionnez un secteur pour voir aussi les cas spécifiques.</span></div>'
+    + '<div id="uc-content"></div>'
+    + '</div></div>';
+  modal.classList.add("on");
+  window.ucRenderContent();
+};
+
+window.ucRenderContent = function(){
+  var holder = document.getElementById("uc-content");
+  if(!holder) return;
+  var sectorKey = document.getElementById("uc-sector-select") ? document.getElementById("uc-sector-select").value : "";
+  var sectorLabel = sectorKey && window.MAT_SECTORS[sectorKey] ? window.MAT_SECTORS[sectorKey].label : "";
+
+  var html = '<div class="sec-h" style="margin-bottom:10px;font-size:14px">Cas d usage génériques — directions métier transverses</div>'
+    + '<div class="uc-grid">' + USECASES_GENERIC.map(function(uc){ return ucRenderCard(uc, sectorLabel); }).join('') + '</div>';
+
+  if(sectorKey && USECASES_SECTOR[sectorKey]){
+    html += '<div class="sec-h" style="margin:24px 0 10px;font-size:14px">Cas d usage spécifiques — secteur '+sectorLabel+'</div>'
+      + '<div class="uc-grid">' + USECASES_SECTOR[sectorKey].map(function(uc){ return ucRenderCard(uc, sectorLabel); }).join('') + '</div>';
+  }
+
+  holder.innerHTML = html;
+};
 
 })();
 
