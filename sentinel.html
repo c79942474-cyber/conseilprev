@@ -11178,20 +11178,53 @@ var USECASES_GENERIC = [
   {dir:"RH", nom:"Assistant de pre-selection CV", type:"NLP / Classification", classif:"haut", art:"Annexe III, point 4(a) — recrutement", desc:"Tri et scoring automatique des candidatures sur criteres definis."},
   {dir:"RH", nom:"Chatbot RH (questions paie, conges)", type:"LLM conversationnel", classif:"minimal", art:"Art. 50 — transparence", desc:"Reponses automatisees aux questions courantes des collaborateurs."},
   {dir:"RH", nom:"Detection de risque de turnover", type:"ML predictif", classif:"limite", art:"Annexe III, point 4(b)", desc:"Score de risque de depart d un collaborateur a partir de signaux RH."},
+  {dir:"RH", nom:"Analyse predictive des besoins en competences", type:"ML predictif", classif:"minimal", art:"Hors Annexe III", desc:"Anticipation des besoins de formation et de recrutement a moyen terme."},
+  {dir:"RH", nom:"Evaluation automatisee de la performance", type:"ML / Scoring", classif:"haut", art:"Annexe III, point 4(c)", desc:"Notation automatisee des collaborateurs influant promotion ou licenciement."},
+
   {dir:"Finance", nom:"Detection de fraude transactionnelle", type:"ML / Anomaly detection", classif:"haut", art:"Annexe III, point 5", desc:"Identification de transactions suspectes en temps reel."},
   {dir:"Finance", nom:"Prevision budgetaire automatisee", type:"ML predictif / Series temporelles", classif:"minimal", art:"Hors Annexe III", desc:"Projection des depenses et recettes a partir de l historique."},
   {dir:"Finance", nom:"Scoring credit / solvabilite", type:"ML / Regression", classif:"haut", art:"Annexe III, point 5(b)", desc:"Evaluation automatisee de la capacite de remboursement d un client."},
+  {dir:"Finance", nom:"Automatisation du rapprochement comptable", type:"ML / Classification", classif:"minimal", art:"Hors Annexe III", desc:"Reconciliation automatique des ecritures comptables et factures."},
+  {dir:"Finance", nom:"Detection d anomalies dans les notes de frais", type:"ML / Anomaly detection", classif:"limite", art:"Hors Annexe III en general", desc:"Identification automatique de depenses atypiques ou non conformes."},
+
   {dir:"Commercial / Marketing", nom:"Assistant commercial generatif (emails, propositions)", type:"LLM generatif", classif:"minimal", art:"Art. 50 — transparence si contenu genere", desc:"Redaction assistee de propositions commerciales personnalisees."},
   {dir:"Commercial / Marketing", nom:"Scoring de leads", type:"ML / Classification", classif:"limite", art:"Hors Annexe III en general", desc:"Priorisation automatique des prospects selon probabilite de conversion."},
   {dir:"Commercial / Marketing", nom:"Personnalisation de contenu client", type:"ML / Recommandation", classif:"minimal", art:"Art. 50", desc:"Adaptation automatique des offres et messages selon le profil client."},
+  {dir:"Commercial / Marketing", nom:"Tarification dynamique (pricing IA)", type:"ML / Optimisation", classif:"limite", art:"Hors Annexe III en general", desc:"Ajustement automatique des prix selon la demande et la concurrence."},
+  {dir:"Commercial / Marketing", nom:"Generation de contenu marketing (visuels, textes)", type:"IA generative (texte/image)", classif:"minimal", art:"Art. 50 — marquage du contenu genere", desc:"Production assistee de visuels et textes publicitaires."},
+
   {dir:"IT / Operations", nom:"Detection d anomalies infrastructure (AIOps)", type:"ML / Anomaly detection", classif:"minimal", art:"Hors Annexe III", desc:"Identification proactive des incidents techniques avant impact utilisateur."},
   {dir:"IT / Operations", nom:"Assistant de developpement (code generatif)", type:"LLM generatif", classif:"minimal", art:"Hors Annexe III", desc:"Suggestion et generation de code pour accelerer le developpement."},
-  {dir:"Juridique / Conformite", nom:"Analyse automatisee de contrats", type:"NLP / Extraction", classif:"limite", art:"Hors Annexe III en general", desc:"Extraction de clauses cles et detection de risques contractuels."},
-  {dir:"Service Client", nom:"Chatbot service client", type:"LLM conversationnel", classif:"limite", art:"Art. 50 — transparence", desc:"Reponse automatisee aux demandes clients de premier niveau."},
-  {dir:"Service Client", nom:"Analyse de sentiment / satisfaction", type:"NLP / Classification", classif:"minimal", art:"Hors Annexe III", desc:"Mesure automatisee de la satisfaction a partir des verbatims clients."}
-];
+  {dir:"IT / Operations", nom:"Detection de cyberattaques (SOC augmente)", type:"ML / Anomaly detection", classif:"limite", art:"NIS2", desc:"Identification automatisee de signaux faibles d intrusion ou de menace."},
+  {dir:"IT / Operations", nom:"Automatisation des tests logiciels", type:"ML / Generation de tests", classif:"minimal", art:"Hors Annexe III", desc:"Generation et execution automatisee de scenarios de test."},
+  {dir:"IT / Operations", nom:"Gestion automatisee des acces (IAM augmente)", type:"ML / Anomaly detection", classif:"limite", art:"Hors Annexe III en general", desc:"Detection de comportements d acces anormaux et ajustement des droits."},
 
-/* Cas d usage SECTORIELS — specifiques par secteur d activite (8 secteurs Sentinel) */
+  {dir:"Juridique / Conformite", nom:"Analyse automatisee de contrats", type:"NLP / Extraction", classif:"limite", art:"Hors Annexe III en general", desc:"Extraction de clauses cles et detection de risques contractuels."},
+  {dir:"Juridique / Conformite", nom:"Veille reglementaire automatisee", type:"NLP / Synthese", classif:"minimal", art:"Hors Annexe III", desc:"Surveillance et synthese automatisee des evolutions legales pertinentes."},
+  {dir:"Juridique / Conformite", nom:"Detection de clauses abusives ou a risque", type:"NLP / Classification", classif:"limite", art:"Hors Annexe III en general", desc:"Identification automatique de clauses contractuelles non conformes."},
+  {dir:"Juridique / Conformite", nom:"Generation de premiers projets de contrats", type:"LLM generatif", classif:"minimal", art:"Art. 50", desc:"Redaction assistee de contrats types a partir de gabarits."},
+  {dir:"Juridique / Conformite", nom:"Cartographie automatisee des risques de conformite", type:"NLP / Classification", classif:"limite", art:"Hors Annexe III en general", desc:"Identification des zones de risque juridique a partir de la documentation interne."},
+
+  {dir:"Service Client", nom:"Chatbot service client", type:"LLM conversationnel", classif:"limite", art:"Art. 50 — transparence", desc:"Reponse automatisee aux demandes clients de premier niveau."},
+  {dir:"Service Client", nom:"Analyse de sentiment / satisfaction", type:"NLP / Classification", classif:"minimal", art:"Hors Annexe III", desc:"Mesure automatisee de la satisfaction a partir des verbatims clients."},
+  {dir:"Service Client", nom:"Routage intelligent des demandes", type:"NLP / Classification", classif:"minimal", art:"Hors Annexe III", desc:"Orientation automatique des tickets vers le bon service ou agent."},
+  {dir:"Service Client", nom:"Assistant agent (suggestions de reponses)", type:"LLM generatif", classif:"limite", art:"Art. 50", desc:"Suggestions en temps reel aux conseillers pour accelerer le traitement."},
+  {dir:"Service Client", nom:"Prevision du volume de contacts", type:"ML predictif / Series temporelles", classif:"minimal", art:"Hors Annexe III", desc:"Anticipation des pics d activite pour ajuster les effectifs du support."},
+
+  {dir:"Achats / Procurement", nom:"Optimisation des achats et selection fournisseurs", type:"ML / Optimisation", classif:"minimal", art:"Hors Annexe III", desc:"Recommandation de fournisseurs selon cout, qualite et delais."},
+  {dir:"Achats / Procurement", nom:"Detection de risques fournisseurs", type:"ML / Scoring", classif:"limite", art:"Hors Annexe III en general", desc:"Evaluation automatisee du risque financier ou reputationnel d un fournisseur."},
+  {dir:"Achats / Procurement", nom:"Analyse automatisee de factures et bons de commande", type:"NLP / Extraction", classif:"minimal", art:"Hors Annexe III", desc:"Extraction et controle automatique des donnees de facturation."},
+  {dir:"Achats / Procurement", nom:"Negociation assistee par IA generative", type:"LLM generatif", classif:"minimal", art:"Art. 50", desc:"Preparation d arguments et de scenarios de negociation fournisseur."},
+  {dir:"Achats / Procurement", nom:"Prevision des couts d achats", type:"ML predictif", classif:"minimal", art:"Hors Annexe III", desc:"Anticipation de l evolution des prix matieres et prestations."},
+
+  {dir:"Direction Generale / Strategie", nom:"Veille concurrentielle automatisee", type:"NLP / Synthese", classif:"minimal", art:"Hors Annexe III", desc:"Surveillance et synthese automatisee de l actualite concurrentielle et sectorielle."},
+  {dir:"Direction Generale / Strategie", nom:"Aide a la decision strategique (scenarios)", type:"ML / Simulation", classif:"minimal", art:"Hors Annexe III", desc:"Modelisation de scenarios strategiques (investissement, expansion)."},
+  {dir:"Direction Generale / Strategie", nom:"Tableau de bord predictif de pilotage (KPIs)", type:"ML predictif", classif:"minimal", art:"Hors Annexe III", desc:"Anticipation des tendances cles de performance de l entreprise."},
+  {dir:"Direction Generale / Strategie", nom:"Assistant de redaction de rapports executifs", type:"LLM generatif", classif:"minimal", art:"Art. 50", desc:"Synthese automatisee de donnees en rapports destines au Comex/Conseil."},
+  {dir:"Direction Generale / Strategie", nom:"Detection de signaux faibles de risque reputationnel", type:"NLP / Analyse de sentiment", classif:"limite", art:"Hors Annexe III en general", desc:"Surveillance des mentions publiques pour anticiper une crise d image."}
+];
+window.USECASES_GENERIC = USECASES_GENERIC;
+
 var USECASES_SECTOR = {
   telecom: [
     {dir:"Reseau / Operations", nom:"Maintenance predictive reseau", type:"ML predictif", classif:"minimal", art:"Hors Annexe III", desc:"Anticipation des pannes sur infrastructure reseau via capteurs IoT."},
