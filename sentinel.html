@@ -939,9 +939,17 @@ textarea.form-el{min-height:86px;resize:vertical}
 .raci-legend-item{font-size:11px;color:var(--ink2);display:flex;align-items:center;gap:6px}
 .raci-legend-dot{width:14px;height:14px;border-radius:3px;flex-shrink:0;display:inline-block}
 .raci-actions{display:flex;flex-wrap:wrap;gap:8px}
-.raci-table-wrap{overflow-x:auto;border:1px solid var(--rule);border-radius:6px;background:var(--white)}
+.raci-table-wrap-outer{position:relative}
+.raci-table-wrap{overflow:auto;max-height:560px;border:1px solid var(--rule);border-radius:6px;background:var(--white);scroll-behavior:smooth}
+.raci-nav-btn{position:absolute;display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:var(--ink);color:#fff;border:2px solid var(--white);box-shadow:0 2px 8px rgba(0,0,0,.25);cursor:pointer;z-index:30;font-size:14px;transition:all .15s;opacity:.85}
+.raci-nav-btn:hover{opacity:1;transform:scale(1.08)}
+.raci-nav-btn:active{transform:scale(0.95)}
+.raci-nav-up{top:-14px;left:50%;transform:translateX(-50%)}
+.raci-nav-down{bottom:-14px;left:50%;transform:translateX(-50%)}
+.raci-nav-left{left:-14px;top:50%;transform:translateY(-50%)}
+.raci-nav-right{right:-14px;top:50%;transform:translateY(-50%)}
 .raci-table{min-width:1400px}
-.raci-row{display:grid;grid-template-columns:280px repeat(10,1fr);border-bottom:1px solid var(--rule)}
+.raci-row{display:grid;border-bottom:1px solid var(--rule)}
 .raci-row:last-child{border-bottom:none}
 .raci-row.raci-head{background:var(--ink);position:sticky;top:0;z-index:5}
 .raci-proc-cell{padding:11px 14px;border-right:1px solid var(--rule);background:var(--bg)}
@@ -8056,12 +8064,15 @@ function raciRenderTable(){
   var sectorProcIds = raciCurSectorProcesses().map(function(p){ return p.id; });
   var sectorRoleIds = raciCurSectorRoles().map(function(r){ return r.id; });
   var roles = raciGetRoles();
-  var head = '<div class="raci-row raci-head"><div class="raci-proc-cell raci-proc-head">Processus de gouvernance IA</div>'
+  /* Grille dynamique : 280px pour la colonne processus + 1 colonne de 130px par role reel
+     (corrige le bug du nombre de colonnes fixe a 10, desormais variable selon le secteur) */
+  var gridStyle = 'grid-template-columns:280px repeat(' + roles.length + ',130px);min-width:' + (280 + roles.length*130) + 'px';
+  var head = '<div class="raci-row raci-head" style="' + gridStyle + '"><div class="raci-proc-cell raci-proc-head">Processus de gouvernance IA</div>'
     + roles.map(function(r){ return '<div class="raci-role-head'+(sectorRoleIds.indexOf(r.id)!==-1?' raci-role-sector':'')+'">'+r.label+(sectorRoleIds.indexOf(r.id)!==-1?'<span class="raci-sector-tag">Sectoriel</span>':'')+'</div>'; }).join("")
     + '</div>';
   var rows = raciGetProcesses().map(function(p){
     var isSector = sectorProcIds.indexOf(p.id) !== -1;
-    return '<div class="raci-row'+(isSector?' raci-row-sector':'')+'">'
+    return '<div class="raci-row'+(isSector?' raci-row-sector':'')+'" style="' + gridStyle + '">'
       + '<div class="raci-proc-cell"><div class="raci-proc-label">'+p.label+(isSector?' <span class="raci-sector-tag">Sectoriel</span>':'')+'</div><div class="raci-proc-art">'+p.art+'</div></div>'
       + roles.map(function(r){
           var v = (RACI_STATE[p.id] && RACI_STATE[p.id][r.id]) || "";
@@ -8071,6 +8082,12 @@ function raciRenderTable(){
   }).join("");
   return head + rows;
 }
+
+window.raciScroll = function(dx, dy){
+  var wrap = document.getElementById('raci-table-wrap-inner');
+  if(!wrap) return;
+  wrap.scrollBy({left: dx, top: dy, behavior: 'smooth'});
+};
 
 window.raciSelectSector = function(sectorKey){
   RACI_SECTOR = sectorKey;
@@ -8128,7 +8145,13 @@ window.raciRenderPage = function(){
     + '<button class="mat-export-btn" style="background:#1C1C1C;color:#fff" onclick="raciGenerateDoc()" title="Generer par IA le document complet de cartographie (analyse, recommandations, plan de communication).">🤖 Generer la cartographie complete par IA</button>'
     + '<button class="mat-export-btn" style="background:var(--bg);color:var(--muted);border:1px solid var(--rule2)" onclick="raciReset()" title="Reinitialiser la matrice RACI au profil de reference CONSEILPREV.">↻ Reinitialiser</button>'
     + '</div></div>'
-    + '<div class="raci-table-wrap"><div class="raci-table" id="raci-table-holder">'+raciRenderTable()+'</div></div>'
+    + '<div class="raci-table-wrap-outer">'
+    + '<button class="raci-nav-btn raci-nav-up" onclick="raciScroll(0,-150)" title="Défiler vers le haut">▲</button>'
+    + '<button class="raci-nav-btn raci-nav-down" onclick="raciScroll(0,150)" title="Défiler vers le bas">▼</button>'
+    + '<button class="raci-nav-btn raci-nav-left" onclick="raciScroll(-200,0)" title="Défiler vers la gauche">◀</button>'
+    + '<button class="raci-nav-btn raci-nav-right" onclick="raciScroll(200,0)" title="Défiler vers la droite">▶</button>'
+    + '<div class="raci-table-wrap" id="raci-table-wrap-inner"><div class="raci-table" id="raci-table-holder">'+raciRenderTable()+'</div></div>'
+    + '</div>'
     + '<p class="raci-help">Cliquez sur une cellule pour faire defiler les assignations : vide → R → A → C → I → vide. Chaque processus ne devrait avoir qu un seul A (Approbateur) pour eviter les conflits de decision.</p>';
 
   holder.innerHTML = html;
