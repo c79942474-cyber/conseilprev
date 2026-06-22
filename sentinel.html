@@ -11195,39 +11195,61 @@ var USECASES_GENERIC = [
 var USECASES_SECTOR = {
   telecom: [
     {dir:"Reseau / Operations", nom:"Maintenance predictive reseau", type:"ML predictif", classif:"minimal", art:"Hors Annexe III", desc:"Anticipation des pannes sur infrastructure reseau via capteurs IoT."},
-    {dir:"Relation Client", nom:"Optimisation des offres telecom", type:"ML / Recommandation", classif:"minimal", art:"Art. 50", desc:"Recommandation personnalisee de forfaits selon usage reel."}
+    {dir:"Relation Client", nom:"Optimisation des offres telecom", type:"ML / Recommandation", classif:"minimal", art:"Art. 50", desc:"Recommandation personnalisee de forfaits selon usage reel."},
+    {dir:"Marketing / Produits", nom:"Prevision de churn abonnes", type:"ML / Classification", classif:"limite", art:"Annexe III point 4(b)", desc:"Identification des abonnes a risque de desabonnement pour action de retention."},
+    {dir:"Securite Reseau", nom:"Detection de fraude SIM/abonnement", type:"ML / Anomaly detection", classif:"haut", art:"Annexe III point 5", desc:"Identification de schemas de fraude a l abonnement ou de SIM swap."},
+    {dir:"Operations Commerciales", nom:"Dimensionnement dynamique de capacite reseau", type:"ML predictif / Optimisation", classif:"minimal", art:"Hors Annexe III", desc:"Allocation automatique de bande passante selon la demande prevue."}
   ],
   energie: [
     {dir:"Exploitation", nom:"Prevision de la demande energetique", type:"ML predictif / Series temporelles", classif:"limite", art:"Annexe III point 2 (infra critique, selon usage)", desc:"Anticipation de la consommation pour optimiser la production."},
-    {dir:"Securite OT", nom:"Detection d intrusion sur reseaux SCADA", type:"ML / Anomaly detection", classif:"haut", art:"NIS2 / Annexe III point 2", desc:"Identification des cyberattaques sur infrastructures critiques."}
+    {dir:"Securite OT", nom:"Detection d intrusion sur reseaux SCADA", type:"ML / Anomaly detection", classif:"haut", art:"NIS2 / Annexe III point 2", desc:"Identification des cyberattaques sur infrastructures critiques."},
+    {dir:"Transition Energetique / RSE", nom:"Optimisation de l autoconsommation renouvelable", type:"ML predictif / Optimisation", classif:"minimal", art:"Hors Annexe III", desc:"Pilotage automatique de la production solaire/eolienne selon meteo et demande."},
+    {dir:"Maintenance", nom:"Maintenance predictive des actifs (turbines, postes)", type:"ML predictif", classif:"minimal", art:"Hors Annexe III", desc:"Anticipation des defaillances d equipements critiques via capteurs."},
+    {dir:"Commercial", nom:"Detection de fraude / vol d energie", type:"ML / Anomaly detection", classif:"limite", art:"Annexe III point 5", desc:"Identification de profils de consommation anormaux signalant une fraude."}
   ],
   sante: [
     {dir:"Affaires Medicales", nom:"Aide au diagnostic par imagerie", type:"Vision par ordinateur / Deep Learning", classif:"haut", art:"Annexe III, point 5 / Reglement MDR", desc:"Detection assistee d anomalies sur imagerie medicale (radio, IRM)."},
-    {dir:"DSIS", nom:"Triage et orientation des patients", type:"ML / Classification", classif:"haut", art:"Annexe III, point 5", desc:"Priorisation automatisee des urgences selon la gravite estimee."}
+    {dir:"DSIS", nom:"Triage et orientation des patients", type:"ML / Classification", classif:"haut", art:"Annexe III, point 5", desc:"Priorisation automatisee des urgences selon la gravite estimee."},
+    {dir:"Pharmacie / Recherche", nom:"Aide a la decouverte de molecules", type:"ML / Deep Learning", classif:"minimal", art:"Hors Annexe III (recherche)", desc:"Identification de candidats medicaments par modelisation moleculaire."},
+    {dir:"Qualite / Affaires Reglementaires", nom:"Detection d effets indesirables (pharmacovigilance)", type:"NLP / Classification", classif:"haut", art:"Annexe III point 5 / Reglement pharmacovigilance", desc:"Identification automatisee de signaux de securite dans les rapports."},
+    {dir:"Administration des Soins", nom:"Optimisation de la planification des lits/blocs", type:"ML predictif / Optimisation", classif:"limite", art:"Hors Annexe III", desc:"Prevision d occupation pour optimiser la gestion des capacites hospitalieres."}
   ],
   finance: [
     {dir:"Risques", nom:"Modelisation du risque de credit (Bale)", type:"ML / Regression", classif:"haut", art:"Annexe III, point 5(b)", desc:"Calcul automatise des provisions et du capital reglementaire requis."},
-    {dir:"Conformite", nom:"Surveillance anti-blanchiment (AML)", type:"ML / Anomaly detection", classif:"haut", art:"Directive AML / Annexe III", desc:"Detection de schemas de transactions suspectes de blanchiment."}
+    {dir:"Conformite", nom:"Surveillance anti-blanchiment (AML)", type:"ML / Anomaly detection", classif:"haut", art:"Directive AML / Annexe III", desc:"Detection de schemas de transactions suspectes de blanchiment."},
+    {dir:"Reseau d Agences / Commercial", nom:"Conseil patrimonial automatise (robo-advisory)", type:"ML / Recommandation", classif:"haut", art:"Annexe III point 5(c)", desc:"Recommandation automatisee d allocation d actifs selon profil de risque."},
+    {dir:"Tresorerie", nom:"Prevision de liquidite et cash-flow", type:"ML predictif / Series temporelles", classif:"minimal", art:"Hors Annexe III", desc:"Anticipation des besoins de tresorerie a partir des flux historiques."},
+    {dir:"Operations Bancaires", nom:"Automatisation du traitement des reclamations", type:"NLP / Classification", classif:"limite", art:"Hors Annexe III en general", desc:"Tri et orientation automatique des reclamations clients."}
   ],
   industrie: [
     {dir:"Production / QHSE", nom:"Controle qualite par vision industrielle", type:"Vision par ordinateur", classif:"limite", art:"Directive Machines", desc:"Detection automatisee de defauts sur ligne de production."},
-    {dir:"Maintenance", nom:"Maintenance predictive equipements", type:"ML predictif", classif:"minimal", art:"Hors Annexe III", desc:"Anticipation des pannes machines via capteurs vibratoires/thermiques."}
+    {dir:"Maintenance", nom:"Maintenance predictive equipements", type:"ML predictif", classif:"minimal", art:"Hors Annexe III", desc:"Anticipation des pannes machines via capteurs vibratoires/thermiques."},
+    {dir:"Supply Chain / Achats", nom:"Optimisation des stocks et previsions de demande", type:"ML predictif / Optimisation", classif:"minimal", art:"Hors Annexe III", desc:"Ajustement automatique des niveaux de stock selon la demande prevue."},
+    {dir:"Securite Industrielle", nom:"Detection de comportements a risque (EPI, zones)", type:"Vision par ordinateur", classif:"haut", art:"Annexe III point 2 (selon contexte)", desc:"Surveillance video pour detecter le non-port d equipements de protection."},
+    {dir:"R&D / Ingenierie", nom:"Jumeau numerique pour simulation de process", type:"ML / Simulation", classif:"minimal", art:"Hors Annexe III", desc:"Modelisation virtuelle pour tester des scenarios de production sans risque."}
   ],
   transport: [
     {dir:"Exploitation", nom:"Optimisation des itineraires et flottes", type:"ML / Optimisation", classif:"minimal", art:"Hors Annexe III", desc:"Planification dynamique des trajets selon trafic et demande."},
-    {dir:"Securite Transport", nom:"Detection de fatigue / vigilance conducteur", type:"Vision par ordinateur", classif:"haut", art:"Reglement vehicules / Annexe III", desc:"Surveillance en temps reel de l etat de vigilance du conducteur."}
+    {dir:"Securite Transport", nom:"Detection de fatigue / vigilance conducteur", type:"Vision par ordinateur", classif:"haut", art:"Reglement vehicules / Annexe III", desc:"Surveillance en temps reel de l etat de vigilance du conducteur."},
+    {dir:"Commerciale / Relation Voyageurs", nom:"Prevision d affluence et tarification dynamique", type:"ML predictif", classif:"limite", art:"Hors Annexe III en general", desc:"Ajustement automatique des prix et capacites selon la demande prevue."},
+    {dir:"Maintenance Flotte", nom:"Maintenance predictive des vehicules", type:"ML predictif", classif:"minimal", art:"Hors Annexe III", desc:"Anticipation des pannes mecaniques via capteurs embarques."},
+    {dir:"Homologation / Reglementaire", nom:"Validation automatisee de conformite vehicule autonome", type:"ML / Vision par ordinateur", classif:"haut", art:"Annexe I et III EU AI Act", desc:"Verification des systemes de conduite assistee/autonome avant homologation, sous strict controle reglementaire."}
   ],
   it: [
     {dir:"Produit / Tech", nom:"Assistant IA integre au produit (copilote)", type:"LLM generatif / Agentique", classif:"limite", art:"Art. 53 (GPAI) / Art. 50", desc:"Fonctionnalite IA conversationnelle integree au produit logiciel."},
-    {dir:"DevSecOps", nom:"Detection de vulnerabilites par IA", type:"ML / Analyse statique", classif:"minimal", art:"Hors Annexe III", desc:"Identification automatisee de failles de securite dans le code."}
+    {dir:"DevSecOps", nom:"Detection de vulnerabilites par IA", type:"ML / Analyse statique", classif:"minimal", art:"Hors Annexe III", desc:"Identification automatisee de failles de securite dans le code."},
+    {dir:"Customer Success", nom:"Prevision de churn et scoring d engagement", type:"ML / Classification", classif:"limite", art:"Hors Annexe III en general", desc:"Identification des comptes a risque de desabonnement (SaaS)."},
+    {dir:"Infrastructure / Cloud", nom:"Optimisation automatique des couts cloud (FinOps IA)", type:"ML / Optimisation", classif:"minimal", art:"Hors Annexe III", desc:"Ajustement dynamique des ressources cloud pour reduire les couts."},
+    {dir:"Support Technique", nom:"Triage automatique des tickets support", type:"NLP / Classification", classif:"minimal", art:"Hors Annexe III", desc:"Categorisation et priorisation automatique des demandes de support."}
   ],
   public: [
     {dir:"Service Public", nom:"Instruction automatisee de dossiers administratifs", type:"NLP / Classification", classif:"haut", art:"Annexe III, point 5(a)", desc:"Pre-traitement et orientation des demandes citoyennes (aides, permis)."},
-    {dir:"Egalite de Traitement", nom:"Detection de discrimination dans l attribution de services", type:"ML / Audit de biais", classif:"haut", art:"Annexe III / Art. 5", desc:"Controle de l equite des decisions automatisees envers les citoyens."}
+    {dir:"Egalite de Traitement", nom:"Detection de discrimination dans l attribution de services", type:"ML / Audit de biais", classif:"haut", art:"Annexe III / Art. 5", desc:"Controle de l equite des decisions automatisees envers les citoyens."},
+    {dir:"DSI Publique", nom:"Chatbot d orientation des demarches citoyennes", type:"LLM conversationnel", classif:"limite", art:"Art. 50", desc:"Assistance conversationnelle pour orienter les usagers vers le bon service."},
+    {dir:"Securite Publique", nom:"Analyse predictive de zones a risque (prevention)", type:"ML predictif", classif:"haut", art:"Annexe III point 6 (application de la loi)", desc:"Identification de zones necessitant un renforcement preventif, sous strict encadrement."},
+    {dir:"Action Sociale", nom:"Detection de situations de vulnerabilite", type:"ML / Classification", classif:"haut", art:"Annexe III point 5(a)", desc:"Priorisation des dossiers d aide sociale selon criteres de vulnerabilite."}
   ]
 };
-
-window.USECASES_GENERIC = USECASES_GENERIC;
 window.USECASES_SECTOR = USECASES_SECTOR;
 
 var CLASSIF_BADGE = {inacceptable:"chip-r", haut:"chip-r", limite:"chip-o", minimal:"chip-g"};
