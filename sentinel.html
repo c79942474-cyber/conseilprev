@@ -1143,6 +1143,11 @@ textarea.form-el{min-height:86px;resize:vertical}
 .uc-desc{font-size:11px;color:var(--muted);line-height:1.5;flex:1}
 .uc-art{font-size:9px;font-family:var(--mono);color:var(--accent)}
 
+
+.fria-cross-links{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;padding-top:10px;border-top:1px solid var(--rule)}
+.fria-cross-link{font-size:10px;font-family:var(--mono);color:var(--blue);text-decoration:none}
+.fria-cross-link:hover{text-decoration:underline}
+
 </style>
 <style id="cpc-styles">
 /* ══ CHATBOT SENTINEL AI — CONSEILPREV ══ */
@@ -8427,6 +8432,7 @@ window.regOpenModal = function(id){
         regField("Responsable", '<input type="text" id="rf-resp" class="reg-input" value="'+val("responsable")+'" placeholder="Ex: Responsable IA">')
       ])
     + regField("Fournisseur / Éditeur", '<input type="text" id="rf-fournisseur" class="reg-input" value="'+val("fournisseur")+'" placeholder="Ex: Interne, OpenAI, fournisseur tiers">')
+    + (sys && (sys.classification==="haut"||sys.classification==="inacceptable") ? '<div class="radar-registre-info radar-registre-warn">⚖️ Système à haut risque — une <a href="#" onclick="regCloseModal();go(\'fria\',null,\'CONFORMITÉ\',\'Évaluation FRIA\');return false;">évaluation FRIA</a> peut être requise (Art. 27).</div>' : '')
     + '</div></div>'
     + '<div class="mat-modal-foot">'
     + '<button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="regSave()" title="Enregistrer ce systeme dans le registre.">'+(sys?"Enregistrer les modifications":"Ajouter au registre")+'</button>'
@@ -9216,7 +9222,7 @@ function auditApplySectorRelevance(){
 (function(){
 'use strict';
 
-var FRIA_SECTOR = "telecom";
+var FRIA_SECTOR = "telecom"; /* sera synchronisee avec window.matGetCur() au chargement de la page */
 var FRIA_REG_CACHE = [];
 var FRIA_ANSWERS = {}; /* { systemeId: { droitId: niveau (0-3) } } */
 
@@ -9297,6 +9303,10 @@ window.friaAnswer = function(sysId, droitId, val){
   FRIA_ANSWERS[sysId][droitId] = val;
   friaSaveAnswers();
   friaRefreshSystemScore(sysId);
+  if(typeof window.cpLogActivity === "function"){
+    var sys = FRIA_REG_CACHE.find(function(s){ return s.id === sysId; });
+    window.cpLogActivity("Évaluation FRIA mise à jour"+(sys?" — "+sys.nom:""), "action");
+  }
 };
 
 function friaComputeScore(sysId){
@@ -9358,6 +9368,24 @@ function friaRenderSysCard(systeme){
         + '<div class="act-item"><div class="act-dot"></div><div class="act-t">Documenter les biais identifiés et leur traitement (Art. 10)</div></div>'
         + '<div class="act-item"><div class="act-dot"></div><div class="act-t">Verifier l enregistrement dans la base UE (Art. 49, 71)</div></div></div>';
     }
+
+    /* Connexion croisee : score Audit IA Act du secteur + positionnement Matrice (probabilite x impact) deja calcules ailleurs */
+    var auditPct = 0, auditTotal = 0, auditDone = 0;
+    if(window.AUDIT_SECTIONS){
+      window.AUDIT_SECTIONS.forEach(function(sec){
+        sec.items.forEach(function(item){
+          auditTotal++;
+          var st = (window.AUDIT_STATE && window.AUDIT_STATE[item.id]) || "none";
+          if(st === "done") auditDone++;
+        });
+      });
+      auditPct = auditTotal>0 ? Math.round(auditDone/auditTotal*100) : 0;
+    }
+    var probLabel = systeme.statut_conformite === "non_conforme" ? "Très élevée" : systeme.statut_conformite === "en_cours" ? "Élevée" : systeme.statut_conformite === "conforme" ? "Très faible" : "Moyenne";
+    head += '<div class="fria-cross-links">'
+      + '<a href="#" onclick="openAuditTab();return false;" class="fria-cross-link">📋 Audit IA Act : <strong>'+auditPct+'%</strong> conforme →</a>'
+      + '<a href="#" onclick="go(\'matrice\',null,\'RISQUES\',\'Matrice risques\');return false;" class="fria-cross-link">📊 Matrice : probabilité <strong>'+probLabel+'</strong> →</a>'
+      + '</div>';
   }
 
   head += '</div>';
@@ -9416,7 +9444,13 @@ function friaRenderAll(){
 var _friaOrigGo = window.go;
 window.go = function(id){
   var r = _friaOrigGo ? _friaOrigGo.apply(this, arguments) : undefined;
-  if(id === "fria"){ setTimeout(function(){ friaInitSectorBar(); friaFetch(); }, 50); }
+  if(id === "fria"){
+    setTimeout(function(){
+      /* Synchroniser avec le secteur actif global (Maturite/RACI/Radar) au lieu de rester sur "telecom" par defaut */
+      if(typeof window.matGetCur === "function") FRIA_SECTOR = window.matGetCur();
+      friaInitSectorBar(); friaFetch();
+    }, 50);
+  }
   return r;
 };
 
