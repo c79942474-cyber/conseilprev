@@ -1161,6 +1161,20 @@ textarea.form-el{min-height:86px;resize:vertical}
 .histo-btn-sm:hover{border-color:var(--accent)}
 .histo-btn-danger{color:var(--accent);border-color:rgba(184,50,34,.25)}
 
+/* ══ RECHERCHE SIDEBAR ══ */
+.sb-search-wrap{position:relative;padding:0 16px 14px}
+.sb-search-input{width:100%;box-sizing:border-box;font-size:11.5px;padding:8px 30px 8px 30px;border:1px solid var(--rule2);border-radius:6px;background:var(--bg);color:var(--ink);outline:none;font-family:var(--sans)}
+.sb-search-input:focus{border-color:var(--accent)}
+.sb-search-icon{position:absolute;left:26px;top:9px;font-size:11px;color:var(--muted2);pointer-events:none}
+.sb-search-clear{position:absolute;right:24px;top:7px;font-size:13px;color:var(--muted2);cursor:pointer;display:none;background:none;border:none;padding:2px}
+.sb-search-clear:hover{color:var(--accent)}
+.sb-search-hint{font-size:9px;color:var(--muted2);text-align:right;padding-right:4px;margin-top:3px;font-family:var(--mono)}
+
+/* ══ BOUTON RETOUR EN HAUT ══ */
+#nav-back-to-top{position:fixed;bottom:90px;right:28px;width:40px;height:40px;border-radius:50%;background:var(--ink);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 3px 12px rgba(0,0,0,.25);opacity:0;pointer-events:none;transform:translateY(8px);transition:all .25s;z-index:9990}
+#nav-back-to-top.visible{opacity:.88;pointer-events:all;transform:translateY(0)}
+#nav-back-to-top:hover{opacity:1;background:var(--accent)}
+
 </style>
 <style id="cpc-styles">
 /* ══ CHATBOT SENTINEL AI — CONSEILPREV ══ */
@@ -1336,6 +1350,12 @@ textarea.form-el{min-height:86px;resize:vertical}
   <div class="sb-brand">
     <div class="sb-logo">Sentinel <span class="sb-logo-ai">AI</span></div>
     <div class="sb-sub">Cartographie des risques</div>
+  </div>
+  <div class="sb-search-wrap">
+    <span class="sb-search-icon">🔍</span>
+    <input type="text" id="sb-search-input" class="sb-search-input" placeholder="Rechercher une page…" oninput="sbSearchFilter(this.value)" title="Filtrer les pages de navigation par mot-cle.">
+    <button id="sb-search-clear" class="sb-search-clear" onclick="sbSearchClear()" title="Effacer la recherche">×</button>
+    <div class="sb-search-hint">Raccourci : /</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Navigation</div>
@@ -1878,7 +1898,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       <div class="sim-nav">
         <span></span>
         <span class="sim-progress">Étape 1 / 4</span>
-        <button class="sim-btn-next" onclick="simNext(1)">Suivant →</button>
+        <button class="sim-btn-next" onclick="simNext(1)" title="Passer a l etape suivante du simulateur.">Suivant →</button>
       </div>
     </div>
 
@@ -1942,7 +1962,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       <div class="sim-nav">
         <button class="sim-btn-prev" onclick="simPrev(2)">← Retour</button>
         <span class="sim-progress">Étape 2 / 4</span>
-        <button class="sim-btn-next" onclick="simNext(2)">Suivant →</button>
+        <button class="sim-btn-next" onclick="simNext(2)" title="Passer a l etape suivante du simulateur.">Suivant →</button>
       </div>
     </div>
 
@@ -2024,7 +2044,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       <div class="sim-nav">
         <button class="sim-btn-prev" onclick="simPrev(3)">← Retour</button>
         <span class="sim-progress">Étape 3 / 4</span>
-        <button class="sim-btn-next" onclick="simNext(3)">Suivant →</button>
+        <button class="sim-btn-next" onclick="simNext(3)" title="Passer a l etape suivante du simulateur.">Suivant →</button>
       </div>
     </div>
 
@@ -5705,6 +5725,7 @@ try { cjRender(); } catch(e){ console.error('cjRender init error:', e); }
 })();
 
 </script>
+<button id="nav-back-to-top" title="Retour en haut de page">↑</button>
 <!-- CHATBOT CONSEILPREV SENTINEL v2 -->
 <button id="cpcBtn" onclick="cpcToggle()" aria-label="Assistant Sentinel">
   <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
@@ -6629,7 +6650,7 @@ function matRender(){
   if(bar){
     bar.innerHTML = Object.keys(MAT_SECTORS).map(function(k){
       var sec = MAT_SECTORS[k];
-      return '<button class="mat-sector-btn'+(k===MAT_CUR?' on':'')+'" onclick="matSelect(\''+k+'\')"><span class="mat-ico">'+sec.icon+'</span>'+sec.label+'</button>';
+      return '<button class="mat-sector-btn'+(k===MAT_CUR?' on':'')+'" title="Selectionner ce secteur pour recalculer l audit de maturite." onclick="matSelect(\''+k+'\')"><span class="mat-ico">'+sec.icon+'</span>'+sec.label+'</button>';
     }).join("");
   }
 
@@ -6762,8 +6783,8 @@ function matRender(){
       + '<div class="mat-section-sub">Cliquez sur un livrable pour le générer avec l\'IA à partir des résultats de votre audit, puis téléchargez-le en PDF ou Word.</div>'
       + '<div class="mat-deliv-apibar">'
       + '<span class="mat-deliv-apilbl">Moteur IA :'+tip("Choisissez le modele qui redige les livrables. Mistral Large (api.mistral.ai) ou Claude Sonnet (Anthropic via le proxy serveur). En cas d indisponibilite de Claude, bascule automatique sur Mistral.")+'</span>'
-      + '<button class="mat-api-btn'+(curApi==="mistral"?" on":"")+'" id="mat-api-mistral" onclick="matSetDelivApi(\'mistral\')">Mistral Large</button>'
-      + '<button class="mat-api-btn'+(curApi==="claude"?" on":"")+'" id="mat-api-claude" onclick="matSetDelivApi(\'claude\')">Claude Sonnet</button>'
+      + '<button class="mat-api-btn'+(curApi==="mistral"?" on":"")+'" id="mat-api-mistral" onclick="matSetDelivApi(\'mistral\')" title="Utiliser Mistral Large pour generer ce livrable.">Mistral Large</button>'
+      + '<button class="mat-api-btn'+(curApi==="claude"?" on":"")+'" id="mat-api-claude" onclick="matSetDelivApi(\'claude\')" title="Utiliser Claude Sonnet pour generer ce livrable.">Claude Sonnet</button>'
       + '</div>'
       + '<div class="mat-deliv-grid">'
       + window.MAT_DELIVERABLES.map(function(d){
@@ -7264,7 +7285,7 @@ window.matGenerateDeliverable = function(delivId){
     + '<div class="mat-modal-head">'
     + '<div><div class="mat-modal-eyebrow">Livrable · '+s.label+' · '+(api==="claude"?"Claude":"Mistral")+'</div>'
     + '<div class="mat-modal-title">'+deliv.icon+' '+deliv.title+'</div></div>'
-    + '<button class="mat-modal-close" onclick="matCloseDeliv()">×</button>'
+    + '<button class="mat-modal-close" onclick="matCloseDeliv()" title="Fermer cette fenêtre">×</button>'
     + '</div>'
     + '<div class="mat-modal-body" id="mat-modal-body">'
     + '<div class="mat-modal-loading"><div class="mat-spinner"></div>'
@@ -7419,7 +7440,7 @@ window.procOpenDoc = function(stepNum){
     + '<div class="mat-modal-head">'
     + '<div><div class="mat-modal-eyebrow">Procedure d audit · Étape '+stepNum+' · '+s.label+'</div>'
     + '<div class="mat-modal-title">'+doc.icon+' '+doc.docTitle+'</div></div>'
-    + '<button class="mat-modal-close" onclick="procClose()">×</button>'
+    + '<button class="mat-modal-close" onclick="procClose()" title="Fermer cette fenêtre">×</button>'
     + '</div>'
     + '<div class="mat-modal-body" id="proc-modal-body">'
     + procSetupHTML(doc, s)
@@ -7449,15 +7470,15 @@ function procSetupHTML(doc, s){
     + '<p class="proc-upload-desc">Importez un fichier (CSV, TXT, JSON, ou texte de documentation) décrivant vos systèmes IA, processus ou données. L IA l analysera pour personnaliser le document. <strong>Vos données sont transmises au moteur IA sélectionné ('+(api==="claude"?"Claude":"Mistral")+') uniquement pour cette génération et ne sont pas stockées sur nos serveurs.</strong></p>'
     + '<input type="file" id="proc-file" accept=".csv,.txt,.json,.md,.tsv" onchange="procFileLoad(this)" style="display:none">'
     + '<div class="proc-upload-actions">'
-    + '<button class="proc-upload-btn" onclick="document.getElementById(\'proc-file\').click()">Choisir un fichier</button>'
+    + '<button class="proc-upload-btn" onclick="document.getElementById(\'proc-file\').click()" title="Importer un fichier de donnees client (CSV, TXT, JSON - 200KB max).">Choisir un fichier</button>'
     + '<span id="proc-file-name" class="proc-file-name">Aucun fichier sélectionné</span>'
     + '</div>'
     + '<textarea id="proc-data-text" class="proc-data-text" placeholder="Ou collez directement ici vos données / notes / description de systèmes IA à analyser…"></textarea>'
     + '</div>'
     + '<div class="proc-api-row">'
     + '<span class="mat-deliv-apilbl">Moteur IA :</span>'
-    + '<button class="mat-api-btn'+(api==="mistral"?" on":"")+'" id="proc-api-mistral" onclick="procSetApi(\'mistral\')">Mistral Large</button>'
-    + '<button class="mat-api-btn'+(api==="claude"?" on":"")+'" id="proc-api-claude" onclick="procSetApi(\'claude\')">Claude Sonnet</button>'
+    + '<button class="mat-api-btn'+(api==="mistral"?" on":"")+'" id="proc-api-mistral" onclick="procSetApi(\'mistral\')" title="Utiliser Mistral Large pour generer ce guide.">Mistral Large</button>'
+    + '<button class="mat-api-btn'+(api==="claude"?" on":"")+'" id="proc-api-claude" onclick="procSetApi(\'claude\')" title="Utiliser Claude Sonnet pour generer ce guide.">Claude Sonnet</button>'
     + '</div>'
     + '<button class="proc-generate-btn" onclick="procGenerate()" title="Lancer la generation du guide methodologique par IA.">Générer le document méthodologique →</button>'
     + '</div>';
@@ -7717,7 +7738,7 @@ window.matOpenBudget = function(){
     + '<div class="mat-modal-head">'
     + '<div><div class="mat-modal-eyebrow">Budget previsionnel detaille · '+b.sector+'</div>'
     + '<div class="mat-modal-title">Budget previsionnel sectoriel</div></div>'
-    + '<button class="mat-modal-close" onclick="matCloseModal(\'mat-budget-modal\')">×</button>'
+    + '<button class="mat-modal-close" onclick="matCloseModal(\'mat-budget-modal\')" title="Fermer cette fenêtre">×</button>'
     + '</div>'
     + '<div class="mat-modal-body">' + budgetBodyHTML(b) + '</div>'
     + '<div class="mat-modal-foot">'
@@ -7804,7 +7825,7 @@ window.matOpenKPIs = function(){
     + '<div class="mat-modal-head">'
     + '<div><div class="mat-modal-eyebrow">Tableau de bord · '+s.label+'</div>'
     + '<div class="mat-modal-title">KPIs sectoriels detailles</div></div>'
-    + '<button class="mat-modal-close" onclick="matCloseModal(\'mat-kpi-modal\')">×</button>'
+    + '<button class="mat-modal-close" onclick="matCloseModal(\'mat-kpi-modal\')" title="Fermer cette fenêtre">×</button>'
     + '</div>'
     + '<div class="mat-modal-body">'
     + '<p class="proc-intro">Indicateurs de pilotage de la conformite IA, incluant '+(kpis.length-7)+' KPIs specifiques au secteur '+s.label+'. Cibles, frequences de mesure, outils et responsables.</p>'
@@ -8226,7 +8247,7 @@ window.raciGenerateDoc = function(){
   modal.innerHTML = '<div class="mat-modal-box mat-modal-wide">'
     + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Cartographie des parties prenantes · '+s.label+'</div>'
     + '<div class="mat-modal-title">📐 Document de cartographie complet</div></div>'
-    + '<button class="mat-modal-close" onclick="raciCloseModal()">×</button></div>'
+    + '<button class="mat-modal-close" onclick="raciCloseModal()" title="Fermer cette fenêtre">×</button></div>'
     + '<div class="mat-modal-body" id="raci-modal-body"><div class="mat-modal-loading"><div class="mat-spinner"></div>Generation en cours par '+(api==="claude"?"Claude":"Mistral")+'…</div></div>'
     + '<div class="mat-modal-foot" id="raci-modal-foot" style="display:none">'
     + '<button class="mat-export-btn mat-export-pdf" onclick="raciDocPDF()" title="Telecharger le document de cartographie genere par IA au format PDF.">↓ PDF</button>'
@@ -8450,7 +8471,7 @@ window.regOpenModal = function(id){
   modal.innerHTML = '<div class="mat-modal-box">'
     + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">'+(sys?"Modifier le système":"Nouveau système IA")+'</div>'
     + '<div class="mat-modal-title">'+(sys?sys.nom:"Ajouter au registre")+'</div></div>'
-    + '<button class="mat-modal-close" onclick="regCloseModal()">×</button></div>'
+    + '<button class="mat-modal-close" onclick="regCloseModal()" title="Fermer cette fenêtre">×</button></div>'
     + '<div class="mat-modal-body">'
     + '<div class="reg-form">'
     + regField("Nom du système *", '<input type="text" id="rf-nom" class="reg-input" value="'+val("nom")+'" placeholder="Ex: Chatbot service client">')
@@ -10069,7 +10090,7 @@ window.jursOpenCriteria = function(){
   modal.innerHTML = '<div class="mat-modal-box">'
     + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Méthodologie Sentinel AI</div>'
     + '<div class="mat-modal-title">12 critères d évaluation</div></div>'
-    + '<button class="mat-modal-close" onclick="document.getElementById(\'jurs-criteria-modal\').classList.remove(\'on\')">×</button></div>'
+    + '<button class="mat-modal-close" onclick="document.getElementById(\'jurs-criteria-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
     + '<div class="mat-modal-body">'
     + '<p style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:16px">Chaque juridiction est évaluée sur ces 12 critères (échelle 0-10). Le score global affiché est une moyenne pondérée. Pour les juridictions majeures, le détail par critère est consultable via le bouton "Voir le détail" sur la fiche.</p>'
     + JURS_CRITERIA.map(function(c,i){
@@ -10100,7 +10121,7 @@ window.jursOpenDetail = function(code, name){
   modal.innerHTML = '<div class="mat-modal-box">'
     + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Détail des 12 critères</div>'
     + '<div class="mat-modal-title">'+name+'</div></div>'
-    + '<button class="mat-modal-close" onclick="document.getElementById(\'jurs-detail-modal\').classList.remove(\'on\')">×</button></div>'
+    + '<button class="mat-modal-close" onclick="document.getElementById(\'jurs-detail-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
     + '<div class="mat-modal-body">' + bodyHtml + '</div>'
     + '<div class="mat-modal-foot"><button class="mat-export-btn" style="background:var(--blue);color:#fff" onclick="jursRefreshAI(\''+code+'\',\''+name+'\')">🤖 Actualiser via IA</button></div>'
     + '</div>';
@@ -10231,8 +10252,8 @@ window.jursInitToolbar = function(){
     + '<a href="#" onclick="jursOpenCriteria();return false;" style="font-size:11px;font-family:var(--mono);color:var(--accent);text-decoration:underline">Voir les 12 critères d évaluation →</a>'
     + '<span style="flex:1"></span>'
     + '<span class="radar-sector-lbl">Mise à jour IA :</span>'
-    + '<button class="mat-api-btn on" id="jurs-api-mistral" onclick="jursSetApi(\'mistral\')">Mistral</button>'
-    + '<button class="mat-api-btn" id="jurs-api-claude" onclick="jursSetApi(\'claude\')">Claude</button>'
+    + '<button class="mat-api-btn on" id="jurs-api-mistral" onclick="jursSetApi(\'mistral\')" title="Utiliser Mistral Large pour la mise a jour IA.">Mistral</button>'
+    + '<button class="mat-api-btn" id="jurs-api-claude" onclick="jursSetApi(\'claude\')" title="Utiliser Claude Sonnet pour la mise a jour IA.">Claude</button>'
     + '</div>';
 };
 
@@ -10496,7 +10517,7 @@ function cardsModal(title, eyebrow, bodyHtml, footHtml){
   if(!modal){ modal = document.createElement("div"); modal.id = "cards-modal"; modal.className = "mat-modal"; document.body.appendChild(modal); }
   modal.innerHTML = '<div class="mat-modal-box mat-modal-wide">'
     + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">'+eyebrow+'</div><div class="mat-modal-title">'+title+'</div></div>'
-    + '<button class="mat-modal-close" onclick="document.getElementById(\'cards-modal\').classList.remove(\'on\')">×</button></div>'
+    + '<button class="mat-modal-close" onclick="document.getElementById(\'cards-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
     + '<div class="mat-modal-body">'+bodyHtml+'</div>'
     + (footHtml ? '<div class="mat-modal-foot">'+footHtml+'</div>' : '')
     + '</div>';
@@ -10702,7 +10723,7 @@ window.trainingOpenFiche = function(key){
   modal.innerHTML = '<div class="mat-modal-box mat-modal-wide">'
     + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Fiche de formation · '+f.duree+' · Niveau '+f.niveau+'</div>'
     + '<div class="mat-modal-title">'+f.icon+' '+f.title+'</div></div>'
-    + '<button class="mat-modal-close" onclick="document.getElementById(\'training-modal\').classList.remove(\'on\')">×</button></div>'
+    + '<button class="mat-modal-close" onclick="document.getElementById(\'training-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
     + '<div class="mat-modal-body">'
     + '<div class="radar-registre-info radar-registre-ok" style="margin-bottom:18px">👥 Public concerné : <strong>'+f.public+'</strong></div>'
     + '<div class="sec-h" style="margin-bottom:10px;font-size:14px">Objectifs pédagogiques</div>'
@@ -10952,7 +10973,7 @@ window.guideOpenModal = function(pid){
   modal.innerHTML = '<div class="mat-modal-box">'
     + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Guide d utilisation</div>'
     + '<div class="mat-modal-title">'+(guide?guide.title:"Aide")+'</div></div>'
-    + '<button class="mat-modal-close" onclick="document.getElementById(\'guide-modal\').classList.remove(\'on\')">×</button></div>'
+    + '<button class="mat-modal-close" onclick="document.getElementById(\'guide-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
     + '<div class="mat-modal-body">'+bodyHtml+'</div>'
     + '</div>';
   modal.classList.add("on");
@@ -11456,7 +11477,7 @@ window.ucOpenLibrary = function(){
   modal.innerHTML = '<div class="mat-modal-box mat-modal-wide">'
     + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Bibliothèque de cas d usage IA</div>'
     + '<div class="mat-modal-title">📚 Identifier un cas d usage à étudier</div></div>'
-    + '<button class="mat-modal-close" onclick="document.getElementById(\'uc-modal\').classList.remove(\'on\')">×</button></div>'
+    + '<button class="mat-modal-close" onclick="document.getElementById(\'uc-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
     + '<div class="mat-modal-body">'
     + '<div class="radar-sector-bar" style="margin-bottom:18px"><span class="radar-sector-lbl">Filtrer par secteur :</span>'
     + '<select id="uc-sector-select" class="radar-sector-select" onchange="ucRenderContent()"><option value="">— Cas génériques uniquement —</option>'+sectorOptions+'</select>'
@@ -11575,7 +11596,7 @@ window.histoOpenDetail = function(id){
     modal.innerHTML = '<div class="mat-modal-box mat-modal-wide">'
       + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">'+pageLabel+' · #'+calc.id+'</div>'
       + '<div class="mat-modal-title">'+(calc.label||calc.type_calcul)+'</div></div>'
-      + '<button class="mat-modal-close" onclick="document.getElementById(\'histo-modal\').classList.remove(\'on\')">×</button></div>'
+      + '<button class="mat-modal-close" onclick="document.getElementById(\'histo-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
       + '<div class="mat-modal-body">'
       + '<div class="sec-h" style="margin-bottom:8px;font-size:13px">Paramètres saisis</div>' + jsonToRows(params)
       + '<div class="sec-h" style="margin:18px 0 8px;font-size:13px">Résultat obtenu</div>' + jsonToRows(resultat)
@@ -11735,6 +11756,108 @@ window.histoSaveRaci = function(){
     else alert('Erreur lors de l enregistrement.');
   });
 };
+
+</script>
+
+<script>
+/* ══ NAVIGATION FLUIDE — recherche sidebar, Echap, retour-haut ══ */
+(function(){
+'use strict';
+
+/* 1. RECHERCHE SIDEBAR — filtre les items de navigation en temps reel */
+window.sbSearchFilter = function(query){
+  var q = query.trim().toLowerCase();
+  var items = document.querySelectorAll('.sb-item');
+  var sections = document.querySelectorAll('.sb-section');
+  var visibleSectionsMap = {};
+
+  items.forEach(function(item){
+    var text = item.textContent.toLowerCase();
+    var title = (item.getAttribute('title')||'').toLowerCase();
+    var match = !q || text.indexOf(q) !== -1 || title.indexOf(q) !== -1;
+    item.style.display = match ? '' : 'none';
+    if(match){
+      var sec = item.previousElementSibling;
+      while(sec && !sec.classList.contains('sb-section')) sec = sec.previousElementSibling;
+    }
+  });
+
+  /* Masquer les sections sans aucun item visible */
+  sections.forEach(function(sec){
+    var next = sec.nextElementSibling;
+    var hasVisible = false;
+    while(next && !next.classList.contains('sb-section')){
+      if(next.classList.contains('sb-item') && next.style.display !== 'none') hasVisible = true;
+      next = next.nextElementSibling;
+    }
+    sec.style.display = (!q || hasVisible) ? '' : 'none';
+  });
+
+  var clearBtn = document.getElementById('sb-search-clear');
+  if(clearBtn) clearBtn.style.display = q ? 'block' : 'none';
+};
+
+window.sbSearchClear = function(){
+  var input = document.getElementById('sb-search-input');
+  if(input){ input.value = ''; window.sbSearchFilter(''); input.focus(); }
+};
+
+/* 2. RACCOURCI ECHAP — ferme la derniere modale ouverte */
+document.addEventListener('keydown', function(e){
+  if(e.key !== 'Escape') return;
+  var openModals = document.querySelectorAll('.mat-modal.on, #guide-modal.on, #histo-modal.on, #uc-modal.on, #cards-modal.on');
+  if(openModals.length > 0){
+    openModals[openModals.length-1].classList.remove('on');
+    return;
+  }
+  /* Raccourci bonus : Echap vide aussi la recherche sidebar si active */
+  var searchInput = document.getElementById('sb-search-input');
+  if(searchInput && document.activeElement === searchInput && searchInput.value){
+    window.sbSearchClear();
+  }
+});
+
+/* Raccourci "/" pour focus rapide sur la recherche sidebar (standard sur de nombreux sites) */
+document.addEventListener('keydown', function(e){
+  if(e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA'){
+    e.preventDefault();
+    var input = document.getElementById('sb-search-input');
+    if(input) input.focus();
+  }
+});
+
+/* 3. BOUTON RETOUR EN HAUT — apparait apres 400px de scroll sur le contenu principal */
+function navInitBackToTop(){
+  var btn = document.getElementById('nav-back-to-top');
+  var mainEl = document.querySelector('.main') || document.querySelector('main') || window;
+  if(!btn) return;
+  var scrollTarget = (mainEl === window) ? window : mainEl;
+
+  function onScroll(){
+    var scrollY = (scrollTarget === window) ? window.scrollY : scrollTarget.scrollTop;
+    btn.classList.toggle('visible', scrollY > 400);
+  }
+  scrollTarget.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  btn.onclick = function(){
+    if(scrollTarget === window) window.scrollTo({top:0, behavior:'smooth'});
+    else scrollTarget.scrollTo({top:0, behavior:'smooth'});
+  };
+}
+
+document.addEventListener('DOMContentLoaded', function(){ setTimeout(navInitBackToTop, 300); });
+if(document.readyState !== 'loading'){ setTimeout(navInitBackToTop, 300); }
+
+/* Reinitialiser le scroll-detection a chaque navigation (le conteneur .main peut changer de hauteur) */
+var _navOrigGo = window.go;
+window.go = function(){
+  var r = _navOrigGo ? _navOrigGo.apply(this, arguments) : undefined;
+  setTimeout(navInitBackToTop, 150);
+  return r;
+};
+
+})();
 
 </script>
 </html>
