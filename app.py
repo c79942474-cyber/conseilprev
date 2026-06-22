@@ -2618,7 +2618,7 @@ def chat_claude():
 # bloquer le developpement.
 # ══════════════════════════════════════════════════════════
 import sqlite3
-from datetime import datetime
+from datetime import datetime, timedelta
 
 DATABASE_URL = os.environ.get('DATABASE_URL', '').strip()
 REGISTRE_USE_PG = bool(DATABASE_URL)
@@ -2975,6 +2975,191 @@ def veille_notifier():
         return jsonify({"message": "Aucune alerte a haut impact a notifier."})
     lines = [f"- {it.get('title','')} ({it.get('source','')}) : {it.get('raison','')}" for it in haut_impact]
     return jsonify({"count": len(haut_impact), "summary": "\n".join(lines)})
+
+
+# ══════════════════════════════════════════════════════════
+# HISTORIQUE DES CALCULS — stockage persistant, tracabilite RGPD
+# Reutilise le moteur de connexion deja en place (registre_get_db / registre_sql).
+# Conservation : 3 ans par defaut (delai de prescription contractuelle), purge
+# automatique des entrees plus anciennes a chaque demarrage (Art. 5(1)(e) RGPD —
+# limitation de la conservation). Acces partage client + CONSEILPREV (support/audit).
+# ══════════════════════════════════════════════════════════
+HISTO_RETENTION_DAYS = 365 * 3  # 3 ans
+
+def histo_init_db():
+    conn = registre_get_db()
+    cur = conn.cursor()
+    if REGISTRE_USE_PG:
+        cur.execute('''CREATE TABLE IF NOT EXISTS calculs_historique (
+            id SERIAL PRIMARY KEY,
+            page_origine TEXT NOT NULL,
+            type_calcul TEXT NOT NULL,
+            parametres_entree TEXT NOT NULL,
+            resultat TEXT NOT NULL,
+            label TEXT,
+            modifie_de INTEGER,
+            date_creation TEXT NOT NULL,
+            date_maj TEXT NOT NULL
+        )''')
+    else:
+        cur.execute('''CREATE TABLE IF NOT EXISTS calculs_historique (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            page_origine TEXT NOT NULL,
+            type_calcul TEXT NOT NULL,
+            parametres_entree TEXT NOT NULL,
+            resultat TEXT NOT NULL,
+            label TEXT,
+            modifie_de INTEGER,
+            date_creation TEXT NOT NULL,
+            date_maj TEXT NOT NULL
+        )''')
+    conn.commit()
+
+    # Purge RGPD : suppression des entrees au-dela de la duree de conservation (Art. 5(1)(e))
+    try:
+        cutoff = (datetime.utcnow() - timedelta(days=HISTO_RETENTION_DAYS)).isoformat()
+        cur.execute(registre_sql(
+            'DELETE FROM calculs_historique WHERE date_creation < %s',
+            'DELETE FROM calculs_historique WHERE date_creation < ?'
+        ), (cutoff,))
+        purged = cur.rowcount
+        conn.commit()
+        if purged and purged > 0:
+            logger.info(f"HISTORIQUE_CALCULS — purge RGPD : {purged} entree(s) > {HISTO_RETENTION_DAYS} jours supprimee(s)")
+    except Exception as _e:
+        logger.warning(f"HISTORIQUE_CALCULS — purge RGPD echouee : {_e}")
+    conn.close()
+
+try:
+    histo_init_db()
+except Exception as _e:
+    logger.error(f"HISTORIQUE_CALCULS — erreur init DB : {_e}")
+
+def histo_row_to_dict(row):
+    if isinstance(row, dict):
+        d = dict(row)
+    else:
+        d = {k: row[k] for k in row.keys()}
+    return {
+        'id': d['id'], 'page_origine': d['page_origine'], 'type_calcul': d['type_calcul'],
+        'parametres_entree': d['parametres_entree'], 'resultat': d['resultat'],
+        'label': d['label'], 'modifie_de': d['modifie_de'],
+        'date_creation': d['date_creation'], 'date_maj': d['date_maj']
+    }
+
+@app.route('/api/historique', methods=['GET'])
+@rate_limit(limit=60, window=60)
+def historique_list():
+    page_filter = request.args.get('page_origine', '').strip()
+    conn = registre_get_db()
+    cur = conn.cursor()
+    if page_filter:
+        cur.execute(registre_sql(
+            'SELECT * FROM calculs_historique WHERE page_origine = %s ORDER BY date_maj DESC',
+            'SELECT * FROM calculs_historique WHERE page_origine = ? ORDER BY date_maj DESC'
+        ), (page_filter,))
+    else:
+        cur.execute('SELECT * FROM calculs_historique ORDER BY date_maj DESC')
+    rows = cur.fetchall()
+    conn.close()
+    return jsonify({
+        'calculs': [histo_row_to_dict(r) for r in rows],
+        'retention_jours': HISTO_RETENTION_DAYS,
+        'retention_info': "Conservation 3 ans (delai de prescription contractuelle usuel) — Art. 5(1)(e) RGPD. Suppression manuelle possible a tout moment."
+    })
+
+@app.route('/api/historique', methods=['POST'])
+@rate_limit(limit=60, window=60)
+def historique_create():
+    data = request.get_json(force=True) or {}
+    page_origine = (data.get('page_origine') or '').strip()[:50]
+    type_calcul = (data.get('type_calcul') or '').strip()[:100]
+    parametres = data.get('parametres_entree')
+    resultat = data.get('resultat')
+    label = (data.get('label') or '')[:200]
+    modifie_de = data.get('modifie_de')
+
+    if not page_origine or not type_calcul or parametres is None or resultat is None:
+        return jsonify({'error': 'page_origine, type_calcul, parametres_entree et resultat sont obligatoires'}), 400
+
+    params_json = json.dumps(parametres, ensure_ascii=False)[:20000]
+    resultat_json = json.dumps(resultat, ensure_ascii=False)[:20000]
+    now = datetime.utcnow().isoformat()
+
+    conn = registre_get_db()
+    cur = conn.cursor()
+    values = (page_origine, type_calcul, params_json, resultat_json, label, modifie_de, now, now)
+    if REGISTRE_USE_PG:
+        cur.execute('''INSERT INTO calculs_historique
+            (page_origine, type_calcul, parametres_entree, resultat, label, modifie_de, date_creation, date_maj)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id''', values)
+        new_id = cur.fetchone()['id']
+    else:
+        cur.execute('''INSERT INTO calculs_historique
+            (page_origine, type_calcul, parametres_entree, resultat, label, modifie_de, date_creation, date_maj)
+            VALUES (?,?,?,?,?,?,?,?)''', values)
+        new_id = cur.lastrowid
+    conn.commit()
+    cur.execute(registre_sql('SELECT * FROM calculs_historique WHERE id=%s', 'SELECT * FROM calculs_historique WHERE id=?'), (new_id,))
+    row = cur.fetchone()
+    conn.close()
+    return jsonify({'calcul': histo_row_to_dict(row)}), 201
+
+@app.route('/api/historique/<int:calc_id>', methods=['PUT'])
+@rate_limit(limit=60, window=60)
+def historique_update(calc_id):
+    data = request.get_json(force=True) or {}
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql('SELECT * FROM calculs_historique WHERE id=%s', 'SELECT * FROM calculs_historique WHERE id=?'), (calc_id,))
+    existing = cur.fetchone()
+    if not existing:
+        conn.close()
+        return jsonify({'error': 'Calcul introuvable'}), 404
+    existing_d = histo_row_to_dict(existing)
+    now = datetime.utcnow().isoformat()
+    parametres = data.get('parametres_entree', json.loads(existing_d['parametres_entree']))
+    resultat = data.get('resultat', json.loads(existing_d['resultat']))
+    label = data.get('label', existing_d['label'])
+    params_json = json.dumps(parametres, ensure_ascii=False)[:20000]
+    resultat_json = json.dumps(resultat, ensure_ascii=False)[:20000]
+    cur.execute(registre_sql(
+        'UPDATE calculs_historique SET parametres_entree=%s, resultat=%s, label=%s, date_maj=%s WHERE id=%s',
+        'UPDATE calculs_historique SET parametres_entree=?, resultat=?, label=?, date_maj=? WHERE id=?'
+    ), (params_json, resultat_json, label, now, calc_id))
+    conn.commit()
+    cur.execute(registre_sql('SELECT * FROM calculs_historique WHERE id=%s', 'SELECT * FROM calculs_historique WHERE id=?'), (calc_id,))
+    row = cur.fetchone()
+    conn.close()
+    return jsonify({'calcul': histo_row_to_dict(row)})
+
+@app.route('/api/historique/<int:calc_id>', methods=['DELETE'])
+@rate_limit(limit=30, window=60)
+def historique_delete(calc_id):
+    """Droit a l effacement (Art. 17 RGPD) — suppression manuelle a la demande du client."""
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql('SELECT id FROM calculs_historique WHERE id=%s', 'SELECT id FROM calculs_historique WHERE id=?'), (calc_id,))
+    existing = cur.fetchone()
+    if not existing:
+        conn.close()
+        return jsonify({'error': 'Calcul introuvable'}), 404
+    cur.execute(registre_sql('DELETE FROM calculs_historique WHERE id=%s', 'DELETE FROM calculs_historique WHERE id=?'), (calc_id,))
+    conn.commit()
+    conn.close()
+    return jsonify({'deleted': calc_id})
+
+@app.route('/api/historique/purge-all', methods=['DELETE'])
+@rate_limit(limit=5, window=60)
+def historique_purge_all():
+    """Droit a l effacement en lot (Art. 17 RGPD) — suppression complete de l historique."""
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute('DELETE FROM calculs_historique')
+    deleted_count = cur.rowcount
+    conn.commit()
+    conn.close()
+    return jsonify({'deleted_count': deleted_count})
 
 
 for route, filename in PAGES.items():
