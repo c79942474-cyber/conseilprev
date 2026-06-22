@@ -9410,10 +9410,17 @@ window.friaSelectSector = function(sectorKey){
 };
 
 function friaFetch(){
+  var holder = document.getElementById("fria-list");
+  if(holder) holder.innerHTML = '<div class="reg-loading">Chargement de vos systèmes IA…</div>';
+  var info = document.getElementById("fria-registre-info");
+  if(info){ info.innerHTML = 'Vérification de l applicabilité Art. 27 en cours…'; info.className = "radar-registre-info"; }
   fetch('/api/registre').then(function(r){ return r.json(); }).then(function(d){
     FRIA_REG_CACHE = d.systemes || [];
     friaRenderAll();
-  }).catch(function(){ FRIA_REG_CACHE = []; friaRenderAll(); });
+  }).catch(function(){
+    FRIA_REG_CACHE = [];
+    if(holder) holder.innerHTML = '<div class="reg-loading" style="color:var(--accent)">Erreur de chargement. Rechargez la page ou réessayez dans quelques secondes.</div>';
+  });
 }
 
 function friaRenderAll(){
