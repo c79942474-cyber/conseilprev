@@ -1148,6 +1148,19 @@ textarea.form-el{min-height:86px;resize:vertical}
 .fria-cross-link{font-size:10px;font-family:var(--mono);color:var(--blue);text-decoration:none}
 .fria-cross-link:hover{text-decoration:underline}
 
+/* ══ HISTORIQUE DES CALCULS ══ */
+.histo-row{background:var(--white);border:1px solid var(--rule);border-radius:6px;padding:14px 18px;margin-bottom:10px;cursor:pointer;transition:border-color .15s}
+.histo-row:hover{border-color:var(--accent)}
+.histo-row-top{display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap}
+.histo-page-chip{font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.03em;background:rgba(28,90,138,.08);color:var(--blue);padding:2px 8px;border-radius:3px}
+.histo-modif-tag{font-size:9px;font-family:var(--mono);background:rgba(196,124,26,.1);color:var(--orange);padding:2px 8px;border-radius:3px}
+.histo-date{font-size:10px;color:var(--muted2);font-family:var(--mono);margin-left:auto}
+.histo-label{font-size:13px;font-weight:600;color:var(--ink)}
+.histo-actions{display:flex;gap:8px;margin-top:10px}
+.histo-btn-sm{font-size:10px;font-family:var(--mono);padding:5px 10px;border-radius:4px;border:1px solid var(--rule2);background:var(--bg);color:var(--ink);cursor:pointer}
+.histo-btn-sm:hover{border-color:var(--accent)}
+.histo-btn-danger{color:var(--accent);border-color:rgba(184,50,34,.25)}
+
 </style>
 <style id="cpc-styles">
 /* ══ CHATBOT SENTINEL AI — CONSEILPREV ══ */
@@ -1340,6 +1353,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-item" onclick="go('regs',this,'CONFORMITÉ','Réglementations')" title="Textes officiels, simulateur de conformite AI Act et audit structure par article."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 8h10M7 12h7M7 16h5"/></svg></span>Réglementations</div>
     <div class="sb-item" onclick="go('veille',this,'CONFORMITÉ','Veille qualifiée')" title="Actualites reglementaires evaluees par IA selon leur impact sur vos systemes IA reels."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12h3M19 12h3M12 2v3M12 19v3M5.6 5.6l2 2M16.4 16.4l2 2M5.6 18.4l2-2M16.4 7.6l2-2"/></svg></span>Veille qualifiée</div>
     <div class="sb-item" onclick="go('evals',this,'CONFORMITÉ','Mes évaluations')" title="Historique de vos simulations et audits de conformite enregistres."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>Mes évaluations<span class="sb-badge">3</span></div>
+    <div class="sb-item" onclick="go('historique',this,'CONFORMITÉ','Historique des calculs')" title="Stockage persistant et tracable de tous vos calculs (RGPD - conservation 3 ans, droit a l effacement)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/><path d="M3.05 11a9 9 0 1 0 .5-4"/></svg></span>Historique des calculs</div>
     <div class="sb-item" onclick="go('fria',this,'CONFORMITÉ','Évaluation FRIA')" title="Evaluation d impact sur les droits fondamentaux (Art. 27 EU AI Act) - obligation du deployeur, applicable a partir du 2 aout 2026."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg></span>FRIA</div>
     <div class="sb-section">Espace</div>
     <div class="sb-item" onclick="go('equipe',this,'ESPACE','Équipe')" title="Espace de collaboration pour l equipe en charge du programme de conformite IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></span>Espace équipe</div>
@@ -2307,6 +2321,7 @@ textarea.form-el{min-height:86px;resize:vertical}
   <div id="sanc-prefill-holder"></div>
   <div class="sanc-calc"><div class="form-grid2"><div class="form-row"><label class="form-lbl">Type de violation</label><select class="form-el" id="s-type"><option value="interdit">Pratique interdite (Art. 5)</option><option value="haut" selected>Système haut risque non conforme</option><option value="transparence">Obligation de transparence</option><option value="info">Informations incorrectes aux autorités</option></select></div><div class="form-row"><label class="form-lbl">Chiffre d'affaires annuel mondial</label><input class="form-el" type="number" id="s-ca" placeholder="Ex : 50000000" value="50000000"></div></div><div class="form-grid2"><div class="form-row"><label class="form-lbl">Taille de l'entreprise</label><select class="form-el" id="s-size"><option value="tpe">TPE / Startup</option><option value="pme">PME</option><option value="eti" selected>ETI</option><option value="ge">Grande entreprise</option></select></div><div class="form-row"><label class="form-lbl">Récidive ?</label><select class="form-el" id="s-recid"><option value="non">Non — première infraction</option><option value="oui">Oui — infraction répétée</option></select></div></div><button class="submit" onclick="calcSanctions()" title="Calculer l exposition financiere estimee en cas de non-conformite.">Calculer l'exposition →</button></div>
   <div class="sanc-result" id="sanc-result"><div style="display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:start"><div><div class="sanc-basis">Amende maximale estimée</div><div class="sanc-amount" id="sanc-amount">—</div><div style="font-size:11px;color:var(--muted);margin-top:4px" id="sanc-basis-txt"></div></div><div id="sanc-details"></div></div></div>
+  <button class="mat-export-btn" style="background:var(--green);color:#fff;margin-top:14px" onclick="histoSaveSanctions()" title="Enregistrer ce calcul dans l historique persistant et tracable.">💾 Enregistrer dans l historique</button>
 </div>
 
 <!-- BENCHMARK -->
@@ -2351,6 +2366,7 @@ textarea.form-el{min-height:86px;resize:vertical}
   </div>
 
   <div id="pricing-results"></div>
+  <button class="mat-export-btn" style="background:var(--green);color:#fff;margin-top:14px" onclick="histoSavePricing()" title="Enregistrer ce calcul dans l historique persistant et tracable.">💾 Enregistrer dans l historique</button>
 
   <div class="tbl-wrap" style="padding:24px;margin-top:20px">
     <div class="tbl-head" style="border:none;padding:0 0 16px"><span class="tbl-title">Projection sur 6 mois — SaaS classique vs Hybride RaaS</span></div>
@@ -2381,6 +2397,28 @@ textarea.form-el{min-height:86px;resize:vertical}
 <div class="page" id="p-templates"><span class="eyebrow">Ressources</span><h1 class="page-h">Documentation &amp; <em>modèles</em></h1><p class="page-lead">Documents réellement générables dans Sentinel AI — cliquez pour accéder directement à l outil de génération.</p><div class="doc-grid" id="doc-grid"></div><div class="rule"></div><div class="sec-h" style="margin-bottom:6px">Guides pratiques</div><div class="sec-sub">Fiches synthétiques téléchargeables</div><div class="doc-grid" id="guides-grid"></div></div>
 
 <!-- FRIA -->
+<div class="page" id="p-historique">
+  <span class="eyebrow">Conformité RGPD</span><h1 class="page-h">Historique des <em>calculs</em></h1>
+  <p class="page-lead">Tous vos calculs effectués sur Sentinel AI (simulations, audits, tarification, sanctions...), stockés de façon persistante, modifiables et traçables.</p>
+
+  <div id="histo-rgpd-info" class="radar-registre-info radar-registre-ok" style="margin-bottom:20px">Chargement…</div>
+
+  <div class="reg-toolbar">
+    <select id="histo-filter-select" class="reg-input" style="max-width:260px" onchange="histoRenderPage()">
+      <option value="">— Toutes les pages —</option>
+      <option value="simulateur">Simulateur IA Act</option>
+      <option value="sanctions">Calculateur sanctions</option>
+      <option value="pricing">Tarification résultats</option>
+      <option value="maturite">Audit de maturité</option>
+      <option value="fria">Évaluation FRIA</option>
+      <option value="audit">Audit IA Act</option>
+      <option value="raci">Parties prenantes (RACI)</option>
+    </select>
+  </div>
+
+  <div id="histo-list"></div>
+</div>
+
 <div class="page" id="p-fria">
   <span class="eyebrow">Évaluation FRIA</span><h1 class="page-h">Fundamental Rights <em>Impact Assessment</em></h1><p class="page-lead">Évaluation d'impact sur les droits fondamentaux — Art. 27 EU AI Act, obligation du <strong>déployeur</strong> (distincte d'une DPIA RGPD). Applicable à partir du 2 août 2026 pour 3 catégories de déployeurs : organismes publics, prestataires de service public, et scoring crédit/assurance.</p>
 
@@ -4110,6 +4148,7 @@ var PAGE_META = {
   regs:     {section:'CONFORMITÉ',      label:'Réglementations'},
   veille:   {section:'CONFORMITÉ',      label:'Veille qualifiée'},
   evals:    {section:'CONFORMITÉ',      label:'Mes évaluations'},
+  historique: {section:'CONFORMITÉ',  label:'Historique des calculs'},
   alertes:  {section:'ALERTES',         label:'7 alertes actives'},
   veille:   {section:'VEILLE',          label:'Actualités'},
   audit:    {section:'AUDIT',           label:'Audit de conformité'},
@@ -11442,6 +11481,183 @@ window.ucRenderContent = function(){
 };
 
 })();
+
+</script>
+
+<script>
+/* ══ HISTORIQUE DES CALCULS — stockage persistant, tracabilite RGPD ══ */
+/* Conservation 3 ans (Art. 5(1)(e) RGPD), modification possible, droit a
+   l effacement (Art. 17 RGPD). Acces partage client + CONSEILPREV (support/audit). */
+(function(){
+'use strict';
+
+window.histoSave = function(pageOrigine, typeCalcul, parametres, resultat, label, modifieDe){
+  return fetch('/api/historique', {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      page_origine: pageOrigine, type_calcul: typeCalcul,
+      parametres_entree: parametres, resultat: resultat,
+      label: label || '', modifie_de: modifieDe || null
+    })
+  }).then(function(r){ return r.json(); }).catch(function(){ return null; });
+};
+
+var HISTO_PAGE_LABELS = {
+  simulateur: "Simulateur IA Act", sanctions: "Calculateur sanctions",
+  pricing: "Tarification résultats", maturite: "Audit de maturité",
+  fria: "Évaluation FRIA", audit: "Audit IA Act", raci: "Parties prenantes (RACI)"
+};
+window.HISTO_PAGE_LABELS = HISTO_PAGE_LABELS;
+
+function histoFetch(pageFilter){
+  var url = '/api/historique' + (pageFilter ? '?page_origine='+encodeURIComponent(pageFilter) : '');
+  return fetch(url).then(function(r){ return r.json(); });
+}
+
+window.histoRenderPage = function(){
+  var holder = document.getElementById("histo-list");
+  var infoEl = document.getElementById("histo-rgpd-info");
+  if(!holder) return;
+  holder.innerHTML = '<div class="reg-loading">Chargement de votre historique…</div>';
+
+  var filterEl = document.getElementById("histo-filter-select");
+  var pageFilter = filterEl ? filterEl.value : '';
+
+  histoFetch(pageFilter).then(function(d){
+    var calculs = d.calculs || [];
+    if(infoEl){
+      infoEl.innerHTML = '🔒 <strong>Traçabilité RGPD</strong> — '+(d.retention_info||'Conservation 3 ans (Art. 5(1)(e) RGPD).')+' Accessible à vous et à CONSEILPREV (support/audit). <a href="#" onclick="histoPurgeAll();return false;" style="color:var(--accent)">Supprimer tout mon historique →</a>';
+    }
+    if(calculs.length === 0){
+      holder.innerHTML = '<div class="reg-empty">Aucun calcul enregistré pour le moment. Les calculs effectués sur le Simulateur, le Calculateur de sanctions, la Tarification par résultats, l Audit de maturité et FRIA s enregistrent automatiquement ici.</div>';
+      return;
+    }
+    holder.innerHTML = calculs.map(function(c){
+      var pageLabel = HISTO_PAGE_LABELS[c.page_origine] || c.page_origine;
+      var d1 = new Date(c.date_creation).toLocaleDateString('fr-FR', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+      var modifTag = c.modifie_de ? '<span class="histo-modif-tag">Modifié depuis #'+c.modifie_de+'</span>' : '';
+      return '<div class="histo-row" onclick="histoOpenDetail('+c.id+')">'
+        + '<div class="histo-row-top"><span class="histo-page-chip">'+pageLabel+'</span>'+modifTag+'<span class="histo-date">'+d1+'</span></div>'
+        + '<div class="histo-label">'+(c.label || c.type_calcul)+'</div>'
+        + '<div class="histo-actions" onclick="event.stopPropagation()">'
+        + '<button class="histo-btn-sm" onclick="histoOpenDetail('+c.id+')">Voir le détail</button>'
+        + '<button class="histo-btn-sm histo-btn-danger" onclick="histoDelete('+c.id+')">Supprimer</button>'
+        + '</div></div>';
+    }).join('');
+  }).catch(function(){
+    holder.innerHTML = '<div class="reg-empty" style="color:var(--accent)">Erreur de chargement de l historique.</div>';
+  });
+};
+
+window.histoOpenDetail = function(id){
+  histoFetch().then(function(d){
+    var calc = (d.calculs||[]).find(function(c){ return c.id === id; });
+    if(!calc) return;
+    var params = JSON.parse(calc.parametres_entree);
+    var resultat = JSON.parse(calc.resultat);
+    var pageLabel = HISTO_PAGE_LABELS[calc.page_origine] || calc.page_origine;
+
+    var modal = document.getElementById("histo-modal");
+    if(!modal){ modal = document.createElement("div"); modal.id = "histo-modal"; modal.className = "mat-modal"; document.body.appendChild(modal); }
+
+    function jsonToRows(obj){
+      return Object.keys(obj).map(function(k){
+        var v = obj[k];
+        if(typeof v === "object" && v !== null) v = JSON.stringify(v);
+        return '<div class="reg-item"><div class="reg-name">'+k+'</div><div class="reg-val" style="font-size:13px">'+v+'</div></div>';
+      }).join('');
+    }
+
+    modal.innerHTML = '<div class="mat-modal-box mat-modal-wide">'
+      + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">'+pageLabel+' · #'+calc.id+'</div>'
+      + '<div class="mat-modal-title">'+(calc.label||calc.type_calcul)+'</div></div>'
+      + '<button class="mat-modal-close" onclick="document.getElementById(\'histo-modal\').classList.remove(\'on\')">×</button></div>'
+      + '<div class="mat-modal-body">'
+      + '<div class="sec-h" style="margin-bottom:8px;font-size:13px">Paramètres saisis</div>' + jsonToRows(params)
+      + '<div class="sec-h" style="margin:18px 0 8px;font-size:13px">Résultat obtenu</div>' + jsonToRows(resultat)
+      + '<div style="font-size:10px;color:var(--muted2);margin-top:16px">Créé le '+new Date(calc.date_creation).toLocaleString('fr-FR')+(calc.date_maj!==calc.date_creation?' · Modifié le '+new Date(calc.date_maj).toLocaleString('fr-FR'):'')+'</div>'
+      + '</div>'
+      + '<div class="mat-modal-foot">'
+      + '<button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="histoReopenInPage(\''+calc.page_origine+'\')">Rouvrir dans '+pageLabel+' →</button>'
+      + '</div></div>';
+    modal.classList.add("on");
+  });
+};
+
+window.histoReopenInPage = function(pageOrigine){
+  var modal = document.getElementById("histo-modal");
+  if(modal) modal.classList.remove("on");
+  var navMap = {
+    simulateur: function(){ go('regs',null,'RÉGLEMENTATIONS','Réglementations & Audit IA'); setTimeout(function(){ if(typeof regsTab==="function") regsTab('simulateur',null); },80); },
+    audit: function(){ if(typeof openAuditTab==="function") openAuditTab(); },
+    sanctions: function(){ go('sanctions',null,'ANALYSE','Calculateur sanctions'); },
+    pricing: function(){ go('pricing',null,'ANALYSE','Tarification par résultats'); },
+    maturite: function(){ go('maturite',null,'AUDIT DE MATURITÉ','Audit de maturité IA'); },
+    fria: function(){ go('fria',null,'CONFORMITÉ','Évaluation FRIA'); },
+    raci: function(){ go('parties',null,'GOUVERNANCE','Parties prenantes'); }
+  };
+  if(navMap[pageOrigine]) navMap[pageOrigine]();
+};
+
+window.histoDelete = function(id){
+  if(!confirm("Supprimer définitivement ce calcul de l historique ? (Droit à l effacement — Art. 17 RGPD)")) return;
+  fetch('/api/historique/'+id, {method:'DELETE'}).then(function(){ window.histoRenderPage(); });
+};
+
+window.histoPurgeAll = function(){
+  if(!confirm("Supprimer DÉFINITIVEMENT tout votre historique de calculs ? Cette action est irréversible.")) return;
+  fetch('/api/historique/purge-all', {method:'DELETE'}).then(function(){ window.histoRenderPage(); });
+};
+
+var _histoOrigGo = window.go;
+window.go = function(id){
+  var r = _histoOrigGo ? _histoOrigGo.apply(this, arguments) : undefined;
+  if(id === "historique") setTimeout(window.histoRenderPage, 80);
+  return r;
+};
+
+})();
+
+</script>
+
+<script>
+/* ══ BOUTONS DE SAUVEGARDE EXPLICITE — Historique des calculs ══ */
+window.histoSavePricing = function(){
+  var nbSystemes = document.getElementById('pricing-nb-systemes').value;
+  var auditDepart = document.getElementById('pricing-audit-depart').value;
+  var caAnnuel = document.getElementById('pricing-ca').value;
+  var secteurEl = document.getElementById('pricing-secteur');
+  var secteur = secteurEl ? secteurEl.options[secteurEl.selectedIndex].text : '';
+  var resultsEl = document.getElementById('pricing-results');
+  var montants = resultsEl ? (resultsEl.textContent.match(/[\d\s]+€/g) || []) : [];
+
+  window.histoSave('pricing', 'Simulation tarification par résultats',
+    {secteur: secteur, nb_systemes: nbSystemes, score_audit_depart: auditDepart+'%', ca_annuel: caAnnuel+'€'},
+    {synthese: montants.join(' / ')},
+    'Tarification — ' + secteur + ' (' + nbSystemes + ' systèmes)'
+  ).then(function(r){
+    if(r && r.calcul) alert('✅ Calcul enregistré dans l historique (#'+r.calcul.id+').');
+    else alert('Erreur lors de l enregistrement.');
+  });
+};
+
+window.histoSaveSanctions = function(){
+  var type = document.getElementById('s-type').value;
+  var ca = document.getElementById('s-ca').value;
+  var size = document.getElementById('s-size').value;
+  var rec = document.getElementById('s-recid').value;
+  var amount = document.getElementById('sanc-amount').textContent;
+  var basis = document.getElementById('sanc-basis-txt').textContent;
+
+  window.histoSave('sanctions', 'Calcul d exposition aux sanctions',
+    {type_infraction: type, ca: ca+'€', taille_entreprise: size, recidive: rec},
+    {amende_estimee: amount, base_legale: basis},
+    'Sanctions — ' + basis + ' (' + amount + ')'
+  ).then(function(r){
+    if(r && r.calcul) alert('✅ Calcul enregistré dans l historique (#'+r.calcul.id+').');
+    else alert('Erreur lors de l enregistrement.');
+  });
+};
 
 </script>
 </html>
