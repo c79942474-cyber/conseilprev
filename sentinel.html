@@ -2087,6 +2087,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       <div class="sim-nav" style="margin-top:8px">
         <button class="sim-reset-btn" onclick="simReset()" title="Recommencer une nouvelle simulation depuis le debut.">↺ Nouvelle simulation</button>
         <button class="sim-btn-next" id="sim-add-registre-btn" onclick="simAddToRegistre()" style="background:var(--green)" title="Enregistrer ce systeme directement dans le Registre IA.">+ Ajouter au Registre IA</button>
+        <button class="sim-btn-next" style="background:#1C5A8A" onclick="histoSaveSimulateur()" title="Enregistrer cette simulation dans l historique persistant et tracable (RGPD).">💾 Historique</button>
         <button class="sim-btn-next" onclick="openAuditTab()" title="Ouvrir l audit de conformite EU AI Act complet (32 points de controle).">Lancer l'audit complet →</button>
       </div>
     </div>
@@ -2249,6 +2250,7 @@ textarea.form-el{min-height:86px;resize:vertical}
   <p class="page-lead">Évaluation structurée selon les 8 piliers de l'EU AI Act, déclinée par secteur d'activité. Analyse, scoring, plan d'action et livrables téléchargeables.</p>
 
   <div class="mat-sector-bar" id="mat-sector-bar"></div>
+  <div style="text-align:right;margin-bottom:8px"><button class="mat-export-btn" style="background:#1C5A8A;color:#fff" onclick="histoSaveMaturite()" title="Enregistrer cet audit de maturite dans l historique persistant et tracable (RGPD).">💾 Enregistrer dans l historique</button></div>
   <div id="mat-content"></div>
 </div>
 
@@ -8198,6 +8200,7 @@ window.raciRenderPage = function(){
     + '<button class="mat-export-btn mat-export-word" onclick="raciExportWord()" title="Telecharger la matrice RACI brute au format Word.">↓ Word</button>'
     + '<button class="mat-export-btn" style="background:var(--blue);color:#fff" onclick="raciMail()" title="Envoyer la matrice RACI par email a un collegue.">✉ Envoyer a un collegue</button>'
     + '<button class="mat-export-btn" style="background:#1C1C1C;color:#fff" onclick="raciGenerateDoc()" title="Generer par IA le document complet de cartographie (analyse, recommandations, plan de communication).">🤖 Generer la cartographie complete par IA</button>'
+    + '<button class="mat-export-btn" style="background:#1C5A8A;color:#fff" onclick="histoSaveRaci()" title="Enregistrer l etat actuel de la matrice RACI dans l historique persistant et tracable (RGPD).">💾 Enregistrer dans l historique</button>'
     + '<button class="mat-export-btn" style="background:var(--bg);color:var(--muted);border:1px solid var(--rule2)" onclick="raciReset()" title="Reinitialiser la matrice RACI au profil de reference CONSEILPREV.">↻ Reinitialiser</button>'
     + '</div></div>'
     + '<div class="raci-table-wrap-outer">'
@@ -9424,7 +9427,8 @@ function friaRenderSysCard(systeme){
     head += '<div class="fria-cross-links">'
       + '<a href="#" onclick="openAuditTab();return false;" class="fria-cross-link">📋 Audit IA Act : <strong>'+auditPct+'%</strong> conforme →</a>'
       + '<a href="#" onclick="go(\'matrice\',null,\'RISQUES\',\'Matrice risques\');return false;" class="fria-cross-link">📊 Matrice : probabilité <strong>'+probLabel+'</strong> →</a>'
-      + '</div>';
+      + '</div>'
+      + '<button class="mat-export-btn" style="background:#1C5A8A;color:#fff;margin-top:10px;width:100%" onclick="histoSaveFria('+systeme.id+',\''+systeme.nom.replace(/'/g,"")+'\')" title="Enregistrer cette evaluation FRIA dans l historique persistant et tracable (RGPD).">💾 Enregistrer dans l historique</button>';
   }
 
   head += '</div>';
@@ -11655,6 +11659,79 @@ window.histoSaveSanctions = function(){
     'Sanctions — ' + basis + ' (' + amount + ')'
   ).then(function(r){
     if(r && r.calcul) alert('✅ Calcul enregistré dans l historique (#'+r.calcul.id+').');
+    else alert('Erreur lors de l enregistrement.');
+  });
+};
+
+</script>
+
+<script>
+/* ══ EXTENSION HISTORIQUE — Simulateur, Maturite, FRIA, RACI ══ */
+
+window.histoSaveSimulateur = function(){
+  if(typeof SIM_DATA === "undefined" || !SIM_DATA.name){
+    alert("Aucune simulation à enregistrer. Complétez d abord le simulateur.");
+    return;
+  }
+  var classif = simClassify();
+  window.histoSave('simulateur', 'Classification système IA (Simulateur)',
+    {nom_systeme: SIM_DATA.name, secteur: SIM_DATA.secteur||'', type: SIM_DATA.type||'', description: SIM_DATA.desc||''},
+    {classification: classif.level, score: classif.score, article: classif.article},
+    'Simulation — ' + SIM_DATA.name
+  ).then(function(r){
+    if(r && r.calcul) alert('✅ Simulation enregistrée dans l historique (#'+r.calcul.id+').');
+    else alert('Erreur lors de l enregistrement.');
+  });
+};
+
+window.histoSaveMaturite = function(){
+  var sectorKey = (typeof window.matGetCur === "function") ? window.matGetCur() : "telecom";
+  var sectorLabel = (window.MAT_SECTORS && window.MAT_SECTORS[sectorKey]) ? window.MAT_SECTORS[sectorKey].label : sectorKey;
+  var globalScore = window.matGlobalScore ? window.matGlobalScore(sectorKey).toFixed(1) : '—';
+  var pillarScores = {};
+  if(window.MAT_PILLARS && window.matPillarScore){
+    window.MAT_PILLARS.forEach(function(p){ pillarScores[p.id] = window.matPillarScore(sectorKey, p.id); });
+  }
+  window.histoSave('maturite', 'Audit de maturité IA',
+    {secteur: sectorLabel},
+    {score_global: globalScore + '/5', scores_par_pilier: pillarScores},
+    'Maturité — ' + sectorLabel + ' (' + globalScore + '/5)'
+  ).then(function(r){
+    if(r && r.calcul) alert('✅ Audit de maturité enregistré dans l historique (#'+r.calcul.id+').');
+    else alert('Erreur lors de l enregistrement.');
+  });
+};
+
+window.histoSaveFria = function(sysId, sysNom){
+  var result = (typeof friaComputeScore === "function") ? friaComputeScore(sysId) : null;
+  if(!result){ alert("Répondez au questionnaire avant d enregistrer cette évaluation."); return; }
+  window.histoSave('fria', 'Évaluation FRIA (Art. 27)',
+    {systeme: sysNom, systeme_id: sysId, questions_repondues: result.answeredCount + '/' + result.totalCount},
+    {score_fria: result.score + '/10', niveau_risque: (result.riskPct*100).toFixed(0) + '%'},
+    'FRIA — ' + sysNom + ' (' + result.score + '/10)'
+  ).then(function(r){
+    if(r && r.calcul) alert('✅ Évaluation FRIA enregistrée dans l historique (#'+r.calcul.id+').');
+    else alert('Erreur lors de l enregistrement.');
+  });
+};
+
+window.histoSaveRaci = function(){
+  if(typeof RACI_STATE === "undefined" || !RACI_STATE){
+    alert("Aucune matrice RACI à enregistrer.");
+    return;
+  }
+  var sectorKey = (typeof RACI_SECTOR !== "undefined") ? RACI_SECTOR : "telecom";
+  var sectorLabel = (window.MAT_SECTORS && window.MAT_SECTORS[sectorKey]) ? window.MAT_SECTORS[sectorKey].label : sectorKey;
+  var nbAssignations = 0;
+  Object.keys(RACI_STATE).forEach(function(pid){
+    Object.keys(RACI_STATE[pid]).forEach(function(rid){ if(RACI_STATE[pid][rid]) nbAssignations++; });
+  });
+  window.histoSave('raci', 'Snapshot matrice RACI',
+    {secteur: sectorLabel},
+    {nb_assignations_actives: nbAssignations, etat_matrice: RACI_STATE},
+    'RACI — ' + sectorLabel + ' (' + nbAssignations + ' assignations)'
+  ).then(function(r){
+    if(r && r.calcul) alert('✅ État de la matrice RACI enregistré dans l historique (#'+r.calcul.id+').');
     else alert('Erreur lors de l enregistrement.');
   });
 };
