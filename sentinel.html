@@ -11860,4 +11860,42 @@ window.go = function(){
 })();
 
 </script>
+
+<script>
+/* ══ CORRECTIF DE CONNEXION — Aperçu : stats reelles connectees a JURS (etaient figees a 0) ══ */
+(function(){
+'use strict';
+
+window.apercuUpdateStats = function(){
+  if(!window.JURS || window.JURS.length === 0) return;
+  var jurs = window.JURS;
+  var c1El = document.getElementById("c1");
+  var c2El = document.getElementById("c2");
+  var c3El = document.getElementById("c3");
+  var sevEl = document.querySelector("#p-apercu .stat:nth-child(2) .stat-val");
+
+  if(c1El) c1El.textContent = jurs.length;
+  var stricts = jurs.filter(function(j){ return j.s >= 7; });
+  if(c2El) c2El.textContent = stricts.length;
+  var avecCadre = jurs.filter(function(j){ return j.reg && j.reg.trim().length > 0; });
+  if(c3El) c3El.textContent = avecCadre.length;
+  if(sevEl){
+    var moyenne = jurs.reduce(function(a,j){ return a+j.s; }, 0) / jurs.length;
+    sevEl.textContent = moyenne.toFixed(1);
+  }
+};
+
+document.addEventListener("DOMContentLoaded", function(){ setTimeout(window.apercuUpdateStats, 200); });
+if(document.readyState !== "loading"){ setTimeout(window.apercuUpdateStats, 200); }
+
+var _apercuOrigGo = window.go;
+window.go = function(id){
+  var r = _apercuOrigGo ? _apercuOrigGo.apply(this, arguments) : undefined;
+  if(id === "apercu") setTimeout(window.apercuUpdateStats, 50);
+  return r;
+};
+
+})();
+
+</script>
 </html>
