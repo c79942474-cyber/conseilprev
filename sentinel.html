@@ -7853,35 +7853,43 @@ window.matKpiMail = function(){
 var RACI_SECTOR_ROLES = {
   telecom: [
     {id:"reseau_ops", label:"Responsable Operations Reseau"},
-    {id:"relation_client", label:"Relation Client / Service Client"}
+    {id:"relation_client", label:"Relation Client / Service Client"},
+    {id:"resp_plateforme", label:"Responsable de Plateforme IA"}
   ],
   energie: [
     {id:"exploitant", label:"Exploitant Infrastructure Critique"},
-    {id:"securite_ot", label:"Securite OT/SCADA"}
+    {id:"securite_ot", label:"Securite OT/SCADA"},
+    {id:"resp_plateforme", label:"Responsable de Plateforme IA"}
   ],
   sante: [
     {id:"medecin", label:"Praticien / Responsable Medical"},
-    {id:"qualite_dm", label:"Responsable Qualite Dispositifs Medicaux"}
+    {id:"qualite_dm", label:"Responsable Qualite Dispositifs Medicaux"},
+    {id:"resp_plateforme", label:"Responsable de Plateforme IA"}
   ],
   finance: [
     {id:"risk_credit", label:"Direction des Risques / Credit"},
-    {id:"conformite_acpr", label:"Conformite ACPR / Regulateur"}
+    {id:"conformite_acpr", label:"Conformite ACPR / Regulateur"},
+    {id:"resp_plateforme", label:"Responsable de Plateforme IA"}
   ],
   industrie: [
     {id:"production", label:"Responsable Production / QHSE"},
-    {id:"maintenance", label:"Responsable Maintenance Industrielle"}
+    {id:"maintenance", label:"Responsable Maintenance Industrielle"},
+    {id:"resp_plateforme", label:"Responsable de Plateforme IA"}
   ],
   transport: [
     {id:"exploitation_transport", label:"Responsable Exploitation / Securite Transport"},
-    {id:"homologation", label:"Charge d Homologation Reglementaire"}
+    {id:"homologation", label:"Charge d Homologation Reglementaire"},
+    {id:"resp_plateforme", label:"Responsable de Plateforme IA"}
   ],
   it: [
     {id:"product_owner", label:"Product Owner / Tech Lead"},
-    {id:"devsecops", label:"DevSecOps"}
+    {id:"devsecops", label:"DevSecOps"},
+    {id:"resp_plateforme", label:"Responsable de Plateforme IA"}
   ],
   public: [
     {id:"agent_public", label:"Agent Instructeur / Service Public"},
-    {id:"defenseur_droits", label:"Correspondant Egalite de Traitement"}
+    {id:"defenseur_droits", label:"Correspondant Egalite de Traitement"},
+    {id:"resp_plateforme", label:"Responsable de Plateforme IA"}
   ]
 };
 
@@ -7949,7 +7957,11 @@ var RACI_PROCESSES_BASE = [
 /* Roles / parties prenantes generiques (colonnes de la matrice) */
 var RACI_ROLES_BASE = [
   {id:"direction", label:"Direction Generale / Comex"},
+  {id:"caio", label:"CAIO (Chief AI Officer)"},
+  {id:"cto", label:"CTO"},
+  {id:"cdio", label:"CDIO (Chief Digital & Information Officer)"},
   {id:"resp_ia", label:"Responsable IA"},
+  {id:"ai_biz_partner", label:"AI Business Partners"},
   {id:"dpo", label:"DPO"},
   {id:"comite", label:"Comite de Gouvernance IA"},
   {id:"juridique", label:"Juridique / Conformite"},
@@ -7978,20 +7990,20 @@ function defaultRaci(){
   var d = {};
   raciGetProcesses().forEach(function(p){ d[p.id] = {}; raciGetRoles().forEach(function(r){ d[p.id][r.id] = ""; }); });
   var presets = {
-    p1:{resp_ia:"R", comite:"A", data:"C", juridique:"C", metiers:"I"},
-    p2:{data:"R", resp_ia:"A", it:"C", juridique:"I"},
-    p3:{resp_ia:"R", juridique:"A", dpo:"C", data:"C", metiers:"C"},
-    p4:{comite:"A", resp_ia:"R", juridique:"C", data:"C", cyber:"C", metiers:"I"},
-    p5:{resp_ia:"R", direction:"A", juridique:"C", comite:"C"},
-    p6:{data:"R", dpo:"A", juridique:"C", it:"I"},
-    p7:{metiers:"R", resp_ia:"A", comite:"I"},
+    p1:{resp_ia:"R", comite:"A", data:"C", juridique:"C", metiers:"I", ai_biz_partner:"C", cto:"I"},
+    p2:{data:"R", resp_ia:"A", it:"C", juridique:"I", resp_plateforme:"C"},
+    p3:{resp_ia:"R", juridique:"A", dpo:"C", data:"C", metiers:"C", ai_biz_partner:"C"},
+    p4:{comite:"A", resp_ia:"R", juridique:"C", data:"C", cyber:"C", metiers:"I", caio:"C", cto:"C"},
+    p5:{resp_ia:"R", direction:"A", juridique:"C", comite:"C", caio:"C", cdio:"I"},
+    p6:{data:"R", dpo:"A", juridique:"C", it:"I", resp_plateforme:"C"},
+    p7:{metiers:"R", resp_ia:"A", comite:"I", ai_biz_partner:"C"},
     p8:{juridique:"R", resp_ia:"A", comite:"I", direction:"I"},
-    p9:{comite:"R", direction:"A", resp_ia:"C", juridique:"C"},
-    p10:{resp_ia:"R", direction:"A", metiers:"I", commercial:"I"},
-    p11:{cyber:"R", resp_ia:"A", dpo:"C", direction:"I", juridique:"C"},
-    p12:{resp_ia:"R", comite:"A", direction:"I"},
-    p13:{juridique:"R", resp_ia:"A", data:"C", it:"C"},
-    p14:{commercial:"R", resp_ia:"A", juridique:"C"}
+    p9:{comite:"R", direction:"A", resp_ia:"C", juridique:"C", cdio:"I"},
+    p10:{resp_ia:"R", direction:"A", metiers:"I", commercial:"I", ai_biz_partner:"C"},
+    p11:{cyber:"R", resp_ia:"A", dpo:"C", direction:"I", juridique:"C", resp_plateforme:"C"},
+    p12:{resp_ia:"R", comite:"A", direction:"I", caio:"I", cdio:"I"},
+    p13:{juridique:"R", resp_ia:"A", data:"C", it:"C", cto:"C"},
+    p14:{commercial:"R", resp_ia:"A", juridique:"C", ai_biz_partner:"C"}
   };
   /* Presets des processus specifiques au secteur actif (deja definis dans RACI_SECTOR_PROCESSES) */
   raciCurSectorProcesses().forEach(function(sp){
