@@ -3162,6 +3162,324 @@ def historique_purge_all():
     return jsonify({'deleted_count': deleted_count})
 
 
+# ══════════════════════════════════════════════════════════
+# RAG — BASE DE CONNAISSANCE (Espace)
+# Upload/download de documents (PDF, DOCX, TXT, CSV), extraction de texte,
+# chunking, embeddings Mistral, recherche hybride : vectorielle (pgvector si
+# disponible) avec repli automatique sur recherche full-text Postgres native
+# (tsvector/tsquery, disponible sur tout plan, y compris gratuit).
+# ══════════════════════════════════════════════════════════
+RAG_PGVECTOR_AVAILABLE = False
+RAG_EMBED_DIM = 1024  # dimension mistral-embed
+RAG_CHUNK_SIZE = 900
+RAG_CHUNK_OVERLAP = 150
+RAG_MAX_FILE_SIZE = 8 * 1024 * 1024  # 8 Mo
+RAG_ALLOWED_EXT = {'.pdf', '.docx', '.txt', '.csv'}
+RAG_PAGES_VALIDES = ['audit', 'registre', 'fria', 'maturite', 'veille', 'raci', 'general']
+
+def rag_init_db():
+    global RAG_PGVECTOR_AVAILABLE
+    conn = registre_get_db()
+    cur = conn.cursor()
+    if REGISTRE_USE_PG:
+        try:
+            cur.execute('CREATE EXTENSION IF NOT EXISTS vector')
+            conn.commit()
+            RAG_PGVECTOR_AVAILABLE = True
+            logger.info("RAG — pgvector active avec succes")
+        except Exception as _e:
+            conn.rollback()
+            RAG_PGVECTOR_AVAILABLE = False
+            logger.warning(f"RAG — pgvector indisponible, repli sur recherche full-text : {_e}")
+
+        cur.execute('''CREATE TABLE IF NOT EXISTS rag_documents (
+            id SERIAL PRIMARY KEY,
+            nom_fichier TEXT NOT NULL,
+            type_mime TEXT NOT NULL,
+            extension TEXT NOT NULL,
+            pages_liees TEXT NOT NULL,
+            taille_octets INTEGER NOT NULL,
+            contenu_fichier BYTEA NOT NULL,
+            nb_chunks INTEGER DEFAULT 0,
+            date_upload TEXT NOT NULL
+        )''')
+        if RAG_PGVECTOR_AVAILABLE:
+            cur.execute(f'''CREATE TABLE IF NOT EXISTS rag_chunks (
+                id SERIAL PRIMARY KEY,
+                document_id INTEGER NOT NULL REFERENCES rag_documents(id) ON DELETE CASCADE,
+                chunk_text TEXT NOT NULL,
+                chunk_index INTEGER NOT NULL,
+                embedding vector({RAG_EMBED_DIM}),
+                search_vector tsvector
+            )''')
+        else:
+            cur.execute('''CREATE TABLE IF NOT EXISTS rag_chunks (
+                id SERIAL PRIMARY KEY,
+                document_id INTEGER NOT NULL REFERENCES rag_documents(id) ON DELETE CASCADE,
+                chunk_text TEXT NOT NULL,
+                chunk_index INTEGER NOT NULL,
+                search_vector tsvector
+            )''')
+        cur.execute("CREATE INDEX IF NOT EXISTS idx_rag_chunks_search ON rag_chunks USING GIN(search_vector)")
+    else:
+        cur.execute('''CREATE TABLE IF NOT EXISTS rag_documents (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nom_fichier TEXT NOT NULL, type_mime TEXT NOT NULL, extension TEXT NOT NULL,
+            pages_liees TEXT NOT NULL, taille_octets INTEGER NOT NULL,
+            contenu_fichier BLOB NOT NULL, nb_chunks INTEGER DEFAULT 0, date_upload TEXT NOT NULL
+        )''')
+        cur.execute('''CREATE TABLE IF NOT EXISTS rag_chunks (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            document_id INTEGER NOT NULL, chunk_text TEXT NOT NULL, chunk_index INTEGER NOT NULL
+        )''')
+    conn.commit()
+    conn.close()
+
+try:
+    rag_init_db()
+except Exception as _e:
+    logger.error(f"RAG — erreur init DB : {_e}")
+
+def rag_extract_text(filename, file_bytes):
+    """Extrait le texte d un fichier selon son extension. Retourne (ok, texte_ou_erreur)."""
+    ext = os.path.splitext(filename)[1].lower()
+    try:
+        if ext == '.txt':
+            return True, file_bytes.decode('utf-8', errors='ignore')
+        elif ext == '.csv':
+            text = file_bytes.decode('utf-8', errors='ignore')
+            return True, text
+        elif ext == '.pdf':
+            from pypdf import PdfReader
+            import io
+            reader = PdfReader(io.BytesIO(file_bytes))
+            pages_text = [p.extract_text() or '' for p in reader.pages]
+            return True, '\n\n'.join(pages_text)
+        elif ext == '.docx':
+            from docx import Document as DocxDocument
+            import io
+            doc = DocxDocument(io.BytesIO(file_bytes))
+            paras = [p.text for p in doc.paragraphs if p.text.strip()]
+            return True, '\n\n'.join(paras)
+        else:
+            return False, f"Extension non supportee : {ext}"
+    except Exception as e:
+        return False, f"Erreur d extraction : {e}"
+
+def rag_chunk_text(text):
+    """Decoupe le texte en chunks avec overlap, en respectant les frontieres de mots."""
+    text = _re.sub(r'\s+', ' ', text).strip()
+    if not text:
+        return []
+    chunks = []
+    start = 0
+    while start < len(text):
+        end = min(start + RAG_CHUNK_SIZE, len(text))
+        chunk = text[start:end]
+        chunks.append(chunk)
+        if end >= len(text):
+            break
+        start = end - RAG_CHUNK_OVERLAP
+    return chunks
+
+def rag_get_embeddings(texts):
+    """Appelle l API Mistral embeddings. Retourne (ok, liste_de_vecteurs_ou_erreur)."""
+    if not MISTRAL_API_KEY:
+        return False, 'no_mistral_key'
+    try:
+        resp = requests.post(
+            'https://api.mistral.ai/v1/embeddings',
+            headers={'Content-Type': 'application/json', 'Authorization': f'Bearer {MISTRAL_API_KEY}'},
+            json={'model': 'mistral-embed', 'input': texts},
+            timeout=30
+        )
+        if resp.ok:
+            data = resp.json()['data']
+            return True, [d['embedding'] for d in data]
+        return False, f'http_{resp.status_code}'
+    except requests.Timeout:
+        return False, 'timeout'
+    except Exception as e:
+        return False, str(e)
+
+@app.route('/api/rag/documents', methods=['GET'])
+@rate_limit(limit=60, window=60)
+def rag_list_documents():
+    page_filter = request.args.get('page', '').strip()
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute('SELECT id, nom_fichier, type_mime, extension, pages_liees, taille_octets, nb_chunks, date_upload FROM rag_documents ORDER BY date_upload DESC')
+    rows = cur.fetchall()
+    conn.close()
+    docs = []
+    for r in rows:
+        d = dict(r) if not isinstance(r, dict) else r
+        pages = (d['pages_liees'] or '').split(',')
+        if page_filter and page_filter not in pages:
+            continue
+        docs.append({
+            'id': d['id'], 'nom_fichier': d['nom_fichier'], 'type_mime': d['type_mime'],
+            'extension': d['extension'], 'pages_liees': pages, 'taille_octets': d['taille_octets'],
+            'nb_chunks': d['nb_chunks'], 'date_upload': d['date_upload']
+        })
+    return jsonify({'documents': docs, 'pgvector_actif': RAG_PGVECTOR_AVAILABLE})
+
+@app.route('/api/rag/upload', methods=['POST'])
+@rate_limit(limit=10, window=60)
+def rag_upload():
+    if 'file' not in request.files:
+        return jsonify({'error': 'Aucun fichier fourni'}), 400
+    f = request.files['file']
+    if not f.filename:
+        return jsonify({'error': 'Nom de fichier invalide'}), 400
+
+    ext = os.path.splitext(f.filename)[1].lower()
+    if ext not in RAG_ALLOWED_EXT:
+        return jsonify({'error': f'Format non supporté. Formats acceptés : {", ".join(RAG_ALLOWED_EXT)}'}), 400
+
+    file_bytes = f.read()
+    if len(file_bytes) > RAG_MAX_FILE_SIZE:
+        return jsonify({'error': f'Fichier trop volumineux (max {RAG_MAX_FILE_SIZE // (1024*1024)} Mo)'}), 400
+
+    pages_liees = request.form.get('pages_liees', 'general').strip()
+    pages_list = [p for p in pages_liees.split(',') if p in RAG_PAGES_VALIDES]
+    if not pages_list:
+        pages_list = ['general']
+
+    ok, text_or_err = rag_extract_text(f.filename, file_bytes)
+    if not ok:
+        return jsonify({'error': text_or_err}), 400
+    if not text_or_err.strip():
+        return jsonify({'error': 'Aucun texte extractible de ce fichier (scan image non-OCR ?)'}), 400
+
+    chunks = rag_chunk_text(text_or_err)
+    if not chunks:
+        return jsonify({'error': 'Texte extrait vide après nettoyage'}), 400
+
+    now = datetime.utcnow().isoformat()
+    safe_name = secure_filename(f.filename)
+    conn = registre_get_db()
+    cur = conn.cursor()
+    values = (safe_name, f.mimetype or 'application/octet-stream', ext, ','.join(pages_list),
+              len(file_bytes), file_bytes,
+              len(chunks), now)
+    if REGISTRE_USE_PG:
+        cur.execute('''INSERT INTO rag_documents
+            (nom_fichier, type_mime, extension, pages_liees, taille_octets, contenu_fichier, nb_chunks, date_upload)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id''', values)
+        doc_id = cur.fetchone()['id']
+    else:
+        cur.execute('''INSERT INTO rag_documents
+            (nom_fichier, type_mime, extension, pages_liees, taille_octets, contenu_fichier, nb_chunks, date_upload)
+            VALUES (?,?,?,?,?,?,?,?)''', values)
+        doc_id = cur.lastrowid
+    conn.commit()
+
+    embed_ok, embeddings_or_err = (True, None)
+    if RAG_PGVECTOR_AVAILABLE:
+        embed_ok, embeddings_or_err = rag_get_embeddings(chunks)
+
+    for i, chunk in enumerate(chunks):
+        embedding = embeddings_or_err[i] if (embed_ok and embeddings_or_err and RAG_PGVECTOR_AVAILABLE) else None
+        if REGISTRE_USE_PG:
+            if RAG_PGVECTOR_AVAILABLE and embedding:
+                cur.execute('''INSERT INTO rag_chunks (document_id, chunk_text, chunk_index, embedding, search_vector)
+                    VALUES (%s,%s,%s,%s, to_tsvector('french', %s))''', (doc_id, chunk, i, embedding, chunk))
+            else:
+                cur.execute('''INSERT INTO rag_chunks (document_id, chunk_text, chunk_index, search_vector)
+                    VALUES (%s,%s,%s, to_tsvector('french', %s))''', (doc_id, chunk, i, chunk))
+        else:
+            cur.execute('INSERT INTO rag_chunks (document_id, chunk_text, chunk_index) VALUES (?,?,?)', (doc_id, chunk, i))
+    conn.commit()
+    conn.close()
+
+    warning = None if embed_ok else "Document indexé en recherche textuelle (embeddings indisponibles)."
+    return jsonify({'document': {'id': doc_id, 'nom_fichier': safe_name, 'nb_chunks': len(chunks)}, 'warning': warning}), 201
+
+@app.route('/api/rag/download/<int:doc_id>', methods=['GET'])
+@rate_limit(limit=30, window=60)
+def rag_download(doc_id):
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql('SELECT * FROM rag_documents WHERE id=%s', 'SELECT * FROM rag_documents WHERE id=?'), (doc_id,))
+    row = cur.fetchone()
+    conn.close()
+    if not row:
+        return jsonify({'error': 'Document introuvable'}), 404
+    d = dict(row) if not isinstance(row, dict) else row
+    content = bytes(d['contenu_fichier'])
+    response = make_response(content)
+    response.headers['Content-Type'] = d['type_mime']
+    response.headers['Content-Disposition'] = f'attachment; filename="{d["nom_fichier"]}"'
+    return response
+
+@app.route('/api/rag/documents/<int:doc_id>', methods=['DELETE'])
+@rate_limit(limit=30, window=60)
+def rag_delete_document(doc_id):
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql('SELECT id FROM rag_documents WHERE id=%s', 'SELECT id FROM rag_documents WHERE id=?'), (doc_id,))
+    if not cur.fetchone():
+        conn.close()
+        return jsonify({'error': 'Document introuvable'}), 404
+    if not REGISTRE_USE_PG:
+        cur.execute('DELETE FROM rag_chunks WHERE document_id=?', (doc_id,))
+    cur.execute(registre_sql('DELETE FROM rag_documents WHERE id=%s', 'DELETE FROM rag_documents WHERE id=?'), (doc_id,))
+    conn.commit()
+    conn.close()
+    return jsonify({'deleted': doc_id})
+
+@app.route('/api/rag/search', methods=['POST'])
+@rate_limit(limit=60, window=60)
+def rag_search():
+    """Recherche hybride : vectorielle (pgvector) si disponible, sinon full-text Postgres."""
+    data = request.get_json(force=True) or {}
+    query = (data.get('query') or '').strip()
+    page = (data.get('page') or '').strip()
+    top_k = min(int(data.get('top_k', 5)), 10)
+    if not query:
+        return jsonify({'error': 'query requis'}), 400
+
+    conn = registre_get_db()
+    cur = conn.cursor()
+
+    page_filter_sql = ''
+    page_params = []
+    if page and REGISTRE_USE_PG:
+        page_filter_sql = "AND d.pages_liees LIKE %s"
+        page_params = [f'%{page}%']
+
+    results = []
+    if RAG_PGVECTOR_AVAILABLE and REGISTRE_USE_PG:
+        embed_ok, embeddings = rag_get_embeddings([query])
+        if embed_ok:
+            query_vec = embeddings[0]
+            sql = f'''SELECT c.chunk_text, d.nom_fichier, d.id as doc_id,
+                      1 - (c.embedding <=> %s::vector) as score
+                      FROM rag_chunks c JOIN rag_documents d ON c.document_id = d.id
+                      WHERE c.embedding IS NOT NULL {page_filter_sql}
+                      ORDER BY c.embedding <=> %s::vector LIMIT %s'''
+            cur.execute(sql, [query_vec] + page_params + [query_vec, top_k])
+            results = [{'texte': r['chunk_text'], 'document': r['nom_fichier'], 'document_id': r['doc_id'], 'score': round(float(r['score']), 3)} for r in cur.fetchall()]
+
+    if not results and REGISTRE_USE_PG:
+        sql = f'''SELECT c.chunk_text, d.nom_fichier, d.id as doc_id,
+                  ts_rank(c.search_vector, to_tsquery('french', %s)) as score
+                  FROM rag_chunks c JOIN rag_documents d ON c.document_id = d.id
+                  WHERE c.search_vector @@ to_tsquery('french', %s) {page_filter_sql}
+                  ORDER BY score DESC LIMIT %s'''
+        try:
+            tsquery = ' | '.join(_re.findall(r'\w+', query))
+            cur.execute(sql, [tsquery, tsquery] + page_params + [top_k])
+            results = [{'texte': r['chunk_text'], 'document': r['nom_fichier'], 'document_id': r['doc_id'], 'score': round(float(r['score']), 3)} for r in cur.fetchall()]
+        except Exception as _e:
+            conn.rollback()
+            logger.warning(f"RAG search fallback error: {_e}")
+
+    conn.close()
+    return jsonify({'resultats': results, 'mode': 'vectoriel' if RAG_PGVECTOR_AVAILABLE else 'texte_integral'})
+
+
 for route, filename in PAGES.items():
     def make_view(fn):
         @rate_limit(limit=60, window=60)
