@@ -1182,6 +1182,10 @@ textarea.form-el{min-height:86px;resize:vertical}
 .rag-pages-checks label{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ink2);cursor:pointer}
 .rag-page-chip{font-size:9px;font-family:var(--mono);text-transform:uppercase;background:rgba(28,90,138,.08);color:var(--blue);padding:2px 8px;border-radius:3px}
 
+
+.rag-progress-track{width:100%;height:6px;background:var(--rule);border-radius:3px;overflow:hidden}
+.rag-progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--accent));border-radius:3px;transition:width .4s ease}
+
 </style>
 <style id="cpc-styles">
 /* ══ CHATBOT SENTINEL AI — CONSEILPREV ══ */
@@ -2478,7 +2482,13 @@ textarea.form-el{min-height:86px;resize:vertical}
         <label><input type="checkbox" value="raci"> Parties prenantes (RACI)</label>
       </div>
     </div>
-    <div id="rag-upload-progress" style="display:none;margin-top:12px" class="reg-loading">Analyse et indexation en cours…</div>
+    <div id="rag-upload-progress" style="display:none;margin-top:14px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span id="rag-progress-label" style="font-size:11.5px;color:var(--ink2)">Import du fichier…</span>
+        <span id="rag-progress-pct" style="font-size:11px;font-family:var(--mono);color:var(--muted)">0%</span>
+      </div>
+      <div class="rag-progress-track"><div id="rag-progress-fill" class="rag-progress-fill" style="width:0%"></div></div>
+    </div>
   </div>
 
   <div class="reg-toolbar">
@@ -12035,35 +12045,99 @@ window.ragHandleFileSelect = function(files){
   if(checkedPages.length === 0) checkedPages = ['general'];
 
   var progressEl = document.getElementById('rag-upload-progress');
+  var labelEl = document.getElementById('rag-progress-label');
+  var pctEl = document.getElementById('rag-progress-pct');
+  var fillEl = document.getElementById('rag-progress-fill');
   if(progressEl) progressEl.style.display = 'block';
+  if(labelEl) labelEl.textContent = 'Envoi et extraction du texte…';
+  if(pctEl) pctEl.textContent = '';
+  if(fillEl) fillEl.style.width = '15%';
 
   var formData = new FormData();
   formData.append('file', file);
   formData.append('pages_liees', checkedPages.join(','));
 
-  fetch('/api/rag/upload', { method: 'POST', headers: window.ragHeaders(), body: formData })
-    .then(function(r){ return r.json().then(function(d){ return {status:r.status, data:d}; }); })
+  /* Timeout client genereux (60s) : l upload lui-meme est desormais rapide (stockage
+     du texte sans embeddings), mais on garde une marge pour l extraction PDF/DOCX volumineux. */
+  var controller = new AbortController();
+  var timeoutId = setTimeout(function(){ controller.abort(); }, 60000);
+
+  fetch('/api/rag/upload', { method: 'POST', headers: window.ragHeaders(), body: formData, signal: controller.signal })
+    .then(function(r){ clearTimeout(timeoutId); return r.json().then(function(d){ return {status:r.status, data:d}; }); })
     .then(function(res){
-      if(progressEl) progressEl.style.display = 'none';
       document.getElementById('rag-file-input').value = '';
-      if(window.ragHandleAuthError(res.status)) return;
+      if(window.ragHandleAuthError(res.status)){ if(progressEl) progressEl.style.display = 'none'; return; }
       if(res.status === 201){
-        var msg = '✅ Document "'+res.data.document.nom_fichier+'" indexé ('+res.data.document.nb_chunks+' segments).';
-        if(res.data.warning) msg += ' ⚠️ ' + res.data.warning;
-        alert(msg);
-        window.ragRenderList();
+        if(fillEl) fillEl.style.width = '40%';
+        if(res.data.statut_indexation === 'en_cours'){
+          window.ragPollIndexation(res.data.document.id, res.data.document.nom_fichier, res.data.document.nb_chunks);
+        } else {
+          if(progressEl) progressEl.style.display = 'none';
+          window.ragRenderList();
+        }
       } else {
-        alert('Erreur : ' + (res.data.error || 'échec de l upload'));
+        if(progressEl) progressEl.style.display = 'none';
+        alert('Erreur : ' + (res.data.error || 'échec de l import'));
       }
     })
-    .catch(function(){
+    .catch(function(err){
+      clearTimeout(timeoutId);
       if(progressEl) progressEl.style.display = 'none';
-      alert('Erreur réseau lors de l upload.');
+      if(err.name === 'AbortError'){
+        alert('L import prend plus de temps que prévu. Le document est peut-être volumineux — vérifiez la liste dans quelques instants, il devrait apparaître une fois traité.');
+        setTimeout(window.ragRenderList, 3000);
+      } else {
+        alert('Erreur réseau pendant l import. Vérifiez votre connexion et réessayez — si le problème persiste avec ce fichier, essayez un format plus léger (TXT plutôt que PDF scanné, par exemple).');
+      }
     });
+};
+
+window.ragPollIndexation = function(docId, nomFichier, totalChunks){
+  var progressEl = document.getElementById('rag-upload-progress');
+  var labelEl = document.getElementById('rag-progress-label');
+  var pctEl = document.getElementById('rag-progress-pct');
+  var fillEl = document.getElementById('rag-progress-fill');
+  var attempts = 0;
+  var maxAttempts = 40; /* 40 x 1.5s = 60s max de polling */
+
+  function poll(){
+    attempts++;
+    fetch('/api/rag/documents/' + docId + '/status', { headers: window.ragHeaders() })
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        var indexes = d.chunks_indexes || 0;
+        var total = d.nb_chunks || totalChunks || 1;
+        var pct = Math.min(100, Math.round(40 + (indexes/total)*60)); /* 40% deja acquis a l upload + 60% pour l indexation */
+        if(fillEl) fillEl.style.width = pct + '%';
+        if(pctEl) pctEl.textContent = pct + '%';
+        if(labelEl) labelEl.textContent = 'Indexation sémantique… (' + indexes + '/' + total + ' segments)';
+
+        if(d.statut === 'termine'){
+          if(labelEl) labelEl.textContent = '✅ "' + nomFichier + '" indexé avec succès';
+          if(fillEl) fillEl.style.width = '100%';
+          if(pctEl) pctEl.textContent = '100%';
+          setTimeout(function(){ if(progressEl) progressEl.style.display = 'none'; window.ragRenderList(); }, 800);
+        } else if(d.statut === 'erreur'){
+          if(labelEl) labelEl.textContent = '⚠️ Erreur d indexation sémantique — document utilisable en recherche textuelle.';
+          setTimeout(function(){ if(progressEl) progressEl.style.display = 'none'; window.ragRenderList(); }, 2000);
+        } else if(attempts < maxAttempts){
+          setTimeout(poll, 1500);
+        } else {
+          if(labelEl) labelEl.textContent = 'Indexation en cours en arrière-plan — le document est déjà disponible.';
+          setTimeout(function(){ if(progressEl) progressEl.style.display = 'none'; window.ragRenderList(); }, 1500);
+        }
+      })
+      .catch(function(){
+        if(attempts < maxAttempts) setTimeout(poll, 1500);
+        else { if(progressEl) progressEl.style.display = 'none'; window.ragRenderList(); }
+      });
+  }
+  poll();
 };
 
 window.ragDownload = function(id){
   var key = window.ragGetAccessKey();
+
   window.open('/api/rag/download/' + id + '?rag_key=' + encodeURIComponent(key), '_blank');
 };
 
