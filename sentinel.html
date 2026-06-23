@@ -11995,6 +11995,28 @@ window.ragHandleDrop = function(evt){
   if(files.length > 0) window.ragHandleFileSelect(files);
 };
 
+window.ragGetAccessKey = function(){
+  var key = sessionStorage.getItem('ragAccessKey');
+  if(!key){
+    key = prompt('Accès réservé à CONSEILPREV — entrez la clé d accès à la base de connaissance :');
+    if(key) sessionStorage.setItem('ragAccessKey', key);
+  }
+  return key || '';
+};
+
+window.ragHeaders = function(){
+  return { 'X-RAG-Key': window.ragGetAccessKey() };
+};
+
+window.ragHandleAuthError = function(status){
+  if(status === 403){
+    sessionStorage.removeItem('ragAccessKey');
+    alert('Clé d accès incorrecte ou absente. Réessayez.');
+    return true;
+  }
+  return false;
+};
+
 window.ragHandleFileSelect = function(files){
   if(!files || files.length === 0) return;
   var file = files[0];
@@ -12019,11 +12041,12 @@ window.ragHandleFileSelect = function(files){
   formData.append('file', file);
   formData.append('pages_liees', checkedPages.join(','));
 
-  fetch('/api/rag/upload', { method: 'POST', body: formData })
+  fetch('/api/rag/upload', { method: 'POST', headers: window.ragHeaders(), body: formData })
     .then(function(r){ return r.json().then(function(d){ return {status:r.status, data:d}; }); })
     .then(function(res){
       if(progressEl) progressEl.style.display = 'none';
       document.getElementById('rag-file-input').value = '';
+      if(window.ragHandleAuthError(res.status)) return;
       if(res.status === 201){
         var msg = '✅ Document "'+res.data.document.nom_fichier+'" indexé ('+res.data.document.nb_chunks+' segments).';
         if(res.data.warning) msg += ' ⚠️ ' + res.data.warning;
@@ -12040,12 +12063,16 @@ window.ragHandleFileSelect = function(files){
 };
 
 window.ragDownload = function(id){
-  window.open('/api/rag/download/' + id, '_blank');
+  var key = window.ragGetAccessKey();
+  window.open('/api/rag/download/' + id + '?rag_key=' + encodeURIComponent(key), '_blank');
 };
 
 window.ragDeleteDoc = function(id, nom){
   if(!confirm('Supprimer définitivement "'+nom+'" et tous ses segments indexés ?')) return;
-  fetch('/api/rag/documents/' + id, { method: 'DELETE' }).then(function(){ window.ragRenderList(); });
+  fetch('/api/rag/documents/' + id, { method: 'DELETE', headers: window.ragHeaders() }).then(function(r){
+    if(window.ragHandleAuthError(r.status)) return;
+    window.ragRenderList();
+  });
 };
 
 var RAG_PAGE_LABELS = { audit:"Audit IA Act", registre:"Registre IA", fria:"FRIA", maturite:"Audit de maturité", veille:"Veille qualifiée", raci:"RACI", general:"Général" };
@@ -12060,7 +12087,10 @@ window.ragRenderList = function(){
   var pageFilter = filterEl ? filterEl.value : '';
   var url = '/api/rag/documents' + (pageFilter ? '?page='+encodeURIComponent(pageFilter) : '');
 
-  fetch(url).then(function(r){ return r.json(); }).then(function(d){
+  fetch(url, { headers: window.ragHeaders() }).then(function(r){
+    if(window.ragHandleAuthError(r.status)){ holder.innerHTML=''; return Promise.reject('auth'); }
+    return r.json();
+  }).then(function(d){
     var docs = d.documents || [];
     if(statusEl){
       statusEl.innerHTML = d.pgvector_actif
