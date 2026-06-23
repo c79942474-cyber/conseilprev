@@ -3439,9 +3439,10 @@ def rag_upload():
         doc_id = cur.lastrowid
     conn.commit()
 
-    # Stockage immediat des chunks SANS embeddings (rapide, quelques ms) -> reponse HTTP rapide.
-    # Les embeddings sont generes ensuite en arriere-plan (thread separe), pour eviter de
-    # bloquer la requete pendant 10-30s et de declencher un timeout du proxy Render.
+    # Stockage immediat des chunks SANS embeddings -> reponse HTTP rapide (pas de thread serveur :
+    # sur un hebergement a un seul worker Gunicorn, un thread d arriere-plan partage le meme GIL
+    # et ralentit TOUT le service pendant son execution. A la place, c est le CLIENT qui appelle
+    # /index-next-batch de facon repetee, chaque appel traitant un lot borne puis se terminant.)
     for i, chunk in enumerate(chunks):
         if REGISTRE_USE_PG:
             cur.execute('''INSERT INTO rag_chunks (document_id, chunk_text, chunk_index, search_vector)
@@ -3451,58 +3452,76 @@ def rag_upload():
     conn.commit()
     conn.close()
 
-    if RAG_PGVECTOR_AVAILABLE:
-        thread = threading.Thread(target=rag_index_embeddings_background, args=(doc_id, chunks), daemon=True)
-        thread.start()
-
     return jsonify({'document': {'id': doc_id, 'nom_fichier': safe_name, 'nb_chunks': len(chunks)},
                      'statut_indexation': statut_initial, 'warning': None}), 201
 
-def rag_index_embeddings_background(doc_id, chunks):
-    """Genere les embeddings par lots en arriere-plan et met a jour la progression,
-    pour ne jamais bloquer la requete HTTP d upload (evite les timeouts Render)."""
-    batch_size = 15
-    try:
-        for batch_start in range(0, len(chunks), batch_size):
-            batch = chunks[batch_start:batch_start + batch_size]
-            embed_ok, embeddings_or_err = rag_get_embeddings(batch)
-            conn = registre_get_db()
-            cur = conn.cursor()
-            if embed_ok and embeddings_or_err:
-                for j, embedding in enumerate(embeddings_or_err):
-                    chunk_index = batch_start + j
-                    cur.execute(registre_sql(
-                        'UPDATE rag_chunks SET embedding = %s WHERE document_id = %s AND chunk_index = %s',
-                        'UPDATE rag_chunks SET chunk_index = chunk_index WHERE document_id = ? AND chunk_index = ?'
-                    ), (embedding, doc_id, chunk_index) if REGISTRE_USE_PG else (doc_id, chunk_index))
-            traites = min(batch_start + batch_size, len(chunks))
-            cur.execute(registre_sql(
-                'UPDATE rag_documents SET chunks_indexes = %s WHERE id = %s',
-                'UPDATE rag_documents SET chunks_indexes = ? WHERE id = ?'
-            ), (traites, doc_id))
-            conn.commit()
-            conn.close()
-        conn = registre_get_db()
-        cur = conn.cursor()
-        cur.execute(registre_sql(
-            "UPDATE rag_documents SET statut_indexation = 'termine' WHERE id = %s",
-            "UPDATE rag_documents SET statut_indexation = 'termine' WHERE id = ?"
-        ), (doc_id,))
-        conn.commit()
+@app.route('/api/rag/documents/<int:doc_id>/index-next-batch', methods=['POST'])
+@rate_limit(limit=120, window=60)
+@rag_require_access
+def rag_index_next_batch(doc_id):
+    """Traite UN SEUL lot de chunks puis retourne immediatement (quelques secondes max).
+    Le client (frontend) rappelle cet endpoint en boucle jusqu a indexation complete.
+    Architecture 'pull' : aucun thread serveur, donc aucune contention sur le worker
+    Gunicorn unique de cet hebergement."""
+    batch_size = 10
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql(
+        'SELECT chunks_indexes, nb_chunks, statut_indexation FROM rag_documents WHERE id=%s',
+        'SELECT chunks_indexes, nb_chunks, statut_indexation FROM rag_documents WHERE id=?'
+    ), (doc_id,))
+    docrow = cur.fetchone()
+    if not docrow:
         conn.close()
-        logger.info(f"RAG — indexation embeddings terminee pour document {doc_id} ({len(chunks)} chunks)")
-    except Exception as _e:
-        logger.error(f"RAG — erreur indexation embeddings document {doc_id} : {_e}")
-        try:
-            conn = registre_get_db()
-            cur = conn.cursor()
+        return jsonify({'error': 'Document introuvable'}), 404
+    d = dict(docrow) if not isinstance(docrow, dict) else docrow
+    already_done = d['chunks_indexes'] or 0
+    total = d['nb_chunks']
+
+    if already_done >= total or d['statut_indexation'] == 'termine':
+        conn.close()
+        return jsonify({'statut': 'termine', 'chunks_indexes': total, 'nb_chunks': total})
+
+    cur.execute(registre_sql(
+        'SELECT chunk_index, chunk_text FROM rag_chunks WHERE document_id=%s AND chunk_index >= %s ORDER BY chunk_index LIMIT %s',
+        'SELECT chunk_index, chunk_text FROM rag_chunks WHERE document_id=? AND chunk_index >= ? ORDER BY chunk_index LIMIT ?'
+    ), (doc_id, already_done, batch_size))
+    rows = cur.fetchall()
+    conn.close()
+
+    if not rows:
+        return jsonify({'statut': 'termine', 'chunks_indexes': total, 'nb_chunks': total})
+
+    batch_texts = [(dict(r) if not isinstance(r, dict) else r)['chunk_text'] for r in rows]
+    batch_indexes = [(dict(r) if not isinstance(r, dict) else r)['chunk_index'] for r in rows]
+
+    embed_ok, embeddings_or_err = rag_get_embeddings(batch_texts)
+
+    conn = registre_get_db()
+    cur = conn.cursor()
+    new_statut = 'en_cours'
+    if embed_ok and embeddings_or_err:
+        for idx, embedding in zip(batch_indexes, embeddings_or_err):
             cur.execute(registre_sql(
-                "UPDATE rag_documents SET statut_indexation = 'erreur' WHERE id = %s",
-                "UPDATE rag_documents SET statut_indexation = 'erreur' WHERE id = ?"
-            ), (doc_id,))
-            conn.commit()
-            conn.close()
-        except Exception: pass
+                'UPDATE rag_chunks SET embedding = %s WHERE document_id = %s AND chunk_index = %s',
+                'UPDATE rag_chunks SET chunk_index = chunk_index WHERE document_id = ? AND chunk_index = ?'
+            ), (embedding, doc_id, idx) if REGISTRE_USE_PG else (doc_id, idx))
+        traites = max(batch_indexes) + 1
+    else:
+        traites = max(batch_indexes) + 1
+        logger.warning(f"RAG — embeddings echoues pour un lot du document {doc_id} : {embeddings_or_err}")
+
+    if traites >= total:
+        new_statut = 'termine'
+
+    cur.execute(registre_sql(
+        'UPDATE rag_documents SET chunks_indexes = %s, statut_indexation = %s WHERE id = %s',
+        'UPDATE rag_documents SET chunks_indexes = ?, statut_indexation = ? WHERE id = ?'
+    ), (traites, new_statut, doc_id))
+    conn.commit()
+    conn.close()
+
+    return jsonify({'statut': new_statut, 'chunks_indexes': traites, 'nb_chunks': total})
 
 @app.route('/api/rag/documents/<int:doc_id>/status', methods=['GET'])
 @rate_limit(limit=120, window=60)
@@ -3520,6 +3539,8 @@ def rag_document_status(doc_id):
         return jsonify({'error': 'Document introuvable'}), 404
     d = dict(row) if not isinstance(row, dict) else row
     return jsonify({'statut': d['statut_indexation'], 'chunks_indexes': d['chunks_indexes'] or 0, 'nb_chunks': d['nb_chunks']})
+
+@app.route('/api/rag/download/<int:doc_id>', methods=['GET'])
 
 @app.route('/api/rag/download/<int:doc_id>', methods=['GET'])
 @rate_limit(limit=30, window=60)
