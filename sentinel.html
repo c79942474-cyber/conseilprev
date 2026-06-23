@@ -2295,6 +2295,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <input type="text" id="reg-search" class="reg-search-input" placeholder="Rechercher par nom, secteur, type, responsable…" oninput="regSearch(this.value)">
     <span id="reg-db-badge" class="reg-db-badge">Vérification…</span>
     <button class="mat-export-btn" style="background:var(--blue);color:#fff" onclick="ucOpenLibrary()" title="Explorer des cas d usage IA courants par direction metier, generiques ou specifiques a votre secteur.">📚 Cas d usage</button>
+    <button class="mat-export-btn" style="background:var(--bg);color:var(--ink);border:1px solid var(--rule2)" onclick="ragShowRelevantDocs(\'inventaire classification systemes IA\',\'registre\',\'Documents pertinents - Registre IA\')" title="Consulter les documents de votre base de connaissance lies au Registre IA.">📚 Base de connaissance</button>
     <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="regOpenModal()" title="Ajouter un nouveau systeme IA au registre.">+ Ajouter un système</button>
   </div>
   <div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title" id="reg-count">Chargement…</span></div>
@@ -7209,9 +7210,29 @@ function matBuildPrompt(deliv, sectorKey){
 }
 
 /* Appel API (Mistral par défaut, Claude en option) */
-function matCallAI(prompt, api, cb){
+function matCallAI(prompt, api, cb, pageOrigine){
   var sys = "Tu es un expert en gouvernance IA et conformite reglementaire de CONSEILPREV (Paris). Tu rediges des livrables professionnels structures, precis et actionnables, en francais. REGLES DE MISE EN FORME STRICTES : utilise des titres markdown (## pour les sections, ### pour les sous-sections), des listes a puces avec des tirets, et des tableaux markdown propres. Dans les cellules de tableau, n utilise JAMAIS de balises HTML comme <br> : si tu dois lister plusieurs elements dans une cellule, separe-les par des virgules ou des points-virgules. Garde les cellules de tableau concises (une phrase courte maximum). N ajoute pas de lignes de tirets decoratives en dehors des tableaux. Sois exhaustif mais clair.";
 
+  /* Enrichissement RAG : si une base de connaissance existe pour cette page, on l interroge
+     silencieusement et on ajoute les extraits pertinents au prompt avant l appel IA. */
+  if(pageOrigine && typeof window.ragSearchContext === "function" && !window.__ragEnrichedAlready){
+    window.__ragEnrichedAlready = true; /* evite une boucle infinie via le fallback recursif */
+    var ragQuery = prompt.substring(0, 300);
+    window.ragSearchContext(ragQuery, pageOrigine, 3).then(function(ragRes){
+      window.__ragEnrichedAlready = false;
+      var enrichedPrompt = prompt;
+      if(ragRes && ragRes.resultats && ragRes.resultats.length > 0){
+        var contexte = ragRes.resultats.map(function(r){ return "- (" + r.document + ") " + r.texte; }).join("\n");
+        enrichedPrompt = "Contexte issu des documents internes du client (base de connaissance CONSEILPREV) :\n" + contexte + "\n\n---\n\n" + prompt;
+      }
+      matCallAIExecute(enrichedPrompt, api, cb, sys);
+    }).catch(function(){ window.__ragEnrichedAlready = false; matCallAIExecute(prompt, api, cb, sys); });
+    return;
+  }
+  matCallAIExecute(prompt, api, cb, sys);
+}
+
+function matCallAIExecute(prompt, api, cb, sys){
   if(api === "claude"){
     fetch('/api/chat/claude',{
       method:'POST', headers:{'Content-Type':'application/json'},
@@ -7219,7 +7240,7 @@ function matCallAI(prompt, api, cb){
     })
     .then(function(r){ if(!r.ok) throw new Error('http'); return r.json(); })
     .then(function(d){ cb(null, d.content && d.content[0] ? d.content[0].text : null, "Claude"); })
-    .catch(function(){ matCallAI(prompt, "mistral", function(e,t){ cb(e,t,"Mistral (fallback)"); }); });
+    .catch(function(){ matCallAIExecute(prompt, "mistral", function(e,t){ cb(e,t,"Mistral (fallback)"); }, sys); });
   } else {
     fetch('https://api.mistral.ai/v1/chat/completions',{
       method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+MISTRAL_KEY},
@@ -7369,7 +7390,7 @@ window.matGenerateDeliverable = function(delivId){
     window.__matCurrentDeliv.apiName = apiName;
     if(body) body.innerHTML = '<div class="mat-deliv-content">'+matMdToHtml(text)+'</div>';
     if(foot) foot.style.display = "flex";
-  });
+  }, "maturite");
 };
 
 window.matCloseDeliv = function(){
@@ -8337,7 +8358,7 @@ window.raciGenerateDoc = function(){
   }
 
   if(window.matCallAIBridge){
-    window.matCallAIBridge(prompt, api, onReply);
+    window.matCallAIBridge(prompt, api, onReply, "raci");
   }
 };
 
@@ -9504,7 +9525,8 @@ function friaRenderSysCard(systeme){
       + '<a href="#" onclick="openAuditTab();return false;" class="fria-cross-link">📋 Audit IA Act : <strong>'+auditPct+'%</strong> conforme →</a>'
       + '<a href="#" onclick="go(\'matrice\',null,\'RISQUES\',\'Matrice risques\');return false;" class="fria-cross-link">📊 Matrice : probabilité <strong>'+probLabel+'</strong> →</a>'
       + '</div>'
-      + '<button class="mat-export-btn" style="background:#1C5A8A;color:#fff;margin-top:10px;width:100%" onclick="histoSaveFria('+systeme.id+',\''+systeme.nom.replace(/'/g,"")+'\')" title="Enregistrer cette evaluation FRIA dans l historique persistant et tracable (RGPD).">💾 Enregistrer dans l historique</button>';
+      + '<button class="mat-export-btn" style="background:#1C5A8A;color:#fff;margin-top:10px;width:100%" onclick="histoSaveFria('+systeme.id+',\''+systeme.nom.replace(/'/g,"")+'\')" title="Enregistrer cette evaluation FRIA dans l historique persistant et tracable (RGPD).">💾 Enregistrer dans l historique</button>'
+      + '<button class="mat-export-btn" style="background:var(--bg);color:var(--ink);border:1px solid var(--rule2);margin-top:8px;width:100%" onclick="ragShowRelevantDocs(\'droits fondamentaux evaluation impact\',\'fria\',\'Documents pertinents\')">📚 Documents pertinents</button>';
   }
 
   head += '</div>';
@@ -10213,7 +10235,7 @@ window.jursRefreshAI = function(code, name){
   var apiCall;
   if(JURS_AI_API === "claude" && window.matCallAIBridge){
     apiCall = new Promise(function(resolve){
-      window.matCallAIBridge(prompt, "claude", function(err, text){ resolve(text); });
+      window.matCallAIBridge(prompt, "claude", function(err, text){ resolve(text); }, "veille");
     });
   } else {
     apiCall = fetch('https://api.mistral.ai/v1/chat/completions',{
@@ -12078,6 +12100,38 @@ window.go = function(id){
   var r = _ragOrigGo ? _ragOrigGo.apply(this, arguments) : undefined;
   if(id === "rag") setTimeout(window.ragRenderList, 80);
   return r;
+};
+
+})();
+
+</script>
+
+<script>
+/* ══ CONNEXION RAG — FRIA et Registre IA (consultation directe, sans LLM) ══ */
+(function(){
+'use strict';
+
+window.ragShowRelevantDocs = function(query, page, titre){
+  var modal = document.getElementById("rag-docs-modal");
+  if(!modal){ modal = document.createElement("div"); modal.id = "rag-docs-modal"; modal.className = "mat-modal"; document.body.appendChild(modal); }
+  modal.innerHTML = '<div class="mat-modal-box"><div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Base de connaissance</div>'
+    + '<div class="mat-modal-title">📚 '+titre+'</div></div>'
+    + '<button class="mat-modal-close" onclick="document.getElementById(\'rag-docs-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
+    + '<div class="mat-modal-body"><div class="reg-loading">Recherche dans vos documents…</div></div></div>';
+  modal.classList.add("on");
+
+  window.ragSearchContext(query, page, 5).then(function(res){
+    var bodyEl = modal.querySelector('.mat-modal-body');
+    var results = (res && res.resultats) || [];
+    if(results.length === 0){
+      bodyEl.innerHTML = '<div class="reg-empty">Aucun document pertinent trouvé dans votre base de connaissance pour ce contexte. <a href="#" onclick="document.getElementById(\'rag-docs-modal\').classList.remove(\'on\');go(\'rag\',null,\'ESPACE\',\'Base de connaissance\');return false;">Importer un document →</a></div>';
+      return;
+    }
+    bodyEl.innerHTML = results.map(function(r){
+      return '<div class="ctrl-section" style="margin-bottom:10px"><div class="ctrl-section-head"><span class="ctrl-section-title">'+r.document+'</span><span style="font-size:9px;font-family:var(--mono);color:var(--muted2)">score '+r.score+'</span></div>'
+        + '<div style="padding:12px 16px;font-size:11.5px;color:var(--ink2);line-height:1.6">…'+r.texte.substring(0,280)+'…</div></div>';
+    }).join('');
+  });
 };
 
 })();
