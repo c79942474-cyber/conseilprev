@@ -2649,10 +2649,46 @@ if REGISTRE_USE_PG:
         logger.error(f"REGISTRE_IA — connexion Postgres impossible ({_conn_err}) — bascule sur SQLite local")
         REGISTRE_USE_PG = False
 
+    # Pool de connexions persistant : elimine la latence de handshake TCP/TLS/auth
+    # (1-3s observes sur Render) qui se produisait a CHAQUE requete avec psycopg.connect()
+    # appele individuellement. Le pool maintient des connexions ouvertes et les reutilise.
+    REGISTRE_POOL = None
+    try:
+        from psycopg_pool import ConnectionPool
+        REGISTRE_POOL = ConnectionPool(
+            DATABASE_URL, min_size=1, max_size=5, timeout=10,
+            kwargs={"row_factory": psycopg.rows.dict_row}, open=True
+        )
+        logger.info("REGISTRE_IA — pool de connexions Postgres initialise (min=1, max=5)")
+    except Exception as _pool_err:
+        logger.warning(f"REGISTRE_IA — pool de connexions indisponible, repli sur connexion directe : {_pool_err}")
+        REGISTRE_POOL = None
+
+class _PooledConnWrapper:
+    """Wrapper de compatibilite : le code existant appelle conn.close() partout (sans
+    context manager). Ce wrapper intercepte close() pour rendre la connexion au pool
+    au lieu de la fermer definitivement, sans avoir a modifier les dizaines d appels existants."""
+    def __init__(self, pool, conn):
+        self._pool = pool
+        self._conn = conn
+    def __getattr__(self, name):
+        return getattr(self._conn, name)
+    def close(self):
+        try:
+            self._pool.putconn(self._conn)
+        except Exception:
+            try: self._conn.close()
+            except Exception: pass
+
 def registre_get_db():
     if REGISTRE_USE_PG:
-        conn = psycopg.connect(DATABASE_URL, row_factory=psycopg.rows.dict_row)
-        return conn
+        if REGISTRE_POOL is not None:
+            try:
+                conn = REGISTRE_POOL.getconn()
+                return _PooledConnWrapper(REGISTRE_POOL, conn)
+            except Exception as _e:
+                logger.warning(f"REGISTRE_IA — getconn pool echoue, connexion directe : {_e}")
+        return psycopg.connect(DATABASE_URL, row_factory=psycopg.rows.dict_row)
     else:
         conn = sqlite3.connect(REGISTRE_SQLITE_PATH)
         conn.row_factory = sqlite3.Row
@@ -3302,8 +3338,25 @@ def rag_get_embeddings(texts):
     except Exception as e:
         return False, str(e)
 
+RAG_ACCESS_KEY = os.environ.get('RAG_ACCESS_KEY', 'conseilprev-rag-2026').strip()
+
+def rag_check_access():
+    """Verifie que la requete provient bien de CONSEILPREV (cle secrete serverside,
+    jamais exposee au client HTML/JS contrairement a l ancien SRC_PASS cosmetique)."""
+    provided = request.headers.get('X-RAG-Key', '') or request.args.get('rag_key', '')
+    return provided == RAG_ACCESS_KEY
+
+def rag_require_access(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        if not rag_check_access():
+            return jsonify({'error': 'Accès réservé à CONSEILPREV. Clé d accès requise.'}), 403
+        return f(*args, **kwargs)
+    return wrapper
+
 @app.route('/api/rag/documents', methods=['GET'])
 @rate_limit(limit=60, window=60)
+@rag_require_access
 def rag_list_documents():
     page_filter = request.args.get('page', '').strip()
     conn = registre_get_db()
@@ -3326,6 +3379,7 @@ def rag_list_documents():
 
 @app.route('/api/rag/upload', methods=['POST'])
 @rate_limit(limit=10, window=60)
+@rag_require_access
 def rag_upload():
     if 'file' not in request.files:
         return jsonify({'error': 'Aucun fichier fourni'}), 400
@@ -3398,6 +3452,7 @@ def rag_upload():
 
 @app.route('/api/rag/download/<int:doc_id>', methods=['GET'])
 @rate_limit(limit=30, window=60)
+@rag_require_access
 def rag_download(doc_id):
     conn = registre_get_db()
     cur = conn.cursor()
@@ -3415,6 +3470,7 @@ def rag_download(doc_id):
 
 @app.route('/api/rag/documents/<int:doc_id>', methods=['DELETE'])
 @rate_limit(limit=30, window=60)
+@rag_require_access
 def rag_delete_document(doc_id):
     conn = registre_get_db()
     cur = conn.cursor()
