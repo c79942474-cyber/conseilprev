@@ -2163,6 +2163,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       </div>
       <button class="audit-export-btn" id="cpEvalSaveBtn" onclick="cpEvalSaveAudit()" style="background:var(--green);margin-right:8px" title="Enregistrer l etat actuel de l audit dans l historique de Mes evaluations.">💾 Enregistrer l'evaluation</button>
       <button class="audit-export-btn" onclick="auditExportPDF()" title="Telecharger le rapport d audit complet au format PDF.">↓ Rapport PDF</button>
+      <button class="audit-export-btn" style="background:var(--bg);color:var(--ink);border:1px solid var(--rule2)" onclick="ragShowRelevantDocs(\'audit conformite EU AI Act controle\',\'audit\',\'Documents pertinents - Audit IA Act\')" title="Consulter les documents de votre base de connaissance lies a l Audit IA Act.">📚 Base de connaissance</button>
     </div>
     <div class="audit-kpi-row">
       <div class="audit-kpi"><div class="audit-kpi-val" id="audit-score-pct">0%</div><div class="audit-kpi-lbl">Score global</div></div>
@@ -7613,7 +7614,7 @@ window.procGenerate = function(){
     cur.content = text; cur.apiName = apiName;
     if(b) b.innerHTML = '<div class="mat-deliv-content">'+window.matMdToHtmlBridge(text)+'</div>';
     if(foot) foot.style.display = "flex";
-  });
+  }, "audit");
 };
 
 function procBuildPrompt(doc, sectorKey, clientData){
