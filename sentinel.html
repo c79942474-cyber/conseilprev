@@ -12098,11 +12098,11 @@ window.ragPollIndexation = function(docId, nomFichier, totalChunks){
   var pctEl = document.getElementById('rag-progress-pct');
   var fillEl = document.getElementById('rag-progress-fill');
   var attempts = 0;
-  var maxAttempts = 40; /* 40 x 1.5s = 60s max de polling */
+  var maxAttempts = 60; /* chaque appel traite ~10 chunks ; 60 appels couvrent de gros documents */
 
-  function poll(){
+  function processBatch(){
     attempts++;
-    fetch('/api/rag/documents/' + docId + '/status', { headers: window.ragHeaders() })
+    fetch('/api/rag/documents/' + docId + '/index-next-batch', { method: 'POST', headers: window.ragHeaders() })
       .then(function(r){ return r.json(); })
       .then(function(d){
         var indexes = d.chunks_indexes || 0;
@@ -12117,23 +12117,21 @@ window.ragPollIndexation = function(docId, nomFichier, totalChunks){
           if(fillEl) fillEl.style.width = '100%';
           if(pctEl) pctEl.textContent = '100%';
           setTimeout(function(){ if(progressEl) progressEl.style.display = 'none'; window.ragRenderList(); }, 800);
-        } else if(d.statut === 'erreur'){
-          if(labelEl) labelEl.textContent = '⚠️ Erreur d indexation sémantique — document utilisable en recherche textuelle.';
-          setTimeout(function(){ if(progressEl) progressEl.style.display = 'none'; window.ragRenderList(); }, 2000);
         } else if(attempts < maxAttempts){
-          setTimeout(poll, 1500);
+          processBatch(); /* lot suivant immediatement, pas d attente : chaque appel est deja borne et rapide */
         } else {
-          if(labelEl) labelEl.textContent = 'Indexation en cours en arrière-plan — le document est déjà disponible.';
+          if(labelEl) labelEl.textContent = 'Indexation partielle — le document reste utilisable, réessayez plus tard pour terminer.';
           setTimeout(function(){ if(progressEl) progressEl.style.display = 'none'; window.ragRenderList(); }, 1500);
         }
       })
       .catch(function(){
-        if(attempts < maxAttempts) setTimeout(poll, 1500);
+        if(attempts < maxAttempts) setTimeout(processBatch, 2000);
         else { if(progressEl) progressEl.style.display = 'none'; window.ragRenderList(); }
       });
   }
-  poll();
+  processBatch();
 };
+
 
 window.ragDownload = function(id){
   var key = window.ragGetAccessKey();
