@@ -1,4 +1,4 @@
-import os, re as _re, time, hashlib, json, logging
+import os, re as _re, time, hashlib, json, logging, threading
 import requests, feedparser
 import smtplib, ssl
 from email.mime.multipart import MIMEMultipart
@@ -3237,8 +3237,15 @@ def rag_init_db():
             taille_octets INTEGER NOT NULL,
             contenu_fichier BYTEA NOT NULL,
             nb_chunks INTEGER DEFAULT 0,
+            chunks_indexes INTEGER DEFAULT 0,
+            statut_indexation TEXT DEFAULT \'termine\',
             date_upload TEXT NOT NULL
         )''')
+        try:
+            cur.execute("ALTER TABLE rag_documents ADD COLUMN IF NOT EXISTS chunks_indexes INTEGER DEFAULT 0")
+            cur.execute("ALTER TABLE rag_documents ADD COLUMN IF NOT EXISTS statut_indexation TEXT DEFAULT \'termine\'")
+            conn.commit()
+        except Exception: conn.rollback()
         if RAG_PGVECTOR_AVAILABLE:
             cur.execute(f'''CREATE TABLE IF NOT EXISTS rag_chunks (
                 id SERIAL PRIMARY KEY,
@@ -3262,7 +3269,9 @@ def rag_init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nom_fichier TEXT NOT NULL, type_mime TEXT NOT NULL, extension TEXT NOT NULL,
             pages_liees TEXT NOT NULL, taille_octets INTEGER NOT NULL,
-            contenu_fichier BLOB NOT NULL, nb_chunks INTEGER DEFAULT 0, date_upload TEXT NOT NULL
+            contenu_fichier BLOB NOT NULL, nb_chunks INTEGER DEFAULT 0,
+            chunks_indexes INTEGER DEFAULT 0, statut_indexation TEXT DEFAULT \'termine\',
+            date_upload TEXT NOT NULL
         )''')
         cur.execute('''CREATE TABLE IF NOT EXISTS rag_chunks (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -3412,43 +3421,105 @@ def rag_upload():
 
     now = datetime.utcnow().isoformat()
     safe_name = secure_filename(f.filename)
+    statut_initial = 'en_cours' if RAG_PGVECTOR_AVAILABLE else 'termine'
+
     conn = registre_get_db()
     cur = conn.cursor()
     values = (safe_name, f.mimetype or 'application/octet-stream', ext, ','.join(pages_list),
-              len(file_bytes), file_bytes,
-              len(chunks), now)
+              len(file_bytes), file_bytes, len(chunks), statut_initial, now)
     if REGISTRE_USE_PG:
         cur.execute('''INSERT INTO rag_documents
-            (nom_fichier, type_mime, extension, pages_liees, taille_octets, contenu_fichier, nb_chunks, date_upload)
-            VALUES (%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id''', values)
+            (nom_fichier, type_mime, extension, pages_liees, taille_octets, contenu_fichier, nb_chunks, statut_indexation, date_upload)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id''', values)
         doc_id = cur.fetchone()['id']
     else:
         cur.execute('''INSERT INTO rag_documents
-            (nom_fichier, type_mime, extension, pages_liees, taille_octets, contenu_fichier, nb_chunks, date_upload)
-            VALUES (?,?,?,?,?,?,?,?)''', values)
+            (nom_fichier, type_mime, extension, pages_liees, taille_octets, contenu_fichier, nb_chunks, statut_indexation, date_upload)
+            VALUES (?,?,?,?,?,?,?,?,?)''', values)
         doc_id = cur.lastrowid
     conn.commit()
 
-    embed_ok, embeddings_or_err = (True, None)
-    if RAG_PGVECTOR_AVAILABLE:
-        embed_ok, embeddings_or_err = rag_get_embeddings(chunks)
-
+    # Stockage immediat des chunks SANS embeddings (rapide, quelques ms) -> reponse HTTP rapide.
+    # Les embeddings sont generes ensuite en arriere-plan (thread separe), pour eviter de
+    # bloquer la requete pendant 10-30s et de declencher un timeout du proxy Render.
     for i, chunk in enumerate(chunks):
-        embedding = embeddings_or_err[i] if (embed_ok and embeddings_or_err and RAG_PGVECTOR_AVAILABLE) else None
         if REGISTRE_USE_PG:
-            if RAG_PGVECTOR_AVAILABLE and embedding:
-                cur.execute('''INSERT INTO rag_chunks (document_id, chunk_text, chunk_index, embedding, search_vector)
-                    VALUES (%s,%s,%s,%s, to_tsvector('french', %s))''', (doc_id, chunk, i, embedding, chunk))
-            else:
-                cur.execute('''INSERT INTO rag_chunks (document_id, chunk_text, chunk_index, search_vector)
-                    VALUES (%s,%s,%s, to_tsvector('french', %s))''', (doc_id, chunk, i, chunk))
+            cur.execute('''INSERT INTO rag_chunks (document_id, chunk_text, chunk_index, search_vector)
+                VALUES (%s,%s,%s, to_tsvector('french', %s))''', (doc_id, chunk, i, chunk))
         else:
             cur.execute('INSERT INTO rag_chunks (document_id, chunk_text, chunk_index) VALUES (?,?,?)', (doc_id, chunk, i))
     conn.commit()
     conn.close()
 
-    warning = None if embed_ok else "Document indexé en recherche textuelle (embeddings indisponibles)."
-    return jsonify({'document': {'id': doc_id, 'nom_fichier': safe_name, 'nb_chunks': len(chunks)}, 'warning': warning}), 201
+    if RAG_PGVECTOR_AVAILABLE:
+        thread = threading.Thread(target=rag_index_embeddings_background, args=(doc_id, chunks), daemon=True)
+        thread.start()
+
+    return jsonify({'document': {'id': doc_id, 'nom_fichier': safe_name, 'nb_chunks': len(chunks)},
+                     'statut_indexation': statut_initial, 'warning': None}), 201
+
+def rag_index_embeddings_background(doc_id, chunks):
+    """Genere les embeddings par lots en arriere-plan et met a jour la progression,
+    pour ne jamais bloquer la requete HTTP d upload (evite les timeouts Render)."""
+    batch_size = 15
+    try:
+        for batch_start in range(0, len(chunks), batch_size):
+            batch = chunks[batch_start:batch_start + batch_size]
+            embed_ok, embeddings_or_err = rag_get_embeddings(batch)
+            conn = registre_get_db()
+            cur = conn.cursor()
+            if embed_ok and embeddings_or_err:
+                for j, embedding in enumerate(embeddings_or_err):
+                    chunk_index = batch_start + j
+                    cur.execute(registre_sql(
+                        'UPDATE rag_chunks SET embedding = %s WHERE document_id = %s AND chunk_index = %s',
+                        'UPDATE rag_chunks SET chunk_index = chunk_index WHERE document_id = ? AND chunk_index = ?'
+                    ), (embedding, doc_id, chunk_index) if REGISTRE_USE_PG else (doc_id, chunk_index))
+            traites = min(batch_start + batch_size, len(chunks))
+            cur.execute(registre_sql(
+                'UPDATE rag_documents SET chunks_indexes = %s WHERE id = %s',
+                'UPDATE rag_documents SET chunks_indexes = ? WHERE id = ?'
+            ), (traites, doc_id))
+            conn.commit()
+            conn.close()
+        conn = registre_get_db()
+        cur = conn.cursor()
+        cur.execute(registre_sql(
+            "UPDATE rag_documents SET statut_indexation = 'termine' WHERE id = %s",
+            "UPDATE rag_documents SET statut_indexation = 'termine' WHERE id = ?"
+        ), (doc_id,))
+        conn.commit()
+        conn.close()
+        logger.info(f"RAG — indexation embeddings terminee pour document {doc_id} ({len(chunks)} chunks)")
+    except Exception as _e:
+        logger.error(f"RAG — erreur indexation embeddings document {doc_id} : {_e}")
+        try:
+            conn = registre_get_db()
+            cur = conn.cursor()
+            cur.execute(registre_sql(
+                "UPDATE rag_documents SET statut_indexation = 'erreur' WHERE id = %s",
+                "UPDATE rag_documents SET statut_indexation = 'erreur' WHERE id = ?"
+            ), (doc_id,))
+            conn.commit()
+            conn.close()
+        except Exception: pass
+
+@app.route('/api/rag/documents/<int:doc_id>/status', methods=['GET'])
+@rate_limit(limit=120, window=60)
+@rag_require_access
+def rag_document_status(doc_id):
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql(
+        'SELECT statut_indexation, chunks_indexes, nb_chunks FROM rag_documents WHERE id=%s',
+        'SELECT statut_indexation, chunks_indexes, nb_chunks FROM rag_documents WHERE id=?'
+    ), (doc_id,))
+    row = cur.fetchone()
+    conn.close()
+    if not row:
+        return jsonify({'error': 'Document introuvable'}), 404
+    d = dict(row) if not isinstance(row, dict) else row
+    return jsonify({'statut': d['statut_indexation'], 'chunks_indexes': d['chunks_indexes'] or 0, 'nb_chunks': d['nb_chunks']})
 
 @app.route('/api/rag/download/<int:doc_id>', methods=['GET'])
 @rate_limit(limit=30, window=60)
