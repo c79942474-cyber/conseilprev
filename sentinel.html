@@ -817,7 +817,9 @@ textarea.form-el{min-height:86px;resize:vertical}
 .matq-global-val{font-family:var(--serif);font-size:38px;line-height:1}
 .matq-level-badge{font-size:13px;font-weight:600;margin-left:10px}
 .matq-level-desc{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5}
-.matq-pillar{background:var(--white);border:1px solid var(--rule);border-radius:5px;padding:14px 16px;margin-bottom:10px}
+.matq-pillar-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;margin-top:12px}
+@media(max-width:900px){.matq-pillar-grid{grid-template-columns:1fr}}
+.matq-pillar{background:var(--white);border:1px solid var(--rule);border-radius:5px;padding:14px 16px}
 .matq-pillar-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--rule)}
 .matq-pillar-name{font-size:13px;font-weight:600;color:var(--ink);overflow:visible}
 .matq-pillar-score-mini{font-family:var(--mono);font-size:13px;font-weight:600}
@@ -6786,7 +6788,8 @@ function matRender(){
       + '<div class="matq-global-box"><div><div class="matq-global-lbl">Score global de maturité</div>'
       + '<div><span class="matq-global-val" id="matq-global" style="color:'+lvl.color+'">'+g.toFixed(1)+'</span><span style="font-size:16px;color:var(--muted2)">/5</span> '
       + '<span class="matq-level-badge" id="matq-level" style="color:'+lvl.color+'">'+lvl.label+'</span></div>'
-      + '<div class="matq-level-desc" id="matq-level-desc">'+lvl.desc+'</div></div></div>';
+      + '<div class="matq-level-desc" id="matq-level-desc">'+lvl.desc+'</div></div></div>'
+      + '<div class="matq-pillar-grid">';
     MAT_PILLARS.forEach(function(p){
       var qs = window.MAT_QUESTIONS[p.id] || [];
       var sc = curPillarScore(p.id);
@@ -6804,7 +6807,7 @@ function matRender(){
       });
       html += '</div>';
     });
-    html += '</div>';
+    html += '</div></div>';
   }
 
   /* Spécificités secteur */
