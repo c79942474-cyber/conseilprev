@@ -104,7 +104,8 @@ body{font-family:var(--sans);background:var(--bg);color:var(--ink);min-height:10
         <div class="field">
           <label class="label">Mot de passe</label>
           <div class="pw-row">
-            <input type="text" id="reg-password" class="input" placeholder="Choisissez ou générez" autocomplete="new-password">
+            <input type="password" id="reg-password" class="input" placeholder="Choisissez ou générez" autocomplete="new-password">
+            <button type="button" class="btn-generate" id="btn-toggle-pw" title="Afficher/masquer le mot de passe">👁</button>
             <button type="button" class="btn-generate" id="btn-generate">🎲 Générer</button>
           </div>
           <div class="pw-strength">
@@ -194,7 +195,15 @@ function generateStrongPassword(){
 
 document.getElementById('btn-generate').addEventListener('click', function(){
   passwordEl.value = generateStrongPassword();
+  passwordEl.type = 'text'; /* affiche temporairement le mdp genere, pour que le client puisse le noter/copier */
+  document.getElementById('btn-toggle-pw').textContent = '🙈';
   checkPasswordStrength();
+});
+
+document.getElementById('btn-toggle-pw').addEventListener('click', function(){
+  var isHidden = passwordEl.type === 'password';
+  passwordEl.type = isHidden ? 'text' : 'password';
+  this.textContent = isHidden ? '🙈' : '👁';
 });
 
 function checkPasswordStrength(){
