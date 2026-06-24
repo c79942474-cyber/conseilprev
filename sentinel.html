@@ -746,13 +746,14 @@ textarea.form-el{min-height:86px;resize:vertical}
 /* Radar 8 piliers */
 .mat-radar-wrap{display:grid;grid-template-columns:340px 1fr;gap:28px;align-items:center}
 .mat-radar-svg{width:100%;max-width:340px}
-.mat-pillars-list{display:flex;flex-direction:column;gap:8px}
-.mat-pillar-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--rule)}
-.mat-pillar-row:last-child{border-bottom:none}
-.mat-pillar-info{flex:1}
+.mat-pillars-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-content:start}
+@media(max-width:1100px){.mat-pillars-list{grid-template-columns:1fr}}
+.mat-pillar-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--rule);border-radius:6px;background:var(--white);transition:border-color .2s,box-shadow .2s}
+.mat-pillar-row:hover{border-color:var(--accent);box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.mat-pillar-info{flex:1;min-width:0}
 .mat-pillar-name{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:1px;overflow:visible}
 .mat-pillar-desc{font-size:10px;color:var(--muted);line-height:1.4}
-.mat-pillar-bar{width:90px;height:6px;background:var(--bg2);border-radius:3px;overflow:hidden;flex-shrink:0}
+.mat-pillar-bar{width:70px;height:6px;background:var(--bg2);border-radius:3px;overflow:hidden;flex-shrink:0}
 .mat-pillar-fill{height:100%;border-radius:3px}
 .mat-pillar-score{font-family:var(--mono);font-size:12px;font-weight:600;width:30px;text-align:right;flex-shrink:0}
 /* Systèmes IA typiques */
