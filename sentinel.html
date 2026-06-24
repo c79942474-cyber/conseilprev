@@ -2538,8 +2538,8 @@ textarea.form-el{min-height:86px;resize:vertical}
         <div class="reg-field"><label class="reg-label">Nom de l entreprise</label><input type="text" id="cl-nom" class="reg-input" placeholder="Ex: Acme Corp"></div>
         <div class="reg-field"><label class="reg-label">Email</label><input type="email" id="cl-email" class="reg-input" placeholder="contact@client.com"></div>
       </div>
-      <div class="reg-field" style="margin-top:12px"><label class="reg-label">Mot de passe (8 caractères minimum)</label><input type="password" id="cl-password" class="reg-input" placeholder="••••••••"></div>
-      <button class="mat-export-btn" style="background:var(--ink);color:#fff;margin-top:14px" onclick="clientsCreate()">+ Créer l accès</button>
+      <div class="radar-registre-info radar-registre-ok" style="margin-top:12px">🔒 Le client recevra un email avec un lien sécurisé pour définir lui-même son mot de passe — CONSEILPREV ne le connaîtra jamais (conforme RGPD).</div>
+      <button class="mat-export-btn" style="background:var(--ink);color:#fff;margin-top:14px" onclick="clientsCreate()">+ Envoyer l invitation</button>
       <div id="clients-create-msg" style="margin-top:10px;font-size:12px"></div>
     </div>
 
@@ -12422,26 +12422,26 @@ try {
 window.clientsCreate = function(){
   var nom = document.getElementById('cl-nom').value.trim();
   var email = document.getElementById('cl-email').value.trim().toLowerCase();
-  var password = document.getElementById('cl-password').value;
   var msgEl = document.getElementById('clients-create-msg');
 
-  if(!nom || !email || password.length < 8){
+  if(!nom || !email){
     msgEl.style.color = 'var(--accent)';
-    msgEl.textContent = 'Nom, email et mot de passe (8 caractères min.) requis.';
+    msgEl.textContent = 'Nom et email requis.';
     return;
   }
 
   fetch('/api/admin/clients', {
     method: 'POST', headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({nom_entreprise: nom, email: email, password: password})
+    body: JSON.stringify({nom_entreprise: nom, email: email})
   }).then(function(r){ return r.json().then(function(d){ return {status:r.status, data:d}; }); })
   .then(function(res){
     if(res.status === 201){
       msgEl.style.color = 'var(--green)';
-      msgEl.textContent = '✅ Accès créé pour ' + nom + ' (' + email + ').';
+      msgEl.textContent = res.data.invitation_email_sent
+        ? '✅ Invitation envoyée à ' + email + '. Le client va définir son propre mot de passe.'
+        : '⚠️ Compte créé pour ' + email + ', mais l email d invitation n a pas pu être envoyé (vérifiez la configuration SMTP).';
       document.getElementById('cl-nom').value = '';
       document.getElementById('cl-email').value = '';
-      document.getElementById('cl-password').value = '';
       window.clientsRenderList();
     } else {
       msgEl.style.color = 'var(--accent)';
