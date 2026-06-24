@@ -2755,14 +2755,14 @@ def registre_sql(pg_query, sqlite_query):
     return pg_query if REGISTRE_USE_PG else sqlite_query
 
 import secrets as _secrets_auth
-AUTH_MASTER_TOKEN = os.environ.get('AUTH_MASTER_TOKEN', '').strip()
-if not AUTH_MASTER_TOKEN:
-    # Genere une fois et logue clairement : a copier dans la variable d'environnement
-    # Render (AUTH_MASTER_TOKEN) pour que le lien reste stable entre redemarrages.
-    AUTH_MASTER_TOKEN = _secrets_auth.token_urlsafe(24)
-    logger.warning(f"AUTH_MASTER_TOKEN non defini en variable d'environnement — "
-                    f"genere temporairement : {AUTH_MASTER_TOKEN} "
-                    f"(CHANGERA AU PROCHAIN REDEMARRAGE — definissez AUTH_MASTER_TOKEN sur Render)")
+# Token stable par defaut si AUTH_MASTER_TOKEN n'est pas defini sur Render (Environment).
+# Recommande : definissez votre propre valeur secrete dans Render pour plus de securite -
+# ce fallback reste fonctionnel immediatement mais est visible dans le code source.
+AUTH_MASTER_TOKEN = os.environ.get('AUTH_MASTER_TOKEN', '').strip() or 'kwQKnjGw8YLgsP1yWwkA1Fg8jhH3BLwe'
+if AUTH_MASTER_TOKEN == 'kwQKnjGw8YLgsP1yWwkA1Fg8jhH3BLwe':
+    logger.warning("AUTH_MASTER_TOKEN non defini en variable d'environnement Render — "
+                    "utilisation du token par defaut (visible dans le code source). "
+                    "Definissez AUTH_MASTER_TOKEN sur Render pour une valeur secrete personnelle.")
 
 def sentauth_init_db():
     conn = registre_get_db()
