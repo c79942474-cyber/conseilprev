@@ -2764,7 +2764,7 @@ if not AUTH_MASTER_TOKEN:
                     f"genere temporairement : {AUTH_MASTER_TOKEN} "
                     f"(CHANGERA AU PROCHAIN REDEMARRAGE — definissez AUTH_MASTER_TOKEN sur Render)")
 
-def sentsentauth_init_db():
+def sentauth_init_db():
     conn = registre_get_db()
     cur = conn.cursor()
     if REGISTRE_USE_PG:
@@ -2792,7 +2792,7 @@ try:
 except Exception as _e:
     logger.error(f"AUTH — erreur init table clients : {_e}")
 
-def sentsentauth_current_client():
+def sentauth_current_client():
     """Retourne le dict client connecte, ou {'is_conseilprev': True} si acces
     CONSEILPREV via le lien maitre, ou None si non authentifie."""
     if session.get('is_conseilprev'):
