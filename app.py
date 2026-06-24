@@ -2764,7 +2764,7 @@ if not AUTH_MASTER_TOKEN:
                     f"genere temporairement : {AUTH_MASTER_TOKEN} "
                     f"(CHANGERA AU PROCHAIN REDEMARRAGE — definissez AUTH_MASTER_TOKEN sur Render)")
 
-def auth_init_db():
+def sentsentauth_init_db():
     conn = registre_get_db()
     cur = conn.cursor()
     if REGISTRE_USE_PG:
@@ -2788,11 +2788,11 @@ def auth_init_db():
     conn.close()
 
 try:
-    auth_init_db()
+    sentauth_init_db()
 except Exception as _e:
     logger.error(f"AUTH — erreur init table clients : {_e}")
 
-def auth_current_client():
+def sentsentauth_current_client():
     """Retourne le dict client connecte, ou {'is_conseilprev': True} si acces
     CONSEILPREV via le lien maitre, ou None si non authentifie."""
     if session.get('is_conseilprev'):
@@ -2810,10 +2810,10 @@ def auth_current_client():
     d = dict(row) if not isinstance(row, dict) else row
     return {'is_conseilprev': False, 'id': d['id'], 'nom_entreprise': d['nom_entreprise'], 'email': d['email']}
 
-def login_required(f):
+def sentinel_login_required(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
-        client = auth_current_client()
+        client = sentauth_current_client()
         if not client:
             if request.path.startswith('/api/'):
                 return jsonify({'error': 'Authentification requise.'}), 401
@@ -2823,7 +2823,7 @@ def login_required(f):
     return wrapper
 
 @app.route('/auth/<token>')
-def auth_master_link(token):
+def sentauth_master_link(token):
     """Lien secret CONSEILPREV — pose un cookie de session longue duree sans mot de passe."""
     if token == AUTH_MASTER_TOKEN:
         session.clear()
@@ -2834,14 +2834,14 @@ def auth_master_link(token):
     abort(404)
 
 @app.route('/login', methods=['GET'])
-def login_page():
-    if auth_current_client():
+def sentauth_login_page():
+    if sentauth_current_client():
         return redirect('/sentinel')
     return send_from_directory('.', 'login.html')
 
-@app.route('/api/auth/login', methods=['POST'])
+@app.route('/api/sentinel-auth/login', methods=['POST'])
 @rate_limit_strict(limit=8, window=300)
-def auth_login():
+def sentauth_login():
     data = request.get_json(force=True) or {}
     email = (data.get('email') or '').strip().lower()
     password = (data.get('password') or '')
@@ -2883,24 +2883,24 @@ def auth_login():
     logger.info(f"AUTH_CLIENT — connexion reussie : {email}")
     return jsonify({'ok': True, 'nom_entreprise': d['nom_entreprise']})
 
-@app.route('/api/auth/logout', methods=['POST'])
-def auth_logout():
+@app.route('/api/sentinel-auth/logout', methods=['POST'])
+def sentauth_logout():
     session.clear()
     return jsonify({'ok': True})
 
-@app.route('/api/auth/me', methods=['GET'])
-def auth_me():
-    client = auth_current_client()
+@app.route('/api/sentinel-auth/me', methods=['GET'])
+def sentauth_me():
+    client = sentauth_current_client()
     if not client:
         return jsonify({'authenticated': False}), 401
     return jsonify({'authenticated': True, **client})
 
 @app.route('/api/admin/clients', methods=['POST'])
-@login_required
+@sentinel_login_required
 @rate_limit_strict(limit=10, window=60)
-def admin_create_client():
+def sentauth_admin_create_client():
     """Creation manuelle de comptes clients — reservee a CONSEILPREV."""
-    client = auth_current_client()
+    client = sentauth_current_client()
     if not client or not client.get('is_conseilprev'):
         abort(403)
     data = request.get_json(force=True) or {}
@@ -2931,9 +2931,9 @@ def admin_create_client():
     return jsonify({'client': {'id': new_id, 'nom_entreprise': nom, 'email': email}}), 201
 
 @app.route('/api/admin/clients', methods=['GET'])
-@login_required
-def admin_list_clients():
-    client = auth_current_client()
+@sentinel_login_required
+def sentauth_admin_list_clients():
+    client = sentauth_current_client()
     if not client or not client.get('is_conseilprev'):
         abort(403)
     conn = registre_get_db()
@@ -3909,7 +3909,7 @@ for route, filename in PAGES.items():
     app.add_url_rule(route, view_func=make_view(filename))
 
 @app.route('/sentinel')
-@login_required
+@sentinel_login_required
 def sentinel_page():
     return send_from_directory('.', 'sentinel.html')
 
