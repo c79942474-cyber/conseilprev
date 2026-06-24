@@ -3092,6 +3092,137 @@ def sentauth_activate_account():
     logger.info(f"ACCOUNT_ACTIVATED {d['email']} — consentement RGPD horodate {now}")
     return jsonify({'ok': True})
 
+# ══════════════════════════════════════════════════════════
+# AUTO-INSCRIPTION CLIENT — accès direct ouvert sur /login (sans invitation
+# prealable de CONSEILPREV). Verification d'email obligatoire (le compte reste
+# inactif jusqu'a confirmation) pour eviter qu'un tiers s'inscrive avec l'email
+# de quelqu'un d'autre. CONSEILPREV est notifie de chaque nouvelle inscription
+# (controle a posteriori plutot qu'a priori).
+# ══════════════════════════════════════════════════════════
+CONSEILPREV_NOTIFY_EMAIL = os.environ.get('CONSEILPREV_NOTIFY_EMAIL', 'christophe.cerf@outlook.com')
+
+@app.route('/api/sentinel-auth/register-captcha', methods=['GET'])
+@rate_limit_strict(limit=20, window=60)
+def sentauth_register_captcha():
+    a, b = _secrets_auth.randbelow(8) + 2, _secrets_auth.randbelow(8) + 2
+    session['register_captcha_answer'] = a + b
+    return jsonify({'captcha_question': f"{a} + {b} = ?"})
+
+def sentauth_send_verification_email(email, nom_entreprise, token):
+    try:
+        link = f"https://conseilprev.onrender.com/verify-email/{token}"
+        html = f"""
+        <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;padding:24px;background:#F5F2ED">
+          <div style="background:#fff;border-radius:8px;padding:32px;border:1px solid #E0DDD8">
+            <div style="font-size:20px;font-weight:600;color:#1C1C1C;margin-bottom:4px">Sentinel <span style="background:#B83222;color:#fff;font-size:10px;padding:2px 6px;border-radius:3px;vertical-align:middle">AI</span></div>
+            <div style="font-size:11px;color:#767676;text-transform:uppercase;letter-spacing:1px;margin-bottom:24px">Confirmez votre adresse email</div>
+            <p style="font-size:14px;color:#3D3D3D;line-height:1.6">Bonjour,</p>
+            <p style="font-size:14px;color:#3D3D3D;line-height:1.6">Vous venez de créer un compte Sentinel AI pour {nom_entreprise}. Confirmez votre adresse email pour activer votre accès :</p>
+            <div style="text-align:center;margin:28px 0">
+              <a href="{link}" style="display:inline-block;background:#B83222;color:#fff;padding:13px 28px;border-radius:6px;text-decoration:none;font-weight:600;font-size:14px">Confirmer mon email →</a>
+            </div>
+            <p style="font-size:12px;color:#767676;line-height:1.6">Ce lien est valable {INVITATION_VALIDITY_HOURS} heures. Si vous n êtes pas à l origine de cette inscription, ignorez cet email.</p>
+          </div>
+          <p style="font-size:11px;color:#A8A8A8;text-align:center;margin-top:16px">CONSEILPREV — Sentinel AI</p>
+        </div>
+        """
+        ok, method = send_email_smart(email, nom_entreprise, "Confirmez votre adresse email — Sentinel AI", html, tags=['sentinel-verify-email'])
+        logger.info(f"VERIFY_EMAIL {email} via {method} — ok={ok}")
+        return ok
+    except Exception as e:
+        logger.error(f"VERIFY_EMAIL_FAILED {email} : {e}")
+        return False
+
+def sentauth_notify_conseilprev_new_signup(nom_entreprise, email, ip):
+    try:
+        html = f"""<div style="font-family:Arial,sans-serif;padding:20px">
+          <p><strong>Nouvelle auto-inscription Sentinel AI</strong></p>
+          <table style="font-size:13px"><tr><td style="padding:4px 12px 4px 0;color:#767676">Entreprise</td><td><strong>{nom_entreprise}</strong></td></tr>
+          <tr><td style="padding:4px 12px 4px 0;color:#767676">Email</td><td>{email}</td></tr>
+          <tr><td style="padding:4px 12px 4px 0;color:#767676">IP</td><td>{ip}</td></tr>
+          <tr><td style="padding:4px 12px 4px 0;color:#767676">Date</td><td>{datetime.utcnow().strftime('%d/%m/%Y à %H:%M UTC')}</td></tr></table>
+          <p style="font-size:12px;color:#767676;margin-top:12px">Connectez-vous à Sentinel AI → Gestion des clients pour désactiver ce compte si nécessaire.</p></div>"""
+        send_email_smart(CONSEILPREV_NOTIFY_EMAIL, 'CONSEILPREV', f"Nouvelle inscription Sentinel AI : {nom_entreprise}", html, tags=['sentinel-new-signup-notify'])
+    except Exception as e:
+        logger.error(f"NOTIFY_CONSEILPREV_FAILED : {e}")
+
+@app.route('/api/sentinel-auth/register', methods=['POST'])
+@rate_limit_strict(limit=5, window=300)
+def sentauth_register():
+    data = request.get_json(force=True) or {}
+    nom = (data.get('nom_entreprise') or '').strip()
+    email = (data.get('email') or '').strip().lower()
+    password = data.get('password') or ''
+    rgpd_consent = bool(data.get('rgpd_consent'))
+    captcha_answer = data.get('captcha_answer')
+
+    try:
+        if int(captcha_answer) != session.get('register_captcha_answer'):
+            return jsonify({'error': 'Réponse de vérification incorrecte.'}), 400
+    except (ValueError, TypeError):
+        return jsonify({'error': 'Réponse de vérification invalide.'}), 400
+
+    if not nom or not email or '@' not in email:
+        return jsonify({'error': 'Nom d entreprise et email valide requis.'}), 400
+    if not rgpd_consent:
+        return jsonify({'error': 'Le consentement RGPD est requis pour créer un compte.'}), 400
+
+    ok, msg = sentauth_validate_password_strength(password)
+    if not ok:
+        return jsonify({'error': msg}), 400
+
+    verify_token = _secrets_auth.token_urlsafe(32)
+    verify_expire = (datetime.utcnow() + _timedelta_auth(hours=INVITATION_VALIDITY_HOURS)).isoformat()
+    now = datetime.utcnow().isoformat()
+    pw_hash = generate_password_hash(password)
+
+    conn = registre_get_db()
+    cur = conn.cursor()
+    try:
+        if REGISTRE_USE_PG:
+            cur.execute('''INSERT INTO clients (nom_entreprise, email, mot_de_passe_hash, date_creation, invitation_token, invitation_expire, actif, rgpd_consenti, rgpd_consenti_date)
+                VALUES (%s,%s,%s,%s,%s,%s,FALSE,TRUE,%s) RETURNING id''', (nom, email, pw_hash, now, verify_token, verify_expire, now))
+            new_id = cur.fetchone()['id']
+        else:
+            cur.execute('INSERT INTO clients (nom_entreprise, email, mot_de_passe_hash, date_creation, invitation_token, invitation_expire, actif, rgpd_consenti, rgpd_consenti_date) VALUES (?,?,?,?,?,?,0,1,?)', (nom, email, pw_hash, now, verify_token, verify_expire, now))
+            new_id = cur.lastrowid
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        conn.close()
+        return jsonify({'error': 'Cet email est déjà utilisé.'}), 409
+    conn.close()
+
+    session.pop('register_captcha_answer', None)
+    sentauth_send_verification_email(email, nom, verify_token)
+    ip = limiter.get_ip(request)
+    threading.Thread(target=sentauth_notify_conseilprev_new_signup, args=(nom, email, ip), daemon=True).start()
+    logger.info(f"NEW_SIGNUP {email} — en attente de verification email")
+    return jsonify({'ok': True}), 201
+
+@app.route('/verify-email/<token>', methods=['GET'])
+def sentauth_verify_email_page(token):
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql('SELECT * FROM clients WHERE invitation_token=%s', 'SELECT * FROM clients WHERE invitation_token=?'), (token,))
+    row = cur.fetchone()
+    if not row:
+        conn.close()
+        return send_from_directory('.', 'invitation-expiree.html')
+    d = dict(row) if not isinstance(row, dict) else row
+    expire = datetime.fromisoformat(d['invitation_expire']) if d.get('invitation_expire') else None
+    if not expire or datetime.utcnow() > expire:
+        conn.close()
+        return send_from_directory('.', 'invitation-expiree.html')
+    cur.execute(registre_sql(
+        "UPDATE clients SET actif=TRUE, invitation_token=NULL, invitation_expire=NULL WHERE id=%s",
+        "UPDATE clients SET actif=1, invitation_token=NULL, invitation_expire=NULL WHERE id=?"
+    ), (d['id'],))
+    conn.commit()
+    conn.close()
+    logger.info(f"EMAIL_VERIFIED {d['email']}")
+    return redirect('/login?verified=1')
+
 @app.route('/api/admin/clients', methods=['POST'])
 @sentinel_login_required
 @rate_limit_strict(limit=10, window=60)
