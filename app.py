@@ -2849,6 +2849,33 @@ def sentauth_login_page():
         return redirect('/sentinel')
     return send_from_directory('.', 'login.html')
 
+def sentauth_send_login_alert(email, nom_entreprise, ip):
+    """Envoie une alerte de securite par email a chaque connexion client reussie.
+    Execute en arriere-plan (thread court, envoi unique) pour ne pas ralentir la
+    connexion avec la latence SMTP (~1-2s)."""
+    try:
+        date_str = datetime.utcnow().strftime('%d/%m/%Y à %H:%M UTC')
+        html = f"""
+        <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;padding:24px;background:#F5F2ED">
+          <div style="background:#fff;border-radius:8px;padding:32px;border:1px solid #E0DDD8">
+            <div style="font-size:20px;font-weight:600;color:#1C1C1C;margin-bottom:4px">Sentinel <span style="background:#B83222;color:#fff;font-size:10px;padding:2px 6px;border-radius:3px;vertical-align:middle">AI</span></div>
+            <div style="font-size:11px;color:#767676;text-transform:uppercase;letter-spacing:1px;margin-bottom:24px">Alerte de connexion</div>
+            <p style="font-size:14px;color:#3D3D3D;line-height:1.6">Bonjour,</p>
+            <p style="font-size:14px;color:#3D3D3D;line-height:1.6">Une connexion à votre espace Sentinel AI ({nom_entreprise}) vient d être effectuée :</p>
+            <table style="width:100%;font-size:13px;color:#3D3D3D;margin:16px 0">
+              <tr><td style="padding:4px 0;color:#767676">Date</td><td style="padding:4px 0;font-weight:600">{date_str}</td></tr>
+              <tr><td style="padding:4px 0;color:#767676">Adresse IP</td><td style="padding:4px 0;font-weight:600">{ip}</td></tr>
+            </table>
+            <p style="font-size:13px;color:#767676;line-height:1.6;margin-top:20px">Si vous n êtes pas à l origine de cette connexion, contactez immédiatement CONSEILPREV à <a href="mailto:christophe.cerf@outlook.com" style="color:#B83222">christophe.cerf@outlook.com</a>.</p>
+          </div>
+          <p style="font-size:11px;color:#A8A8A8;text-align:center;margin-top:16px">CONSEILPREV — Sentinel AI · Cet email est envoyé automatiquement à chaque connexion pour votre sécurité.</p>
+        </div>
+        """
+        ok, method = send_email_smart(email, nom_entreprise, "🔒 Nouvelle connexion à votre espace Sentinel AI", html, tags=['sentinel-login-alert'])
+        logger.info(f"LOGIN_ALERT_EMAIL {email} via {method} — ok={ok}")
+    except Exception as e:
+        logger.error(f"LOGIN_ALERT_EMAIL_FAILED {email} : {e}")
+
 @app.route('/api/sentinel-auth/login', methods=['POST'])
 @rate_limit_strict(limit=8, window=300)
 def sentauth_login():
@@ -2888,6 +2915,11 @@ def sentauth_login():
     cur.execute(registre_sql('UPDATE clients SET derniere_connexion=%s WHERE id=%s', 'UPDATE clients SET derniere_connexion=? WHERE id=?'),
                 (datetime.utcnow().isoformat(), d['id']))
     conn.commit()
+
+    # Alerte de securite par email a chaque connexion - envoi unique en arriere-plan,
+    # ne bloque pas la reponse de connexion avec la latence SMTP (~1-2s).
+    _login_ip = limiter.get_ip(request)
+    threading.Thread(target=sentauth_send_login_alert, args=(email, d['nom_entreprise'], _login_ip), daemon=True).start()
     conn.close()
 
     logger.info(f"AUTH_CLIENT — connexion reussie : {email}")
