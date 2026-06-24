@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connexion — Sentinel AI</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:       #F5F2ED;
+  --white:    #FFFFFF;
+  --ink:      #1C1C1C;
+  --ink2:     #3D3D3D;
+  --muted:    #767676;
+  --rule:     #E0DDD8;
+  --rule2:    #D4D0CA;
+  --accent:   #B83222;
+  --accent2:  #D94030;
+  --serif:    'Instrument Serif', Georgia, serif;
+  --sans:     'Inter', system-ui, sans-serif;
+  --mono:     'JetBrains Mono', monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.login-box{background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:44px 40px;width:100%;max-width:400px;box-shadow:0 8px 32px rgba(0,0,0,.06)}
+.login-logo{font-family:var(--serif);font-size:26px;color:var(--ink);margin-bottom:4px}
+.login-logo .ai{display:inline-block;background:var(--accent);color:#fff;font-family:var(--mono);font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;letter-spacing:.04em;margin-left:4px;vertical-align:middle}
+.login-sub{font-size:11px;font-family:var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:28px}
+.login-field{margin-bottom:16px}
+.login-label{display:block;font-size:11px;color:var(--ink2);font-weight:600;margin-bottom:6px}
+.login-input{width:100%;padding:11px 14px;border:1px solid var(--rule2);border-radius:6px;font-size:14px;font-family:var(--sans);background:var(--bg);color:var(--ink);outline:none;transition:border-color .15s}
+.login-input:focus{border-color:var(--accent)}
+.login-btn{width:100%;padding:12px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px;transition:background .15s}
+.login-btn:hover{background:var(--accent2)}
+.login-btn:disabled{opacity:.6;cursor:default}
+.login-error{font-size:12px;color:var(--accent);margin-top:12px;display:none;line-height:1.5}
+.login-footer{margin-top:24px;text-align:center;font-size:11px;color:var(--muted)}
+.login-footer a{color:var(--accent);text-decoration:none}
+</style>
+</head>
+<body>
+  <div class="login-box">
+    <div class="login-logo">Sentinel <span class="ai">AI</span></div>
+    <div class="login-sub">Espace client — Accès sécurisé</div>
+
+    <form id="login-form">
+      <div class="login-field">
+        <label class="login-label">Adresse email</label>
+        <input type="email" id="login-email" class="login-input" placeholder="vous@entreprise.com" required autocomplete="username">
+      </div>
+      <div class="login-field">
+        <label class="login-label">Mot de passe</label>
+        <input type="password" id="login-password" class="login-input" placeholder="••••••••" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="login-btn" id="login-btn">Se connecter</button>
+      <div class="login-error" id="login-error"></div>
+    </form>
+
+    <div class="login-footer">
+      Accès non fonctionnel ? Contactez <a href="mailto:christophe.cerf@outlook.com">CONSEILPREV</a>
+    </div>
+  </div>
+
+<script>
+document.getElementById('login-form').addEventListener('submit', function(e){
+  e.preventDefault();
+  var btn = document.getElementById('login-btn');
+  var errEl = document.getElementById('login-error');
+  var email = document.getElementById('login-email').value.trim();
+  var password = document.getElementById('login-password').value;
+
+  btn.disabled = true;
+  btn.textContent = 'Connexion…';
+  errEl.style.display = 'none';
+
+  fetch('/api/auth/login', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({email: email, password: password})
+  })
+  .then(function(r){ return r.json().then(function(d){ return {status:r.status, data:d}; }); })
+  .then(function(res){
+    if(res.status === 200){
+      window.location.href = '/sentinel';
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Se connecter';
+      errEl.textContent = res.data.error || 'Identifiants incorrects.';
+      errEl.style.display = 'block';
+    }
+  })
+  .catch(function(){
+    btn.disabled = false;
+    btn.textContent = 'Se connecter';
+    errEl.textContent = 'Erreur réseau. Réessayez.';
+    errEl.style.display = 'block';
+  });
+});
+</script>
+</body>
+</html>
