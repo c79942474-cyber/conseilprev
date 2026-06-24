@@ -772,7 +772,10 @@ textarea.form-el{min-height:86px;resize:vertical}
 .mat-kpi-name{font-size:11px;color:var(--ink2);margin-top:4px;line-height:1.4;overflow:visible}
 .mat-kpi-tool{font-size:9px;font-family:var(--mono);color:var(--blue);margin-top:6px}
 /* Phases / timeline */
-.mat-phase{display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--rule)}
+.mat-phase-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px}
+@media(max-width:900px){.mat-phase-grid{grid-template-columns:1fr}}
+.mat-phase{display:flex;gap:16px;padding:16px;border:1px solid var(--rule);border-radius:8px;background:var(--white);transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;transform-origin:center center;position:relative}
+.mat-phase:hover{transform:scale(1.06);box-shadow:0 12px 32px rgba(0,0,0,.16);border-color:var(--accent);z-index:5}
 .mat-phase:last-child{border-bottom:none}
 .mat-phase-num{width:34px;height:34px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;flex-shrink:0}
 .mat-phase-body{flex:1}
@@ -6822,7 +6825,8 @@ function matRender(){
 
   /* Phases / calendrier */
   html += '<div class="mat-section"><div class="mat-section-h">Plan d\'action — 4 phases'+tip("Programme de mise en conformite en 4 phases : Diagnostic, Conception du cadre de gouvernance, Deploiement operationnel, Maintenance continue. Methodologie CONSEILPREV.")+'</div>'
-    + '<div class="mat-section-sub">Programme de mise en conformité sur '+s.duree+' semaines environ.</div>';
+    + '<div class="mat-section-sub">Programme de mise en conformité sur '+s.duree+' semaines environ.</div>'
+    + '<div class="mat-phase-grid">';
   MAT_PHASES.forEach(function(p){
     html += '<div class="mat-phase"><div class="mat-phase-num">'+p.n+'</div><div class="mat-phase-body">'
       + '<div class="mat-phase-title">Phase '+p.n+' — '+p.title+'</div>'
@@ -6830,7 +6834,7 @@ function matRender(){
       + '<div class="mat-phase-desc">'+p.desc+'</div>'
       + '<div class="mat-phase-deliv">▸ '+p.deliv+tip("Livrables produits a l issue de cette phase. Duree : "+p.duree+" ("+p.dates+").")+'</div></div></div>';
   });
-  html += '</div>';
+  html += '</div></div>';
 
   /* Procédure d'audit */
   html += '<div class="mat-section"><div class="mat-section-h">Procédure d\'audit de maturité'+tip("Methodologie d'audit en 4 etapes : Pre-audit (applicabilite), Audit documentaire automatise, Audit terrain, Tests directs sur les systemes IA.")+'</div>'
