@@ -1435,7 +1435,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <span class="tb-date" id="tb-date"></span>
     <span id="tb-client-name" style="font-size:10px;font-family:var(--mono);color:var(--muted);margin-right:10px"></span>
     <button class="tb-btn" onclick="window.location.href='/'" title="Retourner a la page d accueil CONSEILPREV">← Retour Accueil</button>
-    <button class="tb-btn" onclick="fetch('/api/auth/logout',{method:'POST'}).then(function(){window.location.href='/login'})" title="Se deconnecter de l espace client">Déconnexion</button>
+    <button class="tb-btn" onclick="fetch('/api/sentinel-auth/logout',{method:'POST'}).then(function(){window.location.href='/login'})" title="Se deconnecter de l espace client">Déconnexion</button>
     <button class="tb-btn tb-btn-primary" onclick="openAuditTab()" title="Ouvrir l audit de conformite EU AI Act complet (32 points de controle).">Lancer un audit</button>
   </div>
 </header>
@@ -12375,7 +12375,7 @@ try {
 <script>
 
 (function(){
-  fetch('/api/auth/me').then(function(r){ return r.json(); }).then(function(d){
+  fetch('/api/sentinel-auth/me').then(function(r){ return r.json(); }).then(function(d){
     var el = document.getElementById('tb-client-name');
     if(el && d.authenticated) el.textContent = d.is_conseilprev ? 'CONSEILPREV' : d.nom_entreprise;
   }).catch(function(){});
