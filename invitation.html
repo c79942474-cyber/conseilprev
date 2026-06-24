@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Activation de votre accès — Sentinel AI</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:       #F5F2ED;
+  --white:    #FFFFFF;
+  --ink:      #1C1C1C;
+  --ink2:     #3D3D3D;
+  --muted:    #767676;
+  --rule:     #E0DDD8;
+  --rule2:    #D4D0CA;
+  --accent:   #B83222;
+  --accent2:  #D94030;
+  --green:    #2D7A47;
+  --orange:   #C47C1A;
+  --serif:    'Instrument Serif', Georgia, serif;
+  --sans:     'Inter', system-ui, sans-serif;
+  --mono:     'JetBrains Mono', monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.box{background:var(--white);border:1px solid var(--rule);border-radius:10px;padding:44px 40px;width:100%;max-width:440px;box-shadow:0 8px 32px rgba(0,0,0,.06)}
+.logo{font-family:var(--serif);font-size:26px;color:var(--ink);margin-bottom:4px}
+.logo .ai{display:inline-block;background:var(--accent);color:#fff;font-family:var(--mono);font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;letter-spacing:.04em;margin-left:4px;vertical-align:middle}
+.sub{font-size:11px;font-family:var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.welcome{font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:24px}
+.welcome strong{color:var(--ink)}
+.field{margin-bottom:16px}
+.label{display:block;font-size:11px;color:var(--ink2);font-weight:600;margin-bottom:6px}
+.input{width:100%;padding:11px 14px;border:1px solid var(--rule2);border-radius:6px;font-size:14px;font-family:var(--sans);background:var(--bg);color:var(--ink);outline:none;transition:border-color .15s}
+.input:focus{border-color:var(--accent)}
+.pw-row{display:flex;gap:8px}
+.pw-row .input{flex:1}
+.btn-generate{padding:11px 14px;background:var(--bg);border:1px solid var(--rule2);border-radius:6px;font-size:11px;font-family:var(--mono);color:var(--ink2);cursor:pointer;white-space:nowrap;transition:all .15s}
+.btn-generate:hover{border-color:var(--accent);color:var(--accent)}
+.pw-strength{display:flex;gap:4px;margin-top:8px}
+.pw-strength-bar{height:4px;flex:1;background:var(--rule);border-radius:2px;transition:background .2s}
+.pw-strength-label{font-size:10.5px;color:var(--muted);margin-top:6px}
+.pw-rules{font-size:10.5px;color:var(--muted);line-height:1.6;margin-top:8px}
+.pw-rule{display:flex;align-items:center;gap:6px}
+.pw-rule.ok{color:var(--green)}
+.captcha-row{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--rule2);border-radius:6px;padding:10px 14px;margin-bottom:16px}
+.captcha-question{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--ink)}
+.captcha-input{width:70px;padding:8px 10px;border:1px solid var(--rule2);border-radius:5px;font-size:14px;text-align:center}
+.consent-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:20px}
+.consent-row input{margin-top:3px;flex-shrink:0}
+.consent-row label{font-size:11.5px;color:var(--ink2);line-height:1.5}
+.consent-row a{color:var(--accent);text-decoration:none}
+.btn{width:100%;padding:12px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;transition:background .15s}
+.btn:hover{background:var(--accent2)}
+.btn:disabled{opacity:.5;cursor:default}
+.error{font-size:12px;color:var(--accent);margin-top:12px;display:none;line-height:1.5}
+.success{font-size:13px;color:var(--green);margin-top:12px;display:none;text-align:center;line-height:1.6}
+</style>
+</head>
+<body>
+  <div class="box">
+    <div class="logo">Sentinel <span class="ai">AI</span></div>
+    <div class="sub">Activation de votre accès</div>
+    <div class="welcome">Bienvenue <strong id="welcome-nom">…</strong> — vous allez définir votre mot de passe. <strong>CONSEILPREV ne le connaîtra jamais</strong>, conformément au RGPD.</div>
+
+    <form id="invitation-form">
+      <div class="field">
+        <label class="label">Email</label>
+        <input type="text" class="input" id="email-display" disabled style="opacity:.6">
+      </div>
+
+      <div class="field">
+        <label class="label">Votre mot de passe</label>
+        <div class="pw-row">
+          <input type="text" id="password" class="input" placeholder="Choisissez ou générez un mot de passe" autocomplete="new-password">
+          <button type="button" class="btn-generate" id="btn-generate">🎲 Générer</button>
+        </div>
+        <div class="pw-strength">
+          <div class="pw-strength-bar" id="bar1"></div>
+          <div class="pw-strength-bar" id="bar2"></div>
+          <div class="pw-strength-bar" id="bar3"></div>
+          <div class="pw-strength-bar" id="bar4"></div>
+        </div>
+        <div class="pw-strength-label" id="strength-label">Saisissez ou générez un mot de passe</div>
+        <div class="pw-rules">
+          <div class="pw-rule" id="rule-len">○ 10 caractères minimum</div>
+          <div class="pw-rule" id="rule-upper">○ Une majuscule</div>
+          <div class="pw-rule" id="rule-lower">○ Une minuscule</div>
+          <div class="pw-rule" id="rule-digit">○ Un chiffre</div>
+          <div class="pw-rule" id="rule-special">○ Un caractère spécial</div>
+        </div>
+      </div>
+
+      <div class="captcha-row">
+        <span class="captcha-question" id="captcha-question">…</span>
+        <input type="number" class="captcha-input" id="captcha-answer" placeholder="?">
+      </div>
+
+      <div class="consent-row">
+        <input type="checkbox" id="rgpd-consent">
+        <label for="rgpd-consent">J'accepte que mes données soient traitées par CONSEILPREV dans le cadre de l'utilisation de Sentinel AI, conformément à la <a href="/protection-donnees" target="_blank">politique de confidentialité</a>.</label>
+      </div>
+
+      <button type="submit" class="btn" id="submit-btn">Activer mon compte</button>
+      <div class="error" id="error-msg"></div>
+      <div class="success" id="success-msg">✅ Compte activé ! Redirection vers la connexion…</div>
+    </form>
+  </div>
+
+<script>
+var token = location.pathname.split('/').pop();
+var passwordEl = document.getElementById('password');
+
+function generateStrongPassword(){
+  var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#$%&*';
+  var arr = new Uint32Array(14);
+  crypto.getRandomValues(arr);
+  var pw = '';
+  for(var i=0;i<14;i++) pw += chars[arr[i] % chars.length];
+  return pw;
+}
+
+document.getElementById('btn-generate').addEventListener('click', function(){
+  passwordEl.value = generateStrongPassword();
+  passwordEl.type = 'text';
+  checkPasswordStrength();
+});
+
+function checkPasswordStrength(){
+  var pw = passwordEl.value;
+  var rules = {
+    len: pw.length >= 10,
+    upper: /[A-Z]/.test(pw),
+    lower: /[a-z]/.test(pw),
+    digit: /[0-9]/.test(pw),
+    special: /[^A-Za-z0-9]/.test(pw)
+  };
+  var score = Object.values(rules).filter(Boolean).length;
+
+  var ruleLabels = {
+    len: '10 caractères minimum', upper: 'Une majuscule', lower: 'Une minuscule',
+    digit: 'Un chiffre', special: 'Un caractère spécial'
+  };
+  Object.keys(ruleLabels).forEach(function(key){
+    var el = document.getElementById('rule-' + key);
+    if(el){
+      el.classList.toggle('ok', rules[key]);
+      el.textContent = (rules[key] ? '✓ ' : '○ ') + ruleLabels[key];
+    }
+  });
+
+  var bars = [document.getElementById('bar1'), document.getElementById('bar2'), document.getElementById('bar3'), document.getElementById('bar4')];
+  var colors = ['var(--accent)','var(--orange)','var(--orange)','var(--green)'];
+  var labels = ['Trop faible','Faible','Correct','Fort'];
+  var level = pw.length === 0 ? -1 : Math.min(3, Math.floor(score * 4 / 5));
+  bars.forEach(function(b,i){ b.style.background = i <= level ? colors[level] : 'var(--rule)'; });
+  document.getElementById('strength-label').textContent = pw.length === 0 ? 'Saisissez ou générez un mot de passe' : labels[level];
+
+  return rules.len && rules.upper && rules.lower && rules.digit && rules.special;
+}
+passwordEl.addEventListener('input', checkPasswordStrength);
+
+fetch('/api/sentinel-auth/invitation-info/' + token).then(function(r){ return r.json().then(function(d){ return {status:r.status,data:d}; }); })
+.then(function(res){
+  if(!res.data.valid){
+    document.querySelector('.box').innerHTML = '<div class="logo">Sentinel <span class="ai">AI</span></div><div class="sub">Lien invalide</div><p style="font-size:13px;color:var(--ink2);margin-top:16px">' + res.data.error + ' Contactez CONSEILPREV pour recevoir un nouveau lien.</p>';
+    return;
+  }
+  document.getElementById('welcome-nom').textContent = res.data.nom_entreprise;
+  document.getElementById('email-display').value = res.data.email_masque;
+  document.getElementById('captcha-question').textContent = res.data.captcha_question;
+});
+
+document.getElementById('invitation-form').addEventListener('submit', function(e){
+  e.preventDefault();
+  var errEl = document.getElementById('error-msg');
+  var btn = document.getElementById('submit-btn');
+  errEl.style.display = 'none';
+
+  if(!checkPasswordStrength()){
+    errEl.textContent = 'Le mot de passe ne respecte pas tous les critères de sécurité.';
+    errEl.style.display = 'block';
+    return;
+  }
+  if(!document.getElementById('rgpd-consent').checked){
+    errEl.textContent = 'Vous devez accepter la politique de confidentialité pour continuer.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Activation…';
+
+  fetch('/api/sentinel-auth/activate-account', {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      token: token,
+      password: passwordEl.value,
+      rgpd_consent: document.getElementById('rgpd-consent').checked,
+      captcha_answer: document.getElementById('captcha-answer').value
+    })
+  }).then(function(r){ return r.json().then(function(d){ return {status:r.status, data:d}; }); })
+  .then(function(res){
+    if(res.status === 200){
+      document.getElementById('invitation-form').style.display = 'none';
+      document.getElementById('success-msg').style.display = 'block';
+      setTimeout(function(){ window.location.href = '/login'; }, 2200);
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Activer mon compte';
+      errEl.textContent = res.data.error || 'Erreur lors de l activation.';
+      errEl.style.display = 'block';
+    }
+  }).catch(function(){
+    btn.disabled = false;
+    btn.textContent = 'Activer mon compte';
+    errEl.textContent = 'Erreur réseau. Réessayez.';
+    errEl.style.display = 'block';
+  });
+});
+</script>
+</body>
+</html>
