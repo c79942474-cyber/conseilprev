@@ -8,7 +8,7 @@ from email import encoders
 from werkzeug.utils import secure_filename
 from functools import wraps
 from collections import defaultdict
-from flask import Flask, send_from_directory, jsonify, request, abort, make_response, after_this_request
+from flask import Flask, send_from_directory, jsonify, request, abort, make_response, after_this_request, Response
 from flask_cors import CORS
 
 # ══════════════════════════════════════════════════════════
@@ -333,6 +333,22 @@ def security_middleware():
         logger.warning(f"BOT_BLOCKED {ip} UA={ua[:60]} → {path}")
         # Retourner 404 pour ne pas révéler le blocage
         abort(404)
+
+    # ── Anti-scraping comportemental (check_scraping etait definie mais jamais appelee) ──
+    if path.startswith('/api/') and check_scraping(request):
+        logger.warning(f"SCRAPING_PATTERN {ip} UA={ua[:60]} → {path}")
+        abort(404)
+
+    # ── Coherence des en-tetes : un vrai navigateur envoie Accept-Language et Accept-Encoding.
+    # Un script qui usurpe juste le User-Agent (ex: 'Mozilla/5.0...' en dur dans du code Python
+    # avec requests/curl) oublie generalement ces en-tetes. Applique uniquement aux pages HTML,
+    # pas aux assets/API deja proteges autrement, pour ne pas bloquer des clients API legitimes.
+    if not path.startswith('/api/') and not any(path.endswith(e) for e in static_exts):
+        accept_lang = request.headers.get('Accept-Language', '')
+        accept_enc = request.headers.get('Accept-Encoding', '')
+        if ua and len(ua) > 10 and not accept_lang and not accept_enc:
+            logger.warning(f"HEADERS_INCOHERENTS {ip} UA={ua[:60]} → {path}")
+            abort(404)
 
     # ── Rate limit global : 120 req/min par IP ──
     if not limiter.check(ip, limit=120, window=60, endpoint='global'):
@@ -2544,6 +2560,30 @@ def chat():
         return jsonify({"error": "Erreur serveur"}), 500
 
 # ── Pages statiques ──
+@app.route('/robots.txt')
+def robots_txt():
+    """Declare explicitement les zones interdites au crawl — n'arrete pas un bot
+    malveillant decide, mais cadre les bots respectueux (SEO, archivistes) et
+    sert de preuve de bonne foi en cas de litige sur l'usage des donnees du site."""
+    content = """User-agent: *
+Disallow: /api/
+Disallow: /admin
+Sitemap: https://conseilprev.onrender.com/sitemap.xml
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+"""
+    return Response(content, mimetype='text/plain')
+
 PAGES = {
     '/':              'index.html',
     '/support':       'support.html',
@@ -3626,6 +3666,30 @@ def rag_search():
 
     conn.close()
     return jsonify({'resultats': results, 'mode': 'vectoriel' if RAG_PGVECTOR_AVAILABLE else 'texte_integral'})
+
+
+# ══════════════════════════════════════════════════════════
+# ANTI-SCRAPING — Detection de navigateurs headless (Puppeteer/Selenium/Playwright)
+# Le filtre User-Agent seul ne suffit pas : un scraper sophistique usurpe un UA Chrome
+# standard. Le frontend envoie un signal JS (navigator.webdriver, plugins, etc.) que
+# seul un vrai navigateur peut authentifier correctement.
+# ══════════════════════════════════════════════════════════
+HEADLESS_FLAGGED_IPS = {}  # ip -> timestamp du dernier signalement
+
+@app.route('/api/client-signal', methods=['POST'])
+@rate_limit(limit=20, window=60)
+def client_signal():
+    """Recoit un signal anonyme du navigateur indiquant des caracteristiques de
+    navigateur headless (navigator.webdriver=true, absence de plugins, etc.).
+    Sert a renforcer le blocage cote middleware sans bloquer la navigation normale."""
+    data = request.get_json(force=True) or {}
+    is_headless = bool(data.get('webdriver') or data.get('no_plugins') or data.get('no_languages'))
+    ip = limiter.get_ip(request)
+    if is_headless:
+        HEADLESS_FLAGGED_IPS[ip] = time.time()
+        logger.warning(f"HEADLESS_DETECTED {ip} — signal navigateur automatise")
+        limiter.block(ip, 1800, 'headless_browser_detected')
+    return jsonify({'ok': True})
 
 
 for route, filename in PAGES.items():
