@@ -6218,4 +6218,25 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 
 </script>
+
+<script>
+/* ══ ANTI-SCRAPING — Detection de navigateurs headless (signal silencieux) ══ */
+(function(){
+'use strict';
+try {
+  var signals = {
+    webdriver: navigator.webdriver === true,
+    no_plugins: navigator.plugins && navigator.plugins.length === 0,
+    no_languages: !navigator.languages || navigator.languages.length === 0
+  };
+  if(signals.webdriver || signals.no_plugins || signals.no_languages){
+    fetch('/api/client-signal', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(signals)
+    }).catch(function(){});
+  }
+} catch(e){}
+})();
+
+</script>
 </html>
