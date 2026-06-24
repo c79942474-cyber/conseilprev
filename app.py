@@ -327,6 +327,14 @@ def security_middleware():
     ua  = request.headers.get('User-Agent', '')
     path = request.path
 
+    # ── Exemption partielle /auth/<token> des verifications anti-injection/coherence
+    # des en-tetes : ce chemin ne contient que des tokens generes par le serveur
+    # (jamais d'input libre), donc ces 2 verifications specifiques n'ont pas de sens
+    # ici et peuvent causer des faux positifs selon les caracteres aleatoires du token
+    # (ex: une sequence '--' ou '#' par hasard). Le rate limiting global RESTE applique
+    # (voir plus bas) pour empecher le brute-force du token.
+    is_auth_link = path.startswith('/auth/')
+
     # ── Whitelist assets statiques (pas de check UA) ──
     static_exts = ('.jpg','.jpeg','.png','.gif','.svg','.ico',
                    '.css','.js','.woff','.woff2','.mp4','.json')
@@ -360,7 +368,7 @@ def security_middleware():
     # Un script qui usurpe juste le User-Agent (ex: 'Mozilla/5.0...' en dur dans du code Python
     # avec requests/curl) oublie generalement ces en-tetes. Applique uniquement aux pages HTML,
     # pas aux assets/API deja proteges autrement, pour ne pas bloquer des clients API legitimes.
-    if not path.startswith('/api/') and not any(path.endswith(e) for e in static_exts):
+    if not is_auth_link and not path.startswith('/api/') and not any(path.endswith(e) for e in static_exts):
         accept_lang = request.headers.get('Accept-Language', '')
         accept_enc = request.headers.get('Accept-Encoding', '')
         if ua and len(ua) > 10 and not accept_lang and not accept_enc:
@@ -393,11 +401,12 @@ def security_middleware():
         r"(etc/passwd|/proc/self)",            # LFI
     ]
     full_url = request.url
-    for pat in suspicious_patterns:
-        if _re.search(pat, full_url, _re.IGNORECASE):
-            limiter.block(ip, 3600, f'injection_attempt:{pat}')
-            logger.warning(f"INJECTION {ip} → {full_url[:100]}")
-            abort(403)
+    if not is_auth_link:
+        for pat in suspicious_patterns:
+            if _re.search(pat, full_url, _re.IGNORECASE):
+                limiter.block(ip, 3600, f'injection_attempt:{pat}')
+                logger.warning(f"INJECTION {ip} → {full_url[:100]}")
+                abort(403)
 
 # ══════════════════════════════════════════════════════════
 # CONFIGURATION EMAIL — /api/apply (universel)
@@ -2823,6 +2832,7 @@ def sentinel_login_required(f):
     return wrapper
 
 @app.route('/auth/<token>')
+@rate_limit_strict(limit=10, window=300)
 def sentauth_master_link(token):
     """Lien secret CONSEILPREV — pose un cookie de session longue duree sans mot de passe."""
     if token == AUTH_MASTER_TOKEN:
