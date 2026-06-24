@@ -1186,6 +1186,9 @@ textarea.form-el{min-height:86px;resize:vertical}
 .rag-progress-track{width:100%;height:6px;background:var(--rule);border-radius:3px;overflow:hidden}
 .rag-progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--accent));border-radius:3px;transition:width .4s ease}
 
+.ctrl-section-clickable{cursor:pointer;transition:border-color .15s}
+.ctrl-section-clickable:hover{border-color:var(--accent)}
+
 </style>
 <style id="cpc-styles">
 /* ══ CHATBOT SENTINEL AI — CONSEILPREV ══ */
@@ -9783,11 +9786,12 @@ window.roadmapRenderPage = function(){
       else if(i === 2) prog = Math.round(d.auditPct * 0.6);
       else prog = d.auditPct >= 80 ? 20 : 0;
 
-      return '<div class="ctrl-section"><div class="ctrl-section-head"><span class="ctrl-section-title">Phase '+p.n+' — '+p.title+' <span style="font-family:var(--mono);font-size:9px;color:var(--blue)">'+p.duree+'</span></span>'
+      return '<div class="ctrl-section ctrl-section-clickable" onclick="roadmapOpenPhaseModal('+i+')" title="Cliquer pour générer le livrable détaillé de cette phase via IA"><div class="ctrl-section-head"><span class="ctrl-section-title">Phase '+p.n+' — '+p.title+' <span style="font-family:var(--mono);font-size:9px;color:var(--blue)">'+p.duree+'</span></span>'
         + '<span class="audit-rel-tag '+(prog>=70?'audit-rel-ok':'')+'" style="background:'+(prog>=70?'rgba(45,122,71,.1)':'var(--bg)')+';color:'+(prog>=70?'var(--green)':'var(--muted2)')+'">'+prog+'%</span></div>'
         + '<div style="padding:14px 16px"><div style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:8px">'+p.desc+'</div>'
         + '<div style="height:4px;background:var(--bg2);border-radius:2px;overflow:hidden"><div style="height:100%;width:'+prog+'%;background:'+(prog>=70?'var(--green)':prog>=30?'var(--orange)':'var(--accent)')+';border-radius:2px"></div></div>'
-        + '<div style="font-size:10px;font-family:var(--mono);color:var(--green);margin-top:8px">▸ '+p.deliv+'</div></div></div>';
+        + '<div style="font-size:10px;font-family:var(--mono);color:var(--green);margin-top:8px">▸ '+p.deliv+'</div>'
+        + '<div class="card-cta">🤖 Générer le livrable détaillé →</div></div></div>';
     }).join('');
 
     holder.innerHTML = html || '<div class="reg-empty">Données de phases indisponibles.</div>';
@@ -12234,6 +12238,100 @@ window.ragShowRelevantDocs = function(query, page, titre){
       return '<div class="ctrl-section" style="margin-bottom:10px"><div class="ctrl-section-head"><span class="ctrl-section-title">'+r.document+'</span><span style="font-size:9px;font-family:var(--mono);color:var(--muted2)">score '+r.score+'</span></div>'
         + '<div style="padding:12px 16px;font-size:11.5px;color:var(--ink2);line-height:1.6">…'+r.texte.substring(0,280)+'…</div></div>';
     }).join('');
+  });
+};
+
+})();
+
+</script>
+
+<script>
+/* ══ ROADMAP — Generation de livrables detailles par phase (Mistral/Claude) ══ */
+(function(){
+'use strict';
+
+var ROADMAP_DELIV_API = "mistral";
+
+function roadmapBuildPrompt(phaseIndex, d){
+  var p = window.MAT_PHASES[phaseIndex];
+  var sectorKey = (typeof window.matGetCur === "function") ? window.matGetCur() : "telecom";
+  var sectorLabel = (window.MAT_SECTORS && window.MAT_SECTORS[sectorKey]) ? window.MAT_SECTORS[sectorKey].label : sectorKey;
+
+  return "Tu es consultant senior CONSEILPREV specialise en gouvernance IA. Redige un livrable operationnel detaille pour la phase suivante d'un plan de mise en conformite EU AI Act.\n\n"
+    + "PHASE " + p.n + " — " + p.title + "\n"
+    + "Duree : " + p.duree + " (" + p.dates + ")\n"
+    + "Objectif : " + p.desc + "\n"
+    + "Livrables attendus : " + p.deliv + "\n\n"
+    + "CONTEXTE CLIENT REEL :\n"
+    + "- Secteur d'activite : " + sectorLabel + "\n"
+    + "- Systemes IA inventories au Registre : " + d.registre.length + " (dont " + d.registreHautRisque + " a haut risque)\n"
+    + "- Avancement Audit IA Act : " + d.auditDone + "/" + d.auditTotal + " points de controle conformes (" + d.auditPct + "%)\n\n"
+    + "Structure ta reponse en sections markdown : (1) Objectifs detailles de la phase, (2) Plan d'action semaine par semaine, (3) Roles et responsabilites (RACI), (4) Livrables avec criteres d'acceptation, (5) Risques et points d'attention, (6) Indicateurs de succes. Sois concret et actionnable, adapte au secteur et a la situation reelle du client.";
+}
+
+window.roadmapOpenPhaseModal = function(phaseIndex){
+  var p = window.MAT_PHASES[phaseIndex];
+  var modal = document.getElementById("roadmap-modal");
+  if(!modal){ modal = document.createElement("div"); modal.id = "roadmap-modal"; modal.className = "mat-modal"; document.body.appendChild(modal); }
+
+  modal.innerHTML = '<div class="mat-modal-box mat-modal-wide">'
+    + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Plan d action · Phase ' + p.n + '</div>'
+    + '<div class="mat-modal-title">' + p.title + '</div></div>'
+    + '<button class="mat-modal-close" onclick="document.getElementById(\'roadmap-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
+    + '<div class="mat-modal-body">'
+    + '<p style="font-size:12px;color:var(--muted);margin-bottom:16px">Génère un livrable détaillé et actionnable pour cette phase, basé sur vos données réelles (Registre IA, Audit) et votre secteur d activité.</p>'
+    + '<div class="mat-api-row" style="margin-bottom:16px">'
+    + '<button class="mat-api-btn on" id="roadmap-api-mistral" onclick="roadmapSetApi(\'mistral\')" title="Utiliser Mistral Large pour generer ce livrable.">Mistral</button>'
+    + '<button class="mat-api-btn" id="roadmap-api-claude" onclick="roadmapSetApi(\'claude\')" title="Utiliser Claude Sonnet pour generer ce livrable.">Claude</button>'
+    + '</div>'
+    + '<button class="mat-export-btn" style="background:var(--ink);color:#fff;width:100%" onclick="roadmapGenerateDeliv(' + phaseIndex + ')">🤖 Générer le livrable détaillé</button>'
+    + '<div id="roadmap-modal-body" style="margin-top:16px"></div>'
+    + '</div>'
+    + '<div class="mat-modal-foot" id="roadmap-modal-foot" style="display:none">'
+    + '<button class="mat-export-btn" style="background:#1C5A8A;color:#fff" onclick="roadmapSaveToHisto(' + phaseIndex + ')">💾 Enregistrer dans l historique</button>'
+    + '</div></div>';
+  modal.classList.add("on");
+  window.__roadmapCurrentDeliv = { phaseIndex: phaseIndex, content: null, apiName: null };
+};
+
+window.roadmapSetApi = function(api){
+  ROADMAP_DELIV_API = api;
+  document.getElementById("roadmap-api-mistral").classList.toggle("on", api === "mistral");
+  document.getElementById("roadmap-api-claude").classList.toggle("on", api === "claude");
+};
+
+window.roadmapGenerateDeliv = function(phaseIndex){
+  var bodyEl = document.getElementById("roadmap-modal-body");
+  var footEl = document.getElementById("roadmap-modal-foot");
+  if(bodyEl) bodyEl.innerHTML = '<div class="reg-loading">Génération du livrable en cours…</div>';
+  if(footEl) footEl.style.display = "none";
+
+  cpGetDashboardData(function(d){
+    var prompt = roadmapBuildPrompt(phaseIndex, d);
+    window.matCallAIBridge(prompt, ROADMAP_DELIV_API, function(err, text, apiName){
+      if(err || !text){
+        if(bodyEl) bodyEl.innerHTML = '<div style="padding:20px;text-align:center;color:var(--accent)">Erreur de génération. Réessayez ou contactez christophe.cerf@outlook.com</div>';
+        return;
+      }
+      window.__roadmapCurrentDeliv.content = text;
+      window.__roadmapCurrentDeliv.apiName = apiName;
+      if(bodyEl) bodyEl.innerHTML = '<div class="mat-deliv-content">' + window.matMdToHtmlBridge(text) + '</div>';
+      if(footEl) footEl.style.display = "flex";
+    }, "maturite");
+  });
+};
+
+window.roadmapSaveToHisto = function(phaseIndex){
+  var cur = window.__roadmapCurrentDeliv;
+  if(!cur || !cur.content){ alert("Générez d abord le livrable."); return; }
+  var p = window.MAT_PHASES[phaseIndex];
+  window.histoSave('maturite', 'Livrable Roadmap — Phase ' + p.n,
+    { phase: p.n, titre: p.title, api: cur.apiName },
+    { extrait: cur.content.substring(0, 500) },
+    'Roadmap — Phase ' + p.n + ' : ' + p.title
+  ).then(function(r){
+    if(r && r.calcul) alert('✅ Livrable enregistré dans l historique (#' + r.calcul.id + ').');
+    else alert('Erreur lors de l enregistrement.');
   });
 };
 
