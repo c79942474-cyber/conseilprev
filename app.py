@@ -2781,11 +2781,24 @@ def sentauth_init_db():
             id SERIAL PRIMARY KEY,
             nom_entreprise TEXT NOT NULL,
             email TEXT UNIQUE NOT NULL,
-            mot_de_passe_hash TEXT NOT NULL,
-            actif BOOLEAN DEFAULT TRUE,
+            mot_de_passe_hash TEXT,
+            actif BOOLEAN DEFAULT FALSE,
             date_creation TEXT NOT NULL,
-            derniere_connexion TEXT
+            derniere_connexion TEXT,
+            invitation_token TEXT,
+            invitation_expire TEXT,
+            rgpd_consenti BOOLEAN DEFAULT FALSE,
+            rgpd_consenti_date TEXT
         )''')
+        try:
+            cur.execute("ALTER TABLE clients ALTER COLUMN mot_de_passe_hash DROP NOT NULL")
+            cur.execute("ALTER TABLE clients ALTER COLUMN actif SET DEFAULT FALSE")
+            cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS invitation_token TEXT")
+            cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS invitation_expire TEXT")
+            cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS rgpd_consenti BOOLEAN DEFAULT FALSE")
+            cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS rgpd_consenti_date TEXT")
+            conn.commit()
+        except Exception: conn.rollback()
     else:
         cur.execute('''CREATE TABLE IF NOT EXISTS clients (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -2937,32 +2950,178 @@ def sentauth_me():
         return jsonify({'authenticated': False}), 401
     return jsonify({'authenticated': True, **client})
 
+# ══════════════════════════════════════════════════════════
+# INVITATION CLIENT — le client definit lui-meme son mot de passe
+# Conforme RGPD : CONSEILPREV ne connait jamais le mot de passe du client.
+# Lien d'invitation a usage unique (48h), consentement RGPD horodate (preuve),
+# captcha maison (sans dependance externe), politique de robustesse du mot de passe.
+# ══════════════════════════════════════════════════════════
+INVITATION_VALIDITY_HOURS = 48
+PASSWORD_MIN_LENGTH = 10
+
+def sentauth_validate_password_strength(password):
+    """Politique de robustesse : 10+ caracteres, majuscule, minuscule, chiffre, caractere special."""
+    if len(password) < PASSWORD_MIN_LENGTH:
+        return False, f"Le mot de passe doit contenir au moins {PASSWORD_MIN_LENGTH} caractères."
+    if not _re.search(r'[A-Z]', password):
+        return False, "Le mot de passe doit contenir au moins une majuscule."
+    if not _re.search(r'[a-z]', password):
+        return False, "Le mot de passe doit contenir au moins une minuscule."
+    if not _re.search(r'[0-9]', password):
+        return False, "Le mot de passe doit contenir au moins un chiffre."
+    if not _re.search(r'[^A-Za-z0-9]', password):
+        return False, "Le mot de passe doit contenir au moins un caractère spécial."
+    return True, None
+
+def sentauth_send_invitation_email(email, nom_entreprise, token):
+    try:
+        link = f"https://conseilprev.onrender.com/invitation/{token}"
+        html = f"""
+        <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;padding:24px;background:#F5F2ED">
+          <div style="background:#fff;border-radius:8px;padding:32px;border:1px solid #E0DDD8">
+            <div style="font-size:20px;font-weight:600;color:#1C1C1C;margin-bottom:4px">Sentinel <span style="background:#B83222;color:#fff;font-size:10px;padding:2px 6px;border-radius:3px;vertical-align:middle">AI</span></div>
+            <div style="font-size:11px;color:#767676;text-transform:uppercase;letter-spacing:1px;margin-bottom:24px">Invitation — Activation de votre accès</div>
+            <p style="font-size:14px;color:#3D3D3D;line-height:1.6">Bonjour,</p>
+            <p style="font-size:14px;color:#3D3D3D;line-height:1.6">CONSEILPREV vous invite à activer votre accès à la plateforme Sentinel AI pour {nom_entreprise}.</p>
+            <p style="font-size:14px;color:#3D3D3D;line-height:1.6">Pour votre sécurité, vous seul choisirez votre mot de passe — CONSEILPREV ne le connaîtra jamais.</p>
+            <div style="text-align:center;margin:28px 0">
+              <a href="{link}" style="display:inline-block;background:#B83222;color:#fff;padding:13px 28px;border-radius:6px;text-decoration:none;font-weight:600;font-size:14px">Activer mon accès →</a>
+            </div>
+            <p style="font-size:12px;color:#767676;line-height:1.6">Ce lien est valable {INVITATION_VALIDITY_HOURS} heures et ne peut être utilisé qu une seule fois.</p>
+          </div>
+          <p style="font-size:11px;color:#A8A8A8;text-align:center;margin-top:16px">CONSEILPREV — Sentinel AI</p>
+        </div>
+        """
+        ok, method = send_email_smart(email, nom_entreprise, "Activez votre accès à Sentinel AI", html, tags=['sentinel-invitation'])
+        logger.info(f"INVITATION_EMAIL {email} via {method} — ok={ok}")
+        return ok
+    except Exception as e:
+        logger.error(f"INVITATION_EMAIL_FAILED {email} : {e}")
+        return False
+
+@app.route('/invitation/<token>', methods=['GET'])
+def sentauth_invitation_page(token):
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql(
+        'SELECT * FROM clients WHERE invitation_token=%s', 'SELECT * FROM clients WHERE invitation_token=?'
+    ), (token,))
+    row = cur.fetchone()
+    conn.close()
+    if not row:
+        return send_from_directory('.', 'invitation-expiree.html')
+    d = dict(row) if not isinstance(row, dict) else row
+    expire = datetime.fromisoformat(d['invitation_expire']) if d.get('invitation_expire') else None
+    if not expire or datetime.utcnow() > expire:
+        return send_from_directory('.', 'invitation-expiree.html')
+    return send_from_directory('.', 'invitation.html')
+
+@app.route('/api/sentinel-auth/invitation-info/<token>', methods=['GET'])
+@rate_limit_strict(limit=20, window=60)
+def sentauth_invitation_info(token):
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql(
+        'SELECT nom_entreprise, email, invitation_expire FROM clients WHERE invitation_token=%s',
+        'SELECT nom_entreprise, email, invitation_expire FROM clients WHERE invitation_token=?'
+    ), (token,))
+    row = cur.fetchone()
+    conn.close()
+    if not row:
+        return jsonify({'valid': False, 'error': 'Lien invalide ou déjà utilisé.'}), 404
+    d = dict(row) if not isinstance(row, dict) else row
+    expire = datetime.fromisoformat(d['invitation_expire']) if d.get('invitation_expire') else None
+    if not expire or datetime.utcnow() > expire:
+        return jsonify({'valid': False, 'error': 'Ce lien a expiré.'}), 410
+
+    # Captcha maison simple : addition aleatoire, stockee en session, sans dependance externe.
+    a, b = _secrets_auth.randbelow(8) + 2, _secrets_auth.randbelow(8) + 2
+    session['captcha_answer'] = a + b
+    session['captcha_token'] = token
+
+    masked_email = d['email'][:2] + '***@' + d['email'].split('@')[1] if '@' in d['email'] else d['email']
+    return jsonify({'valid': True, 'nom_entreprise': d['nom_entreprise'], 'email_masque': masked_email, 'captcha_question': f"{a} + {b} = ?"})
+
+@app.route('/api/sentinel-auth/activate-account', methods=['POST'])
+@rate_limit_strict(limit=10, window=300)
+def sentauth_activate_account():
+    data = request.get_json(force=True) or {}
+    token = (data.get('token') or '').strip()
+    password = data.get('password') or ''
+    rgpd_consent = bool(data.get('rgpd_consent'))
+    captcha_answer = data.get('captcha_answer')
+
+    if session.get('captcha_token') != token:
+        return jsonify({'error': 'Session expirée, rechargez la page.'}), 400
+    try:
+        if int(captcha_answer) != session.get('captcha_answer'):
+            return jsonify({'error': 'Réponse de vérification incorrecte.'}), 400
+    except (ValueError, TypeError):
+        return jsonify({'error': 'Réponse de vérification invalide.'}), 400
+
+    if not rgpd_consent:
+        return jsonify({'error': 'Le consentement RGPD est requis pour activer votre compte.'}), 400
+
+    ok, msg = sentauth_validate_password_strength(password)
+    if not ok:
+        return jsonify({'error': msg}), 400
+
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql('SELECT * FROM clients WHERE invitation_token=%s', 'SELECT * FROM clients WHERE invitation_token=?'), (token,))
+    row = cur.fetchone()
+    if not row:
+        conn.close()
+        return jsonify({'error': 'Lien invalide ou déjà utilisé.'}), 404
+    d = dict(row) if not isinstance(row, dict) else row
+    expire = datetime.fromisoformat(d['invitation_expire']) if d.get('invitation_expire') else None
+    if not expire or datetime.utcnow() > expire:
+        conn.close()
+        return jsonify({'error': 'Ce lien a expiré.'}), 410
+
+    pw_hash = generate_password_hash(password)
+    now = datetime.utcnow().isoformat()
+    cur.execute(registre_sql(
+        'UPDATE clients SET mot_de_passe_hash=%s, actif=TRUE, invitation_token=NULL, invitation_expire=NULL, rgpd_consenti=TRUE, rgpd_consenti_date=%s WHERE id=%s',
+        'UPDATE clients SET mot_de_passe_hash=?, actif=1, invitation_token=NULL, invitation_expire=NULL, rgpd_consenti=1, rgpd_consenti_date=? WHERE id=?'
+    ), (pw_hash, now, d['id']))
+    conn.commit()
+    conn.close()
+    session.pop('captcha_answer', None)
+    session.pop('captcha_token', None)
+    logger.info(f"ACCOUNT_ACTIVATED {d['email']} — consentement RGPD horodate {now}")
+    return jsonify({'ok': True})
+
 @app.route('/api/admin/clients', methods=['POST'])
 @sentinel_login_required
 @rate_limit_strict(limit=10, window=60)
 def sentauth_admin_create_client():
-    """Creation manuelle de comptes clients — reservee a CONSEILPREV."""
+    """Creation manuelle de comptes clients — reservee a CONSEILPREV.
+    Le mot de passe n est PAS demande ici : un email d invitation est envoye
+    au client, qui choisit lui-meme son mot de passe (CONSEILPREV ne le
+    connait jamais, conformement aux bonnes pratiques RGPD)."""
     client = sentauth_current_client()
     if not client or not client.get('is_conseilprev'):
         abort(403)
     data = request.get_json(force=True) or {}
     nom = (data.get('nom_entreprise') or '').strip()
     email = (data.get('email') or '').strip().lower()
-    password = (data.get('password') or '')
-    if not nom or not email or len(password) < 8:
-        return jsonify({'error': 'nom_entreprise, email et password (8 caractères min.) requis.'}), 400
+    if not nom or not email:
+        return jsonify({'error': 'nom_entreprise et email requis.'}), 400
+
+    invitation_token = _secrets_auth.token_urlsafe(32)
+    invitation_expire = (datetime.utcnow() + _timedelta_auth(hours=INVITATION_VALIDITY_HOURS)).isoformat()
+    now = datetime.utcnow().isoformat()
 
     conn = registre_get_db()
     cur = conn.cursor()
     try:
-        pw_hash = generate_password_hash(password)
-        now = datetime.utcnow().isoformat()
         if REGISTRE_USE_PG:
-            cur.execute('''INSERT INTO clients (nom_entreprise, email, mot_de_passe_hash, date_creation)
-                VALUES (%s,%s,%s,%s) RETURNING id''', (nom, email, pw_hash, now))
+            cur.execute('''INSERT INTO clients (nom_entreprise, email, date_creation, invitation_token, invitation_expire, actif)
+                VALUES (%s,%s,%s,%s,%s,FALSE) RETURNING id''', (nom, email, now, invitation_token, invitation_expire))
             new_id = cur.fetchone()['id']
         else:
-            cur.execute('INSERT INTO clients (nom_entreprise, email, mot_de_passe_hash, date_creation) VALUES (?,?,?,?)', (nom, email, pw_hash, now))
+            cur.execute('INSERT INTO clients (nom_entreprise, email, date_creation, invitation_token, invitation_expire, actif) VALUES (?,?,?,?,?,0)', (nom, email, now, invitation_token, invitation_expire))
             new_id = cur.lastrowid
         conn.commit()
     except Exception as e:
@@ -2970,7 +3129,9 @@ def sentauth_admin_create_client():
         conn.close()
         return jsonify({'error': 'Email déjà utilisé ou erreur de création.'}), 409
     conn.close()
-    return jsonify({'client': {'id': new_id, 'nom_entreprise': nom, 'email': email}}), 201
+
+    email_sent = sentauth_send_invitation_email(email, nom, invitation_token)
+    return jsonify({'client': {'id': new_id, 'nom_entreprise': nom, 'email': email}, 'invitation_email_sent': email_sent}), 201
 
 @app.route('/api/admin/clients', methods=['GET'])
 @sentinel_login_required
