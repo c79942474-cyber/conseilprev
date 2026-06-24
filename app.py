@@ -3194,11 +3194,16 @@ def sentauth_register():
     conn.close()
 
     session.pop('register_captcha_answer', None)
-    sentauth_send_verification_email(email, nom, verify_token)
+    verification_email_sent = sentauth_send_verification_email(email, nom, verify_token)
     ip = limiter.get_ip(request)
-    threading.Thread(target=sentauth_notify_conseilprev_new_signup, args=(nom, email, ip), daemon=True).start()
-    logger.info(f"NEW_SIGNUP {email} — en attente de verification email")
-    return jsonify({'ok': True}), 201
+    try:
+        sentauth_notify_conseilprev_new_signup(nom, email, ip)
+    except Exception as _e:
+        logger.error(f"NOTIFY_CONSEILPREV_SYNC_FAILED : {_e}")
+    logger.info(f"NEW_SIGNUP {email} — en attente de verification email — email_envoye={verification_email_sent}")
+    if not verification_email_sent:
+        logger.warning(f"NEW_SIGNUP_EMAIL_NON_ENVOYE {email} — verifiez BREVO_API_KEY ou SMTP_USER/SMTP_PASSWORD sur Render")
+    return jsonify({'ok': True, 'verification_email_sent': verification_email_sent}), 201
 
 @app.route('/verify-email/<token>', methods=['GET'])
 def sentauth_verify_email_page(token):
