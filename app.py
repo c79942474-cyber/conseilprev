@@ -8,7 +8,9 @@ from email import encoders
 from werkzeug.utils import secure_filename
 from functools import wraps
 from collections import defaultdict
-from flask import Flask, send_from_directory, jsonify, request, abort, make_response, after_this_request, Response
+from flask import Flask, send_from_directory, jsonify, request, abort, make_response, after_this_request, Response, session, redirect
+from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import timedelta as _timedelta_auth
 from flask_cors import CORS
 
 # ══════════════════════════════════════════════════════════
@@ -21,6 +23,11 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(mess
 logger = logging.getLogger('conseilprev')
 
 app = Flask(__name__, static_folder='.', static_url_path='')
+app.secret_key = os.environ.get('FLASK_SECRET_KEY', '').strip() or hashlib.sha256(b'conseilprev-sentinel-fallback-2026').hexdigest()
+app.config['PERMANENT_SESSION_LIFETIME'] = _timedelta_auth(days=30)
+app.config['SESSION_COOKIE_SECURE'] = True
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 CORS(app, resources={r"/api/*": {"origins": ["https://conseilprev.onrender.com"]}})
 
 # ── Secrets & config ──
@@ -260,6 +267,203 @@ class BruteForceProtector:
         return 0
 
 bf_protector = BruteForceProtector()
+
+# ══════════════════════════════════════════════════════════
+# AUTHENTIFICATION — Acces a Sentinel AI
+# CONSEILPREV : lien secret personnel (cookie longue duree, sans mot de passe).
+# Clients externes : compte email + mot de passe (cree manuellement par CONSEILPREV).
+# Isolation complete : chaque client ne voit que ses propres donnees (client_id).
+# ══════════════════════════════════════════════════════════
+AUTH_MASTER_TOKEN = os.environ.get('AUTH_MASTER_TOKEN', '').strip()
+if not AUTH_MASTER_TOKEN:
+    # Genere une fois et logue clairement : a copier dans la variable d'environnement
+    # Render (AUTH_MASTER_TOKEN) pour que le lien reste stable entre redemarrages.
+    AUTH_MASTER_TOKEN = _secrets.token_urlsafe(24)
+    logger.warning(f"AUTH_MASTER_TOKEN non defini en variable d'environnement — "
+                    f"genere temporairement : {AUTH_MASTER_TOKEN} "
+                    f"(CHANGERA AU PROCHAIN REDEMARRAGE — definissez AUTH_MASTER_TOKEN sur Render)")
+
+def auth_init_db():
+    conn = registre_get_db()
+    cur = conn.cursor()
+    if REGISTRE_USE_PG:
+        cur.execute('''CREATE TABLE IF NOT EXISTS clients (
+            id SERIAL PRIMARY KEY,
+            nom_entreprise TEXT NOT NULL,
+            email TEXT UNIQUE NOT NULL,
+            mot_de_passe_hash TEXT NOT NULL,
+            actif BOOLEAN DEFAULT TRUE,
+            date_creation TEXT NOT NULL,
+            derniere_connexion TEXT
+        )''')
+    else:
+        cur.execute('''CREATE TABLE IF NOT EXISTS clients (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nom_entreprise TEXT NOT NULL, email TEXT UNIQUE NOT NULL,
+            mot_de_passe_hash TEXT NOT NULL, actif INTEGER DEFAULT 1,
+            date_creation TEXT NOT NULL, derniere_connexion TEXT
+        )''')
+    conn.commit()
+    conn.close()
+
+try:
+    auth_init_db()
+except Exception as _e:
+    logger.error(f"AUTH — erreur init table clients : {_e}")
+
+def auth_current_client():
+    """Retourne le dict client connecte, ou {'is_conseilprev': True} si acces
+    CONSEILPREV via le lien maitre, ou None si non authentifie."""
+    if session.get('is_conseilprev'):
+        return {'is_conseilprev': True, 'id': None, 'nom_entreprise': 'CONSEILPREV'}
+    client_id = session.get('client_id')
+    if not client_id:
+        return None
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql('SELECT * FROM clients WHERE id=%s AND actif=TRUE', 'SELECT * FROM clients WHERE id=? AND actif=1'), (client_id,))
+    row = cur.fetchone()
+    conn.close()
+    if not row:
+        return None
+    d = dict(row) if not isinstance(row, dict) else row
+    return {'is_conseilprev': False, 'id': d['id'], 'nom_entreprise': d['nom_entreprise'], 'email': d['email']}
+
+def login_required(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        client = auth_current_client()
+        if not client:
+            if request.path.startswith('/api/'):
+                return jsonify({'error': 'Authentification requise.'}), 401
+            return redirect('/login')
+        request.current_client = client
+        return f(*args, **kwargs)
+    return wrapper
+
+@app.route('/auth/<token>')
+def auth_master_link(token):
+    """Lien secret CONSEILPREV — pose un cookie de session longue duree sans mot de passe."""
+    if token == AUTH_MASTER_TOKEN:
+        session.clear()
+        session['is_conseilprev'] = True
+        session.permanent = True
+        logger.info(f"AUTH_CONSEILPREV — connexion via lien maitre, IP={limiter.get_ip(request)}")
+        return redirect('/sentinel')
+    abort(404)
+
+@app.route('/login', methods=['GET'])
+def login_page():
+    if auth_current_client():
+        return redirect('/sentinel')
+    return send_from_directory('.', 'login.html')
+
+@app.route('/api/auth/login', methods=['POST'])
+@rate_limit_strict(limit=8, window=300)
+def auth_login():
+    data = request.get_json(force=True) or {}
+    email = (data.get('email') or '').strip().lower()
+    password = (data.get('password') or '')
+    bf_key = f"login:{email}"
+    if bf_protector.is_blocked(bf_key):
+        remaining = bf_protector.remaining(bf_key)
+        return jsonify({'error': f'Trop de tentatives. Réessayez dans {remaining // 60 + 1} min.'}), 429
+
+    if not email or not password:
+        return jsonify({'error': 'Email et mot de passe requis.'}), 400
+
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql('SELECT * FROM clients WHERE email=%s AND actif=TRUE', 'SELECT * FROM clients WHERE email=? AND actif=1'), (email,))
+    row = cur.fetchone()
+    conn.close()
+
+    if not row:
+        bf_protector.record_attempt(bf_key, success=False)
+        return jsonify({'error': 'Identifiants incorrects.'}), 401
+
+    d = dict(row) if not isinstance(row, dict) else row
+    if not check_password_hash(d['mot_de_passe_hash'], password):
+        bf_protector.record_attempt(bf_key, success=False)
+        return jsonify({'error': 'Identifiants incorrects.'}), 401
+
+    bf_protector.record_attempt(bf_key, success=True)
+    session.clear()
+    session['client_id'] = d['id']
+    session.permanent = True
+
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql('UPDATE clients SET derniere_connexion=%s WHERE id=%s', 'UPDATE clients SET derniere_connexion=? WHERE id=?'),
+                (datetime.utcnow().isoformat(), d['id']))
+    conn.commit()
+    conn.close()
+
+    logger.info(f"AUTH_CLIENT — connexion reussie : {email}")
+    return jsonify({'ok': True, 'nom_entreprise': d['nom_entreprise']})
+
+@app.route('/api/auth/logout', methods=['POST'])
+def auth_logout():
+    session.clear()
+    return jsonify({'ok': True})
+
+@app.route('/api/auth/me', methods=['GET'])
+def auth_me():
+    client = auth_current_client()
+    if not client:
+        return jsonify({'authenticated': False}), 401
+    return jsonify({'authenticated': True, **client})
+
+@app.route('/api/admin/clients', methods=['POST'])
+@login_required
+@rate_limit_strict(limit=10, window=60)
+def admin_create_client():
+    """Creation manuelle de comptes clients — reservee a CONSEILPREV."""
+    client = auth_current_client()
+    if not client or not client.get('is_conseilprev'):
+        abort(403)
+    data = request.get_json(force=True) or {}
+    nom = (data.get('nom_entreprise') or '').strip()
+    email = (data.get('email') or '').strip().lower()
+    password = (data.get('password') or '')
+    if not nom or not email or len(password) < 8:
+        return jsonify({'error': 'nom_entreprise, email et password (8 caractères min.) requis.'}), 400
+
+    conn = registre_get_db()
+    cur = conn.cursor()
+    try:
+        pw_hash = generate_password_hash(password)
+        now = datetime.utcnow().isoformat()
+        if REGISTRE_USE_PG:
+            cur.execute('''INSERT INTO clients (nom_entreprise, email, mot_de_passe_hash, date_creation)
+                VALUES (%s,%s,%s,%s) RETURNING id''', (nom, email, pw_hash, now))
+            new_id = cur.fetchone()['id']
+        else:
+            cur.execute('INSERT INTO clients (nom_entreprise, email, mot_de_passe_hash, date_creation) VALUES (?,?,?,?)', (nom, email, pw_hash, now))
+            new_id = cur.lastrowid
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        conn.close()
+        return jsonify({'error': 'Email déjà utilisé ou erreur de création.'}), 409
+    conn.close()
+    return jsonify({'client': {'id': new_id, 'nom_entreprise': nom, 'email': email}}), 201
+
+@app.route('/api/admin/clients', methods=['GET'])
+@login_required
+def admin_list_clients():
+    client = auth_current_client()
+    if not client or not client.get('is_conseilprev'):
+        abort(403)
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute('SELECT id, nom_entreprise, email, actif, date_creation, derniere_connexion FROM clients ORDER BY date_creation DESC')
+    rows = cur.fetchall()
+    conn.close()
+    clients = [dict(r) if not isinstance(r, dict) else r for r in rows]
+    return jsonify({'clients': clients})
+
+
 
 # ══════════════════════════════════════════════════════════
 # 5. SECURITY HEADERS MIDDLEWARE
@@ -2600,7 +2804,6 @@ PAGES = {
     '/platform':          'platform.html',
     '/donnees':       'donnees.html',
     '/aies':          'aies.html',
-    '/sentinel':      'sentinel.html',
     '/demo':          'demo.html',
     '/faq':           'faq.html',
     '/livre-blanc':   'livre-blanc.html',
@@ -3700,6 +3903,11 @@ for route, filename in PAGES.items():
         view.__name__ = fn.replace('.','_').replace('-','_')
         return view
     app.add_url_rule(route, view_func=make_view(filename))
+
+@app.route('/sentinel')
+@login_required
+def sentinel_page():
+    return send_from_directory('.', 'sentinel.html')
 
 @app.route('/datasets.json')
 @rate_limit(limit=20, window=60)
