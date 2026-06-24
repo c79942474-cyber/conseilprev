@@ -1407,6 +1407,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-item" onclick="go('pricing',this,'ANALYSE','Tarification par résultats')" title="Simulateur de modele commercial hybride RaaS (resultats) vs SaaS classique."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span>Tarification résultats</div>
     <div class="sb-item" onclick="go('templates',this,'RESSOURCES','Documentation & Modèles')" title="Modeles de documents pretes a completer : politiques IA, registres, rapports."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>Templates &amp; Docs</div>
     <div class="sb-item" onclick="go('rag',this,'ESPACE','Base de connaissance')" title="Uploadez vos documents pour enrichir automatiquement les analyses d Audit, Registre IA, FRIA et Maturite."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></span>Base de connaissance</div>
+    <div class="sb-item" onclick="go('clients',this,'ESPACE','Gestion des clients')" title="Creer et gerer les acces clients externes a Sentinel AI (reserve a CONSEILPREV)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span>Gestion des clients</div>
     <div class="sb-item" onclick="go('report',this,'REPORTING','Vue direction')" title="Tableau de bord executif : indicateurs cles de conformite pour la direction."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>Reporting</div>
   </nav>
   <div class="sb-pager">
@@ -2518,6 +2519,33 @@ textarea.form-el{min-height:86px;resize:vertical}
   </div>
 
   <div id="rag-doc-list"></div>
+</div>
+
+<div class="page" id="p-clients">
+  <span class="eyebrow">Espace · CONSEILPREV uniquement</span><h1 class="page-h">Gestion des <em>clients</em></h1>
+  <p class="page-lead">Créez des accès pour vos clients externes — chacun ne verra que ses propres données une fois l isolation activée.</p>
+
+  <div id="clients-access-denied" style="display:none" class="radar-registre-info" style="background:rgba(184,50,34,.06);border-color:rgba(184,50,34,.2)">
+    🔒 Cette page est réservée à CONSEILPREV.
+  </div>
+
+  <div id="clients-content">
+    <div class="tbl-wrap" style="padding:24px;margin-bottom:24px">
+      <div class="tbl-head" style="border:none;padding:0 0 16px"><span class="tbl-title">Créer un nouvel accès client</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="reg-field"><label class="reg-label">Nom de l entreprise</label><input type="text" id="cl-nom" class="reg-input" placeholder="Ex: Acme Corp"></div>
+        <div class="reg-field"><label class="reg-label">Email</label><input type="email" id="cl-email" class="reg-input" placeholder="contact@client.com"></div>
+      </div>
+      <div class="reg-field" style="margin-top:12px"><label class="reg-label">Mot de passe (8 caractères minimum)</label><input type="password" id="cl-password" class="reg-input" placeholder="••••••••"></div>
+      <button class="mat-export-btn" style="background:var(--ink);color:#fff;margin-top:14px" onclick="clientsCreate()">+ Créer l accès</button>
+      <div id="clients-create-msg" style="margin-top:10px;font-size:12px"></div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-head"><span class="tbl-title">Clients existants</span></div>
+      <div id="clients-list"></div>
+    </div>
+  </div>
 </div>
 
 <div class="page" id="p-fria">
@@ -4271,6 +4299,7 @@ var PAGE_META = {
   pricing:{section:'ANALYSE',           label:'Tarification par résultats'},
   templates:{section:'RESSOURCES',      label:'Documentation & Modèles'},
   rag:{section:'ESPACE',                label:'Base de connaissance'},
+  clients:{section:'ESPACE',            label:'Gestion des clients'},
   'fiche-eu': {section:'JURIDICTION', label:'Union européenne'},
   'fiche-de': {section:'JURIDICTION', label:'Allemagne'},
   'fiche-fr': {section:'JURIDICTION', label:'France'},
@@ -12379,6 +12408,108 @@ try {
     var el = document.getElementById('tb-client-name');
     if(el && d.authenticated) el.textContent = d.is_conseilprev ? 'CONSEILPREV' : d.nom_entreprise;
   }).catch(function(){});
+})();
+
+</script>
+
+<script>
+/* ══ GESTION DES CLIENTS — reservee a CONSEILPREV ══ */
+(function(){
+'use strict';
+
+window.clientsCreate = function(){
+  var nom = document.getElementById('cl-nom').value.trim();
+  var email = document.getElementById('cl-email').value.trim().toLowerCase();
+  var password = document.getElementById('cl-password').value;
+  var msgEl = document.getElementById('clients-create-msg');
+
+  if(!nom || !email || password.length < 8){
+    msgEl.style.color = 'var(--accent)';
+    msgEl.textContent = 'Nom, email et mot de passe (8 caractères min.) requis.';
+    return;
+  }
+
+  fetch('/api/admin/clients', {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({nom_entreprise: nom, email: email, password: password})
+  }).then(function(r){ return r.json().then(function(d){ return {status:r.status, data:d}; }); })
+  .then(function(res){
+    if(res.status === 201){
+      msgEl.style.color = 'var(--green)';
+      msgEl.textContent = '✅ Accès créé pour ' + nom + ' (' + email + ').';
+      document.getElementById('cl-nom').value = '';
+      document.getElementById('cl-email').value = '';
+      document.getElementById('cl-password').value = '';
+      window.clientsRenderList();
+    } else {
+      msgEl.style.color = 'var(--accent)';
+      msgEl.textContent = res.data.error || 'Erreur lors de la création.';
+    }
+  }).catch(function(){
+    msgEl.style.color = 'var(--accent)';
+    msgEl.textContent = 'Erreur réseau.';
+  });
+};
+
+window.clientsRenderList = function(){
+  var holder = document.getElementById('clients-list');
+  if(!holder) return;
+  holder.innerHTML = '<div class="reg-loading">Chargement…</div>';
+
+  fetch('/api/admin/clients').then(function(r){ return r.json(); }).then(function(d){
+    var clients = d.clients || [];
+    if(clients.length === 0){
+      holder.innerHTML = '<div class="reg-empty">Aucun client créé pour le moment.</div>';
+      return;
+    }
+    holder.innerHTML = clients.map(function(c){
+      var derniereConnexion = c.derniere_connexion ? new Date(c.derniere_connexion).toLocaleString('fr-FR') : 'Jamais connecté';
+      var dateCreation = new Date(c.date_creation).toLocaleDateString('fr-FR');
+      return '<div class="reg-sys-row" style="cursor:default">'
+        + '<div class="rs-ico">🏢</div>'
+        + '<div><div class="rs-name">' + c.nom_entreprise + '</div><div class="rs-type">' + c.email + '</div></div>'
+        + '<div style="font-size:11px;color:var(--muted)">Créé le ' + dateCreation + '</div>'
+        + '<div style="font-size:11px;color:var(--muted)">' + derniereConnexion + '</div>'
+        + '<div><span class="chip ' + (c.actif ? 'chip-g' : 'chip-r') + '">' + (c.actif ? 'Actif' : 'Désactivé') + '</span></div>'
+        + '</div>';
+    }).join('');
+  }).catch(function(){
+    holder.innerHTML = '<div class="reg-empty" style="color:var(--accent)">Erreur de chargement.</div>';
+  });
+};
+
+window.clientsInitPage = function(){
+  fetch('/api/sentinel-auth/me').then(function(r){ return r.json(); }).then(function(d){
+    var contentEl = document.getElementById('clients-content');
+    var deniedEl = document.getElementById('clients-access-denied');
+    if(d.authenticated && d.is_conseilprev){
+      if(contentEl) contentEl.style.display = 'block';
+      if(deniedEl) deniedEl.style.display = 'none';
+      window.clientsRenderList();
+    } else {
+      if(contentEl) contentEl.style.display = 'none';
+      if(deniedEl) deniedEl.style.display = 'block';
+    }
+  }).catch(function(){});
+};
+
+/* Masquer l'item sidebar pour les non-CONSEILPREV (la vraie protection reste cote serveur) */
+function clientsCheckSidebarVisibility(){
+  fetch('/api/sentinel-auth/me').then(function(r){ return r.json(); }).then(function(d){
+    var item = document.querySelector('.sb-item[onclick*="go(\'clients\'"]');
+    if(item && !(d.authenticated && d.is_conseilprev)) item.style.display = 'none';
+  }).catch(function(){});
+}
+document.addEventListener('DOMContentLoaded', function(){ setTimeout(clientsCheckSidebarVisibility, 300); });
+if(document.readyState !== 'loading'){ setTimeout(clientsCheckSidebarVisibility, 300); }
+
+var _clientsOrigGo = window.go;
+window.go = function(id){
+  var r = _clientsOrigGo ? _clientsOrigGo.apply(this, arguments) : undefined;
+  if(id === "clients") setTimeout(window.clientsInitPage, 80);
+  return r;
+};
+
 })();
 
 </script>
