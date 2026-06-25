@@ -10638,6 +10638,77 @@ function cardsGetData(callback){
 }
 
 /* ── Rendu des 3 cartes (remplace le contenu statique) ── */
+/* ══ EXPORT DES DOCUMENTS — Cartographier / Evaluer / Planifier (Audit IA Act) ══ */
+function cardsExportDoc(title, subtitle, bodyHtml){
+  var w = window.open('','_blank');
+  if(!w){ alert('Autorisez les pop-ups pour générer le document.'); return; }
+  var today = new Date().toLocaleDateString('fr-FR', {day:'numeric', month:'long', year:'numeric'});
+  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + title + ' - CONSEILPREV</title>'
+    + '<style>@page{margin:2cm}body{font-family:Georgia,serif;color:#1C1C1C;max-width:800px;margin:0 auto;padding:20px}'
+    + 'h1{font-size:24px;border-bottom:3px solid #B83222;padding-bottom:10px;margin-bottom:4px}'
+    + '.sub{color:#666;font-size:12px;margin-bottom:20px;font-family:Arial}'
+    + 'table{width:100%;border-collapse:collapse;margin:12px 0}'
+    + 'th{background:#f5f5f5;padding:8px;font-size:10px;text-align:left;font-family:Arial}'
+    + 'td{padding:8px;font-size:11px;border-bottom:1px solid #eee;font-family:Arial}'
+    + '.doc-info{background:#f8f7f5;border-radius:4px;padding:14px;font-size:11px;font-family:Arial;margin-top:16px}'
+    + '</style></head><body>'
+    + '<h1>' + title + '</h1>'
+    + '<div class="sub">' + subtitle + ' · Généré le ' + today + ' · CONSEILPREV — Règlement (UE) 2024/1689</div>'
+    + bodyHtml
+    + '<p style="font-size:9px;color:#999;font-family:Arial;margin-top:30px">Document généré automatiquement par Sentinel AI à partir des données réelles de votre Registre IA. Imprimez (Ctrl+P) ou enregistrez en PDF.</p>'
+    + '</body></html>';
+  w.document.write(html);
+  w.document.close();
+  setTimeout(function(){ w.print(); }, 300);
+}
+
+window.cardsExportCartographier = function(){
+  var d = window.__cardsData;
+  if(!d) return;
+  var rows = Object.keys(CARD_CLASSIF_LABELS).map(function(k){
+    var n = d.byClassif[k] || 0;
+    var pct = d.registre.length>0 ? Math.round(n/d.registre.length*100) : 0;
+    return '<tr><td>' + CARD_CLASSIF_LABELS[k] + '</td><td>' + n + '</td><td>' + pct + '%</td></tr>';
+  }).join('');
+  var listHaut = d.registre.filter(function(s){ return s.classification==="haut"||s.classification==="inacceptable"; });
+  var listRows = listHaut.length > 0
+    ? listHaut.map(function(s){ return '<tr><td>'+s.nom+'</td><td>'+(s.secteur||'—')+'</td><td>'+(s.justification||'Non renseignée')+'</td></tr>'; }).join('')
+    : '<tr><td colspan="3">Aucun système à haut risque ou inacceptable identifié.</td></tr>';
+  var body = '<table><tr><th>Classification</th><th>Nombre</th><th>%</th></tr>' + rows + '</table>'
+    + '<h3 style="font-size:14px;color:#B83222;margin-top:20px">Systèmes à haut risque / inacceptable</h3>'
+    + '<table><tr><th>Système</th><th>Secteur</th><th>Justification (Annexe III)</th></tr>' + listRows + '</table>'
+    + '<div class="doc-info">Cartographie basée sur ' + d.registre.length + ' système(s) inventorié(s) au Registre IA. Classification selon l Art. 6 et l Annexe III du Règlement (UE) 2024/1689.</div>';
+  cardsExportDoc('Cartographie des systèmes IA', '① Cartographier · Annexe III EU AI Act', body);
+};
+
+window.cardsExportEvaluer = function(){
+  var d = window.__cardsData;
+  if(!d) return;
+  var body = '<table><tr><th>Indicateur</th><th>Valeur</th><th>Détail</th></tr>'
+    + '<tr><td>Score FRIA moyen</td><td>' + (d.friaAvg!==null?d.friaAvg:'—') + '</td><td>Droits fondamentaux (Art. 27)</td></tr>'
+    + '<tr><td>Systèmes évalués</td><td>' + d.friaCount + '</td><td>sur ' + d.registre.length + ' au registre</td></tr>'
+    + '<tr><td>Conformité Audit</td><td>' + d.auditPct + '%</td><td>32 points de contrôle</td></tr>'
+    + '</table>'
+    + '<div class="doc-info">Le scoring multicritère combine : droits fondamentaux (évaluation FRIA par système), sécurité et gouvernance des données (Radar des risques, 6 dimensions pondérées), et performance réglementaire (Audit de conformité, 32 points).</div>';
+  cardsExportDoc('Scoring multicritère', '② Évaluer · Droits fondamentaux, sécurité, gouvernance', body);
+};
+
+window.cardsExportPlanifier = function(){
+  var d = window.__cardsData;
+  if(!d) return;
+  var rows = d.phases.map(function(p,i){
+    var prog = i===0 ? Math.min(100, Math.round((d.registre.length>0?50:0)+d.auditPct*0.5))
+             : i===1 ? d.auditPct
+             : i===2 ? Math.round(d.auditPct*0.6)
+             : (d.auditPct>=80?20:0);
+    return '<tr><td>Phase ' + p.n + ' — ' + p.title + '</td><td>' + prog + '%</td><td>' + p.duree + '</td><td>' + p.deliv + '</td></tr>';
+  }).join('');
+  var body = '<table><tr><th>Phase</th><th>Avancement</th><th>Durée</th><th>Livrables</th></tr>' + rows + '</table>'
+    + '<div class="doc-info">Avancement calculé à partir du Registre IA (' + d.registre.length + ' systèmes) et de l Audit de conformité (' + d.auditDone + '/' + d.auditTotal + ' points). Échéance critique : 2 août 2026 — obligations complètes pour les systèmes haut risque (Art. 6(2), Annexe III).</div>';
+  cardsExportDoc('Feuille de route priorisée', '③ Planifier · Délais réglementaires', body);
+};
+
+
 function cardsRender(){
   var holder = document.getElementById("audit-3cards-holder");
   if(!holder) return;
@@ -10698,6 +10769,7 @@ window.cardsOpenCartographier = function(){
     + '<div class="sec-h" style="margin:20px 0 8px;font-size:14px">Systèmes à haut risque / inacceptable</div>'
     + listHtml,
     '<button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="document.getElementById(\'cards-modal\').classList.remove(\'on\');go(\'registre\',null,\'REGISTRE\',\'Systèmes IA\')">Ouvrir le Registre IA →</button>'
+    + '<button class="mat-export-btn" style="background:var(--green);color:#fff" onclick="cardsExportCartographier()">📄 Télécharger le rapport</button>'
   );
 };
 
@@ -10714,6 +10786,7 @@ window.cardsOpenEvaluer = function(){
     + '<p style="font-size:12px;color:var(--muted);line-height:1.6">Le scoring multicritère combine : <strong>droits fondamentaux</strong> (évaluation FRIA par système), <strong>sécurité</strong> et <strong>gouvernance des données</strong> (Radar des risques, 6 dimensions pondérées), et <strong>performance réglementaire</strong> (Audit de conformité, 32 points). Consultez chaque module pour le détail complet.</p>',
     '<button class="mat-export-btn" style="background:var(--blue);color:#fff" onclick="document.getElementById(\'cards-modal\').classList.remove(\'on\');go(\'fria\',null,\'CONFORMITÉ\',\'Évaluation FRIA\')">Ouvrir FRIA →</button>'
     + '<button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="document.getElementById(\'cards-modal\').classList.remove(\'on\');go(\'radar\',null,\'RISQUES\',\'Radar multi-critères\')">Ouvrir le Radar →</button>'
+    + '<button class="mat-export-btn" style="background:var(--green);color:#fff" onclick="cardsExportEvaluer()">📄 Télécharger le rapport</button>'
   );
 };
 
@@ -10736,14 +10809,15 @@ window.cardsOpenPlanifier = function(){
     + phasesHtml
     + '<div class="radar-registre-info radar-registre-ok" style="margin-top:14px">📅 Échéance critique : <strong>2 août 2026</strong> — obligations complètes pour les systèmes haut risque (Art. 6(2), Annexe III).</div>',
     '<button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="document.getElementById(\'cards-modal\').classList.remove(\'on\');go(\'roadmap\',null,\'PLANIFICATION\',\'Plan action\')">Ouvrir la Roadmap complète →</button>'
+    + '<button class="mat-export-btn" style="background:var(--green);color:#fff" onclick="cardsExportPlanifier()">📄 Télécharger le rapport</button>'
   );
 };
 
-/* Rafraichir au chargement de la page Reglementations + apres chaque toggle d audit */
+/* Rafraichir au chargement de la page Audit IA Act + apres chaque toggle d audit */
 var _cardsOrigGo = window.go;
 window.go = function(id){
   var r = _cardsOrigGo ? _cardsOrigGo.apply(this, arguments) : undefined;
-  if(id === "regs") setTimeout(cardsRender, 100);
+  if(id === "audit-ia-act") setTimeout(cardsRender, 100);
   return r;
 };
 
