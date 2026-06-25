@@ -8671,7 +8671,17 @@ window.regSave = function(){
     .then(function(d){
       if(d.error){ alert(d.error); return; }
       regCloseModal();
-      regFetch();
+      /* Mise a jour locale de REG_DATA avec l objet retourne par le serveur,
+         au lieu de recharger toute la liste (regFetch) : evite un aller-retour
+         reseau complet et inutile, le serveur a deja renvoye tout ce qu il faut. */
+      if(REG_EDIT_ID){
+        var idx = REG_DATA.findIndex(function(s){ return s.id === d.systeme.id; });
+        if(idx !== -1) REG_DATA[idx] = d.systeme;
+        else REG_DATA.unshift(d.systeme);
+      } else {
+        REG_DATA.unshift(d.systeme);
+      }
+      regRender();
     })
     .catch(function(){ alert("Erreur lors de l'enregistrement."); });
 };
@@ -8679,11 +8689,15 @@ window.regSave = function(){
 window.regDelete = function(id){
   if(!confirm("Supprimer définitivement ce système du registre ?")) return;
   fetch("/api/registre/"+id, {method:"DELETE"})
-    .then(function(r){ return r.json(); })
-    .then(function(){
+    .then(function(r){ return r.json().then(function(d){ return {status:r.status, data:d}; }); })
+    .then(function(res){
+      if(res.status !== 200){ alert(res.data.error || "Erreur lors de la suppression."); return; }
       regCloseModal();
-      regFetch();
-    });
+      /* Retrait local de REG_DATA, sans recharger toute la liste depuis le serveur. */
+      REG_DATA = REG_DATA.filter(function(s){ return s.id !== id; });
+      regRender();
+    })
+    .catch(function(){ alert("Erreur réseau lors de la suppression."); });
 };
 
 /* Hook navigation : charger le registre a l'ouverture de la page */
