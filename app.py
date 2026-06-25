@@ -3402,17 +3402,19 @@ def registre_create():
     if REGISTRE_USE_PG:
         cur.execute('''INSERT INTO systemes_ia
             (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj)
-            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id''', values)
-        new_id = cur.fetchone()['id']
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING *''', values)
+        row = cur.fetchone()
     else:
         cur.execute('''INSERT INTO systemes_ia
             (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj)
             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)''', values)
         new_id = cur.lastrowid
+        cur.execute('SELECT * FROM systemes_ia WHERE id=?', (new_id,))
+        row = cur.fetchone()
     conn.commit()
-    cur.execute(registre_sql('SELECT * FROM systemes_ia WHERE id=%s', 'SELECT * FROM systemes_ia WHERE id=?'), (new_id,))
-    row = cur.fetchone()
     conn.close()
+    # Une seule requete (INSERT...RETURNING * sur PG) au lieu d un INSERT + SELECT separes —
+    # economise un aller-retour reseau complet (~600ms sur cet hebergement).
     return jsonify({'systeme': registre_row_to_dict(row)}), 201
 
 @app.route('/api/registre/<int:sys_id>', methods=['PUT'])
@@ -3421,46 +3423,62 @@ def registre_update(sys_id):
     data = request.get_json(force=True) or {}
     conn = registre_get_db()
     cur = conn.cursor()
-    cur.execute(registre_sql('SELECT * FROM systemes_ia WHERE id=%s', 'SELECT * FROM systemes_ia WHERE id=?'), (sys_id,))
-    existing = cur.fetchone()
-    if not existing:
-        conn.close()
-        return jsonify({'error': 'Systeme introuvable'}), 404
-    existing_d = registre_row_to_dict(existing)
     now = datetime.utcnow().isoformat()
     fields = ['nom','finalite','secteur','type_systeme','donnees_utilisees','classification','justification','statut_conformite','responsable','fournisseur']
-    vals = {f: data.get(f, existing_d[f]) for f in fields}
-    score = int(data.get('score_risque', existing_d['score_risque']) or 0)
-    update_q = registre_sql(
-        '''UPDATE systemes_ia SET nom=%s, finalite=%s, secteur=%s, type_systeme=%s, donnees_utilisees=%s,
-           classification=%s, justification=%s, statut_conformite=%s, responsable=%s, fournisseur=%s, score_risque=%s, date_maj=%s
-           WHERE id=%s''',
-        '''UPDATE systemes_ia SET nom=?, finalite=?, secteur=?, type_systeme=?, donnees_utilisees=?,
+
+    if REGISTRE_USE_PG:
+        # COALESCE permet de ne mettre a jour que les champs fournis, en une seule requete
+        # combinant verification d existence + mise a jour + lecture du resultat (au lieu de 3).
+        cur.execute('''UPDATE systemes_ia SET
+            nom=COALESCE(%s,nom), finalite=COALESCE(%s,finalite), secteur=COALESCE(%s,secteur),
+            type_systeme=COALESCE(%s,type_systeme), donnees_utilisees=COALESCE(%s,donnees_utilisees),
+            classification=COALESCE(%s,classification), justification=COALESCE(%s,justification),
+            statut_conformite=COALESCE(%s,statut_conformite), responsable=COALESCE(%s,responsable),
+            fournisseur=COALESCE(%s,fournisseur), score_risque=COALESCE(%s,score_risque), date_maj=%s
+            WHERE id=%s RETURNING *''', (
+            data.get('nom'), data.get('finalite'), data.get('secteur'), data.get('type_systeme'),
+            data.get('donnees_utilisees'), data.get('classification'), data.get('justification'),
+            data.get('statut_conformite'), data.get('responsable'), data.get('fournisseur'),
+            data.get('score_risque'), now, sys_id))
+        row = cur.fetchone()
+        conn.commit()
+        conn.close()
+        if not row:
+            return jsonify({'error': 'Systeme introuvable'}), 404
+        return jsonify({'systeme': registre_row_to_dict(row)})
+    else:
+        cur.execute('SELECT * FROM systemes_ia WHERE id=?', (sys_id,))
+        existing = cur.fetchone()
+        if not existing:
+            conn.close()
+            return jsonify({'error': 'Systeme introuvable'}), 404
+        existing_d = registre_row_to_dict(existing)
+        vals = {f: data.get(f, existing_d[f]) for f in fields}
+        score = int(data.get('score_risque', existing_d['score_risque']) or 0)
+        cur.execute('''UPDATE systemes_ia SET nom=?, finalite=?, secteur=?, type_systeme=?, donnees_utilisees=?,
            classification=?, justification=?, statut_conformite=?, responsable=?, fournisseur=?, score_risque=?, date_maj=?
-           WHERE id=?'''
-    )
-    cur.execute(update_q, (vals['nom'], vals['finalite'], vals['secteur'], vals['type_systeme'], vals['donnees_utilisees'],
-        vals['classification'], vals['justification'], vals['statut_conformite'], vals['responsable'], vals['fournisseur'],
-        score, now, sys_id))
-    conn.commit()
-    cur.execute(registre_sql('SELECT * FROM systemes_ia WHERE id=%s', 'SELECT * FROM systemes_ia WHERE id=?'), (sys_id,))
-    row = cur.fetchone()
-    conn.close()
-    return jsonify({'systeme': registre_row_to_dict(row)})
+           WHERE id=?''', (vals['nom'], vals['finalite'], vals['secteur'], vals['type_systeme'], vals['donnees_utilisees'],
+            vals['classification'], vals['justification'], vals['statut_conformite'], vals['responsable'], vals['fournisseur'],
+            score, now, sys_id))
+        conn.commit()
+        cur.execute('SELECT * FROM systemes_ia WHERE id=?', (sys_id,))
+        row = cur.fetchone()
+        conn.close()
+        return jsonify({'systeme': registre_row_to_dict(row)})
 
 @app.route('/api/registre/<int:sys_id>', methods=['DELETE'])
 @rate_limit(limit=30, window=60)
 def registre_delete(sys_id):
     conn = registre_get_db()
     cur = conn.cursor()
-    cur.execute(registre_sql('SELECT id FROM systemes_ia WHERE id=%s', 'SELECT id FROM systemes_ia WHERE id=?'), (sys_id,))
-    existing = cur.fetchone()
-    if not existing:
-        conn.close()
-        return jsonify({'error': 'Systeme introuvable'}), 404
+    # Une seule requete : DELETE direct, on verifie cur.rowcount pour savoir si la
+    # ligne existait (au lieu d un SELECT de verification puis un DELETE separes).
     cur.execute(registre_sql('DELETE FROM systemes_ia WHERE id=%s', 'DELETE FROM systemes_ia WHERE id=?'), (sys_id,))
+    deleted_count = cur.rowcount
     conn.commit()
     conn.close()
+    if deleted_count == 0:
+        return jsonify({'error': 'Systeme introuvable'}), 404
     return jsonify({'deleted': sys_id})
 
 @app.route('/api/registre/status', methods=['GET'])
