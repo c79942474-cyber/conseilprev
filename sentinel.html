@@ -1174,15 +1174,6 @@ textarea.form-el{min-height:86px;resize:vertical}
 .histo-btn-sm:hover{border-color:var(--accent)}
 .histo-btn-danger{color:var(--accent);border-color:rgba(184,50,34,.25)}
 
-/* ══ RECHERCHE SIDEBAR ══ */
-.sb-search-wrap{position:relative;padding:0 16px 14px}
-.sb-search-input{width:100%;box-sizing:border-box;font-size:11.5px;padding:8px 30px 8px 30px;border:1px solid var(--rule2);border-radius:6px;background:var(--bg);color:var(--ink);outline:none;font-family:var(--sans)}
-.sb-search-input:focus{border-color:var(--accent)}
-.sb-search-icon{position:absolute;left:26px;top:9px;font-size:11px;color:var(--muted2);pointer-events:none}
-.sb-search-clear{position:absolute;right:24px;top:7px;font-size:13px;color:var(--muted2);cursor:pointer;display:none;background:none;border:none;padding:2px}
-.sb-search-clear:hover{color:var(--accent)}
-.sb-search-hint{font-size:9px;color:var(--muted2);text-align:right;padding-right:4px;margin-top:3px;font-family:var(--mono)}
-
 /* ══ BOUTON RETOUR EN HAUT ══ */
 #nav-back-to-top{position:fixed;bottom:90px;right:28px;width:40px;height:40px;border-radius:50%;background:var(--ink);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 3px 12px rgba(0,0,0,.25);opacity:0;pointer-events:none;transform:translateY(8px);transition:all .25s;z-index:9990}
 #nav-back-to-top.visible{opacity:.88;pointer-events:all;transform:translateY(0)}
@@ -1379,12 +1370,6 @@ textarea.form-el{min-height:86px;resize:vertical}
   <div class="sb-brand">
     <div class="sb-logo">Sentinel <span class="sb-logo-ai">AI</span></div>
     <div class="sb-sub">Cartographie des risques</div>
-  </div>
-  <div class="sb-search-wrap">
-    <span class="sb-search-icon">🔍</span>
-    <input type="text" id="sb-search-input" class="sb-search-input" placeholder="Rechercher une page…" oninput="sbSearchFilter(this.value)" title="Filtrer les pages de navigation par mot-cle.">
-    <button id="sb-search-clear" class="sb-search-clear" onclick="sbSearchClear()" title="Effacer la recherche">×</button>
-    <div class="sb-search-hint">Raccourci : /</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Pilotage</div>
@@ -11918,73 +11903,20 @@ window.histoSaveRaci = function(){
 </script>
 
 <script>
-/* ══ NAVIGATION FLUIDE — recherche sidebar, Echap, retour-haut ══ */
+/* ══ NAVIGATION FLUIDE — Echap pour fermer les modales, retour-haut ══ */
 (function(){
 'use strict';
 
-/* 1. RECHERCHE SIDEBAR — filtre les items de navigation en temps reel */
-window.sbSearchFilter = function(query){
-  var q = query.trim().toLowerCase();
-  var items = document.querySelectorAll('.sb-item');
-  var sections = document.querySelectorAll('.sb-section');
-  var visibleSectionsMap = {};
-
-  items.forEach(function(item){
-    var text = item.textContent.toLowerCase();
-    var title = (item.getAttribute('title')||'').toLowerCase();
-    var match = !q || text.indexOf(q) !== -1 || title.indexOf(q) !== -1;
-    item.style.display = match ? '' : 'none';
-    if(match){
-      var sec = item.previousElementSibling;
-      while(sec && !sec.classList.contains('sb-section')) sec = sec.previousElementSibling;
-    }
-  });
-
-  /* Masquer les sections sans aucun item visible */
-  sections.forEach(function(sec){
-    var next = sec.nextElementSibling;
-    var hasVisible = false;
-    while(next && !next.classList.contains('sb-section')){
-      if(next.classList.contains('sb-item') && next.style.display !== 'none') hasVisible = true;
-      next = next.nextElementSibling;
-    }
-    sec.style.display = (!q || hasVisible) ? '' : 'none';
-  });
-
-  var clearBtn = document.getElementById('sb-search-clear');
-  if(clearBtn) clearBtn.style.display = q ? 'block' : 'none';
-};
-
-window.sbSearchClear = function(){
-  var input = document.getElementById('sb-search-input');
-  if(input){ input.value = ''; window.sbSearchFilter(''); input.focus(); }
-};
-
-/* 2. RACCOURCI ECHAP — ferme la derniere modale ouverte */
+/* RACCOURCI ECHAP — ferme la derniere modale ouverte */
 document.addEventListener('keydown', function(e){
   if(e.key !== 'Escape') return;
   var openModals = document.querySelectorAll('.mat-modal.on, #guide-modal.on, #histo-modal.on, #uc-modal.on, #cards-modal.on');
   if(openModals.length > 0){
     openModals[openModals.length-1].classList.remove('on');
-    return;
-  }
-  /* Raccourci bonus : Echap vide aussi la recherche sidebar si active */
-  var searchInput = document.getElementById('sb-search-input');
-  if(searchInput && document.activeElement === searchInput && searchInput.value){
-    window.sbSearchClear();
   }
 });
 
-/* Raccourci "/" pour focus rapide sur la recherche sidebar (standard sur de nombreux sites) */
-document.addEventListener('keydown', function(e){
-  if(e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA'){
-    e.preventDefault();
-    var input = document.getElementById('sb-search-input');
-    if(input) input.focus();
-  }
-});
-
-/* 3. BOUTON RETOUR EN HAUT — apparait apres 400px de scroll sur le contenu principal */
+/* BOUTON RETOUR EN HAUT — apparait apres 400px de scroll sur le contenu principal */
 function navInitBackToTop(){
   var btn = document.getElementById('nav-back-to-top');
   var mainEl = document.querySelector('.main') || document.querySelector('main') || window;
