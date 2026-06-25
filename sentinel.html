@@ -1377,9 +1377,11 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-item" onclick="go('espace',this,'PILOTAGE','Mes actions du jour')" title="Tableau de bord personnel : suivi de vos actions et de votre progression."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg></span>Mon Espace</div>
     <div class="sb-item" onclick="go('report',this,'PILOTAGE','Vue direction')" title="Tableau de bord executif : indicateurs cles de conformite pour la direction."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>Reporting</div>
     <div class="sb-section">Cartographier</div>
+    <div class="sb-item" onclick="go('simulateur',this,'CARTOGRAPHIER','Simulateur IA Act')" title="Classifiez un systeme IA selon le Reglement EU AI Act avant de l enregistrer au Registre."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>Simulateur IA Act</div>
     <div class="sb-item" onclick="go('registre',this,'CARTOGRAPHIER','Systèmes IA')" title="Registre des systemes IA connecte a une base de donnees reelle (ajout, edition, suppression)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/></svg></span>Registre IA</div>
     <div class="sb-item" onclick="go('maturite',this,'CARTOGRAPHIER','Audit de maturité IA')" title="Audit de maturite IA sectoriel : 8 piliers, questionnaire, KPIs, budget et livrables generes par IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 3 5-6"/></svg></span>Audit de maturité IA</div>
     <div class="sb-section">Évaluer le risque</div>
+    <div class="sb-item" onclick="go('audit-ia-act',this,'ÉVALUER LE RISQUE','Audit IA Act')" title="Audit de conformite EU AI Act structure - 32 points de controle, Reglement (UE) 2024/1689."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M21 12a9 9 0 1 1-9-9"/></svg></span>Audit IA Act</div>
     <div class="sb-item" onclick="go('matrice',this,'ÉVALUER LE RISQUE','Matrice risques')" title="Positionnement de vos systemes IA selon probabilite de non-conformite et impact potentiel."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 3v18h18"/><circle cx="9" cy="15" r="1.6"/><circle cx="15" cy="9" r="1.6"/><circle cx="18" cy="6" r="1.6"/><circle cx="7" cy="18" r="1.6"/></svg></span>Matrice risques</div>
     <div class="sb-item" onclick="go('radar',this,'ÉVALUER LE RISQUE','Radar multi-critères')" title="Visualisation hexagonale de votre posture de conformite sur 6 dimensions reglementaires."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg></span>Radar des risques</div>
     <div class="sb-item" onclick="go('fria',this,'ÉVALUER LE RISQUE','Évaluation FRIA')" title="Evaluation d impact sur les droits fondamentaux (Art. 27 EU AI Act) - obligation du deployeur, applicable a partir du 2 aout 2026."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg></span>FRIA</div>
@@ -1777,19 +1779,16 @@ textarea.form-el{min-height:86px;resize:vertical}
 
 <!-- AIDE À LA DÉCISION -->
 <div class="page" id="p-regs">
-  <span class="eyebrow">Conformité · EU AI Act</span>
-  <h1 class="page-h">Réglementations & <em>Audit IA</em></h1>
-  <p class="page-lead">Textes officiels, audit structuré et obligations article par article — Règlement (UE) 2024/1689.</p>
+  <span class="eyebrow">Conformité · EU AI Act</span><h1 class="page-h">Réglementations</h1>
+  <p class="page-lead">Textes officiels et obligations article par article — Règlement (UE) 2024/1689.</p>
 
   <!-- Onglets -->
   <div class="regs-tabbar">
     <div class="regs-tab on" onclick="regsTab('textes',this)">Textes réglementaires</div>
-    <div class="regs-tab" onclick="regsTab('simulateur',this)">Simulateur IA Act <span class="sb-badge sb-badge-new" style="font-size:8px;padding:1px 5px;vertical-align:middle;margin-left:4px">Bêta</span></div>
-    <div class="regs-tab" onclick="regsTab('audit',this)">Audit IA Act</div>
     <div class="regs-tab" onclick="regsTab('articles',this)">Obligations article par article</div>
   </div>
 
-  <!-- ══ ONGLET 1 : Textes réglementaires ══ -->
+<!-- ══ ONGLET 1 : Textes réglementaires ══ -->
   <div class="regs-tabpanel on" id="regs-panel-textes">
     <div class="reg-doc-grid" id="regs-list"></div>
     <div class="alert-list" id="regs-list-extra"></div>
@@ -1804,393 +1803,8 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="veille-list" id="veille-list-regs"></div>
   </div>
 
-  <!-- ══ ONGLET 2 : Audit IA Act ══ -->
-
-  <!-- ══ ONGLET SIMULATEUR ══ -->
-  <div class="regs-tabpanel" id="regs-panel-simulateur">
-  <span class="eyebrow">Aide à la décision</span>
-  <h1 class="page-h">Simuler un<br><em>déploiement IA</em></h1>
-  <p class="page-lead">Évaluez la conformité de votre système IA selon le Règlement (UE) 2024/1689 (EU AI Act) — classification, obligations et sanctions en 5 étapes.</p>
-  <span class="sim-ref">Règlement (UE) 2024/1689 du 13 juin 2024 — Texte officiel Journal officiel L du 12.7.2024</span>
-
-  <div class="sim-wrap">
-    <!-- Stepper -->
-    <div class="sim-stepper">
-      <div class="sim-step-dot active" id="step-dot-1" onclick="simGoto(1)">
-        <div class="sim-step-circle" id="step-circle-1">1</div>
-        <div class="sim-step-lbl">Système</div>
-      </div>
-      <div class="sim-step-dot" id="step-dot-2" onclick="simGoto(2)">
-        <div class="sim-step-circle" id="step-circle-2">2</div>
-        <div class="sim-step-lbl">Classification</div>
-      </div>
-      <div class="sim-step-dot" id="step-dot-3" onclick="simGoto(3)">
-        <div class="sim-step-circle" id="step-circle-3">3</div>
-        <div class="sim-step-lbl">Obligations</div>
-      </div>
-      <div class="sim-step-dot" id="step-dot-4" onclick="simGoto(4)">
-        <div class="sim-step-circle" id="step-circle-4">4</div>
-        <div class="sim-step-lbl">GPAI / Données</div>
-      </div>
-      <div class="sim-step-dot" id="step-dot-5" onclick="simGoto(5)">
-        <div class="sim-step-circle" id="step-circle-5">5</div>
-        <div class="sim-step-lbl">Résultats</div>
-      </div>
-    </div>
-
-    <!-- ÉTAPE 1 — Identification du système -->
-    <div class="sim-panel on" id="sim-panel-1">
-      <div class="sim-panel-title">Identification du système IA</div>
-      <div class="sim-panel-sub">Décrivez votre système et son contexte de déploiement.</div>
-
-      <div class="sim-q">
-        <div class="sim-q-label">Nom du système IA <span class="sim-q-art">Art. 11 — Documentation technique</span></div>
-        <input class="sim-input" id="sim-name" type="text" placeholder="Ex : CreditScore-Pro v2.1, MedDiag-AI, ChatSupport…">
-      </div>
-
-      <div class="sim-q">
-        <div class="sim-q-label">Secteur d'activité <span class="sim-q-art">Annexe III — Domaines à haut risque</span></div>
-        <div class="sim-q-hint">Certains secteurs sont explicitement listés à l'Annexe III comme présentant un haut risque.</div>
-        <select class="sim-select" id="sim-secteur">
-          <option value="">Sélectionnez votre secteur…</option>
-          <optgroup label="Secteurs Annexe III — Risque élevé">
-            <option value="bio">Biométrie (identification, catégorisation, reconnaissance émotionnelle)</option>
-            <option value="infra">Infrastructures critiques (eau, gaz, électricité, trafic, finance)</option>
-            <option value="education">Éducation et formation professionnelle</option>
-            <option value="emploi">Emploi, gestion des travailleurs, accès à l'emploi indépendant</option>
-            <option value="essentiels">Services essentiels (aide sociale, logement, crédit, urgences)</option>
-            <option value="law">Application de la loi, justice, démocratie</option>
-            <option value="migration">Migration, asile, contrôle aux frontières</option>
-          </optgroup>
-          <optgroup label="Autres secteurs">
-            <option value="sante">Santé / Médical (hors dispositifs médicaux réglementés)</option>
-            <option value="finance">Finance / Assurance / Banque</option>
-            <option value="industrie">Industrie / Manufacturing</option>
-            <option value="transport">Transport / Automobile / Aérien</option>
-            <option value="energie">Énergie / Utilities</option>
-            <option value="media">Médias / Communication / Marketing</option>
-            <option value="it">IT / Tech / SaaS</option>
-            <option value="public">Administration publique</option>
-            <option value="autre">Autre secteur</option>
-          </optgroup>
-        </select>
-      </div>
-
-      <div class="sim-q">
-        <div class="sim-q-label">Type de système IA <span class="sim-q-art">Art. 3(1) — Définition système IA</span></div>
-        <select class="sim-select" id="sim-type">
-          <option value="">Sélectionnez le type de système…</option>
-          <optgroup label="Systèmes décisionnels">
-            <option value="scoring">Scoring / Notation automatisée (crédit, risque, employabilité)</option>
-            <option value="decision_auto">Décision entièrement automatisée (sans intervention humaine)</option>
-            <option value="aide_decision">Aide à la décision (recommandation soumise à validation humaine)</option>
-            <option value="triage">Tri / Priorisation de dossiers ou personnes</option>
-          </optgroup>
-          <optgroup label="Systèmes de reconnaissance">
-            <option value="bio_remote">Identification biométrique à distance en temps réel</option>
-            <option value="bio_post">Identification biométrique a posteriori</option>
-            <option value="emotion">Reconnaissance émotionnelle</option>
-            <option value="face_reco">Reconnaissance faciale / catégorisation biométrique</option>
-            <option value="voix">Reconnaissance vocale / Analyse de la voix</option>
-          </optgroup>
-          <optgroup label="IA générative et conversationnelle">
-            <option value="llm_gen">LLM / IA générative (texte, image, code, audio)</option>
-            <option value="deepfake">Synthèse de contenus (deepfake, voix clonée)</option>
-            <option value="chatbot">Chatbot / Agent conversationnel</option>
-            <option value="copilot">Assistant IA / Copilot (code, rédaction)</option>
-          </optgroup>
-          <optgroup label="Systèmes de surveillance et monitoring">
-            <option value="surveillance">Surveillance de masse / monitoring comportemental</option>
-            <option value="ot_monitor">Surveillance OT / Systèmes industriels</option>
-            <option value="cyber_ai">Détection de cybermenaces par IA</option>
-            <option value="predictif">Maintenance prédictive / Anomalie industrielle</option>
-          </optgroup>
-          <optgroup label="Systèmes de recommandation et contenu">
-            <option value="reco">Système de recommandation personnalisée</option>
-            <option value="content_moderation">Modération de contenu automatisée</option>
-            <option value="seo_ai">Génération / Optimisation de contenu</option>
-          </optgroup>
-        </select>
-      </div>
-
-      <div class="sim-q">
-        <div class="sim-q-label">Description du cas d'usage</div>
-        <textarea class="sim-textarea" id="sim-desc" placeholder="Décrivez brièvement le fonctionnement, l'objectif et le contexte d'utilisation de votre système IA. Ex : Modèle ML de scoring crédit analysant 200+ variables pour prédire la solvabilité des demandeurs et déclencher automatiquement l'octroi ou le refus de prêt."></textarea>
-      </div>
-
-      <div class="sim-nav">
-        <span></span>
-        <span class="sim-progress">Étape 1 / 4</span>
-        <button class="sim-btn-next" onclick="simNext(1)" title="Passer a l etape suivante du simulateur.">Suivant →</button>
-      </div>
-    </div>
-
-    <!-- ÉTAPE 2 — Classification du risque -->
-    <div class="sim-panel" id="sim-panel-2">
-      <div class="sim-panel-title">Classification du niveau de risque</div>
-      <div class="sim-panel-sub">Ces questions déterminent si votre système relève des pratiques interdites (Art. 5), du régime haut risque (Art. 6), ou d'un régime allégé.</div>
-
-      <div class="sim-q">
-        <div class="sim-q-label">Votre système utilise-t-il des techniques subliminales ou manipulatrices ? <span class="sim-q-art">Art. 5(1)(a)</span></div>
-        <div class="sim-q-hint">Techniques au-dessous du seuil de conscience, exploitation des vulnérabilités (âge, handicap), altération substantielle du comportement.</div>
-        <div class="sim-radio-group" id="r-subliminal">
-          <div class="sim-radio-opt" onclick="simRadio('r-subliminal','oui')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui<div class="sim-radio-sub">Le système vise à influencer les comportements de manière non transparente</div></div></div>
-          <div class="sim-radio-opt" onclick="simRadio('r-subliminal','non')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Non<div class="sim-radio-sub">Pas de techniques manipulatrices ou subliminales</div></div></div>
-          <div class="sim-radio-opt" onclick="simRadio('r-subliminal','incertain')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Incertain — à analyser<div class="sim-radio-sub">Des techniques de personnalisation pourraient être concernées</div></div></div>
-        </div>
-      </div>
-
-      <div class="sim-q">
-        <div class="sim-q-label">Votre système effectue-t-il une identification biométrique à distance en temps réel dans des espaces publics ? <span class="sim-q-art">Art. 5(1)(h)</span></div>
-        <div class="sim-radio-group" id="r-biometrie">
-          <div class="sim-radio-opt" onclick="simRadio('r-biometrie','oui')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — identification temps réel en espace public<div class="sim-radio-sub">Caméras de surveillance avec reconnaissance faciale en direct</div></div></div>
-          <div class="sim-radio-opt" onclick="simRadio('r-biometrie','aposteriori')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Identification biométrique a posteriori uniquement<div class="sim-radio-sub">Analyse de vidéos ou images enregistrées</div></div></div>
-          <div class="sim-radio-opt" onclick="simRadio('r-biometrie','non')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Non — pas d'identification biométrique publique<div class="sim-radio-sub">Aucun traitement biométrique dans des espaces publics accessibles</div></div></div>
-        </div>
-      </div>
-
-      <div class="sim-q">
-        <div class="sim-q-label">Votre système est-il utilisé dans l'un des domaines à haut risque de l'Annexe III ? <span class="sim-q-art">Art. 6(2) + Annexe III</span></div>
-        <div class="sim-q-hint">Sélectionnez tous les domaines applicables.</div>
-        <div class="sim-checkbox-group" id="cb-annexe3">
-          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-bio')"><div class="sim-checkbox-box">✓</div>Biométrie</div>
-          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-infra')"><div class="sim-checkbox-box">✓</div>Infrastructures critiques</div>
-          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-edu')"><div class="sim-checkbox-box">✓</div>Éducation / Formation</div>
-          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-emploi')"><div class="sim-checkbox-box">✓</div>Emploi / RH / Recrutement</div>
-          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-essentiels')"><div class="sim-checkbox-box">✓</div>Services essentiels / Crédit / Aides</div>
-          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-law')"><div class="sim-checkbox-box">✓</div>Application de la loi / Justice</div>
-          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-migration')"><div class="sim-checkbox-box">✓</div>Migration / Asile / Frontières</div>
-          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-demo')"><div class="sim-checkbox-box">✓</div>Démocratie / Élections</div>
-        </div>
-      </div>
-
-      <div class="sim-q">
-        <div class="sim-q-label">Quel est l'impact du système sur les personnes ? <span class="sim-q-art">Art. 6(1) — Évaluation du risque</span></div>
-        <div class="sim-radio-group" id="r-impact">
-          <div class="sim-radio-opt" onclick="simRadio('r-impact','individuel')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Décisions individuelles contraignantes<div class="sim-radio-sub">Octroi/refus de crédit, recrutement, accès à des services, décision médicale</div></div></div>
-          <div class="sim-radio-opt" onclick="simRadio('r-impact','groupe')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Impact sur des groupes de personnes<div class="sim-radio-sub">Ciblage publicitaire, recommandation de contenu, modération, scoring collectif</div></div></div>
-          <div class="sim-radio-opt" onclick="simRadio('r-impact','interne')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Usage interne — pas de décision directe sur des personnes<div class="sim-radio-sub">Maintenance prédictive, optimisation de processus, outil interne sans impact externe</div></div></div>
-        </div>
-      </div>
-
-      <div class="sim-q">
-        <div class="sim-q-label">Votre système est-il destiné à interagir directement avec des utilisateurs finaux ? <span class="sim-q-art">Art. 50 — Transparence</span></div>
-        <div class="sim-radio-group" id="r-interaction">
-          <div class="sim-radio-opt" onclick="simRadio('r-interaction','oui')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — chatbot, assistant, agent conversationnel<div class="sim-radio-sub">Obligation d'information que l'utilisateur interagit avec une IA (Art. 50.1)</div></div></div>
-          <div class="sim-radio-opt" onclick="simRadio('r-interaction','genere')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Génère des contenus synthétiques (texte, image, voix, vidéo)<div class="sim-radio-sub">Obligation de marquage et de watermarking (Art. 50.2-4)</div></div></div>
-          <div class="sim-radio-opt" onclick="simRadio('r-interaction','non')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Non — système backend sans interaction directe<div class="sim-radio-sub">Pas d'obligation de transparence Art. 50</div></div></div>
-        </div>
-      </div>
-
-      <div class="sim-nav">
-        <button class="sim-btn-prev" onclick="simPrev(2)">← Retour</button>
-        <span class="sim-progress">Étape 2 / 4</span>
-        <button class="sim-btn-next" onclick="simNext(2)" title="Passer a l etape suivante du simulateur.">Suivant →</button>
-      </div>
-    </div>
-
-    <!-- ÉTAPE 3 — Obligations existantes -->
-    <div class="sim-panel" id="sim-panel-3">
-      <div class="sim-panel-title">État de vos obligations de conformité</div>
-      <div class="sim-panel-sub">Indiquez ce que vous avez déjà mis en place. Cela permettra de calculer votre gap de conformité.</div>
-
-      <div class="sim-q">
-        <div class="sim-q-label">Système de gestion des risques <span class="sim-q-art">Art. 9</span></div>
-        <div class="sim-q-hint">Processus itératif documenté couvrant l'identification, estimation et gestion des risques tout au long du cycle de vie.</div>
-        <select class="sim-select" id="sim-art9">
-          <option value="none">Non — pas encore mis en place</option>
-          <option value="partial">En cours — partiellement documenté</option>
-          <option value="done">Oui — système de gestion des risques complet et documenté</option>
-        </select>
-      </div>
-
-      <div class="sim-q">
-        <div class="sim-q-label">Gouvernance des données d'entraînement <span class="sim-q-art">Art. 10</span></div>
-        <div class="sim-q-hint">Qualité, représentativité, absence de biais, traçabilité des jeux de données d'entraînement, validation et test.</div>
-        <select class="sim-select" id="sim-art10">
-          <option value="none">Non — aucune gouvernance formalisée</option>
-          <option value="partial">Partielle — quelques contrôles qualité en place</option>
-          <option value="done">Oui — gouvernance complète (origine, qualité, biais, traçabilité)</option>
-        </select>
-      </div>
-
-      <div class="sim-q">
-        <div class="sim-q-label">Documentation technique <span class="sim-q-art">Art. 11 + Annexe IV</span></div>
-        <div class="sim-q-hint">Dossier technique complet : description du système, architecture, données, performances, limites, mesures de conformité.</div>
-        <select class="sim-select" id="sim-art11">
-          <option value="none">Non — aucune documentation formelle</option>
-          <option value="partial">Partielle — documentation interne basique</option>
-          <option value="done">Oui — dossier technique conforme Annexe IV AI Act</option>
-        </select>
-      </div>
-
-      <div class="sim-q">
-        <div class="sim-q-label">Journalisation et enregistrement des décisions <span class="sim-q-art">Art. 12</span></div>
-        <div class="sim-q-hint">Capacité de journalisation automatique permettant de reconstituer les décisions et de vérifier la conformité a posteriori.</div>
-        <select class="sim-select" id="sim-art12">
-          <option value="none">Non — pas de journalisation IA</option>
-          <option value="partial">Partielle — logs applicatifs basiques</option>
-          <option value="done">Oui — journalisation conforme Art. 12 (horodatage, entrées, sorties, identifiants)</option>
-        </select>
-      </div>
-
-      <div class="sim-q">
-        <div class="sim-q-label">Supervision humaine effective <span class="sim-q-art">Art. 14</span></div>
-        <div class="sim-q-hint">Mesures permettant à des personnes physiques de surveiller, comprendre, corriger ou stopper le système en cours de fonctionnement.</div>
-        <select class="sim-select" id="sim-art14">
-          <option value="none">Non — décision entièrement automatisée sans supervision</option>
-          <option value="partial">Partielle — validation humaine disponible mais non systématique</option>
-          <option value="done">Oui — supervision humaine effective et documentée (Art. 14.4)</option>
-        </select>
-      </div>
-
-      <div class="sim-q">
-        <div class="sim-q-label">Transparence envers les déployeurs <span class="sim-q-art">Art. 13</span></div>
-        <div class="sim-q-hint">Notice d'utilisation claire sur les capacités, limites, performances, conditions d'utilisation prévue.</div>
-        <select class="sim-select" id="sim-art13">
-          <option value="none">Non — aucune notice formelle</option>
-          <option value="partial">Partielle — documentation utilisateur basique</option>
-          <option value="done">Oui — notice conforme Art. 13.3 (capacités, limites, performances, instructions)</option>
-        </select>
-      </div>
-
-      <div class="sim-q">
-        <div class="sim-q-label">Système de gestion de la qualité <span class="sim-q-art">Art. 17</span></div>
-        <div class="sim-q-hint">Politiques et procédures documentées de conception, test, surveillance post-commercialisation, gestion des incidents.</div>
-        <select class="sim-select" id="sim-art17">
-          <option value="none">Non — pas de SGQ formel</option>
-          <option value="partial">Partielle — ISO 9001 ou équivalent sans volet IA spécifique</option>
-          <option value="done">Oui — SGQ complet incluant l'IA (ou ISO 42001 en cours)</option>
-        </select>
-      </div>
-
-      <div class="sim-nav">
-        <button class="sim-btn-prev" onclick="simPrev(3)">← Retour</button>
-        <span class="sim-progress">Étape 3 / 4</span>
-        <button class="sim-btn-next" onclick="simNext(3)" title="Passer a l etape suivante du simulateur.">Suivant →</button>
-      </div>
-    </div>
-
-    <!-- ÉTAPE 4 — GPAI et données -->
-    <div class="sim-panel" id="sim-panel-4">
-      <div class="sim-panel-title">Modèles à usage général (GPAI) et données</div>
-      <div class="sim-panel-sub">Questions spécifiques aux modèles de fondation, LLM et aux enjeux de données personnelles.</div>
-
-      <div class="sim-q">
-        <div class="sim-q-label">Votre système est-il un modèle d'IA à usage général (GPAI) ? <span class="sim-q-art">Art. 51-55</span></div>
-        <div class="sim-q-hint">Modèle entraîné sur large quantité de données, polyvalent, utilisable dans de multiples contextes (LLM, modèle de vision généraliste, modèle audio).</div>
-        <div class="sim-radio-group" id="r-gpai">
-          <div class="sim-radio-opt" onclick="simRadio('r-gpai','oui_sys')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — je développe/fournis un modèle GPAI<div class="sim-radio-sub">Obligations spécifiques Art. 53 (documentation, politique de droits d'auteur, résumé de données)</div></div></div>
-          <div class="sim-radio-opt" onclick="simRadio('r-gpai','oui_flop')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — GPAI à capacités systémiques (seuil 10^25 FLOPs)<div class="sim-radio-sub">Obligations renforcées Art. 55 : évaluation adversariale, signalement incidents, cybersécurité</div></div></div>
-          <div class="sim-radio-opt" onclick="simRadio('r-gpai','deploie')"><div class="sim-radio-opt" onclick="simRadio('r-gpai','deploie')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Je déploie un GPAI tiers (OpenAI, Anthropic, Mistral…)<div class="sim-radio-sub">Obligations de déployeur : vérification des politiques fournisseur, transparence utilisateurs</div></div></div></div>
-          <div class="sim-radio-opt" onclick="simRadio('r-gpai','non')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Non — système IA spécifique à une tâche<div class="sim-radio-sub">Pas soumis au régime GPAI des Art. 51-55</div></div></div>
-        </div>
-      </div>
-
-      <div class="sim-q">
-        <div class="sim-q-label">Votre système traite-t-il des données personnelles ? <span class="sim-q-art">RGPD Art. 22 + AI Act Art. 10</span></div>
-        <div class="sim-radio-group" id="r-rgpd">
-          <div class="sim-radio-opt" onclick="simRadio('r-rgpd','sensibles')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — données sensibles (santé, biométrie, opinions politiques, origine ethnique…)<div class="sim-radio-sub">AIPD obligatoire, base légale Art. 9 RGPD, restrictions strictes</div></div></div>
-          <div class="sim-radio-opt" onclick="simRadio('r-rgpd','standard')"><div class="sim-radio-opt" onclick="simRadio('r-rgpd','standard')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — données personnelles standard<div class="sim-radio-sub">RGPD applicable, AIPD si risque élevé, droit d'opposition aux décisions automatisées (Art. 22)</div></div></div></div>
-          <div class="sim-radio-opt" onclick="simRadio('r-rgpd','non')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Non — données anonymisées ou techniques uniquement<div class="sim-radio-sub">RGPD non applicable — vérifier réelle anonymisation</div></div></div>
-        </div>
-      </div>
-
-      <div class="sim-q">
-        <div class="sim-q-label">Chiffre d'affaires annuel mondial de votre organisation <span class="sim-q-art">Art. 99 — Calcul des sanctions</span></div>
-        <div class="sim-q-hint">Utilisé pour calculer le plafond de sanction applicable (en % du CA mondial).</div>
-        <select class="sim-select" id="sim-ca">
-          <option value="startup">Startup / PME — moins de 10 M€</option>
-          <option value="sme">PME — 10 à 50 M€</option>
-          <option value="mid">ETI — 50 M€ à 250 M€</option>
-          <option value="large">Grande entreprise — 250 M€ à 1 Mds€</option>
-          <option value="xlarge">Multinationale — plus de 1 Mds€</option>
-        </select>
-      </div>
-
-      <div class="sim-q">
-        <div class="sim-q-label">Votre organisation est-elle établie dans l'UE ou vise-t-elle le marché européen ? <span class="sim-q-art">Art. 2 — Champ d'application territorial</span></div>
-        <div class="sim-radio-group" id="r-territoire">
-          <div class="sim-radio-opt" onclick="simRadio('r-territoire','ue')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Établie dans l'UE — fournisseur ou déployeur<div class="sim-radio-sub">AI Act pleinement applicable</div></div></div>
-          <div class="sim-radio-opt" onclick="simRadio('r-territoire','hors_ue')"><div class="sim-radio-opt" onclick="simRadio('r-territoire','hors_ue')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Hors UE — mais système utilisé dans l'UE ou affectant des personnes dans l'UE<div class="sim-radio-sub">AI Act applicable par extraterritorialité — mandataire UE requis (Art. 22)</div></div></div></div>
-          <div class="sim-radio-opt" onclick="simRadio('r-territoire','hors')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Hors UE — système uniquement utilisé hors UE<div class="sim-radio-sub">AI Act non applicable — vérifier les réglementations locales</div></div></div>
-        </div>
-      </div>
-
-      <div class="sim-nav">
-        <button class="sim-btn-prev" onclick="simPrev(4)">← Retour</button>
-        <span class="sim-progress">Étape 4 / 4</span>
-        <button class="sim-btn-next" onclick="simCompute()" title="Lancer l analyse de classification et de conformite de votre systeme IA.">Analyser →</button>
-      </div>
-    </div>
-
-    <!-- ÉTAPE 5 — Résultats -->
-    <div class="sim-panel" id="sim-panel-5">
-      <div id="sim-result-container"></div>
-      <div class="sim-nav" style="margin-top:8px">
-        <button class="sim-reset-btn" onclick="simReset()" title="Recommencer une nouvelle simulation depuis le debut.">↺ Nouvelle simulation</button>
-        <button class="sim-btn-next" id="sim-add-registre-btn" onclick="simAddToRegistre()" style="background:var(--green)" title="Enregistrer ce systeme directement dans le Registre IA.">+ Ajouter au Registre IA</button>
-        <button class="sim-btn-next" style="background:#1C5A8A" onclick="histoSaveSimulateur()" title="Enregistrer cette simulation dans l historique persistant et tracable (RGPD).">💾 Historique</button>
-        <button class="sim-btn-next" onclick="openAuditTab()" title="Ouvrir l audit de conformite EU AI Act complet (32 points de controle).">Lancer l'audit complet →</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-  <div class="sim-alerts-section">
-    <div class="sim-alerts-head">
-      <span class="sim-alerts-title">Alertes <em>actives</em></span>
-      <span class="chip chip-r" style="font-size:10px">7</span>
-    </div>
-    <p class="sim-alerts-sub">Modifications réglementaires susceptibles d'impacter vos déploiements IA.</p>
-    <div class="alert-list" id="alerts-list"></div>
-  </div>
-
-  </div>
-
-  <div class="regs-tabpanel" id="regs-panel-audit">
-    <!-- Bloc Lancer un audit -->
-    <div style="margin-bottom:28px">
-      <div class="col3" style="margin-bottom:20px" id="audit-3cards-holder">
-        <div class="feat"><div class="feat-h" style="margin-bottom:6px">① Cartographier</div><p class="feat-p">Chargement…</p></div>
-        <div class="feat"><div class="feat-h" style="margin-bottom:6px">② Évaluer</div><p class="feat-p">Chargement…</p></div>
-        <div class="feat"><div class="feat-h" style="margin-bottom:6px">③ Planifier</div><p class="feat-p">Chargement…</p></div>
-      </div>
-      <div class="rule" style="margin-bottom:20px"></div>
-      <div class="form-block" style="max-width:540px">
-        <div class="sec-h" style="margin-bottom:4px">Démarrer un audit assisté</div>
-        <div class="sec-sub" style="margin-bottom:20px">Un expert CONSEILPREV vous accompagne à chaque étape.</div>
-        <div class="form-row"><label class="form-lbl">Votre nom</label><input class="form-el" id="audit-nom" placeholder="Prénom Nom"></div>
-        <div class="form-row"><label class="form-lbl">Email professionnel</label><input class="form-el" id="audit-email" type="email" placeholder="vous@entreprise.com"></div>
-        <div class="form-row"><label class="form-lbl">Entreprise</label><input class="form-el" id="audit-entreprise" placeholder="Raison sociale"></div>
-        <div class="form-row"><label class="form-lbl">Périmètre</label><textarea class="form-el" id="audit-perimetre" placeholder="Décrivez vos systèmes IA à auditer…"></textarea></div>
-        <button class="submit" onclick="(function(){var n=document.getElementById('audit-nom').value,e=document.getElementById('audit-email').value,c=document.getElementById('audit-entreprise').value,p=document.getElementById('audit-perimetre').value;if(!n||!e){alert('Merci de renseigner votre nom et email.');return;}var subj=encodeURIComponent('[Sentinel AI] Demande audit conformité IA Act');var body=encodeURIComponent('Nom : '+n+'\nEmail : '+e+'\nEntreprise : '+c+'\nPérimètre : '+p);window.open('mailto:christophe.cerf@outlook.com?subject='+subj+'&body='+body,'_blank');})()">Soumettre la demande →</button>
-      </div>
-      <div class="rule" style="margin:28px 0 24px"></div>
-    </div>
-
-    <div class="radar-sector-bar" id="audit-sector-bar-holder"></div>
-    <div class="radar-registre-info" id="audit-registre-info"></div>
-    <div class="audit-header">
-      <div>
-        <div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px">Audit de conformité EU AI Act</div>
-        <div style="font-size:11px;color:var(--muted)">Règlement (UE) 2024/1689 — Méthodologie CONSEILPREV · 32 points de contrôle</div>
-      </div>
-      <button class="audit-export-btn" id="cpEvalSaveBtn" onclick="cpEvalSaveAudit()" style="background:var(--green);margin-right:8px" title="Enregistrer l etat actuel de l audit dans l historique de Mes evaluations.">💾 Enregistrer l'evaluation</button>
-      <button class="audit-export-btn" onclick="auditExportPDF()" title="Telecharger le rapport d audit complet au format PDF.">↓ Rapport PDF</button>
-      <button class="audit-export-btn" style="background:var(--bg);color:var(--ink);border:1px solid var(--rule2)" onclick="ragShowRelevantDocs(\'audit conformite EU AI Act controle\',\'audit\',\'Documents pertinents - Audit IA Act\')" title="Consulter les documents de votre base de connaissance lies a l Audit IA Act.">📚 Base de connaissance</button>
-    </div>
-    <div class="audit-kpi-row">
-      <div class="audit-kpi"><div class="audit-kpi-val" id="audit-score-pct">0%</div><div class="audit-kpi-lbl">Score global</div></div>
-      <div class="audit-kpi"><div class="audit-kpi-val" style="color:var(--green)" id="audit-done-count">0</div><div class="audit-kpi-lbl">Conformes</div></div>
-      <div class="audit-kpi"><div class="audit-kpi-val" style="color:var(--orange)" id="audit-partial-count">0</div><div class="audit-kpi-lbl">En cours</div></div>
-      <div class="audit-kpi"><div class="audit-kpi-val" style="color:var(--accent)" id="audit-todo-count">32</div><div class="audit-kpi-lbl">À réaliser</div></div>
-    </div>
-    <div class="audit-progress-bar" style="margin-bottom:24px"><div class="audit-progress-fill" id="audit-progress-fill" style="width:0%"></div></div>
-    <div id="audit-sections"></div>
-  </div>
-
-  <!-- ══ ONGLET 3 : Obligations article par article ══ -->
+  
+<!-- ══ ONGLET 3 : Obligations article par article ══ -->
   <div class="regs-tabpanel" id="regs-panel-articles">
     <div class="art-tabs-bar">
       <div class="art-filter-btn on" data-who="all" onclick="artFilter('all',this)">Tous</div>
@@ -2545,6 +2159,392 @@ textarea.form-el{min-height:86px;resize:vertical}
   </div>
 </div>
 
+<div class="page" id="p-simulateur">
+  <span class="eyebrow">Cartographier · EU AI Act</span><h1 class="page-h">Simulateur <em>IA Act</em></h1>
+  <p class="page-lead">Classifiez un système IA selon le Règlement (UE) 2024/1689 avant de l enregistrer au Registre.</p>
+
+  <span class="eyebrow">Aide à la décision</span>
+  <h1 class="page-h">Simuler un<br><em>déploiement IA</em></h1>
+  <p class="page-lead">Évaluez la conformité de votre système IA selon le Règlement (UE) 2024/1689 (EU AI Act) — classification, obligations et sanctions en 5 étapes.</p>
+  <span class="sim-ref">Règlement (UE) 2024/1689 du 13 juin 2024 — Texte officiel Journal officiel L du 12.7.2024</span>
+
+  <div class="sim-wrap">
+    <!-- Stepper -->
+    <div class="sim-stepper">
+      <div class="sim-step-dot active" id="step-dot-1" onclick="simGoto(1)">
+        <div class="sim-step-circle" id="step-circle-1">1</div>
+        <div class="sim-step-lbl">Système</div>
+      </div>
+      <div class="sim-step-dot" id="step-dot-2" onclick="simGoto(2)">
+        <div class="sim-step-circle" id="step-circle-2">2</div>
+        <div class="sim-step-lbl">Classification</div>
+      </div>
+      <div class="sim-step-dot" id="step-dot-3" onclick="simGoto(3)">
+        <div class="sim-step-circle" id="step-circle-3">3</div>
+        <div class="sim-step-lbl">Obligations</div>
+      </div>
+      <div class="sim-step-dot" id="step-dot-4" onclick="simGoto(4)">
+        <div class="sim-step-circle" id="step-circle-4">4</div>
+        <div class="sim-step-lbl">GPAI / Données</div>
+      </div>
+      <div class="sim-step-dot" id="step-dot-5" onclick="simGoto(5)">
+        <div class="sim-step-circle" id="step-circle-5">5</div>
+        <div class="sim-step-lbl">Résultats</div>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 1 — Identification du système -->
+    <div class="sim-panel on" id="sim-panel-1">
+      <div class="sim-panel-title">Identification du système IA</div>
+      <div class="sim-panel-sub">Décrivez votre système et son contexte de déploiement.</div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Nom du système IA <span class="sim-q-art">Art. 11 — Documentation technique</span></div>
+        <input class="sim-input" id="sim-name" type="text" placeholder="Ex : CreditScore-Pro v2.1, MedDiag-AI, ChatSupport…">
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Secteur d'activité <span class="sim-q-art">Annexe III — Domaines à haut risque</span></div>
+        <div class="sim-q-hint">Certains secteurs sont explicitement listés à l'Annexe III comme présentant un haut risque.</div>
+        <select class="sim-select" id="sim-secteur">
+          <option value="">Sélectionnez votre secteur…</option>
+          <optgroup label="Secteurs Annexe III — Risque élevé">
+            <option value="bio">Biométrie (identification, catégorisation, reconnaissance émotionnelle)</option>
+            <option value="infra">Infrastructures critiques (eau, gaz, électricité, trafic, finance)</option>
+            <option value="education">Éducation et formation professionnelle</option>
+            <option value="emploi">Emploi, gestion des travailleurs, accès à l'emploi indépendant</option>
+            <option value="essentiels">Services essentiels (aide sociale, logement, crédit, urgences)</option>
+            <option value="law">Application de la loi, justice, démocratie</option>
+            <option value="migration">Migration, asile, contrôle aux frontières</option>
+          </optgroup>
+          <optgroup label="Autres secteurs">
+            <option value="sante">Santé / Médical (hors dispositifs médicaux réglementés)</option>
+            <option value="finance">Finance / Assurance / Banque</option>
+            <option value="industrie">Industrie / Manufacturing</option>
+            <option value="transport">Transport / Automobile / Aérien</option>
+            <option value="energie">Énergie / Utilities</option>
+            <option value="media">Médias / Communication / Marketing</option>
+            <option value="it">IT / Tech / SaaS</option>
+            <option value="public">Administration publique</option>
+            <option value="autre">Autre secteur</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Type de système IA <span class="sim-q-art">Art. 3(1) — Définition système IA</span></div>
+        <select class="sim-select" id="sim-type">
+          <option value="">Sélectionnez le type de système…</option>
+          <optgroup label="Systèmes décisionnels">
+            <option value="scoring">Scoring / Notation automatisée (crédit, risque, employabilité)</option>
+            <option value="decision_auto">Décision entièrement automatisée (sans intervention humaine)</option>
+            <option value="aide_decision">Aide à la décision (recommandation soumise à validation humaine)</option>
+            <option value="triage">Tri / Priorisation de dossiers ou personnes</option>
+          </optgroup>
+          <optgroup label="Systèmes de reconnaissance">
+            <option value="bio_remote">Identification biométrique à distance en temps réel</option>
+            <option value="bio_post">Identification biométrique a posteriori</option>
+            <option value="emotion">Reconnaissance émotionnelle</option>
+            <option value="face_reco">Reconnaissance faciale / catégorisation biométrique</option>
+            <option value="voix">Reconnaissance vocale / Analyse de la voix</option>
+          </optgroup>
+          <optgroup label="IA générative et conversationnelle">
+            <option value="llm_gen">LLM / IA générative (texte, image, code, audio)</option>
+            <option value="deepfake">Synthèse de contenus (deepfake, voix clonée)</option>
+            <option value="chatbot">Chatbot / Agent conversationnel</option>
+            <option value="copilot">Assistant IA / Copilot (code, rédaction)</option>
+          </optgroup>
+          <optgroup label="Systèmes de surveillance et monitoring">
+            <option value="surveillance">Surveillance de masse / monitoring comportemental</option>
+            <option value="ot_monitor">Surveillance OT / Systèmes industriels</option>
+            <option value="cyber_ai">Détection de cybermenaces par IA</option>
+            <option value="predictif">Maintenance prédictive / Anomalie industrielle</option>
+          </optgroup>
+          <optgroup label="Systèmes de recommandation et contenu">
+            <option value="reco">Système de recommandation personnalisée</option>
+            <option value="content_moderation">Modération de contenu automatisée</option>
+            <option value="seo_ai">Génération / Optimisation de contenu</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Description du cas d'usage</div>
+        <textarea class="sim-textarea" id="sim-desc" placeholder="Décrivez brièvement le fonctionnement, l'objectif et le contexte d'utilisation de votre système IA. Ex : Modèle ML de scoring crédit analysant 200+ variables pour prédire la solvabilité des demandeurs et déclencher automatiquement l'octroi ou le refus de prêt."></textarea>
+      </div>
+
+      <div class="sim-nav">
+        <span></span>
+        <span class="sim-progress">Étape 1 / 4</span>
+        <button class="sim-btn-next" onclick="simNext(1)" title="Passer a l etape suivante du simulateur.">Suivant →</button>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 2 — Classification du risque -->
+    <div class="sim-panel" id="sim-panel-2">
+      <div class="sim-panel-title">Classification du niveau de risque</div>
+      <div class="sim-panel-sub">Ces questions déterminent si votre système relève des pratiques interdites (Art. 5), du régime haut risque (Art. 6), ou d'un régime allégé.</div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Votre système utilise-t-il des techniques subliminales ou manipulatrices ? <span class="sim-q-art">Art. 5(1)(a)</span></div>
+        <div class="sim-q-hint">Techniques au-dessous du seuil de conscience, exploitation des vulnérabilités (âge, handicap), altération substantielle du comportement.</div>
+        <div class="sim-radio-group" id="r-subliminal">
+          <div class="sim-radio-opt" onclick="simRadio('r-subliminal','oui')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui<div class="sim-radio-sub">Le système vise à influencer les comportements de manière non transparente</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-subliminal','non')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Non<div class="sim-radio-sub">Pas de techniques manipulatrices ou subliminales</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-subliminal','incertain')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Incertain — à analyser<div class="sim-radio-sub">Des techniques de personnalisation pourraient être concernées</div></div></div>
+        </div>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Votre système effectue-t-il une identification biométrique à distance en temps réel dans des espaces publics ? <span class="sim-q-art">Art. 5(1)(h)</span></div>
+        <div class="sim-radio-group" id="r-biometrie">
+          <div class="sim-radio-opt" onclick="simRadio('r-biometrie','oui')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — identification temps réel en espace public<div class="sim-radio-sub">Caméras de surveillance avec reconnaissance faciale en direct</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-biometrie','aposteriori')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Identification biométrique a posteriori uniquement<div class="sim-radio-sub">Analyse de vidéos ou images enregistrées</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-biometrie','non')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Non — pas d'identification biométrique publique<div class="sim-radio-sub">Aucun traitement biométrique dans des espaces publics accessibles</div></div></div>
+        </div>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Votre système est-il utilisé dans l'un des domaines à haut risque de l'Annexe III ? <span class="sim-q-art">Art. 6(2) + Annexe III</span></div>
+        <div class="sim-q-hint">Sélectionnez tous les domaines applicables.</div>
+        <div class="sim-checkbox-group" id="cb-annexe3">
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-bio')"><div class="sim-checkbox-box">✓</div>Biométrie</div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-infra')"><div class="sim-checkbox-box">✓</div>Infrastructures critiques</div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-edu')"><div class="sim-checkbox-box">✓</div>Éducation / Formation</div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-emploi')"><div class="sim-checkbox-box">✓</div>Emploi / RH / Recrutement</div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-essentiels')"><div class="sim-checkbox-box">✓</div>Services essentiels / Crédit / Aides</div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-law')"><div class="sim-checkbox-box">✓</div>Application de la loi / Justice</div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-migration')"><div class="sim-checkbox-box">✓</div>Migration / Asile / Frontières</div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-demo')"><div class="sim-checkbox-box">✓</div>Démocratie / Élections</div>
+        </div>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Quel est l'impact du système sur les personnes ? <span class="sim-q-art">Art. 6(1) — Évaluation du risque</span></div>
+        <div class="sim-radio-group" id="r-impact">
+          <div class="sim-radio-opt" onclick="simRadio('r-impact','individuel')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Décisions individuelles contraignantes<div class="sim-radio-sub">Octroi/refus de crédit, recrutement, accès à des services, décision médicale</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-impact','groupe')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Impact sur des groupes de personnes<div class="sim-radio-sub">Ciblage publicitaire, recommandation de contenu, modération, scoring collectif</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-impact','interne')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Usage interne — pas de décision directe sur des personnes<div class="sim-radio-sub">Maintenance prédictive, optimisation de processus, outil interne sans impact externe</div></div></div>
+        </div>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Votre système est-il destiné à interagir directement avec des utilisateurs finaux ? <span class="sim-q-art">Art. 50 — Transparence</span></div>
+        <div class="sim-radio-group" id="r-interaction">
+          <div class="sim-radio-opt" onclick="simRadio('r-interaction','oui')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — chatbot, assistant, agent conversationnel<div class="sim-radio-sub">Obligation d'information que l'utilisateur interagit avec une IA (Art. 50.1)</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-interaction','genere')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Génère des contenus synthétiques (texte, image, voix, vidéo)<div class="sim-radio-sub">Obligation de marquage et de watermarking (Art. 50.2-4)</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-interaction','non')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Non — système backend sans interaction directe<div class="sim-radio-sub">Pas d'obligation de transparence Art. 50</div></div></div>
+        </div>
+      </div>
+
+      <div class="sim-nav">
+        <button class="sim-btn-prev" onclick="simPrev(2)">← Retour</button>
+        <span class="sim-progress">Étape 2 / 4</span>
+        <button class="sim-btn-next" onclick="simNext(2)" title="Passer a l etape suivante du simulateur.">Suivant →</button>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 3 — Obligations existantes -->
+    <div class="sim-panel" id="sim-panel-3">
+      <div class="sim-panel-title">État de vos obligations de conformité</div>
+      <div class="sim-panel-sub">Indiquez ce que vous avez déjà mis en place. Cela permettra de calculer votre gap de conformité.</div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Système de gestion des risques <span class="sim-q-art">Art. 9</span></div>
+        <div class="sim-q-hint">Processus itératif documenté couvrant l'identification, estimation et gestion des risques tout au long du cycle de vie.</div>
+        <select class="sim-select" id="sim-art9">
+          <option value="none">Non — pas encore mis en place</option>
+          <option value="partial">En cours — partiellement documenté</option>
+          <option value="done">Oui — système de gestion des risques complet et documenté</option>
+        </select>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Gouvernance des données d'entraînement <span class="sim-q-art">Art. 10</span></div>
+        <div class="sim-q-hint">Qualité, représentativité, absence de biais, traçabilité des jeux de données d'entraînement, validation et test.</div>
+        <select class="sim-select" id="sim-art10">
+          <option value="none">Non — aucune gouvernance formalisée</option>
+          <option value="partial">Partielle — quelques contrôles qualité en place</option>
+          <option value="done">Oui — gouvernance complète (origine, qualité, biais, traçabilité)</option>
+        </select>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Documentation technique <span class="sim-q-art">Art. 11 + Annexe IV</span></div>
+        <div class="sim-q-hint">Dossier technique complet : description du système, architecture, données, performances, limites, mesures de conformité.</div>
+        <select class="sim-select" id="sim-art11">
+          <option value="none">Non — aucune documentation formelle</option>
+          <option value="partial">Partielle — documentation interne basique</option>
+          <option value="done">Oui — dossier technique conforme Annexe IV AI Act</option>
+        </select>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Journalisation et enregistrement des décisions <span class="sim-q-art">Art. 12</span></div>
+        <div class="sim-q-hint">Capacité de journalisation automatique permettant de reconstituer les décisions et de vérifier la conformité a posteriori.</div>
+        <select class="sim-select" id="sim-art12">
+          <option value="none">Non — pas de journalisation IA</option>
+          <option value="partial">Partielle — logs applicatifs basiques</option>
+          <option value="done">Oui — journalisation conforme Art. 12 (horodatage, entrées, sorties, identifiants)</option>
+        </select>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Supervision humaine effective <span class="sim-q-art">Art. 14</span></div>
+        <div class="sim-q-hint">Mesures permettant à des personnes physiques de surveiller, comprendre, corriger ou stopper le système en cours de fonctionnement.</div>
+        <select class="sim-select" id="sim-art14">
+          <option value="none">Non — décision entièrement automatisée sans supervision</option>
+          <option value="partial">Partielle — validation humaine disponible mais non systématique</option>
+          <option value="done">Oui — supervision humaine effective et documentée (Art. 14.4)</option>
+        </select>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Transparence envers les déployeurs <span class="sim-q-art">Art. 13</span></div>
+        <div class="sim-q-hint">Notice d'utilisation claire sur les capacités, limites, performances, conditions d'utilisation prévue.</div>
+        <select class="sim-select" id="sim-art13">
+          <option value="none">Non — aucune notice formelle</option>
+          <option value="partial">Partielle — documentation utilisateur basique</option>
+          <option value="done">Oui — notice conforme Art. 13.3 (capacités, limites, performances, instructions)</option>
+        </select>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Système de gestion de la qualité <span class="sim-q-art">Art. 17</span></div>
+        <div class="sim-q-hint">Politiques et procédures documentées de conception, test, surveillance post-commercialisation, gestion des incidents.</div>
+        <select class="sim-select" id="sim-art17">
+          <option value="none">Non — pas de SGQ formel</option>
+          <option value="partial">Partielle — ISO 9001 ou équivalent sans volet IA spécifique</option>
+          <option value="done">Oui — SGQ complet incluant l'IA (ou ISO 42001 en cours)</option>
+        </select>
+      </div>
+
+      <div class="sim-nav">
+        <button class="sim-btn-prev" onclick="simPrev(3)">← Retour</button>
+        <span class="sim-progress">Étape 3 / 4</span>
+        <button class="sim-btn-next" onclick="simNext(3)" title="Passer a l etape suivante du simulateur.">Suivant →</button>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 4 — GPAI et données -->
+    <div class="sim-panel" id="sim-panel-4">
+      <div class="sim-panel-title">Modèles à usage général (GPAI) et données</div>
+      <div class="sim-panel-sub">Questions spécifiques aux modèles de fondation, LLM et aux enjeux de données personnelles.</div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Votre système est-il un modèle d'IA à usage général (GPAI) ? <span class="sim-q-art">Art. 51-55</span></div>
+        <div class="sim-q-hint">Modèle entraîné sur large quantité de données, polyvalent, utilisable dans de multiples contextes (LLM, modèle de vision généraliste, modèle audio).</div>
+        <div class="sim-radio-group" id="r-gpai">
+          <div class="sim-radio-opt" onclick="simRadio('r-gpai','oui_sys')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — je développe/fournis un modèle GPAI<div class="sim-radio-sub">Obligations spécifiques Art. 53 (documentation, politique de droits d'auteur, résumé de données)</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-gpai','oui_flop')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — GPAI à capacités systémiques (seuil 10^25 FLOPs)<div class="sim-radio-sub">Obligations renforcées Art. 55 : évaluation adversariale, signalement incidents, cybersécurité</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-gpai','deploie')"><div class="sim-radio-opt" onclick="simRadio('r-gpai','deploie')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Je déploie un GPAI tiers (OpenAI, Anthropic, Mistral…)<div class="sim-radio-sub">Obligations de déployeur : vérification des politiques fournisseur, transparence utilisateurs</div></div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-gpai','non')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Non — système IA spécifique à une tâche<div class="sim-radio-sub">Pas soumis au régime GPAI des Art. 51-55</div></div></div>
+        </div>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Votre système traite-t-il des données personnelles ? <span class="sim-q-art">RGPD Art. 22 + AI Act Art. 10</span></div>
+        <div class="sim-radio-group" id="r-rgpd">
+          <div class="sim-radio-opt" onclick="simRadio('r-rgpd','sensibles')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — données sensibles (santé, biométrie, opinions politiques, origine ethnique…)<div class="sim-radio-sub">AIPD obligatoire, base légale Art. 9 RGPD, restrictions strictes</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-rgpd','standard')"><div class="sim-radio-opt" onclick="simRadio('r-rgpd','standard')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — données personnelles standard<div class="sim-radio-sub">RGPD applicable, AIPD si risque élevé, droit d'opposition aux décisions automatisées (Art. 22)</div></div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-rgpd','non')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Non — données anonymisées ou techniques uniquement<div class="sim-radio-sub">RGPD non applicable — vérifier réelle anonymisation</div></div></div>
+        </div>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Chiffre d'affaires annuel mondial de votre organisation <span class="sim-q-art">Art. 99 — Calcul des sanctions</span></div>
+        <div class="sim-q-hint">Utilisé pour calculer le plafond de sanction applicable (en % du CA mondial).</div>
+        <select class="sim-select" id="sim-ca">
+          <option value="startup">Startup / PME — moins de 10 M€</option>
+          <option value="sme">PME — 10 à 50 M€</option>
+          <option value="mid">ETI — 50 M€ à 250 M€</option>
+          <option value="large">Grande entreprise — 250 M€ à 1 Mds€</option>
+          <option value="xlarge">Multinationale — plus de 1 Mds€</option>
+        </select>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Votre organisation est-elle établie dans l'UE ou vise-t-elle le marché européen ? <span class="sim-q-art">Art. 2 — Champ d'application territorial</span></div>
+        <div class="sim-radio-group" id="r-territoire">
+          <div class="sim-radio-opt" onclick="simRadio('r-territoire','ue')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Établie dans l'UE — fournisseur ou déployeur<div class="sim-radio-sub">AI Act pleinement applicable</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-territoire','hors_ue')"><div class="sim-radio-opt" onclick="simRadio('r-territoire','hors_ue')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Hors UE — mais système utilisé dans l'UE ou affectant des personnes dans l'UE<div class="sim-radio-sub">AI Act applicable par extraterritorialité — mandataire UE requis (Art. 22)</div></div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-territoire','hors')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Hors UE — système uniquement utilisé hors UE<div class="sim-radio-sub">AI Act non applicable — vérifier les réglementations locales</div></div></div>
+        </div>
+      </div>
+
+      <div class="sim-nav">
+        <button class="sim-btn-prev" onclick="simPrev(4)">← Retour</button>
+        <span class="sim-progress">Étape 4 / 4</span>
+        <button class="sim-btn-next" onclick="simCompute()" title="Lancer l analyse de classification et de conformite de votre systeme IA.">Analyser →</button>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 5 — Résultats -->
+    <div class="sim-panel" id="sim-panel-5">
+      <div id="sim-result-container"></div>
+      <div class="sim-nav" style="margin-top:8px">
+        <button class="sim-reset-btn" onclick="simReset()" title="Recommencer une nouvelle simulation depuis le debut.">↺ Nouvelle simulation</button>
+        <button class="sim-btn-next" id="sim-add-registre-btn" onclick="simAddToRegistre()" style="background:var(--green)" title="Enregistrer ce systeme directement dans le Registre IA.">+ Ajouter au Registre IA</button>
+        <button class="sim-btn-next" style="background:#1C5A8A" onclick="histoSaveSimulateur()" title="Enregistrer cette simulation dans l historique persistant et tracable (RGPD).">💾 Historique</button>
+        <button class="sim-btn-next" onclick="openAuditTab()" title="Ouvrir l audit de conformite EU AI Act complet (32 points de controle).">Lancer l'audit complet →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="sim-alerts-section">
+    <div class="sim-alerts-head">
+      <span class="sim-alerts-title">Alertes <em>actives</em></span>
+      <span class="chip chip-r" style="font-size:10px">7</span>
+    </div>
+    <p class="sim-alerts-sub">Modifications réglementaires susceptibles d'impacter vos déploiements IA.</p>
+    <div class="alert-list" id="alerts-list"></div>
+  </div>
+</div>
+<div class="page" id="p-audit-ia-act">
+  <span class="eyebrow">Évaluer le risque · EU AI Act</span><h1 class="page-h">Audit <em>IA Act</em></h1>
+  <p class="page-lead">Audit de conformité structuré — 32 points de contrôle, Règlement (UE) 2024/1689.</p>
+
+    <!-- Bloc Lancer un audit -->
+    <div style="margin-bottom:28px">
+      <div class="col3" style="margin-bottom:20px" id="audit-3cards-holder">
+        <div class="feat"><div class="feat-h" style="margin-bottom:6px">① Cartographier</div><p class="feat-p">Chargement…</p></div>
+        <div class="feat"><div class="feat-h" style="margin-bottom:6px">② Évaluer</div><p class="feat-p">Chargement…</p></div>
+        <div class="feat"><div class="feat-h" style="margin-bottom:6px">③ Planifier</div><p class="feat-p">Chargement…</p></div>
+      </div>
+      <div class="rule" style="margin-bottom:20px"></div>
+      <div class="form-block" style="max-width:540px">
+        <div class="sec-h" style="margin-bottom:4px">Démarrer un audit assisté</div>
+        <div class="sec-sub" style="margin-bottom:20px">Un expert CONSEILPREV vous accompagne à chaque étape.</div>
+        <div class="form-row"><label class="form-lbl">Votre nom</label><input class="form-el" id="audit-nom" placeholder="Prénom Nom"></div>
+        <div class="form-row"><label class="form-lbl">Email professionnel</label><input class="form-el" id="audit-email" type="email" placeholder="vous@entreprise.com"></div>
+        <div class="form-row"><label class="form-lbl">Entreprise</label><input class="form-el" id="audit-entreprise" placeholder="Raison sociale"></div>
+        <div class="form-row"><label class="form-lbl">Périmètre</label><textarea class="form-el" id="audit-perimetre" placeholder="Décrivez vos systèmes IA à auditer…"></textarea></div>
+        <button class="submit" onclick="(function(){var n=document.getElementById('audit-nom').value,e=document.getElementById('audit-email').value,c=document.getElementById('audit-entreprise').value,p=document.getElementById('audit-perimetre').value;if(!n||!e){alert('Merci de renseigner votre nom et email.');return;}var subj=encodeURIComponent('[Sentinel AI] Demande audit conformité IA Act');var body=encodeURIComponent('Nom : '+n+'\nEmail : '+e+'\nEntreprise : '+c+'\nPérimètre : '+p);window.open('mailto:christophe.cerf@outlook.com?subject='+subj+'&body='+body,'_blank');})()">Soumettre la demande →</button>
+      </div>
+      <div class="rule" style="margin:28px 0 24px"></div>
+    </div>
+
+    <div class="radar-sector-bar" id="audit-sector-bar-holder"></div>
+    <div class="radar-registre-info" id="audit-registre-info"></div>
+    <div class="audit-header">
+      <div>
+        <div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px">Audit de conformité EU AI Act</div>
+        <div style="font-size:11px;color:var(--muted)">Règlement (UE) 2024/1689 — Méthodologie CONSEILPREV · 32 points de contrôle</div>
+      </div>
+      <button class="audit-export-btn" id="cpEvalSaveBtn" onclick="cpEvalSaveAudit()" style="background:var(--green);margin-right:8px" title="Enregistrer l etat actuel de l audit dans l historique de Mes evaluations.">💾 Enregistrer l'evaluation</button>
+      <button class="audit-export-btn" onclick="auditExportPDF()" title="Telecharger le rapport d audit complet au format PDF.">↓ Rapport PDF</button>
+      <button class="audit-export-btn" style="background:var(--bg);color:var(--ink);border:1px solid var(--rule2)" onclick="ragShowRelevantDocs(\'audit conformite EU AI Act controle\',\'audit\',\'Documents pertinents - Audit IA Act\')" title="Consulter les documents de votre base de connaissance lies a l Audit IA Act.">📚 Base de connaissance</button>
+    </div>
+    <div class="audit-kpi-row">
+      <div class="audit-kpi"><div class="audit-kpi-val" id="audit-score-pct">0%</div><div class="audit-kpi-lbl">Score global</div></div>
+      <div class="audit-kpi"><div class="audit-kpi-val" style="color:var(--green)" id="audit-done-count">0</div><div class="audit-kpi-lbl">Conformes</div></div>
+      <div class="audit-kpi"><div class="audit-kpi-val" style="color:var(--orange)" id="audit-partial-count">0</div><div class="audit-kpi-lbl">En cours</div></div>
+      <div class="audit-kpi"><div class="audit-kpi-val" style="color:var(--accent)" id="audit-todo-count">32</div><div class="audit-kpi-lbl">À réaliser</div></div>
+    </div>
+    <div class="audit-progress-bar" style="margin-bottom:24px"><div class="audit-progress-fill" id="audit-progress-fill" style="width:0%"></div></div>
+    <div id="audit-sections"></div>
+</div>
 <div class="page" id="p-fria">
   <span class="eyebrow">Évaluation FRIA</span><h1 class="page-h">Fundamental Rights <em>Impact Assessment</em></h1><p class="page-lead">Évaluation d'impact sur les droits fondamentaux — Art. 27 EU AI Act, obligation du <strong>déployeur</strong> (distincte d'une DPIA RGPD). Applicable à partir du 2 août 2026 pour 3 catégories de déployeurs : organismes publics, prestataires de service public, et scoring crédit/assurance.</p>
 
@@ -4285,6 +4285,8 @@ var PAGE_META = {
   maturite: {section:'CARTOGRAPHIER', label:'Audit de maturité IA'},
   parties:  {section:'TRAITER & GOUVERNER',     label:'Parties prenantes'},
   registre: {section:'CARTOGRAPHIER',        label:'Systèmes IA'},
+  simulateur: {section:'CARTOGRAPHIER',      label:'Simulateur IA Act'},
+  'audit-ia-act': {section:'ÉVALUER LE RISQUE', label:'Audit IA Act'},
   matrice:  {section:'ÉVALUER LE RISQUE',         label:'Matrice risques'},
   radar:    {section:'ÉVALUER LE RISQUE',         label:'Radar multi-critères'},
   articles: {section:'EU AI ACT',       label:'Articles & Obligations'},
@@ -4765,19 +4767,26 @@ window.regsTab = function(tab, el){
   }
   var panel = document.getElementById('regs-panel-'+tab);
   if(panel) panel.classList.add('on');
-  if(tab === 'audit') auditInit();
   if(tab === 'articles') artInit();
 };
 
 /* Helper : naviguer vers Reglementations + ouvrir l'onglet Audit */
+var _auditPageOrigGo = window.go;
+window.go = function(id){
+  var r = _auditPageOrigGo ? _auditPageOrigGo.apply(this, arguments) : undefined;
+  if(id === "audit-ia-act") setTimeout(auditInit, 50);
+  return r;
+};
+
+/* Helper conserve pour compatibilite : tous les boutons existants qui appellent
+   openAuditTab()/openSimulateurTab() continuent de fonctionner sans modification,
+   pointant desormais vers les pages dediees plutot que des onglets internes. */
 window.openAuditTab = function(){
-  go('regs', null, 'RÉGLEMENTATIONS', 'Réglementations & Audit IA');
-  setTimeout(function(){ regsTab('audit', null); }, 80);
+  go('audit-ia-act', null, 'ÉVALUER LE RISQUE', 'Audit IA Act');
 };
 
 window.openSimulateurTab = function(){
-  go('regs', null, 'RÉGLEMENTATIONS', 'Réglementations & Audit IA');
-  setTimeout(function(){ regsTab('simulateur', null); }, 80);
+  go('simulateur', null, 'CARTOGRAPHIER', 'Simulateur IA Act');
 };
 
 /* ══ ONGLET 2 : AUDIT IA ACT ══ */
