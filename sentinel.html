@@ -2522,10 +2522,10 @@ textarea.form-el{min-height:86px;resize:vertical}
       <button class="audit-export-btn" style="background:var(--bg);color:var(--ink);border:1px solid var(--rule2)" onclick="ragShowRelevantDocs(\'audit conformite EU AI Act controle\',\'audit\',\'Documents pertinents - Audit IA Act\')" title="Consulter les documents de votre base de connaissance lies a l Audit IA Act.">📚 Base de connaissance</button>
     </div>
     <div class="audit-kpi-row">
-      <div class="audit-kpi"><div class="audit-kpi-val" id="audit-score-pct">0%</div><div class="audit-kpi-lbl">Score global</div></div>
-      <div class="audit-kpi"><div class="audit-kpi-val" style="color:var(--green)" id="audit-done-count">0</div><div class="audit-kpi-lbl">Conformes</div></div>
-      <div class="audit-kpi"><div class="audit-kpi-val" style="color:var(--orange)" id="audit-partial-count">0</div><div class="audit-kpi-lbl">En cours</div></div>
-      <div class="audit-kpi"><div class="audit-kpi-val" style="color:var(--accent)" id="audit-todo-count">32</div><div class="audit-kpi-lbl">À réaliser</div></div>
+      <div class="audit-kpi" title="Calcul : (points conformes + points en cours x 0,5) / total des points x 100. Tous les points comptent a egalite, quelle que soit leur priorite."><div class="audit-kpi-val" id="audit-score-pct">0%</div><div class="audit-kpi-lbl">Score global</div></div>
+      <div class="audit-kpi" title="Points marques comme entierement satisfaits — cliquez sur la case jusqu a obtenir un check vert."><div class="audit-kpi-val" style="color:var(--green)" id="audit-done-count">0</div><div class="audit-kpi-lbl">Conformes</div></div>
+      <div class="audit-kpi" title="Points partiellement traites — comptes pour moitie dans le score global."><div class="audit-kpi-val" style="color:var(--orange)" id="audit-partial-count">0</div><div class="audit-kpi-lbl">En cours</div></div>
+      <div class="audit-kpi" title="Points non encore traites, sur les 32 au total."><div class="audit-kpi-val" style="color:var(--accent)" id="audit-todo-count">32</div><div class="audit-kpi-lbl">À réaliser</div></div>
     </div>
     <div class="audit-progress-bar" style="margin-bottom:24px"><div class="audit-progress-fill" id="audit-progress-fill" style="width:0%"></div></div>
     <div id="audit-sections"></div>
@@ -4875,14 +4875,15 @@ function auditInit(){
       var state = AUDIT_STATE[item.id] || 'none';
       var checkCls = state === 'done' ? 'done' : state === 'partial' ? 'partial' : '';
       var checkTxt = state === 'done' ? '✓' : state === 'partial' ? '~' : '';
+      var prioTips = {p1:'Priorité 1 — obligation critique, directement sanctionnable (jusqu\'à 35M€ ou 7% du CA mondial). À traiter en premier.', p2:'Priorité 2 — obligation importante, impact significatif sur la conformité globale.', p3:'Priorité 3 — bonne pratique recommandée, renforce la robustesse de la démarche.'};
       return '<div class="audit-item" id="aitem-'+item.id+'">'
-        +'<div class="audit-check '+checkCls+'" id="check-'+item.id+'" onclick="auditToggle(\''+item.id+'\')">'+checkTxt+'</div>'
+        +'<div class="audit-check '+checkCls+'" id="check-'+item.id+'" onclick="auditToggle(\''+item.id+'\')" title="Cliquez pour faire défiler : à réaliser → en cours → conforme.">'+checkTxt+'</div>'
         +'<div class="audit-item-body">'
         +'<div class="audit-item-title">'+item.title+'</div>'
         +'<div class="audit-item-desc">'+item.desc+'</div>'
         +'<div class="audit-item-art">'+item.art+'</div>'
         +'</div>'
-        +'<span class="audit-item-prio '+item.prio+'">'+item.prio.toUpperCase()+'</span>'
+        +'<span class="audit-item-prio '+item.prio+'" title="'+(prioTips[item.prio]||'')+'">'+item.prio.toUpperCase()+'</span>'
         +'</div>';
     }).join('');
 
