@@ -5173,17 +5173,43 @@ window.artFilter = function(val, el){
   [['h','EU AI Act — Entrée en vigueur obligations IA haut risque','Article 6(2) — Systèmes affectant les infrastructures critiques','15 août 2026'],['h','NIS2 — Date limite transposition nationale','Directive 2022/2555 — Non-conformité ANSSI signalée','12 août 2026'],['m','RGPD — Nouvelle décision CEPD sur les LLM','Traitement données d\'entraînement — Base légale requis','08 août 2026'],['m','DORA — Exigences tests de résilience ICT','Art. 26 DORA — Entités financières critiques','03 août 2026'],['h','AI Act — Guide ENISA systèmes cybersécurité IA','Interaction IA Act × NIS2 — Nouvelle guidance','28 juil. 2026'],['l','ISO 42001 — Nouvelle version publiée','Gouvernance IA — Alignement EU AI Act confirmé','20 juil. 2026'],['m','US EO 14110 — Révision imminente','Impact sur accords bilatéraux UE-US IA','15 juil. 2026']].forEach(function(a){ var cl=a[0]==='h'?'ad-h':a[0]==='m'?'ad-m':'ad-l'; b.innerHTML+='<div class="alert-item"><div class="alert-dot '+cl+'"></div><div class="alert-body"><div class="alert-t">'+a[1]+'</div><div class="alert-s">'+a[2]+'</div></div><div class="alert-date">'+a[3]+'</div></div>'; });
 })();
 
-/* Veille generique statique remplacee par module veille_module.js (qualifiee par IA) */
-
-(function(){
-  var ITEMS = [{tags:[{c:'chip-b',t:'EU'}],h:"EU AI Act : le premier délai d'août 2026 approche",p:"Les obligations de l'Article 5 s'appliquent depuis le 2 février 2025. Le prochain palier concerne les systèmes haut risque.",d:"15 juin 2026"},{tags:[{c:'chip-g',t:'FR'}],h:"ANSSI publie son guide de sécurité des systèmes IA industriels",p:"Le guide couvre les exigences NIS2 pour les OES utilisant de l'IA dans leurs processus critiques.",d:"10 juin 2026"},{tags:[{c:'chip-b',t:'EU'},{c:'chip-n',t:'ISO'}],h:"ISO/IEC 42001 : comment l'aligner avec l'AI Act ?",p:"Le standard de management des systèmes IA devient un outil central dans la démonstration de conformité.",d:"5 juin 2026"},{tags:[{c:'chip-n',t:'GLOBAL'}],h:"Géopolitique normative : l'EU AI Act s'exporte dans 40 pays",p:"Les négociations commerciales intègrent désormais la réciprocité réglementaire IA.",d:"1 juin 2026"}];
+/* ══ APERCU VEILLE DANS REGLEMENTATIONS — reutilise les vraies donnees RSS/IA ══ */
+function veilleRenderRegsPreview(){
   var b = document.getElementById('veille-list-regs');
   if(!b) return;
-  ITEMS.forEach(function(v){
-    var tags = v.tags.map(function(t){ return '<span class="chip '+t.c+'">'+t.t+'</span>'; }).join(' ');
-    b.innerHTML += '<div class="veille-item"><div class="veille-top"><div class="veille-h">'+v.h+'</div><div class="veille-date">'+v.d+'</div></div><div class="veille-tags">'+tags+'</div><div class="veille-p">'+v.p+'</div></div>';
-  });
-})();
+
+  if(VEILLE_DATA_RAW.length === 0){
+    b.innerHTML = '<div class="reg-loading">Chargement des actualités…</div>';
+    veilleFetchRaw().then(function(){ return fetch('/api/veille/qualifiee'); }).then(function(r){ return r.json(); })
+      .then(function(d){
+        VEILLE_DATA_RAW = d.items || [];
+        veilleRenderRegsPreview();
+      })
+      .catch(function(){ b.innerHTML = '<div class="reg-empty">Actualités indisponibles pour le moment.</div>'; });
+    return;
+  }
+
+  var items = VEILLE_DATA_RAW.slice(0,4);
+  if(items.length === 0){
+    b.innerHTML = '<div class="reg-empty">Aucune actualité à afficher pour le moment.</div>';
+    return;
+  }
+
+  b.innerHTML = items.map(function(it){
+    var imp = IMPACT_LABELS[it.impact] || IMPACT_LABELS.moyen;
+    return '<div class="veille-item" style="border-left:3px solid '+imp.color+';padding-left:10px">'
+      + '<div class="veille-top"><a class="veille-h" href="'+(it.link||'#')+'" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">'+(it.ico||'')+' '+it.title+'</a><div class="veille-date">'+(it.source||'')+'</div></div>'
+      + '<div class="veille-p">'+(it.raison||'')+'</div>'
+      + '</div>';
+  }).join('');
+}
+
+var _veilleRegsOrigGo = window.go;
+window.go = function(id){
+  var r = _veilleRegsOrigGo ? _veilleRegsOrigGo.apply(this, arguments) : undefined;
+  if(id === "regs") setTimeout(veilleRenderRegsPreview, 80);
+  return r;
+};
 
 
 /* Remplace par cpEvalRenderList() — voir module Mes evaluations en fin de fichier */
