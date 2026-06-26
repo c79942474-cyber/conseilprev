@@ -1818,6 +1818,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 
 <!-- ══ ONGLET 1 : Textes réglementaires ══ -->
   <div class="regs-tabpanel on" id="regs-panel-textes">
+    <select class="guided-paths-select" id="regs-doc-select" style="margin-bottom:16px" onchange="regsFilterDoc(this.value)"><option value="all">Tous les textes (10)</option></select>
     <div class="reg-doc-grid" id="regs-list"></div>
     <div class="alert-list" id="regs-list-extra"></div>
     <div class="rule" style="margin:24px 0 20px"></div>
@@ -1834,6 +1835,13 @@ textarea.form-el{min-height:86px;resize:vertical}
   
 <!-- ══ ONGLET 3 : Obligations article par article ══ -->
   <div class="regs-tabpanel" id="regs-panel-articles">
+    <select class="guided-paths-select" style="margin-bottom:14px" onchange="artFilterReg(this.value)">
+      <option value="all">Tous les règlements</option>
+      <option value="ai_act">EU AI Act</option>
+      <option value="dsa">DSA — Services numériques</option>
+      <option value="dma">DMA — Marchés numériques</option>
+      <option value="cra">CRA — Cyber-résilience</option>
+    </select>
     <div class="art-tabs-bar">
       <div class="art-filter-btn on" data-who="all" onclick="artFilter('all',this)">Tous</div>
       <div class="art-filter-btn" data-who="fournisseur" onclick="artFilter('fournisseur',this)">Fournisseurs</div>
@@ -4775,9 +4783,20 @@ geoRenderTL();
     }
   ];
 
+  window.REGS_DOCS = DOCS;
+  var selectEl = document.getElementById('regs-doc-select');
+  if(selectEl){
+    selectEl.innerHTML = '<option value="all">Tous les textes ('+DOCS.length+')</option>'
+      + DOCS.map(function(d){ return '<option value="'+d.title+'">'+d.title+'</option>'; }).join('');
+  }
+  window.regsRenderDocs('all');
+})();
+
+window.regsRenderDocs = function(filterVal){
   var g = document.getElementById('regs-list');
   if(!g) return;
-  g.innerHTML = DOCS.map(function(d){
+  var docs = filterVal === 'all' ? window.REGS_DOCS : window.REGS_DOCS.filter(function(d){ return d.title === filterVal; });
+  g.innerHTML = docs.map(function(d){
     return '<div class="reg-doc-card" onclick="window.open(\''+d.url+'\',\'_blank\')">'
       +'<span class="reg-doc-badge '+d.badge+'">'+d.badgeTxt+'</span>'
       +'<div class="reg-doc-title">'+d.title+'</div>'
@@ -4788,7 +4807,11 @@ geoRenderTL();
       +'<a class="reg-doc-link" href="'+d.url+'" target="_blank" rel="noopener">Texte officiel ↗</a>'
       +'</div></div>';
   }).join('');
-})();
+};
+
+window.regsFilterDoc = function(val){
+  window.regsRenderDocs(val);
+};
 
 /* ── Navigation onglets ── */
 window.regsTab = function(tab, el){
@@ -5142,11 +5165,59 @@ var ARTICLES = [
       texte:'Sanctions par États membres : jusqu\'à 35 M€ ou 7% CA mondial (Art. 5), 15 M€ ou 3% (systèmes haut risque), 7,5 M€ ou 1% (autres infractions). PME : proportionnalité garantie. Le montant le plus élevé des deux seuils s\'applique.',
       obligations:['Mettre en place une veille des délibérations des autorités nationales','Identifier l\'autorité nationale de surveillance compétente dans chaque État membre de déploiement','Budgéter le risque de conformité dans l\'analyse financière'],
       url:'https://artificialintelligenceact.eu/article/99/' },
+  ]},,
+  { chapter:'DSA — Obligations des plateformes', reglement:'dsa', arts:[
+    { num:'Art. 16', title:'Notification et action', status:'actif', who:['deployeur'], sanction:'6% CA mondial',
+      texte:'Mécanisme de signalement de contenu illicite, facile d\'accès, permettant des notifications électroniques précises et étayées.',
+      obligations:['Mettre en place un mécanisme de notification accessible','Confirmer la réception de chaque notification sans délai','Informer le notifiant de la décision prise'],
+      url:'https://eur-lex.europa.eu/eli/reg/2022/2065/oj?locale=fr' },
+    { num:'Art. 17', title:'Exposé des motifs', status:'actif', who:['deployeur'], sanction:'6% CA mondial',
+      texte:'Toute restriction imposée à un contenu doit être motivée clairement auprès de l\'utilisateur concerné.',
+      obligations:['Documenter et justifier toute décision de modération','Informer l\'utilisateur des voies de recours disponibles'],
+      url:'https://eur-lex.europa.eu/eli/reg/2022/2065/oj?locale=fr' },
+    { num:'Art. 25', title:'Interdiction des dark patterns', status:'actif', who:['deployeur'], sanction:'6% CA mondial',
+      texte:'Interdiction de concevoir des interfaces visant à tromper ou manipuler les utilisateurs dans leurs décisions.',
+      obligations:['Auditer les interfaces utilisateur pour détecter des designs manipulateurs','Garantir des choix par défaut neutres'],
+      url:'https://eur-lex.europa.eu/eli/reg/2022/2065/oj?locale=fr' },
+    { num:'Art. 34-35', title:'Risques systémiques (TGPL/TGMRL)', status:'actif', who:['deployeur'], sanction:'6% CA mondial',
+      texte:'Les très grandes plateformes et moteurs de recherche doivent évaluer et atténuer les risques systémiques de leurs services, incluant les systèmes algorithmiques.',
+      obligations:['Réaliser une évaluation annuelle des risques systémiques','Mettre en place des mesures d\'atténuation proportionnées','Faire auditer ces mesures par un tiers indépendant'],
+      url:'https://eur-lex.europa.eu/eli/reg/2022/2065/oj?locale=fr' }
   ]},
+  { chapter:'DMA — Obligations des contrôleurs d\'accès', reglement:'dma', arts:[
+    { num:'Art. 5-6', title:'Obligations des contrôleurs d\'accès', status:'actif', who:['fournisseur'], sanction:'10% CA mondial (20% récidive)',
+      texte:'Interdiction de l\'auto-préférence, obligation d\'interopérabilité, interdiction de combiner les données personnelles entre services sans consentement.',
+      obligations:['Vérifier si votre organisation est désignée contrôleur d\'accès','Auditer les pratiques d\'auto-préférence dans les systèmes de classement/recommandation IA'],
+      url:'https://eur-lex.europa.eu/eli/reg/2022/1925/oj?locale=fr' },
+    { num:'Art. 7', title:'Interopérabilité des services de messagerie', status:'actif', who:['fournisseur'], sanction:'10% CA mondial (20% récidive)',
+      texte:'Les contrôleurs d\'accès doivent assurer l\'interopérabilité de base de leurs services de communication interpersonnelle.',
+      obligations:['Documenter les interfaces techniques d\'interopérabilité'],
+      url:'https://eur-lex.europa.eu/eli/reg/2022/1925/oj?locale=fr' }
+  ]},
+  { chapter:'CRA — Cybersécurité des produits numériques', reglement:'cra', arts:[
+    { num:'Art. 13', title:'Obligations des fabricants', status:'applicable', who:['fournisseur'], sanction:'15M€ ou 2,5% CA mondial',
+      texte:'Sécurité dès la conception, gestion documentée des vulnérabilités, mises à jour de sécurité pendant toute la période de support (5 ans minimum).',
+      obligations:['Intégrer la cybersécurité dès la phase de conception','Établir une documentation technique complète (SBOM, analyse de risques)','Définir une période de support et la communiquer'],
+      url:'https://eur-lex.europa.eu/eli/reg/2024/2847/oj?locale=fr' },
+    { num:'Art. 14', title:'Notification des vulnérabilités', status:'futur', who:['fournisseur'], sanction:'15M€ ou 2,5% CA mondial',
+      texte:'Notification à l\'ENISA des vulnérabilités activement exploitées sous 24h, rapport complet sous 72h, rapport final sous 14 jours. Applicable dès le 11 septembre 2026.',
+      obligations:['Mettre en place un dispositif de détection et notification rapide','Désigner un point de contact pour les autorités (CERT-FR en France)'],
+      url:'https://eur-lex.europa.eu/eli/reg/2024/2847/oj?locale=fr' },
+    { num:'Art. 64', title:'Surveillance du marché', status:'futur', who:['fournisseur'], sanction:'15M€ ou 2,5% CA mondial',
+      texte:'Les autorités nationales (ANFR en France, avec appui ANSSI) contrôlent la conformité des produits mis sur le marché.',
+      obligations:['Conserver la documentation technique 10 ans','Préparer une procédure de réponse aux demandes des autorités de surveillance'],
+      url:'https://eur-lex.europa.eu/eli/reg/2024/2847/oj?locale=fr' }
+  ]}
 ];
 
 var artFilterVal = 'all';
+var artRegFilterVal = 'all';
 var artInitDone = false;
+window.artFilterReg = function(val){
+  artRegFilterVal = val;
+  artRender();
+};
+
 function artInit(){
   if(artInitDone) return;
   artInitDone = true;
@@ -5158,6 +5229,7 @@ function artRender(){
   if(!container) return;
 
   var html = ARTICLES.map(function(ch){
+    if(artRegFilterVal !== 'all' && (ch.reglement || 'ai_act') !== artRegFilterVal) return '';
     var filtered = ch.arts.filter(function(a){
       if(artFilterVal === 'all') return true;
       if(artFilterVal === 'actif') return a.status === 'actif';
@@ -5177,8 +5249,9 @@ function artRender(){
       }).join('')+'</div>' : '';
       var sancHtml = a.sanction ? '<div class="art-sanction-box"><span class="art-sanction-pill">Max : '+a.sanction+'</span></div>' : '';
 
-      return '<div class="art-card" id="artcard-'+a.num.replace(/ /g,'_')+'">'
-        +'<div class="art-card-head" onclick="artToggle(\''+a.num.replace(/ /g,'_')+'\')">'
+      var uid = (ch.reglement||'ai_act')+'-'+a.num.replace(/ /g,'_');
+      return '<div class="art-card" id="artcard-'+uid+'">'
+        +'<div class="art-card-head" onclick="artToggle(\''+uid+'\')">'
         +'<span class="art-card-num">'+a.num+'</span>'
         +'<span class="art-card-title">'+a.title+'</span>'
         +'<div class="art-card-chips">'
