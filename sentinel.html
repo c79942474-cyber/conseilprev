@@ -752,7 +752,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 .mat-section-sub{font-size:12px;color:var(--muted);margin-bottom:16px}
 /* Radar 8 piliers */
 .mat-radar-wrap{display:grid;grid-template-columns:340px 1fr;gap:28px;align-items:center}
-#mat-radar-holder{position:relative}
+#mat-radar-holder{position:relative;background:var(--white);border:1px solid var(--rule2);border-radius:12px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.05)}
 .mat-radar-svg{width:100%;max-width:340px;display:block}
 .mat-radar-tooltip{position:absolute;transform:translate(-50%,calc(-100% - 14px));background:var(--ink);color:#fff;padding:8px 12px;border-radius:6px;font-size:11px;line-height:1.5;max-width:200px;pointer-events:none;opacity:0;transition:opacity .15s;z-index:30;box-shadow:0 4px 16px rgba(0,0,0,.2)}
 .mat-radar-tooltip.on{opacity:1}
@@ -6726,7 +6726,7 @@ function matRadar(pillars){
       ringPts.push((cx + Math.cos(ang)*R*r/5).toFixed(1) + "," + (cy + Math.sin(ang)*R*r/5).toFixed(1));
     }
     var ringOpacity = r === 5 ? 0.9 : 0.5;
-    rings.push('<polygon points="'+ringPts.join(" ")+'" fill="none" stroke="#D4D0CA" stroke-width="0.6" opacity="'+ringOpacity+'"/>');
+    rings.push('<polygon points="'+ringPts.join(" ")+'" fill="none" stroke="#A8A49C" stroke-width="0.8" opacity="'+ringOpacity+'"/>');
     rings.push('<text x="'+(cx+3)+'" y="'+(cy - R*r/5 + 3)+'" font-size="7" font-family="monospace" fill="#A8A8A8">'+r+'</text>');
   }
 
@@ -6743,7 +6743,7 @@ function matRadar(pillars){
     hitzones.push('<circle class="mat-radar-hitzone" data-pillar="'+pid+'" cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="13" fill="transparent" style="cursor:pointer" onmouseenter="matRadarHighlight(\''+pid+'\' , event)" onmouseleave="matRadarUnhighlight()"/>');
 
     var ex = cx + Math.cos(ang)*R, ey = cy + Math.sin(ang)*R;
-    axisLines.push('<line class="mat-radar-axis" data-pillar="'+pid+'" x1="'+cx+'" y1="'+cy+'" x2="'+ex.toFixed(1)+'" y2="'+ey.toFixed(1)+'" stroke="#E0DDD8" stroke-width="0.6" style="transition:stroke .15s,stroke-width .15s"/>');
+    axisLines.push('<line class="mat-radar-axis" data-pillar="'+pid+'" x1="'+cx+'" y1="'+cy+'" x2="'+ex.toFixed(1)+'" y2="'+ey.toFixed(1)+'" stroke="#C4C0B8" stroke-width="0.7" style="transition:stroke .15s,stroke-width .15s"/>');
 
     var lx = cx + Math.cos(ang)*(R+16), ly = cy + Math.sin(ang)*(R+16);
     var anchor = Math.abs(Math.cos(ang)) < 0.25 ? "middle" : (Math.cos(ang) > 0 ? "start" : "end");
