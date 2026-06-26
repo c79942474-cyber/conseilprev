@@ -6704,35 +6704,52 @@ function matPillarColor(score){
 
 /* Radar SVG 8 piliers */
 function matRadar(pillars){
-  var cx=170, cy=160, R=120;
+  var cx=170, cy=165, R=112;
   var keys = MAT_PILLARS.map(function(p){return p.id;});
   var n = keys.length;
-  var pts = [], axisLines = [], labels = [], rings = [];
-  /* anneaux 1-5 */
+  var pts = [], axisLines = [], labels = [], rings = [], markers = [];
+
+  var avgScore = keys.reduce(function(a,k){ return a + (pillars[k]||0); }, 0) / n;
+  var dataColor = avgScore >= 4 ? "#2D7A47" : avgScore >= 2.5 ? "#C47C1A" : "#B83222";
+
+  /* anneaux gradues 1-5 avec etiquette numerique sur l axe vertical superieur */
   for(var r=1;r<=5;r++){
     var ringPts = [];
     for(var i=0;i<n;i++){
       var ang = (Math.PI*2*i/n) - Math.PI/2;
       ringPts.push((cx + Math.cos(ang)*R*r/5).toFixed(1) + "," + (cy + Math.sin(ang)*R*r/5).toFixed(1));
     }
-    rings.push('<polygon points="'+ringPts.join(" ")+'" fill="none" stroke="#E0DDD8" stroke-width="0.5"/>');
+    var ringOpacity = r === 5 ? 0.9 : 0.5;
+    rings.push('<polygon points="'+ringPts.join(" ")+'" fill="none" stroke="#D4D0CA" stroke-width="0.6" opacity="'+ringOpacity+'"/>');
+    rings.push('<text x="'+(cx+3)+'" y="'+(cy - R*r/5 + 3)+'" font-size="7" font-family="monospace" fill="#A8A8A8">'+r+'</text>');
   }
+
   for(var i=0;i<n;i++){
     var ang = (Math.PI*2*i/n) - Math.PI/2;
     var val = pillars[keys[i]] || 0;
     var px = cx + Math.cos(ang)*R*val/5;
     var py = cy + Math.sin(ang)*R*val/5;
     pts.push(px.toFixed(1)+","+py.toFixed(1));
+    markers.push('<circle cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="3.5" fill="'+dataColor+'" stroke="#fff" stroke-width="1.2"><title>'+MAT_PILLARS[i].label+' : '+val.toFixed(1)+'/5</title></circle>');
+
     var ex = cx + Math.cos(ang)*R, ey = cy + Math.sin(ang)*R;
-    axisLines.push('<line x1="'+cx+'" y1="'+cy+'" x2="'+ex.toFixed(1)+'" y2="'+ey.toFixed(1)+'" stroke="#E0DDD8" stroke-width="0.5"/>');
-    var lx = cx + Math.cos(ang)*(R+18), ly = cy + Math.sin(ang)*(R+18);
-    var anchor = Math.abs(Math.cos(ang)) < 0.3 ? "middle" : (Math.cos(ang) > 0 ? "start" : "end");
-    var short = MAT_PILLARS[i].label.split(" ")[0].substring(0,11);
-    labels.push('<text x="'+lx.toFixed(1)+'" y="'+ly.toFixed(1)+'" font-size="8" font-family="monospace" fill="#767676" text-anchor="'+anchor+'" dominant-baseline="middle">'+short+'</text>');
+    axisLines.push('<line x1="'+cx+'" y1="'+cy+'" x2="'+ex.toFixed(1)+'" y2="'+ey.toFixed(1)+'" stroke="#E0DDD8" stroke-width="0.6"/>');
+
+    var lx = cx + Math.cos(ang)*(R+16), ly = cy + Math.sin(ang)*(R+16);
+    var anchor = Math.abs(Math.cos(ang)) < 0.25 ? "middle" : (Math.cos(ang) > 0 ? "start" : "end");
+    /* Label complet, sur 2 lignes si le pilier comporte plusieurs mots (ex: Confidentialité & Securite) */
+    var words = MAT_PILLARS[i].label.split(/\s+/);
+    var labelLines = words.length > 1 ? [words.slice(0, Math.ceil(words.length/2)).join(' '), words.slice(Math.ceil(words.length/2)).join(' ')] : [words[0]];
+    var tspans = labelLines.map(function(line, li){
+      return '<tspan x="'+lx.toFixed(1)+'" dy="'+(li===0?0:9)+'">'+line+'</tspan>';
+    }).join('');
+    labels.push('<text x="'+lx.toFixed(1)+'" y="'+ly.toFixed(1)+'" font-size="8.5" font-family="monospace" fill="#3D3D3D" text-anchor="'+anchor+'" dominant-baseline="middle">'+tspans+'</text>');
   }
-  return '<svg class="mat-radar-svg" viewBox="0 0 340 320" xmlns="http://www.w3.org/2000/svg">'
+
+  return '<svg class="mat-radar-svg" viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg">'
     + rings.join("") + axisLines.join("")
-    + '<polygon points="'+pts.join(" ")+'" fill="rgba(184,50,34,0.12)" stroke="#B83222" stroke-width="1.5"/>'
+    + '<polygon points="'+pts.join(" ")+'" fill="'+dataColor+'" fill-opacity="0.14" stroke="'+dataColor+'" stroke-width="1.8" stroke-linejoin="round"/>'
+    + markers.join("")
     + labels.join("")
     + '</svg>';
 }
