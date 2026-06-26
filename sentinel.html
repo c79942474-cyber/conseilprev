@@ -751,9 +751,9 @@ textarea.form-el{min-height:86px;resize:vertical}
 .mat-section-h{font-family:var(--serif);font-size:19px;color:var(--ink);margin-bottom:4px;letter-spacing:-.01em;overflow:visible}
 .mat-section-sub{font-size:12px;color:var(--muted);margin-bottom:16px}
 /* Radar 8 piliers */
-.mat-radar-wrap{display:grid;grid-template-columns:340px 1fr;gap:28px;align-items:center}
+.mat-radar-wrap{display:grid;grid-template-columns:460px 1fr;gap:28px;align-items:center}
 #mat-radar-holder{position:relative;background:var(--white);border:1px solid var(--rule2);border-radius:12px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.05)}
-.mat-radar-svg{width:100%;max-width:340px;display:block}
+.mat-radar-svg{width:100%;max-width:460px;display:block}
 .mat-radar-tooltip{position:absolute;transform:translate(-50%,calc(-100% - 14px));background:var(--ink);color:#fff;padding:8px 12px;border-radius:6px;font-size:11px;line-height:1.5;max-width:200px;pointer-events:none;opacity:0;transition:opacity .15s;z-index:30;box-shadow:0 4px 16px rgba(0,0,0,.2)}
 .mat-radar-tooltip.on{opacity:1}
 .mat-radar-tooltip strong{font-size:12px}
@@ -6718,7 +6718,7 @@ var MAT_PILLAR_COLORS = {
 window.MAT_PILLAR_COLORS = MAT_PILLAR_COLORS;
 
 function matRadar(pillars){
-  var cx=170, cy=165, R=112;
+  var cx=230, cy=210, R=150;
   var keys = MAT_PILLARS.map(function(p){return p.id;});
   var n = keys.length;
   var pts = [], axisLines = [], labels = [], rings = [], markers = [], hitzones = [];
@@ -6733,8 +6733,8 @@ function matRadar(pillars){
       ringPts.push((cx + Math.cos(ang)*R*r/5).toFixed(1) + "," + (cy + Math.sin(ang)*R*r/5).toFixed(1));
     }
     var ringOpacity = r === 5 ? 0.9 : 0.5;
-    rings.push('<polygon points="'+ringPts.join(" ")+'" fill="none" stroke="#A8A49C" stroke-width="0.8" opacity="'+ringOpacity+'"/>');
-    rings.push('<text x="'+(cx+3)+'" y="'+(cy - R*r/5 + 3)+'" font-size="7" font-family="monospace" fill="#A8A8A8">'+r+'</text>');
+    rings.push('<polygon points="'+ringPts.join(" ")+'" fill="none" stroke="#A8A49C" stroke-width="1" opacity="'+ringOpacity+'"/>');
+    rings.push('<text x="'+(cx+4)+'" y="'+(cy - R*r/5 + 4)+'" font-size="9" font-family="monospace" fill="#A8A8A8">'+r+'</text>');
   }
 
   for(var i=0;i<n;i++){
@@ -6746,26 +6746,25 @@ function matRadar(pillars){
     var py = cy + Math.sin(ang)*R*val/5;
     pts.push(px.toFixed(1)+","+py.toFixed(1));
 
-    /* Chaque point colore selon son pilier (pas juste la couleur globale) */
-    markers.push('<circle class="mat-radar-pt" data-pillar="'+pid+'" cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="4" fill="'+pillarColor+'" stroke="#fff" stroke-width="1.4" style="transition:r .15s,filter .15s"/>');
-    hitzones.push('<circle class="mat-radar-hitzone" data-pillar="'+pid+'" cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="13" fill="transparent" style="cursor:pointer" onmouseenter="matRadarHighlight(\''+pid+'\' , event)" onmouseleave="matRadarUnhighlight()"/>');
+    markers.push('<circle class="mat-radar-pt" data-pillar="'+pid+'" cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="5.5" fill="'+pillarColor+'" stroke="#fff" stroke-width="1.8" style="transition:r .15s,filter .15s"/>');
+    hitzones.push('<circle class="mat-radar-hitzone" data-pillar="'+pid+'" cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="17" fill="transparent" style="cursor:pointer" onmouseenter="matRadarHighlight(\''+pid+'\' , event)" onmouseleave="matRadarUnhighlight()"/>');
 
     var ex = cx + Math.cos(ang)*R, ey = cy + Math.sin(ang)*R;
-    axisLines.push('<line class="mat-radar-axis" data-pillar="'+pid+'" data-color="'+pillarColor+'" x1="'+cx+'" y1="'+cy+'" x2="'+ex.toFixed(1)+'" y2="'+ey.toFixed(1)+'" stroke="#C4C0B8" stroke-width="0.7" style="transition:stroke .15s,stroke-width .15s"/>');
+    axisLines.push('<line class="mat-radar-axis" data-pillar="'+pid+'" data-color="'+pillarColor+'" x1="'+cx+'" y1="'+cy+'" x2="'+ex.toFixed(1)+'" y2="'+ey.toFixed(1)+'" stroke="#C4C0B8" stroke-width="0.9" style="transition:stroke .15s,stroke-width .15s"/>');
 
-    var lx = cx + Math.cos(ang)*(R+16), ly = cy + Math.sin(ang)*(R+16);
+    var lx = cx + Math.cos(ang)*(R+22), ly = cy + Math.sin(ang)*(R+22);
     var anchor = Math.abs(Math.cos(ang)) < 0.25 ? "middle" : (Math.cos(ang) > 0 ? "start" : "end");
     var words = MAT_PILLARS[i].label.split(/\s+/);
     var labelLines = words.length > 1 ? [words.slice(0, Math.ceil(words.length/2)).join(' '), words.slice(Math.ceil(words.length/2)).join(' ')] : [words[0]];
     var tspans = labelLines.map(function(line, li){
-      return '<tspan x="'+lx.toFixed(1)+'" dy="'+(li===0?0:9)+'">'+line+'</tspan>';
+      return '<tspan x="'+lx.toFixed(1)+'" dy="'+(li===0?0:12)+'">'+line+'</tspan>';
     }).join('');
-    labels.push('<text class="mat-radar-label" data-pillar="'+pid+'" x="'+lx.toFixed(1)+'" y="'+ly.toFixed(1)+'" font-size="8.5" font-family="monospace" fill="#3D3D3D" text-anchor="'+anchor+'" dominant-baseline="middle" style="transition:fill .15s,font-weight .15s">'+tspans+'</text>');
+    labels.push('<text class="mat-radar-label" data-pillar="'+pid+'" x="'+lx.toFixed(1)+'" y="'+ly.toFixed(1)+'" font-size="11" font-family="monospace" fill="#3D3D3D" text-anchor="'+anchor+'" dominant-baseline="middle" style="transition:fill .15s,font-weight .15s">'+tspans+'</text>');
   }
 
-  return '<svg class="mat-radar-svg" id="mat-radar-svg-el" viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg">'
+  return '<svg class="mat-radar-svg" id="mat-radar-svg-el" viewBox="0 0 460 440" xmlns="http://www.w3.org/2000/svg">'
     + rings.join("") + axisLines.join("")
-    + '<polygon points="'+pts.join(" ")+'" fill="'+dataColor+'" fill-opacity="0.12" stroke="'+dataColor+'" stroke-width="1.8" stroke-linejoin="round"/>'
+    + '<polygon points="'+pts.join(" ")+'" fill="'+dataColor+'" fill-opacity="0.12" stroke="'+dataColor+'" stroke-width="2.4" stroke-linejoin="round"/>'
     + markers.join("") + hitzones.join("") + labels.join("")
     + '</svg>'
     + '<div id="mat-radar-tooltip" class="mat-radar-tooltip"></div>';
@@ -6799,7 +6798,7 @@ window.matRadarHighlight = function(pillarId, evt){
     var svgEl = document.getElementById('mat-radar-svg-el');
     var rect = svgEl.getBoundingClientRect();
     var ptX = parseFloat(pt.getAttribute('cx')), ptY = parseFloat(pt.getAttribute('cy'));
-    var scaleX = rect.width / 340, scaleY = rect.height / 340;
+    var scaleX = rect.width / 460, scaleY = rect.height / 440;
     tooltip.style.left = (ptX*scaleX) + 'px';
     tooltip.style.top = (ptY*scaleY) + 'px';
     tooltip.classList.add('on');
