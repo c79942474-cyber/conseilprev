@@ -2160,15 +2160,13 @@ textarea.form-el{min-height:86px;resize:vertical}
 </div>
 
 <div class="page" id="p-simulateur">
-  <span class="eyebrow">Cartographier · EU AI Act</span><h1 class="page-h">Simulateur <em>IA Act</em></h1>
-  <p class="page-lead">Classifiez un système IA selon le Règlement (UE) 2024/1689 avant de l enregistrer au Registre.</p>
-
-  <span class="eyebrow">Aide à la décision</span>
-  <h1 class="page-h">Simuler un<br><em>déploiement IA</em></h1>
-  <p class="page-lead">Évaluez la conformité de votre système IA selon le Règlement (UE) 2024/1689 (EU AI Act) — classification, obligations et sanctions en 5 étapes.</p>
+  <span class="eyebrow">Cartographier · EU AI Act</span>
+  <h1 class="page-h">Simulateur <em>IA Act</em></h1>
+  <p class="page-lead">Évaluez la conformité de votre système IA selon le Règlement (UE) 2024/1689 — classification, obligations et sanctions en 5 étapes, avant de l enregistrer au Registre.</p>
   <span class="sim-ref">Règlement (UE) 2024/1689 du 13 juin 2024 — Texte officiel Journal officiel L du 12.7.2024</span>
 
   <div class="sim-wrap">
+    <div id="sim-step-counter" style="font-size:11px;font-family:var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Étape 1 sur 5</div>
     <!-- Stepper -->
     <div class="sim-stepper">
       <div class="sim-step-dot active" id="step-dot-1" onclick="simGoto(1)">
@@ -2482,11 +2480,11 @@ textarea.form-el{min-height:86px;resize:vertical}
     <!-- ÉTAPE 5 — Résultats -->
     <div class="sim-panel" id="sim-panel-5">
       <div id="sim-result-container"></div>
-      <div class="sim-nav" style="margin-top:8px">
-        <button class="sim-reset-btn" onclick="simReset()" title="Recommencer une nouvelle simulation depuis le debut.">↺ Nouvelle simulation</button>
-        <button class="sim-btn-next" id="sim-add-registre-btn" onclick="simAddToRegistre()" style="background:var(--green)" title="Enregistrer ce systeme directement dans le Registre IA.">+ Ajouter au Registre IA</button>
-        <button class="sim-btn-next" style="background:#1C5A8A" onclick="histoSaveSimulateur()" title="Enregistrer cette simulation dans l historique persistant et tracable (RGPD).">💾 Historique</button>
-        <button class="sim-btn-next" onclick="openAuditTab()" title="Ouvrir l audit de conformite EU AI Act complet (32 points de controle).">Lancer l'audit complet →</button>
+      <div class="sim-nav" style="margin-top:8px;flex-wrap:wrap">
+        <button class="sim-btn-next" id="sim-add-registre-btn" onclick="simAddToRegistre()" style="background:var(--green);font-weight:700;order:1" title="Action recommandee : enregistrer ce systeme directement dans le Registre IA.">+ Ajouter au Registre IA</button>
+        <button class="sim-btn-next" onclick="openAuditTab()" style="order:2" title="Ouvrir l audit de conformite EU AI Act complet (32 points de controle).">Lancer l'audit complet →</button>
+        <button class="sim-btn-next" style="background:#1C5A8A;order:3" onclick="histoSaveSimulateur()" title="Enregistrer cette simulation dans l historique persistant et tracable (RGPD).">💾 Historique</button>
+        <button class="sim-reset-btn" onclick="simReset()" style="order:4" title="Recommencer une nouvelle simulation depuis le debut.">↺ Nouvelle simulation</button>
       </div>
     </div>
   </div>
@@ -5287,6 +5285,8 @@ function simShowPanel(step){
     }
     if(circle) circle.textContent = i < step ? '✓' : String(i);
   }
+  var counter = document.getElementById('sim-step-counter');
+  if(counter) counter.textContent = 'Étape ' + step + ' sur 5';
 }
 
 /* ── Helpers ── */
@@ -11048,10 +11048,24 @@ var PAGE_GUIDES = {
     ]
   },
   regs: {
-    title: "Réglementations & Audit IA",
+    title: "Réglementations",
     sections: [
-      {h:"4 onglets disponibles", t:"Textes réglementaires (sources officielles), Simulateur IA Act (classification pas à pas), Audit IA Act (32 points de contrôle), Obligations article par article (113 articles)."},
-      {h:"Comment l utiliser", t:"Commencez par le Simulateur si vous découvrez un système IA pour la première fois : il détermine sa classification et ses obligations en 5 étapes, puis propose de l ajouter au Registre IA ou de lancer l audit complet."}
+      {h:"2 onglets disponibles", t:"Textes réglementaires (sources officielles, actualités) et Obligations article par article (113 articles du Règlement, filtrables par rôle : fournisseur, déployeur, GPAI)."},
+      {h:"Comment l utiliser", t:"Pour classifier un nouveau système IA, utilisez le Simulateur IA Act (section Cartographier). Pour auditer votre conformité en détail, utilisez l Audit IA Act (section Évaluer le risque)."}
+    ]
+  },
+  simulateur: {
+    title: "Simulateur IA Act",
+    sections: [
+      {h:"À quoi sert cette page", t:"Détermine la classification d un système IA (interdit, haut risque, risque limité, minimal) et ses obligations associées, en répondant à 5 étapes guidées — avant même de l enregistrer au Registre."},
+      {h:"Comment l utiliser", t:"Décrivez le système (étape 1), répondez aux questions de classification (étape 2), indiquez vos pratiques actuelles (étape 3), précisez les aspects GPAI/données si pertinent (étape 4), puis consultez le résultat détaillé (étape 5). Vous pourrez ensuite l ajouter directement au Registre IA, sauvegarder la simulation dans l historique, ou lancer l audit complet."}
+    ]
+  },
+  'audit-ia-act': {
+    title: "Audit IA Act",
+    sections: [
+      {h:"À quoi sert cette page", t:"Audit de conformité structuré sur 32 points de contrôle couvrant l ensemble des obligations du Règlement (UE) 2024/1689, organisés par thématique (gouvernance, documentation, supervision humaine, etc.)."},
+      {h:"Comment l utiliser", t:"Pour chaque point de contrôle, indiquez votre statut réel (conforme / en cours / à réaliser). Le score global se calcule automatiquement. Les 3 cartes Cartographier/Évaluer/Planifier en haut de page synthétisent votre situation et proposent des rapports téléchargeables."}
     ]
   },
   veille: {
