@@ -752,7 +752,14 @@ textarea.form-el{min-height:86px;resize:vertical}
 .mat-section-sub{font-size:12px;color:var(--muted);margin-bottom:16px}
 /* Radar 8 piliers */
 .mat-radar-wrap{display:grid;grid-template-columns:340px 1fr;gap:28px;align-items:center}
-.mat-radar-svg{width:100%;max-width:340px}
+#mat-radar-holder{position:relative}
+.mat-radar-svg{width:100%;max-width:340px;display:block}
+.mat-radar-tooltip{position:absolute;transform:translate(-50%,calc(-100% - 14px));background:var(--ink);color:#fff;padding:8px 12px;border-radius:6px;font-size:11px;line-height:1.5;max-width:200px;pointer-events:none;opacity:0;transition:opacity .15s;z-index:30;box-shadow:0 4px 16px rgba(0,0,0,.2)}
+.mat-radar-tooltip.on{opacity:1}
+.mat-radar-tooltip strong{font-size:12px}
+.mat-radar-tooltip-score{font-family:var(--mono);font-size:10px;color:#D4D0CA;margin-top:4px;font-weight:600}
+.mat-radar-tooltip::after{content:'';position:absolute;left:50%;top:100%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--ink)}
+.mat-pillar-row-highlighted{border-color:var(--accent) !important;box-shadow:0 2px 10px rgba(184,50,34,.12) !important;background:rgba(184,50,34,.03) !important}
 .mat-pillars-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-content:start}
 @media(max-width:1100px){.mat-pillars-list{grid-template-columns:1fr}}
 .mat-pillar-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--rule);border-radius:6px;background:var(--white);transition:border-color .2s,box-shadow .2s}
@@ -6707,12 +6714,11 @@ function matRadar(pillars){
   var cx=170, cy=165, R=112;
   var keys = MAT_PILLARS.map(function(p){return p.id;});
   var n = keys.length;
-  var pts = [], axisLines = [], labels = [], rings = [], markers = [];
+  var pts = [], axisLines = [], labels = [], rings = [], markers = [], hitzones = [];
 
   var avgScore = keys.reduce(function(a,k){ return a + (pillars[k]||0); }, 0) / n;
   var dataColor = avgScore >= 4 ? "#2D7A47" : avgScore >= 2.5 ? "#C47C1A" : "#B83222";
 
-  /* anneaux gradues 1-5 avec etiquette numerique sur l axe vertical superieur */
   for(var r=1;r<=5;r++){
     var ringPts = [];
     for(var i=0;i<n;i++){
@@ -6726,33 +6732,77 @@ function matRadar(pillars){
 
   for(var i=0;i<n;i++){
     var ang = (Math.PI*2*i/n) - Math.PI/2;
-    var val = pillars[keys[i]] || 0;
+    var pid = keys[i];
+    var val = pillars[pid] || 0;
     var px = cx + Math.cos(ang)*R*val/5;
     var py = cy + Math.sin(ang)*R*val/5;
     pts.push(px.toFixed(1)+","+py.toFixed(1));
-    markers.push('<circle cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="3.5" fill="'+dataColor+'" stroke="#fff" stroke-width="1.2"><title>'+MAT_PILLARS[i].label+' : '+val.toFixed(1)+'/5</title></circle>');
+
+    markers.push('<circle class="mat-radar-pt" data-pillar="'+pid+'" cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="3.5" fill="'+dataColor+'" stroke="#fff" stroke-width="1.2" style="transition:r .15s,filter .15s"/>');
+    /* Zone de survol invisible, plus large que le point visible, pour faciliter l interaction */
+    hitzones.push('<circle class="mat-radar-hitzone" data-pillar="'+pid+'" cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="13" fill="transparent" style="cursor:pointer" onmouseenter="matRadarHighlight(\''+pid+'\' , event)" onmouseleave="matRadarUnhighlight()"/>');
 
     var ex = cx + Math.cos(ang)*R, ey = cy + Math.sin(ang)*R;
-    axisLines.push('<line x1="'+cx+'" y1="'+cy+'" x2="'+ex.toFixed(1)+'" y2="'+ey.toFixed(1)+'" stroke="#E0DDD8" stroke-width="0.6"/>');
+    axisLines.push('<line class="mat-radar-axis" data-pillar="'+pid+'" x1="'+cx+'" y1="'+cy+'" x2="'+ex.toFixed(1)+'" y2="'+ey.toFixed(1)+'" stroke="#E0DDD8" stroke-width="0.6" style="transition:stroke .15s,stroke-width .15s"/>');
 
     var lx = cx + Math.cos(ang)*(R+16), ly = cy + Math.sin(ang)*(R+16);
     var anchor = Math.abs(Math.cos(ang)) < 0.25 ? "middle" : (Math.cos(ang) > 0 ? "start" : "end");
-    /* Label complet, sur 2 lignes si le pilier comporte plusieurs mots (ex: Confidentialité & Securite) */
     var words = MAT_PILLARS[i].label.split(/\s+/);
     var labelLines = words.length > 1 ? [words.slice(0, Math.ceil(words.length/2)).join(' '), words.slice(Math.ceil(words.length/2)).join(' ')] : [words[0]];
     var tspans = labelLines.map(function(line, li){
       return '<tspan x="'+lx.toFixed(1)+'" dy="'+(li===0?0:9)+'">'+line+'</tspan>';
     }).join('');
-    labels.push('<text x="'+lx.toFixed(1)+'" y="'+ly.toFixed(1)+'" font-size="8.5" font-family="monospace" fill="#3D3D3D" text-anchor="'+anchor+'" dominant-baseline="middle">'+tspans+'</text>');
+    labels.push('<text class="mat-radar-label" data-pillar="'+pid+'" x="'+lx.toFixed(1)+'" y="'+ly.toFixed(1)+'" font-size="8.5" font-family="monospace" fill="#3D3D3D" text-anchor="'+anchor+'" dominant-baseline="middle" style="transition:fill .15s,font-weight .15s">'+tspans+'</text>');
   }
 
-  return '<svg class="mat-radar-svg" viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg">'
+  return '<svg class="mat-radar-svg" id="mat-radar-svg-el" viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg">'
     + rings.join("") + axisLines.join("")
     + '<polygon points="'+pts.join(" ")+'" fill="'+dataColor+'" fill-opacity="0.14" stroke="'+dataColor+'" stroke-width="1.8" stroke-linejoin="round"/>'
-    + markers.join("")
-    + labels.join("")
-    + '</svg>';
+    + markers.join("") + hitzones.join("") + labels.join("")
+    + '</svg>'
+    + '<div id="mat-radar-tooltip" class="mat-radar-tooltip"></div>';
 }
+
+/* ══ INTERACTIVITE CROISEE — survol radar <-> liste des 8 piliers ══ */
+window.matRadarHighlight = function(pillarId, evt){
+  /* Cote radar : agrandir le point, epaissir l axe, mettre le label en gras */
+  var pt = document.querySelector('.mat-radar-pt[data-pillar="'+pillarId+'"]');
+  var axis = document.querySelector('.mat-radar-axis[data-pillar="'+pillarId+'"]');
+  var label = document.querySelector('.mat-radar-label[data-pillar="'+pillarId+'"]');
+  if(pt){ pt.setAttribute('r','6'); pt.style.filter = 'drop-shadow(0 0 3px rgba(0,0,0,.25))'; }
+  if(axis){ axis.setAttribute('stroke', 'var(--ink)'); axis.setAttribute('stroke-width','1.4'); }
+  if(label){ label.style.fontWeight = '700'; label.setAttribute('fill','#1C1C1C'); }
+
+  /* Cote liste : surligner la ligne correspondante */
+  var row = document.querySelector('.mat-pillar-fill[data-pillar="'+pillarId+'"]');
+  var rowEl = row ? row.closest('.mat-pillar-row') : null;
+  if(rowEl){ rowEl.classList.add('mat-pillar-row-highlighted'); rowEl.scrollIntoView({block:'nearest', behavior:'smooth'}); }
+
+  /* Tooltip flottant avec definition + score */
+  var pillarDef = (window.MAT_PILLARS || []).find(function(p){ return p.id === pillarId; });
+  var tooltip = document.getElementById('mat-radar-tooltip');
+  if(tooltip && pillarDef && pt){
+    var score = pt.closest('svg').querySelector('.mat-radar-pt[data-pillar="'+pillarId+'"]');
+    var val = window.curPillarScore ? window.curPillarScore(pillarId) : null;
+    tooltip.innerHTML = '<strong>'+pillarDef.label+'</strong><br>'+pillarDef.desc+(val!==null?'<div class="mat-radar-tooltip-score">'+val.toFixed(1)+'/5</div>':'');
+    var svgEl = document.getElementById('mat-radar-svg-el');
+    var rect = svgEl.getBoundingClientRect();
+    var ptX = parseFloat(pt.getAttribute('cx')), ptY = parseFloat(pt.getAttribute('cy'));
+    var scaleX = rect.width / 340, scaleY = rect.height / 340;
+    tooltip.style.left = (ptX*scaleX) + 'px';
+    tooltip.style.top = (ptY*scaleY) + 'px';
+    tooltip.classList.add('on');
+  }
+};
+
+window.matRadarUnhighlight = function(){
+  document.querySelectorAll('.mat-radar-pt').forEach(function(el){ el.setAttribute('r','3.5'); el.style.filter = ''; });
+  document.querySelectorAll('.mat-radar-axis').forEach(function(el){ el.setAttribute('stroke','#E0DDD8'); el.setAttribute('stroke-width','0.6'); });
+  document.querySelectorAll('.mat-radar-label').forEach(function(el){ el.style.fontWeight = ''; el.setAttribute('fill','#3D3D3D'); });
+  document.querySelectorAll('.mat-pillar-row-highlighted').forEach(function(el){ el.classList.remove('mat-pillar-row-highlighted'); });
+  var tooltip = document.getElementById('mat-radar-tooltip');
+  if(tooltip) tooltip.classList.remove('on');
+};
 
 function matRender(){
   var s = MAT_SECTORS[MAT_CUR];
@@ -6827,7 +6877,7 @@ function matRender(){
         var v = curPillarScore(p.id);
         var col = matPillarColor(Math.round(v));
         var arts = (window.PILLAR_ARTICLES && window.PILLAR_ARTICLES[p.id]) ? window.PILLAR_ARTICLES[p.id].arts.join(" · ") : "";
-        return '<div class="mat-pillar-row"><div class="mat-pillar-info"><div class="mat-pillar-name">'+p.label+' <span style="font-size:8px;font-family:var(--mono);color:var(--blue)">'+arts+'</span>'+tip(PILLAR_TIPS[p.id]||p.desc)+'</div><div class="mat-pillar-desc">'+p.desc+'</div></div>'
+        return '<div class="mat-pillar-row" onmouseenter="matRadarHighlight(\'' + p.id + '\')" onmouseleave="matRadarUnhighlight()"><div class="mat-pillar-info"><div class="mat-pillar-name">'+p.label+' <span style="font-size:8px;font-family:var(--mono);color:var(--blue)">'+arts+'</span>'+tip(PILLAR_TIPS[p.id]||p.desc)+'</div><div class="mat-pillar-desc">'+p.desc+'</div></div>'
           + '<div class="mat-pillar-bar"><div class="mat-pillar-fill matq-bar" data-pillar="'+p.id+'" style="width:'+(v*20)+'%;background:'+col+'"></div></div>'
           + '<div class="mat-pillar-score matq-score" data-pillar="'+p.id+'" style="color:'+col+'">'+v.toFixed(1)+'/5</div></div>';
       }).join("")
