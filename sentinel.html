@@ -2506,15 +2506,7 @@ textarea.form-el{min-height:86px;resize:vertical}
         <div class="feat"><div class="feat-h" style="margin-bottom:6px">③ Planifier</div><p class="feat-p">Chargement…</p></div>
       </div>
       <div class="rule" style="margin-bottom:20px"></div>
-      <div class="form-block" style="max-width:540px">
-        <div class="sec-h" style="margin-bottom:4px">Démarrer un audit assisté</div>
-        <div class="sec-sub" style="margin-bottom:20px">Un expert CONSEILPREV vous accompagne à chaque étape.</div>
-        <div class="form-row"><label class="form-lbl">Votre nom</label><input class="form-el" id="audit-nom" placeholder="Prénom Nom"></div>
-        <div class="form-row"><label class="form-lbl">Email professionnel</label><input class="form-el" id="audit-email" type="email" placeholder="vous@entreprise.com"></div>
-        <div class="form-row"><label class="form-lbl">Entreprise</label><input class="form-el" id="audit-entreprise" placeholder="Raison sociale"></div>
-        <div class="form-row"><label class="form-lbl">Périmètre</label><textarea class="form-el" id="audit-perimetre" placeholder="Décrivez vos systèmes IA à auditer…"></textarea></div>
-        <button class="submit" onclick="(function(){var n=document.getElementById('audit-nom').value,e=document.getElementById('audit-email').value,c=document.getElementById('audit-entreprise').value,p=document.getElementById('audit-perimetre').value;if(!n||!e){alert('Merci de renseigner votre nom et email.');return;}var subj=encodeURIComponent('[Sentinel AI] Demande audit conformité IA Act');var body=encodeURIComponent('Nom : '+n+'\nEmail : '+e+'\nEntreprise : '+c+'\nPérimètre : '+p);window.open('mailto:christophe.cerf@outlook.com?subject='+subj+'&body='+body,'_blank');})()">Soumettre la demande →</button>
-      </div>
+      <div style="margin-bottom:8px"><a href="mailto:christophe.cerf@outlook.com?subject=%5BSentinel%20AI%5D%20Demande%20audit%20conformit%C3%A9%20IA%20Act" class="tbl-link" title="Un expert CONSEILPREV vous accompagne a chaque etape.">📋 Conseil Audit Assisté →</a></div>
       <div class="rule" style="margin:28px 0 24px"></div>
     </div>
 
