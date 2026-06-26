@@ -859,6 +859,23 @@ textarea.form-el{min-height:86px;resize:vertical}
 .mat-deliv-ico{font-size:22px;flex-shrink:0}
 .mat-deliv-gen{font-size:10px;font-family:var(--mono);color:var(--accent);margin-top:8px;letter-spacing:.04em}
 /* Modal livrable */
+.sb-guided-wrap{padding:0 16px 14px}
+.sb-guided-btn{width:100%;padding:9px 12px;background:var(--bg);border:1px solid var(--rule2);border-radius:7px;font-size:11.5px;font-weight:600;color:var(--ink2);cursor:pointer;transition:all .18s;text-align:left}
+.sb-guided-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(184,50,34,.05)}
+.guided-path-card{background:var(--white);border:1px solid var(--rule2);border-radius:10px;padding:18px;margin-bottom:14px}
+.guided-path-head{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px}
+.guided-path-icon{font-size:22px;flex-shrink:0}
+.guided-path-role{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.guided-path-pitch{font-size:11.5px;color:var(--muted);line-height:1.5}
+.guided-steps-wrap{display:flex;flex-direction:column;align-items:stretch}
+.guided-step{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:6px;cursor:pointer;transition:background .15s}
+.guided-step:hover{background:rgba(184,50,34,.06)}
+.guided-step-num{width:20px;height:20px;border-radius:50%;background:var(--bg);border:1px solid var(--rule2);font-size:10px;font-family:var(--mono);font-weight:700;color:var(--muted);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.guided-step:hover .guided-step-num{background:var(--accent);color:#fff;border-color:var(--accent)}
+.guided-step-label{font-size:12.5px;font-weight:600;color:var(--ink)}
+.guided-step-why{font-size:10.5px;color:var(--muted)}
+.guided-step-arrow{text-align:center;color:var(--rule2);font-size:11px;padding:1px 0}
+
 .mat-modal{position:fixed;inset:0;z-index:10020;background:rgba(28,28,28,.55);display:none;align-items:center;justify-content:center;padding:20px}
 .mat-modal.on{display:flex}
 .mat-modal-box{background:var(--white);border-radius:8px;width:100%;max-width:760px;max-height:88vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3)}
@@ -1373,6 +1390,9 @@ textarea.form-el{min-height:86px;resize:vertical}
   <div class="sb-brand">
     <div class="sb-logo">Sentinel <span class="sb-logo-ai">AI</span></div>
     <div class="sb-sub">Cartographie des risques</div>
+  </div>
+  <div class="sb-guided-wrap">
+    <button class="sb-guided-btn" onclick="guidedPathsOpen()" title="Parcours d utilisation recommandes selon votre role">🧭 Parcours guidés</button>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Pilotage</div>
@@ -12748,4 +12768,139 @@ window.go = function(id){
 })();
 
 </script>
+<script>
+/* ══ PARCOURS GUIDES — onboarding par profil utilisateur ══ */
+var GUIDED_PATHS = [
+  {
+    id: 'directeur_programme',
+    icon: '🎯',
+    role: 'Directeur de programme IA Act',
+    pitch: 'Pilotage de bout en bout d un programme de mise en conformité, de la classification au reporting direction.',
+    steps: [
+      {id:'simulateur', label:'Simulateur IA Act', why:'Classifier chaque système avant de l enregistrer'},
+      {id:'registre', label:'Registre IA', why:'Recenser l ensemble du parc de systèmes'},
+      {id:'maturite', label:'Audit de maturité', why:'Évaluer la maturité organisationnelle (8 piliers)'},
+      {id:'audit-ia-act', label:'Audit IA Act', why:'Auditer la conformité détaillée (32 points)'},
+      {id:'matrice', label:'Matrice risques', why:'Prioriser selon probabilité × impact'},
+      {id:'parties', label:'Parties prenantes', why:'Assigner les responsabilités (RACI)'},
+      {id:'roadmap', label:'Roadmap', why:'Planifier et suivre l exécution'},
+      {id:'report', label:'Vue direction', why:'Reporter à la gouvernance'}
+    ]
+  },
+  {
+    id: 'grc_senior',
+    icon: '⚖️',
+    role: 'Senior Gouvernance GRC Data IA',
+    pitch: 'Structuration du cadre de gouvernance, contrôle de conformité continu et veille réglementaire.',
+    steps: [
+      {id:'maturite', label:'Audit de maturité', why:'État des lieux des 8 piliers de gouvernance'},
+      {id:'audit-ia-act', label:'Audit IA Act', why:'Contrôle détaillé des 32 obligations'},
+      {id:'parties', label:'Parties prenantes', why:'Cartographier les rôles et responsabilités'},
+      {id:'regs', label:'Réglementations', why:'Référentiel légal à jour'},
+      {id:'veille', label:'Veille qualifiée', why:'Anticiper les évolutions réglementaires'},
+      {id:'rag', label:'Base de connaissance', why:'Centraliser la documentation de preuve'}
+    ]
+  },
+  {
+    id: 'risk_manager',
+    icon: '🛡️',
+    role: 'Risk Manager',
+    pitch: 'Cartographie, quantification et suivi des risques IA — y compris l exposition financière.',
+    steps: [
+      {id:'matrice', label:'Matrice risques', why:'Vue synthétique probabilité × impact'},
+      {id:'radar', label:'Radar des risques', why:'Analyse multicritère (6 dimensions)'},
+      {id:'fria', label:'Évaluation FRIA', why:'Impact sur les droits fondamentaux'},
+      {id:'sanctions', label:'Calculateur sanctions', why:'Quantifier l exposition financière'},
+      {id:'historique', label:'Historique des calculs', why:'Tracer l évolution du risque dans le temps'}
+    ]
+  },
+  {
+    id: 'ceo',
+    icon: '📊',
+    role: 'CEO / Direction générale',
+    pitch: 'Vue synthétique pour le pilotage stratégique, sans entrer dans le détail opérationnel.',
+    steps: [
+      {id:'report', label:'Vue direction', why:'Indicateurs clés en un coup d œil'},
+      {id:'sanctions', label:'Calculateur sanctions', why:'Enjeu financier de la non-conformité'},
+      {id:'roadmap', label:'Roadmap', why:'Avancement du programme et échéances'},
+      {id:'geo', label:'Géopolitique', why:'Contexte concurrentiel et réglementaire'}
+    ]
+  },
+  {
+    id: 'dpo',
+    icon: '🔒',
+    role: 'DPO — Délégué à la protection des données',
+    pitch: 'Articulation entre RGPD et IA Act, traçabilité et droits des personnes concernées.',
+    steps: [
+      {id:'fria', label:'Évaluation FRIA', why:'Impact sur les droits fondamentaux (Art. 27)'},
+      {id:'registre', label:'Registre IA', why:'Inventaire des traitements par IA'},
+      {id:'regs', label:'Réglementations', why:'Articulation RGPD / IA Act'},
+      {id:'historique', label:'Historique des calculs', why:'Traçabilité RGPD (conservation 3 ans)'}
+    ]
+  },
+  {
+    id: 'cdo',
+    icon: '🗄️',
+    role: 'CDO — Chief Data Officer',
+    pitch: 'Qualité, gouvernance et traçabilité des données alimentant les systèmes IA.',
+    steps: [
+      {id:'registre', label:'Registre IA', why:'Cartographier les données utilisées par système'},
+      {id:'maturite', label:'Audit de maturité', why:'Pilier Confidentialité & Sécurité des données'},
+      {id:'rag', label:'Base de connaissance', why:'Centraliser la documentation data'},
+      {id:'veille', label:'Veille qualifiée', why:'Suivre les évolutions data/IA'}
+    ]
+  },
+  {
+    id: 'caio',
+    icon: '🚀',
+    role: 'CAIO — Chief AI Officer',
+    pitch: 'Déploiement à l échelle, montée en compétence des équipes et structuration du programme IA.',
+    steps: [
+      {id:'simulateur', label:'Simulateur IA Act', why:'Qualifier rapidement un nouveau cas d usage'},
+      {id:'registre', label:'Registre IA', why:'Suivre le portefeuille de systèmes IA'},
+      {id:'roadmap', label:'Roadmap', why:'Structurer le déploiement dans le temps'},
+      {id:'equipe', label:'Équipe', why:'Organiser les compétences internes'},
+      {id:'training', label:'Hub Training', why:'Former les équipes aux enjeux IA Act'}
+    ]
+  }
+];
+
+window.guidedPathsOpen = function(){
+  var modal = document.getElementById('guided-paths-modal');
+  if(!modal){
+    modal = document.createElement('div');
+    modal.id = 'guided-paths-modal';
+    modal.className = 'mat-modal';
+    document.body.appendChild(modal);
+  }
+  modal.innerHTML = '<div class="mat-modal-card" style="max-width:760px;max-height:84vh;overflow-y:auto">'
+    + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Onboarding</div><div class="mat-modal-title">Parcours guidés par profil</div></div>'
+    + '<button class="mat-modal-close" onclick="guidedPathsClose()">×</button></div>'
+    + '<p style="font-size:12.5px;color:var(--muted);margin:0 0 20px;line-height:1.6">Sélectionnez votre rôle pour un enchaînement recommandé des pages — pertinent aussi bien pour une TPE qu un grand compte, le niveau de détail s adapte à votre contexte.</p>'
+    + '<div id="guided-paths-list">' + GUIDED_PATHS.map(guidedPathCard).join('') + '</div>'
+    + '</div>';
+  modal.classList.add('on');
+};
+
+function guidedPathCard(path){
+  var stepsHtml = path.steps.map(function(s, i){
+    return '<div class="guided-step" onclick="guidedPathsClose();go(\''+s.id+'\')">'
+      + '<span class="guided-step-num">'+(i+1)+'</span>'
+      + '<div><div class="guided-step-label">'+s.label+'</div><div class="guided-step-why">'+s.why+'</div></div>'
+      + '</div>';
+  }).join('<div class="guided-step-arrow">↓</div>');
+
+  return '<div class="guided-path-card">'
+    + '<div class="guided-path-head"><span class="guided-path-icon">'+path.icon+'</span><div><div class="guided-path-role">'+path.role+'</div><div class="guided-path-pitch">'+path.pitch+'</div></div></div>'
+    + '<div class="guided-steps-wrap">' + stepsHtml + '</div>'
+    + '</div>';
+}
+
+window.guidedPathsClose = function(){
+  var modal = document.getElementById('guided-paths-modal');
+  if(modal) modal.classList.remove('on');
+};
+
+</script>
+
 </html>
