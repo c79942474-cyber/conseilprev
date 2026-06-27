@@ -153,6 +153,11 @@ if(new URLSearchParams(location.search).get('verified') === '1'){
   document.getElementById('verified-banner').style.display = 'block';
 }
 
+var REQUESTED_PLAN = new URLSearchParams(location.search).get('plan') === 'gratuit' ? 'gratuit' : 'pro';
+if(REQUESTED_PLAN === 'gratuit'){
+  switchTab('register');
+}
+
 document.getElementById('login-form').addEventListener('submit', function(e){
   e.preventDefault();
   var btn = document.getElementById('login-btn');
@@ -264,7 +269,8 @@ document.getElementById('register-form').addEventListener('submit', function(e){
       email: document.getElementById('reg-email').value.trim().toLowerCase(),
       password: passwordEl.value,
       rgpd_consent: document.getElementById('rgpd-consent-reg').checked,
-      captcha_answer: document.getElementById('captcha-answer-reg').value
+      captcha_answer: document.getElementById('captcha-answer-reg').value,
+      plan: REQUESTED_PLAN
     })
   }).then(function(r){ return r.json().then(function(d){ return {status:r.status, data:d}; }); })
   .then(function(res){
