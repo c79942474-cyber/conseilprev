@@ -721,6 +721,14 @@ textarea.form-el{min-height:86px;resize:vertical}
 .art-who{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .art-who-tag{font-size:9px;font-family:var(--mono);background:rgba(28,90,138,.08);border:1px solid rgba(28,90,138,.15);color:var(--blue);padding:2px 8px;border-radius:2px}
 .art-official-link{font-size:10px;font-family:var(--mono);color:var(--blue);text-decoration:none;display:inline-flex;align-items:center;gap:4px;margin-top:10px}
+.art-rag-btn{font-size:10.5px;font-family:var(--mono);color:var(--ink2);background:var(--bg);border:1px solid var(--rule2);border-radius:5px;padding:6px 10px;cursor:pointer;margin-top:10px;display:block;transition:all .15s}
+.art-rag-btn:hover{border-color:var(--accent);color:var(--accent)}
+.art-rag-holder{margin-top:8px}
+.art-rag-title{font-size:10.5px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.art-rag-result{background:var(--bg);border-left:3px solid var(--blue);border-radius:4px;padding:8px 10px;margin-bottom:6px}
+.art-rag-text{font-size:11.5px;color:var(--ink2);line-height:1.5}
+.art-rag-source{font-size:9.5px;font-family:var(--mono);color:var(--muted);margin-top:4px}
+.art-rag-empty{font-size:11px;color:var(--muted);padding:8px 0;font-style:italic}
 .art-official-link:hover{text-decoration:underline}
 
 
@@ -5218,6 +5226,35 @@ window.artFilterReg = function(val){
   artRender();
 };
 
+/* ══ RECHERCHE RAG SUR LES ARTICLES — expose les vrais passages des documents uploades ══ */
+window.artSearchRAG = function(uid, query){
+  var holder = document.getElementById('art-rag-' + uid);
+  if(!holder) return;
+  holder.innerHTML = '<div class="reg-loading" style="padding:10px 0">Recherche dans la base de connaissance…</div>';
+  holder.style.display = 'block';
+
+  fetch('/api/rag/search', {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({query: query, top_k: 3})
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(d){
+    var results = d.results || [];
+    if(results.length === 0){
+      holder.innerHTML = '<div class="art-rag-empty">Aucun passage trouvé dans vos documents pour cette recherche. Vérifiez que le texte source est bien chargé dans la Base de connaissance.</div>';
+      return;
+    }
+    holder.innerHTML = '<div class="art-rag-title">📄 Trouvé dans vos documents</div>'
+      + results.map(function(res){
+        return '<div class="art-rag-result"><div class="art-rag-text">'+res.texte.substring(0,400)+(res.texte.length>400?'…':'')+'</div>'
+          + '<div class="art-rag-source">Source : '+res.document+'</div></div>';
+      }).join('');
+  })
+  .catch(function(){
+    holder.innerHTML = '<div class="art-rag-empty">Erreur lors de la recherche. Réessayez.</div>';
+  });
+};
+
 function artInit(){
   if(artInitDone) return;
   artInitDone = true;
@@ -5271,6 +5308,8 @@ function artRender(){
         +'<div class="art-body-section-title">Obligations pratiques</div>'
         + oblHtml
         +'</div>'
+        +'<button class="art-rag-btn" data-uid="'+uid+'" data-query="'+(a.num+' '+a.title).replace(/"/g,'&quot;')+'" onclick="artSearchRAG(this.getAttribute(\'data-uid\'),this.getAttribute(\'data-query\'))">🔍 Rechercher dans la base de connaissance</button>'
+        +'<div class="art-rag-holder" id="art-rag-'+uid+'" style="display:none"></div>'
         +'<a class="art-official-link" href="'+a.url+'" target="_blank" rel="noopener">↗ Texte officiel EUR-Lex / AI Act EU</a>'
         +'</div>'
         +'</div>';
