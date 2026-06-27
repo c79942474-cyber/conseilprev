@@ -2929,21 +2929,30 @@ def email_health():
     client = sentauth_current_client()
     if not client or not client.get('is_conseilprev'):
         abort(403)
-    conn = registre_get_db()
-    cur = conn.cursor()
-    cur.execute(registre_sql(
-        "SELECT * FROM email_log ORDER BY date_envoi DESC LIMIT 30",
-        "SELECT * FROM email_log ORDER BY date_envoi DESC LIMIT 30"
-    ))
-    recent = [dict(r) if not isinstance(r, dict) else r for r in cur.fetchall()]
+    try:
+        email_log_init_db()  # garantit que la table existe, meme si l init au demarrage a echoue
+    except Exception as _e:
+        logger.error(f"EMAIL_HEALTH_INIT_RETRY_FAILED : {_e}")
 
-    cutoff_24h = (datetime.utcnow() - _timedelta_auth(hours=24)).isoformat()
-    cur.execute(registre_sql(
-        "SELECT succes, COUNT(*) as n FROM email_log WHERE date_envoi > %s GROUP BY succes",
-        "SELECT succes, COUNT(*) as n FROM email_log WHERE date_envoi > ? GROUP BY succes"
-    ), (cutoff_24h,))
-    stats_rows = cur.fetchall()
-    conn.close()
+    try:
+        conn = registre_get_db()
+        cur = conn.cursor()
+        cur.execute(registre_sql(
+            "SELECT * FROM email_log ORDER BY date_envoi DESC LIMIT 30",
+            "SELECT * FROM email_log ORDER BY date_envoi DESC LIMIT 30"
+        ))
+        recent = [dict(r) if not isinstance(r, dict) else r for r in cur.fetchall()]
+
+        cutoff_24h = (datetime.utcnow() - _timedelta_auth(hours=24)).isoformat()
+        cur.execute(registre_sql(
+            "SELECT succes, COUNT(*) as n FROM email_log WHERE date_envoi > %s GROUP BY succes",
+            "SELECT succes, COUNT(*) as n FROM email_log WHERE date_envoi > ? GROUP BY succes"
+        ), (cutoff_24h,))
+        stats_rows = cur.fetchall()
+        conn.close()
+    except Exception as _e:
+        logger.error(f"EMAIL_HEALTH_QUERY_FAILED : {_e}")
+        return jsonify({'error': f'Erreur de lecture du journal email : {_e}'}), 500
 
     succes_24h = 0
     echec_24h = 0
