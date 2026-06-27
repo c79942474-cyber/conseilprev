@@ -534,6 +534,15 @@ def add_contact_to_brevo(email, prenom, nom, entreprise='', liste_id=None):
 
 
 MAIL_FROM     = os.environ.get('MAIL_FROM', 'noreply@conseilprev.onrender.com')
+_FREE_EMAIL_DOMAINS = ('outlook.com', 'hotmail.com', 'live.com', 'gmail.com', 'yahoo.com', 'icloud.com', 'aol.com', 'protonmail.com')
+if MAIL_FROM.split('@')[-1].lower() in _FREE_EMAIL_DOMAINS:
+    logger.error(
+        f"CONFIGURATION INVALIDE : MAIL_FROM='{MAIL_FROM}' utilise un domaine grand public "
+        f"({MAIL_FROM.split('@')[-1]}), qui ne peut JAMAIS etre authentifie sur Brevo. "
+        f"Tous les envois d'email seront rejetes par les fournisseurs (Outlook, Gmail...). "
+        f"Definissez MAIL_FROM sur Render avec une adresse de votre propre domaine, deja "
+        f"verifie dans Brevo (Senders & IP -> Domains)."
+    )
 MAIL_TO       = os.environ.get('MAIL_TO', 'christophe.cerf@outlook.com')
 MAIL_CC       = os.environ.get('MAIL_CC', 'c79942474@gmail.com')
 
