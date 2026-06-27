@@ -12986,7 +12986,12 @@ window.emailHealthRender = function(){
   var holder = document.getElementById('email-health-widget');
   if(!holder) return;
   holder.innerHTML = '<div class="reg-loading">Chargement…</div>';
-  fetch('/api/admin/email-health').then(function(r){ return r.json(); }).then(function(d){
+  fetch('/api/admin/email-health').then(function(r){ return r.json().then(function(d){ return {status:r.status, data:d}; }); }).then(function(res){
+    if(res.status !== 200){
+      holder.innerHTML = '<div class="reg-empty" style="color:var(--accent)">Erreur serveur : ' + (res.data.error || 'cause inconnue') + '</div>';
+      return;
+    }
+    var d = res.data;
     var pct = d.taux_succes_24h;
     var color = pct === null ? 'var(--muted)' : pct >= 80 ? 'var(--green)' : pct >= 50 ? 'var(--orange)' : 'var(--accent)';
     var alerteHtml = d.alerte ? '<div class="radar-registre-info" style="background:rgba(184,50,34,.06);border-color:rgba(184,50,34,.2);margin-bottom:14px">⚠️ Taux d\'échec élevé sur les dernières 24h — vérifiez le blocage IP Brevo (Security → Authorized IPs → Désactiver) ou le quota d\'envoi de votre compte Brevo.</div>' : '';
