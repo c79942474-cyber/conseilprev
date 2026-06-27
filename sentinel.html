@@ -8521,7 +8521,9 @@ var RACI_PROCESSES_BASE = [
   {id:"p11", label:"Gestion des incidents IA (biais, fuites, attaques)", art:"ISO 42001 cl. 10.2"},
   {id:"p12", label:"Reporting executif et revue de direction", art:"ISO 42001 cl. 9.3"},
   {id:"p13", label:"Relation avec les fournisseurs et sous-traitants IA", art:"Art. 26 EU AI Act / ISO 42001 A.10"},
-  {id:"p14", label:"Reponses aux demandes clients sur la gouvernance IA", art:"Accompagnement commercial"}
+  {id:"p14", label:"Reponses aux demandes clients sur la gouvernance IA", art:"Accompagnement commercial"},
+  {id:"p15", label:"Information-consultation du CSE avant introduction d un systeme IA", art:"Art. L2312-8, L2312-37, L2312-38 Code du travail"},
+  {id:"p16", label:"Evaluation des impacts RSE et environnementaux des systemes IA", art:"CSRD / Bilan carbone IA"}
 ];
 
 /* Roles / parties prenantes generiques (colonnes de la matrice) */
@@ -8541,7 +8543,9 @@ var RACI_ROLES_BASE = [
   {id:"metiers", label:"Equipes Metiers"},
   {id:"commercial", label:"Commercial / Avant-vente"},
   {id:"rh", label:"RH / Direction des Ressources Humaines"},
-  {id:"finance", label:"Direction Financiere"}
+  {id:"finance", label:"Direction Financiere"},
+  {id:"cse", label:"CSE (Comite Social et Economique)"},
+  {id:"rse", label:"Responsable RSE / Environnement"}
 ];
 
 var RACI_SECTOR = "telecom"; /* secteur actif de la page Parties prenantes */
@@ -8575,7 +8579,9 @@ function defaultRaci(){
     p11:{cyber:"R", resp_ia:"A", dpo:"C", direction:"I", juridique:"C", resp_plateforme:"C"},
     p12:{resp_ia:"R", comite:"A", direction:"I", caio:"I", cdio:"I", finance:"I"},
     p13:{juridique:"R", resp_ia:"A", data:"C", it:"C", cto:"C", finance:"C"},
-    p14:{commercial:"R", resp_ia:"A", juridique:"C", ai_biz_partner:"C"}
+    p14:{commercial:"R", resp_ia:"A", juridique:"C", ai_biz_partner:"C"},
+    p15:{rh:"R", direction:"A", cse:"C", juridique:"C", resp_ia:"I", dpo:"C"},
+    p16:{rse:"R", direction:"A", resp_ia:"C", cse:"I", data:"C"}
   };
   /* Presets des processus specifiques au secteur actif (deja definis dans RACI_SECTOR_PROCESSES) */
   raciCurSectorProcesses().forEach(function(sp){
