@@ -1852,6 +1852,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       <option value="dsa">DSA — Services numériques</option>
       <option value="dma">DMA — Marchés numériques</option>
       <option value="cra">CRA — Cyber-résilience</option>
+      <option value="iso42001">ISO/IEC 42001</option>
     </select>
     <div class="art-tabs-bar">
       <div class="art-filter-btn on" data-who="all" onclick="artFilter('all',this)">Tous</div>
@@ -5272,6 +5273,32 @@ var ARTICLES = [
       texte:'Cadre de gestion du risque lié aux prestataires tiers TIC, registre d\'information (RoI) tenu à jour, clauses contractuelles minimales obligatoires — directement applicable aux fournisseurs de modèles IA et plateformes cloud IA.',
       obligations:['Intégrer les fournisseurs IA (cloud, modèles tiers, API) dans le registre des prestataires TIC','Vérifier la présence des clauses contractuelles minimales DORA dans les contrats IA','Évaluer le risque de concentration si plusieurs systèmes dépendent du même fournisseur IA'],
       url:'https://eur-lex.europa.eu/eli/reg/2022/2554/oj?locale=fr' }
+  ]},
+  { chapter:'ISO/IEC 42001 — Système de management de l\'IA (SMIA)', reglement:'iso42001', arts:[
+    { num:'Clause 4', title:'Contexte de l\'organisation', status:'actif', who:['fournisseur','deployeur'], sanction:null,
+      texte:'Évaluation des facteurs internes et externes affectant le SMIA, définition du rôle de l\'organisme (fournisseur, déployeur), identification des parties intéressées et de leurs exigences, détermination du périmètre du SMIA.',
+      obligations:['Documenter le contexte interne et externe pertinent pour vos systèmes IA','Définir clairement votre rôle (fournisseur, déployeur, ou les deux)','Identifier les parties intéressées (clients, régulateurs, employés) et leurs attentes'],
+      url:'https://www.iso.org/standard/81230.html' },
+    { num:'Clause 5', title:'Leadership', status:'actif', who:['deployeur'], sanction:null,
+      texte:'La direction doit démontrer son engagement envers le SMIA, établir une politique IA, et attribuer clairement les rôles et responsabilités en matière de gouvernance de l\'IA.',
+      obligations:['Faire approuver une politique IA formelle par la direction','Désigner un responsable de la gouvernance IA avec autorité et ressources'],
+      url:'https://www.iso.org/standard/81230.html' },
+    { num:'Clause 6.1', title:'Identification et évaluation des risques IA', status:'actif', who:['fournisseur','deployeur'], sanction:null,
+      texte:'Identification systématique des risques et opportunités liés à l\'IA. Pour les systèmes à fort impact potentiel, une AIIA (AI Impact Assessment) documentée est requise, couvrant les impacts sociétaux, éthiques et juridiques.',
+      obligations:['Réaliser une évaluation des risques pour chaque système IA','Documenter une AIIA pour les systèmes à impact potentiel élevé sur les individus ou la société','Articuler cette évaluation avec la FRIA de l\'AI Act pour éviter les doublons'],
+      url:'https://www.iso.org/standard/81230.html' },
+    { num:'Clause 7', title:'Support (ressources et compétences)', status:'actif', who:['deployeur'], sanction:null,
+      texte:'Mise à disposition des ressources nécessaires, gestion des compétences du personnel impliqué dans le cycle de vie de l\'IA, communication interne et externe, documentation maîtrisée.',
+      obligations:['Évaluer et combler les écarts de compétences IA au sein des équipes','Maintenir une documentation à jour et accessible du SMIA'],
+      url:'https://www.iso.org/standard/81230.html' },
+    { num:'Clause 8.2', title:'Contrôles opérationnels', status:'actif', who:['fournisseur','deployeur'], sanction:null,
+      texte:'Mise en œuvre de contrôles opérationnels proportionnés aux risques identifiés en clause 6.1, sur la base des contrôles de l\'Annexe A (gestion des données, transparence, robustesse, supervision humaine).',
+      obligations:['Sélectionner et mettre en œuvre les contrôles de l\'Annexe A pertinents pour chaque système','Documenter les contrôles retenus et leur justification (déclaration d\'applicabilité)'],
+      url:'https://www.iso.org/standard/81230.html' },
+    { num:'Clauses 9-10', title:'Évaluation des performances et amélioration', status:'actif', who:['deployeur'], sanction:null,
+      texte:'Surveillance, mesure, audit interne et revue de direction du SMIA. Traitement des non-conformités et amélioration continue du système.',
+      obligations:['Définir des indicateurs de performance du SMIA et les suivre régulièrement','Planifier des audits internes périodiques','Documenter et traiter toute non-conformité identifiée'],
+      url:'https://www.iso.org/standard/81230.html' }
   ]}
 ];
 
