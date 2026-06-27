@@ -662,7 +662,9 @@ textarea.form-el{min-height:86px;resize:vertical}
 .audit-kpi{flex:1;background:var(--white);border:1px solid var(--rule);border-radius:4px;padding:14px 16px;text-align:center}
 .audit-kpi-val{font-family:var(--serif);font-size:28px;color:var(--ink);line-height:1}
 .audit-kpi-lbl{font-size:9px;font-family:var(--mono);color:var(--muted2);letter-spacing:.06em;margin-top:4px;text-transform:uppercase}
-.audit-section{margin-bottom:24px}
+#audit-sections{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+@media(max-width:900px){#audit-sections{grid-template-columns:1fr}}
+.audit-section{margin-bottom:0}
 .audit-section-head{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--bg);border-radius:3px;cursor:pointer;user-select:none}
 .audit-section-title{font-size:13px;font-weight:600;color:var(--ink);flex:1}
 .audit-section-art{font-size:9px;font-family:var(--mono);color:var(--accent);background:rgba(184,50,34,.08);padding:2px 7px;border-radius:2px}
