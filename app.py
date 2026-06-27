@@ -46,6 +46,7 @@ class RateLimiter:
         self.requests   = defaultdict(list)   # ip → [timestamps]
         self.blocked    = {}                   # ip → block_until
         self.violations = defaultdict(int)     # ip → violation count
+        self.last_violation = {}               # ip → timestamp derniere violation (pour decroissance)
         self.chat_req   = defaultdict(list)    # ip → chat timestamps
 
     def get_ip(self, req):
@@ -71,16 +72,22 @@ class RateLimiter:
         if self.is_blocked(ip):
             return False
         now = time.time()
+        # Decroissance : une violation vieille de plus de 1h ne compte plus dans l escalade.
+        # Evite qu un usage legitime mais intensif (tests, navigation rapide) ne s aggrave
+        # indefiniment au fil du temps.
+        if ip in self.last_violation and now - self.last_violation[ip] > 3600:
+            self.violations[ip] = 0
         # Nettoyer les anciennes requêtes
         self.requests[ip] = [t for t in self.requests[ip] if now - t < window]
         self.requests[ip].append(now)
         count = len(self.requests[ip])
         if count > limit:
             self.violations[ip] += 1
-            if self.violations[ip] >= 3:
-                self.block(ip, 1800, f'repeat_rate_limit on {endpoint}')
+            self.last_violation[ip] = now
+            if self.violations[ip] >= 5:
+                self.block(ip, 300, f'repeat_rate_limit on {endpoint}')
             else:
-                self.block(ip, 60, f'rate_limit on {endpoint}')
+                self.block(ip, 30, f'rate_limit on {endpoint}')
             return False
         return True
 
@@ -114,11 +121,14 @@ def rate_limit(limit=60, window=60):
             ip = limiter.get_ip(request)
             if not limiter.check(ip, limit, window, f.__name__):
                 logger.warning(f"RATE_LIMIT {ip} → {f.__name__}")
+                retry_after = max(1, int(limiter.blocked.get(ip, time.time()) - time.time()))
+                retry_msg = f"{retry_after} secondes" if retry_after < 60 else f"{retry_after // 60} minute(s)"
                 resp = make_response(jsonify({
-                    'error': 'Trop de requêtes. Réessayez dans quelques minutes.',
-                    'code': 429
+                    'error': f'Trop de requêtes. Réessayez dans environ {retry_msg}.',
+                    'code': 429,
+                    'retry_after_seconds': retry_after
                 }), 429)
-                resp.headers['Retry-After'] = '60'
+                resp.headers['Retry-After'] = str(retry_after)
                 return resp
             return f(*args, **kwargs)
         return wrapped
@@ -2907,7 +2917,7 @@ def sentauth_send_login_alert(email, nom_entreprise, ip):
         logger.error(f"LOGIN_ALERT_EMAIL_FAILED {email} : {e}")
 
 @app.route('/api/sentinel-auth/login', methods=['POST'])
-@rate_limit_strict(limit=8, window=300)
+@rate_limit_strict(limit=15, window=300)
 def sentauth_login():
     data = request.get_json(force=True) or {}
     email = (data.get('email') or '').strip().lower()
@@ -3164,7 +3174,7 @@ def sentauth_notify_conseilprev_new_signup(nom_entreprise, email, ip):
         logger.error(f"NOTIFY_CONSEILPREV_FAILED : {e}")
 
 @app.route('/api/sentinel-auth/register', methods=['POST'])
-@rate_limit_strict(limit=5, window=300)
+@rate_limit_strict(limit=10, window=300)
 def sentauth_register():
     data = request.get_json(force=True) or {}
     nom = (data.get('nom_entreprise') or '').strip()
