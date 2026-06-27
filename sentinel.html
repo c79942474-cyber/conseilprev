@@ -4708,6 +4708,27 @@ geoRenderTL();
    Règlement (UE) 2024/1689 du 13 juin 2024
    ══════════════════════════════════════════════════════ */
 
+window.regsRenderDocs = function(filterVal){
+  var g = document.getElementById('regs-list');
+  if(!g) return;
+  var docs = filterVal === 'all' ? window.REGS_DOCS : window.REGS_DOCS.filter(function(d){ return d.title === filterVal; });
+  g.innerHTML = docs.map(function(d){
+    return '<div class="reg-doc-card" onclick="window.open(\''+d.url+'\',\'_blank\')">'
+      +'<span class="reg-doc-badge '+d.badge+'">'+d.badgeTxt+'</span>'
+      +'<div class="reg-doc-title">'+d.title+'</div>'
+      +'<div class="reg-doc-ref">'+d.ref+'</div>'
+      +'<div class="reg-doc-desc">'+d.desc+'</div>'
+      +'<div class="reg-doc-footer">'
+      +'<span class="reg-doc-sanction">'+d.sanction+'</span>'
+      +'<a class="reg-doc-link" href="'+d.url+'" target="_blank" rel="noopener">Texte officiel ↗</a>'
+      +'</div></div>';
+  }).join('');
+};
+
+window.regsFilterDoc = function(val){
+  window.regsRenderDocs(val);
+};
+
 /* ── Textes réglementaires ── */
 (function(){
   var DOCS = [
@@ -4791,27 +4812,6 @@ geoRenderTL();
   }
   window.regsRenderDocs('all');
 })();
-
-window.regsRenderDocs = function(filterVal){
-  var g = document.getElementById('regs-list');
-  if(!g) return;
-  var docs = filterVal === 'all' ? window.REGS_DOCS : window.REGS_DOCS.filter(function(d){ return d.title === filterVal; });
-  g.innerHTML = docs.map(function(d){
-    return '<div class="reg-doc-card" onclick="window.open(\''+d.url+'\',\'_blank\')">'
-      +'<span class="reg-doc-badge '+d.badge+'">'+d.badgeTxt+'</span>'
-      +'<div class="reg-doc-title">'+d.title+'</div>'
-      +'<div class="reg-doc-ref">'+d.ref+'</div>'
-      +'<div class="reg-doc-desc">'+d.desc+'</div>'
-      +'<div class="reg-doc-footer">'
-      +'<span class="reg-doc-sanction">'+d.sanction+'</span>'
-      +'<a class="reg-doc-link" href="'+d.url+'" target="_blank" rel="noopener">Texte officiel ↗</a>'
-      +'</div></div>';
-  }).join('');
-};
-
-window.regsFilterDoc = function(val){
-  window.regsRenderDocs(val);
-};
 
 /* ── Navigation onglets ── */
 window.regsTab = function(tab, el){
