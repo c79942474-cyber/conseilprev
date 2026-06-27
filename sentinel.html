@@ -1846,6 +1846,9 @@ textarea.form-el{min-height:86px;resize:vertical}
     <select class="guided-paths-select" style="margin-bottom:14px" onchange="artFilterReg(this.value)">
       <option value="all">Tous les règlements</option>
       <option value="ai_act">EU AI Act</option>
+      <option value="rgpd">RGPD</option>
+      <option value="nis2">NIS2</option>
+      <option value="dora">DORA</option>
       <option value="dsa">DSA — Services numériques</option>
       <option value="dma">DMA — Marchés numériques</option>
       <option value="cra">CRA — Cyber-résilience</option>
@@ -5173,7 +5176,7 @@ var ARTICLES = [
       texte:'Sanctions par États membres : jusqu\'à 35 M€ ou 7% CA mondial (Art. 5), 15 M€ ou 3% (systèmes haut risque), 7,5 M€ ou 1% (autres infractions). PME : proportionnalité garantie. Le montant le plus élevé des deux seuils s\'applique.',
       obligations:['Mettre en place une veille des délibérations des autorités nationales','Identifier l\'autorité nationale de surveillance compétente dans chaque État membre de déploiement','Budgéter le risque de conformité dans l\'analyse financière'],
       url:'https://artificialintelligenceact.eu/article/99/' },
-  ]},,
+  ]},
   { chapter:'DSA — Obligations des plateformes', reglement:'dsa', arts:[
     { num:'Art. 16', title:'Notification et action', status:'actif', who:['deployeur'], sanction:'6% CA mondial',
       texte:'Mécanisme de signalement de contenu illicite, facile d\'accès, permettant des notifications électroniques précises et étayées.',
@@ -5215,6 +5218,60 @@ var ARTICLES = [
       texte:'Les autorités nationales (ANFR en France, avec appui ANSSI) contrôlent la conformité des produits mis sur le marché.',
       obligations:['Conserver la documentation technique 10 ans','Préparer une procédure de réponse aux demandes des autorités de surveillance'],
       url:'https://eur-lex.europa.eu/eli/reg/2024/2847/oj?locale=fr' }
+  ]},
+  { chapter:'RGPD — Articles pertinents pour l\'IA', reglement:'rgpd', arts:[
+    { num:'Art. 5', title:'Principes relatifs au traitement', status:'actif', who:['fournisseur','deployeur'], sanction:'20M€ ou 4% CA mondial',
+      texte:'Minimisation des données : seules les données adéquates, pertinentes et limitées au nécessaire doivent être traitées. Tension structurelle avec le machine learning qui repose sur de gros volumes de données.',
+      obligations:['Documenter la finalité précise de chaque traitement par IA dès la conception','Privilégier données synthétiques ou agrégées pour l\'entraînement quand la performance le permet','Limiter strictement les bases documentaires des systèmes RAG aux données nécessaires'],
+      url:'https://eur-lex.europa.eu/eli/reg/2016/679/oj?locale=fr' },
+    { num:'Art. 6', title:'Licéité du traitement', status:'actif', who:['fournisseur','deployeur'], sanction:'20M€ ou 4% CA mondial',
+      texte:'Tout traitement de données personnelles (y compris l\'entraînement d\'un modèle IA) doit reposer sur une base légale valide. L\'intérêt légitime est souvent retenu pour la phase d\'entraînement, sous réserve d\'une mise en balance documentée.',
+      obligations:['Identifier et documenter la base légale pour chaque phase (entraînement, inférence)','Réaliser une mise en balance des intérêts si la base légale retenue est l\'intérêt légitime'],
+      url:'https://eur-lex.europa.eu/eli/reg/2016/679/oj?locale=fr' },
+    { num:'Art. 13-14', title:'Information des personnes concernées', status:'actif', who:['deployeur'], sanction:'20M€ ou 4% CA mondial',
+      texte:'Obligation d\'informer les personnes de l\'existence d\'un traitement automatisé, de sa logique sous-jacente et de ses conséquences prévisibles.',
+      obligations:['Mentionner explicitement l\'usage de l\'IA dans la politique de confidentialité','Expliquer en langage clair la logique du traitement automatisé concerné'],
+      url:'https://eur-lex.europa.eu/eli/reg/2016/679/oj?locale=fr' },
+    { num:'Art. 15', title:'Droit d\'accès', status:'actif', who:['deployeur'], sanction:'20M€ ou 4% CA mondial',
+      texte:'Le droit d\'accès s\'étend aux informations sur la logique sous-jacente et aux conséquences du traitement automatisé — implique des mécanismes d\'explicabilité dès la conception.',
+      obligations:['Prévoir une procédure de réponse aux demandes d\'accès incluant la logique du système IA','Documenter techniquement le fonctionnement du modèle pour pouvoir répondre'],
+      url:'https://eur-lex.europa.eu/eli/reg/2016/679/oj?locale=fr' },
+    { num:'Art. 22', title:'Décision individuelle automatisée', status:'actif', who:['deployeur'], sanction:'20M€ ou 4% CA mondial',
+      texte:'Droit de ne pas faire l\'objet d\'une décision fondée exclusivement sur un traitement automatisé (y compris le profilage) produisant des effets juridiques ou affectant significativement la personne. 3 exceptions strictes : nécessité contractuelle, autorisation légale, consentement explicite.',
+      obligations:['Identifier tout système IA prenant des décisions à effet juridique ou significatif (crédit, recrutement, assurance)','Garantir une intervention humaine significative et un droit de contestation','Documenter les garanties mises en place (réexamen, explication, contestation)'],
+      url:'https://eur-lex.europa.eu/eli/reg/2016/679/oj?locale=fr' },
+    { num:'Art. 35', title:'Analyse d\'impact (AIPD)', status:'actif', who:['deployeur'], sanction:'20M€ ou 4% CA mondial',
+      texte:'AIPD obligatoire si le traitement présente un risque élevé. Les projets IA impliquant profilage, décision automatisée ou traitement à grande échelle déclenchent quasi systématiquement cette obligation.',
+      obligations:['Réaliser une AIPD pour tout système IA à risque élevé pour les droits des personnes','Intégrer les risques spécifiques à l\'IA dans l\'AIPD (biais, opacité, qualité des données)','Articuler l\'AIPD RGPD avec la FRIA de l\'AI Act pour les systèmes à haut risque'],
+      url:'https://eur-lex.europa.eu/eli/reg/2016/679/oj?locale=fr' }
+  ]},
+  { chapter:'NIS2 — Cybersécurité des systèmes IA critiques', reglement:'nis2', arts:[
+    { num:'Art. 20', title:'Gouvernance et responsabilité des dirigeants', status:'actif', who:['deployeur'], sanction:'10M€ ou 2% CA mondial (EE), 7M€ ou 1,4% (EI)',
+      texte:'Les organes de direction doivent approuver les mesures de gestion des risques cyber, superviser leur mise en œuvre, et peuvent être tenus personnellement responsables en cas de manquement.',
+      obligations:['Faire approuver formellement la politique de cybersécurité IA par la direction','Former les dirigeants à évaluer les risques cyber liés aux systèmes IA'],
+      url:'https://eur-lex.europa.eu/eli/dir/2022/2555/oj?locale=fr' },
+    { num:'Art. 21', title:'Mesures de gestion des risques', status:'actif', who:['deployeur'], sanction:'10M€ ou 2% CA mondial (EE), 7M€ ou 1,4% (EI)',
+      texte:'Mesures techniques et organisationnelles proportionnées : analyse des risques, sécurité de la chaîne d\'approvisionnement, cryptographie, gestion des vulnérabilités — directement applicables aux systèmes et infrastructures IA.',
+      obligations:['Intégrer les systèmes IA dans la cartographie des risques cyber de l\'entité','Sécuriser la chaîne d\'approvisionnement IA (fournisseurs de modèles, API tierces, données)','Mettre en place une gestion documentée des vulnérabilités des systèmes IA'],
+      url:'https://eur-lex.europa.eu/eli/dir/2022/2555/oj?locale=fr' },
+    { num:'Art. 23', title:'Notification des incidents', status:'actif', who:['deployeur'], sanction:'10M€ ou 2% CA mondial (EE), 7M€ ou 1,4% (EI)',
+      texte:'Notification initiale sous 24h après détection d\'un incident significatif, rapport intermédiaire sous 72h, rapport final sous 1 mois.',
+      obligations:['Inclure les incidents de sécurité touchant des systèmes IA dans le dispositif de notification existant','Désigner un point de contact pour la notification aux autorités (ANSSI/CSIRT)'],
+      url:'https://eur-lex.europa.eu/eli/dir/2022/2555/oj?locale=fr' }
+  ]},
+  { chapter:'DORA — Résilience numérique (secteur financier)', reglement:'dora', arts:[
+    { num:'Art. 4', title:'Principe de proportionnalité', status:'actif', who:['deployeur'], sanction:'Mesures correctives + sanctions pécuniaires',
+      texte:'Les obligations DORA sont adaptées à la taille, la nature, la complexité et le profil de risque de chaque entité financière.',
+      obligations:['Évaluer si votre établissement relève du cadre simplifié (Art. 16) ou du cadre complet'],
+      url:'https://eur-lex.europa.eu/eli/reg/2022/2554/oj?locale=fr' },
+    { num:'Art. 19', title:'Notification des incidents TIC majeurs', status:'actif', who:['deployeur'], sanction:'Jusqu\'à 1% CA mondial/jour (astreinte)',
+      texte:'Notification initiale à l\'autorité compétente sous 4h après classification d\'un incident TIC majeur, rapport intermédiaire sous 72h, rapport final sous 1 mois — incluant les incidents touchant des systèmes IA dans l\'infrastructure TIC.',
+      obligations:['Inclure les systèmes IA critiques dans le périmètre de classification des incidents TIC','Désigner un responsable de la gestion des risques TIC au niveau de la direction'],
+      url:'https://eur-lex.europa.eu/eli/reg/2022/2554/oj?locale=fr' },
+    { num:'Art. 28-30', title:'Gestion des prestataires tiers TIC', status:'actif', who:['deployeur'], sanction:'Mesures correctives + sanctions pécuniaires',
+      texte:'Cadre de gestion du risque lié aux prestataires tiers TIC, registre d\'information (RoI) tenu à jour, clauses contractuelles minimales obligatoires — directement applicable aux fournisseurs de modèles IA et plateformes cloud IA.',
+      obligations:['Intégrer les fournisseurs IA (cloud, modèles tiers, API) dans le registre des prestataires TIC','Vérifier la présence des clauses contractuelles minimales DORA dans les contrats IA','Évaluer le risque de concentration si plusieurs systèmes dépendent du même fournisseur IA'],
+      url:'https://eur-lex.europa.eu/eli/reg/2022/2554/oj?locale=fr' }
   ]}
 ];
 
