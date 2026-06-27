@@ -464,11 +464,15 @@ def send_via_brevo_api(to_email, to_name, subject, html_content,
 
 def send_email_smart(to_email, to_name, subject, html_content,
                      reply_to=None, tags=None):
-    """Brevo API → SMTP Brevo → sauvegarde locale."""
+    """Brevo API → SMTP Brevo → sauvegarde locale. Chaque tentative est journalisee
+    dans la table email_log pour permettre un diagnostic immediat (page Gestion des
+    clients) sans avoir a chercher dans les logs Render a chaque incident."""
     if BREVO_API_KEY:
         ok, result = send_via_brevo_api(to_email, to_name, subject, html_content,
                                         reply_to=reply_to, tags=tags)
-        if ok: return True, 'brevo_api'
+        if ok:
+            email_log_record(to_email, subject, 'brevo_api', True)
+            return True, 'brevo_api'
         logger.warning(f'BREVO_API_FAILED: {result}')
     if SMTP_USER and SMTP_PASSWORD:
         try:
@@ -491,9 +495,11 @@ def send_email_smart(to_email, to_name, subject, html_content,
                     srv.ehlo(); srv.starttls(context=ctx); srv.login(SMTP_USER, SMTP_PASSWORD)
                     srv.sendmail(MAIL_FROM, [to_email], msg.as_string())
             logger.info(f'BREVO_SMTP_OK: {to_email}')
+            email_log_record(to_email, subject, 'brevo_smtp', True)
             return True, 'brevo_smtp'
         except Exception as e:
             logger.error(f'BREVO_SMTP_FAILED: {e}')
+            email_log_record(to_email, subject, 'brevo_smtp', False, str(e)[:200])
     import datetime as _dt
     ts   = _dt.datetime.now().strftime('%Y%m%d_%H%M%S')
     path = os.path.join(UPLOAD_FOLDER, f'email_{ts}_{to_email.split("@")[0]}.html')
@@ -502,6 +508,7 @@ def send_email_smart(to_email, to_name, subject, html_content,
             f.write(f'<!-- To: {to_email} | Subject: {subject} -->\n' + html_content)
         logger.warning(f'EMAIL_SAVED_LOCAL: {path}')
     except Exception: pass
+    email_log_record(to_email, subject, 'saved_locally', False, 'Brevo API et SMTP indisponibles ou non configures')
     return False, 'saved_locally'
 
 
@@ -2870,6 +2877,93 @@ def require_paid_plan(f):
             return jsonify({'error': 'Cette fonctionnalite necessite un plan Pro ou Entreprise.', 'plan_requis': True}), 403
         return f(*args, **kwargs)
     return wrapper
+# ══════════════════════════════════════════════════════════
+# JOURNALISATION DES EMAILS — solution durable face aux incidents
+# Brevo (blocage IP, quota epuise). Permet un diagnostic immediat
+# sans avoir a chercher dans les logs Render a chaque incident.
+# ══════════════════════════════════════════════════════════
+def email_log_init_db():
+    conn = registre_get_db()
+    cur = conn.cursor()
+    if REGISTRE_USE_PG:
+        cur.execute('''CREATE TABLE IF NOT EXISTS email_log (
+            id SERIAL PRIMARY KEY,
+            destinataire TEXT NOT NULL,
+            sujet TEXT,
+            methode TEXT,
+            succes BOOLEAN NOT NULL,
+            raison_echec TEXT,
+            date_envoi TEXT NOT NULL
+        )''')
+    else:
+        cur.execute('''CREATE TABLE IF NOT EXISTS email_log (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            destinataire TEXT NOT NULL, sujet TEXT, methode TEXT,
+            succes INTEGER NOT NULL, raison_echec TEXT, date_envoi TEXT NOT NULL
+        )''')
+    conn.commit()
+    conn.close()
+
+try:
+    email_log_init_db()
+except Exception as _e:
+    logger.error(f"EMAIL_LOG — erreur init DB : {_e}")
+
+def email_log_record(destinataire, sujet, methode, succes, raison_echec=None):
+    try:
+        conn = registre_get_db()
+        cur = conn.cursor()
+        now = datetime.utcnow().isoformat()
+        cur.execute(registre_sql(
+            'INSERT INTO email_log (destinataire, sujet, methode, succes, raison_echec, date_envoi) VALUES (%s,%s,%s,%s,%s,%s)',
+            'INSERT INTO email_log (destinataire, sujet, methode, succes, raison_echec, date_envoi) VALUES (?,?,?,?,?,?)'
+        ), (destinataire, sujet, methode, succes, raison_echec, now))
+        conn.commit()
+        conn.close()
+    except Exception as _e:
+        logger.error(f"EMAIL_LOG_RECORD_FAILED : {_e}")
+
+@app.route('/api/admin/email-health', methods=['GET'])
+@sentinel_login_required
+def email_health():
+    client = sentauth_current_client()
+    if not client or not client.get('is_conseilprev'):
+        abort(403)
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql(
+        "SELECT * FROM email_log ORDER BY date_envoi DESC LIMIT 30",
+        "SELECT * FROM email_log ORDER BY date_envoi DESC LIMIT 30"
+    ))
+    recent = [dict(r) if not isinstance(r, dict) else r for r in cur.fetchall()]
+
+    cutoff_24h = (datetime.utcnow() - _timedelta_auth(hours=24)).isoformat()
+    cur.execute(registre_sql(
+        "SELECT succes, COUNT(*) as n FROM email_log WHERE date_envoi > %s GROUP BY succes",
+        "SELECT succes, COUNT(*) as n FROM email_log WHERE date_envoi > ? GROUP BY succes"
+    ), (cutoff_24h,))
+    stats_rows = cur.fetchall()
+    conn.close()
+
+    succes_24h = 0
+    echec_24h = 0
+    for r in stats_rows:
+        rd = dict(r) if not isinstance(r, dict) else r
+        if rd['succes'] in (True, 1):
+            succes_24h = rd['n']
+        else:
+            echec_24h = rd['n']
+    total_24h = succes_24h + echec_24h
+    taux_succes = round(succes_24h / total_24h * 100, 1) if total_24h > 0 else None
+
+    return jsonify({
+        'taux_succes_24h': taux_succes,
+        'total_24h': total_24h,
+        'succes_24h': succes_24h,
+        'echec_24h': echec_24h,
+        'derniers_envois': recent,
+        'alerte': echec_24h > 0 and (taux_succes is None or taux_succes < 80)
+    })
 
 @app.route('/auth/<token>')
 @rate_limit_strict(limit=10, window=300)
