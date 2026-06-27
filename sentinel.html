@@ -1431,7 +1431,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-item" onclick="go('registre',this,'CARTOGRAPHIER','Systèmes IA')" title="Registre des systemes IA connecte a une base de donnees reelle (ajout, edition, suppression)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/></svg></span>Registre IA</div>
     <div class="sb-item" onclick="go('maturite',this,'CARTOGRAPHIER','Audit de maturité IA')" title="Audit de maturite IA sectoriel : 8 piliers, questionnaire, KPIs, budget et livrables generes par IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 3 5-6"/></svg></span>Audit de maturité IA</div>
     <div class="sb-section">Évaluer le risque</div>
-    <div class="sb-item" onclick="go('audit-ia-act',this,'ÉVALUER LE RISQUE','Audit IA Act')" title="Audit de conformite EU AI Act structure - 32 points de controle, Reglement (UE) 2024/1689."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M21 12a9 9 0 1 1-9-9"/></svg></span>Audit IA Act</div>
+    <div class="sb-item" onclick="go('audit-ia-act',this,'ÉVALUER LE RISQUE','Audit IA Act')" title="Audit de conformite EU AI Act structure - 33 points de controle, Reglement (UE) 2024/1689."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M21 12a9 9 0 1 1-9-9"/></svg></span>Audit IA Act</div>
     <div class="sb-item" onclick="go('matrice',this,'ÉVALUER LE RISQUE','Matrice risques')" title="Positionnement de vos systemes IA selon probabilite de non-conformite et impact potentiel."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 3v18h18"/><circle cx="9" cy="15" r="1.6"/><circle cx="15" cy="9" r="1.6"/><circle cx="18" cy="6" r="1.6"/><circle cx="7" cy="18" r="1.6"/></svg></span>Matrice risques</div>
     <div class="sb-item" onclick="go('radar',this,'ÉVALUER LE RISQUE','Radar multi-critères')" title="Visualisation hexagonale de votre posture de conformite sur 6 dimensions reglementaires."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg></span>Radar des risques</div>
     <div class="sb-item" onclick="go('fria',this,'ÉVALUER LE RISQUE','Évaluation FRIA')" title="Evaluation d impact sur les droits fondamentaux (Art. 27 EU AI Act) - obligation du deployeur, applicable a partir du 2 aout 2026."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg></span>FRIA</div>
@@ -1486,7 +1486,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <span id="tb-client-name" style="font-size:10px;font-family:var(--mono);color:var(--muted);margin-right:10px"></span>
     <button class="tb-btn" onclick="window.location.href='/'" title="Retourner a la page d accueil CONSEILPREV">← Retour Accueil</button>
     <button class="tb-btn" onclick="fetch('/api/sentinel-auth/logout',{method:'POST'}).then(function(){window.location.href='/login'})" title="Se deconnecter de l espace client">Déconnexion</button>
-    <button class="tb-btn tb-btn-primary" onclick="openAuditTab()" title="Ouvrir l audit de conformite EU AI Act complet (32 points de controle).">Lancer un audit</button>
+    <button class="tb-btn tb-btn-primary" onclick="openAuditTab()" title="Ouvrir l audit de conformite EU AI Act complet (33 points de controle).">Lancer un audit</button>
   </div>
 </header>
 
@@ -2548,7 +2548,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       <div id="sim-result-container"></div>
       <div class="sim-nav" style="margin-top:8px;flex-wrap:wrap">
         <button class="sim-btn-next" id="sim-add-registre-btn" onclick="simAddToRegistre()" style="background:var(--green);font-weight:700;order:1" title="Action recommandee : enregistrer ce systeme directement dans le Registre IA.">+ Ajouter au Registre IA</button>
-        <button class="sim-btn-next" onclick="openAuditTab()" style="order:2" title="Ouvrir l audit de conformite EU AI Act complet (32 points de controle).">Lancer l'audit complet →</button>
+        <button class="sim-btn-next" onclick="openAuditTab()" style="order:2" title="Ouvrir l audit de conformite EU AI Act complet (33 points de controle).">Lancer l'audit complet →</button>
         <button class="sim-btn-next" style="background:#1C5A8A;order:3" onclick="histoSaveSimulateur()" title="Enregistrer cette simulation dans l historique persistant et tracable (RGPD).">💾 Historique</button>
         <button class="sim-reset-btn" onclick="simReset()" style="order:4" title="Recommencer une nouvelle simulation depuis le debut.">↺ Nouvelle simulation</button>
       </div>
@@ -2559,7 +2559,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 </div>
 <div class="page" id="p-audit-ia-act">
   <span class="eyebrow">Évaluer le risque · EU AI Act</span><h1 class="page-h">Audit <em>IA Act</em></h1>
-  <p class="page-lead">Audit de conformité structuré — 32 points de contrôle, Règlement (UE) 2024/1689.</p>
+  <p class="page-lead">Audit de conformité structuré — 33 points de contrôle, Règlement (UE) 2024/1689.</p>
 
     <!-- Bloc Lancer un audit -->
     <div style="margin-bottom:28px">
@@ -2578,7 +2578,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="audit-header">
       <div>
         <div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px">Audit de conformité EU AI Act</div>
-        <div style="font-size:11px;color:var(--muted)">Règlement (UE) 2024/1689 — Méthodologie CONSEILPREV · 32 points de contrôle</div>
+        <div style="font-size:11px;color:var(--muted)">Règlement (UE) 2024/1689 — Méthodologie CONSEILPREV · 33 points de contrôle</div>
       </div>
       <button class="audit-export-btn" id="cpEvalSaveBtn" onclick="cpEvalSaveAudit()" style="background:var(--green);margin-right:8px" title="Enregistrer l etat actuel de l audit dans l historique de Mes evaluations.">💾 Enregistrer l'evaluation</button>
       <button class="audit-export-btn" onclick="auditExportPDF()" title="Telecharger le rapport d audit complet au format PDF.">↓ Rapport PDF</button>
@@ -4927,6 +4927,7 @@ var AUDIT_SECTIONS = [
       {id:'a11_2', title:'Mise à jour continue du dossier technique', desc:'Procédure de mise à jour du dossier lors de toute modification substantielle du système. Identification des versions.', art:'Art. 11(2)', prio:'p2'},
       {id:'a12_1', title:'Journalisation automatique des décisions', desc:'Capacité d\'enregistrement automatique des événements : horodatage, identifiants, données d\'entrée, décisions de sortie, identité des opérateurs ayant validé.', art:'Art. 12(1)(2)', prio:'p1'},
       {id:'a12_2', title:'Conservation des journaux', desc:'Journaux conservés au minimum pour la durée prescrite et accessibles aux autorités compétentes sur demande.', art:'Art. 12(3)', prio:'p2'},
+      {id:'a18_1', title:'Conservation de la documentation technique (10 ans)', desc:'Le fournisseur conserve la documentation technique (Annexe IV), la déclaration UE de conformité et la documentation du système de gestion de la qualité pendant 10 ans après la mise sur le marché ou la mise en service du système — obligation distincte de la conservation des journaux (Art. 12).', art:'Art. 18', prio:'p2'},
     ]
   },
   {
@@ -4950,7 +4951,7 @@ var AUDIT_SECTIONS = [
   {
     id:'art49_51', title:'Évaluation de conformité & Enregistrement', art:'Art. 43-49, 51', color:'var(--blue)',
     items:[
-      {id:'a43_1', title:'Évaluation de conformité réalisée', desc:'Procédure d\'évaluation de conformité complète avant mise sur le marché : autoévaluation ou évaluation par organisme tiers selon la catégorie de système.', art:'Art. 43, 44', prio:'p1'},
+      {id:'a43_1', title:'Évaluation de conformité réalisée', desc:'Procédure d\'évaluation de conformité complète avant mise sur le marché : autoévaluation (contrôle interne, Annexe VI) ou évaluation par organisme notifié selon la catégorie de système. L\'Annexe VI détaille les critères vérifiés : système de gestion de la qualité, documentation technique, conformité aux exigences de robustesse et cybersécurité.', art:'Art. 43, 44, Annexe VI', prio:'p1'},
       {id:'a47_1', title:'Déclaration UE de conformité', desc:'Déclaration écrite signée par le fournisseur confirmant la conformité du système à l\'AI Act et aux autres règlements applicables.', art:'Art. 47', prio:'p1'},
       {id:'a48_1', title:'Marquage CE apposé', desc:'Apposition du marquage CE visible sur le système ou l\'emballage après évaluation de conformité concluante.', art:'Art. 48', prio:'p2'},
       {id:'a51_1', title:'Enregistrement dans la base de données EU', desc:'Enregistrement obligatoire dans la base de données EU AI Office avant mise sur le marché pour les systèmes haut risque.', art:'Art. 71, Art. 49', prio:'p1'},
@@ -6203,10 +6204,10 @@ var PAGE_CTX = {
     sys: 'L\'utilisateur utilise le Simulateur de conformite AI Act 5 etapes : (1) Identification systeme — secteur (Annexe III), type IA, description ; (2) Classification risque — Art. 5 pratiques interdites, biometrie temps reel, Annexe III 8 domaines ; (3) Obligations — Art. 9 gestion risques, Art. 10 donnees, Art. 11 documentation, Art. 12 logs, Art. 13 transparence, Art. 14 supervision, Art. 17 qualite ; (4) GPAI — Art. 51-55, seuil 10^25 FLOPs, RGPD ; (5) Resultats — score, classification, checklist, sanctions calculees.'
   },
   'audit': {
-    label: 'Audit de conformite AI Act — 32 points',
+    label: 'Audit de conformite AI Act — 33 points',
     apiLabel: { mistral:'Mistral Large', claude:'Claude Sonnet' },
     tags: ['Priorite P1 vs P2 vs P3 ?','Art. 9 — que faire concretement ?','Documentation technique Art. 11 ?','Evaluation de conformite Art. 43 ?','Comment exporter le rapport audit ?'],
-    sys: 'L\'utilisateur realise l\'Audit de conformite AI Act (32 points de controle, 8 sections). Sections : Art. 5 pratiques interdites (4 pts), Art. 6 classification haut risque (4 pts), Art. 9-10 gestion risques et donnees (5 pts), Art. 11-12 documentation et logs (4 pts), Art. 13-14 transparence et supervision (4 pts), Art. 15-17 robustesse et qualite (4 pts), Art. 43-49 evaluation et enregistrement (4 pts), GPAI Art. 51-55 (4 pts). 3 etats : Conforme (vert), En cours (orange), A realiser (rouge). Score en % et export PDF.'
+    sys: 'L\'utilisateur realise l\'Audit de conformite AI Act (33 points de controle, 8 sections). Sections : Art. 5 pratiques interdites (4 pts), Art. 6 classification haut risque (4 pts), Art. 9-10 gestion risques et donnees (5 pts), Art. 11-12-18 documentation et logs (5 pts), Art. 13-14 transparence et supervision (4 pts), Art. 15-17 robustesse et qualite (4 pts), Art. 43-49 evaluation et enregistrement (4 pts), GPAI Art. 51-55 (4 pts). 3 etats : Conforme (vert), En cours (orange), A realiser (rouge). Score en % et export PDF.'
   },
   'articles': {
     label: 'Obligations article par article',
@@ -6224,7 +6225,7 @@ var PAGE_CTX = {
     label: 'Sentinel AI — CONSEILPREV',
     apiLabel: { mistral:'Mistral Large', claude:'Claude Sonnet' },
     tags: ['Qu\'est-ce que l\'EU AI Act ?','Comment classifier mon IA ?','Sanctions AI Act ?','Comment utiliser Sentinel AI ?','Contacter CONSEILPREV ?'],
-    sys: 'L\'utilisateur navigue sur Sentinel AI, la plateforme de cartographie des risques reglementaires IA de CONSEILPREV (Paris). Fonctionnalites : cartographie 24 juridictions, simulateur conformite AI Act 5 etapes, audit 32 points, comparateur juridictions, analyse geopolitique, textes officiels, obligations article par article.'
+    sys: 'L\'utilisateur navigue sur Sentinel AI, la plateforme de cartographie des risques reglementaires IA de CONSEILPREV (Paris). Fonctionnalites : cartographie 24 juridictions, simulateur conformite AI Act 5 etapes, audit 33 points, comparateur juridictions, analyse geopolitique, textes officiels, obligations article par article.'
   }
 };
 
@@ -6548,7 +6549,7 @@ var SOURCES_DATA = {
   "audit": {
     title: "Audit IA Act — Sources et methodologie",
     items: [
-      { type:"Methodologie", label:"32 points de controle (8 sections)", detail:"Deduits des articles 5, 6, 9 a 17, 43 a 51 et 51 a 55 (GPAI) du Reglement 2024/1689. Grille proprietaire CONSEILPREV." },
+      { type:"Methodologie", label:"33 points de controle (8 sections)", detail:"Deduits des articles 5, 6, 9 a 17, 43 a 51 et 51 a 55 (GPAI) du Reglement 2024/1689. Grille proprietaire CONSEILPREV." },
       { type:"Limite", label:"Auto-evaluation declarative", detail:"L utilisateur coche lui-meme son niveau de conformite. Aucune verification documentaire ni preuve n est demandee dans cette version." },
       { type:"Export", label:"Rapport PDF", detail:"Genere cote client via window.print(). Aucune donnee n est stockee cote serveur ni transmise a CONSEILPREV automatiquement." }
     ]
@@ -9867,7 +9868,7 @@ function auditApplySectorRelevance(){
       info.innerHTML = '📊 <strong>'+sysSecteur.length+' système(s)</strong> du Registre IA pour '+auditRelSectorLabel()+' déterminent les sections ci-dessous comme applicables ou non.';
       info.className = "radar-registre-info radar-registre-ok";
     } else {
-      info.innerHTML = '⚠️ Aucun système du secteur '+auditRelSectorLabel()+' dans le Registre IA — les 32 points restent affichés sans filtrage de pertinence.';
+      info.innerHTML = '⚠️ Aucun système du secteur '+auditRelSectorLabel()+' dans le Registre IA — les 33 points restent affichés sans filtrage de pertinence.';
       info.className = "radar-registre-info radar-registre-warn";
     }
   }
@@ -10535,7 +10536,7 @@ window.templatesRenderPage = function(){
   }
   /* Exports deja disponibles ailleurs */
   items.push({ico:"📐", name:"Matrice RACI — Cartographie des parties prenantes", desc:"Export PDF/Word de votre matrice RACI actuelle, ou génération IA complète.", meta:"Disponible · Parties prenantes", action:"go('parties',null,'GOUVERNANCE','Parties prenantes')"});
-  items.push({ico:"📋", name:"Rapport d'audit de conformité (32 points)", desc:"Export PDF de votre audit EU AI Act avec statut réel de chaque contrôle.", meta:"Disponible · Audit IA Act", action:"openAuditTab()"});
+  items.push({ico:"📋", name:"Rapport d'audit de conformité (33 points)", desc:"Export PDF de votre audit EU AI Act avec statut réel de chaque contrôle.", meta:"Disponible · Audit IA Act", action:"openAuditTab()"});
   items.push({ico:"⚖️", name:"Évaluation FRIA par système", desc:"Évaluation des 8 droits fondamentaux pour vos systèmes à haut risque.", meta:"Disponible · FRIA", action:"go('fria',null,'CONFORMITÉ','Évaluation FRIA')"});
 
   holder.innerHTML = items.map(function(d){
@@ -11141,9 +11142,9 @@ window.cardsExportEvaluer = function(){
   var body = '<table><tr><th>Indicateur</th><th>Valeur</th><th>Détail</th></tr>'
     + '<tr><td>Score FRIA moyen</td><td>' + (d.friaAvg!==null?d.friaAvg:'—') + '</td><td>Droits fondamentaux (Art. 27)</td></tr>'
     + '<tr><td>Systèmes évalués</td><td>' + d.friaCount + '</td><td>sur ' + d.registre.length + ' au registre</td></tr>'
-    + '<tr><td>Conformité Audit</td><td>' + d.auditPct + '%</td><td>32 points de contrôle</td></tr>'
+    + '<tr><td>Conformité Audit</td><td>' + d.auditPct + '%</td><td>33 points de contrôle</td></tr>'
     + '</table>'
-    + '<div class="doc-info">Le scoring multicritère combine : droits fondamentaux (évaluation FRIA par système), sécurité et gouvernance des données (Radar des risques, 6 dimensions pondérées), et performance réglementaire (Audit de conformité, 32 points).</div>';
+    + '<div class="doc-info">Le scoring multicritère combine : droits fondamentaux (évaluation FRIA par système), sécurité et gouvernance des données (Radar des risques, 6 dimensions pondérées), et performance réglementaire (Audit de conformité, 33 points).</div>';
   cardsExportDoc('Scoring multicritère', '② Évaluer · Droits fondamentaux, sécurité, gouvernance', body);
 };
 
@@ -11235,9 +11236,9 @@ window.cardsOpenEvaluer = function(){
     '<div class="bud-synth" style="margin-bottom:16px">'
     + '<div class="bud-synth-card"><div class="bud-synth-lbl">Score FRIA moyen</div><div class="bud-synth-val">'+(d.friaAvg!==null?d.friaAvg:'—')+'</div><div class="bud-synth-sub">Droits fondamentaux (Art. 27)</div></div>'
     + '<div class="bud-synth-card"><div class="bud-synth-lbl">Systèmes évalués</div><div class="bud-synth-val">'+d.friaCount+'</div><div class="bud-synth-sub">sur '+d.registre.length+' au registre</div></div>'
-    + '<div class="bud-synth-card"><div class="bud-synth-lbl">Conformité Audit</div><div class="bud-synth-val">'+d.auditPct+'%</div><div class="bud-synth-sub">32 points de contrôle</div></div>'
+    + '<div class="bud-synth-card"><div class="bud-synth-lbl">Conformité Audit</div><div class="bud-synth-val">'+d.auditPct+'%</div><div class="bud-synth-sub">33 points de contrôle</div></div>'
     + '</div>'
-    + '<p style="font-size:12px;color:var(--muted);line-height:1.6">Le scoring multicritère combine : <strong>droits fondamentaux</strong> (évaluation FRIA par système), <strong>sécurité</strong> et <strong>gouvernance des données</strong> (Radar des risques, 6 dimensions pondérées), et <strong>performance réglementaire</strong> (Audit de conformité, 32 points). Consultez chaque module pour le détail complet.</p>',
+    + '<p style="font-size:12px;color:var(--muted);line-height:1.6">Le scoring multicritère combine : <strong>droits fondamentaux</strong> (évaluation FRIA par système), <strong>sécurité</strong> et <strong>gouvernance des données</strong> (Radar des risques, 6 dimensions pondérées), et <strong>performance réglementaire</strong> (Audit de conformité, 33 points). Consultez chaque module pour le détail complet.</p>',
     '<button class="mat-export-btn" style="background:var(--blue);color:#fff" onclick="document.getElementById(\'cards-modal\').classList.remove(\'on\');go(\'fria\',null,\'CONFORMITÉ\',\'Évaluation FRIA\')">Ouvrir FRIA →</button>'
     + '<button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="document.getElementById(\'cards-modal\').classList.remove(\'on\');go(\'radar\',null,\'RISQUES\',\'Radar multi-critères\')">Ouvrir le Radar →</button>'
     + '<button class="mat-export-btn" style="background:var(--green);color:#fff" onclick="cardsExportEvaluer()">📄 Télécharger le rapport</button>'
@@ -11518,7 +11519,7 @@ var PAGE_GUIDES = {
   'audit-ia-act': {
     title: "Audit IA Act",
     sections: [
-      {h:"À quoi sert cette page", t:"Audit de conformité structuré sur 32 points de contrôle couvrant l ensemble des obligations du Règlement (UE) 2024/1689, organisés par thématique (gouvernance, documentation, supervision humaine, etc.)."},
+      {h:"À quoi sert cette page", t:"Audit de conformité structuré sur 33 points de contrôle couvrant l ensemble des obligations du Règlement (UE) 2024/1689, organisés par thématique (gouvernance, documentation, supervision humaine, etc.)."},
       {h:"Comment l utiliser", t:"Pour chaque point de contrôle, indiquez votre statut réel (conforme / en cours / à réaliser). Le score global se calcule automatiquement. Les 3 cartes Cartographier/Évaluer/Planifier en haut de page synthétisent votre situation et proposent des rapports téléchargeables."}
     ]
   },
@@ -13104,7 +13105,7 @@ var GUIDED_PATHS = [
       {id:'simulateur', label:'Simulateur IA Act', action:'Répondez aux 5 questions de classification pour chaque système IA identifié (interne, fournisseur, ou en projet).', gain:'Détermine en quelques minutes le niveau de risque et les obligations légales exactes — évite de découvrir une obligation critique trop tard dans le projet.', tip:'TPE : suffit à sécuriser une décision GO/NO-GO rapide avant tout investissement. Grand compte : imposez cette étape comme jalon obligatoire avant tout comité d engagement IA.'},
       {id:'registre', label:'Registre IA', action:'Enregistrez chaque système classifié avec sa finalité, son fournisseur et ses données utilisées.', gain:'Constitue l inventaire central exigé par le Règlement — la preuve documentaire en cas de contrôle.', tip:'TPE : 3 à 5 systèmes suffisent souvent à démarrer. Grand compte : structurez par filiale ou direction métier dès le départ pour éviter une reprise fastidieuse.'},
       {id:'maturite', label:'Audit de maturité', action:'Évaluez les 8 piliers (explicabilité, gouvernance, sécurité…) sur une échelle de 1 à 5.', gain:'Identifie les angles morts organisationnels avant même de plonger dans le détail réglementaire — où sont les vraies failles ?', tip:'TPE : concentrez-vous sur 2-3 piliers les plus critiques pour votre activité. Grand compte : répétez l évaluation par direction pour cartographier les écarts internes.'},
-      {id:'audit-ia-act', label:'Audit IA Act', action:'Passez en revue les 32 points de contrôle, en marquant chacun conforme / en cours / à traiter.', gain:'Transforme la maturité générale en plan d action concret, point par point, avec référence légale exacte.', tip:'TPE : traitez d abord les points P1 (sanctions directes). Grand compte : déléguez des sections entières à des référents métier identifiés.'},
+      {id:'audit-ia-act', label:'Audit IA Act', action:'Passez en revue les 33 points de contrôle, en marquant chacun conforme / en cours / à traiter.', gain:'Transforme la maturité générale en plan d action concret, point par point, avec référence légale exacte.', tip:'TPE : traitez d abord les points P1 (sanctions directes). Grand compte : déléguez des sections entières à des référents métier identifiés.'},
       {id:'matrice', label:'Matrice risques', action:'Positionnez chaque système sur les axes probabilité × impact.', gain:'Vue synthétique pour prioriser : tout ne peut pas être traité en même temps, la matrice tranche objectivement.', tip:'TPE : 1 page suffit pour piloter visuellement vos priorités en comité de direction.'},
       {id:'parties', label:'Parties prenantes', action:'Assignez un Responsable, un Approbateur, un Consulté et un Informé (RACI) pour chaque obligation clé.', gain:'Élimine l ambiguïté sur qui doit agir — la première cause de retard dans un programme de conformité.', tip:'Grand compte : formalisez avec les directions juridique, IT et métier dès cette étape, pas après.'},
       {id:'roadmap', label:'Roadmap', action:'Séquencez les actions restantes sur un calendrier avec échéances.', gain:'Donne une trajectoire claire vers l échéance du 2 août 2026 (obligations haut risque).', tip:'Découpez en jalons trimestriels — un programme sans étapes intermédiaires perd en visibilité après 2-3 mois.'},
@@ -13118,7 +13119,7 @@ var GUIDED_PATHS = [
     pitch: 'Vous structurez le cadre de contrôle permanent — pas un audit ponctuel, mais un dispositif qui tient dans le temps.',
     steps: [
       {id:'maturite', label:'Audit de maturité', action:'Notez chaque pilier de gouvernance et documentez les justifications de score.', gain:'Établit la baseline de référence pour mesurer les progrès lors des audits suivants.', tip:'Refaites cette évaluation tous les 6 mois pour objectiver la progression réelle, pas perçue.'},
-      {id:'audit-ia-act', label:'Audit IA Act', action:'Contrôlez les 32 obligations et liez chaque point à une preuve documentaire (politique, procédure, registre).', gain:'Transforme une déclaration d intention en dispositif de contrôle opposable en cas d inspection.', tip:'Conservez les preuves dans la Base de connaissance pour une traçabilité immédiate.'},
+      {id:'audit-ia-act', label:'Audit IA Act', action:'Contrôlez les 33 obligations et liez chaque point à une preuve documentaire (politique, procédure, registre).', gain:'Transforme une déclaration d intention en dispositif de contrôle opposable en cas d inspection.', tip:'Conservez les preuves dans la Base de connaissance pour une traçabilité immédiate.'},
       {id:'parties', label:'Parties prenantes', action:'Formalisez qui valide, qui exécute et qui est informé pour chaque processus de contrôle.', gain:'Un cadre de gouvernance sans porteurs identifiés reste un document mort — ici, il devient opérationnel.', tip:'Grand compte : alignez ce RACI sur votre cadre GRC existant (ISO 27001, NIS2) plutôt que d en créer un nouveau parallèle.'},
       {id:'regs', label:'Réglementations', action:'Consultez le texte officiel article par article, filtré selon votre rôle (fournisseur, déployeur, GPAI).', gain:'Évite les interprétations approximatives — la source légale exacte, pas un résumé tiers.', tip:'Utilisez le filtre par rôle pour ne montrer aux équipes que ce qui les concerne réellement.'},
       {id:'veille', label:'Veille qualifiée', action:'Consultez l analyse d impact automatique de chaque actualité réglementaire.', gain:'Anticipe les évolutions avant qu elles ne deviennent des urgences de mise en conformité.', tip:'Consultez en début de semaine, intégrez les alertes critiques au point d équipe.'},
