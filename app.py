@@ -2335,6 +2335,63 @@ def call_mistral(messages, max_tokens=800, temperature=0.7):
         logger.error(f'MISTRAL_ERR: {e}')
         return False, str(e)
 
+def ai_complete_cross_checked(messages, system='', max_tokens=800, temperature=0.7):
+    """Appelle Claude ET Mistral en parallele (threads), compare les 2 reponses via
+    un 3eme appel leger (detection de divergence factuelle, pas une simple comparaison
+    de texte qui serait presque toujours 'differente'). Retourne la reponse Claude
+    (consideree primaire) avec un signal de divergence si les 2 modeles se contredisent
+    sur un point factuel (numero d'article, sanction, date...).
+    Cout et latence plus eleves qu'un appel simple : reserve au Chat Conformite,
+    ou la fiabilite prime sur la rapidite."""
+    results = {}
+
+    def _run_claude():
+        results['claude'] = call_anthropic(messages, system, max_tokens, temperature)
+
+    def _run_mistral():
+        msgs_with_system = ([{'role': 'system', 'content': system}] + messages) if system else messages
+        results['mistral'] = call_mistral(msgs_with_system, max_tokens, temperature)
+
+    t1 = threading.Thread(target=_run_claude)
+    t2 = threading.Thread(target=_run_mistral)
+    t1.start(); t2.start()
+    t1.join(timeout=35); t2.join(timeout=35)
+
+    ok_claude, reply_claude = results.get('claude', (False, 'timeout'))
+    ok_mistral, reply_mistral = results.get('mistral', (False, 'timeout'))
+
+    if not ok_claude and not ok_mistral:
+        return False, 'Les deux moteurs IA sont indisponibles, réessayez.', None, None
+    if not ok_claude:
+        return True, reply_mistral, 'mistral (claude indisponible)', None
+    if not ok_mistral:
+        return True, reply_claude, 'claude (mistral indisponible)', None
+
+    # Les deux ont repondu : detecter une divergence factuelle via un 3e appel leger.
+    divergence_warning = None
+    try:
+        compare_prompt = (
+            "Compare ces deux reponses a la MEME question reglementaire IA. "
+            "Reponds UNIQUEMENT par 'DIVERGENCE: <description courte>' si elles se "
+            "contredisent sur un FAIT precis (numero d'article, montant de sanction, "
+            "date d'application, obligation legale). Reponds UNIQUEMENT 'OK' si elles "
+            "sont factuellement compatibles, meme reformulees differemment.\\n\\n"
+            f"Reponse A (Claude):\\n{reply_claude[:600]}\\n\\n"
+            f"Reponse B (Mistral):\\n{reply_mistral[:600]}"
+        )
+        ok_check, check_result = call_anthropic(
+            [{'role': 'user', 'content': compare_prompt}],
+            system='Tu es un verificateur factuel strict et concis.',
+            max_tokens=120, temperature=0
+        )
+        if ok_check and check_result.strip().upper().startswith('DIVERGENCE'):
+            divergence_warning = check_result.strip()
+            logger.warning(f"CHAT_DIVERGENCE_DETECTED: {divergence_warning}")
+    except Exception as e:
+        logger.error(f"CHAT_CROSSCHECK_FAILED: {e}")
+
+    return True, reply_claude, 'claude+mistral (verifie)', divergence_warning
+
 
 MISTRAL_SYSTEM = (
     "Tu es l'assistant reglementaire de Sentinel AI (CONSEILPREV), specialise dans le "
@@ -2611,17 +2668,19 @@ def chat():
                 messages.append({"role": h['role'], "content": str(h['content'])[:1000]})
         messages.append({"role": "user", "content": user_msg})
 
-        # Moteur hybride : Claude primaire, Mistral fallback
-        ok, reply, model_used = ai_complete(
-            messages, system=MISTRAL_SYSTEM,
-            max_tokens=800, temperature=0.7, prefer='claude'
+        # Double verification : Claude ET Mistral interroges en parallele, comparaison
+        # automatique des reponses pour detecter toute divergence factuelle (numero
+        # d'article, sanction, date). Plus lent et plus couteux qu'un appel simple,
+        # mais la fiabilite prime pour un assistant reglementaire.
+        ok, reply, model_used, divergence = ai_complete_cross_checked(
+            messages, system=MISTRAL_SYSTEM, max_tokens=800, temperature=0.7
         )
         if not ok:
             bf_protector.record_attempt(bf_key, success=False)
             logger.error(f"CHAT_ALL_FAILED {ip}: {reply}")
             return jsonify({"error": "Service IA temporairement indisponible, réessayez"}), 503
         bf_protector.record_attempt(bf_key, success=True)
-        return jsonify({"reply": reply, "model": model_used})
+        return jsonify({"reply": reply, "model": model_used, "divergence": divergence})
     except requests.Timeout:
         return jsonify({"error": "Délai dépassé, réessayez"}), 504
     except Exception as e:
