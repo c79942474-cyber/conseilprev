@@ -3653,11 +3653,38 @@ em,.hero-em{
 </style>
 <style>
 @keyframes navSentinelPulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(109,40,217,.45); }
-  50% { box-shadow: 0 0 0 6px rgba(109,40,217,0); }
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(196,107,255,.55), 0 0 8px 1px rgba(109,40,217,.4);
+    background: rgba(109,40,217,.22);
+    border-color: rgba(196,181,232,.4);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 9px rgba(196,107,255,0), 0 0 22px 5px rgba(168,85,247,.75);
+    background: rgba(147,51,234,.55);
+    border-color: rgba(216,180,254,.9);
+    transform: scale(1.06);
+  }
 }
-.nav-sentinel-btn { animation: navSentinelPulse 2.8s ease-in-out infinite; }
-.nav-sentinel-btn:hover { animation: none; }
+@keyframes navSentinelShimmer {
+  0% { background-position: -150% 0; }
+  100% { background-position: 250% 0; }
+}
+.nav-sentinel-btn {
+  position: relative;
+  overflow: hidden;
+  animation: navSentinelPulse 1.8s ease-in-out infinite;
+}
+.nav-sentinel-btn::after {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(110deg, transparent 40%, rgba(255,255,255,.55) 50%, transparent 60%);
+  background-size: 200% 100%;
+  animation: navSentinelShimmer 2.2s ease-in-out infinite;
+  pointer-events: none;
+}
+.nav-sentinel-btn:hover { animation: none; transform: scale(1.04) !important; }
+.nav-sentinel-btn:hover::after { animation: none; opacity: 0; }
 </style>
 </head>
 <body>
