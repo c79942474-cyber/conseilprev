@@ -2797,6 +2797,7 @@ def sentauth_init_db():
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS invitation_expire TEXT")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS rgpd_consenti BOOLEAN DEFAULT FALSE")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS rgpd_consenti_date TEXT")
+            cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS plan TEXT DEFAULT 'pro'")
             conn.commit()
         except Exception: conn.rollback()
     else:
@@ -2818,7 +2819,7 @@ def sentauth_current_client():
     """Retourne le dict client connecte, ou {'is_conseilprev': True} si acces
     CONSEILPREV via le lien maitre, ou None si non authentifie."""
     if session.get('is_conseilprev'):
-        return {'is_conseilprev': True, 'id': None, 'nom_entreprise': 'CONSEILPREV'}
+        return {'is_conseilprev': True, 'id': None, 'nom_entreprise': 'CONSEILPREV', 'plan': 'entreprise'}
     client_id = session.get('client_id')
     if not client_id:
         return None
@@ -2830,7 +2831,7 @@ def sentauth_current_client():
     if not row:
         return None
     d = dict(row) if not isinstance(row, dict) else row
-    return {'is_conseilprev': False, 'id': d['id'], 'nom_entreprise': d['nom_entreprise'], 'email': d['email']}
+    return {'is_conseilprev': False, 'id': d['id'], 'nom_entreprise': d['nom_entreprise'], 'email': d['email'], 'plan': d.get('plan') or 'pro'}
 
 def sentinel_login_required(f):
     @wraps(f)
@@ -2841,6 +2842,22 @@ def sentinel_login_required(f):
                 return jsonify({'error': 'Authentification requise.'}), 401
             return redirect('/login')
         request.current_client = client
+        return f(*args, **kwargs)
+    return wrapper
+
+def require_paid_plan(f):
+    """Protege les API de donnees reservees aux plans Pro/Entreprise (et CONSEILPREV).
+    Le plan Gratuit (Apercu, Simulateur, Reglementations, Hub Training) n'a pas
+    besoin de ce decorateur car ces pages n'ont pas de donnees sensibles a proteger."""
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        client = sentauth_current_client()
+        if not client:
+            return jsonify({'error': 'Authentification requise.'}), 401
+        if client.get('is_conseilprev'):
+            return f(*args, **kwargs)
+        if (client.get('plan') or 'pro') == 'gratuit':
+            return jsonify({'error': 'Cette fonctionnalite necessite un plan Pro ou Entreprise.', 'plan_requis': True}), 403
         return f(*args, **kwargs)
     return wrapper
 
@@ -3155,6 +3172,9 @@ def sentauth_register():
     password = data.get('password') or ''
     rgpd_consent = bool(data.get('rgpd_consent'))
     captcha_answer = data.get('captcha_answer')
+    plan = (data.get('plan') or 'pro').strip().lower()
+    if plan not in ('gratuit', 'pro', 'entreprise'):
+        plan = 'pro'
 
     try:
         if int(captcha_answer) != session.get('register_captcha_answer'):
@@ -3180,11 +3200,11 @@ def sentauth_register():
     cur = conn.cursor()
     try:
         if REGISTRE_USE_PG:
-            cur.execute('''INSERT INTO clients (nom_entreprise, email, mot_de_passe_hash, date_creation, invitation_token, invitation_expire, actif, rgpd_consenti, rgpd_consenti_date)
-                VALUES (%s,%s,%s,%s,%s,%s,FALSE,TRUE,%s) RETURNING id''', (nom, email, pw_hash, now, verify_token, verify_expire, now))
+            cur.execute('''INSERT INTO clients (nom_entreprise, email, mot_de_passe_hash, date_creation, invitation_token, invitation_expire, actif, rgpd_consenti, rgpd_consenti_date, plan)
+                VALUES (%s,%s,%s,%s,%s,%s,FALSE,TRUE,%s,%s) RETURNING id''', (nom, email, pw_hash, now, verify_token, verify_expire, now, plan))
             new_id = cur.fetchone()['id']
         else:
-            cur.execute('INSERT INTO clients (nom_entreprise, email, mot_de_passe_hash, date_creation, invitation_token, invitation_expire, actif, rgpd_consenti, rgpd_consenti_date) VALUES (?,?,?,?,?,?,0,1,?)', (nom, email, pw_hash, now, verify_token, verify_expire, now))
+            cur.execute('INSERT INTO clients (nom_entreprise, email, mot_de_passe_hash, date_creation, invitation_token, invitation_expire, actif, rgpd_consenti, rgpd_consenti_date, plan) VALUES (?,?,?,?,?,?,0,1,?,?)', (nom, email, pw_hash, now, verify_token, verify_expire, now, plan))
             new_id = cur.lastrowid
         conn.commit()
     except Exception:
@@ -3366,6 +3386,7 @@ def registre_row_to_dict(row):
     }
 
 @app.route('/api/registre', methods=['GET'])
+@require_paid_plan
 @rate_limit(limit=60, window=60)
 def registre_list():
     conn = registre_get_db()
@@ -3376,6 +3397,7 @@ def registre_list():
     return jsonify({'systemes': [registre_row_to_dict(r) for r in rows], 'moteur': 'postgres' if REGISTRE_USE_PG else 'sqlite'})
 
 @app.route('/api/registre', methods=['POST'])
+@require_paid_plan
 @rate_limit(limit=30, window=60)
 def registre_create():
     data = request.get_json(force=True) or {}
@@ -3418,6 +3440,7 @@ def registre_create():
     return jsonify({'systeme': registre_row_to_dict(row)}), 201
 
 @app.route('/api/registre/<int:sys_id>', methods=['PUT'])
+@require_paid_plan
 @rate_limit(limit=30, window=60)
 def registre_update(sys_id):
     data = request.get_json(force=True) or {}
@@ -3467,6 +3490,7 @@ def registre_update(sys_id):
         return jsonify({'systeme': registre_row_to_dict(row)})
 
 @app.route('/api/registre/<int:sys_id>', methods=['DELETE'])
+@require_paid_plan
 @rate_limit(limit=30, window=60)
 def registre_delete(sys_id):
     conn = registre_get_db()
@@ -3482,6 +3506,7 @@ def registre_delete(sys_id):
     return jsonify({'deleted': sys_id})
 
 @app.route('/api/registre/status', methods=['GET'])
+@require_paid_plan
 @rate_limit(limit=30, window=60)
 def registre_status():
     return jsonify({
@@ -3521,6 +3546,7 @@ def registre_row_to_dict_partial(row):
     return {'nom': row[0], 'secteur': row[1], 'classification': row[2], 'type_systeme': row[3]}
 
 @app.route('/api/veille/qualifiee', methods=['GET'])
+@require_paid_plan
 @rate_limit(limit=15, window=60)
 def veille_qualifiee():
     """Scoring de pertinence IA des actualites par rapport au registre reel du client.
@@ -3688,6 +3714,7 @@ def histo_row_to_dict(row):
     }
 
 @app.route('/api/historique', methods=['GET'])
+@require_paid_plan
 @rate_limit(limit=60, window=60)
 def historique_list():
     page_filter = request.args.get('page_origine', '').strip()
@@ -3709,6 +3736,7 @@ def historique_list():
     })
 
 @app.route('/api/historique', methods=['POST'])
+@require_paid_plan
 @rate_limit(limit=60, window=60)
 def historique_create():
     data = request.get_json(force=True) or {}
@@ -3746,6 +3774,7 @@ def historique_create():
     return jsonify({'calcul': histo_row_to_dict(row)}), 201
 
 @app.route('/api/historique/<int:calc_id>', methods=['PUT'])
+@require_paid_plan
 @rate_limit(limit=60, window=60)
 def historique_update(calc_id):
     data = request.get_json(force=True) or {}
@@ -3774,6 +3803,7 @@ def historique_update(calc_id):
     return jsonify({'calcul': histo_row_to_dict(row)})
 
 @app.route('/api/historique/<int:calc_id>', methods=['DELETE'])
+@require_paid_plan
 @rate_limit(limit=30, window=60)
 def historique_delete(calc_id):
     """Droit a l effacement (Art. 17 RGPD) — suppression manuelle a la demande du client."""
@@ -3790,6 +3820,7 @@ def historique_delete(calc_id):
     return jsonify({'deleted': calc_id})
 
 @app.route('/api/historique/purge-all', methods=['DELETE'])
+@require_paid_plan
 @rate_limit(limit=5, window=60)
 def historique_purge_all():
     """Droit a l effacement en lot (Art. 17 RGPD) — suppression complete de l historique."""
