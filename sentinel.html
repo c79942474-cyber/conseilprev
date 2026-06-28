@@ -585,7 +585,9 @@ textarea.form-el{min-height:86px;resize:vertical}
 .sim-radio-text{font-size:12px;color:var(--ink);line-height:1.4}
 .sim-radio-sub{font-size:10px;color:var(--muted);margin-top:2px}
 .sim-checkbox-group{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
-.sim-checkbox-opt{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--rule);border-radius:3px;cursor:pointer;font-size:11px;color:var(--ink2);transition:all .15s}
+.sim-checkbox-opt{display:flex;align-items:flex-start;gap:8px;padding:8px 12px;border:1px solid var(--rule);border-radius:3px;cursor:pointer;font-size:11px;color:var(--ink2);transition:all .15s}
+.sim-checkbox-opt .sim-checkbox-box{margin-top:1px}
+.sim-checkbox-sub{font-size:9.5px;color:var(--muted);margin-top:2px;line-height:1.4}
 .sim-checkbox-opt:hover{border-color:var(--accent)}
 .sim-checkbox-opt.checked{border-color:var(--accent);background:rgba(184,50,34,.05);color:var(--ink)}
 .sim-checkbox-box{width:14px;height:14px;border:2px solid var(--rule2);border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px}
@@ -2372,14 +2374,35 @@ textarea.form-el{min-height:86px;resize:vertical}
         <div class="sim-q-label">Votre système est-il utilisé dans l'un des domaines à haut risque de l'Annexe III ? <span class="sim-q-art">Art. 6(2) + Annexe III</span></div>
         <div class="sim-q-hint">Sélectionnez tous les domaines applicables.</div>
         <div class="sim-checkbox-group" id="cb-annexe3">
-          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-bio')"><div class="sim-checkbox-box">✓</div>Biométrie</div>
-          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-infra')"><div class="sim-checkbox-box">✓</div>Infrastructures critiques</div>
-          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-edu')"><div class="sim-checkbox-box">✓</div>Éducation / Formation</div>
-          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-emploi')"><div class="sim-checkbox-box">✓</div>Emploi / RH / Recrutement</div>
-          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-essentiels')"><div class="sim-checkbox-box">✓</div>Services essentiels / Crédit / Aides</div>
-          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-law')"><div class="sim-checkbox-box">✓</div>Application de la loi / Justice</div>
-          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-migration')"><div class="sim-checkbox-box">✓</div>Migration / Asile / Frontières</div>
-          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-demo')"><div class="sim-checkbox-box">✓</div>Démocratie / Élections</div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-bio')"><div class="sim-checkbox-box">✓</div><div><div>Biométrie</div><div class="sim-checkbox-sub">Identification à distance · catégorisation par attributs sensibles · reconnaissance d'émotions</div></div></div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-infra')"><div class="sim-checkbox-box">✓</div><div><div>Infrastructures critiques</div><div class="sim-checkbox-sub">Composant de sécurité : réseaux numériques, trafic routier, eau, gaz, chauffage, électricité</div></div></div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-edu')"><div class="sim-checkbox-box">✓</div><div><div>Éducation / Formation</div><div class="sim-checkbox-sub">Accès/admission · évaluation des acquis · orientation du niveau · surveillance d'examens</div></div></div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-emploi')"><div class="sim-checkbox-box">✓</div><div><div>Emploi / RH / Recrutement</div><div class="sim-checkbox-sub">Recrutement/sélection · conditions de travail, promotion, licenciement, surveillance des performances</div></div></div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-essentiels')"><div class="sim-checkbox-box">✓</div><div><div>Services essentiels / Crédit / Aides</div><div class="sim-checkbox-sub">Aide sociale · solvabilité/note de crédit · assurance vie-santé · tri des urgences médicales</div></div></div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-law')"><div class="sim-checkbox-box">✓</div><div><div>Application de la loi / Justice</div><div class="sim-checkbox-sub">Évaluation de risque de victimisation/récidive · polygraphes · fiabilité des preuves · profilage pénal</div></div></div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-migration')"><div class="sim-checkbox-box">✓</div><div><div>Migration / Asile / Frontières</div><div class="sim-checkbox-sub">Polygraphes aux frontières · évaluation de risque migratoire · examen de demandes d'asile/visa · identification</div></div></div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-demo')"><div class="sim-checkbox-box">✓</div><div><div>Démocratie / Élections</div><div class="sim-checkbox-sub">Aide à l'interprétation/application de la loi · influence sur le résultat d'une élection ou d'un référendum</div></div></div>
+        </div>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Si un domaine Annexe III est sélectionné — votre système remplit-il une de ces conditions ? <span class="sim-q-art">Art. 6(3) — Exception au haut risque</span></div>
+        <div class="sim-q-hint">Un système relevant d'un domaine Annexe III n'est pas automatiquement haut risque s'il remplit une de ces conditions.</div>
+        <div class="sim-radio-group" id="r-exception63">
+          <div class="sim-radio-opt" onclick="simRadio('r-exception63','procedurale')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Tâche procédurale étroite<div class="sim-radio-sub">Ex: formatage de données, extraction d'informations sans interprétation</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-exception63','amelioration')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Améliore le résultat d'une activité humaine déjà réalisée<div class="sim-radio-sub">Ex: correction orthographique d'un texte déjà rédigé par un humain</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-exception63','detection')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Détecte des écarts sans se substituer à l'évaluation humaine<div class="sim-radio-sub">Ex: alerte sur anomalie, sans influencer la décision finale</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-exception63','preparatoire')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Tâche préparatoire à une évaluation<div class="sim-radio-sub">Ex: pré-tri ou pré-classement avant examen humain complet</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-exception63','aucune')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Aucune de ces conditions<div class="sim-radio-sub">Le système prend ou influence directement la décision</div></div></div>
+        </div>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Votre système effectue-t-il un profilage de personnes physiques ? <span class="sim-q-art">Art. 6(3), dernier alinéa</span></div>
+        <div class="sim-q-hint">Le profilage annule systématiquement l'exception ci-dessus — le système reste haut risque dans tous les cas.</div>
+        <div class="sim-radio-group" id="r-profilage">
+          <div class="sim-radio-opt" onclick="simRadio('r-profilage','oui')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui<div class="sim-radio-sub">Évaluation automatisée de traits, comportements ou caractéristiques personnelles</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-profilage','non')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Non<div class="sim-radio-sub">Pas de profilage individuel</div></div></div>
         </div>
       </div>
 
@@ -4906,7 +4929,7 @@ var AUDIT_SECTIONS = [
     items:[
       {id:'a6_1', title:'Cartographie complète des systèmes IA', desc:'Inventaire de tous les systèmes IA déployés ou en développement, avec identification de leur type, finalité et secteur d\'application.', art:'Art. 6, Art. 51', prio:'p1'},
       {id:'a6_2', title:'Classification selon l\'Annexe III (8 domaines)', desc:'Évaluation formelle de chaque système contre les 8 domaines à haut risque de l\'Annexe III : biométrie, infrastructures critiques, éducation, emploi, services essentiels, application de la loi, migration, démocratie.', art:'Art. 6(2), Annexe III', prio:'p1'},
-      {id:'a6_3', title:'Documentation de la décision de classification', desc:'Pour les systèmes non classés haut risque issus de domaines Annexe III, documenter formellement l\'évaluation avant mise sur le marché (Art. 6(3)).', art:'Art. 6(3)', prio:'p2'},
+      {id:'a6_3', title:'Documentation de la décision de classification', desc:'Pour les systèmes non classés haut risque issus de domaines Annexe III (en application de l\'exception de l\'Art. 6(3)), documenter formellement l\'évaluation avant mise sur le marché — le fournisseur reste soumis à l\'obligation d\'enregistrement (Art. 49(2)).', art:'Art. 6(4)', prio:'p2'},
       {id:'a6_4', title:'Procédure de reclassification continue', desc:'Mécanisme de surveillance permettant de reclassifier un système si son usage ou ses capacités évoluent.', art:'Art. 6, Art. 9', prio:'p2'},
     ]
   },
@@ -5520,6 +5543,8 @@ window.simNext = function(from){
     SIM_DATA.subliminal = simGetRadio('r-subliminal');
     SIM_DATA.biometrie = simGetRadio('r-biometrie');
     SIM_DATA.annexe3 = simGetCheckboxes('cb-annexe3');
+    SIM_DATA.exception6_3 = simGetRadio('r-exception63');
+    SIM_DATA.profilage = simGetRadio('r-profilage');
     SIM_DATA.impact = simGetRadio('r-impact');
     SIM_DATA.interaction = simGetRadio('r-interaction');
   }
@@ -5607,7 +5632,7 @@ function simGetCheckboxes(groupId){
 /* ══ MOTEUR DE CLASSIFICATION ══ */
 function simClassify(){
   var d = SIM_DATA;
-  var result = { level: 'minimal', score: 2.0, art5: false, article: 'Art. 6(3)', color: 'var(--green)', badge: 'RISQUE MINIMAL', obligations: [], gaps: [], sanctions: {}, timeline: [] };
+  var result = { level: 'minimal', score: 2.0, art5: false, article: 'Aucune classification à risque particulière', color: 'var(--green)', badge: 'RISQUE MINIMAL', obligations: [], gaps: [], sanctions: {}, timeline: [] };
 
   /* Art. 5 — Pratiques interdites */
   var isInterdit = false;
@@ -5630,9 +5655,18 @@ function simClassify(){
   var isHautRisque = false;
   var hautRisqueFactor = 1.0;
 
+  /* Art. 6(3) — exception : un systeme Annexe III n'est PAS automatiquement haut
+     risque s'il remplit une des 4 conditions, SAUF s'il effectue un profilage
+     (qui annule systematiquement l'exception, dernier alinea de l'Art. 6(3)). */
+  var exceptionApplicable = d.exception6_3 && d.exception6_3 !== 'aucune' && d.profilage !== 'oui';
+
   var annexe3Secteurs = ['bio','infra','education','emploi','essentiels','law','migration'];
-  if(annexe3Secteurs.includes(d.secteur)) isHautRisque = true;
-  if(d.annexe3 && d.annexe3.length > 0) isHautRisque = true;
+  if(annexe3Secteurs.includes(d.secteur) && !exceptionApplicable) isHautRisque = true;
+  if(d.annexe3 && d.annexe3.length > 0 && !exceptionApplicable) isHautRisque = true;
+
+  if(d.annexe3 && d.annexe3.length > 0 && exceptionApplicable){
+    result.exception_note = 'Votre système relève d\'un domaine Annexe III mais remplit l\'exception de l\'Art. 6(3) — il n\'est donc pas automatiquement classé haut risque. Documentez cette évaluation avant mise sur le marché (Art. 6(4)) : vous restez soumis à l\'obligation d\'enregistrement (Art. 49(2)).';
+  }
   if(['scoring','decision_auto','triage','bio_post','emotion','face_reco','surveillance'].includes(d.type)) isHautRisque = true;
   if(d.impact === 'individuel') hautRisqueFactor = 1.3;
   if(['sante','finance','public','law','infra','migration'].includes(d.secteur)) hautRisqueFactor = Math.max(hautRisqueFactor, 1.2);
@@ -5798,6 +5832,9 @@ function simRender(){
   var extra = "";
   if(classif.extra_territorial){
     extra = "<div style=\"background:rgba(28,90,138,.08);border:1px solid rgba(28,90,138,.2);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--blue);margin-bottom:16px\"><strong>Extraterritorialite (Art. 2)</strong> : Organisation hors UE visant le marche EU. Mandataire UE obligatoire avant mise sur le marche (Art. 22).</div>";
+  }
+  if(classif.exception_note){
+    extra += "<div style=\"background:rgba(45,122,71,.08);border:1px solid rgba(45,122,71,.25);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--green);margin-bottom:16px\"><strong>Exception Art. 6(3) appliquee</strong> : " + classif.exception_note + "</div>";
   }
   var gpaiInfo = "";
   if(d.gpai && d.gpai !== 'non'){
