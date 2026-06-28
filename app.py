@@ -1,4 +1,4 @@
-import os, re as _re, time, hashlib, json, logging, threading
+import os, re as _re, time, hashlib, json, logging, threading, base64
 import requests, feedparser
 import smtplib, ssl
 from email.mime.multipart import MIMEMultipart
@@ -2917,11 +2917,50 @@ try:
 except Exception as _e:
     logger.error(f"AUTH — erreur init table clients : {_e}")
 
+CONSEILPREV_INTERNAL_EMAIL = 'conseilprev@internal.system'
+
+def ensure_conseilprev_client_id():
+    """Garantit l'existence d'un enregistrement CONSEILPREV dans la table clients
+    (idempotent — cree au premier appel, retrouve ensuite). Necessaire pour que
+    CONSEILPREV ait un vrai client_id numerique, comme tout client normal, afin
+    de pouvoir lui assigner les donnees du Registre IA crees avant l isolation
+    par client (migration)."""
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql(
+        'SELECT id FROM clients WHERE email=%s', 'SELECT id FROM clients WHERE email=?'
+    ), (CONSEILPREV_INTERNAL_EMAIL,))
+    row = cur.fetchone()
+    if row:
+        cid = row['id'] if isinstance(row, dict) else row[0]
+        conn.close()
+        return cid
+    now = datetime.utcnow().isoformat()
+    if REGISTRE_USE_PG:
+        cur.execute(
+            "INSERT INTO clients (nom_entreprise, email, actif, rgpd_consenti, rgpd_consenti_date, date_creation, plan) "
+            "VALUES (%s,%s,TRUE,TRUE,%s,%s,'entreprise') RETURNING id",
+            ('CONSEILPREV', CONSEILPREV_INTERNAL_EMAIL, now, now)
+        )
+        cid = cur.fetchone()['id']
+    else:
+        cur.execute(
+            "INSERT INTO clients (nom_entreprise, email, actif, rgpd_consenti, rgpd_consenti_date, date_creation, plan) "
+            "VALUES (?,?,1,1,?,?,'entreprise')",
+            ('CONSEILPREV', CONSEILPREV_INTERNAL_EMAIL, now, now)
+        )
+        cid = cur.lastrowid
+    conn.commit()
+    conn.close()
+    logger.info(f"CONSEILPREV_CLIENT_CREATED id={cid}")
+    return cid
+
+
 def sentauth_current_client():
     """Retourne le dict client connecte, ou {'is_conseilprev': True} si acces
     CONSEILPREV via le lien maitre, ou None si non authentifie."""
     if session.get('is_conseilprev'):
-        return {'is_conseilprev': True, 'id': None, 'nom_entreprise': 'CONSEILPREV', 'plan': 'entreprise'}
+        return {'is_conseilprev': True, 'id': ensure_conseilprev_client_id(), 'nom_entreprise': 'CONSEILPREV', 'plan': 'entreprise'}
     client_id = session.get('client_id')
     if not client_id:
         return None
@@ -3007,6 +3046,125 @@ def email_log_record(destinataire, sujet, methode, succes, raison_echec=None):
         conn.close()
     except Exception as _e:
         logger.error(f"EMAIL_LOG_RECORD_FAILED : {_e}")
+
+# ══════════════════════════════════════════════════════════
+# RAPPORT DE CARTOGRAPHIE AUTOMATIQUE — genere cote serveur
+# (fpdf2, pure Python, aucune dependance systeme) et envoye
+# par email apres une periode de stabilite (debouncing) suite
+# a une modification du Registre IA. Premiere brique pilote
+# du systeme de documents vivants demande par le client.
+# ══════════════════════════════════════════════════════════
+from fpdf import FPDF
+
+CLASSIF_LABELS_PDF = {
+    'inacceptable': 'Risque inacceptable (interdit)',
+    'haut': 'Haut risque',
+    'limite': 'Risque limite (transparence)',
+    'minimal': 'Risque minimal',
+    'a_evaluer': 'A evaluer',
+}
+
+def generate_cartographie_pdf_bytes(client_id):
+    """Construit le PDF de cartographie a partir du Registre IA reel du client.
+    Retourne les bytes du PDF, ou None si le client n'a aucun systeme enregistre."""
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql(
+        'SELECT * FROM systemes_ia WHERE client_id=%s ORDER BY classification, nom',
+        'SELECT * FROM systemes_ia WHERE client_id=? ORDER BY classification, nom'
+    ), (client_id,))
+    rows = [dict(r) if not isinstance(r, dict) else r for r in cur.fetchall()]
+    conn.close()
+    if not rows:
+        return None
+
+    pdf = FPDF()
+    pdf.set_auto_page_break(auto=True, margin=18)
+    pdf.add_page()
+    pdf.set_font('Helvetica', 'B', 18)
+    pdf.cell(0, 12, 'Cartographie des systemes IA', ln=True)
+    pdf.set_font('Helvetica', '', 10)
+    pdf.set_text_color(120, 120, 120)
+    pdf.cell(0, 6, f'CONSEILPREV — Genere le {datetime.utcnow().strftime("%d/%m/%Y a %H:%M")} UTC', ln=True)
+    pdf.ln(6)
+    pdf.set_text_color(0, 0, 0)
+
+    counts = {}
+    for r in rows:
+        c = r.get('classification') or 'a_evaluer'
+        counts[c] = counts.get(c, 0) + 1
+
+    pdf.set_font('Helvetica', 'B', 12)
+    pdf.cell(0, 8, f'Synthese — {len(rows)} systeme(s) au registre', ln=True)
+    pdf.set_font('Helvetica', '', 10)
+    for classif, label in CLASSIF_LABELS_PDF.items():
+        n = counts.get(classif, 0)
+        if n > 0:
+            pdf.cell(0, 6, f'  {label} : {n}', ln=True)
+    pdf.ln(6)
+
+    pdf.set_font('Helvetica', 'B', 12)
+    pdf.cell(0, 8, 'Detail par systeme', ln=True)
+    for r in rows:
+        pdf.set_font('Helvetica', 'B', 10)
+        pdf.multi_cell(0, 6, r.get('nom') or 'Sans nom')
+        pdf.set_font('Helvetica', '', 9)
+        classif_label = CLASSIF_LABELS_PDF.get(r.get('classification'), 'A evaluer')
+        pdf.multi_cell(0, 5, f"Classification : {classif_label}  ·  Secteur : {r.get('secteur') or '-'}")
+        if r.get('finalite'):
+            pdf.multi_cell(0, 5, f"Finalite : {r['finalite'][:300]}")
+        pdf.ln(3)
+
+    return bytes(pdf.output())
+
+
+def send_cartographie_report(client_id, client_email, client_nom):
+    """Genere le PDF de cartographie et l'envoie par email avec piece jointe.
+    Appelee uniquement apres la periode de stabilite du debouncer."""
+    try:
+        pdf_bytes = generate_cartographie_pdf_bytes(client_id)
+        if not pdf_bytes:
+            return
+        pdf_b64 = base64.b64encode(pdf_bytes).decode('ascii')
+        html = (
+            f"<p>Bonjour,</p><p>Votre Registre IA a ete mis a jour. "
+            f"Vous trouverez ci-joint la cartographie actualisee de vos systemes IA.</p>"
+            f"<p>CONSEILPREV — Sentinel AI</p>"
+        )
+        ok, result = send_via_brevo_api(
+            client_email, client_nom,
+            "Cartographie IA mise a jour — Sentinel AI",
+            html,
+            attachments=[{'content': pdf_b64, 'name': 'cartographie-ia.pdf'}],
+            tags=['rapport-auto-cartographie']
+        )
+        email_log_record(client_email, "Cartographie IA mise a jour", 'brevo_api (auto)', ok, None if ok else str(result))
+        logger.info(f"CARTOGRAPHIE_REPORT_SENT client={client_id} ok={ok}")
+    except Exception as e:
+        logger.error(f"CARTOGRAPHIE_REPORT_FAILED client={client_id}: {e}")
+
+
+# ── Debouncing : un seul envoi apres 5 min de stabilite, pas un par modification ──
+_pending_report_timers = {}
+_pending_report_lock = threading.Lock()
+REPORT_DEBOUNCE_SECONDS = 300  # 5 minutes
+
+def schedule_cartographie_report(client_id, client_email, client_nom):
+    """Annule le timer en cours pour ce client (s'il existe) et en programme un
+    nouveau. Le rapport n'est genere et envoye qu'apres 5 minutes SANS nouvelle
+    modification — evite d'envoyer un email a chaque clic individuel."""
+    with _pending_report_lock:
+        existing = _pending_report_timers.get(client_id)
+        if existing:
+            existing.cancel()
+        timer = threading.Timer(
+            REPORT_DEBOUNCE_SECONDS,
+            send_cartographie_report,
+            args=(client_id, client_email, client_nom)
+        )
+        timer.daemon = True
+        _pending_report_timers[client_id] = timer
+        timer.start()
 
 @app.route('/api/admin/email-health', methods=['GET'])
 @sentinel_login_required
@@ -3541,6 +3699,17 @@ def registre_init_db():
         )''')
     conn.commit()
 
+    # Migration isolation par client : ajout de la colonne, puis assignation des
+    # systemes deja existants (crees avant l isolation) au compte CONSEILPREV.
+    cur.execute("ALTER TABLE systemes_ia ADD COLUMN IF NOT EXISTS client_id INTEGER")
+    conn.commit()
+    conseilprev_id = ensure_conseilprev_client_id()
+    cur.execute(registre_sql(
+        "UPDATE systemes_ia SET client_id=%s WHERE client_id IS NULL",
+        "UPDATE systemes_ia SET client_id=? WHERE client_id IS NULL"
+    ), (conseilprev_id,))
+    conn.commit()
+
     cur.execute('SELECT COUNT(*) AS n FROM systemes_ia')
     row = cur.fetchone()
     count = row['n'] if isinstance(row, dict) else row[0]
@@ -3587,9 +3756,13 @@ def registre_row_to_dict(row):
 @require_paid_plan
 @rate_limit(limit=60, window=60)
 def registre_list():
+    client = sentauth_current_client()
     conn = registre_get_db()
     cur = conn.cursor()
-    cur.execute('SELECT * FROM systemes_ia ORDER BY date_maj DESC')
+    cur.execute(registre_sql(
+        'SELECT * FROM systemes_ia WHERE client_id=%s ORDER BY date_maj DESC',
+        'SELECT * FROM systemes_ia WHERE client_id=? ORDER BY date_maj DESC'
+    ), (client['id'],))
     rows = cur.fetchall()
     conn.close()
     return jsonify({'systemes': [registre_row_to_dict(r) for r in rows], 'moteur': 'postgres' if REGISTRE_USE_PG else 'sqlite'})
@@ -3598,6 +3771,7 @@ def registre_list():
 @require_paid_plan
 @rate_limit(limit=30, window=60)
 def registre_create():
+    client = sentauth_current_client()
     data = request.get_json(force=True) or {}
     nom = (data.get('nom') or '').strip()[:200]
     if not nom:
@@ -3617,30 +3791,30 @@ def registre_create():
         int(data.get('score_risque') or 0),
         (data.get('responsable') or '')[:100],
         (data.get('fournisseur') or '')[:100],
-        now, now
+        now, now, client['id']
     )
     if REGISTRE_USE_PG:
         cur.execute('''INSERT INTO systemes_ia
-            (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj)
-            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING *''', values)
+            (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj, client_id)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING *''', values)
         row = cur.fetchone()
     else:
         cur.execute('''INSERT INTO systemes_ia
-            (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)''', values)
+            (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj, client_id)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', values)
         new_id = cur.lastrowid
         cur.execute('SELECT * FROM systemes_ia WHERE id=?', (new_id,))
         row = cur.fetchone()
     conn.commit()
     conn.close()
-    # Une seule requete (INSERT...RETURNING * sur PG) au lieu d un INSERT + SELECT separes —
-    # economise un aller-retour reseau complet (~600ms sur cet hebergement).
+    schedule_cartographie_report(client['id'], client.get('email') or CONSEILPREV_INTERNAL_EMAIL, client.get('nom_entreprise') or 'CONSEILPREV')
     return jsonify({'systeme': registre_row_to_dict(row)}), 201
 
 @app.route('/api/registre/<int:sys_id>', methods=['PUT'])
 @require_paid_plan
 @rate_limit(limit=30, window=60)
 def registre_update(sys_id):
+    client = sentauth_current_client()
     data = request.get_json(force=True) or {}
     conn = registre_get_db()
     cur = conn.cursor()
@@ -3650,25 +3824,27 @@ def registre_update(sys_id):
     if REGISTRE_USE_PG:
         # COALESCE permet de ne mettre a jour que les champs fournis, en une seule requete
         # combinant verification d existence + mise a jour + lecture du resultat (au lieu de 3).
+        # client_id dans le WHERE empeche un client de modifier le systeme d un autre.
         cur.execute('''UPDATE systemes_ia SET
             nom=COALESCE(%s,nom), finalite=COALESCE(%s,finalite), secteur=COALESCE(%s,secteur),
             type_systeme=COALESCE(%s,type_systeme), donnees_utilisees=COALESCE(%s,donnees_utilisees),
             classification=COALESCE(%s,classification), justification=COALESCE(%s,justification),
             statut_conformite=COALESCE(%s,statut_conformite), responsable=COALESCE(%s,responsable),
             fournisseur=COALESCE(%s,fournisseur), score_risque=COALESCE(%s,score_risque), date_maj=%s
-            WHERE id=%s RETURNING *''', (
+            WHERE id=%s AND client_id=%s RETURNING *''', (
             data.get('nom'), data.get('finalite'), data.get('secteur'), data.get('type_systeme'),
             data.get('donnees_utilisees'), data.get('classification'), data.get('justification'),
             data.get('statut_conformite'), data.get('responsable'), data.get('fournisseur'),
-            data.get('score_risque'), now, sys_id))
+            data.get('score_risque'), now, sys_id, client['id']))
         row = cur.fetchone()
         conn.commit()
         conn.close()
         if not row:
             return jsonify({'error': 'Systeme introuvable'}), 404
+        schedule_cartographie_report(client['id'], client.get('email') or CONSEILPREV_INTERNAL_EMAIL, client.get('nom_entreprise') or 'CONSEILPREV')
         return jsonify({'systeme': registre_row_to_dict(row)})
     else:
-        cur.execute('SELECT * FROM systemes_ia WHERE id=?', (sys_id,))
+        cur.execute('SELECT * FROM systemes_ia WHERE id=? AND client_id=?', (sys_id, client['id']))
         existing = cur.fetchone()
         if not existing:
             conn.close()
@@ -3678,13 +3854,14 @@ def registre_update(sys_id):
         score = int(data.get('score_risque', existing_d['score_risque']) or 0)
         cur.execute('''UPDATE systemes_ia SET nom=?, finalite=?, secteur=?, type_systeme=?, donnees_utilisees=?,
            classification=?, justification=?, statut_conformite=?, responsable=?, fournisseur=?, score_risque=?, date_maj=?
-           WHERE id=?''', (vals['nom'], vals['finalite'], vals['secteur'], vals['type_systeme'], vals['donnees_utilisees'],
+           WHERE id=? AND client_id=?''', (vals['nom'], vals['finalite'], vals['secteur'], vals['type_systeme'], vals['donnees_utilisees'],
             vals['classification'], vals['justification'], vals['statut_conformite'], vals['responsable'], vals['fournisseur'],
-            score, now, sys_id))
+            score, now, sys_id, client['id']))
         conn.commit()
         cur.execute('SELECT * FROM systemes_ia WHERE id=?', (sys_id,))
         row = cur.fetchone()
         conn.close()
+        schedule_cartographie_report(client['id'], client.get('email') or CONSEILPREV_INTERNAL_EMAIL, client.get('nom_entreprise') or 'CONSEILPREV')
         return jsonify({'systeme': registre_row_to_dict(row)})
 
 @app.route('/api/registre/<int:sys_id>', methods=['DELETE'])
@@ -3693,14 +3870,20 @@ def registre_update(sys_id):
 def registre_delete(sys_id):
     conn = registre_get_db()
     cur = conn.cursor()
+    client = sentauth_current_client()
     # Une seule requete : DELETE direct, on verifie cur.rowcount pour savoir si la
     # ligne existait (au lieu d un SELECT de verification puis un DELETE separes).
-    cur.execute(registre_sql('DELETE FROM systemes_ia WHERE id=%s', 'DELETE FROM systemes_ia WHERE id=?'), (sys_id,))
+    # client_id dans le WHERE empeche un client de supprimer le systeme d un autre.
+    cur.execute(registre_sql(
+        'DELETE FROM systemes_ia WHERE id=%s AND client_id=%s',
+        'DELETE FROM systemes_ia WHERE id=? AND client_id=?'
+    ), (sys_id, client['id']))
     deleted_count = cur.rowcount
     conn.commit()
     conn.close()
     if deleted_count == 0:
         return jsonify({'error': 'Systeme introuvable'}), 404
+    schedule_cartographie_report(client['id'], client.get('email') or CONSEILPREV_INTERNAL_EMAIL, client.get('nom_entreprise') or 'CONSEILPREV')
     return jsonify({'deleted': sys_id})
 
 @app.route('/api/registre/status', methods=['GET'])
@@ -3721,15 +3904,18 @@ def registre_status():
 # (table systemes_ia) pour evaluer l'impact potentiel de chaque
 # article sur les systemes effectivement deployes.
 # ══════════════════════════════════════════════════════════
-_veille_cache = {"data": None, "ts": 0, "registre_hash": None}
+_veille_cache = {}  # dict indexe par client_id, evite de melanger les caches entre clients
 VEILLE_CACHE_TTL = 1800  # 30 min
 
-def veille_get_registre_summary():
-    """Recupere un resume textuel court du registre IA actif (Postgres ou SQLite)."""
+def veille_get_registre_summary(client_id):
+    """Recupere un resume textuel court du registre IA actif du client (Postgres ou SQLite)."""
     try:
         conn = registre_get_db()
         cur = conn.cursor()
-        cur.execute('SELECT nom, secteur, classification, type_systeme FROM systemes_ia')
+        cur.execute(registre_sql(
+            'SELECT nom, secteur, classification, type_systeme FROM systemes_ia WHERE client_id=%s',
+            'SELECT nom, secteur, classification, type_systeme FROM systemes_ia WHERE client_id=?'
+        ), (client_id,))
         rows = cur.fetchall()
         conn.close()
         systemes = [registre_row_to_dict_partial(r) for r in rows]
@@ -3748,17 +3934,19 @@ def registre_row_to_dict_partial(row):
 @rate_limit(limit=15, window=60)
 def veille_qualifiee():
     """Scoring de pertinence IA des actualites par rapport au registre reel du client.
-    Mise en cache 30 min pour limiter les appels API."""
+    Mise en cache 30 min par client pour limiter les appels API."""
     global _veille_cache
     now = time.time()
+    client = sentauth_current_client()
+    cache_entry = _veille_cache.get(client['id'], {"data": None, "ts": 0, "registre_hash": None})
 
-    systemes = veille_get_registre_summary()
+    systemes = veille_get_registre_summary(client['id'])
     registre_hash = hashlib.md5(json.dumps(systemes, sort_keys=True).encode()).hexdigest() if systemes else "empty"
 
-    if (now - _veille_cache["ts"] < VEILLE_CACHE_TTL
-        and _veille_cache["data"]
-        and _veille_cache["registre_hash"] == registre_hash):
-        return jsonify({"items": _veille_cache["data"], "cached": True, "registre_count": len(systemes)})
+    if (now - cache_entry["ts"] < VEILLE_CACHE_TTL
+        and cache_entry["data"]
+        and cache_entry["registre_hash"] == registre_hash):
+        return jsonify({"items": cache_entry["data"], "cached": True, "registre_count": len(systemes)})
 
     # Récupérer les actualités (réutilise le cache /api/news si disponible)
     items = _news_cache["data"][:20] if _news_cache["data"] else []
@@ -3819,7 +4007,7 @@ def veille_qualifiee():
         })
     scored_items.sort(key=lambda x: impact_order.get(x["impact"], 1))
 
-    _veille_cache = {"data": scored_items, "ts": now, "registre_hash": registre_hash}
+    _veille_cache[client['id']] = {"data": scored_items, "ts": now, "registre_hash": registre_hash}
     return jsonify({
         "items": scored_items,
         "cached": False,
