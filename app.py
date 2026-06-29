@@ -4298,6 +4298,49 @@ def veille_qualifiee():
         "personnalise": len(systemes) > 0
     })
 
+@app.route('/api/notifications/summary', methods=['GET'])
+@sentinel_login_required
+def notifications_summary():
+    """Agrege les 3 sources de notifications affichees via la cloche de la
+    sidebar : veille reglementaire a fort impact (depuis le cache deja calcule,
+    pas de nouvel appel IA couteux), rapports de cartographie envoyes
+    recemment, et laisse au frontend le calcul des points d audit en attente
+    (stockes uniquement en localStorage, donc invisibles cote serveur)."""
+    client = sentauth_current_client()
+
+    veille_count = 0
+    veille_items = []
+    cache_entry = _veille_cache.get(client['id'])
+    if cache_entry and cache_entry.get('data'):
+        for it in cache_entry['data']:
+            if it.get('impact') == 'haut':
+                veille_count += 1
+                if len(veille_items) < 5:
+                    veille_items.append({'title': it.get('title'), 'link': it.get('link')})
+
+    rapports_count = 0
+    rapports_items = []
+    try:
+        conn = registre_get_db()
+        cur = conn.cursor()
+        cutoff = (datetime.utcnow() - _timedelta_auth(hours=48)).isoformat()
+        cur.execute(registre_sql(
+            "SELECT * FROM email_log WHERE destinataire=%s AND sujet LIKE %s AND succes=TRUE AND date_envoi > %s ORDER BY date_envoi DESC",
+            "SELECT * FROM email_log WHERE destinataire=? AND sujet LIKE ? AND succes=1 AND date_envoi > ? ORDER BY date_envoi DESC"
+        ), (client.get('email') or CONSEILPREV_INTERNAL_EMAIL, 'Cartographie IA%', cutoff))
+        rows = [dict(r) if not isinstance(r, dict) else r for r in cur.fetchall()]
+        conn.commit()
+        conn.close()
+        rapports_count = len(rows)
+        rapports_items = [{'sujet': r['sujet'], 'date': r['date_envoi']} for r in rows[:5]]
+    except Exception as e:
+        logger.error(f"NOTIFICATIONS_SUMMARY_RAPPORTS_FAILED: {e}")
+
+    return jsonify({
+        'veille': {'count': veille_count, 'items': veille_items},
+        'rapports': {'count': rapports_count, 'items': rapports_items}
+    })
+
 @app.route('/api/veille/notifier', methods=['POST'])
 @rate_limit(limit=10, window=60)
 def veille_notifier():
