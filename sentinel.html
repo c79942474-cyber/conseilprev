@@ -76,8 +76,20 @@ body{
 .sb-pager{display:flex;align-items:center;gap:2px;padding:12px 18px;border-top:1px solid var(--rule);}
 .sb-pager-btn{width:24px;height:24px;border-radius:3px;border:1px solid var(--rule);background:transparent;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted);cursor:pointer;transition:all .12s;}
 .sb-pager-btn:hover{background:var(--bg);color:var(--ink)}
-.sb-bell{margin-left:auto;width:24px;height:24px;border:1px solid var(--rule);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted);cursor:pointer;position:relative;}
-.sb-bell::after{content:'';position:absolute;top:3px;right:3px;width:5px;height:5px;background:var(--accent);border-radius:50%;border:1px solid var(--white);}
+.sb-bell{margin-left:auto;width:24px;height:24px;border:1px solid var(--rule);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted);cursor:pointer;position:relative;transition:border-color .15s}
+.sb-bell:hover{border-color:var(--accent)}
+.sb-bell-badge{position:absolute;top:-5px;right:-5px;min-width:15px;height:15px;padding:0 3px;background:var(--accent);color:#fff;border-radius:8px;font-size:9px;font-weight:700;display:none;align-items:center;justify-content:center;line-height:1;border:1.5px solid var(--white)}
+.sb-bell.has-notif .sb-bell-badge{display:flex}
+.sb-bell-menu{position:absolute;bottom:calc(100% + 8px);right:0;width:280px;max-height:380px;overflow-y:auto;background:var(--white);border:1px solid var(--rule2);border-radius:8px;box-shadow:0 8px 28px rgba(0,0,0,.15);z-index:50;padding:10px}
+.sb-bell-section{margin-bottom:10px}
+.sb-bell-section:last-child{margin-bottom:0}
+.sb-bell-section-head{font-size:10.5px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:6px;margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid var(--rule)}
+.sb-bell-count{background:var(--bg);color:var(--muted);font-size:9px;font-family:var(--mono);padding:1px 6px;border-radius:8px;margin-left:auto}
+.sb-bell-item{display:block;font-size:11px;color:var(--ink2);text-decoration:none;padding:5px 4px;border-radius:4px;transition:background .12s;line-height:1.4}
+.sb-bell-item:hover{background:var(--bg)}
+.sb-bell-item-date{display:block;font-size:9px;color:var(--muted);margin-top:1px}
+.sb-bell-item-link{color:var(--accent);cursor:pointer;font-weight:600}
+.sb-bell-empty{font-size:10.5px;color:var(--muted);font-style:italic;padding:4px}
 .sb-edition{padding:6px 18px 14px;font-size:9px;font-family:var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);}
 .sb-user{padding:14px 18px;border-top:1px solid var(--rule);display:flex;align-items:center;gap:10px;}
 .sb-avatar{width:26px;height:26px;border-radius:50%;background:var(--ink2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#fff;flex-shrink:0;}
@@ -1464,7 +1476,7 @@ textarea.form-el{min-height:86px;resize:vertical}
   <div class="sb-pager">
     <button class="sb-pager-btn">‹</button>
     <button class="sb-pager-btn">›</button>
-    <div class="sb-bell">🔔</div>
+    <div class="sb-bell" id="sb-bell-el" onclick="bellToggleMenu()">🔔<span class="sb-bell-badge" id="sb-bell-badge"></span></div>
   </div>
   <div class="sb-edition">Édition</div>
   <div class="sb-user">
@@ -13309,5 +13321,88 @@ window.guidedPathsClose = function(){
 };
 
 </script>
+<script>
+/* ══ CLOCHE DE NOTIFICATIONS — agrege veille + rapports (serveur) + audit (local) ══ */
+function bellComputeAuditPending(){
+  try{
+    var state = JSON.parse(localStorage.getItem('cpAuditState') || '{}');
+    var total = 0, pending = 0;
+    if(typeof AUDIT_SECTIONS !== 'undefined'){
+      AUDIT_SECTIONS.forEach(function(sec){
+        sec.items.forEach(function(item){
+          total++;
+          var st = state[item.id] || 'none';
+          if(st === 'none') pending++;
+        });
+      });
+    }
+    return pending;
+  } catch(e){ return 0; }
+}
+
+window.bellRefresh = function(){
+  var bellEl = document.getElementById('sb-bell-el');
+  if(!bellEl) return;
+  var auditPending = bellComputeAuditPending();
+
+  fetch('/api/notifications/summary').then(function(r){ return r.json(); }).then(function(d){
+    window.__bellData = {
+      veille: d.veille || {count:0, items:[]},
+      rapports: d.rapports || {count:0, items:[]},
+      audit: {count: auditPending}
+    };
+    var total = window.__bellData.veille.count + window.__bellData.rapports.count + auditPending;
+    bellEl.classList.toggle('has-notif', total > 0);
+    var badge = document.getElementById('sb-bell-badge');
+    if(badge) badge.textContent = total > 99 ? '99+' : (total || '');
+  }).catch(function(){
+    window.__bellData = {veille:{count:0,items:[]}, rapports:{count:0,items:[]}, audit:{count: auditPending}};
+  });
+};
+
+window.bellToggleMenu = function(){
+  var existing = document.getElementById('sb-bell-menu');
+  if(existing){ existing.remove(); return; }
+  var d = window.__bellData || {veille:{count:0,items:[]}, rapports:{count:0,items:[]}, audit:{count:0}};
+
+  function section(title, count, itemsHtml, emptyMsg){
+    return '<div class="sb-bell-section"><div class="sb-bell-section-head">'+title+' <span class="sb-bell-count">'+count+'</span></div>'
+      + (count > 0 ? itemsHtml : '<div class="sb-bell-empty">'+emptyMsg+'</div>') + '</div>';
+  }
+
+  var veilleHtml = (d.veille.items||[]).map(function(it){
+    return '<a class="sb-bell-item" href="'+(it.link||'#')+'" target="_blank" rel="noopener">⚠️ '+it.title+'</a>';
+  }).join('');
+  var rapportsHtml = (d.rapports.items||[]).map(function(it){
+    var date = new Date(it.date).toLocaleString('fr-FR',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+    return '<div class="sb-bell-item">📄 '+it.sujet+' <span class="sb-bell-item-date">'+date+'</span></div>';
+  }).join('');
+  var auditHtml = d.audit.count > 0
+    ? '<div class="sb-bell-item sb-bell-item-link" onclick="bellToggleMenu();go(\'audit-ia-act\')">→ Voir les points à traiter</div>'
+    : '';
+
+  var menu = document.createElement('div');
+  menu.id = 'sb-bell-menu';
+  menu.className = 'sb-bell-menu';
+  menu.innerHTML =
+    section('⚠️ Veille à fort impact', d.veille.count, veilleHtml, 'Aucune alerte à fort impact actuellement.')
+    + section('📄 Rapports envoyés (48h)', d.rapports.count, rapportsHtml, 'Aucun rapport automatique récent.')
+    + section('📋 Audit IA Act', d.audit.count, auditHtml, 'Tous les points sont traités. 👍');
+
+  document.querySelector('.sb-pager').appendChild(menu);
+};
+
+document.addEventListener('click', function(e){
+  var menu = document.getElementById('sb-bell-menu');
+  if(menu && !menu.contains(e.target) && e.target.id !== 'sb-bell-el' && !e.target.closest('#sb-bell-el')){
+    menu.remove();
+  }
+});
+
+document.addEventListener('DOMContentLoaded', function(){ setTimeout(window.bellRefresh, 400); });
+if(document.readyState !== 'loading'){ setTimeout(window.bellRefresh, 400); }
+
+</script>
+
 
 </html>
