@@ -62,6 +62,37 @@
 }
 html{scroll-behavior:smooth}body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--wh);overflow-x:hidden;line-height:1.6}
 /* ══ HEADER / NAVIGATION ══ */
+.ai-act-banner{
+  position:fixed;top:0;left:0;right:0;z-index:101;
+  background:linear-gradient(120deg,#5b21b6 0%,#7c3aed 45%,#9d2fc4 100%);
+  border-bottom:1px solid rgba(216,180,254,.35);
+  box-shadow:0 2px 16px rgba(0,0,0,.25);
+}
+.ai-act-banner-inner{
+  max-width:1200px;margin:0 auto;padding:11px 48px;
+  display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;
+}
+.ai-act-banner-text{font-family:'Inter',system-ui,sans-serif;font-size:13.5px;color:#F3EEFF;line-height:1.4}
+.ai-act-banner-text em{font-style:italic;color:#FDE68A}
+.ai-act-banner-text strong{color:#fff}
+.ai-act-banner-cta{
+  font-family:'Inter',system-ui,sans-serif;font-size:12.5px;font-weight:700;color:#fff;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.4);
+  padding:6px 14px;border-radius:6px;text-decoration:none;white-space:nowrap;
+  transition:all .18s;
+}
+.ai-act-banner-cta:hover{background:rgba(255,255,255,.28);border-color:rgba(255,255,255,.7)}
+.ai-act-banner-close{
+  position:absolute;top:50%;right:14px;transform:translateY(-50%);
+  background:none;border:none;color:rgba(255,255,255,.7);font-size:20px;line-height:1;
+  cursor:pointer;padding:4px 8px;transition:color .15s;
+}
+.ai-act-banner-close:hover{color:#fff}
+@media(max-width:760px){
+  .ai-act-banner-inner{padding:10px 40px;flex-direction:column;gap:8px;text-align:center}
+  .ai-act-banner-text{font-size:12.5px}
+}
+
 nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
   padding:0 32px;height:64px;
@@ -3706,6 +3737,13 @@ em,.hero-em{
 </head>
 <body>
 
+<div id="ai-act-banner" class="ai-act-banner">
+  <div class="ai-act-banner-inner">
+    <span class="ai-act-banner-text">Votre entreprise utilise-t-elle de l'IA <em>sans le savoir</em> ? L'échéance du <strong>2 août 2026</strong> approche.</span>
+    <a href="/sentinel" target="_blank" rel="noopener" class="ai-act-banner-cta">Cartographier mes systèmes IA →</a>
+  </div>
+  <button class="ai-act-banner-close" onclick="aiActBannerClose()" aria-label="Fermer">×</button>
+</div>
 
 <!-- BARRE DE PROGRESSION LECTURE -->
 <div id="read-progress" aria-hidden="true"></div>
@@ -6369,4 +6407,26 @@ try {
 })();
 
 </script>
+<script>
+(function(){
+  if(localStorage.getItem('aiActBannerClosed') === '1') return;
+  var banner = document.getElementById('ai-act-banner');
+  if(!banner) return;
+  function adjustNavPosition(){
+    var h = banner.offsetHeight;
+    var navEl = document.querySelector('nav');
+    if(navEl) navEl.style.top = h + 'px';
+  }
+  adjustNavPosition();
+  window.addEventListener('resize', adjustNavPosition);
+  window.aiActBannerClose = function(){
+    banner.style.display = 'none';
+    var navEl = document.querySelector('nav');
+    if(navEl) navEl.style.top = '0';
+    localStorage.setItem('aiActBannerClosed', '1');
+  };
+})();
+
+</script>
+
 </html>
