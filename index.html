@@ -6426,15 +6426,18 @@ try {
 </script>
 <script>
 (function(){
-  if(localStorage.getItem('aiActBannerClosed') === '1') return;
   var banner = document.getElementById('ai-act-banner');
   if(!banner) return;
-  document.body.classList.add('has-ai-act-banner');
   window.aiActBannerClose = function(){
     banner.style.display = 'none';
     document.body.classList.remove('has-ai-act-banner');
     localStorage.setItem('aiActBannerClosed', '1');
   };
+  if(localStorage.getItem('aiActBannerClosed') === '1'){
+    banner.style.display = 'none';
+    return;
+  }
+  document.body.classList.add('has-ai-act-banner');
 })();
 
 </script>
