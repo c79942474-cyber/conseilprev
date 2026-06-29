@@ -88,6 +88,23 @@ body{font-family:var(--sans);background:var(--bg);color:var(--ink);min-height:10
         </div>
         <button type="submit" class="btn" id="login-btn">Se connecter</button>
         <div class="error" id="login-error"></div>
+        <div style="text-align:center;margin-top:14px">
+          <a href="#" id="forgot-password-link" style="font-size:12px;color:var(--muted);text-decoration:none">Mot de passe oublié ?</a>
+        </div>
+      </form>
+
+      <form id="forgot-form" style="display:none">
+        <p style="font-size:12.5px;color:var(--ink2);line-height:1.6;margin-bottom:16px">Saisissez votre adresse email — si un compte existe, vous recevrez un lien pour définir un nouveau mot de passe.</p>
+        <div class="field">
+          <label class="label">Adresse email</label>
+          <input type="email" id="forgot-email" class="input" placeholder="vous@entreprise.com" required>
+        </div>
+        <button type="submit" class="btn" id="forgot-btn">Envoyer le lien</button>
+        <div class="error" id="forgot-error"></div>
+        <div class="success" id="forgot-success" style="display:none;font-size:13px;color:var(--green);margin-top:12px;text-align:center;line-height:1.6">✅ Si un compte existe avec cet email, vous recevrez un lien de réinitialisation.</div>
+        <div style="text-align:center;margin-top:14px">
+          <a href="#" id="back-to-login-link" style="font-size:12px;color:var(--muted);text-decoration:none">← Retour à la connexion</a>
+        </div>
       </form>
     </div>
 
@@ -182,6 +199,46 @@ document.getElementById('login-form').addEventListener('submit', function(e){
   })
   .catch(function(){
     btn.disabled = false; btn.textContent = 'Se connecter';
+    errEl.textContent = 'Erreur réseau. Réessayez.';
+    errEl.style.display = 'block';
+  });
+});
+
+document.getElementById('forgot-password-link').addEventListener('click', function(e){
+  e.preventDefault();
+  document.getElementById('login-form').style.display = 'none';
+  document.getElementById('forgot-form').style.display = 'block';
+});
+
+document.getElementById('back-to-login-link').addEventListener('click', function(e){
+  e.preventDefault();
+  document.getElementById('forgot-form').style.display = 'none';
+  document.getElementById('login-form').style.display = 'block';
+  document.getElementById('forgot-success').style.display = 'none';
+});
+
+document.getElementById('forgot-form').addEventListener('submit', function(e){
+  e.preventDefault();
+  var btn = document.getElementById('forgot-btn');
+  var errEl = document.getElementById('forgot-error');
+  var successEl = document.getElementById('forgot-success');
+  var email = document.getElementById('forgot-email').value.trim();
+  errEl.style.display = 'none';
+
+  btn.disabled = true; btn.textContent = 'Envoi…';
+
+  fetch('/api/sentinel-auth/forgot-password', {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({email: email})
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(){
+    document.getElementById('forgot-email').value = '';
+    successEl.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Envoyer le lien';
+  })
+  .catch(function(){
+    btn.disabled = false; btn.textContent = 'Envoyer le lien';
     errEl.textContent = 'Erreur réseau. Réessayez.';
     errEl.style.display = 'block';
   });
