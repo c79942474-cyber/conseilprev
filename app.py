@@ -2900,6 +2900,8 @@ def sentauth_init_db():
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS rgpd_consenti BOOLEAN DEFAULT FALSE")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS rgpd_consenti_date TEXT")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS plan TEXT DEFAULT 'pro'")
+            cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS reset_token TEXT")
+            cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS reset_expire TEXT")
             conn.commit()
         except Exception: conn.rollback()
     else:
@@ -3525,6 +3527,190 @@ def sentauth_activate_account():
     session.pop('captcha_answer', None)
     session.pop('captcha_token', None)
     logger.info(f"ACCOUNT_ACTIVATED {d['email']} — consentement RGPD horodate {now}")
+    return jsonify({'ok': True})
+
+# ══════════════════════════════════════════════════════════
+# MOT DE PASSE OUBLIE — demande -> email avec lien -> nouveau
+# mot de passe -> email de confirmation de securite. Colonnes
+# dediees (reset_token/reset_expire), distinctes de invitation_token
+# pour ne jamais interferer avec le flux d'invitation initiale.
+# ══════════════════════════════════════════════════════════
+RESET_PASSWORD_VALIDITY_HOURS = 2  # plus court qu une invitation : usage immediat attendu
+
+def sentauth_send_reset_email(email, nom_entreprise, token):
+    try:
+        link = f"https://conseilprev.onrender.com/reset-password/{token}"
+        html = f"""
+        <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;padding:24px;background:#F5F2ED">
+          <div style="background:#fff;border-radius:8px;padding:32px;border:1px solid #E0DDD8">
+            <div style="font-size:20px;font-weight:600;color:#1C1C1C;margin-bottom:4px">Sentinel <span style="background:#B83222;color:#fff;font-size:10px;padding:2px 6px;border-radius:3px;vertical-align:middle">AI</span></div>
+            <div style="font-size:11px;color:#767676;text-transform:uppercase;letter-spacing:1px;margin-bottom:24px">Reinitialisation de mot de passe</div>
+            <p style="font-size:14px;color:#3D3D3D;line-height:1.6">Bonjour,</p>
+            <p style="font-size:14px;color:#3D3D3D;line-height:1.6">Une demande de reinitialisation de mot de passe a ete faite pour le compte {nom_entreprise}. Si c est vous, definissez un nouveau mot de passe :</p>
+            <div style="text-align:center;margin:28px 0">
+              <a href="{link}" style="display:inline-block;background:#B83222;color:#fff;padding:13px 28px;border-radius:6px;text-decoration:none;font-weight:600;font-size:14px">Definir un nouveau mot de passe →</a>
+            </div>
+            <p style="font-size:12px;color:#767676;line-height:1.6">Ce lien est valable {RESET_PASSWORD_VALIDITY_HOURS} heures et ne peut etre utilise qu une seule fois. Si vous n etes pas a l origine de cette demande, ignorez cet email — votre mot de passe actuel reste inchange.</p>
+          </div>
+          <p style="font-size:11px;color:#A8A8A8;text-align:center;margin-top:16px">CONSEILPREV — Sentinel AI</p>
+        </div>
+        """
+        ok, method = send_email_smart(email, nom_entreprise, "Réinitialisation de votre mot de passe — Sentinel AI", html, tags=['sentinel-reset-password'])
+        logger.info(f"RESET_EMAIL {email} via {method} — ok={ok}")
+        return ok
+    except Exception as e:
+        logger.error(f"RESET_EMAIL_FAILED {email} : {e}")
+        return False
+
+
+def sentauth_send_reset_confirmation_email(email, nom_entreprise, ip):
+    """Notification de securite envoyee APRES un changement de mot de passe
+    reussi — permet au client de detecter immediatement un changement qu il
+    n aurait pas demande lui-meme."""
+    try:
+        html = f"""
+        <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;padding:24px;background:#F5F2ED">
+          <div style="background:#fff;border-radius:8px;padding:32px;border:1px solid #E0DDD8">
+            <div style="font-size:20px;font-weight:600;color:#1C1C1C;margin-bottom:4px">Sentinel <span style="background:#B83222;color:#fff;font-size:10px;padding:2px 6px;border-radius:3px;vertical-align:middle">AI</span></div>
+            <div style="font-size:11px;color:#767676;text-transform:uppercase;letter-spacing:1px;margin-bottom:24px">Alerte de securite</div>
+            <p style="font-size:14px;color:#3D3D3D;line-height:1.6">Bonjour,</p>
+            <p style="font-size:14px;color:#3D3D3D;line-height:1.6">Le mot de passe du compte {nom_entreprise} vient d etre modifie ({datetime.utcnow().strftime('%d/%m/%Y a %H:%M')} UTC, depuis l adresse IP {ip}).</p>
+            <p style="font-size:14px;color:#3D3D3D;line-height:1.6"><strong>Si vous n etes pas a l origine de ce changement</strong>, contactez immediatement CONSEILPREV.</p>
+          </div>
+          <p style="font-size:11px;color:#A8A8A8;text-align:center;margin-top:16px">CONSEILPREV — Sentinel AI</p>
+        </div>
+        """
+        ok, method = send_email_smart(email, nom_entreprise, "Votre mot de passe a ete modifié — Sentinel AI", html, tags=['sentinel-reset-confirm'])
+        logger.info(f"RESET_CONFIRM_EMAIL {email} via {method} — ok={ok}")
+        return ok
+    except Exception as e:
+        logger.error(f"RESET_CONFIRM_EMAIL_FAILED {email} : {e}")
+        return False
+
+
+@app.route('/api/sentinel-auth/forgot-password', methods=['POST'])
+@rate_limit_strict(limit=5, window=300)
+def sentauth_forgot_password():
+    """Toujours la meme reponse, que l email existe ou non en base — evite
+    qu un tiers puisse deviner quels emails sont enregistres (enumeration)."""
+    data = request.get_json(force=True) or {}
+    email = (data.get('email') or '').strip().lower()
+    generic_response = jsonify({'ok': True, 'message': 'Si un compte existe avec cet email, vous recevrez un lien de réinitialisation.'})
+
+    if not email or '@' not in email:
+        return generic_response
+
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql('SELECT * FROM clients WHERE email=%s AND actif=TRUE', 'SELECT * FROM clients WHERE email=? AND actif=1'), (email,))
+    row = cur.fetchone()
+    if not row:
+        conn.close()
+        return generic_response
+
+    d = dict(row) if not isinstance(row, dict) else row
+    reset_token = _secrets_auth.token_urlsafe(32)
+    reset_expire = (datetime.utcnow() + _timedelta_auth(hours=RESET_PASSWORD_VALIDITY_HOURS)).isoformat()
+    cur.execute(registre_sql(
+        'UPDATE clients SET reset_token=%s, reset_expire=%s WHERE id=%s',
+        'UPDATE clients SET reset_token=?, reset_expire=? WHERE id=?'
+    ), (reset_token, reset_expire, d['id']))
+    conn.commit()
+    conn.close()
+
+    sentauth_send_reset_email(email, d['nom_entreprise'], reset_token)
+    logger.info(f"PASSWORD_RESET_REQUESTED {email}")
+    return generic_response
+
+
+@app.route('/reset-password/<token>', methods=['GET'])
+def sentauth_reset_password_page(token):
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql('SELECT * FROM clients WHERE reset_token=%s', 'SELECT * FROM clients WHERE reset_token=?'), (token,))
+    row = cur.fetchone()
+    conn.close()
+    if not row:
+        return send_from_directory('.', 'invitation-expiree.html')
+    d = dict(row) if not isinstance(row, dict) else row
+    expire = datetime.fromisoformat(d['reset_expire']) if d.get('reset_expire') else None
+    if not expire or datetime.utcnow() > expire:
+        return send_from_directory('.', 'invitation-expiree.html')
+    return send_from_directory('.', 'reset-password.html')
+
+
+@app.route('/api/sentinel-auth/reset-password-info/<token>', methods=['GET'])
+@rate_limit_strict(limit=20, window=60)
+def sentauth_reset_password_info(token):
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql(
+        'SELECT nom_entreprise, email, reset_expire FROM clients WHERE reset_token=%s',
+        'SELECT nom_entreprise, email, reset_expire FROM clients WHERE reset_token=?'
+    ), (token,))
+    row = cur.fetchone()
+    conn.close()
+    if not row:
+        return jsonify({'valid': False, 'error': 'Lien invalide ou déjà utilisé.'}), 404
+    d = dict(row) if not isinstance(row, dict) else row
+    expire = datetime.fromisoformat(d['reset_expire']) if d.get('reset_expire') else None
+    if not expire or datetime.utcnow() > expire:
+        return jsonify({'valid': False, 'error': 'Ce lien a expiré.'}), 410
+
+    a, b = _secrets_auth.randbelow(8) + 2, _secrets_auth.randbelow(8) + 2
+    session['reset_captcha_answer'] = a + b
+    session['reset_captcha_token'] = token
+
+    masked_email = d['email'][:2] + '***@' + d['email'].split('@')[1] if '@' in d['email'] else d['email']
+    return jsonify({'valid': True, 'nom_entreprise': d['nom_entreprise'], 'email_masque': masked_email, 'captcha_question': f"{a} + {b} = ?"})
+
+
+@app.route('/api/sentinel-auth/reset-password', methods=['POST'])
+@rate_limit_strict(limit=10, window=300)
+def sentauth_reset_password_confirm():
+    data = request.get_json(force=True) or {}
+    token = (data.get('token') or '').strip()
+    password = data.get('password') or ''
+    captcha_answer = data.get('captcha_answer')
+
+    if session.get('reset_captcha_token') != token:
+        return jsonify({'error': 'Session expirée, rechargez la page.'}), 400
+    try:
+        if int(captcha_answer) != session.get('reset_captcha_answer'):
+            return jsonify({'error': 'Réponse de vérification incorrecte.'}), 400
+    except (ValueError, TypeError):
+        return jsonify({'error': 'Réponse de vérification invalide.'}), 400
+
+    ok, msg = sentauth_validate_password_strength(password)
+    if not ok:
+        return jsonify({'error': msg}), 400
+
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql('SELECT * FROM clients WHERE reset_token=%s', 'SELECT * FROM clients WHERE reset_token=?'), (token,))
+    row = cur.fetchone()
+    if not row:
+        conn.close()
+        return jsonify({'error': 'Lien invalide ou déjà utilisé.'}), 404
+    d = dict(row) if not isinstance(row, dict) else row
+    expire = datetime.fromisoformat(d['reset_expire']) if d.get('reset_expire') else None
+    if not expire or datetime.utcnow() > expire:
+        conn.close()
+        return jsonify({'error': 'Ce lien a expiré.'}), 410
+
+    pw_hash = generate_password_hash(password)
+    cur.execute(registre_sql(
+        'UPDATE clients SET mot_de_passe_hash=%s, reset_token=NULL, reset_expire=NULL WHERE id=%s',
+        'UPDATE clients SET mot_de_passe_hash=?, reset_token=NULL, reset_expire=NULL WHERE id=?'
+    ), (pw_hash, d['id']))
+    conn.commit()
+    conn.close()
+    session.pop('reset_captcha_answer', None)
+    session.pop('reset_captcha_token', None)
+
+    ip = limiter.get_ip(request)
+    threading.Thread(target=sentauth_send_reset_confirmation_email, args=(d['email'], d['nom_entreprise'], ip), daemon=True).start()
+    logger.info(f"PASSWORD_RESET_COMPLETED {d['email']}")
     return jsonify({'ok': True})
 
 # ══════════════════════════════════════════════════════════
