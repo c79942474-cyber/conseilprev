@@ -2906,6 +2906,8 @@ def sentauth_init_db():
             cur.execute("ALTER TABLE clients ALTER COLUMN actif SET DEFAULT FALSE")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS invitation_token TEXT")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS invitation_expire TEXT")
+            cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS verify_email_token TEXT")
+            cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS verify_email_expire TEXT")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS rgpd_consenti BOOLEAN DEFAULT FALSE")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS rgpd_consenti_date TEXT")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS plan TEXT DEFAULT 'pro'")
@@ -3417,6 +3419,7 @@ def sentauth_me():
 # captcha maison (sans dependance externe), politique de robustesse du mot de passe.
 # ══════════════════════════════════════════════════════════
 INVITATION_VALIDITY_HOURS = 48
+VERIFY_EMAIL_VALIDITY_HOURS = 48  # flux distinct de l invitation CONSEILPREV : auto-inscription cliente
 PASSWORD_MIN_LENGTH = 10
 
 def sentauth_validate_password_strength(password):
@@ -3823,7 +3826,7 @@ def sentauth_register():
         return jsonify({'error': msg}), 400
 
     verify_token = _secrets_auth.token_urlsafe(32)
-    verify_expire = (datetime.utcnow() + _timedelta_auth(hours=INVITATION_VALIDITY_HOURS)).isoformat()
+    verify_expire = (datetime.utcnow() + _timedelta_auth(hours=VERIFY_EMAIL_VALIDITY_HOURS)).isoformat()
     now = datetime.utcnow().isoformat()
     pw_hash = generate_password_hash(password)
 
@@ -3831,11 +3834,11 @@ def sentauth_register():
     cur = conn.cursor()
     try:
         if REGISTRE_USE_PG:
-            cur.execute('''INSERT INTO clients (nom_entreprise, email, mot_de_passe_hash, date_creation, invitation_token, invitation_expire, actif, rgpd_consenti, rgpd_consenti_date, plan)
+            cur.execute('''INSERT INTO clients (nom_entreprise, email, mot_de_passe_hash, date_creation, verify_email_token, verify_email_expire, actif, rgpd_consenti, rgpd_consenti_date, plan)
                 VALUES (%s,%s,%s,%s,%s,%s,FALSE,TRUE,%s,%s) RETURNING id''', (nom, email, pw_hash, now, verify_token, verify_expire, now, plan))
             new_id = cur.fetchone()['id']
         else:
-            cur.execute('INSERT INTO clients (nom_entreprise, email, mot_de_passe_hash, date_creation, invitation_token, invitation_expire, actif, rgpd_consenti, rgpd_consenti_date, plan) VALUES (?,?,?,?,?,?,0,1,?,?)', (nom, email, pw_hash, now, verify_token, verify_expire, now, plan))
+            cur.execute('INSERT INTO clients (nom_entreprise, email, mot_de_passe_hash, date_creation, verify_email_token, verify_email_expire, actif, rgpd_consenti, rgpd_consenti_date, plan) VALUES (?,?,?,?,?,?,0,1,?,?)', (nom, email, pw_hash, now, verify_token, verify_expire, now, plan))
             new_id = cur.lastrowid
         conn.commit()
     except Exception:
@@ -3860,19 +3863,21 @@ def sentauth_register():
 def sentauth_verify_email_page(token):
     conn = registre_get_db()
     cur = conn.cursor()
-    cur.execute(registre_sql('SELECT * FROM clients WHERE invitation_token=%s', 'SELECT * FROM clients WHERE invitation_token=?'), (token,))
+    cur.execute(registre_sql('SELECT * FROM clients WHERE verify_email_token=%s', 'SELECT * FROM clients WHERE verify_email_token=?'), (token,))
     row = cur.fetchone()
     if not row:
+        conn.commit()
         conn.close()
         return send_from_directory('.', 'invitation-expiree.html')
     d = dict(row) if not isinstance(row, dict) else row
-    expire = datetime.fromisoformat(d['invitation_expire']) if d.get('invitation_expire') else None
+    expire = datetime.fromisoformat(d['verify_email_expire']) if d.get('verify_email_expire') else None
     if not expire or datetime.utcnow() > expire:
+        conn.commit()
         conn.close()
         return send_from_directory('.', 'invitation-expiree.html')
     cur.execute(registre_sql(
-        "UPDATE clients SET actif=TRUE, invitation_token=NULL, invitation_expire=NULL WHERE id=%s",
-        "UPDATE clients SET actif=1, invitation_token=NULL, invitation_expire=NULL WHERE id=?"
+        "UPDATE clients SET actif=TRUE, verify_email_token=NULL, verify_email_expire=NULL WHERE id=%s",
+        "UPDATE clients SET actif=1, verify_email_token=NULL, verify_email_expire=NULL WHERE id=?"
     ), (d['id'],))
     conn.commit()
     conn.close()
