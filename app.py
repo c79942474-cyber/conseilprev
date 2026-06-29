@@ -3144,27 +3144,88 @@ def send_cartographie_report(client_id, client_email, client_nom):
         logger.error(f"CARTOGRAPHIE_REPORT_FAILED client={client_id}: {e}")
 
 
-# ── Debouncing : un seul envoi apres 5 min de stabilite, pas un par modification ──
-_pending_report_timers = {}
-_pending_report_lock = threading.Lock()
+# ── Debouncing PERSISTANT : remplace l ancien threading.Timer (en memoire, perdu
+# si le processus redemarre/se met en veille — ce qui arrive sur Render). La date
+# du prochain envoi est stockee en base, et verifiee a chaque requete pertinente.
 REPORT_DEBOUNCE_SECONDS = 300  # 5 minutes
 
+def pending_reports_init_db():
+    conn = registre_get_db()
+    cur = conn.cursor()
+    if REGISTRE_USE_PG:
+        cur.execute('''CREATE TABLE IF NOT EXISTS pending_reports (
+            client_id INTEGER PRIMARY KEY,
+            client_email TEXT,
+            client_nom TEXT,
+            next_send_at TEXT NOT NULL
+        )''')
+    else:
+        cur.execute('''CREATE TABLE IF NOT EXISTS pending_reports (
+            client_id INTEGER PRIMARY KEY,
+            client_email TEXT, client_nom TEXT, next_send_at TEXT NOT NULL
+        )''')
+    conn.commit()
+    conn.close()
+
+try:
+    pending_reports_init_db()
+except Exception as _e:
+    logger.error(f"PENDING_REPORTS — erreur init DB : {_e}")
+
+
 def schedule_cartographie_report(client_id, client_email, client_nom):
-    """Annule le timer en cours pour ce client (s'il existe) et en programme un
-    nouveau. Le rapport n'est genere et envoye qu'apres 5 minutes SANS nouvelle
-    modification — evite d'envoyer un email a chaque clic individuel."""
-    with _pending_report_lock:
-        existing = _pending_report_timers.get(client_id)
-        if existing:
-            existing.cancel()
-        timer = threading.Timer(
-            REPORT_DEBOUNCE_SECONDS,
-            send_cartographie_report,
-            args=(client_id, client_email, client_nom)
-        )
-        timer.daemon = True
-        _pending_report_timers[client_id] = timer
-        timer.start()
+    """Repousse la date d'envoi prevue de 5 minutes (upsert). Remplace l'ancien
+    threading.Timer : la date est persistante en base, donc survit a un
+    redemarrage ou une mise en veille du processus — seule une requete
+    ulterieure (check_pending_reports) declenche l'envoi reel."""
+    try:
+        next_send = (datetime.utcnow() + timedelta(seconds=REPORT_DEBOUNCE_SECONDS)).isoformat()
+        conn = registre_get_db()
+        cur = conn.cursor()
+        if REGISTRE_USE_PG:
+            cur.execute(
+                "INSERT INTO pending_reports (client_id, client_email, client_nom, next_send_at) "
+                "VALUES (%s,%s,%s,%s) ON CONFLICT (client_id) DO UPDATE SET "
+                "client_email=EXCLUDED.client_email, client_nom=EXCLUDED.client_nom, next_send_at=EXCLUDED.next_send_at",
+                (client_id, client_email, client_nom, next_send)
+            )
+        else:
+            cur.execute(
+                "INSERT OR REPLACE INTO pending_reports (client_id, client_email, client_nom, next_send_at) "
+                "VALUES (?,?,?,?)",
+                (client_id, client_email, client_nom, next_send)
+            )
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        logger.error(f"SCHEDULE_REPORT_FAILED client={client_id}: {e}")
+
+
+def check_pending_reports():
+    """Cherche les rapports dont la date d'envoi est depassee et les traite.
+    Appelee a chaque requete sur une route a fort trafic (cf. plus bas) plutot
+    que via un timer en arriere-plan — fonctionne tant qu il y a une activite
+    minimale sur le site, sans dependre de la survie d un thread en memoire."""
+    try:
+        now = datetime.utcnow().isoformat()
+        conn = registre_get_db()
+        cur = conn.cursor()
+        cur.execute(registre_sql(
+            "SELECT * FROM pending_reports WHERE next_send_at <= %s",
+            "SELECT * FROM pending_reports WHERE next_send_at <= ?"
+        ), (now,))
+        due = [dict(r) if not isinstance(r, dict) else r for r in cur.fetchall()]
+        if due:
+            cur.execute(registre_sql(
+                "DELETE FROM pending_reports WHERE next_send_at <= %s",
+                "DELETE FROM pending_reports WHERE next_send_at <= ?"
+            ), (now,))
+            conn.commit()
+        conn.close()
+        for r in due:
+            send_cartographie_report(r['client_id'], r['client_email'], r['client_nom'])
+    except Exception as e:
+        logger.error(f"CHECK_PENDING_REPORTS_FAILED: {e}")
 
 @app.route('/api/admin/email-health', methods=['GET'])
 @sentinel_login_required
@@ -3318,6 +3379,7 @@ def sentauth_logout():
 
 @app.route('/api/sentinel-auth/me', methods=['GET'])
 def sentauth_me():
+    check_pending_reports()  # verifie les rapports en attente a chaque chargement de page
     client = sentauth_current_client()
     if not client:
         return jsonify({'authenticated': False}), 401
