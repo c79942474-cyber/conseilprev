@@ -1987,7 +1987,6 @@ textarea.form-el{min-height:86px;resize:vertical}
   <span class="eyebrow">Registre</span><h1 class="page-h">Registre des <em>systèmes IA</em></h1><p class="page-lead">Inventaire complet de vos déploiements IA classifiés selon l'EU AI Act, connecté à une base de données persistante. Obligatoire pour les systèmes haut risque (Art. 49, 71).</p>
   <div class="reg-toolbar">
     <input type="text" id="reg-search" class="reg-search-input" placeholder="Rechercher par nom, secteur, type, responsable…" oninput="regSearch(this.value)">
-    <span id="reg-db-badge" class="reg-db-badge">Vérification…</span>
     <button class="mat-export-btn" style="background:var(--blue);color:#fff" onclick="ucOpenLibrary()" title="Explorer des cas d usage IA courants par direction metier, generiques ou specifiques a votre secteur.">📚 Cas d usage</button>
     <button class="mat-export-btn" style="background:var(--bg);color:var(--ink);border:1px solid var(--rule2)" onclick="ragShowRelevantDocs(\'inventaire classification systemes IA\',\'registre\',\'Documents pertinents - Registre IA\')" title="Consulter les documents de votre base de connaissance lies au Registre IA.">📚 Base de connaissance</button>
     <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="regOpenModal()" title="Ajouter un nouveau systeme IA au registre.">+ Ajouter un système</button>
@@ -2148,8 +2147,6 @@ textarea.form-el{min-height:86px;resize:vertical}
   <span class="eyebrow">Espace · Automatisation</span><h1 class="page-h">Base de <em>connaissance</em></h1>
   <p class="page-lead">Uploadez vos documents (politiques internes, contrats, procédures) pour enrichir automatiquement les analyses d'Audit, Registre IA, FRIA et Maturité avec votre contexte réel.</p>
 
-  <div id="rag-status-info" class="radar-registre-info radar-registre-ok" style="margin-bottom:20px">Chargement…</div>
-
   <div class="tbl-wrap" style="padding:24px;margin-bottom:24px">
     <div class="tbl-head" style="border:none;padding:0 0 16px"><span class="tbl-title">Importer un document</span></div>
     <div id="rag-drop-zone" class="rag-drop-zone" ondrop="ragHandleDrop(event)" ondragover="event.preventDefault()" ondragenter="this.classList.add('rag-drop-active')" ondragleave="this.classList.remove('rag-drop-active')">
@@ -2205,6 +2202,10 @@ textarea.form-el{min-height:86px;resize:vertical}
   </div>
 
   <div id="clients-content">
+    <div class="tbl-wrap" style="padding:20px;margin-bottom:20px">
+      <div class="tbl-head" style="border:none;padding:0 0 14px"><span class="tbl-title">⚙️ Statut technique de l'infrastructure</span></div>
+      <div id="infra-status-widget"></div>
+    </div>
     <div class="tbl-wrap" style="padding:20px;margin-bottom:20px">
       <div class="tbl-head" style="border:none;padding:0 0 14px"><span class="tbl-title">📧 Santé des envois d'email</span></div>
       <div id="email-health-widget"></div>
@@ -8933,7 +8934,6 @@ function regSkeletonHTML(){
 }
 
 function regFetch(){
-  regCheckDbStatus();
   var body = document.getElementById("reg-sys-body");
   if(body) body.innerHTML = regSkeletonHTML();
   fetch('/api/registre')
@@ -13033,11 +13033,39 @@ window.clientsInitPage = function(){
       if(deniedEl) deniedEl.style.display = 'none';
       window.clientsRenderList();
       window.emailHealthRender();
+      window.infraStatusRender();
     } else {
       if(contentEl) contentEl.style.display = 'none';
       if(deniedEl) deniedEl.style.display = 'block';
     }
   }).catch(function(){});
+};
+
+window.infraStatusRender = function(){
+  var holder = document.getElementById('infra-status-widget');
+  if(!holder) return;
+  holder.innerHTML = '<div class="reg-loading">Chargement…</div>';
+
+  Promise.all([
+    fetch('/api/registre/status').then(function(r){ return r.json(); }).catch(function(){ return null; }),
+    fetch('/api/rag/documents').then(function(r){ return r.json(); }).catch(function(){ return null; })
+  ]).then(function(results){
+    var registreStatus = results[0];
+    var ragStatus = results[1];
+
+    var dbLine = registreStatus && registreStatus.persistant
+      ? '🟢 <strong>Registre IA</strong> — Postgres (persistant)'
+      : '🟡 <strong>Registre IA</strong> — SQLite local (non persistant)';
+
+    var ragLine = ragStatus && ragStatus.pgvector_actif
+      ? '🟢 <strong>Base de connaissance</strong> — Recherche sémantique active (pgvector)'
+      : '🟡 <strong>Base de connaissance</strong> — Recherche textuelle (mode de repli, pgvector inactif)';
+
+    holder.innerHTML = '<div style="display:flex;flex-direction:column;gap:8px;font-size:12px">'
+      + '<div>' + dbLine + '</div>'
+      + '<div>' + ragLine + '</div>'
+      + '</div>';
+  });
 };
 
 window.emailHealthRender = function(){
