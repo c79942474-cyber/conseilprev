@@ -70,18 +70,29 @@ html{scroll-behavior:smooth}body{font-family:"DM Sans",sans-serif;background:var
 }
 .ai-act-banner-inner{
   max-width:1200px;margin:0 auto;padding:11px 48px;
-  display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;
+  display:flex;align-items:center;gap:18px;
 }
-.ai-act-banner-text{font-family:'Inter',system-ui,sans-serif;font-size:13.5px;color:#F3EEFF;line-height:1.4}
+.ai-act-banner-ticker{flex:1;min-width:0;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.ai-act-banner-ticker-track{display:flex;width:max-content;animation:aiActBannerScroll 22s linear infinite}
+@keyframes aiActBannerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ai-act-banner-text{font-family:'Inter',system-ui,sans-serif;font-size:13.5px;color:#F3EEFF;line-height:1.4;white-space:nowrap;padding-right:64px}
 .ai-act-banner-text em{font-style:italic;color:#FDE68A}
 .ai-act-banner-text strong{color:#fff}
 .ai-act-banner-cta{
+  position:relative;overflow:hidden;flex-shrink:0;
   font-family:'Inter',system-ui,sans-serif;font-size:12.5px;font-weight:700;color:#fff;
   background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.4);
   padding:6px 14px;border-radius:6px;text-decoration:none;white-space:nowrap;
   transition:all .18s;
+  animation:navSentinelPulse 1.8s ease-in-out infinite;
 }
-.ai-act-banner-cta:hover{background:rgba(255,255,255,.28);border-color:rgba(255,255,255,.7)}
+.ai-act-banner-cta::after{
+  content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+  background:linear-gradient(110deg,transparent 40%,rgba(255,255,255,.55) 50%,transparent 60%);
+  background-size:200% 100%;animation:navSentinelShimmer 2.2s ease-in-out infinite;pointer-events:none;
+}
+.ai-act-banner-cta:hover{background:rgba(255,255,255,.28);border-color:rgba(255,255,255,.7);animation:none;transform:scale(1.04)}
+.ai-act-banner-cta:hover::after{animation:none;opacity:0}
 .ai-act-banner-close{
   position:absolute;top:50%;right:14px;transform:translateY(-50%);
   background:none;border:none;color:rgba(255,255,255,.7);font-size:20px;line-height:1;
@@ -89,7 +100,7 @@ html{scroll-behavior:smooth}body{font-family:"DM Sans",sans-serif;background:var
 }
 .ai-act-banner-close:hover{color:#fff}
 @media(max-width:760px){
-  .ai-act-banner-inner{padding:10px 40px;flex-direction:column;gap:8px;text-align:center}
+  .ai-act-banner-inner{padding:10px 40px;gap:10px}
   .ai-act-banner-text{font-size:12.5px}
 }
 
@@ -3739,7 +3750,12 @@ em,.hero-em{
 
 <div id="ai-act-banner" class="ai-act-banner">
   <div class="ai-act-banner-inner">
-    <span class="ai-act-banner-text">Votre entreprise utilise-t-elle de l'IA <em>sans le savoir</em> ? L'échéance du <strong>2 août 2026</strong> approche.</span>
+    <div class="ai-act-banner-ticker">
+      <div class="ai-act-banner-ticker-track">
+        <span class="ai-act-banner-text">Votre entreprise utilise-t-elle de l'IA <em>sans le savoir</em> ? L'échéance du <strong>2 août 2026</strong> approche.</span>
+        <span class="ai-act-banner-text">Votre entreprise utilise-t-elle de l'IA <em>sans le savoir</em> ? L'échéance du <strong>2 août 2026</strong> approche.</span>
+      </div>
+    </div>
     <a href="/sentinel" target="_blank" rel="noopener" class="ai-act-banner-cta">Cartographier mes systèmes IA →</a>
   </div>
   <button class="ai-act-banner-close" onclick="aiActBannerClose()" aria-label="Fermer">×</button>
