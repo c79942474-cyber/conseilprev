@@ -3355,8 +3355,13 @@ def sentauth_login():
 
     conn = registre_get_db()
     cur = conn.cursor()
-    cur.execute(registre_sql('SELECT * FROM clients WHERE email=%s AND actif=TRUE', 'SELECT * FROM clients WHERE email=? AND actif=1'), (email,))
+    # Recupere le compte quel que soit son statut actif — la distinction entre
+    # "mauvais mot de passe" et "compte pas encore active" ne se fait QU APRES
+    # verification du mot de passe, pour ne jamais reveler le statut d un compte
+    # a quelqu un qui ne connait pas deja le bon mot de passe (anti-enumeration).
+    cur.execute(registre_sql('SELECT * FROM clients WHERE email=%s', 'SELECT * FROM clients WHERE email=?'), (email,))
     row = cur.fetchone()
+    conn.commit()
     conn.close()
 
     if not row:
@@ -3364,9 +3369,13 @@ def sentauth_login():
         return jsonify({'error': 'Identifiants incorrects.'}), 401
 
     d = dict(row) if not isinstance(row, dict) else row
-    if not check_password_hash(d['mot_de_passe_hash'], password):
+    if not d.get('mot_de_passe_hash') or not check_password_hash(d['mot_de_passe_hash'], password):
         bf_protector.record_attempt(bf_key, success=False)
         return jsonify({'error': 'Identifiants incorrects.'}), 401
+
+    if not d.get('actif'):
+        bf_protector.record_attempt(bf_key, success=True)
+        return jsonify({'error': 'Votre compte n\'est pas encore activé. Vérifiez votre boîte mail (et les spams) pour le lien de confirmation, ou contactez CONSEILPREV si vous ne l\'avez pas reçu.'}), 403
 
     bf_protector.record_attempt(bf_key, success=True)
     session.clear()
