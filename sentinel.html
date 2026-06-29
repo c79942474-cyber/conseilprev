@@ -1478,7 +1478,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <button class="sb-pager-btn" onclick="pagerGo(1)" title="Section suivante">›</button>
     <div class="sb-bell" id="sb-bell-el" onclick="bellToggleMenu()">🔔<span class="sb-bell-badge" id="sb-bell-badge"></span></div>
   </div>
-  <div class="sb-edition">Édition</div>
+  <div class="sb-edition" id="sb-edition-el">Édition</div>
   <div class="sb-user">
     <div class="sb-avatar">CC</div>
     <div>
@@ -13431,6 +13431,27 @@ window.pagerGo = function(direction){
 };
 
 </script>
+<script>
+/* ══ EDITION — affiche le plan reel du compte connecte ══ */
+window.editionRefresh = function(){
+  var el = document.getElementById('sb-edition-el');
+  if(!el) return;
+  fetch('/api/sentinel-auth/me').then(function(r){ return r.json(); }).then(function(d){
+    if(!d.authenticated) return;
+    var labels = {
+      gratuit: 'Édition Gratuite',
+      pro: 'Édition Pro',
+      entreprise: 'Édition Entreprise'
+    };
+    var plan = d.is_conseilprev ? 'entreprise' : (d.plan || 'pro');
+    el.textContent = labels[plan] || 'Édition';
+  }).catch(function(){});
+};
+document.addEventListener('DOMContentLoaded', function(){ setTimeout(window.editionRefresh, 400); });
+if(document.readyState !== 'loading'){ setTimeout(window.editionRefresh, 400); }
+
+</script>
+
 
 
 
