@@ -333,6 +333,12 @@ document.getElementById('register-form').addEventListener('submit', function(e){
   .then(function(res){
     if(res.status === 201){
       document.getElementById('register-form').reset();
+      if(res.data.verification_email_sent === false){
+        successEl.innerHTML = '⚠️ Compte créé, mais l\'email de confirmation n\'a pas pu être envoyé. Contactez <a href="mailto:christophe.cerf@outlook.com" style="color:inherit;text-decoration:underline">CONSEILPREV</a> pour activer votre accès manuellement.';
+        successEl.style.color = 'var(--orange)';
+      } else {
+        successEl.textContent = '✅ Compte créé ! Vérifiez votre boîte mail pour confirmer votre adresse email avant de vous connecter.';
+      }
       successEl.style.display = 'block';
       btn.disabled = false; btn.textContent = 'Créer mon compte';
     } else {
