@@ -104,6 +104,7 @@ html{scroll-behavior:smooth}body{font-family:"DM Sans",sans-serif;background:var
   .ai-act-banner-text{font-size:12.5px}
 }
 
+body.has-ai-act-banner nav{top:48px}
 nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
   padding:0 32px;height:64px;
@@ -6428,17 +6429,10 @@ try {
   if(localStorage.getItem('aiActBannerClosed') === '1') return;
   var banner = document.getElementById('ai-act-banner');
   if(!banner) return;
-  function adjustNavPosition(){
-    var h = banner.offsetHeight;
-    var navEl = document.querySelector('nav');
-    if(navEl) navEl.style.top = h + 'px';
-  }
-  adjustNavPosition();
-  window.addEventListener('resize', adjustNavPosition);
+  document.body.classList.add('has-ai-act-banner');
   window.aiActBannerClose = function(){
     banner.style.display = 'none';
-    var navEl = document.querySelector('nav');
-    if(navEl) navEl.style.top = '0';
+    document.body.classList.remove('has-ai-act-banner');
     localStorage.setItem('aiActBannerClosed', '1');
   };
 })();
