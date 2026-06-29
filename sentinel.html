@@ -1474,8 +1474,8 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-item" onclick="go('clients',this,'ADMINISTRATION','Gestion des clients')" title="Creer et gerer les acces clients externes a Sentinel AI (reserve a CONSEILPREV)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><circle cx="19" cy="8" r="2.5"/><path d="M17.5 21v-1a3 3 0 0 0 .5-1.7"/><path d="M19 14.5a3.5 3.5 0 0 1 3.5 3.5v3"/></svg></span>Gestion des clients</div>
   </nav>
   <div class="sb-pager">
-    <button class="sb-pager-btn">‹</button>
-    <button class="sb-pager-btn">›</button>
+    <button class="sb-pager-btn" onclick="pagerGo(-1)" title="Section precedente">‹</button>
+    <button class="sb-pager-btn" onclick="pagerGo(1)" title="Section suivante">›</button>
     <div class="sb-bell" id="sb-bell-el" onclick="bellToggleMenu()">🔔<span class="sb-bell-badge" id="sb-bell-badge"></span></div>
   </div>
   <div class="sb-edition">Édition</div>
@@ -13403,6 +13403,35 @@ document.addEventListener('DOMContentLoaded', function(){ setTimeout(window.bell
 if(document.readyState !== 'loading'){ setTimeout(window.bellRefresh, 400); }
 
 </script>
+<script>
+/* ══ NAVIGATION ENTRE SECTIONS DE LA SIDEBAR — fleches precedent/suivant ══ */
+function pagerGetSections(){
+  return Array.prototype.slice.call(document.querySelectorAll('.sb-nav .sb-section'));
+}
+
+function pagerCurrentIndex(){
+  var sections = pagerGetSections();
+  var sbEl = document.querySelector('.sb');
+  if(!sbEl || !sections.length) return 0;
+  var scrollTop = sbEl.scrollTop;
+  var current = 0;
+  for(var i=0; i<sections.length; i++){
+    if(sections[i].offsetTop - sbEl.offsetTop <= scrollTop + 40) current = i;
+  }
+  return current;
+}
+
+window.pagerGo = function(direction){
+  var sections = pagerGetSections();
+  var sbEl = document.querySelector('.sb');
+  if(!sbEl || !sections.length) return;
+  var idx = pagerCurrentIndex() + direction;
+  idx = Math.max(0, Math.min(sections.length - 1, idx));
+  sections[idx].scrollIntoView({behavior:'smooth', block:'start'});
+};
+
+</script>
+
 
 
 </html>
