@@ -1425,7 +1425,7 @@ textarea.form-el{min-height:86px;resize:vertical}
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Pilotage</div>
-    <div class="sb-item on" onclick="go('apercu',this,'PILOTAGE','Aperçu')" title="Vue d ensemble : scores de risque sur 24 juridictions, classements innovation et severite."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg></span>Aperçu</div>
+    <div class="sb-item on" onclick="go('apercu',this,'PILOTAGE','Observatoire IA')" title="Panorama mondial : scores de risque sur 24 juridictions, classements innovation et severite."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg></span>Observatoire IA</div>
     <div class="sb-item" onclick="go('espace',this,'PILOTAGE','Mes actions du jour')" title="Tableau de bord personnel : suivi de vos actions et de votre progression."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg></span>Mon Espace</div>
     <div class="sb-item" onclick="go('report',this,'PILOTAGE','Vue direction')" title="Tableau de bord executif : indicateurs cles de conformite pour la direction."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>Reporting</div>
     <div class="sb-section">Cartographier</div>
@@ -1481,7 +1481,7 @@ textarea.form-el{min-height:86px;resize:vertical}
   <div class="tb-breadcrumb">
     <span class="tb-section" id="tb-sec">ÉDITION DU JOUR</span>
     <span class="tb-sep">/</span>
-    <span class="tb-page" id="tb-pg">Aperçu</span>
+    <span class="tb-page" id="tb-pg">Observatoire IA</span>
   </div>
   <div class="tb-right">
     <span class="tb-date" id="tb-date"></span>
@@ -4339,7 +4339,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 'use strict';
 
 var PAGE_META = {
-  apercu:   {section:'PILOTAGE', label:'Aperçu'},
+  apercu:   {section:'PILOTAGE', label:'Observatoire IA'},
   carto:    {section:'SE TENIR INFORMÉ',    label:'Carte mondiale'},
   comp:     {section:'SE TENIR INFORMÉ',         label:'Comparateur'},
   geo:      {section:'SE TENIR INFORMÉ',    label:'Tensions normatives'},
@@ -6206,10 +6206,10 @@ var CUR_API = 'mistral'; /* 'mistral' | 'claude' */
 /* Contexte riche par section de Sentinel AI */
 var PAGE_CTX = {
   'apercu': {
-    label: 'Vue d\'ensemble — Apercu Sentinel AI',
+    label: 'Observatoire IA — Sentinel AI',
     apiLabel: { mistral:'Mistral Large', claude:'Claude Sonnet' },
     tags: ['Qu\'est-ce que l\'EU AI Act ?','Comment classifier mon IA ?','Differents niveaux de risque ?','Sanctions AI Act ?','Qu\'est-ce que Sentinel AI ?'],
-    sys: 'L\'utilisateur est sur la page Apercu de Sentinel AI (CONSEILPREV). Cette page presente : 24 juridictions analysees, scores de risque par pays, distribution mondiale des cadres reglementaires IA, classement par innovation et severite. Contexte technique : EU AI Act Regl. 2024/1689, 4 niveaux de risque (inacceptable, haut, limite, minimal), 8 domaines Annexe III.'
+    sys: 'L\'utilisateur est sur la page Observatoire IA de Sentinel AI (CONSEILPREV). Cette page presente : 24 juridictions analysees, scores de risque par pays, distribution mondiale des cadres reglementaires IA, classement par innovation et severite. Contexte technique : EU AI Act Regl. 2024/1689, 4 niveaux de risque (inacceptable, haut, limite, minimal), 8 domaines Annexe III.'
   },
   'carto': {
     label: 'Cartographie mondiale des risques IA',
