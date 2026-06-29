@@ -2842,6 +2842,15 @@ class _PooledConnWrapper:
         return getattr(self._conn, name)
     def close(self):
         try:
+            # Nettoie systematiquement l etat transactionnel avant de rendre la
+            # connexion au pool : un rollback sur une transaction deja terminee
+            # (commit explicite fait par ailleurs) est un no-op sans danger, et
+            # ca evite que le pool doive le faire lui-meme avec un warning a
+            # chaque fois qu un appelant oublie un commit() apres un SELECT.
+            try:
+                self._conn.rollback()
+            except Exception:
+                pass
             self._pool.putconn(self._conn)
         except Exception:
             try: self._conn.close()
@@ -3222,7 +3231,11 @@ def check_pending_reports():
                 "DELETE FROM pending_reports WHERE next_send_at <= %s",
                 "DELETE FROM pending_reports WHERE next_send_at <= ?"
             ), (now,))
-            conn.commit()
+        # Commit inconditionnel : meme un simple SELECT ouvre une transaction
+        # (mode par defaut de psycopg) qui doit etre terminee avant de rendre
+        # la connexion au pool, sous peine d un rollback de securite a chaque
+        # appel (visible dans les logs sous forme de warning repete).
+        conn.commit()
         conn.close()
         for r in due:
             send_cartographie_report(r['client_id'], r['client_email'], r['client_nom'])
@@ -3255,6 +3268,7 @@ def email_health():
             "SELECT succes, COUNT(*) as n FROM email_log WHERE date_envoi > ? GROUP BY succes"
         ), (cutoff_24h,))
         stats_rows = cur.fetchall()
+        conn.commit()
         conn.close()
     except Exception as _e:
         logger.error(f"EMAIL_HEALTH_QUERY_FAILED : {_e}")
@@ -3444,6 +3458,7 @@ def sentauth_invitation_page(token):
         'SELECT * FROM clients WHERE invitation_token=%s', 'SELECT * FROM clients WHERE invitation_token=?'
     ), (token,))
     row = cur.fetchone()
+    conn.commit()
     conn.close()
     if not row:
         return send_from_directory('.', 'invitation-expiree.html')
@@ -3463,6 +3478,7 @@ def sentauth_invitation_info(token):
         'SELECT nom_entreprise, email, invitation_expire FROM clients WHERE invitation_token=?'
     ), (token,))
     row = cur.fetchone()
+    conn.commit()
     conn.close()
     if not row:
         return jsonify({'valid': False, 'error': 'Lien invalide ou déjà utilisé.'}), 404
@@ -3629,6 +3645,7 @@ def sentauth_reset_password_page(token):
     cur = conn.cursor()
     cur.execute(registre_sql('SELECT * FROM clients WHERE reset_token=%s', 'SELECT * FROM clients WHERE reset_token=?'), (token,))
     row = cur.fetchone()
+    conn.commit()
     conn.close()
     if not row:
         return send_from_directory('.', 'invitation-expiree.html')
@@ -3649,6 +3666,7 @@ def sentauth_reset_password_info(token):
         'SELECT nom_entreprise, email, reset_expire FROM clients WHERE reset_token=?'
     ), (token,))
     row = cur.fetchone()
+    conn.commit()
     conn.close()
     if not row:
         return jsonify({'valid': False, 'error': 'Lien invalide ou déjà utilisé.'}), 404
@@ -4012,6 +4030,7 @@ def registre_list():
         'SELECT * FROM systemes_ia WHERE client_id=? ORDER BY date_maj DESC'
     ), (client['id'],))
     rows = cur.fetchall()
+    conn.commit()
     conn.close()
     return jsonify({'systemes': [registre_row_to_dict(r) for r in rows], 'moteur': 'postgres' if REGISTRE_USE_PG else 'sqlite'})
 
@@ -4165,6 +4184,7 @@ def veille_get_registre_summary(client_id):
             'SELECT nom, secteur, classification, type_systeme FROM systemes_ia WHERE client_id=?'
         ), (client_id,))
         rows = cur.fetchall()
+        conn.commit()
         conn.close()
         systemes = [registre_row_to_dict_partial(r) for r in rows]
         return systemes
