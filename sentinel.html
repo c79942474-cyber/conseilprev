@@ -2145,7 +2145,7 @@ textarea.form-el{min-height:86px;resize:vertical}
   <div id="histo-rgpd-info" class="radar-registre-info radar-registre-ok" style="margin-bottom:20px">Chargement…</div>
 
   <div class="reg-toolbar">
-    <select id="histo-filter-select" class="reg-input" style="max-width:260px" onchange="histoRenderPage()">
+    <select id="histo-filter-select" class="reg-input" style="max-width:260px" onchange="histoRenderPage()" title="Filtrer l historique par outil d origine">
       <option value="">— Toutes les pages —</option>
       <option value="simulateur">Simulateur IA Act</option>
       <option value="sanctions">Calculateur sanctions</option>
@@ -2166,16 +2166,16 @@ textarea.form-el{min-height:86px;resize:vertical}
 
   <div class="tbl-wrap" style="padding:24px;margin-bottom:24px">
     <div class="tbl-head" style="border:none;padding:0 0 16px"><span class="tbl-title">Importer un document</span></div>
-    <div id="rag-drop-zone" class="rag-drop-zone" ondrop="ragHandleDrop(event)" ondragover="event.preventDefault()" ondragenter="this.classList.add('rag-drop-active')" ondragleave="this.classList.remove('rag-drop-active')">
+    <div id="rag-drop-zone" class="rag-drop-zone" ondrop="ragHandleDrop(event)" ondragover="event.preventDefault()" ondragenter="this.classList.add('rag-drop-active')" ondragleave="this.classList.remove('rag-drop-active')" title="Glissez-deposez un fichier ou cliquez pour parcourir">
       <input type="file" id="rag-file-input" accept=".pdf,.docx,.txt,.csv" style="display:none" onchange="ragHandleFileSelect(this.files)">
-      <div onclick="document.getElementById('rag-file-input').click()" style="cursor:pointer">
+      <div onclick="document.getElementById('rag-file-input').click()" style="cursor:pointer" title="Cliquez pour selectionner un fichier (PDF, DOCX, TXT, CSV)">
         <div style="font-size:28px;margin-bottom:8px">📎</div>
         <div style="font-size:13px;font-weight:600">Cliquez ou déposez un fichier ici</div>
         <div style="font-size:11px;color:var(--muted);margin-top:4px">PDF, DOCX, TXT, CSV — 8 Mo maximum</div>
       </div>
     </div>
     <div style="margin-top:14px">
-      <label class="reg-label">Pages à enrichir avec ce document</label>
+      <label class="reg-label" title="Selectionnez les pages dont les analyses pourront utiliser ce document via recherche semantique">Pages à enrichir avec ce document</label>
       <div class="rag-pages-checks">
         <label><input type="checkbox" value="audit" checked> Audit IA Act</label>
         <label><input type="checkbox" value="registre"> Registre IA</label>
@@ -2195,7 +2195,7 @@ textarea.form-el{min-height:86px;resize:vertical}
   </div>
 
   <div class="reg-toolbar">
-    <select id="rag-filter-select" class="reg-input" style="max-width:260px" onchange="ragRenderList()">
+    <select id="rag-filter-select" class="reg-input" style="max-width:260px" onchange="ragRenderList()" title="Filtrer les documents par page enrichie">
       <option value="">— Tous les documents —</option>
       <option value="audit">Audit IA Act</option>
       <option value="registre">Registre IA</option>
@@ -2234,7 +2234,7 @@ textarea.form-el{min-height:86px;resize:vertical}
         <div class="reg-field"><label class="reg-label">Email</label><input type="email" id="cl-email" class="reg-input" placeholder="contact@client.com"></div>
       </div>
       <div class="radar-registre-info radar-registre-ok" style="margin-top:12px">🔒 Le client recevra un email avec un lien sécurisé pour définir lui-même son mot de passe — CONSEILPREV ne le connaîtra jamais (conforme RGPD).</div>
-      <button class="mat-export-btn" style="background:var(--ink);color:#fff;margin-top:14px" onclick="clientsCreate()">+ Envoyer l invitation</button>
+      <button class="mat-export-btn" style="background:var(--ink);color:#fff;margin-top:14px" onclick="clientsCreate()" title="Cree le compte et envoie un email d invitation securise au client">+ Envoyer l invitation</button>
       <div id="clients-create-msg" style="margin-top:10px;font-size:12px"></div>
     </div>
 
@@ -2257,7 +2257,7 @@ textarea.form-el{min-height:86px;resize:vertical}
   <div class="tbl-wrap" style="padding:24px;margin-top:24px">
     <div class="tbl-head" style="border:none;padding:0 0 16px"><span class="tbl-title">Et ensuite ?</span></div>
     <p style="font-size:12.5px;color:var(--ink2);line-height:1.6;margin-bottom:14px">Pour chaque système identifié grâce à cette checklist : classifiez-le précisément avec le Simulateur, puis enregistrez-le au Registre IA avec son rôle réglementaire et son service utilisateur.</p>
-    <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="go('simulateur',null,'CARTOGRAPHIER','Simulateur IA Act')">Aller au Simulateur IA Act →</button>
+    <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="go('simulateur',null,'CARTOGRAPHIER','Simulateur IA Act')" title="Classifier le systeme identifie selon le Reglement EU AI Act">Aller au Simulateur IA Act →</button>
   </div>
 </div>
 
@@ -12482,7 +12482,7 @@ window.histoRenderPage = function(){
   histoFetch(pageFilter).then(function(d){
     var calculs = d.calculs || [];
     if(infoEl){
-      infoEl.innerHTML = '🔒 <strong>Traçabilité RGPD</strong> — '+(d.retention_info||'Conservation 3 ans (Art. 5(1)(e) RGPD).')+' Accessible à vous et à CONSEILPREV (support/audit). <a href="#" onclick="histoPurgeAll();return false;" style="color:var(--accent)">Supprimer tout mon historique →</a>';
+      infoEl.innerHTML = '🔒 <strong>Traçabilité RGPD</strong> — '+(d.retention_info||'Conservation 3 ans (Art. 5(1)(e) RGPD).')+' Accessible à vous et à CONSEILPREV (support/audit). <a href="#" onclick="histoPurgeAll();return false;" style="color:var(--accent)" title="Supprime definitivement TOUS vos calculs enregistres, action irreversible">Supprimer tout mon historique →</a>';
     }
     if(calculs.length === 0){
       holder.innerHTML = '<div class="reg-empty">Aucun calcul enregistré pour le moment. Les calculs effectués sur le Simulateur, le Calculateur de sanctions, la Tarification par résultats, l Audit de maturité et FRIA s enregistrent automatiquement ici.</div>';
@@ -12496,8 +12496,8 @@ window.histoRenderPage = function(){
         + '<div class="histo-row-top"><span class="histo-page-chip">'+pageLabel+'</span>'+modifTag+'<span class="histo-date">'+d1+'</span></div>'
         + '<div class="histo-label">'+(c.label || c.type_calcul)+'</div>'
         + '<div class="histo-actions" onclick="event.stopPropagation()">'
-        + '<button class="histo-btn-sm" onclick="histoOpenDetail('+c.id+')">Voir le détail</button>'
-        + '<button class="histo-btn-sm histo-btn-danger" onclick="histoDelete('+c.id+')">Supprimer</button>'
+        + '<button class="histo-btn-sm" onclick="histoOpenDetail('+c.id+')" title="Afficher le detail complet de ce calcul">Voir le détail</button>'
+        + '<button class="histo-btn-sm histo-btn-danger" onclick="histoDelete('+c.id+')" title="Supprimer definitivement ce calcul">Supprimer</button>'
         + '</div></div>';
     }).join('');
   }).catch(function(){
@@ -12971,8 +12971,8 @@ window.ragRenderList = function(){
         + '<div class="histo-label">'+doc.nom_fichier+'</div>'
         + '<div style="font-size:10px;color:var(--muted2);margin-top:2px">'+window.ragFormatSize(doc.taille_octets)+' · '+doc.nb_chunks+' segment(s) indexé(s)</div>'
         + '<div class="histo-actions">'
-        + '<button class="histo-btn-sm" onclick="ragDownload('+doc.id+')">⬇ Télécharger</button>'
-        + '<button class="histo-btn-sm histo-btn-danger" onclick="ragDeleteDoc('+doc.id+',\''+doc.nom_fichier.replace(/'/g,"")+'\')">Supprimer</button>'
+        + '<button class="histo-btn-sm" onclick="ragDownload('+doc.id+')" title="Telecharger le fichier original">⬇ Télécharger</button>'
+        + '<button class="histo-btn-sm histo-btn-danger" onclick="ragDeleteDoc('+doc.id+',\''+doc.nom_fichier.replace(/'/g,"")+'\')" title="Retirer ce document de la base de connaissance, action irreversible">Supprimer</button>'
         + '</div></div>';
     }).join('');
   }).catch(function(){
@@ -13704,7 +13704,7 @@ window.shadowAiRender = function(){
   if(!holder) return;
   holder.innerHTML = SHADOW_AI_CASES.map(function(c, i){
     return '<div class="ctrl-section" style="margin-bottom:14px">'
-      + '<div class="ctrl-section-head" style="cursor:pointer" onclick="shadowAiToggle('+i+')">'
+      + '<div class="ctrl-section-head" style="cursor:pointer" onclick="shadowAiToggle('+i+')" title="Cliquez pour deplier le detail (exemples, applicabilite, obligation, conseil)">'
       + '<span class="ctrl-section-title">'+c.icon+' '+c.title+'</span>'
       + '<span id="shadow-ai-chev-'+i+'" style="color:var(--muted);font-size:11px">▾</span>'
       + '</div>'
