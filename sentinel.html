@@ -10058,7 +10058,7 @@ window.friaAnswer = function(sysId, droitId, val){
   friaSaveAnswers();
   friaRefreshSystemScore(sysId);
   if(typeof window.cpLogActivity === "function"){
-    var sys = FRIA_REG_CACHE.find(function(s){ return s.id === sysId; });
+    var sys = FRIA_REG_CACHE.find(function(s){ return String(s.id) === String(sysId); });
     window.cpLogActivity("Évaluation FRIA mise à jour"+(sys?" — "+sys.nom:""), "action");
   }
 };
@@ -10093,7 +10093,7 @@ function friaRefreshSystemScore(sysId){
   var saveBtn = document.getElementById("fria-save-btn-"+sysId);
   if(saveBtn){
     var complete = result && result.answeredCount === result.totalCount;
-    var sys = FRIA_REG_CACHE.find(function(s){ return s.id === sysId; });
+    var sys = FRIA_REG_CACHE.find(function(s){ return String(s.id) === String(sysId); });
     saveBtn.disabled = !complete;
     saveBtn.style.background = complete ? "#1C5A8A" : "var(--rule2)";
     saveBtn.style.color = complete ? "#fff" : "var(--muted)";
@@ -10159,7 +10159,7 @@ function friaRenderSysCard(systeme){
       return '<div class="fria-right-item">'
         + '<div class="fria-right-q"><strong>'+r.label+'</strong> <span class="fria-right-art">'+r.art+'</span><br>'+r.desc+'</div>'
         + '<div class="fria-opts">' + FRIA_LEVELS.map(function(lvl){
-            return '<button class="fria-opt'+(val===lvl.v?' on':'')+'" id="fria-opt-'+systeme.id+'-'+r.id+'-'+lvl.v+'" onclick="friaAnswer(\''+systeme.id+'\',\''+r.id+'\','+lvl.v+')" title="'+lvl.label+'">'+lvl.v+'</button>';
+            return '<button class="fria-opt'+(val===lvl.v?' on':'')+'" id="fria-opt-'+systeme.id+'-'+r.id+'-'+lvl.v+'" onclick="friaAnswer('+systeme.id+',\''+r.id+'\','+lvl.v+')" title="'+lvl.label+'">'+lvl.v+'</button>';
           }).join('') + '</div></div>';
     }).join('') + '</div>';
 
