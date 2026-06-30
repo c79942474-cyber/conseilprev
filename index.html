@@ -6274,25 +6274,26 @@ document.addEventListener('keydown', function(e){
   </div>
 </footer>
 <!-- CHATBOT CONSEILPREV -->
-<button id="cpcBtn" onclick="cpcToggle()" aria-label="Assistant réglementaire">
+<button id="cpcBtn" onclick="cpcToggle()" aria-label="Assistant réglementaire" title="Ouvrir l'assistant réglementaire CONSEILPREV (IA Act, NIS2, RGPD)">
   <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
   <div class="cpc-notif"></div>
 </button>
 <div id="cpcPanel">
   <div class="cpc-head">
-    <button class="cpc-close" onclick="cpcToggle()">×</button>
+    <button class="cpc-close" onclick="cpcToggle()" title="Fermer l'assistant réglementaire">×</button>
     <div class="cpc-eyebrow">Chat Conformité</div>
     <div class="cpc-title">Assistant <em>réglementaire</em></div>
-    <div class="cpc-sub">EU AI Act · NIS2 · RGPD — fondé sur les textes officiels</div>
+    <div class="cpc-sub" title="Réponses fondées sur les textes officiels (EUR-Lex), double vérification croisée Claude + Mistral pour limiter les erreurs factuelles">EU AI Act · NIS2 · RGPD — fondé sur les textes officiels</div>
   </div>
   <div class="cpc-tags" id="cpcTags"></div>
   <div class="cpc-msgs" id="cpcMsgs"></div>
   <div class="cpc-bar">
     <textarea class="cpc-input" id="cpcInput" rows="1"
       placeholder="Posez votre question réglementaire…"
+      title="Entrée pour envoyer, Maj+Entrée pour un saut de ligne"
       onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();cpcSend()}"
       oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,90)+'px'"></textarea>
-    <button class="cpc-send" onclick="cpcSend()">Envoyer</button>
+    <button class="cpc-send" onclick="cpcSend()" title="Envoyer votre question (ou appuyez sur Entrée)">Envoyer</button>
   </div>
   <div class="cpc-foot">Sentinel AI · CONSEILPREV Paris · christophe.cerf@outlook.com</div>
 </div>
@@ -6323,7 +6324,7 @@ window.cpcToggle=function(){
 function cpcInit(){
   var t=document.getElementById('cpcTags');
   if(t) t.innerHTML=TAGS.map(function(tg){
-    return '<button class="cpc-tag" onclick="cpcSend(\''+tg.replace(/'/g,'\\\'')+'\')">'+(tg.length>22?tg.substring(0,22)+'…':tg)+'</button>';
+    return '<button class="cpc-tag" onclick="cpcSend(\''+tg.replace(/'/g,'\\\'')+'\')" title="'+tg.replace(/"/g,'&quot;')+'">'+(tg.length>22?tg.substring(0,22)+'…':tg)+'</button>';
   }).join('');
   cpcAdd('bot',WELCOME);
 }
