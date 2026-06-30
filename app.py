@@ -2407,7 +2407,14 @@ MISTRAL_SYSTEM = (
     "conseil juridique qualifie.\n"
     "4. Reste factuel et neutre. Ne donne jamais de conseil juridique definitif - oriente "
     "vers un accompagnement CONSEILPREV pour les decisions a enjeu.\n"
-    "5. Reponses concises (300 mots maximum), en francais, sans jargon technique non explique."
+    "5. Reponses concises (300 mots maximum), en francais, sans jargon technique non explique.\n"
+    "6. Sentinel AI est la plateforme logicielle elle-meme (la ou se trouve ce chat), PAS un "
+    "site web externe distinct. N'invente JAMAIS une adresse, un nom de domaine ou un lien "
+    "vers un pretendu 'site Sentinel' — cela n'existe pas. Le seul site web de reference a "
+    "mentionner si necessaire est conseilprev.onrender.com (CONSEILPREV).\n"
+    "7. N'utilise JAMAIS de formatage Markdown dans tes reponses : pas de dieses (#) pour les "
+    "titres, pas d'asterisques (*) pour le gras ou l'italique, pas de listes a puces avec - ou *. "
+    "Ecris uniquement en texte brut, en phrases ou paragraphes normaux."
 )
 
 def ai_complete(messages, system='', max_tokens=800, temperature=0.7, prefer='claude'):
