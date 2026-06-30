@@ -8982,13 +8982,21 @@ function regRender(){
     return;
   }
 
+  var CYCLE_LABELS = {
+    conception: {label:"① Conception", color:"var(--blue)"},
+    developpement: {label:"② Développement", color:"var(--blue)"},
+    pre_production: {label:"③ Pré-production", color:"var(--orange)"},
+    production: {label:"④ Production", color:"var(--green)"},
+    revue: {label:"⑤ Revue en cours", color:"var(--accent)"}
+  };
   body.innerHTML = data.map(function(s){
     var cl = CLASSIF_LABELS[s.classification] || CLASSIF_LABELS.a_evaluer;
     var st = STATUT_LABELS[s.statut_conformite] || STATUT_LABELS.a_evaluer;
+    var cy = CYCLE_LABELS[s.cycle_vie] || CYCLE_LABELS.production;
     var scoreColor = s.score_risque>=7 ? "var(--accent)" : s.score_risque>=4 ? "var(--orange)" : "var(--green)";
     return '<div class="reg-sys-row" onclick="regOpenModal('+s.id+')">'
       + '<div class="rs-ico">🤖</div>'
-      + '<div><div class="rs-name">'+s.nom+'</div><div class="rs-type">'+(s.type_systeme||"—")+'</div></div>'
+      + '<div><div class="rs-name">'+s.nom+'</div><div class="rs-type">'+(s.type_systeme||"—")+' · <span style="color:'+cy.color+'">'+cy.label+'</span></div></div>'
       + '<div><span class="chip '+cl.cls+'">'+cl.label+'</span></div>'
       + '<div><span class="chip chip-b">'+(s.secteur||"—")+'</span></div>'
       + '<div><span class="chip '+st.cls+'">'+st.label+'</span></div>'
@@ -9041,6 +9049,13 @@ window.regOpenModal = function(id){
         regField("Responsable", '<input type="text" id="rf-resp" class="reg-input" value="'+val("responsable")+'" placeholder="Ex: Responsable IA">')
       ])
     + regField("Fournisseur / Éditeur", '<input type="text" id="rf-fournisseur" class="reg-input" value="'+val("fournisseur")+'" placeholder="Ex: Interne, OpenAI, fournisseur tiers">')
+    + regRow([
+        regField("Étape du cycle de vie (Privacy by Design, Art. 25 RGPD)", '<select id="rf-cycle" class="reg-input">'+sel("cycle_vie",[
+            {v:"conception",l:"① Conception"},{v:"developpement",l:"② Développement"},{v:"pre_production",l:"③ Pré-production"},{v:"production",l:"④ Production"},{v:"revue",l:"⑤ Revue périodique en cours"}
+          ])+'</select>'),
+        regField("Product Owner", '<input type="text" id="rf-po" class="reg-input" value="'+val("product_owner")+'" placeholder="Nom du Product Owner responsable">')
+      ])
+    + (sys && sys.derniere_revue ? '<div class="reg-field" style="font-size:11px;color:var(--muted)">Dernière revue de conformité privacy : '+new Date(sys.derniere_revue).toLocaleDateString('fr-FR')+'</div>' : '')
     + (sys && (sys.classification==="haut"||sys.classification==="inacceptable") ? '<div class="radar-registre-info radar-registre-warn">⚖️ Système à haut risque — une <a href="#" onclick="regCloseModal();go(\'fria\',null,\'CONFORMITÉ\',\'Évaluation FRIA\');return false;">évaluation FRIA</a> peut être requise (Art. 27).</div>' : '')
     + '</div></div>'
     + '<div class="mat-modal-foot">'
@@ -9067,7 +9082,9 @@ window.regSave = function(){
     justification: document.getElementById("rf-justif").value.trim(),
     score_risque: parseInt(document.getElementById("rf-score").value || "0", 10),
     responsable: document.getElementById("rf-resp").value.trim(),
-    fournisseur: document.getElementById("rf-fournisseur").value.trim()
+    fournisseur: document.getElementById("rf-fournisseur").value.trim(),
+    cycle_vie: document.getElementById("rf-cycle").value,
+    product_owner: document.getElementById("rf-po").value.trim()
   };
   if(!payload.nom){ alert("Le nom du système est obligatoire."); return; }
 
