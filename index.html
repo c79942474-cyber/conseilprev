@@ -105,6 +105,25 @@ html{scroll-behavior:smooth}body{font-family:"DM Sans",sans-serif;background:var
 }
 
 body.has-ai-act-banner nav{top:48px}
+.cpx-expand-btn{background:none;border:none;color:inherit;font-size:14px;cursor:pointer;padding:4px 6px;opacity:.65;transition:opacity .15s}
+.cpx-expand-btn:hover{opacity:1}
+.cpx-overlay{position:fixed;inset:0;background:rgba(10,8,20,.55);z-index:9996;display:none;backdrop-filter:blur(2px)}
+.cpx-overlay.on{display:block}
+#cpcPanel.cpx-expanded{
+  position:fixed!important;top:5vh!important;left:50%!important;right:auto!important;bottom:auto!important;
+  transform:translateX(-50%);width:min(720px,92vw)!important;max-width:92vw!important;
+  height:90vh!important;max-height:90vh!important;z-index:10010!important;
+}
+#cpcPanel.cpx-expanded .cpc-msgs{flex:1;font-size:15px;line-height:1.6}
+#cpcPanel.cpx-expanded .cpc-input{font-size:15px}
+#vbox.cpx-expanded{
+  position:fixed!important;top:5vh!important;left:50%!important;right:auto!important;bottom:auto!important;
+  transform:translateX(-50%);width:min(880px,94vw)!important;max-width:94vw!important;
+  height:90vh!important;max-height:90vh!important;z-index:9999!important;
+}
+#vbox.cpx-expanded #vitems{font-size:14.5px}
+#vbox.cpx-expanded .v-item-title{font-size:16px!important}
+
 nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
   padding:0 32px;height:64px;
@@ -4731,7 +4750,7 @@ em,.hero-em{
     </div>
     <div id="vhead-acts">
       <div id="vlive-badge"><div id="vlive-dot"></div>Live</div>
-      <button onclick="vRefresh()" title="Rafraîchir">↻</button>
+      <button class="cpx-expand-btn" onclick="cpxExpandToggle('vbox')" title="Agrandir pour une meilleure lecture">⤢</button><button onclick="vRefresh()" title="Rafraîchir">↻</button>
       <button onclick="vOpen()" title="Fermer">✕</button>
     </div>
   </div>
@@ -6280,7 +6299,7 @@ document.addEventListener('keydown', function(e){
 </button>
 <div id="cpcPanel">
   <div class="cpc-head">
-    <button class="cpc-close" onclick="cpcToggle()" title="Fermer l'assistant réglementaire">×</button>
+    <button class="cpx-expand-btn" onclick="cpxExpandToggle('cpcPanel')" title="Agrandir pour une meilleure lecture" style="position:absolute;top:14px;right:42px">⤢</button><button class="cpc-close" onclick="cpcToggle()" title="Fermer l'assistant réglementaire">×</button>
     <div class="cpc-eyebrow">Chat Conformité</div>
     <div class="cpc-title">Assistant <em>réglementaire</em></div>
     <div class="cpc-sub" title="Réponses fondées sur les textes officiels (EUR-Lex), double vérification croisée Claude + Mistral pour limiter les erreurs factuelles">EU AI Act · NIS2 · RGPD — fondé sur les textes officiels</div>
@@ -6449,5 +6468,45 @@ try {
 })();
 
 </script>
+<script>
+window.cpxExpandToggle = function(panelId){
+  var panel = document.getElementById(panelId);
+  if(!panel) return;
+  var overlay = document.getElementById('cpx-overlay');
+  if(!overlay){
+    overlay = document.createElement('div');
+    overlay.id = 'cpx-overlay';
+    overlay.className = 'cpx-overlay';
+    overlay.onclick = function(){ window.cpxCollapseAll(); };
+    document.body.appendChild(overlay);
+  }
+  var isExpanded = panel.classList.contains('cpx-expanded');
+  window.cpxCollapseAll();
+  if(!isExpanded){
+    panel.classList.add('cpx-expanded');
+    overlay.classList.add('on');
+    var btn = panel.querySelector('.cpx-expand-btn');
+    if(btn) btn.textContent = '⤡';
+    if(btn) btn.title = 'Réduire';
+  }
+};
+window.cpxCollapseAll = function(){
+  ['cpcPanel','vbox'].forEach(function(id){
+    var p = document.getElementById(id);
+    if(p){
+      p.classList.remove('cpx-expanded');
+      var btn = p.querySelector('.cpx-expand-btn');
+      if(btn){ btn.textContent = '⤢'; btn.title = 'Agrandir pour une meilleure lecture'; }
+    }
+  });
+  var overlay = document.getElementById('cpx-overlay');
+  if(overlay) overlay.classList.remove('on');
+};
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') window.cpxCollapseAll();
+});
+
+</script>
+
 
 </html>
