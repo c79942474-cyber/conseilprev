@@ -1445,6 +1445,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-item" onclick="go('espace',this,'PILOTAGE','Mes actions du jour')" title="Tableau de bord personnel : suivi de vos actions et de votre progression."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg></span>Mon Espace</div>
     <div class="sb-item" onclick="go('report',this,'PILOTAGE','Vue direction')" title="Tableau de bord executif : indicateurs cles de conformite pour la direction."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>Reporting</div>
     <div class="sb-section">Cartographier</div>
+    <div class="sb-item" onclick="go('shadow-ai',this,'CARTOGRAPHIER','Découverte Shadow AI')" title="Recensez les systemes IA invisibles deja presents dans votre organisation, avant de les classifier."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg></span>Découverte Shadow AI</div>
     <div class="sb-item" onclick="go('simulateur',this,'CARTOGRAPHIER','Simulateur IA Act')" title="Classifiez un systeme IA selon le Reglement EU AI Act avant de l enregistrer au Registre."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>Simulateur IA Act</div>
     <div class="sb-item" onclick="go('registre',this,'CARTOGRAPHIER','Systèmes IA')" title="Registre des systemes IA connecte a une base de donnees reelle (ajout, edition, suppression)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/></svg></span>Registre IA</div>
     <div class="sb-item" onclick="go('maturite',this,'CARTOGRAPHIER','Audit de maturité IA')" title="Audit de maturite IA sectoriel : 8 piliers, questionnaire, KPIs, budget et livrables generes par IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 3 5-6"/></svg></span>Audit de maturité IA</div>
@@ -2241,6 +2242,22 @@ textarea.form-el{min-height:86px;resize:vertical}
       <div class="tbl-head"><span class="tbl-title">Clients existants</span></div>
       <div id="clients-list"></div>
     </div>
+  </div>
+</div>
+
+<div class="page" id="p-shadow-ai">
+  <span class="eyebrow">Cartographier · Avant le Simulateur</span>
+  <h1 class="page-h">Découverte <em>Shadow AI</em></h1>
+  <p class="page-lead">Le plus grand risque n'est pas toujours le grand projet IA présenté en comité de direction — il est souvent dans l'IA déjà là, invisible. Avant de classifier un système, encore faut-il savoir qu'il existe. Cette checklist guide la découverte des 7 cas d'usage les plus fréquemment oubliés.</p>
+
+  <div class="radar-registre-info" style="margin-bottom:24px">📅 <strong>Échéance du 2 août 2026</strong> — les obligations de transparence (Art. 50) deviennent pleinement applicables : information explicite en cas d'interaction avec une IA, marquage des contenus synthétiques, signalement des deepfakes.</div>
+
+  <div id="shadow-ai-list"></div>
+
+  <div class="tbl-wrap" style="padding:24px;margin-top:24px">
+    <div class="tbl-head" style="border:none;padding:0 0 16px"><span class="tbl-title">Et ensuite ?</span></div>
+    <p style="font-size:12.5px;color:var(--ink2);line-height:1.6;margin-bottom:14px">Pour chaque système identifié grâce à cette checklist : classifiez-le précisément avec le Simulateur, puis enregistrez-le au Registre IA avec son rôle réglementaire et son service utilisateur.</p>
+    <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="go('simulateur',null,'CARTOGRAPHIER','Simulateur IA Act')">Aller au Simulateur IA Act →</button>
   </div>
 </div>
 
@@ -6245,6 +6262,10 @@ var CUR_API = 'mistral'; /* 'mistral' | 'claude' */
 
 /* Contexte riche par section de Sentinel AI */
 var PAGE_CTX = {
+  'shadow-ai': {
+    label: 'Découverte Shadow AI',
+    sys: 'L\'utilisateur est sur la page Decouverte Shadow AI de Sentinel AI (CONSEILPREV). Cette page recense 7 cas d usage frequemment invisibles : SaaS avec IA activee, outils RH, chatbots, generateurs de contenus, agents connectes aux donnees, API de modeles, prestataires utilisant l IA, modeles open source heberges en interne. Echeance 2 aout 2026 pour les obligations de transparence Art. 50.'
+  },
   'apercu': {
     label: 'Observatoire IA — Sentinel AI',
     apiLabel: { mistral:'Mistral Large', claude:'Claude Sonnet' },
@@ -13589,6 +13610,103 @@ document.addEventListener('DOMContentLoaded', function(){ setTimeout(window.edit
 if(document.readyState !== 'loading'){ setTimeout(window.editionRefresh, 400); }
 
 </script>
+<script>
+/* ══ DECOUVERTE SHADOW AI — checklist des 7 cas d usage IA invisibles ══ */
+var SHADOW_AI_CASES = [
+  {
+    icon: '🔌', title: 'Fonctionnalités IA activées dans des logiciels SaaS',
+    examples: 'Copilot Microsoft 365, Salesforce Einstein, options IA ajoutées par un éditeur sans annonce',
+    applicable: 'Souvent oui — l\'entreprise est généralement déployeur (Art. 3(4)), même sans avoir développé l\'outil',
+    obligation: 'Vérifier auprès de l\'éditeur le niveau de risque du module IA. Si interaction directe avec des personnes : information explicite requise (Art. 50§1, applicable au 2 août 2026).',
+    conseil: 'Interroger systématiquement les achats et l\'IT sur les options IA déjà activées dans les contrats SaaS existants — souvent activées par défaut sans validation formelle.'
+  },
+  {
+    icon: '👥', title: 'Outils RH de tri, d\'évaluation ou de matching',
+    examples: 'Tri de CV automatisé, scoring de candidats, matching poste/profil',
+    applicable: 'Oui, quasi systématiquement — cas explicite de l\'Annexe III, point 4(a)',
+    obligation: 'Haut risque par défaut (Art. 6§2 + Annexe III). FRIA obligatoire si le déployeur est un organisme public (Art. 27). Documentation technique, supervision humaine et registre EU requis.',
+    conseil: 'Prioriser ce cas d\'usage en premier dans le Registre IA — c\'est l\'un des domaines où les sanctions sont les plus probables (sujet sensible, fort contentieux prud\'homal potentiel).'
+  },
+  {
+    icon: '💬', title: 'Chatbots clients ou internes',
+    examples: 'Assistant service client, chatbot RH interne, agent conversationnel sur le site web',
+    applicable: 'Oui — dès qu\'il y a interaction directe avec une personne physique',
+    obligation: 'Information claire que l\'utilisateur interagit avec une IA (Art. 50§1), sauf si évident pour une personne raisonnablement informée. Applicable au 2 août 2026.',
+    conseil: 'Vérifier que la mention "vous échangez avec une IA" apparaît dès le premier message, pas seulement dans des mentions légales difficiles à trouver.'
+  },
+  {
+    icon: '🎨', title: 'Générateurs de textes, d\'images, de vidéos et de voix',
+    examples: 'Génération de visuels marketing, synthèse vocale, rédaction assistée de contenus publiés',
+    applicable: 'Oui — obligation de marquage, distincte de l\'obligation d\'information',
+    obligation: 'Marquage machine-readable des contenus générés ou manipulés (Art. 50§2). Pour les deepfakes ou textes d\'intérêt public publiés : signalement explicite obligatoire (Art. 50§4). Délai spécifique jusqu\'au 2 décembre 2026 pour le marquage des systèmes déjà sur le marché avant le 2 août 2026 (Digital Omnibus).',
+    conseil: 'Distinguer les usages internes (pas de publication) des contenus diffusés publiquement — seuls ces derniers déclenchent pleinement l\'obligation de signalement.'
+  },
+  {
+    icon: '🔗', title: 'Agents connectés aux données de l\'entreprise',
+    examples: 'Copilote interne branché sur une base documentaire (RAG), assistant analysant des données métier',
+    applicable: 'Dépend de l\'usage exact — souvent risque limité ou minimal, sauf si le système influence des décisions sur des personnes (RH, crédit, etc.)',
+    obligation: 'Si décisionnel sur des personnes : potentiellement haut risque. Sinon, gouvernance des données (qualité, biais, sécurité) recommandée à titre de bonne pratique (ISO/IEC 42001).',
+    conseil: 'Documenter précisément quelles données sont accessibles à l\'agent — un agent RAG mal cloisonné peut exposer des données sensibles au-delà de son usage prévu.'
+  },
+  {
+    icon: '🧩', title: 'API de modèles utilisées dans les produits',
+    examples: 'Appels à des API de modèles tiers (OpenAI, Anthropic, Mistral) intégrés dans un produit ou service',
+    applicable: 'Oui — l\'entreprise est déployeur du modèle, potentiellement fournisseur du produit final',
+    obligation: 'Vérifier la documentation du fournisseur du modèle (obligations Art. 53 si GPAI). Si le produit final interagit avec des personnes : transparence Art. 50 à votre charge en tant que déployeur du produit.',
+    conseil: 'Conserver une trace des conditions d\'utilisation et des garanties contractuelles du fournisseur de l\'API — utile en cas de modification substantielle (Art. 25) faisant basculer votre rôle.'
+  },
+  {
+    icon: '🤝', title: 'Prestataires qui utilisent de l\'IA dans leurs livrables',
+    examples: 'Agence créa utilisant un générateur d\'images, cabinet de conseil utilisant un LLM pour des analyses',
+    applicable: 'Oui, indirectement — responsabilité de vérification incombe à l\'entreprise qui reçoit le livrable',
+    obligation: 'Aucune obligation directe de l\'AI Act envers le donneur d\'ordre, mais risque de non-conformité par ricochet (contenu non marqué, biais non documenté).',
+    conseil: 'Ajouter une clause contractuelle standard exigeant la déclaration de tout usage d\'IA dans les livrables, avec preuve de conformité Art. 50 si applicable.'
+  },
+  {
+    icon: '🖥️', title: 'Modèles open source ou open weights hébergés en interne',
+    examples: 'Llama, Mistral ou autre modèle déployé sur l\'infrastructure de l\'entreprise',
+    applicable: 'Oui — l\'entreprise devient fournisseur de fait dès qu\'elle héberge et met le système à disposition en son nom',
+    obligation: 'Si modification substantielle du modèle de base : bascule en obligations de fournisseur (Art. 25). Obligations de transparence (Art. 50) si interaction avec des personnes physiques.',
+    conseil: 'Clarifier en interne qui porte la responsabilité "fournisseur" pour un modèle auto-hébergé — un point souvent négligé car perçu à tort comme un simple usage technique sans conséquence réglementaire.'
+  }
+];
+
+window.shadowAiRender = function(){
+  var holder = document.getElementById('shadow-ai-list');
+  if(!holder) return;
+  holder.innerHTML = SHADOW_AI_CASES.map(function(c, i){
+    return '<div class="ctrl-section" style="margin-bottom:14px">'
+      + '<div class="ctrl-section-head" style="cursor:pointer" onclick="shadowAiToggle('+i+')">'
+      + '<span class="ctrl-section-title">'+c.icon+' '+c.title+'</span>'
+      + '<span id="shadow-ai-chev-'+i+'" style="color:var(--muted);font-size:11px">▾</span>'
+      + '</div>'
+      + '<div id="shadow-ai-body-'+i+'" style="padding:14px 16px;font-size:12px;color:var(--ink2);line-height:1.7">'
+      + '<div style="margin-bottom:8px"><strong>Exemples :</strong> '+c.examples+'</div>'
+      + '<div style="margin-bottom:8px"><strong>Applicable ?</strong> '+c.applicable+'</div>'
+      + '<div style="margin-bottom:8px"><strong>Obligation :</strong> '+c.obligation+'</div>'
+      + '<div style="background:rgba(28,90,138,.06);border-left:3px solid var(--blue);padding:8px 12px;border-radius:4px"><strong>💡 Conseil :</strong> '+c.conseil+'</div>'
+      + '</div></div>';
+  }).join('');
+};
+
+window.shadowAiToggle = function(i){
+  var body = document.getElementById('shadow-ai-body-'+i);
+  var chev = document.getElementById('shadow-ai-chev-'+i);
+  if(!body) return;
+  var isOpen = body.style.display !== 'none';
+  body.style.display = isOpen ? 'none' : 'block';
+  if(chev) chev.textContent = isOpen ? '▸' : '▾';
+};
+
+var _shadowAiOrigGo = window.go;
+window.go = function(id){
+  var r = _shadowAiOrigGo ? _shadowAiOrigGo.apply(this, arguments) : undefined;
+  if(id === "shadow-ai") setTimeout(window.shadowAiRender, 50);
+  return r;
+};
+
+</script>
+
 
 
 
