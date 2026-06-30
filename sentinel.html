@@ -1052,6 +1052,10 @@ textarea.form-el{min-height:86px;resize:vertical}
 .rs-del:hover{color:var(--accent)}
 .reg-form{display:flex;flex-direction:column;gap:14px}
 .reg-form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.reg-form-section-title{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 4px;padding-top:14px;border-top:1px solid var(--rule)}
+.reg-checkbox-group{display:flex;flex-direction:column;gap:8px}
+.reg-checkbox-opt{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink2);cursor:pointer}
+.reg-checkbox-opt input[type=checkbox]{width:15px;height:15px;cursor:pointer;accent-color:var(--accent)}
 .reg-field{display:flex;flex-direction:column;gap:5px}
 .reg-label{font-size:10px;font-family:var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--muted2)}
 .reg-input,.reg-textarea{font-size:13px;padding:8px 11px;border:1px solid var(--rule2);border-radius:4px;background:var(--white);color:var(--ink);font-family:var(--sans);box-sizing:border-box;width:100%}
@@ -9009,14 +9013,26 @@ function regRender(){
     production: {label:"④ Production", color:"var(--green)"},
     revue: {label:"⑤ Revue en cours", color:"var(--accent)"}
   };
+  function regCompleteness(s){
+    // Les 10 questions essentielles (Hub France IA) : outil, service, usage,
+    // donnees, personnes concernees, role, transparence, haut risque, preuves, fournisseur.
+    var champs = [s.nom, s.service, s.finalite, s.donnees_utilisees, s.personnes_concernees,
+      (s.roles && s.roles.length>0) ? "x" : "", (s.transparence_art50 && s.transparence_art50!=="a_evaluer") ? "x" : "",
+      (s.classification && s.classification!=="a_evaluer") ? "x" : "", s.preuves_conformite, s.fournisseur];
+    var remplis = champs.filter(function(c){ return c && c.toString().trim().length > 0; }).length;
+    return Math.round(remplis / champs.length * 100);
+  }
   body.innerHTML = data.map(function(s){
     var cl = CLASSIF_LABELS[s.classification] || CLASSIF_LABELS.a_evaluer;
     var st = STATUT_LABELS[s.statut_conformite] || STATUT_LABELS.a_evaluer;
     var cy = CYCLE_LABELS[s.cycle_vie] || CYCLE_LABELS.production;
     var scoreColor = s.score_risque>=7 ? "var(--accent)" : s.score_risque>=4 ? "var(--orange)" : "var(--green)";
+    var pct = regCompleteness(s);
+    var pctColor = pct>=80 ? "var(--green)" : pct>=40 ? "var(--orange)" : "var(--accent)";
+    var pctBadge = '<span title="Fiche '+pct+'% complète (10 questions essentielles IA Act)" style="font-size:9px;font-family:var(--mono);color:'+pctColor+';border:1px solid '+pctColor+';border-radius:8px;padding:1px 6px;margin-left:6px">'+pct+'%</span>';
     return '<div class="reg-sys-row" onclick="regOpenModal('+s.id+')">'
       + '<div class="rs-ico">🤖</div>'
-      + '<div><div class="rs-name">'+s.nom+'</div><div class="rs-type">'+(s.type_systeme||"—")+' · <span style="color:'+cy.color+'">'+cy.label+'</span></div></div>'
+      + '<div><div class="rs-name">'+s.nom+pctBadge+'</div><div class="rs-type">'+(s.type_systeme||"—")+' · <span style="color:'+cy.color+'">'+cy.label+'</span></div></div>'
       + '<div><span class="chip '+cl.cls+'">'+cl.label+'</span></div>'
       + '<div><span class="chip chip-b">'+(s.secteur||"—")+'</span></div>'
       + '<div><span class="chip '+st.cls+'">'+st.label+'</span></div>'
@@ -9076,6 +9092,29 @@ window.regOpenModal = function(id){
         regField("Product Owner", '<input type="text" id="rf-po" class="reg-input" value="'+val("product_owner")+'" placeholder="Nom du Product Owner responsable">')
       ])
     + (sys && sys.derniere_revue ? '<div class="reg-field" style="font-size:11px;color:var(--muted)">Dernière revue de conformité privacy : '+new Date(sys.derniere_revue).toLocaleDateString('fr-FR')+'</div>' : '')
+    + '<div class="reg-form-section-title">Registre conforme IA Act — Hub France IA</div>'
+    + regRow([
+        regField("Service utilisateur", '<select id="rf-service" class="reg-input">'+sel("service",[
+            {v:"",l:"— Sélectionner —"},{v:"rh",l:"RH / Recrutement"},{v:"marketing",l:"Marketing / Communication"},
+            {v:"it",l:"IT / DSI"},{v:"juridique",l:"Juridique / Conformité"},{v:"finance",l:"Finance / Comptabilité"},
+            {v:"service_client",l:"Service client / Support"},{v:"production",l:"Production / Opérations"},
+            {v:"direction",l:"Direction générale"},{v:"autre",l:"Autre"}
+          ])+'</select>'),
+        regField("Personnes concernées", '<input type="text" id="rf-personnes" class="reg-input" value="'+val("personnes_concernees")+'" placeholder="Ex: Clients, salariés, candidats, grand public">')
+      ])
+    + regField("Rôle de l\'entreprise (Art. 3(3-7) — cumulable)", '<div class="reg-checkbox-group" id="rf-roles">'
+        + ['fournisseur','deployeur','importateur','distributeur'].map(function(r){
+            var roleLabels = {fournisseur:"Fournisseur (développe ou met sur le marché)", deployeur:"Déployeur (utilise sous sa propre autorité)", importateur:"Importateur (depuis un pays tiers)", distributeur:"Distributeur (met à disposition sur le marché UE)"};
+            var checked = (sys && sys.roles && sys.roles.indexOf(r) !== -1) ? ' checked' : '';
+            return '<label class="reg-checkbox-opt"><input type="checkbox" value="'+r+'"'+checked+'> '+roleLabels[r]+'</label>';
+          }).join('')
+        + '</div>')
+    + regRow([
+        regField("Obligation de transparence (Art. 50)", '<select id="rf-transp" class="reg-input">'+sel("transparence_art50",[
+            {v:"a_evaluer",l:"À évaluer"},{v:"oui",l:"Oui — information explicite requise"},{v:"non",l:"Non concerné"},{v:"deja_conforme",l:"Déjà conforme (mention affichée)"}
+          ])+'</select>'),
+        regField("Preuves de conformité conservées", '<input type="text" id="rf-preuves" class="reg-input" value="'+val("preuves_conformite")+'" placeholder="Ex: Documentation technique, FRIA, contrat fournisseur, captures écran">')
+      ])
     + (sys && (sys.classification==="haut"||sys.classification==="inacceptable") ? '<div class="radar-registre-info radar-registre-warn">⚖️ Système à haut risque — une <a href="#" onclick="regCloseModal();go(\'fria\',null,\'CONFORMITÉ\',\'Évaluation FRIA\');return false;">évaluation FRIA</a> peut être requise (Art. 27).</div>' : '')
     + '</div></div>'
     + '<div class="mat-modal-foot">'
@@ -9091,6 +9130,8 @@ function regRow(fields){ return '<div class="reg-form-row">'+fields.join("")+'</
 window.regCloseModal = function(){ var m = document.getElementById("reg-modal"); if(m) m.classList.remove("on"); };
 
 window.regSave = function(){
+  var rolesChecked = [];
+  document.querySelectorAll("#rf-roles input[type=checkbox]:checked").forEach(function(cb){ rolesChecked.push(cb.value); });
   var payload = {
     nom: document.getElementById("rf-nom").value.trim(),
     finalite: document.getElementById("rf-finalite").value.trim(),
@@ -9104,7 +9145,12 @@ window.regSave = function(){
     responsable: document.getElementById("rf-resp").value.trim(),
     fournisseur: document.getElementById("rf-fournisseur").value.trim(),
     cycle_vie: document.getElementById("rf-cycle").value,
-    product_owner: document.getElementById("rf-po").value.trim()
+    product_owner: document.getElementById("rf-po").value.trim(),
+    service: document.getElementById("rf-service").value,
+    personnes_concernees: document.getElementById("rf-personnes").value.trim(),
+    roles: rolesChecked,
+    transparence_art50: document.getElementById("rf-transp").value,
+    preuves_conformite: document.getElementById("rf-preuves").value.trim()
   };
   if(!payload.nom){ alert("Le nom du système est obligatoire."); return; }
 
