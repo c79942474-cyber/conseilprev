@@ -3997,6 +3997,19 @@ def registre_init_db():
     ), (conseilprev_id,))
     conn.commit()
 
+    # Cycle de vie projet (Privacy by Design, Art. 25 RGPD) : conception -> developpement
+    # -> pre-production -> production -> revue periodique. Les systemes deja existants
+    # sont par defaut consideres en 'production' (hypothese la plus sure : ils etaient
+    # deja deployes avant l introduction de ce suivi).
+    cur.execute("ALTER TABLE systemes_ia ADD COLUMN IF NOT EXISTS cycle_vie TEXT DEFAULT 'production'")
+    cur.execute("ALTER TABLE systemes_ia ADD COLUMN IF NOT EXISTS product_owner TEXT")
+    cur.execute("ALTER TABLE systemes_ia ADD COLUMN IF NOT EXISTS derniere_revue TEXT")
+    cur.execute(registre_sql(
+        "UPDATE systemes_ia SET cycle_vie='production' WHERE cycle_vie IS NULL",
+        "UPDATE systemes_ia SET cycle_vie='production' WHERE cycle_vie IS NULL"
+    ))
+    conn.commit()
+
     cur.execute('SELECT COUNT(*) AS n FROM systemes_ia')
     row = cur.fetchone()
     count = row['n'] if isinstance(row, dict) else row[0]
@@ -4036,7 +4049,9 @@ def registre_row_to_dict(row):
         'donnees_utilisees': d['donnees_utilisees'], 'classification': d['classification'],
         'justification': d['justification'], 'statut_conformite': d['statut_conformite'],
         'score_risque': d['score_risque'], 'responsable': d['responsable'],
-        'fournisseur': d['fournisseur'], 'date_creation': d['date_creation'], 'date_maj': d['date_maj']
+        'fournisseur': d['fournisseur'], 'date_creation': d['date_creation'], 'date_maj': d['date_maj'],
+        'cycle_vie': d.get('cycle_vie') or 'production', 'product_owner': d.get('product_owner'),
+        'derniere_revue': d.get('derniere_revue')
     }
 
 @app.route('/api/registre', methods=['GET'])
@@ -4079,17 +4094,19 @@ def registre_create():
         int(data.get('score_risque') or 0),
         (data.get('responsable') or '')[:100],
         (data.get('fournisseur') or '')[:100],
-        now, now, client['id']
+        now, now, client['id'],
+        (data.get('cycle_vie') or 'conception')[:30],
+        (data.get('product_owner') or '')[:100]
     )
     if REGISTRE_USE_PG:
         cur.execute('''INSERT INTO systemes_ia
-            (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj, client_id)
-            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING *''', values)
+            (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj, client_id, cycle_vie, product_owner)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING *''', values)
         row = cur.fetchone()
     else:
         cur.execute('''INSERT INTO systemes_ia
-            (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj, client_id)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', values)
+            (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj, client_id, cycle_vie, product_owner)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', values)
         new_id = cur.lastrowid
         cur.execute('SELECT * FROM systemes_ia WHERE id=?', (new_id,))
         row = cur.fetchone()
@@ -4107,7 +4124,10 @@ def registre_update(sys_id):
     conn = registre_get_db()
     cur = conn.cursor()
     now = datetime.utcnow().isoformat()
-    fields = ['nom','finalite','secteur','type_systeme','donnees_utilisees','classification','justification','statut_conformite','responsable','fournisseur']
+    fields = ['nom','finalite','secteur','type_systeme','donnees_utilisees','classification','justification','statut_conformite','responsable','fournisseur','cycle_vie','product_owner']
+    # Si le cycle de vie passe explicitement a 'revue', on horodate la derniere revue —
+    # trace la conformite a l obligation de revue periodique des cas d usage en production.
+    derniere_revue_val = now if data.get('cycle_vie') == 'revue' else None
 
     if REGISTRE_USE_PG:
         # COALESCE permet de ne mettre a jour que les champs fournis, en une seule requete
@@ -4118,12 +4138,15 @@ def registre_update(sys_id):
             type_systeme=COALESCE(%s,type_systeme), donnees_utilisees=COALESCE(%s,donnees_utilisees),
             classification=COALESCE(%s,classification), justification=COALESCE(%s,justification),
             statut_conformite=COALESCE(%s,statut_conformite), responsable=COALESCE(%s,responsable),
-            fournisseur=COALESCE(%s,fournisseur), score_risque=COALESCE(%s,score_risque), date_maj=%s
+            fournisseur=COALESCE(%s,fournisseur), score_risque=COALESCE(%s,score_risque),
+            cycle_vie=COALESCE(%s,cycle_vie), product_owner=COALESCE(%s,product_owner),
+            derniere_revue=COALESCE(%s,derniere_revue), date_maj=%s
             WHERE id=%s AND client_id=%s RETURNING *''', (
             data.get('nom'), data.get('finalite'), data.get('secteur'), data.get('type_systeme'),
             data.get('donnees_utilisees'), data.get('classification'), data.get('justification'),
             data.get('statut_conformite'), data.get('responsable'), data.get('fournisseur'),
-            data.get('score_risque'), now, sys_id, client['id']))
+            data.get('score_risque'), data.get('cycle_vie'), data.get('product_owner'),
+            derniere_revue_val, now, sys_id, client['id']))
         row = cur.fetchone()
         conn.commit()
         conn.close()
@@ -4140,11 +4163,13 @@ def registre_update(sys_id):
         existing_d = registre_row_to_dict(existing)
         vals = {f: data.get(f, existing_d[f]) for f in fields}
         score = int(data.get('score_risque', existing_d['score_risque']) or 0)
+        derniere_revue_final = derniere_revue_val or existing_d.get('derniere_revue')
         cur.execute('''UPDATE systemes_ia SET nom=?, finalite=?, secteur=?, type_systeme=?, donnees_utilisees=?,
-           classification=?, justification=?, statut_conformite=?, responsable=?, fournisseur=?, score_risque=?, date_maj=?
+           classification=?, justification=?, statut_conformite=?, responsable=?, fournisseur=?, score_risque=?,
+           cycle_vie=?, product_owner=?, derniere_revue=?, date_maj=?
            WHERE id=? AND client_id=?''', (vals['nom'], vals['finalite'], vals['secteur'], vals['type_systeme'], vals['donnees_utilisees'],
             vals['classification'], vals['justification'], vals['statut_conformite'], vals['responsable'], vals['fournisseur'],
-            score, now, sys_id, client['id']))
+            score, vals['cycle_vie'], vals['product_owner'], derniere_revue_final, now, sys_id, client['id']))
         conn.commit()
         cur.execute('SELECT * FROM systemes_ia WHERE id=?', (sys_id,))
         row = cur.fetchone()
