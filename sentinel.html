@@ -8998,13 +8998,26 @@ function regFetch(){
   var body = document.getElementById("reg-sys-body");
   if(body) body.innerHTML = regSkeletonHTML();
   fetch('/api/registre')
-    .then(function(r){ return r.json(); })
+    .then(function(r){
+      if(r.status === 401 || r.status === 403){
+        return r.json().then(function(d){
+          var msg = r.status === 401
+            ? '🔒 Session expirée — <a href="/login" style="color:var(--blue)">reconnectez-vous</a> pour accéder au Registre IA.'
+            : '🔒 '+(d.error || 'Accès réservé aux plans Pro/Entreprise.');
+          if(body) body.innerHTML = '<div class="reg-loading" style="color:var(--accent)">'+msg+'</div>';
+          return null;
+        });
+      }
+      if(!r.ok){ throw new Error('HTTP '+r.status); }
+      return r.json();
+    })
     .then(function(d){
+      if(!d) return;
       REG_DATA = d.systemes || [];
       regRender();
     })
-    .catch(function(){
-      if(body) body.innerHTML = '<div class="reg-loading" style="color:var(--accent)">Erreur de chargement. Verifiez la connexion au serveur.</div>';
+    .catch(function(e){
+      if(body) body.innerHTML = '<div class="reg-loading" style="color:var(--accent)">Erreur de chargement ('+e.message+'). Vérifiez la connexion au serveur.</div>';
     });
 }
 
@@ -9183,7 +9196,10 @@ window.regSave = function(){
   var method = REG_EDIT_ID ? "PUT" : "POST";
 
   fetch(url, {method:method, headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload)})
-    .then(function(r){ return r.json(); })
+    .then(function(r){
+      if(!r.ok && r.status !== 400){ throw new Error('HTTP '+r.status+' — '+(r.status===401?'Session expirée':r.status===403?'Accès refusé':'Erreur serveur')); }
+      return r.json();
+    })
     .then(function(d){
       if(d.error){ alert(d.error); return; }
       regCloseModal();
@@ -10292,13 +10308,30 @@ function friaFetch(){
   if(holder) holder.innerHTML = '<div class="reg-loading">Chargement de vos systèmes IA…</div>';
   var info = document.getElementById("fria-registre-info");
   if(info){ info.innerHTML = 'Vérification de l applicabilité Art. 27 en cours…'; info.className = "radar-registre-info"; }
-  fetch('/api/registre').then(function(r){ return r.json(); }).then(function(d){
-    FRIA_REG_CACHE = d.systemes || [];
-    friaRenderAll();
-  }).catch(function(){
-    FRIA_REG_CACHE = [];
-    if(holder) holder.innerHTML = '<div class="reg-loading" style="color:var(--accent)">Erreur de chargement. Rechargez la page ou réessayez dans quelques secondes.</div>';
-  });
+  fetch('/api/registre')
+    .then(function(r){
+      if(r.status === 401 || r.status === 403){
+        return r.json().then(function(d){
+          var msg = r.status === 401
+            ? '🔒 Session expirée — <a href="/login" style="color:var(--blue)">reconnectez-vous</a> pour accéder à FRIA.'
+            : '🔒 '+(d.error || 'Accès réservé aux plans Pro/Entreprise.');
+          if(holder) holder.innerHTML = '<div class="reg-loading" style="color:var(--accent)">'+msg+'</div>';
+          if(info){ info.innerHTML = msg; info.className = "radar-registre-info radar-registre-warn"; }
+          return null;
+        });
+      }
+      if(!r.ok){ throw new Error('HTTP '+r.status); }
+      return r.json();
+    })
+    .then(function(d){
+      if(!d) return;
+      FRIA_REG_CACHE = d.systemes || [];
+      friaRenderAll();
+    })
+    .catch(function(e){
+      FRIA_REG_CACHE = [];
+      if(holder) holder.innerHTML = '<div class="reg-loading" style="color:var(--accent)">Erreur de chargement ('+e.message+'). Rechargez la page ou réessayez dans quelques secondes.</div>';
+    });
 }
 
 function friaRenderAll(){
