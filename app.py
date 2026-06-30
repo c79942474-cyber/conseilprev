@@ -4010,6 +4010,15 @@ def registre_init_db():
     ))
     conn.commit()
 
+    # Registre "parfait professionnel" — gap analyse vs les 10 questions essentielles
+    # de la conformite IA Act (cf. Hub France IA, guide Premiers pas vers l IA de Confiance).
+    cur.execute("ALTER TABLE systemes_ia ADD COLUMN IF NOT EXISTS service TEXT")
+    cur.execute("ALTER TABLE systemes_ia ADD COLUMN IF NOT EXISTS roles TEXT")  # JSON: ["fournisseur","deployeur",...]
+    cur.execute("ALTER TABLE systemes_ia ADD COLUMN IF NOT EXISTS personnes_concernees TEXT")
+    cur.execute("ALTER TABLE systemes_ia ADD COLUMN IF NOT EXISTS transparence_art50 TEXT DEFAULT 'a_evaluer'")
+    cur.execute("ALTER TABLE systemes_ia ADD COLUMN IF NOT EXISTS preuves_conformite TEXT")
+    conn.commit()
+
     cur.execute('SELECT COUNT(*) AS n FROM systemes_ia')
     row = cur.fetchone()
     count = row['n'] if isinstance(row, dict) else row[0]
@@ -4043,6 +4052,10 @@ def registre_row_to_dict(row):
         d = dict(row)
     else:
         d = {k: row[k] for k in row.keys()}
+    try:
+        roles_parsed = json.loads(d.get('roles')) if d.get('roles') else []
+    except Exception:
+        roles_parsed = []
     return {
         'id': d['id'], 'nom': d['nom'], 'finalite': d['finalite'],
         'secteur': d['secteur'], 'type_systeme': d['type_systeme'],
@@ -4051,7 +4064,11 @@ def registre_row_to_dict(row):
         'score_risque': d['score_risque'], 'responsable': d['responsable'],
         'fournisseur': d['fournisseur'], 'date_creation': d['date_creation'], 'date_maj': d['date_maj'],
         'cycle_vie': d.get('cycle_vie') or 'production', 'product_owner': d.get('product_owner'),
-        'derniere_revue': d.get('derniere_revue')
+        'derniere_revue': d.get('derniere_revue'),
+        'service': d.get('service'), 'roles': roles_parsed,
+        'personnes_concernees': d.get('personnes_concernees'),
+        'transparence_art50': d.get('transparence_art50') or 'a_evaluer',
+        'preuves_conformite': d.get('preuves_conformite')
     }
 
 @app.route('/api/registre', methods=['GET'])
@@ -4082,6 +4099,9 @@ def registre_create():
     now = datetime.utcnow().isoformat()
     conn = registre_get_db()
     cur = conn.cursor()
+    roles_list = data.get('roles') or []
+    if not isinstance(roles_list, list):
+        roles_list = []
     values = (
         nom,
         (data.get('finalite') or '')[:500],
@@ -4096,17 +4116,22 @@ def registre_create():
         (data.get('fournisseur') or '')[:100],
         now, now, client['id'],
         (data.get('cycle_vie') or 'conception')[:30],
-        (data.get('product_owner') or '')[:100]
+        (data.get('product_owner') or '')[:100],
+        (data.get('service') or '')[:100],
+        json.dumps(roles_list)[:300],
+        (data.get('personnes_concernees') or '')[:500],
+        (data.get('transparence_art50') or 'a_evaluer')[:30],
+        (data.get('preuves_conformite') or '')[:500]
     )
     if REGISTRE_USE_PG:
         cur.execute('''INSERT INTO systemes_ia
-            (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj, client_id, cycle_vie, product_owner)
-            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING *''', values)
+            (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj, client_id, cycle_vie, product_owner, service, roles, personnes_concernees, transparence_art50, preuves_conformite)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING *''', values)
         row = cur.fetchone()
     else:
         cur.execute('''INSERT INTO systemes_ia
-            (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj, client_id, cycle_vie, product_owner)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', values)
+            (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj, client_id, cycle_vie, product_owner, service, roles, personnes_concernees, transparence_art50, preuves_conformite)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', values)
         new_id = cur.lastrowid
         cur.execute('SELECT * FROM systemes_ia WHERE id=?', (new_id,))
         row = cur.fetchone()
@@ -4124,10 +4149,11 @@ def registre_update(sys_id):
     conn = registre_get_db()
     cur = conn.cursor()
     now = datetime.utcnow().isoformat()
-    fields = ['nom','finalite','secteur','type_systeme','donnees_utilisees','classification','justification','statut_conformite','responsable','fournisseur','cycle_vie','product_owner']
+    fields = ['nom','finalite','secteur','type_systeme','donnees_utilisees','classification','justification','statut_conformite','responsable','fournisseur','cycle_vie','product_owner','service','personnes_concernees','transparence_art50','preuves_conformite']
     # Si le cycle de vie passe explicitement a 'revue', on horodate la derniere revue —
     # trace la conformite a l obligation de revue periodique des cas d usage en production.
     derniere_revue_val = now if data.get('cycle_vie') == 'revue' else None
+    roles_json = json.dumps(data.get('roles')) if data.get('roles') is not None else None
 
     if REGISTRE_USE_PG:
         # COALESCE permet de ne mettre a jour que les champs fournis, en une seule requete
@@ -4140,13 +4166,20 @@ def registre_update(sys_id):
             statut_conformite=COALESCE(%s,statut_conformite), responsable=COALESCE(%s,responsable),
             fournisseur=COALESCE(%s,fournisseur), score_risque=COALESCE(%s,score_risque),
             cycle_vie=COALESCE(%s,cycle_vie), product_owner=COALESCE(%s,product_owner),
-            derniere_revue=COALESCE(%s,derniere_revue), date_maj=%s
+            derniere_revue=COALESCE(%s,derniere_revue),
+            service=COALESCE(%s,service), roles=COALESCE(%s,roles),
+            personnes_concernees=COALESCE(%s,personnes_concernees),
+            transparence_art50=COALESCE(%s,transparence_art50),
+            preuves_conformite=COALESCE(%s,preuves_conformite), date_maj=%s
             WHERE id=%s AND client_id=%s RETURNING *''', (
             data.get('nom'), data.get('finalite'), data.get('secteur'), data.get('type_systeme'),
             data.get('donnees_utilisees'), data.get('classification'), data.get('justification'),
             data.get('statut_conformite'), data.get('responsable'), data.get('fournisseur'),
             data.get('score_risque'), data.get('cycle_vie'), data.get('product_owner'),
-            derniere_revue_val, now, sys_id, client['id']))
+            derniere_revue_val,
+            data.get('service'), roles_json, data.get('personnes_concernees'),
+            data.get('transparence_art50'), data.get('preuves_conformite'),
+            now, sys_id, client['id']))
         row = cur.fetchone()
         conn.commit()
         conn.close()
@@ -4164,12 +4197,16 @@ def registre_update(sys_id):
         vals = {f: data.get(f, existing_d[f]) for f in fields}
         score = int(data.get('score_risque', existing_d['score_risque']) or 0)
         derniere_revue_final = derniere_revue_val or existing_d.get('derniere_revue')
+        roles_final = roles_json if roles_json is not None else json.dumps(existing_d.get('roles') or [])
         cur.execute('''UPDATE systemes_ia SET nom=?, finalite=?, secteur=?, type_systeme=?, donnees_utilisees=?,
            classification=?, justification=?, statut_conformite=?, responsable=?, fournisseur=?, score_risque=?,
-           cycle_vie=?, product_owner=?, derniere_revue=?, date_maj=?
+           cycle_vie=?, product_owner=?, derniere_revue=?,
+           service=?, roles=?, personnes_concernees=?, transparence_art50=?, preuves_conformite=?, date_maj=?
            WHERE id=? AND client_id=?''', (vals['nom'], vals['finalite'], vals['secteur'], vals['type_systeme'], vals['donnees_utilisees'],
             vals['classification'], vals['justification'], vals['statut_conformite'], vals['responsable'], vals['fournisseur'],
-            score, vals['cycle_vie'], vals['product_owner'], derniere_revue_final, now, sys_id, client['id']))
+            score, vals['cycle_vie'], vals['product_owner'], derniere_revue_final,
+            vals['service'], roles_final, vals['personnes_concernees'], vals['transparence_art50'], vals['preuves_conformite'],
+            now, sys_id, client['id']))
         conn.commit()
         cur.execute('SELECT * FROM systemes_ia WHERE id=?', (sys_id,))
         row = cur.fetchone()
