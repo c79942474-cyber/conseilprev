@@ -5238,8 +5238,15 @@ function xTyp(show){
 }
 
 function xFmtT(txt){
-  return txt.split('**').map(function(s,idx){return idx%2===1?'<strong>'+s+'</strong>':s;}).join('')
-    .replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
+  // Nettoyage defensif du formatage Markdown residuel, en complement de la
+  // consigne donnee au modele (qui peut occasionnellement l ignorer) :
+  // titres (#), listes a puces (- ou *), italique (*texte*), asterisques isoles.
+  txt = txt.replace(/^#{1,6}\s*/gm, '');           // titres Markdown (#, ##, ###...)
+  txt = txt.replace(/^[\*\-]\s+/gm, '');           // puces de liste (* ou - en debut de ligne)
+  var bold = txt.split('**').map(function(s,idx){return idx%2===1?'<strong>'+s+'</strong>':s;}).join('');
+  bold = bold.replace(/\*([^*<>]+)\*/g, '$1');     // *italique* -> texte simple
+  bold = bold.replace(/\*/g, '');                  // tout asterisque isole restant
+  return bold.replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
 }
 
 async function xSend(){
