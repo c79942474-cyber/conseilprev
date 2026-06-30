@@ -10070,6 +10070,19 @@ function friaRefreshSystemScore(sysId){
       if(btn) btn.classList.toggle("on", val === v);
     });
   });
+  var saveBtn = document.getElementById("fria-save-btn-"+sysId);
+  if(saveBtn){
+    var complete = result && result.answeredCount === result.totalCount;
+    var sys = FRIA_REG_CACHE.find(function(s){ return s.id === sysId; });
+    saveBtn.disabled = !complete;
+    saveBtn.style.background = complete ? "#1C5A8A" : "var(--rule2)";
+    saveBtn.style.color = complete ? "#fff" : "var(--muted)";
+    saveBtn.style.cursor = complete ? "pointer" : "not-allowed";
+    saveBtn.title = complete ? "Enregistrer cette evaluation FRIA dans l historique persistant et tracable (RGPD)." : "Répondez aux "+FRIA_RIGHTS.length+" questions de ce système pour activer l enregistrement.";
+    saveBtn.textContent = complete ? "💾 Enregistrer dans l historique" : "💾 "+(result?result.answeredCount:0)+"/"+(result?result.totalCount:FRIA_RIGHTS.length)+" questions répondues";
+    if(complete && sys) saveBtn.setAttribute("onclick", "histoSaveFria("+sysId+",'"+sys.nom.replace(/'/g,"")+"')");
+    else saveBtn.removeAttribute("onclick");
+  }
 }
 
 /* ── Rendu d un systeme (carte avec applicabilite + questionnaire si applicable) ── */
@@ -10153,8 +10166,12 @@ function friaRenderSysCard(systeme){
     head += '<div class="fria-cross-links">'
       + '<a href="#" onclick="openAuditTab();return false;" class="fria-cross-link">📋 Audit IA Act : <strong>'+auditPct+'%</strong> conforme →</a>'
       + '<a href="#" onclick="go(\'matrice\',null,\'RISQUES\',\'Matrice risques\');return false;" class="fria-cross-link">📊 Matrice : probabilité <strong>'+probLabel+'</strong> →</a>'
-      + '</div>'
-      + '<button class="mat-export-btn" style="background:#1C5A8A;color:#fff;margin-top:10px;width:100%" onclick="histoSaveFria('+systeme.id+',\''+systeme.nom.replace(/'/g,"")+'\')" title="Enregistrer cette evaluation FRIA dans l historique persistant et tracable (RGPD).">💾 Enregistrer dans l historique</button>'
+      + '</div>';
+    var friaComplete = result && result.answeredCount === result.totalCount;
+    var friaBtnLabel = friaComplete ? '💾 Enregistrer dans l historique' : '💾 '+(result?result.answeredCount:0)+'/'+(result?result.totalCount:FRIA_RIGHTS.length)+' questions répondues';
+    head += '<button class="mat-export-btn" id="fria-save-btn-'+systeme.id+'" style="background:'+(friaComplete?'#1C5A8A':'var(--rule2)')+';color:'+(friaComplete?'#fff':'var(--muted)')+';margin-top:10px;width:100%;cursor:'+(friaComplete?'pointer':'not-allowed')+'" '
+      + (friaComplete ? 'onclick="histoSaveFria('+systeme.id+',\''+systeme.nom.replace(/'/g,"")+'\')"' : 'disabled')
+      + ' title="'+(friaComplete?'Enregistrer cette evaluation FRIA dans l historique persistant et tracable (RGPD).':'Répondez aux '+FRIA_RIGHTS.length+' questions de ce système pour activer l enregistrement.')+'">'+friaBtnLabel+'</button>'
       + '<button class="mat-export-btn" style="background:var(--bg);color:var(--ink);border:1px solid var(--rule2);margin-top:8px;width:100%" onclick="ragShowRelevantDocs(\'droits fondamentaux evaluation impact\',\'fria\',\'Documents pertinents\')">📚 Documents pertinents</button>';
   }
 
