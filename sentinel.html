@@ -10077,13 +10077,47 @@ function friaRenderSysCard(systeme){
   var app = friaApplicable(systeme, systeme.secteur);
   var result = friaComputeScore(systeme.id);
 
+  var CYCLE_LABELS = {
+    conception: {label:"① Conception", color:"var(--blue)"},
+    developpement: {label:"② Développement", color:"var(--blue)"},
+    pre_production: {label:"③ Pré-production", color:"var(--orange)"},
+    production: {label:"④ Production", color:"var(--green)"},
+    revue: {label:"⑤ Revue en cours", color:"var(--accent)"}
+  };
+  var cy = CYCLE_LABELS[systeme.cycle_vie] || CYCLE_LABELS.production;
+
+  /* Bandeau Privacy by Design (Art. 25 RGPD) : adapte le message selon l etape
+     du cycle de vie projet. Pour la Production, signale si aucune revue n a
+     jamais ete effectuee, ou si la derniere revue date de plus de 12 mois. */
+  var pbdMsg = '';
+  var pbdColor = cy.color;
+  if(systeme.cycle_vie === 'conception' || systeme.cycle_vie === 'developpement'){
+    pbdMsg = 'Privacy by Design (Art. 25 RGPD) : determinez les exigences privacy applicables avant la mise en production' + (systeme.product_owner ? ' — Product Owner : ' + systeme.product_owner : '') + '.';
+  } else if(systeme.cycle_vie === 'pre_production'){
+    pbdMsg = 'Dernière étape avant production : validez la conformité privacy complète' + (systeme.product_owner ? ' avec ' + systeme.product_owner : '') + '.';
+  } else if(systeme.cycle_vie === 'production' || systeme.cycle_vie === 'revue'){
+    if(!systeme.derniere_revue){
+      pbdMsg = 'Système en production sans revue de conformité privacy enregistrée — une revue périodique est recommandée.';
+      pbdColor = 'var(--accent)';
+    } else {
+      var moisDepuis = Math.floor((Date.now() - new Date(systeme.derniere_revue).getTime()) / (1000*60*60*24*30));
+      if(moisDepuis >= 12){
+        pbdMsg = 'Dernière revue de conformité privacy il y a ' + moisDepuis + ' mois — une nouvelle revue périodique est recommandée.';
+        pbdColor = 'var(--accent)';
+      } else {
+        pbdMsg = 'Dernière revue de conformité privacy : ' + new Date(systeme.derniere_revue).toLocaleDateString('fr-FR') + '.';
+      }
+    }
+  }
+
   var head = '<div class="fria-sys-card'+(app.applicable?'':' fria-sys-na')+'">'
     + '<div class="fria-sys-head">'
-    + '<div><div class="fria-sys-name">'+systeme.nom+'</div><div class="fria-sys-meta">'+(systeme.secteur||'')+' · '+(systeme.type_systeme||'')+'</div></div>'
+    + '<div><div class="fria-sys-name">'+systeme.nom+'</div><div class="fria-sys-meta">'+(systeme.secteur||'')+' · '+(systeme.type_systeme||'')+' · <span style="color:'+cy.color+'">'+cy.label+'</span></div></div>'
     + (app.applicable
         ? '<div class="fria-score-ring" id="fria-score-'+systeme.id+'"><div class="fria-ring-val">'+(result?result.score.toFixed(1):'—')+'</div><div class="fria-ring-lbl">/ 10</div></div>'
         : '<span class="fria-na-badge">FRIA non requise</span>')
     + '</div>'
+    + (pbdMsg ? '<div class="fria-app-reason" style="border-left:3px solid '+pbdColor+';padding-left:10px;margin-bottom:8px">'+pbdMsg+'</div>' : '')
     + '<div class="fria-app-reason">'+app.reason+'</div>';
 
   if(app.applicable){
