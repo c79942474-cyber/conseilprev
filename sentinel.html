@@ -11644,6 +11644,34 @@ window.trainingOpenFiche = function(key){
 'use strict';
 
 var PAGE_GUIDES = {
+  'shadow-ai': {
+    title: "Découverte Shadow AI",
+    sections: [
+      {h:"À quoi sert cette page", t:"Recense les 8 cas d usage IA les plus souvent invisibles dans une organisation (SaaS avec IA activée, outils RH, chatbots, générateurs de contenus, agents connectés aux données, API de modèles, prestataires, modèles open source hébergés). Avant de classifier un système, encore faut-il savoir qu il existe."},
+      {h:"Comment l utiliser", t:"Cliquez sur chaque carte pour déplier le détail : exemples concrets, applicabilité réelle, obligation légale exacte et conseil pratique. Une fois un système identifié, utilisez le bouton en bas de page pour l envoyer directement au Simulateur IA Act."}
+    ]
+  },
+  historique: {
+    title: "Historique des calculs",
+    sections: [
+      {h:"À quoi sert cette page", t:"Centralise tous les calculs enregistrés depuis Sentinel (simulations, audits, tarification, sanctions, FRIA, RACI) — preuve documentaire traçable et conforme RGPD (conservation 3 ans)."},
+      {h:"Comment l utiliser", t:"Filtrez par type de calcul avec le menu déroulant. Chaque calcul enregistré ailleurs sur Sentinel (bouton 💾 Enregistrer dans l historique) apparaît ici automatiquement, daté et consultable à tout moment."}
+    ]
+  },
+  rag: {
+    title: "Base de connaissance",
+    sections: [
+      {h:"À quoi sert cette page", t:"Uploadez vos propres documents (politiques internes, contrats, procédures) pour enrichir automatiquement les analyses d Audit, Registre IA, FRIA et Maturité avec votre contexte réel, via recherche sémantique."},
+      {h:"Comment l utiliser", t:"Glissez-déposez un document dans la zone d import. L indexation se fait par lots. Une fois indexé, le document est automatiquement consulté par les modules concernés (boutons 🔍 Rechercher dans la base de connaissance, présents sur plusieurs pages)."}
+    ]
+  },
+  clients: {
+    title: "Gestion des clients",
+    sections: [
+      {h:"À quoi sert cette page", t:"Réservée à CONSEILPREV : création d accès clients externes, suivi du statut technique de l infrastructure (Postgres, pgvector) et de la santé des envois d email."},
+      {h:"Comment l utiliser", t:"Créez un nouveau client via le formulaire dédié — un email d invitation sécurisé lui est envoyé pour qu il définisse lui-même son mot de passe. Consultez les 2 widgets de statut technique en haut de page pour diagnostiquer rapidement un incident."}
+    ]
+  },
   apercu: {
     title: "Vue d ensemble",
     sections: [
