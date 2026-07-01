@@ -13763,7 +13763,8 @@ var SHADOW_AI_CASES = [
     conseil:'Interroger les achats et l\'IT sur les options IA déjà activées dans les contrats SaaS.',
     reg_champ:'Type : "SaaS tiers". Service utilisateur : département concerné. Rôle : Déployeur.',
     sia_risque:'Risque limité à minimal en général. Vérifier si le module SaaS traite des décisions sur des personnes.',
-    fria: false
+    fria: false,
+    sim_nom:'Fonctionnalités IA SaaS', sim_secteur:'it', sim_type:'copilot'
   },
   { icon:'👥', title:'Outils RH — tri, évaluation, matching',
     tag:'Haut risque', tagColor:'#B83222',
@@ -13773,7 +13774,8 @@ var SHADOW_AI_CASES = [
     conseil:'Prioriser dans le Registre — fort risque contentieux prud\'homal.',
     reg_champ:'Classification : Haut risque. Personnes concernées : Candidats, salariés. Rôle : Déployeur.',
     sia_risque:'Haut risque Annexe III point 4(a) — Documentation technique, FRIA, logs obligatoires.',
-    fria: true
+    fria: true,
+    sim_nom:'Outil RH — Tri/Matching candidats', sim_secteur:'emploi', sim_type:'triage'
   },
   { icon:'💬', title:'Chatbots clients ou internes',
     tag:'Art. 50§1', tagColor:'#1C5A8A',
@@ -13783,7 +13785,8 @@ var SHADOW_AI_CASES = [
     conseil:'Vérifier que la mention apparaît dès le premier message, pas seulement dans les mentions légales.',
     reg_champ:'Type : "Chatbot / LLM". Transparence Art. 50 : Oui — mention explicite requise.',
     sia_risque:'Risque limité. Obligation principale : transparence Art. 50§1.',
-    fria: false
+    fria: false,
+    sim_nom:'Chatbot client/interne', sim_secteur:'it', sim_type:'chatbot'
   },
   { icon:'🎨', title:'Générateurs de textes, images, vidéos, voix',
     tag:'Art. 50§2-4', tagColor:'#6B3FA0',
@@ -13793,7 +13796,8 @@ var SHADOW_AI_CASES = [
     conseil:'Distinguer les usages internes des contenus publiés — seuls ces derniers déclenchent l\'obligation de signalement.',
     reg_champ:'Type : "Générateur IA". Preuves : politique de marquage interne à conserver.',
     sia_risque:'Risque minimal à limité. Obligation principale : marquage Art. 50§2.',
-    fria: false
+    fria: false,
+    sim_nom:'Générateur de contenus IA', sim_secteur:'media', sim_type:'llm_gen'
   },
   { icon:'🔗', title:'Agents connectés aux données de l\'entreprise',
     tag:'À évaluer', tagColor:'#6B7280',
@@ -13803,7 +13807,8 @@ var SHADOW_AI_CASES = [
     conseil:'Documenter quelles données sont accessibles — un agent RAG mal cloisonné peut exposer des données sensibles.',
     reg_champ:'Type : "Agent / RAG". Données utilisées : base documentaire concernée. Rôle : Déployeur.',
     sia_risque:'Variable selon l\'usage. Classifier avec le Simulateur étape par étape.',
-    fria: false
+    fria: false,
+    sim_nom:'Agent IA connecté aux données', sim_secteur:'it', sim_type:'copilot'
   },
   { icon:'🧩', title:'API de modèles dans les produits',
     tag:'Déployeur/Fournisseur', tagColor:'#2D6ABF',
@@ -13813,7 +13818,8 @@ var SHADOW_AI_CASES = [
     conseil:'Conserver les CGU et garanties du fournisseur d\'API — utile en cas de modification substantielle (Art. 25).',
     reg_champ:'Fournisseur : nom du modèle + éditeur API. Rôle : Déployeur (+ Fournisseur si intégration dans produit).',
     sia_risque:'Dépend du produit final. Vérifier si le produit tombe sous l\'Annexe III.',
-    fria: false
+    fria: false,
+    sim_nom:'API modèle IA intégrée', sim_secteur:'it', sim_type:'llm_gen'
   },
   { icon:'🤝', title:'Prestataires utilisant l\'IA dans leurs livrables',
     tag:'Indirect', tagColor:'#6B7280',
@@ -13823,7 +13829,8 @@ var SHADOW_AI_CASES = [
     conseil:'Ajouter une clause contractuelle standard exigeant la déclaration de tout usage IA dans les livrables.',
     reg_champ:'Fournisseur : nom du prestataire. Preuves : clause contractuelle IA à joindre au registre.',
     sia_risque:'Risque indirect. Clore le sujet contractuellement plutôt que via le Simulateur.',
-    fria: false
+    fria: false,
+    sim_nom:'IA prestataires / livrables', sim_secteur:'it', sim_type:'llm_gen'
   },
   { icon:'🖥️', title:'Modèles open source hébergés en interne',
     tag:'Fournisseur de fait', tagColor:'#B83222',
@@ -13833,7 +13840,8 @@ var SHADOW_AI_CASES = [
     conseil:'Clarifier en interne qui porte la responsabilité "fournisseur" — souvent négligé car perçu comme usage technique.',
     reg_champ:'Type : "Modèle open source auto-hébergé". Rôle : Fournisseur. Product Owner : équipe IT responsable.',
     sia_risque:'Classification identique à un modèle commercial selon l\'usage. FRIA si haut risque.',
-    fria: true
+    fria: true,
+    sim_nom:'Modèle IA open source auto-hébergé', sim_secteur:'it', sim_type:'llm_gen'
   },
   { icon:'📊', title:'Surveillance comportementale des employés',
     tag:'Haut risque', tagColor:'#B83222',
@@ -13843,7 +13851,8 @@ var SHADOW_AI_CASES = [
     conseil:'Informer explicitement les salariés avant tout déploiement — le double régime AI Act + RGPD + droit du travail rend ce cas particulièrement exposé aux recours.',
     reg_champ:'Classification : Haut risque. Personnes concernées : Salariés. Transparence : information explicite obligatoire.',
     sia_risque:'Haut risque Annexe III point 4(b). FRIA recommandée même hors obligation légale.',
-    fria: true
+    fria: true,
+    sim_nom:'Surveillance comportementale salariés', sim_secteur:'emploi', sim_type:'surveillance'
   },
   { icon:'💳', title:'Scoring de crédit et évaluation financière',
     tag:'Haut risque', tagColor:'#B83222',
@@ -13853,7 +13862,8 @@ var SHADOW_AI_CASES = [
     conseil:'Vérifier la compatibilité RGPD Art. 22 (droit de ne pas faire l\'objet d\'une décision uniquement automatisée) — ce cas cumule deux régimes réglementaires.',
     reg_champ:'Classification : Haut risque. Données : données financières, comportementales. Preuves : documentation technique + politique d\'explication.',
     sia_risque:'Haut risque Annexe III 5(b-c). FRIA si organisme public ou parapublic.',
-    fria: true
+    fria: true,
+    sim_nom:'Scoring crédit / Évaluation financière', sim_secteur:'essentiels', sim_type:'scoring'
   },
   { icon:'🎓', title:'IA dans l\'éducation et la formation',
     tag:'Haut risque', tagColor:'#B83222',
@@ -13863,7 +13873,8 @@ var SHADOW_AI_CASES = [
     conseil:'Les établissements d\'enseignement sont souvent inconscients de leur statut de déployeur haut risque lorsqu\'ils utilisent des outils tiers d\'évaluation ou d\'orientation.',
     reg_champ:'Classification : Haut risque. Service : Direction pédagogique. Rôle : Déployeur. Personnes : Apprenants, étudiants.',
     sia_risque:'Haut risque Annexe III point 3. Documentation technique requise + information des apprenants.',
-    fria: true
+    fria: true,
+    sim_nom:'IA éducation / formation', sim_secteur:'education', sim_type:'aide_decision'
   },
   { icon:'🔍', title:'Reconnaissance biométrique et émotionnelle',
     tag:'Haut risque / Interdit', tagColor:'#B83222',
@@ -13873,7 +13884,8 @@ var SHADOW_AI_CASES = [
     conseil:'Vérifier en premier si l\'usage envisagé tombe dans les pratiques interdites Art. 5 — avant même de parler de conformité haut risque.',
     reg_champ:'Classification : Haut risque ou Inacceptable. Justification : préciser l\'exception légale invoquée si usage prévu.',
     sia_risque:'Potentiellement interdit (Art. 5). Simuler en priorité — décision d\'abandon possible avant tout investissement.',
-    fria: true
+    fria: true,
+    sim_nom:'Reconnaissance biométrique / émotionnelle', sim_secteur:'bio', sim_type:'face_reco'
   },
   { icon:'🏥', title:'IA d\'aide à la décision médicale',
     tag:'Haut risque', tagColor:'#B83222',
@@ -13883,7 +13895,8 @@ var SHADOW_AI_CASES = [
     conseil:'Le médecin reste responsable de la décision finale — l\'IA ne peut pas substituer le jugement clinique. Documenter explicitement la chaîne de responsabilité.',
     reg_champ:'Classification : Haut risque. Personnes : Patients. Rôle : Déployeur. Preuves : protocole de supervision médicale.',
     sia_risque:'Haut risque Annexe III 5(d). Cumul possible avec réglementation dispositifs médicaux (MDR/IVDR).',
-    fria: true
+    fria: true,
+    sim_nom:'IA aide décision médicale', sim_secteur:'sante', sim_type:'aide_decision'
   },
   { icon:'📡', title:'Moteurs de recommandation algorithmique',
     tag:'Art. 50§2', tagColor:'#6B3FA0',
@@ -13893,7 +13906,8 @@ var SHADOW_AI_CASES = [
     conseil:'Distinguer la personnalisation légitime (Art. 50 → transparence) des pratiques manipulatoires (Art. 5 → interdiction). La frontière peut être ténue selon les techniques utilisées.',
     reg_champ:'Type : "Moteur de recommandation". Transparence Art. 50 : oui si personnalisation explicite. Rôle : Déployeur.',
     sia_risque:'Risque limité à minimal selon l\'usage. Vérifier les pratiques Art. 5 avant tout.',
-    fria: false
+    fria: false,
+    sim_nom:'Moteur de recommandation personnalisée', sim_secteur:'media', sim_type:'reco'
   },
   { icon:'🛡️', title:'IA de cybersécurité automatisée',
     tag:'Infrastructure critique', tagColor:'#D97706',
@@ -13903,7 +13917,8 @@ var SHADOW_AI_CASES = [
     conseil:'Vérifier si votre organisation est un opérateur d\'importance essentielle (OIE) ou importante (OII) au sens NIS2 — le double régime AI Act + NIS2 est particulièrement exigeant.',
     reg_champ:'Type : "IA de détection/réponse". Classification : Haut risque si infrastructure critique. Rôle : Déployeur.',
     sia_risque:'Haut risque Annexe III point 2 si infrastructure critique. Documenter le périmètre NIS2 simultanément.',
-    fria: false
+    fria: false,
+    sim_nom:'IA cybersécurité automatisée', sim_secteur:'infra', sim_type:'cyber_ai'
   },
   { icon:'🌐', title:'Traduction automatique et assistance multilingue',
     tag:'GPAI / Art. 50', tagColor:'#1C5A8A',
@@ -13913,7 +13928,8 @@ var SHADOW_AI_CASES = [
     conseil:'Attention aux traductions dans des contextes réglementés (médical, juridique, financier) — une erreur de traduction IA peut engager la responsabilité sans que le prestataire soit couvert.',
     reg_champ:'Type : "GPAI / Traduction". Fournisseur : modèle utilisé + éditeur. Preuves : CGU du modèle conservées.',
     sia_risque:'Risque variable selon le contexte. Usage médical ou juridique → réévaluer la classification.',
-    fria: false
+    fria: false,
+    sim_nom:'Traduction et assistance multilingue IA', sim_secteur:'it', sim_type:'llm_gen'
   }
 ];
 
@@ -13995,6 +14011,37 @@ window.shadowAiRenderSIA = function(){
    Les tags couvrent : Haut risque, Haut risque / Interdit, Fournisseur de fait,
    Déployeur, Déployeur/Fournisseur, Art. 50§1, Art. 50§2, Art. 50§2-4,
    GPAI / Art. 50, Infrastructure critique, À évaluer, Indirect */
+/* Navigue vers le Simulateur en pré-remplissant l'étape 1 avec les données du cas Shadow AI */
+window.shadowAiGoSimulator = function(c){
+  go('simulateur', null, 'CARTOGRAPHIER', 'Simulateur IA Act');
+  /* Attendre que la page Simulateur soit rendue dans le DOM avant de remplir */
+  setTimeout(function(){
+    var nameEl = document.getElementById('sim-name');
+    var sectEl = document.getElementById('sim-secteur');
+    var typeEl = document.getElementById('sim-type');
+    if(nameEl && c.sim_nom){
+      nameEl.value = c.sim_nom;
+      /* Déclencher un flash visuel pour signaler le pré-remplissage */
+      nameEl.style.transition = 'box-shadow .3s';
+      nameEl.style.boxShadow = '0 0 0 3px rgba(28,90,138,.35)';
+      setTimeout(function(){ nameEl.style.boxShadow = ''; }, 1200);
+    }
+    if(sectEl && c.sim_secteur) sectEl.value = c.sim_secteur;
+    if(typeEl && c.sim_type)    typeEl.value = c.sim_type;
+    /* Afficher un bandeau de confirmation discret en haut de l'étape 1 */
+    var panel1 = document.getElementById('sim-panel-1');
+    if(panel1 && c.sim_nom){
+      var existing = document.getElementById('sim-prefill-notice');
+      if(existing) existing.remove();
+      var notice = document.createElement('div');
+      notice.id = 'sim-prefill-notice';
+      notice.style.cssText = 'background:rgba(28,90,138,.07);border-left:3px solid var(--blue);padding:8px 14px;font-size:11.5px;color:var(--ink2);margin-bottom:14px;border-radius:4px';
+      notice.innerHTML = '✅ Pré-rempli depuis Shadow AI — <strong>' + c.title + '</strong>. Complétez et ajustez si nécessaire.';
+      panel1.insertBefore(notice, panel1.firstChild);
+    }
+  }, 120);
+};
+
 window.shadowAiFilterByRisk = function(){
   var sel = document.getElementById('shadow-risk-filter');
   var filter = sel ? sel.value : '';
@@ -14038,7 +14085,7 @@ window.shadowAiFilterByRisk = function(){
         + '<div style="background:rgba(28,90,138,.06);border-left:3px solid var(--blue);padding:8px 10px;border-radius:4px;margin-bottom:8px"><strong>💡 Conseil :</strong> '+c.conseil+'</div>'
         + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">'
         + '<button class="histo-btn-sm" onclick="go(\'registre\',null,\'CONFORMITÉ\',\'Systèmes IA\');return false" title="Ajouter ce systeme au Registre IA">📁 Ajouter au Registre</button>'
-        + '<button class="histo-btn-sm" onclick="go(\'simulateur\',null,\'CARTOGRAPHIER\',\'Simulateur IA Act\');return false" title="Classifier ce systeme avec le Simulateur">⚙️ Simulateur</button>'
+        + '<button class="histo-btn-sm" onclick="shadowAiGoSimulator(SHADOW_AI_CASES['+i+']);return false" title="Classifier ce systeme dans le Simulateur — champs pré-remplis automatiquement">⚙️ Simulateur ↗</button>'
         + (c.fria ? '<button class="histo-btn-sm" onclick="go(\'fria\',null,\'CONFORMITÉ\',\'Évaluation FRIA\');return false" title="Evaluer l\'impact sur les droits fondamentaux">⚖️ FRIA</button>' : '')
         + '</div></div></div>';
     }).join('');
