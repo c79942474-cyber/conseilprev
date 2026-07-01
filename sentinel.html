@@ -1560,6 +1560,44 @@ textarea.form-el{min-height:86px;resize:vertical}
 .billing-monthly-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(28,90,138,.1);border:1px solid rgba(28,90,138,.25);border-radius:4px;padding:2px 8px;font-size:10px;color:var(--blue);font-family:var(--mono);font-weight:600;margin-left:6px}
 .billing-per-label{font-size:9px;font-family:var(--mono);color:var(--muted2);margin-top:2px}
 
+
+/* ══ COMPARAISON PLANS SENTINEL ══ */
+.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0}
+@media(max-width:720px){.plans-grid{grid-template-columns:1fr}}
+.plan-card{border-radius:10px;overflow:hidden;border:1.5px solid var(--rule2);background:var(--white);display:flex;flex-direction:column;position:relative;transition:box-shadow .2s,transform .2s}
+.plan-card:hover{box-shadow:0 6px 28px rgba(0,0,0,.1);transform:translateY(-2px)}
+.plan-card.plan-recommended{border-color:var(--accent);box-shadow:0 2px 16px rgba(184,50,34,.12)}
+.plan-badge{position:absolute;top:12px;right:12px;background:var(--accent);color:#fff;font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;padding:3px 8px;border-radius:3px}
+.plan-header{padding:20px 20px 16px;border-bottom:1px solid var(--rule)}
+.plan-tier{font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em;color:var(--muted2);margin-bottom:6px}
+.plan-name{font-size:17px;font-weight:700;color:var(--ink);font-family:var(--serif);margin-bottom:4px}
+.plan-tagline{font-size:11px;color:var(--muted);line-height:1.5}
+.plan-price-block{padding:16px 20px;border-bottom:1px solid var(--rule);background:var(--bg)}
+.plan-price-row{display:flex;align-items:baseline;gap:6px;margin-bottom:2px}
+.plan-price-main{font-size:22px;font-weight:700;color:var(--ink);font-family:var(--mono)}
+.plan-price-period{font-size:11px;color:var(--muted2)}
+.plan-price-raas{margin-top:8px;padding:8px 10px;background:rgba(184,50,34,.05);border:1px solid rgba(184,50,34,.15);border-radius:6px;font-size:10.5px;color:var(--ink2);line-height:1.6}
+.plan-price-raas-val{font-family:var(--mono);font-weight:700;color:var(--accent)}
+.plan-body{padding:16px 20px;flex:1;display:flex;flex-direction:column;gap:12px}
+.plan-section-title{font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--muted2);margin-bottom:6px}
+.plan-features{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px}
+.plan-features li{font-size:11.5px;color:var(--ink2);display:flex;gap:7px;align-items:flex-start;line-height:1.5}
+.plan-features li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
+.plan-features.plan-cons li{color:var(--muted2)}
+.plan-features.plan-cons li::before{content:'○';color:var(--muted2)}
+.plan-conseil{background:rgba(28,90,138,.05);border:1px solid rgba(28,90,138,.18);border-radius:6px;padding:8px 10px;font-size:10.5px;color:var(--ink2);line-height:1.55;margin-top:4px}
+.plan-conseil-label{font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--blue);font-weight:600;margin-bottom:3px}
+.plan-cta{padding:14px 20px;border-top:1px solid var(--rule)}
+.plan-cta-btn{display:block;text-align:center;padding:9px 16px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;border:none;width:100%;transition:opacity .15s;font-family:var(--sans)}
+.plan-cta-btn.btn-primary{background:var(--accent);color:#fff}
+.plan-cta-btn.btn-secondary{background:var(--bg2);color:var(--ink);border:1px solid var(--rule2)}
+.plan-cta-btn:hover{opacity:.85}
+.plan-cta-sub{font-size:10px;color:var(--muted2);text-align:center;margin-top:6px}
+.plans-billing-bar{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:20px}
+.plans-billing-opt{font-size:12px;font-weight:500;color:var(--muted2);cursor:pointer;transition:color .15s;padding:4px 12px;border-radius:4px}
+.plans-billing-opt.active{color:var(--ink);background:var(--bg2);font-weight:700}
+.plans-annual-save{display:inline-block;background:rgba(45,122,71,.1);border:1px solid rgba(45,122,71,.25);border-radius:3px;padding:1px 6px;font-size:9px;color:var(--green);font-family:var(--mono);font-weight:700;margin-left:4px}
+
 </style>
 
 </head>
@@ -2468,6 +2506,24 @@ textarea.form-el{min-height:86px;resize:vertical}
     </div>
   </div>
 
+
+  <!-- COMPARAISON 3 PLANS SENTINEL -->
+  <div class="tbl-wrap" style="padding:24px;margin-top:24px;margin-bottom:0">
+    <div class="tbl-head" style="border:none;padding:0 0 6px">
+      <span class="tbl-title">Choisir votre formule Sentinel AI</span>
+      <span style="font-size:11px;color:var(--muted);margin-left:10px">Tarifs calculés depuis vos paramètres — devis personnalisé sur demande</span>
+    </div>
+    <p style="font-size:12px;color:var(--muted2);margin:0 0 16px;line-height:1.6">Chaque plan s’adapte automatiquement à votre secteur et à la taille de votre organisation.</p>
+    <div class="plans-billing-bar">
+      <span class="plans-billing-opt active" id="plans-opt-monthly" onclick="plansSetBilling('monthly')">Mensuel</span>
+      <span style="color:var(--rule2);font-size:16px">/</span>
+      <span class="plans-billing-opt" id="plans-opt-annual" onclick="plansSetBilling('annual')">Annuel <span class="plans-annual-save" id="plans-annual-badge">−15 %</span></span>
+    </div>
+    <div class="plans-grid" id="plans-grid-container"><!-- rendu par plansRender() --></div>
+    <div class="radar-registre-info radar-registre-ok" style="margin-top:16px;font-size:11px">
+      ?? Tarifs calculés depuis le simulateur. Modifiez le secteur ou le segment pour mettre à jour les plans.
+    </div>
+  </div>
   <div class="tbl-wrap" style="padding:24px;margin-top:20px">
     <div class="tbl-head" style="border:none;padding:0 0 16px"><span class="tbl-title">Comment fonctionne le modèle hybride</span></div>
     <div class="ctrl-section"><div class="ctrl-section-head"><span class="ctrl-section-title">① Socle fixe réduit — ≈35 % du SaaS équivalent <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>Socle fixe</strong><br>Couvre l'infrastructure réelle : hébergement Render, API Mistral/Claude, base PostgreSQL Frankfurt, maintenance.<br><em>Environ 30-40 % d'un SaaS équivalent</em>. Stable quel que soit votre niveau de conformité.</span></span></span></div>
@@ -13054,6 +13110,99 @@ window.go = function(id){
 
 })();
 
+
+
+/* COMPARAISON PLANS SENTINEL */
+(function(){
+'use strict';
+var _SP=[
+  {id:'gratuit',tier:'Découverte',name:'Sentinel Gratuit',tagline:'Tester la plateforme sans engagement.',badge:null,
+   av:['4 modules essentiels (Observatoire, Simulateur, Réglementations, Formation)','Simulateur de tarification RaaS','Calendrier AI Act consolidé','Aucun engagement, aucune carte bancaire'],
+   li:['23 modules verrouillés (Registre IA, FRIA, Audit, Maturité, Veille…)','Pas de persistance des données de conformité','Pas d’accès aux rapports et livrables IA'],
+   conseil:'Équipes souhaitant évaluer Sentinel avant engagement. Idéal pour une première simulation RaaS avant décision d’achat.',
+   cta:{lbl:'Accès gratuit en cours',act:null,sty:'btn-secondary'},ctaSub:'Inscription ouverte — aucune carte requise'},
+  {id:'pro',tier:'Formule professionnelle',name:'Sentinel Pro',tagline:'27 modules. Tarification indexée sur vos résultats réels.',badge:'Recommandé',
+   av:['27 modules : Registre IA, FRIA, Audit AI Act, Maturité, Veille qualifiée, Sanctions, Roadmap, RAG…','Tarification RaaS : socle réduit + variable indexée sur vos progrès réels Sentinel','Données persistantes et traçables, historique complet','Rapports exécutifs et livrables automatisés par IA','Hub de formation et équipe RACI intégrés'],
+   li:['Périmètre limité à une seule entité juridique','Pas d’API d’intégration avec vos outils internes','Support standard (pas de SLA dédié)','Formation sur site non incluse'],
+   conseil:'DPO, RSSI ou Direction juridique d’une PME ou ETI soumise à l’AI Act avec 5 à 50 systèmes IA. Idéal si vous souhaitez un modèle de facturation aligné sur vos résultats réels.',
+   cta:{lbl:'Demander un accès Pro',act:'go("pricing")',sty:'btn-primary'},ctaSub:'Réponse personnalisée sous 24h ouvrables'},
+  {id:'entreprise',tier:'Formule grands comptes',name:'Sentinel Entreprise',tagline:'Multi-entités, API, SLA dédié et accompagnement CONSEILPREV.',badge:null,
+   av:['Toutes les fonctionnalités Pro, plus :','Déploiement multi-entités et multi-périmètres (groupes, filiales)','API d’intégration avec vos outils internes (GRC, ITSM, ERP)','SLA contractuel dédié et interlocuteur CONSEILPREV attitré','Formation sur site jusqu’à 2 jours/an inclus','Rapport de conformité AI Act annuel personnalisé'],
+   li:['Tarif sur devis — engagement minimum recommandé : 12 mois','Délai de mise en place : 2 à 4 semaines','Nécessite un point de contact technique dédié côté client'],
+   conseil:'Grandes entreprises, groupes ou collectivités avec plusieurs dizaines de systèmes IA sur plusieurs entités. Recommandé si votre exposition aux sanctions AI Act Art. 99 dépasse 1 M€.',
+   cta:{lbl:'Demander un devis Entreprise',act:'go("pricing")',sty:'btn-primary'},ctaSub:'Engagement recommandé : 12 mois'}
+];
+function _e(n){return n.toLocaleString('fr-FR')+' €';}
+function _t(h){return '<span class="prx-tip-icon" tabindex="0" style="margin-left:4px;vertical-align:middle">?<span class="prx-tip-bubble" style="width:220px">'+h+'</span></span>';}
+window.plansRender=function(){
+  var el=document.getElementById('plans-grid-container');
+  if(!el) return;
+  var bi=window.__plansBilling||'monthly';
+  var sec=(document.getElementById('pricing-secteur')&&document.getElementById('pricing-secteur').value)||'it';
+  var seg=(document.getElementById('pricing-segment')&&document.getElementById('pricing-segment').value)||'pme';
+  var cS=seg.charAt(0).toUpperCase()+seg.slice(1);
+  var bM=PRICING_PARAMS['saas'+cS+'Base']||PRICING_PARAMS.saasPmeBase||{};
+  var sM=(PRICING_PARAMS.hybridSocleBySegSector&&PRICING_PARAMS.hybridSocleBySegSector[seg])||{};
+  var aD=(PRICING_PARAMS.annualDiscount&&PRICING_PARAMS.annualDiscount[sec])||0.15;
+  var sm=bM[sec]||PRICING_PARAMS.saasBase||350;
+  var sa=Math.round(sm*(1-aD));
+  var cur=(bi==='annual')?sa:sm;
+  var so=(sM[sec]||PRICING_PARAMS.hybridSocle||122);
+  var cp=so*(PRICING_PARAMS.hybridVariableCapMultiplier||3);
+  var mx=so+cp;
+  var ap=Math.round(aD*100);
+  var sl={pme:'PME',eti:'ETI',ge:'Grands comptes'}[seg]||seg;
+  var ab=document.getElementById('plans-annual-badge');
+  if(ab) ab.textContent='−'+ap+' %';
+  var tS=_t('<strong>Tarif SaaS de référence</strong><br>Segment : <em>'+sl+' — '+(bi==='annual'?'12 mois':'sans engagement')+'</em><br>Remise annuelle : <em>−'+ap+' %</em><br><em style="font-size:9px">Sources : OGMA 99 €/mois (TPE), TARANIS 559 €/mois (PME).</em>');
+  var tR=_t('<strong>Modèle RaaS</strong><br>Socle fixe : <em>'+_e(so)+'/mois</em> (∵35 % du SaaS)<br>Part variable : indexée sur vos résultats réels Sentinel<br>Plafonnée à 3× le socle (<em>'+_e(cp)+'</em>)<br><strong>Total max : '+_e(mx)+'/mois</strong>');
+  el.innerHTML=_SP.map(function(p){
+    var iG=p.id==='gratuit',iE=p.id==='entreprise';
+    var pb='';
+    if(iG){
+      pb='<div class="plan-price-row"><span class="plan-price-main">0 €</span><span class="plan-price-period">/mois</span></div><div style="font-size:10px;color:var(--muted2);margin-top:3px">Sans engagement — toujours gratuit</div>';
+    } else if(iE){
+      pb='<div class="plan-price-row"><span class="plan-price-main" style="font-size:16px">Sur devis</span>'+tS+'</div><div style="font-size:10px;color:var(--muted2);margin-top:2px">Fourchette orient. : '+_e(cur)+'–'+_e(Math.round(cur*1.4))+'/mois</div><div class="plan-price-raas"><div style="font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.09em;color:var(--accent);margin-bottom:4px">RaaS groupe'+tR+'</div>Socle GE : <span class="plan-price-raas-val">'+_e(so)+'/mois</span><div style="font-size:10px;color:var(--muted2);margin-top:2px">Max variable : '+_e(mx)+'/mois</div></div>';
+    } else {
+      var oL=(bi==='annual')?'sans engagement':'annuel (−'+ap+' %)';
+      var oV=(bi==='annual')?sm:sa;
+      pb='<div class="plan-price-row"><span class="plan-price-main">'+_e(cur)+'</span><span class="plan-price-period">/mois</span>'+tS+'</div><div style="font-size:10px;color:var(--muted2);margin-top:2px">vs '+_e(oV)+'/mois '+oL+'</div><div class="plan-price-raas"><div style="font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.09em;color:var(--accent);margin-bottom:4px">RaaS — tarification par résultats'+tR+'</div>Socle : <span class="plan-price-raas-val">'+_e(so)+'/mois</span><div style="font-size:10px;color:var(--muted2);margin-top:2px">+ variable selon résultats Sentinel → max '+_e(mx)+'/mois</div></div>';
+    }
+    var cb=p.cta.act
+      ?'<button class="plan-cta-btn '+p.cta.sty+'" onclick="'+p.cta.act+'">'+p.cta.lbl+'</button>'
+      :'<button class="plan-cta-btn '+p.cta.sty+'" disabled style="opacity:.55;cursor:default">'+p.cta.lbl+'</button>';
+    return '<div class="plan-card'+(p.badge?' plan-recommended':'')+'">'
+      +(p.badge?'<div class="plan-badge">'+p.badge+'</div>':'')
+      +'<div class="plan-header"><div class="plan-tier">'+p.tier+'</div><div class="plan-name">'+p.name+'</div><div class="plan-tagline">'+p.tagline+'</div></div>'
+      +'<div class="plan-price-block">'+pb+'</div>'
+      +'<div class="plan-body">'
+      +'<div><div class="plan-section-title">✅ Inclus</div><ul class="plan-features">'+p.av.map(function(a){return '<li>'+a+'</li>';}).join('')+'</ul></div>'
+      +'<div><div class="plan-section-title">○ Limites</div><ul class="plan-features plan-cons">'+p.li.map(function(l){return '<li>'+l+'</li>';}).join('')+'</ul></div>'
+      +'<div class="plan-conseil"><div class="plan-conseil-label">?? Pour qui ?</div><div>'+p.conseil+'</div></div>'
+      +'</div>'
+      +'<div class="plan-cta">'+cb+'<div class="plan-cta-sub">'+p.ctaSub+'</div></div>'
+      +'</div>';
+  }).join('');
+};
+window.plansSetBilling=function(mode){
+  window.__plansBilling=mode;
+  var om=document.getElementById('plans-opt-monthly'),oa=document.getElementById('plans-opt-annual');
+  if(om) om.classList.toggle('active',mode==='monthly');
+  if(oa) oa.classList.toggle('active',mode==='annual');
+  var bt=document.getElementById('pricing-billing-toggle');
+  if(bt){ bt.checked=(mode==='annual'); }
+  window.__pricingBilling=mode;
+  if(window.plansRender) window.plansRender();
+};
+var _oPS=window.pricingSimulate;
+window.pricingSimulate=function(){if(_oPS) _oPS.apply(this,arguments); if(window.plansRender) window.plansRender();};
+var _oPI=window.pricingInitPage;
+window.pricingInitPage=function(){
+  if(_oPI) _oPI.apply(this,arguments);
+  window.__plansBilling=(function(){var t=document.getElementById('pricing-billing-toggle');return(t&&t.checked)?'annual':'monthly';})();
+  if(window.plansRender) window.plansRender();
+};
+})();
 
 // ── Formulaire de demande de tarification ────────────────────────
 window.pricingSelectPlan = function(plan){
