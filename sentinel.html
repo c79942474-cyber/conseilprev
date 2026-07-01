@@ -2267,6 +2267,27 @@ textarea.form-el{min-height:86px;resize:vertical}
   <p class="page-lead">Évaluez la conformité de votre système IA selon le Règlement (UE) 2024/1689 — classification, obligations et sanctions en 5 étapes, avant de l enregistrer au Registre.</p>
   <span class="sim-ref">Règlement (UE) 2024/1689 du 13 juin 2024 — Texte officiel Journal officiel L du 12.7.2024</span>
 
+  <!-- CALENDRIER CONSOLIDÉ EU AI ACT — Art. 113 + Digital Omnibus -->
+  <div class="tbl-wrap" style="margin-bottom:24px;padding:0">
+    <div class="tbl-head" style="padding:16px 20px 10px">
+      <span class="tbl-title">📅 Calendrier consolidé EU AI Act</span>
+      <span style="font-size:10px;font-family:var(--mono);color:var(--muted)">Art. 113 · Digital Omnibus 2024</span>
+    </div>
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:11.5px">
+        <thead>
+          <tr style="background:var(--bg);border-bottom:2px solid var(--rule)">
+            <th style="padding:8px 16px;text-align:left;font-family:var(--mono);font-size:10px;color:var(--muted);font-weight:600;white-space:nowrap">Date</th>
+            <th style="padding:8px 16px;text-align:left;font-family:var(--mono);font-size:10px;color:var(--muted);font-weight:600">Ce qui s'applique</th>
+            <th style="padding:8px 16px;text-align:left;font-family:var(--mono);font-size:10px;color:var(--muted);font-weight:600">Ce que les décideurs doivent retenir</th>
+          </tr>
+        </thead>
+        <tbody id="ai-act-timeline-body"></tbody>
+      </table>
+    </div>
+  </div>
+  <!-- FIN CALENDRIER -->
+
   <div class="sim-wrap">
     <div id="sim-step-counter" style="font-size:11px;font-family:var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Étape 1 sur 5</div>
     <!-- Stepper -->
@@ -13763,13 +13784,88 @@ var _shadowAiOrigGo = window.go;
 window.go = function(id){
   var r = _shadowAiOrigGo ? _shadowAiOrigGo.apply(this, arguments) : undefined;
   if(id === "shadow-ai") setTimeout(window.shadowAiRender, 50);
+  if(id === "simulateur") setTimeout(aiActTimelineRender, 50);
   return r;
 };
 
 </script>
+<script>
+/* ══ CALENDRIER CONSOLIDÉ EU AI ACT — Art. 113 + Digital Omnibus ══
+   Sources : texte officiel Art. 113 Règl.(UE) 2024/1689 (vérifié EUR-Lex),
+   et proposition Digital Omnibus 2024 pour les dates 2027-2028. */
+var AI_ACT_TIMELINE = [
+  {
+    date: "1er août 2024",
+    statut: "passe",
+    quoi: "Entrée en vigueur du Règlement (UE) 2024/1689",
+    retenir: "Le compte à rebours a commencé. Le texte est adopté et directement applicable selon son calendrier progressif.",
+    ref: "Art. 113"
+  },
+  {
+    date: "2 février 2025",
+    statut: "passe",
+    quoi: "Interdictions (Art. 5) — Définitions (Chap. I) — Obligation de culture IA (Art. 4)",
+    retenir: "Les organisations doivent déjà former les personnes qui utilisent ou supervisent des systèmes d'IA et bannir les pratiques interdites.",
+    ref: "Art. 113(a)"
+  },
+  {
+    date: "2 août 2025",
+    statut: "passe",
+    quoi: "Gouvernance (Chap. VII) — Modèles GPAI (Chap. V) — Autorités nationales désignées",
+    retenir: "Les fournisseurs de modèles généralistes sont directement concernés. Les entreprises utilisatrices doivent suivre ce que leurs fournisseurs documentent.",
+    ref: "Art. 113(b)"
+  },
+  {
+    date: "2 août 2026",
+    statut: "prochain",
+    quoi: "Application générale : transparence (Art. 50) — supervision GPAI pleine — sanctions Commission",
+    retenir: "Chatbots, deepfakes, contenus générés ou manipulés, interactions IA : les entreprises doivent être prêtes. C'est l'échéance centrale.",
+    ref: "Art. 113"
+  },
+  {
+    date: "2 décembre 2027",
+    statut: "futur",
+    quoi: "Systèmes à haut risque Annexe III (biométrie, emploi, crédit, justice, migration…)",
+    retenir: "Le haut risque ne disparaît pas : son calendrier est repoussé à une date désormais fixe. Préparer la documentation technique et les FRIA.",
+    ref: "Digital Omnibus"
+  },
+  {
+    date: "2 août 2028",
+    statut: "futur",
+    quoi: "Systèmes haut risque intégrés à des produits réglementés (Annexe I : machines, jouets, dispositifs médicaux…)",
+    retenir: "Les industriels et fabricants de produits réglementés doivent raisonner cycle de vie, conformité produit et documentation technique.",
+    ref: "Art. 113(c)"
+  }
+];
 
+function aiActTimelineRender(){
+  var tbody = document.getElementById('ai-act-timeline-body');
+  if(!tbody) return;
+  var today = new Date();
+  tbody.innerHTML = AI_ACT_TIMELINE.map(function(row, i){
+    var isNext = row.statut === 'prochain';
+    var isPast = row.statut === 'passe';
+    var rowBg = isNext ? 'background:rgba(28,90,138,.07)' : '';
+    var dateBg = isNext
+      ? 'background:var(--blue);color:#fff;border-radius:4px;padding:2px 8px'
+      : isPast
+        ? 'color:var(--muted)'
+        : 'color:var(--ink2)';
+    var border = isNext ? 'border-left:3px solid var(--blue)' : 'border-left:3px solid transparent';
+    return '<tr style="border-bottom:1px solid var(--rule);'+rowBg+';'+border+'">'
+      + '<td style="padding:10px 16px;white-space:nowrap;vertical-align:top"><span style="'+dateBg+';font-family:var(--mono);font-size:10.5px;font-weight:700">'
+      + (isNext ? '⚡ ' : isPast ? '✅ ' : '⏳ ')
+      + row.date+'</span>'
+      + '<div style="font-size:9px;color:var(--muted);font-family:var(--mono);margin-top:3px">'+row.ref+'</div></td>'
+      + '<td style="padding:10px 16px;vertical-align:top;color:'+(isPast?'var(--muted)':'var(--ink2)')+';line-height:1.5">'+row.quoi+'</td>'
+      + '<td style="padding:10px 16px;vertical-align:top;color:'+(isPast?'var(--muted)':'var(--ink)')+';line-height:1.5;font-weight:'+(isNext?'500':'400')+'">'+row.retenir+'</td>'
+      + '</tr>';
+  }).join('');
+}
 
-
+// Afficher immédiatement si on est déjà sur la page simulateur
+(function(){ if(document.getElementById('ai-act-timeline-body')) aiActTimelineRender(); })();
+</script>
 
 
 </html>
