@@ -5110,98 +5110,6 @@ function ftNlSubmit(e){
     return src || "innov";
   }
 
-  /* ── Sources RSS — fetch direct-browser via proxy CORS allorigins ── */
-  var V_RSS_DIRECT = [
-    {name:"ActuIA",         url:"https://www.actuia.com/feed/",                                          cat:"ai",   ico:"🤖", lang:"fr"},
-    {name:"ANSSI",          url:"https://cyber.gouv.fr/feed",                                            cat:"secu", ico:"🛡️", lang:"fr"},
-    {name:"CNIL",           url:"https://www.cnil.fr/fr/rss.xml",                                        cat:"regl", ico:"🔒", lang:"fr"},
-    {name:"AI Act EU",      url:"https://artificialintelligenceact.eu/feed/",                            cat:"regl", ico:"⚖️", lang:"en"},
-    {name:"The Hacker News",url:"https://feeds.feedburner.com/TheHackersNews",                          cat:"secu", ico:"🔓", lang:"en"},
-    {name:"MIT Tech Review",url:"https://www.technologyreview.com/feed/",                               cat:"ai",   ico:"🧠", lang:"en"},
-    {name:"TechCrunch AI",  url:"https://techcrunch.com/category/artificial-intelligence/feed/",        cat:"ai",   ico:"🚀", lang:"en"},
-    {name:"EU Digital",     url:"https://digital-strategy.ec.europa.eu/en/rss.xml",                    cat:"intl", ico:"🇪🇺", lang:"en"},
-  ];
-
-  /* Parse XML RSS/Atom → tableau d'items */
-  function vParseXML(xmlText, src){
-    var items = [];
-    try {
-      var parser = new DOMParser();
-      var doc = parser.parseFromString(xmlText, "text/xml");
-      /* RSS 2.0 */
-      var entries = doc.querySelectorAll("item");
-      /* Atom */
-      if(!entries.length) entries = doc.querySelectorAll("entry");
-      entries.forEach(function(el, i){
-        if(i >= 8) return;
-        var title = (el.querySelector("title")||{}).textContent || "";
-        var link  = (el.querySelector("link")||{}).textContent
-                 || el.getAttribute("href")
-                 || (el.querySelector("link")||{}).getAttribute("href") || "#";
-        var date  = (el.querySelector("pubDate")||el.querySelector("published")||el.querySelector("updated")||{}).textContent || "";
-        if(!title.trim()) return;
-        items.push({
-          title:  title.trim().replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&#039;/g,"'"),
-          link:   link.trim() || "#",
-          date:   date.trim(),
-          source: src.name,
-          ico:    src.ico,
-          cat:    vCatDetect(title, src.cat),
-          lang:   src.lang
-        });
-      });
-    } catch(e){}
-    return items;
-  }
-
-  function vFetchDirect(){
-    var total = V_RSS_DIRECT.length;
-    var done  = 0;
-    var accumulated = [];
-
-    V_RSS_DIRECT.forEach(function(src){
-      /* allorigins.win — proxy CORS gratuit sans limite de taux */
-      var proxy = "https://api.allorigins.win/raw?url=" + encodeURIComponent(src.url);
-      fetch(proxy, {signal: AbortSignal.timeout ? AbortSignal.timeout(7000) : undefined})
-        .then(function(r){
-          if(!r.ok) throw new Error("HTTP " + r.status);
-          return r.text();
-        })
-        .then(function(xml){
-          var items = vParseXML(xml, src);
-          items.forEach(function(it){ accumulated.push(it); });
-        })
-        .catch(function(){})
-        .finally(function(){
-          done++;
-          if(done === total) vDirectDone(accumulated);
-        });
-    });
-  }
-
-  function vDirectDone(items){
-    V_LOADING = false;
-    var loading = document.getElementById("vloading");
-    if(loading) loading.style.display = "none";
-    if(!items.length){
-      vShowError("Sources temporairement inaccessibles. Cliquez ↻ pour réessayer.");
-      return;
-    }
-    var seen = new Set();
-    V_ITEMS = items
-      .filter(function(it){
-        var k = (it.title||"").slice(0,55);
-        if(!k || seen.has(k)) return false;
-        seen.add(k); return true;
-      })
-      .sort(function(a,b){ return (b.date||"") > (a.date||"") ? 1 : -1; })
-      .slice(0,60);
-    vRender();
-    document.getElementById("vstatus-txt").textContent =
-      V_ITEMS.length + " actualités · " +
-      new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
-  }
-
   function vFetch(){
     if(V_LOADING) return;
     V_LOADING = true;
@@ -5217,20 +5125,22 @@ function ftNlSubmit(e){
         return r.json();
       })
       .then(function(data){
-        if(data && data.items && data.items.length > 4 && !data.fallback){
-          V_LOADING = false;
-          if(loading) loading.style.display = "none";
+        V_LOADING = false;
+        if(loading) loading.style.display = "none";
+        if(data && data.items && data.items.length){
           V_ITEMS = data.items;
           vRender();
           document.getElementById("vstatus-txt").textContent =
             data.count + " actualités · " +
             new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
         } else {
-          vFetchDirect();
+          vShowError("Aucune actualité disponible. Cliquez ↻ pour réessayer.");
         }
       })
       .catch(function(){
-        vFetchDirect();
+        V_LOADING = false;
+        if(loading) loading.style.display = "none";
+        vShowError("Erreur de connexion. Cliquez ↻ pour réessayer.");
       });
   }
 
