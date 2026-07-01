@@ -1053,6 +1053,19 @@ textarea.form-el{min-height:86px;resize:vertical}
 .reg-form{display:flex;flex-direction:column;gap:14px}
 .reg-form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .reg-form-section-title{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 4px;padding-top:14px;border-top:1px solid var(--rule)}
+.shadow-ai-tabs{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap}
+.shadow-ai-tab{font-size:11.5px;font-family:var(--mono);padding:7px 16px;border:1px solid var(--rule);border-radius:6px;background:var(--bg2);color:var(--ink2);cursor:pointer;transition:all .15s}
+.shadow-ai-tab:hover{border-color:var(--blue);color:var(--blue)}
+.shadow-ai-tab.on{background:var(--blue);color:#fff;border-color:var(--blue);font-weight:600}
+.shadow-ai-card{background:var(--bg2);border:1px solid var(--rule);border-radius:8px;overflow:hidden;transition:box-shadow .15s}
+.shadow-ai-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.shadow-ai-card-head{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;gap:8px}
+.shadow-ai-card-title{font-size:12.5px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:8px}
+.shadow-ai-card-body{padding:0 14px 14px;font-size:11.5px;color:var(--ink2);line-height:1.65;display:none}
+.shadow-ai-card-body.open{display:block}
+.shadow-ai-card-tag{font-size:9px;font-family:var(--mono);padding:2px 7px;border-radius:10px;font-weight:700;white-space:nowrap}
+.shadow-ai-reg-card{background:var(--bg2);border:1px solid var(--rule);border-radius:8px;padding:14px;font-size:11.5px;color:var(--ink2);line-height:1.65}
+.shadow-ai-reg-card h4{font-size:12px;font-weight:700;color:var(--ink);margin:0 0 8px;display:flex;align-items:center;gap:6px}
 .reg-checkbox-group{display:flex;flex-direction:column;gap:8px}
 .reg-checkbox-opt{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink2);cursor:pointer}
 .reg-checkbox-opt input[type=checkbox]{width:15px;height:15px;cursor:pointer;accent-color:var(--accent)}
@@ -2248,18 +2261,46 @@ textarea.form-el{min-height:86px;resize:vertical}
 <div class="page" id="p-shadow-ai">
   <span class="eyebrow">Cartographier · Avant le Simulateur</span>
   <h1 class="page-h">Découverte <em>Shadow AI</em></h1>
-  <p class="page-lead">Le plus grand risque n'est pas toujours le grand projet IA présenté en comité de direction — il est souvent dans l'IA déjà là, invisible. Avant de classifier un système, encore faut-il savoir qu'il existe. Cette checklist guide la découverte des 7 cas d'usage les plus fréquemment oubliés.</p>
+  <p class="page-lead">Le plus grand risque n'est pas toujours le grand projet IA présenté en comité de direction — il est souvent dans l'IA déjà là, invisible. Identifiez les 8 cas d'usage les plus fréquemment oubliés, puis agissez directement.</p>
 
-  <div class="radar-registre-info" style="margin-bottom:24px">📅 <strong>Échéance du 2 août 2026</strong> — les obligations de transparence (Art. 50) deviennent pleinement applicables : information explicite en cas d'interaction avec une IA, marquage des contenus synthétiques, signalement des deepfakes.</div>
+  <div class="radar-registre-info" style="margin-bottom:20px">📅 <strong>Échéance du 2 août 2026</strong> — Art. 50 pleinement applicable : information explicite en cas d'interaction avec une IA, marquage des contenus synthétiques, signalement des deepfakes.</div>
 
-  <div id="shadow-ai-list"></div>
+  <!-- Onglets -->
+  <div class="shadow-ai-tabs" id="shadow-ai-tabs">
+    <button class="shadow-ai-tab on" onclick="shadowAiTab('cas')" id="shadow-tab-cas">📋 Cas d'usage</button>
+    <button class="shadow-ai-tab" onclick="shadowAiTab('registre')" id="shadow-tab-registre">📁 Registre IA</button>
+    <button class="shadow-ai-tab" onclick="shadowAiTab('sia')" id="shadow-tab-sia">⚙️ SIA — Simulateur</button>
+  </div>
 
-  <div class="tbl-wrap" style="padding:24px;margin-top:24px">
-    <div class="tbl-head" style="border:none;padding:0 0 16px"><span class="tbl-title">Et ensuite ?</span></div>
-    <p style="font-size:12.5px;color:var(--ink2);line-height:1.6;margin-bottom:14px">Pour chaque système identifié grâce à cette checklist : classifiez-le précisément avec le Simulateur, puis enregistrez-le au Registre IA avec son rôle réglementaire et son service utilisateur.</p>
-    <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="go('simulateur',null,'CARTOGRAPHIER','Simulateur IA Act')" title="Classifier le systeme identifie selon le Reglement EU AI Act">Aller au Simulateur IA Act →</button>
+  <!-- Onglet 1 : Checklist 2 colonnes -->
+  <div id="shadow-panel-cas">
+    <div id="shadow-ai-list" style="display:grid;grid-template-columns:1fr 1fr;gap:14px"></div>
+  </div>
+
+  <!-- Onglet 2 : Registre IA — ce qu'il faut y saisir -->
+  <div id="shadow-panel-registre" style="display:none">
+    <div class="tbl-wrap" style="padding:20px;margin-bottom:16px">
+      <div class="tbl-head" style="border:none;padding:0 0 12px"><span class="tbl-title">📁 Que saisir dans le Registre IA pour chaque système identifié ?</span></div>
+      <div id="shadow-registre-list" style="display:grid;grid-template-columns:1fr 1fr;gap:14px"></div>
+      <div style="margin-top:20px">
+        <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="go('registre',null,'CONFORMITÉ','Systèmes IA')" title="Ouvrir le Registre IA">Ouvrir le Registre IA →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Onglet 3 : SIA / Simulateur -->
+  <div id="shadow-panel-sia" style="display:none">
+    <div class="tbl-wrap" style="padding:20px;margin-bottom:16px">
+      <div class="tbl-head" style="border:none;padding:0 0 12px"><span class="tbl-title">⚙️ Comment classifier chaque système identifié ?</span></div>
+      <div id="shadow-sia-list" style="display:grid;grid-template-columns:1fr 1fr;gap:14px"></div>
+      <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap">
+        <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="go('simulateur',null,'CARTOGRAPHIER','Simulateur IA Act')" title="Classifier le systeme identifie">Simulateur IA Act →</button>
+        <button class="mat-export-btn" style="background:var(--bg);color:var(--ink2);border:1px solid var(--rule)" onclick="go('fria',null,'CONFORMITÉ','Évaluation FRIA')" title="Evaluer l impact sur les droits fondamentaux">Évaluation FRIA →</button>
+      </div>
+    </div>
   </div>
 </div>
+
 
 <div class="page" id="p-simulateur">
   <span class="eyebrow">Cartographier · EU AI Act</span>
@@ -13693,81 +13734,143 @@ if(document.readyState !== 'loading'){ setTimeout(window.editionRefresh, 400); }
 
 </script>
 <script>
-/* ══ DECOUVERTE SHADOW AI — checklist des 7 cas d usage IA invisibles ══ */
+/* ══ DÉCOUVERTE SHADOW AI ══ */
 var SHADOW_AI_CASES = [
-  {
-    icon: '🔌', title: 'Fonctionnalités IA activées dans des logiciels SaaS',
-    examples: 'Copilot Microsoft 365, Salesforce Einstein, options IA ajoutées par un éditeur sans annonce',
-    applicable: 'Souvent oui — l\'entreprise est généralement déployeur (Art. 3(4)), même sans avoir développé l\'outil',
-    obligation: 'Vérifier auprès de l\'éditeur le niveau de risque du module IA. Si interaction directe avec des personnes : information explicite requise (Art. 50§1, applicable au 2 août 2026).',
-    conseil: 'Interroger systématiquement les achats et l\'IT sur les options IA déjà activées dans les contrats SaaS existants — souvent activées par défaut sans validation formelle.'
+  { icon:'🔌', title:'Fonctionnalités IA dans des SaaS',
+    tag:'Déployeur', tagColor:'#2D6ABF',
+    examples:'Copilot M365, Salesforce Einstein, options IA activées par un éditeur sans annonce',
+    applicable:'Souvent oui — l\'entreprise est déployeur (Art. 3§4), même sans avoir développé l\'outil',
+    obligation:'Vérifier auprès de l\'éditeur le niveau de risque. Si interaction avec des personnes : Art. 50§1 applicable au 2 août 2026.',
+    conseil:'Interroger les achats et l\'IT sur les options IA déjà activées dans les contrats SaaS.',
+    reg_champ:'Type : "SaaS tiers". Service utilisateur : département concerné. Rôle : Déployeur.',
+    sia_risque:'Risque limité à minimal en général. Vérifier si le module SaaS traite des décisions sur des personnes.',
+    fria: false
   },
-  {
-    icon: '👥', title: 'Outils RH de tri, d\'évaluation ou de matching',
-    examples: 'Tri de CV automatisé, scoring de candidats, matching poste/profil',
-    applicable: 'Oui, quasi systématiquement — cas explicite de l\'Annexe III, point 4(a)',
-    obligation: 'Haut risque par défaut (Art. 6§2 + Annexe III). FRIA obligatoire si le déployeur est un organisme public (Art. 27). Documentation technique, supervision humaine et registre EU requis.',
-    conseil: 'Prioriser ce cas d\'usage en premier dans le Registre IA — c\'est l\'un des domaines où les sanctions sont les plus probables (sujet sensible, fort contentieux prud\'homal potentiel).'
+  { icon:'👥', title:'Outils RH — tri, évaluation, matching',
+    tag:'Haut risque', tagColor:'#B83222',
+    examples:'Tri de CV, scoring candidats, matching poste/profil',
+    applicable:'Oui systématiquement — Annexe III, point 4(a)',
+    obligation:'Haut risque (Art. 6§2 + Annexe III). FRIA obligatoire pour les organismes publics (Art. 27). Documentation technique et supervision humaine requises.',
+    conseil:'Prioriser dans le Registre — fort risque contentieux prud\'homal.',
+    reg_champ:'Classification : Haut risque. Personnes concernées : Candidats, salariés. Rôle : Déployeur.',
+    sia_risque:'Haut risque Annexe III point 4(a) — Documentation technique, FRIA, logs obligatoires.',
+    fria: true
   },
-  {
-    icon: '💬', title: 'Chatbots clients ou internes',
-    examples: 'Assistant service client, chatbot RH interne, agent conversationnel sur le site web',
-    applicable: 'Oui — dès qu\'il y a interaction directe avec une personne physique',
-    obligation: 'Information claire que l\'utilisateur interagit avec une IA (Art. 50§1), sauf si évident pour une personne raisonnablement informée. Applicable au 2 août 2026.',
-    conseil: 'Vérifier que la mention "vous échangez avec une IA" apparaît dès le premier message, pas seulement dans des mentions légales difficiles à trouver.'
+  { icon:'💬', title:'Chatbots clients ou internes',
+    tag:'Art. 50§1', tagColor:'#1C5A8A',
+    examples:'Assistant service client, chatbot RH interne, agent conversationnel',
+    applicable:'Oui — dès qu\'il y a interaction directe avec une personne physique',
+    obligation:'Information claire que l\'utilisateur interagit avec une IA (Art. 50§1). Applicable au 2 août 2026.',
+    conseil:'Vérifier que la mention apparaît dès le premier message, pas seulement dans les mentions légales.',
+    reg_champ:'Type : "Chatbot / LLM". Transparence Art. 50 : Oui — mention explicite requise.',
+    sia_risque:'Risque limité. Obligation principale : transparence Art. 50§1.',
+    fria: false
   },
-  {
-    icon: '🎨', title: 'Générateurs de textes, d\'images, de vidéos et de voix',
-    examples: 'Génération de visuels marketing, synthèse vocale, rédaction assistée de contenus publiés',
-    applicable: 'Oui — obligation de marquage, distincte de l\'obligation d\'information',
-    obligation: 'Marquage machine-readable des contenus générés ou manipulés (Art. 50§2). Pour les deepfakes ou textes d\'intérêt public publiés : signalement explicite obligatoire (Art. 50§4). Délai spécifique jusqu\'au 2 décembre 2026 pour le marquage des systèmes déjà sur le marché avant le 2 août 2026 (Digital Omnibus).',
-    conseil: 'Distinguer les usages internes (pas de publication) des contenus diffusés publiquement — seuls ces derniers déclenchent pleinement l\'obligation de signalement.'
+  { icon:'🎨', title:'Générateurs de textes, images, vidéos, voix',
+    tag:'Art. 50§2-4', tagColor:'#6B3FA0',
+    examples:'Visuels marketing générés, synthèse vocale, rédaction de contenus publiés',
+    applicable:'Oui — obligation de marquage, distincte de l\'obligation d\'information',
+    obligation:'Marquage machine-readable des contenus générés (Art. 50§2). Deepfakes et textes d\'intérêt public : signalement obligatoire (Art. 50§4). Délai Digital Omnibus : 2 décembre 2026.',
+    conseil:'Distinguer les usages internes des contenus publiés — seuls ces derniers déclenchent l\'obligation de signalement.',
+    reg_champ:'Type : "Générateur IA". Preuves : politique de marquage interne à conserver.',
+    sia_risque:'Risque minimal à limité. Obligation principale : marquage Art. 50§2.',
+    fria: false
   },
-  {
-    icon: '🔗', title: 'Agents connectés aux données de l\'entreprise',
-    examples: 'Copilote interne branché sur une base documentaire (RAG), assistant analysant des données métier',
-    applicable: 'Dépend de l\'usage exact — souvent risque limité ou minimal, sauf si le système influence des décisions sur des personnes (RH, crédit, etc.)',
-    obligation: 'Si décisionnel sur des personnes : potentiellement haut risque. Sinon, gouvernance des données (qualité, biais, sécurité) recommandée à titre de bonne pratique (ISO/IEC 42001).',
-    conseil: 'Documenter précisément quelles données sont accessibles à l\'agent — un agent RAG mal cloisonné peut exposer des données sensibles au-delà de son usage prévu.'
+  { icon:'🔗', title:'Agents connectés aux données de l\'entreprise',
+    tag:'À évaluer', tagColor:'#6B7280',
+    examples:'Copilote RAG interne, assistant analysant des données métier',
+    applicable:'Dépend — risque limité sauf si décisions sur des personnes (RH, crédit)',
+    obligation:'Si décisionnel sur des personnes : potentiellement haut risque. Sinon, bonne pratique ISO/IEC 42001.',
+    conseil:'Documenter quelles données sont accessibles — un agent RAG mal cloisonné peut exposer des données sensibles.',
+    reg_champ:'Type : "Agent / RAG". Données utilisées : base documentaire concernée. Rôle : Déployeur.',
+    sia_risque:'Variable selon l\'usage. Classifier avec le Simulateur étape par étape.',
+    fria: false
   },
-  {
-    icon: '🧩', title: 'API de modèles utilisées dans les produits',
-    examples: 'Appels à des API de modèles tiers (OpenAI, Anthropic, Mistral) intégrés dans un produit ou service',
-    applicable: 'Oui — l\'entreprise est déployeur du modèle, potentiellement fournisseur du produit final',
-    obligation: 'Vérifier la documentation du fournisseur du modèle (obligations Art. 53 si GPAI). Si le produit final interagit avec des personnes : transparence Art. 50 à votre charge en tant que déployeur du produit.',
-    conseil: 'Conserver une trace des conditions d\'utilisation et des garanties contractuelles du fournisseur de l\'API — utile en cas de modification substantielle (Art. 25) faisant basculer votre rôle.'
+  { icon:'🧩', title:'API de modèles dans les produits',
+    tag:'Déployeur/Fournisseur', tagColor:'#2D6ABF',
+    examples:'OpenAI, Anthropic, Mistral via API intégrée dans un produit ou service',
+    applicable:'Oui — déployeur du modèle, potentiellement fournisseur du produit final',
+    obligation:'Vérifier documentation du fournisseur (Art. 53 si GPAI). Si interaction avec des personnes : Art. 50 à votre charge.',
+    conseil:'Conserver les CGU et garanties du fournisseur d\'API — utile en cas de modification substantielle (Art. 25).',
+    reg_champ:'Fournisseur : nom du modèle + éditeur API. Rôle : Déployeur (+ Fournisseur si intégration dans produit).',
+    sia_risque:'Dépend du produit final. Vérifier si le produit tombe sous l\'Annexe III.',
+    fria: false
   },
-  {
-    icon: '🤝', title: 'Prestataires qui utilisent de l\'IA dans leurs livrables',
-    examples: 'Agence créa utilisant un générateur d\'images, cabinet de conseil utilisant un LLM pour des analyses',
-    applicable: 'Oui, indirectement — responsabilité de vérification incombe à l\'entreprise qui reçoit le livrable',
-    obligation: 'Aucune obligation directe de l\'AI Act envers le donneur d\'ordre, mais risque de non-conformité par ricochet (contenu non marqué, biais non documenté).',
-    conseil: 'Ajouter une clause contractuelle standard exigeant la déclaration de tout usage d\'IA dans les livrables, avec preuve de conformité Art. 50 si applicable.'
+  { icon:'🤝', title:'Prestataires utilisant l\'IA dans leurs livrables',
+    tag:'Indirect', tagColor:'#6B7280',
+    examples:'Agence créa utilisant un générateur d\'images, cabinet conseil utilisant un LLM',
+    applicable:'Indirectement — responsabilité de vérification incombe au donneur d\'ordre',
+    obligation:'Pas d\'obligation directe AI Act, mais risque non-conformité par ricochet (contenu non marqué, biais non documenté).',
+    conseil:'Ajouter une clause contractuelle standard exigeant la déclaration de tout usage IA dans les livrables.',
+    reg_champ:'Fournisseur : nom du prestataire. Preuves : clause contractuelle IA à joindre au registre.',
+    sia_risque:'Risque indirect. Clore le sujet contractuellement plutôt que via le Simulateur.',
+    fria: false
   },
-  {
-    icon: '🖥️', title: 'Modèles open source ou open weights hébergés en interne',
-    examples: 'Llama, Mistral ou autre modèle déployé sur l\'infrastructure de l\'entreprise',
-    applicable: 'Oui — l\'entreprise devient fournisseur de fait dès qu\'elle héberge et met le système à disposition en son nom',
-    obligation: 'Si modification substantielle du modèle de base : bascule en obligations de fournisseur (Art. 25). Obligations de transparence (Art. 50) si interaction avec des personnes physiques.',
-    conseil: 'Clarifier en interne qui porte la responsabilité "fournisseur" pour un modèle auto-hébergé — un point souvent négligé car perçu à tort comme un simple usage technique sans conséquence réglementaire.'
+  { icon:'🖥️', title:'Modèles open source hébergés en interne',
+    tag:'Fournisseur de fait', tagColor:'#B83222',
+    examples:'Llama, Mistral ou autre modèle déployé sur l\'infrastructure de l\'entreprise',
+    applicable:'Oui — l\'entreprise devient fournisseur de fait dès qu\'elle héberge sous son nom',
+    obligation:'Modification substantielle → obligations fournisseur (Art. 25). Transparence Art. 50 si interaction avec des personnes.',
+    conseil:'Clarifier en interne qui porte la responsabilité "fournisseur" — souvent négligé car perçu comme usage technique.',
+    reg_champ:'Type : "Modèle open source auto-hébergé". Rôle : Fournisseur. Product Owner : équipe IT responsable.',
+    sia_risque:'Classification identique à un modèle commercial selon l\'usage. FRIA si haut risque.',
+    fria: true
   }
 ];
+
+var SHADOW_AI_REGISTRE_FIELDS = [
+  { label:'Nom du système', desc:'Identifiant clair et unique — ex: "Copilot RH", "Chatbot client v2".' },
+  { label:'Type de système', desc:'LLM, scoring, vision, RAG, SaaS tiers, générateur de contenus…' },
+  { label:'Service utilisateur', desc:'Département qui utilise le système (RH, IT, Marketing, Finance…).' },
+  { label:'Rôle de l\'entreprise', desc:'Fournisseur, déployeur, importateur ou distributeur — cumulable (Art. 3§3-7).' },
+  { label:'Données utilisées', desc:'Types de données traitées par le système — données personnelles, biométriques, professionnelles…' },
+  { label:'Personnes concernées', desc:'Qui est impacté : candidats, salariés, clients, grand public…' },
+  { label:'Transparence Art. 50', desc:'"Oui — mention explicite requise" si chatbot ou contenu généré diffusé.' },
+  { label:'Preuves de conformité', desc:'Documentation technique, contrat fournisseur, politique de marquage, captures d\'écran…' },
+  { label:'Product Owner', desc:'Responsable interne du système — interlocuteur pour les autorités.' },
+  { label:'Étape du cycle de vie', desc:'Conception / Développement / Pré-production / Production / Revue.' }
+];
+
+var SHADOW_AI_SIA_STEPS = [
+  { step:'1', label:'Identifier le système', desc:'Nommer précisément le système et son usage réel — pas le produit éditeur, mais l\'usage métier concret.' },
+  { step:'2', label:'Vérifier l\'Annexe III', desc:'Emploi, biométrie, infrastructures critiques, crédit, justice, migration → haut risque automatique.' },
+  { step:'3', label:'Évaluer les interactions', desc:'Le système interagit-il avec des personnes physiques ? → Art. 50 obligatoire dès le 2 août 2026.' },
+  { step:'4', label:'Déterminer le rôle', desc:'L\'entreprise est-elle fournisseur, déployeur, ou les deux ? → Impact direct sur le niveau d\'obligation.' },
+  { step:'5', label:'Enregistrer au Registre IA', desc:'Tout système identifié doit être enregistré — même si le risque est minimal (traçabilité + revue périodique).' },
+  { step:'6', label:'FRIA si haut risque', desc:'Pour les systèmes haut risque Annexe III : évaluation FRIA obligatoire avant déploiement (Art. 27).' }
+];
+
+window.shadowAiTab = function(tab){
+  ['cas','registre','sia'].forEach(function(t){
+    document.getElementById('shadow-panel-'+t).style.display = t===tab ? '' : 'none';
+    var btn = document.getElementById('shadow-tab-'+t);
+    if(btn) btn.className = 'shadow-ai-tab' + (t===tab?' on':'');
+  });
+  if(tab==='registre') shadowAiRenderRegistre();
+  if(tab==='sia') shadowAiRenderSIA();
+};
 
 window.shadowAiRender = function(){
   var holder = document.getElementById('shadow-ai-list');
   if(!holder) return;
   holder.innerHTML = SHADOW_AI_CASES.map(function(c, i){
-    return '<div class="ctrl-section" style="margin-bottom:14px">'
-      + '<div class="ctrl-section-head" style="cursor:pointer" onclick="shadowAiToggle('+i+')" title="Cliquez pour deplier le detail (exemples, applicabilite, obligation, conseil)">'
-      + '<span class="ctrl-section-title">'+c.icon+' '+c.title+'</span>'
-      + '<span id="shadow-ai-chev-'+i+'" style="color:var(--muted);font-size:11px">▾</span>'
-      + '</div>'
-      + '<div id="shadow-ai-body-'+i+'" style="padding:14px 16px;font-size:12px;color:var(--ink2);line-height:1.7">'
-      + '<div style="margin-bottom:8px"><strong>Exemples :</strong> '+c.examples+'</div>'
-      + '<div style="margin-bottom:8px"><strong>Applicable ?</strong> '+c.applicable+'</div>'
+    return '<div class="shadow-ai-card">'
+      + '<div class="shadow-ai-card-head" onclick="shadowAiToggle('+i+')" title="Cliquer pour déplier">'
+      + '<div class="shadow-ai-card-title">'+c.icon+' '+c.title+'</div>'
+      + '<div style="display:flex;align-items:center;gap:8px">'
+      + '<span class="shadow-ai-card-tag" style="background:'+c.tagColor+'22;color:'+c.tagColor+';border:1px solid '+c.tagColor+'44">'+c.tag+'</span>'
+      + '<span id="shadow-ai-chev-'+i+'" style="color:var(--muted);font-size:11px;transition:transform .2s">▾</span>'
+      + '</div></div>'
+      + '<div id="shadow-ai-body-'+i+'" class="shadow-ai-card-body">'
+      + '<div style="margin-bottom:7px"><strong>Exemples :</strong> '+c.examples+'</div>'
+      + '<div style="margin-bottom:7px"><strong>Applicable ?</strong> '+c.applicable+'</div>'
       + '<div style="margin-bottom:8px"><strong>Obligation :</strong> '+c.obligation+'</div>'
-      + '<div style="background:rgba(28,90,138,.06);border-left:3px solid var(--blue);padding:8px 12px;border-radius:4px"><strong>💡 Conseil :</strong> '+c.conseil+'</div>'
-      + '</div></div>';
+      + '<div style="background:rgba(28,90,138,.06);border-left:3px solid var(--blue);padding:8px 10px;border-radius:4px;margin-bottom:8px"><strong>💡 Conseil :</strong> '+c.conseil+'</div>'
+      + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">'
+      + '<button class="histo-btn-sm" onclick="go(\'registre\',null,\'CONFORMITÉ\',\'Systèmes IA\');return false" title="Ajouter ce systeme au Registre IA">📁 Ajouter au Registre</button>'
+      + '<button class="histo-btn-sm" onclick="go(\'simulateur\',null,\'CARTOGRAPHIER\',\'Simulateur IA Act\');return false" title="Classifier ce systeme avec le Simulateur">⚙️ Simulateur</button>'
+      + (c.fria ? '<button class="histo-btn-sm" onclick="go(\'fria\',null,\'CONFORMITÉ\',\'Évaluation FRIA\');return false" title="Evaluer l\'impact sur les droits fondamentaux">⚖️ FRIA</button>' : '')
+      + '</div></div></div>';
   }).join('');
 };
 
@@ -13775,9 +13878,31 @@ window.shadowAiToggle = function(i){
   var body = document.getElementById('shadow-ai-body-'+i);
   var chev = document.getElementById('shadow-ai-chev-'+i);
   if(!body) return;
-  var isOpen = body.style.display !== 'none';
-  body.style.display = isOpen ? 'none' : 'block';
-  if(chev) chev.textContent = isOpen ? '▸' : '▾';
+  var isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  if(chev) chev.style.transform = isOpen ? '' : 'rotate(180deg)';
+};
+
+window.shadowAiRenderRegistre = function(){
+  var holder = document.getElementById('shadow-registre-list');
+  if(!holder || holder.innerHTML) return;
+  holder.innerHTML = SHADOW_AI_REGISTRE_FIELDS.map(function(f){
+    return '<div class="shadow-ai-reg-card">'
+      + '<h4>📝 '+f.label+'</h4>'
+      + '<div>'+f.desc+'</div>'
+      + '</div>';
+  }).join('');
+};
+
+window.shadowAiRenderSIA = function(){
+  var holder = document.getElementById('shadow-sia-list');
+  if(!holder || holder.innerHTML) return;
+  holder.innerHTML = SHADOW_AI_SIA_STEPS.map(function(s){
+    return '<div class="shadow-ai-reg-card">'
+      + '<h4><span style="background:var(--blue);color:#fff;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0">'+s.step+'</span> '+s.label+'</h4>'
+      + '<div>'+s.desc+'</div>'
+      + '</div>';
+  }).join('');
 };
 
 var _shadowAiOrigGo = window.go;
