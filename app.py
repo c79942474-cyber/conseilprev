@@ -2454,11 +2454,23 @@ def news():
     all_items = []
     import socket as _socket
     _old_timeout = _socket.getdefaulttimeout()
-    _socket.setdefaulttimeout(6)
-    _ua = "Mozilla/5.0 (compatible; CONSEILPREV-Veille/1.0)"
+    _socket.setdefaulttimeout(8)
+    # Headers complets imitant Chrome 124 — contourne les filtres anti-bot des sites RSS
+    _headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+        "Accept": "application/rss+xml, application/xml, text/xml, application/atom+xml, */*;q=0.8",
+        "Accept-Language": "fr-FR,fr;q=0.9,en;q=0.8",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive",
+    }
     for src in RSS_SOURCES:
         try:
-            feed = feedparser.parse(src["url"], agent=_ua)
+            resp = requests.get(src["url"], headers=_headers, timeout=7, allow_redirects=True)
+            if resp.status_code != 200:
+                continue
+            import io as _io
+            feed = feedparser.parse(_io.BytesIO(resp.content))
             for entry in (feed.entries or [])[:8]:
                 title = entry.get("title", "").strip()
                 if not title: continue
@@ -2471,7 +2483,8 @@ def news():
                     "cat":    _detect_cat(title, src["cat"]),
                     "lang":   src.get("lang", "fr"),
                 })
-        except Exception: pass
+        except Exception:
+            pass
     _socket.setdefaulttimeout(_old_timeout)
     seen, unique = set(), []
     for item in sorted(all_items, key=lambda x: x.get("date",""), reverse=True):
@@ -2479,7 +2492,6 @@ def news():
         if key not in seen:
             seen.add(key)
             unique.append(item)
-    # Fallback : si tous les feeds échouent, servir un contenu statique minimal
     if not unique:
         unique = [
             {"title": "EU AI Act : les obligations GPAI applicables depuis aout 2025", "link": "https://artificialintelligenceact.eu/", "date": "", "source": "AI Act EU", "ico": "\u2696\uFE0F", "cat": "regl", "lang": "en"},
@@ -2487,7 +2499,7 @@ def news():
             {"title": "CNIL : fiches pratiques sur l'IA et le RGPD", "link": "https://www.cnil.fr/fr/intelligence-artificielle", "date": "", "source": "CNIL", "ico": "\U0001F512", "cat": "regl", "lang": "fr"},
             {"title": "AI safety testing requirements under EO 14179", "link": "https://www.federalregister.gov/", "date": "", "source": "Federal Register", "ico": "\U0001F1FA\U0001F1F8", "cat": "regl", "lang": "en"},
         ]
-        _news_cache = {"data": unique, "ts": now - CACHE_TTL + 60}  # cache court pour reessayer vite
+        _news_cache = {"data": unique, "ts": now - CACHE_TTL + 60}
         return jsonify({"items": unique, "cached": False, "count": len(unique), "fallback": True})
     _news_cache = {"data": unique[:60], "ts": now}
     return jsonify({"items": unique[:60], "cached": False, "count": len(unique)})
