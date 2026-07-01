@@ -1545,6 +1545,21 @@ textarea.form-el{min-height:86px;resize:vertical}
 .bud-delta-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(45,122,71,.2);border:1px solid rgba(45,122,71,.4);border-radius:4px;padding:2px 8px;font-size:10px;color:#4ade80;font-family:var(--mono);margin-top:4px;font-weight:600}
 .bud-delta-neg{background:rgba(196,124,26,.2)!important;border-color:rgba(196,124,26,.4)!important;color:#fbbf24!important}
 
+
+/* ══ TOGGLE MENSUEL / ANNUEL ══ */
+.billing-toggle-wrap{display:flex;align-items:center;gap:10px;margin-bottom:20px;padding:12px 16px;background:var(--bg2);border-radius:8px;border:1px solid var(--rule)}
+.billing-toggle-label{font-size:12px;font-weight:500;color:var(--ink2);cursor:pointer;transition:color .15s;user-select:none}
+.billing-toggle-label.active{color:var(--ink);font-weight:700}
+.billing-toggle{position:relative;width:40px;height:22px;flex-shrink:0}
+.billing-toggle input{opacity:0;width:0;height:0;position:absolute}
+.billing-toggle-track{position:absolute;inset:0;background:var(--rule2);border-radius:11px;cursor:pointer;transition:background .2s}
+.billing-toggle input:checked + .billing-toggle-track{background:var(--accent)}
+.billing-toggle-knob{position:absolute;top:3px;left:3px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform .2s;pointer-events:none;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.billing-toggle input:checked ~ .billing-toggle-knob{transform:translateX(18px)}
+.billing-annual-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(45,122,71,.12);border:1px solid rgba(45,122,71,.3);border-radius:4px;padding:2px 8px;font-size:10px;color:var(--green);font-family:var(--mono);font-weight:700;margin-left:6px}
+.billing-monthly-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(28,90,138,.1);border:1px solid rgba(28,90,138,.25);border-radius:4px;padding:2px 8px;font-size:10px;color:var(--blue);font-family:var(--mono);font-weight:600;margin-left:6px}
+.billing-per-label{font-size:9px;font-family:var(--mono);color:var(--muted2);margin-top:2px}
+
 </style>
 
 </head>
@@ -2385,7 +2400,29 @@ textarea.form-el{min-height:86px;resize:vertical}
   <div id="pricing-prefill-info" class="radar-registre-info radar-registre-ok" style="margin-bottom:20px">Chargement de vos données…</div>
 
   <div class="tbl-wrap" style="padding:24px;margin-bottom:24px">
-    <div class="tbl-head" style="border:none;padding:0 0 16px"><span class="tbl-title">Paramètres de simulation</span></div>
+    <div class="tbl-head" style="border:none;padding:0 0 14px">
+      <span class="tbl-title">Paramètres de simulation</span>
+    </div>
+
+    <!-- Toggle mensuel / annuel -->
+    <div class="billing-toggle-wrap">
+      <span class="billing-toggle-label active" id="billing-monthly-lbl" onclick="pricingSetBilling('monthly')">Mensuel <span style="font-size:9px;font-family:var(--mono);color:var(--muted);font-weight:400">(sans engagement)</span></span>
+      <label class="billing-toggle">
+        <input type="checkbox" id="pricing-billing-toggle" onchange="pricingSetBilling(this.checked?'annual':'monthly')">
+        <span class="billing-toggle-track"></span>
+        <span class="billing-toggle-knob"></span>
+      </label>
+      <span class="billing-toggle-label" id="billing-annual-lbl" onclick="pricingSetBilling('annual')">Annuel <span style="font-size:9px;font-family:var(--mono);color:var(--muted);font-weight:400">(engagement 12 mois)</span>
+        <span class="billing-annual-badge" id="billing-annual-discount-badge">−15 %</span>
+      </span>
+      <span class="prx-tip-icon" tabindex="0" style="margin-left:4px">?<span class="prx-tip-bubble">
+        <strong>Engagement annuel vs mensuel</strong><br>
+        La plupart des éditeurs SaaS gouvernance IA proposent une remise sur engagement 12 mois.<br><br>
+        <em>Mensuel :</em> flexibilité maximale, tarif plein, sans pénalité d’arrêt.<br>
+        <em>Annuel :</em> remise de 10 à 20 % selon le secteur, engagement ferme 12 mois.<br><br>
+        La remise annuelle est cumulative avec la remise volume (plus de 20 systèmes).
+      </span></span>
+    </div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:20px">
       <div class="reg-field"><label class="reg-label">Secteur d'activité <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>Impact secteur</strong><br>La vitesse de progression mensuelle varie : IT/Tech (12 pts/mois), Télécom (10), Industrie (9), Énergie/Transport (8), Finance/Santé (7), Secteur public (6).<br><em>Source : benchmarks Sentinel AI sectoriels</em></span></span></label>
         <select id="pricing-secteur" class="reg-input" onchange="pricingSimulate()">
@@ -12605,6 +12642,19 @@ var PRICING_PARAMS = {
     public:    {min:1800, max:3500, ctx:'Marches cadre UGAP/CAIH. Tarifs negocies, appels d offres frequents.'}
   },
 
+  /* Remises engagement annuel — moyennes observées sur le marché SaaS gouvernance IA France 2025
+     (engagement 12 mois vs mensuel sans engagement, sources : G2/Capterra benchmarks, négociations SSII) */
+  annualDiscount: {
+    telecom:   0.17,   /* -17 % : opérateurs habituels des engagements pluriannuels */
+    energie:   0.15,   /* -15 % : contrats longs mais sur-mesure, remise modérée */
+    sante:     0.12,   /* -12 % : contrats complexes, engagement plus court en pratique */
+    finance:   0.15,   /* -15 % : DORA impose des révisions annuelles — engagement 12 mois standard */
+    industrie: 0.18,   /* -18 % : PMI/ETI sensibles au prix, remise engagement attractif */
+    transport: 0.16,   /* -16 % : cycles budgétaires annuels alignés */
+    it:        0.20,   /* -20 % : marché le plus concurrentiel, remise maximale proposée */
+    public:    0.10    /* -10 % : marchés publics : remise limitée par règles UGAP/CAIH */
+  },
+
   hybridSocle: 900,
   pricePerAuditPoint: 45,
   pricePerSanctionReduced: 0.004,
@@ -12648,13 +12698,18 @@ function pricingSaasDiscount(nbSystemes){
   return 0;
 }
 
-function pricingComputeSaaS(nbSystemes, sector){
-  var base   = (sector && PRICING_PARAMS.saasSectorBase[sector])    || PRICING_PARAMS.saasBase;
-  var perSys = (sector && PRICING_PARAMS.saasSectorPerSystem[sector])|| PRICING_PARAMS.saasPerSystem;
-  var extra  = Math.max(0, nbSystemes - 10);
-  var brut   = base + extra * perSys;
-  var remise = pricingSaasDiscount(nbSystemes);
-  return Math.round(brut * (1 - remise));
+function pricingComputeSaaS(nbSystemes, sector, billing){
+  /* billing : 'monthly' (sans engagement) ou 'annual' (engagement 12 mois, remise sectorielle) */
+  var base    = (sector && PRICING_PARAMS.saasSectorBase[sector])    || PRICING_PARAMS.saasBase;
+  var perSys  = (sector && PRICING_PARAMS.saasSectorPerSystem[sector])|| PRICING_PARAMS.saasPerSystem;
+  var extra   = Math.max(0, nbSystemes - 10);
+  var brut    = base + extra * perSys;
+  var remiseVol  = pricingSaasDiscount(nbSystemes);
+  var remiseAnn  = (billing === 'annual')
+    ? ((PRICING_PARAMS.annualDiscount && PRICING_PARAMS.annualDiscount[sector]) || 0.15)
+    : 0;
+  /* Les deux remises sont cumulatives (volume ET engagement annuel) */
+  return Math.round(brut * (1 - remiseVol) * (1 - remiseAnn));
 }
 
 function pricingComputeHybrid(auditPctGagne, sanctionReduiteEur, poidsSystemesClassifies){
@@ -12770,6 +12825,37 @@ function pricingProjectScenario(auditDepart, paceMultiplier, caAnnuel, nbSysteme
   return results;
 }
 
+window.pricingSetBilling = function(mode){
+  var toggle = document.getElementById('pricing-billing-toggle');
+  var lblM   = document.getElementById('billing-monthly-lbl');
+  var lblA   = document.getElementById('billing-annual-lbl');
+  var badge  = document.getElementById('billing-annual-discount-badge');
+  if(toggle) toggle.checked = (mode === 'annual');
+  if(lblM){ lblM.classList.toggle('active', mode === 'monthly'); }
+  if(lblA){ lblA.classList.toggle('active', mode === 'annual'); }
+  /* Mettre à jour le badge remise en fonction du secteur */
+  var sector = document.getElementById('pricing-secteur') ? document.getElementById('pricing-secteur').value : 'it';
+  if(badge && mode === 'annual'){
+    var disc = (PRICING_PARAMS.annualDiscount && PRICING_PARAMS.annualDiscount[sector]) || 0.15;
+    badge.textContent = '−' + Math.round(disc*100) + ' %';
+  }
+  window.pricingSimulate();
+};
+
+/* Mettre à jour le badge remise quand le secteur change */
+(function(){
+  var origSim = window.pricingSimulate;
+  window._pricingUpdateAnnualBadge = function(){
+    var sector  = document.getElementById('pricing-secteur') ? document.getElementById('pricing-secteur').value : 'it';
+    var toggle  = document.getElementById('pricing-billing-toggle');
+    var badge   = document.getElementById('billing-annual-discount-badge');
+    if(badge && toggle && toggle.checked && PRICING_PARAMS.annualDiscount){
+      var disc = PRICING_PARAMS.annualDiscount[sector] || 0.15;
+      badge.textContent = '−' + Math.round(disc*100) + ' %';
+    }
+  };
+})();
+
 window.pricingSimulate = function(){
   var nbSystemes = parseInt(document.getElementById('pricing-nb-systemes').value || '10', 10);
   var auditDepart = parseInt(document.getElementById('pricing-audit-depart').value || '20', 10);
@@ -12778,7 +12864,12 @@ window.pricingSimulate = function(){
   var poidsTotal = window.__pricingPoidsTotal !== undefined ? window.__pricingPoidsTotal : nbSystemes;
   var months = 6;
 
-  var saasMonthly = pricingComputeSaaS(nbSystemes, sector);
+  /* Lire le mode de facturation sélectionné */
+  var billingEl = document.getElementById('pricing-billing-toggle');
+  var billing = (billingEl && billingEl.checked) ? 'annual' : 'monthly';
+  window.__pricingBilling = billing;
+
+  var saasMonthly = pricingComputeSaaS(nbSystemes, sector, billing);
   var pace = pricingGetSectorPace(sector) / 8; /* normalise autour de 1.0 pour le secteur IT de reference */
 
   var scenarios = {
@@ -12793,18 +12884,30 @@ window.pricingSimulate = function(){
   var diff = totalSaas6m - totalHybridReal6m;
   var remisePct = Math.round(pricingSaasDiscount(nbSystemes)*100);
 
+  var billing = window.__pricingBilling || 'monthly';
+  var annDisc = (billing === 'annual')
+    ? ((PRICING_PARAMS.annualDiscount && PRICING_PARAMS.annualDiscount[sector]) || 0.15)
+    : 0;
+  var annDiscPct = Math.round(annDisc * 100);
+  var saasMensuelBase = pricingComputeSaaS(nbSystemes, sector, 'monthly'); /* tarif mensuel brut pour comparaison */
   var sectorRange = (PRICING_PARAMS.saasSectorRange && PRICING_PARAMS.saasSectorRange[sector]) || {min:1500, max:4000, ctx:'Marché IA gouvernance France.'};
   var sectorLabel = (window.MAT_SECTORS && window.MAT_SECTORS[sector]) ? window.MAT_SECTORS[sector].label : sector;
   var economieAnnuelle = Math.round(Math.abs(diff) * 2);
 
   var resultsEl = document.getElementById('pricing-results');
   if(resultsEl){
+    var billingLabel = billing === 'annual' ? 'Annuel (12 mois)' : 'Mensuel (sans engagement)';
     var tipSaaS = '<span class="bud-tip" tabindex="0">?'
       + '<span class="bud-tip-bubble">'
       + '<strong>Référence marché ' + sectorLabel + '</strong><br>'
+      + 'Mode : <em>' + billingLabel + '</em>'
+      + (billing === 'annual' ? ' — remise engagement <em>−' + annDiscPct + ' %</em>' : '') + '<br>'
       + 'Fourchette constatée : <em>' + sectorRange.min.toLocaleString('fr-FR') + '–' + sectorRange.max.toLocaleString('fr-FR') + ' €/mois</em><br>'
       + sectorRange.ctx + '<br>'
       + (remisePct > 0 ? 'Remise volume ' + remisePct + ' % appliquée.' : 'Pas de remise volume (< 20 systèmes).')
+      + (billing === 'annual' && saasMensuelBase !== saasMonthly
+        ? '<br>Tarif mensuel sans engagement : <em>' + saasMensuelBase.toLocaleString('fr-FR') + ' €/mois</em>.'
+        : '')
       + '</span></span>';
 
     var tipHybrid = '<span class="bud-tip" tabindex="0">?'
@@ -12839,8 +12942,15 @@ window.pricingSimulate = function(){
 
       + '<div class="bud-synth-card">'
       + '<div class="bud-synth-lbl">SaaS référence / mois ' + tipSaaS + '</div>'
-      + '<div class="bud-synth-val">' + saasMonthly.toLocaleString('fr-FR') + ' €</div>'
-      + (remisePct > 0 ? '<div class="bud-synth-sub">Remise volume -' + remisePct + '%</div>' : '')
+      + '<div class="bud-synth-val">' + saasMonthly.toLocaleString('fr-FR') + ' €'
+      + (billing === 'annual'
+          ? '<span class="billing-annual-badge">−15 % annuel</span>'
+              .replace('15', annDiscPct.toString())
+          : '<span class="billing-monthly-badge">sans engagement</span>')
+      + '</div>'
+      + (billing === 'annual' && saasMensuelBase !== saasMonthly
+          ? '<div class="bud-synth-sub">vs ' + saasMensuelBase.toLocaleString('fr-FR') + ' €/mois sans engagement</div>'
+          : (remisePct > 0 ? '<div class="bud-synth-sub">Remise volume −' + remisePct + '%</div>' : ''))
       + '<div class="bud-market-ref">Marché ' + sectorLabel + ' : ' + sectorRange.min.toLocaleString('fr-FR') + '–' + sectorRange.max.toLocaleString('fr-FR') + ' €/mois</div>'
       + '</div>'
 
