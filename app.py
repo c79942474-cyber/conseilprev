@@ -361,12 +361,14 @@ def security_middleware():
     if any(path.endswith(e) for e in static_exts):
         return  # Laisser passer
 
-    # ── Whitelist health check Render (HEAD / depuis localhost) ──
-    # Render verifie la disponibilite du service via une requete HEAD sur /
-    # avec un client Go (Go-http-client). Sans cette exception, ces checks
-    # legitimes sont bloques comme des bots, ce qui pollue les logs.
-    if request.method == 'HEAD' and ip in ('127.0.0.1', '::1'):
-        return  # Laisser passer le health check Render
+    # ── Whitelist health check Render et sondes externes ──────────
+    # Render vérifie la disponibilité via HEAD / ou GET /health depuis
+    # des IPs GCP externes (34.x.x.x) avec UA=Go-http-client/2.0.
+    # On laisse passer HEAD et GET sur les paths de health check
+    # quelle que soit l'IP source — aucune donnée sensible exposée.
+    _health_paths = ('/', '/health', '/api/health')
+    if request.method in ('HEAD', 'GET') and path in _health_paths:
+        return  # Health check légitime — pas de vérif UA ni blocage
 
     # ── Vérifier si IP bloquée ──
     if limiter.is_blocked(ip):
@@ -2954,17 +2956,22 @@ def sentauth_init_db():
     # ── Migration : forcer plan='gratuit' sur les comptes créés avant
     # la correction (commit 0fe43de0). Tout compte public doit démarrer
     # au plan Gratuit — seul CONSEILPREV attribue pro/entreprise via admin.
+    # Note : CONSEILPREV_INTERNAL_EMAIL n'est pas encore définie ici (définie
+    # après l'appel try: sentauth_init_db()), on utilise le littéral direct.
+    _CP_EMAIL = 'conseilprev@internal.system'
     try:
-        cur2 = conn.cursor() if not REGISTRE_USE_PG else conn.cursor()
+        cur2 = conn.cursor()
         if REGISTRE_USE_PG:
             cur2.execute(
-                "UPDATE clients SET plan='gratuit' WHERE plan IS NULL OR plan='pro' OR plan='entreprise' "                "AND email != %s",
-                (CONSEILPREV_INTERNAL_EMAIL,)
+                # Parenthèses explicites : (A OR B OR C) AND D
+                # Sans elles, AND a priorité sur OR → logique incorrecte
+                "UPDATE clients SET plan='gratuit' "                "WHERE (plan IS NULL OR plan='pro' OR plan='entreprise') "                "AND email != %s",
+                (_CP_EMAIL,)
             )
         else:
             cur2.execute(
-                "UPDATE clients SET plan='gratuit' WHERE (plan IS NULL OR plan='pro' OR plan='entreprise') "                "AND email != ?",
-                (CONSEILPREV_INTERNAL_EMAIL,)
+                "UPDATE clients SET plan='gratuit' "                "WHERE (plan IS NULL OR plan='pro' OR plan='entreprise') "                "AND email != ?",
+                (_CP_EMAIL,)
             )
         n = cur2.rowcount
         conn.commit()
