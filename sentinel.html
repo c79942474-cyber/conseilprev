@@ -13978,42 +13978,62 @@ window.go = function(id){
 var GRATUIT_ALLOWED_PAGES = ['apercu', 'simulateur', 'regs', 'training', 'pricing'];
 
 function gratuitCheckSidebarVisibility(){
-  // Initialiser __SENTINEL_PLAN immédiatement pour bloquer go() avant la réponse réseau
-  // Default: 'gratuit' — sera confirmé ou élevé par la réponse /me
   if(window.__SENTINEL_PLAN === undefined) window.__SENTINEL_PLAN = 'gratuit';
-
   fetch('/api/sentinel-auth/me').then(function(r){ return r.json(); }).then(function(d){
-    if(!d.authenticated){
-      // Non connecté — pas de restriction Sentinel à appliquer
-      window.__SENTINEL_PLAN = null;
-      return;
-    }
-    if(d.is_conseilprev){
-      window.__SENTINEL_PLAN = 'entreprise';
-      return;
-    }
-    // Fallback 'gratuit' si plan absent — jamais 'pro' par défaut
+    if(!d.authenticated){ window.__SENTINEL_PLAN = null; return; }
+    if(d.is_conseilprev){ window.__SENTINEL_PLAN = 'entreprise'; return; }
     var plan = d.plan || 'gratuit';
     window.__SENTINEL_PLAN = plan;
-    if(plan !== 'gratuit') return;
 
-    // Masquer les onglets non autorisés dans la sidebar
-    document.querySelectorAll('.sb-item').forEach(function(item){
-      var match = item.getAttribute('onclick') && item.getAttribute('onclick').match(/go\('(\w+)'/);
-      var pageId = match ? match[1] : null;
-      if(pageId && GRATUIT_ALLOWED_PAGES.indexOf(pageId) === -1){
-        item.style.display = 'none';
+    // ── Plan Gratuit ────────────────────────────────────────────────
+    if(plan === 'gratuit'){
+      document.querySelectorAll('.sb-item').forEach(function(item){
+        var match = item.getAttribute('onclick') && item.getAttribute('onclick').match(/go\('(\w+)'/);
+        var pageId = match ? match[1] : null;
+        if(pageId && GRATUIT_ALLOWED_PAGES.indexOf(pageId) === -1){
+          item.style.display = 'none';
+        }
+      });
+      if(!document.getElementById('sentinel-gratuit-banner')){
+        var banner = document.createElement('div');
+        banner.id = 'sentinel-gratuit-banner';
+        banner.style.cssText = 'margin:12px 16px;padding:10px 12px;background:rgba(184,50,34,.06);border:1px solid rgba(184,50,34,.2);border-radius:7px;font-size:11px;color:var(--ink2);line-height:1.5';
+        banner.innerHTML = '\uD83D\uDD13 <strong>Plan Gratuit</strong> \u2014 Acc\u00e8s limit\u00e9 \u00e0 4 modules. <a href="javascript:go(\u0027pricing\u0027)" style="color:var(--accent)">Demander un acc\u00e8s Pro \u2192</a>';
+        var nav = document.querySelector('.sb-nav');
+        if(nav) nav.parentNode.insertBefore(banner, nav.nextSibling);
       }
-    });
+      return;
+    }
 
-    // Bannière plan gratuit
-    if(!document.getElementById('sentinel-gratuit-banner')){
-      var banner = document.createElement('div');
-      banner.id = 'sentinel-gratuit-banner';
-      banner.style.cssText = 'margin:12px 16px;padding:10px 12px;background:rgba(184,50,34,.06);border:1px solid rgba(184,50,34,.2);border-radius:7px;font-size:11px;color:var(--ink2);line-height:1.5';
-      banner.innerHTML = '\uD83D\uDD13 <strong>Plan Gratuit</strong><br>Acc\u00e8s limit\u00e9 \u00e0 4 modules. <a href="mailto:christophe.cerf@outlook.com" style="color:var(--accent)">Passer \u00e0 Pro</a> pour tout d\u00e9bloquer.';
-      var nav = document.querySelector('.sb-nav');
-      if(nav) nav.parentNode.insertBefore(banner, nav.nextSibling);
+    // ── Plans Pro / Entreprise — en attente d'activation CONSEILPREV ──
+    if(plan === 'pro' || plan === 'entreprise'){
+      var PENDING_OK = ['apercu','simulateur','regs','training','pricing'];
+      document.querySelectorAll('.sb-item').forEach(function(item){
+        var match = item.getAttribute('onclick') && item.getAttribute('onclick').match(/go\('(\w+)'/);
+        var pageId = match ? match[1] : null;
+        if(pageId && PENDING_OK.indexOf(pageId) === -1){
+          item.style.display = 'none';
+        }
+      });
+      if(!document.getElementById('sentinel-pending-banner')){
+        var planLabel = plan === 'pro' ? 'Pro' : 'Entreprise';
+        var pb = document.createElement('div');
+        pb.id = 'sentinel-pending-banner';
+        pb.style.cssText = 'margin:12px 16px;padding:12px 14px;background:rgba(28,90,138,.06);border:1px solid rgba(28,90,138,.25);border-radius:7px;font-size:11px;color:var(--ink2);line-height:1.6';
+        pb.innerHTML = '\u23F3 <strong>Sentinel ' + planLabel + '</strong> \u2014 Acc\u00e8s complet activ\u00e9 apr\u00e8s signature du contrat RaaS.<br><a href="javascript:go(\u0027pricing\u0027)" style="color:var(--blue);font-weight:600">Compl\u00e9ter ma demande de tarification \u2192</a>';
+        var nav2 = document.querySelector('.sb-nav');
+        if(nav2) nav2.parentNode.insertBefore(pb, nav2.nextSibling);
+      }
+      // Rediriger vers pricing si page courante non autorisée
+      setTimeout(function(){
+        var cur = document.querySelector('.page.on');
+        var curId = cur ? cur.id.replace('p-','') : '';
+        var POK = ['apercu','simulateur','regs','training','pricing'];
+        if(curId && POK.indexOf(curId) === -1){
+          go('pricing',null,'BUSINESS','Tarification par r\u00e9sultats');
+        }
+      }, 200);
+      return;
     }
   }).catch(function(){ window.__SENTINEL_PLAN = null; });
 }
@@ -14022,9 +14042,10 @@ if(document.readyState !== 'loading'){ setTimeout(gratuitCheckSidebarVisibility,
 
 var _gratuitOrigGo = window.go;
 window.go = function(id){
-  // Bloquer l'accès aux pages non autorisées pour le plan Gratuit
-  if(window.__SENTINEL_PLAN === 'gratuit' && GRATUIT_ALLOWED_PAGES.indexOf(id) === -1){
-    // Afficher une notification discrète au lieu d'une alert bloquante
+  var _plan = window.__SENTINEL_PLAN;
+
+  // ── Plan Gratuit ──────────────────────────────────────────────
+  if(_plan === 'gratuit' && GRATUIT_ALLOWED_PAGES.indexOf(id) === -1){
     var notif = document.getElementById('gratuit-lock-notif');
     if(!notif){
       notif = document.createElement('div');
@@ -14032,12 +14053,30 @@ window.go = function(id){
       notif.style.cssText = 'position:fixed;top:16px;right:16px;z-index:9999;background:#fff;border:1px solid rgba(184,50,34,.3);border-radius:8px;padding:12px 16px;font-size:12px;color:var(--ink);box-shadow:0 4px 20px rgba(0,0,0,.15);max-width:280px;line-height:1.5';
       document.body.appendChild(notif);
     }
-    notif.innerHTML = '\uD83D\uDD12 <strong>Module r\u00e9serv\u00e9</strong><br>Ce module n\u2019est pas inclus dans votre plan Gratuit.<br><a href="mailto:christophe.cerf@outlook.com" style="color:var(--accent)">Contacter CONSEILPREV</a> pour acc\u00e9der \u00e0 la version Pro.';
+    notif.innerHTML = '\uD83D\uDD12 <strong>Module r\u00e9serv\u00e9</strong><br>Non inclus dans votre plan Gratuit.<br>'
+      + '<a href="javascript:go(\u0027pricing\u0027)" style="color:var(--accent)">Demander un acc\u00e8s Pro \u2192</a>';
     notif.style.display = 'block';
     clearTimeout(window._gratuitNotifTimer);
     window._gratuitNotifTimer = setTimeout(function(){ notif.style.display='none'; }, 4000);
-    // Rediriger vers l'aperçu
     return _gratuitOrigGo ? _gratuitOrigGo.apply(this, ['apercu']) : undefined;
+  }
+
+  // ── Plans Pro / Entreprise en attente ─────────────────────────
+  var PENDING_OK = ['apercu','simulateur','regs','training','pricing'];
+  if((_plan === 'pro' || _plan === 'entreprise') && PENDING_OK.indexOf(id) === -1){
+    var notifP = document.getElementById('pending-lock-notif');
+    if(!notifP){
+      notifP = document.createElement('div');
+      notifP.id = 'pending-lock-notif';
+      notifP.style.cssText = 'position:fixed;top:16px;right:16px;z-index:9999;background:#fff;border:1px solid rgba(28,90,138,.35);border-radius:8px;padding:12px 16px;font-size:12px;color:var(--ink);box-shadow:0 4px 20px rgba(0,0,0,.15);max-width:300px;line-height:1.5';
+      document.body.appendChild(notifP);
+    }
+    notifP.innerHTML = '\u23F3 <strong>Acc\u00e8s en attente</strong><br>Votre acc\u00e8s complet sera activ\u00e9 apr\u00e8s signature du contrat RaaS.<br>'
+      + '<a href="javascript:go(\u0027pricing\u0027)" style="color:var(--blue);font-weight:600">Compl\u00e9ter ma demande \u2192</a>';
+    notifP.style.display = 'block';
+    clearTimeout(window._pendingNotifTimer);
+    window._pendingNotifTimer = setTimeout(function(){ notifP.style.display='none'; }, 5000);
+    return _gratuitOrigGo ? _gratuitOrigGo.apply(this, ['pricing']) : undefined;
   }
   return _gratuitOrigGo ? _gratuitOrigGo.apply(this, arguments) : undefined;
 };
