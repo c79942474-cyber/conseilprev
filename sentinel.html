@@ -2279,7 +2279,21 @@ textarea.form-el{min-height:86px;resize:vertical}
 
   <!-- Onglet 1 : Checklist 2 colonnes -->
   <div id="shadow-panel-cas">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap">
+      <select id="shadow-risk-filter" class="reg-input" style="max-width:280px;font-size:11.5px"
+        onchange="shadowAiFilterByRisk()" title="Filtrer les cas d'usage par niveau de risque réglementaire">
+        <option value="">🔍 Tous les niveaux de risque (16)</option>
+        <option value="haut">🔴 Haut risque — Annexe III</option>
+        <option value="interdit">🚫 Potentiellement interdit — Art. 5</option>
+        <option value="art50">🔵 Transparence — Art. 50</option>
+        <option value="infra">🟠 Infrastructure critique — Annexe III pt.2</option>
+        <option value="gpai">🟣 GPAI — Art. 51-55</option>
+        <option value="evaluer">⚪ À évaluer / Indirect</option>
+      </select>
+      <span id="shadow-filter-count" style="font-size:11px;font-family:var(--mono);color:var(--muted)"></span>
+    </div>
     <div id="shadow-ai-list" style="display:grid;grid-template-columns:1fr 1fr;gap:14px"></div>
+    <div id="shadow-filter-empty" style="display:none;padding:20px;text-align:center;color:var(--muted);font-size:12px">Aucun cas d'usage dans cette catégorie.</div>
   </div>
 
   <!-- Onglet 2 : Registre IA — ce qu'il faut y saisir -->
@@ -13933,30 +13947,16 @@ window.shadowAiTab = function(tab){
   });
   if(tab==='registre') shadowAiRenderRegistre();
   if(tab==='sia') shadowAiRenderSIA();
+  if(tab==='cas'){
+    var sel = document.getElementById('shadow-risk-filter');
+    if(sel && !sel.value) shadowAiFilterByRisk();
+  }
 };
 
 window.shadowAiRender = function(){
-  var holder = document.getElementById('shadow-ai-list');
-  if(!holder) return;
-  holder.innerHTML = SHADOW_AI_CASES.map(function(c, i){
-    return '<div class="shadow-ai-card">'
-      + '<div class="shadow-ai-card-head" onclick="shadowAiToggle('+i+')" title="Cliquer pour déplier">'
-      + '<div class="shadow-ai-card-title">'+c.icon+' '+c.title+'</div>'
-      + '<div style="display:flex;align-items:center;gap:8px">'
-      + '<span class="shadow-ai-card-tag" style="background:'+c.tagColor+'22;color:'+c.tagColor+';border:1px solid '+c.tagColor+'44">'+c.tag+'</span>'
-      + '<span id="shadow-ai-chev-'+i+'" style="color:var(--muted);font-size:11px;transition:transform .2s">▾</span>'
-      + '</div></div>'
-      + '<div id="shadow-ai-body-'+i+'" class="shadow-ai-card-body">'
-      + '<div style="margin-bottom:7px"><strong>Exemples :</strong> '+c.examples+'</div>'
-      + '<div style="margin-bottom:7px"><strong>Applicable ?</strong> '+c.applicable+'</div>'
-      + '<div style="margin-bottom:8px"><strong>Obligation :</strong> '+c.obligation+'</div>'
-      + '<div style="background:rgba(28,90,138,.06);border-left:3px solid var(--blue);padding:8px 10px;border-radius:4px;margin-bottom:8px"><strong>💡 Conseil :</strong> '+c.conseil+'</div>'
-      + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">'
-      + '<button class="histo-btn-sm" onclick="go(\'registre\',null,\'CONFORMITÉ\',\'Systèmes IA\');return false" title="Ajouter ce systeme au Registre IA">📁 Ajouter au Registre</button>'
-      + '<button class="histo-btn-sm" onclick="go(\'simulateur\',null,\'CARTOGRAPHIER\',\'Simulateur IA Act\');return false" title="Classifier ce systeme avec le Simulateur">⚙️ Simulateur</button>'
-      + (c.fria ? '<button class="histo-btn-sm" onclick="go(\'fria\',null,\'CONFORMITÉ\',\'Évaluation FRIA\');return false" title="Evaluer l\'impact sur les droits fondamentaux">⚖️ FRIA</button>' : '')
-      + '</div></div></div>';
-  }).join('');
+  var sel = document.getElementById('shadow-risk-filter');
+  if(sel) sel.options[0].text = '🔍 Tous les niveaux de risque (' + SHADOW_AI_CASES.length + ')';
+  shadowAiFilterByRisk();
 };
 
 window.shadowAiToggle = function(i){
@@ -13988,6 +13988,77 @@ window.shadowAiRenderSIA = function(){
       + '<div>'+s.desc+'</div>'
       + '</div>';
   }).join('');
+};
+
+/* ── Filtre par niveau de risque ──
+   Mappe chaque valeur de liste déroulante aux tags présents dans SHADOW_AI_CASES.
+   Les tags couvrent : Haut risque, Haut risque / Interdit, Fournisseur de fait,
+   Déployeur, Déployeur/Fournisseur, Art. 50§1, Art. 50§2, Art. 50§2-4,
+   GPAI / Art. 50, Infrastructure critique, À évaluer, Indirect */
+window.shadowAiFilterByRisk = function(){
+  var sel = document.getElementById('shadow-risk-filter');
+  var filter = sel ? sel.value : '';
+  var holder = document.getElementById('shadow-ai-list');
+  var emptyMsg = document.getElementById('shadow-filter-empty');
+  var countEl = document.getElementById('shadow-filter-count');
+  if(!holder) return;
+
+  var matchFn = {
+    '':       function(){ return true; },
+    'haut':   function(c){ return c.tag.indexOf('Haut risque') !== -1 && c.tag.indexOf('Interdit') === -1; },
+    'interdit': function(c){ return c.tag.indexOf('Interdit') !== -1; },
+    'art50':  function(c){ return c.tag.indexOf('Art. 50') !== -1 && c.tag.indexOf('GPAI') === -1; },
+    'infra':  function(c){ return c.tag.indexOf('Infrastructure') !== -1; },
+    'gpai':   function(c){ return c.tag.indexOf('GPAI') !== -1; },
+    'evaluer':function(c){ return c.tag === 'À évaluer' || c.tag === 'Indirect' ||
+                                  c.tag === 'Déployeur' || c.tag === 'Déployeur/Fournisseur' ||
+                                  c.tag === 'Fournisseur de fait'; }
+  }[filter] || function(){ return true; };
+
+  var filtered = SHADOW_AI_CASES.map(function(c,i){ return {c:c,i:i}; }).filter(function(x){ return matchFn(x.c); });
+
+  if(filtered.length === 0){
+    holder.innerHTML = '';
+    if(emptyMsg) emptyMsg.style.display = 'block';
+  } else {
+    if(emptyMsg) emptyMsg.style.display = 'none';
+    holder.innerHTML = filtered.map(function(x){
+      var c = x.c; var i = x.i;
+      return '<div class="shadow-ai-card">'
+        + '<div class="shadow-ai-card-head" onclick="shadowAiToggle('+i+')" title="Cliquer pour déplier">'
+        + '<div class="shadow-ai-card-title">'+c.icon+' '+c.title+'</div>'
+        + '<div style="display:flex;align-items:center;gap:8px">'
+        + '<span class="shadow-ai-card-tag" style="background:'+c.tagColor+'22;color:'+c.tagColor+';border:1px solid '+c.tagColor+'44">'+c.tag+'</span>'
+        + '<span id="shadow-ai-chev-'+i+'" style="color:var(--muted);font-size:11px;transition:transform .2s">▾</span>'
+        + '</div></div>'
+        + '<div id="shadow-ai-body-'+i+'" class="shadow-ai-card-body">'
+        + '<div style="margin-bottom:7px"><strong>Exemples :</strong> '+c.examples+'</div>'
+        + '<div style="margin-bottom:7px"><strong>Applicable ?</strong> '+c.applicable+'</div>'
+        + '<div style="margin-bottom:8px"><strong>Obligation :</strong> '+c.obligation+'</div>'
+        + '<div style="background:rgba(28,90,138,.06);border-left:3px solid var(--blue);padding:8px 10px;border-radius:4px;margin-bottom:8px"><strong>💡 Conseil :</strong> '+c.conseil+'</div>'
+        + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">'
+        + '<button class="histo-btn-sm" onclick="go(\'registre\',null,\'CONFORMITÉ\',\'Systèmes IA\');return false" title="Ajouter ce systeme au Registre IA">📁 Ajouter au Registre</button>'
+        + '<button class="histo-btn-sm" onclick="go(\'simulateur\',null,\'CARTOGRAPHIER\',\'Simulateur IA Act\');return false" title="Classifier ce systeme avec le Simulateur">⚙️ Simulateur</button>'
+        + (c.fria ? '<button class="histo-btn-sm" onclick="go(\'fria\',null,\'CONFORMITÉ\',\'Évaluation FRIA\');return false" title="Evaluer l\'impact sur les droits fondamentaux">⚖️ FRIA</button>' : '')
+        + '</div></div></div>';
+    }).join('');
+  }
+
+  /* Compteur de résultats */
+  if(countEl){
+    var RISK_LABELS = {
+      '':'',
+      'haut':'Haut risque Annexe III',
+      'interdit':'Pratiques potentiellement interdites',
+      'art50':'Obligations de transparence Art. 50',
+      'infra':'Infrastructure critique',
+      'gpai':'Modèles GPAI',
+      'evaluer':'À évaluer / Déployeur / Indirect'
+    };
+    countEl.textContent = filter
+      ? filtered.length + ' cas · ' + RISK_LABELS[filter]
+      : '';
+  }
 };
 
 var _shadowAiOrigGo = window.go;
