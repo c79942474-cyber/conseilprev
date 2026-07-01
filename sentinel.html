@@ -2261,7 +2261,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 <div class="page" id="p-shadow-ai">
   <span class="eyebrow">Cartographier · Avant le Simulateur</span>
   <h1 class="page-h">Découverte <em>Shadow AI</em></h1>
-  <p class="page-lead">Le plus grand risque n'est pas toujours le grand projet IA présenté en comité de direction — il est souvent dans l'IA déjà là, invisible. Identifiez les 8 cas d'usage les plus fréquemment oubliés, puis agissez directement.</p>
+  <p class="page-lead">Le plus grand risque n'est pas toujours le grand projet IA présenté en comité de direction — il est souvent dans l'IA déjà là, invisible. Identifiez les 16 cas d'usage les plus fréquemment oubliés, puis agissez directement.</p>
 
   <div class="radar-registre-info" style="margin-bottom:20px">📅 <strong>Échéance du 2 août 2026</strong> — Art. 50 pleinement applicable : information explicite en cas d'interaction avec une IA, marquage des contenus synthétiques, signalement des deepfakes.</div>
 
@@ -13815,6 +13815,86 @@ var SHADOW_AI_CASES = [
     reg_champ:'Type : "Modèle open source auto-hébergé". Rôle : Fournisseur. Product Owner : équipe IT responsable.',
     sia_risque:'Classification identique à un modèle commercial selon l\'usage. FRIA si haut risque.',
     fria: true
+  },
+  { icon:'📊', title:'Surveillance comportementale des employés',
+    tag:'Haut risque', tagColor:'#B83222',
+    examples:'Monitoring de productivité, analyse des emails internes, détection de fraude interne par IA, suivi du temps en temps réel',
+    applicable:'Oui — Annexe III point 4(b) : systèmes d\'allocation de tâches ou d\'évaluation du comportement des travailleurs',
+    obligation:'Haut risque (Annexe III point 4(b)). Documentation technique, supervision humaine obligatoire, information des salariés. Compatibilité RGPD Art. 88 à vérifier.',
+    conseil:'Informer explicitement les salariés avant tout déploiement — le double régime AI Act + RGPD + droit du travail rend ce cas particulièrement exposé aux recours.',
+    reg_champ:'Classification : Haut risque. Personnes concernées : Salariés. Transparence : information explicite obligatoire.',
+    sia_risque:'Haut risque Annexe III point 4(b). FRIA recommandée même hors obligation légale.',
+    fria: true
+  },
+  { icon:'💳', title:'Scoring de crédit et évaluation financière',
+    tag:'Haut risque', tagColor:'#B83222',
+    examples:'Credit scoring automatisé, notation de solvabilité, IA d\'évaluation de risque pour assurance vie/santé',
+    applicable:'Oui — Annexe III point 5(b) et 5(c) : évaluation de la solvabilité et tarification assurance santé',
+    obligation:'Haut risque (Annexe III point 5(b-c)). Documentation technique, droit d\'explication de la décision, supervision humaine. Art. 22 RGPD si décision automatisée.',
+    conseil:'Vérifier la compatibilité RGPD Art. 22 (droit de ne pas faire l\'objet d\'une décision uniquement automatisée) — ce cas cumule deux régimes réglementaires.',
+    reg_champ:'Classification : Haut risque. Données : données financières, comportementales. Preuves : documentation technique + politique d\'explication.',
+    sia_risque:'Haut risque Annexe III 5(b-c). FRIA si organisme public ou parapublic.',
+    fria: true
+  },
+  { icon:'🎓', title:'IA dans l\'éducation et la formation',
+    tag:'Haut risque', tagColor:'#B83222',
+    examples:'Systèmes d\'admission automatisée, évaluation des apprenants, orientation scolaire par IA, anti-triche pendant les examens',
+    applicable:'Oui — Annexe III point 3(a-d) : accès à l\'éducation, évaluation des résultats, surveillance des examens',
+    obligation:'Haut risque (Annexe III point 3). Information des personnes concernées obligatoire. Supervision humaine des décisions d\'admission ou d\'évaluation.',
+    conseil:'Les établissements d\'enseignement sont souvent inconscients de leur statut de déployeur haut risque lorsqu\'ils utilisent des outils tiers d\'évaluation ou d\'orientation.',
+    reg_champ:'Classification : Haut risque. Service : Direction pédagogique. Rôle : Déployeur. Personnes : Apprenants, étudiants.',
+    sia_risque:'Haut risque Annexe III point 3. Documentation technique requise + information des apprenants.',
+    fria: true
+  },
+  { icon:'🔍', title:'Reconnaissance biométrique et émotionnelle',
+    tag:'Haut risque / Interdit', tagColor:'#B83222',
+    examples:'Contrôle d\'accès par reconnaissance faciale, détection d\'émotion à l\'embauche, catégorisation de personnes par attributs',
+    applicable:'Oui, voire interdit selon l\'usage — Annexe III point 1 + Art. 5 pour certaines utilisations',
+    obligation:'Haut risque systématique (Annexe III point 1). Identification biométrique à distance en espace public : interdite sauf exceptions Art. 5§2. Reconnaissance émotionnelle sur le lieu de travail : interdite (Art. 5§1(f)).',
+    conseil:'Vérifier en premier si l\'usage envisagé tombe dans les pratiques interdites Art. 5 — avant même de parler de conformité haut risque.',
+    reg_champ:'Classification : Haut risque ou Inacceptable. Justification : préciser l\'exception légale invoquée si usage prévu.',
+    sia_risque:'Potentiellement interdit (Art. 5). Simuler en priorité — décision d\'abandon possible avant tout investissement.',
+    fria: true
+  },
+  { icon:'🏥', title:'IA d\'aide à la décision médicale',
+    tag:'Haut risque', tagColor:'#B83222',
+    examples:'Triage des urgences par IA, aide au diagnostic, systèmes de priorisation des patients, IA de prescription',
+    applicable:'Oui — Annexe III point 5(d) : systèmes d\'évaluation et de classification des appels d\'urgence et de triage',
+    obligation:'Haut risque (Annexe III point 5(d)). Documentation technique renforcée, traçabilité des décisions, supervision médicale humaine impérative.',
+    conseil:'Le médecin reste responsable de la décision finale — l\'IA ne peut pas substituer le jugement clinique. Documenter explicitement la chaîne de responsabilité.',
+    reg_champ:'Classification : Haut risque. Personnes : Patients. Rôle : Déployeur. Preuves : protocole de supervision médicale.',
+    sia_risque:'Haut risque Annexe III 5(d). Cumul possible avec réglementation dispositifs médicaux (MDR/IVDR).',
+    fria: true
+  },
+  { icon:'📡', title:'Moteurs de recommandation algorithmique',
+    tag:'Art. 50§2', tagColor:'#6B3FA0',
+    examples:'Recommandations de contenu (Netflix, Spotify-like), publicité ciblée par profil IA, personnalisation de flux',
+    applicable:'Partiellement — obligation de transparence sur la personnalisation (Art. 50§2). Pratiques de manipulation : interdites (Art. 5§1(a-b)).',
+    obligation:'Informer les utilisateurs que le contenu est personnalisé par IA (Art. 50§2). Manipulations exploitant les vulnérabilités psychologiques : interdites Art. 5§1(a). Systèmes de notation sociale : interdits Art. 5§1(c).',
+    conseil:'Distinguer la personnalisation légitime (Art. 50 → transparence) des pratiques manipulatoires (Art. 5 → interdiction). La frontière peut être ténue selon les techniques utilisées.',
+    reg_champ:'Type : "Moteur de recommandation". Transparence Art. 50 : oui si personnalisation explicite. Rôle : Déployeur.',
+    sia_risque:'Risque limité à minimal selon l\'usage. Vérifier les pratiques Art. 5 avant tout.',
+    fria: false
+  },
+  { icon:'🛡️', title:'IA de cybersécurité automatisée',
+    tag:'Infrastructure critique', tagColor:'#D97706',
+    examples:'Détection d\'intrusion par ML, réponse automatique aux incidents, analyse comportementale du réseau (UEBA)',
+    applicable:'Potentiellement — Annexe III point 2 si utilisée comme composante de sécurité d\'une infrastructure critique',
+    obligation:'Si l\'infrastructure est critique (eau, énergie, finance, numérique) : haut risque (Annexe III point 2). Sinon : risque limité mais NIS2 s\'applique en parallèle.',
+    conseil:'Vérifier si votre organisation est un opérateur d\'importance essentielle (OIE) ou importante (OII) au sens NIS2 — le double régime AI Act + NIS2 est particulièrement exigeant.',
+    reg_champ:'Type : "IA de détection/réponse". Classification : Haut risque si infrastructure critique. Rôle : Déployeur.',
+    sia_risque:'Haut risque Annexe III point 2 si infrastructure critique. Documenter le périmètre NIS2 simultanément.',
+    fria: false
+  },
+  { icon:'🌐', title:'Traduction automatique et assistance multilingue',
+    tag:'GPAI / Art. 50', tagColor:'#1C5A8A',
+    examples:'Traduction juridique ou médicale automatisée, sous-titrage automatique, localisation de contenu par IA',
+    applicable:'Oui si basé sur un modèle GPAI (GPT-4, Claude, Gemini…) — obligations Art. 53 s\'appliquent au fournisseur',
+    obligation:'Si la traduction produit du contenu publié : marquage Art. 50§2. Si le modèle est GPAI : vérifier que le fournisseur respecte Art. 53 (documentation, politique d\'utilisation acceptable).',
+    conseil:'Attention aux traductions dans des contextes réglementés (médical, juridique, financier) — une erreur de traduction IA peut engager la responsabilité sans que le prestataire soit couvert.',
+    reg_champ:'Type : "GPAI / Traduction". Fournisseur : modèle utilisé + éditeur. Preuves : CGU du modèle conservées.',
+    sia_risque:'Risque variable selon le contexte. Usage médical ou juridique → réévaluer la classification.',
+    fria: false
   }
 ];
 
