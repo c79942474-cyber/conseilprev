@@ -1445,6 +1445,34 @@ textarea.form-el{min-height:86px;resize:vertical}
 .cpc-src-link{display:inline-block;font-size:9px;font-family:var(--mono,monospace);
   color:#7fb3e0;margin-top:6px;text-decoration:none}
 .cpc-src-link:hover{text-decoration:underline}
+
+/* ══ TEMPLATES PAGE — catégories, filtres, tooltips ══ */
+.tmpl-filter-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:20px}
+.tmpl-filter-bar label{font-size:10px;font-family:var(--mono);color:var(--muted2);text-transform:uppercase;letter-spacing:.08em}
+.tmpl-select{font-size:11px;font-family:var(--sans);color:var(--ink);background:var(--white);border:1px solid var(--rule2);border-radius:3px;padding:5px 28px 5px 10px;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%235C5C5C' d='M0 0l5 6 5-6z'/%2F%3E%3C%2Fsvg%3E");background-repeat:no-repeat;background-position:right 8px center;cursor:pointer;transition:border-color .15s;min-width:160px}
+.tmpl-select:hover{border-color:var(--accent)}
+.tmpl-select:focus{outline:none;border-color:var(--accent)}
+.tmpl-section{margin-bottom:36px}
+.tmpl-section-header{display:flex;align-items:baseline;gap:12px;margin-bottom:6px;padding-bottom:8px;border-bottom:1px solid var(--rule)}
+.tmpl-section-title{font-family:var(--serif);font-size:19px;font-weight:400;color:var(--ink)}
+.tmpl-section-count{font-size:10px;font-family:var(--mono);color:var(--muted2)}
+.tmpl-section-sub{font-size:11px;color:var(--muted2);margin-bottom:14px}
+.doc-card.tmpl-hidden{display:none!important}
+.tmpl-arts{display:flex;gap:4px;flex-wrap:wrap;margin-top:7px}
+.tmpl-art-badge{font-size:9px;font-family:var(--mono);color:var(--accent);background:rgba(184,50,34,.07);border:1px solid rgba(184,50,34,.15);border-radius:2px;padding:1px 5px;cursor:help;position:relative;display:inline-block;transition:background .15s}
+.tmpl-art-badge:hover{background:rgba(184,50,34,.15)}
+.tmpl-tip{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:10px;font-family:var(--sans);padding:5px 9px;border-radius:3px;z-index:999;pointer-events:none;line-height:1.5;width:260px;text-align:left}
+.tmpl-art-badge:hover .tmpl-tip{display:block}
+.tmpl-tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--ink)}
+.tmpl-dl-badge{font-size:9px;font-family:var(--mono);color:var(--green);background:rgba(45,122,71,.07);border:1px solid rgba(45,122,71,.2);border-radius:2px;padding:1px 5px;margin-left:4px;display:inline-block}
+.doc-card{position:relative;padding-left:23px!important}
+.doc-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;border-radius:4px 0 0 4px}
+.doc-card.type-template::before{background:var(--orange)}
+.doc-card.type-fiche::before{background:var(--green)}
+.doc-card.type-guide::before{background:var(--blue)}
+.doc-card.type-doc::before{background:#7C3AED}
+.doc-card.type-process::before{background:var(--accent)}
+
 </style>
 
 </head>
@@ -10879,49 +10907,143 @@ window.go = function(id){
 
 </script>
 <script>
-/* ══ TEMPLATES & DOCS — connecte aux vrais livrables generables dans Sentinel ══ */
+/* ══ TEMPLATES PAGE v2 — catégories, filtres, articles AI Act ══ */
 (function(){
 'use strict';
 
-window.templatesRenderPage = function(){
-  var holder = document.getElementById("doc-grid");
-  if(!holder) return;
-
-  var items = [];
-
-  /* 6 livrables IA (Audit de maturite) */
-  if(window.MAT_DELIVERABLES){
-    window.MAT_DELIVERABLES.forEach(function(d){
-      items.push({ico:d.icon, name:d.title, desc:d.tooltip.substring(0,90)+"…", meta:"Généré par IA · Audit de maturité", action:"go('maturite',null,'AUDIT DE MATURITÉ','Audit de maturité IA')"});
-    });
-  }
-  /* 4 guides de procedure */
-  if(window.PROC_DOCS){
-    Object.keys(window.PROC_DOCS).forEach(function(k){
-      var p = window.PROC_DOCS[k];
-      items.push({ico:p.icon, name:p.docTitle, desc:p.tooltip.substring(0,90)+"…", meta:"Généré par IA · Procédure d'audit", action:"go('maturite',null,'AUDIT DE MATURITÉ','Audit de maturité IA')"});
-    });
-  }
-  /* Exports deja disponibles ailleurs */
-  items.push({ico:"📐", name:"Matrice RACI — Cartographie des parties prenantes", desc:"Export PDF/Word de votre matrice RACI actuelle, ou génération IA complète.", meta:"Disponible · Parties prenantes", action:"go('parties',null,'GOUVERNANCE','Parties prenantes')"});
-  items.push({ico:"📋", name:"Rapport d'audit de conformité (33 points)", desc:"Export PDF de votre audit EU AI Act avec statut réel de chaque contrôle.", meta:"Disponible · Audit IA Act", action:"openAuditTab()"});
-  items.push({ico:"⚖️", name:"Évaluation FRIA par système", desc:"Évaluation des 8 droits fondamentaux pour vos systèmes à haut risque.", meta:"Disponible · FRIA", action:"go('fria',null,'CONFORMITÉ','Évaluation FRIA')"});
-
-  holder.innerHTML = items.map(function(d){
-    return '<div class="doc-card" style="cursor:pointer" onclick="'+d.action+'"><div class="doc-icon">'+d.ico+'</div><div><div class="doc-name">'+d.name+'</div><div class="doc-desc">'+d.desc+'</div><div class="doc-meta">'+d.meta+'</div></div></div>';
-  }).join('');
+var ART_TIPS = {
+  art5:  "Art.\u00a05 \u2014 Pratiques interdites\u00a0: manipulation subliminale, exploitation des vuln\u00e9rabilit\u00e9s, notation sociale, biom\u00e9trie temps r\u00e9el espaces publics.",
+  art6:  "Art.\u00a06 \u2014 Classification haut risque\u00a0: syst\u00e8mes Annexe\u00a0III soumis aux obligations Art.\u00a09\u201315 avant mise sur le march\u00e9.",
+  art9:  "Art.\u00a09 \u2014 Gestion des risques\u00a0: identification, analyse, estimation et contr\u00f4le des risques tout au long du cycle de vie.",
+  art10: "Art.\u00a010 \u2014 Donn\u00e9es d\u2019entra\u00eenement\u00a0: gouvernance, qualit\u00e9, absence de biais, conformit\u00e9 RGPD et documentation des jeux de donn\u00e9es.",
+  art11: "Art.\u00a011 \u2014 Documentation technique\u00a0: dossier complet (Annexe\u00a0IV) conserv\u00e9 10\u00a0ans \u2014 obligatoire avant mise sur le march\u00e9 pour tout syst\u00e8me haut risque.",
+  art12: "Art.\u00a012 \u2014 Journalisation\u00a0: tra\u00e7abilit\u00e9 automatique de chaque utilisation, conservation des logs, acc\u00e8s autorit\u00e9s comp\u00e9tentes.",
+  art13: "Art.\u00a013 \u2014 Transparence\u00a0: notice d\u2019utilisation, capacit\u00e9s/limites, m\u00e9triques de pr\u00e9cision, risques r\u00e9siduels communiqu\u00e9s au d\u00e9ployeur.",
+  art14: "Art.\u00a014 \u2014 Surveillance humaine\u00a0: m\u00e9canismes permettant la compr\u00e9hension, la correction et l\u2019arr\u00eat d\u2019urgence par des personnes physiques qualifi\u00e9es.",
+  art15: "Art.\u00a015 \u2014 Exactitude, robustesse, cybers\u00e9curit\u00e9\u00a0: niveaux appropri\u00e9s attest\u00e9s par des m\u00e9triques mesur\u00e9es, r\u00e9sistance aux attaques adversariales.",
+  art17: "Art.\u00a017 \u2014 Syst\u00e8me QMS\u00a0: management de la qualit\u00e9 couvrant conception, tests, gestion des risques, non-conformit\u00e9s et cybers\u00e9curit\u00e9.",
+  art27: "Art.\u00a027 \u2014 FRIA\u00a0: analyse d\u2019impact sur les droits fondamentaux, obligatoire pour d\u00e9ployeurs secteur public et certains secteurs priv\u00e9s critiques.",
+  art47: "Art.\u00a047 \u2014 D\u00e9claration UE de conformit\u00e9\u00a0: document sign\u00e9 par le fournisseur attestant la conformit\u00e9 \u00e0 l\u2019ensemble des exigences applicables.",
+  art50: "Art.\u00a050 \u2014 Transparence risque limit\u00e9\u00a0: obligation d\u2019informer les utilisateurs qu\u2019ils interagissent avec un syst\u00e8me d\u2019IA (chatbots, deepfakes).",
+  art51: "Art.\u00a051 \u2014 Syst\u00e8mes GPAI\u00a0: mod\u00e8les d\u2019IA \u00e0 usage g\u00e9n\u00e9ral soumis \u00e0 obligations de transparence et, pour les mod\u00e8les \u00e0 risque syst\u00e9mique, d\u2019\u00e9valuation adversariale.",
 };
 
-var _tplOrigGo = window.go;
+var TMPL_DATA = [
+  {cat:"template",type:"template",ico:"\uD83D\uDCCB",format:"pdf word",name:"Fiche Technique du Syst\u00e8me d\u2019IA (Art.\u00a011)",desc:"Template vierge en 8 sections\u00a0: identification, classification, architecture, mesures de conformit\u00e9, FRIA, QMS, d\u00e9claration, historique.",meta:"PDF + Word \u00b7 Vierge \u00b7 Universel",arts:["art11","art9","art10","art12","art13","art14","art15","art27","art47"],dl:true,action:"alert('T\u00e9l\u00e9chargement disponible')"},
+  {cat:"template",type:"template",ico:"\uD83D\uDCDD",format:"word ia",name:"Plan de Gestion des Risques IA (Art.\u00a09)",desc:"Template structur\u00e9 pour identifier, analyser et traiter les risques tout au long du cycle de vie du syst\u00e8me d\u2019IA.",meta:"Word \u00b7 Vierge \u00b7 Haut risque obligatoire",arts:["art9","art6"],action:"go('fria',null,'CONFORMIT\u00c9','FRIA')"},
+  {cat:"template",type:"template",ico:"\uD83D\uDD0F",format:"word",name:"Notice d\u2019Utilisation pour D\u00e9ployeurs (Art.\u00a013)",desc:"Template de notice d\u2019utilisation conforme Art.\u00a013(2)\u00a0\u2014 capacit\u00e9s, limites, m\u00e9triques, risques r\u00e9siduels, surveillance.",meta:"Word \u00b7 Vierge \u00b7 Fourni par le fournisseur au d\u00e9ployeur",arts:["art13","art14"],action:"alert('Notice Art.\u00a013')"},
+  {cat:"template",type:"template",ico:"\u2705",format:"word pdf",name:"D\u00e9claration UE de Conformit\u00e9 (Art.\u00a047)",desc:"Template officiel de d\u00e9claration de conformit\u00e9\u00a0\u2014 normes harmonis\u00e9es, organismes notifi\u00e9s, signature du repr\u00e9sentant l\u00e9gal.",meta:"Word + PDF \u00b7 Vierge \u00b7 Signature obligatoire",arts:["art47","art6"],dl:true,action:"alert('D\u00e9claration Art.\u00a047')"},
+  {cat:"template",type:"template",ico:"\uD83D\uDCCA",format:"word ia",name:"Matrice d\u2019\u00c9valuation des Risques (Art.\u00a09)",desc:"Tableau crois\u00e9 probabilit\u00e9 x impact\u00a0\u2014 5 niveaux de criticit\u00e9, mesures correctives, responsable d\u00e9sign\u00e9.",meta:"Word \u00b7 Vierge \u00b7 ISO 31000 compatible",arts:["art9","art15"],action:"alert('Matrice risques Art.\u00a09')"},
+  {cat:"template",type:"template",ico:"\uD83D\uDD12",format:"word",name:"Registre de Journalisation (Art.\u00a012)",desc:"Template de registre des \u00e9v\u00e9nements journalis\u00e9s\u00a0\u2014 format d\u2019entr\u00e9e, dur\u00e9e de r\u00e9tention, proc\u00e9dure d\u2019acc\u00e8s autorit\u00e9s.",meta:"Word \u00b7 Vierge \u00b7 Journalisation obligatoire haut risque",arts:["art12"],action:"alert('Registre Art.\u00a012')"},
+  {cat:"template",type:"template",ico:"\u2696\uFE0F",format:"word pdf",name:"Analyse d\u2019Impact Droits Fondamentaux \u2014 FRIA (Art.\u00a027)",desc:"Template FRIA en 5 sections\u00a0: p\u00e9rim\u00e8tre, droits Charte UE affect\u00e9s, groupes vuln\u00e9rables, mesures d\u2019att\u00e9nuation, conclusion.",meta:"Word + PDF \u00b7 Vierge \u00b7 D\u00e9ployeurs secteur public obligatoire",arts:["art27","art6"],action:"go('fria',null,'CONFORMIT\u00c9','FRIA')"},
+  {cat:"template",type:"template",ico:"\uD83C\uDFED",format:"word",name:"Syst\u00e8me de Management Qualit\u00e9 IA (Art.\u00a017)",desc:"Template QMS adapt\u00e9 AI Act\u00a0\u2014 12 \u00e9l\u00e9ments obligatoires\u00a0: strat\u00e9gie, contr\u00f4le processus, non-conformit\u00e9s, cybers\u00e9curit\u00e9.",meta:"Word \u00b7 Vierge \u00b7 ISO 9001 / ISO 42001 compatible",arts:["art17","art9"],action:"alert('QMS Art.\u00a017')"},
+
+  {cat:"fiche",type:"fiche",ico:"\uD83D\uDCC4",format:"pdf",name:"Fiche synth\u00e9tique \u2014 Art.\u00a05\u00a0: Pratiques interdites",desc:"Synth\u00e8se des 8 cat\u00e9gories de pratiques interdites, conditions d\u2019exception et sanctions applicables (Art.\u00a099).",meta:"PDF \u00b7 2 pages \u00b7 \u00c0 jour au 01/08/2025",arts:["art5"],action:"alert('Fiche Art.\u00a05')"},
+  {cat:"fiche",type:"fiche",ico:"\uD83D\uDCC4",format:"pdf",name:"Fiche synth\u00e9tique \u2014 Art.\u00a06\u00a0: Classification haut risque",desc:"Crit\u00e8res de classification, liste Annexe III, proc\u00e9dure d\u2019auto-\u00e9valuation et obligations d\u00e9clench\u00e9es.",meta:"PDF \u00b7 2 pages \u00b7 Avec tableau d\u00e9cisionnel",arts:["art6"],action:"alert('Fiche Art.\u00a06')"},
+  {cat:"fiche",type:"fiche",ico:"\uD83D\uDCC4",format:"pdf",name:"Fiche synth\u00e9tique \u2014 Art.\u00a09\u00a0: Gestion des risques",desc:"Obligations du syst\u00e8me de gestion des risques, m\u00e9thodes accept\u00e9es, fr\u00e9quence de r\u00e9vision, lien avec ISO 31000.",meta:"PDF \u00b7 2 pages \u00b7 Haut risque obligatoire",arts:["art9"],action:"alert('Fiche Art.\u00a09')"},
+  {cat:"fiche",type:"fiche",ico:"\uD83D\uDCC4",format:"pdf",name:"Fiche synth\u00e9tique \u2014 Art.\u00a010\u00a0: Donn\u00e9es d\u2019entra\u00eenement",desc:"Exigences de gouvernance des donn\u00e9es, d\u00e9tection des biais, conformit\u00e9 RGPD, documentation obligatoire.",meta:"PDF \u00b7 2 pages \u00b7 Art.\u00a010 + Art.\u00a035 RGPD",arts:["art10","art6"],action:"alert('Fiche Art.\u00a010')"},
+  {cat:"fiche",type:"fiche",ico:"\uD83D\uDCC4",format:"pdf",name:"Fiche synth\u00e9tique \u2014 Art.\u00a013\u00a0: Transparence",desc:"Contenu obligatoire de la notice d\u2019utilisation, obligations envers les d\u00e9ployeurs et les utilisateurs finaux.",meta:"PDF \u00b7 1 page \u00b7 Avec checklist",arts:["art13","art50"],action:"alert('Fiche Art.\u00a013')"},
+  {cat:"fiche",type:"fiche",ico:"\uD83D\uDCC4",format:"pdf",name:"Fiche synth\u00e9tique \u2014 Art.\u00a050\u00a0: Transparence risque limit\u00e9",desc:"Obligations pour chatbots, syst\u00e8mes de g\u00e9n\u00e9ration de contenu synth\u00e9tique et deepfakes \u2014 marquage obligatoire.",meta:"PDF \u00b7 1 page \u00b7 Applicable depuis ao\u00fbt 2025",arts:["art50","art51"],action:"alert('Fiche Art.\u00a050')"},
+  {cat:"fiche",type:"fiche",ico:"\uD83D\uDCC4",format:"pdf",name:"Fiche synth\u00e9tique \u2014 Art.\u00a051\u00a0: Mod\u00e8les GPAI",desc:"Obligations sp\u00e9cifiques aux mod\u00e8les d\u2019IA \u00e0 usage g\u00e9n\u00e9ral \u2014 transparence, documentation, \u00e9valuation syst\u00e9mique.",meta:"PDF \u00b7 2 pages \u00b7 Mod\u00e8les fondation & LLMs",arts:["art51"],action:"alert('Fiche Art.\u00a051')"},
+  {cat:"fiche",type:"fiche",ico:"\uD83D\uDCC5",format:"pdf",name:"Fiche synth\u00e9tique \u2014 Calendrier des \u00e9ch\u00e9ances AI Act",desc:"Toutes les dates d\u2019application par cat\u00e9gorie d\u2019obligation \u2014 de f\u00e9vrier 2025 (Art.\u00a05) \u00e0 ao\u00fbt 2027 (syst\u00e8mes existants).",meta:"PDF \u00b7 1 page \u00b7 Mis \u00e0 jour trimestriellement",arts:["art6","art5","art50","art51"],action:"go('historique',null,'CONFORMIT\u00c9','Historique')"},
+
+  {cat:"guide",type:"guide",ico:"\uD83D\uDCD6",format:"pdf",name:"Guide \u2014 Classifier votre syst\u00e8me IA selon l\u2019AI Act",desc:"Arbre d\u00e9cisionnel en 7 \u00e9tapes pour d\u00e9terminer la cat\u00e9gorie de risque applicable, avec exemples par secteur.",meta:"PDF \u00b7 M\u00e9thodologique \u00b7 Tous syst\u00e8mes IA",arts:["art5","art6"],action:"go('simulateur',null,'OUTILS','Simulateur')"},
+  {cat:"guide",type:"guide",ico:"\uD83D\uDCD6",format:"pdf ia",name:"Guide \u2014 Audit de conformit\u00e9 AI Act (33 points)",desc:"Protocole d\u2019audit en 33 points de contr\u00f4le \u2014 m\u00e9thode, collecte de preuves, scoring, rapport d\u2019\u00e9carts.",meta:"PDF \u00b7 G\u00e9n\u00e9r\u00e9 par IA \u00b7 Audit haut risque",arts:["art9","art11","art13","art14","art15","art17"],action:"openAuditTab()"},
+  {cat:"guide",type:"guide",ico:"\uD83D\uDCD6",format:"pdf",name:"Guide \u2014 Constituer la documentation technique (Art.\u00a011)",desc:"M\u00e9thode \u00e9tape par \u00e9tape pour constituer le dossier technique Annexe IV \u2014 qui produit quoi, dans quel ordre.",meta:"PDF \u00b7 4 pages \u00b7 Fournisseurs haut risque",arts:["art11","art17"],action:"alert('Guide Art.\u00a011')"},
+  {cat:"guide",type:"guide",ico:"\uD83D\uDCD6",format:"pdf",name:"Guide \u2014 Surveillance humaine (Art.\u00a014)",desc:"Comment concevoir les interfaces de contr\u00f4le, former les superviseurs et documenter le bouton d\u2019arr\u00eat d\u2019urgence.",meta:"PDF \u00b7 3 pages \u00b7 Fournisseurs & d\u00e9ployeurs",arts:["art14","art13"],action:"alert('Guide Art.\u00a014')"},
+  {cat:"guide",type:"guide",ico:"\uD83D\uDCD6",format:"pdf",name:"Guide \u2014 Gouvernance des donn\u00e9es d\u2019entra\u00eenement (Art.\u00a010)",desc:"Processus de qualification, d\u00e9tection des biais, documentation et v\u00e9rifications de qualit\u00e9 recommand\u00e9es.",meta:"PDF \u00b7 3 pages \u00b7 Art.\u00a010 + RGPD Art.\u00a05",arts:["art10"],action:"alert('Guide Art.\u00a010')"},
+  {cat:"guide",type:"guide",ico:"\uD83D\uDCD6",format:"pdf",name:"Guide \u2014 Conduire une FRIA (Art.\u00a027)",desc:"M\u00e9thodologie compl\u00e8te\u00a0: p\u00e9rim\u00e8tre, parties prenantes, droits Charte UE, groupes vuln\u00e9rables, documentation.",meta:"PDF \u00b7 5 pages \u00b7 D\u00e9ployeurs secteur public",arts:["art27","art6"],action:"go('fria',null,'CONFORMIT\u00c9','FRIA')"},
+  {cat:"guide",type:"guide",ico:"\uD83D\uDCD6",format:"pdf",name:"Guide \u2014 Obligations GPAI et mod\u00e8les syst\u00e9miques (Art.\u00a051)",desc:"Obligations des fournisseurs de mod\u00e8les GPAI \u2014 transparence, droit d\u2019auteur, \u00e9valuation adversariale.",meta:"PDF \u00b7 3 pages \u00b7 Fournisseurs LLM & fondation",arts:["art51"],action:"alert('Guide Art.\u00a051')"},
+
+  {cat:"doc",type:"doc",ico:"\uD83D\uDCCA",format:"sentinel ia",name:"Rapport d\u2019audit de conformit\u00e9 (33 points)",desc:"Export PDF de votre audit EU AI Act avec statut r\u00e9el de chaque contr\u00f4le, score global et plan d\u2019action prioris\u00e9.",meta:"Sentinel \u00b7 G\u00e9n\u00e9r\u00e9 par IA \u00b7 Votre p\u00e9rim\u00e8tre",arts:["art9","art11","art13","art14","art15"],action:"openAuditTab()"},
+  {cat:"doc",type:"doc",ico:"\uD83D\uDDFA\uFE0F",format:"sentinel ia",name:"Matrice RACI \u2014 Parties prenantes",desc:"Export PDF/Word de votre matrice RACI actuelle avec r\u00f4les, responsabilit\u00e9s et interfaces de gouvernance IA.",meta:"Sentinel \u00b7 Disponible \u00b7 Parties prenantes",arts:["art17","art9"],action:"go('parties',null,'GOUVERNANCE','Parties prenantes')"},
+  {cat:"doc",type:"doc",ico:"\u2696\uFE0F",format:"sentinel ia",name:"\u00c9valuation FRIA par syst\u00e8me",desc:"Analyse des 8 droits fondamentaux pour chaque syst\u00e8me \u00e0 haut risque enregistr\u00e9, avec mesures d\u2019att\u00e9nuation.",meta:"Sentinel \u00b7 Disponible \u00b7 FRIA interactive",arts:["art27","art6"],action:"go('fria',null,'CONFORMIT\u00c9','FRIA')"},
+  {cat:"doc",type:"doc",ico:"\uD83D\uDCC8",format:"sentinel ia",name:"Rapport de maturit\u00e9 IA \u2014 6 livrables",desc:"Synth\u00e8se de votre niveau de maturit\u00e9 IA sur 6 dimensions\u00a0: gouvernance, donn\u00e9es, mod\u00e8les, risques, conformit\u00e9, op\u00e9rations.",meta:"Sentinel \u00b7 G\u00e9n\u00e9r\u00e9 par IA \u00b7 Audit de maturit\u00e9",arts:["art9","art17"],action:"go('maturite',null,'AUDIT','Maturit\u00e9 IA')"},
+  {cat:"doc",type:"doc",ico:"\uD83D\uDD0D",format:"sentinel ia",name:"Rapport Shadow AI \u2014 Cartographie usages non d\u00e9clar\u00e9s",desc:"Inventaire des syst\u00e8mes IA d\u00e9couverts hors registre, \u00e9valuation du risque et plan de r\u00e9gularisation.",meta:"Sentinel \u00b7 Disponible \u00b7 Module Shadow AI",arts:["art6","art17"],action:"go('shadow-ai',null,'S\u00c9CURIT\u00c9','Shadow AI')"},
+  {cat:"doc",type:"doc",ico:"\uD83D\uDCCB",format:"sentinel ia",name:"Registre IA \u2014 Export complet des syst\u00e8mes d\u00e9clar\u00e9s",desc:"Export PDF du registre de vos syst\u00e8mes IA avec classification, statut de conformit\u00e9, responsable et historique.",meta:"Sentinel \u00b7 Disponible \u00b7 Registre IA",arts:["art11","art6"],action:"go('registre',null,'REGISTRE','Registre IA')"},
+  {cat:"doc",type:"doc",ico:"\uD83C\uDF10",format:"pdf",name:"Tableau comparatif \u2014 AI Act vs ISO 42001 vs NIST AI RMF",desc:"Mise en correspondance des exigences AI Act avec ISO 42001:2023 et le NIST AI Risk Management Framework.",meta:"PDF \u00b7 R\u00e9f\u00e9rence \u00b7 Mise \u00e0 jour semestrielle",arts:["art9","art17","art11"],action:"go('comp',null,'BENCHMARKS','Comparatif')"},
+
+  {cat:"process",type:"process",ico:"\u2699\uFE0F",format:"word ia",name:"Proc\u00e9dure de gestion des incidents IA (Art.\u00a073)",desc:"Workflow de d\u00e9tection, qualification, signalement et cl\u00f4ture des incidents graves \u2014 d\u00e9lai 15 jours ouvrables autorit\u00e9s.",meta:"Word \u00b7 Vierge \u00b7 Obligatoire haut risque",arts:["art9","art12"],action:"alert('Proc\u00e9dure incidents Art.\u00a073')"},
+  {cat:"process",type:"process",ico:"\u2699\uFE0F",format:"word",name:"Proc\u00e9dure d\u2019approbation des modifications substantielles (Art.\u00a083)",desc:"Processus de r\u00e9\u00e9valuation obligatoire avant tout changement majeur affectant la conformit\u00e9 du syst\u00e8me.",meta:"Word \u00b7 Vierge \u00b7 Art.\u00a083 modifications",arts:["art9","art11"],action:"alert('Proc\u00e9dure Art.\u00a083')"},
+  {cat:"process",type:"process",ico:"\u2699\uFE0F",format:"word ia",name:"Workflow d\u2019int\u00e9gration des fournisseurs IA tiers",desc:"Processus de qualification, \u00e9valuation de conformit\u00e9 et contractualisation des fournisseurs de syst\u00e8mes IA.",meta:"Word \u00b7 Avec checklist fournisseur",arts:["art13","art17"],action:"alert('Workflow fournisseurs IA')"},
+  {cat:"process",type:"process",ico:"\u2699\uFE0F",format:"word",name:"Processus de surveillance post-d\u00e9ploiement (Art.\u00a09)",desc:"Plan de surveillance continue \u2014 KPIs, fr\u00e9quence des tests, seuils d\u2019alerte, proc\u00e9dure de retrait du march\u00e9.",meta:"Word \u00b7 Vierge \u00b7 Art.\u00a09(9) obligatoire",arts:["art9","art12","art15"],action:"alert('Surveillance post-d\u00e9ploiement')"},
+  {cat:"process",type:"process",ico:"\u2699\uFE0F",format:"word ia",name:"Proc\u00e9dure d\u2019audit interne AI Act",desc:"Programme d\u2019audit interne annuel \u2014 p\u00e9rim\u00e8tre, m\u00e9thode de sampling, grille d\u2019\u00e9valuation, rapport et suivi.",meta:"Word \u00b7 G\u00e9n\u00e9r\u00e9 par IA \u00b7 Audit annuel",arts:["art9","art17","art11"],action:"openAuditTab()"},
+  {cat:"process",type:"process",ico:"\u2699\uFE0F",format:"word",name:"Plan de formation \u2014 Acteurs de la cha\u00eene IA (Art.\u00a04)",desc:"Programme de sensibilisation et formation des \u00e9quipes impliqu\u00e9es dans le cycle de vie des syst\u00e8mes IA.",meta:"Word \u00b7 Vierge \u00b7 Art.\u00a04 litt\u00e9ratie IA",arts:["art14"],action:"alert('Plan formation Art.\u00a04')"},
+];
+
+function renderCard(d){
+  var artBadges = (d.arts||[]).map(function(a){
+    var tip = ART_TIPS[a]||'';
+    return '<span class="tmpl-art-badge" data-art="'+a+'">'
+      +a.replace('art','Art.\u00a0')
+      +'<span class="tmpl-tip">'+tip+'</span>'
+      +'</span>';
+  }).join('');
+  var dlBadge = d.dl ? '<span class="tmpl-dl-badge">\u2b07 T\u00e9l\u00e9chargeable</span>' : '';
+  return '<div class="doc-card type-'+d.type+'" data-cat="'+d.cat
+    +'" data-arts="'+(d.arts||[]).join(' ')+'" data-format="'+(d.format||'')+'" onclick="'+d.action+'">'
+    +'<div class="doc-icon">'+d.ico+'</div>'
+    +'<div style="flex:1;min-width:0">'
+    +'<div class="doc-name">'+d.name+'</div>'
+    +'<div class="doc-desc">'+d.desc+'</div>'
+    +'<div class="tmpl-arts">'+artBadges+dlBadge+'</div>'
+    +'<div class="doc-meta">'+d.meta+'</div>'
+    +'</div></div>';
+}
+
+function renderSection(cat, items){
+  var el = document.getElementById('tmpl-grid-'+cat);
+  if(!el) return;
+  el.innerHTML = items.map(renderCard).join('');
+  var c = document.getElementById('tmpl-count-'+cat);
+  if(c) c.textContent = items.length+' document'+(items.length>1?'s':'');
+}
+
+window.tmplFilter = function(){
+  var catV = (document.getElementById('tmpl-cat-select')||{}).value||'all';
+  var artV = (document.getElementById('tmpl-art-select')||{}).value||'all';
+  var fmtV = (document.getElementById('tmpl-format-select')||{}).value||'all';
+  var cards = document.querySelectorAll('#p-templates .doc-card');
+  var vis = 0;
+  cards.forEach(function(c){
+    var ok = (catV==='all'||c.dataset.cat===catV)
+           &&(artV==='all'||(' '+(c.dataset.arts||'')+' ').indexOf(' '+artV+' ')>=0)
+           &&(fmtV==='all'||(c.dataset.format||'').indexOf(fmtV)>=0);
+    c.classList.toggle('tmpl-hidden',!ok);
+    if(ok) vis++;
+  });
+  ['template','fiche','guide','doc','process'].forEach(function(cat){
+    var sec = document.getElementById('tmpl-sec-'+cat);
+    if(!sec) return;
+    var n = sec.querySelectorAll('.doc-card:not(.tmpl-hidden)').length;
+    sec.style.display = n ? '' : 'none';
+    var c = document.getElementById('tmpl-count-'+cat);
+    if(c) c.textContent = n+' document'+(n>1?'s':'');
+  });
+  var lbl = document.getElementById('tmpl-count-lbl');
+  if(lbl) lbl.textContent = vis+' r\u00e9sultat'+(vis>1?'s':'');
+};
+
+window.templatesRenderPage = function(){
+  ['template','fiche','guide','doc','process'].forEach(function(cat){
+    renderSection(cat, TMPL_DATA.filter(function(d){ return d.cat===cat; }));
+  });
+  var lbl = document.getElementById('tmpl-count-lbl');
+  if(lbl) lbl.textContent = TMPL_DATA.length+' documents';
+  ['tmpl-cat-select','tmpl-art-select','tmpl-format-select'].forEach(function(id){
+    var el = document.getElementById(id); if(el) el.value='all';
+  });
+};
+
+var _origGo = window.go;
 window.go = function(id){
-  var r = _tplOrigGo ? _tplOrigGo.apply(this, arguments) : undefined;
-  if(id === "templates") setTimeout(window.templatesRenderPage, 80);
+  var r = _origGo ? _origGo.apply(this,arguments) : undefined;
+  if(id==='templates') setTimeout(window.templatesRenderPage,80);
   return r;
 };
 
 })();
 
-</script>
 
 <script>
 /* ══ ESPACE EQUIPE — Annuaire base sur les roles RACI reels (remplace les membres fictifs) ══ */
