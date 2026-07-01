@@ -2470,21 +2470,21 @@ textarea.form-el{min-height:86px;resize:vertical}
 
   <div class="tbl-wrap" style="padding:24px;margin-top:20px">
     <div class="tbl-head" style="border:none;padding:0 0 16px"><span class="tbl-title">Comment fonctionne le modèle hybride</span></div>
-    <div class="ctrl-section"><div class="ctrl-section-head"><span class="ctrl-section-title">① Socle fixe réduit — 900 €/mois <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>Socle fixe</strong><br>Couvre l'infrastructure réelle : hébergement Render, API Mistral/Claude, base PostgreSQL Frankfurt, maintenance.<br><em>Environ 30-40 % d'un SaaS équivalent</em>. Stable quel que soit votre niveau de conformité.</span></span></span></div>
+    <div class="ctrl-section"><div class="ctrl-section-head"><span class="ctrl-section-title">① Socle fixe réduit — ≈35 % du SaaS équivalent <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>Socle fixe</strong><br>Couvre l'infrastructure réelle : hébergement Render, API Mistral/Claude, base PostgreSQL Frankfurt, maintenance.<br><em>Environ 30-40 % d'un SaaS équivalent</em>. Stable quel que soit votre niveau de conformité.</span></span></span></div>
       <div style="padding:12px 16px;font-size:12px;color:var(--ink2);line-height:1.6">Couvre les coûts réels d'infrastructure (hébergement, API IA, base de données) — environ 30 à 40% du tarif SaaS classique équivalent.</div></div>
     <div class="ctrl-section"><div class="ctrl-section-head"><span class="ctrl-section-title">② Part variable — indexée sur 3 résultats mesurables <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>Part variable RaaS</strong><br>Calculée chaque mois à partir de vos données réelles Sentinel :<br>• <em>45 €/point d'audit gagné</em><br>• <em>0,4 % de la réduction d'exposition Art. 99</em><br>• <em>65 €/système conforme</em> (pondéré par classification)<br>Plafonnée à 4× le socle fixe (3 600 €/mois max).</span></span></span></div>
       <div style="padding:12px 16px;font-size:12px;color:var(--ink2);line-height:1.6">
 
         <div class="prx-formula">
           <span class="prx-var">Part variable</span> <span class="prx-op">=</span>
-          <span class="prx-var">Δ Audit</span> <span class="prx-op">× 45 €</span>
-          <span class="prx-op"> + </span><span class="prx-var">Réduction sanctions</span> <span class="prx-op">× 0,4 %</span>
-          <span class="prx-op"> + </span><span class="prx-var">Systèmes conformes</span> <span class="prx-op">× 65 € × poids</span>
+          <span class="prx-var">Δ Audit</span> <span class="prx-op">× (2 € PME / 12 € ETI / 40 € GE)</span>
+          <span class="prx-op"> + </span><span class="prx-var">Réduction sanctions</span> <span class="prx-op">× 0,1–0,4 %</span>
+          <span class="prx-op"> + </span><span class="prx-var">Systèmes conformes</span> <span class="prx-op">× (4 € / 20 € / 60 €) × poids</span>
           <br><span class="prx-cap">Plafond : 4 × 900 € = 3 600 €/mois</span>
         </div>
-        • Progression du score Audit IA Act (45€/point gagné)<br>
+        • Progression du score Audit IA Act (2 €/pt PME — 12 €/pt ETI — 40 €/pt GE)<br>
         • Réduction estimée de l'exposition aux sanctions Art. 99 (0,4% de la réduction calculée)<br>
-        • Systèmes du Registre IA passés au statut "conforme" (65€/système), <strong>pondérés par classification réelle</strong> — un système haut risque pèse 1,4× plus qu un système à risque minimal<br>
+        • Systèmes du Registre IA passés au statut « conforme » (4 €/sys PME — 20 € ETI — 60 € GE), <strong>pondérés par classification réelle</strong> — un système haut risque pèse 1,4× plus qu un système à risque minimal<br>
         • Vitesse de progression calibrée par <strong>secteur d activité</strong> et <strong>maturité organisationnelle réelle</strong> (score de maturité Sentinel)<br>
         • <strong>Plafond contractuel</strong> : la part variable ne peut excéder 4× le socle fixe
       </div></div>
@@ -12632,24 +12632,15 @@ if(document.readyState !== "loading"){ setTimeout(guideInjectButton, 300); }
 
 var PRICING_PARAMS = {
   /* Tarifs SaaS gouvernance IA — 3 segments de marché, données réelles France 2026.
-     Sources : OGMA/LUG 99€/mois (TPE), TARANIS 559€/mois (PME 10-49 sal.),
-     agences IA France 300-500€/mois entrée de gamme (YouFeel/Nerolia 2026),
-     agents IA PME 80-600€/mois (Nerolia baromètre 2026),
-     ETI/GE : Dastra, Tenacy, OneTrust, EQS Group — estimations sur devis publics. */
-
-  /* ── PME < 250 salariés ── */
+     Sources : OGMA/LUG 99 €/mois (TPE), TARANIS 559 €/mois (PME 10-49 sal.),
+     agences IA France 300-500 €/mois (YouFeel/Nerolia 2026), agents IA PME 80-600 €/mois,
+     ETI/GE : Dastra, Tenacy, OneTrust, EQS Group — estimations sur devis publics. */
   saasPmeBase:      {it:350, public:300, telecom:450, industrie:400, transport:420, energie:500, finance:550, sante:600},
   saasPmePerSystem: {it:20,  public:18,  telecom:28,  industrie:25,  transport:26,  energie:32,  finance:35,  sante:38},
-
-  /* ── ETI 250-5 000 salariés ── */
   saasEtiBase:      {it:900,  public:750,  telecom:1200, industrie:1000, transport:1100, energie:1400, finance:1600, sante:1800},
   saasEtiPerSystem: {it:60,   public:55,   telecom:90,   industrie:75,   transport:80,   energie:100,  finance:120,  sante:130},
-
-  /* ── Grands comptes > 5 000 salariés ── */
   saasGeBase:       {it:2200, public:2100, telecom:2800, industrie:2600, transport:2900, energie:3200, finance:3600, sante:3500},
   saasGePerSystem:  {it:160,  public:170,  telecom:200,  industrie:185,  transport:200,  energie:220,  finance:250,  sante:240},
-
-  /* Fourchette marché complète par secteur (tous segments) */
   saasSectorRange: {
     it:        {min:80,  max:2200, ctx:'PME : 80–600 € (OGMA 99 €, Nerolia). ETI : 900–1 200 €. GE : Certa, Tenacy, Neuroprofiler.'},
     public:    {min:80,  max:2100, ctx:'Marchés cadre UGAP/CAIH. PME : 300–500 €. Tarifs négociés, appels d’offres.'},
@@ -12660,22 +12651,25 @@ var PRICING_PARAMS = {
     finance:   {min:400, max:3600, ctx:'DORA + AI Act + BCBS. PME : 550 €. ETI : Dastra, ComplyAdvantage. GE : EQS/OneTrust.'},
     sante:     {min:500, max:3500, ctx:'AI Act Art. 22 + MDR + HDS. PME : 600 €. ETI/GE : sur-mesure, tarifs premium.'}
   },
-
-  /* Remises engagement annuel — marché France 2025 */
-  annualDiscount: {
-    it:0.20, public:0.10, telecom:0.17, industrie:0.18, transport:0.16, energie:0.15, finance:0.15, sante:0.12
-  },
-
-  /* Remises volume (s'appliquent surtout à partir de l'ETI) */
+  annualDiscount: {it:0.20, public:0.10, telecom:0.17, industrie:0.18, transport:0.16, energie:0.15, finance:0.15, sante:0.12},
   saasVolumeDiscounts: [ {min:50, pct:0.20}, {min:30, pct:0.12}, {min:20, pct:0.06} ],
   saasBase: 350, saasPerSystem: 20,
 
-  hybridSocle: 900,
-  pricePerAuditPoint: 45,
-  pricePerSanctionReduced: 0.004,
-  pricePerSystemClassified: 65,
-  classifWeight: { inacceptable: 1.6, haut: 1.4, limite: 1.0, minimal: 0.6, a_evaluer: 0.8 },
-  variableCapMultiplier: 4
+  /* Modèle hybride RaaS — socle = 35 % du SaaS équivalent du segment.
+     Part variable plafonnée à 3× le socle. Total max ≈ 4× socle ≈ 140 % du SaaS. */
+  hybridSocle: 122,
+  hybridSocleBySegSector: {
+    pme: {it:122, public:105, telecom:158, industrie:140, transport:147, energie:175, finance:193, sante:210},
+    eti: {it:315, public:263, telecom:420, industrie:350, transport:385, energie:490, finance:560, sante:630},
+    ge:  {it:770, public:735, telecom:980, industrie:910, transport:1015, energie:1120, finance:1260, sante:1225}
+  },
+  hybridVariableCapMultiplier: 3,
+  pricePerAuditPointBySegment:  {pme:2,     eti:12,    ge:40},
+  pricePerSystemBySegment:      {pme:4,     eti:20,    ge:60},
+  pricePerSanctionBySegment:    {pme:0.001, eti:0.003, ge:0.004},
+  pricePerAuditPoint: 2, pricePerSanctionReduced: 0.001, pricePerSystemClassified: 4,
+  variableCapMultiplier: 3,
+  classifWeight: { inacceptable: 1.6, haut: 1.4, limite: 1.0, minimal: 0.6, a_evaluer: 0.8 }
 };
 
 /* Vitesse de progression mensuelle de base par secteur (pts/mois), modulee ensuite
@@ -12729,14 +12723,19 @@ function pricingComputeSaaS(nbSystemes, sector, billing, segment){
   return Math.round(brut * (1 - remiseVol) * (1 - remiseAnn));
 }
 
-function pricingComputeHybrid(auditPctGagne, sanctionReduiteEur, poidsSystemesClassifies){
-  var variableBrut = (auditPctGagne * PRICING_PARAMS.pricePerAuditPoint)
-    + (sanctionReduiteEur * PRICING_PARAMS.pricePerSanctionReduced)
-    + (poidsSystemesClassifies * PRICING_PARAMS.pricePerSystemClassified);
-  var cap = PRICING_PARAMS.hybridSocle * PRICING_PARAMS.variableCapMultiplier;
+function pricingComputeHybrid(auditPctGagne, sanctionReduiteEur, poidsSystemesClassifies, segment, sector){
+  var seg = segment || 'pme';
+  var sec = sector  || 'it';
+  var socleMap = PRICING_PARAMS.hybridSocleBySegSector && PRICING_PARAMS.hybridSocleBySegSector[seg];
+  var socle    = (socleMap && socleMap[sec]) || PRICING_PARAMS.hybridSocle;
+  var cpAudit  = (PRICING_PARAMS.pricePerAuditPointBySegment  && PRICING_PARAMS.pricePerAuditPointBySegment[seg])  || PRICING_PARAMS.pricePerAuditPoint;
+  var cpSystem = (PRICING_PARAMS.pricePerSystemBySegment      && PRICING_PARAMS.pricePerSystemBySegment[seg])      || PRICING_PARAMS.pricePerSystemClassified;
+  var cpSanct  = (PRICING_PARAMS.pricePerSanctionBySegment    && PRICING_PARAMS.pricePerSanctionBySegment[seg])    || PRICING_PARAMS.pricePerSanctionReduced;
+  var cap = socle * (PRICING_PARAMS.hybridVariableCapMultiplier || 3);
+  var variableBrut = (auditPctGagne * cpAudit) + (sanctionReduiteEur * cpSanct) + (poidsSystemesClassifies * cpSystem);
   var variable = Math.min(Math.round(variableBrut), cap);
   var plafonne = variableBrut > cap;
-  return { socle: PRICING_PARAMS.hybridSocle, variable: variable, total: PRICING_PARAMS.hybridSocle + variable, plafonne: plafonne, variableBrut: Math.round(variableBrut) };
+  return { socle: socle, variable: variable, total: socle + variable, plafonne: plafonne, variableBrut: Math.round(variableBrut) };
 }
 
 function pricingGetSectorPace(sector){
@@ -12829,7 +12828,7 @@ window.pricingHideTooltip = function(){
   if(tt) tt.style.display = 'none';
 };
 
-function pricingProjectScenario(auditDepart, paceMultiplier, caAnnuel, nbSystemes, poidsTotal, months){
+function pricingProjectScenario(auditDepart, paceMultiplier, caAnnuel, nbSystemes, poidsTotal, months, segment, sector){
   var results = [];
   var cumGain = 0;
   for(var m=1; m<=months; m++){
@@ -12837,7 +12836,7 @@ function pricingProjectScenario(auditDepart, paceMultiplier, caAnnuel, nbSysteme
     cumGain = Math.min(100-auditDepart, cumGain + monthlyGain);
     var sanctionReduite = caAnnuel * 0.07 * (cumGain/100) * 0.3;
     var poidsClassifies = poidsTotal * Math.min(1, m/4);
-    results.push(pricingComputeHybrid(cumGain, sanctionReduite, poidsClassifies));
+    results.push(pricingComputeHybrid(cumGain, sanctionReduite, poidsClassifies, segment, sector));
   }
   return results;
 }
@@ -12891,9 +12890,9 @@ window.pricingSimulate = function(){
   var pace = pricingGetSectorPace(sector) / 8; /* normalise autour de 1.0 pour le secteur IT de reference */
 
   var scenarios = {
-    pessimiste: pricingProjectScenario(auditDepart, pace*0.55, caAnnuel, nbSystemes, poidsTotal, months),
-    realiste:   pricingProjectScenario(auditDepart, pace,      caAnnuel, nbSystemes, poidsTotal, months),
-    optimiste:  pricingProjectScenario(auditDepart, pace*1.5,  caAnnuel, nbSystemes, poidsTotal, months)
+    pessimiste: pricingProjectScenario(auditDepart, pace*0.55, caAnnuel, nbSystemes, poidsTotal, months, segment, sector),
+    realiste:   pricingProjectScenario(auditDepart, pace,      caAnnuel, nbSystemes, poidsTotal, months, segment, sector),
+    optimiste:  pricingProjectScenario(auditDepart, pace*1.5,  caAnnuel, nbSystemes, poidsTotal, months, segment, sector)
   };
 
   var finalR = scenarios.realiste[months-1];
@@ -12996,7 +12995,7 @@ window.pricingSimulate = function(){
       + '</div>'
 
       + '</div>'
-      + '<div class="radar-registre-info radar-registre-ok" style="margin-top:14px">📊 Vitesse de progression calibrée sur le secteur <strong>' + sectorLabel + '</strong> et la maturité organisationnelle réelle. Systèmes pondérés par classification réelle. Part variable plafonnée à ' + PRICING_PARAMS.variableCapMultiplier + '× le socle. <strong>Outil d’aide à la décision, pas un engagement contractuel.</strong></div>';
+      + '<div class="radar-registre-info radar-registre-ok" style="margin-top:14px">📊 Socle hybride : <strong>' + finalR.socle.toLocaleString('fr-FR') + ' €/mois</strong> (∵35 % du SaaS ' + ({pme:'PME',eti:'ETI',ge:'Grands comptes'}[segment]||segment) + ' — secteur <strong>' + sectorLabel + '</strong>). Part variable plafonnée à 3× le socle. Systèmes pondérés par classification. <strong>Outil d’aide à la décision commerciale — pas un engagement contractuel.</strong></div>';
   }
 
   pricingRenderChart(saasMonthly, scenarios);
