@@ -12716,7 +12716,7 @@ function pricingComputeSaaS(nbSystemes, sector, billing, segment){
   var perSys = (sector && perSysMap[sector]) || PRICING_PARAMS.saasPerSystem;
   var extra  = Math.max(0, nbSystemes - 10);
   var brut   = base + extra * perSys;
-  var remiseVol = (seg !== 'pme') ? pricingSaasDiscount(nbSystemes) : 0;
+  var remiseVol = pricingSaasDiscount(nbSystemes);
   var remiseAnn = (billing === 'annual')
     ? ((PRICING_PARAMS.annualDiscount && PRICING_PARAMS.annualDiscount[sector]) || 0.15)
     : 0;
@@ -12760,11 +12760,13 @@ function pricingRenderChart(saasMonthly, scenarios){
   /* Legende HTML au-dessus du graphique */
   var legendEl = document.getElementById('pricing-chart-legend');
   if(legendEl){
-    legendEl.innerHTML =
-        '<span class="pricing-legend-item" title="Tarif mensuel fixe du modele SaaS classique, sans lien avec vos resultats reels"><span class="pricing-legend-swatch dashed" style="border-color:var(--muted2)"></span>SaaS classique</span>'
-      + '<span class="pricing-legend-item" title="Scenario central du modele hybride : socle fixe + part variable indexee sur vos resultats reels (Audit, sanctions evitees, systemes conformes)"><span class="pricing-legend-swatch" style="border-color:var(--accent)"></span>Hybride — réaliste</span>'
-      + '<span class="pricing-legend-item" title="Scenario prudent : progression de conformite plus lente que la moyenne (x0,55)"><span class="pricing-legend-swatch dashed" style="border-color:var(--accent);opacity:.6"></span>Hybride — pessimiste</span>'
-      + '<span class="pricing-legend-item" title="Scenario favorable : progression de conformite plus rapide que la moyenne (x1,5)"><span class="pricing-legend-swatch dashed" style="border-color:var(--green);opacity:.6"></span>Hybride — optimiste</span>';
+    var _sgl={pme:'PME',eti:'ETI',ge:'GE'}[window.__pricingSegment||'pme']||'PME';
+    var _bml=(window.__pricingBilling==='annual')?'annuel':'mensuel';
+    legendEl.innerHTML=
+        '<span class="pricing-legend-item" title="SaaS '+_sgl+' '+_bml+' — tarif fixe, indépendant des résultats"><span class="pricing-legend-swatch dashed" style="border-color:var(--muted2)"></span>SaaS '+_sgl+'</span>'
+      +'<span class="pricing-legend-item" title="Réaliste : socle (∵35 % SaaS) + variable calculée (Audit/sanctions/systèmes)"><span class="pricing-legend-swatch" style="border-color:var(--accent)"></span>Hybride — réaliste</span>'
+      +'<span class="pricing-legend-item" title="Pessimiste : progression 45 % plus lente que la médiane sectorielle"><span class="pricing-legend-swatch dashed" style="border-color:var(--accent);opacity:.6"></span>Hybride — pessimiste</span>'
+      +'<span class="pricing-legend-item" title="Optimiste : progression 50 % plus rapide (ISO 9001/27001)"><span class="pricing-legend-swatch dashed" style="border-color:var(--green);opacity:.6"></span>Hybride — optimiste</span>';
   }
 
   var gridLines=[0,0.25,0.5,0.75,1].map(function(f){
@@ -12791,7 +12793,7 @@ function pricingRenderChart(saasMonthly, scenarios){
   }
 
   svg.innerHTML = gridLines+xLabels
-    + '<path d="'+saasLine+'" stroke="var(--muted2)" stroke-width="2" stroke-dasharray="5,4" fill="none"><title>SaaS classique : '+saasMonthly.toLocaleString('fr-FR')+'€/mois fixe, quel que soit le resultat obtenu</title></path>'
+    + '<path d="'+saasLine+'" stroke="var(--muted2)" stroke-width="2" stroke-dasharray="5,4" fill="none"><title>SaaS classique : '+({pme:'PME',eti:'ETI',ge:'GE'}[window.__pricingSegment||'pme']||'PME')+' '+(window.__pricingBilling==='annual'?'annuel':'mensuel')+' : '+saasMonthly.toLocaleString('fr-FR')+' €/mois fixe</title></path>'
     + '<polyline points="'+poly(scenarios.pessimiste)+'" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="2,3" fill="none" opacity="0.6"/>'
     + '<polyline points="'+poly(scenarios.optimiste)+'" stroke="var(--green)" stroke-width="1.5" stroke-dasharray="2,3" fill="none" opacity="0.6"/>'
     + '<polyline points="'+poly(scenarios.realiste)+'" stroke="var(--accent)" stroke-width="2.5" fill="none"/>'
@@ -12901,8 +12903,7 @@ window.pricingSimulate = function(){
   var diff = totalSaas6m - totalHybridReal6m;
   var remisePct = Math.round(pricingSaasDiscount(nbSystemes)*100);
 
-  var billing = window.__pricingBilling || 'monthly';
-  var segment = window.__pricingSegment || 'pme';
+  /* billing/segment définis en amont */
   var annDisc = (billing === 'annual')
     ? ((PRICING_PARAMS.annualDiscount && PRICING_PARAMS.annualDiscount[sector]) || 0.15)
     : 0;
@@ -12929,32 +12930,36 @@ window.pricingSimulate = function(){
         : '')
       + '</span></span>';
 
-    var tipHybrid = '<span class="bud-tip" tabindex="0">?'
-      + '<span class="bud-tip-bubble">'
-      + '<strong>Coût total mois 6</strong><br>'
-      + 'Socle fixe : <em>' + finalR.socle.toLocaleString('fr-FR') + ' €</em><br>'
-      + 'Part variable : <em>' + finalR.variable.toLocaleString('fr-FR') + ' €</em>'
-      + (finalR.plafonne ? ' <strong>(plafonnée à ' + (PRICING_PARAMS.hybridSocle * PRICING_PARAMS.variableCapMultiplier).toLocaleString('fr-FR') + ' €)</strong>' : '') + '<br>'
-      + 'Calculée depuis : score audit × 45 € + systèmes conformes × 65 € + réduction sanctions Art. 99 × 0,4 %.'
-      + '</span></span>';
+    var _cH=finalR.socle*(PRICING_PARAMS.hybridVariableCapMultiplier||3);
+    var _cA=(PRICING_PARAMS.pricePerAuditPointBySegment&&PRICING_PARAMS.pricePerAuditPointBySegment[segment])||PRICING_PARAMS.pricePerAuditPoint;
+    var _cSy=(PRICING_PARAMS.pricePerSystemBySegment&&PRICING_PARAMS.pricePerSystemBySegment[segment])||PRICING_PARAMS.pricePerSystemClassified;
+    var _cSa=(PRICING_PARAMS.pricePerSanctionBySegment&&PRICING_PARAMS.pricePerSanctionBySegment[segment])||PRICING_PARAMS.pricePerSanctionReduced;
+    var tipHybrid='<span class="bud-tip" tabindex="0">?'
+      +'<span class="bud-tip-bubble">'
+      +'<strong>Coût mois 6 — '+({pme:'PME',eti:'ETI',ge:'GE'}[segment]||segment)+'</strong><br>'
+      +'Socle : <em>'+finalR.socle.toLocaleString('fr-FR')+' €</em> (∵35 % SaaS)<br>'
+      +'Variable : <em>'+finalR.variable.toLocaleString('fr-FR')+' €</em>'
+      +(finalR.plafonne?' (plafonnée à '+_cH.toLocaleString('fr-FR')+' €)':'')+'<br>'
+      +'Δ Audit ×'+_cA+' €/pt + Systèmes ×'+_cSy+' € + Sanctions ×'+(_cSa*100).toFixed(1)+' %'
+      +'</span></span>';
 
-    var tipEcart = '<span class="bud-tip" tabindex="0">?'
-      + '<span class="bud-tip-bubble">'
-      + '<strong>Écart cumulé sur 6 mois</strong><br>'
-      + 'SaaS cumulé : <em>' + totalSaas6m.toLocaleString('fr-FR') + ' €</em><br>'
-      + 'Hybride cumulé : <em>' + totalHybridReal6m.toLocaleString('fr-FR') + ' €</em><br>'
-      + (diff >= 0
-        ? '<strong>Économie de ' + diff.toLocaleString('fr-FR') + ' €</strong> en faveur du modèle hybride. Extrapolation 12 mois : économie estimée <strong>' + economieAnnuelle.toLocaleString('fr-FR') + ' €</strong>.'
-        : 'Le SaaS classique est moins coûteux de ' + Math.abs(diff).toLocaleString('fr-FR') + ' € sur 6 mois. Cet écart s’inverse généralement à partir du mois 8–10.')
-      + '</span></span>';
+    var tipEcart='<span class="bud-tip" tabindex="0">?'
+      +'<span class="bud-tip-bubble">'
+      +'<strong>Écart cumulé 6 mois</strong><br>'
+      +'SaaS : <em>'+totalSaas6m.toLocaleString('fr-FR')+' €</em><br>'
+      +'Hybride : <em>'+totalHybridReal6m.toLocaleString('fr-FR')+' €</em><br>'
+      +(diff>=0
+        ?'<strong>Économie de '+diff.toLocaleString('fr-FR')+' €</strong> pour le modèle hybride. Extrapolation 12 mois : économie estimée <strong>'+economieAnnuelle.toLocaleString('fr-FR')+' €</strong>.'
+        :'SaaS moins coûteux de '+Math.abs(diff).toLocaleString('fr-FR')+' € sur 6 mois. L’écart s’inverse généralement dès M8-M10.')
+      +'</span></span>';
 
-    var tipFourch = '<span class="bud-tip" tabindex="0">?'
-      + '<span class="bud-tip-bubble">'
-      + '<strong>Intervalle de confiance mois 6</strong><br>'
-      + '<em>Pessimiste (' + scenarios.pessimiste[months-1].total.toLocaleString('fr-FR') + ' €)</em> : progression 45 % plus lente que la médiane sectorielle.<br>'
-      + '<em>Optimiste (' + scenarios.optimiste[months-1].total.toLocaleString('fr-FR') + ' €)</em> : progression 50 % plus rapide (typique des orgs. avec ISO 9001/27001).<br>'
-      + 'L’écart reflète l’incertitude sur votre vitesse réelle de mise en conformité.'
-      + '</span></span>';
+    var tipFourch='<span class="bud-tip" tabindex="0">?'
+      +'<span class="bud-tip-bubble">'
+      +'<strong>Intervalle de confiance mois 6</strong><br>'
+      +'<em>Pessimiste ('+scenarios.pessimiste[months-1].total.toLocaleString('fr-FR')+' €)</em> : progression 45 % plus lente.<br>'
+      +'<em>Optimiste ('+scenarios.optimiste[months-1].total.toLocaleString('fr-FR')+' €)</em> : progression 50 % plus rapide (orgs. ISO 9001/27001).<br>'
+      +'L’écart reflète l’incertitude sur votre vitesse de mise en conformité.'
+      +'</span></span>';
 
     resultsEl.innerHTML =
       '<div class="bud-synth">'
@@ -12963,8 +12968,7 @@ window.pricingSimulate = function(){
       + '<div class="bud-synth-lbl">SaaS référence / mois ' + tipSaaS + '</div>'
       + '<div class="bud-synth-val">' + saasMonthly.toLocaleString('fr-FR') + ' €'
       + (billing === 'annual'
-          ? '<span class="billing-annual-badge">−15 % annuel</span>'
-              .replace('15', annDiscPct.toString())
+          ? '<span class="billing-annual-badge">−'+annDiscPct+' % annuel</span>'
           : '<span class="billing-monthly-badge">sans engagement</span>')
       + '</div>'
       + (billing === 'annual' && saasMensuelBase !== saasMonthly
