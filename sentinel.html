@@ -2424,6 +2424,13 @@ textarea.form-el{min-height:86px;resize:vertical}
       </span></span>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:20px">
+      <div class="reg-field"><label class="reg-label">Taille de l'organisation <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>Segment de marché</strong><br><em>PME (&lt; 250 sal.)</em> : 80–600 €/mois — OGMA 99 €, TARANIS 559 €, agences IA 300–500 €.<br><em>ETI (250–5 000 sal.)</em> : 750–1 800 €/mois — Dastra, Tenacy.<br><em>Grands comptes (&gt; 5 000 sal.)</em> : 2 100–3 600 €/mois — OneTrust, EQS, Data Legal Drive.</span></span></label>
+        <select id="pricing-segment" class="reg-input" onchange="pricingSimulate()">
+          <option value="pme" selected>🏢 PME (&lt; 250 salariés)</option>
+          <option value="eti">🏬 ETI (250 – 5 000 salariés)</option>
+          <option value="ge">🏛 Grands comptes (&gt; 5 000 salariés)</option>
+        </select>
+      </div>
       <div class="reg-field"><label class="reg-label">Secteur d'activité <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>Impact secteur</strong><br>La vitesse de progression mensuelle varie : IT/Tech (12 pts/mois), Télécom (10), Industrie (9), Énergie/Transport (8), Finance/Santé (7), Secteur public (6).<br><em>Source : benchmarks Sentinel AI sectoriels</em></span></span></label>
         <select id="pricing-secteur" class="reg-input" onchange="pricingSimulate()">
           <option value="telecom">📶 Télécom</option><option value="energie">⚡ Énergie</option>
@@ -12624,36 +12631,44 @@ if(document.readyState !== "loading"){ setTimeout(guideInjectButton, 300); }
 'use strict';
 
 var PRICING_PARAMS = {
-  saasBase: 2400, saasPerSystem: 180,
-  saasVolumeDiscounts: [ {min:50, pct:0.20}, {min:30, pct:0.12}, {min:20, pct:0.06} ],
+  /* Tarifs SaaS gouvernance IA — 3 segments de marché, données réelles France 2026.
+     Sources : OGMA/LUG 99€/mois (TPE), TARANIS 559€/mois (PME 10-49 sal.),
+     agences IA France 300-500€/mois entrée de gamme (YouFeel/Nerolia 2026),
+     agents IA PME 80-600€/mois (Nerolia baromètre 2026),
+     ETI/GE : Dastra, Tenacy, OneTrust, EQS Group — estimations sur devis publics. */
 
-  /* Tarifs SaaS gouvernance IA par secteur — marche France/Europe 2025
-     Sources : benchmarks startups (Certa, Dastra, Tenacy), SSII AI Act, appels d'offres publics */
-  saasSectorBase:      {telecom:2800, energie:3200, sante:3500, finance:3600, industrie:2600, transport:2900, it:2200, public:2100},
-  saasSectorPerSystem: {telecom:200,  energie:220,  sante:240,  finance:250,  industrie:185,  transport:200,  it:160,  public:170},
+  /* ── PME < 250 salariés ── */
+  saasPmeBase:      {it:350, public:300, telecom:450, industrie:400, transport:420, energie:500, finance:550, sante:600},
+  saasPmePerSystem: {it:20,  public:18,  telecom:28,  industrie:25,  transport:26,  energie:32,  finance:35,  sante:38},
+
+  /* ── ETI 250-5 000 salariés ── */
+  saasEtiBase:      {it:900,  public:750,  telecom:1200, industrie:1000, transport:1100, energie:1400, finance:1600, sante:1800},
+  saasEtiPerSystem: {it:60,   public:55,   telecom:90,   industrie:75,   transport:80,   energie:100,  finance:120,  sante:130},
+
+  /* ── Grands comptes > 5 000 salariés ── */
+  saasGeBase:       {it:2200, public:2100, telecom:2800, industrie:2600, transport:2900, energie:3200, finance:3600, sante:3500},
+  saasGePerSystem:  {it:160,  public:170,  telecom:200,  industrie:185,  transport:200,  energie:220,  finance:250,  sante:240},
+
+  /* Fourchette marché complète par secteur (tous segments) */
   saasSectorRange: {
-    telecom:   {min:2500, max:5000, ctx:'ARCEP + AI Act + NIS2. Operateurs historiques, integrateurs GRC.'},
-    energie:   {min:3500, max:8000, ctx:'NIS2 + AI Act infra critique. Sur-mesure dominant, peu de SaaS natifs.'},
-    sante:     {min:4000, max:9000, ctx:'AI Act Art. 22 + MDR + HDS obligatoire. Tarifs premium, offres rares.'},
-    finance:   {min:3000, max:7000, ctx:'DORA + AI Act + BCBS cumules. Acteurs : Dastra, ComplyAdvantage.'},
-    industrie: {min:2200, max:4500, ctx:'AI Act Annexe I (machines). Marche en formation, startups emergentes.'},
-    transport: {min:2800, max:5500, ctx:'AI Act Annexe III (mobilite). Internalisation frequente grands groupes.'},
-    it:        {min:1500, max:3000, ctx:'Marche concurrentiel. Startups FR : Certa, Tenacy, Neuroprofiler.'},
-    public:    {min:1800, max:3500, ctx:'Marches cadre UGAP/CAIH. Tarifs negocies, appels d offres frequents.'}
+    it:        {min:80,  max:2200, ctx:'PME : 80–600 € (OGMA 99 €, Nerolia). ETI : 900–1 200 €. GE : Certa, Tenacy, Neuroprofiler.'},
+    public:    {min:80,  max:2100, ctx:'Marchés cadre UGAP/CAIH. PME : 300–500 €. Tarifs négociés, appels d’offres.'},
+    telecom:   {min:300, max:2800, ctx:'ARCEP + AI Act + NIS2. PME : 450 €. ETI/GE : intégrateurs GRC, 1 200–2 800 €.'},
+    industrie: {min:200, max:2600, ctx:'AI Act Annexe I (machines). PME : 400 €. Marché en formation, peu de SaaS natifs.'},
+    transport: {min:250, max:2900, ctx:'AI Act Annexe III (mobilité). PME : 420 €. Internalisation fréquente grands groupes.'},
+    energie:   {min:350, max:3200, ctx:'NIS2 + AI Act infra critique. PME : 500 €. ETI/GE : sur-mesure dominant.'},
+    finance:   {min:400, max:3600, ctx:'DORA + AI Act + BCBS. PME : 550 €. ETI : Dastra, ComplyAdvantage. GE : EQS/OneTrust.'},
+    sante:     {min:500, max:3500, ctx:'AI Act Art. 22 + MDR + HDS. PME : 600 €. ETI/GE : sur-mesure, tarifs premium.'}
   },
 
-  /* Remises engagement annuel — moyennes observées sur le marché SaaS gouvernance IA France 2025
-     (engagement 12 mois vs mensuel sans engagement, sources : G2/Capterra benchmarks, négociations SSII) */
+  /* Remises engagement annuel — marché France 2025 */
   annualDiscount: {
-    telecom:   0.17,   /* -17 % : opérateurs habituels des engagements pluriannuels */
-    energie:   0.15,   /* -15 % : contrats longs mais sur-mesure, remise modérée */
-    sante:     0.12,   /* -12 % : contrats complexes, engagement plus court en pratique */
-    finance:   0.15,   /* -15 % : DORA impose des révisions annuelles — engagement 12 mois standard */
-    industrie: 0.18,   /* -18 % : PMI/ETI sensibles au prix, remise engagement attractif */
-    transport: 0.16,   /* -16 % : cycles budgétaires annuels alignés */
-    it:        0.20,   /* -20 % : marché le plus concurrentiel, remise maximale proposée */
-    public:    0.10    /* -10 % : marchés publics : remise limitée par règles UGAP/CAIH */
+    it:0.20, public:0.10, telecom:0.17, industrie:0.18, transport:0.16, energie:0.15, finance:0.15, sante:0.12
   },
+
+  /* Remises volume (s'appliquent surtout à partir de l'ETI) */
+  saasVolumeDiscounts: [ {min:50, pct:0.20}, {min:30, pct:0.12}, {min:20, pct:0.06} ],
+  saasBase: 350, saasPerSystem: 20,
 
   hybridSocle: 900,
   pricePerAuditPoint: 45,
@@ -12698,17 +12713,19 @@ function pricingSaasDiscount(nbSystemes){
   return 0;
 }
 
-function pricingComputeSaaS(nbSystemes, sector, billing){
-  /* billing : 'monthly' (sans engagement) ou 'annual' (engagement 12 mois, remise sectorielle) */
-  var base    = (sector && PRICING_PARAMS.saasSectorBase[sector])    || PRICING_PARAMS.saasBase;
-  var perSys  = (sector && PRICING_PARAMS.saasSectorPerSystem[sector])|| PRICING_PARAMS.saasPerSystem;
-  var extra   = Math.max(0, nbSystemes - 10);
-  var brut    = base + extra * perSys;
-  var remiseVol  = pricingSaasDiscount(nbSystemes);
-  var remiseAnn  = (billing === 'annual')
+function pricingComputeSaaS(nbSystemes, sector, billing, segment){
+  var seg = segment || 'pme';
+  var capSeg = seg.charAt(0).toUpperCase() + seg.slice(1);
+  var baseMap   = PRICING_PARAMS['saas' + capSeg + 'Base']      || PRICING_PARAMS.saasPmeBase;
+  var perSysMap = PRICING_PARAMS['saas' + capSeg + 'PerSystem'] || PRICING_PARAMS.saasPmePerSystem;
+  var base   = (sector && baseMap[sector])   || PRICING_PARAMS.saasBase;
+  var perSys = (sector && perSysMap[sector]) || PRICING_PARAMS.saasPerSystem;
+  var extra  = Math.max(0, nbSystemes - 10);
+  var brut   = base + extra * perSys;
+  var remiseVol = (seg !== 'pme') ? pricingSaasDiscount(nbSystemes) : 0;
+  var remiseAnn = (billing === 'annual')
     ? ((PRICING_PARAMS.annualDiscount && PRICING_PARAMS.annualDiscount[sector]) || 0.15)
     : 0;
-  /* Les deux remises sont cumulatives (volume ET engagement annuel) */
   return Math.round(brut * (1 - remiseVol) * (1 - remiseAnn));
 }
 
@@ -12860,16 +12877,17 @@ window.pricingSimulate = function(){
   var nbSystemes = parseInt(document.getElementById('pricing-nb-systemes').value || '10', 10);
   var auditDepart = parseInt(document.getElementById('pricing-audit-depart').value || '20', 10);
   var caAnnuel = parseInt(document.getElementById('pricing-ca').value || '50000000', 10);
-  var sector = document.getElementById('pricing-secteur') ? document.getElementById('pricing-secteur').value : 'it';
+  var sector  = document.getElementById('pricing-secteur')  ? document.getElementById('pricing-secteur').value  : 'it';
+  var segment = document.getElementById('pricing-segment') ? document.getElementById('pricing-segment').value : 'pme';
   var poidsTotal = window.__pricingPoidsTotal !== undefined ? window.__pricingPoidsTotal : nbSystemes;
   var months = 6;
 
-  /* Lire le mode de facturation sélectionné */
   var billingEl = document.getElementById('pricing-billing-toggle');
   var billing = (billingEl && billingEl.checked) ? 'annual' : 'monthly';
-  window.__pricingBilling = billing;
+  window.__pricingBilling  = billing;
+  window.__pricingSegment  = segment;
 
-  var saasMonthly = pricingComputeSaaS(nbSystemes, sector, billing);
+  var saasMonthly = pricingComputeSaaS(nbSystemes, sector, billing, segment);
   var pace = pricingGetSectorPace(sector) / 8; /* normalise autour de 1.0 pour le secteur IT de reference */
 
   var scenarios = {
@@ -12885,12 +12903,13 @@ window.pricingSimulate = function(){
   var remisePct = Math.round(pricingSaasDiscount(nbSystemes)*100);
 
   var billing = window.__pricingBilling || 'monthly';
+  var segment = window.__pricingSegment || 'pme';
   var annDisc = (billing === 'annual')
     ? ((PRICING_PARAMS.annualDiscount && PRICING_PARAMS.annualDiscount[sector]) || 0.15)
     : 0;
   var annDiscPct = Math.round(annDisc * 100);
-  var saasMensuelBase = pricingComputeSaaS(nbSystemes, sector, 'monthly'); /* tarif mensuel brut pour comparaison */
-  var sectorRange = (PRICING_PARAMS.saasSectorRange && PRICING_PARAMS.saasSectorRange[sector]) || {min:1500, max:4000, ctx:'Marché IA gouvernance France.'};
+  var saasMensuelBase = pricingComputeSaaS(nbSystemes, sector, 'monthly', segment);
+  var sectorRange = (PRICING_PARAMS.saasSectorRange && PRICING_PARAMS.saasSectorRange[sector]) || {min:80, max:3600, ctx:'Marché IA gouvernance France.'};
   var sectorLabel = (window.MAT_SECTORS && window.MAT_SECTORS[sector]) ? window.MAT_SECTORS[sector].label : sector;
   var economieAnnuelle = Math.round(Math.abs(diff) * 2);
 
@@ -12900,13 +12919,14 @@ window.pricingSimulate = function(){
     var tipSaaS = '<span class="bud-tip" tabindex="0">?'
       + '<span class="bud-tip-bubble">'
       + '<strong>Référence marché ' + sectorLabel + '</strong><br>'
+      + 'Segment : <em>' + ({pme:'PME (< 250 sal.)',eti:'ETI',ge:'Grands comptes'}[segment]||segment) + '</em> — '
       + 'Mode : <em>' + billingLabel + '</em>'
-      + (billing === 'annual' ? ' — remise engagement <em>−' + annDiscPct + ' %</em>' : '') + '<br>'
-      + 'Fourchette constatée : <em>' + sectorRange.min.toLocaleString('fr-FR') + '–' + sectorRange.max.toLocaleString('fr-FR') + ' €/mois</em><br>'
+      + (billing === 'annual' ? ' (−' + annDiscPct + ' %)' : '') + '<br>'
+      + 'Fourchette marché (tous segments) : <em>' + sectorRange.min.toLocaleString('fr-FR') + '–' + sectorRange.max.toLocaleString('fr-FR') + ' €/mois</em><br>'
       + sectorRange.ctx + '<br>'
-      + (remisePct > 0 ? 'Remise volume ' + remisePct + ' % appliquée.' : 'Pas de remise volume (< 20 systèmes).')
+      + '<em style="font-size:9px">Sources : OGMA 99 €/mois (TPE), TARANIS 559 €/mois (PME), agences IA France 300–500 € (YouFeel/Nerolia 2026).</em>'
       + (billing === 'annual' && saasMensuelBase !== saasMonthly
-        ? '<br>Tarif mensuel sans engagement : <em>' + saasMensuelBase.toLocaleString('fr-FR') + ' €/mois</em>.'
+        ? '<br>Sans engagement : <em>' + saasMensuelBase.toLocaleString('fr-FR') + ' €/mois</em>.'
         : '')
       + '</span></span>';
 
