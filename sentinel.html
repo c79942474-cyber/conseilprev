@@ -4589,6 +4589,7 @@ function go(id, el, sec, pg) {
   document.querySelectorAll('.sb-item').forEach(function(i){ i.classList.remove('on'); });
   var p = document.getElementById('p-'+id);
   if (p) p.classList.add('on');
+  if (id === 'templates' && typeof window.templatesRenderPage === 'function') setTimeout(window.templatesRenderPage, 60);
   if (el) el.classList.add('on');
   else document.querySelectorAll('.sb-item').forEach(function(i){
     if (i.getAttribute('onclick') && i.getAttribute('onclick').indexOf("'"+id+"'") >= 0) i.classList.add('on');
@@ -11035,12 +11036,7 @@ window.templatesRenderPage = function(){
   });
 };
 
-var _origGo = window.go;
-window.go = function(id){
-  var r = _origGo ? _origGo.apply(this,arguments) : undefined;
-  if(id==='templates') setTimeout(window.templatesRenderPage,80);
-  return r;
-};
+/* hook templates : déclenché directement depuis go() — cf. injection ci-dessus */
 
 })();
 
