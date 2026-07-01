@@ -11193,8 +11193,21 @@ window.tmplClose=function(){
 window.tmplGenerate=function(idx){
   var d=TMPL_CATALOG[idx]; if(!d) return;
   tmplClose();
-  var pg=d.fmt.indexOf('sentinel')>=0||d.fmt.indexOf('ia')>=0?'maturite':'templates';
-  go(pg,null,'SENTINEL AI','Documentation');
+  // Pour les formats avec Sentinel/IA : ouvrir le module de génération IA
+  if(d.fmt.indexOf('sentinel')>=0){
+    // Naviguer vers le module Sentinel approprié
+    if(d.ctaAction && d.ctaAction.indexOf('go(')===0){
+      try{ eval(d.ctaAction); }catch(e){}
+    } else {
+      go('maturite',null,'AUDIT','Générer avec Sentinel AI');
+    }
+  } else if(d.fmt.indexOf('ia')>=0){
+    // Déclencher la génération IA via le module audit ou maturité
+    go('maturite',null,'AUDIT','Générer avec Sentinel AI');
+  } else {
+    // Format Word/PDF : proposer le téléchargement depuis le module templates
+    go('templates',null,'RESSOURCES','Documentation & modèles');
+  }
 };
 document.addEventListener('keydown',function(e){if(e.key==='Escape') tmplClose();});
 
