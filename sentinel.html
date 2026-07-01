@@ -7529,7 +7529,7 @@ function matBuildReportHTML(forPrint){
   if(forPrint){
     h += '<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>';
   }
-  h += '</body></html>';
+  h += '</body><p style="font-size:9px;color:#888;font-family:Arial,sans-serif;font-style:italic;border-top:1px solid #eee;margin-top:20px;padding-top:8px">🤖 Contenu généré par IA (Sentinel AI / CONSEILPREV) — Art. 50 Règl. (UE) 2024/1689. Valider avec un expert avant toute décision.</p></html>';
   return h;
 }
 
@@ -8567,7 +8567,7 @@ function kpiDocHTML(){
   h += '<h1>Tableau de bord — KPIs sectoriels</h1><div class="sub">Secteur '+d.sector+' · '+today+' · CONSEILPREV</div>';
   h += '<table><tr><th>Categorie</th><th>Indicateur</th><th class="r">Cible</th><th class="r">Frequence</th><th>Outil</th><th>Responsable</th></tr>';
   d.kpis.forEach(function(k){ h += '<tr><td>'+k.cat+'</td><td>'+k.kpi+'</td><td class="r">'+k.cible+'</td><td class="r">'+k.freq+'</td><td>'+k.outil+'</td><td>'+k.resp+'</td></tr>'; });
-  h += '</table><p style="font-size:10px;color:#999;margin-top:20px;font-family:Arial;font-style:italic">CONSEILPREV — christophe.cerf@outlook.com</p></body></html>';
+  h += '</table><p style="font-size:10px;color:#999;margin-top:20px;font-family:Arial;font-style:italic">CONSEILPREV — christophe.cerf@outlook.com</p><p style="font-size:9px;color:#888;font-family:Arial,sans-serif;font-style:italic;border-top:1px solid #eee;margin-top:12px;padding-top:8px">🤖 Contenu généré par IA (Sentinel AI / CONSEILPREV) — Art. 50 Règl. (UE) 2024/1689. Valider avec un expert avant toute décision.</p></body></html>';
   return h;
 }
 window.matKpiPDF = function(){ var w = window.open("","_blank"); if(!w){alert("Autorisez les pop-ups.");return;} w.document.write(kpiDocHTML()+'<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>'); w.document.close(); };
@@ -8956,7 +8956,7 @@ function raciDocHTML(){
     + '.sub{color:#666;font-size:12px;font-family:Arial;margin-bottom:18px}table{width:100%;border-collapse:collapse;font-size:11px;margin:10px 0}'
     + 'th{background:#1C1C1C;color:#fff;padding:7px;text-align:left;font-size:10px;font-family:Arial}td{border:1px solid #ddd;padding:6px 8px}</style></head><body>'
     + '<h1>Cartographie des parties prenantes — Matrice RACI</h1><div class="sub">Secteur '+d.sector+' · '+today+' · CONSEILPREV · '+(d.apiName||"IA")+'</div>'
-    + body + '<p style="font-size:10px;color:#999;margin-top:24px;font-family:Arial;font-style:italic">CONSEILPREV — christophe.cerf@outlook.com — +33 6 60 69 21 45</p></body></html>';
+    + body + '<p style="font-size:10px;color:#999;margin-top:24px;font-family:Arial;font-style:italic">CONSEILPREV — christophe.cerf@outlook.com — +33 6 60 69 21 45</p><p style="font-size:9px;color:#888;font-family:Arial,sans-serif;font-style:italic;border-top:1px solid #eee;margin-top:20px;padding-top:8px">🤖 Contenu généré par IA (Sentinel AI / CONSEILPREV) — Art. 50 Règl. (UE) 2024/1689. Valider avec un expert avant toute décision.</p></body></html>';
 }
 window.raciDocPDF = function(){ var w = window.open("","_blank"); if(!w){alert("Autorisez les pop-ups.");return;} w.document.write(raciDocHTML()+'<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>'); w.document.close(); };
 window.raciDocWord = function(){ var d = window.__raciDoc; var blob = new Blob(['\ufeff'+raciDocHTML()],{type:"application/msword"}); var u = URL.createObjectURL(blob); var a = document.createElement("a"); a.href=u; a.download="Cartographie-parties-prenantes-"+d.sector.replace(/[^a-zA-Z]/g,"")+".doc"; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(u); };
@@ -8976,7 +8976,7 @@ function raciTableDocHTML(){
   raciGetProcesses().forEach(function(p){
     h += '<tr><td>'+p.label+'</td>'+raciGetRoles().map(function(r){ var v=RACI_STATE[p.id][r.id]||""; return '<td class="'+v+'">'+v+'</td>'; }).join("")+'</tr>';
   });
-  h += '</table></body></html>';
+  h += '</table></body><p style="font-size:9px;color:#888;font-family:Arial,sans-serif;font-style:italic;border-top:1px solid #eee;margin-top:20px;padding-top:8px">🤖 Contenu généré par IA (Sentinel AI / CONSEILPREV) — Art. 50 Règl. (UE) 2024/1689. Valider avec un expert avant toute décision.</p></html>';
   return h;
 }
 window.raciExportPDF = function(){ var w = window.open("","_blank"); if(!w){alert("Autorisez les pop-ups.");return;} w.document.write(raciTableDocHTML()+'<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>'); w.document.close(); };
