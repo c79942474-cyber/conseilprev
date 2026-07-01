@@ -1598,6 +1598,17 @@ textarea.form-el{min-height:86px;resize:vertical}
 .plans-billing-opt.active{color:var(--ink);background:var(--bg2);font-weight:700}
 .plans-annual-save{display:inline-block;background:rgba(45,122,71,.1);border:1px solid rgba(45,122,71,.25);border-radius:3px;padding:1px 6px;font-size:9px;color:var(--green);font-family:var(--mono);font-weight:700;margin-left:4px}
 
+
+/* CONTRÔLES GRAPHIQUE */
+.chart-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.chart-horizon-sel{font-family:var(--mono);font-size:11px;padding:5px 10px;border:1px solid var(--rule2);border-radius:5px;background:var(--bg);color:var(--ink);cursor:pointer;outline:none}
+.chart-view-toggle{display:flex;border:1px solid var(--rule2);border-radius:5px;overflow:hidden}
+.chart-view-btn{font-size:11px;font-family:var(--mono);padding:5px 12px;background:var(--bg);color:var(--muted2);cursor:pointer;border:none;transition:background .15s,color .15s}
+.chart-view-btn.active{background:var(--ink);color:#fff}
+.chart-eq-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(45,122,71,.1);border:1px solid rgba(45,122,71,.3);border-radius:4px;padding:3px 9px;font-size:10px;font-family:var(--mono);color:var(--green);font-weight:600;margin-left:auto}
+.chart-eq-badge.neg{background:rgba(196,124,26,.1);border-color:rgba(196,124,26,.3);color:var(--orange)}
+.chart-insight{margin-top:10px;font-size:11px;color:var(--muted2);text-align:center;font-family:var(--mono);min-height:16px}
+
 </style>
 
 </head>
@@ -2498,12 +2509,29 @@ textarea.form-el{min-height:86px;resize:vertical}
   <span class="prx-tip-icon" tabindex="0" style="margin-left:6px;vertical-align:middle">?<span class="prx-tip-bubble" style="left:0;transform:none"><strong>Historique des simulations</strong><br>Sauvegarde le calcul courant (paramètres + résultats) dans votre historique Sentinel persistant. Permet de comparer l'évolution de votre projection au fil du temps et de l'inclure dans vos rapports de conformité.</span></span>
 
   <div class="tbl-wrap" style="padding:24px;margin-top:20px">
-    <div class="tbl-head" style="border:none;padding:0 0 16px"><span class="tbl-title">Projection sur 6 mois — SaaS classique vs Hybride RaaS</span></div>
+    <div class="tbl-head" style="border:none;padding:0 0 12px">
+      <span class="tbl-title" id="pricing-chart-title">Projection sur 6 mois — SaaS vs Hybride RaaS</span>
+    </div>
+    <div class="chart-controls">
+      <select class="chart-horizon-sel" id="pricing-chart-horizon" onchange="pricingChartSetHorizon(parseInt(this.value))">
+        <option value="6" selected>6 mois</option>
+        <option value="12">12 mois</option>
+        <option value="18">18 mois</option>
+      </select>
+      <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble" style="width:220px"><strong>Horizon</strong><br>6 mois : premiers résultats.<br>12 mois : point d’équilibre cumulatif.<br>18 mois : cycle AI Act complet.</span></span>
+      <div class="chart-view-toggle">
+        <button class="chart-view-btn active" id="chart-btn-monthly" onclick="pricingChartSetView('monthly')">Mensuel</button>
+        <button class="chart-view-btn" id="chart-btn-cumul" onclick="pricingChartSetView('cumul')">Cumul</button>
+      </div>
+      <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble" style="width:220px"><strong>Vue</strong><br>Mensuelle : coût de chaque mois.<br>Cumulée : total depuis M1, révèle le mois où l’hybride devient avantageux.</span></span>
+      <span id="pricing-chart-eq-badge" class="chart-eq-badge" style="display:none">Équilibre</span>
+    </div>
     <div id="pricing-chart-legend" class="pricing-legend"></div>
-    <div style="position:relative;max-width:640px;margin:0 auto">
-      <svg id="pricing-chart-svg" viewBox="0 0 600 280" style="width:100%;display:block"></svg>
+    <div style="position:relative;max-width:680px;margin:0 auto">
+      <svg id="pricing-chart-svg" viewBox="0 0 640 300" style="width:100%;display:block"></svg>
       <div id="pricing-chart-tooltip" class="pricing-chart-tooltip" style="display:none"></div>
     </div>
+    <div id="pricing-chart-insight" class="chart-insight"></div>
   </div>
 
 
@@ -12804,65 +12832,154 @@ function pricingGetSectorPace(sector){
   return base * facteur;
 }
 
-function pricingRenderChart(saasMonthly, scenarios){
-  var svg = document.getElementById('pricing-chart-svg');
-  if(!svg) return;
-  var allTotals = [];
-  Object.keys(scenarios).forEach(function(k){ scenarios[k].forEach(function(h){ allTotals.push(h.total); }); });
-  var maxVal = Math.max(saasMonthly, allTotals.reduce(function(a,b){return Math.max(a,b);},0)) * 1.15;
-  var W=600,H=280,padL=50,padB=30,padT=20,padR=20;
-  var chartW=W-padL-padR, chartH=H-padT-padB;
-  var n = scenarios.realiste.length;
-  function y(v){ return padT+chartH-(v/maxVal)*chartH; }
-  function x(i){ return padL+(i/(n-1))*chartW; }
-
-  /* Legende HTML au-dessus du graphique */
-  var legendEl = document.getElementById('pricing-chart-legend');
-  if(legendEl){
-    var _sgl={pme:'PME',eti:'ETI',ge:'GE'}[window.__pricingSegment||'pme']||'PME';
-    var _bml=(window.__pricingBilling==='annual')?'annuel':'mensuel';
-    legendEl.innerHTML=
-        '<span class="pricing-legend-item" title="SaaS '+_sgl+' '+_bml+' — tarif fixe, indépendant des résultats"><span class="pricing-legend-swatch dashed" style="border-color:var(--muted2)"></span>SaaS '+_sgl+'</span>'
-      +'<span class="pricing-legend-item" title="Réaliste : socle (∵35 % SaaS) + variable calculée (Audit/sanctions/systèmes)"><span class="pricing-legend-swatch" style="border-color:var(--accent)"></span>Hybride — réaliste</span>'
-      +'<span class="pricing-legend-item" title="Pessimiste : progression 45 % plus lente que la médiane sectorielle"><span class="pricing-legend-swatch dashed" style="border-color:var(--accent);opacity:.6"></span>Hybride — pessimiste</span>'
-      +'<span class="pricing-legend-item" title="Optimiste : progression 50 % plus rapide (ISO 9001/27001)"><span class="pricing-legend-swatch dashed" style="border-color:var(--green);opacity:.6"></span>Hybride — optimiste</span>';
-  }
-
-  var gridLines=[0,0.25,0.5,0.75,1].map(function(f){
-    var yy=padT+chartH*(1-f);
-    var val = Math.round(maxVal*f);
-    return '<line x1="'+padL+'" y1="'+yy+'" x2="'+(padL+chartW)+'" y2="'+yy+'" stroke="var(--rule)" stroke-width="1"><title>Repère '+val+'€/mois</title></line>'
-      +'<text x="'+(padL-8)+'" y="'+(yy+4)+'" text-anchor="end" font-size="9" font-family="var(--mono)" fill="var(--muted2)">'+val+'€<title>Axe vertical : coût total mensuel en euros</title></text>';
-  }).join('');
-  var xLabels=scenarios.realiste.map(function(h,i){
-    return '<text x="'+x(i)+'" y="'+(padT+chartH+18)+'" text-anchor="middle" font-size="9" font-family="var(--mono)" fill="var(--muted2)">M'+(i+1)+'<title>Mois '+(i+1)+' de la projection — axe horizontal : temps depuis le debut du contrat</title></text>';
-  }).join('');
-
-  var saasLine = 'M'+padL+','+y(saasMonthly)+' L'+(padL+chartW)+','+y(saasMonthly);
-
-  function poly(arr){ return arr.map(function(h,i){ return x(i)+','+y(h.total); }).join(' '); }
-
-  /* Zones de survol invisibles elargies (rayon 10) sur chaque scenario, pour declencher le tooltip HTML */
-  function hoverZones(arr, label, color){
-    return arr.map(function(h,i){
-      return '<circle class="pricing-chart-hover-zone" cx="'+x(i)+'" cy="'+y(h.total)+'" r="10" '
-        + 'onmouseenter="pricingShowTooltip(event,\''+label+'\',\''+(i+1)+'\','+h.socle+','+h.variable+','+h.total+',\''+color+'\')" '
-        + 'onmouseleave="pricingHideTooltip()"></circle>';
-    }).join('');
-  }
-
-  svg.innerHTML = gridLines+xLabels
-    + '<path d="'+saasLine+'" stroke="var(--muted2)" stroke-width="2" stroke-dasharray="5,4" fill="none"><title>SaaS classique : '+({pme:'PME',eti:'ETI',ge:'GE'}[window.__pricingSegment||'pme']||'PME')+' '+(window.__pricingBilling==='annual'?'annuel':'mensuel')+' : '+saasMonthly.toLocaleString('fr-FR')+' €/mois fixe</title></path>'
-    + '<polyline points="'+poly(scenarios.pessimiste)+'" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="2,3" fill="none" opacity="0.6"/>'
-    + '<polyline points="'+poly(scenarios.optimiste)+'" stroke="var(--green)" stroke-width="1.5" stroke-dasharray="2,3" fill="none" opacity="0.6"/>'
-    + '<polyline points="'+poly(scenarios.realiste)+'" stroke="var(--accent)" stroke-width="2.5" fill="none"/>'
-    + scenarios.realiste.map(function(h,i){ return '<circle cx="'+x(i)+'" cy="'+y(h.total)+'" r="4" fill="var(--accent)"/>'; }).join('')
-    + hoverZones(scenarios.realiste, "Hybride — réaliste", "var(--accent)")
-    + hoverZones(scenarios.pessimiste, "Hybride — pessimiste", "var(--accent)")
-    + hoverZones(scenarios.optimiste, "Hybride — optimiste", "var(--green)")
-    + '<text x="'+(padL+chartW-4)+'" y="'+(y(saasMonthly)-8)+'" text-anchor="end" font-size="10" font-family="var(--mono)" fill="var(--muted2)">SaaS classique</text>'
-    + '<text x="'+x(n-1)+'" y="'+(y(scenarios.realiste[n-1].total)-12)+'" text-anchor="end" font-size="10" font-family="var(--mono)" fill="var(--accent)" font-weight="700">Hybride — réaliste</text>';
+function pricingRenderChart(saasMonthly,scenarios){
+  window.__scenariosCache=scenarios;
+  pricingRenderChartFull(saasMonthly,scenarios,window.__chartMonths||6,window.__chartView||'monthly');
 }
+
+function _pChartTag(tag,attrs,inner){
+  var s='<'+tag;
+  for(var k in attrs) s+=' '+k+'="'+attrs[k]+'"';
+  return inner!==undefined?s+'>'+inner+'</'+tag+'>':s+'/>';
+}
+
+function pricingRenderChartFull(saasMonthly,scenarios,months,view){
+  var svg=document.getElementById('pricing-chart-svg');if(!svg) return;
+  var n=months;
+  function pt(arr,i){var h=arr[Math.min(i,arr.length-1)];return h||{total:0,socle:0,variable:0};}
+  function buildS(arr){var out=[],cum=0,i;for(i=0;i<n;i++){var h=pt(arr,i);if(view==='cumul'){cum+=h.total;out.push({total:cum,socle:h.socle,variable:h.variable});}else{out.push({total:h.total,socle:h.socle,variable:h.variable});}}return out;}
+  function saasS(){var out=[],cum=0,i;for(i=0;i<n;i++){if(view==='cumul'){cum+=saasMonthly;out.push(cum);}else{out.push(saasMonthly);}}return out;}
+  var sR=buildS(scenarios.realiste),sP=buildS(scenarios.pessimiste),sO=buildS(scenarios.optimiste),sS=saasS();
+  var eqM=-1,cs=0,ch=0,ei;
+  if(view==='cumul'){for(ei=0;ei<n;ei++){cs+=saasMonthly;ch+=pt(scenarios.realiste,ei).total;if(ei>0&&ch<=cs){eqM=ei+1;break;}}}
+  var badge=document.getElementById('pricing-chart-eq-badge');
+  if(badge){if(view==='cumul'){badge.style.display='inline-flex';badge.className=eqM>0?'chart-eq-badge':'chart-eq-badge neg';badge.textContent=eqM>0?'Équilibre M'+eqM:'Non atteint sur '+n+' mois';}else{badge.style.display='none';}}
+  var titleEl=document.getElementById('pricing-chart-title');
+  if(titleEl) titleEl.textContent='Projection sur '+n+' mois — '+(view==='cumul'?'coûts cumulés':'coûts mensuels');
+  var insEl=document.getElementById('pricing-chart-insight');
+  if(insEl){var dF=sS[n-1]-sR[n-1].total;insEl.textContent=view==='cumul'?(dF>0?'Économie cumulée sur '+n+' mois : '+dF.toLocaleString('fr-FR')+' €':'Surécoût sur '+n+' mois : '+Math.abs(dF).toLocaleString('fr-FR')+' €'):'M'+n+' : SaaS '+saasMonthly.toLocaleString('fr-FR')+' €/mois vs Hybride '+sR[n-1].total.toLocaleString('fr-FR')+' €/mois';}
+  var allV=[],ai;for(ai=0;ai<n;ai++){allV.push(sR[ai].total,sP[ai].total,sO[ai].total,sS[ai]);}
+  var maxVal=Math.max.apply(null,allV)*1.12;
+  var W=640,H=300,padL=60,padB=34,padT=22,padR=22,cW=W-padL-padR,cH=H-padT-padB;
+  function yv(v){return padT+cH-(v/maxVal)*cH;}
+  function xv(i){return padL+(n<=1?0:i/(n-1))*cW;}
+  var _sgl={pme:'PME',eti:'ETI',ge:'GE'}[window.__pricingSegment||'pme']||'PME';
+  /* Mettre à jour la légende */
+  var legEl=document.getElementById('pricing-chart-legend');
+  if(legEl){
+    legEl.innerHTML='';
+    function addLeg(lbl,color,dashed,opacity){
+      var sp=document.createElement('span');
+      sp.className='pricing-legend-item';
+      if(opacity) sp.style.opacity=opacity;
+      var sw=document.createElement('span');
+      sw.className='pricing-legend-swatch'+(dashed?' dashed':'');
+      sw.style.borderColor=color;
+      sp.appendChild(sw);
+      sp.appendChild(document.createTextNode(lbl));
+      legEl.appendChild(sp);
+    }
+    addLeg('SaaS '+_sgl,'var(--muted2)',true,'');
+    addLeg('Hybride réaliste','var(--accent)',false,'');
+    addLeg('Pessimiste','var(--accent)',true,'0.6');
+    addLeg('Optimiste','var(--green)',true,'0.6');
+  }
+  /* Construire le SVG avec du texte simple (pas de innerHTML complexe) */
+  var parts=[];
+  /* Grilles */
+  var gi,yy,val;
+  for(gi=0;gi<=5;gi++){
+    var gf=gi/5;yy=padT+cH*(1-gf);val=Math.round(maxVal*gf);
+    var fmt=val>=10000?Math.round(val/1000)+'k':val;
+    parts.push('<line x1="'+padL+'" y1="'+yy+'" x2="'+(padL+cW)+'" y2="'+yy+'" stroke="var(--rule)" stroke-width="1"/>');
+    parts.push('<text x="'+(padL-5)+'" y="'+(yy+4)+'" text-anchor="end" font-size="9" font-family="var(--mono)" fill="var(--muted2)">'+fmt+'€</text>');
+  }
+  /* Labels X */
+  var step=n<=6?1:n<=12?2:3,xi;
+  for(xi=0;xi<n;xi++){if(xi===0||xi===n-1||(xi+1)%step===0){parts.push('<text x="'+xv(xi)+'" y="'+(padT+cH+18)+'" text-anchor="middle" font-size="9" font-family="var(--mono)" fill="var(--muted2)">M'+(xi+1)+'</text>');}}
+  /* Zone remplissage */
+  var fp1='',fp2='',fpi;
+  for(fpi=0;fpi<n;fpi++) fp1+=xv(fpi)+','+yv(sR[fpi].total)+' ';
+  for(fpi=n-1;fpi>=0;fpi--) fp2+=xv(fpi)+','+yv(sS[fpi])+' ';
+  var fillC=(sR[n-1].total<sS[n-1])?'rgba(45,122,71,.07)':'rgba(184,50,34,.05)';
+  parts.push('<polygon points="'+fp1+fp2+'" fill="'+fillC+'"/>');
+  /* Ligne SaaS */
+  var sY0=yv(sS[0]),sYn=yv(sS[n-1]);
+  parts.push('<line x1="'+padL+'" y1="'+sY0+'" x2="'+xv(n-1)+'" y2="'+sYn+'" stroke="var(--muted2)" stroke-width="2" stroke-dasharray="5,4"/>');
+  parts.push('<text x="'+(xv(n-1)-4)+'" y="'+(sY0-8)+'" text-anchor="end" font-size="9" font-family="var(--mono)" fill="var(--muted2)">SaaS '+_sgl+'</text>');
+  /* Courbes */
+  function polyL(arr,color,w,dash,op){
+    var pts='',pli;for(pli=0;pli<n;pli++) pts+=xv(pli)+','+yv(arr[pli].total)+' ';
+    return '<polyline points="'+pts+'" stroke="'+color+'" stroke-width="'+w+'"'+(dash?' stroke-dasharray="'+dash+'"':'')+' fill="none"'+(op?' opacity="'+op+'"':'')+'/>';
+  }
+  parts.push(polyL(sP,'var(--accent)',1.5,'2,3','0.5'));
+  parts.push(polyL(sO,'var(--green)',1.5,'2,3','0.5'));
+  parts.push(polyL(sR,'var(--accent)',2.5,'',''));
+  /* Points */
+  var di;for(di=0;di<n;di++) parts.push('<circle cx="'+xv(di)+'" cy="'+yv(sR[di].total)+'" r="3.5" fill="var(--accent)"/>');
+  /* Marqueur équilibre */
+  if(view==='cumul'&&eqM>0&&eqM<=n){
+    var ex=xv(eqM-1),ey=yv(sR[eqM-1].total);
+    parts.push('<line x1="'+ex+'" y1="'+padT+'" x2="'+ex+'" y2="'+(padT+cH)+'" stroke="var(--green)" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.8"/>');
+    parts.push('<circle cx="'+ex+'" cy="'+ey+'" r="5" fill="var(--green)"/>');
+    parts.push('<text x="'+(ex+7)+'" y="'+(ey-6)+'" font-size="9" font-family="var(--mono)" fill="var(--green)" font-weight="700">Équilibre M'+eqM+'</text>');
+  }
+  /* Hover zones via DOM (évite les problèmes de guillemets dans innerHTML) */
+  svg.setAttribute('viewBox','0 0 '+W+' '+H);
+  svg.innerHTML=parts.join('');
+  /* Ajouter les zones de survol via createElement */
+  function addHover(arr,lbl,col){
+    var hzi;
+    for(hzi=0;hzi<n;hzi++){
+      var c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+      c.setAttribute('cx',xv(hzi));c.setAttribute('cy',yv(arr[hzi].total));c.setAttribute('r','10');
+      c.setAttribute('class','pricing-chart-hover-zone');
+      (function(h,m2,cl){
+        c.addEventListener('mouseenter',function(e){pricingShowTooltip(e,lbl,String(m2),h.socle,h.variable,h.total,cl);});
+        c.addEventListener('mouseleave',pricingHideTooltip);
+      })(arr[hzi],hzi+1,col);
+      svg.appendChild(c);
+    }
+  }
+  addHover(sR,'Hybride réaliste','var(--accent)');
+  addHover(sP,'Hybride pessimiste','var(--accent)');
+  addHover(sO,'Hybride optimiste','var(--green)');
+}
+
+window.__chartMonths=6;window.__chartView='monthly';window.__scenariosCache=null;
+
+window.pricingChartSetHorizon=function(months){
+  window.__chartMonths=months;
+  var nb=parseInt((document.getElementById('pricing-nb-systemes')||{value:'10'}).value||'10',10);
+  var ad=parseInt((document.getElementById('pricing-audit-depart')||{value:'20'}).value||'20',10);
+  var ca=parseInt((document.getElementById('pricing-ca')||{value:'50000000'}).value||'50000000',10);
+  var sec=(document.getElementById('pricing-secteur')&&document.getElementById('pricing-secteur').value)||'it';
+  var seg=(document.getElementById('pricing-segment')&&document.getElementById('pricing-segment').value)||'pme';
+  var bi=window.__pricingBilling||'monthly';
+  var pt2=window.__pricingPoidsTotal!==undefined?window.__pricingPoidsTotal:nb;
+  var saasM=pricingComputeSaaS(nb,sec,bi,seg);
+  var pace=pricingGetSectorPace(sec)/8;
+  var newSc={pessimiste:pricingProjectScenario(ad,pace*0.55,ca,nb,pt2,months,seg,sec),realiste:pricingProjectScenario(ad,pace,ca,nb,pt2,months,seg,sec),optimiste:pricingProjectScenario(ad,pace*1.5,ca,nb,pt2,months,seg,sec)};
+  window.__scenariosCache=newSc;
+  pricingRenderChartFull(saasM,newSc,months,window.__chartView||'monthly');
+};
+
+window.pricingChartSetView=function(view){
+  window.__chartView=view;
+  var bM=document.getElementById('chart-btn-monthly'),bC=document.getElementById('chart-btn-cumul');
+  if(bM) bM.classList.toggle('active',view==='monthly');
+  if(bC) bC.classList.toggle('active',view==='cumul');
+  var months=window.__chartMonths||6;
+  var sec=(document.getElementById('pricing-secteur')&&document.getElementById('pricing-secteur').value)||'it';
+  var seg=(document.getElementById('pricing-segment')&&document.getElementById('pricing-segment').value)||'pme';
+  var bi=window.__pricingBilling||'monthly';
+  var nb=parseInt((document.getElementById('pricing-nb-systemes')||{value:'10'}).value||'10',10);
+  var saasM=pricingComputeSaaS(nb,sec,bi,seg);
+  var cache=window.__scenariosCache;
+  if(!cache){window.pricingChartSetHorizon(months);return;}
+  pricingRenderChartFull(saasM,cache,months,view);
+};
+
 
 window.pricingShowTooltip = function(evt, label, month, socle, variable, total, color){
   var tt = document.getElementById('pricing-chart-tooltip');
@@ -13061,7 +13178,10 @@ window.pricingSimulate = function(){
       + '<div class="radar-registre-info radar-registre-ok" style="margin-top:14px">📊 Socle hybride : <strong>' + finalR.socle.toLocaleString('fr-FR') + ' €/mois</strong> (∵35 % du SaaS ' + ({pme:'PME',eti:'ETI',ge:'Grands comptes'}[segment]||segment) + ' — secteur <strong>' + sectorLabel + '</strong>). Part variable plafonnée à 3× le socle. Systèmes pondérés par classification. <strong>Outil d’aide à la décision commerciale — pas un engagement contractuel.</strong></div>';
   }
 
-  pricingRenderChart(saasMonthly, scenarios);
+  var _hm=window.__chartMonths||6;
+  if(_hm>months){scenarios={pessimiste:pricingProjectScenario(auditDepart,pace*0.55,caAnnuel,nbSystemes,poidsTotal,_hm,segment,sector),realiste:pricingProjectScenario(auditDepart,pace,caAnnuel,nbSystemes,poidsTotal,_hm,segment,sector),optimiste:pricingProjectScenario(auditDepart,pace*1.5,caAnnuel,nbSystemes,poidsTotal,_hm,segment,sector)};}
+  window.__scenariosCache=scenarios;
+  pricingRenderChart(saasMonthly,scenarios);
 };
 
 window.pricingSetEstim = function(val){
