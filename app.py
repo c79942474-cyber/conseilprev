@@ -2929,7 +2929,7 @@ def sentauth_init_db():
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS verify_email_expire TEXT")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS rgpd_consenti BOOLEAN DEFAULT FALSE")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS rgpd_consenti_date TEXT")
-            cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS plan TEXT DEFAULT 'pro'")
+            cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS plan TEXT DEFAULT 'gratuit'")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS reset_token TEXT")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS reset_expire TEXT")
             conn.commit()
@@ -3004,7 +3004,7 @@ def sentauth_current_client():
     if not row:
         return None
     d = dict(row) if not isinstance(row, dict) else row
-    return {'is_conseilprev': False, 'id': d['id'], 'nom_entreprise': d['nom_entreprise'], 'email': d['email'], 'plan': d.get('plan') or 'pro'}
+    return {'is_conseilprev': False, 'id': d['id'], 'nom_entreprise': d['nom_entreprise'], 'email': d['email'], 'plan': d.get('plan') or 'gratuit'}
 
 def sentinel_login_required(f):
     @wraps(f)
@@ -3029,7 +3029,7 @@ def require_paid_plan(f):
             return jsonify({'error': 'Authentification requise.'}), 401
         if client.get('is_conseilprev'):
             return f(*args, **kwargs)
-        if (client.get('plan') or 'pro') == 'gratuit':
+        if (client.get('plan') or 'gratuit') == 'gratuit':
             return jsonify({'error': 'Cette fonctionnalite necessite un plan Pro ou Entreprise.', 'plan_requis': True}), 403
         return f(*args, **kwargs)
     return wrapper
@@ -3825,9 +3825,9 @@ def sentauth_register():
     password = data.get('password') or ''
     rgpd_consent = bool(data.get('rgpd_consent'))
     captcha_answer = data.get('captcha_answer')
-    plan = (data.get('plan') or 'pro').strip().lower()
-    if plan not in ('gratuit', 'pro', 'entreprise'):
-        plan = 'pro'
+    # Toute inscription publique est forcée au plan Gratuit.
+    # Seul CONSEILPREV peut attribuer un plan supérieur via l'interface admin.
+    plan = 'gratuit'
 
     try:
         if int(captcha_answer) != session.get('register_captcha_answer'):
