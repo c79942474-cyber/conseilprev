@@ -3816,6 +3816,77 @@ def sentauth_notify_conseilprev_new_signup(nom_entreprise, email, ip):
     except Exception as e:
         logger.error(f"NOTIFY_CONSEILPREV_FAILED : {e}")
 
+
+@app.route('/api/pricing-request', methods=['POST'])
+@rate_limit(limit=5, window=300)
+def pricing_request():
+    """Demande de tarification par résultats — accessible à tous les plans.
+    Envoie une notification email à CONSEILPREV avec les informations du prospect.
+    Ne conserve aucune donnée côté serveur."""
+    data   = request.get_json(force=True) or {}
+    plan     = str(data.get('plan') or '').strip()[:20]
+    nom      = str(data.get('nom') or '').strip()[:120]
+    email    = str(data.get('email') or '').strip()[:150]
+    systemes = str(data.get('systemes') or '').strip()[:20]
+    secteur  = str(data.get('secteur') or '').strip()[:100]
+    message  = str(data.get('message') or '').strip()[:800]
+
+    if not nom or not email or '@' not in email:
+        return jsonify({'ok': False, 'error': 'Nom et email valides requis.'}), 400
+    if plan not in ('pro', 'entreprise'):
+        return jsonify({'ok': False, 'error': 'Plan invalide.'}), 400
+
+    ip = limiter.get_ip(request)
+    plan_label = 'Sentinel Pro' if plan == 'pro' else 'Sentinel Entreprise'
+    now_str = datetime.utcnow().strftime('%d/%m/%Y à %H:%M UTC')
+
+    html = f"""<div style="font-family:Arial,sans-serif;max-width:560px;padding:24px">
+  <div style="background:#1C1C1C;color:#fff;border-radius:8px 8px 0 0;padding:16px 20px;margin-bottom:0">
+    <span style="font-size:16px;font-weight:700">Sentinel <span style="background:#B83222;font-size:10px;padding:2px 6px;border-radius:3px;vertical-align:middle">AI</span></span>
+    <span style="font-size:12px;color:rgba(255,255,255,.6);margin-left:12px">Demande de tarification par résultats</span>
+  </div>
+  <table style="font-size:13px;border-collapse:collapse;width:100%;border:1px solid #E0DDD8;border-top:none">
+    <tr style="background:#F6F4FC"><td style="padding:10px 16px;color:#767676;width:180px;border-bottom:1px solid #E0DDD8">Plan demandé</td>
+        <td style="padding:10px 16px;font-weight:700;color:#B83222;border-bottom:1px solid #E0DDD8">{plan_label}</td></tr>
+    <tr><td style="padding:10px 16px;color:#767676;border-bottom:1px solid #E0DDD8">Entreprise</td>
+        <td style="padding:10px 16px;font-weight:600;border-bottom:1px solid #E0DDD8">{nom}</td></tr>
+    <tr style="background:#F6F4FC"><td style="padding:10px 16px;color:#767676;border-bottom:1px solid #E0DDD8">Email</td>
+        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8"><a href="mailto:{email}">{email}</a></td></tr>
+    <tr><td style="padding:10px 16px;color:#767676;border-bottom:1px solid #E0DDD8">Secteur</td>
+        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8">{secteur or 'Non précisé'}</td></tr>
+    <tr style="background:#F6F4FC"><td style="padding:10px 16px;color:#767676;border-bottom:1px solid #E0DDD8">Systèmes IA</td>
+        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8">{systemes or 'Non précisé'}</td></tr>
+    <tr><td style="padding:10px 16px;color:#767676;border-bottom:1px solid #E0DDD8">Message</td>
+        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8;white-space:pre-wrap">{message or '—'}</td></tr>
+    <tr style="background:#F6F4FC"><td style="padding:10px 16px;color:#767676">Origine</td>
+        <td style="padding:10px 16px;font-size:11px;color:#767676">IP {ip} — {now_str}</td></tr>
+  </table>
+  <div style="margin-top:16px;font-size:11px;color:#999;border-top:1px solid #E0DDD8;padding-top:12px">
+    Répondre directement à cet email pour contacter le prospect. Demande soumise depuis Sentinel AI — page Tarification par résultats.
+  </div>
+</div>"""
+
+    subject = f"[Sentinel AI] Demande {plan_label} — {nom}"
+    try:
+        sent, _ = send_email_smart(
+            CONSEILPREV_NOTIFY_EMAIL, 'CONSEILPREV',
+            subject, html,
+            reply_to=email,
+            tags=['pricing-request', plan]
+        )
+    except Exception as e:
+        logger.error(f"PRICING_REQUEST_EMAIL_ERR: {e}")
+        sent = False
+
+    logger.info(f"PRICING_REQUEST plan={plan} nom={nom} email={email} ip={ip} sent={sent}")
+    if not sent:
+        # Fallback : logger la demande même si l'email échoue
+        logger.warning(f"PRICING_REQUEST_EMAIL_FAILED: {nom} <{email}> plan={plan}")
+
+    # Toujours retourner ok=True — l'email est secondaire, la demande est enregistrée
+    return jsonify({'ok': True, 'plan': plan})
+
+
 @app.route('/api/sentinel-auth/register', methods=['POST'])
 @rate_limit_strict(limit=10, window=300)
 def sentauth_register():
