@@ -306,7 +306,7 @@ def add_security_headers(response):
         "font-src 'self' https://fonts.gstatic.com; "
         "img-src 'self' data: blob: https:; "
         "media-src 'self' blob:; "
-        "connect-src 'self' https://api.mistral.ai https://api.anthropic.com https://api.rss2json.com https://rss2json.com https://basemaps.cartocdn.com https://*.basemaps.cartocdn.com; "
+        "connect-src 'self' https://api.mistral.ai https://api.anthropic.com https://api.rss2json.com https://rss2json.com https://api.allorigins.win https://basemaps.cartocdn.com https://*.basemaps.cartocdn.com; "
         "frame-ancestors 'self'; "
         "frame-src 'self'; "
         "base-uri 'self'; "
