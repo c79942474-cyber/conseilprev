@@ -2951,7 +2951,29 @@ def sentauth_init_db():
             mot_de_passe_hash TEXT NOT NULL, actif INTEGER DEFAULT 1,
             date_creation TEXT NOT NULL, derniere_connexion TEXT
         )''')
-    conn.commit()
+    # ── Migration : forcer plan='gratuit' sur les comptes créés avant
+    # la correction (commit 0fe43de0). Tout compte public doit démarrer
+    # au plan Gratuit — seul CONSEILPREV attribue pro/entreprise via admin.
+    try:
+        cur2 = conn.cursor() if not REGISTRE_USE_PG else conn.cursor()
+        if REGISTRE_USE_PG:
+            cur2.execute(
+                "UPDATE clients SET plan='gratuit' WHERE plan IS NULL OR plan='pro' OR plan='entreprise' "                "AND email != %s",
+                (CONSEILPREV_INTERNAL_EMAIL,)
+            )
+        else:
+            cur2.execute(
+                "UPDATE clients SET plan='gratuit' WHERE (plan IS NULL OR plan='pro' OR plan='entreprise') "                "AND email != ?",
+                (CONSEILPREV_INTERNAL_EMAIL,)
+            )
+        n = cur2.rowcount
+        conn.commit()
+        if n > 0:
+            logger.info(f"MIGRATION_PLAN: {n} compte(s) remis au plan gratuit")
+    except Exception as _m:
+        try: conn.rollback()
+        except: pass
+        logger.error(f"MIGRATION_PLAN_ERR: {_m}")
     conn.close()
 
 try:
@@ -3014,7 +3036,25 @@ def sentauth_current_client():
     if not row:
         return None
     d = dict(row) if not isinstance(row, dict) else row
-    return {'is_conseilprev': False, 'id': d['id'], 'nom_entreprise': d['nom_entreprise'], 'email': d['email'], 'plan': d.get('plan') or 'gratuit'}
+    raw_plan = d.get('plan') or 'gratuit'
+    # Sécurité : un compte public ne peut avoir que 'gratuit'.
+    # Pro/Entreprise ne sont attribués que via l'interface admin CONSEILPREV.
+    safe_plan = raw_plan if raw_plan in ('gratuit', 'pro', 'entreprise') else 'gratuit'
+    # Protection supplémentaire : si plan non-gratuit sans invitation admin → forcer gratuit
+    # (détecte les comptes créés avant la correction)
+    if safe_plan in ('pro', 'entreprise'):
+        # Vérifier qu'une invitation admin a bien été utilisée (invitation_token=NULL = activé via admin)
+        # Les comptes créés via l'API publique n'ont pas de invitation_token
+        # ET ont un verify_email_token (flux email vérif) → plan forcé à gratuit
+        had_verify_email = d.get('verify_email_token') is not None or d.get('verify_email_expire') is not None
+        # Comptes créés via le flux public (avec vérif email) → gratuit seulement
+        # Comptes créés via invitation admin → plan conservé
+        was_invited = d.get('invitation_token') is None and not had_verify_email
+        # Conserver le plan si créé par invitation admin OU si pas de token de vérif email
+        # (ce qui indique une création admin directe)
+        if not was_invited and safe_plan != 'gratuit':
+            safe_plan = 'gratuit'
+    return {'is_conseilprev': False, 'id': d['id'], 'nom_entreprise': d['nom_entreprise'], 'email': d['email'], 'plan': safe_plan}
 
 def sentinel_login_required(f):
     @wraps(f)
