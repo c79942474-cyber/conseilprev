@@ -5119,29 +5119,45 @@ function ftNlSubmit(e){
     if(items)  { items.innerHTML = ""; }
     document.getElementById("vstatus-txt").textContent = "Chargement…";
 
-    fetch("/api/news")
-      .then(function(r){
-        if(!r.ok) throw new Error("HTTP " + r.status);
-        return r.json();
-      })
-      .then(function(data){
-        V_LOADING = false;
-        if(loading) loading.style.display = "none";
-        if(data && data.items && data.items.length){
-          V_ITEMS = data.items;
-          vRender();
-          document.getElementById("vstatus-txt").textContent =
-            data.count + " actualités · " +
-            new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
-        } else {
-          vShowError("Aucune actualité disponible. Cliquez ↻ pour réessayer.");
-        }
-      })
-      .catch(function(){
-        V_LOADING = false;
-        if(loading) loading.style.display = "none";
-        vShowError("Erreur de connexion. Cliquez ↻ pour réessayer.");
-      });
+    var attempts = 0;
+
+    function doFetch(){
+      attempts++;
+      if(loading && attempts > 1){
+        loading.innerHTML = "<div class=\"vspinner\"></div>Redémarrage du serveur… "
+          + attempts + "/3 (" + (attempts * 8) + "s)";
+      }
+      fetch("/api/news")
+        .then(function(r){
+          if(!r.ok) throw new Error("HTTP " + r.status);
+          return r.json();
+        })
+        .then(function(data){
+          V_LOADING = false;
+          if(loading){ loading.style.display = "none"; loading.innerHTML = "<div class=\"vspinner\"></div>Chargement des actualités…"; }
+          if(data && data.items && data.items.length){
+            V_ITEMS = data.items;
+            vRender();
+            document.getElementById("vstatus-txt").textContent =
+              data.count + " actualités · " +
+              new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
+          } else {
+            vShowError("Aucune actualité disponible. Cliquez ↻ pour réessayer.");
+          }
+        })
+        .catch(function(){
+          if(attempts < 3){
+            /* Serveur Render peut démarrer à froid — réessayer après 8s */
+            setTimeout(doFetch, 8000);
+          } else {
+            V_LOADING = false;
+            if(loading){ loading.style.display = "none"; loading.innerHTML = "<div class=\"vspinner\"></div>Chargement des actualités…"; }
+            vShowError("Service temporairement indisponible. Cliquez ↻ pour réessayer.");
+          }
+        });
+    }
+
+    doFetch();
   }
 
   function vShowError(msg){
