@@ -5135,6 +5135,59 @@ def forbidden(e):
 def too_many(e):
     return jsonify({"error": "Trop de requêtes. Réessayez dans quelques minutes."}), 429
 
+# ── Warm-up RSS au démarrage ──────────────────────────────────────────────────
+# Le plan gratuit Render met le service en veille ; au redémarrage à froid,
+# le premier appel /api/news prendrait 30-50s. Ce thread pré-charge le cache
+# en arrière-plan dès le boot, sans bloquer le démarrage de Flask.
+def _news_warmup():
+    import time as _t
+    _t.sleep(5)          # laisser Flask finir de démarrer
+    try:
+        import io as _io
+        _headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+            "Accept": "application/rss+xml, application/xml, text/xml, application/atom+xml, */*;q=0.8",
+            "Accept-Language": "fr-FR,fr;q=0.9,en;q=0.8",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+        }
+        all_items = []
+        for src in RSS_SOURCES:
+            try:
+                resp = requests.get(src["url"], headers=_headers, timeout=7, allow_redirects=True)
+                if resp.status_code != 200:
+                    continue
+                feed = feedparser.parse(_io.BytesIO(resp.content))
+                for entry in (feed.entries or [])[:8]:
+                    title = entry.get("title", "").strip()
+                    if not title: continue
+                    all_items.append({
+                        "title":  title,
+                        "link":   entry.get("link") or entry.get("id") or "#",
+                        "date":   entry.get("published") or entry.get("updated") or "",
+                        "source": src["name"],
+                        "ico":    src["ico"],
+                        "cat":    _detect_cat(title, src["cat"]),
+                        "lang":   src.get("lang", "fr"),
+                    })
+            except Exception:
+                pass
+        seen, unique = set(), []
+        for item in sorted(all_items, key=lambda x: x.get("date",""), reverse=True):
+            key = item["title"][:60]
+            if key not in seen:
+                seen.add(key)
+                unique.append(item)
+        if unique:
+            global _news_cache
+            _news_cache = {"data": unique[:60], "ts": _t.time()}
+            logger.info(f"[warmup] RSS pré-chargé : {len(unique)} articles")
+    except Exception as exc:
+        logger.warning(f"[warmup] Echec pre-chargement RSS : {exc}")
+
+threading.Thread(target=_news_warmup, daemon=True).start()
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
