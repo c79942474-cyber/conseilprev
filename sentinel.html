@@ -12728,6 +12728,9 @@ var PRICING_PARAMS = {
   classifWeight: { inacceptable: 1.6, haut: 1.4, limite: 1.0, minimal: 0.6, a_evaluer: 0.8 }
 };
 
+/* Exposer PRICING_PARAMS globalement pour les modules tiers (comparaison plans, etc.) */
+window.PRICING_PARAMS = PRICING_PARAMS;
+
 /* Vitesse de progression mensuelle de base par secteur (pts/mois), modulee ensuite
    par le score de maturite organisationnelle reel du secteur (matGlobalScore). */
 var SECTOR_PACE = {
@@ -13137,18 +13140,20 @@ function _t(h){return '<span class="prx-tip-icon" tabindex="0" style="margin-lef
 window.plansRender=function(){
   var el=document.getElementById('plans-grid-container');
   if(!el) return;
+  var PP=window.PRICING_PARAMS;
+  if(!PP){ setTimeout(window.plansRender,200); return; } /* PRICING_PARAMS pas encore chargé */
   var bi=window.__plansBilling||'monthly';
   var sec=(document.getElementById('pricing-secteur')&&document.getElementById('pricing-secteur').value)||'it';
   var seg=(document.getElementById('pricing-segment')&&document.getElementById('pricing-segment').value)||'pme';
   var cS=seg.charAt(0).toUpperCase()+seg.slice(1);
-  var bM=PRICING_PARAMS['saas'+cS+'Base']||PRICING_PARAMS.saasPmeBase||{};
-  var sM=(PRICING_PARAMS.hybridSocleBySegSector&&PRICING_PARAMS.hybridSocleBySegSector[seg])||{};
-  var aD=(PRICING_PARAMS.annualDiscount&&PRICING_PARAMS.annualDiscount[sec])||0.15;
-  var sm=bM[sec]||PRICING_PARAMS.saasBase||350;
+  var bM=PP['saas'+cS+'Base']||PP.saasPmeBase||{};
+  var sM=(PP.hybridSocleBySegSector&&PP.hybridSocleBySegSector[seg])||{};
+  var aD=(PP.annualDiscount&&PP.annualDiscount[sec])||0.15;
+  var sm=bM[sec]||PP.saasBase||350;
   var sa=Math.round(sm*(1-aD));
   var cur=(bi==='annual')?sa:sm;
-  var so=(sM[sec]||PRICING_PARAMS.hybridSocle||122);
-  var cp=so*(PRICING_PARAMS.hybridVariableCapMultiplier||3);
+  var so=(sM[sec]||PP.hybridSocle||122);
+  var cp=so*(PP.hybridVariableCapMultiplier||3);
   var mx=so+cp;
   var ap=Math.round(aD*100);
   var sl={pme:'PME',eti:'ETI',ge:'Grands comptes'}[seg]||seg;
@@ -13196,11 +13201,19 @@ window.plansSetBilling=function(mode){
 };
 var _oPS=window.pricingSimulate;
 window.pricingSimulate=function(){if(_oPS) _oPS.apply(this,arguments); if(window.plansRender) window.plansRender();};
+/* Déclencher plansRender() au DOMContentLoaded et à chaque go('pricing') */
+document.addEventListener('DOMContentLoaded', function(){
+  if(window.PRICING_PARAMS && document.getElementById('plans-grid-container')){
+    window.__plansBilling='monthly';
+    window.plansRender();
+  }
+});
 var _oPI=window.pricingInitPage;
 window.pricingInitPage=function(){
   if(_oPI) _oPI.apply(this,arguments);
   window.__plansBilling=(function(){var t=document.getElementById('pricing-billing-toggle');return(t&&t.checked)?'annual':'monthly';})();
-  if(window.plansRender) window.plansRender();
+  /* Déclencher plansRender avec un léger délai pour laisser le DOM s'installer */
+  setTimeout(function(){ if(window.plansRender) window.plansRender(); }, 50);
 };
 })();
 
