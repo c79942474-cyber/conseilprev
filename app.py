@@ -68,26 +68,36 @@ class RateLimiter:
         logger.warning(f"BLOCKED {ip} for {duration}s — {reason}")
 
     def check(self, ip, limit=60, window=60, endpoint=''):
-        """Retourne True si la requête est autorisée."""
+        """Retourne True si la requête est autorisée.
+        Clé par (ip, endpoint) pour ne pas pénaliser globalement
+        une IP active sur plusieurs routes différentes.
+        3 dépassements successifs avant le 1er blocage (30s).
+        """
         if self.is_blocked(ip):
             return False
         now = time.time()
-        # Decroissance : une violation vieille de plus de 1h ne compte plus dans l escalade.
-        # Evite qu un usage legitime mais intensif (tests, navigation rapide) ne s aggrave
-        # indefiniment au fil du temps.
-        if ip in self.last_violation and now - self.last_violation[ip] > 3600:
-            self.violations[ip] = 0
-        # Nettoyer les anciennes requêtes
-        self.requests[ip] = [t for t in self.requests[ip] if now - t < window]
-        self.requests[ip].append(now)
-        count = len(self.requests[ip])
+        # Clé par route pour isoler les compteurs par endpoint
+        key = f"{ip}:{endpoint}" if endpoint else ip
+        # Décroissance : violation vieille de plus de 2h réinitialisée
+        viol_key = f"viol:{key}"
+        if viol_key in self.last_violation and now - self.last_violation[viol_key] > 7200:
+            self.violations[viol_key] = 0
+        # Nettoyer les anciennes requêtes de cette clé
+        self.requests[key] = [t for t in self.requests[key] if now - t < window]
+        self.requests[key].append(now)
+        count = len(self.requests[key])
         if count > limit:
-            self.violations[ip] += 1
-            self.last_violation[ip] = now
-            if self.violations[ip] >= 5:
-                self.block(ip, 300, f'repeat_rate_limit on {endpoint}')
-            else:
-                self.block(ip, 30, f'rate_limit on {endpoint}')
+            self.violations[viol_key] = self.violations.get(viol_key, 0) + 1
+            self.last_violation[viol_key] = now
+            viol_count = self.violations[viol_key]
+            # Tolérance : 3 dépassements avant le 1er blocage IP global
+            if viol_count >= 8:
+                self.block(ip, 600, f'repeat_rate_limit on {endpoint}')  # 10 min
+            elif viol_count >= 5:
+                self.block(ip, 120, f'rate_limit on {endpoint}')         # 2 min
+            elif viol_count >= 3:
+                self.block(ip, 30, f'rate_limit on {endpoint}')          # 30 s
+            # 1-2 violations : ralentir sans bloquer (pas de block())
             return False
         return True
 
@@ -1378,7 +1388,7 @@ def send_validation_email(email, prenom, token):
 @app.route('/api/auth/register', methods=['POST'])
 def auth_register():
     ip = limiter.get_ip(request)
-    if not limiter.check_soft(ip, limit=10, window=600):
+    if not limiter.check_soft(ip, limit=20, window=600):
         return jsonify({'ok': False, 'error': 'Trop de tentatives, réessayez plus tard'}), 429
     try:
         d = request.get_json(force=True, silent=True) or {}
@@ -2445,7 +2455,7 @@ def ai_complete(messages, system='', max_tokens=800, temperature=0.7, prefer='cl
 
 
 @app.route('/api/news')
-@rate_limit(limit=30, window=60)
+@rate_limit(limit=60, window=60)
 def news():
     global _news_cache
     now = time.time()
@@ -2506,7 +2516,7 @@ def news():
 
 
 @app.route('/api/news/digest', methods=['GET'])
-@rate_limit(limit=10, window=60)
+@rate_limit(limit=20, window=60)
 def news_digest():
     """Synthèse IA des actualités du jour (Claude primaire, Mistral fallback).
     Mise en cache 1h pour limiter les appels API."""
@@ -2661,7 +2671,7 @@ def api_match():
 
 
 @app.route('/api/chat', methods=['POST'])
-@rate_limit(limit=10, window=60)
+@rate_limit(limit=15, window=60)
 def chat():
     ip = limiter.get_ip(request)
     # Brute force protection
@@ -3361,7 +3371,7 @@ def sentauth_send_login_alert(email, nom_entreprise, ip):
         logger.error(f"LOGIN_ALERT_EMAIL_FAILED {email} : {e}")
 
 @app.route('/api/sentinel-auth/login', methods=['POST'])
-@rate_limit_strict(limit=15, window=300)
+@rate_limit_strict(limit=20, window=300)
 def sentauth_login():
     data = request.get_json(force=True) or {}
     email = (data.get('email') or '').strip().lower()
@@ -3419,11 +3429,13 @@ def sentauth_login():
     return jsonify({'ok': True, 'nom_entreprise': d['nom_entreprise']})
 
 @app.route('/api/sentinel-auth/logout', methods=['POST'])
+@rate_limit(limit=30, window=60)
 def sentauth_logout():
     session.clear()
     return jsonify({'ok': True})
 
 @app.route('/api/sentinel-auth/me', methods=['GET'])
+@rate_limit(limit=120, window=60)
 def sentauth_me():
     check_pending_reports()  # verifie les rapports en attente a chaque chargement de page
     client = sentauth_current_client()
@@ -3818,7 +3830,7 @@ def sentauth_notify_conseilprev_new_signup(nom_entreprise, email, ip):
 
 
 @app.route('/api/pricing-request', methods=['POST'])
-@rate_limit(limit=5, window=300)
+@rate_limit(limit=10, window=300)
 def pricing_request():
     """Demande de tarification par résultats — accessible à tous les plans.
     Envoie une notification email à CONSEILPREV avec les informations du prospect.
@@ -4365,7 +4377,7 @@ def registre_row_to_dict_partial(row):
 
 @app.route('/api/veille/qualifiee', methods=['GET'])
 @require_paid_plan
-@rate_limit(limit=15, window=60)
+@rate_limit(limit=30, window=60)
 def veille_qualifiee():
     """Scoring de pertinence IA des actualites par rapport au registre reel du client.
     Mise en cache 30 min par client pour limiter les appels API."""
@@ -4494,7 +4506,7 @@ def notifications_summary():
     })
 
 @app.route('/api/veille/notifier', methods=['POST'])
-@rate_limit(limit=10, window=60)
+@rate_limit(limit=20, window=60)
 def veille_notifier():
     """Genere un lien mailto pre-rempli avec les alertes haut-impact (cote serveur, formatage uniquement)."""
     data = request.get_json(force=True) or {}
@@ -4667,7 +4679,7 @@ def historique_update(calc_id):
 
 @app.route('/api/historique/<int:calc_id>', methods=['DELETE'])
 @require_paid_plan
-@rate_limit(limit=30, window=60)
+@rate_limit(limit=60, window=60)
 def historique_delete(calc_id):
     """Droit a l effacement (Art. 17 RGPD) — suppression manuelle a la demande du client."""
     conn = registre_get_db()
