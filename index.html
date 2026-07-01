@@ -507,11 +507,8 @@ footer::after{
   pointer-events:none}
 .avenir-img-bg{
   position:absolute;inset:0;width:100%;height:100%;
-  object-fit:cover;object-position:center center;
-  opacity:.13;
-  mix-blend-mode:screen;
-  filter:grayscale(20%);
   pointer-events:none;z-index:0;
+  overflow:hidden;
 }
 .avenir-inner{position:relative;z-index:1;max-width:700px;margin:0 auto}
 .avenir-title{font-family:"Cormorant Garamond",serif;font-size:clamp(52px,9vw,112px);font-weight:700;line-height:.9;letter-spacing:-.035em;color:var(--wh);margin-bottom:8px}
@@ -4269,14 +4266,85 @@ em,.hero-em{
 
 <section class="avenir-sec" id="avenir">
   <div class="avenir-bg">
-    <img
-      src="https://i-aes.com/wp-content/uploads/2026/04/ersia-ia-management-69e37bbee6887.png"
-      alt=""
-      aria-hidden="true"
-      class="avenir-img-bg"
-      loading="lazy"
-      onerror="this.style.display='none'"
-    >
+    <svg class="avenir-img-bg" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <radialGradient id="ag1" cx="50%" cy="50%" r="55%">
+          <stop offset="0%" stop-color="#c084fc" stop-opacity=".18"/>
+          <stop offset="100%" stop-color="#7c5cbf" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <!-- Grille de points — évoque réseau IA / données -->
+      <g fill="rgba(192,132,252,.25)">
+        <circle cx="40"  cy="40"  r="1.5"/>
+        <circle cx="120" cy="40"  r="1.5"/>
+        <circle cx="200" cy="40"  r="1.5"/>
+        <circle cx="280" cy="40"  r="1.5"/>
+        <circle cx="360" cy="40"  r="1.5"/>
+        <circle cx="440" cy="40"  r="1.5"/>
+        <circle cx="520" cy="40"  r="1.5"/>
+        <circle cx="600" cy="40"  r="1.5"/>
+        <circle cx="680" cy="40"  r="1.5"/>
+        <circle cx="760" cy="40"  r="1.5"/>
+        <circle cx="40"  cy="120" r="1.5"/>
+        <circle cx="120" cy="120" r="1.5"/>
+        <circle cx="200" cy="120" r="1.5"/>
+        <circle cx="280" cy="120" r="1.5"/>
+        <circle cx="360" cy="120" r="1.5"/>
+        <circle cx="440" cy="120" r="1.5"/>
+        <circle cx="520" cy="120" r="1.5"/>
+        <circle cx="600" cy="120" r="1.5"/>
+        <circle cx="680" cy="120" r="1.5"/>
+        <circle cx="760" cy="120" r="1.5"/>
+        <circle cx="40"  cy="200" r="1.5"/>
+        <circle cx="120" cy="200" r="1.5"/>
+        <circle cx="200" cy="200" r="3" fill="rgba(192,132,252,.5)"/>
+        <circle cx="280" cy="200" r="1.5"/>
+        <circle cx="360" cy="200" r="1.5"/>
+        <circle cx="440" cy="200" r="3" fill="rgba(192,132,252,.5)"/>
+        <circle cx="520" cy="200" r="1.5"/>
+        <circle cx="600" cy="200" r="1.5"/>
+        <circle cx="680" cy="200" r="3" fill="rgba(192,132,252,.5)"/>
+        <circle cx="760" cy="200" r="1.5"/>
+        <circle cx="40"  cy="280" r="1.5"/>
+        <circle cx="120" cy="280" r="1.5"/>
+        <circle cx="200" cy="280" r="1.5"/>
+        <circle cx="280" cy="280" r="1.5"/>
+        <circle cx="360" cy="280" r="1.5"/>
+        <circle cx="440" cy="280" r="1.5"/>
+        <circle cx="520" cy="280" r="1.5"/>
+        <circle cx="600" cy="280" r="1.5"/>
+        <circle cx="680" cy="280" r="1.5"/>
+        <circle cx="760" cy="280" r="1.5"/>
+        <circle cx="40"  cy="360" r="1.5"/>
+        <circle cx="120" cy="360" r="1.5"/>
+        <circle cx="200" cy="360" r="1.5"/>
+        <circle cx="280" cy="360" r="1.5"/>
+        <circle cx="360" cy="360" r="1.5"/>
+        <circle cx="440" cy="360" r="1.5"/>
+        <circle cx="520" cy="360" r="1.5"/>
+        <circle cx="600" cy="360" r="1.5"/>
+        <circle cx="680" cy="360" r="1.5"/>
+        <circle cx="760" cy="360" r="1.5"/>
+      </g>
+      <!-- Lignes de connexion — réseau IA -->
+      <g stroke="rgba(192,132,252,.15)" stroke-width="1" fill="none">
+        <line x1="200" y1="200" x2="440" y2="200"/>
+        <line x1="440" y1="200" x2="680" y2="200"/>
+        <line x1="200" y1="200" x2="280" y2="120"/>
+        <line x1="440" y1="200" x2="360" y2="120"/>
+        <line x1="440" y1="200" x2="520" y2="120"/>
+        <line x1="680" y1="200" x2="600" y2="120"/>
+        <line x1="680" y1="200" x2="760" y2="120"/>
+        <line x1="200" y1="200" x2="120" y2="280"/>
+        <line x1="200" y1="200" x2="280" y2="280"/>
+        <line x1="440" y1="200" x2="360" y2="280"/>
+        <line x1="440" y1="200" x2="520" y2="280"/>
+        <line x1="680" y1="200" x2="600" y2="280"/>
+        <line x1="680" y1="200" x2="760" y2="280"/>
+      </g>
+      <!-- Halo central -->
+      <ellipse cx="400" cy="200" rx="320" ry="160" fill="url(#ag1)"/>
+    </svg>
   </div>
   <div class="avenir-inner">
     <h2 class="avenir-title" data-i18n="av.title">Construisons l'avenir</h2>
