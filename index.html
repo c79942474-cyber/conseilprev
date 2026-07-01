@@ -5110,43 +5110,66 @@ function ftNlSubmit(e){
     return src || "innov";
   }
 
-  /* ── Sources RSS pour le fallback direct-browser via rss2json ── */
+  /* ── Sources RSS — fetch direct-browser via proxy CORS allorigins ── */
   var V_RSS_DIRECT = [
-    {name:"ActuIA",         url:"https://www.actuia.com/feed/",                         cat:"ai",   ico:"🤖", lang:"fr"},
-    {name:"ANSSI",          url:"https://cyber.gouv.fr/feed",                           cat:"secu", ico:"🛡️", lang:"fr"},
-    {name:"CNIL",           url:"https://www.cnil.fr/fr/rss.xml",                       cat:"regl", ico:"🔒", lang:"fr"},
-    {name:"AI Act EU",      url:"https://artificialintelligenceact.eu/feed/",           cat:"regl", ico:"⚖️", lang:"en"},
-    {name:"The Hacker News",url:"https://feeds.feedburner.com/TheHackersNews",          cat:"secu", ico:"🔓", lang:"en"},
-    {name:"MIT Tech Review",url:"https://www.technologyreview.com/feed/",               cat:"ai",   ico:"🧠", lang:"en"},
-    {name:"TechCrunch AI",  url:"https://techcrunch.com/category/artificial-intelligence/feed/", cat:"ai", ico:"🚀", lang:"en"},
-    {name:"EU Digital",     url:"https://digital-strategy.ec.europa.eu/en/rss.xml",    cat:"intl", ico:"🇪🇺", lang:"en"},
+    {name:"ActuIA",         url:"https://www.actuia.com/feed/",                                          cat:"ai",   ico:"🤖", lang:"fr"},
+    {name:"ANSSI",          url:"https://cyber.gouv.fr/feed",                                            cat:"secu", ico:"🛡️", lang:"fr"},
+    {name:"CNIL",           url:"https://www.cnil.fr/fr/rss.xml",                                        cat:"regl", ico:"🔒", lang:"fr"},
+    {name:"AI Act EU",      url:"https://artificialintelligenceact.eu/feed/",                            cat:"regl", ico:"⚖️", lang:"en"},
+    {name:"The Hacker News",url:"https://feeds.feedburner.com/TheHackersNews",                          cat:"secu", ico:"🔓", lang:"en"},
+    {name:"MIT Tech Review",url:"https://www.technologyreview.com/feed/",                               cat:"ai",   ico:"🧠", lang:"en"},
+    {name:"TechCrunch AI",  url:"https://techcrunch.com/category/artificial-intelligence/feed/",        cat:"ai",   ico:"🚀", lang:"en"},
+    {name:"EU Digital",     url:"https://digital-strategy.ec.europa.eu/en/rss.xml",                    cat:"intl", ico:"🇪🇺", lang:"en"},
   ];
 
+  /* Parse XML RSS/Atom → tableau d'items */
+  function vParseXML(xmlText, src){
+    var items = [];
+    try {
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(xmlText, "text/xml");
+      /* RSS 2.0 */
+      var entries = doc.querySelectorAll("item");
+      /* Atom */
+      if(!entries.length) entries = doc.querySelectorAll("entry");
+      entries.forEach(function(el, i){
+        if(i >= 8) return;
+        var title = (el.querySelector("title")||{}).textContent || "";
+        var link  = (el.querySelector("link")||{}).textContent
+                 || el.getAttribute("href")
+                 || (el.querySelector("link")||{}).getAttribute("href") || "#";
+        var date  = (el.querySelector("pubDate")||el.querySelector("published")||el.querySelector("updated")||{}).textContent || "";
+        if(!title.trim()) return;
+        items.push({
+          title:  title.trim().replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&#039;/g,"'"),
+          link:   link.trim() || "#",
+          date:   date.trim(),
+          source: src.name,
+          ico:    src.ico,
+          cat:    vCatDetect(title, src.cat),
+          lang:   src.lang
+        });
+      });
+    } catch(e){}
+    return items;
+  }
+
   function vFetchDirect(){
-    /* Fetch RSS côté navigateur via rss2json — contourne les blocages IP serveur */
     var total = V_RSS_DIRECT.length;
     var done  = 0;
     var accumulated = [];
 
     V_RSS_DIRECT.forEach(function(src){
-      var api = "https://api.rss2json.com/v1/api.json?rss_url="
-              + encodeURIComponent(src.url) + "&count=6";
-      fetch(api)
-        .then(function(r){ return r.json(); })
-        .then(function(d){
-          if(d.status === "ok" && d.items){
-            d.items.forEach(function(it){
-              accumulated.push({
-                title:  (it.title||"").trim(),
-                link:   it.link || it.guid || "#",
-                date:   it.pubDate || "",
-                source: src.name,
-                ico:    src.ico,
-                cat:    vCatDetect(it.title, src.cat),
-                lang:   src.lang
-              });
-            });
-          }
+      /* allorigins.win — proxy CORS gratuit sans limite de taux */
+      var proxy = "https://api.allorigins.win/raw?url=" + encodeURIComponent(src.url);
+      fetch(proxy, {signal: AbortSignal.timeout ? AbortSignal.timeout(7000) : undefined})
+        .then(function(r){
+          if(!r.ok) throw new Error("HTTP " + r.status);
+          return r.text();
+        })
+        .then(function(xml){
+          var items = vParseXML(xml, src);
+          items.forEach(function(it){ accumulated.push(it); });
         })
         .catch(function(){})
         .finally(function(){
@@ -5161,24 +5184,22 @@ function ftNlSubmit(e){
     var loading = document.getElementById("vloading");
     if(loading) loading.style.display = "none";
     if(!items.length){
-      vShowError("Sources temporairement inaccessibles. Réessayez dans quelques instants.");
+      vShowError("Sources temporairement inaccessibles. Cliquez ↻ pour réessayer.");
       return;
     }
-    /* Dédupliquer et trier par date */
     var seen = new Set();
     V_ITEMS = items
       .filter(function(it){
-        var k = it.title.slice(0,60);
-        if(seen.has(k)) return false;
+        var k = (it.title||"").slice(0,55);
+        if(!k || seen.has(k)) return false;
         seen.add(k); return true;
       })
-      .sort(function(a,b){ return (b.date||"") > (a.date||"") ? 1 : -1 })
+      .sort(function(a,b){ return (b.date||"") > (a.date||"") ? 1 : -1; })
       .slice(0,60);
     vRender();
-    var txt = V_ITEMS.length + " actualités · "
-            + new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"})
-            + " · direct";
-    document.getElementById("vstatus-txt").textContent = txt;
+    document.getElementById("vstatus-txt").textContent =
+      V_ITEMS.length + " actualités · " +
+      new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
   }
 
   function vFetch(){
@@ -5190,28 +5211,25 @@ function ftNlSubmit(e){
     if(items)  { items.innerHTML = ""; }
     document.getElementById("vstatus-txt").textContent = "Chargement…";
 
-    /* Essayer d'abord le backend — plus rapide si le cache est chaud */
     fetch("/api/news")
       .then(function(r){
         if(!r.ok) throw new Error("HTTP " + r.status);
         return r.json();
       })
       .then(function(data){
-        /* Si le backend retourne des items réels (pas juste le fallback statique de 4) */
         if(data && data.items && data.items.length > 4 && !data.fallback){
           V_LOADING = false;
           if(loading) loading.style.display = "none";
           V_ITEMS = data.items;
           vRender();
           document.getElementById("vstatus-txt").textContent =
-            data.count + " actualités · " + new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
+            data.count + " actualités · " +
+            new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
         } else {
-          /* Backend retourne le fallback statique → basculer sur fetch direct */
           vFetchDirect();
         }
       })
       .catch(function(){
-        /* Backend inaccessible → fetch direct immédiat */
         vFetchDirect();
       });
   }
