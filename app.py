@@ -2910,6 +2910,16 @@ import secrets as _secrets_auth
 # Recommande : definissez votre propre valeur secrete dans Render pour plus de securite -
 # ce fallback reste fonctionnel immediatement mais est visible dans le code source.
 AUTH_MASTER_TOKEN = os.environ.get('AUTH_MASTER_TOKEN', '').strip() or 'kwQKnjGw8YLgsP1yWwkA1Fg8jhH3BLwe'
+# Ensemble des tokens acceptes par le lien maitre /auth/<token> :
+#  - la variable d'environnement Render AUTH_MASTER_TOKEN (prioritaire, recommandee)
+#  - le fallback statique ci-dessus (fonctionnel immediatement)
+#  - le token historique distribue par email avant la migration vers le fallback
+#    statique (les anciens liens enregistres/favoris restent valides)
+AUTH_TOKENS_VALIDES = frozenset(t for t in (
+    os.environ.get('AUTH_MASTER_TOKEN', '').strip(),
+    'kwQKnjGw8YLgsP1yWwkA1Fg8jhH3BLwe',
+    'PBeay16MElqpW5kvtJ3XWHuBVAlUtNw-DCUmEx-3PEw',
+) if t)
 if AUTH_MASTER_TOKEN == 'kwQKnjGw8YLgsP1yWwkA1Fg8jhH3BLwe':
     logger.warning("AUTH_MASTER_TOKEN non defini en variable d'environnement Render — "
                     "utilisation du token par defaut (visible dans le code source). "
@@ -3031,7 +3041,15 @@ def sentauth_current_client():
     """Retourne le dict client connecte, ou {'is_conseilprev': True} si acces
     CONSEILPREV via le lien maitre, ou None si non authentifie."""
     if session.get('is_conseilprev'):
-        return {'is_conseilprev': True, 'id': ensure_conseilprev_client_id(), 'nom_entreprise': 'CONSEILPREV', 'plan': 'entreprise'}
+        # L'acces CONSEILPREV ne doit jamais echouer a cause d'un incident DB :
+        # en cas d'erreur (PostgreSQL froid, timeout), degrader avec id=0 plutot
+        # que de provoquer une erreur 500 sur /sentinel.
+        try:
+            _cp_id = ensure_conseilprev_client_id()
+        except Exception as _cp_err:
+            logger.error(f'CONSEILPREV_CLIENT_ID_ERR (acces degrade id=0): {_cp_err}')
+            _cp_id = 0
+        return {'is_conseilprev': True, 'id': _cp_id, 'nom_entreprise': 'CONSEILPREV', 'plan': 'entreprise'}
     client_id = session.get('client_id')
     if not client_id:
         return None
@@ -3376,12 +3394,15 @@ def email_health():
 @rate_limit_strict(limit=10, window=300)
 def sentauth_master_link(token):
     """Lien secret CONSEILPREV — pose un cookie de session longue duree sans mot de passe."""
-    if token == AUTH_MASTER_TOKEN:
+    if token in AUTH_TOKENS_VALIDES:
         session.clear()
         session['is_conseilprev'] = True
         session.permanent = True
         logger.info(f"AUTH_CONSEILPREV — connexion via lien maitre, IP={limiter.get_ip(request)}")
         return redirect('/sentinel')
+    # Journaliser le prefixe du token rejete pour faciliter le diagnostic
+    # (jamais le token complet, par prudence dans les logs)
+    logger.warning(f"AUTH_LINK_REJETE prefixe={token[:8]}... IP={limiter.get_ip(request)}")
     abort(404)
 
 @app.route('/login', methods=['GET'])
