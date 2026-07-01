@@ -1498,6 +1498,12 @@ textarea.form-el{min-height:86px;resize:vertical}
 .tmi-btn-s{display:inline-flex;align-items:center;gap:5px;background:transparent;color:var(--muted);border:1px solid var(--rule2);padding:8px 16px;border-radius:4px;font-size:11px;cursor:pointer}
 .tmi-btn-s:hover{border-color:var(--ink);color:var(--ink)}
 
+
+/* ══ PRICING REQUEST CARDS ══ */
+.pricing-plan-card:hover{border-color:var(--accent)!important;background:rgba(184,50,34,.04)}
+.pricing-plan-card.selected{border-color:var(--accent)!important;background:rgba(184,50,34,.06)}
+.pricing-plan-card.selected .tbl-title{color:var(--accent)}
+
 </style>
 
 </head>
@@ -2191,6 +2197,108 @@ textarea.form-el{min-height:86px;resize:vertical}
 
 <!-- TEMPLATES -->
 <div class="page" id="p-pricing">
+
+  <!-- ── Bloc demande de tarification — affiché en tête ── -->
+  <div id="pricing-request-block" style="margin-bottom:28px">
+
+    <!-- Bannière plan gratuit (visible uniquement si plan=gratuit) -->
+    <div id="pricing-gratuit-banner" style="display:none;background:linear-gradient(135deg,#1C1C1C 0%,#2d2260 100%);border-radius:10px;padding:24px 28px;margin-bottom:20px;color:#fff">
+      <div style="display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap">
+        <div style="flex:1;min-width:220px">
+          <div style="font-size:10px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.55);margin-bottom:8px">Votre plan actuel</div>
+          <div style="font-size:20px;font-weight:700;margin-bottom:6px">Sentinel AI <span style="background:rgba(255,255,255,.12);font-size:11px;padding:3px 8px;border-radius:4px;font-weight:400;vertical-align:middle">Gratuit</span></div>
+          <div style="font-size:12px;color:rgba(255,255,255,.7);line-height:1.5">Vous avez accès à 4 modules sur 27. Passez à Pro ou Entreprise pour accéder à l’intégralité de la plateforme avec le modèle tarifaire par résultats.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;min-width:160px">
+          <div style="background:rgba(255,255,255,.1);border-radius:6px;padding:10px 14px;font-size:11px;line-height:1.5">
+            <div style="font-weight:600;margin-bottom:2px">✔ Accès illimité Sentinel Pro</div>
+            <div style="color:rgba(255,255,255,.65)">Registre IA, FRIA, Audit, Maturité, Veille, 23 modules</div>
+          </div>
+          <div style="background:rgba(255,255,255,.1);border-radius:6px;padding:10px 14px;font-size:11px;line-height:1.5">
+            <div style="font-weight:600;margin-bottom:2px">✔ Tarification par résultats</div>
+            <div style="color:rgba(255,255,255,.65)">Socle fixe réduit + variable indexé sur vos progrès réels</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulaire de demande de tarification par résultats -->
+    <div class="tbl-wrap" style="padding:24px">
+      <div class="tbl-head" style="border:none;padding:0 0 18px">
+        <span class="tbl-title">Demande de tarification par résultats</span>
+        <span style="font-size:11px;color:var(--muted);margin-left:10px">Réponse personnalisée sous 24h ouvrables</span>
+      </div>
+
+      <!-- Choix du plan -->
+      <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap" id="pricing-plan-cards">
+        <div class="pricing-plan-card" id="pcard-pro" onclick="pricingSelectPlan('pro')"
+             style="flex:1;min-width:200px;border:2px solid var(--rule);border-radius:8px;padding:16px 18px;cursor:pointer;transition:border-color .15s,background .15s">
+          <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px">Sentinel Pro</div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:10px">TPE, PME, ETI — jusqu’à 50 systèmes IA</div>
+          <div style="font-size:10px;font-family:var(--mono);color:var(--accent)">Accès 27 modules · Registre IA · FRIA · Audit · Veille</div>
+        </div>
+        <div class="pricing-plan-card" id="pcard-entreprise" onclick="pricingSelectPlan('entreprise')"
+             style="flex:1;min-width:200px;border:2px solid var(--rule);border-radius:8px;padding:16px 18px;cursor:pointer;transition:border-color .15s,background .15s">
+          <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px">Sentinel Entreprise</div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Grandes entreprises · groupes · secteur public</div>
+          <div style="font-size:10px;font-family:var(--mono);color:var(--accent)">Multi-entités · API · SLA dédié · Formation sur site</div>
+        </div>
+      </div>
+      <input type="hidden" id="pricing-req-plan" value="">
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+        <div class="reg-field">
+          <label class="reg-label" for="pricing-req-nom">Entreprise</label>
+          <input class="reg-input" id="pricing-req-nom" type="text" placeholder="Raison sociale" maxlength="120">
+        </div>
+        <div class="reg-field">
+          <label class="reg-label" for="pricing-req-email">Email de contact</label>
+          <input class="reg-input" id="pricing-req-email" type="email" placeholder="votre@entreprise.fr" maxlength="150">
+        </div>
+        <div class="reg-field">
+          <label class="reg-label" for="pricing-req-systemes">Nombre de systèmes IA estimé</label>
+          <input class="reg-input" id="pricing-req-systemes" type="number" min="1" max="9999" placeholder="ex. 12">
+        </div>
+        <div class="reg-field">
+          <label class="reg-label" for="pricing-req-secteur">Secteur d’activité</label>
+          <select class="reg-input" id="pricing-req-secteur">
+            <option value="">Sélectionner…</option>
+            <option value="Banque / Finance / Assurance">Banque / Finance / Assurance</option>
+            <option value="Santé / Pharma / Médical">Santé / Pharma / Médical</option>
+            <option value="Énergie / Infrastructure critique">Énergie / Infrastructure critique</option>
+            <option value="Transport / Mobilité">Transport / Mobilité</option>
+            <option value="Industrie / Manufactur / Défense">Industrie / Manufactur / Défense</option>
+            <option value="Télécommunications">Télécommunications</option>
+            <option value="IT / SaaS / IA">IT / SaaS / IA</option>
+            <option value="Secteur public / Administration">Secteur public / Administration</option>
+            <option value="Droit / Conseil / Audit">Droit / Conseil / Audit</option>
+            <option value="Autre">Autre</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="reg-field" style="margin-bottom:16px">
+        <label class="reg-label" for="pricing-req-msg">Contexte et attentes <span style="color:var(--muted);font-weight:400">(optionnel)</span></label>
+        <textarea class="reg-input" id="pricing-req-msg" rows="3" maxlength="800"
+                  placeholder="Décrivez brièvement votre contexte de conformité IA, vos échéances, ou toute question spécifique…"
+                  style="resize:vertical;line-height:1.5"></textarea>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <button class="mat-export-btn" id="pricing-req-submit"
+                style="background:var(--accent);color:#fff;padding:10px 22px;font-size:13px"
+                onclick="pricingSubmitRequest()">
+          Envoyer la demande de tarification
+        </button>
+        <div id="pricing-req-status" style="font-size:12px;display:none"></div>
+      </div>
+
+      <div style="margin-top:14px;font-size:10px;color:var(--muted);font-family:var(--mono)">
+        Les données saisies sont transmises uniquement à CONSEILPREV (christophe.cerf@outlook.com) et ne sont pas conservées sur le serveur. Réponse personnalisée sous 24h ouvrables.
+      </div>
+    </div>
+  </div>
+
   <span class="eyebrow">Modèle commercial innovant</span><h1 class="page-h">Tarification <em>par résultats</em></h1>
   <p class="page-lead">Simulez un modèle hybride RaaS (Results-as-a-Service) — socle fixe réduit + part variable indexée sur vos résultats réels de conformité — comparé à un abonnement SaaS classique.</p>
 
@@ -13772,7 +13880,7 @@ window.go = function(id){
 };
 
 /* ══ RESTRICTION SIDEBAR — plan Gratuit limite a 4 pages ══ */
-var GRATUIT_ALLOWED_PAGES = ['apercu', 'simulateur', 'regs', 'training'];
+var GRATUIT_ALLOWED_PAGES = ['apercu', 'simulateur', 'regs', 'training', 'pricing'];
 
 function gratuitCheckSidebarVisibility(){
   // Initialiser __SENTINEL_PLAN immédiatement pour bloquer go() avant la réponse réseau
@@ -14590,4 +14698,98 @@ function aiActTimelineRender(){
   </div>
 </div>
 
-</html>
+</html
+
+// ── Formulaire de demande de tarification ────────────────────────
+window.pricingSelectPlan = function(plan){
+  document.querySelectorAll('.pricing-plan-card').forEach(function(c){
+    c.classList.remove('selected');
+  });
+  var card = document.getElementById('pcard-'+plan);
+  if(card) card.classList.add('selected');
+  var inp = document.getElementById('pricing-req-plan');
+  if(inp) inp.value = plan;
+};
+
+window.pricingSubmitRequest = function(){
+  var plan    = (document.getElementById('pricing-req-plan')||{}).value||'';
+  var nom     = ((document.getElementById('pricing-req-nom')||{}).value||'').trim();
+  var email   = ((document.getElementById('pricing-req-email')||{}).value||'').trim();
+  var systemes= ((document.getElementById('pricing-req-systemes')||{}).value||'').trim();
+  var secteur = ((document.getElementById('pricing-req-secteur')||{}).value||'').trim();
+  var msg     = ((document.getElementById('pricing-req-msg')||{}).value||'').trim();
+  var statusEl= document.getElementById('pricing-req-status');
+  var btnEl   = document.getElementById('pricing-req-submit');
+
+  if(!plan){ alert('Veuillez sélectionner un plan (Pro ou Entreprise).'); return; }
+  if(!nom)  { alert('Veuillez indiquer le nom de votre entreprise.'); return; }
+  if(!email || !email.includes('@')){ alert('Veuillez indiquer un email valide.'); return; }
+
+  if(statusEl){ statusEl.style.display='inline'; statusEl.style.color='var(--muted)'; statusEl.textContent='Envoi en cours…'; }
+  if(btnEl){ btnEl.disabled=true; btnEl.style.opacity='0.6'; }
+
+  fetch('/api/pricing-request',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({plan:plan,nom:nom,email:email,systemes:systemes,secteur:secteur,message:msg})
+  }).then(function(r){ return r.json(); }).then(function(d){
+    if(d.ok){
+      if(statusEl){ statusEl.style.color='var(--green)'; statusEl.textContent='✔ Demande envoyée. Nous vous recontactons sous 24h ouvrables.'; }
+      if(btnEl){ btnEl.style.display='none'; }
+      // Pré-remplir le simulateur avec les données saisies
+      try{
+        var nb = parseInt(systemes);
+        if(nb>0 && document.getElementById('pricing-nb-systemes'))
+          document.getElementById('pricing-nb-systemes').value=nb;
+        if(secteur && document.getElementById('pricing-secteur'))
+          document.getElementById('pricing-secteur').value=
+            secteur.indexOf('Banque')>=0?'finance':
+            secteur.indexOf('Santé')>=0?'sante':
+            secteur.indexOf('Énergie')>=0?'energie':
+            secteur.indexOf('Transport')>=0?'transport':
+            secteur.indexOf('Industrie')>=0?'industrie':
+            secteur.indexOf('Télé')>=0?'telecom':
+            secteur.indexOf('public')>=0?'public':'it';
+        if(typeof pricingSimulate==='function') pricingSimulate();
+      }catch(e){}
+    } else {
+      if(statusEl){ statusEl.style.color='var(--accent)'; statusEl.textContent='❌ Erreur : '+(d.error||'Veuillez réessayer.'); }
+      if(btnEl){ btnEl.disabled=false; btnEl.style.opacity='1'; }
+    }
+  }).catch(function(){
+    if(statusEl){ statusEl.style.color='var(--accent)'; statusEl.textContent='❌ Erreur réseau. Vérifiez votre connexion et réessayez.'; }
+    if(btnEl){ btnEl.disabled=false; btnEl.style.opacity='1'; }
+  });
+};
+
+// ── Init page pricing : pré-remplir si connecté, afficher bannière gratuit ──
+(function(){
+  var _pricingOrigGo = window.go;
+  window.go = function(id){
+    var r = _pricingOrigGo ? _pricingOrigGo.apply(this,arguments) : undefined;
+    if(id === 'pricing'){
+      // Pré-remplir les champs si l'utilisateur est connecté
+      fetch('/api/sentinel-auth/me').then(function(r2){ return r2.json(); }).then(function(d){
+        if(!d.authenticated) return;
+        var nomEl   = document.getElementById('pricing-req-nom');
+        var emailEl = document.getElementById('pricing-req-email');
+        if(nomEl   && !nomEl.value   && d.nom_entreprise) nomEl.value   = d.nom_entreprise;
+        if(emailEl && !emailEl.value && d.email)          emailEl.value = d.email;
+        // Pré-sélectionner le plan selon le plan actuel
+        var planActuel = d.is_conseilprev ? 'entreprise' : (d.plan || 'gratuit');
+        if(planActuel === 'gratuit'){
+          // Proposer Pro par défaut pour les gratuits
+          pricingSelectPlan('pro');
+          // Afficher la banniière gratuit
+          var banner = document.getElementById('pricing-gratuit-banner');
+          if(banner) banner.style.display = 'block';
+        } else if(planActuel === 'pro'){
+          // Déjà Pro — proposer l'upgrade Entreprise
+          pricingSelectPlan('entreprise');
+        }
+      }).catch(function(){});
+    }
+    return r;
+  };
+})();
+>
