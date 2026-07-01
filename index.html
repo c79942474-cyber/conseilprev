@@ -1953,6 +1953,17 @@ footer::after{
   background-clip:text!important;
   -webkit-text-fill-color:transparent!important;
 }
+.ft-logo-link{display:inline-block;text-decoration:none;margin-bottom:10px}
+.ft-logo-img{
+  height:52px;
+  width:auto;
+  display:block;
+  border-radius:6px;
+  object-fit:contain;
+  filter:brightness(1.05) contrast(1.02);
+  transition:opacity .2s;
+}
+.ft-logo-link:hover .ft-logo-img{opacity:.85}
 
 /* Titres colonnes footer */
 .ft-col-title{
@@ -6178,7 +6189,16 @@ document.addEventListener('keydown', function(e){
 
       <!-- Colonne brand -->
       <div class="ft-brand-col">
-        <div class="ft-logo">CONSEIL<span>PREV</span></div>
+        <a href="https://i-aes.com" target="_blank" rel="noopener" title="CONSEILPREV — IA MANAGEMENT · i-aes.com" class="ft-logo-link">
+          <img
+            src="https://i-aes.com/wp-content/uploads/2026/02/LOGOv3.jpg"
+            alt="CONSEILPREV"
+            class="ft-logo-img"
+            loading="lazy"
+            onerror="this.style.display='none';document.getElementById('ft-logo-fallback').style.display='block'"
+          >
+          <div class="ft-logo" id="ft-logo-fallback" style="display:none">CONSEIL<span>PREV</span></div>
+        </a>
         <p class="ft-desc" data-i18n="ft.brand">Business Unit IA · Data · Cyber<br>Connecteur MCP data.gouv.fr · Paris 2025</p>
         <div class="ft-socials">
           <a href="https://www.linkedin.com/company/conseilprev" target="_blank" rel="noopener" class="ft-social" title="LinkedIn">in</a>
