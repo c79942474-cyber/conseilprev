@@ -5138,8 +5138,9 @@ function ftNlSubmit(e){
   };
 
   function vOpen(){
-    V_OPEN = !V_OPEN;
     var box = document.getElementById("vbox");
+    if(!box){ console.warn("[vOpen] #vbox introuvable"); return; }
+    V_OPEN = !V_OPEN;
     if(V_OPEN){
       box.classList.add("open");
       if(!V_ITEMS.length) vFetch();
