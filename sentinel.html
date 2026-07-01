@@ -582,6 +582,11 @@ textarea.form-el{min-height:86px;resize:vertical}
 .sim-q{margin-bottom:22px}
 .sim-q-label{font-size:12px;font-weight:500;color:var(--ink);margin-bottom:4px;display:flex;align-items:center;gap:8px}
 .sim-q-hint{font-size:10px;color:var(--muted);font-weight:400;font-style:italic}
+
+.legal-ref-link{color:inherit;text-decoration:none;border-bottom:1px dashed rgba(28,90,138,.4);cursor:pointer;transition:border-color .15s,color .15s}
+.legal-ref-link:hover{color:var(--blue);border-bottom-color:var(--blue)}
+.legal-ref-ext{display:inline-block;font-size:8px;vertical-align:super;margin-left:1px;opacity:.5;font-family:var(--mono)}
+
 .sim-q-art{font-size:9px;font-family:var(--mono);color:var(--accent);background:rgba(184,50,34,.08);padding:1px 6px;border-radius:2px}
 .sim-select,.sim-input,.sim-textarea{width:100%;font-size:12px;font-family:var(--sans);color:var(--ink);background:var(--white);border:1px solid var(--rule2);border-radius:3px;padding:9px 12px;outline:none;transition:border-color .15s;box-sizing:border-box}
 .sim-select:focus,.sim-input:focus,.sim-textarea:focus{border-color:var(--accent)}
@@ -2306,7 +2311,7 @@ textarea.form-el{min-height:86px;resize:vertical}
   <span class="eyebrow">Cartographier · EU AI Act</span>
   <h1 class="page-h">Simulateur <em>IA Act</em></h1>
   <p class="page-lead">Évaluez la conformité de votre système IA selon le Règlement (UE) 2024/1689 — classification, obligations et sanctions en 5 étapes, avant de l enregistrer au Registre.</p>
-  <span class="sim-ref">Règlement (UE) 2024/1689 du 13 juin 2024 — Texte officiel Journal officiel L du 12.7.2024</span>
+  <span class="sim-ref"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="Texte officiel consolidé sur EUR-Lex">Règlement (UE) 2024/1689 du 13 juin 2024 <span class="legal-ref-ext">↗</span></a> — Texte officiel Journal officiel L du 12.7.2024</span>
 
   <!-- CALENDRIER CONSOLIDÉ EU AI ACT — Art. 113 + Digital Omnibus -->
   <div class="tbl-wrap" style="margin-bottom:24px;padding:0">
@@ -2361,7 +2366,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       <div class="sim-panel-sub">Décrivez votre système et son contexte de déploiement.</div>
 
       <div class="sim-q">
-        <div class="sim-q-label">Nom du système IA <span class="sim-q-art">Art. 11 — Documentation technique</span></div>
+        <div class="sim-q-label">Nom du système IA <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="Art. 11 — Documentation technique (EUR-Lex)">Art. 11</a><span class="legal-ref-ext">↗</span></span></div>
         <input class="sim-input" id="sim-name" type="text" placeholder="Ex : CreditScore-Pro v2.1, MedDiag-AI, ChatSupport…">
       </div>
 
@@ -2394,7 +2399,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       </div>
 
       <div class="sim-q">
-        <div class="sim-q-label">Type de système IA <span class="sim-q-art">Art. 3(1) — Définition système IA</span></div>
+        <div class="sim-q-label">Type de système IA <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="Art. 3 AI Act — Définitions (EUR-Lex)">Art. 3(1) — Définition système IA</a><span class="legal-ref-ext">↗</span></span></div>
         <select class="sim-select" id="sim-type">
           <option value="">Sélectionnez le type de système…</option>
           <optgroup label="Systèmes décisionnels">
@@ -2448,7 +2453,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       <div class="sim-panel-sub">Ces questions déterminent si votre système relève des pratiques interdites (Art. 5), du régime haut risque (Art. 6), ou d'un régime allégé.</div>
 
       <div class="sim-q">
-        <div class="sim-q-label">Votre système utilise-t-il des techniques subliminales ou manipulatrices ? <span class="sim-q-art">Art. 5(1)(a)</span></div>
+        <div class="sim-q-label">Votre système utilise-t-il des techniques subliminales ou manipulatrices ? <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="Art. 5(1)(a) — Pratiques interdites (EUR-Lex)">Art. 5(1)(a)</a><span class="legal-ref-ext">↗</span></span></div>
         <div class="sim-q-hint">Techniques au-dessous du seuil de conscience, exploitation des vulnérabilités (âge, handicap), altération substantielle du comportement.</div>
         <div class="sim-radio-group" id="r-subliminal">
           <div class="sim-radio-opt" onclick="simRadio('r-subliminal','oui')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui<div class="sim-radio-sub">Le système vise à influencer les comportements de manière non transparente</div></div></div>
@@ -2467,7 +2472,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       </div>
 
       <div class="sim-q">
-        <div class="sim-q-label">Votre système est-il utilisé dans l'un des domaines à haut risque de l'Annexe III ? <span class="sim-q-art">Art. 6(2) + Annexe III</span></div>
+        <div class="sim-q-label">Votre système est-il utilisé dans l'un des domaines à haut risque de l'Annexe III ? <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="Art. 6(2) + Annexe III — Classification haut risque (EUR-Lex)">Art. 6(2) + Annexe III</a><span class="legal-ref-ext">↗</span></span></div>
         <div class="sim-q-hint">Sélectionnez tous les domaines applicables.</div>
         <div class="sim-checkbox-group" id="cb-annexe3">
           <div class="sim-checkbox-opt" onclick="simCheckbox(this,'annexe3-bio')"><div class="sim-checkbox-box">✓</div><div><div>Biométrie</div><div class="sim-checkbox-sub">Identification à distance · catégorisation par attributs sensibles · reconnaissance d'émotions</div></div></div>
@@ -2494,7 +2499,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       </div>
 
       <div class="sim-q">
-        <div class="sim-q-label">Votre système effectue-t-il un profilage de personnes physiques ? <span class="sim-q-art">Art. 6(3), dernier alinéa</span></div>
+        <div class="sim-q-label">Votre système effectue-t-il un profilage de personnes physiques ? <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="Art. 6(3) AI Act — Profilage (EUR-Lex)">Art. 6(3), dernier alinéa</a><span class="legal-ref-ext">↗</span></span></div>
         <div class="sim-q-hint">Le profilage annule systématiquement l'exception ci-dessus — le système reste haut risque dans tous les cas.</div>
         <div class="sim-radio-group" id="r-profilage">
           <div class="sim-radio-opt" onclick="simRadio('r-profilage','oui')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui<div class="sim-radio-sub">Évaluation automatisée de traits, comportements ou caractéristiques personnelles</div></div></div>
@@ -2503,7 +2508,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       </div>
 
       <div class="sim-q">
-        <div class="sim-q-label">Quel est l'impact du système sur les personnes ? <span class="sim-q-art">Art. 6(1) — Évaluation du risque</span></div>
+        <div class="sim-q-label">Quel est l'impact du système sur les personnes ? <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="Art. 6(1) AI Act — Évaluation du risque (EUR-Lex)">Art. 6(1) — Évaluation du risque</a><span class="legal-ref-ext">↗</span></span></div>
         <div class="sim-radio-group" id="r-impact">
           <div class="sim-radio-opt" onclick="simRadio('r-impact','individuel')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Décisions individuelles contraignantes<div class="sim-radio-sub">Octroi/refus de crédit, recrutement, accès à des services, décision médicale</div></div></div>
           <div class="sim-radio-opt" onclick="simRadio('r-impact','groupe')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Impact sur des groupes de personnes<div class="sim-radio-sub">Ciblage publicitaire, recommandation de contenu, modération, scoring collectif</div></div></div>
@@ -2512,7 +2517,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       </div>
 
       <div class="sim-q">
-        <div class="sim-q-label">Votre système est-il destiné à interagir directement avec des utilisateurs finaux ? <span class="sim-q-art">Art. 50 — Transparence</span></div>
+        <div class="sim-q-label">Votre système est-il destiné à interagir directement avec des utilisateurs finaux ? <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="Art. 50 AI Act — Obligations de transparence (EUR-Lex)">Art. 50 — Transparence</a><span class="legal-ref-ext">↗</span></span></div>
         <div class="sim-radio-group" id="r-interaction">
           <div class="sim-radio-opt" onclick="simRadio('r-interaction','oui')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — chatbot, assistant, agent conversationnel<div class="sim-radio-sub">Obligation d'information que l'utilisateur interagit avec une IA (Art. 50.1)</div></div></div>
           <div class="sim-radio-opt" onclick="simRadio('r-interaction','genere')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Génère des contenus synthétiques (texte, image, voix, vidéo)<div class="sim-radio-sub">Obligation de marquage et de watermarking (Art. 50.2-4)</div></div></div>
@@ -2533,7 +2538,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       <div class="sim-panel-sub">Indiquez ce que vous avez déjà mis en place. Cela permettra de calculer votre gap de conformité.</div>
 
       <div class="sim-q">
-        <div class="sim-q-label">Système de gestion des risques <span class="sim-q-art">Art. 9</span></div>
+        <div class="sim-q-label">Système de gestion des risques <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="Art. 9 — Système de gestion des risques (EUR-Lex)">Art. 9</a><span class="legal-ref-ext">↗</span></span></div>
         <div class="sim-q-hint">Processus itératif documenté couvrant l'identification, estimation et gestion des risques tout au long du cycle de vie.</div>
         <select class="sim-select" id="sim-art9">
           <option value="none">Non — pas encore mis en place</option>
@@ -2573,7 +2578,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       </div>
 
       <div class="sim-q">
-        <div class="sim-q-label">Supervision humaine effective <span class="sim-q-art">Art. 14</span></div>
+        <div class="sim-q-label">Supervision humaine effective <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="Art. 14 — Supervision humaine (EUR-Lex)">Art. 14</a><span class="legal-ref-ext">↗</span></span></div>
         <div class="sim-q-hint">Mesures permettant à des personnes physiques de surveiller, comprendre, corriger ou stopper le système en cours de fonctionnement.</div>
         <select class="sim-select" id="sim-art14">
           <option value="none">Non — décision entièrement automatisée sans supervision</option>
@@ -2583,7 +2588,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       </div>
 
       <div class="sim-q">
-        <div class="sim-q-label">Transparence envers les déployeurs <span class="sim-q-art">Art. 13</span></div>
+        <div class="sim-q-label">Transparence envers les déployeurs <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="Art. 13 — Transparence envers les déployeurs (EUR-Lex)">Art. 13</a><span class="legal-ref-ext">↗</span></span></div>
         <div class="sim-q-hint">Notice d'utilisation claire sur les capacités, limites, performances, conditions d'utilisation prévue.</div>
         <select class="sim-select" id="sim-art13">
           <option value="none">Non — aucune notice formelle</option>
@@ -2593,7 +2598,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       </div>
 
       <div class="sim-q">
-        <div class="sim-q-label">Système de gestion de la qualité <span class="sim-q-art">Art. 17</span></div>
+        <div class="sim-q-label">Système de gestion de la qualité <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="Art. 17 — Système de gestion de la qualité (EUR-Lex)">Art. 17</a><span class="legal-ref-ext">↗</span></span></div>
         <div class="sim-q-hint">Politiques et procédures documentées de conception, test, surveillance post-commercialisation, gestion des incidents.</div>
         <select class="sim-select" id="sim-art17">
           <option value="none">Non — pas de SGQ formel</option>
@@ -2615,7 +2620,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       <div class="sim-panel-sub">Questions spécifiques aux modèles de fondation, LLM et aux enjeux de données personnelles.</div>
 
       <div class="sim-q">
-        <div class="sim-q-label">Votre système est-il un modèle d'IA à usage général (GPAI) ? <span class="sim-q-art">Art. 51-55</span></div>
+        <div class="sim-q-label">Votre système est-il un modèle d'IA à usage général (GPAI) ? <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="Art. 51-55 AI Act — Modèles GPAI (EUR-Lex)">Art. 51-55</a><span class="legal-ref-ext">↗</span></span></div>
         <div class="sim-q-hint">Modèle entraîné sur large quantité de données, polyvalent, utilisable dans de multiples contextes (LLM, modèle de vision généraliste, modèle audio).</div>
         <div class="sim-radio-group" id="r-gpai">
           <div class="sim-radio-opt" onclick="simRadio('r-gpai','oui_sys')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — je développe/fournis un modèle GPAI<div class="sim-radio-sub">Obligations spécifiques Art. 53 (documentation, politique de droits d'auteur, résumé de données)</div></div></div>
@@ -2626,7 +2631,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       </div>
 
       <div class="sim-q">
-        <div class="sim-q-label">Votre système traite-t-il des données personnelles ? <span class="sim-q-art">RGPD Art. 22 + AI Act Art. 10</span></div>
+        <div class="sim-q-label">Votre système traite-t-il des données personnelles ? <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32016R0679" target="_blank" rel="noopener" class="legal-ref-link" title="RGPD Art. 22 — Décisions automatisées (EUR-Lex)">RGPD Art. 22</a> + <a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="AI Act Art. 10 — Données et gouvernance (EUR-Lex)">AI Act Art. 10</a><span class="legal-ref-ext">↗</span></span></div>
         <div class="sim-radio-group" id="r-rgpd">
           <div class="sim-radio-opt" onclick="simRadio('r-rgpd','sensibles')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — données sensibles (santé, biométrie, opinions politiques, origine ethnique…)<div class="sim-radio-sub">AIPD obligatoire, base légale Art. 9 RGPD, restrictions strictes</div></div></div>
           <div class="sim-radio-opt" onclick="simRadio('r-rgpd','standard')"><div class="sim-radio-opt" onclick="simRadio('r-rgpd','standard')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — données personnelles standard<div class="sim-radio-sub">RGPD applicable, AIPD si risque élevé, droit d'opposition aux décisions automatisées (Art. 22)</div></div></div></div>
@@ -2635,7 +2640,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       </div>
 
       <div class="sim-q">
-        <div class="sim-q-label">Chiffre d'affaires annuel mondial de votre organisation <span class="sim-q-art">Art. 99 — Calcul des sanctions</span></div>
+        <div class="sim-q-label">Chiffre d'affaires annuel mondial de votre organisation <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="Art. 99 — Sanctions (EUR-Lex)">Art. 99</a><span class="legal-ref-ext">↗</span></span></div>
         <div class="sim-q-hint">Utilisé pour calculer le plafond de sanction applicable (en % du CA mondial).</div>
         <select class="sim-select" id="sim-ca">
           <option value="startup">Startup / PME — moins de 10 M€</option>
@@ -2647,7 +2652,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       </div>
 
       <div class="sim-q">
-        <div class="sim-q-label">Votre organisation est-elle établie dans l'UE ou vise-t-elle le marché européen ? <span class="sim-q-art">Art. 2 — Champ d'application territorial</span></div>
+        <div class="sim-q-label">Votre organisation est-elle établie dans l'UE ou vise-t-elle le marché européen ? <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="Art. 2 AI Act — Champ d'application territorial (EUR-Lex)">Art. 2 — Champ d'application territorial</a><span class="legal-ref-ext">↗</span></span></div>
         <div class="sim-radio-group" id="r-territoire">
           <div class="sim-radio-opt" onclick="simRadio('r-territoire','ue')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Établie dans l'UE — fournisseur ou déployeur<div class="sim-radio-sub">AI Act pleinement applicable</div></div></div>
           <div class="sim-radio-opt" onclick="simRadio('r-territoire','hors_ue')"><div class="sim-radio-opt" onclick="simRadio('r-territoire','hors_ue')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Hors UE — mais système utilisé dans l'UE ou affectant des personnes dans l'UE<div class="sim-radio-sub">AI Act applicable par extraterritorialité — mandataire UE requis (Art. 22)</div></div></div></div>
