@@ -12756,6 +12756,101 @@ window.go = function(id){
 
 })();
 
+
+// ── Formulaire de demande de tarification ────────────────────────
+window.pricingSelectPlan = function(plan){
+  document.querySelectorAll('.pricing-plan-card').forEach(function(c){
+    c.classList.remove('selected');
+  });
+  var card = document.getElementById('pcard-'+plan);
+  if(card) card.classList.add('selected');
+  var inp = document.getElementById('pricing-req-plan');
+  if(inp) inp.value = plan;
+};
+
+window.pricingSubmitRequest = function(){
+  var plan    = (document.getElementById('pricing-req-plan')||{}).value||'';
+  var nom     = ((document.getElementById('pricing-req-nom')||{}).value||'').trim();
+  var email   = ((document.getElementById('pricing-req-email')||{}).value||'').trim();
+  var systemes= ((document.getElementById('pricing-req-systemes')||{}).value||'').trim();
+  var secteur = ((document.getElementById('pricing-req-secteur')||{}).value||'').trim();
+  var msg     = ((document.getElementById('pricing-req-msg')||{}).value||'').trim();
+  var statusEl= document.getElementById('pricing-req-status');
+  var btnEl   = document.getElementById('pricing-req-submit');
+
+  if(!plan){ alert('Veuillez sélectionner un plan (Pro ou Entreprise).'); return; }
+  if(!nom)  { alert('Veuillez indiquer le nom de votre entreprise.'); return; }
+  if(!email || !email.includes('@')){ alert('Veuillez indiquer un email valide.'); return; }
+
+  if(statusEl){ statusEl.style.display='inline'; statusEl.style.color='var(--muted)'; statusEl.textContent='Envoi en cours…'; }
+  if(btnEl){ btnEl.disabled=true; btnEl.style.opacity='0.6'; }
+
+  fetch('/api/pricing-request',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({plan:plan,nom:nom,email:email,systemes:systemes,secteur:secteur,message:msg})
+  }).then(function(r){ return r.json(); }).then(function(d){
+    if(d.ok){
+      if(statusEl){ statusEl.style.color='var(--green)'; statusEl.textContent='✔ Demande envoyée. Nous vous recontactons sous 24h ouvrables.'; }
+      if(btnEl){ btnEl.style.display='none'; }
+      // Pré-remplir le simulateur avec les données saisies
+      try{
+        var nb = parseInt(systemes);
+        if(nb>0 && document.getElementById('pricing-nb-systemes'))
+          document.getElementById('pricing-nb-systemes').value=nb;
+        if(secteur && document.getElementById('pricing-secteur'))
+          document.getElementById('pricing-secteur').value=
+            secteur.indexOf('Banque')>=0?'finance':
+            secteur.indexOf('Santé')>=0?'sante':
+            secteur.indexOf('Énergie')>=0?'energie':
+            secteur.indexOf('Transport')>=0?'transport':
+            secteur.indexOf('Industrie')>=0?'industrie':
+            secteur.indexOf('Télé')>=0?'telecom':
+            secteur.indexOf('public')>=0?'public':'it';
+        if(typeof pricingSimulate==='function') pricingSimulate();
+      }catch(e){}
+    } else {
+      if(statusEl){ statusEl.style.color='var(--accent)'; statusEl.textContent='❌ Erreur : '+(d.error||'Veuillez réessayer.'); }
+      if(btnEl){ btnEl.disabled=false; btnEl.style.opacity='1'; }
+    }
+  }).catch(function(){
+    if(statusEl){ statusEl.style.color='var(--accent)'; statusEl.textContent='❌ Erreur réseau. Vérifiez votre connexion et réessayez.'; }
+    if(btnEl){ btnEl.disabled=false; btnEl.style.opacity='1'; }
+  });
+};
+
+// ── Init page pricing : pré-remplir si connecté, afficher bannière gratuit ──
+(function(){
+  var _pricingOrigGo = window.go;
+  window.go = function(id){
+    var r = _pricingOrigGo ? _pricingOrigGo.apply(this,arguments) : undefined;
+    if(id === 'pricing'){
+      // Pré-remplir les champs si l'utilisateur est connecté
+      fetch('/api/sentinel-auth/me').then(function(r2){ return r2.json(); }).then(function(d){
+        if(!d.authenticated) return;
+        var nomEl   = document.getElementById('pricing-req-nom');
+        var emailEl = document.getElementById('pricing-req-email');
+        if(nomEl   && !nomEl.value   && d.nom_entreprise) nomEl.value   = d.nom_entreprise;
+        if(emailEl && !emailEl.value && d.email)          emailEl.value = d.email;
+        // Pré-sélectionner le plan selon le plan actuel
+        var planActuel = d.is_conseilprev ? 'entreprise' : (d.plan || 'gratuit');
+        if(planActuel === 'gratuit'){
+          // Proposer Pro par défaut pour les gratuits
+          pricingSelectPlan('pro');
+          // Afficher la banniière gratuit
+          var banner = document.getElementById('pricing-gratuit-banner');
+          if(banner) banner.style.display = 'block';
+        } else if(planActuel === 'pro'){
+          // Déjà Pro — proposer l'upgrade Entreprise
+          pricingSelectPlan('entreprise');
+        }
+      }).catch(function(){});
+    }
+    return r;
+  };
+})();
+
+
 })();
 
 </script>
@@ -14699,97 +14794,4 @@ function aiActTimelineRender(){
 </div>
 
 </html
-
-// ── Formulaire de demande de tarification ────────────────────────
-window.pricingSelectPlan = function(plan){
-  document.querySelectorAll('.pricing-plan-card').forEach(function(c){
-    c.classList.remove('selected');
-  });
-  var card = document.getElementById('pcard-'+plan);
-  if(card) card.classList.add('selected');
-  var inp = document.getElementById('pricing-req-plan');
-  if(inp) inp.value = plan;
-};
-
-window.pricingSubmitRequest = function(){
-  var plan    = (document.getElementById('pricing-req-plan')||{}).value||'';
-  var nom     = ((document.getElementById('pricing-req-nom')||{}).value||'').trim();
-  var email   = ((document.getElementById('pricing-req-email')||{}).value||'').trim();
-  var systemes= ((document.getElementById('pricing-req-systemes')||{}).value||'').trim();
-  var secteur = ((document.getElementById('pricing-req-secteur')||{}).value||'').trim();
-  var msg     = ((document.getElementById('pricing-req-msg')||{}).value||'').trim();
-  var statusEl= document.getElementById('pricing-req-status');
-  var btnEl   = document.getElementById('pricing-req-submit');
-
-  if(!plan){ alert('Veuillez sélectionner un plan (Pro ou Entreprise).'); return; }
-  if(!nom)  { alert('Veuillez indiquer le nom de votre entreprise.'); return; }
-  if(!email || !email.includes('@')){ alert('Veuillez indiquer un email valide.'); return; }
-
-  if(statusEl){ statusEl.style.display='inline'; statusEl.style.color='var(--muted)'; statusEl.textContent='Envoi en cours…'; }
-  if(btnEl){ btnEl.disabled=true; btnEl.style.opacity='0.6'; }
-
-  fetch('/api/pricing-request',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({plan:plan,nom:nom,email:email,systemes:systemes,secteur:secteur,message:msg})
-  }).then(function(r){ return r.json(); }).then(function(d){
-    if(d.ok){
-      if(statusEl){ statusEl.style.color='var(--green)'; statusEl.textContent='✔ Demande envoyée. Nous vous recontactons sous 24h ouvrables.'; }
-      if(btnEl){ btnEl.style.display='none'; }
-      // Pré-remplir le simulateur avec les données saisies
-      try{
-        var nb = parseInt(systemes);
-        if(nb>0 && document.getElementById('pricing-nb-systemes'))
-          document.getElementById('pricing-nb-systemes').value=nb;
-        if(secteur && document.getElementById('pricing-secteur'))
-          document.getElementById('pricing-secteur').value=
-            secteur.indexOf('Banque')>=0?'finance':
-            secteur.indexOf('Santé')>=0?'sante':
-            secteur.indexOf('Énergie')>=0?'energie':
-            secteur.indexOf('Transport')>=0?'transport':
-            secteur.indexOf('Industrie')>=0?'industrie':
-            secteur.indexOf('Télé')>=0?'telecom':
-            secteur.indexOf('public')>=0?'public':'it';
-        if(typeof pricingSimulate==='function') pricingSimulate();
-      }catch(e){}
-    } else {
-      if(statusEl){ statusEl.style.color='var(--accent)'; statusEl.textContent='❌ Erreur : '+(d.error||'Veuillez réessayer.'); }
-      if(btnEl){ btnEl.disabled=false; btnEl.style.opacity='1'; }
-    }
-  }).catch(function(){
-    if(statusEl){ statusEl.style.color='var(--accent)'; statusEl.textContent='❌ Erreur réseau. Vérifiez votre connexion et réessayez.'; }
-    if(btnEl){ btnEl.disabled=false; btnEl.style.opacity='1'; }
-  });
-};
-
-// ── Init page pricing : pré-remplir si connecté, afficher bannière gratuit ──
-(function(){
-  var _pricingOrigGo = window.go;
-  window.go = function(id){
-    var r = _pricingOrigGo ? _pricingOrigGo.apply(this,arguments) : undefined;
-    if(id === 'pricing'){
-      // Pré-remplir les champs si l'utilisateur est connecté
-      fetch('/api/sentinel-auth/me').then(function(r2){ return r2.json(); }).then(function(d){
-        if(!d.authenticated) return;
-        var nomEl   = document.getElementById('pricing-req-nom');
-        var emailEl = document.getElementById('pricing-req-email');
-        if(nomEl   && !nomEl.value   && d.nom_entreprise) nomEl.value   = d.nom_entreprise;
-        if(emailEl && !emailEl.value && d.email)          emailEl.value = d.email;
-        // Pré-sélectionner le plan selon le plan actuel
-        var planActuel = d.is_conseilprev ? 'entreprise' : (d.plan || 'gratuit');
-        if(planActuel === 'gratuit'){
-          // Proposer Pro par défaut pour les gratuits
-          pricingSelectPlan('pro');
-          // Afficher la banniière gratuit
-          var banner = document.getElementById('pricing-gratuit-banner');
-          if(banner) banner.style.display = 'block';
-        } else if(planActuel === 'pro'){
-          // Déjà Pro — proposer l'upgrade Entreprise
-          pricingSelectPlan('entreprise');
-        }
-      }).catch(function(){});
-    }
-    return r;
-  };
-})();
 >
