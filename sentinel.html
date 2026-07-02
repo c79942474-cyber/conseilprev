@@ -14613,9 +14613,15 @@ window.go = function(id){
 var GRATUIT_ALLOWED_PAGES = ['apercu', 'simulateur', 'regs', 'training', 'pricing'];
 
 function gratuitCheckSidebarVisibility(){
-  if(window.__SENTINEL_PLAN === undefined) window.__SENTINEL_PLAN = 'gratuit';
-  fetch('/api/sentinel-auth/me').then(function(r){ return r.json(); }).then(function(d){
-    if(!d.authenticated){ window.__SENTINEL_PLAN = null; return; }
+  /* Ne JAMAIS bloquer par defaut : le plan reste indetermine (null) tant que le
+     serveur n'a pas confirme explicitement un compte gratuit. Un echec reseau,
+     une session CONSEILPREV ou une base froide ne doivent pas verrouiller l'acces. */
+  if(window.__SENTINEL_PLAN === undefined) window.__SENTINEL_PLAN = null;
+  fetch('/api/sentinel-auth/me', {credentials:'same-origin'}).then(function(r){
+    if(r.status === 401){ return {authenticated:false}; }
+    return r.json();
+  }).then(function(d){
+    if(!d || !d.authenticated){ window.__SENTINEL_PLAN = null; return; }
     if(d.is_conseilprev){ window.__SENTINEL_PLAN = 'entreprise'; return; }
     var plan = d.plan || 'gratuit';
     window.__SENTINEL_PLAN = plan;
@@ -14680,6 +14686,8 @@ window.go = function(id){
   var _plan = window.__SENTINEL_PLAN;
 
   // ── Plan Gratuit ──────────────────────────────────────────────
+  // Blocage UNIQUEMENT si le serveur a confirme un compte gratuit (_plan==='gratuit').
+  // _plan null/undefined (session CONSEILPREV, /me en cours, erreur reseau) = pas de blocage.
   if(_plan === 'gratuit' && GRATUIT_ALLOWED_PAGES.indexOf(id) === -1){
     var notif = document.getElementById('gratuit-lock-notif');
     if(!notif){
@@ -14907,7 +14915,7 @@ window.bellRefresh = function(){
     if(badge) badge.textContent = total > 99 ? '99+' : (total || '');
   }).catch(function(){
     window.__bellData = {veille:{count:0,items:[]}, rapports:{count:0,items:[]}, audit:{count: auditPending}};
-  });
+  }).catch(function(){ /* erreur reseau : ne pas bloquer, plan indetermine */ window.__SENTINEL_PLAN = null; });
 };
 
 window.bellToggleMenu = function(){
