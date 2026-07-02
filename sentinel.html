@@ -2560,10 +2560,10 @@ textarea.form-el{min-height:86px;resize:vertical}
       <tbody id="ms-tbody"><!-- rendu par milestonesRender() --></tbody>
     </table>
     <div class="ms-guarantee">
-      ??️ <strong>Garanties contractuelles du modèle :</strong> plafond annuel borné — le total socle + jalons ne dépasse jamais ≈95 % du SaaS équivalent ; jalon vérifié = acquis définitivement, jamais refacturé ; aucune facturation de jalon sans double vérification (score Sentinel + validation documentaire) ; en cas de progression partielle, vous ne payez que les jalons atteints — le risque d’exécution est porté par CONSEILPREV, pas par vous.
+      <strong>Garanties contractuelles du modèle :</strong> plafond annuel borné — le total socle + jalons ne dépasse jamais ≈95 % du SaaS équivalent ; jalon vérifié = acquis définitivement, jamais refacturé ; aucune facturation de jalon sans double vérification (score Sentinel + validation documentaire) ; en cas de progression partielle, vous ne payez que les jalons atteints — le risque d’exécution est porté par CONSEILPREV, pas par vous.
     </div>
     <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
-      <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="milestonesExportPdf()" title="Genere un document PDF de l echeancier a joindre a une proposition commerciale">?? Exporter l’échéancier (PDF)</button>
+      <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="milestonesExportPdf()" title="Genere un document PDF de l echeancier a joindre a une proposition commerciale">Exporter l’échéancier (PDF)</button>
     </div>
   </div>
 
@@ -2590,7 +2590,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     </div>
     <div class="plans-grid" id="plans-grid-container"><!-- rendu par plansRender() --></div>
     <div class="radar-registre-info radar-registre-ok" style="margin-top:16px;font-size:11px">
-      ?? Tarifs calculés depuis le simulateur. Modifiez le secteur ou le segment pour mettre à jour les plans.
+      Tarifs calculés depuis le simulateur. Modifiez le secteur ou le segment pour mettre à jour les plans.
     </div>
   </div>
     <div class="prx-step" style="display:flex;align-items:center;gap:14px;margin:32px 0 16px;padding-bottom:12px;border-bottom:2px solid var(--rule2)">
@@ -2838,7 +2838,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <!-- ═══ PILOTAGE JALONS RAAS — Agent Sentinel Pricing Orchestrator ═══ -->
     <div class="tbl-wrap" style="padding:20px;margin-top:20px">
       <div class="tbl-head" style="border:none;padding:0 0 8px">
-        <span class="tbl-title">?? Pilotage des jalons RaaS par client</span>
+        <span class="tbl-title">Pilotage des jalons RaaS par client</span>
         <span class="bud-tip" tabindex="0" style="margin-left:8px">?
           <span class="bud-tip-bubble" style="width:280px">
             <strong>Agent Sentinel Pricing Orchestrator</strong><br>
@@ -13920,7 +13920,7 @@ window.plansRender=function(){
       +'<div class="plan-body">'
       +'<div><div class="plan-section-title">✅ Inclus</div><ul class="plan-features">'+p.av.map(function(a){return '<li>'+a+'</li>';}).join('')+'</ul></div>'
       +'<div><div class="plan-section-title">○ Limites</div><ul class="plan-features plan-cons">'+p.li.map(function(l){return '<li>'+l+'</li>';}).join('')+'</ul></div>'
-      +'<div class="plan-conseil"><div class="plan-conseil-label">?? Pour qui ?</div><div>'+p.conseil+'</div></div>'
+      +'<div class="plan-conseil"><div class="plan-conseil-label">Pour qui ?</div><div>'+p.conseil+'</div></div>'
       +'</div>'
       +'<div class="plan-cta">'+cb+'<div class="plan-cta-sub">'+p.ctaSub+'</div></div>'
       +'</div>';
@@ -15301,7 +15301,7 @@ window.raasAdminLoad = function(){
         return;
       }
       function eur(n){ return (n||0).toLocaleString('fr-FR')+'\u202f\u20ac'; }
-      var stLbl = {pending:'⏳ En attente', verified:'✅ Vérifié', invoiced:'?? Facturé'};
+      var stLbl = {pending:'⏳ En attente', verified:'✅ Vérifié', invoiced:'Facturé'};
       var rows = '';
       d.milestones.forEach(function(m){
         var canVerify = (m.status === 'pending');
