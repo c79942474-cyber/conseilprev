@@ -2773,6 +2773,34 @@ textarea.form-el{min-height:86px;resize:vertical}
       <div class="tbl-head"><span class="tbl-title">Clients existants</span></div>
       <div id="clients-list"></div>
     </div>
+
+    <!-- ═══ PILOTAGE JALONS RAAS — Agent Sentinel Pricing Orchestrator ═══ -->
+    <div class="tbl-wrap" style="padding:20px;margin-top:20px">
+      <div class="tbl-head" style="border:none;padding:0 0 8px">
+        <span class="tbl-title">?? Pilotage des jalons RaaS par client</span>
+        <span class="bud-tip" tabindex="0" style="margin-left:8px">?
+          <span class="bud-tip-bubble" style="width:280px">
+            <strong>Agent Sentinel Pricing Orchestrator</strong><br>
+            Initialisez l’échéancier de 7 jalons AI Act d’un client, vérifiez chaque jalon (double déclencheur : score Sentinel atteint + évidence documentaire), puis lancez le cycle de facturation.<br>
+            Un jalon vérifié est <strong>irrévocable</strong> ; montants figés à la vérification ; paiement étalé sur 2 mensualités.
+          </span>
+        </span>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:14px">
+        <div>
+          <label style="font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted2);display:block;margin-bottom:4px">Client</label>
+          <select id="raas-client-select" style="padding:7px 10px;border:1px solid var(--rule2);border-radius:5px;background:var(--white);font-size:12px;min-width:220px" onchange="raasAdminLoad()"></select>
+        </div>
+        <div>
+          <label style="font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted2);display:block;margin-bottom:4px">SaaS mensuel de référence (€)</label>
+          <input type="number" id="raas-saas-monthly" value="350" min="50" max="10000" style="padding:7px 10px;border:1px solid var(--rule2);border-radius:5px;width:120px;font-size:12px">
+        </div>
+        <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="raasAdminInit()" title="Cree les 7 jalons pour ce client (idempotent, n ecrase jamais un jalon existant)">Initialiser l’échéancier</button>
+        <button class="mat-export-btn" onclick="raasAdminBill()" title="Facture les jalons verifies et genere l echeancier en 2 mensualites">Lancer le cycle de facturation</button>
+      </div>
+      <div id="raas-admin-msg" style="font-size:12px;margin-bottom:10px"></div>
+      <div id="raas-admin-table"></div>
+    </div>
   </div>
 </div>
 
@@ -15038,6 +15066,153 @@ window.go = function(id){
   // 'entreprise' cote serveur et beneficie donc du meme acces complet.
   return _gratuitOrigGo ? _gratuitOrigGo.apply(this, arguments) : undefined;
 };
+
+
+/* ═══ PILOTAGE JALONS RAAS — Agent Sentinel Pricing Orchestrator ═══ */
+window.raasAdminClients = [];
+
+window.raasAdminPopulate = function(){
+  var sel = document.getElementById('raas-client-select');
+  if(!sel) return;
+  fetch('/api/admin/clients', {credentials:'same-origin'})
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      var list = d.clients || d || [];
+      window.raasAdminClients = list;
+      sel.innerHTML = '<option value="">— Sélectionner un client —</option>' + list.map(function(c){
+        return '<option value="'+c.id+'">'+(c.nom_entreprise||('Client #'+c.id))+' ('+(c.plan||'gratuit')+')</option>';
+      }).join('');
+    })
+    .catch(function(){ sel.innerHTML = '<option value="">Erreur de chargement</option>'; });
+};
+
+window.raasAdminLoad = function(){
+  var sel = document.getElementById('raas-client-select');
+  var out = document.getElementById('raas-admin-table');
+  var msg = document.getElementById('raas-admin-msg');
+  if(!sel || !out) return;
+  if(!sel.value){ out.innerHTML=''; return; }
+  if(msg) msg.textContent = '';
+  out.innerHTML = '<div style="padding:14px;color:var(--muted)">Chargement…</div>';
+  fetch('/api/raas/milestones?client_id='+encodeURIComponent(sel.value), {credentials:'same-origin'})
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if(!d.ok){ out.innerHTML = '<div style="padding:14px;color:var(--accent)">'+(d.error||'Erreur')+'</div>'; return; }
+      if(!d.milestones.length){
+        out.innerHTML = '<div style="padding:14px;color:var(--muted2)">Aucun jalon initialisé pour ce client. Renseignez le SaaS mensuel de référence puis cliquez sur « Initialiser l’échéancier ».</div>';
+        return;
+      }
+      function eur(n){ return (n||0).toLocaleString('fr-FR')+'\u202f\u20ac'; }
+      var stLbl = {pending:'⏳ En attente', verified:'✅ Vérifié', invoiced:'?? Facturé'};
+      var rows = '';
+      d.milestones.forEach(function(m){
+        var canVerify = (m.status === 'pending');
+        rows += '<tr>'
+          + '<td>'+m.label+'</td>'
+          + '<td><span class="ms-badge-art">'+(m.art||'')+'</span></td>'
+          + '<td><span class="ms-badge-seuil">score \u2265 '+m.threshold+'</span></td>'
+          + '<td class="ms-amount">'+eur(m.amount_eur)+'</td>'
+          + '<td>'+(stLbl[m.status]||m.status)
+          + (m.verified_at ? '<div style="font-size:9px;color:var(--muted2)">'+String(m.verified_at).substring(0,10)+' · score '+(m.score_at_verification||'—')+'</div>' : '')
+          + '</td>'
+          + '<td>'+(canVerify
+            ? '<button class="mat-export-btn" style="padding:4px 10px;font-size:10px" onclick="raasAdminVerify(\''+m.milestone_id+'\','+m.threshold+')">Vérifier</button>'
+            : '<span style="font-size:10px;color:var(--muted2)">'+(m.status==='invoiced'?'Échelonné 2 mens.':'Acquis — irrévocable')+'</span>')+'</td>'
+          + '</tr>';
+      });
+      out.innerHTML =
+        '<div style="display:flex;gap:16px;margin-bottom:10px;font-size:12px">'
+        + '<div>Enveloppe totale\u00a0: <strong>'+eur(d.envelope_total)+'</strong></div>'
+        + '<div>Vérifié/facturé\u00a0: <strong style="color:var(--green)">'+eur(d.verified_total)+'</strong></div>'
+        + '</div>'
+        + '<table class="ms-table"><thead><tr>'
+        + '<th>Jalon</th><th>Réf.</th><th>Seuil</th><th>Montant</th><th>Statut</th><th>Action</th>'
+        + '</tr></thead><tbody>'+rows+'</tbody></table>';
+    })
+    .catch(function(){ out.innerHTML = '<div style="padding:14px;color:var(--accent)">Erreur réseau.</div>'; });
+};
+
+window.raasAdminInit = function(){
+  var sel = document.getElementById('raas-client-select');
+  var saas = parseFloat((document.getElementById('raas-saas-monthly')||{value:'350'}).value||'350');
+  var msg = document.getElementById('raas-admin-msg');
+  if(!sel || !sel.value){ if(msg){ msg.style.color='var(--accent)'; msg.textContent='Sélectionnez d’abord un client.'; } return; }
+  if(msg){ msg.style.color='var(--muted)'; msg.textContent='Initialisation…'; }
+  fetch('/api/raas/milestones/init', {
+    method:'POST', credentials:'same-origin',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({client_id: parseInt(sel.value,10), saas_monthly: saas})
+  }).then(function(r){ return r.json(); }).then(function(d){
+    if(msg){
+      msg.style.color = d.ok ? 'var(--green)' : 'var(--accent)';
+      msg.textContent = d.ok
+        ? (d.created+' jalon(s) créé(s) — enveloppe '+((d.envelope||0).toLocaleString('fr-FR'))+'\u202f\u20ac (60\u00a0% du SaaS annuel). Les jalons existants n’ont pas été modifiés.')
+        : (d.error||'Erreur');
+    }
+    raasAdminLoad();
+  }).catch(function(){ if(msg){ msg.style.color='var(--accent)'; msg.textContent='Erreur réseau.'; } });
+};
+
+window.raasAdminVerify = function(milestoneId, threshold){
+  var sel = document.getElementById('raas-client-select');
+  var msg = document.getElementById('raas-admin-msg');
+  if(!sel || !sel.value) return;
+  var score = prompt('Score Sentinel constaté pour ce jalon (seuil requis\u00a0: '+threshold+')\u00a0:');
+  if(score === null) return;
+  var evidence = prompt('Évidence documentaire (obligatoire — référence du document, lien, constat)\u00a0:');
+  if(evidence === null) return;
+  if(msg){ msg.style.color='var(--muted)'; msg.textContent='Vérification…'; }
+  fetch('/api/raas/milestones/verify', {
+    method:'POST', credentials:'same-origin',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({client_id: parseInt(sel.value,10), milestone_id: milestoneId,
+                          score: parseFloat(score), evidence: evidence})
+  }).then(function(r){ return r.json(); }).then(function(d){
+    if(msg){
+      msg.style.color = d.ok ? 'var(--green)' : 'var(--accent)';
+      msg.textContent = d.ok
+        ? ('Jalon vérifié — '+((d.amount_eur||0).toLocaleString('fr-FR'))+'\u202f\u20ac acquis définitivement (irrévocable).')
+        : (d.error||'Erreur');
+    }
+    raasAdminLoad();
+  }).catch(function(){ if(msg){ msg.style.color='var(--accent)'; msg.textContent='Erreur réseau.'; } });
+};
+
+window.raasAdminBill = function(){
+  var sel = document.getElementById('raas-client-select');
+  var msg = document.getElementById('raas-admin-msg');
+  if(!sel || !sel.value){ if(msg){ msg.style.color='var(--accent)'; msg.textContent='Sélectionnez d’abord un client.'; } return; }
+  if(!confirm('Facturer tous les jalons vérifiés de ce client\u00a0? Chaque jalon sera échelonné sur 2 mensualités (montants figés).')) return;
+  if(msg){ msg.style.color='var(--muted)'; msg.textContent='Cycle de facturation…'; }
+  fetch('/api/raas/billing-cycle', {
+    method:'POST', credentials:'same-origin',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({client_id: parseInt(sel.value,10)})
+  }).then(function(r){ return r.json(); }).then(function(d){
+    if(msg){
+      msg.style.color = d.ok ? 'var(--green)' : 'var(--accent)';
+      if(d.ok && d.invoiced_count > 0){
+        var det = (d.schedule||[]).map(function(s){ return s.label+' ('+s.installments.join('\u202f\u20ac + ')+'\u202f\u20ac)'; }).join(' · ');
+        msg.textContent = d.invoiced_count+' jalon(s) facturé(s) — total '+((d.total_eur||0).toLocaleString('fr-FR'))+'\u202f\u20ac — '+det;
+      } else if(d.ok){
+        msg.textContent = 'Aucun jalon vérifié en attente de facturation.';
+      } else {
+        msg.textContent = d.error||'Erreur';
+      }
+    }
+    raasAdminLoad();
+  }).catch(function(){ if(msg){ msg.style.color='var(--accent)'; msg.textContent='Erreur réseau.'; } });
+};
+
+/* Peupler le selecteur de clients a l ouverture de la page clients */
+(function(){
+  var _raasOrigGo = window.go;
+  window.go = function(id){
+    var r = _raasOrigGo ? _raasOrigGo.apply(this, arguments) : undefined;
+    if(id === 'clients') setTimeout(window.raasAdminPopulate, 400);
+    return r;
+  };
+})();
 
 })();
 
