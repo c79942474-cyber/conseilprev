@@ -13470,13 +13470,16 @@ window.pricingComputeMilestoneSchedule = pricingComputeMilestoneSchedule;
 
 /* ── Rendu de l'echeancier jalons dans la page tarification ── */
 window.RAAS_PROFILE_MILESTONES = {
-  directeur_programme: ['registre','classif','sgr','fria','audit80','attest'],
-  grc_senior: ['registre','classif','sgr','doctech','fria','audit80','attest'],
-  risk_manager: ['registre','classif','sgr','fria','audit80','attest'],
-  ceo: ['registre','classif','audit80','attest'],
-  dpo: ['registre','classif','fria','attest'],
-  cdo: ['registre','classif','sgr','doctech','attest'],
-  caio: ['registre','classif','doctech','attest']
+  /* Chaque profil metier declenche les jalons correspondant aux modules Sentinel
+     de son parcours guide. Signatures differenciees : le socle registre+classif+attest
+     est commun, le reste refletant la specialite (SGR, documentation, FRIA, audit). */
+  directeur_programme: ['registre','classif','sgr','doctech','fria','audit80','attest'], // pilotage complet : 7 jalons
+  grc_senior:          ['registre','classif','sgr','doctech','audit80','attest'],        // controle permanent, sans FRIA operationnelle
+  risk_manager:        ['registre','classif','sgr','fria','audit80','attest'],           // risques + FRIA, sans documentation technique
+  ceo:                 ['registre','classif','audit80','attest'],                        // vue direction : jalons de synthese
+  dpo:                 ['registre','classif','fria','attest'],                           // protection des donnees : FRIA au coeur
+  cdo:                 ['registre','classif','doctech','attest'],                        // gouvernance data : documentation technique
+  caio:                ['registre','classif','sgr','attest']                             // deploiement a l echelle : SGR
 };
 
 window.RAAS_ROLE_MILESTONES = {
@@ -13621,13 +13624,27 @@ window.milestonesExportPdf = function(){
   var nb=parseInt((document.getElementById('pricing-nb-systemes')||{value:'10'}).value||'10',10);
   var bi=window.__pricingBilling||'monthly';
   var saasM=pricingComputeSaaS(nb,sec,bi,seg);
+  /* Role AI Act + profil metier : filtrer les jalons comme a l'ecran (intersection) */
+  var roleSel=document.getElementById('ms-role-select');
+  var role=(roleSel&&roleSel.value)||'deployeur';
+  var profSel=document.getElementById('ms-profile-select');
+  var profId=(profSel&&profSel.value)||'directeur_programme';
+  var roleJ=(window.RAAS_ROLE_MILESTONES&&window.RAAS_ROLE_MILESTONES[role])||null;
+  var profJ=(window.RAAS_PROFILE_MILESTONES&&window.RAAS_PROFILE_MILESTONES[profId])||null;
+  var applicable=(roleJ&&profJ)?roleJ.filter(function(id){return profJ.indexOf(id)!==-1;}):(roleJ||profJ);
+  var shownMs=applicable?sched.milestones.filter(function(m){return applicable.indexOf(m.id)!==-1;}):sched.milestones;
+  var envShown=shownMs.reduce(function(a,m){return a+m.amount;},0);
+  var totalShown=sched.socle*12+envShown;
+  var pctShown=Math.round(totalShown/(saasM*12)*100);
+  var roleLbl={fournisseur:'Fournisseur',deployeur:'D\u00e9ployeur',importateur:'Importateur',distributeur:'Distributeur'}[role]||role;
+  var profLbl=(window.RAAS_PROFILES&&window.RAAS_PROFILES[profId])?window.RAAS_PROFILES[profId].role:profId;
   var segLbl={pme:'PME (< 250 salari\u00e9s)',eti:'ETI',ge:'Grands comptes'}[seg]||seg;
   var secLbl=(window.MAT_SECTORS&&window.MAT_SECTORS[sec])?window.MAT_SECTORS[sec].label:sec;
   var biLbl=bi==='annual'?'Annuel (12 mois)':'Mensuel (sans engagement)';
   var today=new Date().toLocaleDateString('fr-FR');
   function eur(n){ return (n||0).toLocaleString('fr-FR')+'\u202f\u20ac'; }
   var rows='';
-  sched.milestones.forEach(function(m){
+  shownMs.forEach(function(m){
     rows+='<tr><td>'+m.label+'</td><td>'+m.art+'</td><td style="text-align:center">score \u2265 '+m.threshold+'</td>'
       +'<td style="text-align:center">'+Math.round(m.w*100)+'\u00a0%</td>'
       +'<td style="text-align:right"><strong>'+eur(m.amount)+'</strong></td>'
@@ -13669,18 +13686,18 @@ window.milestonesExportPdf = function(){
     +'<div class="kpis">'
     +'<div class="kpi"><span>Socle mensuel garanti</span><b>'+eur(sched.socle)+'</b><small>\u223535\u00a0% du SaaS \u2014 seul co\u00fbt fixe</small></div>'
     +'<div class="kpi"><span>Enveloppe r\u00e9sultats (7 jalons)</span><b>'+eur(sched.envelope)+'</b><small>60\u00a0% du SaaS annuel \u2014 pay\u00e9e si v\u00e9rifi\u00e9e</small></div>'
-    +'<div class="kpi"><span>Total maximal annuel</span><b>'+eur(sched.totalMax)+'</b><small>'+sched.pctOfSaas+'\u00a0% du SaaS \u2014 toujours inf\u00e9rieur</small></div>'
+    +'<div class="kpi"><span>Total maximal annuel</span><b>'+eur(totalShown)+'</b><small>'+pctShown+'\u00a0% du SaaS \u2014 toujours inf\u00e9rieur</small></div>'
     +'</div>'
     +'<h2>Jalons de conformit\u00e9 et d\u00e9clencheurs</h2>'
     +'<table><thead><tr><th>Jalon</th><th>R\u00e9f\u00e9rence AI Act</th><th>Seuil Sentinel</th><th>Pond\u00e9ration</th><th>Montant</th><th>D\u00e9clenchement projet\u00e9</th></tr></thead>'
     +'<tbody>'+rows
-    +'<tr class="tot"><td colspan="4">Total si tous les jalons sont atteints (socle 12 mois inclus)</td>'
-    +'<td style="text-align:right">'+eur(sched.totalMax)+'</td><td style="text-align:center">'+sched.pctOfSaas+'\u00a0% du SaaS</td></tr>'
+    +'<tr class="tot"><td colspan="4">Total des jalons applicables à votre rôle et profil (socle 12 mois inclus)</td>'
+    +'<td style="text-align:right">'+eur(totalShown)+'</td><td style="text-align:center">'+pctShown+'\u00a0% du SaaS</td></tr>'
     +'</tbody></table>'
     +'<div class="pagebreak"></div>'
     +'<h2>Conditions et garanties contractuelles</h2>'
     +'<div class="guar"><strong>Garanties contractuelles du mod\u00e8le RaaS par jalons</strong><br>'
-    +'1. Plafond annuel born\u00e9\u00a0: le total socle + jalons ne d\u00e9passe jamais \u2248'+sched.pctOfSaas+'\u00a0% du SaaS \u00e9quivalent.<br>'
+    +'1. Plafond annuel born\u00e9\u00a0: le total socle + jalons ne d\u00e9passe jamais \u2248'+pctShown+'\u00a0% du SaaS \u00e9quivalent.<br>'
     +'2. Jalon v\u00e9rifi\u00e9 = acquis d\u00e9finitivement, jamais refactur\u00e9 ni r\u00e9\u00e9valu\u00e9.<br>'
     +'3. Aucune facturation sans double v\u00e9rification\u00a0: score Sentinel du domaine atteint <em>et</em> validation documentaire par CONSEILPREV.<br>'
     +'4. Paiement de chaque jalon \u00e9tal\u00e9 sur '+sched.payMonths+' mensualit\u00e9s \u00e9gales.<br>'
