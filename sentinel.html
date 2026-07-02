@@ -14646,34 +14646,18 @@ function gratuitCheckSidebarVisibility(){
       return;
     }
 
-    // ── Plans Pro / Entreprise — en attente d'activation CONSEILPREV ──
+    // ── Plans Pro / Entreprise — acces complet a tous les modules ──
+    // Les plans Pro et Entreprise ne sont attribues que par l'administration
+    // CONSEILPREV (jamais via l'inscription publique). Ils donnent donc acces
+    // a l'integralite des modules Sentinel, sans masquage ni redirection.
     if(plan === 'pro' || plan === 'entreprise'){
-      var PENDING_OK = ['apercu','simulateur','regs','training','pricing'];
+      // S'assurer que tous les items de la barre laterale sont visibles
       document.querySelectorAll('.sb-item').forEach(function(item){
-        var match = item.getAttribute('onclick') && item.getAttribute('onclick').match(/go\('(\w+)'/);
-        var pageId = match ? match[1] : null;
-        if(pageId && PENDING_OK.indexOf(pageId) === -1){
-          item.style.display = 'none';
-        }
+        item.style.display = '';
       });
-      if(!document.getElementById('sentinel-pending-banner')){
-        var planLabel = plan === 'pro' ? 'Pro' : 'Entreprise';
-        var pb = document.createElement('div');
-        pb.id = 'sentinel-pending-banner';
-        pb.style.cssText = 'margin:12px 16px;padding:12px 14px;background:rgba(28,90,138,.06);border:1px solid rgba(28,90,138,.25);border-radius:7px;font-size:11px;color:var(--ink2);line-height:1.6';
-        pb.innerHTML = '\u23F3 <strong>Sentinel ' + planLabel + '</strong> \u2014 Acc\u00e8s complet activ\u00e9 apr\u00e8s signature du contrat RaaS.<br><a href="javascript:go(\u0027pricing\u0027)" style="color:var(--blue);font-weight:600">Compl\u00e9ter ma demande de tarification \u2192</a>';
-        var nav2 = document.querySelector('.sb-nav');
-        if(nav2) nav2.parentNode.insertBefore(pb, nav2.nextSibling);
-      }
-      // Rediriger vers pricing si page courante non autorisée
-      setTimeout(function(){
-        var cur = document.querySelector('.page.on');
-        var curId = cur ? cur.id.replace('p-','') : '';
-        var POK = ['apercu','simulateur','regs','training','pricing'];
-        if(curId && POK.indexOf(curId) === -1){
-          go('pricing',null,'BUSINESS','Tarification par r\u00e9sultats');
-        }
-      }, 200);
+      // Retirer une eventuelle banniere de restriction posee lors d'un rendu anterieur
+      var oldPb = document.getElementById('sentinel-pending-banner');
+      if(oldPb && oldPb.parentNode) oldPb.parentNode.removeChild(oldPb);
       return;
     }
   }).catch(function(){ window.__SENTINEL_PLAN = null; });
@@ -14688,6 +14672,7 @@ window.go = function(id){
   // ── Plan Gratuit ──────────────────────────────────────────────
   // Blocage UNIQUEMENT si le serveur a confirme un compte gratuit (_plan==='gratuit').
   // _plan null/undefined (session CONSEILPREV, /me en cours, erreur reseau) = pas de blocage.
+  // Les plans pro/entreprise et la session CONSEILPREV ont acces a tout.
   if(_plan === 'gratuit' && GRATUIT_ALLOWED_PAGES.indexOf(id) === -1){
     var notif = document.getElementById('gratuit-lock-notif');
     if(!notif){
