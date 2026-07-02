@@ -8318,31 +8318,90 @@ function matCallAIExecute(prompt, api, cb, sys){
 /* Markdown simple → HTML */
 function matMdToHtml(md){
   if(!md) return '';
-  /* Normaliser : convertir les <br> litteraux du modele en vrais sauts de ligne */
-  md = md.replace(/<br\s*\/?>/gi, '\n');
-  /* Supprimer les lignes de separation de tableau pleines de tirets/pipes isolees hors tableau */
+  /* Uniformiser les fins de ligne. Les <br> sont conserves ici et traites
+     plus bas : convertis en separateur inline dans les cellules de tableau
+     (pour ne pas eclater une rangee), et en sauts de ligne ailleurs. */
+  md = md.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  /* Hors tableau : un <br> en fin/milieu de ligne hors | devient un vrai saut.
+     On repere les lignes sans | et on y convertit les <br>. Les lignes avec |
+     gardent leurs <br> pour le rendu en cellule. */
+  md = md.split('\n').map(function(l){
+    return (l.indexOf('|') === -1) ? l.replace(/<br\s*\/?>/gi, '\n') : l;
+  }).join('\n');
   var lines = md.split('\n');
   var out = [];
   var i = 0;
 
   function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
   function inline(s){
+    /* Convertir les <br> restants (cellules de tableau) en <br> HTML propres
+       AVANT echappement, puis les restaurer apres. */
+    s = s.replace(/<br\s*\/?>/gi, '\u0001BR\u0001');
+    /* Ordre important : gras (**...**) avant italique (*...*) pour ne pas casser le gras */
     return esc(s)
       .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
-      .replace(/`([^`]+)`/g,'<code>$1</code>');
+      .replace(/(^|[^*])\*(?!\s)([^*]+?)\*(?!\*)/g,'$1<em>$2</em>')
+      .replace(/`([^`]+)`/g,'<code>$1</code>')
+      .replace(/\u0001BR\u0001/g, '<br>');
+  }
+  /* Une ligne est-elle une ligne de tableau ? (contient au moins un | non echappe entre du texte) */
+  function isTableRow(l){
+    var t = l.trim();
+    if(t.indexOf('|') === -1) return false;
+    /* Doit ressembler a des cellules : au moins un | interne, pas juste un | isole en fin de phrase */
+    var pipes = (t.match(/\|/g) || []).length;
+    return pipes >= 2 || (pipes >= 1 && (/^\|/.test(t) || /\|$/.test(t)));
+  }
+  /* Est-ce une ligne de separation de tableau ? (|---|:--:|---|) */
+  function isSep(l){
+    var t = l.trim();
+    return /^\|?[\s:|-]+\|[\s:|-]*$/.test(t) && t.indexOf('-') !== -1;
+  }
+  function splitCells(l){
+    return l.trim().replace(/^\||\|$/g,'').split('|').map(function(c){return c.trim();});
   }
 
   while(i < lines.length){
     var line = lines[i];
     var trimmed = line.trim();
 
-    /* Tableau markdown : ligne avec | suivie d'une ligne de separation |---|---| */
-    if(trimmed.indexOf('|') !== -1 && i+1 < lines.length && /^\s*\|?[\s:|-]+\|[\s:|-]*$/.test(lines[i+1]) && lines[i+1].indexOf('-') !== -1){
-      var headerCells = trimmed.replace(/^\||\|$/g,'').split('|').map(function(c){return c.trim();});
-      i += 2; /* sauter header + separateur */
+    /* ── Tableau markdown ─────────────────────────────────────────
+       Detection robuste : une ligne de tableau suivie soit d'un separateur,
+       soit directement d'autres lignes de tableau. Les lignes suivantes
+       contenant | sont absorbees dans le tableau meme sans separateur, ce
+       qui evite que des rangees se retrouvent en <p>/<li> avec des | bruts. */
+    if(isTableRow(trimmed) && i+1 < lines.length && (isSep(lines[i+1]) || isTableRow(lines[i+1]))){
+      var headerCells = splitCells(trimmed);
+      var nCol = headerCells.length;
+      i++;
+      /* Sauter la ligne de separation si presente */
+      if(i < lines.length && isSep(lines[i])) i++;
       var rows = [];
-      while(i < lines.length && lines[i].indexOf('|') !== -1 && lines[i].trim() !== ''){
-        var cells = lines[i].trim().replace(/^\||\|$/g,'').split('|').map(function(c){return c.trim();});
+      while(i < lines.length){
+        var lt = lines[i].trim();
+        if(lt === '') { i++; break; }
+        if(isSep(lines[i])) { i++; continue; }
+        if(!isTableRow(lt)){
+          /* Ligne sans | : continuation d'une cellule multi-lignes de la
+             rangee precedente (cas frequent quand le modele met une liste
+             dans une cellule). On l'accroche a la derniere cellule. */
+          if(rows.length && lt !== ''){
+            var last = rows[rows.length-1];
+            last[last.length-1] += ' ' + lt.replace(/^[-*•]\s+/, '');
+            i++;
+            continue;
+          }
+          break;
+        }
+        var cells = splitCells(lt);
+        /* Normaliser le nombre de colonnes sur l'en-tete */
+        if(cells.length < nCol){ while(cells.length < nCol) cells.push(''); }
+        else if(cells.length > nCol){
+          /* Fusionner le surplus dans la derniere colonne */
+          var head = cells.slice(0, nCol-1);
+          head.push(cells.slice(nCol-1).join(' '));
+          cells = head;
+        }
         rows.push(cells);
         i++;
       }
@@ -8361,10 +8420,10 @@ function matMdToHtml(md){
     if(/^##\s+/.test(trimmed)){ out.push('<h2>'+inline(trimmed.replace(/^##\s+/,''))+'</h2>'); i++; continue; }
     if(/^#\s+/.test(trimmed)){ out.push('<h2>'+inline(trimmed.replace(/^#\s+/,''))+'</h2>'); i++; continue; }
 
-    /* Listes à puces (-, *, •) */
-    if(/^[-*•]\s+/.test(trimmed)){
+    /* Listes a puces (-, *, •) — mais PAS une ligne de tableau */
+    if(/^[-*•]\s+/.test(trimmed) && !isTableRow(trimmed)){
       var items = [];
-      while(i < lines.length && /^[-*•]\s+/.test(lines[i].trim())){
+      while(i < lines.length && /^[-*•]\s+/.test(lines[i].trim()) && !isTableRow(lines[i].trim())){
         items.push('<li>'+inline(lines[i].trim().replace(/^[-*•]\s+/,''))+'</li>');
         i++;
       }
@@ -8372,7 +8431,7 @@ function matMdToHtml(md){
       continue;
     }
 
-    /* Listes numérotées */
+    /* Listes numerotees */
     if(/^\d+\.\s+/.test(trimmed)){
       var oitems = [];
       while(i < lines.length && /^\d+\.\s+/.test(lines[i].trim())){
@@ -8394,7 +8453,7 @@ function matMdToHtml(md){
     i++;
     while(i < lines.length){
       var nxt = lines[i].trim();
-      if(nxt === '' || /^[#\-*•]\s/.test(nxt) || /^\d+\.\s/.test(nxt) || nxt.indexOf('|') !== -1 || /^[-*_]{3,}$/.test(nxt)) break;
+      if(nxt === '' || /^#{1,4}\s/.test(nxt) || /^[-*•]\s/.test(nxt) || /^\d+\.\s/.test(nxt) || isTableRow(nxt) || /^[-*_]{3,}$/.test(nxt)) break;
       para.push(nxt);
       i++;
     }
