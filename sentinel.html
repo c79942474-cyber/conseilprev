@@ -1652,6 +1652,26 @@ textarea.form-el{min-height:86px;resize:vertical}
 .tmi-gen-out ul{margin:6px 0;padding-left:20px}
 .tmi-gen-out li{margin:3px 0}
 
+
+/* ══ ECHEANCIER RAAS PAR JALONS ══ */
+.ms-table{width:100%;border-collapse:collapse;font-size:11.5px;margin:14px 0}
+.ms-table th{background:var(--bg2);font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted2);padding:8px 10px;text-align:left;border-bottom:1.5px solid var(--rule2)}
+.ms-table td{padding:9px 10px;border-bottom:1px solid var(--rule);color:var(--ink2);vertical-align:middle}
+.ms-table tr:hover td{background:var(--bg)}
+.ms-badge-art{display:inline-block;background:rgba(184,50,34,.07);border:1px solid rgba(184,50,34,.2);border-radius:3px;padding:1px 6px;font-size:9px;font-family:var(--mono);color:var(--accent)}
+.ms-badge-seuil{display:inline-block;background:var(--bg2);border:1px solid var(--rule2);border-radius:3px;padding:1px 6px;font-size:9px;font-family:var(--mono);color:var(--muted2)}
+.ms-badge-mois{display:inline-block;background:rgba(28,90,138,.08);border:1px solid rgba(28,90,138,.25);border-radius:3px;padding:1px 7px;font-size:9.5px;font-family:var(--mono);color:var(--blue);font-weight:700}
+.ms-badge-na{display:inline-block;background:var(--bg2);border:1px solid var(--rule);border-radius:3px;padding:1px 7px;font-size:9.5px;font-family:var(--mono);color:var(--muted2)}
+.ms-amount{font-family:var(--mono);font-weight:700;color:var(--ink)}
+.ms-total-row td{border-top:2px solid var(--ink);font-weight:700;color:var(--ink);background:var(--bg)}
+.ms-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+@media(max-width:700px){.ms-summary{grid-template-columns:1fr}}
+.ms-sum-card{background:var(--bg);border:1px solid var(--rule);border-radius:8px;padding:14px 16px}
+.ms-sum-lbl{font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--muted2);margin-bottom:5px}
+.ms-sum-val{font-size:19px;font-weight:700;font-family:var(--mono);color:var(--ink)}
+.ms-sum-sub{font-size:10px;color:var(--muted2);margin-top:3px}
+.ms-guarantee{background:rgba(45,122,71,.06);border:1px solid rgba(45,122,71,.22);border-radius:7px;padding:12px 14px;font-size:11.5px;color:var(--ink2);line-height:1.65;margin-top:12px}
+
 </style>
 
 </head>
@@ -2577,6 +2597,32 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div id="pricing-chart-insight" class="chart-insight"></div>
   </div>
 
+
+  <!-- ECHEANCIER RAAS PAR JALONS -->
+  <div class="tbl-wrap" style="padding:24px;margin-top:24px;margin-bottom:0">
+    <div class="tbl-head" style="border:none;padding:0 0 6px">
+      <span class="tbl-title">Échéancier RaaS par jalons — paiement dynamique sur résultats vérifiés</span>
+      <span class="bud-tip" tabindex="0" style="margin-left:8px">?
+        <span class="bud-tip-bubble" style="width:280px">
+          <strong>Principe du paiement par jalons</strong><br>
+          Vous payez un socle mensuel réduit (∵35 % du SaaS), puis chaque jalon de conformité AI Act uniquement lorsqu’il est <em>vérifié</em> : score Sentinel du domaine atteint <em>et</em> validation documentaire par CONSEILPREV.<br>
+          Chaque jalon acquis est <strong>irrévocable</strong> et payé en 2 mensualités.<br>
+          Total maximal contractuellement borné à ≈95 % du SaaS — le RaaS ne peut jamais coûter plus cher que l’abonnement classique.
+        </span>
+      </span>
+    </div>
+    <p style="font-size:12px;color:var(--muted2);margin:0 0 10px;line-height:1.6">Échéancier recalculé depuis vos paramètres simulateur (segment, secteur, trajectoire réaliste projetée). Les mois de déclenchement sont prévisionnels ; la facturation réelle n’intervient qu’après vérification.</p>
+    <div class="ms-summary" id="ms-summary"><!-- rendu par milestonesRender() --></div>
+    <table class="ms-table">
+      <thead><tr>
+        <th>Jalon de conformité</th><th>Référence</th><th>Seuil Sentinel</th><th>Pond.</th><th>Montant</th><th>Déclenchement projeté</th>
+      </tr></thead>
+      <tbody id="ms-tbody"><!-- rendu par milestonesRender() --></tbody>
+    </table>
+    <div class="ms-guarantee">
+      ??️ <strong>Garanties contractuelles du modèle :</strong> plafond annuel borné — le total socle + jalons ne dépasse jamais ≈95 % du SaaS équivalent ; jalon vérifié = acquis définitivement, jamais refacturé ; aucune facturation de jalon sans double vérification (score Sentinel + validation documentaire) ; en cas de progression partielle, vous ne payez que les jalons atteints — le risque d’exécution est porté par CONSEILPREV, pas par vous.
+    </div>
+  </div>
 
   <!-- COMPARAISON 3 PLANS SENTINEL -->
   <div class="tbl-wrap" style="padding:24px;margin-top:24px;margin-bottom:0">
@@ -12924,7 +12970,25 @@ var PRICING_PARAMS = {
   pricePerSanctionBySegment:    {pme:0.001, eti:0.003, ge:0.004},
   pricePerAuditPoint: 2, pricePerSanctionReduced: 0.001, pricePerSystemClassified: 4,
   variableCapMultiplier: 3,
-  classifWeight: { inacceptable: 1.6, haut: 1.4, limite: 1.0, minimal: 0.6, a_evaluer: 0.8 }
+  classifWeight: { inacceptable: 1.6, haut: 1.4, limite: 1.0, minimal: 0.6, a_evaluer: 0.8 },
+
+  /* ── MODELE RAAS PAR JALONS (paiement dynamique sur resultats verifies) ──
+     Socle mensuel reduit (35 % du SaaS) + enveloppe resultats bornee a 60 %
+     du SaaS annuel, repartie sur 7 jalons de conformite AI Act. Chaque jalon
+     n'est facturable qu'apres double declencheur : score Sentinel atteint
+     (threshold) ET validation documentaire. Paiement etale sur payMonths
+     mensualites. Jalon acquis = irrevocable. Total max ~95 % du SaaS. */
+  raasEnvelopeRate: 0.60,
+  raasMilestonePayMonths: 2,
+  raasMilestones: [
+    {id:'registre',  label:'Registre IA complet',          art:'Art. 49',    w:0.10, threshold:30},
+    {id:'classif',   label:'Classification des risques',   art:'Annexe III', w:0.10, threshold:38},
+    {id:'sgr',       label:'SGR op\u00e9rationnel',            art:'Art. 9',     w:0.15, threshold:48},
+    {id:'doctech',   label:'Documentation technique',      art:'Art. 11',    w:0.15, threshold:58},
+    {id:'fria',      label:'FRIA r\u00e9alis\u00e9e',               art:'Art. 27',    w:0.10, threshold:65},
+    {id:'audit80',   label:'Audit de conformit\u00e9 \u2265 80 %', art:'Art. 43',    w:0.20, threshold:80},
+    {id:'attest',    label:'Attestation finale',           art:'Art. 47',    w:0.20, threshold:90}
+  ]
 };
 
 /* Exposer PRICING_PARAMS globalement pour les modules tiers (comparaison plans, etc.) */
@@ -13021,6 +13085,15 @@ function pricingRenderChartFull(saasMonthly,scenarios,months,view){
   function buildS(arr){var out=[],cum=0,i;for(i=0;i<n;i++){var h=pt(arr,i);if(view==='cumul'){cum+=h.total;out.push({total:cum,socle:h.socle,variable:h.variable});}else{out.push({total:h.total,socle:h.socle,variable:h.variable});}}return out;}
   function saasS(){var out=[],cum=0,i;for(i=0;i<n;i++){if(view==='cumul'){cum+=saasMonthly;out.push(cum);}else{out.push(saasMonthly);}}return out;}
   var sR=buildS(scenarios.realiste),sP=buildS(scenarios.pessimiste),sO=buildS(scenarios.optimiste),sS=saasS();
+  /* Serie RaaS Jalons : paiement dynamique sur resultats verifies */
+  var sJ=null;
+  try{
+    var _secJ=(document.getElementById('pricing-secteur')&&document.getElementById('pricing-secteur').value)||'it';
+    var _segJ=(document.getElementById('pricing-segment')&&document.getElementById('pricing-segment').value)||'pme';
+    var _sched=pricingComputeMilestoneSchedule(saasMonthly,_segJ,_secJ,scenarios.realiste,n);
+    window.__milestoneSchedule=_sched;
+    sJ=_sched.serie.map(function(x){return {total:(view==='cumul')?x.cumul:x.total,socle:x.socle,variable:x.jalons};});
+  }catch(eJ){ sJ=null; }
   var eqM=-1,cs=0,ch=0,ei;
   if(view==='cumul'){for(ei=0;ei<n;ei++){cs+=saasMonthly;ch+=pt(scenarios.realiste,ei).total;if(ei>0&&ch<=cs){eqM=ei+1;break;}}}
   var badge=document.getElementById('pricing-chart-eq-badge');
@@ -13028,8 +13101,8 @@ function pricingRenderChartFull(saasMonthly,scenarios,months,view){
   var titleEl=document.getElementById('pricing-chart-title');
   if(titleEl) titleEl.textContent='Projection sur '+n+' mois \u2014 '+(view==='cumul'?'co\u00fbts cumul\u00e9s':'co\u00fbts mensuels');
   var insEl=document.getElementById('pricing-chart-insight');
-  if(insEl){var dF=sS[n-1]-sR[n-1].total;insEl.textContent=view==='cumul'?(dF>0?'\u00c9conomie cumul\u00e9e sur '+n+' mois : '+dF.toLocaleString('fr-FR')+'\u202f\u20ac':'Sur\u00e9co\u00fbt sur '+n+' mois : '+Math.abs(dF).toLocaleString('fr-FR')+'\u202f\u20ac'):'M'+n+' : SaaS '+saasMonthly.toLocaleString('fr-FR')+'\u202f\u20ac/mois vs Hybride '+sR[n-1].total.toLocaleString('fr-FR')+'\u202f\u20ac/mois';}
-  var allV=[],ai;for(ai=0;ai<n;ai++){allV.push(sR[ai].total,sP[ai].total,sO[ai].total,sS[ai]);}
+  /* Insight place ici mais recalcule apres construction de sJ : deplace en fin de fonction */
+  var allV=[],ai;for(ai=0;ai<n;ai++){allV.push(sR[ai].total,sP[ai].total,sO[ai].total,sS[ai]);if(sJ)allV.push(sJ[ai].total);}
   var maxVal=Math.max.apply(null,allV)*1.12;
   var W=640,H=300,padL=60,padB=34,padT=22,padR=22,cW=W-padL-padR,cH=H-padT-padB;
   function yv(v){return padT+cH-(v/maxVal)*cH;}
@@ -13050,9 +13123,10 @@ function pricingRenderChartFull(saasMonthly,scenarios,months,view){
       legEl.appendChild(sp);
     }
     addLeg('SaaS '+_sgl,'var(--muted2)',true,'');
-    addLeg('Hybride r\u00e9aliste','var(--accent)',false,'');
-    addLeg('Pessimiste','var(--accent)',true,'0.6');
-    addLeg('Optimiste','var(--green)',true,'0.6');
+    addLeg('RaaS Jalons \u2014 recommand\u00e9','var(--blue)',false,'');
+    addLeg('Hybride continu','var(--accent)',false,'0.75');
+    addLeg('Pessimiste','var(--accent)',true,'0.5');
+    addLeg('Optimiste','var(--green)',true,'0.5');
   }
   /* ── Construction SVG avec animations ── */
   var parts=[];
@@ -13102,11 +13176,21 @@ function pricingRenderChartFull(saasMonthly,scenarios,months,view){
   function polyPts(arr){var pts='',pli;for(pli=0;pli<n;pli++) pts+=xv(pli)+','+yv(arr[pli].total)+' ';return pts;}
   parts.push('<polyline points="'+polyPts(sP)+'" stroke="var(--accent)" stroke-width="1.5" fill="none" opacity="0.45" pathLength="1" class="chart-line-alt" stroke-dasharray="1"/>');
   parts.push('<polyline points="'+polyPts(sO)+'" stroke="var(--green)" stroke-width="1.5" fill="none" opacity="0.45" pathLength="1" class="chart-line-alt" stroke-dasharray="1"/>');
-  parts.push('<polyline points="'+polyPts(sR)+'" stroke="var(--accent)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="chart-line-main" stroke-dasharray="1"/>');
+  parts.push('<polyline points="'+polyPts(sR)+'" stroke="var(--accent)" stroke-width="2" fill="none" opacity="0.75" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="chart-line-alt" stroke-dasharray="1"/>');
+  if(sJ){
+    parts.push('<polyline points="'+polyPts(sJ)+'" stroke="var(--blue)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="chart-line-main" stroke-dasharray="1"/>');
+  }
   /* Points realiste avec pop progressif */
   var di;
   for(di=0;di<n;di++){
     parts.push('<circle cx="'+xv(di)+'" cy="'+yv(sR[di].total)+'" r="3.5" fill="var(--accent)" stroke="var(--white)" stroke-width="1.2" class="chart-dot" style="animation-delay:'+(300+di*(700/Math.max(1,n)))+'ms"/>');
+  }
+  /* Points RaaS Jalons */
+  if(sJ){
+    var dj;
+    for(dj=0;dj<n;dj++){
+      parts.push('<circle cx="'+xv(dj)+'" cy="'+yv(sJ[dj].total)+'" r="3.5" fill="var(--blue)" stroke="var(--white)" stroke-width="1.2" class="chart-dot" style="animation-delay:'+(380+dj*(700/Math.max(1,n)))+'ms"/>');
+    }
   }
   /* Marqueur equilibre (pulse infini) */
   if(view==='cumul'&&eqM>0&&eqM<=n){
@@ -13143,9 +13227,22 @@ function pricingRenderChartFull(saasMonthly,scenarios,months,view){
       svg.appendChild(c);
     }
   }
-  addHover(sR,'Hybride r\u00e9aliste','var(--accent)');
+  addHover(sR,'Hybride continu','var(--accent)');
   addHover(sP,'Hybride pessimiste','var(--accent)');
   addHover(sO,'Hybride optimiste','var(--green)');
+  if(sJ) addHover(sJ,'RaaS Jalons','var(--blue)');
+  /* Insight comparatif final (apres construction de toutes les series) */
+  if(insEl){
+    if(sJ){
+      var dJ=sS[n-1]-sJ[n-1].total;
+      insEl.textContent=view==='cumul'
+        ? 'RaaS Jalons : \u00e9conomie de '+dJ.toLocaleString('fr-FR')+'\u202f\u20ac vs SaaS sur '+n+' mois \u2014 vous ne payez que les r\u00e9sultats v\u00e9rifi\u00e9s'
+        : 'M'+n+' \u2014 SaaS : '+saasMonthly.toLocaleString('fr-FR')+'\u202f\u20ac \u00b7 RaaS Jalons : '+sJ[n-1].total.toLocaleString('fr-FR')+'\u202f\u20ac \u00b7 Hybride continu : '+sR[n-1].total.toLocaleString('fr-FR')+'\u202f\u20ac';
+    } else {
+      var dF2=sS[n-1]-sR[n-1].total;
+      insEl.textContent=view==='cumul'?(dF2>0?'\u00c9conomie cumul\u00e9e sur '+n+' mois : '+dF2.toLocaleString('fr-FR')+'\u202f\u20ac':'Sur\u00e9co\u00fbt sur '+n+' mois : '+Math.abs(dF2).toLocaleString('fr-FR')+'\u202f\u20ac'):'M'+n+' : SaaS '+saasMonthly.toLocaleString('fr-FR')+'\u202f\u20ac/mois vs Hybride '+sR[n-1].total.toLocaleString('fr-FR')+'\u202f\u20ac/mois';
+    }
+  }
 }
 
 window.__chartMonths=6;window.__chartView='monthly';window.__scenariosCache=null;
@@ -13216,10 +13313,98 @@ function pricingProjectScenario(auditDepart, paceMultiplier, caAnnuel, nbSysteme
     cumGain = Math.min(100-auditDepart, cumGain + monthlyGain);
     var sanctionReduite = caAnnuel * 0.07 * (cumGain/100) * 0.3;
     var poidsClassifies = poidsTotal * Math.min(1, m/4);
-    results.push(pricingComputeHybrid(cumGain, sanctionReduite, poidsClassifies, segment, sector));
+    var r = pricingComputeHybrid(cumGain, sanctionReduite, poidsClassifies, segment, sector);
+    r.score = Math.min(100, auditDepart + cumGain);
+    results.push(r);
   }
   return results;
 }
+
+/* ── ECHEANCIER RAAS PAR JALONS : paiement dynamique sur resultats verifies ── */
+function pricingComputeMilestoneSchedule(saasMonthly, segment, sector, realiste, months){
+  var socleMap = (PRICING_PARAMS.hybridSocleBySegSector && PRICING_PARAMS.hybridSocleBySegSector[segment]) || {};
+  var socle = socleMap[sector] || PRICING_PARAMS.hybridSocle || Math.round(saasMonthly*0.35);
+  var envelope = Math.round(saasMonthly * 12 * (PRICING_PARAMS.raasEnvelopeRate || 0.60));
+  var payMonths = PRICING_PARAMS.raasMilestonePayMonths || 2;
+  var defs = PRICING_PARAMS.raasMilestones || [];
+  var milestones = defs.map(function(d){
+    return {id:d.id, label:d.label, art:d.art, w:d.w, threshold:d.threshold,
+            amount: Math.round(envelope * d.w), monthTriggered: null};
+  });
+  for(var mi=0; mi<milestones.length; mi++){
+    for(var m=0; m<months && m<realiste.length; m++){
+      var sc = realiste[m].score !== undefined ? realiste[m].score : 0;
+      if(sc >= milestones[mi].threshold){ milestones[mi].monthTriggered = m+1; break; }
+    }
+  }
+  var serie = []; var cumul = 0;
+  for(var m2=1; m2<=months; m2++){
+    var jal = 0;
+    milestones.forEach(function(ms){
+      if(ms.monthTriggered !== null && m2 >= ms.monthTriggered && m2 < ms.monthTriggered + payMonths){
+        jal += Math.round(ms.amount / payMonths);
+      }
+    });
+    var tot = socle + jal;
+    cumul += tot;
+    serie.push({socle:socle, jalons:jal, total:tot, cumul:cumul,
+                score:(realiste[Math.min(m2-1, realiste.length-1)].score||0)});
+  }
+  var totalMax = socle*12 + envelope;
+  return {milestones:milestones, serie:serie, socle:socle, envelope:envelope,
+          payMonths:payMonths, totalMax:totalMax,
+          pctOfSaas: Math.round(totalMax / (saasMonthly*12) * 100)};
+}
+window.pricingComputeMilestoneSchedule = pricingComputeMilestoneSchedule;
+
+/* ── Rendu de l'echeancier jalons dans la page tarification ── */
+window.milestonesRender = function(){
+  var tb=document.getElementById('ms-tbody');
+  var sm=document.getElementById('ms-summary');
+  if(!tb || !sm) return;
+  var sched=window.__milestoneSchedule;
+  if(!sched){ return; }
+  var saasM=(function(){
+    var nb=parseInt((document.getElementById('pricing-nb-systemes')||{value:'10'}).value||'10',10);
+    var sec=(document.getElementById('pricing-secteur')&&document.getElementById('pricing-secteur').value)||'it';
+    var seg=(document.getElementById('pricing-segment')&&document.getElementById('pricing-segment').value)||'pme';
+    var bi=window.__pricingBilling||'monthly';
+    return pricingComputeSaaS(nb,sec,bi,seg);
+  })();
+  var saasAnnual=saasM*12;
+  function eur(n){return n.toLocaleString('fr-FR')+'\u202f\u20ac';}
+  /* Cartes de synthese */
+  sm.innerHTML=
+    '<div class="ms-sum-card"><div class="ms-sum-lbl">Socle mensuel garanti</div>'
+    +'<div class="ms-sum-val">'+eur(sched.socle)+'</div>'
+    +'<div class="ms-sum-sub">\u223535\u00a0% du SaaS \u2014 seul co\u00fbt fixe</div></div>'
+    +'<div class="ms-sum-card"><div class="ms-sum-lbl">Enveloppe r\u00e9sultats (7 jalons)</div>'
+    +'<div class="ms-sum-val">'+eur(sched.envelope)+'</div>'
+    +'<div class="ms-sum-sub">60\u00a0% du SaaS annuel \u2014 pay\u00e9e uniquement si v\u00e9rifi\u00e9e</div></div>'
+    +'<div class="ms-sum-card"><div class="ms-sum-lbl">Total maximal annuel</div>'
+    +'<div class="ms-sum-val" style="color:var(--green)">'+eur(sched.totalMax)+'</div>'
+    +'<div class="ms-sum-sub">'+sched.pctOfSaas+'\u00a0% du SaaS ('+eur(saasAnnual)+') \u2014 toujours inf\u00e9rieur</div></div>';
+  /* Rangees jalons */
+  var rows='';
+  sched.milestones.forEach(function(ms){
+    rows+='<tr>'
+      +'<td>'+ms.label+'</td>'
+      +'<td><span class="ms-badge-art">'+ms.art+'</span></td>'
+      +'<td><span class="ms-badge-seuil">score \u2265 '+ms.threshold+'</span></td>'
+      +'<td>'+Math.round(ms.w*100)+'\u00a0%</td>'
+      +'<td class="ms-amount">'+eur(ms.amount)+'</td>'
+      +'<td>'+(ms.monthTriggered
+        ? '<span class="ms-badge-mois">M'+ms.monthTriggered+'\u2013M'+(ms.monthTriggered+sched.payMonths-1)+'</span>'
+        : '<span class="ms-badge-na">au-del\u00e0 de l\u2019horizon</span>')+'</td>'
+      +'</tr>';
+  });
+  rows+='<tr class="ms-total-row">'
+    +'<td colspan="4">Total si tous les jalons sont atteints (socle 12 mois inclus)</td>'
+    +'<td class="ms-amount">'+eur(sched.totalMax)+'</td>'
+    +'<td><span class="ms-badge-mois">'+sched.pctOfSaas+'\u00a0% du SaaS</span></td>'
+    +'</tr>';
+  tb.innerHTML=rows;
+};
 
 window.pricingSetBilling = function(mode){
   var toggle = document.getElementById('pricing-billing-toggle');
@@ -13384,6 +13569,7 @@ window.pricingSimulate = function(){
   if(_hm>months){scenarios={pessimiste:pricingProjectScenario(auditDepart,pace*0.55,caAnnuel,nbSystemes,poidsTotal,_hm,segment,sector),realiste:pricingProjectScenario(auditDepart,pace,caAnnuel,nbSystemes,poidsTotal,_hm,segment,sector),optimiste:pricingProjectScenario(auditDepart,pace*1.5,caAnnuel,nbSystemes,poidsTotal,_hm,segment,sector)};}
   window.__scenariosCache=scenarios;
   pricingRenderChart(saasMonthly,scenarios);
+  if(window.milestonesRender) window.milestonesRender();
 };
 
 window.pricingSetEstim = function(val){
@@ -13482,18 +13668,21 @@ window.plansRender=function(){
   var ab=document.getElementById('plans-annual-badge');
   if(ab) ab.textContent='−'+ap+' %';
   var tS=_t('<strong>Tarif SaaS de référence</strong><br>Segment : <em>'+sl+' — '+(bi==='annual'?'12 mois':'sans engagement')+'</em><br>Remise annuelle : <em>−'+ap+' %</em><br><em style="font-size:9px">Sources : OGMA 99 €/mois (TPE), TARANIS 559 €/mois (PME).</em>');
-  var tR=_t('<strong>Modèle RaaS</strong><br>Socle fixe : <em>'+_e(so)+'/mois</em> (∵35 % du SaaS)<br>Part variable : indexée sur vos résultats réels Sentinel<br>Plafonnée à 3× le socle (<em>'+_e(cp)+'</em>)<br><strong>Total max : '+_e(mx)+'/mois</strong>');
+  var envJ=Math.round(sm*12*((PP.raasEnvelopeRate)||0.60));
+  var maxJ=so*12+envJ;
+  var pctJ=Math.round(maxJ/(sm*12)*100);
+  var tR=_t('<strong>RaaS par jalons — paiement sur résultats vérifiés</strong><br>Socle : <em>'+_e(so)+'/mois</em> (∵35 % du SaaS)<br>Enveloppe résultats : <em>'+_e(envJ)+'</em> répartie sur 7 jalons AI Act, facturés uniquement après vérification<br><strong>Total max annuel : '+_e(maxJ)+' — '+pctJ+' % du SaaS, toujours inférieur</strong><br>Jalon acquis = irrévocable ; paiement étalé sur 2 mensualités.');
   el.innerHTML=_SP.map(function(p){
     var iG=p.id==='gratuit',iE=p.id==='entreprise';
     var pb='';
     if(iG){
       pb='<div class="plan-price-row"><span class="plan-price-main">0 €</span><span class="plan-price-period">/mois</span></div><div style="font-size:10px;color:var(--muted2);margin-top:3px">Sans engagement — toujours gratuit</div>';
     } else if(iE){
-      pb='<div class="plan-price-row"><span class="plan-price-main" style="font-size:16px">Sur devis</span>'+tS+'</div><div style="font-size:10px;color:var(--muted2);margin-top:2px">Fourchette orient. : '+_e(cur)+'–'+_e(Math.round(cur*1.4))+'/mois</div><div class="plan-price-raas"><div style="font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.09em;color:var(--accent);margin-bottom:4px">RaaS groupe'+tR+'</div>Socle GE : <span class="plan-price-raas-val">'+_e(so)+'/mois</span><div style="font-size:10px;color:var(--muted2);margin-top:2px">Max variable : '+_e(mx)+'/mois</div></div>';
+      pb='<div class="plan-price-row"><span class="plan-price-main" style="font-size:16px">Sur devis</span>'+tS+'</div><div style="font-size:10px;color:var(--muted2);margin-top:2px">Fourchette orient. : '+_e(cur)+'–'+_e(Math.round(cur*1.4))+'/mois</div><div class="plan-price-raas"><div style="font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.09em;color:var(--accent);margin-bottom:4px">RaaS jalons groupe'+tR+'</div>Socle GE : <span class="plan-price-raas-val">'+_e(so)+'/mois</span><div style="font-size:10px;color:var(--muted2);margin-top:2px">+ jalons vérifiés → max annuel '+_e(maxJ)+' ('+pctJ+' % du SaaS)</div></div>';
     } else {
       var oL=(bi==='annual')?'sans engagement':'annuel (−'+ap+' %)';
       var oV=(bi==='annual')?sm:sa;
-      pb='<div class="plan-price-row"><span class="plan-price-main">'+_e(cur)+'</span><span class="plan-price-period">/mois</span>'+tS+'</div><div style="font-size:10px;color:var(--muted2);margin-top:2px">vs '+_e(oV)+'/mois '+oL+'</div><div class="plan-price-raas"><div style="font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.09em;color:var(--accent);margin-bottom:4px">RaaS — tarification par résultats'+tR+'</div>Socle : <span class="plan-price-raas-val">'+_e(so)+'/mois</span><div style="font-size:10px;color:var(--muted2);margin-top:2px">+ variable selon résultats Sentinel → max '+_e(mx)+'/mois</div></div>';
+      pb='<div class="plan-price-row"><span class="plan-price-main">'+_e(cur)+'</span><span class="plan-price-period">/mois</span>'+tS+'</div><div style="font-size:10px;color:var(--muted2);margin-top:2px">vs '+_e(oV)+'/mois '+oL+'</div><div class="plan-price-raas"><div style="font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.09em;color:var(--accent);margin-bottom:4px">RaaS jalons — paiement sur résultats'+tR+'</div>Socle : <span class="plan-price-raas-val">'+_e(so)+'/mois</span><div style="font-size:10px;color:var(--muted2);margin-top:2px">+ 7 jalons vérifiés → max annuel '+_e(maxJ)+' ('+pctJ+' % du SaaS)</div></div>';
     }
     var cb=p.cta.act
       ?'<button class="plan-cta-btn '+p.cta.sty+'" onclick="'+p.cta.act+'">'+p.cta.lbl+'</button>'
