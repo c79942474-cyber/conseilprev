@@ -1675,6 +1675,11 @@ textarea.form-el{min-height:86px;resize:vertical}
 
 .prx-model-wrap .ctrl-section{overflow:visible}
 .prx-model-wrap .ctrl-section-head{overflow:visible}
+
+/* ══ NOTE EXPLICATIVE ROLE AI ACT ══ */
+.ms-role-note{background:rgba(28,90,138,.05);border:1px solid rgba(28,90,138,.2);border-left:3px solid var(--blue);border-radius:6px;padding:12px 16px;margin-bottom:14px;font-size:11.5px;line-height:1.65;color:var(--ink2)}
+.ms-role-note strong{color:var(--ink)}
+.ms-role-note .ms-role-arts{display:block;margin-top:6px;font-size:10.5px;color:var(--muted2);font-family:var(--mono)}
 </style>
 
 </head>
@@ -2546,6 +2551,7 @@ textarea.form-el{min-height:86px;resize:vertical}
         </select>
       </div>
     </div>
+    <div id="ms-role-note" class="ms-role-note"><!-- rendu par milestonesRenderRoleNote() --></div>
     <div class="ms-summary" id="ms-summary"><!-- rendu par milestonesRender() --></div>
     <table class="ms-table">
       <thead><tr>
@@ -13451,6 +13457,38 @@ window.RAAS_ROLE_MILESTONES = {
   distributeur:['registre','classif','audit80','attest']
 };
 
+window.RAAS_ROLE_NOTES = {
+  fournisseur: {
+    titre: 'Fournisseur',
+    desc: 'En tant que fournisseur (Art. 16), vous portez l\'integralite des obligations du cycle de conception d\'un systeme IA a haut risque. Les sept jalons s\'appliquent : registre, classification, systeme de gestion des risques (Art. 9), documentation technique (Art. 11), analyse d\'impact sur les droits fondamentaux, audit de conformite et attestation finale (Art. 47) precedant le marquage CE.',
+    arts: 'Art. 16 \u00b7 9 \u00b7 11 \u00b7 17 \u00b7 43 \u00b7 47 \u00b7 49'
+  },
+  deployeur: {
+    titre: 'D\u00e9ployeur',
+    desc: 'En tant que deployeur (Art. 26), vous utilisez un systeme IA sous votre propre autorite. Vos obligations portent sur l\'usage conforme : enregistrement, classification, systeme de gestion des risques operationnel, analyse d\'impact sur les droits fondamentaux (FRIA, Art. 27) obligatoire pour les organismes publics et certains cas, audit et attestation. La documentation technique de conception releve du fournisseur et ne vous est pas imputee.',
+    arts: 'Art. 26 \u00b7 27 \u00b7 9 \u00b7 43 \u00b7 49'
+  },
+  importateur: {
+    titre: 'Importateur',
+    desc: 'En tant qu\'importateur (Art. 23), vous mettez sur le marche europeen un systeme IA d\'un pays tiers. Vos obligations sont des obligations de verification : vous devez vous assurer que le fournisseur a etabli la documentation technique et la conformite. D\'ou les jalons registre, classification, verification de la documentation technique, audit et attestation. Le systeme de gestion des risques et la FRIA relevent respectivement du fournisseur et du deployeur.',
+    arts: 'Art. 23 \u00b7 11 \u00b7 43 \u00b7 49'
+  },
+  distributeur: {
+    titre: 'Distributeur',
+    desc: 'En tant que distributeur (Art. 24), vous mettez un systeme IA a disposition sur le marche UE sans en etre le fournisseur ni l\'importateur. Vos obligations sont allegees : verifier la presence du marquage et de la conformite. Les jalons retenus sont donc registre, classification, audit de conformite et attestation. La conception, la documentation technique et la FRIA ne vous incombent pas.',
+    arts: 'Art. 24 \u00b7 43 \u00b7 49'
+  }
+};
+
+window.milestonesRenderRoleNote = function(role){
+  var el = document.getElementById('ms-role-note');
+  if(!el) return;
+  var n = window.RAAS_ROLE_NOTES[role] || window.RAAS_ROLE_NOTES.deployeur;
+  el.innerHTML = '<strong>Pourquoi ces jalons pour le r\u00f4le \u00ab\u00a0'+n.titre+'\u00a0\u00bb\u00a0?</strong><br>'
+    + n.desc
+    + '<span class="ms-role-arts">Articles applicables : '+n.arts+' \u2014 R\u00e8glement (UE) 2024/1689</span>';
+};
+
 window.milestonesRender = function(){
   var tb=document.getElementById('ms-tbody');
   var sm=document.getElementById('ms-summary');
@@ -13460,6 +13498,7 @@ window.milestonesRender = function(){
   var roleSel=document.getElementById('ms-role-select');
   var role=(roleSel&&roleSel.value)||'deployeur';
   var applicable=window.RAAS_ROLE_MILESTONES[role]||null;
+  if(window.milestonesRenderRoleNote) window.milestonesRenderRoleNote(role);
   var shownMs = applicable ? sched.milestones.filter(function(m){ return applicable.indexOf(m.id)!==-1; }) : sched.milestones;
   var envShown = shownMs.reduce(function(a,m){ return a+m.amount; }, 0);
   var totalShown = sched.socle*12 + envShown;
