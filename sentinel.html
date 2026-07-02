@@ -2558,7 +2558,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       </div>
       <div>
         <label style="font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted2);display:block;margin-bottom:4px">Profil métier (parcours guidé Sentinel)</label>
-        <select id="ms-profile-select" class="reg-input" onchange="milestonesRenderProfile()" style="min-width:300px">
+        <select id="ms-profile-select" class="reg-input" onchange="milestonesRender()" style="min-width:300px">
           <option value="directeur_programme" selected>Directeur de programme IA Act (8 modules)</option>
           <option value="grc_senior">Senior Gouvernance GRC Data IA (6 modules)</option>
           <option value="risk_manager">Risk Manager (5 modules)</option>
@@ -13469,6 +13469,16 @@ function pricingComputeMilestoneSchedule(saasMonthly, segment, sector, realiste,
 window.pricingComputeMilestoneSchedule = pricingComputeMilestoneSchedule;
 
 /* ── Rendu de l'echeancier jalons dans la page tarification ── */
+window.RAAS_PROFILE_MILESTONES = {
+  directeur_programme: ['registre','classif','sgr','fria','audit80','attest'],
+  grc_senior: ['registre','classif','sgr','doctech','fria','audit80','attest'],
+  risk_manager: ['registre','classif','sgr','fria','audit80','attest'],
+  ceo: ['registre','classif','audit80','attest'],
+  dpo: ['registre','classif','fria','attest'],
+  cdo: ['registre','classif','sgr','doctech','attest'],
+  caio: ['registre','classif','doctech','attest']
+};
+
 window.RAAS_ROLE_MILESTONES = {
   fournisseur: ['registre','classif','sgr','doctech','fria','audit80','attest'],
   deployeur:   ['registre','classif','sgr','fria','audit80','attest'],
@@ -13517,9 +13527,11 @@ window.milestonesRenderProfile = function(){
   var p = window.RAAS_PROFILES[pid];
   if(!p){ el.innerHTML=''; return; }
   var mods = p.modules.map(function(m){ return '<span class="ms-profile-mod">'+m+'</span>'; }).join('');
+  var pjal=(window.RAAS_PROFILE_MILESTONES&&window.RAAS_PROFILE_MILESTONES[pid])||[];
   el.innerHTML = '<strong>Parcours guid\u00e9 \u00ab\u00a0'+p.role+'\u00a0\u00bb \u2014 '+p.modules.length+' modules Sentinel</strong><br>'
     + p.pitch
-    + '<div class="ms-profile-mods">'+mods+'</div>';
+    + '<div class="ms-profile-mods">'+mods+'</div>'
+    + '<div style="margin-top:8px;font-size:10.5px;color:var(--muted2)">Ce profil d\u00e9clenche '+pjal.length+' jalon(s) de conformit\u00e9 sur les 7, selon les modules Sentinel qu\u2019il mobilise.</div>';
 };
 
 window.milestonesRenderRoleNote = function(role){
@@ -13539,7 +13551,19 @@ window.milestonesRender = function(){
   if(!sched){ return; }
   var roleSel=document.getElementById('ms-role-select');
   var role=(roleSel&&roleSel.value)||'deployeur';
-  var applicable=window.RAAS_ROLE_MILESTONES[role]||null;
+  var roleJalons=window.RAAS_ROLE_MILESTONES[role]||null;
+  /* Le profil metier (parcours guide Sentinel) determine egalement les jalons :
+     seuls les jalons couverts par les modules du profil ET applicables au role
+     sont retenus (intersection). */
+  var profSel=document.getElementById('ms-profile-select');
+  var profId=(profSel&&profSel.value)||'directeur_programme';
+  var profJalons=window.RAAS_PROFILE_MILESTONES[profId]||null;
+  var applicable=null;
+  if(roleJalons && profJalons){
+    applicable=roleJalons.filter(function(id){ return profJalons.indexOf(id)!==-1; });
+  } else {
+    applicable=roleJalons || profJalons;
+  }
   if(window.milestonesRenderRoleNote) window.milestonesRenderRoleNote(role);
   if(window.milestonesRenderProfile) window.milestonesRenderProfile();
   var shownMs = applicable ? sched.milestones.filter(function(m){ return applicable.indexOf(m.id)!==-1; }) : sched.milestones;
