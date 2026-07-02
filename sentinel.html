@@ -1633,6 +1633,25 @@ textarea.form-el{min-height:86px;resize:vertical}
   .chart-eq-dot{animation:none}
 }
 
+
+/* ══ GENERATION IA DANS LA MODALE TEMPLATE ══ */
+#tmi-gen-zone{margin-top:14px;border-top:1px solid var(--rule);padding-top:14px}
+.tmi-api-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.tmi-api-lbl{font-size:10px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted2)}
+.tmi-api-btn{font-size:11px;font-family:var(--mono);padding:5px 12px;border:1px solid var(--rule2);border-radius:5px;background:var(--bg);color:var(--muted2);cursor:pointer;transition:all .15s}
+.tmi-api-btn.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.tmi-gen-out{margin-top:12px;max-height:420px;overflow-y:auto;padding:16px;background:var(--white);border:1px solid var(--rule);border-radius:8px;font-size:12.5px;line-height:1.6;color:var(--ink2)}
+.tmi-gen-loading{padding:32px;text-align:center;color:var(--muted)}
+.tmi-gen-spinner{width:26px;height:26px;border:3px solid var(--rule2);border-top-color:var(--accent);border-radius:50%;animation:tmiSpin .8s linear infinite;margin:0 auto 12px}
+@keyframes tmiSpin{to{transform:rotate(360deg)}}
+.tmi-gen-out h2{font-size:15px;margin:16px 0 8px;color:var(--ink);font-family:var(--serif)}
+.tmi-gen-out h3{font-size:13px;margin:12px 0 6px;color:var(--ink)}
+.tmi-gen-out table{width:100%;border-collapse:collapse;margin:10px 0;font-size:11px}
+.tmi-gen-out th,.tmi-gen-out td{border:1px solid var(--rule2);padding:5px 8px;text-align:left}
+.tmi-gen-out th{background:var(--bg2);font-weight:600}
+.tmi-gen-out ul{margin:6px 0;padding-left:20px}
+.tmi-gen-out li{margin:3px 0}
+
 </style>
 
 </head>
@@ -11531,32 +11550,101 @@ window.tmplOpen=function(idx){
     return '<li>'+o+'</li>';
   }).join('');
   var cta=document.getElementById('tmi-cta');
-  cta.textContent=d.ctaLabel;
-  cta.onclick=function(){tmplClose();try{eval(d.ctaAction);}catch(e){}};
+  cta.textContent='Générer ce document';
+  cta.style.display='';
+  cta.onclick=function(){ tmplGenerate(idx); };
+  // Réinitialiser la zone de génération IA
+  window.__tmplCur = {idx:idx, doc:d, content:'', apiName:''};
+  window.__tmplApi = window.__tmplApi || 'mistral';
+  var zone=document.getElementById('tmi-gen-zone');
+  var out=document.getElementById('tmi-gen-out');
+  var exp=document.getElementById('tmi-export');
+  if(zone) zone.style.display='';
+  if(out){ out.style.display='none'; out.innerHTML=''; }
+  if(exp) exp.style.display='none';
+  var bm=document.getElementById('tmi-api-mistral'), bc=document.getElementById('tmi-api-claude');
+  if(bm) bm.classList.toggle('on', window.__tmplApi==='mistral');
+  if(bc) bc.classList.toggle('on', window.__tmplApi==='claude');
   m.classList.add('open');
 };
+
+window.tmplSetApi=function(api){
+  window.__tmplApi=api;
+  var bm=document.getElementById('tmi-api-mistral'), bc=document.getElementById('tmi-api-claude');
+  if(bm) bm.classList.toggle('on', api==='mistral');
+  if(bc) bc.classList.toggle('on', api==='claude');
+};
+
+function tmplBuildPrompt(d){
+  var ALMAP2=(typeof ALMAP!=='undefined')?ALMAP:{};
+  var arts=(d.arts||[]).map(function(a){ return ALMAP2[a]||a; }).join(', ');
+  var oblig=(d.oblig||[]).slice(0,20).map(function(o){ return '- '+o; }).join('\n');
+  return 'Rédige un document professionnel de conformité AI Act intitulé : "'+d.name+'".\n\n'
+    + 'Description du document : '+d.desc+'\n\n'
+    + 'Articles du Règlement (UE) 2024/1689 applicables : '+arts+'\n\n'
+    + 'Obligations réglementaires à couvrir :\n'+oblig+'\n\n'
+    + 'Consignes de rédaction :\n'
+    + '- Produis un document structuré, complet et directement utilisable par une organisation soumise à l\'AI Act.\n'
+    + '- Utilise des titres markdown (## et ###), des listes à puces et des tableaux markdown lorsque pertinent.\n'
+    + '- Pour chaque section, référence explicitement les articles applicables.\n'
+    + '- Inclus des champs à compléter par l\'utilisateur (ex: [Nom du système], [Date]) là où c\'est pertinent.\n'
+    + '- Rédige en français professionnel, précis et sans redondance.';
+}
 window.tmplClose=function(){
   var m=document.getElementById('tmpl-modal');
   if(m) m.classList.remove('open');
 };
 window.tmplGenerate=function(idx){
   var d=TMPL_CATALOG[idx]; if(!d) return;
-  tmplClose();
-  // Pour les formats avec Sentinel/IA : ouvrir le module de génération IA
-  if(d.fmt.indexOf('sentinel')>=0){
-    // Naviguer vers le module Sentinel approprié
-    if(d.ctaAction && d.ctaAction.indexOf('go(')===0){
-      try{ eval(d.ctaAction); }catch(e){}
-    } else {
-      go('maturite',null,'AUDIT','Générer avec Sentinel AI');
-    }
-  } else if(d.fmt.indexOf('ia')>=0){
-    // Déclencher la génération IA via le module audit ou maturité
-    go('maturite',null,'AUDIT','Générer avec Sentinel AI');
-  } else {
-    // Format Word/PDF : proposer le téléchargement depuis le module templates
-    go('templates',null,'RESSOURCES','Documentation & modèles');
+  var cur=window.__tmplCur;
+  if(!cur || cur.idx!==idx){ cur={idx:idx, doc:d, content:'', apiName:''}; window.__tmplCur=cur; }
+  var api=window.__tmplApi||'mistral';
+  var out=document.getElementById('tmi-gen-out');
+  var cta=document.getElementById('tmi-cta');
+  var exp=document.getElementById('tmi-export');
+  if(!out){ return; }
+  out.style.display='';
+  out.innerHTML='<div class="tmi-gen-loading"><div class="tmi-gen-spinner"></div>'
+    + 'Génération du document par '+(api==='claude'?'Claude':'Mistral')+'…<br>'
+    + '<span style="font-size:11px;color:var(--muted)">Rédaction structurée selon les articles AI Act applicables.</span></div>';
+  if(cta) cta.textContent='Génération en cours…';
+  if(cta) cta.disabled=true;
+  if(exp) exp.style.display='none';
+
+  var prompt=tmplBuildPrompt(d);
+  if(!window.matCallAIBridge){
+    out.innerHTML='<div style="padding:24px;text-align:center;color:var(--accent)">Module de génération indisponible. Rechargez la page puis réessayez.</div>';
+    if(cta){ cta.textContent='Générer ce document'; cta.disabled=false; }
+    return;
   }
+  window.matCallAIBridge(prompt, api, function(err, text, apiName){
+    if(cta){ cta.textContent='Régénérer'; cta.disabled=false; }
+    if(err || !text){
+      out.innerHTML='<div style="padding:24px;text-align:center;color:var(--accent)">Erreur de génération. Réessayez ou contactez christophe.cerf@outlook.com</div>';
+      return;
+    }
+    cur.content=text; cur.apiName=apiName||api;
+    var html=(window.matMdToHtmlBridge)?window.matMdToHtmlBridge(text):text.replace(/\n/g,'<br>');
+    out.innerHTML=html;
+    if(exp) exp.style.display='';
+  }, 'templates');
+};
+
+window.tmplExportWord=function(){
+  var cur=window.__tmplCur;
+  if(!cur || !cur.content){ return; }
+  var titleHtml=(window.matMdToHtmlBridge)?window.matMdToHtmlBridge(cur.content):cur.content.replace(/\n/g,'<br>');
+  var doc='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>'
+    + cur.doc.name + '</title></head><body style="font-family:Calibri,Arial,sans-serif;font-size:11pt;line-height:1.5">'
+    + '<h1 style="font-size:16pt">' + cur.doc.name + '</h1>'
+    + '<p style="color:#666;font-size:9pt">Document généré par Sentinel AI (' + (cur.apiName||'IA') + ') — CONSEILPREV · Règl. (UE) 2024/1689</p><hr>'
+    + titleHtml + '</body></html>';
+  var blob=new Blob(['\ufeff'+doc], {type:'application/msword'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url; a.download=cur.doc.name.replace(/[^a-zA-Z0-9]/g,'_').substring(0,60)+'.doc';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 };
 document.addEventListener('keydown',function(e){if(e.key==='Escape') tmplClose();});
 
@@ -15453,9 +15541,18 @@ function aiActTimelineRender(){
       <div class="tmi-sec"><div class="tmi-lbl">Obligations couvertes</div><div class="tmi-oblig"><ul id="tmi-obl"></ul></div></div>
       <div class="tmi-sec"><div class="tmi-lbl">Format &amp; disponibilité</div><p class="tmi-txt" id="tmi-met" style="font-family:var(--mono);font-size:10px;color:var(--muted2)"></p></div>
     </div>
+    <div id="tmi-gen-zone" style="display:none">
+      <div class="tmi-api-row">
+        <span class="tmi-api-lbl">Moteur IA</span>
+        <button class="tmi-api-btn on" id="tmi-api-mistral" onclick="tmplSetApi('mistral')" title="Mistral Large — rapide">Mistral</button>
+        <button class="tmi-api-btn" id="tmi-api-claude" onclick="tmplSetApi('claude')" title="Claude Sonnet — approfondi">Claude</button>
+      </div>
+      <div id="tmi-gen-out" class="tmi-gen-out" style="display:none"></div>
+    </div>
     <div id="tmi-foot">
       <button class="tmi-btn-s" onclick="tmplClose()">Fermer</button>
-      <button class="tmi-btn-p" id="tmi-cta">Accéder →</button>
+      <button class="tmi-btn-p" id="tmi-cta">Générer ce document</button>
+      <button class="tmi-btn-p" id="tmi-export" onclick="tmplExportWord()" style="display:none;background:var(--ink)">Télécharger (Word)</button>
     </div>
   </div>
 </div>
