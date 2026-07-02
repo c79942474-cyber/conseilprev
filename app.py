@@ -2998,6 +2998,68 @@ try:
 except Exception as _e:
     logger.error(f"AUTH — erreur init table clients : {_e}")
 
+def raas_init_db():
+    """Table des jalons RaaS — agent Sentinel Pricing Orchestrator.
+    Un enregistrement par (client, jalon). Statuts : pending -> verified -> invoiced.
+    Un jalon verified est irrevocable (garantie contractuelle)."""
+    conn = registre_get_db()
+    cur = conn.cursor()
+    if REGISTRE_USE_PG:
+        cur.execute('''CREATE TABLE IF NOT EXISTS raas_milestones (
+            id SERIAL PRIMARY KEY,
+            client_id INTEGER NOT NULL,
+            milestone_id TEXT NOT NULL,
+            label TEXT NOT NULL,
+            art TEXT,
+            weight REAL NOT NULL,
+            threshold INTEGER NOT NULL,
+            amount_eur INTEGER NOT NULL,
+            status TEXT NOT NULL DEFAULT 'pending',
+            score_at_verification REAL,
+            evidence TEXT,
+            verified_at TEXT,
+            invoiced_at TEXT,
+            created_at TEXT NOT NULL,
+            UNIQUE(client_id, milestone_id)
+        )''')
+    else:
+        cur.execute('''CREATE TABLE IF NOT EXISTS raas_milestones (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            client_id INTEGER NOT NULL,
+            milestone_id TEXT NOT NULL,
+            label TEXT NOT NULL,
+            art TEXT,
+            weight REAL NOT NULL,
+            threshold INTEGER NOT NULL,
+            amount_eur INTEGER NOT NULL,
+            status TEXT NOT NULL DEFAULT 'pending',
+            score_at_verification REAL,
+            evidence TEXT,
+            verified_at TEXT,
+            invoiced_at TEXT,
+            created_at TEXT NOT NULL,
+            UNIQUE(client_id, milestone_id)
+        )''')
+    conn.commit()
+    conn.close()
+
+try:
+    raas_init_db()
+except Exception as _e:
+    logger.error(f"RAAS — erreur init table raas_milestones : {_e}")
+
+# Definition canonique des 7 jalons AI Act (partagee avec le front PRICING_PARAMS.raasMilestones)
+RAAS_MILESTONE_DEFS = [
+    {'id': 'registre', 'label': 'Registre IA complet',          'art': 'Art. 49',    'w': 0.10, 'threshold': 30},
+    {'id': 'classif',  'label': 'Classification des risques',   'art': 'Annexe III', 'w': 0.10, 'threshold': 38},
+    {'id': 'sgr',      'label': 'SGR operationnel',             'art': 'Art. 9',     'w': 0.15, 'threshold': 48},
+    {'id': 'doctech',  'label': 'Documentation technique',      'art': 'Art. 11',    'w': 0.15, 'threshold': 58},
+    {'id': 'fria',     'label': 'FRIA realisee',                'art': 'Art. 27',    'w': 0.10, 'threshold': 65},
+    {'id': 'audit80',  'label': 'Audit de conformite >= 80 %',  'art': 'Art. 43',    'w': 0.20, 'threshold': 80},
+    {'id': 'attest',   'label': 'Attestation finale',           'art': 'Art. 47',    'w': 0.20, 'threshold': 90},
+]
+RAAS_ENVELOPE_RATE = 0.60  # enveloppe resultats = 60 % du SaaS annuel
+
 CONSEILPREV_INTERNAL_EMAIL = 'conseilprev@internal.system'
 
 def ensure_conseilprev_client_id():
@@ -3510,6 +3572,177 @@ def sentauth_me():
     if not client:
         return jsonify({'authenticated': False}), 401
     return jsonify({'authenticated': True, **client})
+
+
+# ══════════════════════════════════════════════════════════
+# AGENT SENTINEL PRICING ORCHESTRATOR — TARIFICATION RAAS PAR JALONS
+# Modules : Observateur (lecture des scores), Verificateur (double
+# declencheur), Facturier (echeancier, gel des acquis), Mediateur
+# (validation humaine CONSEILPREV requise pour verifier un jalon).
+# Regles inviolables : jalon verified = irrevocable ; aucun jalon
+# facture sans verification ; enveloppe bornee a 60 % du SaaS annuel.
+# ══════════════════════════════════════════════════════════
+
+def raas_require_conseilprev():
+    """Retourne le client CONSEILPREV ou None. Les operations de
+    verification et de facturation sont reservees a CONSEILPREV
+    (module Mediateur : l'humain reste dans la boucle)."""
+    client = sentauth_current_client()
+    if not client or not client.get('is_conseilprev'):
+        return None
+    return client
+
+@app.route('/api/raas/milestones', methods=['GET'])
+@sentinel_login_required
+def raas_list_milestones():
+    """Etat des jalons du client courant (ou ?client_id=N pour CONSEILPREV)."""
+    client = request.current_client
+    target_id = client['id']
+    if client.get('is_conseilprev') and request.args.get('client_id'):
+        try:
+            target_id = int(request.args.get('client_id'))
+        except (TypeError, ValueError):
+            return jsonify({'ok': False, 'error': 'client_id invalide'}), 400
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql(
+        'SELECT * FROM raas_milestones WHERE client_id=%s ORDER BY threshold ASC',
+        'SELECT * FROM raas_milestones WHERE client_id=? ORDER BY threshold ASC'
+    ), (target_id,))
+    rows = [dict(r) if not isinstance(r, dict) else r for r in cur.fetchall()]
+    conn.close()
+    total = sum(r['amount_eur'] for r in rows)
+    verified = sum(r['amount_eur'] for r in rows if r['status'] in ('verified', 'invoiced'))
+    return jsonify({'ok': True, 'milestones': rows,
+                    'envelope_total': total, 'verified_total': verified})
+
+@app.route('/api/raas/milestones/init', methods=['POST'])
+def raas_init_milestones():
+    """Initialise l'echeancier de jalons pour un client (CONSEILPREV uniquement).
+    Body : {client_id, saas_monthly}. Idempotent : n'ecrase jamais un jalon existant
+    (garantie du gel des acquis)."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    d = request.get_json(force=True, silent=True) or {}
+    try:
+        client_id = int(d.get('client_id'))
+        saas_monthly = float(d.get('saas_monthly'))
+    except (TypeError, ValueError):
+        return jsonify({'ok': False, 'error': 'client_id et saas_monthly requis'}), 400
+    if saas_monthly <= 0 or saas_monthly > 100000:
+        return jsonify({'ok': False, 'error': 'saas_monthly hors bornes'}), 400
+    envelope = round(saas_monthly * 12 * RAAS_ENVELOPE_RATE)
+    now = datetime.utcnow().isoformat()
+    conn = registre_get_db()
+    cur = conn.cursor()
+    created = 0
+    for m in RAAS_MILESTONE_DEFS:
+        amount = round(envelope * m['w'])
+        try:
+            if REGISTRE_USE_PG:
+                cur.execute(
+                    "INSERT INTO raas_milestones (client_id, milestone_id, label, art, weight, threshold, amount_eur, status, created_at) "
+                    "VALUES (%s,%s,%s,%s,%s,%s,%s,'pending',%s) ON CONFLICT (client_id, milestone_id) DO NOTHING",
+                    (client_id, m['id'], m['label'], m['art'], m['w'], m['threshold'], amount, now))
+            else:
+                cur.execute(
+                    "INSERT OR IGNORE INTO raas_milestones (client_id, milestone_id, label, art, weight, threshold, amount_eur, status, created_at) "
+                    "VALUES (?,?,?,?,?,?,?,'pending',?)",
+                    (client_id, m['id'], m['label'], m['art'], m['w'], m['threshold'], amount, now))
+            created += cur.rowcount if cur.rowcount and cur.rowcount > 0 else 0
+        except Exception as e:
+            logger.error(f'RAAS_INIT_ERR {client_id}/{m["id"]}: {e}')
+    conn.commit()
+    conn.close()
+    logger.info(f'RAAS_INIT client={client_id} envelope={envelope} crees={created}')
+    return jsonify({'ok': True, 'created': created, 'envelope': envelope})
+
+@app.route('/api/raas/milestones/verify', methods=['POST'])
+def raas_verify_milestone():
+    """Verificateur + Mediateur : marque un jalon comme verifie (CONSEILPREV).
+    Body : {client_id, milestone_id, score, evidence}. Double declencheur :
+    le score fourni doit atteindre le seuil ET l'evidence documentaire est
+    obligatoire. Un jalon deja verified/invoiced est immuable."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    d = request.get_json(force=True, silent=True) or {}
+    try:
+        client_id = int(d.get('client_id'))
+    except (TypeError, ValueError):
+        return jsonify({'ok': False, 'error': 'client_id requis'}), 400
+    milestone_id = str(d.get('milestone_id', ''))[:50]
+    evidence = str(d.get('evidence', ''))[:2000]
+    try:
+        score = float(d.get('score'))
+    except (TypeError, ValueError):
+        return jsonify({'ok': False, 'error': 'score requis'}), 400
+    if not evidence.strip():
+        return jsonify({'ok': False, 'error': 'Evidence documentaire obligatoire (double declencheur)'}), 400
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql(
+        'SELECT * FROM raas_milestones WHERE client_id=%s AND milestone_id=%s',
+        'SELECT * FROM raas_milestones WHERE client_id=? AND milestone_id=?'
+    ), (client_id, milestone_id))
+    row = cur.fetchone()
+    if not row:
+        conn.close()
+        return jsonify({'ok': False, 'error': 'Jalon introuvable — initialisez l\'echeancier'}), 404
+    r = dict(row) if not isinstance(row, dict) else row
+    if r['status'] in ('verified', 'invoiced'):
+        conn.close()
+        return jsonify({'ok': False, 'error': 'Jalon deja verifie — irrevocable'}), 409
+    if score < r['threshold']:
+        conn.close()
+        logger.info(f'RAAS_VERIFY_REFUSE client={client_id} jalon={milestone_id} score={score}<{r["threshold"]}')
+        return jsonify({'ok': False, 'error': f'Score {score} inferieur au seuil {r["threshold"]} — declencheur non atteint'}), 422
+    now = datetime.utcnow().isoformat()
+    cur.execute(registre_sql(
+        "UPDATE raas_milestones SET status='verified', score_at_verification=%s, evidence=%s, verified_at=%s WHERE client_id=%s AND milestone_id=%s",
+        "UPDATE raas_milestones SET status='verified', score_at_verification=?, evidence=?, verified_at=? WHERE client_id=? AND milestone_id=?"
+    ), (score, evidence, now, client_id, milestone_id))
+    conn.commit()
+    conn.close()
+    logger.info(f'RAAS_VERIFY_OK client={client_id} jalon={milestone_id} score={score}')
+    return jsonify({'ok': True, 'milestone_id': milestone_id, 'status': 'verified',
+                    'amount_eur': r['amount_eur'], 'verified_at': now})
+
+@app.route('/api/raas/billing-cycle', methods=['POST'])
+def raas_billing_cycle():
+    """Facturier : marque comme factures (invoiced) les jalons verifies d'un
+    client et retourne l'echeancier de paiement etale sur 2 mensualites.
+    Body : {client_id}. Reserve a CONSEILPREV. Le montant est fige au moment
+    de la verification — le cycle ne recalcule jamais un jalon acquis."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    d = request.get_json(force=True, silent=True) or {}
+    try:
+        client_id = int(d.get('client_id'))
+    except (TypeError, ValueError):
+        return jsonify({'ok': False, 'error': 'client_id requis'}), 400
+    now = datetime.utcnow().isoformat()
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql(
+        "SELECT * FROM raas_milestones WHERE client_id=%s AND status='verified'",
+        "SELECT * FROM raas_milestones WHERE client_id=? AND status='verified'"
+    ), (client_id,))
+    to_invoice = [dict(r) if not isinstance(r, dict) else r for r in cur.fetchall()]
+    schedule = []
+    for r in to_invoice:
+        half = round(r['amount_eur'] / 2)
+        schedule.append({'milestone_id': r['milestone_id'], 'label': r['label'],
+                         'installments': [half, r['amount_eur'] - half]})
+        cur.execute(registre_sql(
+            "UPDATE raas_milestones SET status='invoiced', invoiced_at=%s WHERE id=%s",
+            "UPDATE raas_milestones SET status='invoiced', invoiced_at=? WHERE id=?"
+        ), (now, r['id']))
+    conn.commit()
+    conn.close()
+    total = sum(r['amount_eur'] for r in to_invoice)
+    logger.info(f'RAAS_BILLING client={client_id} jalons={len(to_invoice)} total={total}')
+    return jsonify({'ok': True, 'invoiced_count': len(to_invoice),
+                    'total_eur': total, 'schedule': schedule})
 
 # ══════════════════════════════════════════════════════════
 # INVITATION CLIENT — le client definit lui-meme son mot de passe
