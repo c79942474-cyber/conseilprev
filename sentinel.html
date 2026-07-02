@@ -14710,7 +14710,8 @@ function gratuitCheckSidebarVisibility(){
     return r.json();
   }).then(function(d){
     if(!d || !d.authenticated){ window.__SENTINEL_PLAN = null; return; }
-    if(d.is_conseilprev){ window.__SENTINEL_PLAN = 'entreprise'; return; }
+    // Session CONSEILPREV OU nom d'entreprise CONSEILPREV = acces entreprise total.
+    if(d.is_conseilprev || d.nom_entreprise === 'CONSEILPREV'){ window.__SENTINEL_PLAN = 'entreprise'; window.__IS_CONSEILPREV = true; return; }
     var plan = d.plan || 'gratuit';
     window.__SENTINEL_PLAN = plan;
 
@@ -14757,6 +14758,11 @@ var _gratuitOrigGo = window.go;
 window.go = function(id){
   var _plan = window.__SENTINEL_PLAN;
 
+  // ── Garde-fou CONSEILPREV : acces total, aucune restriction ──
+  if(window.__IS_CONSEILPREV){
+    return _gratuitOrigGo ? _gratuitOrigGo.apply(this, arguments) : undefined;
+  }
+
   // ── Plan Gratuit ──────────────────────────────────────────────
   // Blocage UNIQUEMENT si le serveur a confirme un compte gratuit (_plan==='gratuit').
   // _plan null/undefined (session CONSEILPREV, /me en cours, erreur reseau) = pas de blocage.
@@ -14777,23 +14783,11 @@ window.go = function(id){
     return _gratuitOrigGo ? _gratuitOrigGo.apply(this, ['apercu']) : undefined;
   }
 
-  // ── Plans Pro / Entreprise en attente ─────────────────────────
-  var PENDING_OK = ['apercu','simulateur','regs','training','pricing'];
-  if((_plan === 'pro' || _plan === 'entreprise') && PENDING_OK.indexOf(id) === -1){
-    var notifP = document.getElementById('pending-lock-notif');
-    if(!notifP){
-      notifP = document.createElement('div');
-      notifP.id = 'pending-lock-notif';
-      notifP.style.cssText = 'position:fixed;top:16px;right:16px;z-index:9999;background:#fff;border:1px solid rgba(28,90,138,.35);border-radius:8px;padding:12px 16px;font-size:12px;color:var(--ink);box-shadow:0 4px 20px rgba(0,0,0,.15);max-width:300px;line-height:1.5';
-      document.body.appendChild(notifP);
-    }
-    notifP.innerHTML = '\u23F3 <strong>Acc\u00e8s en attente</strong><br>Votre acc\u00e8s complet sera activ\u00e9 apr\u00e8s signature du contrat RaaS.<br>'
-      + '<a href="javascript:go(\u0027pricing\u0027)" style="color:var(--blue);font-weight:600">Compl\u00e9ter ma demande \u2192</a>';
-    notifP.style.display = 'block';
-    clearTimeout(window._pendingNotifTimer);
-    window._pendingNotifTimer = setTimeout(function(){ notifP.style.display='none'; }, 5000);
-    return _gratuitOrigGo ? _gratuitOrigGo.apply(this, ['pricing']) : undefined;
-  }
+  // ── Plans Pro / Entreprise + session CONSEILPREV : ACCES TOTAL ──
+  // Ces plans ne sont attribues que par l'administration CONSEILPREV : ils
+  // donnent acces a l'integralite des modules, sans aucune restriction ni
+  // redirection. La session CONSEILPREV (is_conseilprev) est resolue en
+  // 'entreprise' cote serveur et beneficie donc du meme acces complet.
   return _gratuitOrigGo ? _gratuitOrigGo.apply(this, arguments) : undefined;
 };
 
