@@ -2366,8 +2366,222 @@ textarea.form-el{min-height:86px;resize:vertical}
 <!-- TEMPLATES -->
 <div class="page" id="p-pricing">
 
-  <!-- ── Bloc demande de tarification — affiché en tête ── -->
-  <div id="pricing-request-block" style="margin-bottom:28px">
+
+
+  <span class="eyebrow">Modèle commercial innovant</span>
+  <h1 class="page-h">Tarification <em>par résultats</em></h1>
+  <p class="page-lead">Simulez un modèle hybride RaaS <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>RaaS — Results as a Service</strong><br>Modèle contractuel où la part variable de la facturation est indexée sur des <em>résultats mesurables</em> (score d'audit, systèmes conformes, réduction de l'exposition aux sanctions) plutôt que sur un forfait fixe.</span></span> — socle fixe réduit + part variable indexée sur vos résultats réels de conformité — comparé à un abonnement SaaS classique <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>SaaS classique</strong><br>Abonnement mensuel ou annuel fixe, indépendant de vos progrès de conformité. Le simulateur le calcule à partir du tarif base 2 400 €/mois + 180 €/système supplémentaire, avec remises volume.</span></span>.</p>
+
+  <div class="prx-intro" style="background:linear-gradient(135deg,var(--bg) 0%,var(--bg2) 100%);border:1px solid var(--rule2);border-radius:10px;padding:18px 22px;margin-bottom:8px">
+    <div style="font-size:13px;color:var(--ink2);line-height:1.65">Le modèle <strong>RaaS (Results as a Service)</strong> renverse la logique de l’abonnement classique : au lieu de payer un forfait fixe indépendant de vos progrès, vous réglez un socle réduit puis des jalons de conformité <strong>uniquement lorsqu’ils sont vérifiés</strong>. Le coût total reste toujours inférieur au SaaS équivalent. Suivez les cinq étapes ci-dessous pour comprendre, simuler et choisir.</div>
+  </div>
+
+  <div class="prx-step" style="display:flex;align-items:center;gap:14px;margin:32px 0 16px;padding-bottom:12px;border-bottom:2px solid var(--rule2)">
+    <div style="flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:16px;font-weight:700">1</div>
+    <div>
+      <div style="font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em;color:var(--muted2)">Étape 1 sur 5</div>
+      <div style="font-size:16px;font-weight:700;color:var(--ink);line-height:1.3">Comprendre le modèle RaaS</div>
+      <div style="font-size:12px;color:var(--muted2);margin-top:2px">Vous ne payez que les résultats de conformité réellement obtenus — voici comment.</div>
+    </div>
+  </div>
+
+<div class="tbl-wrap" style="padding:24px;margin-top:20px">
+    <div class="tbl-head" style="border:none;padding:0 0 16px"><span class="tbl-title">Comment fonctionne le modèle hybride</span></div>
+    <div class="ctrl-section"><div class="ctrl-section-head"><span class="ctrl-section-title">① Socle fixe réduit — ≈35 % du SaaS équivalent <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>Socle fixe</strong><br>Couvre l'infrastructure réelle : hébergement Render, API Mistral/Claude, base PostgreSQL Frankfurt, maintenance.<br><em>Environ 30-40 % d'un SaaS équivalent</em>. Stable quel que soit votre niveau de conformité.</span></span></span></div>
+      <div style="padding:12px 16px;font-size:12px;color:var(--ink2);line-height:1.6">Couvre les coûts réels d'infrastructure (hébergement, API IA, base de données) — environ 30 à 40% du tarif SaaS classique équivalent.</div></div>
+    <div class="ctrl-section"><div class="ctrl-section-head"><span class="ctrl-section-title">② Part variable — indexée sur 3 résultats mesurables <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>Part variable RaaS</strong><br>Calculée chaque mois à partir de vos données réelles Sentinel :<br>• <em>45 €/point d'audit gagné</em><br>• <em>0,4 % de la réduction d'exposition Art. 99</em><br>• <em>65 €/système conforme</em> (pondéré par classification)<br>Plafonnée à 4× le socle fixe (3 600 €/mois max).</span></span></span></div>
+      <div style="padding:12px 16px;font-size:12px;color:var(--ink2);line-height:1.6">
+
+        <div class="prx-formula">
+          <span class="prx-var">Part variable</span> <span class="prx-op">=</span>
+          <span class="prx-var">Δ Audit</span> <span class="prx-op">× (2 € PME / 12 € ETI / 40 € GE)</span>
+          <span class="prx-op"> + </span><span class="prx-var">Réduction sanctions</span> <span class="prx-op">× 0,1–0,4 %</span>
+          <span class="prx-op"> + </span><span class="prx-var">Systèmes conformes</span> <span class="prx-op">× (4 € / 20 € / 60 €) × poids</span>
+          <br><span class="prx-cap">Plafond : 4 × 900 € = 3 600 €/mois</span>
+        </div>
+        • Progression du score Audit IA Act (2 €/pt PME — 12 €/pt ETI — 40 €/pt GE)<br>
+        • Réduction estimée de l'exposition aux sanctions Art. 99 (0,4% de la réduction calculée)<br>
+        • Systèmes du Registre IA passés au statut « conforme » (4 €/sys PME — 20 € ETI — 60 € GE), <strong>pondérés par classification réelle</strong> — un système haut risque pèse 1,4× plus qu un système à risque minimal<br>
+        • Vitesse de progression calibrée par <strong>secteur d activité</strong> et <strong>maturité organisationnelle réelle</strong> (score de maturité Sentinel)<br>
+        • <strong>Plafond contractuel</strong> : la part variable ne peut excéder 4× le socle fixe
+      </div></div>
+    <div class="ctrl-section"><div class="ctrl-section-head"><span class="ctrl-section-title">③ Garde-fous contractuels <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>Protection contractuelle</strong><br>Le contrat RaaS doit impérativement définir :<br>• <em>Périmètre de responsabilité</em> : distinction entre les obligations de moyens (CONSEILPREV) et les obligations de résultat dépendant du client<br>• <em>Plafond mensuel</em> (recommandé : 4× socle)<br>• <em>Plancher</em> : le socle est toujours dû, même si aucun progrès n'est réalisé</span></span></span></div>
+      <div style="padding:12px 16px;font-size:12px;color:var(--ink2);line-height:1.6">Les résultats dépendent aussi des actions du client (qualité des données fournies, adoption interne). Le contrat doit définir clairement le périmètre de responsabilité de chaque partie et un plafond/plancher de facturation variable.</div></div>
+  </div>
+  <div class="prx-step" style="display:flex;align-items:center;gap:14px;margin:32px 0 16px;padding-bottom:12px;border-bottom:2px solid var(--rule2)">
+    <div style="flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:16px;font-weight:700">2</div>
+    <div>
+      <div style="font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em;color:var(--muted2)">Étape 2 sur 5</div>
+      <div style="font-size:16px;font-weight:700;color:var(--ink);line-height:1.3">Simuler votre tarification</div>
+      <div style="font-size:12px;color:var(--muted2);margin-top:2px">Renseignez vos paramètres et visualisez instantanément le coût comparé au SaaS classique.</div>
+    </div>
+  </div>
+
+
+
+  <div id="pricing-prefill-info" class="radar-registre-info radar-registre-ok" style="margin-bottom:20px">Chargement de vos données…</div>
+
+  <div class="tbl-wrap" style="padding:24px;margin-bottom:24px">
+    <div class="tbl-head" style="border:none;padding:0 0 14px">
+      <span class="tbl-title">Paramètres de simulation</span>
+    </div>
+
+    <!-- Toggle mensuel / annuel -->
+    <div class="billing-toggle-wrap">
+      <span class="billing-toggle-label active" id="billing-monthly-lbl" onclick="pricingSetBilling('monthly')">Mensuel <span style="font-size:9px;font-family:var(--mono);color:var(--muted);font-weight:400">(sans engagement)</span></span>
+      <label class="billing-toggle">
+        <input type="checkbox" id="pricing-billing-toggle" onchange="pricingSetBilling(this.checked?'annual':'monthly')">
+        <span class="billing-toggle-track"></span>
+        <span class="billing-toggle-knob"></span>
+      </label>
+      <span class="billing-toggle-label" id="billing-annual-lbl" onclick="pricingSetBilling('annual')">Annuel <span style="font-size:9px;font-family:var(--mono);color:var(--muted);font-weight:400">(engagement 12 mois)</span>
+        <span class="billing-annual-badge" id="billing-annual-discount-badge">−15 %</span>
+      </span>
+      <span class="prx-tip-icon" tabindex="0" style="margin-left:4px">?<span class="prx-tip-bubble">
+        <strong>Engagement annuel vs mensuel</strong><br>
+        La plupart des éditeurs SaaS gouvernance IA proposent une remise sur engagement 12 mois.<br><br>
+        <em>Mensuel :</em> flexibilité maximale, tarif plein, sans pénalité d’arrêt.<br>
+        <em>Annuel :</em> remise de 10 à 20 % selon le secteur, engagement ferme 12 mois.<br><br>
+        La remise annuelle est cumulative avec la remise volume (plus de 20 systèmes).
+      </span></span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:20px">
+      <div class="reg-field"><label class="reg-label">Taille de l'organisation <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>Segment de marché</strong><br><em>PME (&lt; 250 sal.)</em> : 80–600 €/mois — OGMA 99 €, TARANIS 559 €, agences IA 300–500 €.<br><em>ETI (250–5 000 sal.)</em> : 750–1 800 €/mois — Dastra, Tenacy.<br><em>Grands comptes (&gt; 5 000 sal.)</em> : 2 100–3 600 €/mois — OneTrust, EQS, Data Legal Drive.</span></span></label>
+        <select id="pricing-segment" class="reg-input" onchange="pricingSimulate()">
+          <option value="pme" selected>🏢 PME (&lt; 250 salariés)</option>
+          <option value="eti">🏬 ETI (250 – 5 000 salariés)</option>
+          <option value="ge">🏛 Grands comptes (&gt; 5 000 salariés)</option>
+        </select>
+      </div>
+      <div class="reg-field"><label class="reg-label">Secteur d'activité <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>Impact secteur</strong><br>La vitesse de progression mensuelle varie : IT/Tech (12 pts/mois), Télécom (10), Industrie (9), Énergie/Transport (8), Finance/Santé (7), Secteur public (6).<br><em>Source : benchmarks Sentinel AI sectoriels</em></span></span></label>
+        <select id="pricing-secteur" class="reg-input" onchange="pricingSimulate()">
+          <option value="telecom">📶 Télécom</option><option value="energie">⚡ Énergie</option>
+          <option value="sante">🩺 Santé</option><option value="finance">🏦 Finance</option>
+          <option value="industrie">🏭 Industrie</option><option value="transport">🚇 Transport</option>
+          <option value="it" selected>💻 IT/Tech</option><option value="public">🏛 Secteur public</option>
+        </select>
+      </div>
+      <div class="reg-field"><label class="reg-label">Nombre de systèmes IA <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>Périmètre des systèmes IA</strong><br>Incluez tous les systèmes utilisant de l'IA dans vos processus métier : outils décisionnels, chatbots, systèmes de scoring, automatisations ML. Le coût SaaS augmente de <em>180 €/système</em> au-delà de 10, avec remises volume à partir de 20 systèmes.</span></span></label><input type="number" id="pricing-nb-systemes" class="reg-input" value="10" onchange="pricingSimulate()"></div>
+      <div class="reg-field">
+        <label class="reg-label">Score Audit IA Act de départ (%) <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>Score de départ AI Act</strong><br>Pourcentage des 33 critères d'audit validés à ce jour. Si vous ne le connaissez pas, utilisez les boutons d'estimation. La part variable RaaS est indexée à <em>45 €/point gagné</em> — un passage de 20% à 60% rapporte 1 800 €/mois de part variable.</span></span></label>
+        <input type="number" id="pricing-audit-depart" class="reg-input" value="20" min="0" max="100" onchange="pricingSimulate()">
+        <div id="pricing-audit-mode-info" style="font-size:10px;color:var(--muted);margin-top:4px"></div>
+        <div id="pricing-audit-estim-buttons" style="display:none;gap:6px;margin-top:6px;flex-wrap:wrap">
+          <button type="button" class="mat-export-btn" style="background:var(--bg);color:var(--ink);border:1px solid var(--rule2);font-size:10px;padding:5px 10px" onclick="pricingSetEstim(10)" title="Aucune démarche de conformité engagée à ce jour">Aucune démarche (~10%)</button>
+          <button type="button" class="mat-export-btn" style="background:var(--bg);color:var(--ink);border:1px solid var(--rule2);font-size:10px;padding:5px 10px" onclick="pricingSetEstim(30)" title="Premières actions de gouvernance engagées">Démarche initiale (~30%)</button>
+          <button type="button" class="mat-export-btn" style="background:var(--bg);color:var(--ink);border:1px solid var(--rule2);font-size:10px;padding:5px 10px" onclick="pricingSetEstim(55)" title="Politiques et processus partiellement en place">Démarche avancée (~55%)</button>
+        </div>
+      </div>
+      <div class="reg-field"><label class="reg-label">Chiffre d'affaires annuel (€) <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>Exposition aux sanctions Art. 99</strong><br>L'AI Act Art. 99 prévoit des amendes jusqu'à 3% du CA mondial pour les systèmes haut risque non conformes. Le simulateur estime votre exposition initiale et le gain de réduction grâce à la conformité. <em>0,4% de la réduction calculée</em> est inclus dans la part variable RaaS.</span></span></label><input type="number" id="pricing-ca" class="reg-input" value="50000000" onchange="pricingSimulate()"></div>
+    </div>
+    <button class="mat-export-btn" style="background:var(--ink);color:#fff;margin-top:16px" onclick="pricingSimulate()">Recalculer la simulation</button>
+  </div>
+
+  <div id="pricing-results"></div>
+  <button class="mat-export-btn" style="background:var(--green);color:#fff;margin-top:14px" onclick="histoSavePricing()" title="Enregistrer ce calcul dans l'historique persistant et traçable.">💾 Enregistrer dans l'historique</button>
+  <span class="prx-tip-icon" tabindex="0" style="margin-left:6px;vertical-align:middle">?<span class="prx-tip-bubble" style="left:0;transform:none"><strong>Historique des simulations</strong><br>Sauvegarde le calcul courant (paramètres + résultats) dans votre historique Sentinel persistant. Permet de comparer l'évolution de votre projection au fil du temps et de l'inclure dans vos rapports de conformité.</span></span>
+
+  <div class="tbl-wrap" style="padding:24px;margin-top:20px">
+    <div class="tbl-head" style="border:none;padding:0 0 12px">
+      <span class="tbl-title" id="pricing-chart-title">Projection sur 6 mois — SaaS vs Hybride RaaS</span>
+    </div>
+    <div class="chart-controls">
+      <select class="chart-horizon-sel" id="pricing-chart-horizon" onchange="pricingChartSetHorizon(parseInt(this.value))">
+        <option value="6" selected>6 mois</option>
+        <option value="12">12 mois</option>
+        <option value="18">18 mois</option>
+      </select>
+      <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble" style="width:220px"><strong>Horizon</strong><br>6 mois : premiers résultats.<br>12 mois : point d’équilibre cumulatif.<br>18 mois : cycle AI Act complet.</span></span>
+      <div class="chart-view-toggle">
+        <button class="chart-view-btn active" id="chart-btn-monthly" onclick="pricingChartSetView('monthly')">Mensuel</button>
+        <button class="chart-view-btn" id="chart-btn-cumul" onclick="pricingChartSetView('cumul')">Cumul</button>
+      </div>
+      <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble" style="width:220px"><strong>Vue</strong><br>Mensuelle : coût de chaque mois.<br>Cumulée : total depuis M1, révèle le mois où l’hybride devient avantageux.</span></span>
+      <span id="pricing-chart-eq-badge" class="chart-eq-badge" style="display:none">Équilibre</span>
+    </div>
+    <div id="pricing-chart-legend" class="pricing-legend"></div>
+    <div style="position:relative;max-width:680px;margin:0 auto">
+      <svg id="pricing-chart-svg" viewBox="0 0 640 300" style="width:100%;display:block"></svg>
+      <div id="pricing-chart-tooltip" class="pricing-chart-tooltip" style="display:none"></div>
+    </div>
+    <div id="pricing-chart-insight" class="chart-insight"></div>
+  </div>
+
+
+  <div class="prx-step" style="display:flex;align-items:center;gap:14px;margin:32px 0 16px;padding-bottom:12px;border-bottom:2px solid var(--rule2)">
+    <div style="flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:16px;font-weight:700">3</div>
+    <div>
+      <div style="font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em;color:var(--muted2)">Étape 3 sur 5</div>
+      <div style="font-size:16px;font-weight:700;color:var(--ink);line-height:1.3">Détailler votre échéancier</div>
+      <div style="font-size:12px;color:var(--muted2);margin-top:2px">Découvrez les 7 jalons de conformité AI Act, leur montant et leur déclenchement.</div>
+    </div>
+  </div>
+
+  <!-- ECHEANCIER RAAS PAR JALONS -->
+  <div class="tbl-wrap" style="padding:24px;margin-top:24px;margin-bottom:0">
+    <div class="tbl-head" style="border:none;padding:0 0 6px">
+      <span class="tbl-title">Échéancier RaaS par jalons — paiement dynamique sur résultats vérifiés</span>
+      <span class="bud-tip" tabindex="0" style="margin-left:8px">?
+        <span class="bud-tip-bubble" style="width:280px">
+          <strong>Principe du paiement par jalons</strong><br>
+          Vous payez un socle mensuel réduit (∵35 % du SaaS), puis chaque jalon de conformité AI Act uniquement lorsqu’il est <em>vérifié</em> : score Sentinel du domaine atteint <em>et</em> validation documentaire par CONSEILPREV.<br>
+          Chaque jalon acquis est <strong>irrévocable</strong> et payé en 2 mensualités.<br>
+          Total maximal contractuellement borné à ≈95 % du SaaS — le RaaS ne peut jamais coûter plus cher que l’abonnement classique.
+        </span>
+      </span>
+    </div>
+    <p style="font-size:12px;color:var(--muted2);margin:0 0 10px;line-height:1.6">Échéancier recalculé depuis vos paramètres simulateur (segment, secteur, trajectoire réaliste projetée). Les mois de déclenchement sont prévisionnels ; la facturation réelle n’intervient qu’après vérification.</p>
+    <div class="ms-summary" id="ms-summary"><!-- rendu par milestonesRender() --></div>
+    <table class="ms-table">
+      <thead><tr>
+        <th>Jalon de conformité</th><th>Référence</th><th>Seuil Sentinel</th><th>Pond.</th><th>Montant</th><th>Déclenchement projeté</th>
+      </tr></thead>
+      <tbody id="ms-tbody"><!-- rendu par milestonesRender() --></tbody>
+    </table>
+    <div class="ms-guarantee">
+      ??️ <strong>Garanties contractuelles du modèle :</strong> plafond annuel borné — le total socle + jalons ne dépasse jamais ≈95 % du SaaS équivalent ; jalon vérifié = acquis définitivement, jamais refacturé ; aucune facturation de jalon sans double vérification (score Sentinel + validation documentaire) ; en cas de progression partielle, vous ne payez que les jalons atteints — le risque d’exécution est porté par CONSEILPREV, pas par vous.
+    </div>
+    <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="milestonesExportPdf()" title="Genere un document PDF de l echeancier a joindre a une proposition commerciale">?? Exporter l’échéancier (PDF)</button>
+    </div>
+  </div>
+
+  <div class="prx-step" style="display:flex;align-items:center;gap:14px;margin:32px 0 16px;padding-bottom:12px;border-bottom:2px solid var(--rule2)">
+    <div style="flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:16px;font-weight:700">4</div>
+    <div>
+      <div style="font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em;color:var(--muted2)">Étape 4 sur 5</div>
+      <div style="font-size:16px;font-weight:700;color:var(--ink);line-height:1.3">Comparer les formules</div>
+      <div style="font-size:12px;color:var(--muted2);margin-top:2px">Situez votre choix parmi les trois offres Sentinel AI.</div>
+    </div>
+  </div>
+
+  <!-- COMPARAISON 3 PLANS SENTINEL -->
+  <div class="tbl-wrap" style="padding:24px;margin-top:24px;margin-bottom:0">
+    <div class="tbl-head" style="border:none;padding:0 0 6px">
+      <span class="tbl-title">Choisir votre formule Sentinel AI</span>
+      <span style="font-size:11px;color:var(--muted);margin-left:10px">Tarifs calculés depuis vos paramètres — devis personnalisé sur demande</span>
+    </div>
+    <p style="font-size:12px;color:var(--muted2);margin:0 0 16px;line-height:1.6">Chaque plan s’adapte automatiquement à votre secteur et à la taille de votre organisation.</p>
+    <div class="plans-billing-bar">
+      <span class="plans-billing-opt active" id="plans-opt-monthly" onclick="plansSetBilling('monthly')">Mensuel</span>
+      <span style="color:var(--rule2);font-size:16px">/</span>
+      <span class="plans-billing-opt" id="plans-opt-annual" onclick="plansSetBilling('annual')">Annuel <span class="plans-annual-save" id="plans-annual-badge">−15 %</span></span>
+    </div>
+    <div class="plans-grid" id="plans-grid-container"><!-- rendu par plansRender() --></div>
+    <div class="radar-registre-info radar-registre-ok" style="margin-top:16px;font-size:11px">
+      ?? Tarifs calculés depuis le simulateur. Modifiez le secteur ou le segment pour mettre à jour les plans.
+    </div>
+  </div>
+    <div class="prx-step" style="display:flex;align-items:center;gap:14px;margin:32px 0 16px;padding-bottom:12px;border-bottom:2px solid var(--rule2)">
+    <div style="flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:16px;font-weight:700">5</div>
+    <div>
+      <div style="font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em;color:var(--muted2)">Étape 5 sur 5</div>
+      <div style="font-size:16px;font-weight:700;color:var(--ink);line-height:1.3">Demander votre tarification</div>
+      <div style="font-size:12px;color:var(--muted2);margin-top:2px">Convaincu ? Envoyez votre demande — réponse personnalisée sous 24h ouvrables.</div>
+    </div>
+  </div>
+
+<div id="pricing-request-block" style="margin-bottom:28px">
 
     <!-- Bannière plan gratuit (visible uniquement si plan=gratuit) -->
     <div id="pricing-gratuit-banner" style="display:none;background:linear-gradient(135deg,#1C1C1C 0%,#2d2260 100%);border-radius:10px;padding:24px 28px;margin-bottom:20px;color:#fff">
@@ -2490,184 +2704,7 @@ textarea.form-el{min-height:86px;resize:vertical}
         Les données saisies sont transmises uniquement à CONSEILPREV (christophe.cerf@outlook.com) et ne sont pas conservées sur le serveur. Réponse personnalisée sous 24h ouvrables.
       </div>
     </div>
-  </div>
-
-  <span class="eyebrow">Modèle commercial innovant</span>
-  <h1 class="page-h">Tarification <em>par résultats</em></h1>
-  <p class="page-lead">Simulez un modèle hybride RaaS <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>RaaS — Results as a Service</strong><br>Modèle contractuel où la part variable de la facturation est indexée sur des <em>résultats mesurables</em> (score d'audit, systèmes conformes, réduction de l'exposition aux sanctions) plutôt que sur un forfait fixe.</span></span> — socle fixe réduit + part variable indexée sur vos résultats réels de conformité — comparé à un abonnement SaaS classique <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>SaaS classique</strong><br>Abonnement mensuel ou annuel fixe, indépendant de vos progrès de conformité. Le simulateur le calcule à partir du tarif base 2 400 €/mois + 180 €/système supplémentaire, avec remises volume.</span></span>.</p>
-
-  <!-- Guide d'utilisation rapide -->
-  <div class="prx-guide" style="margin-bottom:20px">
-    <div class="prx-guide-title">Comment utiliser ce simulateur</div>
-    <p style="margin:0 0 8px">Le simulateur calcule automatiquement vos données réelles (Registre IA, scores Audit) et compare les deux modèles sur 6 mois. Renseignez vos paramètres ci-dessous pour obtenir une projection personnalisée.</p>
-    <ol class="prx-guide-steps">
-      <li>Sélectionnez votre <strong>secteur</strong> — la vitesse de progression de conformité varie selon les référentiels sectoriels</li>
-      <li>Indiquez le <strong>nombre de systèmes IA</strong> déclarés ou estimés dans votre périmètre</li>
-      <li>Renseignez votre <strong>score d'audit de départ</strong> (utilisez les boutons estimatifs si vous ne connaissez pas le vôtre)</li>
-      <li>Saisissez votre <strong>chiffre d'affaires annuel</strong> — il sert à estimer l'exposition aux sanctions AI Act Art. 99</li>
-      <li>Cliquez <strong>Recalculer</strong> pour mettre à jour les projections et le graphique</li>
-    </ol>
-  </div>
-
-  <div id="pricing-prefill-info" class="radar-registre-info radar-registre-ok" style="margin-bottom:20px">Chargement de vos données…</div>
-
-  <div class="tbl-wrap" style="padding:24px;margin-bottom:24px">
-    <div class="tbl-head" style="border:none;padding:0 0 14px">
-      <span class="tbl-title">Paramètres de simulation</span>
-    </div>
-
-    <!-- Toggle mensuel / annuel -->
-    <div class="billing-toggle-wrap">
-      <span class="billing-toggle-label active" id="billing-monthly-lbl" onclick="pricingSetBilling('monthly')">Mensuel <span style="font-size:9px;font-family:var(--mono);color:var(--muted);font-weight:400">(sans engagement)</span></span>
-      <label class="billing-toggle">
-        <input type="checkbox" id="pricing-billing-toggle" onchange="pricingSetBilling(this.checked?'annual':'monthly')">
-        <span class="billing-toggle-track"></span>
-        <span class="billing-toggle-knob"></span>
-      </label>
-      <span class="billing-toggle-label" id="billing-annual-lbl" onclick="pricingSetBilling('annual')">Annuel <span style="font-size:9px;font-family:var(--mono);color:var(--muted);font-weight:400">(engagement 12 mois)</span>
-        <span class="billing-annual-badge" id="billing-annual-discount-badge">−15 %</span>
-      </span>
-      <span class="prx-tip-icon" tabindex="0" style="margin-left:4px">?<span class="prx-tip-bubble">
-        <strong>Engagement annuel vs mensuel</strong><br>
-        La plupart des éditeurs SaaS gouvernance IA proposent une remise sur engagement 12 mois.<br><br>
-        <em>Mensuel :</em> flexibilité maximale, tarif plein, sans pénalité d’arrêt.<br>
-        <em>Annuel :</em> remise de 10 à 20 % selon le secteur, engagement ferme 12 mois.<br><br>
-        La remise annuelle est cumulative avec la remise volume (plus de 20 systèmes).
-      </span></span>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:20px">
-      <div class="reg-field"><label class="reg-label">Taille de l'organisation <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>Segment de marché</strong><br><em>PME (&lt; 250 sal.)</em> : 80–600 €/mois — OGMA 99 €, TARANIS 559 €, agences IA 300–500 €.<br><em>ETI (250–5 000 sal.)</em> : 750–1 800 €/mois — Dastra, Tenacy.<br><em>Grands comptes (&gt; 5 000 sal.)</em> : 2 100–3 600 €/mois — OneTrust, EQS, Data Legal Drive.</span></span></label>
-        <select id="pricing-segment" class="reg-input" onchange="pricingSimulate()">
-          <option value="pme" selected>🏢 PME (&lt; 250 salariés)</option>
-          <option value="eti">🏬 ETI (250 – 5 000 salariés)</option>
-          <option value="ge">🏛 Grands comptes (&gt; 5 000 salariés)</option>
-        </select>
-      </div>
-      <div class="reg-field"><label class="reg-label">Secteur d'activité <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>Impact secteur</strong><br>La vitesse de progression mensuelle varie : IT/Tech (12 pts/mois), Télécom (10), Industrie (9), Énergie/Transport (8), Finance/Santé (7), Secteur public (6).<br><em>Source : benchmarks Sentinel AI sectoriels</em></span></span></label>
-        <select id="pricing-secteur" class="reg-input" onchange="pricingSimulate()">
-          <option value="telecom">📶 Télécom</option><option value="energie">⚡ Énergie</option>
-          <option value="sante">🩺 Santé</option><option value="finance">🏦 Finance</option>
-          <option value="industrie">🏭 Industrie</option><option value="transport">🚇 Transport</option>
-          <option value="it" selected>💻 IT/Tech</option><option value="public">🏛 Secteur public</option>
-        </select>
-      </div>
-      <div class="reg-field"><label class="reg-label">Nombre de systèmes IA <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>Périmètre des systèmes IA</strong><br>Incluez tous les systèmes utilisant de l'IA dans vos processus métier : outils décisionnels, chatbots, systèmes de scoring, automatisations ML. Le coût SaaS augmente de <em>180 €/système</em> au-delà de 10, avec remises volume à partir de 20 systèmes.</span></span></label><input type="number" id="pricing-nb-systemes" class="reg-input" value="10" onchange="pricingSimulate()"></div>
-      <div class="reg-field">
-        <label class="reg-label">Score Audit IA Act de départ (%) <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>Score de départ AI Act</strong><br>Pourcentage des 33 critères d'audit validés à ce jour. Si vous ne le connaissez pas, utilisez les boutons d'estimation. La part variable RaaS est indexée à <em>45 €/point gagné</em> — un passage de 20% à 60% rapporte 1 800 €/mois de part variable.</span></span></label>
-        <input type="number" id="pricing-audit-depart" class="reg-input" value="20" min="0" max="100" onchange="pricingSimulate()">
-        <div id="pricing-audit-mode-info" style="font-size:10px;color:var(--muted);margin-top:4px"></div>
-        <div id="pricing-audit-estim-buttons" style="display:none;gap:6px;margin-top:6px;flex-wrap:wrap">
-          <button type="button" class="mat-export-btn" style="background:var(--bg);color:var(--ink);border:1px solid var(--rule2);font-size:10px;padding:5px 10px" onclick="pricingSetEstim(10)" title="Aucune démarche de conformité engagée à ce jour">Aucune démarche (~10%)</button>
-          <button type="button" class="mat-export-btn" style="background:var(--bg);color:var(--ink);border:1px solid var(--rule2);font-size:10px;padding:5px 10px" onclick="pricingSetEstim(30)" title="Premières actions de gouvernance engagées">Démarche initiale (~30%)</button>
-          <button type="button" class="mat-export-btn" style="background:var(--bg);color:var(--ink);border:1px solid var(--rule2);font-size:10px;padding:5px 10px" onclick="pricingSetEstim(55)" title="Politiques et processus partiellement en place">Démarche avancée (~55%)</button>
-        </div>
-      </div>
-      <div class="reg-field"><label class="reg-label">Chiffre d'affaires annuel (€) <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>Exposition aux sanctions Art. 99</strong><br>L'AI Act Art. 99 prévoit des amendes jusqu'à 3% du CA mondial pour les systèmes haut risque non conformes. Le simulateur estime votre exposition initiale et le gain de réduction grâce à la conformité. <em>0,4% de la réduction calculée</em> est inclus dans la part variable RaaS.</span></span></label><input type="number" id="pricing-ca" class="reg-input" value="50000000" onchange="pricingSimulate()"></div>
-    </div>
-    <button class="mat-export-btn" style="background:var(--ink);color:#fff;margin-top:16px" onclick="pricingSimulate()">Recalculer la simulation</button>
-  </div>
-
-  <div id="pricing-results"></div>
-  <button class="mat-export-btn" style="background:var(--green);color:#fff;margin-top:14px" onclick="histoSavePricing()" title="Enregistrer ce calcul dans l'historique persistant et traçable.">💾 Enregistrer dans l'historique</button>
-  <span class="prx-tip-icon" tabindex="0" style="margin-left:6px;vertical-align:middle">?<span class="prx-tip-bubble" style="left:0;transform:none"><strong>Historique des simulations</strong><br>Sauvegarde le calcul courant (paramètres + résultats) dans votre historique Sentinel persistant. Permet de comparer l'évolution de votre projection au fil du temps et de l'inclure dans vos rapports de conformité.</span></span>
-
-  <div class="tbl-wrap" style="padding:24px;margin-top:20px">
-    <div class="tbl-head" style="border:none;padding:0 0 12px">
-      <span class="tbl-title" id="pricing-chart-title">Projection sur 6 mois — SaaS vs Hybride RaaS</span>
-    </div>
-    <div class="chart-controls">
-      <select class="chart-horizon-sel" id="pricing-chart-horizon" onchange="pricingChartSetHorizon(parseInt(this.value))">
-        <option value="6" selected>6 mois</option>
-        <option value="12">12 mois</option>
-        <option value="18">18 mois</option>
-      </select>
-      <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble" style="width:220px"><strong>Horizon</strong><br>6 mois : premiers résultats.<br>12 mois : point d’équilibre cumulatif.<br>18 mois : cycle AI Act complet.</span></span>
-      <div class="chart-view-toggle">
-        <button class="chart-view-btn active" id="chart-btn-monthly" onclick="pricingChartSetView('monthly')">Mensuel</button>
-        <button class="chart-view-btn" id="chart-btn-cumul" onclick="pricingChartSetView('cumul')">Cumul</button>
-      </div>
-      <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble" style="width:220px"><strong>Vue</strong><br>Mensuelle : coût de chaque mois.<br>Cumulée : total depuis M1, révèle le mois où l’hybride devient avantageux.</span></span>
-      <span id="pricing-chart-eq-badge" class="chart-eq-badge" style="display:none">Équilibre</span>
-    </div>
-    <div id="pricing-chart-legend" class="pricing-legend"></div>
-    <div style="position:relative;max-width:680px;margin:0 auto">
-      <svg id="pricing-chart-svg" viewBox="0 0 640 300" style="width:100%;display:block"></svg>
-      <div id="pricing-chart-tooltip" class="pricing-chart-tooltip" style="display:none"></div>
-    </div>
-    <div id="pricing-chart-insight" class="chart-insight"></div>
-  </div>
-
-
-  <!-- ECHEANCIER RAAS PAR JALONS -->
-  <div class="tbl-wrap" style="padding:24px;margin-top:24px;margin-bottom:0">
-    <div class="tbl-head" style="border:none;padding:0 0 6px">
-      <span class="tbl-title">Échéancier RaaS par jalons — paiement dynamique sur résultats vérifiés</span>
-      <span class="bud-tip" tabindex="0" style="margin-left:8px">?
-        <span class="bud-tip-bubble" style="width:280px">
-          <strong>Principe du paiement par jalons</strong><br>
-          Vous payez un socle mensuel réduit (∵35 % du SaaS), puis chaque jalon de conformité AI Act uniquement lorsqu’il est <em>vérifié</em> : score Sentinel du domaine atteint <em>et</em> validation documentaire par CONSEILPREV.<br>
-          Chaque jalon acquis est <strong>irrévocable</strong> et payé en 2 mensualités.<br>
-          Total maximal contractuellement borné à ≈95 % du SaaS — le RaaS ne peut jamais coûter plus cher que l’abonnement classique.
-        </span>
-      </span>
-    </div>
-    <p style="font-size:12px;color:var(--muted2);margin:0 0 10px;line-height:1.6">Échéancier recalculé depuis vos paramètres simulateur (segment, secteur, trajectoire réaliste projetée). Les mois de déclenchement sont prévisionnels ; la facturation réelle n’intervient qu’après vérification.</p>
-    <div class="ms-summary" id="ms-summary"><!-- rendu par milestonesRender() --></div>
-    <table class="ms-table">
-      <thead><tr>
-        <th>Jalon de conformité</th><th>Référence</th><th>Seuil Sentinel</th><th>Pond.</th><th>Montant</th><th>Déclenchement projeté</th>
-      </tr></thead>
-      <tbody id="ms-tbody"><!-- rendu par milestonesRender() --></tbody>
-    </table>
-    <div class="ms-guarantee">
-      ??️ <strong>Garanties contractuelles du modèle :</strong> plafond annuel borné — le total socle + jalons ne dépasse jamais ≈95 % du SaaS équivalent ; jalon vérifié = acquis définitivement, jamais refacturé ; aucune facturation de jalon sans double vérification (score Sentinel + validation documentaire) ; en cas de progression partielle, vous ne payez que les jalons atteints — le risque d’exécution est porté par CONSEILPREV, pas par vous.
-    </div>
-    <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
-      <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="milestonesExportPdf()" title="Genere un document PDF de l echeancier a joindre a une proposition commerciale">?? Exporter l’échéancier (PDF)</button>
-    </div>
-  </div>
-
-  <!-- COMPARAISON 3 PLANS SENTINEL -->
-  <div class="tbl-wrap" style="padding:24px;margin-top:24px;margin-bottom:0">
-    <div class="tbl-head" style="border:none;padding:0 0 6px">
-      <span class="tbl-title">Choisir votre formule Sentinel AI</span>
-      <span style="font-size:11px;color:var(--muted);margin-left:10px">Tarifs calculés depuis vos paramètres — devis personnalisé sur demande</span>
-    </div>
-    <p style="font-size:12px;color:var(--muted2);margin:0 0 16px;line-height:1.6">Chaque plan s’adapte automatiquement à votre secteur et à la taille de votre organisation.</p>
-    <div class="plans-billing-bar">
-      <span class="plans-billing-opt active" id="plans-opt-monthly" onclick="plansSetBilling('monthly')">Mensuel</span>
-      <span style="color:var(--rule2);font-size:16px">/</span>
-      <span class="plans-billing-opt" id="plans-opt-annual" onclick="plansSetBilling('annual')">Annuel <span class="plans-annual-save" id="plans-annual-badge">−15 %</span></span>
-    </div>
-    <div class="plans-grid" id="plans-grid-container"><!-- rendu par plansRender() --></div>
-    <div class="radar-registre-info radar-registre-ok" style="margin-top:16px;font-size:11px">
-      ?? Tarifs calculés depuis le simulateur. Modifiez le secteur ou le segment pour mettre à jour les plans.
-    </div>
-  </div>
-  <div class="tbl-wrap" style="padding:24px;margin-top:20px">
-    <div class="tbl-head" style="border:none;padding:0 0 16px"><span class="tbl-title">Comment fonctionne le modèle hybride</span></div>
-    <div class="ctrl-section"><div class="ctrl-section-head"><span class="ctrl-section-title">① Socle fixe réduit — ≈35 % du SaaS équivalent <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>Socle fixe</strong><br>Couvre l'infrastructure réelle : hébergement Render, API Mistral/Claude, base PostgreSQL Frankfurt, maintenance.<br><em>Environ 30-40 % d'un SaaS équivalent</em>. Stable quel que soit votre niveau de conformité.</span></span></span></div>
-      <div style="padding:12px 16px;font-size:12px;color:var(--ink2);line-height:1.6">Couvre les coûts réels d'infrastructure (hébergement, API IA, base de données) — environ 30 à 40% du tarif SaaS classique équivalent.</div></div>
-    <div class="ctrl-section"><div class="ctrl-section-head"><span class="ctrl-section-title">② Part variable — indexée sur 3 résultats mesurables <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>Part variable RaaS</strong><br>Calculée chaque mois à partir de vos données réelles Sentinel :<br>• <em>45 €/point d'audit gagné</em><br>• <em>0,4 % de la réduction d'exposition Art. 99</em><br>• <em>65 €/système conforme</em> (pondéré par classification)<br>Plafonnée à 4× le socle fixe (3 600 €/mois max).</span></span></span></div>
-      <div style="padding:12px 16px;font-size:12px;color:var(--ink2);line-height:1.6">
-
-        <div class="prx-formula">
-          <span class="prx-var">Part variable</span> <span class="prx-op">=</span>
-          <span class="prx-var">Δ Audit</span> <span class="prx-op">× (2 € PME / 12 € ETI / 40 € GE)</span>
-          <span class="prx-op"> + </span><span class="prx-var">Réduction sanctions</span> <span class="prx-op">× 0,1–0,4 %</span>
-          <span class="prx-op"> + </span><span class="prx-var">Systèmes conformes</span> <span class="prx-op">× (4 € / 20 € / 60 €) × poids</span>
-          <br><span class="prx-cap">Plafond : 4 × 900 € = 3 600 €/mois</span>
-        </div>
-        • Progression du score Audit IA Act (2 €/pt PME — 12 €/pt ETI — 40 €/pt GE)<br>
-        • Réduction estimée de l'exposition aux sanctions Art. 99 (0,4% de la réduction calculée)<br>
-        • Systèmes du Registre IA passés au statut « conforme » (4 €/sys PME — 20 € ETI — 60 € GE), <strong>pondérés par classification réelle</strong> — un système haut risque pèse 1,4× plus qu un système à risque minimal<br>
-        • Vitesse de progression calibrée par <strong>secteur d activité</strong> et <strong>maturité organisationnelle réelle</strong> (score de maturité Sentinel)<br>
-        • <strong>Plafond contractuel</strong> : la part variable ne peut excéder 4× le socle fixe
-      </div></div>
-    <div class="ctrl-section"><div class="ctrl-section-head"><span class="ctrl-section-title">③ Garde-fous contractuels <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>Protection contractuelle</strong><br>Le contrat RaaS doit impérativement définir :<br>• <em>Périmètre de responsabilité</em> : distinction entre les obligations de moyens (CONSEILPREV) et les obligations de résultat dépendant du client<br>• <em>Plafond mensuel</em> (recommandé : 4× socle)<br>• <em>Plancher</em> : le socle est toujours dû, même si aucun progrès n'est réalisé</span></span></span></div>
-      <div style="padding:12px 16px;font-size:12px;color:var(--ink2);line-height:1.6">Les résultats dépendent aussi des actions du client (qualité des données fournies, adoption interne). Le contrat doit définir clairement le périmètre de responsabilité de chaque partie et un plafond/plancher de facturation variable.</div></div>
-  </div>
-</div>
+  </div></div>
 
 <div class="page" id="p-templates"><span class="eyebrow">Ressources</span><h1 class="page-h">Documentation &amp; <em>modèles</em></h1><p class="page-lead">Guides, fiches synthétiques, templates et documents de conformité — classés par catégorie et liés aux articles applicables du Règl. (UE) 2024/1689.</p><div class="tmpl-filter-bar"><label>Filtrer par</label><select class="tmpl-select" id="tmpl-cat-select" onchange="tmplFilter()"><option value="all">Toutes les catégories</option><option value="template">Templates</option><option value="fiche">Fiches synthétiques</option><option value="guide">Guides pratiques</option><option value="doc">Documents de référence</option><option value="process">Procédures &amp; processus</option></select><select class="tmpl-select" id="tmpl-art-select" onchange="tmplFilter()"><option value="all">Tous les articles AI Act</option><option value="art5">Art. 5 — Pratiques interdites</option><option value="art6">Art. 6 — Systèmes haut risque</option><option value="art9">Art. 9 — Gestion des risques</option><option value="art10">Art. 10 — Données entraînement</option><option value="art11">Art. 11 — Documentation technique</option><option value="art12">Art. 12 — Journalisation</option><option value="art13">Art. 13 — Transparence</option><option value="art14">Art. 14 — Surveillance humaine</option><option value="art15">Art. 15 — Exactitude &amp; robustesse</option><option value="art17">Art. 17 — Management qualité</option><option value="art27">Art. 27 — FRIA</option><option value="art47">Art. 47 — Déclaration conformité</option><option value="art50">Art. 50 — Transparence risque limité</option><option value="art51">Art. 51 — Systèmes GPAI</option></select><select class="tmpl-select" id="tmpl-format-select" onchange="tmplFilter()"><option value="all">Tous les formats</option><option value="pdf">PDF</option><option value="word">Word (.docx)</option><option value="ia">Généré par IA</option><option value="sentinel">Sentinel intégré</option></select><span id="tmpl-count-lbl" style="font-size:10px;font-family:var(--mono);color:var(--muted2);margin-left:4px"></span></div><div class="tmpl-section" id="tmpl-sec-template"><div class="tmpl-section-header"><span class="tmpl-section-title">&#x1F4CB; Templates</span><span class="tmpl-section-count" id="tmpl-count-template"></span></div><p class="tmpl-section-sub">Documents vierges à compléter — utilisables directement pour votre démarche de conformité AI Act.</p><div class="doc-grid" id="tmpl-grid-template"></div></div><div class="tmpl-section" id="tmpl-sec-fiche"><div class="tmpl-section-header"><span class="tmpl-section-title">&#x1F4C4; Fiches synthétiques</span><span class="tmpl-section-count" id="tmpl-count-fiche"></span></div><p class="tmpl-section-sub">Résumés opérationnels des obligations réglementaires — 1 à 2 pages par article clé.</p><div class="doc-grid" id="tmpl-grid-fiche"></div></div><div class="tmpl-section" id="tmpl-sec-guide"><div class="tmpl-section-header"><span class="tmpl-section-title">&#x1F4D6; Guides pratiques</span><span class="tmpl-section-count" id="tmpl-count-guide"></span></div><p class="tmpl-section-sub">Fiches méthodologiques étape par étape pour implémenter les obligations AI Act.</p><div class="doc-grid" id="tmpl-grid-guide"></div></div><div class="tmpl-section" id="tmpl-sec-doc"><div class="tmpl-section-header"><span class="tmpl-section-title">&#x1F4C1; Documents de référence</span><span class="tmpl-section-count" id="tmpl-count-doc"></span></div><p class="tmpl-section-sub">Livrables complets générés par Sentinel AI ou téléchargeables depuis la plateforme.</p><div class="doc-grid" id="tmpl-grid-doc"></div></div><div class="tmpl-section" id="tmpl-sec-process"><div class="tmpl-section-header"><span class="tmpl-section-title">&#x2699;&#xFE0F; Procédures &amp; processus</span><span class="tmpl-section-count" id="tmpl-count-process"></span></div><p class="tmpl-section-sub">Modèles de processus internes, procédures d&#39;audit et workflows de conformité.</p><div class="doc-grid" id="tmpl-grid-process"></div></div></div>
 
