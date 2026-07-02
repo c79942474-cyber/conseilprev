@@ -1680,6 +1680,12 @@ textarea.form-el{min-height:86px;resize:vertical}
 .ms-role-note{background:rgba(28,90,138,.05);border:1px solid rgba(28,90,138,.2);border-left:3px solid var(--blue);border-radius:6px;padding:12px 16px;margin-bottom:14px;font-size:11.5px;line-height:1.65;color:var(--ink2)}
 .ms-role-note strong{color:var(--ink)}
 .ms-role-note .ms-role-arts{display:block;margin-top:6px;font-size:10.5px;color:var(--muted2);font-family:var(--mono)}
+
+/* ══ NOTE PROFIL METIER (PARCOURS GUIDE) ══ */
+.ms-profile-note{background:rgba(45,122,71,.05);border:1px solid rgba(45,122,71,.22);border-left:3px solid var(--green);border-radius:6px;padding:12px 16px;margin-bottom:14px;font-size:11.5px;line-height:1.6;color:var(--ink2)}
+.ms-profile-note strong{color:var(--ink)}
+.ms-profile-mods{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.ms-profile-mod{display:inline-block;background:var(--white);border:1px solid var(--rule2);border-radius:4px;padding:3px 9px;font-size:10.5px;color:var(--ink2)}
 </style>
 
 </head>
@@ -2550,8 +2556,21 @@ textarea.form-el{min-height:86px;resize:vertical}
           <option value="distributeur">Distributeur (met à disposition sur le marché UE)</option>
         </select>
       </div>
+      <div>
+        <label style="font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted2);display:block;margin-bottom:4px">Profil métier (parcours guidé Sentinel)</label>
+        <select id="ms-profile-select" class="reg-input" onchange="milestonesRenderProfile()" style="min-width:300px">
+          <option value="directeur_programme" selected>Directeur de programme IA Act (8 modules)</option>
+          <option value="grc_senior">Senior Gouvernance GRC Data IA (6 modules)</option>
+          <option value="risk_manager">Risk Manager (5 modules)</option>
+          <option value="ceo">CEO / Direction générale (4 modules)</option>
+          <option value="dpo">DPO — Délégué à la protection des données (4 modules)</option>
+          <option value="cdo">CDO — Chief Data Officer (4 modules)</option>
+          <option value="caio">CAIO — Chief AI Officer (5 modules)</option>
+        </select>
+      </div>
     </div>
     <div id="ms-role-note" class="ms-role-note"><!-- rendu par milestonesRenderRoleNote() --></div>
+    <div id="ms-profile-note" class="ms-profile-note"><!-- rendu par milestonesRenderProfile() --></div>
     <div class="ms-summary" id="ms-summary"><!-- rendu par milestonesRender() --></div>
     <table class="ms-table">
       <thead><tr>
@@ -13480,6 +13499,29 @@ window.RAAS_ROLE_NOTES = {
   }
 };
 
+window.RAAS_PROFILES = {
+  directeur_programme: {role:'Directeur de programme IA Act', pitch:'Vous pilotez la mise en conformité de bout en bout. Ce parco', modules:['Simulateur IA Act','Registre IA','Audit de maturité','Audit IA Act','Matrice risques','Parties prenantes','Roadmap','Vue direction']},
+  grc_senior: {role:'Senior Gouvernance GRC Data IA', pitch:'Vous structurez le cadre de contrôle permanent — pas un audi', modules:['Audit de maturité','Audit IA Act','Parties prenantes','Réglementations','Veille qualifiée','Base de connaissance']},
+  risk_manager: {role:'Risk Manager', pitch:'Vous quantifiez ce qui reste flou pour les autres — l exposi', modules:['Matrice risques','Radar des risques','Évaluation FRIA','Calculateur sanctions','Historique des calculs']},
+  ceo: {role:'CEO / Direction générale', pitch:'Vous n avez pas le temps d entrer dans le détail opérationne', modules:['Vue direction','Calculateur sanctions','Roadmap','Géopolitique']},
+  dpo: {role:'DPO — Délégué à la protection des données', pitch:'L IA Act et le RGPD se chevauchent sans se confondre — ce pa', modules:['Évaluation FRIA','Registre IA','Réglementations','Historique des calculs']},
+  cdo: {role:'CDO — Chief Data Officer', pitch:'La qualité et la gouvernance des données sont le socle invis', modules:['Registre IA','Audit de maturité','Base de connaissance','Veille qualifiée']},
+  caio: {role:'CAIO — Chief AI Officer', pitch:'Vous portez le déploiement à l échelle — ce parcours structu', modules:['Simulateur IA Act','Registre IA','Roadmap','Équipe','Hub Training']}
+};
+
+window.milestonesRenderProfile = function(){
+  var el = document.getElementById('ms-profile-note');
+  if(!el) return;
+  var sel = document.getElementById('ms-profile-select');
+  var pid = (sel && sel.value) || 'directeur_programme';
+  var p = window.RAAS_PROFILES[pid];
+  if(!p){ el.innerHTML=''; return; }
+  var mods = p.modules.map(function(m){ return '<span class="ms-profile-mod">'+m+'</span>'; }).join('');
+  el.innerHTML = '<strong>Parcours guid\u00e9 \u00ab\u00a0'+p.role+'\u00a0\u00bb \u2014 '+p.modules.length+' modules Sentinel</strong><br>'
+    + p.pitch
+    + '<div class="ms-profile-mods">'+mods+'</div>';
+};
+
 window.milestonesRenderRoleNote = function(role){
   var el = document.getElementById('ms-role-note');
   if(!el) return;
@@ -13499,6 +13541,7 @@ window.milestonesRender = function(){
   var role=(roleSel&&roleSel.value)||'deployeur';
   var applicable=window.RAAS_ROLE_MILESTONES[role]||null;
   if(window.milestonesRenderRoleNote) window.milestonesRenderRoleNote(role);
+  if(window.milestonesRenderProfile) window.milestonesRenderProfile();
   var shownMs = applicable ? sched.milestones.filter(function(m){ return applicable.indexOf(m.id)!==-1; }) : sched.milestones;
   var envShown = shownMs.reduce(function(a,m){ return a+m.amount; }, 0);
   var totalShown = sched.socle*12 + envShown;
