@@ -1672,6 +1672,9 @@ textarea.form-el{min-height:86px;resize:vertical}
 .ms-sum-sub{font-size:10px;color:var(--muted2);margin-top:3px}
 .ms-guarantee{background:rgba(45,122,71,.06);border:1px solid rgba(45,122,71,.22);border-radius:7px;padding:12px 14px;font-size:11.5px;color:var(--ink2);line-height:1.65;margin-top:12px}
 
+
+.prx-model-wrap .ctrl-section{overflow:visible}
+.prx-model-wrap .ctrl-section-head{overflow:visible}
 </style>
 
 </head>
@@ -2370,7 +2373,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 
   <span class="eyebrow">Modèle commercial innovant</span>
   <h1 class="page-h">Tarification <em>par résultats</em></h1>
-  <p class="page-lead">Simulez un modèle hybride RaaS <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>RaaS — Results as a Service</strong><br>Modèle contractuel où la part variable de la facturation est indexée sur des <em>résultats mesurables</em> (score d'audit, systèmes conformes, réduction de l'exposition aux sanctions) plutôt que sur un forfait fixe.</span></span> — socle fixe réduit + part variable indexée sur vos résultats réels de conformité — comparé à un abonnement SaaS classique <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>SaaS classique</strong><br>Abonnement mensuel ou annuel fixe, indépendant de vos progrès de conformité. Le simulateur le calcule à partir du tarif base 2 400 €/mois + 180 €/système supplémentaire, avec remises volume.</span></span>.</p>
+  <p class="page-lead">Simulez un modèle hybride RaaS <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>RaaS — Results as a Service</strong><br>Modèle contractuel où la part variable de la facturation est indexée sur des <em>résultats mesurables</em> (score d'audit, systèmes conformes, réduction de l'exposition aux sanctions) plutôt que sur un forfait fixe.</span></span> — socle fixe réduit + part variable indexée sur vos résultats réels de conformité — comparé à un abonnement SaaS classique <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>SaaS classique</strong><br>Abonnement mensuel ou annuel fixe, indépendant de vos progrès de conformité. Le simulateur le calcule à partir d’un tarif de base propre à votre secteur et à la taille de votre organisation (de 300 à 3 600 €/mois selon le profil), majoré pour chaque système IA au-delà de dix, avec remises volume et remise annuelle.</span></span>.</p>
 
   <div class="prx-intro" style="background:linear-gradient(135deg,var(--bg) 0%,var(--bg2) 100%);border:1px solid var(--rule2);border-radius:10px;padding:18px 22px;margin-bottom:8px">
     <div style="font-size:13px;color:var(--ink2);line-height:1.65">Le modèle <strong>RaaS (Results as a Service)</strong> renverse la logique de l’abonnement classique : au lieu de payer un forfait fixe indépendant de vos progrès, vous réglez un socle réduit puis des jalons de conformité <strong>uniquement lorsqu’ils sont vérifiés</strong>. Le coût total reste toujours inférieur au SaaS équivalent. Suivez les cinq étapes ci-dessous pour comprendre, simuler et choisir.</div>
@@ -2385,7 +2388,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     </div>
   </div>
 
-<div class="tbl-wrap" style="padding:24px;margin-top:20px">
+<div class="tbl-wrap prx-model-wrap" style="padding:24px;margin-top:20px;overflow:visible">
     <div class="tbl-head" style="border:none;padding:0 0 16px"><span class="tbl-title">Comment fonctionne le modèle hybride</span></div>
     <div class="ctrl-section"><div class="ctrl-section-head"><span class="ctrl-section-title">① Socle fixe réduit — ≈35 % du SaaS équivalent <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>Socle fixe</strong><br>Couvre l'infrastructure réelle : hébergement Render, API Mistral/Claude, base PostgreSQL Frankfurt, maintenance.<br><em>Environ 30-40 % d'un SaaS équivalent</em>. Stable quel que soit votre niveau de conformité.</span></span></span></div>
       <div style="padding:12px 16px;font-size:12px;color:var(--ink2);line-height:1.6">Couvre les coûts réels d'infrastructure (hébergement, API IA, base de données) — environ 30 à 40% du tarif SaaS classique équivalent.</div></div>
@@ -2448,6 +2451,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:20px">
       <div class="reg-field"><label class="reg-label">Taille de l'organisation <span class="prx-tip-icon" tabindex="0">?<span class="prx-tip-bubble"><strong>Segment de marché</strong><br><em>PME (&lt; 250 sal.)</em> : 80–600 €/mois — OGMA 99 €, TARANIS 559 €, agences IA 300–500 €.<br><em>ETI (250–5 000 sal.)</em> : 750–1 800 €/mois — Dastra, Tenacy.<br><em>Grands comptes (&gt; 5 000 sal.)</em> : 2 100–3 600 €/mois — OneTrust, EQS, Data Legal Drive.</span></span></label>
         <select id="pricing-segment" class="reg-input" onchange="pricingSimulate()">
+          <option value="tpe">🏠 TPE (&lt; 50 salariés)</option>
           <option value="pme" selected>🏢 PME (&lt; 250 salariés)</option>
           <option value="eti">🏬 ETI (250 – 5 000 salariés)</option>
           <option value="ge">🏛 Grands comptes (&gt; 5 000 salariés)</option>
@@ -2530,7 +2534,18 @@ textarea.form-el{min-height:86px;resize:vertical}
         </span>
       </span>
     </div>
-    <p style="font-size:12px;color:var(--muted2);margin:0 0 10px;line-height:1.6">Échéancier recalculé depuis vos paramètres simulateur (segment, secteur, trajectoire réaliste projetée). Les mois de déclenchement sont prévisionnels ; la facturation réelle n’intervient qu’après vérification.</p>
+    <p style="font-size:12px;color:var(--muted2);margin:0 0 10px;line-height:1.6">Échéancier recalculé depuis vos paramètres simulateur (segment, secteur, trajectoire réaliste projetée). Les jalons affichés s’adaptent au rôle de votre organisation au sens de l’AI Act. Les mois de déclenchement sont prévisionnels ; la facturation réelle n’intervient qu’après vérification.</p>
+    <div style="display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:14px">
+      <div>
+        <label style="font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted2);display:block;margin-bottom:4px">Rôle de votre organisation (Art. 3 — AI Act)</label>
+        <select id="ms-role-select" class="reg-input" onchange="milestonesRender()" style="min-width:280px">
+          <option value="deployeur" selected>Déployeur (utilise un système IA sous sa propre autorité)</option>
+          <option value="fournisseur">Fournisseur (développe ou met sur le marché un système IA)</option>
+          <option value="importateur">Importateur (met sur le marché un système d’un pays tiers)</option>
+          <option value="distributeur">Distributeur (met à disposition sur le marché UE)</option>
+        </select>
+      </div>
+    </div>
     <div class="ms-summary" id="ms-summary"><!-- rendu par milestonesRender() --></div>
     <table class="ms-table">
       <thead><tr>
@@ -2561,7 +2576,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       <span class="tbl-title">Choisir votre formule Sentinel AI</span>
       <span style="font-size:11px;color:var(--muted);margin-left:10px">Tarifs calculés depuis vos paramètres — devis personnalisé sur demande</span>
     </div>
-    <p style="font-size:12px;color:var(--muted2);margin:0 0 16px;line-height:1.6">Chaque plan s’adapte automatiquement à votre secteur et à la taille de votre organisation.</p>
+    <p style="font-size:12px;color:var(--muted2);margin:0 0 16px;line-height:1.6">Chaque formule s’adapte automatiquement à votre secteur et à la taille de votre organisation, de la TPE au grand compte. Les tarifs affichés reflètent votre simulation ; le modèle RaaS par jalons s’applique aux formules Pro et Entreprise, avec un coût total toujours inférieur au SaaS équivalent.</p>
     <div class="plans-billing-bar">
       <span class="plans-billing-opt active" id="plans-opt-monthly" onclick="plansSetBilling('monthly')">Mensuel</span>
       <span style="color:var(--rule2);font-size:16px">/</span>
@@ -2611,12 +2626,12 @@ textarea.form-el{min-height:86px;resize:vertical}
         <span style="font-size:11px;color:var(--muted);margin-left:10px">Réponse personnalisée sous 24h ouvrables</span>
       </div>
       <div class="prx-guide" style="margin-bottom:18px">
-        <div class="prx-guide-title">Comment se déroule la suite ?</div>
+        <div class="prx-guide-title">Comment se déroule la mise en place du RaaS ?</div>
         <ol class="prx-guide-steps">
-          <li><strong>Envoyez votre demande</strong> — Christophe Cerf (CONSEILPREV) vous répond sous 24h ouvrables avec une proposition tarifaire personnalisée basée sur vos données réelles</li>
-          <li><strong>Simulation affinée</strong> — un rendez-vous de 30 min pour calibrer le simulateur sur vos systèmes IA réels et définir les indicateurs de résultats contractuels</li>
-          <li><strong>Contrat RaaS</strong> — signature du contrat avec socle fixe + méthode de calcul de la part variable, plafond et garde-fous définis ensemble</li>
-          <li><strong>Activation Sentinel</strong> — accès complet aux 27 modules, données de performance enregistrées dès le premier mois</li>
+          <li><strong>Envoi de votre demande</strong> — Christophe Cerf (CONSEILPREV) vous répond sous 24 heures ouvrables avec une proposition tarifaire personnalisée, établie à partir des paramètres de votre simulation et du rôle de votre organisation au sens de l’AI Act</li>
+          <li><strong>Cadrage des jalons</strong> — un rendez-vous de trente minutes pour calibrer le simulateur sur vos systèmes IA réels, retenir les jalons de conformité applicables et fixer les seuils de vérification de chacun</li>
+          <li><strong>Contrat RaaS</strong> — signature du contrat précisant le socle mensuel réduit, l’enveloppe résultats répartie sur les jalons, le plafond annuel garanti et les modalités de double vérification</li>
+          <li><strong>Activation et suivi</strong> — accès complet à la plateforme Sentinel, mesure continue de votre avancement, et facturation de chaque jalon uniquement après vérification du résultat obtenu</li>
         </ol>
       </div>
 
@@ -13004,7 +13019,9 @@ var PRICING_PARAMS = {
      Sources : OGMA/LUG 99 €/mois (TPE), TARANIS 559 €/mois (PME 10-49 sal.),
      agences IA France 300-500 €/mois (YouFeel/Nerolia 2026), agents IA PME 80-600 €/mois,
      ETI/GE : Dastra, Tenacy, OneTrust, EQS Group — estimations sur devis publics. */
+  saasTpeBase:      {it:180, public:160, telecom:230, industrie:210, transport:220, energie:260, finance:290, sante:320},
   saasPmeBase:      {it:350, public:300, telecom:450, industrie:400, transport:420, energie:500, finance:550, sante:600},
+  saasTpePerSystem: {it:12,  public:10,  telecom:16,  industrie:14,  transport:15,  energie:18,  finance:20,  sante:22},
   saasPmePerSystem: {it:20,  public:18,  telecom:28,  industrie:25,  transport:26,  energie:32,  finance:35,  sante:38},
   saasEtiBase:      {it:900,  public:750,  telecom:1200, industrie:1000, transport:1100, energie:1400, finance:1600, sante:1800},
   saasEtiPerSystem: {it:60,   public:55,   telecom:90,   industrie:75,   transport:80,   energie:100,  finance:120,  sante:130},
@@ -13028,14 +13045,15 @@ var PRICING_PARAMS = {
      Part variable plafonnée à 3× le socle. Total max ≈ 4× socle ≈ 140 % du SaaS. */
   hybridSocle: 122,
   hybridSocleBySegSector: {
+    tpe: {it:63, public:56, telecom:81, industrie:74, transport:77, energie:91, finance:102, sante:112},
     pme: {it:122, public:105, telecom:158, industrie:140, transport:147, energie:175, finance:193, sante:210},
     eti: {it:315, public:263, telecom:420, industrie:350, transport:385, energie:490, finance:560, sante:630},
     ge:  {it:770, public:735, telecom:980, industrie:910, transport:1015, energie:1120, finance:1260, sante:1225}
   },
   hybridVariableCapMultiplier: 3,
-  pricePerAuditPointBySegment:  {pme:2,     eti:12,    ge:40},
-  pricePerSystemBySegment:      {pme:4,     eti:20,    ge:60},
-  pricePerSanctionBySegment:    {pme:0.001, eti:0.003, ge:0.004},
+  pricePerAuditPointBySegment:  {tpe:1,     pme:2,     eti:12,    ge:40},
+  pricePerSystemBySegment:      {tpe:2,     pme:4,     eti:20,    ge:60},
+  pricePerSanctionBySegment:    {tpe:0.0008,pme:0.001, eti:0.003, ge:0.004},
   pricePerAuditPoint: 2, pricePerSanctionReduced: 0.001, pricePerSystemClassified: 4,
   variableCapMultiplier: 3,
   classifWeight: { inacceptable: 1.6, haut: 1.4, limite: 1.0, minimal: 0.6, a_evaluer: 0.8 },
@@ -13426,12 +13444,25 @@ function pricingComputeMilestoneSchedule(saasMonthly, segment, sector, realiste,
 window.pricingComputeMilestoneSchedule = pricingComputeMilestoneSchedule;
 
 /* ── Rendu de l'echeancier jalons dans la page tarification ── */
+window.RAAS_ROLE_MILESTONES = {
+  fournisseur: ['registre','classif','sgr','doctech','fria','audit80','attest'],
+  deployeur:   ['registre','classif','sgr','fria','audit80','attest'],
+  importateur: ['registre','classif','doctech','audit80','attest'],
+  distributeur:['registre','classif','audit80','attest']
+};
+
 window.milestonesRender = function(){
   var tb=document.getElementById('ms-tbody');
   var sm=document.getElementById('ms-summary');
   if(!tb || !sm) return;
   var sched=window.__milestoneSchedule;
   if(!sched){ return; }
+  var roleSel=document.getElementById('ms-role-select');
+  var role=(roleSel&&roleSel.value)||'deployeur';
+  var applicable=window.RAAS_ROLE_MILESTONES[role]||null;
+  var shownMs = applicable ? sched.milestones.filter(function(m){ return applicable.indexOf(m.id)!==-1; }) : sched.milestones;
+  var envShown = shownMs.reduce(function(a,m){ return a+m.amount; }, 0);
+  var totalShown = sched.socle*12 + envShown;
   var saasM=(function(){
     var nb=parseInt((document.getElementById('pricing-nb-systemes')||{value:'10'}).value||'10',10);
     var sec=(document.getElementById('pricing-secteur')&&document.getElementById('pricing-secteur').value)||'it';
@@ -13440,21 +13471,22 @@ window.milestonesRender = function(){
     return pricingComputeSaaS(nb,sec,bi,seg);
   })();
   var saasAnnual=saasM*12;
+  var pctShown = saasAnnual>0 ? Math.round(totalShown / saasAnnual * 100) : sched.pctOfSaas;
   function eur(n){return n.toLocaleString('fr-FR')+'\u202f\u20ac';}
-  /* Cartes de synthese */
+  /* Cartes de synthese (adaptees au role selectionne) */
   sm.innerHTML=
     '<div class="ms-sum-card"><div class="ms-sum-lbl">Socle mensuel garanti</div>'
     +'<div class="ms-sum-val">'+eur(sched.socle)+'</div>'
     +'<div class="ms-sum-sub">\u223535\u00a0% du SaaS \u2014 seul co\u00fbt fixe</div></div>'
-    +'<div class="ms-sum-card"><div class="ms-sum-lbl">Enveloppe r\u00e9sultats (7 jalons)</div>'
-    +'<div class="ms-sum-val">'+eur(sched.envelope)+'</div>'
-    +'<div class="ms-sum-sub">60\u00a0% du SaaS annuel \u2014 pay\u00e9e uniquement si v\u00e9rifi\u00e9e</div></div>'
+    +'<div class="ms-sum-card"><div class="ms-sum-lbl">Enveloppe r\u00e9sultats ('+shownMs.length+' jalons)</div>'
+    +'<div class="ms-sum-val">'+eur(envShown)+'</div>'
+    +'<div class="ms-sum-sub">jalons applicables \u00e0 votre r\u00f4le \u2014 pay\u00e9s si v\u00e9rifi\u00e9s</div></div>'
     +'<div class="ms-sum-card"><div class="ms-sum-lbl">Total maximal annuel</div>'
-    +'<div class="ms-sum-val" style="color:var(--green)">'+eur(sched.totalMax)+'</div>'
-    +'<div class="ms-sum-sub">'+sched.pctOfSaas+'\u00a0% du SaaS ('+eur(saasAnnual)+') \u2014 toujours inf\u00e9rieur</div></div>';
-  /* Rangees jalons */
+    +'<div class="ms-sum-val" style="color:var(--green)">'+eur(totalShown)+'</div>'
+    +'<div class="ms-sum-sub">'+pctShown+'\u00a0% du SaaS ('+eur(saasAnnual)+') \u2014 toujours inf\u00e9rieur</div></div>';
+  /* Rangees jalons applicables au role */
   var rows='';
-  sched.milestones.forEach(function(ms){
+  shownMs.forEach(function(ms){
     rows+='<tr>'
       +'<td>'+ms.label+'</td>'
       +'<td><span class="ms-badge-art">'+ms.art+'</span></td>'
@@ -13467,9 +13499,9 @@ window.milestonesRender = function(){
       +'</tr>';
   });
   rows+='<tr class="ms-total-row">'
-    +'<td colspan="4">Total si tous les jalons sont atteints (socle 12 mois inclus)</td>'
-    +'<td class="ms-amount">'+eur(sched.totalMax)+'</td>'
-    +'<td><span class="ms-badge-mois">'+sched.pctOfSaas+'\u00a0% du SaaS</span></td>'
+    +'<td colspan="4">Total des jalons applicables \u00e0 votre r\u00f4le (socle 12 mois inclus)</td>'
+    +'<td class="ms-amount">'+eur(totalShown)+'</td>'
+    +'<td><span class="ms-badge-mois">'+pctShown+'\u00a0% du SaaS</span></td>'
     +'</tr>';
   tb.innerHTML=rows;
 };
