@@ -15556,7 +15556,22 @@ window.raasAdminContract = function(){
   var cur = window.__raasCurrentClient;
   if(!cur || !cur.data){ alert('Sélectionnez un client et chargez son échéancier.'); return; }
   var d = cur.data;
+  var k = cur.kyc || {};
   function eur(n){ return (n||0).toLocaleString('fr-FR')+'\u202f\u20ac'; }
+  /* Coordonnees client depuis la fiche KYC, avec repli sur le nom courant */
+  function esc(s){ return s?String(s).replace(/</g,'&lt;').replace(/>/g,'&gt;'):''; }
+  var cliNom = esc(k.raison_sociale) || cur.name;
+  var cliLignes = '<strong>'+cliNom+'</strong>';
+  if(k.forme_juridique) cliLignes += ' ('+esc(k.forme_juridique)+')';
+  if(k.siren) cliLignes += '<br>SIREN\u00a0: '+esc(k.siren);
+  if(k.tva_intra) cliLignes += '<br>TVA\u00a0: '+esc(k.tva_intra);
+  if(k.adresse) cliLignes += '<br>'+esc(k.adresse);
+  if(k.code_postal || k.ville) cliLignes += '<br>'+esc(k.code_postal||'')+' '+esc(k.ville||'');
+  if(k.pays && k.pays!=='France') cliLignes += '<br>'+esc(k.pays);
+  if(k.representant) cliLignes += '<br>Repr\u00e9sentant\u00a0: '+esc(k.representant)+(k.fonction_representant?' ('+esc(k.fonction_representant)+')':'');
+  if(k.email_contact) cliLignes += '<br>'+esc(k.email_contact);
+  if(k.telephone) cliLignes += '<br>'+esc(k.telephone);
+  cliLignes += '<br>R\u00e9f. client\u00a0: '+cur.id;
   var today = new Date().toLocaleDateString('fr-FR');
   var ref = 'RAAS-'+cur.id+'-'+(new Date().getFullYear());
   var rows = d.milestones.map(function(m){
@@ -15583,7 +15598,7 @@ window.raasAdminContract = function(){
     + '<div class="sub">R\u00e9f\u00e9rence '+ref+' \u00b7 \u00c9tabli le '+today+' \u00b7 CONSEILPREV \u2014 Sentinel AI \u00b7 R\u00e8glement (UE) 2024/1689</div>'
     + '<div class="parties">'
     + '<div><strong>Prestataire</strong><br>CONSEILPREV<br>Christophe CERF<br>christophe.cerf@outlook.com</div>'
-    + '<div><strong>Client</strong><br>'+cur.name+'<br>R\u00e9f. client\u00a0: '+cur.id+'</div>'
+    + '<div><strong>Client</strong><br>'+cliLignes+'</div>'
     + '</div>'
     + '<h2>Article 1 \u2014 Objet</h2>'
     + '<div class="clause">Le pr\u00e9sent contrat d\u00e9finit les modalit\u00e9s de la tarification RaaS (Results as a Service) par laquelle le Client r\u00e9mun\u00e8re le Prestataire selon l\u2019atteinte v\u00e9rifi\u00e9e de jalons de conformit\u00e9 \u00e0 l\u2019AI Act, et non selon un forfait fixe.</div>'
@@ -15596,7 +15611,7 @@ window.raasAdminContract = function(){
     + '<div class="clause">Chaque jalon n\u2019est factur\u00e9 qu\u2019apr\u00e8s double v\u00e9rification\u00a0: atteinte du score Sentinel du domaine <em>et</em> validation documentaire par CONSEILPREV. Un jalon v\u00e9rifi\u00e9 est acquis d\u00e9finitivement et irr\u00e9vocable. Le paiement de chaque jalon est \u00e9chelonn\u00e9 sur deux mensualit\u00e9s \u00e9gales.</div>'
     + '<h2>Article 4 \u2014 Garanties</h2>'
     + '<div class="clause">Le total per\u00e7u au titre des jalons ne peut exc\u00e9der l\u2019enveloppe contractuelle ci-dessus. En cas de progression partielle, seuls les jalons atteints sont dus\u00a0: le risque d\u2019ex\u00e9cution est port\u00e9 par le Prestataire.</div>'
-    + '<div class="sign"><div>Pour CONSEILPREV<br><br><br>Christophe CERF</div><div>Pour '+cur.name+'<br><br><br>Nom, fonction, signature</div></div>'
+    + '<div class="sign"><div>Pour CONSEILPREV<br><br><br>Christophe CERF</div><div>Pour '+cliNom+'<br><br><br>'+(k.representant?esc(k.representant)+(k.fonction_representant?', '+esc(k.fonction_representant):''):'Nom, fonction, signature')+'</div></div>'
     + '<div class="foot">Document contractuel g\u00e9n\u00e9r\u00e9 par Sentinel AI. Les seuils et montants sont ceux de l\u2019\u00e9ch\u00e9ancier en vigueur \u00e0 la date d\u2019\u00e9tablissement. CONSEILPREV \u2014 Christophe CERF \u2014 christophe.cerf@outlook.com</div>'
     + '</body></html>';
   var w = window.open('', '_blank');
@@ -15609,6 +15624,16 @@ window.raasAdminContract = function(){
 window.raasAdminInvoice = function(){
   var cur = window.__raasCurrentClient;
   if(!cur || !cur.data){ alert('Sélectionnez un client et chargez son échéancier.'); return; }
+  var k = cur.kyc || {};
+  function esc(s){ return s?String(s).replace(/</g,'&lt;').replace(/>/g,'&gt;'):''; }
+  var cliNom = esc(k.raison_sociale) || cur.name;
+  var billTo = '<strong>'+cliNom+'</strong>';
+  if(k.adresse) billTo += '<br>'+esc(k.adresse);
+  if(k.code_postal || k.ville) billTo += '<br>'+esc(k.code_postal||'')+' '+esc(k.ville||'');
+  if(k.siren) billTo += '<br>SIREN\u00a0: '+esc(k.siren);
+  if(k.tva_intra) billTo += '<br>TVA\u00a0: '+esc(k.tva_intra);
+  if(k.email_contact) billTo += '<br>'+esc(k.email_contact);
+  billTo += '<br>R\u00e9f. client\u00a0: '+cur.id;
   var invoiced = cur.data.milestones.filter(function(m){ return m.status === 'invoiced'; });
   if(!invoiced.length){ alert('Aucun jalon facturé pour ce client. Lancez d\u2019abord le cycle de facturation.'); return; }
   function eur(n){ return (n||0).toLocaleString('fr-FR')+'\u202f\u20ac'; }
@@ -15639,7 +15664,7 @@ window.raasAdminInvoice = function(){
     + '<div class="meta">N\u00b0 '+num+'<br>Date\u00a0: '+dateStr+'<br>R\u00e9f. client\u00a0: '+cur.id+'</div></div>'
     + '<div style="display:flex;gap:20px;margin-bottom:16px">'
     + '<div style="flex:1;font-size:12px"><strong>\u00c9metteur</strong><br>CONSEILPREV<br>Christophe CERF<br>christophe.cerf@outlook.com</div>'
-    + '<div class="bill-to" style="flex:1"><strong>Factur\u00e9 \u00e0</strong><br>'+cur.name+'<br>R\u00e9f. client\u00a0: '+cur.id+'</div>'
+    + '<div class="bill-to" style="flex:1"><strong>Factur\u00e9 \u00e0</strong><br>'+billTo+'</div>'
     + '</div>'
     + '<table><thead><tr><th>Jalon de conformit\u00e9 factur\u00e9</th><th style="text-align:center">\u00c9chelonnement</th><th style="text-align:right">Montant</th></tr></thead>'
     + '<tbody>'+rows
@@ -15695,6 +15720,9 @@ window.raasKycLoad = function(clientId){
   fetch('/api/clients/kyc?client_id='+encodeURIComponent(clientId),{credentials:'same-origin'})
     .then(function(r){return r.json();}).then(function(d){
       var k=(d.ok&&d.kyc)?d.kyc:{};
+      if(window.__raasCurrentClient && String(window.__raasCurrentClient.id)===String(clientId)){
+        window.__raasCurrentClient.kyc = k;
+      }
       function fld(id,lbl,val,ph,w){ return '<div style="flex:'+(w||1)+';min-width:160px"><label style="font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.07em;color:var(--muted2);display:block;margin-bottom:3px">'+lbl+'</label><input id="kyc-'+id+'" value="'+(val?String(val).replace(/"/g,'&quot;'):'')+'" placeholder="'+(ph||'')+'" style="width:100%;padding:6px 9px;border:1px solid var(--rule2);border-radius:5px;font-size:12px"></div>'; }
       var badge = (k.kyc_status==='complet')
         ? '<span style="background:rgba(45,122,71,.12);color:var(--green);padding:3px 10px;border-radius:12px;font-size:10px;font-family:var(--mono)">\u2705 KYC complet</span>'
