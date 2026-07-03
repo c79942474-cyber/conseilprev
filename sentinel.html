@@ -13885,6 +13885,9 @@ window.pricingSimulate = function(){
   window.__scenariosCache=scenarios;
   pricingRenderChart(saasMonthly,scenarios);
   if(window.milestonesRender) window.milestonesRender();
+  /* Rafraichir les cartes de plans pour harmoniser leurs montants RaaS avec
+     l'echeancier (meme base SaaS integrant le nombre de systemes). */
+  if(window.plansRender) window.plansRender();
 };
 
 window.pricingSetEstim = function(val){
