@@ -3146,6 +3146,61 @@ try:
 except Exception as _e:
     logger.error(f"RAAS — erreur init tables gestion clients : {_e}")
 
+
+def clients_followup_init_db():
+    """Tables de suivi et de relance client (reserve CONSEILPREV) :
+    - client_lifecycle : statut, sante, dernier contact, prochaine action
+    - client_relances  : relances planifiees/effectuees (email, appel, facture, jalon)
+    Reservees a la session CONSEILPREV."""
+    conn = registre_get_db()
+    cur = conn.cursor()
+    if REGISTRE_USE_PG:
+        cur.execute('''CREATE TABLE IF NOT EXISTS client_lifecycle (
+            client_id INTEGER PRIMARY KEY,
+            statut TEXT NOT NULL DEFAULT 'prospect',
+            sante TEXT NOT NULL DEFAULT 'a_evaluer',
+            last_contact_at TEXT,
+            next_action_at TEXT,
+            next_action_label TEXT,
+            updated_at TEXT NOT NULL
+        )''')
+        cur.execute('''CREATE TABLE IF NOT EXISTS client_relances (
+            id SERIAL PRIMARY KEY,
+            client_id INTEGER NOT NULL,
+            type TEXT NOT NULL DEFAULT 'email',
+            objet TEXT NOT NULL,
+            canal TEXT DEFAULT 'email',
+            priorite TEXT DEFAULT 'normale',
+            due_date TEXT,
+            status TEXT NOT NULL DEFAULT 'planifiee',
+            notes TEXT,
+            related_ref TEXT,
+            created_at TEXT NOT NULL,
+            done_at TEXT
+        )''')
+    else:
+        cur.execute('''CREATE TABLE IF NOT EXISTS client_lifecycle (
+            client_id INTEGER PRIMARY KEY,
+            statut TEXT NOT NULL DEFAULT 'prospect',
+            sante TEXT NOT NULL DEFAULT 'a_evaluer',
+            last_contact_at TEXT, next_action_at TEXT, next_action_label TEXT,
+            updated_at TEXT NOT NULL
+        )''')
+        cur.execute('''CREATE TABLE IF NOT EXISTS client_relances (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            client_id INTEGER NOT NULL, type TEXT NOT NULL DEFAULT 'email',
+            objet TEXT NOT NULL, canal TEXT DEFAULT 'email', priorite TEXT DEFAULT 'normale',
+            due_date TEXT, status TEXT NOT NULL DEFAULT 'planifiee', notes TEXT,
+            related_ref TEXT, created_at TEXT NOT NULL, done_at TEXT
+        )''')
+    conn.commit()
+    conn.close()
+
+try:
+    clients_followup_init_db()
+except Exception as _e:
+    logger.error(f"RAAS — erreur init tables suivi/relance : {_e}")
+
 # Definition canonique des 7 jalons AI Act (partagee avec le front PRICING_PARAMS.raasMilestones)
 RAAS_MILESTONE_DEFS = [
     {'id': 'registre', 'label': 'Registre IA complet',          'art': 'Art. 49',    'w': 0.10, 'threshold': 30},
@@ -4183,6 +4238,232 @@ def clients_invoices_issue():
     conn.close()
     return jsonify({'ok': True, 'issued_count': len(issued), 'invoices': issued,
                     'email_sent': email_sent, 'email_error': email_error})
+
+# ══════════════════════════════════════════════════════════
+# SUIVI & RELANCE CLIENT AVANCE (reserve CONSEILPREV)
+# Cycle de vie, relances, paiement facture, tableau de bord + suggestions.
+# ══════════════════════════════════════════════════════════
+
+def _days_since(iso_str):
+    """Nombre de jours ecoules depuis une date ISO (ou None)."""
+    if not iso_str:
+        return None
+    try:
+        dt = datetime.fromisoformat(str(iso_str).replace('Z', '').split('.')[0])
+        return (datetime.utcnow() - dt).days
+    except Exception:
+        return None
+
+@app.route('/api/clients/status', methods=['GET'])
+def clients_status_get():
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    try:
+        client_id = int(request.args.get('client_id'))
+    except (TypeError, ValueError):
+        return jsonify({'ok': False, 'error': 'client_id invalide'}), 400
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql('SELECT * FROM client_lifecycle WHERE client_id=%s',
+                             'SELECT * FROM client_lifecycle WHERE client_id=?'), (client_id,))
+    row = cur.fetchone(); conn.close()
+    return jsonify({'ok': True, 'status': (dict(row) if row else None)})
+
+@app.route('/api/clients/status', methods=['POST'])
+def clients_status_save():
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    d = request.get_json(force=True, silent=True) or {}
+    try:
+        client_id = int(d.get('client_id'))
+    except (TypeError, ValueError):
+        return jsonify({'ok': False, 'error': 'client_id invalide'}), 400
+    STATUTS = {'prospect', 'onboarding', 'actif', 'a_risque', 'inactif', 'clos'}
+    SANTES = {'a_evaluer', 'bonne', 'moyenne', 'fragile'}
+    statut = str(d.get('statut', 'prospect'))
+    if statut not in STATUTS:
+        statut = 'prospect'
+    sante = str(d.get('sante', 'a_evaluer'))
+    if sante not in SANTES:
+        sante = 'a_evaluer'
+    next_action_at = (str(d.get('next_action_at', '')).strip() or None)
+    next_action_label = (str(d.get('next_action_label', '')).strip()[:200] or None)
+    now = _clients_now()
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql('SELECT client_id FROM client_lifecycle WHERE client_id=%s',
+                             'SELECT client_id FROM client_lifecycle WHERE client_id=?'), (client_id,))
+    exists = cur.fetchone()
+    if exists:
+        cur.execute(registre_sql(
+            'UPDATE client_lifecycle SET statut=%s, sante=%s, next_action_at=%s, next_action_label=%s, updated_at=%s WHERE client_id=%s',
+            'UPDATE client_lifecycle SET statut=?, sante=?, next_action_at=?, next_action_label=?, updated_at=? WHERE client_id=?'),
+            (statut, sante, next_action_at, next_action_label, now, client_id))
+    else:
+        cur.execute(registre_sql(
+            'INSERT INTO client_lifecycle (client_id, statut, sante, next_action_at, next_action_label, updated_at) VALUES (%s, %s, %s, %s, %s, %s)',
+            'INSERT INTO client_lifecycle (client_id, statut, sante, next_action_at, next_action_label, updated_at) VALUES (?, ?, ?, ?, ?, ?)'),
+            (client_id, statut, sante, next_action_at, next_action_label, now))
+    conn.commit(); conn.close()
+    return jsonify({'ok': True, 'statut': statut, 'sante': sante, 'updated_at': now})
+
+@app.route('/api/clients/relances', methods=['GET'])
+def clients_relances_list():
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    try:
+        client_id = int(request.args.get('client_id'))
+    except (TypeError, ValueError):
+        return jsonify({'ok': False, 'error': 'client_id invalide'}), 400
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql(
+        'SELECT * FROM client_relances WHERE client_id=%s ORDER BY (done_at IS NULL) DESC, due_date ASC, created_at DESC',
+        'SELECT * FROM client_relances WHERE client_id=? ORDER BY (done_at IS NULL) DESC, due_date ASC, created_at DESC'), (client_id,))
+    relances = [dict(r) for r in cur.fetchall()]
+    conn.close()
+    return jsonify({'ok': True, 'relances': relances})
+
+@app.route('/api/clients/relances', methods=['POST'])
+def clients_relances_add():
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    d = request.get_json(force=True, silent=True) or {}
+    try:
+        client_id = int(d.get('client_id'))
+    except (TypeError, ValueError):
+        return jsonify({'ok': False, 'error': 'client_id invalide'}), 400
+    objet = (str(d.get('objet', '')).strip())[:300]
+    if not objet:
+        return jsonify({'ok': False, 'error': 'Objet requis'}), 400
+    TYPES = {'email', 'appel', 'rdv', 'relance_facture', 'relance_jalon', 'autre'}
+    rtype = str(d.get('type', 'email'))
+    if rtype not in TYPES:
+        rtype = 'autre'
+    canal = str(d.get('canal', 'email'))[:40]
+    PRIOS = {'basse', 'normale', 'haute', 'urgente'}
+    priorite = str(d.get('priorite', 'normale'))
+    if priorite not in PRIOS:
+        priorite = 'normale'
+    due_date = (str(d.get('due_date', '')).strip() or None)
+    notes = (str(d.get('notes', '')).strip())[:2000]
+    related_ref = (str(d.get('related_ref', '')).strip())[:80] or None
+    now = _clients_now()
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql(
+        'INSERT INTO client_relances (client_id, type, objet, canal, priorite, due_date, status, notes, related_ref, created_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
+        'INSERT INTO client_relances (client_id, type, objet, canal, priorite, due_date, status, notes, related_ref, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'),
+        (client_id, rtype, objet, canal, priorite, due_date, 'planifiee', notes, related_ref, now))
+    conn.commit(); conn.close()
+    return jsonify({'ok': True, 'created_at': now})
+
+@app.route('/api/clients/relances/complete', methods=['POST'])
+def clients_relances_complete():
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    d = request.get_json(force=True, silent=True) or {}
+    try:
+        client_id = int(d.get('client_id'))
+        rid = int(d.get('id'))
+    except (TypeError, ValueError):
+        return jsonify({'ok': False, 'error': 'Parametres invalides'}), 400
+    new_status = str(d.get('status', 'faite'))
+    if new_status not in {'faite', 'annulee', 'planifiee'}:
+        new_status = 'faite'
+    now = _clients_now()
+    done = now if new_status != 'planifiee' else None
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql(
+        'UPDATE client_relances SET status=%s, done_at=%s WHERE id=%s AND client_id=%s',
+        'UPDATE client_relances SET status=?, done_at=? WHERE id=? AND client_id=?'),
+        (new_status, done, rid, client_id))
+    # Mettre a jour le dernier contact du client si relance faite
+    if new_status == 'faite':
+        cur.execute(registre_sql('SELECT client_id FROM client_lifecycle WHERE client_id=%s',
+                                 'SELECT client_id FROM client_lifecycle WHERE client_id=?'), (client_id,))
+        if cur.fetchone():
+            cur.execute(registre_sql('UPDATE client_lifecycle SET last_contact_at=%s, updated_at=%s WHERE client_id=%s',
+                                     'UPDATE client_lifecycle SET last_contact_at=?, updated_at=? WHERE client_id=?'),
+                        (now, now, client_id))
+    conn.commit(); conn.close()
+    return jsonify({'ok': True, 'status': new_status, 'done_at': done})
+
+@app.route('/api/clients/invoices/pay', methods=['POST'])
+def clients_invoices_pay():
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    d = request.get_json(force=True, silent=True) or {}
+    try:
+        client_id = int(d.get('client_id'))
+        numero = str(d.get('numero', '')).strip()
+    except (TypeError, ValueError):
+        return jsonify({'ok': False, 'error': 'Parametres invalides'}), 400
+    if not numero:
+        return jsonify({'ok': False, 'error': 'Numero de facture requis'}), 400
+    now = _clients_now()
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql(
+        "UPDATE raas_invoices SET status='payee', paid_at=%s WHERE numero=%s AND client_id=%s",
+        "UPDATE raas_invoices SET status='payee', paid_at=? WHERE numero=? AND client_id=?"),
+        (now, numero, client_id))
+    conn.commit(); conn.close()
+    return jsonify({'ok': True, 'paid_at': now})
+
+@app.route('/api/clients/dashboard', methods=['GET'])
+def clients_dashboard():
+    """Tableau de bord de suivi : statut, relances en attente, factures impayees/en
+    retard, jalons stagnants, et suggestions de relance automatiques. CONSEILPREV."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    try:
+        client_id = int(request.args.get('client_id'))
+    except (TypeError, ValueError):
+        return jsonify({'ok': False, 'error': 'client_id invalide'}), 400
+    conn = registre_get_db(); cur = conn.cursor()
+    # Statut
+    cur.execute(registre_sql('SELECT * FROM client_lifecycle WHERE client_id=%s',
+                             'SELECT * FROM client_lifecycle WHERE client_id=?'), (client_id,))
+    lc = cur.fetchone(); lc = dict(lc) if lc else {}
+    # Relances en attente
+    cur.execute(registre_sql("SELECT * FROM client_relances WHERE client_id=%s AND status='planifiee' ORDER BY due_date ASC",
+                             "SELECT * FROM client_relances WHERE client_id=? AND status='planifiee' ORDER BY due_date ASC"), (client_id,))
+    pending = [dict(r) for r in cur.fetchall()]
+    # Factures impayees
+    cur.execute(registre_sql("SELECT * FROM raas_invoices WHERE client_id=%s AND status!='payee' ORDER BY issued_at ASC",
+                             "SELECT * FROM raas_invoices WHERE client_id=? AND status!='payee' ORDER BY issued_at ASC"), (client_id,))
+    unpaid = [dict(r) for r in cur.fetchall()]
+    # Jalons
+    cur.execute(registre_sql('SELECT * FROM raas_milestones WHERE client_id=%s',
+                             'SELECT * FROM raas_milestones WHERE client_id=?'), (client_id,))
+    milestones = [dict(r) for r in cur.fetchall()]
+    conn.close()
+    # Suggestions automatiques
+    suggestions = []
+    for inv in unpaid:
+        age = _days_since(inv.get('issued_at'))
+        if age is not None and age >= 30:
+            suggestions.append({'type': 'relance_facture', 'priorite': 'urgente' if age >= 60 else 'haute',
+                                'objet': 'Facture %s impayee depuis %d jours' % (inv.get('numero'), age),
+                                'related_ref': inv.get('numero')})
+    pending_ms = [m for m in milestones if m.get('status') == 'pending']
+    if pending_ms:
+        oldest = _days_since(lc.get('last_contact_at'))
+        if oldest is None or oldest >= 21:
+            suggestions.append({'type': 'relance_jalon', 'priorite': 'normale',
+                                'objet': '%d jalon(s) en attente \u2014 relancer sur l\'avancement' % len(pending_ms),
+                                'related_ref': None})
+    last_contact_days = _days_since(lc.get('last_contact_at'))
+    if last_contact_days is not None and last_contact_days >= 45:
+        suggestions.append({'type': 'email', 'priorite': 'normale',
+                            'objet': 'Aucun contact depuis %d jours \u2014 prendre des nouvelles' % last_contact_days,
+                            'related_ref': None})
+    unpaid_total = sum(i.get('amount_eur', 0) for i in unpaid)
+    return jsonify({'ok': True,
+                    'status': lc or None,
+                    'pending_relances': pending,
+                    'unpaid_invoices': unpaid,
+                    'unpaid_total': unpaid_total,
+                    'milestones_pending': len(pending_ms),
+                    'milestones_total': len(milestones),
+                    'last_contact_days': last_contact_days,
+                    'suggestions': suggestions})
 
 @app.route('/invitation/<token>', methods=['GET'])
 def sentauth_invitation_page(token):
