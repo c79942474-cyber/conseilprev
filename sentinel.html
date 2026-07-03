@@ -1565,7 +1565,10 @@ textarea.form-el{min-height:86px;resize:vertical}
 /* ══ COMPARAISON PLANS SENTINEL ══ */
 .plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0}
 @media(max-width:720px){.plans-grid{grid-template-columns:1fr}}
-.plan-card{border-radius:10px;overflow:hidden;border:1.5px solid var(--rule2);background:var(--white);display:flex;flex-direction:column;position:relative;transition:box-shadow .2s,transform .2s}
+.plan-card{border-radius:10px;overflow:hidden;border:1.5px solid var(--rule2);background:var(--white);display:flex;flex-direction:column;position:relative;transition:box-shadow .2s,transform .2s,border-color .2s;cursor:pointer}
+.plan-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.plan-card.plan-selected{border-color:var(--accent);border-width:2px;box-shadow:0 0 0 3px rgba(184,50,34,.15),0 6px 24px rgba(184,50,34,.14)}
+.plan-card.plan-selected::after{content:'\2713 S\00e9lectionn\00e9';position:absolute;top:10px;right:10px;background:var(--accent);color:#fff;font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;padding:3px 9px;border-radius:12px;z-index:2}
 .plan-card:hover{box-shadow:0 6px 28px rgba(0,0,0,.1);transform:translateY(-2px)}
 .plan-card.plan-recommended{border-color:var(--accent);box-shadow:0 2px 16px rgba(184,50,34,.12)}
 .plan-badge{position:absolute;top:12px;right:12px;background:var(--accent);color:#fff;font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;padding:3px 8px;border-radius:3px}
@@ -14003,9 +14006,9 @@ window.plansRender=function(){
       pb='<div class="plan-price-row"><span class="plan-price-main">'+_e(cur)+'</span><span class="plan-price-period">/mois</span>'+tS+'</div><div style="font-size:10px;color:var(--muted2);margin-top:2px">vs '+_e(oV)+'/mois '+oL+'</div><div class="plan-price-raas"><div style="font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.09em;color:var(--accent);margin-bottom:4px">RaaS jalons — paiement sur résultats'+tR+'</div>Socle : <span class="plan-price-raas-val">'+_e(so)+'/mois</span><div style="font-size:10px;color:var(--muted2);margin-top:2px">+ 7 jalons vérifiés → max annuel '+_e(maxJ)+' ('+pctJ+' % du SaaS)</div></div>';
     }
     var cb=p.cta.act
-      ?'<button class="plan-cta-btn '+p.cta.sty+'" onclick="'+p.cta.act+'">'+p.cta.lbl+'</button>'
+      ?'<button class="plan-cta-btn '+p.cta.sty+'" onclick="event.stopPropagation();'+p.cta.act+'">'+p.cta.lbl+'</button>'
       :'<button class="plan-cta-btn '+p.cta.sty+'" disabled style="opacity:.55;cursor:default">'+p.cta.lbl+'</button>';
-    return '<div class="plan-card'+(p.badge?' plan-recommended':'')+'">'
+    return '<div class="plan-card'+(p.badge?' plan-recommended':'')+'" id="plancard-'+p.id+'" data-plan="'+p.id+'" onclick="plansChoose(\''+p.id+'\')" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();plansChoose(\''+p.id+'\');}">'
       +(p.badge?'<div class="plan-badge">'+p.badge+'</div>':'')
       +'<div class="plan-header"><div class="plan-tier">'+p.tier+'</div><div class="plan-name">'+p.name+'</div><div class="plan-tagline">'+p.tagline+'</div></div>'
       +'<div class="plan-price-block">'+pb+'</div>'
@@ -14018,6 +14021,21 @@ window.plansRender=function(){
       +'</div>';
   }).join('');
 };
+window.plansChoose = function(plan){
+  /* Selection d'un plan par clic sur la carte : met en evidence la carte choisie,
+     renseigne le champ du formulaire, et pour Pro/Entreprise lance le parcours de
+     demande (defilement + focus). Le plan gratuit reste selectionnable sans demande. */
+  document.querySelectorAll('.plan-card').forEach(function(c){ c.classList.remove('plan-selected'); });
+  var card = document.getElementById('plancard-'+plan);
+  if(card) card.classList.add('plan-selected');
+  window.__plansChosen = plan;
+  var inp = document.getElementById('pricing-req-plan');
+  if(inp && plan !== 'gratuit') inp.value = plan;
+  if(plan === 'pro' || plan === 'entreprise'){
+    if(window.pricingRequestAccess) window.pricingRequestAccess(plan);
+  }
+};
+
 window.plansSetBilling=function(mode){
   window.__plansBilling=mode;
   var om=document.getElementById('plans-opt-monthly'),oa=document.getElementById('plans-opt-annual');
