@@ -13954,12 +13954,12 @@ var _SP=[
    av:['27 modules : Registre IA, FRIA, Audit AI Act, Maturité, Veille qualifiée, Sanctions, Roadmap, RAG…','Tarification RaaS : socle réduit + variable indexée sur vos progrès réels Sentinel','Données persistantes et traçables, historique complet','Rapports exécutifs et livrables automatisés par IA','Hub de formation et équipe RACI intégrés'],
    li:['Périmètre limité à une seule entité juridique','Pas d’API d’intégration avec vos outils internes','Support standard (pas de SLA dédié)','Formation sur site non incluse'],
    conseil:'DPO, RSSI ou Direction juridique d’une PME ou ETI soumise à l’AI Act avec 5 à 50 systèmes IA. Idéal si vous souhaitez un modèle de facturation aligné sur vos résultats réels.',
-   cta:{lbl:'Demander un accès Pro',act:'go("pricing")',sty:'btn-primary'},ctaSub:'Réponse personnalisée sous 24h ouvrables'},
+   cta:{lbl:'Demander un accès Pro',act:'pricingRequestAccess(\'pro\')',sty:'btn-primary'},ctaSub:'Réponse personnalisée sous 24h ouvrables'},
   {id:'entreprise',tier:'Formule grands comptes',name:'Sentinel Entreprise',tagline:'Multi-entités, API, SLA dédié et accompagnement CONSEILPREV.',badge:null,
    av:['Toutes les fonctionnalités Pro, plus :','Déploiement multi-entités et multi-périmètres (groupes, filiales)','API d’intégration avec vos outils internes (GRC, ITSM, ERP)','SLA contractuel dédié et interlocuteur CONSEILPREV attitré','Formation sur site jusqu’à 2 jours/an inclus','Rapport de conformité AI Act annuel personnalisé'],
    li:['Tarif sur devis — engagement minimum recommandé : 12 mois','Délai de mise en place : 2 à 4 semaines','Nécessite un point de contact technique dédié côté client'],
    conseil:'Grandes entreprises, groupes ou collectivités avec plusieurs dizaines de systèmes IA sur plusieurs entités. Recommandé si votre exposition aux sanctions AI Act Art. 99 dépasse 1 M€.',
-   cta:{lbl:'Demander un devis Entreprise',act:'go("pricing")',sty:'btn-primary'},ctaSub:'Engagement recommandé : 12 mois'}
+   cta:{lbl:'Demander un devis Entreprise',act:'pricingRequestAccess(\'entreprise\')',sty:'btn-primary'},ctaSub:'Engagement recommandé : 12 mois'}
 ];
 function _e(n){return n.toLocaleString('fr-FR')+' €';}
 function _t(h){return '<span class="prx-tip-icon" tabindex="0" style="margin-left:4px;vertical-align:middle">?<span class="prx-tip-bubble" style="width:220px">'+h+'</span></span>';}
@@ -14055,6 +14055,25 @@ window.pricingSelectPlan = function(plan){
   if(card) card.classList.add('selected');
   var inp = document.getElementById('pricing-req-plan');
   if(inp) inp.value = plan;
+};
+
+window.pricingRequestAccess = function(plan){
+  /* Active le parcours de demande depuis les cartes de plans : selectionne le
+     plan, renseigne le champ cache du formulaire, fait defiler jusqu'au bloc de
+     demande (etape 5) et place le focus sur le premier champ. */
+  if(window.pricingSelectPlan) window.pricingSelectPlan(plan);
+  var inp = document.getElementById('pricing-req-plan');
+  if(inp) inp.value = plan;
+  var block = document.getElementById('pricing-request-block');
+  if(block){
+    block.scrollIntoView({behavior:'smooth', block:'start'});
+    /* Mise en evidence breve du bloc pour guider l'oeil */
+    block.style.transition='box-shadow .4s';
+    block.style.boxShadow='0 0 0 3px rgba(184,50,34,.25)';
+    setTimeout(function(){ block.style.boxShadow='none'; }, 1600);
+  }
+  var nomEl = document.getElementById('pricing-req-nom');
+  if(nomEl) setTimeout(function(){ try{ nomEl.focus(); }catch(e){} }, 600);
 };
 
 window.pricingSubmitRequest = function(){
