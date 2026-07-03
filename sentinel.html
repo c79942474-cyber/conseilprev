@@ -16048,10 +16048,14 @@ window.raasPortfolioToggle = function(){
       var STAT={prospect:'Prospect',onboarding:'Onboarding',actif:'Actif',a_risque:'\u00c0 risque',inactif:'Inactif',clos:'Clos'};
       var SANTEC={a_evaluer:'var(--muted2)',bonne:'var(--green)',moyenne:'#c98a00',fragile:'var(--accent)'};
       var t=d.totals||{};
+      window.__raasPortfolio = {portfolio:d.portfolio, totals:t};
       var head =
         '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px">'
         + '<strong style="font-size:14px">Portefeuille clients ('+t.clients+')</strong>'
+        + '<div style="display:flex;gap:8px;flex-wrap:wrap">'
+        + '<button class="mat-export-btn" onclick="raasPortfolioExport()" title="Exporter le portefeuille en PDF imprimable">\ud83d\udcc4 Exporter (PDF)</button>'
         + '<button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="raasPortfolioDigest()">\u2709 Envoyer la synth\u00e8se de relance</button>'
+        + '</div>'
         + '</div>'
         + '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px">'
         + '<div class="ms-sum-card"><div class="ms-sum-lbl">Impay\u00e9s</div><div class="ms-sum-val" style="color:'+(t.unpaid_count?'var(--accent)':'var(--green)')+'">'+eur(t.unpaid_amount)+'</div><div class="ms-sum-sub">'+t.unpaid_count+' facture(s)</div></div>'
@@ -16083,6 +16087,51 @@ window.raasPortfolioOpen = function(clientId){
   var box=document.getElementById('raas-portfolio'); if(box) box.style.display='none';
 };
 
+window.raasPortfolioExport = function(){
+  var pf = window.__raasPortfolio;
+  if(!pf || !pf.portfolio){ alert('Ouvrez d\u2019abord la vue portefeuille.'); return; }
+  function eur(n){ return (n||0).toLocaleString('fr-FR')+'\u202f\u20ac'; }
+  var STAT={prospect:'Prospect',onboarding:'Onboarding',actif:'Actif',a_risque:'\u00c0 risque',inactif:'Inactif',clos:'Clos'};
+  var SANTE={a_evaluer:'\u00c0 \u00e9valuer',bonne:'Bonne',moyenne:'Moyenne',fragile:'Fragile'};
+  var t=pf.totals||{};
+  var today=new Date().toLocaleDateString('fr-FR');
+  var rows=pf.portfolio.map(function(p){
+    return '<tr><td>'+String(p.nom).replace(/</g,'&lt;')+'</td><td>'+(STAT[p.statut]||p.statut)+'</td>'
+      +'<td>'+(SANTE[p.sante]||p.sante)+'</td>'
+      +'<td style="text-align:right">'+(p.unpaid_count?eur(p.unpaid_amount)+' ('+p.unpaid_count+')':'\u2014')+'</td>'
+      +'<td style="text-align:center">'+(p.pending_relances||'\u2014')+'</td>'
+      +'<td style="text-align:center">'+(p.milestones_pending||'\u2014')+'</td>'
+      +'<td style="text-align:center">'+(p.last_contact_days!==null?p.last_contact_days+' j':'\u2014')+'</td></tr>';
+  }).join('');
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Portefeuille clients \u2014 CONSEILPREV</title>'
+    +'<style>@page{margin:1.5cm}body{font-family:Arial,sans-serif;color:#1C1C1C;max-width:960px;margin:0 auto;padding:16px}'
+    +'h1{font-size:19px;border-bottom:3px solid #B83222;padding-bottom:8px;margin-bottom:4px}'
+    +'.sub{color:#666;font-size:11px;margin-bottom:14px}'
+    +'.kpis{display:flex;gap:14px;margin:12px 0}'
+    +'.kpi{flex:1;border:1px solid #e5e2dd;border-radius:6px;padding:10px 12px}'
+    +'.kpi b{display:block;font-size:17px}.kpi span{font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:#888}'
+    +'table{width:100%;border-collapse:collapse;font-size:11px;margin-top:8px}'
+    +'th{background:#1C1C1C;color:#fff;padding:7px 9px;text-align:left;font-size:9.5px}'
+    +'td{border:1px solid #ddd;padding:6px 9px}tbody tr:nth-child(even){background:#faf9f7}'
+    +'.foot{font-size:9px;color:#999;margin-top:20px;border-top:1px solid #eee;padding-top:8px}'
+    +'</style></head><body>'
+    +'<h1>Portefeuille clients</h1>'
+    +'<div class="sub">CONSEILPREV \u2014 Sentinel AI \u00b7 \u00c9tabli le '+today+' \u00b7 Document interne de suivi</div>'
+    +'<div class="kpis">'
+    +'<div class="kpi"><span>Clients suivis</span><b>'+t.clients+'</b></div>'
+    +'<div class="kpi"><span>Impay\u00e9s</span><b>'+eur(t.unpaid_amount)+'</b>'+t.unpaid_count+' facture(s)</div>'
+    +'<div class="kpi"><span>Relances en attente</span><b>'+t.pending_relances+'</b></div>'
+    +'</div>'
+    +'<table><thead><tr><th>Client</th><th>Statut</th><th>Sant\u00e9</th><th>Impay\u00e9s</th><th>Relances</th><th>Jalons</th><th>Dernier contact</th></tr></thead>'
+    +'<tbody>'+rows+'</tbody></table>'
+    +'<div class="foot">Document interne CONSEILPREV \u2014 donn\u00e9es de suivi client \u00e0 usage strictement interne. G\u00e9n\u00e9r\u00e9 par Sentinel AI.</div>'
+    +'</body></html>';
+  var w=window.open('','_blank');
+  if(!w){ alert('Autorisez les pop-ups pour exporter.'); return; }
+  w.document.write(html+'<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>');
+  w.document.close();
+};
+
 window.raasPortfolioDigest = function(){
   var msg=document.getElementById('pf-digest-msg');
   if(!confirm('Envoyer par email \u00e0 CONSEILPREV la synth\u00e8se des impay\u00e9s et relances en attente ?')) return;
@@ -16107,14 +16156,14 @@ window.raasRgpdBlock = function(clientId){
     + '<strong>Dur\u00e9e de conservation\u00a0:</strong> donn\u00e9es de suivi conserv\u00e9es pendant la relation contractuelle puis 3 ans \u00e0 des fins de prospection\u00a0; pi\u00e8ces comptables (factures, contrats) conserv\u00e9es 10 ans au titre de l\u2019article L.123-22 du Code de commerce.<br>'
     + '<strong>Droits\u00a0:</strong> le client dispose d\u2019un droit d\u2019acc\u00e8s, de rectification et d\u2019effacement (art. 15 \u00e0 17 RGPD).'
     + '<div style="margin-top:10px"><button class="mat-export-btn" style="background:var(--accent);color:#fff;padding:5px 12px;font-size:11px" onclick="raasRgpdErase('+clientId+')">Exercer le droit \u00e0 l\u2019effacement</button>'
-    + '<span style="font-size:10px;color:var(--muted2);margin-left:8px">Supprime KYC, notes, relances et suivi. Factures et contrats conserv\u00e9s (obligation l\u00e9gale).</span></div>'
+    + '<span style="font-size:10px;color:var(--muted2);margin-left:8px">Supprime KYC, notes, relances et suivi\u00a0; anonymise les coordonn\u00e9es du compte. Factures et contrats conserv\u00e9s et pseudonymis\u00e9s (obligation l\u00e9gale 10 ans).</span></div>'
     + '</div></details></div>';
 };
 
 window.raasRgpdErase = function(clientId){
-  if(!confirm('EFFACEMENT RGPD \u2014 supprimer d\u00e9finitivement les donn\u00e9es KYC, notes, relances et suivi de ce client ?\n\nLes factures et contrats sont conserv\u00e9s au titre de l\u2019obligation comptable l\u00e9gale (10 ans). Cette action est irr\u00e9versible.')) return;
+  if(!confirm('EFFACEMENT RGPD \u2014 supprimer les donn\u00e9es KYC, notes, relances et suivi, et anonymiser les coordonn\u00e9es nominatives du compte de ce client ?\n\nLes factures et contrats sont conserv\u00e9s (li\u00e9s par identifiant pseudonymis\u00e9) au titre de l\u2019obligation comptable l\u00e9gale de 10 ans. Le compte sera d\u00e9sactiv\u00e9. Cette action est irr\u00e9versible.')) return;
   if(!confirm('Confirmez-vous d\u00e9finitivement cet effacement ?')) return;
-  fetch('/api/clients/erase',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({client_id:parseInt(clientId,10),confirm:true})})
+  fetch('/api/clients/erase',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({client_id:parseInt(clientId,10),confirm:true,anonymize:true})})
     .then(function(r){return r.json();}).then(function(d){
       if(d.ok){ alert('Effacement effectu\u00e9. '+(d.note||'')); raasExpertRender(clientId); }
       else { alert(d.error||'Erreur'); }
