@@ -15597,7 +15597,7 @@ window.raasAdminContract = function(){
     + '<h1>Contrat de tarification RaaS par jalons</h1>'
     + '<div class="sub">R\u00e9f\u00e9rence '+ref+' \u00b7 \u00c9tabli le '+today+' \u00b7 CONSEILPREV \u2014 Sentinel AI \u00b7 R\u00e8glement (UE) 2024/1689</div>'
     + '<div class="parties">'
-    + '<div><strong>Prestataire</strong><br>CONSEILPREV<br>Christophe CERF<br>christophe.cerf@outlook.com</div>'
+    + '<div><strong>Prestataire</strong><br>CONSEILPREV<br>Christophe CERF<br>19 rue Auguste Chabri\u00e8res, 75015 Paris<br>SIREN 494\u202f530\u202f157 \u2014 RCS Paris<br>christophe.cerf@outlook.com</div>'
     + '<div><strong>Client</strong><br>'+cliLignes+'</div>'
     + '</div>'
     + '<h2>Article 1 \u2014 Objet</h2>'
@@ -15610,7 +15610,7 @@ window.raasAdminContract = function(){
     + '<h2>Article 3 \u2014 Conditions de facturation</h2>'
     + '<div class="clause">Chaque jalon n\u2019est factur\u00e9 qu\u2019apr\u00e8s double v\u00e9rification\u00a0: atteinte du score Sentinel du domaine <em>et</em> validation documentaire par CONSEILPREV. Un jalon v\u00e9rifi\u00e9 est acquis d\u00e9finitivement et irr\u00e9vocable. Le paiement de chaque jalon est \u00e9chelonn\u00e9 sur deux mensualit\u00e9s \u00e9gales.</div>'
     + '<h2>Article 4 \u2014 Garanties</h2>'
-    + '<div class="clause">Le total per\u00e7u au titre des jalons ne peut exc\u00e9der l\u2019enveloppe contractuelle ci-dessus. En cas de progression partielle, seuls les jalons atteints sont dus\u00a0: le risque d\u2019ex\u00e9cution est port\u00e9 par le Prestataire.</div>'
+    + '<div class="clause">Le total per\u00e7u au titre des jalons ne peut exc\u00e9der l\u2019enveloppe contractuelle ci-dessus. En cas de progression partielle, seuls les jalons atteints sont dus\u00a0: le risque d\u2019ex\u00e9cution est port\u00e9 par le Prestataire.</div>'    + '<h2>Article 5 \u2014 Conditions de paiement</h2>'    + '<div class="clause">Chaque jalon factur\u00e9 est payable \u00e0 r\u00e9ception de la facture, selon l\u2019\u00e9ch\u00e9ancier \u00e9chelonn\u00e9 sur deux mensualit\u00e9s \u00e9gales. Conform\u00e9ment aux articles L.441-10 et D.441-5 du Code de commerce, tout retard de paiement entra\u00eene des p\u00e9nalit\u00e9s au taux de trois fois le taux d\u2019int\u00e9r\u00eat l\u00e9gal et une indemnit\u00e9 forfaitaire de recouvrement de 40\u202f\u20ac. TVA non applicable, article 293 B du CGI.</div>'    + '<h2>Article 6 \u2014 Prise d\u2019effet et dur\u00e9e</h2>'    + '<div class="clause">Le pr\u00e9sent contrat prend effet \u00e0 sa date de signature par les deux parties et demeure en vigueur jusqu\u2019\u00e0 l\u2019atteinte de l\u2019attestation finale de conformit\u00e9 ou la r\u00e9siliation dans les conditions du droit commun. Il est conclu conform\u00e9ment aux articles 1103 et 1104 du Code civil, qui conf\u00e8rent force obligatoire aux conventions l\u00e9galement form\u00e9es et imposent leur ex\u00e9cution de bonne foi.</div>'    + '<h2>Article 7 \u2014 Droit applicable et juridiction</h2>'    + '<div class="clause">Le pr\u00e9sent contrat est soumis au droit fran\u00e7ais. \u00c0 d\u00e9faut de r\u00e9solution amiable, tout litige relatif \u00e0 sa formation, son ex\u00e9cution ou son interpr\u00e9tation rel\u00e8ve de la comp\u00e9tence du Tribunal de commerce de Paris.</div>'
     + '<div class="sign"><div>Pour CONSEILPREV<br><br><br>Christophe CERF</div><div>Pour '+cliNom+'<br><br><br>'+(k.representant?esc(k.representant)+(k.fonction_representant?', '+esc(k.fonction_representant):''):'Nom, fonction, signature')+'</div></div>'
     + '<div class="foot">Document contractuel g\u00e9n\u00e9r\u00e9 par Sentinel AI. Les seuils et montants sont ceux de l\u2019\u00e9ch\u00e9ancier en vigueur \u00e0 la date d\u2019\u00e9tablissement. CONSEILPREV \u2014 Christophe CERF \u2014 christophe.cerf@outlook.com</div>'
     + '</body></html>';
@@ -15661,16 +15661,16 @@ window.raasAdminInvoice = function(){
     + '.foot{font-size:9.5px;color:#999;margin-top:26px;border-top:1px solid #eee;padding-top:10px}'
     + '</style></head><body>'
     + '<div class="head"><div><h1>FACTURE</h1><div style="font-size:11px;color:#555;margin-top:4px">Tarification RaaS par jalons \u2014 Sentinel AI</div></div>'
-    + '<div class="meta">N\u00b0 '+num+'<br>Date\u00a0: '+dateStr+'<br>R\u00e9f. client\u00a0: '+cur.id+'</div></div>'
+    + '<div class="meta">N\u00b0 '+num+'<br>Date d\u2019\u00e9mission\u00a0: '+dateStr+'<br>Prestation\u00a0: v\u00e9rification des jalons list\u00e9s<br>R\u00e9f. client\u00a0: '+cur.id+'</div></div>'
     + '<div style="display:flex;gap:20px;margin-bottom:16px">'
-    + '<div style="flex:1;font-size:12px"><strong>\u00c9metteur</strong><br>CONSEILPREV<br>Christophe CERF<br>christophe.cerf@outlook.com</div>'
+    + '<div style="flex:1;font-size:12px"><strong>\u00c9metteur</strong><br>CONSEILPREV<br>Christophe CERF<br>19 rue Auguste Chabri\u00e8res, 75015 Paris<br>SIREN 494\u202f530\u202f157 \u2014 RCS Paris<br>christophe.cerf@outlook.com</div>'
     + '<div class="bill-to" style="flex:1"><strong>Factur\u00e9 \u00e0</strong><br>'+billTo+'</div>'
     + '</div>'
     + '<table><thead><tr><th>Jalon de conformit\u00e9 factur\u00e9</th><th style="text-align:center">\u00c9chelonnement</th><th style="text-align:right">Montant</th></tr></thead>'
     + '<tbody>'+rows
     + '<tr class="totrow"><td colspan="2">Total \u00e0 r\u00e9gler</td><td style="text-align:right">'+eur(totalHT)+'</td></tr>'
     + '</tbody></table>'
-    + '<div class="note">Chaque jalon factur\u00e9 a fait l\u2019objet d\u2019une double v\u00e9rification (score Sentinel atteint et validation documentaire) et constitue un r\u00e9sultat de conformit\u00e9 acquis. Paiement de chaque jalon \u00e9chelonn\u00e9 sur deux mensualit\u00e9s \u00e9gales. TVA non applicable, article 293 B du CGI (le cas \u00e9ch\u00e9ant).</div>'
+    + '<div class="note"><strong>Conditions de r\u00e8glement.</strong> Paiement \u00e0 r\u00e9ception de la facture, selon l\u2019\u00e9ch\u00e9ancier contractuel \u00e9chelonn\u00e9 sur deux mensualit\u00e9s \u00e9gales. Aucun escompte pour paiement anticip\u00e9.<br><strong>Retard de paiement.</strong> Conform\u00e9ment aux articles L.441-10 et D.441-5 du Code de commerce, tout retard entra\u00eene l\u2019application de p\u00e9nalit\u00e9s au taux de trois fois le taux d\u2019int\u00e9r\u00eat l\u00e9gal, ainsi qu\u2019une indemnit\u00e9 forfaitaire pour frais de recouvrement de 40\u202f\u20ac.<br><strong>TVA.</strong> TVA non applicable, article 293 B du CGI (franchise en base).<br>Chaque jalon factur\u00e9 a fait l\u2019objet d\u2019une double v\u00e9rification (score Sentinel atteint et validation documentaire) et constitue un r\u00e9sultat de conformit\u00e9 acquis. Mentions \u00e9tablies au titre des articles L.441-9 du Code de commerce et 242 nonies A de l\u2019annexe II au CGI.</div>'
     + '<div class="foot">CONSEILPREV \u2014 Christophe CERF \u2014 christophe.cerf@outlook.com \u2014 Facture g\u00e9n\u00e9r\u00e9e par Sentinel AI le '+dateStr+'.</div>'
     + '</body></html>';
   var w = window.open('', '_blank');
