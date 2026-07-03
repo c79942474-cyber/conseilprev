@@ -1690,6 +1690,12 @@ textarea.form-el{min-height:86px;resize:vertical}
 .ms-profile-note strong{color:var(--ink)}
 .ms-profile-mods{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .ms-profile-mod{display:inline-block;background:var(--white);border:1px solid var(--rule2);border-radius:4px;padding:3px 9px;font-size:10.5px;color:var(--ink2)}
+
+/* ══ ONGLETS GESTION EXPERTE CLIENTS ══ */
+.raas-tab-btn{background:var(--bg);border:1px solid var(--rule2);border-radius:6px;padding:7px 14px;font-size:12px;font-family:var(--mono);color:var(--muted2);cursor:pointer;transition:all .15s}
+.raas-tab-btn:hover{background:var(--bg2);color:var(--ink2)}
+.raas-tab-btn.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.raas-tab-pane{background:var(--white);border:1px solid var(--rule);border-radius:8px;padding:16px}
 </style>
 
 </head>
@@ -2884,6 +2890,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       </div>
       <div id="raas-admin-msg" style="font-size:12px;margin-bottom:10px"></div>
       <div id="raas-admin-table"></div>
+      <div id="raas-admin-expert"></div>
     </div>
   </div>
 </div>
@@ -15452,6 +15459,7 @@ window.raasAdminLoad = function(){
       var opt = sel.options[sel.selectedIndex];
       if(opt) clientName = opt.textContent.replace(/\s*\([^)]*\)\s*$/, '').trim();
       window.__raasCurrentClient = {id: sel.value, name: clientName, data: d};
+      if(window.raasExpertRender) window.raasExpertRender(sel.value);
       var invoiced = d.milestones.filter(function(m){ return m.status === 'invoiced'; });
       var verified = d.milestones.filter(function(m){ return m.status === 'verified'; });
       out.innerHTML =
@@ -15644,6 +15652,185 @@ window.raasAdminInvoice = function(){
   if(!w){ alert('Autorisez les pop-ups pour générer la facture.'); return; }
   w.document.write(html + '<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>');
   w.document.close();
+};
+
+/* ══ GESTION EXPERTE DES CLIENTS RAAS — KYC, notes, contrats BDD, factures ══ */
+window.raasExpertRender = function(clientId){
+  var box = document.getElementById('raas-admin-expert');
+  if(!box) return;
+  box.innerHTML =
+    '<div class="raas-expert-tabs" style="display:flex;gap:6px;margin:18px 0 12px;flex-wrap:wrap">'
+    + '<button class="raas-tab-btn active" data-tab="kyc" onclick="raasExpertTab(\'kyc\')">KYC client</button>'
+    + '<button class="raas-tab-btn" data-tab="notes" onclick="raasExpertTab(\'notes\')">Notes</button>'
+    + '<button class="raas-tab-btn" data-tab="contracts" onclick="raasExpertTab(\'contracts\')">Contrats</button>'
+    + '<button class="raas-tab-btn" data-tab="invoices" onclick="raasExpertTab(\'invoices\')">Factures</button>'
+    + '</div>'
+    + '<div id="raas-tab-kyc" class="raas-tab-pane"></div>'
+    + '<div id="raas-tab-notes" class="raas-tab-pane" style="display:none"></div>'
+    + '<div id="raas-tab-contracts" class="raas-tab-pane" style="display:none"></div>'
+    + '<div id="raas-tab-invoices" class="raas-tab-pane" style="display:none"></div>';
+  raasKycLoad(clientId);
+  raasNotesLoad(clientId);
+  raasContractsLoad(clientId);
+  raasInvoicesLoad(clientId);
+};
+
+window.raasExpertTab = function(tab){
+  ['kyc','notes','contracts','invoices'].forEach(function(t){
+    var pane=document.getElementById('raas-tab-'+t);
+    if(pane) pane.style.display = (t===tab)?'block':'none';
+  });
+  document.querySelectorAll('.raas-tab-btn').forEach(function(b){
+    b.classList.toggle('active', b.getAttribute('data-tab')===tab);
+  });
+};
+
+function raasCid(){ var s=document.getElementById('raas-client-select'); return s?s.value:''; }
+function raasEur(n){ return (n||0).toLocaleString('fr-FR')+'\u202f\u20ac'; }
+
+/* ── KYC ── */
+window.raasKycLoad = function(clientId){
+  var pane=document.getElementById('raas-tab-kyc'); if(!pane) return;
+  pane.innerHTML='<div style="color:var(--muted);font-size:12px;padding:10px">Chargement KYC…</div>';
+  fetch('/api/clients/kyc?client_id='+encodeURIComponent(clientId),{credentials:'same-origin'})
+    .then(function(r){return r.json();}).then(function(d){
+      var k=(d.ok&&d.kyc)?d.kyc:{};
+      function fld(id,lbl,val,ph,w){ return '<div style="flex:'+(w||1)+';min-width:160px"><label style="font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.07em;color:var(--muted2);display:block;margin-bottom:3px">'+lbl+'</label><input id="kyc-'+id+'" value="'+(val?String(val).replace(/"/g,'&quot;'):'')+'" placeholder="'+(ph||'')+'" style="width:100%;padding:6px 9px;border:1px solid var(--rule2);border-radius:5px;font-size:12px"></div>'; }
+      var badge = (k.kyc_status==='complet')
+        ? '<span style="background:rgba(45,122,71,.12);color:var(--green);padding:3px 10px;border-radius:12px;font-size:10px;font-family:var(--mono)">\u2705 KYC complet</span>'
+        : '<span style="background:rgba(184,50,34,.1);color:var(--accent);padding:3px 10px;border-radius:12px;font-size:10px;font-family:var(--mono)">\u26a0 KYC incomplet</span>';
+      pane.innerHTML =
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><strong style="font-size:13px">Fiche KYC (Know Your Customer)</strong>'+badge+'</div>'
+        + '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px">'
+        + fld('raison_sociale','Raison sociale',k.raison_sociale,'',2)+fld('siren','SIREN',k.siren,'9 chiffres')+fld('forme_juridique','Forme juridique',k.forme_juridique,'SAS, SARL…')
+        + '</div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px">'
+        + fld('adresse','Adresse',k.adresse,'',2)+fld('code_postal','Code postal',k.code_postal,'')+fld('ville','Ville',k.ville,'')
+        + '</div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px">'
+        + fld('representant','Représentant légal',k.representant,'')+fld('fonction_representant','Fonction',k.fonction_representant,'')+fld('pays','Pays',k.pays||'France','')
+        + '</div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px">'
+        + fld('email_contact','Email de contact',k.email_contact,'')+fld('telephone','Téléphone',k.telephone,'')+fld('tva_intra','TVA intracom.',k.tva_intra,'')
+        + '</div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">'
+        + fld('secteur','Secteur',k.secteur,'')+fld('effectif','Effectif',k.effectif,'')
+        + '</div>'
+        + '<button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="raasKycSave()">Enregistrer la fiche KYC</button>'
+        + '<span id="kyc-msg" style="font-size:12px;margin-left:12px"></span>'
+        + (k.updated_at?'<div style="font-size:10px;color:var(--muted2);margin-top:8px">Dernière mise à jour : '+String(k.updated_at).substring(0,16).replace('T',' ')+'</div>':'');
+    }).catch(function(){ pane.innerHTML='<div style="color:var(--accent);font-size:12px;padding:10px">Erreur de chargement KYC.</div>'; });
+};
+
+window.raasKycSave = function(){
+  var cid=raasCid(); if(!cid) return;
+  var msg=document.getElementById('kyc-msg');
+  function v(id){ var e=document.getElementById('kyc-'+id); return e?e.value.trim():''; }
+  var body={client_id:parseInt(cid,10)};
+  ['raison_sociale','siren','forme_juridique','adresse','code_postal','ville','pays','representant','fonction_representant','email_contact','telephone','tva_intra','secteur','effectif'].forEach(function(f){ body[f]=v(f); });
+  if(msg){ msg.style.color='var(--muted)'; msg.textContent='Enregistrement…'; }
+  fetch('/api/clients/kyc',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+    .then(function(r){return r.json();}).then(function(d){
+      if(msg){ msg.style.color=d.ok?'var(--green)':'var(--accent)'; msg.textContent=d.ok?('Fiche enregistrée — statut : '+d.kyc_status):(d.error||'Erreur'); }
+      if(d.ok) raasKycLoad(cid);
+    }).catch(function(){ if(msg){ msg.style.color='var(--accent)'; msg.textContent='Erreur réseau.'; } });
+};
+
+/* ── NOTES ── */
+window.raasNotesLoad = function(clientId){
+  var pane=document.getElementById('raas-tab-notes'); if(!pane) return;
+  pane.innerHTML='<div style="color:var(--muted);font-size:12px;padding:10px">Chargement…</div>';
+  fetch('/api/clients/notes?client_id='+encodeURIComponent(clientId),{credentials:'same-origin'})
+    .then(function(r){return r.json();}).then(function(d){
+      var notes=(d.ok&&d.notes)?d.notes:[];
+      var list = notes.length ? notes.map(function(n){
+        return '<div style="border-left:3px solid var(--rule2);padding:8px 12px;margin-bottom:8px;background:var(--bg)"><div style="font-size:12px;color:var(--ink2);white-space:pre-wrap">'+String(n.note).replace(/</g,'&lt;')+'</div><div style="font-size:9px;color:var(--muted2);margin-top:4px">'+(n.author||'CONSEILPREV')+' · '+String(n.created_at).substring(0,16).replace('T',' ')+'</div></div>';
+      }).join('') : '<div style="color:var(--muted2);font-size:12px;padding:8px">Aucune note pour ce client.</div>';
+      pane.innerHTML =
+        '<strong style="font-size:13px;display:block;margin-bottom:10px">Notes explicatives client</strong>'
+        + '<textarea id="note-input" placeholder="Ajouter une note explicative (contexte, échanges, décisions…)" style="width:100%;min-height:70px;padding:9px;border:1px solid var(--rule2);border-radius:6px;font-size:12px;font-family:inherit;margin-bottom:8px"></textarea>'
+        + '<button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="raasNoteAdd()">Ajouter la note</button>'
+        + '<span id="note-msg" style="font-size:12px;margin-left:12px"></span>'
+        + '<div style="margin-top:14px">'+list+'</div>';
+    }).catch(function(){ pane.innerHTML='<div style="color:var(--accent);font-size:12px;padding:10px">Erreur de chargement.</div>'; });
+};
+
+window.raasNoteAdd = function(){
+  var cid=raasCid(); if(!cid) return;
+  var inp=document.getElementById('note-input'); var msg=document.getElementById('note-msg');
+  var note=inp?inp.value.trim():'';
+  if(!note){ if(msg){ msg.style.color='var(--accent)'; msg.textContent='Note vide.'; } return; }
+  if(msg){ msg.style.color='var(--muted)'; msg.textContent='Ajout…'; }
+  fetch('/api/clients/notes',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({client_id:parseInt(cid,10),note:note})})
+    .then(function(r){return r.json();}).then(function(d){
+      if(d.ok){ raasNotesLoad(cid); } else if(msg){ msg.style.color='var(--accent)'; msg.textContent=d.error||'Erreur'; }
+    }).catch(function(){ if(msg){ msg.style.color='var(--accent)'; msg.textContent='Erreur réseau.'; } });
+};
+
+/* ── CONTRATS (BDD) ── */
+window.raasContractsLoad = function(clientId){
+  var pane=document.getElementById('raas-tab-contracts'); if(!pane) return;
+  pane.innerHTML='<div style="color:var(--muted);font-size:12px;padding:10px">Chargement…</div>';
+  fetch('/api/clients/contracts?client_id='+encodeURIComponent(clientId),{credentials:'same-origin'})
+    .then(function(r){return r.json();}).then(function(d){
+      var cs=(d.ok&&d.contracts)?d.contracts:[];
+      var rows = cs.length ? '<table class="ms-table"><thead><tr><th>Référence</th><th>Enveloppe</th><th>Jalons</th><th>Statut</th><th>Créé le</th></tr></thead><tbody>'
+        + cs.map(function(c){ return '<tr><td>'+c.reference+'</td><td class="ms-amount">'+raasEur(c.envelope_total)+'</td><td>'+(c.milestones_count||'—')+'</td><td>'+c.status+'</td><td style="font-size:10px">'+String(c.created_at).substring(0,10)+'</td></tr>'; }).join('')
+        + '</tbody></table>' : '<div style="color:var(--muted2);font-size:12px;padding:8px">Aucun contrat enregistré.</div>';
+      pane.innerHTML =
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><strong style="font-size:13px">Contrats RaaS enregistrés (base de données)</strong>'
+        + '<button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="raasContractSaveDb()">Enregistrer le contrat courant</button></div>'
+        + '<span id="contract-msg" style="font-size:12px"></span>'
+        + '<div style="margin-top:10px">'+rows+'</div>'
+        + '<div style="font-size:10px;color:var(--muted2);margin-top:8px">Le bouton « Générer le contrat RaaS (PDF) » ci-dessus produit le document imprimable ; l\'enregistrement ci-contre archive une référence traçable en base.</div>';
+    }).catch(function(){ pane.innerHTML='<div style="color:var(--accent);font-size:12px;padding:10px">Erreur de chargement.</div>'; });
+};
+
+window.raasContractSaveDb = function(){
+  var cur=window.__raasCurrentClient; var msg=document.getElementById('contract-msg');
+  if(!cur||!cur.data){ if(msg){ msg.style.color='var(--accent)'; msg.textContent='Chargez d\'abord l\'échéancier.'; } return; }
+  if(msg){ msg.style.color='var(--muted)'; msg.textContent='Enregistrement…'; }
+  fetch('/api/clients/contracts',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({client_id:parseInt(cur.id,10),envelope_total:cur.data.envelope_total,milestones_count:(cur.data.milestones||[]).length,content:{milestones:cur.data.milestones}})})
+    .then(function(r){return r.json();}).then(function(d){
+      if(msg){ msg.style.color=d.ok?'var(--green)':'var(--accent)'; msg.textContent=d.ok?('Contrat enregistré — '+d.reference):(d.error||'Erreur'); }
+      if(d.ok) raasContractsLoad(cur.id);
+    }).catch(function(){ if(msg){ msg.style.color='var(--accent)'; msg.textContent='Erreur réseau.'; } });
+};
+
+/* ── FACTURES (selon échéancier) ── */
+window.raasInvoicesLoad = function(clientId){
+  var pane=document.getElementById('raas-tab-invoices'); if(!pane) return;
+  pane.innerHTML='<div style="color:var(--muted);font-size:12px;padding:10px">Chargement…</div>';
+  fetch('/api/clients/invoices?client_id='+encodeURIComponent(clientId),{credentials:'same-origin'})
+    .then(function(r){return r.json();}).then(function(d){
+      var inv=(d.ok&&d.invoices)?d.invoices:[];
+      var rows = inv.length ? '<table class="ms-table"><thead><tr><th>N° facture</th><th>Jalon</th><th>Montant</th><th>Échelonnement</th><th>Statut</th><th>Émise le</th></tr></thead><tbody>'
+        + inv.map(function(i){ return '<tr><td>'+i.numero+'</td><td style="font-size:11px">'+(i.milestone_id||'—')+'</td><td class="ms-amount">'+raasEur(i.amount_eur)+'</td><td>'+(i.installments||2)+' mens.</td><td>'+i.status+'</td><td style="font-size:10px">'+String(i.issued_at).substring(0,10)+'</td></tr>'; }).join('')
+        + '</tbody></table>' : '<div style="color:var(--muted2);font-size:12px;padding:8px">Aucune facture émise.</div>';
+      pane.innerHTML =
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px"><strong style="font-size:13px">Factures émises selon l\'échéancier</strong>'
+        + '<label style="font-size:11px;color:var(--muted2);display:flex;align-items:center;gap:6px"><input type="checkbox" id="inv-notify" checked> Notifier le client par email</label></div>'
+        + '<button class="mat-export-btn" style="background:var(--accent);color:#fff" onclick="raasInvoicesIssue()">Émettre les factures des jalons vérifiés</button>'
+        + '<span id="invoice-msg" style="font-size:12px;margin-left:12px"></span>'
+        + '<div style="margin-top:12px">'+rows+'</div>';
+    }).catch(function(){ pane.innerHTML='<div style="color:var(--accent);font-size:12px;padding:10px">Erreur de chargement.</div>'; });
+};
+
+window.raasInvoicesIssue = function(){
+  var cid=raasCid(); if(!cid) return;
+  var msg=document.getElementById('invoice-msg');
+  var notify=document.getElementById('inv-notify'); var doNotify=notify?notify.checked:true;
+  if(!confirm('Émettre les factures de tous les jalons vérifiés de ce client selon l\'échéancier ?'+(doNotify?' Le client sera notifié par email.':''))) return;
+  if(msg){ msg.style.color='var(--muted)'; msg.textContent='Émission…'; }
+  fetch('/api/clients/invoices/issue',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({client_id:parseInt(cid,10),notify:doNotify})})
+    .then(function(r){return r.json();}).then(function(d){
+      if(msg){
+        msg.style.color=d.ok?'var(--green)':'var(--accent)';
+        if(d.ok&&d.issued_count>0){
+          var em = d.email_sent ? ' — client notifié par email' : (doNotify?(' — email non envoyé'+(d.email_error?' ('+d.email_error+')':'')):'');
+          msg.textContent = d.issued_count+' facture(s) émise(s)'+em;
+        } else if(d.ok){ msg.textContent = d.message||'Aucun jalon vérifié à facturer'; }
+        else { msg.textContent = d.error||'Erreur'; }
+      }
+      if(d.ok){ raasInvoicesLoad(cid); if(window.raasAdminLoad) raasAdminLoad(); }
+    }).catch(function(){ if(msg){ msg.style.color='var(--accent)'; msg.textContent='Erreur réseau.'; } });
 };
 
 /* Peupler le selecteur de clients a l ouverture de la page clients */
