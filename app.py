@@ -3048,6 +3048,104 @@ try:
 except Exception as _e:
     logger.error(f"RAAS — erreur init table raas_milestones : {_e}")
 
+
+def raas_clients_init_db():
+    """Tables expertes de gestion des clients RaaS (reserve CONSEILPREV) :
+    - client_kyc     : donnees KYC (Know Your Customer) par client
+    - raas_contracts : contrats generes/enregistres par client (BDD)
+    - raas_invoices  : factures emises selon l'echeancier client
+    - client_notes   : notes explicatives par client
+    Toutes les operations sont reservees a la session CONSEILPREV."""
+    conn = registre_get_db()
+    cur = conn.cursor()
+    if REGISTRE_USE_PG:
+        cur.execute('''CREATE TABLE IF NOT EXISTS client_kyc (
+            client_id INTEGER PRIMARY KEY,
+            raison_sociale TEXT,
+            siren TEXT,
+            forme_juridique TEXT,
+            adresse TEXT,
+            code_postal TEXT,
+            ville TEXT,
+            pays TEXT DEFAULT 'France',
+            representant TEXT,
+            fonction_representant TEXT,
+            email_contact TEXT,
+            telephone TEXT,
+            tva_intra TEXT,
+            secteur TEXT,
+            effectif TEXT,
+            kyc_status TEXT NOT NULL DEFAULT 'incomplet',
+            kyc_verified_at TEXT,
+            updated_at TEXT NOT NULL
+        )''')
+        cur.execute('''CREATE TABLE IF NOT EXISTS raas_contracts (
+            id SERIAL PRIMARY KEY,
+            client_id INTEGER NOT NULL,
+            reference TEXT NOT NULL UNIQUE,
+            envelope_total INTEGER,
+            milestones_count INTEGER,
+            status TEXT NOT NULL DEFAULT 'brouillon',
+            content_json TEXT,
+            created_at TEXT NOT NULL,
+            signed_at TEXT
+        )''')
+        cur.execute('''CREATE TABLE IF NOT EXISTS raas_invoices (
+            id SERIAL PRIMARY KEY,
+            client_id INTEGER NOT NULL,
+            numero TEXT NOT NULL UNIQUE,
+            milestone_id TEXT,
+            amount_eur INTEGER NOT NULL,
+            installments INTEGER DEFAULT 2,
+            status TEXT NOT NULL DEFAULT 'emise',
+            due_json TEXT,
+            issued_at TEXT NOT NULL,
+            paid_at TEXT
+        )''')
+        cur.execute('''CREATE TABLE IF NOT EXISTS client_notes (
+            id SERIAL PRIMARY KEY,
+            client_id INTEGER NOT NULL,
+            note TEXT NOT NULL,
+            author TEXT,
+            created_at TEXT NOT NULL
+        )''')
+    else:
+        cur.execute('''CREATE TABLE IF NOT EXISTS client_kyc (
+            client_id INTEGER PRIMARY KEY,
+            raison_sociale TEXT, siren TEXT, forme_juridique TEXT,
+            adresse TEXT, code_postal TEXT, ville TEXT, pays TEXT DEFAULT 'France',
+            representant TEXT, fonction_representant TEXT, email_contact TEXT,
+            telephone TEXT, tva_intra TEXT, secteur TEXT, effectif TEXT,
+            kyc_status TEXT NOT NULL DEFAULT 'incomplet', kyc_verified_at TEXT,
+            updated_at TEXT NOT NULL
+        )''')
+        cur.execute('''CREATE TABLE IF NOT EXISTS raas_contracts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            client_id INTEGER NOT NULL, reference TEXT NOT NULL UNIQUE,
+            envelope_total INTEGER, milestones_count INTEGER,
+            status TEXT NOT NULL DEFAULT 'brouillon', content_json TEXT,
+            created_at TEXT NOT NULL, signed_at TEXT
+        )''')
+        cur.execute('''CREATE TABLE IF NOT EXISTS raas_invoices (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            client_id INTEGER NOT NULL, numero TEXT NOT NULL UNIQUE,
+            milestone_id TEXT, amount_eur INTEGER NOT NULL, installments INTEGER DEFAULT 2,
+            status TEXT NOT NULL DEFAULT 'emise', due_json TEXT,
+            issued_at TEXT NOT NULL, paid_at TEXT
+        )''')
+        cur.execute('''CREATE TABLE IF NOT EXISTS client_notes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            client_id INTEGER NOT NULL, note TEXT NOT NULL,
+            author TEXT, created_at TEXT NOT NULL
+        )''')
+    conn.commit()
+    conn.close()
+
+try:
+    raas_clients_init_db()
+except Exception as _e:
+    logger.error(f"RAAS — erreur init tables gestion clients : {_e}")
+
 # Definition canonique des 7 jalons AI Act (partagee avec le front PRICING_PARAMS.raasMilestones)
 RAAS_MILESTONE_DEFS = [
     {'id': 'registre', 'label': 'Registre IA complet',          'art': 'Art. 49',    'w': 0.10, 'threshold': 30},
@@ -3793,6 +3891,298 @@ def sentauth_send_invitation_email(email, nom_entreprise, token):
     except Exception as e:
         logger.error(f"INVITATION_EMAIL_FAILED {email} : {e}")
         return False
+
+# ══════════════════════════════════════════════════════════
+# GESTION EXPERTE DES CLIENTS RAAS (reserve CONSEILPREV)
+# KYC, contrats (BDD), factures selon echeancier, notes, notification email.
+# ══════════════════════════════════════════════════════════
+
+def _clients_now():
+    return datetime.utcnow().isoformat()
+
+def _kyc_completeness(row):
+    """Retourne 'complet' si les champs KYC essentiels sont renseignes, sinon 'incomplet'."""
+    essentiels = ['raison_sociale', 'siren', 'adresse', 'ville', 'representant', 'email_contact']
+    for k in essentiels:
+        v = (row.get(k) if isinstance(row, dict) else None)
+        if not v or not str(v).strip():
+            return 'incomplet'
+    return 'complet'
+
+@app.route('/api/clients/kyc', methods=['GET'])
+def clients_kyc_get():
+    """Lit la fiche KYC d'un client. Reserve CONSEILPREV."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    try:
+        client_id = int(request.args.get('client_id'))
+    except (TypeError, ValueError):
+        return jsonify({'ok': False, 'error': 'client_id invalide'}), 400
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql(
+        'SELECT * FROM client_kyc WHERE client_id=%s',
+        'SELECT * FROM client_kyc WHERE client_id=?'
+    ), (client_id,))
+    row = cur.fetchone()
+    conn.close()
+    if not row:
+        return jsonify({'ok': True, 'kyc': None})
+    return jsonify({'ok': True, 'kyc': dict(row)})
+
+@app.route('/api/clients/kyc', methods=['POST'])
+def clients_kyc_save():
+    """Cree ou met a jour la fiche KYC d'un client. Reserve CONSEILPREV.
+    Les champs sont valides et nettoyes ; le statut de completude est recalcule."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    d = request.get_json(force=True, silent=True) or {}
+    try:
+        client_id = int(d.get('client_id'))
+    except (TypeError, ValueError):
+        return jsonify({'ok': False, 'error': 'client_id invalide'}), 400
+    def clean(k, maxlen=200):
+        v = d.get(k, '')
+        return (str(v).strip()[:maxlen]) if v is not None else ''
+    fields = {
+        'raison_sociale': clean('raison_sociale'), 'siren': clean('siren', 20),
+        'forme_juridique': clean('forme_juridique', 60), 'adresse': clean('adresse', 300),
+        'code_postal': clean('code_postal', 12), 'ville': clean('ville', 120),
+        'pays': clean('pays', 80) or 'France', 'representant': clean('representant', 160),
+        'fonction_representant': clean('fonction_representant', 120),
+        'email_contact': clean('email_contact', 160), 'telephone': clean('telephone', 40),
+        'tva_intra': clean('tva_intra', 30), 'secteur': clean('secteur', 60),
+        'effectif': clean('effectif', 40),
+    }
+    email = fields['email_contact']
+    if email and '@' not in email:
+        return jsonify({'ok': False, 'error': 'Email de contact invalide'}), 400
+    status = _kyc_completeness(fields)
+    now = _clients_now()
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql(
+        'SELECT client_id FROM client_kyc WHERE client_id=%s',
+        'SELECT client_id FROM client_kyc WHERE client_id=?'
+    ), (client_id,))
+    exists = cur.fetchone()
+    cols = list(fields.keys())
+    vals = [fields[c] for c in cols]
+    if exists:
+        setclause = ', '.join([c + '=' + ('%s' if REGISTRE_USE_PG else '?') for c in cols])
+        setclause += ', kyc_status=' + ('%s' if REGISTRE_USE_PG else '?')
+        setclause += ', updated_at=' + ('%s' if REGISTRE_USE_PG else '?')
+        cur.execute('UPDATE client_kyc SET ' + setclause + ' WHERE client_id=' + ('%s' if REGISTRE_USE_PG else '?'),
+                    tuple(vals) + (status, now, client_id))
+    else:
+        ph = ', '.join(['%s' if REGISTRE_USE_PG else '?'] * (len(cols) + 3))
+        cur.execute('INSERT INTO client_kyc (client_id, ' + ', '.join(cols) + ', kyc_status, updated_at) VALUES (' + ('%s' if REGISTRE_USE_PG else '?') + ', ' + ph + ')',
+                    (client_id,) + tuple(vals) + (status, now))
+    conn.commit()
+    conn.close()
+    return jsonify({'ok': True, 'kyc_status': status, 'updated_at': now})
+
+@app.route('/api/clients/notes', methods=['GET'])
+def clients_notes_get():
+    """Liste les notes explicatives d'un client. Reserve CONSEILPREV."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    try:
+        client_id = int(request.args.get('client_id'))
+    except (TypeError, ValueError):
+        return jsonify({'ok': False, 'error': 'client_id invalide'}), 400
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql(
+        'SELECT * FROM client_notes WHERE client_id=%s ORDER BY created_at DESC',
+        'SELECT * FROM client_notes WHERE client_id=? ORDER BY created_at DESC'
+    ), (client_id,))
+    notes = [dict(r) for r in cur.fetchall()]
+    conn.close()
+    return jsonify({'ok': True, 'notes': notes})
+
+@app.route('/api/clients/notes', methods=['POST'])
+def clients_notes_add():
+    """Ajoute une note explicative a un client. Reserve CONSEILPREV."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    d = request.get_json(force=True, silent=True) or {}
+    try:
+        client_id = int(d.get('client_id'))
+    except (TypeError, ValueError):
+        return jsonify({'ok': False, 'error': 'client_id invalide'}), 400
+    note = (str(d.get('note', '')).strip())[:4000]
+    if not note:
+        return jsonify({'ok': False, 'error': 'Note vide'}), 400
+    now = _clients_now()
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql(
+        'INSERT INTO client_notes (client_id, note, author, created_at) VALUES (%s, %s, %s, %s)',
+        'INSERT INTO client_notes (client_id, note, author, created_at) VALUES (?, ?, ?, ?)'
+    ), (client_id, note, 'CONSEILPREV', now))
+    conn.commit()
+    conn.close()
+    return jsonify({'ok': True, 'created_at': now})
+
+@app.route('/api/clients/contracts', methods=['GET'])
+def clients_contracts_list():
+    """Liste les contrats enregistres d'un client. Reserve CONSEILPREV."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    try:
+        client_id = int(request.args.get('client_id'))
+    except (TypeError, ValueError):
+        return jsonify({'ok': False, 'error': 'client_id invalide'}), 400
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql(
+        'SELECT id, client_id, reference, envelope_total, milestones_count, status, created_at, signed_at FROM raas_contracts WHERE client_id=%s ORDER BY created_at DESC',
+        'SELECT id, client_id, reference, envelope_total, milestones_count, status, created_at, signed_at FROM raas_contracts WHERE client_id=? ORDER BY created_at DESC'
+    ), (client_id,))
+    contracts = [dict(r) for r in cur.fetchall()]
+    conn.close()
+    return jsonify({'ok': True, 'contracts': contracts})
+
+@app.route('/api/clients/contracts', methods=['POST'])
+def clients_contracts_save():
+    """Enregistre un contrat RaaS en base pour un client. Reserve CONSEILPREV.
+    Reference unique RAAS-<client>-<annee>-<seq>. Idempotent sur la reference."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    d = request.get_json(force=True, silent=True) or {}
+    try:
+        client_id = int(d.get('client_id'))
+    except (TypeError, ValueError):
+        return jsonify({'ok': False, 'error': 'client_id invalide'}), 400
+    now = _clients_now()
+    year = datetime.utcnow().year
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql(
+        'SELECT COUNT(*) AS n FROM raas_contracts WHERE client_id=%s',
+        'SELECT COUNT(*) AS n FROM raas_contracts WHERE client_id=?'
+    ), (client_id,))
+    r = cur.fetchone()
+    seq = (dict(r)['n'] if r else 0) + 1
+    reference = 'RAAS-%d-%d-%02d' % (client_id, year, seq)
+    try:
+        envelope = int(d.get('envelope_total') or 0)
+    except (TypeError, ValueError):
+        envelope = 0
+    try:
+        mcount = int(d.get('milestones_count') or 0)
+    except (TypeError, ValueError):
+        mcount = 0
+    content = json.dumps(d.get('content') or {})[:200000]
+    cur.execute(registre_sql(
+        'INSERT INTO raas_contracts (client_id, reference, envelope_total, milestones_count, status, content_json, created_at) VALUES (%s, %s, %s, %s, %s, %s, %s)',
+        'INSERT INTO raas_contracts (client_id, reference, envelope_total, milestones_count, status, content_json, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)'
+    ), (client_id, reference, envelope, mcount, 'enregistre', content, now))
+    conn.commit()
+    conn.close()
+    return jsonify({'ok': True, 'reference': reference, 'created_at': now})
+
+@app.route('/api/clients/invoices', methods=['GET'])
+def clients_invoices_list():
+    """Liste les factures emises d'un client. Reserve CONSEILPREV."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    try:
+        client_id = int(request.args.get('client_id'))
+    except (TypeError, ValueError):
+        return jsonify({'ok': False, 'error': 'client_id invalide'}), 400
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql(
+        'SELECT * FROM raas_invoices WHERE client_id=%s ORDER BY issued_at DESC',
+        'SELECT * FROM raas_invoices WHERE client_id=? ORDER BY issued_at DESC'
+    ), (client_id,))
+    invoices = [dict(r) for r in cur.fetchall()]
+    conn.close()
+    return jsonify({'ok': True, 'invoices': invoices})
+
+@app.route('/api/clients/invoices/issue', methods=['POST'])
+def clients_invoices_issue():
+    """Emet les factures des jalons verifies selon l'echeancier du client, en
+    2 mensualites. Enregistre chaque facture, marque le jalon invoiced, et
+    notifie le client par email (Brevo) si une fiche KYC avec email existe.
+    Reserve CONSEILPREV."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    d = request.get_json(force=True, silent=True) or {}
+    try:
+        client_id = int(d.get('client_id'))
+    except (TypeError, ValueError):
+        return jsonify({'ok': False, 'error': 'client_id invalide'}), 400
+    notify = bool(d.get('notify', True))
+    now = _clients_now()
+    conn = registre_get_db()
+    cur = conn.cursor()
+    # Jalons verifies non encore factures
+    cur.execute(registre_sql(
+        "SELECT * FROM raas_milestones WHERE client_id=%s AND status='verified'",
+        "SELECT * FROM raas_milestones WHERE client_id=? AND status='verified'"
+    ), (client_id,))
+    verified = [dict(r) for r in cur.fetchall()]
+    if not verified:
+        conn.close()
+        return jsonify({'ok': True, 'issued_count': 0, 'invoices': [], 'message': 'Aucun jalon verifie a facturer'})
+    year = datetime.utcnow().year
+    issued = []
+    for m in verified:
+        cur.execute(registre_sql(
+            'SELECT COUNT(*) AS n FROM raas_invoices WHERE client_id=%s',
+            'SELECT COUNT(*) AS n FROM raas_invoices WHERE client_id=?'
+        ), (client_id,))
+        seq = (dict(cur.fetchone())['n'] if True else 0) + 1
+        numero = 'F%d-%d-%03d' % (year, client_id, seq)
+        amount = int(m.get('amount_eur') or 0)
+        half = round(amount / 2)
+        due = [{'echeance': 1, 'montant': half}, {'echeance': 2, 'montant': amount - half}]
+        cur.execute(registre_sql(
+            'INSERT INTO raas_invoices (client_id, numero, milestone_id, amount_eur, installments, status, due_json, issued_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)',
+            'INSERT INTO raas_invoices (client_id, numero, milestone_id, amount_eur, installments, status, due_json, issued_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
+        ), (client_id, numero, m.get('milestone_id'), amount, 2, 'emise', json.dumps(due), now))
+        cur.execute(registre_sql(
+            "UPDATE raas_milestones SET status='invoiced', invoiced_at=%s WHERE client_id=%s AND milestone_id=%s",
+            "UPDATE raas_milestones SET status='invoiced', invoiced_at=? WHERE client_id=? AND milestone_id=?"
+        ), (now, client_id, m.get('milestone_id')))
+        issued.append({'numero': numero, 'label': m.get('label'), 'amount_eur': amount, 'due': due})
+    conn.commit()
+    # Notification email client (best effort, ne bloque pas la facturation)
+    email_sent = False
+    email_error = None
+    if notify:
+        cur.execute(registre_sql(
+            'SELECT raison_sociale, email_contact, representant FROM client_kyc WHERE client_id=%s',
+            'SELECT raison_sociale, email_contact, representant FROM client_kyc WHERE client_id=?'
+        ), (client_id,))
+        kyc = cur.fetchone()
+        kyc = dict(kyc) if kyc else {}
+        to_email = (kyc.get('email_contact') or '').strip()
+        if to_email and '@' in to_email:
+            try:
+                total = sum(i['amount_eur'] for i in issued)
+                lignes = ''.join('<li>%s — %s : %d&#8239;&euro;</li>' % (i['numero'], i['label'], i['amount_eur']) for i in issued)
+                html = ('<p>Bonjour %s,</p>' % (kyc.get('representant') or kyc.get('raison_sociale') or 'Madame, Monsieur')
+                    + '<p>Dans le cadre de votre contrat de tarification RaaS par jalons, '
+                    + 'CONSEILPREV a emis %d facture(s) correspondant aux jalons de conformite recemment verifies :</p>' % len(issued)
+                    + '<ul>' + lignes + '</ul>'
+                    + '<p>Montant total : <strong>%d&#8239;&euro;</strong>, chaque jalon etant echelonne sur deux mensualites egales.</p>' % total
+                    + '<p>Ces jalons ont fait l\'objet d\'une double verification (score Sentinel atteint et validation documentaire).</p>'
+                    + '<p>Cordialement,<br>Christophe CERF — CONSEILPREV — Sentinel AI</p>')
+                res = send_email_smart(to_email, kyc.get('raison_sociale') or 'Client',
+                                       'CONSEILPREV — Emission de facture(s) RaaS', html, tags=['raas-invoice'])
+                email_sent = bool(res if not isinstance(res, tuple) else res[0])
+            except Exception as _e:
+                email_error = str(_e)[:200]
+                logger.error(f"RAAS_INVOICE_EMAIL_FAILED client={client_id} : {_e}")
+        else:
+            email_error = 'Aucun email KYC valide'
+    conn.close()
+    return jsonify({'ok': True, 'issued_count': len(issued), 'invoices': issued,
+                    'email_sent': email_sent, 'email_error': email_error})
 
 @app.route('/invitation/<token>', methods=['GET'])
 def sentauth_invitation_page(token):
