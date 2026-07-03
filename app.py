@@ -4658,16 +4658,33 @@ def clients_erase():
         return jsonify({'ok': False, 'error': 'client_id invalide'}), 400
     if not d.get('confirm'):
         return jsonify({'ok': False, 'error': 'Confirmation requise'}), 400
+    anonymize = bool(d.get('anonymize', True))
     conn = registre_get_db(); cur = conn.cursor()
     deleted = {}
     for tbl in ['client_kyc', 'client_notes', 'client_relances', 'client_lifecycle']:
         cur.execute(registre_sql('DELETE FROM ' + tbl + ' WHERE client_id=%s',
                                  'DELETE FROM ' + tbl + ' WHERE client_id=?'), (client_id,))
         deleted[tbl] = cur.rowcount if cur.rowcount is not None else 0
+    anonymized = False
+    if anonymize:
+        # Anonymisation des coordonnees nominatives conservees dans le compte client,
+        # les factures/contrats restant lies par un identifiant pseudonymise (client_id).
+        anon_nom = 'Client anonymise #%d' % client_id
+        anon_email = 'rgpd-anonymise-%d@invalide.local' % client_id
+        try:
+            cur.execute(registre_sql(
+                'UPDATE clients SET nom_entreprise=%s, email=%s, actif=%s WHERE id=%s',
+                'UPDATE clients SET nom_entreprise=?, email=?, actif=? WHERE id=?'),
+                (anon_nom, anon_email, False if REGISTRE_USE_PG else 0, client_id))
+            anonymized = True
+        except Exception as _e:
+            logger.error(f"RGPD_ANONYMIZE_CLIENT_FAILED client={client_id} : {_e}")
     conn.commit(); conn.close()
-    logger.info(f"RGPD_ERASE client={client_id} deleted={deleted}")
-    return jsonify({'ok': True, 'deleted': deleted,
-                    'note': 'Factures et contrats conserves au titre de l obligation comptable legale (10 ans).'})
+    logger.info(f"RGPD_ERASE client={client_id} deleted={deleted} anonymized={anonymized}")
+    return jsonify({'ok': True, 'deleted': deleted, 'anonymized': anonymized,
+                    'note': 'Donnees de suivi supprimees. Coordonnees nominatives du compte anonymisees. '
+                            'Factures et contrats conserves (lies par identifiant pseudonymise) au titre de '
+                            'l obligation comptable legale de 10 ans (art. L.123-22 C. com.).'})
 
 @app.route('/invitation/<token>', methods=['GET'])
 def sentauth_invitation_page(token):
