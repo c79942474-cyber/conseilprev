@@ -15689,15 +15689,18 @@ window.raasExpertRender = function(clientId){
   if(!box) return;
   box.innerHTML =
     '<div class="raas-expert-tabs" style="display:flex;gap:6px;margin:18px 0 12px;flex-wrap:wrap">'
-    + '<button class="raas-tab-btn active" data-tab="kyc" onclick="raasExpertTab(\'kyc\')">KYC client</button>'
+    + '<button class="raas-tab-btn active" data-tab="suivi" onclick="raasExpertTab(\'suivi\')">\ud83d\udcca Suivi &amp; Relances</button>'
+    + '<button class="raas-tab-btn" data-tab="kyc" onclick="raasExpertTab(\'kyc\')">KYC client</button>'
     + '<button class="raas-tab-btn" data-tab="notes" onclick="raasExpertTab(\'notes\')">Notes</button>'
     + '<button class="raas-tab-btn" data-tab="contracts" onclick="raasExpertTab(\'contracts\')">Contrats</button>'
     + '<button class="raas-tab-btn" data-tab="invoices" onclick="raasExpertTab(\'invoices\')">Factures</button>'
     + '</div>'
-    + '<div id="raas-tab-kyc" class="raas-tab-pane"></div>'
+    + '<div id="raas-tab-suivi" class="raas-tab-pane"></div>'
+    + '<div id="raas-tab-kyc" class="raas-tab-pane" style="display:none"></div>'
     + '<div id="raas-tab-notes" class="raas-tab-pane" style="display:none"></div>'
     + '<div id="raas-tab-contracts" class="raas-tab-pane" style="display:none"></div>'
     + '<div id="raas-tab-invoices" class="raas-tab-pane" style="display:none"></div>';
+  raasSuiviLoad(clientId);
   raasKycLoad(clientId);
   raasNotesLoad(clientId);
   raasContractsLoad(clientId);
@@ -15705,7 +15708,7 @@ window.raasExpertRender = function(clientId){
 };
 
 window.raasExpertTab = function(tab){
-  ['kyc','notes','contracts','invoices'].forEach(function(t){
+  ['suivi','kyc','notes','contracts','invoices'].forEach(function(t){
     var pane=document.getElementById('raas-tab-'+t);
     if(pane) pane.style.display = (t===tab)?'block':'none';
   });
@@ -15716,6 +15719,156 @@ window.raasExpertTab = function(tab){
 
 function raasCid(){ var s=document.getElementById('raas-client-select'); return s?s.value:''; }
 function raasEur(n){ return (n||0).toLocaleString('fr-FR')+'\u202f\u20ac'; }
+
+/* ── SUIVI & RELANCES (tableau de bord) ── */
+window.RAAS_STATUTS = {prospect:'Prospect', onboarding:'Onboarding', actif:'Actif', a_risque:'\u00c0 risque', inactif:'Inactif', clos:'Clos'};
+window.RAAS_SANTES = {a_evaluer:'\u00c0 \u00e9valuer', bonne:'Bonne', moyenne:'Moyenne', fragile:'Fragile'};
+window.RAAS_SANTE_COLOR = {a_evaluer:'var(--muted2)', bonne:'var(--green)', moyenne:'#c98a00', fragile:'var(--accent)'};
+
+window.raasSuiviLoad = function(clientId){
+  var pane=document.getElementById('raas-tab-suivi'); if(!pane) return;
+  pane.innerHTML='<div style="color:var(--muted);font-size:12px;padding:10px">Chargement du tableau de bord…</div>';
+  fetch('/api/clients/dashboard?client_id='+encodeURIComponent(clientId),{credentials:'same-origin'})
+    .then(function(r){return r.json();}).then(function(d){
+      if(!d.ok){ pane.innerHTML='<div style="color:var(--accent);font-size:12px;padding:10px">'+(d.error||'Erreur')+'</div>'; return; }
+      var st=d.status||{};
+      var statut=st.statut||'prospect';
+      var sante=st.sante||'a_evaluer';
+      function eur(n){ return (n||0).toLocaleString('fr-FR')+'\u202f\u20ac'; }
+      // Bandeau KPI
+      var kpis =
+        '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px">'
+        + '<div class="ms-sum-card"><div class="ms-sum-lbl">Factures impay\u00e9es</div><div class="ms-sum-val" style="color:'+(d.unpaid_invoices.length?'var(--accent)':'var(--green)')+'">'+d.unpaid_invoices.length+'</div><div class="ms-sum-sub">'+eur(d.unpaid_total)+'</div></div>'
+        + '<div class="ms-sum-card"><div class="ms-sum-lbl">Relances en attente</div><div class="ms-sum-val">'+d.pending_relances.length+'</div><div class="ms-sum-sub">\u00e0 traiter</div></div>'
+        + '<div class="ms-sum-card"><div class="ms-sum-lbl">Jalons en attente</div><div class="ms-sum-val">'+d.milestones_pending+'</div><div class="ms-sum-sub">sur '+d.milestones_total+'</div></div>'
+        + '<div class="ms-sum-card"><div class="ms-sum-lbl">Dernier contact</div><div class="ms-sum-val">'+(d.last_contact_days!==null?d.last_contact_days+'j':'\u2014')+'</div><div class="ms-sum-sub">'+(d.last_contact_days!==null?'jours':'jamais')+'</div></div>'
+        + '</div>';
+      // Statut & sante (editables)
+      var statOpts=Object.keys(window.RAAS_STATUTS).map(function(k){return '<option value="'+k+'"'+(k===statut?' selected':'')+'>'+window.RAAS_STATUTS[k]+'</option>';}).join('');
+      var santeOpts=Object.keys(window.RAAS_SANTES).map(function(k){return '<option value="'+k+'"'+(k===sante?' selected':'')+'>'+window.RAAS_SANTES[k]+'</option>';}).join('');
+      var statusBar =
+        '<div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;background:var(--bg);border:1px solid var(--rule2);border-radius:8px;padding:12px 14px;margin-bottom:14px">'
+        + '<div><label style="font-size:9px;font-family:var(--mono);text-transform:uppercase;color:var(--muted2);display:block;margin-bottom:3px">Statut client</label><select id="suivi-statut" style="padding:6px 10px;border:1px solid var(--rule2);border-radius:5px;font-size:12px">'+statOpts+'</select></div>'
+        + '<div><label style="font-size:9px;font-family:var(--mono);text-transform:uppercase;color:var(--muted2);display:block;margin-bottom:3px">Sant\u00e9 relation</label><select id="suivi-sante" style="padding:6px 10px;border:1px solid var(--rule2);border-radius:5px;font-size:12px">'+santeOpts+'</select></div>'
+        + '<div><label style="font-size:9px;font-family:var(--mono);text-transform:uppercase;color:var(--muted2);display:block;margin-bottom:3px">Prochaine action</label><input id="suivi-next-label" value="'+(st.next_action_label?String(st.next_action_label).replace(/"/g,'&quot;'):'')+'" placeholder="Ex: appel de suivi" style="padding:6px 10px;border:1px solid var(--rule2);border-radius:5px;font-size:12px;min-width:170px"></div>'
+        + '<div><label style="font-size:9px;font-family:var(--mono);text-transform:uppercase;color:var(--muted2);display:block;margin-bottom:3px">Le</label><input type="date" id="suivi-next-date" value="'+(st.next_action_at?String(st.next_action_at).substring(0,10):'')+'" style="padding:6px 10px;border:1px solid var(--rule2);border-radius:5px;font-size:12px"></div>'
+        + '<button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="raasStatusSave()">Enregistrer le statut</button>'
+        + '<span id="suivi-status-msg" style="font-size:11px;align-self:center"></span>'
+        + '</div>';
+      // Suggestions automatiques
+      var sugg = d.suggestions.length ? '<div style="margin-bottom:14px"><strong style="font-size:12px;display:block;margin-bottom:6px">\ud83d\udca1 Relances sugg\u00e9r\u00e9es</strong>'
+        + d.suggestions.map(function(s){
+            var col=s.priorite==='urgente'?'var(--accent)':(s.priorite==='haute'?'#c98a00':'var(--muted2)');
+            return '<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;border-left:3px solid '+col+';background:var(--bg);padding:8px 12px;margin-bottom:6px;border-radius:4px">'
+              + '<span style="font-size:12px">'+s.objet+'</span>'
+              + '<button class="mat-export-btn" style="padding:3px 10px;font-size:10px" onclick="raasRelanceQuick(\''+s.type+'\',\''+encodeURIComponent(s.objet)+'\',\''+s.priorite+'\',\''+(s.related_ref||'')+'\')">Planifier</button>'
+              + '</div>';
+          }).join('') + '</div>' : '';
+      // Factures impayees avec action "marquer payee" + "relancer"
+      var unpaid = d.unpaid_invoices.length ? '<div style="margin-bottom:14px"><strong style="font-size:12px;display:block;margin-bottom:6px">Factures impay\u00e9es</strong>'
+        + '<table class="ms-table"><thead><tr><th>N\u00b0</th><th>Montant</th><th>\u00c9mise le</th><th>Action</th></tr></thead><tbody>'
+        + d.unpaid_invoices.map(function(i){
+            return '<tr><td>'+i.numero+'</td><td class="ms-amount">'+eur(i.amount_eur)+'</td><td style="font-size:10px">'+String(i.issued_at).substring(0,10)+'</td>'
+              + '<td><button class="mat-export-btn" style="padding:3px 9px;font-size:10px" onclick="raasInvoicePay(\''+i.numero+'\')">Marquer pay\u00e9e</button></td></tr>';
+          }).join('') + '</tbody></table></div>' : '';
+      pane.innerHTML = kpis + statusBar + sugg + unpaid + '<div id="suivi-relances"></div>';
+      raasRelancesLoad(clientId);
+    }).catch(function(){ pane.innerHTML='<div style="color:var(--accent);font-size:12px;padding:10px">Erreur de chargement du tableau de bord.</div>'; });
+};
+
+window.raasStatusSave = function(){
+  var cid=raasCid(); if(!cid) return;
+  var msg=document.getElementById('suivi-status-msg');
+  var body={client_id:parseInt(cid,10),
+    statut:(document.getElementById('suivi-statut')||{}).value,
+    sante:(document.getElementById('suivi-sante')||{}).value,
+    next_action_label:(document.getElementById('suivi-next-label')||{}).value,
+    next_action_at:(document.getElementById('suivi-next-date')||{}).value};
+  if(msg){ msg.style.color='var(--muted)'; msg.textContent='Enregistrement…'; }
+  fetch('/api/clients/status',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+    .then(function(r){return r.json();}).then(function(d){
+      if(msg){ msg.style.color=d.ok?'var(--green)':'var(--accent)'; msg.textContent=d.ok?'Statut enregistr\u00e9':(d.error||'Erreur'); }
+    }).catch(function(){ if(msg){ msg.style.color='var(--accent)'; msg.textContent='Erreur r\u00e9seau.'; } });
+};
+
+window.raasInvoicePay = function(numero){
+  var cid=raasCid(); if(!cid) return;
+  if(!confirm('Marquer la facture '+numero+' comme pay\u00e9e ?')) return;
+  fetch('/api/clients/invoices/pay',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({client_id:parseInt(cid,10),numero:numero})})
+    .then(function(r){return r.json();}).then(function(d){ if(d.ok){ raasSuiviLoad(cid); if(window.raasInvoicesLoad) raasInvoicesLoad(cid); } });
+};
+
+window.raasRelanceQuick = function(type,objetEnc,priorite,ref){
+  var cid=raasCid(); if(!cid) return;
+  var objet=decodeURIComponent(objetEnc);
+  var body={client_id:parseInt(cid,10),type:type,objet:objet,priorite:priorite,related_ref:ref||'',
+            due_date:new Date(Date.now()+3*86400000).toISOString().substring(0,10)};
+  fetch('/api/clients/relances',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+    .then(function(r){return r.json();}).then(function(d){ if(d.ok) raasSuiviLoad(cid); });
+};
+
+window.raasRelancesLoad = function(clientId){
+  var box=document.getElementById('suivi-relances'); if(!box) return;
+  fetch('/api/clients/relances?client_id='+encodeURIComponent(clientId),{credentials:'same-origin'})
+    .then(function(r){return r.json();}).then(function(d){
+      var rel=(d.ok&&d.relances)?d.relances:[];
+      var TYPES={email:'Email',appel:'Appel',rdv:'RDV',relance_facture:'Relance facture',relance_jalon:'Relance jalon',autre:'Autre'};
+      var PRIOC={basse:'var(--muted2)',normale:'var(--ink2)',haute:'#c98a00',urgente:'var(--accent)'};
+      var rows = rel.length ? rel.map(function(r){
+        var done=r.status!=='planifiee';
+        var col=PRIOC[r.priorite]||'var(--ink2)';
+        return '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;border-left:3px solid '+col+';background:'+(done?'var(--bg2)':'var(--white)')+';border:1px solid var(--rule2);border-radius:5px;padding:9px 12px;margin-bottom:7px'+(done?';opacity:.6':'')+'">'
+          + '<div><div style="font-size:12px;font-weight:500'+(done?';text-decoration:line-through':'')+'">'+String(r.objet).replace(/</g,"&lt;")+'</div>'
+          + '<div style="font-size:9px;color:var(--muted2);margin-top:3px">'+(TYPES[r.type]||r.type)+' \u00b7 '+r.priorite+(r.due_date?' \u00b7 \u00e9ch\u00e9ance '+String(r.due_date).substring(0,10):'')+(r.status!=='planifiee'?' \u00b7 '+r.status:'')+'</div>'
+          + (r.notes?'<div style="font-size:11px;color:var(--ink2);margin-top:4px;white-space:pre-wrap">'+String(r.notes).replace(/</g,"&lt;")+'</div>':'')+'</div>'
+          + (done?'':'<div style="display:flex;gap:5px;flex-shrink:0"><button class="mat-export-btn" style="padding:3px 9px;font-size:10px" onclick="raasRelanceComplete('+r.id+',\'faite\')">\u2713 Faite</button><button class="mat-export-btn" style="padding:3px 9px;font-size:10px" onclick="raasRelanceComplete('+r.id+',\'annulee\')">Annuler</button></div>')
+          + '</div>';
+      }).join('') : '<div style="color:var(--muted2);font-size:12px;padding:8px">Aucune relance enregistr\u00e9e.</div>';
+      box.innerHTML =
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin:6px 0 10px"><strong style="font-size:13px">Relances</strong>'
+        + '<button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="raasRelanceForm()">+ Nouvelle relance</button></div>'
+        + '<div id="suivi-relance-form"></div>'
+        + rows;
+    }).catch(function(){ box.innerHTML='<div style="color:var(--accent);font-size:12px;padding:8px">Erreur de chargement des relances.</div>'; });
+};
+
+window.raasRelanceForm = function(){
+  var box=document.getElementById('suivi-relance-form'); if(!box) return;
+  if(box.innerHTML){ box.innerHTML=''; return; }
+  box.innerHTML =
+    '<div style="background:var(--bg);border:1px solid var(--rule2);border-radius:6px;padding:12px;margin-bottom:10px">'
+    + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">'
+    + '<input id="rel-objet" placeholder="Objet de la relance" style="flex:2;min-width:200px;padding:7px 10px;border:1px solid var(--rule2);border-radius:5px;font-size:12px">'
+    + '<select id="rel-type" style="padding:7px 10px;border:1px solid var(--rule2);border-radius:5px;font-size:12px"><option value="email">Email</option><option value="appel">Appel</option><option value="rdv">RDV</option><option value="relance_facture">Relance facture</option><option value="relance_jalon">Relance jalon</option><option value="autre">Autre</option></select>'
+    + '<select id="rel-prio" style="padding:7px 10px;border:1px solid var(--rule2);border-radius:5px;font-size:12px"><option value="basse">Basse</option><option value="normale" selected>Normale</option><option value="haute">Haute</option><option value="urgente">Urgente</option></select>'
+    + '<input type="date" id="rel-date" style="padding:7px 10px;border:1px solid var(--rule2);border-radius:5px;font-size:12px">'
+    + '</div>'
+    + '<textarea id="rel-notes" placeholder="Notes (facultatif)" style="width:100%;min-height:50px;padding:8px;border:1px solid var(--rule2);border-radius:5px;font-size:12px;font-family:inherit;margin-bottom:8px"></textarea>'
+    + '<button class="mat-export-btn" style="background:var(--accent);color:#fff" onclick="raasRelanceAdd()">Enregistrer la relance</button>'
+    + '<span id="rel-msg" style="font-size:11px;margin-left:10px"></span></div>';
+};
+
+window.raasRelanceAdd = function(){
+  var cid=raasCid(); if(!cid) return;
+  var msg=document.getElementById('rel-msg');
+  var objet=(document.getElementById('rel-objet')||{}).value||'';
+  if(!objet.trim()){ if(msg){ msg.style.color='var(--accent)'; msg.textContent='Objet requis.'; } return; }
+  var body={client_id:parseInt(cid,10),objet:objet,
+    type:(document.getElementById('rel-type')||{}).value,
+    priorite:(document.getElementById('rel-prio')||{}).value,
+    due_date:(document.getElementById('rel-date')||{}).value,
+    notes:(document.getElementById('rel-notes')||{}).value};
+  fetch('/api/clients/relances',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+    .then(function(r){return r.json();}).then(function(d){
+      if(d.ok){ raasRelancesLoad(cid); } else if(msg){ msg.style.color='var(--accent)'; msg.textContent=d.error||'Erreur'; }
+    }).catch(function(){ if(msg){ msg.style.color='var(--accent)'; msg.textContent='Erreur r\u00e9seau.'; } });
+};
+
+window.raasRelanceComplete = function(id,status){
+  var cid=raasCid(); if(!cid) return;
+  fetch('/api/clients/relances/complete',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({client_id:parseInt(cid,10),id:id,status:status})})
+    .then(function(r){return r.json();}).then(function(d){ if(d.ok){ raasRelancesLoad(cid); raasSuiviLoad(cid); } });
+};
 
 /* ── KYC ── */
 window.raasKycLoad = function(clientId){
