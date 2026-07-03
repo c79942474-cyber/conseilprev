@@ -15769,7 +15769,7 @@ window.raasSuiviLoad = function(clientId){
         + '<table class="ms-table"><thead><tr><th>N\u00b0</th><th>Montant</th><th>\u00c9mise le</th><th>Action</th></tr></thead><tbody>'
         + d.unpaid_invoices.map(function(i){
             return '<tr><td>'+i.numero+'</td><td class="ms-amount">'+eur(i.amount_eur)+'</td><td style="font-size:10px">'+String(i.issued_at).substring(0,10)+'</td>'
-              + '<td><button class="mat-export-btn" style="padding:3px 9px;font-size:10px" onclick="raasInvoicePay(\''+i.numero+'\')">Marquer pay\u00e9e</button></td></tr>';
+              + '<td style="display:flex;gap:5px"><button class="mat-export-btn" style="padding:3px 9px;font-size:10px" onclick="raasInvoiceRemind(\''+i.numero+'\')">\u2709 Relancer</button><button class="mat-export-btn" style="padding:3px 9px;font-size:10px" onclick="raasInvoicePay(\''+i.numero+'\')">Marquer pay\u00e9e</button></td></tr>';
           }).join('') + '</tbody></table></div>' : '';
       pane.innerHTML = kpis + statusBar + sugg + unpaid + '<div id="suivi-relances"></div>';
       raasRelancesLoad(clientId);
@@ -15796,6 +15796,18 @@ window.raasInvoicePay = function(numero){
   if(!confirm('Marquer la facture '+numero+' comme pay\u00e9e ?')) return;
   fetch('/api/clients/invoices/pay',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({client_id:parseInt(cid,10),numero:numero})})
     .then(function(r){return r.json();}).then(function(d){ if(d.ok){ raasSuiviLoad(cid); if(window.raasInvoicesLoad) raasInvoicesLoad(cid); } });
+};
+
+window.raasInvoiceRemind = function(numero){
+  var cid=raasCid(); if(!cid) return;
+  if(!confirm('Envoyer un email de rappel de paiement au client pour la facture '+numero+' ?')) return;
+  fetch('/api/clients/invoices/remind',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({client_id:parseInt(cid,10),numero:numero})})
+    .then(function(r){return r.json();}).then(function(d){
+      if(d.ok && d.email_sent){ alert('Rappel envoy\u00e9 \u00e0 '+d.to+'.'); }
+      else if(d.ok && !d.email_sent){ alert('Rappel non envoy\u00e9 : '+(d.email_error||d.message||'v\u00e9rifiez l\'email KYC du client')+'. La relance a \u00e9t\u00e9 enregistr\u00e9e.'); }
+      else { alert(d.error||'Erreur'); }
+      raasSuiviLoad(cid);
+    }).catch(function(){ alert('Erreur r\u00e9seau.'); });
 };
 
 window.raasRelanceQuick = function(type,objetEnc,priorite,ref){
