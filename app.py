@@ -3975,7 +3975,7 @@ def clients_kyc_save():
         cur.execute('UPDATE client_kyc SET ' + setclause + ' WHERE client_id=' + ('%s' if REGISTRE_USE_PG else '?'),
                     tuple(vals) + (status, now, client_id))
     else:
-        ph = ', '.join(['%s' if REGISTRE_USE_PG else '?'] * (len(cols) + 3))
+        ph = ', '.join(['%s' if REGISTRE_USE_PG else '?'] * (len(cols) + 2))
         cur.execute('INSERT INTO client_kyc (client_id, ' + ', '.join(cols) + ', kyc_status, updated_at) VALUES (' + ('%s' if REGISTRE_USE_PG else '?') + ', ' + ph + ')',
                     (client_id,) + tuple(vals) + (status, now))
     conn.commit()
