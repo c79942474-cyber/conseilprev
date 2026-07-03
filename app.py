@@ -4465,6 +4465,91 @@ def clients_dashboard():
                     'last_contact_days': last_contact_days,
                     'suggestions': suggestions})
 
+@app.route('/api/clients/invoices/remind', methods=['POST'])
+def clients_invoices_remind():
+    """Envoie un email de rappel de paiement au client pour une facture donnee
+    (ou toutes les factures impayees si numero absent), via Brevo. Enregistre une
+    relance de type relance_facture (status faite) et met a jour le dernier contact.
+    Reserve CONSEILPREV. La facturation/relance n'est pas bloquee par un echec email."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    d = request.get_json(force=True, silent=True) or {}
+    try:
+        client_id = int(d.get('client_id'))
+    except (TypeError, ValueError):
+        return jsonify({'ok': False, 'error': 'client_id invalide'}), 400
+    numero = (str(d.get('numero', '')).strip() or None)
+    now = _clients_now()
+    conn = registre_get_db(); cur = conn.cursor()
+    # Coordonnees client (KYC)
+    cur.execute(registre_sql('SELECT raison_sociale, email_contact, representant FROM client_kyc WHERE client_id=%s',
+                             'SELECT raison_sociale, email_contact, representant FROM client_kyc WHERE client_id=?'), (client_id,))
+    kyc = cur.fetchone(); kyc = dict(kyc) if kyc else {}
+    to_email = (kyc.get('email_contact') or '').strip()
+    if not to_email or '@' not in to_email:
+        conn.close()
+        return jsonify({'ok': False, 'error': 'Aucun email KYC valide pour ce client'}), 400
+    # Factures concernees
+    if numero:
+        cur.execute(registre_sql("SELECT * FROM raas_invoices WHERE client_id=%s AND numero=%s AND status!='payee'",
+                                 "SELECT * FROM raas_invoices WHERE client_id=? AND numero=? AND status!='payee'"), (client_id, numero))
+    else:
+        cur.execute(registre_sql("SELECT * FROM raas_invoices WHERE client_id=%s AND status!='payee' ORDER BY issued_at ASC",
+                                 "SELECT * FROM raas_invoices WHERE client_id=? AND status!='payee' ORDER BY issued_at ASC"), (client_id,))
+    factures = [dict(r) for r in cur.fetchall()]
+    if not factures:
+        conn.close()
+        return jsonify({'ok': True, 'email_sent': False, 'message': 'Aucune facture impayee a relancer'})
+    # Construction de l'email (identite CONSEILPREV / Sentinel)
+    total_ht = sum(f.get('amount_eur', 0) for f in factures)
+    tva = round(total_ht * 0.20)
+    ttc = total_ht + tva
+    lignes = ''.join('<li>%s \u2014 %d&#8239;&euro; HT (\u00e9mise le %s)</li>' % (
+        f.get('numero'), f.get('amount_eur', 0), str(f.get('issued_at', ''))[:10]) for f in factures)
+    dest = kyc.get('representant') or kyc.get('raison_sociale') or 'Madame, Monsieur'
+    html = ('<p>Bonjour %s,</p>' % dest
+        + '<p>Sauf erreur ou r\u00e8glement r\u00e9cent de votre part, nous constatons que '
+        + ('la facture suivante demeure' if len(factures) == 1 else 'les factures suivantes demeurent')
+        + ' en attente de paiement :</p>'
+        + '<ul>' + lignes + '</ul>'
+        + '<p>Total : <strong>%d&#8239;&euro; HT</strong>, soit <strong>%d&#8239;&euro; TTC</strong> (TVA 20&#8239;%%).</p>' % (total_ht, ttc)
+        + '<p>Nous vous remercions de bien vouloir proc\u00e9der au r\u00e8glement \u00e0 r\u00e9ception, '
+        + 'selon l\'\u00e9ch\u00e9ancier contractuel. Pass\u00e9 le d\u00e9lai, des p\u00e9nalit\u00e9s de retard '
+        + '(trois fois le taux d\'int\u00e9r\u00eat l\u00e9gal) et une indemnit\u00e9 forfaitaire de recouvrement '
+        + 'de 40&#8239;&euro; seraient applicables (articles L.441-10 et D.441-5 du Code de commerce).</p>'
+        + '<p>Pour toute question ou si le r\u00e8glement a d\u00e9j\u00e0 \u00e9t\u00e9 effectu\u00e9, '
+        + 'n\'h\u00e9sitez pas \u00e0 nous contacter.</p>'
+        + '<p>Cordialement,<br>Christophe CERF<br>CONSEILPREV \u2014 Sentinel AI<br>'
+        + '19 rue Auguste Chabri\u00e8res, 75015 Paris<br>christophe.cerf@outlook.com</p>')
+    email_sent = False
+    email_error = None
+    try:
+        res = send_email_smart(to_email, kyc.get('raison_sociale') or 'Client',
+                               'CONSEILPREV \u2014 Rappel de paiement', html, tags=['raas-reminder'])
+        email_sent = bool(res[0] if isinstance(res, tuple) else res)
+    except Exception as _e:
+        email_error = str(_e)[:200]
+        logger.error(f"RAAS_REMINDER_EMAIL_FAILED client={client_id} : {_e}")
+    # Enregistrer la relance (tracabilite)
+    objet = ('Rappel de paiement \u2014 facture %s' % numero) if numero else ('Rappel de paiement \u2014 %d facture(s)' % len(factures))
+    cur.execute(registre_sql(
+        'INSERT INTO client_relances (client_id, type, objet, canal, priorite, due_date, status, notes, related_ref, created_at, done_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
+        'INSERT INTO client_relances (client_id, type, objet, canal, priorite, due_date, status, notes, related_ref, created_at, done_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'),
+        (client_id, 'relance_facture', objet, 'email', 'haute', None,
+         'faite' if email_sent else 'planifiee',
+         ('Email envoye a ' + to_email) if email_sent else ('Echec envoi : ' + (email_error or 'inconnu')),
+         numero, now, now if email_sent else None))
+    # Dernier contact
+    if email_sent:
+        cur.execute(registre_sql('SELECT client_id FROM client_lifecycle WHERE client_id=%s',
+                                 'SELECT client_id FROM client_lifecycle WHERE client_id=?'), (client_id,))
+        if cur.fetchone():
+            cur.execute(registre_sql('UPDATE client_lifecycle SET last_contact_at=%s, updated_at=%s WHERE client_id=%s',
+                                     'UPDATE client_lifecycle SET last_contact_at=?, updated_at=? WHERE client_id=?'), (now, now, client_id))
+    conn.commit(); conn.close()
+    return jsonify({'ok': True, 'email_sent': email_sent, 'email_error': email_error,
+                    'invoices_count': len(factures), 'to': to_email})
+
 @app.route('/invitation/<token>', methods=['GET'])
 def sentauth_invitation_page(token):
     conn = registre_get_db()
