@@ -4550,6 +4550,125 @@ def clients_invoices_remind():
     return jsonify({'ok': True, 'email_sent': email_sent, 'email_error': email_error,
                     'invoices_count': len(factures), 'to': to_email})
 
+@app.route('/api/clients/portfolio', methods=['GET'])
+def clients_portfolio():
+    """Vue portefeuille multiclient : pour chaque client, agrege statut/sante,
+    factures impayees (nombre + total), relances en attente, jalons en attente,
+    et jours depuis le dernier contact. Reserve CONSEILPREV."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute('SELECT id, nom_entreprise, email FROM clients ORDER BY nom_entreprise ASC')
+    clients = [dict(r) for r in cur.fetchall()]
+    portfolio = []
+    tot_unpaid_amount = 0
+    tot_unpaid_count = 0
+    tot_pending_rel = 0
+    for c in clients:
+        cid = c['id']
+        cur.execute(registre_sql("SELECT amount_eur FROM raas_invoices WHERE client_id=%s AND status!='payee'",
+                                 "SELECT amount_eur FROM raas_invoices WHERE client_id=? AND status!='payee'"), (cid,))
+        unpaid = [dict(r) for r in cur.fetchall()]
+        unpaid_amt = sum(u.get('amount_eur', 0) for u in unpaid)
+        cur.execute(registre_sql("SELECT COUNT(*) AS n FROM client_relances WHERE client_id=%s AND status='planifiee'",
+                                 "SELECT COUNT(*) AS n FROM client_relances WHERE client_id=? AND status='planifiee'"), (cid,))
+        pending = dict(cur.fetchone())['n']
+        cur.execute(registre_sql("SELECT COUNT(*) AS n FROM raas_milestones WHERE client_id=%s AND status='pending'",
+                                 "SELECT COUNT(*) AS n FROM raas_milestones WHERE client_id=? AND status='pending'"), (cid,))
+        ms_pending = dict(cur.fetchone())['n']
+        cur.execute(registre_sql('SELECT statut, sante, last_contact_at, next_action_at, next_action_label FROM client_lifecycle WHERE client_id=%s',
+                                 'SELECT statut, sante, last_contact_at, next_action_at, next_action_label FROM client_lifecycle WHERE client_id=?'), (cid,))
+        lc = cur.fetchone(); lc = dict(lc) if lc else {}
+        last_days = _days_since(lc.get('last_contact_at'))
+        portfolio.append({
+            'id': cid, 'nom': c.get('nom_entreprise') or ('Client #' + str(cid)),
+            'statut': lc.get('statut') or 'prospect', 'sante': lc.get('sante') or 'a_evaluer',
+            'unpaid_count': len(unpaid), 'unpaid_amount': unpaid_amt,
+            'pending_relances': pending, 'milestones_pending': ms_pending,
+            'last_contact_days': last_days,
+            'next_action_at': lc.get('next_action_at'), 'next_action_label': lc.get('next_action_label')
+        })
+        tot_unpaid_amount += unpaid_amt
+        tot_unpaid_count += len(unpaid)
+        tot_pending_rel += pending
+    conn.close()
+    # Tri : priorite aux clients avec impayes puis relances
+    portfolio.sort(key=lambda x: (-x['unpaid_amount'], -x['pending_relances']))
+    return jsonify({'ok': True, 'portfolio': portfolio,
+                    'totals': {'clients': len(clients), 'unpaid_count': tot_unpaid_count,
+                               'unpaid_amount': tot_unpaid_amount, 'pending_relances': tot_pending_rel}})
+
+@app.route('/api/clients/portfolio/digest', methods=['POST'])
+def clients_portfolio_digest():
+    """Synthese de relance : envoie a CONSEILPREV un recapitulatif des actions a
+    mener (impayes, relances en attente, prochaines actions). Reserve CONSEILPREV."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute('SELECT id, nom_entreprise FROM clients ORDER BY nom_entreprise ASC')
+    clients = [dict(r) for r in cur.fetchall()]
+    lignes_imp = []
+    lignes_rel = []
+    tot_imp = 0
+    for c in clients:
+        cid = c['id']; nom = c.get('nom_entreprise') or ('Client #' + str(cid))
+        cur.execute(registre_sql("SELECT numero, amount_eur, issued_at FROM raas_invoices WHERE client_id=%s AND status!='payee'",
+                                 "SELECT numero, amount_eur, issued_at FROM raas_invoices WHERE client_id=? AND status!='payee'"), (cid,))
+        for u in [dict(r) for r in cur.fetchall()]:
+            age = _days_since(u.get('issued_at'))
+            tot_imp += u.get('amount_eur', 0)
+            lignes_imp.append('<li>%s \u2014 %s : %d&#8239;&euro; HT%s</li>' % (
+                nom, u.get('numero'), u.get('amount_eur', 0),
+                (' (depuis %d j)' % age) if age is not None else ''))
+        cur.execute(registre_sql("SELECT objet, priorite, due_date FROM client_relances WHERE client_id=%s AND status='planifiee'",
+                                 "SELECT objet, priorite, due_date FROM client_relances WHERE client_id=? AND status='planifiee'"), (cid,))
+        for r in [dict(x) for x in cur.fetchall()]:
+            lignes_rel.append('<li>%s \u2014 %s (%s%s)</li>' % (
+                nom, r.get('objet'), r.get('priorite'),
+                (', \u00e9ch. ' + str(r.get('due_date'))[:10]) if r.get('due_date') else ''))
+    conn.close()
+    html = ('<p>Synth\u00e8se de suivi CONSEILPREV \u2014 Sentinel AI</p>'
+        + '<h3>Factures impay\u00e9es (%d&#8239;&euro; HT au total)</h3>' % tot_imp
+        + ('<ul>' + ''.join(lignes_imp) + '</ul>' if lignes_imp else '<p>Aucune facture impay\u00e9e.</p>')
+        + '<h3>Relances en attente</h3>'
+        + ('<ul>' + ''.join(lignes_rel) + '</ul>' if lignes_rel else '<p>Aucune relance en attente.</p>')
+        + '<p style="color:#888;font-size:12px">Synth\u00e8se g\u00e9n\u00e9r\u00e9e automatiquement par Sentinel AI.</p>')
+    email_sent = False; email_error = None
+    try:
+        res = send_email_smart(ADMIN_EMAIL, 'CONSEILPREV', 'CONSEILPREV \u2014 Synth\u00e8se de suivi client', html, tags=['portfolio-digest'])
+        email_sent = bool(res[0] if isinstance(res, tuple) else res)
+    except Exception as _e:
+        email_error = str(_e)[:200]
+        logger.error(f"PORTFOLIO_DIGEST_EMAIL_FAILED : {_e}")
+    return jsonify({'ok': True, 'email_sent': email_sent, 'email_error': email_error,
+                    'unpaid_lines': len(lignes_imp), 'relance_lines': len(lignes_rel), 'to': ADMIN_EMAIL})
+
+@app.route('/api/clients/erase', methods=['POST'])
+def clients_erase():
+    """RGPD \u2014 droit a l'effacement (art. 17 RGPD). Supprime les donnees
+    personnelles d'un client : KYC, notes, relances, cycle de vie. Les factures et
+    contrats sont CONSERVES au titre de l'obligation legale comptable (art. L.123-22
+    C. com. \u2014 10 ans) mais anonymisables sur demande. Reserve CONSEILPREV."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    d = request.get_json(force=True, silent=True) or {}
+    try:
+        client_id = int(d.get('client_id'))
+    except (TypeError, ValueError):
+        return jsonify({'ok': False, 'error': 'client_id invalide'}), 400
+    if not d.get('confirm'):
+        return jsonify({'ok': False, 'error': 'Confirmation requise'}), 400
+    conn = registre_get_db(); cur = conn.cursor()
+    deleted = {}
+    for tbl in ['client_kyc', 'client_notes', 'client_relances', 'client_lifecycle']:
+        cur.execute(registre_sql('DELETE FROM ' + tbl + ' WHERE client_id=%s',
+                                 'DELETE FROM ' + tbl + ' WHERE client_id=?'), (client_id,))
+        deleted[tbl] = cur.rowcount if cur.rowcount is not None else 0
+    conn.commit(); conn.close()
+    logger.info(f"RGPD_ERASE client={client_id} deleted={deleted}")
+    return jsonify({'ok': True, 'deleted': deleted,
+                    'note': 'Factures et contrats conserves au titre de l obligation comptable legale (10 ans).'})
+
 @app.route('/invitation/<token>', methods=['GET'])
 def sentauth_invitation_page(token):
     conn = registre_get_db()
