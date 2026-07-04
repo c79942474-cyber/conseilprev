@@ -1696,6 +1696,23 @@ textarea.form-el{min-height:86px;resize:vertical}
 .raas-tab-btn:hover{background:var(--bg2);color:var(--ink2)}
 .raas-tab-btn.active{background:var(--ink);color:#fff;border-color:var(--ink)}
 .raas-tab-pane{background:var(--white);border:1px solid var(--rule);border-radius:8px;padding:16px}
+
+/* ══ CARTOGRAPHIE DES CAS D'USAGE ══ */
+.carto-step{display:flex;align-items:center;gap:7px;padding:8px 14px;border:1px solid var(--rule2);border-radius:20px;font-size:12px;color:var(--muted2);background:var(--bg)}
+.carto-step.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.carto-num{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.2);font-size:10px;font-weight:600}
+.carto-step:not(.on) .carto-num{background:var(--rule2);color:var(--ink2)}
+.carto-lbl{font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted2);display:block;margin-bottom:5px}
+.carto-select{width:100%;padding:8px 11px;border:1px solid var(--rule2);border-radius:6px;font-size:13px;background:var(--white)}
+.carto-chip{padding:5px 12px;border:1px solid var(--rule2);border-radius:16px;font-size:11px;cursor:pointer;background:var(--white);color:var(--ink2);user-select:none}
+.carto-chip.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.carto-uc-card{border:1px solid var(--rule2);border-radius:10px;padding:14px;background:var(--white);transition:box-shadow .15s;cursor:pointer;position:relative}
+.carto-uc-card:hover{box-shadow:0 3px 14px rgba(0,0,0,.07)}
+.carto-uc-card.sel{border-color:var(--accent);background:#fdf6f4}
+.carto-fam{display:inline-block;font-size:9px;font-family:var(--mono);padding:2px 7px;border-radius:10px;font-weight:600}
+.carto-fam.LLM{background:rgba(184,50,34,.12);color:var(--accent)}
+.carto-fam.ML{background:rgba(45,122,71,.14);color:var(--green)}
+.carto-fam.RPA{background:rgba(201,162,39,.18);color:#8a6d00}
 </style>
 
 </head>
@@ -1744,7 +1761,8 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-item" onclick="go('equipe',this,'ÉQUIPE & FORMATION','Équipe')" title="Espace de collaboration pour l equipe en charge du programme de conformite IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></span>Espace équipe</div>
     <div class="sb-item" onclick="go('training',this,'ÉQUIPE & FORMATION','Hub Training')" title="Modules de formation sur l EU AI Act, les 8 piliers et la gouvernance IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></span>Hub Training</div>
     <div class="sb-section">Business</div>
-    <div class="sb-item" onclick="go('benchmark',this,'BUSINESS','Benchmark sectoriel')" title="Comparez votre niveau de conformite a celui d autres acteurs de votre secteur."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>Benchmark</div>
+    <div class="sb-item" onclick="go('carto-uc',this,'BUSINESS','Cartographie des cas d\u2019usage IA')" title="Identifier, qualifier et prioriser les cas d usage IA a fort impact metier (achats, finance, supply chain, operations, relation client)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>Cartographie des cas d’usage</div>
+<div class="sb-item" onclick="go('benchmark',this,'BUSINESS','Benchmark sectoriel')" title="Comparez votre niveau de conformite a celui d autres acteurs de votre secteur."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>Benchmark</div>
     <div class="sb-item" onclick="go('pricing',this,'BUSINESS','Tarification par résultats')" title="Simulateur de modele commercial hybride RaaS (resultats) vs SaaS classique."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2v2M12 20v2"/><path d="M5 7a3 3 0 0 1 3-3h8.5L20 8.5 16.5 12 20 15.5 16.5 19H8a3 3 0 0 1-3-3"/><path d="M9 9h4M9 14h4"/></svg></span>Tarification résultats</div>
     <div class="sb-section">Administration</div>
     <div class="sb-item" onclick="go('clients',this,'ADMINISTRATION','Gestion des clients')" title="Creer et gerer les acces clients externes a Sentinel AI (reserve a CONSEILPREV)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><circle cx="19" cy="8" r="2.5"/><path d="M17.5 21v-1a3 3 0 0 0 .5-1.7"/><path d="M19 14.5a3.5 3.5 0 0 1 3.5 3.5v3"/></svg></span>Gestion des clients</div>
@@ -2829,6 +2847,70 @@ textarea.form-el{min-height:86px;resize:vertical}
   </div>
 
   <div id="rag-doc-list"></div>
+</div>
+
+<div class="page" id="p-carto-uc">
+  <span class="eyebrow">Business — Valeur métier</span>
+  <h1 class="page-title">Cartographie des cas d’usage IA</h1>
+  <p class="page-intro">Identifier, qualifier et prioriser les cas d’usage IA à fort impact métier pour les organisations industrielles. Un parcours guidé en trois temps : cibler le secteur et les processus, explorer les cas d’usage pertinents, puis constituer une liste courte à qualifier.</p>
+
+  <div class="carto-steps" style="display:flex;gap:8px;margin:18px 0;flex-wrap:wrap">
+    <div class="carto-step on" id="carto-step-1"><span class="carto-num">1</span> Cibler</div>
+    <div class="carto-step" id="carto-step-2"><span class="carto-num">2</span> Explorer</div>
+    <div class="carto-step" id="carto-step-3"><span class="carto-num">3</span> Prioriser</div>
+  </div>
+
+  <!-- Étape 1 : Cibler -->
+  <div class="carto-panel on" id="carto-panel-1">
+    <div class="card" style="padding:18px">
+      <h3 style="margin-top:0">Étape 1 — Cibler le contexte industriel</h3>
+      <p style="color:var(--muted2);font-size:13px">Sélectionnez le secteur et, si vous le souhaitez, les processus métiers prioritaires. La cartographie s’adapte à votre choix.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:14px">
+        <div style="flex:1;min-width:220px">
+          <label class="carto-lbl">Secteur industriel</label>
+          <select id="carto-secteur" class="carto-select">
+            <option value="">Tous secteurs</option>
+            <option>Énergie</option><option>Oil &amp; gas</option><option>Manufacturing</option>
+            <option>Transport</option><option>Distribution</option><option>Immobilier</option>
+          </select>
+        </div>
+        <div style="flex:2;min-width:260px">
+          <label class="carto-lbl">Processus métiers (facultatif)</label>
+          <div id="carto-proc-filter" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px"></div>
+        </div>
+      </div>
+      <div style="margin-top:18px">
+        <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="cartoGoStep(2)">Explorer les cas d’usage →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Étape 2 : Explorer -->
+  <div class="carto-panel" id="carto-panel-2" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
+      <h3 style="margin:0">Étape 2 — Explorer et sélectionner</h3>
+      <div style="font-size:12px;color:var(--muted2)"><span id="carto-count">0</span> cas d’usage · <span id="carto-selected-count">0</span> sélectionné(s)</div>
+    </div>
+    <div id="carto-catalog" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px"></div>
+    <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="mat-export-btn" onclick="cartoGoStep(1)">← Revenir</button>
+      <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="cartoGoStep(3)">Constituer la liste courte →</button>
+    </div>
+  </div>
+
+  <!-- Étape 3 : Prioriser -->
+  <div class="carto-panel" id="carto-panel-3" style="display:none">
+    <h3 style="margin-top:0">Étape 3 — Liste courte à qualifier</h3>
+    <p style="color:var(--muted2);font-size:13px">Les cas retenus ci-dessous constituent votre liste courte. Exportez-la pour la qualifier (impact, faisabilité, données, risque) et la prioriser.</p>
+    <div id="carto-shortlist"></div>
+    <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="mat-export-btn" onclick="cartoGoStep(2)">← Modifier la sélection</button>
+      <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="cartoExport()">?? Exporter la liste courte (PDF)</button>
+    </div>
+    <div style="margin-top:14px;padding:12px 14px;background:var(--bg);border:1px solid var(--rule2);border-radius:8px;font-size:12px;color:var(--muted2)">
+      Prochaine étape du parcours : qualifier chaque cas retenu (scoring pondéré) puis estimer les résultats mesurables. Chaque cas prioritaire pourra être rattaché à un jalon de conformité AI Act dans le module RaaS, reliant la valeur métier à la trajectoire de conformité.
+    </div>
+  </div>
 </div>
 
 <div class="page" id="p-clients">
@@ -5118,6 +5200,7 @@ var PAGE_META = {
   templates:{section:'DOCUMENTER & PROUVER',      label:'Documentation & Modèles'},
   rag:{section:'DOCUMENTER & PROUVER',                label:'Base de connaissance'},
   clients:{section:'ADMINISTRATION',            label:'Gestion des clients'},
+  'carto-uc':{section:'BUSINESS', label:'Cartographie des cas d\u2019usage IA'},
   'fiche-eu': {section:'JURIDICTION', label:'Union européenne'},
   'fiche-de': {section:'JURIDICTION', label:'Allemagne'},
   'fiche-fr': {section:'JURIDICTION', label:'France'},
@@ -16249,6 +16332,139 @@ window.raasRgpdErase = function(clientId){
       else { alert(d.error||'Erreur'); }
     }).catch(function(){ alert('Erreur r\u00e9seau.'); });
 };
+
+/* ══ CARTOGRAPHIE DES CAS D'USAGE IA — parcours guidé ══ */
+window.CARTO_UC = [
+  {p:'Achats', n:'Spend analysis automatisé', f:'ML', r:'Couverture du spend de 60 % à >95 % ; temps d\u2019analyse divisé par 5.', d:'Historique factures/commandes, référentiel fournisseurs.', s:['Énergie','Oil & gas','Manufacturing','Transport','Distribution']},
+  {p:'Achats', n:'Aide aux appels d\u2019offres (IA générative)', f:'LLM', r:'Délai de rédaction −40 % ; complétude des critères +30 %.', d:'Modèles de CCTP, offres historiques, grilles d\u2019évaluation.', s:['Énergie','Transport','Manufacturing']},
+  {p:'Achats', n:'Scoring des risques fournisseurs', f:'ML', r:'Détection anticipée des défaillances ; ruptures d\u2019appro réduites.', d:'Données financières, ESG, incidents, dépendance.', s:['Oil & gas','Énergie','Manufacturing']},
+  {p:'Achats', n:'Analyse automatique de contrats', f:'LLM', r:'Temps de revue −50 % ; clauses à risque détectées +35 %.', d:'Corpus contractuel, clausier de référence.', s:['Énergie','Oil & gas','Manufacturing','Transport','Distribution','Immobilier']},
+  {p:'Finance', n:'Automatisation des clôtures', f:'RPA', r:'Durée de clôture −30 % ; erreurs de saisie −50 %.', d:'Écritures comptables, relevés, référentiels.', s:['Énergie','Oil & gas','Manufacturing','Transport','Distribution','Immobilier']},
+  {p:'Finance', n:'Détection d\u2019anomalies', f:'ML', r:'Anomalies détectées +40 % ; pertes évitées mesurables.', d:'Journaux comptables, paiements, historiques.', s:['Énergie','Oil & gas','Manufacturing','Transport','Distribution','Immobilier']},
+  {p:'Finance', n:'Prévisions (trésorerie, coûts)', f:'ML', r:'Erreur de prévision réduite ; visibilité trésorerie allongée.', d:'Historique flux, carnet de commandes, saisonnalité.', s:['Énergie','Manufacturing','Transport']},
+  {p:'Supply chain', n:'Prévision de la demande', f:'ML', r:'MAPE −20 à −40 % ; taux de service +5 pts.', d:'Ventes historiques, promotions, météo, saisonnalité.', s:['Manufacturing','Énergie','Distribution']},
+  {p:'Supply chain', n:'Optimisation des stocks', f:'ML', r:'Stock immobilisé −15 à −25 % ; ruptures −30 %.', d:'Stocks, délais, coûts de possession, demande.', s:['Manufacturing','Oil & gas']},
+  {p:'Supply chain', n:'Planification sous contrainte', f:'ML', r:'Respect des délais +10 pts ; coûts logistiques −10 %.', d:'Capacités, ordres, contraintes, aléas.', s:['Manufacturing','Transport']},
+  {p:'Opérations', n:'Maintenance prédictive', f:'ML', r:'Arrêts non planifiés −25 % ; durée de vie équipements allongée.', d:'Données capteurs/IoT, historiques de pannes.', s:['Énergie','Oil & gas','Manufacturing','Transport']},
+  {p:'Opérations', n:'Traitement automatisé de documents', f:'LLM', r:'Temps de traitement −60 % ; extraction correcte >95 %.', d:'Documents techniques, formulaires, plans.', s:['Énergie','Oil & gas','Manufacturing','Transport','Distribution','Immobilier']},
+  {p:'Relation client', n:'Assistant IA (support/interne)', f:'LLM', r:'Temps de réponse −50 % ; résolution au 1er contact +20 pts.', d:'Base de connaissance, historiques tickets.', s:['Énergie','Transport','Distribution','Immobilier']},
+  {p:'Relation client', n:'Analyse de la voix du client', f:'LLM', r:'Irritants prioritaires identifiés ; satisfaction mesurable.', d:'Réclamations, enquêtes, verbatims.', s:['Transport','Énergie','Distribution']}
+];
+window.CARTO_PROCS = ['Achats','Finance','Supply chain','Opérations','Relation client'];
+window.__cartoState = {procs:[], selected:{}};
+
+window.cartoInit = function(){
+  var box=document.getElementById('carto-proc-filter'); if(!box) return;
+  box.innerHTML = window.CARTO_PROCS.map(function(p){
+    return '<span class="carto-chip" data-proc="'+p+'" onclick="cartoToggleProc(this)">'+p+'</span>';
+  }).join('');
+  var sec=document.getElementById('carto-secteur');
+  if(sec && !sec.__bound){ sec.addEventListener('change', function(){ if(window.__cartoStep===2) cartoRenderCatalog(); }); sec.__bound=true; }
+  cartoGoStep(1);
+};
+
+window.cartoToggleProc = function(el){
+  el.classList.toggle('on');
+  var p=el.getAttribute('data-proc');
+  var i=window.__cartoState.procs.indexOf(p);
+  if(i>=0) window.__cartoState.procs.splice(i,1); else window.__cartoState.procs.push(p);
+};
+
+window.cartoGoStep = function(step){
+  window.__cartoStep=step;
+  for(var i=1;i<=3;i++){
+    var panel=document.getElementById('carto-panel-'+i);
+    var stp=document.getElementById('carto-step-'+i);
+    if(panel) panel.style.display=(i===step)?'block':'none';
+    if(stp) stp.classList.toggle('on', i<=step);
+  }
+  if(step===2) cartoRenderCatalog();
+  if(step===3) cartoRenderShortlist();
+  var pg=document.getElementById('p-carto-uc'); if(pg) pg.scrollIntoView({behavior:'smooth',block:'start'});
+};
+
+window.cartoFiltered = function(){
+  var sec=(document.getElementById('carto-secteur')||{}).value||'';
+  var procs=window.__cartoState.procs;
+  return window.CARTO_UC.filter(function(u){
+    if(sec && u.s.indexOf(sec)<0) return false;
+    if(procs.length && procs.indexOf(u.p)<0) return false;
+    return true;
+  });
+};
+
+window.cartoKey = function(u){ return u.p+'|'+u.n; };
+
+window.cartoRenderCatalog = function(){
+  var box=document.getElementById('carto-catalog'); if(!box) return;
+  var list=cartoFiltered();
+  var cnt=document.getElementById('carto-count'); if(cnt) cnt.textContent=list.length;
+  box.innerHTML = list.map(function(u){
+    var key=cartoKey(u); var sel=!!window.__cartoState.selected[key];
+    return '<div class="carto-uc-card'+(sel?' sel':'')+'" onclick="cartoToggleSel(this,\''+encodeURIComponent(key)+'\')">'
+      + '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:6px">'
+      + '<span style="font-size:10px;font-family:var(--mono);color:var(--muted2);text-transform:uppercase">'+u.p+'</span>'
+      + '<span class="carto-fam '+u.f+'">'+u.f+'</span></div>'
+      + '<div style="font-weight:600;font-size:13px;margin-bottom:6px">'+u.n+'</div>'
+      + '<div style="font-size:11px;color:var(--green);margin-bottom:5px">\u25b8 '+u.r+'</div>'
+      + '<div style="font-size:10.5px;color:var(--muted2)">Données : '+u.d+'</div>'
+      + '<div style="position:absolute;top:12px;right:12px;font-size:15px;color:var(--accent);display:'+(sel?'block':'none')+'">\u2713</div>'
+      + '</div>';
+  }).join('') || '<div style="color:var(--muted2);font-size:13px;padding:20px">Aucun cas d\u2019usage pour ce filtre. Élargissez la sélection.</div>';
+  cartoUpdateCount();
+};
+
+window.cartoToggleSel = function(el,keyEnc){
+  var key=decodeURIComponent(keyEnc);
+  if(window.__cartoState.selected[key]){ delete window.__cartoState.selected[key]; el.classList.remove('sel'); }
+  else { window.__cartoState.selected[key]=true; el.classList.add('sel'); }
+  var chk=el.querySelector('div[style*="absolute"]'); if(chk) chk.style.display=window.__cartoState.selected[key]?'block':'none';
+  cartoUpdateCount();
+};
+
+window.cartoUpdateCount = function(){
+  var n=Object.keys(window.__cartoState.selected).length;
+  var el=document.getElementById('carto-selected-count'); if(el) el.textContent=n;
+};
+
+window.cartoSelectedList = function(){
+  var keys=window.__cartoState.selected;
+  return window.CARTO_UC.filter(function(u){ return keys[cartoKey(u)]; });
+};
+
+window.cartoRenderShortlist = function(){
+  var box=document.getElementById('carto-shortlist'); if(!box) return;
+  var list=cartoSelectedList();
+  if(!list.length){ box.innerHTML='<div style="color:var(--muted2);font-size:13px;padding:16px;background:var(--bg);border-radius:8px">Aucun cas retenu. Revenez à l\u2019étape 2 pour en sélectionner.</div>'; return; }
+  box.innerHTML='<table class="ms-table"><thead><tr><th>Processus</th><th>Cas d\u2019usage</th><th>Famille</th><th>Résultats mesurables attendus</th></tr></thead><tbody>'
+    + list.map(function(u){ return '<tr><td style="font-size:11px">'+u.p+'</td><td><strong>'+u.n+'</strong></td><td><span class="carto-fam '+u.f+'">'+u.f+'</span></td><td style="font-size:11px;color:var(--muted2)">'+u.r+'</td></tr>'; }).join('')
+    + '</tbody></table>';
+};
+
+window.cartoExport = function(){
+  var list=cartoSelectedList();
+  if(!list.length){ alert('Sélectionnez au moins un cas d\u2019usage.'); return; }
+  var sec=(document.getElementById('carto-secteur')||{}).value||'Tous secteurs';
+  var today=new Date().toLocaleDateString('fr-FR');
+  var rows=list.map(function(u){ return '<tr><td>'+u.p+'</td><td>'+u.n+'</td><td>'+u.f+'</td><td>'+u.r+'</td><td>'+u.d+'</td></tr>'; }).join('');
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Liste courte cas d\u2019usage IA</title>'
+    +'<style>@page{margin:1.8cm}body{font-family:Arial,sans-serif;color:#1C1C1C;max-width:920px;margin:0 auto;padding:18px}'
+    +'h1{font-size:19px;border-bottom:3px solid #B83222;padding-bottom:8px;margin-bottom:4px}'
+    +'.sub{color:#666;font-size:11px;margin-bottom:14px}'
+    +'table{width:100%;border-collapse:collapse;font-size:11px;margin-top:8px}'
+    +'th{background:#1C1C1C;color:#fff;padding:7px 9px;text-align:left;font-size:9.5px}'
+    +'td{border:1px solid #ddd;padding:7px 9px;vertical-align:top}tbody tr:nth-child(even){background:#faf9f7}'
+    +'.foot{font-size:9px;color:#999;margin-top:20px;border-top:1px solid #eee;padding-top:8px}</style></head><body>'
+    +'<h1>Liste courte de cas d\u2019usage IA</h1>'
+    +'<div class="sub">CONSEILPREV \u2014 Sentinel AI \u00b7 Secteur : '+sec+' \u00b7 Établi le '+today+' \u00b7 '+list.length+' cas retenu(s)</div>'
+    +'<table><thead><tr><th>Processus</th><th>Cas d\u2019usage</th><th>Famille</th><th>Résultats mesurables attendus</th><th>Données requises</th></tr></thead><tbody>'+rows+'</tbody></table>'
+    +'<div class="foot">Document de cadrage \u2014 étape 1 du parcours d\u2019identification des cas d\u2019usage. À qualifier (impact, faisabilité, données, risque) puis prioriser. Généré par Sentinel AI.</div>'
+    +'</body></html>';
+  var w=window.open('','_blank'); if(!w){ alert('Autorisez les pop-ups pour exporter.'); return; }
+  w.document.write(html+'<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>'); w.document.close();
+};
+
+document.addEventListener('DOMContentLoaded', function(){ if(window.cartoInit) window.cartoInit(); });
 
 /* Peupler le selecteur de clients a l ouverture de la page clients */
 (function(){
