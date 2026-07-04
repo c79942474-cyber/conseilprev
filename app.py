@@ -914,6 +914,94 @@ def _detect_cat(title, default_cat):
 # Sécurité multicouche : validation, magic bytes, rate limit,
 #   anti-spam, taille max, extension whitelist
 # ══════════════════════════════════════════════════════════
+# ══════════════════════════════════════════════════════════════════
+# Veille réglementaire IA — agrégateur de flux (lecture seule, cache)
+# ══════════════════════════════════════════════════════════════════
+VEILLE_FEEDS = [
+    {"url": "https://dig.watch/feed/",                                        "source": "Digital Watch Observatory", "jur": "International"},
+    {"url": "https://artificialintelligenceact.eu/feed/",                     "source": "EU AI Act",                 "jur": "Union européenne"},
+    {"url": "https://www.euractiv.com/sections/artificial-intelligence/feed/", "source": "EURACTIV — IA",            "jur": "Union européenne"},
+    {"url": "https://www.technologyreview.com/feed/",                         "source": "MIT Technology Review",     "jur": "International"},
+]
+VEILLE_TTL = 1800  # cache serveur (secondes) = 30 min
+_VEILLE_CACHE = {"ts": 0.0, "items": [], "errors": []}
+VEILLE_THEMES = [
+    ("AI Act",               ["ai act", "artificial intelligence act", "ia act", "2024/1689", "high-risk", "gpai", "ai office"]),
+    ("RGPD / données",       ["gdpr", "rgpd", "data protection", "privacy", "donnees personnelles", "données personnelles"]),
+    ("Cyber / NIS2 / DORA",  ["nis2", "nis 2", "dora", "cyber", "cybersecurity", "cybersecurite", "cybersécurité", "resilience"]),
+    ("Normes / gouvernance", ["iso", "42001", "governance", "gouvernance", "standard", "oecd", "ocde"]),
+]
+
+def _veille_theme(text):
+    t = (text or "").lower()
+    for label, kws in VEILLE_THEMES:
+        for kw in kws:
+            if kw in t:
+                return label
+    return "Actualité IA"
+
+@app.route('/api/veille', methods=['GET'])
+def api_veille():
+    """Agrège des flux RSS publics sur la régulation et l'actualité de l'IA.
+    Lecture seule, cache serveur (VEILLE_TTL). ?refresh=1 force le rafraîchissement."""
+    import time as _time, html as _html, re as _re
+    force = (request.args.get('refresh') or '') in ('1', 'true', 'yes')
+    now = _time.time()
+    if (not force) and _VEILLE_CACHE["items"] and (now - _VEILLE_CACHE["ts"] < VEILLE_TTL):
+        return jsonify({
+            "ok": True, "cached": True,
+            "updated_at": datetime.utcfromtimestamp(_VEILLE_CACHE["ts"]).isoformat() + "Z",
+            "count": len(_VEILLE_CACHE["items"]),
+            "items": _VEILLE_CACHE["items"],
+            "errors": _VEILLE_CACHE["errors"],
+        })
+    items, errors, seen = [], [], set()
+    headers = {"User-Agent": "Sentinel-Veille/1.0"}
+    for feed in VEILLE_FEEDS:
+        try:
+            resp = requests.get(feed["url"], headers=headers, timeout=6)
+            parsed = feedparser.parse(resp.content)
+            for e in parsed.entries[:15]:
+                title = _html.unescape((e.get("title") or "").strip())
+                if not title:
+                    continue
+                link = e.get("link") or ""
+                key = link or title
+                if key in seen:
+                    continue
+                seen.add(key)
+                iso, ts_sort = None, 0.0
+                for attr in ("published_parsed", "updated_parsed"):
+                    dp = e.get(attr)
+                    if dp:
+                        try:
+                            ts_sort = _time.mktime(dp)
+                            iso = datetime(dp[0], dp[1], dp[2], dp[3], dp[4], dp[5]).isoformat() + "Z"
+                        except Exception:
+                            pass
+                        break
+                raw_sum = e.get("summary") or ""
+                summary = _html.unescape(_re.sub(r"<[^>]+>", "", raw_sum)).strip()[:220]
+                items.append({
+                    "title": title[:200], "link": link,
+                    "source": feed["source"], "jur": feed["jur"],
+                    "theme": _veille_theme(title + " " + summary),
+                    "date": iso, "_ts": ts_sort, "summary": summary,
+                })
+        except Exception as ex:
+            errors.append({"source": feed.get("source"), "error": str(ex)[:140]})
+    items.sort(key=lambda x: x.get("_ts") or 0.0, reverse=True)
+    for it in items:
+        it.pop("_ts", None)
+    items = items[:60]
+    _VEILLE_CACHE["ts"], _VEILLE_CACHE["items"], _VEILLE_CACHE["errors"] = now, items, errors
+    return jsonify({
+        "ok": True, "cached": False,
+        "updated_at": datetime.utcnow().isoformat() + "Z",
+        "count": len(items), "items": items, "errors": errors,
+    })
+
+
 @app.route('/api/apply', methods=['POST'])
 def api_apply():
     ip = limiter.get_ip(request)
