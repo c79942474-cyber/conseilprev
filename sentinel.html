@@ -2859,6 +2859,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="carto-step" id="carto-step-2"><span class="carto-num">2</span> Explorer</div>
     <div class="carto-step" id="carto-step-3"><span class="carto-num">3</span> Qualifier &amp; prioriser</div>
     <div class="carto-step" id="carto-step-4"><span class="carto-num">4</span> Chiffrer le retour</div>
+    <div class="carto-step" id="carto-step-5"><span class="carto-num">5</span> Évaluer la maturité</div>
   </div>
 
   <!-- Étape 1 : Cibler -->
@@ -2921,7 +2922,22 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div id="carto-roi"></div>
     <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
       <button class="mat-export-btn" onclick="cartoGoStep(3)">← Revenir à la qualification</button>
-      <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="cartoRoiExport()">?? Exporter le dossier de valeur (PDF)</button>
+      <button class="mat-export-btn" onclick="cartoRoiExport()">Exporter le dossier de valeur (PDF)</button>
+      <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="cartoGoStep(5)">Évaluer la maturité →</button>
+    </div>
+  </div>
+
+  <!-- Étape 5 : Évaluer la maturité -->
+  <div class="carto-panel" id="carto-panel-5" style="display:none">
+    <h3 style="margin-top:0">Étape 5 — Maturité data et compétences techniques</h3>
+    <p style="color:var(--muted2);font-size:13px">Évaluez la capacité de l’organisation à déployer les cas d’usage retenus. Notez chaque critère de 1 (absent) à 5 (maîtrisé). Le diagnostic croise votre maturité technique avec les familles technologiques de votre liste courte, et signale les écarts à combler avant le déploiement.</p>
+    <div id="carto-maturite"></div>
+    <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="mat-export-btn" onclick="cartoGoStep(4)">← Revenir au chiffrage</button>
+      <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="cartoMaturiteExport()">?? Exporter le diagnostic (PDF)</button>
+    </div>
+    <div style="margin-top:14px;padding:12px 14px;background:var(--bg);border:1px solid var(--rule2);border-radius:8px;font-size:12px;color:var(--muted2)">
+      Ce diagnostic clôt le parcours d’identification et de préparation. Les cas prioritaires, chiffrés et jugés déployables peuvent être rattachés à des jalons de conformité AI Act dans le module RaaS, reliant valeur métier, faisabilité et trajectoire de conformité.
     </div>
   </div>
 </div>
@@ -16385,7 +16401,7 @@ window.cartoToggleProc = function(el){
 
 window.cartoGoStep = function(step){
   window.__cartoStep=step;
-  for(var i=1;i<=4;i++){
+  for(var i=1;i<=5;i++){
     var panel=document.getElementById('carto-panel-'+i);
     var stp=document.getElementById('carto-step-'+i);
     if(panel) panel.style.display=(i===step)?'block':'none';
@@ -16394,6 +16410,7 @@ window.cartoGoStep = function(step){
   if(step===2) cartoRenderCatalog();
   if(step===3) cartoRenderShortlist();
   if(step===4) cartoRenderRoi();
+  if(step===5) cartoRenderMaturite();
   var pg=document.getElementById('p-carto-uc'); if(pg) pg.scrollIntoView({behavior:'smooth',block:'start'});
 };
 
@@ -16542,6 +16559,135 @@ window.cartoRoiTotals = function(){
   var base=tSetup+tRun; var roiG=base>0?(tNet/base*100):0;
   var el=document.getElementById('carto-roi-totals');
   if(el){ el.innerHTML='Portefeuille \u00b7 Gain annuel cumulé : <strong style="color:var(--green)">'+eur(tGain)+'</strong> \u00b7 Investissement année 1 : <strong>'+eur(base)+'</strong> \u00b7 Retour net année 1 : <strong style="color:'+(tNet>=0?'var(--green)':'var(--accent)')+'">'+eur(tNet)+'</strong> \u00b7 ROI : <strong>'+roiG.toFixed(0)+'\u202f%</strong>'; }
+};
+
+/* ══ Évaluation de la maturité data & compétences techniques ══ */
+window.CARTO_MATURITE_AXES = [
+  {id:'donnees', groupe:'Données', label:'Disponibilité et volume des données', fam:null},
+  {id:'qualite', groupe:'Données', label:'Qualité et fiabilité des données', fam:null},
+  {id:'gouv_data', groupe:'Données', label:'Gouvernance et accessibilité des données', fam:null},
+  {id:'skill_llm', groupe:'Compétences techniques', label:'Maîtrise de l\u2019IA générative (LLM)', fam:'LLM'},
+  {id:'skill_ml', groupe:'Compétences techniques', label:'Maîtrise de l\u2019apprentissage automatique (ML)', fam:'ML'},
+  {id:'skill_rpa', groupe:'Compétences techniques', label:'Maîtrise de l\u2019automatisation robotisée (RPA)', fam:'RPA'},
+  {id:'infra', groupe:'Infrastructure', label:'Infrastructure et industrialisation (MLOps)', fam:null},
+  {id:'sponsor', groupe:'Organisation', label:'Sponsorship et conduite du changement', fam:null},
+  {id:'conformite', groupe:'Organisation', label:'Gouvernance de conformité (AI Act, RGPD)', fam:null}
+];
+if(!window.__cartoState.maturite) window.__cartoState.maturite = {};
+window.cartoMatOf = function(id){ var v=window.__cartoState.maturite[id]; return (v===undefined?3:v); };
+window.cartoMatSet = function(id,val){ window.__cartoState.maturite[id]=parseInt(val,10); cartoMatRefresh(); };
+
+window.cartoMatGlobal = function(){
+  var s=0,n=0; window.CARTO_MATURITE_AXES.forEach(function(a){ s+=cartoMatOf(a.id); n++; });
+  return n?s/n:0;
+};
+window.cartoMatNiveau = function(g){
+  if(g>=4.2) return {label:'Optimisé', col:'var(--green)'};
+  if(g>=3.4) return {label:'Maîtrisé', col:'var(--green)'};
+  if(g>=2.6) return {label:'En construction', col:'#c98a00'};
+  if(g>=1.8) return {label:'Émergent', col:'#c98a00'};
+  return {label:'Initial', col:'var(--accent)'};
+};
+
+/* Familles technologiques présentes dans la liste courte */
+window.cartoShortlistFamilies = function(){
+  var fams={}; cartoSelectedList().forEach(function(u){ fams[u.f]=(fams[u.f]||0)+1; });
+  return fams;
+};
+/* Analyse d'écart : famille présente dans la liste mais compétence faible */
+window.cartoMatGaps = function(){
+  var fams=cartoShortlistFamilies(); var gaps=[];
+  var map={LLM:'skill_llm', ML:'skill_ml', RPA:'skill_rpa'};
+  Object.keys(map).forEach(function(f){
+    if(fams[f]){
+      var niveau=cartoMatOf(map[f]);
+      if(niveau<=2){ gaps.push({fam:f, count:fams[f], niveau:niveau, sev:'critique'}); }
+      else if(niveau===3){ gaps.push({fam:f, count:fams[f], niveau:niveau, sev:'a_surveiller'}); }
+    }
+  });
+  // Données : si beaucoup de ML/LLM et données faibles
+  var mlLlm=(fams.ML||0)+(fams.LLM||0);
+  if(mlLlm>0 && (cartoMatOf('donnees')<=2 || cartoMatOf('qualite')<=2)){
+    gaps.push({fam:'Données', count:mlLlm, niveau:Math.min(cartoMatOf('donnees'),cartoMatOf('qualite')), sev:'critique'});
+  }
+  return gaps;
+};
+
+window.cartoMatRefresh = function(){
+  var g=cartoMatGlobal(); var niv=cartoMatNiveau(g);
+  var gEl=document.getElementById('carto-mat-global');
+  if(gEl){ gEl.innerHTML='Indice de maturité global : <strong>'+g.toFixed(2)+'/5</strong> \u00b7 <span style="color:'+niv.col+';font-weight:600">'+niv.label+'</span>'; }
+  cartoMatRenderGaps();
+};
+
+window.cartoMatRenderGaps = function(){
+  var box=document.getElementById('carto-mat-gaps'); if(!box) return;
+  var gaps=cartoMatGaps();
+  if(!cartoSelectedList().length){ box.innerHTML='<div style="font-size:12px;color:var(--muted2)">Sélectionnez des cas d\u2019usage (étape 2) pour l\u2019analyse d\u2019écart.</div>'; return; }
+  if(!gaps.length){ box.innerHTML='<div style="font-size:12px;color:var(--green);padding:10px;background:rgba(45,122,71,.08);border-radius:8px">\u2713 Aucun écart bloquant détecté : la maturité couvre les familles technologiques de votre liste courte.</div>'; return; }
+  box.innerHTML='<strong style="font-size:12px;display:block;margin-bottom:6px">Écarts à combler avant déploiement</strong>'
+    + gaps.map(function(gp){
+        var col=gp.sev==='critique'?'var(--accent)':'#c98a00';
+        var msg=gp.fam==='Données'
+          ? (gp.count+' cas exigent des données solides, or leur disponibilité ou qualité est faible (niveau '+gp.niveau+'/5). Prévoir une remédiation data préalable.')
+          : (gp.count+' cas reposent sur '+gp.fam+', or la compétence interne est '+(gp.sev==='critique'?'insuffisante':'à consolider')+' (niveau '+gp.niveau+'/5). Prévoir montée en compétence, recrutement ou partenariat.');
+        return '<div style="border-left:3px solid '+col+';background:var(--bg);padding:8px 12px;margin-bottom:6px;border-radius:4px;font-size:12px"><strong>'+gp.fam+'</strong> \u2014 '+msg+'</div>';
+      }).join('');
+};
+
+window.cartoRenderMaturite = function(){
+  var box=document.getElementById('carto-maturite'); if(!box) return;
+  var groupes={};
+  window.CARTO_MATURITE_AXES.forEach(function(a){ (groupes[a.groupe]=groupes[a.groupe]||[]).push(a); });
+  function sel(id,cur){ var o=''; for(var v=1;v<=5;v++){ o+='<option value="'+v+'"'+(v===cur?' selected':'')+'>'+v+'</option>'; } return '<select onchange="cartoMatSet(\''+id+'\',this.value)" style="padding:4px 7px;border:1px solid var(--rule2);border-radius:5px;font-size:12px">'+o+'</select>'; }
+  var html='';
+  Object.keys(groupes).forEach(function(grp){
+    html+='<div style="font-size:10px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.07em;color:var(--muted2);margin:12px 0 6px">'+grp+'</div>';
+    groupes[grp].forEach(function(a){
+      html+='<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--rule)">'
+        + '<span style="font-size:12.5px">'+a.label+(a.fam?' <span class="carto-fam '+a.fam+'">'+a.fam+'</span>':'')+'</span>'
+        + sel(a.id, cartoMatOf(a.id))+'</div>';
+    });
+  });
+  box.innerHTML =
+    html
+    + '<div id="carto-mat-global" style="margin-top:14px;padding:11px 14px;background:var(--ink);color:#fff;border-radius:8px;font-size:13px"></div>'
+    + '<div id="carto-mat-gaps" style="margin-top:12px"></div>';
+  cartoMatRefresh();
+};
+
+window.cartoMaturiteExport = function(){
+  var g=cartoMatGlobal(); var niv=cartoMatNiveau(g); var gaps=cartoMatGaps();
+  var today=new Date().toLocaleDateString('fr-FR');
+  var sec=(document.getElementById('carto-secteur')||{}).value||'Tous secteurs';
+  var groupes={}; window.CARTO_MATURITE_AXES.forEach(function(a){ (groupes[a.groupe]=groupes[a.groupe]||[]).push(a); });
+  var critRows='';
+  Object.keys(groupes).forEach(function(grp){
+    groupes[grp].forEach(function(a){ critRows+='<tr><td>'+grp+'</td><td>'+a.label.replace(/<[^>]+>/g,'')+'</td><td style="text-align:center">'+cartoMatOf(a.id)+'/5</td></tr>'; });
+  });
+  var gapRows = gaps.length ? gaps.map(function(gp){
+    return '<li><strong>'+gp.fam+'</strong> ('+gp.sev.replace('_',' ')+', niveau '+gp.niveau+'/5) \u2014 '+gp.count+' cas concerné(s).</li>';
+  }).join('') : '<li>Aucun écart bloquant : maturité alignée sur les cas retenus.</li>';
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Diagnostic de maturité IA</title>'
+    +'<style>@page{margin:1.8cm}body{font-family:Arial,sans-serif;color:#1C1C1C;max-width:900px;margin:0 auto;padding:18px}'
+    +'h1{font-size:19px;border-bottom:3px solid #B83222;padding-bottom:8px;margin-bottom:4px}'
+    +'h3{font-size:13px;color:#B83222;margin-top:18px}'
+    +'.sub{color:#666;font-size:11px;margin-bottom:12px}'
+    +'.big{font-size:15px;font-weight:bold;margin:10px 0}'
+    +'table{width:100%;border-collapse:collapse;font-size:11px;margin-top:6px}'
+    +'th{background:#1C1C1C;color:#fff;padding:6px 8px;text-align:left;font-size:9px}'
+    +'td{border:1px solid #ddd;padding:5px 8px}tbody tr:nth-child(even){background:#faf9f7}'
+    +'ul{font-size:11px;line-height:1.6}.foot{font-size:9px;color:#999;margin-top:18px;border-top:1px solid #eee;padding-top:8px}</style></head><body>'
+    +'<h1>Diagnostic de maturité data et compétences techniques</h1>'
+    +'<div class="sub">CONSEILPREV \u2014 Sentinel AI \u00b7 Secteur : '+sec+' \u00b7 Établi le '+today+'</div>'
+    +'<div class="big">Indice de maturité global : '+g.toFixed(2)+'/5 \u2014 '+niv.label+'</div>'
+    +'<h3>Détail par critère</h3>'
+    +'<table><thead><tr><th>Domaine</th><th>Critère</th><th>Niveau</th></tr></thead><tbody>'+critRows+'</tbody></table>'
+    +'<h3>Écarts à combler avant déploiement</h3><ul>'+gapRows+'</ul>'
+    +'<div class="foot">Diagnostic de cadrage \u2014 à valider avec la DSI et les métiers. Barème : 1 absent, 3 en construction, 5 maîtrisé. Généré par Sentinel AI.</div>'
+    +'</body></html>';
+  var w=window.open('','_blank'); if(!w){ alert('Autorisez les pop-ups pour exporter.'); return; }
+  w.document.write(html+'<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>'); w.document.close();
 };
 
 window.cartoRenderRoi = function(){
