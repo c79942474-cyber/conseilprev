@@ -1763,6 +1763,26 @@ textarea.form-el{min-height:86px;resize:vertical}
 .carto-eco-svg .eco-t{fill:var(--ink);font-size:12.5px;font-weight:600;text-anchor:middle;dominant-baseline:central;font-family:var(--sans)}
 .carto-eco-svg .eco-hub .eco-t{fill:var(--accent);font-size:13.5px;font-weight:700}
 .carto-eco-svg .eco-s{fill:var(--muted2);font-size:10px;text-anchor:middle;dominant-baseline:central;font-family:var(--sans)}
+
+/* ══ BARRE DE CONTINUITE PARCOURS GUIDE ══ */
+.guided-banner{position:fixed;left:0;right:0;bottom:0;z-index:1200;display:none;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:10px 18px;background:var(--ink);color:var(--white);box-shadow:0 -4px 18px rgba(0,0,0,.25);font-family:var(--sans)}
+.guided-banner .gb-left{display:flex;align-items:center;gap:14px;flex-wrap:wrap;min-width:0}
+.guided-banner .gb-role{background:transparent;border:1px solid rgba(255,255,255,.35);color:var(--white);font-size:12px;font-weight:600;padding:5px 11px;border-radius:20px;cursor:pointer}
+.guided-banner .gb-role:hover{background:rgba(255,255,255,.12)}
+.guided-banner .gb-prog{display:flex;flex-direction:column;gap:5px}
+.guided-banner .gb-step{font-size:12.5px;color:var(--white)}
+.guided-banner .gb-dots{display:flex;gap:5px}
+.guided-banner .gb-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.28)}
+.guided-banner .gb-dot.done{background:var(--green)}
+.guided-banner .gb-dot.on{background:var(--accent);box-shadow:0 0 0 2px rgba(255,255,255,.25)}
+.guided-banner .gb-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.guided-banner .gb-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:var(--white);font-size:12px;font-weight:600;padding:7px 13px;border-radius:7px;cursor:pointer;max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.guided-banner .gb-btn:hover{background:rgba(255,255,255,.2)}
+.guided-banner .gb-next{background:var(--accent);border-color:var(--accent);color:var(--ink)}
+.guided-banner .gb-next:hover{filter:brightness(1.06)}
+.guided-banner .gb-close{background:transparent;border:none;color:rgba(255,255,255,.7);font-size:20px;line-height:1;cursor:pointer;padding:2px 6px}
+.guided-banner .gb-close:hover{color:var(--white)}
+@media(max-width:640px){.guided-banner .gb-btn{max-width:150px}}
 </style>
 
 </head>
@@ -17235,7 +17255,7 @@ function guidedPathCard(path){
   var stepsHtml = path.steps.map(function(s, i){
     return '<div class="guided-step">'
       + '<div class="guided-step-top"><span class="guided-step-num">'+(i+1)+'</span><div class="guided-step-label">'+s.label+'</div>'
-      + '<button class="guided-step-go" onclick="guidedPathsClose();go(\''+s.id+'\')">Aller à cette page →</button></div>'
+      + '<button class="guided-step-go" onclick="guidedStartStep(\''+path.id+'\','+i+')">Aller à cette page →</button></div>'
       + '<div class="guided-step-detail"><strong>À faire :</strong> '+s.action+'</div>'
       + '<div class="guided-step-detail"><strong>Ce que vous y gagnez :</strong> '+s.gain+'</div>'
       + (s.tip ? '<div class="guided-step-tip">💡 '+s.tip+'</div>' : '')
@@ -17247,6 +17267,57 @@ function guidedPathCard(path){
     + '<div class="guided-steps-wrap">' + stepsHtml + '</div>'
     + '</div>';
 }
+
+window.__activeGuided = null;
+
+window.guidedStartStep = function(pathId, i){
+  var path = GUIDED_PATHS.find(function(p){ return p.id === pathId; });
+  if(!path || !path.steps[i]) return;
+  window.__activeGuided = { pathId: pathId, i: i };
+  guidedPathsClose();
+  go(path.steps[i].id);
+  guidedRenderBanner();
+};
+
+window.guidedRenderBanner = function(){
+  var b = document.getElementById('guided-banner');
+  if(!b){ b = document.createElement('div'); b.id = 'guided-banner'; b.className = 'guided-banner'; document.body.appendChild(b); }
+  var g = window.__activeGuided;
+  if(!g){ b.style.display = 'none'; return; }
+  var path = GUIDED_PATHS.find(function(p){ return p.id === g.pathId; });
+  if(!path){ b.style.display = 'none'; return; }
+  var n = path.steps.length, i = g.i;
+  var step = path.steps[i];
+  var prev = i > 0 ? path.steps[i-1] : null;
+  var next = i < n-1 ? path.steps[i+1] : null;
+  function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  var dots = '';
+  for(var k=0;k<n;k++){ dots += '<span class="gb-dot'+(k===i?' on':(k<i?' done':''))+'"></span>'; }
+  var html = '<div class="gb-left">'
+    + '<button class="gb-role" onclick="guidedReopen(\''+g.pathId+'\')" title="Revenir au parcours complet">'+esc(path.icon)+' '+esc(path.role)+'</button>'
+    + '<div class="gb-prog"><span class="gb-step">\u00c9tape '+(i+1)+' / '+n+' \u00b7 '+esc(step.label)+'</span><span class="gb-dots">'+dots+'</span></div>'
+    + '</div>'
+    + '<div class="gb-actions">';
+  if(prev) html += '<button class="gb-btn" onclick="guidedStartStep(\''+g.pathId+'\','+(i-1)+')" title="'+esc(prev.label)+'">\u2190 Pr\u00e9c\u00e9dent</button>';
+  if(next) html += '<button class="gb-btn gb-next" onclick="guidedStartStep(\''+g.pathId+'\','+(i+1)+')">Suivant : '+esc(next.label)+' \u2192</button>';
+  else html += '<button class="gb-btn gb-next" onclick="guidedEndBanner()">Terminer \u2713</button>';
+  html += '<button class="gb-close" title="Quitter le parcours" onclick="guidedEndBanner()">\u00d7</button>';
+  html += '</div>';
+  b.innerHTML = html;
+  b.style.display = 'flex';
+};
+
+window.guidedEndBanner = function(){
+  window.__activeGuided = null;
+  var b = document.getElementById('guided-banner');
+  if(b) b.style.display = 'none';
+};
+
+window.guidedReopen = function(pathId){
+  guidedPathsOpen();
+  var sel = document.getElementById('guided-paths-select');
+  if(sel){ sel.value = pathId; if(typeof guidedPathsRenderSelected === 'function') guidedPathsRenderSelected(pathId); }
+};
 
 window.guidedPathsClose = function(){
   var modal = document.getElementById('guided-paths-modal');
