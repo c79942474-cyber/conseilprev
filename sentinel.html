@@ -1742,6 +1742,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 .carto-eco{position:relative;margin:14px 0 6px;padding:14px 16px;background:var(--white);border:1px solid var(--rule2);border-radius:12px}
 .carto-eco-svg .eco-node{cursor:default}
 .carto-eco-svg .eco-node:hover rect{filter:brightness(0.97)}
+.carto-hint{cursor:help;text-decoration:underline dotted;text-underline-offset:3px;text-decoration-color:var(--muted2)}
 .carto-eco-tip{position:absolute;display:none;max-width:260px;padding:8px 11px;background:var(--ink);color:var(--white);font-size:11.5px;line-height:1.45;border-radius:7px;pointer-events:none;z-index:40;box-shadow:0 4px 14px rgba(0,0,0,.25)}
 .carto-eco-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px}
 .carto-eco-title{font-size:13px;font-weight:600;color:var(--ink)}
@@ -16943,7 +16944,7 @@ window.cartoRenderRoi = function(){
   }).join('');
   box.innerHTML =
     '<div style="overflow-x:auto"><table class="ms-table"><thead><tr>'
-    + '<th>Cas d\u2019usage</th><th>Assiette annuelle</th><th>Taux de gain</th><th>Coût projet</th><th>Coût récurrent/an</th><th>Gain annuel</th><th>Retour net an 1</th><th>ROI an 1</th><th>Récupération</th>'
+    + '<th>Cas d\u2019usage</th><th class="carto-hint" title="Assiette annuelle : cout annuel actuel du processus vise (masse salariale, achats, pertes evitables).">Assiette annuelle</th><th class="carto-hint" title="Taux de gain estime : productivite, qualite ou delais gagnes, en % de l assiette. Pre-rempli par famille technologique.">Taux de gain</th><th class="carto-hint" title="Cout de mise en oeuvre : investissement initial (build, integration, conduite du changement).">Coût projet</th><th class="carto-hint" title="Cout recurrent annuel : exploitation, licences, maintenance, supervision (run).">Coût récurrent/an</th><th class="carto-hint" title="Gain annuel = assiette annuelle x taux de gain.">Gain annuel</th><th class="carto-hint" title="Retour net annee 1 = gain annuel - cout projet - cout recurrent.">Retour net an 1</th><th class="carto-hint" title="Retour sur investissement annee 1 = retour net / (cout projet + cout recurrent).">ROI an 1</th><th class="carto-hint" title="Delai de recuperation : temps d amortissement du cout projet.">Récupération</th>'
     + '</tr></thead><tbody>'+rows+'</tbody></table></div>'
     + '<div id="carto-roi-totals" style="margin-top:12px;padding:12px 14px;background:var(--bg);border:1px solid var(--rule2);border-radius:8px;font-size:12.5px"></div>'
     + '<div style="font-size:10px;color:var(--muted2);margin-top:8px">Assiette annuelle : coût annuel du processus visé (masse salariale, achats, pertes évitables). Taux de gain : productivité, qualité ou délais. Retour net année 1 = gain annuel − coût projet − coût récurrent. Récupération = délai d\u2019amortissement du coût projet.</div>';
@@ -17054,7 +17055,7 @@ window.cartoRenderShortlist = function(){
   }).join('');
   box.innerHTML =
     '<div style="font-size:11px;color:var(--muted2);margin-bottom:8px">Notez chaque axe de 1 (très faible) à 5 (très fort). Le score global pondéré, la priorité et le positionnement se calculent en temps réel. Pondérations : impact 35 %, faisabilité 25 %, données 20 %, risque maîtrisé 20 %.</div>'
-    + '<table class="ms-table"><thead><tr><th>Cas d\u2019usage</th><th>Impact</th><th>Faisab.</th><th>Données</th><th>Risque</th><th>Score /5</th><th>Priorité</th><th>Positionnement / vague</th><th>Passer à</th></tr></thead><tbody>'+rows+'</tbody></table>'
+    + '<table class="ms-table"><thead><tr><th>Cas d\u2019usage</th><th class="carto-hint" title="Impact metier attendu : ampleur des gains (productivite, qualite, revenus, reduction de risque). 1 = faible, 5 = fort.">Impact</th><th class="carto-hint" title="Faisabilite : maturite technique, complexite d integration et disponibilite des moyens. 1 = difficile, 5 = aisee.">Faisab.</th><th class="carto-hint" title="Donnees : disponibilite, qualite et accessibilite des donnees necessaires. 1 = insuffisantes, 5 = pretes.">Données</th><th class="carto-hint" title="Risque maitrise : maitrise des risques reglementaire, ethique et securite. 1 = risque eleve, 5 = bien maitrise.">Risque</th><th>Score /5</th><th>Priorité</th><th>Positionnement / vague</th><th>Passer à</th></tr></thead><tbody>'+rows+'</tbody></table>'
     + '<div id="carto-synthese" style="margin-top:10px;padding:10px 12px;background:var(--bg);border:1px solid var(--rule2);border-radius:8px;font-size:12px"></div>';
   cartoUpdateSynthese();
 };
