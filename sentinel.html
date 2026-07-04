@@ -1730,6 +1730,13 @@ textarea.form-el{min-height:86px;resize:vertical}
 .carto-guide-tips{margin-top:12px;padding:11px 14px;background:var(--white);border:1px solid var(--rule);border-radius:8px}
 .carto-guide-tips ul{margin:6px 0 0;padding-left:18px}
 .carto-guide-tips li{margin-bottom:4px;font-size:11.5px;color:var(--muted2)}
+
+/* ══ RENVOIS DE COHERENCE CARTOGRAPHIE ══ */
+.carto-xref{display:flex;gap:9px;align-items:flex-start;margin:12px 0;padding:10px 13px;background:var(--bg);border:1px solid var(--rule2);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;font-size:12px;color:var(--muted2);line-height:1.5}
+.carto-xref-ico{color:var(--accent);font-size:14px;flex-shrink:0;line-height:1.4}
+.carto-xref strong{color:var(--ink);font-weight:600}
+.carto-xref-link{color:var(--accent);cursor:pointer;font-weight:600;white-space:nowrap;text-decoration:none}
+.carto-xref-link:hover{text-decoration:underline}
 </style>
 
 </head>
@@ -2933,6 +2940,7 @@ textarea.form-el{min-height:86px;resize:vertical}
           <div id="carto-proc-filter" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px"></div>
         </div>
       </div>
+      <div class="carto-xref"><span class="carto-xref-ico">↔</span><div><strong>Pour situer votre secteur,</strong> consultez les repères de maturité, d’investissement et de risque IA propres à votre filière. <a class="carto-xref-link" onclick="go('benchmark',null,'BUSINESS','Benchmark sectoriel')">Ouvrir le Benchmark sectoriel →</a></div></div>
       <div style="margin-top:18px">
         <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="cartoGoStep(2)">Explorer les cas d’usage →</button>
       </div>
@@ -2957,6 +2965,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <h3 style="margin-top:0">Étape 3 — Qualifier et prioriser</h3>
     <p style="color:var(--muted2);font-size:13px">Notez chaque cas retenu sur quatre axes. Le score pondéré, la priorité (P1 à P3) et le positionnement dans la matrice impact-faisabilité se calculent en temps réel. Exportez ensuite la liste priorisée.</p>
     <div id="carto-shortlist"></div>
+    <div class="carto-xref"><span class="carto-xref-ico">↔</span><div><strong>L’axe « risque maîtrisé » reste une appréciation rapide.</strong> Pour une évaluation approfondie d’un cas sensible, ouvrez la matrice dédiée plutôt que de dupliquer l’analyse ici. <a class="carto-xref-link" onclick="go('matrice',null,'ÉVALUER LE RISQUE','Matrice risques')">Ouvrir la Matrice risques →</a></div></div>
     <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
       <button class="mat-export-btn" onclick="cartoGoStep(2)">← Modifier la sélection</button>
       <button class="mat-export-btn" onclick="cartoExport()">Exporter la liste priorisée (PDF)</button>
@@ -2972,6 +2981,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <h3 style="margin-top:0">Étape 4 — Chiffrer le retour attendu</h3>
     <p style="color:var(--muted2);font-size:13px">Pour chaque cas retenu, renseignez l’assiette annuelle du processus concerné, le taux de gain estimé, le coût de mise en œuvre et le coût récurrent annuel. Le gain annuel, le retour net la première année, le retour sur investissement et le délai de récupération se calculent en temps réel. Les valeurs sont des estimations de cadrage, à valider avec les métiers et la direction financière.</p>
     <div id="carto-roi"></div>
+    <div class="carto-xref"><span class="carto-xref-ico">↔</span><div><strong>Déploiement prévu dans plusieurs pays ?</strong> Les obligations varient selon la juridiction. Vérifiez le cadre applicable avant d’industrialiser un cas hors de France. <a class="carto-xref-link" onclick="go('carto',null,'SE TENIR INFORMÉ','Carte mondiale')">Ouvrir la Carte mondiale des juridictions →</a></div></div>
     <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
       <button class="mat-export-btn" onclick="cartoGoStep(3)">← Revenir à la qualification</button>
       <button class="mat-export-btn" onclick="cartoRoiExport()">Exporter le dossier de valeur (PDF)</button>
@@ -2985,6 +2995,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <h3 style="margin-top:0">Étape 5 — Maturité data et compétences techniques</h3>
     <p style="color:var(--muted2);font-size:13px">Évaluez la capacité de l’organisation à déployer les cas d’usage retenus. Notez chaque critère de 1 (absent) à 5 (maîtrisé). Le diagnostic croise votre maturité technique avec les familles technologiques de votre liste courte, et signale les écarts à combler avant le déploiement.</p>
     <div id="carto-maturite"></div>
+    <div class="carto-xref"><span class="carto-xref-ico">↔</span><div><strong>Cette maturité mesure votre capacité à déployer les cas retenus.</strong> Elle complète, sans la remplacer, l’évaluation de gouvernance de l’Audit de maturité IA (8 piliers). <a class="carto-xref-link" onclick="go('maturite',null,'CARTOGRAPHIER','Audit de maturité IA')">Ouvrir l’Audit de maturité IA →</a></div></div>
     <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
       <button class="mat-export-btn" onclick="cartoGoStep(4)">← Revenir au chiffrage</button>
       <button class="mat-export-btn" onclick="cartoMaturiteExport()">Exporter le diagnostic (PDF)</button>
