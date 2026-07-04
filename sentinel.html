@@ -1742,19 +1742,23 @@ textarea.form-el{min-height:86px;resize:vertical}
 .carto-eco{margin:14px 0 6px;padding:14px 16px;background:var(--white);border:1px solid var(--rule2);border-radius:12px}
 .carto-eco-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px}
 .carto-eco-title{font-size:13px;font-weight:600;color:var(--ink)}
-.carto-eco-legend{display:flex;gap:14px;font-size:11px;color:var(--muted2)}
+.carto-eco-legend{display:flex;gap:13px;font-size:11px;color:var(--muted2);flex-wrap:wrap}
 .carto-eco-legend span{display:inline-flex;align-items:center;gap:5px}
-.carto-eco-l1{width:16px;height:0;border-top:2px solid var(--accent)}
-.carto-eco-l2{width:16px;height:0;border-top:2px dashed var(--muted2)}
-.carto-eco-svg{width:100%;height:auto;display:block}
-.carto-eco-node rect{fill:var(--white);stroke:var(--rule2);stroke-width:1}
-.carto-eco-hub rect{fill:var(--bg2);stroke:var(--accent);stroke-width:1.6}
-.carto-eco-coh rect{fill:var(--bg);stroke:var(--rule2);stroke-width:1;stroke-dasharray:4 3}
-.carto-eco-svg .cen-t{fill:var(--ink);font-size:12px;font-weight:600;text-anchor:middle;dominant-baseline:central;font-family:var(--sans)}
-.carto-eco-svg .cen-s{fill:var(--muted2);font-size:10px;text-anchor:middle;dominant-baseline:central;font-family:var(--sans)}
-.carto-eco-svg .hub-t{fill:var(--accent);font-size:14px;font-weight:700;text-anchor:middle;dominant-baseline:central;font-family:var(--sans)}
-.carto-eco-svg .hub-s{fill:var(--ink2);font-size:10.5px;text-anchor:middle;dominant-baseline:central;font-family:var(--sans)}
-.carto-eco-svg .coh-t{fill:var(--muted);font-size:11.5px;font-weight:500;text-anchor:middle;dominant-baseline:central;font-family:var(--sans)}
+.carto-eco-l{width:16px;height:0;display:inline-block}
+.l-est{border-top:2px solid var(--green)}
+.l-prio{border-top:2px solid var(--accent)}
+.l-log{border-top:2px dashed var(--blue)}
+.l-coh{border-top:2px dotted var(--muted2)}
+.carto-eco-svg{width:100%;max-width:640px;height:auto;display:block;margin:0 auto}
+.carto-eco-svg rect{fill:var(--white);stroke-width:1.2}
+.carto-eco-svg .eco-hub rect{fill:var(--bg2);stroke:var(--accent);stroke-width:1.8}
+.carto-eco-svg .eco-prio rect{stroke:var(--accent)}
+.carto-eco-svg .eco-est rect{stroke:var(--green)}
+.carto-eco-svg .eco-log rect{stroke:var(--blue)}
+.carto-eco-svg .eco-coh rect{stroke:var(--muted2);stroke-dasharray:4 3;fill:var(--bg)}
+.carto-eco-svg .eco-t{fill:var(--ink);font-size:12.5px;font-weight:600;text-anchor:middle;dominant-baseline:central;font-family:var(--sans)}
+.carto-eco-svg .eco-hub .eco-t{fill:var(--accent);font-size:13.5px;font-weight:700}
+.carto-eco-svg .eco-s{fill:var(--muted2);font-size:10px;text-anchor:middle;dominant-baseline:central;font-family:var(--sans)}
 </style>
 
 </head>
@@ -2898,43 +2902,44 @@ textarea.form-el{min-height:86px;resize:vertical}
 
   <div class="carto-eco">
     <div class="carto-eco-head">
-      <div class="carto-eco-title">Place de la cartographie dans l’écosystème Sentinel</div>
+      <div class="carto-eco-title">Interactions de la cartographie des cas d’usage</div>
       <div class="carto-eco-legend">
-        <span><span class="carto-eco-l1"></span> lien établi</span>
-        <span><span class="carto-eco-l2"></span> renvoi de cohérence</span>
+        <span><span class="carto-eco-l l-est"></span> établi</span>
+        <span><span class="carto-eco-l l-prio"></span> prioritaire</span>
+        <span><span class="carto-eco-l l-log"></span> logique</span>
+        <span><span class="carto-eco-l l-coh"></span> cohérence</span>
       </div>
     </div>
-    <svg viewBox="0 0 960 440" class="carto-eco-svg" role="img" aria-label="Schéma des interactions de la cartographie avec les modules Sentinel">
+    <svg viewBox="0 0 680 610" class="carto-eco-svg" role="img" aria-label="Schéma des interactions de la cartographie avec les modules Sentinel, par statut de lien">
       <defs>
-        <marker id="arrEst" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker>
-        <marker id="arrCoh" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="var(--muted2)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></marker>
+        <marker id="aEst" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="var(--green)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker>
+        <marker id="aPrio" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker>
+        <marker id="aLog" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+        <marker id="aCoh" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="var(--muted2)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></marker>
       </defs>
 
-      <line x1="190" y1="214" x2="376" y2="214" stroke="var(--accent)" stroke-width="1.6" marker-end="url(#arrEst)"/>
-      <line x1="560" y1="192" x2="776" y2="74"  stroke="var(--accent)" stroke-width="1.6" marker-end="url(#arrEst)"/>
-      <line x1="566" y1="200" x2="776" y2="136" stroke="var(--accent)" stroke-width="1.6" marker-end="url(#arrEst)"/>
-      <line x1="580" y1="214" x2="776" y2="214" stroke="var(--accent)" stroke-width="1.6" marker-end="url(#arrEst)"/>
-      <line x1="566" y1="230" x2="776" y2="286" stroke="var(--accent)" stroke-width="1.6" marker-end="url(#arrEst)"/>
-      <line x1="860" y1="240" x2="860" y2="260" stroke="var(--accent)" stroke-width="1.6" marker-end="url(#arrEst)"/>
+      <line x1="300" y1="288" x2="196" y2="180" stroke="var(--accent)" stroke-width="1.7" marker-end="url(#aPrio)"/>
+      <line x1="340" y1="288" x2="340" y2="180" stroke="var(--accent)" stroke-width="1.7" marker-end="url(#aPrio)"/>
+      <line x1="428" y1="300" x2="556" y2="180" stroke="var(--green)" stroke-width="1.7" marker-end="url(#aEst)"/>
+      <line x1="420" y1="348" x2="548" y2="422" stroke="var(--green)" stroke-width="1.7" marker-end="url(#aEst)"/>
+      <line x1="340" y1="352" x2="340" y2="420" stroke="var(--blue)" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#aLog)"/>
+      <line x1="262" y1="348" x2="140" y2="422" stroke="var(--blue)" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#aLog)"/>
+      <line x1="252" y1="330" x2="204" y2="330" stroke="var(--blue)" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#aLog)"/>
+      <line x1="300" y1="352" x2="196" y2="522" stroke="var(--muted2)" stroke-width="1.4" stroke-dasharray="2 4" marker-end="url(#aCoh)"/>
+      <line x1="342" y1="352" x2="342" y2="522" stroke="var(--muted2)" stroke-width="1.4" stroke-dasharray="2 4" marker-end="url(#aCoh)"/>
+      <line x1="386" y1="352" x2="500" y2="522" stroke="var(--muted2)" stroke-width="1.4" stroke-dasharray="2 4" marker-end="url(#aCoh)"/>
 
-      <line x1="440" y1="252" x2="150" y2="370" stroke="var(--muted2)" stroke-width="1.3" stroke-dasharray="5 4" marker-end="url(#arrCoh)"/>
-      <line x1="466" y1="252" x2="342" y2="370" stroke="var(--muted2)" stroke-width="1.3" stroke-dasharray="5 4" marker-end="url(#arrCoh)"/>
-      <line x1="500" y1="252" x2="540" y2="370" stroke="var(--muted2)" stroke-width="1.3" stroke-dasharray="5 4" marker-end="url(#arrCoh)"/>
-      <line x1="524" y1="250" x2="730" y2="370" stroke="var(--muted2)" stroke-width="1.3" stroke-dasharray="5 4" marker-end="url(#arrCoh)"/>
-
-      <g class="carto-eco-node"><rect x="40" y="187" width="150" height="54" rx="9"/><text class="cen-t" x="115" y="207">Parcours guidés</text><text class="cen-s" x="115" y="225">1re étape par rôle</text></g>
-
-      <g class="carto-eco-hub"><rect x="380" y="176" width="200" height="76" rx="11"/><text class="hub-t" x="480" y="203">Cartographie</text><text class="hub-s" x="480" y="224">des cas d’usage · 5 étapes</text></g>
-
-      <g class="carto-eco-node"><rect x="780" y="46" width="160" height="48" rx="9"/><text class="cen-t" x="860" y="74">Simulateur IA Act</text></g>
-      <g class="carto-eco-node"><rect x="780" y="114" width="160" height="48" rx="9"/><text class="cen-t" x="860" y="142">Registre IA</text></g>
-      <g class="carto-eco-node"><rect x="780" y="190" width="160" height="48" rx="9"/><text class="cen-t" x="860" y="218">Tarification &amp; RaaS</text></g>
-      <g class="carto-eco-node"><rect x="780" y="262" width="160" height="54" rx="9"/><text class="cen-t" x="860" y="283">Factures /</text><text class="cen-t" x="860" y="301">Gestion clients</text></g>
-
-      <g class="carto-eco-coh"><rect x="40" y="372" width="170" height="48" rx="9"/><text class="coh-t" x="125" y="400">Benchmark sectoriel</text></g>
-      <g class="carto-eco-coh"><rect x="250" y="372" width="170" height="48" rx="9"/><text class="coh-t" x="335" y="400">Matrice risques</text></g>
-      <g class="carto-eco-coh"><rect x="460" y="372" width="170" height="48" rx="9"/><text class="coh-t" x="545" y="400">Audit de maturité</text></g>
-      <g class="carto-eco-coh"><rect x="670" y="372" width="180" height="48" rx="9"/><text class="coh-t" x="760" y="400">Juridictions</text></g>
+      <g class="eco-hub"><rect x="250" y="290" width="180" height="62" rx="10"/><text class="eco-t" x="340" y="314">Cartographie cas d’usage</text><text class="eco-s" x="340" y="334">5 étapes · valeur métier</text></g>
+      <g class="eco-prio"><rect x="90" y="122" width="180" height="56" rx="10"/><text class="eco-t" x="180" y="144">Simulateur IA Act</text><text class="eco-s" x="180" y="162">Classer un cas retenu</text></g>
+      <g class="eco-prio"><rect x="290" y="122" width="180" height="56" rx="10"/><text class="eco-t" x="380" y="144">Registre IA</text><text class="eco-s" x="380" y="162">Inscrire à l’inventaire</text></g>
+      <g class="eco-est"><rect x="482" y="122" width="168" height="56" rx="10"/><text class="eco-t" x="566" y="144">Parcours guidés</text><text class="eco-s" x="566" y="162">1re étape par rôle</text></g>
+      <g class="eco-log"><rect x="30" y="302" width="172" height="56" rx="10"/><text class="eco-t" x="116" y="324">Gestion clients</text><text class="eco-s" x="116" y="342">Livrables PDF</text></g>
+      <g class="eco-est"><rect x="482" y="410" width="168" height="56" rx="10"/><text class="eco-t" x="566" y="432">Module RaaS</text><text class="eco-s" x="566" y="450">Jalons de conformité</text></g>
+      <g class="eco-log"><rect x="30" y="410" width="180" height="56" rx="10"/><text class="eco-t" x="120" y="432">Roadmap</text><text class="eco-s" x="120" y="450">Vagues de déploiement</text></g>
+      <g class="eco-log"><rect x="250" y="410" width="180" height="56" rx="10"/><text class="eco-t" x="340" y="432">Tarification</text><text class="eco-s" x="340" y="450">Enveloppe · ROI</text></g>
+      <g class="eco-coh"><rect x="40" y="524" width="180" height="56" rx="10"/><text class="eco-t" x="130" y="546">Audit de maturité</text><text class="eco-s" x="130" y="564">Se citer, ne pas dupliquer</text></g>
+      <g class="eco-coh"><rect x="256" y="524" width="168" height="56" rx="10"/><text class="eco-t" x="340" y="546">Matrice des risques</text><text class="eco-s" x="340" y="564">Axe risque partagé</text></g>
+      <g class="eco-coh"><rect x="456" y="524" width="194" height="56" rx="10"/><text class="eco-t" x="553" y="546">Benchmark · Juridictions</text><text class="eco-s" x="553" y="564">Secteur · déploiement pays</text></g>
     </svg>
   </div>
 
