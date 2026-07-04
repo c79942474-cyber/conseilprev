@@ -2872,8 +2872,20 @@ textarea.form-el{min-height:86px;resize:vertical}
           <label class="carto-lbl">Secteur industriel</label>
           <select id="carto-secteur" class="carto-select">
             <option value="">Tous secteurs</option>
-            <option>Énergie</option><option>Oil &amp; gas</option><option>Manufacturing</option>
-            <option>Transport</option><option>Distribution</option><option>Immobilier</option>
+            <optgroup label="Énergie &amp; ressources">
+              <option>Énergie</option><option>Oil &amp; gas</option><option>Nucléaire</option>
+              <option>Eau &amp; environnement</option><option>Mines &amp; matières premières</option><option>Utilities &amp; réseaux</option>
+            </optgroup>
+            <optgroup label="Industrie manufacturière">
+              <option>Manufacturing</option><option>Automobile</option><option>Aéronautique &amp; défense</option>
+              <option>Ferroviaire &amp; naval</option><option>Chimie &amp; pétrochimie</option><option>Métallurgie &amp; sidérurgie</option>
+              <option>Électronique &amp; semi-conducteurs</option><option>Pharmaceutique &amp; cosmétique</option>
+              <option>Agroalimentaire</option><option>Papier, verre &amp; matériaux</option><option>Textile</option>
+            </optgroup>
+            <optgroup label="Infrastructures &amp; services">
+              <option>Transport &amp; mobilité</option><option>Logistique &amp; entreposage</option><option>BTP &amp; construction</option>
+              <option>Distribution</option><option>Immobilier</option><option>Télécommunications</option>
+            </optgroup>
           </select>
         </div>
         <div style="flex:2;min-width:260px">
@@ -16364,20 +16376,20 @@ window.raasRgpdErase = function(clientId){
 
 /* ══ CARTOGRAPHIE DES CAS D'USAGE IA — parcours guidé ══ */
 window.CARTO_UC = [
-  {p:'Achats', n:'Spend analysis automatisé', f:'ML', r:'Couverture du spend de 60 % à >95 % ; temps d\u2019analyse divisé par 5.', d:'Historique factures/commandes, référentiel fournisseurs.', s:['Énergie','Oil & gas','Manufacturing','Transport','Distribution']},
-  {p:'Achats', n:'Aide aux appels d\u2019offres (IA générative)', f:'LLM', r:'Délai de rédaction −40 % ; complétude des critères +30 %.', d:'Modèles de CCTP, offres historiques, grilles d\u2019évaluation.', s:['Énergie','Transport','Manufacturing']},
-  {p:'Achats', n:'Scoring des risques fournisseurs', f:'ML', r:'Détection anticipée des défaillances ; ruptures d\u2019appro réduites.', d:'Données financières, ESG, incidents, dépendance.', s:['Oil & gas','Énergie','Manufacturing']},
-  {p:'Achats', n:'Analyse automatique de contrats', f:'LLM', r:'Temps de revue −50 % ; clauses à risque détectées +35 %.', d:'Corpus contractuel, clausier de référence.', s:['Énergie','Oil & gas','Manufacturing','Transport','Distribution','Immobilier']},
-  {p:'Finance', n:'Automatisation des clôtures', f:'RPA', r:'Durée de clôture −30 % ; erreurs de saisie −50 %.', d:'Écritures comptables, relevés, référentiels.', s:['Énergie','Oil & gas','Manufacturing','Transport','Distribution','Immobilier']},
-  {p:'Finance', n:'Détection d\u2019anomalies', f:'ML', r:'Anomalies détectées +40 % ; pertes évitées mesurables.', d:'Journaux comptables, paiements, historiques.', s:['Énergie','Oil & gas','Manufacturing','Transport','Distribution','Immobilier']},
-  {p:'Finance', n:'Prévisions (trésorerie, coûts)', f:'ML', r:'Erreur de prévision réduite ; visibilité trésorerie allongée.', d:'Historique flux, carnet de commandes, saisonnalité.', s:['Énergie','Manufacturing','Transport']},
-  {p:'Supply chain', n:'Prévision de la demande', f:'ML', r:'MAPE −20 à −40 % ; taux de service +5 pts.', d:'Ventes historiques, promotions, météo, saisonnalité.', s:['Manufacturing','Énergie','Distribution']},
-  {p:'Supply chain', n:'Optimisation des stocks', f:'ML', r:'Stock immobilisé −15 à −25 % ; ruptures −30 %.', d:'Stocks, délais, coûts de possession, demande.', s:['Manufacturing','Oil & gas']},
-  {p:'Supply chain', n:'Planification sous contrainte', f:'ML', r:'Respect des délais +10 pts ; coûts logistiques −10 %.', d:'Capacités, ordres, contraintes, aléas.', s:['Manufacturing','Transport']},
-  {p:'Opérations', n:'Maintenance prédictive', f:'ML', r:'Arrêts non planifiés −25 % ; durée de vie équipements allongée.', d:'Données capteurs/IoT, historiques de pannes.', s:['Énergie','Oil & gas','Manufacturing','Transport']},
-  {p:'Opérations', n:'Traitement automatisé de documents', f:'LLM', r:'Temps de traitement −60 % ; extraction correcte >95 %.', d:'Documents techniques, formulaires, plans.', s:['Énergie','Oil & gas','Manufacturing','Transport','Distribution','Immobilier']},
-  {p:'Relation client', n:'Assistant IA (support/interne)', f:'LLM', r:'Temps de réponse −50 % ; résolution au 1er contact +20 pts.', d:'Base de connaissance, historiques tickets.', s:['Énergie','Transport','Distribution','Immobilier']},
-  {p:'Relation client', n:'Analyse de la voix du client', f:'LLM', r:'Irritants prioritaires identifiés ; satisfaction mesurable.', d:'Réclamations, enquêtes, verbatims.', s:['Transport','Énergie','Distribution']}
+  {p:'Achats', n:'Spend analysis automatisé', f:'ML', r:'Couverture du spend de 60 % à >95 % ; temps d\u2019analyse divisé par 5.', d:'Historique factures/commandes, référentiel fournisseurs.', s:['*']},
+  {p:'Achats', n:'Aide aux appels d\u2019offres (IA générative)', f:'LLM', r:'Délai de rédaction −40 % ; complétude des critères +30 %.', d:'Modèles de CCTP, offres historiques, grilles d\u2019évaluation.', s:['Énergie','Oil & gas','Transport & mobilité','Manufacturing','Automobile','Aéronautique & défense','BTP & construction','Nucléaire','Ferroviaire & naval','Chimie & pétrochimie']},
+  {p:'Achats', n:'Scoring des risques fournisseurs', f:'ML', r:'Détection anticipée des défaillances ; ruptures d\u2019appro réduites.', d:'Données financières, ESG, incidents, dépendance.', s:['Oil & gas','Énergie','Manufacturing','Automobile','Aéronautique & défense','Chimie & pétrochimie','Métallurgie & sidérurgie','Électronique & semi-conducteurs','Pharmaceutique & cosmétique','Agroalimentaire']},
+  {p:'Achats', n:'Analyse automatique de contrats', f:'LLM', r:'Temps de revue −50 % ; clauses à risque détectées +35 %.', d:'Corpus contractuel, clausier de référence.', s:['*']},
+  {p:'Finance', n:'Automatisation des clôtures', f:'RPA', r:'Durée de clôture −30 % ; erreurs de saisie −50 %.', d:'Écritures comptables, relevés, référentiels.', s:['*']},
+  {p:'Finance', n:'Détection d\u2019anomalies', f:'ML', r:'Anomalies détectées +40 % ; pertes évitées mesurables.', d:'Journaux comptables, paiements, historiques.', s:['*']},
+  {p:'Finance', n:'Prévisions (trésorerie, coûts)', f:'ML', r:'Erreur de prévision réduite ; visibilité trésorerie allongée.', d:'Historique flux, carnet de commandes, saisonnalité.', s:['Énergie','Oil & gas','Manufacturing','Transport & mobilité','Chimie & pétrochimie','Métallurgie & sidérurgie','Agroalimentaire','BTP & construction']},
+  {p:'Supply chain', n:'Prévision de la demande', f:'ML', r:'MAPE −20 à −40 % ; taux de service +5 pts.', d:'Ventes historiques, promotions, météo, saisonnalité.', s:['Manufacturing','Énergie','Distribution','Automobile','Agroalimentaire','Pharmaceutique & cosmétique','Textile','Électronique & semi-conducteurs','Papier, verre & matériaux']},
+  {p:'Supply chain', n:'Optimisation des stocks', f:'ML', r:'Stock immobilisé −15 à −25 % ; ruptures −30 %.', d:'Stocks, délais, coûts de possession, demande.', s:['Manufacturing','Oil & gas','Automobile','Agroalimentaire','Pharmaceutique & cosmétique','Distribution','Électronique & semi-conducteurs','Métallurgie & sidérurgie','Textile']},
+  {p:'Supply chain', n:'Planification sous contrainte', f:'ML', r:'Respect des délais +10 pts ; coûts logistiques −10 %.', d:'Capacités, ordres, contraintes, aléas.', s:['Manufacturing','Transport & mobilité','Automobile','Aéronautique & défense','Ferroviaire & naval','Logistique & entreposage','Métallurgie & sidérurgie','Chimie & pétrochimie']},
+  {p:'Opérations', n:'Maintenance prédictive', f:'ML', r:'Arrêts non planifiés −25 % ; durée de vie équipements allongée.', d:'Données capteurs/IoT, historiques de pannes.', s:['Énergie','Oil & gas','Nucléaire','Manufacturing','Automobile','Aéronautique & défense','Ferroviaire & naval','Transport & mobilité','Métallurgie & sidérurgie','Chimie & pétrochimie','Utilities & réseaux','Eau & environnement','Mines & matières premières']},
+  {p:'Opérations', n:'Traitement automatisé de documents', f:'LLM', r:'Temps de traitement −60 % ; extraction correcte >95 %.', d:'Documents techniques, formulaires, plans.', s:['*']},
+  {p:'Relation client', n:'Assistant IA (support/interne)', f:'LLM', r:'Temps de réponse −50 % ; résolution au 1er contact +20 pts.', d:'Base de connaissance, historiques tickets.', s:['*']},
+  {p:'Relation client', n:'Analyse de la voix du client', f:'LLM', r:'Irritants prioritaires identifiés ; satisfaction mesurable.', d:'Réclamations, enquêtes, verbatims.', s:['Transport & mobilité','Énergie','Distribution','Télécommunications','Utilities & réseaux','Immobilier','Automobile']}
 ];
 window.CARTO_PROCS = ['Achats','Finance','Supply chain','Opérations','Relation client'];
 window.__cartoState = {procs:[], selected:{}};
@@ -16418,7 +16430,7 @@ window.cartoFiltered = function(){
   var sec=(document.getElementById('carto-secteur')||{}).value||'';
   var procs=window.__cartoState.procs;
   return window.CARTO_UC.filter(function(u){
-    if(sec && u.s.indexOf(sec)<0) return false;
+    if(sec && u.s.indexOf(sec)<0 && u.s.indexOf('*')<0) return false;
     if(procs.length && procs.indexOf(u.p)<0) return false;
     return true;
   });
