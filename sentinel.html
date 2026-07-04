@@ -1806,6 +1806,29 @@ textarea.form-el{min-height:86px;resize:vertical}
 .guided-mp-row{display:flex;align-items:center;justify-content:center;margin:14px 0 10px;color:var(--muted2);font-size:11px}
 .guided-mp-btn{width:100%;background:var(--bg2);color:var(--ink);border:1px solid var(--accent);font-size:12.5px;font-weight:600;padding:11px 14px;border-radius:8px;cursor:pointer;text-align:left}
 .guided-mp-btn:hover{background:var(--accent);color:var(--ink)}
+
+/* ══ MON PARCOURS : CONSTRUCTEUR + SYNTHESE ══ */
+.carto-mp-cta-btn2{background:transparent;color:var(--ink);border:1px solid var(--accent);font-size:13px;font-weight:600;padding:10px 14px;border-radius:8px;cursor:pointer;white-space:nowrap}
+.carto-mp-cta-btn2:hover{background:var(--bg2)}
+.mp-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--rule2);border-radius:8px;margin-bottom:8px;background:var(--white)}
+.mp-check{position:relative;display:inline-flex;cursor:pointer}
+.mp-check input{position:absolute;opacity:0;width:20px;height:20px;cursor:pointer;margin:0}
+.mp-check span{width:20px;height:20px;border:1.5px solid var(--rule2);border-radius:5px;display:inline-block;position:relative}
+.mp-check input:checked + span{background:var(--accent);border-color:var(--accent)}
+.mp-check input:checked + span:after{content:'';position:absolute;left:6px;top:2px;width:5px;height:10px;border:solid var(--ink);border-width:0 2px 2px 0;transform:rotate(45deg)}
+.mp-row-txt{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
+.mp-row-txt strong{font-size:13px;color:var(--ink)}
+.mp-row-txt span{font-size:11.5px;color:var(--muted2)}
+.mp-row-move{display:flex;gap:4px}
+.mp-row-move button{width:28px;height:28px;border:1px solid var(--rule2);background:var(--bg);border-radius:6px;cursor:pointer;font-size:13px;color:var(--ink)}
+.mp-row-move button:disabled{opacity:.35;cursor:not-allowed}
+.mp-row-move button:not(:disabled):hover{background:var(--bg2)}
+.mp-syn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:6px 0 4px}
+.mp-syn-card{border:1px solid var(--rule2);border-radius:10px;padding:12px 14px;background:var(--bg)}
+.mp-syn-v{font-size:19px;font-weight:700;color:var(--accent)}
+.mp-syn-t{font-size:12px;font-weight:600;color:var(--ink);margin-top:3px}
+.mp-syn-s{font-size:10.5px;color:var(--muted2);margin-top:1px}
+.mp-syn-note{margin-top:12px;padding:10px 12px;background:var(--bg2);border:1px solid var(--rule2);border-radius:8px;font-size:11.5px;color:var(--muted2)}
 </style>
 
 </head>
@@ -2991,7 +3014,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div id="carto-eco-tip" class="carto-eco-tip"></div>
   </div>
 
-  <div class="carto-mp-cta"><div class="carto-mp-cta-txt"><strong>Créer mon parcours chiffré</strong><span>Générez un parcours guidé à partir de vos cas d’usage et allez jusqu’au coût et à l’enveloppe RaaS.</span></div><button class="carto-mp-cta-btn" onclick="monParcoursStart()">?? Lancer mon parcours →</button></div>
+  <div class="carto-mp-cta"><div class="carto-mp-cta-txt"><strong>Créer mon parcours chiffré</strong><span>Générez un parcours guidé à partir de vos cas d’usage et allez jusqu’au coût et à l’enveloppe RaaS.</span></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="carto-mp-cta-btn" onclick="monParcoursStart()">Lancer (auto) →</button><button class="carto-mp-cta-btn2" onclick="monParcoursBuilder()">Composer</button></div></div>
 
   <details class="carto-guide" id="carto-guide">
     <summary class="carto-guide-sum"><span class="carto-guide-ico">ℹ️</span> Guide d’utilisation — comment utiliser cette cartographie</summary>
@@ -17262,7 +17285,7 @@ window.guidedPathsOpen = function(){
     + '<button class="mat-modal-close" onclick="guidedPathsClose()">×</button></div>'
     + '<p style="font-size:12.5px;color:var(--muted);margin:0 0 16px;line-height:1.6">Sélectionnez votre rôle pour un enchaînement recommandé des pages — pertinent aussi bien pour une TPE qu un grand compte, le niveau de détail s adapte à votre contexte.</p>'
     + '<select id="guided-paths-select" class="guided-paths-select" onchange="guidedPathsRenderSelected(this.value)">' + options + '</select>'
-    + '<div class="guided-mp-row"><span>\u2014 ou \u2014</span></div>'+ '<button class="guided-mp-btn" onclick="guidedPathsClose();monParcoursStart()">\ud83e\udded Cr\u00e9er mon parcours chiffr\u00e9 (\u00e0 partir de mes cas d\u2019usage)</button>'
+    + '<div class="guided-mp-row"><span>\u2014 ou \u2014</span></div>'+ '<button class="guided-mp-btn" onclick="guidedPathsClose();monParcoursBuilder()">\ud83e\udded Cr\u00e9er mon parcours chiffr\u00e9 (\u00e0 partir de mes cas d\u2019usage)</button>'
     + '<div id="guided-paths-list"></div>'
     + '</div>';
   modal.classList.add('on');
@@ -17327,10 +17350,111 @@ window.monParcoursStart = function(){
       {id:'pricing', go:'cartoToTarification', label:'Découvrir le coût',
        action:'La tarification se pré-remplit avec vos cas retenus ; ajustez le segment et le secteur pour affiner le coût et l\u2019enveloppe RaaS.',
        gain:'Le coût de l\u2019accompagnement, à rapprocher du gain annuel estimé au chiffrage.',
-       tip:'Estimation de cadrage à valider avec CONSEILPREV avant tout engagement.'}
+       tip:'Estimation de cadrage à valider avec CONSEILPREV avant tout engagement.'},
+      {id:'__synthese', go:'monParcoursSyntheseShow', label:'Synthèse coût & valeur',
+       action:'Consultez le récapitulatif : nombre de cas, gain annuel estimé, coût d\u2019accompagnement, retour net et retour sur investissement.',
+       gain:'Une vision consolidée pour décider, coût à l\u2019appui.',
+       tip:'Estimations de cadrage à valider avec CONSEILPREV et votre direction financière.'}
     ]
   };
   guidedStartStep('mon-parcours', 0);
+};
+
+/* Catalogue des modules pour le mode manuel */
+window.MP_MODULES = [
+  {id:'carto-uc', label:'Cartographie des cas d\u2019usage', desc:'Identifier, qualifier et chiffrer',
+   action:'Sélectionnez, notez et chiffrez vos cas d\u2019usage IA (étapes 2 à 4).', gain:'Une liste priorisée et un dossier de valeur.', tip:'Commencez par 2 à 3 cas transverses.'},
+  {id:'simulateur', label:'Simulateur IA Act', desc:'Classer selon le niveau de risque',
+   action:'Déroulez les 5 étapes de classification pour un cas.', gain:'Le niveau de risque et les obligations légales.', tip:'Utilisez le bouton Simulateur depuis un cas retenu.'},
+  {id:'registre', label:'Registre IA', desc:'Inscrire à l\u2019inventaire',
+   action:'Enregistrez le système classifié avec sa finalité.', gain:'L\u2019inventaire central exigé par le Règlement.', tip:'Le bouton Registre pré-remplit la fiche.'},
+  {id:'pricing', go:'cartoToTarification', label:'Tarification & enveloppe RaaS', desc:'Chiffrer le coût',
+   action:'La tarification se pré-remplit ; ajustez segment et secteur.', gain:'Le coût de l\u2019accompagnement et l\u2019enveloppe RaaS.', tip:'À rapprocher du gain estimé.'},
+  {id:'__synthese', go:'monParcoursSyntheseShow', label:'Synthèse coût & valeur', desc:'Récapitulatif final',
+   action:'Consultez le récapitulatif coût, gain et ROI.', gain:'Une vision consolidée pour décider.', tip:'Estimations à valider avec CONSEILPREV.'}
+];
+if(!window.__mpBuilder) window.__mpBuilder = MP_MODULES.map(function(m,i){ return {id:m.id, on:(m.id==='carto-uc'||m.id==='pricing'||m.id==='__synthese')}; });
+
+window.monParcoursBuilder = function(){
+  var modal=document.getElementById('mp-builder-modal');
+  if(!modal){ modal=document.createElement('div'); modal.id='mp-builder-modal'; modal.className='mat-modal'; document.body.appendChild(modal); }
+  modal.innerHTML='<div class="mat-modal-card" style="max-width:600px">'
+    + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Mon parcours chiffré</div><div class="mat-modal-title">Composer mon parcours</div></div>'
+    + '<button class="mat-modal-close" onclick="mpBuilderClose()">×</button></div>'
+    + '<p style="font-size:12.5px;color:var(--muted);margin:0 0 14px;line-height:1.6">Cochez les modules à inclure et ordonnez-les. Le parcours vous guidera d\u2019un module à l\u2019autre jusqu\u2019au coût et à la synthèse.</p>'
+    + '<div id="mp-builder-list"></div>'
+    + '<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">'
+    + '<button class="mat-export-btn" onclick="mpBuilderClose()">Annuler</button>'
+    + '<button class="mat-export-btn" style="background:var(--accent);color:var(--ink);font-weight:700" onclick="mpBuilderLaunch()">\ud83e\udded Lancer mon parcours \u2192</button>'
+    + '</div></div>';
+  modal.classList.add('on');
+  mpBuilderRender();
+};
+window.mpBuilderRender = function(){
+  var box=document.getElementById('mp-builder-list'); if(!box) return;
+  box.innerHTML = window.__mpBuilder.map(function(row,idx){
+    var m=MP_MODULES.filter(function(x){return x.id===row.id;})[0]; if(!m) return '';
+    return '<div class="mp-row">'
+      + '<label class="mp-check"><input type="checkbox" '+(row.on?'checked':'')+' onchange="mpBuilderToggle('+idx+')"><span></span></label>'
+      + '<div class="mp-row-txt"><strong>'+(idx+1)+'. '+m.label+'</strong><span>'+m.desc+'</span></div>'
+      + '<div class="mp-row-move"><button onclick="mpBuilderMove('+idx+',-1)" title="Monter" '+(idx===0?'disabled':'')+'>\u2191</button>'
+      + '<button onclick="mpBuilderMove('+idx+',1)" title="Descendre" '+(idx===window.__mpBuilder.length-1?'disabled':'')+'>\u2193</button></div>'
+      + '</div>';
+  }).join('');
+};
+window.mpBuilderToggle = function(idx){ window.__mpBuilder[idx].on = !window.__mpBuilder[idx].on; };
+window.mpBuilderMove = function(idx, dir){
+  var a=window.__mpBuilder; var j=idx+dir; if(j<0||j>=a.length) return;
+  var t=a[idx]; a[idx]=a[j]; a[j]=t; mpBuilderRender();
+};
+window.mpBuilderClose = function(){ var m=document.getElementById('mp-builder-modal'); if(m) m.classList.remove('on'); };
+window.mpBuilderLaunch = function(){
+  var chosen = window.__mpBuilder.filter(function(r){return r.on;});
+  if(!chosen.length){ alert('Sélectionnez au moins un module.'); return; }
+  var steps = chosen.map(function(r){ var m=MP_MODULES.filter(function(x){return x.id===r.id;})[0]; var s={id:m.id, label:m.label, action:m.action, gain:m.gain, tip:m.tip}; if(m.go) s.go=m.go; return s; });
+  window.__monParcours = {id:'mon-parcours', icon:'\ud83e\udded', role:'Mon parcours chiffré', pitch:'Parcours composé sur mesure : '+steps.length+' étape(s).', steps:steps};
+  mpBuilderClose();
+  guidedStartStep('mon-parcours', 0);
+};
+
+window.mpSyntheseClose = function(){ var m=document.getElementById('mp-synthese-modal'); if(m) m.classList.remove('on'); };
+window.monParcoursSyntheseShow = function(){
+  var list = (typeof cartoSelectedList==='function') ? cartoSelectedList() : [];
+  function eur(n){ return (Math.round(n)||0).toLocaleString('fr-FR')+'\u202f\u20ac'; }
+  var n=list.length, gain=0, invest=0, net=0;
+  list.forEach(function(u){ var r=cartoRoiOf(cartoKey(u),u); var c=cartoRoiCompute(r); gain+=c.gainAnnuel; invest+=(r.setup+r.run); net+=c.netAn1; });
+  var roi = invest>0 ? (net/invest*100) : 0;
+  var coutAnnuel=0;
+  try{
+    var nb=parseInt((document.getElementById('pricing-nb-systemes')||{}).value,10)|| n || 1;
+    var sector=(document.getElementById('pricing-secteur')||{}).value||'';
+    var segment=(document.getElementById('pricing-segment')||{}).value || window.__pricingSegment || 'pme';
+    var billing=window.__pricingBilling || 'monthly';
+    if(typeof pricingComputeSaaS==='function'){
+      var res=pricingComputeSaaS(nb, sector, billing, segment);
+      var mensuel=(typeof res==='number')?res:(res&&res.total?res.total:0);
+      coutAnnuel=mensuel*12;
+    }
+  }catch(e){}
+  var ratio = coutAnnuel>0 ? (gain/coutAnnuel) : 0;
+  function card(t,v,s){ return '<div class="mp-syn-card"><div class="mp-syn-v">'+v+'</div><div class="mp-syn-t">'+t+'</div><div class="mp-syn-s">'+s+'</div></div>'; }
+  var modal=document.getElementById('mp-synthese-modal');
+  if(!modal){ modal=document.createElement('div'); modal.id='mp-synthese-modal'; modal.className='mat-modal'; document.body.appendChild(modal); }
+  modal.innerHTML='<div class="mat-modal-card" style="max-width:600px">'
+    + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Mon parcours chiffré</div><div class="mat-modal-title">Synthèse coût &amp; valeur</div></div>'
+    + '<button class="mat-modal-close" onclick="mpSyntheseClose()">×</button></div>'
+    + '<div class="mp-syn-grid">'
+    + card('Cas d\u2019usage', n+'', 'retenus')
+    + card('Gain annuel estimé', eur(gain), 'cumulé')
+    + card('Coût accompagnement / an', coutAnnuel>0?eur(coutAnnuel):'\u2014', 'estimation SaaS')
+    + card('Retour net année 1', eur(net), 'gain − coûts internes')
+    + card('ROI année 1', Math.round(roi)+' %', 'sur coûts internes')
+    + card('Gain / coût', ratio>0?(ratio.toFixed(1)+'\u00d7'):'\u2014', 'gain vs accompagnement')
+    + '</div>'
+    + '<div class="mp-syn-note">Estimations de cadrage à valider avec CONSEILPREV et votre direction financière avant tout engagement.</div>'
+    + '<div style="text-align:right;margin-top:14px"><button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="mpSyntheseClose()">Fermer</button></div>'
+    + '</div>';
+  modal.classList.add('on');
 };
 
 window.guidedRenderBanner = function(){
