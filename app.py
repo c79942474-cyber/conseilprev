@@ -919,14 +919,14 @@ def _detect_cat(title, default_cat):
 # ══════════════════════════════════════════════════════════════════
 VEILLE_FEEDS = [
     # Régulation et gouvernance (prioritaires pour la veille CONSEILPREV)
-    {"url": "https://dig.watch/feed/",                    "source": "Digital Watch Observatory", "jur": "International"},
-    {"url": "https://artificialintelligenceact.eu/feed/", "source": "EU AI Act",                 "jur": "Union européenne"},
-    {"url": "https://www.euractiv.com/sections/tech/feed/", "source": "EURACTIV — Tech",          "jur": "Union européenne"},
+    {"url": "https://dig.watch/feed/",                    "source": "Digital Watch Observatory", "jur": "International", "fallbacks": ["https://news.google.com/rss/search?q=AI%20regulation%20governance&hl=en-US&gl=US&ceid=US:en"]},
+    {"url": "https://artificialintelligenceact.eu/feed/", "source": "EU AI Act",                 "jur": "Union européenne", "fallbacks": ["https://news.google.com/rss/search?q=%22EU%20AI%20Act%22&hl=en-US&gl=US&ceid=US:en"]},
+    {"url": "https://www.euractiv.com/sections/tech/feed/", "source": "EURACTIV — Tech",          "jur": "Union européenne", "fallbacks": ["https://news.google.com/rss/search?q=EU%20artificial%20intelligence%20policy&hl=en-US&gl=US&ceid=US:en"]},
     # Actualité technologique (contexte)
-    {"url": "https://arstechnica.com/ai/feed/",           "source": "Ars Technica — IA",         "jur": "International"},
-    {"url": "https://www.technologyreview.com/feed/",     "source": "MIT Technology Review",     "jur": "International"},
+    {"url": "https://arstechnica.com/ai/feed/",           "source": "Ars Technica — IA",         "jur": "International", "fallbacks": ["https://news.google.com/rss/search?q=artificial%20intelligence&hl=en-US&gl=US&ceid=US:en"]},
+    {"url": "https://www.technologyreview.com/feed/",     "source": "MIT Technology Review",     "jur": "International", "fallbacks": ["https://news.google.com/rss/search?q=AI%20technology%20regulation&hl=en-US&gl=US&ceid=US:en"]},
     # Cybersécurité & protection des données (spécialisées — pertinentes NIS2/DORA/RGPD)
-    {"url": "https://www.enisa.europa.eu/media/news-items/news-wires/RSS", "source": "ENISA — cybersécurité UE", "jur": "Union européenne"},  # URL confirmée
+    {"url": "https://www.enisa.europa.eu/media/news-items/news-wires/RSS", "source": "ENISA — cybersécurité UE", "jur": "Union européenne", "fallbacks": ["https://news.google.com/rss/search?q=ENISA%20cybersecurity%20NIS2&hl=en-US&gl=US&ceid=US:en"]},  # URL confirmée + repli
     {"url": "https://www.cert.ssi.gouv.fr/feed/",         "source": "CERT-FR / ANSSI",           "jur": "France", "fallbacks": ["https://www.cert.ssi.gouv.fr/avis/feed/", "https://www.cert.ssi.gouv.fr/alerte/feed/", "https://www.cert.ssi.gouv.fr/actualite/feed/"]},
     {"url": "https://www.cnil.fr/fr/rss.xml",             "source": "CNIL — RGPD",               "jur": "France", "fallbacks": ["https://www.cnil.fr/fr/flux-rss", "https://news.google.com/rss/search?q=CNIL%20RGPD&hl=fr&gl=FR&ceid=FR:fr"]},
     # Pour ajouter une source : dupliquer une ligne (url du flux RSS/Atom, source, jur).
