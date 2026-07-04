@@ -927,8 +927,8 @@ VEILLE_FEEDS = [
     {"url": "https://www.technologyreview.com/feed/",     "source": "MIT Technology Review",     "jur": "International"},
     # Cybersécurité & protection des données (spécialisées — pertinentes NIS2/DORA/RGPD)
     {"url": "https://www.enisa.europa.eu/media/news-items/news-wires/RSS", "source": "ENISA — cybersécurité UE", "jur": "Union européenne"},  # URL confirmée
-    {"url": "https://www.cert.ssi.gouv.fr/feed/",         "source": "CERT-FR / ANSSI",           "jur": "France"},          # à valider (WordPress /feed/)
-    {"url": "https://www.cnil.fr/fr/rss.xml",             "source": "CNIL — RGPD",               "jur": "France"},          # candidat : flux CNIL à valider via ?debug=1
+    {"url": "https://www.cert.ssi.gouv.fr/feed/",         "source": "CERT-FR / ANSSI",           "jur": "France", "fallbacks": ["https://www.cert.ssi.gouv.fr/avis/feed/", "https://www.cert.ssi.gouv.fr/alerte/feed/", "https://www.cert.ssi.gouv.fr/actualite/feed/"]},
+    {"url": "https://www.cnil.fr/fr/rss.xml",             "source": "CNIL — RGPD",               "jur": "France", "fallbacks": ["https://www.cnil.fr/fr/flux-rss", "https://news.google.com/rss/search?q=CNIL%20RGPD&hl=fr&gl=FR&ceid=FR:fr"]},
     # Pour ajouter une source : dupliquer une ligne (url du flux RSS/Atom, source, jur).
     # Le mode diagnostic /api/veille?debug=1 indique, pour chaque flux, le statut HTTP et le nombre d'items.
 ]
@@ -940,6 +940,24 @@ VEILLE_THEMES = [
     ("Cyber / NIS2 / DORA",  ["nis2", "nis 2", "dora", "cyber", "cybersecurity", "cybersecurite", "cybersécurité", "resilience"]),
     ("Normes / gouvernance", ["iso", "42001", "governance", "gouvernance", "standard", "oecd", "ocde"]),
 ]
+
+def _veille_load(feed):
+    """Essaie l'URL principale puis les fallbacks ; renvoie le 1er flux valide (>0 items)."""
+    urls = [feed["url"]] + list(feed.get("fallbacks") or [])
+    last = {"parsed": None, "url": urls[0], "status": None, "error": None, "items": 0}
+    for u in urls:
+        try:
+            resp = requests.get(u, headers={"User-Agent": "Sentinel-Veille/1.0"}, timeout=6)
+            parsed = feedparser.parse(resp.content)
+            n = len(parsed.entries)
+            cand = {"parsed": parsed, "url": u, "status": resp.status_code, "error": None, "items": n}
+            if resp.status_code == 200 and n > 0:
+                return cand
+            last = cand
+        except Exception as ex:
+            last = {"parsed": None, "url": u, "status": None, "error": str(ex)[:160], "items": 0}
+    return last
+
 
 def _veille_theme(text):
     t = (text or "").lower()
@@ -959,20 +977,17 @@ def api_veille():
     if debug:
         diag = []
         for feed in VEILLE_FEEDS:
-            entry = {"source": feed.get("source"), "url": feed.get("url"), "jur": feed.get("jur")}
-            try:
-                resp = requests.get(feed["url"], headers={"User-Agent": "Sentinel-Veille/1.0"}, timeout=6)
-                parsed = feedparser.parse(resp.content)
-                entry["http_status"] = resp.status_code
-                entry["items"] = len(parsed.entries)
-                entry["ok"] = bool(resp.status_code == 200 and len(parsed.entries) > 0)
-                if parsed.entries:
-                    entry["sample"] = (parsed.entries[0].get("title") or "")[:120]
-                if getattr(parsed, "bozo", 0) and getattr(parsed, "bozo_exception", None):
-                    entry["parse_warning"] = str(parsed.bozo_exception)[:120]
-            except Exception as ex:
-                entry["ok"] = False
-                entry["error"] = str(ex)[:160]
+            r = _veille_load(feed)
+            entry = {"source": feed.get("source"), "url": feed.get("url"),
+                     "used_url": r["url"], "jur": feed.get("jur"),
+                     "http_status": r["status"], "items": r["items"],
+                     "ok": bool(r["status"] == 200 and r["items"] > 0)}
+            if r["url"] != feed["url"] and r.get("ok"):
+                entry["note"] = "repli utilisé"
+            if r.get("error"):
+                entry["error"] = r["error"]
+            if r["parsed"] and r["parsed"].entries:
+                entry["sample"] = (r["parsed"].entries[0].get("title") or "")[:120]
             diag.append(entry)
         return jsonify({"ok": True, "debug": True, "count": len(diag),
                         "working": sum(1 for d in diag if d.get("ok")), "feeds": diag})
@@ -989,8 +1004,11 @@ def api_veille():
     headers = {"User-Agent": "Sentinel-Veille/1.0"}
     for feed in VEILLE_FEEDS:
         try:
-            resp = requests.get(feed["url"], headers=headers, timeout=6)
-            parsed = feedparser.parse(resp.content)
+            r = _veille_load(feed)
+            parsed = r["parsed"]
+            if not parsed or not parsed.entries:
+                errors.append({"source": feed.get("source"), "error": "aucun item (statut %s)" % r.get("status")})
+                continue
             for e in parsed.entries[:15]:
                 title = _html.unescape((e.get("title") or "").strip())
                 if not title:
