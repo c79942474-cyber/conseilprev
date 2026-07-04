@@ -1829,6 +1829,28 @@ textarea.form-el{min-height:86px;resize:vertical}
 .mp-syn-t{font-size:12px;font-weight:600;color:var(--ink);margin-top:3px}
 .mp-syn-s{font-size:10.5px;color:var(--muted2);margin-top:1px}
 .mp-syn-note{margin-top:12px;padding:10px 12px;background:var(--bg2);border:1px solid var(--rule2);border-radius:8px;font-size:11.5px;color:var(--muted2)}
+
+/* ══ VEILLE REGLEMENTAIRE IA ══ */
+.veille-panel{margin:8px 0 24px;padding:14px 16px;background:var(--white);border:1px solid var(--rule2);border-radius:12px}
+.veille-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.veille-head-t{font-size:13.5px;font-weight:700;color:var(--ink)}
+.veille-head-r{display:flex;align-items:center;gap:10px}
+.veille-updated{font-size:10.5px;color:var(--muted2)}
+.veille-refresh{background:var(--bg2);border:1px solid var(--rule2);color:var(--ink);font-size:11px;font-weight:600;padding:5px 10px;border-radius:6px;cursor:pointer}
+.veille-refresh:hover{background:var(--bg)}
+.veille-list{display:flex;flex-direction:column;gap:8px;max-height:360px;overflow-y:auto;padding-right:4px}
+.veille-item{display:block;text-decoration:none;border:1px solid var(--rule);border-radius:9px;padding:10px 12px;background:var(--bg);transition:border-color .15s,background .15s}
+.veille-item:hover{border-color:var(--accent);background:var(--bg2)}
+.veille-item-top{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:5px}
+.veille-chip{font-size:9.5px;font-weight:600;padding:2px 8px;border-radius:10px;white-space:nowrap}
+.veille-chip.vj{background:rgba(224,168,0,.14);color:var(--accent);border:1px solid var(--accent)}
+.veille-chip.vt{background:var(--bg2);color:var(--muted);border:1px solid var(--rule2)}
+.veille-date{margin-left:auto;font-size:10px;color:var(--muted2)}
+.veille-item-title{font-size:12.5px;font-weight:600;color:var(--ink);line-height:1.35}
+.veille-item-sum{font-size:11px;color:var(--muted2);line-height:1.45;margin-top:3px}
+.veille-item-src{font-size:9.5px;color:var(--muted2);margin-top:5px;font-style:italic}
+.veille-loading,.veille-empty{font-size:12px;color:var(--muted2);padding:16px;text-align:center;background:var(--bg);border-radius:8px}
+.veille-foot{font-size:10px;color:var(--muted2);margin-top:9px;padding-top:8px;border-top:1px solid var(--rule)}
 </style>
 
 </head>
@@ -1993,6 +2015,8 @@ textarea.form-el{min-height:86px;resize:vertical}
   <h1 class="page-h">Carte mondiale des<br><em>régulations IA</em></h1>
   <p class="page-lead">46 juridictions analysées selon 12 critères réglementaires, avec mise à jour en temps réel par IA (Mistral / Claude). Triées par sévérité ci-dessous.</p>
 
+  <section class="veille-panel"><div class="veille-head"><div class="veille-head-t">??️ Veille réglementaire IA — actualités mondiales</div><div class="veille-head-r"><span class="veille-updated" id="veille-upd-carto"></span><button class="veille-refresh" onclick="veilleRefresh()" title="Forcer le rafraîchissement">↻ Actualiser</button></div></div><div class="veille-list" id="veille-carto"><div class="veille-loading">Chargement de la veille…</div></div><div class="veille-foot">Flux publics agrégés · mise à jour automatique. Estimations et actualités à vérifier aux sources officielles.</div></section>
+
   
   <!-- ══ CARTE LEAFLET ══ -->
   <div style="margin-bottom:24px;border:1px solid var(--rule);border-radius:4px;overflow:hidden;background:var(--white)">
@@ -2055,6 +2079,8 @@ textarea.form-el{min-height:86px;resize:vertical}
   <span class="eyebrow">Géopolitique</span>
   <h1 class="page-h">Tensions &amp; alliances<br><em>réglementaires</em></h1>
   <p class="page-lead">Compétition normative sur l'IA : blocs réglementaires, fragmentation et influence des standards.</p>
+
+  <section class="veille-panel"><div class="veille-head"><div class="veille-head-t">??️ Veille — tensions et évolutions normatives</div><div class="veille-head-r"><span class="veille-updated" id="veille-upd-geo"></span><button class="veille-refresh" onclick="veilleRefresh()" title="Forcer le rafraîchissement">↻ Actualiser</button></div></div><div class="veille-list" id="veille-geo"><div class="veille-loading">Chargement de la veille…</div></div><div class="veille-foot">Flux publics agrégés · mise à jour automatique. Estimations et actualités à vérifier aux sources officielles.</div></section>
   <div class="geo-bloc-grid">
 
     <!-- ══ BLOC EUROPÉEN ══ -->
@@ -2299,6 +2325,8 @@ textarea.form-el{min-height:86px;resize:vertical}
 <div class="page" id="p-regs">
   <span class="eyebrow">Conformité · EU AI Act</span><h1 class="page-h">Réglementations</h1>
   <p class="page-lead">Textes officiels et obligations article par article — Règlement (UE) 2024/1689.</p>
+
+  <section class="veille-panel"><div class="veille-head"><div class="veille-head-t">??️ Veille — actualité de la réglementation IA</div><div class="veille-head-r"><span class="veille-updated" id="veille-upd-regs"></span><button class="veille-refresh" onclick="veilleRefresh()" title="Forcer le rafraîchissement">↻ Actualiser</button></div></div><div class="veille-list" id="veille-regs"><div class="veille-loading">Chargement de la veille…</div></div><div class="veille-foot">Flux publics agrégés · mise à jour automatique. Estimations et actualités à vérifier aux sources officielles.</div></section>
 
   <!-- Onglets -->
   <div class="regs-tabbar">
@@ -16885,6 +16913,62 @@ window.cartoToTarification = function(){
     var pg=document.getElementById('p-pricing'); if(pg) pg.scrollIntoView({behavior:'smooth',block:'start'});
   }, 120);
 };
+
+/* ══ Veille réglementaire IA : rendu partagé + rafraîchissement périodique ══ */
+window.__veille = {data:null, ts:0, loading:false, regs:[], timer:null};
+window.veilleInit = function(containerId, updId, filter){
+  window.__veille.regs.push({id:containerId, upd:updId, filter:filter||{}});
+  veilleEnsureLoaded(false);
+  var r=window.__veille.regs[window.__veille.regs.length-1]; veilleRenderOne(r);
+  if(!window.__veille.timer){ window.__veille.timer=setInterval(function(){ veilleEnsureLoaded(false); }, 600000); }
+};
+window.veilleEnsureLoaded = function(force){
+  var v=window.__veille, now=Date.now();
+  if(!force && v.data && (now - v.ts < 300000)) return;
+  if(v.loading) return; v.loading=true;
+  fetch('/api/veille'+(force?'?refresh=1':''), {credentials:'same-origin'})
+    .then(function(r){ return r.json(); })
+    .then(function(d){ v.data=d; v.ts=Date.now(); v.loading=false; v.regs.forEach(veilleRenderOne); })
+    .catch(function(){ v.loading=false; v.regs.forEach(function(r){ var b=document.getElementById(r.id); if(b && !v.data) b.innerHTML='<div class=\"veille-empty\">Veille momentan\u00e9ment indisponible. R\u00e9essayez plus tard.</div>'; }); });
+};
+window.veilleRefresh = function(){ veilleEnsureLoaded(true); };
+window.veilleRenderOne = function(reg){
+  var box=document.getElementById(reg.id); if(!box) return;
+  var d=window.__veille.data;
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;'); }
+  function fdate(iso){ if(!iso) return ''; var x=new Date(iso); if(isNaN(x.getTime())) return ''; return x.toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'}); }
+  if(!d){ box.innerHTML='<div class=\"veille-loading\">Chargement de la veille\u2026</div>'; return; }
+  if(!d.ok || !d.items || !d.items.length){ box.innerHTML='<div class=\"veille-empty\">Aucune actualit\u00e9 disponible pour le moment.</div>'; return; }
+  var items=d.items.filter(function(it){
+    if(reg.filter.theme && it.theme!==reg.filter.theme) return false;
+    if(reg.filter.jur && it.jur!==reg.filter.jur) return false;
+    return true;
+  });
+  if(reg.filter.max) items=items.slice(0, reg.filter.max);
+  if(!items.length){ box.innerHTML='<div class=\"veille-empty\">Aucune actualit\u00e9 correspondante.</div>'; return; }
+  box.innerHTML = items.map(function(it){
+    var dt=fdate(it.date);
+    return '<a class=\"veille-item\" href=\"'+esc(it.link)+'\" target=\"_blank\" rel=\"noopener noreferrer\">'
+      + '<div class=\"veille-item-top\"><span class=\"veille-chip vj\">'+esc(it.jur)+'</span>'
+      + '<span class=\"veille-chip vt\">'+esc(it.theme)+'</span>'
+      + (dt?'<span class=\"veille-date\">'+dt+'</span>':'')+'</div>'
+      + '<div class=\"veille-item-title\">'+esc(it.title)+'</div>'
+      + (it.summary?'<div class=\"veille-item-sum\">'+esc(it.summary)+'</div>':'')
+      + '<div class=\"veille-item-src\">'+esc(it.source)+'</div>'
+      + '</a>';
+  }).join('');
+  var upd=document.getElementById(reg.upd);
+  if(upd && d.updated_at){ var u=new Date(d.updated_at); if(!isNaN(u.getTime())) upd.textContent='Mise \u00e0 jour : '+u.toLocaleString('fr-FR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}); }
+};
+(function(){
+  function initVeille(){
+    if(!document.getElementById('veille-regs')) return;
+    veilleInit('veille-regs','veille-upd-regs',{max:12});
+    veilleInit('veille-carto','veille-upd-carto',{max:10});
+    veilleInit('veille-geo','veille-upd-geo',{max:10});
+  }
+  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', initVeille); } else { initVeille(); }
+})();
 
 window.ecoTip = function(ev, el){
   var tip=document.getElementById('carto-eco-tip'); if(!tip||!el) return;
