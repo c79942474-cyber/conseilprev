@@ -16817,6 +16817,42 @@ window.cartoRoiExport = function(){
   w.document.write(html+'<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>'); w.document.close();
 };
 
+/* Passage d'un cas retenu vers le Simulateur puis le Registre */
+window.cartoUcByKey = function(key){ return window.CARTO_UC.filter(function(x){return cartoKey(x)===key;})[0]; };
+
+window.cartoToSimulateur = function(keyEnc){
+  var key=decodeURIComponent(keyEnc); var u=cartoUcByKey(key); if(!u) return;
+  window.__cartoHandoff = u;
+  go('simulateur');
+  setTimeout(function(){
+    if(typeof simReset==='function') simReset();
+    var el=document.getElementById('sim-name'); if(el){ el.value=u.n+' ('+u.p+')'; }
+    var d=document.getElementById('sim-desc');
+    if(d){ d.value='Cas d\u2019usage identifié via la cartographie \u2014 '+u.p+'. Famille : '+u.f+'. Résultats attendus : '+u.r; }
+    if(el) el.focus();
+  }, 90);
+};
+
+window.cartoToRegistre = function(keyEnc){
+  var key=decodeURIComponent(keyEnc); var u=cartoUcByKey(key); if(!u) return;
+  var sec=(document.getElementById('carto-secteur')||{}).value||'';
+  window.__cartoHandoff = u;
+  go('registre');
+  setTimeout(function(){
+    if(typeof regOpenModal==='function'){
+      regOpenModal();
+      setTimeout(function(){
+        var n=document.getElementById('rf-nom'); if(n) n.value=u.n;
+        var f=document.getElementById('rf-finalite'); if(f) f.value=u.n+' \u2014 '+u.p+'. '+u.r;
+        var s=document.getElementById('rf-secteur'); if(s && sec) s.value=sec;
+        var t=document.getElementById('rf-type'); if(t) t.value=(u.f==='LLM'?'IA générative':(u.f==='ML'?'Apprentissage automatique':'Automatisation'));
+        var dn=document.getElementById('rf-donnees'); if(dn) dn.value=u.d;
+        if(n) n.focus();
+      }, 80);
+    }
+  }, 90);
+};
+
 window.cartoRenderShortlist = function(){
   var box=document.getElementById('carto-shortlist'); if(!box) return;
   var list=cartoSelectedList();
@@ -16837,11 +16873,12 @@ window.cartoRenderShortlist = function(){
       + '<td style="text-align:center"><strong id="cq-g-'+enc+'">'+g.toFixed(2)+'</strong></td>'
       + '<td style="text-align:center"><span id="cq-p-'+enc+'" style="display:inline-block;min-width:26px;padding:2px 8px;border-radius:10px;color:#fff;font-size:11px;font-weight:600;background:'+(prio==='P1'?'var(--green)':(prio==='P2'?'#c98a00':'var(--muted2)'))+'">'+prio+'</span></td>'
       + '<td style="font-size:10.5px;color:'+q.col+'" id="cq-q-'+enc+'">'+q.label+'</td>'
+      + '<td style="white-space:nowrap"><button class="mat-export-btn" style="padding:3px 8px;font-size:10px" title="Classer ce cas dans le Simulateur IA Act" onclick="cartoToSimulateur(\''+enc+'\')">Simulateur</button> <button class="mat-export-btn" style="padding:3px 8px;font-size:10px" title="Inscrire ce cas au Registre IA" onclick="cartoToRegistre(\''+enc+'\')">Registre</button></td>'
       + '</tr>';
   }).join('');
   box.innerHTML =
     '<div style="font-size:11px;color:var(--muted2);margin-bottom:8px">Notez chaque axe de 1 (très faible) à 5 (très fort). Le score global pondéré, la priorité et le positionnement se calculent en temps réel. Pondérations : impact 35 %, faisabilité 25 %, données 20 %, risque maîtrisé 20 %.</div>'
-    + '<table class="ms-table"><thead><tr><th>Cas d\u2019usage</th><th>Impact</th><th>Faisab.</th><th>Données</th><th>Risque</th><th>Score /5</th><th>Priorité</th><th>Positionnement / vague</th></tr></thead><tbody>'+rows+'</tbody></table>'
+    + '<table class="ms-table"><thead><tr><th>Cas d\u2019usage</th><th>Impact</th><th>Faisab.</th><th>Données</th><th>Risque</th><th>Score /5</th><th>Priorité</th><th>Positionnement / vague</th><th>Passer à</th></tr></thead><tbody>'+rows+'</tbody></table>'
     + '<div id="carto-synthese" style="margin-top:10px;padding:10px 12px;background:var(--bg);border:1px solid var(--rule2);border-radius:8px;font-size:12px"></div>';
   cartoUpdateSynthese();
 };
