@@ -918,10 +918,15 @@ def _detect_cat(title, default_cat):
 # Veille réglementaire IA — agrégateur de flux (lecture seule, cache)
 # ══════════════════════════════════════════════════════════════════
 VEILLE_FEEDS = [
-    {"url": "https://dig.watch/feed/",                                        "source": "Digital Watch Observatory", "jur": "International"},
-    {"url": "https://artificialintelligenceact.eu/feed/",                     "source": "EU AI Act",                 "jur": "Union européenne"},
-    {"url": "https://www.euractiv.com/sections/artificial-intelligence/feed/", "source": "EURACTIV — IA",            "jur": "Union européenne"},
-    {"url": "https://www.technologyreview.com/feed/",                         "source": "MIT Technology Review",     "jur": "International"},
+    # Régulation et gouvernance (prioritaires pour la veille CONSEILPREV)
+    {"url": "https://dig.watch/feed/",                    "source": "Digital Watch Observatory", "jur": "International"},
+    {"url": "https://artificialintelligenceact.eu/feed/", "source": "EU AI Act",                 "jur": "Union européenne"},
+    {"url": "https://www.euractiv.com/sections/tech/feed/", "source": "EURACTIV — Tech",          "jur": "Union européenne"},
+    # Actualité technologique (contexte)
+    {"url": "https://arstechnica.com/ai/feed/",           "source": "Ars Technica — IA",         "jur": "International"},
+    {"url": "https://www.technologyreview.com/feed/",     "source": "MIT Technology Review",     "jur": "International"},
+    # Pour ajouter une source : dupliquer une ligne (url du flux RSS/Atom, source, jur).
+    # Le mode diagnostic /api/veille?debug=1 indique, pour chaque flux, le statut HTTP et le nombre d'items.
 ]
 VEILLE_TTL = 1800  # cache serveur (secondes) = 30 min
 _VEILLE_CACHE = {"ts": 0.0, "items": [], "errors": []}
@@ -946,6 +951,27 @@ def api_veille():
     Lecture seule, cache serveur (VEILLE_TTL). ?refresh=1 force le rafraîchissement."""
     import time as _time, html as _html, re as _re
     force = (request.args.get('refresh') or '') in ('1', 'true', 'yes')
+    debug = (request.args.get('debug') or '') in ('1', 'true', 'yes')
+    if debug:
+        diag = []
+        for feed in VEILLE_FEEDS:
+            entry = {"source": feed.get("source"), "url": feed.get("url"), "jur": feed.get("jur")}
+            try:
+                resp = requests.get(feed["url"], headers={"User-Agent": "Sentinel-Veille/1.0"}, timeout=6)
+                parsed = feedparser.parse(resp.content)
+                entry["http_status"] = resp.status_code
+                entry["items"] = len(parsed.entries)
+                entry["ok"] = bool(resp.status_code == 200 and len(parsed.entries) > 0)
+                if parsed.entries:
+                    entry["sample"] = (parsed.entries[0].get("title") or "")[:120]
+                if getattr(parsed, "bozo", 0) and getattr(parsed, "bozo_exception", None):
+                    entry["parse_warning"] = str(parsed.bozo_exception)[:120]
+            except Exception as ex:
+                entry["ok"] = False
+                entry["error"] = str(ex)[:160]
+            diag.append(entry)
+        return jsonify({"ok": True, "debug": True, "count": len(diag),
+                        "working": sum(1 for d in diag if d.get("ok")), "feeds": diag})
     now = _time.time()
     if (not force) and _VEILLE_CACHE["items"] and (now - _VEILLE_CACHE["ts"] < VEILLE_TTL):
         return jsonify({
