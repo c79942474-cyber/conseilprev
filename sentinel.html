@@ -2975,6 +2975,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
       <button class="mat-export-btn" onclick="cartoGoStep(3)">← Revenir à la qualification</button>
       <button class="mat-export-btn" onclick="cartoRoiExport()">Exporter le dossier de valeur (PDF)</button>
+      <button class="mat-export-btn" onclick="cartoToTarification()" title="Reporter le perimetre et la valeur vers la Tarification et l enveloppe RaaS">→ Tarification &amp; enveloppe RaaS</button>
       <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="cartoGoStep(5)">Évaluer la maturité →</button>
     </div>
   </div>
@@ -16706,6 +16707,32 @@ window.cartoRenderMaturite = function(){
     + '<div id="carto-mat-global" style="margin-top:14px;padding:11px 14px;background:var(--ink);color:#fff;border-radius:8px;font-size:13px"></div>'
     + '<div id="carto-mat-gaps" style="margin-top:12px"></div>';
   cartoMatRefresh();
+};
+
+window.cartoToTarification = function(){
+  var list=cartoSelectedList();
+  if(!list.length){ alert('Sélectionnez au moins un cas d\u2019usage \u00e0 l\u2019étape 2.'); return; }
+  function eur(n){ return (n||0).toLocaleString('fr-FR')+'\u202f\u20ac'; }
+  var tGain=0,tBase=0,tNet=0,nbP1=0;
+  list.forEach(function(u){ var r=cartoRoiOf(cartoKey(u),u); var c=cartoRoiCompute(r); tGain+=c.gainAnnuel; tBase+=(r.setup+r.run); tNet+=c.netAn1;
+    if(cartoPriority(cartoGlobal(cartoScoreOf(cartoKey(u))))==='P1') nbP1++; });
+  var nbSys=list.length;
+  window.__cartoValueReport = {nbSystemes:nbSys, nbP1:nbP1, gainAnnuel:tGain, invest:tBase, net:tNet};
+  go('pricing');
+  setTimeout(function(){
+    var nb=document.getElementById('pricing-nb-systemes');
+    if(nb){ nb.value=nbSys; }
+    if(typeof pricingSimulate==='function') pricingSimulate();
+    var info=document.getElementById('pricing-prefill-info');
+    if(info){
+      info.innerHTML='<strong>Report du dossier de valeur \u2014 cartographie</strong><br>'
+        + nbSys+' cas d\u2019usage retenus ('+nbP1+' prioritaires P1) report\u00e9s comme '+nbSys+' syst\u00e8me(s) \u00e0 tarifer. '
+        + 'Gain annuel estim\u00e9 : <strong>'+eur(tGain)+'</strong>. '
+        + 'L\u2019enveloppe RaaS ci-dessous se dimensionne sur ce p\u00e9rim\u00e8tre ; rapprochez-la du gain attendu pour calibrer les jalons.';
+      info.style.display='block';
+    }
+    var pg=document.getElementById('p-pricing'); if(pg) pg.scrollIntoView({behavior:'smooth',block:'start'});
+  }, 120);
 };
 
 window.cartoMaturiteExport = function(){
