@@ -2857,7 +2857,7 @@ textarea.form-el{min-height:86px;resize:vertical}
   <div class="carto-steps" style="display:flex;gap:8px;margin:18px 0;flex-wrap:wrap">
     <div class="carto-step on" id="carto-step-1"><span class="carto-num">1</span> Cibler</div>
     <div class="carto-step" id="carto-step-2"><span class="carto-num">2</span> Explorer</div>
-    <div class="carto-step" id="carto-step-3"><span class="carto-num">3</span> Prioriser</div>
+    <div class="carto-step" id="carto-step-3"><span class="carto-num">3</span> Qualifier &amp; prioriser</div>
   </div>
 
   <!-- Étape 1 : Cibler -->
@@ -2900,12 +2900,12 @@ textarea.form-el{min-height:86px;resize:vertical}
 
   <!-- Étape 3 : Prioriser -->
   <div class="carto-panel" id="carto-panel-3" style="display:none">
-    <h3 style="margin-top:0">Étape 3 — Liste courte à qualifier</h3>
-    <p style="color:var(--muted2);font-size:13px">Les cas retenus ci-dessous constituent votre liste courte. Exportez-la pour la qualifier (impact, faisabilité, données, risque) et la prioriser.</p>
+    <h3 style="margin-top:0">Étape 3 — Qualifier et prioriser</h3>
+    <p style="color:var(--muted2);font-size:13px">Notez chaque cas retenu sur quatre axes. Le score pondéré, la priorité (P1 à P3) et le positionnement dans la matrice impact-faisabilité se calculent en temps réel. Exportez ensuite la liste priorisée.</p>
     <div id="carto-shortlist"></div>
     <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
       <button class="mat-export-btn" onclick="cartoGoStep(2)">← Modifier la sélection</button>
-      <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="cartoExport()">?? Exporter la liste courte (PDF)</button>
+      <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="cartoExport()">Exporter la liste priorisée (PDF)</button>
     </div>
     <div style="margin-top:14px;padding:12px 14px;background:var(--bg);border:1px solid var(--rule2);border-radius:8px;font-size:12px;color:var(--muted2)">
       Prochaine étape du parcours : qualifier chaque cas retenu (scoring pondéré) puis estimer les résultats mesurables. Chaque cas prioritaire pourra être rattaché à un jalon de conformité AI Act dans le module RaaS, reliant la valeur métier à la trajectoire de conformité.
@@ -16432,13 +16432,85 @@ window.cartoSelectedList = function(){
   return window.CARTO_UC.filter(function(u){ return keys[cartoKey(u)]; });
 };
 
+/* Pondérations (alignées sur la grille tableur) et seuils de priorité */
+window.CARTO_WEIGHTS = {impact:0.35, faisabilite:0.25, donnees:0.20, risque:0.20};
+window.CARTO_SEUILS = {p1:4.0, p2:3.2};
+window.CARTO_MATRIX_THRESHOLD = 3.5;
+if(!window.__cartoState.scores) window.__cartoState.scores = {};
+
+window.cartoScoreOf = function(key){
+  var s = window.__cartoState.scores[key] || {impact:3, faisabilite:3, donnees:3, risque:3};
+  return s;
+};
+window.cartoGlobal = function(s){
+  var w=window.CARTO_WEIGHTS;
+  return s.impact*w.impact + s.faisabilite*w.faisabilite + s.donnees*w.donnees + s.risque*w.risque;
+};
+window.cartoPriority = function(g){
+  if(g>=window.CARTO_SEUILS.p1) return 'P1';
+  if(g>=window.CARTO_SEUILS.p2) return 'P2';
+  return 'P3';
+};
+window.cartoQuadrant = function(s){
+  var t=window.CARTO_MATRIX_THRESHOLD;
+  if(s.impact>=t && s.faisabilite>=t) return {label:'Gain rapide \u2014 Vague 1', col:'var(--green)'};
+  if(s.impact>=t && s.faisabilite<t) return {label:'Chantier structurant \u2014 Vague 2', col:'#c98a00'};
+  if(s.impact<t && s.faisabilite>=t) return {label:'Quick win limité \u2014 Vague 2', col:'#c98a00'};
+  return {label:'À écarter / réévaluer \u2014 Vague 3', col:'var(--muted2)'};
+};
+
+window.cartoSetScore = function(keyEnc, axe, val){
+  var key=decodeURIComponent(keyEnc);
+  if(!window.__cartoState.scores[key]) window.__cartoState.scores[key]={impact:3,faisabilite:3,donnees:3,risque:3};
+  window.__cartoState.scores[key][axe]=parseInt(val,10);
+  cartoRefreshRow(key);
+};
+
+window.cartoRefreshRow = function(key){
+  var s=cartoScoreOf(key); var g=cartoGlobal(s); var prio=cartoPriority(g); var q=cartoQuadrant(s);
+  var enc=encodeURIComponent(key);
+  var gEl=document.getElementById('cq-g-'+enc); if(gEl) gEl.textContent=g.toFixed(2);
+  var pEl=document.getElementById('cq-p-'+enc);
+  if(pEl){ pEl.textContent=prio; pEl.style.background=(prio==='P1'?'var(--green)':(prio==='P2'?'#c98a00':'var(--muted2)')); }
+  var qEl=document.getElementById('cq-q-'+enc); if(qEl){ qEl.textContent=q.label; qEl.style.color=q.col; }
+  cartoUpdateSynthese();
+};
+
+window.cartoUpdateSynthese = function(){
+  var list=cartoSelectedList();
+  var p1=0,p2=0,p3=0,sum=0;
+  list.forEach(function(u){ var g=cartoGlobal(cartoScoreOf(cartoKey(u))); sum+=g; var pr=cartoPriority(g); if(pr==='P1')p1++;else if(pr==='P2')p2++;else p3++; });
+  var el=document.getElementById('carto-synthese');
+  if(el && list.length){ el.innerHTML='Moyenne du portefeuille : <strong>'+(sum/list.length).toFixed(2)+'/5</strong> \u00b7 <span style="color:var(--green)">'+p1+' P1</span> \u00b7 <span style="color:#c98a00">'+p2+' P2</span> \u00b7 <span style="color:var(--muted2)">'+p3+' P3</span>'; }
+};
+
 window.cartoRenderShortlist = function(){
   var box=document.getElementById('carto-shortlist'); if(!box) return;
   var list=cartoSelectedList();
   if(!list.length){ box.innerHTML='<div style="color:var(--muted2);font-size:13px;padding:16px;background:var(--bg);border-radius:8px">Aucun cas retenu. Revenez à l\u2019étape 2 pour en sélectionner.</div>'; return; }
-  box.innerHTML='<table class="ms-table"><thead><tr><th>Processus</th><th>Cas d\u2019usage</th><th>Famille</th><th>Résultats mesurables attendus</th></tr></thead><tbody>'
-    + list.map(function(u){ return '<tr><td style="font-size:11px">'+u.p+'</td><td><strong>'+u.n+'</strong></td><td><span class="carto-fam '+u.f+'">'+u.f+'</span></td><td style="font-size:11px;color:var(--muted2)">'+u.r+'</td></tr>'; }).join('')
-    + '</tbody></table>';
+  function sel(enc,axe,cur){
+    var o='';
+    for(var v=1;v<=5;v++){ o+='<option value="'+v+'"'+(v===cur?' selected':'')+'>'+v+'</option>'; }
+    return '<select onchange="cartoSetScore(\''+enc+'\',\''+axe+'\',this.value)" style="padding:4px 6px;border:1px solid var(--rule2);border-radius:5px;font-size:12px">'+o+'</select>';
+  }
+  var rows=list.map(function(u){
+    var key=cartoKey(u); var enc=encodeURIComponent(key); var s=cartoScoreOf(key); var g=cartoGlobal(s); var prio=cartoPriority(g); var q=cartoQuadrant(s);
+    return '<tr>'
+      + '<td><strong style="font-size:12px">'+u.n+'</strong><div style="font-size:9px;color:var(--muted2)">'+u.p+' \u00b7 <span class="carto-fam '+u.f+'">'+u.f+'</span></div></td>'
+      + '<td style="text-align:center">'+sel(enc,'impact',s.impact)+'</td>'
+      + '<td style="text-align:center">'+sel(enc,'faisabilite',s.faisabilite)+'</td>'
+      + '<td style="text-align:center">'+sel(enc,'donnees',s.donnees)+'</td>'
+      + '<td style="text-align:center">'+sel(enc,'risque',s.risque)+'</td>'
+      + '<td style="text-align:center"><strong id="cq-g-'+enc+'">'+g.toFixed(2)+'</strong></td>'
+      + '<td style="text-align:center"><span id="cq-p-'+enc+'" style="display:inline-block;min-width:26px;padding:2px 8px;border-radius:10px;color:#fff;font-size:11px;font-weight:600;background:'+(prio==='P1'?'var(--green)':(prio==='P2'?'#c98a00':'var(--muted2)'))+'">'+prio+'</span></td>'
+      + '<td style="font-size:10.5px;color:'+q.col+'" id="cq-q-'+enc+'">'+q.label+'</td>'
+      + '</tr>';
+  }).join('');
+  box.innerHTML =
+    '<div style="font-size:11px;color:var(--muted2);margin-bottom:8px">Notez chaque axe de 1 (très faible) à 5 (très fort). Le score global pondéré, la priorité et le positionnement se calculent en temps réel. Pondérations : impact 35 %, faisabilité 25 %, données 20 %, risque maîtrisé 20 %.</div>'
+    + '<table class="ms-table"><thead><tr><th>Cas d\u2019usage</th><th>Impact</th><th>Faisab.</th><th>Données</th><th>Risque</th><th>Score /5</th><th>Priorité</th><th>Positionnement / vague</th></tr></thead><tbody>'+rows+'</tbody></table>'
+    + '<div id="carto-synthese" style="margin-top:10px;padding:10px 12px;background:var(--bg);border:1px solid var(--rule2);border-radius:8px;font-size:12px"></div>';
+  cartoUpdateSynthese();
 };
 
 window.cartoExport = function(){
@@ -16446,7 +16518,7 @@ window.cartoExport = function(){
   if(!list.length){ alert('Sélectionnez au moins un cas d\u2019usage.'); return; }
   var sec=(document.getElementById('carto-secteur')||{}).value||'Tous secteurs';
   var today=new Date().toLocaleDateString('fr-FR');
-  var rows=list.map(function(u){ return '<tr><td>'+u.p+'</td><td>'+u.n+'</td><td>'+u.f+'</td><td>'+u.r+'</td><td>'+u.d+'</td></tr>'; }).join('');
+  var rows=list.slice().sort(function(a,b){ return cartoGlobal(cartoScoreOf(cartoKey(b)))-cartoGlobal(cartoScoreOf(cartoKey(a))); }).map(function(u){ var s=cartoScoreOf(cartoKey(u)); var g=cartoGlobal(s); var prio=cartoPriority(g); var q=cartoQuadrant(s); return '<tr><td>'+u.p+'</td><td>'+u.n+'</td><td>'+u.f+'</td><td style="text-align:center">'+g.toFixed(2)+'</td><td style="text-align:center"><strong>'+prio+'</strong></td><td>'+q.label+'</td><td>'+u.r+'</td></tr>'; }).join('');
   var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Liste courte cas d\u2019usage IA</title>'
     +'<style>@page{margin:1.8cm}body{font-family:Arial,sans-serif;color:#1C1C1C;max-width:920px;margin:0 auto;padding:18px}'
     +'h1{font-size:19px;border-bottom:3px solid #B83222;padding-bottom:8px;margin-bottom:4px}'
@@ -16455,10 +16527,10 @@ window.cartoExport = function(){
     +'th{background:#1C1C1C;color:#fff;padding:7px 9px;text-align:left;font-size:9.5px}'
     +'td{border:1px solid #ddd;padding:7px 9px;vertical-align:top}tbody tr:nth-child(even){background:#faf9f7}'
     +'.foot{font-size:9px;color:#999;margin-top:20px;border-top:1px solid #eee;padding-top:8px}</style></head><body>'
-    +'<h1>Liste courte de cas d\u2019usage IA</h1>'
+    +'<h1>Cas d\u2019usage IA \u2014 qualification et priorisation</h1>'
     +'<div class="sub">CONSEILPREV \u2014 Sentinel AI \u00b7 Secteur : '+sec+' \u00b7 Établi le '+today+' \u00b7 '+list.length+' cas retenu(s)</div>'
-    +'<table><thead><tr><th>Processus</th><th>Cas d\u2019usage</th><th>Famille</th><th>Résultats mesurables attendus</th><th>Données requises</th></tr></thead><tbody>'+rows+'</tbody></table>'
-    +'<div class="foot">Document de cadrage \u2014 étape 1 du parcours d\u2019identification des cas d\u2019usage. À qualifier (impact, faisabilité, données, risque) puis prioriser. Généré par Sentinel AI.</div>'
+    +'<table><thead><tr><th>Processus</th><th>Cas d\u2019usage</th><th>Famille</th><th>Score /5</th><th>Priorité</th><th>Positionnement / vague</th><th>Résultats mesurables attendus</th></tr></thead><tbody>'+rows+'</tbody></table>'
+    +'<div class="foot">Document de cadrage \u2014 cas d\u2019usage qualifiés (scoring pondéré : impact 35 %, faisabilité 25 %, données 20 %, risque maîtrisé 20 %) et priorisés (P1 \u2265 4,0 ; P2 \u2265 3,2). Estimations à valider avec les métiers et la DSI. Généré par Sentinel AI.</div>'
     +'</body></html>';
   var w=window.open('','_blank'); if(!w){ alert('Autorisez les pop-ups pour exporter.'); return; }
   w.document.write(html+'<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>'); w.document.close();
