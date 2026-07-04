@@ -1783,6 +1783,18 @@ textarea.form-el{min-height:86px;resize:vertical}
 .guided-banner .gb-close{background:transparent;border:none;color:rgba(255,255,255,.7);font-size:20px;line-height:1;cursor:pointer;padding:2px 6px}
 .guided-banner .gb-close:hover{color:var(--white)}
 @media(max-width:640px){.guided-banner .gb-btn{max-width:150px}}
+
+/* ══ INDICATEUR CLIGNOTANT PARCOURS EN COURS ══ */
+@keyframes gbPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
+@keyframes gbHalo{0%,100%{box-shadow:0 0 0 0 rgba(224,168,0,.55)}50%{box-shadow:0 0 0 6px rgba(224,168,0,0)}}
+@keyframes gbArrow{0%,100%{transform:translateX(0);opacity:1}50%{transform:translateX(5px);opacity:.55}}
+.guided-banner .gb-live{display:inline-flex;align-items:center;gap:7px;padding:4px 10px 4px 8px;border:1px solid rgba(255,255,255,.22);border-radius:20px}
+.guided-banner .gb-live-dot{width:9px;height:9px;border-radius:50%;background:var(--accent);animation:gbPulse 1.2s ease-in-out infinite}
+.guided-banner .gb-live-txt{font-size:11px;font-weight:600;color:var(--white);letter-spacing:.02em}
+.guided-banner .gb-next-anim{animation:gbHalo 1.6s ease-in-out infinite}
+.guided-banner .gb-arrow{display:inline-block;animation:gbArrow 1s ease-in-out infinite;font-weight:700}
+@media(max-width:640px){.guided-banner .gb-live-txt{display:none}}
+@media(prefers-reduced-motion:reduce){.guided-banner .gb-live-dot,.guided-banner .gb-next-anim,.guided-banner .gb-arrow{animation:none}}
 </style>
 
 </head>
@@ -17294,12 +17306,13 @@ window.guidedRenderBanner = function(){
   var dots = '';
   for(var k=0;k<n;k++){ dots += '<span class="gb-dot'+(k===i?' on':(k<i?' done':''))+'"></span>'; }
   var html = '<div class="gb-left">'
+    + '<span class="gb-live" title="Parcours en cours"><span class="gb-live-dot"></span><span class="gb-live-txt">Parcours en cours</span></span>'
     + '<button class="gb-role" onclick="guidedReopen(\''+g.pathId+'\')" title="Revenir au parcours complet">'+esc(path.icon)+' '+esc(path.role)+'</button>'
     + '<div class="gb-prog"><span class="gb-step">\u00c9tape '+(i+1)+' / '+n+' \u00b7 '+esc(step.label)+'</span><span class="gb-dots">'+dots+'</span></div>'
     + '</div>'
     + '<div class="gb-actions">';
   if(prev) html += '<button class="gb-btn" onclick="guidedStartStep(\''+g.pathId+'\','+(i-1)+')" title="'+esc(prev.label)+'">\u2190 Pr\u00e9c\u00e9dent</button>';
-  if(next) html += '<button class="gb-btn gb-next" onclick="guidedStartStep(\''+g.pathId+'\','+(i+1)+')">Suivant : '+esc(next.label)+' \u2192</button>';
+  if(next) html += '<button class="gb-btn gb-next gb-next-anim" onclick="guidedStartStep(\''+g.pathId+'\','+(i+1)+')">Suivant : '+esc(next.label)+' <span class="gb-arrow">\u2192</span></button>';
   else html += '<button class="gb-btn gb-next" onclick="guidedEndBanner()">Terminer \u2713</button>';
   html += '<button class="gb-close" title="Quitter le parcours" onclick="guidedEndBanner()">\u00d7</button>';
   html += '</div>';
