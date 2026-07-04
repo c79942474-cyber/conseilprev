@@ -2987,8 +2987,10 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div id="carto-maturite"></div>
     <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
       <button class="mat-export-btn" onclick="cartoGoStep(4)">← Revenir au chiffrage</button>
-      <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="cartoMaturiteExport()">?? Exporter le diagnostic (PDF)</button>
+      <button class="mat-export-btn" onclick="cartoMaturiteExport()">Exporter le diagnostic (PDF)</button>
+      <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="cartoAttachInit()" title="Rattacher la synthese de la cartographie a la fiche d un client (Gestion des clients)">↗ Rattacher à un client</button>
     </div>
+    <div id="carto-attach" style="display:none;margin-top:12px;padding:12px 14px;background:var(--bg);border:1px solid var(--rule2);border-radius:8px"></div>
     <div style="margin-top:14px;padding:12px 14px;background:var(--bg);border:1px solid var(--rule2);border-radius:8px;font-size:12px;color:var(--muted2)">
       Ce diagnostic clôt le parcours d’identification et de préparation. Les cas prioritaires, chiffrés et jugés déployables peuvent être rattachés à des jalons de conformité AI Act dans le module RaaS, reliant valeur métier, faisabilité et trajectoire de conformité.
     </div>
@@ -16733,6 +16735,61 @@ window.cartoToTarification = function(){
     }
     var pg=document.getElementById('p-pricing'); if(pg) pg.scrollIntoView({behavior:'smooth',block:'start'});
   }, 120);
+};
+
+window.cartoAttachInit = function(){
+  var box=document.getElementById('carto-attach'); if(!box) return;
+  if(box.style.display==='block'){ box.style.display='none'; return; }
+  box.style.display='block';
+  if(!cartoSelectedList().length){ box.innerHTML='<div style="font-size:12px;color:var(--muted2)">Aucun cas retenu. Revenez \u00e0 l\u2019\u00e9tape 2 pour en s\u00e9lectionner.</div>'; return; }
+  box.innerHTML='<div style="font-size:12px;color:var(--muted)">Chargement des clients…</div>';
+  fetch('/api/admin/clients',{credentials:'same-origin'})
+    .then(function(r){return r.json();}).then(function(d){
+      var clients=(d && d.clients)?d.clients:[];
+      if(!clients.length){ box.innerHTML='<div style="font-size:12px;color:var(--accent)">Aucun client disponible. Cr\u00e9ez un client dans Gestion des clients.</div>'; return; }
+      var opts=clients.map(function(c){ return '<option value="'+c.id+'">'+String(c.nom_entreprise||('Client #'+c.id)).replace(/</g,"&lt;")+'</option>'; }).join('');
+      box.innerHTML=
+        '<div style="font-size:12px;font-weight:600;margin-bottom:8px">Rattacher la synth\u00e8se de la cartographie \u00e0 un client</div>'
+        + '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">'
+        + '<select id="carto-attach-client" style="padding:7px 10px;border:1px solid var(--rule2);border-radius:6px;font-size:12px;min-width:220px">'+opts+'</select>'
+        + '<button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="cartoAttachToClient()">Rattacher la synth\u00e8se</button>'
+        + '<span id="carto-attach-msg" style="font-size:11px"></span></div>'
+        + '<div style="font-size:10px;color:var(--muted2);margin-top:6px">La synth\u00e8se (cas retenus, priorit\u00e9s, gain estim\u00e9, maturit\u00e9) sera enregistr\u00e9e comme note dans la fiche du client, o\u00f9 elle reste consultable et trac\u00e9e.</div>';
+    }).catch(function(){ box.innerHTML='<div style="font-size:12px;color:var(--accent)">Erreur de chargement des clients.</div>'; });
+};
+
+window.cartoBuildSynthese = function(){
+  var list=cartoSelectedList();
+  function eur(n){ return (n||0).toLocaleString('fr-FR')+' EUR'; }
+  var sec=(document.getElementById('carto-secteur')||{}).value||'Tous secteurs';
+  var today=new Date().toLocaleDateString('fr-FR');
+  var p1=0,p2=0,p3=0,tGain=0;
+  var lignes=list.slice().sort(function(a,b){ return cartoGlobal(cartoScoreOf(cartoKey(b)))-cartoGlobal(cartoScoreOf(cartoKey(a))); }).map(function(u){
+    var key=cartoKey(u); var g=cartoGlobal(cartoScoreOf(key)); var prio=cartoPriority(g);
+    if(prio==='P1')p1++;else if(prio==='P2')p2++;else p3++;
+    var r=cartoRoiOf(key,u); var c=cartoRoiCompute(r); tGain+=c.gainAnnuel;
+    return '- '+u.p+' | '+u.n+' ('+u.f+') | '+prio+' | score '+g.toFixed(2)+'/5 | gain annuel '+eur(c.gainAnnuel);
+  }).join('\n');
+  var matG = (typeof cartoMatGlobal==='function')? cartoMatGlobal() : null;
+  var txt='Synthese cartographie des cas d\'usage IA - '+today+'\n'
+    + 'Secteur : '+sec+'\n'
+    + list.length+' cas retenus (P1: '+p1+', P2: '+p2+', P3: '+p3+')\n'
+    + 'Gain annuel estime cumule : '+eur(tGain)+'\n'
+    + (matG!==null?('Indice de maturite : '+matG.toFixed(2)+'/5\n'):'')
+    + '\nDetail :\n'+lignes
+    + '\n\nEstimations de cadrage a valider avec les metiers et la direction financiere. Genere par Sentinel AI.';
+  return txt;
+};
+
+window.cartoAttachToClient = function(){
+  var sel=document.getElementById('carto-attach-client'); var msg=document.getElementById('carto-attach-msg');
+  if(!sel||!sel.value){ return; }
+  var note=cartoBuildSynthese();
+  if(msg){ msg.style.color='var(--muted)'; msg.textContent='Rattachement…'; }
+  fetch('/api/clients/notes',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({client_id:parseInt(sel.value,10),note:note})})
+    .then(function(r){return r.json();}).then(function(d){
+      if(msg){ msg.style.color=d.ok?'var(--green)':'var(--accent)'; msg.textContent=d.ok?'Synth\u00e8se rattach\u00e9e \u00e0 la fiche client (onglet Notes).':(d.error||'Erreur'); }
+    }).catch(function(){ if(msg){ msg.style.color='var(--accent)'; msg.textContent='Erreur r\u00e9seau.'; } });
 };
 
 window.cartoMaturiteExport = function(){
