@@ -1739,7 +1739,10 @@ textarea.form-el{min-height:86px;resize:vertical}
 .carto-xref-link:hover{text-decoration:underline}
 
 /* ══ SCHEMA ECOSYSTEME CARTOGRAPHIE ══ */
-.carto-eco{margin:14px 0 6px;padding:14px 16px;background:var(--white);border:1px solid var(--rule2);border-radius:12px}
+.carto-eco{position:relative;margin:14px 0 6px;padding:14px 16px;background:var(--white);border:1px solid var(--rule2);border-radius:12px}
+.carto-eco-svg .eco-node{cursor:default}
+.carto-eco-svg .eco-node:hover rect{filter:brightness(0.97)}
+.carto-eco-tip{position:absolute;display:none;max-width:260px;padding:8px 11px;background:var(--ink);color:var(--white);font-size:11.5px;line-height:1.45;border-radius:7px;pointer-events:none;z-index:40;box-shadow:0 4px 14px rgba(0,0,0,.25)}
 .carto-eco-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px}
 .carto-eco-title{font-size:13px;font-weight:600;color:var(--ink)}
 .carto-eco-legend{display:flex;gap:13px;font-size:11px;color:var(--muted2);flex-wrap:wrap}
@@ -2929,18 +2932,19 @@ textarea.form-el{min-height:86px;resize:vertical}
       <line x1="342" y1="352" x2="342" y2="522" stroke="var(--muted2)" stroke-width="1.4" stroke-dasharray="2 4" marker-end="url(#aCoh)"/>
       <line x1="386" y1="352" x2="500" y2="522" stroke="var(--muted2)" stroke-width="1.4" stroke-dasharray="2 4" marker-end="url(#aCoh)"/>
 
-      <g class="eco-hub"><rect x="250" y="290" width="180" height="62" rx="10"/><text class="eco-t" x="340" y="314">Cartographie cas d’usage</text><text class="eco-s" x="340" y="334">5 étapes · valeur métier</text></g>
-      <g class="eco-prio"><rect x="90" y="122" width="180" height="56" rx="10"/><text class="eco-t" x="180" y="144">Simulateur IA Act</text><text class="eco-s" x="180" y="162">Classer un cas retenu</text></g>
-      <g class="eco-prio"><rect x="290" y="122" width="180" height="56" rx="10"/><text class="eco-t" x="380" y="144">Registre IA</text><text class="eco-s" x="380" y="162">Inscrire à l’inventaire</text></g>
-      <g class="eco-est"><rect x="482" y="122" width="168" height="56" rx="10"/><text class="eco-t" x="566" y="144">Parcours guidés</text><text class="eco-s" x="566" y="162">1re étape par rôle</text></g>
-      <g class="eco-log"><rect x="30" y="302" width="172" height="56" rx="10"/><text class="eco-t" x="116" y="324">Gestion clients</text><text class="eco-s" x="116" y="342">Livrables PDF</text></g>
-      <g class="eco-est"><rect x="482" y="410" width="168" height="56" rx="10"/><text class="eco-t" x="566" y="432">Module RaaS</text><text class="eco-s" x="566" y="450">Jalons de conformité</text></g>
-      <g class="eco-log"><rect x="30" y="410" width="180" height="56" rx="10"/><text class="eco-t" x="120" y="432">Roadmap</text><text class="eco-s" x="120" y="450">Vagues de déploiement</text></g>
-      <g class="eco-log"><rect x="250" y="410" width="180" height="56" rx="10"/><text class="eco-t" x="340" y="432">Tarification</text><text class="eco-s" x="340" y="450">Enveloppe · ROI</text></g>
-      <g class="eco-coh"><rect x="40" y="524" width="180" height="56" rx="10"/><text class="eco-t" x="130" y="546">Audit de maturité</text><text class="eco-s" x="130" y="564">Se citer, ne pas dupliquer</text></g>
-      <g class="eco-coh"><rect x="256" y="524" width="168" height="56" rx="10"/><text class="eco-t" x="340" y="546">Matrice des risques</text><text class="eco-s" x="340" y="564">Axe risque partagé</text></g>
-      <g class="eco-coh"><rect x="456" y="524" width="194" height="56" rx="10"/><text class="eco-t" x="553" y="546">Benchmark · Juridictions</text><text class="eco-s" x="553" y="564">Secteur · déploiement pays</text></g>
+      <g class="eco-hub eco-node" data-tip="Point d\u2019entrée valeur métier : identifier, qualifier, chiffrer puis évaluer la maturité des cas d\u2019usage IA (5 étapes)." onmousemove="ecoTip(event,this)" onmouseleave="ecoTipHide()"><rect x="250" y="290" width="180" height="62" rx="10"/><text class="eco-t" x="340" y="314">Cartographie cas d’usage</text><text class="eco-s" x="340" y="334">5 étapes · valeur métier</text></g>
+      <g class="eco-prio eco-node" data-tip="Lien prioritaire (établi) : classer un cas retenu selon les niveaux de risque de l\u2019AI Act." onmousemove="ecoTip(event,this)" onmouseleave="ecoTipHide()"><rect x="90" y="122" width="180" height="56" rx="10"/><text class="eco-t" x="180" y="144">Simulateur IA Act</text><text class="eco-s" x="180" y="162">Classer un cas retenu</text></g>
+      <g class="eco-prio eco-node" data-tip="Lien prioritaire (établi) : inscrire un cas retenu à l\u2019inventaire central du registre." onmousemove="ecoTip(event,this)" onmouseleave="ecoTipHide()"><rect x="290" y="122" width="180" height="56" rx="10"/><text class="eco-t" x="380" y="144">Registre IA</text><text class="eco-s" x="380" y="162">Inscrire à l’inventaire</text></g>
+      <g class="eco-est eco-node" data-tip="Lien établi : la cartographie est la 1re étape des parcours par rôle (directeur programme, CEO, CDO, CAIO)." onmousemove="ecoTip(event,this)" onmouseleave="ecoTipHide()"><rect x="482" y="122" width="168" height="56" rx="10"/><text class="eco-t" x="566" y="144">Parcours guidés</text><text class="eco-s" x="566" y="162">1re étape par rôle</text></g>
+      <g class="eco-log eco-node" data-tip="Lien établi : rattacher la synthèse de la cartographie à la fiche client (onglet Notes) et y produire les livrables PDF." onmousemove="ecoTip(event,this)" onmouseleave="ecoTipHide()"><rect x="30" y="302" width="172" height="56" rx="10"/><text class="eco-t" x="116" y="324">Gestion clients</text><text class="eco-s" x="116" y="342">Livrables PDF</text></g>
+      <g class="eco-est eco-node" data-tip="Lien établi : les cas prioritaires deviennent des jalons de conformité facturables." onmousemove="ecoTip(event,this)" onmouseleave="ecoTipHide()"><rect x="482" y="410" width="168" height="56" rx="10"/><text class="eco-t" x="566" y="432">Module RaaS</text><text class="eco-s" x="566" y="450">Jalons de conformité</text></g>
+      <g class="eco-log eco-node" data-tip="Lien logique : les vagues de déploiement issues de la priorisation nourrissent la feuille de route." onmousemove="ecoTip(event,this)" onmouseleave="ecoTipHide()"><rect x="30" y="410" width="180" height="56" rx="10"/><text class="eco-t" x="120" y="432">Roadmap</text><text class="eco-s" x="120" y="450">Vagues de déploiement</text></g>
+      <g class="eco-log eco-node" data-tip="Lien établi : reporter le dossier de valeur pour dimensionner l\u2019enveloppe RaaS et le ROI." onmousemove="ecoTip(event,this)" onmouseleave="ecoTipHide()"><rect x="250" y="410" width="180" height="56" rx="10"/><text class="eco-t" x="340" y="432">Tarification</text><text class="eco-s" x="340" y="450">Enveloppe · ROI</text></g>
+      <g class="eco-coh eco-node" data-tip="Renvoi de cohérence : complète l\u2019évaluation de gouvernance (8 piliers) sans la dupliquer." onmousemove="ecoTip(event,this)" onmouseleave="ecoTipHide()"><rect x="40" y="524" width="180" height="56" rx="10"/><text class="eco-t" x="130" y="546">Audit de maturité</text><text class="eco-s" x="130" y="564">Se citer, ne pas dupliquer</text></g>
+      <g class="eco-coh eco-node" data-tip="Renvoi de cohérence : évaluation approfondie du risque, en écho à l\u2019axe risque de la qualification." onmousemove="ecoTip(event,this)" onmouseleave="ecoTipHide()"><rect x="256" y="524" width="168" height="56" rx="10"/><text class="eco-t" x="340" y="546">Matrice des risques</text><text class="eco-s" x="340" y="564">Axe risque partagé</text></g>
+      <g class="eco-coh eco-node" data-tip="Renvoi de cohérence : repères sectoriels et cadre réglementaire par pays pour un déploiement multi-pays." onmousemove="ecoTip(event,this)" onmouseleave="ecoTipHide()"><rect x="456" y="524" width="194" height="56" rx="10"/><text class="eco-t" x="553" y="546">Benchmark · Juridictions</text><text class="eco-s" x="553" y="564">Secteur · déploiement pays</text></g>
     </svg>
+    <div id="carto-eco-tip" class="carto-eco-tip"></div>
   </div>
 
   <details class="carto-guide" id="carto-guide">
@@ -16812,6 +16816,18 @@ window.cartoToTarification = function(){
     var pg=document.getElementById('p-pricing'); if(pg) pg.scrollIntoView({behavior:'smooth',block:'start'});
   }, 120);
 };
+
+window.ecoTip = function(ev, el){
+  var tip=document.getElementById('carto-eco-tip'); if(!tip||!el) return;
+  var txt=el.getAttribute('data-tip'); if(!txt) return;
+  var cont=tip.parentNode; var r=cont.getBoundingClientRect();
+  tip.textContent=txt; tip.style.display='block';
+  var x=ev.clientX-r.left+14, y=ev.clientY-r.top+14;
+  var maxX=cont.clientWidth-tip.offsetWidth-8;
+  if(x>maxX) x=maxX; if(x<4) x=4;
+  tip.style.left=x+'px'; tip.style.top=y+'px';
+};
+window.ecoTipHide = function(){ var tip=document.getElementById('carto-eco-tip'); if(tip) tip.style.display='none'; };
 
 window.cartoAttachInit = function(){
   var box=document.getElementById('carto-attach'); if(!box) return;
