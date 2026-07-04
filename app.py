@@ -925,6 +925,10 @@ VEILLE_FEEDS = [
     # Actualité technologique (contexte)
     {"url": "https://arstechnica.com/ai/feed/",           "source": "Ars Technica — IA",         "jur": "International"},
     {"url": "https://www.technologyreview.com/feed/",     "source": "MIT Technology Review",     "jur": "International"},
+    # Cybersécurité & protection des données (spécialisées — pertinentes NIS2/DORA/RGPD)
+    {"url": "https://www.enisa.europa.eu/media/news-items/news-wires/RSS", "source": "ENISA — cybersécurité UE", "jur": "Union européenne"},  # URL confirmée
+    {"url": "https://www.cert.ssi.gouv.fr/feed/",         "source": "CERT-FR / ANSSI",           "jur": "France"},          # à valider (WordPress /feed/)
+    {"url": "https://www.cnil.fr/fr/rss.xml",             "source": "CNIL — RGPD",               "jur": "France"},          # candidat : flux CNIL à valider via ?debug=1
     # Pour ajouter une source : dupliquer une ligne (url du flux RSS/Atom, source, jur).
     # Le mode diagnostic /api/veille?debug=1 indique, pour chaque flux, le statut HTTP et le nombre d'items.
 ]
