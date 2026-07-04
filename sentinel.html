@@ -1795,6 +1795,17 @@ textarea.form-el{min-height:86px;resize:vertical}
 .guided-banner .gb-arrow{display:inline-block;margin-left:4px;font-size:1.5em;line-height:1;font-weight:900;animation:gbArrow .85s ease-in-out infinite}
 @media(max-width:640px){.guided-banner .gb-live-txt{display:none}}
 @media(prefers-reduced-motion:reduce){.guided-banner .gb-live-dot,.guided-banner .gb-next-anim,.guided-banner .gb-arrow{animation:none}}
+
+/* ══ MON PARCOURS CHIFFRE ══ */
+.carto-mp-cta{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:12px 0 6px;padding:14px 16px;background:var(--bg2);border:1px solid var(--accent);border-radius:12px}
+.carto-mp-cta-txt{display:flex;flex-direction:column;gap:3px;min-width:200px}
+.carto-mp-cta-txt strong{font-size:13.5px;color:var(--ink)}
+.carto-mp-cta-txt span{font-size:12px;color:var(--muted2)}
+.carto-mp-cta-btn{background:var(--accent);color:var(--ink);border:none;font-size:13px;font-weight:700;padding:10px 16px;border-radius:8px;cursor:pointer;white-space:nowrap}
+.carto-mp-cta-btn:hover{filter:brightness(1.06)}
+.guided-mp-row{display:flex;align-items:center;justify-content:center;margin:14px 0 10px;color:var(--muted2);font-size:11px}
+.guided-mp-btn{width:100%;background:var(--bg2);color:var(--ink);border:1px solid var(--accent);font-size:12.5px;font-weight:600;padding:11px 14px;border-radius:8px;cursor:pointer;text-align:left}
+.guided-mp-btn:hover{background:var(--accent);color:var(--ink)}
 </style>
 
 </head>
@@ -2979,6 +2990,8 @@ textarea.form-el{min-height:86px;resize:vertical}
     </svg>
     <div id="carto-eco-tip" class="carto-eco-tip"></div>
   </div>
+
+  <div class="carto-mp-cta"><div class="carto-mp-cta-txt"><strong>Créer mon parcours chiffré</strong><span>Générez un parcours guidé à partir de vos cas d’usage et allez jusqu’au coût et à l’enveloppe RaaS.</span></div><button class="carto-mp-cta-btn" onclick="monParcoursStart()">?? Lancer mon parcours →</button></div>
 
   <details class="carto-guide" id="carto-guide">
     <summary class="carto-guide-sum"><span class="carto-guide-ico">ℹ️</span> Guide d’utilisation — comment utiliser cette cartographie</summary>
@@ -17249,6 +17262,7 @@ window.guidedPathsOpen = function(){
     + '<button class="mat-modal-close" onclick="guidedPathsClose()">×</button></div>'
     + '<p style="font-size:12.5px;color:var(--muted);margin:0 0 16px;line-height:1.6">Sélectionnez votre rôle pour un enchaînement recommandé des pages — pertinent aussi bien pour une TPE qu un grand compte, le niveau de détail s adapte à votre contexte.</p>'
     + '<select id="guided-paths-select" class="guided-paths-select" onchange="guidedPathsRenderSelected(this.value)">' + options + '</select>'
+    + '<div class="guided-mp-row"><span>\u2014 ou \u2014</span></div>'+ '<button class="guided-mp-btn" onclick="guidedPathsClose();monParcoursStart()">\ud83e\udded Cr\u00e9er mon parcours chiffr\u00e9 (\u00e0 partir de mes cas d\u2019usage)</button>'
     + '<div id="guided-paths-list"></div>'
     + '</div>';
   modal.classList.add('on');
@@ -17282,13 +17296,41 @@ function guidedPathCard(path){
 
 window.__activeGuided = null;
 
+window.guidedFindPath = function(pathId){
+  var p = GUIDED_PATHS.find(function(x){ return x.id === pathId; });
+  if(p) return p;
+  if(window.__monParcours && window.__monParcours.id === pathId) return window.__monParcours;
+  return null;
+};
 window.guidedStartStep = function(pathId, i){
-  var path = GUIDED_PATHS.find(function(p){ return p.id === pathId; });
+  var path = guidedFindPath(pathId);
   if(!path || !path.steps[i]) return;
   window.__activeGuided = { pathId: pathId, i: i };
   guidedPathsClose();
-  go(path.steps[i].id);
+  var step = path.steps[i];
+  if(step.go && typeof window[step.go] === 'function'){ window[step.go](); }
+  else { go(step.id); }
   guidedRenderBanner();
+};
+
+window.monParcoursStart = function(){
+  var n = (typeof cartoSelectedList === 'function') ? cartoSelectedList().length : 0;
+  var casTxt = n>0 ? (n+' cas retenu'+(n>1?'s':'')) : 'vos cas d\u2019usage';
+  window.__monParcours = {
+    id:'mon-parcours', icon:'\ud83e\udded', role:'Mon parcours chiffré',
+    pitch:'Parcours personnalisé généré depuis '+casTxt+' : qualifier, chiffrer, puis découvrir le coût et l\u2019enveloppe RaaS.',
+    steps:[
+      {id:'carto-uc', label:'Qualifier et chiffrer mes cas',
+       action:'Sélectionnez vos cas d\u2019usage (étape 2), notez-les sur les 4 axes (étape 3), puis chiffrez le retour attendu (étape 4).',
+       gain:'Une liste priorisée et un dossier de valeur chiffré, propres à '+casTxt+'.',
+       tip:'Concentrez-vous d\u2019abord sur 2 à 3 cas transverses à retour rapide.'},
+      {id:'pricing', go:'cartoToTarification', label:'Découvrir le coût',
+       action:'La tarification se pré-remplit avec vos cas retenus ; ajustez le segment et le secteur pour affiner le coût et l\u2019enveloppe RaaS.',
+       gain:'Le coût de l\u2019accompagnement, à rapprocher du gain annuel estimé au chiffrage.',
+       tip:'Estimation de cadrage à valider avec CONSEILPREV avant tout engagement.'}
+    ]
+  };
+  guidedStartStep('mon-parcours', 0);
 };
 
 window.guidedRenderBanner = function(){
@@ -17296,7 +17338,7 @@ window.guidedRenderBanner = function(){
   if(!b){ b = document.createElement('div'); b.id = 'guided-banner'; b.className = 'guided-banner'; document.body.appendChild(b); }
   var g = window.__activeGuided;
   if(!g){ b.style.display = 'none'; return; }
-  var path = GUIDED_PATHS.find(function(p){ return p.id === g.pathId; });
+  var path = guidedFindPath(g.pathId);
   if(!path){ b.style.display = 'none'; return; }
   var n = path.steps.length, i = g.i;
   var step = path.steps[i];
@@ -17327,6 +17369,7 @@ window.guidedEndBanner = function(){
 };
 
 window.guidedReopen = function(pathId){
+  if(pathId === 'mon-parcours'){ guidedStartStep('mon-parcours', 0); return; }
   guidedPathsOpen();
   var sel = document.getElementById('guided-paths-select');
   if(sel){ sel.value = pathId; if(typeof guidedPathsRenderSelected === 'function') guidedPathsRenderSelected(pathId); }
