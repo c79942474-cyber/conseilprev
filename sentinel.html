@@ -1886,6 +1886,25 @@ textarea.form-el{min-height:86px;resize:vertical}
 .ct-chip:hover{border-color:var(--accent);background:var(--bg2)}
 .ct-none{font-size:11.5px;color:var(--muted2);font-style:italic}
 @media(max-width:640px){.ct-cols{grid-template-columns:1fr}.ct-bar-lbl{flex-basis:50%}}
+
+/* ══ AIPD (art. 35 RGPD) ══ */
+.aipd-card{border:1px solid var(--rule2);border-radius:10px;padding:16px 18px;background:var(--white);margin-bottom:14px}
+.aipd-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:6px}
+.aipd-head strong{font-size:14px;color:var(--ink)}
+.aipd-sub{font-size:10px;color:var(--muted2)}
+.aipd-verdict{color:#fff;font-size:11px;font-weight:700;padding:4px 11px;border-radius:12px;white-space:nowrap}
+.aipd-sec-t{font-size:11.5px;font-weight:700;color:var(--muted);margin:14px 0 8px;text-transform:uppercase;letter-spacing:.3px}
+.aipd-crit-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px}
+.aipd-crit{display:flex;align-items:flex-start;gap:7px;font-size:11.5px;color:var(--ink);cursor:pointer;line-height:1.35}
+.aipd-crit input{margin-top:2px;flex:0 0 auto}
+.aipd-matrix{width:100%;border-collapse:collapse;font-size:11.5px}
+.aipd-matrix th{text-align:left;font-size:10px;color:var(--muted2);padding:4px 6px;border-bottom:1px solid var(--rule2)}
+.aipd-matrix td{padding:5px 6px;border-bottom:1px solid var(--rule)}
+.aipd-ev-lbl{font-weight:600;color:var(--ink)}
+.aipd-sel{padding:4px 6px;border:1px solid var(--rule2);border-radius:5px;font-size:11px;background:var(--white);color:var(--ink)}
+.aipd-lvl{display:inline-block;color:#fff;font-size:10px;font-weight:700;padding:2px 9px;border-radius:10px}
+.aipd-risk-line{margin-top:10px;font-size:12px;font-weight:600;color:var(--ink)}
+@media(max-width:640px){.aipd-crit-grid{grid-template-columns:1fr}}
 </style>
 
 </head>
@@ -1940,6 +1959,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-section">RGPD &amp; Vie privée</div>
     <div class="sb-item" onclick="go('rgpd-traitements',this,'RGPD &amp; VIE PRIVÉE','Registre des traitements');traitLoadOnce()" title="Registre des activites de traitement au sens de l article 30 du RGPD (ajout, details, suppression, export)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"/><path d="M9 12l2 2 4-4"/></svg></span>Registre des traitements</div>
     <div class="sb-item" onclick="go('rgpd-cartographie',this,'RGPD &amp; VIE PRIVÉE','Cartographie des traitements');cartoTraitLoadOnce()" title="Vue d ensemble des traitements par service et base legale, donnees sensibles et transferts hors UE."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>Cartographie des traitements</div>
+    <div class="sb-item" onclick="go('rgpd-aipd',this,'RGPD &amp; VIE PRIVÉE','AIPD — analyse d\u2019impact');aipdLoadOnce()" title="Analyse d impact relative a la protection des donnees (art. 35 RGPD), par traitement : besoin d AIPD (criteres CNIL) et appreciation des risques."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>AIPD (art. 35)</div>
     <div class="sb-section">Administration</div>
     <div class="sb-item" onclick="go('clients',this,'ADMINISTRATION','Gestion des clients')" title="Creer et gerer les acces clients externes a Sentinel AI (reserve a CONSEILPREV)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><circle cx="19" cy="8" r="2.5"/><path d="M17.5 21v-1a3 3 0 0 0 .5-1.7"/><path d="M19 14.5a3.5 3.5 0 0 1 3.5 3.5v3"/></svg></span>Gestion des clients</div>
   </nav>
@@ -3241,6 +3261,24 @@ textarea.form-el{min-height:86px;resize:vertical}
   <div id="ctrait-body"><div class="veille-loading">Chargement de la cartographie…</div></div>
   <div class="trait-note">
     Cette cartographie se met à jour à partir du registre des traitements. Alimentez le registre pour en enrichir la vue. Les données particulières de l'article 9 et les transferts hors Union appellent des garanties renforcées, que CONSEILPREV peut vous aider à qualifier.
+  </div>
+</div>
+
+
+<div class="page" id="p-rgpd-aipd">
+  <span class="eyebrow">RGPD &amp; Vie privée</span>
+  <h1 class="page-h">AIPD — <em>analyse d'impact</em></h1>
+  <p class="page-lead">Analyse d'impact relative à la protection des données — article 35 du RGPD (DPIA). Appréciée pour chaque traitement du registre, distincte de la FRIA de l'AI Act. Le besoin d'AIPD est déterminé selon les neuf critères de la CNIL.</p>
+  <div class="reg-toolbar">
+    <button class="mat-export-btn" onclick="aipdLoad()">↻ Actualiser</button>
+    <button class="mat-export-btn" onclick="cartoTraitOpenRegistre()">Ouvrir le registre</button>
+    <button class="mat-export-btn" onclick="aipdOpenFria()">Voir la FRIA (AI Act)</button>
+    <span id="aipd-count" style="font-size:12px;color:var(--muted2);margin-left:auto"></span>
+  </div>
+  <div id="aipd-summary"></div>
+  <div id="aipd-list"><div class="veille-loading">Chargement des traitements…</div></div>
+  <div class="trait-note">
+    Méthodologie : le besoin d'AIPD est présumé requis dès que deux des neuf critères de la CNIL sont réunis, ou dans les cas de l'article 35(3). Les risques sont appréciés selon la gravité et la vraisemblance de trois événements redoutés — accès illégitime, modification non désirée, disparition des données — sur l'échelle de la CNIL. Aide à la décision : une AIPD formelle doit être documentée et, le cas échéant, soumise à la CNIL au titre de l'article 36. CONSEILPREV peut vous accompagner dans sa conduite.
   </div>
 </div>
 
@@ -5501,6 +5539,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 'use strict';
 
 var PAGE_META = {
+    'rgpd-aipd': { section: 'RGPD & VIE PRIVÉE', label: 'AIPD — analyse d\u2019impact' },
     'rgpd-cartographie': { section: 'RGPD & VIE PRIVÉE', label: 'Cartographie des traitements' },
     'rgpd-traitements': { section: 'RGPD & VIE PRIVÉE', label: 'Registre des traitements' },
   apercu:   {section:'PILOTAGE', label:'Observatoire IA'},
@@ -17207,6 +17246,162 @@ window.cartoTraitRender = function(){
     + '</div>'
     + '<div class="ct-card ct-alert"><div class="ct-card-t">Données sensibles — article 9</div><p class="ct-help">Traitements portant sur des données particulières (santé, biométrie, opinions, orientation…), soumis à des garanties renforcées.</p><div class="ct-chips">'+chips(sensibles)+'</div></div>'
     + '<div class="ct-card ct-warn"><div class="ct-card-t">Transferts hors Union européenne</div><p class="ct-help">Traitements impliquant un transfert hors UE ; vérifiez les garanties appropriées (clauses contractuelles types, décision d\'adéquation).</p><div class="ct-chips">'+chips(transferts)+'</div></div>';
+};
+
+/* ══ AIPD — analyse d'impact RGPD (art. 35), calquee sur la FRIA, pilotee par le registre des traitements ══ */
+window.AIPD_KEY = "sentinel_aipd_v1";
+window.AIPD_CRITERIA = [
+  "Évaluation ou notation (y compris profilage)",
+  "Décision automatisée à effet juridique ou significatif",
+  "Surveillance systématique",
+  "Données sensibles ou à caractère hautement personnel",
+  "Traitement à grande échelle",
+  "Croisement ou combinaison d'ensembles de données",
+  "Personnes vulnérables (mineurs, patients, salariés…)",
+  "Usage innovant ou application de nouvelles technologies",
+  "Obstacle à un droit, à un service ou à un contrat"
+];
+window.AIPD_EVENTS = [
+  ["acces", "Accès illégitime aux données"],
+  ["modif", "Modification non désirée des données"],
+  ["dispar", "Disparition des données"]
+];
+window.AIPD_SCALE = ["", "Négligeable", "Limitée", "Importante", "Maximale"];
+window.__aipdLoaded = false;
+
+window.aipdStateAll = function(){ try { return JSON.parse(localStorage.getItem(AIPD_KEY)) || {}; } catch(e){ return {}; } };
+window.aipdStateSave = function(all){ try { localStorage.setItem(AIPD_KEY, JSON.stringify(all)); } catch(e){} };
+window.aipdGet = function(id){
+  var all=aipdStateAll(), s=all[id];
+  if(!s) s={ criteria:[false,false,false,false,false,false,false,false,false], events:{acces:{g:1,v:1},modif:{g:1,v:1},dispar:{g:1,v:1}}, mesures:"" };
+  return s;
+};
+window.aipdSet = function(id, s){ var all=aipdStateAll(); all[id]=s; aipdStateSave(all); };
+
+window.aipdOpenFria = function(){ var el=document.querySelector(".sb-item[onclick*=\"go('fria'\"]"); if(el) el.click(); };
+window.aipdLoadOnce = function(){ if(window.__aipdLoaded) return; aipdLoad(); };
+window.aipdLoad = function(){
+  var box=document.getElementById("aipd-list"); if(box) box.innerHTML='<div class="veille-loading">Chargement des traitements…</div>';
+  fetch("/api/rgpd/traitements",{credentials:"same-origin"}).then(function(r){ return r.json(); })
+    .then(function(d){ window.TRAIT_DATA=(d&&d.traitements)?d.traitements:[]; window.__aipdLoaded=true; aipdRenderAll(); })
+    .catch(function(){ var b=document.getElementById("aipd-list"); if(b) b.innerHTML='<div class="veille-empty">Module momentanément indisponible. Vérifiez votre connexion.</div>'; });
+};
+
+window.aipdCritCount = function(t, s){
+  var n=0; for(var i=0;i<9;i++){ if(s.criteria[i]) n++; }
+  // Critere 4 (donnees sensibles) presume si le registre le renseigne
+  if(!s.criteria[3] && ctFilled(t.donnees_sensibles)) n++;
+  return n;
+};
+window.aipdVerdict = function(t, s){
+  var n=aipdCritCount(t,s);
+  if(n>=2) return ["AIPD requise","#c0392b"];
+  if(n===1) return ["À évaluer","#c98a00"];
+  return ["Non requise a priori","var(--green)"];
+};
+window.aipdEventLevel = function(g,v){
+  if(g>=3 && v>=3) return 4;
+  if(g>=3 || v>=3) return 3;
+  if(g>=2 || v>=2) return 2;
+  return 1;
+};
+window.aipdRiskLevel = function(s){
+  var m=1; AIPD_EVENTS.forEach(function(e){ var ev=s.events[e[0]]; m=Math.max(m, aipdEventLevel(ev.g,ev.v)); });
+  return m;
+};
+window.aipdLevelColor = function(l){ return ["","var(--green)","#2d7dd2","#c98a00","#c0392b"][l]; };
+
+window.aipdRenderAll = function(){
+  var box=document.getElementById("aipd-list"); if(!box) return;
+  var list=window.TRAIT_DATA||[];
+  var cnt=document.getElementById("aipd-count"); if(cnt) cnt.textContent=list.length+" traitement(s)";
+  var sumEl=document.getElementById("aipd-summary");
+  if(!list.length){ if(sumEl) sumEl.innerHTML=""; box.innerHTML='<div class="veille-empty">Aucun traitement enregistré. Alimentez d\'abord le registre des traitements.</div>'; return; }
+  var requises=0, eleves=0;
+  list.forEach(function(t){ var s=aipdGet(t.id); if(aipdCritCount(t,s)>=2) requises++; if(aipdRiskLevel(s)>=3) eleves++; });
+  if(sumEl){
+    function kpi(v,l,c){ return '<div class="ct-kpi"><div class="ct-kpi-v" style="color:'+(c||"var(--accent)")+'">'+v+'</div><div class="ct-kpi-l">'+l+'</div></div>'; }
+    sumEl.innerHTML='<div class="ct-kpis">'+kpi(list.length,"Traitements","var(--accent)")+kpi(requises,"AIPD requises", requises?"#c0392b":"var(--muted2)")+kpi(eleves,"Risque élevé", eleves?"#c98a00":"var(--muted2)")+'</div>';
+  }
+  box.innerHTML=list.map(aipdCardHtml).join("");
+};
+
+window.aipdCardHtml = function(t){
+  var s=aipdGet(t.id);
+  var vd=aipdVerdict(t,s), n=aipdCritCount(t,s);
+  var crits=AIPD_CRITERIA.map(function(lbl,i){
+    var checked = s.criteria[i] || (i===3 && ctFilled(t.donnees_sensibles));
+    var lock = (i===3 && ctFilled(t.donnees_sensibles)) ? ' title="Présumé : données sensibles renseignées au registre"' : '';
+    return '<label class="aipd-crit"'+lock+'><input type="checkbox" '+(checked?"checked":"")+' onchange="aipdToggleCrit('+t.id+','+i+',this.checked)"><span>'+traitEsc(lbl)+'</span></label>';
+  }).join("");
+  var evs=AIPD_EVENTS.map(function(e){
+    var ev=s.events[e[0]], lvl=aipdEventLevel(ev.g,ev.v);
+    function sel(dim,val){ var o=""; for(var k=1;k<=4;k++){ o+='<option value="'+k+'"'+(val===k?" selected":"")+'>'+k+' — '+AIPD_SCALE[k]+'</option>'; } return '<select class="aipd-sel" onchange="aipdSetEv('+t.id+',\''+e[0]+'\',\''+dim+'\',this.value)">'+o+'</select>'; }
+    return '<tr><td class="aipd-ev-lbl">'+traitEsc(e[1])+'</td><td>'+sel("g",ev.g)+'</td><td>'+sel("v",ev.v)+'</td><td style="text-align:center"><span class="aipd-lvl" id="aipd-ev-'+t.id+'-'+e[0]+'" style="background:'+aipdLevelColor(lvl)+'">'+AIPD_SCALE[lvl]+'</span></td></tr>';
+  }).join("");
+  var rl=aipdRiskLevel(s);
+  return '<div class="aipd-card" id="aipd-card-'+t.id+'">'
+    + '<div class="aipd-head"><div><strong>'+traitEsc(t.nom)+'</strong><div class="aipd-sub">'+traitEsc(t.service||"")+'</div></div>'
+    + '<span class="aipd-verdict" id="aipd-verdict-'+t.id+'" style="background:'+vd[1]+'">'+vd[0]+'</span></div>'
+    + '<div class="aipd-sec-t">Besoin d\'AIPD — critères CNIL (<span id="aipd-crit-'+t.id+'">'+n+'</span>/9 · seuil 2)</div>'
+    + '<div class="aipd-crit-grid">'+crits+'</div>'
+    + '<div class="aipd-sec-t">Appréciation des risques — gravité × vraisemblance</div>'
+    + '<table class="aipd-matrix"><thead><tr><th>Événement redouté</th><th>Gravité</th><th>Vraisemblance</th><th>Niveau</th></tr></thead><tbody>'+evs+'</tbody></table>'
+    + '<div class="aipd-risk-line">Risque global : <span class="aipd-lvl" id="aipd-risk-'+t.id+'" style="background:'+aipdLevelColor(rl)+'">'+AIPD_SCALE[rl]+'</span></div>'
+    + '<div class="aipd-sec-t">Mesures envisagées</div>'
+    + '<textarea class="trait-input" rows="2" placeholder="Garanties, sécurité, minimisation, information des personnes…" onchange="aipdSetMesures('+t.id+',this.value)">'+traitEsc(s.mesures||"")+'</textarea>'
+    + '<div style="text-align:right;margin-top:10px"><button class="mat-export-btn" onclick="aipdExportPdf('+t.id+')">Exporter cette AIPD (PDF)</button></div>'
+    + '</div>';
+};
+
+window.aipdToggleCrit = function(id, idx, checked){
+  var s=aipdGet(id); s.criteria[idx]=!!checked; aipdSet(id,s);
+  var t=(window.TRAIT_DATA||[]).filter(function(x){return x.id===id;})[0]; if(!t) return;
+  var n=aipdCritCount(t,s), vd=aipdVerdict(t,s);
+  var cEl=document.getElementById("aipd-crit-"+id); if(cEl) cEl.textContent=n;
+  var vEl=document.getElementById("aipd-verdict-"+id); if(vEl){ vEl.textContent=vd[0]; vEl.style.background=vd[1]; }
+  aipdRefreshSummary();
+};
+window.aipdSetEv = function(id, ev, dim, val){
+  var s=aipdGet(id); s.events[ev][dim]=parseInt(val,10)||1; aipdSet(id,s);
+  var lvl=aipdEventLevel(s.events[ev].g, s.events[ev].v);
+  var cell=document.getElementById("aipd-ev-"+id+"-"+ev); if(cell){ cell.textContent=AIPD_SCALE[lvl]; cell.style.background=aipdLevelColor(lvl); }
+  var rl=aipdRiskLevel(s); var rEl=document.getElementById("aipd-risk-"+id); if(rEl){ rEl.textContent=AIPD_SCALE[rl]; rEl.style.background=aipdLevelColor(rl); }
+  aipdRefreshSummary();
+};
+window.aipdSetMesures = function(id, val){ var s=aipdGet(id); s.mesures=val||""; aipdSet(id,s); };
+window.aipdRefreshSummary = function(){
+  var list=window.TRAIT_DATA||[], requises=0, eleves=0;
+  list.forEach(function(t){ var s=aipdGet(t.id); if(aipdCritCount(t,s)>=2) requises++; if(aipdRiskLevel(s)>=3) eleves++; });
+  var sumEl=document.getElementById("aipd-summary"); if(!sumEl) return;
+  function kpi(v,l,c){ return '<div class="ct-kpi"><div class="ct-kpi-v" style="color:'+(c||"var(--accent)")+'">'+v+'</div><div class="ct-kpi-l">'+l+'</div></div>'; }
+  sumEl.innerHTML='<div class="ct-kpis">'+kpi(list.length,"Traitements","var(--accent)")+kpi(requises,"AIPD requises", requises?"#c0392b":"var(--muted2)")+kpi(eleves,"Risque élevé", eleves?"#c98a00":"var(--muted2)")+'</div>';
+};
+
+window.aipdExportPdf = function(id){
+  var t=(window.TRAIT_DATA||[]).filter(function(x){return x.id===id;})[0]; if(!t) return;
+  var s=aipdGet(id), vd=aipdVerdict(t,s), rl=aipdRiskLevel(s), today=new Date().toLocaleDateString("fr-FR");
+  function esc(x){ return String(x==null?"":x).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  var critHtml=AIPD_CRITERIA.map(function(l,i){ var c=s.criteria[i]||(i===3&&ctFilled(t.donnees_sensibles)); return '<li style="color:'+(c?"#c0392b":"#999")+'">'+(c?"☑":"☐")+" "+esc(l)+'</li>'; }).join("");
+  var evHtml=AIPD_EVENTS.map(function(e){ var ev=s.events[e[0]], lvl=aipdEventLevel(ev.g,ev.v); return '<tr><td>'+esc(e[1])+'</td><td>'+AIPD_SCALE[ev.g]+'</td><td>'+AIPD_SCALE[ev.v]+'</td><td>'+AIPD_SCALE[lvl]+'</td></tr>'; }).join("");
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>AIPD — '+esc(t.nom)+'</title>'
+    +'<style>@page{margin:1.6cm}body{font-family:Arial,sans-serif;color:#1C1C1C;max-width:900px;margin:0 auto;padding:16px}'
+    +'h1{font-size:19px;border-bottom:3px solid #6B46C1;padding-bottom:8px;margin-bottom:2px}.sub{color:#666;font-size:11px;margin-bottom:14px}'
+    +'h2{font-size:13px;color:#6B46C1;margin:16px 0 6px}table{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:8px}'
+    +'td,th{border:1px solid #ddd;padding:5px 8px;text-align:left}th{background:#faf9f7}ul{font-size:11px;line-height:1.7;margin:0;padding-left:2px;list-style:none}'
+    +'.v{display:inline-block;padding:3px 10px;border-radius:4px;color:#fff;font-size:11px;font-weight:600}'
+    +'.foot{font-size:9px;color:#999;margin-top:18px;border-top:1px solid #eee;padding-top:8px}</style></head><body>'
+    +'<h1>Analyse d\'impact (AIPD — art. 35 RGPD)</h1>'
+    +'<div class="sub">Traitement : <strong>'+esc(t.nom)+'</strong>'+(t.service?" · "+esc(t.service):"")+' · CONSEILPREV — Sentinel · '+today+'</div>'
+    +'<p><span class="v" style="background:'+vd[1]+'">'+vd[0]+'</span> &nbsp; Risque global : <span class="v" style="background:'+aipdLevelColor(rl)+'">'+AIPD_SCALE[rl]+'</span></p>'
+    +'<h2>1. Description du traitement</h2><table><tr><th>Finalité(s)</th><td>'+esc(t.finalites)+'</td></tr><tr><th>Base légale</th><td>'+esc(t.base_legale)+'</td></tr><tr><th>Personnes concernées</th><td>'+esc(t.categories_personnes)+'</td></tr><tr><th>Données</th><td>'+esc(t.categories_donnees)+'</td></tr><tr><th>Durée de conservation</th><td>'+esc(t.duree_conservation)+'</td></tr></table>'
+    +'<h2>2. Besoin d\'AIPD — critères CNIL</h2><ul>'+critHtml+'</ul>'
+    +'<h2>3. Appréciation des risques</h2><table><thead><tr><th>Événement redouté</th><th>Gravité</th><th>Vraisemblance</th><th>Niveau</th></tr></thead><tbody>'+evHtml+'</tbody></table>'
+    +'<h2>4. Mesures envisagées</h2><p style="font-size:11px;white-space:pre-wrap">'+esc(s.mesures||"—")+'</p>'
+    +'<div class="foot">Aide à la décision. Une AIPD formelle doit être documentée et, le cas échéant, soumise à la CNIL (art. 36). Généré par Sentinel — à valider avec le délégué à la protection des données.</div>'
+    +'</body></html>';
+  var w=window.open("","_blank"); if(!w){ alert("Autorisez les pop-ups pour exporter."); return; }
+  w.document.write(html+'<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>'); w.document.close();
 };
 
 window.__veille = {data:null, ts:0, loading:false, regs:[], timer:null};
