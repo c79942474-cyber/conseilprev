@@ -5747,8 +5747,11 @@ function go(id, el, sec, pg) {
     if (i.getAttribute('onclick') && i.getAttribute('onclick').indexOf("'"+id+"'") >= 0) i.classList.add('on');
   });
   var meta = PAGE_META[id];
-  document.getElementById('tb-sec').textContent = sec || (meta && meta.section) || '';
-  document.getElementById('tb-pg').textContent  = pg  || (meta && meta.label)   || '';
+  var _tbSec = sec || (meta && meta.section) || '';
+  var _tbPg  = pg  || (meta && meta.label)   || '';
+  document.getElementById('tb-sec').textContent = _tbSec;
+  document.getElementById('tb-pg').textContent  = _tbPg;
+  document.title = 'Sentinel' + (_tbSec ? ' \u2014 ' + _tbSec : '') + (_tbPg ? ' \u00b7 ' + _tbPg : '');
   window.scrollTo(0,0);
 }
 
