@@ -919,16 +919,16 @@ def _detect_cat(title, default_cat):
 # ══════════════════════════════════════════════════════════════════
 VEILLE_FEEDS = [
     # Régulation et gouvernance (prioritaires pour la veille CONSEILPREV)
-    {"url": "https://dig.watch/feed/",                    "source": "Digital Watch Observatory", "jur": "International", "fallbacks": ["https://news.google.com/rss/search?q=AI%20regulation%20governance&hl=en-US&gl=US&ceid=US:en"]},
-    {"url": "https://artificialintelligenceact.eu/feed/", "source": "EU AI Act",                 "jur": "Union européenne", "fallbacks": ["https://news.google.com/rss/search?q=%22EU%20AI%20Act%22&hl=en-US&gl=US&ceid=US:en"]},
-    {"url": "https://www.euractiv.com/sections/tech/feed/", "source": "EURACTIV — Tech",          "jur": "Union européenne", "fallbacks": ["https://news.google.com/rss/search?q=EU%20artificial%20intelligence%20policy&hl=en-US&gl=US&ceid=US:en"]},
+    {"url": "https://dig.watch/feed/",                    "source": "Digital Watch Observatory", "jur": "International", "trusted": True, "fallbacks": ["https://news.google.com/rss/search?q=AI%20regulation%20governance&hl=en-US&gl=US&ceid=US:en"]},
+    {"url": "https://artificialintelligenceact.eu/feed/", "source": "EU AI Act",                 "jur": "Union européenne", "trusted": True, "fallbacks": ["https://news.google.com/rss/search?q=%22EU%20AI%20Act%22&hl=en-US&gl=US&ceid=US:en"]},
+    {"url": "https://www.euractiv.com/feed/", "source": "EURACTIV",          "jur": "Union européenne", "fallbacks": ["https://www.euractiv.com/sections/tech/feed", "https://news.google.com/rss/search?q=EU%20artificial%20intelligence%20policy&hl=en-US&gl=US&ceid=US:en"]},
     # Actualité technologique (contexte)
     {"url": "https://arstechnica.com/ai/feed/",           "source": "Ars Technica — IA",         "jur": "International", "fallbacks": ["https://news.google.com/rss/search?q=artificial%20intelligence&hl=en-US&gl=US&ceid=US:en"]},
     {"url": "https://www.technologyreview.com/feed/",     "source": "MIT Technology Review",     "jur": "International", "fallbacks": ["https://news.google.com/rss/search?q=AI%20technology%20regulation&hl=en-US&gl=US&ceid=US:en"]},
     # Cybersécurité & protection des données (spécialisées — pertinentes NIS2/DORA/RGPD)
-    {"url": "https://www.enisa.europa.eu/media/news-items/news-wires/RSS", "source": "ENISA — cybersécurité UE", "jur": "Union européenne", "fallbacks": ["https://news.google.com/rss/search?q=ENISA%20cybersecurity%20NIS2&hl=en-US&gl=US&ceid=US:en"]},  # URL confirmée + repli
-    {"url": "https://www.cert.ssi.gouv.fr/feed/",         "source": "CERT-FR / ANSSI",           "jur": "France", "fallbacks": ["https://www.cert.ssi.gouv.fr/avis/feed/", "https://www.cert.ssi.gouv.fr/alerte/feed/", "https://www.cert.ssi.gouv.fr/actualite/feed/"]},
-    {"url": "https://www.cnil.fr/fr/rss.xml",             "source": "CNIL — RGPD",               "jur": "France", "fallbacks": ["https://www.cnil.fr/fr/flux-rss", "https://news.google.com/rss/search?q=CNIL%20RGPD&hl=fr&gl=FR&ceid=FR:fr"]},
+    {"url": "https://www.enisa.europa.eu/media/news-items/news-wires/RSS", "source": "ENISA — cybersécurité UE", "jur": "Union européenne", "trusted": True, "fallbacks": ["https://news.google.com/rss/search?q=ENISA%20cybersecurity%20NIS2&hl=en-US&gl=US&ceid=US:en"]},  # URL confirmée + repli
+    {"url": "https://www.cert.ssi.gouv.fr/feed/",         "source": "CERT-FR / ANSSI",           "jur": "France", "trusted": True, "fallbacks": ["https://www.cert.ssi.gouv.fr/avis/feed/", "https://www.cert.ssi.gouv.fr/alerte/feed/", "https://www.cert.ssi.gouv.fr/actualite/feed/"]},
+    {"url": "https://www.cnil.fr/fr/rss.xml",             "source": "CNIL — RGPD",               "jur": "France", "trusted": True, "fallbacks": ["https://www.cnil.fr/fr/flux-rss", "https://news.google.com/rss/search?q=CNIL%20RGPD&hl=fr&gl=FR&ceid=FR:fr"]},
     # Pour ajouter une source : dupliquer une ligne (url du flux RSS/Atom, source, jur).
     # Le mode diagnostic /api/veille?debug=1 indique, pour chaque flux, le statut HTTP et le nombre d'items.
 ]
@@ -940,6 +940,23 @@ VEILLE_THEMES = [
     ("Cyber / NIS2 / DORA",  ["nis2", "nis 2", "dora", "cyber", "cybersecurity", "cybersecurite", "cybersécurité", "resilience"]),
     ("Normes / gouvernance", ["iso", "42001", "governance", "gouvernance", "standard", "oecd", "ocde"]),
 ]
+
+_VEILLE_KW = re.compile(
+    r"(artificial intelligence|intelligence artificielle|machine learning|deep learning|"
+    r"\bllm\b|\bgpai\b|generative|genai|chatgpt|openai|anthropic|mistral|"
+    r"algorithm[e]?s?|ai act|r\u00e8glement|regulation|\bgdpr\b|\brgpd\b|"
+    r"nis ?2|\bdora\b|cyber\w*|cybers\u00e9curit\u00e9|vuln\u00e9rabilit\w*|vulnerabilit\w*|"
+    r"ransomware|malware|phishing|\benisa\b|\bcnil\b|data protection|privacy|surveillance|"
+    r"gouvernance|governance|compliance|conformit\u00e9|directive|sanction|amende|d\u00e9lib\u00e9ration|"
+    r"digital services act|\bdsa\b|\bdma\b)",
+    re.I,
+)
+_VEILLE_AI = re.compile(r"\bAI\b")  # acronyme (sensible \u00e0 la casse) pour éviter le faux positif français "ai"
+
+def _veille_relevant(text):
+    """Vrai si le texte concerne l'IA, la r\u00e9gulation, la cybers\u00e9curit\u00e9 ou les donn\u00e9es."""
+    return bool(_VEILLE_KW.search(text or "") or _VEILLE_AI.search(text or ""))
+
 
 def _veille_load(feed):
     """Essaie l'URL principale puis les fallbacks ; renvoie le 1er flux valide (>0 items)."""
@@ -1009,10 +1026,15 @@ def api_veille():
             if not parsed or not parsed.entries:
                 errors.append({"source": feed.get("source"), "error": "aucun item (statut %s)" % r.get("status")})
                 continue
+            trusted = bool(feed.get("trusted"))
             for e in parsed.entries[:15]:
                 title = _html.unescape((e.get("title") or "").strip())
                 if not title:
                     continue
+                if not trusted:
+                    raw_for_rel = title + " " + _re.sub(r"<[^>]+>", "", e.get("summary") or "")
+                    if not _veille_relevant(raw_for_rel):
+                        continue
                 link = e.get("link") or ""
                 key = link or title
                 if key in seen:
