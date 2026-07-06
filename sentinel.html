@@ -5751,7 +5751,8 @@ function go(id, el, sec, pg) {
   var _tbPg  = pg  || (meta && meta.label)   || '';
   document.getElementById('tb-sec').textContent = _tbSec;
   document.getElementById('tb-pg').textContent  = _tbPg;
-  document.title = 'Sentinel' + (_tbSec ? ' \u2014 ' + _tbSec : '') + (_tbPg ? ' \u00b7 ' + _tbPg : '');
+  var _lead = _tbPg || _tbSec;
+  document.title = _lead ? (_lead + ' \u2014 Sentinel') : 'Sentinel';
   window.scrollTo(0,0);
 }
 
