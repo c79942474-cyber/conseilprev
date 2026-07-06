@@ -921,12 +921,12 @@ VEILLE_FEEDS = [
     # Régulation et gouvernance (prioritaires pour la veille CONSEILPREV)
     {"url": "https://dig.watch/feed/",                    "source": "Digital Watch Observatory", "jur": "International", "trusted": True, "fallbacks": ["https://news.google.com/rss/search?q=AI%20regulation%20governance&hl=en-US&gl=US&ceid=US:en"]},
     {"url": "https://artificialintelligenceact.eu/feed/", "source": "EU AI Act",                 "jur": "Union européenne", "trusted": True, "fallbacks": ["https://news.google.com/rss/search?q=%22EU%20AI%20Act%22&hl=en-US&gl=US&ceid=US:en"]},
-    {"url": "https://www.euractiv.com/feed/", "source": "EURACTIV",          "jur": "Union européenne", "fallbacks": ["https://www.euractiv.com/sections/tech/feed", "https://news.google.com/rss/search?q=EU%20artificial%20intelligence%20policy&hl=en-US&gl=US&ceid=US:en"]},
+    {"url": "https://news.google.com/rss/search?q=EU%20artificial%20intelligence%20policy%20OR%20%22AI%20Act%22&hl=en-US&gl=US&ceid=US:en", "source": "EURACTIV / actualité UE", "jur": "Union européenne", "fallbacks": ["https://www.euractiv.com/feed/"]},
     # Actualité technologique (contexte)
     {"url": "https://arstechnica.com/ai/feed/",           "source": "Ars Technica — IA",         "jur": "International", "fallbacks": ["https://news.google.com/rss/search?q=artificial%20intelligence&hl=en-US&gl=US&ceid=US:en"]},
     {"url": "https://www.technologyreview.com/feed/",     "source": "MIT Technology Review",     "jur": "International", "fallbacks": ["https://news.google.com/rss/search?q=AI%20technology%20regulation&hl=en-US&gl=US&ceid=US:en"]},
     # Cybersécurité & protection des données (spécialisées — pertinentes NIS2/DORA/RGPD)
-    {"url": "https://www.enisa.europa.eu/media/news-items/news-wires/RSS", "source": "ENISA — cybersécurité UE", "jur": "Union européenne", "trusted": True, "fallbacks": ["https://news.google.com/rss/search?q=ENISA%20cybersecurity%20NIS2&hl=en-US&gl=US&ceid=US:en"]},  # URL confirmée + repli
+    {"url": "https://news.google.com/rss/search?q=ENISA%20OR%20NIS2%20OR%20cybersecurity%20EU&hl=en-US&gl=US&ceid=US:en", "source": "ENISA / cybersécurité UE", "jur": "Union européenne", "fallbacks": ["https://www.enisa.europa.eu/media/news-items/news-wires/RSS"]},  # Google News primaire (natif bloque sur Render), natif en repli
     {"url": "https://www.cert.ssi.gouv.fr/feed/",         "source": "CERT-FR / ANSSI",           "jur": "France", "trusted": True, "fallbacks": ["https://www.cert.ssi.gouv.fr/avis/feed/", "https://www.cert.ssi.gouv.fr/alerte/feed/", "https://www.cert.ssi.gouv.fr/actualite/feed/"]},
     {"url": "https://www.cnil.fr/fr/rss.xml",             "source": "CNIL — RGPD",               "jur": "France", "trusted": True, "fallbacks": ["https://www.cnil.fr/fr/flux-rss", "https://news.google.com/rss/search?q=CNIL%20RGPD&hl=fr&gl=FR&ceid=FR:fr"]},
     # Pour ajouter une source : dupliquer une ligne (url du flux RSS/Atom, source, jur).
@@ -952,6 +952,15 @@ _VEILLE_KW = _re.compile(
     _re.I,
 )
 _VEILLE_AI = _re.compile(r"\bAI\b")  # acronyme (sensible \u00e0 la casse) pour éviter le faux positif français "ai"
+
+_VEILLE_JUNK = _re.compile(
+    r"(test to be deleted|\bto be deleted\b|test article|dummy|lorem ipsum|\[test\]|placeholder)",
+    _re.I,
+)
+
+def _veille_is_junk(text):
+    """Vrai si l'entrée est manifestement un résidu technique ou de test."""
+    return bool(_VEILLE_JUNK.search(text or ""))
 
 def _veille_relevant(text):
     """Vrai si le texte concerne l'IA, la r\u00e9gulation, la cybers\u00e9curit\u00e9 ou les donn\u00e9es."""
@@ -1031,8 +1040,10 @@ def api_veille():
                 title = _html.unescape((e.get("title") or "").strip())
                 if not title:
                     continue
+                raw_for_rel = title + " " + _re.sub(r"<[^>]+>", "", e.get("summary") or "")
+                if _veille_is_junk(raw_for_rel):
+                    continue
                 if not trusted:
-                    raw_for_rel = title + " " + _re.sub(r"<[^>]+>", "", e.get("summary") or "")
                     if not _veille_relevant(raw_for_rel):
                         continue
                 link = e.get("link") or ""
