@@ -17963,6 +17963,8 @@ window.hubRender = function(){
   }).join("");
 };
 
+/* Navigation des parcours RGPD : reproduit le clic menu (go + init) */
+["rgpd-hub","rgpd-traitements","rgpd-cartographie","rgpd-aipd","rgpd-pbd","rgpd-doc","rgpd-sensibilisation","rgpd-conformite"].forEach(function(pid){ window["gnav_"+pid]=function(){ if(typeof hubGo==="function"){ hubGo(pid); } else { go(pid); } }; });
 window.__veille = {data:null, ts:0, loading:false, regs:[], timer:null};
 window.veilleInit = function(containerId, updId, filter){
   window.__veille.regs.push({id:containerId, upd:updId, filter:filter||{}});
@@ -18396,6 +18398,51 @@ var GUIDED_PATHS = [
       {id:'roadmap', label:'Roadmap', action:'Structurez le déploiement de vos initiatives IA sur un calendrier partagé.', gain:'Synchronise les équipes techniques et conformité — éviter qu un système soit déployé avant d être audité.', tip:'Intégrez un jalon de conformité obligatoire avant chaque mise en production.'},
       {id:'equipe', label:'Équipe', action:'Cartographiez les compétences IA disponibles en interne (data scientists, MLOps, référents conformité).', gain:'Identifie les manques de compétences avant qu ils ne deviennent un goulot d étranglement de croissance.', tip:'TPE : un seul référent polyvalent peut suffire au démarrage, formalisez son rôle clairement.'},
       {id:'training', label:'Hub Training', action:'Déployez des modules de formation ciblés selon le rôle (développeur, métier, dirigeant).', gain:'Une montée en compétence homogène plutôt que des connaissances disparates selon qui a eu le temps de se former.', tip:'Rendez obligatoire le module de base pour toute personne impliquée dans un projet IA, dès son arrivée.'}
+    ]
+  }
+,
+  {
+    id: 'rgpd_conformite_init', icon: '\ud83d\udee1\ufe0f', role: 'Conformité RGPD — mise en place',
+    pitch: 'Vous prenez la conformité RGPD à zéro. Ce parcours déroule le cycle complet, du registre jusqu\u2019à l\u2019indice de conformité.',
+    steps: [
+      {id:'rgpd-hub', go:'gnav_rgpd-hub', label:'Vue d\u2019ensemble', action:'Découvrez les briques du dispositif et l\u2019indice global de conformité.', gain:'Une vision consolidée avant d\u2019agir, et un point d\u2019entrée vers chaque module.', tip:'Revenez-y à tout moment pour suivre votre progression.'},
+      {id:'rgpd-traitements', go:'gnav_rgpd-traitements', label:'Registre des traitements', action:'Recensez chaque traitement de données avec les mentions de l\u2019article 30.', gain:'L\u2019inventaire exigé par le RGPD, socle de toutes les autres briques.', tip:'Commencez par les traitements les plus sensibles ou à grande échelle.'},
+      {id:'rgpd-cartographie', go:'gnav_rgpd-cartographie', label:'Cartographie des traitements', action:'Visualisez la répartition par service, par base légale, les données sensibles et les transferts.', gain:'Une lecture d\u2019ensemble qui révèle les zones d\u2019attention.', tip:'Les pastilles rouges et orange signalent les points à traiter en priorité.'},
+      {id:'rgpd-aipd', go:'gnav_rgpd-aipd', label:'AIPD (art. 35)', action:'Déterminez les traitements nécessitant une AIPD et appréciez leurs risques.', gain:'Les analyses d\u2019impact requises identifiées, et les risques élevés mis en évidence.', tip:'Le besoin d\u2019AIPD est présumé dès deux critères CNIL réunis.'},
+      {id:'rgpd-pbd', go:'gnav_rgpd-pbd', label:'Privacy by design (art. 25)', action:'Auto-évaluez vos mesures de protection dès la conception et par défaut.', gain:'Un état des lieux structuré des principes de l\u2019article 25.', tip:'Ciblez d\u2019abord les items « à faire » à fort impact.'},
+      {id:'rgpd-doc', go:'gnav_rgpd-doc', label:'Politique documentaire', action:'Suivez l\u2019état, le responsable et la revue de votre documentation de conformité.', gain:'La preuve de votre responsabilité (accountability, art. 5.2).', tip:'Priorisez les documents socles marqués « absent ».'},
+      {id:'rgpd-sensibilisation', go:'gnav_rgpd-sensibilisation', label:'Sensibilisation', action:'Planifiez les actions de sensibilisation par public cible et périodicité.', gain:'Une culture de conformité entretenue et traçable.', tip:'La sensibilisation à l\u2019embauche et le rappel annuel sont attendus.'},
+      {id:'rgpd-conformite', go:'gnav_rgpd-conformite', label:'Conformité RGPD', action:'Consultez l\u2019indice global consolidant l\u2019ensemble du dispositif.', gain:'Un tableau de bord de pilotage et les points d\u2019attention.', tip:'L\u2019indice est une aide au pilotage, non une attestation juridique.'}
+    ]
+  },
+  {
+    id: 'rgpd_registre', icon: '\ud83d\udcc7', role: 'Responsable de traitement — registre',
+    pitch: 'Vous tenez le registre au quotidien. Un parcours court pour recenser, visualiser et vérifier la conformité.',
+    steps: [
+      {id:'rgpd-hub', go:'gnav_rgpd-hub', label:'Vue d\u2019ensemble', action:'Découvrez les briques du dispositif et l\u2019indice global de conformité.', gain:'Une vision consolidée avant d\u2019agir, et un point d\u2019entrée vers chaque module.', tip:'Revenez-y à tout moment pour suivre votre progression.'},
+      {id:'rgpd-traitements', go:'gnav_rgpd-traitements', label:'Registre des traitements', action:'Recensez chaque traitement de données avec les mentions de l\u2019article 30.', gain:'L\u2019inventaire exigé par le RGPD, socle de toutes les autres briques.', tip:'Commencez par les traitements les plus sensibles ou à grande échelle.'},
+      {id:'rgpd-cartographie', go:'gnav_rgpd-cartographie', label:'Cartographie des traitements', action:'Visualisez la répartition par service, par base légale, les données sensibles et les transferts.', gain:'Une lecture d\u2019ensemble qui révèle les zones d\u2019attention.', tip:'Les pastilles rouges et orange signalent les points à traiter en priorité.'},
+      {id:'rgpd-conformite', go:'gnav_rgpd-conformite', label:'Conformité RGPD', action:'Consultez l\u2019indice global consolidant l\u2019ensemble du dispositif.', gain:'Un tableau de bord de pilotage et les points d\u2019attention.', tip:'L\u2019indice est une aide au pilotage, non une attestation juridique.'}
+    ]
+  },
+  {
+    id: 'rgpd_nouveau', icon: '\ud83d\ude80', role: 'Chef de projet — nouveau traitement',
+    pitch: 'Vous lancez un nouveau traitement. Ce parcours applique la privacy by design dès la conception, puis l\u2019AIPD et la documentation.',
+    steps: [
+      {id:'rgpd-traitements', go:'gnav_rgpd-traitements', label:'Registre des traitements', action:'Recensez chaque traitement de données avec les mentions de l\u2019article 30.', gain:'L\u2019inventaire exigé par le RGPD, socle de toutes les autres briques.', tip:'Commencez par les traitements les plus sensibles ou à grande échelle.'},
+      {id:'rgpd-pbd', go:'gnav_rgpd-pbd', label:'Privacy by design (art. 25)', action:'Auto-évaluez vos mesures de protection dès la conception et par défaut.', gain:'Un état des lieux structuré des principes de l\u2019article 25.', tip:'Ciblez d\u2019abord les items « à faire » à fort impact.'},
+      {id:'rgpd-aipd', go:'gnav_rgpd-aipd', label:'AIPD (art. 35)', action:'Déterminez les traitements nécessitant une AIPD et appréciez leurs risques.', gain:'Les analyses d\u2019impact requises identifiées, et les risques élevés mis en évidence.', tip:'Le besoin d\u2019AIPD est présumé dès deux critères CNIL réunis.'},
+      {id:'rgpd-doc', go:'gnav_rgpd-doc', label:'Politique documentaire', action:'Suivez l\u2019état, le responsable et la revue de votre documentation de conformité.', gain:'La preuve de votre responsabilité (accountability, art. 5.2).', tip:'Priorisez les documents socles marqués « absent ».'}
+    ]
+  },
+  {
+    id: 'rgpd_controle', icon: '\ud83d\udd0e', role: 'Préparer un contrôle CNIL',
+    pitch: 'Vous préparez un contrôle. Ce parcours met l\u2019accent sur la preuve : registre à jour, documentation opposable, AIPD et indice de conformité.',
+    steps: [
+      {id:'rgpd-traitements', go:'gnav_rgpd-traitements', label:'Registre des traitements', action:'Recensez chaque traitement de données avec les mentions de l\u2019article 30.', gain:'L\u2019inventaire exigé par le RGPD, socle de toutes les autres briques.', tip:'Commencez par les traitements les plus sensibles ou à grande échelle.'},
+      {id:'rgpd-doc', go:'gnav_rgpd-doc', label:'Politique documentaire', action:'Suivez l\u2019état, le responsable et la revue de votre documentation de conformité.', gain:'La preuve de votre responsabilité (accountability, art. 5.2).', tip:'Priorisez les documents socles marqués « absent ».'},
+      {id:'rgpd-aipd', go:'gnav_rgpd-aipd', label:'AIPD (art. 35)', action:'Déterminez les traitements nécessitant une AIPD et appréciez leurs risques.', gain:'Les analyses d\u2019impact requises identifiées, et les risques élevés mis en évidence.', tip:'Le besoin d\u2019AIPD est présumé dès deux critères CNIL réunis.'},
+      {id:'rgpd-conformite', go:'gnav_rgpd-conformite', label:'Conformité RGPD', action:'Consultez l\u2019indice global consolidant l\u2019ensemble du dispositif.', gain:'Un tableau de bord de pilotage et les points d\u2019attention.', tip:'L\u2019indice est une aide au pilotage, non une attestation juridique.'}
     ]
   }
 ];
