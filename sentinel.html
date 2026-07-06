@@ -3470,7 +3470,7 @@ textarea.form-el{min-height:86px;resize:vertical}
           <label style="font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted2);display:block;margin-bottom:4px">SaaS mensuel de référence (€)</label>
           <input type="number" id="raas-saas-monthly" value="350" min="50" max="10000" style="padding:7px 10px;border:1px solid var(--rule2);border-radius:5px;width:120px;font-size:12px">
         </div>
-        <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="raasAdminInit()" title="Cree les 7 jalons pour ce client (idempotent, n ecrase jamais un jalon existant)">Initialiser l’échéancier</button>
+        <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="raasAdminInit('ai_act')" title="Cree les 7 jalons pour ce client (idempotent, n ecrase jamais un jalon existant)">Initialiser l’échéancier</button> <button class="mat-export-btn" style="background:#6B46C1;color:#fff" onclick="raasAdminInit('rgpd')" title="Cree les 7 jalons RGPD pour ce client (idempotent). Verification adossee a l indice de conformite RGPD.">Initialiser l’échéancier RGPD</button>
         <button class="mat-export-btn" onclick="raasAdminBill()" title="Facture les jalons verifies et genere l echeancier en 2 mensualites">Lancer le cycle de facturation</button>
       </div>
       <div id="raas-admin-msg" style="font-size:12px;margin-bottom:10px"></div>
@@ -16037,7 +16037,14 @@ window.raasAdminLoad = function(){
       function eur(n){ return (n||0).toLocaleString('fr-FR')+'\u202f\u20ac'; }
       var stLbl = {pending:'⏳ En attente', verified:'✅ Vérifié', invoiced:'Facturé'};
       var rows = '';
-      d.milestones.forEach(function(m){
+      var __msList = d.milestones.slice().sort(function(a,b){
+        var fa = String(a.milestone_id).indexOf('rgpd_')===0?1:0, fb = String(b.milestone_id).indexOf('rgpd_')===0?1:0; return fa-fb;
+      });
+      var __lastFw = null, __env = {'IA Act':0,'RGPD':0}, __ver = {'IA Act':0,'RGPD':0};
+      __msList.forEach(function(m){ var f = String(m.milestone_id).indexOf('rgpd_')===0?'RGPD':'IA Act'; __env[f]+=(m.amount_eur||0); if(m.status==='verified'||m.status==='invoiced') __ver[f]+=(m.amount_eur||0); });
+      __msList.forEach(function(m){
+        var __fw = String(m.milestone_id).indexOf('rgpd_')===0?'RGPD':'IA Act';
+        if(__fw!==__lastFw){ rows += '<tr><td colspan="6" style="background:'+(__fw==='RGPD'?'#6B46C1':'var(--ink)')+';color:#fff;font-weight:700;font-size:11px;padding:7px 10px">Cadre '+__fw+' \u2014 enveloppe '+eur(__env[__fw])+' \u00b7 acquis '+eur(__ver[__fw])+'</td></tr>'; __lastFw=__fw; }
         var canVerify = (m.status === 'pending');
         rows += '<tr>'
           + '<td>'+m.label+'</td>'
@@ -16077,7 +16084,8 @@ window.raasAdminLoad = function(){
     .catch(function(){ out.innerHTML = '<div style="padding:14px;color:var(--accent)">Erreur réseau.</div>'; });
 };
 
-window.raasAdminInit = function(){
+window.raasAdminInit = function(framework){
+  var fw = (framework === 'rgpd') ? 'rgpd' : 'ai_act';
   var sel = document.getElementById('raas-client-select');
   var saas = parseFloat((document.getElementById('raas-saas-monthly')||{value:'350'}).value||'350');
   var msg = document.getElementById('raas-admin-msg');
@@ -16086,7 +16094,7 @@ window.raasAdminInit = function(){
   fetch('/api/raas/milestones/init', {
     method:'POST', credentials:'same-origin',
     headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({client_id: parseInt(sel.value,10), saas_monthly: saas})
+    body: JSON.stringify({client_id: parseInt(sel.value,10), saas_monthly: saas, framework: fw})
   }).then(function(r){ return r.json(); }).then(function(d){
     if(msg){
       msg.style.color = d.ok ? 'var(--green)' : 'var(--accent)';
