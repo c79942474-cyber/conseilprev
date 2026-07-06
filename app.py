@@ -941,7 +941,7 @@ VEILLE_THEMES = [
     ("Normes / gouvernance", ["iso", "42001", "governance", "gouvernance", "standard", "oecd", "ocde"]),
 ]
 
-_VEILLE_KW = re.compile(
+_VEILLE_KW = _re.compile(
     r"(artificial intelligence|intelligence artificielle|machine learning|deep learning|"
     r"\bllm\b|\bgpai\b|generative|genai|chatgpt|openai|anthropic|mistral|"
     r"algorithm[e]?s?|ai act|r\u00e8glement|regulation|\bgdpr\b|\brgpd\b|"
@@ -949,9 +949,9 @@ _VEILLE_KW = re.compile(
     r"ransomware|malware|phishing|\benisa\b|\bcnil\b|data protection|privacy|surveillance|"
     r"gouvernance|governance|compliance|conformit\u00e9|directive|sanction|amende|d\u00e9lib\u00e9ration|"
     r"digital services act|\bdsa\b|\bdma\b)",
-    re.I,
+    _re.I,
 )
-_VEILLE_AI = re.compile(r"\bAI\b")  # acronyme (sensible \u00e0 la casse) pour éviter le faux positif français "ai"
+_VEILLE_AI = _re.compile(r"\bAI\b")  # acronyme (sensible \u00e0 la casse) pour éviter le faux positif français "ai"
 
 def _veille_relevant(text):
     """Vrai si le texte concerne l'IA, la r\u00e9gulation, la cybers\u00e9curit\u00e9 ou les donn\u00e9es."""
