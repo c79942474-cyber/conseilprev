@@ -1915,6 +1915,12 @@ textarea.form-el{min-height:86px;resize:vertical}
 .pbd-item{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--ink);cursor:pointer;line-height:1.35}
 .pbd-item input{margin-top:2px;flex:0 0 auto}
 @media(max-width:640px){.pbd-items{grid-template-columns:1fr}}
+
+/* ══ POLITIQUE DOCUMENTAIRE RGPD ══ */
+.doc-table th{font-size:10px}
+.doc-name{font-size:12px;color:var(--ink)}
+.doc-in{padding:5px 7px;border:1px solid var(--rule2);border-radius:5px;font-size:11px;background:var(--white);color:var(--ink);width:120px;box-sizing:border-box}
+.doc-in:focus{outline:none;border-color:var(--accent)}
 </style>
 
 </head>
@@ -1971,6 +1977,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-item" onclick="go('rgpd-cartographie',this,'RGPD &amp; VIE PRIVÉE','Cartographie des traitements');cartoTraitLoadOnce()" title="Vue d ensemble des traitements par service et base legale, donnees sensibles et transferts hors UE."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>Cartographie des traitements</div>
     <div class="sb-item" onclick="go('rgpd-aipd',this,'RGPD &amp; VIE PRIVÉE','AIPD — analyse d\u2019impact');aipdLoadOnce()" title="Analyse d impact relative a la protection des donnees (art. 35 RGPD), par traitement : besoin d AIPD (criteres CNIL) et appreciation des risques."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>AIPD (art. 35)</div>
     <div class="sb-item" onclick="go('rgpd-pbd',this,'RGPD &amp; VIE PRIVÉE','Privacy by design');pbdInit()" title="Protection des donnees des la conception et par defaut (art. 25 RGPD) : check-list d auto-evaluation."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2l7 4v6c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span>Privacy by design</div>
+    <div class="sb-item" onclick="go('rgpd-doc',this,'RGPD &amp; VIE PRIVÉE','Politique documentaire');docInit()" title="Referentiel de la documentation de conformite RGPD (accountability, art. 5.2) : etat, responsable, revue."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h6"/></svg></span>Politique documentaire</div>
     <div class="sb-section">Administration</div>
     <div class="sb-item" onclick="go('clients',this,'ADMINISTRATION','Gestion des clients')" title="Creer et gerer les acces clients externes a Sentinel AI (reserve a CONSEILPREV)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><circle cx="19" cy="8" r="2.5"/><path d="M17.5 21v-1a3 3 0 0 0 .5-1.7"/><path d="M19 14.5a3.5 3.5 0 0 1 3.5 3.5v3"/></svg></span>Gestion des clients</div>
   </nav>
@@ -3307,6 +3314,22 @@ textarea.form-el{min-height:86px;resize:vertical}
   <div id="pbd-list" style="margin-top:16px"></div>
   <div class="trait-note">
     Cette check-list matérialise l'article 25 du RGPD et les principes de la protection des données dès la conception. Elle constitue une aide à la décision : les mesures cochées doivent correspondre à des dispositifs réellement en place et documentés. CONSEILPREV peut vous accompagner dans leur mise en œuvre et leur preuve.
+  </div>
+</div>
+
+
+<div class="page" id="p-rgpd-doc">
+  <span class="eyebrow">RGPD &amp; Vie privée</span>
+  <h1 class="page-h">Politique <em>documentaire</em></h1>
+  <p class="page-lead">Référentiel de la documentation de conformité RGPD — accountability (article 5.2). Suivi de l'état, du responsable et de la dernière revue des documents attestant votre conformité.</p>
+  <div class="reg-toolbar">
+    <button class="mat-export-btn" onclick="docExportPdf()">Exporter le suivi (PDF)</button>
+    <span id="doc-global-wrap" style="margin-left:auto;display:flex;align-items:center;gap:8px"><span style="font-size:12px;color:var(--muted2)">Documents en place</span><strong id="doc-global" style="font-size:16px;color:var(--accent)">0 %</strong></span>
+  </div>
+  <div class="pbd-track"><div class="pbd-fill" id="doc-global-fill" style="width:0%"></div></div>
+  <div id="doc-list" style="margin-top:16px"></div>
+  <div class="trait-note">
+    La documentation atteste votre conformité au titre du principe de responsabilité (accountability, art. 5.2 RGPD). Chaque document doit être établi, tenu à jour et opposable. Les états déclarés ici sont une aide au pilotage et ne préjugent pas de la validité juridique des pièces. CONSEILPREV peut vous accompagner dans leur constitution.
   </div>
 </div>
 
@@ -5567,6 +5590,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 'use strict';
 
 var PAGE_META = {
+    'rgpd-doc': { section: 'RGPD & VIE PRIVÉE', label: 'Politique documentaire' },
     'rgpd-pbd': { section: 'RGPD & VIE PRIVÉE', label: 'Privacy by design' },
     'rgpd-aipd': { section: 'RGPD & VIE PRIVÉE', label: 'AIPD — analyse d\u2019impact' },
     'rgpd-cartographie': { section: 'RGPD & VIE PRIVÉE', label: 'Cartographie des traitements' },
@@ -17527,6 +17551,100 @@ window.pbdExportPdf = function(){
     +'<div class="sub">CONSEILPREV — Sentinel · Progression : '+c.done+'/'+c.total+' ('+c.pct+' %) · '+today+'</div>'
     +body
     +'<div class="foot">Aide à la décision. Les mesures cochées doivent correspondre à des dispositifs en place et documentés. Généré par Sentinel — à valider avec le délégué à la protection des données.</div>'
+    +'</body></html>';
+  var w=window.open("","_blank"); if(!w){ alert("Autorisez les pop-ups pour exporter."); return; }
+  w.document.write(html+'<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>'); w.document.close();
+};
+
+/* ══ Politique documentaire RGPD — suivi des documents d'accountability, localStorage ══ */
+window.DOC_KEY = "sentinel_rgpddoc_v1";
+window.DOC_STATUSES = [["absent","Absent","var(--muted2)"],["projet","En projet","#c98a00"],["en_place","En place","var(--green)"],["a_reviser","À réviser","#c0392b"]];
+window.DOC_ITEMS = [
+  ["Documents socles", [
+    ["doc-registre-t","Registre des activités de traitement (art. 30)"],
+    ["doc-registre-st","Registre des traitements du sous-traitant (art. 30.2)"],
+    ["doc-politique","Politique de protection des données"]
+  ]],
+  ["Information et droits", [
+    ["doc-mentions","Mentions d'information des personnes (art. 13-14)"],
+    ["doc-proc-droits","Procédure d'exercice des droits (art. 15-22)"],
+    ["doc-cookies","Politique cookies et traceurs"]
+  ]],
+  ["Sécurité et incidents", [
+    ["doc-pssi","Politique de sécurité des systèmes d'information"],
+    ["doc-viol","Procédure et registre des violations de données (art. 33-34)"],
+    ["doc-habilit","Matrice des habilitations et accès"]
+  ]],
+  ["Sous-traitance et transferts", [
+    ["doc-contrats","Contrats de sous-traitance (clauses art. 28)"],
+    ["doc-transferts","Encadrement des transferts hors UE (clauses types)"]
+  ]],
+  ["Gouvernance", [
+    ["doc-aipd","AIPD des traitements à risque (art. 35)"],
+    ["doc-dpo","Désignation et lettre de mission du DPO"],
+    ["doc-sensib","Plan et supports de sensibilisation"]
+  ]]
+];
+
+window.docState = function(){ try { return JSON.parse(localStorage.getItem(DOC_KEY)) || {}; } catch(e){ return {}; } };
+window.docSave = function(st){ try { localStorage.setItem(DOC_KEY, JSON.stringify(st)); } catch(e){} };
+window.docRec = function(id){ var st=docState(); return st[id] || {statut:"absent",resp:"",revue:""}; };
+window.docAllIds = function(){ var a=[]; DOC_ITEMS.forEach(function(g){ g[1].forEach(function(it){ a.push(it[0]); }); }); return a; };
+window.docCounts = function(){
+  var st=docState(), all=docAllIds();
+  var enPlace=all.filter(function(id){ return (st[id]||{}).statut==="en_place"; }).length;
+  return { enPlace:enPlace, total:all.length, pct: all.length? Math.round(enPlace/all.length*100):0 };
+};
+window.docStatusMeta = function(code){ for(var i=0;i<DOC_STATUSES.length;i++){ if(DOC_STATUSES[i][0]===code) return DOC_STATUSES[i]; } return DOC_STATUSES[0]; };
+
+window.docRender = function(){
+  var box=document.getElementById("doc-list"); if(!box) return;
+  box.innerHTML = DOC_ITEMS.map(function(g){
+    var rows=g[1].map(function(it){
+      var r=docRec(it[0]);
+      var opts=DOC_STATUSES.map(function(s){ return '<option value="'+s[0]+'"'+(r.statut===s[0]?" selected":"")+'>'+s[1]+'</option>'; }).join("");
+      var m=docStatusMeta(r.statut);
+      return '<tr>'
+        + '<td class="doc-name">'+traitEsc(it[1])+'</td>'
+        + '<td><span class="aipd-lvl" id="doc-badge-'+it[0]+'" style="background:'+m[2]+'">'+m[1]+'</span></td>'
+        + '<td><select class="aipd-sel" onchange="docSet(\''+it[0]+'\',\'statut\',this.value)">'+opts+'</select></td>'
+        + '<td><input type="text" class="doc-in" value="'+traitEsc(r.resp)+'" placeholder="Responsable" onchange="docSet(\''+it[0]+'\',\'resp\',this.value)"></td>'
+        + '<td><input type="text" class="doc-in" value="'+traitEsc(r.revue)+'" placeholder="jj/mm/aaaa" onchange="docSet(\''+it[0]+'\',\'revue\',this.value)"></td>'
+        + '</tr>';
+    }).join("");
+    return '<div class="ct-card" style="margin-bottom:12px"><div class="ct-card-t">'+traitEsc(g[0])+'</div>'
+      + '<div style="overflow-x:auto"><table class="ms-table doc-table"><thead><tr><th>Document</th><th>État</th><th>Statut</th><th>Responsable</th><th>Dernière revue</th></tr></thead><tbody>'+rows+'</tbody></table></div></div>';
+  }).join("");
+  docUpdateGlobal();
+};
+window.docUpdateGlobal = function(){
+  var c=docCounts();
+  var g=document.getElementById("doc-global"); if(g) g.textContent=c.pct+" %";
+  var f=document.getElementById("doc-global-fill"); if(f) f.style.width=c.pct+"%";
+};
+window.docSet = function(id, field, val){
+  var st=docState(); if(!st[id]) st[id]={statut:"absent",resp:"",revue:""}; st[id][field]=val; docSave(st);
+  if(field==="statut"){ var m=docStatusMeta(val); var b=document.getElementById("doc-badge-"+id); if(b){ b.textContent=m[1]; b.style.background=m[2]; } docUpdateGlobal(); }
+};
+window.docInit = function(){ if(document.getElementById("doc-list")) docRender(); };
+
+window.docExportPdf = function(){
+  var st=docState(), c=docCounts(), today=new Date().toLocaleDateString("fr-FR");
+  function esc(x){ return String(x==null?"":x).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  var body=DOC_ITEMS.map(function(g){
+    var rows=g[1].map(function(it){ var r=docRec(it[0]), m=docStatusMeta(r.statut); return '<tr><td>'+esc(it[1])+'</td><td>'+m[1]+'</td><td>'+esc(r.resp||"—")+'</td><td>'+esc(r.revue||"—")+'</td></tr>'; }).join("");
+    return '<h2>'+esc(g[0])+'</h2><table><thead><tr><th>Document</th><th>Statut</th><th>Responsable</th><th>Dernière revue</th></tr></thead><tbody>'+rows+'</tbody></table>';
+  }).join("");
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Politique documentaire RGPD</title>'
+    +'<style>@page{margin:1.6cm}body{font-family:Arial,sans-serif;color:#1C1C1C;max-width:900px;margin:0 auto;padding:16px}'
+    +'h1{font-size:19px;border-bottom:3px solid #6B46C1;padding-bottom:8px;margin-bottom:2px}.sub{color:#666;font-size:11px;margin-bottom:14px}'
+    +'h2{font-size:13px;color:#6B46C1;margin:14px 0 4px}table{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:8px}'
+    +'td,th{border:1px solid #ddd;padding:5px 8px;text-align:left}th{background:#faf9f7}'
+    +'.foot{font-size:9px;color:#999;margin-top:18px;border-top:1px solid #eee;padding-top:8px}</style></head><body>'
+    +'<h1>Politique documentaire RGPD — accountability (art. 5.2)</h1>'
+    +'<div class="sub">CONSEILPREV — Sentinel · Documents en place : '+c.enPlace+'/'+c.total+' ('+c.pct+' %) · '+today+'</div>'
+    +body
+    +'<div class="foot">Aide au pilotage. Les états déclarés ne préjugent pas de la validité juridique des pièces. Généré par Sentinel — à valider avec le délégué à la protection des données.</div>'
     +'</body></html>';
   var w=window.open("","_blank"); if(!w){ alert("Autorisez les pop-ups pour exporter."); return; }
   w.document.write(html+'<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>'); w.document.close();
