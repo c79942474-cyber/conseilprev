@@ -3390,6 +3390,18 @@ RAAS_MILESTONE_DEFS = [
     {'id': 'audit80',  'label': 'Audit de conformite >= 80 %',  'art': 'Art. 43',    'w': 0.20, 'threshold': 80},
     {'id': 'attest',   'label': 'Attestation finale',           'art': 'Art. 47',    'w': 0.20, 'threshold': 90},
 ]
+
+# Jalons RaaS RGPD (parallele a l'IA Act) : ids prefixes 'rgpd_', memes table et endpoints.
+# Verification adossee a l'indice de conformite RGPD (score transmis par le frontend).
+RAAS_MILESTONE_DEFS_RGPD = [
+    {'id': 'rgpd_registre',        'label': 'Registre des traitements (art. 30)', 'art': 'Art. 30',  'w': 0.15, 'threshold': 30},
+    {'id': 'rgpd_cartographie',    'label': 'Cartographie des traitements',       'art': 'Art. 30',  'w': 0.10, 'threshold': 40},
+    {'id': 'rgpd_aipd',            'label': 'AIPD des traitements a risque',      'art': 'Art. 35',  'w': 0.20, 'threshold': 55},
+    {'id': 'rgpd_pbd',             'label': 'Privacy by design',                  'art': 'Art. 25',  'w': 0.15, 'threshold': 65},
+    {'id': 'rgpd_doc',             'label': 'Politique documentaire',             'art': 'Art. 5.2', 'w': 0.15, 'threshold': 75},
+    {'id': 'rgpd_sensibilisation', 'label': 'Sensibilisation',                    'art': 'Art. 39',  'w': 0.10, 'threshold': 85},
+    {'id': 'rgpd_conformite',      'label': 'Indice de conformite RGPD >= 90%',   'art': 'RGPD',     'w': 0.15, 'threshold': 90},
+]
 RAAS_ENVELOPE_RATE = 0.60  # enveloppe resultats = 60 % du SaaS annuel
 
 CONSEILPREV_INTERNAL_EMAIL = 'conseilprev@internal.system'
@@ -3963,12 +3975,14 @@ def raas_init_milestones():
         return jsonify({'ok': False, 'error': 'client_id et saas_monthly requis'}), 400
     if saas_monthly <= 0 or saas_monthly > 100000:
         return jsonify({'ok': False, 'error': 'saas_monthly hors bornes'}), 400
+    framework = str(d.get('framework', 'ai_act'))
+    defs = RAAS_MILESTONE_DEFS_RGPD if framework == 'rgpd' else RAAS_MILESTONE_DEFS
     envelope = round(saas_monthly * 12 * RAAS_ENVELOPE_RATE)
     now = datetime.utcnow().isoformat()
     conn = registre_get_db()
     cur = conn.cursor()
     created = 0
-    for m in RAAS_MILESTONE_DEFS:
+    for m in defs:
         amount = round(envelope * m['w'])
         try:
             if REGISTRE_USE_PG:
