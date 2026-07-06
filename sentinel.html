@@ -1864,6 +1864,28 @@ textarea.form-el{min-height:86px;resize:vertical}
 .trait-d-l{flex:0 0 34%;font-size:11.5px;font-weight:600;color:var(--muted)}
 .trait-d-v{flex:1;font-size:12px;color:var(--ink);white-space:pre-wrap}
 @media(max-width:640px){.trait-grid{grid-template-columns:1fr}}
+
+/* ══ CARTOGRAPHIE DES TRAITEMENTS RGPD ══ */
+.ct-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:6px 0 16px}
+.ct-kpi{border:1px solid var(--rule2);border-radius:10px;padding:14px;text-align:center;background:var(--white)}
+.ct-kpi-v{font-size:24px;font-weight:700}
+.ct-kpi-l{font-size:11px;color:var(--muted2);margin-top:3px}
+.ct-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.ct-card{border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white)}
+.ct-card-t{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px}
+.ct-help{font-size:11px;color:var(--muted2);line-height:1.5;margin:0 0 10px}
+.ct-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.ct-bar-lbl{flex:0 0 40%;font-size:11.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ct-bar-track{flex:1;height:8px;background:var(--bg2);border-radius:5px;overflow:hidden}
+.ct-bar-fill{height:100%;background:var(--accent);border-radius:5px}
+.ct-bar-val{flex:0 0 auto;font-size:11px;font-weight:600;color:var(--muted);min-width:18px;text-align:right}
+.ct-alert{border-left:3px solid #c0392b}
+.ct-warn{border-left:3px solid #c98a00}
+.ct-chips{display:flex;flex-wrap:wrap;gap:6px}
+.ct-chip{border:1px solid var(--rule2);background:var(--bg);border-radius:14px;padding:4px 11px;font-size:11px;color:var(--ink);cursor:pointer}
+.ct-chip:hover{border-color:var(--accent);background:var(--bg2)}
+.ct-none{font-size:11.5px;color:var(--muted2);font-style:italic}
+@media(max-width:640px){.ct-cols{grid-template-columns:1fr}.ct-bar-lbl{flex-basis:50%}}
 </style>
 
 </head>
@@ -1917,6 +1939,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-item" onclick="go('pricing',this,'BUSINESS','Tarification par résultats')" title="Simulateur de modele commercial hybride RaaS (resultats) vs SaaS classique."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2v2M12 20v2"/><path d="M5 7a3 3 0 0 1 3-3h8.5L20 8.5 16.5 12 20 15.5 16.5 19H8a3 3 0 0 1-3-3"/><path d="M9 9h4M9 14h4"/></svg></span>Tarification résultats</div>
     <div class="sb-section">RGPD &amp; Vie privée</div>
     <div class="sb-item" onclick="go('rgpd-traitements',this,'RGPD &amp; VIE PRIVÉE','Registre des traitements');traitLoadOnce()" title="Registre des activites de traitement au sens de l article 30 du RGPD (ajout, details, suppression, export)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"/><path d="M9 12l2 2 4-4"/></svg></span>Registre des traitements</div>
+    <div class="sb-item" onclick="go('rgpd-cartographie',this,'RGPD &amp; VIE PRIVÉE','Cartographie des traitements');cartoTraitLoadOnce()" title="Vue d ensemble des traitements par service et base legale, donnees sensibles et transferts hors UE."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>Cartographie des traitements</div>
     <div class="sb-section">Administration</div>
     <div class="sb-item" onclick="go('clients',this,'ADMINISTRATION','Gestion des clients')" title="Creer et gerer les acces clients externes a Sentinel AI (reserve a CONSEILPREV)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><circle cx="19" cy="8" r="2.5"/><path d="M17.5 21v-1a3 3 0 0 0 .5-1.7"/><path d="M19 14.5a3.5 3.5 0 0 1 3.5 3.5v3"/></svg></span>Gestion des clients</div>
   </nav>
@@ -3202,6 +3225,22 @@ textarea.form-el{min-height:86px;resize:vertical}
   <div id="trait-list"><div class="veille-loading">Chargement du registre…</div></div>
   <div class="trait-note">
     Ce registre matérialise l'article 30 du RGPD. Les mentions relatives au responsable de traitement, au délégué à la protection des données et aux droits des personnes doivent être tenues à jour. Les données saisies sont propres à votre compte. CONSEILPREV peut vous accompagner dans la constitution et la revue de ce registre.
+  </div>
+</div>
+
+
+<div class="page" id="p-rgpd-cartographie">
+  <span class="eyebrow">RGPD &amp; Vie privée</span>
+  <h1 class="page-h">Cartographie des <em>traitements</em></h1>
+  <p class="page-lead">Vue d'ensemble de vos traitements de données personnelles, agrégée depuis le registre de l'article 30 : répartition par service et par base légale, données sensibles et transferts hors Union européenne.</p>
+  <div class="reg-toolbar">
+    <button class="mat-export-btn" onclick="cartoTraitLoad()">↻ Actualiser</button>
+    <button class="mat-export-btn" onclick="cartoTraitOpenRegistre()">Ouvrir le registre</button>
+    <span id="ctrait-count" style="font-size:12px;color:var(--muted2);margin-left:auto"></span>
+  </div>
+  <div id="ctrait-body"><div class="veille-loading">Chargement de la cartographie…</div></div>
+  <div class="trait-note">
+    Cette cartographie se met à jour à partir du registre des traitements. Alimentez le registre pour en enrichir la vue. Les données particulières de l'article 9 et les transferts hors Union appellent des garanties renforcées, que CONSEILPREV peut vous aider à qualifier.
   </div>
 </div>
 
@@ -5462,6 +5501,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 'use strict';
 
 var PAGE_META = {
+    'rgpd-cartographie': { section: 'RGPD & VIE PRIVÉE', label: 'Cartographie des traitements' },
     'rgpd-traitements': { section: 'RGPD & VIE PRIVÉE', label: 'Registre des traitements' },
   apercu:   {section:'PILOTAGE', label:'Observatoire IA'},
   carto:    {section:'SE TENIR INFORMÉ',    label:'Carte mondiale'},
@@ -17106,6 +17146,67 @@ window.traitExportPdf = function(){
     +'</body></html>';
   var w=window.open("","_blank"); if(!w){ alert("Autorisez les pop-ups pour exporter."); return; }
   w.document.write(html+'<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>'); w.document.close();
+};
+
+/* ══ Cartographie des traitements (RGPD) — agrège TRAIT_DATA ══ */
+window.__ctraitLoaded = false;
+window.cartoTraitOpenRegistre = function(){ var el=document.querySelector(".sb-item[onclick*=\"go('rgpd-traitements'\"]"); if(el) el.click(); };
+window.cartoTraitLoadOnce = function(){ if(window.__ctraitLoaded) return; cartoTraitLoad(); };
+window.cartoTraitLoad = function(){
+  var box=document.getElementById("ctrait-body"); if(box) box.innerHTML='<div class="veille-loading">Chargement de la cartographie…</div>';
+  fetch("/api/rgpd/traitements",{credentials:"same-origin"}).then(function(r){ return r.json(); })
+    .then(function(d){ window.TRAIT_DATA=(d&&d.traitements)?d.traitements:[]; window.__ctraitLoaded=true; cartoTraitRender(); })
+    .catch(function(){ var b=document.getElementById("ctrait-body"); if(b) b.innerHTML='<div class="veille-empty">Cartographie momentanément indisponible. Vérifiez votre connexion.</div>'; });
+};
+window.ctNorm = function(s){ return (s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,""); };
+window.ctBase = function(s){
+  var t=ctNorm(s);
+  if(/consent/.test(t)) return "Consentement (6.1.a)";
+  if(/contrat|contract/.test(t)) return "Contrat (6.1.b)";
+  if(/obligation/.test(t)) return "Obligation légale (6.1.c)";
+  if(/vitaux|vital/.test(t)) return "Intérêts vitaux (6.1.d)";
+  if(/interet public|public interest|mission/.test(t)) return "Mission d'intérêt public (6.1.e)";
+  if(/legitime|legitimate/.test(t)) return "Intérêt légitime (6.1.f)";
+  if(!t) return "Non précisée";
+  return "Autre / à préciser";
+};
+window.ctFilled = function(v){ var t=ctNorm(v).trim(); return !!t && t!=="non" && t!=="-" && t!=="n/a" && t!=="na" && t!=="aucun" && t!=="aucune" && t!=="neant"; };
+window.cartoTraitRender = function(){
+  var box=document.getElementById("ctrait-body"); if(!box) return;
+  var list=window.TRAIT_DATA||[];
+  var cnt=document.getElementById("ctrait-count"); if(cnt) cnt.textContent=list.length+" traitement(s)";
+  if(!list.length){ box.innerHTML='<div class="veille-empty">Aucun traitement enregistré. Alimentez d\'abord le registre des traitements.</div>'; return; }
+  var byStatut={}, byService={}, byBase={}, sensibles=[], transferts=[];
+  list.forEach(function(t){
+    byStatut[t.statut]=(byStatut[t.statut]||0)+1;
+    var sv=((t.service||"").trim())||"Non affecté"; byService[sv]=(byService[sv]||0)+1;
+    var b=ctBase(t.base_legale); byBase[b]=(byBase[b]||0)+1;
+    if(ctFilled(t.donnees_sensibles)) sensibles.push(t);
+    if(ctFilled(t.transferts_hors_ue)) transferts.push(t);
+  });
+  function bars(obj){
+    var entries=Object.keys(obj).map(function(k){ return [k,obj[k]]; }).sort(function(a,b){ return b[1]-a[1]; });
+    var max=entries.reduce(function(m,e){ return Math.max(m,e[1]); },1);
+    return entries.map(function(e){
+      var pct=Math.round(e[1]/max*100);
+      return '<div class="ct-bar-row"><div class="ct-bar-lbl">'+traitEsc(e[0])+'</div><div class="ct-bar-track"><div class="ct-bar-fill" style="width:'+pct+'%"></div></div><div class="ct-bar-val">'+e[1]+'</div></div>';
+    }).join("");
+  }
+  function kpi(v,l,color){ return '<div class="ct-kpi"><div class="ct-kpi-v" style="color:'+(color||"var(--accent)")+'">'+v+'</div><div class="ct-kpi-l">'+l+'</div></div>'; }
+  function chips(arr){ return arr.length ? arr.map(function(t){ return '<button class="ct-chip" onclick="traitDetails('+t.id+')">'+traitEsc(t.nom)+'</button>'; }).join("") : '<span class="ct-none">Aucun traitement concerné</span>'; }
+  box.innerHTML =
+      '<div class="ct-kpis">'
+    + kpi(list.length,"Traitements","var(--accent)")
+    + kpi(byStatut.actif||0,"Actifs","var(--green)")
+    + kpi(sensibles.length,"Données sensibles (art. 9)", sensibles.length? "#c0392b":"var(--muted2)")
+    + kpi(transferts.length,"Transferts hors UE", transferts.length? "#c98a00":"var(--muted2)")
+    + '</div>'
+    + '<div class="ct-cols">'
+    + '<div class="ct-card"><div class="ct-card-t">Répartition par service</div>'+bars(byService)+'</div>'
+    + '<div class="ct-card"><div class="ct-card-t">Répartition par base légale (art. 6)</div>'+bars(byBase)+'</div>'
+    + '</div>'
+    + '<div class="ct-card ct-alert"><div class="ct-card-t">Données sensibles — article 9</div><p class="ct-help">Traitements portant sur des données particulières (santé, biométrie, opinions, orientation…), soumis à des garanties renforcées.</p><div class="ct-chips">'+chips(sensibles)+'</div></div>'
+    + '<div class="ct-card ct-warn"><div class="ct-card-t">Transferts hors Union européenne</div><p class="ct-help">Traitements impliquant un transfert hors UE ; vérifiez les garanties appropriées (clauses contractuelles types, décision d\'adéquation).</p><div class="ct-chips">'+chips(transferts)+'</div></div>';
 };
 
 window.__veille = {data:null, ts:0, loading:false, regs:[], timer:null};
