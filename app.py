@@ -927,18 +927,23 @@ VEILLE_FEEDS = [
     {"url": "https://www.technologyreview.com/feed/",     "source": "MIT Technology Review",     "jur": "International", "fallbacks": ["https://news.google.com/rss/search?q=AI%20technology%20regulation&hl=en-US&gl=US&ceid=US:en"]},
     # Cybersécurité & protection des données (spécialisées — pertinentes NIS2/DORA/RGPD)
     {"url": "https://news.google.com/rss/search?q=ENISA%20OR%20NIS2%20OR%20cybersecurity%20EU&hl=en-US&gl=US&ceid=US:en", "source": "ENISA / cybersécurité UE", "jur": "Union européenne", "fallbacks": ["https://www.enisa.europa.eu/media/news-items/news-wires/RSS"]},  # Google News primaire (natif bloque sur Render), natif en repli
-    {"url": "https://www.cert.ssi.gouv.fr/feed/",         "source": "CERT-FR / ANSSI",           "jur": "France", "trusted": True, "fallbacks": ["https://www.cert.ssi.gouv.fr/avis/feed/", "https://www.cert.ssi.gouv.fr/alerte/feed/", "https://www.cert.ssi.gouv.fr/actualite/feed/"]},
-    {"url": "https://www.cnil.fr/fr/rss.xml",             "source": "CNIL — RGPD",               "jur": "France", "trusted": True, "fallbacks": ["https://www.cnil.fr/fr/flux-rss", "https://news.google.com/rss/search?q=CNIL%20RGPD&hl=fr&gl=FR&ceid=FR:fr"]},
+    {"url": "https://www.cert.ssi.gouv.fr/feed/",         "source": "CERT-FR / ANSSI",           "jur": "France", "trusted": True, "theme": "Cyber / NIS2 / DORA", "fallbacks": ["https://www.cert.ssi.gouv.fr/avis/feed/", "https://www.cert.ssi.gouv.fr/alerte/feed/", "https://www.cert.ssi.gouv.fr/actualite/feed/"]},
+    {"url": "https://www.cnil.fr/fr/rss.xml",             "source": "CNIL — RGPD",               "jur": "France", "trusted": True, "theme": "RGPD / données", "fallbacks": ["https://www.cnil.fr/fr/flux-rss", "https://news.google.com/rss/search?q=CNIL%20RGPD&hl=fr&gl=FR&ceid=FR:fr"]},
     # Pour ajouter une source : dupliquer une ligne (url du flux RSS/Atom, source, jur).
     # Le mode diagnostic /api/veille?debug=1 indique, pour chaque flux, le statut HTTP et le nombre d'items.
 ]
 VEILLE_TTL = 1800  # cache serveur (secondes) = 30 min
+VEILLE_MAX_PER_SOURCE = 6  # plafond par source (equilibrage)
 _VEILLE_CACHE = {"ts": 0.0, "items": [], "errors": []}
 VEILLE_THEMES = [
-    ("AI Act",               ["ai act", "artificial intelligence act", "ia act", "2024/1689", "high-risk", "gpai", "ai office"]),
-    ("RGPD / données",       ["gdpr", "rgpd", "data protection", "privacy", "donnees personnelles", "données personnelles"]),
-    ("Cyber / NIS2 / DORA",  ["nis2", "nis 2", "dora", "cyber", "cybersecurity", "cybersecurite", "cybersécurité", "resilience"]),
-    ("Normes / gouvernance", ["iso", "42001", "governance", "gouvernance", "standard", "oecd", "ocde"]),
+    ("AI Act",               ["ai act", "artificial intelligence act", "ia act", "2024/1689", "high-risk", "gpai", "ai office", "règlement ia", "reglement ia", "règlement (ue)"]),
+    ("RGPD / données",       ["gdpr", "rgpd", "data protection", "privacy", "donnees personnelles", "données personnelles",
+                              "cookies", "vidéosurveillance", "videosurveillance", "localisation", "vie privée", "vie privee",
+                              "consentement", "dpo", "cnil", "sanction", "délibération", "deliberation", "biométr", "biometr"]),
+    ("Cyber / NIS2 / DORA",  ["nis2", "nis 2", "nis360", "dora", "cyber", "cybersecurity", "cybersecurite", "cybersécurité", "resilience",
+                              "vulnérabilit", "vulnerabilit", "faille", "exploit", "correctif", "ransomware", "malware",
+                              "attaque", "intrusion", "supply chain security"]),
+    ("Normes / gouvernance", ["iso", "42001", "governance", "gouvernance", "standard", "oecd", "ocde", "normalisation", "certification"]),
 ]
 
 _VEILLE_KW = _re.compile(
@@ -1036,21 +1041,26 @@ def api_veille():
                 errors.append({"source": feed.get("source"), "error": "aucun item (statut %s)" % r.get("status")})
                 continue
             trusted = bool(feed.get("trusted"))
-            for e in parsed.entries[:15]:
+            fixed_theme = feed.get("theme")
+            cap = feed.get("max_items", VEILLE_MAX_PER_SOURCE)
+            kept = 0
+            for e in parsed.entries[:20]:
+                if kept >= cap:
+                    break
                 title = _html.unescape((e.get("title") or "").strip())
                 if not title:
                     continue
-                raw_for_rel = title + " " + _re.sub(r"<[^>]+>", "", e.get("summary") or "")
-                if _veille_is_junk(raw_for_rel):
+                clean_sum = _re.sub(r"<[^>]+>", "", e.get("summary") or "")
+                if _veille_is_junk(title + " " + clean_sum):
                     continue
-                if not trusted:
-                    if not _veille_relevant(raw_for_rel):
-                        continue
+                if not trusted and not _veille_relevant(title):
+                    continue
                 link = e.get("link") or ""
                 key = link or title
                 if key in seen:
                     continue
                 seen.add(key)
+                kept += 1
                 iso, ts_sort = None, 0.0
                 for attr in ("published_parsed", "updated_parsed"):
                     dp = e.get(attr)
@@ -1066,7 +1076,7 @@ def api_veille():
                 items.append({
                     "title": title[:200], "link": link,
                     "source": feed["source"], "jur": feed["jur"],
-                    "theme": _veille_theme(title + " " + summary),
+                    "theme": fixed_theme or _veille_theme(title + " " + summary),
                     "date": iso, "_ts": ts_sort, "summary": summary,
                 })
         except Exception as ex:
