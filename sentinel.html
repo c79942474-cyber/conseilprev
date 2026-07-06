@@ -16757,7 +16757,7 @@ window.raasPortfolioToggle = function(){
           + '<td><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:'+col+'"></span></td>'
           + '<td class="ms-amount" style="color:'+(p.unpaid_amount?'var(--accent)':'inherit')+'">'+(p.unpaid_count?eur(p.unpaid_amount)+' ('+p.unpaid_count+')':'\u2014')+'</td>'
           + '<td style="text-align:center">'+(p.pending_relances||'\u2014')+'</td>'
-          + '<td style="text-align:center">'+(p.milestones_pending||'\u2014')+'</td>'
+          + '<td style="text-align:center">'+raasMsCell(p)+'</td>'
           + '<td style="text-align:center;font-size:10px">'+(p.last_contact_days!==null?p.last_contact_days+'j':'\u2014')+'</td>'
           + '</tr>';
       }).join('');
@@ -16786,7 +16786,7 @@ window.raasPortfolioExport = function(){
       +'<td>'+(SANTE[p.sante]||p.sante)+'</td>'
       +'<td style="text-align:right">'+(p.unpaid_count?eur(p.unpaid_amount)+' ('+p.unpaid_count+')':'\u2014')+'</td>'
       +'<td style="text-align:center">'+(p.pending_relances||'\u2014')+'</td>'
-      +'<td style="text-align:center">'+(p.milestones_pending||'\u2014')+'</td>'
+      +'<td style="text-align:center">'+raasMsCell(p)+'</td>'
       +'<td style="text-align:center">'+(p.last_contact_days!==null?p.last_contact_days+' j':'\u2014')+'</td></tr>';
   }).join('');
   var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Portefeuille clients \u2014 CONSEILPREV</title>'
@@ -17979,6 +17979,13 @@ window.hubRender = function(){
 
 /* Navigation des parcours RGPD : reproduit le clic menu (go + init) */
 ["rgpd-hub","rgpd-traitements","rgpd-cartographie","rgpd-aipd","rgpd-pbd","rgpd-doc","rgpd-sensibilisation","rgpd-conformite"].forEach(function(pid){ window["gnav_"+pid]=function(){ if(typeof hubGo==="function"){ hubGo(pid); } else { go(pid); } }; });
+/* Cellule portefeuille : jalons en attente par cadre (IA Act / RGPD) */
+window.raasMsCell = function(p){
+  if(p.milestones_pending_ai===undefined && p.milestones_pending_rgpd===undefined) return raasMsCell(p);
+  var a=p.milestones_pending_ai||0, r=p.milestones_pending_rgpd||0;
+  if(!(a+r)) return '\u2014';
+  return a+' IA'+(r?' <span style=\"color:#6B46C1\">\u00b7 '+r+' RGPD</span>':'');
+};
 window.__veille = {data:null, ts:0, loading:false, regs:[], timer:null};
 window.veilleInit = function(containerId, updId, filter){
   window.__veille.regs.push({id:containerId, upd:updId, filter:filter||{}});
