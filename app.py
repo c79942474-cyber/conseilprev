@@ -4769,6 +4769,11 @@ def clients_portfolio():
         cur.execute(registre_sql("SELECT COUNT(*) AS n FROM raas_milestones WHERE client_id=%s AND status='pending'",
                                  "SELECT COUNT(*) AS n FROM raas_milestones WHERE client_id=? AND status='pending'"), (cid,))
         ms_pending = dict(cur.fetchone())['n']
+        cur.execute(registre_sql(
+            "SELECT COUNT(*) AS n FROM raas_milestones WHERE client_id=%s AND status='pending' AND milestone_id LIKE 'rgpd%%'",
+            "SELECT COUNT(*) AS n FROM raas_milestones WHERE client_id=? AND status='pending' AND milestone_id LIKE 'rgpd%'"), (cid,))
+        ms_pending_rgpd = dict(cur.fetchone())['n']
+        ms_pending_ai = ms_pending - ms_pending_rgpd
         cur.execute(registre_sql('SELECT statut, sante, last_contact_at, next_action_at, next_action_label FROM client_lifecycle WHERE client_id=%s',
                                  'SELECT statut, sante, last_contact_at, next_action_at, next_action_label FROM client_lifecycle WHERE client_id=?'), (cid,))
         lc = cur.fetchone(); lc = dict(lc) if lc else {}
@@ -4777,7 +4782,7 @@ def clients_portfolio():
             'id': cid, 'nom': c.get('nom_entreprise') or ('Client #' + str(cid)),
             'statut': lc.get('statut') or 'prospect', 'sante': lc.get('sante') or 'a_evaluer',
             'unpaid_count': len(unpaid), 'unpaid_amount': unpaid_amt,
-            'pending_relances': pending, 'milestones_pending': ms_pending,
+            'pending_relances': pending, 'milestones_pending': ms_pending, 'milestones_pending_ai': ms_pending_ai, 'milestones_pending_rgpd': ms_pending_rgpd,
             'last_contact_days': last_days,
             'next_action_at': lc.get('next_action_at'), 'next_action_label': lc.get('next_action_label')
         })
