@@ -1851,6 +1851,19 @@ textarea.form-el{min-height:86px;resize:vertical}
 .veille-item-src{font-size:9.5px;color:var(--muted2);margin-top:5px;font-style:italic}
 .veille-loading,.veille-empty{font-size:12px;color:var(--muted2);padding:16px;text-align:center;background:var(--bg);border-radius:8px}
 .veille-foot{font-size:10px;color:var(--muted2);margin-top:9px;padding-top:8px;border-top:1px solid var(--rule)}
+
+/* ══ REGISTRE DES TRAITEMENTS RGPD ══ */
+.trait-note{margin-top:14px;padding:12px 14px;background:var(--bg);border:1px solid var(--rule2);border-left:3px solid #6B46C1;border-radius:0 8px 8px 0;font-size:12px;color:var(--muted2);line-height:1.55}
+.trait-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px}
+.trait-f{display:flex;flex-direction:column;gap:3px}
+.trait-f label{font-size:11px;font-weight:600;color:var(--ink)}
+.trait-hint{font-weight:400;color:var(--muted2);font-family:var(--mono);font-size:9px}
+.trait-input{padding:7px 9px;border:1px solid var(--rule2);border-radius:6px;font-size:12px;font-family:var(--sans);background:var(--white);color:var(--ink);width:100%;box-sizing:border-box}
+.trait-input:focus{outline:none;border-color:var(--accent)}
+.trait-d-row{display:flex;gap:12px;padding:7px 0;border-bottom:1px solid var(--rule)}
+.trait-d-l{flex:0 0 34%;font-size:11.5px;font-weight:600;color:var(--muted)}
+.trait-d-v{flex:1;font-size:12px;color:var(--ink);white-space:pre-wrap}
+@media(max-width:640px){.trait-grid{grid-template-columns:1fr}}
 </style>
 
 </head>
@@ -1902,6 +1915,8 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-item" onclick="go('carto-uc',this,'BUSINESS','Cartographie des cas d\u2019usage IA')" title="Identifier, qualifier et prioriser les cas d usage IA a fort impact metier (achats, finance, supply chain, operations, relation client)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>Cartographie des cas d’usage</div>
 <div class="sb-item" onclick="go('benchmark',this,'BUSINESS','Benchmark sectoriel')" title="Comparez votre niveau de conformite a celui d autres acteurs de votre secteur."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>Benchmark</div>
     <div class="sb-item" onclick="go('pricing',this,'BUSINESS','Tarification par résultats')" title="Simulateur de modele commercial hybride RaaS (resultats) vs SaaS classique."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2v2M12 20v2"/><path d="M5 7a3 3 0 0 1 3-3h8.5L20 8.5 16.5 12 20 15.5 16.5 19H8a3 3 0 0 1-3-3"/><path d="M9 9h4M9 14h4"/></svg></span>Tarification résultats</div>
+    <div class="sb-section">RGPD &amp; Vie privée</div>
+    <div class="sb-item" onclick="go('rgpd-traitements',this,'RGPD &amp; VIE PRIVÉE','Registre des traitements');traitLoadOnce()" title="Registre des activites de traitement au sens de l article 30 du RGPD (ajout, details, suppression, export)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"/><path d="M9 12l2 2 4-4"/></svg></span>Registre des traitements</div>
     <div class="sb-section">Administration</div>
     <div class="sb-item" onclick="go('clients',this,'ADMINISTRATION','Gestion des clients')" title="Creer et gerer les acces clients externes a Sentinel AI (reserve a CONSEILPREV)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><circle cx="19" cy="8" r="2.5"/><path d="M17.5 21v-1a3 3 0 0 0 .5-1.7"/><path d="M19 14.5a3.5 3.5 0 0 1 3.5 3.5v3"/></svg></span>Gestion des clients</div>
   </nav>
@@ -3173,6 +3188,23 @@ textarea.form-el{min-height:86px;resize:vertical}
     </div>
   </div>
 </div>
+
+<div class="page" id="p-rgpd-traitements">
+  <span class="eyebrow">RGPD &amp; Vie privée</span>
+  <h1 class="page-h">Registre des <em>traitements</em></h1>
+  <p class="page-lead">Registre des activités de traitement au sens de l'article 30 du RGPD, connecté à une base de données persistante. Distinct du registre des systèmes IA, il recense les traitements de données à caractère personnel.</p>
+  <div class="reg-toolbar">
+    <input type="text" id="trait-search" class="reg-search-input" placeholder="Rechercher par nom, finalité, service, responsable…" oninput="traitSearch(this.value)">
+    <button class="mat-export-btn" style="background:var(--accent);color:var(--ink);font-weight:700" onclick="traitOpenModal()">+ Ajouter un traitement</button>
+    <button class="mat-export-btn" onclick="traitExportPdf()">Exporter le registre (PDF)</button>
+    <span id="trait-count" style="font-size:12px;color:var(--muted2);margin-left:auto"></span>
+  </div>
+  <div id="trait-list"><div class="veille-loading">Chargement du registre…</div></div>
+  <div class="trait-note">
+    Ce registre matérialise l'article 30 du RGPD. Les mentions relatives au responsable de traitement, au délégué à la protection des données et aux droits des personnes doivent être tenues à jour. Les données saisies sont propres à votre compte. CONSEILPREV peut vous accompagner dans la constitution et la revue de ce registre.
+  </div>
+</div>
+
 
 <div class="page" id="p-clients">
   <span class="eyebrow">Espace · CONSEILPREV uniquement</span><h1 class="page-h">Gestion des <em>clients</em></h1>
@@ -5430,6 +5462,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 'use strict';
 
 var PAGE_META = {
+    'rgpd-traitements': { section: 'RGPD & VIE PRIVÉE', label: 'Registre des traitements' },
   apercu:   {section:'PILOTAGE', label:'Observatoire IA'},
   carto:    {section:'SE TENIR INFORMÉ',    label:'Carte mondiale'},
   comp:     {section:'SE TENIR INFORMÉ',         label:'Comparateur'},
@@ -16915,6 +16948,166 @@ window.cartoToTarification = function(){
 };
 
 /* ══ Veille réglementaire IA : rendu partagé + rafraîchissement périodique ══ */
+/* ══ Registre des traitements (RGPD art. 30) ══ */
+window.TRAIT_DATA = [];
+window.__traitLoaded = false;
+window.__traitQ = "";
+window.traitEsc = function(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); };
+window.traitLoadOnce = function(){ if(window.__traitLoaded) return; traitLoad(); };
+window.traitLoad = function(){
+  var box=document.getElementById("trait-list"); if(box) box.innerHTML='<div class="veille-loading">Chargement du registre…</div>';
+  fetch("/api/rgpd/traitements",{credentials:"same-origin"})
+    .then(function(r){ return r.json(); })
+    .then(function(d){ window.TRAIT_DATA=(d&&d.traitements)?d.traitements:[]; window.__traitLoaded=true; traitRender(); })
+    .catch(function(){ var b=document.getElementById("trait-list"); if(b) b.innerHTML='<div class="veille-empty">Registre momentanément indisponible. Vérifiez votre connexion.</div>'; });
+};
+window.traitSearch = function(q){ window.__traitQ=(q||"").toLowerCase(); traitRender(); };
+window.traitStatutBadge = function(s){
+  var map={actif:["Actif","var(--green)"],projet:["Projet","#c98a00"],archive:["Archivé","var(--muted2)"]};
+  var v=map[s]||["Actif","var(--green)"];
+  return '<span style="display:inline-block;padding:2px 8px;border-radius:10px;color:#fff;font-size:10px;font-weight:600;background:'+v[1]+'">'+v[0]+'</span>';
+};
+window.traitRender = function(){
+  var box=document.getElementById("trait-list"); if(!box) return;
+  var q=window.__traitQ, list=window.TRAIT_DATA.filter(function(t){
+    if(!q) return true;
+    return ((t.nom||"")+" "+(t.finalites||"")+" "+(t.service||"")+" "+(t.responsable||"")).toLowerCase().indexOf(q)>=0;
+  });
+  var cnt=document.getElementById("trait-count"); if(cnt) cnt.textContent=window.TRAIT_DATA.length+" traitement(s)";
+  if(!window.TRAIT_DATA.length){ box.innerHTML='<div class="veille-empty">Aucun traitement enregistré. Cliquez sur « Ajouter un traitement » pour commencer votre registre.</div>'; return; }
+  if(!list.length){ box.innerHTML='<div class="veille-empty">Aucun traitement ne correspond à votre recherche.</div>'; return; }
+  var rows=list.map(function(t){
+    return '<tr>'
+      + '<td><strong style="font-size:12.5px">'+traitEsc(t.nom)+'</strong><div style="font-size:9px;color:var(--muted2)">'+traitEsc(t.service||"")+'</div></td>'
+      + '<td style="font-size:11px;color:var(--muted2)">'+traitEsc((t.finalites||"").slice(0,90))+'</td>'
+      + '<td style="font-size:11px;color:var(--muted2)">'+traitEsc((t.base_legale||"").slice(0,60))+'</td>'
+      + '<td style="font-size:11px;color:var(--muted2)">'+traitEsc((t.categories_personnes||"").slice(0,50))+'</td>'
+      + '<td style="text-align:center">'+traitStatutBadge(t.statut)+'</td>'
+      + '<td style="white-space:nowrap"><button class="mat-export-btn" style="padding:3px 8px;font-size:10px" onclick="traitDetails('+t.id+')">Détails</button> <button class="mat-export-btn" style="padding:3px 8px;font-size:10px;color:var(--accent)" onclick="traitDelete('+t.id+')">Suppr.</button></td>'
+      + '</tr>';
+  }).join("");
+  box.innerHTML='<div style="overflow-x:auto"><table class="ms-table"><thead><tr><th>Traitement</th><th>Finalité(s)</th><th>Base légale</th><th>Personnes concernées</th><th>Statut</th><th>Actions</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+};
+window.traitModalEl = function(){
+  var m=document.getElementById("trait-modal");
+  if(!m){ m=document.createElement("div"); m.id="trait-modal"; m.className="mat-modal"; document.body.appendChild(m); }
+  return m;
+};
+window.traitField = function(id,label,ph,area,hint){
+  var input = area
+    ? '<textarea id="'+id+'" rows="2" class="trait-input" placeholder="'+ph+'"></textarea>'
+    : '<input type="text" id="'+id+'" class="trait-input" placeholder="'+ph+'">';
+  return '<div class="trait-f"><label>'+label+(hint?' <span class="trait-hint">'+hint+'</span>':'')+'</label>'+input+'</div>';
+};
+window.traitOpenModal = function(){
+  var m=traitModalEl();
+  m.innerHTML='<div class="mat-modal-card" style="max-width:680px">'
+    + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">RGPD — article 30</div><div class="mat-modal-title">Nouveau traitement</div></div>'
+    + '<button class="mat-modal-close" onclick="traitClose()">×</button></div>'
+    + '<div class="trait-grid">'
+    + traitField("tf-nom","Nom du traitement *","Ex : Gestion de la paie",false)
+    + traitField("tf-service","Service / entité","Ex : Ressources humaines",false)
+    + traitField("tf-finalites","Finalité(s) *","Objectif du traitement",true)
+    + traitField("tf-base","Base légale (art. 6)","Consentement, contrat, obligation légale, intérêt légitime…",false)
+    + traitField("tf-resp","Responsable de traitement","Entité responsable",false)
+    + traitField("tf-soustrait","Sous-traitant(s)","Prestataires traitant les données",true)
+    + traitField("tf-personnes","Catégories de personnes concernées","Ex : salariés, clients, prospects",true)
+    + traitField("tf-donnees","Catégories de données","Ex : identité, coordonnées, données de connexion",true)
+    + traitField("tf-sensibles","Données sensibles (art. 9)","Santé, biométrie… ou « Non »",false,"art. 9")
+    + traitField("tf-destinataires","Destinataires","Qui reçoit les données",true)
+    + traitField("tf-transferts","Transferts hors UE","Pays et garanties, ou « Non »",false)
+    + traitField("tf-duree","Durée de conservation","Ex : durée du contrat + 5 ans",false)
+    + traitField("tf-mesures","Mesures de sécurité","Techniques et organisationnelles",true)
+    + '<div class="trait-f"><label>Statut</label><select id="tf-statut" class="trait-input"><option value="actif">Actif</option><option value="projet">Projet</option><option value="archive">Archivé</option></select></div>'
+    + '</div>'
+    + '<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:14px"><button class="mat-export-btn" onclick="traitClose()">Annuler</button>'
+    + '<button class="mat-export-btn" style="background:var(--accent);color:var(--ink);font-weight:700" onclick="traitSave()">Enregistrer</button></div>'
+    + '<div id="tf-msg" style="font-size:11px;margin-top:8px"></div></div>';
+  m.classList.add("on");
+};
+window.traitSave = function(){
+  var msg=document.getElementById("tf-msg");
+  var payload={
+    nom:document.getElementById("tf-nom").value.trim(),
+    service:document.getElementById("tf-service").value.trim(),
+    finalites:document.getElementById("tf-finalites").value.trim(),
+    base_legale:document.getElementById("tf-base").value.trim(),
+    responsable:document.getElementById("tf-resp").value.trim(),
+    sous_traitants:document.getElementById("tf-soustrait").value.trim(),
+    categories_personnes:document.getElementById("tf-personnes").value.trim(),
+    categories_donnees:document.getElementById("tf-donnees").value.trim(),
+    donnees_sensibles:document.getElementById("tf-sensibles").value.trim(),
+    destinataires:document.getElementById("tf-destinataires").value.trim(),
+    transferts_hors_ue:document.getElementById("tf-transferts").value.trim(),
+    duree_conservation:document.getElementById("tf-duree").value.trim(),
+    mesures_securite:document.getElementById("tf-mesures").value.trim(),
+    statut:document.getElementById("tf-statut").value
+  };
+  if(!payload.nom){ if(msg){msg.style.color="var(--accent)";msg.textContent="Le nom du traitement est obligatoire.";} return; }
+  if(msg){ msg.style.color="var(--muted)"; msg.textContent="Enregistrement…"; }
+  fetch("/api/rgpd/traitements",{method:"POST",credentials:"same-origin",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)})
+    .then(function(r){ return r.json(); })
+    .then(function(d){ if(d.ok){ traitClose(); traitLoad(); } else if(msg){ msg.style.color="var(--accent)"; msg.textContent=d.error||"Erreur."; } })
+    .catch(function(){ if(msg){ msg.style.color="var(--accent)"; msg.textContent="Erreur réseau."; } });
+};
+window.traitDetails = function(id){
+  var t=window.TRAIT_DATA.filter(function(x){return x.id===id;})[0]; if(!t) return;
+  function row(l,v){ return '<div class="trait-d-row"><div class="trait-d-l">'+l+'</div><div class="trait-d-v">'+traitEsc(v||"—")+'</div></div>'; }
+  var m=traitModalEl();
+  m.innerHTML='<div class="mat-modal-card" style="max-width:680px">'
+    + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">RGPD — article 30</div><div class="mat-modal-title">'+traitEsc(t.nom)+'</div></div>'
+    + '<button class="mat-modal-close" onclick="traitClose()">×</button></div>'
+    + row("Service / entité",t.service)
+    + row("Finalité(s)",t.finalites)
+    + row("Base légale (art. 6)",t.base_legale)
+    + row("Responsable de traitement",t.responsable)
+    + row("Sous-traitant(s)",t.sous_traitants)
+    + row("Catégories de personnes",t.categories_personnes)
+    + row("Catégories de données",t.categories_donnees)
+    + row("Données sensibles (art. 9)",t.donnees_sensibles)
+    + row("Destinataires",t.destinataires)
+    + row("Transferts hors UE",t.transferts_hors_ue)
+    + row("Durée de conservation",t.duree_conservation)
+    + row("Mesures de sécurité",t.mesures_securite)
+    + '<div style="text-align:right;margin-top:14px"><button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="traitClose()">Fermer</button></div></div>';
+  m.classList.add("on");
+};
+window.traitDelete = function(id){
+  if(!confirm("Supprimer ce traitement du registre ? Cette action est définitive.")) return;
+  fetch("/api/rgpd/traitements/delete",{method:"POST",credentials:"same-origin",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:id})})
+    .then(function(r){ return r.json(); }).then(function(){ traitLoad(); }).catch(function(){});
+};
+window.traitClose = function(){ var m=document.getElementById("trait-modal"); if(m) m.classList.remove("on"); };
+window.traitExportPdf = function(){
+  var list=window.TRAIT_DATA; if(!list.length){ alert("Aucun traitement à exporter."); return; }
+  var today=new Date().toLocaleDateString("fr-FR");
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  var blocks=list.map(function(t,i){
+    function r(l,v){ return '<tr><td class="l">'+l+'</td><td>'+esc(v||"—")+'</td></tr>'; }
+    return '<div class="t"><h3>'+(i+1)+'. '+esc(t.nom)+'</h3><table>'
+      + r("Service / entité",t.service)+r("Finalité(s)",t.finalites)+r("Base légale (art. 6)",t.base_legale)
+      + r("Responsable de traitement",t.responsable)+r("Sous-traitant(s)",t.sous_traitants)
+      + r("Catégories de personnes concernées",t.categories_personnes)+r("Catégories de données",t.categories_donnees)
+      + r("Données sensibles (art. 9)",t.donnees_sensibles)+r("Destinataires",t.destinataires)
+      + r("Transferts hors UE",t.transferts_hors_ue)+r("Durée de conservation",t.duree_conservation)
+      + r("Mesures de sécurité",t.mesures_securite)+'</table></div>';
+  }).join("");
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Registre des traitements RGPD</title>'
+    +'<style>@page{margin:1.6cm}body{font-family:Arial,sans-serif;color:#1C1C1C;max-width:900px;margin:0 auto;padding:16px}'
+    +'h1{font-size:19px;border-bottom:3px solid #6B46C1;padding-bottom:8px;margin-bottom:4px}'
+    +'.sub{color:#666;font-size:11px;margin-bottom:14px}.t{margin-bottom:16px;page-break-inside:avoid}'
+    +'h3{font-size:13px;color:#6B46C1;margin:0 0 6px}table{width:100%;border-collapse:collapse;font-size:11px}'
+    +'td{border:1px solid #ddd;padding:5px 8px;vertical-align:top}td.l{width:34%;background:#faf9f7;font-weight:600}'
+    +'.foot{font-size:9px;color:#999;margin-top:18px;border-top:1px solid #eee;padding-top:8px}</style></head><body>'
+    +'<h1>Registre des activités de traitement</h1>'
+    +'<div class="sub">Article 30 du RGPD · CONSEILPREV — Sentinel · '+list.length+' traitement(s) · Établi le '+today+'</div>'
+    +blocks
+    +'<div class="foot">Document de conformité RGPD (art. 30). À tenir à jour et à valider avec le délégué à la protection des données. Généré par Sentinel.</div>'
+    +'</body></html>';
+  var w=window.open("","_blank"); if(!w){ alert("Autorisez les pop-ups pour exporter."); return; }
+  w.document.write(html+'<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>'); w.document.close();
+};
+
 window.__veille = {data:null, ts:0, loading:false, regs:[], timer:null};
 window.veilleInit = function(containerId, updId, filter){
   window.__veille.regs.push({id:containerId, upd:updId, filter:filter||{}});
