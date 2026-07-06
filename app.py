@@ -5514,6 +5514,165 @@ try:
 except Exception as _e:
     logger.error(f"REGISTRE_IA — erreur init DB : {_e}")
 
+
+# ══════════════════════════════════════════════════════════════════
+# Registre des traitements (RGPD, article 30) — calque du registre IA
+# Table dediee, isolation par client (sentauth_current_client).
+# ══════════════════════════════════════════════════════════════════
+_RGPD_TRAIT_COLS = (
+    'id', 'nom', 'finalites', 'base_legale', 'responsable', 'sous_traitants',
+    'categories_personnes', 'categories_donnees', 'donnees_sensibles', 'destinataires',
+    'transferts_hors_ue', 'duree_conservation', 'mesures_securite', 'service', 'statut',
+    'date_creation', 'date_maj',
+)
+
+
+def rgpd_traitements_init_db():
+    conn = registre_get_db()
+    cur = conn.cursor()
+    if REGISTRE_USE_PG:
+        cur.execute("""CREATE TABLE IF NOT EXISTS rgpd_traitements (
+            id SERIAL PRIMARY KEY,
+            client_id INTEGER,
+            nom TEXT NOT NULL,
+            finalites TEXT,
+            base_legale TEXT,
+            responsable TEXT,
+            sous_traitants TEXT,
+            categories_personnes TEXT,
+            categories_donnees TEXT,
+            donnees_sensibles TEXT,
+            destinataires TEXT,
+            transferts_hors_ue TEXT,
+            duree_conservation TEXT,
+            mesures_securite TEXT,
+            service TEXT,
+            statut TEXT DEFAULT 'actif',
+            date_creation TEXT,
+            date_maj TEXT
+        )""")
+    else:
+        cur.execute("""CREATE TABLE IF NOT EXISTS rgpd_traitements (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            client_id INTEGER,
+            nom TEXT NOT NULL,
+            finalites TEXT,
+            base_legale TEXT,
+            responsable TEXT,
+            sous_traitants TEXT,
+            categories_personnes TEXT,
+            categories_donnees TEXT,
+            donnees_sensibles TEXT,
+            destinataires TEXT,
+            transferts_hors_ue TEXT,
+            duree_conservation TEXT,
+            mesures_securite TEXT,
+            service TEXT,
+            statut TEXT DEFAULT 'actif',
+            date_creation TEXT,
+            date_maj TEXT
+        )""")
+    conn.commit()
+    try:
+        cid = ensure_conseilprev_client_id()
+        cur.execute('SELECT COUNT(*) AS n FROM rgpd_traitements')
+        row = cur.fetchone()
+        count = row['n'] if isinstance(row, dict) else row[0]
+        if count == 0:
+            now = datetime.utcnow().isoformat()
+            ins = registre_sql(
+                'INSERT INTO rgpd_traitements (client_id, nom, finalites, base_legale, responsable, sous_traitants, categories_personnes, categories_donnees, donnees_sensibles, destinataires, transferts_hors_ue, duree_conservation, mesures_securite, service, statut, date_creation, date_maj) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
+                'INSERT INTO rgpd_traitements (client_id, nom, finalites, base_legale, responsable, sous_traitants, categories_personnes, categories_donnees, donnees_sensibles, destinataires, transferts_hors_ue, duree_conservation, mesures_securite, service, statut, date_creation, date_maj) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
+            )
+            cur.execute(ins, (
+                cid, "Gestion des ressources humaines",
+                "Gestion administrative du personnel (paie, contrats, absences)",
+                "Obligation legale (art. 6.1.c) et execution du contrat (art. 6.1.b)",
+                "CONSEILPREV - Direction", "Editeur SIRH (hebergement UE)",
+                "Salaries, candidats",
+                "Identite, coordonnees, donnees de carriere, donnees de paie",
+                "Non (hors art. 9)",
+                "Service RH, expert-comptable, organismes sociaux", "Non",
+                "Duree du contrat + 5 ans (obligations legales)",
+                "Controle d'acces, chiffrement, journalisation, habilitations",
+                "Ressources humaines", "actif", now, now,
+            ))
+            conn.commit()
+    except Exception:
+        pass
+    conn.close()
+
+
+def rgpd_trait_row_to_dict(row):
+    d = dict(row) if isinstance(row, dict) else {k: row[k] for k in row.keys()}
+    return {k: d.get(k) for k in _RGPD_TRAIT_COLS}
+
+
+try:
+    rgpd_traitements_init_db()
+    logger.info("RGPD_TRAITEMENTS - table prete")
+except Exception as _e:
+    logger.error(f"RGPD_TRAITEMENTS - erreur init : {_e}")
+
+
+@app.route('/api/rgpd/traitements', methods=['GET'])
+def rgpd_traitements_list():
+    client = sentauth_current_client()
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql(
+        'SELECT * FROM rgpd_traitements WHERE client_id=%s ORDER BY date_maj DESC',
+        'SELECT * FROM rgpd_traitements WHERE client_id=? ORDER BY date_maj DESC'
+    ), (client['id'],))
+    rows = cur.fetchall()
+    conn.commit()
+    conn.close()
+    return jsonify({'traitements': [rgpd_trait_row_to_dict(r) for r in rows]})
+
+
+@app.route('/api/rgpd/traitements', methods=['POST'])
+def rgpd_traitements_create():
+    client = sentauth_current_client()
+    data = request.get_json(force=True) or {}
+    nom = (data.get('nom') or '').strip()[:200]
+    if not nom:
+        return jsonify({'error': 'Le nom du traitement est obligatoire'}), 400
+    now = datetime.utcnow().isoformat()
+    champs = ['finalites', 'base_legale', 'responsable', 'sous_traitants', 'categories_personnes',
+              'categories_donnees', 'donnees_sensibles', 'destinataires', 'transferts_hors_ue',
+              'duree_conservation', 'mesures_securite', 'service']
+    vals = [(data.get(f) or '')[:1000] for f in champs]
+    statut = (data.get('statut') or 'actif')[:30]
+    conn = registre_get_db()
+    cur = conn.cursor()
+    ins = registre_sql(
+        'INSERT INTO rgpd_traitements (client_id, nom, finalites, base_legale, responsable, sous_traitants, categories_personnes, categories_donnees, donnees_sensibles, destinataires, transferts_hors_ue, duree_conservation, mesures_securite, service, statut, date_creation, date_maj) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
+        'INSERT INTO rgpd_traitements (client_id, nom, finalites, base_legale, responsable, sous_traitants, categories_personnes, categories_donnees, donnees_sensibles, destinataires, transferts_hors_ue, duree_conservation, mesures_securite, service, statut, date_creation, date_maj) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
+    )
+    cur.execute(ins, tuple([client['id'], nom] + vals + [statut, now, now]))
+    conn.commit()
+    conn.close()
+    return jsonify({'ok': True})
+
+
+@app.route('/api/rgpd/traitements/delete', methods=['POST'])
+def rgpd_traitements_delete():
+    client = sentauth_current_client()
+    data = request.get_json(force=True) or {}
+    tid = data.get('id')
+    if not tid:
+        return jsonify({'error': 'id requis'}), 400
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql(
+        'DELETE FROM rgpd_traitements WHERE id=%s AND client_id=%s',
+        'DELETE FROM rgpd_traitements WHERE id=? AND client_id=?'
+    ), (tid, client['id']))
+    conn.commit()
+    conn.close()
+    return jsonify({'ok': True})
+
+
 def registre_row_to_dict(row):
     if isinstance(row, dict):
         d = dict(row)
