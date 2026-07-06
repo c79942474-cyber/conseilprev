@@ -1978,6 +1978,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-item" onclick="go('rgpd-aipd',this,'RGPD &amp; VIE PRIVÉE','AIPD — analyse d\u2019impact');aipdLoadOnce()" title="Analyse d impact relative a la protection des donnees (art. 35 RGPD), par traitement : besoin d AIPD (criteres CNIL) et appreciation des risques."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>AIPD (art. 35)</div>
     <div class="sb-item" onclick="go('rgpd-pbd',this,'RGPD &amp; VIE PRIVÉE','Privacy by design');pbdInit()" title="Protection des donnees des la conception et par defaut (art. 25 RGPD) : check-list d auto-evaluation."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2l7 4v6c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span>Privacy by design</div>
     <div class="sb-item" onclick="go('rgpd-doc',this,'RGPD &amp; VIE PRIVÉE','Politique documentaire');docInit()" title="Referentiel de la documentation de conformite RGPD (accountability, art. 5.2) : etat, responsable, revue."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h6"/></svg></span>Politique documentaire</div>
+    <div class="sb-item" onclick="go('rgpd-sensibilisation',this,'RGPD &amp; VIE PRIVÉE','Sensibilisation');sensInit()" title="Plan de sensibilisation a la protection des donnees par public cible : periodicite, statut, suivi."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>Sensibilisation</div>
     <div class="sb-section">Administration</div>
     <div class="sb-item" onclick="go('clients',this,'ADMINISTRATION','Gestion des clients')" title="Creer et gerer les acces clients externes a Sentinel AI (reserve a CONSEILPREV)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><circle cx="19" cy="8" r="2.5"/><path d="M17.5 21v-1a3 3 0 0 0 .5-1.7"/><path d="M19 14.5a3.5 3.5 0 0 1 3.5 3.5v3"/></svg></span>Gestion des clients</div>
   </nav>
@@ -3330,6 +3331,22 @@ textarea.form-el{min-height:86px;resize:vertical}
   <div id="doc-list" style="margin-top:16px"></div>
   <div class="trait-note">
     La documentation atteste votre conformité au titre du principe de responsabilité (accountability, art. 5.2 RGPD). Chaque document doit être établi, tenu à jour et opposable. Les états déclarés ici sont une aide au pilotage et ne préjugent pas de la validité juridique des pièces. CONSEILPREV peut vous accompagner dans leur constitution.
+  </div>
+</div>
+
+
+<div class="page" id="p-rgpd-sensibilisation">
+  <span class="eyebrow">RGPD &amp; Vie privée</span>
+  <h1 class="page-h">Sensibilisation <em>&amp; formation</em></h1>
+  <p class="page-lead">Plan de sensibilisation à la protection des données. Suivi des actions par public cible, de leur périodicité et de leur réalisation, au service de la culture de conformité.</p>
+  <div class="reg-toolbar">
+    <button class="mat-export-btn" onclick="sensExportPdf()">Exporter le plan (PDF)</button>
+    <span id="sens-global-wrap" style="margin-left:auto;display:flex;align-items:center;gap:8px"><span style="font-size:12px;color:var(--muted2)">Actions réalisées</span><strong id="sens-global" style="font-size:16px;color:var(--accent)">0 %</strong></span>
+  </div>
+  <div class="pbd-track"><div class="pbd-fill" id="sens-global-fill" style="width:0%"></div></div>
+  <div id="sens-list" style="margin-top:16px"></div>
+  <div class="trait-note">
+    La sensibilisation des personnes habilitées à traiter des données est une mesure de conformité attendue (art. 39.1.b pour le DPO, art. 32 pour la sécurité). Le suivi ci-dessous aide à planifier et à prouver ces actions. CONSEILPREV peut fournir supports et sessions adaptés à vos métiers industriels.
   </div>
 </div>
 
@@ -5590,6 +5607,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 'use strict';
 
 var PAGE_META = {
+    'rgpd-sensibilisation': { section: 'RGPD & VIE PRIVÉE', label: 'Sensibilisation' },
     'rgpd-doc': { section: 'RGPD & VIE PRIVÉE', label: 'Politique documentaire' },
     'rgpd-pbd': { section: 'RGPD & VIE PRIVÉE', label: 'Privacy by design' },
     'rgpd-aipd': { section: 'RGPD & VIE PRIVÉE', label: 'AIPD — analyse d\u2019impact' },
@@ -17645,6 +17663,93 @@ window.docExportPdf = function(){
     +'<div class="sub">CONSEILPREV — Sentinel · Documents en place : '+c.enPlace+'/'+c.total+' ('+c.pct+' %) · '+today+'</div>'
     +body
     +'<div class="foot">Aide au pilotage. Les états déclarés ne préjugent pas de la validité juridique des pièces. Généré par Sentinel — à valider avec le délégué à la protection des données.</div>'
+    +'</body></html>';
+  var w=window.open("","_blank"); if(!w){ alert("Autorisez les pop-ups pour exporter."); return; }
+  w.document.write(html+'<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>'); w.document.close();
+};
+
+/* ══ Sensibilisation RGPD — plan d'actions, localStorage ══ */
+window.SENS_KEY = "sentinel_sens_v1";
+window.SENS_ITEMS = [
+  ["Ensemble du personnel", [
+    ["sens-all-1","Sensibilisation générale RGPD à l'embauche","À l'arrivée"],
+    ["sens-all-2","Rappel annuel des bonnes pratiques (données, mots de passe)","Annuelle"],
+    ["sens-all-3","Sensibilisation au risque cyber (phishing, ingénierie sociale)","Annuelle"]
+  ]],
+  ["Personnes habilitées aux traitements", [
+    ["sens-ops-1","Formation aux procédures de traitement et de conservation","À l'affectation"],
+    ["sens-ops-2","Conduite à tenir en cas de violation de données","Annuelle"],
+    ["sens-ops-3","Gestion des demandes d'exercice des droits","Annuelle"]
+  ]],
+  ["Encadrement et référents", [
+    ["sens-mgr-1","Rôle du management dans la privacy by design","Annuelle"],
+    ["sens-mgr-2","Formation approfondie des relais RGPD / référents","Annuelle"]
+  ]],
+  ["Fonctions techniques", [
+    ["sens-it-1","Sécurité du développement et minimisation par défaut","Annuelle"],
+    ["sens-it-2","Gestion des habilitations et journalisation","Annuelle"]
+  ]]
+];
+window.SENS_STATUSES = [["a_planifier","À planifier","var(--muted2)"],["planifie","Planifiée","#c98a00"],["realise","Réalisée","var(--green)"],["a_renouveler","À renouveler","#c0392b"]];
+
+window.sensState = function(){ try { return JSON.parse(localStorage.getItem(SENS_KEY)) || {}; } catch(e){ return {}; } };
+window.sensSave = function(st){ try { localStorage.setItem(SENS_KEY, JSON.stringify(st)); } catch(e){} };
+window.sensRec = function(id){ var st=sensState(); return st[id] || {statut:"a_planifier",date:""}; };
+window.sensAllIds = function(){ var a=[]; SENS_ITEMS.forEach(function(g){ g[1].forEach(function(it){ a.push(it[0]); }); }); return a; };
+window.sensCounts = function(){
+  var st=sensState(), all=sensAllIds();
+  var done=all.filter(function(id){ return (st[id]||{}).statut==="realise"; }).length;
+  return { done:done, total:all.length, pct: all.length? Math.round(done/all.length*100):0 };
+};
+window.sensMeta = function(code){ for(var i=0;i<SENS_STATUSES.length;i++){ if(SENS_STATUSES[i][0]===code) return SENS_STATUSES[i]; } return SENS_STATUSES[0]; };
+
+window.sensRender = function(){
+  var box=document.getElementById("sens-list"); if(!box) return;
+  box.innerHTML = SENS_ITEMS.map(function(g){
+    var rows=g[1].map(function(it){
+      var r=sensRec(it[0]), m=sensMeta(r.statut);
+      var opts=SENS_STATUSES.map(function(s){ return '<option value="'+s[0]+'"'+(r.statut===s[0]?" selected":"")+'>'+s[1]+'</option>'; }).join("");
+      return '<tr>'
+        + '<td class="doc-name">'+traitEsc(it[1])+'</td>'
+        + '<td style="font-size:10.5px;color:var(--muted2)">'+traitEsc(it[2])+'</td>'
+        + '<td><span class="aipd-lvl" id="sens-badge-'+it[0]+'" style="background:'+m[2]+'">'+m[1]+'</span></td>'
+        + '<td><select class="aipd-sel" onchange="sensSet(\''+it[0]+'\',\'statut\',this.value)">'+opts+'</select></td>'
+        + '<td><input type="text" class="doc-in" value="'+traitEsc(r.date)+'" placeholder="jj/mm/aaaa" onchange="sensSet(\''+it[0]+'\',\'date\',this.value)"></td>'
+        + '</tr>';
+    }).join("");
+    return '<div class="ct-card" style="margin-bottom:12px"><div class="ct-card-t">'+traitEsc(g[0])+'</div>'
+      + '<div style="overflow-x:auto"><table class="ms-table doc-table"><thead><tr><th>Action</th><th>Périodicité</th><th>État</th><th>Statut</th><th>Dernière session</th></tr></thead><tbody>'+rows+'</tbody></table></div></div>';
+  }).join("");
+  sensUpdateGlobal();
+};
+window.sensUpdateGlobal = function(){
+  var c=sensCounts();
+  var g=document.getElementById("sens-global"); if(g) g.textContent=c.pct+" %";
+  var f=document.getElementById("sens-global-fill"); if(f) f.style.width=c.pct+"%";
+};
+window.sensSet = function(id, field, val){
+  var st=sensState(); if(!st[id]) st[id]={statut:"a_planifier",date:""}; st[id][field]=val; sensSave(st);
+  if(field==="statut"){ var m=sensMeta(val); var b=document.getElementById("sens-badge-"+id); if(b){ b.textContent=m[1]; b.style.background=m[2]; } sensUpdateGlobal(); }
+};
+window.sensInit = function(){ if(document.getElementById("sens-list")) sensRender(); };
+
+window.sensExportPdf = function(){
+  var c=sensCounts(), today=new Date().toLocaleDateString("fr-FR");
+  function esc(x){ return String(x==null?"":x).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  var body=SENS_ITEMS.map(function(g){
+    var rows=g[1].map(function(it){ var r=sensRec(it[0]), m=sensMeta(r.statut); return '<tr><td>'+esc(it[1])+'</td><td>'+esc(it[2])+'</td><td>'+m[1]+'</td><td>'+esc(r.date||"—")+'</td></tr>'; }).join("");
+    return '<h2>'+esc(g[0])+'</h2><table><thead><tr><th>Action</th><th>Périodicité</th><th>Statut</th><th>Dernière session</th></tr></thead><tbody>'+rows+'</tbody></table>';
+  }).join("");
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Plan de sensibilisation RGPD</title>'
+    +'<style>@page{margin:1.6cm}body{font-family:Arial,sans-serif;color:#1C1C1C;max-width:900px;margin:0 auto;padding:16px}'
+    +'h1{font-size:19px;border-bottom:3px solid #6B46C1;padding-bottom:8px;margin-bottom:2px}.sub{color:#666;font-size:11px;margin-bottom:14px}'
+    +'h2{font-size:13px;color:#6B46C1;margin:14px 0 4px}table{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:8px}'
+    +'td,th{border:1px solid #ddd;padding:5px 8px;text-align:left}th{background:#faf9f7}'
+    +'.foot{font-size:9px;color:#999;margin-top:18px;border-top:1px solid #eee;padding-top:8px}</style></head><body>'
+    +'<h1>Plan de sensibilisation à la protection des données</h1>'
+    +'<div class="sub">CONSEILPREV — Sentinel · Actions réalisées : '+c.done+'/'+c.total+' ('+c.pct+' %) · '+today+'</div>'
+    +body
+    +'<div class="foot">Aide à la planification et à la preuve des actions de sensibilisation. Généré par Sentinel.</div>'
     +'</body></html>';
   var w=window.open("","_blank"); if(!w){ alert("Autorisez les pop-ups pour exporter."); return; }
   w.document.write(html+'<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>'); w.document.close();
