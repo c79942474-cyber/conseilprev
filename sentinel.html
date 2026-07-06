@@ -16053,6 +16053,7 @@ window.raasAdminLoad = function(){
           + '<td class="ms-amount">'+eur(m.amount_eur)+'</td>'
           + '<td>'+(stLbl[m.status]||m.status)
           + (m.verified_at ? '<div style="font-size:9px;color:var(--muted2)">'+String(m.verified_at).substring(0,10)+' · score '+(m.score_at_verification||'—')+'</div>' : '')
+          + (m.evidence ? '<div style="font-size:9px;color:var(--muted2);font-style:italic">Preuve\u00a0: '+String(m.evidence).replace(/</g,'&lt;')+'</div>' : '')
           + '</td>'
           + '<td>'+(canVerify
             ? '<button class="mat-export-btn" style="padding:4px 10px;font-size:10px" onclick="raasAdminVerify(\''+m.milestone_id+'\','+m.threshold+')">Vérifier</button>'
@@ -16107,10 +16108,11 @@ window.raasAdminInit = function(framework){
 };
 
 window.raasAdminVerify = function(milestoneId, threshold){
+  var __isRgpd = String(milestoneId).indexOf('rgpd_')===0;
   var sel = document.getElementById('raas-client-select');
   var msg = document.getElementById('raas-admin-msg');
   if(!sel || !sel.value) return;
-  var score = prompt('Score Sentinel constaté pour ce jalon (seuil requis\u00a0: '+threshold+')\u00a0:');
+  var score = prompt(__isRgpd ? 'Indice de conformit\u00e9 RGPD constat\u00e9 pour ce client (0\u2013100, seuil requis\u00a0: '+threshold+')\u00a0:' : 'Score Sentinel constat\u00e9 pour ce jalon (seuil requis\u00a0: '+threshold+')\u00a0:');
   if(score === null) return;
   var evidence = prompt('Évidence documentaire (obligatoire — référence du document, lien, constat)\u00a0:');
   if(evidence === null) return;
