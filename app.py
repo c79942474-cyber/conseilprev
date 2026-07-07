@@ -3402,6 +3402,18 @@ RAAS_MILESTONE_DEFS_RGPD = [
     {'id': 'rgpd_sensibilisation', 'label': 'Sensibilisation',                    'art': 'Art. 39',  'w': 0.10, 'threshold': 85},
     {'id': 'rgpd_conformite',      'label': 'Indice de conformite RGPD >= 90%',   'art': 'RGPD',     'w': 0.15, 'threshold': 90},
 ]
+
+# Jalons RaaS ISO/IEC 42001 (3e cadre) : ids prefixes 'iso_', meme table et endpoints.
+# Verification adossee a la couverture du systeme de management (score transmis par le frontend).
+RAAS_MILESTONE_DEFS_ISO = [
+    {'id': 'iso_contexte',     'label': 'Contexte & parties interessees',      'art': 'Clause 4',        'w': 0.10, 'threshold': 20},
+    {'id': 'iso_leadership',   'label': 'Politique IA & leadership',           'art': 'Clause 5 · A.2',  'w': 0.15, 'threshold': 35},
+    {'id': 'iso_planification','label': 'Evaluation des risques & impacts',     'art': 'Clause 6 · 8.2',  'w': 0.20, 'threshold': 50},
+    {'id': 'iso_support',      'label': 'Competences & documentation',         'art': 'Clause 7',        'w': 0.15, 'threshold': 60},
+    {'id': 'iso_operation',    'label': 'Cycle de vie & donnees',              'art': 'Clause 8 · A.6',  'w': 0.15, 'threshold': 70},
+    {'id': 'iso_evaluation',   'label': 'Audit interne & revue de direction',  'art': 'Clause 9',        'w': 0.15, 'threshold': 80},
+    {'id': 'iso_amelioration', 'label': 'Amelioration continue',               'art': 'Clause 10',       'w': 0.10, 'threshold': 90},
+]
 RAAS_ENVELOPE_RATE = 0.60  # enveloppe resultats = 60 % du SaaS annuel
 
 CONSEILPREV_INTERNAL_EMAIL = 'conseilprev@internal.system'
@@ -3976,7 +3988,12 @@ def raas_init_milestones():
     if saas_monthly <= 0 or saas_monthly > 100000:
         return jsonify({'ok': False, 'error': 'saas_monthly hors bornes'}), 400
     framework = str(d.get('framework', 'ai_act'))
-    defs = RAAS_MILESTONE_DEFS_RGPD if framework == 'rgpd' else RAAS_MILESTONE_DEFS
+    if framework == 'rgpd':
+        defs = RAAS_MILESTONE_DEFS_RGPD
+    elif framework == 'iso42001':
+        defs = RAAS_MILESTONE_DEFS_ISO
+    else:
+        defs = RAAS_MILESTONE_DEFS
     envelope = round(saas_monthly * 12 * RAAS_ENVELOPE_RATE)
     now = datetime.utcnow().isoformat()
     conn = registre_get_db()
@@ -4773,7 +4790,11 @@ def clients_portfolio():
             "SELECT COUNT(*) AS n FROM raas_milestones WHERE client_id=%s AND status='pending' AND milestone_id LIKE 'rgpd%%'",
             "SELECT COUNT(*) AS n FROM raas_milestones WHERE client_id=? AND status='pending' AND milestone_id LIKE 'rgpd%'"), (cid,))
         ms_pending_rgpd = dict(cur.fetchone())['n']
-        ms_pending_ai = ms_pending - ms_pending_rgpd
+        cur.execute(registre_sql(
+            "SELECT COUNT(*) AS n FROM raas_milestones WHERE client_id=%s AND status='pending' AND milestone_id LIKE 'iso%%'",
+            "SELECT COUNT(*) AS n FROM raas_milestones WHERE client_id=? AND status='pending' AND milestone_id LIKE 'iso%'"), (cid,))
+        ms_pending_iso = dict(cur.fetchone())['n']
+        ms_pending_ai = ms_pending - ms_pending_rgpd - ms_pending_iso
         cur.execute(registre_sql('SELECT statut, sante, last_contact_at, next_action_at, next_action_label FROM client_lifecycle WHERE client_id=%s',
                                  'SELECT statut, sante, last_contact_at, next_action_at, next_action_label FROM client_lifecycle WHERE client_id=?'), (cid,))
         lc = cur.fetchone(); lc = dict(lc) if lc else {}
@@ -4782,7 +4803,7 @@ def clients_portfolio():
             'id': cid, 'nom': c.get('nom_entreprise') or ('Client #' + str(cid)),
             'statut': lc.get('statut') or 'prospect', 'sante': lc.get('sante') or 'a_evaluer',
             'unpaid_count': len(unpaid), 'unpaid_amount': unpaid_amt,
-            'pending_relances': pending, 'milestones_pending': ms_pending, 'milestones_pending_ai': ms_pending_ai, 'milestones_pending_rgpd': ms_pending_rgpd,
+            'pending_relances': pending, 'milestones_pending': ms_pending, 'milestones_pending_ai': ms_pending_ai, 'milestones_pending_rgpd': ms_pending_rgpd, 'milestones_pending_iso': ms_pending_iso,
             'last_contact_days': last_days,
             'next_action_at': lc.get('next_action_at'), 'next_action_label': lc.get('next_action_label')
         })
