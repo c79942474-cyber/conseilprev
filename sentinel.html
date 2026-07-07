@@ -1987,6 +1987,11 @@ textarea.form-el{min-height:86px;resize:vertical}
 .gc-bar{height:7px;background:var(--bg2);border-radius:5px;overflow:hidden}
 .gc-bar-fill{height:100%;border-radius:5px;transition:width .4s}
 .gc-fw-go{font-size:11px;font-weight:600;color:var(--accent);margin-top:9px}
+
+/* ══ Onglets verrouillés selon l'offre ══ */
+.sb-item.sb-locked{opacity:.4;transition:opacity .15s}
+.sb-item.sb-locked:hover{opacity:.62}
+.sb-lock{font-size:10px;opacity:.85;margin-left:6px;flex:0 0 auto}
 </style>
 
 </head>
@@ -16023,98 +16028,101 @@ window.go = function(id){
   return r;
 };
 
-/* ══ RESTRICTION SIDEBAR — plan Gratuit limite a 4 pages ══ */
-var GRATUIT_ALLOWED_PAGES = ['apercu', 'simulateur', 'regs', 'training', 'pricing'];
+/* ══ CONTRÔLE D'ACCÈS PAR OFFRE — Gratuit / Pro / Entreprise ══
+   Les offres Pro et Entreprise sont attribuées par l'administration CONSEILPREV
+   APRÈS confirmation de paiement du client. Toute inscription publique démarre au
+   plan Gratuit ; l'attribution d'une offre payante vaut donc confirmation de
+   paiement. Les onglets accessibles sont mis en évidence, les autres sont estompés
+   et verrouillés (aucun onglet n'est masqué). CONSEILPREV conserve un accès total. */
+var PLAN_GRATUIT_MODULES = ['apercu', 'simulateur', 'regs', 'training'];
+var PLAN_ENTREPRISE_ONLY = ['clients', 'pricing'];
 
-function gratuitCheckSidebarVisibility(){
-  /* Ne JAMAIS bloquer par defaut : le plan reste indetermine (null) tant que le
-     serveur n'a pas confirme explicitement un compte gratuit. Un echec reseau,
-     une session CONSEILPREV ou une base froide ne doivent pas verrouiller l'acces. */
+function planIsAllowed(id){
+  if(window.__IS_CONSEILPREV) return true;
+  var plan = window.__SENTINEL_PLAN;
+  if(!plan) return true;                                 // indéterminé = pas de blocage
+  if(plan === 'entreprise') return true;                 // accès complet
+  if(plan === 'pro') return PLAN_ENTREPRISE_ONLY.indexOf(id) === -1;
+  return PLAN_GRATUIT_MODULES.indexOf(id) !== -1;        // gratuit
+}
+
+function sentinelApplyGating(){
+  var plan = window.__SENTINEL_PLAN;
+  var restricted = !window.__IS_CONSEILPREV && (plan === 'gratuit' || plan === 'pro');
+  document.querySelectorAll('.sb-item').forEach(function(item){
+    var mm = item.getAttribute('onclick') && item.getAttribute('onclick').match(/go\('([\w-]+)'/);
+    var pid = mm ? mm[1] : null;
+    if(!pid) return;
+    item.style.display = '';                             // ne plus masquer : tout reste visible
+    var locked = restricted && !planIsAllowed(pid);
+    item.classList.toggle('sb-locked', locked);
+    var lk = item.querySelector('.sb-lock');
+    if(locked){ if(!lk){ lk = document.createElement('span'); lk.className = 'sb-lock'; lk.textContent = '🔒'; item.appendChild(lk); } }
+    else if(lk && lk.parentNode){ lk.parentNode.removeChild(lk); }
+  });
+  sentinelPlanBanner(plan);
+}
+
+function sentinelPlanBanner(plan){
+  var old = document.getElementById('sentinel-plan-banner');
+  if(old && old.parentNode) old.parentNode.removeChild(old);
+  if(window.__IS_CONSEILPREV || !plan || plan === 'entreprise') return;
+  var msg = (plan === 'pro')
+    ? '✨ <strong>Sentinel Pro</strong> — gouvernance IA Act &amp; RGPD complète. <a href="/tarifications" style="color:var(--accent)">Passer à Entreprise →</a>'
+    : '🔒 <strong>Plan Gratuit</strong> — Accès limité à 4 modules. <a href="/tarifications" style="color:var(--accent)">Comparer les formules →</a>';
+  var banner = document.createElement('div');
+  banner.id = 'sentinel-plan-banner';
+  banner.style.cssText = 'margin:12px 16px;padding:10px 12px;background:rgba(184,50,34,.06);border:1px solid rgba(184,50,34,.2);border-radius:7px;font-size:11px;color:var(--ink2);line-height:1.5';
+  banner.innerHTML = msg;
+  var nav = document.querySelector('.sb-nav');
+  if(nav && nav.parentNode) nav.parentNode.insertBefore(banner, nav.nextSibling);
+}
+
+function sentinelFetchPlan(){
   if(window.__SENTINEL_PLAN === undefined) window.__SENTINEL_PLAN = null;
   fetch('/api/sentinel-auth/me', {credentials:'same-origin'}).then(function(r){
     if(r.status === 401){ return {authenticated:false}; }
     return r.json();
   }).then(function(d){
-    if(!d || !d.authenticated){ window.__SENTINEL_PLAN = null; return; }
-    // Session CONSEILPREV OU nom d'entreprise CONSEILPREV = acces entreprise total.
-    if(d.is_conseilprev || d.nom_entreprise === 'CONSEILPREV'){ window.__SENTINEL_PLAN = 'entreprise'; window.__IS_CONSEILPREV = true; return; }
-    var plan = d.plan || 'gratuit';
-    window.__SENTINEL_PLAN = plan;
-
-    // ── Plan Gratuit ────────────────────────────────────────────────
-    if(plan === 'gratuit'){
-      document.querySelectorAll('.sb-item').forEach(function(item){
-        var match = item.getAttribute('onclick') && item.getAttribute('onclick').match(/go\('(\w+)'/);
-        var pageId = match ? match[1] : null;
-        if(pageId && GRATUIT_ALLOWED_PAGES.indexOf(pageId) === -1){
-          item.style.display = 'none';
-        }
-      });
-      if(!document.getElementById('sentinel-gratuit-banner')){
-        var banner = document.createElement('div');
-        banner.id = 'sentinel-gratuit-banner';
-        banner.style.cssText = 'margin:12px 16px;padding:10px 12px;background:rgba(184,50,34,.06);border:1px solid rgba(184,50,34,.2);border-radius:7px;font-size:11px;color:var(--ink2);line-height:1.5';
-        banner.innerHTML = '\uD83D\uDD13 <strong>Plan Gratuit</strong> \u2014 Acc\u00e8s limit\u00e9 \u00e0 4 modules. <a href="javascript:go(\u0027pricing\u0027)" style="color:var(--accent)">Demander un acc\u00e8s Pro \u2192</a>';
-        var nav = document.querySelector('.sb-nav');
-        if(nav) nav.parentNode.insertBefore(banner, nav.nextSibling);
-      }
-      return;
-    }
-
-    // ── Plans Pro / Entreprise — acces complet a tous les modules ──
-    // Les plans Pro et Entreprise ne sont attribues que par l'administration
-    // CONSEILPREV (jamais via l'inscription publique). Ils donnent donc acces
-    // a l'integralite des modules Sentinel, sans masquage ni redirection.
-    if(plan === 'pro' || plan === 'entreprise'){
-      // S'assurer que tous les items de la barre laterale sont visibles
-      document.querySelectorAll('.sb-item').forEach(function(item){
-        item.style.display = '';
-      });
-      // Retirer une eventuelle banniere de restriction posee lors d'un rendu anterieur
-      var oldPb = document.getElementById('sentinel-pending-banner');
-      if(oldPb && oldPb.parentNode) oldPb.parentNode.removeChild(oldPb);
-      return;
-    }
-  }).catch(function(){ window.__SENTINEL_PLAN = null; });
+    if(!d || !d.authenticated){ window.__SENTINEL_PLAN = null; sentinelApplyGating(); return; }
+    if(d.is_conseilprev || d.nom_entreprise === 'CONSEILPREV'){ window.__SENTINEL_PLAN = 'entreprise'; window.__IS_CONSEILPREV = true; sentinelApplyGating(); return; }
+    window.__SENTINEL_PLAN = d.plan || 'gratuit';
+    sentinelApplyGating();
+  }).catch(function(){ window.__SENTINEL_PLAN = null; sentinelApplyGating(); });
 }
-document.addEventListener('DOMContentLoaded', function(){ setTimeout(gratuitCheckSidebarVisibility, 300); });
-if(document.readyState !== 'loading'){ setTimeout(gratuitCheckSidebarVisibility, 300); }
+document.addEventListener('DOMContentLoaded', function(){ setTimeout(sentinelFetchPlan, 300); });
+if(document.readyState !== 'loading'){ setTimeout(sentinelFetchPlan, 300); }
 
-var _gratuitOrigGo = window.go;
+function sentinelLockPrompt(){
+  var old = document.getElementById('sentinel-lock-modal');
+  if(old && old.parentNode) old.parentNode.removeChild(old);
+  var plan = window.__SENTINEL_PLAN;
+  var txt = (plan === 'pro')
+    ? 'Ce module relève de l’offre Entreprise (gestion multi-clients et pilotage par résultats). Comparez les formules pour y accéder.'
+    : 'Ce module n’est pas inclus dans votre plan Gratuit. L’accès complet est ouvert après souscription et confirmation de paiement.';
+  var m = document.createElement('div');
+  m.id = 'sentinel-lock-modal';
+  m.style.cssText = 'position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5)';
+  m.innerHTML = '<div style="background:var(--white,#fff);max-width:390px;padding:28px;border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.3);text-align:center">'
+    + '<div style="font-size:30px;margin-bottom:10px">🔒</div>'
+    + '<div style="font-size:15px;font-weight:700;color:var(--ink,#111);margin-bottom:8px">Module verrouillé</div>'
+    + '<div style="font-size:13px;color:var(--muted,#666);line-height:1.55;margin-bottom:18px">' + txt + '</div>'
+    + '<a href="/tarifications" style="display:inline-block;background:var(--accent);color:#fff;padding:10px 18px;border-radius:9px;font-size:13px;font-weight:700;text-decoration:none">Comparer les formules</a>'
+    + '<div style="margin-top:12px"><span onclick="var e=document.getElementById(\'sentinel-lock-modal\');if(e&&e.parentNode)e.parentNode.removeChild(e);" style="font-size:12px;color:var(--muted,#888);cursor:pointer">Fermer</span></div>'
+    + '</div>';
+  m.addEventListener('click', function(e){ if(e.target === m && m.parentNode) m.parentNode.removeChild(m); });
+  document.body.appendChild(m);
+}
+
+var _planOrigGo = window.go;
 window.go = function(id){
-  var _plan = window.__SENTINEL_PLAN;
-
-  // ── Garde-fou CONSEILPREV : acces total, aucune restriction ──
-  if(window.__IS_CONSEILPREV){
-    return _gratuitOrigGo ? _gratuitOrigGo.apply(this, arguments) : undefined;
+  if(window.__IS_CONSEILPREV) return _planOrigGo ? _planOrigGo.apply(this, arguments) : undefined;
+  var plan = window.__SENTINEL_PLAN;
+  if((plan === 'gratuit' || plan === 'pro') && !planIsAllowed(id)){
+    sentinelLockPrompt();
+    return;
   }
-
-  // ── Plan Gratuit ──────────────────────────────────────────────
-  // Blocage UNIQUEMENT si le serveur a confirme un compte gratuit (_plan==='gratuit').
-  // _plan null/undefined (session CONSEILPREV, /me en cours, erreur reseau) = pas de blocage.
-  // Les plans pro/entreprise et la session CONSEILPREV ont acces a tout.
-  if(_plan === 'gratuit' && GRATUIT_ALLOWED_PAGES.indexOf(id) === -1){
-    var notif = document.getElementById('gratuit-lock-notif');
-    if(!notif){
-      notif = document.createElement('div');
-      notif.id = 'gratuit-lock-notif';
-      notif.style.cssText = 'position:fixed;top:16px;right:16px;z-index:9999;background:#fff;border:1px solid rgba(184,50,34,.3);border-radius:8px;padding:12px 16px;font-size:12px;color:var(--ink);box-shadow:0 4px 20px rgba(0,0,0,.15);max-width:280px;line-height:1.5';
-      document.body.appendChild(notif);
-    }
-    notif.innerHTML = '\uD83D\uDD12 <strong>Module r\u00e9serv\u00e9</strong><br>Non inclus dans votre plan Gratuit.<br>'
-      + '<a href="javascript:go(\u0027pricing\u0027)" style="color:var(--accent)">Demander un acc\u00e8s Pro \u2192</a>';
-    notif.style.display = 'block';
-    clearTimeout(window._gratuitNotifTimer);
-    window._gratuitNotifTimer = setTimeout(function(){ notif.style.display='none'; }, 4000);
-    return _gratuitOrigGo ? _gratuitOrigGo.apply(this, ['apercu']) : undefined;
-  }
-
-  // ── Plans Pro / Entreprise + session CONSEILPREV : ACCES TOTAL ──
-  // Ces plans ne sont attribues que par l'administration CONSEILPREV : ils
-  // donnent acces a l'integralite des modules, sans aucune restriction ni
-  // redirection. La session CONSEILPREV (is_conseilprev) est resolue en
-  // 'entreprise' cote serveur et beneficie donc du meme acces complet.
-  return _gratuitOrigGo ? _gratuitOrigGo.apply(this, arguments) : undefined;
+  return _planOrigGo ? _planOrigGo.apply(this, arguments) : undefined;
 };
 
 
