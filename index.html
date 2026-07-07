@@ -3940,7 +3940,7 @@ em,.hero-em{
     <div class="hero-actions">
       <a href="/sentinel" target="_blank" rel="noopener" class="ha-primary" data-i18n="hero.btn.aies" data-tooltip="Accéder à la plateforme de gouvernance IA Sentinel AI">Accéder à Sentinel AI →</a>
       <a href="https://youtu.be/QZNBXs-UsWU" target="_blank" rel="noopener" class="ha-demo" data-i18n="hero.btn.demo" data-tooltip="Voir la démo vidéo AIES en action">▷ Démo</a>
-      <a href="#contact" class="ha-offers" data-i18n="hero.btn.offres" data-tooltip="Échanger avec un consultant CONSEILPREV">⬛ Échanger avec un expert</a>
+      <a href="#offres" class="ha-offers" data-i18n="hero.btn.offres" data-tooltip="Échanger avec un consultant CONSEILPREV">⬛ Échanger avec un expert</a>
     </div>
 
     <!-- Parcours Sentinel AI en 3 etapes -->
@@ -4356,6 +4356,75 @@ em,.hero-em{
     </div>
   </div>
 </section>
+
+<style>
+#offres{padding:72px 20px;max-width:1180px;margin:0 auto}
+.offres-head{text-align:center;margin-bottom:42px}
+.offres-head h2{font-size:34px;color:#fff;margin:0 0 12px;font-weight:800;letter-spacing:-.5px}
+.offres-head p{font-size:15px;color:var(--pp);max-width:700px;margin:0 auto;line-height:1.6}
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px;align-items:stretch}
+.pr-card{position:relative;background:rgba(18,8,48,.55);border:1px solid rgba(139,92,246,.28);border-radius:18px;padding:32px 26px 28px;display:flex;flex-direction:column;backdrop-filter:blur(8px)}
+.pr-card-pop{border-color:var(--pf);box-shadow:0 0 44px rgba(217,70,239,.28);transform:translateY(-6px)}
+.pr-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--pf);color:#fff;font-size:11px;font-weight:700;padding:5px 16px;border-radius:20px;letter-spacing:.05em;white-space:nowrap}
+.pr-name{font-size:20px;font-weight:700;color:#fff;margin-bottom:10px}
+.pr-price{font-size:25px;font-weight:800;color:var(--pl);margin-bottom:22px;line-height:1.2}
+.pr-price span{display:block;font-size:12px;font-weight:400;color:var(--pp);opacity:.7;margin-top:5px}
+.pr-feat{list-style:none;padding:0;margin:0 0 26px;flex:1}
+.pr-feat li{font-size:13.5px;color:var(--pp);padding:9px 0 9px 26px;position:relative;line-height:1.45;border-bottom:1px solid rgba(139,92,246,.12)}
+.pr-feat li:last-child{border-bottom:none}
+.pr-feat li:before{content:"\2713";position:absolute;left:0;color:var(--pf);font-weight:700}
+.pr-cta{display:block;text-align:center;padding:13px;border-radius:12px;font-size:14px;font-weight:700;text-decoration:none;background:rgba(139,92,246,.16);color:#fff;border:1px solid var(--pm);transition:background .2s,opacity .2s}
+.pr-cta:hover{background:var(--pm)}
+.pr-cta-pop{background:linear-gradient(135deg,var(--pm),var(--pf));border:none}
+.pr-cta-pop:hover{opacity:.9;background:linear-gradient(135deg,var(--pm),var(--pf))}
+.pr-note{text-align:center;font-size:12px;color:var(--pp);opacity:.62;margin:28px auto 0;max-width:720px;line-height:1.5}
+@media(max-width:640px){.pr-card-pop{transform:none}}
+</style>
+<section class="sec" id="offres">
+  <div class="offres-head">
+    <h2>Nos offres <span style="color:var(--pf)">Sentinel</span></h2>
+    <p>Choisissez le plan adapté à votre démarche de conformité IA. L'offre gratuite est accessible immédiatement par inscription ; les offres Pro et Entreprise donnent accès à la tarification après création de compte.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="pr-card">
+      <div class="pr-name">Sentinel Gratuit</div>
+      <div class="pr-price">0 €<span>pour découvrir la plateforme</span></div>
+      <ul class="pr-feat">
+        <li>Observatoire IA et veille réglementaire</li>
+        <li>Registre des systèmes IA (accès de découverte)</li>
+        <li>Simulateur de classification IA Act</li>
+        <li>1 utilisateur</li>
+      </ul>
+      <a href="/login?plan=gratuit" class="pr-cta">Commencer gratuitement</a>
+    </div>
+    <div class="pr-card pr-card-pop">
+      <div class="pr-badge">Le plus choisi</div>
+      <div class="pr-name">Sentinel Pro</div>
+      <div class="pr-price">Tarification par résultats<span>modèle RaaS — détail après inscription</span></div>
+      <ul class="pr-feat">
+        <li>Tout l'IA Act et le RGPD</li>
+        <li>Registre illimité, cartographies, FRIA et AIPD</li>
+        <li>Veille qualifiée, exports PDF, plan d'action</li>
+        <li>Indice de conformité global IA Act · RGPD · ISO 42001</li>
+        <li>Plusieurs utilisateurs</li>
+      </ul>
+      <a href="/login?plan=pro" class="pr-cta pr-cta-pop">Choisir Pro</a>
+    </div>
+    <div class="pr-card">
+      <div class="pr-name">Sentinel Entreprise</div>
+      <div class="pr-price">Sur mesure<span>nous consulter — détail après inscription</span></div>
+      <ul class="pr-feat">
+        <li>Gestion multi-clients et portefeuille</li>
+        <li>Jalons RaaS sur trois cadres (IA Act, RGPD, ISO 42001)</li>
+        <li>Accompagnement CONSEILPREV et audit approfondi</li>
+        <li>Support prioritaire et intégrations sur mesure</li>
+      </ul>
+      <a href="/login?plan=entreprise" class="pr-cta">Choisir Entreprise</a>
+    </div>
+  </div>
+  <p class="pr-note">Offres et fonctionnalités présentées à titre indicatif, ajustables selon votre périmètre. Le détail tarifaire des offres Pro et Entreprise est communiqué après création de compte, sur la page de tarification.</p>
+</section>
+
 
 <section class="sec sec-a" id="contact">
   <div class="con">
