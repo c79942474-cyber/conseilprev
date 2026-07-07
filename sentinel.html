@@ -1968,6 +1968,25 @@ textarea.form-el{min-height:86px;resize:vertical}
 .cn-link{color:var(--accent);cursor:pointer;text-decoration:none}
 .cn-link:hover{text-decoration:underline}
 .cn-table th:nth-child(2),.cn-table td:nth-child(2){background:rgba(224,168,0,.05)}
+
+/* ══ INDICE DE CONFORMITÉ GLOBAL ══ */
+.gc-hero{display:flex;align-items:center;gap:22px;flex-wrap:wrap;border:1px solid var(--rule2);border-radius:14px;padding:20px 24px;background:var(--white);margin:6px 0 16px}
+.gc-hero-num{font-size:46px;font-weight:800;line-height:1;flex:0 0 auto}
+.gc-hero-right{flex:1;min-width:220px}
+.gc-hero-l{font-size:14px;font-weight:700;color:var(--ink)}
+.gc-hero-s{font-size:11px;color:var(--muted2);margin:3px 0 8px}
+.gc-hero-bar{height:9px;background:var(--bg2);border-radius:6px;overflow:hidden}
+.gc-hero-fill{height:100%;border-radius:6px;transition:width .4s}
+.gc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.gc-fw{border:1px solid var(--rule2);border-radius:12px;padding:15px 17px;background:var(--white);cursor:pointer;transition:border-color .15s,transform .1s}
+.gc-fw:hover{border-color:var(--accent);transform:translateY(-1px)}
+.gc-fw-top{display:flex;justify-content:space-between;align-items:baseline}
+.gc-fw-name{font-size:13px;font-weight:700;color:var(--ink)}
+.gc-fw-val{font-size:22px;font-weight:800}
+.gc-fw-sub{font-size:11px;color:var(--muted2);margin:3px 0 9px;min-height:28px}
+.gc-bar{height:7px;background:var(--bg2);border-radius:5px;overflow:hidden}
+.gc-bar-fill{height:100%;border-radius:5px;transition:width .4s}
+.gc-fw-go{font-size:11px;font-weight:600;color:var(--accent);margin-top:9px}
 </style>
 
 </head>
@@ -1988,6 +2007,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-item" onclick="go('espace',this,'PILOTAGE','Mes actions du jour')" title="Tableau de bord personnel : suivi de vos actions et de votre progression."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg></span>Mon Espace</div>
     <div class="sb-item" onclick="go('report',this,'PILOTAGE','Vue direction')" title="Tableau de bord executif : indicateurs cles de conformite pour la direction."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>Reporting</div>
     <div class="sb-item" onclick="go('cadre-normatif',this,'PILOTAGE','Cadre normatif')" title="Matrice de correspondance IA Act / RGPD / ISO 42001 : chaque module rattache a ses cadres, avec liens directs."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></span>Cadre normatif</div>
+    <div class="sb-item" onclick="go('conformite-globale',this,'PILOTAGE','Indice de conformité global');gcLoad()" title="Indice consolidant IA Act, RGPD et ISO 42001 en un score unique, calcule depuis vos evaluations."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 12l7-7"/><path d="M12 12V2"/></svg></span>Indice global</div>
     <div class="sb-section">Cartographier</div>
     <div class="sb-item" onclick="go('shadow-ai',this,'CARTOGRAPHIER','Découverte Shadow AI')" title="Recensez les systemes IA invisibles deja presents dans votre organisation, avant de les classifier."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg></span>Découverte Shadow AI</div>
     <div class="sb-item" onclick="go('simulateur',this,'CARTOGRAPHIER','Simulateur IA Act')" title="Classifiez un systeme IA selon le Reglement EU AI Act avant de l enregistrer au Registre."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>Simulateur IA Act</div>
@@ -3477,6 +3497,21 @@ textarea.form-el{min-height:86px;resize:vertical}
 
   <div class="trait-note">
     Cette matrice de correspondance est une aide au pilotage transverse. Les rattachements normatifs sont indicatifs et doivent être validés au regard de votre périmètre et de la version en vigueur des textes. CONSEILPREV peut réaliser une cartographie de conformité approfondie couvrant les trois cadres.
+  </div>
+</div>
+
+
+<div class="page" id="p-conformite-globale">
+  <span class="eyebrow">Pilotage · Conformité</span>
+  <h1 class="page-h">Indice de conformité <em>global</em></h1>
+  <p class="page-lead">Consolidation des trois cadres — Règlement IA, RGPD et ISO/IEC 42001 — en un indice unique, calculé à partir de vos évaluations dans la plateforme. Chaque cadre renvoie directement à ses modules.</p>
+  <div class="reg-toolbar">
+    <button class="mat-export-btn" onclick="gcLoad()">↻ Recalculer</button>
+    <button class="mat-export-btn" onclick="hubGo('cadre-normatif')">Voir le cadre normatif</button>
+  </div>
+  <div id="gc-body"><div class="veille-loading">Calcul de l'indice…</div></div>
+  <div class="trait-note">
+    L'indice IA Act reflète l'avancement de l'Audit IA Act, l'indice RGPD la conformité RGPD consolidée, et l'indice ISO 42001 est estimé à partir de l'audit de maturité, dont les piliers correspondent aux clauses de la norme. Ces indices sont des aides au pilotage, non des attestations. CONSEILPREV peut réaliser un audit de conformité approfondi couvrant les trois cadres.
   </div>
 </div>
 
@@ -5737,6 +5772,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 'use strict';
 
 var PAGE_META = {
+    'conformite-globale': { section: 'PILOTAGE', label: 'Indice de conformité global' },
     'cadre-normatif': { section: 'PILOTAGE', label: 'Cadre normatif' },
     'rgpd-hub': { section: 'RGPD & PRIVACY', label: 'Vue d\u2019ensemble' },
     'rgpd-conformite': { section: 'RGPD & PRIVACY', label: 'Conformité RGPD' },
@@ -18054,6 +18090,62 @@ window.raasMsCell = function(p){
   if(!(a+r)) return '\u2014';
   return a+' IA'+(r?' <span style=\"color:#6B46C1\">\u00b7 '+r+' RGPD</span>':'');
 };
+/* ══ Indice de conformité global — consolide IA Act / RGPD / ISO 42001 ══ */
+window.gcAuditPct = function(){
+  try{
+    if(!window.AUDIT_SECTIONS) return null;
+    var tot=0, done=0;
+    window.AUDIT_SECTIONS.forEach(function(sec){ (sec.items||[]).forEach(function(it){ tot++; var st=(window.AUDIT_STATE&&window.AUDIT_STATE[it.id])||'none'; if(st==='done') done++; }); });
+    return tot? Math.round(done/tot*100) : 0;
+  }catch(e){ return null; }
+};
+window.gcRgpdPct = function(){
+  try{
+    var fns=['confRegPct','confPbdPct','confDocPct','confSensPct'];
+    var ok=fns.filter(function(f){ return typeof window[f]==='function'; });
+    if(!ok.length) return null;
+    var v=fns.map(function(f){ return (typeof window[f]==='function')?(window[f]()||0):0; });
+    return Math.round(v.reduce(function(a,b){return a+b;},0)/v.length);
+  }catch(e){ return null; }
+};
+window.gcIsoPct = function(){
+  try{
+    if(typeof window.matGlobalScore!=='function') return null;
+    var sec = window.MAT_CUR || (window.MAT_SECTORS ? Object.keys(window.MAT_SECTORS)[0] : null);
+    var s = window.matGlobalScore(sec); // échelle 0–4
+    if(typeof s!=='number' || isNaN(s)) return null;
+    return Math.max(0, Math.min(100, Math.round((s/4)*100)));
+  }catch(e){ return null; }
+};
+window.gcLoad = function(){ gcRender(); };
+window.gcRender = function(){
+  var box=document.getElementById('gc-body'); if(!box) return;
+  var ia=gcAuditPct(), rg=gcRgpdPct(), iso=gcIsoPct();
+  function col(v){ return v==null?'var(--muted2)':(v<50?'#c0392b':(v<75?'#c98a00':'var(--green)')); }
+  function txt(v){ return v==null?'—':v+'%'; }
+  var vals=[ia,rg,iso].filter(function(x){ return x!==null; });
+  var g = vals.length ? Math.round(vals.reduce(function(a,b){return a+b;},0)/vals.length) : null;
+  function fw(name, sub, v, target){
+    return '<div class="gc-fw" onclick="hubGo(\''+target+'\')">'
+      + '<div class="gc-fw-top"><span class="gc-fw-name">'+name+'</span><span class="gc-fw-val" style="color:'+col(v)+'">'+txt(v)+'</span></div>'
+      + '<div class="gc-fw-sub">'+sub+'</div>'
+      + '<div class="gc-bar"><div class="gc-bar-fill" style="width:'+(v==null?0:v)+'%;background:'+col(v)+'"></div></div>'
+      + '<div class="gc-fw-go">Ouvrir \u2192</div></div>';
+  }
+  box.innerHTML =
+      '<div class="gc-hero">'
+    + '<div class="gc-hero-num" style="color:'+col(g)+'">'+txt(g)+'</div>'
+    + '<div class="gc-hero-right"><div class="gc-hero-l">Indice de conformité global</div>'
+    + '<div class="gc-hero-s">Moyenne des cadres évalués'+(vals.length<3?' ('+vals.length+'/3 renseigné(s))':'')+'</div>'
+    + '<div class="gc-hero-bar"><div class="gc-hero-fill" style="width:'+(g==null?0:g)+'%;background:'+col(g)+'"></div></div></div>'
+    + '</div>'
+    + '<div class="gc-grid">'
+    + fw('Règlement IA', 'Avancement de l\'Audit IA Act', ia, 'audit-ia-act')
+    + fw('RGPD', 'Conformité RGPD consolidée', rg, 'rgpd-conformite')
+    + fw('ISO/IEC 42001', 'Estimé via l\'audit de maturité', iso, 'maturite')
+    + '</div>';
+};
+
 window.__veille = {data:null, ts:0, loading:false, regs:[], timer:null};
 window.veilleInit = function(containerId, updId, filter){
   window.__veille.regs.push({id:containerId, upd:updId, filter:filter||{}});
