@@ -1954,6 +1954,20 @@ textarea.form-el{min-height:86px;resize:vertical}
 .hub-card-d{font-size:11px;color:var(--muted2);line-height:1.45;margin:4px 0 8px}
 .hub-card-go{font-size:11px;font-weight:600;color:var(--accent)}
 @media(max-width:640px){.hub-index{border-right:none;padding-right:0}}
+
+/* ══ CADRE NORMATIF (matrice IA Act / RGPD / ISO 42001) ══ */
+.cn-note-top{margin:8px 0 16px;padding:11px 14px;background:var(--bg);border:1px solid var(--rule2);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;font-size:12px;color:var(--muted);line-height:1.55}
+.cn-group{margin-bottom:16px}
+.cn-group-t{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
+.cn-scroll{overflow-x:auto;border:1px solid var(--rule2);border-radius:10px}
+.cn-table{width:100%;border-collapse:collapse;font-size:12px;min-width:560px}
+.cn-table th{text-align:left;background:var(--bg2);color:var(--ink);font-size:10.5px;text-transform:uppercase;letter-spacing:.03em;padding:8px 12px;border-bottom:1px solid var(--rule2)}
+.cn-table td{padding:9px 12px;border-bottom:1px solid var(--rule);color:var(--muted);vertical-align:top}
+.cn-table tr:last-child td{border-bottom:none}
+.cn-table td:first-child{color:var(--ink);font-weight:600}
+.cn-link{color:var(--accent);cursor:pointer;text-decoration:none}
+.cn-link:hover{text-decoration:underline}
+.cn-table th:nth-child(2),.cn-table td:nth-child(2){background:rgba(224,168,0,.05)}
 </style>
 
 </head>
@@ -1973,6 +1987,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-item on" onclick="go('apercu',this,'PILOTAGE','Observatoire IA')" title="Panorama mondial : scores de risque sur 24 juridictions, classements innovation et severite."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg></span>Observatoire IA</div>
     <div class="sb-item" onclick="go('espace',this,'PILOTAGE','Mes actions du jour')" title="Tableau de bord personnel : suivi de vos actions et de votre progression."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg></span>Mon Espace</div>
     <div class="sb-item" onclick="go('report',this,'PILOTAGE','Vue direction')" title="Tableau de bord executif : indicateurs cles de conformite pour la direction."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>Reporting</div>
+    <div class="sb-item" onclick="go('cadre-normatif',this,'PILOTAGE','Cadre normatif')" title="Matrice de correspondance IA Act / RGPD / ISO 42001 : chaque module rattache a ses cadres, avec liens directs."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></span>Cadre normatif</div>
     <div class="sb-section">Cartographier</div>
     <div class="sb-item" onclick="go('shadow-ai',this,'CARTOGRAPHIER','Découverte Shadow AI')" title="Recensez les systemes IA invisibles deja presents dans votre organisation, avant de les classifier."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg></span>Découverte Shadow AI</div>
     <div class="sb-item" onclick="go('simulateur',this,'CARTOGRAPHIER','Simulateur IA Act')" title="Classifiez un systeme IA selon le Reglement EU AI Act avant de l enregistrer au Registre."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>Simulateur IA Act</div>
@@ -3410,6 +3425,58 @@ textarea.form-el{min-height:86px;resize:vertical}
   <div id="conf-body"><div class="veille-loading">Consolidation des indicateurs…</div></div>
   <div class="trait-note">
     Cet indice consolide des éléments déclaratifs et le registre des traitements ; il constitue une aide au pilotage et ne vaut pas attestation de conformité juridique. La conformité RGPD se démontre par des mesures effectives et documentées. CONSEILPREV peut réaliser un audit approfondi et un plan de mise en conformité.
+  </div>
+</div>
+
+
+<div class="page" id="p-cadre-normatif">
+  <span class="eyebrow">Pilotage · Cadre normatif</span>
+  <h1 class="page-h">Cadre <em>normatif</em> — IA Act · RGPD · ISO/IEC 42001</h1>
+  <p class="page-lead">Matrice de correspondance reliant chaque module de Sentinel aux trois cadres : le Règlement sur l'IA pour les obligations réglementaires, le RGPD pour la protection des données, et la norme ISO/IEC 42001 comme système de management de l'IA qui structure et chapeaute l'ensemble. Chaque ligne renvoie directement au module concerné.</p>
+  <div class="cn-note-top">ISO/IEC 42001 fournit le système de management ; l'IA Act et le RGPD en constituent les exigences réglementaires. Un même module sert donc souvent les trois cadres à la fois.</div>
+
+  <div class="cn-group"><div class="cn-group-t">Gouverner &amp; cadrer</div>
+  <div class="cn-scroll"><table class="cn-table"><thead><tr><th>Module Sentinel</th><th>ISO/IEC 42001</th><th>Règlement IA</th><th>RGPD</th></tr></thead><tbody>
+    <tr><td><a class="cn-link" onclick="hubGo('parties')">Parties prenantes</a></td><td>Clause 4.2 · A.8</td><td>Chaîne de valeur</td><td>Art. 26 · 28</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('roadmap')">Plan d'action</a></td><td>Clause 10.1 (amélioration)</td><td>Art. 9</td><td>Art. 24</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('regs')">Réglementations &amp; veille</a></td><td>Clause 4.1 (contexte)</td><td>Texte intégral</td><td>Texte intégral</td></tr>
+  </tbody></table></div></div>
+
+  <div class="cn-group"><div class="cn-group-t">Cartographier</div>
+  <div class="cn-scroll"><table class="cn-table"><thead><tr><th>Module Sentinel</th><th>ISO/IEC 42001</th><th>Règlement IA</th><th>RGPD</th></tr></thead><tbody>
+    <tr><td><a class="cn-link" onclick="hubGo('carto-uc')">Cartographie des cas d'usage</a></td><td>A.6 · A.9</td><td>Art. 6 · Annexe III</td><td>Art. 35 (pré-analyse)</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('registre')">Registre des systèmes IA</a></td><td>A.4 · A.6</td><td>Art. 11 · Annexe IV</td><td>Art. 30</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('simulateur')">Classification IA Act</a></td><td>Clause 8.4 · A.5</td><td>Art. 6 · Annexe III</td><td>Art. 35</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('rgpd-traitements')">Registre des traitements</a></td><td>A.7 (données)</td><td>Art. 10 (données)</td><td>Art. 30</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('rgpd-cartographie')">Cartographie des traitements</a></td><td>A.7</td><td>Art. 10</td><td>Art. 30 · 35</td></tr>
+  </tbody></table></div></div>
+
+  <div class="cn-group"><div class="cn-group-t">Évaluer les risques</div>
+  <div class="cn-scroll"><table class="cn-table"><thead><tr><th>Module Sentinel</th><th>ISO/IEC 42001</th><th>Règlement IA</th><th>RGPD</th></tr></thead><tbody>
+    <tr><td><a class="cn-link" onclick="hubGo('maturite')">Audit de maturité IA</a></td><td>Clauses 4 à 6</td><td>Art. 9 (gestion des risques)</td><td>Art. 24</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('matrice')">Matrice / Radar des risques</a></td><td>Clause 6.1 · 8.2 · A.5</td><td>Art. 9</td><td>Art. 35</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('fria')">FRIA — droits fondamentaux</a></td><td>Clause 8.4 · A.5.2</td><td>Art. 27</td><td>Art. 35 (complément)</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('rgpd-aipd')">AIPD — protection des données</a></td><td>Clause 8.4 · A.5</td><td>Art. 27 (lié)</td><td>Art. 35</td></tr>
+  </tbody></table></div></div>
+
+  <div class="cn-group"><div class="cn-group-t">Concevoir, documenter &amp; prouver</div>
+  <div class="cn-scroll"><table class="cn-table"><thead><tr><th>Module Sentinel</th><th>ISO/IEC 42001</th><th>Règlement IA</th><th>RGPD</th></tr></thead><tbody>
+    <tr><td><a class="cn-link" onclick="hubGo('rgpd-pbd')">Privacy by design</a></td><td>Clause 8 · A.7</td><td>Art. 10 (gouvernance des données)</td><td>Art. 25</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('templates')">Documentation &amp; modèles</a></td><td>Clause 7.5</td><td>Art. 11 · 18</td><td>Art. 5.2</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('rgpd-doc')">Politique documentaire</a></td><td>Clause 7.5 · A.2</td><td>Art. 11</td><td>Art. 5.2 · 30</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('audit-ia-act')">Audit IA Act</a></td><td>Clause 9.2 (audit interne)</td><td>Art. 17 (SMQ)</td><td>Art. 24</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('rgpd-conformite')">Conformité RGPD</a></td><td>Clause 9.1 (surveillance)</td><td>—</td><td>Art. 24</td></tr>
+  </tbody></table></div></div>
+
+  <div class="cn-group"><div class="cn-group-t">Former, sensibiliser &amp; sanctions</div>
+  <div class="cn-scroll"><table class="cn-table"><thead><tr><th>Module Sentinel</th><th>ISO/IEC 42001</th><th>Règlement IA</th><th>RGPD</th></tr></thead><tbody>
+    <tr><td><a class="cn-link" onclick="hubGo('training')">Hub Training</a></td><td>Clause 7.2 · 7.3</td><td>Art. 4 (maîtrise de l'IA)</td><td>Art. 39</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('rgpd-sensibilisation')">Sensibilisation</a></td><td>Clause 7.3</td><td>Art. 4</td><td>Art. 32 · 39</td></tr>
+    <tr><td><a class="cn-link" onclick="hubGo('sanctions')">Calculateur de sanctions</a></td><td>—</td><td>Art. 99</td><td>Art. 83</td></tr>
+  </tbody></table></div></div>
+
+  <div class="trait-note">
+    Cette matrice de correspondance est une aide au pilotage transverse. Les rattachements normatifs sont indicatifs et doivent être validés au regard de votre périmètre et de la version en vigueur des textes. CONSEILPREV peut réaliser une cartographie de conformité approfondie couvrant les trois cadres.
   </div>
 </div>
 
@@ -5670,6 +5737,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 'use strict';
 
 var PAGE_META = {
+    'cadre-normatif': { section: 'PILOTAGE', label: 'Cadre normatif' },
     'rgpd-hub': { section: 'RGPD & PRIVACY', label: 'Vue d\u2019ensemble' },
     'rgpd-conformite': { section: 'RGPD & PRIVACY', label: 'Conformité RGPD' },
     'rgpd-sensibilisation': { section: 'RGPD & PRIVACY', label: 'Sensibilisation' },
