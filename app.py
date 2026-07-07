@@ -2929,6 +2929,7 @@ PAGES = {
     '/protection-donnees': 'protection-donnees.html',
     '/cgv':               'cgv.html',
     '/confidentialite':   'confidentialite.html',
+    '/actualites':        'actualites.html',
     '/dsa':               'dsa.html',
     '/team':              'team.html',
     '/careers':           'careers.html',
