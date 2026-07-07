@@ -18209,6 +18209,9 @@ window.iahRender = function(){
   }).join("");
 };
 
+/* Ouverture directe d'une page via ?goto= (ex. redirection depuis la connexion vers la tarification) */
+window.sentinelGotoDeepLink = function(){ try{ var g=new URLSearchParams(location.search).get('goto'); if(g){ setTimeout(function(){ if(typeof hubGo==='function') hubGo(g); else if(typeof go==='function') go(g); }, 350); } }catch(e){} };
+if(document.readyState==='complete') window.sentinelGotoDeepLink(); else window.addEventListener('load', window.sentinelGotoDeepLink);
 window.__veille = {data:null, ts:0, loading:false, regs:[], timer:null};
 window.veilleInit = function(containerId, updId, filter){
   window.__veille.regs.push({id:containerId, upd:updId, filter:filter||{}});
