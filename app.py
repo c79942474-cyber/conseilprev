@@ -3933,6 +3933,104 @@ def sentauth_me():
 
 
 # ══════════════════════════════════════════════════════════
+# PAIEMENT STRIPE — ACTIVATION AUTOMATIQUE DES OFFRES
+# Sur paiement confirme (notification signee 'checkout.session.completed'),
+# l'offre du client est automatiquement mise a niveau (pro / entreprise).
+# Securite : aucune offre n'est activee sans un evenement de paiement dont
+# la signature Stripe est verifiee. Import 'stripe' differe et endpoints
+# desactives tant que les cles ne sont pas configurees : l'absence de
+# configuration ne compromet jamais le demarrage de l'application.
+# CONSEILPREV/Sentinel.
+# ══════════════════════════════════════════════════════════
+
+def activate_client_plan(client_id, plan):
+    """Met a niveau l'offre d'un client. Reserve a pro/entreprise ; appele
+    uniquement apres verification d'un paiement (webhook signe) ou par
+    l'administration CONSEILPREV."""
+    if plan not in ('pro', 'entreprise'):
+        return False
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql('UPDATE clients SET plan=%s WHERE id=%s',
+                             'UPDATE clients SET plan=? WHERE id=?'),
+                (plan, int(client_id)))
+    conn.commit()
+    try:
+        conn.close()
+    except Exception:
+        pass
+    return True
+
+
+@app.route('/api/sentinel/checkout', methods=['POST'])
+@rate_limit(limit=20, window=60)
+def sentinel_checkout():
+    """Cree une session de paiement Stripe pour le client connecte et l'offre
+    demandee. Retourne l'URL de paiement hebergee par Stripe."""
+    client = sentauth_current_client()
+    if not client or not client.get('id'):
+        return jsonify({'error': "Authentification requise."}), 401
+    body = request.get_json(silent=True) or {}
+    plan = body.get('plan')
+    if plan not in ('pro', 'entreprise'):
+        return jsonify({'error': "Offre invalide."}), 400
+    secret = os.environ.get('STRIPE_SECRET_KEY')
+    price_id = os.environ.get('STRIPE_PRICE_PRO' if plan == 'pro' else 'STRIPE_PRICE_ENTREPRISE')
+    if not secret or not price_id:
+        return jsonify({'error': "Paiement non configure.", 'configured': False}), 501
+    try:
+        import stripe
+    except Exception:
+        return jsonify({'error': "Module de paiement indisponible.", 'configured': False}), 501
+    stripe.api_key = secret
+    base = request.host_url.rstrip('/')
+    try:
+        sess = stripe.checkout.Session.create(
+            mode='subscription',
+            line_items=[{'price': price_id, 'quantity': 1}],
+            customer_email=client.get('email'),
+            client_reference_id=str(client['id']),
+            metadata={'client_id': str(client['id']), 'plan': plan},
+            success_url=base + '/sentinel?activation=ok',
+            cancel_url=base + '/tarifications',
+        )
+        return jsonify({'url': sess.url})
+    except Exception:
+        return jsonify({'error': "Echec de creation de la session de paiement."}), 502
+
+
+@app.route('/api/stripe/webhook', methods=['POST'])
+def stripe_webhook():
+    """Notification Stripe. Verifie la signature puis active l'offre du client
+    sur 'checkout.session.completed'. Desactive si le secret n'est pas defini."""
+    secret = os.environ.get('STRIPE_WEBHOOK_SECRET')
+    if not secret:
+        return jsonify({'error': "Webhook non configure."}), 501
+    try:
+        import stripe
+    except Exception:
+        return jsonify({'error': "Module indisponible."}), 501
+    payload = request.get_data()
+    sig = request.headers.get('Stripe-Signature', '')
+    try:
+        event = stripe.Webhook.construct_event(payload, sig, secret)
+    except Exception:
+        return jsonify({'error': "Signature invalide."}), 400
+    if event.get('type') == 'checkout.session.completed':
+        obj = (event.get('data') or {}).get('object') or {}
+        meta = obj.get('metadata') or {}
+        cid = meta.get('client_id') or obj.get('client_reference_id')
+        plan = meta.get('plan')
+        if cid and plan in ('pro', 'entreprise'):
+            try:
+                activate_client_plan(int(cid), plan)
+            except Exception:
+                pass
+    return jsonify({'received': True}), 200
+
+
+
+# ══════════════════════════════════════════════════════════
 # AGENT SENTINEL PRICING ORCHESTRATOR — TARIFICATION RAAS PAR JALONS
 # Modules : Observateur (lecture des scores), Verificateur (double
 # declencheur), Facturier (echeancier, gel des acquis), Mediateur
