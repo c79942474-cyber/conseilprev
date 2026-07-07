@@ -2006,6 +2006,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-item on" onclick="go('apercu',this,'PILOTAGE','Observatoire IA')" title="Panorama mondial : scores de risque sur 24 juridictions, classements innovation et severite."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg></span>Observatoire IA</div>
     <div class="sb-item" onclick="go('espace',this,'PILOTAGE','Mes actions du jour')" title="Tableau de bord personnel : suivi de vos actions et de votre progression."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg></span>Mon Espace</div>
     <div class="sb-item" onclick="go('report',this,'PILOTAGE','Vue direction')" title="Tableau de bord executif : indicateurs cles de conformite pour la direction."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>Reporting</div>
+    <div class="sb-item" onclick="go('ia-act-hub',this,'PILOTAGE','Vue d\u2019ensemble IA Act');iahLoadOnce()" title="Point d entree du dispositif IA Act : avancement et acces a tous les modules."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg></span>Vue d\u2019ensemble IA Act</div>
     <div class="sb-item" onclick="go('cadre-normatif',this,'PILOTAGE','Cadre normatif')" title="Matrice de correspondance IA Act / RGPD / ISO 42001 : chaque module rattache a ses cadres, avec liens directs."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></span>Cadre normatif</div>
     <div class="sb-item" onclick="go('conformite-globale',this,'PILOTAGE','Indice de conformité global');gcLoad()" title="Indice consolidant IA Act, RGPD et ISO 42001 en un score unique, calcule depuis vos evaluations."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 12l7-7"/><path d="M12 12V2"/></svg></span>Indice global</div>
     <div class="sb-section">Cartographier</div>
@@ -2025,7 +2026,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-section">Se tenir informé</div>
     <div class="sb-item" onclick="go('regs',this,'SE TENIR INFORMÉ','Réglementations')" title="Textes officiels, simulateur de conformite AI Act et audit structure par article."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 8h10M7 12h7M7 16h5"/></svg></span>Réglementations</div>
     <div class="sb-item" onclick="go('veille',this,'SE TENIR INFORMÉ','Veille qualifiée')" title="Actualites reglementaires evaluees par IA selon leur impact sur vos systemes IA reels."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M2 12c.5-5 4.5-9 10-9s9.5 4 10 9"/><path d="M5.5 12c.4-3.3 3-6 6.5-6s6.1 2.7 6.5 6"/><circle cx="12" cy="15" r="2"/><path d="M12 17v3"/></svg></span>Veille qualifiée</div>
-    <div class="sb-item" onclick="go('carto',this,'SE TENIR INFORMÉ','Carte mondiale')" title="Carte mondiale interactive des cadres reglementaires IA par pays, avec fiches detaillees."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3.6 9h16.8M3.6 15h16.8M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg></span>Cartographie</div>
+    <div class="sb-item" onclick="go('carto',this,'SE TENIR INFORMÉ','Carte mondiale de la régulation')" title="Carte mondiale interactive des cadres reglementaires IA par pays, avec fiches detaillees."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3.6 9h16.8M3.6 15h16.8M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg></span>Cartographie</div>
     <div class="sb-item" onclick="go('comp',this,'SE TENIR INFORMÉ','Comparateur')" title="Comparez jusqu a 4 juridictions sur 6 dimensions reglementaires (radar et tableau)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M8 4v16M16 4v16M3 8h18M3 16h18"/></svg></span>Comparateur</div>
     <div class="sb-item" onclick="go('geo',this,'SE TENIR INFORMÉ','Tensions normatives')" title="Analyse des tensions normatives entre les blocs UE, US et Chine sur la regulation de l IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3.6 9h16.8M3.6 15h16.8M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/><path d="M12 12 7 7m5 5 5 5" stroke-width="2"/></svg></span>Géopolitique</div>
     <div class="sb-section">Documenter & prouver</div>
@@ -3512,6 +3513,18 @@ textarea.form-el{min-height:86px;resize:vertical}
   <div id="gc-body"><div class="veille-loading">Calcul de l'indice…</div></div>
   <div class="trait-note">
     L'indice IA Act reflète l'avancement de l'Audit IA Act, l'indice RGPD la conformité RGPD consolidée, et l'indice ISO 42001 est estimé à partir de l'audit de maturité, dont les piliers correspondent aux clauses de la norme. Ces indices sont des aides au pilotage, non des attestations. CONSEILPREV peut réaliser un audit de conformité approfondi couvrant les trois cadres.
+  </div>
+</div>
+
+
+<div class="page" id="p-ia-act-hub">
+  <span class="eyebrow">Pilotage · Règlement IA</span>
+  <h1 class="page-h">Vue d'ensemble <em>IA Act</em></h1>
+  <p class="page-lead">Point d'entrée du dispositif de conformité au Règlement sur l'IA : cartographier et classer les systèmes, évaluer les risques, documenter et prouver. Avancement et accès direct à chaque module.</p>
+  <div id="iah-snapshot"></div>
+  <div id="iah-cards"><div class="veille-loading">Chargement du dispositif…</div></div>
+  <div class="trait-note">
+    Ce dispositif couvre la classification des systèmes (art. 6, annexe III), le système de gestion des risques (art. 9), la documentation technique (art. 11), la FRIA (art. 27) et les sanctions (art. 99). Voir aussi le cadre normatif pour la correspondance avec le RGPD et l'ISO/IEC 42001. CONSEILPREV peut réaliser un audit approfondi.
   </div>
 </div>
 
@@ -5772,6 +5785,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 'use strict';
 
 var PAGE_META = {
+    'ia-act-hub': { section: 'PILOTAGE', label: 'Vue d\u2019ensemble IA Act' },
     'conformite-globale': { section: 'PILOTAGE', label: 'Indice de conformité global' },
     'cadre-normatif': { section: 'PILOTAGE', label: 'Cadre normatif' },
     'rgpd-hub': { section: 'RGPD & PRIVACY', label: 'Vue d\u2019ensemble' },
@@ -18149,6 +18163,50 @@ window.gcRender = function(){
     + fw('RGPD', 'Conformité RGPD consolidée', rg, 'rgpd-conformite')
     + fw('ISO/IEC 42001', 'Estimé via l\'audit de maturité', iso, 'maturite')
     + '</div>';
+};
+
+/* ══ Hub IA Act — vue d'ensemble + navigation (réutilise le style hub-*) ══ */
+window.IA_HUB_BRICKS = [
+  ["Cartographier & classer", [
+    ["registre","Registre des systèmes IA","Inventaire et documentation technique (art. 11, annexe IV)."],
+    ["simulateur","Classification IA Act","Niveau de risque et obligations (art. 6, annexe III)."],
+    ["carto-uc","Cartographie des cas d'usage","Priorisation des cas d'usage IA à potentiel."]
+  ]],
+  ["Évaluer les risques", [
+    ["matrice","Matrice / Radar des risques","Probabilité × impact, gestion des risques (art. 9)."],
+    ["fria","FRIA — droits fondamentaux","Évaluation d'impact du déployeur (art. 27)."],
+    ["maturite","Audit de maturité IA","Maturité de gouvernance, socle du dispositif."],
+    ["sanctions","Calculateur de sanctions","Exposition aux amendes (art. 99)."]
+  ]],
+  ["Gouverner, documenter & prouver", [
+    ["audit-ia-act","Audit IA Act","Conformité par exigence, système de qualité (art. 17)."],
+    ["templates","Documentation & modèles","Pièces de conformité (art. 11, 18)."],
+    ["parties","Parties prenantes","Chaîne de valeur et responsabilités."],
+    ["roadmap","Plan d'action","Trajectoire de mise en conformité."]
+  ]]
+];
+window.__iahLoaded = false;
+window.iahLoadOnce = function(){ if(window.__iahLoaded) return; window.__iahLoaded=true; iahRender(); };
+window.iahLoad = function(){ iahRender(); };
+window.iahRender = function(){
+  var snap=document.getElementById("iah-snapshot");
+  var ia = (typeof gcAuditPct==="function") ? gcAuditPct() : null;
+  var mat = (typeof gcIsoPct==="function") ? gcIsoPct() : null;
+  function col(v){ return v==null?"var(--muted2)":(v<50?"#c0392b":(v<75?"#c98a00":"var(--green)")); }
+  function txt(v){ return v==null?"—":v+"%"; }
+  if(snap){
+    function mini(v,l){ return '<div class="hub-mini"><div class="hub-mini-bar"><div class="hub-mini-fill" style="width:'+(v==null?0:v)+'%;background:'+col(v)+'"></div></div><div class="hub-mini-l">'+l+' · '+txt(v)+'</div></div>'; }
+    snap.innerHTML='<div class="hub-snap">'
+      + '<div class="hub-index"><div class="hub-index-v" style="color:'+col(ia)+'">'+txt(ia)+'</div><div class="hub-index-l">Avancement<br>Audit IA Act</div></div>'
+      + '<div class="hub-minis">'+mini(ia,"Audit IA Act")+mini(mat,"Maturité / ISO 42001")+'</div></div>';
+  }
+  var box=document.getElementById("iah-cards"); if(!box) return;
+  box.innerHTML = IA_HUB_BRICKS.map(function(g){
+    var cards=g[1].map(function(b){
+      return '<div class="hub-card" onclick="hubGo(\''+b[0]+'\')"><div class="hub-card-t">'+traitEsc(b[1])+'</div><div class="hub-card-d">'+traitEsc(b[2])+'</div><div class="hub-card-go">Ouvrir →</div></div>';
+    }).join("");
+    return '<div class="hub-group"><div class="hub-group-t">'+traitEsc(g[0])+'</div><div class="hub-grid">'+cards+'</div></div>';
+  }).join("");
 };
 
 window.__veille = {data:null, ts:0, loading:false, regs:[], timer:null};
