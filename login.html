@@ -171,6 +171,12 @@ if(new URLSearchParams(location.search).get('verified') === '1'){
 }
 
 var REQUESTED_PLAN = new URLSearchParams(location.search).get('plan') === 'gratuit' ? 'gratuit' : 'pro';
+var __rawPlan = new URLSearchParams(location.search).get('plan');
+function __authDest(){
+  var goPricing = (__rawPlan === 'pro' || __rawPlan === 'entreprise');
+  try{ if(!goPricing && localStorage.getItem('sentinelGotoPricing') === '1') goPricing = true; if(goPricing) localStorage.removeItem('sentinelGotoPricing'); }catch(e){}
+  return goPricing ? '/sentinel?goto=pricing' : '/sentinel';
+}
 if(REQUESTED_PLAN === 'gratuit'){
   switchTab('register');
 }
@@ -190,7 +196,7 @@ document.getElementById('login-form').addEventListener('submit', function(e){
   })
   .then(function(r){ return r.json().then(function(d){ return {status:r.status, data:d}; }); })
   .then(function(res){
-    if(res.status === 200){ window.location.href = '/sentinel'; }
+    if(res.status === 200){ window.location.href = __authDest(); }
     else {
       btn.disabled = false; btn.textContent = 'Se connecter';
       errEl.textContent = res.data.error || 'Identifiants incorrects.';
@@ -301,6 +307,7 @@ function loadCaptcha(){
 
 document.getElementById('register-form').addEventListener('submit', function(e){
   e.preventDefault();
+  try{ if(__rawPlan === 'pro' || __rawPlan === 'entreprise') localStorage.setItem('sentinelGotoPricing','1'); }catch(e){}
   var btn = document.getElementById('register-btn');
   var errEl = document.getElementById('register-error');
   var successEl = document.getElementById('register-success');
