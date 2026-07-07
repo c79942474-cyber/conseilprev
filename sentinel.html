@@ -3572,7 +3572,7 @@ textarea.form-el{min-height:86px;resize:vertical}
           <label style="font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted2);display:block;margin-bottom:4px">SaaS mensuel de référence (€)</label>
           <input type="number" id="raas-saas-monthly" value="350" min="50" max="10000" style="padding:7px 10px;border:1px solid var(--rule2);border-radius:5px;width:120px;font-size:12px">
         </div>
-        <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="raasAdminInit('ai_act')" title="Cree les 7 jalons pour ce client (idempotent, n ecrase jamais un jalon existant)">Initialiser l’échéancier</button> <button class="mat-export-btn" style="background:#6B46C1;color:#fff" onclick="raasAdminInit('rgpd')" title="Cree les 7 jalons RGPD pour ce client (idempotent). Verification adossee a l indice de conformite RGPD.">Initialiser l’échéancier RGPD</button>
+        <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="raasAdminInit('ai_act')" title="Cree les 7 jalons pour ce client (idempotent, n ecrase jamais un jalon existant)">Initialiser l’échéancier</button> <button class="mat-export-btn" style="background:#6B46C1;color:#fff" onclick="raasAdminInit('rgpd')" title="Cree les 7 jalons RGPD pour ce client (idempotent). Verification adossee a l indice de conformite RGPD.">Initialiser l’échéancier RGPD</button> <button class="mat-export-btn" style="background:#0E7C7B;color:#fff" onclick="raasAdminInit('iso42001')" title="Cree les 7 jalons ISO/IEC 42001 pour ce client (idempotent). Verification adossee a la couverture du systeme de management.">Initialiser l’échéancier ISO 42001</button>
         <button class="mat-export-btn" onclick="raasAdminBill()" title="Facture les jalons verifies et genere l echeancier en 2 mensualites">Lancer le cycle de facturation</button>
       </div>
       <div id="raas-admin-msg" style="font-size:12px;margin-bottom:10px"></div>
@@ -16141,14 +16141,15 @@ window.raasAdminLoad = function(){
       function eur(n){ return (n||0).toLocaleString('fr-FR')+'\u202f\u20ac'; }
       var stLbl = {pending:'⏳ En attente', verified:'✅ Vérifié', invoiced:'Facturé'};
       var rows = '';
-      var __msList = d.milestones.slice().sort(function(a,b){
-        var fa = String(a.milestone_id).indexOf('rgpd_')===0?1:0, fb = String(b.milestone_id).indexOf('rgpd_')===0?1:0; return fa-fb;
-      });
-      var __lastFw = null, __env = {'IA Act':0,'RGPD':0}, __ver = {'IA Act':0,'RGPD':0};
-      __msList.forEach(function(m){ var f = String(m.milestone_id).indexOf('rgpd_')===0?'RGPD':'IA Act'; __env[f]+=(m.amount_eur||0); if(m.status==='verified'||m.status==='invoiced') __ver[f]+=(m.amount_eur||0); });
+      function __fwOf(id){ id=String(id); if(id.indexOf('rgpd_')===0) return 'RGPD'; if(id.indexOf('iso_')===0) return 'ISO 42001'; return 'IA Act'; }
+      function __fwOrder(f){ return f==='IA Act'?0:(f==='RGPD'?1:2); }
+      function __fwColor(f){ return f==='RGPD'?'#6B46C1':(f==='ISO 42001'?'#0E7C7B':'var(--ink)'); }
+      var __msList = d.milestones.slice().sort(function(a,b){ return __fwOrder(__fwOf(a.milestone_id))-__fwOrder(__fwOf(b.milestone_id)); });
+      var __lastFw = null, __env = {}, __ver = {};
+      __msList.forEach(function(m){ var f=__fwOf(m.milestone_id); __env[f]=(__env[f]||0)+(m.amount_eur||0); if(m.status==='verified'||m.status==='invoiced') __ver[f]=(__ver[f]||0)+(m.amount_eur||0); });
       __msList.forEach(function(m){
-        var __fw = String(m.milestone_id).indexOf('rgpd_')===0?'RGPD':'IA Act';
-        if(__fw!==__lastFw){ rows += '<tr><td colspan="6" style="background:'+(__fw==='RGPD'?'#6B46C1':'var(--ink)')+';color:#fff;font-weight:700;font-size:11px;padding:7px 10px">Cadre '+__fw+' \u2014 enveloppe '+eur(__env[__fw])+' \u00b7 acquis '+eur(__ver[__fw])+'</td></tr>'; __lastFw=__fw; }
+        var __fw = __fwOf(m.milestone_id);
+        if(__fw!==__lastFw){ rows += '<tr><td colspan="6" style="background:'+__fwColor(__fw)+';color:#fff;font-weight:700;font-size:11px;padding:7px 10px">Cadre '+__fw+' \u2014 enveloppe '+eur(__env[__fw]||0)+' \u00b7 acquis '+eur(__ver[__fw]||0)+'</td></tr>'; __lastFw=__fw; }
         var canVerify = (m.status === 'pending');
         rows += '<tr>'
           + '<td>'+m.label+'</td>'
@@ -16190,7 +16191,7 @@ window.raasAdminLoad = function(){
 };
 
 window.raasAdminInit = function(framework){
-  var fw = (framework === 'rgpd') ? 'rgpd' : 'ai_act';
+  var fw = (framework === 'rgpd') ? 'rgpd' : ((framework === 'iso42001') ? 'iso42001' : 'ai_act');
   var sel = document.getElementById('raas-client-select');
   var saas = parseFloat((document.getElementById('raas-saas-monthly')||{value:'350'}).value||'350');
   var msg = document.getElementById('raas-admin-msg');
@@ -16213,10 +16214,11 @@ window.raasAdminInit = function(framework){
 
 window.raasAdminVerify = function(milestoneId, threshold){
   var __isRgpd = String(milestoneId).indexOf('rgpd_')===0;
+  var __isIso = String(milestoneId).indexOf('iso_')===0;
   var sel = document.getElementById('raas-client-select');
   var msg = document.getElementById('raas-admin-msg');
   if(!sel || !sel.value) return;
-  var score = prompt(__isRgpd ? 'Indice de conformit\u00e9 RGPD constat\u00e9 pour ce client (0\u2013100, seuil requis\u00a0: '+threshold+')\u00a0:' : 'Score Sentinel constat\u00e9 pour ce jalon (seuil requis\u00a0: '+threshold+')\u00a0:');
+  var score = prompt(__isIso ? 'Couverture ISO/IEC 42001 constat\u00e9e pour ce client (0\u2013100, seuil requis\u00a0: '+threshold+')\u00a0:' : (__isRgpd ? 'Indice de conformit\u00e9 RGPD constat\u00e9 pour ce client (0\u2013100, seuil requis\u00a0: '+threshold+')\u00a0:' : 'Score Sentinel constat\u00e9 pour ce jalon (seuil requis\u00a0: '+threshold+')\u00a0:'));
   if(score === null) return;
   var evidence = prompt('Évidence documentaire (obligatoire — référence du document, lien, constat)\u00a0:');
   if(evidence === null) return;
@@ -18085,10 +18087,13 @@ window.hubRender = function(){
 ["rgpd-hub","rgpd-traitements","rgpd-cartographie","rgpd-aipd","rgpd-pbd","rgpd-doc","rgpd-sensibilisation","rgpd-conformite"].forEach(function(pid){ window["gnav_"+pid]=function(){ if(typeof hubGo==="function"){ hubGo(pid); } else { go(pid); } }; });
 /* Cellule portefeuille : jalons en attente par cadre (IA Act / RGPD) */
 window.raasMsCell = function(p){
-  if(p.milestones_pending_ai===undefined && p.milestones_pending_rgpd===undefined) return raasMsCell(p);
-  var a=p.milestones_pending_ai||0, r=p.milestones_pending_rgpd||0;
-  if(!(a+r)) return '\u2014';
-  return a+' IA'+(r?' <span style=\"color:#6B46C1\">\u00b7 '+r+' RGPD</span>':'');
+  if(p.milestones_pending_ai===undefined && p.milestones_pending_rgpd===undefined && p.milestones_pending_iso===undefined) return (p.milestones_pending||'\u2014');
+  var a=p.milestones_pending_ai||0, r=p.milestones_pending_rgpd||0, i=p.milestones_pending_iso||0;
+  if(!(a+r+i)) return '\u2014';
+  var parts=[a+' IA'];
+  if(r) parts.push('<span style="color:#6B46C1">'+r+' RGPD</span>');
+  if(i) parts.push('<span style="color:#0E7C7B">'+i+' ISO</span>');
+  return parts.join(' \u00b7 ');
 };
 /* ══ Indice de conformité global — consolide IA Act / RGPD / ISO 42001 ══ */
 window.gcAuditPct = function(){
