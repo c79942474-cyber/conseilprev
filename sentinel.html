@@ -16100,6 +16100,8 @@ function sentinelLockPrompt(){
   var txt = (plan === 'pro')
     ? 'Ce module relève de l’offre Entreprise (gestion multi-clients et pilotage par résultats). Comparez les formules pour y accéder.'
     : 'Ce module n’est pas inclus dans votre plan Gratuit. L’accès complet est ouvert après souscription et confirmation de paiement.';
+  var nextPlan = (plan === 'pro') ? 'entreprise' : 'pro';
+  var nextLabel = (nextPlan === 'entreprise') ? 'Entreprise' : 'Pro';
   var m = document.createElement('div');
   m.id = 'sentinel-lock-modal';
   m.style.cssText = 'position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5)';
@@ -16107,12 +16109,20 @@ function sentinelLockPrompt(){
     + '<div style="font-size:30px;margin-bottom:10px">🔒</div>'
     + '<div style="font-size:15px;font-weight:700;color:var(--ink,#111);margin-bottom:8px">Module verrouillé</div>'
     + '<div style="font-size:13px;color:var(--muted,#666);line-height:1.55;margin-bottom:18px">' + txt + '</div>'
-    + '<a href="/tarifications" style="display:inline-block;background:var(--accent);color:#fff;padding:10px 18px;border-radius:9px;font-size:13px;font-weight:700;text-decoration:none">Comparer les formules</a>'
+    + '<button onclick="sentinelCheckout(\''+nextPlan+'\')" style="display:inline-block;background:var(--accent);color:#fff;padding:10px 18px;border-radius:9px;font-size:13px;font-weight:700;border:none;cursor:pointer">Souscrire l\u2019offre '+nextLabel+'</button>'
+    + '<div style="margin-top:10px"><a href="/tarifications" style="font-size:12px;color:var(--accent);text-decoration:none">Comparer les formules</a></div>'
     + '<div style="margin-top:12px"><span onclick="var e=document.getElementById(\'sentinel-lock-modal\');if(e&&e.parentNode)e.parentNode.removeChild(e);" style="font-size:12px;color:var(--muted,#888);cursor:pointer">Fermer</span></div>'
     + '</div>';
   m.addEventListener('click', function(e){ if(e.target === m && m.parentNode) m.parentNode.removeChild(m); });
   document.body.appendChild(m);
 }
+
+window.sentinelCheckout = function(plan){
+  fetch('/api/sentinel/checkout', {method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json'}, body:JSON.stringify({plan:plan})})
+    .then(function(r){ return r.json().then(function(j){ return j; }).catch(function(){ return {}; }); })
+    .then(function(j){ if(j && j.url){ window.location.href = j.url; } else { window.location.href = '/tarifications'; } })
+    .catch(function(){ window.location.href = '/tarifications'; });
+};
 
 var _planOrigGo = window.go;
 window.go = function(id){
