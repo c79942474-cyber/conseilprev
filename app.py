@@ -3131,6 +3131,7 @@ def sentauth_init_db():
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS verify_email_token TEXT")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS verify_email_expire TEXT")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS stripe_customer_id TEXT")
+            cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS stripe_subscription_id TEXT")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS rgpd_consenti BOOLEAN DEFAULT FALSE")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS rgpd_consenti_date TEXT")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS plan TEXT DEFAULT 'gratuit'")
@@ -4060,6 +4061,12 @@ def stripe_webhook():
                 _billing_set_customer(int(cid), cust)
             except Exception:
                 pass
+        sub = obj.get('subscription')
+        if cid and sub:
+            try:
+                _billing_set_subscription(int(cid), sub)
+            except Exception:
+                pass
     elif etype == 'invoice.paid':
         numero = meta.get('numero'); ech = meta.get('echeance')
         if numero and ech:
@@ -4597,6 +4604,10 @@ def clients_invoices_issue():
         else:
             email_error = 'Aucun email KYC valide'
     conn.close()
+    try:
+        _billing_cancel_subscription(client_id)
+    except Exception:
+        pass
     return jsonify({'ok': True, 'issued_count': len(issued), 'invoices': issued,
                     'email_sent': email_sent, 'email_error': email_error})
 
@@ -7031,6 +7042,59 @@ def _stripe_event_seen(event_id):
         return False
 
 
+def _billing_set_subscription(client_id, sub_id):
+    """Memorise l'identifiant d'abonnement Stripe du client (pour pouvoir le
+    resilier lors du passage a la facturation par resultats)."""
+    try:
+        conn = registre_get_db(); cur = conn.cursor()
+        cur.execute(registre_sql('UPDATE clients SET stripe_subscription_id=%s WHERE id=%s',
+                                 'UPDATE clients SET stripe_subscription_id=? WHERE id=?'),
+                    (str(sub_id), int(client_id)))
+        conn.commit()
+        try: conn.close()
+        except Exception: pass
+    except Exception:
+        pass
+
+
+def _billing_cancel_subscription(client_id):
+    """Resilie l'abonnement Stripe d'un client. Exclusion du cumul : un client
+    est facture soit par abonnement recurrent, soit par resultats (echeances RaAS),
+    jamais les deux. Des qu'une facture RaAS est emise, l'abonnement est resilie.
+    Idempotent (ne fait rien si aucun abonnement)."""
+    secret = os.environ.get('STRIPE_SECRET_KEY')
+    try:
+        conn = registre_get_db(); cur = conn.cursor()
+        cur.execute(registre_sql('SELECT stripe_subscription_id FROM clients WHERE id=%s',
+                                 'SELECT stripe_subscription_id FROM clients WHERE id=?'), (int(client_id),))
+        row = cur.fetchone()
+        sub = (dict(row).get('stripe_subscription_id') if row else None)
+        if not sub:
+            try: conn.close()
+            except Exception: pass
+            return
+        if secret:
+            try:
+                import stripe
+                stripe.api_key = secret
+                try:
+                    stripe.Subscription.delete(sub)
+                except Exception:
+                    try:
+                        stripe.Subscription.cancel(sub)
+                    except Exception:
+                        pass
+            except Exception:
+                pass
+        cur.execute(registre_sql('UPDATE clients SET stripe_subscription_id=NULL WHERE id=%s',
+                                 'UPDATE clients SET stripe_subscription_id=NULL WHERE id=?'), (int(client_id),))
+        conn.commit()
+        try: conn.close()
+        except Exception: pass
+    except Exception:
+        pass
+
+
 def _billing_set_customer(client_id, customer_id):
     conn = registre_get_db(); cur = conn.cursor()
     cur.execute(registre_sql('UPDATE clients SET stripe_customer_id=%s WHERE id=%s',
@@ -7173,15 +7237,32 @@ def clients_billing_run():
         except Exception: pass
         return jsonify({'ok': False, 'error': "Module Stripe indisponible.", 'configured': False}), 501
     stripe.api_key = secret
+    try:
+        _lim = int(d.get('limit', 200))
+    except (TypeError, ValueError):
+        _lim = 200
+    _batch = due[:max(1, _lim)]
+    _remaining = len(due) - len(_batch)
+    _cids = list({it['client_id'] for it in _batch})
+    _cust_map = {}
+    if _cids:
+        _ph = ','.join(['%s' if REGISTRE_USE_PG else '?'] * len(_cids))
+        cur.execute('SELECT id, stripe_customer_id FROM clients WHERE id IN (' + _ph + ')', tuple(_cids))
+        for _r in cur.fetchall():
+            _r = dict(_r); _cust_map[_r['id']] = _r.get('stripe_customer_id')
     results = []
-    for item in due:
-        cur.execute(registre_sql('SELECT stripe_customer_id FROM clients WHERE id=%s',
-                                 'SELECT stripe_customer_id FROM clients WHERE id=?'), (item['client_id'],))
-        crow = cur.fetchone()
-        cust = (dict(crow).get('stripe_customer_id') if crow else None)
+    _cancelled = set()
+    for item in _batch:
+        cust = _cust_map.get(item['client_id'])
         if not cust:
             results.append({'numero': item['numero'], 'echeance': item['echeance'], 'ok': False, 'error': 'Aucun moyen de paiement Stripe enregistre'})
             continue
+        if item['client_id'] not in _cancelled:
+            try:
+                _billing_cancel_subscription(item['client_id'])
+            except Exception:
+                pass
+            _cancelled.add(item['client_id'])
         try:
             _ikey = 'raas-' + str(item['numero']) + '-e' + str(item['echeance'])
             stripe.InvoiceItem.create(customer=cust, amount=int(item['montant']) * 100, currency='eur',
@@ -7201,7 +7282,7 @@ def clients_billing_run():
     conn.commit()
     try: conn.close()
     except Exception: pass
-    return jsonify({'ok': True, 'mode': 'execute', 'processed': results})
+    return jsonify({'ok': True, 'mode': 'execute', 'processed': results, 'remaining': _remaining})
 
 
 
