@@ -3986,15 +3986,24 @@ def sentinel_checkout():
     stripe.api_key = secret
     base = request.host_url.rstrip('/')
     try:
-        sess = stripe.checkout.Session.create(
-            mode='subscription',
-            line_items=[{'price': price_id, 'quantity': 1}],
-            customer_email=client.get('email'),
-            client_reference_id=str(client['id']),
-            metadata={'client_id': str(client['id']), 'plan': plan},
-            success_url=base + '/sentinel?activation=ok',
-            cancel_url=base + '/tarifications',
-        )
+        _existing_customer = None
+        try:
+            _cc = registre_get_db(); _ccur = _cc.cursor()
+            _ccur.execute(registre_sql('SELECT stripe_customer_id FROM clients WHERE id=%s', 'SELECT stripe_customer_id FROM clients WHERE id=?'), (int(client['id']),))
+            _crow = _ccur.fetchone()
+            if _crow: _existing_customer = dict(_crow).get('stripe_customer_id')
+            _cc.close()
+        except Exception:
+            _existing_customer = None
+        _sk = dict(mode='subscription', line_items=[{'price': price_id, 'quantity': 1}],
+                   client_reference_id=str(client['id']),
+                   metadata={'client_id': str(client['id']), 'plan': plan},
+                   success_url=base + '/sentinel?activation=ok', cancel_url=base + '/tarifications')
+        if _existing_customer:
+            _sk['customer'] = _existing_customer
+        else:
+            _sk['customer_email'] = client.get('email')
+        sess = stripe.checkout.Session.create(**_sk)
         return jsonify({'url': sess.url})
     except Exception:
         return jsonify({'error': "Echec de creation de la session de paiement."}), 502
@@ -4017,6 +4026,8 @@ def stripe_webhook():
         event = stripe.Webhook.construct_event(payload, sig, secret)
     except Exception:
         return jsonify({'error': "Signature invalide."}), 400
+    if _stripe_event_seen(event.get('id')):
+        return jsonify({'received': True, 'duplicate': True}), 200
     etype = event.get('type')
     obj = (event.get('data') or {}).get('object') or {}
     meta = obj.get('metadata') or {}
@@ -4026,6 +4037,21 @@ def stripe_webhook():
         if cid and plan in ('pro', 'entreprise'):
             try:
                 activate_client_plan(int(cid), plan)
+            except Exception:
+                pass
+            try:
+                _conn_e = registre_get_db(); _cur_e = _conn_e.cursor()
+                _cur_e.execute(registre_sql('SELECT email, nom_entreprise FROM clients WHERE id=%s', 'SELECT email, nom_entreprise FROM clients WHERE id=?'), (int(cid),))
+                _ce = _cur_e.fetchone()
+                try: _conn_e.close()
+                except Exception: pass
+                _ce = dict(_ce) if _ce else {}
+                if _ce.get('email'):
+                    _plabel = 'Entreprise' if plan == 'entreprise' else 'Pro'
+                    send_email_smart(_ce['email'], _ce.get('nom_entreprise') or 'Client',
+                        'Votre offre Sentinel ' + _plabel + ' est activee',
+                        '<p>Bonjour,</p><p>Votre paiement a bien ete recu et votre offre <strong>Sentinel ' + _plabel + '</strong> est desormais active. Vous avez acces a l ensemble des modules correspondants.</p><p>L equipe CONSEILPREV</p>',
+                        tags=['activation'])
             except Exception:
                 pass
         cust = obj.get('customer')
@@ -6978,6 +7004,33 @@ threading.Thread(target=_news_warmup, daemon=True).start()
 # A valider en mode TEST Stripe avant production. CONSEILPREV/Sentinel.
 # ══════════════════════════════════════════════════════════
 
+def _stripe_event_seen(event_id):
+    """Deduplication des rejeux Stripe : retourne True si l'evenement a deja ete
+    traite. Stripe rejoue ses notifications ; sans cela, un meme paiement pourrait
+    etre traite deux fois."""
+    if not event_id:
+        return False
+    try:
+        conn = registre_get_db(); cur = conn.cursor()
+        cur.execute("CREATE TABLE IF NOT EXISTS stripe_events (event_id TEXT PRIMARY KEY, processed_at TEXT)")
+        conn.commit()
+        cur.execute(registre_sql('SELECT 1 FROM stripe_events WHERE event_id=%s',
+                                 'SELECT 1 FROM stripe_events WHERE event_id=?'), (event_id,))
+        if cur.fetchone():
+            try: conn.close()
+            except Exception: pass
+            return True
+        cur.execute(registre_sql('INSERT INTO stripe_events (event_id, processed_at) VALUES (%s, %s)',
+                                 'INSERT INTO stripe_events (event_id, processed_at) VALUES (?, ?)'),
+                    (str(event_id), datetime.utcnow().isoformat()))
+        conn.commit()
+        try: conn.close()
+        except Exception: pass
+        return False
+    except Exception:
+        return False
+
+
 def _billing_set_customer(client_id, customer_id):
     conn = registre_get_db(); cur = conn.cursor()
     cur.execute(registre_sql('UPDATE clients SET stripe_customer_id=%s WHERE id=%s',
@@ -7068,6 +7121,16 @@ def _billing_on_invoice_failed(numero, echeance, client_id=None):
                                      "UPDATE client_lifecycle SET sante='en_retard', updated_at=? WHERE client_id=?"),
                         (datetime.utcnow().isoformat(), int(client_id)))
             conn.commit()
+            try:
+                cur.execute(registre_sql('SELECT email, nom_entreprise FROM clients WHERE id=%s', 'SELECT email, nom_entreprise FROM clients WHERE id=?'), (int(client_id),))
+                _fe = cur.fetchone(); _fe = dict(_fe) if _fe else {}
+                if _fe.get('email'):
+                    send_email_smart(_fe['email'], _fe.get('nom_entreprise') or 'Client',
+                        'Echec de prelevement - facture ' + str(numero),
+                        '<p>Bonjour,</p><p>Le prelevement de l echeance ' + str(echeance) + ' de la facture ' + str(numero) + ' n a pas abouti. Nous reviendrons vers vous ; vous pouvez aussi verifier votre moyen de paiement.</p><p>L equipe CONSEILPREV</p>',
+                        tags=['paiement-echec'])
+            except Exception:
+                pass
             try: conn.close()
             except Exception: pass
         except Exception:
@@ -7120,10 +7183,13 @@ def clients_billing_run():
             results.append({'numero': item['numero'], 'echeance': item['echeance'], 'ok': False, 'error': 'Aucun moyen de paiement Stripe enregistre'})
             continue
         try:
+            _ikey = 'raas-' + str(item['numero']) + '-e' + str(item['echeance'])
             stripe.InvoiceItem.create(customer=cust, amount=int(item['montant']) * 100, currency='eur',
-                                      description='%s - echeance %s' % (item['numero'], item['echeance']))
+                                      description='%s - echeance %s' % (item['numero'], item['echeance']),
+                                      idempotency_key=_ikey + '-item')
             inv = stripe.Invoice.create(customer=cust, auto_advance=True, collection_method='charge_automatically',
-                                        metadata={'numero': item['numero'], 'echeance': str(item['echeance']), 'client_id': str(item['client_id'])})
+                                        metadata={'numero': item['numero'], 'echeance': str(item['echeance']), 'client_id': str(item['client_id'])},
+                                        idempotency_key=_ikey + '-inv')
             try:
                 stripe.Invoice.finalize_invoice(inv['id'])
             except Exception:
