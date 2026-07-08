@@ -3130,6 +3130,7 @@ def sentauth_init_db():
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS invitation_expire TEXT")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS verify_email_token TEXT")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS verify_email_expire TEXT")
+            cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS stripe_customer_id TEXT")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS rgpd_consenti BOOLEAN DEFAULT FALSE")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS rgpd_consenti_date TEXT")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS plan TEXT DEFAULT 'gratuit'")
@@ -4016,14 +4017,35 @@ def stripe_webhook():
         event = stripe.Webhook.construct_event(payload, sig, secret)
     except Exception:
         return jsonify({'error': "Signature invalide."}), 400
-    if event.get('type') == 'checkout.session.completed':
-        obj = (event.get('data') or {}).get('object') or {}
-        meta = obj.get('metadata') or {}
+    etype = event.get('type')
+    obj = (event.get('data') or {}).get('object') or {}
+    meta = obj.get('metadata') or {}
+    if etype == 'checkout.session.completed':
         cid = meta.get('client_id') or obj.get('client_reference_id')
         plan = meta.get('plan')
         if cid and plan in ('pro', 'entreprise'):
             try:
                 activate_client_plan(int(cid), plan)
+            except Exception:
+                pass
+        cust = obj.get('customer')
+        if cid and cust:
+            try:
+                _billing_set_customer(int(cid), cust)
+            except Exception:
+                pass
+    elif etype == 'invoice.paid':
+        numero = meta.get('numero'); ech = meta.get('echeance')
+        if numero and ech:
+            try:
+                _billing_on_invoice_paid(numero, int(ech))
+            except Exception:
+                pass
+    elif etype == 'invoice.payment_failed':
+        numero = meta.get('numero'); ech = meta.get('echeance'); cid = meta.get('client_id')
+        if numero and ech:
+            try:
+                _billing_on_invoice_failed(numero, int(ech), int(cid) if cid else None)
             except Exception:
                 pass
     return jsonify({'received': True}), 200
@@ -4504,7 +4526,10 @@ def clients_invoices_issue():
         numero = 'F%d-%d-%03d' % (year, client_id, seq)
         amount = int(m.get('amount_eur') or 0)
         half = round(amount / 2)
-        due = [{'echeance': 1, 'montant': half}, {'echeance': 2, 'montant': amount - half}]
+        _due1 = datetime.utcnow().date().isoformat()
+        _due2 = (datetime.utcnow() + timedelta(days=30)).date().isoformat()
+        due = [{'echeance': 1, 'montant': half, 'due': _due1, 'status': 'a_venir'},
+               {'echeance': 2, 'montant': amount - half, 'due': _due2, 'status': 'a_venir'}]
         cur.execute(registre_sql(
             'INSERT INTO raas_invoices (client_id, numero, milestone_id, amount_eur, installments, status, due_json, issued_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)',
             'INSERT INTO raas_invoices (client_id, numero, milestone_id, amount_eur, installments, status, due_json, issued_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
@@ -6941,6 +6966,178 @@ def _news_warmup():
         logger.warning(f"[warmup] Echec pre-chargement RSS : {exc}")
 
 threading.Thread(target=_news_warmup, daemon=True).start()
+
+# ══════════════════════════════════════════════════════════
+# FACTURATION ECHELONNEE PAR RESULTATS — LIEN Tarification par resultats /
+# Gestion des clients / Stripe. Chaque echeance du due_json d'une facture RaAS
+# (issue d'un jalon verifie) est prelevee via Stripe lorsqu'elle arrive a terme.
+# Cycle CONSEILPREV : preview (liste des echeances dues, sans prelevement) ou
+# execute (prelevement Stripe par echeance, idempotent, desactive si Stripe non
+# configure). Les reactions Stripe (invoice.paid / payment_failed) mettent a jour
+# l'echeance, la facture, le cycle de vie et creent une relance en cas d'echec.
+# A valider en mode TEST Stripe avant production. CONSEILPREV/Sentinel.
+# ══════════════════════════════════════════════════════════
+
+def _billing_set_customer(client_id, customer_id):
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql('UPDATE clients SET stripe_customer_id=%s WHERE id=%s',
+                             'UPDATE clients SET stripe_customer_id=? WHERE id=?'),
+                (str(customer_id), int(client_id)))
+    conn.commit()
+    try: conn.close()
+    except Exception: pass
+
+
+def _billing_scan_due(cur, only_client=None):
+    """Liste les echeances dues (date <= aujourd'hui, statut 'a_venir') sur les
+    factures RaAS non soldees."""
+    import json as _json
+    today = datetime.utcnow().date().isoformat()
+    q = "SELECT id, client_id, numero, amount_eur, due_json, status FROM raas_invoices WHERE status != 'payee'"
+    params = ()
+    if only_client is not None:
+        q += (" AND client_id=%s" if REGISTRE_USE_PG else " AND client_id=?")
+        params = (only_client,)
+    cur.execute(q, params)
+    rows = [dict(r) for r in cur.fetchall()]
+    due = []
+    for inv in rows:
+        try:
+            ech = _json.loads(inv.get('due_json') or '[]')
+        except Exception:
+            ech = []
+        for e in ech:
+            st = e.get('status') or 'a_venir'
+            d = e.get('due')
+            if st == 'a_venir' and (d is None or d <= today):
+                due.append({'numero': inv['numero'], 'client_id': inv['client_id'],
+                            'echeance': e.get('echeance'), 'montant': e.get('montant'), 'due': d})
+    return due
+
+
+def _billing_update_echeance(numero, echeance, status, stripe_invoice_id=None):
+    """Met a jour le statut d'une echeance dans due_json ; solde la facture si
+    toutes les echeances sont payees."""
+    import json as _json
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql('SELECT due_json FROM raas_invoices WHERE numero=%s',
+                             'SELECT due_json FROM raas_invoices WHERE numero=?'), (numero,))
+    row = cur.fetchone()
+    if not row:
+        try: conn.close()
+        except Exception: pass
+        return False
+    row = dict(row)
+    try:
+        ech = _json.loads(row.get('due_json') or '[]')
+    except Exception:
+        ech = []
+    for e in ech:
+        if e.get('echeance') == echeance:
+            e['status'] = status
+            if stripe_invoice_id:
+                e['stripe_invoice_id'] = stripe_invoice_id
+    cur.execute(registre_sql('UPDATE raas_invoices SET due_json=%s WHERE numero=%s',
+                             'UPDATE raas_invoices SET due_json=? WHERE numero=?'),
+                (_json.dumps(ech), numero))
+    if ech and all((e.get('status') == 'payee') for e in ech):
+        cur.execute(registre_sql("UPDATE raas_invoices SET status='payee', paid_at=%s WHERE numero=%s",
+                                 "UPDATE raas_invoices SET status='payee', paid_at=? WHERE numero=?"),
+                    (datetime.utcnow().isoformat(), numero))
+    conn.commit()
+    try: conn.close()
+    except Exception: pass
+    return True
+
+
+def _billing_on_invoice_paid(numero, echeance):
+    _billing_update_echeance(numero, echeance, 'payee')
+
+
+def _billing_on_invoice_failed(numero, echeance, client_id=None):
+    _billing_update_echeance(numero, echeance, 'echec')
+    if client_id:
+        try:
+            conn = registre_get_db(); cur = conn.cursor()
+            cur.execute(registre_sql(
+                "INSERT INTO client_relances (client_id, type, objet, canal, priorite, due_date, status, related_ref, created_at) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                "INSERT INTO client_relances (client_id, type, objet, canal, priorite, due_date, status, related_ref, created_at) VALUES (?,?,?,?,?,?,?,?,?)"),
+                (int(client_id), 'paiement', 'Echec de prelevement - echeance %s de %s' % (echeance, numero),
+                 'email', 'haute', datetime.utcnow().date().isoformat(), 'planifiee', numero, datetime.utcnow().isoformat()))
+            cur.execute(registre_sql("UPDATE client_lifecycle SET sante='en_retard', updated_at=%s WHERE client_id=%s",
+                                     "UPDATE client_lifecycle SET sante='en_retard', updated_at=? WHERE client_id=?"),
+                        (datetime.utcnow().isoformat(), int(client_id)))
+            conn.commit()
+            try: conn.close()
+            except Exception: pass
+        except Exception:
+            pass
+
+
+@app.route('/api/clients/billing-run', methods=['POST'])
+def clients_billing_run():
+    """Cycle de facturation echelonnee (CONSEILPREV).
+    mode=preview (defaut) : liste les echeances dues, sans prelevement.
+    mode=execute (+confirm=true) : cree une facture Stripe par echeance due,
+    prelevee automatiquement. Desactive si Stripe non configure."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    d = request.get_json(silent=True) or {}
+    mode = d.get('mode', 'preview')
+    try:
+        only_client = int(d.get('client_id')) if d.get('client_id') is not None else None
+    except (TypeError, ValueError):
+        only_client = None
+    conn = registre_get_db(); cur = conn.cursor()
+    due = _billing_scan_due(cur, only_client)
+    if mode != 'execute':
+        try: conn.close()
+        except Exception: pass
+        return jsonify({'ok': True, 'mode': 'preview', 'due_count': len(due), 'echeances': due})
+    if not d.get('confirm'):
+        try: conn.close()
+        except Exception: pass
+        return jsonify({'ok': False, 'error': "Confirmation requise (confirm=true) pour declencher les prelevements."}), 400
+    secret = os.environ.get('STRIPE_SECRET_KEY')
+    if not secret:
+        try: conn.close()
+        except Exception: pass
+        return jsonify({'ok': False, 'error': "Paiement Stripe non configure.", 'configured': False, 'echeances': due}), 501
+    try:
+        import stripe
+    except Exception:
+        try: conn.close()
+        except Exception: pass
+        return jsonify({'ok': False, 'error': "Module Stripe indisponible.", 'configured': False}), 501
+    stripe.api_key = secret
+    results = []
+    for item in due:
+        cur.execute(registre_sql('SELECT stripe_customer_id FROM clients WHERE id=%s',
+                                 'SELECT stripe_customer_id FROM clients WHERE id=?'), (item['client_id'],))
+        crow = cur.fetchone()
+        cust = (dict(crow).get('stripe_customer_id') if crow else None)
+        if not cust:
+            results.append({'numero': item['numero'], 'echeance': item['echeance'], 'ok': False, 'error': 'Aucun moyen de paiement Stripe enregistre'})
+            continue
+        try:
+            stripe.InvoiceItem.create(customer=cust, amount=int(item['montant']) * 100, currency='eur',
+                                      description='%s - echeance %s' % (item['numero'], item['echeance']))
+            inv = stripe.Invoice.create(customer=cust, auto_advance=True, collection_method='charge_automatically',
+                                        metadata={'numero': item['numero'], 'echeance': str(item['echeance']), 'client_id': str(item['client_id'])})
+            try:
+                stripe.Invoice.finalize_invoice(inv['id'])
+            except Exception:
+                pass
+            _billing_update_echeance(item['numero'], item['echeance'], 'envoyee', inv.get('id'))
+            results.append({'numero': item['numero'], 'echeance': item['echeance'], 'ok': True, 'stripe_invoice': inv.get('id')})
+        except Exception:
+            results.append({'numero': item['numero'], 'echeance': item['echeance'], 'ok': False, 'error': 'Echec de creation de la facture Stripe'})
+    conn.commit()
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True, 'mode': 'execute', 'processed': results})
+
+
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
