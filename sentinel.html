@@ -3595,6 +3595,16 @@ textarea.form-el{min-height:86px;resize:vertical}
       </div>
       <div id="raas-admin-msg" style="font-size:12px;margin-bottom:10px"></div>
       <div id="raas-admin-table"></div>
+      <div style="margin-top:18px;border:1px solid var(--rule2);border-radius:12px;padding:16px 18px;background:var(--white)">
+        <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Cycle de facturation — prélèvements Stripe</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Prélève les échéances arrivées à terme via Stripe. L’aperçu ne prélève rien ; le déclenchement exige une confirmation et reste sans effet tant que Stripe n’est pas configuré.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+          <button class="mat-export-btn" onclick="billingRunPreview()" title="Liste les échéances dues, sans prélèvement">Prévisualiser les échéances dues</button>
+          <button class="mat-export-btn" style="background:var(--accent);color:#fff" onclick="billingRunExecute()" title="Émet une facture Stripe par échéance due (prélèvement réel)">Déclencher les prélèvements</button>
+        </div>
+        <div id="billing-run-msg" style="font-size:12px;margin-bottom:8px"></div>
+        <div id="billing-run-out"></div>
+      </div>
       <div id="raas-admin-expert"></div>
     </div>
   </div>
@@ -18230,6 +18240,58 @@ window.iahRender = function(){
 /* Ouverture directe d'une page via ?goto= (ex. redirection depuis la connexion vers la tarification) */
 window.sentinelGotoDeepLink = function(){ try{ var g=new URLSearchParams(location.search).get('goto'); if(g){ setTimeout(function(){ if(typeof hubGo==='function') hubGo(g); else if(typeof go==='function') go(g); }, 350); } }catch(e){} };
 if(document.readyState==='complete') window.sentinelGotoDeepLink(); else window.addEventListener('load', window.sentinelGotoDeepLink);
+/* ══ Cycle de facturation échelonnée — prélèvements Stripe (Gestion des clients) ══ */
+window.billingRenderList = function(out, list){
+  if(!out) return;
+  if(!list || !list.length){ out.innerHTML = '<div style="padding:12px;color:var(--muted);font-size:12px">Aucune échéance due.</div>'; return; }
+  var rows = list.map(function(e){
+    return '<tr><td style="padding:6px 8px;border-bottom:1px solid var(--rule)">'+(e.numero||'')+'</td><td style="padding:6px 8px;border-bottom:1px solid var(--rule);text-align:center">#'+(e.echeance||'')+'</td><td style="padding:6px 8px;border-bottom:1px solid var(--rule);text-align:right">'+(e.montant||0)+' €</td><td style="padding:6px 8px;border-bottom:1px solid var(--rule)">'+(e.due||'')+'</td><td style="padding:6px 8px;border-bottom:1px solid var(--rule)">client '+(e.client_id||'')+'</td></tr>';
+  }).join('');
+  out.innerHTML = '<table style="width:100%;border-collapse:collapse;font-size:12px"><thead><tr><th style="text-align:left;padding:6px 8px;color:var(--muted);font-size:10px;text-transform:uppercase">Facture</th><th style="padding:6px 8px;color:var(--muted);font-size:10px">Éch.</th><th style="padding:6px 8px;color:var(--muted);font-size:10px;text-align:right">Montant</th><th style="text-align:left;padding:6px 8px;color:var(--muted);font-size:10px">Échéance</th><th style="text-align:left;padding:6px 8px;color:var(--muted);font-size:10px">Client</th></tr></thead><tbody>'+rows+'</tbody></table>';
+};
+window.billingRenderResults = function(out, list){
+  if(!out) return;
+  if(!list || !list.length){ out.innerHTML = '<div style="padding:12px;color:var(--muted);font-size:12px">Aucune échéance traitée.</div>'; return; }
+  var rows = list.map(function(e){
+    var col = e.ok ? 'var(--green,#0E7C7B)' : 'var(--accent)';
+    var txt = e.ok ? 'Prélèvement émis' : (e.error || 'Échec');
+    return '<tr><td style="padding:6px 8px;border-bottom:1px solid var(--rule)">'+(e.numero||'')+'</td><td style="padding:6px 8px;border-bottom:1px solid var(--rule);text-align:center">#'+(e.echeance||'')+'</td><td style="padding:6px 8px;border-bottom:1px solid var(--rule);color:'+col+'">'+txt+'</td></tr>';
+  }).join('');
+  out.innerHTML = '<table style="width:100%;border-collapse:collapse;font-size:12px"><thead><tr><th style="text-align:left;padding:6px 8px;color:var(--muted);font-size:10px;text-transform:uppercase">Facture</th><th style="padding:6px 8px;color:var(--muted);font-size:10px">Éch.</th><th style="text-align:left;padding:6px 8px;color:var(--muted);font-size:10px">Résultat</th></tr></thead><tbody>'+rows+'</tbody></table>';
+};
+window.billingRunPreview = function(){
+  var msg = document.getElementById('billing-run-msg');
+  var out = document.getElementById('billing-run-out');
+  if(msg) msg.textContent = 'Chargement…';
+  fetch('/api/clients/billing-run', {method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json'}, body:JSON.stringify({mode:'preview'})})
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if(!d || !d.ok){ if(msg) msg.innerHTML = '<span style="color:var(--accent)">'+((d&&d.error)||'Erreur')+'</span>'; return; }
+      if(msg) msg.textContent = d.due_count + ' échéance(s) due(s) à ce jour.';
+      billingRenderList(out, d.echeances);
+    })
+    .catch(function(){ if(msg) msg.textContent = 'Erreur réseau.'; });
+};
+window.billingRunExecute = function(){
+  if(!window.confirm('Déclencher les prélèvements Stripe pour toutes les échéances dues ? Cette action prélève réellement les clients.')) return;
+  var msg = document.getElementById('billing-run-msg');
+  var out = document.getElementById('billing-run-out');
+  if(msg) msg.textContent = 'Traitement…';
+  fetch('/api/clients/billing-run', {method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json'}, body:JSON.stringify({mode:'execute', confirm:true})})
+    .then(function(r){ return r.json().then(function(j){ return {status:r.status, j:j}; }).catch(function(){ return {status:r.status, j:{}}; }); })
+    .then(function(res){
+      var d = res.j || {};
+      if(!d.ok){
+        if(res.status === 501){ if(msg) msg.innerHTML = '<span style="color:var(--accent)">Stripe n\u2019est pas encore configuré : aucun prélèvement effectué.</span>'; if(out) billingRenderList(out, d.echeances); }
+        else if(msg){ msg.innerHTML = '<span style="color:var(--accent)">'+(d.error||'Erreur')+'</span>'; }
+        return;
+      }
+      if(msg) msg.textContent = (d.processed ? d.processed.length : 0) + ' échéance(s) traitée(s).';
+      billingRenderResults(out, d.processed);
+    })
+    .catch(function(){ if(msg) msg.textContent = 'Erreur réseau.'; });
+};
+
 window.__veille = {data:null, ts:0, loading:false, regs:[], timer:null};
 window.veilleInit = function(containerId, updId, filter){
   window.__veille.regs.push({id:containerId, upd:updId, filter:filter||{}});
