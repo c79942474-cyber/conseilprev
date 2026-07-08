@@ -18304,7 +18304,8 @@ window.billingRunExecute = function(){
         else if(msg){ msg.innerHTML = '<span style="color:var(--accent)">'+(d.error||'Erreur')+'</span>'; }
         return;
       }
-      if(msg) msg.textContent = (d.processed ? d.processed.length : 0) + ' échéance(s) traitée(s).';
+      var _rem = d.remaining || 0;
+      if(msg) msg.textContent = (d.processed ? d.processed.length : 0) + ' échéance(s) traitée(s)' + (_rem > 0 ? ' — ' + _rem + ' restante(s), relancez pour continuer.' : '.');
       billingRenderResults(out, d.processed);
     })
     .catch(function(){ if(msg) msg.textContent = 'Erreur réseau.'; });
