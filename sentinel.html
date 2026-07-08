@@ -16128,11 +16128,29 @@ function sentinelLockPrompt(){
 }
 
 window.sentinelCheckout = function(plan){
+  var _ov = document.createElement('div');
+  _ov.id = 'checkout-overlay';
+  _ov.style.cssText = 'position:fixed;inset:0;z-index:10002;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.45)';
+  _ov.innerHTML = '<div style="background:var(--white,#fff);color:var(--ink,#111);padding:22px 30px;border-radius:12px;font-size:14px;font-weight:600">Ouverture du paiement sécurisé\u2026</div>';
+  document.body.appendChild(_ov);
+  function _fin(){ if(_ov && _ov.parentNode) _ov.parentNode.removeChild(_ov); }
   fetch('/api/sentinel/checkout', {method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json'}, body:JSON.stringify({plan:plan})})
     .then(function(r){ return r.json().then(function(j){ return j; }).catch(function(){ return {}; }); })
-    .then(function(j){ if(j && j.url){ window.location.href = j.url; } else { window.location.href = '/tarifications'; } })
-    .catch(function(){ window.location.href = '/tarifications'; });
+    .then(function(j){ if(j && j.url){ window.location.href = j.url; } else { _fin(); window.location.href = '/tarifications'; } })
+    .catch(function(){ _fin(); window.location.href = '/tarifications'; });
 };
+window.sentinelActivationToast = function(){
+  try{
+    if(new URLSearchParams(location.search).get('activation') === 'ok'){
+      var t = document.createElement('div');
+      t.style.cssText = 'position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:10001;background:var(--green,#0E7C7B);color:#fff;padding:12px 22px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.25)';
+      t.textContent = '\u2713 Votre offre est activée. Bienvenue !';
+      document.body.appendChild(t);
+      setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 6000);
+    }
+  }catch(e){}
+};
+if(document.readyState === 'complete'){ window.sentinelActivationToast(); } else { window.addEventListener('load', window.sentinelActivationToast); }
 
 var _planOrigGo = window.go;
 window.go = function(id){
