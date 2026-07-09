@@ -2055,6 +2055,8 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-item" onclick="go('rgpd-doc',this,'RGPD &amp; PRIVACY','Politique documentaire');docInit()" title="Referentiel de la documentation de conformite RGPD (accountability, art. 5.2) : etat, responsable, revue."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h6"/></svg></span>Politique documentaire</div>
     <div class="sb-item" onclick="go('rgpd-sensibilisation',this,'RGPD &amp; PRIVACY','Sensibilisation');sensInit()" title="Plan de sensibilisation a la protection des donnees par public cible : periodicite, statut, suivi."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>Sensibilisation</div>
     <div class="sb-item" onclick="go('rgpd-conformite',this,'RGPD &amp; PRIVACY','Conformité RGPD');confLoadOnce()" title="Tableau de bord consolidant registre, AIPD, privacy by design, documentation et sensibilisation : indice global et points d attention."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></span>Conformité RGPD</div>
+    <div class="sb-section">Entreprise</div>
+    <div class="sb-item" onclick="go('entreprise',this,'ENTREPRISE','Offre Entreprise')" title="Offre Entreprise : multi-entites, integrations API, SLA, accompagnement, formation et rapport annuel."><span class="sb-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M9 8h.01M15 8h.01M9 12h.01M15 12h.01M9 16h6"/></svg></span>Offre Entreprise</div>
     <div class="sb-section">Administration</div>
     <div class="sb-item" onclick="go('clients',this,'ADMINISTRATION','Gestion des clients')" title="Creer et gerer les acces clients externes a Sentinel AI (reserve a CONSEILPREV)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><circle cx="19" cy="8" r="2.5"/><path d="M17.5 21v-1a3 3 0 0 0 .5-1.7"/><path d="M19 14.5a3.5 3.5 0 0 1 3.5 3.5v3"/></svg></span>Gestion des clients</div>
   </nav>
@@ -3530,6 +3532,74 @@ textarea.form-el{min-height:86px;resize:vertical}
   <div id="iah-cards"><div class="veille-loading">Chargement du dispositif…</div></div>
   <div class="trait-note">
     Ce dispositif couvre la classification des systèmes (art. 6, annexe III), le système de gestion des risques (art. 9), la documentation technique (art. 11), la FRIA (art. 27) et les sanctions (art. 99). Voir aussi le cadre normatif pour la correspondance avec le RGPD et l'ISO/IEC 42001. CONSEILPREV peut réaliser un audit approfondi.
+  </div>
+</div>
+
+
+
+<div class="page" id="p-entreprise">
+  <span class="eyebrow">Offre · Entreprise</span><h1 class="page-h">Offre <em>Entreprise</em></h1>
+  <p class="page-lead">L'offre Entreprise inclut l'intégralité de l'offre Pro et y ajoute le déploiement à l'échelle d'un groupe, l'intégration à votre système d'information et un accompagnement contractuel dédié.</p>
+
+  <div style="border:1px solid var(--rule2);border-left:3px solid var(--accent);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:18px">
+    <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Socle inclus : Sentinel Pro dans son intégralité</div>
+    <div style="font-size:12px;color:var(--muted)">Observatoire, simulateur IA Act, registre, matrice de risques, audits, module RGPD, documentation, équipe et formation : toutes les capacités de l'offre Pro sont comprises, sans redondance. L'offre Entreprise les étend aux six dimensions ci-dessous.</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px">
+
+    <div style="border:1px solid var(--rule2);border-radius:10px;padding:16px;background:var(--white)">
+      <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">1 · Déploiement multi-entités et multi-périmètres</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Filiales, entités et périmètres d'un groupe, pilotés depuis un espace unique. Enregistrez ici les entités couvertes par votre déploiement.</div>
+      <div id="ent-entites"></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+        <input id="ent-ent-name" placeholder="Nom de l'entité" style="flex:1;min-width:120px;font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px">
+        <select id="ent-ent-type" style="font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px"><option>Filiale</option><option>Groupe</option><option>Périmètre</option><option>Site</option></select>
+        <button class="mat-export-btn" onclick="entAddEntite()">Ajouter</button>
+      </div>
+    </div>
+
+    <div style="border:1px solid var(--rule2);border-radius:10px;padding:16px;background:var(--white)">
+      <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">2 · API d'intégration d'outils internes</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Connexion de Sentinel à vos outils internes de gouvernance, gestion et exploitation.</div>
+      <div style="font-size:12px;color:var(--ink)">
+        <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--rule2)"><span>GRC — gouvernance, risques, conformité</span><span style="color:var(--muted);font-size:11px">à configurer</span></div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--rule2)"><span>ERP — gestion intégrée</span><span style="color:var(--muted);font-size:11px">à configurer</span></div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0"><span>ITSM — gestion des services informatiques</span><span style="color:var(--muted);font-size:11px">à configurer</span></div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-top:8px">La mise en service des connecteurs est réalisée avec l'accompagnement CONSEILPREV.</div>
+    </div>
+
+    <div style="border:1px solid var(--rule2);border-radius:10px;padding:16px;background:var(--white)">
+      <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">3 · SLA contractuel dédié et interlocuteur CONSEILPREV</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Un niveau de service formalisé et un interlocuteur unique pour votre accompagnement.</div>
+      <div style="font-size:12px;color:var(--ink)">
+        <div style="padding:4px 0">Engagement de service défini contractuellement, avec délais de prise en charge et de résolution.</div>
+        <div style="padding:4px 0">Interlocuteur CONSEILPREV dédié, référent de votre déploiement.</div>
+      </div>
+    </div>
+
+    <div style="border:1px solid var(--rule2);border-radius:10px;padding:16px;background:var(--white)">
+      <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">4 · Formation sur site</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Deux sessions de formation par an, dispensées sur votre site.</div>
+      <div style="font-size:12px;color:var(--ink)">
+        <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--rule2)"><span>Session 1 — premier semestre</span><span style="color:var(--muted);font-size:11px">à planifier</span></div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0"><span>Session 2 — second semestre</span><span style="color:var(--muted);font-size:11px">à planifier</span></div>
+      </div>
+    </div>
+
+    <div style="border:1px solid var(--rule2);border-radius:10px;padding:16px;background:var(--white)">
+      <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">5 · Rapport IA Act annuel personnalisé</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Une synthèse annuelle de votre conformité à l'IA Act, adaptée à votre organisation et à vos périmètres.</div>
+      <div style="font-size:12px;color:var(--ink);padding:4px 0">État de conformité, écarts, plan d'action et recommandations, remis chaque année.</div>
+    </div>
+
+    <div style="border:1px solid var(--rule2);border-radius:10px;padding:16px;background:var(--white)">
+      <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">6 · Jalons RaaS sur trois cadres</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Facturation par résultats indexée sur l'atteinte de jalons vérifiés, sur trois référentiels : IA Act, RGPD et ISO/IEC 42001.</div>
+      <button class="mat-export-btn" onclick="hubGo('conformite-globale')">Ouvrir l'indice de conformité des trois cadres</button>
+    </div>
+
   </div>
 </div>
 
@@ -5801,6 +5871,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 'use strict';
 
 var PAGE_META = {
+    'entreprise': { section: 'ENTREPRISE', label: 'Offre Entreprise' },
     'ia-act-hub': { section: 'PILOTAGE', label: 'Vue d\u2019ensemble IA Act' },
     'conformite-globale': { section: 'PILOTAGE', label: 'Indice de conformité global' },
     'cadre-normatif': { section: 'PILOTAGE', label: 'Cadre normatif' },
@@ -16046,7 +16117,7 @@ window.go = function(id){
    paiement. Les onglets accessibles sont mis en évidence, les autres sont estompés
    et verrouillés (aucun onglet n'est masqué). CONSEILPREV conserve un accès total. */
 var PLAN_GRATUIT_MODULES = ['apercu', 'simulateur', 'regs', 'training'];
-var PLAN_ENTREPRISE_ONLY = ['clients', 'pricing'];
+var PLAN_ENTREPRISE_ONLY = ['clients', 'pricing', 'entreprise'];
 
 function planIsAllowed(id){
   if(window.__IS_CONSEILPREV) return true;
@@ -18366,6 +18437,27 @@ window.clientSetPlan = function(cid, plan){
     .then(function(d){ if(d && d.ok){ if(window.clientSubLoad) clientSubLoad(cid); } })
     .catch(function(){});
 };
+window.entRenderEntites = function(){
+  var box = document.getElementById('ent-entites'); if(!box) return;
+  var list = []; try { list = JSON.parse(localStorage.getItem('sentinel_ent_entites') || '[]'); } catch(e){}
+  if(!list.length){ box.innerHTML = '<div style="font-size:11px;color:var(--muted);padding:4px 0">Aucune entité enregistrée.</div>'; return; }
+  box.innerHTML = list.map(function(e, ix){ return '<div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:5px 0;border-bottom:1px solid var(--rule2)"><span><strong style="color:var(--ink)">'+String(e.nom).replace(/</g,"&lt;")+'</strong> <span style="color:var(--muted)">· '+String(e.type).replace(/</g,"&lt;")+'</span></span><button onclick="entDelEntite('+ix+')" style="font-size:10px;color:var(--accent);background:none;border:none;cursor:pointer">Retirer</button></div>'; }).join('');
+};
+window.entAddEntite = function(){
+  var n = document.getElementById('ent-ent-name'), t = document.getElementById('ent-ent-type');
+  if(!n || !n.value.trim()) return;
+  var list = []; try { list = JSON.parse(localStorage.getItem('sentinel_ent_entites') || '[]'); } catch(e){}
+  list.push({ nom: n.value.trim(), type: (t ? t.value : 'Filiale') });
+  try { localStorage.setItem('sentinel_ent_entites', JSON.stringify(list)); } catch(e){}
+  n.value = ''; entRenderEntites();
+};
+window.entDelEntite = function(ix){
+  var list = []; try { list = JSON.parse(localStorage.getItem('sentinel_ent_entites') || '[]'); } catch(e){}
+  list.splice(ix, 1);
+  try { localStorage.setItem('sentinel_ent_entites', JSON.stringify(list)); } catch(e){}
+  entRenderEntites();
+};
+try { entRenderEntites(); } catch(e){}
 window.__veille = {data:null, ts:0, loading:false, regs:[], timer:null};
 window.veilleInit = function(containerId, updId, filter){
   window.__veille.regs.push({id:containerId, upd:updId, filter:filter||{}});
