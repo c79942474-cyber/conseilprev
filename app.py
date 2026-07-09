@@ -7319,6 +7319,8 @@ def clients_subscription():
     sub_id = row.get('stripe_subscription_id')
     if not sub_id:
         return jsonify({'ok': True, 'has_sub': False, 'plan': plan})
+    if not request.args.get('live'):
+        return jsonify({'ok': True, 'has_sub': True, 'plan': plan})
     secret = os.environ.get('STRIPE_SECRET_KEY')
     if not secret:
         return jsonify({'ok': True, 'has_sub': True, 'plan': plan, 'configured': False})
