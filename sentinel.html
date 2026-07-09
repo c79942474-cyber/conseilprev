@@ -3562,12 +3562,18 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div style="border:1px solid var(--rule2);border-radius:10px;padding:16px;background:var(--white)">
       <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">2 · API d'intégration d'outils internes</div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Connexion de Sentinel à vos outils internes de gouvernance, gestion et exploitation.</div>
-      <div style="font-size:12px;color:var(--ink)">
-        <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--rule2)"><span>GRC — gouvernance, risques, conformité</span><span style="color:var(--muted);font-size:11px">à configurer</span></div>
-        <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--rule2)"><span>ERP — gestion intégrée</span><span style="color:var(--muted);font-size:11px">à configurer</span></div>
-        <div style="display:flex;justify-content:space-between;padding:5px 0"><span>ITSM — gestion des services informatiques</span><span style="color:var(--muted);font-size:11px">à configurer</span></div>
+      <div id="conn-list"></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+        <select id="conn-cat" style="font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px"><option>GRC</option><option>ERP</option><option>ITSM</option></select>
+        <input id="conn-nom" placeholder="Nom (ex. ServiceNow)" style="flex:1;min-width:110px;font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px">
       </div>
-      <div style="font-size:11px;color:var(--muted);margin-top:8px">La mise en service des connecteurs est réalisée avec l'accompagnement CONSEILPREV.</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">
+        <input id="conn-url" placeholder="URL de l'API (https://...)" style="flex:1;min-width:150px;font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px">
+        <input id="conn-sec" placeholder="Jeton (optionnel)" style="font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px">
+        <button class="mat-export-btn" onclick="connAdd()">Ajouter</button>
+      </div>
+      <div id="conn-msg" style="font-size:11px;color:var(--accent);margin-top:4px"></div>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px">Le test de connexion vérifie l'accès réel à l'API configurée (HTTPS).</div>
     </div>
 
     <div style="border:1px solid var(--rule2);border-radius:10px;padding:16px;background:var(--white)">
@@ -3592,6 +3598,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">5 · Rapport IA Act annuel personnalisé</div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Une synthèse annuelle de votre conformité à l'IA Act, adaptée à votre organisation et à vos périmètres.</div>
       <div style="font-size:12px;color:var(--ink);padding:4px 0">État de conformité, écarts, plan d'action et recommandations, remis chaque année.</div>
+      <button class="mat-export-btn" style="margin-top:8px" onclick="entGenerateReport()">Générer le rapport annuel</button>
     </div>
 
     <div style="border:1px solid var(--rule2);border-radius:10px;padding:16px;background:var(--white)">
@@ -18437,27 +18444,79 @@ window.clientSetPlan = function(cid, plan){
     .then(function(d){ if(d && d.ok){ if(window.clientSubLoad) clientSubLoad(cid); } })
     .catch(function(){});
 };
-window.entRenderEntites = function(){
+/* ══ Espace Entreprise : entités (serveur), connecteurs, rapport annuel ══ */
+window.entRenderEntites = function(list){
   var box = document.getElementById('ent-entites'); if(!box) return;
-  var list = []; try { list = JSON.parse(localStorage.getItem('sentinel_ent_entites') || '[]'); } catch(e){}
+  list = list || [];
   if(!list.length){ box.innerHTML = '<div style="font-size:11px;color:var(--muted);padding:4px 0">Aucune entité enregistrée.</div>'; return; }
-  box.innerHTML = list.map(function(e, ix){ return '<div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:5px 0;border-bottom:1px solid var(--rule2)"><span><strong style="color:var(--ink)">'+String(e.nom).replace(/</g,"&lt;")+'</strong> <span style="color:var(--muted)">· '+String(e.type).replace(/</g,"&lt;")+'</span></span><button onclick="entDelEntite('+ix+')" style="font-size:10px;color:var(--accent);background:none;border:none;cursor:pointer">Retirer</button></div>'; }).join('');
+  box.innerHTML = list.map(function(e){ return '<div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:5px 0;border-bottom:1px solid var(--rule2)"><span><strong style="color:var(--ink)">'+String(e.nom).replace(/</g,"&lt;")+'</strong> <span style="color:var(--muted)">· '+String(e.type).replace(/</g,"&lt;")+'</span></span><button onclick="entDelEntite('+e.id+')" style="font-size:10px;color:var(--accent);background:none;border:none;cursor:pointer">Retirer</button></div>'; }).join('');
+};
+window.entLoadEntites = function(){
+  fetch('/api/entreprise/entites', {credentials:'same-origin'}).then(function(r){return r.json();})
+    .then(function(d){ if(d && d.ok) entRenderEntites(d.entites); }).catch(function(){});
 };
 window.entAddEntite = function(){
   var n = document.getElementById('ent-ent-name'), t = document.getElementById('ent-ent-type');
   if(!n || !n.value.trim()) return;
-  var list = []; try { list = JSON.parse(localStorage.getItem('sentinel_ent_entites') || '[]'); } catch(e){}
-  list.push({ nom: n.value.trim(), type: (t ? t.value : 'Filiale') });
-  try { localStorage.setItem('sentinel_ent_entites', JSON.stringify(list)); } catch(e){}
-  n.value = ''; entRenderEntites();
+  fetch('/api/entreprise/entites', {method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json'}, body:JSON.stringify({nom:n.value.trim(), type:(t?t.value:'Filiale')})})
+    .then(function(r){return r.json();}).then(function(d){ if(d && d.ok){ n.value=''; entRenderEntites(d.entites); } }).catch(function(){});
 };
-window.entDelEntite = function(ix){
-  var list = []; try { list = JSON.parse(localStorage.getItem('sentinel_ent_entites') || '[]'); } catch(e){}
-  list.splice(ix, 1);
-  try { localStorage.setItem('sentinel_ent_entites', JSON.stringify(list)); } catch(e){}
-  entRenderEntites();
+window.entDelEntite = function(id){
+  fetch('/api/entreprise/entites/'+id, {method:'DELETE', credentials:'same-origin'}).then(function(r){return r.json();})
+    .then(function(d){ if(d && d.ok) entLoadEntites(); }).catch(function(){});
 };
-try { entRenderEntites(); } catch(e){}
+
+window.connRender = function(list){
+  var box = document.getElementById('conn-list'); if(!box) return;
+  list = list || [];
+  if(!list.length){ box.innerHTML = '<div style="font-size:11px;color:var(--muted);padding:4px 0">Aucun connecteur configuré.</div>'; return; }
+  var SC = {operationnel:'var(--green,#0E7C7B)', echec:'var(--accent)', non_teste:'var(--muted)'};
+  var SL = {operationnel:'opérationnel', echec:'échec', non_teste:'non testé'};
+  box.innerHTML = list.map(function(c){
+    return '<div style="padding:6px 0;border-bottom:1px solid var(--rule2)"><div style="display:flex;justify-content:space-between;align-items:center;font-size:12px"><span><strong style="color:var(--ink)">'+String(c.categorie).replace(/</g,"&lt;")+'</strong> · '+String(c.nom||'').replace(/</g,"&lt;")+'</span><span style="color:'+(SC[c.statut]||'var(--muted)')+';font-size:11px">'+(SL[c.statut]||c.statut)+'</span></div><div style="display:flex;gap:8px;margin-top:3px"><button onclick="connTest('+c.id+')" style="font-size:10px;background:none;border:none;color:var(--ink);cursor:pointer;text-decoration:underline">Tester</button><button onclick="connDel('+c.id+')" style="font-size:10px;background:none;border:none;color:var(--accent);cursor:pointer">Retirer</button></div></div>';
+  }).join('');
+};
+window.connLoad = function(){
+  fetch('/api/entreprise/connecteurs', {credentials:'same-origin'}).then(function(r){return r.json();})
+    .then(function(d){ if(d && d.ok) connRender(d.connecteurs); }).catch(function(){});
+};
+window.connAdd = function(){
+  var cat=document.getElementById('conn-cat'), nom=document.getElementById('conn-nom'), url=document.getElementById('conn-url'), sec=document.getElementById('conn-sec'), msg=document.getElementById('conn-msg');
+  if(!url || !url.value.trim()){ if(msg) msg.textContent='URL HTTPS requise.'; return; }
+  fetch('/api/entreprise/connecteurs', {method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json'}, body:JSON.stringify({categorie:(cat?cat.value:'GRC'), nom:(nom?nom.value.trim():''), url:url.value.trim(), secret:(sec?sec.value.trim():'')})})
+    .then(function(r){return r.json();}).then(function(d){ if(d && d.ok){ if(nom)nom.value='';if(url)url.value='';if(sec)sec.value=''; if(msg)msg.textContent=''; connRender(d.connecteurs); } else if(msg){ msg.textContent=(d&&d.error)||'Erreur'; } }).catch(function(){});
+};
+window.connDel = function(id){
+  fetch('/api/entreprise/connecteurs/'+id, {method:'DELETE', credentials:'same-origin'}).then(function(r){return r.json();})
+    .then(function(d){ if(d && d.ok) connLoad(); }).catch(function(){});
+};
+window.connTest = function(id){
+  fetch('/api/entreprise/connecteurs/'+id+'/test', {method:'POST', credentials:'same-origin'}).then(function(r){return r.json();})
+    .then(function(d){ connLoad(); }).catch(function(){});
+};
+
+window.entGenerateReport = function(){
+  function pct(fn){ try { var v = (typeof window[fn]==='function') ? window[fn]() : null; return (typeof v==='number' && !isNaN(v)) ? Math.round(v) : null; } catch(e){ return null; } }
+  var ia = pct('gcAuditPct'), rg = pct('gcRgpdPct'), is = pct('gcIsoPct');
+  var vals = [ia,rg,is].filter(function(x){ return x!=null; });
+  var glob = vals.length ? Math.round(vals.reduce(function(a,b){return a+b;},0)/vals.length) : null;
+  function line(l,v){ return '<tr><td style="padding:8px 12px;border-bottom:1px solid #e5e7eb">'+l+'</td><td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;text-align:right;font-weight:700">'+(v!=null?v+' %':'\u2014')+'</td></tr>'; }
+  var today = new Date().toLocaleDateString('fr-FR');
+  var html = '<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>Rapport IA Act annuel \u2014 CONSEILPREV</title>'
+    + '<style>body{font-family:Georgia,serif;max-width:800px;margin:40px auto;padding:0 24px;color:#1a1a1a}h1{font-size:24px}h2{font-size:16px;margin-top:28px;border-bottom:2px solid #1a1a1a;padding-bottom:4px}table{width:100%;border-collapse:collapse;margin-top:8px}.meta{color:#666;font-size:13px}.big{font-size:44px;font-weight:800;margin:8px 0}@media print{.noprint{display:none}}</style></head><body>'
+    + '<div class="noprint" style="text-align:right"><button onclick="window.print()" style="padding:8px 16px;cursor:pointer">Imprimer / PDF</button></div>'
+    + '<h1>Rapport IA Act annuel personnalis\u00e9</h1>'
+    + '<div class="meta">\u00c9dit\u00e9 le '+today+' \u2014 CONSEILPREV / Sentinel</div>'
+    + '<h2>Indice global de conformit\u00e9</h2><div class="big">'+(glob!=null?glob+' %':'\u2014')+'</div>'
+    + '<h2>Conformit\u00e9 par r\u00e9f\u00e9rentiel</h2><table>'+line('EU AI Act', ia)+line('RGPD', rg)+line('ISO/IEC 42001', is)+'</table>'
+    + '<h2>Synth\u00e8se</h2><p>Ce rapport pr\u00e9sente l\u2019\u00e9tat de conformit\u00e9 consolid\u00e9 de votre organisation sur les trois r\u00e9f\u00e9rentiels suivis dans Sentinel. Il constitue la base de la synth\u00e8se annuelle personnalis\u00e9e \u00e9tablie avec l\u2019accompagnement CONSEILPREV : analyse des \u00e9carts, plan d\u2019action prioris\u00e9 et recommandations.</p>'
+    + '<p class="meta">Document g\u00e9n\u00e9r\u00e9 depuis Sentinel. Les indices refl\u00e8tent l\u2019\u00e9tat de vos \u00e9valuations \u00e0 la date d\u2019\u00e9dition.</p></body></html>';
+  var w = window.open('', '_blank');
+  if(w){ w.document.write(html); w.document.close(); }
+  else { alert('Veuillez autoriser les fen\u00eatres pour g\u00e9n\u00e9rer le rapport.'); }
+};
+
+try { entLoadEntites(); connLoad(); } catch(e){}
 window.__veille = {data:null, ts:0, loading:false, regs:[], timer:null};
 window.veilleInit = function(containerId, updId, filter){
   window.__veille.regs.push({id:containerId, upd:updId, filter:filter||{}});
