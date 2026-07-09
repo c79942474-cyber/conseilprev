@@ -7395,6 +7395,32 @@ def clients_subscription():
 
 
 
+@app.route('/api/clients/set-plan', methods=['POST'])
+def clients_set_plan():
+    """Attribution manuelle de l'offre d'un client par CONSEILPREV
+    (gratuit / pro / entreprise). Permet de faire evoluer une offre, par exemple
+    d'Entreprise a Pro. Ne modifie pas l'abonnement Stripe (a ajuster separement
+    si necessaire)."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    d = request.get_json(silent=True) or {}
+    try:
+        client_id = int(d.get('client_id'))
+    except (TypeError, ValueError):
+        return jsonify({'ok': False, 'error': 'client_id invalide'}), 400
+    plan = d.get('plan')
+    if plan not in ('gratuit', 'pro', 'entreprise'):
+        return jsonify({'ok': False, 'error': 'Offre invalide'}), 400
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql('UPDATE clients SET plan=%s WHERE id=%s',
+                             'UPDATE clients SET plan=? WHERE id=?'), (plan, client_id))
+    conn.commit()
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True, 'plan': plan})
+
+
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
