@@ -4930,7 +4930,7 @@ def clients_portfolio():
     if not raas_require_conseilprev():
         return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
     conn = registre_get_db(); cur = conn.cursor()
-    cur.execute('SELECT id, nom_entreprise, email FROM clients ORDER BY nom_entreprise ASC')
+    cur.execute('SELECT id, nom_entreprise, email, plan, stripe_subscription_id FROM clients ORDER BY nom_entreprise ASC')
     clients = [dict(r) for r in cur.fetchall()]
     portfolio = []
     tot_unpaid_amount = 0
@@ -4963,6 +4963,7 @@ def clients_portfolio():
         last_days = _days_since(lc.get('last_contact_at'))
         portfolio.append({
             'id': cid, 'nom': c.get('nom_entreprise') or ('Client #' + str(cid)),
+            'plan': (c.get('plan') or 'gratuit'), 'has_sub': bool(c.get('stripe_subscription_id')),
             'statut': lc.get('statut') or 'prospect', 'sante': lc.get('sante') or 'a_evaluer',
             'unpaid_count': len(unpaid), 'unpaid_amount': unpaid_amt,
             'pending_relances': pending, 'milestones_pending': ms_pending, 'milestones_pending_ai': ms_pending_ai, 'milestones_pending_rgpd': ms_pending_rgpd, 'milestones_pending_iso': ms_pending_iso,
