@@ -4930,8 +4930,14 @@ def clients_portfolio():
     if not raas_require_conseilprev():
         return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
     conn = registre_get_db(); cur = conn.cursor()
-    cur.execute('SELECT id, nom_entreprise, email, plan, stripe_subscription_id FROM clients ORDER BY nom_entreprise ASC')
-    clients = [dict(r) for r in cur.fetchall()]
+    try:
+        cur.execute('SELECT id, nom_entreprise, email, plan, stripe_subscription_id FROM clients ORDER BY nom_entreprise ASC')
+        clients = [dict(r) for r in cur.fetchall()]
+    except Exception:
+        try: conn.rollback()
+        except Exception: pass
+        cur.execute('SELECT id, nom_entreprise, email FROM clients ORDER BY nom_entreprise ASC')
+        clients = [dict(r) for r in cur.fetchall()]
     portfolio = []
     tot_unpaid_amount = 0
     tot_unpaid_count = 0
@@ -7298,9 +7304,14 @@ def clients_subscription():
     except (TypeError, ValueError):
         return jsonify({'ok': False, 'error': 'client_id invalide'}), 400
     conn = registre_get_db(); cur = conn.cursor()
-    cur.execute(registre_sql('SELECT plan, stripe_subscription_id FROM clients WHERE id=%s',
-                             'SELECT plan, stripe_subscription_id FROM clients WHERE id=?'), (client_id,))
-    row = cur.fetchone()
+    try:
+        cur.execute(registre_sql('SELECT plan, stripe_subscription_id FROM clients WHERE id=%s',
+                                 'SELECT plan, stripe_subscription_id FROM clients WHERE id=?'), (client_id,))
+        row = cur.fetchone()
+    except Exception:
+        try: conn.rollback()
+        except Exception: pass
+        row = None
     try: conn.close()
     except Exception: pass
     row = dict(row) if row else {}
