@@ -7287,6 +7287,55 @@ def clients_billing_run():
 
 
 
+@app.route('/api/clients/subscription', methods=['GET'])
+def clients_subscription():
+    """Detail de l'abonnement Stripe d'un client (CONSEILPREV) : offre, statut,
+    montant, prochaine echeance. Recupere en direct depuis Stripe si configure."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    try:
+        client_id = int(request.args.get('client_id'))
+    except (TypeError, ValueError):
+        return jsonify({'ok': False, 'error': 'client_id invalide'}), 400
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql('SELECT plan, stripe_subscription_id FROM clients WHERE id=%s',
+                             'SELECT plan, stripe_subscription_id FROM clients WHERE id=?'), (client_id,))
+    row = cur.fetchone()
+    try: conn.close()
+    except Exception: pass
+    row = dict(row) if row else {}
+    plan = row.get('plan') or 'gratuit'
+    sub_id = row.get('stripe_subscription_id')
+    if not sub_id:
+        return jsonify({'ok': True, 'has_sub': False, 'plan': plan})
+    secret = os.environ.get('STRIPE_SECRET_KEY')
+    if not secret:
+        return jsonify({'ok': True, 'has_sub': True, 'plan': plan, 'configured': False})
+    try:
+        import stripe
+        stripe.api_key = secret
+        sub = stripe.Subscription.retrieve(sub_id)
+    except Exception:
+        return jsonify({'ok': True, 'has_sub': True, 'plan': plan, 'configured': True, 'error_stripe': True})
+    amount = None; currency = 'eur'; interval = None
+    try:
+        items = (sub.get('items') or {}).get('data') or []
+        if items:
+            price = items[0].get('price') or {}
+            amount = price.get('unit_amount')
+            currency = price.get('currency') or 'eur'
+            interval = (price.get('recurring') or {}).get('interval')
+    except Exception:
+        pass
+    return jsonify({'ok': True, 'has_sub': True, 'plan': plan,
+                    'status': sub.get('status'),
+                    'amount_eur': (amount / 100.0 if amount is not None else None),
+                    'currency': currency, 'interval': interval,
+                    'current_period_end': sub.get('current_period_end'),
+                    'cancel_at_period_end': sub.get('cancel_at_period_end')})
+
+
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
