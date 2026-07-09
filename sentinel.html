@@ -16189,7 +16189,7 @@ window.raasAdminLoad = function(){
   var msg = document.getElementById('raas-admin-msg');
   if(!sel || !out) return;
   if(!sel.value){ out.innerHTML=''; var _sp0=document.getElementById('client-sub-panel'); if(_sp0) _sp0.innerHTML=''; return; }
-  var _sp=document.getElementById('client-sub-panel'); if(_sp){ _sp.innerHTML='<button class="mat-export-btn" onclick="clientSubLoad(\''+sel.value+'\')">Afficher l\u2019abonnement Stripe</button>'; }
+  if(window.clientSubLoad) clientSubLoad(sel.value);
   if(msg) msg.textContent = '';
   out.innerHTML = '<div style="padding:14px;color:var(--muted)">Chargement…</div>';
   fetch('/api/raas/milestones?client_id='+encodeURIComponent(sel.value), {credentials:'same-origin'})
@@ -18315,12 +18315,12 @@ window.billingRunExecute = function(){
     .catch(function(){ if(msg) msg.textContent = 'Erreur réseau.'; });
 };
 
-window.clientSubLoad = function(cid){
+window.clientSubLoad = function(cid, live){
   var box = document.getElementById('client-sub-panel');
   if(!box) return;
   if(!cid){ box.innerHTML = ''; return; }
-  box.innerHTML = '<div style="font-size:11px;color:var(--muted);padding:8px">Chargement de l\u2019abonnement\u2026</div>';
-  fetch('/api/clients/subscription?client_id='+encodeURIComponent(cid), {credentials:'same-origin'})
+  box.innerHTML = '<div style="font-size:11px;color:var(--muted);padding:8px">Chargement\u2026</div>';
+  fetch('/api/clients/subscription?client_id='+encodeURIComponent(cid)+(live?'&live=1':''), {credentials:'same-origin'})
     .then(function(r){ return r.json(); })
     .then(function(d){
       if(!d || !d.ok){ box.innerHTML = ''; return; }
@@ -18330,10 +18330,13 @@ window.clientSubLoad = function(cid){
         + '<div style="font-size:12px;color:var(--muted)">Offre : <strong style="color:var(--ink)">'+(PL[d.plan]||d.plan||'\u2014')+'</strong></div>';
       if(!d.has_sub){
         h += '<div style="font-size:12px;color:var(--muted);margin-top:4px">Aucun abonnement Stripe (facturation par r\u00e9sultats le cas \u00e9ch\u00e9ant).</div>';
+      } else if(!live){
+        h += '<div style="font-size:12px;color:var(--green,#0E7C7B);margin-top:4px">Abonnement Stripe actif.</div>'
+          + '<button class="mat-export-btn" style="background:var(--ink,#111827);color:#fff;margin-top:8px" onclick="clientSubLoad(\''+cid+'\', true)">Voir les d\u00e9tails Stripe</button>';
       } else if(d.configured === false){
         h += '<div style="font-size:12px;color:var(--muted);margin-top:4px">Abonnement pr\u00e9sent ; d\u00e9tails indisponibles (Stripe non configur\u00e9).</div>';
       } else if(d.error_stripe){
-        h += '<div style="font-size:12px;color:var(--accent);margin-top:4px">Abonnement introuvable c\u00f4t\u00e9 Stripe.</div>';
+        h += '<div style="font-size:12px;color:var(--accent);margin-top:4px">D\u00e9tails introuvables c\u00f4t\u00e9 Stripe.</div>';
       } else {
         var ST={active:'Actif',trialing:'Essai',past_due:'Impay\u00e9',canceled:'R\u00e9sili\u00e9',unpaid:'Impay\u00e9',incomplete:'Incomplet',incomplete_expired:'Expir\u00e9'};
         var amt = (d.amount_eur!=null) ? (d.amount_eur.toLocaleString('fr-FR')+'\u202f\u20ac'+(d.interval==='month'?' / mois':(d.interval==='year'?' / an':''))) : '\u2014';
