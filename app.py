@@ -7417,7 +7417,48 @@ def clients_set_plan():
     conn.commit()
     try: conn.close()
     except Exception: pass
-    return jsonify({'ok': True, 'plan': plan})
+    stripe_sync = None
+    secret = os.environ.get('STRIPE_SECRET_KEY')
+    _c2 = registre_get_db(); _cur2 = _c2.cursor()
+    _cur2.execute(registre_sql('SELECT stripe_subscription_id FROM clients WHERE id=%s', 'SELECT stripe_subscription_id FROM clients WHERE id=?'), (client_id,))
+    _r2 = _cur2.fetchone()
+    try: _c2.close()
+    except Exception: pass
+    sub_id = (dict(_r2).get('stripe_subscription_id') if _r2 else None)
+    if secret and sub_id:
+        try:
+            import stripe
+            stripe.api_key = secret
+            stripe.max_network_retries = 0
+            try: stripe.default_http_client = stripe.http_client.RequestsClient(timeout=8)
+            except Exception: pass
+            if plan == 'gratuit':
+                try:
+                    stripe.Subscription.delete(sub_id)
+                except Exception:
+                    try: stripe.Subscription.cancel(sub_id)
+                    except Exception: pass
+                _c3 = registre_get_db(); _cur3 = _c3.cursor()
+                _cur3.execute(registre_sql('UPDATE clients SET stripe_subscription_id=NULL WHERE id=%s', 'UPDATE clients SET stripe_subscription_id=NULL WHERE id=?'), (client_id,))
+                _c3.commit()
+                try: _c3.close()
+                except Exception: pass
+                stripe_sync = 'abonnement_resilie'
+            else:
+                price_id = os.environ.get('STRIPE_PRICE_PRO') if plan == 'pro' else os.environ.get('STRIPE_PRICE_ENTREPRISE')
+                if not price_id:
+                    stripe_sync = 'tarif_non_configure'
+                else:
+                    sub = stripe.Subscription.retrieve(sub_id)
+                    items = (sub.get('items') or {}).get('data') or []
+                    if items:
+                        stripe.Subscription.modify(sub_id, items=[{'id': items[0].get('id'), 'price': price_id}], proration_behavior='create_prorations')
+                        stripe_sync = 'tarif_mis_a_jour'
+                    else:
+                        stripe_sync = 'aucun_article'
+        except Exception:
+            stripe_sync = 'erreur_stripe'
+    return jsonify({'ok': True, 'plan': plan, 'stripe_sync': stripe_sync})
 
 
 
