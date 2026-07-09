@@ -3578,20 +3578,28 @@ textarea.form-el{min-height:86px;resize:vertical}
 
     <div style="border:1px solid var(--rule2);border-radius:10px;padding:16px;background:var(--white)">
       <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">3 · SLA contractuel dédié et interlocuteur CONSEILPREV</div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Un niveau de service formalisé et un interlocuteur unique pour votre accompagnement.</div>
-      <div style="font-size:12px;color:var(--ink)">
-        <div style="padding:4px 0">Engagement de service défini contractuellement, avec délais de prise en charge et de résolution.</div>
-        <div style="padding:4px 0">Interlocuteur CONSEILPREV dédié, référent de votre déploiement.</div>
-      </div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Niveaux de service par criticité, engagés contractuellement (valeurs indicatives, précisées au contrat).</div>
+      <table style="width:100%;border-collapse:collapse;font-size:11px">
+        <thead><tr><th style="text-align:left;padding:4px 6px;color:var(--muted)">Criticité</th><th style="padding:4px 6px;color:var(--muted)">Prise en charge</th><th style="padding:4px 6px;color:var(--muted)">Résolution visée</th></tr></thead>
+        <tbody>
+          <tr><td style="padding:4px 6px;border-top:1px solid var(--rule2)">Critique</td><td style="padding:4px 6px;border-top:1px solid var(--rule2);text-align:center">2 h ouvrées</td><td style="padding:4px 6px;border-top:1px solid var(--rule2);text-align:center">1 jour ouvré</td></tr>
+          <tr><td style="padding:4px 6px;border-top:1px solid var(--rule2)">Majeur</td><td style="padding:4px 6px;border-top:1px solid var(--rule2);text-align:center">4 h ouvrées</td><td style="padding:4px 6px;border-top:1px solid var(--rule2);text-align:center">3 jours ouvrés</td></tr>
+          <tr><td style="padding:4px 6px;border-top:1px solid var(--rule2)">Mineur</td><td style="padding:4px 6px;border-top:1px solid var(--rule2);text-align:center">1 jour ouvré</td><td style="padding:4px 6px;border-top:1px solid var(--rule2);text-align:center">5 jours ouvrés</td></tr>
+        </tbody>
+      </table>
+      <div style="font-size:11px;color:var(--muted);margin-top:8px">Interlocuteur CONSEILPREV dédié, référent de votre déploiement — contact : christophe.cerf@outlook.com.</div>
     </div>
 
     <div style="border:1px solid var(--rule2);border-radius:10px;padding:16px;background:var(--white)">
       <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">4 · Formation sur site</div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Deux sessions de formation par an, dispensées sur votre site.</div>
-      <div style="font-size:12px;color:var(--ink)">
-        <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--rule2)"><span>Session 1 — premier semestre</span><span style="color:var(--muted);font-size:11px">à planifier</span></div>
-        <div style="display:flex;justify-content:space-between;padding:5px 0"><span>Session 2 — second semestre</span><span style="color:var(--muted);font-size:11px">à planifier</span></div>
+      <div id="form-list"></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+        <input id="form-date" type="date" style="font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px">
+        <input id="form-theme" placeholder="Thème de la session" style="flex:1;min-width:120px;font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px">
+        <button class="mat-export-btn" onclick="formAdd()">Planifier</button>
       </div>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px">Deux sessions par an incluses dans l'offre.</div>
     </div>
 
     <div style="border:1px solid var(--rule2);border-radius:10px;padding:16px;background:var(--white)">
@@ -18473,7 +18481,7 @@ window.connRender = function(list){
   var SC = {operationnel:'var(--green,#0E7C7B)', echec:'var(--accent)', non_teste:'var(--muted)'};
   var SL = {operationnel:'opérationnel', echec:'échec', non_teste:'non testé'};
   box.innerHTML = list.map(function(c){
-    return '<div style="padding:6px 0;border-bottom:1px solid var(--rule2)"><div style="display:flex;justify-content:space-between;align-items:center;font-size:12px"><span><strong style="color:var(--ink)">'+String(c.categorie).replace(/</g,"&lt;")+'</strong> · '+String(c.nom||'').replace(/</g,"&lt;")+'</span><span style="color:'+(SC[c.statut]||'var(--muted)')+';font-size:11px">'+(SL[c.statut]||c.statut)+'</span></div><div style="display:flex;gap:8px;margin-top:3px"><button onclick="connTest('+c.id+')" style="font-size:10px;background:none;border:none;color:var(--ink);cursor:pointer;text-decoration:underline">Tester</button><button onclick="connDel('+c.id+')" style="font-size:10px;background:none;border:none;color:var(--accent);cursor:pointer">Retirer</button></div></div>';
+    return '<div style="padding:6px 0;border-bottom:1px solid var(--rule2)"><div style="display:flex;justify-content:space-between;align-items:center;font-size:12px"><span><strong style="color:var(--ink)">'+String(c.categorie).replace(/</g,"&lt;")+'</strong> · '+String(c.nom||'').replace(/</g,"&lt;")+'</span><span style="color:'+(SC[c.statut]||'var(--muted)')+';font-size:11px">'+(SL[c.statut]||c.statut)+'</span></div><div style="display:flex;gap:8px;margin-top:3px"><button onclick="connTest('+c.id+')" style="font-size:10px;background:none;border:none;color:var(--ink);cursor:pointer;text-decoration:underline">Tester</button><button onclick="connSync('+c.id+',\''+c.categorie+'\')" style="font-size:10px;background:none;border:none;color:var(--ink);cursor:pointer;text-decoration:underline">Synchroniser</button><button onclick="connDel('+c.id+')" style="font-size:10px;background:none;border:none;color:var(--accent);cursor:pointer">Retirer</button></div></div>';
   }).join('');
 };
 window.connLoad = function(){
@@ -18516,7 +18524,35 @@ window.entGenerateReport = function(){
   else { alert('Veuillez autoriser les fen\u00eatres pour g\u00e9n\u00e9rer le rapport.'); }
 };
 
-try { entLoadEntites(); connLoad(); } catch(e){}
+window.formRender = function(list){
+  var box = document.getElementById('form-list'); if(!box) return;
+  list = list || [];
+  if(!list.length){ box.innerHTML = '<div style="font-size:11px;color:var(--muted);padding:4px 0">Aucune session planifi\u00e9e.</div>'; return; }
+  box.innerHTML = list.map(function(f){ return '<div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:5px 0;border-bottom:1px solid var(--rule2)"><span><strong style="color:var(--ink)">'+String(f.date_prevue).replace(/</g,"&lt;")+'</strong> <span style="color:var(--muted)">\u00b7 '+String(f.theme||'Formation').replace(/</g,"&lt;")+'</span></span><button onclick="formDel('+f.id+')" style="font-size:10px;color:var(--accent);background:none;border:none;cursor:pointer">Retirer</button></div>'; }).join('');
+};
+window.formLoad = function(){
+  fetch('/api/entreprise/formations', {credentials:'same-origin'}).then(function(r){return r.json();}).then(function(d){ if(d&&d.ok) formRender(d.formations); }).catch(function(){});
+};
+window.formAdd = function(){
+  var dt = document.getElementById('form-date'), th = document.getElementById('form-theme');
+  if(!dt || !dt.value){ return; }
+  fetch('/api/entreprise/formations', {method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json'}, body:JSON.stringify({date_prevue: dt.value, theme:(th?th.value.trim():'')})})
+    .then(function(r){return r.json();}).then(function(d){ if(d&&d.ok){ if(th)th.value=''; formRender(d.formations); } }).catch(function(){});
+};
+window.formDel = function(id){
+  fetch('/api/entreprise/formations/'+id, {method:'DELETE', credentials:'same-origin'}).then(function(r){return r.json();}).then(function(d){ if(d&&d.ok) formLoad(); }).catch(function(){});
+};
+window.connSync = function(id, cat){
+  function pct(fn){ try { var v=(typeof window[fn]==='function')?window[fn]():null; return (typeof v==='number'&&!isNaN(v))?Math.round(v):null; } catch(e){ return null; } }
+  var body;
+  if(cat==='GRC'){ body = { type:'compliance_snapshot', indices:{ ia_act:pct('gcAuditPct'), rgpd:pct('gcRgpdPct'), iso42001:pct('gcIsoPct') } }; }
+  else if(cat==='ITSM'){ body = { type:'compliance_ticket', titre:'Suivi de conformit\u00e9 IA Act', description:'Point de conformit\u00e9 transmis depuis Sentinel.' }; }
+  else { body = { type:'governance_context', message:'Contexte de gouvernance transmis depuis Sentinel.' }; }
+  var msg = document.getElementById('conn-msg'); if(msg) msg.textContent = 'Envoi\u2026';
+  fetch('/api/entreprise/connecteurs/'+id+'/sync', {method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)})
+    .then(function(r){return r.json();}).then(function(d){ if(msg) msg.textContent = (d&&d.envoye) ? ('Donn\u00e9es transmises ('+(d.detail||'')+').') : ('\u00c9chec de transmission'+((d&&d.detail)?' ('+d.detail+')':'')+'.'); connLoad(); }).catch(function(){ if(msg) msg.textContent = 'Erreur r\u00e9seau.'; });
+};
+try { entLoadEntites(); connLoad(); formLoad(); } catch(e){}
 window.__veille = {data:null, ts:0, loading:false, regs:[], timer:null};
 window.veilleInit = function(containerId, updId, filter){
   window.__veille.regs.push({id:containerId, upd:updId, filter:filter||{}});
