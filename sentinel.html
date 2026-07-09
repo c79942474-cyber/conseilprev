@@ -18346,12 +18346,21 @@ window.clientSubLoad = function(cid, live){
           + '<div style="font-size:12px;color:var(--muted);margin-top:2px">Prochaine \u00e9ch\u00e9ance : <strong style="color:var(--ink)">'+when+'</strong></div>';
         if(d.cancel_at_period_end){ h += '<div style="font-size:11px;color:#c98a00;margin-top:4px">R\u00e9siliation programm\u00e9e en fin de p\u00e9riode.</div>'; }
       }
+      h += '<div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--rule2);font-size:11px;color:var(--muted)">Changer l\u2019offre :'
+        + ['gratuit','pro','entreprise'].map(function(pp){ return ' <button onclick="clientSetPlan(\''+cid+'\',\''+pp+'\')" style="font-size:11px;padding:3px 8px;border:1px solid var(--rule2);border-radius:4px;background:'+(d.plan===pp?'var(--ink,#111827)':'transparent')+';color:'+(d.plan===pp?'#fff':'var(--ink)')+';cursor:pointer">'+(PL[pp]||pp)+'</button>'; }).join('')
+        + '</div>';
       h += '</div>';
       box.innerHTML = h;
     })
     .catch(function(){ if(box) box.innerHTML = ''; });
 };
 
+window.clientSetPlan = function(cid, plan){
+  fetch('/api/clients/set-plan', {method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json'}, body:JSON.stringify({client_id: cid, plan: plan})})
+    .then(function(r){ return r.json(); })
+    .then(function(d){ if(d && d.ok){ if(window.clientSubLoad) clientSubLoad(cid); } })
+    .catch(function(){});
+};
 window.__veille = {data:null, ts:0, loading:false, regs:[], timer:null};
 window.veilleInit = function(containerId, updId, filter){
   window.__veille.regs.push({id:containerId, upd:updId, filter:filter||{}});
