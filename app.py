@@ -7330,8 +7330,9 @@ def clients_billing_run():
 
 @app.route('/api/clients/subscription', methods=['GET'])
 def clients_subscription():
-    """Detail de l'abonnement Stripe d'un client (CONSEILPREV) : offre, statut,
-    montant, prochaine echeance. Recupere en direct depuis Stripe si configure."""
+    """Detail de l'abonnement Stripe d'un client (CONSEILPREV). En mode direct,
+    si l'identifiant d'abonnement n'a pas ete memorise, la fonction retrouve
+    l'abonnement actif par e-mail chez Stripe et le rattache au client."""
     if not raas_require_conseilprev():
         return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
     try:
@@ -7339,16 +7340,15 @@ def clients_subscription():
     except (TypeError, ValueError):
         return jsonify({'ok': False, 'error': 'client_id invalide'}), 400
     conn = registre_get_db(); cur = conn.cursor()
-    try:
-        cur.execute(registre_sql('SELECT plan, stripe_subscription_id FROM clients WHERE id=%s',
-                                 'SELECT plan, stripe_subscription_id FROM clients WHERE id=?'), (client_id,))
-        row = cur.fetchone()
-    except Exception:
-        try: conn.rollback()
-        except Exception: pass
+    row = None
+    for q_pg, q_sq in [
+        ('SELECT plan, stripe_subscription_id, stripe_customer_id, email FROM clients WHERE id=%s',
+         'SELECT plan, stripe_subscription_id, stripe_customer_id, email FROM clients WHERE id=?'),
+        ('SELECT plan, email FROM clients WHERE id=%s', 'SELECT plan, email FROM clients WHERE id=?'),
+        ('SELECT plan FROM clients WHERE id=%s', 'SELECT plan FROM clients WHERE id=?')]:
         try:
-            cur.execute(registre_sql('SELECT plan FROM clients WHERE id=%s', 'SELECT plan FROM clients WHERE id=?'), (client_id,))
-            row = cur.fetchone()
+            cur.execute(registre_sql(q_pg, q_sq), (client_id,))
+            row = cur.fetchone(); break
         except Exception:
             try: conn.rollback()
             except Exception: pass
@@ -7358,13 +7358,22 @@ def clients_subscription():
     row = dict(row) if row else {}
     plan = row.get('plan') or 'gratuit'
     sub_id = row.get('stripe_subscription_id')
-    if not sub_id:
-        return jsonify({'ok': True, 'has_sub': False, 'plan': plan})
+    email = row.get('email')
     if not request.args.get('live'):
-        return jsonify({'ok': True, 'has_sub': True, 'plan': plan})
+        return jsonify({'ok': True, 'has_sub': bool(sub_id), 'plan': plan})
     secret = os.environ.get('STRIPE_SECRET_KEY')
     if not secret:
-        return jsonify({'ok': True, 'has_sub': True, 'plan': plan, 'configured': False})
+        return jsonify({'ok': True, 'has_sub': bool(sub_id), 'plan': plan, 'configured': False})
+
+    def _g(o, k):
+        try:
+            return getattr(o, k)
+        except Exception:
+            try:
+                return o[k]
+            except Exception:
+                return None
+
     try:
         import stripe
         stripe.api_key = secret
@@ -7373,26 +7382,45 @@ def clients_subscription():
             stripe.default_http_client = stripe.http_client.RequestsClient(timeout=8)
         except Exception:
             pass
-        sub = stripe.Subscription.retrieve(sub_id)
+        sub = None
+        if sub_id:
+            sub = stripe.Subscription.retrieve(sub_id)
+        elif email:
+            custs = stripe.Customer.list(email=email, limit=10)
+            for c in (_g(custs, 'data') or []):
+                subs = stripe.Subscription.list(customer=_g(c, 'id'), status='active', limit=1)
+                dl = _g(subs, 'data') or []
+                if dl:
+                    sub = dl[0]
+                    try:
+                        _billing_set_customer(client_id, _g(c, 'id'))
+                        _billing_set_subscription(client_id, _g(sub, 'id'))
+                    except Exception:
+                        pass
+                    break
+        if sub is None:
+            return jsonify({'ok': True, 'has_sub': False, 'plan': plan})
     except Exception:
-        return jsonify({'ok': True, 'has_sub': True, 'plan': plan, 'configured': True, 'error_stripe': True})
+        return jsonify({'ok': True, 'has_sub': bool(sub_id), 'plan': plan, 'configured': True, 'error_stripe': True})
+
     amount = None; currency = 'eur'; interval = None
     try:
-        items = (sub.get('items') or {}).get('data') or []
-        if items:
-            price = items[0].get('price') or {}
-            amount = price.get('unit_amount')
-            currency = price.get('currency') or 'eur'
-            interval = (price.get('recurring') or {}).get('interval')
+        items_obj = _g(sub, 'items')
+        data = _g(items_obj, 'data') or []
+        if data:
+            price = _g(data[0], 'price')
+            amount = _g(price, 'unit_amount')
+            currency = _g(price, 'currency') or 'eur'
+            rec = _g(price, 'recurring')
+            interval = _g(rec, 'interval') if rec else None
     except Exception:
         pass
     return jsonify({'ok': True, 'has_sub': True, 'plan': plan,
-                    'status': sub.get('status'),
+                    'status': _g(sub, 'status'),
                     'amount_eur': (amount / 100.0 if amount is not None else None),
                     'currency': currency, 'interval': interval,
-                    'current_period_end': sub.get('current_period_end'),
-                    'cancel_at_period_end': sub.get('cancel_at_period_end')})
-
+                    'current_period_end': _g(sub, 'current_period_end'),
+                    'cancel_at_period_end': _g(sub, 'cancel_at_period_end')})
 
 
 @app.route('/api/clients/set-plan', methods=['POST'])
