@@ -3158,12 +3158,12 @@ def sentauth_init_db():
             cur2.execute(
                 # Parenthèses explicites : (A OR B OR C) AND D
                 # Sans elles, AND a priorité sur OR → logique incorrecte
-                "UPDATE clients SET plan='gratuit' "                "WHERE (plan IS NULL OR plan='pro' OR plan='entreprise') "                "AND email != %s",
+                "UPDATE clients SET plan='gratuit' "                "WHERE plan IS NULL "                "AND email != %s",
                 (_CP_EMAIL,)
             )
         else:
             cur2.execute(
-                "UPDATE clients SET plan='gratuit' "                "WHERE (plan IS NULL OR plan='pro' OR plan='entreprise') "                "AND email != ?",
+                "UPDATE clients SET plan='gratuit' "                "WHERE plan IS NULL "                "AND email != ?",
                 (_CP_EMAIL,)
             )
         n = cur2.rowcount
