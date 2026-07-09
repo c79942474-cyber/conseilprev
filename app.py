@@ -4082,6 +4082,8 @@ def stripe_webhook():
                     _billing_on_invoice_failed(numero, int(ech), int(cid) if cid else None)
                 except Exception:
                     pass
+        try: _stripe_event_mark(event.get('id'))
+        except Exception: pass
         return jsonify({'received': True}), 200
 
 
@@ -7034,34 +7036,49 @@ threading.Thread(target=_news_warmup, daemon=True).start()
 # ══════════════════════════════════════════════════════════
 
 def _stripe_event_seen(event_id):
-    """Deduplication des rejeux Stripe : retourne True si l'evenement a deja ete
-    traite. Stripe rejoue ses notifications ; sans cela, un meme paiement pourrait
-    etre traite deux fois."""
+    """Verifie seulement si un evenement Stripe a deja ete traite.
+    L'enregistrement n'a lieu qu'apres traitement reussi (_stripe_event_mark),
+    afin qu'un evenement en echec puisse etre rejoue et retraite."""
     if not event_id:
         return False
+    conn = None
     try:
         conn = registre_get_db(); cur = conn.cursor()
         cur.execute("CREATE TABLE IF NOT EXISTS stripe_events (event_id TEXT PRIMARY KEY, processed_at TEXT)")
         conn.commit()
         cur.execute(registre_sql('SELECT 1 FROM stripe_events WHERE event_id=%s',
                                  'SELECT 1 FROM stripe_events WHERE event_id=?'), (event_id,))
-        if cur.fetchone():
-            try: conn.close()
-            except Exception: pass
-            return True
-        cur.execute(registre_sql('INSERT INTO stripe_events (event_id, processed_at) VALUES (%s, %s)',
-                                 'INSERT INTO stripe_events (event_id, processed_at) VALUES (?, ?)'),
-                    (str(event_id), datetime.utcnow().isoformat()))
-        conn.commit()
+        seen = cur.fetchone() is not None
         try: conn.close()
         except Exception: pass
-        return False
+        return seen
     except Exception:
         try: conn.close()
         except Exception: pass
         return False
 
 
+def _stripe_event_mark(event_id):
+    """Enregistre un evenement Stripe comme traite, apres un traitement reussi."""
+    if not event_id:
+        return
+    conn = None
+    try:
+        conn = registre_get_db(); cur = conn.cursor()
+        cur.execute("CREATE TABLE IF NOT EXISTS stripe_events (event_id TEXT PRIMARY KEY, processed_at TEXT)")
+        try:
+            cur.execute(registre_sql('INSERT INTO stripe_events (event_id, processed_at) VALUES (%s, %s)',
+                                     'INSERT INTO stripe_events (event_id, processed_at) VALUES (?, ?)'),
+                        (str(event_id), datetime.utcnow().isoformat()))
+            conn.commit()
+        except Exception:
+            try: conn.rollback()
+            except Exception: pass
+        try: conn.close()
+        except Exception: pass
+    except Exception:
+        try: conn.close()
+        except Exception: pass
 def _billing_set_subscription(client_id, sub_id):
     """Memorise l'identifiant d'abonnement Stripe du client (pour pouvoir le
     resilier lors du passage a la facturation par resultats)."""
