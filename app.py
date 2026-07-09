@@ -4936,8 +4936,14 @@ def clients_portfolio():
     except Exception:
         try: conn.rollback()
         except Exception: pass
-        cur.execute('SELECT id, nom_entreprise, email FROM clients ORDER BY nom_entreprise ASC')
-        clients = [dict(r) for r in cur.fetchall()]
+        try:
+            cur.execute('SELECT id, nom_entreprise, email, plan FROM clients ORDER BY nom_entreprise ASC')
+            clients = [dict(r) for r in cur.fetchall()]
+        except Exception:
+            try: conn.rollback()
+            except Exception: pass
+            cur.execute('SELECT id, nom_entreprise, email FROM clients ORDER BY nom_entreprise ASC')
+            clients = [dict(r) for r in cur.fetchall()]
     portfolio = []
     tot_unpaid_amount = 0
     tot_unpaid_count = 0
@@ -7311,7 +7317,13 @@ def clients_subscription():
     except Exception:
         try: conn.rollback()
         except Exception: pass
-        row = None
+        try:
+            cur.execute(registre_sql('SELECT plan FROM clients WHERE id=%s', 'SELECT plan FROM clients WHERE id=?'), (client_id,))
+            row = cur.fetchone()
+        except Exception:
+            try: conn.rollback()
+            except Exception: pass
+            row = None
     try: conn.close()
     except Exception: pass
     row = dict(row) if row else {}
