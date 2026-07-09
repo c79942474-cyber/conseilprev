@@ -7325,6 +7325,11 @@ def clients_subscription():
     try:
         import stripe
         stripe.api_key = secret
+        stripe.max_network_retries = 0
+        try:
+            stripe.default_http_client = stripe.http_client.RequestsClient(timeout=8)
+        except Exception:
+            pass
         sub = stripe.Subscription.retrieve(sub_id)
     except Exception:
         return jsonify({'ok': True, 'has_sub': True, 'plan': plan, 'configured': True, 'error_stripe': True})
