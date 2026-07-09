@@ -16899,6 +16899,7 @@ window.raasPortfolioToggle = function(){
       function eur(n){ return (n||0).toLocaleString('fr-FR')+'\u202f\u20ac'; }
       var STAT={prospect:'Prospect',onboarding:'Onboarding',actif:'Actif',a_risque:'\u00c0 risque',inactif:'Inactif',clos:'Clos'};
       var SANTEC={a_evaluer:'var(--muted2)',bonne:'var(--green)',moyenne:'#c98a00',fragile:'var(--accent)'};
+      function plabel(p){ var m={gratuit:'Gratuit',pro:'Pro',entreprise:'Entreprise'}; var cc={gratuit:'var(--muted2)',pro:'#6B46C1',entreprise:'#0E7C7B'}; var pl=p.plan||'gratuit'; return '<span style="font-size:11px;font-weight:600;color:'+(cc[pl]||'var(--muted)')+'">'+(m[pl]||pl)+'</span>'+(p.has_sub?' <span title="Abonnement Stripe actif" style="color:var(--green,#0E7C7B)">\u25CF</span>':''); }
       var t=d.totals||{};
       window.__raasPortfolio = {portfolio:d.portfolio, totals:t};
       var head =
@@ -16919,6 +16920,7 @@ window.raasPortfolioToggle = function(){
         var alert = p.unpaid_amount>0 || p.pending_relances>0;
         return '<tr style="cursor:pointer" onclick="raasPortfolioOpen('+p.id+')">'
           + '<td><strong>'+String(p.nom).replace(/</g,"&lt;")+'</strong></td>'
+          + '<td>'+plabel(p)+'</td>'
           + '<td>'+(STAT[p.statut]||p.statut)+'</td>'
           + '<td><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:'+col+'"></span></td>'
           + '<td class="ms-amount" style="color:'+(p.unpaid_amount?'var(--accent)':'inherit')+'">'+(p.unpaid_count?eur(p.unpaid_amount)+' ('+p.unpaid_count+')':'\u2014')+'</td>'
@@ -16928,7 +16930,7 @@ window.raasPortfolioToggle = function(){
           + '</tr>';
       }).join('');
       box.innerHTML = head
-        + '<table class="ms-table"><thead><tr><th>Client</th><th>Statut</th><th>Sant\u00e9</th><th>Impay\u00e9s</th><th>Relances</th><th>Jalons</th><th>Contact</th></tr></thead><tbody>'+rows+'</tbody></table>'
+        + '<table class="ms-table"><thead><tr><th>Client</th><th>Offre</th><th>Statut</th><th>Sant\u00e9</th><th>Impay\u00e9s</th><th>Relances</th><th>Jalons</th><th>Contact</th></tr></thead><tbody>'+rows+'</tbody></table>'
         + '<div style="font-size:10px;color:var(--muted2);margin-top:6px">Cliquez sur une ligne pour ouvrir le suivi d\u00e9taill\u00e9 du client.</div>';
     }).catch(function(){ box.innerHTML='<div style="color:var(--accent);font-size:12px;padding:10px">Erreur de chargement du portefeuille.</div>'; });
 };
