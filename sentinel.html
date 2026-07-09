@@ -18325,18 +18325,23 @@ window.clientSubLoad = function(cid, live){
     .then(function(d){
       if(!d || !d.ok){ box.innerHTML = ''; return; }
       var PL={gratuit:'Gratuit',pro:'Pro',entreprise:'Entreprise'};
+      var payante = (d.plan==='pro' || d.plan==='entreprise');
       var h = '<div style="border:1px solid var(--rule2);border-radius:10px;padding:12px 14px;background:var(--white);margin-bottom:12px">'
         + '<div style="font-weight:700;font-size:12px;margin-bottom:6px">Abonnement Stripe</div>'
         + '<div style="font-size:12px;color:var(--muted)">Offre : <strong style="color:var(--ink)">'+(PL[d.plan]||d.plan||'\u2014')+'</strong></div>';
-      if(!d.has_sub){
-        h += '<div style="font-size:12px;color:var(--muted);margin-top:4px">Aucun abonnement Stripe (facturation par r\u00e9sultats le cas \u00e9ch\u00e9ant).</div>';
-      } else if(!live){
-        h += '<div style="font-size:12px;color:var(--green,#0E7C7B);margin-top:4px">Abonnement Stripe actif.</div>'
-          + '<button class="mat-export-btn" style="background:var(--ink,#111827);color:#fff;margin-top:8px" onclick="clientSubLoad(\''+cid+'\', true)">Voir les d\u00e9tails Stripe</button>';
+      if(!live){
+        if(d.has_sub){ h += '<div style="font-size:12px;color:var(--green,#0E7C7B);margin-top:4px">Abonnement Stripe actif.</div>'; }
+        else if(payante){ h += '<div style="font-size:12px;color:var(--muted);margin-top:4px">Abonnement Stripe non encore rattach\u00e9.</div>'; }
+        else { h += '<div style="font-size:12px;color:var(--muted);margin-top:4px">Aucun abonnement Stripe (facturation par r\u00e9sultats le cas \u00e9ch\u00e9ant).</div>'; }
+        if(d.has_sub || payante){
+          h += '<button class="mat-export-btn" style="background:var(--ink,#111827);color:#fff;margin-top:8px" onclick="clientSubLoad(\''+cid+'\', true)">Voir les d\u00e9tails Stripe</button>';
+        }
       } else if(d.configured === false){
-        h += '<div style="font-size:12px;color:var(--muted);margin-top:4px">Abonnement pr\u00e9sent ; d\u00e9tails indisponibles (Stripe non configur\u00e9).</div>';
+        h += '<div style="font-size:12px;color:var(--muted);margin-top:4px">D\u00e9tails indisponibles (Stripe non configur\u00e9).</div>';
       } else if(d.error_stripe){
-        h += '<div style="font-size:12px;color:var(--accent);margin-top:4px">D\u00e9tails introuvables c\u00f4t\u00e9 Stripe.</div>';
+        h += '<div style="font-size:12px;color:var(--accent);margin-top:4px">Erreur lors de l\u2019acc\u00e8s \u00e0 Stripe.</div>';
+      } else if(!d.has_sub){
+        h += '<div style="font-size:12px;color:var(--muted);margin-top:4px">Aucun abonnement Stripe trouv\u00e9 pour ce client.</div>';
       } else {
         var ST={active:'Actif',trialing:'Essai',past_due:'Impay\u00e9',canceled:'R\u00e9sili\u00e9',unpaid:'Impay\u00e9',incomplete:'Incomplet',incomplete_expired:'Expir\u00e9'};
         var amt = (d.amount_eur!=null) ? (d.amount_eur.toLocaleString('fr-FR')+'\u202f\u20ac'+(d.interval==='month'?' / mois':(d.interval==='year'?' / an':''))) : '\u2014';
