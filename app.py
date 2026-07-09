@@ -4027,72 +4027,77 @@ def stripe_webhook():
         event = stripe.Webhook.construct_event(payload, sig, secret)
     except Exception:
         return jsonify({'error': "Signature invalide."}), 400
-    if _stripe_event_seen(event.get('id')):
-        return jsonify({'received': True, 'duplicate': True}), 200
-    etype = event.get('type')
-    obj = (event.get('data') or {}).get('object') or {}
-    meta = obj.get('metadata') or {}
-    if etype == 'checkout.session.completed':
-        cid = meta.get('client_id') or obj.get('client_reference_id')
-        plan = meta.get('plan')
-        if cid and plan in ('pro', 'entreprise'):
-            try:
-                activate_client_plan(int(cid), plan)
-            except Exception:
-                pass
-            try:
-                _conn_e = registre_get_db(); _cur_e = _conn_e.cursor()
-                _cur_e.execute(registre_sql('SELECT email, nom_entreprise FROM clients WHERE id=%s', 'SELECT email, nom_entreprise FROM clients WHERE id=?'), (int(cid),))
-                _ce = _cur_e.fetchone()
-                try: _conn_e.close()
-                except Exception: pass
-                _ce = dict(_ce) if _ce else {}
-                if _ce.get('email'):
-                    _plabel = 'Entreprise' if plan == 'entreprise' else 'Pro'
-                    send_email_smart(_ce['email'], _ce.get('nom_entreprise') or 'Client',
-                        'Votre offre Sentinel ' + _plabel + ' est activee',
-                        '<p>Bonjour,</p><p>Votre paiement a bien ete recu et votre offre <strong>Sentinel ' + _plabel + '</strong> est desormais active. Vous avez acces a l ensemble des modules correspondants.</p><p>L equipe CONSEILPREV</p>',
-                        tags=['activation'])
-            except Exception:
-                pass
-        cust = obj.get('customer')
-        if cid and cust:
-            try:
-                _billing_set_customer(int(cid), cust)
-            except Exception:
-                pass
-        sub = obj.get('subscription')
-        if cid and sub:
-            try:
-                _billing_set_subscription(int(cid), sub)
-            except Exception:
-                pass
-    elif etype == 'invoice.paid':
-        numero = meta.get('numero'); ech = meta.get('echeance')
-        if numero and ech:
-            try:
-                _billing_on_invoice_paid(numero, int(ech))
-            except Exception:
-                pass
-    elif etype == 'invoice.payment_failed':
-        numero = meta.get('numero'); ech = meta.get('echeance'); cid = meta.get('client_id')
-        if numero and ech:
-            try:
-                _billing_on_invoice_failed(numero, int(ech), int(cid) if cid else None)
-            except Exception:
-                pass
+    try:
+        if _stripe_event_seen(event.get('id')):
+            return jsonify({'received': True, 'duplicate': True}), 200
+        etype = event.get('type')
+        obj = (event.get('data') or {}).get('object') or {}
+        meta = obj.get('metadata') or {}
+        if etype == 'checkout.session.completed':
+            cid = meta.get('client_id') or obj.get('client_reference_id')
+            plan = meta.get('plan')
+            if cid and plan in ('pro', 'entreprise'):
+                try:
+                    activate_client_plan(int(cid), plan)
+                except Exception:
+                    pass
+                try:
+                    _conn_e = registre_get_db(); _cur_e = _conn_e.cursor()
+                    _cur_e.execute(registre_sql('SELECT email, nom_entreprise FROM clients WHERE id=%s', 'SELECT email, nom_entreprise FROM clients WHERE id=?'), (int(cid),))
+                    _ce = _cur_e.fetchone()
+                    try: _conn_e.close()
+                    except Exception: pass
+                    _ce = dict(_ce) if _ce else {}
+                    if _ce.get('email'):
+                        _plabel = 'Entreprise' if plan == 'entreprise' else 'Pro'
+                        send_email_smart(_ce['email'], _ce.get('nom_entreprise') or 'Client',
+                            'Votre offre Sentinel ' + _plabel + ' est activee',
+                            '<p>Bonjour,</p><p>Votre paiement a bien ete recu et votre offre <strong>Sentinel ' + _plabel + '</strong> est desormais active. Vous avez acces a l ensemble des modules correspondants.</p><p>L equipe CONSEILPREV</p>',
+                            tags=['activation'])
+                except Exception:
+                    pass
+            cust = obj.get('customer')
+            if cid and cust:
+                try:
+                    _billing_set_customer(int(cid), cust)
+                except Exception:
+                    pass
+            sub = obj.get('subscription')
+            if cid and sub:
+                try:
+                    _billing_set_subscription(int(cid), sub)
+                except Exception:
+                    pass
+        elif etype == 'invoice.paid':
+            numero = meta.get('numero'); ech = meta.get('echeance')
+            if numero and ech:
+                try:
+                    _billing_on_invoice_paid(numero, int(ech))
+                except Exception:
+                    pass
+        elif etype == 'invoice.payment_failed':
+            numero = meta.get('numero'); ech = meta.get('echeance'); cid = meta.get('client_id')
+            if numero and ech:
+                try:
+                    _billing_on_invoice_failed(numero, int(ech), int(cid) if cid else None)
+                except Exception:
+                    pass
+        return jsonify({'received': True}), 200
+
+
+
+    # ══════════════════════════════════════════════════════════
+    # AGENT SENTINEL PRICING ORCHESTRATOR — TARIFICATION RAAS PAR JALONS
+    # Modules : Observateur (lecture des scores), Verificateur (double
+    # declencheur), Facturier (echeancier, gel des acquis), Mediateur
+    # (validation humaine CONSEILPREV requise pour verifier un jalon).
+    # Regles inviolables : jalon verified = irrevocable ; aucun jalon
+    # facture sans verification ; enveloppe bornee a 60 % du SaaS annuel.
+    # ══════════════════════════════════════════════════════════
+    except Exception as _we:
+        try: logger.error('STRIPE_WEBHOOK_ERROR: ' + str(_we))
+        except Exception: pass
     return jsonify({'received': True}), 200
-
-
-
-# ══════════════════════════════════════════════════════════
-# AGENT SENTINEL PRICING ORCHESTRATOR — TARIFICATION RAAS PAR JALONS
-# Modules : Observateur (lecture des scores), Verificateur (double
-# declencheur), Facturier (echeancier, gel des acquis), Mediateur
-# (validation humaine CONSEILPREV requise pour verifier un jalon).
-# Regles inviolables : jalon verified = irrevocable ; aucun jalon
-# facture sans verification ; enveloppe bornee a 60 % du SaaS annuel.
-# ══════════════════════════════════════════════════════════
 
 def raas_require_conseilprev():
     """Retourne le client CONSEILPREV ou None. Les operations de
@@ -7052,6 +7057,8 @@ def _stripe_event_seen(event_id):
         except Exception: pass
         return False
     except Exception:
+        try: conn.close()
+        except Exception: pass
         return False
 
 
