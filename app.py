@@ -7490,6 +7490,149 @@ def clients_set_plan():
 
 
 
+# ══════════════════════════════════════════════════════════
+# ESPACE ENTREPRISE — entites/perimetres et connecteurs d'integration,
+# rattaches au client authentifie. Tables creees a la volee.
+# CONSEILPREV/Sentinel.
+# ══════════════════════════════════════════════════════════
+
+def _ent_client_id():
+    c = sentauth_current_client()
+    if not c:
+        return None
+    try:
+        return int(c.get('id') or 0)
+    except Exception:
+        return 0
+
+
+@app.route('/api/entreprise/entites', methods=['GET', 'POST'])
+def entreprise_entites():
+    cid = _ent_client_id()
+    if cid is None:
+        return jsonify({'ok': False, 'error': 'Non authentifie'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute("CREATE TABLE IF NOT EXISTS client_entites (id SERIAL PRIMARY KEY, client_id INTEGER, nom TEXT, type TEXT, created_at TEXT)"
+                if REGISTRE_USE_PG else
+                "CREATE TABLE IF NOT EXISTS client_entites (id INTEGER PRIMARY KEY AUTOINCREMENT, client_id INTEGER, nom TEXT, type TEXT, created_at TEXT)")
+    conn.commit()
+    if request.method == 'POST':
+        d = request.get_json(silent=True) or {}
+        nom = (d.get('nom') or '').strip()[:200]
+        typ = (d.get('type') or 'Filiale').strip()[:60]
+        if not nom:
+            try: conn.close()
+            except Exception: pass
+            return jsonify({'ok': False, 'error': 'Nom requis'}), 400
+        cur.execute(registre_sql('INSERT INTO client_entites (client_id, nom, type, created_at) VALUES (%s,%s,%s,%s)',
+                                 'INSERT INTO client_entites (client_id, nom, type, created_at) VALUES (?,?,?,?)'),
+                    (cid, nom, typ, datetime.utcnow().isoformat()))
+        conn.commit()
+    cur.execute(registre_sql('SELECT id, nom, type FROM client_entites WHERE client_id=%s ORDER BY id ASC',
+                             'SELECT id, nom, type FROM client_entites WHERE client_id=? ORDER BY id ASC'), (cid,))
+    rows = [dict(r) for r in cur.fetchall()]
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True, 'entites': rows})
+
+
+@app.route('/api/entreprise/entites/<int:eid>', methods=['DELETE'])
+def entreprise_entites_delete(eid):
+    cid = _ent_client_id()
+    if cid is None:
+        return jsonify({'ok': False, 'error': 'Non authentifie'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql('DELETE FROM client_entites WHERE id=%s AND client_id=%s',
+                             'DELETE FROM client_entites WHERE id=? AND client_id=?'), (eid, cid))
+    conn.commit()
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True})
+
+
+@app.route('/api/entreprise/connecteurs', methods=['GET', 'POST'])
+def entreprise_connecteurs():
+    cid = _ent_client_id()
+    if cid is None:
+        return jsonify({'ok': False, 'error': 'Non authentifie'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute("CREATE TABLE IF NOT EXISTS client_connecteurs (id SERIAL PRIMARY KEY, client_id INTEGER, categorie TEXT, nom TEXT, url TEXT, secret TEXT, statut TEXT, created_at TEXT)"
+                if REGISTRE_USE_PG else
+                "CREATE TABLE IF NOT EXISTS client_connecteurs (id INTEGER PRIMARY KEY AUTOINCREMENT, client_id INTEGER, categorie TEXT, nom TEXT, url TEXT, secret TEXT, statut TEXT, created_at TEXT)")
+    conn.commit()
+    if request.method == 'POST':
+        d = request.get_json(silent=True) or {}
+        categorie = (d.get('categorie') or 'GRC').strip()[:20]
+        nom = (d.get('nom') or '').strip()[:120]
+        url = (d.get('url') or '').strip()[:500]
+        secret = (d.get('secret') or '').strip()[:500]
+        if not url or not url.lower().startswith('https://'):
+            try: conn.close()
+            except Exception: pass
+            return jsonify({'ok': False, 'error': 'URL HTTPS requise'}), 400
+        cur.execute(registre_sql('INSERT INTO client_connecteurs (client_id, categorie, nom, url, secret, statut, created_at) VALUES (%s,%s,%s,%s,%s,%s,%s)',
+                                 'INSERT INTO client_connecteurs (client_id, categorie, nom, url, secret, statut, created_at) VALUES (?,?,?,?,?,?,?)'),
+                    (cid, categorie, nom, url, secret, 'non_teste', datetime.utcnow().isoformat()))
+        conn.commit()
+    cur.execute(registre_sql('SELECT id, categorie, nom, url, statut FROM client_connecteurs WHERE client_id=%s ORDER BY id ASC',
+                             'SELECT id, categorie, nom, url, statut FROM client_connecteurs WHERE client_id=? ORDER BY id ASC'), (cid,))
+    rows = [dict(r) for r in cur.fetchall()]
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True, 'connecteurs': rows})
+
+
+@app.route('/api/entreprise/connecteurs/<int:cxid>', methods=['DELETE'])
+def entreprise_connecteurs_delete(cxid):
+    cid = _ent_client_id()
+    if cid is None:
+        return jsonify({'ok': False, 'error': 'Non authentifie'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql('DELETE FROM client_connecteurs WHERE id=%s AND client_id=%s',
+                             'DELETE FROM client_connecteurs WHERE id=? AND client_id=?'), (cxid, cid))
+    conn.commit()
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True})
+
+
+@app.route('/api/entreprise/connecteurs/<int:cxid>/test', methods=['POST'])
+def entreprise_connecteurs_test(cxid):
+    cid = _ent_client_id()
+    if cid is None:
+        return jsonify({'ok': False, 'error': 'Non authentifie'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql('SELECT url, secret FROM client_connecteurs WHERE id=%s AND client_id=%s',
+                             'SELECT url, secret FROM client_connecteurs WHERE id=? AND client_id=?'), (cxid, cid))
+    row = cur.fetchone()
+    row = dict(row) if row else None
+    if not row:
+        try: conn.close()
+        except Exception: pass
+        return jsonify({'ok': False, 'error': 'Connecteur introuvable'}), 404
+    url = row.get('url'); secret = row.get('secret')
+    statut = 'echec'; detail = ''
+    if not url or not url.lower().startswith('https://'):
+        detail = 'URL non HTTPS'
+    else:
+        try:
+            headers = {'Accept': 'application/json'}
+            if secret:
+                headers['Authorization'] = 'Bearer ' + secret
+            resp = requests.get(url, headers=headers, timeout=8)
+            statut = 'operationnel' if resp.status_code < 400 else 'echec'
+            detail = 'HTTP ' + str(resp.status_code)
+        except Exception:
+            statut = 'echec'; detail = 'connexion impossible'
+    cur.execute(registre_sql('UPDATE client_connecteurs SET statut=%s WHERE id=%s AND client_id=%s',
+                             'UPDATE client_connecteurs SET statut=? WHERE id=? AND client_id=?'), (statut, cxid, cid))
+    conn.commit()
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True, 'statut': statut, 'detail': detail})
+
+
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
