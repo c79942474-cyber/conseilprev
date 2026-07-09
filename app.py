@@ -7633,6 +7633,98 @@ def entreprise_connecteurs_test(cxid):
 
 
 
+@app.route('/api/entreprise/formations', methods=['GET', 'POST'])
+def entreprise_formations():
+    cid = _ent_client_id()
+    if cid is None:
+        return jsonify({'ok': False, 'error': 'Non authentifie'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute("CREATE TABLE IF NOT EXISTS client_formations (id SERIAL PRIMARY KEY, client_id INTEGER, date_prevue TEXT, theme TEXT, statut TEXT, created_at TEXT)"
+                if REGISTRE_USE_PG else
+                "CREATE TABLE IF NOT EXISTS client_formations (id INTEGER PRIMARY KEY AUTOINCREMENT, client_id INTEGER, date_prevue TEXT, theme TEXT, statut TEXT, created_at TEXT)")
+    conn.commit()
+    if request.method == 'POST':
+        d = request.get_json(silent=True) or {}
+        date_prevue = (d.get('date_prevue') or '').strip()[:20]
+        theme = (d.get('theme') or '').strip()[:200]
+        if not date_prevue:
+            try: conn.close()
+            except Exception: pass
+            return jsonify({'ok': False, 'error': 'Date requise'}), 400
+        cur.execute(registre_sql('INSERT INTO client_formations (client_id, date_prevue, theme, statut, created_at) VALUES (%s,%s,%s,%s,%s)',
+                                 'INSERT INTO client_formations (client_id, date_prevue, theme, statut, created_at) VALUES (?,?,?,?,?)'),
+                    (cid, date_prevue, theme, 'planifiee', datetime.utcnow().isoformat()))
+        conn.commit()
+    cur.execute(registre_sql('SELECT id, date_prevue, theme, statut FROM client_formations WHERE client_id=%s ORDER BY date_prevue ASC',
+                             'SELECT id, date_prevue, theme, statut FROM client_formations WHERE client_id=? ORDER BY date_prevue ASC'), (cid,))
+    rows = [dict(r) for r in cur.fetchall()]
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True, 'formations': rows})
+
+
+@app.route('/api/entreprise/formations/<int:fid>', methods=['DELETE'])
+def entreprise_formations_delete(fid):
+    cid = _ent_client_id()
+    if cid is None:
+        return jsonify({'ok': False, 'error': 'Non authentifie'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql('DELETE FROM client_formations WHERE id=%s AND client_id=%s',
+                             'DELETE FROM client_formations WHERE id=? AND client_id=?'), (fid, cid))
+    conn.commit()
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True})
+
+
+@app.route('/api/entreprise/connecteurs/<int:cxid>/sync', methods=['POST'])
+def entreprise_connecteurs_sync(cxid):
+    """Echange de donnees reel : transmet a l'API du connecteur un contenu propre
+    a sa categorie (fourni par le client), avec jeton Bearer optionnel."""
+    cid = _ent_client_id()
+    if cid is None:
+        return jsonify({'ok': False, 'error': 'Non authentifie'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql('SELECT url, secret, categorie FROM client_connecteurs WHERE id=%s AND client_id=%s',
+                             'SELECT url, secret, categorie FROM client_connecteurs WHERE id=? AND client_id=?'), (cxid, cid))
+    row = cur.fetchone(); row = dict(row) if row else None
+    if not row:
+        try: conn.close()
+        except Exception: pass
+        return jsonify({'ok': False, 'error': 'Connecteur introuvable'}), 404
+    url = row.get('url'); secret = row.get('secret')
+    statut = 'echec'
+    if not url or not url.lower().startswith('https://'):
+        try: conn.close()
+        except Exception: pass
+        return jsonify({'ok': False, 'error': 'URL non HTTPS'}), 400
+    payload = request.get_json(silent=True) or {}
+    payload['source'] = 'CONSEILPREV Sentinel'
+    payload['categorie'] = row.get('categorie')
+    payload['emis_le'] = datetime.utcnow().isoformat()
+    envoye = False; detail = ''
+    try:
+        headers = {'Content-Type': 'application/json', 'Accept': 'application/json'}
+        if secret:
+            headers['Authorization'] = 'Bearer ' + secret
+        resp = requests.post(url, json=payload, headers=headers, timeout=10)
+        envoye = resp.status_code < 400
+        statut = 'operationnel' if envoye else 'echec'
+        detail = 'HTTP ' + str(resp.status_code)
+    except Exception:
+        envoye = False; statut = 'echec'; detail = 'connexion impossible'
+    try:
+        cur.execute(registre_sql('UPDATE client_connecteurs SET statut=%s WHERE id=%s AND client_id=%s',
+                                 'UPDATE client_connecteurs SET statut=? WHERE id=? AND client_id=?'), (statut, cxid, cid))
+        conn.commit()
+    except Exception:
+        pass
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True, 'envoye': envoye, 'detail': detail})
+
+
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
