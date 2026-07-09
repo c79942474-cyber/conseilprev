@@ -4028,10 +4028,15 @@ def stripe_webhook():
     except Exception:
         return jsonify({'error': "Signature invalide."}), 400
     try:
-        if _stripe_event_seen(event.get('id')):
+        import json as _jwh
+        evt = _jwh.loads(payload.decode('utf-8') if isinstance(payload, (bytes, bytearray)) else payload)
+    except Exception:
+        evt = {}
+    try:
+        if _stripe_event_seen(evt.get('id')):
             return jsonify({'received': True, 'duplicate': True}), 200
-        etype = event.get('type')
-        obj = (event.get('data') or {}).get('object') or {}
+        etype = evt.get('type')
+        obj = (evt.get('data') or {}).get('object') or {}
         meta = obj.get('metadata') or {}
         if etype == 'checkout.session.completed':
             cid = meta.get('client_id') or obj.get('client_reference_id')
@@ -4082,7 +4087,7 @@ def stripe_webhook():
                     _billing_on_invoice_failed(numero, int(ech), int(cid) if cid else None)
                 except Exception:
                     pass
-        try: _stripe_event_mark(event.get('id'))
+        try: _stripe_event_mark(evt.get('id'))
         except Exception: pass
         return jsonify({'received': True}), 200
 
