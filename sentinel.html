@@ -3546,16 +3546,26 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div style="font-size:12px;color:var(--muted)">Observatoire, simulateur IA Act, registre, matrice de risques, audits, module RGPD, documentation, équipe et formation : toutes les capacités de l'offre Pro sont comprises, sans redondance. L'offre Entreprise les étend aux six dimensions ci-dessous.</div>
   </div>
 
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px">
+    <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:18px">
+    <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:8px">Guide d'utilisation</div>
+    <details style="margin-bottom:4px"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">1 · Déploiement multi-entités et multi-périmètres</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 8px 0">Enregistrez chaque entité couverte par votre déploiement en précisant son type : filiale, groupe, périmètre ou site. Ces entités structurent le pilotage à l'échelle de votre organisation et sont conservées côté serveur, rattachées à votre compte. Saisissez un nom, choisissez le type, puis « Ajouter » ; « Retirer » supprime une entité.</div></details>
+    <details style="margin-bottom:4px"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">2 · API d'intégration d'outils internes</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 8px 0">Déclarez un connecteur vers un outil interne en choisissant sa catégorie (GRC, ERP ou ITSM), en lui donnant un nom, et en indiquant l'URL HTTPS de son API et, si nécessaire, un jeton d'authentification. « Tester » vérifie l'accès réel à l'API. « Synchroniser » transmet à cette API un contenu adapté à la catégorie : un instantané de conformité pour un GRC, un ticket pour un ITSM, un contexte de gouvernance pour un ERP. Seules les URL HTTPS sont acceptées, et le jeton n'est jamais affiché après enregistrement.</div></details>
+    <details style="margin-bottom:4px"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">3 · SLA contractuel et accompagnement</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 8px 0">Le tableau présente les engagements de service par niveau de criticité : délai de prise en charge et délai de résolution visé. Ces valeurs sont indicatives et sont précisées dans votre contrat. Un interlocuteur CONSEILPREV dédié est votre référent tout au long du déploiement.</div></details>
+    <details style="margin-bottom:4px"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">4 · Formation sur site</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 8px 0">Planifiez les sessions de formation sur site en indiquant une date et un thème, puis « Planifier ». Les sessions sont conservées côté serveur et peuvent être retirées. L'offre comprend deux sessions par an.</div></details>
+    <details style="margin-bottom:4px"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">5 · Rapport IA Act annuel personnalisé</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 8px 0">« Générer le rapport annuel » produit un document imprimable, exportable en PDF, consolidant l'indice global de conformité et le détail des trois référentiels (IA Act, RGPD, ISO/IEC 42001). Les indices reflètent l'état de vos évaluations à la date d'édition.</div></details>
+    <details><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">6 · Jalons RaaS sur trois cadres</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 4px 0">La facturation par résultats indexe une partie de votre engagement sur l'atteinte de jalons vérifiés, sur trois référentiels : IA Act, RGPD et ISO/IEC 42001. Le bouton ouvre l'indice de conformité consolidé des trois cadres, où ces jalons sont suivis, sans duplication avec le module existant.</div></details>
+  </div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px">
 
     <div style="border:1px solid var(--rule2);border-radius:10px;padding:16px;background:var(--white)">
       <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">1 · Déploiement multi-entités et multi-périmètres</div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Filiales, entités et périmètres d'un groupe, pilotés depuis un espace unique. Enregistrez ici les entités couvertes par votre déploiement.</div>
       <div id="ent-entites"></div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
-        <input id="ent-ent-name" placeholder="Nom de l'entité" style="flex:1;min-width:120px;font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px">
+        <input id="ent-ent-name" title="Nom de la filiale, du site ou du périmètre" placeholder="Nom de l'entité" style="flex:1;min-width:120px;font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px">
         <select id="ent-ent-type" style="font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px"><option>Filiale</option><option>Groupe</option><option>Périmètre</option><option>Site</option></select>
-        <button class="mat-export-btn" onclick="entAddEntite()">Ajouter</button>
+        <button class="mat-export-btn" title="Enregistrer cette entité (côté serveur)" onclick="entAddEntite()">Ajouter</button>
       </div>
     </div>
 
@@ -3568,9 +3578,9 @@ textarea.form-el{min-height:86px;resize:vertical}
         <input id="conn-nom" placeholder="Nom (ex. ServiceNow)" style="flex:1;min-width:110px;font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px">
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">
-        <input id="conn-url" placeholder="URL de l'API (https://...)" style="flex:1;min-width:150px;font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px">
-        <input id="conn-sec" placeholder="Jeton (optionnel)" style="font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px">
-        <button class="mat-export-btn" onclick="connAdd()">Ajouter</button>
+        <input id="conn-url" title="URL HTTPS de l'API de l'outil à connecter" placeholder="URL de l'API (https://...)" style="flex:1;min-width:150px;font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px">
+        <input id="conn-sec" title="Jeton Bearer, transmis mais jamais réaffiché" placeholder="Jeton (optionnel)" style="font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px">
+        <button class="mat-export-btn" title="Déclarer ce connecteur" onclick="connAdd()">Ajouter</button>
       </div>
       <div id="conn-msg" style="font-size:11px;color:var(--accent);margin-top:4px"></div>
       <div style="font-size:11px;color:var(--muted);margin-top:6px">Le test de connexion vérifie l'accès réel à l'API configurée (HTTPS).</div>
@@ -3595,9 +3605,9 @@ textarea.form-el{min-height:86px;resize:vertical}
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Deux sessions de formation par an, dispensées sur votre site.</div>
       <div id="form-list"></div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
-        <input id="form-date" type="date" style="font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px">
+        <input id="form-date" type="date" title="Date prévue de la session" style="font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px">
         <input id="form-theme" placeholder="Thème de la session" style="flex:1;min-width:120px;font-size:12px;padding:6px 8px;border:1px solid var(--rule2);border-radius:4px">
-        <button class="mat-export-btn" onclick="formAdd()">Planifier</button>
+        <button class="mat-export-btn" title="Planifier cette session (côté serveur)" onclick="formAdd()">Planifier</button>
       </div>
       <div style="font-size:11px;color:var(--muted);margin-top:6px">Deux sessions par an incluses dans l'offre.</div>
     </div>
@@ -3606,13 +3616,13 @@ textarea.form-el{min-height:86px;resize:vertical}
       <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">5 · Rapport IA Act annuel personnalisé</div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Une synthèse annuelle de votre conformité à l'IA Act, adaptée à votre organisation et à vos périmètres.</div>
       <div style="font-size:12px;color:var(--ink);padding:4px 0">État de conformité, écarts, plan d'action et recommandations, remis chaque année.</div>
-      <button class="mat-export-btn" style="margin-top:8px" onclick="entGenerateReport()">Générer le rapport annuel</button>
+      <button class="mat-export-btn" style="margin-top:8px" title="Produire un rapport imprimable / PDF" onclick="entGenerateReport()">Générer le rapport annuel</button>
     </div>
 
     <div style="border:1px solid var(--rule2);border-radius:10px;padding:16px;background:var(--white)">
       <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">6 · Jalons RaaS sur trois cadres</div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Facturation par résultats indexée sur l'atteinte de jalons vérifiés, sur trois référentiels : IA Act, RGPD et ISO/IEC 42001.</div>
-      <button class="mat-export-btn" onclick="hubGo('conformite-globale')">Ouvrir l'indice de conformité des trois cadres</button>
+      <button class="mat-export-btn" title="Suivi consolidé IA Act, RGPD, ISO/IEC 42001" onclick="hubGo('conformite-globale')">Ouvrir l'indice de conformité des trois cadres</button>
     </div>
 
   </div>
@@ -18481,7 +18491,7 @@ window.connRender = function(list){
   var SC = {operationnel:'var(--green,#0E7C7B)', echec:'var(--accent)', non_teste:'var(--muted)'};
   var SL = {operationnel:'opérationnel', echec:'échec', non_teste:'non testé'};
   box.innerHTML = list.map(function(c){
-    return '<div style="padding:6px 0;border-bottom:1px solid var(--rule2)"><div style="display:flex;justify-content:space-between;align-items:center;font-size:12px"><span><strong style="color:var(--ink)">'+String(c.categorie).replace(/</g,"&lt;")+'</strong> · '+String(c.nom||'').replace(/</g,"&lt;")+'</span><span style="color:'+(SC[c.statut]||'var(--muted)')+';font-size:11px">'+(SL[c.statut]||c.statut)+'</span></div><div style="display:flex;gap:8px;margin-top:3px"><button onclick="connTest('+c.id+')" style="font-size:10px;background:none;border:none;color:var(--ink);cursor:pointer;text-decoration:underline">Tester</button><button onclick="connSync('+c.id+',\''+c.categorie+'\')" style="font-size:10px;background:none;border:none;color:var(--ink);cursor:pointer;text-decoration:underline">Synchroniser</button><button onclick="connDel('+c.id+')" style="font-size:10px;background:none;border:none;color:var(--accent);cursor:pointer">Retirer</button></div></div>';
+    return '<div style="padding:6px 0;border-bottom:1px solid var(--rule2)"><div style="display:flex;justify-content:space-between;align-items:center;font-size:12px"><span><strong style="color:var(--ink)">'+String(c.categorie).replace(/</g,"&lt;")+'</strong> · '+String(c.nom||'').replace(/</g,"&lt;")+'</span><span style="color:'+(SC[c.statut]||'var(--muted)')+';font-size:11px">'+(SL[c.statut]||c.statut)+'</span></div><div style="display:flex;gap:8px;margin-top:3px"><button onclick="connTest('+c.id+')" style="font-size:10px;background:none;border:none;color:var(--ink);cursor:pointer;text-decoration:underline" title="V\u00e9rifier l\u2019acc\u00e8s r\u00e9el \u00e0 l\u2019API">Tester</button><button onclick="connSync('+c.id+',\''+c.categorie+'\')" style="font-size:10px;background:none;border:none;color:var(--ink);cursor:pointer;text-decoration:underline" title="Transmettre \u00e0 l\u2019API un contenu propre \u00e0 la cat\u00e9gorie">Synchroniser</button><button onclick="connDel('+c.id+')" style="font-size:10px;background:none;border:none;color:var(--accent);cursor:pointer">Retirer</button></div></div>';
   }).join('');
 };
 window.connLoad = function(){
