@@ -16188,8 +16188,8 @@ window.raasAdminLoad = function(){
   var out = document.getElementById('raas-admin-table');
   var msg = document.getElementById('raas-admin-msg');
   if(!sel || !out) return;
-  if(!sel.value){ out.innerHTML=''; if(window.clientSubLoad) clientSubLoad(''); return; }
-  if(window.clientSubLoad) clientSubLoad(sel.value);
+  if(!sel.value){ out.innerHTML=''; var _sp0=document.getElementById('client-sub-panel'); if(_sp0) _sp0.innerHTML=''; return; }
+  var _sp=document.getElementById('client-sub-panel'); if(_sp){ _sp.innerHTML='<button class="mat-export-btn" onclick="clientSubLoad(\''+sel.value+'\')">Afficher l\u2019abonnement Stripe</button>'; }
   if(msg) msg.textContent = '';
   out.innerHTML = '<div style="padding:14px;color:var(--muted)">Chargement…</div>';
   fetch('/api/raas/milestones?client_id='+encodeURIComponent(sel.value), {credentials:'same-origin'})
