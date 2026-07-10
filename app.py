@@ -7725,6 +7725,49 @@ def entreprise_connecteurs_sync(cxid):
 
 
 
+@app.route('/api/clients/entreprise-apercu', methods=['GET'])
+def clients_entreprise_apercu():
+    """Apercu du perimetre Entreprise d'un client pour CONSEILPREV :
+    entites, connecteurs (sans secret) et formations."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    try:
+        client_id = int(request.args.get('client_id'))
+    except (TypeError, ValueError):
+        return jsonify({'ok': False, 'error': 'client_id invalide'}), 400
+    conn = registre_get_db(); cur = conn.cursor()
+    _pk = 'SERIAL PRIMARY KEY' if REGISTRE_USE_PG else 'INTEGER PRIMARY KEY AUTOINCREMENT'
+    for ddl in [
+        "CREATE TABLE IF NOT EXISTS client_entites (id " + _pk + ", client_id INTEGER, nom TEXT, type TEXT, created_at TEXT)",
+        "CREATE TABLE IF NOT EXISTS client_connecteurs (id " + _pk + ", client_id INTEGER, categorie TEXT, nom TEXT, url TEXT, secret TEXT, statut TEXT, created_at TEXT)",
+        "CREATE TABLE IF NOT EXISTS client_formations (id " + _pk + ", client_id INTEGER, date_prevue TEXT, theme TEXT, statut TEXT, created_at TEXT)"]:
+        try:
+            cur.execute(ddl)
+        except Exception:
+            pass
+    conn.commit()
+
+    def safe(sql_pg, sql_sq):
+        try:
+            cur.execute(registre_sql(sql_pg, sql_sq), (client_id,))
+            return [dict(r) for r in cur.fetchall()]
+        except Exception:
+            try: conn.rollback()
+            except Exception: pass
+            return []
+
+    entites = safe('SELECT id, nom, type FROM client_entites WHERE client_id=%s ORDER BY id',
+                   'SELECT id, nom, type FROM client_entites WHERE client_id=? ORDER BY id')
+    connecteurs = safe('SELECT id, categorie, nom, statut FROM client_connecteurs WHERE client_id=%s ORDER BY id',
+                       'SELECT id, categorie, nom, statut FROM client_connecteurs WHERE client_id=? ORDER BY id')
+    formations = safe('SELECT id, date_prevue, theme, statut FROM client_formations WHERE client_id=%s ORDER BY date_prevue',
+                      'SELECT id, date_prevue, theme, statut FROM client_formations WHERE client_id=? ORDER BY date_prevue')
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True, 'entites': entites, 'connecteurs': connecteurs, 'formations': formations})
+
+
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
