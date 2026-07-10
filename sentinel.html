@@ -18416,6 +18416,28 @@ window.billingRunExecute = function(){
     .catch(function(){ if(msg) msg.textContent = 'Erreur réseau.'; });
 };
 
+window.clientEntApercu = function(cid){
+  var box = document.getElementById('client-ent-apercu'); if(!box) return;
+  fetch('/api/clients/entreprise-apercu?client_id='+encodeURIComponent(cid), {credentials:'same-origin'})
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if(!d || !d.ok){ box.innerHTML = ''; return; }
+      var SC = {operationnel:'var(--green,#0E7C7B)', echec:'var(--accent)', non_teste:'var(--muted)'};
+      var SL = {operationnel:'op\u00e9rationnel', echec:'\u00e9chec', non_teste:'non test\u00e9'};
+      function sec(titre, items, render){
+        var h = '<div style="font-weight:600;font-size:11px;color:var(--ink);margin:8px 0 3px 0">'+titre+' ('+items.length+')</div>';
+        if(!items.length){ return h + '<div style="font-size:11px;color:var(--muted)">Aucun.</div>'; }
+        return h + items.map(render).join('');
+      }
+      var h = '<div style="border:1px solid var(--rule2);border-radius:10px;padding:12px 14px;background:var(--white)"><div style="font-weight:700;font-size:12px;margin-bottom:2px">P\u00e9rim\u00e8tre Entreprise</div>';
+      h += sec('Entit\u00e9s', d.entites||[], function(e){ return '<div style="font-size:11px;color:var(--muted);padding:2px 0">'+String(e.nom).replace(/</g,"&lt;")+' \u00b7 '+String(e.type).replace(/</g,"&lt;")+'</div>'; });
+      h += sec('Connecteurs', d.connecteurs||[], function(c){ return '<div style="font-size:11px;padding:2px 0"><span style="color:var(--muted)">'+String(c.categorie).replace(/</g,"&lt;")+' \u00b7 '+String(c.nom||'').replace(/</g,"&lt;")+'</span> <span style="color:'+(SC[c.statut]||'var(--muted)')+'">'+(SL[c.statut]||String(c.statut||'').replace(/</g,"&lt;"))+'</span></div>'; });
+      h += sec('Formations', d.formations||[], function(f){ return '<div style="font-size:11px;color:var(--muted);padding:2px 0">'+String(f.date_prevue).replace(/</g,"&lt;")+' \u00b7 '+String(f.theme||'').replace(/</g,"&lt;")+'</div>'; });
+      h += '</div>';
+      box.innerHTML = h;
+    })
+    .catch(function(){ if(box) box.innerHTML = ''; });
+};
 window.clientSubLoad = function(cid, live){
   var box = document.getElementById('client-sub-panel');
   if(!box) return;
@@ -18455,8 +18477,10 @@ window.clientSubLoad = function(cid, live){
       h += '<div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--rule2);font-size:11px;color:var(--muted)">Changer l\u2019offre :'
         + ['gratuit','pro','entreprise'].map(function(pp){ return ' <button onclick="clientSetPlan(\''+cid+'\',\''+pp+'\')" style="font-size:11px;padding:3px 8px;border:1px solid var(--rule2);border-radius:4px;background:'+(d.plan===pp?'var(--ink,#111827)':'transparent')+';color:'+(d.plan===pp?'#fff':'var(--ink)')+';cursor:pointer">'+(PL[pp]||pp)+'</button>'; }).join('')
         + '</div>';
+      h += '<div id="client-ent-apercu" style="margin-top:10px"></div>';
       h += '</div>';
       box.innerHTML = h;
+      if(d.plan === 'entreprise' && window.clientEntApercu){ try { clientEntApercu(cid); } catch(e){} }
     })
     .catch(function(){ if(box) box.innerHTML = ''; });
 };
