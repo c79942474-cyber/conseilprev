@@ -7500,6 +7500,18 @@ def _ent_client_id():
     c = sentauth_current_client()
     if not c:
         return None
+    if c.get('is_conseilprev'):
+        target = request.args.get('client_id')
+        if target is None:
+            try:
+                target = (request.get_json(silent=True) or {}).get('client_id')
+            except Exception:
+                target = None
+        if target is not None:
+            try:
+                return int(target)
+            except (TypeError, ValueError):
+                pass
     try:
         return int(c.get('id') or 0)
     except Exception:
