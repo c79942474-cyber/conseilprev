@@ -18416,28 +18416,60 @@ window.billingRunExecute = function(){
     .catch(function(){ if(msg) msg.textContent = 'Erreur réseau.'; });
 };
 
+window.__caeCid = null;
 window.clientEntApercu = function(cid){
   var box = document.getElementById('client-ent-apercu'); if(!box) return;
+  window.__caeCid = cid;
   fetch('/api/clients/entreprise-apercu?client_id='+encodeURIComponent(cid), {credentials:'same-origin'})
     .then(function(r){ return r.json(); })
     .then(function(d){
       if(!d || !d.ok){ box.innerHTML = ''; return; }
       var SC = {operationnel:'var(--green,#0E7C7B)', echec:'var(--accent)', non_teste:'var(--muted)'};
       var SL = {operationnel:'op\u00e9rationnel', echec:'\u00e9chec', non_teste:'non test\u00e9'};
-      function sec(titre, items, render){
-        var h = '<div style="font-weight:600;font-size:11px;color:var(--ink);margin:8px 0 3px 0">'+titre+' ('+items.length+')</div>';
-        if(!items.length){ return h + '<div style="font-size:11px;color:var(--muted)">Aucun.</div>'; }
-        return h + items.map(render).join('');
-      }
-      var h = '<div style="border:1px solid var(--rule2);border-radius:10px;padding:12px 14px;background:var(--white)"><div style="font-weight:700;font-size:12px;margin-bottom:2px">P\u00e9rim\u00e8tre Entreprise</div>';
-      h += sec('Entit\u00e9s', d.entites||[], function(e){ return '<div style="font-size:11px;color:var(--muted);padding:2px 0">'+String(e.nom).replace(/</g,"&lt;")+' \u00b7 '+String(e.type).replace(/</g,"&lt;")+'</div>'; });
-      h += sec('Connecteurs', d.connecteurs||[], function(c){ return '<div style="font-size:11px;padding:2px 0"><span style="color:var(--muted)">'+String(c.categorie).replace(/</g,"&lt;")+' \u00b7 '+String(c.nom||'').replace(/</g,"&lt;")+'</span> <span style="color:'+(SC[c.statut]||'var(--muted)')+'">'+(SL[c.statut]||String(c.statut||'').replace(/</g,"&lt;"))+'</span></div>'; });
-      h += sec('Formations', d.formations||[], function(f){ return '<div style="font-size:11px;color:var(--muted);padding:2px 0">'+String(f.date_prevue).replace(/</g,"&lt;")+' \u00b7 '+String(f.theme||'').replace(/</g,"&lt;")+'</div>'; });
+      var inp = 'font-size:11px;padding:5px 7px;border:1px solid var(--rule2);border-radius:4px';
+      var lnk = 'font-size:10px;background:none;border:none;cursor:pointer';
+      var addb = inp + ';cursor:pointer;background:var(--ink,#111827);color:#fff;border:none';
+      var h = '<div style="border:1px solid var(--rule2);border-radius:10px;padding:12px 14px;background:var(--white)"><div style="font-weight:700;font-size:12px;margin-bottom:6px">P\u00e9rim\u00e8tre Entreprise \u2014 gestion</div>';
+      h += '<div style="font-weight:600;font-size:11px;color:var(--ink);margin:8px 0 3px 0">Entit\u00e9s ('+(d.entites||[]).length+')</div>';
+      h += (d.entites||[]).map(function(e){ return '<div style="display:flex;justify-content:space-between;font-size:11px;padding:2px 0"><span style="color:var(--muted)">'+String(e.nom).replace(/</g,"&lt;")+' \u00b7 '+String(e.type).replace(/</g,"&lt;")+'</span><button onclick="caeDelEntite('+e.id+')" style="'+lnk+';color:var(--accent)">Retirer</button></div>'; }).join('');
+      h += '<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"><input id="cae-ent-nom" placeholder="Nom" style="'+inp+';flex:1;min-width:80px"><select id="cae-ent-type" style="'+inp+'"><option>Filiale</option><option>Groupe</option><option>P\u00e9rim\u00e8tre</option><option>Site</option></select><button onclick="caeAddEntite()" title="Ajouter une entit\u00e9" style="'+addb+'">+</button></div>';
+      h += '<div style="font-weight:600;font-size:11px;color:var(--ink);margin:10px 0 3px 0">Connecteurs ('+(d.connecteurs||[]).length+')</div>';
+      h += (d.connecteurs||[]).map(function(c){ return '<div style="padding:2px 0;font-size:11px"><div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">'+String(c.categorie).replace(/</g,"&lt;")+' \u00b7 '+String(c.nom||'').replace(/</g,"&lt;")+'</span><span style="color:'+(SC[c.statut]||'var(--muted)')+'">'+(SL[c.statut]||String(c.statut||'').replace(/</g,"&lt;"))+'</span></div><div style="display:flex;gap:8px;margin-top:1px"><button onclick="caeTestConn('+c.id+')" style="'+lnk+';color:var(--ink);text-decoration:underline">Tester</button><button onclick="caeSyncConn('+c.id+',\''+c.categorie+'\')" style="'+lnk+';color:var(--ink);text-decoration:underline">Synchroniser</button><button onclick="caeDelConn('+c.id+')" style="'+lnk+';color:var(--accent)">Retirer</button></div></div>'; }).join('');
+      h += '<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"><select id="cae-conn-cat" style="'+inp+'"><option>GRC</option><option>ERP</option><option>ITSM</option></select><input id="cae-conn-nom" placeholder="Nom" style="'+inp+';flex:1;min-width:60px"><input id="cae-conn-url" placeholder="https://..." style="'+inp+';flex:1;min-width:90px"><input id="cae-conn-sec" placeholder="Jeton" style="'+inp+';width:60px"><button onclick="caeAddConn()" title="Ajouter un connecteur" style="'+addb+'">+</button></div><div id="cae-conn-msg" style="font-size:10px;color:var(--accent);margin-top:2px"></div>';
+      h += '<div style="font-weight:600;font-size:11px;color:var(--ink);margin:10px 0 3px 0">Formations ('+(d.formations||[]).length+')</div>';
+      h += (d.formations||[]).map(function(f){ return '<div style="display:flex;justify-content:space-between;font-size:11px;padding:2px 0"><span style="color:var(--muted)">'+String(f.date_prevue).replace(/</g,"&lt;")+' \u00b7 '+String(f.theme||'').replace(/</g,"&lt;")+'</span><button onclick="caeDelForm('+f.id+')" style="'+lnk+';color:var(--accent)">Retirer</button></div>'; }).join('');
+      h += '<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"><input id="cae-form-date" type="date" style="'+inp+'"><input id="cae-form-theme" placeholder="Th\u00e8me" style="'+inp+';flex:1;min-width:70px"><button onclick="caeAddForm()" title="Planifier une session" style="'+addb+'">+</button></div>';
       h += '</div>';
       box.innerHTML = h;
     })
     .catch(function(){ if(box) box.innerHTML = ''; });
 };
+function _caeRefresh(){ if(window.__caeCid) window.clientEntApercu(window.__caeCid); }
+window.caeAddEntite = function(){
+  var cid=window.__caeCid, n=document.getElementById('cae-ent-nom'), t=document.getElementById('cae-ent-type');
+  if(!cid||!n||!n.value.trim()) return;
+  fetch('/api/entreprise/entites', {method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({client_id:cid,nom:n.value.trim(),type:(t?t.value:'Filiale')})}).then(function(){ _caeRefresh(); }).catch(function(){});
+};
+window.caeDelEntite = function(id){ var cid=window.__caeCid; fetch('/api/entreprise/entites/'+id+'?client_id='+encodeURIComponent(cid),{method:'DELETE',credentials:'same-origin'}).then(function(){ _caeRefresh(); }).catch(function(){}); };
+window.caeAddConn = function(){
+  var cid=window.__caeCid, cat=document.getElementById('cae-conn-cat'), nom=document.getElementById('cae-conn-nom'), url=document.getElementById('cae-conn-url'), sec=document.getElementById('cae-conn-sec'), msg=document.getElementById('cae-conn-msg');
+  if(!cid||!url||!url.value.trim()){ if(msg) msg.textContent='URL HTTPS requise.'; return; }
+  fetch('/api/entreprise/connecteurs', {method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({client_id:cid,categorie:(cat?cat.value:'GRC'),nom:(nom?nom.value.trim():''),url:url.value.trim(),secret:(sec?sec.value.trim():'')})}).then(function(r){return r.json();}).then(function(d){ if(d&&d.ok){ _caeRefresh(); } else if(msg){ msg.textContent=(d&&d.error)||'Erreur'; } }).catch(function(){});
+};
+window.caeDelConn = function(id){ var cid=window.__caeCid; fetch('/api/entreprise/connecteurs/'+id+'?client_id='+encodeURIComponent(cid),{method:'DELETE',credentials:'same-origin'}).then(function(){ _caeRefresh(); }).catch(function(){}); };
+window.caeTestConn = function(id){ var cid=window.__caeCid; fetch('/api/entreprise/connecteurs/'+id+'/test?client_id='+encodeURIComponent(cid),{method:'POST',credentials:'same-origin'}).then(function(){ _caeRefresh(); }).catch(function(){}); };
+window.caeSyncConn = function(id, cat){
+  var cid=window.__caeCid;
+  function pct(fn){ try { var v=(typeof window[fn]==='function')?window[fn]():null; return (typeof v==='number'&&!isNaN(v))?Math.round(v):null; } catch(e){ return null; } }
+  var body; if(cat==='GRC'){ body={type:'compliance_snapshot',indices:{ia_act:pct('gcAuditPct'),rgpd:pct('gcRgpdPct'),iso42001:pct('gcIsoPct')}}; } else if(cat==='ITSM'){ body={type:'compliance_ticket',titre:'Suivi de conformit\u00e9 IA Act'}; } else { body={type:'governance_context'}; }
+  fetch('/api/entreprise/connecteurs/'+id+'/sync?client_id='+encodeURIComponent(cid),{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(){ _caeRefresh(); }).catch(function(){});
+};
+window.caeAddForm = function(){
+  var cid=window.__caeCid, dt=document.getElementById('cae-form-date'), th=document.getElementById('cae-form-theme');
+  if(!cid||!dt||!dt.value) return;
+  fetch('/api/entreprise/formations', {method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({client_id:cid,date_prevue:dt.value,theme:(th?th.value.trim():'')})}).then(function(){ _caeRefresh(); }).catch(function(){});
+};
+window.caeDelForm = function(id){ var cid=window.__caeCid; fetch('/api/entreprise/formations/'+id+'?client_id='+encodeURIComponent(cid),{method:'DELETE',credentials:'same-origin'}).then(function(){ _caeRefresh(); }).catch(function(){}); };
 window.clientSubLoad = function(cid, live){
   var box = document.getElementById('client-sub-panel');
   if(!box) return;
