@@ -3133,6 +3133,7 @@ def sentauth_init_db():
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS stripe_customer_id TEXT")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS stripe_subscription_id TEXT")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS essai_fin TEXT")
+            cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS essai_relance TEXT")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS rgpd_consenti BOOLEAN DEFAULT FALSE")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS rgpd_consenti_date TEXT")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS plan TEXT DEFAULT 'gratuit'")
@@ -3945,10 +3946,88 @@ def sentauth_logout():
     session.clear()
     return jsonify({'ok': True})
 
+def _essai_relances():
+    """Rappels d'essai gratuit : un courriel a 3 jours de l'echeance, un autre a
+    l'expiration. Chaque rappel n'est envoye qu'une fois (colonne essai_relance).
+    Declenche au fil des chargements, sans tache planifiee. Silencieux en cas
+    d'erreur : ne doit jamais perturber une requete."""
+    try:
+        conn = registre_get_db(); cur = conn.cursor()
+        try:
+            cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS essai_relance TEXT")
+            conn.commit()
+        except Exception:
+            try: conn.rollback()
+            except Exception: pass
+        cur.execute("SELECT id, email, nom_entreprise, essai_fin, essai_relance, plan FROM clients "
+                    "WHERE essai_fin IS NOT NULL AND (plan IS NULL OR plan = 'gratuit')")
+        rows = [dict(r) for r in cur.fetchall()]
+        try: conn.close()
+        except Exception: pass
+    except Exception:
+        return
+
+    now = datetime.utcnow()
+    for c in rows:
+        email = c.get('email')
+        if not email:
+            continue
+        try:
+            fin = datetime.fromisoformat(str(c.get('essai_fin')))
+        except Exception:
+            continue
+        reste = (fin - now).total_seconds()
+        deja = c.get('essai_relance') or ''
+        etape = None
+        if 0 < reste <= 3 * 86400 and deja != 'j3' and deja != 'fin':
+            etape = 'j3'
+        elif reste <= 0 and deja != 'fin':
+            etape = 'fin'
+        if not etape:
+            continue
+
+        nom = c.get('nom_entreprise') or 'Client'
+        if etape == 'j3':
+            jours = max(1, int(reste // 86400) + 1)
+            sujet = 'Votre essai Sentinel se termine dans %d jour(s)' % jours
+            html = ('<p>Bonjour,</p>'
+                    '<p>Votre essai gratuit de Sentinel se termine dans <strong>%d jour(s)</strong>. '
+                    'A l echeance, l acces a la plateforme prendra fin.</p>'
+                    '<p>Pour poursuivre sans interruption, vous pouvez souscrire une offre depuis la '
+                    'plateforme, ou comparer les formules sur notre site.</p>'
+                    '<p>L equipe CONSEILPREV</p>') % jours
+        else:
+            sujet = 'Votre essai gratuit Sentinel est termine'
+            html = ('<p>Bonjour,</p>'
+                    '<p>Votre essai gratuit de Sentinel est arrive a son terme et l acces a la plateforme '
+                    'a pris fin.</p>'
+                    '<p>Pour retrouver l acces, souscrivez l offre qui correspond a vos besoins. '
+                    'Nous restons a votre disposition pour vous accompagner dans ce choix.</p>'
+                    '<p>L equipe CONSEILPREV</p>')
+
+        try:
+            send_email_smart(email, nom, sujet, html, tags=['essai-' + etape])
+        except Exception:
+            continue
+        try:
+            conn2 = registre_get_db(); cur2 = conn2.cursor()
+            cur2.execute(registre_sql('UPDATE clients SET essai_relance=%s WHERE id=%s',
+                                      'UPDATE clients SET essai_relance=? WHERE id=?'), (etape, int(c['id'])))
+            conn2.commit()
+            try: conn2.close()
+            except Exception: pass
+        except Exception:
+            pass
+
+
 @app.route('/api/sentinel-auth/me', methods=['GET'])
 @rate_limit(limit=120, window=60)
 def sentauth_me():
     check_pending_reports()  # verifie les rapports en attente a chaque chargement de page
+    try:
+        _essai_relances()  # rappels d'essai (3 jours avant, puis a l'expiration)
+    except Exception:
+        pass
     client = sentauth_current_client()
     if not client:
         return jsonify({'authenticated': False}), 401
