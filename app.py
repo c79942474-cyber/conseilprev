@@ -3132,6 +3132,7 @@ def sentauth_init_db():
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS verify_email_expire TEXT")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS stripe_customer_id TEXT")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS stripe_subscription_id TEXT")
+            cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS essai_fin TEXT")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS rgpd_consenti BOOLEAN DEFAULT FALSE")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS rgpd_consenti_date TEXT")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS plan TEXT DEFAULT 'gratuit'")
@@ -3501,7 +3502,24 @@ def sentauth_current_client():
         # (ce qui indique une création admin directe)
         if not was_invited and safe_plan != 'gratuit':
             safe_plan = 'gratuit'
-    return {'is_conseilprev': False, 'id': d['id'], 'nom_entreprise': d['nom_entreprise'], 'email': d['email'], 'plan': safe_plan}
+    # Essai gratuit de 15 jours : acces de niveau Pro tant que l'essai court.
+    # Calcule a la volee (le plan enregistre reste 'gratuit') : a l'echeance,
+    # le compte revient naturellement au plan gratuit, sauf abonnement paye.
+    essai_actif = False
+    essai_jours = 0
+    _ef = d.get('essai_fin')
+    if _ef and safe_plan == 'gratuit':
+        try:
+            _fin = datetime.fromisoformat(str(_ef))
+            _reste = (_fin - datetime.utcnow()).total_seconds()
+            if _reste > 0:
+                essai_actif = True
+                essai_jours = max(1, int(_reste // 86400) + 1)
+                safe_plan = 'pro'
+        except Exception:
+            essai_actif = False
+    return {'is_conseilprev': False, 'id': d['id'], 'nom_entreprise': d['nom_entreprise'], 'email': d['email'],
+            'plan': safe_plan, 'essai_actif': essai_actif, 'essai_jours': essai_jours, 'essai_fin': _ef}
 
 def sentinel_login_required(f):
     @wraps(f)
@@ -5534,12 +5552,13 @@ def sentauth_register():
     conn = registre_get_db()
     cur = conn.cursor()
     try:
+        _essai_fin = (datetime.utcnow() + timedelta(days=15)).isoformat()
         if REGISTRE_USE_PG:
-            cur.execute('''INSERT INTO clients (nom_entreprise, email, mot_de_passe_hash, date_creation, verify_email_token, verify_email_expire, actif, rgpd_consenti, rgpd_consenti_date, plan)
-                VALUES (%s,%s,%s,%s,%s,%s,FALSE,TRUE,%s,%s) RETURNING id''', (nom, email, pw_hash, now, verify_token, verify_expire, now, plan))
+            cur.execute('''INSERT INTO clients (nom_entreprise, email, mot_de_passe_hash, date_creation, verify_email_token, verify_email_expire, actif, rgpd_consenti, rgpd_consenti_date, plan, essai_fin)
+                VALUES (%s,%s,%s,%s,%s,%s,FALSE,TRUE,%s,%s,%s) RETURNING id''', (nom, email, pw_hash, now, verify_token, verify_expire, now, plan, _essai_fin))
             new_id = cur.fetchone()['id']
         else:
-            cur.execute('INSERT INTO clients (nom_entreprise, email, mot_de_passe_hash, date_creation, verify_email_token, verify_email_expire, actif, rgpd_consenti, rgpd_consenti_date, plan) VALUES (?,?,?,?,?,?,0,1,?,?)', (nom, email, pw_hash, now, verify_token, verify_expire, now, plan))
+            cur.execute('INSERT INTO clients (nom_entreprise, email, mot_de_passe_hash, date_creation, verify_email_token, verify_email_expire, actif, rgpd_consenti, rgpd_consenti_date, plan, essai_fin) VALUES (?,?,?,?,?,?,0,1,?,?,?)', (nom, email, pw_hash, now, verify_token, verify_expire, now, plan, _essai_fin))
             new_id = cur.lastrowid
         conn.commit()
     except Exception:
