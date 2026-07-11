@@ -16151,11 +16151,12 @@ var PLAN_ENTREPRISE_ONLY = ['clients', 'pricing', 'entreprise'];
 
 function planIsAllowed(id){
   if(window.__IS_CONSEILPREV) return true;
-  var plan = window.__SENTINEL_PLAN;
-  if(!plan) return true;                                 // indéterminé = pas de blocage
-  if(plan === 'entreprise') return true;                 // accès complet
-  if(plan === 'pro') return PLAN_ENTREPRISE_ONLY.indexOf(id) === -1;
-  return PLAN_GRATUIT_MODULES.indexOf(id) !== -1;        // gratuit
+  if(window.__SENTINEL_ESSAI_EXPIRE) return false;
+  var p = window.__SENTINEL_PLAN;
+  if(!p) return true;
+  if(p === 'entreprise') return true;
+  if(p === 'pro') return PLAN_ENTREPRISE_ONLY.indexOf(id) === -1;
+  return PLAN_GRATUIT_MODULES.indexOf(id) !== -1;
 }
 
 function sentinelApplyGating(){
@@ -16201,6 +16202,7 @@ function sentinelFetchPlan(){
     window.__SENTINEL_PLAN = d.plan || 'gratuit';
     window.__SENTINEL_ESSAI = !!d.essai_actif;
     window.__SENTINEL_ESSAI_JOURS = d.essai_jours || 0;
+    window.__SENTINEL_ESSAI_EXPIRE = !!d.essai_expire;
     sentinelApplyGating();
     if(window.sentinelEssaiBanner) sentinelEssaiBanner();
   }).catch(function(){ window.__SENTINEL_PLAN = null; sentinelApplyGating(); });
@@ -16210,19 +16212,27 @@ if(document.readyState !== 'loading'){ setTimeout(sentinelFetchPlan, 300); }
 
 
 window.sentinelEssaiBanner = function(){
-  if(!window.__SENTINEL_ESSAI) return;
-  if(document.getElementById('essai-banner')) return;
+  var exp = !!window.__SENTINEL_ESSAI_EXPIRE;
+  if(!window.__SENTINEL_ESSAI && !exp) return;
+  var old = document.getElementById('essai-banner'); if(old) old.remove();
   var j = window.__SENTINEL_ESSAI_JOURS || 0;
-  var urgent = j <= 3;
+  var urgent = exp || j <= 3;
   var b = document.createElement('div');
   b.id = 'essai-banner';
-  b.style.cssText = 'position:fixed;bottom:16px;right:16px;z-index:9998;max-width:330px;background:var(--white,#fff);border:1px solid ' + (urgent ? 'var(--accent)' : 'var(--rule2,#e4e7ec)') + ';border-left:4px solid ' + (urgent ? 'var(--accent)' : '#c9a227') + ';border-radius:10px;padding:12px 14px;box-shadow:0 10px 30px rgba(5,8,14,.18)';
-  b.innerHTML = '<div style="font-weight:700;font-size:12px;color:var(--ink,#1f2733);margin-bottom:3px">Essai gratuit \u2014 ' + j + ' jour' + (j > 1 ? 's' : '') + ' restant' + (j > 1 ? 's' : '') + '</div>'
-    + '<div style="font-size:11.5px;color:var(--muted,#5b6472);line-height:1.5;margin-bottom:8px">Vous b\u00e9n\u00e9ficiez d\u2019un acc\u00e8s complet de niveau Pro. \u00c0 l\u2019\u00e9ch\u00e9ance, votre compte reviendra au plan Gratuit.</div>'
-    + '<div style="display:flex;gap:8px"><button onclick="sentinelCheckout(\'pro\')" style="font-size:11px;font-weight:600;padding:6px 12px;border:none;border-radius:6px;background:linear-gradient(135deg,#c9a227,#e6c65a);color:#14181f;cursor:pointer">Souscrire l\u2019offre Pro</button>'
-    + '<button onclick="var e=document.getElementById(\'essai-banner\'); if(e) e.remove();" style="font-size:11px;padding:6px 10px;border:1px solid var(--rule2,#e4e7ec);border-radius:6px;background:none;color:var(--muted,#5b6472);cursor:pointer">Plus tard</button></div>';
+  b.style.cssText = 'position:fixed;bottom:16px;right:16px;z-index:9998;max-width:340px;background:var(--white,#fff);border:1px solid ' + (urgent ? 'var(--accent)' : 'var(--rule2,#e4e7ec)') + ';border-left:4px solid ' + (urgent ? 'var(--accent)' : '#c9a227') + ';border-radius:10px;padding:12px 14px;box-shadow:0 10px 30px rgba(5,8,14,.18)';
+  var titre = exp ? 'Votre essai gratuit est termin\u00e9' : ('Essai gratuit \u2014 ' + j + ' jour' + (j > 1 ? 's' : '') + ' restant' + (j > 1 ? 's' : ''));
+  var texte = exp
+    ? 'L\u2019acc\u00e8s \u00e0 Sentinel a pris fin. Souscrivez une offre pour retrouver l\u2019acc\u00e8s \u00e0 la plateforme.'
+    : 'Vous acc\u00e9dez au plan Gratuit pendant la dur\u00e9e de l\u2019essai. \u00c0 l\u2019\u00e9ch\u00e9ance, une souscription sera n\u00e9cessaire pour poursuivre.';
+  var boutons = '<button onclick="sentinelCheckout(\'pro\')" style="font-size:11px;font-weight:600;padding:6px 12px;border:none;border-radius:6px;background:linear-gradient(135deg,#c9a227,#e6c65a);color:#14181f;cursor:pointer">Souscrire l\u2019offre Pro</button>'
+    + '<a href="/tarifications" style="font-size:11px;padding:6px 10px;border:1px solid var(--rule2,#e4e7ec);border-radius:6px;color:var(--muted,#5b6472);text-decoration:none">Comparer les formules</a>';
+  if(!exp){ boutons += '<button onclick="var e=document.getElementById(\'essai-banner\'); if(e) e.remove();" style="font-size:11px;padding:6px 10px;border:none;background:none;color:var(--muted,#5b6472);cursor:pointer">Plus tard</button>'; }
+  b.innerHTML = '<div style="font-weight:700;font-size:12px;color:var(--ink,#1f2733);margin-bottom:3px">' + titre + '</div>'
+    + '<div style="font-size:11.5px;color:var(--muted,#5b6472);line-height:1.5;margin-bottom:8px">' + texte + '</div>'
+    + '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">' + boutons + '</div>';
   document.body.appendChild(b);
 };
+
 
 function sentinelLockPrompt(){
   var old = document.getElementById('sentinel-lock-modal');
