@@ -7881,6 +7881,26 @@ def clients_entreprise_apercu():
 
 
 
+@app.route('/api/cron/essai-relances', methods=['POST', 'GET'])
+def cron_essai_relances():
+    """Point d'entree pour une tache planifiee (Render Cron Job) : declenche les
+    rappels d'essai a heure fixe. Protege par un secret partage (CRON_SECRET),
+    transmis en en-tete 'X-Cron-Secret' ou en parametre 'secret'.
+    Sans CRON_SECRET configure, l'acces est refuse."""
+    secret = os.environ.get('CRON_SECRET')
+    if not secret:
+        return jsonify({'ok': False, 'error': 'Tache planifiee non configuree.'}), 501
+    fourni = request.headers.get('X-Cron-Secret') or request.args.get('secret')
+    if not fourni or not hmac.compare_digest(str(fourni), str(secret)):
+        return jsonify({'ok': False, 'error': 'Non autorise.'}), 403
+    try:
+        _essai_relances()
+    except Exception:
+        return jsonify({'ok': False, 'error': 'Echec du traitement des rappels.'}), 500
+    return jsonify({'ok': True, 'executed_at': datetime.utcnow().isoformat()})
+
+
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
