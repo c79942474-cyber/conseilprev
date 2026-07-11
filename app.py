@@ -3502,10 +3502,11 @@ def sentauth_current_client():
         # (ce qui indique une création admin directe)
         if not was_invited and safe_plan != 'gratuit':
             safe_plan = 'gratuit'
-    # Essai gratuit de 15 jours : acces de niveau Pro tant que l'essai court.
-    # Calcule a la volee (le plan enregistre reste 'gratuit') : a l'echeance,
-    # le compte revient naturellement au plan gratuit, sauf abonnement paye.
+    # Essai gratuit de 15 jours : le compte accede au plan Gratuit pendant 15 jours
+    # seulement. A l'echeance, l'acces prend fin (essai_expire) et une souscription
+    # est requise. Les comptes payants (pro/entreprise) ne sont pas concernes.
     essai_actif = False
+    essai_expire = False
     essai_jours = 0
     _ef = d.get('essai_fin')
     if _ef and safe_plan == 'gratuit':
@@ -3515,11 +3516,13 @@ def sentauth_current_client():
             if _reste > 0:
                 essai_actif = True
                 essai_jours = max(1, int(_reste // 86400) + 1)
-                safe_plan = 'pro'
+            else:
+                essai_expire = True
         except Exception:
             essai_actif = False
     return {'is_conseilprev': False, 'id': d['id'], 'nom_entreprise': d['nom_entreprise'], 'email': d['email'],
-            'plan': safe_plan, 'essai_actif': essai_actif, 'essai_jours': essai_jours, 'essai_fin': _ef}
+            'plan': safe_plan, 'essai_actif': essai_actif, 'essai_expire': essai_expire,
+            'essai_jours': essai_jours, 'essai_fin': _ef}
 
 def sentinel_login_required(f):
     @wraps(f)
