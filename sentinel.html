@@ -15743,11 +15743,7 @@ window.ragPollIndexation = function(docId, nomFichier, totalChunks){
 };
 
 
-window.ragDownload = function(id){
-  var key = window.ragGetAccessKey();
 
-  window.open('/api/rag/download/' + id + '?rag_key=' + encodeURIComponent(key), '_blank');
-};
 
 window.ragDeleteDoc = function(id, nom){
   if(!confirm('Supprimer définitivement "'+nom+'" et tous ses segments indexés ?')) return;
@@ -15759,11 +15755,80 @@ window.ragDeleteDoc = function(id, nom){
 
 var RAG_PAGE_LABELS = { audit:"Audit IA Act", registre:"Registre IA", fria:"FRIA", maturite:"Audit de maturité", veille:"Veille qualifiée", raci:"RACI", general:"Général" };
 
+window.ragDownload = function(id, nom){
+  fetch('/api/rag/download/' + id, { headers: window.ragHeaders(), credentials: 'same-origin' })
+    .then(function(r){
+      if(window.ragHandleAuthError(r.status)) return null;
+      if(!r.ok){
+        return r.json().catch(function(){ return {}; }).then(function(e){
+          alert((e && e.error) ? e.error : ('\u00c9chec du t\u00e9l\u00e9chargement (erreur ' + r.status + ').'));
+          return null;
+        });
+      }
+      return r.blob().then(function(b){ return { blob: b, nom: nom || ('document-' + id) }; });
+    })
+    .then(function(res){
+      if(!res) return;
+      var url = URL.createObjectURL(res.blob);
+      var a = document.createElement('a');
+      a.href = url; a.download = res.nom;
+      document.body.appendChild(a); a.click();
+      setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); }, 1500);
+    })
+    .catch(function(){ alert('T\u00e9l\u00e9chargement impossible : v\u00e9rifiez votre connexion.'); });
+};
+
+window.ragDocRow = function(doc){
+  var pagesChips = (doc.pages_liees || []).map(function(p){ return '<span class="rag-page-chip">'+(RAG_PAGE_LABELS[p]||p)+'</span>'; }).join('');
+  var d1 = new Date(doc.date_upload).toLocaleDateString('fr-FR', {day:'2-digit',month:'2-digit',year:'numeric'});
+  var nomJs = JSON.stringify(doc.nom_fichier || '').replace(/"/g, '&quot;');
+  return '<div class="histo-row">'
+    + '<div class="histo-row-top"><span class="histo-page-chip">'+String(doc.extension||'').replace('.','').toUpperCase()+'</span>'+pagesChips+'<span class="histo-date">'+d1+'</span></div>'
+    + '<div class="histo-label">'+String(doc.nom_fichier||'').replace(/</g,'&lt;')+'</div>'
+    + '<div style="font-size:10px;color:var(--muted2);margin-top:2px">'+window.ragFormatSize(doc.taille_octets)+' \u00b7 '+doc.nb_chunks+' segment(s) index\u00e9(s)</div>'
+    + '<div class="histo-actions">'
+    + '<button class="histo-btn-sm" onclick="ragDownload('+doc.id+', '+nomJs+')" title="T\u00e9l\u00e9charger le fichier original">\u2b07 T\u00e9l\u00e9charger</button>'
+    + '<button class="histo-btn-sm histo-btn-danger" onclick="ragDeleteDoc('+doc.id+','+nomJs+')" title="Retirer ce document de la base de connaissance, action irr\u00e9versible">Supprimer</button>'
+    + '</div></div>';
+};
+
+window.ragGroupBySujet = function(docs){
+  var ORDRE = ['IA Act','RGPD','ISO 42001','ISO 27001','NIS2','DORA','Cybersecurite','Contrats','Audit','Autre'];
+  var LIB = { 'Cybersecurite': 'Cybers\u00e9curit\u00e9' };
+  var sel = document.getElementById('rag-sujet-select');
+  var filtre = sel ? sel.value : '';
+  var groupes = {};
+  docs.forEach(function(doc){
+    var s = doc.sujet || 'Autre';
+    if(!groupes[s]) groupes[s] = [];
+    groupes[s].push(doc);
+  });
+  var sujets = ORDRE.filter(function(s){ return groupes[s] && groupes[s].length; });
+  Object.keys(groupes).forEach(function(s){ if(sujets.indexOf(s) === -1) sujets.push(s); });
+  var opts = '<option value="">Tous les sujets (' + docs.length + ')</option>' + sujets.map(function(s){
+    return '<option value="'+s+'"'+(filtre === s ? ' selected' : '')+'>'+(LIB[s]||s)+' ('+groupes[s].length+')</option>';
+  }).join('');
+  var barre = '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">'
+    + '<span style="font-size:11px;color:var(--muted)">Trier par sujet</span>'
+    + '<select id="rag-sujet-select" onchange="window.ragApplyTri()" style="font-size:12px;padding:5px 8px;border:1px solid var(--rule2);border-radius:5px">'+opts+'</select></div>';
+  var corps = sujets.filter(function(s){ return !filtre || s === filtre; }).map(function(s){
+    return '<div style="margin:12px 0 4px 0;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);border-bottom:1px solid var(--rule2);padding-bottom:3px">'
+      + (LIB[s]||s) + ' <span style="color:var(--muted);font-weight:400">(' + groupes[s].length + ')</span></div>'
+      + groupes[s].map(window.ragDocRow).join('');
+  }).join('');
+  return barre + corps;
+};
+
+window.ragApplyTri = function(){
+  var holder = document.getElementById('rag-doc-list');
+  if(holder) holder.innerHTML = window.ragGroupBySujet(window.__ragDocs || []);
+};
+
 window.ragRenderList = function(){
   var holder = document.getElementById('rag-doc-list');
   var statusEl = document.getElementById('rag-status-info');
   if(!holder) return;
-  holder.innerHTML = '<div class="reg-loading">Chargement de vos documents…</div>';
+  holder.innerHTML = '<div class="reg-loading">Chargement de vos documents\u2026</div>';
 
   var filterEl = document.getElementById('rag-filter-select');
   var pageFilter = filterEl ? filterEl.value : '';
@@ -15776,25 +15841,15 @@ window.ragRenderList = function(){
     var docs = d.documents || [];
     if(statusEl){
       statusEl.innerHTML = d.pgvector_actif
-        ? '🟢 <strong>Recherche sémantique active</strong> (pgvector) — vos documents enrichissent les analyses par similarité de sens.'
-        : '🟡 <strong>Recherche textuelle active</strong> (mode de repli) — vos documents enrichissent les analyses par correspondance de mots-clés. La recherche sémantique nécessite l activation de pgvector sur la base de données.';
+        ? '\u{1F7E2} <strong>Recherche s\u00e9mantique active</strong> (pgvector) \u2014 vos documents enrichissent les analyses par similarit\u00e9 de sens.'
+        : '\u{1F7E1} <strong>Recherche textuelle active</strong> (mode de repli) \u2014 vos documents enrichissent les analyses par correspondance de mots-cl\u00e9s.';
     }
     if(docs.length === 0){
       holder.innerHTML = '<div class="reg-empty">Aucun document dans la base de connaissance. Importez un fichier ci-dessus pour commencer.</div>';
       return;
     }
-    holder.innerHTML = docs.map(function(doc){
-      var pagesChips = doc.pages_liees.map(function(p){ return '<span class="rag-page-chip">'+(RAG_PAGE_LABELS[p]||p)+'</span>'; }).join('');
-      var d1 = new Date(doc.date_upload).toLocaleDateString('fr-FR', {day:'2-digit',month:'2-digit',year:'numeric'});
-      return '<div class="histo-row">'
-        + '<div class="histo-row-top"><span class="histo-page-chip">'+doc.extension.replace('.','').toUpperCase()+'</span>'+pagesChips+'<span class="histo-date">'+d1+'</span></div>'
-        + '<div class="histo-label">'+doc.nom_fichier+'</div>'
-        + '<div style="font-size:10px;color:var(--muted2);margin-top:2px">'+window.ragFormatSize(doc.taille_octets)+' · '+doc.nb_chunks+' segment(s) indexé(s)</div>'
-        + '<div class="histo-actions">'
-        + '<button class="histo-btn-sm" onclick="ragDownload('+doc.id+')" title="Telecharger le fichier original">⬇ Télécharger</button>'
-        + '<button class="histo-btn-sm histo-btn-danger" onclick="ragDeleteDoc('+doc.id+',\''+doc.nom_fichier.replace(/'/g,"")+'\')" title="Retirer ce document de la base de connaissance, action irreversible">Supprimer</button>'
-        + '</div></div>';
-    }).join('');
+    window.__ragDocs = docs;
+    holder.innerHTML = window.ragGroupBySujet(docs);
   }).catch(function(){
     holder.innerHTML = '<div class="reg-empty" style="color:var(--accent)">Erreur de chargement.</div>';
   });
