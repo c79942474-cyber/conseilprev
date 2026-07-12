@@ -6732,6 +6732,49 @@ def rag_require_access(f):
         return f(*args, **kwargs)
     return wrapper
 
+RAG_SUJETS = [
+    ('IA Act', ['ia act', 'ai act', 'intelligence artificielle', 'systeme ia', "systeme d'ia", 'annexe iii',
+                'haut risque', 'gpai', 'modele de fondation', 'ai office', 'bureau de l ia']),
+    ('RGPD', ['rgpd', 'gdpr', 'donnees personnelles', 'donnees a caractere personnel', 'aipd', 'dpia',
+              'sous-traitant', 'responsable de traitement', 'cnil', 'consentement', 'droit d acces']),
+    ('ISO 42001', ['iso 42001', 'iso/iec 42001', 'iso42001', 'systeme de management de l ia', 'smia']),
+    ('ISO 27001', ['iso 27001', 'iso/iec 27001', 'smsi', 'securite de l information', 'annexe a']),
+    ('NIS2', ['nis2', 'nis 2', 'directive nis', 'entite essentielle', 'entite importante']),
+    ('DORA', ['dora', 'resilience operationnelle', 'tiers prestataire tic', 'ict risk']),
+    ('Cybersecurite', ['cyber', 'securite', 'vulnerabilite', 'incident', 'menace', 'attaque', 'iec 62443',
+                       'ebios', 'pentest', 'soc ']),
+    ('Contrats', ['contrat', 'convention', 'clause', 'avenant', 'nda', 'accord de confidentialite',
+                  'conditions generales', 'cgv', 'cgu']),
+    ('Audit', ['audit', 'controle', 'conformite', 'ecart', 'non-conformite', 'plan d action', 'remediation']),
+]
+
+
+def rag_classify_sujet(nom_fichier, texte=None):
+    """Classe un document par sujet, a partir de son nom et d'un extrait de son
+    texte. Retourne le sujet le mieux represente, ou 'Autre'."""
+    def _norm(s):
+        s = (s or '').lower()
+        for a, b in [('é', 'e'), ('è', 'e'), ('ê', 'e'), ('à', 'a'), ('â', 'a'), ('î', 'i'),
+                     ('ï', 'i'), ('ô', 'o'), ('û', 'u'), ('ù', 'u'), ('ç', 'c'), ('_', ' '), ('-', ' ')]:
+            s = s.replace(a, b)
+        return s
+
+    base = _norm(nom_fichier)
+    corps = _norm((texte or '')[:20000])
+    meilleur = None
+    meilleur_score = 0
+    for sujet, mots in RAG_SUJETS:
+        score = 0
+        for mot in mots:
+            if mot in base:
+                score += 5           # le nom du fichier pese davantage
+            score += corps.count(mot)
+        if score > meilleur_score:
+            meilleur_score = score
+            meilleur = sujet
+    return meilleur if (meilleur and meilleur_score >= 2) else 'Autre'
+
+
 @app.route('/api/rag/documents', methods=['GET'])
 @rate_limit(limit=60, window=60)
 @rag_require_access
@@ -6917,16 +6960,33 @@ def rag_document_status(doc_id):
 def rag_download(doc_id):
     conn = registre_get_db()
     cur = conn.cursor()
-    cur.execute(registre_sql('SELECT * FROM rag_documents WHERE id=%s', 'SELECT * FROM rag_documents WHERE id=?'), (doc_id,))
+    # SELECT cible : ne charge pas le texte extrait (inutile et volumineux)
+    cur.execute(registre_sql('SELECT nom_fichier, type_mime, contenu_fichier FROM rag_documents WHERE id=%s',
+                             'SELECT nom_fichier, type_mime, contenu_fichier FROM rag_documents WHERE id=?'), (doc_id,))
     row = cur.fetchone()
-    conn.close()
+    try: conn.close()
+    except Exception: pass
     if not row:
         return jsonify({'error': 'Document introuvable'}), 404
     d = dict(row) if not isinstance(row, dict) else row
-    content = bytes(d['contenu_fichier'])
+    brut = d.get('contenu_fichier')
+    if brut is None:
+        return jsonify({'error': 'Contenu du document indisponible.'}), 404
+    try:
+        content = bytes(brut)
+    except Exception:
+        return jsonify({'error': 'Contenu du document illisible.'}), 500
+    nom = str(d.get('nom_fichier') or ('document-%d' % doc_id))
+    # Nom de fichier robuste : ASCII pour les clients anciens, UTF-8 encode (RFC 5987)
+    # pour les navigateurs modernes. Corrige l'echec de telechargement sur noms accentues.
+    from urllib.parse import quote as _q
+    ascii_nom = ''.join((c if (32 <= ord(c) < 127 and c not in '"\\') else '_') for c in nom) or 'document'
     response = make_response(content)
-    response.headers['Content-Type'] = d['type_mime']
-    response.headers['Content-Disposition'] = f'attachment; filename="{d["nom_fichier"]}"'
+    response.headers['Content-Type'] = d.get('type_mime') or 'application/octet-stream'
+    response.headers['Content-Disposition'] = (
+        'attachment; filename="%s"; filename*=UTF-8\'\'%s' % (ascii_nom, _q(nom))
+    )
+    response.headers['Content-Length'] = str(len(content))
     return response
 
 @app.route('/api/rag/documents/<int:doc_id>', methods=['DELETE'])
