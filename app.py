@@ -3543,6 +3543,14 @@ def sentauth_current_client():
     if not row:
         return None
     d = dict(row) if not isinstance(row, dict) else row
+    # CONSEILPREV connecte par le formulaire habituel (et non par le lien maitre) :
+    # reconnu par son e-mail interne ou sa denomination, il conserve l'acces
+    # administrateur complet et n'est pas concerne par la protection anti-elevation.
+    _em = (d.get('email') or '').strip().lower()
+    _nom = (d.get('nom_entreprise') or '').strip().upper()
+    if _em == str(CONSEILPREV_INTERNAL_EMAIL).strip().lower() or _nom == 'CONSEILPREV':
+        return {'is_conseilprev': True, 'id': d['id'], 'nom_entreprise': 'CONSEILPREV',
+                'email': d.get('email'), 'plan': 'entreprise'}
     raw_plan = d.get('plan') or 'gratuit'
     # Sécurité : un compte public ne peut avoir que 'gratuit'.
     # Pro/Entreprise ne sont attribués que via l'interface admin CONSEILPREV.
