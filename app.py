@@ -1137,6 +1137,13 @@ def api_apply():
             'consent_date': now_str,
         }
 
+        # Preuve de consentement (art. 7) : enregistree si la case est cochee
+        try:
+            if data.get('consent') and data.get('email'):
+                _rgpd_record_consent(data.get('email'), {'formulaire_contact': True}, 'formulaire-site')
+        except Exception:
+            pass
+
         # ── Validation champs obligatoires ──
         missing = [f for f in ['prenom','nom','email'] if not data[f]]
         if missing:
