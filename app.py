@@ -6794,7 +6794,8 @@ def rag_list_documents():
         docs.append({
             'id': d['id'], 'nom_fichier': d['nom_fichier'], 'type_mime': d['type_mime'],
             'extension': d['extension'], 'pages_liees': pages, 'taille_octets': d['taille_octets'],
-            'nb_chunks': d['nb_chunks'], 'date_upload': d['date_upload']
+            'nb_chunks': d['nb_chunks'], 'date_upload': d['date_upload'],
+            'sujet': rag_classify_sujet(d['nom_fichier'])
         })
     return jsonify({'documents': docs, 'pgvector_actif': RAG_PGVECTOR_AVAILABLE})
 
