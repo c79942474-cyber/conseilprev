@@ -7817,7 +7817,7 @@ try { cjRender(); } catch(e){ console.error('cjRender init error:', e); }
 (function(){
 'use strict';
 
-var MISTRAL_KEY = 'g0Dqgfe3v3op1LPV6lxaUCEVTEZ6GYXU';
+/* Cle retiree : les appels passent par le relais serveur /api/mistral/proxy. */
 var CLAUDE_KEY  = '';  /* Anthropic key injected via API proxy */
 var OPEN = false, HIST = [], BUSY = false, READY = false;
 var CUR_API = 'mistral'; /* 'mistral' | 'claude' */
@@ -8001,9 +8001,9 @@ function cpcTypingIndicator(){
 
 /* Appel Mistral */
 function cpcCallMistral(messages, sysPrompt, cb){
-  fetch('https://api.mistral.ai/v1/chat/completions',{
+  fetch('/api/mistral/proxy',{
     method:'POST',
-    headers:{'Content-Type':'application/json','Authorization':'Bearer '+MISTRAL_KEY},
+    headers:{'Content-Type':'application/json'}, credentials:'same-origin',
     body:JSON.stringify({
       model:'mistral-large-latest',
       messages:[{role:'system',content:sysPrompt}].concat(messages),
@@ -9214,7 +9214,7 @@ window.MAT_ANSWERS = MAT_ANSWERS;
 (function(){
 'use strict';
 
-var MISTRAL_KEY = 'g0Dqgfe3v3op1LPV6lxaUCEVTEZ6GYXU';
+/* Cle retiree : les appels passent par le relais serveur /api/mistral/proxy. */
 
 /* Définition des 6 livrables avec tooltips */
 var DELIVERABLES = [
@@ -9318,8 +9318,8 @@ function matCallAIExecute(prompt, api, cb, sys){
     .then(function(d){ cb(null, d.content && d.content[0] ? d.content[0].text : null, "Claude"); })
     .catch(function(){ matCallAIExecute(prompt, "mistral", function(e,t){ cb(e,t,"Mistral (fallback)"); }, sys); });
   } else {
-    fetch('https://api.mistral.ai/v1/chat/completions',{
-      method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+MISTRAL_KEY},
+    fetch('/api/mistral/proxy',{
+      method:'POST', headers:{'Content-Type':'application/json'}, credentials:'same-origin',
       body:JSON.stringify({model:'mistral-large-latest', messages:[{role:'system',content:sys},{role:'user',content:prompt}], max_tokens:2000, temperature:0.4})
     })
     .then(function(r){ return r.json(); })
@@ -12936,9 +12936,9 @@ window.jursRefreshAI = function(code, name){
       window.matCallAIBridge(prompt, "claude", function(err, text){ resolve(text); }, "veille");
     });
   } else {
-    apiCall = fetch('https://api.mistral.ai/v1/chat/completions',{
+    apiCall = fetch('/api/mistral/proxy',{
       method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer g0Dqgfe3v3op1LPV6lxaUCEVTEZ6GYXU'},
+      headers:{'Content-Type':'application/json'}, credentials:'same-origin',
       body:JSON.stringify({model:'mistral-large-latest', messages:[
         {role:'system',content:'Tu es un analyste juridique specialise en regulation internationale de l IA. Reponds uniquement en JSON strict.'},
         {role:'user',content:prompt}
