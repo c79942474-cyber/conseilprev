@@ -3781,6 +3781,13 @@ em,.hero-em{
   animation: ctaTitlePulse 1.8s ease-in-out infinite;
 }
 </style>
+<style id="cp-scroll-arrows-css">
+.cp-arrow-btn{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;border:1px solid rgba(196,181,232,.35);background:rgba(109,40,217,.18);color:rgba(240,236,255,.92);font-size:14px;line-height:1;cursor:pointer;text-decoration:none;transition:all .2s ease;flex-shrink:0}
+.cp-arrow-btn:hover{background:rgba(109,40,217,.5);border-color:rgba(196,181,232,.8);color:#fff;transform:translateY(-1px);box-shadow:0 0 14px rgba(109,40,217,.45)}
+.ft-bar{align-items:center}
+.ft-bar .cp-arrow-btn{margin-left:14px}
+@media (max-width:760px){#cp-nav-down{display:none}}
+</style>
 </head>
 <body>
 
@@ -3912,6 +3919,7 @@ em,.hero-em{
     </div>
     <a href="/sentinel" target="_blank" rel="noopener" class="nav-sentinel-btn" style="font-size:11px;font-family:'Space Mono',monospace;letter-spacing:.06em;padding:7px 14px;border-radius:7px;border:1px solid rgba(196,181,232,.35);color:rgba(240,236,255,.92);text-decoration:none;font-weight:600;transition:all .2s;white-space:nowrap;background:rgba(109,40,217,.18);" onmouseover="this.style.background='rgba(109,40,217,.5)';this.style.transform='translateY(-1px) scale(1.04)';this.style.color='#fff';this.style.borderColor='rgba(196,181,232,.8)';this.style.boxShadow='0 0 16px rgba(109,40,217,.5)'" onmouseout="this.style.background='rgba(109,40,217,.18)';this.style.transform='';this.style.color='rgba(240,236,255,.92)';this.style.borderColor='rgba(196,181,232,.35)';this.style.boxShadow=''">✦ Sentinel AI</a>
     <a href="#contact" class="ncta" data-tooltip="Soumettre votre projet IA & Cyber" data-i18n="nav.contact2">Contact</a>
+    <button type="button" id="cp-nav-down" class="cp-arrow-btn" onclick="cpScrollBottom()" aria-label="Aller en bas de la page" data-tooltip="Aller directement en bas de la page" title="Aller en bas de la page">&#8595;</button>
   </div>
 </nav>
 
@@ -6475,6 +6483,7 @@ document.addEventListener('keydown', function(e){
     <div class="ft-bar">
       <span>© 2025 <strong>CONSEILPREV</strong> · ERSIA IA MANAGEMENT · <a href="https://i-aes.com" target="_blank" rel="noopener" style="color:var(--teal);text-decoration:none">i-aes.com</a> · <a href="/sentinel" target="_blank" rel="noopener" style="color:var(--pl);text-decoration:none">Sentinel AI</a></span>
       <span data-i18n="ft.tag">MCP · DATA.GOUV.FR · PARIS</span>
+      <button type="button" id="cp-ft-top" class="cp-arrow-btn" onclick="cpScrollTop()" aria-label="Retour en haut de la page" data-tooltip="Retour rapide en haut de la page" title="Retour en haut de la page">&#8593;</button>
     </div>
 
   </div>
@@ -6953,6 +6962,16 @@ setTimeout(function(){
   });
 })();
 
+</script>
+<script>
+/* Fleches de defilement rapide : bas (en-tete) et haut (pied de page). */
+window.cpScrollBottom = function(){
+  var y = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+  try { window.scrollTo({ top: y, behavior: "smooth" }); } catch(e){ window.scrollTo(0, y); }
+};
+window.cpScrollTop = function(){
+  try { window.scrollTo({ top: 0, behavior: "smooth" }); } catch(e){ window.scrollTo(0, 0); }
+};
 </script>
 </body>
 
