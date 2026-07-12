@@ -4009,8 +4009,18 @@ def sentauth_login():
 @app.route('/api/sentinel-auth/logout', methods=['POST'])
 @rate_limit(limit=30, window=60)
 def sentauth_logout():
+    # Vide la session (y compris l'indicateur d'acces CONSEILPREV pose par le
+    # lien maitre) et invalide explicitement le cookie cote navigateur.
+    session.pop('is_conseilprev', None)
+    session.pop('client_id', None)
     session.clear()
-    return jsonify({'ok': True})
+    resp = make_response(jsonify({'ok': True}))
+    try:
+        resp.set_cookie(app.config.get('SESSION_COOKIE_NAME', 'session'), '', expires=0, path='/')
+    except Exception:
+        pass
+    resp.headers['Cache-Control'] = 'no-store'
+    return resp
 
 def _essai_relances():
     """Rappels d'essai gratuit : un courriel a 3 jours de l'echeance, un autre a
