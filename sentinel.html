@@ -2063,6 +2063,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-section">Entreprise</div>
     <div class="sb-item" onclick="go('entreprise',this,'ENTREPRISE','Offre Entreprise')" title="Offre Entreprise : multi-entites, integrations API, SLA, accompagnement, formation et rapport annuel."><span class="sb-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M9 8h.01M15 8h.01M9 12h.01M15 12h.01M9 16h6"/></svg></span>Offre Entreprise</div>
     <div class="sb-section">Administration</div>
+    <div class="sb-item" id="sb-rgpd-site" onclick="go('rgpd-site',this,'ADMINISTRATION','RGPD du site')" title="Tableau de bord de conformite RGPD du site : preuves de consentement, registre des traitements, transferts, droits et rapport d'audit (reserve a CONSEILPREV)."><span class="sb-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12h6M9 16h4M9 8h6"/></svg></span>RGPD du site</div>
     <div class="sb-item" onclick="go('clients',this,'ADMINISTRATION','Gestion des clients')" title="Creer et gerer les acces clients externes a Sentinel AI (reserve a CONSEILPREV)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><circle cx="19" cy="8" r="2.5"/><path d="M17.5 21v-1a3 3 0 0 0 .5-1.7"/><path d="M19 14.5a3.5 3.5 0 0 1 3.5 3.5v3"/></svg></span>Gestion des clients</div>
   </nav>
   <div class="sb-pager">
@@ -3645,6 +3646,74 @@ textarea.form-el{min-height:86px;resize:vertical}
       <button class="mat-export-btn" title="Suivi consolidé IA Act, RGPD, ISO/IEC 42001" onclick="hubGo('conformite-globale')">Ouvrir l'indice de conformité des trois cadres</button>
     </div>
 
+  </div>
+</div>
+
+
+
+<div class="page" id="p-rgpd-site">
+  <span class="eyebrow">Administration · Conformité</span><h1 class="page-h">RGPD <em>du site</em></h1>
+  <p class="page-lead">Tableau de bord de conformité du site CONSEILPREV et de la plateforme Sentinel : vérification selon les articles 5, 7, 17, 25 et 30 du RGPD, registre des preuves de consentement, registre des traitements, transferts, droits des personnes et rapport d'audit pour toute demande externe. Outillage technique, à valider par votre conseil juridique.</p>
+
+  <div style="border:1px solid var(--rule2);border-left:3px solid var(--accent);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px;display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+    <div><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Indice de conformité</div>
+    <div id="rgpd-score" style="font-size:34px;font-weight:800;color:var(--ink)">—</div></div>
+    <div id="rgpd-score-note" style="font-size:12px;color:var(--muted);max-width:52ch">Contrôles automatiques et déclaratifs, hors éléments non applicables.</div>
+    <button class="mat-export-btn" style="margin-left:auto" title="Générer le rapport d'audit complet, imprimable / PDF, pour une demande externe" onclick="rgpdRapport()">Rapport d'audit complet</button>
+  </div>
+
+  <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px">
+    <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:8px">Vérification de conformité — articles 5, 7, 17, 25, 30 · DSA · DMA · Data Act</div>
+    <div id="rgpd-checks" style="font-size:12px;color:var(--muted)">Chargement…</div>
+  </div>
+
+  <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px">
+    <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Registre des preuves de consentement (art. 7)</div>
+    <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px">Chaque acceptation, personnalisation, refus ou retrait est horodaté (bannière, formulaires, inscriptions). Adresse IP hachée et agent utilisateur tronqué (minimisation, art. 5).</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+      <input id="rgpd-cons-q" placeholder="Rechercher une adresse…" style="flex:1;min-width:160px;font-size:12px;padding:7px 10px;border:1px solid var(--rule2);border-radius:6px" onkeydown="if(event.key==='Enter') rgpdConsents();">
+      <button class="mat-export-btn" onclick="rgpdConsents()">Rechercher</button>
+      <button class="mat-export-btn" title="Exporter le registre affiché au format CSV" onclick="rgpdCsv()">Exporter CSV</button>
+    </div>
+    <div id="rgpd-cons-meta" style="font-size:11px;color:var(--muted);margin-bottom:6px"></div>
+    <div id="rgpd-cons" style="font-size:12px;overflow-x:auto"></div>
+  </div>
+
+  <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px">
+    <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Registre des activités de traitement (art. 30)</div>
+    <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px">Finalité, base légale, données, durée de conservation et destinataires, pour chaque traitement du site et de la plateforme. <button class="mat-export-btn" style="margin-left:8px" onclick="rgpdRegistreJson()">Exporter JSON</button></div>
+    <div id="rgpd-registre" style="font-size:12px;overflow-x:auto">Chargement…</div>
+  </div>
+
+  <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px">
+    <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Mécanismes de transfert des données (chapitre V)</div>
+    <div id="rgpd-transferts" style="font-size:12px;overflow-x:auto">Chargement…</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:16px">
+    <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white)">
+      <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Droit à l'effacement (art. 17)</div>
+      <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px">Anonymise le compte, supprime les données liées ; les preuves de consentement sont anonymisées et conservées à titre de preuve ; les pièces comptables demeurent (art. 17.3.b).</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap"><input id="rgpd-eff-email" placeholder="adresse@exemple.fr" style="flex:1;min-width:150px;font-size:12px;padding:7px 10px;border:1px solid var(--rule2);border-radius:6px"><button class="mat-export-btn" onclick="rgpdEffacer()">Effacer</button></div>
+      <div id="rgpd-eff-msg" style="font-size:11px;color:var(--muted);margin-top:6px"></div>
+    </div>
+    <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white)">
+      <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Portabilité (art. 20 · Data Act)</div>
+      <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px">Export structuré des données d'une personne (compte, périmètre Entreprise, consentements), à lui remettre sur demande dans un format lisible par machine.</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap"><input id="rgpd-exp-email" placeholder="adresse@exemple.fr" style="flex:1;min-width:150px;font-size:12px;padding:7px 10px;border:1px solid var(--rule2);border-radius:6px"><button class="mat-export-btn" onclick="rgpdExport()">Exporter</button></div>
+      <div id="rgpd-exp-msg" style="font-size:11px;color:var(--muted);margin-top:6px"></div>
+    </div>
+  </div>
+
+  <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white)">
+    <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:8px">Guide d'exploitation</div>
+    <details style="margin-bottom:4px"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">1 · Lire l'indice et la vérification de conformité</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 8px 0">L'indice agrège les contrôles conformes, hors éléments non applicables. Chaque ligne référence l'article concerné, distingue les contrôles automatiques (mesurés par la plateforme) des contrôles déclaratifs (documentés), et précise le constat. Un statut « à vérifier » appelle une action de votre part.</div></details>
+    <details style="margin-bottom:4px"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">2 · Exploiter le registre des preuves de consentement</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 8px 0">Recherchez par adresse pour retrouver l'historique d'une personne : acceptations, personnalisations, refus et retraits, avec horodatage, méthode, granularité des finalités et version de la politique. L'export CSV fournit la preuve en cas de contrôle. En vertu de l'article 7, la charge de la preuve du consentement vous incombe : ce registre y répond.</div></details>
+    <details style="margin-bottom:4px"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">3 · Tenir le registre des traitements (art. 30)</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 8px 0">Le registre documente chaque traitement : finalité, base légale, données, durée et destinataires. Exportez-le en JSON pour vos dossiers. Toute évolution du site (nouveau formulaire, nouveau sous-traitant) doit s'y refléter : demandez la mise à jour du registre dans la plateforme.</div></details>
+    <details style="margin-bottom:4px"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">4 · Répondre à une demande d'effacement (art. 17)</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 8px 0">Vérifiez l'identité du demandeur, puis saisissez son adresse et confirmez. Le compte est anonymisé, les données du périmètre Entreprise supprimées, et l'opération est elle-même tracée. Répondez au demandeur dans le délai d'un mois. Les pièces comptables sont conservées au titre de l'obligation légale.</div></details>
+    <details style="margin-bottom:4px"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">5 · Répondre à une demande d'accès ou de portabilité</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 8px 0">Saisissez l'adresse de la personne et exportez : le fichier JSON, lisible par machine, rassemble son compte, son périmètre et ses consentements. Remettez-le par un canal sûr après vérification d'identité. Ce mécanisme répond à l'article 20 du RGPD et à l'esprit de portabilité du Data Act.</div></details>
+    <details style="margin-bottom:4px"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">6 · Produire le rapport d'audit pour une demande externe</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 8px 0">Le bouton « Rapport d'audit complet » assemble l'identité du responsable de traitement, l'indice, les contrôles article par article, le registre des traitements, les transferts et les statistiques de preuves, dans un document imprimable et exportable en PDF, daté. C'est la pièce à produire face à une autorité, un client ou un prospect.</div></details>
+    <details><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">7 · DMA, DSA et Data Act : positionnement</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 4px 0">Le DMA vise les contrôleurs d'accès désignés et ne s'applique pas à CONSEILPREV. Le DSA impose transparence et point de contact : mentions légales et politique publiées. Le Data Act, pour un service en nuage, appelle la portabilité des données et la facilité de changement de fournisseur : l'export structuré et le téléchargement des documents de la base de connaissance y répondent. Ce positionnement est documenté dans la vérification et le rapport.</div></details>
   </div>
 </div>
 
@@ -5916,6 +5985,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 'use strict';
 
 var PAGE_META = {
+    'rgpd-site': { section: 'ADMINISTRATION', label: 'RGPD du site' },
     'entreprise': { section: 'ENTREPRISE', label: 'Offre Entreprise' },
     'ia-act-hub': { section: 'PILOTAGE', label: 'Vue d\u2019ensemble IA Act' },
     'conformite-globale': { section: 'PILOTAGE', label: 'Indice de conformité global' },
@@ -5993,6 +6063,7 @@ function go(id, el, sec, pg) {
   var p = document.getElementById('p-'+id);
   if (p) p.classList.add('on');
   if (id === 'templates' && typeof window.templatesRenderPage === 'function') setTimeout(window.templatesRenderPage, 60);
+  if (id === 'rgpd-site' && typeof window.rgpdInit === 'function') setTimeout(window.rgpdInit, 60);
   if (el) el.classList.add('on');
   else document.querySelectorAll('.sb-item').forEach(function(i){
     if (i.getAttribute('onclick') && i.getAttribute('onclick').indexOf("'"+id+"'") >= 0) i.classList.add('on');
@@ -16276,7 +16347,7 @@ window.go = function(id){
    paiement. Les onglets accessibles sont mis en évidence, les autres sont estompés
    et verrouillés (aucun onglet n'est masqué). CONSEILPREV conserve un accès total. */
 var PLAN_GRATUIT_MODULES = ['apercu', 'simulateur', 'regs', 'training'];
-var PLAN_ENTREPRISE_ONLY = ['clients', 'pricing', 'entreprise'];
+var PLAN_ENTREPRISE_ONLY = ['clients', 'pricing', 'entreprise', 'rgpd-site'];
 
 function planIsAllowed(id){
   if(window.__IS_CONSEILPREV) return true;
@@ -16332,6 +16403,7 @@ function sentinelFetchPlan(){
     window.__SENTINEL_ESSAI = !!d.essai_actif;
     window.__SENTINEL_ESSAI_JOURS = d.essai_jours || 0;
     window.__SENTINEL_ESSAI_EXPIRE = !!d.essai_expire;
+    var _sbr = document.getElementById('sb-rgpd-site'); if(_sbr) _sbr.style.display = 'none';
     sentinelApplyGating();
     if(window.sentinelEssaiBanner) sentinelEssaiBanner();
   }).catch(function(){ window.__SENTINEL_PLAN = null; sentinelApplyGating(); });
@@ -18876,6 +18948,142 @@ window.sentinelLogout = function(){
     });
 };
 
+/* ══ Tableau de bord RGPD du site (CONSEILPREV) ══ */
+window.__rgpdConsRows = [];
+function rgpdEsc(s){ return String(s == null ? '' : s).replace(/</g, '&lt;'); }
+function rgpdTable(cols, rows){
+  var th = cols.map(function(c){ return '<th style="text-align:left;padding:5px 8px;color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--rule2);white-space:nowrap">' + c + '</th>'; }).join('');
+  var tb = rows.map(function(r){
+    return '<tr>' + r.map(function(v){ return '<td style="padding:6px 8px;border-bottom:1px solid var(--rule2);vertical-align:top">' + v + '</td>'; }).join('') + '</tr>';
+  }).join('');
+  return '<table style="width:100%;border-collapse:collapse;font-size:11.5px"><thead><tr>' + th + '</tr></thead><tbody>' + tb + '</tbody></table>';
+}
+window.rgpdChecks = function(){
+  fetch('/api/rgpd/verification', { credentials: 'same-origin' }).then(function(r){ return r.json(); }).then(function(d){
+    if(!d || !d.ok) return;
+    var sc = document.getElementById('rgpd-score');
+    if(sc) sc.textContent = d.score + ' %';
+    var ST = { conforme: ['Conforme', 'var(--green,#0E7C7B)'], 'a-verifier': ['\u00c0 v\u00e9rifier', 'var(--accent)'], 'non-applicable': ['Non applicable', 'var(--muted)'] };
+    var box = document.getElementById('rgpd-checks');
+    if(!box) return;
+    box.innerHTML = rgpdTable(['Cadre', 'Contr\u00f4le', 'Mode', 'Statut', 'Constat'], (d.checks || []).map(function(c){
+      var st = ST[c.statut] || [c.statut, 'var(--muted)'];
+      return [ '<strong style="color:var(--ink)">' + rgpdEsc(c.article) + '</strong>', rgpdEsc(c.intitule),
+        '<span style="font-size:10px;color:var(--muted)">' + rgpdEsc(c.mode) + '</span>',
+        '<span style="color:' + st[1] + ';font-weight:700">' + st[0] + '</span>', rgpdEsc(c.detail) ];
+    }));
+  }).catch(function(){});
+};
+window.rgpdConsents = function(){
+  var q = (document.getElementById('rgpd-cons-q') || {}).value || '';
+  fetch('/api/rgpd/consentements?limit=300&q=' + encodeURIComponent(q.trim()), { credentials: 'same-origin' })
+    .then(function(r){ return r.json(); }).then(function(d){
+      if(!d || !d.ok) return;
+      window.__rgpdConsRows = d.consentements || [];
+      var meta = document.getElementById('rgpd-cons-meta');
+      if(meta) meta.textContent = d.total + ' preuve(s) au total \u2014 ' + window.__rgpdConsRows.length + ' affich\u00e9e(s)';
+      var box = document.getElementById('rgpd-cons');
+      if(!box) return;
+      if(!window.__rgpdConsRows.length){ box.innerHTML = '<div style="color:var(--muted);padding:6px 0">Aucune preuve enregistr\u00e9e pour cette recherche.</div>'; return; }
+      box.innerHTML = rgpdTable(['Horodatage (UTC)', 'Personne', 'M\u00e9thode', 'Finalit\u00e9s', 'Version', 'Retrait'], window.__rgpdConsRows.map(function(c){
+        var fin = '';
+        try { var f = JSON.parse(c.finalites || '{}'); fin = Object.keys(f).filter(function(k){ return f[k]; }).join(', '); } catch(e){ fin = rgpdEsc(c.finalites); }
+        return [ rgpdEsc((c.horodatage || '').replace('T', ' ').slice(0, 19)),
+          rgpdEsc(c.efface ? '(effac\u00e9e)' : (c.email || 'visiteur')), rgpdEsc(c.methode), rgpdEsc(fin),
+          rgpdEsc(c.politique_version), c.retrait ? '<span style="color:var(--accent);font-weight:700">oui</span>' : 'non' ];
+      }));
+    }).catch(function(){});
+};
+window.rgpdCsv = function(){
+  var rows = window.__rgpdConsRows || [];
+  if(!rows.length){ alert('Aucune ligne \u00e0 exporter.'); return; }
+  var head = 'horodatage;personne;methode;finalites;version;retrait;ip_hash';
+  var body = rows.map(function(c){
+    return [c.horodatage, (c.efface ? 'effacee' : (c.email || 'visiteur')), c.methode,
+      String(c.finalites || '').replace(/;/g, ','), c.politique_version, (c.retrait ? 'oui' : 'non'), c.ip_hash]
+      .map(function(v){ return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; }).join(';');
+  }).join('\n');
+  var blob = new Blob(['\ufeff' + head + '\n' + body], { type: 'text/csv;charset=utf-8' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = 'registre-consentements-conseilprev.csv';
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1200);
+};
+window.rgpdRegistre = function(){
+  fetch('/api/rgpd/registre-traitements', { credentials: 'same-origin' }).then(function(r){ return r.json(); }).then(function(d){
+    if(!d || !d.ok) return;
+    window.__rgpdReg = d;
+    var box = document.getElementById('rgpd-registre');
+    if(box) box.innerHTML = rgpdTable(['Traitement', 'Finalit\u00e9', 'Base l\u00e9gale', 'Donn\u00e9es', 'Dur\u00e9e', 'Destinataires'], (d.traitements || []).map(function(t){
+      return ['<strong style="color:var(--ink)">' + rgpdEsc(t.nom) + '</strong>', rgpdEsc(t.finalite), rgpdEsc(t.base), rgpdEsc(t.donnees), rgpdEsc(t.duree), rgpdEsc(t.destinataires)];
+    }));
+    var tb = document.getElementById('rgpd-transferts');
+    if(tb) tb.innerHTML = rgpdTable(['Destinataire', 'Pays', 'R\u00f4le', 'Garantie de transfert'], (d.transferts || []).map(function(t){
+      return ['<strong style="color:var(--ink)">' + rgpdEsc(t.destinataire) + '</strong>', rgpdEsc(t.pays), rgpdEsc(t.role), rgpdEsc(t.garantie)];
+    }));
+  }).catch(function(){});
+};
+window.rgpdRegistreJson = function(){
+  if(!window.__rgpdReg){ alert('Registre non charg\u00e9.'); return; }
+  var blob = new Blob([JSON.stringify(window.__rgpdReg, null, 2)], { type: 'application/json' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = 'registre-traitements-art30-conseilprev.json';
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1200);
+};
+window.rgpdEffacer = function(){
+  var em = (document.getElementById('rgpd-eff-email') || {}).value || '';
+  var msg = document.getElementById('rgpd-eff-msg');
+  if(!em.trim()){ if(msg) msg.textContent = 'Adresse requise.'; return; }
+  if(!confirm('Confirmer l\u2019effacement (art. 17) des donn\u00e9es de ' + em.trim() + ' ? Cette action est irr\u00e9versible.')) return;
+  fetch('/api/rgpd/effacement', { method: 'POST', credentials: 'same-origin', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ email: em.trim() }) })
+    .then(function(r){ return r.json(); }).then(function(d){
+      if(msg) msg.textContent = (d && d.ok) ? ('Effectu\u00e9 : ' + JSON.stringify(d.bilan)) : ((d && d.error) || 'Erreur');
+      rgpdConsents(); rgpdChecks();
+    }).catch(function(){ if(msg) msg.textContent = 'Erreur r\u00e9seau.'; });
+};
+window.rgpdExport = function(){
+  var em = (document.getElementById('rgpd-exp-email') || {}).value || '';
+  var msg = document.getElementById('rgpd-exp-msg');
+  if(!em.trim()){ if(msg) msg.textContent = 'Adresse requise.'; return; }
+  fetch('/api/rgpd/export-donnees?email=' + encodeURIComponent(em.trim()), { credentials: 'same-origin' })
+    .then(function(r){ return r.json(); }).then(function(d){
+      if(!d || !d.ok){ if(msg) msg.textContent = (d && d.error) || 'Erreur'; return; }
+      var blob = new Blob([JSON.stringify(d.export, null, 2)], { type: 'application/json' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = 'export-donnees-' + em.trim().replace(/[^a-z0-9]/gi, '-') + '.json';
+      document.body.appendChild(a); a.click();
+      setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1200);
+      if(msg) msg.textContent = 'Export t\u00e9l\u00e9charg\u00e9 \u2014 \u00e0 remettre apr\u00e8s v\u00e9rification d\u2019identit\u00e9.';
+    }).catch(function(){ if(msg) msg.textContent = 'Erreur r\u00e9seau.'; });
+};
+window.rgpdRapport = function(){
+  fetch('/api/rgpd/rapport-audit', { credentials: 'same-origin' }).then(function(r){ return r.json(); }).then(function(d){
+    if(!d || !d.ok){ alert('Rapport indisponible.'); return; }
+    function row(cs){ return '<tr>' + cs.map(function(v){ return '<td style="padding:6px 9px;border-bottom:1px solid #e5e7eb;vertical-align:top">' + v + '</td>'; }).join('') + '</tr>'; }
+    var checks = (d.checks || []).map(function(c){ return row([c.article, c.intitule, c.mode, c.statut, c.detail]); }).join('');
+    var traits = (d.traitements || []).map(function(t){ return row([t.nom, t.finalite, t.base, t.duree, t.destinataires]); }).join('');
+    var trans = (d.transferts || []).map(function(t){ return row([t.destinataire, t.pays, t.role, t.garantie]); }).join('');
+    var today = new Date().toLocaleDateString('fr-FR');
+    var html = '<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>Rapport d\u2019audit RGPD \u2014 CONSEILPREV</title>'
+      + '<style>body{font-family:Georgia,serif;max-width:860px;margin:36px auto;padding:0 24px;color:#1a1a1a}h1{font-size:23px}h2{font-size:15px;margin-top:26px;border-bottom:2px solid #1a1a1a;padding-bottom:4px}table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}th{text-align:left;padding:6px 9px;border-bottom:2px solid #1a1a1a;font-size:11px}.meta{color:#666;font-size:12.5px}.big{font-size:40px;font-weight:800;margin:6px 0}@media print{.noprint{display:none}}</style></head><body>'
+      + '<div class="noprint" style="text-align:right"><button onclick="window.print()" style="padding:8px 16px;cursor:pointer">Imprimer / PDF</button></div>'
+      + '<h1>Rapport d\u2019audit de conformit\u00e9 RGPD</h1>'
+      + '<div class="meta">\u00c9dit\u00e9 le ' + today + ' \u2014 ' + rgpdEsc(d.responsable.entite) + ' \u00b7 SIREN ' + rgpdEsc(d.responsable.siren) + ' \u00b7 ' + rgpdEsc(d.responsable.adresse) + '<br>Repr\u00e9sentant : ' + rgpdEsc(d.responsable.representant) + ' \u00b7 Contact protection des donn\u00e9es : ' + rgpdEsc(d.responsable.dpo_contact) + ' \u00b7 Politique v' + rgpdEsc(d.version_politique) + '</div>'
+      + '<h2>Indice de conformit\u00e9</h2><div class="big">' + d.score + ' %</div>'
+      + '<div class="meta">' + d.preuves_consentement + ' preuve(s) de consentement enregistr\u00e9e(s), dont ' + d.retraits + ' retrait(s) ou refus trac\u00e9(s).</div>'
+      + '<h2>Contr\u00f4les \u2014 articles 5, 7, 17, 25, 30 \u00b7 DSA \u00b7 DMA \u00b7 Data Act</h2><table><tr><th>Cadre</th><th>Contr\u00f4le</th><th>Mode</th><th>Statut</th><th>Constat</th></tr>' + checks + '</table>'
+      + '<h2>Registre des activit\u00e9s de traitement (art. 30)</h2><table><tr><th>Traitement</th><th>Finalit\u00e9</th><th>Base l\u00e9gale</th><th>Dur\u00e9e</th><th>Destinataires</th></tr>' + traits + '</table>'
+      + '<h2>Transferts de donn\u00e9es (chapitre V)</h2><table><tr><th>Destinataire</th><th>Pays</th><th>R\u00f4le</th><th>Garantie</th></tr>' + trans + '</table>'
+      + '<p class="meta">' + rgpdEsc(d.avertissement) + '</p></body></html>';
+    var w = window.open('', '_blank');
+    if(w){ w.document.write(html); w.document.close(); }
+    else { alert('Veuillez autoriser les fen\u00eatres pour g\u00e9n\u00e9rer le rapport.'); }
+  }).catch(function(){ alert('Rapport indisponible.'); });
+};
+window.rgpdInit = function(){
+  rgpdChecks(); rgpdRegistre(); rgpdConsents();
+};
 window.__veille = {data:null, ts:0, loading:false, regs:[], timer:null};
 window.veilleInit = function(containerId, updId, filter){
   window.__veille.regs.push({id:containerId, upd:updId, filter:filter||{}});
