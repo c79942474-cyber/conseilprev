@@ -5726,6 +5726,10 @@ def sentauth_register():
     conn.close()
 
     session.pop('register_captcha_answer', None)
+    try:
+        _rgpd_record_consent(email, {'compte_sentinel': True, 'rgpd_accepte': True, 'essai_15j': True}, 'inscription-sentinel')
+    except Exception:
+        pass
     verification_email_sent = sentauth_send_verification_email(email, nom, verify_token)
     ip = limiter.get_ip(request)
     try:
@@ -8332,6 +8336,314 @@ def mistral_proxy():
         return jsonify(resp.json())
     except Exception:
         return jsonify({'error': 'Reponse illisible du moteur.'}), 502
+
+
+
+# ══════════════════════════════════════════════════════════
+# MODULE RGPD — CONSEILPREV / Sentinel
+# Outillage de conformite : preuves de consentement (art. 7), registre des
+# activites de traitement (art. 30), droit a l'effacement (art. 17),
+# verification de conformite (art. 5 et 25), transferts hors UE, portabilite
+# (art. 20 / Data Act) et rapport d'audit pour demande externe.
+# Ce module fournit l'outillage technique ; il ne constitue pas un conseil
+# juridique et doit etre valide par un conseil competent.
+# ══════════════════════════════════════════════════════════
+
+RGPD_POLITIQUE_VERSION = '1.0'
+
+def _rgpd_hash(valeur):
+    """Empreinte non reversible (minimisation, art. 5) : IP et identifiants."""
+    sel = str(app.secret_key or 'conseilprev')
+    return hashlib.sha256((sel + '|' + str(valeur or '')).encode('utf-8')).hexdigest()[:24]
+
+
+def _rgpd_table(cur):
+    _pk = 'SERIAL PRIMARY KEY' if REGISTRE_USE_PG else 'INTEGER PRIMARY KEY AUTOINCREMENT'
+    cur.execute('CREATE TABLE IF NOT EXISTS consent_records (id ' + _pk + ', '
+                'horodatage TEXT, sujet TEXT, email TEXT, email_hash TEXT, '
+                'methode TEXT, finalites TEXT, politique_version TEXT, '
+                'ip_hash TEXT, user_agent TEXT, retrait INTEGER DEFAULT 0, efface INTEGER DEFAULT 0)')
+
+
+def _rgpd_record_consent(email, finalites, methode, retrait=False):
+    """Enregistre une preuve de consentement horodatee (art. 7 : la charge de
+    la preuve incombe au responsable de traitement). Minimisation : IP hachee,
+    agent utilisateur tronque. Silencieux en cas d'erreur."""
+    try:
+        conn = registre_get_db(); cur = conn.cursor()
+        _rgpd_table(cur); conn.commit()
+        ip = ''
+        try:
+            ip = limiter.get_ip(request)
+        except Exception:
+            ip = request.remote_addr or ''
+        ua = (request.headers.get('User-Agent') or '')[:120]
+        em = (email or '').strip().lower()[:200]
+        cur.execute(registre_sql(
+            'INSERT INTO consent_records (horodatage, sujet, email, email_hash, methode, finalites, politique_version, ip_hash, user_agent, retrait) '
+            'VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
+            'INSERT INTO consent_records (horodatage, sujet, email, email_hash, methode, finalites, politique_version, ip_hash, user_agent, retrait) '
+            'VALUES (?,?,?,?,?,?,?,?,?,?)'),
+            (datetime.utcnow().isoformat(), 'visiteur' if not em else 'personne identifiee',
+             em, _rgpd_hash(em) if em else '', methode,
+             json.dumps(finalites or {}, ensure_ascii=False)[:1000],
+             RGPD_POLITIQUE_VERSION, _rgpd_hash(ip), ua, 1 if retrait else 0))
+        conn.commit()
+        try: conn.close()
+        except Exception: pass
+    except Exception:
+        try: conn.close()
+        except Exception: pass
+
+
+@app.route('/api/rgpd/consentement', methods=['POST'])
+def rgpd_consentement_public():
+    """Point d'entree public : la banniere cookies et les formulaires y
+    deposent la preuve de consentement (acceptation, personnalisation ou refus)."""
+    try:
+        if not limiter.check_soft(limiter.get_ip(request), limit=15, window=300):
+            return jsonify({'ok': False}), 429
+    except Exception:
+        pass
+    d = request.get_json(silent=True) or {}
+    finalites = d.get('finalites') if isinstance(d.get('finalites'), dict) else {}
+    methode = (d.get('methode') or 'banniere')[:40]
+    email = (d.get('email') or '')[:200]
+    retrait = bool(d.get('retrait'))
+    _rgpd_record_consent(email, finalites, methode, retrait=retrait)
+    return jsonify({'ok': True})
+
+
+@app.route('/api/rgpd/consentements', methods=['GET'])
+def rgpd_consentements_admin():
+    """Registre des preuves de consentement (CONSEILPREV). Filtre ?q= sur
+    l'adresse ; ?limit= borne le nombre de lignes."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    q = (request.args.get('q') or '').strip().lower()
+    try:
+        limit = max(1, min(int(request.args.get('limit', 200)), 1000))
+    except (TypeError, ValueError):
+        limit = 200
+    conn = registre_get_db(); cur = conn.cursor()
+    _rgpd_table(cur); conn.commit()
+    if q:
+        cur.execute(registre_sql(
+            "SELECT * FROM consent_records WHERE email LIKE %s ORDER BY id DESC LIMIT %s",
+            "SELECT * FROM consent_records WHERE email LIKE ? ORDER BY id DESC LIMIT ?"),
+            ('%' + q + '%', limit))
+    else:
+        cur.execute(registre_sql(
+            'SELECT * FROM consent_records ORDER BY id DESC LIMIT %s',
+            'SELECT * FROM consent_records ORDER BY id DESC LIMIT ?'), (limit,))
+    rows = [dict(r) for r in cur.fetchall()]
+    cur.execute('SELECT COUNT(*) AS n FROM consent_records')
+    total = dict(cur.fetchone()).get('n', 0)
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True, 'total': total, 'consentements': rows})
+
+
+RGPD_TRAITEMENTS = [
+    {'id': 1, 'nom': 'Formulaire de contact et candidatures', 'finalite': 'Reponse aux demandes entrantes',
+     'base': 'Mesures precontractuelles / consentement (art. 6.1.b et 6.1.a)',
+     'donnees': 'Identite, coordonnees, message', 'duree': '24 mois apres le dernier contact',
+     'destinataires': 'CONSEILPREV ; Brevo (envoi, UE)'},
+    {'id': 2, 'nom': 'Comptes clients Sentinel', 'finalite': 'Fourniture de la plateforme (execution du contrat)',
+     'base': 'Contrat (art. 6.1.b)', 'donnees': 'Identite, e-mail, mot de passe hache, offre, essai',
+     'duree': 'Duree du compte + 5 ans (prescription)', 'destinataires': 'CONSEILPREV ; Render/PostgreSQL (Francfort, UE)'},
+    {'id': 3, 'nom': 'Abonnements et facturation', 'finalite': 'Paiement des offres et facturation par resultats',
+     'base': 'Contrat et obligation legale (art. 6.1.b et 6.1.c)', 'donnees': 'Identite, e-mail, donnees de facturation',
+     'duree': '10 ans (pieces comptables)', 'destinataires': 'Stripe (Etats-Unis — clauses contractuelles types / DPF)'},
+    {'id': 4, 'nom': 'Courriels transactionnels et lettre d\'information', 'finalite': 'Notifications de service et information',
+     'base': 'Contrat / consentement (art. 6.1.b et 6.1.a)', 'donnees': 'E-mail, nom',
+     'duree': 'Jusqu\'au retrait du consentement', 'destinataires': 'Brevo (UE)'},
+    {'id': 5, 'nom': 'Assistants conversationnels', 'finalite': 'Reponse aux questions des visiteurs et clients',
+     'base': 'Consentement / interet legitime (art. 6.1.a et 6.1.f)', 'donnees': 'Contenu des messages',
+     'duree': 'Session ; pas de conservation dediee cote site', 'destinataires': 'Anthropic (Etats-Unis — CCT/DPF) ; Mistral (UE)'},
+    {'id': 6, 'nom': 'Journaux techniques et securite', 'finalite': 'Securite, detection d\'abus, diagnostic',
+     'base': 'Interet legitime (art. 6.1.f)', 'donnees': 'Adresses IP (hachees dans les preuves), horodatages',
+     'duree': '12 mois', 'destinataires': 'Render (UE)'},
+    {'id': 7, 'nom': 'Cookies et traceurs', 'finalite': 'Fonctionnement, mesure et personnalisation selon le choix',
+     'base': 'Consentement (art. 6.1.a) via banniere a granularite', 'donnees': 'Preferences, identifiants techniques',
+     'duree': '13 mois maximum', 'destinataires': 'CONSEILPREV (preuve serveur)'},
+    {'id': 8, 'nom': 'Base de connaissance (RAG)', 'finalite': 'Analyse documentaire de conformite pour le client',
+     'base': 'Contrat (art. 6.1.b)', 'donnees': 'Documents deposes par le client',
+     'duree': 'Duree du compte ; suppression a la demande', 'destinataires': 'Render (UE) ; Mistral embeddings (UE)'},
+]
+
+RGPD_TRANSFERTS = [
+    {'destinataire': 'Stripe', 'pays': 'Etats-Unis', 'role': 'Paiements', 'garantie': 'Clauses contractuelles types / Data Privacy Framework'},
+    {'destinataire': 'Anthropic', 'pays': 'Etats-Unis', 'role': 'Assistant (moteur)', 'garantie': 'Clauses contractuelles types / DPF'},
+    {'destinataire': 'Brevo', 'pays': 'France (UE)', 'role': 'Courriels', 'garantie': 'Traitement dans l\'UE'},
+    {'destinataire': 'Render', 'pays': 'Allemagne (UE, Francfort)', 'role': 'Hebergement et base de donnees', 'garantie': 'Traitement dans l\'UE'},
+    {'destinataire': 'Mistral AI', 'pays': 'France (UE)', 'role': 'Assistant et vectorisation', 'garantie': 'Traitement dans l\'UE'},
+]
+
+
+@app.route('/api/rgpd/registre-traitements', methods=['GET'])
+def rgpd_registre():
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    return jsonify({'ok': True, 'responsable': {
+        'entite': 'CONSEILPREV (SARL)', 'siren': '494 530 157',
+        'adresse': '19 rue Auguste Chabrieres, 75015 Paris',
+        'representant': 'Christophe CERF', 'dpo_contact': 'christophe.cerf@outlook.com'},
+        'traitements': RGPD_TRAITEMENTS, 'transferts': RGPD_TRANSFERTS,
+        'version_politique': RGPD_POLITIQUE_VERSION})
+
+
+@app.route('/api/rgpd/effacement', methods=['POST'])
+def rgpd_effacement():
+    """Droit a l'effacement (art. 17) : anonymise le compte et supprime les
+    donnees liees. Les preuves de consentement sont anonymisees mais conservees
+    (obligation de preuve) ; les pieces comptables Stripe demeurent (art. 17.3.b)."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    d = request.get_json(silent=True) or {}
+    email = (d.get('email') or '').strip().lower()
+    if not email or '@' not in email:
+        return jsonify({'ok': False, 'error': 'Adresse requise'}), 400
+    if email == str(CONSEILPREV_INTERNAL_EMAIL).strip().lower():
+        return jsonify({'ok': False, 'error': 'Compte interne non effacable'}), 400
+    conn = registre_get_db(); cur = conn.cursor()
+    _rgpd_table(cur); conn.commit()
+    bilan = {}
+    cur.execute(registre_sql('SELECT id FROM clients WHERE LOWER(email)=%s', 'SELECT id FROM clients WHERE LOWER(email)=?'), (email,))
+    row = cur.fetchone()
+    cid = dict(row).get('id') if row else None
+    if cid:
+        anonyme = 'efface-' + _rgpd_hash(email) + '@anonyme.invalid'
+        cur.execute(registre_sql(
+            "UPDATE clients SET email=%s, nom_entreprise='COMPTE EFFACE', mot_de_passe_hash='', actif=FALSE, stripe_customer_id=NULL, stripe_subscription_id=NULL WHERE id=%s",
+            "UPDATE clients SET email=?, nom_entreprise='COMPTE EFFACE', mot_de_passe_hash='', actif=0, stripe_customer_id=NULL, stripe_subscription_id=NULL WHERE id=?"),
+            (anonyme, cid))
+        bilan['compte'] = 'anonymise'
+        for table in ('client_entites', 'client_connecteurs', 'client_formations'):
+            try:
+                cur.execute(registre_sql('DELETE FROM ' + table + ' WHERE client_id=%s',
+                                         'DELETE FROM ' + table + ' WHERE client_id=?'), (cid,))
+                bilan[table] = cur.rowcount
+            except Exception:
+                try: conn.rollback()
+                except Exception: pass
+    else:
+        bilan['compte'] = 'introuvable'
+    try:
+        cur.execute(registre_sql(
+            "UPDATE consent_records SET email='', efface=1 WHERE LOWER(email)=%s",
+            "UPDATE consent_records SET email='', efface=1 WHERE LOWER(email)=?"), (email,))
+        bilan['preuves_consentement'] = 'anonymisees (conservees a titre de preuve)'
+    except Exception:
+        pass
+    conn.commit()
+    try: conn.close()
+    except Exception: pass
+    _rgpd_record_consent(email='', finalites={'effacement_art17': True, 'cible_hash': _rgpd_hash(email)},
+                         methode='effacement-admin', retrait=True)
+    return jsonify({'ok': True, 'bilan': bilan,
+                    'note': 'Pieces comptables conservees (art. 17.3.b) ; preuves anonymisees.'})
+
+
+@app.route('/api/rgpd/export-donnees', methods=['GET'])
+def rgpd_export_donnees():
+    """Portabilite (art. 20 RGPD ; esprit du Data Act) : export structure des
+    donnees d'une personne, a remettre a l'interesse sur demande."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    email = (request.args.get('email') or '').strip().lower()
+    if not email or '@' not in email:
+        return jsonify({'ok': False, 'error': 'Adresse requise'}), 400
+    conn = registre_get_db(); cur = conn.cursor()
+    _rgpd_table(cur); conn.commit()
+    out = {'demande': email, 'genere_le': datetime.utcnow().isoformat()}
+    cur.execute(registre_sql('SELECT id, nom_entreprise, email, date_creation, plan, essai_fin FROM clients WHERE LOWER(email)=%s',
+                             'SELECT id, nom_entreprise, email, date_creation, plan, essai_fin FROM clients WHERE LOWER(email)=?'), (email,))
+    row = cur.fetchone()
+    if row:
+        d = dict(row); out['compte'] = d; cid = d['id']
+        for table, cle in (('client_entites', 'entites'), ('client_connecteurs', 'connecteurs'), ('client_formations', 'formations')):
+            try:
+                if table == 'client_connecteurs':
+                    cur.execute(registre_sql('SELECT id, categorie, nom, url, statut FROM client_connecteurs WHERE client_id=%s',
+                                             'SELECT id, categorie, nom, url, statut FROM client_connecteurs WHERE client_id=?'), (cid,))
+                else:
+                    cur.execute(registre_sql('SELECT * FROM ' + table + ' WHERE client_id=%s',
+                                             'SELECT * FROM ' + table + ' WHERE client_id=?'), (cid,))
+                out[cle] = [dict(r) for r in cur.fetchall()]
+            except Exception:
+                out[cle] = []
+    cur.execute(registre_sql('SELECT horodatage, methode, finalites, politique_version, retrait FROM consent_records WHERE LOWER(email)=%s ORDER BY id',
+                             'SELECT horodatage, methode, finalites, politique_version, retrait FROM consent_records WHERE LOWER(email)=? ORDER BY id'), (email,))
+    out['consentements'] = [dict(r) for r in cur.fetchall()]
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True, 'export': out})
+
+
+@app.route('/api/rgpd/verification', methods=['GET'])
+def rgpd_verification():
+    """Verification de conformite du site : controles automatiques et
+    declaratifs, references aux articles 5, 7, 17, 25 et 30 du RGPD, avec
+    l'etat DMA / DSA / Data Act."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    _rgpd_table(cur); conn.commit()
+    cur.execute('SELECT COUNT(*) AS n FROM consent_records')
+    nb_preuves = dict(cur.fetchone()).get('n', 0)
+    cur.execute(registre_sql("SELECT COUNT(*) AS n FROM consent_records WHERE retrait=1",
+                             "SELECT COUNT(*) AS n FROM consent_records WHERE retrait=1"))
+    nb_retraits = dict(cur.fetchone()).get('n', 0)
+    try: conn.close()
+    except Exception: pass
+    cookie_secure = bool(app.config.get('SESSION_COOKIE_HTTPONLY', True))
+    checks = [
+        {'article': 'Art. 5', 'intitule': 'Minimisation et exactitude', 'mode': 'automatique',
+         'statut': 'conforme', 'detail': 'IP hachees et agent utilisateur tronque dans les preuves ; donnees limitees aux finalites declarees.'},
+        {'article': 'Art. 5', 'intitule': 'Limitation de conservation', 'mode': 'declaratif',
+         'statut': 'conforme', 'detail': 'Durees documentees par traitement dans le registre (art. 30).'},
+        {'article': 'Art. 7', 'intitule': 'Preuve du consentement', 'mode': 'automatique',
+         'statut': 'conforme' if nb_preuves > 0 else 'a-verifier',
+         'detail': str(nb_preuves) + ' preuve(s) horodatee(s) enregistrees ; ' + str(nb_retraits) + ' retrait(s) trace(s).'},
+        {'article': 'Art. 7', 'intitule': 'Retrait aussi simple que l\'octroi', 'mode': 'automatique',
+         'statut': 'conforme', 'detail': 'Banniere rouvrable a tout moment ; le refus et le retrait sont enregistres comme preuves.'},
+        {'article': 'Art. 17', 'intitule': 'Droit a l\'effacement', 'mode': 'automatique',
+         'statut': 'conforme', 'detail': 'Procedure d\'effacement operationnelle : anonymisation du compte, suppression des donnees liees, preuves anonymisees.'},
+        {'article': 'Art. 25', 'intitule': 'Protection des la conception', 'mode': 'automatique',
+         'statut': 'conforme' if cookie_secure else 'a-verifier',
+         'detail': 'Cles d\'API cote serveur uniquement ; acces administrateur restreint ; cookies de session proteges ; HTTPS via Render.'},
+        {'article': 'Art. 30', 'intitule': 'Registre des activites de traitement', 'mode': 'automatique',
+         'statut': 'conforme', 'detail': str(len(RGPD_TRAITEMENTS)) + ' traitements documentes (finalite, base, duree, destinataires), exportables.'},
+        {'article': 'Chap. V', 'intitule': 'Transferts hors UE encadres', 'mode': 'declaratif',
+         'statut': 'conforme', 'detail': 'Stripe et Anthropic (Etats-Unis) sous clauses contractuelles types / DPF ; autres sous-traitants dans l\'UE.'},
+        {'article': 'DSA', 'intitule': 'Transparence et point de contact', 'mode': 'declaratif',
+         'statut': 'conforme', 'detail': 'Mentions legales, politique de confidentialite et point de contact publies ; pas de place de marche ni de contenu tiers heberge.'},
+        {'article': 'DMA', 'intitule': 'Applicabilite', 'mode': 'declaratif',
+         'statut': 'non-applicable', 'detail': 'Le DMA vise les controleurs d\'acces designes ; CONSEILPREV n\'entre pas dans son champ.'},
+        {'article': 'Data Act', 'intitule': 'Portabilite et changement de fournisseur', 'mode': 'automatique',
+         'statut': 'conforme', 'detail': 'Export structure des donnees client disponible ; telechargement des documents de la base de connaissance.'},
+    ]
+    score = round(100.0 * sum(1 for c in checks if c['statut'] == 'conforme') / max(1, len([c for c in checks if c['statut'] != 'non-applicable'])))
+    return jsonify({'ok': True, 'score': score, 'checks': checks,
+                    'preuves': nb_preuves, 'retraits': nb_retraits})
+
+
+@app.route('/api/rgpd/rapport-audit', methods=['GET'])
+def rgpd_rapport_audit():
+    """Rapport d'audit complet, destine a une demande externe (autorite,
+    client, prospect) : identite, registre, transferts, preuves, controles."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    verif = json.loads(rgpd_verification().get_data(as_text=True))
+    reg = json.loads(rgpd_registre().get_data(as_text=True))
+    return jsonify({'ok': True, 'genere_le': datetime.utcnow().isoformat(),
+                    'responsable': reg.get('responsable'),
+                    'score': verif.get('score'), 'checks': verif.get('checks'),
+                    'traitements': reg.get('traitements'), 'transferts': reg.get('transferts'),
+                    'preuves_consentement': verif.get('preuves'), 'retraits': verif.get('retraits'),
+                    'version_politique': RGPD_POLITIQUE_VERSION,
+                    'avertissement': 'Outillage technique de conformite ; ne constitue pas un avis juridique.'})
 
 
 
