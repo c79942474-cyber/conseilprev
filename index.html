@@ -5389,7 +5389,7 @@ function ftNlSubmit(e){
 // CHAT MISTRAL AI
 // ════════════════════════════════════════
 var xCO=false, xCB=false, xCH=[];
-var xKEY='g0Dqgfe3v3op1LPV6lxaUCEVTEZ6GYXU';
+/* Cle API retiree : le chat passe par le serveur (/api/chat), moteur hybride. */
 var xSYS={
   fr:'Tu es un expert senior CONSEILPREV spécialisé en gouvernance IA, conformité et cybersécurité. Réponds en français, de manière professionnelle et concise (max 280 mots). Domaines : IA Act, ISO 42001, NIS2, ISO 27001, DORA, RGPD, 8 risques systémiques IA. Pour toute question de projet, oriente vers contact@i-aes.com ou le formulaire du site.',
   en:'You are a senior CONSEILPREV expert in AI governance, compliance and cybersecurity. Reply in English, professionally and concisely (max 280 words). Domains: AI Act, ISO 42001, NIS2, ISO 27001, DORA, GDPR, 8 systemic AI risks. For project inquiries, direct to contact@i-aes.com.',
@@ -5462,15 +5462,19 @@ async function xSend(){
     var sys=xSYS[lang]||xSYS.fr;
     var msgs=[{role:'system',content:sys}];
     xCH.slice(-8).forEach(function(h){msgs.push(h);});
-    var r=await fetch('https://api.mistral.ai/v1/chat/completions',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+xKEY},
-      body:JSON.stringify({model:'mistral-large-latest',messages:msgs,max_tokens:800,temperature:0.7})
+    var r=await fetch('/api/chat',{
+      method:'POST', credentials:'same-origin',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({message:m, history:xCH.slice(-8)})
     });
-    if(!r.ok) throw new Error('Mistral HTTP '+r.status);
     var data=await r.json();
+    if(!r.ok || !data.reply) throw new Error(data.error || ('HTTP '+r.status));
     xTyp(false);
-    var rep=data.choices[0].message.content;
+    var rep=data.reply;
+    if(data.sources && data.sources.length){
+      var LIBS1={document:'Base documentaire',veille:'Veille r\u00e9glementaire',analyse:'Analyse Sentinel'};
+      rep = rep + '\n\nSources : ' + data.sources.map(function(s){ return '['+s.n+'] '+(LIBS1[s.type]||s.type)+' \u2014 '+String(s.titre||''); }).join(' \u00b7 ');
+    }
     xMsg('b',xFmtT(rep));
     xCH.push({role:'assistant',content:rep});
   }catch(err){
@@ -6503,7 +6507,7 @@ document.addEventListener('keydown', function(e){
 <script>
 /* CHATBOT CONSEILPREV */
 (function(){
-var KEY='g0Dqgfe3v3op1LPV6lxaUCEVTEZ6GYXU';
+/* Cle API retiree : le chat passe par le serveur (/api/chat), moteur hybride. */
 var OPEN=false,HIST=[],BUSY=false,READY=false;
 var SYS='Tu es Sentinel, expert reglementaire CONSEILPREV (Paris). Tu reponds en francais, avec precision et concision (max 280 mots). Domaines : EU AI Act (Regl. 2024/1689), NIS2, RGPD, DORA, ISO 42001, ISO 27001, gouvernance IA, cybersecurite industrielle. Tu aides aussi a naviguer sur le site CONSEILPREV et Sentinel AI. Pour tout projet ou audit, oriente vers christophe.cerf@outlook.com. Pas d avis juridique - orientations expertes.';
 var TAGS=['Art. 6 AI Act','Obligations NIS2','Classification IA','Sanctions AI Act','Comment utiliser Sentinel AI ?','Audit de conformite'];
@@ -6565,17 +6569,19 @@ window.cpcSend=function(preset){
   HIST.push({role:'user',content:txt});
   BUSY=true;
   var ty=cpcTyping();
-  fetch('https://api.mistral.ai/v1/chat/completions',{
-    method:'POST',
-    headers:{'Content-Type':'application/json','Authorization':'Bearer '+KEY},
-    body:JSON.stringify({model:'mistral-large-latest',
-      messages:[{role:'system',content:SYS}].concat(HIST.slice(-8)),
-      max_tokens:500,temperature:0.5})
+  fetch('/api/chat',{
+    method:'POST', credentials:'same-origin',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({message:txt, history:HIST.slice(-8)})
   })
   .then(function(r){return r.json();})
   .then(function(d){
     if(ty)ty.remove();
-    var rep=d.choices&&d.choices[0]?d.choices[0].message.content:'Erreur de connexion.';
+    var rep=d.reply || (d.error ? ('Erreur : '+d.error) : 'Reponse indisponible.');
+    if(d.sources && d.sources.length){
+      var LIBS2={document:'Base documentaire',veille:'Veille reglementaire',analyse:'Analyse Sentinel'};
+      rep = rep + '\n\nSources : ' + d.sources.map(function(s){ return '['+s.n+'] '+(LIBS2[s.type]||s.type)+' - '+String(s.titre||''); }).join(' | ');
+    }
     HIST.push({role:'assistant',content:rep});
     cpcAdd('bot',rep.replace(/\n/g,'<br>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>'));
     BUSY=false;
