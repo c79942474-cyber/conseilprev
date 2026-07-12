@@ -8122,6 +8122,40 @@ def _expl_analyses(cur, mots, cadres, limite):
     return out[:limite]
 
 
+
+def _expl_synthese(question, resultats):
+    """Synthese redigee par le modele, fondee EXCLUSIVEMENT sur les extraits
+    retrouves. Le modele doit citer ses sources et signaler l'absence
+    d'information plutot que d'inventer."""
+    if not resultats:
+        return None
+    LIB = {'document': 'Base documentaire', 'veille': 'Veille reglementaire',
+           'analyse': 'Analyse de la plateforme'}
+    blocs = []
+    for i, r in enumerate(resultats[:8], start=1):
+        blocs.append('[%d] (%s - %s)\n%s' % (
+            i, LIB.get(r.get('type'), r.get('type')), str(r.get('titre') or '')[:120],
+            str(r.get('extrait') or '')[:700]))
+    contexte = '\n\n'.join(blocs)
+    system = (
+        "Vous etes l'assistant de conformite de la plateforme Sentinel, editee par CONSEILPREV. "
+        "Vous repondez en francais, dans un style formel, precis et concis (200 mots maximum). "
+        "REGLE ABSOLUE : vous vous appuyez EXCLUSIVEMENT sur les extraits fournis. "
+        "Vous n'inventez aucun fait, aucun article, aucune date, aucun chiffre. "
+        "Vous citez vos sources entre crochets, par exemple [1] ou [2]. "
+        "Si les extraits ne permettent pas de repondre, vous le dites clairement et vous "
+        "invitez a preciser la question ou a importer les documents utiles. "
+        "Pour toute question juridique ou comptable, vous rappelez que la reponse ne constitue "
+        "pas un conseil juridique et recommandez la validation par un conseil competent."
+    )
+    user = ('Question : %s\n\nExtraits disponibles :\n\n%s\n\n'
+            'Redigez la reponse en vous appuyant uniquement sur ces extraits, avec citations.'
+            % (question, contexte))
+    ok, texte = call_anthropic([{'role': 'user', 'content': user}], system=system,
+                               max_tokens=700, temperature=0.2)
+    return texte if ok else None
+
+
 @app.route('/api/sentinel/explorer', methods=['POST'])
 @rate_limit(limit=20, window=60)
 @rag_require_access
@@ -8163,7 +8197,14 @@ def sentinel_explorer():
     for r in resultats:
         par_source[r['type']] = par_source.get(r['type'], 0) + 1
 
+    synthese = None
+    if data.get('synthese', True):
+        try:
+            synthese = _expl_synthese(question, resultats)
+        except Exception:
+            synthese = None
     return jsonify({'ok': True, 'question': question, 'cadres': cadres,
+                    'synthese': synthese,
                     'resultats': resultats, 'par_source': par_source,
                     'total': len(resultats),
                     'moteur': 'vectoriel' if (RAG_PGVECTOR_AVAILABLE and REGISTRE_USE_PG) else 'lexical'})
