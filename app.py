@@ -8269,6 +8269,54 @@ def sentinel_explorer():
 
 
 
+@app.route('/api/mistral/proxy', methods=['POST'])
+@rate_limit(limit=30, window=60)
+@sentinel_login_required
+def mistral_proxy():
+    """Relais serveur vers Mistral, reserve aux clients authentifies.
+    La cle d'API reste cote serveur et n'est jamais exposee au navigateur.
+    Entree : {'model','messages','max_tokens','temperature'} — sortie : reponse Mistral."""
+    if not MISTRAL_API_KEY:
+        return jsonify({'error': 'Moteur Mistral non configure.'}), 501
+    d = request.get_json(silent=True) or {}
+    messages = d.get('messages') or []
+    if not isinstance(messages, list) or not messages:
+        return jsonify({'error': 'messages requis'}), 400
+    propres = []
+    for m in messages[-12:]:
+        if isinstance(m, dict) and m.get('role') in ('system', 'user', 'assistant') and m.get('content'):
+            propres.append({'role': m['role'], 'content': str(m['content'])[:6000]})
+    if not propres:
+        return jsonify({'error': 'messages invalides'}), 400
+    try:
+        max_tokens = max(1, min(int(d.get('max_tokens', 800)), 4000))
+    except (TypeError, ValueError):
+        max_tokens = 800
+    try:
+        temperature = float(d.get('temperature', 0.5))
+    except (TypeError, ValueError):
+        temperature = 0.5
+    temperature = max(0.0, min(temperature, 1.0))
+    try:
+        resp = requests.post(
+            MISTRAL_URL,
+            headers={'Content-Type': 'application/json',
+                     'Authorization': 'Bearer ' + MISTRAL_API_KEY},
+            json={'model': d.get('model') or 'mistral-large-latest',
+                  'messages': propres, 'max_tokens': max_tokens, 'temperature': temperature},
+            timeout=45,
+        )
+    except Exception:
+        return jsonify({'error': 'Moteur indisponible.'}), 503
+    if resp.status_code >= 400:
+        return jsonify({'error': 'Moteur indisponible (%d).' % resp.status_code}), 502
+    try:
+        return jsonify(resp.json())
+    except Exception:
+        return jsonify({'error': 'Reponse illisible du moteur.'}), 502
+
+
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
