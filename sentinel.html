@@ -3658,8 +3658,16 @@ textarea.form-el{min-height:86px;resize:vertical}
   <div style="border:1px solid var(--rule2);border-left:3px solid var(--accent);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px;display:flex;align-items:center;gap:18px;flex-wrap:wrap">
     <div><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Indice de conformité</div>
     <div id="rgpd-score" style="font-size:34px;font-weight:800;color:var(--ink)">—</div></div>
-    <div id="rgpd-score-note" style="font-size:12px;color:var(--muted);max-width:52ch">Contrôles automatiques et déclaratifs, hors éléments non applicables.</div>
-    <button class="mat-export-btn" style="margin-left:auto" title="Générer le rapport d'audit complet, imprimable / PDF, pour une demande externe" onclick="rgpdRapport()">Rapport d'audit complet</button>
+    <div style="flex:1;min-width:220px">
+      <div id="rgpd-score-note" style="font-size:12px;color:var(--muted);max-width:52ch">Contrôles automatiques et déclaratifs, hors éléments non applicables.</div>
+      <div style="height:6px;border-radius:4px;background:var(--rule2);margin-top:8px;overflow:hidden"><div id="rgpd-score-bar" style="height:100%;width:0%;background:var(--green,#0E7C7B);transition:width .6s ease"></div></div>
+      <div id="rgpd-score-time" style="font-size:10.5px;color:var(--muted);margin-top:5px">Vérification non encore effectuée.</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;margin-left:auto;flex-wrap:wrap">
+      <button class="mat-export-btn" id="rgpd-refresh-btn" title="Recalculer immédiatement le taux de conformité RGPD à partir de l'état réel du site (preuves, registre, contrôles)" onclick="rgpdRefresh()">↻ Actualiser la conformité</button>
+      <label style="font-size:10.5px;color:var(--muted);display:inline-flex;align-items:center;gap:5px;cursor:pointer" title="Recalcule automatiquement le taux toutes les 30 secondes tant que cette page est ouverte"><input type="checkbox" id="rgpd-auto" checked onchange="rgpdAutoToggle()"> Temps réel</label>
+      <button class="mat-export-btn" title="Générer le rapport d'audit complet, imprimable / PDF, pour une demande externe" onclick="rgpdRapport()">Rapport d'audit complet</button>
+    </div>
   </div>
 
   <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px">
@@ -18959,10 +18967,16 @@ function rgpdTable(cols, rows){
   return '<table style="width:100%;border-collapse:collapse;font-size:11.5px"><thead><tr>' + th + '</tr></thead><tbody>' + tb + '</tbody></table>';
 }
 window.rgpdChecks = function(){
-  fetch('/api/rgpd/verification', { credentials: 'same-origin' }).then(function(r){ return r.json(); }).then(function(d){
+  return fetch('/api/rgpd/verification', { credentials: 'same-origin', cache: 'no-store' }).then(function(r){ return r.json(); }).then(function(d){
     if(!d || !d.ok) return;
     var sc = document.getElementById('rgpd-score');
-    if(sc) sc.textContent = d.score + ' %';
+    var couleur = (d.score >= 90) ? 'var(--green,#0E7C7B)' : ((d.score >= 70) ? '#c98a00' : 'var(--accent)');
+    if(sc){ sc.textContent = d.score + ' %'; sc.style.color = couleur; }
+    var bar = document.getElementById('rgpd-score-bar');
+    if(bar){ bar.style.width = d.score + '%'; bar.style.background = couleur; }
+    var tm = document.getElementById('rgpd-score-time');
+    if(tm){ tm.textContent = 'Dernière vérification : ' + new Date().toLocaleTimeString('fr-FR')
+      + ' \u00b7 ' + d.preuves + ' preuve(s) de consentement \u00b7 ' + d.retraits + ' retrait(s)'; }
     var ST = { conforme: ['Conforme', 'var(--green,#0E7C7B)'], 'a-verifier': ['\u00c0 v\u00e9rifier', 'var(--accent)'], 'non-applicable': ['Non applicable', 'var(--muted)'] };
     var box = document.getElementById('rgpd-checks');
     if(!box) return;
@@ -19081,8 +19095,40 @@ window.rgpdRapport = function(){
     else { alert('Veuillez autoriser les fen\u00eatres pour g\u00e9n\u00e9rer le rapport.'); }
   }).catch(function(){ alert('Rapport indisponible.'); });
 };
+window.rgpdRefresh = function(){
+  var b = document.getElementById('rgpd-refresh-btn');
+  var tm = document.getElementById('rgpd-score-time');
+  if(b){ b.disabled = true; b.textContent = 'Vérification en cours\u2026'; }
+  if(tm){ tm.textContent = 'Recalcul du taux de conformité\u2026'; }
+  Promise.all([ window.rgpdChecks(), window.rgpdConsents(), window.rgpdRegistre() ])
+    .catch(function(){})
+    .then(function(){
+      if(b){ b.disabled = false; b.textContent = '\u21bb Actualiser la conformité'; }
+    });
+};
+window.__rgpdTimer = null;
+window.rgpdAutoToggle = function(){
+  var el = document.getElementById('rgpd-auto');
+  if(el && el.checked){ window.rgpdAutoStart(); } else { window.rgpdAutoStop(); }
+};
+window.rgpdAutoStart = function(){
+  window.rgpdAutoStop();
+  /* Recalcul periodique tant que la page RGPD est affichee : le taux reflete
+     en continu l'etat reel (preuves deposees, retraits, controles). */
+  window.__rgpdTimer = setInterval(function(){
+    var on = document.querySelector('.page.on');
+    if(!on || on.id !== 'p-rgpd-site'){ window.rgpdAutoStop(); return; }
+    if(document.hidden) return;
+    window.rgpdChecks();
+  }, 30000);
+};
+window.rgpdAutoStop = function(){
+  if(window.__rgpdTimer){ clearInterval(window.__rgpdTimer); window.__rgpdTimer = null; }
+};
 window.rgpdInit = function(){
   rgpdChecks(); rgpdRegistre(); rgpdConsents();
+  var el = document.getElementById('rgpd-auto');
+  if(!el || el.checked) window.rgpdAutoStart();
 };
 window.__veille = {data:null, ts:0, loading:false, regs:[], timer:null};
 window.veilleInit = function(containerId, updId, filter){
