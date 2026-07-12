@@ -7962,6 +7962,214 @@ def cron_essai_relances():
 
 
 
+# ══════════════════════════════════════════════════════════
+# MOTEUR D'EXPLORATION UNIFIE — Sentinel
+# Interroge en temps reel l'ensemble des sources de connaissance :
+#   1. base documentaire RAG (vectorielle si pgvector, sinon plein texte)
+#   2. veille reglementaire (flux qualifies, cache serveur)
+#   3. historique des analyses et documents produits par la plateforme
+# Fusionne, pondere et restitue une reponse citee. Aucun reentrainement :
+# la connaissance est lue a chaque requete, donc toujours a jour.
+# CONSEILPREV/Sentinel.
+# ══════════════════════════════════════════════════════════
+
+EXPL_SOURCE_POIDS = {
+    'document': 1.00,   # base documentaire : source de reference
+    'veille': 0.85,     # actualite reglementaire : forte valeur si recente
+    'analyse': 0.75,    # productions de la plateforme
+}
+
+EXPL_CADRES = {
+    'IA Act': ['ia act', 'ai act', 'annexe iii', 'haut risque', 'gpai', 'systeme d ia'],
+    'RGPD': ['rgpd', 'gdpr', 'donnees personnelles', 'aipd', 'dpia', 'cnil', 'consentement'],
+    'ISO 42001': ['iso 42001', 'iso/iec 42001', 'smia'],
+    'ISO 27001': ['iso 27001', 'smsi', 'securite de l information'],
+    'NIS2': ['nis2', 'nis 2', 'entite essentielle'],
+    'DORA': ['dora', 'resilience operationnelle'],
+    'Cybersecurite': ['cyber', 'vulnerabilite', 'incident', 'menace', 'attaque', 'iec 62443', 'ebios'],
+}
+
+
+def _expl_norm(s):
+    s = (s or '').lower()
+    for a, b in [('é', 'e'), ('è', 'e'), ('ê', 'e'), ('ë', 'e'), ('à', 'a'), ('â', 'a'), ('î', 'i'),
+                 ('ï', 'i'), ('ô', 'o'), ('ö', 'o'), ('û', 'u'), ('ù', 'u'), ('ç', 'c'), ('’', ' '),
+                 ("'", ' '), ('-', ' '), ('_', ' ')]:
+        s = s.replace(a, b)
+    return s
+
+
+def _expl_mots(q):
+    """Mots significatifs de la question (hors mots vides)."""
+    vides = {'le', 'la', 'les', 'de', 'des', 'du', 'un', 'une', 'et', 'ou', 'que', 'qui', 'quoi',
+             'quel', 'quelle', 'quels', 'quelles', 'est', 'sont', 'ce', 'cet', 'cette', 'dans',
+             'pour', 'par', 'sur', 'au', 'aux', 'en', 'a', 'il', 'elle', 'nous', 'vous', 'je',
+             'mon', 'ma', 'mes', 'notre', 'nos', 'comment', 'pourquoi', 'quand', 'combien', 'plus'}
+    mots = [m for m in _expl_norm(q).split() if len(m) > 2 and m not in vides]
+    return mots
+
+
+def _expl_cadres_detectes(q):
+    n = _expl_norm(q)
+    trouves = []
+    for cadre, mots in EXPL_CADRES.items():
+        if any(m in n for m in mots):
+            trouves.append(cadre)
+    return trouves
+
+
+def _expl_score_texte(texte, mots, cadres):
+    """Score lexical d'un extrait : couverture des mots + cadres reconnus."""
+    if not texte:
+        return 0.0
+    n = _expl_norm(texte)
+    couverts = sum(1 for m in mots if m in n)
+    base = (couverts / max(1, len(mots))) if mots else 0.0
+    bonus = 0.0
+    for c in cadres:
+        for m in EXPL_CADRES.get(c, []):
+            if m in n:
+                bonus += 0.08
+                break
+    return min(1.0, base + bonus)
+
+
+def _expl_documents(cur, query, mots, cadres, limite):
+    """Base documentaire : vectorielle si disponible, sinon lexicale."""
+    out = []
+    try:
+        if RAG_PGVECTOR_AVAILABLE and REGISTRE_USE_PG:
+            ok, embs = rag_get_embeddings([query])
+            if ok:
+                vec = embs[0]
+                cur.execute(
+                    'SELECT c.chunk_text, d.nom_fichier, d.id AS doc_id, '
+                    '1 - (c.embedding <=> %s::vector) AS score '
+                    'FROM rag_chunks c JOIN rag_documents d ON c.document_id = d.id '
+                    'WHERE c.embedding IS NOT NULL '
+                    'ORDER BY c.embedding <=> %s::vector LIMIT %s',
+                    [vec, vec, limite])
+                for r in cur.fetchall():
+                    r = dict(r)
+                    out.append({'type': 'document', 'titre': r['nom_fichier'], 'ref': r['doc_id'],
+                                'extrait': (r['chunk_text'] or '')[:600],
+                                'score': float(r.get('score') or 0.0)})
+    except Exception:
+        out = []
+    if not out:
+        try:
+            cur.execute(registre_sql(
+                'SELECT c.chunk_text, d.nom_fichier, d.id AS doc_id FROM rag_chunks c '
+                'JOIN rag_documents d ON c.document_id = d.id LIMIT %s',
+                'SELECT c.chunk_text, d.nom_fichier, d.id AS doc_id FROM rag_chunks c '
+                'JOIN rag_documents d ON c.document_id = d.id LIMIT ?'), (600,))
+            for r in cur.fetchall():
+                r = dict(r)
+                s = _expl_score_texte(r.get('chunk_text'), mots, cadres)
+                if s > 0:
+                    out.append({'type': 'document', 'titre': r['nom_fichier'], 'ref': r['doc_id'],
+                                'extrait': (r['chunk_text'] or '')[:600], 'score': s})
+        except Exception:
+            pass
+    return out
+
+
+def _expl_veille(mots, cadres, limite):
+    """Veille reglementaire : articles du cache serveur, bonus de fraicheur."""
+    out = []
+    try:
+        items = (_VEILLE_CACHE or {}).get('items') or []
+    except Exception:
+        items = []
+    for it in items:
+        titre = it.get('title') or it.get('titre') or ''
+        resume = it.get('summary') or it.get('resume') or ''
+        s = _expl_score_texte(titre + ' ' + resume, mots, cadres)
+        if s <= 0:
+            continue
+        s = min(1.0, s + 0.10)  # bonus de fraicheur (veille = actualite)
+        out.append({'type': 'veille', 'titre': titre[:200], 'ref': it.get('link') or '',
+                    'extrait': (resume or '')[:400], 'score': s,
+                    'date': it.get('published') or it.get('date') or ''})
+    out.sort(key=lambda x: -x['score'])
+    return out[:limite]
+
+
+def _expl_analyses(cur, mots, cadres, limite):
+    """Documents et analyses produits par la plateforme (historique)."""
+    out = []
+    for sql_pg, sql_sq in [
+        ('SELECT id, page, label, date_creation FROM historique ORDER BY date_creation DESC LIMIT %s',
+         'SELECT id, page, label, date_creation FROM historique ORDER BY date_creation DESC LIMIT ?'),
+        ('SELECT id, page, titre AS label, date_creation FROM historique ORDER BY date_creation DESC LIMIT %s',
+         'SELECT id, page, titre AS label, date_creation FROM historique ORDER BY date_creation DESC LIMIT ?')]:
+        try:
+            cur.execute(registre_sql(sql_pg, sql_sq), (400,))
+            for r in cur.fetchall():
+                r = dict(r)
+                txt = (r.get('label') or '') + ' ' + (r.get('page') or '')
+                s = _expl_score_texte(txt, mots, cadres)
+                if s > 0:
+                    out.append({'type': 'analyse', 'titre': (r.get('label') or 'Analyse')[:200],
+                                'ref': r.get('id'), 'extrait': ('Module : ' + str(r.get('page') or '')),
+                                'score': s, 'date': str(r.get('date_creation') or '')})
+            break
+        except Exception:
+            try: conn_rollback = None
+            except Exception: pass
+            continue
+    out.sort(key=lambda x: -x['score'])
+    return out[:limite]
+
+
+@app.route('/api/sentinel/explorer', methods=['POST'])
+@rate_limit(limit=20, window=60)
+@rag_require_access
+def sentinel_explorer():
+    """Exploration unifiee de la connaissance Sentinel, en temps reel.
+    Entree : {'question': str, 'sources': ['document','veille','analyse'], 'top_k': int}
+    Sortie : resultats fusionnes et pondere, cadres detectes, synthese."""
+    data = request.get_json(silent=True) or {}
+    question = (data.get('question') or '').strip()
+    if not question:
+        return jsonify({'ok': False, 'error': 'Question requise.'}), 400
+    demandees = data.get('sources') or ['document', 'veille', 'analyse']
+    try:
+        top_k = max(1, min(int(data.get('top_k', 8)), 20))
+    except (TypeError, ValueError):
+        top_k = 8
+
+    mots = _expl_mots(question)
+    cadres = _expl_cadres_detectes(question)
+
+    conn = registre_get_db(); cur = conn.cursor()
+    resultats = []
+    if 'document' in demandees:
+        resultats += _expl_documents(cur, question, mots, cadres, top_k)
+    if 'analyse' in demandees:
+        resultats += _expl_analyses(cur, mots, cadres, top_k)
+    try: conn.close()
+    except Exception: pass
+    if 'veille' in demandees:
+        resultats += _expl_veille(mots, cadres, top_k)
+
+    # Fusion ponderee par source, puis classement
+    for r in resultats:
+        r['score_final'] = round(float(r.get('score') or 0.0) * EXPL_SOURCE_POIDS.get(r['type'], 0.7), 4)
+    resultats.sort(key=lambda x: -x['score_final'])
+    resultats = resultats[:top_k]
+
+    par_source = {}
+    for r in resultats:
+        par_source[r['type']] = par_source.get(r['type'], 0) + 1
+
+    return jsonify({'ok': True, 'question': question, 'cadres': cadres,
+                    'resultats': resultats, 'par_source': par_source,
+                    'total': len(resultats),
+                    'moteur': 'vectoriel' if (RAG_PGVECTOR_AVAILABLE and REGISTRE_USE_PG) else 'lexical'})
+
+
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
