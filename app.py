@@ -2851,6 +2851,52 @@ def api_match():
         return jsonify({'ok': False, 'error': 'server_error', 'fallback': True}), 200
 
 
+
+def _chat_contexte_sentinel(question, limite=5):
+    """Couche de connaissance Sentinel pour le chat : retrouve les extraits les
+    plus pertinents (base documentaire, veille reglementaire, analyses) et les
+    formate en contexte. Retourne (contexte_texte, sources). Silencieux en cas
+    d'erreur : le chat conserve ses moteurs habituels."""
+    try:
+        mots = _expl_mots(question)
+        cadres = _expl_cadres_detectes(question)
+        conn = registre_get_db(); cur = conn.cursor()
+        res = []
+        try:
+            res += _expl_documents(cur, question, mots, cadres, limite)
+        except Exception:
+            pass
+        try:
+            res += _expl_analyses(cur, mots, cadres, 3)
+        except Exception:
+            pass
+        try: conn.close()
+        except Exception: pass
+        try:
+            res += _expl_veille(mots, cadres, 3)
+        except Exception:
+            pass
+        for r in res:
+            r['score_final'] = float(r.get('score') or 0.0) * EXPL_SOURCE_POIDS.get(r.get('type'), 0.7)
+        res.sort(key=lambda x: -x['score_final'])
+        res = [r for r in res if r['score_final'] > 0.12][:limite]
+        if not res:
+            return '', []
+        LIB = {'document': 'Base documentaire', 'veille': 'Veille reglementaire',
+               'analyse': 'Analyse de la plateforme'}
+        blocs = []
+        sources = []
+        for i, r in enumerate(res, start=1):
+            blocs.append('[%d] (%s - %s)\n%s' % (
+                i, LIB.get(r.get('type'), r.get('type')), str(r.get('titre') or '')[:110],
+                str(r.get('extrait') or '')[:600]))
+            sources.append({'n': i, 'type': r.get('type'), 'titre': str(r.get('titre') or '')[:140],
+                            'ref': r.get('ref')})
+        return '\n\n'.join(blocs), sources
+    except Exception:
+        return '', []
+
+
 @app.route('/api/chat', methods=['POST'])
 @rate_limit(limit=15, window=60)
 def chat():
@@ -2878,19 +2924,31 @@ def chat():
                 messages.append({"role": h['role'], "content": str(h['content'])[:1000]})
         messages.append({"role": "user", "content": user_msg})
 
-        # Double verification : Claude ET Mistral interroges en parallele, comparaison
-        # automatique des reponses pour detecter toute divergence factuelle (numero
-        # d'article, sanction, date). Plus lent et plus couteux qu'un appel simple,
-        # mais la fiabilite prime pour un assistant reglementaire.
+        # Reponse HYBRIDE MULTI-SOURCES :
+        #  1. couche de connaissance Sentinel (base documentaire, veille, analyses)
+        #     -> extraits injectes dans le systeme, avec obligation de citer ;
+        #  2. moteurs conserves : Claude ET Mistral interroges en parallele, avec
+        #     comparaison automatique pour detecter toute divergence factuelle.
+        contexte, sources = _chat_contexte_sentinel(user_msg)
+        system_chat = MISTRAL_SYSTEM
+        if contexte:
+            system_chat = (MISTRAL_SYSTEM +
+                "\n\nCONNAISSANCE SENTINEL (CONSEILPREV) — extraits issus de la base documentaire, "
+                "de la veille reglementaire et des analyses de la plateforme :\n\n" + contexte +
+                "\n\nPrivilegiez ces extraits lorsqu'ils repondent a la question, et citez-les entre "
+                "crochets, par exemple [1]. N'inventez jamais un article, une date ou un chiffre. "
+                "Si les extraits ne suffisent pas, repondez avec vos connaissances generales en le "
+                "signalant, sans citer de source.")
         ok, reply, model_used, divergence = ai_complete_cross_checked(
-            messages, system=MISTRAL_SYSTEM, max_tokens=800, temperature=0.7
+            messages, system=system_chat, max_tokens=800, temperature=0.7
         )
         if not ok:
             bf_protector.record_attempt(bf_key, success=False)
             logger.error(f"CHAT_ALL_FAILED {ip}: {reply}")
             return jsonify({"error": "Service IA temporairement indisponible, réessayez"}), 503
         bf_protector.record_attempt(bf_key, success=True)
-        return jsonify({"reply": reply, "model": model_used, "divergence": divergence})
+        return jsonify({"reply": reply, "model": model_used, "divergence": divergence,
+                        "sources": sources, "connaissance": bool(contexte)})
     except requests.Timeout:
         return jsonify({"error": "Délai dépassé, réessayez"}), 504
     except Exception as e:
