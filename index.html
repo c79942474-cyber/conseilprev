@@ -5935,6 +5935,14 @@ document.addEventListener('keydown', function(e){
       version:    '1.0'
     };
     localStorage.setItem(CK_KEY, JSON.stringify(data));
+    /* Preuve de consentement serveur (RGPD art. 7) : acceptation, personnalisation
+       ou refus sont horodates et conserves comme preuve, sans donnee superflue. */
+    try {
+      fetch('/api/rgpd/consentement', { method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ methode: 'banniere-cookies',
+          finalites: { necessary: true, functional: data.functional, analytics: data.analytics, marketing: data.marketing },
+          retrait: !(data.functional || data.analytics || data.marketing) }) }).catch(function(){});
+    } catch(e){}
     return data;
   }
 
