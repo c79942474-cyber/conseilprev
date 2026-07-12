@@ -3150,6 +3150,21 @@ textarea.form-el{min-height:86px;resize:vertical}
     </select>
   </div>
 
+      <div style="border:1px solid var(--rule2);border-radius:12px;padding:16px 18px;background:var(--white);margin-bottom:18px">
+        <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:3px">Explorer la connaissance Sentinel</div>
+        <div style="font-size:11.5px;color:var(--muted);margin-bottom:10px">Interroge en temps réel vos documents, la veille réglementaire et les analyses produites par la plateforme. Les résultats sont classés par pertinence et cités.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+          <input id="expl-q" placeholder="Votre question (ex. : obligations IA Act pour un système à haut risque)" onkeydown="if(event.key==='Enter') explorerAsk();" style="flex:1;min-width:220px;font-size:13px;padding:9px 12px;border:1px solid var(--rule2);border-radius:8px">
+          <button class="mat-export-btn" onclick="explorerAsk()">Explorer</button>
+        </div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-bottom:8px">
+          <label><input type="checkbox" id="expl-src-document" checked> Base documentaire</label>
+          <label><input type="checkbox" id="expl-src-veille" checked> Veille réglementaire</label>
+          <label><input type="checkbox" id="expl-src-analyse" checked> Analyses de la plateforme</label>
+        </div>
+        <div id="expl-meta" style="font-size:11px;color:var(--muted);margin-bottom:6px"></div>
+        <div id="expl-out"></div>
+      </div>
   <div id="rag-doc-list"></div>
 </div>
 
@@ -15754,6 +15769,57 @@ window.ragDeleteDoc = function(id, nom){
 };
 
 var RAG_PAGE_LABELS = { audit:"Audit IA Act", registre:"Registre IA", fria:"FRIA", maturite:"Audit de maturité", veille:"Veille qualifiée", raci:"RACI", general:"Général" };
+
+window.explorerAsk = function(){
+  var q = document.getElementById('expl-q');
+  var out = document.getElementById('expl-out');
+  var meta = document.getElementById('expl-meta');
+  if(!q || !out || !q.value.trim()) return;
+  var sources = [];
+  ['document','veille','analyse'].forEach(function(s){
+    var el = document.getElementById('expl-src-' + s);
+    if(el && el.checked) sources.push(s);
+  });
+  if(!sources.length){ sources = ['document','veille','analyse']; }
+  if(meta) meta.textContent = 'Exploration en cours\u2026';
+  out.innerHTML = '<div class="reg-loading">Consultation de la base de connaissance\u2026</div>';
+  fetch('/api/sentinel/explorer', {
+    method:'POST', credentials:'same-origin',
+    headers: Object.assign({'Content-Type':'application/json'}, window.ragHeaders ? window.ragHeaders() : {}),
+    body: JSON.stringify({ question: q.value.trim(), sources: sources, top_k: 8 })
+  })
+  .then(function(r){
+    if(window.ragHandleAuthError && window.ragHandleAuthError(r.status)) return null;
+    return r.json();
+  })
+  .then(function(d){
+    if(!d){ out.innerHTML = ''; return; }
+    if(!d.ok){ out.innerHTML = '<div class="reg-empty" style="color:var(--accent)">' + (d.error || 'Erreur') + '</div>'; if(meta) meta.textContent=''; return; }
+    var SRC = { document:'Base documentaire', veille:'Veille r\u00e9glementaire', analyse:'Analyses de la plateforme' };
+    var COL = { document:'#6B46C1', veille:'#0E7C7B', analyse:'#c98a00' };
+    if(meta){
+      var cadres = (d.cadres && d.cadres.length) ? (' \u00b7 Cadres d\u00e9tect\u00e9s : ' + d.cadres.join(', ')) : '';
+      meta.textContent = d.total + ' r\u00e9sultat(s) \u00b7 moteur ' + d.moteur + cadres;
+    }
+    if(!d.resultats || !d.resultats.length){
+      out.innerHTML = '<div class="reg-empty">Aucun \u00e9l\u00e9ment pertinent trouv\u00e9. Reformulez la question ou importez des documents.</div>';
+      return;
+    }
+    out.innerHTML = d.resultats.map(function(r){
+      var pct = Math.round((r.score_final || 0) * 100);
+      var lien = (r.type === 'veille' && r.ref) ? '<a href="'+r.ref+'" target="_blank" rel="noopener" style="font-size:10px;color:var(--ink)">Ouvrir la source</a>' : '';
+      if(r.type === 'document' && r.ref){ lien = '<button class="histo-btn-sm" onclick="ragDownload('+r.ref+')">\u2b07 T\u00e9l\u00e9charger</button>'; }
+      return '<div class="histo-row">'
+        + '<div class="histo-row-top"><span class="histo-page-chip" style="background:'+(COL[r.type]||'#666')+';color:#fff">'+(SRC[r.type]||r.type)+'</span>'
+        + '<span class="histo-date">pertinence '+pct+' %</span></div>'
+        + '<div class="histo-label">'+String(r.titre||'').replace(/</g,'&lt;')+'</div>'
+        + '<div style="font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.5">'+String(r.extrait||'').replace(/</g,'&lt;')+'</div>'
+        + (lien ? '<div class="histo-actions">'+lien+'</div>' : '')
+        + '</div>';
+    }).join('');
+  })
+  .catch(function(){ out.innerHTML = '<div class="reg-empty" style="color:var(--accent)">Erreur d\u2019exploration.</div>'; if(meta) meta.textContent=''; });
+};
 
 window.ragDownload = function(id, nom){
   fetch('/api/rag/download/' + id, { headers: window.ragHeaders(), credentials: 'same-origin' })
