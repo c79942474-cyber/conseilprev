@@ -1999,6 +1999,10 @@ textarea.form-el{min-height:86px;resize:vertical}
 .ent-tip:hover{color:#fff;background:var(--ink,#111827);border-color:var(--ink,#111827)}
 .ent-tip:hover::after{content:attr(data-tip);position:absolute;left:50%;bottom:135%;transform:translateX(-50%);background:var(--ink,#111827);color:#fff;font-size:11px;font-weight:400;font-style:normal;line-height:1.45;padding:8px 10px;border-radius:6px;width:230px;max-width:70vw;z-index:60;box-shadow:0 6px 20px rgba(0,0,0,.25);white-space:normal;text-align:left}
 </style>
+<style id="rgpd-h-css">
+.rgpd-h{display:inline-block;transform-origin:left center;transition:transform .2s ease, color .2s ease, letter-spacing .2s ease;cursor:default}
+.rgpd-h:hover{transform:scale(1.08);color:#c9a227;letter-spacing:.01em}
+</style>
 </head>
 <body>
 
@@ -3675,12 +3679,12 @@ textarea.form-el{min-height:86px;resize:vertical}
   </div>
 
   <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px">
-    <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:8px">Vérification de conformité — articles 5, 7, 17, 25, 30 · DSA · DMA · Data Act</div>
+    <div class="rgpd-h" style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:8px">Vérification de conformité — articles 5, 7, 17, 25, 30 · DSA · DMA · Data Act</div>
     <div id="rgpd-checks" style="font-size:12px;color:var(--muted)">Chargement…</div>
   </div>
 
   <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px">
-    <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Registre des preuves de consentement (art. 7)</div>
+    <div class="rgpd-h" style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Registre des preuves de consentement (art. 7)</div>
     <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px">Chaque acceptation, personnalisation, refus ou retrait est horodaté (bannière, formulaires, inscriptions). Adresse IP hachée et agent utilisateur tronqué (minimisation, art. 5).</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
       <input id="rgpd-cons-q" placeholder="Rechercher une adresse…" style="flex:1;min-width:160px;font-size:12px;padding:7px 10px;border:1px solid var(--rule2);border-radius:6px" onkeydown="if(event.key==='Enter') rgpdConsents();">
@@ -3692,7 +3696,7 @@ textarea.form-el{min-height:86px;resize:vertical}
   </div>
 
   <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px">
-    <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Registre des activités de traitement (art. 30)</div>
+    <div class="rgpd-h" style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Registre des activités de traitement (art. 30)</div>
     <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px">Finalité, base légale, données, durée de conservation et destinataires, pour chaque traitement du site et de la plateforme. <button class="mat-export-btn" style="margin-left:8px" onclick="rgpdRegistreJson()">Exporter JSON</button></div>
     <div id="rgpd-registre" style="font-size:12px;overflow-x:auto">Chargement…</div>
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
@@ -3707,19 +3711,19 @@ textarea.form-el{min-height:86px;resize:vertical}
   </div>
 
   <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px">
-    <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Mécanismes de transfert des données (chapitre V)</div>
+    <div class="rgpd-h" style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Mécanismes de transfert des données (chapitre V)</div>
     <div id="rgpd-transferts" style="font-size:12px;overflow-x:auto">Chargement…</div>
   </div>
 
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:16px">
     <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white)">
-      <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Droit à l'effacement (art. 17)</div>
+      <div class="rgpd-h" style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Droit à l'effacement (art. 17)</div>
       <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px">Anonymise le compte, supprime les données liées ; les preuves de consentement sont anonymisées et conservées à titre de preuve ; les pièces comptables demeurent (art. 17.3.b).</div>
       <div style="display:flex;gap:6px;flex-wrap:wrap"><input id="rgpd-eff-email" placeholder="adresse@exemple.fr" style="flex:1;min-width:150px;font-size:12px;padding:7px 10px;border:1px solid var(--rule2);border-radius:6px"><button class="mat-export-btn" onclick="rgpdEffacer()">Effacer</button></div>
       <div id="rgpd-eff-msg" style="font-size:11px;color:var(--muted);margin-top:6px"></div>
     </div>
     <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white)">
-      <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Portabilité (art. 20 · Data Act)</div>
+      <div class="rgpd-h" style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Portabilité (art. 20 · Data Act)</div>
       <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px">Export structuré des données d'une personne (compte, périmètre Entreprise, consentements), à lui remettre sur demande dans un format lisible par machine.</div>
       <div style="display:flex;gap:6px;flex-wrap:wrap"><input id="rgpd-exp-email" placeholder="adresse@exemple.fr" style="flex:1;min-width:150px;font-size:12px;padding:7px 10px;border:1px solid var(--rule2);border-radius:6px"><button class="mat-export-btn" onclick="rgpdExport()">Exporter</button></div>
       <div id="rgpd-exp-msg" style="font-size:11px;color:var(--muted);margin-top:6px"></div>
@@ -3727,7 +3731,7 @@ textarea.form-el{min-height:86px;resize:vertical}
   </div>
 
     <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px">
-    <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Rétention et suppression automatique (art. 5.1.e · Data Act)</div>
+    <div class="rgpd-h" style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Rétention et suppression automatique (art. 5.1.e · Data Act)</div>
     <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px">Durées de conservation appliquées, non plus seulement déclarées. La purge anonymise les données échues et journalise l'opération, scellée par chaînage d'empreintes : c'est votre preuve de suppression en cas de contrôle.</div>
     <div id="rgpd-reten" style="overflow-x:auto;margin-bottom:10px"></div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
@@ -3742,7 +3746,7 @@ textarea.form-el{min-height:86px;resize:vertical}
   </div>
 
   <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px">
-    <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Analyse d'impact relative à la protection des données (art. 35)</div>
+    <div class="rgpd-h" style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Analyse d'impact relative à la protection des données (art. 35)</div>
     <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px">Test de seuil sur les neuf critères de référence : à partir de deux critères, l'AIPD est requise. L'analyse est conservée côté serveur, versionnée, et opposable en audit.</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">
       <div>
@@ -3770,7 +3774,7 @@ textarea.form-el{min-height:86px;resize:vertical}
   </div>
 
   <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px">
-    <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Demandes d'exercice de droits (art. 12)</div>
+    <div class="rgpd-h" style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Demandes d'exercice de droits (art. 12)</div>
     <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px">Toute demande est enregistrée avec son échéance d'un mois. Les demandes hors délai sont signalées et pèsent sur l'indice de conformité.</div>
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
       <select id="dem-type" style="font-size:12px;padding:6px 9px;border:1px solid var(--rule2);border-radius:5px"><option value="acces">Accès (art. 15)</option><option value="rectification">Rectification (art. 16)</option><option value="effacement">Effacement (art. 17)</option><option value="portabilite">Portabilité (art. 20)</option><option value="opposition">Opposition (art. 21)</option></select>
@@ -3782,7 +3786,7 @@ textarea.form-el{min-height:86px;resize:vertical}
   </div>
 
   <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px">
-    <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Historique des rapports d'audit (art. 5.2 · responsabilité)</div>
+    <div class="rgpd-h" style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Historique des rapports d'audit (art. 5.2 · responsabilité)</div>
     <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px">Archiver fige l'état de conformité à une date : contenu complet, indice et empreinte chaînée sur le rapport précédent. Toute altération devient détectable, ce qui confère au dossier sa valeur probante.</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
       <button class="mat-export-btn" style="background:var(--ink,#111827);color:#fff" title="Figer et sceller l'état de conformité actuel" onclick="rgpdAuditArchiver()">Archiver le rapport actuel</button>
@@ -3791,7 +3795,7 @@ textarea.form-el{min-height:86px;resize:vertical}
   </div>
 
   <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white)">
-    <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:8px">Guide d'exploitation</div>
+    <div class="rgpd-h" style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:8px">Guide d'exploitation</div>
     <details style="margin-bottom:4px"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">1 · Lire l'indice et la vérification de conformité</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 8px 0">L'indice agrège les contrôles conformes, hors éléments non applicables. Chaque ligne référence l'article concerné, distingue les contrôles automatiques (mesurés par la plateforme) des contrôles déclaratifs (documentés), et précise le constat. Un statut « à vérifier » appelle une action de votre part.</div></details>
     <details style="margin-bottom:4px"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">2 · Exploiter le registre des preuves de consentement</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 8px 0">Recherchez par adresse pour retrouver l'historique d'une personne : acceptations, personnalisations, refus et retraits, avec horodatage, méthode, granularité des finalités et version de la politique. L'export CSV fournit la preuve en cas de contrôle. En vertu de l'article 7, la charge de la preuve du consentement vous incombe : ce registre y répond.</div></details>
     <details style="margin-bottom:4px"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">3 · Tenir le registre des traitements (art. 30)</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 8px 0">Le registre documente chaque traitement : finalité, base légale, données, durée et destinataires. Exportez-le en JSON pour vos dossiers. Toute évolution du site (nouveau formulaire, nouveau sous-traitant) doit s'y refléter : demandez la mise à jour du registre dans la plateforme.</div></details>
