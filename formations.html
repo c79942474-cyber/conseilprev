@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Formations conformité IA — CONSEILPREV</title>
+<meta name="description" content="Politique de confidentialité CONSEILPREV — collecte, utilisation et protection de vos données personnelles. Conforme RGPD et AI Act.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--pm:#8b5cf6;--pl:#b48af7;--pp:#d4baff;--pf:#d946ef;--teal:#5eead4;--wh:#f8f4ff;--mu:rgba(212,186,255,.52);--bdr:rgba(180,138,247,.18)}
+html{scroll-behavior:smooth}
+body{font-family:"DM Sans",sans-serif;background:linear-gradient(160deg,#0d0825,#110a2e,#0e0820);color:var(--wh);min-height:100vh}
+body::before{content:"";position:fixed;inset:0;background-image:url("/hero-bg.jpg");background-size:cover;background-position:center 55%;background-attachment:fixed;opacity:.35;z-index:-2;pointer-events:none}
+#bc{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.bl{position:absolute;border-radius:50%;filter:blur(45px);mix-blend-mode:screen}
+#b1{width:380px;height:380px;background:radial-gradient(circle,#7c3aed,#4f46e5 40%,transparent 70%);opacity:.38;animation:bm 22s ease-in-out infinite alternate;top:5%;left:5%}
+#b2{width:320px;height:320px;background:radial-gradient(circle,#db2777,#be185d 35%,transparent 75%);opacity:.30;animation:bm2 28s ease-in-out infinite alternate;bottom:10%;right:5%}
+@keyframes bm{0%{transform:translate(0,0)}100%{transform:translate(80px,-60px)}}
+@keyframes bm2{0%{transform:translate(0,0)}100%{transform:translate(-60px,80px)}}
+nav{position:sticky;top:0;z-index:100;background:rgba(10,6,32,.93);backdrop-filter:blur(24px);border-bottom:1px solid var(--bdr);padding:13px 28px;display:flex;align-items:center;gap:12px}
+.nl{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:700;text-decoration:none;color:var(--wh);margin-right:auto}.nl span{color:var(--pl)}
+.nb{font-size:12px;color:var(--mu);text-decoration:none;font-family:"Space Mono",monospace;transition:color .2s}.nb:hover{color:var(--wh)}
+/* HERO */
+.hero{text-align:center;padding:40px 20px 24px;position:relative}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(139,92,246,.18),transparent 65%);pointer-events:none}
+.hbadge{display:inline-flex;align-items:center;gap:8px;background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);border-radius:100px;padding:5px 16px;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.12em;color:var(--pp);margin-bottom:16px}
+.bdot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:blink 2s ease-in-out infinite}
+h1{font-family:"Cormorant Garamond",serif;font-size:clamp(26px,4.5vw,46px);font-weight:700;margin-bottom:10px;position:relative}
+h1 em{font-style:italic;background:linear-gradient(135deg,#818cf8,#c084fc,#e879f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:13px;color:var(--mu);line-height:1.75;max-width:520px;margin:0 auto;position:relative}
+.con{max-width:800px;margin:0 auto;padding:0 20px 60px}
+/* TOC */
+.toc{background:rgba(139,92,246,.08);border:1px solid rgba(180,138,247,.2);border-radius:12px;padding:18px 22px;margin-bottom:32px}
+.toc-title{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--pp);margin-bottom:12px}
+.toc-list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:4px 16px}
+@media(max-width:500px){.toc-list{grid-template-columns:1fr}}
+.toc-list a{font-size:12px;color:var(--mu);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s;font-family:"Space Mono",monospace;padding:3px 0}
+.toc-list a::before{content:"›";color:var(--pm);font-size:13px;flex-shrink:0}
+.toc-list a:hover{color:var(--wh)}
+/* Sections */
+.pc-section{margin-bottom:32px;padding-bottom:32px;border-bottom:1px solid rgba(180,138,247,.1)}
+.pc-section:last-child{border-bottom:none}
+.pc-h{font-family:"Cormorant Garamond",serif;font-size:20px;font-weight:700;color:var(--wh);margin-bottom:14px;display:flex;align-items:center;gap:10px;scroll-margin-top:80px}
+.pc-h-num{font-family:"Space Mono",monospace;font-size:11px;background:linear-gradient(135deg,var(--pm),var(--pf));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-weight:700}
+.pc-h2{font-size:14px;font-weight:700;color:var(--pp);margin:16px 0 8px;display:flex;align-items:center;gap:8px}
+.pc-h2::before{content:"";width:3px;height:13px;background:linear-gradient(180deg,var(--pm),var(--pf));border-radius:2px;flex-shrink:0}
+.pc-p{font-size:13px;color:rgba(212,186,255,.78);line-height:1.85;margin-bottom:10px}
+.pc-p strong{color:var(--pp)}
+.pc-p a{color:var(--teal);text-decoration:none}.pc-p a:hover{text-decoration:underline}
+.pc-list{list-style:none;display:flex;flex-direction:column;gap:5px;margin:8px 0 12px}
+.pc-list li{font-size:13px;color:rgba(212,186,255,.72);padding-left:18px;position:relative;line-height:1.75}
+.pc-list li::before{content:"›";position:absolute;left:4px;color:var(--pm);font-weight:600}
+.pc-list li strong{color:var(--pp)}
+/* Tableau cookies */
+.cookie-table{width:100%;border-collapse:collapse;margin:14px 0;border-radius:10px;overflow:hidden;font-size:12px}
+.cookie-table th{background:rgba(139,92,246,.2);padding:9px 12px;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--pp);text-align:left}
+.cookie-table td{padding:9px 12px;color:rgba(212,186,255,.72);border-bottom:1px solid rgba(180,138,247,.08);line-height:1.5}
+.cookie-table tr:last-child td{border-bottom:none}
+.cookie-table tr:hover td{background:rgba(139,92,246,.04)}
+.ck-badge{font-family:"Space Mono",monospace;font-size:9px;padding:2px 7px;border-radius:100px;white-space:nowrap}
+.ck-req{background:rgba(34,197,94,.12);color:#4ade80;border:1px solid rgba(34,197,94,.25)}
+.ck-opt{background:rgba(217,70,239,.12);color:#f0abfc;border:1px solid rgba(217,70,239,.25)}
+/* Alert */
+.alert{border-radius:10px;padding:13px 17px;margin:13px 0;display:flex;gap:12px;align-items:flex-start}
+.al-info{background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.2)}
+.al-warn{background:rgba(234,179,8,.07);border:1px solid rgba(234,179,8,.2)}
+.al-ok{background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2)}
+.alert-ico{font-size:16px;flex-shrink:0;margin-top:1px}
+.alert-txt{font-size:12px;line-height:1.7}
+.al-info .alert-txt{color:rgba(147,197,253,.85)}
+.al-warn .alert-txt{color:rgba(252,211,77,.85)}
+.al-ok .alert-txt{color:rgba(74,222,128,.85)}
+.alert-txt strong{color:inherit}
+.alert-txt a{text-decoration:underline}
+/* Contact card */
+.contact-card{background:linear-gradient(135deg,rgba(139,92,246,.12),rgba(217,70,239,.08));border:1px solid rgba(180,138,247,.25);border-radius:12px;padding:18px 22px}
+.cc-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:13px;color:var(--mu)}
+.cc-row:last-child{border-bottom:none}
+.cc-row strong{color:var(--pp);min-width:160px;font-size:11px;font-family:"Space Mono",monospace}
+.cc-row a{color:var(--teal);text-decoration:none}
+/* Dates */
+.dates-bar{background:rgba(255,255,255,.03);border-radius:8px;padding:12px 16px;margin:24px 0 0;font-family:"Space Mono",monospace;font-size:10px;color:var(--mu);display:flex;gap:20px;flex-wrap:wrap}
+.dates-bar span strong{color:var(--pp)}
+/* Footer */
+.ft-mini{background:rgba(5,2,20,.92);border-top:1px solid var(--bdr);padding:14px 24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:"Space Mono",monospace;font-size:10px;color:var(--mu)}
+.ft-mini a{color:var(--teal);text-decoration:none}
+body{-webkit-user-select:none;user-select:none}
+input,textarea{-webkit-user-select:text!important;user-select:text!important}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ══════════════════════════════════════════════════════
+   EFFET LUEUR BLOB — Fuchsia / Bleu / Violet clair
+   Animation lente, fluide, différente par bloc
+   ══════════════════════════════════════════════════════ */
+
+/* Keyframes de déplacement des lueurs dans les blocs */
+@keyframes glow-drift-1{
+  0%  {background-position: 0% 0%}
+  25% {background-position: 100% 30%}
+  50% {background-position: 60% 100%}
+  75% {background-position: 20% 60%}
+  100%{background-position: 0% 0%}
+}
+@keyframes glow-drift-2{
+  0%  {background-position: 100% 100%}
+  30% {background-position: 0% 50%}
+  60% {background-position: 80% 0%}
+  100%{background-position: 100% 100%}
+}
+@keyframes glow-drift-3{
+  0%  {background-position: 50% 0%}
+  40% {background-position: 0% 100%}
+  70% {background-position: 100% 60%}
+  100%{background-position: 50% 0%}
+}
+@keyframes glow-drift-4{
+  0%  {background-position: 20% 80%}
+  35% {background-position: 90% 10%}
+  65% {background-position: 30% 50%}
+  100%{background-position: 20% 80%}
+}
+@keyframes glow-drift-5{
+  0%  {background-position: 80% 20%}
+  45% {background-position: 10% 70%}
+  80% {background-position: 60% 30%}
+  100%{background-position: 80% 20%}
+}
+
+/* Mixin blob appliqué aux cartes — overlay pseudo-element */
+.card,.feat-card,.diff-card,.svc2-card,.risk-card,.norm-card,
+.ia-card,.ux-card,.rm-item,.pole-card,.pillar,.eng-card,
+.right-card,.faq-item,.ck-cat,.wcag-card,.info-card,
+.algo-card,.signal-box,.mode-card,.theme-card,.cc,
+.tips-card,.contact-card,.dpo-card,
+.cgv-section,.pc-section,.dsa-sec .signal-box,
+.ml-section,.score-board{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+}
+
+/* Pseudo-element blob lumineux sur chaque carte */
+.card::before,.feat-card::before,.diff-card::before,
+.svc2-card::before,.risk-card::before,.norm-card::before,
+.ia-card::before,.ux-card::before,.rm-item::before,
+.pole-card::before,.pillar::before,.eng-card::before,
+.right-card::before,.faq-item::before,.ck-cat::before,
+.wcag-card::before,.info-card::before,
+.algo-card::before,.signal-box::before,
+.mode-card::before,.theme-card::before,.cc::before{
+  content:"";
+  position:absolute;
+  inset:-60%;
+  border-radius:50%;
+  opacity:0;
+  pointer-events:none;
+  z-index:0;
+  transition:opacity .6s ease;
+  background:radial-gradient(
+    ellipse 55% 55% at 50% 50%,
+    rgba(217,70,239,.22) 0%,
+    rgba(139,92,246,.18) 30%,
+    rgba(99,102,241,.12) 55%,
+    transparent 72%
+  );
+  background-size:300% 300%;
+  animation:glow-drift-1 18s ease-in-out infinite;
+  filter:blur(18px);
+}
+
+/* Variation de timing et direction par position nth */
+.card:nth-child(2n)::before,.feat-card:nth-child(2n)::before,
+.norm-card:nth-child(2n)::before,.eng-card:nth-child(2n)::before,
+.right-card:nth-child(2n)::before,.pillar:nth-child(2n)::before{
+  animation-name:glow-drift-2;
+  animation-duration:22s;
+  background:radial-gradient(
+    ellipse 55% 55% at 50% 50%,
+    rgba(99,102,241,.22) 0%,
+    rgba(139,92,246,.16) 30%,
+    rgba(217,70,239,.10) 55%,
+    transparent 72%
+  );
+}
+.card:nth-child(3n)::before,.feat-card:nth-child(3n)::before,
+.norm-card:nth-child(3n)::before,.eng-card:nth-child(3n)::before,
+.right-card:nth-child(3n)::before,.pillar:nth-child(3n)::before{
+  animation-name:glow-drift-3;
+  animation-duration:26s;
+  background:radial-gradient(
+    ellipse 55% 55% at 50% 50%,
+    rgba(168,85,247,.20) 0%,
+    rgba(217,70,239,.14) 30%,
+    rgba(99,102,241,.10) 55%,
+    transparent 72%
+  );
+}
+.card:nth-child(4n)::before,.risk-card:nth-child(4n)::before,
+.diff-card:nth-child(4n)::before,.svc2-card:nth-child(4n)::before{
+  animation-name:glow-drift-4;
+  animation-duration:20s;
+  background:radial-gradient(
+    ellipse 55% 55% at 50% 50%,
+    rgba(139,92,246,.24) 0%,
+    rgba(99,102,241,.16) 30%,
+    rgba(168,85,247,.10) 55%,
+    transparent 72%
+  );
+}
+.card:nth-child(5n)::before,.diff-card:nth-child(5n)::before{
+  animation-name:glow-drift-5;
+  animation-duration:24s;
+  background:radial-gradient(
+    ellipse 55% 55% at 50% 50%,
+    rgba(196,181,232,.18) 0%,
+    rgba(168,85,247,.14) 28%,
+    rgba(217,70,239,.09) 55%,
+    transparent 72%
+  );
+}
+
+/* Activer la lueur au chargement (progressive) */
+.card::before,.feat-card::before,.diff-card::before,
+.svc2-card::before,.risk-card::before,.norm-card::before,
+.ia-card::before,.ux-card::before,.rm-item::before,
+.pole-card::before,.pillar::before,.eng-card::before,
+.right-card::before,.faq-item::before,.ck-cat::before,
+.wcag-card::before,.info-card::before,
+.algo-card::before,.signal-box::before,
+.mode-card::before,.theme-card::before,.cc::before{
+  opacity:1;
+}
+
+/* Intensifier la lueur au hover */
+.card:hover::before,.feat-card:hover::before,
+.diff-card:hover::before,.svc2-card:hover::before,
+.risk-card:hover::before,.norm-card:hover::before,
+.pillar:hover::before,.eng-card:hover::before,
+.right-card:hover::before,.faq-item:hover::before,
+.ck-cat:hover::before,.wcag-card:hover::before,
+.info-card:hover::before,.algo-card:hover::before,
+.signal-box:hover::before,.mode-card:hover::before,
+.theme-card:hover::before,.cc:hover::before{
+  filter:blur(12px);
+  opacity:1;
+  /* Teinte fuchsia plus forte au hover */
+  background:radial-gradient(
+    ellipse 60% 60% at 50% 50%,
+    rgba(217,70,239,.32) 0%,
+    rgba(139,92,246,.24) 28%,
+    rgba(99,102,241,.16) 52%,
+    transparent 70%
+  )!important;
+}
+
+/* Contenu au-dessus du blob */
+.card > *,.feat-card > *,.diff-card > *,
+.svc2-card > *,.risk-card > *,.norm-card > *,
+.ia-card > *,.ux-card > *,.rm-item > *,
+.pole-card > *,.pillar > *,.eng-card > *,
+.right-card > *,.faq-item > *,.ck-cat > *,
+.wcag-card > *,.info-card > *,.algo-card > *,
+.signal-box > *,.mode-card > *,.theme-card > *,
+.cc > *{
+  position:relative;
+  z-index:1;
+}
+
+/* Bordures légèrement illuminées */
+.card,.feat-card,.diff-card,.risk-card,.norm-card,
+.ia-card,.ux-card,.rm-item,.pole-card,.pillar,
+.eng-card,.right-card,.wcag-card,.info-card,
+.algo-card,.signal-box,.mode-card,.theme-card,.cc{
+  border-color:rgba(180,138,247,.22)!important;
+  transition:border-color .3s ease, box-shadow .3s ease;
+}
+
+/* Lueur de bordure au hover */
+.card:hover,.feat-card:hover,.diff-card:hover,
+.risk-card:hover,.pillar:hover,.eng-card:hover,
+.right-card:hover,.wcag-card:hover,.info-card:hover,
+.algo-card:hover,.signal-box:hover,.mode-card:hover,
+.cc:hover{
+  border-color:rgba(217,70,239,.45)!important;
+  box-shadow:
+    0 0 20px rgba(217,70,239,.1),
+    0 0 40px rgba(139,92,246,.08),
+    inset 0 0 20px rgba(139,92,246,.04)!important;
+}
+
+/* Sections hero et grandes sections — lueur d'ambiance */
+.sec,.sec-a,.sec-dark{
+  position:relative;
+}
+.sec::after,.sec-a::after{
+  content:"";
+  position:absolute;
+  width:60%;
+  height:60%;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:0;
+  filter:blur(80px);
+  opacity:.06;
+  background:radial-gradient(circle,#d946ef 0%,#8b5cf6 40%,#6366f1 70%,transparent 100%);
+  animation:glow-drift-3 30s ease-in-out infinite;
+  top:20%;left:20%;
+}
+
+
+/* ══ NAV REDESIGN — Pages secondaires ══ */
+nav{
+  background:linear-gradient(135deg,rgba(15,8,42,.97),rgba(20,10,52,.96),rgba(12,6,35,.97))!important;
+  backdrop-filter:blur(32px)!important;
+  border-bottom:1px solid rgba(180,138,247,.22)!important;
+  box-shadow:0 1px 0 rgba(217,70,239,.12),0 4px 32px rgba(0,0,0,.45),inset 0 1px 0 rgba(180,138,247,.08)!important;
+  height:56px;
+}
+.nl{font-family:"Cormorant Garamond",serif!important;font-size:18px!important;font-weight:700!important;color:#fff!important;text-shadow:0 0 20px rgba(180,138,247,.4)}
+.nl span{background:linear-gradient(135deg,#c084fc,#e879f9)!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important}
+.nb,.nav-back{color:rgba(196,181,232,.5)!important;font-family:"Space Mono",monospace!important;font-size:11px!important;padding:5px 10px!important;border-radius:7px!important;border:1px solid transparent!important;transition:all .2s!important}
+.nb:hover,.nav-back:hover{color:#fff!important;background:rgba(139,92,246,.15)!important;border-color:rgba(180,138,247,.2)!important}
+.nav-cta,.ncta{background:linear-gradient(135deg,#8b5cf6,#d946ef)!important;color:#fff!important;padding:8px 18px!important;border-radius:8px!important;font-size:12px!important;font-family:"Space Mono",monospace!important;letter-spacing:.04em!important;font-weight:700!important;box-shadow:0 4px 16px rgba(217,70,239,.4)!important;transition:all .2s!important;text-decoration:none}
+.nav-cta:hover,.ncta:hover{transform:translateY(-1px)!important;box-shadow:0 6px 24px rgba(217,70,239,.55)!important}
+
+
+/* Fond body plus lumineux */
+body{
+  background:linear-gradient(160deg,
+    #1a0f3e 0%,
+    #1e1248 25%,
+    #160e38 50%,
+    #1c1044 75%,
+    #180c3c 100%
+  ) !important;
+}
+
+/* Image de fond plus visible */
+body::before{
+  opacity:.52 !important;
+}
+
+/* Blobs plus lumineux */
+#b1,#blob1{opacity:.55 !important}
+#b2,#blob2{opacity:.48 !important}
+#b3,#blob3{opacity:.42 !important}
+#b4,#blob4{opacity:.34 !important}
+#b5,#blob5{opacity:.40 !important}
+
+/* Texte principal plus blanc */
+body{color:#f0eaff !important}
+
+/* Variables de couleur plus lumineuses */
+:root{
+  --bg:#1a0f3e !important;
+  --bg2:#1e1248 !important;
+  --card:rgba(180,138,247,.10) !important;
+  --bdr:rgba(180,138,247,.28) !important;
+  --mu:rgba(220,200,255,.72) !important;
+  --pp:#e2d0ff !important;
+  --wh:#f4eeff !important;
+}
+
+/* Cartes et blocs — fonds plus clairs */
+.card,.feat-card,.diff-card,.svc2-card,.svc2,
+.risk-card,.norm-card,.nc,.ia-card,.ux-card,
+.rm-item,.pole-card,.pillar,.eng-card,
+.right-card,.faq-item,.ck-cat,.wcag-card,
+.info-card,.algo-card,.signal-box,
+.mode-card,.theme-card,.cc,.member-card,
+.job-card,.val-card,.perk,.res-card,
+.toc,.cgv-section,.pc-section,
+.ml-section,.ctx-card,.dpo-card,.contact-card,
+.tips-card,.score-board,.faq-mini-item,
+.ft-newsletter{
+  background:rgba(180,138,247,.11) !important;
+  border-color:rgba(180,138,247,.28) !important;
+}
+
+/* Textes secondaires (mu) plus lisibles */
+.card p,.feat-card p,.diff-card p,.svc2 p,
+.risk-card p,.norm-card p,.pillar p,
+.eng-card p,.right-card p,.faq-item p,
+.info-card p,.algo-card p,.signal-box p,
+.res-card p,.job-card p,.val-card p,
+.dsa-p,.cgv-p,.pc-p,.ml-p,.hero-sub,
+.member-desc,.perk-body .perk-desc,
+.dd-desc,.form-sub{
+  color:rgba(220,200,255,.80) !important;
+}
+
+/* Sections sombres */
+.sec,.sec-a,.sec-dark{
+  background:rgba(26,15,62,.6) !important;
+}
+
+/* Nav plus lumineux */
+nav{
+  background:linear-gradient(135deg,
+    rgba(26,12,64,.97) 0%,
+    rgba(32,14,72,.96) 50%,
+    rgba(22,10,54,.97) 100%
+  ) !important;
+}
+
+/* Footer plus clair */
+footer{
+  background:linear-gradient(180deg,
+    rgba(20,10,50,.97) 0%,
+    rgba(16,8,42,.99) 100%
+  ) !important;
+}
+
+/* Stats bar */
+.sb2,.stats-bar{
+  background:linear-gradient(90deg,
+    rgba(99,102,241,.16),
+    rgba(139,92,246,.14),
+    rgba(217,70,239,.10)
+  ) !important;
+}
+
+/* Contexte cards pages légales */
+.ml-section,.cgv-section,.pc-section,.dsa-sec{
+  border-bottom-color:rgba(180,138,247,.18) !important;
+}
+
+/* Hero sections */
+.hero,.page-wrap{
+  position:relative;
+}
+
+/* Chat widget */
+#xbox,#xbox{
+  background:rgba(22,10,54,.97) !important;
+}
+
+/* Cookie modal */
+#ck-modal-box{
+  background:linear-gradient(160deg,#1a0a40,#1e0e48) !important;
+}
+
+/* Dropdown nav */
+.nav-dropdown{
+  background:rgba(18,8,46,.98) !important;
+}
+.dd-item:hover{
+  background:rgba(139,92,246,.22) !important;
+}
+
+/* Inputs */
+.finput,.fselect,.ftextarea,.nl-input{
+  background:rgba(255,255,255,.09) !important;
+  border-color:rgba(180,138,247,.3) !important;
+  color:#f0eaff !important;
+}
+
+/* Faq items */
+.faq-item,.faq-mini-item{
+  background:rgba(139,92,246,.09) !important;
+}
+
+/* Page card (mentions légales etc) */
+.page-card{
+  background:rgba(22,10,50,.95) !important;
+}
+
+/* Tooltips */
+[data-tooltip]::after{
+  background:rgba(18,8,46,.98) !important;
+}
+
+
+/* ══════════════════════════════════════════════════════
+   PALETTE LUMINEUSE — Violet-Bleu #7c5cbf → #9b6dde
+   Passage du bleu nuit sombre au violet lumineux
+   ══════════════════════════════════════════════════════ */
+
+/* Fond body — violet lumineux */
+body{
+  background:linear-gradient(145deg,
+    #4a2d8a 0%,
+    #5a35a8 20%,
+    #6340b8 40%,
+    #5535a0 60%,
+    #6644bb 80%,
+    #5a38a5 100%
+  ) !important;
+}
+
+/* Image de fond encore plus visible */
+body::before{
+  opacity:.30 !important;
+  mix-blend-mode:luminosity;
+}
+
+/* Blobs — couleurs plus chaudes et lumineuses */
+#b1,#blob1{
+  background:radial-gradient(circle,#c084fc 0%,#a855f7 40%,transparent 70%) !important;
+  opacity:.55 !important;
+}
+#b2,#blob2{
+  background:radial-gradient(circle,#f0abfc 0%,#e879f9 35%,transparent 75%) !important;
+  opacity:.45 !important;
+}
+#b3,#blob3{
+  background:radial-gradient(circle,#818cf8 0%,#6366f1 40%,transparent 70%) !important;
+  opacity:.40 !important;
+}
+#b4,#blob4{
+  background:radial-gradient(circle,#c4b5fd 0%,#a78bfa 50%,transparent 75%) !important;
+  opacity:.35 !important;
+}
+#b5,#blob5{
+  background:radial-gradient(ellipse,#e879f9 0%,#a855f7 45%,transparent 72%) !important;
+  opacity:.40 !important;
+}
+
+/* Variables CSS — palette lumineuse */
+:root{
+  --bg:#5535a0 !important;
+  --bg2:#6340b8 !important;
+  --pm:#c084fc !important;
+  --pl:#d8b4fe !important;
+  --pp:#ede9fe !important;
+  --pf:#f0abfc !important;
+  --teal:#6ee7b7 !important;
+  --wh:#faf5ff !important;
+  --mu:rgba(237,233,254,.78) !important;
+  --bdr:rgba(216,180,254,.35) !important;
+  --card:rgba(255,255,255,.14) !important;
+  --glow:rgba(192,132,252,.35) !important;
+  --glow2:rgba(240,171,252,.22) !important;
+}
+
+/* Texte principal plus blanc/lavande */
+body{ color:#faf5ff !important; }
+
+/* NAV plus lumineux */
+nav{
+  background:linear-gradient(135deg,
+    rgba(74,45,138,.97) 0%,
+    rgba(90,53,168,.96) 50%,
+    rgba(80,42,150,.97) 100%
+  ) !important;
+  border-bottom:1px solid rgba(216,180,254,.35) !important;
+  box-shadow:0 2px 0 rgba(240,171,252,.18),0 4px 32px rgba(0,0,0,.3) !important;
+}
+
+/* Logo */
+.logo{ text-shadow:0 0 24px rgba(216,180,254,.6) !important; }
+.logo span{
+  background:linear-gradient(135deg,#f0abfc,#e879f9,#c084fc) !important;
+  -webkit-background-clip:text !important;
+  background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+  filter:drop-shadow(0 0 10px rgba(240,171,252,.6));
+}
+
+/* Liens nav */
+.nl a{ color:rgba(237,233,254,.75) !important; }
+.nl a:hover{
+  color:#fff !important;
+  background:rgba(216,180,254,.22) !important;
+  border-color:rgba(216,180,254,.4) !important;
+}
+
+/* CTA nav */
+.ncta,.nav-cta{
+  background:linear-gradient(135deg,#a855f7,#c084fc,#e879f9) !important;
+  box-shadow:0 4px 18px rgba(240,171,252,.5) !important;
+}
+
+/* Cartes et blocs */
+.card,.feat-card,.diff-card,.svc2,.svc2-card,
+.risk-card,.norm-card,.nc,.ia-card,.ux-card,
+.rm-item,.pole-card,.pillar,.eng-card,
+.right-card,.faq-item,.faq-mini-item,.ck-cat,
+.wcag-card,.info-card,.algo-card,.signal-box,
+.mode-card,.theme-card,.cc,.member-card,
+.job-card,.val-card,.perk,.res-card,
+.toc,.dpo-card,.contact-card,.tips-card,
+.score-board,.ctx-card,.faq-sec-head,
+.spont-card,.nl-box,.live-banner,.ref-bar,
+.cgv-section,.pc-section,.ml-section,.dsa-sec{
+  background:rgba(255,255,255,.12) !important;
+  border-color:rgba(216,180,254,.32) !important;
+  backdrop-filter:blur(10px) !important;
+}
+.card:hover,.feat-card:hover,.diff-card:hover,
+.svc2:hover,.risk-card:hover,.nc:hover,
+.pillar:hover,.eng-card:hover,.member-card:hover,
+.job-card:hover,.val-card:hover,.res-card:hover{
+  background:rgba(255,255,255,.20) !important;
+  border-color:rgba(240,171,252,.55) !important;
+  box-shadow:0 8px 32px rgba(240,171,252,.28),0 0 0 1px rgba(216,180,254,.3) !important;
+}
+
+/* Sections */
+.sec,.sec-a,.sec-dark{
+  background:rgba(255,255,255,.06) !important;
+}
+
+/* Footer */
+footer{
+  background:linear-gradient(180deg,
+    rgba(64,36,122,.98) 0%,
+    rgba(52,28,100,.99) 100%
+  ) !important;
+}
+footer::before{
+  background:linear-gradient(90deg,
+    transparent 0%,
+    rgba(192,132,252,.7) 30%,
+    rgba(240,171,252,.8) 55%,
+    rgba(192,132,252,.6) 80%,
+    transparent 100%
+  ) !important;
+  box-shadow:0 0 28px rgba(192,132,252,.45),0 0 56px rgba(240,171,252,.2) !important;
+}
+
+/* Titres colonnes footer */
+.ft-col-title{
+  background:linear-gradient(90deg,#f0abfc,#e879f9) !important;
+  -webkit-background-clip:text !important;
+  background-clip:text !important;
+  border-bottom-color:rgba(216,180,254,.28) !important;
+}
+.ft-col-title::after{
+  background:linear-gradient(90deg,#e879f9,transparent) !important;
+}
+
+/* Liens footer */
+.ft-col a{ color:rgba(237,233,254,.65) !important; }
+.ft-col a:hover{ color:#fff !important; }
+.ft-col a::before{ color:rgba(192,132,252,.55) !important; }
+.ft-col a:hover::before{ color:#e879f9 !important; }
+
+/* Barre copyright footer */
+.ft-bar{ border-top-color:rgba(216,180,254,.22) !important; }
+
+/* Badges et tags */
+.hero-badge,.hbadge,.hb{
+  background:rgba(216,180,254,.2) !important;
+  border-color:rgba(216,180,254,.45) !important;
+  color:#ede9fe !important;
+}
+.badge-dot,.bdot,.hb-dot,.bdot-anim{
+  background:#6ee7b7 !important;
+  box-shadow:0 0 8px rgba(110,231,183,.5) !important;
+}
+
+/* Stats bar */
+.sb2,.stats-bar{
+  background:linear-gradient(90deg,
+    rgba(168,85,247,.2),
+    rgba(192,132,252,.18),
+    rgba(240,171,252,.14)
+  ) !important;
+  border-color:rgba(216,180,254,.25) !important;
+}
+
+/* em dégradé titres */
+em,.hero-em{
+  background:linear-gradient(135deg,#c084fc,#e879f9,#f0abfc) !important;
+  -webkit-background-clip:text !important;
+  background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+}
+
+/* Boutons principaux */
+.btn-p,a.btn-p,.ha-primary,.ck-btn-all,.ck-save-btn,.test-btn,.sbtn-p,.pbtn{
+  background:linear-gradient(135deg,#9333ea,#a855f7,#c084fc,#e879f9) !important;
+  box-shadow:0 4px 22px rgba(240,171,252,.45),0 0 40px rgba(168,85,247,.15) !important;
+}
+
+/* Labels/sections labels */
+.lb,.section-label{
+  color:#6ee7b7 !important;
+}
+
+/* Inputs */
+.finput,.fselect,.ftextarea,.nl-input,.pi2,.psel{
+  background:rgba(255,255,255,.12) !important;
+  border-color:rgba(216,180,254,.35) !important;
+  color:#faf5ff !important;
+}
+.finput:focus,.fselect:focus,.ftextarea:focus,.pi2:focus,.psel:focus{
+  border-color:rgba(240,171,252,.65) !important;
+  box-shadow:0 0 0 3px rgba(192,132,252,.22) !important;
+}
+
+/* Barre de progression */
+#read-progress{
+  background:linear-gradient(90deg,#6366f1,#a855f7,#e879f9) !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar-thumb{
+  background:linear-gradient(#a855f7,#e879f9) !important;
+}
+
+/* Dropdown nav */
+.nav-dropdown{
+  background:rgba(64,36,122,.98) !important;
+  border-color:rgba(216,180,254,.3) !important;
+}
+.dd-item:hover{
+  background:rgba(216,180,254,.2) !important;
+}
+.dd-icon{
+  background:rgba(216,180,254,.2) !important;
+  border-color:rgba(216,180,254,.3) !important;
+}
+
+/* Chat widget */
+#xbtn{
+  background:linear-gradient(135deg,#9333ea,#e879f9) !important;
+  box-shadow:0 4px 24px rgba(240,171,252,.55) !important;
+}
+#xbox{
+  background:rgba(58,30,112,.97) !important;
+  border-color:rgba(216,180,254,.3) !important;
+}
+
+/* Cookie */
+#ck-banner{ background:rgba(58,30,112,.98) !important; border-top-color:rgba(240,171,252,.3) !important; }
+#ck-modal-box{ background:linear-gradient(160deg,#4a2d8a,#5535a0) !important; }
+#ck-btn{ border-color:rgba(216,180,254,.3) !important; }
+
+/* Boutons accessibilité */
+#acc-reading-btn{background:linear-gradient(135deg,#6366f1,#818cf8) !important}
+#acc-dyslexia-btn{background:linear-gradient(135deg,#7c3aed,#a855f7) !important}
+#acc-contrast-btn{background:linear-gradient(135deg,#9333ea,#c084fc) !important}
+
+/* Tooltips */
+[data-tooltip]::after{
+  background:rgba(52,28,100,.98) !important;
+  border-color:rgba(216,180,254,.3) !important;
+}
+
+/* Page card (légal) */
+.page-card,.modal-box,#ck-modal-box{
+  background:rgba(74,45,138,.95) !important;
+  border-color:rgba(216,180,254,.28) !important;
+}
+
+/* Veil/mini footer */
+.ft-mini{
+  background:rgba(44,22,88,.95) !important;
+}
+
+/* Sector cards — couleurs preservées mais plus lumineuses */
+.sc-teal{ color:#6ee7b7 !important; border-color:rgba(110,231,183,.5) !important; background:rgba(110,231,183,.15) !important; }
+.sc-orange{ color:#fdba74 !important; border-color:rgba(253,186,116,.5) !important; background:rgba(253,186,116,.12) !important; }
+
+/* Tags/pills */
+.rgpd-tag{
+  background:rgba(216,180,254,.2) !important;
+  border-color:rgba(216,180,254,.35) !important;
+  color:rgba(237,233,254,.85) !important;
+}
+
+/* Consent block */
+.consent-block{
+  background:rgba(216,180,254,.14) !important;
+  border-color:rgba(216,180,254,.35) !important;
+}
+
+/* Switching langue */
+.lsw{ background:rgba(216,180,254,.15) !important; border-color:rgba(216,180,254,.25) !important; }
+.lsw button:hover,.lsw button.on{ background:rgba(168,85,247,.5) !important; }
+
+
+
+/* Fond body — violet lumineux pur */
+body{
+  background:
+    radial-gradient(ellipse 80% 60% at 30% 20%, #7c3aed 0%, transparent 55%),
+    radial-gradient(ellipse 70% 60% at 75% 80%, #6d28d9 0%, transparent 55%),
+    linear-gradient(160deg, #5b21b6 0%, #6d28d9 30%, #7c3aed 55%, #6b21a8 80%, #5b21b6 100%)
+    !important;
+  min-height:100vh;
+}
+
+/* Photo de fond éclaircie */
+body::before{
+  opacity:.28 !important;
+  mix-blend-mode:soft-light !important;
+}
+
+/* Blobs plus lumineux et saturés */
+#b1,#blob1{
+  background:radial-gradient(circle,#c084fc 0%,#a855f7 35%,transparent 65%) !important;
+  opacity:.60 !important;
+  filter:blur(40px) !important;
+}
+#b2,#blob2{
+  background:radial-gradient(circle,#f0abfc 0%,#e879f9 40%,transparent 68%) !important;
+  opacity:.50 !important;
+  filter:blur(40px) !important;
+}
+#b3,#blob3{
+  background:radial-gradient(circle,#818cf8 0%,#6366f1 40%,transparent 68%) !important;
+  opacity:.45 !important;
+  filter:blur(40px) !important;
+}
+#b4,#blob4{
+  background:radial-gradient(circle,#ddd6fe 0%,#c4b5fd 45%,transparent 72%) !important;
+  opacity:.38 !important;
+  filter:blur(40px) !important;
+}
+#b5,#blob5{
+  background:radial-gradient(ellipse,#e879f9 0%,#a855f7 40%,transparent 70%) !important;
+  opacity:.44 !important;
+  filter:blur(40px) !important;
+}
+
+/* Texte */
+body{ color:#f5f0ff !important; }
+
+/* Palette CSS variables */
+:root{
+  --bg:#6d28d9 !important;
+  --bg2:#7c3aed !important;
+  --pm:#c084fc !important;
+  --pl:#ddd6fe !important;
+  --pp:#ede9fe !important;
+  --pf:#f0abfc !important;
+  --teal:#6ee7b7 !important;
+  --wh:#faf5ff !important;
+  --mu:rgba(237,233,254,.80) !important;
+  --bdr:rgba(216,180,254,.40) !important;
+  --card:rgba(255,255,255,.15) !important;
+}
+
+/* NAV */
+nav{
+  background:linear-gradient(135deg,
+    rgba(91,33,182,.95) 0%,
+    rgba(109,40,217,.94) 50%,
+    rgba(124,58,237,.95) 100%
+  ) !important;
+  border-bottom:1px solid rgba(216,180,254,.38) !important;
+  box-shadow:0 2px 0 rgba(240,171,252,.2),0 4px 24px rgba(91,33,182,.4) !important;
+}
+.logo{ text-shadow:0 0 24px rgba(221,214,254,.7) !important; }
+.logo span{
+  background:linear-gradient(135deg,#f0abfc,#e879f9,#c084fc) !important;
+  -webkit-background-clip:text!important; background-clip:text!important; -webkit-text-fill-color:transparent!important;
+}
+.nl a{ color:rgba(237,233,254,.80) !important; }
+.nl a:hover{ color:#fff !important; background:rgba(221,214,254,.22) !important; border-color:rgba(221,214,254,.4) !important; }
+.ncta,.nav-cta{
+  background:linear-gradient(135deg,#7c3aed,#a855f7,#e879f9) !important;
+  box-shadow:0 4px 18px rgba(232,121,249,.5) !important;
+}
+
+/* Cartes */
+.card,.feat-card,.diff-card,.svc2,.svc2-card,
+.risk-card,.norm-card,.nc,.ia-card,.ux-card,
+.rm-item,.pole-card,.pillar,.eng-card,
+.right-card,.faq-item,.faq-mini-item,.ck-cat,
+.wcag-card,.info-card,.algo-card,.signal-box,
+.mode-card,.theme-card,.cc,.member-card,
+.job-card,.val-card,.perk,.res-card,
+.toc,.dpo-card,.contact-card,.tips-card,
+.score-board,.ctx-card,.faq-sec-head,
+.spont-card,.nl-box,.live-banner,.ref-bar,
+.ctx-card,.price-table,.signal-grid .signal-box,
+.eng-grid .eng-card,.algo-grid .algo-card{
+  background:rgba(255,255,255,.14) !important;
+  border-color:rgba(221,214,254,.35) !important;
+  backdrop-filter:blur(12px) !important;
+  -webkit-backdrop-filter:blur(12px) !important;
+}
+.card:hover,.feat-card:hover,.diff-card:hover,
+.svc2:hover,.risk-card:hover,.pillar:hover,
+.eng-card:hover,.member-card:hover,.job-card:hover,
+.val-card:hover,.res-card:hover,.nc:hover{
+  background:rgba(255,255,255,.22) !important;
+  border-color:rgba(240,171,252,.55) !important;
+  box-shadow:0 8px 32px rgba(232,121,249,.28),0 0 0 1px rgba(221,214,254,.3) !important;
+}
+
+/* Sections */
+.sec,.sec-a,.sec-dark{
+  background:rgba(91,33,182,.18) !important;
+}
+
+/* Footer */
+footer{
+  background:linear-gradient(180deg,rgba(76,29,149,.97) 0%,rgba(59,22,120,.99) 100%) !important;
+  position:relative;
+}
+footer::before{
+  background:linear-gradient(90deg,transparent,rgba(192,132,252,.75) 30%,rgba(240,171,252,.85) 55%,rgba(192,132,252,.7) 80%,transparent) !important;
+  box-shadow:0 0 30px rgba(192,132,252,.5),0 0 60px rgba(240,171,252,.2) !important;
+}
+.ft-col-title{
+  background:linear-gradient(90deg,#f0abfc,#e879f9) !important;
+  -webkit-background-clip:text!important; background-clip:text!important;
+}
+.ft-col a{ color:rgba(237,233,254,.65) !important; }
+.ft-col a:hover{ color:#fff !important; }
+
+/* Titres em */
+em,.hero-em{
+  background:linear-gradient(135deg,#c084fc,#e879f9,#f0abfc) !important;
+  -webkit-background-clip:text!important; background-clip:text!important; -webkit-text-fill-color:transparent!important;
+}
+.lb,.section-label{ color:#6ee7b7 !important; }
+
+/* Boutons */
+.btn-p,a.btn-p,.ha-primary,.pbtn,.ck-save-btn,.test-btn,.sbtn-p,.nav-cta,.ft-nl-btn{
+  background:linear-gradient(135deg,#7c3aed,#a855f7,#c084fc,#e879f9) !important;
+  box-shadow:0 4px 22px rgba(232,121,249,.50) !important;
+}
+
+/* Stats */
+.sb2,.stats-bar{
+  background:linear-gradient(90deg,rgba(124,58,237,.22),rgba(168,85,247,.20),rgba(232,121,249,.15)) !important;
+}
+
+/* Inputs */
+.finput,.fselect,.ftextarea,.nl-input,.pi2,.psel{
+  background:rgba(255,255,255,.14) !important;
+  border-color:rgba(221,214,254,.38) !important;
+  color:#faf5ff !important;
+}
+.finput:focus,.fselect:focus,.ftextarea:focus,.pi2:focus,.psel:focus{
+  border-color:rgba(240,171,252,.7) !important;
+  box-shadow:0 0 0 3px rgba(192,132,252,.25) !important;
+}
+
+/* Chat */
+#xbtn{ background:linear-gradient(135deg,#7c3aed,#e879f9) !important; box-shadow:0 4px 24px rgba(232,121,249,.6) !important; }
+#xbox{ background:rgba(76,29,149,.97) !important; }
+
+/* Cookie */
+#ck-banner{ background:rgba(76,29,149,.98) !important; border-top-color:rgba(240,171,252,.35) !important; }
+#ck-modal-box{ background:linear-gradient(160deg,#5b21b6,#6d28d9) !important; }
+
+/* Barre progression */
+#read-progress{ background:linear-gradient(90deg,#6366f1,#a855f7,#e879f9) !important; }
+
+/* Dropdown */
+.nav-dropdown{ background:rgba(76,29,149,.98) !important; border-color:rgba(221,214,254,.35) !important; }
+.dd-item:hover{ background:rgba(221,214,254,.22) !important; }
+.dd-icon{ background:rgba(221,214,254,.22) !important; }
+
+/* Page card légal */
+.page-card,.modal-box{ background:rgba(91,33,182,.95) !important; border-color:rgba(221,214,254,.3) !important; }
+.ft-mini{ background:rgba(59,22,120,.96) !important; }
+
+/* Switcher langue */
+.lsw{ background:rgba(221,214,254,.18) !important; border-color:rgba(221,214,254,.28) !important; }
+.lsw button:hover,.lsw button.on{ background:rgba(168,85,247,.55) !important; }
+
+/* Scrollbar */
+::-webkit-scrollbar-thumb{ background:linear-gradient(#a855f7,#e879f9) !important; }
+
+/* Consent / tags RGPD */
+.consent-block{ background:rgba(221,214,254,.16) !important; border-color:rgba(221,214,254,.38) !important; }
+.rgpd-tag{ background:rgba(221,214,254,.2) !important; border-color:rgba(221,214,254,.38) !important; color:rgba(237,233,254,.88) !important; }
+
+/* Hero badge */
+.hero-badge,.hbadge{ background:rgba(221,214,254,.22) !important; border-color:rgba(221,214,254,.45) !important; }
+
+/* Acc float btns */
+#acc-reading-btn{ background:linear-gradient(135deg,#6366f1,#818cf8) !important; }
+#acc-dyslexia-btn{ background:linear-gradient(135deg,#7c3aed,#a855f7) !important; }
+#acc-contrast-btn{ background:linear-gradient(135deg,#9333ea,#c084fc) !important; }
+
+/* Tooltips */
+[data-tooltip]::after{ background:rgba(59,22,120,.98) !important; border-color:rgba(221,214,254,.3) !important; }
+
+
+/* ════════════════════════════════════════
+   PALETTE FINALE — image ref : #2d1b69 → #5b3a9e
+   Bleu-indigo profond en haut, violet en bas
+   ════════════════════════════════════════ */
+body{
+  background:linear-gradient(180deg,
+    #1e1250 0%,
+    #2d1b69 20%,
+    #3b2280 45%,
+    #4a2d8a 65%,
+    #5b3a9e 85%,
+    #4e3390 100%
+  ) !important;
+  min-height:100vh;
+}
+body::before{
+  opacity:.22 !important;
+  mix-blend-mode:normal !important;
+}
+#b1,#blob1{
+  background:radial-gradient(circle,#7c3aed 0%,#5b21b6 40%,transparent 70%) !important;
+  opacity:.48 !important; filter:blur(50px) !important;
+}
+#b2,#blob2{
+  background:radial-gradient(circle,#a855f7 0%,#7c3aed 40%,transparent 70%) !important;
+  opacity:.38 !important; filter:blur(50px) !important;
+}
+#b3,#blob3{
+  background:radial-gradient(circle,#6366f1 0%,#4f46e5 45%,transparent 72%) !important;
+  opacity:.32 !important; filter:blur(50px) !important;
+}
+#b4,#blob4{
+  background:radial-gradient(circle,#c4b5fd 0%,#a78bfa 50%,transparent 75%) !important;
+  opacity:.28 !important; filter:blur(50px) !important;
+}
+#b5,#blob5{
+  background:radial-gradient(ellipse,#d946ef 0%,#9333ea 45%,transparent 72%) !important;
+  opacity:.30 !important; filter:blur(50px) !important;
+}
+:root{
+  --bg:#2d1b69 !important;
+  --bg2:#3b2280 !important;
+  --pm:#9d6fe8 !important;
+  --pl:#c4b5fd !important;
+  --pp:#ede9fe !important;
+  --pf:#d946ef !important;
+  --teal:#5eead4 !important;
+  --wh:#f5f0ff !important;
+  --mu:rgba(216,180,254,.72) !important;
+  --bdr:rgba(196,181,232,.22) !important;
+  --card:rgba(255,255,255,.08) !important;
+}
+body{ color:#f5f0ff !important; }
+nav{
+  background:linear-gradient(135deg,rgba(30,18,80,.97),rgba(45,27,105,.96),rgba(35,20,88,.97)) !important;
+  border-bottom:1px solid rgba(196,181,232,.22) !important;
+  box-shadow:0 2px 0 rgba(196,181,232,.1),0 4px 24px rgba(0,0,0,.35) !important;
+}
+.logo{ text-shadow:0 0 20px rgba(196,181,232,.5) !important; }
+.logo span{
+  background:linear-gradient(135deg,#c084fc,#e879f9) !important;
+  -webkit-background-clip:text !important; background-clip:text !important; -webkit-text-fill-color:transparent !important;
+}
+.nl a{ color:rgba(216,180,254,.72) !important; }
+.nl a:hover{ color:#fff !important; background:rgba(157,111,232,.2) !important; border-color:rgba(196,181,232,.3) !important; }
+.ncta,.nav-cta{
+  background:linear-gradient(135deg,#7c3aed,#9d6fe8,#d946ef) !important;
+  box-shadow:0 4px 16px rgba(217,70,239,.4) !important;
+}
+.card,.feat-card,.diff-card,.svc2,.svc2-card,.risk-card,.norm-card,.nc,
+.ia-card,.ux-card,.rm-item,.pole-card,.pillar,.eng-card,.right-card,
+.faq-item,.faq-mini-item,.ck-cat,.wcag-card,.info-card,.algo-card,
+.signal-box,.mode-card,.theme-card,.cc,.member-card,.job-card,
+.val-card,.perk,.res-card,.toc,.dpo-card,.contact-card,.tips-card,
+.score-board,.ctx-card,.faq-sec-head,.spont-card,.nl-box,.live-banner{
+  background:rgba(255,255,255,.08) !important;
+  border-color:rgba(196,181,232,.20) !important;
+}
+.card:hover,.feat-card:hover,.diff-card:hover,.svc2:hover,.risk-card:hover,
+.nc:hover,.pillar:hover,.eng-card:hover,.member-card:hover,.job-card:hover,
+.val-card:hover,.res-card:hover{
+  background:rgba(255,255,255,.14) !important;
+  border-color:rgba(217,70,239,.42) !important;
+  box-shadow:0 6px 28px rgba(217,70,239,.22),0 0 0 1px rgba(196,181,232,.22) !important;
+}
+.sec,.sec-a,.sec-dark{ background:rgba(45,27,105,.25) !important; }
+footer{
+  background:linear-gradient(180deg,rgba(30,18,80,.98) 0%,rgba(20,12,55,.99) 100%) !important;
+}
+footer::before{
+  background:linear-gradient(90deg,transparent,rgba(157,111,232,.55) 30%,rgba(217,70,239,.45) 55%,rgba(157,111,232,.5) 80%,transparent) !important;
+  box-shadow:0 0 24px rgba(157,111,232,.38) !important;
+}
+.ft-col-title{
+  background:linear-gradient(90deg,#c084fc,#e879f9) !important;
+  -webkit-background-clip:text !important; background-clip:text !important;
+}
+.ft-col a{ color:rgba(216,180,254,.58) !important; }
+.ft-col a:hover{ color:#fff !important; }
+em,.hero-em{
+  background:linear-gradient(135deg,#a78bfa,#c084fc,#e879f9) !important;
+  -webkit-background-clip:text !important; background-clip:text !important; -webkit-text-fill-color:transparent !important;
+}
+.lb,.section-label{ color:#5eead4 !important; }
+.btn-p,a.btn-p,.ha-primary,.pbtn,.ck-save-btn,.test-btn,.sbtn-p,.ft-nl-btn{
+  background:linear-gradient(135deg,#6d28d9,#9d6fe8,#d946ef) !important;
+  box-shadow:0 4px 20px rgba(217,70,239,.38) !important;
+}
+.sb2,.stats-bar{
+  background:linear-gradient(90deg,rgba(109,40,217,.18),rgba(157,111,232,.15),rgba(217,70,239,.10)) !important;
+}
+.finput,.fselect,.ftextarea,.nl-input,.pi2,.psel{
+  background:rgba(255,255,255,.08) !important;
+  border-color:rgba(196,181,232,.25) !important;
+  color:#f5f0ff !important;
+}
+.finput:focus,.fselect:focus,.ftextarea:focus,.pi2:focus,.psel:focus{
+  border-color:rgba(217,70,239,.55) !important;
+  box-shadow:0 0 0 3px rgba(157,111,232,.18) !important;
+}
+#xbtn{ background:linear-gradient(135deg,#6d28d9,#d946ef) !important; box-shadow:0 4px 22px rgba(217,70,239,.5) !important; }
+#xbox{ background:rgba(30,18,80,.97) !important; border-color:rgba(196,181,232,.25) !important; }
+#ck-banner{ background:rgba(30,18,80,.98) !important; border-top-color:rgba(217,70,239,.28) !important; }
+#ck-modal-box{ background:linear-gradient(160deg,#2d1b69,#3b2280) !important; }
+#read-progress{ background:linear-gradient(90deg,#6366f1,#9d6fe8,#d946ef) !important; }
+.nav-dropdown{ background:rgba(25,15,70,.98) !important; border-color:rgba(196,181,232,.28) !important; }
+.dd-item:hover{ background:rgba(196,181,232,.15) !important; }
+.page-card,.modal-box{ background:rgba(45,27,105,.95) !important; border-color:rgba(196,181,232,.22) !important; }
+.ft-mini{ background:rgba(20,12,55,.96) !important; }
+.lsw{ background:rgba(196,181,232,.12) !important; border-color:rgba(196,181,232,.22) !important; }
+.lsw button:hover,.lsw button.on{ background:rgba(157,111,232,.45) !important; }
+.consent-block{ background:rgba(196,181,232,.10) !important; border-color:rgba(196,181,232,.28) !important; }
+.rgpd-tag{ background:rgba(196,181,232,.14) !important; border-color:rgba(196,181,232,.28) !important; color:rgba(216,180,254,.85) !important; }
+.hero-badge,.hbadge{ background:rgba(196,181,232,.15) !important; border-color:rgba(196,181,232,.35) !important; }
+#acc-reading-btn{ background:linear-gradient(135deg,#4f46e5,#6366f1) !important; }
+#acc-dyslexia-btn{ background:linear-gradient(135deg,#6d28d9,#9d6fe8) !important; }
+#acc-contrast-btn{ background:linear-gradient(135deg,#7c3aed,#c084fc) !important; }
+[data-tooltip]::after{ background:rgba(20,12,55,.98) !important; border-color:rgba(196,181,232,.25) !important; }
+::-webkit-scrollbar-thumb{ background:linear-gradient(#9d6fe8,#d946ef) !important; }
+
+
+/* ══ PAGES LÉGALES — Pleine largeur ══ */
+.page-wrap, .con {
+  max-width: 1000px !important;
+  padding-left: 28px !important;
+  padding-right: 28px !important;
+}
+.toc-list {
+  grid-template-columns: 1fr 1fr !important;
+}
+.pc-section, .ml-section, .cgv-section, .dsa-sec {
+  padding-bottom: 32px !important;
+  margin-bottom: 32px !important;
+}
+.pc-h, .ml-h, .cgv-h, .dsa-h {
+  font-size: 20px !important;
+  color: #fff !important;
+}
+.pc-p, .ml-p, .cgv-p, .dsa-p {
+  font-size: 13.5px !important;
+  color: rgba(237,233,254,.85) !important;
+  line-height: 1.88 !important;
+}
+.pc-list li, .ml-list li, .cgv-list li, .pillar-list li {
+  font-size: 13px !important;
+  color: rgba(216,180,254,.80) !important;
+  line-height: 1.8 !important;
+}
+.rights-grid, .forbidden-grid, .algo-grid, .signal-grid, .perks {
+  grid-template-columns: repeat(2,1fr) !important;
+}
+
+</style>
+<style id="na-ed-css">
+.na-editorial{margin:16px 0 0 0;padding:11px 13px;border-left:3px solid #c9a227;background:rgba(201,162,39,.09);border-radius:6px;font-size:12px;line-height:1.6;color:#3a4250}
+.na-ed-badge{display:inline-flex;align-items:center;justify-content:center;padding:1px 6px;border-radius:4px;background:#14181f;color:#fff;font-weight:800;font-size:10px;letter-spacing:.06em;margin-right:6px}
+</style>
+<style id="na-grid-css">
+.con{max-width:1240px !important}
+.na-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start}
+@media (max-width:980px){.na-grid{grid-template-columns:1fr}}
+.na-article{padding:30px 32px !important}
+.na-filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 22px 0;justify-content:center}
+.na-f{padding:6px 14px;border-radius:999px;border:1px solid rgba(196,181,232,.35);background:rgba(109,40,217,.14);color:rgba(240,236,255,.9);font-size:12px;font-weight:600;cursor:pointer;transition:all .18s ease}
+.na-f:hover{background:rgba(109,40,217,.4);border-color:rgba(196,181,232,.75);color:#fff}
+.na-f.on{background:linear-gradient(135deg,#c9a227,#e6c65a);border-color:#c9a227;color:#14181f}
+.na-theme{display:inline-block;margin-bottom:10px;padding:2px 9px;border-radius:999px;background:rgba(201,162,39,.16);border:1px solid rgba(201,162,39,.45);color:#e6c65a;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.na-empty{grid-column:1/-1;text-align:center;color:rgba(240,236,255,.6);font-size:13px;padding:24px}
+</style>
+
+<style id="fo-css">
+.fo-wrap{max-width:1240px;margin:0 auto;padding:0 20px 70px}
+.fo-filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 24px 0;justify-content:center}
+.fo-f{padding:6px 14px;border-radius:999px;border:1px solid rgba(196,181,232,.35);background:rgba(109,40,217,.14);color:rgba(240,236,255,.9);font-size:12px;font-weight:600;cursor:pointer;transition:all .18s ease}
+.fo-f:hover{background:rgba(109,40,217,.4);border-color:rgba(196,181,232,.75);color:#fff}
+.fo-f.on{background:linear-gradient(135deg,#c9a227,#e6c65a);border-color:#c9a227;color:#14181f}
+.fo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;align-items:start}
+@media (max-width:980px){.fo-grid{grid-template-columns:1fr}}
+.fo-card{background:rgba(255,255,255,.02);border:1px solid var(--bdr);border-left:3px solid var(--pf);border-radius:16px;padding:26px 28px;transition:transform .2s ease,border-color .2s ease}
+.fo-card:hover{transform:translateY(-2px);border-color:rgba(201,162,39,.5)}
+.fo-tag{display:inline-block;padding:2px 9px;border-radius:999px;border:1px solid;background:rgba(0,0,0,.2);font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.fo-num{margin-top:10px;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mu)}
+.fo-title{margin:6px 0 10px 0;font-size:19px;line-height:1.3;color:var(--wh)}
+.fo-meta{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--pp);margin-bottom:10px}
+.fo-obj{font-size:13.5px;line-height:1.65;color:rgba(240,236,255,.8);margin:0 0 10px 0}
+.fo-det summary{cursor:pointer;font-size:12.5px;font-weight:600;color:var(--pl);padding:4px 0}
+.fo-det ul{margin:6px 0 0 18px;padding:0;font-size:13px;line-height:1.7;color:rgba(240,236,255,.72)}
+.fo-cta{display:inline-block;margin-top:14px;padding:8px 16px;border-radius:10px;background:linear-gradient(135deg,#c9a227,#e6c65a);color:#14181f;font-size:12.5px;font-weight:700;text-decoration:none;transition:filter .18s ease}
+.fo-cta:hover{filter:brightness(1.07)}
+.fo-note{max-width:1240px;margin:26px auto 0;padding:12px 16px;border-left:3px solid #c9a227;background:rgba(201,162,39,.09);border-radius:8px;font-size:12.5px;line-height:1.6;color:rgba(240,236,255,.78)}
+.fo-empty{grid-column:1/-1;text-align:center;color:rgba(240,236,255,.6);font-size:13px;padding:24px}
+</style>
+</head>
+<body>
+<nav>
+  <a href="/" class="nl">CONSEIL<span>PREV</span></a>
+  <a href="/" class="nb">← Retour au site</a>
+</nav>
+<div class="hero">
+  <div class="hbadge"><span class="bdot"></span> Formations · IA Act · RGPD · ISO 42001</div>
+  <h1>Formations <em>conformité IA</em></h1>
+  <p class="hero-sub">Dix formations conçues et animées par CONSEILPREV, du cadrage réglementaire à la mise en œuvre opérationnelle et à la preuve opposable en contrôle. En présentiel, à distance ou sur site.</p>
+</div>
+
+<div class="fo-wrap">
+  <div class="fo-filters" id="fo-filters">
+    <button class="fo-f on" data-r="" onclick="foFilter('')">Toutes les formations (10)</button>
+    <button class="fo-f" data-r="IA Act" onclick="foFilter('IA Act')">IA Act (4)</button>
+    <button class="fo-f" data-r="RGPD" onclick="foFilter('RGPD')">RGPD (3)</button>
+    <button class="fo-f" data-r="ISO 42001" onclick="foFilter('ISO 42001')">ISO 42001 (2)</button>
+    <button class="fo-f" data-r="Transverse" onclick="foFilter('Transverse')">Transverse (1)</button>
+  </div>
+
+  <div class="fo-grid" id="fo-grid">
+      <article class="fo-card" data-ref="IA Act">
+        <span class="fo-tag" style="border-color:#c9a227;color:#c9a227">IA Act</span>
+        <div class="fo-num">Formation 01</div>
+        <h2 class="fo-title">Fondamentaux du règlement européen sur l'IA</h2>
+        <div class="fo-meta"><span>⏱ 1 jour (7 h)</span><span>👥 Dirigeants, chefs de projet, juristes, DSI</span></div>
+        <p class="fo-obj"><strong>Objectif.</strong> Comprendre l'architecture du règlement (UE) 2024/1689, identifier les rôles (fournisseur, déployeur, importateur) et situer son organisation dans le calendrier d'application.</p>
+        <details class="fo-det"><summary>Programme détaillé</summary><ul><li>Genèse, champ d'application et définitions</li><li>Approche par les risques : interdit, haut risque, transparence, minimal</li><li>Rôles et responsabilités le long de la chaîne de valeur</li><li>Calendrier d'application et effets de l'Omnibus</li><li>Sanctions et gouvernance (Bureau de l'IA, autorités nationales)</li><li>Atelier : qualifier trois cas d'usage de l'organisation</li></ul></details>
+        <a class="fo-cta" href="/#contact">Demander un devis →</a>
+      </article>
+      <article class="fo-card" data-ref="IA Act">
+        <span class="fo-tag" style="border-color:#c9a227;color:#c9a227">IA Act</span>
+        <div class="fo-num">Formation 02</div>
+        <h2 class="fo-title">Systèmes à haut risque : obligations et mise en conformité</h2>
+        <div class="fo-meta"><span>⏱ 2 jours (14 h)</span><span>👥 Responsables conformité, ingénieurs, chefs de produit</span></div>
+        <p class="fo-obj"><strong>Objectif.</strong> Maîtriser les obligations des articles 8 à 27 et construire le dossier technique exigé pour un système à haut risque.</p>
+        <details class="fo-det"><summary>Programme détaillé</summary><ul><li>Annexes I et III : qualification du haut risque</li><li>Système de gestion des risques et gouvernance des données</li><li>Documentation technique et journalisation</li><li>Transparence, contrôle humain, exactitude et robustesse</li><li>Évaluation de la conformité et marquage CE</li><li>Atelier : construire un dossier technique sur un cas réel</li></ul></details>
+        <a class="fo-cta" href="/#contact">Demander un devis →</a>
+      </article>
+      <article class="fo-card" data-ref="IA Act">
+        <span class="fo-tag" style="border-color:#c9a227;color:#c9a227">IA Act</span>
+        <div class="fo-num">Formation 03</div>
+        <h2 class="fo-title">Transparence (article 50) : marquage, étiquetage et preuve</h2>
+        <div class="fo-meta"><span>⏱ 1 jour (7 h)</span><span>👥 Directions marketing et communication, éditeurs, DPO, conformité</span></div>
+        <p class="fo-obj"><strong>Objectif.</strong> Mettre en œuvre les obligations de transparence applicables au 2 août 2026 et constituer la preuve opposable en contrôle.</p>
+        <details class="fo-det"><summary>Programme détaillé</summary><ul><li>Article 50 : fournisseurs et déployeurs</li><li>Code de bonnes pratiques du 10 juin 2026 : portée volontaire, obligations légales</li><li>Marquage à deux niveaux : métadonnées et filigrane</li><li>Quatre critères de détection : efficacité, fiabilité, robustesse, interopérabilité</li><li>Étiquetage des hypertrucages et des textes d'intérêt public</li><li>Exceptions du paragraphe 4 et documentation du contrôle éditorial</li><li>Atelier : registre de transparence et attestation</li></ul></details>
+        <a class="fo-cta" href="/#contact">Demander un devis →</a>
+      </article>
+      <article class="fo-card" data-ref="IA Act">
+        <span class="fo-tag" style="border-color:#c9a227;color:#c9a227">IA Act</span>
+        <div class="fo-num">Formation 04</div>
+        <h2 class="fo-title">Analyse d'impact sur les droits fondamentaux (FRIA)</h2>
+        <div class="fo-meta"><span>⏱ 1 jour (7 h)</span><span>👥 Conformité, juristes, métiers déployant des systèmes à haut risque</span></div>
+        <p class="fo-obj"><strong>Objectif.</strong> Conduire et formaliser l'analyse d'impact sur les droits fondamentaux prévue à l'article 27.</p>
+        <details class="fo-det"><summary>Programme détaillé</summary><ul><li>Champ d'application et redevables de la FRIA</li><li>Articulation avec l'AIPD du RGPD</li><li>Identification des risques pour les personnes</li><li>Mesures d'atténuation et gouvernance humaine</li><li>Formalisation, notification et mise à jour</li><li>Atelier : conduire une FRIA de bout en bout</li></ul></details>
+        <a class="fo-cta" href="/#contact">Demander un devis →</a>
+      </article>
+      <article class="fo-card" data-ref="RGPD">
+        <span class="fo-tag" style="border-color:#5eead4;color:#5eead4">RGPD</span>
+        <div class="fo-num">Formation 05</div>
+        <h2 class="fo-title">RGPD pour les projets d'intelligence artificielle</h2>
+        <div class="fo-meta"><span>⏱ 2 jours (14 h)</span><span>👥 DPO, juristes, data scientists, chefs de projet</span></div>
+        <p class="fo-obj"><strong>Objectif.</strong> Concilier innovation et protection des données : bases légales, minimisation, transparence et droits des personnes appliqués à l'IA.</p>
+        <details class="fo-det"><summary>Programme détaillé</summary><ul><li>Bases légales applicables à l'entraînement et à l'inférence</li><li>Minimisation, exactitude et limitation de la conservation</li><li>Décision automatisée et profilage (article 22)</li><li>Information des personnes et exercice des droits</li><li>Données d'entraînement, réutilisation et anonymisation</li><li>Atelier : cadrer un projet d'IA conforme</li></ul></details>
+        <a class="fo-cta" href="/#contact">Demander un devis →</a>
+      </article>
+      <article class="fo-card" data-ref="RGPD">
+        <span class="fo-tag" style="border-color:#5eead4;color:#5eead4">RGPD</span>
+        <div class="fo-num">Formation 06</div>
+        <h2 class="fo-title">Analyse d'impact relative à la protection des données (AIPD, article 35)</h2>
+        <div class="fo-meta"><span>⏱ 1 jour (7 h)</span><span>👥 DPO, conformité, chefs de projet</span></div>
+        <p class="fo-obj"><strong>Objectif.</strong> Réaliser le test de seuil, conduire l'analyse et formaliser un document opposable.</p>
+        <details class="fo-det"><summary>Programme détaillé</summary><ul><li>Neuf critères et test de seuil</li><li>Description systématique, nécessité et proportionnalité</li><li>Appréciation des risques pour les droits et libertés</li><li>Mesures, risque résiduel et avis du délégué</li><li>Consultation préalable de l'autorité de contrôle</li><li>Atelier : AIPD complète sur un traitement fondé sur l'IA</li></ul></details>
+        <a class="fo-cta" href="/#contact">Demander un devis →</a>
+      </article>
+      <article class="fo-card" data-ref="RGPD">
+        <span class="fo-tag" style="border-color:#5eead4;color:#5eead4">RGPD</span>
+        <div class="fo-num">Formation 07</div>
+        <h2 class="fo-title">Preuve du consentement, rétention et droits des personnes</h2>
+        <div class="fo-meta"><span>⏱ 1 jour (7 h)</span><span>👥 DPO, responsables numériques, conformité, marketing</span></div>
+        <p class="fo-obj"><strong>Objectif.</strong> Constituer un dossier de preuve conforme aux articles 5, 7, 12, 17 et 30, et automatiser la rétention.</p>
+        <details class="fo-det"><summary>Programme détaillé</summary><ul><li>Article 7 : charge de la preuve et registre des consentements</li><li>Bannières et granularité : recueil, refus et retrait</li><li>Article 5.1.e : durées, purge et preuve de suppression</li><li>Articles 12, 15, 17 et 20 : traiter une demande dans le délai</li><li>Article 30 : tenir un registre à jour</li><li>Atelier : dossier probant pour un contrôle</li></ul></details>
+        <a class="fo-cta" href="/#contact">Demander un devis →</a>
+      </article>
+      <article class="fo-card" data-ref="ISO 42001">
+        <span class="fo-tag" style="border-color:#b48af7;color:#b48af7">ISO 42001</span>
+        <div class="fo-num">Formation 08</div>
+        <h2 class="fo-title">ISO/IEC 42001 : construire un système de management de l'IA</h2>
+        <div class="fo-meta"><span>⏱ 2 jours (14 h)</span><span>👥 Responsables qualité, conformité, RSSI, direction</span></div>
+        <p class="fo-obj"><strong>Objectif.</strong> Comprendre la norme, structurer un SMIA et préparer la certification.</p>
+        <details class="fo-det"><summary>Programme détaillé</summary><ul><li>Structure de haut niveau et articulation avec ISO 27001</li><li>Contexte, parties intéressées et périmètre</li><li>Leadership, politique et rôles</li><li>Appréciation des risques et des impacts liés à l'IA</li><li>Annexe A : mesures et objectifs de contrôle</li><li>Atelier : feuille de route de certification</li></ul></details>
+        <a class="fo-cta" href="/#contact">Demander un devis →</a>
+      </article>
+      <article class="fo-card" data-ref="ISO 42001">
+        <span class="fo-tag" style="border-color:#b48af7;color:#b48af7">ISO 42001</span>
+        <div class="fo-num">Formation 09</div>
+        <h2 class="fo-title">Auditer un système de management de l'IA (ISO/IEC 42001)</h2>
+        <div class="fo-meta"><span>⏱ 2 jours (14 h)</span><span>👥 Auditeurs internes, conformité, qualité</span></div>
+        <p class="fo-obj"><strong>Objectif.</strong> Préparer, conduire et restituer un audit interne du SMIA, et exploiter ses conclusions.</p>
+        <details class="fo-det"><summary>Programme détaillé</summary><ul><li>Principes d'audit et compétences de l'auditeur</li><li>Programme, plan et échantillonnage</li><li>Recueil des preuves et conduite des entretiens</li><li>Constats, non-conformités et actions correctives</li><li>Rapport d'audit et revue de direction</li><li>Atelier : simulation d'audit complet</li></ul></details>
+        <a class="fo-cta" href="/#contact">Demander un devis →</a>
+      </article>
+      <article class="fo-card" data-ref="Transverse">
+        <span class="fo-tag" style="border-color:#d946ef;color:#d946ef">Transverse</span>
+        <div class="fo-num">Formation 10</div>
+        <h2 class="fo-title">Gouvernance de l'IA : IA Act, RGPD et ISO 42001 en un seul dispositif</h2>
+        <div class="fo-meta"><span>⏱ 2 jours (14 h)</span><span>👥 Direction générale, conformité, DSI, DPO</span></div>
+        <p class="fo-obj"><strong>Objectif.</strong> Bâtir un dispositif unique couvrant les trois référentiels, sans redondance, et en démontrer l'efficacité.</p>
+        <details class="fo-det"><summary>Programme détaillé</summary><ul><li>Cartographier les exigences communes et spécifiques</li><li>Registre unique : systèmes d'IA, traitements, mesures</li><li>Articuler FRIA, AIPD et appréciation des risques ISO</li><li>Indicateurs, preuve et pilotage par les jalons</li><li>Outillage : plateforme Sentinel en démonstration</li><li>Atelier : feuille de route à douze mois</li></ul></details>
+        <a class="fo-cta" href="/#contact">Demander un devis →</a>
+      </article>
+  </div>
+
+  <div class="fo-note">
+    Chaque formation est adaptable à votre secteur et à votre maturité. Les sessions sur site sont incluses, à raison de deux par an, dans l'offre Entreprise de la plateforme Sentinel. Les contenus sont mis à jour en continu au regard des évolutions réglementaires ; ils constituent un apport pédagogique et ne se substituent pas à un conseil juridique individualisé.
+  </div>
+</div>
+
+<div class="ft-mini">
+  <span>© 2025 CONSEILPREV · Actualités · <a href="/mentions-legales">Mentions légales</a> · <a href="/">Accueil</a></span>
+  <a href="/">← Retour au site</a>
+</div>
+<div id="shared-footer-placeholder"></div>
+<script src="/footer-loader.js"></script>
+<script>
+window.foFilter = function(r){
+  document.querySelectorAll(".fo-f").forEach(function(b){ b.classList.toggle("on", (b.getAttribute("data-r")||"") === r); });
+  var n = 0;
+  document.querySelectorAll(".fo-card").forEach(function(c){
+    var vu = !r || (c.getAttribute("data-ref") || "") === r;
+    c.style.display = vu ? "" : "none";
+    if(vu) n++;
+  });
+  var g = document.getElementById("fo-grid");
+  var e = document.getElementById("fo-empty");
+  if(!n){ if(!e && g){ e = document.createElement("div"); e.id = "fo-empty"; e.className = "fo-empty"; e.textContent = "Aucune formation pour ce r\u00e9f\u00e9rentiel."; g.appendChild(e); } }
+  else if(e){ e.remove(); }
+};
+</script>
+</body>
+</html>
