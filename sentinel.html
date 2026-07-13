@@ -3662,6 +3662,7 @@ textarea.form-el{min-height:86px;resize:vertical}
       <div id="rgpd-score-note" style="font-size:12px;color:var(--muted);max-width:52ch">Contrôles automatiques et déclaratifs, hors éléments non applicables.</div>
       <div style="height:6px;border-radius:4px;background:var(--rule2);margin-top:8px;overflow:hidden"><div id="rgpd-score-bar" style="height:100%;width:0%;background:var(--green,#0E7C7B);transition:width .6s ease"></div></div>
       <div id="rgpd-score-time" style="font-size:10.5px;color:var(--muted);margin-top:5px">Vérification non encore effectuée.</div>
+      <div id="rgpd-anomalies" style="font-size:11px;margin-top:5px"></div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;margin-left:auto;flex-wrap:wrap">
       <button class="mat-export-btn" id="rgpd-refresh-btn" title="Recalculer immédiatement le taux de conformité RGPD à partir de l'état réel du site (preuves, registre, contrôles)" onclick="rgpdRefresh()">↻ Actualiser la conformité</button>
@@ -3711,6 +3712,70 @@ textarea.form-el{min-height:86px;resize:vertical}
       <div style="display:flex;gap:6px;flex-wrap:wrap"><input id="rgpd-exp-email" placeholder="adresse@exemple.fr" style="flex:1;min-width:150px;font-size:12px;padding:7px 10px;border:1px solid var(--rule2);border-radius:6px"><button class="mat-export-btn" onclick="rgpdExport()">Exporter</button></div>
       <div id="rgpd-exp-msg" style="font-size:11px;color:var(--muted);margin-top:6px"></div>
     </div>
+  </div>
+
+    <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px">
+    <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Rétention et suppression automatique (art. 5.1.e · Data Act)</div>
+    <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px">Durées de conservation appliquées, non plus seulement déclarées. La purge anonymise les données échues et journalise l'opération, scellée par chaînage d'empreintes : c'est votre preuve de suppression en cas de contrôle.</div>
+    <div id="rgpd-reten" style="overflow-x:auto;margin-bottom:10px"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <button class="mat-export-btn" title="Simuler sans rien modifier : affiche les données au-delà de leur durée" onclick="rgpdPurge(true)">Simuler la purge</button>
+      <button class="mat-export-btn" style="background:var(--ink,#111827);color:#fff" title="Exécuter la purge : anonymisation des données échues, journalisée et scellée" onclick="rgpdPurge(false)">Exécuter la purge</button>
+      <span id="rgpd-purge-msg" style="font-size:11px;color:var(--muted)"></span>
+    </div>
+    <div id="rgpd-purge-res" style="overflow-x:auto;margin-top:10px"></div>
+    <div style="font-weight:600;font-size:11px;color:var(--ink);margin:12px 0 4px 0">Journal des purges (preuve scellée)</div>
+    <div id="rgpd-journal" style="overflow-x:auto"></div>
+    <div style="font-size:10.5px;color:var(--muted);margin-top:8px">Automatisation : tâche planifiée quotidienne appelant /api/cron/rgpd-purge avec le secret CRON_SECRET.</div>
+  </div>
+
+  <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px">
+    <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Analyse d'impact relative à la protection des données (art. 35)</div>
+    <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px">Test de seuil sur les neuf critères de référence : à partir de deux critères, l'AIPD est requise. L'analyse est conservée côté serveur, versionnée, et opposable en audit.</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">
+      <div>
+        <div style="font-weight:600;font-size:11px;color:var(--ink);margin-bottom:4px">Critères du traitement</div>
+        <div id="aipd-criteres"></div>
+        <div id="aipd-seuil" style="font-size:11.5px;margin-top:6px"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <input id="aipd-titre" placeholder="Titre de l'AIPD" style="font-size:12px;padding:6px 9px;border:1px solid var(--rule2);border-radius:5px">
+        <input id="aipd-trait" placeholder="Traitement concerné (ex. assistants conversationnels)" style="font-size:12px;padding:6px 9px;border:1px solid var(--rule2);border-radius:5px">
+        <textarea id="aipd-desc" placeholder="Description systématique du traitement" rows="2" style="font-size:12px;padding:6px 9px;border:1px solid var(--rule2);border-radius:5px"></textarea>
+        <textarea id="aipd-nec" placeholder="Nécessité et proportionnalité" rows="2" style="font-size:12px;padding:6px 9px;border:1px solid var(--rule2);border-radius:5px"></textarea>
+        <textarea id="aipd-risq" placeholder="Risques pour les droits et libertés" rows="2" style="font-size:12px;padding:6px 9px;border:1px solid var(--rule2);border-radius:5px"></textarea>
+        <textarea id="aipd-mes" placeholder="Mesures prévues pour traiter les risques" rows="2" style="font-size:12px;padding:6px 9px;border:1px solid var(--rule2);border-radius:5px"></textarea>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <select id="aipd-res" style="font-size:12px;padding:6px 9px;border:1px solid var(--rule2);border-radius:5px"><option value="negligeable">Risque résiduel négligeable</option><option value="limite">Limité</option><option value="important">Important</option><option value="eleve">Élevé (consultation CNIL)</option></select>
+          <select id="aipd-statut" style="font-size:12px;padding:6px 9px;border:1px solid var(--rule2);border-radius:5px"><option value="brouillon">Brouillon</option><option value="validee">Validée</option></select>
+          <input id="aipd-ver" placeholder="1.0" style="width:60px;font-size:12px;padding:6px 9px;border:1px solid var(--rule2);border-radius:5px">
+        </div>
+        <textarea id="aipd-dpo" placeholder="Avis du délégué à la protection des données" rows="2" style="font-size:12px;padding:6px 9px;border:1px solid var(--rule2);border-radius:5px"></textarea>
+        <button class="mat-export-btn" onclick="rgpdAipdSave()">Enregistrer l'AIPD</button>
+      </div>
+    </div>
+    <div id="aipd-liste" style="overflow-x:auto;margin-top:12px"></div>
+  </div>
+
+  <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px">
+    <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Demandes d'exercice de droits (art. 12)</div>
+    <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px">Toute demande est enregistrée avec son échéance d'un mois. Les demandes hors délai sont signalées et pèsent sur l'indice de conformité.</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+      <select id="dem-type" style="font-size:12px;padding:6px 9px;border:1px solid var(--rule2);border-radius:5px"><option value="acces">Accès (art. 15)</option><option value="rectification">Rectification (art. 16)</option><option value="effacement">Effacement (art. 17)</option><option value="portabilite">Portabilité (art. 20)</option><option value="opposition">Opposition (art. 21)</option></select>
+      <input id="dem-email" placeholder="adresse@exemple.fr" style="flex:1;min-width:150px;font-size:12px;padding:6px 9px;border:1px solid var(--rule2);border-radius:5px">
+      <input id="dem-note" placeholder="Note (facultatif)" style="flex:1;min-width:120px;font-size:12px;padding:6px 9px;border:1px solid var(--rule2);border-radius:5px">
+      <button class="mat-export-btn" onclick="rgpdDemAdd()">Enregistrer</button>
+    </div>
+    <div id="rgpd-dem" style="overflow-x:auto"></div>
+  </div>
+
+  <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px">
+    <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Historique des rapports d'audit (art. 5.2 · responsabilité)</div>
+    <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px">Archiver fige l'état de conformité à une date : contenu complet, indice et empreinte chaînée sur le rapport précédent. Toute altération devient détectable, ce qui confère au dossier sa valeur probante.</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+      <button class="mat-export-btn" style="background:var(--ink,#111827);color:#fff" title="Figer et sceller l'état de conformité actuel" onclick="rgpdAuditArchiver()">Archiver le rapport actuel</button>
+    </div>
+    <div id="rgpd-audits" style="overflow-x:auto"></div>
   </div>
 
   <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white)">
@@ -18977,6 +19042,10 @@ window.rgpdChecks = function(){
     var tm = document.getElementById('rgpd-score-time');
     if(tm){ tm.textContent = 'Dernière vérification : ' + new Date().toLocaleTimeString('fr-FR')
       + ' \u00b7 ' + d.preuves + ' preuve(s) de consentement \u00b7 ' + d.retraits + ' retrait(s)'; }
+    var an = document.getElementById('rgpd-anomalies');
+    if(an){ an.innerHTML = (d.nb_anomalies)
+      ? '<span style="color:var(--accent);font-weight:700">' + d.nb_anomalies + ' non-conformit\u00e9(s) d\u00e9tect\u00e9e(s)</span> <span style="color:var(--muted)">\u2014 ' + (d.anomalies||[]).map(function(a){ return a.article; }).join(', ') + '</span>'
+      : '<span style="color:var(--green,#0E7C7B);font-weight:700">Aucune non-conformit\u00e9 d\u00e9tect\u00e9e.</span>'; }
     var ST = { conforme: ['Conforme', 'var(--green,#0E7C7B)'], 'a-verifier': ['\u00c0 v\u00e9rifier', 'var(--accent)'], 'non-applicable': ['Non applicable', 'var(--muted)'] };
     var box = document.getElementById('rgpd-checks');
     if(!box) return;
@@ -19095,6 +19164,151 @@ window.rgpdRapport = function(){
     else { alert('Veuillez autoriser les fen\u00eatres pour g\u00e9n\u00e9rer le rapport.'); }
   }).catch(function(){ alert('Rapport indisponible.'); });
 };
+/* ══ RGPD : rétention/purge, AIPD (art. 35), demandes (art. 12), audits scellés ══ */
+window.rgpdRetention = function(){
+  fetch('/api/rgpd/retention', { credentials:'same-origin' }).then(function(r){ return r.json(); }).then(function(d){
+    if(!d || !d.ok) return;
+    var box = document.getElementById('rgpd-reten'); if(!box) return;
+    box.innerHTML = rgpdTable(['Donn\u00e9es', 'Dur\u00e9e (mois)', 'Action', 'Base'], (d.politiques||[]).map(function(p){
+      return ['<strong style="color:var(--ink)">' + rgpdEsc(p.libelle) + '</strong>',
+        '<input type="number" min="1" max="240" value="' + (p.duree_mois||0) + '" onchange="rgpdRetSave(' + p.id + ', this.value)" style="width:64px;font-size:11.5px;padding:3px 5px;border:1px solid var(--rule2);border-radius:4px">',
+        rgpdEsc(p.action === 'anonymiser' ? 'Anonymisation automatique' : 'Signalement'), rgpdEsc(p.base)];
+    }));
+  }).catch(function(){});
+};
+window.rgpdRetSave = function(id, val){
+  fetch('/api/rgpd/retention', { method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ id: id, duree_mois: parseInt(val, 10) }) })
+    .then(function(){ rgpdPurge(true); rgpdChecks(); }).catch(function(){});
+};
+window.rgpdPurge = function(simulation){
+  var msg = document.getElementById('rgpd-purge-msg');
+  if(!simulation && !confirm('Ex\u00e9cuter la purge ? Les donn\u00e9es au-del\u00e0 de leur dur\u00e9e seront anonymis\u00e9es. L\u2019op\u00e9ration est journalis\u00e9e et scell\u00e9e.')) return;
+  if(msg) msg.textContent = simulation ? 'Simulation en cours\u2026' : 'Purge en cours\u2026';
+  fetch('/api/rgpd/purge', { method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ simulation: !!simulation }) })
+    .then(function(r){ return r.json(); }).then(function(d){
+      if(!d || !d.ok){ if(msg) msg.textContent = 'Erreur.'; return; }
+      var box = document.getElementById('rgpd-purge-res');
+      if(box) box.innerHTML = rgpdTable(['Donn\u00e9es', 'Concern\u00e9s', 'Action', 'Constat'], (d.resultats||[]).map(function(r){
+        var n = r.concernes || 0;
+        return ['<strong style="color:var(--ink)">' + rgpdEsc(r.libelle) + '</strong>',
+          '<span style="font-weight:700;color:' + (n ? 'var(--accent)' : 'var(--green,#0E7C7B)') + '">' + n + '</span>',
+          rgpdEsc(r.action), rgpdEsc(r.detail)];
+      }));
+      if(msg) msg.textContent = d.simulation ? 'Simulation \u2014 aucune donn\u00e9e modifi\u00e9e.' : 'Purge ex\u00e9cut\u00e9e et journalis\u00e9e.';
+      if(!d.simulation){ rgpdJournal(); rgpdChecks(); }
+    }).catch(function(){ if(msg) msg.textContent = 'Erreur r\u00e9seau.'; });
+};
+window.rgpdJournal = function(){
+  fetch('/api/rgpd/purge-journal', { credentials:'same-origin' }).then(function(r){ return r.json(); }).then(function(d){
+    if(!d || !d.ok) return;
+    var box = document.getElementById('rgpd-journal'); if(!box) return;
+    if(!(d.journal||[]).length){ box.innerHTML = '<div style="color:var(--muted);font-size:11.5px">Aucune purge ex\u00e9cut\u00e9e \u00e0 ce jour.</div>'; return; }
+    box.innerHTML = rgpdTable(['Horodatage (UTC)', 'Donn\u00e9es', 'Nombre', 'Empreinte (scell\u00e9)'], d.journal.map(function(j){
+      return [rgpdEsc((j.horodatage||'').replace('T',' ').slice(0,19)), rgpdEsc(j.cible), String(j.nb||0),
+        '<code style="font-size:10px;color:var(--muted)">' + rgpdEsc(String(j.hash||'').slice(0,16)) + '\u2026</code>'];
+    }));
+  }).catch(function(){});
+};
+window.rgpdAipdLoad = function(){
+  fetch('/api/rgpd/aipd', { credentials:'same-origin' }).then(function(r){ return r.json(); }).then(function(d){
+    if(!d || !d.ok) return;
+    var crit = document.getElementById('aipd-criteres');
+    if(crit && !crit.dataset.rendu){
+      crit.dataset.rendu = '1';
+      crit.innerHTML = (d.criteres_reference||[]).map(function(c, i){
+        return '<label style="display:block;font-size:11.5px;color:var(--muted);padding:2px 0"><input type="checkbox" class="aipd-c" value="' + rgpdEsc(c) + '" onchange="rgpdAipdSeuil()"> ' + rgpdEsc(c) + '</label>';
+      }).join('');
+    }
+    var box = document.getElementById('aipd-liste'); if(!box) return;
+    if(!(d.aipd||[]).length){ box.innerHTML = '<div style="color:var(--muted);font-size:11.5px">Aucune AIPD enregistr\u00e9e.</div>'; return; }
+    box.innerHTML = rgpdTable(['Titre', 'Traitement', 'Seuil', 'Risque r\u00e9siduel', 'Statut', 'Version', ''], d.aipd.map(function(a){
+      return ['<strong style="color:var(--ink)">' + rgpdEsc(a.titre) + '</strong>', rgpdEsc(a.traitement),
+        a.seuil_atteint ? '<span style="color:var(--accent);font-weight:700">AIPD requise</span>' : 'Non requise',
+        rgpdEsc(a.risque_residuel), rgpdEsc(a.statut), rgpdEsc(a.version),
+        '<button onclick="rgpdAipdDel(' + a.id + ')" style="font-size:10px;color:var(--accent);background:none;border:none;cursor:pointer">Retirer</button>'];
+    }));
+  }).catch(function(){});
+};
+window.rgpdAipdSeuil = function(){
+  var n = document.querySelectorAll('.aipd-c:checked').length;
+  var el = document.getElementById('aipd-seuil');
+  if(el) el.innerHTML = (n >= 2)
+    ? '<span style="color:var(--accent);font-weight:700">Seuil atteint (' + n + ' crit\u00e8res) \u2014 AIPD requise (art. 35).</span>'
+    : '<span style="color:var(--muted)">' + n + ' crit\u00e8re(s) : AIPD non requise en principe (seuil : 2 crit\u00e8res).</span>';
+};
+window.rgpdAipdSave = function(){
+  var crits = [];
+  document.querySelectorAll('.aipd-c:checked').forEach(function(c){ crits.push(c.value); });
+  function v(id){ var e = document.getElementById(id); return e ? e.value : ''; }
+  if(!v('aipd-titre').trim()){ alert('Titre requis.'); return; }
+  fetch('/api/rgpd/aipd', { method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ titre: v('aipd-titre'), traitement: v('aipd-trait'), criteres: crits,
+      description: v('aipd-desc'), necessite: v('aipd-nec'), risques: v('aipd-risq'), mesures: v('aipd-mes'),
+      risque_residuel: v('aipd-res'), avis_dpo: v('aipd-dpo'), statut: v('aipd-statut'), version: v('aipd-ver') || '1.0' }) })
+    .then(function(r){ return r.json(); }).then(function(){ rgpdAipdLoad(); rgpdChecks(); alert('AIPD enregistr\u00e9e.'); })
+    .catch(function(){});
+};
+window.rgpdAipdDel = function(id){
+  if(!confirm('Retirer cette AIPD ?')) return;
+  fetch('/api/rgpd/aipd/' + id, { method:'DELETE', credentials:'same-origin' }).then(function(){ rgpdAipdLoad(); rgpdChecks(); }).catch(function(){});
+};
+window.rgpdDemandes = function(){
+  fetch('/api/rgpd/demandes', { credentials:'same-origin' }).then(function(r){ return r.json(); }).then(function(d){
+    if(!d || !d.ok) return;
+    var box = document.getElementById('rgpd-dem'); if(!box) return;
+    if(!(d.demandes||[]).length){ box.innerHTML = '<div style="color:var(--muted);font-size:11.5px">Aucune demande enregistr\u00e9e.</div>'; return; }
+    var now = new Date().toISOString();
+    box.innerHTML = rgpdTable(['Re\u00e7ue le', '\u00c9ch\u00e9ance (1 mois)', 'Type', 'Personne', 'Statut', ''], d.demandes.map(function(r){
+      var retard = (r.statut === 'en_cours' && r.echeance && r.echeance < now);
+      return [rgpdEsc((r.recu_le||'').slice(0,10)),
+        '<span style="color:' + (retard ? 'var(--accent);font-weight:700' : 'var(--muted)') + '">' + rgpdEsc((r.echeance||'').slice(0,10)) + (retard ? ' (hors d\u00e9lai)' : '') + '</span>',
+        rgpdEsc(r.type), rgpdEsc(r.email || '(anonymis\u00e9e)'), rgpdEsc(r.statut),
+        (r.statut === 'en_cours' ? '<button onclick="rgpdDemClore(' + r.id + ')" style="font-size:10px;background:none;border:none;color:var(--ink);text-decoration:underline;cursor:pointer">Marquer trait\u00e9e</button>' : '')];
+    }));
+  }).catch(function(){});
+};
+window.rgpdDemAdd = function(){
+  function v(id){ var e = document.getElementById(id); return e ? e.value : ''; }
+  if(!v('dem-email').trim()){ alert('Adresse requise.'); return; }
+  fetch('/api/rgpd/demandes', { method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ type: v('dem-type'), email: v('dem-email'), note: v('dem-note') }) })
+    .then(function(){ var e = document.getElementById('dem-email'); if(e) e.value=''; rgpdDemandes(); rgpdChecks(); }).catch(function(){});
+};
+window.rgpdDemClore = function(id){
+  fetch('/api/rgpd/demandes', { method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ id: id, statut: 'traitee' }) })
+    .then(function(){ rgpdDemandes(); rgpdChecks(); }).catch(function(){});
+};
+window.rgpdAudits = function(){
+  fetch('/api/rgpd/audits', { credentials:'same-origin' }).then(function(r){ return r.json(); }).then(function(d){
+    if(!d || !d.ok) return;
+    var box = document.getElementById('rgpd-audits'); if(!box) return;
+    if(!(d.audits||[]).length){ box.innerHTML = '<div style="color:var(--muted);font-size:11.5px">Aucun rapport archiv\u00e9.</div>'; return; }
+    box.innerHTML = rgpdTable(['Date (UTC)', 'Indice', 'Empreinte (cha\u00eene)', ''], d.audits.map(function(a){
+      return [rgpdEsc((a.horodatage||'').replace('T',' ').slice(0,19)),
+        '<strong style="color:var(--ink)">' + (a.score||0) + ' %</strong>',
+        '<code style="font-size:10px;color:var(--muted)">' + rgpdEsc(String(a.hash||'').slice(0,16)) + '\u2026</code>',
+        '<button onclick="rgpdAuditDl(' + a.id + ')" style="font-size:10px;background:none;border:none;color:var(--ink);text-decoration:underline;cursor:pointer">T\u00e9l\u00e9charger</button>'];
+    }));
+  }).catch(function(){});
+};
+window.rgpdAuditArchiver = function(){
+  fetch('/api/rgpd/audits', { method:'POST', credentials:'same-origin' })
+    .then(function(r){ return r.json(); }).then(function(){ rgpdAudits(); rgpdChecks(); alert('Rapport archiv\u00e9 et scell\u00e9.'); })
+    .catch(function(){});
+};
+window.rgpdAuditDl = function(id){
+  fetch('/api/rgpd/audits/' + id, { credentials:'same-origin' }).then(function(r){ return r.json(); }).then(function(d){
+    if(!d || !d.ok) return;
+    var blob = new Blob([JSON.stringify(d.audit, null, 2)], { type:'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = 'audit-rgpd-' + id + '-conseilprev.json';
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1200);
+  }).catch(function(){});
+};
 window.rgpdRefresh = function(){
   var b = document.getElementById('rgpd-refresh-btn');
   var tm = document.getElementById('rgpd-score-time');
@@ -19127,6 +19341,7 @@ window.rgpdAutoStop = function(){
 };
 window.rgpdInit = function(){
   rgpdChecks(); rgpdRegistre(); rgpdConsents();
+  rgpdRetention(); rgpdPurge(true); rgpdJournal(); rgpdAipdLoad(); rgpdDemandes(); rgpdAudits();
   var el = document.getElementById('rgpd-auto');
   if(!el || el.checked) window.rgpdAutoStart();
 };
