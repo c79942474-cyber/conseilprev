@@ -2602,7 +2602,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 <div class="page" id="p-training"><span class="eyebrow">Hub Training</span><h1 class="page-h">Formations conformité <em>IA</em></h1><p class="page-lead">Modules certifiants — progression calculée à partir de vos scores réels de l Audit de maturité IA par pilier.</p><div class="training-grid" id="training-grid"></div>
   <div style="margin-top:34px">
     <div class="rgpd-h" style="font-weight:700;font-size:14px;color:var(--ink);margin-bottom:4px">Catalogue des formations CONSEILPREV</div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Dix formations animées par CONSEILPREV, du cadrage réglementaire à la preuve opposable en contrôle. <strong>Modalités : à distance en visioconférence, ou en présentiel à Paris uniquement.</strong> Les sessions <strong>sur site, dans vos locaux</strong>, sont <strong>réservées à l'offre Entreprise</strong>, à raison de deux par an incluses.</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Dix formations animées par CONSEILPREV, du cadrage réglementaire à la preuve opposable en contrôle. <strong>Modalités : à distance en visioconférence, ou en présentiel à Paris uniquement.</strong> Les sessions <strong>sur site, dans vos locaux</strong>, sont <strong>réservées à l'offre Entreprise</strong>, à raison de deux par an incluses. Tarifs par participant : 950 € HT (1 jour) et 1 750 € HT (2 jours), <strong>TVA 20 % en sus</strong>.</div>
     <div id="form-cat-filters" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px"></div>
     <div class="training-grid" id="form-cat-grid"></div>
   </div>
@@ -13069,7 +13069,7 @@ window.formRenderModal = function(f){
         }
         var plein = (s.places_restantes <= 0);
         return '<option value="' + s.id + '" data-prix="' + s.prix_cents + '"' + (plein ? ' disabled' : '') + '>'
-          + lib + ' \u00b7 ' + s.lieu + ' \u00b7 ' + (s.prix_cents/100).toLocaleString('fr-FR') + '\u202f\u20ac HT'
+          + lib + ' \u00b7 ' + s.lieu + ' \u00b7 ' + (s.prix_cents/100).toLocaleString('fr-FR') + '\u202f\u20ac HT (TVA 20\u202f%)'
           + (plein ? ' \u2014 complet' : ' \u2014 ' + s.places_restantes + ' place(s)') + '</option>';
       }).join('')
     : '<option value="">Aucune session ouverte \u2014 nous contacter</option>';
