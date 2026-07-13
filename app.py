@@ -9190,13 +9190,19 @@ IA50_USAGES_DEFAUT = [
      'marquage': 'Metadonnees lisibles par machine (ai-generated, ai-disclosure) inserees dans le document — EN PLACE',
      'etiquetage': 'Mention "AI GENERATED" / "AI ASSISTED" apposee sur le document — EN PLACE',
      'exception': 'Aucune', 'responsable': 'Christophe CERF'},
-    {'systeme': 'Veille reglementaire et actualites du site', 'role': 'deployeur',
-     'contenu': 'Texte d\'interet public repris des flux sources (RSS)',
+    {'systeme': 'Veille reglementaire (flux RSS du site)', 'role': 'deployeur',
+     'contenu': 'Titres et resumes repris des sources externes',
      'marquage': 'Sans objet',
-     'etiquetage': 'Non requis : contenu NON genere par IA (reprise des titres et resumes des sources ; '
+     'etiquetage': 'Non requis : contenu NON genere par IA (reprise sans reformulation ; '
                    'la selection par mots-cles ne constitue pas une generation)',
-     'exception': 'Sans objet en l\'etat ; si une reformulation par IA etait introduite, etiqueter ou '
-                  'documenter le controle editorial humain (art. 50.4)',
+     'exception': 'Sans objet', 'responsable': 'Christophe CERF'},
+    {'systeme': 'Actualites du site (redaction assistee par IA)', 'role': 'deployeur',
+     'contenu': 'Texte d\'interet public elabore avec l\'assistance d\'une IA',
+     'marquage': 'Sans objet (redaction assistee, publication sous responsabilite editoriale)',
+     'etiquetage': 'Non requis : exception invoquee — mention de transparence et de responsabilite '
+                   'editoriale publiee sur la page Actualites — EN PLACE',
+     'exception': 'Controle editorial humain (art. 50 par. 4) : examen humain systematique avant publication ; '
+                  'responsabilite editoriale assumee nommement',
      'responsable': 'Christophe CERF'},
 ]
 
