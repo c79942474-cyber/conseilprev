@@ -9165,31 +9165,38 @@ IA50_ECHEANCES = [
 ]
 
 IA50_USAGES_DEFAUT = [
-    {'systeme': 'Assistant conversationnel du site public', 'role': 'deployeur',
+    {'systeme': 'Assistants conversationnels du site public (2)', 'role': 'deployeur',
      'contenu': 'Texte (reponses aux visiteurs)',
-     'marquage': 'Sans objet (contenu non diffuse comme publication)',
-     'etiquetage': 'Mention d\'IA affichee des la premiere interaction (art. 50.1)',
+     'marquage': 'Sans objet (echange interactif, non diffuse comme publication)',
+     'etiquetage': 'Mention d\'IA affichee des la premiere interaction (art. 50.1) — EN PLACE',
      'exception': 'Aucune', 'responsable': 'Christophe CERF'},
-    {'systeme': 'Assistant Sentinel (chat plateforme)', 'role': 'deployeur',
-     'contenu': 'Texte (reponses aux clients)',
-     'marquage': 'Sans objet (usage interne au client)',
-     'etiquetage': 'Mention d\'IA affichee des la premiere interaction (art. 50.1)',
+    {'systeme': 'Copilote Sentinel (assistant de la plateforme)', 'role': 'deployeur',
+     'contenu': 'Texte (reponses aux clients, moteurs Claude et Mistral)',
+     'marquage': 'Sans objet (echange interactif)',
+     'etiquetage': 'Mention d\'IA affichee des la premiere interaction (art. 50.1) — EN PLACE',
      'exception': 'Aucune', 'responsable': 'Christophe CERF'},
-    {'systeme': 'Synthese de la base de connaissance (explorateur)', 'role': 'fournisseur',
-     'contenu': 'Texte de synthese genere par IA',
-     'marquage': 'Mention explicite et metadonnees dans les documents produits',
-     'etiquetage': 'Bandeau "Contenu genere par IA" sur la reponse de synthese',
+    {'systeme': 'Analyses generees par IA dans les modules Sentinel', 'role': 'fournisseur',
+     'contenu': 'Texte d\'analyse produit par IA',
+     'marquage': 'Mention visible apposee sur la sortie ; metadonnees dans les documents exportes',
+     'etiquetage': 'Bandeau "AI GENERATED" sur la sortie — EN PLACE',
      'exception': 'Aucune', 'responsable': 'Christophe CERF'},
-    {'systeme': 'Rapports generes par Sentinel (IA Act annuel, audit RGPD)', 'role': 'fournisseur',
+    {'systeme': 'Synthese de la base de connaissance (explorateur RAG)', 'role': 'fournisseur',
+     'contenu': 'Texte de synthese genere par IA, avec citations',
+     'marquage': 'Mention visible ; metadonnees lisibles par machine a l\'export',
+     'etiquetage': 'Bandeau "AI GENERATED" sur la reponse — EN PLACE',
+     'exception': 'Aucune', 'responsable': 'Christophe CERF'},
+    {'systeme': 'Rapports generes par Sentinel (IA Act annuel, audit RGPD, attestation art. 50)', 'role': 'fournisseur',
      'contenu': 'Documents (texte et indicateurs)',
-     'marquage': 'Metadonnees lisibles par machine inserees dans le document',
-     'etiquetage': 'Mention "AI GENERATED" apposee sur le document',
+     'marquage': 'Metadonnees lisibles par machine (ai-generated, ai-disclosure) inserees dans le document — EN PLACE',
+     'etiquetage': 'Mention "AI GENERATED" / "AI ASSISTED" apposee sur le document — EN PLACE',
      'exception': 'Aucune', 'responsable': 'Christophe CERF'},
     {'systeme': 'Veille reglementaire et actualites du site', 'role': 'deployeur',
-     'contenu': 'Texte d\'interet public',
+     'contenu': 'Texte d\'interet public repris des flux sources (RSS)',
      'marquage': 'Sans objet',
-     'etiquetage': 'A determiner selon le mode de production',
-     'exception': 'Controle editorial humain (art. 50.4) : a documenter si invoque',
+     'etiquetage': 'Non requis : contenu NON genere par IA (reprise des titres et resumes des sources ; '
+                   'la selection par mots-cles ne constitue pas une generation)',
+     'exception': 'Sans objet en l\'etat ; si une reformulation par IA etait introduite, etiqueter ou '
+                  'documenter le controle editorial humain (art. 50.4)',
      'responsable': 'Christophe CERF'},
 ]
 
@@ -9267,6 +9274,21 @@ def ia50_usages():
     return jsonify({'ok': True, 'usages': rows, 'total': total, 'conformes': ok,
                     'taux': round(100.0 * ok / max(1, total)),
                     'jours_avant_echeance': jours, 'echeances': IA50_ECHEANCES})
+
+
+@app.route('/api/ia50/reset', methods=['POST'])
+def ia50_reset():
+    """Reinitialise le registre aux valeurs de reference (etat reel du code)."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    _ia50_table(cur, conn)
+    cur.execute('DELETE FROM ia50_usages')
+    conn.commit()
+    _ia50_table(cur, conn)
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True})
 
 
 @app.route('/api/ia50/usages/<int:uid>', methods=['DELETE'])
