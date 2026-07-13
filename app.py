@@ -9339,17 +9339,18 @@ FORM_CATALOGUE = [
 FORM_PRIX = {1: 95000, 2: 175000}
 
 # Sessions de reference (dates previsionnelles), creees a la premiere consultation.
+# Modalites : presentiel a PARIS uniquement, ou a distance (visioconference).
 FORM_SESSIONS_DEFAUT = [
-    (1, '2026-09-15', 'Paris (present)'), (1, '2026-11-17', 'A distance'),
-    (2, '2026-09-22', 'Paris (present)'), (2, '2026-12-01', 'A distance'),
-    (3, '2026-07-28', 'A distance'),      (3, '2026-09-08', 'Paris (present)'),
-    (4, '2026-10-06', 'A distance'),      (4, '2026-12-08', 'Paris (present)'),
-    (5, '2026-09-29', 'Paris (present)'), (5, '2026-11-24', 'A distance'),
-    (6, '2026-10-13', 'A distance'),      (6, '2026-12-15', 'Paris (present)'),
-    (7, '2026-10-20', 'A distance'),      (7, '2027-01-19', 'Paris (present)'),
-    (8, '2026-10-27', 'Paris (present)'), (8, '2027-01-26', 'A distance'),
-    (9, '2026-11-10', 'Paris (present)'), (9, '2027-02-09', 'A distance'),
-    (10, '2026-11-03', 'Paris (present)'), (10, '2027-02-02', 'A distance'),
+    (1, '2026-09-15', 'Presentiel — Paris'), (1, '2026-11-17', 'A distance (visioconference)'),
+    (2, '2026-09-22', 'Presentiel — Paris'), (2, '2026-12-01', 'A distance (visioconference)'),
+    (3, '2026-07-28', 'A distance (visioconference)'),      (3, '2026-09-08', 'Presentiel — Paris'),
+    (4, '2026-10-06', 'A distance (visioconference)'),      (4, '2026-12-08', 'Presentiel — Paris'),
+    (5, '2026-09-29', 'Presentiel — Paris'), (5, '2026-11-24', 'A distance (visioconference)'),
+    (6, '2026-10-13', 'A distance (visioconference)'),      (6, '2026-12-15', 'Presentiel — Paris'),
+    (7, '2026-10-20', 'A distance (visioconference)'),      (7, '2027-01-19', 'Presentiel — Paris'),
+    (8, '2026-10-27', 'Presentiel — Paris'), (8, '2027-01-26', 'A distance (visioconference)'),
+    (9, '2026-11-10', 'Presentiel — Paris'), (9, '2027-02-09', 'A distance (visioconference)'),
+    (10, '2026-11-03', 'Presentiel — Paris'), (10, '2027-02-02', 'A distance (visioconference)'),
 ]
 
 
