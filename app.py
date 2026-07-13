@@ -9148,6 +9148,140 @@ def rgpd_audit_detail(aid):
 
 
 
+# ══════════════════════════════════════════════════════════
+# TRANSPARENCE IA — ARTICLE 50 DU REGLEMENT (UE) 2024/1689
+# Registre probant des usages d'IA : role (fournisseur / deployeur), nature du
+# contenu, marquage lisible par machine, etiquetage visible, exception invoquee
+# (oeuvre creative ; controle editorial humain) et responsable editorial.
+# Echeances : 2 aout 2026 (art. 50), 2 decembre 2026 (fin de periode
+# transitoire), 2 fevrier 2027 (interoperabilite de la detection).
+# Outillage technique ; ne constitue pas un avis juridique.
+# ══════════════════════════════════════════════════════════
+
+IA50_ECHEANCES = [
+    {'date': '2026-08-02', 'objet': 'Entree en application des obligations de transparence (art. 50) : marquage (fournisseurs) et etiquetage (deployeurs).'},
+    {'date': '2026-12-02', 'objet': 'Fin de la periode transitoire pour les systemes deja sur le marche.'},
+    {'date': '2027-02-02', 'objet': 'Solution d\'interoperabilite du marquage et acces a la detection (fournisseurs).'},
+]
+
+IA50_USAGES_DEFAUT = [
+    {'systeme': 'Assistant conversationnel du site public', 'role': 'deployeur',
+     'contenu': 'Texte (reponses aux visiteurs)',
+     'marquage': 'Sans objet (contenu non diffuse comme publication)',
+     'etiquetage': 'Mention d\'IA affichee des la premiere interaction (art. 50.1)',
+     'exception': 'Aucune', 'responsable': 'Christophe CERF'},
+    {'systeme': 'Assistant Sentinel (chat plateforme)', 'role': 'deployeur',
+     'contenu': 'Texte (reponses aux clients)',
+     'marquage': 'Sans objet (usage interne au client)',
+     'etiquetage': 'Mention d\'IA affichee des la premiere interaction (art. 50.1)',
+     'exception': 'Aucune', 'responsable': 'Christophe CERF'},
+    {'systeme': 'Synthese de la base de connaissance (explorateur)', 'role': 'fournisseur',
+     'contenu': 'Texte de synthese genere par IA',
+     'marquage': 'Mention explicite et metadonnees dans les documents produits',
+     'etiquetage': 'Bandeau "Contenu genere par IA" sur la reponse de synthese',
+     'exception': 'Aucune', 'responsable': 'Christophe CERF'},
+    {'systeme': 'Rapports generes par Sentinel (IA Act annuel, audit RGPD)', 'role': 'fournisseur',
+     'contenu': 'Documents (texte et indicateurs)',
+     'marquage': 'Metadonnees lisibles par machine inserees dans le document',
+     'etiquetage': 'Mention "AI GENERATED" apposee sur le document',
+     'exception': 'Aucune', 'responsable': 'Christophe CERF'},
+    {'systeme': 'Veille reglementaire et actualites du site', 'role': 'deployeur',
+     'contenu': 'Texte d\'interet public',
+     'marquage': 'Sans objet',
+     'etiquetage': 'A determiner selon le mode de production',
+     'exception': 'Controle editorial humain (art. 50.4) : a documenter si invoque',
+     'responsable': 'Christophe CERF'},
+]
+
+
+def _ia50_table(cur, conn):
+    _pk = 'SERIAL PRIMARY KEY' if REGISTRE_USE_PG else 'INTEGER PRIMARY KEY AUTOINCREMENT'
+    cur.execute('CREATE TABLE IF NOT EXISTS ia50_usages (id ' + _pk + ', systeme TEXT, role TEXT, '
+                'contenu TEXT, marquage TEXT, etiquetage TEXT, exception TEXT, responsable TEXT, '
+                'conforme INTEGER DEFAULT 0, date_maj TEXT)')
+    conn.commit()
+    cur.execute('SELECT COUNT(*) AS n FROM ia50_usages')
+    if int(dict(cur.fetchone()).get('n', 0)) > 0:
+        return
+    for u in IA50_USAGES_DEFAUT:
+        cur.execute(registre_sql(
+            'INSERT INTO ia50_usages (systeme, role, contenu, marquage, etiquetage, exception, responsable, conforme, date_maj) '
+            'VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)',
+            'INSERT INTO ia50_usages (systeme, role, contenu, marquage, etiquetage, exception, responsable, conforme, date_maj) '
+            'VALUES (?,?,?,?,?,?,?,?,?)'),
+            (u['systeme'], u['role'], u['contenu'], u['marquage'], u['etiquetage'], u['exception'],
+             u['responsable'], 0, datetime.utcnow().isoformat()))
+    conn.commit()
+
+
+@app.route('/api/ia50/usages', methods=['GET', 'POST'])
+def ia50_usages():
+    """Registre de transparence (art. 50) : usages d'IA, marquage, etiquetage,
+    exceptions et responsable editorial. Reserve a CONSEILPREV."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    _ia50_table(cur, conn)
+    if request.method == 'POST':
+        d = request.get_json(silent=True) or {}
+        rid = d.get('id')
+        if rid and 'conforme' in d and len(d) <= 2:
+            cur.execute(registre_sql(
+                'UPDATE ia50_usages SET conforme=%s, date_maj=%s WHERE id=%s',
+                'UPDATE ia50_usages SET conforme=?, date_maj=? WHERE id=?'),
+                (1 if d.get('conforme') else 0, datetime.utcnow().isoformat(), int(rid)))
+        else:
+            champs = (str(d.get('systeme') or '')[:200], str(d.get('role') or 'deployeur')[:30],
+                      str(d.get('contenu') or '')[:200], str(d.get('marquage') or '')[:300],
+                      str(d.get('etiquetage') or '')[:300], str(d.get('exception') or 'Aucune')[:300],
+                      str(d.get('responsable') or '')[:120], 1 if d.get('conforme') else 0,
+                      datetime.utcnow().isoformat())
+            if not champs[0]:
+                try: conn.close()
+                except Exception: pass
+                return jsonify({'ok': False, 'error': 'Systeme requis'}), 400
+            if rid:
+                cur.execute(registre_sql(
+                    'UPDATE ia50_usages SET systeme=%s, role=%s, contenu=%s, marquage=%s, etiquetage=%s, '
+                    'exception=%s, responsable=%s, conforme=%s, date_maj=%s WHERE id=%s',
+                    'UPDATE ia50_usages SET systeme=?, role=?, contenu=?, marquage=?, etiquetage=?, '
+                    'exception=?, responsable=?, conforme=?, date_maj=? WHERE id=?'), champs + (int(rid),))
+            else:
+                cur.execute(registre_sql(
+                    'INSERT INTO ia50_usages (systeme, role, contenu, marquage, etiquetage, exception, responsable, conforme, date_maj) '
+                    'VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)',
+                    'INSERT INTO ia50_usages (systeme, role, contenu, marquage, etiquetage, exception, responsable, conforme, date_maj) '
+                    'VALUES (?,?,?,?,?,?,?,?,?)'), champs)
+        conn.commit()
+    cur.execute('SELECT * FROM ia50_usages ORDER BY id')
+    rows = [dict(r) for r in cur.fetchall()]
+    total = len(rows)
+    ok = sum(1 for r in rows if r.get('conforme'))
+    jours = None
+    try:
+        jours = (datetime(2026, 8, 2) - datetime.utcnow()).days
+    except Exception:
+        jours = None
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True, 'usages': rows, 'total': total, 'conformes': ok,
+                    'taux': round(100.0 * ok / max(1, total)),
+                    'jours_avant_echeance': jours, 'echeances': IA50_ECHEANCES})
+
+
+@app.route('/api/ia50/usages/<int:uid>', methods=['DELETE'])
+def ia50_usages_delete(uid):
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql('DELETE FROM ia50_usages WHERE id=%s', 'DELETE FROM ia50_usages WHERE id=?'), (uid,))
+    conn.commit()
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True})
+
+
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
