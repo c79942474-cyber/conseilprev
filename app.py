@@ -8631,8 +8631,15 @@ def rgpd_verification():
         {'article': 'Data Act', 'intitule': 'Portabilite et changement de fournisseur', 'mode': 'automatique',
          'statut': 'conforme', 'detail': 'Export structure des donnees client disponible ; telechargement des documents de la base de connaissance.'},
     ]
+    # Controles reellement calcules a partir de l'etat de la base (temps reel)
+    try:
+        checks = checks + _rgpd_controles_calcules()
+    except Exception:
+        pass
+    anomalies = [c for c in checks if c['statut'] == 'a-verifier']
     score = round(100.0 * sum(1 for c in checks if c['statut'] == 'conforme') / max(1, len([c for c in checks if c['statut'] != 'non-applicable'])))
     return jsonify({'ok': True, 'score': score, 'checks': checks,
+                    'anomalies': anomalies, 'nb_anomalies': len(anomalies),
                     'preuves': nb_preuves, 'retraits': nb_retraits})
 
 
@@ -8651,6 +8658,433 @@ def rgpd_rapport_audit():
                     'preuves_consentement': verif.get('preuves'), 'retraits': verif.get('retraits'),
                     'version_politique': RGPD_POLITIQUE_VERSION,
                     'avertissement': 'Outillage technique de conformite ; ne constitue pas un avis juridique.'})
+
+
+
+# ══════════════════════════════════════════════════════════
+# RGPD — RETENTION, PURGE, AIPD (art. 35), CONTROLES CALCULES,
+# HISTORIQUE D'AUDIT SCELLE ET REGISTRE DES DEMANDES (art. 12)
+# Outillage technique ; ne constitue pas un avis juridique.
+# ══════════════════════════════════════════════════════════
+
+RGPD_RETENTION_DEFAUT = [
+    {'cible': 'consent_records', 'libelle': 'Preuves de consentement', 'duree_mois': 36,
+     'base': 'Preuve du consentement (art. 7) : conservation limitee a la duree utile a la preuve.',
+     'action': 'anonymiser'},
+    {'cible': 'essais_expires', 'libelle': 'Comptes d\'essai expires et jamais convertis', 'duree_mois': 12,
+     'base': 'Limitation de conservation (art. 5.1.e) : absence de relation contractuelle.',
+     'action': 'anonymiser'},
+    {'cible': 'clients_inactifs', 'libelle': 'Comptes clients inactifs', 'duree_mois': 36,
+     'base': 'Limitation de conservation (art. 5.1.e) ; prescription commerciale.',
+     'action': 'signaler'},
+    {'cible': 'rgpd_demandes', 'libelle': 'Demandes d\'exercice de droits traitees', 'duree_mois': 36,
+     'base': 'Preuve du traitement de la demande (art. 12).', 'action': 'anonymiser'},
+]
+
+
+def _rgpd_tables2(cur):
+    _pk = 'SERIAL PRIMARY KEY' if REGISTRE_USE_PG else 'INTEGER PRIMARY KEY AUTOINCREMENT'
+    cur.execute('CREATE TABLE IF NOT EXISTS rgpd_retention (id ' + _pk + ', cible TEXT, libelle TEXT, '
+                'duree_mois INTEGER, base TEXT, action TEXT, actif INTEGER DEFAULT 1, date_maj TEXT)')
+    cur.execute('CREATE TABLE IF NOT EXISTS rgpd_purge_log (id ' + _pk + ', horodatage TEXT, cible TEXT, '
+                'nb INTEGER, mode TEXT, detail TEXT, hash_prec TEXT, hash TEXT)')
+    cur.execute('CREATE TABLE IF NOT EXISTS rgpd_aipd (id ' + _pk + ', titre TEXT, traitement TEXT, '
+                'criteres TEXT, seuil_atteint INTEGER, description TEXT, necessite TEXT, risques TEXT, '
+                'mesures TEXT, risque_residuel TEXT, avis_dpo TEXT, statut TEXT, version TEXT, date_maj TEXT)')
+    cur.execute('CREATE TABLE IF NOT EXISTS rgpd_audits (id ' + _pk + ', horodatage TEXT, score INTEGER, '
+                'contenu TEXT, hash_prec TEXT, hash TEXT)')
+    cur.execute('CREATE TABLE IF NOT EXISTS rgpd_demandes (id ' + _pk + ', recu_le TEXT, echeance TEXT, '
+                'type TEXT, email TEXT, statut TEXT, traite_le TEXT, note TEXT)')
+
+
+def _rgpd_seed_retention(cur, conn):
+    cur.execute('SELECT COUNT(*) AS n FROM rgpd_retention')
+    if int(dict(cur.fetchone()).get('n', 0)) > 0:
+        return
+    for r in RGPD_RETENTION_DEFAUT:
+        cur.execute(registre_sql(
+            'INSERT INTO rgpd_retention (cible, libelle, duree_mois, base, action, actif, date_maj) VALUES (%s,%s,%s,%s,%s,1,%s)',
+            'INSERT INTO rgpd_retention (cible, libelle, duree_mois, base, action, actif, date_maj) VALUES (?,?,?,?,?,1,?)'),
+            (r['cible'], r['libelle'], r['duree_mois'], r['base'], r['action'], datetime.utcnow().isoformat()))
+    conn.commit()
+
+
+def _rgpd_chaine(cur, table, payload):
+    """Scellement par chainage d'empreintes : chaque entree porte l'empreinte de
+    la precedente, rendant toute alteration detectable (valeur probante)."""
+    try:
+        cur.execute('SELECT hash FROM ' + table + ' ORDER BY id DESC LIMIT 1')
+        row = cur.fetchone()
+        prec = (dict(row).get('hash') if row else '') or 'GENESE'
+    except Exception:
+        prec = 'GENESE'
+    h = hashlib.sha256((prec + '|' + payload).encode('utf-8')).hexdigest()
+    return prec, h
+
+
+def _rgpd_politiques(cur):
+    cur.execute('SELECT * FROM rgpd_retention WHERE actif=1')
+    return [dict(r) for r in cur.fetchall()]
+
+
+def rgpd_purge_run(simulation=True):
+    """Applique la politique de retention : anonymise ou signale les donnees dont
+    la duree de conservation est depassee. Chaque execution est journalisee et
+    scellee (preuve de suppression opposable en controle)."""
+    conn = registre_get_db(); cur = conn.cursor()
+    _rgpd_table(cur); _rgpd_tables2(cur); conn.commit()
+    _rgpd_seed_retention(cur, conn)
+    resultats = []
+    for pol in _rgpd_politiques(cur):
+        cible = pol.get('cible')
+        mois = int(pol.get('duree_mois') or 0)
+        action = pol.get('action') or 'signaler'
+        limite = (datetime.utcnow() - timedelta(days=30 * max(1, mois))).isoformat()
+        nb = 0
+        detail = ''
+        try:
+            if cible == 'consent_records':
+                cur.execute(registre_sql(
+                    "SELECT COUNT(*) AS n FROM consent_records WHERE horodatage < %s AND efface=0 AND email <> ''",
+                    "SELECT COUNT(*) AS n FROM consent_records WHERE horodatage < ? AND efface=0 AND email <> ''"), (limite,))
+                nb = int(dict(cur.fetchone()).get('n', 0))
+                if nb and not simulation and action == 'anonymiser':
+                    cur.execute(registre_sql(
+                        "UPDATE consent_records SET email='', efface=1 WHERE horodatage < %s AND efface=0 AND email <> ''",
+                        "UPDATE consent_records SET email='', efface=1 WHERE horodatage < ? AND efface=0 AND email <> ''"), (limite,))
+                detail = 'Preuves au-dela de ' + str(mois) + ' mois : adresse retiree, preuve conservee anonymisee.'
+            elif cible == 'essais_expires':
+                cur.execute(registre_sql(
+                    "SELECT COUNT(*) AS n FROM clients WHERE essai_fin IS NOT NULL AND essai_fin < %s "
+                    "AND (plan IS NULL OR plan='gratuit') AND stripe_subscription_id IS NULL AND nom_entreprise <> 'COMPTE EFFACE'",
+                    "SELECT COUNT(*) AS n FROM clients WHERE essai_fin IS NOT NULL AND essai_fin < ? "
+                    "AND (plan IS NULL OR plan='gratuit') AND stripe_subscription_id IS NULL AND nom_entreprise <> 'COMPTE EFFACE'"), (limite,))
+                nb = int(dict(cur.fetchone()).get('n', 0))
+                if nb and not simulation and action == 'anonymiser':
+                    cur.execute(registre_sql(
+                        "SELECT id, email FROM clients WHERE essai_fin IS NOT NULL AND essai_fin < %s "
+                        "AND (plan IS NULL OR plan='gratuit') AND stripe_subscription_id IS NULL AND nom_entreprise <> 'COMPTE EFFACE'",
+                        "SELECT id, email FROM clients WHERE essai_fin IS NOT NULL AND essai_fin < ? "
+                        "AND (plan IS NULL OR plan='gratuit') AND stripe_subscription_id IS NULL AND nom_entreprise <> 'COMPTE EFFACE'"), (limite,))
+                    for r in [dict(x) for x in cur.fetchall()]:
+                        if str(r.get('email') or '').strip().lower() == str(CONSEILPREV_INTERNAL_EMAIL).strip().lower():
+                            continue
+                        anon = 'purge-' + _rgpd_hash(r.get('email')) + '@anonyme.invalid'
+                        cur.execute(registre_sql(
+                            "UPDATE clients SET email=%s, nom_entreprise='COMPTE EFFACE', mot_de_passe_hash='', actif=FALSE WHERE id=%s",
+                            "UPDATE clients SET email=?, nom_entreprise='COMPTE EFFACE', mot_de_passe_hash='', actif=0 WHERE id=?"),
+                            (anon, r['id']))
+                detail = 'Essais expires depuis plus de ' + str(mois) + ' mois, sans souscription : comptes anonymises.'
+            elif cible == 'clients_inactifs':
+                cur.execute(registre_sql(
+                    "SELECT COUNT(*) AS n FROM clients WHERE date_creation < %s AND (plan IS NULL OR plan='gratuit') "
+                    "AND stripe_subscription_id IS NULL AND nom_entreprise <> 'COMPTE EFFACE'",
+                    "SELECT COUNT(*) AS n FROM clients WHERE date_creation < ? AND (plan IS NULL OR plan='gratuit') "
+                    "AND stripe_subscription_id IS NULL AND nom_entreprise <> 'COMPTE EFFACE'"), (limite,))
+                nb = int(dict(cur.fetchone()).get('n', 0))
+                detail = 'Comptes anciens sans souscription : signales pour decision (aucune suppression automatique).'
+            elif cible == 'rgpd_demandes':
+                cur.execute(registre_sql(
+                    "SELECT COUNT(*) AS n FROM rgpd_demandes WHERE statut='traitee' AND traite_le < %s AND email <> ''",
+                    "SELECT COUNT(*) AS n FROM rgpd_demandes WHERE statut='traitee' AND traite_le < ? AND email <> ''"), (limite,))
+                nb = int(dict(cur.fetchone()).get('n', 0))
+                if nb and not simulation and action == 'anonymiser':
+                    cur.execute(registre_sql(
+                        "UPDATE rgpd_demandes SET email='' WHERE statut='traitee' AND traite_le < %s AND email <> ''",
+                        "UPDATE rgpd_demandes SET email='' WHERE statut='traitee' AND traite_le < ? AND email <> ''"), (limite,))
+                detail = 'Demandes traitees au-dela de ' + str(mois) + ' mois : adresse retiree.'
+            conn.commit()
+        except Exception:
+            try: conn.rollback()
+            except Exception: pass
+            detail = 'Controle impossible.'
+        resultats.append({'cible': cible, 'libelle': pol.get('libelle'), 'duree_mois': mois,
+                          'action': action, 'concernes': nb, 'detail': detail})
+        if nb and not simulation:
+            payload = json.dumps({'cible': cible, 'nb': nb, 'action': action,
+                                  'ts': datetime.utcnow().isoformat()}, ensure_ascii=False)
+            prec, h = _rgpd_chaine(cur, 'rgpd_purge_log', payload)
+            cur.execute(registre_sql(
+                'INSERT INTO rgpd_purge_log (horodatage, cible, nb, mode, detail, hash_prec, hash) VALUES (%s,%s,%s,%s,%s,%s,%s)',
+                'INSERT INTO rgpd_purge_log (horodatage, cible, nb, mode, detail, hash_prec, hash) VALUES (?,?,?,?,?,?,?)'),
+                (datetime.utcnow().isoformat(), cible, nb, action, detail, prec, h))
+            conn.commit()
+    try: conn.close()
+    except Exception: pass
+    return resultats
+
+
+@app.route('/api/rgpd/retention', methods=['GET', 'POST'])
+def rgpd_retention():
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    _rgpd_tables2(cur); conn.commit(); _rgpd_seed_retention(cur, conn)
+    if request.method == 'POST':
+        d = request.get_json(silent=True) or {}
+        try:
+            rid = int(d.get('id')); mois = max(1, min(int(d.get('duree_mois')), 240))
+        except (TypeError, ValueError):
+            try: conn.close()
+            except Exception: pass
+            return jsonify({'ok': False, 'error': 'Parametres invalides'}), 400
+        cur.execute(registre_sql('UPDATE rgpd_retention SET duree_mois=%s, date_maj=%s WHERE id=%s',
+                                 'UPDATE rgpd_retention SET duree_mois=?, date_maj=? WHERE id=?'),
+                    (mois, datetime.utcnow().isoformat(), rid))
+        conn.commit()
+    cur.execute('SELECT * FROM rgpd_retention ORDER BY id')
+    pols = [dict(r) for r in cur.fetchall()]
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True, 'politiques': pols})
+
+
+@app.route('/api/rgpd/purge', methods=['POST'])
+def rgpd_purge():
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    d = request.get_json(silent=True) or {}
+    simulation = bool(d.get('simulation', True))
+    res = rgpd_purge_run(simulation=simulation)
+    return jsonify({'ok': True, 'simulation': simulation, 'resultats': res})
+
+
+@app.route('/api/rgpd/purge-journal', methods=['GET'])
+def rgpd_purge_journal():
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    _rgpd_tables2(cur); conn.commit()
+    cur.execute('SELECT * FROM rgpd_purge_log ORDER BY id DESC LIMIT 200')
+    rows = [dict(r) for r in cur.fetchall()]
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True, 'journal': rows})
+
+
+@app.route('/api/cron/rgpd-purge', methods=['POST', 'GET'])
+def cron_rgpd_purge():
+    """Tache planifiee : application automatique de la politique de retention."""
+    secret = os.environ.get('CRON_SECRET')
+    if not secret:
+        return jsonify({'ok': False, 'error': 'Tache planifiee non configuree.'}), 501
+    fourni = request.headers.get('X-Cron-Secret') or request.args.get('secret')
+    if not fourni or not hmac.compare_digest(str(fourni), str(secret)):
+        return jsonify({'ok': False, 'error': 'Non autorise.'}), 403
+    try:
+        res = rgpd_purge_run(simulation=False)
+    except Exception:
+        return jsonify({'ok': False, 'error': 'Echec de la purge.'}), 500
+    return jsonify({'ok': True, 'executed_at': datetime.utcnow().isoformat(), 'resultats': res})
+
+
+# ── AIPD (art. 35) ──
+RGPD_AIPD_CRITERES = [
+    'Evaluation ou scoring (y compris profilage)',
+    'Decision automatisee avec effet juridique ou significatif',
+    'Surveillance systematique',
+    'Donnees sensibles ou a caractere hautement personnel',
+    'Traitement a grande echelle',
+    'Croisement ou combinaison d\'ensembles de donnees',
+    'Personnes vulnerables',
+    'Usage innovant ou application de nouvelles technologies (dont IA)',
+    'Traitement faisant obstacle a un droit ou a un contrat',
+]
+
+
+@app.route('/api/rgpd/aipd', methods=['GET', 'POST'])
+def rgpd_aipd():
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    _rgpd_tables2(cur); conn.commit()
+    if request.method == 'POST':
+        d = request.get_json(silent=True) or {}
+        criteres = d.get('criteres') if isinstance(d.get('criteres'), list) else []
+        seuil = 1 if len(criteres) >= 2 else 0
+        champs = (str(d.get('titre') or '')[:200], str(d.get('traitement') or '')[:200],
+                  json.dumps(criteres, ensure_ascii=False)[:1200], seuil,
+                  str(d.get('description') or '')[:4000], str(d.get('necessite') or '')[:4000],
+                  str(d.get('risques') or '')[:4000], str(d.get('mesures') or '')[:4000],
+                  str(d.get('risque_residuel') or '')[:200], str(d.get('avis_dpo') or '')[:2000],
+                  str(d.get('statut') or 'brouillon')[:40], str(d.get('version') or '1.0')[:20],
+                  datetime.utcnow().isoformat())
+        rid = d.get('id')
+        if rid:
+            cur.execute(registre_sql(
+                'UPDATE rgpd_aipd SET titre=%s, traitement=%s, criteres=%s, seuil_atteint=%s, description=%s, '
+                'necessite=%s, risques=%s, mesures=%s, risque_residuel=%s, avis_dpo=%s, statut=%s, version=%s, date_maj=%s WHERE id=%s',
+                'UPDATE rgpd_aipd SET titre=?, traitement=?, criteres=?, seuil_atteint=?, description=?, '
+                'necessite=?, risques=?, mesures=?, risque_residuel=?, avis_dpo=?, statut=?, version=?, date_maj=? WHERE id=?'),
+                champs + (int(rid),))
+        else:
+            cur.execute(registre_sql(
+                'INSERT INTO rgpd_aipd (titre, traitement, criteres, seuil_atteint, description, necessite, '
+                'risques, mesures, risque_residuel, avis_dpo, statut, version, date_maj) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
+                'INSERT INTO rgpd_aipd (titre, traitement, criteres, seuil_atteint, description, necessite, '
+                'risques, mesures, risque_residuel, avis_dpo, statut, version, date_maj) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)'),
+                champs)
+        conn.commit()
+    cur.execute('SELECT * FROM rgpd_aipd ORDER BY id DESC')
+    rows = [dict(r) for r in cur.fetchall()]
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True, 'aipd': rows, 'criteres_reference': RGPD_AIPD_CRITERES})
+
+
+@app.route('/api/rgpd/aipd/<int:aid>', methods=['DELETE'])
+def rgpd_aipd_delete(aid):
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    _rgpd_tables2(cur)
+    cur.execute(registre_sql('DELETE FROM rgpd_aipd WHERE id=%s', 'DELETE FROM rgpd_aipd WHERE id=?'), (aid,))
+    conn.commit()
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True})
+
+
+# ── Demandes d'exercice de droits (art. 12) ──
+@app.route('/api/rgpd/demandes', methods=['GET', 'POST'])
+def rgpd_demandes():
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    _rgpd_tables2(cur); conn.commit()
+    if request.method == 'POST':
+        d = request.get_json(silent=True) or {}
+        rid = d.get('id')
+        if rid and d.get('statut'):
+            cur.execute(registre_sql(
+                'UPDATE rgpd_demandes SET statut=%s, traite_le=%s, note=%s WHERE id=%s',
+                'UPDATE rgpd_demandes SET statut=?, traite_le=?, note=? WHERE id=?'),
+                (str(d.get('statut'))[:30], datetime.utcnow().isoformat(), str(d.get('note') or '')[:1000], int(rid)))
+        else:
+            recu = datetime.utcnow()
+            cur.execute(registre_sql(
+                'INSERT INTO rgpd_demandes (recu_le, echeance, type, email, statut, note) VALUES (%s,%s,%s,%s,%s,%s)',
+                'INSERT INTO rgpd_demandes (recu_le, echeance, type, email, statut, note) VALUES (?,?,?,?,?,?)'),
+                (recu.isoformat(), (recu + timedelta(days=30)).isoformat(),
+                 str(d.get('type') or 'acces')[:40], str(d.get('email') or '')[:200],
+                 'en_cours', str(d.get('note') or '')[:1000]))
+        conn.commit()
+    cur.execute('SELECT * FROM rgpd_demandes ORDER BY id DESC LIMIT 200')
+    rows = [dict(r) for r in cur.fetchall()]
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True, 'demandes': rows})
+
+
+# ── Controles calcules (non-conformites reelles) ──
+def _rgpd_controles_calcules():
+    """Detecte les non-conformites a partir de l'etat reel de la base."""
+    out = []
+    conn = registre_get_db(); cur = conn.cursor()
+    _rgpd_table(cur); _rgpd_tables2(cur); conn.commit()
+    _rgpd_seed_retention(cur, conn)
+    # 1. Donnees au-dela de leur duree de conservation (art. 5.1.e)
+    depasse = 0
+    try:
+        for r in rgpd_purge_run(simulation=True):
+            if r.get('action') != 'signaler':
+                depasse += int(r.get('concernes') or 0)
+    except Exception:
+        depasse = -1
+    out.append({'article': 'Art. 5.1.e', 'intitule': 'Limitation de la conservation (mesure)', 'mode': 'automatique',
+                'statut': 'conforme' if depasse == 0 else 'a-verifier',
+                'detail': ('Aucune donnee au-dela de sa duree de conservation.' if depasse == 0
+                           else str(depasse) + ' enregistrement(s) au-dela de la duree : executer la purge.')})
+    # 2. AIPD manquante pour un traitement a risque (art. 35)
+    try:
+        cur.execute("SELECT COUNT(*) AS n FROM rgpd_aipd WHERE seuil_atteint=1 AND statut='validee'")
+        aipd_ok = int(dict(cur.fetchone()).get('n', 0))
+        cur.execute('SELECT COUNT(*) AS n FROM rgpd_aipd')
+        aipd_total = int(dict(cur.fetchone()).get('n', 0))
+    except Exception:
+        aipd_ok = aipd_total = 0
+    out.append({'article': 'Art. 35', 'intitule': 'Analyse d\'impact (AIPD) formalisee', 'mode': 'automatique',
+                'statut': 'conforme' if aipd_ok > 0 else 'a-verifier',
+                'detail': (str(aipd_ok) + ' AIPD validee(s) sur ' + str(aipd_total) + ' enregistree(s).'
+                           if aipd_total else 'Aucune AIPD enregistree : realiser le test de seuil pour les traitements a risque (IA, profilage, grande echelle).')})
+    # 3. Demandes de droits hors delai (art. 12)
+    try:
+        maintenant = datetime.utcnow().isoformat()
+        cur.execute(registre_sql(
+            "SELECT COUNT(*) AS n FROM rgpd_demandes WHERE statut='en_cours' AND echeance < %s",
+            "SELECT COUNT(*) AS n FROM rgpd_demandes WHERE statut='en_cours' AND echeance < ?"), (maintenant,))
+        retard = int(dict(cur.fetchone()).get('n', 0))
+    except Exception:
+        retard = 0
+    out.append({'article': 'Art. 12', 'intitule': 'Delai de reponse aux demandes (un mois)', 'mode': 'automatique',
+                'statut': 'conforme' if retard == 0 else 'a-verifier',
+                'detail': ('Aucune demande hors delai.' if retard == 0 else str(retard) + ' demande(s) hors delai d\'un mois.')})
+    # 4. Journal de purge scelle (preuve de suppression)
+    try:
+        cur.execute('SELECT COUNT(*) AS n FROM rgpd_purge_log')
+        nb_purge = int(dict(cur.fetchone()).get('n', 0))
+    except Exception:
+        nb_purge = 0
+    out.append({'article': 'Art. 5 / 17', 'intitule': 'Preuve de suppression (journal scelle)', 'mode': 'automatique',
+                'statut': 'conforme' if nb_purge > 0 else 'a-verifier',
+                'detail': (str(nb_purge) + ' operation(s) de purge journalisee(s) et scellee(s) par chainage d\'empreintes.'
+                           if nb_purge else 'Aucune purge executee a ce jour : lancer la purge ou attendre la tache planifiee.')})
+    # 5. Historique d'audit archive
+    try:
+        cur.execute('SELECT COUNT(*) AS n FROM rgpd_audits')
+        nb_audits = int(dict(cur.fetchone()).get('n', 0))
+    except Exception:
+        nb_audits = 0
+    out.append({'article': 'Art. 5.2', 'intitule': 'Responsabilite : historique d\'audit archive', 'mode': 'automatique',
+                'statut': 'conforme' if nb_audits > 0 else 'a-verifier',
+                'detail': (str(nb_audits) + ' rapport(s) d\'audit archive(s) et scelle(s).'
+                           if nb_audits else 'Aucun rapport archive : archiver un rapport pour constituer l\'historique.')})
+    try: conn.close()
+    except Exception: pass
+    return out
+
+
+@app.route('/api/rgpd/audits', methods=['GET', 'POST'])
+def rgpd_audits():
+    """Historique des rapports d'audit, scelle par chainage d'empreintes."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    _rgpd_tables2(cur); conn.commit()
+    if request.method == 'POST':
+        rap = json.loads(rgpd_rapport_audit().get_data(as_text=True))
+        contenu = json.dumps(rap, ensure_ascii=False)
+        prec, h = _rgpd_chaine(cur, 'rgpd_audits', contenu)
+        cur.execute(registre_sql(
+            'INSERT INTO rgpd_audits (horodatage, score, contenu, hash_prec, hash) VALUES (%s,%s,%s,%s,%s)',
+            'INSERT INTO rgpd_audits (horodatage, score, contenu, hash_prec, hash) VALUES (?,?,?,?,?)'),
+            (datetime.utcnow().isoformat(), int(rap.get('score') or 0), contenu, prec, h))
+        conn.commit()
+    cur.execute('SELECT id, horodatage, score, hash_prec, hash FROM rgpd_audits ORDER BY id DESC LIMIT 100')
+    rows = [dict(r) for r in cur.fetchall()]
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True, 'audits': rows})
+
+
+@app.route('/api/rgpd/audits/<int:aid>', methods=['GET'])
+def rgpd_audit_detail(aid):
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    _rgpd_tables2(cur)
+    cur.execute(registre_sql('SELECT * FROM rgpd_audits WHERE id=%s', 'SELECT * FROM rgpd_audits WHERE id=?'), (aid,))
+    row = cur.fetchone()
+    try: conn.close()
+    except Exception: pass
+    if not row:
+        return jsonify({'ok': False, 'error': 'Rapport introuvable'}), 404
+    d = dict(row)
+    try:
+        d['contenu'] = json.loads(d.get('contenu') or '{}')
+    except Exception:
+        pass
+    return jsonify({'ok': True, 'audit': d})
 
 
 
