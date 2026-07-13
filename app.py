@@ -8488,18 +8488,78 @@ RGPD_TRANSFERTS = [
 ]
 
 
-@app.route('/api/rgpd/registre-traitements', methods=['GET'])
+def _rgpd_registre_table(cur, conn):
+    _pk = 'SERIAL PRIMARY KEY' if REGISTRE_USE_PG else 'INTEGER PRIMARY KEY AUTOINCREMENT'
+    cur.execute('CREATE TABLE IF NOT EXISTS rgpd_registre_site (id ' + _pk + ', nom TEXT, finalite TEXT, '
+                'base TEXT, donnees TEXT, duree TEXT, destinataires TEXT, date_maj TEXT)')
+    conn.commit()
+    cur.execute('SELECT COUNT(*) AS n FROM rgpd_registre_site')
+    if int(dict(cur.fetchone()).get('n', 0)) > 0:
+        return
+    for t in RGPD_TRAITEMENTS:
+        cur.execute(registre_sql(
+            'INSERT INTO rgpd_registre_site (nom, finalite, base, donnees, duree, destinataires, date_maj) VALUES (%s,%s,%s,%s,%s,%s,%s)',
+            'INSERT INTO rgpd_registre_site (nom, finalite, base, donnees, duree, destinataires, date_maj) VALUES (?,?,?,?,?,?,?)'),
+            (t['nom'], t['finalite'], t['base'], t['donnees'], t['duree'], t['destinataires'],
+             datetime.utcnow().isoformat()))
+    conn.commit()
+
+
+@app.route('/api/rgpd/registre-traitements', methods=['GET', 'POST'])
 def rgpd_registre():
+    """Registre des activites de traitement de CONSEILPREV (art. 30), source
+    unique : stocke en base et editable. Distinct du registre que chaque client
+    tient pour sa propre organisation."""
     if not raas_require_conseilprev():
         return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
-    return jsonify({'ok': True, 'responsable': {
-        'entite': 'CONSEILPREV (SARL)', 'siren': '494 530 157',
-        'adresse': '19 rue Auguste Chabrieres, 75015 Paris',
-        'representant': 'Christophe CERF', 'dpo_contact': 'christophe.cerf@outlook.com'},
-        'traitements': RGPD_TRAITEMENTS, 'transferts': RGPD_TRANSFERTS,
-        'version_politique': RGPD_POLITIQUE_VERSION})
+    conn = registre_get_db(); cur = conn.cursor()
+    _rgpd_registre_table(cur, conn)
+    if request.method == 'POST':
+        d = request.get_json(silent=True) or {}
+        champs = (str(d.get('nom') or '')[:200], str(d.get('finalite') or '')[:500],
+                  str(d.get('base') or '')[:300], str(d.get('donnees') or '')[:500],
+                  str(d.get('duree') or '')[:200], str(d.get('destinataires') or '')[:400],
+                  datetime.utcnow().isoformat())
+        if not champs[0]:
+            try: conn.close()
+            except Exception: pass
+            return jsonify({'ok': False, 'error': 'Nom du traitement requis'}), 400
+        rid = d.get('id')
+        if rid:
+            cur.execute(registre_sql(
+                'UPDATE rgpd_registre_site SET nom=%s, finalite=%s, base=%s, donnees=%s, duree=%s, destinataires=%s, date_maj=%s WHERE id=%s',
+                'UPDATE rgpd_registre_site SET nom=?, finalite=?, base=?, donnees=?, duree=?, destinataires=?, date_maj=? WHERE id=?'),
+                champs + (int(rid),))
+        else:
+            cur.execute(registre_sql(
+                'INSERT INTO rgpd_registre_site (nom, finalite, base, donnees, duree, destinataires, date_maj) VALUES (%s,%s,%s,%s,%s,%s,%s)',
+                'INSERT INTO rgpd_registre_site (nom, finalite, base, donnees, duree, destinataires, date_maj) VALUES (?,?,?,?,?,?,?)'),
+                champs)
+        conn.commit()
+    cur.execute('SELECT * FROM rgpd_registre_site ORDER BY id')
+    traitements = [dict(r) for r in cur.fetchall()]
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True, 'perimetre': 'CONSEILPREV — site public et plateforme Sentinel',
+                    'responsable': {
+                        'entite': 'CONSEILPREV (SARL)', 'siren': '494 530 157',
+                        'adresse': '19 rue Auguste Chabrieres, 75015 Paris',
+                        'representant': 'Christophe CERF', 'dpo_contact': 'christophe.cerf@outlook.com'},
+                    'traitements': traitements, 'transferts': RGPD_TRANSFERTS,
+                    'version_politique': RGPD_POLITIQUE_VERSION})
 
 
+@app.route('/api/rgpd/registre-traitements/<int:tid>', methods=['DELETE'])
+def rgpd_registre_delete(tid):
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    cur.execute(registre_sql('DELETE FROM rgpd_registre_site WHERE id=%s',
+                             'DELETE FROM rgpd_registre_site WHERE id=?'), (tid,))
+    conn.commit()
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True})
 @app.route('/api/rgpd/effacement', methods=['POST'])
 def rgpd_effacement():
     """Droit a l'effacement (art. 17) : anonymise le compte et supprime les
