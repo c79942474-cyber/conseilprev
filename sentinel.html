@@ -2063,7 +2063,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-section">Entreprise</div>
     <div class="sb-item" onclick="go('entreprise',this,'ENTREPRISE','Offre Entreprise')" title="Offre Entreprise : multi-entites, integrations API, SLA, accompagnement, formation et rapport annuel."><span class="sb-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M9 8h.01M15 8h.01M9 12h.01M15 12h.01M9 16h6"/></svg></span>Offre Entreprise</div>
     <div class="sb-section">Administration</div>
-    <div class="sb-item" id="sb-rgpd-site" onclick="go('rgpd-site',this,'ADMINISTRATION','RGPD du site')" title="Tableau de bord de conformite RGPD du site : preuves de consentement, registre des traitements, transferts, droits et rapport d'audit (reserve a CONSEILPREV)."><span class="sb-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12h6M9 16h4M9 8h6"/></svg></span>RGPD du site</div>
+    <div class="sb-item" id="sb-rgpd-site" onclick="go('rgpd-site',this,'ADMINISTRATION','RGPD — CONSEILPREV')" title="Tableau de bord de conformite RGPD du site : preuves de consentement, registre des traitements, transferts, droits et rapport d'audit (reserve a CONSEILPREV)."><span class="sb-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12h6M9 16h4M9 8h6"/></svg></span>RGPD — CONSEILPREV</div>
     <div class="sb-item" onclick="go('clients',this,'ADMINISTRATION','Gestion des clients')" title="Creer et gerer les acces clients externes a Sentinel AI (reserve a CONSEILPREV)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><circle cx="19" cy="8" r="2.5"/><path d="M17.5 21v-1a3 3 0 0 0 .5-1.7"/><path d="M19 14.5a3.5 3.5 0 0 1 3.5 3.5v3"/></svg></span>Gestion des clients</div>
   </nav>
   <div class="sb-pager">
@@ -3365,6 +3365,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 <div class="page" id="p-rgpd-traitements">
   <span class="eyebrow">RGPD &amp; Privacy</span>
   <h1 class="page-h">Registre des <em>traitements</em></h1>
+  <p style="font-size:12px;color:var(--muted);margin:-6px 0 8px 0"><strong style="color:var(--ink)">Périmètre : votre organisation.</strong></p>
   <p class="page-lead">Registre des activités de traitement au sens de l'article 30 du RGPD, connecté à une base de données persistante. Distinct du registre des systèmes IA, il recense les traitements de données à caractère personnel.</p>
   <div class="reg-toolbar">
     <input type="text" id="trait-search" class="reg-search-input" placeholder="Rechercher par nom, finalité, service, responsable…" oninput="traitSearch(this.value)">
@@ -3465,6 +3466,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 <div class="page" id="p-rgpd-conformite">
   <span class="eyebrow">RGPD &amp; Privacy</span>
   <h1 class="page-h">Conformité <em>RGPD</em></h1>
+  <p style="font-size:12px;color:var(--muted);margin:-6px 0 8px 0"><strong style="color:var(--ink)">Périmètre : votre organisation.</strong></p>
   <p class="page-lead">Tableau de bord de conformité consolidant les briques du dispositif : registre des traitements, cartographie, AIPD, privacy by design, documentation et sensibilisation. Indice global et points d'attention.</p>
   <div class="reg-toolbar">
     <button class="mat-export-btn" onclick="confLoad()">↻ Actualiser</button>
@@ -3652,7 +3654,8 @@ textarea.form-el{min-height:86px;resize:vertical}
 
 
 <div class="page" id="p-rgpd-site">
-  <span class="eyebrow">Administration · Conformité</span><h1 class="page-h">RGPD <em>du site</em></h1>
+  <span class="eyebrow">Administration · Conformité</span><h1 class="page-h">RGPD — <em>CONSEILPREV</em></h1>
+  <p style="font-size:12px;color:var(--muted);margin:-6px 0 8px 0"><strong style="color:var(--ink)">Périmètre : notre propre conformité</strong> — site public et plateforme Sentinel. À ne pas confondre avec les modules « Conformité RGPD » et « Registre des traitements », qui portent sur l'organisation du client.</p>
   <p class="page-lead">Tableau de bord de conformité du site CONSEILPREV et de la plateforme Sentinel : vérification selon les articles 5, 7, 17, 25 et 30 du RGPD, registre des preuves de consentement, registre des traitements, transferts, droits des personnes et rapport d'audit pour toute demande externe. Outillage technique, à valider par votre conseil juridique.</p>
 
   <div style="border:1px solid var(--rule2);border-left:3px solid var(--accent);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px;display:flex;align-items:center;gap:18px;flex-wrap:wrap">
@@ -3692,6 +3695,15 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Registre des activités de traitement (art. 30)</div>
     <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px">Finalité, base légale, données, durée de conservation et destinataires, pour chaque traitement du site et de la plateforme. <button class="mat-export-btn" style="margin-left:8px" onclick="rgpdRegistreJson()">Exporter JSON</button></div>
     <div id="rgpd-registre" style="font-size:12px;overflow-x:auto">Chargement…</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+      <input id="reg-nom" placeholder="Traitement" style="flex:1;min-width:110px;font-size:11.5px;padding:6px 8px;border:1px solid var(--rule2);border-radius:5px">
+      <input id="reg-fin" placeholder="Finalité" style="flex:1;min-width:110px;font-size:11.5px;padding:6px 8px;border:1px solid var(--rule2);border-radius:5px">
+      <input id="reg-base" placeholder="Base légale" style="flex:1;min-width:100px;font-size:11.5px;padding:6px 8px;border:1px solid var(--rule2);border-radius:5px">
+      <input id="reg-don" placeholder="Données" style="flex:1;min-width:90px;font-size:11.5px;padding:6px 8px;border:1px solid var(--rule2);border-radius:5px">
+      <input id="reg-dur" placeholder="Durée" style="width:90px;font-size:11.5px;padding:6px 8px;border:1px solid var(--rule2);border-radius:5px">
+      <input id="reg-dest" placeholder="Destinataires" style="flex:1;min-width:100px;font-size:11.5px;padding:6px 8px;border:1px solid var(--rule2);border-radius:5px">
+      <button class="mat-export-btn" title="Ajouter un traitement au registre (art. 30)" onclick="rgpdRegAdd()">Ajouter</button>
+    </div>
   </div>
 
   <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px">
@@ -6058,7 +6070,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 'use strict';
 
 var PAGE_META = {
-    'rgpd-site': { section: 'ADMINISTRATION', label: 'RGPD du site' },
+    'rgpd-site': { section: 'ADMINISTRATION', label: 'RGPD — CONSEILPREV (site et plateforme)' },
     'entreprise': { section: 'ENTREPRISE', label: 'Offre Entreprise' },
     'ia-act-hub': { section: 'PILOTAGE', label: 'Vue d\u2019ensemble IA Act' },
     'conformite-globale': { section: 'PILOTAGE', label: 'Indice de conformité global' },
@@ -19097,14 +19109,29 @@ window.rgpdRegistre = function(){
     if(!d || !d.ok) return;
     window.__rgpdReg = d;
     var box = document.getElementById('rgpd-registre');
-    if(box) box.innerHTML = rgpdTable(['Traitement', 'Finalit\u00e9', 'Base l\u00e9gale', 'Donn\u00e9es', 'Dur\u00e9e', 'Destinataires'], (d.traitements || []).map(function(t){
-      return ['<strong style="color:var(--ink)">' + rgpdEsc(t.nom) + '</strong>', rgpdEsc(t.finalite), rgpdEsc(t.base), rgpdEsc(t.donnees), rgpdEsc(t.duree), rgpdEsc(t.destinataires)];
+    if(box) box.innerHTML = rgpdTable(['Traitement', 'Finalit\u00e9', 'Base l\u00e9gale', 'Donn\u00e9es', 'Dur\u00e9e', 'Destinataires', ''], (d.traitements || []).map(function(t){
+      return ['<strong style="color:var(--ink)">' + rgpdEsc(t.nom) + '</strong>', rgpdEsc(t.finalite), rgpdEsc(t.base), rgpdEsc(t.donnees), rgpdEsc(t.duree), rgpdEsc(t.destinataires),
+        '<button onclick="rgpdRegDel(' + t.id + ')" style="font-size:10px;color:var(--accent);background:none;border:none;cursor:pointer">Retirer</button>'];
     }));
     var tb = document.getElementById('rgpd-transferts');
     if(tb) tb.innerHTML = rgpdTable(['Destinataire', 'Pays', 'R\u00f4le', 'Garantie de transfert'], (d.transferts || []).map(function(t){
       return ['<strong style="color:var(--ink)">' + rgpdEsc(t.destinataire) + '</strong>', rgpdEsc(t.pays), rgpdEsc(t.role), rgpdEsc(t.garantie)];
     }));
   }).catch(function(){});
+};
+window.rgpdRegAdd = function(){
+  function v(id){ var e = document.getElementById(id); return e ? e.value.trim() : ''; }
+  if(!v('reg-nom')){ alert('Nom du traitement requis.'); return; }
+  fetch('/api/rgpd/registre-traitements', { method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ nom: v('reg-nom'), finalite: v('reg-fin'), base: v('reg-base'),
+      donnees: v('reg-don'), duree: v('reg-dur'), destinataires: v('reg-dest') }) })
+    .then(function(){ ['reg-nom','reg-fin','reg-base','reg-don','reg-dur','reg-dest'].forEach(function(i){ var e=document.getElementById(i); if(e) e.value=''; });
+      rgpdRegistre(); rgpdChecks(); }).catch(function(){});
+};
+window.rgpdRegDel = function(id){
+  if(!confirm('Retirer ce traitement du registre ?')) return;
+  fetch('/api/rgpd/registre-traitements/' + id, { method:'DELETE', credentials:'same-origin' })
+    .then(function(){ rgpdRegistre(); rgpdChecks(); }).catch(function(){});
 };
 window.rgpdRegistreJson = function(){
   if(!window.__rgpdReg){ alert('Registre non charg\u00e9.'); return; }
