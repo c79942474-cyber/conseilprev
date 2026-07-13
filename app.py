@@ -9338,6 +9338,19 @@ FORM_CATALOGUE = [
 # Tarifs indicatifs HT par participant (en centimes) : 1 jour = 950 EUR, 2 jours = 1750 EUR.
 FORM_PRIX = {1: 95000, 2: 175000}
 
+# Taux de TVA applique au paiement (en pourcentage). Mettre 0 en cas d'exoneration
+# de la formation professionnelle continue (art. 261-4-4 a du CGI, sur attestation).
+# A valider avec l'expert-comptable avant toute mise en paiement reel.
+try:
+    FORM_TVA_PCT = float(os.environ.get('FORMATION_TVA_PCT', '20'))
+except (TypeError, ValueError):
+    FORM_TVA_PCT = 20.0
+
+
+def _form_ttc(cents_ht):
+    """Montant TTC (en centimes) a partir d'un montant HT."""
+    return int(round(int(cents_ht or 0) * (1.0 + max(0.0, FORM_TVA_PCT) / 100.0)))
+
 # Sessions de reference (dates previsionnelles), creees a la premiere consultation.
 # Modalites : presentiel a PARIS uniquement, ou a distance (visioconference).
 FORM_SESSIONS_DEFAUT = [
@@ -9424,6 +9437,8 @@ def formations_sessions():
         s['titre'] = cat['titre'] if cat else ''
         s['ref'] = cat['ref'] if cat else ''
         s['jours'] = cat['jours'] if cat else 1
+        s['tva_pct'] = FORM_TVA_PCT
+        s['prix_ttc_cents'] = _form_ttc(s.get('prix_cents'))
     try: conn.close()
     except Exception: pass
     return jsonify({'ok': True, 'sessions': sessions, 'catalogue': FORM_CATALOGUE})
@@ -9464,7 +9479,8 @@ def formations_inscription():
     sess = dict(row)
     cat = next((c for c in FORM_CATALOGUE if c['id'] == sess['formation_id']), None)
     titre = cat['titre'] if cat else 'Formation CONSEILPREV'
-    montant = int(sess.get('prix_cents') or 95000) * participants
+    montant = int(sess.get('prix_cents') or 95000) * participants          # HT
+    montant_ttc = _form_ttc(sess.get('prix_cents') or 95000) * participants   # TTC preleve
 
     cur.execute(registre_sql(
         'INSERT INTO form_inscriptions (session_id, client_id, nom, prenom, email, entreprise, fonction, telephone, '
@@ -9499,9 +9515,11 @@ def formations_inscription():
                          'Votre demande d inscription — ' + titre,
                          '<p>Bonjour,</p><p>Nous avons bien recu votre demande d inscription a la formation '
                          '<strong>%s</strong>, session du %s (%s), pour %d participant(s).</p>'
-                         '<p>Votre place est confirmee des reception du paiement. Montant : %.2f EUR HT.</p>'
+                         '<p>Votre place est confirmee des reception du paiement. Montant : %.2f EUR HT'
+                         ' (soit %.2f EUR TTC, TVA %s %%).</p>'
                          '<p>L equipe CONSEILPREV</p>'
-                         % (titre, sess.get('date_session'), sess.get('lieu'), participants, montant / 100.0),
+                         % (titre, sess.get('date_session'), sess.get('lieu'), participants, montant / 100.0,
+                            montant_ttc / 100.0, FORM_TVA_PCT),
                          tags=['formation-accuse'])
     except Exception:
         pass
@@ -9521,7 +9539,7 @@ def formations_inscription():
             line_items=[{'price_data': {'currency': 'eur',
                                         'product_data': {'name': titre,
                                                          'description': 'Session du %s — %s' % (sess.get('date_session'), sess.get('lieu'))},
-                                        'unit_amount': int(sess.get('prix_cents') or 95000)},
+                                        'unit_amount': _form_ttc(sess.get('prix_cents') or 95000)},
                          'quantity': participants}],
             customer_email=email,
             client_reference_id=str(insc_id),
