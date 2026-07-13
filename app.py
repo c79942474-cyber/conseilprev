@@ -9341,23 +9341,49 @@ FORM_PRIX = {1: 95000, 2: 175000}
 # Sessions de reference (dates previsionnelles), creees a la premiere consultation.
 # Modalites : presentiel a PARIS uniquement, ou a distance (visioconference).
 FORM_SESSIONS_DEFAUT = [
-    (1, '2026-09-15', 'Presentiel — Paris'), (1, '2026-11-17', 'A distance (visioconference)'),
-    (2, '2026-09-22', 'Presentiel — Paris'), (2, '2026-12-01', 'A distance (visioconference)'),
-    (3, '2026-07-28', 'A distance (visioconference)'),      (3, '2026-09-08', 'Presentiel — Paris'),
-    (4, '2026-10-06', 'A distance (visioconference)'),      (4, '2026-12-08', 'Presentiel — Paris'),
-    (5, '2026-09-29', 'Presentiel — Paris'), (5, '2026-11-24', 'A distance (visioconference)'),
-    (6, '2026-10-13', 'A distance (visioconference)'),      (6, '2026-12-15', 'Presentiel — Paris'),
-    (7, '2026-10-20', 'A distance (visioconference)'),      (7, '2027-01-19', 'Presentiel — Paris'),
-    (8, '2026-10-27', 'Presentiel — Paris'), (8, '2027-01-26', 'A distance (visioconference)'),
-    (9, '2026-11-10', 'Presentiel — Paris'), (9, '2027-02-09', 'A distance (visioconference)'),
-    (10, '2026-11-03', 'Presentiel — Paris'), (10, '2027-02-02', 'A distance (visioconference)'),
+    (1, '2026-09-07', '2026-09-07', 'Presentiel — Paris'),
+    (2, '2026-09-10', '2026-09-11', 'A distance (visioconference)'),
+    (3, '2026-09-14', '2026-09-14', 'Presentiel — Paris'),
+    (4, '2026-09-17', '2026-09-17', 'A distance (visioconference)'),
+    (5, '2026-09-21', '2026-09-22', 'Presentiel — Paris'),
+    (6, '2026-09-24', '2026-09-24', 'A distance (visioconference)'),
+    (7, '2026-09-28', '2026-09-28', 'Presentiel — Paris'),
+    (8, '2026-10-01', '2026-10-02', 'A distance (visioconference)'),
+    (9, '2026-10-05', '2026-10-06', 'Presentiel — Paris'),
+    (10, '2026-10-08', '2026-10-09', 'A distance (visioconference)'),
+    (1, '2026-10-12', '2026-10-12', 'Presentiel — Paris'),
+    (2, '2026-10-15', '2026-10-16', 'A distance (visioconference)'),
+    (3, '2026-10-19', '2026-10-19', 'Presentiel — Paris'),
+    (4, '2026-10-22', '2026-10-22', 'A distance (visioconference)'),
+    (5, '2026-10-26', '2026-10-27', 'Presentiel — Paris'),
+    (6, '2026-10-29', '2026-10-29', 'A distance (visioconference)'),
+    (7, '2026-11-02', '2026-11-02', 'Presentiel — Paris'),
+    (8, '2026-11-05', '2026-11-06', 'A distance (visioconference)'),
+    (9, '2026-11-09', '2026-11-10', 'Presentiel — Paris'),
+    (10, '2026-11-12', '2026-11-13', 'A distance (visioconference)'),
+    (1, '2026-11-16', '2026-11-16', 'Presentiel — Paris'),
+    (2, '2026-11-19', '2026-11-20', 'A distance (visioconference)'),
+    (3, '2026-11-23', '2026-11-23', 'Presentiel — Paris'),
+    (4, '2026-11-26', '2026-11-26', 'A distance (visioconference)'),
+    (5, '2026-11-30', '2026-12-01', 'Presentiel — Paris'),
+    (6, '2026-12-03', '2026-12-03', 'A distance (visioconference)'),
+    (7, '2026-12-07', '2026-12-07', 'Presentiel — Paris'),
+    (8, '2026-12-10', '2026-12-11', 'A distance (visioconference)'),
+    (9, '2026-12-14', '2026-12-15', 'Presentiel — Paris'),
+    (10, '2026-12-17', '2026-12-18', 'A distance (visioconference)'),
 ]
 
 
 def _form_tables(cur, conn):
     _pk = 'SERIAL PRIMARY KEY' if REGISTRE_USE_PG else 'INTEGER PRIMARY KEY AUTOINCREMENT'
     cur.execute('CREATE TABLE IF NOT EXISTS form_sessions (id ' + _pk + ', formation_id INTEGER, '
-                'date_session TEXT, lieu TEXT, prix_cents INTEGER, places INTEGER DEFAULT 12, actif INTEGER DEFAULT 1)')
+                'date_session TEXT, date_fin TEXT, lieu TEXT, prix_cents INTEGER, places INTEGER DEFAULT 12, actif INTEGER DEFAULT 1)')
+    try:
+        cur.execute('ALTER TABLE form_sessions ADD COLUMN date_fin TEXT')
+        conn.commit()
+    except Exception:
+        try: conn.rollback()
+        except Exception: pass
     cur.execute('CREATE TABLE IF NOT EXISTS form_inscriptions (id ' + _pk + ', session_id INTEGER, '
                 'client_id INTEGER, nom TEXT, prenom TEXT, email TEXT, entreprise TEXT, fonction TEXT, '
                 'telephone TEXT, participants INTEGER, message TEXT, montant_cents INTEGER, statut TEXT, '
@@ -9366,13 +9392,13 @@ def _form_tables(cur, conn):
     cur.execute('SELECT COUNT(*) AS n FROM form_sessions')
     if int(dict(cur.fetchone()).get('n', 0)) > 0:
         return
-    for fid, date_s, lieu in FORM_SESSIONS_DEFAUT:
+    for fid, date_s, date_f, lieu in FORM_SESSIONS_DEFAUT:
         cat = next((c for c in FORM_CATALOGUE if c['id'] == fid), None)
         prix = FORM_PRIX.get(cat['jours'] if cat else 1, 95000)
         cur.execute(registre_sql(
-            'INSERT INTO form_sessions (formation_id, date_session, lieu, prix_cents, places, actif) VALUES (%s,%s,%s,%s,%s,1)',
-            'INSERT INTO form_sessions (formation_id, date_session, lieu, prix_cents, places, actif) VALUES (?,?,?,?,?,1)'),
-            (fid, date_s, lieu, prix, 12))
+            'INSERT INTO form_sessions (formation_id, date_session, date_fin, lieu, prix_cents, places, actif) VALUES (%s,%s,%s,%s,%s,%s,1)',
+            'INSERT INTO form_sessions (formation_id, date_session, date_fin, lieu, prix_cents, places, actif) VALUES (?,?,?,?,?,?,1)'),
+            (fid, date_s, date_f, lieu, prix, 12))
     conn.commit()
 
 
@@ -9564,6 +9590,23 @@ def _form_confirmer_paiement(insc_id):
                          tags=['formation-payee'])
     except Exception:
         pass
+
+
+@app.route('/api/formations/reset-sessions', methods=['POST'])
+def formations_reset_sessions():
+    """Reinitialise le calendrier des sessions aux dates de reference."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    _form_tables(cur, conn)
+    cur.execute('DELETE FROM form_sessions')
+    conn.commit()
+    _form_tables(cur, conn)
+    cur.execute('SELECT COUNT(*) AS n FROM form_sessions')
+    n = int(dict(cur.fetchone()).get('n', 0))
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True, 'sessions': n})
 
 
 @app.route('/api/formations/inscriptions', methods=['GET'])
