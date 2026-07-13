@@ -13023,18 +13023,117 @@ window.formCatRender = function(){
   grid.innerHTML = liste.map(function(f){
     var c = COL[f.ref] || '#c9a227';
     var prog = f.g.map(function(x){ return '<li>' + String(x).replace(/</g,'&lt;') + '</li>'; }).join('');
-    return '<div class="t-card" style="cursor:default;border-left:3px solid ' + c + '">'
+    return '<div class="t-card" onclick="formOpen(' + f.n + ')" style="cursor:pointer;border-left:3px solid ' + c + '">'
       + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'
       + '<span style="font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:' + c + '">' + f.ref + '</span>'
       + '<span style="font-size:10px;color:var(--muted2,#999)">FORMATION ' + (f.n < 10 ? '0' : '') + f.n + '</span></div>'
       + '<div style="font-weight:700;font-size:13.5px;color:var(--ink);line-height:1.35;margin-bottom:6px">' + f.t + '</div>'
       + '<div style="font-size:11px;color:var(--muted);margin-bottom:8px">' + f.d + ' \u00b7 ' + f.p + '</div>'
       + '<div style="font-size:12px;color:var(--ink2,#444);line-height:1.6;margin-bottom:8px"><strong>Objectif.</strong> ' + f.o + '</div>'
-      + '<details><summary style="cursor:pointer;font-size:11.5px;font-weight:600;color:var(--ink)">Programme d\u00e9taill\u00e9</summary>'
+      + '<details onclick="event.stopPropagation()"><summary style="cursor:pointer;font-size:11.5px;font-weight:600;color:var(--ink)">Programme d\u00e9taill\u00e9</summary>'
       + '<ul style="margin:6px 0 0 16px;padding:0;font-size:11.5px;line-height:1.7;color:var(--muted)">' + prog + '</ul></details>'
-      + '<a href="mailto:christophe.cerf@outlook.com?subject=' + encodeURIComponent('Demande de session - ' + f.t) + '" class="mat-export-btn" style="display:inline-block;margin-top:10px;text-decoration:none">Demander une session</a>'
+      + '<button onclick="event.stopPropagation();formOpen(' + f.n + ')" class="mat-export-btn" style="margin-top:10px;background:linear-gradient(135deg,#c9a227,#e6c65a);color:#14181f;border:none;font-weight:700">S\u2019inscrire \u00b7 dates et tarif</button>'
       + '</div>';
   }).join('');
+};
+/* ══ Inscription aux formations : sessions, tarif, paiement Stripe ══ */
+window.__formSessions = null;
+window.formLoadSessions = function(cb){
+  if(window.__formSessions){ if(cb) cb(); return; }
+  fetch('/api/formations/sessions', { credentials:'same-origin' })
+    .then(function(r){ return r.json(); })
+    .then(function(d){ if(d && d.ok){ window.__formSessions = d.sessions || []; } if(cb) cb(); })
+    .catch(function(){ if(cb) cb(); });
+};
+window.formOpen = function(n){
+  var f = (window.FORMATIONS_CAT || []).filter(function(x){ return x.n === n; })[0];
+  if(!f) return;
+  window.formLoadSessions(function(){ window.formRenderModal(f); });
+};
+window.formRenderModal = function(f){
+  var sess = (window.__formSessions || []).filter(function(s){ return s.formation_id === f.n; });
+  var old = document.getElementById('form-modal'); if(old) old.remove();
+  var ov = document.createElement('div');
+  ov.id = 'form-modal';
+  ov.style.cssText = 'position:fixed;inset:0;background:rgba(8,11,18,.62);z-index:10050;display:flex;align-items:center;justify-content:center;padding:20px;overflow:auto';
+  ov.onclick = function(e){ if(e.target === ov) ov.remove(); };
+  var inp = 'width:100%;font-size:12.5px;padding:8px 10px;border:1px solid var(--rule2);border-radius:6px;margin-top:3px';
+  var lab = 'font-size:11px;color:var(--muted);font-weight:600';
+  var opts = sess.length
+    ? sess.map(function(s){
+        var d = new Date(s.date_session);
+        var lib = d.toLocaleDateString('fr-FR', {day:'2-digit', month:'long', year:'numeric'});
+        var plein = (s.places_restantes <= 0);
+        return '<option value="' + s.id + '" data-prix="' + s.prix_cents + '"' + (plein ? ' disabled' : '') + '>'
+          + lib + ' \u00b7 ' + s.lieu + ' \u00b7 ' + (s.prix_cents/100).toLocaleString('fr-FR') + '\u202f\u20ac HT'
+          + (plein ? ' \u2014 complet' : ' \u2014 ' + s.places_restantes + ' place(s)') + '</option>';
+      }).join('')
+    : '<option value="">Aucune session ouverte \u2014 nous contacter</option>';
+  ov.innerHTML =
+    '<div style="background:var(--white,#fff);max-width:640px;width:100%;border-radius:14px;box-shadow:0 30px 70px rgba(5,8,14,.45);overflow:hidden">'
+    + '<div style="background:linear-gradient(135deg,#0c1017,#131a26);color:#fff;padding:20px 24px;position:relative">'
+    + '<button onclick="document.getElementById(\'form-modal\').remove()" style="position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#ddd;cursor:pointer;font-size:15px;line-height:1">&#10005;</button>'
+    + '<div style="font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:#e6c65a;font-weight:700">' + f.ref + ' \u00b7 Formation ' + (f.n < 10 ? '0' : '') + f.n + '</div>'
+    + '<div style="font-size:17px;font-weight:700;margin-top:4px;line-height:1.3">' + f.t + '</div>'
+    + '<div style="font-size:11.5px;color:#c4cad4;margin-top:5px">' + f.d + ' \u00b7 ' + f.p + '</div></div>'
+    + '<div style="padding:20px 24px;max-height:62vh;overflow:auto">'
+    + '<div style="font-size:12px;color:var(--ink2,#444);line-height:1.6;margin-bottom:12px"><strong>Objectif.</strong> ' + f.o + '</div>'
+    + '<label style="' + lab + '">Session</label>'
+    + '<select id="fm-session" onchange="formMaj()" style="' + inp + '">' + opts + '</select>'
+    + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">'
+    + '<div><label style="' + lab + '">Pr\u00e9nom *</label><input id="fm-prenom" style="' + inp + '"></div>'
+    + '<div><label style="' + lab + '">Nom *</label><input id="fm-nom" style="' + inp + '"></div>'
+    + '<div><label style="' + lab + '">Adresse \u00e9lectronique *</label><input id="fm-email" type="email" style="' + inp + '"></div>'
+    + '<div><label style="' + lab + '">T\u00e9l\u00e9phone</label><input id="fm-tel" style="' + inp + '"></div>'
+    + '<div><label style="' + lab + '">Entreprise</label><input id="fm-ent" style="' + inp + '"></div>'
+    + '<div><label style="' + lab + '">Fonction</label><input id="fm-fct" style="' + inp + '"></div>'
+    + '<div><label style="' + lab + '">Participants</label><input id="fm-nb" type="number" min="1" max="20" value="1" onchange="formMaj()" style="' + inp + '"></div>'
+    + '</div>'
+    + '<label style="' + lab + ';display:block;margin-top:10px">Besoins particuliers (facultatif)</label>'
+    + '<textarea id="fm-msg" rows="2" style="' + inp + '"></textarea>'
+    + '<div id="fm-total" style="margin-top:12px;padding:10px 12px;border-left:3px solid #c9a227;background:rgba(201,162,39,.10);border-radius:6px;font-size:13px;color:var(--ink)"></div>'
+    + '<div id="fm-msg-out" style="font-size:11.5px;color:var(--accent);margin-top:8px"></div>'
+    + '<div style="font-size:10.5px;color:var(--muted);margin-top:8px;line-height:1.5">Tarifs indiqu\u00e9s hors taxes, par participant. Votre place est confirm\u00e9e d\u00e8s r\u00e9ception du paiement. Un accus\u00e9 de r\u00e9ception vous est adress\u00e9 imm\u00e9diatement.</div>'
+    + '</div>'
+    + '<div style="padding:14px 24px;border-top:1px solid var(--rule2);display:flex;gap:10px;justify-content:flex-end;background:var(--bg2,#fafafa)">'
+    + '<button onclick="document.getElementById(\'form-modal\').remove()" class="mat-export-btn">Annuler</button>'
+    + '<button id="fm-pay" onclick="formSubmit()" class="mat-export-btn" style="background:linear-gradient(135deg,#c9a227,#e6c65a);color:#14181f;border:none;font-weight:700">R\u00e9server et payer</button>'
+    + '</div></div>';
+  document.body.appendChild(ov);
+  window.formMaj();
+};
+window.formMaj = function(){
+  var sel = document.getElementById('fm-session');
+  var nb = parseInt((document.getElementById('fm-nb') || {}).value || '1', 10) || 1;
+  var tot = document.getElementById('fm-total');
+  if(!sel || !tot) return;
+  var opt = sel.options[sel.selectedIndex];
+  var prix = opt ? parseInt(opt.getAttribute('data-prix') || '0', 10) : 0;
+  if(!prix){ tot.textContent = 'Aucune session s\u00e9lectionnable \u2014 contactez CONSEILPREV.'; return; }
+  var total = prix * nb / 100;
+  tot.innerHTML = '<strong>Total : ' + total.toLocaleString('fr-FR') + '\u202f\u20ac HT</strong> \u2014 ' + nb + ' participant(s) \u00d7 ' + (prix/100).toLocaleString('fr-FR') + '\u202f\u20ac HT';
+};
+window.formSubmit = function(){
+  function v(id){ var e = document.getElementById(id); return e ? e.value.trim() : ''; }
+  var out = document.getElementById('fm-msg-out');
+  var btn = document.getElementById('fm-pay');
+  var sid = v('fm-session');
+  if(!sid){ if(out) out.textContent = 'Veuillez choisir une session.'; return; }
+  if(!v('fm-prenom') || !v('fm-nom') || !v('fm-email')){ if(out) out.textContent = 'Pr\u00e9nom, nom et adresse \u00e9lectronique sont requis.'; return; }
+  if(btn){ btn.disabled = true; btn.textContent = 'Traitement\u2026'; }
+  if(out){ out.style.color = 'var(--muted)'; out.textContent = 'Enregistrement de la demande\u2026'; }
+  fetch('/api/formations/inscription', { method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ session_id: parseInt(sid, 10), participants: parseInt(v('fm-nb') || '1', 10),
+      prenom: v('fm-prenom'), nom: v('fm-nom'), email: v('fm-email'), telephone: v('fm-tel'),
+      entreprise: v('fm-ent'), fonction: v('fm-fct'), message: v('fm-msg') }) })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if(!d || !d.ok){ if(out){ out.style.color = 'var(--accent)'; out.textContent = (d && d.error) || 'Erreur.'; } if(btn){ btn.disabled = false; btn.textContent = 'R\u00e9server et payer'; } return; }
+      if(d.paiement && d.url){ window.location.href = d.url; return; }
+      if(out){ out.style.color = 'var(--green,#0E7C7B)'; out.textContent = d.message || 'Demande enregistr\u00e9e. CONSEILPREV vous recontacte.'; }
+      if(btn){ btn.disabled = true; btn.textContent = 'Demande envoy\u00e9e'; }
+    })
+    .catch(function(){ if(out){ out.style.color = 'var(--accent)'; out.textContent = 'Erreur r\u00e9seau.'; } if(btn){ btn.disabled = false; btn.textContent = 'R\u00e9server et payer'; } });
 };
 window.formCatFilter = function(r){ window.__formCatRef = r; window.formCatRender(); };
 </script>
