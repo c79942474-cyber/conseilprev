@@ -13062,7 +13062,11 @@ window.formRenderModal = function(f){
   var opts = sess.length
     ? sess.map(function(s){
         var d = new Date(s.date_session);
-        var lib = d.toLocaleDateString('fr-FR', {day:'2-digit', month:'long', year:'numeric'});
+        var lib = d.toLocaleDateString('fr-FR', {weekday:'long', day:'2-digit', month:'long', year:'numeric'});
+        if(s.date_fin && s.date_fin !== s.date_session){
+          var d2 = new Date(s.date_fin);
+          lib = d.toLocaleDateString('fr-FR', {weekday:'long', day:'2-digit', month:'long'}) + ' au ' + d2.toLocaleDateString('fr-FR', {weekday:'long', day:'2-digit', month:'long', year:'numeric'});
+        }
         var plein = (s.places_restantes <= 0);
         return '<option value="' + s.id + '" data-prix="' + s.prix_cents + '"' + (plein ? ' disabled' : '') + '>'
           + lib + ' \u00b7 ' + s.lieu + ' \u00b7 ' + (s.prix_cents/100).toLocaleString('fr-FR') + '\u202f\u20ac HT'
