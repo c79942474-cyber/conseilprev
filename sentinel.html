@@ -2599,7 +2599,14 @@ textarea.form-el{min-height:86px;resize:vertical}
 <div class="page" id="p-equipe"><span class="eyebrow">Espace équipe</span><h1 class="page-h">Gestion des accès</h1><p class="page-lead">Roles de gouvernance IA issus de votre matrice RACI (Parties prenantes), avec statut d assignation reel.</p><div class="tbl-wrap" style="max-width:600px"><div class="tbl-head"><span class="tbl-title">Membres actifs</span><button class="submit" style="font-size:10px;padding:6px 14px" onclick="window.open('mailto:christophe.cerf@outlook.com?subject=[Sentinel AI] Invitation équipe','_blank')">+ Inviter</button></div><div id="team-rows"></div></div></div>
 
 <!-- TRAINING -->
-<div class="page" id="p-training"><span class="eyebrow">Hub Training</span><h1 class="page-h">Formations conformité <em>IA</em></h1><p class="page-lead">Modules certifiants — progression calculée à partir de vos scores réels de l Audit de maturité IA par pilier.</p><div class="training-grid" id="training-grid"></div></div>
+<div class="page" id="p-training"><span class="eyebrow">Hub Training</span><h1 class="page-h">Formations conformité <em>IA</em></h1><p class="page-lead">Modules certifiants — progression calculée à partir de vos scores réels de l Audit de maturité IA par pilier.</p><div class="training-grid" id="training-grid"></div>
+  <div style="margin-top:34px">
+    <div class="rgpd-h" style="font-weight:700;font-size:14px;color:var(--ink);margin-bottom:4px">Catalogue des formations CONSEILPREV</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Dix formations animées par CONSEILPREV, du cadrage réglementaire à la preuve opposable en contrôle. Deux sessions sur site par an sont incluses dans l'offre Entreprise.</div>
+    <div id="form-cat-filters" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px"></div>
+    <div class="training-grid" id="form-cat-grid"></div>
+  </div>
+</div>
 
 <!-- MON ESPACE -->
 <div class="page" id="p-espace">
@@ -6207,6 +6214,7 @@ function go(id, el, sec, pg) {
   if (p) p.classList.add('on');
   if (id === 'templates' && typeof window.templatesRenderPage === 'function') setTimeout(window.templatesRenderPage, 60);
   if (id === 'rgpd-site' && typeof window.rgpdInit === 'function') setTimeout(window.rgpdInit, 60);
+  if (id === 'training' && typeof window.formCatRender === 'function') setTimeout(window.formCatRender, 60);
   if (id === 'ia50' && typeof window.ia50Load === 'function') setTimeout(window.ia50Load, 60);
   if (el) el.classList.add('on');
   else document.querySelectorAll('.sb-item').forEach(function(i){
@@ -12992,6 +13000,43 @@ window.go = function(id){
 
 })();
 
+</script>
+
+<script>
+/* ══ CATALOGUE DES FORMATIONS — Hub Training ══ */
+window.FORMATIONS_CAT = [{"n": 1, "ref": "IA Act", "t": "Fondamentaux du règlement européen sur l'IA", "d": "1 jour (7 h)", "p": "Dirigeants, chefs de projet, juristes, DSI", "o": "Comprendre l'architecture du règlement (UE) 2024/1689, identifier les rôles et situer l'organisation dans le calendrier.", "g": ["Genèse, champ d'application et définitions", "Approche par les risques : interdit, haut risque, transparence, minimal", "Rôles le long de la chaîne de valeur", "Calendrier et effets de l'Omnibus", "Sanctions et gouvernance", "Atelier : qualifier trois cas d'usage"]}, {"n": 2, "ref": "IA Act", "t": "Systèmes à haut risque : obligations et mise en conformité", "d": "2 jours (14 h)", "p": "Conformité, ingénieurs, chefs de produit", "o": "Maîtriser les obligations des articles 8 à 27 et construire le dossier technique exigé.", "g": ["Annexes I et III : qualification", "Gestion des risques et gouvernance des données", "Documentation technique et journalisation", "Transparence, contrôle humain, robustesse", "Évaluation de conformité et marquage CE", "Atelier : dossier technique sur cas réel"]}, {"n": 3, "ref": "IA Act", "t": "Transparence (article 50) : marquage, étiquetage et preuve", "d": "1 jour (7 h)", "p": "Marketing, communication, éditeurs, DPO", "o": "Mettre en œuvre les obligations applicables au 2 août 2026 et constituer la preuve opposable.", "g": ["Article 50 : fournisseurs et déployeurs", "Code de bonnes pratiques du 10 juin 2026", "Marquage à deux niveaux : métadonnées et filigrane", "Quatre critères de détection", "Étiquetage des hypertrucages et textes d'intérêt public", "Exceptions du § 4 et contrôle éditorial", "Atelier : registre de transparence"]}, {"n": 4, "ref": "IA Act", "t": "Analyse d'impact sur les droits fondamentaux (FRIA)", "d": "1 jour (7 h)", "p": "Conformité, juristes, métiers", "o": "Conduire et formaliser l'analyse d'impact prévue à l'article 27.", "g": ["Champ d'application et redevables", "Articulation avec l'AIPD du RGPD", "Risques pour les personnes", "Mesures d'atténuation et contrôle humain", "Formalisation et mise à jour", "Atelier : FRIA de bout en bout"]}, {"n": 5, "ref": "RGPD", "t": "RGPD pour les projets d'intelligence artificielle", "d": "2 jours (14 h)", "p": "DPO, juristes, data scientists", "o": "Concilier innovation et protection des données sur tout le cycle de vie d'un système d'IA.", "g": ["Bases légales : entraînement et inférence", "Minimisation, exactitude, conservation", "Décision automatisée et profilage (art. 22)", "Information et droits des personnes", "Données d'entraînement et anonymisation", "Atelier : cadrer un projet conforme"]}, {"n": 6, "ref": "RGPD", "t": "Analyse d'impact relative à la protection des données (art. 35)", "d": "1 jour (7 h)", "p": "DPO, conformité, chefs de projet", "o": "Réaliser le test de seuil, conduire l'analyse et formaliser un document opposable.", "g": ["Neuf critères et test de seuil", "Nécessité et proportionnalité", "Risques pour les droits et libertés", "Mesures, risque résiduel, avis du DPO", "Consultation préalable de l'autorité", "Atelier : AIPD sur un traitement IA"]}, {"n": 7, "ref": "RGPD", "t": "Preuve du consentement, rétention et droits des personnes", "d": "1 jour (7 h)", "p": "DPO, responsables numériques, marketing", "o": "Constituer un dossier de preuve conforme aux articles 5, 7, 12, 17 et 30, et automatiser la rétention.", "g": ["Article 7 : charge de la preuve", "Bannières : recueil, refus, retrait", "Article 5.1.e : durées, purge, preuve de suppression", "Articles 12, 15, 17 et 20 : traiter une demande", "Article 30 : registre à jour", "Atelier : dossier probant pour un contrôle"]}, {"n": 8, "ref": "ISO 42001", "t": "ISO/IEC 42001 : construire un système de management de l'IA", "d": "2 jours (14 h)", "p": "Qualité, conformité, RSSI, direction", "o": "Comprendre la norme, structurer un SMIA et préparer la certification.", "g": ["Structure de haut niveau et lien avec ISO 27001", "Contexte, parties intéressées, périmètre", "Leadership, politique et rôles", "Risques et impacts liés à l'IA", "Annexe A : mesures de contrôle", "Atelier : feuille de route de certification"]}, {"n": 9, "ref": "ISO 42001", "t": "Auditer un système de management de l'IA", "d": "2 jours (14 h)", "p": "Auditeurs internes, conformité, qualité", "o": "Préparer, conduire et restituer un audit interne du SMIA.", "g": ["Principes d'audit et compétences", "Programme, plan, échantillonnage", "Preuves et conduite des entretiens", "Non-conformités et actions correctives", "Rapport et revue de direction", "Atelier : simulation d'audit"]}, {"n": 10, "ref": "Transverse", "t": "Gouvernance de l'IA : IA Act, RGPD et ISO 42001 en un dispositif unique", "d": "2 jours (14 h)", "p": "Direction générale, conformité, DSI, DPO", "o": "Bâtir un dispositif unique couvrant les trois référentiels, sans redondance, et en démontrer l'efficacité.", "g": ["Cartographier exigences communes et spécifiques", "Registre unique : systèmes, traitements, mesures", "Articuler FRIA, AIPD et risques ISO", "Indicateurs, preuve et jalons", "Sentinel en démonstration", "Atelier : feuille de route à douze mois"]}];
+window.__formCatRef = '';
+window.formCatRender = function(){
+  var grid = document.getElementById('form-cat-grid');
+  var bar = document.getElementById('form-cat-filters');
+  if(!grid) return;
+  var COL = { 'IA Act':'#c9a227', 'RGPD':'#0E7C7B', 'ISO 42001':'#6B46C1', 'Transverse':'#c98a00' };
+  var refs = ['', 'IA Act', 'RGPD', 'ISO 42001', 'Transverse'];
+  if(bar){
+    bar.innerHTML = refs.map(function(r){
+      var n = r ? window.FORMATIONS_CAT.filter(function(f){ return f.ref === r; }).length : window.FORMATIONS_CAT.length;
+      var on = (window.__formCatRef === r);
+      return '<button onclick="formCatFilter(\'' + r + '\')" style="font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:999px;border:1px solid ' + (on ? 'var(--ink,#111827)' : 'var(--rule2)') + ';background:' + (on ? 'var(--ink,#111827)' : 'transparent') + ';color:' + (on ? '#fff' : 'var(--ink)') + ';cursor:pointer">' + (r || 'Toutes') + ' (' + n + ')</button>';
+    }).join('');
+  }
+  var liste = window.FORMATIONS_CAT.filter(function(f){ return !window.__formCatRef || f.ref === window.__formCatRef; });
+  grid.innerHTML = liste.map(function(f){
+    var c = COL[f.ref] || '#c9a227';
+    var prog = f.g.map(function(x){ return '<li>' + String(x).replace(/</g,'&lt;') + '</li>'; }).join('');
+    return '<div class="t-card" style="cursor:default;border-left:3px solid ' + c + '">'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'
+      + '<span style="font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:' + c + '">' + f.ref + '</span>'
+      + '<span style="font-size:10px;color:var(--muted2,#999)">FORMATION ' + (f.n < 10 ? '0' : '') + f.n + '</span></div>'
+      + '<div style="font-weight:700;font-size:13.5px;color:var(--ink);line-height:1.35;margin-bottom:6px">' + f.t + '</div>'
+      + '<div style="font-size:11px;color:var(--muted);margin-bottom:8px">' + f.d + ' \u00b7 ' + f.p + '</div>'
+      + '<div style="font-size:12px;color:var(--ink2,#444);line-height:1.6;margin-bottom:8px"><strong>Objectif.</strong> ' + f.o + '</div>'
+      + '<details><summary style="cursor:pointer;font-size:11.5px;font-weight:600;color:var(--ink)">Programme d\u00e9taill\u00e9</summary>'
+      + '<ul style="margin:6px 0 0 16px;padding:0;font-size:11.5px;line-height:1.7;color:var(--muted)">' + prog + '</ul></details>'
+      + '<a href="mailto:christophe.cerf@outlook.com?subject=' + encodeURIComponent('Demande de session - ' + f.t) + '" class="mat-export-btn" style="display:inline-block;margin-top:10px;text-decoration:none">Demander une session</a>'
+      + '</div>';
+  }).join('');
+};
+window.formCatFilter = function(r){ window.__formCatRef = r; window.formCatRender(); };
 </script>
 <script>
 /* ══ HUB TRAINING — connecte aux scores reels des 8 piliers de maturite ══ */
