@@ -13115,7 +13115,12 @@ window.formMaj = function(){
   var prix = opt ? parseInt(opt.getAttribute('data-prix') || '0', 10) : 0;
   if(!prix){ tot.textContent = 'Aucune session s\u00e9lectionnable \u2014 contactez CONSEILPREV.'; return; }
   var total = prix * nb / 100;
-  tot.innerHTML = '<strong>Total : ' + total.toLocaleString('fr-FR') + '\u202f\u20ac HT</strong> \u2014 ' + nb + ' participant(s) \u00d7 ' + (prix/100).toLocaleString('fr-FR') + '\u202f\u20ac HT';
+  var sessObj = (window.__formSessions || []).filter(function(x){ return String(x.id) === String(sel.value); })[0] || {};
+  var pct = (sessObj.tva_pct != null) ? sessObj.tva_pct : 20;
+  var ttc = total * (1 + pct / 100);
+  tot.innerHTML = '<strong>Total : ' + ttc.toLocaleString('fr-FR', {maximumFractionDigits:2}) + '\u202f\u20ac TTC</strong>'
+    + '<div style="font-size:11px;color:var(--muted);margin-top:3px">' + nb + ' participant(s) \u00d7 ' + (prix/100).toLocaleString('fr-FR') + '\u202f\u20ac HT = ' + total.toLocaleString('fr-FR') + '\u202f\u20ac HT'
+    + (pct > 0 ? ' \u00b7 TVA ' + pct + '\u202f% : ' + (ttc - total).toLocaleString('fr-FR', {maximumFractionDigits:2}) + '\u202f\u20ac' : ' \u00b7 TVA non applicable') + '</div>';
 };
 window.formSubmit = function(){
   function v(id){ var e = document.getElementById(id); return e ? e.value.trim() : ''; }
