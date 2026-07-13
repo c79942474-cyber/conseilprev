@@ -4223,6 +4223,12 @@ def stripe_webhook():
         obj = (evt.get('data') or {}).get('object') or {}
         meta = obj.get('metadata') or {}
         if etype == 'checkout.session.completed':
+            # Reservation d'une formation : confirmer et notifier.
+            if meta.get('type') == 'formation':
+                try:
+                    _form_confirmer_paiement(int(meta.get('inscription_id')))
+                except Exception:
+                    pass
             cid = meta.get('client_id') or obj.get('client_reference_id')
             plan = meta.get('plan')
             if cid and plan in ('pro', 'entreprise'):
@@ -9308,6 +9314,269 @@ def ia50_usages_delete(uid):
     try: conn.close()
     except Exception: pass
     return jsonify({'ok': True})
+
+
+
+# ══════════════════════════════════════════════════════════
+# FORMATIONS — sessions, inscriptions, paiement Stripe et notifications
+# Reservation d'une session de formation CONSEILPREV depuis le Hub Training.
+# ══════════════════════════════════════════════════════════
+
+FORM_CATALOGUE = [
+    {'id': 1,  'ref': 'IA Act',     'titre': "Fondamentaux du reglement europeen sur l'IA", 'jours': 1},
+    {'id': 2,  'ref': 'IA Act',     'titre': "Systemes a haut risque : obligations et mise en conformite", 'jours': 2},
+    {'id': 3,  'ref': 'IA Act',     'titre': "Transparence (article 50) : marquage, etiquetage et preuve", 'jours': 1},
+    {'id': 4,  'ref': 'IA Act',     'titre': "Analyse d'impact sur les droits fondamentaux (FRIA)", 'jours': 1},
+    {'id': 5,  'ref': 'RGPD',       'titre': "RGPD pour les projets d'intelligence artificielle", 'jours': 2},
+    {'id': 6,  'ref': 'RGPD',       'titre': "Analyse d'impact relative a la protection des donnees (art. 35)", 'jours': 1},
+    {'id': 7,  'ref': 'RGPD',       'titre': "Preuve du consentement, retention et droits des personnes", 'jours': 1},
+    {'id': 8,  'ref': 'ISO 42001',  'titre': "ISO/IEC 42001 : construire un systeme de management de l'IA", 'jours': 2},
+    {'id': 9,  'ref': 'ISO 42001',  'titre': "Auditer un systeme de management de l'IA", 'jours': 2},
+    {'id': 10, 'ref': 'Transverse', 'titre': "Gouvernance de l'IA : IA Act, RGPD et ISO 42001", 'jours': 2},
+]
+
+# Tarifs indicatifs HT par participant (en centimes) : 1 jour = 950 EUR, 2 jours = 1750 EUR.
+FORM_PRIX = {1: 95000, 2: 175000}
+
+# Sessions de reference (dates previsionnelles), creees a la premiere consultation.
+FORM_SESSIONS_DEFAUT = [
+    (1, '2026-09-15', 'Paris (present)'), (1, '2026-11-17', 'A distance'),
+    (2, '2026-09-22', 'Paris (present)'), (2, '2026-12-01', 'A distance'),
+    (3, '2026-07-28', 'A distance'),      (3, '2026-09-08', 'Paris (present)'),
+    (4, '2026-10-06', 'A distance'),      (4, '2026-12-08', 'Paris (present)'),
+    (5, '2026-09-29', 'Paris (present)'), (5, '2026-11-24', 'A distance'),
+    (6, '2026-10-13', 'A distance'),      (6, '2026-12-15', 'Paris (present)'),
+    (7, '2026-10-20', 'A distance'),      (7, '2027-01-19', 'Paris (present)'),
+    (8, '2026-10-27', 'Paris (present)'), (8, '2027-01-26', 'A distance'),
+    (9, '2026-11-10', 'Paris (present)'), (9, '2027-02-09', 'A distance'),
+    (10, '2026-11-03', 'Paris (present)'), (10, '2027-02-02', 'A distance'),
+]
+
+
+def _form_tables(cur, conn):
+    _pk = 'SERIAL PRIMARY KEY' if REGISTRE_USE_PG else 'INTEGER PRIMARY KEY AUTOINCREMENT'
+    cur.execute('CREATE TABLE IF NOT EXISTS form_sessions (id ' + _pk + ', formation_id INTEGER, '
+                'date_session TEXT, lieu TEXT, prix_cents INTEGER, places INTEGER DEFAULT 12, actif INTEGER DEFAULT 1)')
+    cur.execute('CREATE TABLE IF NOT EXISTS form_inscriptions (id ' + _pk + ', session_id INTEGER, '
+                'client_id INTEGER, nom TEXT, prenom TEXT, email TEXT, entreprise TEXT, fonction TEXT, '
+                'telephone TEXT, participants INTEGER, message TEXT, montant_cents INTEGER, statut TEXT, '
+                'stripe_session_id TEXT, created_at TEXT)')
+    conn.commit()
+    cur.execute('SELECT COUNT(*) AS n FROM form_sessions')
+    if int(dict(cur.fetchone()).get('n', 0)) > 0:
+        return
+    for fid, date_s, lieu in FORM_SESSIONS_DEFAUT:
+        cat = next((c for c in FORM_CATALOGUE if c['id'] == fid), None)
+        prix = FORM_PRIX.get(cat['jours'] if cat else 1, 95000)
+        cur.execute(registre_sql(
+            'INSERT INTO form_sessions (formation_id, date_session, lieu, prix_cents, places, actif) VALUES (%s,%s,%s,%s,%s,1)',
+            'INSERT INTO form_sessions (formation_id, date_session, lieu, prix_cents, places, actif) VALUES (?,?,?,?,?,1)'),
+            (fid, date_s, lieu, prix, 12))
+    conn.commit()
+
+
+@app.route('/api/formations/sessions', methods=['GET'])
+@sentinel_login_required
+def formations_sessions():
+    """Sessions ouvertes, avec places restantes et tarif."""
+    conn = registre_get_db(); cur = conn.cursor()
+    _form_tables(cur, conn)
+    cur.execute('SELECT * FROM form_sessions WHERE actif=1 ORDER BY formation_id, date_session')
+    sessions = [dict(r) for r in cur.fetchall()]
+    for s in sessions:
+        try:
+            cur.execute(registre_sql(
+                "SELECT COALESCE(SUM(participants),0) AS n FROM form_inscriptions WHERE session_id=%s AND statut='payee'",
+                "SELECT COALESCE(SUM(participants),0) AS n FROM form_inscriptions WHERE session_id=? AND statut='payee'"),
+                (s['id'],))
+            pris = int(dict(cur.fetchone()).get('n', 0) or 0)
+        except Exception:
+            pris = 0
+        s['places_restantes'] = max(0, int(s.get('places') or 12) - pris)
+        cat = next((c for c in FORM_CATALOGUE if c['id'] == s['formation_id']), None)
+        s['titre'] = cat['titre'] if cat else ''
+        s['ref'] = cat['ref'] if cat else ''
+        s['jours'] = cat['jours'] if cat else 1
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True, 'sessions': sessions, 'catalogue': FORM_CATALOGUE})
+
+
+@app.route('/api/formations/inscription', methods=['POST'])
+@rate_limit(limit=10, window=300)
+@sentinel_login_required
+def formations_inscription():
+    """Inscription a une session : enregistre la demande, notifie, puis ouvre
+    une session de paiement Stripe. Le paiement confirme la reservation."""
+    client = request.current_client
+    d = request.get_json(silent=True) or {}
+    try:
+        session_id = int(d.get('session_id'))
+        participants = max(1, min(int(d.get('participants') or 1), 20))
+    except (TypeError, ValueError):
+        return jsonify({'ok': False, 'error': 'Session ou nombre de participants invalide.'}), 400
+    nom = sanitize_input(d.get('nom') or '', 100)
+    prenom = sanitize_input(d.get('prenom') or '', 100)
+    email = sanitize_email(d.get('email') or '') or (client.get('email') if client else '')
+    entreprise = sanitize_input(d.get('entreprise') or '', 150)
+    fonction = sanitize_input(d.get('fonction') or '', 120)
+    telephone = sanitize_phone(d.get('telephone') or '')
+    message = sanitize_input(d.get('message') or '', 1000, allow_newlines=True)
+    if not nom or not prenom or not email:
+        return jsonify({'ok': False, 'error': 'Nom, prenom et adresse electronique sont requis.'}), 400
+
+    conn = registre_get_db(); cur = conn.cursor()
+    _form_tables(cur, conn)
+    cur.execute(registre_sql('SELECT * FROM form_sessions WHERE id=%s AND actif=1',
+                             'SELECT * FROM form_sessions WHERE id=? AND actif=1'), (session_id,))
+    row = cur.fetchone()
+    if not row:
+        try: conn.close()
+        except Exception: pass
+        return jsonify({'ok': False, 'error': 'Session introuvable.'}), 404
+    sess = dict(row)
+    cat = next((c for c in FORM_CATALOGUE if c['id'] == sess['formation_id']), None)
+    titre = cat['titre'] if cat else 'Formation CONSEILPREV'
+    montant = int(sess.get('prix_cents') or 95000) * participants
+
+    cur.execute(registre_sql(
+        'INSERT INTO form_inscriptions (session_id, client_id, nom, prenom, email, entreprise, fonction, telephone, '
+        'participants, message, montant_cents, statut, created_at) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
+        'INSERT INTO form_inscriptions (session_id, client_id, nom, prenom, email, entreprise, fonction, telephone, '
+        'participants, message, montant_cents, statut, created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)'),
+        (session_id, int(client.get('id') or 0) if client else 0, nom, prenom, email, entreprise, fonction,
+         telephone, participants, message, montant, 'en_attente_paiement', datetime.utcnow().isoformat()))
+    conn.commit()
+    try:
+        cur.execute('SELECT MAX(id) AS id FROM form_inscriptions')
+        insc_id = int(dict(cur.fetchone()).get('id') or 0)
+    except Exception:
+        insc_id = 0
+    try: conn.close()
+    except Exception: pass
+
+    # Notification interne (CONSEILPREV) et accuse de reception (participant)
+    libelle = '%s — %s (%s)' % (titre, sess.get('date_session'), sess.get('lieu'))
+    try:
+        send_email_smart(CONSEILPREV_INTERNAL_EMAIL, 'CONSEILPREV',
+                         'Nouvelle demande d inscription : ' + titre,
+                         '<p>Demande d inscription recue.</p><p><strong>%s</strong><br>%s %s — %s<br>%s / %s<br>'
+                         'Participants : %d — Montant : %.2f EUR HT</p><p>%s</p>'
+                         % (libelle, prenom, nom, entreprise, email, telephone, participants,
+                            montant / 100.0, message or ''),
+                         tags=['formation-demande'])
+    except Exception:
+        pass
+    try:
+        send_email_smart(email, prenom + ' ' + nom,
+                         'Votre demande d inscription — ' + titre,
+                         '<p>Bonjour,</p><p>Nous avons bien recu votre demande d inscription a la formation '
+                         '<strong>%s</strong>, session du %s (%s), pour %d participant(s).</p>'
+                         '<p>Votre place est confirmee des reception du paiement. Montant : %.2f EUR HT.</p>'
+                         '<p>L equipe CONSEILPREV</p>'
+                         % (titre, sess.get('date_session'), sess.get('lieu'), participants, montant / 100.0),
+                         tags=['formation-accuse'])
+    except Exception:
+        pass
+
+    secret = os.environ.get('STRIPE_SECRET_KEY')
+    if not secret:
+        return jsonify({'ok': True, 'paiement': False,
+                        'message': 'Demande enregistree. Le paiement en ligne n est pas encore configure : '
+                                   'CONSEILPREV vous contactera pour finaliser la reservation.'})
+    try:
+        import stripe
+        stripe.api_key = secret
+        stripe.max_network_retries = 0
+        base = request.url_root.rstrip('/')
+        sk = stripe.checkout.Session.create(
+            mode='payment',
+            line_items=[{'price_data': {'currency': 'eur',
+                                        'product_data': {'name': titre,
+                                                         'description': 'Session du %s — %s' % (sess.get('date_session'), sess.get('lieu'))},
+                                        'unit_amount': int(sess.get('prix_cents') or 95000)},
+                         'quantity': participants}],
+            customer_email=email,
+            client_reference_id=str(insc_id),
+            metadata={'type': 'formation', 'inscription_id': str(insc_id), 'session_id': str(session_id)},
+            success_url=base + '/sentinel?formation=ok',
+            cancel_url=base + '/sentinel?formation=annule')
+        conn2 = registre_get_db(); cur2 = conn2.cursor()
+        cur2.execute(registre_sql('UPDATE form_inscriptions SET stripe_session_id=%s WHERE id=%s',
+                                  'UPDATE form_inscriptions SET stripe_session_id=? WHERE id=?'),
+                     (sk.get('id') if isinstance(sk, dict) else getattr(sk, 'id', None), insc_id))
+        conn2.commit()
+        try: conn2.close()
+        except Exception: pass
+        url = sk.get('url') if isinstance(sk, dict) else getattr(sk, 'url', None)
+        return jsonify({'ok': True, 'paiement': True, 'url': url, 'inscription_id': insc_id})
+    except Exception:
+        return jsonify({'ok': True, 'paiement': False,
+                        'message': 'Demande enregistree. La session de paiement n a pas pu etre ouverte ; '
+                                   'CONSEILPREV vous contactera pour finaliser la reservation.'})
+
+
+def _form_confirmer_paiement(insc_id):
+    """Confirme une inscription payee et notifie le participant et CONSEILPREV."""
+    conn = registre_get_db(); cur = conn.cursor()
+    _form_tables(cur, conn)
+    cur.execute(registre_sql('SELECT * FROM form_inscriptions WHERE id=%s', 'SELECT * FROM form_inscriptions WHERE id=?'), (insc_id,))
+    row = cur.fetchone()
+    if not row:
+        try: conn.close()
+        except Exception: pass
+        return
+    ins = dict(row)
+    if ins.get('statut') == 'payee':
+        try: conn.close()
+        except Exception: pass
+        return
+    cur.execute(registre_sql("UPDATE form_inscriptions SET statut='payee' WHERE id=%s",
+                             "UPDATE form_inscriptions SET statut='payee' WHERE id=?"), (insc_id,))
+    conn.commit()
+    cur.execute(registre_sql('SELECT * FROM form_sessions WHERE id=%s', 'SELECT * FROM form_sessions WHERE id=?'),
+                (ins.get('session_id'),))
+    srow = cur.fetchone()
+    sess = dict(srow) if srow else {}
+    try: conn.close()
+    except Exception: pass
+    cat = next((c for c in FORM_CATALOGUE if c['id'] == sess.get('formation_id')), None)
+    titre = cat['titre'] if cat else 'Formation CONSEILPREV'
+    try:
+        send_email_smart(ins.get('email'), (ins.get('prenom') or '') + ' ' + (ins.get('nom') or ''),
+                         'Inscription confirmee — ' + titre,
+                         '<p>Bonjour,</p><p>Votre inscription a la formation <strong>%s</strong> est '
+                         '<strong>confirmee</strong>.</p><p>Session du %s — %s.<br>Participants : %s.</p>'
+                         '<p>Une convocation detaillee vous sera adressee avant la session.</p>'
+                         '<p>L equipe CONSEILPREV</p>'
+                         % (titre, sess.get('date_session'), sess.get('lieu'), ins.get('participants')),
+                         tags=['formation-confirmee'])
+    except Exception:
+        pass
+    try:
+        send_email_smart(CONSEILPREV_INTERNAL_EMAIL, 'CONSEILPREV',
+                         'Inscription payee : ' + titre,
+                         '<p>Inscription confirmee et payee.</p><p>%s %s (%s) — %s participant(s) — %.2f EUR HT<br>'
+                         'Session du %s — %s</p>'
+                         % (ins.get('prenom'), ins.get('nom'), ins.get('email'), ins.get('participants'),
+                            (ins.get('montant_cents') or 0) / 100.0, sess.get('date_session'), sess.get('lieu')),
+                         tags=['formation-payee'])
+    except Exception:
+        pass
+
+
+@app.route('/api/formations/inscriptions', methods=['GET'])
+def formations_inscriptions_admin():
+    """Inscriptions enregistrees (CONSEILPREV)."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    _form_tables(cur, conn)
+    cur.execute('SELECT * FROM form_inscriptions ORDER BY id DESC LIMIT 300')
+    rows = [dict(r) for r in cur.fetchall()]
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True, 'inscriptions': rows})
 
 
 
