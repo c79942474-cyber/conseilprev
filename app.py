@@ -9737,7 +9737,89 @@ EMP_WH_1K = {
 
 # Intensite carbone par defaut (gCO2eq/kWh, approche cycle de vie).
 # France : ordre de grandeur ADEME / Base Empreinte. A ajuster si besoin.
-EMP_INTENSITE_DEFAUT = {'FR': 60.0, 'DE': 380.0, 'US': 380.0, 'EU': 250.0}
+EMP_INTENSITE_DEFAUT = {
+    'FR': float(os.environ.get('EMPREINTE_FE_FR', '60')),
+    'DE': float(os.environ.get('EMPREINTE_FE_DE', '380')),   # hebergement Render Francfort
+    'US': float(os.environ.get('EMPREINTE_FE_US', '380')),
+    'EU': 250.0,
+}
+
+# Approche fondee sur le marche (GHG Protocol) : facteur contractuel du fournisseur
+# d'hebergement (par exemple electricite renouvelable garantie). Laisser vide tant
+# qu'une attestation du fournisseur n'a pas ete obtenue : sans preuve, seule
+# l'approche fondee sur la localisation est publiee.
+EMP_FE_HEB_MARCHE = os.environ.get('EMPREINTE_FE_HEBERGEMENT_MARCHE', '')
+
+# Facteurs d'emission par filiere de production (gCO2eq/kWh, cycle de vie).
+# Ordres de grandeur usuels (mediane GIEC / ADEME). Servent a reconstituer
+# l'intensite carbone allemande a partir du mix de production temps reel.
+EMP_FE_FILIERE = [
+    ('lignite', 1050.0), ('brown coal', 1050.0), ('hard coal', 900.0), ('coal', 950.0),
+    ('oil', 750.0), ('gas', 490.0), ('waste', 500.0), ('biomass', 230.0),
+    ('geothermal', 38.0), ('hydro', 24.0), ('nuclear', 12.0),
+    ('wind offshore', 12.0), ('wind onshore', 11.0), ('wind', 11.0), ('solar', 45.0),
+]
+
+
+def _emp_fe_filiere(nom):
+    n = str(nom or '').lower()
+    for cle, val in EMP_FE_FILIERE:
+        if cle in n:
+            return val
+    return None
+
+
+_EMP_INT_DE_CACHE = {'ts': 0.0, 'val': None, 'src': ''}
+
+
+def _emp_intensite_de():
+    """Intensite carbone du reseau allemand — pertinente car la plateforme est
+    hebergee a Francfort. Reconstituee en temps reel a partir du mix de
+    production publie par Fraunhofer ISE (Energy-Charts, licence ouverte),
+    pondere par des facteurs d'emission par filiere en cycle de vie.
+    Repli sur le facteur moyen pays en cas d'indisponibilite."""
+    maintenant = time.time()
+    if _EMP_INT_DE_CACHE['val'] is not None and (maintenant - _EMP_INT_DE_CACHE['ts']) < 900:
+        return _EMP_INT_DE_CACHE['val'], _EMP_INT_DE_CACHE['src']
+    try:
+        resp = requests.get('https://api.energy-charts.info/public_power',
+                            params={'country': 'de'}, timeout=7)
+        data = resp.json()
+        somme = 0.0
+        pondere = 0.0
+        for serie in (data.get('production_types') or []):
+            fe = _emp_fe_filiere(serie.get('name'))
+            if fe is None:
+                continue
+            valeurs = [v for v in (serie.get('data') or []) if v is not None]
+            if not valeurs:
+                continue
+            mw = float(valeurs[-1])
+            if mw <= 0:
+                continue
+            somme += mw
+            pondere += mw * fe
+        if somme > 0:
+            val = round(pondere / somme, 1)
+            _EMP_INT_DE_CACHE.update({'ts': maintenant, 'val': val,
+                                      'src': 'Fraunhofer ISE / Energy-Charts (mix de production temps reel, FE par filiere ACV)'})
+            return val, _EMP_INT_DE_CACHE['src']
+    except Exception:
+        pass
+    val = EMP_INTENSITE_DEFAUT['DE']
+    _EMP_INT_DE_CACHE.update({'ts': maintenant, 'val': val, 'src': 'Facteur moyen pays (repli)'})
+    return val, _EMP_INT_DE_CACHE['src']
+
+
+def _emp_intensite_hebergement():
+    """Facteur applique a l'hebergement (Render, Francfort) : approche fondee
+    sur la localisation, en temps reel."""
+    if str(EMP_PAYS_HEBERGEMENT).upper() == 'DE':
+        return _emp_intensite_de()
+    if str(EMP_PAYS_HEBERGEMENT).upper() == 'FR':
+        return _emp_intensite_fr()
+    return EMP_INTENSITE_DEFAUT.get(str(EMP_PAYS_HEBERGEMENT).upper(), 380.0), 'Facteur moyen pays'
+
 
 # Methode C : impacts incorpores (fabrication du materiel) exprimes en
 # pourcentage ajoute aux emissions d'usage (approche Boavizta simplifiee).
@@ -9800,9 +9882,12 @@ def _emp_intensite_fr():
 
 
 def _emp_intensite(pays):
-    if str(pays).upper() == 'FR':
+    p = str(pays).upper()
+    if p == 'FR':
         return _emp_intensite_fr()
-    return EMP_INTENSITE_DEFAUT.get(str(pays).upper(), 250.0), 'Facteur par defaut (moyenne pays)'
+    if p == 'DE':
+        return _emp_intensite_de()
+    return EMP_INTENSITE_DEFAUT.get(p, 250.0), 'Facteur par defaut (moyenne pays)'
 
 
 def _emp_calc(modele, tokens_out, latence_ms):
@@ -9829,7 +9914,7 @@ def _emp_calc(modele, tokens_out, latence_ms):
     # Methode C : B + impacts incorpores + hebergement de la requete.
     wh_c = wh_b + EMP_HEBERGEMENT_WH_REQ
     fab = 1.0 + max(0.0, EMP_FABRICATION_PCT) / 100.0
-    int_heb = EMP_INTENSITE_DEFAUT.get(str(EMP_PAYS_HEBERGEMENT).upper(), 380.0)
+    int_heb, _src_heb = _emp_intensite_hebergement()
     g_heb = EMP_HEBERGEMENT_WH_REQ / 1000.0 * int_heb
     g_c = g_b * fab + g_heb
     g_c_min = g_b_min * fab + g_heb
@@ -9922,7 +10007,7 @@ def _emp_log_page(octets, duree_ms):
 
 def _emp_web_impacts(pages, octets, duree_ms):
     """Empreinte du site : hebergement + reseau + terminal (methode C)."""
-    int_heb = EMP_INTENSITE_DEFAUT.get(str(EMP_PAYS_HEBERGEMENT).upper(), 380.0)
+    int_heb, _src_heb = _emp_intensite_hebergement()
     int_fr, _src = _emp_intensite_fr()
     wh_heb = float(pages or 0) * EMP_HEBERGEMENT_WH_REQ
     go = float(octets or 0) / 1e9
@@ -10126,7 +10211,8 @@ def empreinte_gap():
     for nom, val, note in [
         ('France — facteur ADEME (ACV)', EMP_INTENSITE_DEFAUT['FR'], 'Erreur frequente : ne correspond pas a votre hebergement'),
         ('France — temps reel RTE (majore ACV)', int_reel, src),
-        ('Allemagne — hebergement reel (Render Francfort)', EMP_INTENSITE_DEFAUT['DE'], 'Facteur a retenir pour la plateforme'),
+        ('Allemagne — temps reel (Fraunhofer ISE, Energy-Charts)', _emp_intensite_de()[0], 'Facteur retenu pour l hebergement (Render Francfort)'),
+        ('Allemagne — facteur moyen pays (repli)', EMP_INTENSITE_DEFAUT['DE'], 'Utilise si le mix temps reel est indisponible'),
         ('Etats-Unis — centre de donnees du fournisseur', EMP_INTENSITE_DEFAUT['US'], 'Applicable aux appels Anthropic'),
     ]:
         g = kwh * float(val)
@@ -10208,7 +10294,7 @@ def empreinte_ghg():
     fab = max(0.0, EMP_FABRICATION_PCT) / 100.0
     g_llm_fab = g_llm_usage * fab                            # impacts incorpores (fabrication amont)
 
-    fe_heb = EMP_INTENSITE_DEFAUT.get(str(EMP_PAYS_HEBERGEMENT).upper(), 380.0)
+    fe_heb, src_fe_heb = _emp_intensite_hebergement()
     kwh_heb_req = n_req * EMP_HEBERGEMENT_WH_REQ / 1000.0    # hebergement des requetes de modeles
     g_heb_req = kwh_heb_req * fe_heb
 
@@ -10290,9 +10376,14 @@ def empreinte_ghg():
         {'facteur': 'Reseau electrique — France (temps reel)', 'valeur': round(fe_visiteur, 1),
          'unite': 'gCO2eq/kWh', 'source': src_fe_fr,
          'usage': 'Reseau et terminaux des utilisateurs ; inference des modeles heberges en France'},
-        {'facteur': 'Reseau electrique — Allemagne (hebergement Render, Francfort)',
+        {'facteur': 'Reseau electrique — Allemagne (hebergement Render, Francfort) — temps reel',
+         'valeur': round(fe_heb, 1), 'unite': 'gCO2eq/kWh',
+         'source': src_fe_heb,
+         'usage': 'Hebergement de la plateforme et du site — approche fondee sur la localisation'},
+        {'facteur': 'Reseau electrique — Allemagne (facteur moyen pays, repli)',
          'valeur': EMP_INTENSITE_DEFAUT['DE'], 'unite': 'gCO2eq/kWh',
-         'source': 'Facteur moyen pays (ACV)', 'usage': 'Hebergement de la plateforme et du site'},
+         'source': 'Facteur moyen pays (ACV) — parametrable (EMPREINTE_FE_DE)',
+         'usage': 'Repli si le mix temps reel est indisponible'},
         {'facteur': 'Reseau electrique — Etats-Unis', 'valeur': EMP_INTENSITE_DEFAUT['US'],
          'unite': 'gCO2eq/kWh', 'source': 'Facteur moyen pays (ACV)',
          'usage': 'Inference des modeles heberges aux Etats-Unis'},
@@ -10341,11 +10432,25 @@ def empreinte_ghg():
                         + str(int(EMP_TERMINAL_S_PAR_PAGE)) + ' s  =>  ' + str(round(g_term / 1000.0, 4)) + ' kgCO2eq'},
     ]
 
+    # Double approche (GHG Protocol) : localisation (retenue) et marche (si attestation fournisseur)
+    marche = None
+    if str(EMP_FE_HEB_MARCHE).strip():
+        try:
+            fe_m = float(EMP_FE_HEB_MARCHE)
+            g_heb_m = (kwh_heb_req + kwh_heb_pages) * fe_m
+            marche = {'fe': fe_m,
+                      'kg_hebergement': round(g_heb_m / 1000.0, 5),
+                      'kg_total': round((total_g - g_heb_req - g_heb_pages + g_heb_m) / 1000.0, 5),
+                      'note': 'Approche fondee sur le marche : facteur contractuel du fournisseur d hebergement. '
+                              'A ne publier que sur attestation ; l approche fondee sur la localisation reste la reference.'}
+        except (TypeError, ValueError):
+            marche = None
     inc_min = float(d.get('gcmin') or 0.0)
     inc_max = float(d.get('gcmax') or 0.0)
     return jsonify({'ok': True, 'jours': j, 'methodo': EMP_METHODO_VERSION,
                     'periode_depuis': depuis, 'requetes': n_req, 'tokens_out': tokens_out,
                     'ghg': ghg, 'ademe': ademe, 'facteurs': facteurs, 'calculs': calculs,
+                    'approche_marche': marche, 'fe_hebergement': round(fe_heb, 1), 'source_fe_hebergement': src_fe_heb,
                     'total_kg': round(total_g / 1000.0, 5),
                     'fourchette_kg': [round(inc_min / 1000.0, 5), round(inc_max / 1000.0, 5)],
                     'incertitude_pct': round(100.0 * (inc_max - inc_min) / (g_c_total if g_c_total else 1.0), 1),
