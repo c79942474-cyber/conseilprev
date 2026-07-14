@@ -2471,7 +2471,7 @@ body{{background:linear-gradient(180deg,#1e1250,#3b2280);color:#1a1a2e;padding:2
 # ══════════════════════════════════════════════════════════
 # MOTEUR IA HYBRIDE — Claude (primaire) + Mistral (fallback)
 # ══════════════════════════════════════════════════════════
-def call_anthropic(messages, system='', max_tokens=800, temperature=0.7):
+def call_anthropic(messages, system='', max_tokens=800, temperature=0.7, emp_ctx=None):
     """Appelle Claude. Retourne (ok, reply_or_error)."""
     if not ANTHROPIC_API_KEY:
         return False, 'no_anthropic_key'
@@ -2502,7 +2502,7 @@ def call_anthropic(messages, system='', max_tokens=800, temperature=0.7):
             try:
                 _u = _data.get('usage') or {}
                 _emp_log(ANTHROPIC_MODEL, _u.get('input_tokens'), _u.get('output_tokens'),
-                         int((time.time() - _t0) * 1000), module='assistant')
+                         int((time.time() - _t0) * 1000), module='assistant', ctx=emp_ctx)
             except Exception:
                 pass
             return (True, text) if text.strip() else (False, 'empty_response')
@@ -2519,7 +2519,7 @@ def call_anthropic(messages, system='', max_tokens=800, temperature=0.7):
         return False, str(e)
 
 
-def call_mistral(messages, max_tokens=800, temperature=0.7):
+def call_mistral(messages, max_tokens=800, temperature=0.7, emp_ctx=None):
     """Appelle Mistral. Retourne (ok, reply_or_error)."""
     if not MISTRAL_API_KEY:
         return False, 'no_mistral_key'
@@ -2538,7 +2538,7 @@ def call_mistral(messages, max_tokens=800, temperature=0.7):
             try:
                 _u = _data.get('usage') or {}
                 _emp_log(_data.get('model') or 'mistral-large', _u.get('prompt_tokens'),
-                         _u.get('completion_tokens'), int((time.time() - _t0) * 1000), module='assistant')
+                         _u.get('completion_tokens'), int((time.time() - _t0) * 1000), module='assistant', ctx=emp_ctx)
             except Exception:
                 pass
             return (True, reply) if reply.strip() else (False, 'empty_response')
@@ -2558,13 +2558,14 @@ def ai_complete_cross_checked(messages, system='', max_tokens=800, temperature=0
     Cout et latence plus eleves qu'un appel simple : reserve au Chat Conformite,
     ou la fiabilite prime sur la rapidite."""
     results = {}
+    _ctx = _emp_ctx()   # capture avant les threads : le contexte de requete y est perdu
 
     def _run_claude():
-        results['claude'] = call_anthropic(messages, system, max_tokens, temperature)
+        results['claude'] = call_anthropic(messages, system, max_tokens, temperature, emp_ctx=_ctx)
 
     def _run_mistral():
         msgs_with_system = ([{'role': 'system', 'content': system}] + messages) if system else messages
-        results['mistral'] = call_mistral(msgs_with_system, max_tokens, temperature)
+        results['mistral'] = call_mistral(msgs_with_system, max_tokens, temperature, emp_ctx=_ctx)
 
     t1 = threading.Thread(target=_run_claude)
     t2 = threading.Thread(target=_run_mistral)
@@ -9943,19 +9944,23 @@ def _emp_tables(cur, conn):
     conn.commit()
 
 
-def _emp_log(modele, tokens_in, tokens_out, latence_ms, module=None):
+def _emp_ctx():
+    """Capture le client courant. A appeler DANS le contexte de requete : les
+    appels de modeles sont executes dans des threads, ou ce contexte n existe plus."""
+    try:
+        c = sentauth_current_client()
+        if c:
+            return (int(c.get('id') or 0), 1 if c.get('is_conseilprev') else 0)
+    except Exception:
+        pass
+    return (0, 0)
+
+
+def _emp_log(modele, tokens_in, tokens_out, latence_ms, module=None, ctx=None):
     """Journalise une requete de modele. Silencieux : ne doit jamais perturber
     une reponse. L'attribution au client est faite si la session le permet."""
     try:
-        cid = 0
-        interne = 0
-        try:
-            c = sentauth_current_client()
-            if c:
-                cid = int(c.get('id') or 0)
-                interne = 1 if c.get('is_conseilprev') else 0
-        except Exception:
-            pass
+        cid, interne = (ctx if ctx else _emp_ctx())
         r = _emp_calc(modele, tokens_out, latence_ms)
         conn = registre_get_db(); cur = conn.cursor()
         _emp_tables(cur, conn)
@@ -10460,6 +10465,43 @@ def empreinte_ghg():
                         'exclusions': 'Bureaux, deplacements, equipements internes, achats hors numerique',
                         'hebergement': 'Render — Francfort (Allemagne)',
                         'fournisseurs_modeles': 'Anthropic (Etats-Unis), Mistral AI (France)'}})
+
+
+@app.route('/api/empreinte/diagnostic', methods=['GET'])
+def empreinte_diagnostic():
+    """Pourquoi le compteur affiche-t-il zero ? Etat reel de la collecte."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    _emp_tables(cur, conn)
+    jour = datetime.utcnow().strftime('%Y-%m-%d')
+    cur.execute('SELECT COUNT(*) AS n FROM empreinte_llm')
+    total = int(dict(cur.fetchone()).get('n', 0))
+    cur.execute(registre_sql('SELECT COUNT(*) AS n FROM empreinte_llm WHERE jour = %s',
+                             'SELECT COUNT(*) AS n FROM empreinte_llm WHERE jour = ?'), (jour,))
+    aujourdhui = int(dict(cur.fetchone()).get('n', 0))
+    cur.execute('SELECT horodatage, modele, module, client_id FROM empreinte_llm ORDER BY id DESC LIMIT 1')
+    r = cur.fetchone()
+    dernier = dict(r) if r else None
+    cur.execute('SELECT COALESCE(SUM(pages),0) AS p FROM empreinte_web')
+    pages = int(dict(cur.fetchone()).get('p', 0))
+    try: conn.close()
+    except Exception: pass
+    causes = []
+    if not ANTHROPIC_API_KEY:
+        causes.append('Cle ANTHROPIC_API_KEY absente : les appels a Claude echouent avant tout comptage.')
+    if not MISTRAL_API_KEY:
+        causes.append('Cle MISTRAL_API_KEY absente : les appels a Mistral echouent avant tout comptage.')
+    if total == 0 and ANTHROPIC_API_KEY and MISTRAL_API_KEY:
+        causes.append('Aucun appel de modele n a encore ete effectue depuis la mise en service du compteur.')
+    if aujourdhui == 0 and total > 0:
+        causes.append('Aucun appel de modele aujourd hui : le compteur du jour est logiquement a zero.')
+    causes.append('Rappel : la simple navigation ne declenche aucun appel de modele. Seuls le copilote, '
+                  'l explorateur de connaissance et les analyses generees par IA sont comptabilises.')
+    return jsonify({'ok': True, 'total_requetes_journalisees': total, 'requetes_aujourdhui': aujourdhui,
+                    'pages_comptabilisees': pages, 'derniere_requete': dernier,
+                    'cle_anthropic': bool(ANTHROPIC_API_KEY), 'cle_mistral': bool(MISTRAL_API_KEY),
+                    'causes_possibles': causes})
 
 
 @app.route('/api/empreinte/export', methods=['GET'])
