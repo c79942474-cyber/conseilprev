@@ -10173,6 +10173,190 @@ def empreinte_public():
                     'avertissement': 'Estimations par modelisation, non des mesures. Fourchettes publiees.'})
 
 
+@app.route('/api/empreinte/ghg', methods=['GET'])
+def empreinte_ghg():
+    """Decomposition normalisee de l'empreinte, selon deux referentiels :
+      - GHG Protocol (scopes 1, 2, 3 et categories du scope 3) ;
+      - Bilan Carbone / BEGES de l'ADEME (categories et postes).
+    Fournit egalement le detail des calculs et les facteurs d'emission utilises,
+    afin que le rapport soit auditable ligne a ligne."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    depuis, j = _emp_periode(request.args.get('days', 30))
+    conn = registre_get_db(); cur = conn.cursor()
+    _emp_tables(cur, conn)
+    d = _emp_agrege(cur, depuis)
+    cur.execute(registre_sql('SELECT COALESCE(SUM(wh_b),0) AS wb FROM empreinte_llm WHERE jour >= %s',
+                             'SELECT COALESCE(SUM(wh_b),0) AS wb FROM empreinte_llm WHERE jour >= ?'), (depuis,))
+    wh_b = float(dict(cur.fetchone() or {}).get('wb') or 0.0)
+    cur.execute(registre_sql(
+        'SELECT COALESCE(SUM(pages),0) AS p, COALESCE(SUM(octets),0) AS o, COALESCE(SUM(duree_ms),0) AS dd '
+        'FROM empreinte_web WHERE jour >= %s',
+        'SELECT COALESCE(SUM(pages),0) AS p, COALESCE(SUM(octets),0) AS o, COALESCE(SUM(duree_ms),0) AS dd '
+        'FROM empreinte_web WHERE jour >= ?'), (depuis,))
+    w = dict(cur.fetchone() or {})
+    try: conn.close()
+    except Exception: pass
+
+    n_req = int(d.get('n') or 0)
+    tokens_out = int(d.get('to_') or 0)
+    g_llm_usage = float(d.get('gb') or 0.0)                 # usage des modeles (PUE inclus)
+    g_c_total = float(d.get('gc') or 0.0)
+    kwh_llm = wh_b / 1000.0
+    fe_llm = (g_llm_usage / kwh_llm) if kwh_llm > 0 else 0.0   # facteur moyen pondere par l'energie
+
+    fab = max(0.0, EMP_FABRICATION_PCT) / 100.0
+    g_llm_fab = g_llm_usage * fab                            # impacts incorpores (fabrication amont)
+
+    fe_heb = EMP_INTENSITE_DEFAUT.get(str(EMP_PAYS_HEBERGEMENT).upper(), 380.0)
+    kwh_heb_req = n_req * EMP_HEBERGEMENT_WH_REQ / 1000.0    # hebergement des requetes de modeles
+    g_heb_req = kwh_heb_req * fe_heb
+
+    site = _emp_web_impacts(w.get('p'), w.get('o'), w.get('dd'))
+    fe_visiteur, src_fe_fr = _emp_intensite_fr()
+    kwh_heb_pages = site['wh_hebergement'] / 1000.0
+    g_heb_pages = kwh_heb_pages * fe_heb
+    kwh_reseau = site['wh_reseau'] / 1000.0
+    g_reseau = kwh_reseau * fe_visiteur
+    kwh_term = site['wh_terminal'] / 1000.0
+    g_term = kwh_term * fe_visiteur
+
+    total_g = g_llm_usage + g_llm_fab + g_heb_req + g_heb_pages + g_reseau + g_term
+    ref = total_g if total_g > 0 else 1.0
+
+    def ligne(intitule, kwh, fe, g, detail):
+        return {'intitule': intitule, 'kwh': round(kwh, 4), 'fe': round(fe, 1), 'kg': round(g / 1000.0, 5),
+                'g': round(g, 2), 'part_pct': round(100.0 * g / ref, 1), 'detail': detail}
+
+    # ── GHG Protocol ──
+    ghg = {
+        'scope1': {'total_kg': 0.0, 'lignes': [], 'commentaire':
+                   'Aucune emission directe : le service numerique ne comporte ni combustion, ni source fixe ou '
+                   'mobile detenue ou controlee. Perimetre limite au service numerique (hors bureaux et deplacements).'},
+        'scope2': {'total_kg': 0.0, 'lignes': [], 'commentaire':
+                   'Aucune electricite achetee directement : l hebergement et l inference sont fournis par des tiers. '
+                   'Ces consommations relevent donc du scope 3 (services achetes), et non du scope 2.'},
+        'scope3': {'lignes': [
+            ligne('Cat. 1 — Biens et services achetes : inference des modeles (usage)',
+                  kwh_llm, fe_llm, g_llm_usage,
+                  'Energie d inference (PUE inclus) x facteur du reseau du centre de donnees du fournisseur'),
+            ligne('Cat. 1 — Biens et services achetes : fabrication amont du materiel (amortie)',
+                  0.0, 0.0, g_llm_fab,
+                  'Impacts incorpores des serveurs et GPU du fournisseur, amortis (approche Boavizta) : '
+                  + str(int(EMP_FABRICATION_PCT)) + ' % des emissions d usage'),
+            ligne('Cat. 1 — Biens et services achetes : hebergement des requetes (Render)',
+                  kwh_heb_req, fe_heb, g_heb_req,
+                  'Requetes servies x energie unitaire x facteur du reseau du pays d hebergement (' + str(EMP_PAYS_HEBERGEMENT) + ')'),
+            ligne('Cat. 1 — Biens et services achetes : hebergement des pages du site',
+                  kwh_heb_pages, fe_heb, g_heb_pages,
+                  'Pages servies x energie unitaire x facteur du pays d hebergement'),
+            ligne('Cat. 11 — Utilisation des produits vendus : reseau',
+                  kwh_reseau, fe_visiteur, g_reseau,
+                  'Octets transferes x intensite energetique du reseau x facteur du reseau electrique'),
+            ligne('Cat. 11 — Utilisation des produits vendus : terminaux des utilisateurs',
+                  kwh_term, fe_visiteur, g_term,
+                  'Pages vues x puissance moyenne du terminal x duree d exposition x facteur du reseau electrique'),
+        ], 'commentaire':
+            'Le materiel n etant pas detenu, les impacts incorpores sont rattaches a la categorie 1 (empreinte du '
+            'service achete), et non a la categorie 2 (biens immobilises). Une lecture alternative les placerait en '
+            'categorie 8 (actifs en leasing amont) : le choix est documente et constant.'},
+    }
+    ghg['scope3']['total_kg'] = round(sum(l['kg'] for l in ghg['scope3']['lignes']), 5)
+    ghg['total_kg'] = round(ghg['scope1']['total_kg'] + ghg['scope2']['total_kg'] + ghg['scope3']['total_kg'], 5)
+
+    # ── Bilan Carbone / BEGES (ADEME) ──
+    ademe = [
+        {'categorie': '1 — Emissions directes', 'poste': 'Postes 1.1 a 1.5', 'kg': 0.0,
+         'commentaire': 'Neant sur le perimetre du service numerique.'},
+        {'categorie': '2 — Emissions indirectes associees a l energie', 'poste': 'Postes 2.1 et 2.2', 'kg': 0.0,
+         'commentaire': 'Neant : aucune electricite achetee en propre pour le service.'},
+        {'categorie': '3 — Transport', 'poste': 'Postes 3.1 a 3.5', 'kg': None,
+         'commentaire': 'Hors perimetre de ce rapport (service numerique).'},
+        {'categorie': '4 — Produits achetes', 'poste': 'Poste 4.5 — Achats de services (hebergement et inference)',
+         'kg': round((g_llm_usage + g_heb_req + g_heb_pages) / 1000.0, 5),
+         'commentaire': 'Consommation d energie des centres de donnees des fournisseurs, PUE inclus.'},
+        {'categorie': '4 — Produits achetes', 'poste': 'Poste 4.2 — Immobilisations (fabrication amont, amortie)',
+         'kg': round(g_llm_fab / 1000.0, 5),
+         'commentaire': 'Impacts incorpores du materiel du fournisseur, amortis sur sa duree de vie.'},
+        {'categorie': '5 — Produits vendus', 'poste': 'Poste 5.1 — Utilisation des produits vendus',
+         'kg': round((g_reseau + g_term) / 1000.0, 5),
+         'commentaire': 'Reseau et terminaux mobilises par les visiteurs et les clients.'},
+        {'categorie': '6 — Autres emissions indirectes', 'poste': 'Poste 6.1', 'kg': 0.0,
+         'commentaire': 'Neant identifie.'},
+    ]
+
+    # ── Facteurs d emission utilises ──
+    facteurs = [
+        {'facteur': 'Reseau electrique — France (temps reel)', 'valeur': round(fe_visiteur, 1),
+         'unite': 'gCO2eq/kWh', 'source': src_fe_fr,
+         'usage': 'Reseau et terminaux des utilisateurs ; inference des modeles heberges en France'},
+        {'facteur': 'Reseau electrique — Allemagne (hebergement Render, Francfort)',
+         'valeur': EMP_INTENSITE_DEFAUT['DE'], 'unite': 'gCO2eq/kWh',
+         'source': 'Facteur moyen pays (ACV)', 'usage': 'Hebergement de la plateforme et du site'},
+        {'facteur': 'Reseau electrique — Etats-Unis', 'valeur': EMP_INTENSITE_DEFAUT['US'],
+         'unite': 'gCO2eq/kWh', 'source': 'Facteur moyen pays (ACV)',
+         'usage': 'Inference des modeles heberges aux Etats-Unis'},
+        {'facteur': 'Facteur moyen pondere applique a l inference', 'valeur': round(fe_llm, 1),
+         'unite': 'gCO2eq/kWh', 'source': 'Moyenne ponderee par l energie reellement consommee',
+         'usage': 'Controle de coherence'},
+        {'facteur': 'Energie par millier de jetons de sortie', 'valeur': 0.0, 'unite': 'Wh/1000 jetons',
+         'source': 'EcoLogits / ML.ENERGY : ' + str(EMP_WH_1K),
+         'usage': 'Classes de modeles : petit, moyen, grand (fourchette basse-centrale-haute)'},
+        {'facteur': 'Impacts incorpores (fabrication amont)', 'valeur': EMP_FABRICATION_PCT, 'unite': '% de l usage',
+         'source': 'Approche Boavizta simplifiee', 'usage': 'Amortissement de la fabrication du materiel'},
+        {'facteur': 'Hebergement d une requete servie', 'valeur': EMP_HEBERGEMENT_WH_REQ, 'unite': 'Wh/requete',
+         'source': 'Parametre interne documente', 'usage': 'Instance applicative (PUE inclus)'},
+        {'facteur': 'Intensite energetique du reseau', 'valeur': EMP_RESEAU_KWH_GO, 'unite': 'kWh/Go',
+         'source': 'Parametre interne documente (ordre de grandeur ADEME/Arcep)', 'usage': 'Transfert de donnees'},
+        {'facteur': 'Terminal utilisateur', 'valeur': EMP_TERMINAL_W, 'unite': 'W',
+         'source': 'Parametre interne documente', 'usage': 'Exposition moyenne de ' + str(int(EMP_TERMINAL_S_PAR_PAGE)) + ' s par page'},
+    ]
+
+    # ── Detail des calculs (chiffres substitues) ──
+    calculs = [
+        {'poste': 'Inference des modeles — energie',
+         'formule': 'E = SUM( jetons_sortie / 1000 x Wh_par_1000_jetons x PUE )',
+         'application': str(tokens_out) + ' jetons de sortie sur ' + str(n_req) + ' requetes  =>  E = '
+                        + str(round(kwh_llm, 4)) + ' kWh'},
+        {'poste': 'Inference des modeles — emissions d usage',
+         'formule': 'GES = E x FE_reseau_du_centre_de_donnees',
+         'application': str(round(kwh_llm, 4)) + ' kWh x ' + str(round(fe_llm, 1)) + ' gCO2eq/kWh  =>  '
+                        + str(round(g_llm_usage / 1000.0, 4)) + ' kgCO2eq'},
+        {'poste': 'Fabrication amont (amortie)',
+         'formule': 'GES_fab = GES_usage x taux_fabrication',
+         'application': str(round(g_llm_usage / 1000.0, 4)) + ' kgCO2eq x ' + str(int(EMP_FABRICATION_PCT))
+                        + ' %  =>  ' + str(round(g_llm_fab / 1000.0, 4)) + ' kgCO2eq'},
+        {'poste': 'Hebergement (requetes et pages)',
+         'formule': 'GES = (requetes + pages) x Wh_par_requete / 1000 x FE_pays_hebergement',
+         'application': str(n_req) + ' requetes + ' + str(site['pages']) + ' pages x '
+                        + str(EMP_HEBERGEMENT_WH_REQ) + ' Wh x ' + str(fe_heb) + ' gCO2eq/kWh  =>  '
+                        + str(round((g_heb_req + g_heb_pages) / 1000.0, 4)) + ' kgCO2eq'},
+        {'poste': 'Reseau',
+         'formule': 'GES = octets / 1e9 x kWh_par_Go x FE_reseau_electrique',
+         'application': str(int(site['octets'])) + ' octets x ' + str(EMP_RESEAU_KWH_GO) + ' kWh/Go x '
+                        + str(round(fe_visiteur, 1)) + ' gCO2eq/kWh  =>  ' + str(round(g_reseau / 1000.0, 4)) + ' kgCO2eq'},
+        {'poste': 'Terminaux des utilisateurs',
+         'formule': 'GES = pages x P_terminal x duree / 3600 / 1000 x FE_reseau_electrique',
+         'application': str(site['pages']) + ' pages x ' + str(EMP_TERMINAL_W) + ' W x '
+                        + str(int(EMP_TERMINAL_S_PAR_PAGE)) + ' s  =>  ' + str(round(g_term / 1000.0, 4)) + ' kgCO2eq'},
+    ]
+
+    inc_min = float(d.get('gcmin') or 0.0)
+    inc_max = float(d.get('gcmax') or 0.0)
+    return jsonify({'ok': True, 'jours': j, 'methodo': EMP_METHODO_VERSION,
+                    'periode_depuis': depuis, 'requetes': n_req, 'tokens_out': tokens_out,
+                    'ghg': ghg, 'ademe': ademe, 'facteurs': facteurs, 'calculs': calculs,
+                    'total_kg': round(total_g / 1000.0, 5),
+                    'fourchette_kg': [round(inc_min / 1000.0, 5), round(inc_max / 1000.0, 5)],
+                    'incertitude_pct': round(100.0 * (inc_max - inc_min) / (g_c_total if g_c_total else 1.0), 1),
+                    'perimetre': {
+                        'organisationnel': 'CONSEILPREV (SARL) — controle operationnel',
+                        'operationnel': 'Service numerique : site public, plateforme Sentinel, modeles de langage appeles',
+                        'exclusions': 'Bureaux, deplacements, equipements internes, achats hors numerique',
+                        'hebergement': 'Render — Francfort (Allemagne)',
+                        'fournisseurs_modeles': 'Anthropic (Etats-Unis), Mistral AI (France)'}})
+
+
 @app.route('/api/empreinte/export', methods=['GET'])
 def empreinte_export():
     """Export CSV du journal (CONSEILPREV)."""
