@@ -2476,6 +2476,7 @@ def call_anthropic(messages, system='', max_tokens=800, temperature=0.7):
     if not ANTHROPIC_API_KEY:
         return False, 'no_anthropic_key'
     try:
+        _t0 = time.time()
         # Anthropic sépare le system du tableau messages
         anthropic_msgs = [m for m in messages if m.get('role') in ('user', 'assistant')]
         resp = requests.post(
@@ -2495,8 +2496,15 @@ def call_anthropic(messages, system='', max_tokens=800, temperature=0.7):
             timeout=30,
         )
         if resp.status_code == 200:
-            blocks = resp.json().get('content', [])
+            _data = resp.json()
+            blocks = _data.get('content', [])
             text = ''.join(b.get('text', '') for b in blocks if b.get('type') == 'text')
+            try:
+                _u = _data.get('usage') or {}
+                _emp_log(ANTHROPIC_MODEL, _u.get('input_tokens'), _u.get('output_tokens'),
+                         int((time.time() - _t0) * 1000), module='assistant')
+            except Exception:
+                pass
             return (True, text) if text.strip() else (False, 'empty_response')
         elif resp.status_code == 401:
             logger.error('ANTHROPIC_AUTH_ERROR')
@@ -2516,6 +2524,7 @@ def call_mistral(messages, max_tokens=800, temperature=0.7):
     if not MISTRAL_API_KEY:
         return False, 'no_mistral_key'
     try:
+        _t0 = time.time()
         resp = requests.post(
             MISTRAL_URL,
             headers={'Content-Type': 'application/json', 'Authorization': f'Bearer {MISTRAL_API_KEY}'},
@@ -2524,7 +2533,14 @@ def call_mistral(messages, max_tokens=800, temperature=0.7):
             timeout=30,
         )
         if resp.ok:
-            reply = resp.json()['choices'][0]['message']['content']
+            _data = resp.json()
+            reply = _data['choices'][0]['message']['content']
+            try:
+                _u = _data.get('usage') or {}
+                _emp_log(_data.get('model') or 'mistral-large', _u.get('prompt_tokens'),
+                         _u.get('completion_tokens'), int((time.time() - _t0) * 1000), module='assistant')
+            except Exception:
+                pass
             return (True, reply) if reply.strip() else (False, 'empty_response')
         return False, f'http_{resp.status_code}'
     except requests.Timeout:
@@ -8341,6 +8357,7 @@ def mistral_proxy():
     except (TypeError, ValueError):
         temperature = 0.5
     temperature = max(0.0, min(temperature, 1.0))
+    _t0 = time.time()
     try:
         resp = requests.post(
             MISTRAL_URL,
@@ -8355,7 +8372,14 @@ def mistral_proxy():
     if resp.status_code >= 400:
         return jsonify({'error': 'Moteur indisponible (%d).' % resp.status_code}), 502
     try:
-        return jsonify(resp.json())
+        _data = resp.json()
+        try:
+            _u = _data.get('usage') or {}
+            _emp_log(_data.get('model') or d.get('model') or 'mistral-large', _u.get('prompt_tokens'),
+                     _u.get('completion_tokens'), int((time.time() - _t0) * 1000), module='modules')
+        except Exception:
+            pass
+        return jsonify(_data)
     except Exception:
         return jsonify({'error': 'Reponse illisible du moteur.'}), 502
 
@@ -9685,6 +9709,526 @@ def formations_inscriptions_admin():
     except Exception: pass
     return jsonify({'ok': True, 'inscriptions': rows})
 
+
+
+# ══════════════════════════════════════════════════════════
+# COMPTEUR D'EMPREINTE NUMERIQUE — site, plateforme et modeles de langage
+# Trois methodes calculees en parallele sur les memes donnees d'usage reelles :
+#   A. facteurs statiques simples (socle)
+#   B. parametrique, inspiree des methodologies EcoLogits / Boavizta / ADEME,
+#      avec fourchette d'incertitude et intensite carbone temps reel (RTE)
+#   C. cycle de vie etendu : B + impacts incorpores (fabrication) + hebergement
+#      + reseau et terminal du visiteur
+# L'analyse d'ecarts compare les trois methodes et les scenarios d'intensite.
+# Estimations par modelisation, non des mesures : les fourchettes sont publiees.
+# ══════════════════════════════════════════════════════════
+
+EMP_METHODO_VERSION = '1.0'
+
+# Energie par millier de jetons de sortie (Wh) : (basse, centrale, haute).
+# Ordres de grandeur issus des travaux publies (Google, Mistral AI, ML.ENERGY,
+# EcoLogits). Parametrables : ces valeurs doivent etre revues periodiquement.
+EMP_WH_1K = {
+    'petit':  (0.05, 0.30, 0.80),
+    'moyen':  (0.30, 1.50, 4.00),
+    'grand':  (1.00, 4.00, 12.00),
+}
+
+# Intensite carbone par defaut (gCO2eq/kWh, approche cycle de vie).
+# France : ordre de grandeur ADEME / Base Empreinte. A ajuster si besoin.
+EMP_INTENSITE_DEFAUT = {'FR': 60.0, 'DE': 380.0, 'US': 380.0, 'EU': 250.0}
+
+# Methode C : impacts incorpores (fabrication du materiel) exprimes en
+# pourcentage ajoute aux emissions d'usage (approche Boavizta simplifiee).
+try:
+    EMP_FABRICATION_PCT = float(os.environ.get('EMPREINTE_FABRICATION_PCT', '30'))
+except (TypeError, ValueError):
+    EMP_FABRICATION_PCT = 30.0
+
+# Methode C : hebergement (Wh par requete HTTP servie) et reseau / terminal.
+EMP_HEBERGEMENT_WH_REQ = 0.15      # Wh par requete servie (instance + PUE)
+EMP_RESEAU_KWH_GO = 0.06           # kWh par gigaoctet transfere
+EMP_TERMINAL_W = 15.0              # puissance moyenne d'un terminal (W)
+EMP_TERMINAL_S_PAR_PAGE = 25.0     # duree d'exposition moyenne par page (s)
+EMP_PAYS_HEBERGEMENT = os.environ.get('EMPREINTE_PAYS_HEBERGEMENT', 'DE')  # Render Francfort
+
+# Profils de modeles : classe energetique, pays du centre de donnees, PUE.
+EMP_MODELES = [
+    ('claude',        {'classe': 'grand', 'pays': 'US', 'pue': 1.20, 'fournisseur': 'Anthropic'}),
+    ('mistral-large', {'classe': 'grand', 'pays': 'FR', 'pue': 1.15, 'fournisseur': 'Mistral AI'}),
+    ('mistral-embed', {'classe': 'petit', 'pays': 'FR', 'pue': 1.15, 'fournisseur': 'Mistral AI'}),
+    ('mistral',       {'classe': 'moyen', 'pays': 'FR', 'pue': 1.15, 'fournisseur': 'Mistral AI'}),
+]
+
+
+def _emp_profil(modele):
+    m = str(modele or '').lower()
+    for cle, prof in EMP_MODELES:
+        if cle in m:
+            return prof
+    return {'classe': 'moyen', 'pays': 'EU', 'pue': 1.20, 'fournisseur': 'Autre'}
+
+
+_EMP_INT_CACHE = {'ts': 0.0, 'val': None, 'src': ''}
+
+
+def _emp_intensite_fr():
+    """Intensite carbone du reseau francais, en temps reel (RTE / eCO2mix via
+    ODRE, pas de quinze minutes, donnees ouvertes). Valeur de combustion
+    directe : une majoration est appliquee pour approcher le cycle de vie.
+    Repli sur le facteur par defaut en cas d'indisponibilite."""
+    maintenant = time.time()
+    if _EMP_INT_CACHE['val'] is not None and (maintenant - _EMP_INT_CACHE['ts']) < 900:
+        return _EMP_INT_CACHE['val'], _EMP_INT_CACHE['src']
+    try:
+        resp = requests.get(
+            'https://odre.opendatasoft.com/api/records/1.0/search/',
+            params={'dataset': 'eco2mix-national-tr', 'rows': 1,
+                    'sort': '-date_heure', 'q': 'taux_co2:[1 TO *]'},
+            timeout=6)
+        data = resp.json()
+        rec = (data.get('records') or [])[0]
+        brut = float(rec['fields']['taux_co2'])          # gCO2/kWh, combustion directe
+        val = round(brut * 1.35, 1)                      # majoration cycle de vie (amont)
+        _EMP_INT_CACHE.update({'ts': maintenant, 'val': val, 'src': 'RTE eCO2mix (temps reel, majore ACV)'})
+        return val, _EMP_INT_CACHE['src']
+    except Exception:
+        val = EMP_INTENSITE_DEFAUT['FR']
+        _EMP_INT_CACHE.update({'ts': maintenant, 'val': val, 'src': 'Facteur par defaut (ADEME, repli)'})
+        return val, _EMP_INT_CACHE['src']
+
+
+def _emp_intensite(pays):
+    if str(pays).upper() == 'FR':
+        return _emp_intensite_fr()
+    return EMP_INTENSITE_DEFAUT.get(str(pays).upper(), 250.0), 'Facteur par defaut (moyenne pays)'
+
+
+def _emp_calc(modele, tokens_out, latence_ms):
+    """Calcule l'empreinte d'une requete de modele selon les trois methodes."""
+    prof = _emp_profil(modele)
+    bas, central, haut = EMP_WH_1K.get(prof['classe'], EMP_WH_1K['moyen'])
+    k = max(0.0, float(tokens_out or 0)) / 1000.0
+    intensite, source = _emp_intensite(prof['pays'])
+    fixe = EMP_INTENSITE_DEFAUT.get(str(prof['pays']).upper(), 250.0)
+
+    # Methode A : facteur central, intensite fixe, sans PUE ni fabrication.
+    wh_a = central * k
+    g_a = wh_a / 1000.0 * fixe
+
+    # Methode B : PUE applique, intensite temps reel, fourchette.
+    pue = float(prof.get('pue') or 1.2)
+    wh_b = central * k * pue
+    wh_b_min = bas * k * pue
+    wh_b_max = haut * k * pue
+    g_b = wh_b / 1000.0 * intensite
+    g_b_min = wh_b_min / 1000.0 * intensite
+    g_b_max = wh_b_max / 1000.0 * intensite
+
+    # Methode C : B + impacts incorpores + hebergement de la requete.
+    wh_c = wh_b + EMP_HEBERGEMENT_WH_REQ
+    fab = 1.0 + max(0.0, EMP_FABRICATION_PCT) / 100.0
+    int_heb = EMP_INTENSITE_DEFAUT.get(str(EMP_PAYS_HEBERGEMENT).upper(), 380.0)
+    g_heb = EMP_HEBERGEMENT_WH_REQ / 1000.0 * int_heb
+    g_c = g_b * fab + g_heb
+    g_c_min = g_b_min * fab + g_heb
+    g_c_max = g_b_max * fab + g_heb
+
+    return {'classe': prof['classe'], 'pays': prof['pays'], 'fournisseur': prof['fournisseur'],
+            'intensite': intensite, 'source_intensite': source,
+            'wh_a': wh_a, 'g_a': g_a,
+            'wh_b': wh_b, 'g_b': g_b, 'g_b_min': g_b_min, 'g_b_max': g_b_max,
+            'wh_c': wh_c, 'g_c': g_c, 'g_c_min': g_c_min, 'g_c_max': g_c_max}
+
+
+def _emp_tables(cur, conn):
+    _pk = 'SERIAL PRIMARY KEY' if REGISTRE_USE_PG else 'INTEGER PRIMARY KEY AUTOINCREMENT'
+    cur.execute('CREATE TABLE IF NOT EXISTS empreinte_llm (id ' + _pk + ', horodatage TEXT, jour TEXT, '
+                'client_id INTEGER, interne INTEGER DEFAULT 0, module TEXT, fournisseur TEXT, modele TEXT, '
+                'tokens_in INTEGER, tokens_out INTEGER, latence_ms INTEGER, '
+                'wh_a REAL, g_a REAL, wh_b REAL, g_b REAL, g_b_min REAL, g_b_max REAL, '
+                'wh_c REAL, g_c REAL, g_c_min REAL, g_c_max REAL, '
+                'intensite REAL, source_intensite TEXT, methodo TEXT)')
+    cur.execute('CREATE TABLE IF NOT EXISTS empreinte_web (jour TEXT PRIMARY KEY, pages INTEGER DEFAULT 0, '
+                'octets BIGINT DEFAULT 0, duree_ms BIGINT DEFAULT 0)'
+                if REGISTRE_USE_PG else
+                'CREATE TABLE IF NOT EXISTS empreinte_web (jour TEXT PRIMARY KEY, pages INTEGER DEFAULT 0, '
+                'octets INTEGER DEFAULT 0, duree_ms INTEGER DEFAULT 0)')
+    conn.commit()
+
+
+def _emp_log(modele, tokens_in, tokens_out, latence_ms, module=None):
+    """Journalise une requete de modele. Silencieux : ne doit jamais perturber
+    une reponse. L'attribution au client est faite si la session le permet."""
+    try:
+        cid = 0
+        interne = 0
+        try:
+            c = sentauth_current_client()
+            if c:
+                cid = int(c.get('id') or 0)
+                interne = 1 if c.get('is_conseilprev') else 0
+        except Exception:
+            pass
+        r = _emp_calc(modele, tokens_out, latence_ms)
+        conn = registre_get_db(); cur = conn.cursor()
+        _emp_tables(cur, conn)
+        maintenant = datetime.utcnow()
+        cur.execute(registre_sql(
+            'INSERT INTO empreinte_llm (horodatage, jour, client_id, interne, module, fournisseur, modele, '
+            'tokens_in, tokens_out, latence_ms, wh_a, g_a, wh_b, g_b, g_b_min, g_b_max, wh_c, g_c, g_c_min, '
+            'g_c_max, intensite, source_intensite, methodo) VALUES '
+            '(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
+            'INSERT INTO empreinte_llm (horodatage, jour, client_id, interne, module, fournisseur, modele, '
+            'tokens_in, tokens_out, latence_ms, wh_a, g_a, wh_b, g_b, g_b_min, g_b_max, wh_c, g_c, g_c_min, '
+            'g_c_max, intensite, source_intensite, methodo) VALUES '
+            '(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)'),
+            (maintenant.isoformat(), maintenant.strftime('%Y-%m-%d'), cid, interne,
+             str(module or 'plateforme')[:40], r['fournisseur'], str(modele or '')[:80],
+             int(tokens_in or 0), int(tokens_out or 0), int(latence_ms or 0),
+             r['wh_a'], r['g_a'], r['wh_b'], r['g_b'], r['g_b_min'], r['g_b_max'],
+             r['wh_c'], r['g_c'], r['g_c_min'], r['g_c_max'],
+             r['intensite'], r['source_intensite'], EMP_METHODO_VERSION))
+        conn.commit()
+        try: conn.close()
+        except Exception: pass
+    except Exception:
+        pass
+
+
+def _emp_log_page(octets, duree_ms):
+    """Compteur journalier des pages servies (methode C : hebergement, reseau,
+    terminal du visiteur). Agrege par jour pour rester sobre."""
+    try:
+        jour = datetime.utcnow().strftime('%Y-%m-%d')
+        conn = registre_get_db(); cur = conn.cursor()
+        _emp_tables(cur, conn)
+        cur.execute(registre_sql(
+            'UPDATE empreinte_web SET pages=pages+1, octets=octets+%s, duree_ms=duree_ms+%s WHERE jour=%s',
+            'UPDATE empreinte_web SET pages=pages+1, octets=octets+?, duree_ms=duree_ms+? WHERE jour=?'),
+            (int(octets or 0), int(duree_ms or 0), jour))
+        if cur.rowcount == 0:
+            cur.execute(registre_sql(
+                'INSERT INTO empreinte_web (jour, pages, octets, duree_ms) VALUES (%s,%s,%s,%s)',
+                'INSERT INTO empreinte_web (jour, pages, octets, duree_ms) VALUES (?,?,?,?)'),
+                (jour, 1, int(octets or 0), int(duree_ms or 0)))
+        conn.commit()
+        try: conn.close()
+        except Exception: pass
+    except Exception:
+        pass
+
+
+def _emp_web_impacts(pages, octets, duree_ms):
+    """Empreinte du site : hebergement + reseau + terminal (methode C)."""
+    int_heb = EMP_INTENSITE_DEFAUT.get(str(EMP_PAYS_HEBERGEMENT).upper(), 380.0)
+    int_fr, _src = _emp_intensite_fr()
+    wh_heb = float(pages or 0) * EMP_HEBERGEMENT_WH_REQ
+    go = float(octets or 0) / 1e9
+    wh_res = go * EMP_RESEAU_KWH_GO * 1000.0
+    wh_term = float(pages or 0) * EMP_TERMINAL_W * EMP_TERMINAL_S_PAR_PAGE / 3600.0
+    g = (wh_heb / 1000.0 * int_heb) + ((wh_res + wh_term) / 1000.0 * int_fr)
+    return {'pages': int(pages or 0), 'octets': int(octets or 0),
+            'wh_hebergement': wh_heb, 'wh_reseau': wh_res, 'wh_terminal': wh_term,
+            'wh_total': wh_heb + wh_res + wh_term, 'g_total': g,
+            'intensite_hebergement': int_heb, 'intensite_visiteur': int_fr}
+
+
+def _emp_periode(jours):
+    try:
+        j = max(1, min(int(jours), 400))
+    except (TypeError, ValueError):
+        j = 30
+    return (datetime.utcnow() - timedelta(days=j)).strftime('%Y-%m-%d'), j
+
+
+def _emp_agrege(cur, depuis, where='', params=()):
+    sql = ('SELECT COUNT(*) AS n, COALESCE(SUM(tokens_in),0) AS ti, COALESCE(SUM(tokens_out),0) AS to_, '
+           'COALESCE(SUM(wh_a),0) AS wa, COALESCE(SUM(g_a),0) AS ga, '
+           'COALESCE(SUM(wh_b),0) AS wb, COALESCE(SUM(g_b),0) AS gb, COALESCE(SUM(g_b_min),0) AS gbmin, '
+           'COALESCE(SUM(g_b_max),0) AS gbmax, COALESCE(SUM(wh_c),0) AS wc, COALESCE(SUM(g_c),0) AS gc, '
+           'COALESCE(SUM(g_c_min),0) AS gcmin, COALESCE(SUM(g_c_max),0) AS gcmax '
+           'FROM empreinte_llm WHERE jour >= %s ' + where)
+    cur.execute(registre_sql(sql, sql.replace('%s', '?')), (depuis,) + tuple(params))
+    row = cur.fetchone()
+    return dict(row) if row else {}
+
+
+@app.route('/api/empreinte/live', methods=['GET'])
+@sentinel_login_required
+def empreinte_live():
+    """Compteur temps reel : intensite carbone actuelle et cumul du jour."""
+    client = request.current_client
+    conn = registre_get_db(); cur = conn.cursor()
+    _emp_tables(cur, conn)
+    jour = datetime.utcnow().strftime('%Y-%m-%d')
+    admin = bool(client and client.get('is_conseilprev'))
+    if admin:
+        d = _emp_agrege(cur, jour)
+    else:
+        d = _emp_agrege(cur, jour, 'AND client_id = %s', (int(client.get('id') or 0),))
+    try: conn.close()
+    except Exception: pass
+    intensite, source = _emp_intensite_fr()
+    return jsonify({'ok': True, 'admin': admin, 'jour': jour,
+                    'intensite_fr': intensite, 'source_intensite': source,
+                    'requetes': int(d.get('n') or 0), 'tokens_out': int(d.get('to_') or 0),
+                    'wh': round(float(d.get('wc') or 0), 3),
+                    'g_co2': round(float(d.get('gc') or 0), 3),
+                    'g_min': round(float(d.get('gcmin') or 0), 3),
+                    'g_max': round(float(d.get('gcmax') or 0), 3),
+                    'methodo': EMP_METHODO_VERSION})
+
+
+@app.route('/api/empreinte/mine', methods=['GET'])
+@sentinel_login_required
+def empreinte_mine():
+    """Empreinte du client connecte (valorisation, option C)."""
+    client = request.current_client
+    depuis, j = _emp_periode(request.args.get('days', 30))
+    conn = registre_get_db(); cur = conn.cursor()
+    _emp_tables(cur, conn)
+    d = _emp_agrege(cur, depuis, 'AND client_id = %s', (int(client.get('id') or 0),))
+    cur.execute(registre_sql(
+        'SELECT module, COUNT(*) AS n, COALESCE(SUM(g_c),0) AS g FROM empreinte_llm '
+        'WHERE jour >= %s AND client_id = %s GROUP BY module ORDER BY g DESC',
+        'SELECT module, COUNT(*) AS n, COALESCE(SUM(g_c),0) AS g FROM empreinte_llm '
+        'WHERE jour >= ? AND client_id = ? GROUP BY module ORDER BY g DESC'),
+        (depuis, int(client.get('id') or 0)))
+    modules = [dict(r) for r in cur.fetchall()]
+    try: conn.close()
+    except Exception: pass
+    n = max(1, int(d.get('n') or 0))
+    return jsonify({'ok': True, 'jours': j, 'requetes': int(d.get('n') or 0),
+                    'tokens_out': int(d.get('to_') or 0),
+                    'wh': round(float(d.get('wc') or 0), 2),
+                    'g_co2': round(float(d.get('gc') or 0), 2),
+                    'g_min': round(float(d.get('gcmin') or 0), 2),
+                    'g_max': round(float(d.get('gcmax') or 0), 2),
+                    'g_par_requete': round(float(d.get('gc') or 0) / n, 3),
+                    'g_par_1k_tokens': round(float(d.get('gc') or 0) / max(1.0, float(d.get('to_') or 0) / 1000.0), 3),
+                    'modules': modules, 'methodo': EMP_METHODO_VERSION})
+
+
+@app.route('/api/empreinte/resume', methods=['GET'])
+def empreinte_resume():
+    """Synthese complete (CONSEILPREV) : total, par client, par module, par
+    fournisseur, et empreinte du site."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    depuis, j = _emp_periode(request.args.get('days', 30))
+    conn = registre_get_db(); cur = conn.cursor()
+    _emp_tables(cur, conn)
+    total = _emp_agrege(cur, depuis)
+    interne = _emp_agrege(cur, depuis, 'AND interne = 1')
+    clients_agg = _emp_agrege(cur, depuis, 'AND interne = 0')
+
+    cur.execute(registre_sql(
+        'SELECT e.client_id, COUNT(*) AS n, COALESCE(SUM(e.tokens_out),0) AS toks, '
+        'COALESCE(SUM(e.wh_c),0) AS wh, COALESCE(SUM(e.g_c),0) AS g FROM empreinte_llm e '
+        'WHERE e.jour >= %s AND e.interne = 0 GROUP BY e.client_id ORDER BY g DESC LIMIT 50',
+        'SELECT e.client_id, COUNT(*) AS n, COALESCE(SUM(e.tokens_out),0) AS toks, '
+        'COALESCE(SUM(e.wh_c),0) AS wh, COALESCE(SUM(e.g_c),0) AS g FROM empreinte_llm e '
+        'WHERE e.jour >= ? AND e.interne = 0 GROUP BY e.client_id ORDER BY g DESC LIMIT 50'), (depuis,))
+    par_client = [dict(r) for r in cur.fetchall()]
+    for c in par_client:
+        try:
+            cur.execute(registre_sql('SELECT nom_entreprise FROM clients WHERE id=%s',
+                                     'SELECT nom_entreprise FROM clients WHERE id=?'), (c['client_id'],))
+            rr = cur.fetchone()
+            c['nom'] = dict(rr).get('nom_entreprise') if rr else ('Client ' + str(c['client_id']))
+        except Exception:
+            c['nom'] = 'Client ' + str(c.get('client_id'))
+
+    cur.execute(registre_sql(
+        'SELECT module, COUNT(*) AS n, COALESCE(SUM(g_c),0) AS g FROM empreinte_llm WHERE jour >= %s GROUP BY module ORDER BY g DESC',
+        'SELECT module, COUNT(*) AS n, COALESCE(SUM(g_c),0) AS g FROM empreinte_llm WHERE jour >= ? GROUP BY module ORDER BY g DESC'), (depuis,))
+    par_module = [dict(r) for r in cur.fetchall()]
+
+    cur.execute(registre_sql(
+        'SELECT fournisseur, COUNT(*) AS n, COALESCE(SUM(wh_c),0) AS wh, COALESCE(SUM(g_c),0) AS g '
+        'FROM empreinte_llm WHERE jour >= %s GROUP BY fournisseur ORDER BY g DESC',
+        'SELECT fournisseur, COUNT(*) AS n, COALESCE(SUM(wh_c),0) AS wh, COALESCE(SUM(g_c),0) AS g '
+        'FROM empreinte_llm WHERE jour >= ? GROUP BY fournisseur ORDER BY g DESC'), (depuis,))
+    par_fournisseur = [dict(r) for r in cur.fetchall()]
+
+    cur.execute(registre_sql(
+        'SELECT COALESCE(SUM(pages),0) AS p, COALESCE(SUM(octets),0) AS o, COALESCE(SUM(duree_ms),0) AS d '
+        'FROM empreinte_web WHERE jour >= %s',
+        'SELECT COALESCE(SUM(pages),0) AS p, COALESCE(SUM(octets),0) AS o, COALESCE(SUM(duree_ms),0) AS d '
+        'FROM empreinte_web WHERE jour >= ?'), (depuis,))
+    w = dict(cur.fetchone() or {})
+    try: conn.close()
+    except Exception: pass
+    web = _emp_web_impacts(w.get('p'), w.get('o'), w.get('d'))
+    intensite, source = _emp_intensite_fr()
+
+    def bloc(d):
+        n = max(1, int(d.get('n') or 0))
+        return {'requetes': int(d.get('n') or 0), 'tokens_out': int(d.get('to_') or 0),
+                'wh': round(float(d.get('wc') or 0), 2), 'g_co2': round(float(d.get('gc') or 0), 2),
+                'g_min': round(float(d.get('gcmin') or 0), 2), 'g_max': round(float(d.get('gcmax') or 0), 2),
+                'g_par_requete': round(float(d.get('gc') or 0) / n, 3)}
+
+    return jsonify({'ok': True, 'jours': j, 'methodo': EMP_METHODO_VERSION,
+                    'intensite_fr': intensite, 'source_intensite': source,
+                    'pays_hebergement': EMP_PAYS_HEBERGEMENT,
+                    'total': bloc(total), 'conseilprev': bloc(interne), 'clients': bloc(clients_agg),
+                    'par_client': par_client, 'par_module': par_module,
+                    'par_fournisseur': par_fournisseur, 'site': web})
+
+
+@app.route('/api/empreinte/gap', methods=['GET'])
+def empreinte_gap():
+    """Analyse d'ecarts : comparaison des trois methodes et des scenarios
+    d'intensite carbone, sur les memes donnees d'usage reelles."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    depuis, j = _emp_periode(request.args.get('days', 30))
+    conn = registre_get_db(); cur = conn.cursor()
+    _emp_tables(cur, conn)
+    d = _emp_agrege(cur, depuis)
+    cur.execute(registre_sql(
+        'SELECT COALESCE(SUM(wh_b),0) AS wb FROM empreinte_llm WHERE jour >= %s',
+        'SELECT COALESCE(SUM(wh_b),0) AS wb FROM empreinte_llm WHERE jour >= ?'), (depuis,))
+    wb = float(dict(cur.fetchone() or {}).get('wb') or 0.0)
+    try: conn.close()
+    except Exception: pass
+
+    ga, gb, gc = float(d.get('ga') or 0), float(d.get('gb') or 0), float(d.get('gc') or 0)
+    ref = gc if gc > 0 else 1.0
+
+    methodes = [
+        {'cle': 'A', 'nom': 'Facteurs statiques (socle)',
+         'perimetre': 'Usage des modeles seulement ; intensite fixe ; sans PUE ni fabrication',
+         'sources': 'Facteurs internes documentes',
+         'wh': round(float(d.get('wa') or 0), 2), 'g': round(ga, 2), 'g_min': None, 'g_max': None,
+         'ecart_pct': round(100.0 * (ga - gc) / ref, 1)},
+        {'cle': 'B', 'nom': 'Parametrique (EcoLogits / Boavizta / ADEME)',
+         'perimetre': 'Usage + rendement du centre de donnees (PUE) ; intensite temps reel ; fourchette',
+         'sources': 'EcoLogits, ML.ENERGY, Base Empreinte ADEME, RTE eCO2mix',
+         'wh': round(wb, 2), 'g': round(gb, 2),
+         'g_min': round(float(d.get('gbmin') or 0), 2), 'g_max': round(float(d.get('gbmax') or 0), 2),
+         'ecart_pct': round(100.0 * (gb - gc) / ref, 1)},
+        {'cle': 'C', 'nom': 'Cycle de vie etendu (retenue)',
+         'perimetre': 'B + impacts incorpores (fabrication, +' + str(int(EMP_FABRICATION_PCT)) + ' %) + hebergement de la requete',
+         'sources': 'B + Boavizta (fabrication) + hebergement Render (' + str(EMP_PAYS_HEBERGEMENT) + ')',
+         'wh': round(float(d.get('wc') or 0), 2), 'g': round(gc, 2),
+         'g_min': round(float(d.get('gcmin') or 0), 2), 'g_max': round(float(d.get('gcmax') or 0), 2),
+         'ecart_pct': 0.0},
+    ]
+
+    # Scenarios d'intensite carbone appliques a la meme energie (methode B)
+    int_reel, src = _emp_intensite_fr()
+    kwh = wb / 1000.0
+    scenarios = []
+    for nom, val, note in [
+        ('France — facteur ADEME (ACV)', EMP_INTENSITE_DEFAUT['FR'], 'Erreur frequente : ne correspond pas a votre hebergement'),
+        ('France — temps reel RTE (majore ACV)', int_reel, src),
+        ('Allemagne — hebergement reel (Render Francfort)', EMP_INTENSITE_DEFAUT['DE'], 'Facteur a retenir pour la plateforme'),
+        ('Etats-Unis — centre de donnees du fournisseur', EMP_INTENSITE_DEFAUT['US'], 'Applicable aux appels Anthropic'),
+    ]:
+        g = kwh * float(val)
+        base = kwh * EMP_INTENSITE_DEFAUT['FR'] if EMP_INTENSITE_DEFAUT['FR'] else 1.0
+        scenarios.append({'scenario': nom, 'intensite': float(val), 'g': round(g, 2),
+                          'ecart_vs_france_pct': round(100.0 * (g - base) / (base if base else 1.0), 1),
+                          'note': note})
+
+    return jsonify({'ok': True, 'jours': j, 'methodo': EMP_METHODO_VERSION,
+                    'requetes': int(d.get('n') or 0), 'tokens_out': int(d.get('to_') or 0),
+                    'methodes': methodes, 'scenarios': scenarios,
+                    'incertitude_pct': round(100.0 * (float(d.get('gcmax') or 0) - float(d.get('gcmin') or 0)) / ref, 1)})
+
+
+@app.route('/api/empreinte/public', methods=['GET'])
+@rate_limit(limit=60, window=60)
+def empreinte_public():
+    """Transparence : totaux agreges du service et methodologie (sans donnee client)."""
+    conn = registre_get_db(); cur = conn.cursor()
+    _emp_tables(cur, conn)
+    depuis = (datetime.utcnow() - timedelta(days=30)).strftime('%Y-%m-%d')
+    d = _emp_agrege(cur, depuis)
+    cur.execute(registre_sql(
+        'SELECT COALESCE(SUM(pages),0) AS p, COALESCE(SUM(octets),0) AS o, COALESCE(SUM(duree_ms),0) AS dd '
+        'FROM empreinte_web WHERE jour >= %s',
+        'SELECT COALESCE(SUM(pages),0) AS p, COALESCE(SUM(octets),0) AS o, COALESCE(SUM(duree_ms),0) AS dd '
+        'FROM empreinte_web WHERE jour >= ?'), (depuis,))
+    w = dict(cur.fetchone() or {})
+    try: conn.close()
+    except Exception: pass
+    web = _emp_web_impacts(w.get('p'), w.get('o'), w.get('dd'))
+    intensite, source = _emp_intensite_fr()
+    n = max(1, int(d.get('n') or 0))
+    return jsonify({'ok': True, 'periode_jours': 30, 'methodo': EMP_METHODO_VERSION,
+                    'intensite_fr_temps_reel': intensite, 'source_intensite': source,
+                    'requetes_llm': int(d.get('n') or 0), 'tokens_out': int(d.get('to_') or 0),
+                    'wh_llm': round(float(d.get('wc') or 0), 2),
+                    'g_co2_llm': round(float(d.get('gc') or 0), 2),
+                    'g_min': round(float(d.get('gcmin') or 0), 2),
+                    'g_max': round(float(d.get('gcmax') or 0), 2),
+                    'g_par_requete': round(float(d.get('gc') or 0) / n, 3),
+                    'site': {'pages': web['pages'], 'wh': round(web['wh_total'], 2),
+                             'g_co2': round(web['g_total'], 2)},
+                    'avertissement': 'Estimations par modelisation, non des mesures. Fourchettes publiees.'})
+
+
+@app.route('/api/empreinte/export', methods=['GET'])
+def empreinte_export():
+    """Export CSV du journal (CONSEILPREV)."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    depuis, j = _emp_periode(request.args.get('days', 90))
+    conn = registre_get_db(); cur = conn.cursor()
+    _emp_tables(cur, conn)
+    cur.execute(registre_sql(
+        'SELECT horodatage, client_id, interne, module, fournisseur, modele, tokens_in, tokens_out, '
+        'latence_ms, wh_c, g_a, g_b, g_c, g_c_min, g_c_max, intensite, source_intensite, methodo '
+        'FROM empreinte_llm WHERE jour >= %s ORDER BY id DESC LIMIT 20000',
+        'SELECT horodatage, client_id, interne, module, fournisseur, modele, tokens_in, tokens_out, '
+        'latence_ms, wh_c, g_a, g_b, g_c, g_c_min, g_c_max, intensite, source_intensite, methodo '
+        'FROM empreinte_llm WHERE jour >= ? ORDER BY id DESC LIMIT 20000'), (depuis,))
+    rows = [dict(r) for r in cur.fetchall()]
+    try: conn.close()
+    except Exception: pass
+    entete = ('horodatage;client_id;interne;module;fournisseur;modele;tokens_in;tokens_out;latence_ms;'
+              'wh_methodeC;gCO2_methodeA;gCO2_methodeB;gCO2_methodeC;gCO2_min;gCO2_max;intensite_gCO2_kWh;'
+              'source_intensite;version_methodo')
+    lignes = [entete]
+    for r in rows:
+        lignes.append(';'.join(str(r.get(k, '')) for k in
+                               ['horodatage', 'client_id', 'interne', 'module', 'fournisseur', 'modele',
+                                'tokens_in', 'tokens_out', 'latence_ms', 'wh_c', 'g_a', 'g_b', 'g_c',
+                                'g_c_min', 'g_c_max', 'intensite', 'source_intensite', 'methodo']))
+    corps = '\ufeff' + '\n'.join(lignes)
+    resp = make_response(corps)
+    resp.headers['Content-Type'] = 'text/csv; charset=utf-8'
+    resp.headers['Content-Disposition'] = 'attachment; filename="empreinte-numerique-conseilprev.csv"'
+    return resp
+
+
+
+@app.after_request
+def _emp_after_request(resp):
+    """Compteur des pages servies : alimente le volet hebergement, reseau et
+    terminal (methode C). Silencieux et non bloquant."""
+    try:
+        if request.method == 'GET' and not request.path.startswith('/api/'):
+            ct = (resp.headers.get('Content-Type') or '')
+            if 'text/html' in ct:
+                taille = 0
+                try:
+                    taille = int(resp.headers.get('Content-Length') or 0)
+                except Exception:
+                    taille = 0
+                if not taille and not getattr(resp, 'direct_passthrough', False):
+                    try:
+                        taille = len(resp.get_data())
+                    except Exception:
+                        taille = 0
+                _emp_log_page(taille, 0)
+    except Exception:
+        pass
+    return resp
 
 
 if __name__ == '__main__':
