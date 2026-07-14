@@ -9347,6 +9347,36 @@ except (TypeError, ValueError):
     FORM_TVA_PCT = 20.0
 
 
+_FORM_TAX_RATE_CACHE = {'id': None}
+
+
+def _form_tax_rate(stripe_mod):
+    """Taux de TVA Stripe (objet TaxRate) : permet au recu et a la facture
+    d'afficher le HT, la TVA et le TTC separement, au lieu d'un montant global.
+    Utilise STRIPE_TAX_RATE_ID si defini, sinon cree le taux une fois et le
+    met en cache. Retourne None si la TVA est nulle ou en cas d'echec."""
+    if FORM_TVA_PCT <= 0:
+        return None
+    fixe = os.environ.get('STRIPE_TAX_RATE_ID')
+    if fixe:
+        return fixe
+    if _FORM_TAX_RATE_CACHE.get('id'):
+        return _FORM_TAX_RATE_CACHE['id']
+    try:
+        tr = stripe_mod.TaxRate.create(
+            display_name='TVA',
+            description='TVA francaise',
+            jurisdiction='FR',
+            percentage=FORM_TVA_PCT,
+            inclusive=False,
+        )
+        tid = tr.get('id') if isinstance(tr, dict) else getattr(tr, 'id', None)
+        _FORM_TAX_RATE_CACHE['id'] = tid
+        return tid
+    except Exception:
+        return None
+
+
 def _form_ttc(cents_ht):
     """Montant TTC (en centimes) a partir d'un montant HT."""
     return int(round(int(cents_ht or 0) * (1.0 + max(0.0, FORM_TVA_PCT) / 100.0)))
@@ -9534,13 +9564,20 @@ def formations_inscription():
         stripe.api_key = secret
         stripe.max_network_retries = 0
         base = request.url_root.rstrip('/')
+        taux = _form_tax_rate(stripe)
+        ligne = {'price_data': {'currency': 'eur',
+                                'product_data': {'name': titre,
+                                                 'description': 'Session du %s — %s' % (sess.get('date_session'), sess.get('lieu'))},
+                                # Avec un taux de TVA Stripe : montant HT, la TVA est ajoutee et detaillee.
+                                # Sans taux (echec ou TVA nulle) : le montant TTC est preleve directement.
+                                'unit_amount': (int(sess.get('prix_cents') or 95000) if taux
+                                                else _form_ttc(sess.get('prix_cents') or 95000))},
+                 'quantity': participants}
+        if taux:
+            ligne['tax_rates'] = [taux]
         sk = stripe.checkout.Session.create(
             mode='payment',
-            line_items=[{'price_data': {'currency': 'eur',
-                                        'product_data': {'name': titre,
-                                                         'description': 'Session du %s — %s' % (sess.get('date_session'), sess.get('lieu'))},
-                                        'unit_amount': _form_ttc(sess.get('prix_cents') or 95000)},
-                         'quantity': participants}],
+            line_items=[ligne],
             customer_email=email,
             client_reference_id=str(insc_id),
             metadata={'type': 'formation', 'inscription_id': str(insc_id), 'session_id': str(session_id)},
