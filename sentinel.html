@@ -3735,7 +3735,7 @@ textarea.form-el{min-height:86px;resize:vertical}
         <div class="rgpd-h" style="font-weight:700;font-size:13px;color:var(--ink)">Vue globale — CONSEILPREV</div>
         <select id="emp-days" onchange="empLoadAdmin()" style="font-size:11.5px;padding:4px 8px;border:1px solid var(--rule2);border-radius:5px"><option value="7">7 jours</option><option value="30" selected>30 jours</option><option value="90">90 jours</option><option value="365">12 mois</option></select>
         <button class="mat-export-btn" style="margin-left:auto" onclick="empExport()">Exporter CSV</button>
-        <button class="mat-export-btn" style="background:var(--ink,#111827);color:#fff" onclick="empRapport()">Rapport d'empreinte</button>
+        <button class="mat-export-btn" style="background:var(--ink,#111827);color:#fff" onclick="empRapport()">Bilan GES (GHG Protocol · ADEME)</button>
       </div>
       <div id="emp-glob" style="font-size:12px;overflow-x:auto">Chargement…</div>
     </div>
@@ -19821,36 +19821,145 @@ window.empExport = function(){
 window.empRapport = function(){
   var days = (document.getElementById('emp-days') || {}).value || '30';
   Promise.all([
+    fetch('/api/empreinte/ghg?days=' + days, { credentials:'same-origin' }).then(function(r){ return r.json(); }),
     fetch('/api/empreinte/resume?days=' + days, { credentials:'same-origin' }).then(function(r){ return r.json(); }),
     fetch('/api/empreinte/gap?days=' + days, { credentials:'same-origin' }).then(function(r){ return r.json(); })
   ]).then(function(res){
-    var d = res[0], g = res[1];
-    if(!d || !d.ok) return;
-    function row(cs){ return '<tr>' + cs.map(function(v){ return '<td style="padding:6px 9px;border-bottom:1px solid #e5e7eb">' + v + '</td>'; }).join('') + '</tr>'; }
-    var met = (g.methodes||[]).map(function(x){ return row([x.cle + ' — ' + x.nom, x.perimetre, empG(x.g), (x.ecart_pct > 0 ? '+' : '') + x.ecart_pct + ' %']); }).join('');
-    var scen = (g.scenarios||[]).map(function(x){ return row([x.scenario, Math.round(x.intensite) + ' g/kWh', empG(x.g), x.note]); }).join('');
-    var cli = (d.par_client||[]).map(function(x){ return row([String(x.nom||''), String(x.n||0), empG(x.g)]); }).join('');
+    var h = res[0], d = res[1], g = res[2];
+    if(!h || !h.ok){ alert('Rapport indisponible.'); return; }
+    function esc(s){ return String(s == null ? '' : s).replace(/</g, '&lt;'); }
+    function kg(v){ var n = Number(v || 0); return n.toLocaleString('fr-FR', {minimumFractionDigits:3, maximumFractionDigits:3}) + ' kg'; }
+    function row(cs){ return '<tr>' + cs.map(function(v){ return '<td>' + v + '</td>'; }).join('') + '</tr>'; }
+
+    var s3 = (h.ghg.scope3.lignes || []).map(function(l){
+      return row([esc(l.intitule),
+                  (l.kwh ? l.kwh.toLocaleString('fr-FR', {maximumFractionDigits:4}) + ' kWh' : '\u2014'),
+                  (l.fe ? l.fe.toLocaleString('fr-FR') + ' g/kWh' : '\u2014'),
+                  '<strong>' + kg(l.kg) + '</strong>', l.part_pct + ' %']);
+    }).join('');
+
+    var ademe = (h.ademe || []).map(function(a){
+      return row([esc(a.categorie), esc(a.poste),
+                  (a.kg == null ? '<em>hors p\u00e9rim\u00e8tre</em>' : '<strong>' + kg(a.kg) + '</strong>'),
+                  '<span style="color:#666">' + esc(a.commentaire) + '</span>']);
+    }).join('');
+
+    var fe = (h.facteurs || []).map(function(f){
+      return row([esc(f.facteur),
+                  (f.valeur ? String(f.valeur).replace('.', ',') : '\u2014') + ' ' + esc(f.unite),
+                  esc(f.source), '<span style="color:#666">' + esc(f.usage) + '</span>']);
+    }).join('');
+
+    var calc = (h.calculs || []).map(function(c){
+      return '<div class="calc"><div class="calc-t">' + esc(c.poste) + '</div>'
+        + '<div class="calc-f">' + esc(c.formule) + '</div>'
+        + '<div class="calc-a">' + esc(c.application) + '</div></div>';
+    }).join('');
+
+    var met = (g && g.methodes ? g.methodes : []).map(function(x){
+      return row([esc(x.cle + ' \u2014 ' + x.nom), esc(x.perimetre),
+                  (x.g/1000).toLocaleString('fr-FR', {maximumFractionDigits:3}) + ' kg',
+                  (x.ecart_pct > 0 ? '+' : '') + x.ecart_pct + ' %']);
+    }).join('');
+    var scen = (g && g.scenarios ? g.scenarios : []).map(function(x){
+      return row([esc(x.scenario), Math.round(x.intensite) + ' g/kWh',
+                  (x.g/1000).toLocaleString('fr-FR', {maximumFractionDigits:3}) + ' kg',
+                  '<span style="color:#666">' + esc(x.note) + '</span>']);
+    }).join('');
+    var cli = (d && d.par_client ? d.par_client : []).map(function(c){
+      return row([esc(c.nom), String(c.n || 0), (Number(c.g||0)/1000).toLocaleString('fr-FR', {maximumFractionDigits:3}) + ' kg']);
+    }).join('');
+
     var today = new Date().toLocaleDateString('fr-FR');
-    var html = '<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="ai-generated" content="partial"><title>Rapport d\u2019empreinte num\u00e9rique \u2014 CONSEILPREV</title>'
-      + '<style>body{font-family:Georgia,serif;max-width:860px;margin:36px auto;padding:0 24px;color:#1a1a1a}h1{font-size:23px}h2{font-size:15px;margin-top:24px;border-bottom:2px solid #1a1a1a;padding-bottom:4px}table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}th{text-align:left;padding:6px 9px;border-bottom:2px solid #1a1a1a;font-size:11px}.meta{color:#666;font-size:12.5px}.big{font-size:38px;font-weight:800;margin:6px 0}.warn{margin:14px 0;padding:10px 12px;border-left:3px solid #c9a227;background:#faf5e6;font-size:12px}@media print{.noprint{display:none}}</style></head><body>'
+    var html = '<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">'
+      + '<meta name="ai-generated" content="partial"><meta name="ai-disclosure" content="Document produit par Sentinel (CONSEILPREV) ; certaines sections peuvent etre generees par IA (IA Act art. 50).">'
+      + '<title>Bilan d\u2019\u00e9missions \u2014 service num\u00e9rique \u2014 CONSEILPREV</title>'
+      + '<style>'
+      + 'body{font-family:Georgia,serif;max-width:900px;margin:34px auto;padding:0 26px;color:#1a1a1a}'
+      + 'h1{font-size:23px;margin-bottom:4px}h2{font-size:15px;margin-top:26px;border-bottom:2px solid #1a1a1a;padding-bottom:4px}'
+      + 'h3{font-size:13px;margin:16px 0 4px;color:#333}'
+      + 'table{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:8px}'
+      + 'th{text-align:left;padding:6px 8px;border-bottom:2px solid #1a1a1a;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em}'
+      + 'td{padding:6px 8px;border-bottom:1px solid #e5e7eb;vertical-align:top}'
+      + '.meta{color:#666;font-size:12px;line-height:1.6}'
+      + '.big{font-size:36px;font-weight:800;margin:6px 0}'
+      + '.warn{margin:14px 0;padding:10px 12px;border-left:3px solid #c9a227;background:#faf5e6;font-size:11.5px;line-height:1.6}'
+      + '.tot{background:#f3f4f6;font-weight:700}'
+      + '.calc{margin:8px 0;padding:8px 10px;border-left:2px solid #6B46C1;background:#faf9ff}'
+      + '.calc-t{font-weight:700;font-size:11.5px}'
+      + '.calc-f{font-family:Menlo,Consolas,monospace;font-size:10.5px;color:#444;margin-top:3px}'
+      + '.calc-a{font-family:Menlo,Consolas,monospace;font-size:10.5px;color:#6B46C1;margin-top:2px}'
+      + '.badge{display:inline-block;padding:2px 7px;background:#14181f;color:#fff;font-weight:800;font-size:9.5px;letter-spacing:.06em;border-radius:3px;margin-right:6px}'
+      + '@media print{.noprint{display:none}h2{page-break-after:avoid}table{page-break-inside:avoid}}'
+      + '</style></head><body>'
       + '<div class="noprint" style="text-align:right"><button onclick="window.print()" style="padding:8px 16px;cursor:pointer">Imprimer / PDF</button></div>'
-      + '<h1>Rapport d\u2019empreinte num\u00e9rique</h1>'
-      + '<div class="meta">\u00c9dit\u00e9 le ' + today + ' \u2014 CONSEILPREV \u00b7 p\u00e9riode : ' + d.jours + ' jours \u00b7 m\u00e9thodologie v' + d.methodo + '</div>'
-      + '<div class="warn"><strong>Estimations par mod\u00e9lisation</strong>, non des mesures. Fourchette d\u2019incertitude : \u00b1 ' + g.incertitude_pct + ' %. Aucune all\u00e9gation de neutralit\u00e9 ni d\u2019\u00e9missions \u00e9vit\u00e9es n\u2019est formul\u00e9e.</div>'
-      + '<h2>Total (m\u00e9thode C \u2014 cycle de vie \u00e9tendu)</h2><div class="big">' + empG(d.total.g_co2) + ' CO2eq</div>'
-      + '<div class="meta">' + d.total.requetes + ' requ\u00eate(s) \u00b7 ' + empW(d.total.wh) + ' \u00b7 ' + empG(d.total.g_par_requete) + ' par requ\u00eate \u00b7 fourchette ' + empG(d.total.g_min) + ' \u2013 ' + empG(d.total.g_max) + '</div>'
-      + '<h2>R\u00e9partition</h2><table><tr><th>P\u00e9rim\u00e8tre</th><th>Requ\u00eates</th><th>\u00c9missions</th></tr>'
-      + row(['Clients', String(d.clients.requetes), empG(d.clients.g_co2)])
-      + row(['CONSEILPREV (usage propre)', String(d.conseilprev.requetes), empG(d.conseilprev.g_co2)])
-      + row(['Site public', String(d.site.pages) + ' pages', empG(d.site.g_total)]) + '</table>'
-      + '<h2>Par client</h2><table><tr><th>Client</th><th>Requ\u00eates</th><th>\u00c9missions</th></tr>' + cli + '</table>'
-      + '<h2>Analyse d\u2019\u00e9carts \u2014 m\u00e9thodes</h2><table><tr><th>M\u00e9thode</th><th>P\u00e9rim\u00e8tre</th><th>\u00c9missions</th><th>\u00c9cart</th></tr>' + met + '</table>'
-      + '<h2>Analyse d\u2019\u00e9carts \u2014 intensit\u00e9 carbone</h2><table><tr><th>Sc\u00e9nario</th><th>Intensit\u00e9</th><th>\u00c9missions</th><th>Observation</th></tr>' + scen + '</table>'
-      + '<h2>Sources</h2><p class="meta">EcoLogits (GenAI Impact) \u00b7 Boavizta \u00b7 ADEME Base Empreinte \u00b7 RTE \u00e9CO2mix / ODR\u00c9.</p>'
-      + '<p class="meta">Document technique ; ne constitue pas une d\u00e9claration environnementale r\u00e9glementaire.</p></body></html>';
+      + '<div class="warn"><span class="badge">AI ASSISTED</span>Document produit par la plateforme Sentinel ; certaines sections peuvent \u00eatre g\u00e9n\u00e9r\u00e9es par IA (IA Act, art. 50).</div>'
+      + '<h1>Bilan d\u2019\u00e9missions de gaz \u00e0 effet de serre \u2014 service num\u00e9rique</h1>'
+      + '<div class="meta">CONSEILPREV (SARL) \u00b7 SIREN 494 530 157 \u00b7 19 rue Auguste Chabri\u00e8res, 75015 Paris \u00b7 Responsable : Christophe CERF<br>'
+      + '\u00c9dit\u00e9 le ' + today + ' \u00b7 P\u00e9riode : ' + h.jours + ' jours (depuis le ' + esc(h.periode_depuis) + ') \u00b7 M\u00e9thodologie v' + esc(h.methodo) + '</div>'
+
+      + '<h2>1. P\u00e9rim\u00e8tre</h2>'
+      + '<table>'
+      + row(['<strong>P\u00e9rim\u00e8tre organisationnel</strong>', esc(h.perimetre.organisationnel) + ' \u2014 consolidation par <em>contr\u00f4le op\u00e9rationnel</em>'])
+      + row(['<strong>P\u00e9rim\u00e8tre op\u00e9rationnel</strong>', esc(h.perimetre.operationnel)])
+      + row(['<strong>H\u00e9bergement</strong>', esc(h.perimetre.hebergement)])
+      + row(['<strong>Fournisseurs de mod\u00e8les</strong>', esc(h.perimetre.fournisseurs_modeles)])
+      + row(['<strong>Exclusions</strong>', esc(h.perimetre.exclusions)])
+      + row(['<strong>Donn\u00e9es d\u2019activit\u00e9</strong>', h.requetes + ' requ\u00eate(s) de mod\u00e8le \u00b7 ' + (h.tokens_out||0).toLocaleString('fr-FR') + ' jetons de sortie \u00b7 pages servies comptabilis\u00e9es'])
+      + '</table>'
+
+      + '<h2>2. R\u00e9sultat consolid\u00e9</h2>'
+      + '<div class="big">' + kg(h.total_kg) + ' CO2eq</div>'
+      + '<div class="meta">Fourchette d\u2019incertitude : ' + kg(h.fourchette_kg[0]) + ' \u2013 ' + kg(h.fourchette_kg[1])
+      + ' (\u00b1 ' + h.incertitude_pct + ' %). M\u00e9thode retenue : cycle de vie \u00e9tendu (usage + fabrication amont + h\u00e9bergement).</div>'
+
+      + '<h2>3. GHG Protocol \u2014 scopes 1, 2 et 3</h2>'
+      + '<h3>Scope 1 \u2014 \u00e9missions directes</h3>'
+      + '<table><tr><th>Poste</th><th>\u00c9missions</th></tr>' + row(['N\u00e9ant', '<strong>0,000 kg</strong>']) + '</table>'
+      + '<div class="meta">' + esc(h.ghg.scope1.commentaire) + '</div>'
+      + '<h3>Scope 2 \u2014 \u00e9missions indirectes li\u00e9es \u00e0 l\u2019\u00e9nergie achet\u00e9e</h3>'
+      + '<table><tr><th>Poste</th><th>\u00c9missions</th></tr>' + row(['N\u00e9ant', '<strong>0,000 kg</strong>']) + '</table>'
+      + '<div class="meta">' + esc(h.ghg.scope2.commentaire) + '</div>'
+      + '<h3>Scope 3 \u2014 autres \u00e9missions indirectes</h3>'
+      + '<table><tr><th>Cat\u00e9gorie et poste</th><th>Donn\u00e9e d\u2019activit\u00e9</th><th>Facteur d\u2019\u00e9mission</th><th>\u00c9missions</th><th>Part</th></tr>'
+      + s3
+      + row(['<span class="tot">Total scope 3</span>', '', '', '<span class="tot">' + kg(h.ghg.scope3.total_kg) + '</span>', '<span class="tot">100 %</span>'])
+      + '</table>'
+      + '<div class="meta">' + esc(h.ghg.scope3.commentaire) + '</div>'
+      + '<table><tr><th>Total (scopes 1 + 2 + 3)</th><th>\u00c9missions</th></tr>'
+      + row(['<strong>Bilan consolid\u00e9</strong>', '<strong>' + kg(h.ghg.total_kg) + ' CO2eq</strong>']) + '</table>'
+
+      + '<h2>4. D\u00e9tail des calculs</h2>'
+      + '<div class="meta">Chaque poste est reconstituable \u00e0 partir des donn\u00e9es d\u2019activit\u00e9 et des facteurs d\u2019\u00e9mission ci-dessous.</div>'
+      + calc
+
+      + '<h2>5. Facteurs d\u2019\u00e9mission et param\u00e8tres</h2>'
+      + '<table><tr><th>Facteur ou param\u00e8tre</th><th>Valeur</th><th>Source</th><th>Usage</th></tr>' + fe + '</table>'
+      + '<div class="meta">Sources : EcoLogits (GenAI Impact) \u00b7 Boavizta \u00b7 ADEME Base Empreinte \u00b7 RTE \u00e9CO2mix / ODR\u00c9 \u00b7 ML.ENERGY.</div>'
+
+      + '<h2>6. Bilan Carbone \u2014 format ADEME (BEGES)</h2>'
+      + '<table><tr><th>Cat\u00e9gorie</th><th>Poste</th><th>\u00c9missions</th><th>Commentaire</th></tr>' + ademe
+      + row(['<span class="tot">Total</span>', '', '<span class="tot">' + kg(h.total_kg) + '</span>', '']) + '</table>'
+      + '<div class="meta">Correspondance : le scope 3, cat\u00e9gorie 1 du GHG Protocol correspond aux postes 4.2 et 4.5 de l\u2019ADEME ; la cat\u00e9gorie 11 correspond au poste 5.1. Les scopes 1 et 2 correspondent aux cat\u00e9gories 1 et 2, nulles sur ce p\u00e9rim\u00e8tre.</div>'
+
+      + '<h2>7. R\u00e9partition par client</h2>'
+      + '<table><tr><th>Client</th><th>Requ\u00eates</th><th>\u00c9missions</th></tr>' + cli + '</table>'
+      + '<div class="meta">L\u2019usage propre de CONSEILPREV est isol\u00e9 et ne figure pas dans ce tableau : il repr\u00e9sente '
+      + ((d && d.conseilprev) ? kg(Number(d.conseilprev.g_co2||0)/1000) : '\u2014') + ' CO2eq sur la p\u00e9riode.</div>'
+
+      + '<h2>8. Analyse d\u2019\u00e9carts m\u00e9thodologiques</h2>'
+      + '<table><tr><th>M\u00e9thode</th><th>P\u00e9rim\u00e8tre</th><th>\u00c9missions</th><th>\u00c9cart</th></tr>' + met + '</table>'
+      + '<h3>Sensibilit\u00e9 au facteur d\u2019intensit\u00e9 carbone</h3>'
+      + '<table><tr><th>Sc\u00e9nario</th><th>Intensit\u00e9</th><th>\u00c9missions</th><th>Observation</th></tr>' + scen + '</table>'
+
+      + '<h2>9. Incertitudes et limites</h2>'
+      + '<div class="warn"><strong>Estimations par mod\u00e9lisation, non des mesures.</strong> Aucun fournisseur ne publie la consommation r\u00e9elle par requ\u00eate ; les impacts de fabrication souffrent d\u2019un manque de transparence de la fili\u00e8re. Incertitude retenue : \u00b1 ' + h.incertitude_pct + ' %. Aucune all\u00e9gation de neutralit\u00e9, de compensation ou d\u2019\u00e9missions \u00e9vit\u00e9es n\u2019est formul\u00e9e.</div>'
+      + '<div class="meta">Document technique. Ne constitue ni une d\u00e9claration r\u00e9glementaire au titre de l\u2019article L. 229-25 du code de l\u2019environnement, ni un avis juridique. Les facteurs et param\u00e8tres doivent \u00eatre revus au moins annuellement.</div>'
+      + '</body></html>';
     var w = window.open('', '_blank');
     if(w){ w.document.write(html); w.document.close(); }
-  }).catch(function(){});
+    else { alert('Veuillez autoriser les fen\u00eatres pour g\u00e9n\u00e9rer le rapport.'); }
+  }).catch(function(){ alert('Rapport indisponible.'); });
 };
 window.empInit = function(){
   empLive(); empMine();
