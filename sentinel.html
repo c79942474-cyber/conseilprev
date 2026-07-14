@@ -2064,6 +2064,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-item" onclick="go('rgpd-doc',this,'RGPD &amp; PRIVACY','Politique documentaire');docInit()" title="Referentiel de la documentation de conformite RGPD (accountability, art. 5.2) : etat, responsable, revue."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h6"/></svg></span>Politique documentaire</div>
     <div class="sb-item" onclick="go('rgpd-sensibilisation',this,'RGPD &amp; PRIVACY','Sensibilisation');sensInit()" title="Plan de sensibilisation a la protection des donnees par public cible : periodicite, statut, suivi."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>Sensibilisation</div>
     <div class="sb-item" onclick="go('rgpd-conformite',this,'RGPD &amp; PRIVACY','Conformité RGPD');confLoadOnce()" title="Tableau de bord consolidant registre, AIPD, privacy by design, documentation et sensibilisation : indice global et points d attention."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></span>Conformité RGPD</div>
+    <div class="sb-item" onclick="go('empreinte',this,'EMPREINTE','Empreinte numerique')" title="Compteur temps reel de l'empreinte numerique : site, plateforme et modeles de langage ; trois methodes comparees."><span class="sb-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></span>Empreinte numérique</div>
     <div class="sb-section">Entreprise</div>
     <div class="sb-item" onclick="go('entreprise',this,'ENTREPRISE','Offre Entreprise')" title="Offre Entreprise : multi-entites, integrations API, SLA, accompagnement, formation et rapport annuel."><span class="sb-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M9 8h.01M15 8h.01M9 12h.01M15 12h.01M9 16h6"/></svg></span>Offre Entreprise</div>
     <div class="sb-section">Administration</div>
@@ -3693,6 +3694,83 @@ textarea.form-el{min-height:86px;resize:vertical}
 </div>
 
 
+
+
+
+<div class="page" id="p-empreinte">
+  <span class="eyebrow">Empreinte · Numérique responsable</span><h1 class="page-h">Empreinte <em>numérique</em></h1>
+  <p class="page-lead">Compteur automatique et temps réel de l'empreinte du site, de la plateforme et des modèles de langage utilisés, à partir de l'usage réel : jetons consommés, latence, pages servies. Trois méthodes sont calculées en parallèle sur les mêmes données, afin d'en comparer les résultats.</p>
+
+  <div style="border:1px solid var(--rule2);border-left:3px solid var(--accent);border-radius:10px;padding:12px 14px;background:var(--white);margin-bottom:16px;font-size:11.5px;color:var(--muted);line-height:1.6">
+    <strong style="color:var(--ink)">Avertissement méthodologique.</strong> Ces valeurs sont des <strong>estimations par modélisation</strong>, non des mesures. Aucun fournisseur ne publie la consommation réelle par requête. Les fourchettes d'incertitude sont affichées et la méthodologie est versionnée. Ne pas en tirer d'allégation de neutralité ni d'émissions évitées.
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:18px">
+    <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white)">
+      <div style="font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">Aujourd'hui</div>
+      <div id="emp-live-g" style="font-size:30px;font-weight:800;color:var(--ink)">—</div>
+      <div id="emp-live-detail" style="font-size:11px;color:var(--muted)">Chargement…</div>
+    </div>
+    <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white)">
+      <div style="font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">Intensité carbone — France (temps réel)</div>
+      <div id="emp-int" style="font-size:30px;font-weight:800;color:var(--ink)">—</div>
+      <div id="emp-int-src" style="font-size:11px;color:var(--muted)">RTE éCO2mix</div>
+    </div>
+    <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white)">
+      <div style="font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">Sur 30 jours</div>
+      <div id="emp-mine-g" style="font-size:30px;font-weight:800;color:var(--ink)">—</div>
+      <div id="emp-mine-detail" style="font-size:11px;color:var(--muted)">—</div>
+    </div>
+  </div>
+
+  <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px">
+    <div class="rgpd-h" style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:8px">Répartition par module</div>
+    <div id="emp-mine-modules" style="font-size:12px;overflow-x:auto">—</div>
+  </div>
+
+  <!-- ══ Sections réservées à CONSEILPREV ══ -->
+  <div id="emp-admin" style="display:none">
+    <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px">
+        <div class="rgpd-h" style="font-weight:700;font-size:13px;color:var(--ink)">Vue globale — CONSEILPREV</div>
+        <select id="emp-days" onchange="empLoadAdmin()" style="font-size:11.5px;padding:4px 8px;border:1px solid var(--rule2);border-radius:5px"><option value="7">7 jours</option><option value="30" selected>30 jours</option><option value="90">90 jours</option><option value="365">12 mois</option></select>
+        <button class="mat-export-btn" style="margin-left:auto" onclick="empExport()">Exporter CSV</button>
+        <button class="mat-export-btn" style="background:var(--ink,#111827);color:#fff" onclick="empRapport()">Rapport d'empreinte</button>
+      </div>
+      <div id="emp-glob" style="font-size:12px;overflow-x:auto">Chargement…</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:16px">
+      <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white)">
+        <div class="rgpd-h" style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:8px">Par client</div>
+        <div id="emp-clients" style="font-size:12px;overflow-x:auto">—</div>
+      </div>
+      <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white)">
+        <div class="rgpd-h" style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:8px">Par fournisseur et par module</div>
+        <div id="emp-four" style="font-size:12px;overflow-x:auto">—</div>
+      </div>
+    </div>
+
+    <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px">
+      <div class="rgpd-h" style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Analyse d'écarts — comparaison des méthodes</div>
+      <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px">Les trois méthodes sont appliquées aux <strong>mêmes données d'usage réelles</strong>. L'écart mesure la sensibilité du résultat au choix méthodologique — c'est l'information la plus utile d'un point de vue d'audit.</div>
+      <div id="emp-gap-met" style="font-size:12px;overflow-x:auto">—</div>
+      <div class="rgpd-h" style="font-weight:700;font-size:13px;color:var(--ink);margin:14px 0 4px 0">Analyse d'écarts — scénarios d'intensité carbone</div>
+      <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px">Même énergie consommée, facteurs d'intensité différents. <strong>Point de vigilance :</strong> l'hébergement Render est situé à Francfort ; retenir le facteur français serait une erreur méthodologique.</div>
+      <div id="emp-gap-scen" style="font-size:12px;overflow-x:auto">—</div>
+      <div id="emp-gap-inc" style="font-size:11.5px;color:var(--muted);margin-top:10px"></div>
+    </div>
+
+    <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white)">
+      <div class="rgpd-h" style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:8px">Méthodologie et guide d'exploitation</div>
+      <details style="margin-bottom:4px"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">1 · Ce qui est compté</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 8px 0;line-height:1.65">Chaque appel de modèle est journalisé avec le <strong>décompte réel des jetons</strong> renvoyé par l'API, la latence, le client, le module et le fournisseur. Les pages servies sont agrégées par jour. Tous les appels passant par le serveur, le comptage est <strong>exhaustif</strong>.</div></details>
+      <details style="margin-bottom:4px"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">2 · Les trois méthodes</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 8px 0;line-height:1.65"><strong>A — Facteurs statiques.</strong> Énergie par millier de jetons, intensité fixe. Simple, mais sous-estime : ni rendement du centre de données, ni fabrication.<br><br><strong>B — Paramétrique.</strong> Inspirée d'EcoLogits, de Boavizta et de la Base Empreinte de l'ADEME : rendement du centre de données (PUE), intensité carbone <strong>temps réel</strong> (RTE éCO2mix), fourchette basse et haute.<br><br><strong>C — Cycle de vie étendu (retenue).</strong> B, augmentée des <strong>impacts incorporés</strong> (fabrication du matériel, amortie) et de l'hébergement de la requête. C'est la méthode affichée par défaut.</div></details>
+      <details style="margin-bottom:4px"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">3 · Sources</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 8px 0;line-height:1.65"><strong>EcoLogits</strong> (GenAI Impact) — méthodologie d'estimation des impacts des modèles via API, prenant en charge Anthropic et Mistral.<br><strong>Boavizta</strong> — données ouvertes sur les impacts incorporés du matériel.<br><strong>ADEME — Base Empreinte</strong> — facteurs d'émission des mix électriques.<br><strong>RTE — éCO2mix / ODRÉ</strong> — intensité carbone du réseau français au pas de quinze minutes, en données ouvertes.</div></details>
+      <details style="margin-bottom:4px"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">4 · Lire l'analyse d'écarts</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 8px 0;line-height:1.65">Un écart important entre les méthodes ne signifie pas qu'une valeur est fausse : il signifie que le <strong>périmètre</strong> diffère. C'est précisément ce qu'un auditeur vérifie. Documentez la méthode retenue, sa version et sa date, et conservez l'export.</div></details>
+      <details><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">5 · Précautions à respecter</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 4px 0;line-height:1.65">N'affichez jamais d'« émissions évitées » ni de « neutralité » sans base solide : la réglementation européenne sur les allégations environnementales et le contrôle de la DGCCRF s'y intéressent. Distinguez toujours votre empreinte propre de celle imputable aux clients. Revoyez les paramètres au moins une fois par an.</div></details>
+    </div>
+  </div>
+</div>
 
 
 <div class="page" id="p-ia50">
@@ -6163,6 +6241,7 @@ textarea.form-el{min-height:86px;resize:vertical}
 'use strict';
 
 var PAGE_META = {
+    'empreinte': { section: 'EMPREINTE', label: 'Empreinte numérique' },
     'ia50': { section: 'ADMINISTRATION', label: 'Transparence IA Act (art. 50)' },
     'rgpd-site': { section: 'ADMINISTRATION', label: 'RGPD — CONSEILPREV (site et plateforme)' },
     'entreprise': { section: 'ENTREPRISE', label: 'Offre Entreprise' },
@@ -6245,6 +6324,7 @@ function go(id, el, sec, pg) {
   if (id === 'rgpd-site' && typeof window.rgpdInit === 'function') setTimeout(window.rgpdInit, 60);
   if (id === 'training' && typeof window.formCatRender === 'function') setTimeout(window.formCatRender, 60);
   if (id === 'ia50' && typeof window.ia50Load === 'function') setTimeout(window.ia50Load, 60);
+  if (id === 'empreinte' && typeof window.empInit === 'function') setTimeout(window.empInit, 60);
   if (el) el.classList.add('on');
   else document.querySelectorAll('.sb-item').forEach(function(i){
     if (i.getAttribute('onclick') && i.getAttribute('onclick').indexOf("'"+id+"'") >= 0) i.classList.add('on');
@@ -16678,7 +16758,7 @@ window.go = function(id){
    plan Gratuit ; l'attribution d'une offre payante vaut donc confirmation de
    paiement. Les onglets accessibles sont mis en évidence, les autres sont estompés
    et verrouillés (aucun onglet n'est masqué). CONSEILPREV conserve un accès total. */
-var PLAN_GRATUIT_MODULES = ['apercu', 'simulateur', 'regs', 'training'];
+var PLAN_GRATUIT_MODULES = ['apercu', 'simulateur', 'regs', 'training', 'empreinte'];
 var PLAN_ENTREPRISE_ONLY = ['clients', 'pricing', 'entreprise', 'rgpd-site', 'ia50'];
 
 function planIsAllowed(id){
@@ -19654,6 +19734,138 @@ window.ia50Rapport = function(){
     if(w){ w.document.write(html); w.document.close(); }
     else { alert('Veuillez autoriser les fen\u00eatres.'); }
   }).catch(function(){});
+};
+/* ══ Empreinte numérique : compteur temps réel, vue globale, analyse d'écarts ══ */
+function empT(cols, rows){
+  var th = cols.map(function(c){ return '<th style="text-align:left;padding:5px 8px;color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--rule2);white-space:nowrap">' + c + '</th>'; }).join('');
+  var tb = rows.map(function(r){ return '<tr>' + r.map(function(v){ return '<td style="padding:6px 8px;border-bottom:1px solid var(--rule2);vertical-align:top">' + v + '</td>'; }).join('') + '</tr>'; }).join('');
+  return '<table style="width:100%;border-collapse:collapse;font-size:11.5px"><thead><tr>' + th + '</tr></thead><tbody>' + tb + '</tbody></table>';
+}
+function empG(v){ var n = Number(v || 0); return (n >= 1000) ? (n/1000).toLocaleString('fr-FR', {maximumFractionDigits:2}) + ' kg' : n.toLocaleString('fr-FR', {maximumFractionDigits:2}) + ' g'; }
+function empW(v){ var n = Number(v || 0); return (n >= 1000) ? (n/1000).toLocaleString('fr-FR', {maximumFractionDigits:2}) + ' kWh' : n.toLocaleString('fr-FR', {maximumFractionDigits:2}) + ' Wh'; }
+
+window.empLive = function(){
+  fetch('/api/empreinte/live', { credentials:'same-origin', cache:'no-store' }).then(function(r){ return r.json(); }).then(function(d){
+    if(!d || !d.ok) return;
+    var g = document.getElementById('emp-live-g');
+    if(g) g.textContent = empG(d.g_co2) + ' CO2eq';
+    var det = document.getElementById('emp-live-detail');
+    if(det) det.textContent = d.requetes + ' requête(s) · ' + (d.tokens_out||0).toLocaleString('fr-FR') + ' jetons · ' + empW(d.wh)
+      + ' · fourchette ' + empG(d.g_min) + '–' + empG(d.g_max);
+    var i = document.getElementById('emp-int');
+    if(i) i.textContent = Math.round(d.intensite_fr) + ' gCO2eq/kWh';
+    var s = document.getElementById('emp-int-src');
+    if(s) s.textContent = d.source_intensite || '';
+  }).catch(function(){});
+};
+window.empMine = function(){
+  fetch('/api/empreinte/mine?days=30', { credentials:'same-origin' }).then(function(r){ return r.json(); }).then(function(d){
+    if(!d || !d.ok) return;
+    var g = document.getElementById('emp-mine-g');
+    if(g) g.textContent = empG(d.g_co2) + ' CO2eq';
+    var det = document.getElementById('emp-mine-detail');
+    if(det) det.textContent = d.requetes + ' requête(s) · ' + empG(d.g_par_requete) + '/requête · ' + empG(d.g_par_1k_tokens) + '/1000 jetons';
+    var m = document.getElementById('emp-mine-modules');
+    if(m) m.innerHTML = (d.modules && d.modules.length)
+      ? empT(['Module', 'Requêtes', 'Émissions (méthode C)'], d.modules.map(function(x){ return [String(x.module||'—'), String(x.n||0), empG(x.g)]; }))
+      : '<div style="color:var(--muted);font-size:11.5px">Aucun usage enregistré sur la période.</div>';
+  }).catch(function(){});
+};
+window.empLoadAdmin = function(){
+  var days = (document.getElementById('emp-days') || {}).value || '30';
+  fetch('/api/empreinte/resume?days=' + days, { credentials:'same-origin' }).then(function(r){ return r.json(); }).then(function(d){
+    if(!d || !d.ok) return;
+    var g = document.getElementById('emp-glob');
+    if(g) g.innerHTML = empT(['Périmètre', 'Requêtes', 'Jetons', 'Énergie', 'Émissions (C)', 'Fourchette', 'Par requête'], [
+      ['<strong style="color:var(--ink)">Total plateforme</strong>', String(d.total.requetes), (d.total.tokens_out||0).toLocaleString('fr-FR'), empW(d.total.wh), '<strong>' + empG(d.total.g_co2) + '</strong>', empG(d.total.g_min) + '–' + empG(d.total.g_max), empG(d.total.g_par_requete)],
+      ['Clients', String(d.clients.requetes), (d.clients.tokens_out||0).toLocaleString('fr-FR'), empW(d.clients.wh), empG(d.clients.g_co2), empG(d.clients.g_min) + '–' + empG(d.clients.g_max), empG(d.clients.g_par_requete)],
+      ['CONSEILPREV (usage propre)', String(d.conseilprev.requetes), (d.conseilprev.tokens_out||0).toLocaleString('fr-FR'), empW(d.conseilprev.wh), empG(d.conseilprev.g_co2), empG(d.conseilprev.g_min) + '–' + empG(d.conseilprev.g_max), empG(d.conseilprev.g_par_requete)],
+      ['Site public (hébergement, réseau, terminal)', String(d.site.pages) + ' pages', '—', empW(d.site.wh_total), empG(d.site.g_total), '—', '—']
+    ]);
+    var c = document.getElementById('emp-clients');
+    if(c) c.innerHTML = (d.par_client && d.par_client.length)
+      ? empT(['Client', 'Requêtes', 'Jetons', 'Émissions'], d.par_client.map(function(x){ return ['<strong style="color:var(--ink)">' + String(x.nom||'').replace(/</g,'&lt;') + '</strong>', String(x.n||0), (x.toks||0).toLocaleString('fr-FR'), empG(x.g)]; }))
+      : '<div style="color:var(--muted);font-size:11.5px">Aucun usage client sur la période.</div>';
+    var f = document.getElementById('emp-four');
+    var rowsF = (d.par_fournisseur||[]).map(function(x){ return ['<strong style="color:var(--ink)">' + String(x.fournisseur||'—') + '</strong>', String(x.n||0), empW(x.wh), empG(x.g)]; });
+    var rowsM = (d.par_module||[]).map(function(x){ return ['<span style="color:var(--muted)">' + String(x.module||'—') + '</span>', String(x.n||0), '—', empG(x.g)]; });
+    if(f) f.innerHTML = empT(['Fournisseur / module', 'Requêtes', 'Énergie', 'Émissions'], rowsF.concat(rowsM));
+  }).catch(function(){});
+
+  fetch('/api/empreinte/gap?days=' + days, { credentials:'same-origin' }).then(function(r){ return r.json(); }).then(function(d){
+    if(!d || !d.ok) return;
+    var m = document.getElementById('emp-gap-met');
+    if(m) m.innerHTML = empT(['Méthode', 'Périmètre', 'Sources', 'Énergie', 'Émissions', 'Fourchette', 'Écart / méthode C'],
+      (d.methodes||[]).map(function(x){
+        var col = (x.ecart_pct === 0) ? 'var(--green,#0E7C7B)' : (x.ecart_pct < 0 ? 'var(--accent)' : '#c98a00');
+        return ['<strong style="color:var(--ink)">' + x.cle + ' — ' + x.nom + '</strong>', x.perimetre, '<span style="font-size:10.5px">' + x.sources + '</span>',
+          empW(x.wh), '<strong>' + empG(x.g) + '</strong>',
+          (x.g_min != null ? empG(x.g_min) + '–' + empG(x.g_max) : '—'),
+          '<span style="color:' + col + ';font-weight:700">' + (x.ecart_pct > 0 ? '+' : '') + x.ecart_pct + ' %</span>'];
+      }));
+    var s = document.getElementById('emp-gap-scen');
+    if(s) s.innerHTML = empT(['Scénario d\'intensité', 'gCO2eq/kWh', 'Émissions (énergie méthode B)', 'Écart vs France', 'Observation'],
+      (d.scenarios||[]).map(function(x){
+        return ['<strong style="color:var(--ink)">' + x.scenario + '</strong>', String(Math.round(x.intensite)), empG(x.g),
+          '<span style="font-weight:700;color:' + (x.ecart_vs_france_pct > 100 ? 'var(--accent)' : 'var(--muted)') + '">' + (x.ecart_vs_france_pct > 0 ? '+' : '') + x.ecart_vs_france_pct + ' %</span>',
+          '<span style="font-size:11px;color:var(--muted)">' + x.note + '</span>'];
+      }));
+    var inc = document.getElementById('emp-gap-inc');
+    if(inc) inc.innerHTML = '<strong>Incertitude de la méthode retenue :</strong> ± ' + d.incertitude_pct + ' % (amplitude de la fourchette rapportée à la valeur centrale) · Version de méthodologie : ' + d.methodo + ' · ' + (d.requetes||0) + ' requête(s) analysée(s).';
+  }).catch(function(){});
+};
+window.empExport = function(){
+  var days = (document.getElementById('emp-days') || {}).value || '90';
+  window.open('/api/empreinte/export?days=' + days, '_blank');
+};
+window.empRapport = function(){
+  var days = (document.getElementById('emp-days') || {}).value || '30';
+  Promise.all([
+    fetch('/api/empreinte/resume?days=' + days, { credentials:'same-origin' }).then(function(r){ return r.json(); }),
+    fetch('/api/empreinte/gap?days=' + days, { credentials:'same-origin' }).then(function(r){ return r.json(); })
+  ]).then(function(res){
+    var d = res[0], g = res[1];
+    if(!d || !d.ok) return;
+    function row(cs){ return '<tr>' + cs.map(function(v){ return '<td style="padding:6px 9px;border-bottom:1px solid #e5e7eb">' + v + '</td>'; }).join('') + '</tr>'; }
+    var met = (g.methodes||[]).map(function(x){ return row([x.cle + ' — ' + x.nom, x.perimetre, empG(x.g), (x.ecart_pct > 0 ? '+' : '') + x.ecart_pct + ' %']); }).join('');
+    var scen = (g.scenarios||[]).map(function(x){ return row([x.scenario, Math.round(x.intensite) + ' g/kWh', empG(x.g), x.note]); }).join('');
+    var cli = (d.par_client||[]).map(function(x){ return row([String(x.nom||''), String(x.n||0), empG(x.g)]); }).join('');
+    var today = new Date().toLocaleDateString('fr-FR');
+    var html = '<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="ai-generated" content="partial"><title>Rapport d\u2019empreinte num\u00e9rique \u2014 CONSEILPREV</title>'
+      + '<style>body{font-family:Georgia,serif;max-width:860px;margin:36px auto;padding:0 24px;color:#1a1a1a}h1{font-size:23px}h2{font-size:15px;margin-top:24px;border-bottom:2px solid #1a1a1a;padding-bottom:4px}table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}th{text-align:left;padding:6px 9px;border-bottom:2px solid #1a1a1a;font-size:11px}.meta{color:#666;font-size:12.5px}.big{font-size:38px;font-weight:800;margin:6px 0}.warn{margin:14px 0;padding:10px 12px;border-left:3px solid #c9a227;background:#faf5e6;font-size:12px}@media print{.noprint{display:none}}</style></head><body>'
+      + '<div class="noprint" style="text-align:right"><button onclick="window.print()" style="padding:8px 16px;cursor:pointer">Imprimer / PDF</button></div>'
+      + '<h1>Rapport d\u2019empreinte num\u00e9rique</h1>'
+      + '<div class="meta">\u00c9dit\u00e9 le ' + today + ' \u2014 CONSEILPREV \u00b7 p\u00e9riode : ' + d.jours + ' jours \u00b7 m\u00e9thodologie v' + d.methodo + '</div>'
+      + '<div class="warn"><strong>Estimations par mod\u00e9lisation</strong>, non des mesures. Fourchette d\u2019incertitude : \u00b1 ' + g.incertitude_pct + ' %. Aucune all\u00e9gation de neutralit\u00e9 ni d\u2019\u00e9missions \u00e9vit\u00e9es n\u2019est formul\u00e9e.</div>'
+      + '<h2>Total (m\u00e9thode C \u2014 cycle de vie \u00e9tendu)</h2><div class="big">' + empG(d.total.g_co2) + ' CO2eq</div>'
+      + '<div class="meta">' + d.total.requetes + ' requ\u00eate(s) \u00b7 ' + empW(d.total.wh) + ' \u00b7 ' + empG(d.total.g_par_requete) + ' par requ\u00eate \u00b7 fourchette ' + empG(d.total.g_min) + ' \u2013 ' + empG(d.total.g_max) + '</div>'
+      + '<h2>R\u00e9partition</h2><table><tr><th>P\u00e9rim\u00e8tre</th><th>Requ\u00eates</th><th>\u00c9missions</th></tr>'
+      + row(['Clients', String(d.clients.requetes), empG(d.clients.g_co2)])
+      + row(['CONSEILPREV (usage propre)', String(d.conseilprev.requetes), empG(d.conseilprev.g_co2)])
+      + row(['Site public', String(d.site.pages) + ' pages', empG(d.site.g_total)]) + '</table>'
+      + '<h2>Par client</h2><table><tr><th>Client</th><th>Requ\u00eates</th><th>\u00c9missions</th></tr>' + cli + '</table>'
+      + '<h2>Analyse d\u2019\u00e9carts \u2014 m\u00e9thodes</h2><table><tr><th>M\u00e9thode</th><th>P\u00e9rim\u00e8tre</th><th>\u00c9missions</th><th>\u00c9cart</th></tr>' + met + '</table>'
+      + '<h2>Analyse d\u2019\u00e9carts \u2014 intensit\u00e9 carbone</h2><table><tr><th>Sc\u00e9nario</th><th>Intensit\u00e9</th><th>\u00c9missions</th><th>Observation</th></tr>' + scen + '</table>'
+      + '<h2>Sources</h2><p class="meta">EcoLogits (GenAI Impact) \u00b7 Boavizta \u00b7 ADEME Base Empreinte \u00b7 RTE \u00e9CO2mix / ODR\u00c9.</p>'
+      + '<p class="meta">Document technique ; ne constitue pas une d\u00e9claration environnementale r\u00e9glementaire.</p></body></html>';
+    var w = window.open('', '_blank');
+    if(w){ w.document.write(html); w.document.close(); }
+  }).catch(function(){});
+};
+window.empInit = function(){
+  empLive(); empMine();
+  if(window.__IS_CONSEILPREV){
+    var a = document.getElementById('emp-admin');
+    if(a) a.style.display = 'block';
+    empLoadAdmin();
+  }
+  if(window.__empTimer) clearInterval(window.__empTimer);
+  window.__empTimer = setInterval(function(){
+    var on = document.querySelector('.page.on');
+    if(!on || on.id !== 'p-empreinte'){ clearInterval(window.__empTimer); window.__empTimer = null; return; }
+    if(document.hidden) return;
+    empLive();
+  }, 20000);
 };
 window.rgpdRefresh = function(){
   var b = document.getElementById('rgpd-refresh-btn');
