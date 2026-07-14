@@ -7563,9 +7563,17 @@ def clients_billing_run():
             _cancelled.add(item['client_id'])
         try:
             _ikey = 'raas-' + str(item['numero']) + '-e' + str(item['echeance'])
+            # TVA : le montant du jalon est HT ; le taux Stripe ajoute la TVA en ligne
+            # distincte, de sorte que la facture presente HT, TVA et TTC.
+            _taux = None
+            try:
+                _taux = _form_tax_rate(stripe)
+            except Exception:
+                _taux = None
+            _kw = {'tax_rates': [_taux]} if _taux else {}
             stripe.InvoiceItem.create(customer=cust, amount=int(item['montant']) * 100, currency='eur',
                                       description='%s - echeance %s' % (item['numero'], item['echeance']),
-                                      idempotency_key=_ikey + '-item')
+                                      idempotency_key=_ikey + '-item', **_kw)
             inv = stripe.Invoice.create(customer=cust, auto_advance=True, collection_method='charge_automatically',
                                         metadata={'numero': item['numero'], 'echeance': str(item['echeance']), 'client_id': str(item['client_id'])},
                                         idempotency_key=_ikey + '-inv')
