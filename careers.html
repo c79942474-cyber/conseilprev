@@ -19,8 +19,8 @@ body::before{content:"";position:fixed;inset:0;background-image:url("/hero-bg.jp
 @keyframes bm2{0%{transform:translate(0,0)}100%{transform:translate(-60px,80px)}}
 nav{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,rgba(15,8,42,.97),rgba(20,10,52,.96));backdrop-filter:blur(32px);border-bottom:1px solid rgba(180,138,247,.22);padding:0 28px;height:60px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 32px rgba(0,0,0,.45)}
 .nl{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:700;text-decoration:none;color:#fff;margin-right:auto;text-shadow:0 0 20px rgba(180,138,247,.4)}.nl span{background:linear-gradient(135deg,#c084fc,#e879f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.nb{font-size:11px;color:rgba(196,181,232,.5);text-decoration:none;font-family:"Space Mono",monospace;padding:5px 10px;border-radius:7px;border:1px solid transparent;transition:all .2s}.nb:hover{color:#fff;background:rgba(139,92,246,.15);border-color:rgba(180,138,247,.2)}
-.nav-cta{background:linear-gradient(135deg,#8b5cf6,#d946ef);color:#fff;padding:8px 18px;border-radius:8px;font-size:12px;font-family:"Space Mono",monospace;letter-spacing:.04em;font-weight:700;text-decoration:none;box-shadow:0 4px 16px rgba(217,70,239,.4);transition:all .2s}.nav-cta:hover{transform:translateY(-1px)}
+.nb{font-size:11px;color:rgba(196,181,232,.5);text-decoration:none;font-family:"Space Mono",monospace;padding:5px 10px;border-radius:7px;border:1px solid transparent;transition:all .18s}.nb:hover{color:#fff;background:rgba(139,92,246,.15);border-color:rgba(180,138,247,.2)}
+.nav-cta{background:linear-gradient(135deg,#8b5cf6,#d946ef);color:#fff;padding:8px 18px;border-radius:8px;font-size:12px;font-family:"Space Mono",monospace;letter-spacing:.04em;font-weight:700;text-decoration:none;box-shadow:0 4px 16px rgba(217,70,239,.4);transition:all .18s}.nav-cta:hover{transform:translateY(-1px)}
 /* HERO */
 .hero{padding:70px 24px 52px;text-align:center;position:relative}
 .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 80% 70% at 50% 0%,rgba(139,92,246,.22),transparent 65%);pointer-events:none}
@@ -33,7 +33,7 @@ h1 em{font-style:italic;background:linear-gradient(135deg,#818cf8,#c084fc,#e879f
 .con{max-width:960px;margin:0 auto;padding:0 20px 64px}
 .values{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:48px}
 @media(max-width:640px){.values{grid-template-columns:1fr}}
-.val-card{background:rgba(139,92,246,.08);border:1px solid rgba(180,138,247,.18);border-radius:14px;padding:24px 20px;text-align:center;transition:transform .35s cubic-bezier(.34,1.56,.64,1),border-color .25s,box-shadow .28s}
+.val-card{background:rgba(139,92,246,.08);border:1px solid rgba(180,138,247,.18);border-radius:14px;padding:24px 20px;text-align:center;transition:transform .18s cubic-bezier(.34,1.56,.64,1),border-color .18s,box-shadow .18s}
 .val-card:hover{transform:scale(1.07) translateY(-6px);border-color:rgba(217,70,239,.5);box-shadow:0 12px 36px rgba(217,70,239,.28)}
 .val-ico{font-size:32px;margin-bottom:12px;display:block}
 .val-title{font-size:16px;font-weight:700;color:var(--wh);margin-bottom:6px}
@@ -44,9 +44,9 @@ h1 em{font-style:italic;background:linear-gradient(135deg,#818cf8,#c084fc,#e879f
 .section-sub{font-size:13px;color:var(--mu);margin-bottom:28px;line-height:1.7}
 /* Cartes offres */
 .job-grid{display:flex;flex-direction:column;gap:14px;margin-bottom:40px}
-.job-card{background:rgba(139,92,246,.06);border:1px solid rgba(180,138,247,.18);border-radius:13px;padding:22px 24px;display:flex;align-items:center;gap:20px;transition:all .28s;cursor:pointer}
+.job-card{background:rgba(139,92,246,.06);border:1px solid rgba(180,138,247,.18);border-radius:13px;padding:22px 24px;display:flex;align-items:center;gap:20px;transition:all .18s;cursor:pointer}
 .job-card:hover{border-color:rgba(217,70,239,.45);background:rgba(139,92,246,.14);transform:translateX(4px);box-shadow:0 8px 28px rgba(139,92,246,.2)}
-.job-ico{width:48px;height:48px;border-radius:12px;background:rgba(139,92,246,.2);border:1px solid rgba(180,138,247,.25);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;transition:box-shadow .25s}
+.job-ico{width:48px;height:48px;border-radius:12px;background:rgba(139,92,246,.2);border:1px solid rgba(180,138,247,.25);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;transition:box-shadow .18s}
 .job-card:hover .job-ico{box-shadow:0 0 16px rgba(217,70,239,.4)}
 .job-body{flex:1}
 .job-title{font-size:16px;font-weight:700;color:var(--wh);margin-bottom:4px}
@@ -56,14 +56,14 @@ h1 em{font-style:italic;background:linear-gradient(135deg,#818cf8,#c084fc,#e879f
 .t-type{background:rgba(139,92,246,.15);color:var(--pl);border:1px solid rgba(139,92,246,.28)}
 .t-urgent{background:rgba(217,70,239,.12);color:#f0abfc;border:1px solid rgba(217,70,239,.25)}
 .job-desc{font-size:12px;color:var(--mu);line-height:1.6}
-.job-arrow{font-size:20px;color:rgba(180,138,247,.4);transition:transform .2s,color .2s;flex-shrink:0}
+.job-arrow{font-size:20px;color:rgba(180,138,247,.4);transition:transform .18s,color .18s;flex-shrink:0}
 .job-card:hover .job-arrow{transform:translateX(4px);color:var(--pf)}
 /* Candidature spontanée */
 .spont-card{background:linear-gradient(135deg,rgba(139,92,246,.14),rgba(217,70,239,.09));border:1px solid rgba(139,92,246,.3);border-radius:16px;padding:32px;text-align:center;margin-bottom:40px}
 .spont-title{font-family:"Cormorant Garamond",serif;font-size:24px;font-weight:700;color:var(--wh);margin-bottom:10px}
 .spont-sub{font-size:13px;color:var(--mu);margin-bottom:20px;line-height:1.7}
-.btn-p{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#8b5cf6,#d946ef);color:#fff;padding:13px 28px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;transition:all .2s;box-shadow:0 4px 20px rgba(139,92,246,.4)}.btn-p:hover{transform:translateY(-2px)}
-.btn-s{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid var(--bdr);color:var(--wh);padding:13px 28px;border-radius:8px;font-size:14px;text-decoration:none;transition:all .2s}.btn-s:hover{border-color:var(--pl)}
+.btn-p{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#8b5cf6,#d946ef);color:#fff;padding:13px 28px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;transition:all .18s;box-shadow:0 4px 20px rgba(139,92,246,.4)}.btn-p:hover{transform:translateY(-2px)}
+.btn-s{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid var(--bdr);color:var(--wh);padding:13px 28px;border-radius:8px;font-size:14px;text-decoration:none;transition:all .18s}.btn-s:hover{border-color:var(--pl)}
 /* Perks */
 .perks{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:40px}
 @media(max-width:560px){.perks{grid-template-columns:1fr}}
@@ -968,7 +968,7 @@ nav {
   transform:translate(-50%,-50%);
   pointer-events:all;
   cursor:pointer;
-  transition:transform .3s ease;
+  transition:transform .18s ease;
   z-index:2;
 }
 .orbit-avatar:hover{ z-index:10; }
@@ -978,7 +978,7 @@ nav {
   object-fit:cover;
   border:3px solid rgba(196,181,232,.45);
   box-shadow:0 0 20px rgba(157,111,232,.55), 0 0 0 1px rgba(196,181,232,.2);
-  transition:transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .3s;
+  transition:transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .18s;
   display:block;
 }
 .orbit-img-logo{
@@ -1013,7 +1013,7 @@ nav {
   box-shadow:0 4px 16px rgba(0,0,0,.35);
   opacity:0;
   pointer-events:none;
-  transition:opacity .25s ease, transform .25s ease;
+  transition:opacity .18s ease, transform .18s ease;
   transform:translateY(4px);
   z-index:20;
 }
@@ -1119,7 +1119,7 @@ nav {
   color:rgba(196,181,232,.55);
   text-decoration:none;
   font-family:"DM Sans",sans-serif;
-  transition:color .2s;
+  transition:color .18s;
 }
 .careers-submenu-top a:hover{ color:rgba(196,181,232,.9); }
 
@@ -1142,7 +1142,7 @@ nav {
   padding:18px 12px;
   display:inline-block;
   border-bottom:2px solid transparent;
-  transition:color .22s, border-color .22s;
+  transition:color .18s, border-color .18s;
   white-space:nowrap;
 }
 .csm-link:hover{
@@ -1190,7 +1190,7 @@ nav {
   <div class="hbadge"><span class="bdot"></span> Careers · Rejoignez-nous</div>
   <h1>L'innovation commence<br>avec des <em>gens</em></h1>
   <p class="hero-sub">Rejoignez une équipe internationale de passionnés qui réinventent la conformité IA pour les entreprises mondiales.</p>
-  <a href="#offres" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#8b5cf6,#d946ef);color:#fff;padding:13px 28px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;box-shadow:0 4px 20px rgba(139,92,246,.4);transition:all .2s">Voir les postes ouverts ↓</a>
+  <a href="#offres" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#8b5cf6,#d946ef);color:#fff;padding:13px 28px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;box-shadow:0 4px 20px rgba(139,92,246,.4);transition:all .18s">Voir les postes ouverts ↓</a>
 </section>
 
 

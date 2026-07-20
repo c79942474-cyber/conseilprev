@@ -21,8 +21,8 @@ body::before{content:"";position:fixed;inset:0;background-image:url("/hero-bg.jp
 @keyframes bm3{0%{transform:translate(0,0)}100%{transform:translate(50px,50px)}}
 nav{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,rgba(15,8,42,.97),rgba(20,10,52,.96));backdrop-filter:blur(32px);border-bottom:1px solid rgba(180,138,247,.22);padding:0 28px;height:60px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 32px rgba(0,0,0,.45)}
 .nl{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:700;text-decoration:none;color:#fff;margin-right:auto;text-shadow:0 0 20px rgba(180,138,247,.4)}.nl span{background:linear-gradient(135deg,#c084fc,#e879f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.nb{font-size:11px;color:rgba(196,181,232,.5);text-decoration:none;font-family:"Space Mono",monospace;padding:5px 10px;border-radius:7px;border:1px solid transparent;transition:all .2s}.nb:hover{color:#fff;background:rgba(139,92,246,.15);border-color:rgba(180,138,247,.2)}
-.nav-cta{background:linear-gradient(135deg,#8b5cf6,#d946ef);color:#fff;padding:8px 18px;border-radius:8px;font-size:12px;font-family:"Space Mono",monospace;letter-spacing:.04em;font-weight:700;text-decoration:none;box-shadow:0 4px 16px rgba(217,70,239,.4);transition:all .2s}.nav-cta:hover{transform:translateY(-1px)}
+.nb{font-size:11px;color:rgba(196,181,232,.5);text-decoration:none;font-family:"Space Mono",monospace;padding:5px 10px;border-radius:7px;border:1px solid transparent;transition:all .18s}.nb:hover{color:#fff;background:rgba(139,92,246,.15);border-color:rgba(180,138,247,.2)}
+.nav-cta{background:linear-gradient(135deg,#8b5cf6,#d946ef);color:#fff;padding:8px 18px;border-radius:8px;font-size:12px;font-family:"Space Mono",monospace;letter-spacing:.04em;font-weight:700;text-decoration:none;box-shadow:0 4px 16px rgba(217,70,239,.4);transition:all .18s}.nav-cta:hover{transform:translateY(-1px)}
 /* HERO */
 .hero{text-align:center;padding:52px 20px 32px;position:relative}
 .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(139,92,246,.2),transparent 65%);pointer-events:none}
@@ -41,7 +41,7 @@ h1 em{font-style:italic;background:linear-gradient(135deg,#818cf8,#c084fc,#e879f
   background:rgba(139,92,246,.07);
   border:1px solid rgba(180,138,247,.18);
   border-radius:16px;padding:28px 24px;
-  transition:transform .38s cubic-bezier(.34,1.56,.64,1),border-color .28s,box-shadow .3s,background .28s;
+  transition:transform .18s cubic-bezier(.34,1.56,.64,1),border-color .18s,box-shadow .18s,background .18s;
   position:relative;overflow:hidden;isolation:isolate;cursor:default;
 }
 .member-card::before{content:"";position:absolute;inset:-60%;border-radius:50%;opacity:.18;pointer-events:none;z-index:0;background:radial-gradient(ellipse 55% 55% at 50% 50%,rgba(217,70,239,.25),rgba(139,92,246,.18) 35%,transparent 70%);background-size:300% 300%;animation:glow-drift 22s ease-in-out infinite alternate;filter:blur(18px)}
@@ -55,7 +55,7 @@ h1 em{font-style:italic;background:linear-gradient(135deg,#818cf8,#c084fc,#e879f
   border:3px solid rgba(139,92,246,.45);
   box-shadow:0 0 24px rgba(139,92,246,.4),0 0 0 1px rgba(180,138,247,.2);
   display:block;
-  transition:transform .35s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;
+  transition:transform .18s cubic-bezier(.34,1.56,.64,1),box-shadow .18s;
 }
 .member-card:hover .member-avatar{
   transform:scale(1.08);
@@ -68,15 +68,15 @@ h1 em{font-style:italic;background:linear-gradient(135deg,#818cf8,#c084fc,#e879f
 .member-badge{display:inline-block;font-family:"Space Mono",monospace;font-size:9px;padding:2px 9px;border-radius:100px;background:rgba(94,234,212,.1);border:1px solid rgba(94,234,212,.25);color:var(--teal);margin-bottom:10px;letter-spacing:.06em}
 .member-desc{font-size:12px;color:rgba(212,186,255,.65);line-height:1.75}
 /* Lien LinkedIn */
-.member-li{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:11px;color:rgba(147,197,253,.6);text-decoration:none;font-family:"Space Mono",monospace;transition:color .2s}
+.member-li{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:11px;color:rgba(147,197,253,.6);text-decoration:none;font-family:"Space Mono",monospace;transition:color .18s}
 .member-li:hover{color:var(--teal)}
 /* Stats */
 .team-stats{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;padding:36px 0 12px;border-top:1px solid rgba(180,138,247,.1);margin-top:32px}
 .ts{text-align:center}.ts-n{font-family:"Space Mono",monospace;font-size:24px;font-weight:700;color:var(--pl)}.ts-l{font-size:11px;color:var(--mu);text-transform:uppercase;letter-spacing:.1em;margin-top:3px}
 /* CTA */
 .team-cta{text-align:center;padding:40px 24px;background:rgba(139,92,246,.06);border-top:1px solid rgba(139,92,246,.15)}
-.btn-p{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#8b5cf6,#d946ef);color:#fff;padding:13px 28px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;transition:all .2s;box-shadow:0 4px 20px rgba(139,92,246,.4)}.btn-p:hover{transform:translateY(-2px)}
-.btn-s{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid var(--bdr);color:var(--wh);padding:13px 28px;border-radius:8px;font-size:14px;text-decoration:none;transition:all .2s}.btn-s:hover{border-color:var(--pl)}
+.btn-p{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#8b5cf6,#d946ef);color:#fff;padding:13px 28px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;transition:all .18s;box-shadow:0 4px 20px rgba(139,92,246,.4)}.btn-p:hover{transform:translateY(-2px)}
+.btn-s{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid var(--bdr);color:var(--wh);padding:13px 28px;border-radius:8px;font-size:14px;text-decoration:none;transition:all .18s}.btn-s:hover{border-color:var(--pl)}
 .ft-mini{background:rgba(5,2,20,.92);border-top:1px solid var(--bdr);padding:14px 24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:"Space Mono",monospace;font-size:10px;color:var(--mu)}
 .ft-mini a{color:var(--teal);text-decoration:none}
 body{-webkit-user-select:none;user-select:none}
