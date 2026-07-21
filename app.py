@@ -1,4 +1,6 @@
-import os, re as _re, time, hashlib, json, logging, threading, base64
+import os, re as _re, time, hashlib, json, logging, threading, base64, secrets, hmac, socket, ipaddress
+from urllib.parse import urlparse as _urlparse_ssrf
+from markupsafe import escape as _esc_html  # échappement HTML des champs utilisateur (emails)
 import requests, feedparser
 import smtplib, ssl
 from email.mime.multipart import MIMEMultipart
@@ -23,7 +25,16 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(mess
 logger = logging.getLogger('conseilprev')
 
 app = Flask(__name__, static_folder='.', static_url_path='')
-app.secret_key = os.environ.get('FLASK_SECRET_KEY', '').strip() or hashlib.sha256(b'conseilprev-sentinel-fallback-2026').hexdigest()
+# SÉCURITÉ : la clé de signature des sessions ne doit JAMAIS avoir de repli déterministe
+# (une valeur devinable permet de forger un cookie admin). On exige FLASK_SECRET_KEY ;
+# à défaut, on génère une clé aléatoire éphémère (les sessions ne survivent pas à un
+# redémarrage, ce qui est le comportement sûr — jamais de clé publique/reproductible).
+_flask_secret = os.environ.get('FLASK_SECRET_KEY', '').strip()
+if not _flask_secret:
+    logger.critical("FLASK_SECRET_KEY absente — génération d'une clé aléatoire éphémère. "
+                    "Définissez FLASK_SECRET_KEY sur Render pour des sessions persistantes et sûres.")
+    _flask_secret = secrets.token_hex(32)
+app.secret_key = _flask_secret
 app.config['PERMANENT_SESSION_LIFETIME'] = _timedelta_auth(days=30)
 app.config['SESSION_COOKIE_SECURE'] = True
 app.config['SESSION_COOKIE_HTTPONLY'] = True
@@ -35,7 +46,35 @@ MISTRAL_API_KEY = os.environ.get('MISTRAL_API_KEY', '')
 MISTRAL_URL     = "https://api.mistral.ai/v1/chat/completions"
 ANTHROPIC_URL   = "https://api.anthropic.com/v1/messages"
 ANTHROPIC_MODEL = os.environ.get('ANTHROPIC_MODEL', 'claude-haiku-4-5-20251001')
-SECRET_SALT     = os.environ.get('SECRET_SALT', 'conseilprev_security_2025_xK9#mP')
+SECRET_SALT     = os.environ.get('SECRET_SALT', '').strip() or secrets.token_hex(16)  # pas de repli en dur
+
+def _url_is_public_https(url):
+    """Anti-SSRF : True uniquement si l'URL est en https ET que TOUTES les IP résolues
+    de l'hôte sont publiques (rejette loopback, privé, link-local, réservé, multicast,
+    ainsi que les IPv6 mappées IPv4 correspondantes). À combiner avec allow_redirects=False."""
+    try:
+        p = _urlparse_ssrf((url or '').strip())
+    except Exception:
+        return False
+    if p.scheme != 'https' or not p.hostname:
+        return False
+    try:
+        infos = socket.getaddrinfo(p.hostname, p.port or 443, proto=socket.IPPROTO_TCP)
+    except Exception:
+        return False
+    if not infos:
+        return False
+    for info in infos:
+        try:
+            addr = ipaddress.ip_address(info[4][0])
+        except ValueError:
+            return False
+        if isinstance(addr, ipaddress.IPv6Address) and addr.ipv4_mapped:
+            addr = addr.ipv4_mapped
+        if (addr.is_private or addr.is_loopback or addr.is_link_local
+                or addr.is_reserved or addr.is_multicast or addr.is_unspecified):
+            return False
+    return True
 
 # ══════════════════════════════════════════════════════════
 # 1. RATE LIMITING — Anti-DDoS & Brute Force
@@ -50,10 +89,15 @@ class RateLimiter:
         self.chat_req   = defaultdict(list)    # ip → chat timestamps
 
     def get_ip(self, req):
-        # Support proxies (Render, Cloudflare)
+        # SÉCURITÉ : le segment le plus à GAUCHE de X-Forwarded-For est fourni par le
+        # client et donc usurpable (contournement du rate-limiting / brute-force). On
+        # prend le segment le plus à DROITE, ajouté par le proxy de confiance (Render),
+        # que le client ne peut pas contrôler.
         xff = req.headers.get('X-Forwarded-For','')
         if xff:
-            return xff.split(',')[0].strip()
+            parts = [p.strip() for p in xff.split(',') if p.strip()]
+            if parts:
+                return parts[-1]
         return req.remote_addr or '0.0.0.0'
 
     def is_blocked(self, ip):
@@ -369,6 +413,32 @@ def security_middleware():
     _health_paths = ('/', '/health', '/api/health')
     if request.method in ('HEAD', 'GET') and path in _health_paths:
         return  # Health check légitime — pas de vérif UA ni blocage
+
+    # ── Protection CSRF : contrôle d'Origin/Referer sur les mutations d'API ──
+    # SÉCURITÉ : le token CSRF émis (/api/csrf-token) n'était jamais vérifié. On ajoute
+    # une défense sans dépendance côté front : toute requête d'API à effet de bord
+    # (POST/PUT/PATCH/DELETE) doit provenir de l'hôte du site. Les navigateurs envoient
+    # toujours Origin sur les requêtes cross-site ; une origine étrangère est rejetée.
+    # Comparaison par HÔTE (pas par schéma) pour rester correct derrière le proxy TLS de
+    # Render. Les webhooks externes (Stripe/Brevo, authentifiés par signature/secret) sont
+    # exemptés car appelés de serveur à serveur, sans navigateur.
+    if (request.method in ('POST', 'PUT', 'PATCH', 'DELETE')
+            and path.startswith('/api/')
+            and path not in ('/api/stripe/webhook', '/api/brevo/webhook')):
+        _src = request.headers.get('Origin', '') or request.headers.get('Referer', '')
+        if _src:
+            try:
+                _src_host = _urlparse_ssrf(_src).netloc.lower()
+            except Exception:
+                _src_host = ''
+            _allowed_hosts = {(request.host or '').lower(),
+                              _urlparse_ssrf(request.host_url).netloc.lower(),
+                              'conseilprev.onrender.com'}
+            if _src_host and _src_host not in _allowed_hosts:
+                logger.warning(f"CSRF_ORIGIN_BLOCKED {ip} src={_src[:80]!r} → {path}")
+                abort(403)
+        # Origin ET Referer absents = requête non-navigateur (curl/serveur) : tolérée,
+        # car une attaque CSRF nécessite un navigateur qui envoie toujours Origin.
 
     # ── Vérifier si IP bloquée ──
     if limiter.is_blocked(ip):
@@ -1212,9 +1282,13 @@ def api_apply():
 
 @app.route('/api/test-brevo-cv', methods=['GET'])
 def test_brevo_cv():
-    """Test direct API Brevo avec pièce jointe — diagnostic CV."""
+    """Test direct API Brevo avec pièce jointe — diagnostic CV (réservé admin)."""
     import base64 as _b64
     ip = limiter.get_ip(request)
+    # SÉCURITÉ : endpoint de diagnostic (envoie des e-mails, révèle la config).
+    # Réservé à l'admin (token signé) — 404 sinon pour ne pas révéler son existence.
+    if not _admin_token_valid(request.args.get('token','').strip()):
+        abort(404)
 
     # Mini PDF valide (1 page)
     mini_pdf = (
@@ -1227,8 +1301,6 @@ def test_brevo_cv():
 
     result = {
         'brevo_api_key_set':  bool(BREVO_API_KEY),
-        'brevo_api_key_len':  len(BREVO_API_KEY) if BREVO_API_KEY else 0,
-        'brevo_api_key_start': BREVO_API_KEY[:12] + '...' if BREVO_API_KEY else '',
         'mail_from':  MAIL_FROM,
         'mail_to':    MAIL_TO,
     }
@@ -1300,8 +1372,10 @@ def test_brevo_cv():
 def test_email():
     """Route de diagnostic email — accessible uniquement depuis conseilprev.onrender.com"""
     ip = limiter.get_ip(request)
-    # Vérifier que la requête vient du même domaine
-    origin = request.headers.get('Origin','') + request.headers.get('Referer','')
+    # SÉCURITÉ : diagnostic (révèle la config SMTP + envoie un e-mail) → réservé admin.
+    # (l'ancien « contrôle d'origine » était calculé mais jamais appliqué.)
+    if not _admin_token_valid(request.args.get('token','').strip()):
+        abort(404)
     result = {
         'smtp_host':     SMTP_HOST,
         'smtp_port':     SMTP_PORT,
@@ -1431,9 +1505,11 @@ def sanitize_input(text, max_len=3000, allow_newlines=True):
     """
     Nettoie un input utilisateur :
     - Supprime les caractères de contrôle dangereux
-    - Échappe les entités HTML
     - Limite la longueur
     - Normalise les espaces
+    NB : n'échappe PAS le HTML (contrairement à ce que laissait entendre l'ancienne
+    docstring). Pour insérer dans du HTML, échapper au point d'insertion via
+    markupsafe.escape() — ne pas se reposer sur cette fonction pour la protection XSS.
     """
     if not isinstance(text, str):
         return ''
@@ -1509,6 +1585,30 @@ def _verify_password(password, stored):
 
 def _make_token():
     return _secrets.token_urlsafe(32)
+
+# ── Tokens admin signés (endpoints /api/admin/cv, /cv-list, /candidate) ──
+# SÉCURITÉ : ces endpoints n'acceptaient jadis qu'un token « non vide » (≥ 8 car.), sans
+# aucune validation. On émet désormais un token SIGNÉ (HMAC via itsdangerous, clé = secret
+# Flask) avec expiration : stateless, vérifiable par tous les workers, non falsifiable.
+from itsdangerous import URLSafeTimedSerializer as _URLSafeTimedSerializer, BadData as _ItsBadData
+ADMIN_TOKEN_TTL = 8 * 3600  # 8 h
+_admin_token_serializer = _URLSafeTimedSerializer(app.secret_key, salt='conseilprev-admin-token')
+
+def _admin_token_issue():
+    return _admin_token_serializer.dumps({'role': 'admin'})
+
+def _admin_token_valid(token):
+    if not token:
+        return False
+    try:
+        data = _admin_token_serializer.loads(token, max_age=ADMIN_TOKEN_TTL)
+        return isinstance(data, dict) and data.get('role') == 'admin'
+    except _ItsBadData:
+        return False
+
+# Hash factice (calculé une fois) pour équilibrer le temps de réponse du login quand le
+# compte n'existe pas — évite l'énumération d'utilisateurs par mesure de timing.
+_DUMMY_PW_HASH = generate_password_hash('conseilprev-timing-equalizer-' + secrets.token_hex(8))
 
 def _validate_password_strength(pw):
     """Min 8 car, 1 maj, 1 min, 1 chiffre."""
@@ -1743,8 +1843,8 @@ def auth_admin_login():
             time.sleep(0.05)
             return jsonify({'ok': False, 'error': 'Identifiants incorrects'}), 401
 
-        # Succès — générer une session admin
-        session_token = _make_token()
+        # Succès — générer une session admin (token signé + expiration, validable côté serveur)
+        session_token = _admin_token_issue()
         logger.info(f'ADMIN_LOGIN_OK {ip}: {email}')
         return jsonify({
             'ok': True, 'token': session_token, 'admin': True,
@@ -2081,7 +2181,10 @@ def notify_selection():
                 # Sauvegarder localement
                 import os, datetime as _dt
                 ts = _dt.datetime.now().strftime('%Y%m%d_%H%M%S')
-                path = os.path.join(UPLOAD_FOLDER, f'selection_{ts}_{client.get("nom","")}.html')
+                # SÉCURITÉ : assainir le nom fourni par l'utilisateur avant de le mettre
+                # dans un chemin de fichier (pas d'injection de séparateurs/traversal).
+                _safe_nom = secure_filename(str(client.get("nom","")))[:60] or 'client'
+                path = os.path.join(UPLOAD_FOLDER, f'selection_{ts}_{_safe_nom}.html')
                 with open(path, 'w', encoding='utf-8') as f:
                     f.write(build_conseilprev_notif_html(client, candidates))
                 logger.info(f'NOTIFY_CP_SAVED: {path}')
@@ -2112,6 +2215,16 @@ def brevo_webhook():
     À configurer dans Brevo : Paramètres > Webhooks > Transactionnel
     URL : https://conseilprev.onrender.com/api/brevo/webhook
     """
+    # SÉCURITÉ : Brevo ne signe pas ses webhooks en HMAC. Si BREVO_WEBHOOK_SECRET est
+    # défini, on exige sa présence dans l'URL (?secret=) ou l'en-tête X-Webhook-Secret,
+    # pour empêcher un tiers de POSTer des événements falsifiés. Sans secret configuré,
+    # comportement inchangé (rétro-compatible).
+    _bw_secret = os.environ.get('BREVO_WEBHOOK_SECRET', '').strip()
+    if _bw_secret:
+        _provided = (request.args.get('secret', '') or request.headers.get('X-Webhook-Secret', '')).strip()
+        if not _provided or not hmac.compare_digest(_provided, _bw_secret):
+            logger.warning(f"BREVO_WEBHOOK_UNAUTH {limiter.get_ip(request)}")
+            abort(403)
     try:
         events = request.get_json(force=True, silent=True)
         if not events:
@@ -2160,9 +2273,9 @@ def admin_get_candidate():
         if not ADMIN_PASSWORD:
             return jsonify({'ok': False, 'error': 'Compte admin non configuré'}), 503
 
-        # En production : valider le token contre une session stockée
-        # Pour l'instant : vérifie que le header contient bien un token non-vide
-        if not token or len(token) < 10:
+        # SÉCURITÉ : valider le token admin SIGNÉ (émis par /api/auth/admin-login),
+        # au lieu d'accepter n'importe quelle chaîne non vide.
+        if not _admin_token_valid(token):
             return jsonify({'ok': False, 'error': 'Token invalide'}), 401
 
         logger.info(f'ADMIN_CANDIDATE_ACCESS {ip}: uid={uid}')
@@ -2190,11 +2303,10 @@ def admin_download_cv(filename):
     if not ADMIN_PASSWORD:
         # ADMIN_PASSWORD non configuré sur Render — accès refusé
         return jsonify({'ok': False, 'error': 'Compte admin non configuré (ADMIN_PASSWORD manquant sur Render)'}), 503
-    if not token or len(token) < 8:
+    if not _admin_token_valid(token):
         logger.warning(f'CV_DL_UNAUTH {ip}: {filename}')
         abort(401)
-    # Token valide si non-vide et ADMIN_PASSWORD configuré
-    # (en production complète : valider contre la session stockée)
+    # SÉCURITÉ : token admin signé et validé (émis par /api/auth/admin-login)
 
     # Sécuriser le nom de fichier (pas de path traversal)
     safe = secure_filename(filename)
@@ -2253,7 +2365,7 @@ def admin_cv_list():
     token = request.args.get('token','').strip()
     if not ADMIN_PASSWORD:
         return jsonify({'ok': False, 'error': 'ADMIN_PASSWORD non configuré'}), 503
-    if not token or len(token) < 8:
+    if not _admin_token_valid(token):
         abort(401)
 
     files = []
@@ -2388,11 +2500,12 @@ def health_check():
             'conseil':    '✅ Opérationnel' if brevo_api_ok else '→ Ajouter BREVO_API_KEY dans Render → Environment',
         },
         'anthropic': {
-            'key': (ANTHROPIC_API_KEY[:12] + '***') if ANTHROPIC_API_KEY else 'NON CONFIGURÉ',
+            # SÉCURITÉ : ne jamais exposer de préfixe de clé (endpoint /api/health public).
+            'key': 'CONFIGURÉ' if ANTHROPIC_API_KEY else 'NON CONFIGURÉ',
             'ready': anthropic_ready, 'valid': anthropic_valid, 'status': anthropic_msg,
         },
         'mistral': {
-            'key': (MISTRAL_API_KEY[:6] + '***') if MISTRAL_API_KEY else 'NON CONFIGURÉ',
+            'key': 'CONFIGURÉ' if MISTRAL_API_KEY else 'NON CONFIGURÉ',
             'ready': mistral_ready,
         },
         'uploads_folder': os.path.isdir(UPLOAD_FOLDER),
@@ -3174,21 +3287,15 @@ import secrets as _secrets_auth
 # Token stable par defaut si AUTH_MASTER_TOKEN n'est pas defini sur Render (Environment).
 # Recommande : definissez votre propre valeur secrete dans Render pour plus de securite -
 # ce fallback reste fonctionnel immediatement mais est visible dans le code source.
-AUTH_MASTER_TOKEN = os.environ.get('AUTH_MASTER_TOKEN', '').strip() or 'kwQKnjGw8YLgsP1yWwkA1Fg8jhH3BLwe'
-# Ensemble des tokens acceptes par le lien maitre /auth/<token> :
-#  - la variable d'environnement Render AUTH_MASTER_TOKEN (prioritaire, recommandee)
-#  - le fallback statique ci-dessus (fonctionnel immediatement)
-#  - le token historique distribue par email avant la migration vers le fallback
-#    statique (les anciens liens enregistres/favoris restent valides)
-AUTH_TOKENS_VALIDES = frozenset(t for t in (
-    os.environ.get('AUTH_MASTER_TOKEN', '').strip(),
-    'kwQKnjGw8YLgsP1yWwkA1Fg8jhH3BLwe',
-    'PBeay16MElqpW5kvtJ3XWHuBVAlUtNw-DCUmEx-3PEw',
-) if t)
-if AUTH_MASTER_TOKEN == 'kwQKnjGw8YLgsP1yWwkA1Fg8jhH3BLwe':
-    logger.warning("AUTH_MASTER_TOKEN non defini en variable d'environnement Render — "
-                    "utilisation du token par defaut (visible dans le code source). "
-                    "Definissez AUTH_MASTER_TOKEN sur Render pour une valeur secrete personnelle.")
+# SÉCURITÉ : aucun token en dur. Le lien maître /auth/<token> n'accepte QUE la valeur
+# de la variable d'environnement AUTH_MASTER_TOKEN (secrète, non versionnée). Les anciens
+# tokens jadis présents dans le code source sont révoqués : ils doivent être considérés
+# comme compromis (visibles dans l'historique git).
+AUTH_MASTER_TOKEN = os.environ.get('AUTH_MASTER_TOKEN', '').strip()
+AUTH_TOKENS_VALIDES = frozenset(t for t in (AUTH_MASTER_TOKEN,) if t)
+if not AUTH_TOKENS_VALIDES:
+    logger.warning("AUTH_MASTER_TOKEN non défini — le lien maître /auth/<token> est désactivé. "
+                    "Définissez AUTH_MASTER_TOKEN sur Render pour l'activer.")
 
 def sentauth_init_db():
     conn = registre_get_db()
@@ -3569,12 +3676,13 @@ def sentauth_current_client():
     if not row:
         return None
     d = dict(row) if not isinstance(row, dict) else row
-    # CONSEILPREV connecte par le formulaire habituel (et non par le lien maitre) :
-    # reconnu par son e-mail interne ou sa denomination, il conserve l'acces
-    # administrateur complet et n'est pas concerne par la protection anti-elevation.
+    # SÉCURITÉ : le rôle admin CONSEILPREV est reconnu UNIQUEMENT par l'e-mail interne
+    # (compte amorcé côté serveur), et JAMAIS par nom_entreprise — cette dernière est
+    # fournie librement à l'inscription publique, s'en servir permettrait à quiconque de
+    # s'auto-déclarer « CONSEILPREV » et d'obtenir l'accès administrateur. L'accès admin
+    # habituel passe par le lien maître /auth/<token> (session is_conseilprev).
     _em = (d.get('email') or '').strip().lower()
-    _nom = (d.get('nom_entreprise') or '').strip().upper()
-    if _em == str(CONSEILPREV_INTERNAL_EMAIL).strip().lower() or _nom == 'CONSEILPREV':
+    if _em == str(CONSEILPREV_INTERNAL_EMAIL).strip().lower():
         return {'is_conseilprev': True, 'id': d['id'], 'nom_entreprise': 'CONSEILPREV',
                 'email': d.get('email'), 'plan': 'entreprise'}
     raw_plan = d.get('plan') or 'gratuit'
@@ -3930,7 +4038,7 @@ def email_health():
 @rate_limit_strict(limit=10, window=300)
 def sentauth_master_link(token):
     """Lien secret CONSEILPREV — pose un cookie de session longue duree sans mot de passe."""
-    if token in AUTH_TOKENS_VALIDES:
+    if token and any(hmac.compare_digest(token, t) for t in AUTH_TOKENS_VALIDES):
         session.clear()
         session['is_conseilprev'] = True
         session.permanent = True
@@ -4000,6 +4108,9 @@ def sentauth_login():
     conn.close()
 
     if not row:
+        # SÉCURITÉ anti-énumération par timing : hash factice pour un temps de réponse
+        # comparable à celui d'un compte existant (le hash coûteux est sinon évité ici).
+        check_password_hash(_DUMMY_PW_HASH, password)
         bf_protector.record_attempt(bf_key, success=False)
         return jsonify({'error': 'Identifiants incorrects.'}), 401
 
@@ -5624,11 +5735,13 @@ def sentauth_send_verification_email(email, nom_entreprise, token):
 
 def sentauth_notify_conseilprev_new_signup(nom_entreprise, email, ip):
     try:
+        # SÉCURITÉ : échapper les champs utilisateur avant insertion dans le HTML de l'e-mail.
+        _ne, _em, _ip = _esc_html(nom_entreprise), _esc_html(email), _esc_html(ip)
         html = f"""<div style="font-family:Arial,sans-serif;padding:20px">
           <p><strong>Nouvelle auto-inscription Sentinel AI</strong></p>
-          <table style="font-size:13px"><tr><td style="padding:4px 12px 4px 0;color:#767676">Entreprise</td><td><strong>{nom_entreprise}</strong></td></tr>
-          <tr><td style="padding:4px 12px 4px 0;color:#767676">Email</td><td>{email}</td></tr>
-          <tr><td style="padding:4px 12px 4px 0;color:#767676">IP</td><td>{ip}</td></tr>
+          <table style="font-size:13px"><tr><td style="padding:4px 12px 4px 0;color:#767676">Entreprise</td><td><strong>{_ne}</strong></td></tr>
+          <tr><td style="padding:4px 12px 4px 0;color:#767676">Email</td><td>{_em}</td></tr>
+          <tr><td style="padding:4px 12px 4px 0;color:#767676">IP</td><td>{_ip}</td></tr>
           <tr><td style="padding:4px 12px 4px 0;color:#767676">Date</td><td>{datetime.utcnow().strftime('%d/%m/%Y à %H:%M UTC')}</td></tr></table>
           <p style="font-size:12px;color:#767676;margin-top:12px">Connectez-vous à Sentinel AI → Gestion des clients pour désactiver ce compte si nécessaire.</p></div>"""
         send_email_smart(CONSEILPREV_NOTIFY_EMAIL, 'CONSEILPREV', f"Nouvelle inscription Sentinel AI : {nom_entreprise}", html, tags=['sentinel-new-signup-notify'])
@@ -5659,6 +5772,12 @@ def pricing_request():
     plan_label = 'Sentinel Pro' if plan == 'pro' else 'Sentinel Entreprise'
     now_str = datetime.utcnow().strftime('%d/%m/%Y à %H:%M UTC')
 
+    # SÉCURITÉ : échapper tous les champs utilisateur avant insertion dans le HTML de l'e-mail.
+    _nom_h, _email_h, _ip_h = _esc_html(nom), _esc_html(email), _esc_html(ip)
+    _secteur_h = _esc_html(secteur) if secteur else 'Non précisé'
+    _systemes_h = _esc_html(systemes) if systemes else 'Non précisé'
+    _message_h = _esc_html(message) if message else '—'
+
     html = f"""<div style="font-family:Arial,sans-serif;max-width:560px;padding:24px">
   <div style="background:#1C1C1C;color:#fff;border-radius:8px 8px 0 0;padding:16px 20px;margin-bottom:0">
     <span style="font-size:16px;font-weight:700">Sentinel <span style="background:#B83222;font-size:10px;padding:2px 6px;border-radius:3px;vertical-align:middle">AI</span></span>
@@ -5668,17 +5787,17 @@ def pricing_request():
     <tr style="background:#F6F4FC"><td style="padding:10px 16px;color:#767676;width:180px;border-bottom:1px solid #E0DDD8">Plan demandé</td>
         <td style="padding:10px 16px;font-weight:700;color:#B83222;border-bottom:1px solid #E0DDD8">{plan_label}</td></tr>
     <tr><td style="padding:10px 16px;color:#767676;border-bottom:1px solid #E0DDD8">Entreprise</td>
-        <td style="padding:10px 16px;font-weight:600;border-bottom:1px solid #E0DDD8">{nom}</td></tr>
+        <td style="padding:10px 16px;font-weight:600;border-bottom:1px solid #E0DDD8">{_nom_h}</td></tr>
     <tr style="background:#F6F4FC"><td style="padding:10px 16px;color:#767676;border-bottom:1px solid #E0DDD8">Email</td>
-        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8"><a href="mailto:{email}">{email}</a></td></tr>
+        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8"><a href="mailto:{_email_h}">{_email_h}</a></td></tr>
     <tr><td style="padding:10px 16px;color:#767676;border-bottom:1px solid #E0DDD8">Secteur</td>
-        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8">{secteur or 'Non précisé'}</td></tr>
+        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8">{_secteur_h}</td></tr>
     <tr style="background:#F6F4FC"><td style="padding:10px 16px;color:#767676;border-bottom:1px solid #E0DDD8">Systèmes IA</td>
-        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8">{systemes or 'Non précisé'}</td></tr>
+        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8">{_systemes_h}</td></tr>
     <tr><td style="padding:10px 16px;color:#767676;border-bottom:1px solid #E0DDD8">Message</td>
-        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8;white-space:pre-wrap">{message or '—'}</td></tr>
+        <td style="padding:10px 16px;border-bottom:1px solid #E0DDD8;white-space:pre-wrap">{_message_h}</td></tr>
     <tr style="background:#F6F4FC"><td style="padding:10px 16px;color:#767676">Origine</td>
-        <td style="padding:10px 16px;font-size:11px;color:#767676">IP {ip} — {now_str}</td></tr>
+        <td style="padding:10px 16px;font-size:11px;color:#767676">IP {_ip_h} — {now_str}</td></tr>
   </table>
   <div style="margin-top:16px;font-size:11px;color:#999;border-top:1px solid #E0DDD8;padding-top:12px">
     Répondre directement à cet email pour contacter le prospect. Demande soumise depuis Sentinel AI — page Tarification par résultats.
@@ -5727,6 +5846,13 @@ def sentauth_register():
 
     if not nom or not email or '@' not in email:
         return jsonify({'error': 'Nom d entreprise et email valide requis.'}), 400
+    # SÉCURITÉ : le nom réservé « CONSEILPREV » et le domaine e-mail interne confèrent
+    # le rôle admin ; ils ne peuvent pas être revendiqués via l'inscription publique.
+    if nom.strip().upper() == 'CONSEILPREV' \
+       or email.endswith('@internal.system') \
+       or email == str(CONSEILPREV_INTERNAL_EMAIL).strip().lower():
+        logger.warning(f"REGISTER_RESERVED_NAME_BLOCKED nom={nom!r} email={email!r}")
+        return jsonify({'error': "Ce nom d'entreprise est réservé. Merci d'en choisir un autre."}), 400
     if not rgpd_consent:
         return jsonify({'error': 'Le consentement RGPD est requis pour créer un compte.'}), 400
 
@@ -6828,13 +6954,21 @@ def rag_get_embeddings(texts):
     except Exception as e:
         return False, str(e)
 
-RAG_ACCESS_KEY = os.environ.get('RAG_ACCESS_KEY', 'conseilprev-rag-2026').strip()
+# SÉCURITÉ : aucune clé par défaut en dur. Si RAG_ACCESS_KEY n'est pas définie sur
+# Render, l'accès à la base de connaissance est refusé (fail-closed) plutôt que
+# protégé par une clé publique devinable.
+RAG_ACCESS_KEY = os.environ.get('RAG_ACCESS_KEY', '').strip()
+if not RAG_ACCESS_KEY:
+    logger.warning("RAG_ACCESS_KEY non définie — accès à la base de connaissance désactivé (fail-closed).")
 
 def rag_check_access():
     """Verifie que la requete provient bien de CONSEILPREV (cle secrete serverside,
-    jamais exposee au client HTML/JS contrairement a l ancien SRC_PASS cosmetique)."""
+    jamais exposee au client HTML/JS contrairement a l ancien SRC_PASS cosmetique).
+    Comparaison à temps constant ; refus si la clé n'est pas configurée."""
+    if not RAG_ACCESS_KEY:
+        return False
     provided = request.headers.get('X-RAG-Key', '') or request.args.get('rag_key', '')
-    return provided == RAG_ACCESS_KEY
+    return bool(provided) and hmac.compare_digest(provided, RAG_ACCESS_KEY)
 
 def rag_require_access(f):
     @wraps(f)
@@ -7121,6 +7255,7 @@ def rag_delete_document(doc_id):
 
 @app.route('/api/rag/search', methods=['POST'])
 @rate_limit(limit=60, window=60)
+@rag_require_access
 def rag_search():
     """Recherche hybride : vectorielle (pgvector) si disponible, sinon full-text Postgres."""
     data = request.get_json(force=True) or {}
@@ -7860,10 +7995,10 @@ def entreprise_connecteurs():
         nom = (d.get('nom') or '').strip()[:120]
         url = (d.get('url') or '').strip()[:500]
         secret = (d.get('secret') or '').strip()[:500]
-        if not url or not url.lower().startswith('https://'):
+        if not _url_is_public_https(url):
             try: conn.close()
             except Exception: pass
-            return jsonify({'ok': False, 'error': 'URL HTTPS requise'}), 400
+            return jsonify({'ok': False, 'error': 'URL HTTPS publique requise (les adresses internes/privées sont refusées).'}), 400
         cur.execute(registre_sql('INSERT INTO client_connecteurs (client_id, categorie, nom, url, secret, statut, created_at) VALUES (%s,%s,%s,%s,%s,%s,%s)',
                                  'INSERT INTO client_connecteurs (client_id, categorie, nom, url, secret, statut, created_at) VALUES (?,?,?,?,?,?,?)'),
                     (cid, categorie, nom, url, secret, 'non_teste', datetime.utcnow().isoformat()))
@@ -7906,14 +8041,14 @@ def entreprise_connecteurs_test(cxid):
         return jsonify({'ok': False, 'error': 'Connecteur introuvable'}), 404
     url = row.get('url'); secret = row.get('secret')
     statut = 'echec'; detail = ''
-    if not url or not url.lower().startswith('https://'):
-        detail = 'URL non HTTPS'
+    if not _url_is_public_https(url):
+        detail = 'URL invalide ou non autorisée'
     else:
         try:
             headers = {'Accept': 'application/json'}
             if secret:
                 headers['Authorization'] = 'Bearer ' + secret
-            resp = requests.get(url, headers=headers, timeout=8)
+            resp = requests.get(url, headers=headers, timeout=8, allow_redirects=False)
             statut = 'operationnel' if resp.status_code < 400 else 'echec'
             detail = 'HTTP ' + str(resp.status_code)
         except Exception:
@@ -7988,10 +8123,10 @@ def entreprise_connecteurs_sync(cxid):
         return jsonify({'ok': False, 'error': 'Connecteur introuvable'}), 404
     url = row.get('url'); secret = row.get('secret')
     statut = 'echec'
-    if not url or not url.lower().startswith('https://'):
+    if not _url_is_public_https(url):
         try: conn.close()
         except Exception: pass
-        return jsonify({'ok': False, 'error': 'URL non HTTPS'}), 400
+        return jsonify({'ok': False, 'error': 'URL HTTPS publique requise (adresses internes refusées).'}), 400
     payload = request.get_json(silent=True) or {}
     payload['source'] = 'CONSEILPREV Sentinel'
     payload['categorie'] = row.get('categorie')
@@ -8001,7 +8136,7 @@ def entreprise_connecteurs_sync(cxid):
         headers = {'Content-Type': 'application/json', 'Accept': 'application/json'}
         if secret:
             headers['Authorization'] = 'Bearer ' + secret
-        resp = requests.post(url, json=payload, headers=headers, timeout=10)
+        resp = requests.post(url, json=payload, headers=headers, timeout=10, allow_redirects=False)
         envoye = resp.status_code < 400
         statut = 'operationnel' if envoye else 'echec'
         detail = 'HTTP ' + str(resp.status_code)
