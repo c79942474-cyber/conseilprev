@@ -3,7 +3,7 @@ services:
     name: conseilprev
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app
+    startCommand: gunicorn app:app --worker-class gthread --threads 8 --timeout 90 --keep-alive 5
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0

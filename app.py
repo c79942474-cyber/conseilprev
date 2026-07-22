@@ -1,4 +1,4 @@
-import os, re as _re, time, hashlib, json, logging, threading, base64
+import os, re as _re, time, hashlib, json, logging, threading, base64, gzip
 import requests, feedparser
 import smtplib, ssl
 from email.mime.multipart import MIMEMultipart
@@ -331,8 +331,15 @@ def add_security_headers(response):
     response.headers['Strict-Transport-Security']  = 'max-age=31536000; includeSubDomains'
     # Anti-scraping
     response.headers['X-Robots-Tag']               = 'index, follow'
-    # Cache control pour les pages HTML
-    if response.content_type and 'html' in response.content_type:
+    # Cache control pour les pages HTML.
+    # Exception : les pages servies par le cache rapide (_serve_page_fast) avec
+    # une politique dediee posent le marqueur X-Perf-Cache et leur propre
+    # Cache-Control (ex. /sentinel en private,no-cache pour permettre la
+    # revalidation ETag/304 au lieu d'un re-telechargement de 1,75 Mo a chaque
+    # clic). Le marqueur est retire de la reponse dans tous les cas.
+    if response.headers.pop('X-Perf-Cache', None):
+        pass  # Cache-Control deja pose par _serve_page_fast — ne pas ecraser
+    elif response.content_type and 'html' in response.content_type:
         response.headers['Cache-Control']          = 'no-store, no-cache, must-revalidate'
         response.headers['Pragma']                 = 'no-cache'
     return response
@@ -7194,11 +7201,74 @@ def client_signal():
     return jsonify({'ok': True})
 
 
+# ══════════════════════════════════════════════════════════
+# SERVICE RAPIDE DES PAGES HTML — cache memoire + gzip + ETag/304
+# Les pages du site sont des fichiers statiques identiques pour tous les
+# visiteurs (aucune donnee personnelle dedans : la personnalisation passe
+# par les API). On les garde donc en memoire, pre-compressees en gzip une
+# seule fois, et rechargees automatiquement si le fichier change (deploi).
+# Gains : plus de lecture disque par requete, et surtout des transferts
+# compresses (sentinel.html : 1 752 Ko → ~400 Ko, index.html : 422 → ~100 Ko)
+# la ou Flask et Render n'appliquent aucune compression par defaut.
+# ══════════════════════════════════════════════════════════
+_PAGE_CACHE = {}
+_PAGE_CACHE_LOCK = threading.Lock()
+_APP_DIR = os.path.dirname(os.path.abspath(__file__))
+
+def _page_cache_entry(filename):
+    """Retourne l'entree de cache {raw, gz, etag} du fichier, reconstruite si
+    le fichier a change sur disque (cle mtime+taille)."""
+    st = os.stat(os.path.join(_APP_DIR, filename))
+    key = (st.st_mtime_ns, st.st_size)
+    ent = _PAGE_CACHE.get(filename)
+    if ent is not None and ent['key'] == key:
+        return ent
+    with _PAGE_CACHE_LOCK:
+        ent = _PAGE_CACHE.get(filename)
+        if ent is not None and ent['key'] == key:
+            return ent
+        with open(os.path.join(_APP_DIR, filename), 'rb') as f:
+            raw = f.read()
+        ent = {
+            'key': key,
+            'raw': raw,
+            'gz': gzip.compress(raw, compresslevel=9),
+            'etag': '"pg-%s"' % hashlib.sha256(raw).hexdigest()[:24],
+        }
+        _PAGE_CACHE[filename] = ent
+        return ent
+
+def _serve_page_fast(filename, cache_control=None):
+    """Sert une page HTML depuis le cache memoire, gzippee si le navigateur
+    l'accepte. Si cache_control est fourni, la reponse porte un ETag fort et
+    honore If-None-Match (304 sans corps) ; le marqueur X-Perf-Cache indique
+    a add_security_headers de ne pas ecraser cette politique de cache."""
+    try:
+        ent = _page_cache_entry(filename)
+    except OSError:
+        # Repli : comportement historique si le fichier est illisible.
+        return send_from_directory('.', filename)
+    if cache_control and ent['etag'] in (request.headers.get('If-None-Match') or ''):
+        resp = Response(status=304, mimetype='text/html')
+    else:
+        accept_gz = 'gzip' in (request.headers.get('Accept-Encoding') or '').lower()
+        body = ent['gz'] if accept_gz else ent['raw']
+        resp = Response(body, mimetype='text/html')
+        if accept_gz:
+            resp.headers['Content-Encoding'] = 'gzip'
+        resp.headers['Content-Length'] = str(len(body))
+    resp.headers['Vary'] = 'Accept-Encoding'
+    if cache_control:
+        resp.headers['ETag'] = ent['etag']
+        resp.headers['Cache-Control'] = cache_control
+        resp.headers['X-Perf-Cache'] = '1'
+    return resp
+
 for route, filename in PAGES.items():
     def make_view(fn):
         @rate_limit(limit=60, window=60)
         def view():
-            return send_from_directory('.', fn)
+            return _serve_page_fast(fn)
         view.__name__ = fn.replace('.','_').replace('-','_')
         return view
     app.add_url_rule(route, view_func=make_view(filename))
@@ -7206,7 +7276,14 @@ for route, filename in PAGES.items():
 @app.route('/sentinel')
 @sentinel_login_required
 def sentinel_page():
-    return send_from_directory('.', 'sentinel.html')
+    # Coquille statique sans donnee personnelle (les donnees viennent des API
+    # apres authentification) : private + no-cache autorise le navigateur a
+    # conserver la page mais impose une revalidation ETag a chaque affichage.
+    # Resultat : les clics suivants recoivent un 304 sans corps (~quelques ms
+    # cote serveur) au lieu de re-telecharger 1,75 Mo, tout en conservant la
+    # redirection /login des que la session expire (la revalidation passe par
+    # sentinel_login_required avant de repondre 304).
+    return _serve_page_fast('sentinel.html', cache_control='private, no-cache, must-revalidate')
 
 @app.route('/datasets.json')
 @rate_limit(limit=20, window=60)
