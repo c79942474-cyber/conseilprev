@@ -3,3 +3,4 @@ uploads_cv/*.txt
 # uploads_cv/ PDFs are kept for demo
 __pycache__/
 *.pyc
+registre_ia.db
