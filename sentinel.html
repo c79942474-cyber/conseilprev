@@ -6457,6 +6457,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <button class="ju-tab" data-p="ju-p-ana">2 · Analyse d'une question</button>
     <button class="ju-tab" data-p="ju-p-cla">3 · Clausier fournisseurs</button>
     <button class="ju-tab" data-p="ju-p-con">4 · Revue de contrat</button>
+    <button class="ju-tab" data-p="ju-p-arb">5 · Note d'arbitrage</button>
     <button class="ju-tab" data-p="ju-p-ref">Référentiel</button>
   </div>
 
@@ -6531,6 +6532,51 @@ textarea.form-el{min-height:86px;resize:vertical}
       <div class="ju-msg" id="ju-cmsg"></div>
     </div>
     <div id="ju-cres"></div>
+  </div>
+
+  <div class="ju-pan" id="ju-p-arb">
+    <div class="ju-card">
+      <h3 style="margin:0 0 8px">Préparer une décision</h3>
+      <p style="font-size:13px;color:var(--muted);margin:0 0 18px;line-height:1.7">Pour une réunion de
+        direction ou une négociation. Trois choses sont produites, et <strong>une seule vient du
+        modèle</strong> : le <strong>routage</strong> — qui tranche, qui est consulté — est calculé par
+        règles, parce que lorsqu'un texte réserve une décision à un organe, s'en écarter est un
+        manquement et non un choix d'organisation ; les <strong>échéances</strong> réglementaires
+        commandent le calendrier ; la <em>synthèse, les options et la recommandation</em> sont rédigées
+        sur les seules pièces fournies.</p>
+      <div id="ju-arb-profil" class="ju-cit ko" style="display:none">
+        <b>Profil non renseigné.</b> Le routage se déduit de votre secteur, de votre taille et de vos
+        rôles : sans eux, le moteur ne peut pas savoir qu'une décision doit remonter à l'organe de
+        direction plutôt qu'à la direction juridique. Renseignez l'onglet <b>1 · Qualification</b> — la
+        note reste produite, mais son routage sera générique.
+      </div>
+      <div class="ju-f"><label for="ju-arb-objet">Décision à préparer</label>
+        <input type="text" id="ju-arb-objet" placeholder="Exemple : accepter le report d'un an de la segmentation du réseau industriel ?"></div>
+      <div class="ju-sug" id="ju-arb-sug"></div>
+      <div class="ju-f" style="margin-top:16px"><label>Nature du dossier</label>
+        <div class="ju-chk" id="ju-arb-nat"></div>
+        <div class="ju-aide">Détermine les échéances applicables et l'instance qui doit trancher.</div></div>
+      <div class="ju-frow" style="margin-top:16px">
+        <div class="ju-f"><label for="ju-arb-enjeu">Niveau d'enjeu</label>
+          <select id="ju-arb-enjeu"><option value="moyen">Moyen</option><option value="eleve">Élevé</option><option value="faible">Faible</option></select>
+          <div class="ju-aide">Un enjeu élevé appelle systématiquement un conseil externe.</div></div>
+      </div>
+      <div class="ju-f" style="margin-top:16px"><label for="ju-arb-contexte">Contexte (hors pièces)</label>
+        <textarea id="ju-arb-contexte" style="min-height:80px" placeholder="Ce que vous savez et qui ne figure pas au dossier. Traité comme déclaré, non comme établi."></textarea></div>
+    </div>
+
+    <div class="ju-card">
+      <h3 style="margin:0 0 8px">Pièces du dossier</h3>
+      <p style="font-size:13px;color:var(--muted);margin:0 0 14px;line-height:1.7">Les pièces désignées
+        sont lues <strong>intégralement</strong>, pas recherchées par similarité — quand on soumet un
+        contrat à un comité, on veut la pièce, pas les trois passages les plus ressemblants.</p>
+      <div id="ju-arb-docs" style="max-height:240px;overflow-y:auto;border:1px solid var(--rule);border-radius:3px;padding:10px;margin-bottom:14px"></div>
+      <div class="ju-f"><label for="ju-arb-texte">Coller une pièce</label>
+        <textarea id="ju-arb-texte" style="min-height:110px" placeholder="Clause, courrier, compte rendu…"></textarea></div>
+      <div class="ju-bar"><button class="ju-btn" id="ju-arb-go">Préparer la note</button></div>
+      <div class="ju-msg" id="ju-arb-msg"></div>
+    </div>
+    <div id="ju-arb-res"></div>
   </div>
 
   <div class="ju-pan" id="ju-p-ref">
@@ -6736,6 +6782,77 @@ function juClausier(){
     }).catch(function(){});
 }
 
+var JUARB={docs:[],coches:[],charge:false};
+
+function juArbProfilRenseigne(){
+  // « Renseigné » veut dire : de quoi faire tourner les règles. Un secteur ou
+  // un rôle suffit ; un formulaire ouvert mais vide ne compte pas.
+  var p=JU.profil||{};
+  return !!(p.secteur || (p.roles&&p.roles.length) || p.donnees_personnelles
+            || p.systeme_ot || p.secteur_financier || (p.ia_usage&&p.ia_usage!=='aucun'));
+}
+
+function juArbCharger(){
+  var av=document.getElementById('ju-arb-profil');
+  if(av) av.style.display=juArbProfilRenseigne()?'none':'block';
+  if(JUARB.charge) return; JUARB.charge=true;
+  juApi('/api/juridique/instances',{},20000).then(function(j){
+    if(!j||!j.ok) return;
+    document.getElementById('ju-arb-nat').innerHTML=j.natures.map(function(n){
+      return '<label><input type="checkbox" data-jnat value="'+juEsc(n.v)+'">'+juEsc(n.l)+'</label>';}).join('');
+    document.getElementById('ju-arb-sug').innerHTML=j.suggestions.map(function(x){
+      return '<button type="button" data-q="'+juEsc(x.q)+'">'+juEsc(x.groupe)+' — '+juEsc(x.q)+'</button>';}).join('');
+    Array.prototype.forEach.call(document.querySelectorAll('#ju-arb-sug button'),function(b){
+      b.addEventListener('click',function(){
+        document.getElementById('ju-arb-objet').value=b.getAttribute('data-q');
+        document.getElementById('ju-arb-objet').focus();
+      });
+    });
+  }).catch(function(){});
+  juApi('/api/juridique/dossier-documents',{},20000).then(function(j){
+    var z=document.getElementById('ju-arb-docs');
+    if(!j||!j.ok){ z.innerHTML='<div class="ju-cnt">Base documentaire indisponible — collez vos pièces ci-dessous.</div>'; return; }
+    JUARB.docs=j.documents||[];
+    if(!JUARB.docs.length){
+      z.innerHTML='<div class="ju-cnt">'+juEsc(j.message||"Aucun document disponible — collez vos pièces ci-dessous.")+'</div>';
+      return;
+    }
+    z.innerHTML=JUARB.docs.map(function(d){
+      return '<label style="display:flex;gap:8px;align-items:flex-start;padding:6px 4px;font-size:12.5px;cursor:pointer;text-transform:none;letter-spacing:normal;margin:0;background:none;border:none">'
+        +'<input type="checkbox" data-jdoc value="'+juEsc(d.id)+'" style="width:auto;margin:3px 0 0">'
+        +'<span><b style="color:var(--ink)">'+juEsc(d.title||'Document')+'</b>'
+        +'<span class="ju-cnt" style="display:block">'+juEsc(d.theme||'non classé')+'</span></span></label>';
+    }).join('');
+  }).catch(function(){
+    document.getElementById('ju-arb-docs').innerHTML='<div class="ju-cnt">Base documentaire indisponible — collez vos pièces ci-dessous.</div>';
+  });
+}
+
+function juArbRoutage(rt){
+  var h='<div class="ju-card"><h3 style="margin:0 0 8px">Qui tranche, et avant quand</h3>'
+    +'<p style="font-size:12.5px;color:var(--muted);margin:0 0 6px;line-height:1.7">'+juEsc(rt.synthese_routage)+'</p>'
+    +'<div class="ju-cnt" style="margin-bottom:14px">Calcul déterministe, sans IA — chaque ligne porte son fondement.</div>';
+  if(rt.echeances&&rt.echeances.length){
+    h+='<div class="ju-cit ko" style="margin-bottom:14px"><b>⏱ Échéances réglementaires</b><br>'
+      +rt.echeances.map(function(e){
+        return '<b>'+juEsc(e.duree)+'</b> — '+juEsc(e.quoi)+' <span class="ju-cnt">('+juEsc(e.fondement)
+          +' · à compter de : '+juEsc(e.depart)+(e.autorite&&e.autorite!=='—'?(' · '+juEsc(e.autorite)):'')+')</span>'
+          +(e.a_verifier?' <span class="ju-pill wr">durée à confirmer</span>':'');
+      }).join('<br>')+'</div>';
+  }
+  h+=rt.decisions.map(function(d){
+    return '<div class="ju-t"><div class="m">'+juEsc(d.fondements.join(' · '))+'</div>'
+      +'<div class="ti">'+juEsc(d.decideur_libelle)+' <span class="ju-pill hi">décide</span></div>'
+      +'<div class="of">'+juEsc(d.role)+'</div>'
+      +d.motifs.map(function(m){return '<div class="mot">'+juEsc(m)+'</div>';}).join('')
+      +(d.consultes.length?'<div class="jal"><b>Consultés :</b> '+d.consultes.map(function(c){return juEsc(c.libelle);}).join(' · ')+'</div>':'')
+      +(d.informes.length?'<div class="jal"><b>Informés :</b> '+d.informes.map(function(i){return juEsc(i.libelle);}).join(' · ')+'</div>':'')
+      +(d.quand.length?'<div class="jal"><b>Quand :</b> '+d.quand.map(juEsc).join(' ')+'</div>':'')
+      +'</div>';
+  }).join('');
+  return h+'</div>';
+}
+
 function juReferentiel(){
   if(!JU.cfg) return;
   var d=document.getElementById('ju-rdom').value;
@@ -6760,6 +6877,7 @@ function juReferentiel(){
       b.classList.add('on');
       var p=document.getElementById(b.getAttribute('data-p')); if(p) p.classList.add('on');
       if(b.getAttribute('data-p')==='ju-p-cla') juClausier();
+      if(b.getAttribute('data-p')==='ju-p-arb') juArbCharger();
       if(b.getAttribute('data-p')==='ju-p-ref') juReferentiel();
     });
   });
@@ -6772,6 +6890,7 @@ function juReferentiel(){
       body:JSON.stringify({profil:p})},20000).then(function(j){
       if(!j||!j.ok){ juMsg('ju-qmsg',(j&&j.error)||'Qualification impossible.','err'); return; }
       juMsg('ju-qmsg','','');
+      var av=document.getElementById('ju-arb-profil'); if(av) av.style.display='none';
       var h='<div class="ju-card"><h3 style="margin:0 0 10px">Résultat</h3>'
         +'<p style="font-size:13px;color:var(--muted);margin:0 0 6px;line-height:1.7">'+juEsc(j.synthese)+'</p>'
         +'<div class="ju-cnt">Référentiel version '+juEsc(j.version_referentiel)+' · calcul déterministe, sans IA</div></div>';
@@ -6810,6 +6929,46 @@ function juReferentiel(){
     }).catch(function(){
       juMsg('ju-amsg','Analyse interrompue (délai dépassé ou service indisponible). Réessayez.','err');
     }).then(function(){ b.disabled=false; });
+  });
+
+  document.getElementById('ju-arb-docs').addEventListener('change',function(e){
+    if(!e.target||!e.target.hasAttribute('data-jdoc')) return;
+    var v=e.target.value, i=JUARB.coches.indexOf(v);
+    if(e.target.checked){ if(i<0) JUARB.coches.push(v); } else if(i>=0){ JUARB.coches.splice(i,1); }
+  });
+
+  document.getElementById('ju-arb-go').addEventListener('click',function(){
+    var objet=(document.getElementById('ju-arb-objet').value||'').trim();
+    if(!objet){ juMsg('ju-arb-msg','Indiquez la décision à préparer.','err'); return; }
+    var nat=Array.prototype.map.call(document.querySelectorAll('[data-jnat]:checked'),function(x){return x.value;});
+    var b=this; b.disabled=true;
+    juMsg('ju-arb-msg','Préparation de la note — comptez 30 à 90 secondes selon le volume du dossier.','wait');
+    juApi('/api/juridique/arbitrage',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({objet:objet, contexte:document.getElementById('ju-arb-contexte').value,
+                           texte:document.getElementById('ju-arb-texte').value,
+                           doc_ids:JUARB.coches, profil:JU.profil,
+                           dossier:{natures:nat, enjeu:document.getElementById('ju-arb-enjeu').value}})},180000)
+      .then(function(j){
+        if(!j||!j.ok){ juMsg('ju-arb-msg',(j&&j.error)||'Note impossible.','err'); return; }
+        juMsg('ju-arb-msg','','');
+        var h=juArbRoutage(j.routage);
+        h+='<div class="ju-card"><div class="ju-cnt" style="margin-bottom:12px">Note d\'arbitrage · modèle '
+          +juEsc(j.model||'')+' · référentiel '+juEsc(j.version_referentiel||'')+'</div>'
+          +juCitations(j.citations)+'<div class="ju-doc">'+juMd(j.texte)+'</div>';
+        if(j.pieces&&j.pieces.length){
+          h+='<div class="ju-srcs">'+j.pieces.map(function(p){
+            return '<span>['+(p.n||'')+'] '+juEsc(p.titre)+' — '+juEsc(p.origine)+'</span>';}).join('')+'</div>';
+        } else {
+          h+='<div class="ju-cit ko" style="margin-top:14px">Aucune pièce n\'a pu être versée au dossier : '
+            +'la note repose sur le seul cadre réglementaire. Vérifiez la section « Ce qui manque pour décider ».</div>';
+        }
+        h+='</div><div class="ju-card"><div class="ju-avert" style="margin:0">'+juEsc(j.avertissement)
+          +'<br><br><b>'+juEsc(j.mention_ia)+'</b></div></div>';
+        var el=document.getElementById('ju-arb-res');
+        el.innerHTML=h; el.scrollIntoView({behavior:'smooth',block:'start'});
+      }).catch(function(){
+        juMsg('ju-arb-msg','Préparation interrompue (délai dépassé ou service indisponible). Réessayez.','err');
+      }).then(function(){ b.disabled=false; });
   });
 
   document.getElementById('ju-cdom').addEventListener('change',juClausier);

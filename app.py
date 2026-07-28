@@ -7477,6 +7477,184 @@ def juridique_contrat():
     return jsonify(res)
 
 
+@app.route('/api/juridique/instances', methods=['GET'])
+@rate_limit(limit=30, window=60)
+def juridique_instances():
+    """Instances, natures de dossier et échéances — pour construire l'interface."""
+    if not _jur_client():
+        return _jur_refus()
+    return jsonify({'ok': True, 'instances': juridique.INSTANCES,
+                    'natures': [{'v': v, 'l': l} for v, l in juridique.NATURES_DOSSIER],
+                    'delais': juridique.DELAIS,
+                    'suggestions': juridique.SUGGESTIONS_ARBITRAGE})
+
+
+@app.route('/api/juridique/dossier-documents', methods=['GET'])
+@rate_limit(limit=30, window=60)
+def juridique_dossier_documents():
+    """Documents versables à un dossier d'arbitrage.
+
+    La base documentaire de cette plateforme est réservée à CONSEILPREV (voir
+    rag_require_access) : on ne l'ouvre pas au passage. Un client prépare donc
+    son dossier en collant ses pièces, et la couche de connaissance Sentinel
+    complète l'analyse — on le lui dit plutôt que de lui présenter une liste
+    vide sans explication.
+    """
+    client = _jur_client()
+    if not client:
+        return _jur_refus()
+    if not client.get('is_conseilprev'):
+        return jsonify({'ok': True, 'documents': [], 'interne': False,
+                        'message': "La base documentaire est réservée à CONSEILPREV. "
+                                   "Collez vos pièces ci-dessous : elles seront "
+                                   "analysées sans être conservées."})
+    try:
+        conn = registre_get_db()
+        cur = conn.cursor()
+        cur.execute('SELECT id, nom_fichier, pages_liees, taille_octets, nb_chunks '
+                    'FROM rag_documents ORDER BY date_upload DESC')
+        rows = cur.fetchall()
+        conn.close()
+    except Exception as exc:
+        logger.error(f'JURIDIQUE_DOSSIER_DOCS_ERR: {exc}')
+        return jsonify({'ok': False, 'error': 'Base documentaire indisponible.'}), 503
+    docs = []
+    for r in rows:
+        d = dict(r) if not isinstance(r, dict) else r
+        if not (d.get('nb_chunks') or 0):
+            continue
+        docs.append({'id': d['id'], 'title': d['nom_fichier'],
+                     'theme': (d.get('pages_liees') or '').replace(',', ' · '),
+                     'bytes': d.get('taille_octets')})
+    return jsonify({'ok': True, 'documents': docs, 'interne': True})
+
+
+def _jur_piece_texte(doc_id, limite=24000):
+    """Texte réassemblé d'un document de la base, ou chaîne vide."""
+    try:
+        conn = registre_get_db()
+        cur = conn.cursor()
+        cur.execute(registre_sql(
+            'SELECT chunk_text FROM rag_chunks WHERE document_id=%s ORDER BY chunk_index',
+            'SELECT chunk_text FROM rag_chunks WHERE document_id=? ORDER BY chunk_index'),
+            (doc_id,))
+        rows = cur.fetchall()
+        conn.close()
+    except Exception:
+        return ''
+    parts = []
+    for r in rows:
+        d = dict(r) if not isinstance(r, dict) else r
+        parts.append(d.get('chunk_text') or '')
+    return "\n\n".join(parts)[:limite]
+
+
+def _jur_titre_piece(doc_id):
+    try:
+        conn = registre_get_db()
+        cur = conn.cursor()
+        cur.execute(registre_sql(
+            'SELECT nom_fichier, pages_liees FROM rag_documents WHERE id=%s',
+            'SELECT nom_fichier, pages_liees FROM rag_documents WHERE id=?'), (doc_id,))
+        row = cur.fetchone()
+        conn.close()
+    except Exception:
+        return None, None
+    if not row:
+        return None, None
+    d = dict(row) if not isinstance(row, dict) else row
+    return d.get('nom_fichier'), (d.get('pages_liees') or '').replace(',', ' · ')
+
+
+@app.route('/api/juridique/arbitrage', methods=['POST'])
+@rate_limit(limit=8, window=600)
+def juridique_arbitrage():
+    """Note d'arbitrage : synthétiser un dossier et préparer la décision.
+
+    Ce qu'attend un comité n'est pas « que dit le droit » mais « que décide-t-on,
+    qui décide, avant quand ». Trois choses sont produites, et une seule vient
+    du modèle :
+      - le ROUTAGE (qui tranche, qui est consulté) — moteur de règles, car
+        lorsqu'un texte réserve une décision à un organe, s'en écarter est un
+        manquement et non un choix d'organisation ;
+      - les ÉCHÉANCES réglementaires — elles commandent le calendrier ;
+      - la SYNTHÈSE, les OPTIONS et la RECOMMANDATION — le modèle, sur les
+        seules pièces réellement fournies.
+
+    Les pièces désignées sont lues INTÉGRALEMENT et non recherchées par
+    similarité : quand on soumet un contrat à un comité, on veut la pièce, pas
+    les trois passages les plus ressemblants.
+    """
+    client = _jur_client()
+    if not client:
+        return _jur_refus()
+    data = request.get_json(silent=True) or {}
+    objet = str(data.get('objet') or '').strip()[:2000]
+    if not objet:
+        return jsonify({'error': 'Indiquez la décision à préparer.',
+                        'code': 'objet_vide'}), 400
+    profil = data.get('profil') if isinstance(data.get('profil'), dict) else None
+    dossier = data.get('dossier') if isinstance(data.get('dossier'), dict) else {}
+    dossier['objet'] = objet
+    contexte = str(data.get('contexte') or '').strip()[:6000]
+    colle = str(data.get('texte') or '').strip()
+    prefere = 'mistral' if data.get('model') == 'mistral' else 'claude'
+
+    extraits, pieces, n = [], [], 0
+    # La base documentaire est réservée à CONSEILPREV : un client ne peut pas
+    # y puiser, même en désignant un identifiant.
+    if client.get('is_conseilprev'):
+        for doc_id in (data.get('doc_ids') or [])[:12]:
+            try:
+                doc_id = int(doc_id)
+            except (TypeError, ValueError):
+                continue
+            titre, theme = _jur_titre_piece(doc_id)
+            if not titre:
+                continue
+            texte = _jur_piece_texte(doc_id)
+            if not texte.strip():
+                continue
+            n += 1
+            extraits.append('[%d] %s (%s)\n%s' % (n, titre, theme or 'non classé', texte))
+            pieces.append({'n': n, 'titre': titre, 'theme': theme, 'doc_id': doc_id,
+                           'origine': 'document désigné'})
+    if colle:
+        n += 1
+        extraits.append('[%d] Pièce collée par le demandeur\n%s' % (n, colle[:24000]))
+        pieces.append({'n': n, 'titre': 'Pièce collée', 'origine': 'saisie'})
+
+    # Sans pièce désignée, la couche de connaissance Sentinel complète — son
+    # origine est renvoyée : un extrait retrouvé n'a pas le poids d'une pièce
+    # choisie, et la note doit pouvoir le dire.
+    if not extraits:
+        ctx, srcs = _juridique_extraits(objet, profil)
+        if ctx:
+            extraits.append(ctx)
+            for s in (srcs or []):
+                n += 1
+                pieces.append({'n': s.get('n', n), 'titre': s.get('titre') or 'Source',
+                               'origine': 'recherche automatique'})
+
+    routage = juridique.router(profil, dossier)
+    textes_ids = ([x['id'] for x in routage['qualification']['applicables']]
+                  + [x['id'] for x in routage['qualification']['a_verifier']])
+    user = juridique.prompt_arbitrage(
+        objet, contexte=contexte,
+        extraits="\n\n".join(extraits) if extraits else None,
+        profil=profil, dossier=dossier, textes_ids=textes_ids)
+    ok, reponse, modele = ai_complete([{'role': 'user', 'content': user}],
+                                      system=juridique.SYSTEM_ARBITRAGE,
+                                      max_tokens=4000, temperature=0.3,
+                                      prefer=prefere)
+    if not ok:
+        logger.error(f'JURIDIQUE_ARBITRAGE_ECHEC: {reponse}')
+        return jsonify({'error': "Service d'IA momentanément indisponible. Réessayez."}), 503
+    res = juridique.post_traiter(reponse, textes_ids)
+    res.update({'ok': True, 'model': modele, 'pieces': pieces, 'routage': routage})
+    return jsonify(res)
+
+
 def _jur_champ_json(valeur):
     """Champ JSON transmis dans un formulaire multipart, ou None."""
     if not valeur:
