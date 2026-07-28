@@ -3927,6 +3927,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <details style="margin-bottom:4px"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">2 · Distinguer fournisseur et déployeur</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 8px 0;line-height:1.6">Le <strong>fournisseur</strong> d'un système d'IA générative doit rendre ses contenus détectables dans un format lisible par machine : métadonnées sécurisées et filigrane résistant aux altérations.<br><br>Le <strong>déployeur</strong>, qui publie ou diffuse un contenu produit par IA, doit l'étiqueter de manière visible.<br><br>CONSEILPREV cumule les deux rôles : déployeur pour ses assistants conversationnels, et vraisemblablement fournisseur pour les documents produits par Sentinel. <strong>Cette qualification doit être confirmée par votre conseil.</strong></div></details>
     <details style="margin-bottom:4px"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">3 · Informer dès la première interaction</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 8px 0;line-height:1.6">Les assistants du site affichent, avant tout échange, une mention explicite indiquant que l'interlocuteur est un système d'intelligence artificielle, avec une réserve sur les erreurs possibles et le caractère non juridique des réponses.<br><br>La mention doit rester claire, reconnaissable et non dissimulée. Si une information visuelle est impossible, un avertissement sonore doit intervenir dès la première seconde du contenu.</div></details>
     <details style="margin-bottom:4px"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">4 · Marquer et étiqueter les contenus produits</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 8px 0;line-height:1.6">Les documents générés par Sentinel portent la mention visible « AI GENERATED » ou « AI ASSISTED » ainsi que des métadonnées lisibles par machine. Les synthèses du moteur d'exploration portent le même marquage.<br><br>Le code recommande un marquage à deux niveaux : marqueurs techniques intégrés — métadonnées et filigrane sécurisé — attestant la nature synthétique du contenu, et mention visible pour le public.<br><br><strong>Conservez la trace des techniques employées :</strong> c'est la preuve attendue en contrôle.</div></details>
+    <details style="margin-bottom:4px"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">4 bis · Ce que fait la plateforme elle-même</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 8px 0;line-height:1.6"><strong>Marquage lisible par machine.</strong> Les documents Word et PDF exportés par Sentinel portent dans leurs <strong>propriétés de fichier</strong> la mention « AI-generated », l'outil producteur, le modèle utilisé, la référence à l'article 50 et le statut de brouillon. Un marquage placé dans les propriétés survit à la copie du fichier ; une mention de bas de page, non.<br><br><strong>Minimisation avant transmission au modèle (RGPD, art. 5.1.c).</strong> Avant tout envoi à un fournisseur de modèle — chat public comme module juridique — le texte saisi est contrôlé et les données directement identifiantes signalées : adresse électronique, téléphone, IBAN, carte de paiement, numéro de sécurité sociale. L'utilisateur corrige, demande le caviardage automatique, ou confirme l'envoi. Le contrôle est fait <strong>côté serveur</strong> — un avertissement contournable depuis le navigateur ne serait pas une mesure — par expressions régulières et clés de contrôle, sans modèle et sans conserver le texte analysé.<br><br><strong>Limite assumée.</strong> La détection porte sur des formats stables, non sur les noms, adresses postales ou données de santé : les repérer supposerait de soumettre le texte à un modèle, c'est-à-dire de faire ce que la mesure vise à éviter.</div></details>
     <details style="margin-bottom:4px"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">5 · Exceptions de l'article 50, § 4</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 8px 0;line-height:1.6"><strong>Œuvres artistiques, créatives ou satiriques.</strong> La divulgation ne doit pas entraver la jouissance de l'œuvre : une mention en générique ou en note d'accompagnement suffit.<br><br><strong>Textes d'intérêt public sous contrôle éditorial.</strong> L'étiquetage n'est pas requis si le contenu a fait l'objet d'un examen humain et si une personne assume la responsabilité éditoriale de sa publication.<br><br><strong>Point d'attention.</strong> Si vous invoquez cette seconde exception pour votre veille réglementaire, vous devez démontrer la réalité de la relecture humaine et désigner nommément le responsable éditorial. À défaut, l'étiquetage s'impose.</div></details>
     <details style="margin-bottom:4px"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">6 · Quatre critères de la détection</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 8px 0;line-height:1.6"><strong>Efficacité :</strong> le public peut-il réellement identifier le contenu généré par IA ?<br><strong>Fiabilité :</strong> quel est le taux d'erreur de la détection en conditions normales ?<br><strong>Robustesse :</strong> le marquage résiste-t-il aux altérations — compression, recadrage — et aux attaques ?<br><strong>Interopérabilité :</strong> fonctionne-t-il avec les autres systèmes du marché ?<br><br>Échéance applicable aux fournisseurs : le 2 février 2027.</div></details>
     <details style="margin-bottom:4px"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">7 · Exploiter le registre des usages</summary><div style="font-size:12px;color:var(--muted);padding:4px 0 8px 0;line-height:1.6">Chaque usage d'IA est recensé avec son rôle, la nature du contenu, le marquage, l'étiquetage, l'exception invoquée et le responsable éditorial.<br><br><strong>Procédure.</strong> Ne cochez « Conforme » qu'après vérification effective de la mesure. Ajoutez tout nouvel usage dès sa mise en service. Le taux de préparation et le compte à rebours vers le 2 août 2026 figurent en tête de page.</div></details>
@@ -6391,6 +6392,14 @@ textarea.form-el{min-height:86px;resize:vertical}
   #p-juridique .ju-msg{margin-top:14px;font-size:12.5px;padding:11px 14px;border-radius:3px;display:none}
   #p-juridique .ju-msg.err{display:block;background:var(--t-terra);border:1px solid var(--accent);color:var(--ink)}
   #p-juridique .ju-msg.wait{display:block;background:var(--bg2);border:1px solid var(--rule2);color:var(--muted)}
+  #p-juridique .ju-msg.mz{display:block;background:rgba(245,158,11,.10);border:1px solid rgba(245,158,11,.45);
+    color:var(--ink);line-height:1.6}
+  #p-juridique .ju-msg.mz .mz-d{font-size:12px;color:var(--muted);margin:6px 0 10px}
+  #p-juridique .ju-msg.mz .mz-b{display:flex;flex-wrap:wrap;gap:8px}
+  #p-juridique .ju-msg.mz button{font:inherit;font-size:12.5px;padding:7px 12px;border-radius:3px;cursor:pointer;
+    border:1px solid var(--rule2);background:var(--bg2);color:var(--ink)}
+  #p-juridique .ju-msg.mz button.pri{border-color:var(--accent);background:var(--t-terra)}
+  #p-juridique .ju-msg.mz button:hover{filter:brightness(1.12)}
   #p-juridique .ju-t{border:1px solid var(--rule);border-left:3px solid var(--blue);background:var(--white);
     padding:16px 18px;margin-bottom:12px;font-size:12.8px;line-height:1.6}
   #p-juridique .ju-t.warn{border-left-color:var(--amber)}
@@ -6614,6 +6623,33 @@ var JU = { cfg: null, profil: {}, clausierPret: false, charge: false };
 
 function juEsc(s){return (''+(s==null?'':s)).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 function juMsg(id,t,cls){var e=document.getElementById(id);if(!e)return;e.textContent=t||'';e.className='ju-msg'+(t?(' '+cls):'');}
+
+// Minimisation (RGPD art. 5.1.c) — le serveur refuse un premier envoi contenant
+// des données personnelles et décrit ce qu'il a trouvé. Trois issues, toutes
+// tenues par l'utilisateur : corriger, caviarder, ou maintenir. Le contrôle vit
+// côté serveur ; ceci n'en est que la présentation.
+function juMinim(zone,j,relancer){
+  var m=(j&&j.minimisation)||{}, det=m.detections||[];
+  var d=det.map(function(x){
+    return juEsc(x.libelle)+' × '+x.occurrences
+      +(x.exemples&&x.exemples.length?' <span style="opacity:.72">('+juEsc(x.exemples.join(', '))+')</span>':'');
+  }).join(' · ');
+  var e=document.getElementById(zone); if(!e) return;
+  e.className='ju-msg mz';
+  e.innerHTML='<b>'+juEsc(j.message||'Ce texte contient des données personnelles.')+'</b>'
+    +'<div class="mz-d">'+d+'</div>'
+    +'<div class="mz-b">'
+    +'<button type="button" class="pri" data-mz="corriger">Corriger la saisie</button>'
+    +'<button type="button" data-mz="masquer">Retirer et envoyer</button>'
+    +'<button type="button" data-mz="accepter">Envoyer quand même</button>'
+    +'</div>';
+  e.onclick=function(ev){
+    var t=ev.target.getAttribute&&ev.target.getAttribute('data-mz'); if(!t) return;
+    e.onclick=null;
+    if(t==='corriger'){ juMsg(zone,'',''); return; }
+    relancer(t);
+  };
+}
 
 function juInline(s){
   return juEsc(s).replace(/`([^`]+)`/g,'<code>$1</code>')
@@ -6961,16 +6997,21 @@ function juReferentiel(){
   document.getElementById('ju-ana').addEventListener('click',function(){
     var q=(document.getElementById('ju-q').value||'').trim();
     if(!q){ juMsg('ju-amsg','Posez une question.','err'); return; }
-    var b=this; b.disabled=true;
+    var b=this;
+    function envoyer(mode){
+    b.disabled=true;
     juMsg('ju-amsg','Analyse en cours — la rédaction complète prend généralement 20 à 60 secondes.','wait');
     juApi('/api/juridique/analyse',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({question:q,profil:JU.profil})},150000).then(function(j){
+      body:JSON.stringify({question:q,profil:JU.profil,minimisation:mode||''})},150000).then(function(j){
+      if(j&&j.code==='donnees_personnelles'){ juMinim('ju-amsg',j,envoyer); return; }
       if(!j||!j.ok){ juMsg('ju-amsg',(j&&j.error)||'Analyse impossible.','err'); return; }
       juMsg('ju-amsg','','');
       juRendreAnalyse('ju-ares',j,'Analyse juridique');
     }).catch(function(){
       juMsg('ju-amsg','Analyse interrompue (délai dépassé ou service indisponible). Réessayez.','err');
     }).then(function(){ b.disabled=false; });
+    }
+    envoyer('');
   });
 
   document.getElementById('ju-arb-docs').addEventListener('change',function(e){
@@ -6983,14 +7024,17 @@ function juReferentiel(){
     var objet=(document.getElementById('ju-arb-objet').value||'').trim();
     if(!objet){ juMsg('ju-arb-msg','Indiquez la décision à préparer.','err'); return; }
     var nat=Array.prototype.map.call(document.querySelectorAll('[data-jnat]:checked'),function(x){return x.value;});
-    var b=this; b.disabled=true;
+    var b=this;
+    function envoyer(mode){
+    b.disabled=true;
     juMsg('ju-arb-msg','Préparation de la note — comptez 30 à 90 secondes selon le volume du dossier.','wait');
     juApi('/api/juridique/arbitrage',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({objet:objet, contexte:document.getElementById('ju-arb-contexte').value,
                            texte:document.getElementById('ju-arb-texte').value,
-                           doc_ids:JUARB.coches, profil:JU.profil,
+                           doc_ids:JUARB.coches, profil:JU.profil, minimisation:mode||'',
                            dossier:{natures:nat, enjeu:document.getElementById('ju-arb-enjeu').value}})},180000)
       .then(function(j){
+        if(j&&j.code==='donnees_personnelles'){ juMinim('ju-arb-msg',j,envoyer); return; }
         if(!j||!j.ok){ juMsg('ju-arb-msg',(j&&j.error)||'Note impossible.','err'); return; }
         juMsg('ju-arb-msg','','');
         var h=juArbRoutage(j.routage);
@@ -7013,6 +7057,8 @@ function juReferentiel(){
       }).catch(function(){
         juMsg('ju-arb-msg','Préparation interrompue (délai dépassé ou service indisponible). Réessayez.','err');
       }).then(function(){ b.disabled=false; });
+    }
+    envoyer('');
   });
 
   document.getElementById('ju-cdom').addEventListener('change',juClausier);
@@ -7024,7 +7070,9 @@ function juReferentiel(){
     var t=(document.getElementById('ju-ctexte').value||'').trim();
     if(!f && t.length<200){ juMsg('ju-cmsg','Collez le texte du contrat (200 caractères minimum) ou chargez un fichier.','err'); return; }
     var doms=Array.prototype.map.call(document.querySelectorAll('[data-jcd]:checked'),function(x){return x.value;});
-    var b=this; b.disabled=true;
+    var b=this;
+    function envoyer(mode){
+    b.disabled=true;
     juMsg('ju-cmsg','Revue en cours — la grille complète demande généralement 30 à 90 secondes.','wait');
     var opts;
     if(f){
@@ -7032,18 +7080,22 @@ function juReferentiel(){
       fd.append('fichier',f,f.name);
       fd.append('profil',JSON.stringify(JU.profil));
       fd.append('domaines',JSON.stringify(doms));
+      fd.append('minimisation',mode||'');
       opts={method:'POST',body:fd};
     } else {
       opts={method:'POST',headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({texte:t,profil:JU.profil,domaines:doms})};
+            body:JSON.stringify({texte:t,profil:JU.profil,domaines:doms,minimisation:mode||''})};
     }
     juApi('/api/juridique/contrat',opts,180000).then(function(j){
+      if(j&&j.code==='donnees_personnelles'){ juMinim('ju-cmsg',j,envoyer); return; }
       if(!j||!j.ok){ juMsg('ju-cmsg',(j&&j.error)||'Revue impossible.','err'); return; }
       juMsg('ju-cmsg','','');
       juRendreAnalyse('ju-cres',j,'Revue de contrat — '+j.caracteres+' caractères analysés');
     }).catch(function(){
       juMsg('ju-cmsg','Revue interrompue (délai dépassé ou service indisponible). Réessayez.','err');
     }).then(function(){ b.disabled=false; });
+    }
+    envoyer('');
   });
 })();
 

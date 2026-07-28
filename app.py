@@ -2928,6 +2928,45 @@ def _chat_contexte_sentinel(question, limite=5):
         return '', []
 
 
+import minimisation  # noqa: E402
+
+
+def _minimiser(textes, mode):
+    """Contrôle de minimisation avant tout envoi à un modèle (RGPD art. 5.1.c).
+
+    Sentinel ne conserve ni les conversations ni les pièces analysées, mais il
+    les TRANSMET à un fournisseur de modèle. La minimisation se joue donc à
+    l'envoi, pas au stockage : ce qui n'est pas nécessaire à la réponse n'a pas
+    à quitter le poste de l'utilisateur.
+
+    `textes` : les SAISIES de l'utilisateur, et elles seules. Les pièces de la
+    base documentaire sont choisies par CONSEILPREV, pas tapées dans un
+    formulaire — avertir à leur sujet serait un bruit qu'on ne peut pas corriger.
+
+    `mode` vient du navigateur : "" (contrôle), "masquer" (caviardage
+    automatique), "accepter" (l'utilisateur maintient son envoi).
+
+    Retourne (textes_a_utiliser, refus_ou_None, resume_pour_le_journal). Le
+    contrôle est fait ICI, côté serveur : un avertissement contournable en
+    changeant d'onglet n'est pas une mesure de minimisation, seulement son
+    apparence.
+    """
+    mode = str(mode or '').strip().lower()
+    res = minimisation.analyser('\n'.join(t for t in textes if t))
+    resume = minimisation.resume_journal(res)
+    if not res['total']:
+        return textes, None, resume
+    if mode == 'masquer':
+        return ([minimisation.masquer(t) for t in textes], None,
+                resume + ' (caviardées)')
+    if mode == 'accepter':
+        return textes, None, resume + ' (maintenues par l\'utilisateur)'
+    refus = (jsonify({'ok': False, 'error': res['message'],
+                      'code': 'donnees_personnelles',
+                      'minimisation': res, 'message': res['message']}), 200)
+    return textes, refus, resume + ' (envoi suspendu)'
+
+
 @app.route('/api/chat', methods=['POST'])
 @rate_limit(limit=15, window=60)
 def chat():
@@ -2948,6 +2987,15 @@ def chat():
         if is_spam:
             logger.warning(f"CHAT_SPAM {ip}: {reason}")
             return jsonify({"error": "Message non autorisé."}), 400
+
+        # Minimisation avant transmission (RGPD art. 5.1.c) : seul le dernier
+        # message est contrôlé — les tours précédents ont déjà été validés, les
+        # redemander à chaque envoi rendrait la conversation impraticable.
+        mode_min = str(data.get('minimisation') or '').strip().lower()
+        (user_msg,), refus, _resume = _minimiser([user_msg], mode_min)
+        if refus:
+            return refus
+
         # Construire l'historique (sans system — géré par le moteur)
         messages = []
         for h in history[-8:]:
@@ -2978,8 +3026,12 @@ def chat():
             logger.error(f"CHAT_ALL_FAILED {ip}: {reply}")
             return jsonify({"error": "Service IA temporairement indisponible, réessayez"}), 503
         bf_protector.record_attempt(bf_key, success=True)
+        # Après caviardage, on renvoie le texte RÉELLEMENT transmis : l'utilisateur
+        # doit voir ce qui est parti, et la suite de la conversation doit repartir
+        # de cette version — sinon le tour suivant renverrait l'original en clair.
         return jsonify({"reply": reply, "model": model_used, "divergence": divergence,
-                        "sources": sources, "connaissance": bool(contexte)})
+                        "sources": sources, "connaissance": bool(contexte),
+                        "envoye": user_msg if mode_min == 'masquer' else None})
     except requests.Timeout:
         return jsonify({"error": "Délai dépassé, réessayez"}), 504
     except Exception as e:
@@ -7287,8 +7339,6 @@ for route, filename in PAGES.items():
 # Réservé aux comptes Sentinel : c'est une prestation de conseil.
 
 import juridique  # noqa: E402
-
-
 def _jur_client():
     """Client Sentinel connecté, ou None. Les routes juridiques répondent 401
     plutôt que de planter sur un client absent."""
@@ -7397,6 +7447,10 @@ def juridique_analyse():
         return jsonify({'error': 'Posez une question.', 'code': 'question_vide'}), 400
     profil = data.get('profil') if isinstance(data.get('profil'), dict) else None
 
+    (question,), refus, _resume = _minimiser([question], data.get('minimisation'))
+    if refus:
+        return refus
+
     qual = juridique.qualifier(profil) if profil else None
     textes_ids = None
     if qual:
@@ -7430,7 +7484,7 @@ def juridique_contrat():
     if not client:
         return _jur_refus()
 
-    texte_contrat, profil, domaines, prefere = '', None, None, 'claude'
+    texte_contrat, profil, domaines, prefere, mode_min = '', None, None, 'claude', ''
     fichier = request.files.get('fichier')
     if fichier is not None:
         nom = (fichier.filename or '').lower()
@@ -7449,6 +7503,7 @@ def juridique_contrat():
                             'code': 'illisible'}), 400
         profil = _jur_champ_json(request.form.get('profil'))
         domaines = _jur_champ_json(request.form.get('domaines'))
+        mode_min = request.form.get('minimisation') or ''
         if request.form.get('model') == 'mistral':
             prefere = 'mistral'
     else:
@@ -7456,6 +7511,7 @@ def juridique_contrat():
         texte_contrat = str(data.get('texte') or '').strip()
         profil = data.get('profil') if isinstance(data.get('profil'), dict) else None
         domaines = data.get('domaines') if isinstance(data.get('domaines'), list) else None
+        mode_min = data.get('minimisation') or ''
         if data.get('model') == 'mistral':
             prefere = 'mistral'
 
@@ -7463,6 +7519,15 @@ def juridique_contrat():
     if len(texte_contrat) < 200:
         return jsonify({'error': 'Fournissez le texte du contrat (200 caractères minimum).',
                         'code': 'contrat_vide'}), 400
+
+    # C'est ici que la mesure compte le plus : un contrat porte des signataires,
+    # des adresses et parfois un RIB, dont aucun n'est utile à l'analyse des
+    # clauses. Sur un PDF, l'utilisateur ne peut pas corriger sa saisie — le
+    # caviardage automatique est la seule option praticable, et il est proposé
+    # plutôt qu'imposé.
+    (texte_contrat,), refus, _resume = _minimiser([texte_contrat], mode_min)
+    if refus:
+        return refus
 
     user = juridique.prompt_contrat(texte_contrat, profil=profil, domaines=domaines)
     ok, reponse, modele = ai_complete([{'role': 'user', 'content': user}],
@@ -7669,10 +7734,18 @@ def juridique_arbitrage():
                         'code': 'objet_vide'}), 400
     profil = data.get('profil') if isinstance(data.get('profil'), dict) else None
     dossier = data.get('dossier') if isinstance(data.get('dossier'), dict) else {}
-    dossier['objet'] = objet
     contexte = str(data.get('contexte') or '').strip()[:6000]
     colle = str(data.get('texte') or '').strip()
     prefere = 'mistral' if data.get('model') == 'mistral' else 'claude'
+
+    # Les trois saisies du demandeur sont contrôlées ensemble ; les pièces
+    # désignées dans la base ne le sont pas — elles sont choisies par
+    # CONSEILPREV et l'utilisateur n'a aucun moyen de les corriger.
+    (objet, contexte, colle), refus, _resume = _minimiser(
+        [objet, contexte, colle], data.get('minimisation'))
+    if refus:
+        return refus
+    dossier['objet'] = objet
 
     extraits, pieces, n = [], [], 0
     # La base documentaire est réservée à CONSEILPREV : un client ne peut pas

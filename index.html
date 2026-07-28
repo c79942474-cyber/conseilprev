@@ -3797,6 +3797,17 @@ em,.hero-em{
 .ia50-badge{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:18px;padding:0 5px;border-radius:4px;background:#14181f;color:#fff;font-weight:800;font-size:10px;letter-spacing:.06em;flex-shrink:0}
 </style>
 <link rel="stylesheet" href="/anti-debordement.css">
+<style>
+  /* Avertissement de minimisation — commun aux deux fenêtres de dialogue. */
+  .cpmin{border:1px solid rgba(245,158,11,.45);background:rgba(245,158,11,.10);border-radius:10px;
+    padding:12px 14px;font-size:13px;line-height:1.6}
+  .cpmin .cpmin-d{font-size:12px;opacity:.8;margin:6px 0 10px}
+  .cpmin .cpmin-b{display:flex;flex-wrap:wrap;gap:8px}
+  .cpmin button{font:inherit;font-size:12.5px;padding:6px 11px;border-radius:8px;cursor:pointer;
+    border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.06);color:inherit}
+  .cpmin button.pri{border-color:rgba(45,212,191,.55);background:rgba(45,212,191,.14)}
+  .cpmin button:hover{filter:brightness(1.15)}
+</style>
 </head>
 <body>
 
@@ -5437,6 +5448,7 @@ function xMsg(role,txt){
   d.innerHTML='<div class="xav">'+(role==='b'?'AI':'✦')+'</div><div class="xbl">'+txt+'</div>';
   b.appendChild(d);
   b.scrollTop=b.scrollHeight;
+  return d;
 }
 
 function xTyp(show){
@@ -5465,17 +5477,46 @@ function xFmtT(txt){
   return bold.replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
 }
 
-async function xSend(){
+
+/* Minimisation (RGPD art. 5.1.c) — le serveur refuse un premier envoi qui
+   contient des donnees personnelles et dit ce qu il a trouve. Trois issues,
+   toutes tenues par l utilisateur : corriger, caviarder, ou maintenir. On
+   n interdit jamais : un avertissement qui empeche de travailler finit par
+   etre contourne. Le controle vit cote serveur ; ceci n en est que la
+   presentation. */
+function cpMinEsc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+  .replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function cpMinHtml(j){
+  var m=(j&&j.minimisation)||{}, det=m.detections||[];
+  var d=det.map(function(x){
+    return cpMinEsc(x.libelle)+' \u00d7 '+x.occurrences
+      +(x.exemples&&x.exemples.length?' <span style="opacity:.7">('+cpMinEsc(x.exemples.join(', '))+')</span>':'');
+  }).join(' \u00b7 ');
+  return '<div class="cpmin"><b>'+cpMinEsc(j.message||'Ce texte contient des donnees personnelles.')+'</b>'
+    +'<div class="cpmin-d">'+d+'</div>'
+    +'<div class="cpmin-b">'
+    +'<button type="button" class="pri" data-mz="corriger">Corriger ma question</button>'
+    +'<button type="button" data-mz="masquer">Retirer et envoyer</button>'
+    +'<button type="button" data-mz="accepter">Envoyer quand meme</button>'
+    +'</div></div>';
+}
+
+var xDerniere='', xBulle=null;
+
+async function xSend(mode){
   if(xCB) return;
   var inp=document.getElementById('xinp');
   if(!inp) return;
-  var m=inp.value.trim();
+  var m=mode?xDerniere:inp.value.trim();
   if(!m) return;
-  inp.value=''; inp.style.height='auto';
-  var sugg=document.getElementById('xsugg');
-  if(sugg) sugg.style.display='none';
-  xMsg('u',m.replace(/</g,'&lt;').replace(/>/g,'&gt;'));
-  xCH.push({role:'user',content:m});
+  if(!mode){
+    inp.value=''; inp.style.height='auto';
+    var sugg=document.getElementById('xsugg');
+    if(sugg) sugg.style.display='none';
+    xBulle=xMsg('u',m.replace(/</g,'&lt;').replace(/>/g,'&gt;'));
+    xDerniere=m;
+    xCH.push({role:'user',content:m});
+  }
   xCB=true;
   var btn=document.getElementById('xsnd');
   if(btn) btn.disabled=true;
@@ -5488,11 +5529,33 @@ async function xSend(){
     var r=await fetch('/api/chat',{
       method:'POST', credentials:'same-origin',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({message:m, history:xCH.slice(-8)})
+      body:JSON.stringify({message:m, history:xCH.slice(-8), minimisation:mode||''})
     });
     var data=await r.json();
+    if(data && data.code==='donnees_personnelles'){
+      xTyp(false);
+      var av=xMsg('b',cpMinHtml(data));
+      av.addEventListener('click',function(e){
+        var t=e.target.getAttribute&&e.target.getAttribute('data-mz'); if(!t) return;
+        av.remove();
+        if(t==='corriger'){
+          for(var k=xCH.length-1;k>=0;k--){ if(xCH[k].role==='user'){ xCH.splice(k,1); break; } }
+          if(xBulle){ xBulle.remove(); xBulle=null; }
+          inp.value=xDerniere; inp.focus();
+          return;
+        }
+        xSend(t);
+      });
+      xCB=false;
+      if(btn) btn.disabled=false;
+      return;
+    }
     if(!r.ok || !data.reply) throw new Error(data.error || ('HTTP '+r.status));
     xTyp(false);
+    if(data.envoye){        // caviarde : la conversation repart du texte transmis
+      for(var q=xCH.length-1;q>=0;q--){ if(xCH[q].role==='user'){ xCH[q].content=data.envoye; break; } }
+      if(xBulle){ var bl=xBulle.querySelector('.xbl'); if(bl) bl.textContent=data.envoye; }
+    }
     var rep=data.reply;
     if(data.sources && data.sources.length){
       var LIBS1={document:'Base documentaire',veille:'Veille r\u00e9glementaire',analyse:'Analyse Sentinel'};
@@ -6579,6 +6642,7 @@ function cpcAdd(role,html){
     +'<div class="cpc-bubble">'+html+'</div>';
   m.appendChild(d);
   m.scrollTop=m.scrollHeight;
+  return d;
 }
 
 function cpcTyping(){
@@ -6593,24 +6657,49 @@ function cpcTyping(){
   return d;
 }
 
-window.cpcSend=function(preset){
+var cpcDerniere='', cpcBulle=null;
+
+window.cpcSend=function(preset,mode){
   if(BUSY) return;
   var inp=document.getElementById('cpcInput');
-  var txt=preset||(inp?inp.value.trim():'');
+  var txt=mode?cpcDerniere:(preset||(inp?inp.value.trim():''));
   if(!txt) return;
-  if(inp){inp.value='';inp.style.height='auto';}
-  cpcAdd('user',txt.replace(/</g,'&lt;').replace(/>/g,'&gt;'));
-  HIST.push({role:'user',content:txt});
+  if(!mode){
+    if(inp){inp.value='';inp.style.height='auto';}
+    cpcBulle=cpcAdd('user',txt.replace(/</g,'&lt;').replace(/>/g,'&gt;'));
+    cpcDerniere=txt;
+    HIST.push({role:'user',content:txt});
+  }
   BUSY=true;
   var ty=cpcTyping();
   fetch('/api/chat',{
     method:'POST', credentials:'same-origin',
     headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({message:txt, history:HIST.slice(-8)})
+    body:JSON.stringify({message:txt, history:HIST.slice(-8), minimisation:mode||''})
   })
   .then(function(r){return r.json();})
   .then(function(d){
     if(ty)ty.remove();
+    if(d && d.code==='donnees_personnelles'){
+      var av=cpcAdd('bot',cpMinHtml(d));
+      av.addEventListener('click',function(e){
+        var t=e.target.getAttribute&&e.target.getAttribute('data-mz'); if(!t) return;
+        av.remove();
+        if(t==='corriger'){
+          for(var k=HIST.length-1;k>=0;k--){ if(HIST[k].role==='user'){ HIST.splice(k,1); break; } }
+          if(cpcBulle){ cpcBulle.remove(); cpcBulle=null; }
+          if(inp){ inp.value=cpcDerniere; inp.focus(); }
+          return;
+        }
+        BUSY=false; window.cpcSend(null,t);
+      });
+      BUSY=false;
+      return;
+    }
+    if(d.envoye){        // caviarde : la conversation repart du texte transmis
+      for(var q=HIST.length-1;q>=0;q--){ if(HIST[q].role==='user'){ HIST[q].content=d.envoye; break; } }
+      if(cpcBulle){ var bl=cpcBulle.querySelector('.cpc-bubble'); if(bl) bl.textContent=d.envoye; }
+    }
     var rep=d.reply || (d.error ? ('Erreur : '+d.error) : 'Reponse indisponible.');
     if(d.sources && d.sources.length){
       var LIBS2={document:'Base documentaire',veille:'Veille reglementaire',analyse:'Analyse Sentinel'};
