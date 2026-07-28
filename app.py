@@ -7273,6 +7273,221 @@ for route, filename in PAGES.items():
         return view
     app.add_url_rule(route, view_func=make_view(filename))
 
+# ══════════════════════════════════════════════════════════════════════════
+#  CONSEIL JURIDIQUE ASSISTÉ — services numériques, cyber IT/OT/ICS, IA
+# ══════════════════════════════════════════════════════════════════════════
+# Module juridique.py, partagé à l'identique avec conseilprevcyber. Trois
+# niveaux volontairement séparés :
+#   1. la QUALIFICATION est déterministe — aucun modèle n'intervient, chaque
+#      rattachement porte sa motivation, deux appels donnent le même résultat ;
+#   2. le CLAUSIER et les POINTS D'INTERPRÉTATION sont des données figées ;
+#   3. seule l'ANALYSE appelle un modèle, cadrée par un référentiel FERMÉ de
+#      références citables et vérifiée a posteriori (détection des références
+#      inventées, cf. juridique.verifier_citations).
+# Réservé aux comptes Sentinel : c'est une prestation de conseil.
+
+import juridique  # noqa: E402
+
+
+def _jur_client():
+    """Client Sentinel connecté, ou None. Les routes juridiques répondent 401
+    plutôt que de planter sur un client absent."""
+    try:
+        return sentauth_current_client()
+    except Exception:
+        return None
+
+
+def _jur_refus():
+    return jsonify({'error': 'Connectez-vous à Sentinel pour accéder au conseil juridique.'}), 401
+
+
+@app.route('/api/juridique/config', methods=['GET'])
+@rate_limit(limit=30, window=60)
+def juridique_config():
+    """Tout ce dont l'interface a besoin : questionnaire, référentiel, clausier,
+    amorces. Une seule définition côté serveur — une liste d'options recopiée
+    dans le HTML finit toujours par diverger du moteur qui, lui, décide."""
+    if not _jur_client():
+        return _jur_refus()
+    return jsonify({
+        'ok': True,
+        'version_referentiel': juridique.VERSION_REFERENTIEL,
+        'champs': juridique.PROFIL_CHAMPS,
+        'referentiel': juridique.referentiel(),
+        'domaines_clausier': juridique.DOMAINES_CLAUSIER,
+        'suggestions': juridique.SUGGESTIONS,
+        'avertissement': juridique.AVERTISSEMENT,
+        'mention_ia': juridique.MENTION_IA,
+    })
+
+
+@app.route('/api/juridique/qualification', methods=['POST'])
+@rate_limit(limit=60, window=60)
+def juridique_qualification():
+    """Qualification réglementaire d'un profil. Aucun appel de modèle : la
+    réponse est reproductible et opposable telle quelle."""
+    if not _jur_client():
+        return _jur_refus()
+    data = request.get_json(silent=True) or {}
+    profil = data.get('profil') if isinstance(data.get('profil'), dict) else data
+    try:
+        res = juridique.qualifier(profil)
+    except Exception as exc:
+        logger.error(f'JURIDIQUE_QUALIF_ERR: {exc}')
+        return jsonify({'error': 'La qualification a échoué.'}), 500
+    res['ok'] = True
+    return jsonify(res)
+
+
+@app.route('/api/juridique/clausier', methods=['GET'])
+@rate_limit(limit=30, window=60)
+def juridique_clausier():
+    """Clausier fournisseurs — chaque clause porte son fondement, son modèle de
+    rédaction et le risque encouru en son absence."""
+    if not _jur_client():
+        return _jur_refus()
+    return jsonify({
+        'ok': True,
+        'domaines': juridique.DOMAINES_CLAUSIER,
+        'clauses': juridique.clausier(
+            domaine=(request.args.get('domaine') or '').strip() or None,
+            criticite=(request.args.get('criticite') or '').strip() or None),
+        'avertissement': juridique.AVERTISSEMENT,
+    })
+
+
+@app.route('/api/juridique/controverses', methods=['GET'])
+@rate_limit(limit=30, window=60)
+def juridique_controverses():
+    """Points d'interprétation ouverts : plusieurs lectures, jamais une seule."""
+    if not _jur_client():
+        return _jur_refus()
+    ids = [x for x in (request.args.get('textes') or '').split(',') if x.strip()]
+    return jsonify({'ok': True, 'points': juridique.controverses(ids or None)})
+
+
+def _juridique_extraits(question, profil):
+    """Extraits de la couche de connaissance Sentinel (base documentaire, veille,
+    analyses) pertinents pour la question. Best-effort : une base momentanément
+    indisponible dégrade la précision, elle ne bloque pas l'analyse — le
+    référentiel des textes suffit à produire une réponse utile."""
+    try:
+        requete = ' '.join(x for x in [question, (profil or {}).get('secteur') or ''] if x)[:500]
+        contexte, sources = _chat_contexte_sentinel(requete, limite=6)
+        return contexte or '', sources or []
+    except Exception:
+        return '', []
+
+
+@app.route('/api/juridique/analyse', methods=['POST'])
+@rate_limit(limit=12, window=600)
+def juridique_analyse():
+    """Analyse juridique argumentée : qualification, textes, LECTURES POSSIBLES,
+    risque, recommandation, actions, réserves.
+
+    La qualification déterministe est calculée d'abord et transmise au modèle :
+    il ne décide pas de ce qui s'applique, il l'explique et l'interprète."""
+    client = _jur_client()
+    if not client:
+        return _jur_refus()
+    data = request.get_json(silent=True) or {}
+    question = str(data.get('question') or '').strip()[:4000]
+    if not question:
+        return jsonify({'error': 'Posez une question.', 'code': 'question_vide'}), 400
+    profil = data.get('profil') if isinstance(data.get('profil'), dict) else None
+
+    qual = juridique.qualifier(profil) if profil else None
+    textes_ids = None
+    if qual:
+        textes_ids = ([x['id'] for x in qual['applicables']]
+                      + [x['id'] for x in qual['a_verifier']])
+    extraits, sources = _juridique_extraits(question, profil)
+    user = juridique.prompt_analyse(question, profil=profil, extraits=extraits,
+                                    textes_ids=textes_ids)
+    prefere = 'mistral' if data.get('model') == 'mistral' else 'claude'
+    ok, reponse, modele = ai_complete([{'role': 'user', 'content': user}],
+                                      system=juridique.SYSTEM_JURIDIQUE,
+                                      max_tokens=3200, temperature=0.3,
+                                      prefer=prefere)
+    if not ok:
+        logger.error(f'JURIDIQUE_ANALYSE_ECHEC: {reponse}')
+        return jsonify({'error': "Service d'IA momentanément indisponible. Réessayez."}), 503
+    res = juridique.post_traiter(reponse, textes_ids)
+    res.update({'ok': True, 'model': modele, 'sources': sources, 'qualification': qual})
+    return jsonify(res)
+
+
+@app.route('/api/juridique/contrat', methods=['POST'])
+@rate_limit(limit=6, window=600)
+def juridique_contrat():
+    """Revue d'un contrat de services fournisseur, clause par clause.
+
+    Le contrat est analysé EN MÉMOIRE et n'est jamais conservé : une pièce
+    contractuelle est sensible, et rien n'oblige à la stocker pour la relire.
+    Deux entrées : texte collé, ou fichier PDF/DOCX/TXT."""
+    client = _jur_client()
+    if not client:
+        return _jur_refus()
+
+    texte_contrat, profil, domaines, prefere = '', None, None, 'claude'
+    fichier = request.files.get('fichier')
+    if fichier is not None:
+        nom = (fichier.filename or '').lower()
+        ext = '.' + nom.rsplit('.', 1)[-1] if '.' in nom else ''
+        if ext not in ('.pdf', '.docx', '.txt', '.md'):
+            return jsonify({'error': 'Formats acceptés : PDF, DOCX, TXT, MD.',
+                            'code': 'format_refuse'}), 400
+        blob = fichier.read(6 * 1024 * 1024 + 1)
+        if len(blob) > 6 * 1024 * 1024:
+            return jsonify({'error': 'Fichier trop volumineux (6 Mo maximum).',
+                            'code': 'trop_gros'}), 400
+        extrait_ok, texte_contrat = rag_extract_text(nom if ext != '.md' else nom[:-3] + '.txt', blob)
+        if not extrait_ok or not (texte_contrat or '').strip():
+            return jsonify({'error': "Aucun texte n'a pu être extrait de ce fichier "
+                                     '(document scanné ?). Collez le texte à la place.',
+                            'code': 'illisible'}), 400
+        profil = _jur_champ_json(request.form.get('profil'))
+        domaines = _jur_champ_json(request.form.get('domaines'))
+        if request.form.get('model') == 'mistral':
+            prefere = 'mistral'
+    else:
+        data = request.get_json(silent=True) or {}
+        texte_contrat = str(data.get('texte') or '').strip()
+        profil = data.get('profil') if isinstance(data.get('profil'), dict) else None
+        domaines = data.get('domaines') if isinstance(data.get('domaines'), list) else None
+        if data.get('model') == 'mistral':
+            prefere = 'mistral'
+
+    texte_contrat = (texte_contrat or '').strip()
+    if len(texte_contrat) < 200:
+        return jsonify({'error': 'Fournissez le texte du contrat (200 caractères minimum).',
+                        'code': 'contrat_vide'}), 400
+
+    user = juridique.prompt_contrat(texte_contrat, profil=profil, domaines=domaines)
+    ok, reponse, modele = ai_complete([{'role': 'user', 'content': user}],
+                                      system=juridique.SYSTEM_JURIDIQUE,
+                                      max_tokens=4000, temperature=0.3,
+                                      prefer=prefere)
+    if not ok:
+        logger.error(f'JURIDIQUE_CONTRAT_ECHEC: {reponse}')
+        return jsonify({'error': "Service d'IA momentanément indisponible. Réessayez."}), 503
+    res = juridique.post_traiter(reponse)
+    res.update({'ok': True, 'model': modele, 'caracteres': len(texte_contrat)})
+    return jsonify(res)
+
+
+def _jur_champ_json(valeur):
+    """Champ JSON transmis dans un formulaire multipart, ou None."""
+    if not valeur:
+        return None
+    try:
+        v = json.loads(valeur)
+        return v if isinstance(v, (dict, list)) else None
+    except Exception:
+        return None
+
+
 @app.route('/sentinel')
 @sentinel_login_required
 def sentinel_page():
