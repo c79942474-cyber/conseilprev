@@ -7477,6 +7477,80 @@ def juridique_contrat():
     return jsonify(res)
 
 
+@app.route('/api/juridique/export', methods=['POST'])
+@rate_limit(limit=20, window=600)
+def juridique_export():
+    """Exporte une production juridique en Word ou PDF, prête à diffuser.
+
+    Le document remis au comité doit porter le routage et les échéances : à
+    l'écran on les affiche à part pour distinguer ce qui est déduit d'un texte
+    de ce qui est rédigé par un modèle, mais dans un document qui circule, une
+    note privée du tableau « qui tranche, avant quand » perd exactement ce qui
+    la rendait actionnable.
+
+    Les parties déterministes sont RECALCULÉES ici, jamais reprises de ce que le
+    navigateur renvoie : un document qui sort de l'entreprise et porte une
+    répartition des rôles ne doit pas dépendre de ce qu'un formulaire a bien
+    voulu transmettre.
+    """
+    if not _jur_client():
+        return _jur_refus()
+    import io as _io
+    from flask import send_file as _send_file
+    import livrables_export
+
+    data = request.get_json(silent=True) or {}
+    texte = str(data.get('texte') or '').strip()
+    if not texte:
+        return jsonify({'error': 'Aucun contenu à exporter.', 'code': 'vide'}), 400
+    type_doc = str(data.get('type') or 'analyse').strip()
+    if type_doc not in juridique.TYPES_DOCUMENT:
+        type_doc = 'analyse'
+    fmt = str(data.get('format') or 'docx').strip().lower()
+    if fmt not in ('docx', 'pdf'):
+        fmt = 'docx'
+    objet = str(data.get('objet') or '').strip()[:300]
+    profil = data.get('profil') if isinstance(data.get('profil'), dict) else None
+    dossier = data.get('dossier') if isinstance(data.get('dossier'), dict) else {}
+    if objet:
+        dossier.setdefault('objet', objet)
+    pieces = [p for p in (data.get('pieces') or []) if isinstance(p, dict)][:40]
+
+    routage = qual = None
+    if type_doc == 'arbitrage':
+        routage = juridique.router(profil, dossier)
+        qual = routage['qualification']
+    elif profil:
+        qual = juridique.qualifier(profil)
+
+    md = juridique.document_markdown(
+        type_doc, texte, objet=objet, routage=routage, qualification=qual,
+        pieces=pieces, citations=juridique.verifier_citations(texte),
+        modele=str(data.get('model') or '')[:40],
+        date=datetime.utcnow().strftime('%d/%m/%Y'))
+    meta = {'label': juridique.TYPES_DOCUMENT[type_doc]['titre'],
+            'client': str(data.get('client') or '')[:120],
+            'perimetre': objet, 'model': str(data.get('model') or '')[:40],
+            'date': datetime.utcnow().strftime('%d/%m/%Y'),
+            'sources': [{'title': p.get('titre'), 'theme': p.get('origine')}
+                        for p in pieces]}
+    try:
+        if fmt == 'pdf':
+            blob = livrables_export.build_pdf(md, meta)
+            mimetype = 'application/pdf'
+        else:
+            blob = livrables_export.build_docx(md, meta)
+            mimetype = ('application/vnd.openxmlformats-officedocument'
+                        '.wordprocessingml.document')
+    except Exception as exc:
+        logger.error(f'JURIDIQUE_EXPORT_ERR: {exc}')
+        return jsonify({'error': 'La mise en page a échoué.',
+                        'code': 'export_echec'}), 500
+    return _send_file(_io.BytesIO(blob),
+                      download_name=juridique.nom_fichier(type_doc, objet) + '.' + fmt,
+                      as_attachment=True, mimetype=mimetype)
+
+
 @app.route('/api/juridique/instances', methods=['GET'])
 @rate_limit(limit=30, window=60)
 def juridique_instances():

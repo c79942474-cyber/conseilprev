@@ -6751,6 +6751,12 @@ function juRendreAnalyse(cible,j,titre){
     h+='<div class="ju-srcs">'+j.sources.map(function(s){
       return '<span>['+(s.n||'')+'] '+juEsc(s.titre||'Source')+'</span>';}).join('')+'</div>';
   }
+  var kind=(cible==='ju-cres')?'contrat':'analyse';
+  JUTEXTES[kind]=j.texte||'';
+  h+=juBarreExport(kind,
+      kind==='analyse'?((document.getElementById('ju-q')||{}).value||''):'Revue de contrat',
+      (j.sources||[]).map(function(s){return {n:s.n,titre:s.titre,origine:'connaissance Sentinel'};}),
+      j.model);
   h+='</div><div class="ju-card"><div class="ju-avert" style="margin:0">'+juEsc(j.avertissement)
     +'<br><br><b>'+juEsc(j.mention_ia)+'</b></div></div>';
   var el=document.getElementById(cible);
@@ -6827,6 +6833,42 @@ function juArbCharger(){
     document.getElementById('ju-arb-docs').innerHTML='<div class="ju-cnt">Base documentaire indisponible — collez vos pièces ci-dessous.</div>';
   });
 }
+
+var JUTEXTES={}, JUDERNIER={};
+// Le serveur RECOMPOSE le document (routage, échéances, qualification) : le
+// navigateur ne renvoie que le texte rédigé et le contexte de la demande.
+function juBarreExport(type,objet,pieces,model){
+  JUDERNIER[type]={objet:objet||'',pieces:pieces||[],model:model||''};
+  return '<div class="ju-bar" style="margin-top:16px">'
+    +'<button class="ju-btn" data-juexp="'+type+'" data-jufmt="docx" type="button">⬇ Word</button>'
+    +'<button class="ju-btn ju-btn2" data-juexp="'+type+'" data-jufmt="pdf" type="button">⬇ PDF</button>'
+    +'<span class="ju-cnt" style="align-self:center">Le document exporté porte le routage, '
+    +'les échéances et la qualification — pas seulement le texte rédigé.</span></div>';
+}
+document.addEventListener('click',function(e){
+  var b=e.target&&e.target.closest?e.target.closest('[data-juexp]'):null;
+  if(!b) return;
+  var type=b.getAttribute('data-juexp'), fmt=b.getAttribute('data-jufmt');
+  var d=JUDERNIER[type]||{}, md=(JUTEXTES[type]||'');
+  if(!md) return;
+  var old=b.textContent; b.disabled=true; b.textContent='Préparation…';
+  var nat=Array.prototype.map.call(document.querySelectorAll('[data-jnat]:checked'),function(x){return x.value;});
+  var en=document.getElementById('ju-arb-enjeu');
+  fetch('/api/juridique/export',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({type:type,format:fmt,texte:md,objet:d.objet,pieces:d.pieces,
+                         model:d.model,profil:JU.profil,
+                         dossier:{natures:nat,enjeu:en?en.value:'moyen'}})})
+    .then(function(r){
+      if(!r.ok) throw new Error('export');
+      var m=(r.headers.get('content-disposition')||'').match(/filename="?([^";]+)/);
+      return r.blob().then(function(bl){return {bl:bl,nom:m?m[1]:('document.'+fmt)};});
+    }).then(function(x){
+      var u=URL.createObjectURL(x.bl), a=document.createElement('a');
+      a.href=u; a.download=x.nom; document.body.appendChild(a); a.click();
+      document.body.removeChild(a); setTimeout(function(){URL.revokeObjectURL(u);},2000);
+    }).catch(function(){ alert("L'export a échoué. Réessayez dans un instant."); })
+    .then(function(){ b.disabled=false; b.textContent=old; });
+});
 
 function juArbRoutage(rt){
   var h='<div class="ju-card"><h3 style="margin:0 0 8px">Qui tranche, et avant quand</h3>'
@@ -6962,6 +7004,8 @@ function juReferentiel(){
           h+='<div class="ju-cit ko" style="margin-top:14px">Aucune pièce n\'a pu être versée au dossier : '
             +'la note repose sur le seul cadre réglementaire. Vérifiez la section « Ce qui manque pour décider ».</div>';
         }
+        JUTEXTES['arbitrage']=j.texte||'';
+        h+=juBarreExport('arbitrage', objet, j.pieces||[], j.model);
         h+='</div><div class="ju-card"><div class="ju-avert" style="margin:0">'+juEsc(j.avertissement)
           +'<br><br><b>'+juEsc(j.mention_ia)+'</b></div></div>';
         var el=document.getElementById('ju-arb-res');
