@@ -25,7 +25,21 @@ a:focus-visible,summary:focus-visible{outline:2px solid #1E63A8;outline-offset:2
 .h{font-family:var(--serif);font-weight:400;font-size:26px;line-height:1.2}
 .sub{font-size:13px;color:var(--muted);margin-top:4px;max-width:660px}
 .data-badge{font-family:var(--mono);font-size:10px;letter-spacing:.04em;background:#1C1C1C;color:#fff;padding:6px 12px;border-radius:4px;white-space:nowrap}
+/* Mode embarqué : la largeur est déjà bornée par la colonne de Sentinel.
+   Y REPOSER un max-width de 1080 px ajoutait une seconde marge par-dessus la
+   première — d'où une colonne étroite au milieu d'un cadre large. En iframe on
+   prend donc toute la largeur offerte, et on allège les marges verticales
+   (l'en-tête du module, juste au-dessus, joue déjà ce rôle). */
+body.embed{max-width:none;padding:16px 18px 20px}
 body.embed .data-badge{display:none}
+body.embed .hdr{margin-bottom:14px}
+/* La carte respire quand la LARGEUR le permet — jamais selon la hauteur.
+   Une unité `vh` serait ici un piège : embarquée, la page annonce sa hauteur au
+   parent, qui agrandit l'iframe, ce qui augmente `vh`, ce qui agrandit la carte,
+   ce qui rallonge la page… la mesure se poursuit jusqu'à laisser des milliers de
+   pixels vides. On indexe donc sur la largeur, qui, elle, ne dépend pas de nous. */
+@media (min-width:900px){ #obsmap{height:520px} }
+@media (min-width:1400px){ #obsmap{height:580px} }
 
 /* ── Panneaux ── */
 .panel{background:var(--white);border:1px solid var(--rule);border-radius:4px;margin-bottom:20px;overflow:hidden}
@@ -846,9 +860,58 @@ if(window.fetch){
   }).catch(function(){ /* hors serveur ou API absente : le seed reste affiché */ });
 }
 
-/* Signaler au parent (Sentinel) que l’observatoire est prêt — même motif que map.html */
+/* ── Hauteur annoncée au parent (Sentinel) ──────────────────────────────
+   Une iframe ne se redimensionne pas toute seule : à hauteur figée, un contenu
+   de plusieurs milliers de pixels se replie derrière une barre de défilement
+   interne — deux ascenseurs imbriqués, et une page qui paraît étriquée alors
+   qu'elle ne l'est pas. On mesure donc la hauteur réelle et on la signale ; le
+   parent ajuste. En cas d'échec (page ouverte seule, message ignoré), rien ne
+   dépend de ce mécanisme : la page reste entièrement lisible. */
 if(window.parent && window.parent !== window){
+  var _hEnvoyee = 0;
+  /* Hauteur du CONTENU, et surtout pas celle du document.
+     `scrollHeight` vaut au moins la hauteur de la fenêtre : embarqué, il renvoie
+     donc la taille de l'iframe dès que le contenu est plus court. Le parent
+     agrandit, la mesure suivante reprend cette nouvelle taille, et l'iframe
+     enfle indéfiniment en laissant des milliers de pixels blancs — c'est
+     exactement ce que la recette a montré. On mesure donc le bas du dernier
+     élément réel, ce qui ne dépend jamais de la taille du cadre. */
+  function hauteurContenu(){
+    var b = document.body, bas = 0;
+    for(var i = 0; i < b.children.length; i++){
+      var el = b.children[i];
+      if(el.tagName === 'SCRIPT' || el.tagName === 'STYLE') continue;
+      var r = el.getBoundingClientRect();
+      if(!r.height && !r.width) continue;   // élément masqué
+      var abs = r.bottom + (window.scrollY || 0);
+      if(abs > bas) bas = abs;
+    }
+    var pb = parseFloat(getComputedStyle(b).paddingBottom) || 0;
+    return Math.ceil(bas + pb);
+  }
+  function annonceHauteur(){
+    try{
+      var h = hauteurContenu();
+      if(!(h > 200)) return;               // mesure prise trop tôt : on ignore
+      /* Marge morte large : elle absorbe les variations d'un pixel dues aux
+         arrondis, sans laisser s'installer de va-et-vient entre les deux cadres. */
+      if(Math.abs(h - _hEnvoyee) < 40) return;
+      _hEnvoyee = h;
+      window.parent.postMessage({type:'obs-height', height:h}, '*');
+    }catch(e){}
+  }
   try{ window.parent.postMessage({type:'obs-ready'}, '*'); }catch(e){}
+  annonceHauteur();
+  /* Les graphiques et la carte se dessinent après le premier rendu, et les
+     données live peuvent rallonger la page : on remesure à ces moments-là. */
+  window.addEventListener('load', annonceHauteur);
+  window.addEventListener('resize', annonceHauteur);
+  setTimeout(annonceHauteur, 400);
+  setTimeout(annonceHauteur, 1500);
+  setTimeout(annonceHauteur, 4000);
+  if(window.ResizeObserver){
+    try{ new ResizeObserver(annonceHauteur).observe(document.body); }catch(e){}
+  }
 }
 </script>
 </body>
