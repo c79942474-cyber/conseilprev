@@ -131,6 +131,8 @@ body{
 
 .main{margin-left:var(--sidebar);padding-top:var(--topbar);min-height:100vh}
 .page{display:none;padding:40px 40px 64px;max-width:1200px}
+/* Pages bâties sur des cartes : elles prennent toute la largeur disponible. */
+.page-large{max-width:none}
 .page.on{display:block}
 
 .eyebrow{font-size:10px;font-family:var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:12px;}
@@ -2320,7 +2322,10 @@ textarea.form-el{min-height:86px;resize:vertical}
 </div>
 
 <!-- OBSERVATOIRE R&D IA -->
-<div class="page" id="p-obs-rd">
+<!-- Ce module fait exception a la largeur de lecture commune (1200 px) : il est
+     bati sur trois cartes du monde, qui gagnent a chaque pixel disponible. Les
+     autres pages restent bornees, leur contenu etant surtout du texte. -->
+<div class="page page-large" id="p-obs-rd">
   <span class="eyebrow">Observatoire</span>
   <h1 class="page-h">Où se <em>crée</em> l'intelligence artificielle</h1>
   <p class="page-lead">La carte réglementaire dit où l'IA est <em>encadrée</em>. Celle-ci dit où elle est <em>produite</em> : modèles remarquables, chercheurs d'élite (NeurIPS), brevets accordés et adoption par les entreprises européennes. Chaque série porte sa source, sa licence et sa précision.</p>

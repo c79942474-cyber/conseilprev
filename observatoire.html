@@ -14,7 +14,12 @@
   --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
 }
 html{background:var(--bg)}
-body{font-family:var(--sans);color:var(--ink);font-size:14px;line-height:1.5;max-width:1080px;margin:0 auto;padding:24px 20px 36px}
+/* Pleine largeur : une carte du monde et deux cartes jumelles gagnent à chaque
+   pixel — les brider à une colonne de lecture, largeur pensée pour du texte
+   suivi, réduisait l'Europe à un amas de taches. Le texte, lui, reste borné
+   panneau par panneau (.note, .sub) : c'est la carte qui s'étend, pas les
+   lignes de prose. */
+body{font-family:var(--sans);color:var(--ink);font-size:14px;line-height:1.5;margin:0;padding:24px 22px 36px}
 a{color:#1E63A8}
 a:focus-visible,summary:focus-visible{outline:2px solid #1E63A8;outline-offset:2px}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
@@ -44,7 +49,10 @@ body.embed .hdr{margin-bottom:14px}
 .panel-title{font-size:13px;font-weight:600}
 .panel-note{font-family:var(--mono);font-size:10px;color:var(--muted2);letter-spacing:.03em}
 .panel-body{padding:16px 20px 18px}
-.note{font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.55}
+/* La prose garde une longueur de ligne lisible même quand le panneau s'étend :
+   au-delà d'une centaine de caractères, l'œil perd le début de la ligne
+   suivante. Ce qui gagne à la pleine largeur, ce sont les cartes, pas le texte. */
+.note{font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.55;max-width:110ch}
 figure{margin:0}
 
 /* ── Carte ── */
