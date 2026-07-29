@@ -129,7 +129,16 @@ body{
 .tb-btn-primary{background:var(--accent);color:#fff;border-color:var(--accent);}
 .tb-btn-primary:hover{background:var(--accent2)}
 
-.main{margin-left:var(--sidebar);padding-top:var(--topbar);min-height:100vh}
+/* `flex:1` est indispensable, pas cosmetique. Le corps est en display:flex et
+   la barre laterale est en position:fixed, donc hors flux : .main est le seul
+   element en flux, et un element flex vaut par defaut `flex:0 1 auto`, c'est-a-
+   dire une largeur DEDUITE DE SON CONTENU. Tant qu'une page contient un tableau
+   ou un texte large, elle s'etale et l'on ne voit rien ; mais une page dont le
+   contenu est une iframe en width:100% n'a aucune largeur propre a offrir — la
+   reference devient circulaire et la colonne s'effondre. C'est ce qui reduisait
+   l'observatoire a la moitie de l'ecran. min-width:0 evite en prime qu'un
+   contenu insecable (tableau large) fasse deborder la page. */
+.main{margin-left:var(--sidebar);padding-top:var(--topbar);min-height:100vh;flex:1 1 auto;min-width:0}
 .page{display:none;padding:40px 40px 64px;max-width:1200px}
 /* Pages bâties sur des cartes : elles prennent toute la largeur disponible. */
 .page-large{max-width:none}
