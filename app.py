@@ -307,7 +307,7 @@ def add_security_headers(response):
     # Autoriser iframe pour les pages embarquees dans Sentinel (carte
     # reglementaire et observatoire R&D) : elles sont chargees en iframe
     # same-origin depuis /sentinel.
-    if request.path in ('/map', '/observatoire'):
+    if request.path in ('/map', '/observatoire', '/panorama'):
         response.headers['X-Frame-Options'] = 'SAMEORIGIN'
         return response
     # Content Security Policy
@@ -1146,6 +1146,30 @@ def api_observatoire():
     payload = dict(data)
     payload["ok"] = True
     payload["cached"] = False
+    return jsonify(payload)
+
+
+# ── Panorama des SIA en entreprise (UE) — referentiel statique versionne ──
+# Contrairement a l'observatoire (fetcheurs temps reel), le panorama est un
+# REFERENTIEL EXPERT fige par version : il s'assemble une fois par processus,
+# se sert depuis la memoire, et n'appelle jamais le reseau. Aucune donnee
+# personnelle, aucun LLM.
+import panorama_ia  # noqa: E402
+
+_PAN_CACHE = {"data": None}
+
+
+@app.route('/api/panorama', methods=['GET'])
+@rate_limit(limit=60, window=60)
+def api_panorama():
+    if _PAN_CACHE["data"] is None:
+        try:
+            _PAN_CACHE["data"] = panorama_ia.assemble()
+        except Exception as e:
+            logger.error(f'PANORAMA_ERR: {e}')
+            return jsonify({"ok": False, "erreur": "assemblage indisponible"}), 503
+    payload = dict(_PAN_CACHE["data"])
+    payload["ok"] = True
     return jsonify(payload)
 
 
@@ -2453,6 +2477,7 @@ def health_check():
         },
         'uploads_folder': os.path.isdir(UPLOAD_FOLDER),
         'observatoire': observatoire_ia.sante(),
+        'panorama': panorama_ia.sante(),
     }
 
     # Réponse JSON si demandée
@@ -3139,6 +3164,7 @@ PAGES = {
     '/accessibility': 'accessibility.html',
     '/map':           'map.html',
     '/observatoire':  'observatoire.html',
+    '/panorama':      'panorama.html',
 }
 
 

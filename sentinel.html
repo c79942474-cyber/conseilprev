@@ -2154,6 +2154,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-item" onclick="go('registre',this,'CARTOGRAPHIER','Systèmes IA')" title="Registre des systemes IA connecte a une base de donnees reelle (ajout, edition, suppression)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/></svg></span>Registre IA</div>
     <div class="sb-item" onclick="go('maturite',this,'CARTOGRAPHIER','Audit de maturité IA')" title="Audit de maturite IA sectoriel : 8 piliers, questionnaire, KPIs, budget et livrables generes par IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 3 5-6"/></svg></span>Audit de maturité IA</div>
     <div class="sb-section">Évaluer le risque</div>
+    <div class="sb-item" onclick="go('pan-sia',this,'ÉVALUER LE RISQUE','Panorama SIA — UE')" title="Panel de cas reels documentes dans l UE : classes de risque AI Act, vulnerabilites cyber, exposition, couche pays."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a14 14 0 010 18M3.6 9h16.8M3.6 15h16.8"/><circle cx="9" cy="9" r="1.4" fill="currentColor"/><circle cx="15" cy="13" r="1.4" fill="currentColor"/></svg></span>Panorama SIA — UE</div>
     <div class="sb-item" onclick="go('audit-ia-act',this,'ÉVALUER LE RISQUE','Audit IA Act')" title="Audit de conformite EU AI Act structure - 33 points de controle, Reglement (UE) 2024/1689."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M21 12a9 9 0 1 1-9-9"/></svg></span>Audit IA Act</div>
     <div class="sb-item" onclick="go('matrice',this,'ÉVALUER LE RISQUE','Matrice risques')" title="Positionnement de vos systemes IA selon probabilite de non-conformite et impact potentiel."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 3v18h18"/><circle cx="9" cy="15" r="1.6"/><circle cx="15" cy="9" r="1.6"/><circle cx="18" cy="6" r="1.6"/><circle cx="7" cy="18" r="1.6"/></svg></span>Matrice risques</div>
     <div class="sb-item" onclick="go('radar',this,'ÉVALUER LE RISQUE','Radar multi-critères')" title="Visualisation hexagonale de votre posture de conformite sur 6 dimensions reglementaires."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg></span>Radar des risques</div>
@@ -2329,6 +2330,31 @@ textarea.form-el{min-height:86px;resize:vertical}
   <div id="jurs-toolbar-holder"></div>
   <div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title">Toutes les juridictions — triées par sévérité</span><span class="tbl-link">↓ Exporter CSV</span></div><div id="carto-all"></div></div>
 </div>
+
+<!-- PANORAMA SIA UE -->
+<div class="page page-large" id="p-pan-sia">
+  <span class="eyebrow">Panorama</span>
+  <h1 class="page-h">Les systèmes d'IA <em>réellement déployés</em> dans l'UE</h1>
+  <p class="page-lead">Un panel expert de cas documentés (POC → production, mi-2023 → mi-2026) classés selon
+  l'AI Act, avec vulnérabilités cyber, exposition calculée et couche réglementaire des 27 États membres.
+  Situez vos propres systèmes par rapport au marché — puis prolongez dans le Simulateur, le Registre IA et l'Audit.</p>
+  <div style="margin-bottom:24px;border:1px solid var(--rule);border-radius:4px;overflow:hidden;background:var(--white)">
+    <iframe id="pan-sia-iframe" src="/panorama?embed=1" style="width:100%;height:1600px;border:none;display:block" loading="lazy" title="Panorama des systèmes d'IA en entreprise dans l'UE"></iframe>
+  </div>
+</div>
+<script>
+(function(){
+  window.addEventListener('message', function(ev){
+    var d = ev && ev.data;
+    if(!d || d.type !== 'pan-height') return;
+    var f = document.getElementById('pan-sia-iframe');
+    if(!f) return;
+    var h = parseInt(d.height, 10);
+    if(!(h > 400 && h < 20000)) return;
+    f.style.height = (h + 24) + 'px';
+  }, false);
+})();
+</script>
 
 <!-- OBSERVATOIRE R&D IA -->
 <!-- Ce module fait exception a la largeur de lecture commune (1200 px) : il est
@@ -7144,6 +7170,7 @@ function juReferentiel(){
 })();
 
 var PAGE_META = {
+    'pan-sia': { section: 'ÉVALUER LE RISQUE', label: 'Panorama SIA — UE' },
     'obs-rd': { section: 'SE TENIR INFORMÉ', label: 'Observatoire R&D IA' },
     'juridique': { section: 'JURIDIQUE', label: 'Conseil juridique assisté' },
     'empreinte': { section: 'EMPREINTE', label: 'Empreinte numérique' },

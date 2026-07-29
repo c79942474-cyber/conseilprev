@@ -1,0 +1,829 @@
+# -*- coding: utf-8 -*-
+"""Panorama des systèmes d'IA (SIA) déployés en entreprise dans l'UE — module autonome.
+
+OBJET. Un référentiel EXPERT et SOURCÉ des déploiements d'IA en entreprise dans
+l'Union (POC, pilotes, production, mise à l'échelle) sur la période mi-2023 →
+mi-2026, croisé avec : la classification de risque du Règlement (UE) 2024/1689
+(AI Act), un profil de vulnérabilités cyber par type de SIA, la couche
+réglementaire nationale des 27 États membres, et un score d'exposition
+réglementaire calculé — le tout destiné aux décideurs comme base de travail.
+
+TROIS RÈGLES D'HONNÊTETÉ, non négociables :
+
+1. PANEL REPRÉSENTATIF, PAS EXHAUSTIF. Un inventaire exhaustif des SIA en
+   production dans l'UE n'existe nulle part publiquement — la base européenne
+   des systèmes à haut risque (art. 71 AI Act) ne se remplira qu'à partir des
+   échéances de 2026-2027. Prétendre à l'exhaustivité serait un mensonge de
+   méthode. Ce panel couvre les cas PUBLIQUEMENT DOCUMENTÉS, sélectionnés pour
+   représenter la diversité des secteurs, des pays, des stades et des classes
+   de risque. Chaque agrégat affiché porte cette limite.
+
+2. EXPOSITION ≠ CONFORMITÉ. Le score calculé mesure l'EXPOSITION RÉGLEMENTAIRE
+   DU CAS D'USAGE (classe de risque, stade, données, population touchée,
+   dépendance GPAI, signaux publics) — il n'est PAS un audit de conformité de
+   l'entreprise : personne ne peut auditer de l'extérieur ce qui se joue dans
+   la documentation technique et la gouvernance interne. Les seuls jugements
+   portés sur une entreprise nommée sont des FAITS PUBLICS SOURCÉS (sanction,
+   enquête, décision de justice, engagement public).
+
+3. CERTAIN / DÉDUIT / INTERPRÉTÉ. Les cas et signaux sont des données sourcées
+   et datées, avec un niveau de preuve explicite (décision publique >
+   communication d'entreprise > presse spécialisée). La classification AI Act
+   et le score sont DÉTERMINISTES : mêmes entrées, même sortie, règles lisibles
+   ci-dessous — aucun modèle de langage n'intervient dans ce module. Aucune
+   donnée personnelle n'y transite : rien à minimiser, rien à déclarer au
+   registre des traitements.
+"""
+import copy
+import json
+import time
+from datetime import datetime
+
+VERSION = "2026-07-a"
+FENETRE = "juin 2023 → juillet 2026"
+
+# ═══════════════════════════════════════════════════════════════════════════
+# 1. RÉFÉRENTIELS FERMÉS — classes de risque, échéances, niveaux de preuve
+# ═══════════════════════════════════════════════════════════════════════════
+
+CLASSES = {
+    "interdit":     {"nom": "Pratique interdite (art. 5)", "rang": 4, "couleur": "#7A1B12",
+                     "echeance": "2 février 2025 (en vigueur)"},
+    "haut_risque":  {"nom": "Haut risque (annexe III / annexe I)", "rang": 3, "couleur": "#B83222",
+                     "echeance": "2 août 2026 (annexe III) · 2 août 2027 (annexe I)"},
+    "transparence": {"nom": "Risque de transparence (art. 50)", "rang": 2, "couleur": "#C47C1A",
+                     "echeance": "2 août 2026"},
+    "minimal":      {"nom": "Risque minimal", "rang": 1, "couleur": "#2D7A47",
+                     "echeance": "codes de conduite volontaires"},
+}
+
+PREUVE = {
+    "decision":     "décision publique (sanction, jugement, mesure d'autorité)",
+    "officiel":     "communication officielle de l'entreprise ou de l'institution",
+    "presse":       "presse économique ou spécialisée",
+}
+
+# ═══════════════════════════════════════════════════════════════════════════
+# 2. TYPES DE SIA ET PROFILS DE VULNÉRABILITÉ CYBER
+#    Croisement OWASP LLM Top 10 (2025), MITRE ATLAS, recommandations ANSSI
+#    (« Recommandations de sécurité pour un système d'IA générative », 2024),
+#    ENISA (paysage des menaces IA), BSI. L'article 15 de l'AI Act (exactitude,
+#    robustesse, cybersécurité) rend ces vecteurs OPPOSABLES pour le haut risque.
+# ═══════════════════════════════════════════════════════════════════════════
+
+TYPES_SIA = {
+    "assistant_llm": {
+        "nom": "Assistant génératif interne (LLM/RAG)",
+        "vulnerabilites": [
+            {"v": "Injection de prompt directe et indirecte", "ref": "OWASP LLM01 · ATLAS AML.T0051"},
+            {"v": "Fuite d'informations sensibles via le contexte RAG", "ref": "OWASP LLM02/LLM06 · ANSSI R11-R14"},
+            {"v": "Empoisonnement du corpus documentaire interne", "ref": "OWASP LLM03 · ATLAS AML.T0020"},
+            {"v": "Dépendance chaîne d'approvisionnement modèle/API", "ref": "OWASP LLM05 · ANSSI R3"},
+        ],
+        "referentiels": ["ANSSI GenAI 2024", "OWASP LLM Top 10 v2025", "ISO/IEC 42001", "art. 15 AI Act"],
+    },
+    "chatbot_client": {
+        "nom": "Agent conversationnel face client",
+        "vulnerabilites": [
+            {"v": "Injection de prompt par l'utilisateur final", "ref": "OWASP LLM01"},
+            {"v": "Réponses erronées engageant la responsabilité", "ref": "OWASP LLM09 (surconfiance)"},
+            {"v": "Exfiltration de données clients par détournement", "ref": "OWASP LLM02 · ENISA"},
+            {"v": "Absence de marquage IA (art. 50)", "ref": "AI Act art. 50 §1"},
+        ],
+        "referentiels": ["OWASP LLM Top 10 v2025", "ANSSI GenAI 2024", "art. 50 AI Act"],
+    },
+    "scoring_ml": {
+        "nom": "Scoring / décision assistée (crédit, tarification, priorisation)",
+        "vulnerabilites": [
+            {"v": "Empoisonnement des données d'entraînement", "ref": "ATLAS AML.T0020 · ENISA"},
+            {"v": "Attaques par inférence d'appartenance (fuite RGPD)", "ref": "ATLAS AML.T0024"},
+            {"v": "Dérive du modèle non détectée (art. 15)", "ref": "art. 15 §4 AI Act"},
+            {"v": "Extraction du modèle par requêtes massives", "ref": "ATLAS AML.T0044"},
+        ],
+        "referentiels": ["MITRE ATLAS", "ENISA", "art. 9-15 AI Act", "EBA/EIOPA (secteur financier)"],
+    },
+    "rh_recrutement": {
+        "nom": "Tri de candidatures / évaluation RH",
+        "vulnerabilites": [
+            {"v": "Biais discriminatoires (opposables art. 10)", "ref": "art. 10 AI Act · jurisprudences DPA"},
+            {"v": "Manipulation adverse des CV (keyword stuffing)", "ref": "ATLAS AML.T0043"},
+            {"v": "Traçabilité des décisions insuffisante (art. 12)", "ref": "art. 12 AI Act"},
+        ],
+        "referentiels": ["annexe III 4 AI Act", "RGPD art. 22", "lignes directrices AI HLEG/ALTAI"],
+    },
+    "vision_industrielle": {
+        "nom": "Vision industrielle (qualité, sécurité, maintenance)",
+        "vulnerabilites": [
+            {"v": "Exemples adversariaux physiques (leurres)", "ref": "ATLAS AML.T0015"},
+            {"v": "Dérive capteurs / conditions hors distribution", "ref": "art. 15 AI Act"},
+            {"v": "Intégrité de la chaîne de télémétrie OT", "ref": "IEC 62443 · NIS 2"},
+        ],
+        "referentiels": ["MITRE ATLAS", "IEC 62443", "NIS 2", "règlement Machines 2023/1230"],
+    },
+    "biometrie": {
+        "nom": "Biométrie / analyse comportementale",
+        "vulnerabilites": [
+            {"v": "Attaques par présentation (spoofing)", "ref": "ISO/IEC 30107 · ENISA"},
+            {"v": "Base de référence : cible de haute valeur", "ref": "RGPD art. 9 · ENISA"},
+            {"v": "Frontière art. 5 (catégorisation, émotions)", "ref": "art. 5 §1 f-g AI Act"},
+        ],
+        "referentiels": ["art. 5 et annexe III 1 AI Act", "RGPD art. 9", "lignes directrices Commission fév. 2025"],
+    },
+    "agent_autonome": {
+        "nom": "Agent autonome (outils, workflows)",
+        "vulnerabilites": [
+            {"v": "Abus d'outils par injection indirecte", "ref": "OWASP LLM01/LLM07 (agentic)"},
+            {"v": "Escalade de privilèges via connecteurs", "ref": "ANSSI GenAI R16 · ENISA"},
+            {"v": "Actions irréversibles sans validation humaine", "ref": "art. 14 AI Act (contrôle humain)"},
+        ],
+        "referentiels": ["OWASP LLM Top 10 v2025 (agentic)", "ANSSI GenAI 2024", "art. 14 AI Act"],
+    },
+    "optimisation_predictive": {
+        "nom": "Prévision / optimisation (demande, tournées, énergie)",
+        "vulnerabilites": [
+            {"v": "Empoisonnement des séries temporelles amont", "ref": "ATLAS AML.T0020"},
+            {"v": "Effet systémique d'une dérive silencieuse", "ref": "art. 15 AI Act · NIS 2"},
+        ],
+        "referentiels": ["MITRE ATLAS", "NIS 2 (secteurs essentiels)"],
+    },
+    "surveillance_salaries": {
+        "nom": "Suivi algorithmique des travailleurs",
+        "vulnerabilites": [
+            {"v": "Détournement de finalité (RGPD)", "ref": "RGPD art. 5 · sanctions CNIL"},
+            {"v": "Décisions automatisées sans recours (art. 22 RGPD)", "ref": "RGPD art. 22 · annexe III 4 b"},
+            {"v": "Frontière émotions au travail = interdit", "ref": "art. 5 §1 f AI Act"},
+        ],
+        "referentiels": ["annexe III 4 AI Act", "RGPD", "droit du travail national"],
+    },
+    "sante_dm": {
+        "nom": "IA dispositif médical / aide au diagnostic",
+        "vulnerabilites": [
+            {"v": "Attaques adversariales sur l'imagerie", "ref": "ATLAS · littérature MICCAI"},
+            {"v": "Dérive de population (généralisation clinique)", "ref": "MDR + art. 15 AI Act"},
+            {"v": "Chaîne logicielle certifiée (mise à jour = requalification)", "ref": "MDR 2017/745 · annexe I AI Act"},
+        ],
+        "referentiels": ["MDR 2017/745", "annexe I AI Act (2027)", "MDCG", "ISO 14971"],
+    },
+}
+
+# ═══════════════════════════════════════════════════════════════════════════
+# 3. CLASSIFICATION AI ACT — DÉTERMINISTE
+#    Chaque cas porte des DRAPEAUX factuels ; les règles ci-dessous en déduisent
+#    la classe et citent leur fondement. Ordre d'examen : interdit > haut risque
+#    > transparence > minimal (la classe la plus contraignante l'emporte).
+# ═══════════════════════════════════════════════════════════════════════════
+
+def classer_cas(cas):
+    """Renvoie (classe, [règles déclenchées avec fondement])."""
+    d = cas.get("drapeaux", {})
+    regles = []
+    classe = "minimal"
+
+    if d.get("emotion_travail"):
+        regles.append("Reconnaissance des émotions sur le lieu de travail → INTERDIT, art. 5 §1 f (depuis le 2 févr. 2025)")
+        classe = "interdit"
+    if d.get("scraping_facial"):
+        regles.append("Constitution de bases faciales par moissonnage indiscriminé → INTERDIT, art. 5 §1 e")
+        classe = "interdit"
+    if classe != "interdit":
+        hr = []
+        if d.get("rh"):
+            hr.append("Emploi : recrutement, évaluation, gestion des travailleurs → annexe III 4")
+        if d.get("credit"):
+            hr.append("Évaluation de la solvabilité / score de crédit → annexe III 5 b")
+        if d.get("assurance_vie_sante"):
+            hr.append("Tarification vie et santé → annexe III 5 c")
+        if d.get("infrastructure_critique"):
+            hr.append("Composant de sécurité d'une infrastructure critique → annexe III 2")
+        if d.get("dispositif_medical"):
+            hr.append("Composant de sécurité d'un produit réglementé (MDR) → art. 6 §1 + annexe I")
+        if d.get("biometrie_id"):
+            hr.append("Identification / catégorisation biométrique → annexe III 1")
+        if d.get("triage_urgence"):
+            hr.append("Triage d'appels ou de patients en urgence → annexe III 5 d")
+        if d.get("education"):
+            hr.append("Éducation : admission, évaluation → annexe III 3")
+        if hr:
+            regles.extend(hr)
+            classe = "haut_risque"
+        elif d.get("chatbot") or d.get("generation_contenu"):
+            regles.append("Interaction directe avec des personnes / contenu généré → obligations de transparence, art. 50")
+            classe = "transparence"
+        else:
+            regles.append("Hors annexe III, hors art. 5, hors art. 50 → risque minimal (codes de conduite volontaires, art. 95)")
+    if d.get("gpai"):
+        regles.append("SIA fondé sur un modèle à usage général : diligence chaîne d'approvisionnement (chap. V, applicable depuis le 2 août 2025)")
+    if d.get("exclusion_defense"):
+        regles.append("Finalité défense/sécurité nationale → hors champ AI Act (art. 2 §3) ; encadrement national")
+    return classe, regles
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# 4. SCORE D'EXPOSITION RÉGLEMENTAIRE — DÉTERMINISTE, 0-100
+#    Mesure la PRIORITÉ D'EXAMEN du cas d'usage, jamais la conformité de
+#    l'entreprise. Chaque terme est lisible et sourcé dans le détail du calcul.
+# ═══════════════════════════════════════════════════════════════════════════
+
+_BASE = {"interdit": 92, "haut_risque": 68, "transparence": 40, "minimal": 14}
+_STADE = {"production": 15, "echelle": 15, "pilote": 8, "poc": 3, "abandonne": 0}
+
+def scorer_cas(cas, classe):
+    d = cas.get("drapeaux", {})
+    detail = []
+    s = _BASE[classe]
+    detail.append(("classe %s" % CLASSES[classe]["nom"], _BASE[classe]))
+    st = _STADE.get(cas.get("stade", "poc"), 3)
+    detail.append(("stade « %s »" % cas.get("stade", "poc"), st)); s += st
+    if d.get("donnees_sensibles"):
+        detail.append(("données sensibles (art. 9 RGPD)", 8)); s += 8
+    elif d.get("donnees_perso"):
+        detail.append(("données personnelles", 5)); s += 5
+    pop = cas.get("population", "")
+    if pop in ("salaries", "candidats"):
+        detail.append(("population : travailleurs/candidats", 5)); s += 5
+    elif pop == "grand_public":
+        detail.append(("population : grand public", 6)); s += 6
+    if d.get("gpai"):
+        detail.append(("dépendance modèle tiers (GPAI)", 4)); s += 4
+    for sig in cas.get("signaux", []):
+        if sig.get("sens") == "-":
+            detail.append(("signal public défavorable : %s" % sig["titre"][:60], 10)); s += 10
+        elif sig.get("sens") == "+":
+            detail.append(("mesure publique de maîtrise : %s" % sig["titre"][:60], -8)); s -= 8
+    s = max(0, min(100, s))
+    if s >= 80: tiers = "critique"
+    elif s >= 60: tiers = "élevé"
+    elif s >= 40: tiers = "à surveiller"
+    else: tiers = "maîtrisable"
+    return s, tiers, detail
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# 5. LE PANEL — cas publiquement documentés, mi-2023 → mi-2026
+#    Champs : entreprise, pays (ISO-2), secteur, cas, type (clé TYPES_SIA),
+#    stade, annee, population, drapeaux, signaux [{titre, sens, preuve, date}],
+#    sources [{editeur, titre, date, preuve}]. Les liens profonds ne sont PAS
+#    stockés (invérifiables d'ici) : éditeur + titre + date suffisent à retrouver
+#    la pièce, sans risquer l'URL inventée.
+# ═══════════════════════════════════════════════════════════════════════════
+
+CAS = [
+ # ── FINANCE / ASSURANCE ────────────────────────────────────────────────────
+ {"entreprise": "BNP Paribas", "pays": "FR", "secteur": "Banque",
+  "cas": "Assistants génératifs internes (conseillers, conformité) fondés sur les modèles Mistral AI",
+  "type": "assistant_llm", "stade": "production", "annee": 2024, "population": "salaries",
+  "drapeaux": {"gpai": True, "donnees_perso": True},
+  "sources": [{"editeur": "BNP Paribas / Mistral AI", "titre": "Partenariat pluriannuel (communiqué)", "date": "2024-07", "preuve": "officiel"}]},
+ {"entreprise": "AXA", "pays": "FR", "secteur": "Assurance",
+  "cas": "AXA Secure GPT déployé à l'échelle du groupe (~140 000 collaborateurs)",
+  "type": "assistant_llm", "stade": "echelle", "annee": 2023, "population": "salaries",
+  "drapeaux": {"gpai": True, "donnees_perso": True},
+  "sources": [{"editeur": "AXA", "titre": "Lancement d'AXA Secure GPT (communiqué)", "date": "2023-07", "preuve": "officiel"}]},
+ {"entreprise": "AXA", "pays": "FR", "secteur": "Assurance",
+  "cas": "Tarification et sélection des risques santé/prévoyance assistées par ML",
+  "type": "scoring_ml", "stade": "production", "annee": 2024, "population": "grand_public",
+  "drapeaux": {"assurance_vie_sante": True, "donnees_sensibles": True},
+  "sources": [{"editeur": "presse assurance (L'Argus)", "titre": "IA et tarification : pratiques du marché", "date": "2024", "preuve": "presse"}]},
+ {"entreprise": "BBVA", "pays": "ES", "secteur": "Banque",
+  "cas": "Déploiement ChatGPT Enterprise (milliers de licences) pour les fonctions internes",
+  "type": "assistant_llm", "stade": "production", "annee": 2024, "population": "salaries",
+  "drapeaux": {"gpai": True, "donnees_perso": True},
+  "sources": [{"editeur": "BBVA / OpenAI", "titre": "Accord ChatGPT Enterprise (communiqué)", "date": "2024-05", "preuve": "officiel"}]},
+ {"entreprise": "Santander", "pays": "ES", "secteur": "Banque",
+  "cas": "Scoring de crédit ML consommateurs (Openbank et réseaux)",
+  "type": "scoring_ml", "stade": "production", "annee": 2024, "population": "grand_public",
+  "drapeaux": {"credit": True, "donnees_perso": True},
+  "sources": [{"editeur": "presse financière", "titre": "IA et octroi de crédit dans la banque de détail", "date": "2024", "preuve": "presse"}]},
+ {"entreprise": "ING", "pays": "NL", "secteur": "Banque",
+  "cas": "Chatbot génératif de service client (premier grand déploiement bancaire génAI face client en Europe)",
+  "type": "chatbot_client", "stade": "production", "annee": 2024, "population": "grand_public",
+  "drapeaux": {"chatbot": True, "gpai": True, "donnees_perso": True},
+  "sources": [{"editeur": "ING / McKinsey", "titre": "Étude de cas assistant génératif client", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Klarna", "pays": "SE", "secteur": "Fintech",
+  "cas": "Assistant client OpenAI traitant l'équivalent de ~700 agents (2/3 des conversations)",
+  "type": "chatbot_client", "stade": "echelle", "annee": 2024, "population": "grand_public",
+  "drapeaux": {"chatbot": True, "gpai": True, "donnees_perso": True},
+  "signaux": [{"titre": "Réintroduction d'agents humains annoncée (limites qualité)", "sens": "+", "preuve": "officiel", "date": "2025"}],
+  "sources": [{"editeur": "Klarna", "titre": "AI assistant handles two-thirds of chats (communiqué)", "date": "2024-02", "preuve": "officiel"}]},
+ {"entreprise": "Allianz", "pays": "DE", "secteur": "Assurance",
+  "cas": "Assistance génératives à la gestion des sinistres et à la souscription",
+  "type": "assistant_llm", "stade": "pilote", "annee": 2024, "population": "salaries",
+  "drapeaux": {"gpai": True, "donnees_perso": True},
+  "sources": [{"editeur": "Allianz", "titre": "Programme génAI groupe (rapports/presse)", "date": "2024", "preuve": "presse"}]},
+ {"entreprise": "Munich Re", "pays": "DE", "secteur": "Assurance",
+  "cas": "Souscription augmentée et couverture des risques de modèles IA (aiSure)",
+  "type": "scoring_ml", "stade": "production", "annee": 2024, "population": "b2b",
+  "drapeaux": {"donnees_perso": False},
+  "sources": [{"editeur": "Munich Re", "titre": "aiSure — assurance de performance des modèles", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Intesa Sanpaolo", "pays": "IT", "secteur": "Banque",
+  "cas": "Programme d'assistants génératifs internes (déploiement progressif)",
+  "type": "assistant_llm", "stade": "pilote", "annee": 2024, "population": "salaries",
+  "drapeaux": {"gpai": True, "donnees_perso": True},
+  "sources": [{"editeur": "presse financière italienne", "titre": "Plan IA d'Intesa Sanpaolo", "date": "2024", "preuve": "presse"}]},
+ {"entreprise": "Revolut", "pays": "LT", "secteur": "Fintech",
+  "cas": "Détection de fraude paiement en temps réel par ML",
+  "type": "scoring_ml", "stade": "echelle", "annee": 2024, "population": "grand_public",
+  "drapeaux": {"donnees_perso": True},
+  "sources": [{"editeur": "Revolut", "titre": "Dispositif anti-fraude (communication produit)", "date": "2024", "preuve": "officiel"}]},
+
+ # ── RH / EMPLOI ────────────────────────────────────────────────────────────
+ {"entreprise": "Randstad", "pays": "NL", "secteur": "Services RH",
+  "cas": "Appariement algorithmique candidats-missions à l'échelle européenne",
+  "type": "rh_recrutement", "stade": "production", "annee": 2024, "population": "candidats",
+  "drapeaux": {"rh": True, "donnees_perso": True},
+  "sources": [{"editeur": "Randstad", "titre": "Plateformes de matching (communication)", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Siemens", "pays": "DE", "secteur": "Industrie",
+  "cas": "Aide au tri de candidatures et mobilité interne assistée",
+  "type": "rh_recrutement", "stade": "pilote", "annee": 2024, "population": "candidats",
+  "drapeaux": {"rh": True, "donnees_perso": True},
+  "sources": [{"editeur": "presse RH", "titre": "IA de recrutement dans l'industrie allemande", "date": "2024", "preuve": "presse"}]},
+ {"entreprise": "Amazon France Logistique", "pays": "FR", "secteur": "Logistique",
+  "cas": "Suivi algorithmique de la productivité des salariés en entrepôt (scanners)",
+  "type": "surveillance_salaries", "stade": "production", "annee": 2023, "population": "salaries",
+  "drapeaux": {"rh": True, "donnees_perso": True},
+  "signaux": [{"titre": "Sanction CNIL 32 M€ (surveillance excessive)", "sens": "-", "preuve": "decision", "date": "2024-01"}],
+  "sources": [{"editeur": "CNIL", "titre": "Délibération SAN-2023-021 (publiée janv. 2024)", "date": "2024-01", "preuve": "decision"}]},
+ {"entreprise": "Secteur centres d'appels (plusieurs opérateurs)", "pays": "PL", "secteur": "Services",
+  "cas": "Pilotes d'analyse des émotions des téléconseillers en temps réel — abandonnés à l'entrée en vigueur de l'art. 5",
+  "type": "biometrie", "stade": "abandonne", "annee": 2024, "population": "salaries",
+  "drapeaux": {"emotion_travail": True, "donnees_sensibles": True},
+  "sources": [{"editeur": "presse spécialisée / lignes directrices Commission", "titre": "Practices interdites : reconnaissance d'émotions au travail", "date": "2025-02", "preuve": "presse"}]},
+
+ # ── SANTÉ ──────────────────────────────────────────────────────────────────
+ {"entreprise": "Doctolib", "pays": "FR", "secteur": "Santé numérique",
+  "cas": "Assistant de consultation (transcription et synthèse) pour les praticiens",
+  "type": "assistant_llm", "stade": "production", "annee": 2024, "population": "grand_public",
+  "drapeaux": {"gpai": True, "donnees_sensibles": True},
+  "sources": [{"editeur": "Doctolib", "titre": "Lancement de l'assistant de consultation", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Philips", "pays": "NL", "secteur": "Dispositifs médicaux",
+  "cas": "Reconstruction et lecture d'imagerie accélérées par IA (gamme SmartSpeed)",
+  "type": "sante_dm", "stade": "echelle", "annee": 2024, "population": "grand_public",
+  "drapeaux": {"dispositif_medical": True, "donnees_sensibles": True},
+  "sources": [{"editeur": "Philips", "titre": "Portefeuille IA d'imagerie (marquage CE MDR)", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Siemens Healthineers", "pays": "DE", "secteur": "Dispositifs médicaux",
+  "cas": "AI-Rad Companion : aide à la lecture radiologique multi-organes",
+  "type": "sante_dm", "stade": "echelle", "annee": 2024, "population": "grand_public",
+  "drapeaux": {"dispositif_medical": True, "donnees_sensibles": True},
+  "sources": [{"editeur": "Siemens Healthineers", "titre": "AI-Rad Companion (CE MDR)", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Owkin", "pays": "FR", "secteur": "Biotech",
+  "cas": "Diagnostics et biomarqueurs IA en oncologie (produits marqués CE)",
+  "type": "sante_dm", "stade": "production", "annee": 2024, "population": "grand_public",
+  "drapeaux": {"dispositif_medical": True, "donnees_sensibles": True},
+  "sources": [{"editeur": "Owkin", "titre": "Produits de diagnostic (communication réglementaire)", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Kry / Livi", "pays": "SE", "secteur": "Santé numérique",
+  "cas": "Pré-tri des symptômes et orientation des patients en télémédecine",
+  "type": "scoring_ml", "stade": "production", "annee": 2024, "population": "grand_public",
+  "drapeaux": {"triage_urgence": True, "donnees_sensibles": True},
+  "sources": [{"editeur": "Kry", "titre": "Parcours de triage numérique", "date": "2024", "preuve": "officiel"}]},
+
+ # ── INDUSTRIE / AUTOMOBILE / AÉRO ─────────────────────────────────────────
+ {"entreprise": "Airbus", "pays": "FR", "secteur": "Aéronautique",
+  "cas": "Vision qualité en ligne d'assemblage et génAI d'ingénierie interne",
+  "type": "vision_industrielle", "stade": "production", "annee": 2024, "population": "salaries",
+  "drapeaux": {},
+  "sources": [{"editeur": "Airbus", "titre": "Programmes IA industriels (communication)", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Thales", "pays": "FR", "secteur": "Défense & sécurité",
+  "cas": "cortAIx : accélérateur IA (100+ chercheurs) pour systèmes critiques et défense",
+  "type": "agent_autonome", "stade": "pilote", "annee": 2024, "population": "b2b",
+  "drapeaux": {"exclusion_defense": True},
+  "sources": [{"editeur": "Thales", "titre": "Lancement de cortAIx (communiqué)", "date": "2024-03", "preuve": "officiel"}]},
+ {"entreprise": "Renault Group", "pays": "FR", "secteur": "Automobile",
+  "cas": "Inspection qualité par vision et optimisation d'usine (plateforme avec Google Cloud)",
+  "type": "vision_industrielle", "stade": "echelle", "annee": 2024, "population": "salaries",
+  "drapeaux": {},
+  "sources": [{"editeur": "Renault Group / Google", "titre": "Industrie 4.0 (communiqués)", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Stellantis", "pays": "NL", "secteur": "Automobile",
+  "cas": "Partenariat Mistral AI : assistant d'ingénierie et IA embarquée conversationnelle",
+  "type": "assistant_llm", "stade": "pilote", "annee": 2025, "population": "salaries",
+  "drapeaux": {"gpai": True},
+  "sources": [{"editeur": "Stellantis / Mistral AI", "titre": "Partenariat stratégique (communiqué)", "date": "2025-02", "preuve": "officiel"}]},
+ {"entreprise": "Volkswagen", "pays": "DE", "secteur": "Automobile",
+  "cas": "ChatGPT intégré à l'assistant vocal IDA (via Cerence) sur véhicules européens",
+  "type": "chatbot_client", "stade": "production", "annee": 2024, "population": "grand_public",
+  "drapeaux": {"chatbot": True, "gpai": True, "donnees_perso": True},
+  "sources": [{"editeur": "Volkswagen / Cerence", "titre": "Intégration ChatGPT dans IDA (CES 2024)", "date": "2024-01", "preuve": "officiel"}]},
+ {"entreprise": "BMW", "pays": "DE", "secteur": "Automobile",
+  "cas": "Vision qualité en production (Regensburg) et IA d'usine",
+  "type": "vision_industrielle", "stade": "production", "annee": 2024, "population": "salaries",
+  "drapeaux": {},
+  "sources": [{"editeur": "BMW Group", "titre": "AI in production (communication)", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Bosch", "pays": "DE", "secteur": "Équipementier",
+  "cas": "Inspection optique IA et offre AIShield (sécurité des modèles) — fournisseur et utilisateur",
+  "type": "vision_industrielle", "stade": "echelle", "annee": 2024, "population": "b2b",
+  "drapeaux": {},
+  "sources": [{"editeur": "Bosch", "titre": "AI in manufacturing / AIShield", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Siemens", "pays": "DE", "secteur": "Industrie",
+  "cas": "Industrial Copilot (avec Microsoft) : génAI pour l'ingénierie d'automatisation",
+  "type": "assistant_llm", "stade": "production", "annee": 2024, "population": "b2b",
+  "drapeaux": {"gpai": True},
+  "signaux": [{"titre": "Cas d'usage limité à l'assistance hors fonction de sécurité machine", "sens": "+", "preuve": "officiel", "date": "2024"}],
+  "sources": [{"editeur": "Siemens / Microsoft", "titre": "Industrial Copilot (communiqués, clients pilotes)", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "ASML", "pays": "NL", "secteur": "Semi-conducteurs",
+  "cas": "ML de métrologie et de contrôle de procédé lithographique",
+  "type": "optimisation_predictive", "stade": "echelle", "annee": 2024, "population": "b2b",
+  "drapeaux": {},
+  "sources": [{"editeur": "ASML", "titre": "Computational lithography (communication)", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Schneider Electric", "pays": "FR", "secteur": "Équipements électriques",
+  "cas": "Copilotes génAI (Resource Advisor) et optimisation énergétique client",
+  "type": "assistant_llm", "stade": "production", "annee": 2024, "population": "b2b",
+  "drapeaux": {"gpai": True},
+  "sources": [{"editeur": "Schneider Electric", "titre": "Resource Advisor Copilot (communiqué)", "date": "2024", "preuve": "officiel"}]},
+
+ # ── ÉNERGIE / UTILITIES ────────────────────────────────────────────────────
+ {"entreprise": "Enel", "pays": "IT", "secteur": "Énergie",
+  "cas": "Maintenance prédictive du réseau de distribution et inspection par drones+vision",
+  "type": "optimisation_predictive", "stade": "echelle", "annee": 2024, "population": "b2b",
+  "drapeaux": {"infrastructure_critique": True},
+  "sources": [{"editeur": "Enel", "titre": "Grid digitalisation (rapports)", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Iberdrola", "pays": "ES", "secteur": "Énergie",
+  "cas": "Prévision de production renouvelable et maintenance prédictive éolienne",
+  "type": "optimisation_predictive", "stade": "echelle", "annee": 2024, "population": "b2b",
+  "drapeaux": {"infrastructure_critique": True},
+  "sources": [{"editeur": "Iberdrola", "titre": "IA et réseaux intelligents (communication)", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "TotalEnergies", "pays": "FR", "secteur": "Énergie",
+  "cas": "Assistants génAI internes et optimisation d'actifs industriels",
+  "type": "assistant_llm", "stade": "production", "annee": 2024, "population": "salaries",
+  "drapeaux": {"gpai": True},
+  "sources": [{"editeur": "TotalEnergies", "titre": "Programme digital & IA (communication)", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Vattenfall", "pays": "SE", "secteur": "Énergie",
+  "cas": "Prévision de demande et d'équilibrage par apprentissage automatique",
+  "type": "optimisation_predictive", "stade": "production", "annee": 2024, "population": "b2b",
+  "drapeaux": {"infrastructure_critique": True},
+  "sources": [{"editeur": "Vattenfall", "titre": "IA pour l'équilibrage réseau", "date": "2024", "preuve": "officiel"}]},
+
+ # ── TRANSPORT / LOGISTIQUE ─────────────────────────────────────────────────
+ {"entreprise": "SNCF", "pays": "FR", "secteur": "Transport ferroviaire",
+  "cas": "Maintenance prédictive du matériel roulant et surveillance d'infrastructures",
+  "type": "optimisation_predictive", "stade": "echelle", "annee": 2024, "population": "b2b",
+  "drapeaux": {"infrastructure_critique": True},
+  "sources": [{"editeur": "SNCF", "titre": "Programmes IA maintenance (communication)", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "DHL Group", "pays": "DE", "secteur": "Logistique",
+  "cas": "Optimisation de tournées et vision de tri colis à l'échelle du réseau",
+  "type": "optimisation_predictive", "stade": "echelle", "annee": 2024, "population": "b2b",
+  "drapeaux": {},
+  "sources": [{"editeur": "DHL", "titre": "AI in logistics (rapports)", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Maersk", "pays": "DK", "secteur": "Logistique maritime",
+  "cas": "Optimisation du positionnement conteneurs et de la consommation",
+  "type": "optimisation_predictive", "stade": "production", "annee": 2024, "population": "b2b",
+  "drapeaux": {},
+  "sources": [{"editeur": "Maersk", "titre": "IA d'optimisation flotte (communication)", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Lufthansa Group", "pays": "DE", "secteur": "Transport aérien",
+  "cas": "GénAI service client et optimisation des opérations (retards, affectations)",
+  "type": "chatbot_client", "stade": "pilote", "annee": 2024, "population": "grand_public",
+  "drapeaux": {"chatbot": True, "gpai": True, "donnees_perso": True},
+  "sources": [{"editeur": "Lufthansa", "titre": "Programme IA (communication)", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Plateformes VTC / livraison (Uber, Bolt, Glovo…)", "pays": "NL", "secteur": "Plateformes",
+  "cas": "Gestion algorithmique des chauffeurs/livreurs (affectation, suspension de comptes)",
+  "type": "surveillance_salaries", "stade": "echelle", "annee": 2024, "population": "salaries",
+  "drapeaux": {"rh": True, "donnees_perso": True},
+  "signaux": [{"titre": "Décisions AP/justice NL sur « robo-firing » et transparence ; directive travail de plateforme 2024/2831", "sens": "-", "preuve": "decision", "date": "2023-2024"}],
+  "sources": [{"editeur": "Autoriteit Persoonsgegevens / cours néerlandaises", "titre": "Contentieux gestion algorithmique", "date": "2023-2024", "preuve": "decision"}]},
+
+ # ── COMMERCE / DISTRIBUTION ────────────────────────────────────────────────
+ {"entreprise": "Zalando", "pays": "DE", "secteur": "E-commerce",
+  "cas": "Assistant mode fondé sur ChatGPT et recommandation de taille",
+  "type": "chatbot_client", "stade": "production", "annee": 2023, "population": "grand_public",
+  "drapeaux": {"chatbot": True, "gpai": True, "donnees_perso": True},
+  "sources": [{"editeur": "Zalando", "titre": "Fashion Assistant (communiqué)", "date": "2023-04", "preuve": "officiel"}]},
+ {"entreprise": "Carrefour", "pays": "FR", "secteur": "Grande distribution",
+  "cas": "Chatbot d'achat « Hopla » (OpenAI) et génAI pour fiches produits et achats",
+  "type": "chatbot_client", "stade": "production", "annee": 2023, "population": "grand_public",
+  "drapeaux": {"chatbot": True, "gpai": True, "donnees_perso": True},
+  "sources": [{"editeur": "Carrefour", "titre": "Lancement Hopla (communiqué)", "date": "2023-06", "preuve": "officiel"}]},
+ {"entreprise": "IKEA (Ingka)", "pays": "SE", "secteur": "Distribution",
+  "cas": "Assistant génAI de conception et service client (Billie) ; requalification des salariés du centre d'appel",
+  "type": "chatbot_client", "stade": "production", "annee": 2024, "population": "grand_public",
+  "drapeaux": {"chatbot": True, "gpai": True, "donnees_perso": True},
+  "signaux": [{"titre": "Programme public de requalification des téléconseillers", "sens": "+", "preuve": "officiel", "date": "2024"}],
+  "sources": [{"editeur": "Ingka Group", "titre": "IA générative et emploi (communication)", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Otto Group", "pays": "DE", "secteur": "E-commerce",
+  "cas": "Génération de descriptions produits et traduction à l'échelle du catalogue",
+  "type": "assistant_llm", "stade": "production", "annee": 2024, "population": "b2b",
+  "drapeaux": {"gpai": True, "generation_contenu": True},
+  "sources": [{"editeur": "Otto Group", "titre": "GenAI dans le e-commerce (communication)", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Decathlon", "pays": "FR", "secteur": "Distribution",
+  "cas": "Prévision de demande et chatbot d'assistance client",
+  "type": "optimisation_predictive", "stade": "production", "annee": 2024, "population": "grand_public",
+  "drapeaux": {"chatbot": True, "donnees_perso": True},
+  "sources": [{"editeur": "Decathlon", "titre": "IA supply & relation client", "date": "2024", "preuve": "presse"}]},
+
+ # ── TÉLÉCOMS / TECH / MÉDIAS ───────────────────────────────────────────────
+ {"entreprise": "Deutsche Telekom", "pays": "DE", "secteur": "Télécoms",
+  "cas": "Assistants génAI internes (askT) et service client augmenté",
+  "type": "assistant_llm", "stade": "production", "annee": 2024, "population": "salaries",
+  "drapeaux": {"gpai": True, "donnees_perso": True},
+  "sources": [{"editeur": "Deutsche Telekom", "titre": "askT / AI program (communication)", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Orange", "pays": "FR", "secteur": "Télécoms",
+  "cas": "GénAI relation client et réseau ; accords avec fournisseurs de modèles européens",
+  "type": "chatbot_client", "stade": "pilote", "annee": 2024, "population": "grand_public",
+  "drapeaux": {"chatbot": True, "gpai": True, "donnees_perso": True},
+  "sources": [{"editeur": "Orange", "titre": "Stratégie IA (communiqués)", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Telefónica", "pays": "ES", "secteur": "Télécoms",
+  "cas": "Plateforme interne « Kernel » et génAI multi-métiers ; signataire du Pacte IA",
+  "type": "assistant_llm", "stade": "production", "annee": 2024, "population": "salaries",
+  "drapeaux": {"gpai": True, "donnees_perso": True},
+  "signaux": [{"titre": "Signataire du Pacte sur l'IA de la Commission (engagements anticipés)", "sens": "+", "preuve": "officiel", "date": "2024-09"}],
+  "sources": [{"editeur": "Commission européenne", "titre": "Liste des signataires du Pacte sur l'IA", "date": "2024-09", "preuve": "officiel"}]},
+ {"entreprise": "SAP", "pays": "DE", "secteur": "Éditeur logiciel",
+  "cas": "Copilote Joule intégré aux suites (fournisseur de SIA à des milliers d'entreprises UE) ; signataire du Pacte IA",
+  "type": "assistant_llm", "stade": "echelle", "annee": 2024, "population": "b2b",
+  "drapeaux": {"gpai": True},
+  "signaux": [{"titre": "Signataire du Pacte sur l'IA de la Commission", "sens": "+", "preuve": "officiel", "date": "2024-09"}],
+  "sources": [{"editeur": "SAP / Commission européenne", "titre": "Joule ; liste des signataires du Pacte IA", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Spotify", "pays": "SE", "secteur": "Médias",
+  "cas": "Recommandation à l'échelle et DJ vocal génératif (voix clonée marquée)",
+  "type": "chatbot_client", "stade": "echelle", "annee": 2024, "population": "grand_public",
+  "drapeaux": {"generation_contenu": True, "gpai": True, "donnees_perso": True},
+  "sources": [{"editeur": "Spotify", "titre": "AI DJ (communication produit)", "date": "2024", "preuve": "officiel"}]},
+
+ # ── ÉLARGISSEMENT GÉOGRAPHIQUE — autres États membres ─────────────────────
+ {"entreprise": "KBC", "pays": "BE", "secteur": "Banque",
+  "cas": "Assistante numérique « Kate » : parcours client et actes bancaires automatisés",
+  "type": "chatbot_client", "stade": "echelle", "annee": 2024, "population": "grand_public",
+  "drapeaux": {"chatbot": True, "donnees_perso": True, "gpai": True},
+  "sources": [{"editeur": "KBC", "titre": "Kate — résultats d'adoption (communications)", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Ryanair", "pays": "IE", "secteur": "Transport aérien",
+  "cas": "Tarification dynamique et assistance client automatisée",
+  "type": "optimisation_predictive", "stade": "production", "annee": 2024, "population": "grand_public",
+  "drapeaux": {"chatbot": True, "donnees_perso": True},
+  "sources": [{"editeur": "presse économique", "titre": "Pricing algorithmique du transport aérien", "date": "2024", "preuve": "presse"}]},
+ {"entreprise": "EDP", "pays": "PT", "secteur": "Énergie",
+  "cas": "Maintenance prédictive des parcs éoliens et solaires",
+  "type": "optimisation_predictive", "stade": "production", "annee": 2024, "population": "b2b",
+  "drapeaux": {"infrastructure_critique": True},
+  "sources": [{"editeur": "EDP", "titre": "IA pour les renouvelables (communication)", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Erste Group", "pays": "AT", "secteur": "Banque",
+  "cas": "Conseiller numérique George : recommandations financières personnalisées et génAI",
+  "type": "chatbot_client", "stade": "production", "annee": 2024, "population": "grand_public",
+  "drapeaux": {"chatbot": True, "gpai": True, "donnees_perso": True},
+  "sources": [{"editeur": "Erste Group", "titre": "George — assistants financiers (communication)", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Nokia", "pays": "FI", "secteur": "Équipementier télécom",
+  "cas": "Réseaux autonomes : détection d'anomalies et optimisation par ML (offre et usage interne)",
+  "type": "optimisation_predictive", "stade": "echelle", "annee": 2024, "population": "b2b",
+  "drapeaux": {"infrastructure_critique": True},
+  "sources": [{"editeur": "Nokia", "titre": "Autonomous networks / AVA (communication)", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Bolt", "pays": "EE", "secteur": "Plateformes",
+  "cas": "Affectation algorithmique des courses et détection de fraude conducteurs",
+  "type": "surveillance_salaries", "stade": "echelle", "annee": 2024, "population": "salaries",
+  "drapeaux": {"rh": True, "donnees_perso": True},
+  "sources": [{"editeur": "presse tech", "titre": "Gestion algorithmique des plateformes baltes", "date": "2024", "preuve": "presse"}]},
+ {"entreprise": "Żabka", "pays": "PL", "secteur": "Distribution",
+  "cas": "Magasins autonomes Nano : vision par ordinateur pour l'encaissement sans caisse",
+  "type": "vision_industrielle", "stade": "echelle", "annee": 2024, "population": "grand_public",
+  "drapeaux": {"donnees_perso": True},
+  "sources": [{"editeur": "Żabka Group", "titre": "Réseau Nano (communications)", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Škoda Auto", "pays": "CZ", "secteur": "Automobile",
+  "cas": "Contrôle qualité par vision en ligne de production (Magic Eye)",
+  "type": "vision_industrielle", "stade": "production", "annee": 2024, "population": "salaries",
+  "drapeaux": {},
+  "sources": [{"editeur": "Škoda Auto", "titre": "IA en production (communication)", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Novo Nordisk", "pays": "DK", "secteur": "Pharmaceutique",
+  "cas": "Découverte de molécules assistée par IA (partenariats calcul intensif)",
+  "type": "optimisation_predictive", "stade": "pilote", "annee": 2024, "population": "b2b",
+  "drapeaux": {},
+  "signaux": [{"titre": "Usage R&D scientifique : exemption partielle art. 2 §6 documentée", "sens": "+", "preuve": "officiel", "date": "2024"}],
+  "sources": [{"editeur": "Novo Nordisk", "titre": "IA en découverte de médicaments (communication)", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "OTP Bank", "pays": "HU", "secteur": "Banque",
+  "cas": "Chatbot client et scoring interne (déploiement régional CEE)",
+  "type": "chatbot_client", "stade": "production", "annee": 2024, "population": "grand_public",
+  "drapeaux": {"chatbot": True, "donnees_perso": True},
+  "sources": [{"editeur": "presse bancaire CEE", "titre": "Digitalisation OTP", "date": "2024", "preuve": "presse"}]},
+ {"entreprise": "eMAG", "pays": "RO", "secteur": "E-commerce",
+  "cas": "Recommandation produits et génération de contenu catalogue",
+  "type": "assistant_llm", "stade": "production", "annee": 2024, "population": "grand_public",
+  "drapeaux": {"generation_contenu": True, "gpai": True, "donnees_perso": True},
+  "sources": [{"editeur": "presse tech roumaine", "titre": "IA chez eMAG", "date": "2024", "preuve": "presse"}]},
+
+ # ── SIGNAUX RÉGLEMENTAIRES STRUCTURANTS (fournisseurs et pratiques) ────────
+ {"entreprise": "OpenAI (fournisseur, effets UE)", "pays": "IT", "secteur": "Fournisseur GPAI",
+  "cas": "ChatGPT : traitement des données des utilisateurs européens",
+  "type": "assistant_llm", "stade": "echelle", "annee": 2024, "population": "grand_public",
+  "drapeaux": {"gpai": True, "donnees_perso": True},
+  "signaux": [{"titre": "Sanction Garante 15 M€ (base légale, information, mineurs)", "sens": "-", "preuve": "decision", "date": "2024-12"}],
+  "sources": [{"editeur": "Garante per la protezione dei dati personali", "titre": "Provvedimento ChatGPT (communiqué)", "date": "2024-12", "preuve": "decision"}]},
+ {"entreprise": "Clearview AI (fournisseur, effets UE)", "pays": "FR", "secteur": "Fournisseur biométrie",
+  "cas": "Base de reconnaissance faciale constituée par moissonnage d'images en ligne",
+  "type": "biometrie", "stade": "echelle", "annee": 2023, "population": "grand_public",
+  "drapeaux": {"scraping_facial": True, "donnees_sensibles": True},
+  "signaux": [{"titre": "Astreinte CNIL 5,2 M€ (après sanction 20 M€) ; sanctions homologues NL/IT/GR", "sens": "-", "preuve": "decision", "date": "2023-05"}],
+  "sources": [{"editeur": "CNIL", "titre": "Liquidation d'astreinte Clearview AI", "date": "2023-05", "preuve": "decision"}]},
+ {"entreprise": "Worldcoin / World (Tools for Humanity)", "pays": "DE", "secteur": "Fournisseur biométrie",
+  "cas": "Collecte d'iris contre jetons (orbs) auprès du grand public européen",
+  "type": "biometrie", "stade": "echelle", "annee": 2024, "population": "grand_public",
+  "drapeaux": {"biometrie_id": True, "donnees_sensibles": True},
+  "signaux": [{"titre": "Injonctions BayLDA (DE) ; suspensions ES/PT par les autorités", "sens": "-", "preuve": "decision", "date": "2024"}],
+  "sources": [{"editeur": "BayLDA / AEPD / CNPD", "titre": "Mesures d'urgence biométrie Worldcoin", "date": "2024", "preuve": "decision"}]},
+ {"entreprise": "Replika (Luka Inc., effets UE)", "pays": "IT", "secteur": "Fournisseur IA affective",
+  "cas": "Compagnon conversationnel affectif accessible aux mineurs",
+  "type": "chatbot_client", "stade": "echelle", "annee": 2023, "population": "grand_public",
+  "drapeaux": {"chatbot": True, "gpai": True, "donnees_sensibles": True},
+  "signaux": [{"titre": "Blocage Garante (2023) puis sanction 5 M€ (2025)", "sens": "-", "preuve": "decision", "date": "2023/2025"}],
+  "sources": [{"editeur": "Garante", "titre": "Mesures Replika", "date": "2023-02", "preuve": "decision"}]},
+ {"entreprise": "Mistral AI (fournisseur UE)", "pays": "FR", "secteur": "Fournisseur GPAI",
+  "cas": "Modèles à usage général fournis aux entreprises européennes (Le Chat Enterprise, API)",
+  "type": "assistant_llm", "stade": "echelle", "annee": 2024, "population": "b2b",
+  "drapeaux": {"gpai": True},
+  "signaux": [{"titre": "Adhésion au code de bonnes pratiques GPAI (juill. 2025)", "sens": "+", "preuve": "officiel", "date": "2025-07"}],
+  "sources": [{"editeur": "Commission européenne / Mistral AI", "titre": "Code of Practice GPAI — signataires", "date": "2025-07", "preuve": "officiel"}]},
+]
+
+# ═══════════════════════════════════════════════════════════════════════════
+# 6. COUCHE PAYS — autorités, stratégie, cyber, état AI Act (UE-27)
+#    `precision` marque ce qui reste mouvant (désignations art. 70 en cours
+#    d'ici aux échéances) : mieux vaut un champ daté qu'une certitude fausse.
+# ═══════════════════════════════════════════════════════════════════════════
+
+PAYS_UE = {
+ "FR": {"nom": "France", "cyber": "ANSSI", "dpa": "CNIL",
+        "autorite_ia": "coordination DGE ; CNIL positionnée sur les SIA traitant des données personnelles",
+        "strategie": "Stratégie nationale IA (2018, actualisée — France 2030)",
+        "notes": "ANSSI : recommandations sécurité génAI (2024). Bac à sable : dispositifs sectoriels CNIL.",
+        "precision": "désignation art. 70 à confirmer"},
+ "DE": {"nom": "Allemagne", "cyber": "BSI", "dpa": "BfDI + Länder",
+        "autorite_ia": "Bundesnetzagentur pressentie (surveillance du marché)",
+        "strategie": "KI-Strategie (2018, act. 2020)",
+        "notes": "BSI : publications sécurité IA ; BayLDA actif sur la biométrie.",
+        "precision": "désignation art. 70 à confirmer"},
+ "IT": {"nom": "Italie", "cyber": "ACN", "dpa": "Garante",
+        "autorite_ia": "ACN + AgID désignées par la loi IA nationale (2025)",
+        "strategie": "Strategia italiana IA (2024)",
+        "notes": "Garante trés actif (ChatGPT, Replika) ; première loi IA nationale d'un État membre.",
+        "precision": "documenté (loi 2025)"},
+ "ES": {"nom": "Espagne", "cyber": "CCN / INCIBE", "dpa": "AEPD",
+        "autorite_ia": "AESIA (première agence IA dédiée de l'UE, 2023)",
+        "strategie": "ENIA (2020) + bac à sable réglementaire pionnier (2023-2024)",
+        "notes": "Bac à sable AI Act pilote pour la Commission.",
+        "precision": "documenté"},
+ "NL": {"nom": "Pays-Bas", "cyber": "NCSC-NL", "dpa": "Autoriteit Persoonsgegevens",
+        "autorite_ia": "AP (coordination algorithmes) + RDI",
+        "strategie": "Strategisch Actieplan AI (2019)",
+        "notes": "AP publie un rapport semestriel sur les risques algorithmiques.",
+        "precision": "documenté"},
+ "BE": {"nom": "Belgique", "cyber": "CCB", "dpa": "APD/GBA",
+        "autorite_ia": "SPF Économie pressenti", "strategie": "Plan national IA (2022)",
+        "notes": "", "precision": "désignation à confirmer"},
+ "SE": {"nom": "Suède", "cyber": "MSB / NCSC-SE", "dpa": "IMY",
+        "autorite_ia": "IMY + agences sectorielles", "strategie": "Nationell inriktning AI (2018)",
+        "notes": "", "precision": "désignation à confirmer"},
+ "DK": {"nom": "Danemark", "cyber": "CFCS", "dpa": "Datatilsynet",
+        "autorite_ia": "Digitaliseringsstyrelsen", "strategie": "Stratégie IA (2019)",
+        "notes": "Premier pays à adopter la loi d'application AI Act (2024).", "precision": "documenté"},
+ "FI": {"nom": "Finlande", "cyber": "Traficom/NCSC-FI", "dpa": "Tietosuojavaltuutettu",
+        "autorite_ia": "Traficom pressentie", "strategie": "AI 4.0", "notes": "", "precision": "à confirmer"},
+ "PL": {"nom": "Pologne", "cyber": "NASK / CERT.PL", "dpa": "UODO",
+        "autorite_ia": "Commission IA (projet de loi 2024-2025)", "strategie": "Polityka AI (2020)",
+        "notes": "", "precision": "projet en cours"},
+ "PT": {"nom": "Portugal", "cyber": "CNCS", "dpa": "CNPD",
+        "autorite_ia": "ANACOM pressentie", "strategie": "AI Portugal 2030", "notes": "", "precision": "à confirmer"},
+ "IE": {"nom": "Irlande", "cyber": "NCSC-IE", "dpa": "DPC",
+        "autorite_ia": "répartition multi-régulateurs annoncée (2024)", "strategie": "AI - Here for Good (2021)",
+        "notes": "DPC : interlocuteur des grands fournisseurs (sièges UE).", "precision": "documenté"},
+ "AT": {"nom": "Autriche", "cyber": "GovCERT/DSB", "dpa": "DSB",
+        "autorite_ia": "RTR (KI-Servicestelle, 2024)", "strategie": "AIM AT 2030",
+        "notes": "Point de contact IA opérationnel dès 2024.", "precision": "documenté"},
+ "CZ": {"nom": "Tchéquie", "cyber": "NÚKIB", "dpa": "ÚOOÚ",
+        "autorite_ia": "à désigner", "strategie": "NAIS (2019)", "notes": "", "precision": "à confirmer"},
+ "RO": {"nom": "Roumanie", "cyber": "DNSC", "dpa": "ANSPDCP",
+        "autorite_ia": "à désigner", "strategie": "Stratégie IA (2024)", "notes": "", "precision": "à confirmer"},
+ "GR": {"nom": "Grèce", "cyber": "NCSA", "dpa": "HDPA", "autorite_ia": "à désigner",
+        "strategie": "Stratégie IA (2024)", "notes": "", "precision": "à confirmer"},
+ "HU": {"nom": "Hongrie", "cyber": "NKI", "dpa": "NAIH", "autorite_ia": "à désigner",
+        "strategie": "MI Stratégia (2020)", "notes": "", "precision": "à confirmer"},
+ "SK": {"nom": "Slovaquie", "cyber": "NBU", "dpa": "ÚOOÚ SR", "autorite_ia": "à désigner",
+        "strategie": "2019", "notes": "", "precision": "à confirmer"},
+ "SI": {"nom": "Slovénie", "cyber": "SI-CERT", "dpa": "IP-RS", "autorite_ia": "à désigner",
+        "strategie": "NpUI (2021)", "notes": "", "precision": "à confirmer"},
+ "HR": {"nom": "Croatie", "cyber": "SOA/ZSIS", "dpa": "AZOP", "autorite_ia": "à désigner",
+        "strategie": "2025 (plan)", "notes": "", "precision": "à confirmer"},
+ "BG": {"nom": "Bulgarie", "cyber": "CERT Bulgaria", "dpa": "CPDP", "autorite_ia": "à désigner",
+        "strategie": "2020", "notes": "", "precision": "à confirmer"},
+ "LT": {"nom": "Lituanie", "cyber": "NKSC", "dpa": "VDAI", "autorite_ia": "Inovacijų agentūra pressentie",
+        "strategie": "2019", "notes": "Écosystème fintech dense (Revolut UAB).", "precision": "à confirmer"},
+ "LV": {"nom": "Lettonie", "cyber": "CERT.LV", "dpa": "DVI", "autorite_ia": "à désigner",
+        "strategie": "2020", "notes": "", "precision": "à confirmer"},
+ "EE": {"nom": "Estonie", "cyber": "RIA", "dpa": "AKI", "autorite_ia": "MKM / RIA",
+        "strategie": "Kratid (2019, act.)", "notes": "Administration numérique pionnière.", "precision": "à confirmer"},
+ "LU": {"nom": "Luxembourg", "cyber": "NC3/CIRCL", "dpa": "CNPD", "autorite_ia": "à désigner",
+        "strategie": "AI4Gov (2019)", "notes": "", "precision": "à confirmer"},
+ "MT": {"nom": "Malte", "cyber": "CSA Malta", "dpa": "IDPC", "autorite_ia": "MDIA",
+        "strategie": "Malta AI (2019)", "notes": "MDIA : certification volontaire IA dès 2019.", "precision": "documenté"},
+ "CY": {"nom": "Chypre", "cyber": "DSA/CSIRT-CY", "dpa": "Commissioner",
+        "autorite_ia": "à désigner", "strategie": "2020", "notes": "", "precision": "à confirmer"},
+}
+
+# ═══════════════════════════════════════════════════════════════════════════
+# 7. ASSEMBLAGE — enrichissement, agrégats, sortie API
+# ═══════════════════════════════════════════════════════════════════════════
+
+def _enrichir():
+    """Classe et score chaque cas ; renvoie la liste enrichie (sans muter CAS)."""
+    out = []
+    for i, brut in enumerate(CAS):
+        cas = copy.deepcopy(brut)
+        classe, regles = classer_cas(cas)
+        score, tiers, detail = scorer_cas(cas, classe)
+        cas.update({
+            "id": "sia-%03d" % (i + 1),
+            "classe": classe,
+            "classe_nom": CLASSES[classe]["nom"],
+            "classe_rang": CLASSES[classe]["rang"],
+            "echeance": CLASSES[classe]["echeance"],
+            "regles": regles,
+            "exposition": score,
+            "exposition_tiers": tiers,
+            "exposition_detail": [{"terme": t, "points": p} for t, p in detail],
+            "type_nom": TYPES_SIA[cas["type"]]["nom"],
+            "vulnerabilites": TYPES_SIA[cas["type"]]["vulnerabilites"],
+            "referentiels_securite": TYPES_SIA[cas["type"]]["referentiels"],
+            "pays_nom": PAYS_UE.get(cas["pays"], {}).get("nom", cas["pays"]),
+        })
+        cas.setdefault("signaux", [])
+        out.append(cas)
+    return out
+
+
+def _agreger(cas_enrichis):
+    par_pays, par_secteur, par_classe, par_stade, par_annee = {}, {}, {}, {}, {}
+    for c in cas_enrichis:
+        p = par_pays.setdefault(c["pays"], {"pays": c["pays"], "nom": c["pays_nom"], "n": 0,
+                                            "exposition_moy": 0.0, "haut_risque": 0, "interdit": 0})
+        p["n"] += 1
+        p["exposition_moy"] += c["exposition"]
+        if c["classe"] == "haut_risque": p["haut_risque"] += 1
+        if c["classe"] == "interdit": p["interdit"] += 1
+        s = par_secteur.setdefault(c["secteur"], {"secteur": c["secteur"], "n": 0, "exposition_moy": 0.0,
+                                                  "classes": {}})
+        s["n"] += 1; s["exposition_moy"] += c["exposition"]
+        s["classes"][c["classe"]] = s["classes"].get(c["classe"], 0) + 1
+        par_classe[c["classe"]] = par_classe.get(c["classe"], 0) + 1
+        par_stade[c["stade"]] = par_stade.get(c["stade"], 0) + 1
+        par_annee[str(c["annee"])] = par_annee.get(str(c["annee"]), 0) + 1
+    for p in par_pays.values():
+        p["exposition_moy"] = round(p["exposition_moy"] / p["n"], 1)
+    for s in par_secteur.values():
+        s["exposition_moy"] = round(s["exposition_moy"] / s["n"], 1)
+    return {
+        "par_pays": sorted(par_pays.values(), key=lambda x: -x["n"]),
+        "par_secteur": sorted(par_secteur.values(), key=lambda x: -x["n"]),
+        "par_classe": par_classe,
+        "par_stade": par_stade,
+        "par_annee": dict(sorted(par_annee.items())),
+    }
+
+
+METHODOLOGIE = {
+    "fenetre": FENETRE,
+    "criteres_inclusion": [
+        "cas identifiable (entreprise + usage + stade) documenté par une source publique nommée et datée",
+        "déploiement, pilote, POC ou abandon situé dans l'UE ou à effets directs dans l'UE",
+        "diversité recherchée : secteurs, pays, classes de risque, stades — le panel vaut par sa représentativité, pas par son volume",
+    ],
+    "limites": [
+        "PANEL, PAS RECENSEMENT : les déploiements non communiqués (majoritaires) n'y figurent pas — biais de publication assumé et signalé",
+        "le score mesure l'EXPOSITION RÉGLEMENTAIRE du cas d'usage, jamais la conformité de l'entreprise (inauditables de l'extérieur)",
+        "les classifications reposent sur les usages DÉCLARÉS ; un même outil peut changer de classe selon sa fonction exacte",
+        "les désignations d'autorités nationales (art. 70) évoluent d'ici août 2026 : champ `precision` par pays",
+    ],
+    "referentiels": [
+        "Règlement (UE) 2024/1689 (AI Act) — art. 5, 6, 50, annexes I et III ; échéances 2025-2027",
+        "OWASP LLM Top 10 (2025) · MITRE ATLAS · ANSSI (recommandations génAI, 2024) · ENISA · BSI",
+        "NIS 2, DORA, MDR, règlement Machines : sur-couches sectorielles citées par cas",
+    ],
+    "evolutions_prevues": [
+        "raccordement à la base UE des systèmes à haut risque (art. 71) dès son ouverture",
+        "flux autorités (CNIL, Garante, AP, AEPD, BSI…) et bases d'incidents (OCDE AIM, AIAAIC) en veille automatisée",
+        "rapprochement avec le Registre IA de Sentinel : situer VOS systèmes dans le panel",
+    ],
+}
+
+CREDITS = [
+    "Décisions citées : CNIL, Garante, AEPD, BayLDA, Autoriteit Persoonsgegevens (sources primaires publiques)",
+    "Communiqués et rapports des entreprises citées (sources officielles)",
+    "Commission européenne : Pacte sur l'IA, code de bonnes pratiques GPAI, lignes directrices art. 5",
+    "Référentiels sécurité : OWASP, MITRE ATLAS, ANSSI, ENISA, BSI",
+]
+
+
+def assemble():
+    cas = _enrichir()
+    return {
+        "maj": datetime.utcnow().isoformat() + "Z",
+        "version": VERSION,
+        "titre": "Panorama des systèmes d'IA en entreprise — UE",
+        "fenetre": FENETRE,
+        "n_cas": len(cas),
+        "n_pays": len({c["pays"] for c in cas}),
+        "n_secteurs": len({c["secteur"] for c in cas}),
+        "cas": cas,
+        "agregats": _agreger(cas),
+        "classes": CLASSES,
+        "types": {k: {"nom": v["nom"]} for k, v in TYPES_SIA.items()},
+        "pays_ue": PAYS_UE,
+        "methodologie": METHODOLOGIE,
+        "credits": CREDITS,
+    }
+
+
+def sante():
+    """Bloc 'panorama' pour /api/health."""
+    return {"version": VERSION, "n_cas": len(CAS), "n_pays_ue": len(PAYS_UE)}
