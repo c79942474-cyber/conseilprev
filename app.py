@@ -3230,24 +3230,30 @@ def registre_sql(pg_query, sqlite_query):
     return pg_query if REGISTRE_USE_PG else sqlite_query
 
 import secrets as _secrets_auth
-# Token stable par defaut si AUTH_MASTER_TOKEN n'est pas defini sur Render (Environment).
-# Recommande : definissez votre propre valeur secrete dans Render pour plus de securite -
-# ce fallback reste fonctionnel immediatement mais est visible dans le code source.
-AUTH_MASTER_TOKEN = os.environ.get('AUTH_MASTER_TOKEN', '').strip() or 'kwQKnjGw8YLgsP1yWwkA1Fg8jhH3BLwe'
-# Ensemble des tokens acceptes par le lien maitre /auth/<token> :
-#  - la variable d'environnement Render AUTH_MASTER_TOKEN (prioritaire, recommandee)
-#  - le fallback statique ci-dessus (fonctionnel immediatement)
-#  - le token historique distribue par email avant la migration vers le fallback
-#    statique (les anciens liens enregistres/favoris restent valides)
-AUTH_TOKENS_VALIDES = frozenset(t for t in (
-    os.environ.get('AUTH_MASTER_TOKEN', '').strip(),
-    'kwQKnjGw8YLgsP1yWwkA1Fg8jhH3BLwe',
-    'PBeay16MElqpW5kvtJ3XWHuBVAlUtNw-DCUmEx-3PEw',
-) if t)
-if AUTH_MASTER_TOKEN == 'kwQKnjGw8YLgsP1yWwkA1Fg8jhH3BLwe':
-    logger.warning("AUTH_MASTER_TOKEN non defini en variable d'environnement Render — "
-                    "utilisation du token par defaut (visible dans le code source). "
-                    "Definissez AUTH_MASTER_TOKEN sur Render pour une valeur secrete personnelle.")
+# ── Lien maitre /auth/<token> — acces CONSEILPREV a Sentinel ────────────────
+#
+# LE SECRET N'EST PLUS DANS LE CODE. Il l'a ete : deux jetons de repli y
+# figuraient en clair pour que le lien fonctionne sans configuration. Dans un
+# depot public, ce n'est pas une commodite, c'est une porte ouverte — n'importe
+# quel lecteur du source obtenait un acces complet, sans mot de passe.
+#
+# Desormais la seule source est la variable d'environnement AUTH_MASTER_TOKEN.
+# Si elle est absente, AUCUN lien n'est accepte : on echoue FERME. Un service
+# qui, faute de configuration, se rabattrait sur une valeur connue serait pire
+# qu'un service inaccessible — le second se remarque, le premier non.
+AUTH_MASTER_TOKEN = os.environ.get('AUTH_MASTER_TOKEN', '').strip()
+AUTH_TOKENS_VALIDES = frozenset(t for t in (AUTH_MASTER_TOKEN,) if t)
+if not AUTH_TOKENS_VALIDES:
+    logger.error("AUTH_MASTER_TOKEN absent des variables d'environnement — "
+                 "le lien maitre /auth/<token> est DESACTIVE et repondra 404. "
+                 "Definissez-le sur Render (valeur aleatoire de 32 caracteres) "
+                 "pour retablir l'acces CONSEILPREV a Sentinel.")
+elif len(AUTH_MASTER_TOKEN) < 24:
+    # On avertit sans refuser : c'est a l'exploitant de juger, et bloquer ici
+    # reviendrait a verrouiller la porte au motif que la cle est un peu courte.
+    logger.warning("AUTH_MASTER_TOKEN court (%d caracteres) — un lien maitre "
+                   "donne un acces complet sans mot de passe ; 32 caracteres "
+                   "aleatoires sont recommandes.", len(AUTH_MASTER_TOKEN))
 
 def sentauth_init_db():
     conn = registre_get_db()
@@ -3989,7 +3995,12 @@ def email_health():
 @rate_limit_strict(limit=10, window=300)
 def sentauth_master_link(token):
     """Lien secret CONSEILPREV — pose un cookie de session longue duree sans mot de passe."""
-    if token in AUTH_TOKENS_VALIDES:
+    # Comparaison a temps constant : `in` sur un ensemble s'arrete au premier
+    # caractere different, et la duree de la reponse renseigne alors sur le
+    # nombre de caracteres devines. La menace est theorique sur un secret de
+    # 256 bits derriere un reseau, mais la parade coute une ligne.
+    if any(_secrets_auth.compare_digest(token, valide)
+           for valide in AUTH_TOKENS_VALIDES):
         session.clear()
         session['is_conseilprev'] = True
         session.permanent = True
