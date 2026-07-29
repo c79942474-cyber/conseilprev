@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Observatoire R&amp;D IA — modèles, talents, brevets · Sentinel</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#F6F4FC; --white:#FFFFFF; --ink:#1C1C1C; --muted:#5C5C5C; --muted2:#6E6E6E;
+  --rule:#E1DFE7; --accent:#B83222;
+  --sans:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+html{background:var(--bg)}
+body{font-family:var(--sans);color:var(--ink);font-size:14px;line-height:1.5;max-width:1080px;margin:0 auto;padding:24px 20px 36px}
+a{color:#1E63A8}
+a:focus-visible,summary:focus-visible{outline:2px solid #1E63A8;outline-offset:2px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* ── En-tête ── */
+.hdr{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.h{font-family:var(--serif);font-weight:400;font-size:26px;line-height:1.2}
+.sub{font-size:13px;color:var(--muted);margin-top:4px;max-width:660px}
+.data-badge{font-family:var(--mono);font-size:10px;letter-spacing:.04em;background:#1C1C1C;color:#fff;padding:6px 12px;border-radius:4px;white-space:nowrap}
+body.embed .data-badge{display:none}
+
+/* ── Panneaux ── */
+.panel{background:var(--white);border:1px solid var(--rule);border-radius:4px;margin-bottom:20px;overflow:hidden}
+.panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;padding:12px 20px 10px;border-bottom:1px solid var(--rule)}
+.panel-title{font-size:13px;font-weight:600}
+.panel-note{font-family:var(--mono);font-size:10px;color:var(--muted2);letter-spacing:.03em}
+.panel-body{padding:16px 20px 18px}
+.note{font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.55}
+figure{margin:0}
+
+/* ── Carte ── */
+.map-wrap{position:relative}
+#obsmap{width:100%;height:420px}
+.map-count-badge{position:absolute;top:10px;right:10px;z-index:1000;background:#1C1C1C;color:#fff;font-family:var(--mono);font-size:10px;padding:6px 12px;border-radius:4px;letter-spacing:.04em}
+.leaflet-popup-content{font-family:var(--sans);min-width:200px}
+.pn{font-size:13px;font-weight:600;color:#1C1C1C;margin-bottom:4px}
+.pr{font-size:11px;color:#767676;line-height:1.4;margin-bottom:8px}
+.ps{font-family:Georgia,serif;font-size:22px;line-height:1}
+.pl{font-size:9px;font-family:var(--mono);letter-spacing:.1em;color:#A8A8A8;text-transform:uppercase;margin-top:2px}
+.obs-legend{background:rgba(255,255,255,.94);border:1px solid var(--rule);border-radius:4px;padding:10px 12px;box-shadow:0 1px 4px rgba(28,28,28,.08);max-width:236px}
+.obs-legend h3{font-size:10.5px;font-weight:600;line-height:1.35;margin-bottom:6px;color:#1C1C1C}
+.lg-row{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:3px}
+.lg-dot{border-radius:50%;flex:0 0 auto;border:1px solid rgba(28,28,28,.18)}
+
+/* ── Graphiques SVG ── */
+.chart svg{display:block;width:100%;height:auto}
+.chart text{font-family:Inter,system-ui,sans-serif}
+.chart .ax{font-size:10px;fill:#6E6E6E;font-family:'JetBrains Mono',ui-monospace,monospace}
+.chart .vl{font-size:10px;fill:#1C1C1C;font-weight:600}
+.chart .el{font-size:10.5px;fill:#1C1C1C;font-weight:600}
+.chart .cat{font-size:10.5px;fill:#5C5C5C}
+.chart .na{font-size:9.5px;fill:#6E6E6E;font-family:'JetBrains Mono',ui-monospace,monospace}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:10px}
+.lg-item{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;color:var(--muted)}
+.lg-sw{width:10px;height:10px;border-radius:50%;display:inline-block;flex:0 0 auto}
+
+/* ── Tableaux alternatifs (accessibilité) ── */
+details.tbl-alt{margin-top:10px}
+details.tbl-alt summary{cursor:pointer;font-family:var(--mono);font-size:10.5px;color:var(--muted2);letter-spacing:.03em}
+details.tbl-alt .twrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+details.tbl-alt table{border-collapse:collapse;margin-top:8px;width:100%;font-size:11.5px}
+details.tbl-alt th,details.tbl-alt td{border:1px solid var(--rule);padding:4px 8px;text-align:right;white-space:nowrap}
+details.tbl-alt th:first-child,details.tbl-alt td:first-child{text-align:left}
+details.tbl-alt th{font-family:var(--mono);font-size:10px;color:var(--muted2);font-weight:500;background:#FAF9FD}
+
+/* ── Adoption (stat + barres) ── */
+.stat-hero{padding:6px 0 2px}
+.stat-hero .stat-val{font-family:var(--serif);font-size:44px;line-height:1;color:#1E63A8}
+.stat-hero .stat-lbl{font-size:13px;color:var(--muted);margin-top:6px;max-width:520px}
+.adp-row{display:flex;align-items:center;gap:10px;margin-top:6px}
+.adp-n{flex:0 0 130px;font-size:12px;text-align:right;color:var(--ink);min-width:0}
+.adp-track{flex:1;height:14px;background:#F1EFF6;border-radius:3px;min-width:0}
+.adp-fill{height:100%;background:#1E63A8;border-radius:3px}
+.adp-v{flex:0 0 56px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+
+/* ── Gouvernance ── */
+.gov-list{list-style:none}
+.gov-item{padding:12px 0;border-bottom:1px solid var(--rule)}
+.gov-item:last-child{border-bottom:none;padding-bottom:4px}
+.gov-item:first-child{padding-top:4px}
+.gov-t{font-size:13.5px;font-weight:600}
+.gov-y{font-family:var(--mono);font-size:10px;color:var(--muted2);margin-left:6px;font-weight:400}
+.gov-p{font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.5}
+.gov-a{margin-top:4px;font-size:11.5px}
+.gov-a a{margin-right:14px}
+
+/* ── Sources & fraîcheur ── */
+.src-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.src-tbl{width:100%;border-collapse:collapse;font-size:12px}
+.src-tbl th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--muted2);font-weight:500;text-transform:uppercase;padding:6px 10px;border-bottom:1px solid var(--rule);background:#FAF9FD}
+.src-tbl td{padding:8px 10px;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.45}
+.src-tbl tr:last-child td{border-bottom:none}
+.src-tbl .lic{font-family:var(--mono);font-size:10px;color:var(--muted2);white-space:nowrap}
+.src-tbl .etat{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.flux-h{font-size:12.5px;font-weight:600;margin:16px 0 4px}
+.flux-list{list-style:none}
+.flux-list li{padding:5px 0;border-bottom:1px dashed var(--rule);font-size:12px;line-height:1.45}
+.flux-list li:last-child{border-bottom:none}
+.flux-src{font-family:var(--mono);font-size:9.5px;color:var(--muted2);letter-spacing:.04em;text-transform:uppercase;margin-right:6px}
+.foot{font-size:11px;color:var(--muted2);line-height:1.6;margin-top:4px}
+
+@media (max-width:640px){
+  body{padding:16px 12px 28px}
+  .h{font-size:21px}
+  #obsmap{height:320px}
+  .panel-body{padding:12px 14px 14px}
+  .adp-n{flex-basis:96px;font-size:11px}
+  .stat-hero .stat-val{font-size:36px}
+}
+</style>
+<link rel="stylesheet" href="/anti-debordement.css">
+</head>
+<body>
+
+<header class="hdr">
+  <div>
+    <h1 class="h">Observatoire R&amp;D IA — modèles, talents, brevets</h1>
+    <p class="sub">Où se crée l’intelligence artificielle : modèles remarquables, chercheurs d’élite, brevets et adoption en entreprise. Vues recomposées depuis les sources primaires publiques (Epoch AI, MacroPolo/NeurIPS, AI Index/CSET, Eurostat).</p>
+  </div>
+  <span class="data-badge" id="data-badge">données : seed · 29/07/2026</span>
+</header>
+
+<!-- ══ 1. CARTE — modèles remarquables par pays ══ -->
+<section class="panel" aria-labelledby="t-map">
+  <div class="panel-head">
+    <span class="panel-title" id="t-map">Modèles d’IA remarquables créés par pays (2003 – été 2024)</span>
+    <span class="panel-note" id="map-mode">seed · classes (recomposition)</span>
+  </div>
+  <div class="map-wrap">
+    <div id="obsmap" role="img" aria-label="Carte mondiale : nombre de modèles d’IA remarquables créés par pays entre 2003 et l’été 2024, en cinq classes de 1-10 à 101-560. Les États-Unis et la Chine dominent (classe 101-560)."></div>
+    <div class="map-count-badge" id="map-count">— pays</div>
+  </div>
+  <div class="panel-body" style="padding-top:12px;padding-bottom:12px">
+    <p class="note" style="margin-top:0">Source : Epoch AI, « Data on Notable AI Models » (CC BY 4.0). Le seed affiche les classes d’effectifs (précision « classe » ; hors États-Unis, Chine, Canada, Royaume-Uni, Allemagne et France : « classe, lecture de carte ») ; en mode live, les comptes exacts Epoch AI les remplacent. Cliquez un pays pour le détail (modèles, chercheurs d’élite, adoption UE si disponible).</p>
+    <details class="tbl-alt">
+      <summary>Données de la carte (tableau)</summary>
+      <div class="twrap" id="map-table"></div>
+    </details>
+  </div>
+</section>
+
+<!-- ══ 2. BREVETS ══ -->
+<section class="panel" aria-labelledby="t-brev">
+  <div class="panel-head">
+    <span class="panel-title" id="t-brev">Brevets d’IA accordés — part du total mondial (%)</span>
+    <span class="panel-note">AI Index (Stanford HAI) · données CSET · 2010–2023</span>
+  </div>
+  <div class="panel-body">
+    <div class="legend" aria-hidden="true">
+      <span class="lg-item"><span class="lg-sw" style="background:#B83222"></span>Chine</span>
+      <span class="lg-item"><span class="lg-sw" style="background:#1E63A8"></span>États-Unis</span>
+      <span class="lg-item"><span class="lg-sw" style="background:#C47C1A"></span>Europe</span>
+      <span class="lg-item"><span class="lg-sw" style="background:#ECE9F1;border:1px solid #D5D2D9;border-radius:2px"></span>Volume mondial (milliers, axe droit)</span>
+    </div>
+    <figure>
+      <figcaption class="sr-only">Évolution 2010–2023 de la part des brevets d’IA accordés : la Chine passe d’environ 13 % à 69,7 %, les États-Unis reculent d’environ 40 % à 14,2 %, l’Europe d’environ 8 % à 2,8 %. En arrière-plan, le volume mondial accordé passe d’environ 2 000 à 122 000 brevets.</figcaption>
+      <div class="chart" id="brev-chart"></div>
+    </figure>
+    <p class="note">Points 2023 exacts (affichés) : Chine 69,7 % · États-Unis 14,2 % · Europe 2,8 %. Séries 2010–2022 : lecture graphique (± 3 pts). Barres grises : volume mondial de brevets d’IA accordés, en milliers (axe de droite, lecture graphique).</p>
+    <details class="tbl-alt">
+      <summary>Données du graphique (tableau)</summary>
+      <div class="twrap" id="brev-table"></div>
+    </details>
+  </div>
+</section>
+
+<!-- ══ 3. CHERCHEURS D'ÉLITE ══ -->
+<section class="panel" aria-labelledby="t-tal">
+  <div class="panel-head">
+    <span class="panel-title" id="t-tal">Chercheurs d’élite en IA (2022) — origine vs lieu de travail</span>
+    <span class="panel-note">MacroPolo · d’après NeurIPS 2022 · en %</span>
+  </div>
+  <div class="panel-body">
+    <div class="legend" aria-hidden="true">
+      <span class="lg-item"><span class="lg-sw" style="background:#6A4BA8"></span>Origine (formation)</span>
+      <span class="lg-item"><span class="lg-sw" style="background:#0491A4"></span>Lieu de travail</span>
+    </div>
+    <figure>
+      <figcaption class="sr-only">Barres jumelées comparant, pays par pays, la part des chercheurs d’élite en IA selon leur origine et selon leur lieu de travail en 2022. Les États-Unis forment 28 % des chercheurs mais en emploient 57 % ; la Chine en forme 26 % et en emploie 12 %.</figcaption>
+      <div class="chart" id="tal-chart"></div>
+    </figure>
+    <p class="note"><strong>Lecture :</strong> les États-Unis forment 28 % des chercheurs d’élite mais en emploient 57 % (+29 pts — attraction nette) ; la Chine en forme 26 % et n’en emploie que 12 % (−14 pts — exportatrice nette de talents).</p>
+    <p class="note">Définition (N.B. de la carte source) : auteurs d’articles retenus pour <em>présentation orale</em> à NeurIPS (~top 2 % des publications). * Royaume-Uni, Allemagne, France et Canada : entre 2 et 4 % chacun des lieux de travail selon la carte source (lecture graphique — valeur précise non publiée). Inde : lieu de travail non disponible.</p>
+    <details class="tbl-alt">
+      <summary>Données du graphique (tableau)</summary>
+      <div class="twrap" id="tal-table"></div>
+    </details>
+  </div>
+</section>
+
+<!-- ══ 4. ADOPTION ENTREPRISES UE ══ -->
+<section class="panel" aria-labelledby="t-adp">
+  <div class="panel-head">
+    <span class="panel-title" id="t-adp">Adoption de l’IA par les entreprises (UE)</span>
+    <span class="panel-note">Eurostat · isoc_eb_ai · CC BY 4.0</span>
+  </div>
+  <div class="panel-body" id="adp-body"><!-- rempli par renderAdoption() --></div>
+</section>
+
+<!-- ══ 5. CADRE & GOUVERNANCE UE ══ -->
+<section class="panel" aria-labelledby="t-gov">
+  <div class="panel-head">
+    <span class="panel-title" id="t-gov">Cadre &amp; gouvernance UE</span>
+    <span class="panel-note">référentiel fermé · vérifié</span>
+  </div>
+  <div class="panel-body">
+    <ul class="gov-list">
+      <li class="gov-item">
+        <div class="gov-t">Règlement (UE) 2024/1689 — AI Act — et Bureau de l’IA (AI Office)<span class="gov-y">2024</span></div>
+        <p class="gov-p">Le socle juridique : vérifiez la classification de risque de chacun de vos systèmes d’IA et le calendrier d’application (pleine applicabilité le 2 août 2026) ; le Bureau de l’IA supervise les modèles à usage général.</p>
+        <div class="gov-a"><a href="https://eur-lex.europa.eu/eli/reg/2024/1689/oj" target="_blank" rel="noopener">Texte sur EUR-Lex</a><a href="https://digital-strategy.ec.europa.eu/en/policies/ai-office" target="_blank" rel="noopener">Bureau de l’IA</a></div>
+      </li>
+      <li class="gov-item">
+        <div class="gov-t">Groupe d’experts de haut niveau sur l’IA (AI HLEG) — Lignes directrices en matière d’éthique pour une IA digne de confiance, et liste d’évaluation ALTAI<span class="gov-y">2019 · 2020</span></div>
+        <p class="gov-p">La grille d’auto-évaluation de référence : utilisez ALTAI pour documenter, exigence par exigence (7 au total), la fiabilité d’un système avant sa mise en service.</p>
+        <div class="gov-a"><a href="https://digital-strategy.ec.europa.eu/en/library/ethics-guidelines-trustworthy-ai" target="_blank" rel="noopener">Lignes directrices (2019)</a><a href="https://digital-strategy.ec.europa.eu/en/library/assessment-list-trustworthy-artificial-intelligence-altai-self-assessment" target="_blank" rel="noopener">ALTAI (2020)</a></div>
+      </li>
+      <li class="gov-item">
+        <div class="gov-t">Alliance européenne pour l’IA (plateforme Futurium de la Commission)<span class="gov-y">2018</span></div>
+        <p class="gov-p">Le canal de consultation : suivez-y les consultations publiques et ateliers de la Commission pour anticiper les actes d’exécution et lignes directrices à venir.</p>
+        <div class="gov-a"><a href="https://futurium.ec.europa.eu/en/european-ai-alliance" target="_blank" rel="noopener">Alliance européenne pour l’IA</a></div>
+      </li>
+      <li class="gov-item">
+        <div class="gov-t">Plan coordonné dans le domaine de l’IA<span class="gov-y">2018 · révisé 2021</span></div>
+        <p class="gov-p">La feuille de route politique UE/États membres : utile pour anticiper les priorités de financement et les stratégies nationales qui encadreront vos projets.</p>
+        <div class="gov-a"><a href="https://digital-strategy.ec.europa.eu/en/policies/plan-ai" target="_blank" rel="noopener">Plan coordonné IA</a></div>
+      </li>
+      <li class="gov-item">
+        <div class="gov-t">AI Watch — suivi de l’IA par la Commission (Centre commun de recherche, JRC)<span class="gov-y">depuis 2018</span></div>
+        <p class="gov-p">Les indicateurs officiels (investissements, adoption, talents) : citez-les pour étayer une analyse d’impact ou un dossier de conformité auprès d’une autorité.</p>
+        <div class="gov-a"><a href="https://ai-watch.ec.europa.eu/" target="_blank" rel="noopener">AI Watch (JRC)</a></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══ 6. SOURCES, LICENCES & FRAÎCHEUR ══ -->
+<section class="panel" aria-labelledby="t-src">
+  <div class="panel-head">
+    <span class="panel-title" id="t-src">Sources, licences &amp; fraîcheur</span>
+    <span class="panel-note">crédits obligatoires</span>
+  </div>
+  <div class="panel-body">
+    <div class="src-wrap">
+      <table class="src-tbl">
+        <thead><tr><th scope="col">Source</th><th scope="col">Licence</th><th scope="col">Volet</th><th scope="col">Rafraîchissement</th></tr></thead>
+        <tbody>
+          <tr><td>Epoch AI — « Data on Notable AI Models », epoch.ai</td><td class="lic">CC BY 4.0</td><td>Modèles remarquables (carte)</td><td class="etat" id="etat-epoch">seed — en attente du premier rafraîchissement serveur</td></tr>
+          <tr><td>MacroPolo — The Global AI Talent Tracker 2.0, Paulson Institute (d’après NeurIPS 2022)</td><td class="lic">© MacroPolo · citation</td><td>Chercheurs d’élite</td><td class="etat">statique — édition ~triennale, catalogage manuel</td></tr>
+          <tr><td>AI Index Report, Stanford HAI — données brevets : CSET (Georgetown)</td><td class="lic">CC BY-ND 4.0 · citation</td><td>Brevets d’IA</td><td class="etat">statique — annuel (avril), catalogage manuel</td></tr>
+          <tr><td>Eurostat — enquête TIC entreprises (isoc_eb_ai)</td><td class="lic">CC BY 4.0</td><td>Adoption entreprises UE</td><td class="etat" id="etat-eurostat">seed — en attente du premier rafraîchissement serveur</td></tr>
+          <tr><td>Flux stratégie UE (Commission européenne — digital-strategy.ec.europa.eu ; artificialintelligenceact.eu, Future of Life Institute)</td><td class="lic">© UE 2011/833/UE · citation + lien</td><td>Actualité gouvernance</td><td class="etat" id="etat-flux">seed — en attente du premier rafraîchissement serveur</td></tr>
+          <tr><td>Carto n°89, 2025 © Areion/Capri — « Recherche et développement dans le domaine de l’IA »</td><td class="lic">inspiration éditoriale</td><td>—</td><td class="etat">la carte originale n’est pas reproduite</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3 class="flux-h">Derniers titres — flux stratégie UE</h3>
+    <ul class="flux-list" id="flux-list"><li><span class="flux-src">seed</span>Aucun titre en cache — disponible au prochain rafraîchissement en production.</li></ul>
+    <p class="foot">Recomposition depuis les sources primaires publiques citées ci-dessus — inspiration : Carto n°89, 2025 © Areion/Capri ; la carte originale n’est pas reproduite. Chaque série porte sa précision : « exact », « classe » ou « lecture graphique (±) ». Fond de carte © OpenStreetMap © CARTO.</p>
+  </div>
+</section>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+/* ════════════════════════════════════════════════════════════════════
+   OBSERVATOIRE R&D IA — page autonome (motif identique à map.html) :
+   rendu immédiat sur le SEED embarqué, puis fetch('/api/observatoire')
+   qui, s’il répond, remplace/complète les volets concernés (mode live).
+   Aucune dépendance externe hors Leaflet (unpkg) + tuiles Carto.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Mode embarqué (iframe Sentinel) : ?embed=1 masque le badge d’en-tête */
+if(/[?&]embed=1(&|$)/.test(window.location.search)){ document.body.classList.add('embed'); }
+
+/* ── SEED — recomposé depuis les sources primaires (jamais la carte elle-même).
+   Précision par série : "exact" | "classe" | "lecture graphique (±)". ── */
+var SEED = {
+  mode: 'seed',
+  maj: null, /* ISO — fourni par l’API en mode live */
+  modeles: {
+    source: 'Epoch AI — Notable AI Models (CC BY 4.0)',
+    periode: '2003 – été 2024',
+    precision: 'classe',
+    classes: [ {min:1,max:10}, {min:11,max:20}, {min:21,max:60}, {min:61,max:100}, {min:101,max:560} ],
+    exacts: null, /* mode live : {US:561, …} comptes exacts Epoch AI */
+    /* cl = index de classe 0..4 ; lect = classe issue d’une lecture de la carte ; ue = État membre UE */
+    pays: [
+      {n:'États-Unis',          c:'US', cl:4, lat:39.5,  lng:-98.4},
+      {n:'Chine',               c:'CN', cl:4, lat:35.8,  lng:104.2},
+      {n:'Canada',              c:'CA', cl:3, lat:56.1,  lng:-106.3},
+      {n:'Royaume-Uni',         c:'GB', cl:2, lat:54.0,  lng:-2.5},
+      {n:'Allemagne',           c:'DE', cl:2, lat:51.2,  lng:10.4,  ue:1},
+      {n:'France',              c:'FR', cl:2, lat:46.2,  lng:2.2,   ue:1},
+      {n:'Russie',              c:'RU', cl:1, lat:61.5,  lng:90.0,  lect:1},
+      {n:'Japon',               c:'JP', cl:1, lat:36.2,  lng:138.2, lect:1},
+      {n:'Corée du Sud',        c:'KR', cl:1, lat:36.0,  lng:127.9, lect:1},
+      {n:'Israël',              c:'IL', cl:1, lat:31.5,  lng:35.0,  lect:1},
+      {n:'Inde',                c:'IN', cl:1, lat:20.6,  lng:78.9,  lect:1},
+      {n:'Suède',               c:'SE', cl:0, lat:62.2,  lng:14.8,  lect:1, ue:1},
+      {n:'Norvège',             c:'NO', cl:0, lat:64.5,  lng:11.0,  lect:1},
+      {n:'Finlande',            c:'FI', cl:0, lat:64.9,  lng:26.0,  lect:1, ue:1},
+      {n:'Pays-Bas',            c:'NL', cl:0, lat:52.1,  lng:5.3,   lect:1, ue:1},
+      {n:'Belgique',            c:'BE', cl:0, lat:50.6,  lng:4.5,   lect:1, ue:1},
+      {n:'Irlande',             c:'IE', cl:0, lat:53.4,  lng:-8.2,  lect:1, ue:1},
+      {n:'Espagne',             c:'ES', cl:0, lat:40.4,  lng:-3.7,  lect:1, ue:1},
+      {n:'Suisse',              c:'CH', cl:0, lat:46.8,  lng:8.2,   lect:1},
+      {n:'Italie',              c:'IT', cl:0, lat:42.8,  lng:12.5,  lect:1, ue:1},
+      {n:'Pologne',             c:'PL', cl:0, lat:51.9,  lng:19.1,  lect:1, ue:1},
+      {n:'Rép. tchèque',        c:'CZ', cl:0, lat:49.8,  lng:15.5,  lect:1, ue:1},
+      {n:'Autriche',            c:'AT', cl:0, lat:47.6,  lng:14.1,  lect:1, ue:1},
+      {n:'Iran',                c:'IR', cl:0, lat:32.4,  lng:53.7,  lect:1},
+      {n:'Arabie saoudite',     c:'SA', cl:0, lat:24.0,  lng:45.0,  lect:1},
+      {n:'Émirats arabes unis', c:'AE', cl:0, lat:23.4,  lng:53.8,  lect:1},
+      {n:'Australie',           c:'AU', cl:0, lat:-25.3, lng:133.8, lect:1},
+      {n:'Argentine',           c:'AR', cl:0, lat:-34.0, lng:-64.0, lect:1}
+    ]
+  },
+  talents: {
+    source: 'MacroPolo, Global AI Talent Tracker 2.0 — d’après NeurIPS 2022 (© MacroPolo, citation)',
+    annee: 2022,
+    definition: 'auteurs d’articles retenus pour présentation orale à NeurIPS (~top 2 % des publications)',
+    /* o = origine (%), t = lieu de travail (%), tn = mention si t non publié */
+    pays: [
+      {n:'États-Unis', c:'US', o:28, t:57},
+      {n:'Chine',      c:'CN', o:26, t:12},
+      {n:'Inde',       c:'IN', o:7,  t:null, tn:'n.d.'},
+      {n:'France',     c:'FR', o:5,  t:null, tn:'2–4*'},
+      {n:'Allemagne',  c:'DE', o:4,  t:null, tn:'2–4*'},
+      {n:'Canada',     c:'CA', o:2,  t:null, tn:'2–4*'},
+      {n:'Autres',     c:'',   o:28, t:31}
+    ],
+    travail_note: 'la carte montre aussi Royaume-Uni, Allemagne, France et Canada entre 2 et 4 % chacun (lecture graphique)',
+    lecture: 'Les États-Unis forment 28 % des chercheurs d’élite mais en emploient 57 % (+29 pts, attraction nette) ; la Chine en forme 26 % et n’en emploie que 12 % (−14 pts, exportatrice nette).'
+  },
+  brevets: {
+    source: 'AI Index (Stanford HAI), données CSET — CC BY-ND 4.0, citation',
+    precision_series: 'lecture graphique (±3 pts)',
+    precision_2023: 'exact',
+    annees: [2010,2012,2014,2016,2018,2020,2022,2023],
+    chine:  [13,15,18,30,42,55,64,69.7],
+    us:     [40,38,37,33,27,21,16,14.2],
+    europe: [8,7,6,5,4.5,3.8,3.1,2.8],
+    volume: { precision:'lecture graphique',
+      annees:  [2010,2012,2014,2016,2018,2020,2021,2022,2023],
+      milliers:[2,3,5,8,15,40,62,95,122] }
+  },
+  adoption: {
+    source: 'Eurostat, enquête TIC entreprises (isoc_eb_ai) — CC BY 4.0',
+    annee: 2024,
+    ue27: 13.5,
+    precision: '≈, à confirmer par le flux',
+    pays: null /* mode live : [{c:'FR', n:'France', pct:…}, …] */
+  },
+  etat: null, /* mode live : statut de rafraîchissement par source */
+  flux: null  /* mode live : derniers titres des flux stratégie UE */
+};
+
+var DATA = SEED;
+
+/* ── Aides ── */
+function fr(n){ return String(n).replace('.', ','); }
+function esc(s){
+  return String(s).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+function fmtDate(v){
+  var d = new Date(v);
+  if(isNaN(d.getTime())) return String(v);
+  return ('0'+d.getDate()).slice(-2)+'/'+('0'+(d.getMonth()+1)).slice(-2)+'/'+d.getFullYear();
+}
+function setText(id, txt){ var el = document.getElementById(id); if(el) el.textContent = txt; }
+
+/* Palette séquentielle 5 classes (rose pâle → rouge profond, clarté monotone) */
+var CMAP = ['#F5DAD4','#EBAE9F','#DB7E68','#C24E37','#8C2013'];
+/* Palettes catégorielles validées (script validate_palette : tous contrôles PASS) */
+var C_CN = '#B83222', C_US = '#1E63A8', C_EU = '#C47C1A';
+var C_ORI = '#6A4BA8', C_TRA = '#0491A4';
+
+/* ── 1. Carte Leaflet (gardée : si unpkg est injoignable, le reste de la page vit) ── */
+var map = null;
+if(window.L){
+  map = L.map('obsmap', {center:[35,20], zoom:2, minZoom:2, maxZoom:7, scrollWheelZoom:false});
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+    subdomains:'abcd', maxZoom:19
+  }).addTo(map);
+
+  var legend = L.control({position:'bottomleft'});
+  legend.onAdd = function(){
+    var div = L.DomUtil.create('div', 'obs-legend');
+    var rows = '';
+    var sizes = [9,10,12,14,20]; /* pastilles de légende, croissantes avec la classe */
+    for(var i=0;i<DATA.modeles.classes.length;i++){
+      var cl = DATA.modeles.classes[i];
+      rows += '<div class="lg-row"><span class="lg-dot" style="width:'+sizes[i]+'px;height:'+sizes[i]+'px;background:'+CMAP[i]+'"></span>'+cl.min+' – '+cl.max+'</div>';
+    }
+    div.innerHTML = '<h3>Modèles remarquables créés 2003 – été 2024 (nombre par pays)</h3>' + rows;
+    return div;
+  };
+  legend.addTo(map);
+} else {
+  var mfb = document.getElementById('obsmap');
+  if(mfb) mfb.innerHTML = '<p class="note" style="padding:24px 20px">Fond de carte momentanément indisponible — les données par pays restent consultables dans le tableau ci-dessous.</p>';
+}
+
+/* Chercheurs d’élite (popups) — % origine / lieu de travail quand connus */
+var TALENTS_PAYS = {
+  US:{o:'28 %', t:'57 %'}, CN:{o:'26 %', t:'12 %'}, IN:{o:'7 %', t:'n.d.'},
+  FR:{o:'5 %', t:'2–4 %*'}, DE:{o:'4 %', t:'2–4 %*'}, CA:{o:'2 %', t:'2–4 %*'},
+  GB:{o:null, t:'2–4 %*'}
+};
+
+function adoptionFor(code){
+  var p = DATA.adoption && DATA.adoption.pays;
+  if(!p || !p.length) return null;
+  for(var i=0;i<p.length;i++){
+    var e = p[i] || {};
+    var c = String(e.c || e.code || e.geo || '').toUpperCase();
+    if(c === code){
+      if(typeof e.pct === 'number') return e.pct;
+      if(typeof e.valeur === 'number') return e.valeur;
+    }
+  }
+  return null;
+}
+
+var obsMarkers = [];
+function renderMapTable(){
+  var el = document.getElementById('map-table');
+  if(!el) return;
+  var rows = '';
+  DATA.modeles.pays.forEach(function(p){
+    var cl = DATA.modeles.classes[p.cl];
+    var exact = DATA.modeles.exacts && typeof DATA.modeles.exacts[p.c] === 'number'
+              ? DATA.modeles.exacts[p.c] : null;
+    rows += '<tr><th scope="row">'+esc(p.n)+'</th>'
+      + '<td>'+(exact !== null ? exact : cl.min+'–'+cl.max)+'</td>'
+      + '<td>'+(exact !== null ? 'exact (Epoch AI, live)' : (p.lect ? 'classe, lecture de carte' : 'classe'))+'</td></tr>';
+  });
+  el.innerHTML =
+    '<table><caption class="sr-only">Modèles d’IA remarquables créés par pays, 2003 – été 2024</caption>'
+    + '<thead><tr><th scope="col">Pays</th><th scope="col">Modèles (2003 – été 2024)</th><th scope="col">Précision</th></tr></thead>'
+    + '<tbody>'+rows+'</tbody></table>';
+}
+function renderMap(){
+  setText('map-count', DATA.modeles.pays.length + ' pays');
+  renderMapTable();
+  if(!map) return;
+  obsMarkers.forEach(function(m){ map.removeLayer(m); });
+  obsMarkers = [];
+  /* Grands cercles ajoutés d’abord : les petits restent cliquables au-dessus */
+  var pays = DATA.modeles.pays.slice().sort(function(a,b){ return b.cl - a.cl; });
+  pays.forEach(function(p){
+    var cl = DATA.modeles.classes[p.cl];
+    /* rayon ∝ √(borne haute de la classe), avec plancher de lisibilité */
+    var r = 4 + Math.sqrt(cl.max) * 0.85;
+    var mk = L.circleMarker([p.lat, p.lng], {
+      radius:r, fillColor:CMAP[p.cl], color:'#fff', weight:1.5, fillOpacity:0.9
+    }).addTo(map);
+    var exact = DATA.modeles.exacts && typeof DATA.modeles.exacts[p.c] === 'number'
+              ? DATA.modeles.exacts[p.c] : null;
+    var valeur = exact !== null ? String(exact) : (cl.min + '–' + cl.max);
+    var prec = exact !== null ? 'exact · Epoch AI (live)'
+             : (p.lect ? 'classe · lecture de carte' : 'classe · Epoch AI');
+    var html = '<div class="pn">' + esc(p.n) + '</div>'
+      + '<div class="ps" style="color:' + (p.cl >= 2 ? CMAP[p.cl] : '#8C2013') + '">' + valeur + '</div>'
+      + '<div class="pl">modèles remarquables 2003 – été 2024</div>'
+      + '<div class="pr" style="margin-top:8px;margin-bottom:0">précision : ' + prec + '</div>';
+    var t = TALENTS_PAYS[p.c];
+    if(t){
+      html += '<div class="pr" style="margin-top:6px;margin-bottom:0">Chercheurs d’élite 2022 — origine : '
+        + (t.o || 'n.d.') + ' · lieu de travail : ' + t.t + '</div>';
+    }
+    if(p.ue){
+      var adp = adoptionFor(p.c);
+      if(adp !== null){
+        html += '<div class="pr" style="margin-top:6px;margin-bottom:0">Entreprises utilisant l’IA : '
+          + fr(adp) + ' % (Eurostat, live)</div>';
+      }
+    }
+    mk.bindPopup(html, {maxWidth:260});
+    obsMarkers.push(mk);
+  });
+}
+
+/* ── 2. Brevets — courbes + barres de volume (SVG pur) ── */
+function renderBrevets(){
+  var b = DATA.brevets;
+  var W=720, H=310, L=44, R=48, T=16, B=36;
+  var pw = W-L-R, ph = H-T-B;
+  var x  = function(yr){ return L + (yr-2010)/13 * pw; };
+  var yS = function(p){ return T + (1 - p/75) * ph; };   /* axe gauche : part (%) 0–75 */
+  var yV = function(v){ return T + (1 - v/130) * ph; };  /* axe droit : volume (milliers) 0–130 */
+  var s = '';
+
+  /* barres de volume (arrière-plan, recessives) */
+  b.volume.annees.forEach(function(yr, i){
+    var v = b.volume.milliers[i];
+    var by = yV(v);
+    s += '<rect x="'+(x(yr)-7).toFixed(1)+'" y="'+by.toFixed(1)+'" width="14" height="'+((H-B)-by).toFixed(1)+'" fill="#ECE9F1">'
+       + '<title>'+yr+' — volume mondial ≈ '+v+' 000 brevets d’IA accordés (lecture graphique)</title></rect>';
+  });
+
+  /* grille + axe gauche (part, %) */
+  [0,25,50,75].forEach(function(g){
+    var gy = yS(g);
+    s += '<line x1="'+L+'" y1="'+gy.toFixed(1)+'" x2="'+(W-R)+'" y2="'+gy.toFixed(1)+'" stroke="#EFEDF4" stroke-width="1"/>'
+       + '<text class="ax" x="'+(L-6)+'" y="'+(gy+3).toFixed(1)+'" text-anchor="end">'+g+(g===75?' %':'')+'</text>';
+  });
+  /* axe droit (volume, milliers) */
+  [0,50,100].forEach(function(g){
+    var gy = yV(g);
+    s += '<text class="ax" x="'+(W-R+6)+'" y="'+(gy+3).toFixed(1)+'">'+g+'</text>';
+  });
+  s += '<text class="ax" x="'+(W-8)+'" y="'+(T+ph/2).toFixed(1)+'" text-anchor="middle" transform="rotate(-90 '+(W-8)+' '+(T+ph/2).toFixed(1)+')">volume mondial (milliers)</text>';
+  /* axe des années */
+  [2010,2012,2014,2016,2018,2020,2023].forEach(function(yr){
+    s += '<text class="ax" x="'+x(yr).toFixed(1)+'" y="'+(H-B+16)+'" text-anchor="middle">'+yr+'</text>';
+  });
+  s += '<line x1="'+L+'" y1="'+(H-B)+'" x2="'+(W-R)+'" y2="'+(H-B)+'" stroke="#D5D2D9" stroke-width="1"/>';
+
+  /* les trois courbes */
+  var series = [
+    {k:'chine',  nom:'Chine',      col:C_CN},
+    {k:'us',     nom:'États-Unis', col:C_US},
+    {k:'europe', nom:'Europe',     col:C_EU}
+  ];
+  series.forEach(function(sr){
+    var vals = b[sr.k];
+    var pts = b.annees.map(function(yr, i){ return x(yr).toFixed(1)+','+yS(vals[i]).toFixed(1); }).join(' ');
+    s += '<polyline points="'+pts+'" fill="none" stroke="'+sr.col+'" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
+    b.annees.forEach(function(yr, i){
+      var px = x(yr).toFixed(1), py = yS(vals[i]).toFixed(1);
+      var prec = (yr===2023) ? 'exact' : 'lecture graphique ±3 pts';
+      s += '<circle cx="'+px+'" cy="'+py+'" r="3" fill="'+sr.col+'" stroke="#fff" stroke-width="1.5"/>'
+         + '<circle cx="'+px+'" cy="'+py+'" r="9" fill="transparent"><title>'+sr.nom+' — '+yr+' : '+fr(vals[i])+' % ('+prec+')</title></circle>';
+    });
+  });
+
+  /* étiquettes des points 2023 (texte en encre, l’identité vient du point coloré) */
+  var lx = (x(2023)-6).toFixed(1);
+  s += '<text class="el" x="'+lx+'" y="'+(yS(69.7)-12).toFixed(1)+'" text-anchor="end">Chine 69,7 %</text>'
+     + '<text class="el" x="'+lx+'" y="'+(yS(14.2)-14).toFixed(1)+'" text-anchor="end">États-Unis 14,2 %</text>'
+     + '<text class="el" x="'+lx+'" y="'+(yS(2.8)-12).toFixed(1)+'" text-anchor="end">Europe 2,8 %</text>';
+
+  document.getElementById('brev-chart').innerHTML =
+    '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Courbes 2010–2023 de la part des brevets d’IA accordés pour la Chine, les États-Unis et l’Europe, avec le volume mondial en barres d’arrière-plan.">'+s+'</svg>';
+
+  /* tableau alternatif */
+  var rows = '';
+  b.volume.annees.forEach(function(yr, i){
+    var j = b.annees.indexOf(yr);
+    rows += '<tr><th scope="row">'+yr+'</th>'
+      + '<td>'+(j>=0 ? fr(b.chine[j]) : '—')+'</td>'
+      + '<td>'+(j>=0 ? fr(b.us[j]) : '—')+'</td>'
+      + '<td>'+(j>=0 ? fr(b.europe[j]) : '—')+'</td>'
+      + '<td>'+b.volume.milliers[i]+'</td></tr>';
+  });
+  document.getElementById('brev-table').innerHTML =
+    '<table><caption class="sr-only">Brevets d’IA accordés : part du total mondial (%) et volume mondial (milliers), 2010–2023</caption>'
+    + '<thead><tr><th scope="col">Année</th><th scope="col">Chine %</th><th scope="col">États-Unis %</th><th scope="col">Europe %</th><th scope="col">Volume mondial (milliers)</th></tr></thead>'
+    + '<tbody>'+rows+'</tbody></table>';
+}
+
+/* ── 3. Chercheurs d’élite — barres jumelées (SVG pur) ── */
+/* chemin de barre à sommet arrondi, ancrée à la ligne de base */
+function barPath(x, y, w, h, r){
+  if(h <= 0) return '';
+  r = Math.min(r, h, w/2);
+  return 'M'+x.toFixed(1)+' '+(y+h).toFixed(1)
+    + 'V'+(y+r).toFixed(1)
+    + 'a'+r+' '+r+' 0 0 1 '+r+' -'+r
+    + 'h'+(w-2*r).toFixed(1)
+    + 'a'+r+' '+r+' 0 0 1 '+r+' '+r
+    + 'V'+(y+h).toFixed(1)+'Z';
+}
+
+function renderTalents(){
+  var t = DATA.talents;
+  var W=720, H=254, base=226, top=30;
+  var y = function(v){ return base - (v/60) * (base-top-4); };
+  var slot = (W-24)/t.pays.length;
+  var bw = 26, gap = 2; /* 2 px d’écart entre barres jumelées */
+  var s = '';
+  t.pays.forEach(function(p, i){
+    var cx = 12 + i*slot + slot/2;
+    var xo = cx - bw - gap/2, xt = cx + gap/2;
+    /* origine */
+    var yo = y(p.o);
+    s += '<path d="'+barPath(xo, yo, bw, base-yo, 3)+'" fill="'+C_ORI+'"><title>'+esc(p.n)+' — origine : '+fr(p.o)+' %</title></path>'
+       + '<text class="vl" x="'+(xo+bw/2).toFixed(1)+'" y="'+(yo-5).toFixed(1)+'" text-anchor="middle">'+fr(p.o)+'</text>';
+    /* lieu de travail */
+    if(typeof p.t === 'number'){
+      var yt = y(p.t);
+      s += '<path d="'+barPath(xt, yt, bw, base-yt, 3)+'" fill="'+C_TRA+'"><title>'+esc(p.n)+' — lieu de travail : '+fr(p.t)+' %</title></path>'
+         + '<text class="vl" x="'+(xt+bw/2).toFixed(1)+'" y="'+(yt-5).toFixed(1)+'" text-anchor="middle">'+fr(p.t)+'</text>';
+    } else {
+      s += '<text class="na" x="'+(xt+bw/2).toFixed(1)+'" y="'+(base-6)+'" text-anchor="middle">'+esc(p.tn||'n.d.')+'</text>';
+    }
+    s += '<text class="cat" x="'+cx.toFixed(1)+'" y="'+(base+18)+'" text-anchor="middle">'+esc(p.n)+'</text>';
+  });
+  s += '<line x1="12" y1="'+base+'" x2="'+(W-12)+'" y2="'+base+'" stroke="#D5D2D9" stroke-width="1"/>';
+  document.getElementById('tal-chart').innerHTML =
+    '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Barres jumelées : part des chercheurs d’élite en IA (NeurIPS 2022) par pays d’origine et par lieu de travail, en pourcentage.">'+s+'</svg>';
+
+  var rows = '';
+  t.pays.forEach(function(p){
+    rows += '<tr><th scope="row">'+esc(p.n)+'</th><td>'+fr(p.o)+'</td><td>'
+      + (typeof p.t === 'number' ? fr(p.t) : esc(p.tn||'n.d.'))+'</td></tr>';
+  });
+  document.getElementById('tal-table').innerHTML =
+    '<table><caption class="sr-only">Chercheurs d’élite en IA 2022 : origine et lieu de travail, en pourcentage</caption>'
+    + '<thead><tr><th scope="col">Pays</th><th scope="col">Origine %</th><th scope="col">Lieu de travail %</th></tr></thead>'
+    + '<tbody>'+rows+'</tbody></table>';
+}
+
+/* ── 4. Adoption UE — valeur seed ou barres par pays (live) ── */
+function renderAdoption(){
+  var a = DATA.adoption;
+  var el = document.getElementById('adp-body');
+  if(a.pays && a.pays.length){
+    var liste = a.pays.slice().filter(function(e){
+      return e && (typeof e.pct === 'number' || typeof e.valeur === 'number');
+    }).map(function(e){
+      return { n: e.n || e.pays || e.nom || e.c || e.geo || '?',
+               pct: (typeof e.pct === 'number' ? e.pct : e.valeur) };
+    }).sort(function(u,v){ return v.pct - u.pct; });
+    var max = Math.max(20, Math.ceil(liste[0].pct / 5) * 5);
+    var rows = '';
+    liste.forEach(function(e){
+      rows += '<div class="adp-row"><span class="adp-n">'+esc(e.n)+'</span>'
+        + '<span class="adp-track"><span class="adp-fill" style="width:'+Math.min(100,(e.pct/max*100)).toFixed(1)+'%"></span></span>'
+        + '<span class="adp-v">'+fr(e.pct)+' %</span></div>';
+    });
+    el.innerHTML =
+      '<p class="note" style="margin-top:0;margin-bottom:8px">Part des entreprises utilisant au moins une technologie d’IA'
+      + (a.annee ? ' ('+a.annee+')' : '')+' — Eurostat isoc_eb_ai, données live.</p>'
+      + '<div role="img" aria-label="Barres horizontales : part des entreprises utilisant l’IA, par pays de l’UE.">'+rows+'</div>';
+  } else {
+    el.innerHTML =
+      '<div class="stat-hero">'
+      + '<div class="stat-val">≈ '+fr(a.ue27)+' %</div>'
+      + '<div class="stat-lbl">des entreprises de l’UE-27 utilisaient au moins une technologie d’IA en '+a.annee+'.</div>'
+      + '</div>'
+      + '<p class="note">Valeur approchée (seed — précision : « '+esc(a.precision)+' »). Détail par pays au prochain rafraîchissement (Eurostat, isoc_eb_ai, CC BY 4.0).</p>';
+  }
+}
+
+/* ── 5. État de rafraîchissement + flux (pied de page) ── */
+function litEtat(v){
+  if(!v) return null;
+  if(typeof v === 'string') return v;
+  /* Forme servie par observatoire_ia.assemble() : {ok, derniere_maj, derniere_erreur}.
+     Les autres formes restent tolérées — une sonde qui change de vocabulaire ne
+     doit pas vider silencieusement la ligne d'état. */
+  if(typeof v.ok === 'boolean'){
+    if(v.ok) return 'à jour' + (v.derniere_maj ? ' · ' + fmtDate(v.derniere_maj) : '');
+    return v.derniere_erreur
+      ? 'indisponible · ' + String(v.derniere_erreur).slice(0, 90)
+      : 'seed — en attente du premier rafraîchissement serveur';
+  }
+  var st = v.statut || v.status || v.etat || '';
+  var mj = v.maj || v.updated_at || v.date || v.derniere_maj || '';
+  var out = st + (mj ? ' · ' + fmtDate(mj) : '');
+  return out || null;
+}
+function renderEtat(){
+  var e = DATA.etat;
+  if(!e) return;
+  var d = {};
+  if(Array.isArray(e)){
+    e.forEach(function(it){
+      var n = String((it && (it.source || it.nom || it.id)) || '').toLowerCase();
+      if(n.indexOf('epoch') >= 0){ d.epoch = litEtat(it); }
+      else if(n.indexOf('eurostat') >= 0){ d.eurostat = litEtat(it); }
+      else if(n.indexOf('flux') >= 0 || n.indexOf('rss') >= 0 || n.indexOf('strat') >= 0){ d.flux = litEtat(it); }
+    });
+  } else if(typeof e === 'object'){
+    d.epoch = litEtat(e.epoch); d.eurostat = litEtat(e.eurostat); d.flux = litEtat(e.flux);
+  }
+  if(d.epoch) setText('etat-epoch', d.epoch);
+  if(d.eurostat) setText('etat-eurostat', d.eurostat);
+  if(d.flux) setText('etat-flux', d.flux);
+}
+function renderFlux(){
+  var f = DATA.flux;
+  if(!f || !f.length) return;
+  var out = '';
+  f.slice(0, 6).forEach(function(it){
+    if(!it) return;
+    var titre = it.titre || it.title || '';
+    if(!titre) return;
+    var src = it.source || it.src || 'UE';
+    var lien = String(it.lien || it.link || it.url || '');
+    var okLien = /^https?:\/\//.test(lien);
+    out += '<li><span class="flux-src">'+esc(src)+'</span>'
+      + (okLien ? '<a href="'+esc(lien)+'" target="_blank" rel="noopener">'+esc(titre)+'</a>' : esc(titre))
+      + (it.date ? ' <span class="flux-src" style="margin-left:6px">'+esc(fmtDate(it.date))+'</span>' : '')
+      + '</li>';
+  });
+  if(out) document.getElementById('flux-list').innerHTML = out;
+}
+
+/* ── Badges d’état ── */
+function updateBadges(){
+  setText('data-badge', 'données : ' + DATA.mode + ' · ' + (DATA.maj ? fmtDate(DATA.maj) : '29/07/2026'));
+  setText('map-mode', DATA.modeles.exacts ? 'live · comptes exacts Epoch AI' : 'seed · classes (recomposition)');
+}
+
+function renderAll(){
+  renderMap();
+  renderBrevets();
+  renderTalents();
+  renderAdoption();
+  renderEtat();
+  renderFlux();
+  updateBadges();
+}
+
+/* Rendu initial : repli TOTAL sur le SEED (même motif que GEO dans map.html) */
+renderAll();
+
+/* ── Données live : fetch('/api/observatoire') ; en échec, on reste sur le seed.
+   Formes acceptées (champs tous optionnels, sous j.data ou à la racine) :
+   modeles [{c:'US',n:561},…] ou {US:561,…} · adoption [{c,n,pct},…] ou {ue27,pays}
+   · etat (objet {epoch,eurostat,flux} ou tableau [{source,statut,maj}])
+   · flux/items [{titre,lien,source,date},…] · updated_at ISO. ── */
+/* Index libellé → code ISO construit depuis NOS PROPRES données : l'API nomme les
+   pays en français (« États-Unis »), la carte les repère par code. Dériver la
+   correspondance de DATA.modeles.pays plutôt que de la recopier dans une table
+   évite qu'elles divergent au premier pays ajouté. */
+function _normPays(s){
+  var t = String(s == null ? '' : s);
+  /* Accents retirés quand le navigateur sait décomposer (« États-Unis » →
+     « etatsunis »), repli simple sinon : la comparaison reste alors sensible aux
+     accents, ce qui n'apparie pas moins — cela n'apparie simplement plus. */
+  if(t.normalize){ t = t.normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+  return t.toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+function _indexPays(){
+  var idx = {};
+  (DATA.modeles.pays || []).forEach(function(p){
+    if(p && p.n && p.c){ idx[_normPays(p.n)] = String(p.c).toUpperCase(); }
+  });
+  return idx;
+}
+/* Convertit {libellé|code: nombre} en {CODE ISO: nombre}. Un libellé inconnu est
+   ignoré plutôt que deviné : mieux vaut un pays sans compte exact qu'un compte
+   attribué au mauvais pays. */
+function _versCodes(obj, idx){
+  var out = {};
+  Object.keys(obj || {}).forEach(function(k){
+    var v = obj[k];
+    if(typeof v !== 'number') return;
+    var code = (/^[A-Za-z]{2}$/.test(k)) ? k.toUpperCase() : idx[_normPays(k)];
+    if(code) out[code] = v;
+  });
+  return out;
+}
+
+function applyLive(j){
+  var src = j.data || j;
+  var touche = false;
+  var idx = _indexPays();
+
+  /* ── Modèles : l'API sert les comptes exacts sous modeles.cumul_pays ── */
+  var m = src.modeles || src.models;
+  if(m){
+    var ex = {};
+    if(Array.isArray(m)){
+      m.forEach(function(e){ if(e && e.c && typeof e.n === 'number') ex[String(e.c).toUpperCase()] = e.n; });
+    } else if(typeof m === 'object'){
+      var brut = m.cumul_pays || m.pays_counts || (m.mode ? null : m);
+      if(brut && typeof brut === 'object' && !Array.isArray(brut)) ex = _versCodes(brut, idx);
+    }
+    if(Object.keys(ex).length){ DATA.modeles.exacts = ex; touche = true; }
+  }
+
+  /* ── Adoption UE : l'API sert adoption_ue {annee, ue27, valeurs:{libellé:pct}} ── */
+  var ad = src.adoption_ue || src.adoption;
+  if(ad){
+    if(Array.isArray(ad) && ad.length){ DATA.adoption.pays = ad; touche = true; }
+    else if(typeof ad === 'object'){
+      /* `valeurs` existe aussi dans le seed ({"UE-27": 13.5}) : on ne construit
+         le détail par pays que si l'API annonce des données fraîches. */
+      if(ad.mode === 'live' && ad.valeurs && typeof ad.valeurs === 'object'){
+        var liste = [];
+        Object.keys(ad.valeurs).forEach(function(k){
+          var v = ad.valeurs[k];
+          if(typeof v !== 'number') return;
+          var code = (/^[A-Za-z]{2}$/.test(k)) ? k.toUpperCase() : idx[_normPays(k)];
+          liste.push({ c: code || '', n: k, pct: v });
+        });
+        if(liste.length){ DATA.adoption.pays = liste; touche = true; }
+      } else if(ad.pays && Array.isArray(ad.pays) && ad.pays.length){
+        DATA.adoption.pays = ad.pays; touche = true;
+      }
+      /* `ue27` figure AUSSI dans le seed : le reprendre ne prouve rien. Seul le
+         mode déclaré par l'API fait foi — sans quoi le badge annonce « live »
+         en renvoyant les chiffres de départ. */
+      if(typeof ad.ue27 === 'number'){
+        DATA.adoption.ue27 = ad.ue27;
+        if(ad.mode === 'live') touche = true;
+      }
+      if(ad.annee){ DATA.adoption.annee = ad.annee; }
+      if(ad.mode === 'live' && ad.precision){ DATA.adoption.precision = ad.precision; }
+    }
+  }
+
+  /* ── Flux : l'API sert un objet {mode, count, items} ── */
+  var fl = src.flux || src.items;
+  if(fl && !Array.isArray(fl) && typeof fl === 'object') fl = fl.items;
+  if(Array.isArray(fl) && fl.length){ DATA.flux = fl; touche = true; }
+
+  /* ── Date de rafraîchissement servie sous `maj` ── */
+  if(src.maj || j.maj || j.updated_at || src.updated_at){
+    DATA.maj = src.maj || j.maj || j.updated_at || src.updated_at;
+  }
+
+  /* L'état de diagnostic est TOUJOURS présent, même sur un payload 100 % seed :
+     il s'applique donc sans compter comme une donnée live — sinon le badge
+     annoncerait « live » alors que tous les volets affichés restent le seed.
+     C'est précisément le défaut relevé en recette. */
+  if(src.etat){ DATA.etat = src.etat; }
+  if(touche){ DATA.mode = 'live'; }
+  /* Rendre vrai dès qu'il y a quelque chose à redessiner (état/date compris),
+     tout en gardant `mode` fidèle à la nature réelle des données affichées. */
+  return touche || !!src.etat || !!DATA.maj;
+}
+
+if(window.fetch){
+  fetch('/api/observatoire', {cache:'no-store'}).then(function(r){
+    if(!r.ok) throw new Error('http ' + r.status);
+    return r.json();
+  }).then(function(j){
+    if(j && j.ok !== false && applyLive(j)) renderAll();
+  }).catch(function(){ /* hors serveur ou API absente : le seed reste affiché */ });
+}
+
+/* Signaler au parent (Sentinel) que l’observatoire est prêt — même motif que map.html */
+if(window.parent && window.parent !== window){
+  try{ window.parent.postMessage({type:'obs-ready'}, '*'); }catch(e){}
+}
+</script>
+</body>
+</html>

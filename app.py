@@ -304,8 +304,10 @@ bf_protector = BruteForceProtector()
 
 @app.after_request
 def add_security_headers(response):
-    # Autoriser iframe pour /map
-    if request.path == '/map':
+    # Autoriser iframe pour les pages embarquees dans Sentinel (carte
+    # reglementaire et observatoire R&D) : elles sont chargees en iframe
+    # same-origin depuis /sentinel.
+    if request.path in ('/map', '/observatoire'):
         response.headers['X-Frame-Options'] = 'SAMEORIGIN'
         return response
     # Content Security Policy
@@ -1098,6 +1100,53 @@ def api_veille():
         "updated_at": datetime.utcnow().isoformat() + "Z",
         "count": len(items), "items": items, "errors": errors,
     })
+
+
+# ══════════════════════════════════════════════════════════════════
+# Observatoire R&D IA — modeles, talents (NeurIPS), brevets, adoption UE
+#
+# Le module observatoire_ia est AUTONOME (aucun import Flask) : il porte
+# le referentiel source (donnees datees, sourcees, licenciees) et les
+# fetcheurs temps reel. Ici on ne fait que l'exposer, sur le meme motif
+# de cache paresseux que /api/veille.
+#
+# Aucune donnee personnelle n'entre ni ne sort de cet observatoire, et
+# aucun appel a un modele de langage n'y intervient : rien a minimiser,
+# rien a declarer au registre.
+# ══════════════════════════════════════════════════════════════════
+import observatoire_ia  # noqa: E402
+
+OBS_TTL = 1800  # cache de la reponse assemblee (30 min) ; les fetcheurs
+                # ont leurs propres TTL par source (Epoch 7 j, Eurostat 7 j)
+_OBS_CACHE = {"ts": 0.0, "data": None}
+
+
+@app.route('/api/observatoire', methods=['GET'])
+@rate_limit(limit=60, window=60)
+def api_observatoire():
+    """Donnees de l'observatoire R&D IA (lecture seule, publiques).
+
+    ?refresh=1 force le reassemblage ; ?debug=1 joint l'etat par source.
+    Le module degrade seul vers son referentiel si une source est
+    injoignable : cette route ne peut donc pas echouer a cause du reseau."""
+    force = (request.args.get('refresh') or '') in ('1', 'true', 'yes')
+    now = time.time()
+    if (not force) and _OBS_CACHE["data"] and (now - _OBS_CACHE["ts"] < OBS_TTL):
+        payload = dict(_OBS_CACHE["data"])
+        payload["cached"] = True
+        return jsonify(payload)
+    try:
+        data = observatoire_ia.assemble(force=force)
+    except Exception as e:
+        logger.error(f'OBSERVATOIRE_ERR: {e}')
+        # Le referentiel embarque de la page prend le relais : on le dit
+        # explicitement plutot que de renvoyer un 500 opaque.
+        return jsonify({"ok": False, "erreur": "assemblage indisponible"}), 503
+    _OBS_CACHE["ts"], _OBS_CACHE["data"] = now, data
+    payload = dict(data)
+    payload["ok"] = True
+    payload["cached"] = False
+    return jsonify(payload)
 
 
 @app.route('/api/apply', methods=['POST'])
@@ -2403,6 +2452,7 @@ def health_check():
             'ready': mistral_ready,
         },
         'uploads_folder': os.path.isdir(UPLOAD_FOLDER),
+        'observatoire': observatoire_ia.sante(),
     }
 
     # Réponse JSON si demandée
@@ -3088,6 +3138,7 @@ PAGES = {
     '/livre-blanc':   'livre-blanc.html',
     '/accessibility': 'accessibility.html',
     '/map':           'map.html',
+    '/observatoire':  'observatoire.html',
 }
 
 

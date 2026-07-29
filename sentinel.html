@@ -2157,6 +2157,7 @@ textarea.form-el{min-height:86px;resize:vertical}
     <div class="sb-item" onclick="go('carto',this,'SE TENIR INFORMÉ','Carte mondiale de la régulation')" title="Carte mondiale interactive des cadres reglementaires IA par pays, avec fiches detaillees."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3.6 9h16.8M3.6 15h16.8M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg></span>Cartographie</div>
     <div class="sb-item" onclick="go('comp',this,'SE TENIR INFORMÉ','Comparateur')" title="Comparez jusqu a 4 juridictions sur 6 dimensions reglementaires (radar et tableau)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M8 4v16M16 4v16M3 8h18M3 16h18"/></svg></span>Comparateur</div>
     <div class="sb-item" onclick="go('geo',this,'SE TENIR INFORMÉ','Tensions normatives')" title="Analyse des tensions normatives entre les blocs UE, US et Chine sur la regulation de l IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3.6 9h16.8M3.6 15h16.8M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/><path d="M12 12 7 7m5 5 5 5" stroke-width="2"/></svg></span>Géopolitique</div>
+    <div class="sb-item" onclick="go('obs-rd',this,'SE TENIR INFORMÉ','Observatoire R&amp;D IA')" title="Ou se cree l IA : modeles remarquables, chercheurs d elite (NeurIPS), brevets, adoption UE."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 3v6l-5.5 9.5A2 2 0 0 0 5.2 21h13.6a2 2 0 0 0 1.7-2.5L15 9V3"/><path d="M8 3h8"/><path d="M7 14h10"/></svg></span>Observatoire R&amp;D IA</div>
     <div class="sb-section">Documenter & prouver</div>
     <div class="sb-item" onclick="go('evals',this,'DOCUMENTER & PROUVER','Mes évaluations')" title="Historique de vos simulations et audits de conformite enregistres."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>Mes évaluations<span class="sb-badge">3</span></div>
     <div class="sb-item" onclick="go('historique',this,'DOCUMENTER & PROUVER','Historique des calculs')" title="Stockage persistant et tracable de tous vos calculs (RGPD - conservation 3 ans, droit a l effacement)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/><path d="M3.05 11a9 9 0 1 0 .5-4"/></svg></span>Historique des calculs</div>
@@ -2316,6 +2317,16 @@ textarea.form-el{min-height:86px;resize:vertical}
   <!-- ══ FIN CARTE ══ -->
   <div id="jurs-toolbar-holder"></div>
   <div class="tbl-wrap"><div class="tbl-head"><span class="tbl-title">Toutes les juridictions — triées par sévérité</span><span class="tbl-link">↓ Exporter CSV</span></div><div id="carto-all"></div></div>
+</div>
+
+<!-- OBSERVATOIRE R&D IA -->
+<div class="page" id="p-obs-rd">
+  <span class="eyebrow">Observatoire</span>
+  <h1 class="page-h">Où se <em>crée</em> l'intelligence artificielle</h1>
+  <p class="page-lead">La carte réglementaire dit où l'IA est <em>encadrée</em>. Celle-ci dit où elle est <em>produite</em> : modèles remarquables, chercheurs d'élite (NeurIPS), brevets accordés et adoption par les entreprises européennes. Chaque série porte sa source, sa licence et sa précision.</p>
+  <div style="margin-bottom:24px;border:1px solid var(--rule);border-radius:4px;overflow:hidden;background:var(--white)">
+    <iframe id="obs-rd-iframe" src="/observatoire?embed=1" style="width:100%;height:1180px;border:none;display:block" loading="lazy" title="Observatoire R&amp;D dans le domaine de l'IA"></iframe>
+  </div>
 </div>
 
 <!-- COMPARATEUR -->
@@ -7100,6 +7111,7 @@ function juReferentiel(){
 })();
 
 var PAGE_META = {
+    'obs-rd': { section: 'SE TENIR INFORMÉ', label: 'Observatoire R&D IA' },
     'juridique': { section: 'JURIDIQUE', label: 'Conseil juridique assisté' },
     'empreinte': { section: 'EMPREINTE', label: 'Empreinte numérique' },
     'ia50': { section: 'ADMINISTRATION', label: 'Transparence IA Act (art. 50)' },
