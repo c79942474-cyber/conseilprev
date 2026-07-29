@@ -1149,27 +1149,41 @@ def api_observatoire():
     return jsonify(payload)
 
 
-# ── Panorama des SIA en entreprise (UE) — referentiel statique versionne ──
-# Contrairement a l'observatoire (fetcheurs temps reel), le panorama est un
-# REFERENTIEL EXPERT fige par version : il s'assemble une fois par processus,
-# se sert depuis la memoire, et n'appelle jamais le reseau. Aucune donnee
-# personnelle, aucun LLM.
+# ── Panorama des SIA en entreprise (UE) ──────────────────────────────────
+# Deux etages : un REFERENTIEL EXPERT fige par version (cas qualifies a la
+# main, scores deterministes — jamais modifies par un flux), et des SIGNAUX
+# EN CONTINU (flux CNIL/ANSSI/AI Act/Commission, les memes que la veille)
+# rapproches du panel et servis « a qualifier ». Aucune donnee personnelle,
+# aucun LLM. Le cache court suit le TTL des flux dans panorama_ia.
 import panorama_ia  # noqa: E402
 
-_PAN_CACHE = {"data": None}
+PAN_TTL = 900
+_PAN_CACHE = {"ts": 0.0, "data": None}
 
 
 @app.route('/api/panorama', methods=['GET'])
 @rate_limit(limit=60, window=60)
 def api_panorama():
-    if _PAN_CACHE["data"] is None:
-        try:
-            _PAN_CACHE["data"] = panorama_ia.assemble()
-        except Exception as e:
-            logger.error(f'PANORAMA_ERR: {e}')
-            return jsonify({"ok": False, "erreur": "assemblage indisponible"}), 503
-    payload = dict(_PAN_CACHE["data"])
+    """?refresh=1 rearme les flux de signaux (le referentiel, lui, ne change
+    qu'avec une nouvelle version du module)."""
+    force = (request.args.get('refresh') or '') in ('1', 'true', 'yes')
+    now = time.time()
+    if force:
+        panorama_ia.rearmer()
+    if (not force) and _PAN_CACHE["data"] and (now - _PAN_CACHE["ts"] < PAN_TTL):
+        payload = dict(_PAN_CACHE["data"])
+        payload["ok"] = True
+        payload["cached"] = True
+        return jsonify(payload)
+    try:
+        data = panorama_ia.assemble()
+    except Exception as e:
+        logger.error(f'PANORAMA_ERR: {e}')
+        return jsonify({"ok": False, "erreur": "assemblage indisponible"}), 503
+    _PAN_CACHE["ts"], _PAN_CACHE["data"] = now, data
+    payload = dict(data)
     payload["ok"] = True
+    payload["cached"] = False
     return jsonify(payload)
 
 

@@ -36,10 +36,14 @@ TROIS RÈGLES D'HONNÊTETÉ, non négociables :
 """
 import copy
 import json
+import os
+import re
+import threading
 import time
+import unicodedata
 from datetime import datetime
 
-VERSION = "2026-07-a"
+VERSION = "2026-07-b"
 FENETRE = "juin 2023 → juillet 2026"
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -337,13 +341,13 @@ CAS = [
   "type": "rh_recrutement", "stade": "pilote", "annee": 2024, "population": "candidats",
   "drapeaux": {"rh": True, "donnees_perso": True},
   "sources": [{"editeur": "presse RH", "titre": "IA de recrutement dans l'industrie allemande", "date": "2024", "preuve": "presse"}]},
- {"entreprise": "Amazon France Logistique", "pays": "FR", "secteur": "Logistique",
+ {"entreprise": "Amazon France Logistique", "alias": ["Amazon"], "pays": "FR", "secteur": "Logistique",
   "cas": "Suivi algorithmique de la productivité des salariés en entrepôt (scanners)",
   "type": "surveillance_salaries", "stade": "production", "annee": 2023, "population": "salaries",
   "drapeaux": {"rh": True, "donnees_perso": True},
   "signaux": [{"titre": "Sanction CNIL 32 M€ (surveillance excessive)", "sens": "-", "preuve": "decision", "date": "2024-01"}],
   "sources": [{"editeur": "CNIL", "titre": "Délibération SAN-2023-021 (publiée janv. 2024)", "date": "2024-01", "preuve": "decision"}]},
- {"entreprise": "Secteur centres d'appels (plusieurs opérateurs)", "pays": "PL", "secteur": "Services",
+ {"entreprise": "Secteur centres d'appels (plusieurs opérateurs)", "alias": [], "pays": "PL", "secteur": "Services",
   "cas": "Pilotes d'analyse des émotions des téléconseillers en temps réel — abandonnés à l'entrée en vigueur de l'art. 5",
   "type": "biometrie", "stade": "abandonne", "annee": 2024, "population": "salaries",
   "drapeaux": {"emotion_travail": True, "donnees_sensibles": True},
@@ -370,7 +374,7 @@ CAS = [
   "type": "sante_dm", "stade": "production", "annee": 2024, "population": "grand_public",
   "drapeaux": {"dispositif_medical": True, "donnees_sensibles": True},
   "sources": [{"editeur": "Owkin", "titre": "Produits de diagnostic (communication réglementaire)", "date": "2024", "preuve": "officiel"}]},
- {"entreprise": "Kry / Livi", "pays": "SE", "secteur": "Santé numérique",
+ {"entreprise": "Kry / Livi", "alias": ["Kry", "Livi"], "pays": "SE", "secteur": "Santé numérique",
   "cas": "Pré-tri des symptômes et orientation des patients en télémédecine",
   "type": "scoring_ml", "stade": "production", "annee": 2024, "population": "grand_public",
   "drapeaux": {"triage_urgence": True, "donnees_sensibles": True},
@@ -387,7 +391,7 @@ CAS = [
   "type": "agent_autonome", "stade": "pilote", "annee": 2024, "population": "b2b",
   "drapeaux": {"exclusion_defense": True},
   "sources": [{"editeur": "Thales", "titre": "Lancement de cortAIx (communiqué)", "date": "2024-03", "preuve": "officiel"}]},
- {"entreprise": "Renault Group", "pays": "FR", "secteur": "Automobile",
+ {"entreprise": "Renault Group", "alias": ["Renault"], "pays": "FR", "secteur": "Automobile",
   "cas": "Inspection qualité par vision et optimisation d'usine (plateforme avec Google Cloud)",
   "type": "vision_industrielle", "stade": "echelle", "annee": 2024, "population": "salaries",
   "drapeaux": {},
@@ -457,7 +461,7 @@ CAS = [
   "type": "optimisation_predictive", "stade": "echelle", "annee": 2024, "population": "b2b",
   "drapeaux": {"infrastructure_critique": True},
   "sources": [{"editeur": "SNCF", "titre": "Programmes IA maintenance (communication)", "date": "2024", "preuve": "officiel"}]},
- {"entreprise": "DHL Group", "pays": "DE", "secteur": "Logistique",
+ {"entreprise": "DHL Group", "alias": ["DHL"], "pays": "DE", "secteur": "Logistique",
   "cas": "Optimisation de tournées et vision de tri colis à l'échelle du réseau",
   "type": "optimisation_predictive", "stade": "echelle", "annee": 2024, "population": "b2b",
   "drapeaux": {},
@@ -467,12 +471,12 @@ CAS = [
   "type": "optimisation_predictive", "stade": "production", "annee": 2024, "population": "b2b",
   "drapeaux": {},
   "sources": [{"editeur": "Maersk", "titre": "IA d'optimisation flotte (communication)", "date": "2024", "preuve": "officiel"}]},
- {"entreprise": "Lufthansa Group", "pays": "DE", "secteur": "Transport aérien",
+ {"entreprise": "Lufthansa Group", "alias": ["Lufthansa"], "pays": "DE", "secteur": "Transport aérien",
   "cas": "GénAI service client et optimisation des opérations (retards, affectations)",
   "type": "chatbot_client", "stade": "pilote", "annee": 2024, "population": "grand_public",
   "drapeaux": {"chatbot": True, "gpai": True, "donnees_perso": True},
   "sources": [{"editeur": "Lufthansa", "titre": "Programme IA (communication)", "date": "2024", "preuve": "officiel"}]},
- {"entreprise": "Plateformes VTC / livraison (Uber, Bolt, Glovo…)", "pays": "NL", "secteur": "Plateformes",
+ {"entreprise": "Plateformes VTC / livraison (Uber, Bolt, Glovo…)", "alias": ["Uber", "Glovo", "Deliveroo"], "pays": "NL", "secteur": "Plateformes",
   "cas": "Gestion algorithmique des chauffeurs/livreurs (affectation, suspension de comptes)",
   "type": "surveillance_salaries", "stade": "echelle", "annee": 2024, "population": "salaries",
   "drapeaux": {"rh": True, "donnees_perso": True},
@@ -490,13 +494,13 @@ CAS = [
   "type": "chatbot_client", "stade": "production", "annee": 2023, "population": "grand_public",
   "drapeaux": {"chatbot": True, "gpai": True, "donnees_perso": True},
   "sources": [{"editeur": "Carrefour", "titre": "Lancement Hopla (communiqué)", "date": "2023-06", "preuve": "officiel"}]},
- {"entreprise": "IKEA (Ingka)", "pays": "SE", "secteur": "Distribution",
+ {"entreprise": "IKEA (Ingka)", "alias": ["IKEA"], "pays": "SE", "secteur": "Distribution",
   "cas": "Assistant génAI de conception et service client (Billie) ; requalification des salariés du centre d'appel",
   "type": "chatbot_client", "stade": "production", "annee": 2024, "population": "grand_public",
   "drapeaux": {"chatbot": True, "gpai": True, "donnees_perso": True},
   "signaux": [{"titre": "Programme public de requalification des téléconseillers", "sens": "+", "preuve": "officiel", "date": "2024"}],
   "sources": [{"editeur": "Ingka Group", "titre": "IA générative et emploi (communication)", "date": "2024", "preuve": "officiel"}]},
- {"entreprise": "Otto Group", "pays": "DE", "secteur": "E-commerce",
+ {"entreprise": "Otto Group", "alias": ["Otto Group"], "pays": "DE", "secteur": "E-commerce",
   "cas": "Génération de descriptions produits et traduction à l'échelle du catalogue",
   "type": "assistant_llm", "stade": "production", "annee": 2024, "population": "b2b",
   "drapeaux": {"gpai": True, "generation_contenu": True},
@@ -552,7 +556,7 @@ CAS = [
   "type": "optimisation_predictive", "stade": "production", "annee": 2024, "population": "b2b",
   "drapeaux": {"infrastructure_critique": True},
   "sources": [{"editeur": "EDP", "titre": "IA pour les renouvelables (communication)", "date": "2024", "preuve": "officiel"}]},
- {"entreprise": "Erste Group", "pays": "AT", "secteur": "Banque",
+ {"entreprise": "Erste Group", "alias": ["Erste Group", "Erste Bank"], "pays": "AT", "secteur": "Banque",
   "cas": "Conseiller numérique George : recommandations financières personnalisées et génAI",
   "type": "chatbot_client", "stade": "production", "annee": 2024, "population": "grand_public",
   "drapeaux": {"chatbot": True, "gpai": True, "donnees_perso": True},
@@ -607,7 +611,7 @@ CAS = [
   "drapeaux": {"scraping_facial": True, "donnees_sensibles": True},
   "signaux": [{"titre": "Astreinte CNIL 5,2 M€ (après sanction 20 M€) ; sanctions homologues NL/IT/GR", "sens": "-", "preuve": "decision", "date": "2023-05"}],
   "sources": [{"editeur": "CNIL", "titre": "Liquidation d'astreinte Clearview AI", "date": "2023-05", "preuve": "decision"}]},
- {"entreprise": "Worldcoin / World (Tools for Humanity)", "pays": "DE", "secteur": "Fournisseur biométrie",
+ {"entreprise": "Worldcoin / World (Tools for Humanity)", "alias": ["Worldcoin"], "pays": "DE", "secteur": "Fournisseur biométrie",
   "cas": "Collecte d'iris contre jetons (orbs) auprès du grand public européen",
   "type": "biometrie", "stade": "echelle", "annee": 2024, "population": "grand_public",
   "drapeaux": {"biometrie_id": True, "donnees_sensibles": True},
@@ -804,9 +808,186 @@ CREDITS = [
 ]
 
 
+# ═══════════════════════════════════════════════════════════════════════════
+# 8. SIGNAUX EN CONTINU — flux d'autorités et d'institutions, rapprochés du panel
+#
+#    RÈGLE ABSOLUE : un titre de flux N'ALTÈRE JAMAIS un score. Les scores ne
+#    reposent que sur des faits qualifiés à la main dans le référentiel. Le flux
+#    alimente une file « à qualifier » : il signale, l'expert tranche, la version
+#    suivante du référentiel intègre. Automatiser la détection sans automatiser
+#    le jugement — c'est ce qui garde le module opposable.
+#
+#    Les quatre flux sont EXACTEMENT ceux que la veille de Sentinel interroge
+#    déjà avec succès en production : aucun canal nouveau à fiabiliser.
+# ═══════════════════════════════════════════════════════════════════════════
+
+FLUX_SOURCES = [
+    {"nom": "CNIL",        "url": "https://www.cnil.fr/fr/rss.xml"},
+    {"nom": "ANSSI",       "url": "https://cyber.gouv.fr/feed"},
+    {"nom": "EU AI Act",   "url": "https://artificialintelligenceact.eu/feed/"},
+    {"nom": "Commission (stratégie numérique)", "url": "https://digital-strategy.ec.europa.eu/en/rss.xml"},
+]
+
+# Filtre thématique : CNIL et ANSSI publient bien au-delà de l'IA — on ne garde
+# que ce qui la concerne. Liste volontairement large : un faux positif se lit
+# en une seconde, un faux négatif est invisible.
+_MOTS_IA = ["intelligence artificielle", "artificial intelligence", " ia ", "l'ia",
+            " ai ", "ai act", "règlement ia", "algorith", "chatgpt", "openai",
+            "modèle de langage", "llm", "généra", "generative", "gpai", "chatbot",
+            "biométr", "biometric", "reconnaissance faciale", "facial recognition",
+            "deepfake", "machine learning", "apprentissage automatique"]
+
+_FLUX_TTL = 1800          # 30 min : le rythme des autorités, pas celui d'un ticker
+_FLUX_RETRY = 300
+_FLUX_CACHE = {"ts": 0.0, "ts_ok": 0.0, "data": None, "erreur": None}
+_FLUX_LOCK = threading.Lock()
+
+
+def _hors_ligne():
+    return (os.environ.get("PAN_OFFLINE") or os.environ.get("OBS_OFFLINE") or "") in ("1", "true", "yes")
+
+
+def _normaliser(t):
+    t = unicodedata.normalize("NFD", str(t or ""))
+    return "".join(c for c in t if not unicodedata.combining(c)).lower()
+
+
+def _alias_panel():
+    """[(alias_normalisé, alias_brut, id_cas, sensible_casse)] pour le rapprochement.
+
+    Dérivé du nom d'entreprise (partie avant la parenthèse) sauf alias explicite.
+    Les sigles courts (≤ 4 lettres : AXA, SAP, ING, KBC…) ne s'apparient qu'en
+    respectant la casse : « ING » dans un titre, jamais « building »."""
+    out = []
+    for i, c in enumerate(CAS):
+        cid = "sia-%03d" % (i + 1)
+        aliases = c.get("alias")
+        if aliases is None:
+            nom = c["entreprise"].split(" (")[0].strip()
+            aliases = [] if ("/" in nom or "plusieurs" in nom.lower() or "secteur" in nom.lower()) else [nom]
+        for a in aliases:
+            if len(a) < 3:
+                continue
+            out.append((_normaliser(a), a, cid, len(a) <= 4))
+    return out
+
+
+def _rapprocher(titre, alias):
+    """Ids des cas dont un alias apparaît dans le titre (bordures de mots)."""
+    trouves = []
+    t_norm = _normaliser(titre)
+    for a_norm, a_brut, cid, strict in alias:
+        if strict:
+            if re.search(r"\b" + re.escape(a_brut) + r"\b", titre):
+                trouves.append(cid)
+        elif re.search(r"\b" + re.escape(a_norm) + r"\b", t_norm):
+            trouves.append(cid)
+    return sorted(set(trouves))
+
+
+def _lire_flux():
+    """(items, None) ou (None, erreur). Réseau uniquement ici — jamais bloquant
+    au-delà des délais courts, plafonds stricts, aucun identifiant."""
+    import requests
+    import feedparser
+    alias = _alias_panel()
+    items, erreurs = [], []
+    for src in FLUX_SOURCES:
+        try:
+            r = requests.get(src["url"], headers={"User-Agent": "Sentinel-Panorama/1.0"}, timeout=6)
+            if r.status_code != 200:
+                erreurs.append("%s: HTTP %d" % (src["nom"], r.status_code))
+                continue
+            flux = feedparser.parse(r.content[:1_500_000])
+            for e in (flux.entries or [])[:15]:
+                titre = (e.get("title") or "").strip()
+                if not titre:
+                    continue
+                texte = _normaliser(titre + " " + (e.get("summary") or "")[:300])
+                if not any(m in " " + texte + " " for m in _MOTS_IA):
+                    continue
+                lien = e.get("link") or ""
+                date = ""
+                for k in ("published", "updated"):
+                    if e.get(k):
+                        date = str(e[k])[:16]
+                        break
+                items.append({"titre": titre[:200], "lien": lien[:300], "source": src["nom"],
+                              "date": date, "cas_lies": _rapprocher(titre, alias)})
+        except Exception as ex:
+            erreurs.append("%s: %s" % (src["nom"], type(ex).__name__))
+    if not items:
+        return None, ("aucun flux exploitable — " + " ; ".join(erreurs))[:300] if erreurs else "flux vides"
+    items = items[:40]
+    return items, None
+
+
+def _obtenir_flux():
+    c = _FLUX_CACHE
+    now = time.time()
+    if c["data"] is not None and (now - c["ts_ok"] < _FLUX_TTL):
+        return c
+    if c["erreur"] is not None and (now - c["ts"] < _FLUX_RETRY):
+        return c
+    if not _FLUX_LOCK.acquire(blocking=False):
+        return c        # une autre requête rafraîchit : on sert l'état courant
+    try:
+        now = time.time()
+        if c["data"] is not None and (now - c["ts_ok"] < _FLUX_TTL):
+            return c
+        try:
+            data, erreur = _lire_flux()
+        except Exception as ex:
+            data, erreur = None, type(ex).__name__
+        c["ts"] = time.time()
+        if erreur is None and data is not None:
+            c["data"], c["ts_ok"], c["erreur"] = data, c["ts"], None
+        else:
+            c["erreur"] = erreur or "réponse vide"   # l'ancienne donnée est conservée
+    finally:
+        _FLUX_LOCK.release()
+    return c
+
+
+def rearmer():
+    """Force le prochain accès à retenter les flux (?refresh=1). Ne vide pas la
+    donnée déjà obtenue : forcer un essai ne doit jamais appauvrir l'affichage."""
+    _FLUX_CACHE["ts_ok"] = 0.0
+    _FLUX_CACHE["ts"] = 0.0
+    _FLUX_CACHE["erreur"] = None
+
+
+def _iso(ts):
+    if not ts:
+        return None
+    return datetime.utcfromtimestamp(ts).isoformat() + "Z"
+
+
 def assemble():
     cas = _enrichir()
+    # Signaux en continu : cache paresseux, seed pur en mode hors-ligne.
+    if _hors_ligne():
+        fc = {"ts": 0.0, "ts_ok": 0.0, "data": None, "erreur": None}
+    else:
+        fc = _obtenir_flux()
+    if fc["data"]:
+        par_cas = {}
+        for it in fc["data"]:
+            for cid in it.get("cas_lies", []):
+                par_cas.setdefault(cid, []).append(
+                    {"titre": it["titre"], "lien": it["lien"], "source": it["source"], "date": it["date"]})
+        flux = {"mode": "live", "count": len(fc["data"]), "items": fc["data"], "par_cas": par_cas,
+                "note": "Titres bruts des flux d'autorités et d'institutions — À QUALIFIER : "
+                        "aucun n'entre dans les scores tant qu'il n'est pas vérifié et versé au référentiel."}
+    else:
+        flux = {"mode": "seed", "count": 0, "items": [], "par_cas": {},
+                "note": "Signaux non chargés (hors-ligne, premier accès ou flux injoignables) — voir `etat`."}
+    etat_flux = {"ok": fc["erreur"] is None and fc["data"] is not None,
+                 "derniere_maj": _iso(fc["ts_ok"]), "derniere_erreur": fc["erreur"],
+                 "sources": [s["nom"] for s in FLUX_SOURCES], "ttl_s": _FLUX_TTL}
     return {
+        "signaux_flux": flux,
+        "etat": {"flux": etat_flux},
         "maj": datetime.utcnow().isoformat() + "Z",
         "version": VERSION,
         "titre": "Panorama des systèmes d'IA en entreprise — UE",
@@ -825,5 +1006,10 @@ def assemble():
 
 
 def sante():
-    """Bloc 'panorama' pour /api/health."""
-    return {"version": VERSION, "n_cas": len(CAS), "n_pays_ue": len(PAYS_UE)}
+    """Bloc 'panorama' pour /api/health : référentiel + fraîcheur des signaux."""
+    now = time.time()
+    return {"version": VERSION, "n_cas": len(CAS), "n_pays_ue": len(PAYS_UE),
+            "flux": {"ok": _FLUX_CACHE["erreur"] is None and _FLUX_CACHE["data"] is not None,
+                     "items": len(_FLUX_CACHE["data"] or []),
+                     "age_s": int(now - _FLUX_CACHE["ts_ok"]) if _FLUX_CACHE["ts_ok"] else None,
+                     "ttl_s": _FLUX_TTL}}
