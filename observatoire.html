@@ -816,10 +816,10 @@ function zoomCommandes(hote){
   var anc = hote.querySelector('.map-zoom'); if(anc) anc.remove();
   var box = document.createElement('div');
   box.className = 'map-zoom';
-  box.innerHTML = '<button type="button" id="z-plus" title="Agrandir — touche + ou Ctrl et molette" aria-label="Agrandir la carte">+</button>'
-    + '<button type="button" id="z-moins" title="Réduire — touche − ou Ctrl et molette" aria-label="Réduire la carte">−</button>'
+  box.innerHTML = '<button type="button" id="z-plus" title="Agrandir — touche +, ou molette vers le haut" aria-label="Agrandir la carte">+</button>'
+    + '<button type="button" id="z-moins" title="Réduire — touche −, ou molette vers le bas" aria-label="Réduire la carte">−</button>'
     + '<button type="button" class="z-raz" id="z-raz" title="Vue entière — touche 0" aria-label="Revenir à la vue entière">⟲</button>'
-    + '<div class="z-niv" id="z-niv" title="Agrandissement. Une fois la carte agrandie, la déplacer à la main.">×1</div>';
+    + '<div class="z-niv" id="z-niv" title="Agrandissement. Molette pour zoomer, main pour déplacer — les deux en même temps.">×1</div>';
   hote.appendChild(box);
   box.querySelector('#z-plus').onclick  = function(){ zoomPas(1.6); };
   box.querySelector('#z-moins').onclick = function(){ zoomPas(1/1.6); };
@@ -910,14 +910,31 @@ function zoomGestes(hote){
     bouge = 0;
   }, true);
 
-  /* Molette : agrandir sans quitter la carte des yeux. Ctrl (ou Cmd) est exige
-     pour ne pas capturer le defilement de la page — la carte est haute, et
-     l'utilisateur qui fait defiler ne demande pas a zoomer. */
+  /* Molette : la carte grossit et retrecit directement, sans touche a tenir,
+     et en continu — un cran de molette = un pas d'echelle, centre sur le
+     pointeur.
+     Le pas est NORMALISE avant usage : selon le navigateur et le peripherique,
+     `deltaY` compte des pixels, des lignes (Firefox : ±3) ou des pages. Utilise
+     brut, le meme geste zoomerait cinquante fois moins sous Firefox.
+     Une echappatoire est menagee : a la vue entiere, un defilement vers le bas
+     n'a plus rien a reduire — on le rend a la page, sinon la carte, qui occupe
+     toute la hauteur, retiendrait le lecteur prisonnier. */
+  function pasMolette(ev){
+    var d = ev.deltaY;
+    if(ev.deltaMode === 1) d *= 16;          /* lignes */
+    else if(ev.deltaMode === 2) d *= 400;    /* pages */
+    return Math.max(-260, Math.min(260, d)); /* un cran emballe ne doit pas tout avaler */
+  }
   hote.addEventListener('wheel', function(ev){
-    if(!ev.ctrlKey && !ev.metaKey) return;
     if(surCommande(ev)) return;
+    var d = pasMolette(ev);
+    if(d > 0 && ZOOM.k <= 1.001) return;     /* rien a reduire : la page defile */
     ev.preventDefault();
-    zoomVers(ZOOM.k * Math.exp(-ev.deltaY * 0.002), ev.clientX, ev.clientY);
+    zoomVers(ZOOM.k * Math.exp(-d * 0.0022), ev.clientX, ev.clientY);
+    /* Si la main tient la carte pendant qu'on zoome, son point d'ancrage vient
+       de changer d'echelle : sans ce recalage, le prochain mouvement ramenerait
+       brutalement le cadrage d'avant le zoom. */
+    if(dep){ dep.x = ev.clientX; dep.y = ev.clientY; dep.vx = ZOOM.x; dep.vy = ZOOM.y; }
   }, { passive:false });
 
   /* Clavier : la carte reste utilisable sans souris, deplacement compris. */
