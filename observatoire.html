@@ -93,6 +93,16 @@ figure{margin:0}
   paint-order:stroke;stroke:rgba(255,255,255,.85);stroke-width:3.5px;stroke-linejoin:round;
   pointer-events:none;user-select:none}
 .obs-lbl.petit{font-size:12px;font-weight:500;fill:#4A4A4A}
+/* Commandes de zoom, posees sur la carte. */
+.map-zoom{position:absolute;top:10px;left:10px;z-index:5;display:flex;flex-direction:column;gap:4px}
+.map-zoom button{width:30px;height:30px;font:inherit;font-size:16px;line-height:1;font-weight:600;
+  color:#1C1C1C;background:rgba(255,255,255,.95);border:1px solid var(--rule);border-radius:4px;
+  cursor:pointer;box-shadow:0 1px 3px rgba(28,28,28,.14);display:flex;align-items:center;justify-content:center}
+.map-zoom button:hover:not(:disabled){background:#fff;border-color:#1C1C1C}
+.map-zoom button:disabled{opacity:.38;cursor:default}
+.map-zoom .z-raz{font-size:11px}
+.map-zoom .z-niv{font-family:var(--mono);font-size:9.5px;text-align:center;color:var(--muted2);
+  background:rgba(255,255,255,.9);border-radius:3px;padding:1px 0}
 .obs-tip{position:absolute;z-index:20;pointer-events:none;opacity:0;transition:opacity .12s;
   background:rgba(28,28,28,.96);color:#fff;border-radius:5px;padding:9px 12px;
   font-size:12px;line-height:1.5;max-width:280px;box-shadow:0 4px 16px rgba(0,0,0,.28)}
@@ -639,6 +649,101 @@ var LBL_DECAL = { FR:[-2,4], DE:[2,-2], NL:[-8,-6], BE:[-6,6], CH:[-4,6], AT:[6,
                   IT:[-4,-10], NO:[-8,10], SE:[4,4], FI:[2,2], IE:[-10,0], GB:[-6,-4],
                   CZ:[2,-4], PL:[2,0], IL:[-8,4], AE:[6,4], KR:[8,2], JP:[6,0] };
 
+/* ── ZOOM DES CARTES ──────────────────────────────────────────────────────
+   Agit sur le viewBox du SVG : rien n'est redessine, et la carte reste nette a
+   tous les niveaux puisqu'elle est vectorielle. Le facteur est borne a 6 — au
+   dela, les contours simplifies a 0,4 degre montreraient leurs angles.
+   Les LIBELLES sont contre-echelles a chaque pas : sans cela, ils grossiraient
+   avec la carte et couvriraient les pays qu'ils designent. */
+var ZOOM = { k:1, x:0, y:0, W:0, H:0, svg:null, classeLbl:'', tailles:null };
+var ZOOM_MAX = 6;
+
+function zoomInit(svg, W, H, classeLbl){
+  ZOOM.svg = svg; ZOOM.W = W; ZOOM.H = H; ZOOM.classeLbl = classeLbl;
+  ZOOM.k = 1; ZOOM.x = 0; ZOOM.y = 0;
+  /* Taille d'origine de chaque libelle, relevee UNE fois : la relire apres un
+     zoom donnerait la taille deja corrigee et l'erreur s'accumulerait. */
+  ZOOM.tailles = [];
+  svg.querySelectorAll(classeLbl).forEach(function(t){
+    ZOOM.tailles.push([t, parseFloat(getComputedStyle(t).fontSize) || 13]);
+  });
+  zoomAppliquer();
+}
+function zoomAppliquer(){
+  if(!ZOOM.svg) return;
+  var w = ZOOM.W / ZOOM.k, h = ZOOM.H / ZOOM.k;
+  ZOOM.x = Math.max(0, Math.min(ZOOM.W - w, ZOOM.x));
+  ZOOM.y = Math.max(0, Math.min(ZOOM.H - h, ZOOM.y));
+  ZOOM.svg.setAttribute('viewBox', ZOOM.x.toFixed(1)+' '+ZOOM.y.toFixed(1)+' '+w.toFixed(1)+' '+h.toFixed(1));
+  ZOOM.tailles.forEach(function(p){
+    p[0].setAttribute('font-size', (p[1] / ZOOM.k).toFixed(2));
+    p[0].setAttribute('stroke-width', (3 / ZOOM.k).toFixed(2));
+  });
+  ZOOM.svg.style.cursor = ZOOM.k > 1 ? 'grab' : '';
+  var n = document.getElementById('z-niv'); if(n) n.textContent = '×' + (Math.round(ZOOM.k*10)/10);
+  var p = document.getElementById('z-plus'), m = document.getElementById('z-moins');
+  if(p) p.disabled = ZOOM.k >= ZOOM_MAX - 0.01;
+  if(m) m.disabled = ZOOM.k <= 1.01;
+}
+/* Zoom centre sur le milieu de la vue : le point regarde reste au centre. */
+function zoomPas(f){
+  var k0 = ZOOM.k, k = Math.max(1, Math.min(ZOOM_MAX, k0 * f));
+  if(k === k0) return;
+  var cx = ZOOM.x + (ZOOM.W/k0)/2, cy = ZOOM.y + (ZOOM.H/k0)/2;
+  ZOOM.k = k; ZOOM.x = cx - (ZOOM.W/k)/2; ZOOM.y = cy - (ZOOM.H/k)/2;
+  zoomAppliquer();
+}
+function zoomRaz(){ ZOOM.k = 1; ZOOM.x = 0; ZOOM.y = 0; zoomAppliquer(); }
+
+/* Commandes + deplacement au glisser. Le glissement n'est actif QU'AU-DELA de
+   ×1 : sinon il capterait les clics sur les pays sans rien apporter. */
+function zoomCommandes(hote){
+  var anc = hote.querySelector('.map-zoom'); if(anc) anc.remove();
+  var box = document.createElement('div');
+  box.className = 'map-zoom';
+  box.innerHTML = '<button type="button" id="z-plus" title="Agrandir" aria-label="Agrandir la carte">+</button>'
+    + '<button type="button" id="z-moins" title="Réduire" aria-label="Réduire la carte">−</button>'
+    + '<button type="button" class="z-raz" id="z-raz" title="Vue entière" aria-label="Revenir à la vue entière">⟲</button>'
+    + '<div class="z-niv" id="z-niv">×1</div>';
+  hote.appendChild(box);
+  box.querySelector('#z-plus').onclick = function(){ zoomPas(1.6); };
+  box.querySelector('#z-moins').onclick = function(){ zoomPas(1/1.6); };
+  box.querySelector('#z-raz').onclick = zoomRaz;
+
+  var glisse = null;
+  hote.addEventListener('mousedown', function(ev){
+    if(ZOOM.k <= 1 || ev.target.closest('.map-zoom')) return;
+    glisse = { x:ev.clientX, y:ev.clientY, vx:ZOOM.x, vy:ZOOM.y };
+    if(ZOOM.svg) ZOOM.svg.style.cursor = 'grabbing';
+    ev.preventDefault();
+  });
+  window.addEventListener('mousemove', function(ev){
+    if(!glisse || !ZOOM.svg) return;
+    var r = ZOOM.svg.getBoundingClientRect();
+    /* Conversion pixels -> unites viewBox : sans ce rapport, la carte
+       filerait plus vite ou plus lentement que le curseur. */
+    var ux = (ZOOM.W / ZOOM.k) / r.width, uy = (ZOOM.H / ZOOM.k) / r.height;
+    ZOOM.x = glisse.vx - (ev.clientX - glisse.x) * ux;
+    ZOOM.y = glisse.vy - (ev.clientY - glisse.y) * uy;
+    zoomAppliquer();
+  });
+  window.addEventListener('mouseup', function(){
+    if(glisse && ZOOM.svg) ZOOM.svg.style.cursor = 'grab';
+    glisse = null;
+  });
+  /* Clavier : la carte est atteignable sans souris. */
+  hote.addEventListener('keydown', function(ev){
+    if(ev.key === '+' || ev.key === '=') { zoomPas(1.6); ev.preventDefault(); }
+    else if(ev.key === '-') { zoomPas(1/1.6); ev.preventDefault(); }
+    else if(ev.key === '0') { zoomRaz(); ev.preventDefault(); }
+  });
+  /* L'etat des boutons se calcule dans zoomAppliquer, appele par zoomInit —
+     donc AVANT que ces boutons n'existent. On le rejoue ici, une fois qu'ils
+     sont poses, sinon « − » reste actif a la vue entiere alors qu'il n'y a
+     rien a reduire. */
+  zoomAppliquer();
+}
+
 var TIP = null;
 function tipMontrer(html, ev, hote){
   if(!TIP){ TIP = document.createElement('div'); TIP.className = 'obs-tip'; hote.appendChild(TIP); }
@@ -822,6 +927,10 @@ function renderMap(){
   }
   TIP = null;                      /* l'ancienne infobulle vient d'etre effacee */
   hote.addEventListener('mouseleave', tipCacher);
+  /* La premiere <svg> de l'hote est la carte principale ; les mini-cartes des
+     chercheurs vivent dans un autre panneau et gardent leur cadre. */
+  zoomInit(hote.querySelector("svg"), PROJ.W, PROJ.H, ".obs-lbl");
+  zoomCommandes(hote);
   hote.querySelectorAll('.obs-pays').forEach(function(el){
     el.addEventListener('click', function(){ selectionner(this); });
     el.addEventListener('mouseenter', function(ev){ tipMontrer(tipPays(this.getAttribute('data-code')), ev, hote); });
