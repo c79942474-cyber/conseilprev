@@ -51,24 +51,49 @@ VERSION = "2026-07-a"
 #    ENTSO-E ailleurs), il l'injecte et le module l'utilise à la place.
 # ═══════════════════════════════════════════════════════════════════════════
 
+# Millésime 2024, approche CYCLE DE VIE, une seule source de référence pour
+# tout le tableau : les moyennes annuelles publiées par Ember (facteurs GIEC
+# AR5). Le millésime unique est un choix de méthode, pas un détail — mélanger
+# des années dans un tableau comparatif fausse précisément la comparaison qu'on
+# vient y chercher.
+#
+# La table précédente datait de 2021-2022 et surestimait la plupart des pays
+# de 25 à 80 % : les réseaux européens se sont décarbonés vite (sortie du
+# lignite grec et bulgare, éolien néerlandais, Olkiluoto 3 en Finlande,
+# Mochovce 3 en Slovaquie). Le contrôle factuel de juillet 2026 a mesuré ces
+# écarts un par un ; ils sont publiés dans factcheck.py, avec la valeur
+# d'origine de chaque pays corrigé.
+#
+# DEUX LIMITES ÉCRITES ICI PARCE QU'ELLES CHANGENT LA LECTURE :
+#  — Approche PRODUCTION. Pour les pays qui importent une grande part de leur
+#    électricité (Luxembourg ~60 %, Lituanie ~29 %, Malte via la Sicile),
+#    l'intensité vue par un site raccordé au réseau est sensiblement plus
+#    élevée que celle de la production nationale. LU garde donc une valeur
+#    intermédiaire assumée, entre production (~130) et consommation (~290).
+#  — La France est à 45 g dans le référentiel Ember, quand la Base Empreinte
+#    de l'ADEME retient environ 60 g pour le mix français : périmètres et
+#    méthodes diffèrent. Un client travaillant dans le cadre ADEME doit
+#    substituer sa propre valeur ; le calcul est publié pour cela.
 INTENSITE = {
     # Très peu carboné — nucléaire et hydraulique dominants
-    "FR": 60, "SE": 45, "NO": 30, "FI": 110, "CH": 40, "IS": 30,
+    "FR": 45, "SE": 35, "NO": 30, "FI": 65, "CH": 35, "IS": 30,
     # Intermédiaire
-    "ES": 190, "PT": 200, "AT": 160, "SI": 250, "DK": 180, "BE": 170,
-    "SK": 170, "HR": 240, "LT": 200, "LV": 190, "IT": 330, "GB": 250,
-    "IE": 350, "NL": 350, "HU": 240, "RO": 290,
+    "ES": 145, "PT": 110, "AT": 105, "SI": 230, "DK": 130, "BE": 125,
+    "SK": 95, "HR": 170, "LT": 200, "LV": 170, "IT": 280, "GB": 215,
+    "IE": 270, "NL": 250, "HU": 195, "RO": 230,
     # Fortement carboné — charbon et lignite encore présents
-    "DE": 380, "CZ": 470, "GR": 420, "BG": 480, "PL": 660, "EE": 620,
-    "CY": 640, "MT": 430, "LU": 220,
+    "DE": 355, "CZ": 400, "GR": 320, "BG": 320, "PL": 660, "EE": 415,
+    "CY": 510, "MT": 490, "LU": 220,
     # Repli
-    "UE": 250,
+    "UE": 235,
 }
-INTENSITE_DEFAUT = 250
+INTENSITE_DEFAUT = 235
 
-SOURCE_INTENSITE = ("Ordres de grandeur cycle de vie, d’après la Base Empreinte de "
-                    "l’ADEME, l’Agence internationale de l'énergie et les facteurs "
-                    "par filière du GIEC. Moyennes annuelles.")
+SOURCE_INTENSITE = ("Moyennes annuelles 2024, approche cycle de vie, d’après les "
+                    "séries Ember (facteurs GIEC AR5), recoupées avec l’Agence "
+                    "européenne pour l’environnement. Approche production : pour "
+                    "un pays fortement importateur, l’intensité vue au point de "
+                    "raccordement est plus élevée.")
 
 # ═══════════════════════════════════════════════════════════════════════════
 # 2. FABRICATION — LE POSTE QU'ON OUBLIE
@@ -291,6 +316,11 @@ def assemble(sites=None, cas=None, live=None):
             _cumul(code, "sia_t", e.get("total_t"))
 
     for p in par_pays.values():
+        # Chaque pays dit si son intensité vient du RELEVÉ DU MOMENT ou de la
+        # moyenne annuelle. Sans ce drapeau, une carte rafraîchie en continu et
+        # une carte figée se ressemblent — et rien ne signalerait qu'une source
+        # est tombée.
+        p["intensite_direct"] = bool(live and p["pays"] in (live or {}))
         p["total_t"] = [round(p["dc_t"][0] + p["sia_t"][0]),
                         round(p["dc_t"][1] + p["sia_t"][1])]
         for k in ("dc_t", "sia_t", "eau_m3"):
@@ -315,6 +345,11 @@ def assemble(sites=None, cas=None, live=None):
             "source_fabrication": SOURCE_FABRICATION,
             "sia_mwh_an": {k: list(v) for k, v in SIA_MWH_AN.items()},
             "sia_stade": {k: list(v) for k, v in SIA_STADE.items()},
+            # Les pays dont l'intensité vient du relevé du moment, et la valeur
+            # relevée : publiés pour que le lecteur distingue une carte vivante
+            # d'une carte figée sans avoir à nous croire.
+            "intensite_direct": sorted((live or {}).keys()),
+            "intensite_direct_valeurs": {k: round(float(v), 1) for k, v in (live or {}).items()},
         },
         "avertissement": AVERTISSEMENT,
         "limites": LIMITES,

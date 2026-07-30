@@ -132,6 +132,67 @@ body.vue-pays .panel:not(#s-pays){display:none}
 .pv-vide{font-size:12px;color:var(--muted);padding:14px 2px}
 @media(max-width:760px){.pv-t th.opt,.pv-t td.opt{display:none}.pv-t{min-width:620px}}
 
+/* ── PARCOURS GUIDE ─────────────────────────────────────────────────────────
+   La page s'adresse a des metiers qui n'y cherchent pas la meme chose et n'y
+   courent pas les memes risques de contresens : investissement, banque et
+   assurance, climat, recherche. Le parcours guide chacun dans SON ordre de
+   lecture — chaque etape amene la section a l'ecran et dit quoi y lire,
+   comment le lire, et le piege propre a ce metier. */
+.gp-lanceur{all:unset;cursor:pointer;flex:0 0 auto;font-size:11.5px;font-weight:600;color:#fff;
+  background:#1C1C1C;padding:5px 13px;border-radius:3px;margin-left:auto;white-space:nowrap}
+.gp-lanceur:hover{background:#3A3A3A}
+.gp-lanceur:focus-visible{outline:2px solid #1E63A8;outline-offset:2px}
+.gp-voile{position:fixed;inset:0;z-index:70;background:rgba(20,20,20,.45);display:none}
+.gp-voile.on{display:block}
+.gp-carte{position:fixed;z-index:72;bottom:22px;left:50%;transform:translateX(-50%);
+  width:min(580px,calc(100vw - 28px));background:var(--white);border:1px solid var(--rule);
+  border-radius:6px;box-shadow:0 18px 50px rgba(0,0,0,.35);display:none}
+.gp-carte.on{display:block}
+.gp-tete{display:flex;align-items:baseline;gap:10px;padding:12px 18px 0}
+.gp-etape{font-family:var(--mono);font-size:9.5px;color:var(--muted2);letter-spacing:.05em}
+.gp-profil{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.06em;
+  background:var(--bg);border:1px solid var(--rule);border-radius:3px;padding:2px 8px;color:var(--muted)}
+.gp-fermer{all:unset;cursor:pointer;margin-left:auto;font-size:17px;line-height:1;color:var(--muted);
+  padding:1px 7px;border-radius:3px}
+.gp-fermer:hover{color:var(--ink);background:var(--bg)}
+.gp-fermer:focus-visible{outline:2px solid #1E63A8;outline-offset:1px}
+.gp-corps{padding:8px 18px 4px}
+.gp-corps h4{font-size:14px;font-weight:600;margin:2px 0 6px}
+.gp-corps p{font-size:12.5px;line-height:1.6;color:var(--ink);margin:0 0 8px}
+.gp-piege{border-left:3px solid var(--orange);background:var(--bg);border-radius:0 3px 3px 0;
+  padding:8px 12px;font-size:11.5px;color:var(--muted);line-height:1.55;margin:0 0 6px}
+.gp-piege b{color:var(--ink)}
+.gp-pied{display:flex;align-items:center;gap:8px;padding:8px 18px 14px}
+.gp-points{display:flex;gap:5px;margin-right:auto}
+.gp-points i{width:7px;height:7px;border-radius:50%;background:var(--rule);display:block}
+.gp-points i.fait{background:#8FB3DC}
+.gp-points i.ici{background:#1C5CAB}
+.gp-btn{all:unset;cursor:pointer;font-size:12px;padding:6px 14px;border-radius:3px;border:1px solid var(--rule)}
+.gp-btn:hover{border-color:#1C1C1C}
+.gp-btn:focus-visible{outline:2px solid #1E63A8;outline-offset:2px}
+.gp-btn.suiv{background:#1C1C1C;color:#fff;border-color:#1C1C1C;font-weight:600}
+.gp-btn.suiv:hover{background:#3A3A3A}
+.gp-btn[disabled]{opacity:.35;cursor:default}
+/* La section visee est SOULIGNEE, jamais masquee : on doit pouvoir la lire
+   pendant qu'on lit la consigne, sinon le parcours devient un diaporama. */
+.gp-cible{position:relative;z-index:71;box-shadow:0 0 0 3px #1C5CAB,0 8px 40px rgba(0,0,0,.25)}
+.gp-choix{position:fixed;z-index:72;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:min(700px,calc(100vw - 28px));max-height:calc(100vh - 40px);overflow:auto;
+  background:var(--white);border:1px solid var(--rule);border-radius:6px;
+  box-shadow:0 18px 50px rgba(0,0,0,.35);padding:22px 24px;display:none}
+.gp-choix.on{display:block}
+.gp-choix h3{font-family:var(--serif);font-size:20px;font-weight:400;margin:0 0 4px}
+.gp-choix .st{font-size:12px;color:var(--muted);margin:0 0 14px;line-height:1.55}
+.gp-grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px}
+.gp-p{all:unset;cursor:pointer;border:1px solid var(--rule);border-radius:4px;padding:12px 14px;display:block}
+.gp-p:hover{border-color:#1C5CAB;background:#F6F9FD}
+.gp-p:focus-visible{outline:2px solid #1E63A8;outline-offset:2px}
+.gp-p b{display:block;font-size:13px;margin-bottom:3px}
+.gp-p span{font-size:11.5px;color:var(--muted);line-height:1.5;display:block}
+.gp-p em{display:block;font-style:normal;font-family:var(--mono);font-size:9px;
+  text-transform:uppercase;letter-spacing:.05em;color:var(--muted2);margin-top:6px}
+@media print{.gp-lanceur,.gp-carte,.gp-voile,.gp-choix{display:none !important}}
+
 /* ── FICHE D'UN CENTRE DE DONNEES ───────────────────────────────────────────
    Le troisieme niveau : le parc, puis le pays, puis LE SITE. C'est ici que
    tout doit etre dit — y compris les hypotheses du calcul, pour qu'un lecteur
@@ -482,7 +543,13 @@ engagements publics) sont imputés nominativement.</div>
   <a href="#s-socle">Données ouvertes</a>
   <a href="#s-empreinte">Empreinte<span class="pnav-n" id="pn-emp"></span></a>
   <a href="#s-methodo">Méthodologie</a>
+  <a href="#s-sources">Sources</a>
+  <button type="button" class="gp-lanceur" id="gp-lanceur">Parcours guidé</button>
 </nav>
+
+<div class="gp-voile" id="gp-voile"></div>
+<div class="gp-choix" id="gp-choix" role="dialog" aria-modal="true" aria-label="Choisir un parcours guidé"></div>
+<div class="gp-carte" id="gp-carte" role="dialog" aria-live="polite" aria-label="Parcours guidé"></div>
 
 <div id="echeancier" style="display:flex;gap:10px;flex-wrap:wrap;margin:-6px 0 16px"></div>
 
@@ -660,13 +727,26 @@ engagements publics) sont imputés nominativement.</div>
   <div class="panel-body" id="fs-corps"></div>
 </section>
 
-<!-- ══ 6. MÉTHODOLOGIE ══ -->
+<!-- ══ 6. SOURCES ET VÉRIFICATION ══
+     Destinee a des metiers ou un chiffre engage. Toute constante du modele y
+     figure avec son editeur, son millesime et son lien : le client doit pouvoir
+     refaire le chemin sans nous. -->
+<section class="panel" id="s-sources" aria-labelledby="t-sources">
+  <div class="panel-head">
+    <span class="panel-title" data-aide="sources" id="t-sources">Sources, méthode et vérification</span>
+    <span class="panel-note">chaque constante avec son éditeur, son millésime et son lien</span>
+  </div>
+  <div class="panel-body" id="src-corps"></div>
+</section>
+
+<!-- ══ 7. MÉTHODOLOGIE ══ -->
 <section class="panel" id="s-methodo" aria-labelledby="t-methodo">
   <div class="panel-head"><span class="panel-title" id="t-methodo">Méthodologie, limites, référentiels</span>
   <span class="panel-note">certain / déduit — aucun modèle de langage dans la chaîne</span></div>
   <div class="panel-body" id="methodo"></div>
 </section>
 
+<script src="/factcheck.js"></script>
 <script>
 "use strict";
 /* Le référentiel complet est EMBARQUÉ (page autonome, motif observatoire) puis
@@ -2166,6 +2246,43 @@ var AIDES = {
     pas: "Ce n’est pas un inventaire exhaustif du pays : un centre non communiqué n’y figure pas. "
        + "Et une valeur de classe ne permet aucune comparaison entre deux sites nommés.",
   },
+  sources: {
+    t: "Sources, méthode et vérification",
+    d: "Chaque constante du modèle avec son éditeur, son millésime et son lien, les textes "
+     + "appliqués, les sources de données publiques, et ce que nous ne pouvons pas garantir. "
+     + "Assez pour qu’un analyste refasse la chaîne complète sans nous.",
+    pas: "Ce n’est pas une certification. La chaîne de calcul est publiée mais n’est pas "
+       + "auditée par un tiers : ne la présentez pas comme une donnée certifiée.",
+  },
+  sources_constantes: {
+    t: "Les constantes du modèle",
+    d: "Les sept grandeurs dont tout le reste dérive. Cinq viennent de publications "
+     + "identifiées ; deux sont construites par nos soins et signalées comme telles — "
+     + "les gabarits de capacité et les consommations typiques de systèmes d’IA n’existent "
+     + "nulle part sous cette forme.",
+    pas: "Une constante n’est pas une mesure de site. C’est parce que ces deux dernières "
+       + "lignes sont des constructions que toute valeur qui en dérive porte l’étiquette "
+       + "« classe ».",
+  },
+  controles: {
+    t: "Les contrôles factuels",
+    d: "Le registre des vérifications : chaque affirmation confrontée à une source primaire "
+     + "ou institutionnelle, avec son verdict — confirmé, corrigé, plausible, invérifiable — "
+     + "le constat, la source et la date du contrôle. Survolez une pastille n’importe où sur "
+     + "la page pour voir le contrôle attaché à cette valeur précise.",
+    pas: "Un verdict « confirmé » ne rend pas la valeur exacte : il dit qu’une source la "
+       + "situe dans l’écart de tolérance déclaré pour cette grandeur. Et un contrôle porte "
+       + "une DATE : au-delà, la source a pu changer sans que nous l’ayons revue.",
+  },
+  verification: {
+    t: "Ce que nous ne garantissons pas",
+    d: "Les limites qui doivent accompagner toute citation : le panel n’est pas un "
+     + "recensement, aucune capacité informatique n’est attestée, les intensités sont "
+     + "annuelles et en cycle de vie, un volume d’eau est un prélèvement calculé.",
+    pas: "Aucune de ces limites n’est cosmétique. Chacune interdit un usage précis — "
+       + "part de marché, agrégat de puissance, rapprochement avec un inventaire scope 2, "
+       + "conclusion sur la ressource en eau.",
+  },
   hypotheses: {
     t: "Les hypothèses du calcul",
     d: "Les valeurs réellement employées pour dériver l’électricité, l’eau et le CO₂e de ce "
@@ -2274,6 +2391,31 @@ var HORS_UE = { GB: "Royaume-Uni (hors UE)", NO: "Norvège (hors UE)",
                 CH: "Suisse (hors UE)", IS: "Islande (hors UE)" };
 function nomPays(code){
   return (UE[code] || {}).nom || HORS_UE[code] || code;
+}
+/* Le pays le MOINS carbone du referentiel, et son intensite. Calcule, jamais
+   ecrit en dur : les intensites sont rafraichies automatiquement, et une
+   reference figee dans une phrase deviendrait fausse a la premiere mise a jour
+   sans que rien ne le signale. */
+function reseauLePlusPropre(){
+  var ref = (EMP && EMP.referentiel && EMP.referentiel.intensite) || {};
+  var best = null;
+  Object.keys(ref).forEach(function(k){
+    if(k === "UE") return;
+    if(!best || ref[k] < ref[best]) best = k;
+  });
+  return best ? { code: best, val: ref[best] } : null;
+}
+function compareReseau(intensite){
+  var b = reseauLePlusPropre();
+  if(!b || !intensite || !b.val) return "L’intensité du réseau, pas la taille du parc, "
+    + "fait l’essentiel de l’écart entre pays.";
+  var r = Math.round(intensite / b.val * 10) / 10;
+  if(r <= 1.1) return "C’est le réseau le moins carboné du référentiel : à consommation égale, "
+    + "un site implanté ici émet moins que partout ailleurs en Europe.";
+  return "À consommation égale, un site ici émet <b>" + fr(String(r)) + " fois</b> ce qu’émettrait "
+    + "le même site en " + esc(nomPays(b.code).replace(" (hors UE)", "")) + " ("
+    + nbFr(b.val) + " g) — c’est l’intensité du "
+    + "réseau, pas la taille du parc, qui fait l’essentiel de l’écart entre pays.";
 }
 function empParPays(code){
   if(!EMP) return null;
@@ -2431,9 +2573,17 @@ function renderEmpreinte(){
     + (EMP.limites || []).map(function(l){ return "<li>" + esc(l) + "</li>"; }).join("")
     + "</ul>");
 
+  /* La fraicheur, dite plutot que promise : combien de pays sont sur le releve
+     du moment, et combien retombent sur la moyenne annuelle. Une carte figee et
+     une carte vivante se ressemblent tant qu'on ne l'ecrit pas. */
   var note = document.getElementById("emp-note");
-  if(note) note.textContent = "mise à jour " + String(EMP.maj || "").slice(0, 10)
-    + " · intensités ADEME / AIE, cycle de vie";
+  if(note){
+    var direct = ((EMP.referentiel || {}).intensite_direct || []).length;
+    var nPays = (EMP.par_pays || []).length;
+    note.textContent = "mise à jour " + String(EMP.maj || "").slice(0, 16).replace("T", " ")
+      + " · " + (direct ? direct + " pays sur le relevé du moment, " : "")
+      + Math.max(0, nPays - direct) + " sur la moyenne annuelle 2024";
+  }
 }
 
 /* ── Socle de données ouvertes ──────────────────────────────────────────────
@@ -2705,9 +2855,7 @@ function renderPays(){
          : (agg.n_sia > 1 ? "les " + agg.n_sia + " systèmes d’IA du panel "
                             : "le seul système d’IA du panel ")
            + "<b>" + pctFr(agg.sia_t[1], agg.total_t[1]) + "</b>")
-      + ". À consommation égale, un site ici émet <b>" + fr(String(Math.round(agg.intensite / 45 * 10) / 10))
-      + " fois</b> ce qu’émettrait le même site en Suède (45 g) — c’est l’intensité du réseau, "
-      + "pas la taille du parc, qui fait l’essentiel de l’écart entre pays.</p>";
+      + ". " + compareReseau(agg.intensite) + "</p>";
   }
   if(reg){
     h += '<p class="note"><b>Cadre national.</b> Surveillance AI Act (art. 70) : '
@@ -2825,6 +2973,611 @@ function renderPays(){
       if(r) ouvrirSite(r.getAttribute("data-dc"));
     });
   }
+}
+
+/* ── SOURCES ET VERIFICATION ────────────────────────────────────────────────
+   Cette page est destinee a des metiers ou un chiffre engage : investissement,
+   credit, souscription, inventaire d'emissions. Aucun d'eux ne peut se
+   contenter d'un resultat — il lui faut la source, le millesime, et le moyen
+   de refaire le chemin.
+
+   Le principe : TOUTE constante du modele figure ici avec son editeur, son
+   millesime et son lien. Rien n'est cite de memoire. Quand une verification
+   externe a montre un ecart, l'ecart est ECRIT — un referentiel qui ne
+   publierait que ses succes ne serait pas verifiable, il serait promotionnel. */
+
+var SRC_CONSTANTES = [
+  { g: "Intensité carbone des réseaux électriques",
+    v: "30 à 660 gCO₂e/kWh selon le pays, approche cycle de vie",
+    e: "Ember · Agence européenne pour l’environnement · AIE",
+    m: "moyennes annuelles 2023-2024",
+    u: "Convertir une consommation électrique en émissions, pays par pays.",
+    l: "https://ember-energy.org/data/electricity-data-explorer/" },
+  { g: "Facteur d’émissions de fabrication amortie",
+    v: "22 kgCO₂e par MWh d’électricité informatique",
+    e: "Base Empreinte ADEME · référentiel NegaOctet · ACV d’exploitants",
+    m: "2022-2024",
+    u: "Rapporter l’empreinte de FABRICATION des équipements à leur usage annuel, "
+     + "pour qu’elle apparaisse dans le même total que l’électricité.",
+    l: "https://base-empreinte.ademe.fr/" },
+  { g: "PUE — efficacité énergétique du site",
+    v: "1,10 à 1,60 selon le mode de refroidissement",
+    e: "Uptime Institute Global Data Center Survey · rapports d’exploitants "
+     + "(Google, Meta, OVHcloud) · LBNL",
+    m: "2023-2024",
+    u: "Passer de l’énergie informatique à l’énergie totale du site.",
+    l: "https://uptimeinstitute.com/resources/research-and-reports" },
+  { g: "WUE — eau par kilowattheure informatique",
+    v: "0,00 à 2,20 L/kWh selon le mode de refroidissement",
+    e: "Rapports de développement durable des exploitants · The Green Grid · LBNL",
+    m: "2023-2024",
+    u: "Déduire un volume d’eau de refroidissement annuel.",
+    l: "https://www.thegreengrid.org/" },
+  { g: "Facteur de charge d’un site en exploitation",
+    v: "0,55 à 0,80",
+    e: "Littérature d’exploitation (LBNL, Uptime Institute)",
+    m: "2023-2024",
+    u: "Éviter de compter un site à pleine charge en permanence, ce qui gonfle "
+     + "mécaniquement tous les résultats.",
+    l: "https://eta.lbl.gov/publications/2024-united-states-data-center-energy" },
+  { g: "Gabarits de capacité informatique",
+    v: "hyperscale 30-150 MW · campus IA 100-400 MW · colocation 5-40 MW · "
+     + "régional 1-15 MW",
+    e: "Construits par nos soins depuis les capacités publiées par tranche et les "
+     + "dossiers de raccordement publics",
+    m: "2024-2026",
+    u: "Donner un ordre de grandeur quand AUCUNE capacité n’est publiée — "
+     + "c’est le cas des 97 sites.",
+    l: "" },
+  { g: "Consommation typique d’un système d’IA par type et par stade",
+    v: "de quelques MWh/an (pilote de vision) à ~900 MWh/an (assistant "
+     + "génératif à l’échelle)",
+    e: "Construits par nos soins depuis la littérature d’inférence et les "
+     + "ordres de grandeur publiés",
+    m: "2024-2026",
+    u: "Situer l’empreinte d’un cas d’usage face à celle de l’infrastructure.",
+    l: "" },
+];
+
+var SRC_TEXTES = [
+  { t: "Règlement (UE) 2024/1689 — intelligence artificielle (AI Act)",
+    d: "Classement des systèmes : pratiques interdites (art. 5), haut risque "
+     + "(annexe III et annexe I), transparence (art. 50). Fondement des classes "
+     + "affichées dans l’explorateur des cas.",
+    l: "https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=OJ:L_202401689" },
+  { t: "Directive (UE) 2023/1791 — efficacité énergétique, article 12",
+    d: "Première obligation européenne de déclaration pour les centres de données "
+     + "d’au moins 500 kW de puissance INFORMATIQUE : électricité totale et "
+     + "informatique, part renouvelable, chaleur fatale, PUE, WUE, ERF, REF, et "
+     + "consommation d’eau.",
+    l: "https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32023L1791" },
+  { t: "Règlement délégué (UE) 2024/1364 — indicateurs des centres de données",
+    d: "Définit juridiquement le centre de données, y compris une salle dédiée "
+     + "dans un bâtiment mixte, et fixe les indicateurs communs déclarés vers la "
+     + "base de données européenne.",
+    l: "https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=OJ:L_202401364" },
+  { t: "Règlement (UE) 2016/679 — protection des données (RGPD)",
+    d: "Fondement des décisions d’autorités citées dans le panel, et des "
+     + "signaux de la veille.",
+    l: "https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32016R0679" },
+];
+
+var SRC_DONNEES = [
+  { t: "CSO Ireland — Data Centres Metered Electricity Consumption",
+    d: "La seule série publique longue et méthodologiquement documentée sur la "
+     + "consommation des centres de données d’un État membre, reconstruite depuis "
+     + "2015 à partir des compteurs.",
+    l: "https://www.cso.ie/en/statistics/energy/datacentresmeteredelectricityconsumption/" },
+  { t: "Eurostat — statistiques de l’énergie",
+    d: "Bilans électriques nationaux, dénominateurs des parts sectorielles.",
+    l: "https://ec.europa.eu/eurostat/web/energy/database" },
+  { t: "Copernicus (Union européenne / ESA)",
+    d: "Séries Sentinel utilisées par plusieurs cas du panel et par le socle de "
+     + "données ouvertes de cette page. Licence ouverte.",
+    l: "https://www.copernicus.eu/fr" },
+  { t: "NASA — Earthdata / EONET",
+    d: "Couche d’activité d’observation du socle ouvert. Domaine public.",
+    l: "https://earthdata.nasa.gov/" },
+  { t: "data.gouv.fr — plateforme ouverte des données publiques françaises",
+    d: "Couche française du socle ouvert. Licence Ouverte / Etalab.",
+    l: "https://www.data.gouv.fr/" },
+  { t: "EuroHPC — supercalculateurs européens",
+    d: "Source de référence pour les sites de calcul public du référentiel "
+     + "(LUMI, MareNostrum 5, Karolina, Vega, Discoverer, Helios…).",
+    l: "https://eurohpc-ju.europa.eu/" },
+];
+
+/* Ce que la verification externe a donne. Renseigne apres coup, et publie tel
+   quel : un referentiel qui n'afficherait que ses succes ne serait pas
+   verifiable, il serait promotionnel. */
+var SRC_VERIF = null;
+
+function renderSources(){
+  var lignes = SRC_CONSTANTES.map(function(c){
+    return "<tr><th scope=\"row\">" + esc(c.g) + "</th>"
+      + '<td class="num">' + esc(c.v) + "</td>"
+      + "<td>" + esc(c.e) + (c.m ? '<br><span class="si">' + esc(c.m) + "</span>" : "") + "</td>"
+      + '<td class="opt">' + esc(c.u) + "</td>"
+      + "<td>" + (c.l ? '<a href="' + esc(c.l) + '" target="_blank" rel="noopener">consulter</a>'
+                      : '<span class="si">construit par nos soins</span>') + "</td></tr>";
+  }).join("");
+
+  var h = '<p class="note" style="margin-top:0"><b>Pourquoi cette section.</b> Un chiffre de '
+    + "cette page peut entrer dans une note d’investissement, un dossier de crédit, un "
+    + "questionnaire de souscription ou un inventaire d’émissions. Aucun de ces usages ne se "
+    + "satisfait d’un résultat : il faut la source, le millésime et le moyen de refaire le "
+    + "chemin. Tout est donc listé ici — <b>y compris ce que nous avons construit nous-mêmes</b>, "
+    + "qui est signalé comme tel.</p>"
+
+    + '<h3 class="pv-sh" data-aide="sources_constantes">Les constantes du modèle</h3>'
+    + '<div class="pv-wrap"><table class="pv-t" style="min-width:1020px">'
+    + '<caption class="sr-only">Constantes employées par le modèle, avec leur source</caption>'
+    + '<thead><tr><th scope="col">Grandeur</th><th scope="col">Valeur retenue</th>'
+    + '<th scope="col">Éditeur et millésime</th><th scope="col" class="opt">À quoi elle sert</th>'
+    + '<th scope="col">Lien</th></tr></thead><tbody>' + lignes + "</tbody></table></div>"
+    + '<p class="note"><b>Les deux lignes « construit par nos soins »</b> sont les seules qui ne '
+    + "renvoient à aucune publication : les gabarits de capacité et les consommations typiques "
+    + "de systèmes d’IA n’existent nulle part sous cette forme. Elles sont construites depuis des "
+    + "capacités publiées par tranche et des dossiers de raccordement publics, et c’est "
+    + "précisément pour cela que toute valeur qui en dérive porte l’étiquette « classe ».</p>"
+
+    + '<h3 class="pv-sh">Les textes appliqués</h3>'
+    + SRC_TEXTES.map(function(t){
+        return '<p class="note" style="margin-top:6px"><b><a href="' + esc(t.l)
+          + '" target="_blank" rel="noopener">' + esc(t.t) + "</a>.</b> " + esc(t.d) + "</p>";
+      }).join("")
+
+    + '<h3 class="pv-sh">Les sources de données publiques</h3>'
+    + SRC_DONNEES.map(function(t){
+        return '<p class="note" style="margin-top:6px"><b><a href="' + esc(t.l)
+          + '" target="_blank" rel="noopener">' + esc(t.t) + "</a>.</b> " + esc(t.d) + "</p>";
+      }).join("")
+
+    + '<h3 class="pv-sh">Sources site par site, cas par cas</h3>'
+    + '<p class="note" style="margin-top:4px">Les sources ne sont pas seulement globales. '
+    + "<b>Chaque centre de données</b> porte, sur sa fiche, la source qui l’atteste, le type de "
+    + "cette source (communiqué d’exploitant, presse, décision d’autorité, registre public), un "
+    + "niveau de confiance et une note de vérification qui dit ce qui a été retenu et ce qui a "
+    + "été écarté. <b>Chaque cas d’IA</b> porte de même son niveau de preuve. Ouvrez une fiche : "
+    + "la provenance y est plus précise que tout ce qu’un tableau agrégé pourrait rendre.</p>"
+
+    + '<h3 class="pv-sh" data-aide="controles">Les contrôles factuels</h3>'
+    + '<p class="note" style="margin-top:4px">Chaque affirmation vérifiable de cette page a été '
+    + "confrontée une par une à des sources primaires ou institutionnelles. <b>Tous les verdicts "
+    + "sont publiés, y compris les défavorables</b> : un registre qui n’afficherait que ses "
+    + "succès ne serait pas vérifiable, il serait promotionnel. Quand un contrôle a conduit à "
+    + "corriger une valeur, la valeur d’origine reste écrite — sans elle, un lecteur qui aurait "
+    + "cité l’ancienne ne saurait pas qu’il doit se corriger.</p>"
+    + '<div id="fc-registre"></div>'
+
+    + '<h3 class="pv-sh" data-aide="verification">Ce que nous ne pouvons pas garantir</h3>'
+    + '<ul class="note" style="padding-left:16px;margin-top:4px">'
+    + "<li><b>Le panel n’est pas un recensement.</b> Un déploiement d’IA non communiqué n’y "
+    + "figure pas, et le biais de publication favorise les grands groupes et les cas génératifs. "
+    + "Aucune part de marché ni aucun taux de pénétration ne peut en être tiré.</li>"
+    + "<li><b>Aucune capacité informatique attestée</b> ne survit à la vérification sur les 97 "
+    + "sites. Les mégawatts qui circulent sont des capacités cibles de campus, des ambitions à "
+    + "terme, des capacités de raccordement ou des puissances de machine. Aucun agrégat de "
+    + "puissance européenne n’est donc publié ici.</li>"
+    + "<li><b>Les intensités carbone sont des moyennes annuelles</b>, en approche cycle de vie. "
+    + "Elles ne sont pas comparables aux facteurs de combustion directe employés par la plupart "
+    + "des inventaires d’entreprise, et l’intensité réelle varie d’un facteur trois dans la "
+    + "journée.</li>"
+    + "<li><b>Un volume d’eau est un prélèvement calculé</b>, pas une consommation mesurée. "
+    + "Le référentiel ne porte ni bassin versant, ni indice de stress hydrique, ni régime "
+    + "d’autorisation : sans ces couches, un volume ne dit rien de la pression sur la ressource.</li>"
+    + "<li><b>La chaîne de calcul est publiée mais n’est pas auditée par un tiers.</b> "
+    + "Ne la présentez pas comme une donnée certifiée.</li>"
+    + "</ul>";
+
+  if(SRC_VERIF){
+    h += '<h3 class="pv-sh">Résultat de la vérification externe</h3>'
+      + '<p class="note" style="margin-top:4px">' + SRC_VERIF.resume + "</p>"
+      + (SRC_VERIF.corrections && SRC_VERIF.corrections.length
+          ? '<div class="pv-wrap" style="margin-top:8px"><table class="pv-t" style="min-width:820px">'
+            + '<thead><tr><th scope="col">Point vérifié</th><th scope="col">Constat</th>'
+            + '<th scope="col">Suite donnée</th></tr></thead><tbody>'
+            + SRC_VERIF.corrections.map(function(c){
+                return "<tr><th scope=\"row\">" + esc(c.point) + "</th><td>" + esc(c.constat)
+                  + "</td><td>" + esc(c.suite) + "</td></tr>";
+              }).join("")
+            + "</tbody></table></div>"
+          : "");
+  }
+
+  setHTML("src-corps", h);
+  /* Le registre est servi par /api/factcheck et rendu par le composant partage :
+     les trois pages qui l'affichent lisent la MEME source, sans recopie. */
+  if(window.factcheck){
+    window.factcheck.charger("panorama", function(){
+      window.factcheck.registre("fc-registre");
+      window.factcheck.brancher();
+    });
+  }
+  aideBrancher();
+}
+
+/* ── PARCOURS GUIDE PAR METIER ──────────────────────────────────────────────
+   Cette page sert des lectures qui n'ont presque rien en commun. Un investisseur
+   cherche ou se construit la capacite ; un analyste credit cherche ce qui est
+   ATTESTE et ce qui ne l'est pas ; un climatologue cherche la frontiere entre
+   mesure et modele ; un specialiste de l'eau cherche le mode de refroidissement
+   avant le volume. Servir a tous le meme ordre de lecture, c'est n'en servir
+   aucun — et surtout laisser chacun devant SON contresens habituel.
+
+   Le parcours ne resume donc pas la page : il conduit dans un ordre choisi, et
+   a chaque etape il nomme le PIEGE propre au metier. C'est la moitie utile.
+
+   Choix de mise en oeuvre : la section visee est SOULIGNEE, jamais masquee. Un
+   parcours qui cacherait la donnee pour montrer sa consigne serait un
+   diaporama ; ici on lit la consigne ET la donnee ensemble. */
+
+var GP_PROFILS = {
+  invest: {
+    nom: "Investissement infrastructure",
+    court: "Investisseur",
+    quoi: "Où se construit la capacité, à quel stade de certitude, et ce que le "
+        + "référentiel ne peut pas vous dire.",
+    etapes: [
+      { sect: "s-carte", t: "Lire le parc, pas une liste",
+        d: "Les CARRÉS sont les centres de données, colorés par statut du plus certain "
+         + "au plus fragile : en exploitation, en construction, autorisé, annoncé, "
+         + "abandonné. Le curseur d’horizon, dans la barre du bas, estompe les sites "
+         + "dont la mise en service annoncée dépasse la date choisie — c’est la "
+         + "trajectoire jusqu’en 2030 qui se lit ainsi, pas un état instantané.",
+        piege: "Un site « annoncé » n’est pas un site : c’est un communiqué. Le "
+             + "référentiel conserve exprès les projets ABANDONNÉS (Meta Zeewolde, "
+             + "Apple Athenry, l’extension Google de Dublin) parce qu’un projet mort "
+             + "renseigne autant qu’un projet vivant sur les contraintes d’un territoire." },
+      { sect: "s-empreinte", t: "Le poids relatif des pays",
+        d: "Le tableau classe les pays par empreinte du parc cartographié. Lisez-le "
+         + "comme une carte de CONCENTRATION — Irlande, Pays-Bas, Allemagne, Espagne — "
+         + "et non comme un inventaire national.",
+        piege: "Les cumuls par pays additionnent des ordres de grandeur de CATÉGORIE. "
+             + "Ils situent, ils ne chiffrent pas un marché." },
+      { sect: "s-empreinte", pays: "IE", t: "Descendre au pays, puis au site",
+        d: "La page d’un pays liste tous ses centres avec statut, date, capacité et "
+         + "investissement ANNONCÉS. Cliquez ensuite un exploitant : sa fiche sépare "
+         + "ce qu’il a rendu public de ce que nous calculons, et donne les hypothèses "
+         + "du calcul pour que votre analyste le refasse avec ses propres valeurs.",
+        piege: "Aucune capacité informatique attestée ne survit à la vérification sur "
+             + "les 97 sites : les mégawatts qui circulent sont des cibles de campus, "
+             + "des capacités de raccordement ou des puissances de machine. Aucun "
+             + "agrégat de puissance européenne n’est donc publiable ici." },
+      { sect: "s-sources", t: "Vérifier avant de citer",
+        d: "Chaque constante du modèle — intensités carbone, PUE, WUE, facteur de "
+         + "charge, gabarits — porte sa source, son éditeur et son lien. Vos analystes "
+         + "peuvent refaire la chaîne complète sans nous.",
+        piege: "Si une donnée compte dans une décision d’investissement, remontez à la "
+             + "source primaire citée. Cette page est un point de départ documenté, "
+             + "pas une due diligence." },
+    ],
+  },
+  credit: {
+    nom: "Banque — financement de projet",
+    court: "Banque",
+    quoi: "Ce qui est attesté, ce qui est déclaratif, et où se situe le risque "
+        + "d’exécution.",
+    etapes: [
+      { sect: "s-carte", t: "L’échelle de certitude est le statut",
+        d: "Cinq statuts, du plus solide au plus fragile. « En exploitation » repose "
+         + "sur une exploitation constatée ; « autorisé » sur un permis ; « annoncé » "
+         + "sur un communiqué sans autorisation connue — l’information la plus fragile "
+         + "du référentiel, et elle est étiquetée comme telle.",
+        piege: "Ne traitez jamais deux statuts comme comparables dans un même tableau "
+             + "de financement. L’écart entre « autorisé » et « annoncé » est un risque "
+             + "de permis, pas une nuance de vocabulaire." },
+      { sect: "s-empreinte", pays: "IE", t: "La fiche d’un site, colonne par colonne",
+        d: "Sur la fiche d’un centre, la colonne de GAUCHE ne contient que du "
+         + "déclaratif d’exploitant, avec sa source, son type de source et un niveau "
+         + "de confiance (haute, moyenne, faible). La colonne de DROITE est du calcul. "
+         + "Aucune ligne ne mélange les deux.",
+        piege: "Un investissement annoncé porte souvent sur PLUSIEURS sites ou "
+             + "plusieurs tranches. Deux montants seulement survivent à la "
+             + "vérification dans tout le référentiel — les autres ont été purgés." },
+      { sect: "s-empreinte", t: "L’exposition énergétique du pays d’implantation",
+        d: "L’intensité carbone du réseau national conditionne à la fois l’empreinte "
+         + "reportable du projet et son exposition au prix du carbone. À consommation "
+         + "égale, un site polonais émet environ onze fois un site suédois.",
+        piege: "L’intensité affichée est une moyenne ANNUELLE. Un contrat "
+             + "d’approvisionnement horaire (24/7 carbon-free) change complètement le "
+             + "résultat sans changer cette moyenne." },
+      { sect: "s-sources", t: "La piste d’audit",
+        d: "Chaque valeur du modèle est reliée à sa source et à sa date de relevé, et "
+         + "la version du référentiel est affichée en tête de page. Une note de crédit "
+         + "peut citer cette page en indiquant la version.",
+        piege: "Le référentiel évolue : citez toujours la version et la date, jamais "
+             + "« le site » sans millésime." },
+    ],
+  },
+  assurance: {
+    nom: "Assurance — souscription et sinistres",
+    court: "Assurance",
+    quoi: "L’exposition physique d’un site, l’exposition réglementaire d’un "
+        + "assuré, et ce qui n’est pas assurable faute de mesure.",
+    etapes: [
+      { sect: "s-carte", t: "Localiser l’aléa physique",
+        d: "Chaque centre porte ses coordonnées et son mode de refroidissement. Le "
+         + "mode conditionne l’exposition : un site adiabatique dépend de la "
+         + "disponibilité de l’eau, un site en free cooling de la température de "
+         + "l’air, un site à eau d’une ressource de surface ou industrielle.",
+        piege: "Le référentiel ne porte AUCUNE donnée d’aléa (inondation, sécheresse, "
+             + "submersion). Croisez avec vos propres couches — la carte situe, elle "
+             + "ne qualifie pas le risque." },
+      { sect: "s-empreinte", t: "L’eau, avant le volume : le mode",
+        d: "Les volumes d’eau sont déduits d’un WUE typique du mode de refroidissement. "
+         + "Le mode est donc l’information de premier rang ; le volume n’en est que la "
+         + "conséquence calculée.",
+        piege: "Un mètre cube prélevé n’est pas un mètre cube consommé : une part "
+             + "retourne au milieu. Et mille m³ en Espagne et mille m³ en Irlande n’ont "
+             + "pas le même poids sans contexte de stress hydrique — que cette page ne "
+             + "fournit pas." },
+      { sect: "s-cas", t: "L’exposition réglementaire d’un assuré",
+        d: "L’explorateur classe des cas d’usage d’IA selon l’AI Act et calcule un "
+         + "score d’exposition : classe de risque, stade de déploiement, population "
+         + "touchée, signaux publics. C’est une priorité d’EXAMEN, utile pour cadrer "
+         + "un questionnaire de souscription.",
+        piege: "Le score ne dit RIEN de ce que l’entreprise citée a mis en place. Il ne "
+             + "peut fonder ni une tarification ni un refus de garantie : ce n’est pas "
+             + "un audit de conformité." },
+      { sect: "s-sources", t: "Ce que la réglementation rendra mesurable",
+        d: "La directive 2023/1791 et son règlement délégué 2024/1364 imposent aux "
+         + "centres de plus de 500 kW informatiques de déclarer énergie ET eau. "
+         + "Les premières déclarations alimentent une base européenne.",
+        piege: "Cette base sera d’abord administrative et partiellement agrégée : "
+             + "n’en attendez pas une transparence site par site que le texte ne "
+             + "promet pas." },
+    ],
+  },
+  climat: {
+    nom: "Climat et gaz à effet de serre",
+    court: "Climat",
+    quoi: "La frontière exacte entre ce qui est mesuré, ce qui est déduit, et ce "
+        + "que le modèle ne capte pas.",
+    etapes: [
+      { sect: "s-empreinte", t: "Deux postes, deux dynamiques",
+        d: "L’usage — électricité × intensité du réseau — et la fabrication amortie "
+         + "sur la durée de vie des équipements. Les deux ne répondent pas aux mêmes "
+         + "leviers : décarboner le réseau agit sur le premier seulement.",
+        piege: "Sur un parc alimenté en électricité peu carbonée (Suède 45 g, France "
+             + "60 g), la fabrication pèse plus lourd que l’usage. Une lecture qui "
+             + "n’afficherait que l’usage classerait ces pays près de zéro — ce serait "
+             + "faux, et c’est l’erreur la plus fréquente du domaine." },
+      { sect: "s-empreinte", t: "L’intensité du réseau, et son unité",
+        d: "Les intensités sont en approche CYCLE DE VIE : la construction des moyens "
+         + "de production est incluse, ce qui interdit de compter le nucléaire ou "
+         + "l’éolien à zéro.",
+        piege: "Elles ne sont donc PAS comparables aux facteurs de combustion directe "
+             + "(scope 2 location-based) que publient la plupart des inventaires "
+             + "d’entreprise. Vérifiez le périmètre avant tout rapprochement." },
+      { sect: "s-empreinte", pays: "FR", t: "Ce qu’une fiche de site permet — et interdit",
+        d: "La fiche donne les sept hypothèses du calcul, de la capacité retenue à "
+         + "l’intensité du réseau. Vous pouvez refaire le calcul, changer une "
+         + "hypothèse et mesurer sa sensibilité.",
+        piege: "Une valeur étiquetée « classe » répond à « de quel ordre est un campus "
+             + "de ce type ? », jamais à « combien émet CE site ? ». Elle ne peut entrer "
+             + "dans aucun inventaire attribué à une entité nommée." },
+      { sect: "s-socle", t: "La seule couche que vous pouvez refaire",
+        d: "Copernicus, NASA et data.gouv.fr sont interrogés en direct, sans clé "
+         + "d’API, avec point d’accès, licence et heure de relevé affichés. C’est la "
+         + "couche vérifiable de bout en bout par le lecteur.",
+        piege: "Aucune mesure satellitaire ne démontre l’usage d’une IA. Ces couches "
+             + "décrivent le sol et l’activité d’observation : contexte, jamais preuve." },
+      { sect: "s-sources", t: "Les sources, une par constante",
+        d: "Chaque valeur du modèle porte son éditeur, son millésime et son lien. "
+         + "Les écarts constatés lors de la vérification externe sont affichés tels "
+         + "quels, sans arrondi favorable.",
+        piege: "Les intensités sont des moyennes annuelles : l’intensité réelle varie "
+             + "d’un facteur trois dans la journée. Un calcul déplacé de la nuit au "
+             + "midi solaire change son empreinte sans changer sa consommation." },
+    ],
+  },
+  eau: {
+    nom: "Eau et biodiversité",
+    court: "Eau & biodiversité",
+    quoi: "Ce que la page dit du prélèvement d’eau, et les quatre choses "
+        + "qu’elle ne dit pas.",
+    etapes: [
+      { sect: "s-carte", t: "Le mode de refroidissement, information de premier rang",
+        d: "Survolez un carré : le mode de refroidissement est affiché avant tout "
+         + "volume. Free cooling et récupération de chaleur consomment très peu d’eau ; "
+         + "l’adiabatique en consomme beaucoup, l’eau industrielle ou de surface se "
+         + "situe entre les deux.",
+        piege: "« Non précisé » est fréquent et n’est pas un mode : c’est une absence "
+             + "d’information, et la fourchette d’eau s’en trouve alors très large." },
+      { sect: "s-empreinte", t: "Les volumes, et leur fabrication",
+        d: "Les mètres cubes affichés sont déduits d’un WUE — litres d’eau par "
+         + "kilowattheure informatique — typique du mode déclaré, multiplié par une "
+         + "consommation elle-même estimée. Deux estimations en chaîne.",
+        piege: "La borne basse d’une fourchette peut valoir zéro : c’est le cas d’un "
+             + "mode de refroidissement qui peut fonctionner sans eau. Zéro n’est pas "
+             + "une mesure, c’est une borne de plage." },
+      { sect: "s-empreinte", pays: "ES", t: "Un pays où la question se pose",
+        d: "Ouvrez un pays méditerranéen : la page liste ses centres, leur mode de "
+         + "refroidissement et leur fourchette d’eau. C’est le croisement mode × "
+         + "implantation qui informe, pas le total national.",
+        piege: "Le référentiel ne porte ni bassin versant, ni indice de stress "
+             + "hydrique, ni régime d’autorisation de prélèvement. Sans ces trois "
+             + "couches, un volume ne dit rien de la pression sur la ressource." },
+      { sect: "s-sources", t: "Ce que l’obligation européenne va changer",
+        d: "Le règlement délégué 2024/1364 fait de la consommation d’eau un indicateur "
+         + "déclaré au même titre que l’énergie, pour les centres de plus de 500 kW "
+         + "informatiques. C’est la première fois qu’une donnée d’eau site par site "
+         + "est prévue par un texte.",
+        piege: "Prévue, pas encore publique. Tant que la base européenne n’est pas "
+             + "ouverte, tout volume par site — ici comme ailleurs — reste un calcul." },
+    ],
+  },
+  analyste: {
+    nom: "Analyse financière et reporting extra-financier",
+    court: "Analyste / ESG",
+    quoi: "Ce qui est citable dans un document opposable, et sous quelles "
+        + "réserves explicites.",
+    etapes: [
+      { sect: "s-cas", t: "Le panel, et son biais",
+        d: "72 cas d’IA réellement déployés dans l’Union, recensés depuis des sources "
+         + "publiques, avec classe AI Act déduite par des règles écrites qui citent "
+         + "leur fondement — article 5, annexe III, article 50. Aucun modèle de "
+         + "langage n’intervient dans la classification.",
+        piege: "C’est un PANEL, pas un recensement. Le biais de publication favorise "
+             + "les grands groupes et les cas génératifs : n’en tirez aucune part de "
+             + "marché ni aucun taux de pénétration." },
+      { sect: "s-lectures", t: "Les répartitions, et ce qu’elles décrivent",
+        d: "Classes de risque, maturité, secteurs, vulnérabilités : ces lectures "
+         + "décrivent le panel. Elles servent à situer un portefeuille — si vos "
+         + "systèmes RH ou de scoring n’apparaissent pas dans votre registre interne "
+         + "alors qu’ils dominent les classes hautes du panel, c’est l’angle mort.",
+        piege: "Ne présentez jamais ces répartitions comme celles du parc européen "
+             + "réel. Elles décrivent ce qui a été rendu public." },
+      { sect: "s-empreinte", t: "Trois natures, jamais mélangées",
+        d: "« publié » : l’exploitant a donné le chiffre. « site » : calculé depuis la "
+         + "capacité annoncée de ce site précis. « classe » : calculé depuis l’ordre de "
+         + "grandeur typique de sa catégorie. L’étiquette accompagne chaque valeur, "
+         + "partout, y compris dans les totaux.",
+        piege: "Seules les valeurs « publié » peuvent être citées comme des faits "
+             + "attribués à une entreprise nommée. Les deux autres natures sont des "
+             + "estimations et doivent être présentées comme telles dans tout document "
+             + "opposable." },
+      { sect: "s-sources", t: "La page de sources, à joindre à la citation",
+        d: "Elle liste chaque source, son éditeur, sa licence quand elle existe, son "
+         + "millésime et son lien, plus le résultat de la vérification externe. "
+         + "Joignez-la en annexe : elle constitue la piste d’audit.",
+        piege: "Notre chaîne de calcul est publiée, mais elle n’est pas auditée par un "
+             + "tiers. Ne la présentez pas comme une donnée certifiée." },
+    ],
+  },
+};
+
+var GP = { profil: null, i: 0, cible: null };
+
+function gpEls(){
+  return { voile: document.getElementById("gp-voile"), carte: document.getElementById("gp-carte"),
+           choix: document.getElementById("gp-choix") };
+}
+
+function gpOuvrirChoix(){
+  var e = gpEls();
+  gpNettoyer();
+  e.voile.classList.add("on");
+  e.choix.classList.add("on");
+  var b = e.choix.querySelector(".gp-p");
+  if(b) b.focus({ preventScroll: true });
+}
+
+function gpDemarrer(cle){
+  if(!GP_PROFILS[cle]) return;
+  var e = gpEls();
+  e.choix.classList.remove("on");
+  GP.profil = cle; GP.i = 0;
+  e.voile.classList.add("on");
+  e.carte.classList.add("on");
+  if(history.replaceState) history.replaceState(null, "", "#parcours=" + cle);
+  gpAller(0);
+}
+
+function gpNettoyer(){
+  if(GP.cible){ GP.cible.classList.remove("gp-cible"); GP.cible = null; }
+}
+
+function gpFermer(){
+  var e = gpEls();
+  gpNettoyer();
+  e.voile.classList.remove("on");
+  e.carte.classList.remove("on");
+  e.choix.classList.remove("on");
+  GP.profil = null;
+  if(history.replaceState) history.replaceState(null, "", location.pathname);
+  var l = document.getElementById("gp-lanceur");
+  if(l) l.focus({ preventScroll: true });
+}
+
+function gpAller(i){
+  var P = GP_PROFILS[GP.profil];
+  if(!P) return;
+  i = Math.max(0, Math.min(P.etapes.length - 1, i));
+  GP.i = i;
+  var et = P.etapes[i];
+  gpNettoyer();
+
+  /* Une etape peut demander une vue de detail : on l'ouvre, sinon on revient a
+     la page d'ensemble. Sans cette remise a plat, l'etape suivante viserait une
+     section masquee par la vue precedente. */
+  if(et.pays){
+    if(typeof ouvrirPays === "function") ouvrirPays(et.pays);
+  } else {
+    if(document.body.classList.contains("vue-site") && typeof fermerSite === "function"){
+      RETOUR_PAYS = null; fermerSite();
+    }
+    if(document.body.classList.contains("vue-pays") && typeof fermerPays === "function"){
+      fermerPays(true);
+    }
+  }
+
+  var idCible = et.pays ? "s-pays" : et.sect;
+  var sec = document.getElementById(idCible);
+  if(sec && !sec.hidden){
+    GP.cible = sec;
+    sec.classList.add("gp-cible");
+    sec.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  var points = P.etapes.map(function(_, j){
+    return '<i class="' + (j === i ? "ici" : (j < i ? "fait" : "")) + '"></i>';
+  }).join("");
+  var e = gpEls();
+  e.carte.innerHTML =
+      '<div class="gp-tete"><span class="gp-profil">' + esc(P.court) + "</span>"
+    + '<span class="gp-etape">Étape ' + (i + 1) + " sur " + P.etapes.length + "</span>"
+    + '<button type="button" class="gp-fermer" id="gp-x" aria-label="Fermer le parcours">×</button></div>'
+    + '<div class="gp-corps"><h4>' + esc(et.t) + "</h4><p>" + et.d + "</p>"
+    + (et.piege ? '<div class="gp-piege"><b>Le piège :</b> ' + et.piege + "</div>" : "")
+    + "</div>"
+    + '<div class="gp-pied"><div class="gp-points">' + points + "</div>"
+    + '<button type="button" class="gp-btn" id="gp-prec"' + (i === 0 ? " disabled" : "") + ">Précédent</button>"
+    + '<button type="button" class="gp-btn suiv" id="gp-suiv">'
+    + (i === P.etapes.length - 1 ? "Terminer" : "Suivant") + "</button></div>";
+
+  document.getElementById("gp-x").addEventListener("click", gpFermer);
+  document.getElementById("gp-prec").addEventListener("click", function(){ if(GP.i > 0) gpAller(GP.i - 1); });
+  document.getElementById("gp-suiv").addEventListener("click", function(){
+    if(GP.i === P.etapes.length - 1) gpFermer(); else gpAller(GP.i + 1);
+  });
+  document.getElementById("gp-suiv").focus({ preventScroll: true });
+}
+
+function gpBrancher(){
+  var e = gpEls();
+  if(!e.choix || e.choix.getAttribute("data-pret") === "1") return;
+  e.choix.setAttribute("data-pret", "1");
+  e.choix.innerHTML =
+      "<h3>Un parcours par métier</h3>"
+    + '<p class="st">Cette page sert des lectures qui n’ont presque rien en commun, et '
+    + "chaque métier y court un contresens différent. Choisissez le vôtre : le parcours "
+    + "conduit dans l’ordre qui vous concerne et nomme, à chaque étape, le piège à éviter.</p>"
+    + '<div class="gp-grille">'
+    + Object.keys(GP_PROFILS).map(function(k){
+        var P = GP_PROFILS[k];
+        return '<button type="button" class="gp-p" data-profil="' + k + '"><b>' + esc(P.nom)
+          + "</b><span>" + esc(P.quoi) + "</span><em>" + P.etapes.length + " étapes</em></button>";
+      }).join("")
+    + "</div>";
+  e.choix.querySelectorAll("[data-profil]").forEach(function(b){
+    b.addEventListener("click", function(){ gpDemarrer(this.getAttribute("data-profil")); });
+  });
+  e.voile.addEventListener("click", gpFermer);
+  var l = document.getElementById("gp-lanceur");
+  if(l) l.addEventListener("click", gpOuvrirChoix);
+  document.addEventListener("keydown", function(ev){
+    if(!GP.profil && !e.choix.classList.contains("on")) return;
+    if(ev.key === "Escape"){ ev.stopPropagation(); gpFermer(); }
+    else if(GP.profil && ev.key === "ArrowRight") gpAller(GP.i + 1);
+    else if(GP.profil && ev.key === "ArrowLeft") gpAller(GP.i - 1);
+  }, true);
+
+  /* L'adresse porte le parcours : un responsable peut envoyer a son equipe le
+     chemin de lecture qui la concerne, pas seulement la page. */
+  var m = /^#parcours=([a-z]+)$/.exec(location.hash || "");
+  if(m && GP_PROFILS[m[1]]) setTimeout(function(){ gpDemarrer(m[1]); }, 400);
 }
 
 /* ── FICHE D'UN CENTRE DE DONNEES ───────────────────────────────────────────
@@ -3029,6 +3782,9 @@ function renderSite(){
   if(e.base){
     h += '<p class="note"><b>Point de départ retenu.</b> ' + esc(e.base) + "</p>";
   }
+  h += '<p class="note">Chacune de ces hypothèses porte un éditeur et un millésime, listés '
+    + 'dans <a href="#s-sources" data-vers-sources="1">Sources, méthode et vérification</a> — '
+    + "avec le lien pour aller la vérifier vous-même.</p>";
   if(e.nature === "classe"){
     h += '<div class="fs-note"><b>Cette fiche est de nature « classe ».</b> Les fourchettes '
       + "ci-dessus répondent à « de quel ordre est un campus de ce type ? », <b>jamais</b> à "
@@ -3081,6 +3837,14 @@ function renderSite(){
      rien ne le signale — la meme erreur que sur les blocs de la carte. */
   aideBrancher();
 
+  var vs = document.querySelector("#fs-corps [data-vers-sources]");
+  if(vs) vs.addEventListener("click", function(ev){
+    ev.preventDefault();
+    RETOUR_PAYS = null; fermerSite();
+    var sec = document.getElementById("s-sources");
+    if(sec) sec.scrollIntoView({ block: "start" });
+  });
+
   var bt = document.getElementById("fs-voir-carte");
   if(bt) bt.addEventListener("click", function(){
     /* Fermer d'abord : la carte ne peut pas etre visee tant qu'elle est
@@ -3100,7 +3864,7 @@ function renderSite(){
 /* aideBrancher en FIN de renderAll, et non apres l'appel : renderAll est
    rejoue a l'arrivee des donnees en direct, et les blocs reconstruits
    perdaient alors leur bouton d'aide sans que rien ne le signale. */
-function renderAll(){renderEcheancier();renderFlux();populerFiltres();renderKpis();renderMap();renderTable();renderCharts();renderMethodo();renderSocle();pnavBrancher();pnavCompteurs();aideBrancher();}
+function renderAll(){renderEcheancier();renderFlux();populerFiltres();renderKpis();renderMap();renderTable();renderCharts();renderMethodo();renderSocle();renderSources();pnavBrancher();pnavCompteurs();gpBrancher();aideBrancher();}
 renderAll();
 
 /* Retour depuis la vue pays, et prise en charge de l'adresse #pays=XX :
@@ -3120,6 +3884,16 @@ renderAll();
   function depuisAncre(){
     var mp = /^#pays=([A-Z]{2})$/.exec(location.hash || "");
     var md = /^#dc=([a-z0-9-]+)$/i.exec(location.hash || "");
+    /* Un parcours doit demarrer meme quand l'adresse change SANS rechargement :
+       c'est le cas quand on suit un lien depuis la page elle-meme, ou qu'on
+       colle l'adresse dans la barre. Sans ce branchement, seul le tout premier
+       chargement lancait le parcours, et le lien partage semblait mort. */
+    var mg = /^#parcours=([a-z]+)$/.exec(location.hash || "");
+    if(mg && typeof GP_PROFILS !== "undefined" && GP_PROFILS[mg[1]]){
+      if(GP.profil !== mg[1]) gpDemarrer(mg[1]);
+      return;
+    }
+    if(!mg && typeof GP !== "undefined" && GP.profil) gpFermer();
     if(md) ouvrirSite(md[1]);
     else if(mp) ouvrirPays(mp[1]);
     else {

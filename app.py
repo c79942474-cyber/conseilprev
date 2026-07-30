@@ -1259,20 +1259,90 @@ EMPS_TTL = 900
 _EMPS_CACHE = {"ts": 0.0, "data": None}
 
 
-def _emps_live():
-    """Intensites du moment, quand le serveur sait les obtenir.
+# Pays couverts par Energy-Charts (Fraunhofer ISE, licence ouverte, sans cle)
+# et presents au referentiel. La liste est explicite : interroger un pays que
+# la source ne couvre pas coute un aller-retour reseau pour rien.
+EMPS_PAYS_LIVE = ('fr', 'de', 'nl', 'be', 'es', 'pt', 'it', 'ie', 'dk', 'se',
+                  'fi', 'no', 'at', 'pl', 'cz', 'sk', 'hu', 'ro', 'bg', 'gr',
+                  'si', 'hr', 'lt', 'lv', 'ee', 'lu', 'ch')
 
-    Un echec de l'une n'empeche pas les autres : le module retombe alors sur
-    la moyenne annuelle du pays, et le declare dans sa source."""
-    live = {}
-    for code, fn in (('FR', _emp_intensite_fr), ('DE', _emp_intensite_de)):
-        try:
-            val, _src = fn()
-            if isinstance(val, (int, float)) and val > 0:
-                live[code] = float(val)
-        except Exception as e:  # noqa: BLE001
-            logger.warning('EMPS_LIVE %s: %s', code, e)
-    return live
+EMPS_LIVE_TTL = 1800
+_EMPS_LIVE_CACHE = {'ts': 0.0, 'val': {}, 'etat': {}}
+
+
+def _emp_intensite_pays(code):
+    """Intensite carbone d'un pays, reconstituee depuis son mix de production
+    du moment (Energy-Charts, licence ouverte) et des facteurs par filiere en
+    cycle de vie.
+
+    Rend None plutot qu'une valeur de repli : c'est l'appelant qui decide de
+    retomber sur la moyenne annuelle, et il doit savoir qu'il l'a fait."""
+    try:
+        resp = requests.get('https://api.energy-charts.info/public_power',
+                            params={'country': str(code).lower()}, timeout=6)
+        if not resp.ok:
+            return None
+        data = resp.json()
+        somme = pondere = 0.0
+        for serie in (data.get('production_types') or []):
+            fe = _emp_fe_filiere(serie.get('name'))
+            if fe is None:
+                continue
+            valeurs = [v for v in (serie.get('data') or []) if v is not None]
+            if not valeurs:
+                continue
+            mw = float(valeurs[-1])
+            if mw <= 0:
+                continue
+            somme += mw
+            pondere += mw * fe
+        if somme <= 0:
+            return None
+        val = round(pondere / somme, 1)
+        # Garde-fou : une valeur hors de toute plage physique signale une
+        # reponse malformee plutot qu'un reseau extraordinaire. On la refuse,
+        # sans quoi une carte entiere basculerait sur une aberration.
+        return val if 0 < val < 1200 else None
+    except Exception:                                          # noqa: BLE001
+        return None
+
+
+def _emps_live(force=False):
+    """Intensites du moment pour TOUS les pays du referentiel, en parallele.
+
+    Sans intervention quotidienne : le cache se renouvelle seul, et un
+    rafraichisseur de fond le tient chaud meme sans visiteur. Un echec par pays
+    ne fait pas tomber les autres — le pays concerne retombe sur sa moyenne
+    annuelle, et l'etat publie dit lequel."""
+    now = time.time()
+    if (not force) and _EMPS_LIVE_CACHE['val'] and (now - _EMPS_LIVE_CACHE['ts'] < EMPS_LIVE_TTL):
+        return dict(_EMPS_LIVE_CACHE['val'])
+    live, etat = {}, {}
+    try:
+        with _futures.ThreadPoolExecutor(max_workers=4) as ex:
+            futs = {ex.submit(_emp_intensite_pays, c): c for c in EMPS_PAYS_LIVE}
+            for f in _futures.as_completed(futs, timeout=20):
+                c = futs[f]
+                try:
+                    v = f.result()
+                except Exception:                              # noqa: BLE001
+                    v = None
+                if v:
+                    live[c.upper()] = float(v)
+                    etat[c.upper()] = {'ok': True, 'depuis': datetime.utcnow().isoformat()}
+                else:
+                    etat[c.upper()] = {'ok': False, 'raison': 'source non jointe'}
+    except Exception as e:                                     # noqa: BLE001
+        logger.warning('EMPS_LIVE lot: %s', e)
+    if live:
+        _EMPS_LIVE_CACHE.update({'ts': now, 'val': live, 'etat': etat})
+        logger.info('EMPS_LIVE %d/%d pays en direct', len(live), len(EMPS_PAYS_LIVE))
+        return dict(live)
+    # Aucun pays joint : on conserve le dernier releve plutot que de renvoyer
+    # un dictionnaire vide, qui ferait basculer toute la carte sur les moyennes
+    # annuelles a la premiere coupure reseau.
+    _EMPS_LIVE_CACHE['etat'] = etat
+    return dict(_EMPS_LIVE_CACHE['val'])
 
 
 @app.route('/api/empreinte-sites', methods=['GET'])
@@ -1299,6 +1369,32 @@ def api_empreinte_sites():
     payload["ok"] = True
     payload["cached"] = False
     return jsonify(payload)
+
+# ══════════════════════════════════════════════════════════
+# CONTROLES FACTUELS — registre partage par toutes les pages
+# Les chiffres du site sont lus par des professionnels de l'investissement, du
+# credit, de l'assurance et du climat : un ordre de grandeur non source n'est
+# pas une information, c'est un risque. Chaque affirmation verifiable porte
+# donc son verdict, sa source et la date de son controle.
+# ══════════════════════════════════════════════════════════
+import factcheck  # noqa: E402
+
+
+@app.route('/api/factcheck', methods=['GET'])
+@rate_limit(limit=60, window=60)
+def api_factcheck():
+    """Registre des controles factuels. ?portee=panorama|empreinte|observatoire
+    |reglementaire restreint au perimetre d'une page."""
+    portee = (request.args.get('portee') or '').strip() or None
+    if portee and portee not in factcheck.PORTEES:
+        return jsonify({'ok': False, 'erreur': 'portée inconnue',
+                        'portees': sorted(factcheck.PORTEES)}), 400
+    try:
+        return jsonify(factcheck.etat(portee))
+    except Exception as e:  # noqa: BLE001
+        logger.error(f'FACTCHECK_ERR: {e}')
+        return jsonify({'ok': False, 'erreur': 'registre indisponible'}), 503
+
 
 @app.route('/api/apply', methods=['POST'])
 def api_apply():
@@ -8318,6 +8414,129 @@ def _news_warmup():
         logger.warning(f"[warmup] Echec pre-chargement RSS : {exc}")
 
 threading.Thread(target=_news_warmup, daemon=True).start()
+
+
+# ══════════════════════════════════════════════════════════
+# RAFRAICHISSEMENT AUTOMATIQUE DES CARTES ET DES TABLEAUX
+#
+# Les couches de donnees se renouvelaient PARESSEUSEMENT : la premiere requete
+# arrivee apres l'expiration du cache payait le reassemblage, et si personne ne
+# visitait la page pendant la nuit, le premier visiteur du matin recevait des
+# valeurs vieilles de plusieurs heures — ou attendait dix secondes.
+#
+# Un rafraichisseur de fond tient desormais les caches chauds tout seul. Aucune
+# intervention quotidienne n'est requise : le serveur va chercher, a intervalle
+# regulier, les intensites carbone du moment, l'empreinte du parc, le socle
+# ouvert et les referentiels. Ce qu'un visiteur declenchait par hasard est
+# devenu une cadence.
+#
+# Trois precautions, chacune apprise d'un incident possible :
+#  — un echec ne remonte JAMAIS : une source muette ne doit pas arreter la
+#    boucle, sinon la premiere coupure reseau fige tout le reste ;
+#  — la boucle demarre apres un delai, pour ne pas concurrencer le demarrage
+#    de Flask sur un hebergement a faibles ressources ;
+#  — la cadence est plus lente pour ce qui bouge lentement (referentiels) que
+#    pour ce qui bouge vite (mix electrique), afin de ne pas marteler des
+#    sources publiques pour rien.
+# ══════════════════════════════════════════════════════════
+AUTO_MAJ = (os.environ.get('AUTO_MAJ', '1') or '1').strip() not in ('0', 'false', 'no')
+AUTO_MAJ_RAPIDE = int(os.environ.get('AUTO_MAJ_RAPIDE', '1800'))    # mix electrique, empreinte
+AUTO_MAJ_LENT = int(os.environ.get('AUTO_MAJ_LENT', '21600'))       # referentiels, socle ouvert
+
+_AUTO_ETAT = {'demarre': None, 'cycles': 0, 'dernier': None,
+              'rapide': {}, 'lent': {}, 'erreurs': []}
+
+
+def _auto_note(bloc, cle, ok, detail=''):
+    _AUTO_ETAT[bloc][cle] = {'ok': bool(ok), 'a': datetime.utcnow().isoformat(),
+                             'detail': str(detail)[:160]}
+    if not ok:
+        _AUTO_ETAT['erreurs'] = ([f'{cle}: {detail}'] + _AUTO_ETAT['erreurs'])[:8]
+
+
+def _auto_rapide():
+    """Ce qui bouge dans la journee : mix electrique, donc empreinte du parc."""
+    try:
+        live = _emps_live(force=True)
+        _auto_note('rapide', 'intensites', bool(live), f'{len(live)} pays en direct')
+    except Exception as e:                                     # noqa: BLE001
+        _auto_note('rapide', 'intensites', False, e)
+        live = {}
+    try:
+        _dc = datacentres.assemble()
+        _pan = panorama_ia.assemble()
+        data = empreinte_sites.assemble(sites=_dc.get('sites'), cas=_pan.get('cas'), live=live)
+        _EMPS_CACHE['ts'], _EMPS_CACHE['data'] = time.time(), data
+        _auto_note('rapide', 'empreinte', True,
+                   f"{(data.get('totaux') or {}).get('n_centres', 0)} centres")
+    except Exception as e:                                     # noqa: BLE001
+        _auto_note('rapide', 'empreinte', False, e)
+
+
+def _auto_lent():
+    """Ce qui bouge d'une version a l'autre : referentiels et socle ouvert."""
+    try:
+        d = panorama_ia.assemble()
+        _PAN_CACHE['ts'], _PAN_CACHE['data'] = time.time(), d
+        _auto_note('lent', 'panorama', True, f"{len(d.get('cas') or [])} cas")
+    except Exception as e:                                     # noqa: BLE001
+        _auto_note('lent', 'panorama', False, e)
+    try:
+        d = datacentres.assemble()
+        _DC_CACHE['data'] = d
+        _auto_note('lent', 'datacentres', True, f"{len(d.get('sites') or [])} sites")
+    except Exception as e:                                     # noqa: BLE001
+        _auto_note('lent', 'datacentres', False, e)
+    try:
+        d = donnees_ouvertes.assemble()
+        _DO_CACHE['ts'], _DO_CACHE['data'] = time.time(), d
+        _auto_note('lent', 'socle_ouvert', True, 'sources interrogees')
+    except Exception as e:                                     # noqa: BLE001
+        _auto_note('lent', 'socle_ouvert', False, e)
+
+
+def _auto_boucle():
+    import time as _t
+    # 60 s, et non 20 : sur un hebergement modeste, le premier cycle ne doit
+    # pas concurrencer le service des toutes premieres pages. Ce que le
+    # rafraichisseur gagne a partir tot, la page d'accueil le perd.
+    _t.sleep(60)
+    _AUTO_ETAT['demarre'] = datetime.utcnow().isoformat()
+    prochain_lent = 0.0
+    while True:
+        debut = _t.time()
+        try:
+            _auto_rapide()
+            if debut >= prochain_lent:
+                _auto_lent()
+                prochain_lent = debut + AUTO_MAJ_LENT
+            _AUTO_ETAT['cycles'] += 1
+            _AUTO_ETAT['dernier'] = datetime.utcnow().isoformat()
+        except Exception as e:                                 # noqa: BLE001
+            logger.warning('AUTO_MAJ cycle: %s', e)
+        _t.sleep(max(300, AUTO_MAJ_RAPIDE))
+
+
+@app.route('/api/auto-maj', methods=['GET'])
+@rate_limit(limit=30, window=60)
+def api_auto_maj():
+    """Etat du rafraichissement automatique : ce qui a ete renouvele, quand, et
+    ce qui a echoue. Une automatisation qui ne se donne pas a inspecter ne se
+    distingue pas d'une automatisation arretee."""
+    e = dict(_AUTO_ETAT)
+    e['ok'] = True
+    e['actif'] = AUTO_MAJ
+    e['cadence_rapide_s'] = AUTO_MAJ_RAPIDE
+    e['cadence_lente_s'] = AUTO_MAJ_LENT
+    e['pays_suivis'] = len(EMPS_PAYS_LIVE)
+    e['intensites_en_direct'] = sorted(_EMPS_LIVE_CACHE.get('val') or {})
+    e['intensites_etat'] = _EMPS_LIVE_CACHE.get('etat') or {}
+    return jsonify(e)
+
+
+if AUTO_MAJ:
+    threading.Thread(target=_auto_boucle, daemon=True).start()
+    logger.info('AUTO_MAJ actif — %ds (rapide) / %ds (lent)', AUTO_MAJ_RAPIDE, AUTO_MAJ_LENT)
 
 # ══════════════════════════════════════════════════════════
 # FACTURATION ECHELONNEE PAR RESULTATS — LIEN Tarification par resultats /
