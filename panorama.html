@@ -13,7 +13,10 @@
   --serif:Georgia,'Times New Roman',serif;
   --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
 }
-html{background:var(--bg)}
+/* La barre de sections recouvre les 52 premiers pixels : sans cette reserve,
+   tout defilement programme — ancre, scrollIntoView, recherche du navigateur —
+   depose sa cible SOUS la barre, ou elle n'est ni lisible ni survolable. */
+html{background:var(--bg);scroll-padding-top:56px}
 body{font-family:var(--sans);color:var(--ink);font-size:14px;line-height:1.5;margin:0;padding:24px 22px 36px}
 a{color:#1E63A8}
 a:focus-visible,summary:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid #1E63A8;outline-offset:2px}
@@ -34,6 +37,100 @@ body.embed .hdr{margin-bottom:12px}
 .limite{border:1px solid var(--rule);border-left:3px solid var(--orange);border-radius:0 4px 4px 0;
   background:var(--white);padding:10px 15px;margin-bottom:18px;font-size:12px;color:var(--muted);max-width:1050px}
 .limite b{color:var(--ink)}
+
+/* ── BARRE DE NAVIGATION DE LA PAGE ─────────────────────────────────────────
+   Sept sections, dont une carte haute et deux tableaux longs : sans repere, on
+   ne sait ni ou l'on est ni ce qui reste a lire, et l'on defile a l'aveugle.
+   La barre colle en haut, marque la section courante, et reste un vrai jeu de
+   liens — donc utilisable au clavier et ouvrable dans un nouvel onglet. */
+.pnav{position:sticky;top:0;z-index:40;display:flex;gap:4px;align-items:center;
+  background:rgba(247,246,243,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--rule);
+  margin:0 -22px 18px;padding:7px 22px;overflow-x:auto;scrollbar-width:thin}
+body.embed .pnav{margin:0 -18px 14px;padding:7px 18px}
+.pnav::-webkit-scrollbar{height:4px}
+.pnav::-webkit-scrollbar-thumb{background:var(--rule);border-radius:2px}
+.pnav a{flex:0 0 auto;font-size:11.5px;color:var(--muted);text-decoration:none;
+  padding:5px 11px;border-radius:3px;border:1px solid transparent;white-space:nowrap;
+  transition:background .12s,color .12s,border-color .12s}
+.pnav a:hover{background:var(--white);color:var(--ink);border-color:var(--rule)}
+.pnav a.on{background:#1C1C1C;color:#fff;border-color:#1C1C1C;font-weight:600}
+.pnav .pnav-n{font-family:var(--mono);font-size:9px;opacity:.7;margin-left:5px}
+/* La reserve de defilement est portee par `html{scroll-padding-top}` (voir plus
+   haut) et non par une marge sur chaque section : les deux se CUMULERAIENT, et
+   la section visee arriverait 108 px trop bas. */
+@media print{.pnav{display:none}}
+
+/* ── EMPREINTE : LES DEUX POSTES, ET LA VUE PAR PAYS ────────────────────────
+   Un total de CO2e ne se lit pas : il faut voir de quoi il est fait. Deux
+   postes seulement, mais ils ne se comportent pas pareil — l'usage suit
+   l'intensite du reseau, la fabrication suit la quantite de materiel. Sur un
+   parc alimente en electricite peu carbonee, le second l'emporte, et une
+   lecture qui n'afficherait que le premier classerait ce pays a tort pres de
+   zero. */
+.postes{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:14px 0 4px}
+.poste{border:1px solid var(--rule);border-radius:4px;padding:11px 14px;background:var(--bg)}
+.poste .pt{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted2)}
+.poste .pv{font-family:var(--serif);font-size:19px;line-height:1.2;margin:3px 0 2px}
+.poste .pd{font-size:11px;color:var(--muted);line-height:1.45}
+.barre-postes{display:flex;height:9px;border-radius:2px;overflow:hidden;margin:12px 0 6px;border:1px solid var(--rule)}
+.barre-postes span{display:block;height:100%}
+.bp-usage{background:#1C5CAB}
+.bp-fab{background:#C47C1A}
+.bp-leg{display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:var(--muted)}
+.bp-leg i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px;font-style:normal}
+
+/* Lignes de pays cliquables : la promesse doit etre visible AVANT le clic,
+   sinon personne ne decouvre le detail. D'ou le chevron et le survol. */
+tr.pays-l{cursor:pointer}
+tr.pays-l:hover{background:#F2F5FA}
+tr.pays-l th button{all:unset;cursor:pointer;color:#1E63A8;font:inherit;font-weight:600;
+  display:inline-flex;align-items:center;gap:5px}
+tr.pays-l th button:after{content:"›";font-size:15px;line-height:1;opacity:.55;transition:transform .12s}
+tr.pays-l:hover th button:after{transform:translateX(2px);opacity:1}
+tr.pays-l th button:focus-visible{outline:2px solid #1E63A8;outline-offset:2px;border-radius:2px}
+
+/* VUE PAYS : une page, et rien d'autre. Garder les six autres sections
+   au-dessous obligerait a defiler pour revenir, et brouillerait la lecture
+   du detail — ce qu'on est justement venu chercher. */
+body.vue-pays .pnav,
+body.vue-pays #echeancier,
+body.vue-pays .limite,
+body.vue-pays > .kpis,
+body.vue-pays .panel:not(#s-pays){display:none}
+#s-pays[hidden]{display:none}
+.pv-fil{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.pv-retour{all:unset;cursor:pointer;font-size:11.5px;color:#1E63A8;padding:4px 9px;border-radius:3px;
+  border:1px solid var(--rule);background:var(--white)}
+.pv-retour:hover{background:#F2F5FA;border-color:#1E63A8}
+.pv-retour:focus-visible{outline:2px solid #1E63A8;outline-offset:2px}
+.pv-h{font-family:var(--serif);font-size:24px;font-weight:400;line-height:1.15;margin:2px 0 4px}
+.pv-sh{font-size:13px;font-weight:600;margin:22px 0 8px;padding-top:14px;border-top:1px solid var(--rule)}
+.pv-sh:first-of-type{border-top:none;padding-top:0;margin-top:16px}
+.pv-wrap{overflow-x:auto;border:1px solid var(--rule);border-radius:4px}
+.pv-t{width:100%;border-collapse:collapse;font-size:11.5px;min-width:1180px}
+.pv-t th{position:sticky;top:0;background:var(--bg);text-align:left;font-family:var(--mono);font-size:9px;
+  text-transform:uppercase;letter-spacing:.06em;color:var(--muted2);font-weight:400;
+  padding:8px 10px;border-bottom:1px solid var(--rule);white-space:nowrap;z-index:1}
+.pv-t td{border-bottom:1px solid var(--rule);padding:8px 10px;vertical-align:top;line-height:1.45}
+.pv-t tbody tr:hover{background:#FAFAF8}
+.pv-t td.num{font-family:var(--mono);font-size:11px;white-space:nowrap}
+/* Sans largeurs, le navigateur comprime la premiere colonne et etire la
+   derniere : le nom de l'exploitant passe sur trois lignes pendant que la
+   source en occupe huit, et la ligne devient un pave. */
+.pv-t th:first-child,.pv-t td:first-child{min-width:200px}
+.pv-t th:last-child,.pv-t td:last-child{min-width:210px;max-width:260px}
+.pv-t .op{font-weight:600}
+.pv-t .si{color:var(--muted);font-size:10.5px}
+.pv-st{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.pv-st i{width:8px;height:8px;display:inline-block;flex:0 0 auto}
+.pv-nat{font-family:var(--mono);font-size:8.5px;text-transform:uppercase;letter-spacing:.05em;
+  padding:1px 5px;border-radius:2px;margin-left:5px;white-space:nowrap}
+.n-publie{background:rgba(45,122,71,.13);color:#215B35}
+.n-site{background:rgba(30,99,168,.12);color:#17497E}
+.n-classe{background:rgba(196,124,26,.15);color:#8A5310}
+.n-indisponible{background:var(--rule);color:var(--muted)}
+.pv-vide{font-size:12px;color:var(--muted);padding:14px 2px}
+@media(max-width:760px){.pv-t th.opt,.pv-t td.opt{display:none}.pv-t{min-width:620px}}
 
 /* ── KPI ── */
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
@@ -296,6 +393,10 @@ th .fl{font-size:9px;margin-left:3px}
 .tbl-alt summary{cursor:pointer;font-family:var(--mono);font-size:10.5px;color:var(--muted2);padding:4px 0}
 @media(max-width:640px){
   body{padding:16px 12px 28px}
+  /* La barre deborde de la largeur du corps pour aller bord a bord : sa marge
+     negative doit donc suivre le retrait du corps, sinon elle depasse a droite
+     et c'est toute la page qui defile lateralement. */
+  .pnav{margin:0 -12px 14px;padding:7px 12px}
   .panel-body{padding:12px 14px 14px}
   .filtres{padding:10px 12px}
   .f-count{margin-left:0;width:100%}
@@ -320,12 +421,22 @@ l'<b>exposition réglementaire du cas d'usage</b> (classe de risque, stade, donn
 n'est <b>pas un audit de conformité</b> des entreprises citées. Seuls les faits sourcés (sanctions, décisions,
 engagements publics) sont imputés nominativement.</div>
 
+<nav class="pnav" id="pnav" aria-label="Sections de la page">
+  <a href="#s-carte">Carte &amp; droit national</a>
+  <a href="#s-cas">Explorateur des cas<span class="pnav-n" id="pn-cas"></span></a>
+  <a href="#s-signaux">Signaux</a>
+  <a href="#s-lectures">Lectures d’ensemble</a>
+  <a href="#s-socle">Données ouvertes</a>
+  <a href="#s-empreinte">Empreinte<span class="pnav-n" id="pn-emp"></span></a>
+  <a href="#s-methodo">Méthodologie</a>
+</nav>
+
 <div id="echeancier" style="display:flex;gap:10px;flex-wrap:wrap;margin:-6px 0 16px"></div>
 
 <div class="kpis" id="kpis" aria-label="Indicateurs du panel"></div>
 
 <!-- ══ 1. CARTE UE + FICHE PAYS ══ -->
-<section class="panel" aria-labelledby="t-map">
+<section class="panel" id="s-carte" aria-labelledby="t-map">
   <div class="panel-head">
     <span class="panel-title" data-aide="carte" id="t-map">Où le panel observe des SIA — et ce que dit le droit national</span>
     <span class="panel-note">cliquer un pays : cas + autorités (AI Act art. 70, cyber, données)</span>
@@ -352,7 +463,7 @@ engagements publics) sont imputés nominativement.</div>
 </section>
 
 <!-- ══ 2. EXPLORATEUR DES CAS ══ -->
-<section class="panel" aria-labelledby="t-cas">
+<section class="panel" id="s-cas" aria-labelledby="t-cas">
   <div class="panel-head">
     <span class="panel-title" data-aide="panel" id="t-cas">Explorateur des cas — classement AI Act et exposition</span>
     <span class="panel-note">score = priorité d'examen du cas d'usage · jamais un audit de l'entreprise</span>
@@ -386,7 +497,7 @@ engagements publics) sont imputés nominativement.</div>
 </section>
 
 <!-- ══ SIGNAUX EN CONTINU ══ -->
-<section class="panel" aria-labelledby="t-flux">
+<section class="panel" id="s-signaux" aria-labelledby="t-flux">
   <div class="panel-head">
     <span class="panel-title" data-aide="signaux" id="t-flux">Signaux en continu — autorités &amp; institutions <span id="flux-badge" class="badge" style="background:#1E63A8;display:none"></span></span>
     <span class="panel-note" id="flux-etat">CNIL · ANSSI · EU AI Act · Commission — rafraîchi côté serveur (30 min)</span>
@@ -400,7 +511,7 @@ engagements publics) sont imputés nominativement.</div>
 </section>
 
 <!-- ══ 3. LECTURES D'ENSEMBLE ══ -->
-<section class="panel" aria-labelledby="t-stats">
+<section class="panel" id="s-lectures" aria-labelledby="t-stats">
   <div class="panel-head">
     <span class="panel-title" data-aide="panel" id="t-stats">Lectures d'ensemble du panel</span>
     <span class="panel-note" id="stats-note"></span>
@@ -420,7 +531,7 @@ engagements publics) sont imputés nominativement.</div>
 </section>
 
 <!-- ══ 4. SOCLE DE DONNÉES OUVERTES ══ -->
-<section class="panel" aria-labelledby="t-socle">
+<section class="panel" id="s-socle" aria-labelledby="t-socle">
   <div class="panel-head">
     <span class="panel-title" data-aide="socle" id="t-socle">Socle de données ouvertes</span>
     <span class="panel-note" id="socle-note">Copernicus · NASA · DINUM · Eurostat — sans clé d'API</span>
@@ -442,7 +553,7 @@ engagements publics) sont imputés nominativement.</div>
 </section>
 
 <!-- ══ 5. EMPREINTE ENVIRONNEMENTALE ══ -->
-<section class="panel" aria-labelledby="t-emp">
+<section class="panel" id="s-empreinte" aria-labelledby="t-emp">
   <div class="panel-head">
     <span class="panel-title" data-aide="empreinte" id="t-emp">Empreinte environnementale du parc cartographié</span>
     <span class="panel-note" id="emp-note">calcul en cours…</span>
@@ -454,13 +565,35 @@ engagements publics) sont imputés nominativement.</div>
     de vie, et l’eau de refroidissement. La même chaîne de calcul que la page
     <a href="/empreinte">Empreinte</a> du site, appliquée au parc au lieu d’une requête.</p>
     <div class="kpis" id="emp-kpis"></div>
+    <div id="emp-postes"></div>
+    <p class="note" id="emp-guide-tab"><b>Le tableau qui suit se lit par pays.</b>
+    <b>Cliquez sur un pays</b> pour ouvrir le détail de <b>tous ses centres de données</b> :
+    statut, mise en service, capacité et investissement annoncés, électricité, eau,
+    refroidissement, CO₂e — et, pour chaque valeur, si elle est <b>publiée</b>, déduite du
+    <b>site</b> ou seulement de sa <b>classe</b>.</p>
     <div id="emp-table"></div>
     <div id="emp-methode"></div>
   </div>
 </section>
 
+<!-- ══ 5 bis. DÉTAIL D'UN PAYS — tous ses centres de données, sur une page ══
+     Le tableau par pays répond à « où est l'empreinte ». Il ne répond pas à
+     « de quoi elle est faite », et c'est pourtant la question du professionnel
+     qui doit arbitrer un site. Cette vue ouvre le pays : chaque centre, chaque
+     caractéristique, chaque nature d'estimation. -->
+<section class="panel" id="s-pays" aria-labelledby="t-pays" hidden>
+  <div class="panel-head">
+    <div class="pv-fil">
+      <button type="button" class="pv-retour" id="pv-retour">← Empreinte du parc</button>
+      <span class="panel-title" id="t-pays">Détail par pays</span>
+    </div>
+    <span class="panel-note" id="pv-note"></span>
+  </div>
+  <div class="panel-body" id="pv-corps"></div>
+</section>
+
 <!-- ══ 6. MÉTHODOLOGIE ══ -->
-<section class="panel" aria-labelledby="t-methodo">
+<section class="panel" id="s-methodo" aria-labelledby="t-methodo">
   <div class="panel-head"><span class="panel-title" id="t-methodo">Méthodologie, limites, référentiels</span>
   <span class="panel-note">certain / déduit — aucun modèle de langage dans la chaîne</span></div>
   <div class="panel-body" id="methodo"></div>
@@ -1364,9 +1497,21 @@ function fichePays(code){
   } else {
     h+='<div class="fp-cas">Aucun cas documenté au panel pour ce pays — limite de publication, pas absence d’IA.</div>';
   }
+  /* Passerelle vers le detail d'empreinte : la carte designe un pays, l'empreinte
+     le decrit. Sans ce lien, il faudrait redescendre chercher la meme ligne dans
+     le tableau, six sections plus bas. */
+  var ag = empParPays(code);
+  if(ag){
+    h += '<div class="fp-cas"><a data-emp="' + esc(code) + '" href="#pays=' + esc(code) + '">'
+       + "Empreinte détaillée : " + ag.n_dc + " centre(s) de données →</a></div>";
+  }
   setHTML("fiche-pays",h);
   document.getElementById("fiche-pays").querySelectorAll("[data-cas]").forEach(function(a){
     a.addEventListener("click",function(){ouvrirCas(this.getAttribute("data-cas"));});
+  });
+  var lienEmp = document.getElementById("fiche-pays").querySelector("[data-emp]");
+  if(lienEmp) lienEmp.addEventListener("click", function(ev){
+    ev.preventDefault(); ouvrirPays(this.getAttribute("data-emp"));
   });
 }
 
@@ -1801,6 +1946,9 @@ function chargerDC(){
       if(!d || !d.ok || !d.sites || !d.sites.length) return;
       DC = d;
       renderDC();
+      /* La vue pays peut avoir ete ouverte avant l'arrivee des centres : sans ce
+         redessin elle afficherait « aucun centre recense », ce qui serait faux. */
+      if(PAYS_VU) renderPays();
       var enc = document.getElementById("dc-encart");
       if(enc) enc.style.display = "";
       var hoteC = document.getElementById("panmap");
@@ -1908,6 +2056,44 @@ var AIDES = {
     pas: "Aucun signal n’entre dans les scores tant qu’il n’a pas été vérifié et versé au "
        + "référentiel. L’automatisation détecte ; l’expert tranche.",
   },
+  postes: {
+    t: "Usage et fabrication",
+    d: "L’empreinte carbone se décompose en deux postes qui n’obéissent pas aux mêmes leviers. "
+     + "L’USAGE, c’est l’électricité consommée multipliée par l’intensité carbone du réseau : il "
+     + "baisse quand le réseau se décarbone ou quand on déplace le calcul. La FABRICATION, c’est "
+     + "l’empreinte des équipements amortie sur leur durée de vie : elle ne baisse que si l’on "
+     + "achète moins de matériel, ou si on le garde plus longtemps.",
+    pas: "Les deux ne s’additionnent PAS dans le temps de la même façon : allonger de deux ans la "
+       + "durée de vie d’un serveur réduit le poste fabrication sans toucher à l’usage. Un plan "
+       + "qui ne viserait que l’électricité laisserait le second poste intact.",
+  },
+  eau: {
+    t: "Eau de refroidissement",
+    d: "Volume prélevé pour refroidir, en mètres cubes par an, déduit du WUE — litres d’eau par "
+     + "kilowattheure informatique — typique du mode de refroidissement déclaré. La directive "
+     + "efficacité énergétique 2023/1791 et son règlement délégué 2024/1364 imposent aux centres "
+     + "de plus de 500 kW informatiques de déclarer énergie ET eau.",
+    pas: "Un mètre cube prélevé n’est pas un mètre cube consommé : une partie retourne au milieu. "
+       + "Et l’eau ne se compare pas d’un pays à l’autre sans son contexte de stress hydrique — "
+       + "mille m³ en Irlande et mille m³ en Espagne n’ont pas le même poids.",
+  },
+  pays_detail: {
+    t: "Le détail d’un pays",
+    d: "Tous les centres de données recensés dans ce pays, un par ligne, avec ce que l’exploitant "
+     + "a annoncé (capacité, investissement, date) et ce que nous en déduisons (électricité, eau, "
+     + "CO₂e). Chaque valeur porte sa nature : publiée, déduite du site, ou déduite de sa classe.",
+    pas: "Ce n’est pas un inventaire exhaustif du pays : un centre non communiqué n’y figure pas. "
+       + "Et une valeur de classe ne permet aucune comparaison entre deux sites nommés.",
+  },
+  reseau_pays: {
+    t: "L’intensité du réseau de ce pays",
+    d: "Grammes de CO₂e par kilowattheure, en approche cycle de vie. C’est le facteur qui explique "
+     + "pourquoi deux parcs de taille comparable n’ont pas la même empreinte : à consommation "
+     + "égale, un centre polonais émet environ onze fois un centre suédois.",
+    pas: "C’est une moyenne annuelle. L’intensité réelle varie d’un facteur trois dans la journée : "
+       + "déplacer un calcul de la nuit au midi solaire change son empreinte sans rien changer à "
+       + "sa consommation.",
+  },
 };
 
 /* ── AIDE SUR LES BLOCS ─────────────────────────────────────────────────────
@@ -2011,6 +2197,22 @@ function empParCas(id){
   return (EMP.systemes || []).filter(function(x){ return x.id === id; })[0] || null;
 }
 function kt(t){ return t >= 1000 ? fr(Math.round(t / 100) / 10) + " kt" : nbFr(Math.round(t)) + " t"; }
+/* Un arrondi ne doit jamais effacer ce qu'il mesure : « 0 % » pour une part
+   non nulle laisse croire a une absence, et « 100 % » a une totalite. Les deux
+   bornes sont donc dites autrement. */
+function pctFr(part, total){
+  if(!total) return "—";
+  var x = 100 * part / total, r = Math.round(x);
+  if(r === 0 && x > 0) return "< 1 %";
+  if(r === 100 && x < 100) return "> 99 %";
+  return r + " %";
+}
+/* L'eau se compte en millions de m3, mais une borne basse de 464 000 m3
+   affichee « 0 Mm3 » serait fausse : sous dix millions, on garde une decimale. */
+function mm3(v){
+  var m = v / 1000000;
+  return (m < 10 ? fr(String(Math.round(m * 100) / 100)) : nbFr(m));
+}
 function fourchetteT(v){
   if(!v) return "";
   return kt(v[0]) + " à " + kt(v[1]);
@@ -2023,8 +2225,11 @@ function chargerEmpreinte(){
       if(!d || !d.ok) return;
       EMP = d;
       renderEmpreinte();
+      pnavCompteurs();
       aideBrancher();
       majBarre();                    /* les fonds carbone deviennent choisissables */
+      if(window.__paysAttendu){ var c = window.__paysAttendu; window.__paysAttendu = null; ouvrirPays(c); }
+      else if(PAYS_VU) renderPays();  /* vue ouverte avant l'arrivee des donnees */
     })
     .catch(function(){ /* la carte et le panel n'en dependent pas */ });
 }
@@ -2035,25 +2240,68 @@ function renderEmpreinte(){
   setHTML("emp-kpis",
       '<div class="kpi"><div class="v">' + fourchetteT(t.co2_t) + '</div>'
     + '<div class="l" data-aide="empreinte">CO₂e par an, cycle de vie complet</div></div>'
-    + '<div class="kpi"><div class="v">' + nbFr(Math.round(t.eau_m3[0] / 1000000)) + ' à '
-    + nbFr(Math.round(t.eau_m3[1] / 1000000)) + ' Mm³</div>'
-    + '<div class="l">eau de refroidissement, millions de m³ par an</div></div>'
+    + '<div class="kpi"><div class="v">' + mm3(t.eau_m3[0]) + ' à ' + mm3(t.eau_m3[1]) + ' Mm³</div>'
+    + '<div class="l" data-aide="eau">eau de refroidissement, millions de m³ par an</div></div>'
     + '<div class="kpi"><div class="v">' + t.n_centres + '</div>'
     + '<div class="l">centres de données au calcul</div></div>'
     + '<div class="kpi"><div class="v">' + t.n_systemes + '</div>'
     + '<div class="l">systèmes d’IA au calcul</div></div>');
+
+  /* DE QUOI CE TOTAL EST FAIT. Un chiffre unique de CO2e ne se pilote pas :
+     l'usage et la fabrication ne repondent pas aux memes leviers, et un plan
+     qui ne viserait que l'electricite laisserait le second poste intact. */
+  var usage = [0, 0], fab = [0, 0], dcT = [0, 0], siaT = [0, 0];
+  (EMP.centres || []).concat(EMP.systemes || []).forEach(function(x){
+    var e = x.empreinte || {};
+    if(e.usage_t){ usage[0] += e.usage_t[0]; usage[1] += e.usage_t[1]; }
+    if(e.fabrication_t){ fab[0] += e.fabrication_t[0]; fab[1] += e.fabrication_t[1]; }
+  });
+  (EMP.par_pays || []).forEach(function(p){
+    dcT[0] += p.dc_t[0]; dcT[1] += p.dc_t[1];
+    siaT[0] += p.sia_t[0]; siaT[1] += p.sia_t[1];
+  });
+  var somH = usage[1] + fab[1] || 1;
+  var pctUsage = Math.round(100 * usage[1] / somH), pctFab = 100 - pctUsage;
+  var totParc = dcT[1] + siaT[1];
+  setHTML("emp-postes",
+      '<div class="barre-postes" role="img" aria-label="Répartition de l’empreinte carbone : '
+    + pctUsage + ' % d’usage, ' + pctFab + ' % de fabrication">'
+    + '<span class="bp-usage" style="width:' + pctUsage + '%"></span>'
+    + '<span class="bp-fab" style="width:' + pctFab + '%"></span></div>'
+    + '<div class="bp-leg" data-aide="postes"><span><i class="bp-usage"></i>Usage — électricité × '
+    + 'intensité du réseau · ' + pctUsage + ' %</span>'
+    + '<span><i class="bp-fab"></i>Fabrication amortie sur la durée de vie · ' + pctFab + ' %</span>'
+    + '<span>Centres de données : ' + pctFr(dcT[1], totParc)
+    + ' du total · systèmes d’IA : ' + pctFr(siaT[1], totParc) + '</span></div>'
+    + '<div class="postes">'
+    + '<div class="poste"><div class="pt">Usage</div><div class="pv">' + fourchetteT(usage) + "</div>"
+    + '<div class="pd">Baisse quand le réseau se décarbone, ou quand le calcul se déplace vers '
+    + 'un pays ou une heure moins carbonés. Aucun achat n’est nécessaire.</div></div>'
+    + '<div class="poste"><div class="pt">Fabrication</div><div class="pv">' + fourchetteT(fab) + "</div>"
+    + '<div class="pd">Ne baisse que si l’on achète moins de matériel, ou si on le garde plus '
+    + 'longtemps. Un réseau propre n’y change rien.</div></div>'
+    + '<div class="poste"><div class="pt">Eau</div><div class="pv">'
+    + nbFr(Math.round(t.eau_m3[0] / 1000)) + " à " + nbFr(Math.round(t.eau_m3[1] / 1000)) + ' milliers de m³</div>'
+    + '<div class="pd" data-aide="eau">Prélevée pour le refroidissement. Déclaration obligatoire '
+    + 'au-delà de 500 kW informatiques (directive 2023/1791, règlement délégué 2024/1364).</div></div>'
+    + "</div>");
 
   /* Tableau par pays : la lecture d'ensemble. Trié par empreinte décroissante,
      avec l'intensité du réseau en regard — c'est elle qui explique pourquoi
      deux parcs de taille comparable n'ont pas la même empreinte. */
   var lignes = (EMP.par_pays || []).map(function(p){
     var nom = nomPays(p.pays);
-    var partDC = p.total_t[0] ? Math.round(100 * p.dc_t[0] / p.total_t[0]) : 0;
-    return "<tr><th scope=\"row\">" + esc(nom) + "</th>"
+    var partDC = pctFr(p.dc_t[1], p.total_t[1]);
+    /* La ligne entiere ouvre le pays, mais c'est un BOUTON qui porte l'action :
+       une ligne cliquable sans element focalisable serait inaccessible au
+       clavier, et invisible pour un lecteur d'ecran. */
+    return '<tr class="pays-l" data-pays="' + esc(p.pays) + '">'
+      + '<th scope="row"><button type="button" data-pays="' + esc(p.pays) + '">'
+      + esc(nom) + "</button></th>"
       + "<td>" + p.n_dc + "</td><td>" + p.n_sia + "</td>"
       + "<td>" + nbFr(p.intensite) + "</td>"
       + "<td>" + fourchetteT(p.total_t) + "</td>"
-      + "<td>" + partDC + " %</td>"
+      + "<td>" + partDC + "</td>"
       + "<td>" + nbFr(p.eau_m3[0]) + " – " + nbFr(p.eau_m3[1]) + "</td></tr>";
   }).join("");
   setHTML("emp-table",
@@ -2063,6 +2311,16 @@ function renderEmpreinte(){
     + '<th scope="col" data-aide="natures">CO₂e/an</th>'
     + '<th scope="col">dont centres</th><th scope="col">Eau m³/an</th></tr></thead>'
     + "<tbody>" + lignes + "</tbody></table>");
+  /* Delegation : une seule ecoute sur le tableau, et non une par ligne — le
+     tableau est reconstruit a chaque arrivee de donnees. */
+  var tb = document.getElementById("emp-table");
+  if(tb && !tb.__branche){
+    tb.__branche = true;
+    tb.addEventListener("click", function(ev){
+      var r = ev.target.closest ? ev.target.closest("[data-pays]") : null;
+      if(r) ouvrirPays(r.getAttribute("data-pays"));
+    });
+  }
 
   /* Le référentiel employé, en clair : sans lui, les chiffres ci-dessus ne
      sont pas reproductibles. */
@@ -2183,11 +2441,305 @@ function chargerSocle(){
     .catch(function(){ /* section laissée en l'état : le panel n'en dépend pas */ });
 }
 
+/* ── BARRE DE NAVIGATION DE LA PAGE ─────────────────────────────────────────
+   Sept sections, dont une carte haute et deux tableaux longs. Sans repere, on
+   ne sait ni ou l'on se trouve ni ce qui reste a lire.
+
+   Deux exigences, et une seule des deux se voit :
+   — cliquer doit amener au bon endroit MEME si la barre collante recouvre le
+     titre vise. C'est `scroll-margin-top` en CSS qui s'en charge, et non un
+     decalage calcule en JS : le navigateur applique la reserve aussi bien au
+     clic qu'a l'arrivee par ancre depuis une autre page.
+   — la section COURANTE doit etre marquee pendant qu'on defile. Sans cela la
+     barre n'indique que la destination, jamais la position, et l'on perd
+     exactement le repere qu'on est venu chercher.
+
+   IntersectionObserver plutot qu'un ecouteur de defilement : le navigateur
+   fait le travail hors du fil principal. Une page qui porte deja une carte SVG
+   zoomable n'a pas de calcul a gaspiller a chaque pixel parcouru. */
+var PNAV_OBS = null;
+
+function pnavBrancher(){
+  var nav = document.getElementById("pnav");
+  if(!nav || PNAV_OBS) return;                     /* idempotent : renderAll est rejoue */
+  var liens = [].slice.call(nav.querySelectorAll("a"));
+  var cibles = liens.map(function(a){ return document.getElementById(a.getAttribute("href").slice(1)); });
+
+  function marquer(id){
+    liens.forEach(function(a){
+      var actif = a.getAttribute("href") === "#" + id;
+      a.classList.toggle("on", actif);
+      if(actif) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
+    });
+  }
+
+  /* La marge haute reserve la bande occupee par la barre ; la marge basse de
+     -62 % fait qu'une seule section a la fois occupe la zone de decision. Sans
+     elle, trois sections courtes seraient « visibles » ensemble et le marquage
+     sauterait. */
+  PNAV_OBS = new IntersectionObserver(function(){
+    var meilleur = null, meilleureD = Infinity;
+    cibles.forEach(function(sec){
+      if(!sec || sec.hidden) return;
+      var t = sec.getBoundingClientRect().top - 56;
+      var d = t <= 0 ? -t : t * 3;                 /* au-dessus : proche ; au-dessous : penalise */
+      if(d < meilleureD){ meilleureD = d; meilleur = sec.id; }
+    });
+    if(meilleur) marquer(meilleur);
+  }, { rootMargin: "-52px 0px -62% 0px", threshold: [0, 0.01, 0.5] });
+  cibles.forEach(function(sec){ if(sec) PNAV_OBS.observe(sec); });
+
+  /* Le clic reste un vrai lien (ouverture dans un onglet, copie de l'adresse),
+     mais on defile en douceur et on quitte d'abord la vue pays : y rester
+     ferait pointer le lien vers une section masquee. */
+  liens.forEach(function(a){
+    a.addEventListener("click", function(ev){
+      var id = this.getAttribute("href").slice(1);
+      var sec = document.getElementById(id);
+      if(!sec) return;
+      ev.preventDefault();
+      if(document.body.classList.contains("vue-pays")) fermerPays(true);
+      sec.scrollIntoView({ behavior: "smooth", block: "start" });
+      marquer(id);
+      if(history.replaceState) history.replaceState(null, "", "#" + id);
+      /* Le focus suit le regard : sans cela, la tabulation suivante repartirait
+         du haut de la page et la navigation clavier serait un leurre. */
+      var titre = sec.querySelector(".panel-title");
+      if(titre){ titre.setAttribute("tabindex", "-1"); titre.focus({ preventScroll: true }); }
+    });
+  });
+  marquer("s-carte");
+}
+
+/* Les deux compteurs de la barre : ils disent la TAILLE de ce qui attend
+   derriere le lien. « Empreinte 97 » se clique autrement que « Empreinte ». */
+function pnavCompteurs(){
+  var c = document.getElementById("pn-cas");
+  if(c && DATA && DATA.cas) c.textContent = DATA.cas.length;
+  var e = document.getElementById("pn-emp");
+  if(e && EMP && EMP.totaux) e.textContent = EMP.totaux.n_centres;
+}
+
+/* ── VUE PAYS : TOUS LES CENTRES D'UN PAYS, SUR UNE PAGE ────────────────────
+   Le tableau par pays repond a « ou est l'empreinte ». Il ne repond pas a
+   « de quoi elle est faite » — or c'est la question de celui qui doit arbitrer
+   un site. Cette vue ouvre le pays et ne montre que lui : garder les six
+   autres sections au-dessous obligerait a defiler pour revenir et brouillerait
+   la lecture du detail.
+
+   L'adresse porte le pays (#pays=IE) : la vue se partage, se recharge et se
+   met en signet comme n'importe quelle page. */
+var PAYS_VU = null;
+
+var REFROID_NOM = { air: "à air", adiabatique: "adiabatique", eau: "à eau",
+  free_cooling: "free cooling", recuperation_chaleur: "récupération de chaleur",
+  inconnu: "non précisé" };
+
+function natBadge(n){
+  var L = { publie: "publié", site: "site", classe: "classe", indisponible: "—" };
+  if(!n) return "";
+  return '<span class="pv-nat n-' + esc(n) + '">' + esc(L[n] || n) + "</span>";
+}
+
+/* Electricite et eau se lisent de la meme facon : une valeur publiee par
+   l'exploitant, sinon une fourchette deduite, et TOUJOURS la nature en regard.
+   Un chiffre sans sa nature serait cite pour ce qu'il n'est pas. */
+function valeurSite(publiee, fourchette, nature, unite){
+  if(publiee !== null && publiee !== undefined){
+    return "<b>" + nbFr(publiee) + " " + unite + "</b>" + natBadge("publie");
+  }
+  if(fourchette) return fourchetteFr(fourchette, unite) + natBadge(nature);
+  return '<span class="si">non dérivable</span>';
+}
+
+function ouvrirPays(code){
+  if(!code) return;
+  PAYS_VU = code;
+  renderPays();
+  document.body.classList.add("vue-pays");
+  var sec = document.getElementById("s-pays");
+  if(sec) sec.hidden = false;
+  if(history.replaceState) history.replaceState(null, "", "#pays=" + code);
+  window.scrollTo(0, 0);
+  var b = document.getElementById("pv-retour");
+  if(b) b.focus({ preventScroll: true });
+  aideBrancher();
+}
+
+function fermerPays(sansAncre){
+  PAYS_VU = null;
+  document.body.classList.remove("vue-pays");
+  var sec = document.getElementById("s-pays");
+  if(sec) sec.hidden = true;
+  if(!sansAncre){
+    if(history.replaceState) history.replaceState(null, "", "#s-empreinte");
+    var e = document.getElementById("s-empreinte");
+    if(e) e.scrollIntoView({ block: "start" });
+  }
+}
+
+function renderPays(){
+  var code = PAYS_VU;
+  if(!code) return;
+  var nom = nomPays(code);
+  var agg = empParPays(code);
+  var sites = ((DC && DC.sites) || []).filter(function(s){ return s.pays === code; });
+  var sia = ((EMP && EMP.systemes) || []).filter(function(x){ return x.pays === code; });
+  var reg = UE[code] || null;
+
+  document.getElementById("t-pays").textContent = nom;
+  var note = document.getElementById("pv-note");
+  if(note){
+    note.textContent = agg ? ("réseau à " + nbFr(agg.intensite) + " gCO₂e/kWh · cycle de vie")
+                           : "empreinte non calculée pour ce pays";
+  }
+
+  /* ── En-tete : les quatre chiffres qui situent le pays ── */
+  var h = '<h2 class="pv-h" data-aide="pays_detail">' + esc(nom) + "</h2>";
+  if(agg){
+    var partDC = pctFr(agg.dc_t[1], agg.total_t[1]);
+    h += '<div class="kpis" style="margin-bottom:6px">'
+      + '<div class="kpi"><div class="v">' + agg.n_dc + "</div>"
+      + '<div class="l">centres de données recensés</div></div>'
+      + '<div class="kpi"><div class="v">' + fourchetteT(agg.total_t) + "</div>"
+      + '<div class="l" data-aide="natures">CO₂e par an, cycle de vie</div></div>'
+      + '<div class="kpi"><div class="v">' + nbFr(agg.intensite) + "</div>"
+      + '<div class="l" data-aide="reseau_pays">gCO₂e/kWh du réseau national</div></div>'
+      + '<div class="kpi"><div class="v">' + nbFr(agg.eau_m3[0]) + " – " + nbFr(agg.eau_m3[1]) + "</div>"
+      + '<div class="l" data-aide="eau">m³ d’eau de refroidissement par an</div></div></div>'
+      + '<p class="note" style="margin-top:2px">Dans ce pays, les centres de données représentent <b>'
+      + partDC + '</b> de l’empreinte carbone du parc cartographié, et '
+      + (agg.n_sia === 0 ? "aucun système d’IA du panel n’y est recensé"
+         : (agg.n_sia > 1 ? "les " + agg.n_sia + " systèmes d’IA du panel "
+                            : "le seul système d’IA du panel ")
+           + "<b>" + pctFr(agg.sia_t[1], agg.total_t[1]) + "</b>")
+      + ". À consommation égale, un site ici émet <b>" + fr(String(Math.round(agg.intensite / 45 * 10) / 10))
+      + " fois</b> ce qu’émettrait le même site en Suède (45 g) — c’est l’intensité du réseau, "
+      + "pas la taille du parc, qui fait l’essentiel de l’écart entre pays.</p>";
+  }
+  if(reg){
+    h += '<p class="note"><b>Cadre national.</b> Surveillance AI Act (art. 70) : '
+      + esc(reg.autorite_ia) + " · Cybersécurité : " + esc(reg.cyber)
+      + " · Données : " + esc(reg.dpa) + ".</p>";
+  }
+
+  /* ── Les centres, un par ligne ── */
+  h += '<h3 class="pv-sh">Centres de données recensés (' + sites.length + ")</h3>";
+  if(!sites.length){
+    h += '<p class="pv-vide">Aucun centre de données recensé dans ce pays. '
+      + "C’est une limite du recensement — un site non communiqué n’y figure pas — "
+      + "et non le constat d’une absence d’infrastructure.</p>";
+  } else {
+    sites.sort(function(a, b){
+      var ra = (a.statut_rang || 9), rb = (b.statut_rang || 9);
+      if(ra !== rb) return ra - rb;
+      return (b.capacite_mw || 0) - (a.capacite_mw || 0);
+    });
+    var lignes = sites.map(function(s){
+      var st = (DC.statuts || {})[s.statut] || {};
+      var e = s.estimation || {};
+      var es = empParSite(s.id);
+      var em = (es && es.empreinte) || null;
+      return "<tr>"
+        + '<td><span class="op">' + esc(s.operateur) + "</span>"
+        + (s.nom_site ? '<br><span class="si">' + esc(s.nom_site) + "</span>" : "")
+        + '<br><span class="si">' + esc(s.ville) + "</span></td>"
+        + '<td><span class="pv-st"><i style="background:' + esc(st.couleur || "#7A7A7A") + '"></i>'
+        + esc(st.nom || s.statut) + "</span>"
+        + (s.annee_service ? '<br><span class="si">' + s.annee_service + "</span>" : "") + "</td>"
+        + '<td class="num">' + (s.capacite_mw ? nbFr(s.capacite_mw) + " MW" + natBadge("publie")
+                                              : '<span class="si">non annoncée</span>') + "</td>"
+        + '<td class="num opt">' + (s.investissement_meur
+              ? (s.investissement_meur >= 1000
+                   ? fr(String(Math.round(s.investissement_meur / 100) / 10)) + " Md€"
+                   : nbFr(s.investissement_meur) + " M€")
+              : '<span class="si">—</span>') + "</td>"
+        + '<td class="num">' + valeurSite(s.elec_gwh_an, e.electricite, e.nature, "GWh/an") + "</td>"
+        + '<td class="num">' + valeurSite(s.eau_m3_an, e.eau, e.nature, "m³/an") + "</td>"
+        + '<td class="opt">' + esc(REFROID_NOM[s.refroidissement] || s.refroidissement || "—") + "</td>"
+        + '<td class="num">' + (em && em.total_t
+              ? fourchetteT(em.total_t) + natBadge(em.nature)
+                + '<br><span class="si">dont fabrication ' + em.part_fabrication_pct + " %</span>"
+              : '<span class="si">non calculée</span>') + "</td>"
+        + '<td class="opt"><span class="si">' + esc(s.source_libelle || "—")
+        + "<br>confiance " + esc(s.confiance || "?") + "</span></td>"
+        + "</tr>";
+    }).join("");
+    h += '<div class="pv-wrap"><table class="pv-t">'
+      + '<caption class="sr-only">Centres de données recensés en ' + esc(nom)
+      + ", avec leurs caractéristiques annoncées et estimées</caption>"
+      + '<thead><tr><th scope="col">Exploitant · site · ville</th><th scope="col">Statut</th>'
+      + '<th scope="col">Capacité</th><th scope="col" class="opt">Investissement</th>'
+      + '<th scope="col">Électricité</th><th scope="col">Eau</th>'
+      + '<th scope="col" class="opt">Refroidissement</th><th scope="col">CO₂e/an</th>'
+      + '<th scope="col" class="opt">Source</th></tr></thead>'
+      + "<tbody>" + lignes + "</tbody></table></div>"
+      + '<p class="note"><b>Lire les étiquettes.</b> <span class="pv-nat n-publie">publié</span> '
+      + "l’exploitant a donné le chiffre. <span class=\"pv-nat n-site\">site</span> calculé depuis "
+      + "la capacité annoncée de CE site. <span class=\"pv-nat n-classe\">classe</span> calculé "
+      + "depuis l’ordre de grandeur typique de sa catégorie : cette valeur répond à « de quel ordre "
+      + "est un campus de ce type ? », jamais à « combien consomme CE site ? ». Deux lignes marquées "
+      + "« classe » ne sont pas comparables entre elles.</p>";
+  }
+
+  /* ── Les systemes d'IA du panel dans ce pays ── */
+  h += '<h3 class="pv-sh">Systèmes d’IA du panel dans ce pays (' + sia.length + ")</h3>";
+  if(!sia.length){
+    h += '<p class="pv-vide">Aucun cas documenté au panel pour ce pays — limite de publication, '
+      + "pas absence d’IA.</p>";
+  } else {
+    var lsia = sia.map(function(x){
+      var em = x.empreinte || {};
+      return "<tr>"
+        + '<td><span class="op">' + esc(x.entreprise) + "</span></td>"
+        + "<td>" + esc(x.type_nom || x.type) + "</td>"
+        + '<td class="opt">' + esc(x.stade) + "</td>"
+        + '<td class="num">' + (em.mwh ? nbFr(em.mwh[0]) + " à " + nbFr(em.mwh[1]) + " MWh/an"
+                                       : '<span class="si">—</span>') + "</td>"
+        + '<td class="num">' + (em.total_t ? fourchetteT(em.total_t) + natBadge(em.nature)
+                                           : '<span class="si">—</span>') + "</td>"
+        + "</tr>";
+    }).join("");
+    h += '<div class="pv-wrap"><table class="pv-t" style="min-width:640px">'
+      + '<caption class="sr-only">Systèmes d’IA du panel en ' + esc(nom) + "</caption>"
+      + '<thead><tr><th scope="col">Entreprise</th><th scope="col">Type de système</th>'
+      + '<th scope="col" class="opt">Stade</th><th scope="col">Électricité</th>'
+      + '<th scope="col">CO₂e/an</th></tr></thead><tbody>' + lsia + "</tbody></table></div>"
+      + '<p class="note">L’électricité d’un système d’IA est un ordre de grandeur de son TYPE '
+      + "(assistant génératif, vision industrielle, scoring…) pondéré par son stade de déploiement. "
+      + "Aucun exploitant ne publie la consommation d’un système nommé.</p>";
+  }
+
+  h += '<p class="note" style="color:var(--muted2)"><b>Avertissement.</b> '
+    + esc((EMP && EMP.avertissement) || "") + "</p>";
+
+  setHTML("pv-corps", h);
+}
+
 /* aideBrancher en FIN de renderAll, et non apres l'appel : renderAll est
    rejoue a l'arrivee des donnees en direct, et les blocs reconstruits
    perdaient alors leur bouton d'aide sans que rien ne le signale. */
-function renderAll(){renderEcheancier();renderFlux();populerFiltres();renderKpis();renderMap();renderTable();renderCharts();renderMethodo();renderSocle();aideBrancher();}
+function renderAll(){renderEcheancier();renderFlux();populerFiltres();renderKpis();renderMap();renderTable();renderCharts();renderMethodo();renderSocle();pnavBrancher();pnavCompteurs();aideBrancher();}
 renderAll();
+
+/* Retour depuis la vue pays, et prise en charge de l'adresse #pays=XX :
+   la vue doit survivre a un rechargement et se partager par un lien. */
+(function(){
+  var b = document.getElementById("pv-retour");
+  if(b) b.addEventListener("click", function(){ fermerPays(); });
+  document.addEventListener("keydown", function(ev){
+    if(ev.key === "Escape" && document.body.classList.contains("vue-pays")) fermerPays();
+  });
+  function depuisAncre(){
+    var m = /^#pays=([A-Z]{2})$/.exec(location.hash || "");
+    if(m) ouvrirPays(m[1]);
+    else if(document.body.classList.contains("vue-pays")) fermerPays(true);
+  }
+  window.addEventListener("hashchange", depuisAncre);
+  /* A l'ouverture, l'empreinte n'est pas encore chargee : on retient le pays
+     demande et on l'ouvre des que les donnees arrivent. */
+  window.__paysAttendu = (/^#pays=([A-Z]{2})$/.exec(location.hash || "") || [])[1] || null;
+})();
 chargerSocle();
 chargerEmpreinte();
 chargerDC();
