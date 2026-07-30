@@ -60,6 +60,26 @@ body.embed .hdr{margin-bottom:12px}
 .pan-pays:hover{fill-opacity:.75}
 .pan-pays:focus-visible{outline:2px solid #1C1C1C}
 .pan-pays.on{stroke:#1C1C1C;stroke-width:1.6}
+/* Libelles de pays traces DANS le SVG : ils suivent la carte quand elle se
+   redimensionne, ce qu'un calque HTML positionne en pixels ne ferait pas. */
+.pan-lbl{font-family:var(--sans);font-size:13px;font-weight:600;fill:#2A2A2A;
+  paint-order:stroke;stroke:rgba(255,255,255,.85);stroke-width:3px;stroke-linejoin:round;
+  pointer-events:none;user-select:none}
+.pan-lbl.petit{font-size:11px;font-weight:500;fill:#5A5A5A}
+.pan-lbl.vide{fill:#8A8A8A;font-weight:500}
+/* Infobulle : UN seul element reutilise, deplace au survol — en creer un par
+   pays saturerait le DOM pour rien. */
+.pan-tip{position:absolute;z-index:20;pointer-events:none;opacity:0;transition:opacity .12s;
+  background:rgba(28,28,28,.96);color:#fff;border-radius:5px;padding:9px 12px;
+  font-size:12px;line-height:1.5;max-width:290px;box-shadow:0 4px 16px rgba(0,0,0,.28)}
+.pan-tip.on{opacity:1}
+.pan-tip .t-nom{font-weight:700;font-size:13px;margin-bottom:2px}
+.pan-tip .t-sub{font-size:10.5px;color:#B9B9B9;font-family:var(--mono);margin-bottom:6px}
+.pan-tip .t-l{display:flex;align-items:center;gap:6px;margin-bottom:3px}
+.pan-tip .t-pt{width:8px;height:8px;border-radius:2px;flex:0 0 auto}
+.pan-tip .t-ent{margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,.18);
+  font-size:11.5px;color:#DCDCDC}
+.pan-tip .t-cta{margin-top:6px;font-size:10px;font-family:var(--mono);color:#9A9A9A}
 .obs-legend{position:absolute;left:12px;bottom:12px;z-index:2;background:rgba(255,255,255,.94);
   border:1px solid var(--rule);border-radius:4px;padding:9px 12px;box-shadow:0 1px 4px rgba(28,28,28,.08)}
 .obs-legend h3{font-size:10px;font-weight:600;margin-bottom:5px}
@@ -298,6 +318,77 @@ function cheminPays(code){
   return d;
 }
 
+/* Centroide du plus grand polygone d'un pays — ancre des libelles. Formule du
+   centroide d'AIRE, et non moyenne des sommets : celle-ci derive vers les cotes
+   les plus decoupees et poserait le nom de la Norvege en pleine mer. */
+function centroidePays(code){
+  var polys = CONTOURS[code]; if(!polys || !polys.length) return null;
+  var best = null, bestA = 0;
+  for(var p=0;p<polys.length;p++){
+    var ring = polys[p][0], a = 0, cx = 0, cy = 0;
+    for(var i=0;i<ring.length-1;i++){
+      var x0=ring[i][0], y0=ring[i][1], x1=ring[i+1][0], y1=ring[i+1][1];
+      var f = x0*y1 - x1*y0; a += f; cx += (x0+x1)*f; cy += (y0+y1)*f;
+    }
+    a = a/2;
+    if(Math.abs(a) > Math.abs(bestA) && a !== 0){ bestA = a; best = [cx/(6*a), cy/(6*a)]; }
+  }
+  return best;
+}
+/* Ajustements manuels : quelques centroides tombent mal a cette echelle
+   (peninsules, archipels) ou se chevauchent entre voisins serres. */
+var LBL_DECAL = { FR:[0,6], IT:[-7,-14], HR:[3,4], DK:[-4,-7], NL:[-5,-3], BE:[-4,5],
+                  LU:[-9,7], SI:[3,7], SK:[5,0], AT:[0,5], MT:[7,7], CY:[7,2], EE:[2,-2] };
+
+var TIP = null;
+function tipMontrer(html, ev, hote){
+  if(!TIP){ TIP = document.createElement('div'); TIP.className = 'pan-tip'; hote.appendChild(TIP); }
+  TIP.innerHTML = html; TIP.classList.add('on');
+  tipPlacer(ev, hote);
+}
+function tipPlacer(ev, hote){
+  if(!TIP) return;
+  var r = hote.getBoundingClientRect();
+  var x = ev.clientX - r.left + 14, y = ev.clientY - r.top + 14;
+  /* On garde l'infobulle DANS le cadre : sur les pays de l'est elle sortirait
+     de la carte et serait coupee par le debordement masque du panneau. */
+  var tw = TIP.offsetWidth || 250, th = TIP.offsetHeight || 100;
+  if(x + tw > r.width - 6) x = ev.clientX - r.left - tw - 12;
+  if(y + th > r.height - 6) y = Math.max(6, ev.clientY - r.top - th - 12);
+  TIP.style.left = x + 'px'; TIP.style.top = y + 'px';
+}
+function tipCacher(){ if(TIP) TIP.classList.remove('on'); }
+
+/* Contenu de l'infobulle : ce qu'un decideur veut savoir SANS cliquer —
+   combien de cas, de quelles classes de risque, et chez quelles entreprises. */
+function tipPays(code){
+  var p = UE[code]; if(!p) return '';
+  var mes = DATA.cas.filter(function(c){ return c.pays === code; });
+  var h = '<div class="t-nom">' + esc(p.nom) + '</div>';
+  if(!mes.length){
+    return h + '<div class="t-sub">aucun cas au panel</div>'
+      + '<div class="t-l"><b>' + esc(p.cyber) + '</b> · ' + esc(p.dpa) + '</div>'
+      + '<div class="t-ent">Limite de publication, pas absence d’IA : les déploiements non communiqués ne figurent pas au panel.</div>';
+  }
+  var parCl = {}, expo = 0;
+  mes.forEach(function(c){ parCl[c.classe] = (parCl[c.classe]||0)+1; expo += c.exposition; });
+  h += '<div class="t-sub">' + mes.length + ' cas · exposition moyenne ' + Math.round(expo/mes.length) + '/100</div>';
+  ['interdit','haut_risque','transparence','minimal'].forEach(function(k){
+    if(!parCl[k]) return;
+    h += '<div class="t-l"><span class="t-pt" style="background:' + DATA.classes[k].couleur + '"></span>'
+      + parCl[k] + ' — ' + esc(DATA.classes[k].nom.split(' (')[0]) + '</div>';
+  });
+  var tries = mes.slice().sort(function(a,b){ return b.exposition - a.exposition; });
+  var vus = [];
+  for(var i=0;i<tries.length && vus.length<4;i++){
+    var n = tries[i].entreprise.split(' (')[0];
+    if(vus.indexOf(n) < 0) vus.push(n);
+  }
+  h += '<div class="t-ent">' + esc(vus.join(' · ')) + (mes.length > vus.length ? ' +' + (mes.length - vus.length) : '') + '</div>';
+  h += '<div class="t-cta">Cliquer : autorités et cas détaillés</div>';
+  return h;
+}
+
 /* ── État de filtre ── */
 var F={pays:"",secteur:"",classe:"",stade:"",q:""};
 var CMAP=["#F5DAD4","#EBAE9F","#DB7E68","#C24E37","#8C2013"];
@@ -348,7 +439,23 @@ function renderMap(){
       neutres+='<path d="'+d+'" fill="#E2E0DB" stroke="#EFEDE8" stroke-width="0.5"/>';
     }
   });
-  s+=neutres+colores+"</svg>";
+  /* Libelles : NOM COMPLET pour les pays du panel (ce sont eux qu'on lit),
+     code ISO pour les autres États membres — a cette echelle « Luxembourg »
+     ecrit en toutes lettres recouvrirait trois voisins. Les pays hors UE
+     restent muets : ils ne sont pas le sujet. */
+  var lbls = "";
+  Object.keys(UE).forEach(function(code){
+    var c = centroidePays(code); if(!c) return;
+    var d = LBL_DECAL[code] || [0,0];
+    var x = projX(c[0]) + d[0], y = projY(c[1]) + d[1];
+    if(x < 4 || x > PROJ.W - 4 || y < 8 || y > PROJ.H - 4) return;
+    var n = parPays[code] ? parPays[code].n : 0;
+    var petit = ["LU","MT","CY","SI","EE","LV","LT","BE","NL","DK","HR","SK","AT"].indexOf(code) >= 0;
+    var texte = (n && !petit) ? UE[code].nom.split(" ")[0] : code;
+    lbls += '<text class="pan-lbl' + (petit ? " petit" : "") + (n ? "" : " vide") + '" x="'
+      + x.toFixed(1) + '" y="' + y.toFixed(1) + '" text-anchor="middle">' + esc(texte) + "</text>";
+  });
+  s+=neutres+colores+lbls+"</svg>";
   s+='<div class="obs-legend"><h3>Cas documentés par pays</h3>'
     +'<div class="lg-row"><span class="lg-box" style="background:#EDE9E2"></span>UE — aucun cas au panel</div>'
     +[[1,"1 – 2"],[2,"3 – 5"],[3,"6 – 9"],[4,"10 et plus"]].map(function(x){
@@ -356,6 +463,8 @@ function renderMap(){
     +"</div>";
   var hote=document.getElementById("panmap");
   hote.innerHTML=s;
+  TIP = null;                      /* l'ancienne infobulle vient d'etre effacee */
+  hote.addEventListener("mouseleave", tipCacher);
   var choisi=null;
   hote.querySelectorAll(".pan-pays").forEach(function(el){
     function sel(){ if(choisi)choisi.classList.remove("on");
@@ -363,6 +472,17 @@ function renderMap(){
       var code=el.getAttribute("data-code");
       F.pays=code;syncFiltres();renderTable();fichePays(code); }
     el.addEventListener("click",sel);
+    /* Survol : le detail sans le clic. On garde `title` en repli — il sert au
+       tactile, ou il n'y a pas de survol, et aux lecteurs d'ecran. */
+    el.addEventListener("mouseenter", function(ev){ tipMontrer(tipPays(this.getAttribute("data-code")), ev, hote); });
+    el.addEventListener("mousemove", function(ev){ tipPlacer(ev, hote); });
+    el.addEventListener("mouseleave", tipCacher);
+    el.addEventListener("focus", function(ev){
+      var b = this.getBoundingClientRect(), r = hote.getBoundingClientRect();
+      tipMontrer(tipPays(this.getAttribute("data-code")),
+                 {clientX: b.left + b.width/2, clientY: b.top + b.height/2}, hote);
+    });
+    el.addEventListener("blur", tipCacher);
     el.addEventListener("keydown",function(ev){if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();sel();}});
   });
 }

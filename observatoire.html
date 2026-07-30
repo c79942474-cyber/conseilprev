@@ -88,6 +88,21 @@ figure{margin:0}
 .pr{font-size:11px;color:#767676;line-height:1.4;margin-bottom:8px}
 .ps{font-family:Georgia,serif;font-size:22px;line-height:1}
 .pl{font-size:9px;font-family:var(--mono);letter-spacing:.1em;color:#A8A8A8;text-transform:uppercase;margin-top:2px}
+/* Libelles traces DANS le SVG : ils suivent la carte au redimensionnement. */
+.obs-lbl{font-family:var(--sans);font-size:15px;font-weight:600;fill:#2A2A2A;
+  paint-order:stroke;stroke:rgba(255,255,255,.85);stroke-width:3.5px;stroke-linejoin:round;
+  pointer-events:none;user-select:none}
+.obs-lbl.petit{font-size:12px;font-weight:500;fill:#4A4A4A}
+.obs-tip{position:absolute;z-index:20;pointer-events:none;opacity:0;transition:opacity .12s;
+  background:rgba(28,28,28,.96);color:#fff;border-radius:5px;padding:9px 12px;
+  font-size:12px;line-height:1.5;max-width:280px;box-shadow:0 4px 16px rgba(0,0,0,.28)}
+.obs-tip.on{opacity:1}
+.obs-tip .t-nom{font-weight:700;font-size:13px;margin-bottom:2px}
+.obs-tip .t-sub{font-size:10.5px;color:#B9B9B9;font-family:var(--mono);margin-bottom:6px}
+.obs-tip .t-l{margin-bottom:3px}
+.obs-tip .t-l b{color:#fff}
+.obs-tip .t-cta{margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,.18);
+  font-size:10px;font-family:var(--mono);color:#9A9A9A}
 .obs-legend{position:absolute;left:12px;bottom:12px;z-index:2;background:rgba(255,255,255,.94);border:1px solid var(--rule);border-radius:4px;padding:10px 12px;box-shadow:0 1px 4px rgba(28,28,28,.08);max-width:236px}
 .obs-legend h3{font-size:10.5px;font-weight:600;line-height:1.35;margin-bottom:6px;color:#1C1C1C}
 .lg-row{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:3px}
@@ -604,6 +619,72 @@ function indexerClasses(){
   CLASSE_PAR_CODE = {};
   (DATA.modeles.pays || []).forEach(function(p){ CLASSE_PAR_CODE[p.c] = p; });
 }
+function centroidePays(code){
+  var polys = CONTOURS[code]; if(!polys || !polys.length) return null;
+  var best = null, bestA = 0;
+  for(var p=0;p<polys.length;p++){
+    var ring = polys[p][0], a = 0, cx = 0, cy = 0;
+    for(var i=0;i<ring.length-1;i++){
+      var x0=ring[i][0], y0=ring[i][1], x1=ring[i+1][0], y1=ring[i+1][1];
+      var f = x0*y1 - x1*y0; a += f; cx += (x0+x1)*f; cy += (y0+y1)*f;
+    }
+    a = a/2;
+    if(Math.abs(a) > Math.abs(bestA) && a !== 0){ bestA = a; best = [cx/(6*a), cy/(6*a)]; }
+  }
+  return best;
+}
+/* Quelques centroides tombent mal a l'echelle mondiale, ou trop pres d'un
+   voisin : on les decale du strict necessaire. */
+var LBL_DECAL = { FR:[-2,4], DE:[2,-2], NL:[-8,-6], BE:[-6,6], CH:[-4,6], AT:[6,4],
+                  IT:[-4,-10], NO:[-8,10], SE:[4,4], FI:[2,2], IE:[-10,0], GB:[-6,-4],
+                  CZ:[2,-4], PL:[2,0], IL:[-8,4], AE:[6,4], KR:[8,2], JP:[6,0] };
+
+var TIP = null;
+function tipMontrer(html, ev, hote){
+  if(!TIP){ TIP = document.createElement('div'); TIP.className = 'obs-tip'; hote.appendChild(TIP); }
+  TIP.innerHTML = html; TIP.classList.add('on'); tipPlacer(ev, hote);
+}
+function tipPlacer(ev, hote){
+  if(!TIP) return;
+  var r = hote.getBoundingClientRect();
+  var x = ev.clientX - r.left + 14, y = ev.clientY - r.top + 14;
+  var tw = TIP.offsetWidth || 240, th = TIP.offsetHeight || 100;
+  if(x + tw > r.width - 6) x = ev.clientX - r.left - tw - 12;
+  if(y + th > r.height - 6) y = Math.max(6, ev.clientY - r.top - th - 12);
+  TIP.style.left = x + 'px'; TIP.style.top = y + 'px';
+}
+function tipCacher(){ if(TIP) TIP.classList.remove('on'); }
+
+/* Infobulle pays : modeles, chercheurs d'elite, adoption UE — les trois series
+   de la page reunies, avec leur PRECISION, pour qu'on ne lise pas une classe
+   comme un compte exact. */
+function tipPays(code){
+  var p = CLASSE_PAR_CODE[code]; if(!p) return '';
+  var cl = DATA.modeles.classes[p.cl];
+  var exact = DATA.modeles.exacts && typeof DATA.modeles.exacts[code] === 'number'
+            ? DATA.modeles.exacts[code] : null;
+  var val = exact !== null ? String(exact) : (cl.min + '–' + cl.max);
+  var prec = exact !== null ? 'exact · Epoch AI (live)'
+           : (p.lect ? 'classe · lecture de carte' : 'classe · Epoch AI');
+  var h = '<div class="t-nom">' + esc(p.n) + '</div>'
+        + '<div class="t-sub">' + esc(prec) + '</div>'
+        + '<div class="t-l"><b>' + val + '</b> modèles remarquables (2003 – été 2024)</div>';
+  var t = TALENTS_PAYS[code];
+  if(t){
+    h += '<div class="t-l">Chercheurs d’élite 2022 — origine <b>' + (t.o || 'n.d.')
+       + '</b> · lieu de travail <b>' + t.t + '</b></div>';
+    if(code === 'US') h += '<div class="t-l" style="color:#F0B27A">Attraction nette : +29 points</div>';
+    if(code === 'CN') h += '<div class="t-l" style="color:#F0B27A">Exportatrice nette : −14 points</div>';
+  }
+  if(p.ue){
+    var adp = adoptionFor(code);
+    h += '<div class="t-l">Entreprises utilisant l’IA : <b>'
+       + (adp !== null ? fr(adp) + ' %' : 'détail au prochain rafraîchissement') + '</b></div>';
+  }
+  h += '<div class="t-cta">Cliquer : fiche détaillée sous la carte</div>';
+  return h;
+}
+
 function svgCarte(){
   indexerClasses();
   var s = '<svg class="obs-svg-map" viewBox="0 0 '+PROJ.W+' '+PROJ.H+'" preserveAspectRatio="xMidYMid meet" role="img" '
@@ -630,7 +711,19 @@ function svgCarte(){
       neutres += '<path d="'+d+'" fill="#E7E5E0" stroke="#F5F4F1" stroke-width="0.5"/>';
     }
   }
-  return s + neutres + colores + '</svg>';
+  /* Libelles : nom du pays pour ceux du panel, rien pour les autres — a
+     l'echelle mondiale, ecrire 150 noms rendrait la carte illisible. */
+  var lbls = "";
+  (DATA.modeles.pays || []).forEach(function(pp){
+    var c = centroidePays(pp.c); if(!c) return;
+    var d = LBL_DECAL[pp.c] || [0,0];
+    var x = projX(c[0]) + d[0], y = projY(Math.max(PROJ.latMin, Math.min(PROJ.latMax, c[1]))) + d[1];
+    if(x < 6 || x > PROJ.W - 6 || y < 10 || y > PROJ.H - 4) return;
+    var petit = pp.cl <= 1;
+    lbls += '<text class="obs-lbl' + (petit ? " petit" : "") + '" x="' + x.toFixed(1)
+      + '" y="' + y.toFixed(1) + '" text-anchor="middle">' + esc(pp.n) + '</text>';
+  });
+  return s + neutres + colores + lbls + '</svg>';
 }
 function legendeCarte(){
   var rows = '';
@@ -727,8 +820,19 @@ function renderMap(){
     choisi = el; if(el) el.classList.add('on');
     ficheDetail(el ? el.getAttribute('data-code') : null);
   }
+  TIP = null;                      /* l'ancienne infobulle vient d'etre effacee */
+  hote.addEventListener('mouseleave', tipCacher);
   hote.querySelectorAll('.obs-pays').forEach(function(el){
     el.addEventListener('click', function(){ selectionner(this); });
+    el.addEventListener('mouseenter', function(ev){ tipMontrer(tipPays(this.getAttribute('data-code')), ev, hote); });
+    el.addEventListener('mousemove', function(ev){ tipPlacer(ev, hote); });
+    el.addEventListener('mouseleave', tipCacher);
+    el.addEventListener('focus', function(){
+      var b = this.getBoundingClientRect();
+      tipMontrer(tipPays(this.getAttribute('data-code')),
+                 {clientX: b.left + b.width/2, clientY: b.top + b.height/2}, hote);
+    });
+    el.addEventListener('blur', tipCacher);
     el.addEventListener('keydown', function(ev){
       if(ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); selectionner(this); }
     });
