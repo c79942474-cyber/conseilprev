@@ -132,6 +132,59 @@ body.vue-pays .panel:not(#s-pays){display:none}
 .pv-vide{font-size:12px;color:var(--muted);padding:14px 2px}
 @media(max-width:760px){.pv-t th.opt,.pv-t td.opt{display:none}.pv-t{min-width:620px}}
 
+/* ── FICHE D'UN CENTRE DE DONNEES ───────────────────────────────────────────
+   Le troisieme niveau : le parc, puis le pays, puis LE SITE. C'est ici que
+   tout doit etre dit — y compris les hypotheses du calcul, pour qu'un lecteur
+   puisse le refaire et, s'il le faut, le contester. Une fourchette sans sa
+   formule n'est pas verifiable ; elle demande de nous croire. */
+tr.dc-l{cursor:pointer}
+tr.dc-l:hover{background:#F2F5FA}
+tr.dc-l .op button{all:unset;cursor:pointer;color:#1E63A8;font:inherit;font-weight:600;
+  display:inline-flex;align-items:center;gap:5px}
+tr.dc-l .op button:after{content:"›";font-size:15px;line-height:1;opacity:.55;transition:transform .12s}
+tr.dc-l:hover .op button:after{transform:translateX(2px);opacity:1}
+tr.dc-l .op button:focus-visible{outline:2px solid #1E63A8;outline-offset:2px;border-radius:2px}
+body.vue-site .pnav,
+body.vue-site #echeancier,
+body.vue-site .limite,
+body.vue-site > .kpis,
+body.vue-site .panel:not(#s-site){display:none}
+#s-site[hidden]{display:none}
+.fs-sous{font-size:12.5px;color:var(--muted);margin:-2px 0 2px}
+.fs-badges{display:flex;gap:8px;flex-wrap:wrap;margin:9px 0 4px}
+.fs-b{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.05em;
+  padding:3px 9px;border-radius:3px;background:var(--bg);border:1px solid var(--rule);color:var(--muted)}
+.fs-b.st{color:#1C1C1C}
+.fs-b.st i{width:8px;height:8px;display:inline-block;margin-right:6px;vertical-align:0}
+/* Deux colonnes : « annonce » a gauche, « deduit » a droite. La separation
+   physique fait la moitie du travail pedagogique — on ne confond pas ce qu'un
+   exploitant a dit avec ce que nous avons calcule. */
+.fs-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:12px}
+.fs-carte{border:1px solid var(--rule);border-radius:4px;background:var(--bg);padding:13px 16px}
+.fs-carte h4{font-size:11.5px;font-weight:600;margin-bottom:2px}
+.fs-carte .sh{font-size:11px;color:var(--muted);margin-bottom:9px;line-height:1.45}
+.fs-dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:12px;align-items:baseline}
+.fs-dl dt{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.05em;
+  color:var(--muted2);padding-top:2px;white-space:nowrap}
+.fs-dl dd{line-height:1.5}
+.fs-dl dd b{font-family:var(--mono);font-size:12px}
+.fs-abs{color:var(--muted2);font-size:11.5px}
+.fs-form{font-size:10.5px;color:var(--muted);line-height:1.5;margin-top:2px;
+  border-left:2px solid var(--rule);padding-left:8px}
+.fs-hyp{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:8px}
+.fs-hyp th,.fs-hyp td{text-align:left;padding:6px 10px 6px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+.fs-hyp th{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.05em;
+  color:var(--muted2);font-weight:400;white-space:nowrap}
+.fs-hyp td.v{font-family:var(--mono);white-space:nowrap}
+.fs-hyp td.q{color:var(--muted);font-size:11px}
+.fs-note{border-left:3px solid var(--orange);background:var(--bg);border-radius:0 3px 3px 0;
+  padding:10px 14px;font-size:11.5px;color:var(--muted);line-height:1.55;margin-top:10px}
+.fs-note b{color:var(--ink)}
+.fs-carte-btn{all:unset;cursor:pointer;font-size:11.5px;color:#1E63A8;padding:5px 11px;border-radius:3px;
+  border:1px solid var(--rule);background:var(--white);display:inline-block;margin-top:9px}
+.fs-carte-btn:hover{background:#F2F5FA;border-color:#1E63A8}
+.fs-carte-btn:focus-visible{outline:2px solid #1E63A8;outline-offset:2px}
+
 /* ── KPI ── */
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
 .kpi{background:var(--white);border:1px solid var(--rule);border-radius:4px;padding:12px 16px}
@@ -590,6 +643,21 @@ engagements publics) sont imputés nominativement.</div>
     <span class="panel-note" id="pv-note"></span>
   </div>
   <div class="panel-body" id="pv-corps"></div>
+</section>
+
+<!-- ══ 5 ter. FICHE D'UN CENTRE DE DONNÉES ══
+     Le troisième niveau. Une fourchette sans sa formule demande qu'on nous
+     croie sur parole ; cette fiche donne les hypothèses du calcul pour qu'un
+     lecteur puisse le refaire — et, s'il le faut, le contester. -->
+<section class="panel" id="s-site" aria-labelledby="t-site" hidden>
+  <div class="panel-head">
+    <div class="pv-fil">
+      <button type="button" class="pv-retour" id="fs-retour">← Retour</button>
+      <span class="panel-title" id="t-site">Centre de données</span>
+    </div>
+    <span class="panel-note" id="fs-note"></span>
+  </div>
+  <div class="panel-body" id="fs-corps"></div>
 </section>
 
 <!-- ══ 6. MÉTHODOLOGIE ══ -->
@@ -1949,6 +2017,19 @@ function chargerDC(){
       /* La vue pays peut avoir ete ouverte avant l'arrivee des centres : sans ce
          redessin elle afficherait « aucun centre recense », ce qui serait faux. */
       if(PAYS_VU) renderPays();
+      if(window.__siteAttendu){ var sid = window.__siteAttendu; window.__siteAttendu = null;
+        ouvrirSite(sid, null); }
+      else if(SITE_VU) renderSite();
+      /* Cliquer un carre sur la carte ouvre la meme fiche que le tableau : deux
+         chemins, une seule page — sans quoi l'infobulle serait un cul-de-sac. */
+      var hoteClic = document.getElementById("panmap");
+      if(hoteClic && hoteClic.getAttribute("data-clic-dc") !== "1"){
+        hoteClic.setAttribute("data-clic-dc", "1");
+        hoteClic.addEventListener("click", function(ev){
+          var q = ev.target.closest ? ev.target.closest(".dc-pt, .dc-cible") : null;
+          if(q) ouvrirSite(q.getAttribute("data-dc"), null);
+        });
+      }
       var enc = document.getElementById("dc-encart");
       if(enc) enc.style.display = "";
       var hoteC = document.getElementById("panmap");
@@ -2084,6 +2165,16 @@ var AIDES = {
      + "CO₂e). Chaque valeur porte sa nature : publiée, déduite du site, ou déduite de sa classe.",
     pas: "Ce n’est pas un inventaire exhaustif du pays : un centre non communiqué n’y figure pas. "
        + "Et une valeur de classe ne permet aucune comparaison entre deux sites nommés.",
+  },
+  hypotheses: {
+    t: "Les hypothèses du calcul",
+    d: "Les valeurs réellement employées pour dériver l’électricité, l’eau et le CO₂e de ce "
+     + "site : capacité retenue, heures de fonctionnement, facteur de charge, PUE et WUE du "
+     + "mode de refroidissement, facteur de fabrication, intensité du réseau national. Elles "
+     + "sont données pour que vous puissiez REFAIRE le calcul avec vos propres valeurs.",
+    pas: "Ce ne sont pas des mesures de ce site : ce sont des plages typiques. Si vous "
+       + "exploitez ce centre et connaissez vos vraies valeurs, le résultat que vous "
+       + "obtiendrez prime sur celui-ci — et nous sommes preneurs de la correction.",
   },
   reseau_pays: {
     t: "L’intensité du réseau de ce pays",
@@ -2230,6 +2321,7 @@ function chargerEmpreinte(){
       majBarre();                    /* les fonds carbone deviennent choisissables */
       if(window.__paysAttendu){ var c = window.__paysAttendu; window.__paysAttendu = null; ouvrirPays(c); }
       else if(PAYS_VU) renderPays();  /* vue ouverte avant l'arrivee des donnees */
+      if(SITE_VU) renderSite();       /* la fiche gagne son CO2e et ses intensites */
     })
     .catch(function(){ /* la carte et le panel n'en dependent pas */ });
 }
@@ -2640,8 +2732,12 @@ function renderPays(){
       var e = s.estimation || {};
       var es = empParSite(s.id);
       var em = (es && es.empreinte) || null;
-      return "<tr>"
-        + '<td><span class="op">' + esc(s.operateur) + "</span>"
+      /* La ligne entiere ouvre la fiche du site, mais c'est un BOUTON qui porte
+         l'action : sans element focalisable, la fiche serait inatteignable au
+         clavier et invisible pour un lecteur d'ecran. */
+      return '<tr class="dc-l" data-dc="' + esc(s.id) + '">'
+        + '<td class="op"><button type="button" data-dc="' + esc(s.id) + '">'
+        + esc(s.operateur) + "</button>"
         + (s.nom_site ? '<br><span class="si">' + esc(s.nom_site) + "</span>" : "")
         + '<br><span class="si">' + esc(s.ville) + "</span></td>"
         + '<td><span class="pv-st"><i style="background:' + esc(st.couleur || "#7A7A7A") + '"></i>'
@@ -2674,6 +2770,10 @@ function renderPays(){
       + '<th scope="col" class="opt">Refroidissement</th><th scope="col">CO₂e/an</th>'
       + '<th scope="col" class="opt">Source</th></tr></thead>'
       + "<tbody>" + lignes + "</tbody></table></div>"
+      + '<p class="note"><b>Cliquez sur un exploitant</b> pour ouvrir la fiche complète du '
+      + "site : ce qu’il annonce, ce que nous en déduisons, et les hypothèses du calcul — "
+      + "capacité retenue, facteur de charge, PUE, WUE, intensité du réseau — pour que vous "
+      + "puissiez le refaire.</p>"
       + '<p class="note"><b>Lire les étiquettes.</b> <span class="pv-nat n-publie">publié</span> '
       + "l’exploitant a donné le chiffre. <span class=\"pv-nat n-site\">site</span> calculé depuis "
       + "la capacité annoncée de CE site. <span class=\"pv-nat n-classe\">classe</span> calculé "
@@ -2714,6 +2814,287 @@ function renderPays(){
     + esc((EMP && EMP.avertissement) || "") + "</p>";
 
   setHTML("pv-corps", h);
+  aideBrancher();                   /* le corps est reconstruit : les « ? » aussi */
+  /* Delegation : une seule ecoute pour toutes les lignes, et elle survit au
+     redessin du corps puisqu'elle est posee sur le conteneur. */
+  var corps = document.getElementById("pv-corps");
+  if(corps && !corps.__branche){
+    corps.__branche = true;
+    corps.addEventListener("click", function(ev){
+      var r = ev.target.closest ? ev.target.closest("[data-dc]") : null;
+      if(r) ouvrirSite(r.getAttribute("data-dc"));
+    });
+  }
+}
+
+/* ── FICHE D'UN CENTRE DE DONNEES ───────────────────────────────────────────
+   Troisieme niveau de lecture : le parc, puis le pays, puis LE SITE.
+
+   Le principe qui commande tout le reste : separer physiquement CE QUE
+   L'EXPLOITANT ANNONCE de CE QUE NOUS EN DEDUISONS. Deux cartes cote a cote,
+   jamais un tableau unique — la mise en page fait ici la moitie du travail,
+   parce qu'un lecteur presse retiendra la disposition avant les mots.
+
+   Et une exigence que la vue pays ne remplissait pas : donner les HYPOTHESES
+   du calcul, chiffre par chiffre. Une fourchette sans sa formule demande qu'on
+   nous croie sur parole ; avec elle, un exploitant peut refaire le calcul avec
+   ses propres valeurs et nous opposer le resultat. C'est le but. */
+var SITE_VU = null, RETOUR_PAYS = null;
+
+var SOURCE_TYPE = { operateur: "communiqué de l’exploitant", presse: "presse",
+  autorite: "décision d’une autorité", officiel: "source officielle",
+  registre: "registre public", association: "organisation professionnelle" };
+
+function siteParId(id){ return dcParId(id); }
+
+/* Une plage d'hypothese se cite avec son unite ET sa raison : « 1,20 à 1,45 »
+   ne veut rien dire sans « PUE typique d'un refroidissement adiabatique ». */
+function plage(f, unite, dec){
+  if(!f || f.length !== 2) return null;
+  var d = dec === undefined ? 2 : dec;
+  /* Nombre FIXE de decimales : « 0,55 à 0,8 » donne a lire deux precisions
+     differentes la ou il n'y en a qu'une, et fait douter de la seconde. */
+  return fr(f[0].toFixed(d)) + " à " + fr(f[1].toFixed(d)) + (unite ? " " + unite : "");
+}
+/* Les libelles du referentiel commencent en minuscule — ils y sont des
+   fragments de phrase. Introduits par un titre, ils deviennent des phrases. */
+function majuscule(t){
+  t = String(t || "");
+  return t ? t.charAt(0).toUpperCase() + t.slice(1) : t;
+}
+
+function ouvrirSite(id, depuisPays){
+  var s = siteParId(id);
+  if(!s) return;
+  SITE_VU = id;
+  if(depuisPays !== undefined) RETOUR_PAYS = depuisPays;
+  else if(PAYS_VU) RETOUR_PAYS = PAYS_VU;
+  /* On quitte la vue pays sans oublier d'ou l'on vient : le bouton de retour
+     doit ramener au pays, pas au tableau general. */
+  document.body.classList.remove("vue-pays");
+  var sp = document.getElementById("s-pays");
+  if(sp) sp.hidden = true;
+  PAYS_VU = null;
+  renderSite();
+  document.body.classList.add("vue-site");
+  var sec = document.getElementById("s-site");
+  if(sec) sec.hidden = false;
+  if(history.replaceState) history.replaceState(null, "", "#dc=" + id);
+  window.scrollTo(0, 0);
+  var b = document.getElementById("fs-retour");
+  if(b) b.focus({ preventScroll: true });
+  aideBrancher();
+}
+
+function fermerSite(){
+  SITE_VU = null;
+  document.body.classList.remove("vue-site");
+  var sec = document.getElementById("s-site");
+  if(sec) sec.hidden = true;
+  if(RETOUR_PAYS){ var c = RETOUR_PAYS; RETOUR_PAYS = null; ouvrirPays(c); }
+  else {
+    if(history.replaceState) history.replaceState(null, "", "#s-empreinte");
+    var e = document.getElementById("s-empreinte");
+    if(e) e.scrollIntoView({ block: "start" });
+  }
+}
+
+function renderSite(){
+  var s = siteParId(SITE_VU);
+  if(!s) return;
+  var st = (DC.statuts || {})[s.statut] || {};
+  var e = s.estimation || {};
+  var es = empParSite(s.id);
+  var em = (es && es.empreinte) || null;
+  var der = (DC && DC.derivation) || {};
+  var gab = (DC.gabarits || {})[s.gabarit] || {};
+  var ref = (EMP && EMP.referentiel) || {};
+  var titre = s.operateur + (s.nom_site ? " — " + s.nom_site : "");
+
+  document.getElementById("t-site").textContent = titre;
+  var note = document.getElementById("fs-note");
+  if(note) note.textContent = s.id + " · " + (st.nom || s.statut);
+
+  var h = '<h2 class="pv-h">' + esc(titre) + "</h2>"
+    + '<p class="fs-sous">' + esc(s.ville) + " · " + esc(nomPays(s.pays)) + "</p>"
+    + '<div class="fs-badges">'
+    + '<span class="fs-b st"><i style="background:' + esc(st.couleur || "#7A7A7A") + '"></i>'
+    + esc(st.nom || s.statut) + "</span>"
+    + (s.annee_service ? '<span class="fs-b">mise en service ' + s.annee_service + "</span>" : "")
+    + '<span class="fs-b">' + esc(s.gabarit_nom || s.gabarit) + "</span>"
+    + '<span class="fs-b">refroidissement ' + esc(REFROID_NOM[s.refroidissement] || s.refroidissement || "non précisé") + "</span>"
+    + "</div>";
+
+  if(st.sens){
+    h += '<p class="note" style="margin-top:8px"><b>Ce que dit ce statut.</b> '
+      + esc(majuscule(st.sens)) + ".</p>";
+  }
+  if(gab.sens){
+    h += '<p class="note"><b>Ce que recouvre cette catégorie.</b> '
+      + esc(majuscule(gab.sens)) + ".</p>";
+  }
+
+  /* ── LES DEUX COLONNES : annoncé / déduit ── */
+  var annonce = "";
+  annonce += "<dt>Capacité</dt><dd>" + (s.capacite_mw
+      ? "<b>" + nbFr(s.capacite_mw) + " MW</b> informatiques"
+      : '<span class="fs-abs">non annoncée</span>') + "</dd>";
+  annonce += "<dt>Investissement</dt><dd>" + (s.investissement_meur
+      ? "<b>" + (s.investissement_meur >= 1000
+          ? fr(String(Math.round(s.investissement_meur / 100) / 10)) + " Md€"
+          : nbFr(s.investissement_meur) + " M€") + "</b>"
+      : '<span class="fs-abs">non annoncé</span>') + "</dd>";
+  annonce += "<dt>Électricité</dt><dd>" + (s.elec_gwh_an
+      ? "<b>" + nbFr(s.elec_gwh_an) + " GWh/an</b>"
+      : '<span class="fs-abs">non publiée</span>') + "</dd>";
+  annonce += "<dt>Eau</dt><dd>" + (s.eau_m3_an
+      ? "<b>" + nbFr(s.eau_m3_an) + " m³/an</b>"
+      : '<span class="fs-abs">non publiée</span>') + "</dd>";
+  annonce += "<dt>Mise en service</dt><dd>" + (s.annee_service
+      ? "<b>" + s.annee_service + "</b>"
+      : '<span class="fs-abs">non datée</span>') + "</dd>";
+
+  var deduit = "";
+  deduit += "<dt>Électricité</dt><dd>" + (e.electricite
+      ? "<b>" + fourchetteFr(e.electricite, "GWh/an") + "</b>" + natBadge(e.nature)
+        + (e.formule_electricite ? '<div class="fs-form">' + esc(e.formule_electricite) + "</div>" : "")
+      : '<span class="fs-abs">non dérivable</span>') + "</dd>";
+  deduit += "<dt>Eau</dt><dd>" + (e.eau
+      ? "<b>" + fourchetteFr(e.eau, "m³/an") + "</b>" + natBadge(e.nature)
+        + (e.formule_eau ? '<div class="fs-form">' + esc(e.formule_eau) + "</div>" : "")
+      : '<span class="fs-abs">non dérivable</span>') + "</dd>";
+  if(em && em.total_t){
+    deduit += "<dt>CO₂e total</dt><dd><b>" + fourchetteT(em.total_t) + "</b>/an" + natBadge(em.nature)
+      + (em.formule ? '<div class="fs-form">' + esc(em.formule) + "</div>" : "") + "</dd>";
+    deduit += "<dt>dont usage</dt><dd><b>" + fourchetteT(em.usage_t) + "</b>/an</dd>";
+    deduit += "<dt>dont fabrication</dt><dd><b>" + fourchetteT(em.fabrication_t) + "</b>/an · "
+      + em.part_fabrication_pct + " % du total</dd>";
+  } else {
+    deduit += "<dt>CO₂e</dt><dd><span class=\"fs-abs\">non calculé"
+      + (em && em.motif ? " — " + esc(em.motif) : "") + "</span></dd>";
+  }
+
+  h += '<div class="fs-cols">'
+    + '<div class="fs-carte"><h4>Ce que l’exploitant annonce</h4>'
+    + '<p class="sh">Chiffres rendus publics par l’exploitant, la presse ou une autorité. '
+    + 'Rien n’est ajouté ici : une case vide signifie que personne ne l’a publié.</p>'
+    + '<dl class="fs-dl">' + annonce + "</dl></div>"
+    + '<div class="fs-carte"><h4 data-aide="natures">Ce que nous en déduisons</h4>'
+    + '<p class="sh">Calculs déterministes, formule affichée. Aucun modèle de langage '
+    + 'n’intervient — les mêmes entrées donnent toujours le même résultat.</p>'
+    + '<dl class="fs-dl">' + deduit + "</dl></div></div>";
+
+  /* ── LES HYPOTHÈSES, EN CLAIR ──
+     Le cœur de la fiche : sans ces sept lignes, les fourchettes ci-dessus
+     demandent qu'on nous croie. Avec elles, un exploitant peut refaire le
+     calcul avec SES valeurs et nous opposer son résultat. */
+  var mwG = (der.gabarits_mw || {})[s.gabarit] || gab.mw;
+  var pue = (der.pue || {})[s.refroidissement];
+  var wue = (der.wue || {})[s.refroidissement];
+  var inten = (ref.intensite || {})[s.pays];
+  var lignesH = [];
+  if(s.capacite_mw){
+    lignesH.push(["Capacité informatique", nbFr(s.capacite_mw) + " MW",
+      "annoncée pour CE site — le calcul part d’elle et non du gabarit"]);
+  } else if(mwG){
+    lignesH.push(["Capacité informatique", plage(mwG, "MW", 0),
+      "ordre de grandeur du gabarit « " + (s.gabarit_nom || s.gabarit)
+      + " » : aucune capacité n’est publiée pour ce site"]);
+  }
+  lignesH.push(["Heures par an", "8 760 h", "fonctionnement continu"]);
+  if(der.charge) lignesH.push(["Facteur de charge", plage(der.charge, "", 2),
+    "un site n’a jamais tous ses serveurs à pleine charge en permanence"]);
+  if(pue) lignesH.push(["PUE", plage(pue, "", 2),
+    "énergie totale ÷ énergie informatique, plage typique d’un refroidissement "
+    + (REFROID_NOM[s.refroidissement] || s.refroidissement)]);
+  if(wue) lignesH.push(["WUE", plage(wue, "L/kWh", 2),
+    "litres d’eau par kilowattheure informatique, même mode de refroidissement"]);
+  if(ref.fabrication_kg_par_mwh) lignesH.push(["Fabrication",
+    fr(String(ref.fabrication_kg_par_mwh)) + " kgCO₂e/MWh",
+    "empreinte des équipements amortie sur leur durée de vie"]);
+  if(inten) lignesH.push(["Intensité du réseau", nbFr(inten) + " gCO₂e/kWh",
+    "moyenne annuelle du réseau " + esc(nomPays(s.pays)) + ", approche cycle de vie"]);
+
+  h += '<h3 class="pv-sh" data-aide="hypotheses">Les hypothèses du calcul</h3>'
+    + '<table class="fs-hyp"><caption class="sr-only">Hypothèses employées pour dériver '
+    + "l’électricité, l’eau et le CO₂e de ce site</caption>"
+    + '<thead><tr><th scope="col">Grandeur</th><th scope="col">Valeur retenue</th>'
+    + '<th scope="col">Pourquoi cette valeur</th></tr></thead><tbody>'
+    + lignesH.map(function(l){
+        return "<tr><th scope=\"row\">" + esc(l[0]) + '</th><td class="v">' + esc(l[1])
+             + '</td><td class="q">' + esc(l[2]) + "</td></tr>";
+      }).join("")
+    + "</tbody></table>";
+
+  if(e.base){
+    h += '<p class="note"><b>Point de départ retenu.</b> ' + esc(e.base) + "</p>";
+  }
+  if(e.nature === "classe"){
+    h += '<div class="fs-note"><b>Cette fiche est de nature « classe ».</b> Les fourchettes '
+      + "ci-dessus répondent à « de quel ordre est un campus de ce type ? », <b>jamais</b> à "
+      + "« combien consomme CE site ? ». Elles ne permettent aucune comparaison avec un autre "
+      + "site nommé, et ne peuvent se substituer à une déclaration d’exploitant.</div>";
+  } else if(e.nature === "indisponible"){
+    h += '<div class="fs-note"><b>Aucune dérivation possible.</b> '
+      + esc(e.motif || "les entrées manquent pour calculer quoi que ce soit sur ce site.") + "</div>";
+  }
+
+  /* ── SOURCE : d'où vient ce qui précède ── */
+  h += '<h3 class="pv-sh">D’où vient cette fiche</h3><dl class="fs-dl">'
+    + "<dt>Source</dt><dd>" + esc(s.source_libelle || "non précisée") + "</dd>"
+    + "<dt>Type</dt><dd>" + esc(SOURCE_TYPE[s.source_type] || s.source_type || "—") + "</dd>"
+    + "<dt>Confiance</dt><dd><b>" + esc(s.confiance || "?") + "</b></dd>"
+    + "<dt>Identifiant</dt><dd><b>" + esc(s.id) + "</b></dd>"
+    + (typeof s.lat === "number"
+        ? "<dt>Coordonnées</dt><dd><b>" + fr(String(s.lat)) + ", " + fr(String(s.lon)) + "</b></dd>"
+        : "")
+    + "</dl>";
+  if(s.note){
+    h += '<div class="fs-note"><b>Note de vérification.</b> ' + esc(s.note) + "</div>";
+  }
+  if(typeof s.lat === "number"){
+    h += '<button type="button" class="fs-carte-btn" id="fs-voir-carte">'
+      + "Voir ce site sur la carte →</button>";
+  }
+
+  /* ── REPÈRES DE LECTURE ──
+     Les quatre pièges qui produisent les erreurs d'un ordre de grandeur. Ils
+     ont leur place ICI, sur la fiche d'un site, et pas seulement dans une
+     méthodologie que personne n'ouvre. */
+  var cadre = (DC && DC.cadre) || {};
+  if((cadre.pieges || []).length){
+    h += '<h3 class="pv-sh">Quatre pièges avant de citer ces chiffres</h3>'
+      + '<ul class="note" style="padding-left:16px;margin-top:4px">'
+      + cadre.pieges.map(function(x){ return "<li>" + esc(x) + "</li>"; }).join("")
+      + "</ul>";
+  }
+  if((cadre.textes || []).length){
+    h += '<h3 class="pv-sh">Ce que la réglementation impose</h3>'
+      + cadre.textes.slice(0, 2).map(function(x){
+          return '<p class="note" style="margin-top:6px"><b>' + esc(x.t) + ".</b> " + esc(x.d) + "</p>";
+        }).join("");
+  }
+
+  setHTML("fs-corps", h);
+  /* aideBrancher ICI et pas seulement dans ouvrirSite : la fiche est redessinee
+     quand l'empreinte arrive, et elle perdait alors ses boutons d'aide sans que
+     rien ne le signale — la meme erreur que sur les blocs de la carte. */
+  aideBrancher();
+
+  var bt = document.getElementById("fs-voir-carte");
+  if(bt) bt.addEventListener("click", function(){
+    /* Fermer d'abord : la carte ne peut pas etre visee tant qu'elle est
+       masquee — ses dimensions vaudraient zero et le zoom viserait a cote. */
+    var retour = RETOUR_PAYS;
+    RETOUR_PAYS = null;
+    fermerSite();
+    if(retour) fermerPays(true);
+    var carte = document.getElementById("s-carte");
+    if(carte) carte.scrollIntoView({ block: "start" });
+    if(typeof zoomSur === "function"){
+      setTimeout(function(){ zoomSur(projX(s.lon), projY(s.lat), 6); }, 260);
+    }
+  });
 }
 
 /* aideBrancher en FIN de renderAll, et non apres l'appel : renderAll est
@@ -2727,18 +3108,32 @@ renderAll();
 (function(){
   var b = document.getElementById("pv-retour");
   if(b) b.addEventListener("click", function(){ fermerPays(); });
+  var bs = document.getElementById("fs-retour");
+  if(bs) bs.addEventListener("click", function(){ fermerSite(); });
+  /* Echap remonte d'un cran, jamais deux : depuis la fiche d'un site on
+     revient au pays, et seulement ensuite au tableau. */
   document.addEventListener("keydown", function(ev){
-    if(ev.key === "Escape" && document.body.classList.contains("vue-pays")) fermerPays();
+    if(ev.key !== "Escape") return;
+    if(document.body.classList.contains("vue-site")) fermerSite();
+    else if(document.body.classList.contains("vue-pays")) fermerPays();
   });
   function depuisAncre(){
-    var m = /^#pays=([A-Z]{2})$/.exec(location.hash || "");
-    if(m) ouvrirPays(m[1]);
-    else if(document.body.classList.contains("vue-pays")) fermerPays(true);
+    var mp = /^#pays=([A-Z]{2})$/.exec(location.hash || "");
+    var md = /^#dc=([a-z0-9-]+)$/i.exec(location.hash || "");
+    if(md) ouvrirSite(md[1]);
+    else if(mp) ouvrirPays(mp[1]);
+    else {
+      if(document.body.classList.contains("vue-site")){ SITE_VU = null; RETOUR_PAYS = null;
+        document.body.classList.remove("vue-site");
+        var ss = document.getElementById("s-site"); if(ss) ss.hidden = true; }
+      if(document.body.classList.contains("vue-pays")) fermerPays(true);
+    }
   }
   window.addEventListener("hashchange", depuisAncre);
-  /* A l'ouverture, l'empreinte n'est pas encore chargee : on retient le pays
-     demande et on l'ouvre des que les donnees arrivent. */
+  /* A l'ouverture, ni l'empreinte ni les centres ne sont charges : on retient
+     ce qui est demande et on l'ouvre des que les donnees arrivent. */
   window.__paysAttendu = (/^#pays=([A-Z]{2})$/.exec(location.hash || "") || [])[1] || null;
+  window.__siteAttendu = (/^#dc=([a-z0-9-]+)$/i.exec(location.hash || "") || [])[1] || null;
 })();
 chargerSocle();
 chargerEmpreinte();
