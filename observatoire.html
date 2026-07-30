@@ -137,6 +137,25 @@ figure{margin:0}
 /* Meme regle pour les mini-cartes des chercheurs : un glisser dessus
    laissait une surbrillance de selection en travers des barres. */
 .talents-grid,.mini-map{user-select:none;-webkit-user-select:none}
+/* ── Figure de flux des chercheurs ──
+   Deux cartes cote a cote demandaient au lecteur de faire lui-meme la
+   soustraction. La figure la fait : une ligne par pays, du point « formes » au
+   point « employes », fleche dans le sens du mouvement. */
+.tal-flux{position:relative;user-select:none}
+.tal-flux svg{display:block;width:100%;height:auto}
+.tal-row{cursor:pointer}
+.tal-row rect.zone{fill:transparent}
+.tal-row:hover rect.zone{fill:rgba(28,28,28,.045)}
+.tal-pays{font-family:var(--sans);font-size:13px;fill:#1C1C1C}
+.tal-val{font-family:var(--mono);font-size:12px;font-weight:700;fill:#1C1C1C}
+.tal-sol{font-family:var(--mono);font-size:12px;font-weight:700}
+.tal-nd{font-family:var(--mono);font-size:10.5px;fill:#8A8A8A}
+.tal-axe{font-family:var(--mono);font-size:9.5px;fill:#8A8A8A}
+.tal-grille{stroke:#E8E6E1;stroke-width:1}
+.tal-leg{display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin:2px 0 10px;
+  font-family:var(--mono);font-size:10px;color:var(--muted)}
+.tal-leg i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.tal-leg .fl{width:22px;height:0;border-top:2px solid;border-radius:0;margin-right:5px}
 /* Des que la carte est agrandie, la legende se replie sur l'essentiel : a ×2,6
    elle recouvrait entierement la France. Le survol la redeploie. */
 .carte-main .obs-legend .lg-row{display:none}
@@ -414,17 +433,14 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <span class="panel-note">MacroPolo · d’après NeurIPS 2022 · en %</span>
   </div>
   <div class="panel-body">
-    <div class="legend" aria-hidden="true">
-      <span class="lg-item"><span class="lg-sw" style="background:#6A4BA8"></span>Origine (formation)</span>
-      <span class="lg-item"><span class="lg-sw" style="background:#0491A4"></span>Lieu de travail</span>
-    </div>
-    <div id="tal-maps" class="mini-grid"></div>
-    <p class="note" style="margin-top:2px">Les deux cartes partagent la même échelle : une barre deux fois plus haute vaut deux fois plus de chercheurs. Barre hachurée = valeur non publiée par la source. « Autres » (28 % à l’origine, 31 % au travail) n’a pas de territoire et ne figure pas sur les cartes.</p>
-    <figure>
-      <figcaption class="sr-only">Barres jumelées comparant, pays par pays, la part des chercheurs d’élite en IA selon leur origine et selon leur lieu de travail en 2022. Les États-Unis forment 28 % des chercheurs mais en emploient 57 % ; la Chine en forme 26 % et en emploie 12 %.</figcaption>
-      <div class="chart" id="tal-chart"></div>
-    </figure>
-    <p class="note"><strong>Lecture :</strong> les États-Unis forment 28 % des chercheurs d’élite mais en emploient 57 % (+29 pts — attraction nette) ; la Chine en forme 26 % et n’en emploie que 12 % (−14 pts — exportatrice nette de talents).</p>
+    <div id="tal-maps" class="tal-flux"></div>
+    <p class="note" style="margin-top:2px"><strong>Lecture :</strong> chaque ligne va du point
+    <b>« formés »</b> au point <b>« y travaillent »</b> ; la flèche donne le sens du mouvement et la
+    colonne de droite le solde en points. Les États-Unis forment 28 % des chercheurs d’élite et en
+    emploient 57 % — <b>+29 points</b>, la plus forte attraction nette ; la Chine en forme 26 % et
+    n’en emploie que 12 % — <b>−14 points</b>. Survoler une ligne pour le détail.
+    « Autres » — le reste du monde — y figure aussi : sur une carte il n’avait pas de territoire,
+    dans une figure de flux il a sa ligne comme les autres.</p>
     <p class="note">Définition (N.B. de la carte source) : auteurs d’articles retenus pour <em>présentation orale</em> à NeurIPS (~top 2 % des publications). * Royaume-Uni, Allemagne, France et Canada : entre 2 et 4 % chacun des lieux de travail selon la carte source (lecture graphique — valeur précise non publiée). Inde : lieu de travail non disponible.</p>
     <details class="tbl-alt">
       <summary>Données du graphique (tableau)</summary>
@@ -634,7 +650,14 @@ function setText(id, txt){ var el = document.getElementById(id); if(el) el.textC
 var CMAP = ['#86B6EF','#5598E7','#2A78D6','#1C5CAB','#0D366B'];
 /* Palettes catégorielles validées (script validate_palette : tous contrôles PASS) */
 var C_CN = '#B83222', C_US = '#1E63A8', C_EU = '#C47C1A';
-var C_ORI = '#6A4BA8', C_TRA = '#0491A4';
+/* Origine et lieu de travail : les deux teintes du systeme du site (bleu =
+   magnitude, orange = infrastructure/mouvement), validees ensemble sur toutes
+   les paires — ecart normal 33,6 et deficience protan 24,7, tres au-dessus
+   des planchers. La direction du solde, elle, prend la paire DIVERGENTE
+   bleu <-> rouge : deux poles qui se lisent comme opposes, avec un gris
+   neutre au milieu. */
+var C_ORI = '#2A78D6', C_TRA = '#EB6834';
+var C_GAIN = '#2A78D6', C_PERTE = '#D03B3B', C_NEUTRE = '#B9B4AC';
 
 /* ── Contours des pays (Natural Earth 110 m, DOMAINE PUBLIC) ─────────────
    Simplifiés (Douglas-Peucker, tolérance 0,4°) et arrondis au centième de
@@ -1541,118 +1564,183 @@ function barPath(x, y, w, h, r){
    Les pays dont la valeur n'est pas publiée (2–4 %) portent une barre
    FANTÔME hachurée : montrer une barre pleine reviendrait à inventer une
    hauteur que la source ne donne pas. */
-/* Ancrage des barres : [lat, lng, décalage vertical du LIBELLÉ, décalage
-   horizontal de la barre].
+/* ── FIGURE DE FLUX DES CHERCHEURS ────────────────────────────────────────
+   Ce panneau montrait DEUX cartes du monde avec des barres : le lecteur devait
+   faire lui-meme la soustraction entre « formes ici » et « travaillent la ».
+   Or c'est cette soustraction qui est l'information — les Etats-Unis forment
+   28 % des chercheurs et en emploient 57 %.
+   La figure la fait donc pour lui : une ligne par pays, du point « formes » au
+   point « employes », fleche dans le sens du mouvement, pays ranges du plus
+   attractif au plus exportateur. Le survol donne le detail. */
+var TAL_ETAT = { sel: null };
 
-   Les décalages horizontaux ne sont pas cosmétiques, ils rendent la carte
-   LISIBLE. Deux paires de pays sont trop proches à l'échelle mondiale pour
-   porter des barres côte à côte : États-Unis / Canada (8° de longitude) et
-   France / Allemagne (8° également). Sans écartement, la barre américaine —
-   la plus haute des deux cartes, 28 % puis 57 % — recouvrait purement et
-   simplement celle du Canada, et les deux étiquettes européennes se
-   chevauchaient. On écarte donc les barres de part et d'autre de leur pays,
-   assez peu pour qu'on les y rattache encore, assez pour qu'on les distingue. */
-var MINI_LATLNG = {
-  US:[39.5,-98.4,  0,  14], CA:[56.1,-106.3, -4, -26],
-  FR:[46.6,  2.2, 28, -16], DE:[51.2,  10.4,  0,  18],
-  CN:[35.8,104.2,  0,   0], IN:[22.6, 79.9,   0,  -4],
-  GB:[54.0, -2.5, 56, -34]
-};
-function miniCarte(champ, couleur, titre){
-  var t = DATA.talents, W = PROJ.W, H = PROJ.H;
-  /* Hauteur de barre : proportionnelle, plafonnée par la plus grande valeur
-     réellement publiée (57 %) pour que les deux cartes partagent la MÊME
-     échelle — sans quoi la comparaison entre elles serait trompeuse. */
-  /* DÉGAGEMENT AU-DESSUS DE LA CARTE. La barre américaine part d'un point situé
-     à une centaine de pixels du bord haut et en mesure plusieurs centaines :
-     dans un cadre limité à la carte, elle était ROGNÉE et son chiffre invisible
-     — on perdait la donnée la plus parlante des deux cartes (28 % formés,
-     57 % employés). Le cadre s'étend donc vers le haut et les barres y
-     débordent, comme sur la publication dont ce panneau s'inspire. */
-  var HMAX = 260, VMAX = 57, CIEL = 210;
-  /* La trame des barres fantômes est déclarée DANS le SVG : un <defs> posé
-     avant la balise ouvrante ne serait pas du SVG, et le motif serait ignoré. */
-  var uid = 'hach-' + champ;
-  var s = '<svg class="obs-svg-map" viewBox="0 '+(-CIEL)+' '+W+' '+(H+CIEL)+'" preserveAspectRatio="xMidYMid meet" role="img" '
-        + 'aria-label="'+esc(titre)+'">'
-        + '<defs><pattern id="'+uid+'" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">'
-        + '<rect width="6" height="6" fill="#FFFFFF"/><line x1="0" y1="0" x2="0" y2="6" stroke="'+couleur+'" stroke-width="2.4" opacity=".5"/>'
-        + '</pattern></defs>'
-        + '<rect x="0" y="0" width="'+W+'" height="'+H+'" fill="#DDE3EA"/>';
-  var codes = Object.keys(CONTOURS), fonds = '';
-  for(var i=0;i<codes.length;i++){
-    var d = cheminPays(codes[i]);
-    if(d) fonds += '<path d="'+d+'" fill="#EDEBE6" stroke="#F7F6F3" stroke-width="0.5"/>';
-  }
-  s += fonds;
-  /* Barres du sud au nord : une barre plus méridionale ne recouvre pas sa voisine. */
-  var liste = t.pays.filter(function(p){ return p.c && MINI_LATLNG[p.c]; })
-    .sort(function(a,b){ return MINI_LATLNG[a.c][0] - MINI_LATLNG[b.c][0]; });
-  liste.forEach(function(p){
-    var ll = MINI_LATLNG[p.c];
-    var x = projX(ll[1]) + (ll[3] || 0), yb = projY(ll[0]);
-    var v = p[champ];
-    var connu = typeof v === 'number';
-    var hb = connu ? (v / VMAX) * HMAX : 26;   /* barre fantôme, hauteur neutre */
-    var bw = 26;
-    var etiq = connu ? fr(v) + ' %' : (p.tn || 'n.d.');
-    s += '<rect x="'+(x-bw/2).toFixed(1)+'" y="'+(yb-hb).toFixed(1)+'" width="'+bw+'" height="'+hb.toFixed(1)+'" '
-       + (connu ? 'fill="'+couleur+'"' : 'fill="url(#'+uid+')" stroke="'+couleur+'" stroke-width="1.2" stroke-dasharray="3 2"')
-       + ' rx="1"><title>'+esc(p.n)+' — '+esc(etiq)+'</title></rect>'
-       + '<text x="'+x.toFixed(1)+'" y="'+(yb-hb-9).toFixed(1)+'" text-anchor="middle" '
-       + 'font-size="23" font-weight="700" fill="#1C1C1C">'+esc(etiq)+'</text>'
-       + '<text x="'+x.toFixed(1)+'" y="'+(yb+26+(ll[2]||0)).toFixed(1)+'" text-anchor="middle" '
-       + 'font-size="19" fill="#4A4A4A">'+esc(p.n)+'</text>';
-  });
-  return s + '</svg>';
+function talSolde(p){
+  /* Solde en points : lieu de travail moins origine. Il n'est calculable que
+     si les deux valeurs sont connues — une fourchette de lecture graphique
+     (« 2–4 % ») donne un solde APPROCHE, marque comme tel. */
+  if(typeof p.o !== 'number' || typeof p.t !== 'number') return null;
+  return p.t - p.o;
 }
-function renderMiniCartes(){
+function talCouleur(sol){
+  if(sol === null) return C_NEUTRE;
+  if(sol >= 1.5) return C_GAIN;
+  if(sol <= -1.5) return C_PERTE;
+  return C_NEUTRE;
+}
+function talSens(sol){
+  if(sol === null) return "solde non calculable";
+  if(sol >= 1.5) return "attire plus de chercheurs qu'il n'en forme";
+  if(sol <= -1.5) return "en forme plus qu'il n'en emploie";
+  return "forme et emploie dans les mêmes proportions";
+}
+
+/* Nom explicite : `renderFlux` existe deja dans cette page pour le fil
+   d'actualite « strategie UE ». Deux fonctions de meme nom, et c'est la
+   derniere definie qui l'emporte — la premiere ne s'execute jamais. */
+function renderFluxTalents(){
   var el = document.getElementById('tal-maps');
   if(!el) return;
+  var t = DATA.talents;
+  /* Ranges du plus attractif au plus exportateur ; les soldes non calculables
+     ferment la marche, ils ne se comparent a rien. */
+  var liste = (t.pays || []).slice().sort(function(a, b){
+    var sa = talSolde(a), sb = talSolde(b);
+    if(sa === null && sb === null) return b.o - a.o;
+    if(sa === null) return 1;
+    if(sb === null) return -1;
+    return sb - sa;
+  });
+
+  var W = 760, LH = 34, MG = 148, MD = 118, HAUT = 34, BAS = 26;
+  var H = HAUT + liste.length * LH + BAS;
+  var VMAX = 60;                      /* echelle commune, en points de % */
+  var x = function(v){ return MG + (v / VMAX) * (W - MG - MD); };
+
+  var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="'
+        + 'Flux des chercheurs d’élite en IA : part formée dans chaque pays et part y travaillant, 2022.">';
+  /* Grille : une graduation tous les 10 points, discrete. */
+  for(var g = 0; g <= VMAX; g += 10){
+    s += '<line class="tal-grille" x1="' + x(g).toFixed(1) + '" y1="' + (HAUT - 12)
+      + '" x2="' + x(g).toFixed(1) + '" y2="' + (H - BAS + 4) + '"/>'
+      + '<text class="tal-axe" x="' + x(g).toFixed(1) + '" y="' + (H - BAS + 16)
+      + '" text-anchor="middle">' + g + ' %</text>';
+  }
+  s += '<defs>'
+    + '<marker id="tal-fl-g" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto">'
+    + '<path d="M0 0 L8 4 L0 8 z" fill="' + C_GAIN + '"/></marker>'
+    + '<marker id="tal-fl-p" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto">'
+    + '<path d="M0 0 L8 4 L0 8 z" fill="' + C_PERTE + '"/></marker>'
+    + '</defs>';
+
+  liste.forEach(function(p, i){
+    var y = HAUT + i * LH + LH / 2;
+    var sol = talSolde(p), col = talCouleur(sol);
+    s += '<g class="tal-row" data-pays="' + esc(p.c || p.n) + '">'
+      + '<rect class="zone" x="0" y="' + (y - LH / 2) + '" width="' + W + '" height="' + LH + '"/>'
+      + '<text class="tal-pays" x="' + (MG - 12) + '" y="' + (y + 4) + '" text-anchor="end">'
+      + esc(p.n) + '</text>';
+
+    var xo = x(p.o);
+    if(typeof p.t === 'number'){
+      var xt = x(p.t);
+      /* La ligne va de l'origine vers le lieu de travail ; la fleche dit le
+         sens. Un ecart inferieur a 1,5 point ne merite pas de fleche : on
+         tracerait un mouvement qui n'existe pas. */
+      if(Math.abs(xt - xo) > 3){
+        var marq = sol >= 1.5 ? 'tal-fl-g' : sol <= -1.5 ? 'tal-fl-p' : null;
+        s += '<line x1="' + xo.toFixed(1) + '" y1="' + y + '" x2="'
+          + (xt + (xt > xo ? -7 : 7)).toFixed(1) + '" y2="' + y + '" stroke="' + col
+          + '" stroke-width="2.5" opacity=".55"'
+          + (marq ? ' marker-end="url(#' + marq + ')"' : '') + '/>';
+      }
+      s += '<circle cx="' + xt.toFixed(1) + '" cy="' + y + '" r="6.5" fill="' + C_TRA
+        + '" stroke="#FFFFFF" stroke-width="1.6"/>';
+    } else {
+      /* Valeur non publiee : cercle CREUX, jamais un point plein — un point
+         plein affirmerait une position qu'on n'a pas.
+         Quand la source donne une fourchette (« 2–4 % »), on pose le cercle au
+         MILIEU de cette fourchette : c'est la meilleure position honnete. Sans
+         fourchette, il reste a gauche, hors de l'echelle des valeurs connues. */
+      var m = String(p.tn || '').match(/(\d+)\s*[–-]\s*(\d+)/);
+      var xn = m ? x((+m[1] + +m[2]) / 2) : x(1.5);
+      s += '<circle cx="' + xn.toFixed(1) + '" cy="' + y + '" r="6.5" fill="#FFFFFF" stroke="'
+        + C_TRA + '" stroke-width="1.6" stroke-dasharray="2.4 1.8"/>';
+      /* L'etiquette se pose TOUJOURS a droite du point le plus a droite de la
+         ligne. A gauche, elle chevauchait tantot le disque d'origine, tantot le
+         nom du pays dans la marge. A droite, il n'y a rien. */
+      s += '<text class="tal-nd" x="' + (Math.max(xn, xo) + 13).toFixed(1) + '" y="' + (y + 4)
+        + '" text-anchor="start">' + esc(p.tn || 'n.d.') + '</text>';
+    }
+    s += '<circle cx="' + xo.toFixed(1) + '" cy="' + y + '" r="6.5" fill="' + C_ORI
+      + '" stroke="#FFFFFF" stroke-width="1.6"/>';
+    /* Solde en clair, a droite : c'est la colonne qu'on lit en diagonale. */
+    var lib = sol === null ? '—' : (sol > 0 ? '+' : '') + fr(Math.round(sol * 10) / 10) + ' pts';
+    s += '<text class="tal-sol" x="' + (W - 14) + '" y="' + (y + 4) + '" text-anchor="end" fill="'
+      + (sol === null ? '#8A8A8A' : col) + '">' + esc(lib) + '</text></g>';
+  });
+  s += '<text class="tal-axe" x="' + (W - 14) + '" y="' + (HAUT - 16)
+    + '" text-anchor="end">SOLDE</text>'
+    + '<text class="tal-axe" x="' + MG + '" y="' + (HAUT - 16) + '">PART DES CHERCHEURS D’ÉLITE</text></svg>';
+
+  el.className = 'tal-flux';
   el.innerHTML =
-      '<figure class="mini"><figcaption>Pays d’ORIGINE (formation)</figcaption>'
-    + miniCarte('o', C_ORI, 'Carte : pays d’origine des chercheurs d’élite en IA en 2022, en pourcentage.') + '</figure>'
-    + '<figure class="mini"><figcaption>Pays où ils TRAVAILLENT</figcaption>'
-    + miniCarte('t', C_TRA, 'Carte : pays où travaillent les chercheurs d’élite en IA en 2022, en pourcentage.') + '</figure>';
+      '<div class="tal-leg"><span><i style="background:' + C_ORI + '"></i>formés dans le pays</span>'
+    + '<span><i style="background:' + C_TRA + '"></i>y travaillent</span>'
+    + '<span><i class="fl" style="border-color:' + C_GAIN + '"></i>attire</span>'
+    + '<span><i class="fl" style="border-color:' + C_PERTE + '"></i>exporte</span>'
+    + '<span><i style="background:#FFFFFF;border:1.6px dashed ' + C_TRA + '"></i>valeur non publiée</span></div>'
+    + s;
+
+  /* Survol : le detail sans le clic, sur la meme infobulle que les cartes. */
+  el.querySelectorAll('.tal-row').forEach(function(g){
+    var code = g.getAttribute('data-pays');
+    var p = liste.filter(function(z){ return (z.c || z.n) === code; })[0];
+    g.addEventListener('mouseenter', function(ev){ tipMontrer(tipTalent(p), ev, el); });
+    g.addEventListener('mousemove', function(ev){ tipPlacer(ev, el); });
+    g.addEventListener('mouseleave', tipCacher);
+  });
+  el.addEventListener('mouseleave', tipCacher);
+}
+
+function tipTalent(p){
+  if(!p) return '';
+  var sol = talSolde(p);
+  var h = '<div class="t-nom">' + esc(p.n) + '</div>'
+        + '<div class="t-sub">chercheurs d’élite en IA · NeurIPS 2022</div>'
+        + '<div class="t-l">Formés dans le pays : <b>' + fr(p.o) + ' %</b></div>'
+        + '<div class="t-l">Y travaillent : <b>'
+        + (typeof p.t === 'number' ? fr(p.t) + ' %' : esc(p.tn || 'non publié')) + '</b></div>';
+  if(sol !== null){
+    h += '<div class="t-l" style="color:' + (sol >= 0 ? '#8FC0F5' : '#F0A0A0') + '">Solde : <b>'
+      + (sol > 0 ? '+' : '') + fr(Math.round(sol * 10) / 10) + ' points</b> — ' + esc(talSens(sol)) + '</div>';
+  } else {
+    h += '<div class="t-l" style="color:#B9B9B9">Solde non calculable : le lieu de travail '
+      + 'n’est pas publié pour ce pays.</div>';
+  }
+  if(p.tn) h += '<div class="t-cta">' + esc(p.tn) + ' — lecture graphique de la source</div>';
+  return h;
 }
 
 function renderTalents(){
-  renderMiniCartes();
+  renderFluxTalents();
   var t = DATA.talents;
-  var W=720, H=254, base=226, top=30;
-  var y = function(v){ return base - (v/60) * (base-top-4); };
-  var slot = (W-24)/t.pays.length;
-  var bw = 26, gap = 2; /* 2 px d’écart entre barres jumelées */
-  var s = '';
-  t.pays.forEach(function(p, i){
-    var cx = 12 + i*slot + slot/2;
-    var xo = cx - bw - gap/2, xt = cx + gap/2;
-    /* origine */
-    var yo = y(p.o);
-    s += '<path d="'+barPath(xo, yo, bw, base-yo, 3)+'" fill="'+C_ORI+'"><title>'+esc(p.n)+' — origine : '+fr(p.o)+' %</title></path>'
-       + '<text class="vl" x="'+(xo+bw/2).toFixed(1)+'" y="'+(yo-5).toFixed(1)+'" text-anchor="middle">'+fr(p.o)+'</text>';
-    /* lieu de travail */
-    if(typeof p.t === 'number'){
-      var yt = y(p.t);
-      s += '<path d="'+barPath(xt, yt, bw, base-yt, 3)+'" fill="'+C_TRA+'"><title>'+esc(p.n)+' — lieu de travail : '+fr(p.t)+' %</title></path>'
-         + '<text class="vl" x="'+(xt+bw/2).toFixed(1)+'" y="'+(yt-5).toFixed(1)+'" text-anchor="middle">'+fr(p.t)+'</text>';
-    } else {
-      s += '<text class="na" x="'+(xt+bw/2).toFixed(1)+'" y="'+(base-6)+'" text-anchor="middle">'+esc(p.tn||'n.d.')+'</text>';
-    }
-    s += '<text class="cat" x="'+cx.toFixed(1)+'" y="'+(base+18)+'" text-anchor="middle">'+esc(p.n)+'</text>';
-  });
-  s += '<line x1="12" y1="'+base+'" x2="'+(W-12)+'" y2="'+base+'" stroke="#D5D2D9" stroke-width="1"/>';
-  document.getElementById('tal-chart').innerHTML =
-    '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Barres jumelées : part des chercheurs d’élite en IA (NeurIPS 2022) par pays d’origine et par lieu de travail, en pourcentage.">'+s+'</svg>';
-
   var rows = '';
-  t.pays.forEach(function(p){
+  t.pays.slice().sort(function(a, b){
+    var sa = talSolde(a), sb = talSolde(b);
+    if(sa === null && sb === null) return b.o - a.o;
+    if(sa === null) return 1;
+    if(sb === null) return -1;
+    return sb - sa;
+  }).forEach(function(p){
+    var sol = talSolde(p);
     rows += '<tr><th scope="row">'+esc(p.n)+'</th><td>'+fr(p.o)+'</td><td>'
-      + (typeof p.t === 'number' ? fr(p.t) : esc(p.tn||'n.d.'))+'</td></tr>';
+      + (typeof p.t === 'number' ? fr(p.t) : esc(p.tn||'n.d.')) + '</td><td>'
+      + (sol === null ? '—' : (sol > 0 ? '+' : '') + fr(Math.round(sol*10)/10)) + '</td></tr>';
   });
   document.getElementById('tal-table').innerHTML =
-    '<table><caption class="sr-only">Chercheurs d’élite en IA 2022 : origine et lieu de travail, en pourcentage</caption>'
-    + '<thead><tr><th scope="col">Pays</th><th scope="col">Origine %</th><th scope="col">Lieu de travail %</th></tr></thead>'
+    '<table><caption class="sr-only">Chercheurs d’élite en IA 2022 : origine, lieu de travail et solde, en pourcentage</caption>'
+    + '<thead><tr><th scope="col">Pays</th><th scope="col">Formés %</th>'
+    + '<th scope="col">Y travaillent %</th><th scope="col">Solde (points)</th></tr></thead>'
     + '<tbody>'+rows+'</tbody></table>';
 }
 
