@@ -81,6 +81,9 @@ body.embed .hdr{margin-bottom:12px}
    de zoom, quand les pays sont assez ecartes pour qu'on les distingue. */
 .pan-pt{stroke:#FFFFFF;cursor:pointer}
 .pan-pt:hover{stroke:#1C1C1C}
+/* Anneau creux : dispositif national, sectoriel, ou fournisseur hors UE — il
+   n'y a pas de site a pointer, le marqueur doit le dire d'un coup d'oeil. */
+.pan-pt.approx{stroke-dasharray:2.2 1.6}
 /* Liste nominative du pays vise. Elle vit dans un groupe contre-echelle :
    tout ce qu'il contient garde donc sa taille a l'ecran, quel que soit le zoom. */
 .pan-liste rect.fond{fill:rgba(255,255,255,.93);stroke:var(--rule);stroke-width:1}
@@ -724,6 +727,8 @@ function tipCas(id){
   var cl = DATA.classes[c.classe] || { nom:c.classe, couleur:'#7A7A7A' };
   return '<div class="t-nom">' + esc(c.entreprise.split(' (')[0]) + '</div>'
     + '<div class="t-sub">' + esc(c.secteur) + ' · ' + esc(c.stade || '') + ' · ' + c.annee + '</div>'
+    + (c.ville ? '<div class="t-l">' + esc(c.ville) + ' — ' + esc(c.geo_libelle || '') + '</div>'
+               : '<div class="t-l">' + esc(c.geo_libelle || '') + '</div>')
     + '<div class="t-l"><span class="t-pt" style="background:' + cl.couleur + '"></span>'
     + esc(cl.nom.split(' (')[0]) + ' · exposition ' + c.exposition + '/100</div>'
     + '<div class="t-ent">' + esc(abreger(c.cas, 120)) + '</div>'
@@ -915,20 +920,60 @@ function detailCarte(pal, vise){
            + '" dy="1.3em" text-anchor="middle">' + n + " cas · "
            + Math.round(st.exposition_moy) + "/100</text>";
     }
-    if(pal >= 2 && n){
-      casDe(code).forEach(function(c, i){
-        /* Spirale d'or : les pastilles ne se recouvrent jamais, et leur ecart —
-           exprime en unites de carte — s'ouvre a mesure qu'on grossit. C'est
-           exactement la que le detail apparait. */
-        var ang = i * 2.39996, ray = 4.6 * Math.sqrt(i + 0.6);
-        var px = x + Math.cos(ang) * ray, py = y - 7 + Math.sin(ang) * ray;
-        pts += '<circle class="pan-pt" data-cas="' + c.id + '" data-r="3.6" data-sw="1.1" cx="'
-            + px.toFixed(1) + '" cy="' + py.toFixed(1) + '" r="3.6" fill="'
-            + ((DATA.classes[c.classe] || {}).couleur || "#7A7A7A") + '"/>';
-      });
-    }
   });
+  if(pal >= 2) pts = pastilles();
   g.innerHTML = pts + lbls + (pal >= 3 && vise ? encartCas(vise) : "");
+}
+
+/* Pastilles posées à l'EMPLACEMENT RÉEL de l'organisation.
+   Le point dit où se trouve l'organisation qui déploie — son siège ou son site
+   principal. Il ne dit PAS où le système tourne : un modèle entraîné à Paris
+   peut s'exécuter dans un centre de données irlandais et servir vingt pays.
+   Deux marqueurs, jamais mélangés :
+     — disque plein : organisation située, coordonnées de sa ville ;
+     — anneau creux : dispositif national ou sectoriel, ou fournisseur hors UE
+       dont seuls les effets sont dans l'Union — il n'y a alors aucun site à
+       pointer, et le point se rabat au centre du pays. */
+function pastilles(){
+  var groupes = {}, out = "";
+  DATA.cas.forEach(function(c){
+    var cle, base, situe = (typeof c.lat === "number" && typeof c.lon === "number");
+    if(situe){
+      cle = "v:" + c.ville;
+      base = [projX(c.lon), projY(c.lat)];
+    } else {
+      var a = ancre(c.pays); if(!a) return;
+      cle = "p:" + c.pays;
+      base = [a[0], a[1] - 8];              /* au-dessus du nom du pays */
+    }
+    if(!groupes[cle]) groupes[cle] = {base: base, situe: situe, cas: []};
+    groupes[cle].cas.push(c);
+  });
+  Object.keys(groupes).forEach(function(k){
+    var g = groupes[k], n = g.cas.length;
+    g.cas.forEach(function(c, i){
+      /* Un seul système dans la ville : le point est exactement dessus.
+         Plusieurs : ils sont légèrement écartés en spirale d'or, sans quoi ils
+         se recouvriraient parfaitement et neuf cas parisiens n'en feraient
+         qu'un seul à l'écran. L'écart est en unités de carte : il s'ouvre à
+         mesure qu'on grossit, et la légende le dit. */
+      var px = g.base[0], py = g.base[1];
+      if(n > 1){
+        var ang = i * 2.39996, ray = 3.4 * Math.sqrt(i);
+        px += Math.cos(ang) * ray; py += Math.sin(ang) * ray;
+      }
+      var col = (DATA.classes[c.classe] || {}).couleur || "#7A7A7A";
+      out += '<circle class="pan-pt' + (g.situe ? "" : " approx") + '" data-cas="' + c.id
+          + '" data-r="' + (g.situe ? "3.6" : "3.9") + '" data-sw="' + (g.situe ? "1.1" : "1.5")
+          + '" cx="' + px.toFixed(1) + '" cy="' + py.toFixed(1) + '" r="3.6"'
+          /* Couleur posée en STYLE : la règle CSS `.pan-pt{stroke:#FFF}`
+             l'emporterait sur un attribut de présentation, et l'anneau serait
+             blanc sur blanc. */
+          + (g.situe ? ' fill="' + col + '"'
+                     : ' fill="#FFFFFF" style="stroke:' + col + '"') + "/>";
+    });
+  });
+  return out;
 }
 
 /* Dit ce que le palier courant ajoute — sinon rien n'indique qu'il reste
@@ -936,7 +981,8 @@ function detailCarte(pal, vise){
 function legendeDetail(pal, vise){
   if(pal <= 0) return "Agrandir : noms complets, volumes, puis un point par cas. Double-clic sur un pays : détail direct.";
   if(pal === 1) return "Encore un cran : un point par cas, coloré selon la classe AI Act.";
-  if(pal === 2) return "Un point = un cas. Survoler un point pour l’identifier.";
+  if(pal === 2) return "Un point = un système, à l’emplacement de l’organisation. "
+       + "Anneau creux : dispositif national, aucun site à pointer.";
   return "Détail nominatif du pays au centre" + (vise && UE[vise] ? " — " + UE[vise].nom : "")
        + ". Déplacer la carte à la main pour en viser un autre.";
 }

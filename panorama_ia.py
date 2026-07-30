@@ -793,6 +793,138 @@ PAYS_UE = {
 # 7. ASSEMBLAGE — enrichissement, agrégats, sortie API
 # ═══════════════════════════════════════════════════════════════════════════
 
+# ═══════════════════════════════════════════════════════════════════════════
+# 5 bis. LOCALISATION DES ORGANISATIONS
+#
+#    CE QUE LE POINT DIT : où se trouve l'organisation qui déploie le système
+#    — son siège ou son site principal.
+#    CE QU'IL NE DIT PAS : où le système tourne. Un modèle entraîné à Paris
+#    peut s'exécuter dans un centre de données irlandais et servir vingt pays.
+#    Confondre les deux serait une erreur de lecture, et la carte le dit.
+#
+#    Quatre niveaux de précision, jamais mélangés :
+#      siege      siège social ou site principal de l'organisation
+#      site       site précisément documenté par le cas lui-même
+#      national   dispositif sans point unique (contrôles nationaux, secteur
+#                 entier) — rattaché au centre du pays, pas à une ville
+#      sans_site  fournisseur hors UE dont seuls les EFFETS sont dans l'Union :
+#                 le rattachement au pays est celui de l'autorité qui a agi,
+#                 il n'y a aucun site à pointer
+#
+#    La table est tenue à part du panel : reprendre 72 fiches à la main pour
+#    y glisser deux champs serait une source d'erreurs silencieuses.
+# ═══════════════════════════════════════════════════════════════════════════
+
+VILLES = {
+    "Paris": [48.857, 2.352], "Toulouse": [43.604, 1.444], "Lille": [50.629, 3.057],
+    "Madrid": [40.417, -3.704], "Santander": [43.462, -3.810], "Bilbao": [43.263, -2.935],
+    "Amsterdam": [52.374, 4.892], "Veldhoven": [51.418, 5.404],
+    "Munich": [48.137, 11.575], "Erlangen": [49.598, 11.004], "Wolfsburg": [52.423, 10.787],
+    "Stuttgart": [48.776, 9.183], "Bonn": [50.735, 7.100], "Cologne": [50.937, 6.960],
+    "Berlin": [52.520, 13.405], "Hambourg": [53.551, 9.994], "Walldorf": [49.305, 8.643],
+    "Stockholm": [59.329, 18.069], "Älmhult": [56.551, 14.140],
+    "Turin": [45.070, 7.687], "Rome": [41.903, 12.496], "Bologne": [44.494, 11.343],
+    "Vilnius": [54.687, 25.280], "Varsovie": [52.230, 21.012], "Lisbonne": [38.722, -9.139],
+    "Bruxelles": [50.851, 4.352], "Dublin": [53.350, -6.260], "Vienne": [48.208, 16.373],
+    "Espoo": [60.205, 24.656], "Tallinn": [59.437, 24.754], "Copenhague": [55.676, 12.568],
+    "Mladá Boleslav": [50.412, 14.904], "Budapest": [47.498, 19.040], "Bucarest": [44.427, 26.103],
+}
+
+# entreprise → (ville, précision). `None` en ville = pas de point de ville.
+SITES = {
+    "BNP Paribas": ("Paris", "siege"),
+    "AXA": ("Paris", "siege"),
+    "BBVA": ("Madrid", "siege"),
+    "Santander": ("Santander", "siege"),
+    "ING": ("Amsterdam", "siege"),
+    "Klarna": ("Stockholm", "siege"),
+    "Allianz": ("Munich", "siege"),
+    "Munich Re": ("Munich", "siege"),
+    "Intesa Sanpaolo": ("Turin", "siege"),
+    "Revolut": ("Vilnius", "siege"),
+    "Randstad": ("Amsterdam", "siege"),
+    "Siemens": ("Munich", "siege"),
+    "Amazon France Logistique": (None, "national"),
+    "Secteur centres d'appels (plusieurs opérateurs)": (None, "national"),
+    "Doctolib": ("Paris", "siege"),
+    "Philips": ("Amsterdam", "siege"),
+    "Siemens Healthineers": ("Erlangen", "siege"),
+    "Owkin": ("Paris", "siege"),
+    "Kry / Livi": ("Stockholm", "siege"),
+    "Airbus": ("Toulouse", "site"),
+    "Thales": ("Paris", "siege"),
+    "Renault Group": ("Paris", "siege"),
+    "Stellantis": ("Amsterdam", "siege"),
+    "Volkswagen": ("Wolfsburg", "site"),
+    "BMW": ("Munich", "siege"),
+    "Bosch": ("Stuttgart", "siege"),
+    "ASML": ("Veldhoven", "site"),
+    "Schneider Electric": ("Paris", "siege"),
+    "Enel": ("Rome", "siege"),
+    "Iberdrola": ("Bilbao", "siege"),
+    "TotalEnergies": ("Paris", "siege"),
+    "Vattenfall": ("Stockholm", "siege"),
+    "SNCF": ("Paris", "siege"),
+    "DHL Group": ("Bonn", "siege"),
+    "Maersk": ("Copenhague", "siege"),
+    "Lufthansa Group": ("Cologne", "siege"),
+    "Plateformes VTC / livraison (Uber, Bolt, Glovo…)": (None, "national"),
+    "Zalando": ("Berlin", "siege"),
+    "Carrefour": ("Paris", "siege"),
+    "IKEA (Ingka)": ("Älmhult", "site"),
+    "Otto Group": ("Hambourg", "siege"),
+    "Decathlon": ("Lille", "siege"),
+    "Deutsche Telekom": ("Bonn", "siege"),
+    "Orange": ("Paris", "siege"),
+    "Telefónica": ("Madrid", "siege"),
+    "SAP": ("Walldorf", "siege"),
+    "Spotify": ("Stockholm", "siege"),
+    "KBC": ("Bruxelles", "siege"),
+    "Ryanair": ("Dublin", "siege"),
+    "EDP": ("Lisbonne", "siege"),
+    "Erste Group": ("Vienne", "siege"),
+    "Nokia": ("Espoo", "siege"),
+    "Bolt": ("Tallinn", "siege"),
+    "Żabka": ("Varsovie", "siege"),
+    "Škoda Auto": ("Mladá Boleslav", "site"),
+    "Novo Nordisk": ("Copenhague", "siege"),
+    "OTP Bank": ("Budapest", "siege"),
+    "eMAG": ("Bucarest", "siege"),
+    "OpenAI (fournisseur, effets UE)": (None, "sans_site"),
+    "Clearview AI (fournisseur, effets UE)": (None, "sans_site"),
+    "Worldcoin / World (Tools for Humanity)": (None, "sans_site"),
+    "Replika (Luka Inc., effets UE)": (None, "sans_site"),
+    "Mistral AI (fournisseur UE)": ("Paris", "siege"),
+    "ASP — Agence de services et de paiement": (None, "national"),
+    "FEGA — Fondo Español de Garantía Agraria": (None, "national"),
+    "Frontex": ("Varsovie", "siege"),
+    "Commission européenne — service Copernicus de gestion des urgences (CEMS)": ("Bruxelles", "siege"),
+    "EMSA — Agence européenne pour la sécurité maritime": ("Lisbonne", "siege"),
+    "Kayrros": ("Paris", "siege"),
+    "ECMWF (organisation intergouvernementale, calcul à Bologne)": ("Bologne", "site"),
+}
+
+GEO_LIBELLE = {
+    "siege": "siège ou site principal de l'organisation",
+    "site": "site documenté par le cas",
+    "national": "dispositif national ou sectoriel — aucun point unique",
+    "sans_site": "fournisseur hors UE : rattachement à l'autorité qui a agi, aucun site à pointer",
+}
+
+
+def localiser(entreprise):
+    """(ville, lat, lon, précision) pour une organisation du panel.
+
+    Une organisation absente de la table est traitée comme « national » plutôt
+    que placée au hasard : mieux vaut un point assumé au centre du pays qu'une
+    coordonnée inventée que rien ne signale."""
+    ville, prec = SITES.get(entreprise, (None, "national"))
+    if ville and ville in VILLES:
+        lat, lon = VILLES[ville]
+        return ville, lat, lon, prec
+    return None, None, None, prec if prec in GEO_LIBELLE else "national"
+
+
 def _enrichir():
     """Classe et score chaque cas ; renvoie la liste enrichie (sans muter CAS)."""
     out = []
@@ -815,6 +947,9 @@ def _enrichir():
             "referentiels_securite": TYPES_SIA[cas["type"]]["referentiels"],
             "pays_nom": PAYS_UE.get(cas["pays"], {}).get("nom", cas["pays"]),
         })
+        ville, lat, lon, prec = localiser(cas["entreprise"])
+        cas.update({"ville": ville, "lat": lat, "lon": lon,
+                    "geo": prec, "geo_libelle": GEO_LIBELLE[prec]})
         cas.setdefault("signaux", [])
         out.append(cas)
     return out
