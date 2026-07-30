@@ -1052,7 +1052,12 @@ _MOTS_IA = ["intelligence artificielle", "artificial intelligence", " ia ", "l'i
             " ai ", "ai act", "règlement ia", "algorith", "chatgpt", "openai",
             "modèle de langage", "llm", "généra", "generative", "gpai", "chatbot",
             "biométr", "biometric", "reconnaissance faciale", "facial recognition",
-            "deepfake", "machine learning", "apprentissage automatique"]
+            "deepfake", "machine learning", "apprentissage automatique",
+            # Centres de donnees : la couche infrastructure de /panorama se met
+            # a jour par versions ; entre deux versions, les annonces passent
+            # par la meme file « a qualifier » que les signaux IA.
+            "data center", "data centre", "datacenter", "centre de données",
+            "centres de données"]
 
 _FLUX_TTL = 1800          # 30 min : le rythme des autorités, pas celui d'un ticker
 _FLUX_RETRY = 300
