@@ -84,6 +84,16 @@ body.embed .hdr{margin-bottom:12px}
 /* Anneau creux : dispositif national, sectoriel, ou fournisseur hors UE — il
    n'y a pas de site a pointer, le marqueur doit le dire d'un coup d'oeil. */
 .pan-pt.approx{stroke-dasharray:2.2 1.6}
+/* Centres de donnees : CARRES, la ou les systemes d'IA sont RONDS — la forme
+   distingue l'infrastructure de ce qui s'y execute, avant meme la couleur. */
+.dc-pt{stroke:#FFFFFF;cursor:pointer}
+.dc-pt:hover{stroke:#1C1C1C}
+.dc-pt.projet{stroke-dasharray:1.8 1.3}   /* annonce / autorise : rien n'est bati */
+.lg-dc .lg-box{border-radius:0}           /* la legende reprend la forme carree */
+.lg-bascule{display:flex;align-items:center;gap:6px;margin-top:7px;padding-top:7px;
+  border-top:1px solid var(--rule);font-family:var(--mono);font-size:10px;color:var(--muted);
+  cursor:pointer;user-select:none}
+.lg-bascule input{accent-color:#1C4E80;margin:0}
 /* Liste nominative du pays vise. Elle vit dans un groupe contre-echelle :
    tout ce qu'il contient garde donc sa taille a l'ecran, quel que soit le zoom. */
 .pan-liste rect.fond{fill:rgba(255,255,255,.93);stroke:var(--rule);stroke-width:1}
@@ -272,6 +282,12 @@ engagements publics) sont imputés nominativement.</div>
       <p class="fp-l">Rappel d'échéances : pratiques interdites <b>en vigueur depuis le 2 février 2025</b> ;
       obligations GPAI depuis le <b>2 août 2025</b> ; haut risque annexe III au <b>2 août 2026</b> ;
       annexe I au <b>2 août 2027</b>.</p>
+      <p class="fp-l" id="dc-encart" style="display:none"><b>Carrés = centres de données</b> — l'infrastructure
+      sous les systèmes. Au survol : statut, date, capacité et investissement <b>annoncés</b>, puis électricité
+      et eau — <b>publiées quand elles le sont, sinon calculées en fourchette</b> à partir de la capacité
+      (formule affichée). La directive (UE) 2023/1791, art. 12, oblige désormais les centres de plus de
+      500 kW à déclarer énergie <b>et eau</b> dans une base européenne : ces fourchettes seront remplacées
+      par des déclarations à mesure qu'elles paraissent.</p>
     </div>
   </div>
 </section>
@@ -512,6 +528,15 @@ function zoomAppliquer(){
   /* Trait du pays selectionne ou au focus : sa regle CSS l'emporterait sur
      l'attribut, on passe donc par une variable. */
   ZOOM.svg.style.setProperty('--trait-sel', (1.6 * inv).toFixed(2));
+  /* Marqueurs carres (centres de donnees) : le cote est contre-echelle et le
+     carre reste centre sur son point — sans recentrage, il glisserait vers le
+     bas-droite a chaque pas puisque x,y designent son coin. */
+  ZOOM.svg.querySelectorAll('[data-cote]').forEach(function(el){
+    var c = parseFloat(el.getAttribute('data-cote')) * inv;
+    el.setAttribute('width', c.toFixed(2)); el.setAttribute('height', c.toFixed(2));
+    el.setAttribute('x', (parseFloat(el.getAttribute('data-cx')) - c/2).toFixed(2));
+    el.setAttribute('y', (parseFloat(el.getAttribute('data-cy')) - c/2).toFixed(2));
+  });
   ZOOM.svg.querySelectorAll('[data-anc]').forEach(function(g){
     var a = g.getAttribute('data-anc').split(',');
     g.setAttribute('transform', 'translate('+a[0]+','+a[1]+') scale('+inv.toFixed(4)+')');
@@ -1005,12 +1030,15 @@ function renderMap(){
     }
   });
   /* Les libelles et les pastilles vivent dans une couche a part : elle est
-     redessinee a chaque palier de zoom, sans toucher aux contours. */
-  s+=neutres+colores+'<g id="pan-detail"></g></svg>';
+     redessinee a chaque palier de zoom, sans toucher aux contours. La couche
+     des centres de donnees est encore separee : elle survit aux changements
+     de palier, ses marqueurs sont visibles a toutes les echelles. */
+  s+=neutres+colores+'<g id="dc-couche"></g><g id="pan-detail"></g></svg>';
   s+='<div class="obs-legend"><h3>Cas documentés par pays</h3>'
     +'<div class="lg-row"><span class="lg-box" style="background:#EDE9E2"></span>UE — aucun cas au panel</div>'
     +[[1,"1 – 2"],[2,"3 – 5"],[3,"6 – 9"],[4,"10 et plus"]].map(function(x){
        return '<div class="lg-row"><span class="lg-box" style="background:'+CMAP[x[0]]+'"></span>'+x[1]+"</div>";}).join("")
+    +'<div id="lg-dc"></div>'
     +'<div class="lg-det" id="lg-det"></div></div>';
   var hote=document.getElementById("panmap");
   hote.innerHTML=s;
@@ -1019,6 +1047,7 @@ function renderMap(){
   ZOOM.focus = paysVise; ZOOM.legende = legendeDetail;
   zoomInit(hote.querySelector("svg"), PROJ.W, PROJ.H, ".pan-lbl", detailCarte);
   zoomCommandes(hote);
+  renderDC();                      /* la couche des centres de donnees suit */
   /* Les pastilles sont recreees a chaque palier : on delegue, plutot que de
      rebrancher un gestionnaire par point a chaque redessin. */
   if(hote.getAttribute("data-deleg") !== "1"){
@@ -1295,6 +1324,142 @@ function renderFlux(){
     el.addEventListener("click",function(){ouvrirCas(this.getAttribute("data-cas"));});
   });
 }
+/* ── Centres de données ─────────────────────────────────────────────────────
+   Couche d'infrastructure posée SUR la carte des systèmes d'IA : les carrés
+   sont les centres de données, les ronds restent les systèmes. Chaque carré
+   porte, au survol, ce que son exploitant a ANNONCÉ — capacité, date,
+   investissement — et ce que le module en CALCULE — électricité et eau, en
+   fourchette, formule à l'appui. Les deux natures ne sont jamais mélangées. */
+var DC = null, DC_VISIBLE = true;
+
+function nbFr(n){
+  if(n === null || n === undefined) return null;
+  return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, " ").replace(".", ",");
+}
+function fourchetteFr(f, unite){
+  if(!f || f.length !== 2) return null;
+  return nbFr(f[0]) + " à " + nbFr(f[1]) + " " + unite;
+}
+function dcParId(id){
+  if(!DC) return null;
+  for(var i = 0; i < DC.sites.length; i++) if(DC.sites[i].id === id) return DC.sites[i];
+  return null;
+}
+
+function tipDC(id){
+  var s = dcParId(id); if(!s) return "";
+  var st = (DC.statuts || {})[s.statut] || {};
+  var h = '<div class="t-nom">' + esc(s.operateur) + (s.nom_site ? " — " + esc(s.nom_site) : "") + "</div>"
+    + '<div class="t-sub">' + esc(s.ville) + " (" + esc(s.pays) + ") · centre de données</div>"
+    + '<div class="t-l"><span class="t-pt" style="border-radius:0;background:' + esc(st.couleur || "#7A7A7A") + '"></span>'
+    + esc(st.nom || s.statut) + (s.annee_service ? " · " + s.annee_service : "") + "</div>";
+
+  /* CE QUI EST ANNONCÉ — par l'exploitant ou la presse, jamais mesuré ici. */
+  var annonces = [];
+  if(s.capacite_mw) annonces.push("<b>" + nbFr(s.capacite_mw) + " MW</b> informatiques annoncés");
+  if(s.investissement_meur){
+    annonces.push("<b>" + (s.investissement_meur >= 1000
+      ? fr(String(Math.round(s.investissement_meur / 100) / 10)) + " Md€"
+      : nbFr(s.investissement_meur) + " M€") + "</b> annoncés");
+  }
+  if(annonces.length) h += '<div class="t-l">' + annonces.join(" · ") + "</div>";
+
+  /* CE QUI EST PUBLIÉ, sinon CE QUI EST CALCULÉ — toujours dit. */
+  var e = s.estimation || {};
+  if(s.elec_gwh_an){
+    h += '<div class="t-l">Électricité : <b>' + nbFr(s.elec_gwh_an) + " GWh/an</b> (publié)</div>";
+  } else if(e.electricite){
+    h += '<div class="t-l">Électricité : ' + fourchetteFr(e.electricite, "GWh/an") + ' <span style="color:#B9B9B9">(estimé)</span></div>';
+  }
+  if(s.eau_m3_an){
+    h += '<div class="t-l">Eau : <b>' + nbFr(s.eau_m3_an) + " m³/an</b> (publié)</div>";
+  } else if(e.eau){
+    h += '<div class="t-l">Eau : ' + fourchetteFr(e.eau, "m³/an") + ' <span style="color:#B9B9B9">(estimé)</span></div>';
+  }
+  var REFROID = {air:"refroidissement à air", adiabatique:"refroidissement adiabatique",
+    eau:"refroidissement à eau", free_cooling:"free cooling",
+    recuperation_chaleur:"récupération de chaleur", inconnu:"refroidissement non précisé"};
+  h += '<div class="t-l">' + esc(REFROID[s.refroidissement] || s.refroidissement) + "</div>";
+  if(!s.capacite_mw && !s.elec_gwh_an){
+    h += '<div class="t-l" style="color:#B9B9B9">Capacité non annoncée — aucune estimation possible.</div>';
+  }
+  h += '<div class="t-ent">' + esc(s.source_libelle || "") + " · confiance " + esc(s.confiance || "?")
+    + (s.note ? "<br>" + esc(s.note) : "") + "</div>";
+  return h;
+}
+
+function renderDC(){
+  var g = document.querySelector("#panmap #dc-couche");
+  if(!g || !DC) return;
+  if(!DC_VISIBLE){ g.innerHTML = ""; majLegendeDC(); return; }
+  var inv = 1 / (ZOOM.k || 1), out = "";
+  DC.sites.forEach(function(s){
+    if(typeof s.lat !== "number" || typeof s.lon !== "number") return;
+    var x = projX(s.lon), y = projY(s.lat);
+    if(x < 2 || x > PROJ.W - 2 || y < 2 || y > PROJ.H - 2) return;
+    var st = (DC.statuts || {})[s.statut] || {};
+    var cote = 7, projet = (s.statut === "annonce" || s.statut === "autorise");
+    var c = cote * inv;
+    out += '<rect class="dc-pt' + (projet ? " projet" : "") + '" data-dc="' + s.id
+      + '" data-cote="' + cote + '" data-cx="' + x.toFixed(1) + '" data-cy="' + y.toFixed(1)
+      + '" data-sw="1.1" x="' + (x - c / 2).toFixed(1) + '" y="' + (y - c / 2).toFixed(1)
+      + '" width="' + c.toFixed(1) + '" height="' + c.toFixed(1)
+      + '" stroke-width="' + (1.1 * inv).toFixed(2) + '" fill="' + esc(st.couleur || "#7A7A7A")
+      + '" rx="' + (1.2 * inv).toFixed(2) + '"/>';
+  });
+  g.innerHTML = out;
+  majLegendeDC();
+}
+
+function majLegendeDC(){
+  var bloc = document.getElementById("lg-dc");
+  if(!bloc || !DC) return;
+  var h = "";
+  if(DC_VISIBLE){
+    h += '<div class="lg-row" style="margin-top:7px;padding-top:7px;border-top:1px solid var(--rule)"><b style="font-size:10px">Centres de données (carrés)</b></div>';
+    ["service", "construction", "autorise", "annonce"].forEach(function(k){
+      var st = DC.statuts[k]; if(!st) return;
+      var n = (DC.agregats.par_statut || {})[k] || 0; if(!n) return;
+      h += '<div class="lg-row lg-dc"><span class="lg-box" style="background:' + st.couleur + '"></span>'
+        + esc(st.nom) + " — " + n + "</div>";
+    });
+  }
+  h += '<label class="lg-bascule"><input type="checkbox" id="dc-bascule"'
+    + (DC_VISIBLE ? " checked" : "") + "> centres de données</label>";
+  bloc.innerHTML = h;
+  var c = document.getElementById("dc-bascule");
+  if(c) c.addEventListener("change", function(){ DC_VISIBLE = this.checked; renderDC(); });
+}
+
+function chargerDC(){
+  fetch("/api/datacentres", {cache: "no-store"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(d){
+      /* Referentiel vide = couche absente : ni carres, ni legende, ni encart.
+         Servir l'habillage sans les donnees annoncerait une couche qui n'existe
+         pas encore. */
+      if(!d || !d.ok || !d.sites || !d.sites.length) return;
+      DC = d;
+      renderDC();
+      var enc = document.getElementById("dc-encart");
+      if(enc) enc.style.display = "";
+      /* Survol et clic par delegation : la couche est redessinee a chaque
+         bascule, des gestionnaires par carre seraient perdus. */
+      var hote = document.getElementById("panmap");
+      if(hote && hote.getAttribute("data-deleg-dc") !== "1"){
+        hote.setAttribute("data-deleg-dc", "1");
+        hote.addEventListener("mouseover", function(ev){
+          var q = ev.target.closest ? ev.target.closest(".dc-pt") : null;
+          if(q) tipMontrer(tipDC(q.getAttribute("data-dc")), ev, hote);
+        });
+        hote.addEventListener("mousemove", function(ev){
+          if(ev.target.closest && ev.target.closest(".dc-pt")) tipPlacer(ev, hote);
+        });
+      }
+    })
+    .catch(function(){ /* couche absente : la carte des SIA reste complete */ });
+}
+
 /* ── Socle de données ouvertes ──────────────────────────────────────────────
    Trois sources publiques interrogées côté serveur, sans clé d'API. Chaque
    valeur est publiée AVEC son état : « en direct » si la source a répondu,
@@ -1395,6 +1560,7 @@ function chargerSocle(){
 function renderAll(){renderEcheancier();renderFlux();populerFiltres();renderKpis();renderMap();renderTable();renderCharts();renderMethodo();renderSocle();}
 renderAll();
 chargerSocle();
+chargerDC();
 brancherFiltres();
 document.querySelectorAll("th.triable").forEach(function(th){
   th.addEventListener("click",function(){

@@ -772,6 +772,15 @@ function zoomAppliquer(){
   /* Trait du pays selectionne ou au focus : sa regle CSS l'emporterait sur
      l'attribut, on passe donc par une variable. */
   ZOOM.svg.style.setProperty('--trait-sel', (1.4 * inv).toFixed(2));
+  /* Marqueurs carres (centres de donnees) : le cote est contre-echelle et le
+     carre reste centre sur son point — sans recentrage, il glisserait vers le
+     bas-droite a chaque pas puisque x,y designent son coin. */
+  ZOOM.svg.querySelectorAll('[data-cote]').forEach(function(el){
+    var c = parseFloat(el.getAttribute('data-cote')) * inv;
+    el.setAttribute('width', c.toFixed(2)); el.setAttribute('height', c.toFixed(2));
+    el.setAttribute('x', (parseFloat(el.getAttribute('data-cx')) - c/2).toFixed(2));
+    el.setAttribute('y', (parseFloat(el.getAttribute('data-cy')) - c/2).toFixed(2));
+  });
   ZOOM.svg.querySelectorAll('[data-anc]').forEach(function(g){
     var a = g.getAttribute('data-anc').split(',');
     g.setAttribute('transform', 'translate('+a[0]+','+a[1]+') scale('+inv.toFixed(4)+')');

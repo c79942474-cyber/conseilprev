@@ -1189,6 +1189,28 @@ def api_panorama():
     return jsonify(payload)
 
 
+# ── Centres de donnees europeens ─────────────────────────────────────────
+# Referentiel fige par version (compile puis refute), derivations
+# deterministes : la reponse ne varie pas, elle se met en cache une fois.
+import datacentres  # noqa: E402
+
+_DC_CACHE = {"data": None}
+
+
+@app.route('/api/datacentres', methods=['GET'])
+@rate_limit(limit=60, window=60)
+def api_datacentres():
+    if _DC_CACHE["data"] is None:
+        try:
+            d = datacentres.assemble()
+        except Exception as e:
+            logger.error(f'DATACENTRES_ERR: {e}')
+            return jsonify({"ok": False, "erreur": "referentiel indisponible"}), 503
+        d["ok"] = True
+        _DC_CACHE["data"] = d
+    return jsonify(_DC_CACHE["data"])
+
+
 # ── Socle de donnees ouvertes (Copernicus, NASA, DINUM) ──────────────────
 # Les seules couches du site que le lecteur peut refaire lui-meme : sources
 # publiques, sans cle d'API, avec licence et date de releve. Le module degrade
@@ -2531,6 +2553,7 @@ def health_check():
         'observatoire': observatoire_ia.sante(),
         'panorama': panorama_ia.sante(),
         'donnees_ouvertes': donnees_ouvertes.sante(),
+        'datacentres': datacentres.sante(),
     }
 
     # Réponse JSON si demandée
