@@ -58,8 +58,17 @@ body.embed .hdr{margin-bottom:12px}
 .obs-svg-map{display:block;width:100%;height:auto}
 .pan-pays{cursor:pointer;transition:fill-opacity .12s}
 .pan-pays:hover{fill-opacity:.75}
-.pan-pays:focus-visible{outline:2px solid #1C1C1C}
-.pan-pays.on{stroke:#1C1C1C;stroke-width:1.6}
+/* Focus dessine par le TRAIT et non par `outline` : sur un chemin SVG,
+   l'outline epouse la BOITE ENGLOBANTE — celle de la France englobe la Guyane,
+   et le cadre tracait alors deux barres noires en travers de la carte.
+   L'epaisseur passe par une variable que le zoom met a jour : une valeur figee
+   en CSS l'emporterait sur l'attribut et s'epaissirait avec la carte. */
+/* `outline:none` sur :focus AUSSI : apres un clic, l'element est actif sans
+   correspondre a :focus-visible, et le navigateur peint malgre tout son
+   cadre par defaut. L'indicateur clavier, lui, reste dessine par le trait. */
+.pan-pays:focus{outline:none}
+.pan-pays:focus-visible{outline:none;stroke:#1C1C1C;stroke-width:var(--trait-sel,1.6)}
+.pan-pays.on{stroke:#1C1C1C;stroke-width:var(--trait-sel,1.6)}
 /* Libelles de pays traces DANS le SVG : ils suivent la carte quand elle se
    redimensionne, ce qu'un calque HTML positionne en pixels ne ferait pas. */
 .pan-lbl{font-family:var(--sans);font-size:13px;font-weight:600;fill:#2A2A2A;
@@ -67,6 +76,31 @@ body.embed .hdr{margin-bottom:12px}
   pointer-events:none;user-select:none}
 .pan-lbl.petit{font-size:11px;font-weight:500;fill:#5A5A5A}
 .pan-lbl.vide{fill:#8A8A8A;font-weight:500}
+.pan-lbl.sous{font-size:9.5px;font-weight:500;fill:#4E4E4E}
+/* Pastilles : un cas = un point. Elles n'apparaissent qu'a partir du 3e palier
+   de zoom, quand les pays sont assez ecartes pour qu'on les distingue. */
+.pan-pt{stroke:#FFFFFF;cursor:pointer}
+.pan-pt:hover{stroke:#1C1C1C}
+/* Liste nominative du pays vise. Elle vit dans un groupe contre-echelle :
+   tout ce qu'il contient garde donc sa taille a l'ecran, quel que soit le zoom. */
+.pan-liste rect.fond{fill:rgba(255,255,255,.93);stroke:var(--rule);stroke-width:1}
+.pan-cas{font-family:var(--sans);font-size:10px;fill:#2A2A2A;pointer-events:none;user-select:none}
+.pan-cas.tt{font-weight:700;font-size:10.5px}
+.pan-cas.plus{fill:#7A7A7A;font-style:italic}
+/* Deplacement a la main. La regle porte aussi sur les enfants du SVG : sans
+   cela le `cursor:pointer` des pays reprendrait le dessus au moment meme ou
+   l'on veut saisir la carte, et la main disparaitrait. */
+.carte-main,.carte-main svg,.carte-main svg *{cursor:grab}
+.carte-saisie,.carte-saisie svg,.carte-saisie svg *{cursor:grabbing}
+.carte-main svg{touch-action:none}   /* au doigt : on deplace la carte, pas la page */
+/* Le double-clic sert a viser un pays : sans cela il selectionnerait au passage
+   le texte de la legende ou d'un libelle, ce qui laisse une surbrillance bleue
+   en travers de la carte. */
+.map-wrap{user-select:none;-webkit-user-select:none}
+/* Des que la carte est agrandie, la legende se replie sur l'essentiel : a ×2,6
+   elle recouvrait entierement la France. Le survol la redeploie. */
+.carte-main .obs-legend .lg-row{display:none}
+.carte-main .obs-legend:hover .lg-row{display:flex}
 /* Infobulle : UN seul element reutilise, deplace au survol — en creer un par
    pays saturerait le DOM pour rien. */
 /* Commandes de zoom, posees sur la carte. */
@@ -79,6 +113,8 @@ body.embed .hdr{margin-bottom:12px}
 .map-zoom .z-raz{font-size:11px}
 .map-zoom .z-niv{font-family:var(--mono);font-size:9.5px;text-align:center;color:var(--muted2);
   background:rgba(255,255,255,.9);border-radius:3px;padding:1px 0}
+.lg-det{margin-top:5px;padding-top:5px;border-top:1px solid var(--rule);
+  font-family:var(--mono);font-size:9.5px;color:var(--muted2);line-height:1.45}
 .pan-tip{position:absolute;z-index:20;pointer-events:none;opacity:0;transition:opacity .12s;
   background:rgba(28,28,28,.96);color:#fff;border-radius:5px;padding:9px 12px;
   font-size:12px;line-height:1.5;max-width:290px;box-shadow:0 4px 16px rgba(0,0,0,.28)}
@@ -354,95 +390,252 @@ var LBL_DECAL = { FR:[0,6], IT:[-7,-14], HR:[3,4], DK:[-4,-7], NL:[-5,-3], BE:[-
    Agit sur le viewBox du SVG : rien n'est redessine, et la carte reste nette a
    tous les niveaux puisqu'elle est vectorielle. Le facteur est borne a 6 — au
    dela, les contours simplifies a 0,4 degre montreraient leurs angles.
-   Les LIBELLES sont contre-echelles a chaque pas : sans cela, ils grossiraient
-   avec la carte et couvriraient les pays qu'ils designent. */
-var ZOOM = { k:1, x:0, y:0, W:0, H:0, svg:null, classeLbl:'', tailles:null };
+
+   Deux regles d'echelle, opposees et voulues :
+   — ce qui doit garder sa taille A L'ECRAN (libelles, traits de frontiere,
+     pastilles, encarts) est contre-echelle a chaque pas ; sans cela tout
+     grossirait avec la carte et les noms couvriraient les pays qu'ils
+     designent ;
+   — ce qui doit S'ECARTER (position des pastilles) reste en unites de carte :
+     c'est precisement cet ecartement qui fait apparaitre le detail. */
+var ZOOM = { k:1, x:0, y:0, W:0, H:0, svg:null, hote:null, classeLbl:'',
+             tailles:null, detail:null, palier:-1, vise:null,
+             focus:null, legende:null };
 var ZOOM_MAX = 6;
 
-function zoomInit(svg, W, H, classeLbl){
-  ZOOM.svg = svg; ZOOM.W = W; ZOOM.H = H; ZOOM.classeLbl = classeLbl;
-  ZOOM.k = 1; ZOOM.x = 0; ZOOM.y = 0;
-  /* Taille d'origine de chaque libelle, relevee UNE fois : la relire apres un
-     zoom donnerait la taille deja corrigee et l'erreur s'accumulerait. */
+/* Paliers de detail. Le zoom ne se contente pas d'agrandir : a chaque palier la
+   carte affiche ce que l'echelle precedente ne permettait pas d'ecrire sans se
+   recouvrir elle-meme. Les seuils sont les points ou la place se libere. */
+function zoomPalier(k){ return k < 1.45 ? 0 : k < 2.25 ? 1 : k < 3.4 ? 2 : 3; }
+
+/* Taille d'origine des libelles, relue depuis la CSS. On efface d'abord le
+   style pose au pas precedent : relire un element deja mis a l'echelle
+   renverrait la valeur corrigee et l'erreur s'accumulerait.
+   La correction se pose en STYLE EN LIGNE, pas en attribut : sur un <text>
+   SVG, la moindre regle de feuille de style l'emporte sur l'attribut de
+   presentation — `.pan-lbl{font-size:13px}` annulerait silencieusement toute
+   mise a l'echelle, et les noms grossiraient avec la carte. */
+function zoomRelever(){
   ZOOM.tailles = [];
-  svg.querySelectorAll(classeLbl).forEach(function(t){
-    ZOOM.tailles.push([t, parseFloat(getComputedStyle(t).fontSize) || 13]);
+  if(!ZOOM.svg || !ZOOM.classeLbl) return;
+  ZOOM.svg.querySelectorAll(ZOOM.classeLbl).forEach(function(t){
+    t.style.fontSize = ''; t.style.strokeWidth = '';
+    var st = getComputedStyle(t);
+    ZOOM.tailles.push([t, parseFloat(st.fontSize) || 13, parseFloat(st.strokeWidth) || 3]);
   });
+}
+
+function zoomInit(svg, W, H, classeLbl, detail){
+  ZOOM.svg = svg; ZOOM.W = W; ZOOM.H = H; ZOOM.classeLbl = classeLbl;
+  ZOOM.detail = detail || null;
+  ZOOM.k = 1; ZOOM.x = 0; ZOOM.y = 0; ZOOM.palier = -1; ZOOM.vise = null;
   zoomAppliquer();
 }
+
 function zoomAppliquer(){
   if(!ZOOM.svg) return;
   var w = ZOOM.W / ZOOM.k, h = ZOOM.H / ZOOM.k;
   ZOOM.x = Math.max(0, Math.min(ZOOM.W - w, ZOOM.x));
   ZOOM.y = Math.max(0, Math.min(ZOOM.H - h, ZOOM.y));
   ZOOM.svg.setAttribute('viewBox', ZOOM.x.toFixed(1)+' '+ZOOM.y.toFixed(1)+' '+w.toFixed(1)+' '+h.toFixed(1));
-  ZOOM.tailles.forEach(function(p){
-    p[0].setAttribute('font-size', (p[1] / ZOOM.k).toFixed(2));
-    p[0].setAttribute('stroke-width', (3 / ZOOM.k).toFixed(2));
+
+  /* Le detail se recalcule au changement de palier — et, au dernier palier,
+     quand le pays regarde change : l'encart nominatif suit alors la main. */
+  var pal = zoomPalier(ZOOM.k);
+  var vise = (pal >= 3 && ZOOM.focus) ? ZOOM.focus(ZOOM.x + w/2, ZOOM.y + h/2, w, h) : null;
+  if(pal !== ZOOM.palier || vise !== ZOOM.vise){
+    ZOOM.palier = pal; ZOOM.vise = vise;
+    if(ZOOM.detail) ZOOM.detail(pal, vise);
+    zoomRelever();                 /* les libelles viennent d'etre recrees */
+  }
+  if(!ZOOM.tailles) zoomRelever();
+
+  for(var i=0;i<ZOOM.tailles.length;i++){
+    var t = ZOOM.tailles[i];
+    t[0].style.fontSize    = (t[1] / ZOOM.k).toFixed(2) + 'px';
+    t[0].style.strokeWidth = (t[2] / ZOOM.k).toFixed(2) + 'px';
+  }
+  /* Traits, rayons et encarts de reference gardent leur taille a l'ecran. Un
+     trait de frontiere non corrige s'epaissirait jusqu'a manger les petits
+     Etats : a ×6 il ferait six fois sa largeur. */
+  var inv = 1 / ZOOM.k;
+  ZOOM.svg.querySelectorAll('[data-sw]').forEach(function(el){
+    el.setAttribute('stroke-width', (parseFloat(el.getAttribute('data-sw')) * inv).toFixed(3));
   });
-  ZOOM.svg.style.cursor = ZOOM.k > 1 ? 'grab' : '';
+  ZOOM.svg.querySelectorAll('[data-r]').forEach(function(el){
+    el.setAttribute('r', (parseFloat(el.getAttribute('data-r')) * inv).toFixed(2));
+  });
+  /* Trait du pays selectionne ou au focus : sa regle CSS l'emporterait sur
+     l'attribut, on passe donc par une variable. */
+  ZOOM.svg.style.setProperty('--trait-sel', (1.6 * inv).toFixed(2));
+  ZOOM.svg.querySelectorAll('[data-anc]').forEach(function(g){
+    var a = g.getAttribute('data-anc').split(',');
+    g.setAttribute('transform', 'translate('+a[0]+','+a[1]+') scale('+inv.toFixed(4)+')');
+  });
+
+  if(ZOOM.hote) ZOOM.hote.classList.toggle('carte-main', ZOOM.k > 1.01);
   var n = document.getElementById('z-niv'); if(n) n.textContent = '×' + (Math.round(ZOOM.k*10)/10);
-  var p = document.getElementById('z-plus'), m = document.getElementById('z-moins');
-  if(p) p.disabled = ZOOM.k >= ZOOM_MAX - 0.01;
-  if(m) m.disabled = ZOOM.k <= 1.01;
+  var bp = document.getElementById('z-plus'), bm = document.getElementById('z-moins');
+  if(bp) bp.disabled = ZOOM.k >= ZOOM_MAX - 0.01;
+  if(bm) bm.disabled = ZOOM.k <= 1.01;
+  var ld = document.getElementById('lg-det');
+  if(ld && ZOOM.legende) ld.textContent = ZOOM.legende(pal, vise);
 }
-/* Zoom centre sur le milieu de la vue : le point regarde reste au centre. */
-function zoomPas(f){
-  var k0 = ZOOM.k, k = Math.max(1, Math.min(ZOOM_MAX, k0 * f));
-  if(k === k0) return;
-  var cx = ZOOM.x + (ZOOM.W/k0)/2, cy = ZOOM.y + (ZOOM.H/k0)/2;
-  ZOOM.k = k; ZOOM.x = cx - (ZOOM.W/k)/2; ZOOM.y = cy - (ZOOM.H/k)/2;
+
+/* Zoom centre sur un point de l'ecran : ce qui est sous la main — ou entre les
+   deux doigts — ne bouge pas. Sans cela, la molette ferait fuir le pays vise. */
+function zoomVers(k, px, py){
+  if(!ZOOM.svg) return;
+  k = Math.max(1, Math.min(ZOOM_MAX, k));
+  if(Math.abs(k - ZOOM.k) < 0.0005) return;
+  var r = ZOOM.svg.getBoundingClientRect();
+  if(!r.width || !r.height){ ZOOM.k = k; zoomAppliquer(); return; }
+  var fx = (px - r.left) / r.width, fy = (py - r.top) / r.height;
+  var ux = ZOOM.x + fx * (ZOOM.W / ZOOM.k), uy = ZOOM.y + fy * (ZOOM.H / ZOOM.k);
+  ZOOM.k = k;
+  ZOOM.x = ux - fx * (ZOOM.W / k);
+  ZOOM.y = uy - fy * (ZOOM.H / k);
   zoomAppliquer();
 }
+function zoomPas(f){
+  if(!ZOOM.svg) return;
+  var r = ZOOM.svg.getBoundingClientRect();
+  zoomVers(ZOOM.k * f, r.left + r.width/2, r.top + r.height/2);
+}
 function zoomRaz(){ ZOOM.k = 1; ZOOM.x = 0; ZOOM.y = 0; zoomAppliquer(); }
+/* Aller chercher un point precis au niveau demande. Sert au double-clic sur un
+   pays : sans cela, atteindre son detail imposerait de grossir puis de deplacer
+   la carte a taton — sur un planisphere, le centre de la vue tombe en mer. */
+function zoomSur(x, y, k){
+  ZOOM.k = Math.max(1, Math.min(ZOOM_MAX, k));
+  ZOOM.x = x - (ZOOM.W / ZOOM.k) / 2;
+  ZOOM.y = y - (ZOOM.H / ZOOM.k) / 2;
+  zoomAppliquer();
+}
 
-/* Commandes + deplacement au glisser. Le glissement n'est actif QU'AU-DELA de
-   ×1 : sinon il capterait les clics sur les pays sans rien apporter. */
 function zoomCommandes(hote){
+  ZOOM.hote = hote;
   var anc = hote.querySelector('.map-zoom'); if(anc) anc.remove();
   var box = document.createElement('div');
   box.className = 'map-zoom';
-  box.innerHTML = '<button type="button" id="z-plus" title="Agrandir" aria-label="Agrandir la carte">+</button>'
-    + '<button type="button" id="z-moins" title="Réduire" aria-label="Réduire la carte">−</button>'
-    + '<button type="button" class="z-raz" id="z-raz" title="Vue entière" aria-label="Revenir à la vue entière">⟲</button>'
-    + '<div class="z-niv" id="z-niv">×1</div>';
+  box.innerHTML = '<button type="button" id="z-plus" title="Agrandir — touche + ou Ctrl et molette" aria-label="Agrandir la carte">+</button>'
+    + '<button type="button" id="z-moins" title="Réduire — touche − ou Ctrl et molette" aria-label="Réduire la carte">−</button>'
+    + '<button type="button" class="z-raz" id="z-raz" title="Vue entière — touche 0" aria-label="Revenir à la vue entière">⟲</button>'
+    + '<div class="z-niv" id="z-niv" title="Agrandissement. Une fois la carte agrandie, la déplacer à la main.">×1</div>';
   hote.appendChild(box);
-  box.querySelector('#z-plus').onclick = function(){ zoomPas(1.6); };
+  box.querySelector('#z-plus').onclick  = function(){ zoomPas(1.6); };
   box.querySelector('#z-moins').onclick = function(){ zoomPas(1/1.6); };
-  box.querySelector('#z-raz').onclick = zoomRaz;
-
-  var glisse = null;
-  hote.addEventListener('mousedown', function(ev){
-    if(ZOOM.k <= 1 || ev.target.closest('.map-zoom')) return;
-    glisse = { x:ev.clientX, y:ev.clientY, vx:ZOOM.x, vy:ZOOM.y };
-    if(ZOOM.svg) ZOOM.svg.style.cursor = 'grabbing';
-    ev.preventDefault();
-  });
-  window.addEventListener('mousemove', function(ev){
-    if(!glisse || !ZOOM.svg) return;
-    var r = ZOOM.svg.getBoundingClientRect();
-    /* Conversion pixels -> unites viewBox : sans ce rapport, la carte
-       filerait plus vite ou plus lentement que le curseur. */
-    var ux = (ZOOM.W / ZOOM.k) / r.width, uy = (ZOOM.H / ZOOM.k) / r.height;
-    ZOOM.x = glisse.vx - (ev.clientX - glisse.x) * ux;
-    ZOOM.y = glisse.vy - (ev.clientY - glisse.y) * uy;
-    zoomAppliquer();
-  });
-  window.addEventListener('mouseup', function(){
-    if(glisse && ZOOM.svg) ZOOM.svg.style.cursor = 'grab';
-    glisse = null;
-  });
-  /* Clavier : la carte est atteignable sans souris. */
-  hote.addEventListener('keydown', function(ev){
-    if(ev.key === '+' || ev.key === '=') { zoomPas(1.6); ev.preventDefault(); }
-    else if(ev.key === '-') { zoomPas(1/1.6); ev.preventDefault(); }
-    else if(ev.key === '0') { zoomRaz(); ev.preventDefault(); }
-  });
+  box.querySelector('#z-raz').onclick   = zoomRaz;
+  /* Les gestes ne se branchent qu'une fois : renderMap peut rejouer, et des
+     gestionnaires empiles feraient filer la carte a plusieurs fois la main. */
+  if(hote.getAttribute('data-gestes') !== '1'){
+    hote.setAttribute('data-gestes', '1');
+    zoomGestes(hote);
+  }
   /* L'etat des boutons se calcule dans zoomAppliquer, appele par zoomInit —
      donc AVANT que ces boutons n'existent. On le rejoue ici, une fois qu'ils
      sont poses, sinon « − » reste actif a la vue entiere alors qu'il n'y a
      rien a reduire. */
   zoomAppliquer();
+}
+
+/* Main, molette et pincement. Les evenements « pointer » couvrent souris,
+   doigt et stylet avec un seul jeu de gestionnaires. */
+function zoomGestes(hote){
+  var pts = {}, nb = 0;          /* pointeurs poses sur la carte */
+  var dep = null, pinc = null, bouge = 0;
+
+  function liste(){
+    var l = [];
+    for(var id in pts) if(pts.hasOwnProperty(id)) l.push(pts[id]);
+    return l;
+  }
+  function ecart(l){ var dx = l[0].x - l[1].x, dy = l[0].y - l[1].y; return Math.sqrt(dx*dx + dy*dy); }
+  function surCommande(ev){ return !!(ev.target && ev.target.closest && ev.target.closest('.map-zoom')); }
+
+  hote.addEventListener('pointerdown', function(ev){
+    if(surCommande(ev)) return;
+    if(!pts[ev.pointerId]) nb++;
+    pts[ev.pointerId] = { x:ev.clientX, y:ev.clientY };
+    if(nb === 2){
+      /* Pincement : le deplacement en cours est abandonne, les deux doigts
+         pilotent desormais l'echelle. */
+      dep = null; hote.classList.remove('carte-saisie');
+      var l = liste(); pinc = { d: ecart(l), k: ZOOM.k };
+      return;
+    }
+    if(nb > 2 || ZOOM.k <= 1.01) return;   /* a la vue entiere, rien a deplacer */
+    dep = { x:ev.clientX, y:ev.clientY, vx:ZOOM.x, vy:ZOOM.y };
+    bouge = 0;
+    hote.classList.add('carte-saisie');
+    try { ev.target.setPointerCapture(ev.pointerId); } catch(e){}
+    ev.preventDefault();
+  });
+
+  hote.addEventListener('pointermove', function(ev){
+    if(pts[ev.pointerId]){ pts[ev.pointerId].x = ev.clientX; pts[ev.pointerId].y = ev.clientY; }
+    if(pinc && nb >= 2){
+      var l = liste(), d = ecart(l);
+      if(pinc.d > 8) zoomVers(pinc.k * (d / pinc.d), (l[0].x + l[1].x)/2, (l[0].y + l[1].y)/2);
+      ev.preventDefault();
+      return;
+    }
+    if(!dep || !ZOOM.svg) return;
+    var r = ZOOM.svg.getBoundingClientRect();
+    /* Conversion pixels -> unites viewBox : sans ce rapport, la carte filerait
+       plus vite ou plus lentement que la main. */
+    var ux = (ZOOM.W / ZOOM.k) / r.width, uy = (ZOOM.H / ZOOM.k) / r.height;
+    var dx = ev.clientX - dep.x, dy = ev.clientY - dep.y;
+    if(Math.abs(dx) + Math.abs(dy) > bouge) bouge = Math.abs(dx) + Math.abs(dy);
+    ZOOM.x = dep.vx - dx * ux;
+    ZOOM.y = dep.vy - dy * uy;
+    zoomAppliquer();
+    ev.preventDefault();
+  });
+
+  function relacher(ev){
+    if(pts[ev.pointerId]){ delete pts[ev.pointerId]; nb = Math.max(0, nb - 1); }
+    if(nb < 2) pinc = null;
+    if(dep){ dep = null; hote.classList.remove('carte-saisie'); }
+  }
+  hote.addEventListener('pointerup', relacher);
+  hote.addEventListener('pointercancel', relacher);
+  /* Filet : si la capture du pointeur echoue, le relachement hors de la carte
+     laisserait la main « collee » a la souris. */
+  window.addEventListener('pointerup', relacher);
+
+  /* Un deplacement ne doit pas selectionner le pays qui se trouvait sous la
+     main : on annule le clic qui suit un vrai glissement. Le seuil evite de
+     perdre un clic simplement tremblant. */
+  hote.addEventListener('click', function(ev){
+    if(bouge > 5){ ev.stopPropagation(); ev.preventDefault(); }
+    bouge = 0;
+  }, true);
+
+  /* Molette : agrandir sans quitter la carte des yeux. Ctrl (ou Cmd) est exige
+     pour ne pas capturer le defilement de la page — la carte est haute, et
+     l'utilisateur qui fait defiler ne demande pas a zoomer. */
+  hote.addEventListener('wheel', function(ev){
+    if(!ev.ctrlKey && !ev.metaKey) return;
+    if(surCommande(ev)) return;
+    ev.preventDefault();
+    zoomVers(ZOOM.k * Math.exp(-ev.deltaY * 0.002), ev.clientX, ev.clientY);
+  }, { passive:false });
+
+  /* Clavier : la carte reste utilisable sans souris, deplacement compris. */
+  hote.addEventListener('keydown', function(ev){
+    var p = 0.14 * (ZOOM.W / ZOOM.k);
+    if(ev.key === '+' || ev.key === '='){ zoomPas(1.6); ev.preventDefault(); }
+    else if(ev.key === '-'){ zoomPas(1/1.6); ev.preventDefault(); }
+    else if(ev.key === '0'){ zoomRaz(); ev.preventDefault(); }
+    else if(ZOOM.k > 1.01 && ev.key && ev.key.indexOf('Arrow') === 0){
+      if(ev.key === 'ArrowLeft') ZOOM.x -= p;
+      else if(ev.key === 'ArrowRight') ZOOM.x += p;
+      else if(ev.key === 'ArrowUp') ZOOM.y -= p;
+      else ZOOM.y += p;
+      zoomAppliquer(); ev.preventDefault();
+    }
+  });
 }
 
 var TIP = null;
@@ -463,6 +656,21 @@ function tipPlacer(ev, hote){
   TIP.style.left = x + 'px'; TIP.style.top = y + 'px';
 }
 function tipCacher(){ if(TIP) TIP.classList.remove('on'); }
+
+/* Infobulle d'une pastille : ce qui distingue ce cas de son voisin immediat.
+   Le clic ouvre la fiche complete — l'infobulle ne fait qu'identifier. */
+function tipCas(id){
+  var c = null;
+  for(var i=0;i<DATA.cas.length;i++){ if(DATA.cas[i].id === id){ c = DATA.cas[i]; break; } }
+  if(!c) return '';
+  var cl = DATA.classes[c.classe] || { nom:c.classe, couleur:'#7A7A7A' };
+  return '<div class="t-nom">' + esc(c.entreprise.split(' (')[0]) + '</div>'
+    + '<div class="t-sub">' + esc(c.secteur) + ' · ' + esc(c.stade || '') + ' · ' + c.annee + '</div>'
+    + '<div class="t-l"><span class="t-pt" style="background:' + cl.couleur + '"></span>'
+    + esc(cl.nom.split(' (')[0]) + ' · exposition ' + c.exposition + '/100</div>'
+    + '<div class="t-ent">' + esc(abreger(c.cas, 120)) + '</div>'
+    + '<div class="t-cta">Cliquer : fiche complète du cas</div>';
+}
 
 /* Contenu de l'infobulle : ce qu'un decideur veut savoir SANS cliquer —
    combien de cas, de quelles classes de risque, et chez quelles entreprises. */
@@ -528,7 +736,152 @@ function renderKpis(){
 }
 
 /* ── Carte ── */
+/* Index reconstruits a chaque rendu : la carte est redessinee apres l'arrivee
+   des donnees en direct, et des ancres calculees sur l'ancien jeu placeraient
+   les pastilles a cote. */
+var ANCRES = null, IDX_CAS = null;
+var PETITS = ["LU","MT","CY","SI","EE","LV","LT","BE","NL","DK","HR","SK","AT"];
+
+/* Ancre du libelle d'un pays : centroide d'aire corrige des ajustements
+   manuels, en unites de carte. Les pays dont l'ancre tombe hors cadre sont
+   ecartes — leur nom serait coupe par le bord. */
+function ancre(code){
+  if(!ANCRES){
+    ANCRES = {};
+    Object.keys(UE).forEach(function(c){
+      var ct = centroidePays(c); if(!ct) return;
+      var d = LBL_DECAL[c] || [0,0];
+      var x = projX(ct[0]) + d[0], y = projY(ct[1]) + d[1];
+      if(x < 4 || x > PROJ.W - 4 || y < 8 || y > PROJ.H - 4) return;
+      ANCRES[c] = [x, y];
+    });
+  }
+  return ANCRES[code] || null;
+}
+/* Cas d'un pays, du plus expose au moins expose : l'ordre de lecture attendu
+   et celui de la spirale de pastilles. */
+function casDe(code){
+  if(!IDX_CAS){
+    IDX_CAS = {};
+    DATA.cas.forEach(function(c){ (IDX_CAS[c.pays] = IDX_CAS[c.pays] || []).push(c); });
+    Object.keys(IDX_CAS).forEach(function(k){
+      IDX_CAS[k].sort(function(a, b){ return b.exposition - a.exposition; });
+    });
+  }
+  return IDX_CAS[code] || [];
+}
+function abreger(s, n){ return s.length > n ? s.slice(0, n - 1) + "…" : s; }
+
+/* Pays « vise » : celui dont l'ancre est la plus proche du centre de la vue.
+   Au dernier palier, c'est lui — et lui seul — qui recoit l'encart nominatif :
+   ecrire les 65 noms d'un coup rendrait la carte illisible.
+   Le pays doit etre DANS la vue, et la tolerance se mesure axe par axe : un
+   rayon unique, calibre sur la plus petite dimension, ne retiendrait plus rien
+   des que le cadre devient large et bas. */
+function paysVise(cx, cy, w, h){
+  ancre("FR");                            /* force le calcul des ancres */
+  var best = null, bd = 1e9;
+  for(var code in ANCRES){
+    if(!ANCRES.hasOwnProperty(code) || !casDe(code).length) continue;
+    var dx = ANCRES[code][0] - cx, dy = ANCRES[code][1] - cy, d = dx*dx + dy*dy;
+    if(d < bd){ bd = d; best = code; }
+  }
+  if(!best) return null;
+  var a = ANCRES[best];
+  return (Math.abs(a[0] - cx) < w * 0.42 && Math.abs(a[1] - cy) < h * 0.42) ? best : null;
+}
+
+/* Encart nominatif du pays vise. Il vit dans un groupe contre-echelle : tout
+   ce qu'il contient garde sa taille a l'ecran, l'encart reste donc aussi
+   lisible a ×6 qu'a ×3,4. */
+function encartCas(code){
+  var a = ancre(code), mes = casDe(code);
+  if(!a || !mes.length) return "";
+  var MAX = 8, vus = mes.slice(0, MAX), lh = 13, larg = 196;
+  var haut = 22 + vus.length * lh + (mes.length > MAX ? lh : 0);
+  /* Pose a droite par defaut, a gauche si le pays est deja dans la moitie est
+     de la vue — sinon l'encart sortirait du cadre. L'ecart de 46 degage le nom
+     du pays : colle a l'ancre, l'encart le recouvrait. */
+  var dx = (a[0] > ZOOM.x + (ZOOM.W / ZOOM.k) * 0.55) ? -(larg + 46) : 46;
+  var g = '<g class="pan-liste" data-anc="' + a[0].toFixed(1) + "," + a[1].toFixed(1) + '">'
+        + '<rect class="fond" x="' + dx + '" y="-15" width="' + larg + '" height="' + haut + '" rx="4"/>'
+        + '<text class="pan-cas tt" x="' + (dx + 9) + '" y="0">' + esc(UE[code].nom)
+        + " — " + mes.length + " cas</text>";
+  vus.forEach(function(c, i){
+    var y = 16 + i * lh;
+    g += '<rect x="' + (dx + 9) + '" y="' + (y - 6.5) + '" width="7" height="7" rx="1.5" fill="'
+       + ((DATA.classes[c.classe] || {}).couleur || "#7A7A7A") + '"/>'
+       + '<text class="pan-cas" x="' + (dx + 21) + '" y="' + y + '">'
+       /* Coupe a 30 signes : le texte SVG ne se replie ni ne se rogne tout seul,
+          il traverserait le cadre de l'encart. */
+       + esc(abreger(c.entreprise.split(" (")[0] + " · " + c.cas, 30)) + "</text>";
+  });
+  if(mes.length > MAX)
+    g += '<text class="pan-cas plus" x="' + (dx + 21) + '" y="' + (16 + MAX * lh) + '">+ '
+       + (mes.length - MAX) + " autre" + (mes.length - MAX > 1 ? "s" : "") + "</text>";
+  return g + "</g>";
+}
+
+/* Couche de detail, redessinee a chaque changement de palier :
+     ×1      nom court des pays du panel, code ISO pour les petits États
+     ×1,45   tous les États membres en toutes lettres
+     ×2,25   volume et exposition moyenne, puis une pastille par cas
+     ×3,4    encart nominatif du pays place au centre de la vue            */
+function detailCarte(pal, vise){
+  var g = ZOOM.svg && ZOOM.svg.querySelector("#pan-detail");
+  if(!g) return;
+  var parPays = {};
+  DATA.agregats.par_pays.forEach(function(p){ parPays[p.pays] = p; });
+  /* Pastilles et libelles sont accumules separement pour etre poses dans cet
+     ordre : les noms passent AU-DESSUS des points, et leur halo blanc les rend
+     lisibles meme au milieu d'une grappe. L'inverse les rendait illisibles. */
+  var pts = "", lbls = "";
+  Object.keys(UE).forEach(function(code){
+    var a = ancre(code); if(!a) return;
+    var x = a[0], y = a[1], st = parPays[code], n = st ? st.n : 0;
+    var petit = PETITS.indexOf(code) >= 0;
+    /* Au palier 0, « Luxembourg » ecrit en toutes lettres recouvrirait trois
+       voisins : les petits États portent leur code. Des le palier 1 la place
+       existe, tout le monde a son nom. */
+    var nom = (pal >= 1 || (n && !petit)) ? UE[code].nom.split(" ")[0] : code;
+    lbls += '<text class="pan-lbl' + (petit && pal < 1 ? " petit" : "") + (n ? "" : " vide")
+         + '" x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" text-anchor="middle">'
+         + esc(nom) + "</text>";
+    if(pal >= 1 && n){
+      /* Ecart exprime en `em` : il suit la taille du texte, elle-meme
+         contre-echellee. En unites de carte il se creuserait a chaque pas. */
+      lbls += '<text class="pan-lbl sous" x="' + x.toFixed(1) + '" y="' + y.toFixed(1)
+           + '" dy="1.3em" text-anchor="middle">' + n + " cas · "
+           + Math.round(st.exposition_moy) + "/100</text>";
+    }
+    if(pal >= 2 && n){
+      casDe(code).forEach(function(c, i){
+        /* Spirale d'or : les pastilles ne se recouvrent jamais, et leur ecart —
+           exprime en unites de carte — s'ouvre a mesure qu'on grossit. C'est
+           exactement la que le detail apparait. */
+        var ang = i * 2.39996, ray = 4.6 * Math.sqrt(i + 0.6);
+        var px = x + Math.cos(ang) * ray, py = y - 7 + Math.sin(ang) * ray;
+        pts += '<circle class="pan-pt" data-cas="' + c.id + '" data-r="3.6" data-sw="1.1" cx="'
+            + px.toFixed(1) + '" cy="' + py.toFixed(1) + '" r="3.6" fill="'
+            + ((DATA.classes[c.classe] || {}).couleur || "#7A7A7A") + '"/>';
+      });
+    }
+  });
+  g.innerHTML = pts + lbls + (pal >= 3 && vise ? encartCas(vise) : "");
+}
+
+/* Dit ce que le palier courant ajoute — sinon rien n'indique qu'il reste
+   quelque chose a voir en grossissant. */
+function legendeDetail(pal, vise){
+  if(pal <= 0) return "Agrandir : noms complets, volumes, puis un point par cas. Double-clic sur un pays : détail direct.";
+  if(pal === 1) return "Encore un cran : un point par cas, coloré selon la classe AI Act.";
+  if(pal === 2) return "Un point = un cas. Survoler un point pour l’identifier.";
+  return "Détail nominatif du pays au centre" + (vise && UE[vise] ? " — " + UE[vise].nom : "")
+       + ". Déplacer la carte à la main pour en viser un autre.";
+}
+
 function renderMap(){
+  ANCRES = null; IDX_CAS = null;
   var parPays={};
   DATA.agregats.par_pays.forEach(function(p){parPays[p.pays]=p;});
   var s='<svg class="obs-svg-map" viewBox="0 0 '+PROJ.W+" "+PROJ.H+'" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Carte UE du panel">'
@@ -539,39 +892,42 @@ function renderMap(){
     if(UE[code]){
       var st=parPays[code],n=st?st.n:0;
       var fill=n?CMAP[classeNb(n)]:"#EDE9E2";
-      colores+='<path d="'+d+'" fill="'+fill+'" stroke="#FFF" stroke-width="0.7" class="pan-pays" tabindex="0" role="button" data-code="'+code+'" aria-label="'+esc(UE[code].nom)+' : '+n+' cas au panel"><title>'+esc(UE[code].nom)+" — "+n+" cas"+(st?(" · exposition moy. "+fr(st.exposition_moy)):"")+"</title></path>";
+      colores+='<path d="'+d+'" fill="'+fill+'" stroke="#FFF" stroke-width="0.7" data-sw="0.7" class="pan-pays" tabindex="0" role="button" data-code="'+code+'" aria-label="'+esc(UE[code].nom)+' : '+n+' cas au panel"><title>'+esc(UE[code].nom)+" — "+n+" cas"+(st?(" · exposition moy. "+fr(st.exposition_moy)):"")+"</title></path>";
     } else {
-      neutres+='<path d="'+d+'" fill="#E2E0DB" stroke="#EFEDE8" stroke-width="0.5"/>';
+      neutres+='<path d="'+d+'" fill="#E2E0DB" stroke="#EFEDE8" stroke-width="0.5" data-sw="0.5"/>';
     }
   });
-  /* Libelles : NOM COMPLET pour les pays du panel (ce sont eux qu'on lit),
-     code ISO pour les autres États membres — a cette echelle « Luxembourg »
-     ecrit en toutes lettres recouvrirait trois voisins. Les pays hors UE
-     restent muets : ils ne sont pas le sujet. */
-  var lbls = "";
-  Object.keys(UE).forEach(function(code){
-    var c = centroidePays(code); if(!c) return;
-    var d = LBL_DECAL[code] || [0,0];
-    var x = projX(c[0]) + d[0], y = projY(c[1]) + d[1];
-    if(x < 4 || x > PROJ.W - 4 || y < 8 || y > PROJ.H - 4) return;
-    var n = parPays[code] ? parPays[code].n : 0;
-    var petit = ["LU","MT","CY","SI","EE","LV","LT","BE","NL","DK","HR","SK","AT"].indexOf(code) >= 0;
-    var texte = (n && !petit) ? UE[code].nom.split(" ")[0] : code;
-    lbls += '<text class="pan-lbl' + (petit ? " petit" : "") + (n ? "" : " vide") + '" x="'
-      + x.toFixed(1) + '" y="' + y.toFixed(1) + '" text-anchor="middle">' + esc(texte) + "</text>";
-  });
-  s+=neutres+colores+lbls+"</svg>";
+  /* Les libelles et les pastilles vivent dans une couche a part : elle est
+     redessinee a chaque palier de zoom, sans toucher aux contours. */
+  s+=neutres+colores+'<g id="pan-detail"></g></svg>';
   s+='<div class="obs-legend"><h3>Cas documentés par pays</h3>'
     +'<div class="lg-row"><span class="lg-box" style="background:#EDE9E2"></span>UE — aucun cas au panel</div>'
     +[[1,"1 – 2"],[2,"3 – 5"],[3,"6 – 9"],[4,"10 et plus"]].map(function(x){
        return '<div class="lg-row"><span class="lg-box" style="background:'+CMAP[x[0]]+'"></span>'+x[1]+"</div>";}).join("")
-    +"</div>";
+    +'<div class="lg-det" id="lg-det"></div></div>';
   var hote=document.getElementById("panmap");
   hote.innerHTML=s;
   TIP = null;                      /* l'ancienne infobulle vient d'etre effacee */
   hote.addEventListener("mouseleave", tipCacher);
-  zoomInit(hote.querySelector("svg"), PROJ.W, PROJ.H, ".pan-lbl");
+  ZOOM.focus = paysVise; ZOOM.legende = legendeDetail;
+  zoomInit(hote.querySelector("svg"), PROJ.W, PROJ.H, ".pan-lbl", detailCarte);
   zoomCommandes(hote);
+  /* Les pastilles sont recreees a chaque palier : on delegue, plutot que de
+     rebrancher un gestionnaire par point a chaque redessin. */
+  if(hote.getAttribute("data-deleg") !== "1"){
+    hote.setAttribute("data-deleg", "1");
+    hote.addEventListener("mouseover", function(ev){
+      var pt = ev.target.closest ? ev.target.closest(".pan-pt") : null;
+      if(pt) tipMontrer(tipCas(pt.getAttribute("data-cas")), ev, hote);
+    });
+    hote.addEventListener("mousemove", function(ev){
+      if(ev.target.closest && ev.target.closest(".pan-pt")) tipPlacer(ev, hote);
+    });
+    hote.addEventListener("click", function(ev){
+      var pt = ev.target.closest ? ev.target.closest(".pan-pt") : null;
+      if(pt){ ev.stopPropagation(); ouvrirCas(pt.getAttribute("data-cas")); }
+    });
+  }
   var choisi=null;
   hote.querySelectorAll(".pan-pays").forEach(function(el){
     function sel(){ if(choisi)choisi.classList.remove("on");
@@ -579,6 +935,12 @@ function renderMap(){
       var code=el.getAttribute("data-code");
       F.pays=code;syncFiltres();renderTable();fichePays(code); }
     el.addEventListener("click",sel);
+    /* Double-clic : on va chercher le pays au dernier palier, la ou la carte
+       donne ses cas nommement. */
+    el.addEventListener("dblclick", function(ev){
+      var a = ancre(this.getAttribute("data-code"));
+      if(a){ ev.preventDefault(); zoomSur(a[0], a[1], Math.max(ZOOM.k, 4)); }
+    });
     /* Survol : le detail sans le clic. On garde `title` en repli — il sert au
        tactile, ou il n'y a pas de survol, et aux lecteurs d'ecran. */
     el.addEventListener("mouseenter", function(ev){ tipMontrer(tipPays(this.getAttribute("data-code")), ev, hote); });
