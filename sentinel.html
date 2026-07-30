@@ -15665,6 +15665,13 @@ window.guideOpenModal = function(pid){
 var _guideOrigGo = window.go;
 window.go = function(){
   var r = _guideOrigGo ? _guideOrigGo.apply(this, arguments) : undefined;
+  /* IMMEDIATEMENT, puis en filet. La version precedente n'injectait qu'apres
+     120 ms : pendant ce court instant le bouton restait celui de la page
+     QUITTEE, et un clic rapide ouvrait le guide de la page precedente. `go()`
+     ayant deja bascule la classe `on`, la page courante est connue des son
+     retour — rien ne justifie d'attendre. Le rappel differe est conserve pour
+     les rares pages qui achevent leur rendu de facon asynchrone. */
+  try { guideInjectButton(); } catch(e) {}
   setTimeout(guideInjectButton, 120);
   return r;
 };
