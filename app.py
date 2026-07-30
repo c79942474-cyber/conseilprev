@@ -1,5 +1,7 @@
 import os, re as _re, time, hashlib, json, logging, threading, base64, gzip
 import requests, feedparser
+import concurrent.futures as _futures
+import threading as _threading
 import smtplib, ssl
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -2775,17 +2777,32 @@ def news():
         "Cache-Control": "no-cache",
         "Connection": "keep-alive",
     }
-    for src in RSS_SOURCES:
+    # ── Flux interroges EN PARALLELE, sous budget de temps global ──────────
+    # Auparavant les 12 flux etaient lus L'UN APRES L'AUTRE, 7 s de delai
+    # chacun : une seule requete pouvait tenir un fil pendant 84 s. Avec 8 fils
+    # gthread, quelques appels simultanes suffisaient a saturer le worker ; la
+    # sonde de sante de Render ne recevait plus de reponse et l'instance etait
+    # declaree indisponible puis redemarree. C'est le mecanisme le plus
+    # plausible des redemarrages observes.
+    # En parallele, le cout total tombe au flux le PLUS LENT (~7 s) au lieu de
+    # leur somme, et BUDGET_S borne l'attente quoi qu'il arrive : les flux qui
+    # n'ont pas repondu sont simplement absents de ce rafraichissement.
+    BUDGET_S = 12
+    _lock_items = _threading.Lock()
+
+    def _lire_flux(src):
         try:
             resp = requests.get(src["url"], headers=_headers, timeout=7, allow_redirects=True)
             if resp.status_code != 200:
-                continue
+                return
             import io as _io
             feed = feedparser.parse(_io.BytesIO(resp.content))
+            lot = []
             for entry in (feed.entries or [])[:8]:
                 title = entry.get("title", "").strip()
-                if not title: continue
-                all_items.append({
+                if not title:
+                    continue
+                lot.append({
                     "title":  title,
                     "link":   entry.get("link") or entry.get("id") or "#",
                     "date":   entry.get("published") or entry.get("updated") or "",
@@ -2794,8 +2811,17 @@ def news():
                     "cat":    _detect_cat(title, src["cat"]),
                     "lang":   src.get("lang", "fr"),
                 })
+            if lot:
+                with _lock_items:
+                    all_items.extend(lot)
         except Exception:
             pass
+
+    with _futures.ThreadPoolExecutor(max_workers=min(12, len(RSS_SOURCES) or 1)) as _ex:
+        _taches = [_ex.submit(_lire_flux, s) for s in RSS_SOURCES]
+        _futures.wait(_taches, timeout=BUDGET_S)
+        for _t in _taches:
+            _t.cancel()
     _socket.setdefaulttimeout(_old_timeout)
     seen, unique = set(), []
     for item in sorted(all_items, key=lambda x: x.get("date",""), reverse=True):
