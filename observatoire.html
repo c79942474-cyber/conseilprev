@@ -76,6 +76,29 @@ figure{margin:0}
 .obs-pays.on{stroke:#1C1C1C;stroke-width:var(--trait-sel,1.4)}
 .lg-box{width:14px;height:11px;border-radius:2px;display:inline-block;flex:0 0 auto;border:1px solid rgba(28,28,28,.14)}
 .lg-nd{margin-top:5px;padding-top:5px;border-top:1px solid var(--rule);color:var(--muted2)}
+/* ── AIDE SUR LES BLOCS ─────────────────────────────────────────────────────
+   Un point d'interrogation discret a cote d'un titre ou d'un indicateur. Au
+   survol ET au focus clavier, il explique CE QUE LE BLOC MONTRE et surtout ce
+   qu'il ne montre pas.
+   Pourquoi pas l'attribut `title` du navigateur : il n'apparait qu'apres une
+   seconde d'attente, disparait tout seul, ne se met pas en forme, et reste
+   inaccessible au clavier. Pour un outil de travail ou l'explication fait
+   partie du contenu, ce n'est pas suffisant. */
+.aide{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;
+  margin-left:6px;border-radius:50%;border:1px solid var(--rule);background:transparent;
+  color:var(--muted2);font:inherit;font-size:9.5px;font-weight:700;line-height:1;
+  cursor:help;vertical-align:1px;padding:0;flex:0 0 auto;position:relative}
+.aide:hover,.aide:focus-visible{color:#1C1C1C;border-color:#1C1C1C;background:rgba(28,28,28,.05)}
+.aide:focus-visible{outline:2px solid #1E63A8;outline-offset:2px}
+.aide-bulle{position:absolute;z-index:60;max-width:330px;background:rgba(28,28,28,.97);
+  color:#fff;border-radius:5px;padding:10px 13px;font-family:var(--sans);font-size:12px;
+  font-weight:400;line-height:1.55;text-align:left;box-shadow:0 5px 20px rgba(0,0,0,.3);
+  pointer-events:none;opacity:0;transition:opacity .12s;text-transform:none;letter-spacing:0}
+.aide-bulle.on{opacity:1}
+.aide-bulle b{color:#fff}
+.aide-bulle .pas{display:block;margin-top:7px;padding-top:7px;
+  border-top:1px solid rgba(255,255,255,.18);color:#D9D5CF}
+@media print{.aide{display:none}}
 .lg-det{margin-top:5px;padding-top:5px;border-top:1px solid var(--rule);
   font-family:var(--mono);font-size:9.5px;color:var(--muted2);line-height:1.45}
 /* Mini-cartes jumelles (origine / lieu de travail). Côte à côte tant que la
@@ -382,7 +405,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 <!-- ══ 1. CARTE — modèles remarquables par pays ══ -->
 <section class="panel" aria-labelledby="t-map">
   <div class="panel-head">
-    <span class="panel-title" id="t-map">Modèles d’IA remarquables créés par pays (2003 – été 2024)</span>
+    <span class="panel-title" data-aide="carte" id="t-map">Modèles d’IA remarquables créés par pays (2003 – été 2024)</span>
     <span class="panel-note" id="map-mode">seed · classes (recomposition)</span>
   </div>
   <div class="map-wrap">
@@ -404,7 +427,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 <!-- ══ 2. BREVETS ══ -->
 <section class="panel" aria-labelledby="t-brev">
   <div class="panel-head">
-    <span class="panel-title" id="t-brev">Brevets d’IA accordés — part du total mondial (%)</span>
+    <span class="panel-title" data-aide="brevets" id="t-brev">Brevets d’IA accordés — part du total mondial (%)</span>
     <span class="panel-note">AI Index (Stanford HAI) · données CSET · 2010–2023</span>
   </div>
   <div class="panel-body">
@@ -429,7 +452,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 <!-- ══ 3. CHERCHEURS D'ÉLITE ══ -->
 <section class="panel" aria-labelledby="t-tal">
   <div class="panel-head">
-    <span class="panel-title" id="t-tal">Chercheurs d’élite en IA (2022) — origine vs lieu de travail</span>
+    <span class="panel-title" data-aide="talents" id="t-tal">Chercheurs d’élite en IA (2022) — origine vs lieu de travail</span>
     <span class="panel-note">MacroPolo · d’après NeurIPS 2022 · en %</span>
   </div>
   <div class="panel-body">
@@ -452,7 +475,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 <!-- ══ 4. ADOPTION ENTREPRISES UE ══ -->
 <section class="panel" aria-labelledby="t-adp">
   <div class="panel-head">
-    <span class="panel-title" id="t-adp">Adoption de l’IA par les entreprises (UE)</span>
+    <span class="panel-title" data-aide="adoption" id="t-adp">Adoption de l’IA par les entreprises (UE)</span>
     <span class="panel-note">Eurostat · isoc_eb_ai · CC BY 4.0</span>
   </div>
   <div class="panel-body" id="adp-body"><!-- rempli par renderAdoption() --></div>
@@ -498,7 +521,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 <!-- ══ 6. SOURCES, LICENCES & FRAÎCHEUR ══ -->
 <section class="panel" aria-labelledby="t-src">
   <div class="panel-head">
-    <span class="panel-title" id="t-src">Sources, licences &amp; fraîcheur</span>
+    <span class="panel-title" data-aide="sources" id="t-src">Sources, licences &amp; fraîcheur</span>
     <span class="panel-note">crédits obligatoires</span>
   </div>
   <div class="panel-body">
@@ -1564,6 +1587,132 @@ function barPath(x, y, w, h, r){
    Les pays dont la valeur n'est pas publiée (2–4 %) portent une barre
    FANTÔME hachurée : montrer une barre pleine reviendrait à inventer une
    hauteur que la source ne donne pas. */
+/* Textes d'aide de l'Observatoire. Meme discipline : ce que le bloc montre,
+   puis ce qu'il ne montre pas. */
+var AIDES = {
+  carte: {
+    t: "Où l’IA est produite",
+    d: "Nombre de modèles d’IA remarquables créés dans chaque pays depuis 2003, en cinq classes. "
+     + "Molette pour zoomer, main pour déplacer, champ « Aller à » pour viser un pays. À chaque "
+     + "palier de zoom la carte ajoute ce qu’elle ne pouvait pas écrire plus petit : volumes, "
+     + "puis codes des pays sans modèle, puis l’encart du pays visé.",
+    pas: "« Remarquable » est une définition de la source, pas un jugement de valeur. Un pays sans "
+       + "modèle recensé n’est pas un pays sans recherche en IA.",
+  },
+  precision: {
+    t: "Exact, classe, lecture graphique",
+    d: "Chaque série porte son niveau de précision. « exact » : le chiffre est publié tel quel. "
+     + "« classe » : la source ne donne qu’une tranche. « lecture graphique » : la valeur a été "
+     + "relevée sur une carte publiée, avec l’imprécision que cela suppose.",
+    pas: "Ne citez comme exact que ce qui est marqué exact. Une valeur de classe ou de lecture "
+       + "graphique ne supporte pas une comparaison au point près.",
+  },
+  talents: {
+    t: "Flux des chercheurs d’élite",
+    d: "Chaque ligne va du point « formés dans le pays » au point « y travaillent » ; la flèche "
+     + "donne le sens du mouvement et la colonne de droite le solde en points. Les pays sont "
+     + "rangés du plus attractif au plus exportateur.",
+    pas: "Un cercle CREUX signale une valeur que la source ne publie pas : le solde est alors "
+       + "déclaré non calculable, jamais ramené à zéro. « Autres » est le reste du monde, pas un pays.",
+  },
+  brevets: {
+    t: "Brevets d’IA accordés",
+    d: "Part de chaque pays dans le total mondial des brevets d’IA accordés. Un indicateur "
+     + "d’intensité de dépôt et de stratégie de protection.",
+    pas: "Un brevet accordé ne dit rien de la qualité ni de l’exploitation de l’invention. Les "
+       + "pratiques de dépôt varient fortement d’un pays à l’autre, ce qui limite la comparaison directe.",
+  },
+  adoption: {
+    t: "Adoption par les entreprises",
+    d: "Part d’entreprises déclarant utiliser au moins une technologie d’IA, d’après l’enquête "
+     + "annuelle d’Eurostat sur l’usage des technologies numériques.",
+    pas: "C’est une enquête DÉCLARATIVE. Elle mesure ce que les entreprises disent utiliser, pas "
+       + "les systèmes eux-mêmes — ni leur ampleur, ni leur criticité.",
+  },
+  sources: {
+    t: "Sources et fraîcheur",
+    d: "Chaque série indique son producteur, sa licence, le volet qu’elle alimente et son état de "
+     + "rafraîchissement. Les séries marquées « seed » attendent le premier rafraîchissement serveur.",
+    pas: "Les crédits sont obligatoires en cas de réutilisation. La carte d’origine qui a inspiré "
+       + "ce module n’est pas reproduite ici.",
+  },
+};
+
+/* ── AIDE SUR LES BLOCS ─────────────────────────────────────────────────────
+   Chaque bloc important porte un « ? » qui dit ce qu'il montre ET ce qu'il ne
+   montre pas. La seconde moitie est la plus utile : c'est elle qui empeche un
+   chiffre d'etre cite pour ce qu'il n'est pas.
+
+   Une SEULE bulle est creee et deplacee, jamais une par bouton : un module
+   qui en compte quinze en creerait quinze inutilement, et il faudrait les
+   detruire a chaque redessin. */
+var AIDE_BULLE = null;
+
+function aideMontrer(bouton){
+  var cle = bouton.getAttribute('data-aide');
+  var a = AIDES[cle];
+  if(!a) return;
+  if(!AIDE_BULLE){
+    AIDE_BULLE = document.createElement('div');
+    AIDE_BULLE.className = 'aide-bulle';
+    AIDE_BULLE.setAttribute('role', 'tooltip');
+    document.body.appendChild(AIDE_BULLE);
+  }
+  AIDE_BULLE.innerHTML = '<b>' + esc(a.t) + '</b><br>' + esc(a.d)
+    + (a.pas ? '<span class="pas">' + esc(a.pas) + '</span>' : '');
+  AIDE_BULLE.classList.add('on');
+  /* Position : sous le bouton, ramenee dans la fenetre. La bulle est en
+     `position:absolute` sur le document, donc en coordonnees de PAGE — il faut
+     ajouter le defilement, sans quoi elle saute des qu'on a fait defiler. */
+  var r = bouton.getBoundingClientRect();
+  var bw = AIDE_BULLE.offsetWidth, bh = AIDE_BULLE.offsetHeight;
+  var x = r.left + window.scrollX - 8;
+  var y = r.bottom + window.scrollY + 8;
+  if(x + bw > window.scrollX + document.documentElement.clientWidth - 10){
+    x = window.scrollX + document.documentElement.clientWidth - bw - 10;
+  }
+  if(x < window.scrollX + 6) x = window.scrollX + 6;
+  /* Si elle deborderait en bas de la fenetre, on la pose AU-DESSUS du bouton. */
+  if(r.bottom + bh + 16 > document.documentElement.clientHeight){
+    y = r.top + window.scrollY - bh - 8;
+  }
+  AIDE_BULLE.style.left = Math.round(x) + 'px';
+  AIDE_BULLE.style.top = Math.round(y) + 'px';
+}
+function aideCacher(){ if(AIDE_BULLE) AIDE_BULLE.classList.remove('on'); }
+
+/* Pose les boutons sur tous les elements portant `data-aide`. Idempotent : la
+   fonction peut etre rejouee apres un redessin sans doubler les boutons. */
+function aideBrancher(racine){
+  (racine || document).querySelectorAll('[data-aide]').forEach(function(el){
+    if(el.classList.contains('aide')) return;          /* deja un bouton */
+    if(el.querySelector(':scope > .aide')) return;     /* deja equipe */
+    var cle = el.getAttribute('data-aide');
+    if(!AIDES[cle]) return;
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'aide';
+    b.setAttribute('data-aide', cle);
+    b.setAttribute('aria-label', 'Explication : ' + AIDES[cle].t);
+    b.textContent = '?';
+    b.addEventListener('mouseenter', function(){ aideMontrer(this); });
+    b.addEventListener('focus', function(){ aideMontrer(this); });
+    b.addEventListener('mouseleave', aideCacher);
+    b.addEventListener('blur', aideCacher);
+    /* Au doigt, il n'y a pas de survol : le clic ouvre et referme. */
+    b.addEventListener('click', function(ev){
+      ev.preventDefault(); ev.stopPropagation();
+      if(AIDE_BULLE && AIDE_BULLE.classList.contains('on')) aideCacher();
+      else aideMontrer(this);
+    });
+    el.appendChild(b);
+  });
+}
+/* Échap ferme, et le defilement aussi : une bulle ancree a un bouton parti
+   hors de l'ecran flotterait dans le vide. */
+document.addEventListener('keydown', function(ev){ if(ev.key === 'Escape') aideCacher(); });
+window.addEventListener('scroll', aideCacher, { passive: true });
+
 /* ── FIGURE DE FLUX DES CHERCHEURS ────────────────────────────────────────
    Ce panneau montrait DEUX cartes du monde avec des barres : le lecteur devait
    faire lui-meme la soustraction entre « formes ici » et « travaillent la ».
@@ -1845,6 +1994,9 @@ function renderAll(){
   renderEtat();
   renderFlux();
   updateBadges();
+  /* En FIN de rendu, et non apres l'appel : renderAll est rejoue a l'arrivee
+     des donnees en direct, et les blocs reconstruits perdraient leur aide. */
+  aideBrancher();
 }
 
 /* Rendu initial : repli TOTAL sur le SEED (même motif que GEO dans map.html) */

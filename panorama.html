@@ -162,6 +162,29 @@ body.embed .hdr{margin-bottom:12px}
 .map-zoom .z-raz{font-size:11px}
 .map-zoom .z-niv{font-family:var(--mono);font-size:9.5px;text-align:center;color:var(--muted2);
   background:rgba(255,255,255,.9);border-radius:3px;padding:1px 0}
+/* ── AIDE SUR LES BLOCS ─────────────────────────────────────────────────────
+   Un point d'interrogation discret a cote d'un titre ou d'un indicateur. Au
+   survol ET au focus clavier, il explique CE QUE LE BLOC MONTRE et surtout ce
+   qu'il ne montre pas.
+   Pourquoi pas l'attribut `title` du navigateur : il n'apparait qu'apres une
+   seconde d'attente, disparait tout seul, ne se met pas en forme, et reste
+   inaccessible au clavier. Pour un outil de travail ou l'explication fait
+   partie du contenu, ce n'est pas suffisant. */
+.aide{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;
+  margin-left:6px;border-radius:50%;border:1px solid var(--rule);background:transparent;
+  color:var(--muted2);font:inherit;font-size:9.5px;font-weight:700;line-height:1;
+  cursor:help;vertical-align:1px;padding:0;flex:0 0 auto;position:relative}
+.aide:hover,.aide:focus-visible{color:#1C1C1C;border-color:#1C1C1C;background:rgba(28,28,28,.05)}
+.aide:focus-visible{outline:2px solid #1E63A8;outline-offset:2px}
+.aide-bulle{position:absolute;z-index:60;max-width:330px;background:rgba(28,28,28,.97);
+  color:#fff;border-radius:5px;padding:10px 13px;font-family:var(--sans);font-size:12px;
+  font-weight:400;line-height:1.55;text-align:left;box-shadow:0 5px 20px rgba(0,0,0,.3);
+  pointer-events:none;opacity:0;transition:opacity .12s;text-transform:none;letter-spacing:0}
+.aide-bulle.on{opacity:1}
+.aide-bulle b{color:#fff}
+.aide-bulle .pas{display:block;margin-top:7px;padding-top:7px;
+  border-top:1px solid rgba(255,255,255,.18);color:#D9D5CF}
+@media print{.aide{display:none}}
 .lg-det{margin-top:5px;padding-top:5px;border-top:1px solid var(--rule);
   font-family:var(--mono);font-size:9.5px;color:var(--muted2);line-height:1.45}
 /* ── Socle de données ouvertes ── */
@@ -304,7 +327,7 @@ engagements publics) sont imputés nominativement.</div>
 <!-- ══ 1. CARTE UE + FICHE PAYS ══ -->
 <section class="panel" aria-labelledby="t-map">
   <div class="panel-head">
-    <span class="panel-title" id="t-map">Où le panel observe des SIA — et ce que dit le droit national</span>
+    <span class="panel-title" data-aide="carte" id="t-map">Où le panel observe des SIA — et ce que dit le droit national</span>
     <span class="panel-note">cliquer un pays : cas + autorités (AI Act art. 70, cyber, données)</span>
   </div>
   <div class="geo-grid">
@@ -331,7 +354,7 @@ engagements publics) sont imputés nominativement.</div>
 <!-- ══ 2. EXPLORATEUR DES CAS ══ -->
 <section class="panel" aria-labelledby="t-cas">
   <div class="panel-head">
-    <span class="panel-title" id="t-cas">Explorateur des cas — classement AI Act et exposition</span>
+    <span class="panel-title" data-aide="panel" id="t-cas">Explorateur des cas — classement AI Act et exposition</span>
     <span class="panel-note">score = priorité d'examen du cas d'usage · jamais un audit de l'entreprise</span>
   </div>
   <div class="filtres" role="search">
@@ -354,7 +377,7 @@ engagements publics) sont imputés nominativement.</div>
         <th scope="col">Cas d'usage</th>
         <th scope="col" class="triable" data-tri="stade">Stade<span class="fl"></span></th>
         <th scope="col" class="triable" data-tri="classe_rang">Classe AI Act<span class="fl"></span></th>
-        <th scope="col" class="triable" data-tri="exposition">Exposition<span class="fl"></span></th>
+        <th scope="col" class="triable" data-tri="exposition" data-aide="exposition">Exposition<span class="fl"></span></th>
       </tr></thead>
       <tbody id="t-body"></tbody>
     </table>
@@ -365,7 +388,7 @@ engagements publics) sont imputés nominativement.</div>
 <!-- ══ SIGNAUX EN CONTINU ══ -->
 <section class="panel" aria-labelledby="t-flux">
   <div class="panel-head">
-    <span class="panel-title" id="t-flux">Signaux en continu — autorités &amp; institutions <span id="flux-badge" class="badge" style="background:#1E63A8;display:none"></span></span>
+    <span class="panel-title" data-aide="signaux" id="t-flux">Signaux en continu — autorités &amp; institutions <span id="flux-badge" class="badge" style="background:#1E63A8;display:none"></span></span>
     <span class="panel-note" id="flux-etat">CNIL · ANSSI · EU AI Act · Commission — rafraîchi côté serveur (30 min)</span>
   </div>
   <div class="panel-body">
@@ -379,7 +402,7 @@ engagements publics) sont imputés nominativement.</div>
 <!-- ══ 3. LECTURES D'ENSEMBLE ══ -->
 <section class="panel" aria-labelledby="t-stats">
   <div class="panel-head">
-    <span class="panel-title" id="t-stats">Lectures d'ensemble du panel</span>
+    <span class="panel-title" data-aide="panel" id="t-stats">Lectures d'ensemble du panel</span>
     <span class="panel-note" id="stats-note"></span>
   </div>
   <div class="panel-body">
@@ -399,7 +422,7 @@ engagements publics) sont imputés nominativement.</div>
 <!-- ══ 4. SOCLE DE DONNÉES OUVERTES ══ -->
 <section class="panel" aria-labelledby="t-socle">
   <div class="panel-head">
-    <span class="panel-title" id="t-socle">Socle de données ouvertes</span>
+    <span class="panel-title" data-aide="socle" id="t-socle">Socle de données ouvertes</span>
     <span class="panel-note" id="socle-note">Copernicus · NASA · DINUM · Eurostat — sans clé d'API</span>
   </div>
   <div class="panel-body">
@@ -421,7 +444,7 @@ engagements publics) sont imputés nominativement.</div>
 <!-- ══ 5. EMPREINTE ENVIRONNEMENTALE ══ -->
 <section class="panel" aria-labelledby="t-emp">
   <div class="panel-head">
-    <span class="panel-title" id="t-emp">Empreinte environnementale du parc cartographié</span>
+    <span class="panel-title" data-aide="empreinte" id="t-emp">Empreinte environnementale du parc cartographié</span>
     <span class="panel-note" id="emp-note">calcul en cours…</span>
   </div>
   <div class="panel-body">
@@ -1035,8 +1058,8 @@ function renderKpis(){
     '<div class="kpi"><div class="v">'+n+'</div><div class="l">cas documentés au panel</div></div>'
    +'<div class="kpi"><div class="v">'+DATA.n_pays+'</div><div class="l">États membres couverts</div></div>'
    +'<div class="kpi"><div class="v">'+Math.round(100*prod/n)+' %</div><div class="l">en production ou à l’échelle</div></div>'
-   +'<div class="kpi k-hr"><div class="v">'+(ag.par_classe.haut_risque||0)+'</div><div class="l">haut risque (annexes I &amp; III)</div></div>'
-   +'<div class="kpi k-interdit"><div class="v">'+(ag.par_classe.interdit||0)+'</div><div class="l">pratiques interdites (art. 5) documentées</div></div>');
+   +'<div class="kpi k-hr"><div class="v">'+(ag.par_classe.haut_risque||0)+'</div><div class="l" data-aide="classes">haut risque (annexes I &amp; III)</div></div>'
+   +'<div class="kpi k-interdit"><div class="v">'+(ag.par_classe.interdit||0)+'</div><div class="l" data-aide="classes">pratiques interdites (art. 5) documentées</div></div>');
   var badge=document.getElementById("data-badge");
   if(badge)badge.textContent="référentiel "+DATA.version+" · "+n+" cas · "+DATA.fenetre;
   setHTML("stats-note",DATA.n_secteurs+" secteurs · fenêtre "+DATA.fenetre);
@@ -1717,7 +1740,8 @@ function majBarre(){
   var lg = hote.querySelector(".obs-legend");
   var plie = !lg || lg.classList.contains("pliee");
   barre.innerHTML =
-      '<label>fond <select id="vue-fond" aria-label="Fond de carte">'
+      '<label data-aide="dc">couche</label>'
+    + '<label>fond <select id="vue-fond" aria-label="Fond de carte">'
     + Object.keys(VUES).map(function(k){
         return '<option value="' + k + '"' + (k === VUE ? ' selected' : '')
              + (k !== 'cas' && !EMP ? ' disabled' : '') + '>' + esc(VUES[k].nom) + '</option>'; }).join('')
@@ -1735,6 +1759,7 @@ function majBarre(){
 
   var c = barre.querySelector("#dc-bascule");
   if(c) c.addEventListener("change", function(){ DC_VISIBLE = this.checked; renderDC(); });
+  aideBrancher(barre);              /* la barre est reconstruite a chaque bascule */
   var vf = barre.querySelector("#vue-fond");
   if(vf) vf.addEventListener("change", function(){
     VUE = this.value;
@@ -1797,6 +1822,169 @@ function chargerDC(){
     .catch(function(){ /* couche absente : la carte des SIA reste complete */ });
 }
 
+/* Textes d'aide du Panorama. Chaque entree dit ce que le bloc MONTRE, puis ce
+   qu'il NE MONTRE PAS — la seconde moitie est celle qui evite qu'un chiffre
+   soit cite pour ce qu'il n'est pas. */
+var AIDES = {
+  panel: {
+    t: "Panel de cas documentés",
+    d: "Systèmes d’IA réellement déployés dans l’Union, recensés depuis des sources publiques : "
+     + "communiqués d’entreprises, décisions d’autorités, presse spécialisée. Chaque cas porte "
+     + "sa source et son niveau de preuve.",
+    pas: "Ce n’est PAS un recensement. Un déploiement non communiqué n’y figure pas, et le biais "
+       + "de publication favorise les grands groupes et les cas génératifs.",
+  },
+  classes: {
+    t: "Classes de risque AI Act",
+    d: "Déduites automatiquement des caractéristiques factuelles de chaque cas, par des règles "
+     + "écrites qui citent leur fondement : article 5 pour les pratiques interdites, annexe III "
+     + "pour le haut risque, article 50 pour la transparence. Aucun modèle de langage n’intervient.",
+    pas: "La classe porte sur le CAS D’USAGE tel qu’il est décrit publiquement, pas sur le système "
+       + "réel de l’entreprise, dont nous ne connaissons pas le paramétrage.",
+  },
+  exposition: {
+    t: "Score d’exposition, de 0 à 100",
+    d: "Mesure la PRIORITÉ D’EXAMEN d’un cas d’usage : sa classe de risque, son stade de "
+     + "déploiement, la population touchée, les signaux publics défavorables ou favorables. "
+     + "Chaque terme du calcul est affiché dans la fiche du cas.",
+    pas: "Ce n’est PAS un score de conformité. Il ne dit rien de ce que l’entreprise citée a mis "
+       + "en place, et ne peut fonder ni un classement ni un audit.",
+  },
+  carte: {
+    t: "La carte",
+    d: "Trois fonds au choix — cas documentés, empreinte carbone du parc, intensité carbone du "
+     + "réseau. Les RONDS sont des systèmes d’IA, à l’emplacement de l’organisation qui les "
+     + "déploie ; les CARRÉS sont des centres de données, colorés par statut. Molette pour "
+     + "zoomer, main pour déplacer, champ « Aller à » pour viser directement.",
+    pas: "Le point dit où se trouve l’organisation, pas où le système tourne : un modèle entraîné "
+       + "à Paris peut s’exécuter dans un centre de données irlandais et servir vingt pays.",
+  },
+  dc: {
+    t: "Centres de données",
+    d: "97 sites européens compilés puis vérifiés un par un, avec leur statut — en exploitation, "
+     + "en construction, autorisé, annoncé — du plus certain au plus fragile. Le curseur d’horizon "
+     + "estompe ceux dont la mise en service dépasse la date choisie.",
+    pas: "Aucun exploitant ne publie sa capacité en mégawatts informatiques : les consommations "
+       + "affichées sont des ordres de grandeur de CATÉGORIE, jamais des mesures de site.",
+  },
+  socle: {
+    t: "Socle de données ouvertes",
+    d: "Copernicus, NASA et data.gouv.fr, interrogés en direct et sans clé d’API. C’est la seule "
+     + "couche du module que vous pouvez refaire vous-même : chaque source affiche son point "
+     + "d’accès, sa licence et l’heure de son relevé.",
+    pas: "Aucune mesure satellitaire ne démontre l’usage d’une IA. Ces couches décrivent le sol et "
+       + "l’activité d’observation — elles sont un contexte, pas une preuve.",
+  },
+  empreinte: {
+    t: "Empreinte cycle de vie",
+    d: "Trois postes jamais confondus : l’usage (électricité × intensité carbone du pays), la "
+     + "fabrication des équipements amortie sur leur durée de vie, et l’eau de refroidissement. "
+     + "Même chaîne de calcul que la page Empreinte du site.",
+    pas: "Rien n’est mesuré. Sur un site suédois, la fabrication pèse plus lourd que l’usage — "
+       + "une lecture qui n’afficherait que l’usage classerait la Suède à tort près de zéro.",
+  },
+  natures: {
+    t: "Publié, site, classe",
+    d: "Trois natures, jamais mélangées. « publié » : l’exploitant a donné le chiffre. « site » : "
+     + "calculé depuis la capacité annoncée de ce site précis. « classe » : calculé depuis l’ordre "
+     + "de grandeur typique de sa catégorie.",
+    pas: "Une valeur de classe répond à « de quel ordre est un campus de ce type ? », jamais à "
+       + "« combien consomme CE site ? ». Elle ne permet aucune comparaison entre deux sites nommés.",
+  },
+  intensite: {
+    t: "Intensité carbone du réseau",
+    d: "Grammes de CO₂e par kilowattheure, en approche CYCLE DE VIE — construction des moyens de "
+     + "production incluse, ce qui empêche de compter le nucléaire ou l’éolien à zéro. Quand le "
+     + "serveur sait obtenir la valeur du moment, elle remplace la moyenne annuelle.",
+    pas: "Ce sont des moyennes annuelles. L’intensité réelle varie d’un facteur trois dans la "
+       + "journée : un calcul déplacé de la nuit au midi solaire change son empreinte sans "
+       + "changer sa consommation.",
+  },
+  signaux: {
+    t: "Signaux en continu",
+    d: "Titres des flux officiels — CNIL, ANSSI, AI Act, Commission — rapprochés du panel par "
+     + "correspondance stricte de noms. Ils signalent ce qui bouge entre deux versions du "
+     + "référentiel.",
+    pas: "Aucun signal n’entre dans les scores tant qu’il n’a pas été vérifié et versé au "
+       + "référentiel. L’automatisation détecte ; l’expert tranche.",
+  },
+};
+
+/* ── AIDE SUR LES BLOCS ─────────────────────────────────────────────────────
+   Chaque bloc important porte un « ? » qui dit ce qu'il montre ET ce qu'il ne
+   montre pas. La seconde moitie est la plus utile : c'est elle qui empeche un
+   chiffre d'etre cite pour ce qu'il n'est pas.
+
+   Une SEULE bulle est creee et deplacee, jamais une par bouton : un module
+   qui en compte quinze en creerait quinze inutilement, et il faudrait les
+   detruire a chaque redessin. */
+var AIDE_BULLE = null;
+
+function aideMontrer(bouton){
+  var cle = bouton.getAttribute('data-aide');
+  var a = AIDES[cle];
+  if(!a) return;
+  if(!AIDE_BULLE){
+    AIDE_BULLE = document.createElement('div');
+    AIDE_BULLE.className = 'aide-bulle';
+    AIDE_BULLE.setAttribute('role', 'tooltip');
+    document.body.appendChild(AIDE_BULLE);
+  }
+  AIDE_BULLE.innerHTML = '<b>' + esc(a.t) + '</b><br>' + esc(a.d)
+    + (a.pas ? '<span class="pas">' + esc(a.pas) + '</span>' : '');
+  AIDE_BULLE.classList.add('on');
+  /* Position : sous le bouton, ramenee dans la fenetre. La bulle est en
+     `position:absolute` sur le document, donc en coordonnees de PAGE — il faut
+     ajouter le defilement, sans quoi elle saute des qu'on a fait defiler. */
+  var r = bouton.getBoundingClientRect();
+  var bw = AIDE_BULLE.offsetWidth, bh = AIDE_BULLE.offsetHeight;
+  var x = r.left + window.scrollX - 8;
+  var y = r.bottom + window.scrollY + 8;
+  if(x + bw > window.scrollX + document.documentElement.clientWidth - 10){
+    x = window.scrollX + document.documentElement.clientWidth - bw - 10;
+  }
+  if(x < window.scrollX + 6) x = window.scrollX + 6;
+  /* Si elle deborderait en bas de la fenetre, on la pose AU-DESSUS du bouton. */
+  if(r.bottom + bh + 16 > document.documentElement.clientHeight){
+    y = r.top + window.scrollY - bh - 8;
+  }
+  AIDE_BULLE.style.left = Math.round(x) + 'px';
+  AIDE_BULLE.style.top = Math.round(y) + 'px';
+}
+function aideCacher(){ if(AIDE_BULLE) AIDE_BULLE.classList.remove('on'); }
+
+/* Pose les boutons sur tous les elements portant `data-aide`. Idempotent : la
+   fonction peut etre rejouee apres un redessin sans doubler les boutons. */
+function aideBrancher(racine){
+  (racine || document).querySelectorAll('[data-aide]').forEach(function(el){
+    if(el.classList.contains('aide')) return;          /* deja un bouton */
+    if(el.querySelector(':scope > .aide')) return;     /* deja equipe */
+    var cle = el.getAttribute('data-aide');
+    if(!AIDES[cle]) return;
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'aide';
+    b.setAttribute('data-aide', cle);
+    b.setAttribute('aria-label', 'Explication : ' + AIDES[cle].t);
+    b.textContent = '?';
+    b.addEventListener('mouseenter', function(){ aideMontrer(this); });
+    b.addEventListener('focus', function(){ aideMontrer(this); });
+    b.addEventListener('mouseleave', aideCacher);
+    b.addEventListener('blur', aideCacher);
+    /* Au doigt, il n'y a pas de survol : le clic ouvre et referme. */
+    b.addEventListener('click', function(ev){
+      ev.preventDefault(); ev.stopPropagation();
+      if(AIDE_BULLE && AIDE_BULLE.classList.contains('on')) aideCacher();
+      else aideMontrer(this);
+    });
+    el.appendChild(b);
+  });
+}
+/* Échap ferme, et le defilement aussi : une bulle ancree a un bouton parti
+   hors de l'ecran flotterait dans le vide. */
+document.addEventListener('keydown', function(ev){ if(ev.key === 'Escape') aideCacher(); });
+window.addEventListener('scroll', aideCacher, { passive: true });
+
 /* ── EMPREINTE ENVIRONNEMENTALE DU PARC ────────────────────────────────────
    Applique au parc cartographié la même chaîne de calcul que la page
    /empreinte du site : consommation, PUE, intensité carbone du pays, impacts
@@ -1835,6 +2023,7 @@ function chargerEmpreinte(){
       if(!d || !d.ok) return;
       EMP = d;
       renderEmpreinte();
+      aideBrancher();
       majBarre();                    /* les fonds carbone deviennent choisissables */
     })
     .catch(function(){ /* la carte et le panel n'en dependent pas */ });
@@ -1845,7 +2034,7 @@ function renderEmpreinte(){
   var t = EMP.totaux;
   setHTML("emp-kpis",
       '<div class="kpi"><div class="v">' + fourchetteT(t.co2_t) + '</div>'
-    + '<div class="l">CO₂e par an, cycle de vie complet</div></div>'
+    + '<div class="l" data-aide="empreinte">CO₂e par an, cycle de vie complet</div></div>'
     + '<div class="kpi"><div class="v">' + nbFr(Math.round(t.eau_m3[0] / 1000000)) + ' à '
     + nbFr(Math.round(t.eau_m3[1] / 1000000)) + ' Mm³</div>'
     + '<div class="l">eau de refroidissement, millions de m³ par an</div></div>'
@@ -1870,7 +2059,8 @@ function renderEmpreinte(){
   setHTML("emp-table",
       '<table class="socle-t"><caption class="sr-only">Empreinte annuelle du parc cartographié par pays</caption>'
     + '<thead><tr><th scope="col">Pays</th><th scope="col">Centres</th><th scope="col">SIA</th>'
-    + '<th scope="col">gCO₂e/kWh</th><th scope="col">CO₂e/an</th>'
+    + '<th scope="col" data-aide="intensite">gCO₂e/kWh</th>'
+    + '<th scope="col" data-aide="natures">CO₂e/an</th>'
     + '<th scope="col">dont centres</th><th scope="col">Eau m³/an</th></tr></thead>'
     + "<tbody>" + lignes + "</tbody></table>");
 
@@ -1989,11 +2179,14 @@ function renderSocle(){
 function chargerSocle(){
   fetch("/api/donnees-ouvertes", {cache: "no-store"})
     .then(function(r){ return r.ok ? r.json() : null; })
-    .then(function(d){ if(d && d.ok){ DO = d; renderSocle(); } })
+    .then(function(d){ if(d && d.ok){ DO = d; renderSocle(); aideBrancher(); } })
     .catch(function(){ /* section laissée en l'état : le panel n'en dépend pas */ });
 }
 
-function renderAll(){renderEcheancier();renderFlux();populerFiltres();renderKpis();renderMap();renderTable();renderCharts();renderMethodo();renderSocle();}
+/* aideBrancher en FIN de renderAll, et non apres l'appel : renderAll est
+   rejoue a l'arrivee des donnees en direct, et les blocs reconstruits
+   perdaient alors leur bouton d'aide sans que rien ne le signale. */
+function renderAll(){renderEcheancier();renderFlux();populerFiltres();renderKpis();renderMap();renderTable();renderCharts();renderMethodo();renderSocle();aideBrancher();}
 renderAll();
 chargerSocle();
 chargerEmpreinte();
