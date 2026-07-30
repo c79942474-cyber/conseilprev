@@ -1247,6 +1247,59 @@ def api_donnees_ouvertes():
     return jsonify(payload)
 
 
+# ── Empreinte environnementale du parc cartographie ──────────────────────
+# Applique aux 97 centres de donnees et aux 72 SIA la MEME chaine de calcul
+# que la page /empreinte : consommation, PUE, intensite carbone du pays,
+# impacts incorpores. L'intensite TEMPS REEL disponible cote serveur (RTE pour
+# la France, mix ENTSO-E pour l'Allemagne) est injectee dans le module, qui
+# reste sans reseau et testable seul.
+import empreinte_sites  # noqa: E402
+
+EMPS_TTL = 900
+_EMPS_CACHE = {"ts": 0.0, "data": None}
+
+
+def _emps_live():
+    """Intensites du moment, quand le serveur sait les obtenir.
+
+    Un echec de l'une n'empeche pas les autres : le module retombe alors sur
+    la moyenne annuelle du pays, et le declare dans sa source."""
+    live = {}
+    for code, fn in (('FR', _emp_intensite_fr), ('DE', _emp_intensite_de)):
+        try:
+            val, _src = fn()
+            if isinstance(val, (int, float)) and val > 0:
+                live[code] = float(val)
+        except Exception as e:  # noqa: BLE001
+            logger.warning('EMPS_LIVE %s: %s', code, e)
+    return live
+
+
+@app.route('/api/empreinte-sites', methods=['GET'])
+@rate_limit(limit=60, window=60)
+def api_empreinte_sites():
+    """Empreinte cycle de vie du parc cartographie. ?refresh=1 reassemble."""
+    force = (request.args.get('refresh') or '') in ('1', 'true', 'yes')
+    now = time.time()
+    if (not force) and _EMPS_CACHE["data"] and (now - _EMPS_CACHE["ts"] < EMPS_TTL):
+        payload = dict(_EMPS_CACHE["data"])
+        payload["ok"] = True
+        payload["cached"] = True
+        return jsonify(payload)
+    try:
+        _dc = datacentres.assemble()
+        _pan = panorama_ia.assemble()
+        data = empreinte_sites.assemble(sites=_dc.get('sites'), cas=_pan.get('cas'),
+                                        live=_emps_live())
+    except Exception as e:
+        logger.error(f'EMPREINTE_SITES_ERR: {e}')
+        return jsonify({"ok": False, "erreur": "assemblage indisponible"}), 503
+    _EMPS_CACHE["ts"], _EMPS_CACHE["data"] = now, data
+    payload = dict(data)
+    payload["ok"] = True
+    payload["cached"] = False
+    return jsonify(payload)
+
 @app.route('/api/apply', methods=['POST'])
 def api_apply():
     ip = limiter.get_ip(request)
@@ -2554,6 +2607,7 @@ def health_check():
         'panorama': panorama_ia.sante(),
         'donnees_ouvertes': donnees_ouvertes.sante(),
         'datacentres': datacentres.sante(),
+        'empreinte_sites': empreinte_sites.sante(),
     }
 
     # Réponse JSON si demandée

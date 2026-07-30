@@ -103,6 +103,8 @@ body.embed .hdr{margin-bottom:12px}
 .map-barre label{display:flex;align-items:center;gap:5px;cursor:pointer;user-select:none;white-space:nowrap}
 .map-barre input[type=checkbox]{accent-color:#B35A10;margin:0}
 .map-barre input[type=range]{accent-color:#B35A10;width:96px;margin:0}
+.map-barre select{font:inherit;font-size:10px;color:#1C1C1C;background:#FFF;
+  border:1px solid var(--rule);border-radius:3px;padding:2px 4px;max-width:150px}
 .map-barre .sep{flex:1}
 .map-barre button{font:inherit;font-size:10px;color:var(--muted);background:none;
   border:1px solid var(--rule);border-radius:3px;padding:2px 8px;cursor:pointer}
@@ -416,7 +418,25 @@ engagements publics) sont imputés nominativement.</div>
   </div>
 </section>
 
-<!-- ══ 5. MÉTHODOLOGIE ══ -->
+<!-- ══ 5. EMPREINTE ENVIRONNEMENTALE ══ -->
+<section class="panel" aria-labelledby="t-emp">
+  <div class="panel-head">
+    <span class="panel-title" id="t-emp">Empreinte environnementale du parc cartographié</span>
+    <span class="panel-note" id="emp-note">calcul en cours…</span>
+  </div>
+  <div class="panel-body">
+    <p class="note" style="margin-top:0"><b>Ce que montre cette section.</b> Le cycle de vie
+    complet des systèmes cartographiés : l’électricité qu’ils consomment, le CO₂ que cette
+    électricité représente dans leur pays, la fabrication des équipements amortie sur leur durée
+    de vie, et l’eau de refroidissement. La même chaîne de calcul que la page
+    <a href="/empreinte">Empreinte</a> du site, appliquée au parc au lieu d’une requête.</p>
+    <div class="kpis" id="emp-kpis"></div>
+    <div id="emp-table"></div>
+    <div id="emp-methode"></div>
+  </div>
+</section>
+
+<!-- ══ 6. MÉTHODOLOGIE ══ -->
 <section class="panel" aria-labelledby="t-methodo">
   <div class="panel-head"><span class="panel-title" id="t-methodo">Méthodologie, limites, référentiels</span>
   <span class="panel-note">certain / déduit — aucun modèle de langage dans la chaîne</span></div>
@@ -904,6 +924,12 @@ function tipCas(id){
     + '<div class="t-l"><span class="t-pt" style="background:' + cl.couleur + '"></span>'
     + esc(cl.nom.split(' (')[0]) + ' · exposition ' + c.exposition + '/100</div>'
     + '<div class="t-ent">' + esc(abreger(c.cas, 120)) + '</div>'
+    + (function(){
+        var ec = empParCas(c.id);
+        if(!ec || !ec.empreinte || !ec.empreinte.total_t) return '';
+        return '<div class="t-l">Empreinte : <b>' + fourchetteT(ec.empreinte.total_t) + '</b> CO₂e/an'
+          + ' <span style="color:#E0A96D">(classe)</span></div>';
+      })()
     + '<div class="t-cta">Cliquer : fiche complète du cas</div>';
 }
 
@@ -933,6 +959,13 @@ function tipPays(code){
     if(vus.indexOf(n) < 0) vus.push(n);
   }
   h += '<div class="t-ent">' + esc(vus.join(' · ')) + (mes.length > vus.length ? ' +' + (mes.length - vus.length) : '') + '</div>';
+  var ep = empParPays(code);
+  if(ep){
+    h += '<div class="t-ent">Parc cartographié : <b>' + fourchetteT(ep.total_t) + '</b> CO₂e/an'
+      + ' <span style="color:#E0A96D">(classe)</span><br>'
+      + '<span style="color:#B9B9B9">réseau à ' + nbFr(ep.intensite) + ' gCO₂e/kWh · '
+      + ep.n_dc + ' centre(s), ' + ep.n_sia + ' système(s)</span></div>';
+  }
   h += '<div class="t-cta">Cliquer : autorités et cas détaillés</div>';
   return h;
 }
@@ -943,6 +976,40 @@ var F={pays:"",secteur:"",classe:"",stade:"",q:"",socle:false};
    lisent clair -> fonce, l'extremite claire tient 2:1 sur la surface. */
 var CMAP=["#E3EBF6","#86B6EF","#3987E5","#1C5CAB","#0D366B"];
 function classeNb(n){return n>=10?4:n>=6?3:n>=3?2:n>=1?1:0;}
+/* ── FONDS DE CARTE COMMUTABLES ─────────────────────────────────────────────
+   Une carte de travail doit repondre a plusieurs questions sans se dedoubler.
+   Le meme fond porte donc, au choix, le volume documente, l'empreinte carbone
+   du parc, ou l'intensite carbone du reseau electrique. Un seul choroplethe
+   est visible a la fois : la rampe bleue peut donc servir aux trois, du moment
+   que la legende dit ce qu'elle encode. */
+var VUES = {
+  cas: { nom: "Cas documentés", unite: "cas au panel",
+         seuils: [1, 3, 6, 10], libelles: ["1 – 2", "3 – 5", "6 – 9", "10 et plus"],
+         titre: "Cas documentés par pays" },
+  co2: { nom: "Empreinte carbone", unite: "kt CO₂e/an (borne basse)",
+         seuils: [10, 50, 150, 300], libelles: ["< 50", "50 – 150", "150 – 300", "300 et plus"],
+         titre: "Empreinte du parc cartographié — kt CO₂e/an" },
+  mix: { nom: "Intensité du réseau", unite: "gCO₂e/kWh",
+         seuils: [100, 200, 350, 500], libelles: ["< 200", "200 – 350", "350 – 500", "500 et plus"],
+         titre: "Intensité carbone de l’électricité — gCO₂e/kWh" },
+};
+var VUE = "cas";
+function classeSeuil(v, seuils){
+  if(v === null || v === undefined) return 0;
+  for(var i = seuils.length - 1; i >= 0; i--) if(v >= seuils[i]) return i + 1;
+  return 0;
+}
+/* Valeur portee par un pays dans la vue courante. `null` = rien a colorer :
+   le pays reste au gris « pas de donnee », jamais au bleu le plus clair — un
+   bleu clair se lit comme « peu », pas comme « on ne sait pas ». */
+function valeurVue(code, parPays){
+  if(VUE === "cas"){ var st = parPays[code]; return st ? st.n : null; }
+  if(!EMP) return null;
+  var e = (EMP.par_pays || []).filter(function(x){ return x.pays === code; })[0];
+  if(VUE === "co2") return e ? Math.round(e.total_t[0] / 1000) : null;
+  if(VUE === "mix") return e ? e.intensite : (EMP.referentiel.intensite || {})[code] || null;
+  return null;
+}
 var STADES={poc:"POC",pilote:"Pilote",production:"Production",echelle:"À l'échelle",abandonne:"Abandonné"};
 
 function casFiltres(){
@@ -1182,7 +1249,9 @@ function renderMap(){
     var d=cheminPays(code); if(!d)return;
     if(UE[code]){
       var st=parPays[code],n=st?st.n:0;
-      var fill=n?CMAP[classeNb(n)]:"#EFF2F6";
+      var vv = valeurVue(code, parPays);
+      var fill = (vv === null) ? "#EFF2F6"
+               : (VUE === "cas" ? CMAP[classeNb(vv)] : CMAP[classeSeuil(vv, VUES[VUE].seuils)]);
       colores+='<path d="'+d+'" fill="'+fill+'" stroke="#FFF" stroke-width="0.7" data-sw="0.7" class="pan-pays" tabindex="0" role="button" data-code="'+code+'" aria-label="'+esc(UE[code].nom)+' : '+n+' cas au panel"><title>'+esc(UE[code].nom)+" — "+n+" cas"+(st?(" · exposition moy. "+fr(st.exposition_moy)):"")+"</title></path>";
     } else {
       neutres+='<path d="'+d+'" fill="#E6E4DF" stroke="#F4F2EE" stroke-width="0.5" data-sw="0.5"/>';
@@ -1193,10 +1262,12 @@ function renderMap(){
      des centres de donnees est encore separee : elle survit aux changements
      de palier, ses marqueurs sont visibles a toutes les echelles. */
   s+=neutres+colores+'<g id="dc-couche"></g><g id="pan-detail"></g></svg>';
-  s+='<div class="obs-legend"><h3>Cas documentés par pays</h3>'
-    +'<div class="lg-row"><span class="lg-box" style="background:#EFF2F6"></span>UE — aucun cas au panel</div>'
-    +[[1,"1 – 2"],[2,"3 – 5"],[3,"6 – 9"],[4,"10 et plus"]].map(function(x){
-       return '<div class="lg-row"><span class="lg-box" style="background:'+CMAP[x[0]]+'"></span>'+x[1]+"</div>";}).join("")
+  var vd = VUES[VUE];
+  s+='<div class="obs-legend"><h3>'+esc(vd.titre)+'</h3>'
+    +'<div class="lg-row"><span class="lg-box" style="background:#EFF2F6"></span>'
+    + (VUE === "cas" ? "UE — aucun cas au panel" : "donnée indisponible") + "</div>"
+    +vd.libelles.map(function(lib, i){
+       return '<div class="lg-row"><span class="lg-box" style="background:'+CMAP[i+1]+'"></span>'+esc(lib)+"</div>";}).join("")
     +'<div id="lg-dc"></div>'
     +'<div class="lg-det" id="lg-det"></div></div>';
   var hote=document.getElementById("panmap");
@@ -1565,6 +1636,14 @@ function tipDC(id){
   if(e.nature === "indisponible"){
     h += '<div class="t-l" style="color:#B9B9B9">' + esc(e.motif || "aucune dérivation possible") + "</div>";
   }
+  var es = empParSite(s.id);
+  if(es && es.empreinte && es.empreinte.total_t){
+    var em = es.empreinte;
+    h += '<div class="t-l" style="margin-top:5px">CO₂e : <b>' + fourchetteT(em.total_t) + '</b>/an'
+      + ' <span style="color:#E0A96D">(' + esc(em.nature) + ')</span></div>'
+      + '<div class="t-l" style="color:#B9B9B9">dont fabrication ' + em.part_fabrication_pct
+      + ' % · réseau à ' + nbFr(em.intensite) + ' gCO₂e/kWh</div>';
+  }
   h += '<div class="t-ent">' + esc(s.source_libelle || "") + " · confiance " + esc(s.confiance || "?")
     + (s.note ? "<br>" + esc(s.note) : "") + "</div>";
   return h;
@@ -1638,7 +1717,12 @@ function majBarre(){
   var lg = hote.querySelector(".obs-legend");
   var plie = !lg || lg.classList.contains("pliee");
   barre.innerHTML =
-      '<label><input type="checkbox" id="dc-bascule"' + (DC_VISIBLE ? " checked" : "")
+      '<label>fond <select id="vue-fond" aria-label="Fond de carte">'
+    + Object.keys(VUES).map(function(k){
+        return '<option value="' + k + '"' + (k === VUE ? ' selected' : '')
+             + (k !== 'cas' && !EMP ? ' disabled' : '') + '>' + esc(VUES[k].nom) + '</option>'; }).join('')
+    + '</select></label>'
+    + '<label><input type="checkbox" id="dc-bascule"' + (DC_VISIBLE ? " checked" : "")
     + "> centres de données <b>" + DC.n_sites + "</b></label>"
     + (DC_VISIBLE
         ? '<label style="cursor:default">état annoncé au '
@@ -1651,6 +1735,15 @@ function majBarre(){
 
   var c = barre.querySelector("#dc-bascule");
   if(c) c.addEventListener("change", function(){ DC_VISIBLE = this.checked; renderDC(); });
+  var vf = barre.querySelector("#vue-fond");
+  if(vf) vf.addEventListener("change", function(){
+    VUE = this.value;
+    /* Changer de fond redessine la carte : les contours ne bougent pas, mais
+       le remplissage et la legende, si. Le zoom courant est preserve. */
+    var k = ZOOM.k, zx = ZOOM.x, zy = ZOOM.y;
+    renderMap();
+    ZOOM.k = k; ZOOM.x = zx; ZOOM.y = zy; ZOOM.palier = -1; zoomAppliquer();
+  });
   var bo = barre.querySelector("#lg-ouvrir");
   if(bo) bo.addEventListener("click", function(){
     if(!lg) return;
@@ -1702,6 +1795,105 @@ function chargerDC(){
       }
     })
     .catch(function(){ /* couche absente : la carte des SIA reste complete */ });
+}
+
+/* ── EMPREINTE ENVIRONNEMENTALE DU PARC ────────────────────────────────────
+   Applique au parc cartographié la même chaîne de calcul que la page
+   /empreinte du site : consommation, PUE, intensité carbone du pays, impacts
+   incorporés de fabrication. Rien n'est mesuré — tout hérite de la nature de
+   l'estimation d'entrée, et la page l'écrit à chaque ligne. */
+var EMP = null;
+/* Pays du parc hors Union : ils portent des centres de donnees et doivent
+   donc figurer au tableau, mais la table UE ne les connait pas. */
+var HORS_UE = { GB: "Royaume-Uni (hors UE)", NO: "Norvège (hors UE)",
+                CH: "Suisse (hors UE)", IS: "Islande (hors UE)" };
+function nomPays(code){
+  return (UE[code] || {}).nom || HORS_UE[code] || code;
+}
+function empParPays(code){
+  if(!EMP) return null;
+  return (EMP.par_pays || []).filter(function(x){ return x.pays === code; })[0] || null;
+}
+function empParSite(id){
+  if(!EMP) return null;
+  return (EMP.centres || []).filter(function(x){ return x.id === id; })[0] || null;
+}
+function empParCas(id){
+  if(!EMP) return null;
+  return (EMP.systemes || []).filter(function(x){ return x.id === id; })[0] || null;
+}
+function kt(t){ return t >= 1000 ? fr(Math.round(t / 100) / 10) + " kt" : nbFr(Math.round(t)) + " t"; }
+function fourchetteT(v){
+  if(!v) return "";
+  return kt(v[0]) + " à " + kt(v[1]);
+}
+
+function chargerEmpreinte(){
+  fetch("/api/empreinte-sites", {cache: "no-store"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(d){
+      if(!d || !d.ok) return;
+      EMP = d;
+      renderEmpreinte();
+      majBarre();                    /* les fonds carbone deviennent choisissables */
+    })
+    .catch(function(){ /* la carte et le panel n'en dependent pas */ });
+}
+
+function renderEmpreinte(){
+  if(!EMP) return;
+  var t = EMP.totaux;
+  setHTML("emp-kpis",
+      '<div class="kpi"><div class="v">' + fourchetteT(t.co2_t) + '</div>'
+    + '<div class="l">CO₂e par an, cycle de vie complet</div></div>'
+    + '<div class="kpi"><div class="v">' + nbFr(Math.round(t.eau_m3[0] / 1000000)) + ' à '
+    + nbFr(Math.round(t.eau_m3[1] / 1000000)) + ' Mm³</div>'
+    + '<div class="l">eau de refroidissement, millions de m³ par an</div></div>'
+    + '<div class="kpi"><div class="v">' + t.n_centres + '</div>'
+    + '<div class="l">centres de données au calcul</div></div>'
+    + '<div class="kpi"><div class="v">' + t.n_systemes + '</div>'
+    + '<div class="l">systèmes d’IA au calcul</div></div>');
+
+  /* Tableau par pays : la lecture d'ensemble. Trié par empreinte décroissante,
+     avec l'intensité du réseau en regard — c'est elle qui explique pourquoi
+     deux parcs de taille comparable n'ont pas la même empreinte. */
+  var lignes = (EMP.par_pays || []).map(function(p){
+    var nom = nomPays(p.pays);
+    var partDC = p.total_t[0] ? Math.round(100 * p.dc_t[0] / p.total_t[0]) : 0;
+    return "<tr><th scope=\"row\">" + esc(nom) + "</th>"
+      + "<td>" + p.n_dc + "</td><td>" + p.n_sia + "</td>"
+      + "<td>" + nbFr(p.intensite) + "</td>"
+      + "<td>" + fourchetteT(p.total_t) + "</td>"
+      + "<td>" + partDC + " %</td>"
+      + "<td>" + nbFr(p.eau_m3[0]) + " – " + nbFr(p.eau_m3[1]) + "</td></tr>";
+  }).join("");
+  setHTML("emp-table",
+      '<table class="socle-t"><caption class="sr-only">Empreinte annuelle du parc cartographié par pays</caption>'
+    + '<thead><tr><th scope="col">Pays</th><th scope="col">Centres</th><th scope="col">SIA</th>'
+    + '<th scope="col">gCO₂e/kWh</th><th scope="col">CO₂e/an</th>'
+    + '<th scope="col">dont centres</th><th scope="col">Eau m³/an</th></tr></thead>'
+    + "<tbody>" + lignes + "</tbody></table>");
+
+  /* Le référentiel employé, en clair : sans lui, les chiffres ci-dessus ne
+     sont pas reproductibles. */
+  var r = EMP.referentiel;
+  setHTML("emp-methode",
+      '<p class="note" style="margin-top:0"><b>Comment ces chiffres sont obtenus.</b> '
+    + 'Consommation annuelle estimée × intensité carbone du pays pour l’usage ; '
+    + 'énergie informatique × ' + fr(r.fabrication_kg_par_mwh) + ' kgCO₂e/MWh pour la '
+    + 'fabrication amortie. ' + esc(r.source_intensite) + '</p>'
+    + '<p class="note"><b>Le poste qu’on oublie.</b> Sur un site alimenté en électricité '
+    + 'peu carbonée — Suède à 45 g, France à 60 g — la fabrication des serveurs pèse '
+    + 'plus lourd que leur usage. Une carte qui n’afficherait que l’usage classerait ces '
+    + 'pays quasiment à zéro, ce qui serait faux.</p>'
+    + '<p class="note" style="color:var(--muted2)"><b>Avertissement.</b> ' + esc(EMP.avertissement) + '</p>'
+    + '<ul class="note" style="padding-left:16px">'
+    + (EMP.limites || []).map(function(l){ return "<li>" + esc(l) + "</li>"; }).join("")
+    + "</ul>");
+
+  var note = document.getElementById("emp-note");
+  if(note) note.textContent = "mise à jour " + String(EMP.maj || "").slice(0, 10)
+    + " · intensités ADEME / AIE, cycle de vie";
 }
 
 /* ── Socle de données ouvertes ──────────────────────────────────────────────
@@ -1804,6 +1996,7 @@ function chargerSocle(){
 function renderAll(){renderEcheancier();renderFlux();populerFiltres();renderKpis();renderMap();renderTable();renderCharts();renderMethodo();renderSocle();}
 renderAll();
 chargerSocle();
+chargerEmpreinte();
 chargerDC();
 brancherFiltres();
 document.querySelectorAll("th.triable").forEach(function(th){
