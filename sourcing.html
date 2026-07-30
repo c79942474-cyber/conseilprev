@@ -5,7 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sourcing IA / Data / Cyber — CONSEILPREV</title>
 <meta name="description" content="Moteur de sourcing IA boosté à l'intelligence artificielle. Trouvez les meilleurs profils IA, Data Science, Cybersécurité pour votre entreprise.">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<!-- Polices NON BLOQUANTES : une <link rel="stylesheet" sur une origine
+     tierce empeche tout premier rendu le temps d'un DNS, d'une poignee TLS
+     et d'un aller-retour. media="print" charge sans bloquer ; onload
+     rebascule sur "all". La page s'affiche aussitot avec les polices
+     systeme, les webfonts prennent le relais (display=swap). -->
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" media="print" onload="this.media='all';this.onload=null" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap"></noscript>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--pm:#9d6fe8;--pl:#c4b5fd;--pp:#ede9fe;--pf:#d946ef;--teal:#5eead4;--wh:#f5f0ff;--mu:rgba(216,180,254,.72);--bdr:rgba(196,181,232,.22)}
@@ -328,7 +335,124 @@ input,textarea{-webkit-user-select:text!important;user-select:text!important}
 }
 
 </style>
-<link rel="stylesheet" href="/anti-debordement.css">
+<style id="anti-debordement">/* incorpore : evite une requete bloquante
+   (le rendu attend toute feuille externe) */
+/* Aucune page ne doit défiler horizontalement.
+ * ---------------------------------------------------------------------------
+ * Feuille correctrice partagée, chargée EN DERNIER par chaque page pour passer
+ * après son <style> interne. Elle ne touche ni aux couleurs, ni à la
+ * typographie, ni à la mise en page au-delà du strict nécessaire, et
+ * n'intervient QU'EN DESSOUS des largeurs où le problème existe : au-dessus de
+ * 640 px, la page rend exactement comme avant.
+ *
+ * Le défaut corrigé était systématique et invisible en développement : sur un
+ * téléphone, une seule barre de navigation trop large rend TOUTE la page
+ * glissante latéralement — le texte part sur le côté au moindre balayage
+ * vertical, et l'utilisateur croit à un site cassé.
+ *
+ * Trois causes, trois familles de règles.
+ *
+ * 1. LES BARRES QUI NE PLIENT PAS. Une barre en flex dont aucun élément ne peut
+ *    céder (logo, retour, appel à l'action, tous en `nowrap`) additionne
+ *    simplement ses largeurs. Sous 640 px, on autorise le retour à la ligne et
+ *    on desserre les tailles : la barre s'adapte au lieu de pousser le bouton
+ *    hors de l'écran. `height:auto` est indispensable — une barre à hauteur
+ *    fixe qui passe sur deux lignes couperait la seconde.
+ *
+ * 2. LES GRILLES À PLANCHER IMPLICITE. Une piste `1fr` vaut `minmax(auto,1fr)`,
+ *    et ce `auto` a pour minimum la taille min-content de son contenu : une
+ *    carte à fort rembourrage ou un intitulé long élargit donc la grille
+ *    au-delà de son conteneur. `minmax(0,1fr)` retire ce plancher. C'est la
+ *    cause la moins intuitive : rien ne paraît trop large, et pourtant.
+ *
+ * 3. CE QUI NE PEUT PAS SE COUPER. Une adresse e-mail, un tableau large, une
+ *    rangée d'onglets : soit on autorise la césure, soit on donne un
+ *    défilement PROPRE à l'élément — jamais à la page entière.
+ */
+
+/* ── 1. Barres de navigation ─────────────────────────────────────────────────
+   `.sb-nav` est exclue : c'est la colonne latérale de Sentinel, pas une barre
+   horizontale, et elle n'a jamais débordé. */
+nav:not(.sb-nav) { flex-wrap: wrap; }
+
+@media (max-width: 640px) {
+  nav:not(.sb-nav) {
+    height: auto !important;
+    min-height: 54px;
+    padding: 9px 14px !important;
+    gap: 8px 10px;
+  }
+  .nav-cta, .ncta {
+    padding: 7px 12px !important;
+    font-size: 11.5px !important;
+  }
+  .nav-back, .nb { font-size: 11px; padding: 4px 8px; }
+  .nav-acc-btn { padding: 6px 10px; font-size: 11px; }
+  .nav-logo { font-size: 16px; }
+}
+
+/* ── 2. Sous-menus horizontaux ───────────────────────────────────────────────
+   Rangées d'onglets en `white-space:nowrap` : elles doivent défiler dans leur
+   propre bande, pas emporter la page avec elles. */
+@media (max-width: 900px) {
+  .ssm-main, .ssm-top, .sub-nav-main, .sub-nav-top, .snm, .snm-inner {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    justify-content: flex-start;
+  }
+  .ssm-main::-webkit-scrollbar,
+  .ssm-top::-webkit-scrollbar,
+  .sub-nav-main::-webkit-scrollbar,
+  .sub-nav-top::-webkit-scrollbar,
+  .snm::-webkit-scrollbar { display: none; }
+  /* Sans ce plancher, un onglet se comprimerait au lieu de défiler. */
+  .ssm-link, .snm-link { flex: 0 0 auto; }
+}
+
+/* ── 3. Grilles : suppression du plancher min-content ────────────────────────
+   Uniquement aux largeurs où la page passe DÉJÀ à une colonne (ou aurait dû) :
+   le nombre de colonnes du grand écran n'est jamais modifié. */
+@media (max-width: 640px) {
+  .values { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 560px) {
+  .toc-list, .perks, .forbidden-grid, .sourcing-grid,
+  .contact-cards, .emp-grid, .job-grid, .res-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+/* Un lien de sommaire est un élément flexible : sans `min-width:0`, son texte
+   ne se coupe jamais et impose sa largeur à toute la grille. */
+.toc-list a, .toc-list li { min-width: 0; overflow-wrap: anywhere; }
+
+/* ── 4. Chaînes insécables ───────────────────────────────────────────────────
+   Une adresse e-mail est un « mot » de 27 caractères : sur 320 px elle élargit
+   la page à elle seule. `anywhere` autorise la césure et, contrairement à
+   `break-word`, réduit aussi la taille min-content — ce qui empêche l'élément
+   flexible qui la contient de s'élargir. */
+a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
+
+/* ── 5. Tableaux larges ──────────────────────────────────────────────────────
+   Sous 760 px, le tableau devient un bloc défilant : la donnée reste complète
+   et lisible, mais son défilement lui appartient. */
+@media (max-width: 760px) {
+  .emp-tab {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+}
+
+/* ── 6. Blocs à fort rembourrage ─────────────────────────────────────────────
+   52 px de marge intérieure de chaque côté ne laissent rien au texte sur un
+   téléphone : la moitié suffit et le contenu cesse de pousser. */
+@media (max-width: 640px) {
+  .hs-left, .hs-right { padding-left: 22px !important; padding-right: 22px !important; }
+  .val-card, .sourcing-card, .forbidden-card { padding-left: 16px; padding-right: 16px; }
+  .con { padding-left: 16px; padding-right: 16px; }
+}</style>
 </head>
 <body>
 <div id="bc" aria-hidden="true"><div class="bl" id="b1"></div><div class="bl" id="b2"></div></div>
