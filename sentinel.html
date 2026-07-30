@@ -15209,6 +15209,183 @@ window.trainingOpenFiche = function(key){
 'use strict';
 
 var PAGE_GUIDES = {
+  // ── Guides ajoutes : exploitation module par module ──────────────────────
+  'ia-act-hub': {
+    title: "Vue d’ensemble IA Act",
+    sections: [
+      {h:"À quoi sert cette page", t:"C’est le point d’entrée du dispositif AI Act : elle montre l’avancement de vos quatre chantiers (cartographier, classer, évaluer, documenter) et ouvre directement chaque module concerné. Utilisez-la comme tableau de bord de pilotage, pas comme outil de saisie."},
+      {h:"Comment l’utiliser", t:"Lisez-la de gauche à droite : ce qui est incomplet appelle une action, et chaque bloc renvoie au module qui la traite. Revenez-y après chaque session de travail pour vérifier que l’avancement a bougé."},
+      {h:"Ordre recommandé", t:"Recensez d’abord vos systèmes (Registre IA), classez-les ensuite (Simulateur), évaluez enfin (Audit, FRIA). Auditer un système non classé fait perdre du temps : les obligations dépendent de la classe."}
+    ]
+  },
+  'articles': {
+    title: "Obligations article par article",
+    sections: [
+      {h:"À quoi sert cette page", t:"Référence structurée des 113 articles du Règlement (UE) 2024/1689. Elle sert à vérifier un texte exact quand une obligation est contestée, en réunion ou face à un prestataire."},
+      {h:"Comment l’utiliser", t:"Cherchez par numéro d’article ou par thème. Les articles qui vous concernent dépendent de votre rôle (fournisseur ou déployeur) et de la classe de vos systèmes : commencez par le Simulateur, revenez ici pour le texte."},
+      {h:"À savoir", t:"Toutes les obligations ne sont pas encore applicables. Les pratiques interdites (art. 5) le sont depuis le 2 février 2025, les modèles à usage général depuis le 2 août 2025, le haut risque de l’annexe III au 2 août 2026 et l’annexe I au 2 août 2027."}
+    ]
+  },
+  'audit': {
+    title: "Lancer un audit IA Act",
+    sections: [
+      {h:"À quoi sert cette page", t:"Formulaire de demande d’un audit accompagné, conduit selon la méthodologie CONSEILPREV (AI Act, NIS 2 et RGPD croisés). Il s’agit d’une prestation humaine, à distinguer de l’Audit IA Act en autonomie disponible dans le même menu."},
+      {h:"Comment l’utiliser", t:"Renseignez le périmètre le plus précisément possible : nombre de systèmes, secteur, échéance visée. Vous pouvez inviter des collègues à contribuer avant l’envoi. Plus le périmètre est net, plus la proposition est juste."},
+      {h:"Avant de demander", t:"Passez d’abord l’Audit IA Act en autonomie (33 points) : il fait remonter vos écarts évidents. L’audit accompagné a d’autant plus de valeur qu’il part d’un constat déjà établi."}
+    ]
+  },
+  'cadre-normatif': {
+    title: "Cadre normatif — IA Act, RGPD, ISO/IEC 42001",
+    sections: [
+      {h:"À quoi sert cette page", t:"Matrice de correspondance : elle relie chaque module de Sentinel aux trois cadres — le Règlement sur l’IA pour les obligations, le RGPD pour les données personnelles, ISO/IEC 42001 comme système de management. Elle répond à la question « ce que je fais ici, à quelle exigence répond-il ? »."},
+      {h:"Comment l’utiliser", t:"Partez d’une exigence à justifier (un article, un chapitre de norme) et remontez au module qui produit la preuve. En sens inverse, partez d’un module pour savoir ce qu’il vous permet d’opposer."},
+      {h:"Point de vigilance", t:"Les trois cadres se recouvrent sans se confondre : une AIPD (RGPD art. 35) ne vaut pas FRIA (AI Act art. 27), et ISO 42001 n’est pas une présomption de conformité au Règlement. La matrice montre les recouvrements, elle ne les fusionne pas."}
+    ]
+  },
+  'conformite-globale': {
+    title: "Indice de conformité global",
+    sections: [
+      {h:"À quoi sert cette page", t:"Consolide vos évaluations des trois cadres en un indice unique, destiné à un comité de direction. C’est un instrument de pilotage et de dialogue, pas une attestation de conformité."},
+      {h:"Comment l’utiliser", t:"Cliquez sur « Recalculer » après chaque campagne d’évaluation. Chaque cadre renvoie à ses modules : traitez d’abord la composante la plus basse, c’est elle qui tire l’indice vers le bas."},
+      {h:"Comment le lire", t:"L’indice ne vaut que par la fraîcheur de ce qui l’alimente : un score élevé calculé sur des évaluations d’il y a un an ne prouve rien. Datez vos campagnes et refaites-les au moins annuellement."}
+    ]
+  },
+  'carto-uc': {
+    title: "Cartographie des cas d’usage IA",
+    sections: [
+      {h:"À quoi sert cette page", t:"Parcours guidé en cinq temps pour identifier, qualifier et prioriser les cas d’usage IA à fort impact métier, orienté organisations industrielles. C’est l’étape amont : la valeur métier avant la conformité."},
+      {h:"Comment l’utiliser", t:"Ciblez le secteur et les processus, explorez les cas d’usage proposés, retenez ceux qui parlent à votre réalité, puis priorisez selon l’impact et la faisabilité. Le résultat alimente vos arbitrages d’investissement."},
+      {h:"Enchaînement", t:"Un cas d’usage retenu doit ensuite passer au Simulateur IA Act : sa classe de risque conditionne le coût réel du projet. Un cas prometteur classé haut risque n’est pas disqualifié, mais son budget doit intégrer la mise en conformité."}
+    ]
+  },
+  'empreinte': {
+    title: "Empreinte numérique",
+    sections: [
+      {h:"À quoi sert cette page", t:"Compteur en temps réel de l’empreinte du site, de la plateforme et des modèles de langage utilisés, à partir de l’usage réel : jetons consommés, latence, pages servies. Trois méthodes de calcul sont conduites en parallèle."},
+      {h:"Comment l’utiliser", t:"Consultez-la pour documenter un volet environnemental (rapport de durabilité, réponse à appel d’offres). Les trois méthodes donnent des ordres de grandeur différents : citez-les ensemble plutôt que de retenir la plus flatteuse."},
+      {h:"Honnêteté de la mesure", t:"L’empreinte d’un modèle de langage n’est pas publiée par les fournisseurs : ces chiffres sont des estimations fondées sur des travaux publics, pas des relevés. Présentez-les comme tels."}
+    ]
+  },
+  'entreprise': {
+    title: "Offre Entreprise",
+    sections: [
+      {h:"À quoi sert cette page", t:"Présente le périmètre de l’offre Entreprise : tout le contenu de l’offre Pro, plus le déploiement à l’échelle d’un groupe, l’intégration à votre système d’information et un accompagnement contractuel dédié."},
+      {h:"Comment l’utiliser", t:"Utilisez-la pour cadrer une discussion interne (budget, périmètre, interlocuteurs) avant un échange commercial. Les besoins d’intégration au SI sont le point qui structure le plus le projet : listez-les en amont."}
+    ]
+  },
+  'ia50': {
+    title: "Transparence IA Act (art. 50)",
+    sections: [
+      {h:"À quoi sert cette page", t:"Registre probant des usages d’IA de CONSEILPREV : rôle tenu, nature des contenus, marquage lisible par machine, étiquetage visible, exceptions invoquées et responsable éditorial. C’est l’application à nous-mêmes de ce que la plateforme demande à ses clients."},
+      {h:"Comment l’utiliser", t:"Consultez-la comme modèle de ce qu’un registre de transparence doit contenir, puis générez l’attestation. Elle sert aussi de preuve si vous devez justifier le choix de votre prestataire."},
+      {h:"À retenir", t:"Les obligations de transparence de l’article 50 s’appliquent au 2 août 2026, mais le marquage machine se prépare en amont : il touche la chaîne de production des contenus, pas seulement leur affichage."}
+    ]
+  },
+  'juridique': {
+    title: "Conseil juridique assisté",
+    sections: [
+      {h:"À quoi sert cette page", t:"Trois usages distincts : qualifier une situation au regard des textes applicables, passer un projet de contrat au clausier fournisseurs, et préparer une position d’arbitrage. La qualification est déterministe — elle applique des règles écrites, pas une interprétation."},
+      {h:"Comment l’utiliser", t:"Renseignez les faits, pas votre conclusion : l’outil qualifie à partir des éléments objectifs (rôle, finalité, données, secteur). Chaque réponse porte son fondement, à vérifier avant de s’en prévaloir."},
+      {h:"Limites à connaître", t:"L’analyse s’effectue en mémoire : aucun contrat n’est conservé. Cet outil prépare une décision juridique, il ne la remplace pas — pour un engagement contractuel, faites valider par un conseil."}
+    ]
+  },
+  'obs-rd': {
+    title: "Observatoire R&D IA",
+    sections: [
+      {h:"À quoi sert cette page", t:"La carte réglementaire dit où l’IA est encadrée ; celle-ci dit où elle est produite : modèles remarquables par pays, chercheurs d’élite (NeurIPS), brevets accordés, adoption par les entreprises européennes."},
+      {h:"Comment l’utiliser", t:"Cliquez un pays pour son détail. La lecture la plus utile est le croisement des deux cartes de chercheurs : les États-Unis forment 28 % de l’élite mondiale et en emploient 57 %, la Chine en forme 26 % et n’en emploie que 12 %. C’est un argument chiffré pour un comité de direction."},
+      {h:"Fiabilité des chiffres", t:"Chaque série porte sa source, sa licence et sa PRÉCISION : « exact » pour les points publiés, « classe » pour les tranches, « lecture graphique » pour les séries interpolées. Ne citez comme exact que ce qui est marqué exact."}
+    ]
+  },
+  'pan-sia': {
+    title: "Panorama SIA — UE",
+    sections: [
+      {h:"À quoi sert cette page", t:"Panel de cas réels de systèmes d’IA déployés dans l’UE (POC, pilotes, production, abandons), classés selon l’AI Act, avec vulnérabilités cyber, exposition calculée et couche réglementaire des 27 États membres. Sert à situer vos systèmes par rapport au marché."},
+      {h:"Comment l’utiliser", t:"Filtrez par secteur pour voir ce que font vos pairs et quelles classes de risque dominent chez eux. Cliquez une ligne : la fiche donne les règles de classification déclenchées, le calcul du score terme à terme et les sources. Chaque fiche a une adresse propre, partageable."},
+      {h:"Deux limites à respecter", t:"C’est un PANEL de cas publiquement documentés, pas un recensement : les déploiements non communiqués n’y figurent pas. Et le score mesure l’exposition du CAS D’USAGE, jamais la conformité de l’entreprise citée — ne le présentez pas comme un audit."}
+    ]
+  },
+  'rgpd-hub': {
+    title: "Vue d’ensemble RGPD & Privacy",
+    sections: [
+      {h:"À quoi sert cette page", t:"Point d’entrée du dispositif RGPD : cartographier les traitements, évaluer les risques, documenter, sensibiliser, piloter. Toutes les briques sont reliées — le registre alimente la cartographie, qui déclenche les AIPD."},
+      {h:"Comment l’utiliser", t:"Commencez toujours par le registre des traitements : sans lui, les autres modules n’ont rien à traiter. Ajoutez vos traitements, puis laissez les autres pages en dériver."},
+      {h:"Ne pas confondre", t:"Le registre des traitements (RGPD art. 30) et le registre des systèmes IA sont deux objets distincts. Un même outil peut figurer dans les deux, pour des raisons différentes."}
+    ]
+  },
+  'rgpd-traitements': {
+    title: "Registre des traitements (art. 30)",
+    sections: [
+      {h:"À quoi sert cette page", t:"Registre des activités de traitement au sens de l’article 30 du RGPD, connecté à une base persistante. C’est la pièce que demande une autorité de contrôle en premier, et la source dont dépendent la cartographie, les AIPD et le tableau de bord."},
+      {h:"Comment l’utiliser", t:"Ajoutez un traitement à la fois, en renseignant finalité, base légale, catégories de personnes et de données, destinataires, durée et transferts. Exportez le registre en PDF pour le verser à un dossier."},
+      {h:"Le champ qui compte", t:"La base légale est le champ le plus souvent mal renseigné, et le premier contrôlé. « Consentement » suppose un consentement libre, éclairé et révocable ; « intérêt légitime » suppose une mise en balance documentée. Un traitement sans base légale valable ne se corrige pas par de la documentation."}
+    ]
+  },
+  'rgpd-cartographie': {
+    title: "Cartographie des traitements",
+    sections: [
+      {h:"À quoi sert cette page", t:"Vue d’ensemble agrégée depuis le registre : répartition par service et par base légale, données sensibles, transferts hors Union européenne. Elle fait apparaître les concentrations de risque qu’une lecture ligne à ligne ne montre pas."},
+      {h:"Comment l’utiliser", t:"Actualisez après chaque ajout au registre. Regardez d’abord les données sensibles (art. 9) et les transferts hors UE : ce sont les deux postes qui appellent des garanties spécifiques."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle reflète le registre, rien d’autre. Un traitement non déclaré n’y apparaît pas — et c’est justement celui-là qui pose problème lors d’un contrôle."}
+    ]
+  },
+  'rgpd-aipd': {
+    title: "AIPD — analyse d’impact (art. 35)",
+    sections: [
+      {h:"À quoi sert cette page", t:"Détermine, pour chaque traitement du registre, si une analyse d’impact est requise, selon les neuf critères de la CNIL. Deux critères réunis rendent l’AIPD nécessaire."},
+      {h:"Comment l’utiliser", t:"Actualisez depuis le registre, traitez les traitements signalés, exportez la check-list en PDF pour conduire l’analyse. L’AIPD doit être menée AVANT la mise en œuvre du traitement."},
+      {h:"Ne pas confondre avec la FRIA", t:"L’AIPD (RGPD art. 35) porte sur la protection des données ; la FRIA (AI Act art. 27) porte sur les droits fondamentaux et incombe au déployeur d’un système à haut risque. Un même système peut exiger les deux — l’une ne dispense jamais de l’autre."}
+    ]
+  },
+  'rgpd-pbd': {
+    title: "Privacy by design (art. 25)",
+    sections: [
+      {h:"À quoi sert cette page", t:"Auto-évaluation de la protection des données dès la conception et par défaut, structurée selon les principes de la CNIL. Elle sert à intégrer la vie privée au moment où les choix sont encore ouverts."},
+      {h:"Comment l’utiliser", t:"Passez la check-list sur un projet en cours de conception, pas sur un système déjà livré. Exportez-la en PDF pour la joindre au dossier de projet : c’est une preuve d’accountability."},
+      {h:"Le principe à retenir", t:"« Par défaut » signifie que le réglage le plus protecteur est celui qui s’applique sans action de l’utilisateur. Une option de confidentialité qu’il faut aller activer ne satisfait pas l’article 25."}
+    ]
+  },
+  'rgpd-doc': {
+    title: "Politique documentaire",
+    sections: [
+      {h:"À quoi sert cette page", t:"Référentiel de la documentation de conformité — le principe d’accountability de l’article 5.2 : il ne suffit pas d’être conforme, il faut pouvoir le démontrer. Suivi de l’état, du responsable et de la dernière revue de chaque document."},
+      {h:"Comment l’utiliser", t:"Nommez un responsable pour chaque document et datez sa dernière revue. Exportez le suivi en PDF avant un audit ou un contrôle."},
+      {h:"Le piège", t:"Un document sans date de revue est présumé obsolète. Une politique de 2021 jamais relue affaiblit le dossier au lieu de le soutenir."}
+    ]
+  },
+  'rgpd-sensibilisation': {
+    title: "Sensibilisation & formation",
+    sections: [
+      {h:"À quoi sert cette page", t:"Plan de sensibilisation à la protection des données : actions par public cible, périodicité, réalisation. La culture de conformité est ce qui empêche les incidents que la documentation ne peut que constater."},
+      {h:"Comment l’utiliser", t:"Distinguez les publics : tout le monde n’a pas les mêmes obligations. Les équipes qui manipulent des données sensibles et celles qui conçoivent des traitements appellent des sessions distinctes. Exportez le plan pour le faire valider."},
+      {h:"Preuve attendue", t:"Une autorité de contrôle demande la liste des personnes formées et la date, pas l’intention de former. Enregistrez les réalisations au fil de l’eau."}
+    ]
+  },
+  'rgpd-conformite': {
+    title: "Conformité RGPD — tableau de bord",
+    sections: [
+      {h:"À quoi sert cette page", t:"Consolide les briques du dispositif — registre, cartographie, AIPD, privacy by design, documentation, sensibilisation — en un indice global assorti de points d’attention."},
+      {h:"Comment l’utiliser", t:"Actualisez, puis traitez les points d’attention dans l’ordre affiché. Exportez le bilan en PDF pour un comité ou un dossier de contrôle."},
+      {h:"Comment le lire", t:"L’indice mesure la COMPLÉTUDE de votre dispositif documentaire, pas la légalité de vos traitements. Un registre complet mais fondé sur des bases légales fragiles produira un bon indice et un mauvais contrôle."}
+    ]
+  },
+  'rgpd-site': {
+    title: "RGPD — CONSEILPREV (site et plateforme)",
+    sections: [
+      {h:"À quoi sert cette page", t:"Tableau de bord de la conformité du site CONSEILPREV et de la plateforme Sentinel eux-mêmes : vérification au regard des articles 5, 7, 17, 25 et 30, registre des preuves de consentement, transferts, droits des personnes."},
+      {h:"Comment l’utiliser", t:"Réservée à l’exploitant du site. Actualisez pour relancer les vérifications ; chaque point en écart indique la mesure attendue."},
+      {h:"Pourquoi elle existe", t:"Une plateforme de conformité qui ne s’applique pas à elle-même ce qu’elle recommande n’est pas crédible. Cette page est vérifiable par le client : c’est sa raison d’être."}
+    ]
+  },
+  'fiche-pays': {
+    title: "Fiche pays — cadre réglementaire IA",
+    sections: [
+      {h:"À quoi sert cette page", t:"Détail du cadre applicable à une juridiction : textes en vigueur ou en projet, autorité compétente, niveau de sévérité, points de vigilance. Une fiche par pays, accessible depuis la carte mondiale ou le comparateur."},
+      {h:"Comment l’utiliser", t:"Consultez-la avant un déploiement dans le pays concerné ou avant de contractualiser avec un prestataire qui y opère. Le comparateur met jusqu’à quatre juridictions en regard sur six dimensions."},
+      {h:"À savoir", t:"Ces cadres évoluent vite : plusieurs pays ont adopté ou révisé leur législation IA en 2025-2026. La date de mise à jour figure sur la fiche — vérifiez-la avant de vous en prévaloir dans un acte juridique."}
+    ]
+  },
+
   'shadow-ai': {
     title: "Découverte Shadow AI",
     sections: [
@@ -15416,7 +15593,16 @@ var PAGE_GUIDES = {
     ]
   }
 };
+/* Les 24 fiches pays (fiche-fr, fiche-us, …) partagent UN guide : elles ont la
+   meme structure, seul le contenu reglementaire change. Ecrire 24 guides
+   identiques les aurait condamnes a diverger au premier ajout de pays. */
+function guidePour(pid){
+  if(PAGE_GUIDES[pid]) return PAGE_GUIDES[pid];
+  if(String(pid || '').indexOf('fiche-') === 0) return PAGE_GUIDES['fiche-pays'];
+  return null;
+}
 window.PAGE_GUIDES = PAGE_GUIDES;
+window.guidePour = guidePour;   // resolution partagee, exposee comme PAGE_GUIDES
 
 function guideCurrentPageId(){
   var pages = document.querySelectorAll(".page");
@@ -15436,7 +15622,7 @@ function guideInjectButton(){
   var old = document.getElementById("page-guide-btn");
   if(old) old.remove();
 
-  var guide = PAGE_GUIDES[pid];
+  var guide = guidePour(pid);
   var h1 = activePage.querySelector("h1.page-h");
   if(!h1) return;
 
@@ -15452,7 +15638,7 @@ function guideInjectButton(){
 window.guideInjectButton = guideInjectButton;
 
 window.guideOpenModal = function(pid){
-  var guide = PAGE_GUIDES[pid];
+  var guide = guidePour(pid);
   var modal = document.getElementById("guide-modal");
   if(!modal){ modal = document.createElement("div"); modal.id = "guide-modal"; modal.className = "mat-modal"; document.body.appendChild(modal); }
 
