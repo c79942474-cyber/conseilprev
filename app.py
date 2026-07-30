@@ -6982,17 +6982,24 @@ def historique_purge_all():
 
 # ══════════════════════════════════════════════════════════
 # RAG — BASE DE CONNAISSANCE (Espace)
-# Upload/download de documents (PDF, DOCX, TXT, CSV), extraction de texte,
-# chunking, embeddings Mistral, recherche hybride : vectorielle (pgvector si
-# disponible) avec repli automatique sur recherche full-text Postgres native
-# (tsvector/tsquery, disponible sur tout plan, y compris gratuit).
+# Extraction, decoupage, requetes et fusion vivent dans rag_moteur.py : sans
+# Flask ni base, ce coeur est verifiable ligne a ligne, ce qu'un bloc noye dans
+# app.py ne permettait pas.
+#
+# La recherche etait un ESCALIER — vectorielle d abord, plein-texte SEULEMENT
+# si la vectorielle ne rendait rien. Un document qui repondait par les MOTS
+# (numero d article, nom propre, sigle) etait donc perdu des que la vectorielle
+# rendait cinq resultats mediocres. Les deux moteurs sont desormais interroges
+# ENSEMBLE et leurs classements fusionnes par rang reciproque.
 # ══════════════════════════════════════════════════════════
+import rag_moteur  # noqa: E402
+
 RAG_PGVECTOR_AVAILABLE = False
 RAG_EMBED_DIM = 1024  # dimension mistral-embed
-RAG_CHUNK_SIZE = 900
-RAG_CHUNK_OVERLAP = 150
-RAG_MAX_FILE_SIZE = 8 * 1024 * 1024  # 8 Mo
-RAG_ALLOWED_EXT = {'.pdf', '.docx', '.txt', '.csv'}
+RAG_CHUNK_SIZE = rag_moteur.TAILLE_FRAGMENT
+RAG_CHUNK_OVERLAP = rag_moteur.RECOUVREMENT
+RAG_MAX_FILE_SIZE = 30 * 1024 * 1024  # 30 Mo — un rapport d audit illustre depasse 8 Mo
+RAG_ALLOWED_EXT = {'.' + e for e in rag_moteur.EXTENSIONS}
 RAG_PAGES_VALIDES = ['audit', 'registre', 'fria', 'maturite', 'veille', 'raci', 'general']
 
 def rag_init_db():
@@ -7068,46 +7075,25 @@ except Exception as _e:
     logger.error(f"RAG — erreur init DB : {_e}")
 
 def rag_extract_text(filename, file_bytes):
-    """Extrait le texte d un fichier selon son extension. Retourne (ok, texte_ou_erreur)."""
-    ext = os.path.splitext(filename)[1].lower()
+    """Extrait le texte d un fichier. Retourne (ok, texte_ou_message).
+
+    Le message d echec est desormais MOTIVE : « ce PDF est une image scannee »
+    plutot que « erreur d extraction », parce que les deux appellent des gestes
+    differents de la part de celui qui a envoye le fichier."""
     try:
-        if ext == '.txt':
-            return True, file_bytes.decode('utf-8', errors='ignore')
-        elif ext == '.csv':
-            text = file_bytes.decode('utf-8', errors='ignore')
-            return True, text
-        elif ext == '.pdf':
-            from pypdf import PdfReader
-            import io
-            reader = PdfReader(io.BytesIO(file_bytes))
-            pages_text = [p.extract_text() or '' for p in reader.pages]
-            return True, '\n\n'.join(pages_text)
-        elif ext == '.docx':
-            from docx import Document as DocxDocument
-            import io
-            doc = DocxDocument(io.BytesIO(file_bytes))
-            paras = [p.text for p in doc.paragraphs if p.text.strip()]
-            return True, '\n\n'.join(paras)
-        else:
-            return False, f"Extension non supportee : {ext}"
-    except Exception as e:
-        return False, f"Erreur d extraction : {e}"
+        return True, rag_moteur.extraire_texte(filename, file_bytes)
+    except rag_moteur.RagErreur as e:
+        return False, e.message()
+    except Exception as e:                                     # noqa: BLE001
+        logger.warning(f"RAG extraction — echec inattendu sur {filename} : {e}")
+        return False, "Ce fichier n a pas pu etre lu."
 
 def rag_chunk_text(text):
-    """Decoupe le texte en chunks avec overlap, en respectant les frontieres de mots."""
-    text = _re.sub(r'\s+', ' ', text).strip()
-    if not text:
-        return []
-    chunks = []
-    start = 0
-    while start < len(text):
-        end = min(start + RAG_CHUNK_SIZE, len(text))
-        chunk = text[start:end]
-        chunks.append(chunk)
-        if end >= len(text):
-            break
-        start = end - RAG_CHUNK_OVERLAP
-    return chunks
+    """Decoupe le texte en fragments qui se chevauchent.
+
+    La coupure vise la fin de phrase la plus proche : un fragment tranche en
+    plein milieu d un mot se vectorise mal et se cite encore plus mal."""
+    return rag_moteur.decouper(text, RAG_CHUNK_SIZE, RAG_CHUNK_OVERLAP)
 
 def rag_get_embeddings(texts):
     """Appelle l API Mistral embeddings. Retourne (ok, liste_de_vecteurs_ou_erreur)."""
@@ -7224,24 +7210,33 @@ def rag_upload():
 
     ext = os.path.splitext(f.filename)[1].lower()
     if ext not in RAG_ALLOWED_EXT:
-        return jsonify({'error': f'Format non supporté. Formats acceptés : {", ".join(RAG_ALLOWED_EXT)}'}), 400
+        return jsonify({'error': 'Format non accepté. Formats acceptés : '
+                                 + ', '.join(sorted(e.lstrip(".") for e in RAG_ALLOWED_EXT))}), 415
 
     file_bytes = f.read()
     if len(file_bytes) > RAG_MAX_FILE_SIZE:
-        return jsonify({'error': f'Fichier trop volumineux (max {RAG_MAX_FILE_SIZE // (1024*1024)} Mo)'}), 400
+        return jsonify({'error': f'Fichier trop volumineux (max {RAG_MAX_FILE_SIZE // (1024*1024)} Mo)'}), 413
 
     pages_liees = request.form.get('pages_liees', 'general').strip()
     pages_list = [p for p in pages_liees.split(',') if p in RAG_PAGES_VALIDES]
     if not pages_list:
         pages_list = ['general']
 
-    ok, text_or_err = rag_extract_text(f.filename, file_bytes)
-    if not ok:
-        return jsonify({'error': text_or_err}), 400
-    if not text_or_err.strip():
-        return jsonify({'error': 'Aucun texte extractible de ce fichier (scan image non-OCR ?)'}), 400
+    # Le motif d echec est rendu tel quel, avec son statut : un PDF scanne
+    # (422, « c est une image ») n appelle pas le meme geste qu une
+    # bibliotheque absente sur le serveur (503, « ce n est pas votre faute »).
+    try:
+        texte = rag_moteur.extraire_texte(f.filename, file_bytes)
+    except rag_moteur.RagErreur as e:
+        return jsonify({'error': e.message(), 'code': e.code}), e.statut
+    except Exception as e:                                     # noqa: BLE001
+        logger.warning(f"RAG upload — extraction en echec sur {f.filename} : {e}")
+        return jsonify({'error': "Ce fichier n a pas pu être lu."}), 422
+    if not texte.strip():
+        return jsonify({'error': 'Aucun texte extractible de ce fichier.',
+                        'code': 'texte_vide'}), 422
 
-    chunks = rag_chunk_text(text_or_err)
+    chunks = rag_chunk_text(texte)
     if not chunks:
         return jsonify({'error': 'Texte extrait vide après nettoyage'}), 400
 
@@ -7420,10 +7415,147 @@ def rag_delete_document(doc_id):
     conn.close()
     return jsonify({'deleted': doc_id})
 
+# ── RECHERCHE : LES DEUX MOTEURS EN MEME TEMPS ────────────────────────────
+# Une question porte presque toujours les deux natures a la fois. « Quelles
+# obligations pour un SIA d annexe III ? » demande du SENS (obligations, haut
+# risque) et des MOTS exacts (« annexe III »). Interroger les deux moteurs et
+# fusionner leurs CLASSEMENTS — jamais leurs scores, qui ne sont pas dans la
+# meme unite — rend les deux lectures sans en sacrifier une.
+
+def _rag_ligne(r, origine):
+    r = dict(r)
+    return {'texte': r['chunk_text'], 'document': r['nom_fichier'],
+            'document_id': r['doc_id'], 'score': round(float(r.get('score') or 0.0), 3),
+            'origine': origine}
+
+
+def _rag_cle(r):
+    return (r['document_id'], (r['texte'] or '')[:400])
+
+
+def _rag_vectoriel(cur, query, limite, filtre_sql='', filtre_params=()):
+    """Recherche par le SENS. Rend [] — jamais une exception — si elle est
+    indisponible : c est une moitie de la reponse, pas la reponse."""
+    if not (RAG_PGVECTOR_AVAILABLE and REGISTRE_USE_PG):
+        return []
+    try:
+        ok, embs = rag_get_embeddings([query])
+        if not ok:
+            return []
+        vec = embs[0]
+        cur.execute(
+            'SELECT c.chunk_text, d.nom_fichier, d.id AS doc_id, '
+            '1 - (c.embedding <=> %s::vector) AS score '
+            'FROM rag_chunks c JOIN rag_documents d ON c.document_id = d.id '
+            'WHERE c.embedding IS NOT NULL ' + filtre_sql + ' '
+            'ORDER BY c.embedding <=> %s::vector LIMIT %s',
+            [vec] + list(filtre_params) + [vec, limite])
+        return [_rag_ligne(r, 'sens') for r in cur.fetchall()]
+    except Exception as _e:                                    # noqa: BLE001
+        logger.warning(f"RAG — recherche par le sens indisponible : {_e}")
+        return []
+
+
+def _rag_lexical(cur, query, limite, filtre_sql='', filtre_params=()):
+    """Recherche par les MOTS, en deux passes.
+
+    D abord `plainto_tsquery`, qui exige TOUS les mots de la question : c est
+    la passe de PRECISION. Si elle ne remplit pas la liste, une seconde passe
+    joint les termes par « | » pour le RAPPEL. L ancienne version ne faisait
+    que la seconde, et sur des mots BRUTS : « quelles sont les obligations »
+    remontait donc tout fragment contenant « les » ou « sont »."""
+    termes = rag_moteur.termes_requete(query)
+    if not termes:
+        return []
+    sortie, vus = [], set()
+
+    def _passe(expr, sql_op):
+        if len(sortie) >= limite:
+            return
+        try:
+            cur.execute(
+                'SELECT c.chunk_text, d.nom_fichier, d.id AS doc_id, '
+                "ts_rank(c.search_vector, " + sql_op + "('french', %s)) AS score "
+                'FROM rag_chunks c JOIN rag_documents d ON c.document_id = d.id '
+                "WHERE c.search_vector @@ " + sql_op + "('french', %s) " + filtre_sql + ' '
+                'ORDER BY score DESC LIMIT %s',
+                [expr, expr] + list(filtre_params) + [limite])
+            for r in cur.fetchall():
+                l = _rag_ligne(r, 'mots')
+                c = _rag_cle(l)
+                if c not in vus:
+                    vus.add(c)
+                    sortie.append(l)
+        except Exception as _e:                                # noqa: BLE001
+            try:
+                cur.connection.rollback()
+            except Exception:                                  # noqa: BLE001
+                pass
+            logger.warning(f"RAG — passe lexicale {sql_op} en echec : {_e}")
+
+    if not REGISTRE_USE_PG:
+        # SQLite (developpement) : pas de tsvector. Un LIKE sur les termes vaut
+        # mieux que rien — sans cela la recherche locale ne rend jamais rien et
+        # personne ne peut la verifier avant la mise en ligne.
+        try:
+            cond = ' OR '.join(['LOWER(c.chunk_text) LIKE ?'] * len(termes))
+            cur.execute(
+                'SELECT c.chunk_text, d.nom_fichier, d.id AS doc_id FROM rag_chunks c '
+                'JOIN rag_documents d ON c.document_id = d.id WHERE ' + cond + ' LIMIT ?',
+                ['%' + t + '%' for t in termes] + [limite * 4])
+            lignes = []
+            for r in cur.fetchall():
+                r = dict(r)
+                txt = (r['chunk_text'] or '').lower()
+                r['score'] = sum(1 for t in termes if t in txt) / float(len(termes))
+                lignes.append(_rag_ligne(r, 'mots'))
+            lignes.sort(key=lambda x: -x['score'])
+            return lignes[:limite]
+        except Exception as _e:                                # noqa: BLE001
+            logger.warning(f"RAG — recherche lexicale SQLite en echec : {_e}")
+            return []
+
+    _passe(query, 'plainto_tsquery')          # precision : tous les mots
+    _passe(' | '.join(termes), 'to_tsquery')  # rappel : au moins un terme utile
+    return sortie[:limite]
+
+
+def rag_recherche(cur, query, limite=5, page=''):
+    """Les deux moteurs, puis fusion par rang reciproque. Rend (resultats, mode)."""
+    filtre_sql, filtre_params = '', []
+    if page and REGISTRE_USE_PG:
+        filtre_sql = 'AND d.pages_liees LIKE %s'
+        filtre_params = ['%' + page + '%']
+
+    # Chaque moteur est sollicite plus large que la liste finale : un document
+    # sixieme d un cote et deuxieme de l autre doit pouvoir remonter.
+    large = max(limite * 3, 12)
+    v = _rag_vectoriel(cur, query, large, filtre_sql, filtre_params)
+    l = _rag_lexical(cur, query, large, filtre_sql, filtre_params)
+
+    fusion = rag_moteur.fusionner([v, l], cle=_rag_cle)[:limite]
+    # Un fragment rendu par les deux moteurs merite d etre signale comme tel :
+    # c est le resultat sur lequel on peut le plus s appuyer.
+    doubles = {_rag_cle(x) for x in v} & {_rag_cle(x) for x in l}
+    for r in fusion:
+        if _rag_cle(r) in doubles:
+            r['origine'] = 'sens+mots'
+
+    if v and l:
+        mode = 'hybride'
+    elif v:
+        mode = 'sens'
+    elif l:
+        mode = 'mots'
+    else:
+        mode = 'aucun'
+    return fusion, mode
+
+
 @app.route('/api/rag/search', methods=['POST'])
 @rate_limit(limit=60, window=60)
 def rag_search():
-    """Recherche hybride : vectorielle (pgvector) si disponible, sinon full-text Postgres."""
+    """Recherche hybride : le sens et les mots interroges ENSEMBLE, puis fusionnes."""
     data = request.get_json(force=True) or {}
     query = (data.get('query') or '').strip()
     page = (data.get('page') or '').strip()
@@ -7433,42 +7565,55 @@ def rag_search():
 
     conn = registre_get_db()
     cur = conn.cursor()
+    try:
+        resultats, mode = rag_recherche(cur, query, top_k, page)
+    finally:
+        conn.close()
 
-    page_filter_sql = ''
-    page_params = []
-    if page and REGISTRE_USE_PG:
-        page_filter_sql = "AND d.pages_liees LIKE %s"
-        page_params = [f'%{page}%']
+    # `results` est conserve en plus de `resultats` : d anciens appels du
+    # frontend lisaient l un, d autres l autre.
+    return jsonify({'resultats': resultats, 'results': resultats, 'mode': mode,
+                    'termes': rag_moteur.termes_requete(query)})
 
-    results = []
-    if RAG_PGVECTOR_AVAILABLE and REGISTRE_USE_PG:
-        embed_ok, embeddings = rag_get_embeddings([query])
-        if embed_ok:
-            query_vec = embeddings[0]
-            sql = f'''SELECT c.chunk_text, d.nom_fichier, d.id as doc_id,
-                      1 - (c.embedding <=> %s::vector) as score
-                      FROM rag_chunks c JOIN rag_documents d ON c.document_id = d.id
-                      WHERE c.embedding IS NOT NULL {page_filter_sql}
-                      ORDER BY c.embedding <=> %s::vector LIMIT %s'''
-            cur.execute(sql, [query_vec] + page_params + [query_vec, top_k])
-            results = [{'texte': r['chunk_text'], 'document': r['nom_fichier'], 'document_id': r['doc_id'], 'score': round(float(r['score']), 3)} for r in cur.fetchall()]
 
-    if not results and REGISTRE_USE_PG:
-        sql = f'''SELECT c.chunk_text, d.nom_fichier, d.id as doc_id,
-                  ts_rank(c.search_vector, to_tsquery('french', %s)) as score
-                  FROM rag_chunks c JOIN rag_documents d ON c.document_id = d.id
-                  WHERE c.search_vector @@ to_tsquery('french', %s) {page_filter_sql}
-                  ORDER BY score DESC LIMIT %s'''
-        try:
-            tsquery = ' | '.join(_re.findall(r'\w+', query))
-            cur.execute(sql, [tsquery, tsquery] + page_params + [top_k])
-            results = [{'texte': r['chunk_text'], 'document': r['nom_fichier'], 'document_id': r['doc_id'], 'score': round(float(r['score']), 3)} for r in cur.fetchall()]
-        except Exception as _e:
-            conn.rollback()
-            logger.warning(f"RAG search fallback error: {_e}")
+@app.route('/api/rag/diagnostic', methods=['GET'])
+@rate_limit(limit=30, window=60)
+@rag_require_access
+def rag_diagnostic():
+    """Pourquoi la base rend ce qu elle rend.
 
-    conn.close()
-    return jsonify({'resultats': results, 'mode': 'vectoriel' if RAG_PGVECTOR_AVAILABLE else 'texte_integral'})
+    Une base qui ne repond rien a toujours une raison — aucun document,
+    indexation inachevee, cle d embeddings absente, extension pgvector non
+    installee. La dire ici epargne une heure de recherche a l aveugle."""
+    etat = {'base': False, 'base_pg': bool(REGISTRE_USE_PG),
+            'pgvector': bool(RAG_PGVECTOR_AVAILABLE),
+            'embeddings': bool(MISTRAL_API_KEY), 'documents': 0, 'fragments': 0,
+            'fragments_vectorises': 0}
+    conn = None
+    try:
+        conn = registre_get_db()
+        etat['base'] = True
+        cur = conn.cursor()
+        cur.execute('SELECT COUNT(*) AS n FROM rag_documents')
+        etat['documents'] = int(dict(cur.fetchone())['n'])
+        cur.execute('SELECT COUNT(*) AS n FROM rag_chunks')
+        etat['fragments'] = int(dict(cur.fetchone())['n'])
+        if RAG_PGVECTOR_AVAILABLE and REGISTRE_USE_PG:
+            cur.execute('SELECT COUNT(*) AS n FROM rag_chunks WHERE embedding IS NOT NULL')
+            etat['fragments_vectorises'] = int(dict(cur.fetchone())['n'])
+    except Exception as _e:                                    # noqa: BLE001
+        logger.warning(f"RAG diagnostic — lecture des compteurs impossible : {_e}")
+    finally:
+        if conn is not None:
+            try:
+                conn.close()
+            except Exception:                                  # noqa: BLE001
+                pass
+
+    d = rag_moteur.sante(etat)
+    d['etat'] = etat
+    d['taille_max_mo'] = RAG_MAX_FILE_SIZE // (1024 * 1024)
+    return jsonify(d)
 
 
 # ══════════════════════════════════════════════════════════
@@ -7749,10 +7894,11 @@ def juridique_contrat():
         if len(blob) > 6 * 1024 * 1024:
             return jsonify({'error': 'Fichier trop volumineux (6 Mo maximum).',
                             'code': 'trop_gros'}), 400
-        extrait_ok, texte_contrat = rag_extract_text(nom if ext != '.md' else nom[:-3] + '.txt', blob)
+        extrait_ok, texte_contrat = rag_extract_text(nom, blob)
         if not extrait_ok or not (texte_contrat or '').strip():
-            return jsonify({'error': "Aucun texte n'a pu être extrait de ce fichier "
-                                     '(document scanné ?). Collez le texte à la place.',
+            return jsonify({'error': (texte_contrat if not extrait_ok else
+                                      "Aucun texte n'a pu être extrait de ce fichier.")
+                                     + ' Collez le texte à la place.',
                             'code': 'illisible'}), 400
         profil = _jur_champ_json(request.form.get('profil'))
         domaines = _jur_champ_json(request.form.get('domaines'))
@@ -9025,42 +9171,24 @@ def _expl_score_texte(texte, mots, cadres):
 
 
 def _expl_documents(cur, query, mots, cadres, limite):
-    """Base documentaire : vectorielle si disponible, sinon lexicale."""
+    """Base documentaire : le sens et les mots, interroges ensemble puis fusionnes.
+
+    Meme moteur que /api/rag/search — l assistant et la recherche manuelle
+    doivent voir la MEME base, sans quoi un extrait cite dans une reponse
+    resterait introuvable quand on va le verifier."""
     out = []
     try:
-        if RAG_PGVECTOR_AVAILABLE and REGISTRE_USE_PG:
-            ok, embs = rag_get_embeddings([query])
-            if ok:
-                vec = embs[0]
-                cur.execute(
-                    'SELECT c.chunk_text, d.nom_fichier, d.id AS doc_id, '
-                    '1 - (c.embedding <=> %s::vector) AS score '
-                    'FROM rag_chunks c JOIN rag_documents d ON c.document_id = d.id '
-                    'WHERE c.embedding IS NOT NULL '
-                    'ORDER BY c.embedding <=> %s::vector LIMIT %s',
-                    [vec, vec, limite])
-                for r in cur.fetchall():
-                    r = dict(r)
-                    out.append({'type': 'document', 'titre': r['nom_fichier'], 'ref': r['doc_id'],
-                                'extrait': (r['chunk_text'] or '')[:600],
-                                'score': float(r.get('score') or 0.0)})
-    except Exception:
-        out = []
-    if not out:
-        try:
-            cur.execute(registre_sql(
-                'SELECT c.chunk_text, d.nom_fichier, d.id AS doc_id FROM rag_chunks c '
-                'JOIN rag_documents d ON c.document_id = d.id LIMIT %s',
-                'SELECT c.chunk_text, d.nom_fichier, d.id AS doc_id FROM rag_chunks c '
-                'JOIN rag_documents d ON c.document_id = d.id LIMIT ?'), (600,))
-            for r in cur.fetchall():
-                r = dict(r)
-                s = _expl_score_texte(r.get('chunk_text'), mots, cadres)
-                if s > 0:
-                    out.append({'type': 'document', 'titre': r['nom_fichier'], 'ref': r['doc_id'],
-                                'extrait': (r['chunk_text'] or '')[:600], 'score': s})
-        except Exception:
-            pass
+        resultats, _mode = rag_recherche(cur, query, limite)
+        for r in resultats:
+            out.append({'type': 'document', 'titre': r['document'], 'ref': r['document_id'],
+                        'extrait': (r['texte'] or '')[:600],
+                        # Le score de fusion n est pas dans l echelle attendue ici
+                        # (0 a 1) : on re-note l extrait lexicalement, comme les
+                        # autres sources, pour que les scores restent comparables.
+                        'score': max(_expl_score_texte(r['texte'], mots, cadres), 0.05),
+                        'origine': r.get('origine')})
+    except Exception as _e:                                    # noqa: BLE001
+        logger.warning(f"Assistant — base documentaire indisponible : {_e}")
     return out
 
 

@@ -1325,6 +1325,24 @@ textarea.form-el{min-height:86px;resize:vertical}
 .rag-page-chip{font-size:9px;font-family:var(--mono);text-transform:uppercase;background:rgba(28,90,138,.08);color:var(--blue);padding:2px 8px;border-radius:3px}
 
 
+/* Etat de la base : ce que la recherche sait faire ICI, et pourquoi. Une base
+   qui ne rend rien a toujours une raison — la dire evite de chercher une heure. */
+.rag-diag{border:1px solid var(--rule2);border-radius:12px;padding:14px 18px;background:var(--white);margin-bottom:18px}
+.rag-diag-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.rag-diag-mode{font-size:9px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;
+  padding:3px 9px;border-radius:3px;font-weight:700}
+.rag-diag-mode.m-hybride{background:rgba(30,99,54,.10);color:#1E6336}
+.rag-diag-mode.m-lexical{background:rgba(184,110,20,.12);color:#8A5310}
+.rag-diag-mode.m-indisponible{background:rgba(184,50,34,.10);color:var(--accent)}
+.rag-diag-lib{font-size:11.5px;color:var(--ink2)}
+.rag-diag ul{margin:9px 0 0;padding:0;list-style:none;display:grid;gap:5px}
+.rag-diag li{font-size:11.5px;color:var(--ink2);line-height:1.5;padding-left:16px;position:relative}
+.rag-diag li:before{content:"•";position:absolute;left:3px;color:var(--muted2)}
+.rag-diag li.n-bloquant:before{content:"▲";color:var(--accent);font-size:9px;top:1px}
+.rag-diag li.n-attention:before{content:"▲";color:#B86E14;font-size:9px;top:1px}
+.rag-diag li.n-ok:before{content:"✓";color:#1E6336;font-size:10px}
+.rag-diag-chiffres{margin-top:10px;padding-top:9px;border-top:1px solid var(--rule);
+  font-size:10.5px;font-family:var(--mono);color:var(--muted);display:flex;gap:16px;flex-wrap:wrap}
 .rag-progress-track{width:100%;height:6px;background:var(--rule);border-radius:3px;overflow:hidden}
 .rag-progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--accent));border-radius:3px;transition:width .18s ease}
 
@@ -3528,11 +3546,11 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   <div class="tbl-wrap" style="padding:24px;margin-bottom:24px">
     <div class="tbl-head" style="border:none;padding:0 0 16px"><span class="tbl-title">Importer un document</span></div>
     <div id="rag-drop-zone" class="rag-drop-zone" ondrop="ragHandleDrop(event)" ondragover="event.preventDefault()" ondragenter="this.classList.add('rag-drop-active')" ondragleave="this.classList.remove('rag-drop-active')" title="Glissez-deposez un fichier ou cliquez pour parcourir">
-      <input type="file" id="rag-file-input" accept=".pdf,.docx,.txt,.csv" style="display:none" onchange="ragHandleFileSelect(this.files)">
-      <div onclick="document.getElementById('rag-file-input').click()" style="cursor:pointer" title="Cliquez pour selectionner un fichier (PDF, DOCX, TXT, CSV)">
+      <input type="file" id="rag-file-input" accept=".pdf,.docx,.xlsx,.xlsm,.txt,.md,.csv,.log,.json,.yaml,.yml" style="display:none" onchange="ragHandleFileSelect(this.files)">
+      <div onclick="document.getElementById('rag-file-input').click()" style="cursor:pointer" title="Cliquez pour selectionner un fichier (PDF, Word, Excel, texte, Markdown, CSV, JSON, YAML, journal)">
         <div style="font-size:28px;margin-bottom:8px">📎</div>
         <div style="font-size:13px;font-weight:600">Cliquez ou déposez un fichier ici</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">PDF, DOCX, TXT, CSV — 8 Mo maximum</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">PDF, Word, Excel, texte, Markdown, CSV, JSON, YAML, journal — 30 Mo maximum</div>
       </div>
     </div>
     <div style="margin-top:14px">
@@ -3567,6 +3585,8 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
       <option value="general">Général</option>
     </select>
   </div>
+
+  <div id="rag-diag" class="rag-diag"></div>
 
       <div style="border:1px solid var(--rule2);border-radius:12px;padding:16px 18px;background:var(--white);margin-bottom:18px">
         <div style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:3px">Explorer la connaissance Sentinel</div>
@@ -8435,7 +8455,7 @@ window.artSearchRAG = function(uid, query){
   })
   .then(function(r){ return r.json(); })
   .then(function(d){
-    var results = d.results || [];
+    var results = d.resultats || d.results || [];
     if(results.length === 0){
       holder.innerHTML = '<div class="art-rag-empty">Aucun passage trouvé dans vos documents pour cette recherche. Vérifiez que le texte source est bien chargé dans la Base de connaissance.</div>';
       return;
@@ -17457,14 +17477,14 @@ window.ragHandleAuthError = function(status){
 window.ragHandleFileSelect = function(files){
   if(!files || files.length === 0) return;
   var file = files[0];
-  var allowedExt = ['.pdf','.docx','.txt','.csv'];
+  var allowedExt = ['.pdf','.docx','.xlsx','.xlsm','.txt','.md','.csv','.log','.json','.yaml','.yml'];
   var ext = '.' + file.name.split('.').pop().toLowerCase();
   if(allowedExt.indexOf(ext) === -1){
-    alert('Format non supporté. Formats acceptés : PDF, DOCX, TXT, CSV.');
+    alert('Format non accepté. Formats acceptés : PDF, Word (.docx), Excel (.xlsx, .xlsm), texte, Markdown, CSV, journal, JSON, YAML.');
     return;
   }
-  if(file.size > 8*1024*1024){
-    alert('Fichier trop volumineux (8 Mo maximum).');
+  if(file.size > 30*1024*1024){
+    alert('Fichier trop volumineux (30 Mo maximum).');
     return;
   }
 
@@ -17484,10 +17504,11 @@ window.ragHandleFileSelect = function(files){
   formData.append('file', file);
   formData.append('pages_liees', checkedPages.join(','));
 
-  /* Timeout client genereux (60s) : l upload lui-meme est desormais rapide (stockage
-     du texte sans embeddings), mais on garde une marge pour l extraction PDF/DOCX volumineux. */
+  /* Le plafond est passe de 8 a 30 Mo : le transfert lui-meme peut demander
+     plusieurs dizaines de secondes sur une liaison ordinaire. Abandonner a 60 s
+     ferait echouer un envoi qui allait aboutir. */
   var controller = new AbortController();
-  var timeoutId = setTimeout(function(){ controller.abort(); }, 60000);
+  var timeoutId = setTimeout(function(){ controller.abort(); }, 180000);
 
   fetch('/api/rag/upload', { method: 'POST', headers: window.ragHeaders(), body: formData, signal: controller.signal })
     .then(function(r){ clearTimeout(timeoutId); return r.json().then(function(d){ return {status:r.status, data:d}; }); })
@@ -17699,11 +17720,45 @@ window.ragApplyTri = function(){
   if(holder) holder.innerHTML = window.ragGroupBySujet(window.__ragDocs || []);
 };
 
+/* Etat de la base : ce que la recherche sait faire, et si elle ne sait pas
+   tout faire, POURQUOI. Sans cela, une base muette est indistinguable d une
+   base en panne, et l on cherche du cote du serveur ce qui tient a un simple
+   defaut d indexation. */
+function _ragEsc(x){ return String(x == null ? '' : x)
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+window.ragRenderDiag = function(){
+  var el = document.getElementById('rag-diag');
+  if(!el) return;
+  fetch('/api/rag/diagnostic', { headers: window.ragHeaders() })
+    .then(function(r){ return r.ok ? r.json() : Promise.reject(r.status); })
+    .then(function(d){
+      var e = d.etat || {};
+      var lis = (d.constats || []).map(function(c){
+        return '<li class="n-' + c.niveau + '">' + _ragEsc(c.texte) + '</li>';
+      }).join('');
+      var fmts = Object.keys(d.formats || {}).filter(function(k){ return d.formats[k]; });
+      el.innerHTML =
+        '<div class="rag-diag-head"><span class="rag-diag-mode m-' + _ragEsc(d.mode || '') + '">'
+        + _ragEsc(d.mode || '\u2014') + '</span>'
+        + '<span class="rag-diag-lib">' + _ragEsc(d.mode_libelle || '') + '</span></div>'
+        + '<ul>' + lis + '</ul>'
+        + '<div class="rag-diag-chiffres">'
+        + '<span>' + (e.documents || 0) + ' document(s)</span>'
+        + '<span>' + (e.fragments || 0) + ' fragment(s)</span>'
+        + '<span>' + (e.fragments_vectorises || 0) + ' vectoris\u00e9(s)</span>'
+        + '<span>' + (d.taille_max_mo || 0) + ' Mo max</span>'
+        + '<span>' + fmts.sort().join(' \u00b7 ') + '</span></div>';
+      el.style.display = 'block';
+    })
+    .catch(function(){ el.style.display = 'none'; });
+};
+
 window.ragRenderList = function(){
   var holder = document.getElementById('rag-doc-list');
-  var statusEl = document.getElementById('rag-status-info');
   if(!holder) return;
   holder.innerHTML = '<div class="reg-loading">Chargement de vos documents\u2026</div>';
+  window.ragRenderDiag();
 
   var filterEl = document.getElementById('rag-filter-select');
   var pageFilter = filterEl ? filterEl.value : '';
@@ -17714,11 +17769,6 @@ window.ragRenderList = function(){
     return r.json();
   }).then(function(d){
     var docs = d.documents || [];
-    if(statusEl){
-      statusEl.innerHTML = d.pgvector_actif
-        ? '\u{1F7E2} <strong>Recherche s\u00e9mantique active</strong> (pgvector) \u2014 vos documents enrichissent les analyses par similarit\u00e9 de sens.'
-        : '\u{1F7E1} <strong>Recherche textuelle active</strong> (mode de repli) \u2014 vos documents enrichissent les analyses par correspondance de mots-cl\u00e9s.';
-    }
     if(docs.length === 0){
       holder.innerHTML = '<div class="reg-empty">Aucun document dans la base de connaissance. Importez un fichier ci-dessus pour commencer.</div>';
       return;
