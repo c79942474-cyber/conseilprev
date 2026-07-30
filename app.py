@@ -1189,6 +1189,42 @@ def api_panorama():
     return jsonify(payload)
 
 
+# ── Socle de donnees ouvertes (Copernicus, NASA, DINUM) ──────────────────
+# Les seules couches du site que le lecteur peut refaire lui-meme : sources
+# publiques, sans cle d'API, avec licence et date de releve. Le module degrade
+# seul vers un repli DATE et ANNONCE quand une source ne repond pas — cette
+# route ne peut donc pas echouer a cause du reseau.
+import donnees_ouvertes  # noqa: E402
+
+DO_TTL = 1800
+_DO_CACHE = {"ts": 0.0, "data": None}
+
+
+@app.route('/api/donnees-ouvertes', methods=['GET'])
+@rate_limit(limit=60, window=60)
+def api_donnees_ouvertes():
+    """?refresh=1 rearme les caches par source et rinterroge."""
+    force = (request.args.get('refresh') or '') in ('1', 'true', 'yes')
+    now = time.time()
+    if force:
+        donnees_ouvertes.rearmer()
+    if (not force) and _DO_CACHE["data"] and (now - _DO_CACHE["ts"] < DO_TTL):
+        payload = dict(_DO_CACHE["data"])
+        payload["ok"] = True
+        payload["cached"] = True
+        return jsonify(payload)
+    try:
+        data = donnees_ouvertes.assemble(force=force)
+    except Exception as e:
+        logger.error(f'DONNEES_OUVERTES_ERR: {e}')
+        return jsonify({"ok": False, "erreur": "assemblage indisponible"}), 503
+    _DO_CACHE["ts"], _DO_CACHE["data"] = now, data
+    payload = dict(data)
+    payload["ok"] = True
+    payload["cached"] = False
+    return jsonify(payload)
+
+
 @app.route('/api/apply', methods=['POST'])
 def api_apply():
     ip = limiter.get_ip(request)
@@ -2494,6 +2530,7 @@ def health_check():
         'uploads_folder': os.path.isdir(UPLOAD_FOLDER),
         'observatoire': observatoire_ia.sante(),
         'panorama': panorama_ia.sante(),
+        'donnees_ouvertes': donnees_ouvertes.sante(),
     }
 
     # Réponse JSON si demandée

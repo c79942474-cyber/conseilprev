@@ -115,6 +115,25 @@ body.embed .hdr{margin-bottom:12px}
   background:rgba(255,255,255,.9);border-radius:3px;padding:1px 0}
 .lg-det{margin-top:5px;padding-top:5px;border-top:1px solid var(--rule);
   font-family:var(--mono);font-size:9.5px;color:var(--muted2);line-height:1.45}
+/* ── Socle de données ouvertes ── */
+.socle-grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(228px,1fr));gap:12px;margin:14px 0 18px}
+.socle-c{border:1px solid var(--rule);border-radius:5px;padding:11px 13px;background:#FCFBF9}
+.socle-c .org{font-family:var(--mono);font-size:9px;color:var(--muted2);letter-spacing:.06em;text-transform:uppercase}
+.socle-c h4{margin:3px 0 0;font-size:12px;font-weight:700;line-height:1.35}
+.socle-c .val{font-size:23px;font-weight:700;margin:8px 0 1px;font-variant-numeric:tabular-nums;line-height:1}
+.socle-c .u{font-size:10.5px;color:var(--muted);line-height:1.45}
+.socle-c ul{margin:7px 0 0;padding-left:15px;font-size:11px;color:var(--muted);line-height:1.6}
+.socle-etat{display:inline-block;font-family:var(--mono);font-size:8.5px;padding:1px 6px;border-radius:999px;
+  letter-spacing:.05em;text-transform:uppercase;margin-left:5px;vertical-align:1px;white-space:nowrap}
+.socle-etat.direct{background:rgba(30,99,168,.12);color:#1E63A8}
+.socle-etat.repli{background:rgba(150,110,15,.15);color:#7E6208}
+table.socle-t{width:100%;border-collapse:collapse;font-size:11.5px}
+table.socle-t th{text-align:left;font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--muted2);border-bottom:1px solid var(--rule);padding:5px 10px 5px 0;font-weight:600}
+table.socle-t td{border-bottom:1px solid var(--rule);padding:7px 10px 7px 0;vertical-align:top;line-height:1.5}
+table.socle-t td.lim{color:var(--muted)}
+table.socle-t a{color:#1E63A8}
+@media(max-width:700px){table.socle-t th.opt,table.socle-t td.opt{display:none}}
 .pan-tip{position:absolute;z-index:20;pointer-events:none;opacity:0;transition:opacity .12s;
   background:rgba(28,28,28,.96);color:#fff;border-radius:5px;padding:9px 12px;
   font-size:12px;line-height:1.5;max-width:290px;box-shadow:0 4px 16px rgba(0,0,0,.28)}
@@ -322,7 +341,29 @@ engagements publics) sont imputés nominativement.</div>
   </div>
 </section>
 
-<!-- ══ 4. MÉTHODOLOGIE ══ -->
+<!-- ══ 4. SOCLE DE DONNÉES OUVERTES ══ -->
+<section class="panel" aria-labelledby="t-socle">
+  <div class="panel-head">
+    <span class="panel-title" id="t-socle">Socle de données ouvertes</span>
+    <span class="panel-note" id="socle-note">Copernicus · NASA · DINUM · Eurostat — sans clé d'API</span>
+  </div>
+  <div class="panel-body">
+    <p class="note" style="margin-top:0"><b>Pourquoi cette section.</b> Tout le reste de cette page repose sur un
+    panel constitué à la main : vous devez nous croire sur parole. Les données ci-dessous, non. Elles sont
+    publiques, sous licence explicite, interrogeables sans inscription — <b>vous pouvez refaire la requête</b>.
+    C'est la seule couche du module qui soit vérifiable de bout en bout par le lecteur.</p>
+    <div id="socle-mesures" class="socle-grille">
+      <p class="note" style="margin:0">Interrogation des sources ouvertes en cours…</p>
+    </div>
+    <div id="socle-sources"></div>
+    <div id="socle-cas"></div>
+    <p class="note"><b>Contexte, pas preuve.</b> Aucune mesure satellitaire ne démontre l'usage d'une IA :
+    ces couches décrivent le sol et l'activité d'observation. Elles figurent ici parce qu'elles sont la
+    matière première d'une partie des systèmes recensés — jamais comme indice indirect de leur existence.</p>
+  </div>
+</section>
+
+<!-- ══ 5. MÉTHODOLOGIE ══ -->
 <section class="panel" aria-labelledby="t-methodo">
   <div class="panel-head"><span class="panel-title" id="t-methodo">Méthodologie, limites, référentiels</span>
   <span class="panel-note">certain / déduit — aucun modèle de langage dans la chaîne</span></div>
@@ -720,7 +761,7 @@ function tipPays(code){
 }
 
 /* ── État de filtre ── */
-var F={pays:"",secteur:"",classe:"",stade:"",q:""};
+var F={pays:"",secteur:"",classe:"",stade:"",q:"",socle:false};
 var CMAP=["#F5DAD4","#EBAE9F","#DB7E68","#C24E37","#8C2013"];
 function classeNb(n){return n>=10?4:n>=6?3:n>=3?2:n>=1?1:0;}
 var STADES={poc:"POC",pilote:"Pilote",production:"Production",echelle:"À l'échelle",abandonne:"Abandonné"};
@@ -732,6 +773,9 @@ function casFiltres(){
     if(F.secteur&&c.secteur!==F.secteur)return false;
     if(F.classe&&c.classe!==F.classe)return false;
     if(F.stade&&c.stade!==F.stade)return false;
+    /* Cas dont la matière première est publique : les seuls que le lecteur
+       peut remonter jusqu'à la donnée d'entrée. */
+    if(F.socle&&!(c.donnees_ouvertes&&c.donnees_ouvertes.length))return false;
     if(q&&(c.entreprise+" "+c.cas+" "+c.secteur+" "+c.pays_nom).toLowerCase().indexOf(q)<0)return false;
     return true;
   });
@@ -1205,8 +1249,106 @@ function renderFlux(){
     el.addEventListener("click",function(){ouvrirCas(this.getAttribute("data-cas"));});
   });
 }
-function renderAll(){renderEcheancier();renderFlux();populerFiltres();renderKpis();renderMap();renderTable();renderCharts();renderMethodo();}
+/* ── Socle de données ouvertes ──────────────────────────────────────────────
+   Trois sources publiques interrogées côté serveur, sans clé d'API. Chaque
+   valeur est publiée AVEC son état : « en direct » si la source a répondu,
+   « relevé » si l'on sert le repli daté. Une valeur de repli présentée comme
+   fraîche serait un mensonge — c'est exactement ce qu'on refuse ici. */
+var DO = null;
+function socleEtat(e){
+  if(!e) return "";
+  return '<span class="socle-etat ' + (e.ok ? "direct" : "repli") + '" title="'
+       + esc(e.ok ? ("relevé le " + String(e.depuis || "").slice(0, 16).replace("T", " ") + " UTC")
+                  : ("source non jointe : " + (e.raison || "raison non précisée"))) + '">'
+       + (e.ok ? "en direct" : "relevé") + "</span>";
+}
+function carteSocle(org, titre, etat, valeur, unite, lignes){
+  return '<div class="socle-c"><div class="org">' + esc(org) + "</div>"
+    + "<h4>" + esc(titre) + socleEtat(etat) + "</h4>"
+    + '<div class="val">' + esc(valeur) + "</div>"
+    + '<div class="u">' + esc(unite) + "</div>"
+    + (lignes && lignes.length ? "<ul>" + lignes.map(function(l){ return "<li>" + l + "</li>"; }).join("") + "</ul>" : "")
+    + "</div>";
+}
+function milliers(n){
+  return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " ");   /* espace fine insécable */
+}
+function renderSocle(){
+  if(!DO){ return; }
+  var m = DO.mesures || {}, et = DO.etat || {}, S = DO.sources || {};
+  var g = "";
+
+  var cop = m.copernicus || {}, pr = cop.produits_24h || {};
+  var clefs = Object.keys(pr);
+  var tot = clefs.reduce(function(a, k){ return a + (pr[k] || 0); }, 0);
+  g += carteSocle("Copernicus · Union européenne", "Produits Sentinel mis à disposition",
+        et.copernicus, milliers(tot), "sur 24 heures glissantes, toutes constellations",
+        clefs.map(function(k){ return esc(k) + " — " + milliers(pr[k]); }));
+
+  var na = m.nasa || {};
+  g += carteSocle("NASA · EONET", "Événements naturels ouverts",
+        et.nasa, milliers(na.evenements_ouverts || 0), "événements notables en cours dans le monde",
+        (na.par_categorie || []).slice(0, 4).map(function(c){ return esc(c[0]) + " — " + milliers(c[1]); }));
+
+  var di = m.dinum || {}, t = di.totaux || {};
+  g += carteSocle("DINUM · data.gouv.fr", "Jeux de données publics français",
+        et.dinum, milliers((t.ia || 0) + (t.spatial || 0)), "sur les deux thèmes interrogés",
+        ['« intelligence artificielle » — ' + milliers(t.ia || 0),
+         "observation de la Terre — " + milliers(t.spatial || 0)]
+        .concat((di.exemples || []).slice(0, 2).map(function(x){
+          return esc(x.titre) + ' <span style="color:var(--muted2)">· ' + esc(x.licence) + "</span>"; })));
+  setHTML("socle-mesures", g);
+
+  var ordre = ["copernicus", "nasa", "dinum", "eurostat"];
+  var lignes = ordre.filter(function(k){ return S[k]; }).map(function(k){
+    var s = S[k], e = et[k];
+    return "<tr><td><b>" + esc(s.nom) + "</b>" + (e ? socleEtat(e) : "")
+      + '<br><span style="font-family:var(--mono);font-size:9.5px;color:var(--muted2)">' + esc(s.organisme) + "</span></td>"
+      + '<td class="opt">' + esc(s.licence) + "</td>"
+      + '<td class="opt">' + esc(s.resolution) + "<br>" + esc(s.cadence) + "</td>"
+      + '<td class="lim">' + esc(s.montre) + '<br><b>Ne montre pas :</b> ' + esc(s.ne_montre_pas) + "</td>"
+      + '<td><a href="' + esc(s.portail) + '" target="_blank" rel="noopener">portail</a></td></tr>';
+  }).join("");
+  setHTML("socle-sources",
+    '<h4 style="font-size:12.5px;margin:4px 0 6px">Les sources, leur licence et leurs limites</h4>'
+    + '<table class="socle-t"><thead><tr><th>Source</th><th class="opt">Licence</th>'
+    + '<th class="opt">Résolution · cadence</th><th>Ce qu\'elle établit — et ce qu\'elle n\'établit pas</th>'
+    + "<th></th></tr></thead><tbody>" + lignes + "</tbody></table>");
+
+  var n = (DATA.agregats && DATA.agregats.n_socle_ouvert) || 0;
+  setHTML("socle-cas", !n ? "" :
+    '<p class="note" style="margin-top:14px"><b>' + n + " cas du panel</b> sont bâtis sur ces données : "
+    + "contrôles agricoles par imagerie Sentinel, surveillance des frontières, cartographie de crise, "
+    + 'détection de pollutions. <button type="button" class="btn" id="socle-filtre" style="margin-left:6px">'
+    + "Ne montrer que ces cas</button></p>");
+  var b = document.getElementById("socle-filtre");
+  if(b) b.addEventListener("click", function(){
+    F.socle = !F.socle;
+    this.textContent = F.socle ? "Afficher tout le panel" : "Ne montrer que ces cas";
+    renderTable();
+    var t = document.getElementById("t-cas");
+    if(t) t.scrollIntoView({behavior: "smooth", block: "start"});
+  });
+
+  var note = document.getElementById("socle-note");
+  if(note && DO.resume){
+    note.textContent = DO.resume.en_direct + " source" + (DO.resume.en_direct > 1 ? "s" : "")
+      + " sur " + DO.resume.interrogees + " interrogée" + (DO.resume.interrogees > 1 ? "s" : "")
+      + " ont répondu · sans clé d'API";
+  }
+}
+/* Appel SÉPARÉ et non bloquant : le socle interroge trois services externes,
+   il ne doit jamais retarder l'affichage du panel, qui est embarqué. */
+function chargerSocle(){
+  fetch("/api/donnees-ouvertes", {cache: "no-store"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(d){ if(d && d.ok){ DO = d; renderSocle(); } })
+    .catch(function(){ /* section laissée en l'état : le panel n'en dépend pas */ });
+}
+
+function renderAll(){renderEcheancier();renderFlux();populerFiltres();renderKpis();renderMap();renderTable();renderCharts();renderMethodo();renderSocle();}
 renderAll();
+chargerSocle();
 brancherFiltres();
 document.querySelectorAll("th.triable").forEach(function(th){
   th.addEventListener("click",function(){

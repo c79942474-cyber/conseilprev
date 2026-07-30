@@ -168,6 +168,25 @@ TYPES_SIA = {
         ],
         "referentiels": ["MDR 2017/745", "annexe I AI Act (2027)", "MDCG", "ISO 14971"],
     },
+    "observation_terre": {
+        "nom": "Observation de la Terre assistée par IA (télédétection)",
+        "vulnerabilites": [
+            {"v": "Leurre du signal amont (usurpation AIS, brouillage GNSS)",
+             "ref": "ATLAS AML.T0015 · EMSA/EUSPA"},
+            {"v": "Dérive saisonnière et couverture nuageuse : conditions hors distribution",
+             "ref": "art. 15 §4 AI Act"},
+            {"v": "Dépendance à une chaîne de données ouverte tierce — la disponibilité "
+                  "du service Copernicus devient une dépendance opérationnelle",
+             "ref": "NIS 2 · art. 15 AI Act"},
+            {"v": "Erreur de géoréférencement portée directement dans la décision "
+                  "(parcelle voisine, navire voisin)",
+             "ref": "art. 14 AI Act (contrôle humain)"},
+            {"v": "Empoisonnement des jeux d'annotation ouverts réutilisés",
+             "ref": "ATLAS AML.T0020"},
+        ],
+        "referentiels": ["règlement délégué (UE) 1159/2013 (politique de données Copernicus)",
+                         "art. 14-15 AI Act", "NIS 2", "MITRE ATLAS"],
+    },
 }
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -207,6 +226,11 @@ def classer_cas(cas):
             hr.append("Triage d'appels ou de patients en urgence → annexe III 5 d")
         if d.get("education"):
             hr.append("Éducation : admission, évaluation → annexe III 3")
+        if d.get("prestations_publiques"):
+            hr.append("Accès aux prestations et services publics essentiels : "
+                      "octroi, réduction, suppression → annexe III 5 a")
+        if d.get("migration_frontieres"):
+            hr.append("Migration, asile, contrôle aux frontières → annexe III 7")
         if hr:
             regles.extend(hr)
             classe = "haut_risque"
@@ -629,6 +653,56 @@ CAS = [
   "drapeaux": {"gpai": True},
   "signaux": [{"titre": "Adhésion au code de bonnes pratiques GPAI (juill. 2025)", "sens": "+", "preuve": "officiel", "date": "2025-07"}],
   "sources": [{"editeur": "Commission européenne / Mistral AI", "titre": "Code of Practice GPAI — signataires", "date": "2025-07", "preuve": "officiel"}]},
+
+ # ── OBSERVATION DE LA TERRE — SIA bâtis sur des DONNÉES OUVERTES ───────────
+ # Ces cas ont une particularité : leur matière première est publique et
+ # gratuite (Copernicus, NASA, data.gouv.fr). Le lecteur peut donc, seul,
+ # retrouver les images qui alimentent le système — ce qui n'est vrai d'aucun
+ # autre cas du panel. Le champ `donnees_ouvertes` le rend explicite.
+ {"entreprise": "ASP — Agence de services et de paiement", "pays": "FR", "secteur": "Administration / Agriculture",
+  "cas": "Contrôles PAC par surveillance : séries Sentinel-1 et Sentinel-2 classées automatiquement pour vérifier les cultures déclarées sur chaque parcelle",
+  "type": "observation_terre", "stade": "production", "annee": 2023, "population": "grand_public",
+  "drapeaux": {"prestations_publiques": True, "donnees_perso": True},
+  "donnees_ouvertes": ["copernicus"],
+  "sources": [{"editeur": "Union européenne", "titre": "Règlement d'exécution (UE) 2022/1173 — système de suivi des surfaces par monitoring", "date": "2022-07", "preuve": "officiel"},
+              {"editeur": "Commission européenne / JRC", "titre": "Area monitoring system — mise en œuvre par les organismes payeurs", "date": "2023", "preuve": "officiel"}]},
+ {"entreprise": "FEGA — Fondo Español de Garantía Agraria", "pays": "ES", "secteur": "Administration / Agriculture",
+  "cas": "Même dispositif de suivi des surfaces agricoles par imagerie Sentinel, appliqué aux aides espagnoles",
+  "type": "observation_terre", "stade": "production", "annee": 2023, "population": "grand_public",
+  "drapeaux": {"prestations_publiques": True, "donnees_perso": True},
+  "donnees_ouvertes": ["copernicus"],
+  "sources": [{"editeur": "Union européenne", "titre": "Règlement d'exécution (UE) 2022/1173 — obligation applicable à tous les organismes payeurs", "date": "2022-07", "preuve": "officiel"}]},
+ {"entreprise": "Frontex", "pays": "PL", "secteur": "Sécurité / Frontières",
+  "cas": "Services de fusion EUROSUR : détection d'embarcations et suivi d'activité par imagerie satellitaire aux frontières extérieures",
+  "type": "observation_terre", "stade": "production", "annee": 2023, "population": "grand_public",
+  "drapeaux": {"migration_frontieres": True, "donnees_perso": True},
+  "donnees_ouvertes": ["copernicus"],
+  "sources": [{"editeur": "Union européenne", "titre": "Règlement (UE) 2019/1896 — garde-frontières et garde-côtes, services de fusion EUROSUR", "date": "2019-11", "preuve": "officiel"},
+              {"editeur": "Frontex", "titre": "EUROSUR Fusion Services — description des services d'observation", "date": "2023", "preuve": "officiel"}]},
+ {"entreprise": "Commission européenne — service Copernicus de gestion des urgences (CEMS)", "pays": "BE", "secteur": "Sécurité civile",
+  "cas": "Cartographie rapide de crise : délimitation assistée des zones inondées et brûlées à partir de Sentinel-1 et Sentinel-2",
+  "type": "observation_terre", "stade": "production", "annee": 2023, "population": "b2b",
+  "drapeaux": {},
+  "donnees_ouvertes": ["copernicus"],
+  "sources": [{"editeur": "Commission européenne / JRC", "titre": "Copernicus EMS — Rapid Mapping, portail public des activations", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "EMSA — Agence européenne pour la sécurité maritime", "pays": "PT", "secteur": "Maritime / Environnement",
+  "cas": "CleanSeaNet : détection automatisée des nappes d'hydrocarbures sur imagerie radar Sentinel-1, alertes transmises aux États membres",
+  "type": "observation_terre", "stade": "production", "annee": 2023, "population": "b2b",
+  "drapeaux": {},
+  "donnees_ouvertes": ["copernicus"],
+  "sources": [{"editeur": "EMSA", "titre": "CleanSeaNet — service européen de détection des pollutions par imagerie satellitaire", "date": "2024", "preuve": "officiel"}]},
+ {"entreprise": "Kayrros", "pays": "FR", "secteur": "Environnement / Analytique",
+  "cas": "Détection des super-émetteurs de méthane par analyse des colonnes Sentinel-5P, exploitée par des acteurs publics et privés",
+  "type": "observation_terre", "stade": "production", "annee": 2023, "population": "b2b",
+  "drapeaux": {},
+  "donnees_ouvertes": ["copernicus"],
+  "sources": [{"editeur": "presse spécialisée (énergie, climat)", "titre": "Détection satellitaire des fuites de méthane à partir des données Copernicus", "date": "2023/2024", "preuve": "presse"}]},
+ {"entreprise": "ECMWF (organisation intergouvernementale, calcul à Bologne)", "pays": "IT", "secteur": "Météorologie",
+  "cas": "AIFS : modèle de prévision météorologique appris sur la réanalyse ERA5 du service Copernicus climat, passé en exploitation",
+  "type": "observation_terre", "stade": "production", "annee": 2025, "population": "b2b",
+  "drapeaux": {},
+  "donnees_ouvertes": ["copernicus"],
+  "sources": [{"editeur": "ECMWF", "titre": "Artificial Intelligence Forecasting System — passage en exploitation", "date": "2025-02", "preuve": "officiel"}]},
 ]
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -748,6 +822,12 @@ def _enrichir():
 
 def _agreger(cas_enrichis):
     par_pays, par_secteur, par_classe, par_stade, par_annee = {}, {}, {}, {}, {}
+    # Cas dont la matière première est publique et gratuite : les seuls que le
+    # lecteur peut remonter jusqu'à la donnée d'entrée sans rien demander.
+    par_socle = {}
+    for c in cas_enrichis:
+        for s in (c.get("donnees_ouvertes") or []):
+            par_socle[s] = par_socle.get(s, 0) + 1
     for c in cas_enrichis:
         p = par_pays.setdefault(c["pays"], {"pays": c["pays"], "nom": c["pays_nom"], "n": 0,
                                             "exposition_moy": 0.0, "haut_risque": 0, "interdit": 0})
@@ -772,6 +852,8 @@ def _agreger(cas_enrichis):
         "par_classe": par_classe,
         "par_stade": par_stade,
         "par_annee": dict(sorted(par_annee.items())),
+        "par_socle_ouvert": par_socle,
+        "n_socle_ouvert": sum(1 for c in cas_enrichis if c.get("donnees_ouvertes")),
     }
 
 
