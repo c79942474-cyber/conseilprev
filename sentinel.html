@@ -142,6 +142,14 @@ body{
 .page{display:none;padding:40px 40px 64px;max-width:1200px}
 /* Pages bâties sur des cartes : elles prennent toute la largeur disponible. */
 .page-large{max-width:none}
+/* Squelette d'attente : un cadre vide laisse croire a une panne, surtout quand
+   le module met une seconde a arriver sur une connexion lente. */
+.mod-skel{display:flex;align-items:center;justify-content:center;min-height:320px;
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--muted2);
+  background:linear-gradient(90deg,#FAF9F7 25%,#F2F0EC 50%,#FAF9F7 75%);
+  background-size:400% 100%;animation:modSkel 1.4s ease-in-out infinite}
+@keyframes modSkel{0%{background-position:100% 0}100%{background-position:0 0}}
+@media(prefers-reduced-motion:reduce){.mod-skel{animation:none}}
 .page.on{display:block}
 
 .eyebrow{font-size:10px;font-family:var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:12px;}
@@ -2339,9 +2347,60 @@ textarea.form-el{min-height:86px;resize:vertical}
   l'AI Act, avec vulnérabilités cyber, exposition calculée et couche réglementaire des 27 États membres.
   Situez vos propres systèmes par rapport au marché — puis prolongez dans le Simulateur, le Registre IA et l'Audit.</p>
   <div style="margin-bottom:24px;border:1px solid var(--rule);border-radius:4px;overflow:hidden;background:var(--white)">
-    <iframe id="pan-sia-iframe" src="/panorama?embed=1" style="width:100%;height:1600px;border:none;display:block" loading="lazy" title="Panorama des systèmes d'IA en entreprise dans l'UE"></iframe>
+    <div class="mod-skel" id="skel-pan-sia-iframe">Chargement du panorama…</div><iframe id="pan-sia-iframe" data-src="/panorama?embed=1" style="width:100%;height:1600px;border:none;display:block" title="Panorama des systèmes d'IA en entreprise dans l'UE"></iframe>
   </div>
 </div>
+<script>
+/* ── Prechargement des modules cartographiques ────────────────────────────
+   Ces iframes portaient loading="lazy" DANS UN CONTENEUR MASQUE : le
+   navigateur ne commencait donc a les charger qu'au moment ou l'on ouvrait le
+   module, et l'utilisateur payait sous les yeux la requete, le transfert et le
+   rendu. On inverse : le src n'est pose qu'apres le chargement de Sentinel
+   (donc sans retarder la page), mais AVANT le clic — au premier temps mort du
+   navigateur, ou des le survol de l'entree de menu si l'utilisateur va plus
+   vite. Le squelette disparait a la fin du chargement. */
+(function(){
+  function charger(id){
+    var f = document.getElementById(id);
+    if(!f || f.getAttribute('src')) return;      // deja lance
+    var src = f.getAttribute('data-src');
+    if(!src) return;
+    f.addEventListener('load', function(){
+      var s = document.getElementById('skel-' + id);
+      if(s) s.remove();
+    }, {once:true});
+    f.setAttribute('src', src);
+  }
+  var MODULES = [
+    {id:'pan-sia-iframe', nav:"'pan-sia'"},
+    {id:'obs-rd-iframe',  nav:"'obs-rd'"}
+  ];
+  function survol(){
+    MODULES.forEach(function(m){
+      document.querySelectorAll('.sb-item').forEach(function(el){
+        if((el.getAttribute('onclick')||'').indexOf(m.nav) < 0) return;
+        ['mouseenter','focus','touchstart'].forEach(function(ev){
+          el.addEventListener(ev, function(){ charger(m.id); }, {once:true, passive:true});
+        });
+      });
+    });
+  }
+  function auRepos(){
+    MODULES.forEach(function(m){ charger(m.id); });
+  }
+  function demarrer(){
+    survol();
+    /* Au premier temps mort : le chargement de Sentinel n'est pas retarde,
+       et les modules sont prets bien avant le clic. Repli sur un delai fixe
+       la ou requestIdleCallback n'existe pas (Safari ancien). */
+    if(window.requestIdleCallback) requestIdleCallback(auRepos, {timeout:4000});
+    else setTimeout(auRepos, 1800);
+  }
+  if(document.readyState === 'complete') demarrer();
+  else window.addEventListener('load', demarrer);
+})();
+</script>
+
 <script>
 (function(){
   window.addEventListener('message', function(ev){
@@ -2365,7 +2424,7 @@ textarea.form-el{min-height:86px;resize:vertical}
   <h1 class="page-h">Où se <em>crée</em> l'intelligence artificielle</h1>
   <p class="page-lead">La carte réglementaire dit où l'IA est <em>encadrée</em>. Celle-ci dit où elle est <em>produite</em> : modèles remarquables, chercheurs d'élite (NeurIPS), brevets accordés et adoption par les entreprises européennes. Chaque série porte sa source, sa licence et sa précision.</p>
   <div style="margin-bottom:24px;border:1px solid var(--rule);border-radius:4px;overflow:hidden;background:var(--white)">
-    <iframe id="obs-rd-iframe" src="/observatoire?embed=1" style="width:100%;height:1400px;border:none;display:block" loading="lazy" title="Observatoire R&amp;D dans le domaine de l'IA"></iframe>
+    <div class="mod-skel" id="skel-obs-rd-iframe">Chargement de l’observatoire…</div><iframe id="obs-rd-iframe" data-src="/observatoire?embed=1" style="width:100%;height:1400px;border:none;display:block" title="Observatoire R&amp;D dans le domaine de l'IA"></iframe>
   </div>
 </div>
 <script>

@@ -7418,11 +7418,22 @@ def _serve_page_fast(filename, cache_control=None):
         resp.headers['X-Perf-Cache'] = '1'
     return resp
 
+# Pages embarquees en iframe dans Sentinel : elles sont RECHARGEES a chaque
+# ouverture du module, et leur referentiel embarque les rend lourdes (100 a
+# 170 Ko). Sans politique de cache, le navigateur les retelecharge en entier a
+# chaque fois — c'est la cause principale de la lenteur ressentie. Avec un ETag
+# fort et « no-cache, must-revalidate », la 2e visite coute un 304 sans corps :
+# la revalidation reste obligatoire, donc une mise a jour est prise en compte
+# immediatement, mais on ne repaie plus le transfert. Meme politique que
+# /sentinel, pour la meme raison.
+_PAGES_REVALIDATION = {'map.html', 'observatoire.html', 'panorama.html'}
+
 for route, filename in PAGES.items():
     def make_view(fn):
+        cc = 'private, no-cache, must-revalidate' if fn in _PAGES_REVALIDATION else None
         @rate_limit(limit=60, window=60)
         def view():
-            return _serve_page_fast(fn)
+            return _serve_page_fast(fn, cache_control=cc)
         view.__name__ = fn.replace('.','_').replace('-','_')
         return view
     app.add_url_rule(route, view_func=make_view(filename))
