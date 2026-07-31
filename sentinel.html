@@ -3609,6 +3609,14 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div>
       <input type="file" id="imp-file" accept=".json" style="display:none"
              onchange="impChoisir(this.files)">
+      <!-- webkitdirectory : le navigateur remet TOUS les fichiers du dossier,
+           sous-dossiers compris. Le tri se fait ensuite côté page — inutile de
+           demander à quelqu'un de faire à la main ce que le navigateur sait
+           faire. -->
+      <input type="file" id="dos-file" webkitdirectory directory multiple
+             style="display:none" onchange="dosChoisir(this.files)">
+      <input type="file" id="lot-file" multiple style="display:none"
+             onchange="dosChoisir(this.files)">
       <button class="mat-export-btn" onclick="document.getElementById('imp-file').click()">
         Choisir la sauvegarde…</button>
       <button class="mat-export-btn" id="imp-go" style="display:none;margin-left:8px"
@@ -3618,6 +3626,37 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     </div>
     <div id="imp-inv" style="margin-top:14px"></div>
     <div id="imp-etat" style="margin-top:12px"></div>
+  </div>
+
+  <!-- ══ DÉPÔT EN MASSE ══
+       Quand il n'y a pas de sauvegarde à reprendre — base d'origine perdue,
+       documents qui n'ont jamais été dans une plateforme — on dépose les
+       fichiers directement. Un dossier entier, sous-dossiers compris. -->
+  <div class="tbl-wrap" style="padding:20px;margin-bottom:24px">
+    <div class="tbl-head" style="border:none;padding:0 0 10px">
+      <span class="tbl-title">Déposer un dossier entier</span>
+    </div>
+    <div style="font-size:11.5px;color:var(--muted);line-height:1.6;margin-bottom:12px">
+      Pour charger beaucoup de documents sans passer par une sauvegarde. Choisissez un
+      <b>dossier</b> — ses sous-dossiers sont parcourus — ou une <b>sélection de fichiers</b>.
+      Les formats non reconnus et les fichiers trop lourds sont <b>écartés et listés</b>,
+      ils n’interrompent pas le reste.
+      <br><b>Le nom du sous-dossier devient le thème</b> du document : un dossier
+      <code>EDF/</code> ou <code>IEC 62443/</code> reproduit votre classement sans que vous
+      ayez à le ressaisir.
+    </div>
+    <div>
+      <button class="mat-export-btn" onclick="document.getElementById('dos-file').click()">
+        Choisir un dossier…</button>
+      <button class="mat-export-btn" style="margin-left:8px"
+              onclick="document.getElementById('lot-file').click()">Choisir des fichiers…</button>
+      <button class="mat-export-btn" id="dos-go" style="display:none;margin-left:8px"
+              onclick="dosLancer()">Charger</button>
+      <button class="mat-export-btn" id="dos-stop" style="display:none;margin-left:8px"
+              onclick="DOS.arret=true">Interrompre</button>
+    </div>
+    <div id="dos-inv" style="margin-top:14px"></div>
+    <div id="dos-etat" style="margin-top:12px"></div>
   </div>
 
       <div style="border:1px solid var(--rule2);border-radius:12px;padding:16px 18px;background:var(--white);margin-bottom:18px">
@@ -17797,6 +17836,199 @@ window.ragApplyTri = function(){
        croire à une reprise complète. */
 var IMP = { sauvegarde: null, arret: false, encours: false };
 
+/* ══ DÉPÔT EN MASSE — un dossier entier, sous-dossiers compris ══
+   Quand il n'y a pas de sauvegarde à reprendre — base d'origine perdue,
+   documents qui n'ont jamais transité par une plateforme — on dépose les
+   fichiers directement.
+
+   Trois décisions qui font la différence à l'usage :
+     — le TRI est fait ici, pas par l'utilisateur : le navigateur remet tout le
+       contenu du dossier, y compris des .DS_Store et des fichiers verrouillés
+       Office ; lui demander de faire le ménage avant serait lui faire faire le
+       travail de la machine ;
+     — le NOM DU SOUS-DOSSIER devient le thème. Un dossier « EDF » ou
+       « IEC 62443 » porte déjà le classement : le ressaisir document par
+       document serait absurde ;
+     — les fichiers partent UN PAR UN, en série. En parallèle, dix fichiers de
+       50 Mo arriveraient ensemble sur un serveur qui n'a pas la mémoire de les
+       traiter ensemble — c'est exactement la panne qu'on vient de corriger. */
+var DOS = { fichiers: [], arret: false, encours: false };
+
+var DOS_EXT = ['pdf', 'docx', 'xlsx', 'xlsm', 'txt', 'md', 'csv', 'log', 'json', 'yaml', 'yml'];
+/* Valeur de départ, remplacée par celle que le SERVEUR annonce dès que l'état
+   de la base est chargé : deux limites écrites à deux endroits finissent
+   toujours par diverger, et c'est l'utilisateur qui découvre l'écart. */
+var DOS_MAX = 60 * 1024 * 1024;
+
+function dosExt(nom) {
+  var m = String(nom || '').toLowerCase().match(/\.([a-z0-9]+)$/);
+  return m ? m[1] : '';
+}
+
+/* Le thème est le dossier le plus PROCHE du fichier : dans
+   « base/Normes/IEC 62443/doc.pdf », c'est « IEC 62443 » et non « base ».
+   Le dossier racine est écarté — c'est le nom du répertoire choisi, pas un
+   classement. */
+function dosTheme(chemin) {
+  var parts = String(chemin || '').split('/').filter(Boolean);
+  parts.pop();                            /* le nom du fichier */
+  if (parts.length <= 1) return '';       /* fichier à la racine : pas de thème */
+  return parts[parts.length - 1];
+}
+
+window.dosChoisir = function (files) {
+  var liste = Array.prototype.slice.call(files || []);
+  if (!liste.length) return;
+  var gardes = [], ecartes = [];
+  liste.forEach(function (f) {
+    var chemin = f.webkitRelativePath || f.name;
+    var nom = f.name || '';
+    if (nom.charAt(0) === '.' || nom.indexOf('~$') === 0) {
+      ecartes.push({ nom: chemin, motif: 'fichier système ou verrouillé' });
+      return;
+    }
+    var e = dosExt(nom);
+    if (DOS_EXT.indexOf(e) === -1) {
+      ecartes.push({ nom: chemin, motif: e ? ('format .' + e + ' non lu') : 'sans extension' });
+      return;
+    }
+    if (f.size > DOS_MAX) {
+      ecartes.push({ nom: chemin,
+                     motif: Math.round(f.size / 1048576) + ' Mo — au-delà de la limite' });
+      return;
+    }
+    if (!f.size) { ecartes.push({ nom: chemin, motif: 'fichier vide' }); return; }
+    gardes.push({ f: f, chemin: chemin, theme: dosTheme(chemin) });
+  });
+
+  DOS.fichiers = gardes;
+  DOS.ecartes = ecartes;
+
+  var themes = {};
+  gardes.forEach(function (g) { if (g.theme) themes[g.theme] = (themes[g.theme] || 0) + 1; });
+  var poids = gardes.reduce(function (a, g) { return a + g.f.size; }, 0);
+
+  document.getElementById('dos-inv').innerHTML =
+    '<div style="border:1px solid var(--rule2);border-radius:8px;padding:14px 16px;background:var(--bg)">'
+    + '<div style="font-size:13px;font-weight:600;margin-bottom:2px">'
+    + gardes.length + ' fichier(s) à charger · ' + impPoids(poids) + '</div>'
+    + (Object.keys(themes).length
+        ? '<div style="margin-top:9px"><div style="font-family:var(--mono);font-size:9px;'
+          + 'text-transform:uppercase;letter-spacing:.06em;color:var(--muted2);margin-bottom:5px">'
+          + 'Thèmes déduits des dossiers (' + Object.keys(themes).length + ')</div>'
+          + '<div style="display:flex;flex-wrap:wrap;gap:5px">'
+          + Object.keys(themes).sort().map(function (t) {
+              return '<span class="rag-page-chip">' + impEsc(t) + ' · ' + themes[t] + '</span>';
+            }).join('') + '</div></div>'
+        : '<div style="font-size:11px;color:var(--muted);margin-top:6px">Aucun sous-dossier : '
+          + 'les documents seront classés en « général ».</div>')
+    + (ecartes.length
+        ? '<div style="margin-top:10px;font-size:11px;color:var(--muted);max-height:150px;'
+          + 'overflow:auto"><b style="color:var(--accent)">' + ecartes.length
+          + ' fichier(s) écarté(s) :</b>'
+          + ecartes.slice(0, 60).map(function (r) {
+              return '<div>· ' + impEsc(r.nom) + ' — ' + impEsc(r.motif) + '</div>';
+            }).join('')
+          + (ecartes.length > 60 ? '<div>…</div>' : '') + '</div>'
+        : '')
+    + '</div>';
+  document.getElementById('dos-go').style.display = gardes.length ? '' : 'none';
+  document.getElementById('dos-etat').innerHTML = '';
+};
+
+window.dosLancer = function () {
+  if (DOS.encours || !DOS.fichiers.length) return;
+  DOS.encours = true; DOS.arret = false;
+  document.getElementById('dos-go').style.display = 'none';
+  document.getElementById('dos-stop').style.display = '';
+
+  var i = 0, verses = 0, refuses = [], aIndexer = [];
+  var etat = document.getElementById('dos-etat');
+  var total = DOS.fichiers.length;
+
+  function afficher(fin, courant) {
+    etat.innerHTML =
+      '<div class="rag-progress-track"><div class="rag-progress-fill" style="width:'
+      + Math.round(100 * Math.min(i, total) / total) + '%"></div></div>'
+      + '<div style="font-size:11.5px;color:var(--ink2);margin-top:7px">'
+      + (fin ? '<b>Chargement terminé.</b> ' : 'Chargement… ')
+      + Math.min(i, total) + ' / ' + total + ' — <b>' + verses + '</b> versé(s)'
+      + (refuses.length ? ', <span style="color:var(--accent)">' + refuses.length
+          + ' refusé(s)</span>' : '')
+      + (courant && !fin ? ' · ' + impEsc(courant) : '') + '</div>'
+      + (refuses.length ? '<div style="margin-top:8px;font-size:11px;color:var(--muted);'
+          + 'max-height:170px;overflow:auto">' + refuses.map(function (r) {
+              return '<div>· <b>' + impEsc(r.nom) + '</b> — ' + impEsc(r.motif) + '</div>';
+            }).join('') + '</div>' : '')
+      + (fin && aIndexer.length ? '<div style="font-size:11.5px;color:var(--ink2);margin-top:8px">'
+          + 'Indexation sémantique de ' + aIndexer.length + ' document(s) — laissez cet onglet '
+          + 'ouvert.</div>' : '');
+  }
+
+  function suivant() {
+    if (DOS.arret || i >= total) return fini();
+    var g = DOS.fichiers[i];
+    afficher(false, g.chemin);
+
+    var fd = new FormData();
+    fd.append('file', g.f, g.f.name);
+    fd.append('pages_liees', 'general');
+    if (g.theme) fd.append('theme', g.theme);
+
+    var ctrl = new AbortController();
+    var minuteur = setTimeout(function () { ctrl.abort(); }, 180000);
+
+    fetch('/api/rag/upload', { method: 'POST', headers: window.ragHeaders(),
+                               body: fd, signal: ctrl.signal })
+      .then(function (r) { clearTimeout(minuteur);
+                           return r.json().then(function (d) { return { s: r.status, d: d }; }); })
+      .then(function (res) {
+        if (window.ragHandleAuthError(res.s)) { DOS.arret = true; return fini(); }
+        if (res.s === 201) {
+          verses++;
+          var doc = (res.d || {}).document || {};
+          if ((res.d || {}).statut_indexation === 'en_cours' && doc.id) {
+            aIndexer.push({ id: doc.id, nom: doc.nom_fichier, fragments: doc.nb_chunks });
+          }
+        } else {
+          refuses.push({ nom: g.chemin, motif: (res.d || {}).error || ('refus ' + res.s) });
+        }
+        i++;
+        /* En SÉRIE, et avec une respiration : dix envois simultanés de gros
+           fichiers arriveraient ensemble sur un serveur qui n'a pas la mémoire
+           de les traiter ensemble. */
+        setTimeout(suivant, 120);
+      })
+      .catch(function (e) {
+        clearTimeout(minuteur);
+        refuses.push({ nom: g.chemin,
+                       motif: e && e.name === 'AbortError' ? 'délai dépassé — fichier trop lourd ?'
+                                                           : 'réseau interrompu' });
+        i++;
+        setTimeout(suivant, 400);
+      });
+  }
+
+  function fini() {
+    DOS.encours = false;
+    document.getElementById('dos-stop').style.display = 'none';
+    document.getElementById('dos-go').style.display = '';
+    afficher(true);
+    if (window.ragRenderList) window.ragRenderList();
+    var n = 0;
+    (function indexerSuivant() {
+      if (n >= aIndexer.length) { afficher(true); return; }
+      var doc = aIndexer[n++];
+      window.ragPollIndexation(doc.id, doc.nom, doc.fragments);
+      setTimeout(indexerSuivant, 1200);
+    })();
+  }
+
+  afficher(false);
+  suivant();
+};
+
+
 function impEsc(x) {
   return String(x == null ? '' : x).replace(/&/g, '&amp;').replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
@@ -18002,6 +18234,10 @@ window.ragRenderDiag = function(){
         + '<span>' + (e.fragments_vectorises || 0) + ' vectoris\u00e9(s)</span>'
         + '<span>' + (d.taille_max_mo || 0) + ' Mo max</span>'
         + '<span>' + fmts.sort().join(' \u00b7 ') + '</span></div>';
+      /* La limite de taille du dépôt en masse suit celle du serveur. */
+      if(d.taille_max_mo && typeof DOS_MAX !== 'undefined'){
+        DOS_MAX = d.taille_max_mo * 1024 * 1024;
+      }
       el.style.display = 'block';
     })
     .catch(function(){ el.style.display = 'none'; });

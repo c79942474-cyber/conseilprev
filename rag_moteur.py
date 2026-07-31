@@ -181,32 +181,59 @@ TAILLE_FRAGMENT = 900
 RECOUVREMENT = 150
 
 
-def decouper(texte, taille=TAILLE_FRAGMENT, recouvrement=RECOUVREMENT):
-    texte = re.sub(r"[ \t]+", " ", str(texte or "")).strip()
-    texte = re.sub(r"\n{3,}", "\n\n", texte)
-    if not texte:
-        return []
-    if len(texte) <= taille:
-        return [texte]
+_ESPACES = re.compile(r"[ \t]+")
+_LIGNES = re.compile(r"\n{3,}")
 
-    fragments, debut = [], 0
-    while debut < len(texte):
-        fin = min(debut + taille, len(texte))
-        if fin < len(texte):
-            # On cherche une frontière propre dans le dernier quart du fragment.
-            fenetre = texte[debut + int(taille * 0.75):fin]
+
+def _normaliser(t):
+    """Espaces et lignes vides ramenés à une forme unique, SUR UN FRAGMENT.
+
+    Jamais sur le texte entier : `re.sub` sur une chaîne de 30 Mo comportant
+    des millions de correspondances culmine à plus de 300 Mo de mémoire vive —
+    dix fois le texte — quand les fragments produits n'en pèsent que 37. C'est
+    ce détail, et lui seul, qui plafonnait la taille des documents acceptés.
+    Appliqué à un fragment de 900 caractères, le même nettoyage ne coûte rien."""
+    return _LIGNES.sub("\n\n", _ESPACES.sub(" ", t)).strip()
+
+
+def decouper_flux(texte, taille=TAILLE_FRAGMENT, recouvrement=RECOUVREMENT):
+    """Fragments rendus UN PAR UN, sans jamais construire la liste complète.
+
+    L'appelant qui les insère au fil de l'eau ne paie donc que le fragment
+    courant. `decouper` reste disponible pour les usages qui veulent la liste."""
+    texte = str(texte or "")
+    if not texte.strip():
+        return
+    if len(texte) <= taille:
+        frag = _normaliser(texte)
+        if frag:
+            yield frag
+        return
+
+    debut, n = 0, len(texte)
+    while debut < n:
+        fin = min(debut + taille, n)
+        if fin < n:
+            # Frontière propre cherchée dans le dernier quart, SUR LE TEXTE BRUT :
+            # les séparateurs qu'on y cherche (« . », saut de ligne) survivent de
+            # toute façon au nettoyage, qui ne touche qu'aux espaces répétés.
+            depart_fenetre = debut + int(taille * 0.75)
+            fenetre = texte[depart_fenetre:fin]
             for sep in ("\n\n", ". ", ".\n", " ; ", "\n"):
                 pos = fenetre.rfind(sep)
                 if pos > 0:
-                    fin = debut + int(taille * 0.75) + pos + len(sep)
+                    fin = depart_fenetre + pos + len(sep)
                     break
-        frag = texte[debut:fin].strip()
+        frag = _normaliser(texte[debut:fin])
         if frag:
-            fragments.append(frag)
-        if fin >= len(texte):
+            yield frag
+        if fin >= n:
             break
         debut = max(fin - recouvrement, debut + 1)
-    return fragments
+
+
+def decouper(texte, taille=TAILLE_FRAGMENT, recouvrement=RECOUVREMENT):
+    return list(decouper_flux(texte, taille, recouvrement))
 
 
 # ═══════════════════════════════════════════════════════════════════════════
