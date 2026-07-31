@@ -191,6 +191,13 @@ body.vue-pays .panel:not(#s-pays){display:none}
 .gp-p span{font-size:11.5px;color:var(--muted);line-height:1.5;display:block}
 .gp-p em{display:block;font-style:normal;font-family:var(--mono);font-size:9px;
   text-transform:uppercase;letter-spacing:.05em;color:var(--muted2);margin-top:6px}
+.gp-options{display:grid;gap:8px;margin:10px 0 2px}
+.gp-opt{all:unset;cursor:pointer;border:1px solid var(--rule);border-radius:4px;padding:10px 12px;display:block}
+.gp-opt:hover{border-color:#1C5CAB;background:#F6F9FD}
+.gp-opt:focus-visible{outline:2px solid #1E63A8;outline-offset:2px}
+.gp-opt.on{border-color:#1C5CAB;background:#F0F6FD;box-shadow:inset 3px 0 0 #1C5CAB}
+.gp-opt b{display:block;font-size:12.5px;margin-bottom:2px}
+.gp-opt span{font-size:11px;color:var(--muted);line-height:1.45;display:block}
 @media print{.gp-lanceur,.gp-carte,.gp-voile,.gp-choix{display:none !important}}
 
 /* ── FICHE D'UN CENTRE DE DONNEES ───────────────────────────────────────────
@@ -3214,44 +3221,207 @@ function renderSources(){
 
 var GP_PROFILS = {
   invest: {
-    nom: "Investissement infrastructure",
+    nom: "Investissement & implantation — centres de données",
     court: "Investisseur",
-    quoi: "Où se construit la capacité, à quel stade de certitude, et ce que le "
-        + "référentiel ne peut pas vous dire.",
-    etapes: [
-      { sect: "s-carte", t: "Lire le parc, pas une liste",
-        d: "Les CARRÉS sont les centres de données, colorés par statut du plus certain "
-         + "au plus fragile : en exploitation, en construction, autorisé, annoncé, "
-         + "abandonné. Le curseur d’horizon, dans la barre du bas, estompe les sites "
-         + "dont la mise en service annoncée dépasse la date choisie — c’est la "
-         + "trajectoire jusqu’en 2030 qui se lit ainsi, pas un état instantané.",
-        piege: "Un site « annoncé » n’est pas un site : c’est un communiqué. Le "
-             + "référentiel conserve exprès les projets ABANDONNÉS (Meta Zeewolde, "
-             + "Apple Athenry, l’extension Google de Dublin) parce qu’un projet mort "
-             + "renseigne autant qu’un projet vivant sur les contraintes d’un territoire." },
-      { sect: "s-empreinte", t: "Le poids relatif des pays",
-        d: "Le tableau classe les pays par empreinte du parc cartographié. Lisez-le "
-         + "comme une carte de CONCENTRATION — Irlande, Pays-Bas, Allemagne, Espagne — "
-         + "et non comme un inventaire national.",
-        piege: "Les cumuls par pays additionnent des ordres de grandeur de CATÉGORIE. "
-             + "Ils situent, ils ne chiffrent pas un marché." },
-      { sect: "s-empreinte", pays: "IE", t: "Descendre au pays, puis au site",
-        d: "La page d’un pays liste tous ses centres avec statut, date, capacité et "
-         + "investissement ANNONCÉS. Cliquez ensuite un exploitant : sa fiche sépare "
-         + "ce qu’il a rendu public de ce que nous calculons, et donne les hypothèses "
-         + "du calcul pour que votre analyste le refasse avec ses propres valeurs.",
-        piege: "Aucune capacité informatique attestée ne survit à la vérification sur "
-             + "les 97 sites : les mégawatts qui circulent sont des cibles de campus, "
-             + "des capacités de raccordement ou des puissances de machine. Aucun "
-             + "agrégat de puissance européenne n’est donc publiable ici." },
-      { sect: "s-sources", t: "Vérifier avant de citer",
-        d: "Chaque constante du modèle — intensités carbone, PUE, WUE, facteur de "
-         + "charge, gabarits — porte sa source, son éditeur et son lien. Vos analystes "
-         + "peuvent refaire la chaîne complète sans nous.",
-        piege: "Si une donnée compte dans une décision d’investissement, remontez à la "
-             + "source primaire citée. Cette page est un point de départ documenté, "
-             + "pas une due diligence." },
-    ],
+    quoi: "Choisir où investir — construction neuve, extension ou rachat — critère "
+        + "par critère, en sachant exactement ce que chaque chiffre vaut.",
+    question: {
+      t: "Quel est votre projet ?",
+      d: "Le bon ordre de lecture dépend du scénario. On ne choisit pas un pays pour "
+       + "un campus neuf comme on audite un site à racheter : les critères sont les "
+       + "mêmes, leur ordre et leurs pièges ne le sont pas.",
+      options: [
+        { cle: "neuve", nom: "Construction neuve",
+          sens: "choisir le pays, puis le territoire : électricité, climat, eau, " +
+                "concurrence sur le raccordement" },
+        { cle: "extension", nom: "Extension d’un parc existant",
+          sens: "densité d’opérateurs, marge du réseau, ce que la tranche " +
+                "supplémentaire change à l’empreinte" },
+        { cle: "ma", nom: "Rachat / M&A",
+          sens: "auditer un site : ce que la fiche atteste, et les questions que " +
+                "la data room devra trancher" },
+      ],
+    },
+    branches: {
+      neuve: {
+        nom: "Construction neuve",
+        etapes: [
+          { sect: "s-empreinte", t: "L’électricité décide avant le foncier",
+            d: "Le tableau par pays porte l’intensité carbone du réseau (gCO₂e/kWh, "
+             + "millésime 2024, cycle de vie). À consommation égale, elle fait varier "
+             + "l’empreinte reportable du simple au vingtuple : Suède 35, France 45, "
+             + "Irlande 270, Allemagne 355, Pologne 660. Pour un campus d’IA qui "
+             + "tirera de 100 à 400 MW, c’est le premier critère de long terme — il "
+             + "conditionne le coût carbone, la CSRD et l’acceptabilité du permis.",
+            piege: "C’est une moyenne ANNUELLE de production nationale. Un contrat "
+                 + "d’approvisionnement horaire (24/7 carbon-free) ou un PPA dédié "
+                 + "change complètement votre résultat sans changer cette moyenne — "
+                 + "et un pays importateur (Luxembourg) est mieux noté qu’il ne "
+                 + "consomme réellement." },
+          { sect: "s-carte", t: "Le climat pèse directement sur le PUE — et sur l’eau",
+            d: "Le mode de refroidissement découle du climat, et le PUE en découle : "
+             + "free cooling nordique 1,10–1,25 ; circuit d’eau 1,15–1,35 ; "
+             + "adiabatique méridional 1,20–1,45 — mais ce dernier consomme 0,8 à "
+             + "2,2 litres d’eau par kWh informatique là où le free cooling reste "
+             + "sous 0,1. Un pays froid achète un PUE bas SANS payer en eau ; un pays "
+             + "chaud arbitre entre les deux.",
+            piege: "Aucun des 97 sites du référentiel ne publie son PUE réel. Ces "
+                 + "fourchettes sont des CLASSES par mode de refroidissement : elles "
+                 + "comparent des stratégies d’implantation, jamais deux sites." },
+          { sect: "s-carte", t: "La concurrence sur le raccordement se lit au statut",
+            d: "Filtrez mentalement la carte sur « annoncé » et « en construction » : "
+             + "c’est la file d’attente de raccordement de chaque territoire jusqu’en "
+             + "2030 — le curseur d’horizon la déroule année par année. Là où le "
+             + "pipeline est dense, votre projet arrive DERRIÈRE : le délai de "
+             + "raccordement, de deux à sept ans selon le pays, devient le chemin "
+             + "critique du business plan, avant le permis de construire.",
+            piege: "Les projets ABANDONNÉS sont conservés exprès : Meta à Zeewolde, "
+                 + "Apple à Athenry, l’extension Google de Dublin. Un refus renseigne "
+                 + "plus qu’une annonce — moratoires de raccordement en Irlande et "
+                 + "aux Pays-Bas, deux marchés pourtant réputés « évidents »." },
+          { sect: "s-empreinte", pays: "SE", t: "Descendre dans un pays candidat",
+            d: "La vue pays liste tous les centres cartographiés : opérateur, ville, "
+             + "statut, mise en service, refroidissement, et pour chaque valeur sa "
+             + "NATURE — publiée, déduite du site, ou de sa classe. Ici la Suède : "
+             + "réseau à 35 gCO₂e/kWh, climat propice au free cooling, et un parc déjà constitué qui "
+             + "prouve la filière (main-d’œuvre, chaîne de sous-traitance, permis "
+             + "déjà instruits par les autorités locales).",
+            piege: "Un parc dense prouve la filière ET consomme la ressource : foncier "
+                 + "raccordable, capacité réseau, acceptabilité locale. Le pays idéal "
+                 + "sur le papier peut être saturé dans la région précise que vous "
+                 + "visez — le choix final est régional, pas national." },
+          { sect: "s-sources", t: "Ce que ce référentiel ne vous dira pas — la due diligence",
+            d: "Quatre décisions restent hors de portée de toute carte publique et "
+             + "font votre différentiel : le PRIX de l’électricité et sa couverture "
+             + "(PPA, tarif industriel, exposition spot) ; le DÉLAI de raccordement "
+             + "opposable, écrit par le gestionnaire de réseau ; la disponibilité en "
+             + "EAU au point exact d’implantation ; les aides et la fiscalité locales. "
+             + "Chaque constante utilisée ici — intensités, PUE, WUE, gabarits — "
+             + "porte sa source sur cette page : vos analystes peuvent refaire toute "
+             + "la chaîne avec leurs propres valeurs.",
+            piege: "Cette page SITUE ; elle ne chiffre pas un business plan. Si un "
+                 + "chiffre pèse dans la décision, remontez à la source primaire "
+                 + "citée, et datez votre citation : le référentiel est versionné." },
+        ],
+      },
+      extension: {
+        nom: "Extension d’un parc existant",
+        etapes: [
+          { sect: "s-carte", t: "Où votre opérateur est déjà implanté",
+            d: "Chaque carré porte son exploitant — les 97 sites l’attestent. Une "
+             + "extension se joue d’abord là où l’opérateur détient déjà foncier, "
+             + "permis-cadre et raccordement : la carte montre en un regard les "
+             + "campus multi-tranches (hyperscale : 30 à 150 MW livrés par tranches "
+             + "sur plusieurs années) où la tranche suivante est la voie rapide.",
+            piege: "L’exploitant affiché n’est pas toujours le PROPRIÉTAIRE des murs : "
+                 + "colocation, foncières, coentreprises. Le référentiel ne porte pas "
+                 + "la structure de détention — c’est une question de data room, pas "
+                 + "de carte." },
+          { sect: "s-empreinte", pays: "NL", t: "La densité du pays d’accueil",
+            d: "La vue pays montre la concentration réelle : les Pays-Bas, cinquième "
+             + "parc cartographié, illustrent le cas d’école — forte densité autour "
+             + "d’Amsterdam, réseau à 250 gCO₂e/kWh, et un historique de moratoires "
+             + "municipaux (Zeewolde) qui pèse sur toute extension future.",
+            piege: "La densité joue dans les deux sens : elle prouve l’écosystème et "
+                 + "elle épuise la capacité d’accueil. Les moratoires néerlandais et "
+                 + "irlandais ont d’abord frappé les EXTENSIONS — l’antériorité ne "
+                 + "protège pas du durcissement des règles." },
+          { sect: "s-carte", t: "La marge du réseau, avant le permis",
+            d: "Le pipeline « annoncé + en construction » du territoire visé est "
+             + "votre concurrence directe sur la file de raccordement. Une annonce "
+             + "non construite RÉSERVE souvent la capacité auprès du gestionnaire de "
+             + "réseau : elle vous précède dans la file même si elle ne sort jamais "
+             + "de terre. Le curseur d’horizon 2024→2030 déroule cette file.",
+            piege: "Un site « annoncé » n’est pas un concurrent commercial — mais "
+                 + "c’est un concurrent de RACCORDEMENT. Les deux se confondent "
+                 + "rarement dans les études de marché, jamais dans la file du "
+                 + "gestionnaire de réseau." },
+          { sect: "s-empreinte", t: "Ce que la tranche supplémentaire change à l’empreinte",
+            d: "Les fourchettes par gabarit donnent l’ordre de grandeur du saut : "
+             + "passer d’une colocation (5–40 MW) à un campus hyperscale (30–150 MW) "
+             + "multiplie l’électricité appelée — et l’empreinte reportable suit "
+             + "l’intensité du réseau national. La formule complète est affichée sur "
+             + "chaque fiche : capacité × 8 760 h × charge (0,55–0,80) × PUE.",
+            piege: "Ces fourchettes sont des CLASSES : elles disent de quel ordre est "
+                 + "un campus de ce type, jamais combien consommera VOTRE tranche. "
+                 + "Le dimensionnement contractuel vient de l’ingénierie, pas d’ici." },
+          { sect: "s-sources", t: "La due diligence d’extension",
+            d: "Trois questions décident, et aucune carte publique n’y répond : la "
+             + "capacité de raccordement RESTANTE du site (puissance souscrite vs "
+             + "utilisée, écrite par le gestionnaire de réseau) ; la position de la "
+             + "commune et de l’autorité environnementale sur une extension (les "
+             + "règles ont durci depuis les premiers permis) ; l’eau et le mode de "
+             + "refroidissement de la tranche nouvelle, que la directive 2023/1791 "
+             + "obligera à déclarer. Les sources de cette page donnent le point de "
+             + "départ documenté.",
+            piege: "Le permis d’origine ne préjuge PAS du permis d’extension : "
+                 + "Zeewolde et Dublin l’ont montré sur ce même référentiel. Traitez "
+                 + "l’extension comme un projet neuf en instruction, avec l’avantage "
+                 + "du foncier — pas comme un droit acquis." },
+        ],
+      },
+      ma: {
+        nom: "Rachat / M&A",
+        etapes: [
+          { sect: "s-carte", t: "Le statut est la première ligne de la data room",
+            d: "74 des 97 sites cartographiés sont EN EXPLOITATION — le périmètre "
+             + "naturel d’un rachat. Les statuts se lisent comme une échelle de "
+             + "certitude : une exploitation constatée, un chantier, un permis, un "
+             + "communiqué. Un portefeuille à vendre mélange souvent les quatre ; "
+             + "leur valeur n’a rien de commun.",
+            piege: "Un site « annoncé » dans un portefeuille en vente est un "
+                 + "communiqué, pas un actif : ni permis, ni raccordement, ni "
+                 + "chantier constatés. Les quatre projets abandonnés du référentiel "
+                 + "étaient tous, un jour, des annonces crédibles." },
+          { sect: "s-empreinte", pays: "IE", t: "La fiche du site cible, colonne par colonne",
+            d: "Ouvrez un pays — ici l’Irlande, huit sites, marché de M&A le plus "
+             + "actif du référentiel — puis un site. Sa fiche sépare physiquement ce "
+             + "que l’exploitant a RENDU PUBLIC (avec source, type de source, niveau "
+             + "de confiance : haute, moyenne, faible) de ce que nous CALCULONS "
+             + "(fourchettes, formule affichée). Aucune ligne ne mélange les deux : "
+             + "c’est la discipline que votre data room devra tenir.",
+            piege: "Deux montants d’investissement seulement survivent à la "
+                 + "vérification sur 97 sites — et l’un des deux (Apple, Athenry, "
+                 + "850 M€) porte un projet ABANDONNÉ. Un montant de presse agrège "
+                 + "des tranches, des sites, parfois des pays : sans le contrat, ce "
+                 + "n’est pas un prix." },
+          { sect: "s-empreinte", t: "Ce que la fiche ne contient pas : vos questions de data room",
+            d: "Le référentiel s’arrête où la due diligence commence. Exigez du "
+             + "vendeur : le PUE et le WUE MESURÉS sur douze mois glissants ; la "
+             + "puissance de raccordement CONTRACTUELLE et la marge restante ; le "
+             + "taux d’occupation et la durée résiduelle pondérée des baux ; le "
+             + "CAPEX engagé par tranche (pas l’annonce de presse) ; la structure de "
+             + "détention réelle — murs, foncier, coentreprises ; les PPA en cours "
+             + "et l’exposition au prix spot ; l’état de conformité à la directive "
+             + "2023/1791 art. 12, qui rend la déclaration énergie-eau obligatoire "
+             + "au-delà de 500 kW.",
+            piege: "Si le vendeur ne produit pas un PUE mesuré, ce silence EST une "
+                 + "information : la déclaration européenne le rendra public de toute "
+                 + "façon. Achetez le chiffre avant qu’il ne soit publié, pas après." },
+          { sect: "s-empreinte", t: "Le pays pèse sur la valeur de revente",
+            d: "L’intensité carbone du réseau national suit l’actif toute sa vie : "
+             + "elle conditionne l’empreinte que ses clients reporteront (CSRD), son "
+             + "exposition au prix du carbone et son attractivité pour les charges "
+             + "d’IA sous contrainte ESG. À service égal, un site polonais "
+             + "(660 gCO₂e/kWh) et un site suédois (35) ne sont pas le même actif — "
+             + "l’écart est un multiple, pas une marge.",
+            piege: "Cette décote ou cette prime est DYNAMIQUE : un réseau qui se "
+                 + "décarbone vite (Pologne, Grèce) peut revaloriser l’actif avant "
+                 + "2030. Le millésime de l’intensité fait partie de la thèse "
+                 + "d’investissement — datez-le dans votre modèle." },
+          { sect: "s-sources", t: "La piste d’audit de votre mémo",
+            d: "Chaque constante du modèle — intensités, PUE, WUE, facteur de charge, "
+             + "gabarits — porte ici son éditeur, son millésime et son lien, et le "
+             + "référentiel est versionné en tête de page. Un mémo d’investissement "
+             + "peut citer cette page en indiquant la version ; vos analystes "
+             + "peuvent refaire chaque calcul avec leurs valeurs de data room.",
+            piege: "Ce référentiel est un point de départ DOCUMENTÉ, pas une "
+                 + "évaluation : rien ici n’est audité par un tiers ni opposable. "
+                 + "La valeur d’un site se prouve avec ses mesures, ses contrats et "
+                 + "ses permis — jamais avec une carte publique." },
+        ],
+      },
+    },
   },
   credit: {
     nom: "Banque — financement de projet",
@@ -3448,7 +3618,17 @@ var GP_PROFILS = {
   },
 };
 
-var GP = { profil: null, i: 0, cible: null };
+var GP = { profil: null, branche: null, i: 0, cible: null };
+
+/* Les étapes EFFECTIVES d'un profil. Un profil linéaire les porte dans
+   `etapes` ; un profil à embranchement porte une `question` et des `branches`,
+   et la suite n'existe qu'une fois le scénario choisi — un investisseur en
+   construction neuve et un acheteur en M&A ne lisent pas la même page. */
+function gpEtapes(P){
+  if(P.etapes) return P.etapes;
+  var b = GP.branche && P.branches && P.branches[GP.branche];
+  return b ? [P.question].concat(b.etapes) : [P.question];
+}
 
 function gpEls(){
   return { voile: document.getElementById("gp-voile"), carte: document.getElementById("gp-carte"),
@@ -3464,15 +3644,18 @@ function gpOuvrirChoix(){
   if(b) b.focus({ preventScroll: true });
 }
 
-function gpDemarrer(cle){
-  if(!GP_PROFILS[cle]) return;
+function gpDemarrer(cle, branche){
+  var P = GP_PROFILS[cle];
+  if(!P) return;
   var e = gpEls();
   e.choix.classList.remove("on");
   GP.profil = cle; GP.i = 0;
+  GP.branche = (branche && P.branches && P.branches[branche]) ? branche : null;
   e.voile.classList.add("on");
   e.carte.classList.add("on");
-  if(history.replaceState) history.replaceState(null, "", "#parcours=" + cle);
-  gpAller(0);
+  if(history.replaceState) history.replaceState(null, "", "#parcours=" + cle
+    + (GP.branche ? "." + GP.branche : ""));
+  gpAller(GP.branche ? 1 : 0);
 }
 
 function gpNettoyer(){
@@ -3494,9 +3677,10 @@ function gpFermer(){
 function gpAller(i){
   var P = GP_PROFILS[GP.profil];
   if(!P) return;
-  i = Math.max(0, Math.min(P.etapes.length - 1, i));
+  var E = gpEtapes(P);
+  i = Math.max(0, Math.min(E.length - 1, i));
   GP.i = i;
-  var et = P.etapes[i];
+  var et = E[i];
   gpNettoyer();
 
   /* Une etape peut demander une vue de detail : on l'ouvre, sinon on revient a
@@ -3521,28 +3705,47 @@ function gpAller(i){
     sec.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  var points = P.etapes.map(function(_, j){
+  /* Tant que le scénario n'est pas choisi, la suite n'existe pas : le compte
+     d'étapes affiche « … » plutôt qu'un total qui changerait sous les yeux. */
+  var enAttente = !!(et.options && !GP.branche);
+  var points = E.map(function(_, j){
     return '<i class="' + (j === i ? "ici" : (j < i ? "fait" : "")) + '"></i>';
   }).join("");
   var e = gpEls();
   e.carte.innerHTML =
-      '<div class="gp-tete"><span class="gp-profil">' + esc(P.court) + "</span>"
-    + '<span class="gp-etape">Étape ' + (i + 1) + " sur " + P.etapes.length + "</span>"
+      '<div class="gp-tete"><span class="gp-profil">' + esc(P.court)
+    + (GP.branche && P.branches ? " · " + esc(P.branches[GP.branche].nom) : "") + "</span>"
+    + '<span class="gp-etape">Étape ' + (i + 1) + " sur " + (enAttente ? "…" : E.length) + "</span>"
     + '<button type="button" class="gp-fermer" id="gp-x" aria-label="Fermer le parcours">×</button></div>'
     + '<div class="gp-corps"><h4>' + esc(et.t) + "</h4><p>" + et.d + "</p>"
+    + (et.options ? '<div class="gp-options">' + et.options.map(function(o){
+        return '<button type="button" class="gp-opt' + (GP.branche === o.cle ? " on" : "")
+          + '" data-branche="' + o.cle + '"><b>' + esc(o.nom) + "</b><span>"
+          + esc(o.sens) + "</span></button>";
+      }).join("") + "</div>" : "")
     + (et.piege ? '<div class="gp-piege"><b>Le piège :</b> ' + et.piege + "</div>" : "")
     + "</div>"
     + '<div class="gp-pied"><div class="gp-points">' + points + "</div>"
     + '<button type="button" class="gp-btn" id="gp-prec"' + (i === 0 ? " disabled" : "") + ">Précédent</button>"
-    + '<button type="button" class="gp-btn suiv" id="gp-suiv">'
-    + (i === P.etapes.length - 1 ? "Terminer" : "Suivant") + "</button></div>";
+    + '<button type="button" class="gp-btn suiv" id="gp-suiv"' + (enAttente ? " disabled" : "") + ">"
+    + (!enAttente && i === E.length - 1 ? "Terminer" : "Suivant") + "</button></div>";
 
   document.getElementById("gp-x").addEventListener("click", gpFermer);
   document.getElementById("gp-prec").addEventListener("click", function(){ if(GP.i > 0) gpAller(GP.i - 1); });
   document.getElementById("gp-suiv").addEventListener("click", function(){
-    if(GP.i === P.etapes.length - 1) gpFermer(); else gpAller(GP.i + 1);
+    if(gpEtapes(P)[GP.i] && gpEtapes(P)[GP.i].options && !GP.branche) return;
+    if(GP.i === gpEtapes(P).length - 1) gpFermer(); else gpAller(GP.i + 1);
   });
-  document.getElementById("gp-suiv").focus({ preventScroll: true });
+  e.carte.querySelectorAll("[data-branche]").forEach(function(b){
+    b.addEventListener("click", function(){
+      GP.branche = this.getAttribute("data-branche");
+      if(history.replaceState) history.replaceState(null, "",
+        "#parcours=" + GP.profil + "." + GP.branche);
+      gpAller(GP.i + 1);
+    });
+  });
+  var focale = enAttente ? e.carte.querySelector(".gp-opt") : document.getElementById("gp-suiv");
+  if(focale) focale.focus({ preventScroll: true });
 }
 
 function gpBrancher(){
@@ -3558,7 +3761,10 @@ function gpBrancher(){
     + Object.keys(GP_PROFILS).map(function(k){
         var P = GP_PROFILS[k];
         return '<button type="button" class="gp-p" data-profil="' + k + '"><b>' + esc(P.nom)
-          + "</b><span>" + esc(P.quoi) + "</span><em>" + P.etapes.length + " étapes</em></button>";
+          + "</b><span>" + esc(P.quoi) + "</span><em>"
+          + (P.etapes ? P.etapes.length + " étapes"
+                      : Object.keys(P.branches).length + " scénarios au choix")
+          + "</em></button>";
       }).join("")
     + "</div>";
   e.choix.querySelectorAll("[data-profil]").forEach(function(b){
@@ -3576,8 +3782,8 @@ function gpBrancher(){
 
   /* L'adresse porte le parcours : un responsable peut envoyer a son equipe le
      chemin de lecture qui la concerne, pas seulement la page. */
-  var m = /^#parcours=([a-z]+)$/.exec(location.hash || "");
-  if(m && GP_PROFILS[m[1]]) setTimeout(function(){ gpDemarrer(m[1]); }, 400);
+  var m = /^#parcours=([a-z]+)(?:\.([a-z]+))?$/.exec(location.hash || "");
+  if(m && GP_PROFILS[m[1]]) setTimeout(function(){ gpDemarrer(m[1], m[2]); }, 400);
 }
 
 /* ── FICHE D'UN CENTRE DE DONNEES ───────────────────────────────────────────
