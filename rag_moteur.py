@@ -237,6 +237,172 @@ def decouper(texte, taille=TAILLE_FRAGMENT, recouvrement=RECOUVREMENT):
 
 
 # ═══════════════════════════════════════════════════════════════════════════
+# 3 bis. DÉCOUPAGE D'UNE SOURCE QUI ARRIVE PAR MORCEAUX
+#
+#    Tout ce qui précède suppose le texte ENTIER en mémoire. Pour un document
+#    de 200 Mo, cette seule hypothèse fixe la taille maximale acceptable —
+#    quelles que soient les optimisations en aval.
+#
+#    `decouper_source` lève l'hypothèse : elle consomme une source qui arrive
+#    par morceaux (blocs d'un fichier, pages d'un PDF, lignes d'un tableur) et
+#    rend des fragments au fil de l'eau. À aucun instant elle ne détient plus
+#    qu'un morceau et le fragment en cours. La taille du document n'entre plus
+#    dans l'équation.
+# ═══════════════════════════════════════════════════════════════════════════
+
+TAILLE_BLOC = 1 << 20                       # 1 Mio lu à la fois
+
+
+def _prochaine_coupe(texte, debut, taille):
+    """Fin du fragment commençant à `debut` : frontière de phrase la plus
+    proche dans le dernier quart, ou la taille pleine à défaut."""
+    fin = min(debut + taille, len(texte))
+    if fin >= len(texte):
+        return fin
+    depart = debut + int(taille * 0.75)
+    fenetre = texte[depart:fin]
+    for sep in ("\n\n", ". ", ".\n", " ; ", "\n"):
+        pos = fenetre.rfind(sep)
+        if pos > 0:
+            return depart + pos + len(sep)
+    return fin
+
+
+def decouper_source(morceaux, taille=TAILLE_FRAGMENT, recouvrement=RECOUVREMENT):
+    """Fragments d'une source rendue par morceaux, sans jamais tout détenir.
+
+    `morceaux` : itérable de chaînes. Un morceau peut couper une phrase en
+    deux — c'est le cas d'un bloc de fichier — et le recollage est fait ici :
+    on ne coupe jamais à la frontière d'un morceau, seulement à une frontière
+    de phrase, exactement comme sur un texte entier."""
+    reste = ""
+    for m in morceaux:
+        if not m:
+            continue
+        reste += m
+        # On ne produit que les fragments dont on est SÛR : tant qu'il ne reste
+        # pas de quoi remplir un fragment entier plus sa marge, la fin pourrait
+        # encore recevoir du texte et la coupe serait prématurée.
+        while len(reste) >= taille * 2:
+            fin = _prochaine_coupe(reste, 0, taille)
+            frag = _normaliser(reste[:fin])
+            if frag:
+                yield frag
+            reste = reste[max(fin - recouvrement, 1):]
+    for frag in decouper_flux(reste, taille, recouvrement):
+        yield frag
+
+
+def blocs_texte(flux, taille_bloc=TAILLE_BLOC):
+    """Morceaux décodés d'un fichier texte lu par blocs.
+
+    Le décodage est INCRÉMENTAL : un caractère accentué à cheval sur deux blocs
+    serait sinon décodé en deux moitiés invalides, et le document se remplirait
+    de losanges noirs à l'endroit exact des coupures."""
+    import codecs
+    decodeur = codecs.getincrementaldecoder("utf-8")(errors="replace")
+    while True:
+        bloc = flux.read(taille_bloc)
+        if not bloc:
+            break
+        m = decodeur.decode(bloc)
+        if m:
+            yield m
+    fin = decodeur.decode(b"", True)
+    if fin:
+        yield fin
+
+
+def morceaux_pdf(flux):
+    """Pages d'un PDF, une par une. pypdf lit le fichier à la demande : le
+    document n'est jamais chargé en entier."""
+    try:
+        from pypdf import PdfReader
+    except Exception:                                          # noqa: BLE001
+        raise RagErreur("pdf_absent", 503)
+    try:
+        lecteur = PdfReader(flux)
+        pages = lecteur.pages
+    except Exception as e:                                     # noqa: BLE001
+        raise RagErreur("pdf_illisible", 422, type(e).__name__)
+    vide = True
+    for page in pages:
+        try:
+            t = page.extract_text() or ""
+        except Exception:                                      # noqa: BLE001
+            continue
+        if t.strip():
+            vide = False
+            yield t + "\n\n"
+    if vide:
+        raise RagErreur("pdf_sans_texte", 422)
+
+
+def morceaux_docx(flux):
+    try:
+        import docx
+    except Exception:                                          # noqa: BLE001
+        raise RagErreur("docx_absent", 503)
+    try:
+        d = docx.Document(flux)
+    except Exception as e:                                     # noqa: BLE001
+        raise RagErreur("docx_illisible", 422, type(e).__name__)
+    for p in d.paragraphs:
+        if p.text.strip():
+            yield p.text + "\n\n"
+    for t in d.tables:
+        for ligne in t.rows:
+            cellules = [c.text.strip() for c in ligne.cells]
+            if any(cellules):
+                yield " | ".join(cellules) + "\n"
+
+
+def morceaux_xlsx(flux):
+    try:
+        import openpyxl
+    except Exception:                                          # noqa: BLE001
+        raise RagErreur("xlsx_absent", 503)
+    try:
+        cl = openpyxl.load_workbook(flux, read_only=True, data_only=True)
+    except Exception as e:                                     # noqa: BLE001
+        raise RagErreur("xlsx_illisible", 422, type(e).__name__)
+    for feuille in cl.worksheets:
+        yield "### " + str(feuille.title) + "\n"
+        for ligne in feuille.iter_rows(values_only=True):
+            vals = [str(v) for v in ligne if v is not None]
+            if vals:
+                yield " | ".join(vals) + "\n"
+
+
+def morceaux_de(nom, flux):
+    """Morceaux de texte d'un fichier OUVERT, selon son extension.
+
+    Le fichier est lu depuis son flux — sur disque, tel que le serveur l'a
+    reçu — et non depuis une copie en mémoire. C'est ce qui permet d'accepter
+    un document dont la taille dépasse la mémoire disponible."""
+    ext = valider_extension(nom)
+    try:
+        flux.seek(0)
+    except Exception:                                          # noqa: BLE001
+        pass
+    if ext in FORMATS_TEXTE:
+        return blocs_texte(flux)
+    if ext == "pdf":
+        return morceaux_pdf(flux)
+    if ext == "docx":
+        return morceaux_docx(flux)
+    if ext in ("xlsx", "xlsm"):
+        return morceaux_xlsx(flux)
+    raise RagErreur("extension_refusee", 415, ext)
+
+
+def fragments_de_fichier(nom, flux, taille=TAILLE_FRAGMENT, recouvrement=RECOUVREMENT):
+    """Fragments prêts à indexer, depuis un fichier ouvert. Le point d'entrée
+    des documents volumineux : rien n'est jamais détenu en entier."""
+    return decouper_source(morceaux_de(nom, flux), taille, recouvrement)
+
+
+# ═══════════════════════════════════════════════════════════════════════════
 # 4. REQUÊTES
 #    Le plein-texte de Postgres attend une syntaxe : lui passer des mots bruts
 #    joints par « | » suffit à ramener tout document contenant N'IMPORTE LEQUEL

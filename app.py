@@ -7106,7 +7106,14 @@ RAG_CHUNK_OVERLAP = rag_moteur.RECOUVREMENT
 # TEXTE ENTIER, ce qui coutait 327 Mo pour 30 Mo de texte. Il normalise
 # desormais fragment par fragment — 39 Mo pour les memes 30 Mo. C est ce gain,
 # et lui seul, qui autorise a doubler la limite.
-RAG_MAX_FILE_SIZE = int(os.environ.get('RAG_MAX_FILE_SIZE_MO', '60')) * 1024 * 1024
+RAG_MAX_FILE_SIZE = int(os.environ.get('RAG_MAX_FILE_SIZE_MO', '500')) * 1024 * 1024
+# Au-dela de ce poids, le FICHIER D ORIGINE n est plus conserve : seul son
+# texte est indexe. C est le seul compromis qui permette d accepter un document
+# de plusieurs centaines de megaoctets — stocker le binaire supposerait de le
+# tenir en memoire pour l ecrire en base, et la taille redeviendrait la limite.
+# Ce qu on perd est nomme : le bouton « Telecharger » dira que l original n est
+# pas conserve, plutot que de rendre un fichier vide.
+RAG_BLOB_MAX = int(os.environ.get('RAG_BLOB_MAX_MO', '30')) * 1024 * 1024
 RAG_ALLOWED_EXT = {'.' + e for e in rag_moteur.EXTENSIONS}
 RAG_PAGES_VALIDES = ['audit', 'registre', 'fria', 'maturite', 'veille', 'raci', 'general']
 
@@ -7388,20 +7395,33 @@ def rag_upload():
         return jsonify({'error': 'Format non accepté. Formats acceptés : '
                                  + ', '.join(sorted(e.lstrip(".") for e in RAG_ALLOWED_EXT))}), 415
 
-    file_bytes = f.read()
-    if len(file_bytes) > RAG_MAX_FILE_SIZE:
+    # Taille SANS lire le fichier : Werkzeug l a deja depose sur disque au-dela
+    # de quelques centaines de kilo-octets. Le lire pour connaitre son poids
+    # ferait de la memoire la limite avant meme le premier controle.
+    try:
+        f.stream.seek(0, 2)
+        taille = f.stream.tell()
+        f.stream.seek(0)
+    except Exception:                                          # noqa: BLE001
+        taille = len(f.read())
+        f.stream.seek(0)
+    if not taille:
+        return jsonify({'error': 'Le fichier est vide.', 'code': 'fichier_vide'}), 400
+    if taille > RAG_MAX_FILE_SIZE:
         mo = RAG_MAX_FILE_SIZE // (1024 * 1024)
         return jsonify({
-            'error': "Ce fichier fait %d Mo ; la limite est de %d Mo. Cette limite protège "
-                     "la mémoire du serveur : l ingestion coûte environ trois fois le poids "
-                     "du fichier, et un dépassement ferait redémarrer le service au lieu de "
-                     "refuser proprement. Trois options : découper le document (un PDF de "
-                     "500 pages se scinde par chapitres), le déposer en texte plutôt qu en "
-                     "PDF si c est possible, ou relever RAG_MAX_FILE_SIZE_MO dans les "
-                     "variables d environnement si l hébergement dispose de la mémoire."
-                     % (len(file_bytes) // (1024 * 1024), mo),
+            'error': "Ce fichier fait %d Mo ; la limite est de %d Mo. Découpez le document, "
+                     "ou relevez RAG_MAX_FILE_SIZE_MO dans les variables d environnement."
+                     % (taille // (1024 * 1024), mo),
             'code': 'trop_gros', 'limite_mo': mo,
-            'taille_mo': len(file_bytes) // (1024 * 1024)}), 413
+            'taille_mo': taille // (1024 * 1024)}), 413
+
+    # Le fichier d origine n est conserve que sous le seuil : au-dela, on garde
+    # le texte et on le DIT. Tenir 200 Mo de binaire en memoire pour l ecrire en
+    # base ramenerait la taille au rang de limite, ce qu on vient d ecarter.
+    garde_original = taille <= RAG_BLOB_MAX
+    file_bytes = f.stream.read() if garde_original else b''
+    f.stream.seek(0)
 
     pages_liees = request.form.get('pages_liees', 'general').strip()
     pages_list = [p for p in pages_liees.split(',') if p in RAG_PAGES_VALIDES]
@@ -7416,25 +7436,6 @@ def rag_upload():
     if not pages_list:
         pages_list = ['general']
 
-    # Le motif d echec est rendu tel quel, avec son statut : un PDF scanne
-    # (422, « c est une image ») n appelle pas le meme geste qu une
-    # bibliotheque absente sur le serveur (503, « ce n est pas votre faute »).
-    try:
-        texte = rag_moteur.extraire_texte(f.filename, file_bytes)
-    except rag_moteur.RagErreur as e:
-        return jsonify({'error': e.message(), 'code': e.code}), e.statut
-    except Exception as e:                                     # noqa: BLE001
-        logger.warning(f"RAG upload — extraction en echec sur {f.filename} : {e}")
-        return jsonify({'error': "Ce fichier n a pas pu être lu."}), 422
-    if not texte.strip():
-        return jsonify({'error': 'Aucun texte extractible de ce fichier.',
-                        'code': 'texte_vide'}), 422
-
-    # Le decoupage est consomme AU FIL DE L EAU plus bas : on ne compte ici que
-    # pour refuser tot un document dont rien ne sortirait.
-    if not any(True for _ in rag_moteur.decouper_flux(texte, RAG_CHUNK_SIZE, RAG_CHUNK_OVERLAP)):
-        return jsonify({'error': 'Texte extrait vide après nettoyage'}), 400
-
     now = datetime.utcnow().isoformat()
     safe_name = secure_filename(f.filename)
     statut_initial = 'en_cours' if RAG_PGVECTOR_AVAILABLE else 'termine'
@@ -7448,9 +7449,12 @@ def rag_upload():
 
     conn = registre_get_db()
     cur = conn.cursor()
+    # `taille_octets` porte la taille REELLE du document, meme quand l original
+    # n est pas conserve : afficher 0 Mo pour un fichier de 200 Mo serait faux.
     values = (safe_name, f.mimetype or 'application/octet-stream', ext, ','.join(pages_list),
-              len(file_bytes), file_bytes, 0, statut_initial,
-              theme, famille, entreprise, 'dépôt direct', now)
+              taille, file_bytes, 0, statut_initial,
+              theme, famille, entreprise,
+              'dépôt direct' if garde_original else 'dépôt direct · original non conservé', now)
     if REGISTRE_USE_PG:
         cur.execute('''INSERT INTO rag_documents
             (nom_fichier, type_mime, extension, pages_liees, taille_octets, contenu_fichier,
@@ -7469,22 +7473,53 @@ def rag_upload():
     # sur un hebergement a un seul worker Gunicorn, un thread d arriere-plan partage le meme GIL
     # et ralentit TOUT le service pendant son execution. A la place, c est le CLIENT qui appelle
     # /index-next-batch de facon repetee, chaque appel traitant un lot borne puis se terminant.)
+    # Fragments lus DEPUIS LE FICHIER, bloc par bloc ou page par page : le
+    # document n est jamais detenu en entier, et sa taille cesse donc de fixer
+    # la limite. C est la seule facon d ingerer 200 Mo sur une instance qui n a
+    # que 512 Mo de memoire.
     nb_chunks = 0
-    for chunk in rag_moteur.decouper_flux(texte, RAG_CHUNK_SIZE, RAG_CHUNK_OVERLAP):
-        if REGISTRE_USE_PG:
-            cur.execute('''INSERT INTO rag_chunks (document_id, chunk_text, chunk_index, search_vector)
-                VALUES (%s,%s,%s, to_tsvector('french', %s))''', (doc_id, chunk, nb_chunks, chunk))
-        else:
-            cur.execute('INSERT INTO rag_chunks (document_id, chunk_text, chunk_index) VALUES (?,?,?)',
-                        (doc_id, chunk, nb_chunks))
-        nb_chunks += 1
+    try:
+        for chunk in rag_moteur.fragments_de_fichier(f.filename, f.stream,
+                                                     RAG_CHUNK_SIZE, RAG_CHUNK_OVERLAP):
+            if REGISTRE_USE_PG:
+                cur.execute('''INSERT INTO rag_chunks (document_id, chunk_text, chunk_index, search_vector)
+                    VALUES (%s,%s,%s, to_tsvector('french', %s))''', (doc_id, chunk, nb_chunks, chunk))
+            else:
+                cur.execute('INSERT INTO rag_chunks (document_id, chunk_text, chunk_index) VALUES (?,?,?)',
+                            (doc_id, chunk, nb_chunks))
+            nb_chunks += 1
+    except rag_moteur.RagErreur as e:
+        # Le document a deja sa ligne : on la retire, sinon il resterait en base
+        # avec zero fragment — present a la liste, introuvable a la recherche.
+        cur.execute(registre_sql('DELETE FROM rag_documents WHERE id=%s',
+                                 'DELETE FROM rag_documents WHERE id=?'), (doc_id,))
+        conn.commit(); conn.close()
+        return jsonify({'error': e.message(), 'code': e.code}), e.statut
+    except Exception as e:                                     # noqa: BLE001
+        cur.execute(registre_sql('DELETE FROM rag_documents WHERE id=%s',
+                                 'DELETE FROM rag_documents WHERE id=?'), (doc_id,))
+        conn.commit(); conn.close()
+        logger.warning(f"RAG upload — lecture en echec sur {f.filename} : {e}")
+        return jsonify({'error': "Ce fichier n a pas pu être lu."}), 422
+    if not nb_chunks:
+        cur.execute(registre_sql('DELETE FROM rag_documents WHERE id=%s',
+                                 'DELETE FROM rag_documents WHERE id=?'), (doc_id,))
+        conn.commit(); conn.close()
+        return jsonify({'error': 'Aucun texte extractible de ce fichier.',
+                        'code': 'texte_vide'}), 422
     cur.execute(registre_sql('UPDATE rag_documents SET nb_chunks=%s WHERE id=%s',
                              'UPDATE rag_documents SET nb_chunks=? WHERE id=?'), (nb_chunks, doc_id))
     conn.commit()
     conn.close()
 
-    return jsonify({'document': {'id': doc_id, 'nom_fichier': safe_name, 'nb_chunks': nb_chunks},
-                     'statut_indexation': statut_initial, 'warning': None}), 201
+    return jsonify({'document': {'id': doc_id, 'nom_fichier': safe_name,
+                                 'nb_chunks': nb_chunks, 'original_conserve': garde_original},
+                     'statut_indexation': statut_initial,
+                     'warning': None if garde_original else
+                     ("Document de %d Mo : son texte est indexé et interrogeable, mais le "
+                      "fichier d origine n est pas conservé (au-delà de %d Mo). Le "
+                      "téléchargement de l original ne sera pas proposé."
+                      % (taille // (1024 * 1024), RAG_BLOB_MAX // (1024 * 1024)))}), 201
 
 @app.route('/api/rag/documents/<int:doc_id>/index-next-batch', methods=['POST'])
 @rate_limit(limit=120, window=60)
@@ -7595,6 +7630,14 @@ def rag_download(doc_id):
         content = bytes(brut)
     except Exception:
         return jsonify({'error': 'Contenu du document illisible.'}), 500
+    # Original volontairement non conserve (document trop volumineux) : on le
+    # DIT, plutot que de servir un fichier de zero octet que l utilisateur
+    # croirait corrompu.
+    if not content:
+        return jsonify({'error': "Le fichier d origine de ce document n a pas été conservé : "
+                                 "il dépassait la taille au-delà de laquelle seul le texte est "
+                                 "indexé. Son contenu reste interrogeable par la recherche.",
+                        'code': 'original_non_conserve'}), 410
     nom = str(d.get('nom_fichier') or ('document-%d' % doc_id))
     # Nom de fichier robuste : ASCII pour les clients anciens, UTF-8 encode (RFC 5987)
     # pour les navigateurs modernes. Corrige l'echec de telechargement sur noms accentues.
@@ -7849,9 +7892,14 @@ def rag_import_lot():
             if not n:
                 refuses.append({'nom': (brut or {}).get('filename') or '?', 'motif': motif})
                 continue
-            if n['octets'] > RAG_MAX_FILE_SIZE:
+            # Limite PLUS BASSE que le chargement direct, et c est voulu : ici
+            # les octets arrivent en base64 dans le corps JSON, donc forcement
+            # en memoire. Le chargement direct, lui, lit depuis le disque et
+            # peut se permettre bien davantage.
+            if n['octets'] > RAG_BLOB_MAX:
                 refuses.append({'nom': n['nom_fichier'],
-                                'motif': 'dépasse %d Mo' % (RAG_MAX_FILE_SIZE // (1024 * 1024))})
+                                'motif': 'dépasse %d Mo — chargez-le directement plutôt que '
+                                         'par la sauvegarde' % (RAG_BLOB_MAX // (1024 * 1024))})
                 continue
 
             # Deja transfere ? On compare nom ET taille : deux documents de meme

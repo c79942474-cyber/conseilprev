@@ -17573,10 +17573,10 @@ window.ragHandleFileSelect = function(files){
     alert('Format non accepté. Formats acceptés : PDF, Word (.docx), Excel (.xlsx, .xlsm), texte, Markdown, CSV, journal, JSON, YAML.');
     return;
   }
-  if(file.size > 30*1024*1024){
-    alert('Fichier trop volumineux (30 Mo maximum).');
-    return;
-  }
+  /* Le contrôle de taille est laissé au SERVEUR : lui seul connaît sa limite
+     (réglable par RAG_MAX_FILE_SIZE_MO) et sait si l original sera conservé.
+     Un plafond recopié ici aurait divergé, et refusé des fichiers que le
+     serveur accepte. */
 
   var checkedPages = Array.from(document.querySelectorAll('.rag-pages-checks input:checked')).map(function(cb){ return cb.value; });
   if(checkedPages.length === 0) checkedPages = ['general'];
@@ -17607,6 +17607,10 @@ window.ragHandleFileSelect = function(files){
       if(window.ragHandleAuthError(res.status)){ if(progressEl) progressEl.style.display = 'none'; return; }
       if(res.status === 201){
         if(fillEl) fillEl.style.width = '40%';
+        /* Le serveur peut accepter un document SANS conserver son original :
+           le taire ferait découvrir la chose des mois plus tard, au moment
+           d'un téléchargement qui échoue. */
+        if(res.data.warning) alert(res.data.warning);
         if(res.data.statut_indexation === 'en_cours'){
           window.ragPollIndexation(res.data.document.id, res.data.document.nom_fichier, res.data.document.nb_chunks);
         } else {
@@ -17858,7 +17862,7 @@ var DOS_EXT = ['pdf', 'docx', 'xlsx', 'xlsm', 'txt', 'md', 'csv', 'log', 'json',
 /* Valeur de départ, remplacée par celle que le SERVEUR annonce dès que l'état
    de la base est chargé : deux limites écrites à deux endroits finissent
    toujours par diverger, et c'est l'utilisateur qui découvre l'écart. */
-var DOS_MAX = 60 * 1024 * 1024;
+var DOS_MAX = 500 * 1024 * 1024;
 
 function dosExt(nom) {
   var m = String(nom || '').toLowerCase().match(/\.([a-z0-9]+)$/);
