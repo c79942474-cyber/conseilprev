@@ -18644,9 +18644,58 @@ function impLireParTranches(f, surTexte, surFin, surErreur) {
   })();
 }
 
+/* Poids d'un envoi, en base64. Cinq documents « moyens » font une dizaine de
+   megaoctets ; cinq gros en font cent cinquante, que le serveur doit tenir
+   ENTIEREMENT en memoire (JSON parse + decodage base64). C'est le poids qui
+   fait tomber un envoi, pas le nombre — on compose donc les lots au poids. */
+var IMP_POIDS_LOT = 3 * 1024 * 1024;
+var IMP_LOT_MAX = 5;
+
+function impPoidsDoc(d) { return (d && d.content_b64 ? d.content_b64.length : 0); }
+
+function impPrelever(attente) {
+  var lot = [], poids = 0;
+  while (attente.length) {
+    var p = impPoidsDoc(attente[0]);
+    if (lot.length && (lot.length >= IMP_LOT_MAX || poids + p > IMP_POIDS_LOT)) break;
+    lot.push(attente.shift());
+    poids += p;
+    if (poids >= IMP_POIDS_LOT) break;        /* un gros document part seul */
+  }
+  return lot;
+}
+
+/* Un lot qui echoue EN BLOC emporte avec lui des documents parfaitement
+   valides. On les repasse alors UN PAR UN : le refus ne coute plus que le
+   document qui le merite. C'est la difference entre perdre cinq documents et
+   en perdre un. */
+function impEnvoyerAvecRepli(tranche, suite) {
+  impEnvoyerLot(tranche, function (r) {
+    if (r.stop || !r.echecLot || tranche.length < 2) return suite(r);
+    var i = 0, cumul = { verses: 0, sautes: 0, refuses: [], aIndexer: [], stop: false };
+    (function suivant() {
+      if (i >= tranche.length) return suite(cumul);
+      impEnvoyerLot([tranche[i++]], function (u) {
+        cumul.verses += u.verses; cumul.sautes += u.sautes;
+        cumul.refuses = cumul.refuses.concat(u.refuses);
+        cumul.aIndexer = cumul.aIndexer.concat(u.aIndexer);
+        if (u.stop) { cumul.stop = true; return suite(cumul); }
+        setTimeout(suivant, 60);
+      });
+    })();
+  });
+}
+
 function impEnvoyerLot(tranche, suite) {
-  var r = { verses: 0, sautes: 0, refuses: [], aIndexer: [], stop: false };
-  var nom = tranche.map(function (x) { return (x || {}).filename || '?'; }).join(', ').slice(0, 90);
+  var r = { verses: 0, sautes: 0, refuses: [], aIndexer: [], stop: false, echecLot: false };
+  /* Un echec de lot vaut pour CHACUN de ses documents : une seule ligne pour
+     cinq documents perdus rendait le compte faux — « 66 refuses » pour 330
+     documents disparus, et une soustraction qui ne tombait pas juste. */
+  var parDoc = function (motif) {
+    return tranche.map(function (x) {
+      return { nom: (x || {}).filename || '?', motif: motif };
+    });
+  };
   fetch('/api/rag/import-lot', {
     method: 'POST',
     headers: Object.assign({ 'Content-Type': 'application/json' }, window.ragHeaders()),
@@ -18661,13 +18710,15 @@ function impEnvoyerLot(tranche, suite) {
         r.refuses = d.refuses || [];
         (d.verses || []).forEach(function (v) { if (v.a_indexer) r.aIndexer.push(v); });
       } else {
-        r.refuses = [{ nom: nom, motif: rep.json ? (d.error || 'refusé par le serveur')
-                                                 : window.ragCauseHttp(rep) }];
+        r.echecLot = true;
+        r.refuses = parDoc(rep.json ? (d.error || 'refusé par le serveur')
+                                    : window.ragCauseHttp(rep));
       }
       suite(r);
     })
     .catch(function () {
-      r.refuses = [{ nom: nom, motif: 'connexion interrompue — relancez pour reprendre' }];
+      r.echecLot = true;
+      r.refuses = parDoc('connexion interrompue — relancez pour reprendre');
       suite(r);
     });
 }
@@ -18704,38 +18755,59 @@ window.impFluxLancer = function () {
   document.getElementById('imp-stop').style.display = '';
   var etat = document.getElementById('imp-etat');
 
-  var LOT = 5;
-  var attente = [], lus = 0, verses = 0, sautes = 0, refuses = [], aIndexer = [];
+  var attente = [], poidsAttente = 0;
+  var lus = 0, verses = 0, sautes = 0, refuses = [], aIndexer = [];
   var octetsLus = 0, themes = {};
 
   function afficher(fin) {
     var pct = f.size ? Math.round(100 * octetsLus / f.size) : 0;
     var cles = Object.keys(themes).sort(function (a, b) { return themes[b] - themes[a]; });
+    /* Le compte doit TOMBER JUSTE : trouvés = versés + déjà présents + refusés
+       (+ ce qui reste en file). Sans ce reliquat affiché, une soustraction qui
+       ne tombe pas juste laisse croire que des documents se sont volatilisés. */
+    var restant = lus - verses - sautes - refuses.length;
+
+    /* Tout le detail, pas les soixante premieres lignes : c'est la liste des
+       refus qui dit quoi corriger, et elle doit pouvoir etre transmise. */
+    IMP.rapport = 'Sentinel — compte rendu de transfert\n'
+      + 'fichier : ' + f.name + ' (' + f.size.toLocaleString('fr-FR') + ' octets)\n'
+      + lus + ' document(s) trouvé(s) · ' + verses + ' versé(s) · ' + sautes
+      + ' déjà présent(s) · ' + refuses.length + ' refusé(s)'
+      + (restant > 0 ? ' · ' + restant + ' non traité(s)' : '') + '\n'
+      + (refuses.length ? '\n--- documents refusés ---\n'
+          + refuses.map(function (x) { return x.nom + ' — ' + x.motif; }).join('\n') + '\n' : '');
+
     etat.innerHTML =
       '<div class="rag-progress-track"><div class="rag-progress-fill" style="width:' + pct
       + '%"></div></div>'
       + '<div style="font-size:11.5px;color:var(--ink2);margin-top:7px">'
       + (fin ? '<b>Transfert terminé.</b> ' : 'Lecture au fil de l’eau… ')
-      + impPoids(octetsLus) + ' / ' + impPoids(f.size) + ' · ' + lus + ' document(s) trouvé(s) — <b>'
-      + verses + '</b> versé(s), ' + sautes + ' déjà présent(s)'
-      + (refuses.length ? ', <span style="color:var(--accent)">' + refuses.length
+      + impPoids(octetsLus) + ' / ' + impPoids(f.size) + ' · ' + lus + ' document(s) trouvé(s) = <b>'
+      + verses + '</b> versé(s) + ' + sautes + ' déjà présent(s)'
+      + (refuses.length ? ' + <span style="color:var(--accent)">' + refuses.length
           + ' refusé(s)</span>' : '')
+      + (restant > 0 ? ' + ' + restant + ' en attente' : '')
       + '</div>'
       + (cles.length ? '<div style="margin-top:9px;display:flex;flex-wrap:wrap;gap:5px">'
           + cles.slice(0, 40).map(function (k) {
               return '<span class="rag-page-chip">' + impEsc(k) + ' · ' + themes[k] + '</span>';
             }).join('') + '</div>' : '')
       + (refuses.length ? '<div style="margin-top:8px;font-size:11px;color:var(--muted);'
-          + 'max-height:170px;overflow:auto">' + refuses.slice(0, 60).map(function (x) {
+          + 'max-height:200px;overflow:auto">' + refuses.slice(0, 200).map(function (x) {
               return '<div>· <b>' + impEsc(x.nom) + '</b> — ' + impEsc(x.motif) + '</div>';
-            }).join('') + '</div>' : '')
+            }).join('')
+          + (refuses.length > 200 ? '<div style="margin-top:4px">… et '
+              + (refuses.length - 200) + ' autre(s) — tous dans le compte rendu copiable.</div>'
+              : '')
+          + '</div>' : '')
+      + (fin && refuses.length ? impBoutonCopie() : '')
       + (fin && aIndexer.length ? '<div style="font-size:11.5px;color:var(--ink2);margin-top:8px">'
           + 'Indexation sémantique de ' + aIndexer.length + ' document(s) en cours — '
           + 'laissez cet onglet ouvert.</div>' : '');
   }
 
   var scan = impScanner(function (d) {
-    attente.push(d); lus++;
+    attente.push(d); lus++; poidsAttente += impPoidsDoc(d);
     var th = d && d.theme;
     if (th) themes[th] = (themes[th] || 0) + 1;
   });
@@ -18745,9 +18817,11 @@ window.impFluxLancer = function () {
      les traiter ensemble. */
   function viderLots(force, suite) {
     if (IMP.arret) return suite();
-    if (!attente.length || (!force && attente.length < LOT)) return suite();
-    var tranche = attente.splice(0, LOT);
-    impEnvoyerLot(tranche, function (r) {
+    if (!attente.length) return suite();
+    if (!force && attente.length < IMP_LOT_MAX && poidsAttente < IMP_POIDS_LOT) return suite();
+    var tranche = impPrelever(attente);
+    tranche.forEach(function (d) { poidsAttente -= impPoidsDoc(d); });
+    impEnvoyerAvecRepli(tranche, function (r) {
       verses += r.verses; sautes += r.sautes;
       refuses = refuses.concat(r.refuses);
       aIndexer = aIndexer.concat(r.aIndexer);
@@ -18822,7 +18896,6 @@ window.impLancer = function () {
   document.getElementById('imp-go').style.display = 'none';
   document.getElementById('imp-stop').style.display = '';
 
-  var LOT = 5;                       /* 5 documents : un lot reste sous quelques Mo */
   var i = 0, verses = 0, sautes = 0, refuses = [], aIndexer = [];
   var etat = document.getElementById('imp-etat');
 
@@ -18832,9 +18905,9 @@ window.impLancer = function () {
       + Math.round(100 * Math.min(i, docs.length) / docs.length) + '%"></div></div>'
       + '<div style="font-size:11.5px;color:var(--ink2);margin-top:7px">'
       + (fin ? '<b>Transfert terminé.</b> ' : 'Transfert en cours… ')
-      + Math.min(i, docs.length) + ' / ' + docs.length + ' — <b>' + verses + '</b> versé(s), '
+      + Math.min(i, docs.length) + ' / ' + docs.length + ' = <b>' + verses + '</b> versé(s) + '
       + sautes + ' déjà présent(s)'
-      + (refuses.length ? ', <span style="color:var(--accent)">' + refuses.length
+      + (refuses.length ? ' + <span style="color:var(--accent)">' + refuses.length
           + ' refusé(s)</span>' : '')
       + '</div>'
       + (refuses.length ? '<div style="margin-top:8px;font-size:11px;color:var(--muted);'
@@ -18848,37 +18921,19 @@ window.impLancer = function () {
 
   function lot() {
     if (IMP.arret || i >= docs.length) return fini();
-    var tranche = docs.slice(i, i + LOT);
-    fetch('/api/rag/import-lot', {
-      method: 'POST',
-      headers: Object.assign({ 'Content-Type': 'application/json' }, window.ragHeaders()),
-      body: JSON.stringify({ origine: 'conseilprevcyber', documents: tranche })
-    }).then(function (r) { return r.json().then(function (d) { return { s: r.status, d: d }; }); })
-      .then(function (res) {
-        if (window.ragHandleAuthError(res.s)) { IMP.arret = true; return fini(); }
-        var d = res.d || {};
-        if (d.ok) {
-          verses += (d.compte || {}).verses || 0;
-          sautes += (d.compte || {}).sautes || 0;
-          refuses = refuses.concat(d.refuses || []);
-          (d.verses || []).forEach(function (v) { if (v.a_indexer) aIndexer.push(v); });
-        } else {
-          refuses.push({ nom: 'lot ' + (i + 1) + '–' + (i + tranche.length),
-                         motif: d.error || 'refusé par le serveur' });
-        }
-        i += LOT;
-        afficher(false);
-        setTimeout(lot, 60);          /* laisser respirer le serveur entre deux lots */
-      })
-      .catch(function () {
-        /* Une coupure réseau ne doit pas perdre le transfert : on note et on
-           continue, le serveur sautera ce qu'il a déjà reçu si on relance. */
-        refuses.push({ nom: 'lot ' + (i + 1) + '–' + (i + tranche.length),
-                       motif: 'réseau interrompu — relancez pour reprendre' });
-        i += LOT;
-        afficher(false);
-        setTimeout(lot, 400);
-      });
+    /* Meme mecanique que le flux : composition au poids, repli document par
+       document si le lot echoue en bloc, et comptage EN DOCUMENTS. */
+    var file = docs.slice(i, i + IMP_LOT_MAX);
+    var tranche = impPrelever(file);
+    impEnvoyerAvecRepli(tranche, function (r) {
+      verses += r.verses; sautes += r.sautes;
+      refuses = refuses.concat(r.refuses);
+      aIndexer = aIndexer.concat(r.aIndexer);
+      i += tranche.length;
+      afficher(false);
+      if (r.stop) { IMP.arret = true; return fini(); }
+      setTimeout(lot, 60);            /* laisser respirer le serveur entre deux lots */
+    });
   }
 
   function fini() {
