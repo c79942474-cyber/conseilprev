@@ -17567,6 +17567,44 @@ window.ragHandleAuthError = function(status){
   return false;
 };
 
+/* Lire la reponse en TEXTE d'abord, puis tenter le JSON.
+
+   Une passerelle qui rend une page d'erreur HTML — 502 pendant un
+   redemarrage, 504 sur un traitement trop long, 413 sur un corps trop gros —
+   fait echouer r.json(). Cet echec tombait dans le .catch et etait rapporte
+   comme une « erreur reseau », alors qu'une reponse etait bien arrivee, avec
+   son code. On confondait « rien n'est arrive » et « le serveur a repondu ce
+   qu'on n'attendait pas » : deux pannes differentes, deux gestes differents. */
+window.ragLireReponse = function (r) {
+  return r.text().then(function (txt) {
+    var d = null;
+    try { d = JSON.parse(txt); } catch (e) { d = null; }
+    return { status: r.status, data: d || {}, json: d !== null, brut: txt };
+  });
+};
+
+/* Ce que dit un code HTTP quand le corps n'est pas exploitable. */
+window.ragCauseHttp = function (res) {
+  var s = res.status;
+  var brut = String(res.brut || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  var quoi;
+  if (s === 413) {
+    quoi = 'Le fichier a été refusé AVANT d atteindre Sentinel : il dépasse la taille '
+         + 'acceptée par la passerelle, qui ne consulte pas la limite du site.';
+  } else if (s === 502 || s === 503) {
+    quoi = 'Le service s est arrêté pendant l import puis a redémarré — le plus souvent '
+         + 'faute de mémoire sur un document volumineux.';
+  } else if (s === 504) {
+    quoi = 'La passerelle a coupé avant la fin du traitement : l extraction a duré plus '
+         + 'longtemps qu elle ne l autorise.';
+  } else if (s >= 500) {
+    quoi = 'Le serveur a échoué (' + s + ') sans message exploitable.';
+  } else {
+    quoi = 'Le serveur a répondu ' + s + ' sans message exploitable.';
+  }
+  return quoi + (brut ? ' Réponse reçue : « ' + brut.slice(0, 160) + ' »' : '');
+};
+
 window.ragHandleFileSelect = function(files){
   if(!files || files.length === 0) return;
   var file = files[0];
@@ -17604,10 +17642,19 @@ window.ragHandleFileSelect = function(files){
   var timeoutId = setTimeout(function(){ controller.abort(); }, 180000);
 
   fetch('/api/rag/upload', { method: 'POST', headers: window.ragHeaders(), body: formData, signal: controller.signal })
-    .then(function(r){ clearTimeout(timeoutId); return r.json().then(function(d){ return {status:r.status, data:d}; }); })
+    .then(function(r){ clearTimeout(timeoutId); return window.ragLireReponse(r); })
     .then(function(res){
       document.getElementById('rag-file-input').value = '';
       if(window.ragHandleAuthError(res.status)){ if(progressEl) progressEl.style.display = 'none'; return; }
+      if(!res.json){
+        if(progressEl) progressEl.style.display = 'none';
+        alert('L import a échoué. ' + window.ragCauseHttp(res)
+            + '\n\nFichier : ' + file.name + ' (' + impPoids(file.size) + ').'
+            + '\n\nVérifiez la liste dans un instant : si le document y figure, l import a '
+            + 'malgré tout abouti.');
+        setTimeout(window.ragRenderList, 3000);
+        return;
+      }
       if(res.status === 201){
         if(fillEl) fillEl.style.width = '40%';
         /* Le serveur peut accepter un document SANS conserver son original :
@@ -17632,7 +17679,18 @@ window.ragHandleFileSelect = function(files){
         alert('L import prend plus de temps que prévu. Le document est peut-être volumineux — vérifiez la liste dans quelques instants, il devrait apparaître une fois traité.');
         setTimeout(window.ragRenderList, 3000);
       } else {
-        alert('Erreur réseau pendant l import. Vérifiez votre connexion et réessayez — si le problème persiste avec ce fichier, essayez un format plus léger (TXT plutôt que PDF scanné, par exemple).');
+        /* Aucune reponse n'est arrivee : ce n'est pas la meme panne qu'un
+           serveur qui repond mal, et le geste utile n'est pas le meme non
+           plus. L'envoi peut d'ailleurs avoir abouti cote serveur, seule la
+           reponse s'etant perdue — d'ou le rafraichissement de la liste. */
+        alert('La connexion s est interrompue pendant l import : aucune réponse n est '
+            + 'arrivée. Soit le réseau a coupé, soit le service s est arrêté en cours de '
+            + 'traitement — un document volumineux peut épuiser sa mémoire.'
+            + '\n\nFichier : ' + file.name + ' (' + impPoids(file.size) + ').'
+            + (err && err.message ? '\nDétail : ' + err.message : '')
+            + '\n\nVérifiez la liste dans un instant : si le document y figure, l import a '
+            + 'malgré tout abouti.');
+        setTimeout(window.ragRenderList, 3000);
       }
     });
 };
@@ -17987,10 +18045,15 @@ window.dosLancer = function () {
 
     fetch('/api/rag/upload', { method: 'POST', headers: window.ragHeaders(),
                                body: fd, signal: ctrl.signal })
-      .then(function (r) { clearTimeout(minuteur);
-                           return r.json().then(function (d) { return { s: r.status, d: d }; }); })
-      .then(function (res) {
+      .then(function (r) { clearTimeout(minuteur); return window.ragLireReponse(r); })
+      .then(function (rep) {
+        var res = { s: rep.status, d: rep.data, json: rep.json, brut: rep.brut };
         if (window.ragHandleAuthError(res.s)) { DOS.arret = true; return fini(); }
+        if (!res.json) {
+          refuses.push({ nom: g.chemin, motif: window.ragCauseHttp(rep) });
+          i++;
+          return setTimeout(suivant, 400);
+        }
         if (res.s === 201) {
           verses++;
           var doc = (res.d || {}).document || {};
@@ -18010,7 +18073,8 @@ window.dosLancer = function () {
         clearTimeout(minuteur);
         refuses.push({ nom: g.chemin,
                        motif: e && e.name === 'AbortError' ? 'délai dépassé — fichier trop lourd ?'
-                                                           : 'réseau interrompu' });
+                                                           : 'connexion interrompue, aucune réponse'
+                                                             + (e && e.message ? ' (' + e.message + ')' : '') });
         i++;
         setTimeout(suivant, 400);
       });
