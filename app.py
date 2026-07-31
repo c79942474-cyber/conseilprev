@@ -7211,19 +7211,54 @@ def rag_get_embeddings(texts):
     except Exception as e:
         return False, str(e)
 
-RAG_ACCESS_KEY = os.environ.get('RAG_ACCESS_KEY', 'conseilprev-rag-2026').strip()
+# Cle d acces a la base de connaissance. La valeur ne vit QUE dans la variable
+# d environnement : une valeur de repli ecrite ici serait connue de quiconque lit
+# le depot, et cette cle ouvre l import, le telechargement et la suppression des
+# documents clients.
+#
+# En son absence on echoue FERME, comme AUTH_MASTER_TOKEN : un service qui se
+# rabattrait sur une valeur connue faute de configuration serait pire qu un
+# service inaccessible — le second se remarque, le premier non.
+RAG_ACCESS_KEY = os.environ.get('RAG_ACCESS_KEY', '').strip()
+if not RAG_ACCESS_KEY:
+    logger.error("RAG_ACCESS_KEY absente des variables d environnement — la base "
+                 "de connaissance est FERMEE et repondra 503. Definissez-la sur "
+                 "Render (valeur aleatoire de 32 caracteres au moins) pour "
+                 "retablir l acces.")
+elif len(RAG_ACCESS_KEY) < 24:
+    logger.warning('RAG_ACCESS_KEY courte (%d caracteres) — 32 au moins sont '
+                   'recommandes pour une cle qui ouvre des documents clients.',
+                   len(RAG_ACCESS_KEY))
 
 def rag_check_access():
-    """Verifie que la requete provient bien de CONSEILPREV (cle secrete serverside,
-    jamais exposee au client HTML/JS contrairement a l ancien SRC_PASS cosmetique)."""
-    provided = request.headers.get('X-RAG-Key', '') or request.args.get('rag_key', '')
-    return provided == RAG_ACCESS_KEY
+    """Vrai si la requete porte la bonne cle.
+
+    Comparaison a temps constant : `==` sur des chaines s arrete au premier
+    caractere different, et la duree de la reponse renseigne alors sur le nombre
+    de caracteres devines. La menace est theorique derriere un reseau, la parade
+    coute une ligne.
+
+    La cle n est plus acceptee en PARAMETRE D URL : les chemins complets
+    atterrissent dans les journaux d acces du serveur et de l hebergeur, ou un
+    secret n a rien a faire. Seul l en-tete X-RAG-Key est lu."""
+    if not RAG_ACCESS_KEY:
+        return False
+    fourni = request.headers.get('X-RAG-Key', '') or ''
+    return _secrets_auth.compare_digest(fourni, RAG_ACCESS_KEY)
 
 def rag_require_access(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
+        # Deux refus distincts : « pas configure » n appelle pas le meme geste
+        # que « mauvaise cle ». Confondre les deux ferait chercher une cle
+        # perdue la ou c est le serveur qui n en a aucune.
+        if not RAG_ACCESS_KEY:
+            return jsonify({'error': "La base de connaissance n est pas configurée sur ce "
+                                     "serveur (RAG_ACCESS_KEY absente).",
+                            'code': 'non_configure'}), 503
         if not rag_check_access():
-            return jsonify({'error': 'Accès réservé à CONSEILPREV. Clé d accès requise.'}), 403
+            return jsonify({'error': 'Accès réservé à CONSEILPREV. Clé d accès requise.',
+                            'code': 'cle_invalide'}), 403
         return f(*args, **kwargs)
     return wrapper
 

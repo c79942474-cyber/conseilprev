@@ -17472,6 +17472,16 @@ window.ragHeaders = function(){
 };
 
 window.ragHandleAuthError = function(status){
+  /* 503 et 403 n appellent pas le meme geste : dans un cas la cle est mauvaise
+     et il faut la ressaisir, dans l autre le SERVEUR n en a aucune et ressaisir
+     ne servira a rien. Effacer la cle sur un 503 ferait chercher pendant des
+     heures une cle qui etait la bonne. */
+  if(status === 503){
+    alert('La base de connaissance n’est pas configurée sur ce serveur : la variable '
+        + 'RAG_ACCESS_KEY est absente. Définissez-la dans les variables d’environnement '
+        + 'de l’hébergement, puis rechargez la page. Votre clé n’est pas en cause.');
+    return true;
+  }
   if(status === 403){
     sessionStorage.removeItem('ragAccessKey');
     alert('Clé d accès incorrecte ou absente. Réessayez.');
