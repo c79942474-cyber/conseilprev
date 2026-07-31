@@ -7129,6 +7129,14 @@ def rag_init_db():
         try:
             cur.execute("ALTER TABLE rag_documents ADD COLUMN IF NOT EXISTS chunks_indexes INTEGER DEFAULT 0")
             cur.execute("ALTER TABLE rag_documents ADD COLUMN IF NOT EXISTS statut_indexation TEXT DEFAULT \'termine\'")
+            # Classement d'origine d'un document repris d'une autre plateforme.
+            # Conserve tel quel : un document classe « IEC 62443 » ou « EDF »
+            # chez conseilprevcyber doit rester retrouvable sous ce nom, parce
+            # que c'est ainsi que son proprietaire le cherchera.
+            cur.execute("ALTER TABLE rag_documents ADD COLUMN IF NOT EXISTS theme TEXT DEFAULT \'\'")
+            cur.execute("ALTER TABLE rag_documents ADD COLUMN IF NOT EXISTS famille TEXT DEFAULT \'\'")
+            cur.execute("ALTER TABLE rag_documents ADD COLUMN IF NOT EXISTS entreprise TEXT DEFAULT \'\'")
+            cur.execute("ALTER TABLE rag_documents ADD COLUMN IF NOT EXISTS origine TEXT DEFAULT \'\'")
             conn.commit()
         except Exception: conn.rollback()
         if RAG_PGVECTOR_AVAILABLE:
@@ -7156,8 +7164,16 @@ def rag_init_db():
             pages_liees TEXT NOT NULL, taille_octets INTEGER NOT NULL,
             contenu_fichier BLOB NOT NULL, nb_chunks INTEGER DEFAULT 0,
             chunks_indexes INTEGER DEFAULT 0, statut_indexation TEXT DEFAULT \'termine\',
+            theme TEXT DEFAULT \'\', famille TEXT DEFAULT \'\',
+            entreprise TEXT DEFAULT \'\', origine TEXT DEFAULT \'\',
             date_upload TEXT NOT NULL
         )''')
+        for _c, _t in (('theme', 'TEXT'), ('famille', 'TEXT'),
+                       ('entreprise', 'TEXT'), ('origine', 'TEXT')):
+            try:
+                cur.execute('ALTER TABLE rag_documents ADD COLUMN %s %s DEFAULT \'\'' % (_c, _t))
+            except Exception:
+                pass          # colonne deja presente : rien a faire
         cur.execute('''CREATE TABLE IF NOT EXISTS rag_chunks (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             document_id INTEGER NOT NULL, chunk_text TEXT NOT NULL, chunk_index INTEGER NOT NULL
@@ -7312,7 +7328,21 @@ def rag_list_documents():
     page_filter = request.args.get('page', '').strip()
     conn = registre_get_db()
     cur = conn.cursor()
-    cur.execute('SELECT id, nom_fichier, type_mime, extension, pages_liees, taille_octets, nb_chunks, date_upload FROM rag_documents ORDER BY date_upload DESC')
+    # Le classement d'origine est servi avec le reste : sans lui, un document
+    # repris de conseilprevcyber perdrait a l'affichage le theme sous lequel son
+    # proprietaire le cherche.
+    try:
+        cur.execute('SELECT id, nom_fichier, type_mime, extension, pages_liees, taille_octets, '
+                    'nb_chunks, date_upload, theme, famille, entreprise, origine '
+                    'FROM rag_documents ORDER BY date_upload DESC')
+    except Exception:
+        # Base anterieure a la reprise : les colonnes n'existent pas encore.
+        try:
+            conn.rollback()
+        except Exception:  # noqa: BLE001
+            pass
+        cur.execute('SELECT id, nom_fichier, type_mime, extension, pages_liees, taille_octets, '
+                    'nb_chunks, date_upload FROM rag_documents ORDER BY date_upload DESC')
     rows = cur.fetchall()
     conn.close()
     docs = []
@@ -7325,6 +7355,8 @@ def rag_list_documents():
             'id': d['id'], 'nom_fichier': d['nom_fichier'], 'type_mime': d['type_mime'],
             'extension': d['extension'], 'pages_liees': pages, 'taille_octets': d['taille_octets'],
             'nb_chunks': d['nb_chunks'], 'date_upload': d['date_upload'],
+            'theme': d.get('theme') or '', 'famille': d.get('famille') or '',
+            'entreprise': d.get('entreprise') or '', 'origine': d.get('origine') or '',
             'sujet': rag_classify_sujet(d['nom_fichier'])
         })
     return jsonify({'documents': docs, 'pgvector_actif': RAG_PGVECTOR_AVAILABLE})
@@ -7705,6 +7737,140 @@ def rag_search():
     # frontend lisaient l un, d autres l autre.
     return jsonify({'resultats': resultats, 'results': resultats, 'mode': mode,
                     'termes': rag_moteur.termes_requete(query)})
+
+
+# ══════════════════════════════════════════════════════════
+# REPRISE DE LA BASE DOCUMENTAIRE DE CONSEILPREVCYBER
+#
+# Le transfert se fait par la SAUVEGARDE que conseilprevcyber sait deja
+# produire (/admin/base-connaissance → « Sauvegarder »), et non par un appel
+# direct entre les deux serveurs. Trois raisons, dans l'ordre d'importance :
+#  — aucune des deux plateformes n'a besoin d'une cle d'acces sur l'autre, donc
+#    aucun secret ne circule et aucune n'est exposee si l'autre tombe ;
+#  — le transfert est REJOUABLE : le fichier reste sur le poste, on peut
+#    reprendre ou recommencer sans redemander quoi que ce soit a la source ;
+#  — la source peut etre saturee (c'est arrive) : sauvegarder ne fait que lire.
+#
+# L'envoi se fait par LOTS depuis le navigateur, pas en une requete : une base
+# de trois cents documents pese plusieurs centaines de megaoctets une fois
+# encodee, et une requete unique de cette taille echoue sans rien avoir fait.
+# ══════════════════════════════════════════════════════════
+import rag_import  # noqa: E402
+
+
+@app.route('/api/rag/import-inventaire', methods=['POST'])
+@rate_limit(limit=10, window=60)
+@rag_require_access
+def rag_import_inventaire():
+    """Ce que contient une sauvegarde, AVANT d'en transferer quoi que ce soit.
+
+    On ne lance pas un transfert de plusieurs centaines de megaoctets sans
+    savoir ce qu'il porte — et c'est le seul moyen de verifier ensuite que rien
+    n'a ete perdu en route."""
+    data = request.get_json(silent=True) or {}
+    try:
+        return jsonify({'ok': True, 'inventaire': rag_import.inventaire(data)})
+    except rag_import.ImportErreur as e:
+        return jsonify({'ok': False, 'error': str(e), 'code': e.code}), e.statut
+    except Exception as e:  # noqa: BLE001
+        logger.warning(f'RAG_IMPORT inventaire: {e}')
+        return jsonify({'ok': False, 'error': 'Sauvegarde illisible.'}), 400
+
+
+@app.route('/api/rag/import-lot', methods=['POST'])
+@rate_limit(limit=120, window=60)
+@rag_require_access
+def rag_import_lot():
+    """Transfere UN lot de documents. Idempotent : un document deja present
+    (meme nom, meme taille, meme origine) est saute, pas duplique — c'est ce
+    qui permet de relancer un transfert interrompu sans le nettoyer d'abord."""
+    data = request.get_json(silent=True) or {}
+    docs = data.get('documents')
+    if not isinstance(docs, list):
+        return jsonify({'ok': False, 'error': 'Aucun document dans ce lot.'}), 400
+    if len(docs) > 25:
+        return jsonify({'ok': False, 'error': 'Lot trop grand (25 documents maximum).'}), 413
+    origine = (data.get('origine') or 'conseilprevcyber').strip()[:60]
+
+    now = datetime.utcnow().isoformat()
+    conn = registre_get_db()
+    cur = conn.cursor()
+    verses, sautes, refuses = [], [], []
+    try:
+        for brut in docs:
+            n, motif = rag_import.lire_document(brut)
+            if not n:
+                refuses.append({'nom': (brut or {}).get('filename') or '?', 'motif': motif})
+                continue
+            if n['octets'] > RAG_MAX_FILE_SIZE:
+                refuses.append({'nom': n['nom_fichier'],
+                                'motif': 'dépasse %d Mo' % (RAG_MAX_FILE_SIZE // (1024 * 1024))})
+                continue
+
+            # Deja transfere ? On compare nom ET taille : deux documents de meme
+            # nom mais de tailles differentes sont deux versions, et perdre la
+            # seconde serait pire qu'un doublon.
+            cur.execute(registre_sql(
+                'SELECT id FROM rag_documents WHERE nom_fichier=%s AND taille_octets=%s',
+                'SELECT id FROM rag_documents WHERE nom_fichier=? AND taille_octets=?'),
+                (secure_filename(n['nom_fichier']) or n['nom_fichier'], n['octets']))
+            if cur.fetchone():
+                sautes.append(n['nom_fichier'])
+                continue
+
+            try:
+                texte = rag_moteur.extraire_texte(n['nom_fichier'], n['donnees'])
+            except rag_moteur.RagErreur as e:
+                refuses.append({'nom': n['nom_fichier'], 'motif': e.message()})
+                continue
+            except Exception as e:  # noqa: BLE001
+                refuses.append({'nom': n['nom_fichier'], 'motif': 'lecture impossible'})
+                logger.warning(f"RAG_IMPORT {n['nom_fichier']}: {e}")
+                continue
+            morceaux = rag_chunk_text(texte)
+            if not morceaux:
+                refuses.append({'nom': n['nom_fichier'], 'motif': 'aucun texte exploitable'})
+                continue
+
+            nom_sur = secure_filename(n['nom_fichier']) or n['nom_fichier']
+            statut = 'en_cours' if RAG_PGVECTOR_AVAILABLE else 'termine'
+            valeurs = (nom_sur, n['type_mime'], n['extension'], ','.join(n['pages']),
+                       n['octets'], n['donnees'], len(morceaux), statut,
+                       n['theme'], n['famille'], n['entreprise'], origine, now)
+            if REGISTRE_USE_PG:
+                cur.execute("""INSERT INTO rag_documents
+                    (nom_fichier, type_mime, extension, pages_liees, taille_octets,
+                     contenu_fichier, nb_chunks, statut_indexation, theme, famille,
+                     entreprise, origine, date_upload)
+                    VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id""", valeurs)
+                doc_id = cur.fetchone()['id']
+            else:
+                cur.execute("""INSERT INTO rag_documents
+                    (nom_fichier, type_mime, extension, pages_liees, taille_octets,
+                     contenu_fichier, nb_chunks, statut_indexation, theme, famille,
+                     entreprise, origine, date_upload)
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)""", valeurs)
+                doc_id = cur.lastrowid
+            for i, m in enumerate(morceaux):
+                if REGISTRE_USE_PG:
+                    cur.execute("""INSERT INTO rag_chunks (document_id, chunk_text, chunk_index, search_vector)
+                        VALUES (%s,%s,%s, to_tsvector('french', %s))""", (doc_id, m, i, m))
+                else:
+                    cur.execute('INSERT INTO rag_chunks (document_id, chunk_text, chunk_index) VALUES (?,?,?)',
+                                (doc_id, m, i))
+            conn.commit()
+            verses.append({'id': doc_id, 'nom': nom_sur, 'theme': n['theme'],
+                           'famille': n['famille'], 'entreprise': n['entreprise'],
+                           'fragments': len(morceaux), 'a_indexer': statut == 'en_cours'})
+    finally:
+        try:
+            conn.close()
+        except Exception:  # noqa: BLE001
+            pass
+
+    return jsonify({'ok': True, 'verses': verses, 'sautes': sautes, 'refuses': refuses,
+                    'compte': {'verses': len(verses), 'sautes': len(sautes),
+                               'refuses': len(refuses)}})
 
 
 @app.route('/api/rag/diagnostic', methods=['GET'])
