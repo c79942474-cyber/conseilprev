@@ -18283,6 +18283,7 @@ window.impChoisir = function (files) {
     catch (e) { for (var k = 0; k < octets.length; k++) debut += String.fromCharCode(octets[k]); }
     var s = impSignature(octets, debut);
     if (s) { impRefus(inv, s, debut, f.name); return; }
+    if (f.size > window.IMP_SEUIL_FLUX) { impProposerFlux(f, inv); return; }
     impLireTout(f, inv, debut);
   };
   tete.readAsArrayBuffer(f.slice(0, 4096));
@@ -18396,9 +18397,11 @@ function impDiagnostiquer(texte, err, inv, f) {
 
   var motif;
   if (!t.length) {
-    motif = '<b>Le fichier n’a produit aucun texte.</b> Il occupe pourtant '
-          + impPoids(f ? f.size : 0) + ' sur le disque : son contenu n’est donc pas du texte '
-          + 'lisible. Retéléchargez-le par le bouton <b>💾 Sauvegarder</b>.';
+    motif = '<b>Le fichier n’a produit aucun texte à la lecture.</b> Il occupe pourtant '
+          + impPoids(f ? f.size : 0) + ' sur le disque. Au-delà d’environ 512 Mo, un navigateur '
+          + 'ne peut plus faire une chaîne de caractères d’un fichier : il en rend une vide, sans '
+          + 'erreur — <b>le fichier est bon, c’est la lecture qui ne l’était pas</b>. Rechargez '
+          + 'la page et redéposez-le : il sera lu par tranches.';
   } else if (liste) {
     motif = '<b>Ce fichier est une liste JSON, pas une sauvegarde.</b> Une sauvegarde '
           + 'conseilprevcyber est un <i>objet</i> portant une liste <code>documents</code>.';
@@ -18478,6 +18481,248 @@ window.impRecuperationLancer = function () {
                         octets: 0, themes: {}, familles: {}, entreprises: {} },
                       'documents récupérés');
   window.impLancer();
+};
+
+/* ─────────────────────────────────────────────────────────────────────────
+   QUAND LE FICHIER NE TIENT PAS EN MÉMOIRE
+
+   Un navigateur ne peut pas faire une chaîne de caractères d’un fichier de
+   651 Mo : la limite de V8 est d’environ 512 Mo de caractères, et readAsText
+   rend alors une chaîne VIDE sans rien signaler — ni erreur, ni exception. Le
+   fichier était parfaitement bon ; c’est la façon de le lire qui ne l’était
+   pas, et le diagnostic accusait le fichier.
+
+   On le lit donc par tranches, on en extrait les documents un par un, et on
+   les verse au fur et à mesure. La mémoire occupée ne dépasse jamais une
+   tranche plus le document en cours — la même leçon que côté serveur, où
+   l’ingestion avait dû cesser de dépendre de la taille du fichier.
+   ───────────────────────────────────────────────────────────────────────── */
+window.IMP_SEUIL_FLUX = 64 * 1024 * 1024;   /* au-delà : lecture par tranches */
+var IMP_TRANCHE = 4 * 1024 * 1024;
+
+/* Extrait les documents d’un flux de texte remis morceau par morceau. Le
+   balayage tient compte des chaînes et des échappements : une accolade dans
+   un titre ne doit pas être prise pour une frontière d’objet. */
+function impScanner(surDocument) {
+  var buf = '', dansTableau = false, termine = false, i = 0;
+  var enObjet = false, debut = 0, profondeur = 0, chaine = false, echap = false;
+
+  function balayer() {
+    while (i < buf.length) {
+      if (!enObjet) {
+        var ch = buf.charAt(i);
+        if (ch === ',' || ch === ' ' || ch === '\n' || ch === '\r' || ch === '\t') { i++; continue; }
+        if (ch !== '{') { termine = true; return; }        /* ] : fin du tableau */
+        enObjet = true; debut = i; profondeur = 0; chaine = false; echap = false;
+      }
+      var complet = false;
+      for (; i < buf.length; i++) {
+        var c = buf.charAt(i);
+        if (echap) { echap = false; continue; }
+        if (c === '\\') { echap = true; continue; }
+        if (c === '"') { chaine = !chaine; continue; }
+        if (chaine) continue;
+        if (c === '{') profondeur++;
+        else if (c === '}') { profondeur--; if (profondeur === 0) { i++; complet = true; break; } }
+      }
+      if (!complet) return;                    /* objet à cheval : on attend la suite */
+      try { surDocument(JSON.parse(buf.slice(debut, i))); }
+      catch (e) { /* objet illisible : on le passe plutôt que tout perdre */ }
+      enObjet = false;
+    }
+  }
+
+  return {
+    pousser: function (bout) {
+      if (termine) return;
+      buf += bout;
+      if (!dansTableau) {
+        var d = buf.indexOf('"documents"');
+        if (d < 0) {
+          /* Tant que la clé n’est pas trouvée, on ne garde qu’une queue :
+             sinon le tampon grandirait avec le fichier, ce qu’on refuse. */
+          if (buf.length > 65536) buf = buf.slice(-32);
+          return;
+        }
+        var c = buf.indexOf('[', d);
+        if (c < 0) return;
+        buf = buf.slice(c + 1); i = 0; dansTableau = true;
+      }
+      balayer();
+      /* UNE seule compaction par tranche : recopier le tampon après chaque
+         document le ferait des dizaines de fois par tranche. */
+      var coupe = enObjet ? debut : i;
+      if (coupe > 0) { buf = buf.slice(coupe); i -= coupe; if (enObjet) debut = 0; }
+    },
+    fini: function () { return termine; }
+  };
+}
+
+/* Lit le fichier par tranches et rend la main entre chaque : le versement
+   d’un lot doit pouvoir s’intercaler, sinon tout le fichier serait lu avant
+   le premier envoi et on n’aurait rien gagné. */
+function impLireParTranches(f, surTexte, surFin, surErreur) {
+  var decodeur = new TextDecoder('utf-8');
+  var pos = 0;
+  (function suivant() {
+    if (pos >= f.size) return surFin();
+    var fin = Math.min(pos + IMP_TRANCHE, f.size);
+    var fr = new FileReader();
+    fr.onerror = function () { surErreur(fr.error); };
+    fr.onload = function () {
+      /* stream:true : un caractère accentué coupé en deux par la frontière de
+         tranche serait sinon rendu « ￼ », et un titre deviendrait faux. */
+      var txt = decodeur.decode(new Uint8Array(fr.result), { stream: fin < f.size });
+      pos = fin;
+      surTexte(txt, pos, suivant);
+    };
+    fr.readAsArrayBuffer(f.slice(pos, fin));
+  })();
+}
+
+function impEnvoyerLot(tranche, suite) {
+  var r = { verses: 0, sautes: 0, refuses: [], aIndexer: [], stop: false };
+  var nom = tranche.map(function (x) { return (x || {}).filename || '?'; }).join(', ').slice(0, 90);
+  fetch('/api/rag/import-lot', {
+    method: 'POST',
+    headers: Object.assign({ 'Content-Type': 'application/json' }, window.ragHeaders()),
+    body: JSON.stringify({ origine: 'conseilprevcyber', documents: tranche })
+  }).then(function (rep) { return window.ragLireReponse(rep); })
+    .then(function (rep) {
+      if (window.ragHandleAuthError(rep.status)) { r.stop = true; return suite(r); }
+      var d = rep.data || {};
+      if (rep.json && d.ok) {
+        r.verses = (d.compte || {}).verses || 0;
+        r.sautes = (d.compte || {}).sautes || 0;
+        r.refuses = d.refuses || [];
+        (d.verses || []).forEach(function (v) { if (v.a_indexer) r.aIndexer.push(v); });
+      } else {
+        r.refuses = [{ nom: nom, motif: rep.json ? (d.error || 'refusé par le serveur')
+                                                 : window.ragCauseHttp(rep) }];
+      }
+      suite(r);
+    })
+    .catch(function () {
+      r.refuses = [{ nom: nom, motif: 'connexion interrompue — relancez pour reprendre' }];
+      suite(r);
+    });
+}
+
+window.impScanner = impScanner;
+window.impLireParTranches = impLireParTranches;
+
+function impProposerFlux(f, inv) {
+  IMP.fichier = f;
+  IMP.sauvegarde = null;
+  document.getElementById('imp-go').style.display = 'none';
+  inv.innerHTML =
+    '<div style="border:1px solid var(--rule2);border-radius:8px;padding:14px 16px;background:var(--bg)">'
+    + '<div style="font-size:13px;font-weight:600;margin-bottom:3px">' + impEsc(f.name) + '</div>'
+    + '<div style="font-size:11.5px;color:var(--muted);line-height:1.6">'
+    + '<b>' + impPoids(f.size) + '</b> — trop volumineux pour être ouvert d’un seul tenant. '
+    + 'Au-delà d’environ 512 Mo, un navigateur ne peut plus faire une chaîne de caractères d’un '
+    + 'fichier : il en rend une <b>vide</b>, sans erreur. Ce fichier sera donc <b>lu par tranches '
+    + 'et transféré au fil de l’eau</b> — la mémoire occupée ne dépasse jamais quelques '
+    + 'mégaoctets.'
+    + '<br>L’inventaire préalable n’est pas possible dans ce mode : les thèmes s’affichent au fur '
+    + 'et à mesure. <b>Le transfert reste rejouable</b> — un document déjà présent est sauté, et '
+    + 'vous pouvez l’interrompre puis le reprendre.'
+    + '</div>'
+    + '<button class="mat-export-btn" style="margin-top:10px" onclick="impFluxLancer()">'
+    + 'Transférer au fil de l’eau</button></div>';
+}
+
+window.impFluxLancer = function () {
+  var f = IMP.fichier;
+  if (!f || IMP.encours) return;
+  IMP.encours = true; IMP.arret = false;
+  document.getElementById('imp-go').style.display = 'none';
+  document.getElementById('imp-stop').style.display = '';
+  var etat = document.getElementById('imp-etat');
+
+  var LOT = 5;
+  var attente = [], lus = 0, verses = 0, sautes = 0, refuses = [], aIndexer = [];
+  var octetsLus = 0, themes = {};
+
+  function afficher(fin) {
+    var pct = f.size ? Math.round(100 * octetsLus / f.size) : 0;
+    var cles = Object.keys(themes).sort(function (a, b) { return themes[b] - themes[a]; });
+    etat.innerHTML =
+      '<div class="rag-progress-track"><div class="rag-progress-fill" style="width:' + pct
+      + '%"></div></div>'
+      + '<div style="font-size:11.5px;color:var(--ink2);margin-top:7px">'
+      + (fin ? '<b>Transfert terminé.</b> ' : 'Lecture au fil de l’eau… ')
+      + impPoids(octetsLus) + ' / ' + impPoids(f.size) + ' · ' + lus + ' document(s) trouvé(s) — <b>'
+      + verses + '</b> versé(s), ' + sautes + ' déjà présent(s)'
+      + (refuses.length ? ', <span style="color:var(--accent)">' + refuses.length
+          + ' refusé(s)</span>' : '')
+      + '</div>'
+      + (cles.length ? '<div style="margin-top:9px;display:flex;flex-wrap:wrap;gap:5px">'
+          + cles.slice(0, 40).map(function (k) {
+              return '<span class="rag-page-chip">' + impEsc(k) + ' · ' + themes[k] + '</span>';
+            }).join('') + '</div>' : '')
+      + (refuses.length ? '<div style="margin-top:8px;font-size:11px;color:var(--muted);'
+          + 'max-height:170px;overflow:auto">' + refuses.slice(0, 60).map(function (x) {
+              return '<div>· <b>' + impEsc(x.nom) + '</b> — ' + impEsc(x.motif) + '</div>';
+            }).join('') + '</div>' : '')
+      + (fin && aIndexer.length ? '<div style="font-size:11.5px;color:var(--ink2);margin-top:8px">'
+          + 'Indexation sémantique de ' + aIndexer.length + ' document(s) en cours — '
+          + 'laissez cet onglet ouvert.</div>' : '');
+  }
+
+  var scan = impScanner(function (d) {
+    attente.push(d); lus++;
+    var th = d && d.theme;
+    if (th) themes[th] = (themes[th] || 0) + 1;
+  });
+
+  /* Vide la file par lots, en série : dix envois simultanés de plusieurs
+     mégaoctets arriveraient ensemble sur un serveur qui n’a pas la mémoire de
+     les traiter ensemble. */
+  function viderLots(force, suite) {
+    if (IMP.arret) return suite();
+    if (!attente.length || (!force && attente.length < LOT)) return suite();
+    var tranche = attente.splice(0, LOT);
+    impEnvoyerLot(tranche, function (r) {
+      verses += r.verses; sautes += r.sautes;
+      refuses = refuses.concat(r.refuses);
+      aIndexer = aIndexer.concat(r.aIndexer);
+      afficher(false);
+      if (r.stop) { IMP.arret = true; return suite(); }
+      setTimeout(function () { viderLots(force, suite); }, 60);
+    });
+  }
+
+  function fini() {
+    IMP.encours = false;
+    document.getElementById('imp-stop').style.display = 'none';
+    document.getElementById('imp-go').style.display = 'none';
+    afficher(true);
+    if (window.ragRenderList) window.ragRenderList();
+    var n = 0;
+    (function suivant() {
+      if (n >= aIndexer.length) { afficher(true); return; }
+      var doc = aIndexer[n++];
+      window.ragPollIndexation(doc.id, doc.nom, doc.fragments);
+      setTimeout(suivant, 1200);
+    })();
+  }
+
+  afficher(false);
+  impLireParTranches(f,
+    function (txt, position, continuer) {
+      if (IMP.arret) return fini();
+      octetsLus = position;
+      scan.pousser(txt);
+      afficher(false);
+      viderLots(false, continuer);
+    },
+    function () { viderLots(true, fini); },
+    function (err) {
+      refuses.push({ nom: f.name,
+                     motif: 'lecture interrompue' + (err && err.name ? ' (' + err.name + ')' : '') });
+      viderLots(true, fini);
+    });
 };
 
 function impRendreInventaire(iv, nom) {
