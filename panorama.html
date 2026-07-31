@@ -49,12 +49,20 @@ body.embed .hdr{margin-bottom:12px}
 body.embed .pnav{margin:0 -18px 14px;padding:7px 18px}
 .pnav::-webkit-scrollbar{height:4px}
 .pnav::-webkit-scrollbar-thumb{background:var(--rule);border-radius:2px}
-.pnav a{flex:0 0 auto;font-size:11.5px;color:var(--muted);text-decoration:none;
-  padding:5px 11px;border-radius:3px;border:1px solid transparent;white-space:nowrap;
-  transition:background .12s,color .12s,border-color .12s}
-.pnav a:hover{background:var(--white);color:var(--ink);border-color:var(--rule)}
-.pnav a.on{background:#1C1C1C;color:#fff;border-color:#1C1C1C;font-weight:600}
-.pnav .pnav-n{font-family:var(--mono);font-size:9px;opacity:.7;margin-left:5px}
+.pnav a{flex:0 0 auto;font-size:13.5px;font-weight:600;color:#3A4350;text-decoration:none;
+  padding:8px 15px;border-radius:5px;border:1px solid transparent;white-space:nowrap;
+  transition:background .14s,color .14s,border-color .14s,transform .14s,box-shadow .14s}
+/* Effet LOUPE au survol : l'onglet grossit sous le curseur — assez pour se
+   voir, pas assez pour bousculer ses voisins (transform ne reflue pas). */
+.pnav a:hover{background:var(--white);color:#0F2A4A;border-color:#B9C6D8;
+  transform:scale(1.12);box-shadow:0 2px 10px rgba(15,42,74,.14);position:relative;z-index:2}
+.pnav a:focus-visible{outline:2px solid #1E63A8;outline-offset:2px;transform:scale(1.12)}
+.pnav a.on{background:#0F3D6E;color:#fff;border-color:#0F3D6E}
+.pnav a.on:hover{background:#155089;color:#fff}
+.pnav .pnav-n{font-family:var(--mono);font-size:10px;opacity:.75;margin-left:6px}
+@media(prefers-reduced-motion:reduce){.pnav a:hover,.pnav a:focus-visible,
+  .panel-title:hover{transform:none}}
+@media(max-width:640px){.pnav a{font-size:12px;padding:7px 11px}}
 /* La reserve de defilement est portee par `html{scroll-padding-top}` (voir plus
    haut) et non par une marge sur chaque section : les deux se CUMULERAIENT, et
    la section visee arriverait 108 px trop bas. */
@@ -196,10 +204,47 @@ body.vue-pays .panel:not(#s-pays){display:none}
   text-transform:uppercase;letter-spacing:.05em;color:var(--muted2);margin-top:6px}
 .imp-pond{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:10px 18px}
 .imp-p{display:grid;grid-template-columns:1fr 110px 22px;gap:4px 10px;align-items:center;
-  border:1px solid var(--rule);border-radius:4px;padding:9px 12px}
-.imp-p-nom{font-size:12px;font-weight:600}
-.imp-p-v{font-family:var(--mono);font-size:12px;text-align:right}
+  border:1px solid var(--rule);border-left:4px solid var(--imp-c,#8892A0);border-radius:4px;
+  padding:9px 12px;background:#fff}
+.imp-p-nom{font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.imp-p-v{font-family:var(--mono);font-size:12px;text-align:right;background:var(--imp-c,#8892A0);
+  color:#fff;border-radius:3px;padding:1px 0 1px 1px}
 .imp-p-src{grid-column:1/-1;font-size:10px;color:var(--muted2);line-height:1.45}
+.imp-p input[type=range]{accent-color:var(--imp-c,#5B6472)}
+/* Couleur PAR CRITERE, reprise du curseur a la colonne : l'oeil relie le
+   reglage et son effet sans lire les intitules deux fois. */
+.imp-c-carbone{--imp-c:#1E6336}.imp-c-mix{--imp-c:#4E3277}.imp-c-eau{--imp-c:#1C5CAB}
+.imp-c-climat{--imp-c:#0E7B83}.imp-c-prix{--imp-c:#8A5310}.imp-c-parc{--imp-c:#5B6472}
+.imp-c-pipeline{--imp-c:#B83222}
+/* Jauge de score : la couleur dit le niveau, le chiffre reste la valeur. */
+.imp-jauge{display:flex;align-items:center;gap:7px;min-width:120px}
+.imp-jauge i{flex:1 1 auto;height:7px;border-radius:4px;background:var(--rule);
+  position:relative;overflow:hidden;display:block;min-width:56px}
+.imp-jauge i b{position:absolute;left:0;top:0;bottom:0;border-radius:4px;display:block}
+.imp-sc-n{font-family:var(--mono);font-size:11.5px;font-weight:700;min-width:24px;text-align:right}
+/* Mini-jauge du mix : nucleaire violet, renouvelables vert, fossile gris fonce. */
+.imp-mix{display:flex;height:9px;border-radius:4px;overflow:hidden;min-width:84px;max-width:120px}
+.imp-mix i{display:block;height:100%}
+.imp-mix .m-n{background:#4E3277}.imp-mix .m-r{background:#2D7A47}.imp-mix .m-f{background:#4A4A4A}
+.imp-mix-l{font-size:9.5px;font-family:var(--mono);color:var(--muted);white-space:nowrap}
+/* Pastilles de classe : la meme couleur dit la meme chose partout. */
+.imp-chip{display:inline-block;font-family:var(--mono);font-size:9px;text-transform:uppercase;
+  letter-spacing:.04em;padding:2px 7px;border-radius:9px;white-space:nowrap}
+.imp-chip.bon{background:rgba(45,122,71,.14);color:#215B35}
+.imp-chip.moyen{background:rgba(196,124,26,.16);color:#8A5310}
+.imp-chip.mauvais{background:rgba(184,50,34,.13);color:#8F2317}
+/* Infobulle CSS pure : lisible au survol ET au clavier (focus). */
+.ttip{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;
+  border-radius:50%;background:var(--rule);color:var(--muted);font-size:10px;font-weight:700;
+  cursor:help;position:relative;flex:0 0 auto;border:none;font-family:inherit;vertical-align:middle}
+.ttip:hover,.ttip:focus-visible{background:#1C5CAB;color:#fff;outline:none}
+.ttip::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;
+  transform:translateX(-50%);background:#1C1C1C;color:#fff;font-size:11px;font-weight:400;
+  line-height:1.55;padding:9px 12px;border-radius:5px;width:min(300px,72vw);white-space:normal;
+  text-align:left;opacity:0;pointer-events:none;transition:opacity .12s;z-index:60;
+  text-transform:none;letter-spacing:0}
+.ttip:hover::after,.ttip:focus-visible::after{opacity:1}
+th .ttip{margin-left:5px}
 .imp-l{cursor:pointer}
 .imp-l:hover{background:#F2F5FA}
 .imp-fiche{border:1px solid var(--rule);border-radius:4px;margin-top:8px;padding:0 12px}
@@ -290,8 +335,12 @@ body.vue-site .panel:not(#s-site){display:none}
 .kpi.k-hr .v{color:var(--accent)}
 
 .panel{background:var(--white);border:1px solid var(--rule);border-radius:4px;margin-bottom:20px;overflow:hidden}
-.panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;padding:12px 20px 10px;border-bottom:1px solid var(--rule)}
-.panel-title{font-size:13px;font-weight:600}
+.panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;padding:14px 20px 12px;border-bottom:1px solid var(--rule)}
+.panel-title{font-size:17px;font-weight:700;letter-spacing:-.01em;color:#12233C;
+  padding-left:12px;border-left:4px solid #0F3D6E;line-height:1.3;display:inline-block;
+  transition:transform .14s;transform-origin:left center}
+.panel-title:hover{transform:scale(1.06)}
+@media(max-width:640px){.panel-title{font-size:15px}}
 .panel-note{font-family:var(--mono);font-size:10px;color:var(--muted2);letter-spacing:.03em}
 .panel-body{padding:16px 20px 18px}
 .note{font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.55;max-width:110ch}
@@ -571,15 +620,15 @@ n'est <b>pas un audit de conformité</b> des entreprises citées. Seuls les fait
 engagements publics) sont imputés nominativement.</div>
 
 <nav class="pnav" id="pnav" aria-label="Sections de la page">
-  <a href="#s-carte">Carte &amp; droit national</a>
-  <a href="#s-cas">Explorateur des cas<span class="pnav-n" id="pn-cas"></span></a>
-  <a href="#s-signaux">Signaux</a>
-  <a href="#s-lectures">Lectures d’ensemble</a>
-  <a href="#s-socle">Données ouvertes</a>
-  <a href="#s-empreinte">Empreinte<span class="pnav-n" id="pn-emp"></span></a>
-  <a href="#s-implantation">Implantation</a>
-  <a href="#s-methodo">Méthodologie</a>
-  <a href="#s-sources">Sources</a>
+  <a href="#s-carte" title="La carte de l’UE : systèmes d’IA, centres de données, droit national">Carte UE &amp; droit national</a>
+  <a href="#s-cas" title="Le panel de cas réels, filtrable par risque, secteur et pays">Cas d’IA en entreprise<span class="pnav-n" id="pn-cas"></span></a>
+  <a href="#s-signaux" title="Les mouvements récents du panel">Signaux</a>
+  <a href="#s-lectures" title="Les lectures d’ensemble : classes de risque, secteurs, stades">Lectures d’ensemble</a>
+  <a href="#s-socle" title="Les jeux de données ouverts qui alimentent la page">Données ouvertes</a>
+  <a href="#s-empreinte" title="Électricité, CO₂e, eau et fabrication du parc cartographié">Empreinte &amp; data centres<span class="pnav-n" id="pn-emp"></span></a>
+  <a href="#s-implantation" title="Comparer les pays selon vos critères : carbone, eau, mix, prix, 2030">Choix d’implantation</a>
+  <a href="#s-methodo" title="Comment les chiffres sont construits, hypothèse par hypothèse">Méthodologie</a>
+  <a href="#s-sources" title="Chaque source, son millésime, son lien — et le registre de vérification">Sources</a>
   <button type="button" class="gp-lanceur" id="gp-lanceur">Parcours guidé</button>
 </nav>
 
@@ -2545,6 +2594,39 @@ function implScore(x){
   return poids ? Math.round(somme / poids) : null;
 }
 
+/* Le vert-orange-rouge est le meme partout : une note tient sa couleur de sa
+   valeur, jamais de sa colonne. */
+function implCouleurNote(n){
+  if(n === null || n === undefined) return "#8892A0";
+  return n >= 70 ? "#2D7A47" : (n >= 45 ? "#C47C1A" : "#B83222");
+}
+function implJauge(n){
+  if(n === null || n === undefined) return "—";
+  return '<span class="imp-jauge"><i><b style="width:' + n + '%;background:'
+    + implCouleurNote(n) + '"></b></i><span class="imp-sc-n" style="color:'
+    + implCouleurNote(n) + '">' + n + "</span></span>";
+}
+function implChip(classe, texte){
+  var ton = { faible: "bon", bas: "bon", modere: "moyen", moyen: "moyen",
+              eleve: "mauvais" }[classe] || "moyen";
+  return '<span class="imp-chip ' + ton + '">' + esc(texte) + "</span>";
+}
+function implMixJauge(m){
+  if(!m) return "—";
+  return '<span class="imp-mix" role="img" aria-label="nucléaire ' + m.nucleaire
+    + ' %, renouvelables ' + m.renouvelables + ' %, fossile ' + m.fossile + ' %">'
+    + (m.nucleaire ? '<i class="m-n" style="width:' + m.nucleaire + '%"></i>' : "")
+    + (m.renouvelables ? '<i class="m-r" style="width:' + m.renouvelables + '%"></i>' : "")
+    + (m.fossile ? '<i class="m-f" style="width:' + m.fossile + '%"></i>' : "")
+    + '</span><br><span class="imp-mix-l">'
+    + (m.nucleaire ? "n " + m.nucleaire + " · " : "") + "r " + m.renouvelables
+    + " · f " + m.fossile + "</span>";
+}
+function implTip(texte){
+  return '<button type="button" class="ttip" data-tip="' + esc(texte)
+    + '" aria-label="Explication">?</button>';
+}
+
 function implNatBadge(nat){
   var lib = { referentiel: "référentiel", calcule: "calculé", analyse: "analyse" };
   return '<span class="pv-nat n-' + nat + '">' + (lib[nat] || nat) + "</span>";
@@ -2573,9 +2655,18 @@ function renderImplantation(){
   var pond = document.getElementById("imp-ponderations");
   if(pond && !pond.getAttribute("data-pret")){
     pond.setAttribute("data-pret", "1");
+    var TIPS = {
+      carbone: "Ce que pèse chaque kWh en CO₂e dans ce pays (cycle de vie, 2024). Poids fort si votre empreinte reportable ou le prix du carbone comptent. 0 = critère ignoré, 4 = décisif.",
+      mix: "D’où vient l’électricité : nucléaire (pilotable), renouvelables, fossile. Deux pays à intensité égale peuvent avoir des profils de prix et de disponibilité opposés.",
+      eau: "Stress hydrique national (WEI+ de l’AEE) et compétition avec l’irrigation agricole. Décisif si vous envisagez un refroidissement évaporatif.",
+      climat: "Potentiel de free cooling selon le climat : un pays froid achète un PUE bas sans payer en eau ; un pays chaud arbitre entre les deux.",
+      prix: "Terrain de départ de la négociation d’énergie (classes Eurostat). Le prix réel sera votre PPA — pondérez fort si l’OPEX énergie domine votre modèle.",
+      parc: "Filière déjà constituée : sites en service, main-d’œuvre, permis déjà instruits par les autorités. Rassurant pour une extension ou un rachat.",
+      pipeline: "File de raccordement 2026-2030 : moins il y a de projets devant vous, plus vite votre NOUVEAU site sera raccordé. Sans objet pour un rachat.",
+    };
     pond.innerHTML = '<div class="imp-pond">' + IMPL.criteres.map(function(c){
-        return '<label class="imp-p"><span class="imp-p-nom">' + esc(c.nom)
-          + " " + implNatBadge(c.nature) + '</span>'
+        return '<label class="imp-p imp-c-' + c.cle + '"><span class="imp-p-nom">' + esc(c.nom)
+          + " " + implNatBadge(c.nature) + implTip(TIPS[c.cle] || c.source) + '</span>'
           + '<input type="range" min="0" max="4" step="1" value="' + (IMPL_POIDS[c.cle] || 0)
           + '" data-critere="' + c.cle + '" aria-label="Poids : ' + esc(c.nom) + '">'
           + '<b class="imp-p-v" id="imp-pv-' + c.cle + '">' + (IMPL_POIDS[c.cle] || 0) + "</b>"
@@ -2617,32 +2708,59 @@ function renderImplClassement(){
     .sort(function(a, b){ return b.score - a.score; });
 
   el.innerHTML = '<div class="tablo"><table><thead><tr>'
-    + "<th>Rang</th><th>Pays</th><th>Score</th>"
-    + '<th title="gCO2e/kWh, Ember 2024">Carbone</th>'
-    + '<th title="nucléaire / renouvelables / fossile, production 2024">Mix</th>'
-    + '<th title="WEI+ AEE 2022, part de l’irrigation">Eau</th>'
-    + '<th title="classe latitudinale">Free cooling</th>'
-    + '<th title="Eurostat 2024, classes">Prix</th>'
-    + '<th title="sites en service / pipeline 2026-2030 (référentiel des 97 sites)">Parc · file</th>'
+    + "<th>Rang</th><th>Pays</th>"
+    + "<th>Score" + implTip("Votre pondération appliquée aux notes 0-100 de chaque critère : "
+        + "Σ (poids × note) ÷ Σ poids. La couleur suit la valeur — vert dès 70, orange dès 45, "
+        + "rouge en dessous. Le score n’a de sens que relatif, dans CE classement.") + "</th>"
+    + "<th>Carbone" + implTip("Intensité carbone du réseau en gCO₂e/kWh (Ember 2024, cycle de "
+        + "vie). Vert sous 100, orange jusqu’à 250, rouge au-delà. Moyenne annuelle : un PPA "
+        + "24/7 change votre résultat sans changer ce chiffre.") + "</th>"
+    + "<th>Mix" + implTip("Production 2024 : violet = nucléaire, vert = renouvelables, "
+        + "gris = fossile. Un mix pilotable (nucléaire, hydro) couvre 8 760 h/an ; un mix "
+        + "intermittent expose au prix de couverture des creux.") + "</th>"
+    + "<th>Eau" + implTip("Stress hydrique national (WEI+ AEE 2022) et part de l’irrigation "
+        + "agricole dans les prélèvements : là où elle dépasse la moitié, l’évaporatif entre "
+        + "en compétition d’usage l’été. La réalité est un contraste de BASSINS — l’étude "
+        + "locale reste indispensable.") + "</th>"
+    + "<th>Free cooling" + implTip("Potentiel climatique : nordique (quasi permanent), tempéré "
+        + "(majoritaire), méridional (arbitrage eau/PUE). C’est un potentiel de conception, "
+        + "pas le PUE d’un site.") + "</th>"
+    + "<th>Prix" + implTip("Classe Eurostat 2024, bandes industrielles hautes, en fourchette "
+        + "d’ordre de grandeur. Le prix réel d’un centre de données est contractuel (PPA) : "
+        + "ceci est le terrain de départ de la négociation.") + "</th>"
+    + "<th>Parc · file" + implTip("Sites EN SERVICE (filière constituée) · projets annoncés, "
+        + "autorisés ou en construction 2026-2030 (votre concurrence dans la file de "
+        + "raccordement). Comptés depuis le référentiel des 97 sites.") + "</th>"
     + "</tr></thead><tbody>"
     + lignes.map(function(l, i){
         var x = l.x;
-        var mix = x.mix ? (x.mix.nucleaire ? "nucl. " + x.mix.nucleaire + " %, " : "")
-          + "renouv. " + x.mix.renouvelables + " %, foss. " + x.mix.fossile + " %" : "—";
+        var gInt = x.intensite == null ? null
+          : (x.intensite <= 100 ? "bon" : (x.intensite <= 250 ? "moyen" : "mauvais"));
         return '<tr class="imp-l" data-pays="' + x.pays + '">'
           + "<td>" + (i + 1) + "</td>"
           + "<td><b>" + esc(nomPays(x.pays) || x.pays) + "</b></td>"
-          + "<td><b>" + l.score + "</b>/100</td>"
-          + "<td>" + (x.intensite != null ? x.intensite + " g" : "—") + "</td>"
-          + "<td>" + mix + "</td>"
-          + "<td>" + (x.eau ? esc(x.eau.classe_nom) + " · irrigation " + esc(x.eau.irrigation) : "—") + "</td>"
+          + "<td>" + implJauge(l.score) + "</td>"
+          + "<td>" + (gInt ? implChip(gInt === "bon" ? "faible" : (gInt === "moyen" ? "modere" : "eleve"),
+                      x.intensite + " g") : "—") + "</td>"
+          + "<td>" + implMixJauge(x.mix) + "</td>"
+          + "<td>" + (x.eau ? implChip(x.eau.classe, x.eau.classe_nom.replace("Stress ", ""))
+                      + '<br><span class="imp-mix-l">irrigation ' + esc(x.eau.irrigation) + "</span>" : "—") + "</td>"
           + "<td>" + esc(x.climat.nom.split(" — ")[0]) + "</td>"
-          + "<td>" + (x.prix ? esc(x.prix.classe_nom) + " (" + x.prix.fourchette_eur_mwh[0] + "–"
-                      + x.prix.fourchette_eur_mwh[1] + " €/MWh)" : "—") + "</td>"
+          + "<td>" + (x.prix ? implChip(x.prix.classe, x.prix.classe_nom)
+                      + '<br><span class="imp-mix-l">' + x.prix.fourchette_eur_mwh[0] + "–"
+                      + x.prix.fourchette_eur_mwh[1] + " €/MWh</span>" : "—") + "</td>"
           + "<td>" + x.en_service + " · " + x.pipeline_2030 + "</td>"
           + "</tr>";
       }).join("")
-    + "</tbody></table></div>";
+    + "</tbody></table></div>"
+    + '<p class="note" style="margin-top:8px">Une même couleur dit la même chose partout : '
+    + '<span class="imp-chip bon">favorable</span> <span class="imp-chip moyen">intermédiaire</span> '
+    + '<span class="imp-chip mauvais">défavorable</span> — et le mix se lit '
+    + '<span class="imp-chip" style="background:rgba(78,50,119,.13);color:#4E3277">nucléaire</span>'
+    + '<span class="imp-chip bon">renouvelables</span>'
+    + '<span class="imp-chip" style="background:rgba(74,74,74,.13);color:#3A3A3A">fossile</span>. '
+    + 'Cliquez une ligne pour ouvrir la fiche avantages / inconvénients du pays. '
+    + 'Les « ? » expliquent chaque colonne — au survol comme au clavier.</p>';
   el.querySelectorAll(".imp-l").forEach(function(tr){
     tr.addEventListener("click", function(){
       IMPL_DEPLIE = this.getAttribute("data-pays");
@@ -2669,7 +2787,8 @@ function renderImplAvis(){
     }).join("");
     return '<details class="imp-fiche"' + (ouvert ? " open" : "") + ' data-pays="' + x.pays + '">'
       + "<summary><b>" + esc(nomPays(x.pays) || x.pays) + "</b>"
-      + (l.score !== null ? ' <span class="imp-sc">' + l.score + "/100 selon vos poids</span>" : "")
+      + (l.score !== null ? ' <span class="imp-sc" style="color:' + implCouleurNote(l.score)
+          + '">' + l.score + "/100 selon vos poids</span>" : "")
       + "</summary>"
       + '<div class="imp-2col">'
       + '<div class="imp-pour"><b>Avantages</b><ul>'
