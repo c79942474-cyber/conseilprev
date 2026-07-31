@@ -17605,6 +17605,47 @@ window.ragCauseHttp = function (res) {
   return quoi + (brut ? ' Réponse reçue : « ' + brut.slice(0, 160) + ' »' : '');
 };
 
+/* Une sauvegarde conseilprevcyber deposee dans « Ajouter un document » serait
+   enregistree comme UN document de base64 illisible — quand elle n est pas
+   refusee d emblee pour sa taille, apres avoir ete televersee pour rien. On la
+   reconnait a ses premiers octets, avant d envoyer quoi que ce soit, et on la
+   confie au bloc qui sait en extraire les documents un par un. */
+function ragEstSauvegarde(tete){
+  var t = String(tete || '');
+  if(!/^[\uFEFF\s]*\{/.test(t)) return false;     /* une sauvegarde est un objet JSON */
+  return /"app"\s*:\s*"conseilprevcyber-rag"/.test(t)
+      || (t.indexOf('"documents"') >= 0 && t.indexOf('content_b64') >= 0);
+}
+
+var RAG_FORCE = null;
+
+window.ragForcerDocument = function(){
+  var f = RAG_FORCE;
+  if(!f) return;
+  RAG_FORCE = null;
+  document.getElementById('imp-etat').innerHTML = '';
+  ragEnvoyerDocument(f);
+};
+
+function ragRediriger(file){
+  RAG_FORCE = file;
+  IMP.fichier = file;
+  var inv = document.getElementById('imp-inv');
+  if(file.size > window.IMP_SEUIL_FLUX) impProposerFlux(file, inv);
+  else window.impChoisir([file]);
+  document.getElementById('imp-etat').innerHTML =
+    '<div style="border:1px solid var(--rule2);border-left:3px solid var(--accent);'
+    + 'border-radius:8px;padding:12px 14px;background:var(--bg);font-size:11.5px;'
+    + 'color:var(--ink2);line-height:1.6">'
+    + '<b>Ce fichier est une sauvegarde conseilprevcyber</b> (' + impPoids(file.size) + '), '
+    + 'pas un document. Déposé dans « Ajouter un document », il serait enregistré comme un '
+    + 'seul fichier de base64 illisible. Il a donc été confié au transfert ci-dessus, qui sait '
+    + 'en extraire les documents un par un.'
+    + '<br><button class="mat-export-btn" style="margin-top:8px" '
+    + 'onclick="ragForcerDocument()">L’enregistrer quand même comme un document</button></div>';
+  inv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
 window.ragHandleFileSelect = function(files){
   if(!files || files.length === 0) return;
   var file = files[0];
@@ -17614,11 +17655,31 @@ window.ragHandleFileSelect = function(files){
     alert('Format non accepté. Formats acceptés : PDF, Word (.docx), Excel (.xlsx, .xlsm), texte, Markdown, CSV, journal, JSON, YAML.');
     return;
   }
-  /* Le contrôle de taille est laissé au SERVEUR : lui seul connaît sa limite
-     (réglable par RAG_MAX_FILE_SIZE_MO) et sait si l original sera conservé.
-     Un plafond recopié ici aurait divergé, et refusé des fichiers que le
-     serveur accepte. */
+  document.getElementById('rag-file-input').value = '';
 
+  var tete = new FileReader();
+  tete.onerror = function(){ ragEnvoyerDocument(file); };
+  tete.onload = function(){
+    var debut = '';
+    try { debut = new TextDecoder('utf-8').decode(new Uint8Array(tete.result)); }
+    catch(e){ debut = ''; }
+    if(ragEstSauvegarde(debut)){ ragRediriger(file); return; }
+    /* Le plafond du serveur est connu depuis le diagnostic : refuser ICI evite
+       de televerser six cent cinquante mégaoctets pour s entendre dire non. */
+    if(RAG_TAILLE_MAX && file.size > RAG_TAILLE_MAX){
+      alert('Ce fichier fait ' + impPoids(file.size) + ' ; la limite est de '
+          + Math.round(RAG_TAILLE_MAX / 1048576) + ' Mo. Découpez le document, ou relevez '
+          + 'RAG_MAX_FILE_SIZE_MO dans les variables d environnement.'
+          + '\n\nRien n’a été envoyé : le contrôle a lieu avant le transfert, pour ne pas '
+          + 'téléverser ' + impPoids(file.size) + ' en pure perte.');
+      return;
+    }
+    ragEnvoyerDocument(file);
+  };
+  tete.readAsArrayBuffer(file.slice(0, 4096));
+};
+
+function ragEnvoyerDocument(file){
   var checkedPages = Array.from(document.querySelectorAll('.rag-pages-checks input:checked')).map(function(cb){ return cb.value; });
   if(checkedPages.length === 0) checkedPages = ['general'];
 
@@ -17924,6 +17985,9 @@ var DOS_EXT = ['pdf', 'docx', 'xlsx', 'xlsm', 'txt', 'md', 'csv', 'log', 'json',
    de la base est chargé : deux limites écrites à deux endroits finissent
    toujours par diverger, et c'est l'utilisateur qui découvre l'écart. */
 var DOS_MAX = 500 * 1024 * 1024;
+/* Renseignée par le diagnostic : tant qu’elle vaut 0, on laisse le serveur
+   trancher plutôt que de recopier une limite qui aurait divergé. */
+var RAG_TAILLE_MAX = 0;
 
 function dosExt(nom) {
   var m = String(nom || '').toLowerCase().match(/\.([a-z0-9]+)$/);
@@ -18866,6 +18930,7 @@ window.ragRenderDiag = function(){
       /* La limite de taille du dépôt en masse suit celle du serveur. */
       if(d.taille_max_mo && typeof DOS_MAX !== 'undefined'){
         DOS_MAX = d.taille_max_mo * 1024 * 1024;
+        RAG_TAILLE_MAX = DOS_MAX;
       }
       el.style.display = 'block';
     })
