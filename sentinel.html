@@ -18061,9 +18061,13 @@ window.impChoisir = function (files) {
     var obj;
     try { obj = JSON.parse(fr.result); }
     catch (e) {
-      inv.innerHTML = '<div class="reg-empty" style="color:var(--accent)">Ce fichier n’est pas '
-        + 'un JSON valide. Vérifiez qu’il s’agit bien de la sauvegarde téléchargée depuis '
-        + '/admin/base-connaissance.</div>';
+      /* « JSON invalide » ne dit rien d'exploitable. Dans les faits, c'est
+         presque toujours un fichier TRONQUÉ : le téléchargement s'est
+         interrompu, ou le serveur d'origine a manqué de mémoire en le
+         fabriquant. On le diagnostique, et surtout on RÉCUPÈRE les documents
+         complets — un téléchargement coupé aux trois quarts contient les trois
+         quarts des documents, il serait absurde de tout jeter. */
+      impDiagnostiquer(fr.result, e, inv);
       return;
     }
     IMP.sauvegarde = obj;
@@ -18098,6 +18102,95 @@ window.impChoisir = function (files) {
       });
   };
   fr.readAsText(f);
+};
+
+/* Extrait les objets JSON COMPLETS du tableau « documents » d'une sauvegarde
+   tronquée. Le balayage tient compte des chaînes et des échappements : un
+   accolade à l'intérieur d'un titre ne doit pas être prise pour une frontière
+   d'objet, sans quoi on découperait au mauvais endroit et tout serait perdu. */
+window.impRecuperer = function (texte) {
+  var depart = texte.indexOf('"documents"');
+  if (depart < 0) return [];
+  var crochet = texte.indexOf('[', depart);
+  if (crochet < 0) return [];
+  var docs = [], i = crochet + 1, n = texte.length;
+  while (i < n) {
+    while (i < n && (texte[i] === ',' || texte[i] === ' ' || texte[i] === '\n'
+                     || texte[i] === '\r' || texte[i] === '\t')) i++;
+    if (i >= n || texte[i] !== '{') break;
+    var debut = i, profondeur = 0, chaine = false, echap = false;
+    for (; i < n; i++) {
+      var c = texte[i];
+      if (echap) { echap = false; continue; }
+      if (c === '\\') { echap = true; continue; }
+      if (c === '"') { chaine = !chaine; continue; }
+      if (chaine) continue;
+      if (c === '{') profondeur++;
+      else if (c === '}') {
+        profondeur--;
+        if (profondeur === 0) { i++; break; }
+      }
+    }
+    if (profondeur !== 0) break;          /* dernier objet coupé : on l'écarte */
+    try { docs.push(JSON.parse(texte.slice(debut, i))); }
+    catch (e) { break; }
+  }
+  return docs;
+};
+
+function impDiagnostiquer(texte, err, inv) {
+  var t = String(texte || '');
+  var debutOk = /^\s*\{\s*"version"/.test(t) || t.indexOf('conseilprevcyber-rag') >= 0;
+  var finOk = /\}\s*$/.test(t.slice(-40));
+  var pos = (String(err && err.message || '').match(/position (\d+)/) || [])[1];
+  var recuperes = debutOk ? window.impRecuperer(t) : [];
+
+  var motif;
+  if (!debutOk) {
+    motif = 'Ce fichier ne ressemble pas à une sauvegarde de conseilprevcyber : il ne '
+          + 'commence pas par son en-tête. Vérifiez que c’est bien le fichier téléchargé '
+          + 'par le bouton <b>💾 Sauvegarder</b> de /admin/base-connaissance.';
+  } else if (!finOk) {
+    motif = '<b>Le fichier est incomplet.</b> Il commence bien comme une sauvegarde '
+          + 'conseilprevcyber mais se termine au milieu : le téléchargement s’est '
+          + 'interrompu, ou le serveur d’origine a manqué de mémoire en le fabriquant. '
+          + '<b>Redéployez conseilprevcyber</b> (le correctif de mémoire y est poussé) '
+          + 'puis retéléchargez la sauvegarde.';
+  } else {
+    motif = 'Le fichier est complet en apparence mais son contenu est mal formé'
+          + (pos ? ' (première anomalie au caractère ' + pos + ')' : '') + '.';
+  }
+
+  inv.innerHTML =
+    '<div class="reg-empty" style="color:var(--accent);text-align:left">' + motif
+    + '<div style="margin-top:8px;font-family:var(--mono);font-size:10.5px;color:var(--muted)">'
+    + 'taille lue : ' + impPoids(t.length)
+    + ' · en-tête : ' + (debutOk ? 'reconnu' : 'non reconnu')
+    + ' · fin : ' + (finOk ? 'complète' : 'coupée') + '</div>'
+    + (recuperes.length
+        ? '<div style="margin-top:10px;color:var(--ink2);font-size:12px">'
+          + '<b>' + recuperes.length + ' document(s) entier(s)</b> sont malgré tout lisibles '
+          + 'dans ce fichier. Vous pouvez les transférer maintenant et refaire une '
+          + 'sauvegarde complète ensuite : un document déjà transféré sera sauté.'
+          + '<br><button class="mat-export-btn" style="margin-top:8px" '
+          + 'onclick="impRecuperationLancer()">Transférer les ' + recuperes.length
+          + ' document(s) lisibles</button></div>'
+        : '')
+    + '</div>';
+
+  /* La sauvegarde partielle est gardée telle quelle : l'utilisateur décide. */
+  IMP.sauvegarde = recuperes.length
+    ? { app: 'conseilprevcyber-rag', version: 1, count: recuperes.length, documents: recuperes }
+    : null;
+  document.getElementById('imp-go').style.display = 'none';
+}
+
+window.impRecuperationLancer = function () {
+  if (!IMP.sauvegarde) return;
+  impRendreInventaire({ documents: (IMP.sauvegarde.documents || []).length, rejets: 0,
+                        octets: 0, themes: {}, familles: {}, entreprises: {} },
+                      'documents récupérés');
+  window.impLancer();
 };
 
 function impRendreInventaire(iv, nom) {
