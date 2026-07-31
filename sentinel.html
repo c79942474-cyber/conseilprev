@@ -3599,10 +3599,11 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     </div>
     <div style="font-size:11.5px;color:var(--muted);line-height:1.6;margin-bottom:12px">
       Sur <b>conseilprevcyber</b>, ouvrez <b>/admin/base-connaissance</b> et cliquez
-      <b>💾 Sauvegarder</b> : un fichier <code>conseilprevcyber-rag-backup-AAAA-MM-JJ.json</code>
-      se télécharge. <b>Attendez la fin du téléchargement</b> avant de le déposer ici — un
-      fichier encore en cours d’écriture est incomplet, et c’est la cause n°1 des transferts
-      qui échouent. Déposez-le ici. Tous les documents sont repris <b>avec leur thème
+      <b>💾 Sauvegarder</b> : un fichier <code>conseilprevcyber-rag-backup-2026-07-31.json</code>
+      se télécharge — la date change chaque jour, et <b>le nom n’a aucune importance ici</b> :
+      seul le contenu du fichier est examiné. <b>Attendez la fin du téléchargement</b> avant de
+      le déposer — un fichier encore en cours d’écriture est incomplet, et c’est la cause n°1
+      des transferts qui échouent. Tous les documents sont repris <b>avec leur thème
       d’origine</b> — domaines normatifs, familles techniques et noms d’entreprises —
       et rattachés en plus aux pages Sentinel correspondantes.
       <br><b>Le transfert est rejouable</b> : un document déjà présent est sauté, jamais
@@ -18059,24 +18060,66 @@ function impVisible(t, n) {
    en-tête » à quelqu'un qui voit un fichier nommé conseilprevcyber-rag-….json
    ne lui apprend rien : le NOM vient bien du bouton, c'est le CONTENU qui
    vient d'ailleurs. Les quatre cents premiers caractères tranchent. */
-function impApercuBloc(t) {
-  if (!t) return '';
+function impApercuBloc(t, titre, depart) {
+  var d = depart || 0;
+  if (!t || d >= t.length) return '';
   return '<div style="margin-top:10px">'
     + '<div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;'
-    + 'letter-spacing:.06em;color:var(--muted2);margin-bottom:4px">Début réel du fichier</div>'
+    + 'letter-spacing:.06em;color:var(--muted2);margin-bottom:4px">'
+    + impEsc(titre || 'Début réel du fichier') + '</div>'
     + '<div style="font-family:var(--mono);font-size:10.5px;color:var(--ink2);background:var(--bg2);'
     + 'border:1px solid var(--rule2);border-radius:6px;padding:8px 10px;white-space:pre-wrap;'
-    + 'word-break:break-all;max-height:130px;overflow:auto">' + impVisible(t, 400) + '</div></div>';
+    + 'word-break:break-all;max-height:130px;overflow:auto">'
+    + (d ? '…' : '') + impVisible(t.slice(d), 400) + '</div></div>';
 }
 
-function impRefus(inv, s, apercu) {
+function impSansBalises(h) {
+  return String(h || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+}
+
+/* Le diagnostic ne sert a rien s'il reste dans l'ecran. Un bouton le met dans
+   le presse-papiers en entier — apercu compris — parce que c'est justement
+   l'apercu, le bloc decisif, qu'on oublie de recopier. */
+function impBoutonCopie() {
+  return '<button class="mat-export-btn" style="margin-top:10px" '
+    + 'onclick="impCopierRapport(this)">Copier le diagnostic</button>';
+}
+
+/* Le rapport est dans la fermeture ; on l'expose pour qu'il soit verifiable
+   seul — c'est le bloc que l'utilisateur doit pouvoir transmettre. */
+window.impDernierRapport = function () { return IMP.rapport || ''; };
+
+window.impCopierRapport = function (btn) {
+  var txt = IMP.rapport || '';
+  var fini = function (ok) { btn.textContent = ok ? 'Diagnostic copié' : 'Copie impossible'; };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(function () { fini(true); },
+                                           function () { impCopieSecours(txt, fini); });
+  } else { impCopieSecours(txt, fini); }
+};
+
+function impCopieSecours(txt, fini) {
+  var z = document.createElement('textarea');
+  z.value = txt; z.style.position = 'fixed'; z.style.top = '-1000px'; z.style.opacity = '0';
+  document.body.appendChild(z); z.focus(); z.select();
+  var ok = false;
+  try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+  z.remove();
+  fini(ok);
+}
+
+function impRefus(inv, s, apercu, nom) {
   IMP.sauvegarde = null;
   document.getElementById('imp-go').style.display = 'none';
+  IMP.rapport = 'Sentinel — diagnostic de sauvegarde\n'
+    + 'fichier : ' + (nom || '(inconnu)') + '\n'
+    + 'message : ' + impSansBalises(s.titre + ' ' + (s.cause || '') + ' ' + (s.faire || '')) + '\n'
+    + '--- début réel du fichier ---\n' + String(apercu || '').slice(0, 400) + '\n';
   inv.innerHTML = '<div class="reg-empty" style="color:var(--accent);text-align:left">'
     + '<b>' + s.titre + '</b>'
     + (s.cause ? '<div style="margin-top:6px;color:var(--ink2);font-size:12px">' + s.cause + '</div>' : '')
     + (s.faire ? '<div style="margin-top:6px;color:var(--ink2);font-size:12px">' + s.faire + '</div>' : '')
-    + impApercuBloc(apercu) + '</div>';
+    + impApercuBloc(apercu) + impBoutonCopie() + '</div>';
 }
 
 var IMP_REFAIRE = 'Rouvrez <b>/admin/base-connaissance</b>, vérifiez que la liste des documents '
@@ -18128,7 +18171,7 @@ function impSignature(octets, tete) {
 /* Du JSON, mais pas une sauvegarde. Le cas le plus fréquent est une réponse
    d'erreur enregistrée telle quelle : « Authentification requise » tient dans
    quarante octets et porte, lui aussi, le nom du fichier attendu. */
-function impFormeInattendue(obj, apercu, inv) {
+function impFormeInattendue(obj, apercu, inv, nom) {
   var err = obj && !Array.isArray(obj) && (obj.error || obj.message);
   if (err) {
     impRefus(inv, { titre: 'conseilprevcyber a répondu par une erreur, pas par une sauvegarde : '
@@ -18136,7 +18179,7 @@ function impFormeInattendue(obj, apercu, inv) {
       cause: 'C’est cette réponse-là qui a été enregistrée dans le fichier. Presque toujours : '
            + 'la session d’administration avait expiré au moment du téléchargement.',
       faire: 'Reconnectez-vous sur conseilprevcyber, puis ' + IMP_REFAIRE.charAt(0).toLowerCase()
-           + IMP_REFAIRE.slice(1) }, apercu);
+           + IMP_REFAIRE.slice(1) }, apercu, nom);
     return;
   }
   var cles = Array.isArray(obj) ? [] : Object.keys(obj || {}).slice(0, 8);
@@ -18146,7 +18189,7 @@ function impFormeInattendue(obj, apercu, inv) {
          + (Array.isArray(obj) ? ' Celui-ci est une liste.'
             : cles.length ? ' Celui-ci porte : <code>' + impEsc(cles.join(', ')) + '</code>.' : ''),
     faire: 'Vérifiez que c’est bien le fichier produit par le bouton <b>💾 Sauvegarder</b> '
-         + 'de /admin/base-connaissance.' }, apercu);
+         + 'de /admin/base-connaissance.' }, apercu, nom);
 }
 
 window.impChoisir = function (files) {
@@ -18158,7 +18201,7 @@ window.impChoisir = function (files) {
 
   if (!f.size) {
     impRefus(inv, { titre: 'Ce fichier est vide (0 octet).',
-      cause: 'Le téléchargement n’a rien rapporté.', faire: IMP_REFAIRE }, '');
+      cause: 'Le téléchargement n’a rien rapporté.', faire: IMP_REFAIRE }, '', f.name);
     return;
   }
   inv.innerHTML = '<div class="reg-loading">Lecture de ' + impEsc(f.name) + ' ('
@@ -18175,7 +18218,7 @@ window.impChoisir = function (files) {
     try { debut = new TextDecoder('utf-8').decode(octets); }
     catch (e) { for (var k = 0; k < octets.length; k++) debut += String.fromCharCode(octets[k]); }
     var s = impSignature(octets, debut);
-    if (s) { impRefus(inv, s, debut); return; }
+    if (s) { impRefus(inv, s, debut, f.name); return; }
     impLireTout(f, inv, debut);
   };
   tete.readAsArrayBuffer(f.slice(0, 4096));
@@ -18199,11 +18242,11 @@ function impLireTout(f, inv, debut) {
          fabriquant. On le diagnostique, et surtout on RÉCUPÈRE les documents
          complets — un téléchargement coupé aux trois quarts contient les trois
          quarts des documents, il serait absurde de tout jeter. */
-      impDiagnostiquer(fr.result, e, inv);
+      impDiagnostiquer(fr.result, e, inv, f);
       return;
     }
     if (!obj || typeof obj !== 'object' || !Array.isArray(obj.documents)) {
-      impFormeInattendue(obj, debut, inv);
+      impFormeInattendue(obj, debut, inv, f.name);
       return;
     }
     IMP.sauvegarde = obj;
@@ -18274,9 +18317,10 @@ window.impRecuperer = function (texte) {
   return docs;
 };
 
-function impDiagnostiquer(texte, err, inv) {
+function impDiagnostiquer(texte, err, inv, f) {
   var t = String(texte || '');
   var ouvre = /^[\uFEFF\s]*\{/.test(t);
+  var liste = /^[\uFEFF\s]*\[/.test(t);
   /* La marque de fabrique, ou à défaut la liste elle-même : une sauvegarde
      dont le tout début manque garde ses documents, et c'est eux qui comptent. */
   var signe = t.indexOf('conseilprevcyber-rag') >= 0 || t.indexOf('"documents"') >= 0;
@@ -18287,12 +18331,24 @@ function impDiagnostiquer(texte, err, inv) {
   var recuperes = window.impRecuperer(t);
 
   var motif;
-  if (!ouvre || !signe) {
-    motif = '<b>Ce fichier n’a pas la forme d’une sauvegarde conseilprevcyber.</b> Il ne '
-          + 's’ouvre pas par un objet JSON portant une liste <code>documents</code>. Le nom '
-          + 'du fichier peut très bien commencer par « conseilprevcyber » sans que son '
-          + 'contenu en vienne : comparez avec le début réel affiché ci-dessous, puis '
-          + 'retéléchargez par le bouton <b>💾 Sauvegarder</b> de /admin/base-connaissance.';
+  if (!t.length) {
+    motif = '<b>Le fichier n’a produit aucun texte.</b> Il occupe pourtant '
+          + impPoids(f ? f.size : 0) + ' sur le disque : son contenu n’est donc pas du texte '
+          + 'lisible. Retéléchargez-le par le bouton <b>💾 Sauvegarder</b>.';
+  } else if (liste) {
+    motif = '<b>Ce fichier est une liste JSON, pas une sauvegarde.</b> Une sauvegarde '
+          + 'conseilprevcyber est un <i>objet</i> portant une liste <code>documents</code>.';
+  } else if (!ouvre) {
+    motif = '<b>Ce fichier ne commence pas par un objet JSON.</b> Une sauvegarde '
+          + 'conseilprevcyber commence par <code>{"version":1,"app":"conseilprevcyber-rag"</code>. '
+          + 'Comparez avec le début réel affiché ci-dessous.';
+  } else if (!signe) {
+    motif = '<b>Ce fichier est bien du JSON, mais il ne porte nulle part la marque d’une '
+          + 'sauvegarde conseilprevcyber</b> — ni <code>conseilprevcyber-rag</code>, ni une '
+          + 'liste <code>documents</code>. Le nom du fichier peut très bien commencer par '
+          + '« conseilprevcyber » sans que son contenu en vienne : comparez avec le '
+          + 'début réel affiché ci-dessous, puis retéléchargez par le '
+          + 'bouton <b>💾 Sauvegarder</b> de /admin/base-connaissance.';
   } else if (!finOk) {
     motif = '<b>Le fichier est incomplet.</b> Il commence bien comme une sauvegarde '
           + 'conseilprevcyber mais se termine au milieu : le téléchargement s’est '
@@ -18304,12 +18360,33 @@ function impDiagnostiquer(texte, err, inv) {
           + (pos ? ' (première anomalie au caractère ' + pos + ')' : '') + '.';
   }
 
+  /* Les octets du DISQUE et les caracteres LUS sont deux nombres differents,
+     et leur ecart est parlant : un fichier de deux cents megaoctets dont on ne
+     lit que quelques milliers de caracteres n'est pas du texte. */
+  var technique = 'fichier : ' + (f ? f.size.toLocaleString('fr-FR') + ' octets' : 'taille inconnue')
+    + ' · texte lu : ' + t.length.toLocaleString('fr-FR') + ' caractères'
+    + ' · en-tête : ' + (ouvre && signe ? 'reconnu' : 'non reconnu')
+    + ' · fin : ' + (finOk ? 'complète' : 'coupée')
+    + (pos ? ' · anomalie au caractère ' + Number(pos).toLocaleString('fr-FR') : '');
+
+  /* Sur un fichier de cent cinquante megaoctets, les quatre cents premiers
+     caracteres sont presque toujours irreprochables : c'est AUTOUR DE
+     L'ANOMALIE qu'il faut regarder. */
+  var fenetre = (pos && +pos > 400) ? Math.max(0, +pos - 120) : 0;
+
+  IMP.rapport = 'Sentinel — diagnostic de sauvegarde\n'
+    + 'fichier : ' + (f ? f.name : '(inconnu)') + '\n'
+    + technique + '\n'
+    + 'message : ' + impSansBalises(motif) + '\n'
+    + 'documents récupérables : ' + recuperes.length + '\n'
+    + '--- début réel du fichier ---\n' + t.slice(0, 400) + '\n'
+    + (fenetre ? '--- autour du caractère ' + pos + ' ---\n' + t.slice(fenetre, fenetre + 400) + '\n'
+               : '');
+
   inv.innerHTML =
     '<div class="reg-empty" style="color:var(--accent);text-align:left">' + motif
     + '<div style="margin-top:8px;font-family:var(--mono);font-size:10.5px;color:var(--muted)">'
-    + 'taille lue : ' + impPoids(t.length)
-    + ' · en-tête : ' + (ouvre && signe ? 'reconnu' : 'non reconnu')
-    + ' · fin : ' + (finOk ? 'complète' : 'coupée') + '</div>'
+    + technique + '</div>'
     + (recuperes.length
         ? '<div style="margin-top:10px;color:var(--ink2);font-size:12px">'
           + '<b>' + recuperes.length + ' document(s) entier(s)</b> sont malgré tout lisibles '
@@ -18320,6 +18397,8 @@ function impDiagnostiquer(texte, err, inv) {
           + ' document(s) lisibles</button></div>'
         : '')
     + impApercuBloc(t)
+    + (fenetre ? impApercuBloc(t, 'Autour du caractère ' + pos, fenetre) : '')
+    + impBoutonCopie()
     + '</div>';
 
   /* La sauvegarde partielle est gardée telle quelle : l'utilisateur décide. */
