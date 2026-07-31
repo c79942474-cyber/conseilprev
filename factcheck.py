@@ -73,6 +73,67 @@ PORTEES = {
 # ═══════════════════════════════════════════════════════════════════════════
 
 CONTROLES = [
+    # ── Référentiel d'implantation (implantation.py) — quatre familles ──────
+    {"cle": "imp-eau", "portee": ["panorama"],
+     "sujet": "Stress hydrique par pays (WEI+) et compétition d'usages",
+     "affirmation": "Les classes de stress hydrique nationales suivent l'indice WEI+ "
+                    "de l'AEE (millésime 2022) ; la part de l'irrigation agricole "
+                    "signale la compétition d'usage estivale.",
+     "verdict": "plausible",
+     "constat": "Classes cohérentes avec les publications AEE (stress structurel "
+                "ibérique, grec et italien ; Flandre parmi les régions les plus "
+                "tendues ; abondance nordique). La lecture NATIONALE écrase les "
+                "contrastes de bassins — le module l'écrit et renvoie à l'étude "
+                "locale. À re-vérifier lors de chaque millésime AEE.",
+     "avant": None, "verifie_le": "2026-07-31",
+     "source": {"titre": "Water exploitation index plus (WEI+)",
+                "editeur": "Agence européenne pour l'environnement",
+                "url": "https://www.eea.europa.eu/en/analysis/indicators/use-of-freshwater-resources-in-europe"}},
+    {"cle": "imp-mix", "portee": ["panorama"],
+     "sujet": "Mix de production électrique 2024 par pays",
+     "affirmation": "Les parts nucléaire / renouvelables / fossile sont celles de la "
+                    "production 2024 (Ember), volontairement arrondies à 5 points.",
+     "verdict": "plausible",
+     "constat": "Ordres de grandeur conformes aux séries Ember 2024 (France "
+                "nucléaire ~2/3, Pologne fossile ~70 %, Norvège quasi 100 % "
+                "renouvelable). L'arrondi à 5 points est un choix d'honnêteté : "
+                "une décimale suggérerait une précision que la compilation n'a "
+                "pas. Production ≠ consommation pour les pays importateurs.",
+     "avant": None, "verifie_le": "2026-07-31",
+     "source": {"titre": "Yearly electricity generation", "editeur": "Ember",
+                "url": "https://ember-energy.org/data/yearly-electricity-data/"}},
+    {"cle": "imp-prix", "portee": ["panorama"],
+     "sujet": "Prix de l'électricité industrielle par pays (classes)",
+     "affirmation": "Les classes de prix (bas / moyen / élevé) et leurs fourchettes "
+                    "en €/MWh reflètent Eurostat nrg_pc_205, bandes industrielles "
+                    "hautes, année 2024, hors taxes récupérables.",
+     "verdict": "inverifiable",
+     "constat": "Le prix RÉEL d'un centre de données est contractuel (PPA, "
+                "raccordement, exonérations) et n'apparaît dans aucune statistique "
+                "publique : les classes donnent le terrain de départ de la "
+                "négociation. Les fourchettes publiées ici sont des ordres de "
+                "grandeur à confronter à l'extraction Eurostat du semestre visé "
+                "avant toute citation chiffrée.",
+     "avant": None, "verifie_le": "2026-07-31",
+     "source": {"titre": "Electricity prices for non-household consumers (nrg_pc_205)",
+                "editeur": "Eurostat",
+                "url": "https://ec.europa.eu/eurostat/databrowser/view/nrg_pc_205/"}},
+    {"cle": "imp-2030", "portee": ["panorama"],
+     "sujet": "Perspectives d'investissement et contraintes à l'horizon 2030",
+     "affirmation": "Les perspectives par pays compilent des ANNONCES publiques "
+                    "datées (InvestAI 200 Md€, Sommet de Paris 109 Md€, AWS Aragon, "
+                    "moratoire EirGrid, EnEfG…), jamais des engagements comptables.",
+     "verdict": "plausible",
+     "constat": "Chaque ligne porte sa source et sa date. Une annonce à cinq ans "
+                "est l'information la plus fragile de ce marché — le référentiel "
+                "des sites en conserve quatre, devenues des abandons, pour le "
+                "rappeler. Les CONTRAINTES constatées (moratoire de raccordement "
+                "de Dublin, encadrement néerlandais, PUE réglementaire allemand) "
+                "sont plus solides que les promesses chiffrées.",
+     "avant": None, "verifie_le": "2026-07-31",
+     "source": {"titre": "Compilation datée — communiqués et décisions d'autorités",
+                "editeur": "conseilprev (analyse)", "url": None}},
+
     # ── Contrôles de méthode : ils ne portent pas sur une valeur mais sur la
     #    façon de la lire. Ce sont ceux qu'un analyste doit citer en note.
     {"cle": "meth-millesime",

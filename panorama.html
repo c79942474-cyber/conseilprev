@@ -129,6 +129,9 @@ body.vue-pays .panel:not(#s-pays){display:none}
 .n-site{background:rgba(30,99,168,.12);color:#17497E}
 .n-classe{background:rgba(196,124,26,.15);color:#8A5310}
 .n-indisponible{background:var(--rule);color:var(--muted)}
+.n-referentiel{background:rgba(30,99,168,.12);color:#17497E}
+.n-calcule{background:rgba(196,124,26,.15);color:#8A5310}
+.n-analyse{background:rgba(110,70,160,.13);color:#4E3277}
 .pv-vide{font-size:12px;color:var(--muted);padding:14px 2px}
 @media(max-width:760px){.pv-t th.opt,.pv-t td.opt{display:none}.pv-t{min-width:620px}}
 
@@ -191,6 +194,31 @@ body.vue-pays .panel:not(#s-pays){display:none}
 .gp-p span{font-size:11.5px;color:var(--muted);line-height:1.5;display:block}
 .gp-p em{display:block;font-style:normal;font-family:var(--mono);font-size:9px;
   text-transform:uppercase;letter-spacing:.05em;color:var(--muted2);margin-top:6px}
+.imp-pond{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:10px 18px}
+.imp-p{display:grid;grid-template-columns:1fr 110px 22px;gap:4px 10px;align-items:center;
+  border:1px solid var(--rule);border-radius:4px;padding:9px 12px}
+.imp-p-nom{font-size:12px;font-weight:600}
+.imp-p-v{font-family:var(--mono);font-size:12px;text-align:right}
+.imp-p-src{grid-column:1/-1;font-size:10px;color:var(--muted2);line-height:1.45}
+.imp-l{cursor:pointer}
+.imp-l:hover{background:#F2F5FA}
+.imp-fiche{border:1px solid var(--rule);border-radius:4px;margin-top:8px;padding:0 12px}
+.imp-fiche summary{cursor:pointer;padding:10px 0;font-size:13px}
+.imp-sc{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-left:8px}
+.imp-2col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:4px 0 10px}
+@media(max-width:700px){.imp-2col{grid-template-columns:1fr}}
+.imp-pour,.imp-contre{font-size:12px}
+.imp-pour b{color:#1E6336}.imp-contre b{color:var(--accent, #B83222)}
+.imp-pour ul,.imp-contre ul{margin:5px 0 0;padding-left:18px}
+.imp-pour li,.imp-contre li{margin:3px 0;line-height:1.5}
+.imp-comm{font-size:12px;background:var(--bg);border-left:3px solid #1C5CAB;
+  border-radius:0 3px 3px 0;padding:8px 12px;margin:8px 0}
+.imp-persp{font-size:11.5px;margin:6px 0;padding:7px 11px;border-radius:3px;line-height:1.5}
+.imp-persp.hausse{background:rgba(30,99,54,.07)}
+.imp-persp.contrainte{background:rgba(184,50,34,.07)}
+.imp-src{font-size:10px;color:var(--muted2)}
+.imp-srcs{font-size:11px;color:var(--muted);line-height:1.6;margin-top:12px}
+.imp-fiche .gp-btn{margin:4px 0 12px;display:inline-block}
 .gp-options{display:grid;gap:8px;margin:10px 0 2px}
 .gp-opt{all:unset;cursor:pointer;border:1px solid var(--rule);border-radius:4px;padding:10px 12px;display:block}
 .gp-opt:hover{border-color:#1C5CAB;background:#F6F9FD}
@@ -549,6 +577,7 @@ engagements publics) sont imputés nominativement.</div>
   <a href="#s-lectures">Lectures d’ensemble</a>
   <a href="#s-socle">Données ouvertes</a>
   <a href="#s-empreinte">Empreinte<span class="pnav-n" id="pn-emp"></span></a>
+  <a href="#s-implantation">Implantation</a>
   <a href="#s-methodo">Méthodologie</a>
   <a href="#s-sources">Sources</a>
   <button type="button" class="gp-lanceur" id="gp-lanceur">Parcours guidé</button>
@@ -700,6 +729,36 @@ engagements publics) sont imputés nominativement.</div>
     <b>site</b> ou seulement de sa <b>classe</b>.</p>
     <div id="emp-table"></div>
     <div id="emp-methode"></div>
+  </div>
+</section>
+
+<!-- ══ 5 ter. CHOIX D'IMPLANTATION — comparer les pays selon SES critères ══
+     L'empreinte dit ce que pèse le parc ; cette section répond à la question
+     de l'investisseur : « où implanter ? ». Sept critères, chacun avec sa
+     nature et sa source, des pondérations réglées par le lecteur, et le
+     classement recalculé sous ses yeux — la formule affichée EST la formule
+     exécutée, côté serveur. -->
+<section class="panel" id="s-implantation" aria-labelledby="t-imp">
+  <div class="panel-head">
+    <span class="panel-title" data-aide="implantation" id="t-imp">Choisir un pays d’implantation — comparateur pondéré</span>
+    <span class="panel-note" id="imp-note">chargement…</span>
+  </div>
+  <div class="panel-body">
+    <p class="note" style="margin-top:0"><b>Ce que fait ce comparateur.</b> Il croise, pays par
+    pays, l’<b>intensité carbone</b> et la <b>pilotabilité du mix</b> (nucléaire, renouvelables,
+    centrales fossiles), la <b>disponibilité en eau</b> (indice WEI+ de l’AEE et compétition avec
+    l’irrigation agricole), le <b>potentiel de free cooling</b>, le <b>prix industriel de
+    l’électricité</b>, le <b>parc en service</b> et la <b>file de raccordement 2026-2030</b>.
+    Réglez le poids de chaque critère selon votre projet — construction neuve, extension ou
+    rachat — et lisez le classement. <b>Chaque colonne porte sa nature et sa source</b> ; les
+    notes n’ont aucun sens hors de ce classement.</p>
+    <div id="imp-ponderations"></div>
+    <div id="imp-classement"></div>
+    <p class="note" id="imp-guide-avis"><b>Le tableau qui suit est une analyse, pas une
+    donnée.</b> Avantages, inconvénients et commentaire par pays — la lecture du cabinet, datée,
+    à discuter. Cliquez un pays pour ouvrir le détail de son parc.</p>
+    <div id="imp-avis"></div>
+    <div id="imp-sources"></div>
   </div>
 </section>
 
@@ -2191,6 +2250,15 @@ var AIDES = {
     pas: "Aucune mesure satellitaire ne démontre l’usage d’une IA. Ces couches décrivent le sol et "
        + "l’activité d’observation — elles sont un contexte, pas une preuve.",
   },
+  implantation: {
+    t: "Comparateur d’implantation",
+    d: "Sept critères par pays, chacun avec sa nature — référentiel sourcé, calculé depuis nos "
+     + "données, ou analyse du cabinet — et des pondérations que VOUS réglez : le classement "
+     + "n’est pas un avis, c’est votre pondération appliquée à des critères sourcés.",
+    pas: "Aucune note ne compare deux SITES : le comparateur situe des pays. Le prix réel est "
+       + "contractuel (PPA), l’eau se juge au bassin versant, le raccordement au poste près — "
+       + "trois vérités locales qu’aucun classement national ne remplace.",
+  },
   empreinte: {
     t: "Empreinte cycle de vie",
     d: "Trois postes jamais confondus : l’usage (électricité × intensité carbone du pays), la "
@@ -2456,6 +2524,165 @@ function mm3(v){
 function fourchetteT(v){
   if(!v) return "";
   return kt(v[0]) + " à " + kt(v[1]);
+}
+
+/* ── CHOIX D'IMPLANTATION — comparateur pondere et analyse par pays ────────
+   Les NOTES viennent du serveur (implantation.py) : la formule affichee et la
+   formule executee sont une seule et meme chose. Le navigateur ne fait que la
+   somme ponderee — la seule operation que le lecteur regle lui-meme. */
+var IMPL = null;
+var IMPL_POIDS = { carbone: 3, mix: 2, eau: 2, climat: 2, prix: 3, parc: 1, pipeline: 1 };
+var IMPL_DEPLIE = null;
+
+function implScore(x){
+  var somme = 0, poids = 0;
+  for(var c in IMPL_POIDS){
+    var n = x.notes[c];
+    if(n === null || n === undefined) continue;
+    somme += IMPL_POIDS[c] * n;
+    poids += IMPL_POIDS[c];
+  }
+  return poids ? Math.round(somme / poids) : null;
+}
+
+function implNatBadge(nat){
+  var lib = { referentiel: "référentiel", calcule: "calculé", analyse: "analyse" };
+  return '<span class="pv-nat n-' + nat + '">' + (lib[nat] || nat) + "</span>";
+}
+
+function chargerImplantation(){
+  fetch("/api/implantation", {cache: "no-store"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(d){
+      if(!d || !d.ok) return;
+      IMPL = d;
+      renderImplantation();
+    })
+    .catch(function(){
+      var n = document.getElementById("imp-note");
+      if(n) n.textContent = "référentiel injoignable — rechargez la page";
+    });
+}
+
+function renderImplantation(){
+  if(!IMPL) return;
+  var note = document.getElementById("imp-note");
+  if(note) note.textContent = IMPL.pays.length + " pays · référentiel " + IMPL.version;
+
+  /* Les curseurs de ponderation : 0 (ignore) a 4 (decisif). */
+  var pond = document.getElementById("imp-ponderations");
+  if(pond && !pond.getAttribute("data-pret")){
+    pond.setAttribute("data-pret", "1");
+    pond.innerHTML = '<div class="imp-pond">' + IMPL.criteres.map(function(c){
+        return '<label class="imp-p"><span class="imp-p-nom">' + esc(c.nom)
+          + " " + implNatBadge(c.nature) + '</span>'
+          + '<input type="range" min="0" max="4" step="1" value="' + (IMPL_POIDS[c.cle] || 0)
+          + '" data-critere="' + c.cle + '" aria-label="Poids : ' + esc(c.nom) + '">'
+          + '<b class="imp-p-v" id="imp-pv-' + c.cle + '">' + (IMPL_POIDS[c.cle] || 0) + "</b>"
+          + '<span class="imp-p-src">' + esc(c.source) + " — " + esc(c.formule) + "</span>"
+          + "</label>";
+      }).join("") + "</div>"
+      + '<p class="note" style="margin-top:8px">Score d’un pays = Σ (poids × note du critère) ÷ Σ poids. '
+      + "Les notes 0-100 par critère sont calculées côté serveur, formules ci-dessus.</p>";
+    pond.querySelectorAll("input[type=range]").forEach(function(r){
+      r.addEventListener("input", function(){
+        IMPL_POIDS[this.getAttribute("data-critere")] = +this.value;
+        var v = document.getElementById("imp-pv-" + this.getAttribute("data-critere"));
+        if(v) v.textContent = this.value;
+        renderImplClassement();
+      });
+    });
+  }
+  renderImplClassement();
+  renderImplAvis();
+
+  var src = document.getElementById("imp-sources");
+  if(src){
+    var S = IMPL.sources;
+    src.innerHTML = '<div class="imp-srcs"><b>Sources de cette section.</b> '
+      + ["eau", "mix", "prix", "perspectives"].map(function(k){
+          var x = S[k];
+          return esc(x.titre) + " — " + esc(x.editeur) + " " + implNatBadge(x.nature);
+        }).join(" · ")
+      + "<br>" + esc(IMPL.avertissement) + "</div>";
+  }
+  aideBrancher();
+}
+
+function renderImplClassement(){
+  var el = document.getElementById("imp-classement");
+  if(!el || !IMPL) return;
+  var lignes = IMPL.pays.map(function(x){ return { x: x, score: implScore(x) }; })
+    .filter(function(l){ return l.score !== null && l.x.avis; })
+    .sort(function(a, b){ return b.score - a.score; });
+
+  el.innerHTML = '<div class="tablo"><table><thead><tr>'
+    + "<th>Rang</th><th>Pays</th><th>Score</th>"
+    + '<th title="gCO2e/kWh, Ember 2024">Carbone</th>'
+    + '<th title="nucléaire / renouvelables / fossile, production 2024">Mix</th>'
+    + '<th title="WEI+ AEE 2022, part de l’irrigation">Eau</th>'
+    + '<th title="classe latitudinale">Free cooling</th>'
+    + '<th title="Eurostat 2024, classes">Prix</th>'
+    + '<th title="sites en service / pipeline 2026-2030 (référentiel des 97 sites)">Parc · file</th>'
+    + "</tr></thead><tbody>"
+    + lignes.map(function(l, i){
+        var x = l.x;
+        var mix = x.mix ? (x.mix.nucleaire ? "nucl. " + x.mix.nucleaire + " %, " : "")
+          + "renouv. " + x.mix.renouvelables + " %, foss. " + x.mix.fossile + " %" : "—";
+        return '<tr class="imp-l" data-pays="' + x.pays + '">'
+          + "<td>" + (i + 1) + "</td>"
+          + "<td><b>" + esc(nomPays(x.pays) || x.pays) + "</b></td>"
+          + "<td><b>" + l.score + "</b>/100</td>"
+          + "<td>" + (x.intensite != null ? x.intensite + " g" : "—") + "</td>"
+          + "<td>" + mix + "</td>"
+          + "<td>" + (x.eau ? esc(x.eau.classe_nom) + " · irrigation " + esc(x.eau.irrigation) : "—") + "</td>"
+          + "<td>" + esc(x.climat.nom.split(" — ")[0]) + "</td>"
+          + "<td>" + (x.prix ? esc(x.prix.classe_nom) + " (" + x.prix.fourchette_eur_mwh[0] + "–"
+                      + x.prix.fourchette_eur_mwh[1] + " €/MWh)" : "—") + "</td>"
+          + "<td>" + x.en_service + " · " + x.pipeline_2030 + "</td>"
+          + "</tr>";
+      }).join("")
+    + "</tbody></table></div>";
+  el.querySelectorAll(".imp-l").forEach(function(tr){
+    tr.addEventListener("click", function(){
+      IMPL_DEPLIE = this.getAttribute("data-pays");
+      renderImplAvis();
+      var a = document.getElementById("imp-avis");
+      if(a) a.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+}
+
+function renderImplAvis(){
+  var el = document.getElementById("imp-avis");
+  if(!el || !IMPL) return;
+  var lignes = IMPL.pays.filter(function(x){ return x.avis; })
+    .map(function(x){ return { x: x, score: implScore(x) }; })
+    .sort(function(a, b){ return (b.score || 0) - (a.score || 0); });
+
+  el.innerHTML = lignes.map(function(l){
+    var x = l.x, ouvert = IMPL_DEPLIE === x.pays;
+    var persp = (x.perspectives || []).map(function(pr){
+      return '<div class="imp-persp ' + pr.sens + '"><b>'
+        + (pr.sens === "hausse" ? "Perspective" : "Contrainte") + " :</b> " + esc(pr.resume)
+        + ' <span class="imp-src">' + esc(pr.source) + ", " + esc(pr.date) + "</span></div>";
+    }).join("");
+    return '<details class="imp-fiche"' + (ouvert ? " open" : "") + ' data-pays="' + x.pays + '">'
+      + "<summary><b>" + esc(nomPays(x.pays) || x.pays) + "</b>"
+      + (l.score !== null ? ' <span class="imp-sc">' + l.score + "/100 selon vos poids</span>" : "")
+      + "</summary>"
+      + '<div class="imp-2col">'
+      + '<div class="imp-pour"><b>Avantages</b><ul>'
+      + x.avis.pour.map(function(t){ return "<li>" + esc(t) + "</li>"; }).join("") + "</ul></div>"
+      + '<div class="imp-contre"><b>Inconvénients</b><ul>'
+      + x.avis.contre.map(function(t){ return "<li>" + esc(t) + "</li>"; }).join("") + "</ul></div>"
+      + "</div>"
+      + '<div class="imp-comm"><b>Commentaire :</b> ' + esc(x.avis.comm) + "</div>"
+      + persp
+      + '<button type="button" class="gp-btn" onclick="ouvrirPays(\'' + x.pays
+      + '\')">Ouvrir le parc de ce pays</button>'
+      + "</details>";
+  }).join("");
 }
 
 function chargerEmpreinte(){
@@ -4070,7 +4297,7 @@ function renderSite(){
 /* aideBrancher en FIN de renderAll, et non apres l'appel : renderAll est
    rejoue a l'arrivee des donnees en direct, et les blocs reconstruits
    perdaient alors leur bouton d'aide sans que rien ne le signale. */
-function renderAll(){renderEcheancier();renderFlux();populerFiltres();renderKpis();renderMap();renderTable();renderCharts();renderMethodo();renderSocle();renderSources();pnavBrancher();pnavCompteurs();gpBrancher();aideBrancher();}
+function renderAll(){chargerImplantation();renderEcheancier();renderFlux();populerFiltres();renderKpis();renderMap();renderTable();renderCharts();renderMethodo();renderSocle();renderSources();pnavBrancher();pnavCompteurs();gpBrancher();aideBrancher();}
 renderAll();
 
 /* Retour depuis la vue pays, et prise en charge de l'adresse #pays=XX :

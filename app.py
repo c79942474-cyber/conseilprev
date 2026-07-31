@@ -1371,6 +1371,46 @@ def api_empreinte_sites():
     return jsonify(payload)
 
 # ══════════════════════════════════════════════════════════
+# CHOIX D'IMPLANTATION — referentiel par pays (eau, mix, prix, 2030)
+# Le comparateur du Panorama croise ces criteres avec le parc cartographie ;
+# les notes se calculent ICI, pas dans le navigateur, pour que la formule
+# affichee et la formule executee soient une seule et meme chose.
+# ══════════════════════════════════════════════════════════
+import implantation  # noqa: E402
+
+_IMP_CACHE = {"ts": 0.0, "data": None}
+IMP_TTL = 21600  # 6 h : le referentiel est versionne, seul le pipeline bouge
+
+
+@app.route('/api/implantation', methods=['GET'])
+@rate_limit(limit=60, window=60)
+def api_implantation():
+    """Referentiel d'implantation par pays : stress hydrique (WEI+ et part de
+    l'irrigation), mix de production, prix industriels en classes, pipeline
+    2026-2030 compte depuis les statuts des sites, perspectives datees, et
+    l'analyse avantages/inconvenients. ?refresh=1 reassemble."""
+    force = (request.args.get('refresh') or '') in ('1', 'true', 'yes')
+    now = time.time()
+    if (not force) and _IMP_CACHE["data"] and (now - _IMP_CACHE["ts"] < IMP_TTL):
+        payload = dict(_IMP_CACHE["data"])
+        payload["ok"] = True
+        payload["cached"] = True
+        return jsonify(payload)
+    try:
+        _dc = datacentres.assemble()
+        data = implantation.assemble(sites=_dc.get('sites'),
+                                     intensites=empreinte_sites.INTENSITE)
+    except Exception as e:  # noqa: BLE001
+        logger.error(f'IMPLANTATION_ERR: {e}')
+        return jsonify({"ok": False, "erreur": "assemblage indisponible"}), 503
+    _IMP_CACHE["ts"], _IMP_CACHE["data"] = now, data
+    payload = dict(data)
+    payload["ok"] = True
+    payload["cached"] = False
+    return jsonify(payload)
+
+
+# ══════════════════════════════════════════════════════════
 # CONTROLES FACTUELS — registre partage par toutes les pages
 # Les chiffres du site sont lus par des professionnels de l'investissement, du
 # credit, de l'assurance et du climat : un ordre de grandeur non source n'est
