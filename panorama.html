@@ -16,7 +16,7 @@
 /* La barre de sections recouvre les 52 premiers pixels : sans cette reserve,
    tout defilement programme — ancre, scrollIntoView, recherche du navigateur —
    depose sa cible SOUS la barre, ou elle n'est ni lisible ni survolable. */
-html{background:var(--bg);scroll-padding-top:56px}
+html{background:var(--bg);scroll-padding-top:64px}
 body{font-family:var(--sans);color:var(--ink);font-size:14px;line-height:1.5;margin:0;padding:24px 22px 36px}
 a{color:#1E63A8}
 a:focus-visible,summary:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid #1E63A8;outline-offset:2px}
@@ -43,30 +43,143 @@ body.embed .hdr{margin-bottom:12px}
    ne sait ni ou l'on est ni ce qui reste a lire, et l'on defile a l'aveugle.
    La barre colle en haut, marque la section courante, et reste un vrai jeu de
    liens — donc utilisable au clavier et ouvrable dans un nouvel onglet. */
-.pnav{position:sticky;top:0;z-index:40;display:flex;gap:4px;align-items:center;
-  background:rgba(247,246,243,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--rule);
-  margin:0 -22px 18px;padding:7px 22px;overflow-x:auto;scrollbar-width:thin}
-body.embed .pnav{margin:0 -18px 14px;padding:7px 18px}
-.pnav::-webkit-scrollbar{height:4px}
-.pnav::-webkit-scrollbar-thumb{background:var(--rule);border-radius:2px}
-.pnav a{flex:0 0 auto;font-size:13.5px;font-weight:600;color:#3A4350;text-decoration:none;
-  padding:8px 15px;border-radius:5px;border:1px solid transparent;white-space:nowrap;
-  transition:background .14s,color .14s,border-color .14s,transform .14s,box-shadow .14s}
-/* Effet LOUPE au survol : l'onglet grossit sous le curseur — assez pour se
-   voir, pas assez pour bousculer ses voisins (transform ne reflue pas). */
-.pnav a:hover{background:var(--white);color:#0F2A4A;border-color:#B9C6D8;
-  transform:scale(1.12);box-shadow:0 2px 10px rgba(15,42,74,.14);position:relative;z-index:2}
-.pnav a:focus-visible{outline:2px solid #1E63A8;outline-offset:2px;transform:scale(1.12)}
-.pnav a.on{background:#0F3D6E;color:#fff;border-color:#0F3D6E}
-.pnav a.on:hover{background:#155089;color:#fff}
-.pnav .pnav-n{font-family:var(--mono);font-size:10px;opacity:.75;margin-left:6px}
-@media(prefers-reduced-motion:reduce){.pnav a:hover,.pnav a:focus-visible,
-  .panel-title:hover{transform:none}}
-@media(max-width:640px){.pnav a{font-size:12px;padding:7px 11px}}
-/* La reserve de defilement est portee par `html{scroll-padding-top}` (voir plus
-   haut) et non par une marge sur chaque section : les deux se CUMULERAIENT, et
-   la section visee arriverait 108 px trop bas. */
-@media print{.pnav{display:none}}
+/* ══════════════════════════════════════════════════════════════════════════
+   BARRE DE SECTIONS — refonte
+
+   CE QUI N'ALLAIT PAS
+   Neuf onglets d'apparence identique, dans une bande qui deborde : le lecteur
+   devait tous les lire pour s'orienter, et l'onglet ACTIF pouvait se trouver
+   hors de l'ecran — on venait d'y arriver, et la barre ne le montrait plus
+   (la capture du client montrait « …en entreprise » coupe en deux mots).
+   Rien n'indiquait qu'il restait des onglets a gauche ou a droite.
+
+   CE QUE FAIT LA REFONTE
+   1. TROIS FAMILLES, TROIS COULEURS. Observer (bleu nuit), Comprendre (teal),
+      Verifier (ocre). Ce sont les couleurs deja employees ailleurs sur la page
+      pour ces registres : on ne cree pas un second vocabulaire.
+   2. L'ONGLET ACTIF NE PEUT PLUS SORTIR DE L'ECRAN — le script le ramene dans
+      la zone visible a chaque changement de section.
+   3. LES BORDS S'ESTOMPENT quand il reste des onglets au-dela, et deux fleches
+      apparaissent. Un debordement muet se confond avec une fin de liste.
+   4. UNE PROGRESSION DE LECTURE sous la barre : ou j'en suis dans la page.
+   5. LE PARCOURS GUIDE RESTE COLLE A DROITE, toujours atteignable — c'est le
+      point d'entree le plus utile a un client qui arrive, il ne doit jamais
+      defiler hors de vue.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.pnav-wrap{position:sticky;top:0;z-index:40;margin:0 -22px 18px;
+  background:rgba(247,246,243,.94);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--rule)}
+body.embed .pnav-wrap{margin:0 -18px 14px}
+
+/* Les fentes laterales : ce sont elles qui disent « ca continue ». */
+.pnav-piste{position:relative}
+.pnav-piste:before,.pnav-piste:after{content:"";position:absolute;top:0;bottom:0;width:38px;
+  pointer-events:none;z-index:3;opacity:0;transition:opacity .18s}
+.pnav-piste:before{left:0;background:linear-gradient(90deg,rgba(247,246,243,.98),rgba(247,246,243,0))}
+/* Le lanceur est colle a droite : la fente et la fleche s'arretent a son bord,
+   sinon il les recouvre et l'affordance disparait sous le bouton. */
+.pnav-piste:after{right:0;width:calc(var(--gp-w,0px) + 40px);
+  background:linear-gradient(270deg,rgba(247,246,243,1) 0,
+    rgba(247,246,243,1) var(--gp-w,0px),rgba(247,246,243,0) 100%)}
+.pnav-piste.deb-g:before{opacity:1}
+.pnav-piste.deb-d:after{opacity:1}
+
+.pnav-fl{position:absolute;top:50%;transform:translateY(-50%);z-index:4;width:26px;height:26px;
+  border-radius:50%;border:1px solid var(--rule);background:var(--white);color:#0F3D6E;
+  cursor:pointer;display:none;align-items:center;justify-content:center;font-size:14px;
+  line-height:1;padding:0;box-shadow:0 1px 5px rgba(15,42,74,.14);transition:background .14s}
+.pnav-fl:hover{background:#EEF3F9}
+.pnav-fl:focus-visible{outline:2px solid #1E63A8;outline-offset:2px}
+.pnav-fl.g{left:5px}.pnav-fl.d{right:calc(var(--gp-w,0px) + 8px)}
+.pnav-piste.deb-g .pnav-fl.g,.pnav-piste.deb-d .pnav-fl.d{display:flex}
+
+/* La reserve de droite (--gp-w, mesuree en JS) fait partie du raccourci :
+   deux endroits ou regler le meme padding, c'est celui du bas qui gagne, et
+   c'est ainsi que la reserve avait ete perdue une premiere fois. Le dernier
+   onglet peut venir entierement dans la vue sans finir sous le bouton. */
+.pnav{display:flex;gap:5px;align-items:center;
+  padding:8px calc(var(--gp-w,0px) + 22px) 8px 22px;
+  overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;scroll-behavior:smooth}
+.pnav::-webkit-scrollbar{display:none}   /* les fentes et les fleches remplacent la barre */
+body.embed .pnav{padding:8px calc(var(--gp-w,0px) + 18px) 8px 18px}
+
+/* ── L'onglet ─────────────────────────────────────────────────────────────
+   Une pastille de couleur dit la famille AVANT que le mot soit lu. */
+.pnav a{--f:#0F3D6E;flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;
+  font-size:13.5px;font-weight:600;color:#3A4350;text-decoration:none;
+  padding:8px 14px;border-radius:7px;border:1px solid transparent;white-space:nowrap;
+  transition:background .15s,color .15s,border-color .15s,transform .15s,box-shadow .15s}
+.pnav a:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--f);
+  flex:0 0 auto;transition:transform .15s,box-shadow .15s}
+.pnav a.f-comprendre{--f:#0E7B83}
+.pnav a.f-verifier{--f:#8A5310}
+
+/* Survol : l'effet loupe, mais mesure — assez pour se voir, pas assez pour
+   bousculer la lecture quand on balaie les neuf onglets. */
+.pnav a:hover{background:var(--white);color:var(--f);border-color:color-mix(in srgb,var(--f) 32%,#fff);
+  transform:scale(1.07);box-shadow:0 3px 12px rgba(15,42,74,.13);position:relative;z-index:2}
+.pnav a:hover:before{transform:scale(1.35)}
+.pnav a:focus-visible{outline:2px solid var(--f);outline-offset:2px;transform:scale(1.07)}
+
+/* Actif : la famille prend toute la pastille. Le liesere clair dessous ancre
+   l'onglet a la page, comme un onglet de classeur. */
+.pnav a.on{background:var(--f);color:#fff;border-color:var(--f);
+  box-shadow:0 2px 9px color-mix(in srgb,var(--f) 34%,transparent)}
+.pnav a.on:before{background:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.28)}
+.pnav a.on:hover{background:var(--f);color:#fff;transform:scale(1.07)}
+
+/* Le compteur devient une vraie pastille : « 72 » se lit enfin. */
+.pnav .pnav-n{font-family:var(--mono);font-size:10px;font-weight:700;line-height:1;
+  padding:3px 6px;border-radius:20px;background:color-mix(in srgb,var(--f) 13%,#fff);
+  color:var(--f);border:1px solid color-mix(in srgb,var(--f) 22%,#fff)}
+.pnav .pnav-n:empty{display:none}
+.pnav a.on .pnav-n{background:rgba(255,255,255,.22);color:#fff;border-color:rgba(255,255,255,.34)}
+
+/* ── Separateur de famille ────────────────────────────────────────────────
+   Le nom de la famille n'apparait que s'il y a la place : sur un ecran etroit
+   la couleur suffit, et voler 140 px aux onglets serait un mauvais echange. */
+.pnav-sep{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:0 5px 0 3px;
+  font-family:var(--mono);font-size:8.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--muted2);white-space:nowrap;user-select:none}
+.pnav-sep:before{content:"";width:1px;height:20px;background:var(--rule);display:block}
+.pnav-sep span{display:none}
+@media(min-width:1180px){.pnav-sep span{display:inline}}
+
+/* ── Le parcours guide, colle a droite ────────────────────────────────────
+   Il ne defile pas avec les onglets : c'est la porte d'entree d'un client qui
+   ne sait pas encore par ou commencer, elle doit rester sous la main. */
+.gp-lanceur{all:unset;box-sizing:border-box;position:absolute;right:14px;top:50%;
+  transform:translateY(-50%);z-index:6;
+  display:inline-flex;align-items:center;gap:7px;cursor:pointer;
+  font-size:12.5px;font-weight:700;color:#fff;padding:9px 16px;border-radius:7px;
+  background:linear-gradient(135deg,#1C1C1C,#2E3A4A);
+  box-shadow:0 2px 9px rgba(0,0,0,.2);
+  transition:transform .15s,box-shadow .15s,filter .15s}
+.gp-lanceur:before{content:"🧭";font-size:14px;line-height:1}
+.gp-lanceur:hover{transform:translateY(-50%) scale(1.06);filter:brightness(1.18);
+  box-shadow:0 5px 16px rgba(0,0,0,.28)}
+.gp-lanceur:focus-visible{outline:2px solid #1E63A8;outline-offset:2px}
+
+/* ── Progression de lecture ───────────────────────────────────────────────
+   Trois pixels qui repondent a « il m'en reste combien ? ». */
+.pnav-prog{height:3px;background:var(--rule);position:relative;overflow:hidden}
+.pnav-prog i{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:0 3px 3px 0;
+  background:linear-gradient(90deg,#0F3D6E,#0E7B83 55%,#8A5310);transition:width .16s linear}
+
+@media(prefers-reduced-motion:reduce){
+  .pnav a:hover,.pnav a:focus-visible,.pnav a.on:hover,.panel-title:hover{transform:none}
+  .gp-lanceur:hover{transform:translateY(-50%)}
+  .pnav{scroll-behavior:auto}
+  .pnav-prog i{transition:none}
+}
+@media(max-width:640px){
+  .pnav a{font-size:12px;padding:7px 11px;gap:6px}
+  .pnav{padding:7px calc(var(--gp-w,0px) + 12px) 7px 12px}
+  .gp-lanceur{font-size:11.5px;padding:8px 12px}
+  .pnav-fl{display:none !important}     /* au doigt, on fait glisser : la fleche est inutile */
+}
+@media print{.pnav-wrap{display:none}}
 
 /* ── EMPREINTE : LES DEUX POSTES, ET LA VUE PAR PAYS ────────────────────────
    Un total de CO2e ne se lit pas : il faut voir de quoi il est fait. Deux
@@ -109,7 +222,7 @@ body.vue-pays .panel:not(#s-pays){display:none}
    rendait injoignable des qu'on avait ouvert un pays, et le seul moyen de le
    retrouver etait de sortir de la vue, ce que rien n'indiquait. Le parcours,
    lui, sait revenir a la vue d'ensemble tout seul (voir gpAller). */
-body.vue-pays .pnav a{display:none}
+body.vue-pays .pnav a,body.vue-pays .pnav-sep{display:none}
 #s-pays[hidden]{display:none}
 .pv-fil{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
 .pv-retour{all:unset;cursor:pointer;font-size:11.5px;color:#1E63A8;padding:4px 9px;border-radius:3px;
@@ -154,10 +267,7 @@ body.vue-pays .pnav a{display:none}
    assurance, climat, recherche. Le parcours guide chacun dans SON ordre de
    lecture — chaque etape amene la section a l'ecran et dit quoi y lire,
    comment le lire, et le piege propre a ce metier. */
-.gp-lanceur{all:unset;cursor:pointer;flex:0 0 auto;font-size:11.5px;font-weight:600;color:#fff;
-  background:#1C1C1C;padding:5px 13px;border-radius:3px;margin-left:auto;white-space:nowrap}
-.gp-lanceur:hover{background:#3A3A3A}
-.gp-lanceur:focus-visible{outline:2px solid #1E63A8;outline-offset:2px}
+
 .gp-voile{position:fixed;inset:0;z-index:70;background:rgba(20,20,20,.45);display:none}
 .gp-voile.on{display:block}
 .gp-carte{position:fixed;z-index:72;bottom:22px;left:50%;transform:translateX(-50%);
@@ -295,7 +405,7 @@ body.vue-site .limite,
 body.vue-site > .kpis,
 body.vue-site .panel:not(#s-site){display:none}
 /* Meme raison qu'en vue pays : les onglets partent, le lanceur du parcours reste. */
-body.vue-site .pnav a{display:none}
+body.vue-site .pnav a,body.vue-site .pnav-sep{display:none}
 #s-site[hidden]{display:none}
 .fs-sous{font-size:12.5px;color:var(--muted);margin:-2px 0 2px}
 .fs-badges{display:flex;gap:8px;flex-wrap:wrap;margin:9px 0 4px}
@@ -625,18 +735,28 @@ l'<b>exposition réglementaire du cas d'usage</b> (classe de risque, stade, donn
 n'est <b>pas un audit de conformité</b> des entreprises citées. Seuls les faits sourcés (sanctions, décisions,
 engagements publics) sont imputés nominativement.</div>
 
-<nav class="pnav" id="pnav" aria-label="Sections de la page">
-  <a href="#s-carte" title="La carte de l’UE : systèmes d’IA, centres de données, droit national">Carte UE &amp; droit national</a>
-  <a href="#s-cas" title="Le panel de cas réels, filtrable par risque, secteur et pays">Cas d’IA en entreprise<span class="pnav-n" id="pn-cas"></span></a>
-  <a href="#s-signaux" title="Les mouvements récents du panel">Signaux</a>
-  <a href="#s-lectures" title="Les lectures d’ensemble : classes de risque, secteurs, stades">Lectures d’ensemble</a>
-  <a href="#s-socle" title="Les jeux de données ouverts qui alimentent la page">Données ouvertes</a>
-  <a href="#s-empreinte" title="Électricité, CO₂e, eau et fabrication du parc cartographié">Empreinte &amp; data centres<span class="pnav-n" id="pn-emp"></span></a>
-  <a href="#s-implantation" title="Comparer les pays selon vos critères : carbone, eau, mix, prix, 2030">Choix d’implantation</a>
-  <a href="#s-methodo" title="Comment les chiffres sont construits, hypothèse par hypothèse">Méthodologie</a>
-  <a href="#s-sources" title="Chaque source, son millésime, son lien — et le registre de vérification">Sources</a>
-  <button type="button" class="gp-lanceur" id="gp-lanceur">Parcours guidé</button>
-</nav>
+<div class="pnav-wrap" id="pnav-wrap">
+ <div class="pnav-piste" id="pnav-piste">
+  <button type="button" class="pnav-fl g" id="pnav-fl-g" aria-label="Onglets precedents" tabindex="-1">‹</button>
+  <button type="button" class="pnav-fl d" id="pnav-fl-d" aria-label="Onglets suivants" tabindex="-1">›</button>
+  <nav class="pnav" id="pnav" aria-label="Sections de la page">
+    <span class="pnav-sep" aria-hidden="true"><span>Observer</span></span>
+    <a href="#s-carte" title="La carte de l’UE : systèmes d’IA, centres de données, droit national">Carte UE &amp; droit national</a>
+    <a href="#s-cas" title="Le panel de cas réels, filtrable par risque, secteur et pays">Cas d’IA en entreprise<span class="pnav-n" id="pn-cas"></span></a>
+    <a href="#s-signaux" title="Les mouvements récents du panel">Signaux</a>
+    <span class="pnav-sep" aria-hidden="true"><span>Comprendre</span></span>
+    <a href="#s-lectures" class="f-comprendre" title="Les lectures d’ensemble : classes de risque, secteurs, stades">Lectures d’ensemble</a>
+    <a href="#s-socle" class="f-comprendre" title="Les jeux de données ouverts qui alimentent la page">Données ouvertes</a>
+    <a href="#s-empreinte" class="f-comprendre" title="Électricité, CO₂e, eau et fabrication du parc cartographié">Empreinte &amp; data centres<span class="pnav-n" id="pn-emp"></span></a>
+    <a href="#s-implantation" class="f-comprendre" title="Comparer les pays selon vos critères : carbone, eau, mix, prix, 2030">Choix d’implantation</a>
+    <span class="pnav-sep" aria-hidden="true"><span>Vérifier</span></span>
+    <a href="#s-sources" class="f-verifier" title="Chaque source, son millésime, son lien — et le registre de vérification">Sources</a>
+    <a href="#s-methodo" class="f-verifier" title="Comment les chiffres sont construits, hypothèse par hypothèse">Méthodologie</a>
+  </nav>
+  <button type="button" class="gp-lanceur" id="gp-lanceur" title="Un chemin de lecture selon votre métier : investisseur, banque, assurance, climat, eau, analyste">Parcours guidé</button>
+ </div>
+ <div class="pnav-prog" aria-hidden="true"><i id="pnav-prog-i"></i></div>
+</div>
 
 <div class="gp-voile" id="gp-voile"></div>
 <div class="gp-choix" id="gp-choix" role="dialog" aria-modal="true" aria-label="Choisir un parcours guidé"></div>
@@ -3058,6 +3178,117 @@ function chargerSocle(){
    IntersectionObserver plutot qu'un ecouteur de defilement : le navigateur
    fait le travail hors du fil principal. Une page qui porte deja une carte SVG
    zoomable n'a pas de calcul a gaspiller a chaque pixel parcouru. */
+/* ── Comportement de la barre de sections ──────────────────────────────────
+   Trois services rendus au lecteur, tous absents jusqu'ici :
+
+   1. L'ONGLET ACTIF RESTE VISIBLE. Le marquage suivait deja le defilement,
+      mais l'onglet marque pouvait se trouver hors de la bande visible : on
+      savait ou on etait, sans pouvoir le voir. On le ramene.
+   2. LES BORDS DISENT S'IL RESTE QUELQUE CHOSE. Un debordement silencieux se
+      confond avec une fin de liste — on croit avoir tout vu.
+   3. LA PROGRESSION DE LECTURE. Trois pixels qui repondent a « il m'en reste
+      combien ? », question que neuf onglets ne repondent pas.
+
+   Tout passe par requestAnimationFrame : la page porte deja une carte SVG
+   zoomable, elle n'a pas de calcul a gaspiller a chaque pixel parcouru. */
+
+function pnavDecor(){
+  var piste = document.getElementById("pnav-piste");
+  var nav   = document.getElementById("pnav");
+  if(!piste || !nav || nav.getAttribute("data-decor")) return;
+  nav.setAttribute("data-decor", "1");
+
+  /* ── Bords et fleches ─────────────────────────────────────────────────
+     Marge de 2 px : un defilement s'arrete rarement au pixel exact, et sans
+     cette tolerance la fleche clignoterait en fin de course. */
+  function bords(){
+    var g = nav.scrollLeft > 2;
+    var d = nav.scrollLeft + nav.clientWidth < nav.scrollWidth - 2;
+    piste.classList.toggle("deb-g", g);
+    piste.classList.toggle("deb-d", d);
+  }
+  var attente = false;
+  function bordsDifferes(){
+    if(attente) return;
+    attente = true;
+    requestAnimationFrame(function(){ attente = false; bords(); });
+  }
+  nav.addEventListener("scroll", bordsDifferes, { passive: true });
+  window.addEventListener("resize", bordsDifferes, { passive: true });
+
+  /* Un pas = 70 % de la largeur visible : on garde deux ou trois onglets en
+     commun entre deux vues, sinon on perd le fil de ce qu'on vient de lire. */
+  function pas(sens){ nav.scrollBy({ left: sens * Math.round(nav.clientWidth * 0.7),
+                                     behavior: "smooth" }); }
+  var fg = document.getElementById("pnav-fl-g"), fd = document.getElementById("pnav-fl-d");
+  if(fg) fg.addEventListener("click", function(){ pas(-1); });
+  if(fd) fd.addEventListener("click", function(){ pas(1); });
+
+  /* Molette verticale au-dessus de la barre : on la traduit en defilement
+     horizontal. Sans cela, survoler la barre bloque la lecture de la page. */
+  nav.addEventListener("wheel", function(ev){
+    if(Math.abs(ev.deltaY) <= Math.abs(ev.deltaX)) return;
+    if(nav.scrollWidth <= nav.clientWidth) return;      /* rien a faire defiler */
+    ev.preventDefault();
+    nav.scrollLeft += ev.deltaY;
+  }, { passive: false });
+
+  /* ── Fleches du clavier entre onglets ────────────────────────────────── */
+  nav.addEventListener("keydown", function(ev){
+    if(ev.key !== "ArrowRight" && ev.key !== "ArrowLeft") return;
+    var liens = [].slice.call(nav.querySelectorAll("a"));
+    var i = liens.indexOf(document.activeElement);
+    if(i < 0) return;
+    ev.preventDefault();
+    var suivant = liens[i + (ev.key === "ArrowRight" ? 1 : -1)];
+    if(suivant) suivant.focus();
+  });
+
+  /* ── Progression de lecture ───────────────────────────────────────────
+     Rapportee a la hauteur REELLEMENT defilable : sur une page courte, ou en
+     vue pays, il n'y a rien a parcourir et la barre reste a zero plutot que
+     d'afficher un pourcentage arbitraire. */
+  var jauge = document.getElementById("pnav-prog-i");
+  var enCours = false;
+  function progression(){
+    if(!jauge) return;
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    var p = h > 40 ? Math.min(100, Math.max(0, (window.scrollY / h) * 100)) : 0;
+    jauge.style.width = p.toFixed(1) + "%";
+  }
+  window.addEventListener("scroll", function(){
+    if(enCours) return;
+    enCours = true;
+    requestAnimationFrame(function(){ enCours = false; progression(); });
+  }, { passive: true });
+
+  function mesurerLanceur(){
+    var l = document.getElementById("gp-lanceur");
+    var w = l && getComputedStyle(l).display !== "none" ? Math.ceil(l.offsetWidth) + 22 : 0;
+    piste.style.setProperty("--gp-w", w + "px");
+  }
+  window.addEventListener("resize", mesurerLanceur, { passive: true });
+
+  mesurerLanceur();
+  bords();
+  progression();
+  window.pnavBords = bordsDifferes;
+  window.pnavMesurer = mesurerLanceur;
+}
+
+/* Ramene l'onglet marque dans la bande visible. Appelee par le marquage du
+   defilement : c'est ce qui empeche l'onglet actif de rester hors de l'ecran,
+   le defaut le plus concret de l'ancienne barre. */
+function pnavSuivre(a){
+  var nav = document.getElementById("pnav");
+  if(!nav || !a) return;
+  if(nav.scrollWidth <= nav.clientWidth + 2) return;
+  var r = a.getBoundingClientRect(), n = nav.getBoundingClientRect();
+  var marge = 54;                       /* on garde le voisin visible : on se situe */
+  if(r.left < n.left + marge)        nav.scrollBy({ left: r.left - n.left - marge, behavior: "smooth" });
+  else if(r.right > n.right - marge) nav.scrollBy({ left: r.right - n.right + marge, behavior: "smooth" });
+}
+
 var PNAV_OBS = null;
 
 function pnavBrancher(){
@@ -3067,11 +3298,16 @@ function pnavBrancher(){
   var cibles = liens.map(function(a){ return document.getElementById(a.getAttribute("href").slice(1)); });
 
   function marquer(id){
+    var actif4 = null;
     liens.forEach(function(a){
       var actif = a.getAttribute("href") === "#" + id;
       a.classList.toggle("on", actif);
-      if(actif) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
+      if(actif){ a.setAttribute("aria-current", "true"); actif4 = a; }
+      else a.removeAttribute("aria-current");
     });
+    /* Savoir ou l'on est ne sert a rien si l'onglet correspondant est hors de
+       l'ecran : la barre suit la lecture. */
+    if(actif4) pnavSuivre(actif4);
   }
 
   /* La marge haute reserve la bande occupee par la barre ; la marge basse de
@@ -3110,6 +3346,7 @@ function pnavBrancher(){
     });
   });
   marquer("s-carte");
+  pnavDecor();
 }
 
 /* Les deux compteurs de la barre : ils disent la TAILLE de ce qui attend
