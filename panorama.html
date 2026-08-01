@@ -242,6 +242,10 @@ body.embed .pnav{padding:8px calc(var(--gp-w,0px) + 18px) 8px 18px}
 @media(max-width:640px){
   .pnav a{font-size:12px;padding:7px 11px;gap:6px}
   .pnav{padding:7px calc(var(--gp-w,0px) + 12px) 7px 12px}
+  /* Le bord perdu de la barre doit valoir la marge du corps, qui tombe a 12 px
+     ici : reste a -22, la barre depassait de 10 px de chaque cote et TOUTE la
+     page se decalait horizontalement au doigt. */
+  .pnav-wrap{margin:0 -12px 14px}
   .gp-lanceur{font-size:11.5px;padding:8px 12px}
   .pnav-fl{display:none !important}     /* au doigt, on fait glisser : la fleche est inutile */
 }
@@ -428,6 +432,34 @@ body.vue-pays .pnav a,body.vue-pays .pnav-sep{display:none}
 th .ttip{margin-left:5px}
 .imp-l{cursor:pointer}
 .imp-l:hover{background:#F2F5FA}
+/* ── Grille de pays : 4 a 6 par ligne ───────────────────────────────────────
+   Vingt-trois pays sur neuf colonnes se lisent en defilant ; les memes vingt-
+   trois en tuiles tiennent dans un ecran. auto-fill + minmax donne 6 tuiles
+   vers 1340 px, 5 vers 1150, 4 vers 950 — la fourchette voulue tombe toute
+   seule, sans une media query par palier. Le liseré gauche porte la couleur du
+   pays (score, ou intensite carbone) : on balaie la grille d'un regard. */
+.pgr{display:grid;grid-template-columns:repeat(auto-fill,minmax(196px,1fr));gap:10px;margin:2px 0 6px}
+.pgr-t{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:6px;
+  text-align:left;border:1px solid var(--rule);border-left:3px solid var(--pg-c,#C9CFD8);
+  border-radius:6px;padding:9px 11px;background:var(--white);min-width:0}
+.pgr-t:hover{border-color:#1C5CAB;border-left-color:var(--pg-c,#1C5CAB);background:#F7F9FC}
+.pgr-t:focus-visible{outline:2px solid #1E63A8;outline-offset:1px}
+.pgr-h{display:flex;align-items:baseline;gap:6px;justify-content:space-between}
+.pgr-n{font-size:12.5px;font-weight:700;line-height:1.25;min-width:0;overflow-wrap:anywhere}
+.pgr-r{font-family:var(--mono);font-size:9.5px;color:var(--muted2);white-space:nowrap;flex:0 0 auto}
+.pgr-v{font-family:var(--mono);font-size:12px;font-weight:700;line-height:1.3;overflow-wrap:anywhere}
+.pgr-s{font-size:10px;color:var(--muted);line-height:1.45}
+.pgr-c{display:flex;flex-wrap:wrap;gap:4px}
+/* Fiches avantages / inconvenients : meme grille, mais une fiche OUVERTE prend
+   toute la largeur — deux colonnes d'arguments dans une tuile de 200 px ne se
+   liraient pas. */
+.pgr-f{display:grid;grid-template-columns:repeat(auto-fill,minmax(196px,1fr));gap:10px;
+  align-items:start;margin-top:2px}
+.pgr-f .imp-fiche{margin-top:0}
+.pgr-f .imp-fiche[open]{grid-column:1/-1}
+.pgr-f .imp-fiche summary{font-size:12px;padding:9px 0}
+@media(max-width:700px){.pgr,.pgr-f{grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:8px}}
+@media(max-width:420px){.pgr,.pgr-f{grid-template-columns:1fr 1fr}}
 .imp-fiche{border:1px solid var(--rule);border-radius:4px;margin-top:8px;padding:0 12px}
 .imp-fiche summary{cursor:pointer;padding:10px 0;font-size:13px}
 .imp-sc{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-left:8px}
@@ -773,10 +805,13 @@ th .fl{font-size:9px;margin-left:3px}
 .tbl-alt summary{cursor:pointer;font-family:var(--mono);font-size:10.5px;color:var(--muted2);padding:4px 0}
 @media(max-width:640px){
   body{padding:16px 12px 28px}
-  /* La barre deborde de la largeur du corps pour aller bord a bord : sa marge
-     negative doit donc suivre le retrait du corps, sinon elle depasse a droite
-     et c'est toute la page qui defile lateralement. */
-  .pnav{margin:0 -12px 14px;padding:7px 12px}
+  /* Le bord perdu de la barre est porte par .pnav-wrap (plus haut dans cette
+     feuille), pas par .pnav : c'est le wrapper qui va bord a bord, et .pnav est
+     le rail qui defile A L'INTERIEUR. Une regle « .pnav{margin:0 -12px} »
+     survivait ici de la version d'avant le wrapper ; elle faisait deborder de
+     12 px le rail lui-meme — donc toute la page defilait lateralement au doigt
+     — et son « padding:7px 12px » ecrasait au passage la reserve de place du
+     lanceur (calc(var(--gp-w) + 12px)), qui recouvrait le dernier onglet. */
   .panel-body{padding:12px 14px 14px}
   .filtres{padding:10px 12px}
   .f-count{margin-left:0;width:100%}
@@ -996,10 +1031,12 @@ engagements publics) sont imputés nominativement.</div>
     l’électricité</b>, le <b>parc en service</b> et la <b>file de raccordement 2026-2030</b>.
     Réglez le poids de chaque critère selon votre projet — construction neuve, extension ou
     rachat — et lisez le classement. <b>Chaque colonne porte sa nature et sa source</b> ; les
-    notes n’ont aucun sens hors de ce classement. Le tableau s’affiche <b>par ordre
-    alphabétique</b>, pour qu’on y retrouve son pays d’un coup d’œil : la colonne
-    <b>Rang</b> continue de donner la place au classement par score. Pour lire le podium,
-    choisissez « Score décroissant » dans <b>Trier par</b>.</p>
+    notes n’ont aucun sens hors de ce classement. Les pays s’affichent <b>par ordre
+    alphabétique</b>, en <b>grille de 4 à 6 par ligne</b>, pour qu’on y retrouve le sien d’un
+    coup d’œil sans dérouler vingt-trois lignes : le <b>rang</b> porté par chaque tuile reste
+    celui du classement par score. Pour lire le podium, choisissez « Score décroissant » dans
+    <b>Trier par</b> ; pour comparer critère par critère, « Tableau détaillé » dans
+    <b>Affichage</b>.</p>
     <div id="imp-ponderations"></div>
     <div id="tf-imp"></div>
     <div class="tf-vide" id="tf-imp-vide">Aucun pays ne correspond à ces filtres. Le classement se lit sur un ensemble : trop restreindre le vide de son sens comparatif.</div>
@@ -1130,10 +1167,12 @@ function tfBarre(idBarre, cle, champs, surChangement){
 function tfCompte(idBarre, cle, n, N){
   var e = document.getElementById(idBarre + "-n");
   if(!e) return;
-  /* Trier n'est pas filtrer : un tableau reordonne montre toujours TOUT. Le
-     champ « tri » est donc exclu du compte, sinon changer l'ordre allumerait le
-     compteur en orange et ferait croire a un sous-ensemble. */
-  var actif = Object.keys(TF[cle] || {}).some(function(k){ return k !== "tri" && TF[cle][k]; });
+  /* Trier ni changer d'affichage n'est filtrer : dans les deux cas le tableau
+     montre toujours TOUT. Ces deux champs sont donc exclus du compte, sinon
+     reordonner ou passer en grille allumerait le compteur en orange et ferait
+     croire a un sous-ensemble. */
+  var horsFiltre = { tri: 1, vue: 1 };
+  var actif = Object.keys(TF[cle] || {}).some(function(k){ return !horsFiltre[k] && TF[cle][k]; });
   e.textContent = actif ? (n + " sur " + N + " affichée(s)") : (N + " ligne(s)");
   e.className = "tf-n" + (actif ? " on" : "");
   var b = document.querySelector('#' + idBarre + ' [data-tf-raz]');
@@ -1158,6 +1197,17 @@ function tfTri(libelleValeur){
 /* Applique le tri choisi. `parValeur` est le comparateur d'origine du tableau ;
    sans choix explicite, on classe par nom de pays. localeCompare avec « fr »
    place correctement les accents : sans lui, « Éire » finirait apres « Zone ». */
+/* Le champ « Affichage ». La grille est le defaut : elle regroupe les pays par
+   4 a 6 sur une ligne, ce qui remplace une colonne de 23 lignes par quatre
+   rangees. Le tableau detaille reste a un clic — c'est lui qui porte les
+   infobulles de source et la comparaison colonne par colonne, et personne ne
+   doit en etre prive. */
+function tfVue(){
+  return { cle:"vue", label:"Affichage", large:true, tous:"Grille — 4 à 6 pays par ligne",
+           options:[{ v:"table", t:"Tableau détaillé" }] };
+}
+function tfEnTableau(cle){ return (TF[cle] || {}).vue === "table"; }
+
 function tfTrier(liste, cle, nomDe, parValeur){
   var t = (TF[cle] || {}).tri;
   if(t === "valeur") return liste.slice().sort(parValeur);
@@ -3076,8 +3126,32 @@ function implBarre(idBarre){
           var n = (IMPL.pays.filter(function(x){ return x.prix && x.prix.classe === o.v; })[0] || {}).prix;
           return { v:o.v, t:(n && n.classe_nom) || o.v };
         }) },
-    tfTri("Score décroissant")
+    tfTri("Score décroissant"), tfVue()
   ], function(){ renderImplClassement(); renderImplAvis(); });
+}
+
+/* Une tuile de la grille : le nom, le rang reel, la jauge de score, puis les
+   trois classes qui decident d'un site — carbone, eau, prix. Le reste (mix
+   detaille, free cooling, file de raccordement) tient sur la ligne de bas de
+   tuile ou attend le tableau detaille : une tuile qui redirait les neuf
+   colonnes ne serait qu'un tableau plus etroit. */
+function implTuile(l){
+  var x = l.x;
+  var g = x.intensite == null ? null
+    : (x.intensite <= 100 ? "faible" : (x.intensite <= 250 ? "modere" : "eleve"));
+  return '<button type="button" class="pgr-t imp-l" data-pays="' + esc(x.pays) + '"'
+    + ' style="--pg-c:' + implCouleurNote(l.score) + '">'
+    + '<span class="pgr-h"><span class="pgr-n">' + esc(nomPays(x.pays) || x.pays) + "</span>"
+    + '<span class="pgr-r">rang ' + l.rang + "</span></span>"
+    + implJauge(l.score)
+    + '<span class="pgr-c">'
+    + (g ? implChip(g, x.intensite + " g") : "")
+    + (x.eau ? implChip(x.eau.classe, x.eau.classe_nom.replace("Stress ", "")) : "")
+    + (x.prix ? implChip(x.prix.classe, x.prix.classe_nom) : "")
+    + "</span>"
+    + '<span class="pgr-s">' + esc(x.climat.nom.split(" — ")[0])
+    + " · parc " + x.en_service + " · file " + x.pipeline_2030 + "</span>"
+    + "</button>";
 }
 
 function renderImplClassement(){
@@ -3097,6 +3171,32 @@ function renderImplClassement(){
     function(l){ return nomPays(l.x.pays) || l.x.pays; },
     function(a, b){ return b.score - a.score; });
   tfCompte("tf-imp", "imp", lignes.length, toutes.length);
+
+  /* Le rappel des couleurs vaut dans les deux affichages : c'est la seule chose
+     qu'il faut savoir avant de balayer la grille du regard. */
+  var couleurs = 'Une même couleur dit la même chose partout : '
+    + '<span class="imp-chip bon">favorable</span> <span class="imp-chip moyen">intermédiaire</span> '
+    + '<span class="imp-chip mauvais">défavorable</span>. ';
+
+  if(!tfEnTableau("imp")){
+    el.innerHTML = '<div class="pgr" role="group" aria-label="Classement d’implantation, un pays par tuile">'
+      + lignes.map(implTuile).join("") + "</div>"
+      + '<p class="note" style="margin-top:8px">' + couleurs
+      + 'Chaque tuile porte le <b>rang au classement complet</b>, le score selon vos poids, puis '
+      + 'les classes carbone, eau et prix ; la dernière ligne donne le free cooling, le parc en '
+      + 'service et la file de raccordement 2030. Cliquez une tuile pour ouvrir la fiche du pays. '
+      + 'Pour comparer colonne par colonne, avec la source de chaque critère, choisissez '
+      + '« Tableau détaillé » dans <b>Affichage</b>.</p>';
+    el.querySelectorAll(".imp-l").forEach(function(t){
+      t.addEventListener("click", function(){
+        IMPL_DEPLIE = this.getAttribute("data-pays");
+        renderImplAvis();
+        var a = document.getElementById("imp-avis");
+        if(a) a.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+    return;
+  }
 
   el.innerHTML = '<div class="tablo"><table><thead><tr>'
     + "<th>Rang" + implTip("Rang au CLASSEMENT COMPLET des " + toutes.length
@@ -3148,9 +3248,7 @@ function renderImplClassement(){
           + "</tr>";
       }).join("")
     + "</tbody></table></div>"
-    + '<p class="note" style="margin-top:8px">Une même couleur dit la même chose partout : '
-    + '<span class="imp-chip bon">favorable</span> <span class="imp-chip moyen">intermédiaire</span> '
-    + '<span class="imp-chip mauvais">défavorable</span> — et le mix se lit '
+    + '<p class="note" style="margin-top:8px">' + couleurs + 'Le mix se lit '
     + '<span class="imp-chip" style="background:rgba(78,50,119,.13);color:#4E3277">nucléaire</span>'
     + '<span class="imp-chip bon">renouvelables</span>'
     + '<span class="imp-chip" style="background:rgba(74,74,74,.13);color:#3A3A3A">fossile</span>. '
@@ -3179,6 +3277,11 @@ function renderImplAvis(){
     function(a, b){ return (b.score || 0) - (a.score || 0); });
   tfCompte("tf-avis", "imp", lignes.length, toutesA.length);
 
+  /* Meme grille que le classement, meme choix « Affichage » : les deux blocs
+     partagent leur barre, ils doivent se presenter pareil. Une fiche depliee
+     reprend toute la largeur (CSS .pgr-f .imp-fiche[open]). */
+  var grille = !tfEnTableau("imp");
+  el.className = grille ? "pgr-f" : "";
   el.innerHTML = lignes.map(function(l){
     var x = l.x, ouvert = IMPL_DEPLIE === x.pays;
     var persp = (x.perspectives || []).map(function(pr){
@@ -3189,7 +3292,7 @@ function renderImplAvis(){
     return '<details class="imp-fiche"' + (ouvert ? " open" : "") + ' data-pays="' + x.pays + '">'
       + "<summary><b>" + esc(nomPays(x.pays) || x.pays) + "</b>"
       + (l.score !== null ? ' <span class="imp-sc" style="color:' + implCouleurNote(l.score)
-          + '">' + l.score + "/100 selon vos poids</span>" : "")
+          + '">' + l.score + (grille ? "/100" : "/100 selon vos poids") + "</span>" : "")
       + "</summary>"
       + '<div class="imp-2col">'
       + '<div class="imp-pour"><b>Avantages</b><ul>'
@@ -3291,7 +3394,7 @@ function renderEmpreinte(){
       options: [{v:"bas", t:"Bas — ≤ 100 gCO₂e/kWh"},
                 {v:"moyen", t:"Modéré — 101 à 250"},
                 {v:"eleve", t:"Élevé — > 250"}] },
-    tfTri("Empreinte décroissante")
+    tfTri("Empreinte décroissante"), tfVue()
   ], renderEmpreinte);
 
   var FE = TF.emp || {};
@@ -3321,6 +3424,31 @@ function renderEmpreinte(){
       + "<td>" + partDC + "</td>"
       + "<td>" + nbFr(p.eau_m3[0]) + " – " + nbFr(p.eau_m3[1]) + "</td></tr>";
   }).join("");
+  /* La grille : 4 a 6 pays par ligne au lieu d'une colonne de 26. On y garde
+     ce qui fait la lecture d'ensemble — le nom, l'intensite du reseau, la
+     fourchette de CO₂e et la taille du parc. L'eau et la part des centres
+     restent dans le tableau detaille : les entasser dans une tuile de 200 px
+     rendrait les quatre chiffres illisibles, et aucun ne serait compare. */
+  var tuiles = paysVus.map(function(p){
+    var g = p.intensite == null ? null
+      : (p.intensite <= 100 ? "#2D7A47" : (p.intensite <= 250 ? "#C47C1A" : "#B83222"));
+    return '<button type="button" class="pgr-t" data-pays="' + esc(p.pays) + '"'
+      + ' style="--pg-c:' + (g || "#C9CFD8") + '">'
+      + '<span class="pgr-h"><span class="pgr-n">' + esc(nomPays(p.pays) || p.pays) + "</span>"
+      + '<span class="pgr-r">' + nbFr(p.intensite) + " g</span></span>"
+      + '<span class="pgr-v">' + fourchetteT(p.total_t) + "</span>"
+      + '<span class="pgr-s">CO₂e/an · ' + p.n_dc + " centre(s) · " + p.n_sia + " SIA</span>"
+      + "</button>";
+  }).join("");
+
+  if(!tfEnTableau("emp")){
+    setHTML("emp-table", '<div class="pgr" role="group" aria-label="Empreinte annuelle '
+      + 'du parc cartographié, un pays par tuile">' + tuiles + "</div>"
+      + '<p class="note" style="margin-top:6px">Le liseré donne l’intensité du réseau — '
+      + '<b style="color:#2D7A47">vert</b> sous 100 gCO₂e/kWh, <b style="color:#C47C1A">orange</b> '
+      + 'jusqu’à 250, <b style="color:#B83222">rouge</b> au-delà. L’eau prélevée et la part des '
+      + 'centres de données figurent dans le <b>Tableau détaillé</b> (champ <b>Affichage</b>).</p>');
+  } else {
   setHTML("emp-table",
       '<table class="socle-t"><caption class="sr-only">Empreinte annuelle du parc cartographié par pays</caption>'
     + '<thead><tr><th scope="col">Pays</th><th scope="col">Centres</th><th scope="col">SIA</th>'
@@ -3328,8 +3456,11 @@ function renderEmpreinte(){
     + '<th scope="col" data-aide="natures">CO₂e/an</th>'
     + '<th scope="col">dont centres</th><th scope="col">Eau m³/an</th></tr></thead>'
     + "<tbody>" + lignes + "</tbody></table>");
-  /* Delegation : une seule ecoute sur le tableau, et non une par ligne — le
-     tableau est reconstruit a chaque arrivee de donnees. */
+  }
+  /* Delegation : une seule ecoute sur le conteneur, et non une par ligne — il
+     est reconstruit a chaque arrivee de donnees, et a chaque changement
+     d'affichage. Les tuiles portent le meme [data-pays] que les lignes : le
+     meme clic ouvre le meme pays dans les deux presentations. */
   var tb = document.getElementById("emp-table");
   if(tb && !tb.__branche){
     tb.__branche = true;
@@ -3588,9 +3719,15 @@ function pnavSuivre(a){
   if(!nav || !a) return;
   if(nav.scrollWidth <= nav.clientWidth + 2) return;
   var r = a.getBoundingClientRect(), n = nav.getBoundingClientRect();
-  var marge = 54;                       /* on garde le voisin visible : on se situe */
-  if(r.left < n.left + marge)        nav.scrollBy({ left: r.left - n.left - marge, behavior: "smooth" });
-  else if(r.right > n.right - marge) nav.scrollBy({ left: r.right - n.right + marge, behavior: "smooth" });
+  var margeG = 54;                      /* on garde le voisin visible : on se situe */
+  /* A droite, la reserve n'est pas un nombre : c'est la place que prend le
+     lanceur, et .pnav la porte deja en padding-right. Une marge en dur de 54 px
+     etait plus etroite que le bouton, si bien que l'onglet marque venait se
+     ranger SOUS lui — flagrant sur telephone, ou la barre est courte et ou le
+     lanceur mange plus du tiers de la largeur. */
+  var margeD = parseFloat(getComputedStyle(nav).paddingRight) || margeG;
+  if(r.left < n.left + margeG)        nav.scrollBy({ left: r.left - n.left - margeG, behavior: "smooth" });
+  else if(r.right > n.right - margeD) nav.scrollBy({ left: r.right - n.right + margeD, behavior: "smooth" });
 }
 
 var PNAV_OBS = null;
