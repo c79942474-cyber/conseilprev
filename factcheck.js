@@ -31,6 +31,16 @@
     ".fc-b.v-corrige{background:rgba(196,124,26,.16);color:#8A5310}" +
     ".fc-b.v-plausible{background:rgba(30,99,168,.12);color:#17497E}" +
     ".fc-b.v-inverifiable{background:rgba(122,122,122,.14);color:#5A5A5A}" +
+    ".fc-tf{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;margin:0 0 12px;padding:10px 12px;background:#F7F6F3;border:1px solid #E3E1DC;border-radius:6px}" +
+    ".fc-tf label{display:flex;flex-direction:column;gap:3px;min-width:170px}" +
+    ".fc-tf span{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:#8A8A8A}" +
+    ".fc-tf select{font:inherit;font-size:12px;color:#1C1C1C;background:#fff;border:1px solid #E3E1DC;border-radius:4px;padding:6px 8px;cursor:pointer;max-width:250px}" +
+    ".fc-tf select:hover{border-color:#1C5CAB}" +
+    ".fc-tf button{font:inherit;font-size:11.5px;color:#1E63A8;background:#fff;border:1px solid #E3E1DC;border-radius:4px;padding:6px 10px;cursor:pointer;white-space:nowrap}" +
+    ".fc-tf button:hover{border-color:#1E63A8;background:#F2F5FA}" +
+    ".fc-tf-n{margin-left:auto;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;color:#8A8A8A;padding-bottom:7px;white-space:nowrap;text-transform:none;letter-spacing:0}" +
+    ".fc-tf-n.on{color:#8A5310;font-weight:700}" +
+    "@media print{.fc-tf{display:none}}" +
     ".fc-bulle{position:absolute;z-index:80;max-width:360px;background:rgba(28,28,28,.97);color:#fff;" +
     "border-radius:5px;padding:11px 14px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;" +
     "font-size:12px;font-weight:400;line-height:1.55;text-align:left;box-shadow:0 5px 20px rgba(0,0,0,.3);" +
@@ -163,7 +173,43 @@
         + ((r.compte || {})[k] || 0) + "</b>" + esc(V[k].nom.toLowerCase()) + "</span>";
     }).join("");
 
-    var lignes = (d.controles || []).map(function (c) {
+    /* Filtre par verdict et par editeur de source. Les listes se construisent
+       depuis les donnees : une option ecrite en dur survivrait a la
+       disparition de ce qu'elle designe. */
+    FC.filtre = FC.filtre || { verdict: "", editeur: "" };
+    var tous = d.controles || [];
+    var vus = tous.filter(function (c) {
+      if (FC.filtre.verdict && c.verdict !== FC.filtre.verdict) return false;
+      if (FC.filtre.editeur && ((c.source || {}).editeur || "") !== FC.filtre.editeur) return false;
+      return true;
+    });
+    var editeurs = {};
+    tous.forEach(function (c) { var e = (c.source || {}).editeur; if (e) editeurs[e] = 1; });
+    var actif = !!(FC.filtre.verdict || FC.filtre.editeur);
+
+    var barre = '<div class="fc-tf">'
+      + '<label><span>Verdict</span><select data-fc-f="verdict">'
+      + '<option value="">Tous les verdicts</option>'
+      + Object.keys(V).map(function (k) {
+          return '<option value="' + esc(k) + '"' + (FC.filtre.verdict === k ? " selected" : "")
+            + ">" + esc(V[k].nom) + " (" + ((r.compte || {})[k] || 0) + ")</option>";
+        }).join("")
+      + "</select></label>"
+      + '<label><span>Éditeur de la source</span><select data-fc-f="editeur">'
+      + '<option value="">Tous les éditeurs</option>'
+      + Object.keys(editeurs).sort(function (a, b) { return a.localeCompare(b, "fr"); })
+          .map(function (e) {
+            return '<option value="' + esc(e) + '"' + (FC.filtre.editeur === e ? " selected" : "")
+              + ">" + esc(e) + "</option>";
+          }).join("")
+      + "</select></label>"
+      + '<button type="button" data-fc-raz="1"'
+      + (actif ? "" : ' style="visibility:hidden"') + ">Tout afficher</button>"
+      + '<span class="fc-tf-n' + (actif ? " on" : "") + '">'
+      + (actif ? vus.length + " sur " + tous.length + " affiché(s)" : tous.length + " contrôle(s)")
+      + "</span></div>";
+
+    var lignes = vus.map(function (c) {
       var v = V[c.verdict] || {};
       var s = c.source || {};
       return "<tr><th scope=\"row\">" + esc(c.sujet) + "</th>"
@@ -186,15 +232,30 @@
           + esc(r.verifie_depuis === r.verifie_jusqu_a ? r.verifie_jusqu_a
                 : r.verifie_depuis + " au " + r.verifie_jusqu_a) + "</span>" : "")
       + "</div>"
+      + barre
       + (lignes
           ? '<div class="fc-wrap"><table class="fc-t"><caption class="sr-only">'
             + "Registre des contrôles factuels</caption><thead><tr>"
             + '<th scope="col">Affirmation contrôlée</th><th scope="col">Verdict</th>'
             + '<th scope="col">Constat</th><th scope="col">Source et date</th>'
             + "</tr></thead><tbody>" + lignes + "</tbody></table></div>"
-          : '<p style="font-size:12px;color:#5A5A5A;margin:0">Aucun contrôle enregistré '
-            + "pour cette page.</p>")
+          : '<p style="font-size:12px;color:#5A5A5A;margin:0">'
+            + (actif ? "Aucun contrôle ne correspond à ces filtres — sur "
+                       + tous.length + " enregistrés pour cette page."
+                     : "Aucun contrôle enregistré pour cette page.") + "</p>")
       + "</div>";
+
+    h.querySelectorAll("[data-fc-f]").forEach(function (sel) {
+      sel.addEventListener("change", function () {
+        FC.filtre[this.getAttribute("data-fc-f")] = this.value;
+        registre(idConteneur);
+      });
+    });
+    var raz = h.querySelector("[data-fc-raz]");
+    if (raz) raz.addEventListener("click", function () {
+      FC.filtre = { verdict: "", editeur: "" };
+      registre(idConteneur);
+    });
   }
 
   /* ── Chargement ────────────────────────────────────────────────────────── */

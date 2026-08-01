@@ -73,6 +73,35 @@ body.embed .hdr{margin-bottom:12px}
    ne sait ni ou l'on est ni ce qui reste a lire, et l'on defile a l'aveugle.
    La barre colle en haut, marque la section courante, et reste un vrai jeu de
    liens — donc utilisable au clavier et ouvrable dans un nouvel onglet. */
+/* ── Barre de filtres commune aux tableaux ───────────────────────────────── */
+.tf{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;margin:0 0 12px;
+  padding:10px 12px;background:var(--bg);border:1px solid var(--rule);border-radius:6px}
+.tf-c{display:flex;flex-direction:column;gap:3px;min-width:132px}
+.tf-c.large{min-width:186px}
+.tf-l{font-family:var(--mono);font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted2)}
+.tf select{font-family:inherit;font-size:12px;color:var(--ink);background:var(--white);
+  border:1px solid var(--rule);border-radius:4px;padding:6px 8px;cursor:pointer;max-width:230px}
+.tf select:hover{border-color:#1C5CAB}
+.tf select:focus-visible{outline:2px solid #1E63A8;outline-offset:1px}
+.tf-raz{all:unset;cursor:pointer;font-size:11.5px;color:#1E63A8;padding:6px 10px;border-radius:4px;
+  border:1px solid var(--rule);background:var(--white);visibility:hidden;white-space:nowrap}
+.tf-raz:hover{border-color:#1E63A8;background:#F2F5FA}
+.tf-raz:focus-visible{outline:2px solid #1E63A8;outline-offset:1px;visibility:visible}
+/* Le compteur : discret quand rien n'est filtre, franc des qu'il l'est. */
+.tf-n{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--muted2);
+  padding-bottom:7px;white-space:nowrap}
+.tf-n.on{color:#8A5310;font-weight:700}
+.tf-vide{display:none;font-size:12px;color:var(--muted);background:#FFF7EC;
+  border:1px solid #F0DCC0;border-radius:5px;padding:10px 12px;margin-bottom:10px}
+@media(max-width:640px){
+  .tf{gap:8px;padding:9px 10px}
+  .tf-c,.tf-c.large{min-width:0;flex:1 1 132px}
+  .tf select{max-width:100%;width:100%}
+  .tf-n{margin-left:0;flex-basis:100%;padding-bottom:0}
+}
+@media print{.tf,.tf-vide{display:none !important}}
+
 /* ══════════════════════════════════════════════════════════════════════════
    BARRE DE SECTIONS — refonte
 
@@ -871,6 +900,8 @@ engagements publics) sont imputés nominativement.</div>
     <span class="panel-note" id="flux-etat">CNIL · ANSSI · EU AI Act · Commission — rafraîchi côté serveur (30 min)</span>
   </div>
   <div class="panel-body">
+    <div id="tf-flux"></div>
+    <div class="tf-vide" id="tf-flux-vide">Aucun signal ne correspond à ces filtres. Élargissez la sélection, ou cliquez « Tout afficher ».</div>
     <div id="flux-liste"><p class="note" style="margin-top:0">Signaux en attente du premier rafraîchissement serveur.</p></div>
     <p class="note"><b>File « à qualifier » :</b> ces titres proviennent des flux officiels et sont rapprochés du panel
     par correspondance stricte de noms. <b>Aucun n'entre dans les scores</b> tant qu'il n'a pas été vérifié et versé
@@ -939,6 +970,8 @@ engagements publics) sont imputés nominativement.</div>
     statut, mise en service, capacité et investissement annoncés, électricité, eau,
     refroidissement, CO₂e — et, pour chaque valeur, si elle est <b>publiée</b>, déduite du
     <b>site</b> ou seulement de sa <b>classe</b>.</p>
+    <div id="tf-emp"></div>
+    <div class="tf-vide" id="tf-emp-vide">Aucun pays ne correspond à ces filtres.</div>
     <div id="emp-table"></div>
     <div id="emp-methode"></div>
   </div>
@@ -965,10 +998,14 @@ engagements publics) sont imputés nominativement.</div>
     rachat — et lisez le classement. <b>Chaque colonne porte sa nature et sa source</b> ; les
     notes n’ont aucun sens hors de ce classement.</p>
     <div id="imp-ponderations"></div>
+    <div id="tf-imp"></div>
+    <div class="tf-vide" id="tf-imp-vide">Aucun pays ne correspond à ces filtres. Le classement se lit sur un ensemble : trop restreindre le vide de son sens comparatif.</div>
     <div id="imp-classement"></div>
     <p class="note" id="imp-guide-avis"><b>Le tableau qui suit est une analyse, pas une
     donnée.</b> Avantages, inconvénients et commentaire par pays — la lecture du cabinet, datée,
     à discuter. Cliquez un pays pour ouvrir le détail de son parc.</p>
+    <div id="tf-avis"></div>
+    <div class="tf-vide" id="tf-avis-vide">Aucun pays ne correspond à ces filtres.</div>
     <div id="imp-avis"></div>
     <div id="imp-sources"></div>
   </div>
@@ -1033,6 +1070,86 @@ var DATA = {"signaux_flux":{"mode":"seed","count":0,"items":[],"par_cas":{},"not
 
 function esc(t){return String(t==null?"":t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
 function fr(n){return String(n).replace(".",",");}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   FILTRES DE TABLEAU — barre commune
+
+   UNE REGLE, ET C'EST LA PLUS IMPORTANTE : un tableau filtre DOIT dire qu'il
+   l'est. Un lecteur qui arrive sur « 6 lignes » sans savoir qu'il en existe 22
+   tirera une conclusion fausse d'un sous-ensemble, et rien a l'ecran ne l'en
+   avertira. Chaque barre affiche donc en permanence « n sur N », et le compteur
+   passe en couleur des qu'un filtre est actif.
+
+   Une seule fabrique pour les cinq tableaux : meme apparence, meme
+   comportement, et un seul endroit a corriger. */
+
+var TF = {};                       /* etat des filtres, par tableau */
+
+/* champs : [{cle, label, options:[{v, t}], large?}]
+   Rend la barre et branche les changements. `surChangement` est rappele apres
+   chaque choix ; c'est au tableau de se redessiner. */
+function tfBarre(idBarre, cle, champs, surChangement){
+  var h = document.getElementById(idBarre);
+  if(!h) return;
+  TF[cle] = TF[cle] || {};
+  champs.forEach(function(c){ if(TF[cle][c.cle] === undefined) TF[cle][c.cle] = ""; });
+
+  h.innerHTML = '<div class="tf">'
+    + champs.map(function(c){
+        var opts = '<option value="">' + esc(c.tous || "Tous") + "</option>"
+          + c.options.map(function(o){
+              return '<option value="' + esc(o.v) + '"'
+                + (TF[cle][c.cle] === String(o.v) ? " selected" : "") + ">"
+                + esc(o.t) + "</option>";
+            }).join("");
+        return '<label class="tf-c' + (c.large ? " large" : "") + '">'
+          + '<span class="tf-l">' + esc(c.label) + "</span>"
+          + '<select data-tf="' + esc(c.cle) + '">' + opts + "</select></label>";
+      }).join("")
+    + '<button type="button" class="tf-raz" data-tf-raz="1">Tout afficher</button>'
+    + '<span class="tf-n" id="' + idBarre + '-n"></span></div>';
+
+  h.querySelectorAll("[data-tf]").forEach(function(s){
+    s.addEventListener("change", function(){
+      TF[cle][this.getAttribute("data-tf")] = this.value;
+      surChangement();
+    });
+  });
+  h.querySelector("[data-tf-raz]").addEventListener("click", function(){
+    Object.keys(TF[cle]).forEach(function(k){ TF[cle][k] = ""; });
+    h.querySelectorAll("[data-tf]").forEach(function(s){ s.value = ""; });
+    surChangement();
+  });
+}
+
+/* Le compteur. `n` lignes affichees sur `N` : c'est lui qui empeche de lire un
+   sous-ensemble en croyant lire le tout. */
+function tfCompte(idBarre, cle, n, N){
+  var e = document.getElementById(idBarre + "-n");
+  if(!e) return;
+  var actif = Object.keys(TF[cle] || {}).some(function(k){ return TF[cle][k]; });
+  e.textContent = actif ? (n + " sur " + N + " affichée(s)") : (N + " ligne(s)");
+  e.className = "tf-n" + (actif ? " on" : "");
+  var b = document.querySelector('#' + idBarre + ' [data-tf-raz]');
+  if(b) b.style.visibility = actif ? "visible" : "hidden";
+  /* Filtrer jusqu'a ne plus rien montrer est un resultat, pas une panne : on le
+     dit, sinon un tableau vide passe pour un chargement rate. */
+  var vide = document.getElementById(idBarre + "-vide");
+  if(vide) vide.style.display = (actif && n === 0) ? "block" : "none";
+}
+
+/* Les valeurs distinctes d'un champ, triees — les listes se construisent depuis
+   les donnees, jamais a la main : une option ecrite en dur survit a la
+   disparition de ce qu'elle designe. */
+function tfValeurs(liste, extrait){
+  var vus = {};
+  (liste || []).forEach(function(x){
+    var v = extrait(x);
+    if(v !== null && v !== undefined && v !== "") vus[String(v)] = true;
+  });
+  return Object.keys(vus).sort(function(a, b){ return a.localeCompare(b, "fr"); })
+    .map(function(v){ return { v: v, t: v }; });
+}
 function setHTML(id,h){var e=document.getElementById(id);if(e)e.innerHTML=h;}
 if(/[?&]embed=1(&|$)/.test(window.location.search)){document.body.classList.add("embed");}
 
@@ -2140,7 +2257,31 @@ function renderFlux(){
   if(badge){badge.textContent=f.count;badge.style.display="inline-block";}
   var et=DATA.etat&&DATA.etat.flux;
   if(et&&et.derniere_maj)setHTML("flux-etat","dernier rafraîchissement : "+esc(et.derniere_maj.slice(0,16).replace("T"," "))+" UTC");
-  setHTML("flux-liste",f.items.slice(0,14).map(function(it){
+
+  /* Filtres : la source (qui parle) et le rattachement (ce signal concerne-t-il
+     un cas du panel, ou attend-il d'etre qualifie ?). Les listes viennent des
+     donnees : une option ecrite en dur survivrait a la disparition du flux. */
+  tfBarre("tf-flux", "flux", [
+    { cle:"source", label:"Source", large:true, tous:"Toutes les sources",
+      options: tfValeurs(f.items, function(x){ return x.source; }) },
+    { cle:"lien", label:"Rattachement", large:true, tous:"Tous les signaux",
+      options: [{v:"oui", t:"Rattaché à un cas du panel"},
+                {v:"non", t:"À qualifier — non rattaché"}] }
+  ], renderFlux);
+
+  var F = TF.flux || {};
+  var items = f.items.filter(function(it){
+    if(F.source && it.source !== F.source) return false;
+    if(F.lien){
+      var n = (it.cas_lies || []).length;
+      if(F.lien === "oui" && !n) return false;
+      if(F.lien === "non" && n) return false;
+    }
+    return true;
+  });
+  tfCompte("tf-flux", "flux", items.length, f.items.length);
+
+  setHTML("flux-liste",items.slice(0,14).map(function(it){
     var lies=(it.cas_lies||[]).map(function(cid){
       var c=DATA.cas.filter(function(x){return x.id===cid;})[0];
       return c?'<span class="flux-cas" data-cas="'+cid+'">'+esc(c.entreprise.split(" (")[0])+"</span>":"";
@@ -2868,15 +3009,67 @@ function renderImplantation(){
   aideBrancher();
 }
 
+/* Les deux tableaux d'implantation lisent le MEME jeu de pays : un seul etat de
+   filtre pour les deux, sinon ils se contrediraient a l'ecran. */
+function implFiltrer(liste){
+  var F = TF.imp || {};
+  return liste.filter(function(l){
+    var x = l.x || l;
+    if(F.pays && x.pays !== F.pays) return false;
+    if(F.eau && (!x.eau || x.eau.classe !== F.eau)) return false;
+    if(F.climat && (!x.climat || x.climat.nom.split(" — ")[0] !== F.climat)) return false;
+    if(F.prix && (!x.prix || x.prix.classe !== F.prix)) return false;
+    if(F.carbone){
+      var i = x.intensite;
+      var c = i == null ? "" : (i <= 100 ? "bas" : (i <= 250 ? "moyen" : "eleve"));
+      if(c !== F.carbone) return false;
+    }
+    return true;
+  });
+}
+
+function implBarre(idBarre){
+  if(!IMPL) return;
+  tfBarre(idBarre, "imp", [
+    { cle:"pays", label:"Pays", large:true, tous:"Tous les pays",
+      options: IMPL.pays.filter(function(x){ return x.avis; })
+        .map(function(x){ return { v:x.pays, t:nomPays(x.pays) || x.pays }; })
+        .sort(function(a,b){ return a.t.localeCompare(b.t, "fr"); }) },
+    { cle:"carbone", label:"Carbone", tous:"Toutes intensités",
+      options: [{v:"bas", t:"≤ 100 g"}, {v:"moyen", t:"101 à 250 g"}, {v:"eleve", t:"> 250 g"}] },
+    { cle:"eau", label:"Stress hydrique", large:true, tous:"Tous niveaux",
+      options: tfValeurs(IMPL.pays, function(x){ return x.eau && x.eau.classe; })
+        .map(function(o){
+          var n = (IMPL.pays.filter(function(x){ return x.eau && x.eau.classe === o.v; })[0] || {}).eau;
+          return { v:o.v, t:(n && n.classe_nom) || o.v };
+        }) },
+    { cle:"climat", label:"Free cooling", large:true, tous:"Tous climats",
+      options: tfValeurs(IMPL.pays, function(x){ return x.climat && x.climat.nom.split(" — ")[0]; }) },
+    { cle:"prix", label:"Prix de l’électricité", large:true, tous:"Toutes classes",
+      options: tfValeurs(IMPL.pays, function(x){ return x.prix && x.prix.classe; })
+        .map(function(o){
+          var n = (IMPL.pays.filter(function(x){ return x.prix && x.prix.classe === o.v; })[0] || {}).prix;
+          return { v:o.v, t:(n && n.classe_nom) || o.v };
+        }) }
+  ], function(){ renderImplClassement(); renderImplAvis(); });
+}
+
 function renderImplClassement(){
   var el = document.getElementById("imp-classement");
   if(!el || !IMPL) return;
-  var lignes = IMPL.pays.map(function(x){ return { x: x, score: implScore(x) }; })
+  implBarre("tf-imp");
+  var toutes = IMPL.pays.map(function(x){ return { x: x, score: implScore(x) }; })
     .filter(function(l){ return l.score !== null && l.x.avis; })
     .sort(function(a, b){ return b.score - a.score; });
+  var lignes = implFiltrer(toutes);
+  tfCompte("tf-imp", "imp", lignes.length, toutes.length);
 
+  var filtreActif = Object.keys(TF.imp || {}).some(function(k){ return TF.imp[k]; });
   el.innerHTML = '<div class="tablo"><table><thead><tr>'
-    + "<th>Rang</th><th>Pays</th>"
+    + "<th>Rang" + (filtreActif ? implTip("Rang DANS LA SÉLECTION en cours, pas dans "
+        + "les 23 pays du référentiel : un pays peut être premier ici et cinquième "
+        + "au classement complet. Cliquez « Tout afficher » pour revenir au classement "
+        + "d'ensemble.") : "") + "</th><th>Pays</th>"
     + "<th>Score" + implTip("Votre pondération appliquée aux notes 0-100 de chaque critère : "
         + "Σ (poids × note) ÷ Σ poids. La couleur suit la valeur — vert dès 70, orange dès 45, "
         + "rouge en dessous. Le score n’a de sens que relatif, dans CE classement.") + "</th>"
@@ -2942,9 +3135,12 @@ function renderImplClassement(){
 function renderImplAvis(){
   var el = document.getElementById("imp-avis");
   if(!el || !IMPL) return;
-  var lignes = IMPL.pays.filter(function(x){ return x.avis; })
+  implBarre("tf-avis");
+  var toutesA = IMPL.pays.filter(function(x){ return x.avis; })
     .map(function(x){ return { x: x, score: implScore(x) }; })
     .sort(function(a, b){ return (b.score || 0) - (a.score || 0); });
+  var lignes = implFiltrer(toutesA);
+  tfCompte("tf-avis", "imp", lignes.length, toutesA.length);
 
   el.innerHTML = lignes.map(function(l){
     var x = l.x, ouvert = IMPL_DEPLIE === x.pays;
@@ -3044,7 +3240,31 @@ function renderEmpreinte(){
   /* Tableau par pays : la lecture d'ensemble. Trié par empreinte décroissante,
      avec l'intensité du réseau en regard — c'est elle qui explique pourquoi
      deux parcs de taille comparable n'ont pas la même empreinte. */
-  var lignes = (EMP.par_pays || []).map(function(p){
+  /* Filtres : le pays, et la classe d'intensite carbone du reseau — c'est elle
+     qui explique pourquoi deux parcs de taille comparable n'ont pas la meme
+     empreinte, donc celle sur laquelle on veut isoler. */
+  function empClasseInt(v){
+    return v == null ? "" : (v <= 100 ? "bas" : (v <= 250 ? "moyen" : "eleve"));
+  }
+  tfBarre("tf-emp", "emp", [
+    { cle:"pays", label:"Pays", large:true, tous:"Tous les pays",
+      options: (EMP.par_pays || []).map(function(x){ return { v:x.pays, t:nomPays(x.pays) || x.pays }; })
+                 .sort(function(a,b){ return a.t.localeCompare(b.t, "fr"); }) },
+    { cle:"int", label:"Intensité du réseau", large:true, tous:"Toutes intensités",
+      options: [{v:"bas", t:"Bas — ≤ 100 gCO₂e/kWh"},
+                {v:"moyen", t:"Modéré — 101 à 250"},
+                {v:"eleve", t:"Élevé — > 250"}] }
+  ], renderEmpreinte);
+
+  var FE = TF.emp || {};
+  var paysVus = (EMP.par_pays || []).filter(function(x){
+    if(FE.pays && x.pays !== FE.pays) return false;
+    if(FE.int && empClasseInt(x.intensite) !== FE.int) return false;
+    return true;
+  });
+  tfCompte("tf-emp", "emp", paysVus.length, (EMP.par_pays || []).length);
+
+  var lignes = paysVus.map(function(p){
     var nom = nomPays(p.pays);
     var partDC = pctFr(p.dc_t[1], p.total_t[1]);
     /* La ligne entiere ouvre le pays, mais c'est un BOUTON qui porte l'action :
