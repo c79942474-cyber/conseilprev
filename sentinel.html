@@ -2155,6 +2155,92 @@ textarea.form-el{min-height:86px;resize:vertical}
 .sb-item.sb-locked{opacity:.4;transition:opacity .15s}
 .sb-item.sb-locked:hover{opacity:.62}
 .sb-lock{font-size:10px;opacity:.85;margin-left:6px;flex:0 0 auto}
+
+/* ── Gouvernance IA ─────────────────────────────────────────────────────── */
+.gouv-lab{display:block;font-size:9.5px;font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted2);margin-bottom:5px}
+.gouv-in{width:100%;padding:8px 10px;border:1px solid var(--rule2);border-radius:4px;font-size:12.5px;font-family:inherit;color:var(--ink);background:var(--white);box-sizing:border-box}
+.gouv-in:focus{outline:none;border-color:#1C5CAB;box-shadow:0 0 0 2px rgba(28,92,171,.12)}
+textarea.gouv-in{resize:vertical;line-height:1.5}
+
+.gouv-qs{display:grid;gap:8px}
+.gouv-q{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:9px 12px;background:var(--bg);border:1px solid var(--rule2);border-radius:5px}
+.gouv-q-t{font-size:12.5px;color:var(--ink);line-height:1.45}
+.gouv-q-n{display:inline-block;width:18px;height:18px;line-height:18px;text-align:center;border-radius:50%;background:#0F3D6E;color:#fff;font-family:var(--mono);font-size:9.5px;font-weight:700;margin-right:8px;vertical-align:1px}
+.gouv-seg{display:flex;flex:0 0 auto;border:1px solid var(--rule2);border-radius:5px;overflow:hidden;background:var(--white)}
+.gouv-sg{border:0;background:transparent;padding:6px 16px;font-size:11.5px;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit;transition:background .14s,color .14s}
+.gouv-sg+.gouv-sg{border-left:1px solid var(--rule2)}
+.gouv-sg:hover{background:var(--bg)}
+.gouv-sg.on.oui{background:#C4501A;color:#fff}
+.gouv-sg.on.non{background:#2D7A47;color:#fff}
+
+.gouv-qual{margin-top:16px;border:1px solid var(--rule2);border-radius:6px;background:var(--white);padding:14px 16px}
+.gouv-qual-vide{font-size:12px;color:var(--muted2);font-style:italic}
+.gouv-partiel{font-size:11.5px;color:#C47C1A;background:#FFF7EC;border:1px solid #F0DCC0;border-radius:4px;padding:7px 10px;margin-bottom:12px}
+.gouv-qual-head{padding-left:12px;margin-bottom:12px}
+.gouv-cl{display:inline-block;padding:4px 10px;border-radius:4px;color:#fff;font-size:11px;font-weight:700;letter-spacing:.02em}
+.gouv-cl.sm{font-size:9.5px;padding:2px 7px;font-weight:600}
+.gouv-voie{display:inline-block;margin-left:10px;font-size:11.5px;font-weight:700;color:var(--ink);font-family:var(--mono);letter-spacing:.03em}
+.gouv-sens{font-size:12.5px;color:var(--muted);margin-top:7px;line-height:1.5}
+.gouv-dec{font-size:12px;color:var(--ink);margin-top:6px}
+.gouv-blk{margin-top:12px}
+.gouv-blk-t{font-size:9.5px;font-family:var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#0F3D6E;font-weight:700}
+.gouv-note-t{font-size:11.5px;color:var(--muted2);font-style:italic;margin-top:3px;line-height:1.45}
+.gouv-etapes{margin-top:6px;display:flex;flex-wrap:wrap;align-items:center;gap:4px}
+.gouv-et{display:inline-block;padding:3px 9px;background:#EEF3F9;border:1px solid #D5E1EF;border-radius:4px;font-size:11px;color:#0F3D6E;font-weight:600}
+.gouv-fl{color:var(--muted2);font-size:11px}
+.gouv-obl{margin:6px 0 0 0;padding-left:18px;font-size:12px;color:var(--ink);line-height:1.6}
+.gouv-obl-vide{font-size:12px;color:var(--muted);margin-top:5px}
+.gouv-reserve{margin-top:12px;font-size:11.5px;color:var(--muted);font-style:italic;line-height:1.5;border-left:3px solid #C47C1A;padding-left:10px}
+
+.gouv-st{display:inline-block;padding:2px 8px;border:1px solid;border-radius:11px;font-size:10px;font-weight:700;white-space:nowrap}
+.gouv-mini{border:1px solid var(--rule2);background:var(--white);border-radius:4px;padding:4px 9px;font-size:10.5px;color:var(--ink);cursor:pointer;font-family:inherit;margin-right:5px;white-space:nowrap}
+.gouv-mini:hover{background:var(--bg);border-color:#0F3D6E}
+.gouv-mini.danger{color:var(--accent)}
+.gouv-mini.danger:hover{border-color:var(--accent)}
+
+.gouv-dec-box{margin-top:14px;border:1px solid #D5E1EF;background:#F7FAFD;border-radius:6px;padding:14px 16px}
+.gouv-dec-h{font-size:12.5px;color:var(--ink);margin-bottom:10px}
+.gouv-dec-x{float:right;font-size:10.5px;color:var(--muted);cursor:pointer;text-decoration:underline}
+.gouv-dec-g{display:grid;grid-template-columns:180px 1fr 1fr;gap:12px;align-items:start}
+
+.gouv-mandat{font-size:12.5px;color:var(--ink);line-height:1.6}
+.gouv-meta{margin-top:9px;font-size:11.5px;color:var(--muted)}
+.gouv-meta b{color:var(--ink);font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;margin-right:6px}
+.gouv-quorum{margin-top:8px;font-size:12px;color:var(--muted);line-height:1.55;background:var(--bg);border-left:3px solid #0F3D6E;padding:8px 11px;border-radius:0 4px 4px 0}
+.gouv-quorum b{color:#0F3D6E;font-weight:700}
+.gouv-voix{font-size:9.5px;font-weight:700;font-family:var(--mono);letter-spacing:.04em;padding:2px 6px;border-radius:3px;white-space:nowrap}
+.gouv-voix.d{background:#0F3D6E;color:#fff}
+.gouv-voix.c{background:#E8EDF3;color:#4A5A6B}
+.gouv-li{margin:7px 0 0 0;padding-left:0;list-style:none;font-size:12px;line-height:1.6}
+.gouv-li li{padding-left:20px;position:relative;color:var(--ink);margin-bottom:3px}
+.gouv-li.ok li:before{content:"\2713";position:absolute;left:2px;color:#2D7A47;font-weight:700}
+.gouv-li.out li{color:var(--muted)}
+.gouv-li.out li:before{content:"\2715";position:absolute;left:2px;color:var(--muted2)}
+.gouv-xref{margin-top:16px;font-size:11.5px;color:var(--muted);line-height:1.55;background:var(--bg);border:1px dashed var(--rule2);border-radius:5px;padding:10px 12px}
+
+.gouv-steps{display:grid;gap:0}
+.gouv-step{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--rule2)}
+.gouv-step:last-child{border-bottom:0}
+.gouv-step-n{flex:0 0 24px;height:24px;line-height:24px;text-align:center;border-radius:50%;background:#E8EDF3;color:#0F3D6E;font-family:var(--mono);font-size:10.5px;font-weight:700}
+.gouv-step.clef .gouv-step-n{background:#C4501A;color:#fff}
+.gouv-step.clef{background:#FFFAF5;margin:0 -8px;padding:10px 8px;border-radius:5px}
+.gouv-step-t{font-size:12.5px;font-weight:700;color:var(--ink)}
+.gouv-step-q{font-size:10px;font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;color:#0F3D6E;margin-top:2px}
+.gouv-step-x{font-size:11.5px;color:var(--muted);line-height:1.5;margin-top:4px}
+.gouv-step-s{font-size:10.5px;color:var(--muted2);margin-top:4px}
+.gouv-step-s b{color:var(--ink)}
+.gouv-voie-r{display:grid;grid-template-columns:150px 1fr;gap:4px 10px;padding:8px 0;border-bottom:1px solid var(--rule2)}
+.gouv-voie-r:last-child{border-bottom:0}
+.gouv-voie-n{font-size:12px;font-weight:700;color:var(--ink)}
+.gouv-voie-q{font-size:11.5px;color:var(--muted);line-height:1.45}
+.gouv-voie-d{grid-column:2;font-size:10.5px;color:var(--muted2);font-family:var(--mono)}
+.gouv-fam{font-size:9.5px;font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;color:#0F3D6E;font-weight:700;white-space:nowrap}
+
+@media(max-width:900px){
+  .gouv-q{flex-direction:column;align-items:flex-start;gap:8px}
+  .gouv-dec-g{grid-template-columns:1fr}
+  #gouv-bas{grid-template-columns:1fr!important}
+}
 </style>
 
 <style id="ent-tips-css">
@@ -2317,6 +2403,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="sb-item" onclick="go('fria',this,'ÉVALUER LE RISQUE','Évaluation FRIA')" title="Evaluation d impact sur les droits fondamentaux (Art. 27 EU AI Act) - obligation du deployeur, applicable a partir du 2 aout 2026."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg></span>FRIA</div>
     <div class="sb-item" onclick="go('sanctions',this,'ÉVALUER LE RISQUE','Calculateur sanctions')" title="Estimez l exposition financiere en cas de non-conformite a l EU AI Act."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M5 7h5l-2.5 5a2.5 2.5 0 0 0 5 0L10 7"/><path d="M14 7h5l-2.5 5a2.5 2.5 0 0 0 5 0L19 7"/><path d="M5 21h14"/><path d="M9 7h6"/></svg></span>Calculateur sanctions</div>
     <div class="sb-section">Traiter & gouverner</div>
+    <div class="sb-item" onclick="go('gouvernance',this,'TRAITER &amp; GOUVERNER','Gouvernance IA')" title="Comite de gouvernance, circuit de validation des nouveaux usages et indicateurs de gouvernance."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 21h18M5 21V10M19 21V10M12 3l9 5H3l9-5M9 21v-6h6v6"/></svg></span>Gouvernance IA</div>
     <div class="sb-item" onclick="go('parties',this,'TRAITER & GOUVERNER','Parties prenantes')" title="Cartographie des parties prenantes : matrice RACI interactive des processus de gouvernance IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="9" cy="7" r="3"/><circle cx="17" cy="7" r="2.5"/><path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2M15 13.5c2.5 0 5 1.2 5 3.5v2"/></svg></span>Parties prenantes</div>
     <div class="sb-item" onclick="go('roadmap',this,'TRAITER & GOUVERNER','Plan d\'action')"><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg></span>Roadmap</div>
     <div class="sb-section">Se tenir informé</div>
@@ -3035,6 +3122,46 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   <div class="mat-sector-bar" id="mat-sector-bar"></div>
   <div style="text-align:right;margin-bottom:8px"><button class="mat-export-btn" style="background:#1C5A8A;color:#fff" onclick="histoSaveMaturite()" title="Enregistrer cet audit de maturite dans l historique persistant et tracable (RGPD).">💾 Enregistrer dans l historique</button></div>
   <div id="mat-content"></div>
+</div>
+
+<div class="page" id="p-gouvernance">
+  <span class="eyebrow">Gouvernance · Comité &amp; circuit</span>
+  <h1 class="page-h">Gouvernance <em>opérationnelle</em> de l’IA</h1>
+  <p class="page-lead">Qui décide, ce qu’il a le droit de trancher, et par quel chemin passe un nouvel usage
+    <b>avant</b> d’exister. La matrice RACI détaillée reste dans <a href="#" onclick="go('parties',null,'TRAITER &amp; GOUVERNER','Parties prenantes');return false">Parties prenantes</a> :
+    ce module ne la duplique pas, il l’applique.</p>
+
+  <div class="kpi-row" id="gouv-kpis"></div>
+
+  <div class="tbl-wrap" style="margin-bottom:18px">
+    <div class="tbl-head"><span class="tbl-title" data-aide="gouv-usage">Déclarer un nouvel usage &amp; le qualifier</span>
+      <span class="panel-note" id="gouv-note">chargement…</span></div>
+    <div style="padding:18px 20px" id="gouv-form"></div>
+  </div>
+
+  <div class="tbl-wrap" style="margin-bottom:18px">
+    <div class="tbl-head"><span class="tbl-title">File de validation</span>
+      <span class="panel-note" id="gouv-file-note"></span></div>
+    <div id="gouv-file"></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start" id="gouv-bas">
+    <div class="tbl-wrap">
+      <div class="tbl-head"><span class="tbl-title">Comité de gouvernance IA</span>
+        <button class="mat-export-btn" onclick="gouvExportWord()" title="Telecharger la charte du comite et le circuit au format Word.">↓ Word</button></div>
+      <div id="gouv-comite" style="padding:16px 20px"></div>
+    </div>
+    <div class="tbl-wrap">
+      <div class="tbl-head"><span class="tbl-title">Circuit de validation</span></div>
+      <div id="gouv-circuit" style="padding:16px 20px"></div>
+    </div>
+  </div>
+
+  <div class="tbl-wrap" style="margin-top:18px">
+    <div class="tbl-head"><span class="tbl-title">Indicateurs de gouvernance</span>
+      <span class="panel-note">ce que le comité regarde</span></div>
+    <div id="gouv-indics"></div>
+  </div>
 </div>
 
 <div class="page" id="p-parties">
@@ -7487,6 +7614,7 @@ var PAGE_META = {
   report: {section:'PILOTAGE', label:'Vue direction'},
   chat:     {section:'ASSISTANT IA',    label:'Chat Conformité'},
   maturite: {section:'CARTOGRAPHIER', label:'Audit de maturité IA'},
+  gouvernance: {section:'TRAITER & GOUVERNER',  label:'Gouvernance IA'},
   parties:  {section:'TRAITER & GOUVERNER',     label:'Parties prenantes'},
   registre: {section:'CARTOGRAPHIER',        label:'Systèmes IA'},
   simulateur: {section:'CARTOGRAPHIER',      label:'Simulateur IA Act'},
@@ -7540,6 +7668,7 @@ function go(id, el, sec, pg) {
   if (id === 'training' && typeof window.formCatRender === 'function') setTimeout(window.formCatRender, 60);
   if (id === 'ia50' && typeof window.ia50Load === 'function') setTimeout(window.ia50Load, 60);
   if (id === 'empreinte' && typeof window.empInit === 'function') setTimeout(window.empInit, 60);
+  if (id === 'gouvernance' && typeof window.gouvInit === 'function') setTimeout(window.gouvInit, 60);
   if (el) el.classList.add('on');
   else document.querySelectorAll('.sb-item').forEach(function(i){
     if (i.getAttribute('onclick') && i.getAttribute('onclick').indexOf("'"+id+"'") >= 0) i.classList.add('on');
@@ -9320,8 +9449,15 @@ window.cjRender = cjRender; /* indispensable pour que cj_dynamic.js puisse re-re
 // Peupler CJ_DATA de facon synchrone depuis JURS (deja disponible) avant le premier rendu
 if(typeof window.cjBuildDataFromJurs === "function"){ window.cjBuildDataFromJurs(); }
 
-// Init (protege par try/catch pour ne jamais bloquer le reste du script)
-try { cjRender(); } catch(e){ console.error('cjRender init error:', e); }
+// Init. cjBuildDataFromJurs est declaree PLUS BAS dans le document : au premier
+// passage ici elle n'existe pas encore, CJ_DATA est donc vide et cjRender leve
+// forcement. On ne tente le rendu que si les donnees sont la ; sinon on attend
+// cjRefreshFromJurs, appele a l'ouverture de l'onglet Comparateur. Tenter un
+// rendu voue a l'echec ne produisait qu'une erreur rouge permanente en console,
+// qui masque les vraies.
+try {
+  if (Object.keys(CJ_DATA).length) cjRender();
+} catch(e){ console.error('cjRender init error:', e); }
 
 })();
 
@@ -22275,6 +22411,438 @@ window.rgpdAuditDl = function(id){
     setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1200);
   }).catch(function(){});
 };
+/* ══════════════════════════════════════════════════════════════════════════
+   GOUVERNANCE IA — comité, circuit de validation, indicateurs.
+   La matrice RACI reste dans « Parties prenantes » ; ce module l'applique.
+
+   La qualification affichée est celle du serveur, jamais une copie de la règle
+   en JavaScript : dupliquer la logique de gouvernance.py ferait dériver ce que
+   l'utilisateur voit de ce qui sera réellement enregistré.
+   ══════════════════════════════════════════════════════════════════════════ */
+window.GOUV = { ref:null, demandes:[], tb:null, rep:{}, qual:null, ouvert:null, tmr:null };
+
+window.gouvInit = function(){
+  if (window.GOUV.ref) { gouvChargerFile(); return; }
+  var n = document.getElementById('gouv-note');
+  fetch('/api/gouvernance/referentiel', { credentials:'same-origin' })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (!d || !d.ok) { if(n) n.textContent = 'référentiel indisponible'; return; }
+      window.GOUV.ref = d;
+      if (n) n.textContent = d.questions.length + ' questions · référentiel ' + rgpdEsc(d.version);
+      gouvRenderForm(); gouvRenderComite(); gouvRenderCircuit();
+      gouvChargerFile();
+    })
+    .catch(function(){ if(n) n.textContent = 'référentiel injoignable'; });
+};
+
+window.gouvChargerFile = function(){
+  fetch('/api/gouvernance/demandes', { credentials:'same-origin', cache:'no-store' })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (!d || !d.ok) { gouvFileMsg('File indisponible — les demandes déjà enregistrées ne sont pas perdues, seule leur lecture a échoué.'); return; }
+      window.GOUV.demandes = d.demandes || [];
+      window.GOUV.tb = d.tableau_bord || null;
+      gouvRenderFile(); gouvRenderKpis(); gouvRenderIndics();
+    })
+    .catch(function(){ gouvFileMsg('File injoignable — vérifiez la connexion, puis rouvrez la page.'); });
+};
+
+function gouvFileMsg(m){
+  var b = document.getElementById('gouv-file');
+  if (b) b.innerHTML = '<div style="padding:16px 20px;font-size:12px;color:var(--accent)">' + rgpdEsc(m) + '</div>';
+}
+
+/* ── 1. Déclaration & qualification ─────────────────────────────────────── */
+
+window.gouvRenderForm = function(){
+  var R = window.GOUV.ref, box = document.getElementById('gouv-form');
+  if (!R || !box) return;
+  var champs =
+      '<div style="display:grid;grid-template-columns:1.4fr 1fr;gap:12px;margin-bottom:14px">'
+    + '<div><label class="gouv-lab">Nom de l’usage envisagé</label>'
+    +   '<input id="gouv-nom" class="gouv-in" placeholder="ex. Tri automatique des candidatures" maxlength="200"></div>'
+    + '<div><label class="gouv-lab">Métier demandeur</label>'
+    +   '<input id="gouv-dem" class="gouv-in" placeholder="ex. Direction des ressources humaines" maxlength="120"></div>'
+    + '</div>'
+    + '<div style="margin-bottom:16px"><label class="gouv-lab">Finalité — à quoi sert cet usage, pour qui, avec quel gain attendu</label>'
+    +   '<textarea id="gouv-fin" class="gouv-in" rows="2" placeholder="Une demande sans finalité écrite n’est pas instruite." maxlength="2000"></textarea></div>';
+
+  var qs = R.questions.map(function(q, i){
+    return '<div class="gouv-q">'
+      + '<div class="gouv-q-t"><span class="gouv-q-n">' + (i+1) + '</span>' + rgpdEsc(q.texte) + '</div>'
+      + '<div class="gouv-seg">'
+      +   '<button type="button" class="gouv-sg" id="gq-' + q.cle + '-n" onclick="gouvRep(\'' + q.cle + '\',false)">Non</button>'
+      +   '<button type="button" class="gouv-sg" id="gq-' + q.cle + '-o" onclick="gouvRep(\'' + q.cle + '\',true)">Oui</button>'
+      + '</div></div>';
+  }).join('');
+
+  box.innerHTML = champs
+    + '<div class="gouv-qs">' + qs + '</div>'
+    + '<div id="gouv-qual" class="gouv-qual"><div class="gouv-qual-vide">Répondez aux questions ci-dessus : la qualification présumée et la voie applicable s’affichent ici, avant tout enregistrement.</div></div>'
+    + '<div style="margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">'
+    +   '<button class="submit" style="font-size:11px;padding:8px 18px" onclick="gouvEnregistrer()">Enregistrer la demande dans la file</button>'
+    +   '<button class="mat-export-btn" onclick="gouvReset()">Effacer</button>'
+    +   '<span id="gouv-form-msg" style="font-size:11.5px"></span>'
+    + '</div>';
+  gouvMajSeg();
+};
+
+window.gouvRep = function(cle, val){
+  window.GOUV.rep[cle] = val;
+  gouvMajSeg();
+  clearTimeout(window.GOUV.tmr);
+  window.GOUV.tmr = setTimeout(gouvQualifier, 220);
+};
+
+function gouvMajSeg(){
+  var R = window.GOUV.ref; if (!R) return;
+  R.questions.forEach(function(q){
+    var v = window.GOUV.rep[q.cle];
+    var o = document.getElementById('gq-' + q.cle + '-o');
+    var n = document.getElementById('gq-' + q.cle + '-n');
+    if (o) o.className = 'gouv-sg' + (v === true  ? ' on oui' : '');
+    if (n) n.className = 'gouv-sg' + (v === false ? ' on non' : '');
+  });
+}
+
+window.gouvQualifier = function(){
+  var R = window.GOUV.ref; if (!R) return;
+  var repondues = R.questions.filter(function(q){ return window.GOUV.rep[q.cle] !== undefined; }).length;
+  if (!repondues) return;
+  fetch('/api/gouvernance/qualifier', { method:'POST', credentials:'same-origin',
+    headers:{'Content-Type':'application/json'}, body: JSON.stringify({ reponses: window.GOUV.rep }) })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (!d || !d.ok) return;
+      window.GOUV.qual = d;
+      gouvRenderQual(d, repondues, R.questions.length);
+    })
+    .catch(function(){});
+};
+
+function gouvRenderQual(d, repondues, total){
+  var box = document.getElementById('gouv-qual'); if (!box) return;
+  var partiel = repondues < total
+    ? '<div class="gouv-partiel">' + repondues + ' réponse(s) sur ' + total
+      + ' — les questions non répondues sont comptées « non ». Complétez-les avant d’enregistrer.</div>'
+    : '';
+  var etapes = (window.GOUV.ref.circuit || []).filter(function(c){ return d.etapes.indexOf(c.cle) >= 0; })
+    .map(function(c){ return '<span class="gouv-et">' + rgpdEsc(c.nom) + '</span>'; }).join('<span class="gouv-fl">→</span>');
+  var obl = (d.obligations || []).length
+    ? '<ul class="gouv-obl">' + d.obligations.map(function(o){ return '<li>' + rgpdEsc(o) + '</li>'; }).join('') + '</ul>'
+    : '<div class="gouv-obl-vide">Aucune obligation spécifique déclenchée par ces réponses.</div>';
+  box.innerHTML = partiel
+    + '<div class="gouv-qual-head" style="border-left:4px solid ' + rgpdEsc(d.couleur) + '">'
+    +   '<div><span class="gouv-cl" style="background:' + rgpdEsc(d.couleur) + '">' + rgpdEsc(d.classe_nom) + '</span>'
+    +   '<span class="gouv-voie">' + rgpdEsc(d.voie_nom) + '</span></div>'
+    +   '<div class="gouv-sens">' + rgpdEsc(d.classe_sens) + '</div>'
+    +   '<div class="gouv-dec"><b>Qui décide :</b> ' + rgpdEsc(d.decideur) + '</div>'
+    + '</div>'
+    + '<div class="gouv-blk"><div class="gouv-blk-t">Chemin à suivre</div><div class="gouv-etapes">' + etapes + '</div></div>'
+    + '<div class="gouv-blk"><div class="gouv-blk-t">Obligations déclenchées</div>' + obl + '</div>'
+    + '<div class="gouv-reserve">' + rgpdEsc(d.reserve) + '</div>';
+}
+
+window.gouvReset = function(){
+  window.GOUV.rep = {}; window.GOUV.qual = null;
+  ['gouv-nom','gouv-dem','gouv-fin'].forEach(function(i){ var e = document.getElementById(i); if(e) e.value = ''; });
+  gouvMajSeg();
+  var q = document.getElementById('gouv-qual');
+  if (q) q.innerHTML = '<div class="gouv-qual-vide">Répondez aux questions ci-dessus : la qualification présumée et la voie applicable s’affichent ici, avant tout enregistrement.</div>';
+  var m = document.getElementById('gouv-form-msg'); if (m) m.textContent = '';
+};
+
+window.gouvEnregistrer = function(){
+  function v(id){ var e = document.getElementById(id); return e ? e.value.trim() : ''; }
+  var m = document.getElementById('gouv-form-msg');
+  function dire(t, err){ if(m){ m.textContent = t; m.style.color = err ? 'var(--accent)' : '#2D7A47'; } }
+  if (!v('gouv-nom')) { dire('Le nom de l’usage est requis.', true); return; }
+  if (!v('gouv-fin')) { dire('La finalité est requise : une demande sans finalité écrite n’est pas instruite.', true); return; }
+  var R = window.GOUV.ref;
+  var manquantes = R.questions.filter(function(q){ return window.GOUV.rep[q.cle] === undefined; });
+  if (manquantes.length && !confirm('Il reste ' + manquantes.length + ' question(s) sans réponse ; elles seront comptées « non ».\n\nEnregistrer quand même ?')) return;
+  dire('Enregistrement…', false);
+  fetch('/api/gouvernance/demandes', { method:'POST', credentials:'same-origin',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ usage_nom: v('gouv-nom'), demandeur: v('gouv-dem'),
+      finalite: v('gouv-fin'), reponses: window.GOUV.rep, statut: 'qualifie' }) })
+    .then(function(r){ return r.json().then(function(d){ return { s:r.status, d:d }; }); })
+    .then(function(x){
+      if (!x.d || !x.d.ok) { dire(x.d && x.d.erreur ? x.d.erreur : ('Enregistrement refusé (HTTP ' + x.s + ').'), true); return; }
+      window.GOUV.demandes = x.d.demandes || [];
+      window.GOUV.tb = x.d.tableau_bord || null;
+      gouvRenderFile(); gouvRenderKpis(); gouvRenderIndics();
+      gouvReset();
+      dire('Demande enregistrée dans la file.', false);
+    })
+    .catch(function(){ dire('Réseau indisponible : la demande n’a pas été enregistrée.', true); });
+};
+
+/* ── 2. File de validation ──────────────────────────────────────────────── */
+
+window.gouvRenderFile = function(){
+  var box = document.getElementById('gouv-file'); if (!box) return;
+  var d = window.GOUV.demandes || [];
+  var note = document.getElementById('gouv-file-note');
+  if (note) note.textContent = d.length ? (d.length + ' demande(s)') : 'aucune demande';
+  if (!d.length) {
+    box.innerHTML = '<div style="padding:18px 20px;font-size:12px;color:var(--muted)">Aucune demande enregistrée. '
+      + 'Une file vide ne signifie pas qu’aucun usage n’existe : elle signifie qu’aucun n’est passé par le circuit.</div>';
+    return;
+  }
+  box.innerHTML = '<div style="padding:2px 20px 14px 20px">' + rgpdTable(
+    ['Usage', 'Demandeur', 'Classe présumée', 'Voie', 'Statut', 'Déposée le', ''],
+    d.map(function(x){
+      return [
+        '<strong style="color:var(--ink)">' + rgpdEsc(x.usage_nom) + '</strong>'
+          + (x.finalite ? '<div style="color:var(--muted);font-size:10.5px;margin-top:2px">' + rgpdEsc(String(x.finalite).slice(0,140)) + (String(x.finalite).length > 140 ? '…' : '') + '</div>' : '')
+          + (x.motif ? '<div style="color:var(--muted2);font-size:10.5px;margin-top:3px"><b>Motif :</b> ' + rgpdEsc(x.motif) + '</div>' : '')
+          + (x.conditions ? '<div style="color:var(--muted2);font-size:10.5px"><b>Conditions :</b> ' + rgpdEsc(x.conditions) + '</div>' : ''),
+        rgpdEsc(x.demandeur || '—'),
+        x.classe_nom ? '<span class="gouv-cl sm" style="background:' + rgpdEsc(x.classe_couleur) + '">' + rgpdEsc(x.classe_nom) + '</span>' : '—',
+        rgpdEsc(gouvNomVoie(x.voie)),
+        '<span class="gouv-st" style="color:' + rgpdEsc(x.statut_couleur) + ';border-color:' + rgpdEsc(x.statut_couleur) + '">' + rgpdEsc(x.statut_nom) + '</span>',
+        '<span style="font-family:var(--mono);font-size:10px;color:var(--muted)">' + rgpdEsc(String(x.cree_le || '').slice(0,10)) + '</span>',
+        '<button class="gouv-mini" onclick="gouvOuvrirDecision(' + x.id + ')">Décider</button>'
+          + '<button class="gouv-mini danger" onclick="gouvSupprimer(' + x.id + ')">Retirer</button>'
+      ];
+    })) + '<div id="gouv-dec-zone"></div></div>';
+  if (window.GOUV.ouvert) gouvOuvrirDecision(window.GOUV.ouvert, true);
+};
+
+function gouvNomVoie(v){
+  var R = window.GOUV.ref;
+  return (R && R.voies && R.voies[v]) ? R.voies[v].nom : (v || '—');
+}
+
+window.gouvOuvrirDecision = function(id, garder){
+  var z = document.getElementById('gouv-dec-zone'); if (!z) return;
+  if (!garder && window.GOUV.ouvert === id) { window.GOUV.ouvert = null; z.innerHTML = ''; return; }
+  window.GOUV.ouvert = id;
+  var x = (window.GOUV.demandes || []).filter(function(a){ return a.id === id; })[0];
+  if (!x) { z.innerHTML = ''; return; }
+  var R = window.GOUV.ref;
+  var opts = ['instruction','autorise','conditions','ajourne','refuse'].map(function(s){
+    var st = R.statuts[s];
+    return '<option value="' + s + '"' + (x.statut === s ? ' selected' : '') + '>' + rgpdEsc(st.nom) + '</option>';
+  }).join('');
+  z.innerHTML = '<div class="gouv-dec-box">'
+    + '<div class="gouv-dec-h">Décision — <b>' + rgpdEsc(x.usage_nom) + '</b>'
+    +   '<span class="gouv-dec-x" onclick="gouvOuvrirDecision(' + id + ')">fermer</span></div>'
+    + '<div class="gouv-dec-g">'
+    +   '<div><label class="gouv-lab">Décision</label><select id="gouv-dec-st" class="gouv-in">' + opts + '</select></div>'
+    +   '<div><label class="gouv-lab">Motif — obligatoire, y compris pour un refus</label>'
+    +     '<textarea id="gouv-dec-motif" class="gouv-in" rows="2" maxlength="2000" placeholder="Ce qui fonde la décision. Une décision non motivée n’est pas traçable, et le serveur la refuse.">' + rgpdEsc(x.motif || '') + '</textarea></div>'
+    +   '<div><label class="gouv-lab">Conditions imposées (si autorisation sous conditions)</label>'
+    +     '<textarea id="gouv-dec-cond" class="gouv-in" rows="2" maxlength="2000" placeholder="ex. supervision humaine sur 100 % des décisions défavorables pendant 6 mois">' + rgpdEsc(x.conditions || '') + '</textarea></div>'
+    + '</div>'
+    + '<div style="margin-top:10px;display:flex;gap:10px;align-items:center">'
+    +   '<button class="submit" style="font-size:11px;padding:7px 16px" onclick="gouvDecider(' + id + ')">Enregistrer la décision</button>'
+    +   '<span id="gouv-dec-msg" style="font-size:11.5px"></span></div>'
+    + '</div>';
+};
+
+window.gouvDecider = function(id){
+  function v(i){ var e = document.getElementById(i); return e ? e.value.trim() : ''; }
+  var m = document.getElementById('gouv-dec-msg');
+  function dire(t, err){ if(m){ m.textContent = t; m.style.color = err ? 'var(--accent)' : '#2D7A47'; } }
+  var st = v('gouv-dec-st');
+  if (st !== 'instruction' && !v('gouv-dec-motif')) {
+    dire('Toute décision se motive, y compris un refus.', true); return;
+  }
+  dire('Enregistrement…', false);
+  fetch('/api/gouvernance/demandes/' + id + '/decision', { method:'POST', credentials:'same-origin',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ statut: st, motif: v('gouv-dec-motif'), conditions: v('gouv-dec-cond') }) })
+    .then(function(r){ return r.json().then(function(d){ return { s:r.status, d:d }; }); })
+    .then(function(x){
+      if (!x.d || !x.d.ok) { dire(x.d && x.d.erreur ? x.d.erreur : ('Décision refusée (HTTP ' + x.s + ').'), true); return; }
+      window.GOUV.ouvert = null;
+      gouvChargerFile();
+    })
+    .catch(function(){ dire('Réseau indisponible : la décision n’a pas été enregistrée.', true); });
+};
+
+window.gouvSupprimer = function(id){
+  if (!confirm('Retirer cette demande de la file ?\n\nLa trace de la décision disparaît avec elle.')) return;
+  fetch('/api/gouvernance/demandes/' + id, { method:'DELETE', credentials:'same-origin' })
+    .then(function(){ window.GOUV.ouvert = null; gouvChargerFile(); })
+    .catch(function(){ gouvFileMsg('Suppression impossible : réseau indisponible.'); });
+};
+
+/* ── 3. Comité & circuit ────────────────────────────────────────────────── */
+
+window.gouvRenderComite = function(){
+  var R = window.GOUV.ref, box = document.getElementById('gouv-comite');
+  if (!R || !box) return;
+  var C = R.comite;
+  box.innerHTML =
+      '<div class="gouv-mandat">' + rgpdEsc(C.mandat) + '</div>'
+    + '<div class="gouv-meta"><span><b>Cadence</b> ' + rgpdEsc(C.cadence) + '</span></div>'
+    + '<div class="gouv-quorum"><b>Quorum — </b>' + rgpdEsc(C.quorum) + '</div>'
+    + '<div class="gouv-blk-t" style="margin-top:14px">Composition</div>'
+    + '<div style="margin-top:6px">' + rgpdTable(['Fonction','Voix','Ce qu’elle apporte'],
+        C.membres.map(function(m){
+          return ['<strong style="color:var(--ink)">' + rgpdEsc(m.fonction) + '</strong>',
+            '<span class="gouv-voix ' + (m.voix === 'décisionnaire' ? 'd' : 'c') + '">' + rgpdEsc(m.voix) + '</span>',
+            rgpdEsc(m.role)];
+        })) + '</div>'
+    + '<div class="gouv-blk-t" style="margin-top:16px">Décisions qui lui sont réservées</div>'
+    + '<div class="gouv-note-t">Un comité sans décisions réservées ne gouverne pas : il informe.</div>'
+    + '<ul class="gouv-li ok">' + C.decisions_reservees.map(function(x){ return '<li>' + rgpdEsc(x) + '</li>'; }).join('') + '</ul>'
+    + '<div class="gouv-blk-t" style="margin-top:14px">Hors de son périmètre</div>'
+    + '<ul class="gouv-li out">' + C.hors_perimetre.map(function(x){ return '<li>' + rgpdEsc(x) + '</li>'; }).join('') + '</ul>'
+    + '<div class="gouv-xref">' + rgpdEsc(R.raci_ailleurs)
+    +   ' <a onclick="go(\'parties\',null,\'TRAITER &amp; GOUVERNER\',\'Parties prenantes\')" style="cursor:pointer;color:var(--blue);font-weight:600">Ouvrir Parties prenantes →</a></div>';
+};
+
+window.gouvRenderCircuit = function(){
+  var R = window.GOUV.ref, box = document.getElementById('gouv-circuit');
+  if (!R || !box) return;
+  var etapes = R.circuit.map(function(c, i){
+    return '<div class="gouv-step' + (c.cle === 'qualification' ? ' clef' : '') + '">'
+      + '<div class="gouv-step-n">' + (i+1) + '</div>'
+      + '<div class="gouv-step-b">'
+      +   '<div class="gouv-step-t">' + rgpdEsc(c.nom) + '</div>'
+      +   '<div class="gouv-step-q">' + rgpdEsc(c.qui) + '</div>'
+      +   '<div class="gouv-step-x">' + rgpdEsc(c.quoi) + '</div>'
+      +   '<div class="gouv-step-s">Sortie : <b>' + rgpdEsc(c.sortie) + '</b></div>'
+      + '</div></div>';
+  }).join('');
+  // Flask rend les cles JSON triees alphabetiquement : « allegee, complete,
+  // declaration » n'apprend rien au lecteur. On les classe de la plus lourde a
+  // la plus legere, qui est le seul ordre qui porte du sens ici.
+  var voies = Object.keys(R.voies).sort(function(a, b){
+    return R.voies[b].etapes.length - R.voies[a].etapes.length;
+  }).map(function(k){
+    var v = R.voies[k];
+    return '<div class="gouv-voie-r"><span class="gouv-voie-n">' + rgpdEsc(v.nom) + '</span>'
+      + '<span class="gouv-voie-q">' + rgpdEsc(v.quand) + '</span>'
+      + '<span class="gouv-voie-d">' + rgpdEsc(v.decideur) + ' · ' + v.etapes.length + ' étape(s)</span></div>';
+  }).join('');
+  box.innerHTML = '<div class="gouv-steps">' + etapes + '</div>'
+    + '<div class="gouv-blk-t" style="margin-top:14px">Trois voies, selon ce qui est en jeu</div>'
+    + '<div class="gouv-note-t">Tout ne mérite pas le circuit complet : prétendre le contraire fait naître le contournement, c’est-à-dire le shadow AI.</div>'
+    + '<div style="margin-top:6px">' + voies + '</div>';
+};
+
+/* ── 4. Indicateurs ─────────────────────────────────────────────────────── */
+
+window.gouvRenderKpis = function(){
+  var box = document.getElementById('gouv-kpis'), tb = window.GOUV.tb;
+  if (!box || !tb) return;
+  var voulus = ['usages_declares','part_qualifies','en_attente','delai_decision','haut_risque','refus'];
+  box.innerHTML = voulus.map(function(cle){
+    var i = tb.indicateurs.filter(function(x){ return x.cle === cle; })[0];
+    if (!i) return '';
+    var val = i.mesure ? (i.valeur + (i.unite === '%' ? ' %' : '')) : '—';
+    return '<div class="kpi" title="' + rgpdEsc(i.lecture) + '">'
+      + '<div class="kpi-lbl">' + rgpdEsc(i.nom) + '</div>'
+      + '<div class="kpi-val" style="color:' + gouvCouleurInd(i) + '">' + rgpdEsc(val) + '</div>'
+      + '<div class="kpi-tr" style="color:var(--muted2)">' + (i.mesure ? ('Cible : ' + rgpdEsc(i.cible)) : 'non mesuré') + '</div>'
+      + '</div>';
+  }).join('');
+};
+
+function gouvCouleurInd(i){
+  if (!i.mesure) return 'var(--muted2)';
+  if (i.cle === 'part_qualifies') return i.valeur >= 100 ? '#2D7A47' : (i.valeur >= 70 ? '#C47C1A' : '#B83222');
+  if (i.cle === 'en_attente')     return i.valeur === 0 ? '#2D7A47' : (i.valeur <= 3 ? '#C47C1A' : '#B83222');
+  if (i.cle === 'delai_decision') return i.valeur < 30 ? '#2D7A47' : (i.valeur <= 60 ? '#C47C1A' : '#B83222');
+  if (i.cle === 'haut_risque')    return i.valeur > 0 ? '#C4501A' : 'var(--ink)';
+  return 'var(--ink)';
+}
+
+window.gouvRenderIndics = function(){
+  var box = document.getElementById('gouv-indics'), tb = window.GOUV.tb;
+  if (!box || !tb) return;
+  var sens = { hausse:'↑ doit monter', baisse:'↓ doit descendre', surveiller:'◉ à surveiller' };
+  box.innerHTML = '<div style="padding:2px 20px 14px 20px">' + rgpdTable(
+    ['Famille','Indicateur','Valeur','Cible','Sens de lecture','Pourquoi il compte','Source'],
+    tb.indicateurs.map(function(i){
+      return ['<span class="gouv-fam">' + rgpdEsc(i.famille) + '</span>',
+        '<strong style="color:var(--ink)">' + rgpdEsc(i.nom) + '</strong>',
+        i.mesure ? ('<b style="color:' + gouvCouleurInd(i) + ';font-size:13px">' + rgpdEsc(i.valeur + (i.unite === '%' ? ' %' : '')) + '</b>')
+                 : '<span style="color:var(--muted2)">non mesuré</span>',
+        rgpdEsc(i.cible),
+        '<span style="font-family:var(--mono);font-size:10px;color:var(--muted)">' + (sens[i.sens] || rgpdEsc(i.sens)) + '</span>',
+        '<span style="color:var(--muted)">' + rgpdEsc(i.lecture) + '</span>',
+        '<span style="font-size:10.5px;color:var(--muted2)">' + rgpdEsc(i.source) + '</span>'];
+    }))
+    + '<div class="gouv-reserve" style="margin-top:10px">' + rgpdEsc(tb.note) + '</div></div>';
+};
+
+/* ── 5. Export Word ─────────────────────────────────────────────────────── */
+
+function gouvDocHTML(){
+  var R = window.GOUV.ref, d = window.GOUV.demandes || [], tb = window.GOUV.tb;
+  var today = new Date().toLocaleDateString('fr-FR');
+  function row(cs){ return '<tr>' + cs.map(function(v){ return '<td>' + v + '</td>'; }).join('') + '</tr>'; }
+  function tbl(cols, rows){
+    return '<table><thead><tr>' + cols.map(function(c){ return '<th>' + c + '</th>'; }).join('') + '</tr></thead><tbody>' + rows + '</tbody></table>';
+  }
+  var membres = tbl(['Fonction','Voix','Ce qu’elle apporte'],
+    R.comite.membres.map(function(m){ return row([rgpdEsc(m.fonction), rgpdEsc(m.voix), rgpdEsc(m.role)]); }).join(''));
+  var circuit = tbl(['#','Étape','Qui','Ce qui s’y fait','Sortie'],
+    R.circuit.map(function(c, i){ return row([(i+1), rgpdEsc(c.nom), rgpdEsc(c.qui), rgpdEsc(c.quoi), rgpdEsc(c.sortie)]); }).join(''));
+  var voies = tbl(['Voie','Quand elle s’applique','Qui décide','Étapes'],
+    Object.keys(R.voies).sort(function(a, b){ return R.voies[b].etapes.length - R.voies[a].etapes.length; })
+      .map(function(k){ var v = R.voies[k];
+      return row([rgpdEsc(v.nom), rgpdEsc(v.quand), rgpdEsc(v.decideur), v.etapes.length]); }).join(''));
+  var file = d.length
+    ? tbl(['Usage','Demandeur','Classe présumée','Voie','Statut','Motif'],
+        d.map(function(x){ return row([rgpdEsc(x.usage_nom), rgpdEsc(x.demandeur || '—'),
+          rgpdEsc(x.classe_nom || '—'), rgpdEsc(gouvNomVoie(x.voie)), rgpdEsc(x.statut_nom),
+          rgpdEsc(x.motif || '—')]); }).join(''))
+    : '<p><i>Aucune demande enregistrée à ce jour.</i></p>';
+  var indics = tb ? tbl(['Indicateur','Valeur','Cible','Sens','Pourquoi il compte'],
+    tb.indicateurs.map(function(i){ return row([rgpdEsc(i.nom),
+      (i.mesure ? rgpdEsc(i.valeur + (i.unite === '%' ? ' %' : '')) : 'non mesuré'),
+      rgpdEsc(i.cible), rgpdEsc(i.sens), rgpdEsc(i.lecture)]); }).join('')) : '';
+
+  return '<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">'
+    + '<title>Charte du comité de gouvernance IA — CONSEILPREV</title>'
+    + '<meta name="ai-generated" content="partial"><meta name="ai-disclosure" content="Document produit par la plateforme Sentinel (CONSEILPREV) ; certaines sections peuvent etre generees par IA.">'
+    + '<style>body{font-family:Georgia,serif;max-width:900px;margin:36px auto;padding:0 24px;color:#1a1a1a}'
+    + 'h1{font-size:23px}h2{font-size:15px;margin-top:26px;border-bottom:2px solid #1a1a1a;padding-bottom:4px}'
+    + 'table{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:8px}'
+    + 'th{text-align:left;padding:6px 9px;border-bottom:2px solid #1a1a1a;font-size:10.5px}'
+    + 'td{padding:6px 9px;border-bottom:1px solid #e5e7eb;vertical-align:top}'
+    + '.meta{color:#666;font-size:12.5px}.res{font-size:11.5px;color:#555;font-style:italic;margin-top:10px;'
+    + 'border-left:3px solid #C47C1A;padding-left:10px}ul{font-size:12.5px}</style></head><body>'
+    + '<h1>Charte du comité de gouvernance IA et circuit de validation</h1>'
+    + '<div class="meta">Édité le ' + today + ' — CONSEILPREV (SARL) · SIREN 494 530 157 · '
+    + '19 rue Auguste Chabrières, 75015 Paris · Responsable : Christophe CERF · référentiel ' + rgpdEsc(R.version) + '</div>'
+    + '<h2>1. Mandat du comité</h2><p>' + rgpdEsc(R.comite.mandat) + '</p>'
+    + '<p><b>Cadence :</b> ' + rgpdEsc(R.comite.cadence) + '<br><b>Quorum :</b> ' + rgpdEsc(R.comite.quorum) + '</p>'
+    + '<h2>2. Composition</h2>' + membres
+    + '<h2>3. Décisions réservées au comité</h2>'
+    + '<p><i>Un comité sans décisions réservées ne gouverne pas : il informe.</i></p>'
+    + '<ul>' + R.comite.decisions_reservees.map(function(x){ return '<li>' + rgpdEsc(x) + '</li>'; }).join('') + '</ul>'
+    + '<p><b>Hors de son périmètre :</b></p><ul>'
+    + R.comite.hors_perimetre.map(function(x){ return '<li>' + rgpdEsc(x) + '</li>'; }).join('') + '</ul>'
+    + '<h2>4. Circuit de validation d’un nouvel usage</h2>' + circuit
+    + '<h2>5. Voies applicables</h2>' + voies
+    + '<h2>6. File de validation à la date d’édition</h2>' + file
+    + (indics ? ('<h2>7. Indicateurs de gouvernance</h2>' + indics) : '')
+    + '<div class="res">Les classes indiquées sont des qualifications PRÉSUMÉES, calculées depuis des réponses '
+    + 'déclaratives. Elles orientent le circuit et ne valent pas analyse juridique : la classification définitive '
+    + 'relève du juriste, sur le système réel et sa documentation. La matrice RACI détaillée des rôles est portée '
+    + 'par le module « Parties prenantes » de Sentinel et ne figure pas ici.</div>'
+    + '</body></html>';
+}
+
+window.gouvExportWord = function(){
+  if (!window.GOUV.ref) { alert('Le référentiel de gouvernance n’est pas encore chargé.'); return; }
+  var blob = new Blob(['﻿' + gouvDocHTML()], { type:'application/msword' });
+  var u = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = u; a.download = 'Charte-comite-gouvernance-IA.doc';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(u);
+};
+
 window.ia50Load = function(){
   fetch('/api/ia50/usages', { credentials:'same-origin' }).then(function(r){ return r.json(); }).then(function(d){
     if(!d || !d.ok) return;

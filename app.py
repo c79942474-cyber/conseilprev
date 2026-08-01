@@ -2744,6 +2744,10 @@ def health_check():
         'donnees_ouvertes': donnees_ouvertes.sante(),
         'datacentres': datacentres.sante(),
         'empreinte_sites': empreinte_sites.sante(),
+        # Un module qui expose sante() sans que personne ne l'appelle est un
+        # controle qui ne tourne jamais : on les branche tous ici.
+        'implantation': implantation.sante(),
+        'gouvernance': gouvernance.sante(),
     }
 
     # Réponse JSON si demandée
@@ -10808,6 +10812,158 @@ IA50_USAGES_DEFAUT = [
                   'responsabilite editoriale assumee nommement',
      'responsable': 'Christophe CERF'},
 ]
+
+
+# ══════════════════════════════════════════════════════════
+# GOUVERNANCE IA — comite, circuit de validation, indicateurs
+# La matrice RACI vit dans « Parties prenantes » ; ce module porte ce qu'elle
+# ne dit pas : quand le comite decide, ce qu'il a le droit de trancher, et par
+# quel chemin passe un nouvel usage AVANT d'exister.
+# ══════════════════════════════════════════════════════════
+import gouvernance  # noqa: E402
+
+
+def _gouv_table(cur, conn):
+    _pk = 'SERIAL PRIMARY KEY' if REGISTRE_USE_PG else 'INTEGER PRIMARY KEY AUTOINCREMENT'
+    cur.execute('CREATE TABLE IF NOT EXISTS gouv_demandes (id ' + _pk + ', usage_nom TEXT, '
+                'demandeur TEXT, finalite TEXT, reponses TEXT, classe TEXT, voie TEXT, '
+                'statut TEXT DEFAULT \'brouillon\', motif TEXT, conditions TEXT, '
+                'cree_le TEXT, decide_le TEXT)')
+    conn.commit()
+
+
+def _gouv_ligne(r):
+    d = dict(r)
+    try:
+        d['reponses'] = json.loads(d.get('reponses') or '{}')
+    except Exception:                                          # noqa: BLE001
+        d['reponses'] = {}
+    st = gouvernance.STATUTS_DEMANDE.get(d.get('statut') or 'brouillon', {})
+    d['statut_nom'] = st.get('nom', d.get('statut'))
+    d['statut_couleur'] = st.get('couleur', '#8892A0')
+    if d.get('classe'):
+        c = gouvernance.CLASSES.get(d['classe'], {})
+        d['classe_nom'] = c.get('nom')
+        d['classe_couleur'] = c.get('couleur')
+    return d
+
+
+@app.route('/api/gouvernance/referentiel', methods=['GET'])
+@rate_limit(limit=60, window=60)
+def api_gouv_referentiel():
+    """Comite, circuit, voies, questions de qualification, indicateurs."""
+    try:
+        return jsonify(dict(gouvernance.referentiel(), ok=True))
+    except Exception as e:  # noqa: BLE001
+        logger.error(f'GOUV_REF_ERR: {e}')
+        return jsonify({'ok': False, 'erreur': 'referentiel indisponible'}), 503
+
+
+@app.route('/api/gouvernance/qualifier', methods=['POST'])
+@rate_limit(limit=60, window=60)
+def api_gouv_qualifier():
+    """Qualification PRESUMEE d'un usage depuis les reponses declaratives.
+    Ne persiste rien : sert a montrer le resultat avant d'enregistrer."""
+    d = request.get_json(silent=True) or {}
+    try:
+        return jsonify(dict(gouvernance.qualifier(d.get('reponses') or {}), ok=True))
+    except Exception as e:  # noqa: BLE001
+        logger.error(f'GOUV_QUALIF_ERR: {e}')
+        return jsonify({'ok': False, 'erreur': 'qualification impossible'}), 400
+
+
+@app.route('/api/gouvernance/demandes', methods=['GET', 'POST'])
+@rate_limit(limit=60, window=60)
+def api_gouv_demandes():
+    """File des demandes de nouvel usage. GET liste, POST cree ou met a jour."""
+    conn = registre_get_db(); cur = conn.cursor()
+    try:
+        _gouv_table(cur, conn)
+        if request.method == 'POST':
+            d = request.get_json(silent=True) or {}
+            nom = str(d.get('usage_nom') or '').strip()[:200]
+            if not nom:
+                return jsonify({'ok': False, 'erreur': 'Le nom de l usage est requis.'}), 400
+            reponses = d.get('reponses') or {}
+            q = gouvernance.qualifier(reponses)
+            maintenant = datetime.utcnow().isoformat()
+            rid = d.get('id')
+            champs = (nom, str(d.get('demandeur') or '')[:120],
+                      str(d.get('finalite') or '')[:2000], json.dumps(reponses),
+                      q['classe'], q['voie'], str(d.get('statut') or 'qualifie')[:20])
+            if rid:
+                cur.execute(registre_sql(
+                    'UPDATE gouv_demandes SET usage_nom=%s, demandeur=%s, finalite=%s, '
+                    'reponses=%s, classe=%s, voie=%s, statut=%s WHERE id=%s',
+                    'UPDATE gouv_demandes SET usage_nom=?, demandeur=?, finalite=?, '
+                    'reponses=?, classe=?, voie=?, statut=? WHERE id=?'), champs + (int(rid),))
+            else:
+                cur.execute(registre_sql(
+                    'INSERT INTO gouv_demandes (usage_nom, demandeur, finalite, reponses, '
+                    'classe, voie, statut, cree_le) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)',
+                    'INSERT INTO gouv_demandes (usage_nom, demandeur, finalite, reponses, '
+                    'classe, voie, statut, cree_le) VALUES (?,?,?,?,?,?,?,?)'),
+                    champs + (maintenant,))
+            conn.commit()
+        cur.execute('SELECT * FROM gouv_demandes ORDER BY id DESC')
+        lignes = [_gouv_ligne(r) for r in cur.fetchall()]
+        return jsonify({'ok': True, 'demandes': lignes,
+                        'tableau_bord': gouvernance.tableau_bord(lignes)})
+    except Exception as e:  # noqa: BLE001
+        logger.error(f'GOUV_DEM_ERR: {e}')
+        return jsonify({'ok': False, 'erreur': 'file indisponible'}), 503
+    finally:
+        try: conn.close()
+        except Exception: pass                                 # noqa: BLE001
+
+
+@app.route('/api/gouvernance/demandes/<int:did>/decision', methods=['POST'])
+@rate_limit(limit=60, window=60)
+def api_gouv_decision(did):
+    """Trace la DECISION du comite. Un refus se motive autant qu'une
+    autorisation : sans motif, la decision n'est pas enregistree."""
+    d = request.get_json(silent=True) or {}
+    statut = str(d.get('statut') or '').strip()
+    if statut not in gouvernance.STATUTS_DEMANDE:
+        return jsonify({'ok': False, 'erreur': 'statut inconnu'}), 400
+    motif = str(d.get('motif') or '').strip()
+    if statut in ('autorise', 'conditions', 'ajourne', 'refuse') and not motif:
+        return jsonify({'ok': False,
+                        'erreur': 'Toute décision se motive, y compris un refus.'}), 400
+    conn = registre_get_db(); cur = conn.cursor()
+    try:
+        _gouv_table(cur, conn)
+        cur.execute(registre_sql(
+            'UPDATE gouv_demandes SET statut=%s, motif=%s, conditions=%s, decide_le=%s WHERE id=%s',
+            'UPDATE gouv_demandes SET statut=?, motif=?, conditions=?, decide_le=? WHERE id=?'),
+            (statut, motif[:2000], str(d.get('conditions') or '')[:2000],
+             datetime.utcnow().isoformat(), did))
+        conn.commit()
+        return jsonify({'ok': True})
+    except Exception as e:  # noqa: BLE001
+        logger.error(f'GOUV_DEC_ERR: {e}')
+        return jsonify({'ok': False, 'erreur': 'décision non enregistrée'}), 503
+    finally:
+        try: conn.close()
+        except Exception: pass                                 # noqa: BLE001
+
+
+@app.route('/api/gouvernance/demandes/<int:did>', methods=['DELETE'])
+@rate_limit(limit=30, window=60)
+def api_gouv_supprimer(did):
+    conn = registre_get_db(); cur = conn.cursor()
+    try:
+        _gouv_table(cur, conn)
+        cur.execute(registre_sql('DELETE FROM gouv_demandes WHERE id=%s',
+                                 'DELETE FROM gouv_demandes WHERE id=?'), (did,))
+        conn.commit()
+        return jsonify({'ok': True})
+    except Exception as e:  # noqa: BLE001
+        logger.error(f'GOUV_SUPPR_ERR: {e}')
+        return jsonify({'ok': False, 'erreur': 'suppression impossible'}), 503
+    finally:
+        try: conn.close()
+        except Exception: pass                                 # noqa: BLE001
 
 
 def _ia50_table(cur, conn):
