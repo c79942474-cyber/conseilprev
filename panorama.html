@@ -100,11 +100,16 @@ tr.pays-l th button:focus-visible{outline:2px solid #1E63A8;outline-offset:2px;b
 /* VUE PAYS : une page, et rien d'autre. Garder les six autres sections
    au-dessous obligerait a defiler pour revenir, et brouillerait la lecture
    du detail — ce qu'on est justement venu chercher. */
-body.vue-pays .pnav,
 body.vue-pays #echeancier,
 body.vue-pays .limite,
 body.vue-pays > .kpis,
 body.vue-pays .panel:not(#s-pays){display:none}
+/* On masque les ONGLETS — ils pointeraient vers des sections masquees — mais
+   PAS la barre : le bouton « Parcours guide » y vit. Masquer .pnav entiere le
+   rendait injoignable des qu'on avait ouvert un pays, et le seul moyen de le
+   retrouver etait de sortir de la vue, ce que rien n'indiquait. Le parcours,
+   lui, sait revenir a la vue d'ensemble tout seul (voir gpAller). */
+body.vue-pays .pnav a{display:none}
 #s-pays[hidden]{display:none}
 .pv-fil{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
 .pv-retour{all:unset;cursor:pointer;font-size:11.5px;color:#1E63A8;padding:4px 9px;border-radius:3px;
@@ -285,11 +290,12 @@ tr.dc-l .op button{all:unset;cursor:pointer;color:#1E63A8;font:inherit;font-weig
 tr.dc-l .op button:after{content:"›";font-size:15px;line-height:1;opacity:.55;transition:transform .12s}
 tr.dc-l:hover .op button:after{transform:translateX(2px);opacity:1}
 tr.dc-l .op button:focus-visible{outline:2px solid #1E63A8;outline-offset:2px;border-radius:2px}
-body.vue-site .pnav,
 body.vue-site #echeancier,
 body.vue-site .limite,
 body.vue-site > .kpis,
 body.vue-site .panel:not(#s-site){display:none}
+/* Meme raison qu'en vue pays : les onglets partent, le lanceur du parcours reste. */
+body.vue-site .pnav a{display:none}
 #s-site[hidden]{display:none}
 .fs-sous{font-size:12.5px;color:var(--muted);margin:-2px 0 2px}
 .fs-badges{display:flex;gap:8px;flex-wrap:wrap;margin:9px 0 4px}
@@ -605,7 +611,7 @@ th .fl{font-size:9px;margin-left:3px}
 
 <header class="hdr">
   <div>
-    <div class="h">Panorama des systèmes d'IA en entreprise — Union européenne</div>
+    <h1 class="h">Panorama des systèmes d'IA en entreprise — Union européenne</h1>
     <p class="sub">Cas documentés (POC, pilotes, production, abandons) mi-2023 → mi-2026, classés selon le
     Règlement (UE) 2024/1689, avec profil de vulnérabilités cyber, couche réglementaire des 27 États membres
     et score d'exposition calculé. Base de travail pour décideurs.</p>

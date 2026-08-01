@@ -1614,8 +1614,7 @@ function submitSupport(e){
     '',
     '---',
     'Envoyé depuis conseilprev.onrender.com/support'
-  ].join('
-');
+  ].join('\n');
 
   var mailto = 'mailto:christophe.cerf@outlook.com'
     +'?subject='+encodeURIComponent('[SUPPORT] '+subject+' — '+name)
@@ -1625,7 +1624,7 @@ function submitSupport(e){
 
   setTimeout(function(){
     status.className='form-status ok';
-    status.textContent='✅ Votre client email va s'ouvrir. Si ce n'est pas le cas, écrivez directement à christophe.cerf@outlook.com';
+    status.textContent="✅ Votre client email va s'ouvrir. Si ce n'est pas le cas, écrivez directement à christophe.cerf@outlook.com";
     btn.disabled=false; btnTxt.textContent='Envoyer la demande';
   }, 1200);
 }

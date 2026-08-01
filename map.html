@@ -138,6 +138,25 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 <div class="map-count-badge" id="map-count">— juridictions</div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
+/* Repli visible : sans Leaflet, on explique au lieu de laisser un ecran blanc. */
+if (typeof L === 'undefined') {
+  document.getElementById('map').innerHTML =
+    '<div style="height:100%;display:flex;align-items:center;justify-content:center;'
+  + 'padding:32px;font-family:Inter,system-ui,sans-serif;background:#F7F6F2">'
+  + '<div style="max-width:440px;text-align:center">'
+  + '<div style="font-size:34px;margin-bottom:14px">🗺️</div>'
+  + '<div style="font-size:15px;font-weight:600;color:#1C1C1C;margin-bottom:8px">'
+  + 'La carte n\u2019a pas pu se charger</div>'
+  + '<p style="font-size:13px;color:#5B6472;line-height:1.6;margin-bottom:16px">'
+  + 'Sa biblioth\u00e8que cartographique est servie par un domaine tiers '
+  + '(unpkg.com) que votre r\u00e9seau ou votre navigateur n\u2019a pas pu joindre. '
+  + 'Les donn\u00e9es, elles, sont intactes.</p>'
+  + '<a href="/panorama#s-carte" style="display:inline-block;font-size:13px;font-weight:600;'
+  + 'color:#fff;background:#0F3D6E;padding:9px 18px;border-radius:5px;text-decoration:none">'
+  + 'Voir les m\u00eames juridictions dans le Panorama \u2192</a></div></div>';
+  var b = document.getElementById('map-count');
+  if (b) b.textContent = 'carte indisponible';
+} else {
 var map = L.map('map',{center:[38,15],zoom:2.4,minZoom:2,maxZoom:7,scrollWheelZoom:false});
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
   attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
@@ -238,6 +257,7 @@ window.addEventListener('message', function(event){
 /* Signaler au parent que la carte est prete a recevoir des donnees */
 if(window.parent && window.parent !== window){
   window.parent.postMessage({type:'map-ready'}, '*');
+}
 }
 </script>
 </body>

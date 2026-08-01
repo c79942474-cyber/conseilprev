@@ -4004,7 +4004,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   <ul class="nl">
     <li><a href="#secteurs" data-i18n="nav.secteurs" data-tooltip="Explorer les 12 secteurs industriels couverts">Secteurs</a></li>
     <li><a href="#risques" data-i18n="nav.risques" data-tooltip="8 risques systémiques IA que nous adressons">Risques IA</a></li>
-    <li><a href="#poles" data-i18n="nav.expertise" id="nav-expertise" onclick="scrollToPoles(event)" data-tooltip="IA · Data · Cyber — notre expertise tripolaire">Expertise</a></li>
+    <li><a href="#differenciateurs" data-i18n="nav.expertise" id="nav-expertise" onclick="scrollToPoles(event)" data-tooltip="IA · Data · Cyber — notre expertise tripolaire">Expertise</a></li>
     <li><a href="#services" data-i18n="nav.svc" data-tooltip="Audit, conformité, formation, gouvernance">Services</a></li>
     <li><a href="/donnees" target="_blank" rel="noopener" data-i18n="nav.donnees" data-tooltip="44 datasets data.gouv.fr en temps réel">Données</a></li>
 
@@ -5138,7 +5138,11 @@ function ii(k){return (T[LANG]||T.fr)[k]||(T.fr)[k]||k;}
 // Scroll vers #poles avec offset nav
 function scrollToPoles(e){
   if(e) e.preventDefault();
-  var el=document.getElementById('poles');
+  /* Plusieurs cibles possibles, dans l'ordre de preference : la premiere qui
+     existe l'emporte. Chercher un seul identifiant et abandonner en silence
+     s'il a disparu, c'est ce qui rendait cette entree de menu inerte. */
+  var el=null, cibles=['differenciateurs','services','secteurs'];
+  for(var i=0;i<cibles.length && !el;i++) el=document.getElementById(cibles[i]);
   if(!el) return;
   var navH=document.querySelector('nav')?document.querySelector('nav').offsetHeight:70;
   var top=el.getBoundingClientRect().top+window.scrollY-navH-8;
