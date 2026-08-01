@@ -1988,15 +1988,30 @@ function updateBadges(){
 
 function renderAll(){
   renderMap();
-  renderBrevets();
-  renderTalents();
-  renderAdoption();
-  renderEtat();
-  renderFlux();
-  updateBadges();
-  /* En FIN de rendu, et non apres l'appel : renderAll est rejoue a l'arrivee
-     des donnees en direct, et les blocs reconstruits perdraient leur aide. */
-  aideBrancher();
+  /* La carte est dessinee, on rend la main pour qu'elle soit PEINTE : les six
+     rendus suivants partageaient sa tache, et le navigateur ne peignait rien
+     avant que tous soient finis. Ils se construisent maintenant apres, sans
+     que le lecteur attende devant un cadre vide. */
+  var reste = function(){
+    renderBrevets();
+    renderTalents();
+    renderAdoption();
+    renderEtat();
+    renderFlux();
+    updateBadges();
+    /* En FIN de rendu, et non apres l'appel : renderAll est rejoue a l'arrivee
+       des donnees en direct, et les blocs reconstruits perdraient leur aide. */
+    aideBrancher();
+  };
+  /* Le premier des deux declencheurs gagne ; l'autre ne fait rien. La trame
+     est la voie rapide quand la page est visible ; le minuteur est le filet
+     pour un onglet en arriere-plan ou une iframe masquee, ou la trame ne vient
+     jamais — c'est le cas des modules cartographiques de Sentinel. */
+  var fait = false;
+  var unefois = function(){ if(fait) return; fait = true; reste(); };
+  if(window.requestAnimationFrame)
+    requestAnimationFrame(function(){ setTimeout(unefois, 0); });
+  setTimeout(unefois, 120);
 }
 
 /* Rendu initial : repli TOTAL sur le SEED (même motif que GEO dans map.html) */

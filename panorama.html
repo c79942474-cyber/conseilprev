@@ -4,6 +4,36 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Panorama des systèmes d'IA en entreprise — UE · Sentinel</title>
+<script>
+/* ── Depart anticipe des donnees ──────────────────────────────────────────
+   Ce script est le PREMIER du document, et c'est tout son interet : les
+   requetes partent ici, pendant que le navigateur analyse encore les 800 Ko
+   qui suivent. Le code plus bas ne relance rien, il reprend ces promesses.
+
+   `preAPI` rend la promesse deja lancee, ou en demarre une si le prechargement
+   a echoue (navigateur sans fetch, requete rejetee) : la page reste correcte
+   sans ce bloc, elle est seulement plus lente. */
+(function(){
+  var CIBLES = ["/api/panorama","/api/datacentres","/api/implantation",
+                "/api/empreinte-sites","/api/donnees-ouvertes"];
+  var CACHE = {};
+  if(window.fetch){
+    CIBLES.forEach(function(u){
+      try{
+        /* On garde la REPONSE, pas le JSON : lire le corps se fait plus tard,
+           au moment ou le code qui l'exploite est enfin defini. */
+        CACHE[u] = fetch(u, {cache:"no-store"});
+        CACHE[u].catch(function(){});      /* pas de rejet non traite */
+      }catch(e){}
+    });
+  }
+  window.preAPI = function(u){
+    var p = CACHE[u];
+    delete CACHE[u];                       /* une reponse ne se lit qu'une fois */
+    return p || fetch(u, {cache:"no-store"});
+  };
+})();
+</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -2333,7 +2363,7 @@ function majBarre(){
 }
 
 function chargerDC(){
-  fetch("/api/datacentres", {cache: "no-store"})
+  preAPI("/api/datacentres")
     .then(function(r){ return r.ok ? r.json() : null; })
     .then(function(d){
       /* Referentiel vide = couche absente : ni carres, ni legende, ni encart.
@@ -2765,8 +2795,13 @@ function implNatBadge(nat){
   return '<span class="pv-nat n-' + nat + '">' + (lib[nat] || nat) + "</span>";
 }
 
+var IMPL_LANCE = false;
 function chargerImplantation(){
-  fetch("/api/implantation", {cache: "no-store"})
+  /* renderAll() est rejoue quand /api/panorama repond : sans ce garde-fou, la
+     requete partait deux fois pour un referentiel qui ne depend pas des cas. */
+  if(IMPL_LANCE) return;
+  IMPL_LANCE = true;
+  preAPI("/api/implantation")
     .then(function(r){ return r.ok ? r.json() : null; })
     .then(function(d){
       if(!d || !d.ok) return;
@@ -2938,7 +2973,7 @@ function renderImplAvis(){
 }
 
 function chargerEmpreinte(){
-  fetch("/api/empreinte-sites", {cache: "no-store"})
+  preAPI("/api/empreinte-sites")
     .then(function(r){ return r.ok ? r.json() : null; })
     .then(function(d){
       if(!d || !d.ok) return;
@@ -3163,7 +3198,7 @@ function renderSocle(){
 /* Appel SÉPARÉ et non bloquant : le socle interroge trois services externes,
    il ne doit jamais retarder l'affichage du panel, qui est embarqué. */
 function chargerSocle(){
-  fetch("/api/donnees-ouvertes", {cache: "no-store"})
+  preAPI("/api/donnees-ouvertes")
     .then(function(r){ return r.ok ? r.json() : null; })
     .then(function(d){ if(d && d.ok){ DO = d; renderSocle(); aideBrancher(); } })
     .catch(function(){ /* section laissée en l'état : le panel n'en dépend pas */ });
@@ -4680,7 +4715,33 @@ function renderSite(){
 /* aideBrancher en FIN de renderAll, et non apres l'appel : renderAll est
    rejoue a l'arrivee des donnees en direct, et les blocs reconstruits
    perdaient alors leur bouton d'aide sans que rien ne le signale. */
-function renderAll(){chargerImplantation();renderEcheancier();renderFlux();populerFiltres();renderKpis();renderMap();renderTable();renderCharts();renderMethodo();renderSocle();renderSources();pnavBrancher();pnavCompteurs();gpBrancher();aideBrancher();}
+function renderAll(){
+  /* 1. Ce qui doit etre a l'ecran en premier : les indicateurs, puis LA CARTE.
+        chargerImplantation ne fait que lancer une requete, elle ne bloque pas. */
+  chargerImplantation();
+  populerFiltres();
+  renderKpis();
+  renderMap();
+
+  /* 2. On rend la main : sans cette pause, les onze rendus suivants — dont un
+        tableau de 72 lignes et 23 Ko de sources — s'executent dans la MEME
+        tache, et le navigateur ne peint rien avant la fin. Ici la carte
+        s'affiche d'abord ; le reste s'assemble ensuite, invisible du lecteur. */
+  var reste = function(){
+    renderEcheancier(); renderFlux(); renderTable(); renderCharts();
+    renderMethodo(); renderSocle(); renderSources();
+    pnavBrancher(); pnavCompteurs(); gpBrancher(); aideBrancher();
+  };
+  /* Le premier des deux declencheurs gagne ; l'autre ne fait rien. La trame
+     est la voie rapide quand la page est visible ; le minuteur est le filet
+     pour un onglet en arriere-plan ou une iframe masquee, ou la trame ne vient
+     jamais — c'est le cas des modules cartographiques de Sentinel. */
+  var fait = false;
+  var unefois = function(){ if(fait) return; fait = true; reste(); };
+  if(window.requestAnimationFrame)
+    requestAnimationFrame(function(){ setTimeout(unefois, 0); });
+  setTimeout(unefois, 120);
+}
 renderAll();
 
 /* Retour depuis la vue pays, et prise en charge de l'adresse #pays=XX :
@@ -4740,7 +4801,7 @@ if(location.hash&&/^#sia-\d{3}$/.test(location.hash)){ouvrirCas(location.hash.sl
 
 /* ── Live : /api/panorama remplace le référentiel embarqué s'il répond ── */
 if(window.fetch){
-  fetch("/api/panorama",{cache:"no-store"}).then(function(r){
+  preAPI("/api/panorama").then(function(r){
     if(!r.ok)throw new Error("http "+r.status);return r.json();
   }).then(function(j){
     var src=j&&(j.data||j);

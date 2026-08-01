@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Preconnexion : la bibliotheque vient d'unpkg, les tuiles de CARTO.
+     Etablir DNS + TLS des maintenant evite deux allers-retours au moment
+     ou le navigateur rencontre enfin les balises qui en ont besoin. -->
+<link rel="preconnect" href="https://unpkg.com" crossorigin>
+<link rel="preconnect" href="https://a.basemaps.cartocdn.com" crossorigin>
+<link rel="dns-prefetch" href="https://b.basemaps.cartocdn.com">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
