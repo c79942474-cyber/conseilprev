@@ -445,11 +445,25 @@ th .ttip{margin-left:5px}
 .pgr-t:hover{border-color:#1C5CAB;border-left-color:var(--pg-c,#1C5CAB);background:#F7F9FC}
 .pgr-t:focus-visible{outline:2px solid #1E63A8;outline-offset:1px}
 .pgr-h{display:flex;align-items:baseline;gap:6px;justify-content:space-between}
-.pgr-n{font-size:12.5px;font-weight:700;line-height:1.25;min-width:0;overflow-wrap:anywhere}
+/* Deux lignes au plus pour le nom : dans une grille, une rangee prend la
+   hauteur de sa plus grande tuile, et un seul intitule de dix mots — « Commission
+   européenne — service Copernicus de gestion des urgences » — faisait doubler
+   la rangee entiere. Le nom complet reste dans l'attribut title et dans la
+   fiche qui s'ouvre au clic. */
+.pgr-n{font-size:12.5px;font-weight:700;line-height:1.25;min-width:0;overflow-wrap:anywhere;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .pgr-r{font-family:var(--mono);font-size:9.5px;color:var(--muted2);white-space:nowrap;flex:0 0 auto}
 .pgr-v{font-family:var(--mono);font-size:12px;font-weight:700;line-height:1.3;overflow-wrap:anywhere}
 .pgr-s{font-size:10px;color:var(--muted);line-height:1.45}
 .pgr-c{display:flex;flex-wrap:wrap;gap:4px}
+/* L'intitule du cas d'usage : deux lignes, pas plus. Une phrase de trente mots
+   ferait de sa tuile le double des voisines et casserait la lecture en lignes ;
+   la fiche complete s'ouvre au clic, juste dessous. */
+.pgr-cas{font-size:11px;color:var(--ink);line-height:1.45;display:-webkit-box;
+  -webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pgr-t.on{border-color:#1C5CAB;background:#EEF3FA;box-shadow:0 0 0 1px #1C5CAB inset}
+#t-grille{padding:14px 20px 4px}
+@media(max-width:640px){#t-grille{padding:10px 14px 4px}}
 /* Fiches avantages / inconvenients : meme grille, mais une fiche OUVERTE prend
    toute la largeur — deux colonnes d'arguments dans une tuile de 200 px ne se
    liraient pas. */
@@ -906,11 +920,24 @@ engagements publics) sont imputés nominativement.</div>
     <select id="f-classe" aria-label="Filtrer par classe de risque"><option value="">Toutes classes</option></select>
     <select id="f-stade" aria-label="Filtrer par stade"><option value="">Tous stades</option></select>
     <input id="f-q" type="search" placeholder="Rechercher (entreprise, cas…)" aria-label="Recherche libre">
+    <select id="f-tri" aria-label="Trier les cas">
+      <option value="entreprise">Entreprise (A → Z)</option>
+      <option value="exposition">Exposition décroissante</option>
+      <option value="classe_rang">Classe AI Act</option>
+      <option value="pays_nom">Pays (A → Z)</option>
+      <option value="secteur">Secteur (A → Z)</option>
+      <option value="stade">Stade</option>
+    </select>
+    <select id="f-vue" aria-label="Affichage des cas">
+      <option value="">Grille — 4 à 6 entreprises par ligne</option>
+      <option value="table">Tableau détaillé</option>
+    </select>
     <button class="btn" id="f-raz" type="button">Réinitialiser</button>
     <button class="btn" id="f-csv" type="button" title="Exporter les cas filtrés">⬇ CSV</button>
     <span class="f-count" id="f-count"></span>
   </div>
-  <div class="twrap">
+  <div id="t-grille"></div>
+  <div class="twrap" id="t-wrap">
     <table id="t-table">
       <caption class="sr-only">Cas de systèmes d'IA documentés, filtrables, avec classe de risque AI Act et score d'exposition</caption>
       <thead><tr>
@@ -2168,6 +2195,17 @@ function brancherFiltres(){
     document.getElementById("f-"+k).addEventListener("change",function(){F[k]=this.value;renderTable();});
   });
   document.getElementById("f-q").addEventListener("input",function(){F.q=this.value;renderTable();});
+  /* Trier et changer d'affichage ne sont pas des filtres : ils ne touchent pas
+     a F, et « Réinitialiser » — qui parle des filtres — ne les remet pas a
+     zero. Les deux listes portent elles-memes leur retour a l'etat de depart. */
+  document.getElementById("f-tri").addEventListener("change",function(){
+    var k=this.value;
+    TRI={cle:k,sens:(k==="exposition"||k==="classe_rang")?-1:1};
+    renderTable();
+  });
+  document.getElementById("f-vue").addEventListener("change",function(){
+    CAS_TABLEAU=this.value==="table";renderTable();
+  });
   document.getElementById("f-raz").addEventListener("click",function(){
     F={pays:"",secteur:"",classe:"",stade:"",q:""};
     document.getElementById("f-q").value="";syncFiltres();renderTable();
@@ -2175,23 +2213,79 @@ function brancherFiltres(){
   });
   document.getElementById("f-csv").addEventListener("click",exportCsv);
 }
-var TRI={cle:"exposition",sens:-1};
+/* L'entreprise, de A a Z : devant 72 cas, le premier geste est de chercher un
+   nom. L'ordre par exposition — la priorite d'examen — reste a un clic, dans
+   « Trier par » comme au clic sur l'en-tete de colonne, et le score reste ecrit
+   sur chaque tuile : rien de l'information de priorite ne se perd. */
+var TRI={cle:"entreprise",sens:1};
+var CAS_TABLEAU=false;          /* la grille d'abord ; le tableau a un clic */
 function trierListe(liste){
   var k=TRI.cle,s=TRI.sens;
   return liste.sort(function(a,b){
     var x=a[k],y=b[k];
-    if(typeof x==="number"&&typeof y==="number")return s*(x-y)||a.entreprise.localeCompare(b.entreprise);
-    return s*String(x).localeCompare(String(y))||b.exposition-a.exposition;
+    /* « fr » explicite : sans lui le classement suit la langue du navigateur, et
+       « Éditions » finirait après « Zurich » au lieu de suivre « Edenred ». */
+    if(typeof x==="number"&&typeof y==="number")return s*(x-y)||a.entreprise.localeCompare(b.entreprise,"fr");
+    return s*String(x).localeCompare(String(y),"fr")||b.exposition-a.exposition;
   });
 }
 function majFleches(){
   document.querySelectorAll("th.triable").forEach(function(th){
     th.querySelector(".fl").textContent = th.getAttribute("data-tri")===TRI.cle ? (TRI.sens<0?"▼":"▲") : "";
   });
+  /* Un seul etat de tri pour deux commandes : l'en-tete de colonne et la liste
+     deroulante. Sans cette synchronisation, la liste afficherait « Entreprise »
+     apres un clic sur « Exposition » et mentirait au lecteur. */
+  var s=document.getElementById("f-tri");
+  if(s && s.value!==TRI.cle) s.value=TRI.cle;
+}
+
+/* Une tuile de cas : qui, quelle classe AI Act, quelle exposition, quel usage,
+   et ou. Le liséré porte la couleur de la classe — la grille se balaie alors
+   par niveau de risque avant meme d'etre lue. */
+function casTuile(c){
+  var cl=DATA.classes[c.classe];
+  var bell=(DATA.signaux_flux&&DATA.signaux_flux.par_cas&&DATA.signaux_flux.par_cas[c.id])
+    ?' <span class="bell" title="Actualité récente à qualifier — voir la fiche">🔔</span>':"";
+  return '<button type="button" class="pgr-t" data-cas="'+esc(c.id)+'"'
+    +' title="'+esc(c.entreprise+" — "+c.cas)+'" style="--pg-c:'+cl.couleur+'">'
+    +'<span class="pgr-h"><span class="pgr-n">'+esc(c.entreprise)+bell+"</span>"
+    +'<span class="pgr-r">expo '+c.exposition+"</span></span>"
+    +'<span class="pgr-c"><span class="badge" style="background:'+cl.couleur+'">'
+    +esc(cl.nom.split(" (")[0])+"</span></span>"
+    +'<span class="pgr-cas">'+esc(c.cas)+"</span>"
+    +'<span class="pgr-s">'+esc(c.pays_nom)+" · "+esc(c.secteur)+" · "
+    +esc(STADES[c.stade]||c.stade)+"</span>"
+    +"</button>";
 }
 function renderTable(){
   var liste=trierListe(casFiltres().slice());
   majFleches();
+  var grille=document.getElementById("t-grille"), wrap=document.getElementById("t-wrap");
+  if(grille&&wrap){
+    grille.style.display=CAS_TABLEAU?"none":"";
+    wrap.style.display=CAS_TABLEAU?"":"none";
+  }
+  setHTML("f-count",liste.length+" / "+DATA.n_cas+" cas");
+
+  /* Un seul des deux existe a la fois, et l'autre est VIDE — pas seulement
+     masque. Deux copies dans le DOM, c'est chaque entreprise trouvee deux fois
+     par la recherche du navigateur, annoncee deux fois par un lecteur d'ecran,
+     et 72 lignes construites pour rien. */
+  if(!CAS_TABLEAU){
+    setHTML("t-body", "");
+    setHTML("t-grille", liste.length
+      ? '<div class="pgr" role="group" aria-label="Cas d’IA documentés, une entreprise par tuile">'
+        + liste.map(casTuile).join("") + "</div>"
+      : '<p class="note" style="margin:0">Aucun cas ne correspond à ces filtres. '
+        + 'Élargissez la sélection, ou cliquez « Réinitialiser ».</p>');
+    grille.querySelectorAll("[data-cas]").forEach(function(t){
+      t.addEventListener("click",function(){ouvrirCas(this.getAttribute("data-cas"),this);});
+    });
+    return;
+  }
+
+  setHTML("t-grille", "");
   var h="";
   liste.forEach(function(c){
     var cl=DATA.classes[c.classe];
@@ -2204,15 +2298,18 @@ function renderTable(){
      +'<td><span class="expo"><span class="expo-track"><span class="expo-fill" style="width:'+c.exposition+'%;background:'+cl.couleur+'"></span></span><span class="expo-num">'+c.exposition+"</span></span></td></tr>";
   });
   setHTML("t-body",h||'<tr><td colspan="7" style="color:var(--muted2)">Aucun cas ne correspond à ces filtres.</td></tr>');
-  setHTML("f-count",liste.length+" / "+DATA.n_cas+" cas");
   document.getElementById("t-body").querySelectorAll("tr[data-cas]").forEach(function(tr){
     tr.addEventListener("click",function(){ouvrirCas(this.getAttribute("data-cas"),this);});
   });
 }
 function ouvrirCas(id,tr){
   var c=DATA.cas.filter(function(x){return x.id===id;})[0]; if(!c)return;
-  document.querySelectorAll("#t-body tr.on").forEach(function(x){x.classList.remove("on");});
-  if(tr)tr.classList.add("on");
+  document.querySelectorAll("#t-body tr.on,#t-grille .pgr-t.on").forEach(function(x){x.classList.remove("on");});
+  /* Appelé depuis un lien, un signal ou l'URL, on n'a pas l'élément d'origine :
+     on le retrouve par son identifiant, sinon la fiche s'ouvre sans qu'on voie
+     d'où elle vient — dans une grille de 72 tuiles, c'est se perdre. */
+  var marque=tr||document.querySelector('#t-grille [data-cas="'+id+'"],#t-body tr[data-cas="'+id+'"]');
+  if(marque)marque.classList.add("on");
   var cl=DATA.classes[c.classe];
   var h='<div class="fc-head"><div><div class="fc-titre">'+esc(c.entreprise)+" — "+esc(c.type_nom)+"</div>"
    +'<div class="fc-sub">'+esc(c.cas)+" · "+esc(c.pays_nom)+" · "+esc(c.secteur)+" · "+(STADES[c.stade]||c.stade)+" ("+c.annee+")</div></div>"
