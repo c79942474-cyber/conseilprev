@@ -996,7 +996,10 @@ engagements publics) sont imputés nominativement.</div>
     l’électricité</b>, le <b>parc en service</b> et la <b>file de raccordement 2026-2030</b>.
     Réglez le poids de chaque critère selon votre projet — construction neuve, extension ou
     rachat — et lisez le classement. <b>Chaque colonne porte sa nature et sa source</b> ; les
-    notes n’ont aucun sens hors de ce classement.</p>
+    notes n’ont aucun sens hors de ce classement. Le tableau s’affiche <b>par ordre
+    alphabétique</b>, pour qu’on y retrouve son pays d’un coup d’œil : la colonne
+    <b>Rang</b> continue de donner la place au classement par score. Pour lire le podium,
+    choisissez « Score décroissant » dans <b>Trier par</b>.</p>
     <div id="imp-ponderations"></div>
     <div id="tf-imp"></div>
     <div class="tf-vide" id="tf-imp-vide">Aucun pays ne correspond à ces filtres. Le classement se lit sur un ensemble : trop restreindre le vide de son sens comparatif.</div>
@@ -1127,7 +1130,10 @@ function tfBarre(idBarre, cle, champs, surChangement){
 function tfCompte(idBarre, cle, n, N){
   var e = document.getElementById(idBarre + "-n");
   if(!e) return;
-  var actif = Object.keys(TF[cle] || {}).some(function(k){ return TF[cle][k]; });
+  /* Trier n'est pas filtrer : un tableau reordonne montre toujours TOUT. Le
+     champ « tri » est donc exclu du compte, sinon changer l'ordre allumerait le
+     compteur en orange et ferait croire a un sous-ensemble. */
+  var actif = Object.keys(TF[cle] || {}).some(function(k){ return k !== "tri" && TF[cle][k]; });
   e.textContent = actif ? (n + " sur " + N + " affichée(s)") : (N + " ligne(s)");
   e.className = "tf-n" + (actif ? " on" : "");
   var b = document.querySelector('#' + idBarre + ' [data-tf-raz]');
@@ -1141,6 +1147,25 @@ function tfCompte(idBarre, cle, n, N){
 /* Les valeurs distinctes d'un champ, triees — les listes se construisent depuis
    les donnees, jamais a la main : une option ecrite en dur survit a la
    disparition de ce qu'elle designe. */
+/* Le champ « Trier par », identique partout. L'ordre alphabetique est le defaut
+   parce que la premiere chose qu'on fait devant une liste de pays est d'y
+   chercher le sien ; l'ordre par valeur reste a un clic. */
+function tfTri(libelleValeur){
+  return { cle:"tri", label:"Trier par", large:true, tous:"Pays (A → Z)",
+           options:[{ v:"valeur", t:libelleValeur }] };
+}
+
+/* Applique le tri choisi. `parValeur` est le comparateur d'origine du tableau ;
+   sans choix explicite, on classe par nom de pays. localeCompare avec « fr »
+   place correctement les accents : sans lui, « Éire » finirait apres « Zone ». */
+function tfTrier(liste, cle, nomDe, parValeur){
+  var t = (TF[cle] || {}).tri;
+  if(t === "valeur") return liste.slice().sort(parValeur);
+  return liste.slice().sort(function(a, b){
+    return String(nomDe(a)).localeCompare(String(nomDe(b)), "fr");
+  });
+}
+
 function tfValeurs(liste, extrait){
   var vus = {};
   (liste || []).forEach(function(x){
@@ -3050,7 +3075,8 @@ function implBarre(idBarre){
         .map(function(o){
           var n = (IMPL.pays.filter(function(x){ return x.prix && x.prix.classe === o.v; })[0] || {}).prix;
           return { v:o.v, t:(n && n.classe_nom) || o.v };
-        }) }
+        }) },
+    tfTri("Score décroissant")
   ], function(){ renderImplClassement(); renderImplAvis(); });
 }
 
@@ -3058,18 +3084,26 @@ function renderImplClassement(){
   var el = document.getElementById("imp-classement");
   if(!el || !IMPL) return;
   implBarre("tf-imp");
+  /* Le rang se calcule UNE FOIS, sur le classement complet trié par score, puis
+     s'attache à la ligne. Il n'est jamais déduit de la position affichée : à
+     l'ordre alphabétique, « i + 1 » donnerait 1, 2, 3… au fil de l'alphabet —
+     des nombres qui ne seraient plus des rangs. Ainsi « France, rang 7 » se lit
+     correctement à la lettre F, et reste vrai sous n'importe quel filtre. */
   var toutes = IMPL.pays.map(function(x){ return { x: x, score: implScore(x) }; })
     .filter(function(l){ return l.score !== null && l.x.avis; })
     .sort(function(a, b){ return b.score - a.score; });
-  var lignes = implFiltrer(toutes);
+  toutes.forEach(function(l, i){ l.rang = i + 1; });
+  var lignes = tfTrier(implFiltrer(toutes), "imp",
+    function(l){ return nomPays(l.x.pays) || l.x.pays; },
+    function(a, b){ return b.score - a.score; });
   tfCompte("tf-imp", "imp", lignes.length, toutes.length);
 
-  var filtreActif = Object.keys(TF.imp || {}).some(function(k){ return TF.imp[k]; });
   el.innerHTML = '<div class="tablo"><table><thead><tr>'
-    + "<th>Rang" + (filtreActif ? implTip("Rang DANS LA SÉLECTION en cours, pas dans "
-        + "les 23 pays du référentiel : un pays peut être premier ici et cinquième "
-        + "au classement complet. Cliquez « Tout afficher » pour revenir au classement "
-        + "d'ensemble.") : "") + "</th><th>Pays</th>"
+    + "<th>Rang" + implTip("Rang au CLASSEMENT COMPLET des " + toutes.length
+        + " pays du référentiel, selon vos poids. Il ne suit pas l’ordre d’affichage : "
+        + "trié de A à Z ou restreint par un filtre, « rang 7 » veut toujours dire "
+        + "septième sur " + toutes.length + ". Des rangs qui sautent — 2, 5, 9… — sont "
+        + "donc normaux, et non un tableau incomplet.") + "</th><th>Pays</th>"
     + "<th>Score" + implTip("Votre pondération appliquée aux notes 0-100 de chaque critère : "
         + "Σ (poids × note) ÷ Σ poids. La couleur suit la valeur — vert dès 70, orange dès 45, "
         + "rouge en dessous. Le score n’a de sens que relatif, dans CE classement.") + "</th>"
@@ -3093,12 +3127,12 @@ function renderImplClassement(){
         + "autorisés ou en construction 2026-2030 (votre concurrence dans la file de "
         + "raccordement). Comptés depuis le référentiel des 97 sites.") + "</th>"
     + "</tr></thead><tbody>"
-    + lignes.map(function(l, i){
+    + lignes.map(function(l){
         var x = l.x;
         var gInt = x.intensite == null ? null
           : (x.intensite <= 100 ? "bon" : (x.intensite <= 250 ? "moyen" : "mauvais"));
         return '<tr class="imp-l" data-pays="' + x.pays + '">'
-          + "<td>" + (i + 1) + "</td>"
+          + "<td>" + l.rang + "</td>"
           + "<td><b>" + esc(nomPays(x.pays) || x.pays) + "</b></td>"
           + "<td>" + implJauge(l.score) + "</td>"
           + "<td>" + (gInt ? implChip(gInt === "bon" ? "faible" : (gInt === "moyen" ? "modere" : "eleve"),
@@ -3137,9 +3171,12 @@ function renderImplAvis(){
   if(!el || !IMPL) return;
   implBarre("tf-avis");
   var toutesA = IMPL.pays.filter(function(x){ return x.avis; })
-    .map(function(x){ return { x: x, score: implScore(x) }; })
-    .sort(function(a, b){ return (b.score || 0) - (a.score || 0); });
-  var lignes = implFiltrer(toutesA);
+    .map(function(x){ return { x: x, score: implScore(x) }; });
+  /* Les fiches se cherchent par leur nom : l'alphabet d'abord, le score à un
+     clic. Le score reste écrit sur chaque fiche, l'information ne se perd pas. */
+  var lignes = tfTrier(implFiltrer(toutesA), "imp",
+    function(l){ return nomPays(l.x.pays) || l.x.pays; },
+    function(a, b){ return (b.score || 0) - (a.score || 0); });
   tfCompte("tf-avis", "imp", lignes.length, toutesA.length);
 
   el.innerHTML = lignes.map(function(l){
@@ -3237,9 +3274,9 @@ function renderEmpreinte(){
     + 'au-delà de 500 kW informatiques (directive 2023/1791, règlement délégué 2024/1364).</div></div>'
     + "</div>");
 
-  /* Tableau par pays : la lecture d'ensemble. Trié par empreinte décroissante,
-     avec l'intensité du réseau en regard — c'est elle qui explique pourquoi
-     deux parcs de taille comparable n'ont pas la même empreinte. */
+  /* Tableau par pays : la lecture d'ensemble, avec l'intensité du réseau en
+     regard — c'est elle qui explique pourquoi deux parcs de taille comparable
+     n'ont pas la même empreinte. */
   /* Filtres : le pays, et la classe d'intensite carbone du reseau — c'est elle
      qui explique pourquoi deux parcs de taille comparable n'ont pas la meme
      empreinte, donc celle sur laquelle on veut isoler. */
@@ -3253,7 +3290,8 @@ function renderEmpreinte(){
     { cle:"int", label:"Intensité du réseau", large:true, tous:"Toutes intensités",
       options: [{v:"bas", t:"Bas — ≤ 100 gCO₂e/kWh"},
                 {v:"moyen", t:"Modéré — 101 à 250"},
-                {v:"eleve", t:"Élevé — > 250"}] }
+                {v:"eleve", t:"Élevé — > 250"}] },
+    tfTri("Empreinte décroissante")
   ], renderEmpreinte);
 
   var FE = TF.emp || {};
@@ -3264,6 +3302,10 @@ function renderEmpreinte(){
   });
   tfCompte("tf-emp", "emp", paysVus.length, (EMP.par_pays || []).length);
 
+  /* De A à Z par défaut — on vient y chercher un pays, pas un podium. Le
+     comparateur d'origine reste disponible sous « Empreinte décroissante ». */
+  paysVus = tfTrier(paysVus, "emp", function(x){ return nomPays(x.pays) || x.pays; },
+                    function(a, b){ return (b.total_t[1] || 0) - (a.total_t[1] || 0); });
   var lignes = paysVus.map(function(p){
     var nom = nomPays(p.pays);
     var partDC = pctFr(p.dc_t[1], p.total_t[1]);
