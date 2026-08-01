@@ -149,6 +149,13 @@ body.embed .pnav{padding:8px calc(var(--gp-w,0px) + 18px) 8px 18px}
 /* ── Le parcours guide, colle a droite ────────────────────────────────────
    Il ne defile pas avec les onglets : c'est la porte d'entree d'un client qui
    ne sait pas encore par ou commencer, elle doit rester sous la main. */
+/* Consigne d'attente : elle remplace le silence d'un bouton grise. */
+.gp-attente{font-size:11.5px;color:#8A5310;background:#FFF7EC;border:1px solid #F0DCC0;
+  border-radius:4px;padding:4px 9px;margin-right:auto;white-space:nowrap}
+.gp-options.gp-appel{animation:gp-appel .5s ease}
+@keyframes gp-appel{0%,100%{transform:none}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+@media(prefers-reduced-motion:reduce){.gp-options.gp-appel{animation:none;outline:2px solid #C47C1A;
+  outline-offset:3px;border-radius:5px}}
 .gp-lanceur{all:unset;box-sizing:border-box;position:absolute;right:14px;top:50%;
   transform:translateY(-50%);z-index:6;
   display:inline-flex;align-items:center;gap:7px;cursor:pointer;
@@ -4304,7 +4311,8 @@ function gpAller(i){
   e.carte.innerHTML =
       '<div class="gp-tete"><span class="gp-profil">' + esc(P.court)
     + (GP.branche && P.branches ? " · " + esc(P.branches[GP.branche].nom) : "") + "</span>"
-    + '<span class="gp-etape">Étape ' + (i + 1) + " sur " + (enAttente ? "…" : E.length) + "</span>"
+    + '<span class="gp-etape">' + (enAttente ? "Choix du scénario"
+        : "Étape " + (i + 1) + " sur " + E.length) + "</span>"
     + '<button type="button" class="gp-fermer" id="gp-x" aria-label="Fermer le parcours">×</button></div>'
     + '<div class="gp-corps"><h4>' + esc(et.t) + "</h4><p>" + et.d + "</p>"
     + (et.options ? '<div class="gp-options">' + et.options.map(function(o){
@@ -4315,11 +4323,24 @@ function gpAller(i){
     + (et.piege ? '<div class="gp-piege"><b>Le piège :</b> ' + et.piege + "</div>" : "")
     + "</div>"
     + '<div class="gp-pied"><div class="gp-points">' + points + "</div>"
+    + (enAttente ? '<span class="gp-attente">Choisissez un scénario ci-dessus</span>' : "")
     + '<button type="button" class="gp-btn" id="gp-prec"' + (i === 0 ? " disabled" : "") + ">Précédent</button>"
     + '<button type="button" class="gp-btn suiv" id="gp-suiv"' + (enAttente ? " disabled" : "") + ">"
-    + (!enAttente && i === E.length - 1 ? "Terminer" : "Suivant") + "</button></div>";
+    + (enAttente ? "Suivant" : (i === E.length - 1 ? "Terminer" : "Suivant")) + "</button></div>";
 
   document.getElementById("gp-x").addEventListener("click", gpFermer);
+  /* Un bouton `disabled` n'emet aucun evenement : c'est la carte qui recueille
+     le clic tombe a cote, et qui renvoie l'oeil vers le choix attendu. */
+  if(enAttente){
+    e.carte.addEventListener("click", function(ev){
+      if(!ev.target.closest || ev.target.closest("[data-branche]")) return;
+      var g = e.carte.querySelector(".gp-options");
+      if(!g) return;
+      g.classList.remove("gp-appel");
+      void g.offsetWidth;                    /* redemarre l'animation */
+      g.classList.add("gp-appel");
+    });
+  }
   document.getElementById("gp-prec").addEventListener("click", function(){ if(GP.i > 0) gpAller(GP.i - 1); });
   document.getElementById("gp-suiv").addEventListener("click", function(){
     if(gpEtapes(P)[GP.i] && gpEtapes(P)[GP.i].options && !GP.branche) return;
