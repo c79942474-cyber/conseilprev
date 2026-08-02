@@ -208,6 +208,58 @@ figure{margin:0}
 .lg-row{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:3px}
 .lg-dot{border-radius:50%;flex:0 0 auto;border:1px solid rgba(28,28,28,.18)}
 
+/* ── TROIS COUCHES, TROIS SILHOUETTES ───────────────────────────────────────
+   La page tient sur trois séries — modèles, brevets, talents — et jusqu'ici
+   la carte n'en portait qu'une, le fond coloré. Les deux autres vivaient dans
+   des graphiques plus bas, sans jamais rencontrer la géographie.
+   Chacune a désormais sa forme sur la carte :
+     PANNEAU  un modèle est un objet produit — une plaque sur son poteau ;
+     DRAPEAU  un talent a une nationalité — le drapeau dit d'où il vient ;
+     SCEAU    un brevet est un titre délivré — un cachet à crans.
+   Trois formes et non trois couleurs : les couleurs sont déjà prises par les
+   classes du fond de carte, et une quatrième échelle chromatique sur la même
+   image ne se lirait plus. */
+.mk{cursor:pointer}
+.mk-plaque,.mk-cloth,.mk-sceau{stroke:#FFFFFF;stroke-width:1}
+.mk:hover .mk-plaque,.mk:hover .mk-cloth,.mk:hover .mk-sceau{stroke:#1C1C1C}
+.mk:focus-visible{outline:none}
+.mk:focus-visible .mk-plaque,.mk:focus-visible .mk-cloth,.mk:focus-visible .mk-sceau{
+  stroke:#1C1C1C;stroke-width:1.6}
+/* Contour pointillé = ce qui n'est PAS un pays, ou une valeur non publiée. On
+   ne peut pas poser « Europe, 2,8 % des brevets » sur un pays sans mentir ; le
+   marqueur le dit par sa forme au lieu de le taire. */
+.mk.bloc .mk-sceau,.mk.estime .mk-cloth{stroke-dasharray:2.2 1.6}
+.mk-lbl{font-family:var(--mono);font-size:7.5px;font-weight:700;fill:#FFFFFF;
+  pointer-events:none;user-select:none;letter-spacing:-.02em}
+.mk-lbl.sombre{fill:#1C1C1C}
+
+/* Barre de couches : c'est elle qui rend la carte navigable. Trois cases,
+   posées SUR la carte, avec le compte de marqueurs de chaque couche. */
+/* left:52px et non 12 : la colonne de zoom occupe 30 px a partir de 10 px, et
+   la barre lui passait dessus — le bouton « + » se retrouvait sous la premiere
+   case, inutilisable. */
+.cq-barre{position:absolute;left:52px;top:10px;z-index:3;display:flex;gap:6px;
+  flex-wrap:wrap;align-items:center;background:rgba(255,255,255,.94);
+  border:1px solid var(--rule);border-radius:5px;padding:6px 8px;
+  box-shadow:0 1px 4px rgba(28,28,28,.08);max-width:calc(100% - 24px)}
+.cq-barre label{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);
+  font-size:10px;color:var(--ink);cursor:pointer;padding:3px 7px;border-radius:4px;
+  border:1px solid transparent;white-space:nowrap}
+.cq-barre label:hover{background:#F2F5FA;border-color:var(--rule)}
+.cq-barre label.on{background:#EDF3FA;border-color:#1C5CAB}
+.cq-barre input{margin:0;cursor:pointer}
+.cq-barre .n{color:var(--muted2)}
+.cq-barre svg{width:14px;height:12px;flex:0 0 auto}
+@media(max-width:640px){
+  .cq-barre{left:46px;top:8px;padding:5px 6px;gap:4px;max-width:calc(100% - 56px)}
+  .cq-barre label{font-size:9px;padding:2px 5px}
+}
+.lg-forme{width:15px;height:13px;flex:0 0 auto}
+/* Une couche vide se DIT : « aucun marqueur » vaut mieux qu'une case cochée
+   qui ne montre rien. */
+.cq-vide{font-family:var(--mono);font-size:9.5px;color:#8A5310}
+@media print{.cq-barre{display:none}}
+
 /* ── Graphiques SVG ── */
 .chart svg{display:block;width:100%;height:auto}
 .chart text{font-family:Inter,system-ui,sans-serif}
@@ -842,8 +894,9 @@ function zoomAppliquer(){
     el.setAttribute('x', (parseFloat(el.getAttribute('data-cx')) - c/2).toFixed(2));
     el.setAttribute('y', (parseFloat(el.getAttribute('data-cy')) - c/2).toFixed(2));
   });
-  ZOOM.svg.querySelectorAll('[data-anc]').forEach(function(g){
-    var a = g.getAttribute('data-anc').split(',');
+  ancrerGroupes(ZOOM.svg, inv);
+  ZOOM.svg.querySelectorAll('[data-anc-off]').forEach(function(g){
+    var a = g.getAttribute('data-anc-off').split(',');
     g.setAttribute('transform', 'translate('+a[0]+','+a[1]+') scale('+inv.toFixed(4)+')');
   });
 
@@ -1200,7 +1253,8 @@ function svgCarte(){
   }
   /* Les libelles vivent dans une couche a part : elle est redessinee a chaque
      palier de zoom, sans toucher aux contours. */
-  return s + neutres + colores + '<g id="obs-detail"></g></svg>';
+  return s + neutres + colores + '<g id="obs-detail"></g>'
+       + '<g id="obs-couches"></g></svg>';
 }
 
 /* ── DETAIL PROGRESSIF ────────────────────────────────────────────────────
@@ -1363,7 +1417,299 @@ function legendeCarte(){
   }
   return '<div class="obs-legend"><h3>Modèles remarquables créés 2003 – été 2024 (nombre par pays)</h3>'
        + rows + '<div class="lg-row lg-nd"><span class="lg-box" style="background:#E6E4DF"></span>aucun modèle recensé</div>'
+       /* Les trois formes sont nommees dans la barre de couches, en haut de la
+          carte : les repeter ici allongeait la legende jusqu'a couvrir
+          l'Atlantique. Ne restent que les deux nuances qui ne sont ecrites
+          nulle part ailleurs — celles qui disent ce qu'on ne sait pas. */
+       + '<div class="lg-row" style="margin-top:7px;padding-top:6px;border-top:1px solid var(--rule)">'
+       + vgSceau(CQ_COL.brevets, true) + 'contour pointillé — bloc, pas un pays</div>'
+       + '<div class="lg-row">' + vgDrapeau(CQ_COL.talents, true)
+       + 'contour pointillé — valeur non publiée</div>'
+       /* Ce qui MANQUE se dit : 28 % des chercheurs d'elite et 31 % des lieux
+          de travail sont regroupes sous « Autres », qui n'est nulle part. Une
+          carte muette la-dessus se lirait comme un recensement complet. */
+       + '<div class="lg-row cq-vide">« Autres » — 28 % de l’origine et 31 % du '
+       + 'lieu de travail — n’est rattaché à aucun pays et ne figure pas sur la carte.</div>'
        + '<div class="lg-det" id="lg-det"></div></div>';
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LES TROIS COUCHES DE LA CARTE
+
+   La page porte trois séries qui parlent du même monde sans jamais se
+   rencontrer : les modèles remarquables (le fond coloré), les brevets et les
+   chercheurs d'élite (deux graphiques, plus bas). Les poser sur la même carte
+   fait apparaître ce qu'aucun des trois ne montre seul — que la Chine dépose
+   70 % des brevets tout en exportant ses chercheurs, que les États-Unis
+   produisent autant de modèles en attirant les talents des autres.
+
+   Deux règles tiennent tout le reste :
+
+   1. ON NE POSE PAS UN AGRÉGAT SUR UN PAYS. « Europe : 2,8 % des brevets » est
+      un bloc, pas un État ; son sceau est placé au centre de l'Union, en trait
+      pointillé, et le dit. « Autres : 28 % des chercheurs » n'est localisable
+      nulle part : ce marqueur n'existe pas, et la légende annonce le manque au
+      lieu de le passer sous silence.
+   2. UNE VALEUR NON PUBLIÉE N'EST PAS UNE VALEUR. Les lieux de travail hors
+      États-Unis et Chine sont des lectures graphiques (« 2–4 % ») : le drapeau
+      correspondant porte un liseré pointillé.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+var COUCHES = { modeles: true, brevets: true, talents: true };
+
+/* Couleurs de couche : une par série, distincte des cinq classes du fond. */
+var CQ_COL = { modeles: "#1C5CAB", brevets: "#8A5310", talents: "#2D7A47" };
+
+/* Place et contre-échelle les groupes ancrés. Extrait du cycle de zoom : les
+   couches sont redessinées à chaque bascule de case, HORS de ce cycle, et un
+   groupe sans transform se pose en 0,0 — tous les marqueurs s'empileraient
+   alors au coin de la carte. */
+function ancrerGroupes(racine, inv){
+  if(!racine) return;
+  if(inv === undefined) inv = 1 / ((ZOOM && ZOOM.k) || 1);
+  racine.querySelectorAll("[data-anc]").forEach(function(g){
+    var a = g.getAttribute("data-anc").split(",");
+    g.setAttribute("transform",
+      "translate(" + a[0] + "," + a[1] + ") scale(" + inv.toFixed(4) + ")");
+  });
+}
+
+/* Étoile à cinq branches, calculée et non écrite en dur : le marqueur est
+   contre-échellé, un chemin figé se déformerait. */
+function etoile(cx, cy, r, coul){
+  var p = [];
+  for(var i = 0; i < 10; i++){
+    var a = -Math.PI / 2 + i * Math.PI / 5, rr = (i % 2 ? r * 0.42 : r);
+    p.push((cx + Math.cos(a) * rr).toFixed(2) + "," + (cy + Math.sin(a) * rr).toFixed(2));
+  }
+  return '<polygon points="' + p.join(" ") + '" fill="' + coul + '" stroke="none"/>';
+}
+
+/* ── PANNEAU : un modèle produit ─────────────────────────────────────────── */
+function mkPanneau(x, y, coul, texte, titre, code){
+  var lp = 11, hp = 7.4, H = 13, x0 = -lp / 2, y0 = -H;
+  return '<g class="mk mk-modeles" data-anc="' + x.toFixed(1) + "," + y.toFixed(1)
+    + '" data-code="' + esc(code) + '" data-couche="modeles" tabindex="0" role="button"'
+    + ' aria-label="' + esc(titre) + '">'
+    + '<rect x="-0.7" y="' + (y0 + hp) + '" width="1.4" height="' + (H - hp)
+    + '" fill="' + coul + '" stroke="none" rx="0.5"/>'
+    + '<rect class="mk-plaque" x="' + x0 + '" y="' + y0 + '" width="' + lp
+    + '" height="' + hp + '" rx="1.4" fill="' + coul + '"/>'
+    + '<text class="mk-lbl" x="0" y="' + (y0 + hp / 2 + 2.6).toFixed(1)
+    + '" text-anchor="middle">' + esc(texte) + "</text>"
+    + "<title>" + esc(titre) + "</title></g>";
+}
+
+/* ── DRAPEAU : d'où viennent les chercheurs ──────────────────────────────── */
+function mkDrapeau(x, y, coul, texte, titre, code, estime){
+  var H = 13.5, lm = 1.5, lc = 10, hc = 7, bx = -lc / 2, by = -H;
+  return '<g class="mk mk-talents' + (estime ? " estime" : "") + '" data-anc="'
+    + x.toFixed(1) + "," + y.toFixed(1) + '" data-code="' + esc(code)
+    + '" data-couche="talents" tabindex="0" role="button" aria-label="' + esc(titre) + '">'
+    + '<rect x="' + bx + '" y="' + by + '" width="' + lm + '" height="' + H
+    + '" fill="' + coul + '" stroke="none" rx="0.5"/>'
+    + '<rect class="mk-cloth" x="' + (bx + lm) + '" y="' + by + '" width="' + lc
+    + '" height="' + hc + '" rx="0.8" fill="' + coul + '"/>'
+    + '<text class="mk-lbl" x="' + (bx + lm + lc / 2).toFixed(1) + '" y="'
+    + (by + hc / 2 + 2.5).toFixed(1) + '" text-anchor="middle">' + esc(texte) + "</text>"
+    + '<circle cx="0" cy="0" r="1.9" fill="' + coul + '" stroke="#FFFFFF" stroke-width="0.8"/>'
+    + "<title>" + esc(titre) + "</title></g>";
+}
+
+/* ── SCEAU : un titre délivré ────────────────────────────────────────────── */
+function mkSceau(x, y, coul, texte, titre, code, bloc){
+  var r = 6.6, crans = "";
+  for(var i = 0; i < 12; i++){
+    var a = i * Math.PI / 6;
+    crans += '<line x1="' + (Math.cos(a) * (r - 0.6)).toFixed(2) + '" y1="'
+      + (Math.sin(a) * (r - 0.6)).toFixed(2) + '" x2="' + (Math.cos(a) * (r + 1.5)).toFixed(2)
+      + '" y2="' + (Math.sin(a) * (r + 1.5)).toFixed(2) + '" stroke="' + coul
+      + '" stroke-width="1.3" stroke-linecap="round"/>';
+  }
+  return '<g class="mk mk-brevets' + (bloc ? " bloc" : "") + '" data-anc="'
+    + x.toFixed(1) + "," + y.toFixed(1) + '" data-code="' + esc(code)
+    + '" data-couche="brevets" tabindex="0" role="button" aria-label="' + esc(titre) + '">'
+    + crans
+    + '<circle class="mk-sceau" cx="0" cy="0" r="' + r + '" fill="' + coul + '"/>'
+    + '<text class="mk-lbl" x="0" y="2.6" text-anchor="middle">' + esc(texte) + "</text>"
+    + "<title>" + esc(titre) + "</title></g>";
+}
+
+/* Vignettes de légende : la même silhouette, en petit. Une légende qui nomme
+   une forme sans la montrer oblige à deviner. */
+function vgPanneau(c){
+  return '<svg class="lg-forme" viewBox="0 0 15 13" aria-hidden="true">'
+    + '<rect x="6.8" y="7" width="1.4" height="5" fill="' + c + '" rx="0.5"/>'
+    + '<rect x="2" y="1.5" width="11" height="6" rx="1.2" fill="' + c
+    + '" stroke="#FFFFFF" stroke-width="0.9"/></svg>';
+}
+function vgDrapeau(c, estime){
+  return '<svg class="lg-forme" viewBox="0 0 15 13" aria-hidden="true">'
+    + '<rect x="2.4" y="1" width="1.4" height="11" fill="' + c + '" rx="0.5"/>'
+    + '<rect x="3.8" y="1" width="9" height="6" rx="0.8" fill="' + c
+    + '" stroke="#FFFFFF" stroke-width="0.9"'
+    + (estime ? ' stroke-dasharray="1.8 1.3"' : "") + "/>"
+    + '<circle cx="3.1" cy="11.6" r="1.4" fill="' + c + '" stroke="#FFFFFF" stroke-width="0.6"/></svg>';
+}
+function vgSceau(c, bloc){
+  var g = "";
+  for(var i = 0; i < 12; i++){
+    var a = i * Math.PI / 6;
+    g += '<line x1="' + (7.5 + Math.cos(a) * 4).toFixed(2) + '" y1="'
+      + (6.5 + Math.sin(a) * 4).toFixed(2) + '" x2="' + (7.5 + Math.cos(a) * 6).toFixed(2)
+      + '" y2="' + (6.5 + Math.sin(a) * 6).toFixed(2) + '" stroke="' + c
+      + '" stroke-width="1.1" stroke-linecap="round"/>';
+  }
+  return '<svg class="lg-forme" viewBox="0 0 15 13" aria-hidden="true">' + g
+    + '<circle cx="7.5" cy="6.5" r="4.4" fill="' + c + '" stroke="#FFFFFF" stroke-width="0.9"'
+    + (bloc ? ' stroke-dasharray="1.8 1.3"' : "") + "/></svg>";
+}
+
+/* Ancre d'un bloc supranational. L'Union n'a pas de contour propre dans le
+   référentiel : on la place au barycentre de ses membres présents, ce qui
+   suit la carte au lieu d'une coordonnée écrite en dur. */
+function ancreUE(){
+  var xs = 0, ys = 0, n = 0;
+  ["FR", "DE", "IT", "ES", "PL", "NL", "BE", "AT", "CZ", "SE", "FI", "IE"].forEach(function(c){
+    var a = ancre(c); if(!a) return;
+    xs += a[0]; ys += a[1]; n++;
+  });
+  /* Remonté de 30 unités, au large : posé au barycentre exact, le sceau
+     tombait sur le Danemark et se lisait comme SA valeur. Un agrégat doit se
+     tenir à l'écart des États qu'il agrège — c'est ce décalage, autant que le
+     pointillé, qui empêche de le prendre pour un pays. */
+  return n ? [xs / n, ys / n - 30] : null;
+}
+
+/* Construit les trois couches. Une couche décochée n'est pas cachée : elle
+   n'est pas construite — un DOM qui porte des marqueurs invisibles les fait
+   trouver deux fois par la recherche du navigateur. */
+function renderCouches(){
+  var g = ZOOM.svg && ZOOM.svg.querySelector("#obs-couches");
+  if(!g) return;
+  var out = "", n = { modeles: 0, brevets: 0, talents: 0 };
+
+  if(COUCHES.modeles){
+    (DATA.modeles.pays || []).forEach(function(p){
+      var a = ancre(p.c); if(!a) return;
+      var cl = DATA.modeles.classes[p.cl];
+      var ex = DATA.modeles.exacts && typeof DATA.modeles.exacts[p.c] === "number"
+             ? DATA.modeles.exacts[p.c] : null;
+      var val = ex !== null ? String(ex) : (cl.min + "–" + cl.max);
+      var court = ex !== null ? String(ex) : (cl.max >= 101 ? "100+" : String(cl.max));
+      out += mkPanneau(a[0], a[1] - 15, CQ_COL.modeles, court,
+        p.n + " — " + val + " modèles remarquables"
+        + (ex !== null ? " (exact, Epoch AI)" : (p.lect ? " (classe, lecture de carte)" : " (classe)")),
+        p.c);
+      n.modeles++;
+    });
+  }
+
+  if(COUCHES.talents){
+    (DATA.talents.pays || []).forEach(function(p){
+      /* « Autres : 28 % » n'a pas de code pays : ce marqueur n'existe pas, et
+         la légende annonce ce qui manque. Le poser quelque part serait
+         inventer une géographie. */
+      if(!p.c) return;
+      var a = ancre(p.c); if(!a) return;
+      var t = p.t !== null && p.t !== undefined ? p.t + " %" : (p.tn || "n.d.");
+      var estime = p.t === null || p.t === undefined;
+      out += mkDrapeau(a[0] + 15, a[1], CQ_COL.talents, p.o + "%",
+        p.n + " — chercheurs d’élite 2022 : " + p.o + " % de l’origine, "
+        + t + " du lieu de travail"
+        + (estime ? " (valeur non publiée, lecture graphique)" : ""),
+        p.c, estime);
+      n.talents++;
+    });
+  }
+
+  if(COUCHES.brevets){
+    var b = DATA.brevets, der = b.annees.length - 1;
+    [["CN", "Chine", b.chine[der]], ["US", "États-Unis", b.us[der]]].forEach(function(x){
+      var a = ancre(x[0]); if(!a) return;
+      out += mkSceau(a[0] - 16, a[1], CQ_COL.brevets, fr(x[2]) + "%",
+        x[1] + " — " + fr(x[2]) + " % des brevets d’IA accordés dans le monde en "
+        + b.annees[der] + " (exact)", x[0]);
+      n.brevets++;
+    });
+    var au = ancreUE();
+    if(au){
+      out += mkSceau(au[0], au[1], CQ_COL.brevets, fr(b.europe[der]) + "%",
+        "Europe (bloc, pas un pays) — " + fr(b.europe[der]) + " % des brevets d’IA "
+        + "accordés dans le monde en " + b.annees[der]
+        + ". Agrégat continental : il ne se rattache à aucun État.", "", true);
+      n.brevets++;
+    }
+  }
+
+  g.innerHTML = out;
+  ancrerGroupes(g);
+  brancherCouches(g);
+  majBarreCouches(n);
+  return n;
+}
+
+/* Survol, clic et clavier sur les marqueurs — par délégation, la couche étant
+   reconstruite à chaque bascule. */
+function brancherCouches(g){
+  var hote = document.getElementById("obsmap");
+  if(!hote) return;
+  g.querySelectorAll(".mk").forEach(function(el){
+    var code = el.getAttribute("data-code");
+    el.addEventListener("mouseenter", function(ev){
+      if(code) tipMontrer(tipPays(code), ev, hote);
+    });
+    el.addEventListener("mousemove", function(ev){ if(code) tipPlacer(ev, hote); });
+    el.addEventListener("mouseleave", tipCacher);
+    /* Un marqueur mène à la même fiche que son pays : deux chemins, une seule
+       page. Sans cela l'infobulle serait un cul-de-sac. */
+    if(code){
+      el.addEventListener("click", function(){ ficheDetail(code); });
+      el.addEventListener("keydown", function(ev){
+        if(ev.key === "Enter" || ev.key === " "){ ev.preventDefault(); ficheDetail(code); }
+      });
+    }
+  });
+}
+
+/* La barre de couches : ce qui rend la carte navigable au lieu d'illisible. */
+function barreCouches(){
+  var hote = document.getElementById("obsmap");
+  if(!hote || hote.querySelector(".cq-barre")) return;
+  var b = document.createElement("div");
+  b.className = "cq-barre";
+  b.setAttribute("role", "group");
+  b.setAttribute("aria-label", "Couches de la carte");
+  b.innerHTML = [["modeles", "Modèles", vgPanneau(CQ_COL.modeles)],
+                 ["brevets", "Brevets", vgSceau(CQ_COL.brevets)],
+                 ["talents", "Talents", vgDrapeau(CQ_COL.talents)]]
+    .map(function(c){
+      return '<label class="' + (COUCHES[c[0]] ? "on" : "") + '" data-c="' + c[0] + '">'
+        /* `data-bascule` et non `data-couche` : ce dernier est porté AUSSI par
+           les marqueurs SVG, et un querySelector('[data-couche]') renvoyait un
+           marqueur là où l'on cherchait la case à cocher. Deux choses
+           différentes ne doivent pas répondre au même sélecteur. */
+        + '<input type="checkbox" data-bascule="' + c[0] + '"'
+        + (COUCHES[c[0]] ? " checked" : "") + ">" + c[2] + "<span>" + c[1]
+        + '</span><span class="n" data-n="' + c[0] + '"></span></label>';
+    }).join("");
+  hote.appendChild(b);
+  b.querySelectorAll("[data-bascule]").forEach(function(i){
+    i.addEventListener("change", function(){
+      COUCHES[this.getAttribute("data-bascule")] = this.checked;
+      this.closest("label").classList.toggle("on", this.checked);
+      renderCouches();
+    });
+  });
+}
+
+function majBarreCouches(n){
+  var b = document.querySelector("#obsmap .cq-barre");
+  if(!b || !n) return;
+  Object.keys(n).forEach(function(k){
+    var e = b.querySelector('[data-n="' + k + '"]');
+    if(e) e.textContent = COUCHES[k] ? "· " + n[k] : "";
+  });
 }
 
 /* Chercheurs d’élite (popups) — % origine / lieu de travail quand connus */
@@ -1462,6 +1808,10 @@ function renderMap(){
   zoomInit(hote.querySelector("svg"), PROJ.W, PROJ.H, ".obs-lbl", detailCarte);
   zoomCommandes(hote);
   chercheCarte(hote);
+  /* Les trois couches et leur barre : construites APRES zoomInit, qui pose
+     ZOOM.svg — c'est lui que renderCouches() interroge. */
+  barreCouches();
+  renderCouches();
   hote.querySelectorAll('.obs-pays').forEach(function(el){
     el.addEventListener('click', function(){ selectionner(this); });
     /* Double-clic : on va chercher le pays au dernier palier, la ou la carte
