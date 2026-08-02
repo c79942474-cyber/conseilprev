@@ -2668,10 +2668,16 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
    La hauteur de depart reste generreuse — si le message n'arrive jamais
    (script bloque, page servie autrement), l'essentiel est deja visible. */
 (function(){
+  /* Deux canaux, deux cadres. Le panorama n'annoncait pas sa hauteur : il n'en
+     avait pas besoin, sa carte remplit ses 1600 px. Mais depuis que le module
+     peut repondre « acces reserve », une page de 440 px flotterait au milieu
+     d'un cadre douze fois trop grand, et la suite de Sentinel serait poussee
+     hors de l'ecran. Chaque cadre suit donc son message. */
+  var CADRES = { 'obs-height': 'obs-rd-iframe', 'pan-height': 'pan-sia-iframe' };
   window.addEventListener('message', function(ev){
     var d = ev && ev.data;
-    if(!d || d.type !== 'obs-height') return;
-    var f = document.getElementById('obs-rd-iframe');
+    if(!d || !CADRES[d.type]) return;
+    var f = document.getElementById(CADRES[d.type]);
     if(!f) return;
     var h = parseInt(d.height, 10);
     /* Bornes : sous 400 px on tient une mesure prise trop tot pour fiable ;

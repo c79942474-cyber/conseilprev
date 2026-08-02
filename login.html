@@ -297,10 +297,23 @@ if(new URLSearchParams(location.search).get('verified') === '1'){
 
 var REQUESTED_PLAN = new URLSearchParams(location.search).get('plan') === 'gratuit' ? 'gratuit' : 'pro';
 var __rawPlan = new URLSearchParams(location.search).get('plan');
+/* La destination d'après-connexion. Un module réservé renvoie ici avec
+   ?suite=<son chemin> : sans cela, le visiteur qui vient d'être refusé sur le
+   Panorama se retrouve sur l'accueil de Sentinel et doit retrouver seul la
+   page qu'il demandait.
+   On n'accepte QUE des chemins internes. Une URL absolue ferait de cette page
+   un redirect ouvert — un lien /login?suite=https://ailleurs.exemple mènerait
+   un visiteur hors du site en lui laissant croire qu'il y est resté. */
+function __suiteSure(){
+  var s = new URLSearchParams(location.search).get('suite') || '';
+  if(!s || s.charAt(0) !== '/' || s.slice(0,2) === '//' || s.indexOf('\\') >= 0) return '';
+  return s;
+}
 function __authDest(){
   var goPricing = (__rawPlan === 'pro' || __rawPlan === 'entreprise');
   try{ if(!goPricing && localStorage.getItem('sentinelGotoPricing') === '1') goPricing = true; if(goPricing) localStorage.removeItem('sentinelGotoPricing'); }catch(e){}
-  return goPricing ? '/sentinel?goto=pricing' : '/sentinel';
+  if(goPricing) return '/sentinel?goto=pricing';
+  return __suiteSure() || '/sentinel';
 }
 if(REQUESTED_PLAN === 'gratuit'){
   switchTab('register');

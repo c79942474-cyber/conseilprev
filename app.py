@@ -10,6 +10,7 @@ from email import encoders
 from werkzeug.utils import secure_filename
 from functools import wraps
 from collections import defaultdict
+from urllib.parse import quote
 from flask import Flask, send_from_directory, jsonify, request, abort, make_response, after_this_request, Response, session, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import timedelta as _timedelta_auth
@@ -1104,6 +1105,181 @@ def api_veille():
     })
 
 
+# ══════════════════════════════════════════════════════════════════════════
+#  ACCÈS RÉSERVÉ — abonnés payants et comptes validés par l'administrateur
+#
+#  Une seule fonction décide qui entre : acces_reserve_motif(). Tout le reste
+#  — pages, API, message affiché — n'est qu'une manière d'appliquer sa
+#  réponse. Deux règles écrites à deux endroits finissent toujours par
+#  diverger, et un accès qui diverge est un accès ouvert quelque part.
+#
+#  QUI ENTRE :
+#    · l'administrateur (compte CONSEILPREV, lien maître ou connexion) ;
+#    · tout compte dont le plan est « pro » ou « entreprise ».
+#  Ce second cas couvre les DEUX cas demandés — abonnement payé et validation
+#  par l'administrateur — parce que sentauth_current_client() n'accorde déjà
+#  un plan non gratuit qu'aux comptes créés par invitation admin : un compte
+#  ouvert librement retombe sur « gratuit », quoi qu'il ait en base.
+#
+#  QUI N'ENTRE PAS, et c'est délibéré : le compte gratuit, y compris pendant
+#  ses 15 jours d'essai. L'essai n'est ni un abonnement payé ni une validation
+#  administrateur. Si l'essai devait ouvrir ces modules, il suffirait
+#  d'ajouter essai_actif au test ci-dessous — un seul endroit, une seule ligne.
+#
+#  Les décorateurs appellent sentauth_current_client(), définie plus bas dans
+#  le fichier : la résolution a lieu à l'appel, jamais à l'import, donc l'ordre
+#  de déclaration n'a pas d'importance ici.
+# ══════════════════════════════════════════════════════════════════════════
+PLANS_ABONNES = ('pro', 'entreprise')
+
+
+def acces_reserve_motif(client):
+    """None si l'accès est ouvert ; sinon 'anonyme' ou 'plan'.
+
+    Renvoyer un MOTIF plutôt qu'un booléen n'est pas cosmétique : « vous
+    n'êtes pas connecté » et « votre compte n'a pas d'abonnement » appellent
+    deux gestes différents, et confondre les deux envoie l'abonné qui vient
+    de se connecter refaire une connexion qui ne changera rien."""
+    if not client:
+        return 'anonyme'
+    if client.get('is_conseilprev'):
+        return None
+    if (client.get('plan') or 'gratuit') in PLANS_ABONNES:
+        return None
+    return 'plan'
+
+
+def _acces_client():
+    """Le client courant, ou None. Un incident de base ne doit pas rendre 500
+    sur une page publique : on dégrade en « anonyme », qui envoie vers la
+    connexion — refus lisible plutôt qu'erreur opaque."""
+    try:
+        return sentauth_current_client()
+    except Exception as exc:  # noqa: BLE001
+        logger.error(f'ACCES_RESERVE_CLIENT_ERR: {exc}')
+        return None
+
+
+def _suite_sure(chemin):
+    """La destination d'après-connexion, nettoyée. On n'accepte qu'un chemin
+    interne : une URL absolue transformerait la page de connexion en redirect
+    ouvert, c'est-à-dire en tremplin d'hameçonnage sous notre nom de domaine."""
+    c = (chemin or '').strip()
+    if not c.startswith('/') or c.startswith('//') or '\\' in c:
+        return '/sentinel'
+    return c[:200]
+
+
+def _page_acces_reserve(motif, cible):
+    """La page de refus. Elle dit trois choses, dans cet ordre : ce qui est
+    fermé, pourquoi, et le geste qui l'ouvre. Un 403 nu laisse le lecteur
+    croire à une panne et il repart — c'est le pire des deux mondes,
+    l'information n'est pas livrée et le client n'est pas gagné."""
+    connexion = '/login?suite=' + quote(_suite_sure(cible), safe='/?&=#')
+    if motif == 'anonyme':
+        titre = 'Module réservé aux abonnés'
+        corps = ('Ce module fait partie de l’espace Sentinel. Connectez-vous avec '
+                 'votre compte pour y accéder.')
+        actions = ('<a class="ar-btn" href="' + connexion + '">Se connecter</a>'
+                   '<a class="ar-lien" href="/tarifications">Voir les formules</a>')
+    else:
+        titre = 'Votre formule ne couvre pas ce module'
+        corps = ('Ce module est ouvert aux formules Pro et Entreprise, ainsi qu’aux '
+                 'comptes validés par CONSEILPREV. Votre compte est bien connecté, '
+                 'mais reste sur la formule Gratuit.')
+        actions = ('<a class="ar-btn" href="/tarifications">Voir les formules</a>'
+                   '<a class="ar-lien" href="/support">Demander un accès</a>')
+    html = f"""<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>{titre} — CONSEILPREV</title>
+<style>
+ :root{{--ink:#1C1C1C;--muted:#767676;--rule:#E0DDD8;--accent:#B83222;--pap:#F5F2ED}}
+ *{{box-sizing:border-box}}
+ body{{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+   padding:40px 20px;background:var(--pap);color:var(--ink);
+   font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}}
+ .ar{{max-width:520px;width:100%;background:#fff;border:1px solid var(--rule);
+   border-radius:8px;padding:36px 34px}}
+ .ar-sur{{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;
+   letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}}
+ .ar h1{{font-size:21px;line-height:1.3;margin:0 0 12px}}
+ .ar p{{font-size:14px;line-height:1.65;color:#3D3D3D;margin:0 0 22px}}
+ .ar-act{{display:flex;flex-wrap:wrap;gap:10px;align-items:center}}
+ .ar-btn{{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;
+   font-size:13px;font-weight:600;padding:11px 20px;border-radius:5px}}
+ .ar-btn:hover{{background:#9C2A1D}}
+ .ar-lien{{font-size:13px;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--rule)}}
+ .ar-lien:hover{{color:var(--ink)}}
+ .ar-note{{margin:24px 0 0;padding-top:16px;border-top:1px solid var(--rule);
+   font-size:11.5px;line-height:1.6;color:var(--muted)}}
+</style></head><body>
+<main class="ar">
+  <div class="ar-sur">Accès réservé</div>
+  <h1>{titre}</h1>
+  <p>{corps}</p>
+  <div class="ar-act">{actions}</div>
+  <p class="ar-note">Les modules d’observation et de conseil de Sentinel reposent sur
+  un travail de recensement, de qualification et de veille continue. Ils sont réservés
+  aux comptes abonnés ou validés par CONSEILPREV.</p>
+</main>
+<script>
+/* Ces deux modules sont chargés en iframe dans Sentinel, avec une hauteur de
+   départ de 1 400 à 1 600 px prévue pour la carte. Sans ce message, le refus
+   flotterait au milieu d'un cadre douze fois trop grand et la page suivante
+   serait poussée hors de l'écran. On annonce donc la hauteur réelle, sur les
+   deux canaux — le module n'a pas à deviner lequel des deux cadres l'affiche. */
+(function(){{
+  if(window.parent === window) return;
+  var h = Math.max(440, document.querySelector('.ar').getBoundingClientRect().height + 80);
+  ['obs-height', 'pan-height'].forEach(function(t){{
+    try{{ window.parent.postMessage({{type: t, height: Math.round(h)}}, '*'); }}catch(e){{}}
+  }});
+}})();
+</script>
+</body></html>"""
+    # 403 et non 401 : l'authentification n'est pas en cause pour un abonné au
+    # mauvais plan, et un 401 sans en-tête WWW-Authenticate n'a de sens pour
+    # personne. La page reste servie avec son corps — un refus doit se lire.
+    resp = Response(html, status=403, mimetype='text/html')
+    resp.headers['Cache-Control'] = 'private, no-store'
+    resp.headers['X-Robots-Tag'] = 'noindex, nofollow'
+    return resp
+
+
+def reserve_abonne_api(f):
+    """API : 401 si personne n'est connecté, 403 si la formule ne suffit pas.
+    Le client JavaScript distingue les deux par le code, pas par le texte."""
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        motif = acces_reserve_motif(_acces_client())
+        if motif == 'anonyme':
+            return jsonify({'ok': False, 'error': 'Connectez-vous pour accéder à ces données.',
+                            'auth_requise': True}), 401
+        if motif:
+            return jsonify({'ok': False, 'error': 'Ces données sont réservées aux formules Pro et '
+                                                  'Entreprise, ou aux comptes validés par CONSEILPREV.',
+                            'abonnement_requis': True}), 403
+        return f(*args, **kwargs)
+    return wrapper
+
+
+def reserve_abonne_page(f):
+    """Page : la même décision, rendue lisible. Pas de redirection automatique
+    vers /login — la page est souvent chargée en iframe dans Sentinel, et une
+    redirection y afficherait le formulaire de connexion dans un cadre de
+    1 600 px de haut, sans que personne comprenne ce qui s'est passé."""
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        motif = acces_reserve_motif(_acces_client())
+        if motif:
+            logger.info(f'ACCES_RESERVE_REFUS {request.path} motif={motif} '
+                        f'ip={limiter.get_ip(request)}')
+            return _page_acces_reserve(motif, request.full_path.rstrip('?'))
+        return f(*args, **kwargs)
+    return wrapper
+
+
 # ══════════════════════════════════════════════════════════════════
 # Observatoire R&D IA — modeles, talents (NeurIPS), brevets, adoption UE
 #
@@ -1125,6 +1301,7 @@ _OBS_CACHE = {"ts": 0.0, "data": None}
 
 @app.route('/api/observatoire', methods=['GET'])
 @rate_limit(limit=60, window=60)
+@reserve_abonne_api
 def api_observatoire():
     """Donnees de l'observatoire R&D IA (lecture seule, publiques).
 
@@ -1165,6 +1342,7 @@ _PAN_CACHE = {"ts": 0.0, "data": None}
 
 @app.route('/api/panorama', methods=['GET'])
 @rate_limit(limit=60, window=60)
+@reserve_abonne_api
 def api_panorama():
     """?refresh=1 rearme les flux de signaux (le referentiel, lui, ne change
     qu'avec une nouvelle version du module)."""
@@ -1199,6 +1377,7 @@ _DC_CACHE = {"data": None}
 
 @app.route('/api/datacentres', methods=['GET'])
 @rate_limit(limit=60, window=60)
+@reserve_abonne_api
 def api_datacentres():
     if _DC_CACHE["data"] is None:
         try:
@@ -1231,6 +1410,7 @@ _DO_CACHE = {"ts": 0.0, "data": None}
 
 @app.route('/api/donnees-ouvertes', methods=['GET'])
 @rate_limit(limit=60, window=60)
+@reserve_abonne_api
 def api_donnees_ouvertes():
     """?refresh=1 rearme les caches par source et rinterroge."""
     force = (request.args.get('refresh') or '') in ('1', 'true', 'yes')
@@ -1354,6 +1534,7 @@ def _emps_live(force=False):
 
 @app.route('/api/empreinte-sites', methods=['GET'])
 @rate_limit(limit=60, window=60)
+@reserve_abonne_api
 def api_empreinte_sites():
     """Empreinte cycle de vie du parc cartographie. ?refresh=1 reassemble."""
     force = (request.args.get('refresh') or '') in ('1', 'true', 'yes')
@@ -1391,6 +1572,7 @@ IMP_TTL = 21600  # 6 h : le referentiel est versionne, seul le pipeline bouge
 
 @app.route('/api/implantation', methods=['GET'])
 @rate_limit(limit=60, window=60)
+@reserve_abonne_api
 def api_implantation():
     """Referentiel d'implantation par pays : stress hydrique (WEI+ et part de
     l'irrigation), mix de production, prix industriels en classes, pipeline
@@ -1429,6 +1611,7 @@ import factcheck  # noqa: E402
 
 @app.route('/api/factcheck', methods=['GET'])
 @rate_limit(limit=60, window=60)
+@reserve_abonne_api
 def api_factcheck():
     """Registre des controles factuels. ?portee=panorama|empreinte|observatoire
     |reglementaire restreint au perimetre d'une page."""
@@ -3420,9 +3603,15 @@ def robots_txt():
     """Declare explicitement les zones interdites au crawl — n'arrete pas un bot
     malveillant decide, mais cadre les bots respectueux (SEO, archivistes) et
     sert de preuve de bonne foi en cas de litige sur l'usage des donnees du site."""
+    # /panorama et /observatoire sont desormais reserves aux abonnes : les
+    # laisser au crawl ferait indexer une page de refus sous le titre du
+    # module, ce qui abime le referencement ET promet au visiteur un contenu
+    # qu'il ne verra pas en arrivant.
     content = """User-agent: *
 Disallow: /api/
 Disallow: /admin
+Disallow: /panorama
+Disallow: /observatoire
 Sitemap: https://conseilprev.onrender.com/sitemap.xml
 
 User-agent: GPTBot
@@ -3464,6 +3653,13 @@ PAGES = {
     '/livre-blanc':   'livre-blanc.html',
     '/accessibility': 'accessibility.html',
     '/map':           'map.html',
+}
+
+# /observatoire et /panorama ne figurent PLUS ici : la boucle qui suit publie
+# ses entrées sans aucun contrôle d'accès, et une page réservée qui traverse
+# une boucle « tout public » est une page ouverte. Elles sont déclarées plus
+# bas, une par une, derrière reserve_abonne_page — voir PAGES_RESERVEES.
+PAGES_RESERVEES = {
     '/observatoire':  'observatoire.html',
     '/panorama':      'panorama.html',
 }
@@ -3675,6 +3871,29 @@ def sentauth_init_db():
             mot_de_passe_hash TEXT NOT NULL, actif INTEGER DEFAULT 1,
             date_creation TEXT NOT NULL, derniere_connexion TEXT
         )''')
+        # Les mêmes colonnes que la branche PostgreSQL. Elles manquaient ici,
+        # et tant que SQLite n'était qu'un bac à sable de développement, cela
+        # ne se voyait pas. Ce n'est plus vrai depuis que l'accès aux modules
+        # réservés se décide sur `plan` : une bascule de secours vers SQLite
+        # ferait retomber TOUS les abonnés au plan gratuit, c'est-à-dire
+        # fermerait la porte aux clients payants sans qu'aucune erreur ne
+        # s'affiche. SQLite ignore ADD COLUMN IF NOT EXISTS : on tente colonne
+        # par colonne, et l'échec « duplicate column » signifie simplement
+        # qu'elle est déjà là.
+        for _col, _decl in (
+            ('invitation_token', 'TEXT'), ('invitation_expire', 'TEXT'),
+            ('verify_email_token', 'TEXT'), ('verify_email_expire', 'TEXT'),
+            ('stripe_customer_id', 'TEXT'), ('stripe_subscription_id', 'TEXT'),
+            ('essai_fin', 'TEXT'), ('essai_relance', 'TEXT'),
+            ('rgpd_consenti', 'INTEGER DEFAULT 0'), ('rgpd_consenti_date', 'TEXT'),
+            ('plan', "TEXT DEFAULT 'gratuit'"),
+            ('reset_token', 'TEXT'), ('reset_expire', 'TEXT'),
+        ):
+            try:
+                cur.execute(f'ALTER TABLE clients ADD COLUMN {_col} {_decl}')
+                conn.commit()
+            except Exception:
+                conn.rollback()
     # ── Migration : forcer plan='gratuit' sur les comptes créés avant
     # la correction (commit 0fe43de0). Tout compte public doit démarrer
     # au plan Gratuit — seul CONSEILPREV attribue pro/entreprise via admin.
@@ -8175,6 +8394,32 @@ for route, filename in PAGES.items():
         return view
     app.add_url_rule(route, view_func=make_view(filename))
 
+# Les deux modules d'observation, servis par la même mécanique rapide mais
+# derrière le verrou. L'ordre des décorateurs compte : reserve_abonne_page est
+# le plus interne, donc le plus proche de la vue — le refus est décidé APRÈS
+# le comptage de débit, jamais avant, sinon un anonyme pourrait marteler la
+# route sans jamais consommer son quota.
+def _make_view_reservee(fn, suffixe=''):
+    @rate_limit(limit=60, window=60)
+    @reserve_abonne_page
+    def view():
+        # « private » est ici obligatoire, pas décoratif : un cache
+        # intermédiaire qui garderait cette page la rendrait lisible au
+        # visiteur suivant, abonné ou non.
+        return _serve_page_fast(fn, cache_control='private, no-cache, must-revalidate')
+    view.__name__ = 'reserve_' + fn.replace('.', '_').replace('-', '_') + suffixe
+    return view
+
+
+for route, filename in PAGES_RESERVEES.items():
+    app.add_url_rule(route, view_func=_make_view_reservee(filename))
+    # L'application est servie avec static_folder='.' et static_url_path='' :
+    # TOUT fichier de la racine est accessible par son nom. Verrouiller
+    # /panorama en laissant /panorama.html ouvert ne verrouille rien du tout.
+    # Une règle explicite prime sur la route statique attrape-tout, qui porte
+    # un convertisseur <path:> et se classe donc après.
+    app.add_url_rule('/' + filename, view_func=_make_view_reservee(filename, '_html'))
+
 # ══════════════════════════════════════════════════════════════════════════
 #  CONSEIL JURIDIQUE ASSISTÉ — services numériques, cyber IT/OT/ICS, IA
 # ══════════════════════════════════════════════════════════════════════════
@@ -8190,16 +8435,29 @@ for route, filename in PAGES.items():
 
 import juridique  # noqa: E402
 def _jur_client():
-    """Client Sentinel connecté, ou None. Les routes juridiques répondent 401
-    plutôt que de planter sur un client absent."""
-    try:
-        return sentauth_current_client()
-    except Exception:
+    """Le client AUTORISÉ sur le conseil juridique, ou None.
+
+    Toutes les routes juridiques passent par cette fonction : la resserrer ici
+    les resserre toutes, et aucune ne peut être oubliée dans un ajout futur.
+    Le conseil juridique et technique est une prestation — être connecté ne
+    suffit plus, il faut un abonnement ou une validation administrateur."""
+    client = _acces_client()
+    if acces_reserve_motif(client):
         return None
+    return client
 
 
 def _jur_refus():
-    return jsonify({'error': 'Connectez-vous à Sentinel pour accéder au conseil juridique.'}), 401
+    """Le refus, avec le bon code. Distinguer 401 et 403 n'est pas un détail
+    d'étiquette : l'interface propose « se connecter » sur le premier et
+    « voir les formules » sur le second, et proposer une connexion à quelqu'un
+    de déjà connecté est une impasse."""
+    if acces_reserve_motif(_acces_client()) == 'anonyme':
+        return jsonify({'error': 'Connectez-vous à Sentinel pour accéder au conseil juridique.',
+                        'auth_requise': True}), 401
+    return jsonify({'error': 'Le conseil juridique et technique est réservé aux formules Pro et '
+                             'Entreprise, ou aux comptes validés par CONSEILPREV.',
+                    'abonnement_requis': True}), 403
 
 
 @app.route('/api/juridique/config', methods=['GET'])
@@ -10857,6 +11115,7 @@ def _gouv_ligne(r):
 
 @app.route('/api/gouvernance/referentiel', methods=['GET'])
 @rate_limit(limit=60, window=60)
+@reserve_abonne_api
 def api_gouv_referentiel():
     """Comite, circuit, voies, questions de qualification, indicateurs."""
     try:
@@ -10868,6 +11127,7 @@ def api_gouv_referentiel():
 
 @app.route('/api/gouvernance/qualifier', methods=['POST'])
 @rate_limit(limit=60, window=60)
+@reserve_abonne_api
 def api_gouv_qualifier():
     """Qualification PRESUMEE d'un usage depuis les reponses declaratives.
     Ne persiste rien : sert a montrer le resultat avant d'enregistrer."""
@@ -10881,6 +11141,7 @@ def api_gouv_qualifier():
 
 @app.route('/api/gouvernance/demandes', methods=['GET', 'POST'])
 @rate_limit(limit=60, window=60)
+@reserve_abonne_api
 def api_gouv_demandes():
     """File des demandes de nouvel usage. GET liste, POST cree ou met a jour."""
     conn = registre_get_db(); cur = conn.cursor()
@@ -10926,6 +11187,7 @@ def api_gouv_demandes():
 
 @app.route('/api/gouvernance/demandes/<int:did>/decision', methods=['POST'])
 @rate_limit(limit=60, window=60)
+@reserve_abonne_api
 def api_gouv_decision(did):
     """Trace la DECISION du comite. Un refus se motive autant qu'une
     autorisation : sans motif, la decision n'est pas enregistree."""
@@ -10957,6 +11219,7 @@ def api_gouv_decision(did):
 
 @app.route('/api/gouvernance/demandes/<int:did>', methods=['DELETE'])
 @rate_limit(limit=30, window=60)
+@reserve_abonne_api
 def api_gouv_supprimer(did):
     conn = registre_get_db(); cur = conn.cursor()
     try:
