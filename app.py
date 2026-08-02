@@ -1206,8 +1206,15 @@ def api_datacentres():
         except Exception as e:
             logger.error(f'DATACENTRES_ERR: {e}')
             return jsonify({"ok": False, "erreur": "referentiel indisponible"}), 503
-        d["ok"] = True
         _DC_CACHE["data"] = d
+    # Le drapeau `ok` est posé ICI, au seul point de sortie, et non chez celui
+    # qui remplit le cache. Il y avait deux remplisseurs — cette route et le
+    # rafraichisseur de fond _auto_lent() — et le second l'oubliait. Consequence
+    # vue en recette : la couche des centres de donnees fonctionnait au demarrage
+    # puis DISPARAISSAIT de la carte au premier rafraichissement, sans message
+    # nulle part, le navigateur abandonnant sur `if(!d.ok) return`. Un drapeau
+    # pose par le lecteur ne peut plus etre oublie par un ecrivain.
+    _DC_CACHE["data"].setdefault("ok", True)
     return jsonify(_DC_CACHE["data"])
 
 

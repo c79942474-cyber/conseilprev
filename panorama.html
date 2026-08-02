@@ -574,10 +574,12 @@ body.vue-site .pnav a,body.vue-site .pnav-sep{display:none}
 .note{font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.55;max-width:110ch}
 
 /* ── Carte + fiche pays ── */
-.geo-grid{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(280px,1fr);gap:0}
-@media(max-width:900px){.geo-grid{grid-template-columns:1fr}}
-.map-wrap{position:relative;border-right:1px solid var(--rule)}
-@media(max-width:900px){.map-wrap{border-right:none;border-bottom:1px solid var(--rule)}}
+/* La carte prend TOUTE la largeur, et la fiche du pays passe dessous. En deux
+   colonnes, elle occupait 1,7/2,7 de la largeur : les marqueurs de Belgique et
+   des Pays-Bas se chevauchaient à l'échelle de départ, et il fallait zoomer pour
+   distinguer ce que la carte est censée montrer d'un coup d'œil. */
+.geo-grid{display:grid;grid-template-columns:1fr;gap:0}
+.map-wrap{position:relative;border-bottom:1px solid var(--rule)}
 .obs-svg-map{display:block;width:100%;height:auto}
 .pan-pays{cursor:pointer;transition:fill-opacity .12s}
 .pan-pays:hover{fill-opacity:.75}
@@ -600,22 +602,29 @@ body.vue-site .pnav a,body.vue-site .pnav-sep{display:none}
 .pan-lbl.petit{font-size:11px;font-weight:500;fill:#5A5A5A}
 .pan-lbl.vide{fill:#8A8A8A;font-weight:500}
 .pan-lbl.sous{font-size:9.5px;font-weight:500;fill:#4E4E4E}
-/* Pastilles : un cas = un point. Elles n'apparaissent qu'a partir du 3e palier
-   de zoom, quand les pays sont assez ecartes pour qu'on les distingue. */
-.pan-pt{stroke:#FFFFFF;cursor:pointer}
-.pan-pt:hover{stroke:#1C1C1C}
-/* Anneau creux : dispositif national, sectoriel, ou fournisseur hors UE — il
-   n'y a pas de site a pointer, le marqueur doit le dire d'un coup d'oeil. */
-.pan-pt.approx{stroke-dasharray:2.2 1.6}
-/* Centres de donnees : CARRES, la ou les systemes d'IA sont RONDS — la forme
-   distingue l'infrastructure de ce qui s'y execute, avant meme la couleur. */
-.dc-pt{stroke:#FFFFFF;cursor:pointer;pointer-events:none}
+/* ── DEUX SILHOUETTES, DEUX NATURES ────────────────────────────────────────
+   Un système d'IA porte un PANNEAU sur son poteau ; un centre de données porte
+   un DRAPEAU européen. La forme dit ce qu'on regarde avant que la couleur soit
+   lue, et même sans lire la légende — ce qu'un disque coloré à côté d'un carré
+   coloré ne donnait pas : à 8 px, les deux se ressemblaient.
+   Les marqueurs sont des groupes ancrés ([data-anc]) : leur contenu est en
+   unités d'écran, l'épaisseur des traits ne se contre-échelle donc pas ici. */
+.pan-pt{stroke:#FFFFFF;stroke-width:1.1;cursor:pointer}
+.pan-pt:hover .pan-plaque{stroke:#1C1C1C}
+/* Plaque évidée à liseré pointillé : dispositif national, sectoriel, ou
+   fournisseur hors UE — il n'y a pas de site à pointer, et le marqueur doit
+   dire cette incertitude au lieu de la masquer. */
+.pan-pt.approx .pan-plaque{stroke-width:1.5;stroke-dasharray:2.2 1.6}
+.dc-pt{stroke:#FFFFFF;stroke-width:0.9;cursor:pointer;pointer-events:none}
 /* Cible de survol : invisible, plus large que le marqueur, elle seule capte le
    pointeur — le marqueur visible le laisse passer. */
 .dc-cible{cursor:pointer}
-.dc-pt:hover{stroke:#1C1C1C}
-.dc-pt.projet{stroke-dasharray:1.8 1.3}   /* annonce / autorise : rien n'est bati */
-.lg-dc .lg-box{border-radius:0}           /* la legende reprend la forme carree */
+.dc-pt.survol .dc-cloth{stroke:#1C1C1C}
+.dc-pt.projet .dc-cloth{stroke-dasharray:1.8 1.3}  /* annonce / autorisé : rien n'est bâti */
+.lg-dc .lg-box{border-radius:1px}
+/* Vignettes de légende : la légende montre les deux silhouettes, sinon elle
+   nomme des marqueurs sans les montrer. */
+.lg-forme{width:15px;height:13px;flex:0 0 auto;margin-right:6px;vertical-align:-2px}
 /* Barre de commandes, en pied de carte : les reglages dont on se sert en
    permanence (couche, horizon) ne doivent pas vivre dans la legende, qui est
    une aide a la lecture et qu'on replie. Une bande de 30 px masque une frange
@@ -745,7 +754,12 @@ table.socle-t a{color:#1E63A8}
 .obs-legend h3{font-size:10px;font-weight:600;margin-bottom:5px}
 .lg-row{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;color:#4A4A4A;margin-bottom:3px}
 .lg-box{width:14px;height:11px;border-radius:2px;display:inline-block;border:1px solid rgba(28,28,28,.14)}
-.fiche-pays{padding:16px 18px;font-size:12.5px}
+/* Sous une carte pleine largeur, la fiche se lit en colonnes : une seule
+   colonne de 1 300 px donnerait des lignes de 180 caractères, illisibles. */
+.fiche-pays{padding:16px 20px;font-size:12.5px;columns:2 340px;column-gap:26px}
+.fiche-pays>*{break-inside:avoid}
+.fiche-pays h3{column-span:all}
+@media(max-width:700px){.fiche-pays{columns:1}}
 .fiche-pays h3{font-family:var(--serif);font-size:18px;font-weight:400;margin-bottom:8px}
 .fp-l{margin-bottom:7px;color:var(--muted);line-height:1.5}
 .fp-l b{color:var(--ink)}
@@ -1384,19 +1398,16 @@ function zoomAppliquer(){
   /* Trait du pays selectionne ou au focus : sa regle CSS l'emporterait sur
      l'attribut, on passe donc par une variable. */
   ZOOM.svg.style.setProperty('--trait-sel', (1.6 * inv).toFixed(2));
-  /* Marqueurs carres (centres de donnees) : le cote est contre-echelle et le
-     carre reste centre sur son point — sans recentrage, il glisserait vers le
-     bas-droite a chaque pas puisque x,y designent son coin. */
+  /* Cibles de survol carrees : le cote est contre-echelle et le carre reste
+     centre sur son point — sans recentrage, il glisserait vers le bas-droite a
+     chaque pas puisque x,y designent son coin. */
   ZOOM.svg.querySelectorAll('[data-cote]').forEach(function(el){
     var c = parseFloat(el.getAttribute('data-cote')) * inv;
     el.setAttribute('width', c.toFixed(2)); el.setAttribute('height', c.toFixed(2));
     el.setAttribute('x', (parseFloat(el.getAttribute('data-cx')) - c/2).toFixed(2));
     el.setAttribute('y', (parseFloat(el.getAttribute('data-cy')) - c/2).toFixed(2));
   });
-  ZOOM.svg.querySelectorAll('[data-anc]').forEach(function(g){
-    var a = g.getAttribute('data-anc').split(',');
-    g.setAttribute('transform', 'translate('+a[0]+','+a[1]+') scale('+inv.toFixed(4)+')');
-  });
+  ancrerGroupes(ZOOM.svg, inv);
 
   if(ZOOM.hote) ZOOM.hote.classList.toggle('carte-main', ZOOM.k > 1.01);
   var n = document.getElementById('z-niv'); if(n) n.textContent = '×' + (Math.round(ZOOM.k*10)/10);
@@ -1973,7 +1984,11 @@ function detailCarte(pal, vise){
     cands.push({ x: x, y: y, w: w, h: h, prio: n ? 100 + n : (petit ? 0 : 1), html: html });
   });
   var lbls = poserSansChevauche(cands);
-  if(pal >= 2) pts = pastilles();
+  /* Les panneaux dès le premier palier, et non plus au troisième. Tant qu'ils
+     n'apparaissaient qu'à ×2,25, la carte d'accueil ne montrait QUE des
+     drapeaux : distinguer deux silhouettes suppose de les voir ensemble. La
+     carte pleine largeur donne la place — on l'a mesurée avant de le faire. */
+  pts = pastilles();
   g.innerHTML = pts + lbls + (pal >= 3 && vise ? encartCas(vise) : "");
 }
 
@@ -1982,10 +1997,10 @@ function detailCarte(pal, vise){
    principal. Il ne dit PAS où le système tourne : un modèle entraîné à Paris
    peut s'exécuter dans un centre de données irlandais et servir vingt pays.
    Deux marqueurs, jamais mélangés :
-     — disque plein : organisation située, coordonnées de sa ville ;
-     — anneau creux : dispositif national ou sectoriel, ou fournisseur hors UE
-       dont seuls les effets sont dans l'Union — il n'y a alors aucun site à
-       pointer, et le point se rabat au centre du pays. */
+     — panneau plein : organisation située, coordonnées de sa ville ;
+     — panneau évidé, liseré pointillé : dispositif national ou sectoriel, ou
+       fournisseur hors UE dont seuls les effets sont dans l'Union — il n'y a
+       alors aucun site à pointer, et le panneau se rabat au centre du pays. */
 function pastilles(){
   var groupes = {}, out = "";
   DATA.cas.forEach(function(c){
@@ -2015,26 +2030,67 @@ function pastilles(){
         px += Math.cos(ang) * ray; py += Math.sin(ang) * ray;
       }
       var col = (DATA.classes[c.classe] || {}).couleur || "#7A7A7A";
-      out += '<circle class="pan-pt' + (g.situe ? "" : " approx") + '" data-cas="' + c.id
-          + '" data-r="' + (g.situe ? "3.6" : "3.9") + '" data-sw="' + (g.situe ? "1.1" : "1.5")
-          + '" cx="' + px.toFixed(1) + '" cy="' + py.toFixed(1) + '" r="3.6"'
-          /* Couleur posée en STYLE : la règle CSS `.pan-pt{stroke:#FFF}`
-             l'emporterait sur un attribut de présentation, et l'anneau serait
-             blanc sur blanc. */
-          + (g.situe ? ' fill="' + col + '"'
-                     : ' fill="#FFFFFF" style="stroke:' + col + '"') + "/>";
+      out += panneauSIA(c, px, py, col, g.situe);
     });
   });
   return out;
 }
 
+/* ── LE PANNEAU D'UN SYSTÈME D'IA ───────────────────────────────────────────
+   Un panneau sur son poteau : une plaque portée par un mât, comme un panneau de
+   signalisation. Face au drapeau des centres de données, la silhouette suffit à
+   dire de quoi il s'agit, à toutes les échelles et même en noir et blanc.
+
+   Ce que le panneau conserve du point qu'il remplace :
+     — la couleur de la CLASSE AI Act sur la plaque (interdite, haut risque,
+       transparence, minimal) ;
+     — la distinction situé / non situé, qui est une nuance de méthode et non de
+       décoration : plaque pleine quand on sait où se trouve l'organisation,
+       plaque évidée à liseré pointillé pour un dispositif national dont il
+       n'existe aucun site à pointer. Confondre les deux ferait croire à une
+       précision qu'on n'a pas.
+
+   Les dimensions sont écrites en unités de carte NON contre-échellées : c'est
+   `pastilles()` qui est rejoué à chaque palier, et `ZOOM` applique ensuite le
+   même facteur qu'aux disques d'avant. */
+function panneauSIA(c, px, py, col, situe){
+  /* Même ancrage que le drapeau : coordonnées locales en unités d'écran,
+     origine (0,0) au pied du poteau. L'écartement en spirale des systèmes
+     d'une même ville reste, lui, en unités de CARTE — il est déjà appliqué à
+     px, py — et continue donc de s'ouvrir quand on grossit. */
+  var lp = 7.6, hp = 5.6, H = 11;
+  var x0 = -lp / 2, y0 = -H;
+  return '<g class="pan-pt' + (situe ? "" : " approx") + '" data-anc="'
+    + px.toFixed(1) + "," + py.toFixed(1) + '" data-cas="' + c.id + '">'
+    /* Le poteau, toujours plein : c'est lui qui pointe l'emplacement. */
+    + '<rect x="-0.65" y="' + (y0 + hp).toFixed(1) + '" width="1.3" height="'
+    + (H - hp).toFixed(1) + '" fill="' + esc(col) + '" stroke="none" rx="0.5"/>'
+    + '<rect class="pan-plaque" x="' + x0.toFixed(1) + '" y="' + y0
+    + '" width="' + lp + '" height="' + hp + '" rx="1.2"'
+    /* Couleur posée en STYLE : la règle CSS `.pan-pt{stroke:#FFF}` l'emporterait
+       sur un attribut de présentation, et le liseré serait blanc sur blanc. */
+    + (situe ? ' fill="' + esc(col) + '"'
+             : ' fill="#FFFFFF" style="stroke:' + esc(col) + '"') + "/>"
+    /* Deux traits clairs sur la plaque pleine : ils évoquent l'inscription du
+       panneau, et à petite taille ce sont eux qui empêchent de le confondre
+       avec un rectangle quelconque. */
+    + (situe ? '<rect x="' + (x0 + 1.5).toFixed(1) + '" y="' + (y0 + 1.6).toFixed(1)
+               + '" width="' + (lp - 3).toFixed(1) + '" height="0.9" rx="0.45"'
+               + ' fill="#FFFFFF" stroke="none" opacity="0.85"/>'
+               + '<rect x="' + (x0 + 1.5).toFixed(1) + '" y="' + (y0 + 3.3).toFixed(1)
+               + '" width="' + (lp - 4.4).toFixed(1) + '" height="0.9" rx="0.45"'
+               + ' fill="#FFFFFF" stroke="none" opacity="0.85"/>' : "")
+    + "</g>";
+}
+
 /* Dit ce que le palier courant ajoute — sinon rien n'indique qu'il reste
    quelque chose a voir en grossissant. */
 function legendeDetail(pal, vise){
-  if(pal <= 0) return "Agrandir : noms complets, volumes, puis un point par cas. Double-clic sur un pays : détail direct.";
-  if(pal === 1) return "Encore un cran : un point par cas, coloré selon la classe AI Act.";
-  if(pal === 2) return "Un point = un système, à l’emplacement de l’organisation. "
-       + "Anneau creux : dispositif national, aucun site à pointer.";
+  if(pal <= 0) return "Drapeau = centre de données · panneau = système d’IA, coloré selon sa classe AI Act. Agrandir : noms des pays, volumes, puis détail nominatif. Double-clic sur un pays : fiche directe.";
+  if(pal === 1) return "Les panneaux d’une même ville s’écartent à mesure qu’on grossit : "
+       + "sept systèmes parisiens ne font plus un seul marqueur.";
+  if(pal === 2) return "Un panneau = un système, à l’emplacement de l’organisation. "
+       + "Panneau évidé : dispositif national, aucun site à pointer.";
   return "Détail nominatif du pays au centre" + (vise && UE[vise] ? " — " + UE[vise].nom : "")
        + ". Déplacer la carte à la main pour en viser un autre.";
 }
@@ -2069,6 +2125,12 @@ function renderMap(){
     + (VUE === "cas" ? "UE — aucun cas au panel" : "donnée indisponible") + "</div>"
     +vd.libelles.map(function(lib, i){
        return '<div class="lg-row"><span class="lg-box" style="background:'+CMAP[i+1]+'"></span>'+esc(lib)+"</div>";}).join("")
+    +'<div class="lg-row" style="margin-top:7px;padding-top:7px;border-top:1px solid var(--rule)">'
+    + vignettePanneau("#7A7A7A", true) + '<b style="font-size:10px">Systèmes d’IA (panneaux)</b></div>'
+    +'<div class="lg-row">' + vignettePanneau("#7A7A7A", true)
+    + 'panneau plein — organisation située</div>'
+    +'<div class="lg-row">' + vignettePanneau("#7A7A7A", false)
+    + 'panneau évidé — dispositif national, aucun site à pointer</div>'
     +'<div id="lg-dc"></div>'
     +'<div class="lg-det" id="lg-det"></div></div>';
   var hote=document.getElementById("panmap");
@@ -2467,7 +2529,7 @@ function renderFlux(){
   });
 }
 /* ── Centres de données ─────────────────────────────────────────────────────
-   Couche d'infrastructure posée SUR la carte des systèmes d'IA : les carrés
+   Couche d'infrastructure posée SUR la carte des systèmes d'IA : les drapeaux
    sont les centres de données, les ronds restent les systèmes. Chaque carré
    porte, au survol, ce que son exploitant a ANNONCÉ — capacité, date,
    investissement — et ce que le module en CALCULE — électricité et eau, en
@@ -2556,6 +2618,99 @@ function tipDC(id){
   return h;
 }
 
+/* ── LE DRAPEAU EUROPÉEN D'UN CENTRE DE DONNÉES ─────────────────────────────
+   Un centre de données porte un petit drapeau ; un système d'IA porte un
+   panneau. Les deux couches se lisent alors AU PREMIER COUP D'ŒIL, sans passer
+   par la légende — c'est tout l'objet de ce changement, et c'est ce qu'un carré
+   coloré à côté d'un disque coloré ne donnait pas.
+
+   Le drapeau est dessiné, pas écrit : l'emoji 🇪🇺 ne se rend pas de la même
+   façon d'un système à l'autre, et sur plusieurs il ne se rend pas du tout.
+   Douze étoiles à 9 px de côté formeraient une bouillie ; on garde donc la
+   composition officielle — champ #003399, or #FFCC00 — avec une seule étoile
+   au centre, lisible à cette taille.
+
+   L'information de STATUT ne se perd pas : elle passe au mât et au socle, en
+   couleur pleine, et le cartouche reste en pointillé pour un projet — la
+   convention qui existait déjà sur les carrés qu'ils remplacent. */
+function drapeauDC(s, x, y, st, projet, futur){
+  var col = st.couleur || "#7A7A7A";
+  /* Le groupe est ANCRÉ au point et contre-échellé par [data-anc] : à
+     l'intérieur, tout est en unités d'écran constantes, origine (0,0) au pied
+     du mât, c'est-à-dire à l'emplacement du site. C'est plus sûr que de
+     multiplier chaque coordonnée par 1/k à la main — il suffisait d'en oublier
+     une pour que le drapeau se disloque à mesure qu'on grossit. */
+  var H = 13, lm = 1.5, lc = 8.5, hc = 6;
+  var bx = -lc / 2, by = -H;
+  return '<g class="dc-pt' + (projet ? " projet" : "") + '" data-anc="'
+    + x.toFixed(1) + "," + y.toFixed(1) + '" data-dc="' + s.id + '"'
+    + (futur ? ' opacity="0.3"' : '') + ">"
+    /* Mât : il porte la couleur du statut et descend jusqu'au point exact. */
+    + '<rect x="' + bx + '" y="' + by + '" width="' + lm + '" height="' + H
+    + '" fill="' + esc(col) + '" stroke="none" rx="0.5"/>'
+    /* Cartouche : bleu Europe, bordé de blanc pour tenir sur les fonds clairs
+       comme sur les fonds foncés du choroplèthe. */
+    + '<rect class="dc-cloth" x="' + (bx + lm) + '" y="' + by + '" width="' + lc
+    + '" height="' + hc + '" fill="#003399" rx="0.7"/>'
+    + etoileOr(bx + lm + lc / 2, by + hc / 2, 1.85)
+    /* Socle : la pastille de statut, posée sur l'emplacement réel du site. */
+    + '<circle cx="0" cy="0" r="2.1" fill="' + esc(col) + '"/></g>';
+}
+
+/* Vignettes de légende : la même silhouette qu'à l'écran, en petit. Une légende
+   qui écrit « drapeaux » et montre un carré fait douter de tout le reste. */
+function vignetteDrapeau(col){
+  return '<svg class="lg-forme" viewBox="0 0 15 13" aria-hidden="true">'
+    + '<rect x="2.6" y="1" width="1.5" height="11" fill="' + esc(col) + '" rx="0.5"/>'
+    + '<rect x="4.1" y="1" width="8.4" height="6" fill="#003399" stroke="#FFFFFF"'
+    + ' stroke-width="0.8" rx="0.7"/>'
+    + '<polygon points="8.3,2.5 8.85,3.6 10.05,3.75 9.15,4.6 9.4,5.8 8.3,5.2'
+    + ' 7.2,5.8 7.45,4.6 6.55,3.75 7.75,3.6" fill="#FFCC00"/>'
+    + '<circle cx="3.35" cy="11.4" r="1.6" fill="' + esc(col)
+    + '" stroke="#FFFFFF" stroke-width="0.7"/></svg>';
+}
+function vignettePanneau(col, plein){
+  return '<svg class="lg-forme" viewBox="0 0 15 13" aria-hidden="true">'
+    + '<rect x="6.85" y="6" width="1.3" height="6" fill="' + esc(col) + '" rx="0.5"/>'
+    + '<rect x="3.7" y="1" width="7.6" height="5.6" rx="1.2"'
+    + (plein ? ' fill="' + esc(col) + '" stroke="#FFFFFF" stroke-width="1"'
+             : ' fill="#FFFFFF" stroke="' + esc(col)
+               + '" stroke-width="1.3" stroke-dasharray="2 1.5"') + "/>"
+    + (plein ? '<rect x="5.2" y="2.5" width="4.6" height="0.9" rx="0.45" fill="#FFFFFF"'
+               + ' opacity="0.85"/><rect x="5.2" y="4.2" width="3.2" height="0.9" rx="0.45"'
+               + ' fill="#FFFFFF" opacity="0.85"/>' : "")
+    + "</svg>";
+}
+
+/* Une étoile à cinq branches, en or européen. Les points sont calculés plutôt
+   qu'écrits en dur : le marqueur est contre-échellé à chaque palier de zoom, et
+   un chemin figé se déformerait. */
+function etoileOr(cx, cy, r){
+  var p = [];
+  for(var i = 0; i < 10; i++){
+    var a = -Math.PI / 2 + i * Math.PI / 5;
+    var rr = (i % 2 ? r * 0.42 : r);
+    p.push((cx + Math.cos(a) * rr).toFixed(2) + "," + (cy + Math.sin(a) * rr).toFixed(2));
+  }
+  return '<polygon points="' + p.join(" ") + '" fill="#FFCC00"/>';
+}
+
+/* Place et contre-échelle les groupes ancrés. Extrait du cycle de zoom parce
+   que la couche des centres de données est REDESSINÉE en dehors de ce cycle —
+   à la bascule de la case, à l'arrivée des données, au déplacement du curseur
+   d'horizon. Tant que ce placement vivait dans zoomAppliquer(), les 97 drapeaux
+   reconstruits gardaient un transform vide et se retrouvaient tous empilés au
+   coin haut-gauche de la carte. */
+function ancrerGroupes(racine, inv){
+  if(!racine) return;
+  if(inv === undefined) inv = 1 / (ZOOM.k || 1);
+  racine.querySelectorAll("[data-anc]").forEach(function(g){
+    var a = g.getAttribute("data-anc").split(",");
+    g.setAttribute("transform",
+      "translate(" + a[0] + "," + a[1] + ") scale(" + inv.toFixed(4) + ")");
+  });
+}
+
 function renderDC(){
   var g = document.querySelector("#panmap #dc-couche");
   if(!g || !DC) return;
@@ -2583,15 +2738,10 @@ function renderDC(){
       + x.toFixed(1) + '" data-cy="' + y.toFixed(1) + '" x="' + (x - hc / 2).toFixed(1)
       + '" y="' + (y - hc / 2).toFixed(1) + '" width="' + hc.toFixed(1)
       + '" height="' + hc.toFixed(1) + '" fill="transparent"/>'
-      + '<rect class="dc-pt' + (projet ? " projet" : "") + '"'
-      + (futur ? ' opacity="0.3"' : '') + ' data-dc="' + s.id
-      + '" data-cote="' + cote + '" data-cx="' + x.toFixed(1) + '" data-cy="' + y.toFixed(1)
-      + '" data-sw="1.1" x="' + (x - c / 2).toFixed(1) + '" y="' + (y - c / 2).toFixed(1)
-      + '" width="' + c.toFixed(1) + '" height="' + c.toFixed(1)
-      + '" stroke-width="' + (1.1 * inv).toFixed(2) + '" fill="' + esc(st.couleur || "#7A7A7A")
-      + '" rx="' + (1.2 * inv).toFixed(2) + '"/>';
+      + drapeauDC(s, x, y, st, projet, futur);
   });
   g.innerHTML = out;
+  ancrerGroupes(g);              /* sans quoi les drapeaux s'empilent en 0,0 */
   majLegendeDC();
 }
 
@@ -2600,7 +2750,8 @@ function majLegendeDC(){
   if(!bloc || !DC) return;
   var h = "";
   if(DC_VISIBLE){
-    h += '<div class="lg-row" style="margin-top:7px;padding-top:7px;border-top:1px solid var(--rule)"><b style="font-size:10px">Centres de données (carrés)</b></div>';
+    h += '<div class="lg-row" style="margin-top:7px;padding-top:7px;border-top:1px solid var(--rule)">'
+      + vignetteDrapeau("#7A7A7A") + '<b style="font-size:10px">Centres de données (drapeaux)</b></div>';
     ["service", "construction", "autorise", "annonce"].forEach(function(k){
       var st = DC.statuts[k]; if(!st) return;
       var n = (DC.agregats.par_statut || {})[k] || 0; if(!n) return;
@@ -2679,10 +2830,18 @@ function chargerDC(){
   preAPI("/api/datacentres")
     .then(function(r){ return r.ok ? r.json() : null; })
     .then(function(d){
-      /* Referentiel vide = couche absente : ni carres, ni legende, ni encart.
+      /* Referentiel vide = couche absente : ni drapeaux, ni legende, ni encart.
          Servir l'habillage sans les donnees annoncerait une couche qui n'existe
          pas encore. */
-      if(!d || !d.ok || !d.sites || !d.sites.length) return;
+      /* Un `ok` ABSENT n'est plus un refus : seul un `ok:false` explicite en est
+         un. La couche entière disparaissait parce qu'un producteur de la réponse
+         avait oublié un drapeau, alors que les 97 sites étaient bien là. Ce qui
+         décide, c'est la présence des données. */
+      if(!d || d.ok === false || !d.sites || !d.sites.length){
+        noteDC(d && d.erreur ? String(d.erreur).slice(0, 120)
+                             : "référentiel des centres de données indisponible");
+        return;
+      }
       DC = d;
       renderDC();
       /* La vue pays peut avoir ete ouverte avant l'arrivee des centres : sans ce
@@ -2713,13 +2872,44 @@ function chargerDC(){
         hote.addEventListener("mouseover", function(ev){
           var q = ev.target.closest ? ev.target.closest(".dc-pt, .dc-cible") : null;
           if(q) tipMontrer(tipDC(q.getAttribute("data-dc")), ev, hote);
+          /* Le drapeau ne peut pas se surligner tout seul : c'est la CIBLE qui
+             reçoit le pointeur, le marqueur le laisse passer. On désigne donc
+             le drapeau correspondant, sans quoi rien à l'écran ne confirme
+             lequel des sept sites d'Amsterdam l'infobulle décrit. */
+          hote.querySelectorAll(".dc-pt.survol").forEach(function(el){
+            el.classList.remove("survol"); });
+          if(q){
+            var f = hote.querySelector('.dc-pt[data-dc="' + q.getAttribute("data-dc") + '"]');
+            if(f) f.classList.add("survol");
+          }
+        });
+        hote.addEventListener("mouseleave", function(){
+          hote.querySelectorAll(".dc-pt.survol").forEach(function(el){
+            el.classList.remove("survol"); });
         });
         hote.addEventListener("mousemove", function(ev){
           if(ev.target.closest && ev.target.closest(".dc-pt, .dc-cible")) tipPlacer(ev, hote);
         });
       }
     })
-    .catch(function(){ /* couche absente : la carte des SIA reste complete */ });
+    .catch(function(e){
+      /* Ce `catch` a longtemps été muet, et c'est ce silence qui a laissé la
+         couche disparaître sans qu'on puisse le constater. Il DIT désormais,
+         discrètement, que l'infrastructure manque — la carte des systèmes d'IA,
+         elle, reste complète. */
+      noteDC("couche des centres de données non chargée ("
+             + String((e && e.message) || e || "erreur").slice(0, 80) + ")");
+    });
+}
+
+/* Le mot qu'on écrit quand les centres de données manquent. Discret, dans la
+   légende, mais présent : une couche absente sans un mot se lit comme « il n'y
+   a pas de centres de données en Europe ». */
+function noteDC(quoi){
+  var bloc = document.getElementById("lg-dc");
+  if(bloc) bloc.innerHTML = '<div class="lg-row" style="margin-top:7px;padding-top:7px;'
+    + 'border-top:1px solid var(--rule);color:#8A5310">Drapeaux absents — ' + esc(quoi)
+    + "</div>";
 }
 
 /* Textes d'aide du Panorama. Chaque entree dit ce que le bloc MONTRE, puis ce
