@@ -1144,6 +1144,17 @@ def acces_reserve_motif(client):
         return 'anonyme'
     if client.get('is_conseilprev'):
         return None
+    # L'administrateur du site, reconnu à son adresse (ADMIN_EMAIL). Sans cette
+    # ligne, le propriétaire connecté avec SON compte Sentinel — qui n'est ni
+    # « conseilprev@internal.system » ni une raison sociale « CONSEILPREV », et
+    # dont le plan reste « gratuit » — se voyait refuser ses propres modules.
+    # Un verrou qui exclut celui qui l'a posé n'est pas un verrou strict,
+    # c'est un verrou faux.
+    try:
+        if (client.get('email') or '').strip().lower() == ADMIN_EMAIL:
+            return None
+    except Exception:  # noqa: BLE001
+        pass
     if (client.get('plan') or 'gratuit') in PLANS_ABONNES:
         return None
     return 'plan'
