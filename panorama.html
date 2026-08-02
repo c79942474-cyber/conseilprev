@@ -430,6 +430,16 @@ body.vue-pays .pnav a,body.vue-pays .pnav-sep{display:none}
   text-transform:none;letter-spacing:0}
 .ttip:hover::after,.ttip:focus-visible::after{opacity:1}
 th .ttip{margin-left:5px}
+/* La vignette de drapeau : posée devant le nom, jamais à la place. Elle sert
+   à retrouver une ligne d'un coup d'œil ; c'est le NOM qui identifie, et le
+   drapeau reste décoratif pour un lecteur d'écran — sans quoi chaque pays
+   serait annoncé deux fois. */
+.dr{flex:0 0 auto;vertical-align:-2px;margin-right:7px;border-radius:2px;
+  display:inline-block}
+.pgr-n .dr{margin-right:6px}
+.td-pays .dr{margin-right:7px}
+.imp-fiche summary .dr{margin-right:7px}
+@media print{.dr{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 .imp-l{cursor:pointer}
 .imp-l:hover{background:#F2F5FA}
 /* ── Grille de pays : 4 a 6 par ligne ───────────────────────────────────────
@@ -1142,6 +1152,7 @@ engagements publics) sont imputés nominativement.</div>
   <div class="panel-body" id="methodo"></div>
 </section>
 
+<script src="/drapeaux.js"></script>
 <script src="/factcheck.js"></script>
 <script>
 "use strict";
@@ -1804,6 +1815,12 @@ var VUES = {
   mix: { nom: "Intensité du réseau", unite: "gCO₂e/kWh",
          seuils: [100, 200, 350, 500], libelles: ["< 200", "200 – 350", "350 – 500", "500 et plus"],
          titre: "Intensité carbone de l’électricité — gCO₂e/kWh" },
+  /* Les drapeaux ne sont PAS une échelle : aucun seuil, aucune classe. C'est
+     un fond d'orientation — on y retrouve un pays par sa couleur nationale
+     avant de lire un chiffre. Les vues qui portent une donnée restent
+     disponibles et inchangées ; celle-ci s'ajoute, elle ne remplace rien. */
+  drapeaux: { nom: "Drapeaux nationaux", unite: "", seuils: [], libelles: [],
+              titre: "Couleurs nationales — repère d’orientation", brut: true },
 };
 var VUE = "cas";
 function classeSeuil(v, seuils){
@@ -2100,6 +2117,11 @@ function renderMap(){
   var parPays={};
   DATA.agregats.par_pays.forEach(function(p){parPays[p.pays]=p;});
   var s='<svg class="obs-svg-map" viewBox="0 0 '+PROJ.W+" "+PROJ.H+'" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Carte UE du panel">'
+      /* Les dégradés ne sont fabriqués que pour les pays que la carte colore,
+         c'est-à-dire l'UE : les voisins restent en gris neutre dans toutes les
+         vues, et soixante-trois dégradés dont trente-six inutilisés
+         alourdiraient le document pour rien. */
+      + (VUE === "drapeaux" && window.DRAPEAUX ? DRAPEAUX.defs(Object.keys(UE)) : "")
       +'<rect width="'+PROJ.W+'" height="'+PROJ.H+'" fill="#DDE3EA"/>';
   var neutres="",colores="";
   Object.keys(CONTOURS).forEach(function(code){
@@ -2107,8 +2129,16 @@ function renderMap(){
     if(UE[code]){
       var st=parPays[code],n=st?st.n:0;
       var vv = valeurVue(code, parPays);
-      var fill = (vv === null) ? "#EFF2F6"
-               : (VUE === "cas" ? CMAP[classeNb(vv)] : CMAP[classeSeuil(vv, VUES[VUE].seuils)]);
+      /* Fond « drapeaux » : le dégradé national, ou le gris « pas de donnée »
+         si le pays n'est pas au référentiel des drapeaux — jamais une couleur
+         inventée pour boucher un trou. */
+      var fill;
+      if(VUE === "drapeaux"){
+        fill = (window.DRAPEAUX && DRAPEAUX.fond(code)) || "#EFF2F6";
+      } else {
+        fill = (vv === null) ? "#EFF2F6"
+             : (VUE === "cas" ? CMAP[classeNb(vv)] : CMAP[classeSeuil(vv, VUES[VUE].seuils)]);
+      }
       colores+='<path d="'+d+'" fill="'+fill+'" stroke="#FFF" stroke-width="0.7" data-sw="0.7" class="pan-pays" tabindex="0" role="button" data-code="'+code+'" aria-label="'+esc(UE[code].nom)+' : '+n+' cas au panel"><title>'+esc(UE[code].nom)+" — "+n+" cas"+(st?(" · exposition moy. "+fr(st.exposition_moy)):"")+"</title></path>";
     } else {
       neutres+='<path d="'+d+'" fill="#E6E4DF" stroke="#F4F2EE" stroke-width="0.5" data-sw="0.5"/>';
@@ -2120,11 +2150,38 @@ function renderMap(){
      de palier, ses marqueurs sont visibles a toutes les echelles. */
   s+=neutres+colores+'<g id="dc-couche"></g><g id="pan-detail"></g></svg>';
   var vd = VUES[VUE];
+  /* Ce que la vue « drapeaux » doit avouer, chiffres à l'appui : combien de
+     pays dessinés portent un emblème que trois bandes de couleur ne peuvent
+     pas rendre. Annoncer « c'est approximatif » sans dire à quel point laisse
+     croire à un détail ; le compte, lui, se vérifie. */
+  var codesCarte = Object.keys(UE);
+  var drSansFlag = window.DRAPEAUX
+    ? codesCarte.filter(function(c){ return !DRAPEAUX.connu(c); }) : codesCarte;
+  var drSimpl = window.DRAPEAUX ? DRAPEAUX.simplifies(codesCarte).length : 0;
   s+='<div class="obs-legend"><h3>'+esc(vd.titre)+'</h3>'
-    +'<div class="lg-row"><span class="lg-box" style="background:#EFF2F6"></span>'
-    + (VUE === "cas" ? "UE — aucun cas au panel" : "donnée indisponible") + "</div>"
-    +vd.libelles.map(function(lib, i){
-       return '<div class="lg-row"><span class="lg-box" style="background:'+CMAP[i+1]+'"></span>'+esc(lib)+"</div>";}).join("")
+    + (vd.brut
+        /* Aucune classe à énumérer : à la place, ce que ce fond montre et ce
+           qu'il ne montre pas. Un lecteur qui croirait voir des drapeaux
+           exacts se tromperait sur les armoiries et les croix absentes. */
+        /* Un seul enfant par ligne : .lg-row est un conteneur flex, et un <b>
+           laissé nu y devient un élément à part — le chiffre partait alors se
+           poser en dehors de sa phrase. */
+        ? '<div class="lg-row" style="line-height:1.5"><span>Chaque pays porte les '
+          + '<b>couleurs principales</b> de son drapeau, en bandes.</span></div>'
+          + '<div class="lg-row" style="line-height:1.5;color:#8A5310"><span>Évocation, '
+          + 'non reproduction : un territoire n’est pas un rectangle. Sur <b>'
+          + drSimpl + '</b> des ' + codesCarte.length + ' États membres, le drapeau '
+          + 'porte un emblème — armoiries, croix, croissant — que les couleurs '
+          + 'seules ne rendent pas. Les vignettes des tableaux, elles, sont '
+          + 'fidèles, et chacune déclare son écart au survol.</span></div>'
+          + (drSansFlag.length
+              ? '<div class="lg-row"><span class="lg-box" style="background:#EFF2F6"></span>'
+                + drSansFlag.length + ' pays sans drapeau au référentiel</div>'
+              : '')
+        : '<div class="lg-row"><span class="lg-box" style="background:#EFF2F6"></span>'
+          + (VUE === "cas" ? "UE — aucun cas au panel" : "donnée indisponible") + "</div>"
+          + vd.libelles.map(function(lib, i){
+              return '<div class="lg-row"><span class="lg-box" style="background:'+CMAP[i+1]+'"></span>'+esc(lib)+"</div>";}).join(""))
     +'<div class="lg-row" style="margin-top:7px;padding-top:7px;border-top:1px solid var(--rule)">'
     + vignettePanneau("#7A7A7A", true) + '<b style="font-size:10px">Systèmes d’IA (panneaux)</b></div>'
     +'<div class="lg-row">' + vignettePanneau("#7A7A7A", true)
@@ -3179,6 +3236,14 @@ var EMP = null;
    donc figurer au tableau, mais la table UE ne les connait pas. */
 var HORS_UE = { GB: "Royaume-Uni (hors UE)", NO: "Norvège (hors UE)",
                 CH: "Suisse (hors UE)", IS: "Islande (hors UE)" };
+/* La vignette d'un pays, devant son nom. `decoratif` quand le nom suit
+   immédiatement : un lecteur d'écran annoncerait sinon deux fois le pays. */
+function drap(code, decoratif){
+  if(!window.DRAPEAUX || !code) return "";
+  return DRAPEAUX.icone(code, { w: 18, h: 13, decoratif: decoratif !== false,
+                                nom: nomPays(code) || code });
+}
+
 function nomPays(code){
   return (UE[code] || {}).nom || HORS_UE[code] || code;
 }
@@ -3428,7 +3493,8 @@ function implTuile(l){
     : (x.intensite <= 100 ? "faible" : (x.intensite <= 250 ? "modere" : "eleve"));
   return '<button type="button" class="pgr-t imp-l" data-pays="' + esc(x.pays) + '"'
     + ' style="--pg-c:' + implCouleurNote(l.score) + '">'
-    + '<span class="pgr-h"><span class="pgr-n">' + esc(nomPays(x.pays) || x.pays) + "</span>"
+    + '<span class="pgr-h"><span class="pgr-n">' + drap(x.pays)
+    + esc(nomPays(x.pays) || x.pays) + "</span>"
     + '<span class="pgr-r">rang ' + l.rang + "</span></span>"
     + implJauge(l.score)
     + '<span class="pgr-c">'
@@ -3520,7 +3586,8 @@ function renderImplClassement(){
           : (x.intensite <= 100 ? "bon" : (x.intensite <= 250 ? "moyen" : "mauvais"));
         return '<tr class="imp-l" data-pays="' + x.pays + '">'
           + "<td>" + l.rang + "</td>"
-          + "<td><b>" + esc(nomPays(x.pays) || x.pays) + "</b></td>"
+          + '<td class="td-pays">' + drap(x.pays) + "<b>"
+          + esc(nomPays(x.pays) || x.pays) + "</b></td>"
           + "<td>" + implJauge(l.score) + "</td>"
           + "<td>" + (gInt ? implChip(gInt === "bon" ? "faible" : (gInt === "moyen" ? "modere" : "eleve"),
                       x.intensite + " g") : "—") + "</td>"
@@ -3577,7 +3644,7 @@ function renderImplAvis(){
         + ' <span class="imp-src">' + esc(pr.source) + ", " + esc(pr.date) + "</span></div>";
     }).join("");
     return '<details class="imp-fiche"' + (ouvert ? " open" : "") + ' data-pays="' + x.pays + '">'
-      + "<summary><b>" + esc(nomPays(x.pays) || x.pays) + "</b>"
+      + "<summary>" + drap(x.pays) + "<b>" + esc(nomPays(x.pays) || x.pays) + "</b>"
       + (l.score !== null ? ' <span class="imp-sc" style="color:' + implCouleurNote(l.score)
           + '">' + l.score + (grille ? "/100" : "/100 selon vos poids") + "</span>" : "")
       + "</summary>"
@@ -3703,8 +3770,8 @@ function renderEmpreinte(){
        une ligne cliquable sans element focalisable serait inaccessible au
        clavier, et invisible pour un lecteur d'ecran. */
     return '<tr class="pays-l" data-pays="' + esc(p.pays) + '">'
-      + '<th scope="row"><button type="button" data-pays="' + esc(p.pays) + '">'
-      + esc(nom) + "</button></th>"
+      + '<th scope="row" class="td-pays"><button type="button" data-pays="' + esc(p.pays) + '">'
+      + drap(p.pays) + esc(nom) + "</button></th>"
       + "<td>" + p.n_dc + "</td><td>" + p.n_sia + "</td>"
       + "<td>" + nbFr(p.intensite) + "</td>"
       + "<td>" + fourchetteT(p.total_t) + "</td>"
@@ -3721,7 +3788,8 @@ function renderEmpreinte(){
       : (p.intensite <= 100 ? "#2D7A47" : (p.intensite <= 250 ? "#C47C1A" : "#B83222"));
     return '<button type="button" class="pgr-t" data-pays="' + esc(p.pays) + '"'
       + ' style="--pg-c:' + (g || "#C9CFD8") + '">'
-      + '<span class="pgr-h"><span class="pgr-n">' + esc(nomPays(p.pays) || p.pays) + "</span>"
+      + '<span class="pgr-h"><span class="pgr-n">' + drap(p.pays)
+      + esc(nomPays(p.pays) || p.pays) + "</span>"
       + '<span class="pgr-r">' + nbFr(p.intensite) + " g</span></span>"
       + '<span class="pgr-v">' + fourchetteT(p.total_t) + "</span>"
       + '<span class="pgr-s">CO₂e/an · ' + p.n_dc + " centre(s) · " + p.n_sia + " SIA</span>"

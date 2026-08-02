@@ -207,6 +207,10 @@ figure{margin:0}
 .obs-legend h3{font-size:10.5px;font-weight:600;line-height:1.35;margin-bottom:6px;color:#1C1C1C}
 .lg-row{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:3px}
 .lg-dot{border-radius:50%;flex:0 0 auto;border:1px solid rgba(28,28,28,.18)}
+/* Vignette de drapeau : devant le nom, jamais à sa place — c'est le nom qui
+   identifie, le drapeau qui fait retrouver la ligne. */
+.dr{flex:0 0 auto;vertical-align:-2px;margin-right:7px;border-radius:2px;display:inline-block}
+@media print{.dr{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 
 /* ── TROIS COUCHES, TROIS SILHOUETTES ───────────────────────────────────────
    La page tient sur trois séries — modèles, brevets, talents — et jusqu'ici
@@ -501,6 +505,10 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   .val-card, .sourcing-card, .forbidden-card { padding-left: 16px; padding-right: 16px; }
   .con { padding-left: 16px; padding-right: 16px; }
 }</style>
+<!-- Le référentiel des drapeaux, partagé avec le Panorama. Chargé sans defer :
+     les tableaux se rendent dès l'exécution du script de page, et un module
+     encore en vol laisserait des cases vides que rien ne viendrait remplir. -->
+<script src="/drapeaux.js"></script>
 </head>
 <body>
 
@@ -779,6 +787,15 @@ function fmtDate(v){
   return ('0'+d.getDate()).slice(-2)+'/'+('0'+(d.getMonth()+1)).slice(-2)+'/'+d.getFullYear();
 }
 function setText(id, txt){ var el = document.getElementById(id); if(el) el.textContent = txt; }
+
+/* Vignette de drapeau, à côté d'un nom de pays. Décorative par défaut : le nom
+   est juste là, et une lectrice d'écran qui entend « Drapeau — France, France »
+   entend deux fois la même chose. Un code vide (l'agrégat « Autres ») ne rend
+   rien : mieux vaut une case vide qu'un drapeau inventé pour un non-pays. */
+function drap(code, decoratif){
+  if(!window.DRAPEAUX || !code) return '';
+  return DRAPEAUX.icone(code, { w: 18, h: 13, decoratif: decoratif !== false });
+}
 
 /* Palette séquentielle 5 classes (rose pâle → rouge profond, clarté monotone) */
 /* Rampe sequentielle UNE teinte (bleu), validee ordinal (5 classes). */
@@ -1266,7 +1283,7 @@ function tipPays(code){
   var val = exact !== null ? String(exact) : (cl.min + '–' + cl.max);
   var prec = exact !== null ? 'exact · Epoch AI (live)'
            : (p.lect ? 'classe · lecture de carte' : 'classe · Epoch AI');
-  var h = '<div class="t-nom">' + esc(p.n) + '</div>'
+  var h = '<div class="t-nom">' + drap(code) + esc(p.n) + '</div>'
         + '<div class="t-sub">' + esc(prec) + '</div>'
         + '<div class="t-l"><b>' + val + '</b> modèles remarquables (2003 – été 2024)</div>';
   var t = TALENTS_PAYS[code];
@@ -1801,7 +1818,7 @@ function renderMapTable(){
     var cl = DATA.modeles.classes[p.cl];
     var exact = DATA.modeles.exacts && typeof DATA.modeles.exacts[p.c] === 'number'
               ? DATA.modeles.exacts[p.c] : null;
-    rows += '<tr><th scope="row">'+esc(p.n)+'</th>'
+    rows += '<tr><th scope="row">'+drap(p.c)+esc(p.n)+'</th>'
       + '<td>'+(exact !== null ? exact : cl.min+'–'+cl.max)+'</td>'
       + '<td>'+(exact !== null ? 'exact (Epoch AI, live)' : (p.lect ? 'classe, lecture de carte' : 'classe'))+'</td></tr>';
   });
@@ -1826,7 +1843,7 @@ function ficheDetail(code){
   var prec = exact !== null ? 'exact · Epoch AI (live)'
            : (p.lect ? 'classe · lecture de carte' : 'classe · Epoch AI');
   var html = '<div class="fd-head"><span class="fd-sw" style="background:'+CMAP[p.cl]+'"></span>'
-    + '<span class="fd-nom">'+esc(p.n)+'</span></div>'
+    + '<span class="fd-nom">'+drap(code)+esc(p.n)+'</span></div>'
     + '<div class="fd-val">'+valeur+'</div>'
     + '<div class="fd-lbl">modèles remarquables 2003 – été 2024 · '+esc(prec)+'</div>';
   var t = TALENTS_PAYS[code];
@@ -2316,11 +2333,13 @@ function brevTableau(){
   document.getElementById('brev-table').innerHTML =
     '<table><caption class="sr-only">Brevets d’IA accordés : parts du total mondial (%), '
     + 'volume mondial (milliers) et volumes déduits par acteur, 2010–2023</caption>'
-    + '<thead><tr><th scope="col">Année</th><th scope="col">Chine %</th>'
-    + '<th scope="col">États-Unis %</th><th scope="col">Europe %</th>'
+    + '<thead><tr><th scope="col">Année</th><th scope="col">'+drap('CN')+'Chine %</th>'
+    + '<th scope="col">'+drap('US')+'États-Unis %</th>'
+    + '<th scope="col">'+drap('EU')+'Europe %</th>'
     + '<th scope="col">Reste %</th><th scope="col">Monde (milliers)</th>'
-    + '<th scope="col">Chine (déduit)</th><th scope="col">É.-U. (déduit)</th>'
-    + '<th scope="col">Europe (déduit)</th></tr></thead>'
+    + '<th scope="col">'+drap('CN')+'Chine (déduit)</th>'
+    + '<th scope="col">'+drap('US')+'É.-U. (déduit)</th>'
+    + '<th scope="col">'+drap('EU')+'Europe (déduit)</th></tr></thead>'
     + '<tbody>' + rows + '</tbody></table>';
 }
 
@@ -2632,7 +2651,7 @@ function renderFluxTalents(){
 function tipTalent(p){
   if(!p) return '';
   var sol = talSolde(p);
-  var h = '<div class="t-nom">' + esc(p.n) + '</div>'
+  var h = '<div class="t-nom">' + drap(p.c) + esc(p.n) + '</div>'
         + '<div class="t-sub">chercheurs d’élite en IA · NeurIPS 2022</div>'
         + '<div class="t-l">Formés dans le pays : <b>' + fr(p.o) + ' %</b></div>'
         + '<div class="t-l">Y travaillent : <b>'
@@ -2660,7 +2679,7 @@ function renderTalents(){
     return sb - sa;
   }).forEach(function(p){
     var sol = talSolde(p);
-    rows += '<tr><th scope="row">'+esc(p.n)+'</th><td>'+fr(p.o)+'</td><td>'
+    rows += '<tr><th scope="row">'+drap(p.c)+esc(p.n)+'</th><td>'+fr(p.o)+'</td><td>'
       + (typeof p.t === 'number' ? fr(p.t) : esc(p.tn||'n.d.')) + '</td><td>'
       + (sol === null ? '—' : (sol > 0 ? '+' : '') + fr(Math.round(sol*10)/10)) + '</td></tr>';
   });
