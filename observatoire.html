@@ -260,6 +260,64 @@ figure{margin:0}
 .cq-vide{font-family:var(--mono);font-size:9.5px;color:#8A5310}
 @media print{.cq-barre{display:none}}
 
+/* ── LE GRAPHIQUE DES BREVETS ────────────────────────────────────────────────
+   Deux lectures d'une même série, un guide de survol, une légende qui filtre.
+   La bascule n'est pas un ornement : en PART du monde, les États-Unis et
+   l'Europe s'effondrent ; en VOLUME, les trois acteurs montent, et l'Europe est
+   multipliée par 21. Le premier graphique disait la moitié de l'histoire. */
+.bv-tete{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;
+  flex-wrap:wrap;margin-bottom:10px}
+.bv-vues{display:inline-flex;border:1px solid var(--rule);border-radius:7px;overflow:hidden;
+  flex:0 0 auto}
+.bv-vues button{all:unset;cursor:pointer;font-size:12.5px;font-weight:600;padding:8px 14px;
+  color:var(--muted);white-space:nowrap}
+.bv-vues button+button{border-left:1px solid var(--rule)}
+.bv-vues button:hover{background:#F2F5FA;color:var(--ink)}
+.bv-vues button.on{background:#1E63A8;color:#fff}
+.bv-vues button:focus-visible{outline:2px solid #1E63A8;outline-offset:-2px}
+/* Chaque entrée de légende est un INTERRUPTEUR : quatre courbes qui se croisent
+   se lisent mal ensemble, et éteindre trois d'entre elles est le geste naturel. */
+.bv-leg{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.bv-leg button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;
+  font-size:11.5px;padding:5px 10px;border-radius:20px;border:1px solid var(--rule);
+  color:var(--ink);white-space:nowrap}
+.bv-leg button:hover{border-color:currentColor}
+.bv-leg button:focus-visible{outline:2px solid #1E63A8;outline-offset:1px}
+.bv-leg button.off{opacity:.42;text-decoration:line-through}
+.bv-leg .sw{width:11px;height:11px;border-radius:3px;flex:0 0 auto}
+.bv-leg .v{font-family:var(--mono);font-size:11px;font-weight:700}
+.bv-chart{position:relative}
+.bv-chart svg{cursor:crosshair}
+.bv-pt{transition:r .12s}
+.bv-pt.exact{stroke-width:2.4}
+/* Bande d'incertitude : les points 2010-2022 sont des lectures graphiques à
+   ±3 points. Les tracer comme des mesures serait leur prêter une précision
+   qu'ils n'ont pas ; la bande la rend visible au lieu de la reléguer en note. */
+.bv-bande{opacity:.13}
+.bv-guide{stroke:#1C1C1C;stroke-width:1;stroke-dasharray:3 3;opacity:.5;pointer-events:none}
+.bv-tip{position:absolute;z-index:6;background:#1C1C1C;color:#fff;border-radius:6px;
+  padding:9px 11px;font-size:11.5px;line-height:1.6;pointer-events:none;opacity:0;
+  transition:opacity .1s;min-width:186px;box-shadow:0 4px 14px rgba(0,0,0,.24)}
+.bv-tip.on{opacity:1}
+.bv-tip h4{font-size:12px;margin:0 0 5px;font-family:var(--mono);letter-spacing:.04em}
+.bv-tip .l{display:flex;align-items:center;gap:7px;justify-content:space-between}
+.bv-tip .l i{width:9px;height:9px;border-radius:2px;flex:0 0 auto}
+.bv-tip .l b{font-family:var(--mono);font-weight:700;margin-left:auto}
+.bv-tip .p{color:#C9C6C0;font-size:10px;margin-top:5px;line-height:1.45;
+  border-top:1px solid rgba(255,255,255,.18);padding-top:5px}
+/* Le guide de lecture : ce que la vue montre, et ce qu'elle ne montre pas. */
+.bv-lecture{border:1px solid var(--rule);border-left:3px solid #1E63A8;border-radius:7px;
+  padding:11px 14px;margin:10px 0 4px;font-size:12.5px;line-height:1.65;color:var(--muted);
+  background:rgba(30,99,168,.04)}
+.bv-lecture b{color:var(--ink)}
+.bv-lecture .ch{font-family:var(--mono);font-weight:700;color:var(--ink)}
+@media(max-width:640px){
+  .bv-tete{flex-direction:column;gap:9px}
+  .bv-vues{width:100%}
+  .bv-vues button{flex:1 1 0;text-align:center;font-size:11.5px;padding:8px 6px}
+}
+@media print{.bv-vues,.bv-tip{display:none !important}}
+
 /* ── Graphiques SVG ── */
 .chart svg{display:block;width:100%;height:auto}
 .chart text{font-family:Inter,system-ui,sans-serif}
@@ -483,17 +541,19 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <span class="panel-note">AI Index (Stanford HAI) · données CSET · 2010–2023</span>
   </div>
   <div class="panel-body">
-    <div class="legend" aria-hidden="true">
-      <span class="lg-item"><span class="lg-sw" style="background:#B83222"></span>Chine</span>
-      <span class="lg-item"><span class="lg-sw" style="background:#1E63A8"></span>États-Unis</span>
-      <span class="lg-item"><span class="lg-sw" style="background:#C47C1A"></span>Europe</span>
-      <span class="lg-item"><span class="lg-sw" style="background:#ECE9F1;border:1px solid #D5D2D9;border-radius:2px"></span>Volume mondial (milliers, axe droit)</span>
+    <div class="bv-tete">
+      <div class="bv-vues" role="tablist" aria-label="Lecture du graphique">
+        <button type="button" role="tab" data-vue="part" class="on" aria-selected="true">Part du monde (%)</button>
+        <button type="button" role="tab" data-vue="volume" aria-selected="false">Volume accordé (échelle log)</button>
+      </div>
+      <div class="bv-leg" id="brev-leg"></div>
     </div>
     <figure>
-      <figcaption class="sr-only">Évolution 2010–2023 de la part des brevets d’IA accordés : la Chine passe d’environ 13 % à 69,7 %, les États-Unis reculent d’environ 40 % à 14,2 %, l’Europe d’environ 8 % à 2,8 %. En arrière-plan, le volume mondial accordé passe d’environ 2 000 à 122 000 brevets.</figcaption>
-      <div class="chart" id="brev-chart"></div>
+      <figcaption class="sr-only">Évolution 2010–2023 de la part des brevets d’IA accordés : la Chine passe d’environ 13 % à 69,7 %, les États-Unis reculent d’environ 40 % à 14,2 %, l’Europe d’environ 8 % à 2,8 %, le reste du monde d’environ 39 % à 13,3 %. En volume absolu, les trois acteurs progressent : l’Europe est multipliée par 21, les États-Unis par 22, la Chine par 327.</figcaption>
+      <div class="chart bv-chart" id="brev-chart"></div>
     </figure>
-    <p class="note">Points 2023 exacts (affichés) : Chine 69,7 % · États-Unis 14,2 % · Europe 2,8 %. Séries 2010–2022 : lecture graphique (± 3 pts). Barres grises : volume mondial de brevets d’IA accordés, en milliers (axe de droite, lecture graphique).</p>
+    <div class="bv-lecture" id="brev-lecture"></div>
+    <p class="note" id="brev-note"></p>
     <details class="tbl-alt">
       <summary>Données du graphique (tableau)</summary>
       <div class="twrap" id="brev-table"></div>
@@ -1835,83 +1895,451 @@ function renderMap(){
   });
 }
 
-/* ── 2. Brevets — courbes + barres de volume (SVG pur) ── */
-function renderBrevets(){
+/* ══════════════════════════════════════════════════════════════════════════
+   BREVETS D'IA — deux lectures d'une même série
+
+   Le graphique d'origine ne montrait qu'une chose : la PART mondiale. On y
+   lisait un effondrement américain et européen. C'est vrai, et c'est trompeur :
+   entre 2010 et 2023 le volume mondial est passé d'environ 2 000 à 122 000
+   brevets accordés. Sur cette période, en NOMBRE, l'Europe est multipliée par
+   21, les États-Unis par 22 — et la Chine par 327. Personne n'a reculé ; la
+   Chine a simplement grandi quinze fois plus vite. Une part qui s'effondre
+   pendant que le nombre est multiplié par vingt raconte une histoire
+   différente de celle qu'on croyait lire.
+
+   D'où la bascule : PART DU MONDE et VOLUME ACCORDÉ. Le second est calculé
+   (part × volume mondial) et le dit — c'est une déduction arithmétique sur
+   deux séries publiées, pas un chiffre publié.
+
+   Une quatrième courbe apparaît, « Reste du monde » = 100 − (Chine + É.-U. +
+   Europe). Même statut : arithmétique, pas mesure. Sans elle, les trois
+   courbes ne totalisent pas 100 % et le lecteur ne sait pas où est passé le
+   complément.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+var C_ROW = '#6E5AA8';                      /* reste du monde */
+var BV_VUE = 'part';
+var BV_ON = { chine: true, us: true, europe: true, reste: true };
+var BV_AN = null;                           /* année sous le curseur */
+
+/* Les séries, dont deux DÉDUITES. `deduit` n'est pas décoratif : il commande
+   la mention de provenance dans l'infobulle et dans la note. */
+function brevSeries(){
   var b = DATA.brevets;
-  var W=720, H=310, L=44, R=48, T=16, B=36;
-  var pw = W-L-R, ph = H-T-B;
-  var x  = function(yr){ return L + (yr-2010)/13 * pw; };
-  var yS = function(p){ return T + (1 - p/75) * ph; };   /* axe gauche : part (%) 0–75 */
-  var yV = function(v){ return T + (1 - v/130) * ph; };  /* axe droit : volume (milliers) 0–130 */
+  var reste = b.annees.map(function(_, i){
+    var r = 100 - b.chine[i] - b.us[i] - b.europe[i];
+    return Math.round(r * 10) / 10;
+  });
+  return [
+    { k: 'chine',  nom: 'Chine',          col: C_CN,  v: b.chine },
+    { k: 'us',     nom: 'États-Unis',     col: C_US,  v: b.us },
+    { k: 'europe', nom: 'Europe',         col: C_EU,  v: b.europe },
+    { k: 'reste',  nom: 'Reste du monde', col: C_ROW, v: reste, deduit: true }
+  ];
+}
+
+/* Volume mondial de l'année, en milliers. La série des volumes porte 2021, que
+   les parts n'ont pas : on interroge par année, jamais par index. */
+function brevVol(an){
+  var b = DATA.brevets, i = b.volume.annees.indexOf(an);
+  return i < 0 ? null : b.volume.milliers[i];
+}
+
+/* Volume accordé à un acteur, en milliers — part × volume mondial. */
+function brevAbs(part, an){
+  var v = brevVol(an);
+  return v === null ? null : Math.round(part * v) / 100;
+}
+
+function renderBrevets(){
+  var b = DATA.brevets, series = brevSeries();
+  var W = 980, H = 380, L = 58, R = 128, T = 20, B = 44;
+  var pw = W - L - R, ph = H - T - B;
+  var an0 = b.annees[0], an1 = b.annees[b.annees.length - 1];
+  var x = function(yr){ return L + (yr - an0) / (an1 - an0) * pw; };
+
+  /* Échelle logarithmique pour les volumes : la Chine accorde 85 000 brevets
+     quand l'Europe en accorde 3 400. En linéaire, l'Europe serait une ligne
+     collée à l'axe et sa progression — ×21 — resterait invisible. Sur une
+     échelle log, la PENTE est le taux de croissance : deux courbes parallèles
+     grandissent au même rythme, ce qui est exactement le propos. */
+  var LOGMIN = 0.1, LOGMAX = 200;           /* en milliers de brevets */
+  var yLog = function(v){
+    var q = Math.max(v, LOGMIN);
+    return T + (1 - (Math.log10(q) - Math.log10(LOGMIN))
+                    / (Math.log10(LOGMAX) - Math.log10(LOGMIN))) * ph;
+  };
+  var yPart = function(p){ return T + (1 - p / 75) * ph; };
+  var yV = function(v){ return T + (1 - v / 130) * ph; };   /* volume, axe droit */
+
+  var vue = BV_VUE;
+  var valeur = function(sr, i){
+    return vue === 'part' ? sr.v[i] : brevAbs(sr.v[i], b.annees[i]);
+  };
+  var y = function(val){ return vue === 'part' ? yPart(val) : yLog(val); };
+
   var s = '';
 
-  /* barres de volume (arrière-plan, recessives) */
-  b.volume.annees.forEach(function(yr, i){
-    var v = b.volume.milliers[i];
-    var by = yV(v);
-    s += '<rect x="'+(x(yr)-7).toFixed(1)+'" y="'+by.toFixed(1)+'" width="14" height="'+((H-B)-by).toFixed(1)+'" fill="#ECE9F1">'
-       + '<title>'+yr+' — volume mondial ≈ '+v+' 000 brevets d’IA accordés (lecture graphique)</title></rect>';
-  });
+  /* Barres du volume mondial : seulement en vue « part », où elles apportent le
+     dénominateur manquant. En vue volume, elles feraient double emploi avec les
+     courbes elles-mêmes. */
+  if(vue === 'part'){
+    b.volume.annees.forEach(function(yr, i){
+      var v = b.volume.milliers[i], by = yV(v);
+      s += '<rect x="' + (x(yr) - 9).toFixed(1) + '" y="' + by.toFixed(1)
+        + '" width="18" height="' + ((H - B) - by).toFixed(1) + '" fill="#ECE9F1" rx="2">'
+        + '<title>' + yr + ' — volume mondial ≈ ' + v
+        + ' 000 brevets d’IA accordés (lecture graphique)</title></rect>';
+    });
+  }
 
-  /* grille + axe gauche (part, %) */
-  [0,25,50,75].forEach(function(g){
-    var gy = yS(g);
-    s += '<line x1="'+L+'" y1="'+gy.toFixed(1)+'" x2="'+(W-R)+'" y2="'+gy.toFixed(1)+'" stroke="#EFEDF4" stroke-width="1"/>'
-       + '<text class="ax" x="'+(L-6)+'" y="'+(gy+3).toFixed(1)+'" text-anchor="end">'+g+(g===75?' %':'')+'</text>';
-  });
-  /* axe droit (volume, milliers) */
-  [0,50,100].forEach(function(g){
-    var gy = yV(g);
-    s += '<text class="ax" x="'+(W-R+6)+'" y="'+(gy+3).toFixed(1)+'">'+g+'</text>';
-  });
-  s += '<text class="ax" x="'+(W-8)+'" y="'+(T+ph/2).toFixed(1)+'" text-anchor="middle" transform="rotate(-90 '+(W-8)+' '+(T+ph/2).toFixed(1)+')">volume mondial (milliers)</text>';
-  /* axe des années */
-  [2010,2012,2014,2016,2018,2020,2023].forEach(function(yr){
-    s += '<text class="ax" x="'+x(yr).toFixed(1)+'" y="'+(H-B+16)+'" text-anchor="middle">'+yr+'</text>';
-  });
-  s += '<line x1="'+L+'" y1="'+(H-B)+'" x2="'+(W-R)+'" y2="'+(H-B)+'" stroke="#D5D2D9" stroke-width="1"/>';
+  /* Grille et axe de gauche */
+  if(vue === 'part'){
+    [0, 25, 50, 75].forEach(function(g){
+      var gy = yPart(g);
+      s += '<line x1="' + L + '" y1="' + gy.toFixed(1) + '" x2="' + (W - R) + '" y2="'
+        + gy.toFixed(1) + '" stroke="#EFEDF4" stroke-width="1"/>'
+        + '<text class="ax" x="' + (L - 8) + '" y="' + (gy + 3).toFixed(1)
+        + '" text-anchor="end">' + g + (g === 75 ? ' %' : '') + '</text>';
+    });
+    [0, 50, 100].forEach(function(g){
+      s += '<text class="ax" x="' + (W - R + 8) + '" y="' + (yV(g) + 3).toFixed(1) + '">'
+        + g + '</text>';
+    });
+    s += '<text class="ax" x="' + (W - R + 46) + '" y="' + (T + ph / 2).toFixed(1)
+      + '" text-anchor="middle" transform="rotate(-90 ' + (W - R + 46) + ' '
+      + (T + ph / 2).toFixed(1) + ')">volume mondial (milliers)</text>';
+  } else {
+    [0.1, 1, 10, 100].forEach(function(g){
+      var gy = yLog(g);
+      s += '<line x1="' + L + '" y1="' + gy.toFixed(1) + '" x2="' + (W - R) + '" y2="'
+        + gy.toFixed(1) + '" stroke="#EFEDF4" stroke-width="1"/>'
+        + '<text class="ax" x="' + (L - 8) + '" y="' + (gy + 3).toFixed(1)
+        + '" text-anchor="end">' + (g < 1 ? '100' : (g * 1000).toLocaleString('fr-FR'))
+        + '</text>';
+    });
+    s += '<text class="ax" x="14" y="' + (T + ph / 2).toFixed(1)
+      + '" text-anchor="middle" transform="rotate(-90 14 ' + (T + ph / 2).toFixed(1)
+      + ')">brevets accordés · échelle logarithmique</text>';
+  }
 
-  /* les trois courbes */
-  var series = [
-    {k:'chine',  nom:'Chine',      col:C_CN},
-    {k:'us',     nom:'États-Unis', col:C_US},
-    {k:'europe', nom:'Europe',     col:C_EU}
-  ];
+  /* Axe des années : toutes les années mesurées portent leur repère, sinon on
+     croit à une série continue là où il y a huit points. */
+  b.annees.forEach(function(yr){
+    s += '<text class="ax" x="' + x(yr).toFixed(1) + '" y="' + (H - B + 17)
+      + '" text-anchor="middle">' + yr + '</text>'
+      + '<line x1="' + x(yr).toFixed(1) + '" y1="' + (H - B) + '" x2="' + x(yr).toFixed(1)
+      + '" y2="' + (H - B + 4) + '" stroke="#D5D2D9" stroke-width="1"/>';
+  });
+  s += '<line x1="' + L + '" y1="' + (H - B) + '" x2="' + (W - R) + '" y2="' + (H - B)
+    + '" stroke="#D5D2D9" stroke-width="1"/>';
+
+  /* Bande d'incertitude ±3 points sur la vue « part » : elle s'arrête en 2022,
+     le point 2023 étant publié tel quel. */
+  if(vue === 'part'){
+    series.forEach(function(sr){
+      if(!BV_ON[sr.k] || sr.deduit) return;
+      var haut = [], bas = [];
+      b.annees.forEach(function(yr, i){
+        if(yr >= 2023) return;
+        haut.push(x(yr).toFixed(1) + ',' + yPart(Math.min(75, sr.v[i] + 3)).toFixed(1));
+        bas.unshift(x(yr).toFixed(1) + ',' + yPart(Math.max(0, sr.v[i] - 3)).toFixed(1));
+      });
+      if(haut.length) s += '<polygon class="bv-bande" points="' + haut.concat(bas).join(' ')
+        + '" fill="' + sr.col + '"/>';
+    });
+  }
+
+  /* Les courbes */
   series.forEach(function(sr){
-    var vals = b[sr.k];
-    var pts = b.annees.map(function(yr, i){ return x(yr).toFixed(1)+','+yS(vals[i]).toFixed(1); }).join(' ');
-    s += '<polyline points="'+pts+'" fill="none" stroke="'+sr.col+'" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
+    if(!BV_ON[sr.k]) return;
+    var pts = [];
     b.annees.forEach(function(yr, i){
-      var px = x(yr).toFixed(1), py = yS(vals[i]).toFixed(1);
-      var prec = (yr===2023) ? 'exact' : 'lecture graphique ±3 pts';
-      s += '<circle cx="'+px+'" cy="'+py+'" r="3" fill="'+sr.col+'" stroke="#fff" stroke-width="1.5"/>'
-         + '<circle cx="'+px+'" cy="'+py+'" r="9" fill="transparent"><title>'+sr.nom+' — '+yr+' : '+fr(vals[i])+' % ('+prec+')</title></circle>';
+      var v = valeur(sr, i);
+      if(v === null) return;
+      pts.push(x(yr).toFixed(1) + ',' + y(v).toFixed(1));
+    });
+    s += '<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + sr.col
+      + '" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"'
+      + (sr.deduit ? ' stroke-dasharray="6 3"' : '') + '/>';
+    b.annees.forEach(function(yr, i){
+      var v = valeur(sr, i);
+      if(v === null) return;
+      var exact = (yr === an1 && !sr.deduit);
+      s += '<circle class="bv-pt' + (exact ? ' exact' : '') + '" cx="' + x(yr).toFixed(1)
+        + '" cy="' + y(v).toFixed(1) + '" r="' + (exact ? 5 : 3.4) + '" fill="'
+        + (exact ? '#FFFFFF' : sr.col) + '" stroke="' + sr.col + '" stroke-width="'
+        + (exact ? 2.4 : 1.6) + '"/>';
     });
   });
 
-  /* étiquettes des points 2023 (texte en encre, l’identité vient du point coloré) */
-  var lx = (x(2023)-6).toFixed(1);
-  s += '<text class="el" x="'+lx+'" y="'+(yS(69.7)-12).toFixed(1)+'" text-anchor="end">Chine 69,7 %</text>'
-     + '<text class="el" x="'+lx+'" y="'+(yS(14.2)-14).toFixed(1)+'" text-anchor="end">États-Unis 14,2 %</text>'
-     + '<text class="el" x="'+lx+'" y="'+(yS(2.8)-12).toFixed(1)+'" text-anchor="end">Europe 2,8 %</text>';
+  /* Étiquettes de fin de courbe, dans la marge de droite : elles remplacent la
+     lecture croisée avec la légende. Empilées si elles se chevauchent. */
+  var fins = [];
+  series.forEach(function(sr){
+    if(!BV_ON[sr.k]) return;
+    var i = b.annees.length - 1, v = valeur(sr, i);
+    if(v === null) return;
+    fins.push({ y: y(v), nom: sr.nom, col: sr.col,
+      txt: vue === 'part' ? fr(sr.v[i]) + ' %' : nbBrev(v) });
+  });
+  /* Chaque étiquette occupe DEUX lignes — le nom et la valeur : l'écart
+     minimal doit les couvrir toutes deux, sinon la valeur de l'une se pose sur
+     le nom de la suivante. On repousse ensuite l'ensemble vers le haut si la
+     dernière sortait du cadre. */
+  fins.sort(function(p, q){ return p.y - q.y; });
+  var ECART = 32;
+  for(var f = 1; f < fins.length; f++){
+    if(fins[f].y - fins[f - 1].y < ECART) fins[f].y = fins[f - 1].y + ECART;
+  }
+  var trop = fins.length ? fins[fins.length - 1].y - (H - B - 4) : 0;
+  if(trop > 0) fins.forEach(function(e){ e.y -= trop; });
+  fins.forEach(function(e){
+    s += '<text class="el" x="' + (W - R + 10) + '" y="' + (e.y - 2).toFixed(1)
+      + '" fill="' + e.col + '" style="font-size:11.5px;font-weight:700">' + esc(e.nom) + '</text>'
+      + '<text class="ax" x="' + (W - R + 10) + '" y="' + (e.y + 11).toFixed(1) + '">'
+      + esc(e.txt) + '</text>';
+  });
 
-  document.getElementById('brev-chart').innerHTML =
-    '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Courbes 2010–2023 de la part des brevets d’IA accordés pour la Chine, les États-Unis et l’Europe, avec le volume mondial en barres d’arrière-plan.">'+s+'</svg>';
+  /* Guide de survol et surface de capture. Une seule surface transparente
+     couvre l'aire de tracé : viser un point à la souris demanderait une
+     précision que la lecture d'un graphique ne tolère pas. */
+  s += '<line class="bv-guide" id="bv-guide" x1="0" y1="' + T + '" x2="0" y2="' + (H - B)
+    + '" style="display:none"/>'
+    + '<rect id="bv-capte" x="' + L + '" y="' + T + '" width="' + pw + '" height="' + ph
+    + '" fill="transparent"/>';
 
-  /* tableau alternatif */
-  var rows = '';
+  var hote = document.getElementById('brev-chart');
+  hote.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="'
+    + (vue === 'part'
+        ? 'Part des brevets d’IA accordés par acteur, 2010–2023, avec le volume mondial en arrière-plan.'
+        : 'Volume de brevets d’IA accordés par acteur, 2010–2023, échelle logarithmique.')
+    + '">' + s + '</svg><div class="bv-tip" id="bv-tip" role="status"></div>';
+
+  brevInteraction(hote, { W: W, H: H, L: L, R: R, T: T, B: B, pw: pw, ph: ph,
+                          x: x, y: y, vue: vue, series: series });
+  brevLegende(series);
+  brevTitre();
+  brevLecture();
+  brevTableau();
+}
+
+/* Nombre de brevets, à partir de milliers. On n'écrit pas « 3,416 milliers » :
+   personne ne lit un ordre de grandeur dans cette forme. */
+function nbBrev(milliers){
+  var n = Math.round(milliers * 1000);
+  /* fr() et non String() : « 17.3 k » se lit en anglais au milieu d'une page
+     française, et le point y passe pour un séparateur de milliers. */
+  return n >= 1000 ? fr(Math.round(n / 100) / 10) + ' k'
+                   : n.toLocaleString('fr-FR');
+}
+
+/* Survol : un repère vertical et une infobulle qui donne TOUTES les séries
+   visibles à cette année. Lire une courbe à la fois obligerait à mémoriser. */
+function brevInteraction(hote, g){
+  var svg = hote.querySelector('svg');
+  var capte = svg.querySelector('#bv-capte');
+  var guide = svg.querySelector('#bv-guide');
+  var tip = hote.querySelector('#bv-tip');
+  var b = DATA.brevets;
+
+  function annee(cx){
+    var best = b.annees[0], d = Infinity;
+    b.annees.forEach(function(yr){
+      var dd = Math.abs(g.x(yr) - cx);
+      if(dd < d){ d = dd; best = yr; }
+    });
+    return best;
+  }
+
+  function montrer(an, ev){
+    var i = b.annees.indexOf(an);
+    if(i < 0) return;
+    BV_AN = an;
+    guide.style.display = '';
+    guide.setAttribute('x1', g.x(an).toFixed(1));
+    guide.setAttribute('x2', g.x(an).toFixed(1));
+    var vol = brevVol(an);
+    var lignes = g.series.filter(function(sr){ return BV_ON[sr.k]; }).map(function(sr){
+      var val = g.vue === 'part' ? sr.v[i] : brevAbs(sr.v[i], an);
+      return { nom: sr.nom, col: sr.col, deduit: sr.deduit,
+               tri: sr.v[i],
+               txt: val === null ? 'n. d.'
+                    : (g.vue === 'part' ? fr(sr.v[i]) + ' %' : nbBrev(val)) };
+    }).sort(function(p, q){ return q.tri - p.tri; });
+    var prec = an === b.annees[b.annees.length - 1]
+      ? 'Parts publiées (exactes). '
+      : 'Parts : lecture graphique, ± 3 points. ';
+    if(g.vue === 'volume') prec += 'Volumes déduits (part × volume mondial) : '
+      + 'l’incertitude des deux séries s’y ajoute.';
+    else if(vol !== null) prec += 'Volume mondial ≈ ' + vol + ' 000 brevets.';
+    tip.innerHTML = '<h4>' + an + '</h4>'
+      + lignes.map(function(l){
+          return '<div class="l"><i style="background:' + l.col + '"></i><span>'
+            + esc(l.nom) + (l.deduit ? ' <span style="opacity:.6">(déduit)</span>' : '')
+            + '</span><b>' + esc(l.txt) + '</b></div>';
+        }).join('')
+      + '<div class="p">' + prec + '</div>';
+    tip.classList.add('on');
+    /* L'infobulle bascule à gauche du repère quand elle sortirait du cadre :
+       une bulle coupée par le bord ne se lit pas. */
+    var r = hote.getBoundingClientRect();
+    var px = ev ? (ev.clientX - r.left) : (g.x(an) / g.W * r.width);
+    var lg = tip.offsetWidth || 200;
+    tip.style.left = Math.max(4, Math.min(r.width - lg - 4,
+      px + (px + lg + 18 > r.width ? -lg - 14 : 14))) + 'px';
+    tip.style.top = Math.max(4, (ev ? ev.clientY - r.top : r.height / 2) - 20) + 'px';
+  }
+
+  function cacher(){
+    guide.style.display = 'none';
+    tip.classList.remove('on');
+  }
+
+  capte.addEventListener('mousemove', function(ev){
+    var r = svg.getBoundingClientRect();
+    montrer(annee((ev.clientX - r.left) / r.width * g.W), ev);
+  });
+  capte.addEventListener('mouseleave', cacher);
+  hote.addEventListener('mouseleave', cacher);
+
+  /* Clavier : le graphique est atteignable et parcourable année par année.
+     Sans cela, tout ce que porte l'infobulle serait réservé à la souris. */
+  svg.setAttribute('tabindex', '0');
+  svg.addEventListener('focus', function(){ montrer(BV_AN || b.annees[b.annees.length - 1]); });
+  svg.addEventListener('blur', cacher);
+  svg.addEventListener('keydown', function(ev){
+    var i = b.annees.indexOf(BV_AN);
+    if(i < 0) i = b.annees.length - 1;
+    if(ev.key === 'ArrowRight'){ ev.preventDefault(); montrer(b.annees[Math.min(b.annees.length - 1, i + 1)]); }
+    else if(ev.key === 'ArrowLeft'){ ev.preventDefault(); montrer(b.annees[Math.max(0, i - 1)]); }
+    else if(ev.key === 'Escape'){ cacher(); }
+  });
+}
+
+/* Légende-interrupteur : chaque entrée porte sa valeur de fin de série, ce qui
+   évite l'aller-retour vers le graphique pour lire un chiffre. */
+function brevLegende(series){
+  var b = DATA.brevets, i = b.annees.length - 1;
+  var e = document.getElementById('brev-leg');
+  if(!e) return;
+  e.innerHTML = series.map(function(sr){
+    var v = BV_VUE === 'part' ? fr(sr.v[i]) + ' %' : nbBrev(brevAbs(sr.v[i], b.annees[i]));
+    return '<button type="button" data-serie="' + sr.k + '"'
+      + (BV_ON[sr.k] ? '' : ' class="off"') + ' aria-pressed="' + (BV_ON[sr.k] ? 'true' : 'false')
+      + '" style="color:' + sr.col + '">'
+      + '<span class="sw" style="background:' + sr.col + '"></span>'
+      + '<span style="color:var(--ink)">' + esc(sr.nom) + '</span>'
+      + '<span class="v">' + esc(v) + '</span></button>';
+  }).join('')
+  + (BV_VUE === 'part'
+      ? '<span class="lg-item" style="margin-left:4px"><span class="lg-sw" '
+        + 'style="background:#ECE9F1;border:1px solid #D5D2D9;border-radius:2px"></span>'
+        + 'Volume mondial (milliers, axe droit)</span>' : '');
+  e.querySelectorAll('[data-serie]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var k = this.getAttribute('data-serie');
+      /* On refuse d'éteindre la dernière : un graphique vide n'apprend rien et
+         donne l'impression d'une panne. */
+      var reste = Object.keys(BV_ON).filter(function(q){ return BV_ON[q]; });
+      if(BV_ON[k] && reste.length === 1) return;
+      BV_ON[k] = !BV_ON[k];
+      renderBrevets();
+    });
+  });
+}
+
+/* Ce que la vue montre, et ce qu'elle ne montre pas. */
+/* Le titre du panneau suit la lecture affichée : « part du total mondial (%) »
+   au-dessus de volumes absolus était un contresens, et c'est le titre qu'on lit
+   en premier. */
+function brevTitre(){
+  var t = document.getElementById('t-brev');
+  if(t) t.textContent = BV_VUE === 'part'
+    ? 'Brevets d’IA accordés — part du total mondial (%)'
+    : 'Brevets d’IA accordés — volume déduit par acteur (2010–2023)';
+}
+
+function brevLecture(){
+  var b = DATA.brevets, n = b.annees.length - 1;
+  var mult = function(k){
+    var d = brevAbs(b[k][0], b.annees[0]), f = brevAbs(b[k][n], b.annees[n]);
+    return (d && f) ? Math.round(f / d) : null;
+  };
+  var e = document.getElementById('brev-lecture');
+  var note = document.getElementById('brev-note');
+  if(BV_VUE === 'part'){
+    e.innerHTML = '<b>Ce que montre cette vue.</b> La répartition du gâteau. '
+      + 'La Chine passe d’environ <span class="ch">13 %</span> à <span class="ch">69,7 %</span> '
+      + 'des brevets d’IA accordés, les États-Unis reculent de <span class="ch">40 %</span> à '
+      + '<span class="ch">14,2 %</span>, l’Europe de <span class="ch">8 %</span> à '
+      + '<span class="ch">2,8 %</span>. '
+      + '<b>Ce qu’elle ne montre pas :</b> la taille du gâteau. Le volume mondial a été '
+      + 'multiplié par 60 sur la période — une part qui baisse peut recouvrir un nombre '
+      + 'qui monte. Basculez sur <b>Volume accordé</b> pour le voir.';
+    note.textContent = 'Points 2023 publiés (exacts) ; séries 2010–2022 : lecture graphique, '
+      + 'la bande colorée figure l’incertitude de ± 3 points. « Reste du monde » est déduit '
+      + '(100 − Chine − États-Unis − Europe), d’où son trait discontinu. Barres grises : '
+      + 'volume mondial de brevets d’IA accordés, en milliers (axe de droite, lecture graphique).';
+  } else {
+    e.innerHTML = '<b>Ce que montre cette vue.</b> Le nombre, et non la part. Entre 2010 et '
+      + '2023, l’Europe est multipliée par <span class="ch">×' + mult('europe') + '</span>, '
+      + 'les États-Unis par <span class="ch">×' + mult('us') + '</span>, la Chine par '
+      + '<span class="ch">×' + mult('chine') + '</span>. Personne n’a reculé en volume : la '
+      + 'Chine a grandi quinze fois plus vite, et c’est cela que la vue en parts fait passer '
+      + 'pour un effondrement. '
+      + '<b>Comment la lire :</b> l’échelle est logarithmique — un même écart vertical '
+      + 'représente le même FACTEUR, et deux courbes parallèles croissent au même rythme. '
+      + '<b>Ce qu’elle ne montre pas :</b> ces volumes sont <b>déduits</b>, pas publiés.';
+    note.textContent = 'Volumes calculés : part du monde × volume mondial de l’année. '
+      + 'Les deux séries d’entrée portent leur propre incertitude (parts en lecture graphique '
+      + 'jusqu’en 2022, volume mondial en lecture graphique) : ces nombres sont des ordres de '
+      + 'grandeur, à ne pas citer comme des comptes officiels. Échelle logarithmique.';
+  }
+}
+
+function brevTableau(){
+  var b = DATA.brevets, rows = '';
   b.volume.annees.forEach(function(yr, i){
-    var j = b.annees.indexOf(yr);
-    rows += '<tr><th scope="row">'+yr+'</th>'
-      + '<td>'+(j>=0 ? fr(b.chine[j]) : '—')+'</td>'
-      + '<td>'+(j>=0 ? fr(b.us[j]) : '—')+'</td>'
-      + '<td>'+(j>=0 ? fr(b.europe[j]) : '—')+'</td>'
-      + '<td>'+b.volume.milliers[i]+'</td></tr>';
+    var j = b.annees.indexOf(yr), v = b.volume.milliers[i];
+    var reste = j >= 0 ? Math.round((100 - b.chine[j] - b.us[j] - b.europe[j]) * 10) / 10 : null;
+    rows += '<tr><th scope="row">' + yr + '</th>'
+      + '<td>' + (j >= 0 ? fr(b.chine[j]) : '—') + '</td>'
+      + '<td>' + (j >= 0 ? fr(b.us[j]) : '—') + '</td>'
+      + '<td>' + (j >= 0 ? fr(b.europe[j]) : '—') + '</td>'
+      + '<td>' + (reste !== null ? fr(reste) : '—') + '</td>'
+      + '<td>' + v + '</td>'
+      + '<td>' + (j >= 0 ? nbBrev(brevAbs(b.chine[j], yr)) : '—') + '</td>'
+      + '<td>' + (j >= 0 ? nbBrev(brevAbs(b.us[j], yr)) : '—') + '</td>'
+      + '<td>' + (j >= 0 ? nbBrev(brevAbs(b.europe[j], yr)) : '—') + '</td></tr>';
   });
   document.getElementById('brev-table').innerHTML =
-    '<table><caption class="sr-only">Brevets d’IA accordés : part du total mondial (%) et volume mondial (milliers), 2010–2023</caption>'
-    + '<thead><tr><th scope="col">Année</th><th scope="col">Chine %</th><th scope="col">États-Unis %</th><th scope="col">Europe %</th><th scope="col">Volume mondial (milliers)</th></tr></thead>'
-    + '<tbody>'+rows+'</tbody></table>';
+    '<table><caption class="sr-only">Brevets d’IA accordés : parts du total mondial (%), '
+    + 'volume mondial (milliers) et volumes déduits par acteur, 2010–2023</caption>'
+    + '<thead><tr><th scope="col">Année</th><th scope="col">Chine %</th>'
+    + '<th scope="col">États-Unis %</th><th scope="col">Europe %</th>'
+    + '<th scope="col">Reste %</th><th scope="col">Monde (milliers)</th>'
+    + '<th scope="col">Chine (déduit)</th><th scope="col">É.-U. (déduit)</th>'
+    + '<th scope="col">Europe (déduit)</th></tr></thead>'
+    + '<tbody>' + rows + '</tbody></table>';
+}
+
+/* La bascule des deux lectures. Posée une seule fois : la reposer à chaque
+   rendu empilerait les écouteurs, et un clic déclencherait n rendus. */
+function brevBrancherVues(){
+  document.querySelectorAll('.bv-vues [data-vue]').forEach(function(btn){
+    if(btn.__branche) return;
+    btn.__branche = true;
+    btn.addEventListener('click', function(){
+      BV_VUE = this.getAttribute('data-vue');
+      document.querySelectorAll('.bv-vues [data-vue]').forEach(function(o){
+        var on = o.getAttribute('data-vue') === BV_VUE;
+        o.classList.toggle('on', on);
+        o.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      renderBrevets();
+    });
+  });
 }
 
 /* ── 3. Chercheurs d’élite — barres jumelées (SVG pur) ── */
@@ -2343,6 +2771,10 @@ function renderAll(){
      avant que tous soient finis. Ils se construisent maintenant apres, sans
      que le lecteur attende devant un cadre vide. */
   var reste = function(){
+    /* La bascule des deux lectures est branchée AVANT le premier rendu : ses
+       boutons vivent dans le balisage de la page, pas dans le SVG reconstruit,
+       et brevBrancherVues() est idempotent. */
+    brevBrancherVues();
     renderBrevets();
     renderTalents();
     renderAdoption();
