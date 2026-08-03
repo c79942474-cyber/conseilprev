@@ -976,6 +976,23 @@ textarea.form-el{min-height:86px;resize:vertical}
 .guided-step-detail{font-size:11.5px;color:var(--ink2);line-height:1.55;margin-bottom:5px}
 .guided-step-detail strong{color:var(--ink);font-weight:700}
 .guided-step-tip{font-size:11px;color:#1C5A8A;background:rgba(28,90,138,.06);border-radius:5px;padding:7px 10px;margin-top:6px;line-height:1.5}
+/* Fiche technique d'une étape. « À faire » et « ce que vous y gagnez » disent
+   au client ce qu'il obtient ; ces quatre lignes-ci disent D'OÙ ÇA VIENT —
+   quelle source, quel calcul, quel document, et ce que le modèle a le droit de
+   faire. Un chiffre sans provenance n'est pas une information : c'est un
+   risque, et c'est exactement ce qu'un analyste doit pouvoir écarter. */
+.gs-fiche{margin-top:8px;border-top:1px dashed var(--rule2);padding-top:8px;
+  display:grid;grid-template-columns:auto 1fr;gap:3px 9px;align-items:baseline}
+.gs-cle{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted2);font-weight:700;white-space:nowrap;padding-top:2px}
+.gs-val{font-size:11px;color:var(--ink2);line-height:1.5}
+.gs-val ul{margin:0;padding-left:14px}
+.gs-val li{margin:1px 0}
+.gs-det{color:var(--muted)}
+/* L'absence de modèle est une information, pas un vide : elle se marque. */
+.gs-sansia{color:#0E7C7B;font-weight:600}
+@media(max-width:560px){.gs-fiche{grid-template-columns:1fr;gap:1px}
+  .gs-cle{padding-top:6px}}
 .guided-step-arrow{text-align:center;color:var(--rule2);font-size:13px;padding:2px 0}
 
 .mat-modal{position:fixed;inset:0;z-index:10020;background:rgba(28,28,28,.55);display:none;align-items:center;justify-content:center;padding:20px}
@@ -23796,23 +23813,43 @@ var GUIDED_PATHS = [
       {id:'pan-sia', go:'panParcoursInvest', label:'Choisir le pays : le parcours investisseur',
        action:'Le parcours commence par une question — construction neuve, extension ou rachat — parce que les mêmes critères ne se lisent pas dans le même ordre. Suivez la branche de votre projet jusqu’au bout.',
        gain:'Un classement des pays selon SEPT critères pondérés par vous : intensité carbone, pilotabilité du mix, eau, free cooling, prix, parc en service, file de raccordement.',
-       tip:'L’intensité carbone est une moyenne annuelle nationale : un PPA dédié ou un approvisionnement horaire change votre résultat sans changer cette moyenne.'},
+       tip:'L’intensité carbone est une moyenne annuelle nationale : un PPA dédié ou un approvisionnement horaire change votre résultat sans changer cette moyenne.',
+       sources: ["Ember — production électrique par filière, millésime 2024", "Agence européenne pour l’environnement — indice d’exploitation de l’eau WEI+", "Eurostat — prix industriels de l’électricité, série nrg_pc_205, en classes", "Référentiel d’implantation CONSEILPREV, version 2026-07-a"],
+       calcul: "Somme pondérée sur SEPT critères, exécutée CÔTÉ SERVEUR (implantation.py) : score = Σ(poids × note) / Σ(poids), les poids 0 à 4 étant les vôtres. La formule affichée est la formule exécutée.",
+       livrable: "Classement des pays et fiche par pays — avantages, inconvénients, commentaire d’arbitrage, perspectives 2030 — à l’écran et à l’impression.",
+       ia: "Aucun modèle. Tout est calculé côté serveur, formule affichée."},
       {id:'pan-sia', go:'panParcoursEau', label:'Vérifier l’eau avant de s’engager',
        action:'Reprenez le même module par le chemin « Eau & biodiversité » : indice WEI+ de l’Agence européenne, part de l’irrigation agricole, mode de refroidissement retenu.',
        gain:'Le point où un refroidissement évaporatif entre en compétition d’usage avec l’agriculture — c’est souvent là que se joue le permis, pas dans le dossier électrique.',
-       tip:'Un aéroréfrigérant sec affiche zéro eau SUR SITE tout en consommant davantage à la source sur un réseau thermique : WUE_source = WUE_site + EWIF × PUE.'},
-      {id:'empreinte', label:'Chiffrer l’empreinte du projet',
-       action:'Portez la consommation annoncée du site dans le module Empreinte et comparez usage, fabrication amortie et eau.',
-       gain:'Un ordre de grandeur défendable devant un financeur — et la part de fabrication, qui domine dès que le réseau est décarboné.',
-       tip:'Sur un réseau très décarboné la fabrication amortie pèse plus lourd que l’usage : ne présentez jamais l’usage seul.'},
+       tip:'Un aéroréfrigérant sec affiche zéro eau SUR SITE tout en consommant davantage à la source sur un réseau thermique : WUE_source = WUE_site + EWIF × PUE.',
+       sources: ["Agence européenne pour l’environnement — WEI+ et part de l’irrigation agricole", "Référentiel des 97 centres de données CONSEILPREV, version 2026-07-a — mode de refroidissement déclaré ou déduit"],
+       calcul: "WUE_source = WUE_site + EWIF × PUE. L’eau du site et l’eau de la source sont tenues séparées : un aéroréfrigérant sec affiche zéro sur site et davantage à la source.",
+       livrable: "Lecture « eau » du classement, et fiche eau par pays.",
+       ia: "Aucun modèle. Tout est calculé côté serveur, formule affichée."},
+      {id:'matrice', label:'Porter les risques du projet dans la matrice',
+       action:'Positionnez les risques relevés aux deux étapes précédentes — raccordement, eau, permis, concurrence sur le réseau — par gravité et probabilité.',
+       gain:'Un support d’arbitrage qui distingue ce qui se contractualise, ce qui s’assure et ce qui fait renoncer.',
+       tip:'Sentinel SITUE et COMPARE des pays. Le calcul d’ingénierie de VOTRE site — PUE et WUE mesurés, carbone incorporé, dimensionnement — n’est pas en libre-service : c’est une étude, et elle se commande.',
+       sources: ["Constats des étapes précédentes, rattachés à la version 2026-07-a du référentiel","Registre des contrôles factuels, version 2026-07-a — 40 affirmations vérifiées"],
+       calcul: "Positionnement gravité × probabilité, sans pondération cachée. Aucune note globale ne vient masquer un écart isolé.",
+       livrable: "Matrice des risques imprimable, exportable en PDF et en Word.",
+       ia: "Aucun modèle. Vos saisies, positionnées telles quelles."},
       {id:'juridique', label:'Sécuriser les contrats',
        action:'Faites relire les pièces du montage : raccordement, PPA, bail, contrat de colocation ou d’hébergement.',
        gain:'Les clauses manquantes et les engagements mal bornés, repérés avant la signature plutôt qu’au premier litige.',
-       tip:'Un délai de raccordement qui n’est pas opposable au gestionnaire de réseau n’est pas un délai : c’est une intention.'},
+       tip:'Un délai de raccordement qui n’est pas opposable au gestionnaire de réseau n’est pas un délai : c’est une intention.',
+       sources: ["Référentiel juridique CONSEILPREV — textes UE et nationaux, chacun avec sa date d’application (règlement (UE) 2024/1689, RGPD, NIS 2)", "Base de connaissance Sentinel — vos documents versés, découpés puis indexés (PDF, DOCX, XLSX ; index vectoriel <em>mistral-embed</em>, 1 024 dimensions). Les passages sont RETROUVÉS à chaque question, le modèle n’est pas ré-entraîné."],
+       calcul: "Qualification DÉTERMINISTE d’abord : juridique.qualifier() établit les textes applicables et ceux à vérifier. Le modèle intervient ensuite, sur cette liste.",
+       livrable: "Analyse argumentée — qualification, lectures possibles, risque, actions, réserves — exportable en DOCX et en PDF, marquage IA porté dans les métadonnées du fichier (art. 50 du règlement (UE) 2024/1689), avec le nom exact du modèle employé.",
+       ia: "Claude (Anthropic) ou Mistral Large, au choix dans l’interface. Le modèle RÉDIGE et EXPLIQUE ; il ne décide pas de ce qui s’applique — la qualification est calculée avant lui et lui est transmise."},
       {id:'report', label:'Présenter l’arbitrage',
        action:'Consolidez le classement, l’empreinte et les réserves juridiques en une vue de direction.',
        gain:'Un support de comité qui dit ce qui est mesuré, ce qui est calculé et ce qui reste à trancher en data room.',
-       tip:'Datez la version du référentiel citée : les intensités carbone et les files de raccordement bougent d’un millésime à l’autre.'}
+       tip:'Datez la version du référentiel citée : les intensités carbone et les files de raccordement bougent d’un millésime à l’autre.',
+       sources: ["Vos propres saisies dans les modules parcourus, horodatées", "Registre des contrôles factuels, version 2026-07-a — 40 affirmations, verdicts publiés y compris défavorables"],
+       calcul: "Consolidation des résultats des étapes précédentes ; aucun nouveau calcul.",
+       livrable: "Vue de direction imprimable, avec la version du référentiel et sa date.",
+       ia: "Aucun modèle. Tout est calculé côté serveur, formule affichée."}
     ]
   },
   {
@@ -23824,19 +23861,35 @@ var GUIDED_PATHS = [
       {id:'pan-sia', go:'panParcoursClimat', label:'Le chemin « Climat et gaz à effet de serre »',
        action:'Parcourez le fond de carte « intensité carbone du réseau » et le tableau d’empreinte par pays, poste par poste.',
        gain:'La distinction entre l’empreinte d’usage et l’empreinte totale — et la raison pour laquelle un pays gris n’est pas un pays à zéro.',
-       tip:'Aucun des 97 sites ne publie sa capacité, son PUE ni sa consommation : presque tout ce que vous lisez est de nature « classe », et la page le dit.'},
+       tip:'Aucun des 97 sites ne publie sa capacité, son PUE ni sa consommation : presque tout ce que vous lisez est de nature « classe », et la page le dit.',
+       sources: ["Ember — mix de production 2024", "ADEME, AIE, GIEC — facteurs d’émission sur cycle de vie", "Référentiel des 97 centres de données, version 2026-07-a"],
+       calcul: "Intensité carbone appliquée à la consommation estimée. Chaque valeur porte sa NATURE : publié, site (capacité annoncée) ou classe (ordre de grandeur de la catégorie).",
+       livrable: "Tableau d’empreinte par pays et fond de carte « intensité carbone ».",
+       ia: "Aucun modèle. Tout est calculé côté serveur, formule affichée."},
       {id:'pan-sia', go:'panParcoursEau', label:'Le chemin « Eau et biodiversité »',
        action:'Même module, autre lecture : disponibilité en eau, concurrence d’usage, choix de refroidissement.',
        gain:'Les territoires où l’eau, et non l’électricité, sera le facteur limitant.',
-       tip:'L’eau de refroidissement se juge au point exact du site et au mois le plus tendu, jamais sur une moyenne nationale annuelle.'},
-      {id:'empreinte', label:'Consolider votre propre empreinte',
-       action:'Reportez vos consommations et vos équipements pour obtenir usage, fabrication et eau sur votre périmètre.',
-       gain:'Un chiffrage à opposer aux ordres de grandeur du marché plutôt qu’à recopier.',
-       tip:'ERE = PUE × (1 − ERF) peut descendre sous 1 quand la chaleur est réellement valorisée : ce n’est pas une anomalie de calcul.'},
+       tip:'L’eau de refroidissement se juge au point exact du site et au mois le plus tendu, jamais sur une moyenne nationale annuelle.',
+       sources: ["Agence européenne pour l’environnement — indice WEI+ et prélèvements par usage, repris au référentiel d’implantation version 2026-07-a", "Référentiel d’implantation, version 2026-07-a"],
+       calcul: "WUE_source = WUE_site + EWIF × PUE, par mode de refroidissement.",
+       livrable: "Lecture « eau et biodiversité » et fiche eau par pays.",
+       ia: "Aucun modèle. Tout est calculé côté serveur, formule affichée."},
+      {id:'pan-sia', label:'Lire l’empreinte du parc, poste par poste',
+       action:'Dans la section Empreinte, comparez usage, fabrication amortie et eau pays par pays, et regardez la NATURE de chaque valeur avant de la retenir.',
+       gain:'Des ordres de grandeur défendables, et la part de fabrication — majoritaire dès que le réseau est décarboné, invisible sur une carte qui n’afficherait que l’usage.',
+       tip:'Cette page ne chiffre PAS votre parc : elle donne le référentiel auquel le comparer. Le calcul site par site — PUE et WUE mesurés, carbone incorporé de vos équipements — relève d’une étude d’ingénierie, pas d’un formulaire.',
+       sources: ["ADEME — Base Empreinte, facteurs d’émission sur cycle de vie, appliqués par le référentiel d’empreinte version 2026-07-a","Agence internationale de l’énergie et Centre commun de recherche de la Commission (JRC)","Référentiel des 97 centres de données CONSEILPREV, version 2026-07-a"],
+       calcul: "usage = électricité × intensité carbone du pays ; fabrication amortie sur la durée de vie ; eau de refroidissement. ERE = PUE × (1 − ERF), qui peut descendre sous 1 quand la chaleur est valorisée.",
+       livrable: "Tableau d’empreinte par pays et fiches pays, à l’écran et à l’impression.",
+       ia: "Aucun modèle. Formules exécutées côté serveur et affichées."},
       {id:'templates', label:'Documenter et prouver',
        action:'Constituez le dossier : sources, millésimes, hypothèses et formules retenues.',
        gain:'De quoi soutenir un chiffre en audit — un ordre de grandeur sans hypothèses écrites ne résiste pas à la première question.',
-       tip:'Citez toujours la version du référentiel et sa date : c’est la première chose que vérifie un contrôleur.'}
+       tip:'Citez toujours la version du référentiel et sa date : c’est la première chose que vérifie un contrôleur.',
+       sources: ["Base de connaissance Sentinel — vos documents versés, découpés puis indexés (PDF, DOCX, XLSX ; index vectoriel <em>mistral-embed</em>, 1 024 dimensions). Les passages sont RETROUVÉS à chaque question, le modèle n’est pas ré-entraîné.", "Registre des contrôles factuels, version 2026-07-a — source, verdict et date pour chacune des 40 affirmations"],
+       calcul: "Aucun calcul à cette étape : on rassemble et on trace.",
+       livrable: "Dossier documentaire — sources, millésimes, hypothèses, formules — exportable en DOCX et PDF, marquage IA porté dans les métadonnées du fichier (art. 50 du règlement (UE) 2024/1689), avec le nom exact du modèle employé.",
+       ia: "Claude (Anthropic) ou Mistral Large, au choix dans l’interface. Le modèle RÉDIGE et EXPLIQUE ; il ne décide pas de ce qui s’applique — la qualification est calculée avant lui et lui est transmise."}
     ]
   },
   {
@@ -23848,19 +23901,35 @@ var GUIDED_PATHS = [
       {id:'pan-sia', go:'panParcoursCredit', label:'Le chemin « Banque — financement de projet »',
        action:'Suivez la lecture bancaire : statut du site comme échelle de certitude, trajectoire du parc, file de raccordement.',
        gain:'Une hiérarchie des risques du projet fondée sur des faits datés et sourcés, pas sur des annonces.',
-       tip:'Les projets ABANDONNÉS sont conservés exprès dans le référentiel : un refus renseigne autant qu’une annonce sur les contraintes d’un territoire.'},
+       tip:'Les projets ABANDONNÉS sont conservés exprès dans le référentiel : un refus renseigne autant qu’une annonce sur les contraintes d’un territoire.',
+       sources: ["Référentiel des 97 centres de données — statut, exploitant, mise en service annoncée", "Ember (mix 2024), Eurostat nrg_pc_205 (prix en classes)", "Compilation datée du cabinet — communiqués et décisions d’autorités"],
+       calcul: "File de raccordement 2026-2030 COMPTÉE depuis les statuts des 97 sites, pas déclarée. Le statut sert d’échelle de certitude : en exploitation, en construction, autorisé, annoncé, abandonné.",
+       livrable: "Lecture bancaire du référentiel et fiches site déclaré / calculé.",
+       ia: "Aucun modèle. Tout est calculé côté serveur, formule affichée."},
       {id:'pan-sia', go:'panParcoursAssurance', label:'Le chemin « Assurance — souscription et sinistres »',
        action:'Même module, angle assurantiel : exposition physique, dépendance au réseau, concentration géographique.',
        gain:'Les cumuls d’exposition qu’une lecture site par site ne fait pas apparaître.',
-       tip:'La concentration se lit sur la carte, pas dans le dossier d’un site : plusieurs preneurs peuvent dépendre du même point de raccordement.'},
+       tip:'La concentration se lit sur la carte, pas dans le dossier d’un site : plusieurs preneurs peuvent dépendre du même point de raccordement.',
+       sources: ["Référentiel des 97 centres de données CONSEILPREV, version 2026-07-a — implantation et exploitant", "Copernicus, DINUM et NASA via /api/donnees-ouvertes, pour la couche ouverte"],
+       calcul: "Concentration lue sur la carte : plusieurs preneurs peuvent dépendre du même point de raccordement. Aucun modèle actuariel n’est appliqué.",
+       livrable: "Vue d’exposition et fiches site, avec la nature de chaque valeur.",
+       ia: "Aucun modèle. Tout est calculé côté serveur, formule affichée."},
       {id:'matrice', label:'Positionner les risques',
        action:'Reportez les risques identifiés sur les axes gravité × probabilité.',
        gain:'Un support d’arbitrage qui tranche entre ce qui se couvre, ce qui se contractualise et ce qui se refuse.',
-       tip:'Un risque non chiffrable n’est pas un risque nul : inscrivez-le avec la mention « à mesurer », il disparaîtra sinon du dossier.'},
+       tip:'Un risque non chiffrable n’est pas un risque nul : inscrivez-le avec la mention « à mesurer », il disparaîtra sinon du dossier.',
+       sources: ["Vos saisies de gravité et de probabilité, horodatées dans votre espace", "Constats des étapes précédentes, rattachés à la version du référentiel employée"],
+       calcul: "Positionnement gravité × probabilité ; aucune pondération cachée.",
+       livrable: "Matrice imprimable, exportable en PDF et en Word.",
+       ia: "Aucun modèle. Tout est calculé côté serveur, formule affichée."},
       {id:'juridique', label:'Les questions de data room',
        action:'Listez, avec l’assistance juridique, ce que le référentiel ne peut pas trancher : PUE mesuré sur douze mois, raccordement contractuel, baux, CAPEX engagé, structure de détention.',
        gain:'Une liste opposable au vendeur, écrite avant la négociation et non pendant.',
-       tip:'Le prix réel de l’électricité est un contrat : la statistique publique ne le voit pas, ne la citez jamais comme prix du projet.'}
+       tip:'Le prix réel de l’électricité est un contrat : la statistique publique ne le voit pas, ne la citez jamais comme prix du projet.',
+       sources: ["Référentiel juridique CONSEILPREV — textes datés (règlement (UE) 2024/1689, RGPD, NIS 2) et clausier par domaine et criticité", "Base de connaissance Sentinel — vos documents versés, découpés puis indexés (PDF, DOCX, XLSX ; index vectoriel <em>mistral-embed</em>, 1 024 dimensions). Les passages sont RETROUVÉS à chaque question, le modèle n’est pas ré-entraîné."],
+       calcul: "Qualification déterministe des textes applicables, puis rédaction. Le clausier est un référentiel, pas une génération.",
+       livrable: "Liste de questions de data room et revue de clauses, exportables en DOCX et PDF, marquage IA porté dans les métadonnées du fichier (art. 50 du règlement (UE) 2024/1689), avec le nom exact du modèle employé.",
+       ia: "Claude (Anthropic) ou Mistral Large, au choix dans l’interface. Le modèle RÉDIGE et EXPLIQUE ; il ne décide pas de ce qui s’applique — la qualification est calculée avant lui et lui est transmise."}
     ]
   },
   {
@@ -23872,19 +23941,35 @@ var GUIDED_PATHS = [
       {id:'pan-sia', go:'panParcoursAnalyste', label:'Le chemin « Analyse financière et reporting »',
        action:'Parcourez le référentiel avec la question du reporting : quelle donnée est opposable, laquelle est un ordre de grandeur.',
        gain:'La nature de chaque valeur — publié, site, classe — écrite noir sur blanc, ce qui est exactement ce qu’un commissaire demandera.',
-       tip:'« Classe » répond à « de quel ordre est un campus de ce type ? », jamais à « combien consomme ce site ? ». Ne franchissez pas cette ligne dans un rapport.'},
-      {id:'empreinte', label:'Chiffrer votre périmètre',
-       action:'Calculez usage, fabrication amortie et eau sur vos propres installations et contrats d’hébergement.',
-       gain:'Des postes séparés, tels que les attend un référentiel de reporting.',
-       tip:'La fabrication amortie relève du scope 3 : la fondre dans l’usage revient à sous-déclarer.'},
+       tip:'« Classe » répond à « de quel ordre est un campus de ce type ? », jamais à « combien consomme ce site ? ». Ne franchissez pas cette ligne dans un rapport.',
+       sources: ["Référentiel des 97 centres et des 72 systèmes d’IA, version 2026-07-a", "Registre des contrôles factuels — 40 affirmations vérifiées"],
+       calcul: "Aucun calcul nouveau : on LIT la nature de chaque valeur. « Classe » répond à « de quel ordre est un campus de ce type ? », jamais à « combien consomme ce site ? ».",
+       livrable: "Export CSV des cas filtrés, et fiches site avec leur nature.",
+       ia: "Aucun modèle. Tout est calculé côté serveur, formule affichée."},
+      {id:'pan-sia', label:'Retenir les ordres de grandeur, et leur nature',
+       action:'Relevez, pour chaque valeur que vous comptez citer, si elle est publiée, calculée depuis le site ou déduite d’une classe — l’infobulle le dit à chaque fois.',
+       gain:'Un rapport dont chaque chiffre porte sa qualification, ce qu’un commissaire aux comptes demandera avant toute autre chose.',
+       tip:'Aucune de ces valeurs n’est votre reporting : ce sont des repères de marché. Vos propres postes se calculent sur vos factures et vos contrats d’hébergement — Sentinel ne les collecte pas.',
+       sources: ["Référentiel des 97 centres et des 72 systèmes d’IA, versions 2026-07-a et 2026-07-b","Registre des contrôles factuels, version 2026-07-a — 40 affirmations vérifiées","ADEME, AIE, JRC et GIEC pour les facteurs appliqués"],
+       calcul: "Aucun calcul nouveau : on LIT la nature de chaque valeur. « Classe » répond à « de quel ordre est un campus de ce type ? », jamais à « combien consomme ce site ? ».",
+       livrable: "Export CSV des cas filtrés, et fiches site portant la nature de chaque valeur.",
+       ia: "Aucun modèle. La nature de chaque valeur est posée par le référentiel, pas déduite à la volée."},
       {id:'templates', label:'Constituer le dossier de preuve',
        action:'Rassemblez sources, millésimes, hypothèses et méthodes de calcul.',
        gain:'La traçabilité exigée en vérification — chaque chiffre remonte à sa source primaire.',
-       tip:'Une capture d’écran n’est pas une source : conservez le lien, l’éditeur et la date de consultation.'},
+       tip:'Une capture d’écran n’est pas une source : conservez le lien, l’éditeur et la date de consultation.',
+       sources: ["Base de connaissance Sentinel — vos documents versés, découpés puis indexés (PDF, DOCX, XLSX ; index vectoriel <em>mistral-embed</em>, 1 024 dimensions). Les passages sont RETROUVÉS à chaque question, le modèle n’est pas ré-entraîné.", "Sources primaires citées par le référentiel — éditeur, millésime et lien, contrôlées au registre de vérification"],
+       calcul: "Aucun calcul : traçabilité et rassemblement des pièces.",
+       livrable: "Dossier de preuve exportable en DOCX et PDF, marquage IA porté dans les métadonnées du fichier (art. 50 du règlement (UE) 2024/1689), avec le nom exact du modèle employé.",
+       ia: "Claude (Anthropic) ou Mistral Large, au choix dans l’interface. Le modèle RÉDIGE et EXPLIQUE ; il ne décide pas de ce qui s’applique — la qualification est calculée avant lui et lui est transmise."},
       {id:'report', label:'Restituer à la direction',
        action:'Présentez les résultats avec leurs limites explicites.',
        gain:'Un rapport dont les réserves sont écrites par vous plutôt que découvertes par le vérificateur.',
-       tip:'Annoncez les incertitudes en même temps que les chiffres : une réserve ajoutée après coup se lit comme une correction.'}
+       tip:'Annoncez les incertitudes en même temps que les chiffres : une réserve ajoutée après coup se lit comme une correction.',
+       sources: ["Résultats des étapes précédentes, horodatés", "Version datée des référentiels employés (implantation, empreinte et centres de données : 2026-07-a)"],
+       calcul: "Consolidation ; aucun nouveau calcul.",
+       livrable: "Vue de direction imprimable, réserves incluses.",
+       ia: "Aucun modèle. Tout est calculé côté serveur, formule affichée."}
     ]
   },
   {
@@ -23896,23 +23981,43 @@ var GUIDED_PATHS = [
       {id:'pan-sia', label:'Voir ce qui est réellement déployé dans l’UE',
        action:'Parcourez le panel des cas documentés — POC, pilotes, production, abandons — et leurs classes de risque AI Act.',
        gain:'Des points de comparaison réels pour situer vos propres usages, et les vulnérabilités déjà constatées par type de système.',
-       tip:'Ce panel n’est PAS un recensement : un déploiement non communiqué n’y figure pas, et le biais de publication favorise les grands groupes.'},
+       tip:'Ce panel n’est PAS un recensement : un déploiement non communiqué n’y figure pas, et le biais de publication favorise les grands groupes.',
+       sources: ["Panel de 72 cas d’IA documentés, version 2026-07-b — communiqués d’entreprises, décisions d’autorités, presse spécialisée", "Règlement (UE) 2024/1689 — classes de risque", "OWASP LLM Top 10 et MITRE ATLAS pour le profil de vulnérabilités"],
+       calcul: "Classe de risque DÉDUITE des caractéristiques factuelles par des règles écrites, et score d’exposition calculé terme à terme, chaque terme et son poids étant affichés.",
+       livrable: "Export CSV des cas filtrés, avec classe, règles appliquées et sources.",
+       ia: "Aucun modèle. Tout est calculé côté serveur, formule affichée."},
       {id:'simulateur', label:'Classer chaque système',
        action:'Déroulez les cinq étapes de classification pour chaque système hébergé ou opéré.',
        gain:'Le niveau de risque et les obligations exactes, avant d’avoir engagé la moindre dépense de mise en conformité.',
-       tip:'Le rôle compte autant que le système : hébergeur, déployeur et fournisseur n’ont pas les mêmes obligations sur le même outil.'},
+       tip:'Le rôle compte autant que le système : hébergeur, déployeur et fournisseur n’ont pas les mêmes obligations sur le même outil.',
+       sources: ["Règlement (UE) 2024/1689 — art. 5, annexes I et III, art. 50", "Référentiel juridique CONSEILPREV, avec dates d’application"],
+       calcul: "Arbre de décision déterministe en cinq étapes. Le même profil donne toujours le même résultat, avec la règle qui l’a produit.",
+       livrable: "Fiche de classification — niveau de risque, obligations, échéances.",
+       ia: "Aucun modèle. Tout est calculé côté serveur, formule affichée."},
       {id:'registre', label:'Inscrire à l’inventaire',
        action:'Enregistrez chaque système classifié avec sa finalité, son fournisseur et les données qu’il utilise.',
        gain:'L’inventaire central exigé par le règlement — la première pièce demandée en contrôle.',
-       tip:'Structurez par site ou par entité dès le départ : une reprise d’inventaire après coup coûte plus cher que la saisie initiale.'},
+       tip:'Structurez par site ou par entité dès le départ : une reprise d’inventaire après coup coûte plus cher que la saisie initiale.',
+       sources: ["Vos saisies dans le registre, isolées par client en base", "Fiche de classification produite à l’étape précédente, avec la règle du règlement (UE) 2024/1689 qui l’a produite"],
+       calcul: "Aucun : le registre enregistre, il ne recalcule pas.",
+       livrable: "Inventaire exigé par le règlement, conservé en base et isolé par client. Le module ne propose PAS de bouton d\u2019export : la pièce imprimable vient du rapport d\u2019audit, à l\u2019étape suivante.",
+       ia: "Aucun modèle. Tout est calculé côté serveur, formule affichée."},
       {id:'audit-ia-act', label:'Passer les points de contrôle',
        action:'Parcourez les points de contrôle en marquant chacun conforme, en cours ou à traiter.',
        gain:'Un plan d’action point par point, avec la référence légale de chacun.',
-       tip:'Traitez d’abord les points qui exposent à une sanction directe : tout ne peut pas être mené de front.'},
+       tip:'Traitez d’abord les points qui exposent à une sanction directe : tout ne peut pas être mené de front.',
+       sources: ["Règlement (UE) 2024/1689 — points de contrôle, chacun avec sa référence d’article", "Vos réponses aux points de contrôle, horodatées et conservées"],
+       calcul: "Avancement compté par point ; aucune note globale masquant un écart.",
+       livrable: "Rapport d’audit exportable en PDF, point par point.",
+       ia: "Aucun modèle. Tout est calculé côté serveur, formule affichée."},
       {id:'gouvernance', label:'Tenir le dispositif dans la durée',
        action:'Fixez le circuit de validation des nouveaux usages et la composition du comité.',
        gain:'Un dispositif qui survit au départ de la personne qui l’a monté.',
-       tip:'Un comité sans décisions réservées et sans motif écrit n’est pas une gouvernance : c’est une réunion.'}
+       tip:'Un comité sans décisions réservées et sans motif écrit n’est pas une gouvernance : c’est une réunion.',
+       sources: ["Référentiel de gouvernance CONSEILPREV, version 2026-07-a — RACI, décisions réservées, circuit de validation", "Base de connaissance Sentinel — vos documents versés, découpés puis indexés (PDF, DOCX, XLSX ; index vectoriel <em>mistral-embed</em>, 1 024 dimensions). Les passages sont RETROUVÉS à chaque question, le modèle n’est pas ré-entraîné."],
+       calcul: "Qualification déterministe d’une demande d’usage, puis rédaction. Le serveur REFUSE une décision sans motif écrit (HTTP 400).",
+       livrable: "Charte du comité, circuit de validation et registre des décisions, exportables en Word, marquage IA porté dans les métadonnées du fichier (art. 50 du règlement (UE) 2024/1689), avec le nom exact du modèle employé.",
+       ia: "Claude (Anthropic) ou Mistral Large, au choix dans l’interface. Le modèle RÉDIGE et EXPLIQUE ; il ne décide pas de ce qui s’applique — la qualification est calculée avant lui et lui est transmise."}
     ]
   }
 ];
@@ -24060,6 +24165,39 @@ window.guidedPathsRenderSelected = function(pathId){
   holder.innerHTML = guidedPathCard(path);
 };
 
+/* ══════════════════════════════════════════════════════════════════════════
+   LA FICHE TECHNIQUE D'UNE ÉTAPE
+
+   Quatre lignes, et elles ne sont pas décoratives. Un client qui portera un
+   chiffre en comité d'investissement, en dossier de crédit ou en rapport CSRD
+   doit pouvoir répondre à quatre questions AVANT de citer :
+
+     SOURCES   qui publie la donnée, quel jeu, quel millésime ;
+     CALCUL    quelle formule s'applique, et OÙ elle s'exécute ;
+     LIVRABLE  ce qui sort, dans quel format, avec quel marquage ;
+     IA        ce que le modèle a le droit de faire — et ce qu'il n'a pas le
+               droit de faire.
+
+   La quatrième ligne s'affiche MÊME quand aucun modèle n'intervient. « Aucun
+   modèle » est une information : sur ces pages l'essentiel est déterministe, et
+   un lecteur qui l'ignore soupçonne une génération là où il n'y en a pas.
+   ══════════════════════════════════════════════════════════════════════════ */
+function guidedFiche(s){
+  var l = [];
+  function ligne(cle, val, classe){
+    l.push('<div class="gs-cle">' + cle + '</div><div class="gs-val'
+         + (classe ? ' ' + classe : '') + '">' + val + '</div>');
+  }
+  if(s.sources && s.sources.length){
+    ligne('Sources', '<ul>' + s.sources.map(function(x){
+      return '<li>' + x + '</li>'; }).join('') + '</ul>');
+  }
+  if(s.calcul) ligne('Calcul', s.calcul);
+  if(s.livrable) ligne('Livrable', s.livrable);
+  if(s.ia) ligne('IA', s.ia, /Aucun mod/i.test(s.ia) ? 'gs-sansia' : '');
+  return l.length ? '<div class="gs-fiche">' + l.join('') + '</div>' : '';
+}
+
 function guidedPathCard(path){
   var stepsHtml = path.steps.map(function(s, i){
     return '<div class="guided-step">'
@@ -24068,6 +24206,7 @@ function guidedPathCard(path){
       + '<div class="guided-step-detail"><strong>À faire :</strong> '+s.action+'</div>'
       + '<div class="guided-step-detail"><strong>Ce que vous y gagnez :</strong> '+s.gain+'</div>'
       + (s.tip ? '<div class="guided-step-tip">💡 '+s.tip+'</div>' : '')
+      + guidedFiche(s)
       + '</div>';
   }).join('<div class="guided-step-arrow">↓</div>');
 
