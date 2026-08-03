@@ -1,6 +1,14 @@
 users_db.json
 uploads_cv/*.txt
 # uploads_cv/ PDFs are kept for demo
+
+# Quand ni l'API Brevo ni le SMTP ne repondent, envoyer_email() ecrit le
+# message sur disque dans uploads_cv/ plutot que de le perdre (app.py, ~l.529).
+# Ces fichiers portent l'adresse du destinataire, la date et l'IP de connexion :
+# ce sont des donnees personnelles, elles n'ont rien a faire dans un depot.
+# En developpement local, SMTP n'est jamais configure — chaque connexion de
+# recette en depose un.
+uploads_cv/email_*.html
 __pycache__/
 *.pyc
 registre_ia.db
