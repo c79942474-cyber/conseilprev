@@ -3970,12 +3970,24 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 <div id="read-progress" aria-hidden="true"></div>
 
 <!-- FLÈCHES DE NAVIGATION LATÉRALES -->
+<!-- Cette colonne ne savait que passer d'une section a la suivante : il n'y
+     avait aucun moyen de revenir en tete ni d'atteindre le pied de page, ou se
+     trouvent le contact et les mentions. Les deux bornes s'ajoutent ici plutot
+     que par /fleches.js, qui se retire des qu'une page a deja sa colonne : deux
+     jeux de fleches au meme bord se recouvrent, et le clic n'atteint plus
+     aucun des deux. -->
 <div id="nav-arrows" aria-label="Navigation sections" role="navigation">
+  <button class="nav-arrow-btn" id="nav-haut"
+    onclick="navBorne(0)"
+    aria-label="Haut de page"
+    title="Haut de page (Alt + Origine)">
+    ⤒
+  </button>
   <button class="nav-arrow-btn" id="nav-up"
     onclick="navSection(-1)"
     aria-label="Section précédente"
     data-tooltip="Section précédente"
-    title="Section précédente">
+    title="Section précédente (Alt + flèche haut)">
     ▲
   </button>
   <div id="nav-section-dots" role="tablist" aria-label="Sections de la page"></div>
@@ -3983,8 +3995,14 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     onclick="navSection(1)"
     aria-label="Section suivante"
     data-tooltip="Section suivante"
-    title="Section suivante">
+    title="Section suivante (Alt + flèche bas)">
     ▼
+  </button>
+  <button class="nav-arrow-btn" id="nav-bas"
+    onclick="navBorne(1)"
+    aria-label="Bas de page"
+    title="Bas de page (Alt + Fin)">
+    ⤓
   </button>
 </div>
 <div id="nav-section-label" aria-live="polite"></div>
@@ -6022,6 +6040,15 @@ function xSug(btn){
     goToSection(currentSection + dir);
   };
 
+  /* Les deux bornes. Elles ne passent PAS par goToSection : la premiere section
+     ne commence pas a zero (l'en-tete la precede) et la derniere ne finit pas
+     au pied de page. « Haut » et « bas » veulent dire le haut et le bas du
+     document, pas la premiere et la derniere section. */
+  window.navBorne = function(bas){
+    var doux = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+    window.scrollTo({ top: bas ? document.body.scrollHeight : 0, behavior: doux });
+  };
+
   // Mettre à jour les boutons et points
   function updateArrows(){
     var up   = document.getElementById('nav-up');
@@ -6083,8 +6110,10 @@ function xSug(btn){
     if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
     if(e.altKey && e.key === 'ArrowUp'){   e.preventDefault(); navSection(-1); }
     if(e.altKey && e.key === 'ArrowDown'){ e.preventDefault(); navSection(1);  }
-    if(e.altKey && e.key === 'Home'){      e.preventDefault(); goToSection(0); }
-    if(e.altKey && e.key === 'End'){       e.preventDefault(); goToSection(SECTION_IDS.length-1); }
+    /* Alt+Origine visait la premiere SECTION, pas le haut du document : on
+       n'arrivait jamais tout en haut. Meme raisonnement en bas. */
+    if(e.altKey && e.key === 'Home'){      e.preventDefault(); navBorne(0); }
+    if(e.altKey && e.key === 'End'){       e.preventDefault(); navBorne(1); }
   });
 
   // Init
@@ -7467,4 +7496,5 @@ document.addEventListener('keydown', function(e){
 </script>
 
 
+<script src="/fleches.js" defer></script>
 </html>

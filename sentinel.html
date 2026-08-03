@@ -1330,9 +1330,6 @@ textarea.form-el{min-height:86px;resize:vertical}
 .histo-btn-danger{color:var(--accent);border-color:rgba(184,50,34,.25)}
 
 /* ══ BOUTON RETOUR EN HAUT ══ */
-#nav-back-to-top{position:fixed;bottom:90px;right:28px;width:40px;height:40px;border-radius:50%;background:var(--ink);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 3px 12px rgba(0,0,0,.25);opacity:0;pointer-events:none;transform:translateY(8px);transition:all .18s;z-index:9990}
-#nav-back-to-top.visible{opacity:.88;pointer-events:all;transform:translateY(0)}
-#nav-back-to-top:hover{opacity:1;background:var(--accent)}
 
 /* ══ BASE DE CONNAISSANCE (RAG) ══ */
 .rag-drop-zone{border:2px dashed var(--rule2);border-radius:8px;padding:32px;text-align:center;transition:all .18s;background:var(--bg)}
@@ -9553,7 +9550,12 @@ try {
 })();
 
 </script>
-<button id="nav-back-to-top" title="Retour en haut de page">↑</button>
+<!-- Le bouton « retour en haut » qui vivait ici visait .main sans verifier que
+     .main defile. Ce n'est pas le cas : overflow-y y vaut visible, c'est le
+     DOCUMENT qui defile. Il lisait donc un scrollTop toujours nul et ne
+     devenait jamais visible — mesure faite, opacite 0 sur tous les modules.
+     Remplace par /fleches.js, qui cherche l'element defilant au lieu de le
+     supposer, et ajoute la borne basse qui manquait. -->
 <!-- CHATBOT CONSEILPREV SENTINEL v2 -->
 <button id="cpcBtn" onclick="cpcToggle()" aria-label="Assistant Sentinel">
   <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
@@ -17674,36 +17676,15 @@ document.addEventListener('keydown', function(e){
   }
 });
 
-/* BOUTON RETOUR EN HAUT — apparait apres 400px de scroll sur le contenu principal */
-function navInitBackToTop(){
-  var btn = document.getElementById('nav-back-to-top');
-  var mainEl = document.querySelector('.main') || document.querySelector('main') || window;
-  if(!btn) return;
-  var scrollTarget = (mainEl === window) ? window : mainEl;
+/* Le bouton « retour en haut » et sa fonction navInitBackToTop vivaient
+   ici. La fonction liait son ecouteur a .main, qui ne defile pas : le
+   bouton n'est jamais apparu. /fleches.js le remplace, avec la borne
+   basse en plus, et cherche l'element defilant au lieu de le supposer. */
 
-  function onScroll(){
-    var scrollY = (scrollTarget === window) ? window.scrollY : scrollTarget.scrollTop;
-    btn.classList.toggle('visible', scrollY > 400);
-  }
-  scrollTarget.addEventListener('scroll', onScroll, {passive:true});
-  onScroll();
-
-  btn.onclick = function(){
-    if(scrollTarget === window) window.scrollTo({top:0, behavior:'smooth'});
-    else scrollTarget.scrollTo({top:0, behavior:'smooth'});
-  };
-}
-
-document.addEventListener('DOMContentLoaded', function(){ setTimeout(navInitBackToTop, 300); });
-if(document.readyState !== 'loading'){ setTimeout(navInitBackToTop, 300); }
-
-/* Reinitialiser le scroll-detection a chaque navigation (le conteneur .main peut changer de hauteur) */
-var _navOrigGo = window.go;
-window.go = function(){
-  var r = _navOrigGo ? _navOrigGo.apply(this, arguments) : undefined;
-  setTimeout(navInitBackToTop, 150);
-  return r;
-};
+/* L'enveloppe de go() qui suivait ne servait qu'a relancer navInitBackToTop a
+   chaque changement de module. La fonction ayant disparu, l'enveloppe aurait
+   leve une erreur a CHAQUE navigation. /fleches.js observe lui-meme les
+   changements du document : rien a relancer de l'exterieur. */
 
 })();
 
@@ -22139,7 +22120,21 @@ window.navGoRelative = function(step){
   }
 };
 window.navScrollTo = function(sens){
-  var box = document.querySelector('.main') || document.scrollingElement || document.documentElement;
+  /* .main existe sur toutes les pages du module, mais son overflow-y vaut
+     « visible » : ce n'est PAS lui qui defile, c'est le document. La version
+     precedente le prenait pour cible sans verifier, appelait scrollTo sur un
+     element qui ne defile pas, et les boutons ↑ / ↓ ne bougeaient rien —
+     mesure faite, y restait a 0. On cherche donc l'element qui a reellement
+     du debordement, et le document sert de recours. */
+  var box = null;
+  var cand = [document.querySelector('.main'), document.querySelector('main')];
+  for(var i = 0; i < cand.length; i++){
+    var el = cand[i];
+    if(!el) continue;
+    var s = getComputedStyle(el);
+    if(/auto|scroll/.test(s.overflowY) && el.scrollHeight - el.clientHeight > 40){ box = el; break; }
+  }
+  if(!box) box = document.scrollingElement || document.documentElement;
   var y = (sens === 'bottom') ? box.scrollHeight : 0;
   try { box.scrollTo({ top: y, behavior: 'smooth' }); }
   catch(e){ box.scrollTop = y; }
@@ -24719,5 +24714,6 @@ function aiActTimelineRender(){
   </div>
 </div>
 
+<script src="/fleches.js" defer></script>
 </html
 >
