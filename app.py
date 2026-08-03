@@ -1645,8 +1645,16 @@ def _fin_pays_index():
 
 
 def _fin_dossier(code, mw, gabarit, scenario, densite_ia, cout_mw, annees, depart,
-                 vitesse="aucune"):
-    """Dossier complet d'un pays : DPGF, exploitation, cout total, trajectoire."""
+                 vitesse="aucune", conception=None):
+    """Dossier complet d'un pays : DPGF, exploitation, cout total, trajectoire.
+
+    `conception` porte les criteres que le lecteur IMPOSE — famille de
+    refroidissement, classe d'air admise, PUE contractuel, taux de charge, prix
+    et intensite carbone de son contrat, part d'energie sans carbone. Chacun
+    remplace une deduction par une donnee saisie, et la nature du poste change
+    en consequence : `saisi` dit au lecteur du dossier que c'est LUI qui
+    l'engage, pas ce referentiel."""
+    C = conception or {}
     idx, data = _fin_pays_index()
     p = idx.get(code)
     if not p:
@@ -1658,12 +1666,20 @@ def _fin_dossier(code, mw, gabarit, scenario, densite_ia, cout_mw, annees, depar
         densite_ia=densite_ia,
         parc_sites=p.get("en_service") or 0,
         pipeline_sites=p.get("pipeline_2030") or 0,
-        cout_mw=cout_mw, vitesse=vitesse)
+        cout_mw=cout_mw, vitesse=vitesse,
+        refroidissement=C.get("refroidissement"),
+        classe_ashrae=C.get("classe_ashrae"),
+        pue_impose=C.get("pue_impose"))
     prix = (p.get("prix") or {}).get("fourchette_eur_mwh") or [100, 150]
+    wue = [0.1, 0.6]
     expl = finance_dc.exploitation(
         devis["enveloppe_meur"], mw, devis["refroidissement"]["pue"], prix,
         intensite_g_kwh=p.get("intensite"),
-        wue_m3_mwh=[0.1, 0.6])
+        wue_m3_mwh=wue,
+        charge=C.get("charge"),
+        prix_contrat=C.get("prix_contrat"),
+        intensite_contrat=C.get("intensite_contrat"),
+        part_sans_carbone=C.get("part_sans_carbone") or 0.0)
     cout = finance_dc.tco(devis["enveloppe_meur"], expl["total_meur_an"], annees)
     # Les perspectives de l'Union structurent le calendrier de TOUS les pays : le
     # paquet efficacite energetique attendu au premier trimestre 2026 ne se lit
@@ -1681,7 +1697,14 @@ def _fin_dossier(code, mw, gabarit, scenario, densite_ia, cout_mw, annees, depar
                 "en_service": p.get("en_service"), "pipeline_2030": p.get("pipeline_2030"),
                 "avis": p.get("avis"), "perspectives": p.get("perspectives")},
             "devis": devis, "exploitation": expl, "tco": cout, "trajectoire": traj,
-            "prospective": prosp}
+            "prospective": prosp,
+            # Le carbone de la CONSTRUCTION, amorti. Sans lui un dossier CSRD est
+            # incomplet des sa premiere page, et l'exploitation seule flatte les
+            # sites neufs face aux reprises de batiment existant.
+            "incorpore": finance_dc.carbone_incorpore(mw),
+            "conformite": finance_dc.conformite_marche(
+                devis["refroidissement"]["pue"], wue,
+                (p.get("climat") or {}).get("classe"))}
 
 
 @app.route('/api/finance-dc', methods=['GET'])
@@ -1738,9 +1761,44 @@ def api_finance_dc_devis():
     if vitesse not in finance_dc.PRIME_VITESSE:
         return jsonify({'ok': False, 'erreur': 'calendrier inconnu'}), 400
 
+    # ── Criteres de conception, tous facultatifs ──────────────────────────
+    # Une valeur hors bornes est REFUSEE, jamais rabotee en silence : un
+    # dossier calcule sur un parametre corrige a l'insu de celui qui l'a saisi
+    # est un dossier qu'il ne peut pas defendre.
+    conception = {}
+    froid = d.get('refroidissement')
+    if froid:
+        if str(froid) not in finance_dc.REFROIDISSEMENT:
+            return jsonify({'ok': False, 'erreur': 'famille de refroidissement inconnue'}), 400
+        conception['refroidissement'] = str(froid)
+    ash = d.get('classe_ashrae')
+    if ash:
+        if str(ash) not in finance_dc.CLASSES_ASHRAE:
+            return jsonify({'ok': False, 'erreur': 'classe ASHRAE inconnue'}), 400
+        conception['classe_ashrae'] = str(ash)
+    for cle, mini, maxi, libelle in (
+            ('pue_impose', 1.02, 2.50, 'PUE impose'),
+            ('charge', finance_dc.CHARGE['bornes'][0], finance_dc.CHARGE['bornes'][1],
+             'taux de charge'),
+            ('prix_contrat', 1.0, 600.0, 'prix contractuel'),
+            ('intensite_contrat', 0.0, 1200.0, 'intensite carbone contractuelle'),
+            ('part_sans_carbone', 0.0, 1.0, "part d'energie sans carbone")):
+        v = d.get(cle)
+        if v in (None, ''):
+            continue
+        try:
+            v = float(v)
+        except (TypeError, ValueError):
+            return jsonify({'ok': False, 'erreur': '%s invalide' % libelle}), 400
+        if not (mini <= v <= maxi):
+            return jsonify({'ok': False,
+                            'erreur': '%s hors bornes (%s a %s)' % (libelle, mini, maxi)}), 400
+        conception[cle] = v
+
     try:
         dossiers = [x for x in (_fin_dossier(c, mw, gabarit, scenario, densite_ia,
-                                             cout_mw, annees, depart, vitesse)
+                                             cout_mw, annees, depart, vitesse,
+                                             conception)
                                 for c in pays) if x]
     except Exception as e:  # noqa: BLE001
         logger.error(f'FINANCE_DC_ERR: {e}')
@@ -1766,7 +1824,8 @@ def api_finance_dc_devis():
                     "entree": {"mw": mw, "gabarit": gabarit, "scenario": scenario,
                                "densite_ia": densite_ia, "annees": annees,
                                "depart": depart, "pays": pays, "vitesse": vitesse,
-                               "cout_mw": cout_mw or "hypothese de filiere"},
+                               "cout_mw": cout_mw or "hypothese de filiere",
+                               "conception": conception},
                     "dossiers": dossiers, "ecarts": ecarts, "classement": classement})
 
 

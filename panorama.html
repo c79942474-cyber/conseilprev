@@ -514,6 +514,29 @@ body.embed .gp-carte{bottom:auto;top:var(--gp-bas,auto);
 .n-referentiel{color:#1E6336}.n-analyse{color:#4E3277}.n-hypothese{color:#8A5310}
 .n-saisi{color:#1C5CAB}.n-calcule{color:#0E7B83}
 .fin-mod{font-size:10px;color:#1C5CAB}
+/* CRITÈRES DE CONCEPTION — repliés par défaut, mais jamais muets : un dépliant
+   qui n'annonce pas son contenu ne s'ouvre pas. */
+.fin-plus{grid-column:1/-1;border:1px solid var(--rule2);border-radius:6px;
+  background:var(--bg);padding:0;margin:2px 0}
+.fin-plus > summary{cursor:pointer;padding:9px 12px;font-size:12px;font-weight:600;
+  list-style:none;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.fin-plus > summary::-webkit-details-marker{display:none}
+.fin-plus > summary:before{content:"▸";font-size:10px;color:var(--muted2)}
+.fin-plus[open] > summary:before{content:"▾"}
+.fin-plus > summary span{font-weight:400;font-size:10.5px;color:var(--muted2)}
+.fin-plus-corps{padding:2px 12px 12px;display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px 16px}
+.fin-plus-note{grid-column:1/-1;font-size:10.5px;color:var(--muted2);line-height:1.5;
+  margin:0 0 2px}
+.fin-conf{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:9px;
+  margin:10px 0}
+.fin-conf-c{border:1px solid var(--rule2);border-left:4px solid #1E6336;border-radius:0 6px 6px 0;
+  padding:9px 11px;font-size:11.5px;line-height:1.5;background:var(--white)}
+.fin-conf-c.hors{border-left-color:#8A5310;background:#FFF9EF}
+/* Le titre seul passe en bloc. La règle portait sur TOUS les `b` de la carte,
+   ce qui envoyait la valeur et la cible à la ligne et laissait la phrase
+   commencer par un point isolé. */
+.fin-conf-c > b:first-child{display:block;font-size:12px;margin-bottom:2px}
 .fin-aren{background:#FFF6E5;border:1px solid #E0C088;border-radius:6px;padding:10px 13px;
   font-size:11.5px;line-height:1.55;margin:12px 0}
 .fin-aren li{margin:3px 0}
@@ -1363,6 +1386,49 @@ engagements publics) sont imputés nominativement.</div>
       <div class="fin-ch"><label for="fin-cout">Coût unitaire (M€/MW) — facultatif</label>
         <input type="text" id="fin-cout" placeholder="ex. 8-12 · vide = hypothèse">
         <span class="fin-aide">Vos devis remplacent l’hypothèse de filière.</span></div>
+      <details class="fin-plus" id="fin-plus">
+        <summary>Critères de conception <span>— refroidissement imposé, classe d’air ASHRAE,
+        PUE contractuel, taux de charge, prix et intensité carbone de votre contrat.
+        Chacun remplace une déduction par VOTRE donnée.</span></summary>
+        <div class="fin-plus-corps">
+          <p class="fin-plus-note">Ces critères viennent du référentiel d’ingénierie
+          CONSEILPREV (module centres de données de conseilprevcyber), qui cite ASHRAE TC 9.9,
+          la directive (UE) 2023/1791 et son règlement délégué (UE) 2024/1364, le Climate
+          Neutral Data Centre Pact et ISO/IEC 30134. Ils ne changent pas le coût au mégawatt —
+          rien ici ne le permet. Ils changent ce qui se passe <b>après</b> : le PUE, donc
+          l’électricité, donc le coût total sur dix ans, c’est-à-dire le seul chiffre qui
+          départage deux pays. Une valeur que vous saisissez est marquée <b>saisi</b> : le
+          dossier dira que c’est vous qui l’engagez.</p>
+          <div class="fin-ch"><label for="fin-froid">Refroidissement imposé</label>
+            <select id="fin-froid"></select>
+            <span class="fin-aide">Vide = déduit du climat et du stress hydrique du pays.</span></div>
+          <div class="fin-ch"><label for="fin-ashrae">Classe d’air admise (ASHRAE)</label>
+            <select id="fin-ashrae"></select>
+            <span class="fin-aide">Le levier le moins cher qui existe — il ne coûte aucun
+            matériel, mais engage la garantie constructeur.</span></div>
+          <div class="fin-ch"><label for="fin-pue">PUE imposé par le cahier des charges</label>
+            <input type="number" id="fin-pue" step="0.01" min="1.02" max="2.5"
+                   placeholder="vide = déduit de la conception">
+            <span class="fin-aide">Une contrainte contractuelle prime sur toute déduction.</span></div>
+          <div class="fin-ch"><label for="fin-charge">Taux de charge moyen</label>
+            <input type="number" id="fin-charge" step="0.05" min="0.3" max="1"
+                   placeholder="défaut 0,70">
+            <span class="fin-aide">Sous 0,55, la pénalité de charge partielle devient le
+            premier poste de perte.</span></div>
+          <div class="fin-ch"><label for="fin-prixc">Prix contractuel de l’électricité (€/MWh)</label>
+            <input type="number" id="fin-prixc" step="1" min="1" max="600"
+                   placeholder="vide = bande du pays">
+            <span class="fin-aide">Renseigné, ce poste cesse d’être « à renseigner ».</span></div>
+          <div class="fin-ch"><label for="fin-intc">Intensité carbone du contrat (gCO₂e/kWh)</label>
+            <input type="number" id="fin-intc" step="1" min="0" max="1200"
+                   placeholder="vide = moyenne nationale">
+            <span class="fin-aide">Approche « market-based », GHG Protocol Scope 2.</span></div>
+          <div class="fin-ch"><label for="fin-ref">Part d’énergie sans carbone contractualisée</label>
+            <input type="number" id="fin-ref" step="0.05" min="0" max="1"
+                   placeholder="0 à 1 · défaut 0">
+            <span class="fin-aide">Indicateur REF au sens d’EN 50600-4-3 et ISO 30134-3.</span></div>
+        </div>
+      </details>
       <div class="fin-ch"><label for="fin-an">Horizon d’exploitation (ans)</label>
         <input type="number" id="fin-an" value="10" min="3" max="25" step="1">
         <span class="fin-aide">Sert au coût total de possession.</span></div>
@@ -6243,6 +6309,16 @@ if(window.parent&&window.parent!==window){
   /* Les pourcentages arrivent du serveur avec un point décimal. Le reste de
      la page est en français : « -28.4 % » à côté de « -879,3 M€ » se voit. */
   function pct(x){ return String(x).replace('.', ','); }
+  /* Renvoie le nombre saisi, ou `undefined` si le champ est VIDE — jamais si la
+     valeur vaut zéro. Le serveur distingue les deux, la page doit aussi. */
+  function nombreOuRien(id){
+    var e = $(id);
+    if(!e) return undefined;
+    var t = String(e.value == null ? '' : e.value).trim();
+    if(t === '') return undefined;
+    var v = Number(t.replace(',', '.'));
+    return isNaN(v) ? undefined : v;
+  }
   function esc(t){ return String(t == null ? '' : t).replace(/[<>&]/g, function(c){
     return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c]; }); }
 
@@ -6271,6 +6347,21 @@ if(window.parent&&window.parent!==window){
           return '<option value="'+k+'">'+esc(v.nom)
                + (v.coef !== 1 ? ' — +'+Math.round((v.coef-1)*100)+' %' : '')+'</option>'; }).join('');
         $('fin-vit').value = 'aucune';
+        /* La famille imposée s'ajoute au choix « déduit » : c'est le défaut, et
+           il doit rester en tête quel que soit l'ordre de sérialisation. */
+        $('fin-froid').innerHTML = '<option value="">Déduit du climat et de l’eau du pays</option>'
+          + Object.keys(j.refroidissement || {}).map(function(k){
+              var r = j.refroidissement[k];
+              return '<option value="'+k+'">'+esc(r.nom)+' — PUE '+r.pue[0]+'–'+r.pue[1]
+                   + '</option>'; }).join('');
+        $('fin-froid').value = '';
+        $('fin-ashrae').innerHTML = '<option value="">Non précisée</option>'
+          + Object.keys(j.ashrae || {}).map(function(k){
+              var a = j.ashrae[k];
+              return '<option value="'+k+'">'+esc(a.nom)+'</option>'; }).join('');
+        $('fin-ashrae').value = '';
+        if(j.charge && j.charge.defaut) $('fin-charge').placeholder =
+          'défaut ' + pct(j.charge.defaut);
       });
   }
 
@@ -6321,6 +6412,16 @@ if(window.parent&&window.parent!==window){
         mw: parseFloat($('fin-mw').value) || 100,
         gabarit: $('fin-gab').value, scenario: $('fin-sc').value,
         densite_ia: !!$('fin-ia').value, pays: SEL, vitesse: $('fin-vit').value,
+        refroidissement: $('fin-froid').value || undefined,
+        classe_ashrae: $('fin-ashrae').value || undefined,
+        /* Vide et zéro ne se confondent pas : vide veut dire « déduis-le »,
+           zéro veut dire « je l'engage à zéro ». Un `|| undefined` sur un
+           nombre effacerait le second. */
+        pue_impose: nombreOuRien('fin-pue'),
+        charge: nombreOuRien('fin-charge'),
+        prix_contrat: nombreOuRien('fin-prixc'),
+        intensite_contrat: nombreOuRien('fin-intc'),
+        part_sans_carbone: nombreOuRien('fin-ref'),
         annees: parseInt($('fin-an').value, 10) || 10,
         cout_mw: cout })
     }).then(function(r){ return r.json(); })
@@ -6457,6 +6558,44 @@ if(window.parent&&window.parent!==window){
       + '<p class="dl-msg" id="dl-msg-calcul"></p></div>';
   }
 
+  /* Les repères de marché sont VOLONTAIRES : le verdict ne peut donc pas être
+     « conforme / non conforme ». Il est « dans la cible » ou « à justifier » —
+     un dossier qui s'écarte du repère doit l'expliquer, pas le taire. */
+  function blocConformite(d){
+    var c = d.conformite;
+    if(!c || !(c.reperes || []).length) return '';
+    return '<div class="fin-conf">'
+      + c.reperes.map(function(r){
+          return '<div class="fin-conf-c'+(r.verdict === 'dans la cible' ? '' : ' hors')+'">'
+            + '<b>'+esc(r.nom)+' — '+esc(r.verdict)+'</b>'
+            + 'Valeur retenue <b>'+pct(r.valeur)+'</b> · cible <b>'+pct(r.cible)+'</b>'
+            + (r.cible_nom ? ' ('+esc(r.cible_nom)+')' : '') + '. '+esc(r.sens)+'</div>'; }).join('')
+      + '</div>'
+      + '<p class="note" style="margin:0 0 10px">Repères : <b>'+esc(c.source)+'</b> '
+      + '<span class="fin-nat n-'+esc(c.nature)+'">'+esc(c.nature)+'</span>. '+esc(c.note)+'</p>';
+  }
+
+  /* Le carbone de la CONSTRUCTION. L'exploitation seule flatte les sites neufs
+     face à une reprise de bâtiment existant : sans cette ligne, la comparaison
+     entre scénarios est biaisée, et un dossier CSRD est incomplet. */
+  function blocIncorpore(d){
+    var i = d.incorpore;
+    if(!i || !(i.postes || []).length) return '';
+    return '<table class="fin-tab" style="margin-top:10px"><thead><tr>'
+      + '<th>Carbone incorporé de la construction</th><th style="text-align:right">tCO₂e</th>'
+      + '<th style="text-align:right">Durée de vie</th><th style="text-align:right">tCO₂e/an</th>'
+      + '<th>Formule</th></tr></thead><tbody>'
+      + i.postes.map(function(p){
+          return '<tr><td>'+esc(p.nom)+'</td><td class="n">'+eur(p.t_co2e)+'</td>'
+            + '<td class="n">'+p.duree_vie_ans+' ans</td><td class="n">'+eur(p.t_co2e_an)+'</td>'
+            + '<td><span class="fin-code">'+esc(p.formule)+'</span></td></tr>'; }).join('')
+      + '<tr class="lourd"><td>Total amorti</td><td class="n">'+eur(i.total_t_co2e)+'</td>'
+      + '<td class="n">—</td><td class="n">'+eur(i.total_t_co2e_an)+'</td>'
+      + '<td><span class="fin-nat n-'+esc(i.nature)+'">'+esc(i.nature)+'</span></td></tr>'
+      + '</tbody></table>'
+      + '<p class="note" style="margin:4px 0 10px">'+esc(i.note)+' '+esc(i.source)+'</p>';
+  }
+
   function rendre(j){
     var h = '<div class="fin-rang">'
       + j.classement.map(function(x,i){ return carteRang(x,i,j); }).join('') + '</div>';
@@ -6467,7 +6606,15 @@ if(window.parent&&window.parent!==window){
         + esc(d.devis.refroidissement.nom)+'</b> (PUE '+d.devis.refroidissement.pue[0]+'–'
         + d.devis.refroidissement.pue[1]+', eau '+esc(d.devis.refroidissement.eau)+') — déduit du climat '
         + esc((d.contexte.climat||{}).classe)+' et du stress hydrique '
-        + esc((d.contexte.eau||{}).classe)+'. Raccordement : <b>'+esc(d.devis.raccordement.nom)
+        + esc((d.contexte.eau||{}).classe)
+        + (d.devis.refroidissement.impose ? ' — <b>imposé</b>' : '')
+        + '. PUE retenu <b>'+pct(d.devis.refroidissement.pue[0])+'–'
+        + pct(d.devis.refroidissement.pue[1])
+        + '</b> <span class="fin-nat n-'+esc(d.devis.refroidissement.pue_nature)+'">'
+        + esc(d.devis.refroidissement.pue_nature)+'</span>'
+        + (d.devis.refroidissement.classe_ashrae
+            ? ' · classe '+esc(d.devis.refroidissement.classe_ashrae) : '')
+        + '. Raccordement : <b>'+esc(d.devis.raccordement.nom)
         + '</b> ('+d.contexte.pipeline_2030+' projets pour '+d.contexte.en_service+' sites en service).</p>'
         + '<p class="note" style="margin:0 0 8px">Coût unitaire : <b>'+fourch(d.devis.cout_mw.valeur)
         + ' M€/MW</b>'
@@ -6481,7 +6628,8 @@ if(window.parent&&window.parent!==window){
               + d.devis.vitesse.mois_gagnes+' mois gagnés au mieux — la prime achète la priorité '
               + 'd’une entreprise générale, pas l’accord du gestionnaire de réseau.' : '')
         + '</p>'
-        + blocReserve(d) + tableDpgf(d) + blocAren(d) + blocTraj(d);
+        + blocConformite(d) + blocReserve(d) + tableDpgf(d) + blocIncorpore(d)
+        + blocAren(d) + blocTraj(d);
     });
     j.ecarts.forEach(function(e){ h += blocEcart(e); });
     h += '<details style="margin-top:16px"><summary class="note" style="cursor:pointer">'

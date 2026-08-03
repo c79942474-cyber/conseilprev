@@ -191,6 +191,33 @@ def md_enveloppe(devis_reponse):
         ["Pays comparés", ", ".join(e.get("pays") or [])],
     ]))
 
+    # Ce que le lecteur a IMPOSÉ. Un dossier qui tait ses paramètres de
+    # conception laisse croire que tout a été déduit — et rend ses chiffres
+    # incontestables faute d'être reproductibles.
+    C = e.get("conception") or {}
+    if C:
+        LIB = {"refroidissement": "Famille de refroidissement imposée",
+               "classe_ashrae": "Classe d'air admise (ASHRAE TC 9.9)",
+               "pue_impose": "PUE imposé par le cahier des charges",
+               "charge": "Taux de charge moyen",
+               "prix_contrat": "Prix contractuel de l'électricité (€/MWh)",
+               "intensite_contrat": "Intensité carbone du contrat (gCO₂e/kWh)",
+               "part_sans_carbone": "Part d'énergie sans carbone contractualisée"}
+        a("### Critères de conception que vous avez imposés\n")
+        a("Chacun remplace une déduction de ce référentiel par **votre** donnée. Les "
+          "postes concernés portent la nature *saisi* : le dossier dit que c'est vous "
+          "qui les engagez, pas nous.\n")
+        a(_tab(["Critère", "Valeur retenue"],
+               [[LIB.get(k, k),
+                 (finance_dc.REFROIDISSEMENT.get(v, {}).get("nom") if k == "refroidissement"
+                  else finance_dc.CLASSES_ASHRAE.get(v, {}).get("nom") if k == "classe_ashrae"
+                  else _n(v, 3))]
+                for k, v in C.items()]))
+    else:
+        a("*Aucun critère de conception n'a été imposé : le refroidissement, le PUE, le "
+          "taux de charge et le prix de l'électricité sont déduits du référentiel pays. "
+          "Le formulaire permet de les remplacer par vos propres données.*\n")
+
     cl = j.get("classement") or []
     if cl:
         a("## Classement — sur le coût total de possession, pas sur l'investissement\n")
@@ -222,13 +249,16 @@ def md_enveloppe(devis_reponse):
               % (vit.get("nom"), round((vit.get("coef") - 1) * 100), vit.get("mois_gagnes") or 0))
         froid = dev.get("refroidissement") or {}
         racc = dev.get("raccordement") or {}
-        a("**Refroidissement retenu :** %s (PUE %s, eau %s), déduit du climat *%s* et "
-          "du stress hydrique *%s*. **Raccordement :** %s — %s projets déclarés pour %s "
+        a("**Refroidissement retenu :** %s%s (PUE %s — nature *%s*, eau %s), climat *%s* "
+          "et stress hydrique *%s*. **Raccordement :** %s — %s projets déclarés pour %s "
           "sites en service. **Durée de projet :** %s mois.\n"
-          % (froid.get("nom"), _f(froid.get("pue"), 2), froid.get("eau"),
+          % (froid.get("nom"), " — **imposé**" if froid.get("impose") else " (déduit)",
+             _f(froid.get("pue"), 3), froid.get("pue_nature"), froid.get("eau"),
              (ctx.get("climat") or {}).get("classe"), (ctx.get("eau") or {}).get("classe"),
              racc.get("nom"), ctx.get("pipeline_2030"), ctx.get("en_service"),
              _f(dev.get("duree_mois"), 0)))
+        if froid.get("pue_note"):
+            a("*%s*\n" % _esc(froid["pue_note"]))
 
         a("### Décomposition par lot (DPGF)\n")
         # `arenseigner` marque les lots dont une composante n'est PAS chiffrable.
@@ -272,6 +302,32 @@ def md_enveloppe(devis_reponse):
                 ["**Total**", "**" + _f(tco.get("total_meur"), 0) + "**"]]))
         if tco.get("note"):
             a("*" + _esc(tco["note"]) + "*\n")
+
+        inc = d.get("incorpore") or {}
+        if inc.get("postes"):
+            a("### Carbone incorporé de la construction\n")
+            a("L'exploitation seule flatte les sites neufs face à une reprise de bâtiment "
+              "existant. Sans cette ligne, la comparaison entre scénarios est biaisée — et "
+              "un dossier CSRD est incomplet dès sa première page.\n")
+            a(_tab(["Poste", "tCO₂e", "Durée de vie", "tCO₂e/an", "Formule"],
+                   [[x.get("nom"), _n(x.get("t_co2e"), 0), str(x.get("duree_vie_ans")) + " ans",
+                     _n(x.get("t_co2e_an"), 0), x.get("formule")] for x in inc["postes"]]
+                   + [["**Total amorti**", "**" + _n(inc.get("total_t_co2e"), 0) + "**", "—",
+                       "**" + _n(inc.get("total_t_co2e_an"), 0) + "**",
+                       "nature : " + str(inc.get("nature"))]]))
+            a("*%s %s*\n" % (_esc(inc.get("note")), _esc(inc.get("source"))))
+
+        conf = d.get("conformite") or {}
+        if conf.get("reperes"):
+            a("### Repères de marché\n")
+            a(_tab(["Indicateur", "Valeur retenue", "Cible", "Verdict", "Ce que cela veut dire"],
+                   [[r.get("nom"), _n(r.get("valeur"), 3), _n(r.get("cible"), 2),
+                     r.get("verdict"), r.get("sens")] for r in conf["reperes"]]))
+            a("*Source : %s — %s*\n" % (_esc(conf.get("source")), _esc(conf.get("note"))))
+
+        alerte = (d.get("exploitation") or {}).get("charge_alerte")
+        if alerte:
+            a("**Alerte de charge partielle —** %s\n" % _esc(alerte))
 
         aren = dev.get("arenseigner") or []
         if aren:
@@ -628,7 +684,9 @@ ATTENDU = {
     "enveloppe": ["Ce que ce dossier ne peut PAS trancher",
                   "Décomposition par lot (DPGF)",
                   "Coût total de possession",
-                  "Échéancier jusqu'en 2030"],
+                  "Échéancier jusqu'en 2030",
+                  "Carbone incorporé de la construction",
+                  "Repères de marché"],
     "prospectives": ["Réserves sur le référentiel",
                      "Jalons réglementaires datés",
                      "tendances 2026",

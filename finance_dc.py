@@ -328,6 +328,94 @@ REFROIDISSEMENT = {
     },
 }
 
+# ═══════════════════════════════════════════════════════════════════════════
+# CRITÈRES DE CONCEPTION — repris du référentiel d'ingénierie CONSEILPREV
+#
+# Source : `datacenter.py` de conseilprevcyber, version 2026-08-a, qui cite
+# lui-même ASHRAE TC 9.9, la directive (UE) 2023/1791 et son règlement délégué
+# (UE) 2024/1364, le Climate Neutral Data Centre Pact et ISO/IEC 30134.
+#
+# Ces critères ne changent pas le PRIX AU MÉGAWATT — rien ici ne le permet.
+# Ils changent ce qui se passe APRÈS : le PUE, donc l'électricité, donc le coût
+# total sur dix ans, c'est-à-dire le seul chiffre qui départage deux pays.
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Classe d'air admise à l'entrée des équipements. Élargir la plage est le levier
+# le moins cher qui existe — il ne coûte aucun matériel — mais il engage la
+# garantie constructeur, ce qui doit être écrit noir sur blanc dans l'offre.
+#
+# Le référentiel d'ingénierie donne les PLAGES, pas un coefficient de PUE :
+# le gain dépend du climat heure par heure et ne se déduit pas d'une capitale.
+# La classe POSITIONNE donc le PUE dans la bande de la famille retenue, au lieu
+# de le recalculer — et cette position est déclarée `hypothese`, pas `calcule`.
+CLASSES_ASHRAE = {
+    "A1": {"nom": "A1 — 15 à 32 °C", "plage_c": [15, 32], "position": 1.00,
+           "sens": "serveurs d'entreprise et stockage : la classe la plus contrainte, "
+                   "donc le moins d'heures de free cooling"},
+    "A2": {"nom": "A2 — 10 à 35 °C", "plage_c": [10, 35], "position": 0.75,
+           "sens": "serveurs de volume, plage courante — le défaut du marché"},
+    "A3": {"nom": "A3 — 5 à 40 °C", "plage_c": [5, 40], "position": 0.45,
+           "sens": "autorise beaucoup plus de free cooling ; vérifier la qualification "
+                   "du matériel retenu"},
+    "A4": {"nom": "A4 — 5 à 45 °C", "plage_c": [5, 45], "position": 0.20,
+           "sens": "maximise le free cooling ; impose du matériel qualifié et engage "
+                   "la garantie constructeur"},
+}
+ASHRAE_SOURCE = {
+    "titre": "ASHRAE TC 9.9, Thermal Guidelines for Data Processing Environments",
+    "nature": "referentiel",
+    "note": "Les plages sont normatives. Le POSITIONNEMENT du PUE dans la bande de "
+            "la famille est une hypothèse de cadrage : le gain réel dépend du profil "
+            "horaire de température du site, qu'aucune moyenne nationale ne remplace.",
+}
+
+# Taux de charge moyen. L'électricité se calcule dessus : c'est, avec le PUE, ce
+# qui commande l'exploitation. Le référentiel d'ingénierie retient 0,65 par
+# défaut ; ce module conserve 0,70 pour ne pas réécrire en silence des résultats
+# déjà cités, et l'écart est dit ici plutôt que masqué.
+CHARGE = {
+    "defaut": 0.70,
+    "defaut_ingenierie": 0.65,
+    "bornes": [0.30, 1.00],
+    "nature": "hypothese",
+    "sens": "charge réelle moyenne rapportée à la puissance installée",
+    "alerte_sous": 0.55,
+    "note_alerte": "Sous 0,55, la pénalité de charge partielle des chaînes électriques "
+                   "et frigorifiques devient le premier poste de perte : un site "
+                   "surdimensionné coûte cher avant même d'être utile.",
+}
+
+# Cibles de marché. Volontaires, non réglementaires — mais un dossier qui s'en
+# écarte doit le justifier, et un évaluateur technique le demandera.
+CIBLES_MARCHE = {
+    "titre": "Climate Neutral Data Centre Pact (engagement sectoriel volontaire)",
+    "nature": "referentiel",
+    "pue_climat_froid": 1.30,
+    "pue_climat_tempere_chaud": 1.40,
+    "wue_site_max": 0.40,
+    "note": "Engagement volontaire, pas une obligation. Il sert de repère : "
+            "l'écart se justifie, il ne s'ignore pas.",
+}
+
+# Carbone incorporé, amorti sur la durée de vie. Sans cet amortissement, la
+# comparaison avec l'exploitation n'a aucun sens — et sans cette ligne, un
+# dossier CSRD est incomplet dès sa première page.
+INCORPORE = {
+    "batiment": {"nom": "Bâtiment (gros œuvre et second œuvre)",
+                 "kgco2e_par_kw_it": 2500, "duree_vie_ans": 25},
+    "technique": {"nom": "Lots techniques (froid, onduleurs, batteries, groupes)",
+                  "kgco2e_par_kw_it": 1400, "duree_vie_ans": 15},
+}
+INCORPORE_SOURCE = {
+    "nature": "hypothese",
+    "note": "Ordres de grandeur issus des analyses de cycle de vie publiées du "
+            "secteur, repris du référentiel d'ingénierie CONSEILPREV. À REMPLACER "
+            "par les déclarations environnementales (FDES / EPD) des équipements "
+            "réellement retenus : l'écart entre un ordre de grandeur et une EPD "
+            "peut atteindre un facteur deux. Les serveurs sont EXCLUS — ils "
+            "relèvent de l'exploitant, pas du constructeur du bâtiment.",
+}
+
 # Tension sur le raccordement : elle ne change pas le prix du poste source, elle
 # change le DÉLAI, donc la provision d'aléas et le coût de portage.
 TENSION_RACCORDEMENT = {
@@ -359,7 +447,20 @@ A_RENSEIGNER = [
                  "réseau varient par région et par convention"},
     {"cle": "energie_contrat", "lot": None, "nom": "Prix contractuel de l'électricité",
      "pourquoi": "un PPA ou un contrat d'approvisionnement est un contrat privé ; la "
-                 "statistique Eurostat donne des bandes, pas votre prix"},
+                 "statistique Eurostat donne des bandes, pas votre prix",
+     "question": "Quel prix votre PPA ou votre contrat d'approvisionnement retient-il, "
+                 "et sur quelle durée ?"},
+    # La redondance est le PREMIER multiplicateur de coût des lots 04 et 05 —
+    # doubler une chaîne électrique se voit dans l'enveloppe avant tout le
+    # reste. Aucune des sources de ce référentiel ne la chiffre. Elle est donc
+    # affichée VIDE, comme les autres : un coefficient plausible mais inventé
+    # serait plus dangereux qu'une case blanche, parce qu'il serait cru.
+    {"cle": "redondance", "lot": "04", "nom": "Niveau de redondance électrique et frigorifique",
+     "pourquoi": "passer de N+1 à 2N double des chaînes entières sur les lots 04 et 05 ; "
+                 "aucune source de ce référentiel ne donne le coefficient correspondant, "
+                 "et il dépend autant de la topologie retenue que du niveau affiché",
+     "question": "Quel niveau de disponibilité le contrat de service impose-t-il, et "
+                 "quelle topologie l'atteint — N+1, N+2, 2N, 2(N+1) ?"},
 ]
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -401,10 +502,48 @@ def _fr(x):
     return str(x).replace('.', ',')
 
 
-def refroidissement_retenu(climat_classe, eau_classe, densite_ia=False):
-    """Le mode de refroidissement DÉCOULE du climat et de l'eau. C'est le seul
-    endroit où le pays change la solution technique elle-même — et donc les
-    lots 05, 06, 07 ainsi que le PUE, c'est-à-dire l'électricité sur vingt ans."""
+def pue_de(mode, classe_ashrae=None, pue_impose=None):
+    """Le PUE retenu, et d'où il vient.
+
+    Trois provenances possibles, dans cet ordre de priorité :
+      1. le CAHIER DES CHARGES, s'il en impose un — c'est une contrainte, pas
+         une estimation, et elle prime sur toute déduction ;
+      2. la CLASSE D'AIR ADMISE, qui positionne le PUE dans la bande de la
+         famille : élargir la plage augmente les heures de free cooling ;
+      3. la bande de la famille, telle quelle, si rien n'est précisé.
+
+    La position dans la bande est une HYPOTHÈSE de cadrage, jamais un calcul :
+    le gain réel d'une classe ASHRAE dépend du profil horaire de température du
+    site, qu'aucune moyenne nationale ne remplace."""
+    bande = list(REFROIDISSEMENT[mode]["pue"])
+    if pue_impose:
+        v = _f(max(1.02, min(2.5, float(pue_impose))), 2)
+        return [v, v], "saisi", ("PUE imposé par le cahier des charges : %s. La bande de "
+                                 "la famille (%s à %s) n'est pas retenue."
+                                 % (_fr(v), _fr(bande[0]), _fr(bande[1])))
+    A = CLASSES_ASHRAE.get(classe_ashrae or "")
+    if not A:
+        return bande, "hypothese", ("Bande de la famille retenue, sans classe d'air "
+                                    "précisée : %s à %s" % (_fr(bande[0]), _fr(bande[1])))
+    # La position 1,00 laisse la bande entière (classe la plus contrainte) ;
+    # la position 0,00 la ramène sur sa borne basse (classe la plus permissive).
+    haut = _f(bande[0] + (bande[1] - bande[0]) * A["position"], 3)
+    return ([bande[0], max(bande[0], haut)], "hypothese",
+            "Classe %s (%s à %s °C) : la borne haute du PUE passe de %s à %s — "
+            "élargir la plage d'air admise achète des heures de free cooling, sans "
+            "matériel, mais engage la garantie constructeur."
+            % (classe_ashrae, A["plage_c"][0], A["plage_c"][1],
+               _fr(bande[1]), _fr(max(bande[0], haut))))
+
+
+def refroidissement_retenu(climat_classe, eau_classe, densite_ia=False, impose=None):
+    """Le mode de refroidissement DÉCOULE du climat et de l'eau — sauf si le
+    lecteur en IMPOSE un. C'est le seul endroit où le pays change la solution
+    technique elle-même, et donc les lots 05, 06, 07 ainsi que le PUE,
+    c'est-à-dire l'électricité sur vingt ans. Un investisseur qui a déjà une
+    esquisse doit pouvoir dire ce qu'il sait au lieu de le laisser déduire."""
+    if impose and impose in REFROIDISSEMENT:
+        return impose
     if densite_ia:
         return "liquide"
     if eau_classe == "eleve":
@@ -432,7 +571,8 @@ def tension_de(parc_mw_ou_sites, pipeline):
 
 def dpgf(mw, gabarit="hyperscale", scenario="neuve", pays=None,
          climat_classe=None, eau_classe=None, densite_ia=False,
-         parc_sites=0, pipeline_sites=0, cout_mw=None, vitesse="aucune"):
+         parc_sites=0, pipeline_sites=0, cout_mw=None, vitesse="aucune",
+         refroidissement=None, classe_ashrae=None, pue_impose=None):
     """Enveloppe et DPGF pour une puissance IT donnée, dans un pays donné.
 
     Retourne l'enveloppe en fourchette, la décomposition par lot, les postes
@@ -446,8 +586,9 @@ def dpgf(mw, gabarit="hyperscale", scenario="neuve", pays=None,
     if V["coef"] != 1.0:
         base = [base[0] * V["coef"], base[1] * V["coef"]]
 
-    mode = refroidissement_retenu(climat_classe, eau_classe, densite_ia)
+    mode = refroidissement_retenu(climat_classe, eau_classe, densite_ia, refroidissement)
     R = REFROIDISSEMENT[mode]
+    pue, pue_nature, pue_note = pue_de(mode, classe_ashrae, pue_impose)
     ten_cle, ten_ratio = tension_de(parc_sites, pipeline_sites)
     T = TENSION_RACCORDEMENT[ten_cle]
 
@@ -462,8 +603,13 @@ def dpgf(mw, gabarit="hyperscale", scenario="neuve", pays=None,
             ("" if V["coef"] == 1.0 else
              " — surcoût de %s %% appliqué à l'enveloppe, %s mois gagnés au mieux"
              % (_fr(_f((V["coef"] - 1) * 100, 0)), abs(V["mois"])))),
-        "Refroidissement déduit du climat (%s) et de l'eau (%s) : %s"
-        % (climat_classe or "inconnu", eau_classe or "inconnu", R["nom"]),
+        ("Refroidissement IMPOSÉ : %s — le climat (%s) et l'eau (%s) auraient conduit à %s"
+         % (R["nom"], climat_classe or "inconnu", eau_classe or "inconnu",
+            REFROIDISSEMENT[refroidissement_retenu(climat_classe, eau_classe, densite_ia)]["nom"])
+         ) if refroidissement in REFROIDISSEMENT else
+        ("Refroidissement déduit du climat (%s) et de l'eau (%s) : %s"
+         % (climat_classe or "inconnu", eau_classe or "inconnu", R["nom"])),
+        "PUE retenu : %s à %s (%s) — %s" % (_fr(pue[0]), _fr(pue[1]), pue_nature, pue_note),
         "Raccordement : %s (%s projets pour %s sites en service, ratio %s)"
         % (T["nom"], pipeline_sites, parc_sites, _fr(ten_ratio)),
     ]
@@ -536,8 +682,13 @@ def dpgf(mw, gabarit="hyperscale", scenario="neuve", pays=None,
                     "mois_gagnes": abs(V["mois"]),
                     "nature": V.get("nature", "analyse"),
                     "source": V.get("source"), "sens": V["sens"]},
-        "refroidissement": {"cle": mode, "nom": R["nom"], "pue": R["pue"],
-                            "eau": R["eau"], "sens": R["sens"], "nature": "calcule"},
+        "refroidissement": {"cle": mode, "nom": R["nom"], "pue": pue,
+                            "pue_famille": R["pue"], "pue_nature": pue_nature,
+                            "pue_note": pue_note,
+                            "impose": bool(refroidissement in REFROIDISSEMENT),
+                            "classe_ashrae": classe_ashrae or None,
+                            "eau": R["eau"], "sens": R["sens"],
+                            "nature": "saisi" if refroidissement in REFROIDISSEMENT else "calcule"},
         "raccordement": {"cle": ten_cle, "nom": T["nom"], "ratio": ten_ratio,
                          "mois_sup": T["mois_sup"], "sens": T["sens"], "nature": "calcule"},
         "enveloppe_meur": _fourchette(ebas, ehaut, 1),
@@ -553,11 +704,33 @@ def dpgf(mw, gabarit="hyperscale", scenario="neuve", pays=None,
 
 
 def exploitation(env_meur, mw, pue, prix_mwh, intensite_g_kwh=None,
-                 wue_m3_mwh=None, charge=0.7):
+                 wue_m3_mwh=None, charge=None, prix_contrat=None,
+                 intensite_contrat=None, part_sans_carbone=0.0):
     """Postes annuels d'exploitation. L'électricité est calculée, pas supposée :
-    elle sort de la puissance, du facteur de charge, du PUE et du prix du pays."""
+    elle sort de la puissance, du facteur de charge, du PUE et du prix.
+
+    Trois entrées facultatives remplacent une statistique par VOTRE donnée, et
+    la nature du poste change en conséquence :
+
+      `prix_contrat`       — le prix de votre PPA remplace la bande Eurostat.
+                             C'était l'un des cinq postes affichés vides ; il
+                             cesse de l'être dès qu'il est renseigné.
+      `intensite_contrat`  — l'intensité de votre fourniture remplace la
+                             moyenne nationale (approche « market-based »,
+                             GHG Protocol Scope 2 Guidance).
+      `part_sans_carbone`  — la part d'énergie sans carbone contractualisée
+                             (REF au sens d'EN 50600-4-3 et ISO 30134-3).
+
+    Une donnée saisie n'est pas une donnée vérifiée : elle est marquée `saisi`,
+    ce qui dit au lecteur du dossier que c'est VOUS qui l'engagez."""
     mw = max(0.1, float(mw or 0))
-    charge = min(1.0, max(0.1, float(charge)))
+    charge = CHARGE["defaut"] if charge is None else float(charge)
+    charge = min(CHARGE["bornes"][1], max(CHARGE["bornes"][0], charge))
+    prix_source = "bande de prix industriels du pays"
+    if prix_contrat:
+        p = _f(max(1.0, min(600.0, float(prix_contrat))), 1)
+        prix_mwh = [p, p]
+        prix_source = "prix contractuel saisi"
     mwh = [mw * charge * 8760 * pue[0], mw * charge * 8760 * pue[1]]
     elec = [mwh[0] * prix_mwh[0] / 1e6, mwh[1] * prix_mwh[1] / 1e6]   # M€
     cb, ch = env_meur[0], env_meur[1]
@@ -569,12 +742,12 @@ def exploitation(env_meur, mw, pue, prix_mwh, intensite_g_kwh=None,
              ch * OPEX["assurance"]["part_capex_an"][1]]
     postes = [
         {"cle": "electricite", "nom": "Électricité", "meur_an": _fourchette(elec[0], elec[1], 2),
-         "nature": "calcule",
+         "nature": "saisi" if prix_contrat else "calcule",
          "formule": "MWh = %s MW × %s × 8 760 h × PUE %s-%s → %s à %s MWh/an, "
-                    "puis × prix %s-%s €/MWh"
+                    "puis × prix %s-%s €/MWh (%s)"
                     % (_fr(_f(mw, 1)), _fr(charge), _fr(pue[0]), _fr(pue[1]),
                        _fr(_f(mwh[0] / 1000, 0) * 1000), _fr(_f(mwh[1] / 1000, 0) * 1000),
-                       prix_mwh[0], prix_mwh[1])},
+                       _fr(prix_mwh[0]), _fr(prix_mwh[1]), prix_source)},
         {"cle": "maintenance", "nom": OPEX["maintenance"]["nom"],
          "meur_an": _fourchette(maint[0], maint[1], 2), "nature": "hypothese",
          "formule": "%s à %s %% de l'enveloppe par an"
@@ -598,18 +771,93 @@ def exploitation(env_meur, mw, pue, prix_mwh, intensite_g_kwh=None,
                                   % (_fr(wue_m3_mwh[0]), _fr(wue_m3_mwh[1]),
                                      _fr(EAU_PRIX_EUR_M3[0]), _fr(EAU_PRIX_EUR_M3[1]))})
     carbone = None
-    if intensite_g_kwh:
-        t = [mwh[0] * intensite_g_kwh / 1000.0, mwh[1] * intensite_g_kwh / 1000.0]
+    # L'intensité CONTRACTUELLE prime sur la moyenne nationale : c'est
+    # l'approche « market-based » du GHG Protocol, celle qu'un auditeur CSRD
+    # attend. La moyenne nationale reste affichée pour que l'écart se voie.
+    inten = float(intensite_contrat) if intensite_contrat else intensite_g_kwh
+    ref = max(0.0, min(1.0, float(part_sans_carbone or 0.0)))
+    if inten:
+        eff = inten * (1.0 - ref)
+        t = [mwh[0] * eff / 1000.0, mwh[1] * eff / 1000.0]
         carbone = {"t_co2e_an": _fourchette(t[0], t[1], 0),
                    "cout_meur_an": _fourchette(t[0] * CO2_EUR_T[0] / 1e6,
                                                t[1] * CO2_EUR_T[1] / 1e6, 2),
-                   "nature": "calcule",
-                   "formule": "MWh × %s gCO₂e/kWh (Ember 2024, cycle de vie), "
-                              "valorisé %s à %s €/t — le prix du quota est une hypothèse "
-                              "très volatile" % (intensite_g_kwh, CO2_EUR_T[0], CO2_EUR_T[1])}
+                   "intensite_retenue_g": _f(eff, 1),
+                   "intensite_reseau_g": intensite_g_kwh,
+                   "part_sans_carbone": ref,
+                   "nature": "saisi" if (intensite_contrat or ref) else "calcule",
+                   "formule": "MWh × %s gCO₂e/kWh%s%s, valorisé %s à %s €/t — le prix "
+                              "du quota est une hypothèse très volatile"
+                              % (_fr(_f(inten, 1)),
+                                 " (fourniture contractuelle, approche market-based)"
+                                 if intensite_contrat
+                                 else " (moyenne nationale, Ember 2024, cycle de vie)",
+                                 " × (1 − %s de part sans carbone contractualisée)"
+                                 % _fr(ref) if ref else "",
+                                 CO2_EUR_T[0], CO2_EUR_T[1])}
     tot = [sum(p["meur_an"][0] for p in postes), sum(p["meur_an"][1] for p in postes)]
+    alerte = (CHARGE["note_alerte"] if charge < CHARGE["alerte_sous"] else None)
     return {"postes": postes, "total_meur_an": _fourchette(tot[0], tot[1], 2),
-            "carbone": carbone, "charge": charge}
+            "carbone": carbone, "charge": charge,
+            "charge_alerte": alerte, "prix_source": prix_source,
+            "prix_mwh": list(prix_mwh)}
+
+
+def carbone_incorpore(mw, annees=None):
+    """Le carbone de la CONSTRUCTION, amorti sur la durée de vie de chaque lot.
+
+    Sans cet amortissement, la comparaison avec l'exploitation n'a aucun sens —
+    et sans cette ligne, un dossier CSRD est incomplet dès sa première page.
+    Les serveurs sont volontairement EXCLUS : ils relèvent de l'exploitant et de
+    son cycle de renouvellement, pas du constructeur du bâtiment."""
+    mw = max(0.1, float(mw or 0))
+    kw = mw * 1000.0
+    postes, total_t, total_t_an = [], 0.0, 0.0
+    for cle, I in INCORPORE.items():
+        t = kw * I["kgco2e_par_kw_it"] / 1000.0
+        t_an = t / I["duree_vie_ans"]
+        total_t += t
+        total_t_an += t_an
+        postes.append({"cle": cle, "nom": I["nom"],
+                       "t_co2e": _f(t, 0), "duree_vie_ans": I["duree_vie_ans"],
+                       "t_co2e_an": _f(t_an, 0), "nature": "hypothese",
+                       "formule": "%s kW IT × %s kgCO₂e/kW ÷ %s ans"
+                                  % (_fr(_f(kw, 0)), I["kgco2e_par_kw_it"],
+                                     I["duree_vie_ans"])})
+    return {"postes": postes, "total_t_co2e": _f(total_t, 0),
+            "total_t_co2e_an": _f(total_t_an, 0), "nature": "hypothese",
+            "source": INCORPORE_SOURCE["note"],
+            "note": "Amorti par lot sur sa propre durée de vie : le bâtiment sur "
+                    "25 ans, les lots techniques sur 15. Un carbone incorporé non "
+                    "amorti ne se compare à rien."}
+
+
+def conformite_marche(pue, wue_m3_mwh=None, climat_classe=None):
+    """Confrontation aux cibles du Climate Neutral Data Centre Pact.
+
+    Engagement volontaire, pas une obligation : le verdict n'est donc pas
+    « conforme / non conforme » mais « dans la cible / à justifier ». Un dossier
+    qui s'écarte du repère de marché doit l'expliquer, il ne peut pas l'ignorer."""
+    froid = climat_classe in ("nordique", "continental")
+    cible_pue = (CIBLES_MARCHE["pue_climat_froid"] if froid
+                 else CIBLES_MARCHE["pue_climat_tempere_chaud"])
+    haut = pue[1]
+    out = [{"cle": "pue", "nom": "PUE annuel",
+            "cible": cible_pue, "valeur": _f(haut, 3),
+            "cible_nom": "climat froid" if froid else "climat tempéré ou chaud",
+            "verdict": "dans la cible" if haut <= cible_pue else "à justifier",
+            "sens": "Le PUE retenu est comparé à la borne haute : c'est elle qui "
+                    "engage, pas la borne basse."}]
+    if wue_m3_mwh:
+        out.append({"cle": "wue", "nom": "WUE site (m³/MWh IT)",
+                    "cible": CIBLES_MARCHE["wue_site_max"],
+                    "valeur": _f(wue_m3_mwh[1], 2),
+                    "verdict": ("dans la cible" if wue_m3_mwh[1] <= CIBLES_MARCHE["wue_site_max"]
+                                else "à justifier"),
+                    "sens": "Le WUE annuel masque les pointes estivales, qui sont "
+                            "précisément le moment où la ressource est tendue."})
+    return {"reperes": out, "source": CIBLES_MARCHE["titre"],
+            "nature": CIBLES_MARCHE["nature"], "note": CIBLES_MARCHE["note"]}
 
 
 def tco(env_meur, opex_an_meur, annees=10):
@@ -815,6 +1063,12 @@ def referentiel():
         "refroidissement": REFROIDISSEMENT,
         "tension": TENSION_RACCORDEMENT,
         "arenseigner": A_RENSEIGNER,
+        "ashrae": CLASSES_ASHRAE,
+        "source_ashrae": ASHRAE_SOURCE,
+        "charge": CHARGE,
+        "cibles_marche": CIBLES_MARCHE,
+        "incorpore": INCORPORE,
+        "source_incorpore": INCORPORE_SOURCE,
         "opex": OPEX,
         "hypotheses_prix": {"eau_eur_m3": EAU_PRIX_EUR_M3, "co2_eur_t": CO2_EUR_T},
     }
@@ -828,4 +1082,6 @@ def sante():
             "somme_parts_basses": _f(sbas, 3), "somme_parts_hautes": _f(shaut, 3),
             "scenarios": len(SCENARIOS), "modes_refroidissement": len(REFROIDISSEMENT),
             "postes_a_renseigner": len(A_RENSEIGNER),
+            "classes_ashrae": len(CLASSES_ASHRAE),
+            "postes_incorpore": len(INCORPORE),
             "horodatage": datetime.now(timezone.utc).isoformat(timespec="seconds")}
