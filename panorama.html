@@ -593,6 +593,40 @@ body.embed .gp-carte{bottom:auto;top:var(--gp-bas,auto);
   line-height:1.5;background:var(--bg)}
 .pro-s b{display:block;font-size:11.5px;margin-bottom:2px}
 @media(max-width:640px){.pro-jal{grid-template-columns:1fr;gap:3px}}
+/* ══ DÉPLIANTS DEUX PAR LIGNE ══════════════════════════════════════════════
+   Ces listes sont longues et se lisent par PICORAGE : on cherche un jalon, une
+   tendance, un contrôle — pas les onze d'affilée. Déployées, elles imposaient
+   plusieurs écrans de défilement avant d'atteindre la suivante.
+
+   Le résumé n'est jamais muet : il porte le titre ET l'information qui permet
+   de décider s'il faut ouvrir — la date pour un jalon, le critère touché pour
+   une tendance, le verdict pour un contrôle. Un dépliant qui ne dit rien de son
+   contenu ne s'ouvre pas, et son contenu est alors perdu plutôt que résumé.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.dl2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:0 0 14px;
+  align-items:start}
+@media(max-width:900px){.dl2{grid-template-columns:1fr}}
+.dpl{border:1px solid var(--rule2);border-radius:7px;background:var(--white);
+  font-size:11.5px;line-height:1.55}
+.dpl[open]{box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.dpl > summary{cursor:pointer;padding:9px 12px;list-style:none;display:flex;
+  gap:8px;align-items:baseline;flex-wrap:wrap;font-weight:600;font-size:12px}
+.dpl > summary::-webkit-details-marker{display:none}
+.dpl > summary:before{content:"▸";font-size:9px;color:var(--muted2);flex:0 0 auto;
+  position:relative;top:-1px}
+.dpl[open] > summary:before{content:"▾"}
+.dpl > summary:hover{background:var(--bg)}
+.dpl > summary:focus-visible{outline:2px solid var(--encre,#1C1C1C);outline-offset:-2px}
+/* Ce qui suit le titre dans le résumé est une indication, pas un titre bis. */
+.dpl-cle{font-weight:400;font-size:10.5px;color:var(--muted2)}
+.dpl-corps{padding:0 12px 11px 30px}
+.dpl-corps > p{margin:0 0 6px}
+.dpl-corps > p:last-child{margin-bottom:0}
+/* Les réserves gardent leur signal d'alerte jusque dans le résumé replié :
+   c'est le seul bloc qui remet en cause un chiffre affiché ailleurs. */
+.dpl.alerte{border-color:#E0C088;border-left:4px solid #B37A15;background:#FFF9EF}
+.dpl.annonce{border-left:3px dashed #8A5310}
+.dpl.vigie{border-left:3px solid #1C5CAB}
 /* TÉLÉCHARGEMENTS — un chiffre recopié à la main perd sa nature et sa source.
    Les boutons sont donc là où le chiffre se lit, pas dans un coin de page. */
 .dl-barre{border:1px solid var(--rule2);border-radius:8px;background:var(--bg);
@@ -4898,17 +4932,25 @@ function renderSources(){
     + "capacités publiées par tranche et des dossiers de raccordement publics, et c’est "
     + "précisément pour cela que toute valeur qui en dérive porte l’étiquette « classe ».</p>"
 
-    + '<h3 class="pv-sh">Les textes appliqués</h3>'
+    + '<h3 class="pv-sh">Les ' + SRC_TEXTES.length + ' textes appliqués</h3>'
+    + '<div class="dl2">'
     + SRC_TEXTES.map(function(t){
-        return '<p class="note" style="margin-top:6px"><b><a href="' + esc(t.l)
-          + '" target="_blank" rel="noopener">' + esc(t.t) + "</a>.</b> " + esc(t.d) + "</p>";
+        return '<details class="dpl"><summary>' + esc(t.t) + '</summary>'
+          + '<div class="dpl-corps"><p>' + esc(t.d) + '</p>'
+          + '<p><a href="' + esc(t.l) + '" target="_blank" rel="noopener">'
+          + 'Consulter le texte</a></p></div></details>';
       }).join("")
+    + '</div>'
 
-    + '<h3 class="pv-sh">Les sources de données publiques</h3>'
+    + '<h3 class="pv-sh">Les ' + SRC_DONNEES.length + ' sources de données publiques</h3>'
+    + '<div class="dl2">'
     + SRC_DONNEES.map(function(t){
-        return '<p class="note" style="margin-top:6px"><b><a href="' + esc(t.l)
-          + '" target="_blank" rel="noopener">' + esc(t.t) + "</a>.</b> " + esc(t.d) + "</p>";
+        return '<details class="dpl"><summary>' + esc(t.t) + '</summary>'
+          + '<div class="dpl-corps"><p>' + esc(t.d) + '</p>'
+          + '<p><a href="' + esc(t.l) + '" target="_blank" rel="noopener">'
+          + 'Consulter la source</a></p></div></details>';
       }).join("")
+    + '</div>'
 
     + '<h3 class="pv-sh">Sources site par site, cas par cas</h3>'
     + '<p class="note" style="margin-top:4px">Les sources ne sont pas seulement globales. '
@@ -4927,25 +4969,33 @@ function renderSources(){
     + "cité l’ancienne ne saurait pas qu’il doit se corriger.</p>"
     + '<div id="fc-registre"></div>'
 
-    + '<h3 class="pv-sh" data-aide="verification">Ce que nous ne pouvons pas garantir</h3>'
-    + '<ul class="note" style="padding-left:16px;margin-top:4px">'
-    + "<li><b>Le panel n’est pas un recensement.</b> Un déploiement d’IA non communiqué n’y "
-    + "figure pas, et le biais de publication favorise les grands groupes et les cas génératifs. "
-    + "Aucune part de marché ni aucun taux de pénétration ne peut en être tiré.</li>"
-    + "<li><b>Aucune capacité informatique attestée</b> ne survit à la vérification sur les 97 "
-    + "sites. Les mégawatts qui circulent sont des capacités cibles de campus, des ambitions à "
-    + "terme, des capacités de raccordement ou des puissances de machine. Aucun agrégat de "
-    + "puissance européenne n’est donc publié ici.</li>"
-    + "<li><b>Les intensités carbone sont des moyennes annuelles</b>, en approche cycle de vie. "
-    + "Elles ne sont pas comparables aux facteurs de combustion directe employés par la plupart "
-    + "des inventaires d’entreprise, et l’intensité réelle varie d’un facteur trois dans la "
-    + "journée.</li>"
-    + "<li><b>Un volume d’eau est un prélèvement calculé</b>, pas une consommation mesurée. "
-    + "Le référentiel ne porte ni bassin versant, ni indice de stress hydrique, ni régime "
-    + "d’autorisation : sans ces couches, un volume ne dit rien de la pression sur la ressource.</li>"
-    + "<li><b>La chaîne de calcul est publiée mais n’est pas auditée par un tiers.</b> "
-    + "Ne la présentez pas comme une donnée certifiée.</li>"
-    + "</ul>";
+    + '<h3 class="pv-sh" data-aide="verification">Les 5 choses que nous ne pouvons pas '
+    + 'garantir</h3>'
+    + '<div class="dl2">'
+    /* Le titre de chaque limite tient dans le résumé replié : replier une
+       limite ne doit pas la faire disparaître, seulement la raccourcir. */
+    + [["Le panel n’est pas un recensement",
+        "Un déploiement d’IA non communiqué n’y figure pas, et le biais de publication "
+        + "favorise les grands groupes et les cas génératifs. Aucune part de marché ni aucun "
+        + "taux de pénétration ne peut en être tiré."],
+       ["Aucune capacité informatique attestée sur les 97 sites",
+        "Les mégawatts qui circulent sont des capacités cibles de campus, des ambitions à "
+        + "terme, des capacités de raccordement ou des puissances de machine. Aucun agrégat "
+        + "de puissance européenne n’est donc publié ici."],
+       ["Les intensités carbone sont des moyennes annuelles",
+        "En approche cycle de vie. Elles ne sont pas comparables aux facteurs de combustion "
+        + "directe employés par la plupart des inventaires d’entreprise, et l’intensité "
+        + "réelle varie d’un facteur trois dans la journée."],
+       ["Un volume d’eau est un prélèvement calculé, pas une consommation mesurée",
+        "Le référentiel ne porte ni bassin versant, ni indice de stress hydrique, ni régime "
+        + "d’autorisation : sans ces couches, un volume ne dit rien de la pression sur la "
+        + "ressource."],
+       ["La chaîne de calcul est publiée mais n’est pas auditée par un tiers",
+        "Ne la présentez pas comme une donnée certifiée."]]
+      .map(function(x){
+        return '<details class="dpl alerte"><summary>' + esc(x[0]) + '</summary>'
+          + '<div class="dpl-corps"><p>' + esc(x[1]) + '</p></div></details>'; }).join("")
+    + '</div>';
 
   if(SRC_VERIF){
     h += '<h3 class="pv-sh">Résultat de la vérification externe</h3>'
@@ -6740,18 +6790,21 @@ if(window.parent&&window.parent!==window){
       + 'd’office aux notes et aux classes affichées ailleurs sur cette page. Un référentiel '
       + 'qui se réécrit sans le dire fait perdre la trace de ce qui a été cité la semaine '
       + 'précédente : la correction vous est remise, la décision vous appartient.</p>'
+      + '<div class="dl2">'
       + j.reserves.map(function(r){
           var jal = (j.jalons || []).filter(function(z){ return z.cle === r.jalon; })[0];
-          return '<div class="pro-res"><div class="pro-res-t">'
+          return '<details class="dpl alerte"><summary>'
             + '<span class="pro-pays">' + esc(r.pays) + '</span>'
-            + '<b>Critère « ' + esc(r.critere) + ' »</b>'
-            + '<span class="fin-nat n-analyse">depuis ' + esc(libDate(r.depuis)) + '</span></div>'
+            + 'Critère « ' + esc(r.critere) + ' »'
+            + '<span class="dpl-cle">depuis ' + esc(libDate(r.depuis)) + '</span></summary>'
+            + '<div class="dpl-corps">'
             + '<p class="pro-res-v">Valeur affichée sur cette page : <b>'
             + esc(r.valeur_referentiel) + '</b></p>'
-            + '<p style="margin:0">' + esc(r.reserve) + '</p>'
+            + '<p>' + esc(r.reserve) + '</p>'
             + (jal ? '<p class="pro-src">Fait déclencheur : ' + esc(jal.titre) + ' — '
                    + srcLib(j, jal.source, jal.page) + '.</p>' : '')
-            + '</div>'; }).join('');
+            + '</div></details>'; }).join('')
+      + '</div>';
   }
 
   function blocJalons(j){
@@ -6759,17 +6812,20 @@ if(window.parent&&window.parent!==window){
     if(!L.length) return '';
     return '<div class="pro-h">Jalons réglementaires datés — ' + L.length + ' échéances qui '
       + 'structurent un calendrier de projet</div>'
+      + '<div class="dl2">'
       + L.map(function(x){
-          return '<div class="pro-jal' + (x.statut === 'annoncé' ? ' annonce' : '') + '">'
-            + '<div class="pro-jal-d">' + esc(libDate(x.date))
-            + '<span class="pro-jal-s">' + esc(x.statut) + '</span></div>'
-            + '<div><span class="pro-jal-t"><span class="pro-pays">' + esc(x.pays)
-            + '</span> ' + esc(x.titre) + '</span>'
-            + esc(x.detail)
-            + '<p style="margin:5px 0 0"><b>Ce que cela impose :</b> ' + esc(x.impact) + '</p>'
+          return '<details class="dpl' + (x.statut === 'annoncé' ? ' annonce' : ' vigie')
+            + '"><summary>'
+            + '<span class="pro-jal-d">' + esc(libDate(x.date)) + '</span>'
+            + '<span class="pro-pays">' + esc(x.pays) + '</span>'
+            + esc(x.titre)
+            + '<span class="dpl-cle">' + esc(x.statut) + '</span></summary>'
+            + '<div class="dpl-corps"><p>' + esc(x.detail) + '</p>'
+            + '<p><b>Ce que cela impose :</b> ' + esc(x.impact) + '</p>'
             + citation(x)
             + '<p class="pro-src">' + srcLib(j, x.source, x.page) + amont(x) + '</p>'
-            + '</div></div>'; }).join('');
+            + '</div></details>'; }).join('')
+      + '</div>';
   }
 
   function blocTendances(j){
@@ -6777,19 +6833,22 @@ if(window.parent&&window.parent!==window){
     if(!L.length) return '';
     return '<div class="pro-h">Les ' + L.length + ' tendances 2026, et le critère du '
       + 'comparateur que chacune touche</div>'
-      + '<div class="pro-cartes">'
+      + '<div class="dl2">'
       + L.map(function(x){
-          return '<div class="pro-c"><h4><i>' + x.n + '.</i> ' + esc(x.titre) + '</h4>'
-            + '<p style="margin:0">' + esc(x.resume) + '</p>'
+          return '<details class="dpl"><summary>'
+            + '<i style="font-family:var(--mono);font-style:normal;color:var(--muted2)">'
+            + x.n + '.</i> ' + esc(x.titre)
+            + (x.critere
+                ? '<span class="pro-crit">critère ' + esc(x.critere) + '</span>'
+                : '<span class="pro-crit rien">hors comparateur</span>')
+            + '</summary>'
+            + '<div class="dpl-corps"><p>' + esc(x.resume) + '</p>'
             + (x.chiffre ? '<span class="pro-chiffre">' + esc(x.chiffre) + '</span>' : '')
             + citation(x)
             + '<p class="pro-inc"><b>Ce que cela change pour vous —</b> ' + esc(x.incidence)
             + '</p>'
-            + '<p class="pro-src">' + srcLib(j, x.source, x.page) + amont(x) + ' · '
-            + (x.critere
-                ? '<span class="pro-crit">critère ' + esc(x.critere) + '</span>'
-                : '<span class="pro-crit rien">hors comparateur</span>')
-            + '</p></div>'; }).join('')
+            + '<p class="pro-src">' + srcLib(j, x.source, x.page) + amont(x) + '</p>'
+            + '</div></details>'; }).join('')
       + '</div>';
   }
 
@@ -6798,29 +6857,36 @@ if(window.parent&&window.parent!==window){
     if(!L.length) return '';
     return '<div class="pro-h">Structure de marché — ce qui contraint l’exécution, pas la '
       + 'localisation</div>'
-      + '<table class="fin-tab"><thead><tr><th>Fait</th><th>Valeur</th><th>Nature</th>'
-      + '<th>Source</th></tr></thead><tbody>'
+      + '<div class="dl2">'
       + L.map(function(x){
-          return '<tr><td><b>' + esc(x.titre) + '</b><br>' + esc(x.sens) + citation(x) + '</td>'
-            + '<td class="n">' + esc(x.valeur) + '</td>'
-            + '<td><span class="fin-nat n-'
-            + (x.nature === 'prevision' ? 'hypothese' : (x.nature === 'analyse' ? 'analyse' : 'referentiel'))
-            + '">' + esc(x.nature) + '</span><br><span class="fin-code">' + esc(x.date) + '</span></td>'
-            + '<td><span class="pro-src">' + srcLib(j, x.source, x.page) + amont(x)
-            + '</span></td></tr>'; }).join('')
-      + '</tbody></table>';
+          return '<details class="dpl"><summary>' + esc(x.titre)
+            + '<span class="dpl-cle">' + esc(x.valeur) + '</span>'
+            + '<span class="fin-nat n-'
+            + (x.nature === 'prevision' ? 'hypothese'
+               : (x.nature === 'analyse' ? 'analyse' : 'referentiel'))
+            + '">' + esc(x.nature) + '</span></summary>'
+            + '<div class="dpl-corps"><p>' + esc(x.sens) + '</p>'
+            + citation(x)
+            + '<p class="pro-src">' + esc(x.date) + ' · ' + srcLib(j, x.source, x.page)
+            + amont(x) + '</p></div></details>'; }).join('')
+      + '</div>';
   }
 
   function blocSources(j){
     var K = Object.keys(j.sources || {});
     if(!K.length) return '';
     return '<div class="pro-h">Les ' + K.length + ' rapports dépouillés</div>'
-      + '<div class="pro-sources">'
+      + '<div class="dl2">'
       + K.map(function(k){
           var S = j.sources[k];
-          return '<div class="pro-s"><b>' + esc(S.titre) + '</b>' + esc(S.editeur) + ' — '
-            + esc(S.date) + '<br><span class="fin-code">portée : ' + esc(S.portee)
-            + '</span></div>'; }).join('')
+          return '<details class="dpl"><summary>' + esc(S.titre)
+            + '<span class="dpl-cle">' + esc(S.editeur) + ' — ' + esc(S.date)
+            + '</span></summary>'
+            + '<div class="dpl-corps"><p>Éditeur : <b>' + esc(S.editeur) + '</b>, '
+            + esc(S.date) + '.</p>'
+            + '<p>Portée : ' + esc(S.portee) + '.</p>'
+            + '<p class="pro-src">Nature : <span class="fin-nat n-' + esc(S.nature) + '">'
+            + esc(S.nature) + '</span></p></div></details>'; }).join('')
       + '</div>'
       + '<p class="note" style="margin-top:9px">' + esc(j.avertissement) + '</p>';
   }

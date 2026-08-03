@@ -61,7 +61,29 @@
     ".fc-t tbody tr:hover{background:#FAFAF8}" +
     ".fc-t .fc-src{font-size:10.5px;color:#5A5A5A}" +
     ".fc-t .fc-av{display:block;margin-top:4px;font-size:10.5px;color:#8A5310}" +
-    "@media print{.fc-b{border-color:#999}}";
+    /* Le registre se lit par PICORAGE : on cherche un contrôle, pas les
+       quarante d'affilée. Le tableau imposait un defilement horizontal sur
+       ecran etroit et plusieurs ecrans verticaux sur large. Deplies deux par
+       ligne, les controles gardent leur verdict VISIBLE replie — c'est la
+       seule information qui decide s'il faut ouvrir. */
+    ".fc-g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-items:start}" +
+    "@media(max-width:900px){.fc-g{grid-template-columns:1fr}}" +
+    ".fc-d{border:1px solid #E3E1DC;border-radius:5px;background:#fff;font-size:11.5px;line-height:1.5}" +
+    ".fc-d[open]{box-shadow:0 1px 4px rgba(0,0,0,.06)}" +
+    ".fc-d > summary{cursor:pointer;padding:8px 11px;list-style:none;display:flex;gap:7px;" +
+    "align-items:baseline;flex-wrap:wrap;font-weight:600}" +
+    ".fc-d > summary::-webkit-details-marker{display:none}" +
+    ".fc-d > summary:before{content:\"\\25B8\";font-size:9px;color:#8A8A8A;flex:0 0 auto}" +
+    ".fc-d[open] > summary:before{content:\"\\25BE\"}" +
+    ".fc-d > summary:hover{background:#FAFAF8}" +
+    ".fc-d > summary:focus-visible{outline:2px solid #1E63A8;outline-offset:-2px}" +
+    ".fc-d > summary .fc-b{cursor:default;margin-left:auto}" +
+    ".fc-dc{padding:0 11px 10px 27px}" +
+    ".fc-dc p{margin:0 0 5px}" +
+    ".fc-dc p:last-child{margin-bottom:0}" +
+    ".fc-dc .fc-src{font-size:10.5px;color:#5A5A5A}" +
+    ".fc-dc .fc-av{display:block;margin-top:4px;font-size:10.5px;color:#8A5310}" +
+    "@media print{.fc-b{border-color:#999}.fc-d{break-inside:avoid}}";
 
   function style() {
     if (document.getElementById("fc-style")) return;
@@ -212,18 +234,24 @@
     var lignes = vus.map(function (c) {
       var v = V[c.verdict] || {};
       var s = c.source || {};
-      return "<tr><th scope=\"row\">" + esc(c.sujet) + "</th>"
-        + '<td><span class="fc-b v-' + esc(c.verdict) + '" style="margin:0;cursor:default">'
-        + '<i style="background:' + esc(v.couleur || "#7A7A7A") + '"></i>' + esc(v.nom || c.verdict)
-        + "</span></td>"
-        + "<td>" + esc(c.constat)
-        + (c.avant ? '<span class="fc-av">Valeur d’origine : ' + esc(c.avant) + " — remplacée.</span>" : "")
-        + "</td>"
-        + '<td class="fc-src">' + (s.url
-            ? '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.titre || s.editeur) + "</a>"
+      /* Le VERDICT reste visible replie. C'est lui, et lui seul, qui decide si
+         le lecteur ouvre : un registre qui n'affiche ses verdicts qu'une fois
+         deplie oblige a tout ouvrir pour trouver les defavorables — et un
+         registre qu'on n'ouvre pas est un registre promotionnel. */
+      return '<details class="fc-d"><summary>' + esc(c.sujet)
+        + '<span class="fc-b v-' + esc(c.verdict) + '">'
+        + '<i style="background:' + esc(v.couleur || "#7A7A7A") + '"></i>'
+        + esc(v.nom || c.verdict) + "</span></summary>"
+        + '<div class="fc-dc"><p>' + esc(c.constat) + "</p>"
+        + (c.avant ? '<p><span class="fc-av">Valeur d’origine : ' + esc(c.avant)
+                     + " — remplacée.</span></p>" : "")
+        + '<p class="fc-src">' + (s.url
+            ? '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">'
+              + esc(s.titre || s.editeur) + "</a>"
             : esc(s.titre || "—"))
-        + (s.editeur ? "<br>" + esc(s.editeur) : "")
-        + (c.verifie_le ? "<br>" + esc(c.verifie_le) : "") + "</td></tr>";
+        + (s.editeur ? " — " + esc(s.editeur) : "")
+        + (c.verifie_le ? " · contrôlé le " + esc(c.verifie_le) : "")
+        + "</p></div></details>";
     }).join("");
 
     h.innerHTML =
@@ -234,11 +262,7 @@
       + "</div>"
       + barre
       + (lignes
-          ? '<div class="fc-wrap"><table class="fc-t"><caption class="sr-only">'
-            + "Registre des contrôles factuels</caption><thead><tr>"
-            + '<th scope="col">Affirmation contrôlée</th><th scope="col">Verdict</th>'
-            + '<th scope="col">Constat</th><th scope="col">Source et date</th>'
-            + "</tr></thead><tbody>" + lignes + "</tbody></table></div>"
+          ? '<div class="fc-g" role="list">' + lignes + "</div>"
           : '<p style="font-size:12px;color:#5A5A5A;margin:0">'
             + (actif ? "Aucun contrôle ne correspond à ces filtres — sur "
                        + tous.length + " enregistrés pour cette page."
