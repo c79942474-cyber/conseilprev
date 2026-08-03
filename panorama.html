@@ -472,6 +472,53 @@ body.embed .gp-carte{bottom:auto;top:var(--gp-bas,auto);
 .gp-p span{font-size:11.5px;color:var(--muted);line-height:1.5;display:block}
 .gp-p em{display:block;font-style:normal;font-family:var(--mono);font-size:9px;
   text-transform:uppercase;letter-spacing:.05em;color:var(--muted2);margin-top:6px}
+/* ══ ENVELOPPE & DPGF ══════════════════════════════════════════════════════
+   Un tableau de DPGF se lit en diagonale : le lecteur cherche d'abord les deux
+   ou trois lots qui portent l'enveloppe. La part est donc alignée à droite et
+   monospace, et le lot dominant se repère sans le chercher. */
+.fin-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px 16px;
+  padding:14px 0 4px;border-bottom:1px solid var(--rule2);margin-bottom:14px}
+.fin-ch{display:flex;flex-direction:column;gap:4px}
+.fin-ch label{font-size:11px;font-weight:600;color:var(--ink2)}
+.fin-ch select,.fin-ch input{font-size:12.5px;padding:7px 9px;border:1px solid var(--rule2);
+  border-radius:6px;background:var(--white);font-family:inherit;color:var(--ink)}
+.fin-ch .fin-aide{font-size:10px;color:var(--muted2);line-height:1.4}
+.fin-pays{display:flex;flex-wrap:wrap;gap:5px}
+.fin-pays button{font-size:11px;padding:4px 9px;border:1px solid var(--rule2);border-radius:20px;
+  background:var(--white);cursor:pointer;font-family:inherit;color:var(--ink2)}
+.fin-pays button.on{background:var(--encre,#1C1C1C);color:#fff;border-color:var(--encre,#1C1C1C)}
+.fin-go{align-self:end;font-size:12.5px;font-weight:700;padding:9px 16px;border:none;
+  border-radius:7px;background:#1C5CAB;color:#fff;cursor:pointer;font-family:inherit}
+.fin-go:disabled{opacity:.5;cursor:default}
+.fin-bandeau{background:#FFF6E5;border:1px solid #E0C088;border-radius:6px;padding:10px 13px;
+  font-size:11.5px;line-height:1.55;margin:0 0 14px}
+.fin-rang{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:16px}
+.fin-carte{border:1px solid var(--rule2);border-radius:8px;padding:11px 13px;background:var(--white)}
+.fin-carte.gagne{border-color:#1E6336;box-shadow:0 0 0 2px rgba(30,99,54,.12)}
+.fin-carte h4{margin:0 0 6px;font-size:13px;display:flex;align-items:center;gap:7px}
+.fin-kv{display:flex;justify-content:space-between;gap:10px;font-size:11.5px;padding:2px 0}
+.fin-kv span:last-child{font-family:var(--mono);white-space:nowrap}
+.fin-tab{width:100%;border-collapse:collapse;font-size:11.5px}
+.fin-tab th,.fin-tab td{padding:6px 8px;border-bottom:1px solid var(--rule2);text-align:left;
+  vertical-align:top}
+.fin-tab th{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted2);
+  background:var(--bg);white-space:nowrap}
+.fin-tab td.n{text-align:right;font-family:var(--mono);white-space:nowrap}
+.fin-tab tr.lourd td{background:rgba(28,92,171,.05);font-weight:600}
+.fin-tab tr.aren td:first-child:after{content:" ⚑";color:#8A5310}
+.fin-code{font-family:var(--mono);color:var(--muted2)}
+.fin-mod{font-size:10px;color:#1C5CAB}
+.fin-aren{background:#FFF6E5;border:1px solid #E0C088;border-radius:6px;padding:10px 13px;
+  font-size:11.5px;line-height:1.55;margin:12px 0}
+.fin-aren li{margin:3px 0}
+.fin-phases{display:flex;flex-direction:column;gap:6px;margin:10px 0}
+.fin-ph{display:grid;grid-template-columns:78px 1fr auto;gap:10px;align-items:center;
+  font-size:11.5px;border-left:3px solid #1C5CAB;padding:6px 10px;background:var(--bg);border-radius:0 6px 6px 0}
+.fin-ph.hors{border-left-color:#A33;background:#FDF3F2}
+.fin-ph b{font-family:var(--mono);font-size:11px}
+.fin-ecart{margin-top:8px}
+.fin-pos{color:#A33}.fin-neg{color:#1E6336}
+@media(max-width:640px){.fin-ph{grid-template-columns:1fr;gap:2px}}
 .imp-pond{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:10px 18px}
 .imp-p{display:grid;grid-template-columns:1fr 110px 22px;gap:4px 10px;align-items:center;
   border:1px solid var(--rule);border-left:4px solid var(--imp-c,#8892A0);border-radius:4px;
@@ -981,7 +1028,7 @@ engagements publics) sont imputés nominativement.</div>
     <a href="#s-lectures" class="f-comprendre" title="Les lectures d’ensemble : classes de risque, secteurs, stades">Lectures d’ensemble</a>
     <a href="#s-socle" class="f-comprendre" title="Les jeux de données ouverts qui alimentent la page">Données ouvertes</a>
     <a href="#s-empreinte" class="f-comprendre" title="Électricité, CO₂e, eau et fabrication du parc cartographié">Empreinte &amp; data centres<span class="pnav-n" id="pn-emp"></span></a>
-    <a href="#s-implantation" class="f-comprendre" title="Comparer les pays selon vos critères : carbone, eau, mix, prix, 2030">Choix d’implantation</a>
+    <a href="#s-implantation" class="f-comprendre" title="Comparer les pays selon vos critères : carbone, eau, mix, prix, 2030">Choix d’implantation</a><a href="#s-finance" class="f-comprendre" title="Enveloppe d’investissement, DPGF par lot, écart entre pays et échéancier 2030">Enveloppe &amp; DPGF</a>
     <span class="pnav-sep s-verifier" aria-hidden="true"><span>Vérifier</span></span>
     <a href="#s-sources" class="f-verifier" title="Chaque source, son millésime, son lien — et le registre de vérification">Sources</a>
     <a href="#s-methodo" class="f-verifier" title="Comment les chiffres sont construits, hypothèse par hypothèse">Méthodologie</a>
@@ -1205,6 +1252,52 @@ engagements publics) sont imputés nominativement.</div>
     <div class="tf-vide" id="tf-avis-vide">Aucun pays ne correspond à ces filtres.</div>
     <div id="imp-avis"></div>
     <div id="imp-sources"></div>
+  </div>
+</section>
+
+<section class="panel" id="s-finance" aria-labelledby="t-fin">
+  <div class="panel-head">
+    <span class="panel-title" id="t-fin">Enveloppe d’investissement et DPGF — décision GO / NO GO</span>
+    <span class="panel-note" id="fin-note">réglez, puis calculez</span>
+  </div>
+  <div class="panel-body">
+    <div class="fin-bandeau"><b>Ce module ne fabrique pas un prix, et il faut le dire avant
+    tout le reste.</b> Aucun des 97 centres de données du référentiel ne publie sa capacité,
+    deux seulement publient un montant — et sans la capacité correspondante. Aucun coût au
+    mégawatt n’en est donc dérivable, et toute valeur au MW affichée ici serait une invention
+    habillée en référentiel. <b>Le coût unitaire est un paramètre</b>, donné en fourchette
+    large, que vous remplacez par vos devis. Ce que le module apporte est ailleurs : la
+    <b>structure complète de la DPGF</b>, la modulation par les <b>seuls critères sourcés</b>
+    de cette page, la <b>liste explicite de ce qu’il ne peut pas trancher</b>, et la
+    comparaison entre pays sur le <b>coût total de possession</b> — car sur le seul
+    investissement, elle afficherait zéro.</div>
+
+    <div class="fin-form">
+      <div class="fin-ch"><label for="fin-mw">Puissance IT (MW)</label>
+        <input type="number" id="fin-mw" value="100" min="0.1" max="2000" step="1">
+        <span class="fin-aide">La puissance informatique, pas la puissance raccordée.</span></div>
+      <div class="fin-ch"><label for="fin-gab">Gabarit</label>
+        <select id="fin-gab"></select>
+        <span class="fin-aide">Commande la fourchette de coût unitaire.</span></div>
+      <div class="fin-ch"><label for="fin-sc">Scénario</label>
+        <select id="fin-sc"></select>
+        <span class="fin-aide">Neuve, extension ou reprise : les lots ne pèsent pas pareil.</span></div>
+      <div class="fin-ch"><label for="fin-ia">Densité IA</label>
+        <select id="fin-ia"><option value="">Calcul classique</option>
+          <option value="1">Densité IA — refroidissement liquide</option></select>
+        <span class="fin-aide">Au-delà d’environ 40 kW par baie, l’air ne suffit plus.</span></div>
+      <div class="fin-ch"><label for="fin-cout">Coût unitaire (M€/MW) — facultatif</label>
+        <input type="text" id="fin-cout" placeholder="ex. 8-12 · vide = hypothèse">
+        <span class="fin-aide">Vos devis remplacent l’hypothèse de filière.</span></div>
+      <div class="fin-ch"><label for="fin-an">Horizon d’exploitation (ans)</label>
+        <input type="number" id="fin-an" value="10" min="3" max="25" step="1">
+        <span class="fin-aide">Sert au coût total de possession.</span></div>
+      <div class="fin-ch" style="grid-column:1/-1"><label>Pays comparés — le premier sert de référence (2 à 6)</label>
+        <div class="fin-pays" id="fin-pays"></div></div>
+      <button class="fin-go" id="fin-go" type="button">Calculer l’enveloppe →</button>
+    </div>
+
+    <div id="fin-res"></div>
   </div>
 </section>
 
@@ -5069,6 +5162,64 @@ var GP_PROFILS = {
              + "ouverte, tout volume par site — ici comme ailleurs — reste un calcul." },
     ],
   },
+  finance: {
+    nom: "Enveloppe d’investissement et DPGF",
+    court: "Enveloppe & DPGF",
+    quoi: "Chiffrer une décision GO / NO GO : enveloppe, décomposition par lot, "
+        + "écart entre pays et échéancier jusqu’en 2030.",
+    etapes: [
+      { sect: "s-finance", t: "Ce que ce module ne fera PAS pour vous",
+        d: "Il ne fabrique pas un prix. Aucun des 97 centres du référentiel ne publie "
+         + "sa capacité, deux seulement publient un montant — et sans la capacité "
+         + "correspondante. Le coût au mégawatt est donc un PARAMÈTRE, donné en "
+         + "fourchette large, que vous remplacez par vos devis dès que vous les avez.",
+        piege: "Un comparateur qui afficherait un coût national au mégawatt vous "
+             + "donnerait une précision qu’aucune source ne porte. Ce qui a de la "
+             + "valeur ici est la STRUCTURE : quatorze lots, et la liste de ce qui "
+             + "reste à renseigner." },
+      { sect: "s-finance", t: "La DPGF, et les deux ou trois lots qui font le prix",
+        d: "L’électromécanique — distribution et secours, production de froid, "
+         + "traitement d’air — pèse environ la moitié de l’enveloppe d’un centre "
+         + "de données. Les lots marqués portent plus de 10 % à eux seuls : "
+         + "c’est là que se négocie un projet, pas sur les finitions.",
+        piege: "Les bornes basses de tous les lots ne surviennent pas ensemble. Leur "
+             + "somme reconstitue la borne basse de l’enveloppe, elle ne décrit "
+             + "aucun chantier réel." },
+      { sect: "s-finance", t: "Le refroidissement se déduit, il ne se choisit pas",
+        d: "Le mode retenu découle du climat et du stress hydrique du pays : free "
+         + "cooling au nord, adiabatique en zone tempérée, aéroréfrigérants secs "
+         + "là où l’eau est contrainte, liquide dès que la densité IA l’impose. "
+         + "Il commande les lots 05, 06 et 07 — et le PUE, donc l’électricité "
+         + "pendant vingt ans.",
+        piege: "L’aéroréfrigérant sec affiche zéro eau SUR SITE tout en consommant "
+             + "davantage d’électricité — donc davantage d’eau À LA SOURCE sur un "
+             + "réseau thermique. Le poste disparaît du tableau, pas de la réalité." },
+      { sect: "s-finance", t: "Pourquoi le classement porte sur le coût TOTAL",
+        d: "À puissance et gabarit identiques, l’enveloppe d’investissement est la "
+         + "même dans tous les pays : aucun indice national de coût n’est appliqué, "
+         + "faute d’en avoir un ici. Ce qui départage se joue sur vingt ans — le "
+         + "prix de l’électricité multiplié par le PUE, le carbone, le délai.",
+        piege: "Classer sur le seul investissement afficherait une égalité parfaite "
+             + "entre l’Irlande et la Suède. Ce serait exact, et parfaitement "
+             + "trompeur : sur dix ans l’écart dépasse le quart du total." },
+      { sect: "s-finance", t: "Les postes affichés VIDES sont les plus importants",
+        d: "Foncier, main-d’œuvre locale, quote-part de renforcement du réseau, "
+         + "fiscalité, prix contractuel de l’électricité : ce référentiel ne les "
+         + "porte pas et ne les estime pas. Chacun s’affiche avec la question à "
+         + "poser, et à qui la poser.",
+        piege: "Ces cinq postes peuvent renverser le classement à eux seuls. Un "
+             + "comparateur qui les masquerait donnerait l’illusion d’une décision "
+             + "complète — c’est exactement l’inverse du service rendu." },
+      { sect: "s-finance", t: "L’échéancier, et ce qui commande vraiment",
+        d: "Six phases, de l’étude à la mise en service, avec le décaissement de "
+         + "chacune. La durée n’est pas commandée par le chantier mais par "
+         + "l’instruction du raccordement, allongée selon la tension de la file "
+         + "comptée sur les 97 sites.",
+        piege: "Une phase qui dépasse 2030 s’affiche en rouge et n’est jamais "
+             + "raccourcie pour tenir dans la case. Si la borne haute déborde, "
+             + "découpez en tranches et n’annoncez que la première." },
+    ],
+  },
   analyste: {
     nom: "Analyse financière et reporting extra-financier",
     court: "Analyste / ESG",
@@ -5944,5 +6095,232 @@ if(window.parent&&window.parent!==window){
 }
 </script>
 <script src="/fleches.js" defer></script>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════════════
+   ENVELOPPE & DPGF — le rendu
+
+   Trois partis pris de lecture, et chacun répond à un piège :
+
+   1. Le CLASSEMENT est fait sur le coût total de possession, pas sur
+      l'investissement. À puissance égale l'enveloppe est identique d'un pays à
+      l'autre — le module refuse d'appliquer un indice national de coût qu'il
+      n'a pas. Classer sur le CAPEX afficherait donc une égalité parfaite et
+      ferait croire à une panne.
+
+   2. Les lots qui portent plus de 10 % de l'enveloppe sont marqués : un
+      décideur cherche d'abord les deux ou trois postes qui font le prix.
+
+   3. Les postes que le référentiel NE PEUT PAS trancher sont affichés VIDES,
+      avec la question à poser. Les masquer donnerait l'illusion d'une décision
+      complète, ce qui est exactement le contraire du service rendu.
+   ══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  var REF = null, SEL = [], DERNIER = null;
+  var $ = function(id){ return document.getElementById(id); };
+  function eur(x){ return (Math.round(x*10)/10).toLocaleString('fr-FR'); }
+  function fourch(a){ return a ? eur(a[0]) + ' – ' + eur(a[1]) : '—'; }
+  /* Les pourcentages arrivent du serveur avec un point décimal. Le reste de
+     la page est en français : « -28.4 % » à côté de « -879,3 M€ » se voit. */
+  function pct(x){ return String(x).replace('.', ','); }
+  function esc(t){ return String(t == null ? '' : t).replace(/[<>&]/g, function(c){
+    return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c]; }); }
+
+  function chargerRef(){
+    return fetch('/api/finance-dc', { credentials:'same-origin' })
+      .then(function(r){ return r.json(); })
+      .then(function(j){
+        if(!j || !j.ok) throw new Error('référentiel indisponible');
+        REF = j;
+        var g = $('fin-gab');
+        g.innerHTML = Object.keys(j.cout_mw).map(function(k){
+          var c = j.cout_mw[k];
+          return '<option value="'+k+'">'+esc(c.nom)+' — '+c.meur_mw[0]+' à '+c.meur_mw[1]+' M€/MW</option>';
+        }).join('');
+        g.value = 'hyperscale';
+        $('fin-sc').innerHTML = Object.keys(j.scenarios).map(function(k){
+          return '<option value="'+k+'">'+esc(j.scenarios[k].nom)+'</option>'; }).join('');
+        /* Le défaut se POSE. Flask sérialise les clés par ordre alphabétique :
+           « extension » arrivait donc en tête et se trouvait présélectionné,
+           alors que la construction neuve est le cas de référence — celui dont
+           les coefficients valent tous 1. Un défaut décidé par un tri de
+           sérialisation n'est pas un défaut, c'est un accident. */
+        $('fin-sc').value = 'neuve';
+      });
+  }
+
+  /* Les pays proposés sont ceux du référentiel d'implantation, pas une liste
+     écrite à la main : un pays retiré du référentiel doit disparaître d'ici. */
+  function chargerPays(){
+    return fetch('/api/implantation', { credentials:'same-origin' })
+      .then(function(r){ return r.json(); })
+      .then(function(j){
+        var lst = (j && j.pays) || [];
+        var box = $('fin-pays');
+        box.innerHTML = lst.map(function(p){
+          return '<button type="button" data-p="'+p.pays+'">'+p.pays+'</button>'; }).join('');
+        box.addEventListener('click', function(e){
+          var b = e.target.closest('button[data-p]'); if(!b) return;
+          var c = b.getAttribute('data-p'), i = SEL.indexOf(c);
+          if(i >= 0){ SEL.splice(i,1); b.classList.remove('on'); }
+          else if(SEL.length < 6){ SEL.push(c); b.classList.add('on'); }
+          majNote();
+        });
+        ['IE','SE','FR'].forEach(function(c){
+          var b = box.querySelector('[data-p="'+c+'"]');
+          if(b && SEL.length < 6){ SEL.push(c); b.classList.add('on'); }
+        });
+        majNote();
+      });
+  }
+  function majNote(){
+    $('fin-note').textContent = SEL.length < 2
+      ? 'choisissez au moins deux pays'
+      : SEL.join(' · ') + ' — le premier sert de référence';
+    $('fin-go').disabled = SEL.length < 2;
+  }
+
+  function calculer(){
+    var cout = null, brut = ($('fin-cout').value || '').trim();
+    if(brut){
+      var m = brut.replace(',', '.').match(/([\d.]+)\s*[-–à]\s*([\d.]+)/);
+      if(!m){ alert('Coût unitaire : écrivez une fourchette, par exemple 8-12.'); return; }
+      cout = [parseFloat(m[1]), parseFloat(m[2])];
+    }
+    $('fin-go').disabled = true;
+    $('fin-note').textContent = 'calcul en cours…';
+    fetch('/api/finance-dc/devis', {
+      method:'POST', credentials:'same-origin',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        mw: parseFloat($('fin-mw').value) || 100,
+        gabarit: $('fin-gab').value, scenario: $('fin-sc').value,
+        densite_ia: !!$('fin-ia').value, pays: SEL,
+        annees: parseInt($('fin-an').value, 10) || 10,
+        cout_mw: cout })
+    }).then(function(r){ return r.json(); })
+      .then(function(j){
+        $('fin-go').disabled = false;
+        if(!j || !j.ok){ $('fin-note').textContent = (j && j.erreur) || 'calcul impossible'; return; }
+        DERNIER = j; rendre(j); majNote();
+      })
+      .catch(function(){ $('fin-go').disabled = false;
+        $('fin-note').textContent = 'service indisponible'; });
+  }
+
+  function carteRang(x, i, ref){
+    return '<div class="fin-carte'+(i===0?' gagne':'')+'">'
+      + '<h4>'+(i===0?'🏆 ':'')+esc(x.pays)+'</h4>'
+      + '<div class="fin-kv"><span>Coût total '+ref.entree.annees+' ans</span><span>'+fourch(x.tco_meur)+' M€</span></div>'
+      + '<div class="fin-kv"><span>Exploitation / an</span><span>'+fourch(x.opex_meur_an)+' M€</span></div>'
+      + (x.co2_t_an ? '<div class="fin-kv"><span>CO₂e / an</span><span>'+fourch(x.co2_t_an)+' t</span></div>' : '')
+      + '<div class="fin-kv"><span>Délai</span><span>'+x.duree_mois[0]+'–'+x.duree_mois[1]+' mois</span></div>'
+      + '<div class="fin-kv"><span>Livrable avant 2030</span><span>'+(x.tient_2030?'oui':'non')+'</span></div>'
+      + '</div>';
+  }
+
+  function tableDpgf(d){
+    var l = d.devis.lots.map(function(x){
+      var cl = (x.part >= 10 ? 'lourd' : '') + (x.arenseigner ? ' aren' : '');
+      return '<tr class="'+cl+'"><td><span class="fin-code">'+x.code+'</span> '+esc(x.nom)
+        + '<div class="fin-mod">'+esc(x.detail_coef)+'</div></td>'
+        + '<td class="n">'+pct(x.part)+' %</td>'
+        + '<td class="n">'+fourch(x.meur)+'</td></tr>';
+    }).join('');
+    return '<table class="fin-tab"><thead><tr><th>Lot</th><th style="text-align:right">Part</th>'
+      + '<th style="text-align:right">M€</th></tr></thead><tbody>'+l+'</tbody>'
+      + '<tfoot><tr><th>Enveloppe</th><th class="n">100 %</th>'
+      + '<th class="n">'+fourch(d.devis.enveloppe_meur)+'</th></tr></tfoot></table>';
+  }
+
+  function blocAren(d){
+    return '<div class="fin-aren"><b>⚑ Ce que ce module NE PEUT PAS trancher.</b> Ces postes '
+      + 'sont affichés vides, jamais estimés — ils peuvent renverser le classement à eux seuls.'
+      + '<ul>' + d.devis.arenseigner.map(function(a){
+          return '<li><b>'+esc(a.nom)+'</b>'+(a.lot?' (lot '+a.lot+')':'')+' — '+esc(a.pourquoi)+'</li>';
+        }).join('') + '</ul></div>';
+  }
+
+  function blocTraj(d){
+    var t = d.trajectoire;
+    var ph = t.phases.map(function(p){
+      return '<div class="fin-ph'+(p.depasse_2030?' hors':'')+'">'
+        + '<b>'+p.debut+' → '+p.fin+'</b><span>'+esc(p.nom)+'</span>'
+        + '<span class="fin-code">'+fourch(p.meur)+' M€</span></div>';
+    }).join('');
+    var j = (t.jalons_pays||[]).map(function(x){
+      return '<li>'+esc(x.quoi)+' <span class="fin-code">('+esc(x.source)+', '+esc(x.date)+')</span></li>';
+    }).join('');
+    return '<h4 style="margin:16px 0 6px;font-size:13px">Échéancier — mise en service '
+      + t.mise_en_service[0]+' à '+t.mise_en_service[1]+'</h4>'
+      + '<div class="fin-phases">'+ph+'</div>'
+      + '<p class="note" style="margin:6px 0"><b>Avis.</b> '+esc(t.avis)+'</p>'
+      + (j ? '<p class="note" style="margin:6px 0"><b>Jalons publics du pays.</b></p><ul class="note">'+j+'</ul>' : '');
+  }
+
+  function blocEcart(e){
+    var sg = function(v, inv){ var c = (inv ? v > 0 : v < 0) ? 'fin-neg' : 'fin-pos';
+      return '<span class="'+c+'">'+(v>0?'+':'')+eur(v)+'</span>'; };
+    var lignes = e.postes.filter(function(p){ return p.justifie; }).map(function(p){
+      return '<tr><td><span class="fin-code">'+p.code+'</span> '+esc(p.nom)
+        + '<div class="fin-mod">'+esc(p.raison)+'</div></td>'
+        + '<td class="n">'+fourch(p.a_meur)+'</td><td class="n">'+fourch(p.b_meur)+'</td>'
+        + '<td class="n">'+sg(p.ecart_meur)+' M€</td></tr>'; }).join('');
+    var ex = (e.exploitation||[]).map(function(p){
+      return '<tr><td>'+esc(p.nom)+'</td><td class="n">'+fourch(p.a_meur_an)+'</td>'
+        + '<td class="n">'+fourch(p.b_meur_an)+'</td><td class="n">'+sg(p.ecart_meur_an)+' M€/an</td></tr>'; }).join('');
+    return '<div class="fin-ecart"><h4 style="margin:16px 0 6px;font-size:13px">Écart '
+      + esc(e.a.pays)+' → '+esc(e.b.pays)+'</h4>'
+      + '<p class="note" style="margin:0 0 8px">'+esc(e.note_capex)+'</p>'
+      + (lignes ? '<table class="fin-tab"><thead><tr><th>Lot modulé</th><th style="text-align:right">'
+          +esc(e.a.pays)+'</th><th style="text-align:right">'+esc(e.b.pays)+'</th>'
+          +'<th style="text-align:right">Écart</th></tr></thead><tbody>'+lignes+'</tbody></table>'
+        : '<p class="note">Aucun lot n’est modulé différemment entre ces deux pays.</p>')
+      + (ex ? '<table class="fin-tab" style="margin-top:10px"><thead><tr><th>Exploitation</th>'
+          +'<th style="text-align:right">'+esc(e.a.pays)+'</th><th style="text-align:right">'
+          +esc(e.b.pays)+'</th><th style="text-align:right">Écart</th></tr></thead><tbody>'+ex
+          +'</tbody></table>' : '')
+      + (e.ecart_tco ? '<p class="note" style="margin:8px 0"><b>Coût total sur '
+          +e.ecart_tco.annees+' ans :</b> '+sg(e.ecart_tco.ecart_meur)+' M€ ('
+          +pct(e.ecart_tco.ecart_pct)+' %) — avantage <b>'+esc(e.ecart_tco.avantage)+'</b>.</p>' : '')
+      + (e.ecart_carbone ? '<p class="note" style="margin:4px 0"><b>Carbone :</b> '
+          +sg(e.ecart_carbone.ecart_t_an)+' tCO₂e par an ('+pct(e.ecart_carbone.ecart_pct)+' %).</p>' : '')
+      + '<p class="note" style="margin:8px 0">'+esc(e.note)+'</p></div>';
+  }
+
+  function rendre(j){
+    var h = '<div class="fin-rang">'
+      + j.classement.map(function(x,i){ return carteRang(x,i,j); }).join('') + '</div>';
+    j.dossiers.forEach(function(d){
+      h += '<h3 style="margin:18px 0 4px;font-size:14px">'+esc(d.pays)+' — enveloppe '
+        + fourch(d.devis.enveloppe_meur)+' M€</h3>'
+        + '<p class="note" style="margin:0 0 8px">Refroidissement retenu : <b>'
+        + esc(d.devis.refroidissement.nom)+'</b> (PUE '+d.devis.refroidissement.pue[0]+'–'
+        + d.devis.refroidissement.pue[1]+', eau '+esc(d.devis.refroidissement.eau)+') — déduit du climat '
+        + esc((d.contexte.climat||{}).classe)+' et du stress hydrique '
+        + esc((d.contexte.eau||{}).classe)+'. Raccordement : <b>'+esc(d.devis.raccordement.nom)
+        + '</b> ('+d.contexte.pipeline_2030+' projets pour '+d.contexte.en_service+' sites en service).</p>'
+        + tableDpgf(d) + blocAren(d) + blocTraj(d);
+    });
+    j.ecarts.forEach(function(e){ h += blocEcart(e); });
+    h += '<details style="margin-top:16px"><summary class="note" style="cursor:pointer">'
+      + 'Trace du calcul et hypothèses</summary><ul class="note">'
+      + j.dossiers[0].devis.trace.map(function(t){ return '<li>'+esc(t)+'</li>'; }).join('')
+      + '<li><b>Coût unitaire :</b> '+esc(JSON.stringify(j.entree.cout_mw))+'</li>'
+      + '</ul><p class="note">'+esc(j.avertissement)+'</p></details>';
+    $('fin-res').innerHTML = h;
+  }
+
+  function demarrer(){
+    if(!$('fin-go')) return;
+    $('fin-go').addEventListener('click', calculer);
+    Promise.all([chargerRef(), chargerPays()]).catch(function(){
+      $('fin-note').textContent = 'référentiel indisponible';
+    });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', demarrer);
+  else demarrer();
+})();
+</script>
 </body>
 </html>

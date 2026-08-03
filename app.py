@@ -1611,6 +1611,149 @@ def api_implantation():
 
 
 # ══════════════════════════════════════════════════════════
+# ENVELOPPE D'INVESTISSEMENT ET DPGF — decision GO / NO GO
+# Le referentiel d'implantation dit OU implanter ; il ne dit pas COMBIEN. Ce
+# module structure l'enveloppe et sa decomposition par lot, compare les pays
+# sur le cout total de possession, et pose l'echeancier jusqu'en 2030.
+#
+# Il ne fabrique aucun prix, et c'est mesure : aucun des 97 sites du referentiel
+# ne publie sa capacite, deux seulement publient un montant — sans la capacite
+# correspondante. Le cout au megawatt est donc un PARAMETRE declare hypothese,
+# jamais une donnee. La valeur du module est ailleurs : la structure des lots,
+# la modulation par les seuls criteres sources, et la liste explicite de ce que
+# le referentiel ne peut pas trancher.
+# ══════════════════════════════════════════════════════════
+import finance_dc  # noqa: E402
+
+_FIN_INTENSITES = {}
+
+
+def _fin_pays_index():
+    """Donnees par pays, reprises telles quelles du referentiel d'implantation
+    (meme cache, meme version) : climat, eau, prix, intensite, parc, pipeline."""
+    now = time.time()
+    if _IMP_CACHE["data"] and (now - _IMP_CACHE["ts"] < IMP_TTL):
+        data = _IMP_CACHE["data"]
+    else:
+        _dc = datacentres.assemble()
+        data = implantation.assemble(sites=_dc.get('sites'),
+                                     intensites=empreinte_sites.INTENSITE)
+        _IMP_CACHE["ts"], _IMP_CACHE["data"] = now, data
+    return {p["pays"]: p for p in (data.get("pays") or [])}, data
+
+
+def _fin_dossier(code, mw, gabarit, scenario, densite_ia, cout_mw, annees, depart):
+    """Dossier complet d'un pays : DPGF, exploitation, cout total, trajectoire."""
+    idx, data = _fin_pays_index()
+    p = idx.get(code)
+    if not p:
+        return None
+    devis = finance_dc.dpgf(
+        mw=mw, gabarit=gabarit, scenario=scenario, pays=code,
+        climat_classe=(p.get("climat") or {}).get("classe"),
+        eau_classe=(p.get("eau") or {}).get("classe"),
+        densite_ia=densite_ia,
+        parc_sites=p.get("en_service") or 0,
+        pipeline_sites=p.get("pipeline_2030") or 0,
+        cout_mw=cout_mw)
+    prix = (p.get("prix") or {}).get("fourchette_eur_mwh") or [100, 150]
+    expl = finance_dc.exploitation(
+        devis["enveloppe_meur"], mw, devis["refroidissement"]["pue"], prix,
+        intensite_g_kwh=p.get("intensite"),
+        wue_m3_mwh=[0.1, 0.6])
+    cout = finance_dc.tco(devis["enveloppe_meur"], expl["total_meur_an"], annees)
+    traj = finance_dc.trajectoire(devis, depart, p.get("perspectives") or [])
+    return {"pays": code, "contexte": {
+                "climat": p.get("climat"), "eau": p.get("eau"), "prix": p.get("prix"),
+                "intensite_g_kwh": p.get("intensite"),
+                "en_service": p.get("en_service"), "pipeline_2030": p.get("pipeline_2030"),
+                "avis": p.get("avis"), "perspectives": p.get("perspectives")},
+            "devis": devis, "exploitation": expl, "tco": cout, "trajectoire": traj}
+
+
+@app.route('/api/finance-dc', methods=['GET'])
+@rate_limit(limit=60, window=60)
+@reserve_abonne_api
+def api_finance_dc():
+    """Referentiel du module financier : lots de la DPGF, scenarios, modes de
+    refroidissement, postes non chiffrables, hypotheses de prix."""
+    ref = finance_dc.referentiel()
+    ref["ok"] = True
+    ref["sante"] = finance_dc.sante()
+    return jsonify(ref)
+
+
+@app.route('/api/finance-dc/devis', methods=['POST'])
+@rate_limit(limit=30, window=300)
+@reserve_abonne_api
+def api_finance_dc_devis():
+    """Enveloppe, DPGF, exploitation, cout total et trajectoire, pour un a six
+    pays. Renvoie aussi l'ecart deux a deux contre le premier pays cite, et le
+    classement par cout total de possession — le seul chiffre qui departage les
+    pays, l'enveloppe d'investissement etant identique par construction."""
+    d = request.get_json(silent=True) or {}
+    try:
+        mw = float(d.get('mw') or 0)
+    except (TypeError, ValueError):
+        return jsonify({'ok': False, 'erreur': 'puissance invalide'}), 400
+    if not (0.1 <= mw <= 2000):
+        return jsonify({'ok': False, 'erreur': 'puissance hors bornes (0,1 a 2 000 MW)'}), 400
+    pays = [str(x).upper()[:2] for x in (d.get('pays') or []) if x][:6]
+    if not pays:
+        return jsonify({'ok': False, 'erreur': 'aucun pays'}), 400
+    gabarit = str(d.get('gabarit') or 'hyperscale')
+    if gabarit not in finance_dc.COUT_MW:
+        return jsonify({'ok': False, 'erreur': 'gabarit inconnu'}), 400
+    scenario = str(d.get('scenario') or 'neuve')
+    if scenario not in finance_dc.SCENARIOS:
+        return jsonify({'ok': False, 'erreur': 'scenario inconnu'}), 400
+    cout_mw = d.get('cout_mw')
+    if cout_mw is not None:
+        try:
+            cout_mw = [float(cout_mw[0]), float(cout_mw[1])]
+        except (TypeError, ValueError, IndexError):
+            return jsonify({'ok': False, 'erreur': 'cout au MW invalide'}), 400
+        if not (0.5 <= cout_mw[0] <= 60 and 0.5 <= cout_mw[1] <= 60):
+            return jsonify({'ok': False, 'erreur': 'cout au MW hors bornes'}), 400
+    try:
+        annees = max(3, min(25, int(d.get('annees') or 10)))
+        depart = max(2026, min(2030, int(d.get('depart') or 2026)))
+    except (TypeError, ValueError):
+        return jsonify({'ok': False, 'erreur': 'horizon invalide'}), 400
+    densite_ia = bool(d.get('densite_ia'))
+
+    try:
+        dossiers = [x for x in (_fin_dossier(c, mw, gabarit, scenario, densite_ia,
+                                             cout_mw, annees, depart) for c in pays) if x]
+    except Exception as e:  # noqa: BLE001
+        logger.error(f'FINANCE_DC_ERR: {e}')
+        return jsonify({'ok': False, 'erreur': 'calcul indisponible'}), 503
+    if not dossiers:
+        return jsonify({'ok': False, 'erreur': 'aucun pays connu du referentiel'}), 404
+
+    ref = dossiers[0]
+    ecarts = [finance_dc.ecart(ref["devis"], x["devis"], ref["exploitation"],
+                               x["exploitation"], ref["tco"], x["tco"])
+              for x in dossiers[1:]]
+    classement = sorted(
+        ({"pays": x["pays"],
+          "tco_meur": x["tco"]["total_meur"],
+          "tco_milieu": round(sum(x["tco"]["total_meur"]) / 2, 1),
+          "opex_meur_an": x["exploitation"]["total_meur_an"],
+          "co2_t_an": (x["exploitation"].get("carbone") or {}).get("t_co2e_an"),
+          "duree_mois": x["devis"]["duree_mois"],
+          "tient_2030": x["trajectoire"]["tient_2030"]} for x in dossiers),
+        key=lambda z: z["tco_milieu"])
+    return jsonify({"ok": True, "version": finance_dc.VERSION,
+                    "avertissement": finance_dc.AVERTISSEMENT,
+                    "entree": {"mw": mw, "gabarit": gabarit, "scenario": scenario,
+                               "densite_ia": densite_ia, "annees": annees,
+                               "depart": depart, "pays": pays,
+                               "cout_mw": cout_mw or "hypothese de filiere"},
+                    "dossiers": dossiers, "ecarts": ecarts, "classement": classement})
+
+
+# ══════════════════════════════════════════════════════════
 # CONTROLES FACTUELS — registre partage par toutes les pages
 # Les chiffres du site sont lus par des professionnels de l'investissement, du
 # credit, de l'assurance et du climat : un ordre de grandeur non source n'est
