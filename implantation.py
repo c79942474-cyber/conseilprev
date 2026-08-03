@@ -27,7 +27,7 @@ une étude hydrologique locale, ni une due diligence.
 """
 from datetime import datetime, timezone
 
-VERSION = "2026-07-a"
+VERSION = "2026-08-a"
 
 # ═══════════════════════════════════════════════════════════════════════════
 # 1. EAU — stress hydrique national et compétition d'usages
@@ -203,22 +203,51 @@ PERSPECTIVES = [
      "resume": "AWS en Aragon : 15,7 Md€ annoncés en 2024, portés à plus de 30 Md€ en "
                "2025 ; Microsoft en Aragon et à Madrid.",
      "source": "communiqués AWS / Microsoft, gouvernement d'Aragon", "date": "2024-06 → 2025"},
+    {"pays": "ES", "sens": "contrainte",
+     "resume": "L'Aragon est devenu en partie victime de son succès : le raccordement au "
+               "réseau y forme désormais un goulet d'étranglement, et des agriculteurs "
+               "imputent aux centres de données les pénuries d'eau — un permis rapide n'y "
+               "est plus un raccordement rapide.",
+     "source": "Soben (part of Accenture), Data Centre Trends Report 2026, p. 22",
+     "date": "2025"},
     {"pays": "DE", "sens": "hausse",
      "resume": "Microsoft ~3,2 Md€ (2024) ; cloud d'IA industrielle Deutsche "
                "Telekom / NVIDIA (2025) ; Rhénanie et Brandebourg en tête.",
      "source": "communiqués Microsoft / Deutsche Telekom", "date": "2024 → 2025"},
     {"pays": "GB", "sens": "hausse",
-     "resume": "« AI Growth Zones » et vague d'engagements hyperscalers annoncée en "
-               "2025, parmi les plus gros pipelines d'Europe.",
-     "source": "gouvernement britannique, communiqués opérateurs", "date": "2025"},
+     "resume": "Trois premières « AI Growth Zones » désignées — Oxfordshire, Nord-Est "
+               "de l'Angleterre, Nord du pays de Galles — avec accès prioritaire au "
+               "réseau et instruction accélérée ; parmi les plus gros pipelines d'Europe.",
+     "source": "Soben (part of Accenture), Data Centre Trends Report 2026, p. 30 ; "
+               "gouvernement britannique", "date": "2025"},
     {"pays": "IT", "sens": "hausse",
-     "resume": "Microsoft ~4,3 Md€ pour l'IA et le cloud (2024) ; Milan consolidé "
-               "comme hub sud-européen.",
-     "source": "communiqué Microsoft", "date": "2024-10"},
+     "resume": "Microsoft ~4,3 Md€ pour l'IA et le cloud (2024) ; les projets planifiés "
+               "à Milan porteraient la capacité de 200 MW à 2 GW, soit un facteur dix, "
+               "avec récupération de chaleur au programme.",
+     "source": "communiqué Microsoft ; Soben (part of Accenture), Data Centre Trends "
+               "Report 2026, p. 31", "date": "2024-10 → 2025"},
     {"pays": "SE", "sens": "hausse",
      "resume": "Microsoft ~3,2 Md$ (2024) ; attractivité durable du réseau bas-carbone "
                "et du free cooling.",
      "source": "communiqué Microsoft", "date": "2024-06"},
+    {"pays": "SE", "sens": "hausse",
+     "resume": "Incitations fiscales (comme la Norvège) et instruction des permis "
+               "simplifiée pour les projets hyperscale — le levier porte sur le "
+               "calendrier, celui qui commande tout le reste.",
+     "source": "Soben (part of Accenture), Data Centre Trends Report 2026, p. 30",
+     "date": "2025"},
+    {"pays": "FR", "sens": "hausse",
+     "resume": "Marseille s'affirme comme hub de connectivité méditerranéen : câbles "
+               "sous-marins vers l'Europe, l'Afrique, le Moyen-Orient et l'Asie, "
+               "atterrissage du câble Medusa d'Orange en octobre 2025.",
+     "source": "Soben (part of Accenture), Data Centre Trends Report 2026, p. 31",
+     "date": "2025-10"},
+    {"pays": "IE", "sens": "hausse",
+     "resume": "Une loi autorise désormais les centres de données à produire leur "
+               "propre électricité — une voie qui contourne la file de raccordement. "
+               "L'obtention des autorisations correspondantes reste difficile.",
+     "source": "Soben (part of Accenture), Data Centre Trends Report 2026, p. 30",
+     "date": "2025"},
     {"pays": "NO", "sens": "hausse",
      "resume": "Projet « Stargate Norway » (OpenAI / Nscale / Aker) annoncé en 2025 : "
                "capacité IA de grande échelle sur hydroélectricité.",
@@ -236,10 +265,46 @@ PERSPECTIVES = [
      "resume": "Encadrement national des implantations hyperscale depuis 2022 "
                "(après Zeewolde) ; extensions soumises à conditions strictes.",
      "source": "gouvernement néerlandais", "date": "2022 → maintenu"},
+    {"pays": "NL", "sens": "contrainte",
+     "resume": "Le conseil municipal d'Amsterdam n'examinera de nouveaux projets de "
+               "centres de données qu'à partir de 2035 : l'un des cinq hubs "
+               "historiques est fermé de fait pour une décennie.",
+     "source": "Soben (part of Accenture), Data Centre Trends Report 2026, p. 30",
+     "date": "2035"},
     {"pays": "DE", "sens": "contrainte",
      "resume": "Loi d'efficacité énergétique (EnEfG) : PUE maximal imposé aux "
-               "nouveaux sites (1,2 dès 2026) et valorisation de chaleur fatale.",
-     "source": "EnEfG (2023)", "date": "2023 → montée en charge"},
+               "nouveaux sites (1,2 dès 2026) ; réutilisation d'une part de la chaleur "
+               "fatale obligatoire pour tout site mis en service à partir du "
+               "1er juillet 2026, sauf réseau de chaleur hors d'atteinte.",
+     "source": "EnEfG (2023) ; Soben (part of Accenture), Data Centre Trends Report "
+               "2026, p. 35", "date": "2023 → 2026-07-01"},
+    {"pays": "DE", "sens": "contrainte",
+     "resume": "À Francfort, les projets de centres de données dédiés à l'IA sont "
+               "gelés jusqu'à la mise en service de nouvelles capacités de réseau, "
+               "attendues en 2031 ; la demande se reporte sur les marchés secondaires "
+               "allemands et les Nordiques.",
+     "source": "Soben (part of Accenture), Data Centre Trends Report 2026, p. 30",
+     "date": "2031"},
+    {"pays": "FI", "sens": "contrainte",
+     "resume": "Suppression du tarif réduit d'accise sur l'électricité des centres de "
+               "données en mars 2025 : de 0,05 à 2,24 centimes par kWh, soit environ "
+               "+22 €/MWh. Le pays reste compétitif, mais l'écart avec la Suède et la "
+               "Norvège se resserre nettement.",
+     "source": "Soben (part of Accenture), Data Centre Trends Report 2026, p. 30",
+     "date": "2025-03"},
+    {"pays": "UE", "sens": "contrainte",
+     "resume": "Déclaration de performance énergétique obligatoire depuis septembre "
+               "2024 (directive 2023/1791) ; un « Data Centre Energy Efficiency "
+               "Package » est annoncé pour le premier trimestre 2026, en durcissement "
+               "attendu — à anticiper dans tout projet livré après 2027.",
+     "source": "Soben (part of Accenture), Data Centre Trends Report 2026, p. 35",
+     "date": "2024-09 → 2026-T1"},
+    {"pays": "UE", "sens": "hausse",
+     "resume": "File de projets estimée à 351,7 milliards de dollars pour l'Europe au "
+               "troisième trimestre 2025 — l'ordre de grandeur de la vague, contre "
+               "lequel se mesure la capacité de raccordement de chaque pays.",
+     "source": "Soben (part of Accenture), Data Centre Trends Report 2026, p. 29 "
+               "(estimation Accenture)", "date": "2025-T3"},
 ]
 
 SOURCE_PERSPECTIVES = {

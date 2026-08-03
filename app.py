@@ -1616,14 +1616,16 @@ def api_implantation():
 # module structure l'enveloppe et sa decomposition par lot, compare les pays
 # sur le cout total de possession, et pose l'echeancier jusqu'en 2030.
 #
-# Il ne fabrique aucun prix, et c'est mesure : aucun des 97 sites du referentiel
-# ne publie sa capacite, deux seulement publient un montant — sans la capacite
-# correspondante. Le cout au megawatt est donc un PARAMETRE declare hypothese,
-# jamais une donnee. La valeur du module est ailleurs : la structure des lots,
-# la modulation par les seuls criteres sources, et la liste explicite de ce que
-# le referentiel ne peut pas trancher.
+# Il ne fabrique aucun prix a partir du referentiel de sites, et c'est mesure :
+# aucun des 97 sites ne publie sa capacite, deux seulement publient un montant —
+# sans la capacite correspondante. Le cout au megawatt vient donc d'un releve
+# PUBLIE (Soben 2026, p. 8), converti depuis le dollar par un taux affiche ; il
+# reste un ordre de grandeur de marche, jamais VOTRE prix. La valeur du module
+# est ailleurs : la structure des lots, la modulation par les seuls criteres
+# sources, et la liste explicite de ce que le referentiel ne peut pas trancher.
 # ══════════════════════════════════════════════════════════
 import finance_dc  # noqa: E402
+import tendances_dc  # noqa: E402  — chaque dossier porte ses reserves datees
 
 _FIN_INTENSITES = {}
 
@@ -1642,7 +1644,8 @@ def _fin_pays_index():
     return {p["pays"]: p for p in (data.get("pays") or [])}, data
 
 
-def _fin_dossier(code, mw, gabarit, scenario, densite_ia, cout_mw, annees, depart):
+def _fin_dossier(code, mw, gabarit, scenario, densite_ia, cout_mw, annees, depart,
+                 vitesse="aucune"):
     """Dossier complet d'un pays : DPGF, exploitation, cout total, trajectoire."""
     idx, data = _fin_pays_index()
     p = idx.get(code)
@@ -1655,20 +1658,30 @@ def _fin_dossier(code, mw, gabarit, scenario, densite_ia, cout_mw, annees, depar
         densite_ia=densite_ia,
         parc_sites=p.get("en_service") or 0,
         pipeline_sites=p.get("pipeline_2030") or 0,
-        cout_mw=cout_mw)
+        cout_mw=cout_mw, vitesse=vitesse)
     prix = (p.get("prix") or {}).get("fourchette_eur_mwh") or [100, 150]
     expl = finance_dc.exploitation(
         devis["enveloppe_meur"], mw, devis["refroidissement"]["pue"], prix,
         intensite_g_kwh=p.get("intensite"),
         wue_m3_mwh=[0.1, 0.6])
     cout = finance_dc.tco(devis["enveloppe_meur"], expl["total_meur_an"], annees)
-    traj = finance_dc.trajectoire(devis, depart, p.get("perspectives") or [])
+    # Les perspectives de l'Union structurent le calendrier de TOUS les pays : le
+    # paquet efficacite energetique attendu au premier trimestre 2026 ne se lit
+    # dans aucune ligne nationale, et il tombe pendant l'avant-projet.
+    persp = list(p.get("perspectives") or []) + list(data.get("perspectives_ue") or [])
+    traj = finance_dc.trajectoire(devis, depart, persp)
+    # Une reserve datee vaut mieux qu'un referentiel corrige en silence : le
+    # dossier porte, a cote de ses chiffres, ce qu'un fait posterieur rend
+    # optimiste — la classe de prix finlandaise en est l'exemple type.
+    prosp = tendances_dc.par_pays(code)
+    prosp["jalons"] = prosp["jalons"] + tendances_dc.par_pays("UE")["jalons"]
     return {"pays": code, "contexte": {
                 "climat": p.get("climat"), "eau": p.get("eau"), "prix": p.get("prix"),
                 "intensite_g_kwh": p.get("intensite"),
                 "en_service": p.get("en_service"), "pipeline_2030": p.get("pipeline_2030"),
                 "avis": p.get("avis"), "perspectives": p.get("perspectives")},
-            "devis": devis, "exploitation": expl, "tco": cout, "trajectoire": traj}
+            "devis": devis, "exploitation": expl, "tco": cout, "trajectoire": traj,
+            "prospective": prosp}
 
 
 @app.route('/api/finance-dc', methods=['GET'])
@@ -1721,10 +1734,14 @@ def api_finance_dc_devis():
     except (TypeError, ValueError):
         return jsonify({'ok': False, 'erreur': 'horizon invalide'}), 400
     densite_ia = bool(d.get('densite_ia'))
+    vitesse = str(d.get('vitesse') or 'aucune')
+    if vitesse not in finance_dc.PRIME_VITESSE:
+        return jsonify({'ok': False, 'erreur': 'calendrier inconnu'}), 400
 
     try:
         dossiers = [x for x in (_fin_dossier(c, mw, gabarit, scenario, densite_ia,
-                                             cout_mw, annees, depart) for c in pays) if x]
+                                             cout_mw, annees, depart, vitesse)
+                                for c in pays) if x]
     except Exception as e:  # noqa: BLE001
         logger.error(f'FINANCE_DC_ERR: {e}')
         return jsonify({'ok': False, 'erreur': 'calcul indisponible'}), 503
@@ -1748,9 +1765,47 @@ def api_finance_dc_devis():
                     "avertissement": finance_dc.AVERTISSEMENT,
                     "entree": {"mw": mw, "gabarit": gabarit, "scenario": scenario,
                                "densite_ia": densite_ia, "annees": annees,
-                               "depart": depart, "pays": pays,
+                               "depart": depart, "pays": pays, "vitesse": vitesse,
                                "cout_mw": cout_mw or "hypothese de filiere"},
                     "dossiers": dossiers, "ecarts": ecarts, "classement": classement})
+
+
+# ══════════════════════════════════════════════════════════
+# PROSPECTIVES — ce qui est en train de changer, et ce que cela perime
+# Le referentiel d'implantation dit ou sont les sites et ce que coute
+# l'electricite : un etat des lieux. Une decision d'investissement se prend sur
+# cinq a dix ans, horizon sur lequel le gel de Francfort jusqu'en 2031 ou la
+# fin de l'accise finlandaise en mars 2025 pesent plus lourd que l'ecart de
+# notation entre deux pays voisins.
+#
+# Chaque entree porte sa citation verbatim, sa page et son editeur. Et quand un
+# fait nouveau PERIME une valeur du referentiel, il s'inscrit en RESERVE datee
+# a cote d'elle au lieu de la corriger en silence : le lecteur qui a cite cette
+# valeur la semaine derniere doit pouvoir voir ce qui a change depuis.
+#
+# Le module lui-meme est importe avec le bloc financier ci-dessus : chaque
+# dossier d'enveloppe porte deja les jalons et les reserves de son pays.
+# ══════════════════════════════════════════════════════════
+
+
+@app.route('/api/tendances-dc', methods=['GET'])
+@rate_limit(limit=60, window=60)
+@reserve_abonne_api
+def api_tendances_dc():
+    """Tendances 2026, jalons reglementaires dates, structure de marche et
+    reserves sur le referentiel. Parametre `pays` optionnel (code ISO a deux
+    lettres, repetable) pour ne renvoyer que les jalons et reserves qui le
+    concernent — le reste du dossier est commun."""
+    data = tendances_dc.assemble()
+    codes = [str(c).upper()[:2] for c in request.args.getlist('pays') if c][:8]
+    if codes:
+        garde = set(codes) | {"UE"}
+        data["jalons"] = [j for j in data["jalons"] if j["pays"] in garde]
+        data["reserves"] = [r for r in data["reserves"] if r["pays"] in garde]
+        data["filtre_pays"] = codes
+    data["ok"] = True
+    data["sante"] = tendances_dc.sante()
+    return jsonify(data)
 
 
 # ══════════════════════════════════════════════════════════

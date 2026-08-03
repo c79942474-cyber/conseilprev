@@ -507,6 +507,12 @@ body.embed .gp-carte{bottom:auto;top:var(--gp-bas,auto);
 .fin-tab tr.lourd td{background:rgba(28,92,171,.05);font-weight:600}
 .fin-tab tr.aren td:first-child:after{content:" ⚑";color:#8A5310}
 .fin-code{font-family:var(--mono);color:var(--muted2)}
+/* La NATURE d'une valeur se voit d'un coup d'oeil : un relevé publié et une
+   hypothèse de cadrage ne se citent pas de la même façon dans une note. */
+.fin-nat{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;
+  padding:1px 6px;border-radius:10px;border:1px solid currentColor;white-space:nowrap}
+.n-referentiel{color:#1E6336}.n-analyse{color:#4E3277}.n-hypothese{color:#8A5310}
+.n-saisi{color:#1C5CAB}.n-calcule{color:#0E7B83}
 .fin-mod{font-size:10px;color:#1C5CAB}
 .fin-aren{background:#FFF6E5;border:1px solid #E0C088;border-radius:6px;padding:10px 13px;
   font-size:11.5px;line-height:1.55;margin:12px 0}
@@ -519,6 +525,51 @@ body.embed .gp-carte{bottom:auto;top:var(--gp-bas,auto);
 .fin-ecart{margin-top:8px}
 .fin-pos{color:#A33}.fin-neg{color:#1E6336}
 @media(max-width:640px){.fin-ph{grid-template-columns:1fr;gap:2px}}
+/* PROSPECTIVES — une réserve n'est pas une note de bas de page.
+   Elle dit qu'un chiffre affiché ailleurs sur cette page est daté. Elle se
+   voit donc autant qu'un avertissement, et elle porte la valeur concernée. */
+.pro-bandeau{background:#F1F5FA;border:1px solid #B8CBE0;border-radius:6px;padding:10px 13px;
+  font-size:11.5px;line-height:1.6;margin-bottom:16px}
+.pro-h{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--muted2);margin:20px 0 9px;padding-bottom:5px;border-bottom:1px solid var(--rule2)}
+.pro-h:first-child{margin-top:0}
+.pro-res{border:1px solid #E0C088;border-left:4px solid #B37A15;background:#FFF9EF;
+  border-radius:0 6px 6px 0;padding:10px 13px;margin:0 0 9px;font-size:11.5px;line-height:1.55}
+.pro-res-t{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-bottom:5px}
+.pro-res-v{font-size:11px;color:var(--ink2);margin:0 0 5px}
+.pro-res-v b{font-family:var(--mono);font-weight:600}
+.pro-jal{display:grid;grid-template-columns:92px 1fr;gap:10px;align-items:start;
+  border-left:3px solid #1C5CAB;background:var(--bg);border-radius:0 6px 6px 0;
+  padding:8px 11px;margin-bottom:6px;font-size:11.5px;line-height:1.55}
+.pro-jal.annonce{border-left-color:#8A5310;border-left-style:dashed}
+.pro-jal-d{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ink2)}
+.pro-jal-s{display:block;font-family:var(--sans);font-size:9.5px;font-weight:400;
+  text-transform:uppercase;letter-spacing:.05em;color:var(--muted2);margin-top:2px}
+.pro-jal-t{font-weight:700;display:block;margin-bottom:3px}
+.pro-cartes{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:10px}
+.pro-c{border:1px solid var(--rule2);border-radius:8px;padding:11px 13px;background:var(--white);
+  font-size:11.5px;line-height:1.55}
+.pro-c h4{margin:0 0 6px;font-size:12.5px;display:flex;align-items:baseline;gap:7px}
+.pro-c h4 i{font-family:var(--mono);font-style:normal;font-size:11px;color:var(--muted2)}
+.pro-chiffre{font-family:var(--mono);font-size:11px;background:rgba(28,92,171,.07);
+  border-radius:4px;padding:5px 8px;margin:6px 0;display:block}
+.pro-inc{margin:6px 0 0;padding-top:6px;border-top:1px dotted var(--rule2);color:var(--ink2)}
+.pro-inc b{color:#0E7B83}
+/* La citation est le point d'appui : sans elle, une prospective n'est qu'un avis. */
+.pro-cit{font-size:10.5px;color:var(--muted2);line-height:1.5;margin:5px 0 0;
+  padding-left:8px;border-left:2px solid var(--rule2);font-style:italic}
+.pro-src{font-size:10px;color:var(--muted2);margin-top:5px}
+.pro-crit{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;
+  padding:1px 6px;border-radius:10px;border:1px solid currentColor;white-space:nowrap;
+  color:#0E7B83}
+.pro-crit.rien{color:var(--muted2)}
+.pro-pays{font-family:var(--mono);font-size:10px;font-weight:700;background:var(--encre,#1C1C1C);
+  color:#fff;border-radius:3px;padding:1px 5px}
+.pro-sources{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:9px}
+.pro-s{border:1px solid var(--rule2);border-radius:6px;padding:9px 11px;font-size:11px;
+  line-height:1.5;background:var(--bg)}
+.pro-s b{display:block;font-size:11.5px;margin-bottom:2px}
+@media(max-width:640px){.pro-jal{grid-template-columns:1fr;gap:3px}}
 .imp-pond{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:10px 18px}
 .imp-p{display:grid;grid-template-columns:1fr 110px 22px;gap:4px 10px;align-items:center;
   border:1px solid var(--rule);border-left:4px solid var(--imp-c,#8892A0);border-radius:4px;
@@ -1028,7 +1079,7 @@ engagements publics) sont imputés nominativement.</div>
     <a href="#s-lectures" class="f-comprendre" title="Les lectures d’ensemble : classes de risque, secteurs, stades">Lectures d’ensemble</a>
     <a href="#s-socle" class="f-comprendre" title="Les jeux de données ouverts qui alimentent la page">Données ouvertes</a>
     <a href="#s-empreinte" class="f-comprendre" title="Électricité, CO₂e, eau et fabrication du parc cartographié">Empreinte &amp; data centres<span class="pnav-n" id="pn-emp"></span></a>
-    <a href="#s-implantation" class="f-comprendre" title="Comparer les pays selon vos critères : carbone, eau, mix, prix, 2030">Choix d’implantation</a><a href="#s-finance" class="f-comprendre" title="Enveloppe d’investissement, DPGF par lot, écart entre pays et échéancier 2030">Enveloppe &amp; DPGF</a>
+    <a href="#s-implantation" class="f-comprendre" title="Comparer les pays selon vos critères : carbone, eau, mix, prix, 2030">Choix d’implantation</a><a href="#s-finance" class="f-comprendre" title="Enveloppe d’investissement, DPGF par lot, écart entre pays et échéancier 2030">Enveloppe &amp; DPGF</a><a href="#s-prospect" class="f-comprendre" title="Ce qui change d’ici 2030 : jalons réglementaires datés, tendances 2026, et ce qu’ils périment dans le référentiel">Prospectives 2026-2030<span class="pnav-n" id="pn-pro"></span></a>
     <span class="pnav-sep s-verifier" aria-hidden="true"><span>Vérifier</span></span>
     <a href="#s-sources" class="f-verifier" title="Chaque source, son millésime, son lien — et le registre de vérification">Sources</a>
     <a href="#s-methodo" class="f-verifier" title="Comment les chiffres sont construits, hypothèse par hypothèse">Méthodologie</a>
@@ -1261,12 +1312,15 @@ engagements publics) sont imputés nominativement.</div>
     <span class="panel-note" id="fin-note">réglez, puis calculez</span>
   </div>
   <div class="panel-body">
-    <div class="fin-bandeau"><b>Ce module ne fabrique pas un prix, et il faut le dire avant
-    tout le reste.</b> Aucun des 97 centres de données du référentiel ne publie sa capacité,
-    deux seulement publient un montant — et sans la capacité correspondante. Aucun coût au
-    mégawatt n’en est donc dérivable, et toute valeur au MW affichée ici serait une invention
-    habillée en référentiel. <b>Le coût unitaire est un paramètre</b>, donné en fourchette
-    large, que vous remplacez par vos devis. Ce que le module apporte est ailleurs : la
+    <div class="fin-bandeau"><b>D’où vient le coût au mégawatt, et ce qu’il ne dit pas.</b>
+    Il provient d’un relevé publié — <b>Soben, part of Accenture, Data Centre Trends Report
+    2026</b> : « cloud data centres currently cost between $8 million and $10 million per MW,
+    GW+ AI data centres are costing as much as $17 million per MW ». La source est en
+    <b>dollars</b> : la conversion passe par un taux affiché et modifiable, un taux du jour
+    n’étant pas une donnée de référentiel. Elle couvre le cloud et les campus d’IA, <b>pas</b>
+    la colocation ni le site régional, dont la nature reste marquée en conséquence. Et elle
+    reste un ordre de grandeur de marché : ce module ne fabrique pas VOTRE prix — aucun des 97
+    centres du référentiel ne publiant sa capacité, rien ici ne remplace vos devis. Ce que le module apporte est ailleurs : la
     <b>structure complète de la DPGF</b>, la modulation par les <b>seuls critères sourcés</b>
     de cette page, la <b>liste explicite de ce qu’il ne peut pas trancher</b>, et la
     comparaison entre pays sur le <b>coût total de possession</b> — car sur le seul
@@ -1286,6 +1340,9 @@ engagements publics) sont imputés nominativement.</div>
         <select id="fin-ia"><option value="">Calcul classique</option>
           <option value="1">Densité IA — refroidissement liquide</option></select>
         <span class="fin-aide">Au-delà d’environ 40 kW par baie, l’air ne suffit plus.</span></div>
+      <div class="fin-ch"><label for="fin-vit">Calendrier</label>
+        <select id="fin-vit"></select>
+        <span class="fin-aide">La vitesse s’achète : jusqu’à +25 % constatés sur le marché.</span></div>
       <div class="fin-ch"><label for="fin-cout">Coût unitaire (M€/MW) — facultatif</label>
         <input type="text" id="fin-cout" placeholder="ex. 8-12 · vide = hypothèse">
         <span class="fin-aide">Vos devis remplacent l’hypothèse de filière.</span></div>
@@ -1298,6 +1355,38 @@ engagements publics) sont imputés nominativement.</div>
     </div>
 
     <div id="fin-res"></div>
+  </div>
+</section>
+
+<!-- ══ 5 quater. PROSPECTIVES 2026-2030 ══
+     Le référentiel est un état des lieux : il dit où sont les sites et ce que
+     coûte l'électricité. Une décision d'investissement, elle, se prend sur cinq
+     à dix ans — horizon sur lequel le gel de Francfort jusqu'en 2031 ou la fin
+     de l'accise finlandaise pèsent plus lourd que l'écart de notation entre
+     deux pays voisins.
+
+     La partie qui compte le plus est la première : les RÉSERVES. Quand un fait
+     postérieur périme une valeur du référentiel, il s'inscrit à côté d'elle,
+     daté, au lieu de la corriger en silence. Un référentiel qui se réécrit sans
+     le dire fait perdre au lecteur la trace de ce qu'il a cité la semaine
+     dernière. -->
+<section class="panel" id="s-prospect" aria-labelledby="t-pro">
+  <div class="panel-head">
+    <span class="panel-title" id="t-pro">Prospectives 2026-2030 — ce qui change, et ce que ça périme</span>
+    <span class="panel-note" id="pro-note">chargement…</span>
+  </div>
+  <div class="panel-body">
+    <div class="pro-bandeau"><b>Une prévision n’est pas une donnée.</b> Les faits ci-dessous
+    proviennent de quatre rapports d’éditeurs nommés, lus intégralement : chaque entrée porte
+    sa <b>citation verbatim</b>, sa <b>page</b> et son éditeur, pour que vous puissiez la
+    vérifier plutôt que nous croire. Les entrées marquées <b>prévision</b> engagent leur
+    auteur, pas la réalité. Et lorsqu’un fait postérieur rend optimiste une valeur affichée
+    ailleurs sur cette page — la classe de prix finlandaise en est l’exemple —, il est inscrit
+    en <b>réserve datée à côté d’elle</b>, jamais substitué en silence : vous devez pouvoir
+    retrouver ce que vous avez cité la semaine dernière.</div>
+    <div id="pro-res">
+      <p class="note">Chargement des prospectives…</p>
+    </div>
   </div>
 </section>
 
@@ -6146,6 +6235,11 @@ if(window.parent&&window.parent!==window){
            les coefficients valent tous 1. Un défaut décidé par un tri de
            sérialisation n'est pas un défaut, c'est un accident. */
         $('fin-sc').value = 'neuve';
+        $('fin-vit').innerHTML = Object.keys(j.vitesse).map(function(k){
+          var v = j.vitesse[k];
+          return '<option value="'+k+'">'+esc(v.nom)
+               + (v.coef !== 1 ? ' — +'+Math.round((v.coef-1)*100)+' %' : '')+'</option>'; }).join('');
+        $('fin-vit').value = 'aucune';
       });
   }
 
@@ -6195,7 +6289,7 @@ if(window.parent&&window.parent!==window){
       body: JSON.stringify({
         mw: parseFloat($('fin-mw').value) || 100,
         gabarit: $('fin-gab').value, scenario: $('fin-sc').value,
-        densite_ia: !!$('fin-ia').value, pays: SEL,
+        densite_ia: !!$('fin-ia').value, pays: SEL, vitesse: $('fin-vit').value,
         annees: parseInt($('fin-an').value, 10) || 10,
         cout_mw: cout })
     }).then(function(r){ return r.json(); })
@@ -6288,6 +6382,25 @@ if(window.parent&&window.parent!==window){
       + '<p class="note" style="margin:8px 0">'+esc(e.note)+'</p></div>';
   }
 
+  /* Une réserve lue trois sections plus bas arrive trop tard. Elle se lit
+     là où se lit le chiffre qu'elle qualifie : ici, à côté de l'enveloppe du
+     pays. Le référentiel n'est pas corrigé pour autant — il est ANNOTÉ. */
+  function blocReserve(d){
+    var p = d.prospective || {};
+    var r = p.reserves || [];
+    if(!r.length) return '';
+    return '<div class="pro-res" style="margin:0 0 10px">'
+      + '<div class="pro-res-t"><span class="pro-pays">'+esc(d.pays)+'</span>'
+      + '<b>Réserve sur le référentiel — critère « '+esc(r[0].critere)+' »</b>'
+      + '<span class="fin-nat n-analyse">depuis '+esc(r[0].depuis)+'</span></div>'
+      + r.map(function(x){
+          return '<p class="pro-res-v">Valeur affichée : <b>'+esc(x.valeur_referentiel)+'</b></p>'
+               + '<p style="margin:0">'+esc(x.reserve)+'</p>'; }).join('')
+      + '<p class="note" style="margin:6px 0 0">Cette réserve n’est pas appliquée au calcul '
+      + 'ci-dessous : elle vous est remise pour que vous décidiez si elle change votre '
+      + 'arbitrage.</p></div>';
+  }
+
   function rendre(j){
     var h = '<div class="fin-rang">'
       + j.classement.map(function(x,i){ return carteRang(x,i,j); }).join('') + '</div>';
@@ -6300,7 +6413,19 @@ if(window.parent&&window.parent!==window){
         + esc((d.contexte.climat||{}).classe)+' et du stress hydrique '
         + esc((d.contexte.eau||{}).classe)+'. Raccordement : <b>'+esc(d.devis.raccordement.nom)
         + '</b> ('+d.contexte.pipeline_2030+' projets pour '+d.contexte.en_service+' sites en service).</p>'
-        + tableDpgf(d) + blocAren(d) + blocTraj(d);
+        + '<p class="note" style="margin:0 0 8px">Coût unitaire : <b>'+fourch(d.devis.cout_mw.valeur)
+        + ' M€/MW</b>'
+        + (d.devis.cout_mw.musd_mw ? ' — '+fourch(d.devis.cout_mw.musd_mw)+' M$/MW au taux '
+            + pct(d.devis.cout_mw.taux_eur_usd) : '')
+        + ' <span class="fin-nat n-'+esc(d.devis.cout_mw.nature)+'">'+esc(d.devis.cout_mw.nature)
+        + '</span> · '+esc(d.devis.cout_mw.source)+'.'
+        + (d.devis.vitesse && d.devis.vitesse.coef !== 1
+            ? ' Calendrier <b>'+esc(d.devis.vitesse.nom)+'</b> : +'
+              + Math.round((d.devis.vitesse.coef-1)*100)+' % sur l’enveloppe, '
+              + d.devis.vitesse.mois_gagnes+' mois gagnés au mieux — la prime achète la priorité '
+              + 'd’une entreprise générale, pas l’accord du gestionnaire de réseau.' : '')
+        + '</p>'
+        + blocReserve(d) + tableDpgf(d) + blocAren(d) + blocTraj(d);
     });
     j.ecarts.forEach(function(e){ h += blocEcart(e); });
     h += '<details style="margin-top:16px"><summary class="note" style="cursor:pointer">'
@@ -6317,6 +6442,205 @@ if(window.parent&&window.parent!==window){
     Promise.all([chargerRef(), chargerPays()]).catch(function(){
       $('fin-note').textContent = 'référentiel indisponible';
     });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', demarrer);
+  else demarrer();
+})();
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PROSPECTIVES 2026-2030 — le rendu
+
+   L'ordre de lecture n'est pas décoratif, il est l'argument :
+
+   1. Les RÉSERVES d'abord. Ce sont les seules entrées qui remettent en cause
+      un chiffre affiché ailleurs sur cette page. Les enterrer sous dix
+      tendances reviendrait à les publier sans les dire.
+
+   2. Les JALONS ensuite, triés par date, parce qu'un calendrier de projet se
+      heurte à des dates, pas à des thèmes. Le statut « annoncé » est marqué
+      d'un trait discontinu : une décision de conseil municipal et une
+      directive en vigueur n'ont pas la même force.
+
+   3. Les TENDANCES enfin, chacune disant explicitement QUEL critère du
+      comparateur elle touche — ou qu'elle n'en touche aucun. Ce dernier cas
+      est une information : le référentiel ne capte pas tout, et il vaut mieux
+      l'écrire que le laisser découvrir.
+
+   Chaque entrée porte sa citation verbatim et sa page. Sans elles, une
+   prospective n'est qu'un avis présenté en tableau.
+   ══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  function esc(t){ return String(t == null ? '' : t).replace(/[<>&]/g, function(c){
+    return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c]; }); }
+
+  /* Les dates sont des CHAÎNES hétérogènes : « 2024-09 », « 2026-T1 »,
+     « 2026-07-01 », « 2031 ». Un tri lexical placerait « 2026-T1 » après
+     « 2026-07-01 », ce qui est faux. On extrait donc année et mois, le
+     trimestre valant son premier mois. */
+  function rang(d){
+    var t = String(d || '');
+    var an = parseInt(t.slice(0, 4), 10) || 9999;
+    var m = 0;
+    var q = t.match(/T([1-4])/);
+    if(q) m = (parseInt(q[1], 10) - 1) * 3 + 1;
+    else { var mm = t.match(/^\d{4}-(\d{2})/); if(mm) m = parseInt(mm[1], 10); }
+    return an * 100 + m;
+  }
+
+  function libDate(d){
+    var MOIS = ['', 'janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet',
+                'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+    var t = String(d || '');
+    var jm = t.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if(jm) return (jm[3] === '01' ? '1er' : String(parseInt(jm[3], 10)))
+                + ' ' + MOIS[parseInt(jm[2], 10)] + ' ' + jm[1];
+    var am = t.match(/^(\d{4})-(\d{2})$/);
+    if(am) return MOIS[parseInt(am[2], 10)] + ' ' + am[1];
+    var qm = t.match(/^(\d{4})-T([1-4])$/);
+    if(qm) return 'T' + qm[2] + ' ' + qm[1];
+    return t;
+  }
+
+  function srcLib(j, cle, page){
+    var S = (j.sources || {})[cle];
+    if(!S) return esc(cle);
+    return esc(S.editeur) + ', <i>' + esc(S.titre) + '</i>'
+         + (page ? ', p. ' + page : '') + ' (' + esc(S.date) + ')';
+  }
+
+  /* Un rapport qui REPREND un chiffre n'en est pas la source. Le lecteur qui
+     veut remonter à l'origine — pour la contester, ou pour l'actualiser — doit
+     savoir qu'entre lui et le chiffre il y a deux publications, pas une. */
+  function amont(x){
+    return x.source_amont ? ' — d’après ' + esc(x.source_amont) : '';
+  }
+
+  function citation(x){
+    return x.citation
+      ? '<p class="pro-cit">« ' + esc(x.citation) + ' »</p>'
+      : '<p class="pro-cit">Reformulé depuis le corps du rapport — aucune phrase '
+        + 'citable isolément ; la page est donnée pour vérification.</p>';
+  }
+
+  function blocReserves(j){
+    if(!(j.reserves || []).length) return '';
+    return '<div class="pro-h">Réserves sur le référentiel — ' + j.reserves.length
+      + ' valeur' + (j.reserves.length > 1 ? 's' : '') + ' qu’un fait postérieur rend '
+      + 'optimiste ou incomplète</div>'
+      + '<p class="note" style="margin:0 0 9px">Aucune de ces réserves n’est appliquée '
+      + 'd’office aux notes et aux classes affichées ailleurs sur cette page. Un référentiel '
+      + 'qui se réécrit sans le dire fait perdre la trace de ce qui a été cité la semaine '
+      + 'précédente : la correction vous est remise, la décision vous appartient.</p>'
+      + j.reserves.map(function(r){
+          var jal = (j.jalons || []).filter(function(z){ return z.cle === r.jalon; })[0];
+          return '<div class="pro-res"><div class="pro-res-t">'
+            + '<span class="pro-pays">' + esc(r.pays) + '</span>'
+            + '<b>Critère « ' + esc(r.critere) + ' »</b>'
+            + '<span class="fin-nat n-analyse">depuis ' + esc(libDate(r.depuis)) + '</span></div>'
+            + '<p class="pro-res-v">Valeur affichée sur cette page : <b>'
+            + esc(r.valeur_referentiel) + '</b></p>'
+            + '<p style="margin:0">' + esc(r.reserve) + '</p>'
+            + (jal ? '<p class="pro-src">Fait déclencheur : ' + esc(jal.titre) + ' — '
+                   + srcLib(j, jal.source, jal.page) + '.</p>' : '')
+            + '</div>'; }).join('');
+  }
+
+  function blocJalons(j){
+    var L = (j.jalons || []).slice().sort(function(a, b){ return rang(a.date) - rang(b.date); });
+    if(!L.length) return '';
+    return '<div class="pro-h">Jalons réglementaires datés — ' + L.length + ' échéances qui '
+      + 'structurent un calendrier de projet</div>'
+      + L.map(function(x){
+          return '<div class="pro-jal' + (x.statut === 'annoncé' ? ' annonce' : '') + '">'
+            + '<div class="pro-jal-d">' + esc(libDate(x.date))
+            + '<span class="pro-jal-s">' + esc(x.statut) + '</span></div>'
+            + '<div><span class="pro-jal-t"><span class="pro-pays">' + esc(x.pays)
+            + '</span> ' + esc(x.titre) + '</span>'
+            + esc(x.detail)
+            + '<p style="margin:5px 0 0"><b>Ce que cela impose :</b> ' + esc(x.impact) + '</p>'
+            + citation(x)
+            + '<p class="pro-src">' + srcLib(j, x.source, x.page) + amont(x) + '</p>'
+            + '</div></div>'; }).join('');
+  }
+
+  function blocTendances(j){
+    var L = j.tendances || [];
+    if(!L.length) return '';
+    return '<div class="pro-h">Les ' + L.length + ' tendances 2026, et le critère du '
+      + 'comparateur que chacune touche</div>'
+      + '<div class="pro-cartes">'
+      + L.map(function(x){
+          return '<div class="pro-c"><h4><i>' + x.n + '.</i> ' + esc(x.titre) + '</h4>'
+            + '<p style="margin:0">' + esc(x.resume) + '</p>'
+            + (x.chiffre ? '<span class="pro-chiffre">' + esc(x.chiffre) + '</span>' : '')
+            + citation(x)
+            + '<p class="pro-inc"><b>Ce que cela change pour vous —</b> ' + esc(x.incidence)
+            + '</p>'
+            + '<p class="pro-src">' + srcLib(j, x.source, x.page) + amont(x) + ' · '
+            + (x.critere
+                ? '<span class="pro-crit">critère ' + esc(x.critere) + '</span>'
+                : '<span class="pro-crit rien">hors comparateur</span>')
+            + '</p></div>'; }).join('')
+      + '</div>';
+  }
+
+  function blocMarche(j){
+    var L = j.marche || [];
+    if(!L.length) return '';
+    return '<div class="pro-h">Structure de marché — ce qui contraint l’exécution, pas la '
+      + 'localisation</div>'
+      + '<table class="fin-tab"><thead><tr><th>Fait</th><th>Valeur</th><th>Nature</th>'
+      + '<th>Source</th></tr></thead><tbody>'
+      + L.map(function(x){
+          return '<tr><td><b>' + esc(x.titre) + '</b><br>' + esc(x.sens) + citation(x) + '</td>'
+            + '<td class="n">' + esc(x.valeur) + '</td>'
+            + '<td><span class="fin-nat n-'
+            + (x.nature === 'prevision' ? 'hypothese' : (x.nature === 'analyse' ? 'analyse' : 'referentiel'))
+            + '">' + esc(x.nature) + '</span><br><span class="fin-code">' + esc(x.date) + '</span></td>'
+            + '<td><span class="pro-src">' + srcLib(j, x.source, x.page) + amont(x)
+            + '</span></td></tr>'; }).join('')
+      + '</tbody></table>';
+  }
+
+  function blocSources(j){
+    var K = Object.keys(j.sources || {});
+    if(!K.length) return '';
+    return '<div class="pro-h">Les ' + K.length + ' rapports dépouillés</div>'
+      + '<div class="pro-sources">'
+      + K.map(function(k){
+          var S = j.sources[k];
+          return '<div class="pro-s"><b>' + esc(S.titre) + '</b>' + esc(S.editeur) + ' — '
+            + esc(S.date) + '<br><span class="fin-code">portée : ' + esc(S.portee)
+            + '</span></div>'; }).join('')
+      + '</div>'
+      + '<p class="note" style="margin-top:9px">' + esc(j.avertissement) + '</p>';
+  }
+
+  function rendre(j){
+    $('pro-res').innerHTML = blocReserves(j) + blocJalons(j) + blocTendances(j)
+                           + blocMarche(j) + blocSources(j);
+    /* Les compteurs se lisent dans la charge utile, jamais en dur : une entrée
+       ajoutée au module ne doit pas laisser un chiffre faux sur l'onglet. */
+    var c = $('pn-pro');
+    if(c) c.textContent = (j.jalons || []).length;
+    $('pro-note').textContent = (j.tendances || []).length + ' tendances · '
+      + (j.jalons || []).length + ' jalons · ' + (j.reserves || []).length + ' réserves';
+  }
+
+  function demarrer(){
+    if(!$('pro-res')) return;
+    fetch('/api/tendances-dc', { credentials:'same-origin' })
+      .then(function(r){ return r.json(); })
+      .then(function(j){
+        if(!j || !j.ok) throw new Error('prospectives indisponibles');
+        rendre(j);
+      })
+      .catch(function(){
+        $('pro-note').textContent = 'prospectives indisponibles';
+        $('pro-res').innerHTML = '<p class="note">Les prospectives ne sont pas accessibles '
+          + 'pour le moment. Elles sont réservées aux comptes abonnés ou validés.</p>';
+      });
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', demarrer);
   else demarrer();

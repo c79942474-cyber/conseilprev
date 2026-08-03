@@ -52,39 +52,117 @@ from datetime import datetime, timezone
 VERSION = "2026-08-a"
 
 AVERTISSEMENT = (
-    "Enveloppe de CADRAGE. Le coût unitaire est une hypothèse de filière en "
-    "fourchette large, pas un prix : aucun des 97 sites du référentiel ne "
-    "publie sa capacité, aucun coût au mégawatt n'en est dérivable. "
-    "Remplacez-le par vos devis avant tout engagement."
+    "Enveloppe de CADRAGE. Le coût au mégawatt provient d'un relevé publié "
+    "(Soben, part of Accenture — Data Centre Trends Report 2026, p. 8), en "
+    "dollars, converti au taux déclaré : c'est un ordre de grandeur de marché, "
+    "pas votre prix. Aucun des 97 sites du référentiel ne publiant sa capacité, "
+    "rien ici ne remplace vos devis."
 )
 
 # ═══════════════════════════════════════════════════════════════════════════
-# 1. LE COÛT UNITAIRE — UN PARAMÈTRE, PAS UNE DONNÉE
-#    Fourchettes d'ordre de grandeur de filière, par gabarit, en millions
-#    d'euros par mégawatt IT installé, tout compris (shell, MEP, mise en
-#    service ; hors serveurs et hors foncier, qui font leur propre lot).
-#    Elles sont LARGES exprès : une fourchette étroite inventée est plus
-#    trompeuse qu'une fourchette large assumée.
+# 1. LE COÛT UNITAIRE — DÉSORMAIS SOURCÉ, ET NON PLUS SUPPOSÉ
+#
+# La première version de ce module donnait une fourchette de filière déclarée
+# HYPOTHÈSE, faute de source : aucun des 97 sites du référentiel ne publie sa
+# capacité, deux seulement publient un montant, et sans la capacité
+# correspondante — impossible d'en dériver un coût au mégawatt.
+#
+# Le Data Centre Trends Report 2026 de Soben, part of Accenture, publie
+# précisément cette valeur, issue de leurs propres relevés de coûts :
+#
+#   « Research by Soben, part of Accenture, found that while cloud data centres
+#     currently cost between $8 million and $10 million per MW, GW+ AI data
+#     centres are costing as much as $17 million per MW. Contrary to popular
+#     belief, this signals that economies of scale are not driving the savings
+#     some would expect. »                              (rapport 2026, page 8)
+#
+# Deux précautions, et elles comptent autant que le chiffre :
+#
+#   1. LA MONNAIE. La source est en DOLLARS. Convertir en silence reviendrait à
+#      fabriquer une précision que la source ne porte pas. Le montant en dollars
+#      est donc conservé tel quel, et la conversion passe par un taux DÉCLARÉ,
+#      daté, modifiable — dont la nature est « hypothèse », parce qu'un taux de
+#      change du jour n'est pas une donnée de référentiel.
+#   2. LA COUVERTURE. La source distingue « cloud » et « GW+ AI ». Elle ne dit
+#      rien du site régional : ce gabarit-là reste une hypothèse, et le module
+#      l'écrit au lieu de faire passer l'ensemble pour sourcé.
 # ═══════════════════════════════════════════════════════════════════════════
-COUT_MW = {
-    "campus_ia":   {"nom": "Campus dédié à l'IA", "meur_mw": [9.0, 15.0],
-                    "sens": "densité par baie très élevée, refroidissement liquide fréquent, "
-                            "redondance forte — le haut de la fourchette est la règle plus que l'exception"},
-    "hyperscale":  {"nom": "Campus hyperscale", "meur_mw": [7.0, 12.0],
-                    "sens": "construction par tranches, standardisation poussée, effets d'échelle réels"},
-    "colocation":  {"nom": "Colocation / hébergement", "meur_mw": [8.0, 13.0],
-                    "sens": "redondance contractuelle (Tier III le plus souvent), cloisonnement par client"},
-    "regional":    {"nom": "Site régional ou spécialisé", "meur_mw": [9.0, 16.0],
-                    "sens": "pas d'effet d'échelle, coûts fixes rapportés à une puissance faible"},
-}
-SOURCE_COUT = {
-    "titre": "Coût d'investissement au mégawatt IT — ordre de grandeur de filière",
-    "editeur": "hypothèse de cadrage CONSEILPREV",
+EUR_USD = 0.92
+SOURCE_TAUX = {
+    "titre": "Taux de conversion dollar → euro appliqué aux coûts publiés en dollars",
+    "valeur": EUR_USD,
     "nature": "hypothese",
-    "note": "NON dérivé du référentiel : aucun des 97 sites ne publie sa capacité, "
-            "deux seulement publient un montant, et sans la capacité correspondante. "
-            "Cette fourchette sert à STRUCTURER une enveloppe, pas à la chiffrer. "
-            "Elle est remplaçable en totalité par vos propres valeurs.",
+    "note": "Ordre de grandeur, à ajuster à la date de votre décision. Un coût "
+            "d'investissement s'engage sur plusieurs années : le taux du jour "
+            "n'est pas une donnée de référentiel, et une couverture de change "
+            "est un contrat, pas une statistique.",
+}
+
+COUT_MW = {
+    "campus_ia":   {"nom": "Campus dédié à l'IA", "musd_mw": [12.0, 17.0],
+                    "nature": "referentiel",
+                    "source": "Soben (part of Accenture), Data Centre Trends Report 2026, p. 8",
+                    "citation": "GW+ AI data centres are costing as much as $17 million per MW",
+                    "sens": "densité par baie très élevée, refroidissement liquide fréquent, "
+                            "redondance forte. La source donne 17 M$/MW comme HAUT de "
+                            "fourchette pour les campus de l'ordre du gigawatt ; la borne "
+                            "basse retenue ici marque l'écart avec le cloud, la source ne "
+                            "la publiant pas"},
+    "hyperscale":  {"nom": "Campus hyperscale (cloud)", "musd_mw": [8.0, 10.0],
+                    "nature": "referentiel",
+                    "source": "Soben (part of Accenture), Data Centre Trends Report 2026, p. 8",
+                    "citation": "cloud data centres currently cost between $8 million and "
+                                "$10 million per MW",
+                    "sens": "la fourchette publiée pour le cloud, telle quelle"},
+    "colocation":  {"nom": "Colocation / hébergement", "musd_mw": [8.0, 11.0],
+                    "nature": "analyse",
+                    "source": "lecture du cabinet à partir de la fourchette cloud (Soben 2026, p. 8)",
+                    "sens": "même socle technique que le cloud, majoré de la redondance "
+                            "contractuelle et du cloisonnement par client. La source ne "
+                            "traite pas ce gabarit séparément"},
+    "regional":    {"nom": "Site régional ou spécialisé", "musd_mw": [9.0, 16.0],
+                    "nature": "hypothese",
+                    "source": "hypothèse de cadrage CONSEILPREV — NON couverte par la source",
+                    "sens": "pas d'effet d'échelle, coûts fixes rapportés à une puissance "
+                            "faible. Aucune source publiée ne chiffre ce gabarit : cette "
+                            "fourchette reste une hypothèse et se remplace en priorité"},
+}
+# La page et le moteur travaillent en euros : la conversion est faite ici, une
+# seule fois, et le montant en dollars reste exposé à côté.
+for _g in COUT_MW.values():
+    _g["meur_mw"] = [round(_g["musd_mw"][0] * EUR_USD, 2),
+                     round(_g["musd_mw"][1] * EUR_USD, 2)]
+
+SOURCE_COUT = {
+    "titre": "Coût d'investissement au mégawatt IT",
+    "editeur": "Soben (part of Accenture) — Data Centre Trends Report 2026, page 8",
+    "nature": "referentiel",
+    "note": "Relevé de coûts d'un cabinet d'economie de la construction, publié en "
+            "DOLLARS et converti au taux déclaré. La source distingue le cloud "
+            "(8 à 10 M$/MW) des campus d'IA de l'ordre du gigawatt (jusqu'à "
+            "17 M$/MW) et souligne que les économies d'échelle n'y jouent PAS "
+            "dans le sens attendu. Elle ne couvre ni la colocation ni le site "
+            "régional : ces deux gabarits portent leur propre nature.",
+}
+
+# La vitesse se paie, et la source le chiffre : « a US hyperscaler recently
+# accepted a 25% uplift in tender price from a GC to deliver to a demanding
+# timeline » (Soben 2026, p. 8). C'est un levier à part entière d'une décision
+# d'investissement — le seul, dans ce module, qui augmente sciemment la dépense.
+PRIME_VITESSE = {
+    "aucune":   {"nom": "Calendrier de marché", "coef": 1.00, "mois": 0,
+                 "sens": "pas de compression, l'entreprise générale travaille à son rythme"},
+    "acceleree": {"nom": "Calendrier accéléré", "coef": 1.12, "mois": -6,
+                  "sens": "compression modérée : préfabrication, achats anticipés, "
+                          "équipes renforcées"},
+    "maximale": {"nom": "Vitesse maximale", "coef": 1.25, "mois": -12,
+                 "nature": "referentiel",
+                 "source": "Soben 2026, p. 8 — surcoût de 25 % accepté par un hyperscaler "
+                           "américain pour tenir un calendrier exigeant",
+                 "sens": "la valeur haute observée sur le marché. Elle ne garantit "
+                         "pas le délai : elle achète la priorité d'une entreprise "
+                         "générale, dans un marché où moins de dix d'entre elles "
+                         "dominent l'EMEA"},
 }
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -354,7 +432,7 @@ def tension_de(parc_mw_ou_sites, pipeline):
 
 def dpgf(mw, gabarit="hyperscale", scenario="neuve", pays=None,
          climat_classe=None, eau_classe=None, densite_ia=False,
-         parc_sites=0, pipeline_sites=0, cout_mw=None):
+         parc_sites=0, pipeline_sites=0, cout_mw=None, vitesse="aucune"):
     """Enveloppe et DPGF pour une puissance IT donnée, dans un pays donné.
 
     Retourne l'enveloppe en fourchette, la décomposition par lot, les postes
@@ -364,6 +442,9 @@ def dpgf(mw, gabarit="hyperscale", scenario="neuve", pays=None,
     g = COUT_MW.get(gabarit) or COUT_MW["hyperscale"]
     sc = SCENARIOS.get(scenario) or SCENARIOS["neuve"]
     base = list(cout_mw) if cout_mw else list(g["meur_mw"])
+    V = PRIME_VITESSE.get(vitesse) or PRIME_VITESSE["aucune"]
+    if V["coef"] != 1.0:
+        base = [base[0] * V["coef"], base[1] * V["coef"]]
 
     mode = refroidissement_retenu(climat_classe, eau_classe, densite_ia)
     R = REFROIDISSEMENT[mode]
@@ -372,8 +453,15 @@ def dpgf(mw, gabarit="hyperscale", scenario="neuve", pays=None,
 
     trace = [
         "Coût unitaire retenu : %s à %s M€/MW (%s) — %s"
-        % (_fr(base[0]), _fr(base[1]), g["nom"], "saisi" if cout_mw else "hypothèse de filière"),
+        % (_fr(_f(base[0], 2)), _fr(_f(base[1], 2)), g["nom"],
+           "valeur saisie" if cout_mw else
+           ("%s M$/MW convertis au taux %s · source : %s"
+            % ('-'.join(_fr(x) for x in g["musd_mw"]), _fr(EUR_USD), g["source"]))),
         "Scénario : %s" % sc["nom"],
+        "Calendrier : %s%s" % (V["nom"],
+            ("" if V["coef"] == 1.0 else
+             " — surcoût de %s %% appliqué à l'enveloppe, %s mois gagnés au mieux"
+             % (_fr(_f((V["coef"] - 1) * 100, 0)), abs(V["mois"])))),
         "Refroidissement déduit du climat (%s) et de l'eau (%s) : %s"
         % (climat_classe or "inconnu", eau_classe or "inconnu", R["nom"]),
         "Raccordement : %s (%s projets pour %s sites en service, ratio %s)"
@@ -439,8 +527,15 @@ def dpgf(mw, gabarit="hyperscale", scenario="neuve", pays=None,
                    "scenario": scenario, "scenario_nom": sc["nom"], "pays": pays,
                    "densite_ia": bool(densite_ia)},
         "cout_mw": {"valeur": _fourchette(base[0], base[1], 2),
-                    "nature": "hypothese" if not cout_mw else "saisi",
-                    "source": SOURCE_COUT["editeur"] if not cout_mw else "valeur saisie"},
+                    "musd_mw": None if cout_mw else g["musd_mw"],
+                    "taux_eur_usd": None if cout_mw else EUR_USD,
+                    "nature": "saisi" if cout_mw else g["nature"],
+                    "source": "valeur saisie" if cout_mw else g["source"],
+                    "citation": None if cout_mw else g.get("citation")},
+        "vitesse": {"cle": vitesse, "nom": V["nom"], "coef": V["coef"],
+                    "mois_gagnes": abs(V["mois"]),
+                    "nature": V.get("nature", "analyse"),
+                    "source": V.get("source"), "sens": V["sens"]},
         "refroidissement": {"cle": mode, "nom": R["nom"], "pue": R["pue"],
                             "eau": R["eau"], "sens": R["sens"], "nature": "calcule"},
         "raccordement": {"cle": ten_cle, "nom": T["nom"], "ratio": ten_ratio,
@@ -448,8 +543,11 @@ def dpgf(mw, gabarit="hyperscale", scenario="neuve", pays=None,
         "enveloppe_meur": _fourchette(ebas, ehaut, 1),
         "lots": lignes,
         "arenseigner": A_RENSEIGNER,
-        "duree_mois": [sc["duree_mois"][0] + T["mois_sup"][0],
-                       sc["duree_mois"][1] + T["mois_sup"][1]],
+        # La prime raccourcit le CHANTIER, jamais l'instruction du raccordement :
+        # aucun surcoût accepté par un maître d'ouvrage n'accélère un gestionnaire
+        # de réseau. Le gain est donc plafonné par la part compressible.
+        "duree_mois": [max(6, sc["duree_mois"][0] + V["mois"]) + T["mois_sup"][0],
+                       max(12, sc["duree_mois"][1] + V["mois"]) + T["mois_sup"][1]],
         "trace": trace,
     }
 
@@ -709,6 +807,8 @@ def referentiel():
         "avertissement": AVERTISSEMENT,
         "cout_mw": COUT_MW,
         "source_cout": SOURCE_COUT,
+        "taux": SOURCE_TAUX,
+        "vitesse": PRIME_VITESSE,
         "lots": LOTS,
         "source_lots": SOURCE_LOTS,
         "scenarios": SCENARIOS,
