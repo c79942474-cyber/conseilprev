@@ -943,22 +943,24 @@ textarea.form-el{min-height:86px;resize:vertical}
 .mat-deliv-gen{font-size:10px;font-family:var(--mono);color:var(--accent);margin-top:8px;letter-spacing:.04em}
 /* Modal livrable */
 .sb-guided-wrap{padding:0 16px 14px}
-.sb-guided-btn{width:100%;padding:9px 12px;background:var(--bg);border:1px solid var(--rule2);border-radius:7px;font-size:11.5px;font-weight:600;color:var(--ink2);cursor:pointer;transition:all .18s;text-align:left}
+.sb-guided-lab{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted2);margin-bottom:6px;font-weight:700;cursor:pointer}
+.sb-guided-select{width:100%;padding:9px 11px;background:var(--bg);border:1px solid var(--rule2);
+  border-radius:7px;font-size:11.5px;font-weight:600;color:var(--ink2);cursor:pointer;
+  font-family:var(--sans);transition:border-color .18s,color .18s}
+.sb-guided-select:hover{border-color:var(--accent);color:var(--accent)}
+.sb-guided-select:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.sb-guided-mp{width:100%;margin-top:7px;padding:8px 11px;background:transparent;
+  border:1px dashed var(--rule2);border-radius:7px;font-size:11px;font-weight:600;
+  color:var(--muted2);cursor:pointer;text-align:left;transition:all .18s}
+.sb-guided-mp:before{content:"\1F9ED";margin-right:5px}
+.sb-guided-mp:hover{border-style:solid;border-color:var(--accent);color:var(--accent)}
+.sb-guided-mp:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .guided-paths-select{width:100%;padding:11px 14px;font-size:13px;font-weight:600;color:var(--ink);background:var(--white);border:1px solid var(--rule2);border-radius:8px;cursor:pointer;margin-bottom:20px;font-family:var(--sans)}
 .guided-paths-select:focus{outline:none;border-color:var(--accent)}
-.sb-guided-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(184,50,34,.05)}
-@keyframes sbGuidedPulse {
-  0%, 100% {
-    color: #b48af7;
-    text-shadow: 0 0 6px rgba(180,138,247,.3), 0 0 14px rgba(180,138,247,.15);
-  }
-  50% {
-    color: #e9d5ff;
-    text-shadow: 0 0 16px rgba(216,180,254,.85), 0 0 34px rgba(168,85,247,.6), 0 0 50px rgba(147,51,234,.35);
-  }
-}
-.sb-guided-btn { animation: sbGuidedPulse 1.8s ease-in-out infinite; }
-.sb-guided-btn:hover { animation: none; }
+/* Le bouton clignotant qui vivait ici attirait l'œil sur une commande dont on
+   ne savait pas ce qu'elle ouvrait. La liste des rôles montre le contenu
+   elle-même : plus rien à faire clignoter. */
 .guided-path-card{background:var(--white);border:1px solid var(--rule2);border-radius:10px;padding:18px;margin-bottom:14px}
 .guided-path-head{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px}
 .guided-path-icon{font-size:22px;flex-shrink:0}
@@ -979,6 +981,21 @@ textarea.form-el{min-height:86px;resize:vertical}
 .mat-modal{position:fixed;inset:0;z-index:10020;background:rgba(28,28,28,.55);display:none;align-items:center;justify-content:center;padding:20px}
 .mat-modal.on{display:flex}
 .mat-modal-box{background:var(--white);border-radius:8px;width:100%;max-width:760px;max-height:88vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+/* .mat-modal-card etait employe par CINQ fenetres — les deux du registre des
+   traitements et les trois des parcours guides — sans avoir jamais ete defini.
+   Resultat : aucun fond, aucune marge, aucune ombre. Le texte s affichait a
+   meme la page, par-dessus le module en cours, illisible. Les cartes portent
+   leur largeur en attribut style : une regle de classe ne la contrarie pas.
+   Contrairement a .mat-modal-box, la carte defile d un seul bloc — en-tete
+   compris — parce que c est ainsi que ces fenetres sont ecrites. */
+.mat-modal-card{background:var(--white);border-radius:8px;width:100%;max-width:760px;
+  max-height:88vh;overflow-y:auto;padding:20px 22px 22px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+/* En-tete et pied heritent d un rembourrage prevu pour une boite non rembourree :
+   dans une carte qui a deja le sien, il doublerait. */
+.mat-modal-card>.mat-modal-head{padding:0 0 14px;margin-bottom:16px;border-bottom:1px solid var(--rule)}
+.mat-modal-card>.mat-modal-foot{padding:14px 0 0;margin-top:16px}
+.mp-builder-actions{position:sticky;bottom:0;display:flex;justify-content:flex-end;gap:8px;
+  margin:16px -22px -22px;padding:12px 22px;background:var(--white);border-top:1px solid var(--rule)}
 .mat-modal-head{display:flex;align-items:flex-start;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--rule);flex-shrink:0}
 .mat-modal-eyebrow{font-size:9px;font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
 .mat-modal-title{font-family:var(--serif);font-size:21px;color:var(--ink)}
@@ -2379,8 +2396,23 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="sb-logo">Sentinel <span class="sb-logo-ai">AI</span></div>
     <div class="sb-sub">Cartographie des risques</div>
   </div>
+  <!-- Les onze parcours vivaient derrière un bouton et une fenêtre : un
+       visiteur qui ne cliquait pas ne savait pas que Sentinel se lit selon son
+       rôle. La liste est désormais LÀ, ouverte, dans la barre latérale — le
+       rôle se choisit sans rien ouvrir, et la fenêtre ne sert plus qu'à lire le
+       détail du parcours choisi. « Créer mon parcours chiffré » sort du même
+       coup de la fenêtre où il était enfoui.
+       Le libellé visible EST l'étiquette du menu : pas de doublon caché, un
+       seul texte, et il nomme réellement le champ pour un lecteur d'écran. -->
   <div class="sb-guided-wrap">
-    <button class="sb-guided-btn" onclick="guidedPathsOpen()" title="Parcours d utilisation recommandes selon votre role">🧭 Parcours guidés</button>
+    <label class="sb-guided-lab" for="sb-role">
+      <span aria-hidden="true">🧭</span> Parcours guidés — votre rôle</label>
+    <select id="sb-role" class="sb-guided-select"
+            onchange="sbRoleChoisi(this.value)"
+            title="Onze chemins de lecture selon votre métier : le parcours enchaîne les pages dans l’ordre qui vous concerne."></select>
+    <button class="sb-guided-mp" onclick="monParcoursBuilder()"
+            title="Composer votre propre parcours à partir de vos cas d’usage, jusqu’au coût et à l’enveloppe RaaS.">
+      Créer mon parcours chiffré</button>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Pilotage</div>
@@ -7639,7 +7671,7 @@ function juReferentiel(){
 })();
 
 var PAGE_META = {
-    'pan-sia': { section: 'ÉVALUER LE RISQUE', label: 'Panorama SIA — UE' },
+    'pan-sia': { section: 'ÉVALUER LE RISQUE', label: 'Panorama IA & centres de données — UE' },
     'obs-rd': { section: 'SE TENIR INFORMÉ', label: 'Observatoire R&D IA' },
     'juridique': { section: 'JURIDIQUE', label: 'Conseil juridique assisté' },
     'empreinte': { section: 'EMPREINTE', label: 'Empreinte numérique' },
@@ -15588,20 +15620,20 @@ var PAGE_GUIDES = {
     ]
   },
   'pan-sia': {
-    title: "Panorama SIA — UE",
+    title: "Panorama IA & centres de données — UE",
     sections: [
-      {h:"À quoi sert cette page", t:"Quatre objets sur une même page, parce qu’ils s’expliquent l’un l’autre : un panel de cas réels de systèmes d’IA déployés dans l’UE (POC, pilotes, production, abandons) classés selon l’AI Act ; la couche réglementaire des 27 États membres ; le parc des centres de données européens — 97 sites cartographiés avec statut, exploitant et refroidissement ; et l’empreinte environnementale de l’ensemble, électricité, CO₂e, fabrication et eau. S’y ajoutent un comparateur de pays d’implantation et des parcours guidés par métier. Le fil conducteur : chaque chiffre porte sa NATURE — publié, calculé, analyse — et sa source."},
+      {h:"À quoi sert cette page", t:"Quatre objets sur une même page, parce qu’ils s’expliquent l’un l’autre : un panel de cas réels de systèmes d’IA déployés dans l’UE (POC, pilotes, production, abandons) classés selon l’AI Act ; la couche réglementaire des 27 États membres ; le parc des centres de données européens — 97 sites cartographiés avec statut, exploitant et refroidissement ; et l’empreinte environnementale de l’ensemble, électricité, CO₂e, fabrication et eau. S’y ajoutent un comparateur de pays d’implantation et six parcours guidés par métier, choisis dans deux listes sous les onglets. Le fil conducteur : chaque chiffre porte sa NATURE — publié, calculé, analyse — et sa source."},
       {h:"Naviguer sur la carte", t:"La molette agrandit et réduit sans touche à tenir ; la main déplace dès que la carte est agrandie, et les deux marchent ensemble. Le champ « Aller à » accepte un pays, une organisation ou un centre de données. Double-clic sur un pays : la carte l’atteint au dernier palier. La barre du bas commande la couche des centres et l’horizon 2024-2030 — le curseur estompe les sites dont la mise en service annoncée dépasse la date choisie, et c’est ainsi que se lit la trajectoire du parc. La légende se déplie par le bouton de droite."},
-      {h:"Les trois fonds de carte", t:"Le sélecteur « fond » change ce que la couleur encode, sans changer la carte : cas documentés par pays, empreinte carbone du parc, ou intensité carbone du réseau électrique. Ce dernier fond explique les deux autres — un centre polonais à 660 gCO₂e/kWh et un centre suédois à 35 n’ont pas la même empreinte à consommation égale. Un pays GRIS n’a pas de donnée ; il n’est pas à zéro."},
+      {h:"Les quatre fonds de carte", t:"Le sélecteur « fond » change ce que la couleur encode, sans changer la carte : cas documentés par pays, empreinte carbone du parc, ou intensité carbone du réseau électrique. Ce dernier fond explique les deux autres — un centre polonais à 660 gCO₂e/kWh et un centre suédois à 35 n’ont pas la même empreinte à consommation égale. Un pays GRIS n’a pas de donnée ; il n’est pas à zéro. Le quatrième fond, « Drapeaux nationaux », ne porte AUCUNE donnée : c’est un repère d’orientation, et la légende le dit — il évoque les couleurs, il ne reproduit pas les drapeaux, dont les armoiries et les croix ne peuvent pas tenir dans un territoire."},
       {h:"Deux marqueurs, deux objets", t:"Les RONDS sont des systèmes d’IA, posés à l’emplacement de l’organisation qui les déploie — son siège, pas nécessairement le lieu où le système tourne. Un rond creux signale un dispositif national ou un fournisseur hors UE. Les CARRÉS sont des centres de données, colorés par statut du plus certain au plus fragile : en exploitation, en construction, autorisé, annoncé — et les projets ABANDONNÉS sont conservés exprès, car un refus renseigne autant qu’une annonce sur les contraintes d’un territoire."},
       {h:"Ce qui est mesuré, ce qui est calculé", t:"Trois natures, jamais mélangées, toujours écrites dans l’infobulle. « publié » : l’exploitant a publié le chiffre. « site » : calculé depuis la capacité annoncée DE CE SITE. « classe » : calculé depuis l’ordre de grandeur typique de sa catégorie — cela répond à « de quel ordre est un campus de ce type ? », jamais à « combien consomme ce site ? ». Aucun des 97 sites ne publiant capacité, PUE ni consommation, presque tout est de nature « classe » — et la page vous le dit plutôt que de l’habiller."},
-      {h:"Se déplacer entre les sections", t:"La barre du haut suit le défilement et marque la section où vous êtes — neuf entrées, de la carte aux sources, dont « Implantation ». Elle annonce la taille de ce qui attend derrière chaque lien, s’actionne au clavier, et chaque lien est une vraie adresse : copiez-la pour renvoyer un collègue directement à la bonne section."},
+      {h:"Se déplacer entre les sections", t:"La barre du haut suit le défilement et marque la section où vous êtes — neuf entrées, de la carte aux sources, dont « Implantation ». Chaque onglet porte la COULEUR DE SA FAMILLE, même au repos : bleu pour observer, turquoise pour comprendre, brun pour vérifier — la famille se voit avant que le mot soit lu. Le survol, ou le passage au clavier, affiche ce que contient la section. Elle annonce la taille de ce qui attend derrière chaque lien, s’actionne au clavier, et chaque lien est une vraie adresse : copiez-la pour renvoyer un collègue directement à la bonne section."},
       {h:"Ouvrir le détail d’un pays", t:"Dans le tableau d’empreinte, CLIQUEZ SUR UN PAYS : sa page s’ouvre seule, avec tous ses centres — exploitant, ville, statut, mise en service, capacité et investissement annoncés, électricité, eau, refroidissement, CO₂e — puis les systèmes d’IA du panel qui s’y rattachent. Chaque valeur porte son étiquette de nature. L’adresse retient le pays (#pays=IE) : la page se partage et se recharge telle quelle ; Échap referme."},
       {h:"Ouvrir la fiche d’un centre", t:"Depuis la vue pays ou la carte, cliquez un centre : sa fiche sépare physiquement ce que l’exploitant A RENDU PUBLIC — avec source, type de source et niveau de confiance — de ce que NOUS CALCULONS, fourchettes et formules affichées. Les hypothèses (PUE, WUE, facteur de charge, gabarit) sont données chiffre par chiffre pour que votre analyste refasse le calcul avec ses propres valeurs — et puisse nous opposer le résultat."},
       {h:"Usage et fabrication", t:"L’empreinte croise trois postes jamais confondus : l’usage (électricité × intensité carbone du pays, millésime 2024, cycle de vie), la fabrication des équipements amortie sur leur durée de vie, et l’eau de refroidissement. Sur un réseau très décarboné, la fabrication pèse plus lourd que l’usage — une lecture qui n’afficherait que l’usage classerait la Suède à tort près de zéro."},
       {h:"Choisir un pays d’implantation", t:"La section « Implantation » compare les pays selon SEPT critères, chacun avec sa nature et sa source : intensité carbone, pilotabilité du mix (nucléaire, renouvelables, fossile — production 2024), disponibilité en eau (indice WEI+ de l’AEE, avec la part de l’irrigation agricole : là où les cultures prélèvent plus de la moitié de l’eau, un refroidissement évaporatif entre en compétition d’usage l’été), potentiel de free cooling, prix industriel de l’électricité en classes Eurostat, parc en service, et file de raccordement 2026-2030 comptée depuis nos statuts. Réglez le POIDS de chaque critère (0 à 4) selon votre projet : le classement se recalcule sous vos yeux, et la formule affichée est la formule exécutée — côté serveur."},
       {h:"Avantages, inconvénients et perspectives 2030", t:"Sous le classement, chaque pays a sa fiche dépliable : AVANTAGES et INCONVÉNIENTS en deux colonnes, un COMMENTAIRE d’arbitrage, puis les perspectives à 2030 — annonces d’investissement datées et sourcées (InvestAI, Sommet de Paris, AWS Aragon, Stargate Norway…) distinguées des CONTRAINTES constatées : moratoire de raccordement de Dublin, encadrement néerlandais des hyperscale, PUE réglementaire allemand. Une contrainte constatée vaut souvent plus qu’une promesse chiffrée. Cette analyse est de nature « analyse » : la lecture du cabinet, datée, à discuter — c’est écrit dessus."},
-      {h:"Un parcours pour votre métier", t:"Le bouton « Parcours guidé » de la barre propose huit chemins de lecture — investisseur, banque, assurance, climatologue, spécialiste de l’eau, analyste ESG… Chacun conduit dans l’ordre qui concerne le métier et nomme, à chaque étape, LE PIÈGE propre à ce métier. La section visée est soulignée, jamais masquée : on lit la consigne et la donnée ensemble."},
+      {h:"Un parcours pour votre métier", t:"Sous les onglets, deux listes : VOTRE RÔLE puis LE PARCOURS. Six chemins de lecture — investisseur, banque, assurance, climatologue, spécialiste de l’eau, analyste ESG. Chacun conduit dans l’ordre qui concerne le métier et nomme, à chaque étape, LE PIÈGE propre à ce métier. La seconde liste ne propose que ce qui a un sens pour le rôle choisi, avec le nombre d’étapes ; un rôle qui n’a qu’un chemin démarre sans second clic. Le bouton « Parcours guidé » reste là pour lire les six descriptions en entier. La section visée est soulignée, jamais masquée : on lit la consigne et la donnée ensemble."},
       {h:"Le parcours investisseur : trois scénarios", t:"Le parcours investisseur commence par une question — construction neuve, extension d’un parc existant, ou rachat/M&A — parce que les mêmes critères ne se lisent pas dans le même ordre. NEUVE : l’électricité décide avant le foncier, puis climat/PUE/eau, la file de raccordement, et la due diligence (prix et PPA, délai opposable, eau au point exact). EXTENSION : où l’opérateur est déjà, densité du pays, la file de raccordement que les annonces réservent, et le permis d’extension qui n’est jamais acquis. M&A : le statut comme échelle de certitude, la fiche déclaré/calculé, puis la liste des questions de data room que le référentiel ne peut pas trancher — PUE mesuré douze mois, raccordement contractuel, baux, CAPEX engagé, structure de détention. L’adresse porte le scénario (#parcours=invest.ma) : envoyez à chacun le bon chemin."},
       {h:"Vérifier avant de citer", t:"La section Sources liste chaque constante du modèle — intensités, PUE, WUE, facteur de charge, gabarits, classes d’eau et de prix — avec son éditeur, son millésime et son lien, plus le registre des contrôles factuels : 40 affirmations confrontées aux sources, verdict par verdict, y compris les corrections passées. Le référentiel est versionné en tête de page : citez toujours la version et la date. Les pastilles de vérification, dans le texte, s’ouvrent au survol."},
       {h:"Deux limites à respecter", t:"Cette page SITUE et COMPARE ; elle ne chiffre ni un site ni un business plan. Aucune capacité informatique attestée ne survit à la vérification sur les 97 sites, aucun PUE de site n’est publié, et le prix réel de l’électricité est un contrat que la statistique publique ne voit pas. Si un chiffre pèse dans une décision d’investissement, de crédit ou d’assurance : remontez à la source primaire citée, exigez la mesure en data room, et traitez ce référentiel pour ce qu’il est — un point de départ documenté, pas une due diligence."},
@@ -15934,7 +15966,7 @@ function guideInjectButton(){
   var btn = document.createElement("button");
   btn.id = "page-guide-btn";
   btn.className = "page-guide-btn";
-  btn.title = "Ouvrir le guide d utilisation de cette page";
+  btn.title = "Ouvrir le guide d’utilisation de cette page";
   btn.innerHTML = "❔ Guide d'utilisation";
   btn.onclick = function(){ guideOpenModal(pid); };
 
@@ -15958,7 +15990,7 @@ window.guideOpenModal = function(pid){
   }
 
   modal.innerHTML = '<div class="mat-modal-box">'
-    + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Guide d utilisation</div>'
+    + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Guide d’utilisation</div>'
     + '<div class="mat-modal-title">'+(guide?guide.title:"Aide")+'</div></div>'
     + '<button class="mat-modal-close" onclick="document.getElementById(\'guide-modal\').classList.remove(\'on\')" title="Fermer cette fenêtre">×</button></div>'
     + '<div class="mat-modal-body">'+bodyHtml+'</div>'
@@ -23611,17 +23643,17 @@ var GUIDED_PATHS = [
     id: 'directeur_programme',
     icon: '🎯',
     role: 'Directeur de programme IA Act',
-    pitch: 'Vous pilotez la mise en conformité de bout en bout. Ce parcours enchaîne diagnostic, audit, priorisation et reporting — la colonne vertébrale d un programme structuré.',
+    pitch: 'Vous pilotez la mise en conformité de bout en bout. Ce parcours enchaîne diagnostic, audit, priorisation et reporting — la colonne vertébrale d’un programme structuré.',
     steps: [
       {id:'carto-uc', label:'Cartographie des cas d\u2019usage IA', action:'Parcourez les 5 \u00e9tapes : ciblez votre secteur et vos processus, s\u00e9lectionnez les cas d\u2019usage \u00e0 potentiel, qualifiez-les, chiffrez le retour attendu et \u00e9valuez votre maturit\u00e9.', gain:'Transforme une intention IA en une liste courte de cas d\u2019usage prioris\u00e9s, chiffr\u00e9s et jug\u00e9s d\u00e9ployables \u2014 la base d\u2019un programme orient\u00e9 valeur m\u00e9tier.', tip:'TPE : concentrez-vous sur 2 \u00e0 3 cas transverses \u00e0 ROI rapide. Grand compte : croisez cette cartographie avec les jalons de conformit\u00e9 AI Act du module RaaS pour lier valeur et conformit\u00e9.'},
-            {id:'simulateur', label:'Simulateur IA Act', action:'Répondez aux 5 étapes de classification pour chaque système IA identifié (interne, fournisseur, ou en projet).', gain:'Détermine en quelques minutes le niveau de risque et les obligations légales exactes — évite de découvrir une obligation critique trop tard dans le projet.', tip:'TPE : suffit à sécuriser une décision GO/NO-GO rapide avant tout investissement. Grand compte : imposez cette étape comme jalon obligatoire avant tout comité d engagement IA.'},
-      {id:'registre', label:'Registre IA', action:'Enregistrez chaque système classifié avec sa finalité, son fournisseur et ses données utilisées.', gain:'Constitue l inventaire central exigé par le Règlement — la preuve documentaire en cas de contrôle.', tip:'TPE : 3 à 5 systèmes suffisent souvent à démarrer. Grand compte : structurez par filiale ou direction métier dès le départ pour éviter une reprise fastidieuse.'},
-      {id:'maturite', label:'Audit de maturité', action:'Évaluez les 8 piliers (explicabilité, gouvernance, sécurité…) sur une échelle de 1 à 5.', gain:'Identifie les angles morts organisationnels avant même de plonger dans le détail réglementaire — où sont les vraies failles ?', tip:'TPE : concentrez-vous sur 2-3 piliers les plus critiques pour votre activité. Grand compte : répétez l évaluation par direction pour cartographier les écarts internes.'},
-      {id:'audit-ia-act', label:'Audit IA Act', action:'Passez en revue les 33 points de contrôle, en marquant chacun conforme / en cours / à traiter.', gain:'Transforme la maturité générale en plan d action concret, point par point, avec référence légale exacte.', tip:'TPE : traitez d abord les points P1 (sanctions directes). Grand compte : déléguez des sections entières à des référents métier identifiés.'},
+            {id:'simulateur', label:'Simulateur IA Act', action:'Répondez aux 5 étapes de classification pour chaque système IA identifié (interne, fournisseur, ou en projet).', gain:'Détermine en quelques minutes le niveau de risque et les obligations légales exactes — évite de découvrir une obligation critique trop tard dans le projet.', tip:'TPE : suffit à sécuriser une décision GO/NO-GO rapide avant tout investissement. Grand compte : imposez cette étape comme jalon obligatoire avant tout comité d’engagement IA.'},
+      {id:'registre', label:'Registre IA', action:'Enregistrez chaque système classifié avec sa finalité, son fournisseur et ses données utilisées.', gain:'Constitue l’inventaire central exigé par le Règlement — la preuve documentaire en cas de contrôle.', tip:'TPE : 3 à 5 systèmes suffisent souvent à démarrer. Grand compte : structurez par filiale ou direction métier dès le départ pour éviter une reprise fastidieuse.'},
+      {id:'maturite', label:'Audit de maturité', action:'Évaluez les 8 piliers (explicabilité, gouvernance, sécurité…) sur une échelle de 1 à 5.', gain:'Identifie les angles morts organisationnels avant même de plonger dans le détail réglementaire — où sont les vraies failles ?', tip:'TPE : concentrez-vous sur 2-3 piliers les plus critiques pour votre activité. Grand compte : répétez l’évaluation par direction pour cartographier les écarts internes.'},
+      {id:'audit-ia-act', label:'Audit IA Act', action:'Passez en revue les 33 points de contrôle, en marquant chacun conforme / en cours / à traiter.', gain:'Transforme la maturité générale en plan d’action concret, point par point, avec référence légale exacte.', tip:'TPE : traitez d’abord les points P1 (sanctions directes). Grand compte : déléguez des sections entières à des référents métier identifiés.'},
       {id:'matrice', label:'Matrice risques', action:'Positionnez chaque système sur les axes probabilité × impact.', gain:'Vue synthétique pour prioriser : tout ne peut pas être traité en même temps, la matrice tranche objectivement.', tip:'TPE : 1 page suffit pour piloter visuellement vos priorités en comité de direction.'},
-      {id:'parties', label:'Parties prenantes', action:'Assignez un Responsable, un Approbateur, un Consulté et un Informé (RACI) pour chaque obligation clé.', gain:'Élimine l ambiguïté sur qui doit agir — la première cause de retard dans un programme de conformité.', tip:'Grand compte : formalisez avec les directions juridique, IT et métier dès cette étape, pas après.'},
-      {id:'roadmap', label:'Roadmap', action:'Séquencez les actions restantes sur un calendrier avec échéances.', gain:'Donne une trajectoire claire vers l échéance du 2 août 2026 (obligations haut risque).', tip:'Découpez en jalons trimestriels — un programme sans étapes intermédiaires perd en visibilité après 2-3 mois.'},
-      {id:'report', label:'Vue direction', action:'Synthétisez l avancement global en quelques indicateurs clés.', gain:'Le support prêt à l emploi pour vos comités de direction ou conseils d administration.', tip:'Mettez à jour avant chaque comité — un tableau de bord daté perd toute crédibilité.'}
+      {id:'parties', label:'Parties prenantes', action:'Assignez un Responsable, un Approbateur, un Consulté et un Informé (RACI) pour chaque obligation clé.', gain:'Élimine l’ambiguïté sur qui doit agir — la première cause de retard dans un programme de conformité.', tip:'Grand compte : formalisez avec les directions juridique, IT et métier dès cette étape, pas après.'},
+      {id:'roadmap', label:'Roadmap', action:'Séquencez les actions restantes sur un calendrier avec échéances.', gain:'Donne une trajectoire claire vers l’échéance du 2 août 2026 (obligations haut risque).', tip:'Découpez en jalons trimestriels — un programme sans étapes intermédiaires perd en visibilité après 2-3 mois.'},
+      {id:'report', label:'Vue direction', action:'Synthétisez l’avancement global en quelques indicateurs clés.', gain:'Le support prêt à l’emploi pour vos comités de direction ou conseils d’administration.', tip:'Mettez à jour avant chaque comité — un tableau de bord daté perd toute crédibilité.'}
     ]
   },
   {
@@ -23631,75 +23663,75 @@ var GUIDED_PATHS = [
     pitch: 'Vous structurez le cadre de contrôle permanent — pas un audit ponctuel, mais un dispositif qui tient dans le temps.',
     steps: [
       {id:'maturite', label:'Audit de maturité', action:'Notez chaque pilier de gouvernance et documentez les justifications de score.', gain:'Établit la baseline de référence pour mesurer les progrès lors des audits suivants.', tip:'Refaites cette évaluation tous les 6 mois pour objectiver la progression réelle, pas perçue.'},
-      {id:'audit-ia-act', label:'Audit IA Act', action:'Contrôlez les 33 obligations et liez chaque point à une preuve documentaire (politique, procédure, registre).', gain:'Transforme une déclaration d intention en dispositif de contrôle opposable en cas d inspection.', tip:'Conservez les preuves dans la Base de connaissance pour une traçabilité immédiate.'},
-      {id:'parties', label:'Parties prenantes', action:'Formalisez qui valide, qui exécute et qui est informé pour chaque processus de contrôle.', gain:'Un cadre de gouvernance sans porteurs identifiés reste un document mort — ici, il devient opérationnel.', tip:'Grand compte : alignez ce RACI sur votre cadre GRC existant (ISO 27001, NIS2) plutôt que d en créer un nouveau parallèle.'},
+      {id:'audit-ia-act', label:'Audit IA Act', action:'Contrôlez les 33 obligations et liez chaque point à une preuve documentaire (politique, procédure, registre).', gain:'Transforme une déclaration d’intention en dispositif de contrôle opposable en cas d’inspection.', tip:'Conservez les preuves dans la Base de connaissance pour une traçabilité immédiate.'},
+      {id:'parties', label:'Parties prenantes', action:'Formalisez qui valide, qui exécute et qui est informé pour chaque processus de contrôle.', gain:'Un cadre de gouvernance sans porteurs identifiés reste un document mort — ici, il devient opérationnel.', tip:'Grand compte : alignez ce RACI sur votre cadre GRC existant (ISO 27001, NIS2) plutôt que d’en créer un nouveau parallèle.'},
       {id:'regs', label:'Réglementations', action:'Consultez le texte officiel article par article, filtré selon votre rôle (fournisseur, déployeur, GPAI).', gain:'Évite les interprétations approximatives — la source légale exacte, pas un résumé tiers.', tip:'Utilisez le filtre par rôle pour ne montrer aux équipes que ce qui les concerne réellement.'},
-      {id:'veille', label:'Veille qualifiée', action:'Consultez l analyse d impact automatique de chaque actualité réglementaire.', gain:'Anticipe les évolutions avant qu elles ne deviennent des urgences de mise en conformité.', tip:'Consultez en début de semaine, intégrez les alertes critiques au point d équipe.'},
-      {id:'rag', label:'Base de connaissance', action:'Centralisez les politiques, preuves d audit et documents de référence.', gain:'Un point d accès unique pour toute personne de l organisation cherchant une preuve ou un référentiel.', tip:'TPE : 5 à 10 documents bien organisés valent mieux que 50 dispersés.'}
+      {id:'veille', label:'Veille qualifiée', action:'Consultez l’analyse d’impact automatique de chaque actualité réglementaire.', gain:'Anticipe les évolutions avant qu’elles ne deviennent des urgences de mise en conformité.', tip:'Consultez en début de semaine, intégrez les alertes critiques au point d’équipe.'},
+      {id:'rag', label:'Base de connaissance', action:'Centralisez les politiques, preuves d’audit et documents de référence.', gain:'Un point d’accès unique pour toute personne de l’organisation cherchant une preuve ou un référentiel.', tip:'TPE : 5 à 10 documents bien organisés valent mieux que 50 dispersés.'}
     ]
   },
   {
     id: 'risk_manager',
     icon: '🛡️',
     role: 'Risk Manager',
-    pitch: 'Vous quantifiez ce qui reste flou pour les autres — l exposition réelle, en risque et en euros.',
+    pitch: 'Vous quantifiez ce qui reste flou pour les autres — l’exposition réelle, en risque et en euros.',
     steps: [
       {id:'matrice', label:'Matrice risques', action:'Positionnez chaque système selon sa probabilité de défaillance et son impact potentiel.', gain:'Une vue synthétique immédiatement lisible par la direction, sans jargon technique.', tip:'Mettez à jour à chaque changement significatif de système, pas seulement une fois par an.'},
       {id:'radar', label:'Radar des risques', action:'Comparez votre profil sur 6 dimensions (gouvernance, sécurité, droits fondamentaux…) à la moyenne du secteur.', gain:'Situe objectivement votre exposition par rapport à vos pairs — utile pour argumenter un budget de mise en conformité.', tip:'Le radar seul ne suffit pas : croisez-le toujours avec le détail FRIA pour les systèmes à haut risque.'},
-      {id:'fria', label:'Évaluation FRIA', action:'Évaluez l impact sur les droits fondamentaux pour chaque système concerné par l Art. 27.', gain:'Documente formellement un risque souvent sous-estimé : l impact humain, pas seulement technique.', tip:'Impliquez systématiquement un représentant métier — un risk manager seul manque le contexte d usage réel.'},
-      {id:'sanctions', label:'Calculateur sanctions', action:'Simulez l exposition financière selon le type de manquement et la taille de l entreprise.', gain:'Convertit un risque abstrait en chiffre concret — l argument le plus efficace pour débloquer un budget.', tip:'Présentez toujours une fourchette (minimum/maximum), jamais un chiffre unique qui serait contestable.'},
-      {id:'historique', label:'Historique des calculs', action:'Consultez l évolution de vos scores de risque dans le temps.', gain:'Démontre une trajectoire (amélioration ou dégradation) plutôt qu une photo isolée — bien plus convaincant en comité.', tip:'Conservation 3 ans conforme RGPD — utile en cas de contrôle a posteriori.'}
+      {id:'fria', label:'Évaluation FRIA', action:'Évaluez l’impact sur les droits fondamentaux pour chaque système concerné par l’Art. 27.', gain:'Documente formellement un risque souvent sous-estimé : l’impact humain, pas seulement technique.', tip:'Impliquez systématiquement un représentant métier — un risk manager seul manque le contexte d’usage réel.'},
+      {id:'sanctions', label:'Calculateur sanctions', action:'Simulez l’exposition financière selon le type de manquement et la taille de l’entreprise.', gain:'Convertit un risque abstrait en chiffre concret — l’argument le plus efficace pour débloquer un budget.', tip:'Présentez toujours une fourchette (minimum/maximum), jamais un chiffre unique qui serait contestable.'},
+      {id:'historique', label:'Historique des calculs', action:'Consultez l’évolution de vos scores de risque dans le temps.', gain:'Démontre une trajectoire (amélioration ou dégradation) plutôt qu’une photo isolée — bien plus convaincant en comité.', tip:'Conservation 3 ans conforme RGPD — utile en cas de contrôle a posteriori.'}
     ]
   },
   {
     id: 'ceo',
     icon: '📊',
     role: 'CEO / Direction générale',
-    pitch: 'Vous n avez pas le temps d entrer dans le détail opérationnel — ce parcours va droit à l essentiel décisionnel.',
+    pitch: 'Vous n’avez pas le temps d’entrer dans le détail opérationnel — ce parcours va droit à l’essentiel décisionnel.',
     steps: [
       {id:'carto-uc', label:'Cartographie des cas d\u2019usage IA', action:'Parcourez les 5 \u00e9tapes : ciblez votre secteur et vos processus, s\u00e9lectionnez les cas d\u2019usage \u00e0 potentiel, qualifiez-les, chiffrez le retour attendu et \u00e9valuez votre maturit\u00e9.', gain:'Transforme une intention IA en une liste courte de cas d\u2019usage prioris\u00e9s, chiffr\u00e9s et jug\u00e9s d\u00e9ployables \u2014 la base d\u2019un programme orient\u00e9 valeur m\u00e9tier.', tip:'TPE : concentrez-vous sur 2 \u00e0 3 cas transverses \u00e0 ROI rapide. Grand compte : croisez cette cartographie avec les jalons de conformit\u00e9 AI Act du module RaaS pour lier valeur et conformit\u00e9.'},
-            {id:'report', label:'Vue direction', action:'Consultez les indicateurs clés en moins de 2 minutes avant un comité.', gain:'L état de santé du programme de conformité, sans avoir à interroger vos équipes.', tip:'Demandez à votre directeur de programme de le mettre à jour avant chaque comité de direction.'},
-      {id:'sanctions', label:'Calculateur sanctions', action:'Visualisez l exposition financière maximale en cas de non-conformité.', gain:'L argument décisif pour prioriser un budget — un chiffre parle plus qu un rapport de 40 pages.', tip:'Comparez ce chiffre au coût de la mise en conformité — l arbitrage devient évident.'},
-      {id:'roadmap', label:'Roadmap', action:'Vérifiez les échéances clés et les jalons à venir.', gain:'Anticipez les points de décision à venir au lieu de les découvrir en urgence.', tip:'L échéance du 2 août 2026 (systèmes haut risque) doit apparaître dans votre agenda de comité, pas seulement dans l outil.'},
-      {id:'geo', label:'Géopolitique', action:'Consultez le positionnement réglementaire de vos marchés cibles.', gain:'Anticipe un risque souvent négligé : la divergence réglementaire entre zones d expansion.', tip:'Pertinent surtout si votre entreprise opère ou projette de s étendre hors UE.'}
+            {id:'report', label:'Vue direction', action:'Consultez les indicateurs clés en moins de 2 minutes avant un comité.', gain:'L’état de santé du programme de conformité, sans avoir à interroger vos équipes.', tip:'Demandez à votre directeur de programme de le mettre à jour avant chaque comité de direction.'},
+      {id:'sanctions', label:'Calculateur sanctions', action:'Visualisez l’exposition financière maximale en cas de non-conformité.', gain:'L’argument décisif pour prioriser un budget — un chiffre parle plus qu’un rapport de 40 pages.', tip:'Comparez ce chiffre au coût de la mise en conformité — l’arbitrage devient évident.'},
+      {id:'roadmap', label:'Roadmap', action:'Vérifiez les échéances clés et les jalons à venir.', gain:'Anticipez les points de décision à venir au lieu de les découvrir en urgence.', tip:'L’échéance du 2 août 2026 (systèmes haut risque) doit apparaître dans votre agenda de comité, pas seulement dans l’outil.'},
+      {id:'geo', label:'Géopolitique', action:'Consultez le positionnement réglementaire de vos marchés cibles.', gain:'Anticipe un risque souvent négligé : la divergence réglementaire entre zones d’expansion.', tip:'Pertinent surtout si votre entreprise opère ou projette de s’étendre hors UE.'}
     ]
   },
   {
     id: 'dpo',
     icon: '🔒',
     role: 'DPO — Délégué à la protection des données',
-    pitch: 'L IA Act et le RGPD se chevauchent sans se confondre — ce parcours clarifie où s arrête l un et où commence l autre.',
+    pitch: 'L’IA Act et le RGPD se chevauchent sans se confondre — ce parcours clarifie où s’arrête l’un et où commence l’autre.',
     steps: [
-      {id:'fria', label:'Évaluation FRIA', action:'Évaluez chaque système IA à haut risque sous l angle des droits fondamentaux (Art. 27).', gain:'Complète votre AIPD existante — la FRIA couvre des angles que le RGPD seul ne traite pas (biais, discrimination algorithmique).', tip:'Ne dupliquez pas votre travail RGPD : articulez FRIA et AIPD dans un même dossier de conformité.'},
-      {id:'registre', label:'Registre IA', action:'Recensez les traitements de données personnelles opérés par chaque système IA.', gain:'Un registre IA bien tenu nourrit directement votre registre des traitements RGPD, sans ressaisie.', tip:'Documentez systématiquement la base légale du traitement pour chaque système, dès l enregistrement.'},
-      {id:'regs', label:'Réglementations', action:'Identifiez les articles qui interagissent explicitement avec le RGPD (transparence, droits des personnes).', gain:'Évite les angles morts juridiques entre les deux textes — un risque réel de double non-conformité.', tip:'Consultez en particulier les obligations de transparence (Art. 13, 50) qui recoupent directement l information des personnes.'},
-      {id:'historique', label:'Historique des calculs', action:'Vérifiez la conservation et la traçabilité de vos évaluations passées.', gain:'Conformité native à l obligation RGPD de traçabilité (3 ans), sans dispositif supplémentaire à maintenir.', tip:'Exploitable directement comme preuve documentaire en cas de contrôle CNIL.'}
+      {id:'fria', label:'Évaluation FRIA', action:'Évaluez chaque système IA à haut risque sous l’angle des droits fondamentaux (Art. 27).', gain:'Complète votre AIPD existante — la FRIA couvre des angles que le RGPD seul ne traite pas (biais, discrimination algorithmique).', tip:'Ne dupliquez pas votre travail RGPD : articulez FRIA et AIPD dans un même dossier de conformité.'},
+      {id:'registre', label:'Registre IA', action:'Recensez les traitements de données personnelles opérés par chaque système IA.', gain:'Un registre IA bien tenu nourrit directement votre registre des traitements RGPD, sans ressaisie.', tip:'Documentez systématiquement la base légale du traitement pour chaque système, dès l’enregistrement.'},
+      {id:'regs', label:'Réglementations', action:'Identifiez les articles qui interagissent explicitement avec le RGPD (transparence, droits des personnes).', gain:'Évite les angles morts juridiques entre les deux textes — un risque réel de double non-conformité.', tip:'Consultez en particulier les obligations de transparence (Art. 13, 50) qui recoupent directement l’information des personnes.'},
+      {id:'historique', label:'Historique des calculs', action:'Vérifiez la conservation et la traçabilité de vos évaluations passées.', gain:'Conformité native à l’obligation RGPD de traçabilité (3 ans), sans dispositif supplémentaire à maintenir.', tip:'Exploitable directement comme preuve documentaire en cas de contrôle CNIL.'}
     ]
   },
   {
     id: 'cdo',
     icon: '🗄️',
     role: 'CDO — Chief Data Officer',
-    pitch: 'La qualité et la gouvernance des données sont le socle invisible de toute conformité IA — ce parcours s y concentre.',
+    pitch: 'La qualité et la gouvernance des données sont le socle invisible de toute conformité IA — ce parcours s’y concentre.',
     steps: [
       {id:'carto-uc', label:'Cartographie des cas d\u2019usage IA', action:'Parcourez les 5 \u00e9tapes : ciblez votre secteur et vos processus, s\u00e9lectionnez les cas d\u2019usage \u00e0 potentiel, qualifiez-les, chiffrez le retour attendu et \u00e9valuez votre maturit\u00e9.', gain:'Transforme une intention IA en une liste courte de cas d\u2019usage prioris\u00e9s, chiffr\u00e9s et jug\u00e9s d\u00e9ployables \u2014 la base d\u2019un programme orient\u00e9 valeur m\u00e9tier.', tip:'TPE : concentrez-vous sur 2 \u00e0 3 cas transverses \u00e0 ROI rapide. Grand compte : croisez cette cartographie avec les jalons de conformit\u00e9 AI Act du module RaaS pour lier valeur et conformit\u00e9.'},
             {id:'registre', label:'Registre IA', action:'Documentez précisément les jeux de données utilisés par chaque système IA.', gain:'Rend visible une dépendance souvent mal cartographiée : qui utilise quelles données, et pour quoi.', tip:'TPE : commencez par vos 2-3 systèmes les plus critiques en volume de données traitées.'},
       {id:'maturite', label:'Audit de maturité', action:'Concentrez-vous sur le pilier Confidentialité & Sécurité — où en êtes-vous réellement ?', gain:'Objective un sujet souvent évalué de façon optimiste en interne sans grille de lecture externe.', tip:'Croisez ce résultat avec un audit technique de vos pipelines de données si le score est faible.'},
       {id:'rag', label:'Base de connaissance', action:'Centralisez la documentation data (schémas, politiques de qualité, data lineage).', gain:'Un point de référence unique, accessible aux équipes data ET conformité sans duplication.', tip:'Grand compte : structurez par domaine de données plutôt que par système IA pour rester cohérent avec votre organisation data existante.'},
-      {id:'veille', label:'Veille qualifiée', action:'Suivez les évolutions réglementaires touchant spécifiquement la gouvernance des données d entraînement.', gain:'Anticipe les obligations à venir sur la provenance et les droits d auteur des données (Art. 53).', tip:'Particulièrement critique si vous entraînez ou fine-tunez des modèles en interne.'}
+      {id:'veille', label:'Veille qualifiée', action:'Suivez les évolutions réglementaires touchant spécifiquement la gouvernance des données d’entraînement.', gain:'Anticipe les obligations à venir sur la provenance et les droits d’auteur des données (Art. 53).', tip:'Particulièrement critique si vous entraînez ou fine-tunez des modèles en interne.'}
     ]
   },
   {
     id: 'caio',
     icon: '🚀',
     role: 'CAIO — Chief AI Officer',
-    pitch: 'Vous portez le déploiement à l échelle — ce parcours structure la croissance du programme IA sans perdre le contrôle.',
+    pitch: 'Vous portez le déploiement à l’échelle — ce parcours structure la croissance du programme IA sans perdre le contrôle.',
     steps: [
       {id:'carto-uc', label:'Cartographie des cas d\u2019usage IA', action:'Parcourez les 5 \u00e9tapes : ciblez votre secteur et vos processus, s\u00e9lectionnez les cas d\u2019usage \u00e0 potentiel, qualifiez-les, chiffrez le retour attendu et \u00e9valuez votre maturit\u00e9.', gain:'Transforme une intention IA en une liste courte de cas d\u2019usage prioris\u00e9s, chiffr\u00e9s et jug\u00e9s d\u00e9ployables \u2014 la base d\u2019un programme orient\u00e9 valeur m\u00e9tier.', tip:'TPE : concentrez-vous sur 2 \u00e0 3 cas transverses \u00e0 ROI rapide. Grand compte : croisez cette cartographie avec les jalons de conformit\u00e9 AI Act du module RaaS pour lier valeur et conformit\u00e9.'},
-            {id:'simulateur', label:'Simulateur IA Act', action:'Qualifiez rapidement chaque nouveau cas d usage proposé par les équipes métier.', gain:'Un filtre de premier niveau avant d engager des ressources de développement sur un projet à risque.', tip:'Diffusez ce réflexe aux chefs de projet IA : qualifier avant de coder, pas après.'},
-      {id:'registre', label:'Registre IA', action:'Suivez le portefeuille complet de systèmes IA déployés, en cours et en projet.', gain:'Une vision d ensemble qu aucun tableau Excel dispersé ne peut offrir à cette échelle.', tip:'Grand compte : organisez par business unit pour garder une vue both globale et locale.'},
-      {id:'roadmap', label:'Roadmap', action:'Structurez le déploiement de vos initiatives IA sur un calendrier partagé.', gain:'Synchronise les équipes techniques et conformité — éviter qu un système soit déployé avant d être audité.', tip:'Intégrez un jalon de conformité obligatoire avant chaque mise en production.'},
-      {id:'equipe', label:'Équipe', action:'Cartographiez les compétences IA disponibles en interne (data scientists, MLOps, référents conformité).', gain:'Identifie les manques de compétences avant qu ils ne deviennent un goulot d étranglement de croissance.', tip:'TPE : un seul référent polyvalent peut suffire au démarrage, formalisez son rôle clairement.'},
+            {id:'simulateur', label:'Simulateur IA Act', action:'Qualifiez rapidement chaque nouveau cas d’usage proposé par les équipes métier.', gain:'Un filtre de premier niveau avant d’engager des ressources de développement sur un projet à risque.', tip:'Diffusez ce réflexe aux chefs de projet IA : qualifier avant de coder, pas après.'},
+      {id:'registre', label:'Registre IA', action:'Suivez le portefeuille complet de systèmes IA déployés, en cours et en projet.', gain:'Une vision d’ensemble qu’aucun tableau Excel dispersé ne peut offrir à cette échelle.', tip:'Grand compte : organisez par business unit pour garder une vue both globale et locale.'},
+      {id:'roadmap', label:'Roadmap', action:'Structurez le déploiement de vos initiatives IA sur un calendrier partagé.', gain:'Synchronise les équipes techniques et conformité — éviter qu’un système soit déployé avant d’être audité.', tip:'Intégrez un jalon de conformité obligatoire avant chaque mise en production.'},
+      {id:'equipe', label:'Équipe', action:'Cartographiez les compétences IA disponibles en interne (data scientists, MLOps, référents conformité).', gain:'Identifie les manques de compétences avant qu’ils ne deviennent un goulot d’étranglement de croissance.', tip:'TPE : un seul référent polyvalent peut suffire au démarrage, formalisez son rôle clairement.'},
       {id:'training', label:'Hub Training', action:'Déployez des modules de formation ciblés selon le rôle (développeur, métier, dirigeant).', gain:'Une montée en compétence homogène plutôt que des connaissances disparates selon qui a eu le temps de se former.', tip:'Rendez obligatoire le module de base pour toute personne impliquée dans un projet IA, dès son arrivée.'}
     ]
   }
@@ -23750,6 +23782,69 @@ var GUIDED_PATHS = [
   }
 ];
 
+/* ══════════════════════════════════════════════════════════════════════════
+   LA LISTE DES RÔLES DANS LA BARRE LATÉRALE
+   ══════════════════════════════════════════════════════════════════════════
+   Les onze parcours existaient déjà, entiers, derrière un bouton et une
+   fenêtre. Un visiteur qui ne cliquait pas ne savait pas que Sentinel se lit
+   selon son rôle : la fonction était là, et invisible. La liste remplit
+   maintenant la barre latérale, et la fenêtre ne sert plus qu'à LIRE le
+   parcours choisi — pas à découvrir qu'il existe.
+
+   Elle se remplit depuis GUIDED_PATHS, jamais en dur : une liste recopiée à la
+   main finit toujours par proposer un rôle que le catalogue ne connaît plus. */
+/* Onze rôles alignés à plat se lisent mal : les parcours RGPD n'ont rien à
+   voir avec les parcours IA Act, et l'œil ne fait pas le tri tout seul. Les
+   familles sont DÉCLARÉES ici, pas devinées d'un préfixe d'identifiant — et
+   tout parcours absent de cette table retombe dans « Autres parcours » plutôt
+   que de disparaître en silence le jour où le catalogue en gagne un douzième.
+   Un seul constructeur d'options sert la barre latérale ET la fenêtre : deux
+   listes recopiées finissent toujours par diverger. */
+var GP_FAMILLES = [
+  { titre: 'Gouvernance & IA Act',
+    ids: ['directeur_programme', 'grc_senior', 'risk_manager', 'ceo', 'cdo', 'caio'] },
+  { titre: 'Protection des données (RGPD)',
+    ids: ['dpo', 'rgpd_conformite_init', 'rgpd_registre', 'rgpd_nouveau', 'rgpd_controle'] }
+];
+
+function gpOption(p){
+  var n = (p.steps || []).length;
+  return '<option value="' + p.id + '">' + p.icon + ' ' + p.role
+       + (n ? ' · ' + n + ' étapes' : '') + '</option>';
+}
+
+window.gpOptions = function(vide){
+  var restants = GUIDED_PATHS.slice();
+  var html = '<option value="">' + vide + '</option>';
+  GP_FAMILLES.forEach(function(f){
+    var lot = [];
+    f.ids.forEach(function(id){
+      var p = GUIDED_PATHS.filter(function(x){ return x.id === id; })[0];
+      if(!p) return;                       /* id retiré du catalogue : on saute */
+      lot.push(p);
+      var k = restants.indexOf(p); if(k >= 0) restants.splice(k, 1);
+    });
+    if(lot.length) html += '<optgroup label="' + f.titre + '">' + lot.map(gpOption).join('') + '</optgroup>';
+  });
+  if(restants.length) html += '<optgroup label="Autres parcours">' + restants.map(gpOption).join('') + '</optgroup>';
+  return html;
+};
+
+window.sbRolesRemplir = function(){
+  var sel = document.getElementById('sb-role');
+  if(!sel || typeof GUIDED_PATHS === 'undefined') return;
+  sel.innerHTML = gpOptions('— Votre rôle —');
+};
+
+window.sbRoleChoisi = function(id){
+  if(!id) return;
+  guidedPathsOpen();
+  /* La fenêtre se construit à l'ouverture : on pose le rôle APRÈS, sinon on
+     écrit dans un sélecteur qui n'existe pas encore. */
+  var sel = document.getElementById('guided-paths-select');
+  if(sel){ sel.value = id; guidedPathsRenderSelected(id); }
+};
+
 window.guidedPathsOpen = function(){
   var modal = document.getElementById('guided-paths-modal');
   if(!modal){
@@ -23758,14 +23853,12 @@ window.guidedPathsOpen = function(){
     modal.className = 'mat-modal';
     document.body.appendChild(modal);
   }
-  var options = '<option value="">— Sélectionnez votre rôle —</option>' + GUIDED_PATHS.map(function(p){
-    return '<option value="'+p.id+'">'+p.icon+' '+p.role+'</option>';
-  }).join('');
+  var options = gpOptions('— Sélectionnez votre rôle —');
 
   modal.innerHTML = '<div class="mat-modal-card" style="max-width:760px;max-height:84vh;overflow-y:auto">'
     + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Onboarding</div><div class="mat-modal-title">Parcours guidés par profil</div></div>'
     + '<button class="mat-modal-close" onclick="guidedPathsClose()">×</button></div>'
-    + '<p style="font-size:12.5px;color:var(--muted);margin:0 0 16px;line-height:1.6">Sélectionnez votre rôle pour un enchaînement recommandé des pages — pertinent aussi bien pour une TPE qu un grand compte, le niveau de détail s adapte à votre contexte.</p>'
+    + '<p style="font-size:12.5px;color:var(--muted);margin:0 0 16px;line-height:1.6">Sélectionnez votre rôle pour un enchaînement recommandé des pages — pertinent aussi bien pour une TPE qu’un grand compte, le niveau de détail s’adapte à votre contexte.</p>'
     + '<select id="guided-paths-select" class="guided-paths-select" onchange="guidedPathsRenderSelected(this.value)">' + options + '</select>'
     + '<div class="guided-mp-row"><span>\u2014 ou \u2014</span></div>'+ '<button class="guided-mp-btn" onclick="guidedPathsClose();monParcoursBuilder()">\ud83e\udded Cr\u00e9er mon parcours chiffr\u00e9 (\u00e0 partir de mes cas d\u2019usage)</button>'
     + '<div id="guided-paths-list"></div>'
@@ -23775,6 +23868,11 @@ window.guidedPathsOpen = function(){
 
 window.guidedPathsRenderSelected = function(pathId){
   var holder = document.getElementById('guided-paths-list');
+  /* La barre latérale reflète le rôle affiché, d'où qu'il vienne. Deux
+     commandes qui pilotent la même chose sans se refléter donnent un état faux
+     à l'écran — et ici la barre reste visible sous la fenêtre. */
+  var sb = document.getElementById('sb-role');
+  if(sb && sb.value !== pathId) sb.value = pathId || '';
   if(!holder) return;
   if(!pathId){ holder.innerHTML = ''; return; }
   var path = GUIDED_PATHS.find(function(p){ return p.id === pathId; });
@@ -23877,7 +23975,10 @@ window.monParcoursBuilder = function(){
     + '<button class="mat-modal-close" onclick="mpBuilderClose()">×</button></div>'
     + '<p style="font-size:12.5px;color:var(--muted);margin:0 0 14px;line-height:1.6">Cochez les modules à inclure et ordonnez-les. Le parcours vous guidera d\u2019un module à l\u2019autre jusqu\u2019au coût et à la synthèse.</p>'
     + '<div id="mp-builder-list"></div>'
-    + '<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">'
+    /* Onze modules dépassent la hauteur de la fenêtre : sans barre collée en
+       bas, « Lancer mon parcours » se trouve sous le pli et le compositeur
+       paraît sans issue. */
+    + '<div class="mp-builder-actions">'
     + '<button class="mat-export-btn" onclick="mpBuilderClose()">Annuler</button>'
     + '<button class="mat-export-btn" style="background:var(--accent);color:var(--ink);font-weight:700" onclick="mpBuilderLaunch()">\ud83e\udded Lancer mon parcours \u2192</button>'
     + '</div></div>';
@@ -23993,9 +24094,23 @@ window.guidedReopen = function(pathId){
   if(sel){ sel.value = pathId; if(typeof guidedPathsRenderSelected === 'function') guidedPathsRenderSelected(pathId); }
 };
 
+/* Le remplissage a lieu au chargement : la barre latérale existe dès le
+   balisage, le catalogue seulement une fois ce script exécuté. */
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', function(){ sbRolesRemplir(); });
+} else { sbRolesRemplir(); }
+
 window.guidedPathsClose = function(){
   var modal = document.getElementById('guided-paths-modal');
   if(modal) modal.classList.remove('on');
+  /* La barre latérale doit redire la VÉRITÉ : le rôle reste affiché s'il est
+     réellement en cours, et repart à vide si la fenêtre a été refermée sans
+     rien lancer. Sans ce retour à vide, rechoisir le même rôle ne déclenche
+     aucun « change » et la liste devient une commande morte au deuxième essai.
+     « Mon parcours chiffré » ne figure pas dans la liste : la valeur retombe
+     alors à vide, ce qui est exact — aucun rôle du catalogue n'est en cours. */
+  var sb = document.getElementById('sb-role');
+  if(sb) sb.value = (window.__activeGuided && window.__activeGuided.pathId) || '';
 };
 
 </script>
