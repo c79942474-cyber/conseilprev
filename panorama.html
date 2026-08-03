@@ -165,26 +165,38 @@ body.embed .pnav{padding:8px calc(var(--gp-w,0px) + 18px) 8px 18px}
 
 /* ── L'onglet ─────────────────────────────────────────────────────────────
    Une pastille de couleur dit la famille AVANT que le mot soit lu. */
-.pnav a{--f:#0F3D6E;flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;
-  font-size:13.5px;font-weight:600;color:#3A4350;text-decoration:none;
-  padding:8px 14px;border-radius:7px;border:1px solid transparent;white-space:nowrap;
+/* Chaque onglet porte DEJA la couleur de sa famille, meme au repos. La version
+   precedente ne la donnait qu'a la pastille de 7 px : a un metre de l'ecran,
+   neuf onglets gris se ressemblaient tous, et la barre se lisait comme une
+   liste au lieu de trois groupes. Le fond teinte fait le travail que la
+   pastille seule ne faisait pas. */
+.pnav a{--f:#0F3D6E;flex:0 0 auto;display:inline-flex;align-items:center;gap:8px;
+  font-size:13.5px;font-weight:600;text-decoration:none;white-space:nowrap;
+  color:color-mix(in srgb,var(--f) 82%,#1C1C1C);
+  background:color-mix(in srgb,var(--f) 7%,#fff);
+  border:1px solid color-mix(in srgb,var(--f) 18%,#fff);
+  padding:8px 14px;border-radius:8px;
   transition:background .15s,color .15s,border-color .15s,transform .15s,box-shadow .15s}
-.pnav a:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--f);
+.pnav a:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--f);
   flex:0 0 auto;transition:transform .15s,box-shadow .15s}
 .pnav a.f-comprendre{--f:#0E7B83}
 .pnav a.f-verifier{--f:#8A5310}
 
 /* Survol : l'effet loupe, mais mesure — assez pour se voir, pas assez pour
    bousculer la lecture quand on balaie les neuf onglets. */
-.pnav a:hover{background:var(--white);color:var(--f);border-color:color-mix(in srgb,var(--f) 32%,#fff);
-  transform:scale(1.07);box-shadow:0 3px 12px rgba(15,42,74,.13);position:relative;z-index:2}
+.pnav a:hover{background:color-mix(in srgb,var(--f) 16%,#fff);color:var(--f);
+  border-color:color-mix(in srgb,var(--f) 44%,#fff);
+  transform:scale(1.07);box-shadow:0 3px 12px rgba(15,42,74,.16);position:relative;z-index:2}
 .pnav a:hover:before{transform:scale(1.35)}
 .pnav a:focus-visible{outline:2px solid var(--f);outline-offset:2px;transform:scale(1.07)}
 
 /* Actif : la famille prend toute la pastille. Le liesere clair dessous ancre
    l'onglet a la page, comme un onglet de classeur. */
+/* Actif : la famille prend toute la pastille, et un liseré inférieur ancre
+   l'onglet a la page comme un onglet de classeur. */
 .pnav a.on{background:var(--f);color:#fff;border-color:var(--f);
-  box-shadow:0 2px 9px color-mix(in srgb,var(--f) 34%,transparent)}
+  box-shadow:0 3px 14px color-mix(in srgb,var(--f) 44%,transparent),
+             inset 0 -3px 0 rgba(255,255,255,.28)}
 .pnav a.on:before{background:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.28)}
 .pnav a.on:hover{background:var(--f);color:#fff;transform:scale(1.07)}
 
@@ -198,12 +210,67 @@ body.embed .pnav{padding:8px calc(var(--gp-w,0px) + 18px) 8px 18px}
 /* ── Separateur de famille ────────────────────────────────────────────────
    Le nom de la famille n'apparait que s'il y a la place : sur un ecran etroit
    la couleur suffit, et voler 140 px aux onglets serait un mauvais echange. */
-.pnav-sep{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:0 5px 0 3px;
+/* Le separateur porte la couleur de la famille qu'il annonce, au lieu du gris
+   commun d'avant : c'est lui qui donne le ton des onglets qui suivent, et un
+   filet gris devant trois onglets teal n'annoncait rien du tout. */
+.pnav-sep{--f:#0F3D6E;flex:0 0 auto;display:flex;align-items:center;gap:7px;padding:0 7px 0 4px;
   font-family:var(--mono);font-size:8.5px;letter-spacing:.13em;text-transform:uppercase;
-  color:var(--muted2);white-space:nowrap;user-select:none}
-.pnav-sep:before{content:"";width:1px;height:20px;background:var(--rule);display:block}
+  color:var(--f);white-space:nowrap;user-select:none;font-weight:700}
+.pnav-sep.s-comprendre{--f:#0E7B83}
+.pnav-sep.s-verifier{--f:#8A5310}
+.pnav-sep:before{content:"";width:3px;height:19px;border-radius:2px;
+  background:var(--f);display:block;opacity:.85}
 .pnav-sep span{display:none}
 @media(min-width:1180px){.pnav-sep span{display:inline}}
+
+/* ── Infobulles maison ────────────────────────────────────────────────────
+   L'attribut `title` du navigateur met environ une seconde a paraitre, ne se
+   met pas en forme, se coupe a l'aveugle et ne s'affiche jamais au clavier.
+   Sur une barre dont chaque onglet porte une phrase d'explication, c'est
+   toute l'aide qui est hors de portee. Celle-ci parait tout de suite, se lit,
+   et suit le focus autant que la souris. */
+.tt-bulle{position:fixed;z-index:200;max-width:300px;pointer-events:none;
+  background:#1C1C1C;color:#F4F2EE;font-size:12px;line-height:1.55;
+  padding:9px 12px;border-radius:7px;box-shadow:0 6px 22px rgba(0,0,0,.28);
+  opacity:0;transform:translateY(3px);transition:opacity .12s,transform .12s}
+.tt-bulle.on{opacity:1;transform:none}
+.tt-bulle b{color:#fff;display:block;margin-bottom:3px;font-size:12.5px}
+.tt-bulle:after{content:"";position:absolute;left:var(--fl,20px);top:100%;
+  border:6px solid transparent;border-top-color:#1C1C1C}
+.tt-bulle.bas:after{top:auto;bottom:100%;border-top-color:transparent;border-bottom-color:#1C1C1C}
+@media(prefers-reduced-motion:reduce){.tt-bulle{transition:none}}
+
+/* ── La ligne des parcours ────────────────────────────────────────────────
+   Deux listes plutot qu'une : le ROLE d'abord, le PARCOURS ensuite. Un menu
+   unique melangeant « Investisseur — construction neuve » et « Analyste ESG »
+   obligeait a lire quinze intitules pour trouver le sien ; ici on repond a
+   « qui etes-vous » puis a « que cherchez-vous », et la seconde liste ne
+   propose que ce qui a un sens pour le premier choix. */
+.pnav-parcours{display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:9px 22px 10px;border-top:1px solid var(--rule);
+  background:linear-gradient(90deg,rgba(30,99,168,.055),rgba(14,123,131,.045) 55%,transparent)}
+body.embed .pnav-parcours{padding:8px 18px 9px}
+.pnav-parcours .pp-lab{font-family:var(--mono);font-size:9px;letter-spacing:.13em;
+  text-transform:uppercase;color:#0F3D6E;font-weight:700;display:inline-flex;
+  align-items:center;gap:6px}
+.pnav-parcours .pp-lab:before{content:"\1F9ED";font-size:12px;letter-spacing:0}
+.pnav-parcours select{font-family:inherit;font-size:12.5px;font-weight:600;color:#0F3D6E;
+  background:var(--white);border:1px solid color-mix(in srgb,#1E63A8 26%,#fff);
+  border-radius:7px;padding:7px 11px;cursor:pointer;max-width:min(46vw,300px);
+  transition:border-color .14s,box-shadow .14s}
+.pnav-parcours select:hover{border-color:#1E63A8}
+.pnav-parcours select:focus-visible{outline:2px solid #1E63A8;outline-offset:1px}
+.pnav-parcours select:disabled{opacity:.55;cursor:not-allowed;color:var(--muted2)}
+.pnav-parcours .pp-aide{font-size:11.5px;color:var(--muted);line-height:1.5;
+  flex:1 1 240px;min-width:0}
+.pnav-parcours .pp-reprendre{all:unset;box-sizing:border-box;cursor:pointer;
+  font-size:11.5px;font-weight:700;color:#0E7B83;border-bottom:1px solid currentColor}
+.pnav-parcours .pp-reprendre:focus-visible{outline:2px solid #0E7B83;outline-offset:2px}
+@media(max-width:640px){
+  .pnav-parcours{padding:8px 12px 9px;gap:7px}
+  .pnav-parcours .pp-aide{display:none}
+  .pnav-parcours select{max-width:calc(50vw - 26px);font-size:12px;padding:6px 8px}
+}
 
 /* ── Le parcours guide, colle a droite ────────────────────────────────────
    Il ne defile pas avec les onglets : c'est la porte d'entree d'un client qui
@@ -883,18 +950,30 @@ engagements publics) sont imputés nominativement.</div>
     <a href="#s-carte" title="La carte de l’UE : systèmes d’IA, centres de données, droit national">Carte UE &amp; droit national</a>
     <a href="#s-cas" title="Le panel de cas réels, filtrable par risque, secteur et pays">Cas d’IA en entreprise<span class="pnav-n" id="pn-cas"></span></a>
     <a href="#s-signaux" title="Les mouvements récents du panel">Signaux</a>
-    <span class="pnav-sep" aria-hidden="true"><span>Comprendre</span></span>
+    <span class="pnav-sep s-comprendre" aria-hidden="true"><span>Comprendre</span></span>
     <a href="#s-lectures" class="f-comprendre" title="Les lectures d’ensemble : classes de risque, secteurs, stades">Lectures d’ensemble</a>
     <a href="#s-socle" class="f-comprendre" title="Les jeux de données ouverts qui alimentent la page">Données ouvertes</a>
     <a href="#s-empreinte" class="f-comprendre" title="Électricité, CO₂e, eau et fabrication du parc cartographié">Empreinte &amp; data centres<span class="pnav-n" id="pn-emp"></span></a>
     <a href="#s-implantation" class="f-comprendre" title="Comparer les pays selon vos critères : carbone, eau, mix, prix, 2030">Choix d’implantation</a>
-    <span class="pnav-sep" aria-hidden="true"><span>Vérifier</span></span>
+    <span class="pnav-sep s-verifier" aria-hidden="true"><span>Vérifier</span></span>
     <a href="#s-sources" class="f-verifier" title="Chaque source, son millésime, son lien — et le registre de vérification">Sources</a>
     <a href="#s-methodo" class="f-verifier" title="Comment les chiffres sont construits, hypothèse par hypothèse">Méthodologie</a>
   </nav>
-  <button type="button" class="gp-lanceur" id="gp-lanceur" title="Un chemin de lecture selon votre métier : investisseur, banque, assurance, climat, eau, analyste">Parcours guidé</button>
- </div>
+  <button type="button" class="gp-lanceur" id="gp-lanceur" data-tt="Les six parcours, décrits en entier|Ouvre la liste complète avec, pour chacun, ce qu’il vous fait lire et pourquoi.">Parcours guidé</button>
+ 
+</div>
  <div class="pnav-prog" aria-hidden="true"><i id="pnav-prog-i"></i></div>
+  <!-- La ligne des parcours : deux listes, ROLE puis PARCOURS. Elle vit dans le
+       bandeau collant, sous les onglets, parce qu'un client qui ne sait pas par
+       ou commencer ne doit pas avoir a remonter la page pour le demander. -->
+  <div class="pnav-parcours" id="pnav-parcours">
+    <span class="pp-lab" id="pp-lab">Parcours guidé</span>
+    <label class="sr-only" for="pp-role">Votre rôle</label>
+    <select id="pp-role" data-tt="Votre rôle|Il décide de l’ordre de lecture : un banquier et un hydrologue ne regardent pas les mêmes colonnes du même tableau."><option value="">— Votre rôle —</option></select>
+    <label class="sr-only" for="pp-parcours">Parcours</label>
+    <select id="pp-parcours" disabled data-tt="Le parcours|Choisissez d’abord un rôle : la liste ne propose ensuite que les chemins qui ont un sens pour lui."><option value="">— Choisissez un rôle —</option></select>
+    <span class="pp-aide" id="pp-aide">Deux choix, et la page vous conduit section par section, en disant à chaque fois ce que le chiffre vaut.</span>
+  </div>
 </div>
 
 <div class="gp-voile" id="gp-voile"></div>
@@ -5040,6 +5119,7 @@ function gpDemarrer(cle, branche){
   e.carte.classList.add("on");
   if(history.replaceState) history.replaceState(null, "", "#parcours=" + cle
     + (GP.branche ? "." + GP.branche : ""));
+  if(window.__ppRefleter) window.__ppRefleter();
   gpAller(GP.branche ? 1 : 0);
 }
 
@@ -5147,6 +5227,193 @@ function gpAller(i){
   if(focale) focale.focus({ preventScroll: true });
 }
 
+/* ══════════════════════════════════════════════════════════════════════════
+   LA LIGNE DES PARCOURS — deux listes, rôle puis parcours
+   ══════════════════════════════════════════════════════════════════════════
+   Le bouton « Parcours guidé » ouvre une fenêtre qui décrit les six métiers en
+   entier : c'est bien pour découvrir, c'est long pour revenir. Les deux listes
+   font le chemin court, et surtout elles RENDENT VISIBLE ce que le bouton
+   cachait — un visiteur qui ne clique pas ne savait pas que la page pouvait
+   se lire selon son métier.
+
+   L'ordre des deux listes n'est pas indifférent. Une liste unique mêlant
+   « Investisseur — construction neuve » et « Analyste ESG » obligerait à lire
+   quinze intitulés pour trouver le sien. Ici on répond à « qui êtes-vous »,
+   puis à « que cherchez-vous », et la seconde liste ne propose que ce qui a
+   un sens pour le premier choix. */
+
+function ppEls(){
+  return { role: document.getElementById("pp-role"),
+           parc: document.getElementById("pp-parcours"),
+           aide: document.getElementById("pp-aide") };
+}
+
+/* Les parcours d'un rôle. Un profil à embranchement en propose autant que de
+   scénarios ; un profil linéaire n'en a qu'un, et on le nomme au lieu de
+   laisser une liste à une seule ligne sans explication. */
+function ppParcoursDe(cle){
+  var P = GP_PROFILS[cle];
+  if(!P) return [];
+  if(P.branches && P.question && P.question.options){
+    return P.question.options.map(function(o){
+      return { cle: o.cle, nom: o.nom, sens: o.sens || "",
+               n: (P.branches[o.cle] && P.branches[o.cle].etapes || []).length };
+    });
+  }
+  return [{ cle: "", nom: "Parcours complet", sens: P.quoi || "",
+            n: (P.etapes || []).length }];
+}
+
+function ppRemplirRoles(){
+  var e = ppEls();
+  if(!e.role) return;
+  e.role.innerHTML = '<option value="">— Votre rôle —</option>'
+    + Object.keys(GP_PROFILS).map(function(k){
+        return '<option value="' + k + '">' + esc(GP_PROFILS[k].court || GP_PROFILS[k].nom)
+             + "</option>";
+      }).join("");
+}
+
+function ppRemplirParcours(cleRole){
+  var e = ppEls();
+  if(!e.parc) return;
+  if(!cleRole){
+    e.parc.innerHTML = '<option value="">— Choisissez un rôle —</option>';
+    e.parc.disabled = true;
+    if(e.aide) e.aide.textContent = "Deux choix, et la page vous conduit section par "
+      + "section, en disant à chaque fois ce que le chiffre vaut.";
+    return;
+  }
+  var liste = ppParcoursDe(cleRole);
+  e.parc.innerHTML = '<option value="">— Le parcours —</option>'
+    + liste.map(function(o){
+        return '<option value="' + esc(o.cle) + '">' + esc(o.nom)
+             + (o.n ? " · " + o.n + " étapes" : "") + "</option>";
+      }).join("");
+  e.parc.disabled = false;
+  var P = GP_PROFILS[cleRole];
+  if(e.aide) e.aide.textContent = P.quoi || "";
+}
+
+function ppBrancher(){
+  var e = ppEls();
+  if(!e.role || !e.parc) return;
+  ppRemplirRoles();
+  ppRemplirParcours("");
+
+  e.role.addEventListener("change", function(){
+    ppRemplirParcours(this.value);
+    /* Un rôle sans scénario multiple démarre tout de suite : imposer un second
+       choix à une liste qui n'a qu'une entrée est un clic pour rien. */
+    if(this.value && ppParcoursDe(this.value).length === 1){
+      gpDemarrer(this.value, null);
+      e.parc.selectedIndex = 1;
+    }
+  });
+
+  e.parc.addEventListener("change", function(){
+    var r = e.role.value;
+    if(!r || !this.value) return;
+    gpDemarrer(r, this.value);
+  });
+
+  /* Les listes reflètent le parcours en cours, d'où qu'il vienne — fenêtre de
+     choix, adresse partagée, ou elles-mêmes. Deux commandes qui pilotent la
+     même chose sans se refléter donnent un état faux à l'écran. */
+  window.__ppRefleter = function(){
+    if(!GP.profil){ return; }
+    if(e.role.value !== GP.profil){
+      e.role.value = GP.profil;
+      ppRemplirParcours(GP.profil);
+    }
+    e.parc.value = GP.branche || (ppParcoursDe(GP.profil)[0] || {}).cle || "";
+  };
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   INFOBULLES — celles du navigateur ne conviennent pas
+   ══════════════════════════════════════════════════════════════════════════
+   L'attribut `title` met environ une seconde à paraître, ne se met pas en
+   forme, se coupe à l'aveugle sur les textes longs, et ne s'affiche JAMAIS au
+   clavier. Sur une barre dont chaque onglet porte une phrase d'explication,
+   c'est toute l'aide qui reste hors de portée — y compris de qui navigue sans
+   souris. Celle-ci paraît tout de suite, se lit, et suit le focus.
+
+   Format de `data-tt` : « Titre|Corps ». Le titre seul est admis. */
+var TT = { el: null, cible: null };
+
+function ttBulle(){
+  if(!TT.el){
+    TT.el = document.createElement("div");
+    TT.el.className = "tt-bulle";
+    TT.el.setAttribute("role", "tooltip");
+    TT.el.id = "tt-bulle";
+    document.body.appendChild(TT.el);
+  }
+  return TT.el;
+}
+
+function ttMontrer(cible){
+  var brut = cible.getAttribute("data-tt");
+  if(!brut) return;
+  var b = ttBulle(), p = brut.split("|");
+  b.innerHTML = p.length > 1
+    ? "<b>" + esc(p[0]) + "</b>" + esc(p.slice(1).join("|"))
+    : esc(p[0]);
+  b.classList.add("on");
+  TT.cible = cible;
+  var r = cible.getBoundingClientRect();
+  b.style.left = "0px"; b.style.top = "0px";      /* mesurer sans contrainte */
+  var bb = b.getBoundingClientRect();
+  var x = r.left + r.width / 2 - bb.width / 2;
+  /* On garde la bulle dans la fenêtre, et la flèche suit la cible : une bulle
+     recadrée dont la flèche reste au centre pointe à côté de ce qu'elle
+     explique, ce qui est pire que pas de flèche du tout. */
+  x = Math.max(8, Math.min(x, window.innerWidth - bb.width - 8));
+  var dessus = r.top > bb.height + 14;
+  var y = dessus ? r.top - bb.height - 9 : r.bottom + 9;
+  b.classList.toggle("bas", !dessus);
+  b.style.setProperty("--fl", (r.left + r.width / 2 - x - 6) + "px");
+  b.style.left = Math.round(x) + "px";
+  b.style.top = Math.round(y) + "px";
+  cible.setAttribute("aria-describedby", "tt-bulle");
+}
+
+function ttCacher(){
+  if(TT.el) TT.el.classList.remove("on");
+  if(TT.cible){ TT.cible.removeAttribute("aria-describedby"); TT.cible = null; }
+}
+
+function ttBrancher(racine){
+  racine = racine || document;
+  /* Les onglets portent leur explication dans `title` depuis l'origine : on la
+     reprend telle quelle plutôt que de la recopier, et on retire l'attribut
+     pour ne pas afficher DEUX bulles superposées. */
+  racine.querySelectorAll(".pnav a[title]").forEach(function(a){
+    if(a.getAttribute("data-tt")) return;
+    a.setAttribute("data-tt", a.textContent.replace(/\d+$/, "").trim()
+                   + "|" + a.getAttribute("title"));
+    a.removeAttribute("title");
+  });
+  racine.querySelectorAll("[data-tt]").forEach(function(el){
+    if(el.__tt) return;
+    el.__tt = 1;
+    el.addEventListener("mouseenter", function(){ ttMontrer(el); });
+    el.addEventListener("mouseleave", ttCacher);
+    el.addEventListener("focus", function(){ ttMontrer(el); });
+    el.addEventListener("blur", ttCacher);
+  });
+  if(!document.__ttEsc){
+    document.__ttEsc = 1;
+    document.addEventListener("keydown", function(ev){
+      if(ev.key === "Escape") ttCacher();
+    });
+    /* Le bandeau est collant : la page défile sous la bulle, qui pointerait
+       alors un onglet qui a bougé. */
+    window.addEventListener("scroll", ttCacher, { passive: true });
+  }
+}
+
 function gpBrancher(){
   var e = gpEls();
   if(!e.choix || e.choix.getAttribute("data-pret") === "1") return;
@@ -5172,6 +5439,8 @@ function gpBrancher(){
   e.voile.addEventListener("click", gpFermer);
   var l = document.getElementById("gp-lanceur");
   if(l) l.addEventListener("click", gpOuvrirChoix);
+  ppBrancher();
+  ttBrancher();
   document.addEventListener("keydown", function(ev){
     if(!GP.profil && !e.choix.classList.contains("on")) return;
     if(ev.key === "Escape"){ ev.stopPropagation(); gpFermer(); }
