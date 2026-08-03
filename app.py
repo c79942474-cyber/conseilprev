@@ -1809,6 +1809,77 @@ def api_tendances_dc():
 
 
 # ══════════════════════════════════════════════════════════
+# EXPORT DES DOSSIERS — Word et PDF
+# Un chiffre lu a l'ecran ne sert a rien : il finit dans une note
+# d'investissement, un dossier de credit, un memoire technique. Tant qu'il faut
+# le recopier a la main, il perd en route ce qui fait sa valeur — sa nature, sa
+# source, son millesime et ce que le module refuse de trancher.
+#
+# Le dossier « enveloppe » exige le RESULTAT d'un calcul, poste tel quel par la
+# page : le document et l'ecran montrent ainsi rigoureusement la meme chose.
+# Recalculer cote export les ferait diverger au premier ecart de parametre.
+#
+# Ces documents ne recoivent PAS le marquage article 50 : aucun modele de
+# langage n'intervient, ils sont composes par calcul deterministe. Apposer ce
+# marquage partout reviendrait a ne plus rien signaler la ou il compte.
+# ══════════════════════════════════════════════════════════
+import export_dc  # noqa: E402
+
+
+@app.route('/api/export-dc', methods=['GET'])
+@rate_limit(limit=60, window=60)
+@reserve_abonne_api
+def api_export_dc():
+    """Catalogue des dossiers exportables et des formats disponibles."""
+    cat = export_dc.catalogue()
+    cat["ok"] = True
+    cat["sante"] = export_dc.sante()
+    return jsonify(cat)
+
+
+@app.route('/api/export-dc/<dossier>.<fmt>', methods=['POST'])
+@rate_limit(limit=20, window=300)
+@reserve_abonne_api
+def api_export_dc_produire(dossier, fmt):
+    """Produit le dossier demande en Word ou en PDF.
+
+    Le corps peut porter `devis` : la reponse de /api/finance-dc/devis, reprise
+    telle quelle. Elle est obligatoire pour les dossiers qui chiffrent une
+    enveloppe, et refusee explicitement plutot que remplacee par un calcul par
+    defaut — un document d'investissement bati sur des parametres que le lecteur
+    n'a pas choisis serait pire qu'absent."""
+    dossier = str(dossier or '')[:32]
+    fmt = str(fmt or '')[:8].lower()
+    if dossier not in export_dc.DOSSIERS:
+        return jsonify({'ok': False, 'erreur': 'dossier inconnu'}), 404
+    if fmt not in export_dc.FORMATS:
+        return jsonify({'ok': False, 'erreur': 'format inconnu'}), 400
+    corps = request.get_json(silent=True) or {}
+    devis = corps.get('devis')
+    if export_dc.DOSSIERS[dossier]['besoin_devis'] and not (devis or {}).get('dossiers'):
+        return jsonify({'ok': False,
+                        'erreur': 'ce dossier exige un calcul d\'enveloppe : '
+                                  'lancez le calcul, puis exportez'}), 400
+    try:
+        octets, mime, nom = export_dc.produire(dossier, fmt, devis)
+    except RuntimeError as e:
+        # Le garde-fou de composition : mieux vaut ne rien livrer qu'un document
+        # ampute de ses reserves. L'incident est journalise pour etre corrige.
+        logger.error(f'EXPORT_DC_INCOMPLET: {e}')
+        return jsonify({'ok': False, 'erreur': 'document incomplet — export refuse'}), 500
+    except Exception as e:  # noqa: BLE001
+        logger.error(f'EXPORT_DC_ERR: {e}')
+        return jsonify({'ok': False, 'erreur': 'export indisponible'}), 503
+    rep = make_response(octets)
+    rep.headers['Content-Type'] = mime
+    rep.headers['Content-Disposition'] = 'attachment; filename="%s"' % nom
+    rep.headers['Content-Length'] = str(len(octets))
+    rep.headers['Cache-Control'] = 'no-store'
+    rep.headers['X-Content-Type-Options'] = 'nosniff'
+    return rep
+
+
+# ══════════════════════════════════════════════════════════
 # CONTROLES FACTUELS — registre partage par toutes les pages
 # Les chiffres du site sont lus par des professionnels de l'investissement, du
 # credit, de l'assurance et du climat : un ordre de grandeur non source n'est

@@ -29,6 +29,52 @@ CONTACT = ("CONSEILPREV · christophe.cerf@outlook.com · +33 6 60 69 21 45 · "
            "conseilprevcyber.onrender.com")
 MENTION = ("Brouillon généré avec l'aide de l'IA à partir de la base de connaissance "
            "CONSEILPREV — à relire, compléter et valider par un consultant.")
+BANDEAU = "Cybersécurité industrielle IT / OT / IIoT"
+
+# Ce module sert désormais deux natures de document, et la différence n'est pas
+# cosmétique. Un brouillon rédigé par un modèle DOIT être signalé comme tel au
+# titre de l'article 50 ; un dossier calculé de façon déterministe à partir d'un
+# référentiel sourcé ne le doit PAS — l'en marquer serait un mensonge dans
+# l'autre sens, et affaiblirait la valeur du marquage là où il compte vraiment.
+# `meta['ia'] = False` bascule les deux mentions, visible et machine.
+MENTION_CALCUL = ("Document produit par calcul déterministe à partir d'un référentiel "
+                  "versionné et sourcé. Aucun modèle de langage n'est intervenu dans "
+                  "sa rédaction : chaque valeur porte sa nature et sa source.")
+
+
+def _bandeau(meta):
+    return str((meta or {}).get("bandeau") or BANDEAU)
+
+
+def _contact(meta):
+    return str((meta or {}).get("contact") or CONTACT)
+
+
+def _suffixe(meta):
+    """Le second mot de la marque. « Cyber » sur conseilprevcyber, autre chose
+    ailleurs : un dossier d'investissement en centres de données ne se présente
+    pas sous une enseigne de cybersécurité industrielle."""
+    meta = meta or {}
+    v = meta.get("marque_suffixe")
+    return "" if v == "" else str(v or "Cyber")
+
+
+def _pied(meta):
+    """Pied de page court. « Brouillon à valider » ne vaut que pour un texte
+    rédigé par un modèle ; un calcul déterministe n'est pas un brouillon."""
+    meta = meta or {}
+    if meta.get("pied"):
+        return str(meta["pied"])
+    marque = ("CONSEILPREV " + _suffixe(meta)).strip()
+    return marque + (" · Brouillon à valider" if meta.get("ia", True)
+                     else " · Calcul déterministe — référentiel sourcé")
+
+
+def _mention(meta):
+    meta = meta or {}
+    if meta.get("mention"):
+        return str(meta["mention"])
+    return MENTION if meta.get("ia", True) else MENTION_CALCUL
 
 
 def _hex(rgb):
@@ -104,7 +150,15 @@ def _fiche(meta):
               ("Type de livrable", meta.get("label")),
               ("Date", meta.get("date")),
               ("Modèle utilisé", meta.get("model")),
-              ("Statut", "Brouillon — à relire et valider")]
+              # Les VERSIONS des référentiels doivent se lire sur la page, pas
+              # seulement dans les propriétés du fichier. Un dossier imprimé,
+              # scanné ou recopié perd ses métadonnées ; il ne doit pas perdre
+              # avec elles le moyen de savoir quel millésime l'a produit — donc
+              # de le rejouer, donc de le contester.
+              ("Référentiels mobilisés", meta.get("referentiel")),
+              ("Statut", meta.get("statut")
+               or ("Brouillon — à relire et valider" if meta.get("ia", True)
+                   else "Calcul déterministe — aucune rédaction par IA"))]
     return [(k, str(v).strip()) for k, v in champs if v and str(v).strip()]
 
 
@@ -206,9 +260,26 @@ MARQUE_REF = "Reglement (UE) 2024/1689, art. 50"
 
 
 def _marque_ia(meta):
-    """Valeurs de marquage, dérivées des métadonnées du document."""
+    """Valeurs de marquage, dérivées des métadonnées du document.
+
+    Quand `meta['ia']` est faux, le document n'a PAS été rédigé par un modèle :
+    les propriétés du fichier disent alors sa vraie nature — calcul déterministe,
+    référentiel versionné — au lieu d'apposer un marquage article 50 qui ne
+    correspondrait à rien. Un marquage apposé partout ne signale plus rien."""
     meta = meta or {}
     modele = str(meta.get("model") or "").strip()
+    if not meta.get("ia", True):
+        ref = str(meta.get("referentiel") or "").strip()
+        return {
+            "marque": "Calcul deterministe - sans generation par IA",
+            "producteur": "CONSEILPREV - moteur de calcul"
+                          + (" (" + ref + ")" if ref else ""),
+            "mots_cles": "calcul-deterministe; sans-IA; referentiel-source"
+                         + ("; " + ref if ref else ""),
+            "note": "Document produit par calcul deterministe a partir d'un "
+                    "referentiel versionne et source. Aucun modele de langage "
+                    "n'est intervenu dans sa redaction.",
+        }
     return {
         "marque": MARQUE_IA,
         "producteur": "CONSEILPREV — assistance par intelligence artificielle"
@@ -268,12 +339,12 @@ def build_docx(md, meta=None):
     r.bold = True
     r.font.size = Pt(15)
     r.font.color.rgb = NAVY
-    r2 = brand.add_run("Cyber")
+    r2 = brand.add_run(_suffixe(meta))
     r2.bold = True
     r2.font.size = Pt(11)
     r2.font.color.rgb = TEAL
     sp = doc.add_paragraph()
-    sub = sp.add_run("Cybersécurité industrielle IT / OT / IIoT")
+    sub = sp.add_run(_bandeau(meta))
     sub.italic = True
     sub.font.size = Pt(8.5)
     sub.font.color.rgb = GREY
@@ -373,7 +444,7 @@ def build_docx(md, meta=None):
     footer = doc.sections[0].footer
     fp = footer.paragraphs[0] if footer.paragraphs else footer.add_paragraph()
     fp.text = ""
-    fr = fp.add_run("CONSEILPREV Cyber · Brouillon à valider · page ")
+    fr = fp.add_run(_pied(meta) + " · page ")
     fr.font.size = Pt(8)
     fr.font.color.rgb = GREY
     _page_field(fp)
@@ -382,11 +453,11 @@ def build_docx(md, meta=None):
         run.font.color.rgb = GREY
 
     _rule(doc)
-    note = doc.add_paragraph().add_run(MENTION)
+    note = doc.add_paragraph().add_run(_mention(meta))
     note.italic = True
     note.font.size = Pt(8.5)
     note.font.color.rgb = GREY
-    contact = doc.add_paragraph().add_run(CONTACT)
+    contact = doc.add_paragraph().add_run(_contact(meta))
     contact.font.size = Pt(8.5)
     contact.font.color.rgb = GREY
 
@@ -406,7 +477,19 @@ _PDF_MAP = {
     "⇒": "=>", "≤": "<=", "≥": ">=", "…": "...", "•": "·",
     "▪": "·", "‘": "'", "’": "'", "“": '"', "”": '"',
     " ": " ", " ": " ", "‹": "<", "›": ">", "✓": "v",
-    "œ": "oe", "Œ": "OE", "€": "EUR",
+    "œ": "oe", "Œ": "OE", "€": "EUR", "⚑": "(*)",
+    # « ≈ 5 % » privé de son signe devient « 5 % » : le document affirme alors
+    # une précision qu'il n'avait pas. Un opérateur mathématique perdu change
+    # le sens, il ne dégrade pas seulement le rendu.
+    "≠": "!=", "≈": "~", "±": "+/-", "∆": "delta", "↔": "<->",
+    "⚠": "(!)", "▲": "^", "▼": "v", "◉": "o", "↑": "^", "↓": "v",
+    # Les indices et exposants ne sont PAS de la décoration : sans eux,
+    # « tCO₂e » devenait « tCOe » et « m³ » devenait « m ». Une unité fausse
+    # dans un document qui circule est pire qu'une unité laide — elle se cite.
+    "₀": "0", "₁": "1", "₂": "2", "₃": "3", "₄": "4",
+    "₅": "5", "₆": "6", "₇": "7", "₈": "8", "₉": "9",
+    "⁰": "0", "¹": "1", "²": "2", "³": "3", "⁴": "4",
+    "⁵": "5", "⁶": "6", "⁷": "7", "⁸": "8", "⁹": "9",
 }
 _INLINE_STRIP = re.compile(r"\*\*([^*]+)\*\*|`([^`]+)`|\*([^*\n]+)\*")
 
@@ -422,12 +505,14 @@ def _pdf_txt(s):
     return s.encode("latin-1", "ignore").decode("latin-1")
 
 
-def _pdf_class():
+def _pdf_class(meta=None):
     """Classe PDF avec en-tête courant et pied de page numéroté.
 
     Définie dans une fonction : fpdf n'est importé qu'au moment de l'export,
-    l'application démarre donc même si la bibliothèque manque."""
+    l'application démarre donc même si la bibliothèque manque. `meta` est capté
+    par fermeture pour que le pied de page dise la vraie nature du document."""
     from fpdf import FPDF
+    _PIED = _pdf_txt(_pied(meta))
 
     class _Livrable(FPDF):
         titre_courant = ""
@@ -450,8 +535,7 @@ def _pdf_class():
             self.set_y(-13)
             self.set_font("Helvetica", "", 8)
             self.set_text_color(*C_GREY)
-            self.cell(self.epw / 2, 5, _pdf_txt("CONSEILPREV Cyber · Brouillon à valider"),
-                      align="L")
+            self.cell(self.epw / 2, 5, _PIED, align="L")
             self.cell(self.epw / 2, 5, "page %d / {nb}" % self.page_no(), align="R")
 
     return _Livrable
@@ -460,7 +544,7 @@ def _pdf_class():
 def build_pdf(md, meta=None):
     """Construit le document PDF (bytes) à partir du Markdown du livrable."""
     meta = meta or {}
-    pdf = _pdf_class()(format="A4", unit="mm")
+    pdf = _pdf_class(meta)(format="A4", unit="mm")
     # Même marquage que pour le Word : les métadonnées PDF sont lisibles par
     # une machine sans rendu de la page.
     try:
@@ -491,10 +575,10 @@ def build_pdf(md, meta=None):
              new_x="RIGHT", new_y="TOP")
     pdf.set_font("Helvetica", "B", 11)
     pdf.set_text_color(*C_TEAL)
-    pdf.cell(0, 8, "Cyber", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 8, _pdf_txt(_suffixe(meta)), new_x="LMARGIN", new_y="NEXT")
     pdf.set_font("Helvetica", "I", 8.5)
     pdf.set_text_color(*C_GREY)
-    pdf.cell(0, 5, _pdf_txt("Cybersécurité industrielle IT / OT / IIoT"),
+    pdf.cell(0, 5, _pdf_txt(_bandeau(meta)),
              new_x="LMARGIN", new_y="NEXT")
     pdf.ln(1)
     pdf.set_draw_color(*C_LINE)
@@ -615,9 +699,9 @@ def build_pdf(md, meta=None):
     rule()
     pdf.set_font("Helvetica", "I", 8.5)
     pdf.set_text_color(*C_GREY)
-    _cell(_pdf_txt(MENTION), 4.5)
+    _cell(_pdf_txt(_mention(meta)), 4.5)
     pdf.set_font("Helvetica", "", 8.5)
-    _cell(_pdf_txt(CONTACT.replace("·", "-")), 4.5)
+    _cell(_pdf_txt(_contact(meta).replace("·", "-")), 4.5)
 
     out = pdf.output()
     return bytes(out)

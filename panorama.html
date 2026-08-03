@@ -570,6 +570,23 @@ body.embed .gp-carte{bottom:auto;top:var(--gp-bas,auto);
   line-height:1.5;background:var(--bg)}
 .pro-s b{display:block;font-size:11.5px;margin-bottom:2px}
 @media(max-width:640px){.pro-jal{grid-template-columns:1fr;gap:3px}}
+/* TÉLÉCHARGEMENTS — un chiffre recopié à la main perd sa nature et sa source.
+   Les boutons sont donc là où le chiffre se lit, pas dans un coin de page. */
+.dl-barre{border:1px solid var(--rule2);border-radius:8px;background:var(--bg);
+  padding:11px 13px;margin:14px 0}
+.dl-t{font-size:12px;font-weight:700;margin:0 0 3px}
+.dl-note{font-size:10.5px;color:var(--muted2);line-height:1.5;margin:0 0 8px}
+.dl-jeux{display:flex;flex-wrap:wrap;gap:8px}
+.dl-jeu{border:1px solid var(--rule2);border-radius:6px;background:var(--white);
+  padding:8px 10px;min-width:210px;flex:1 1 230px}
+.dl-jeu b{display:block;font-size:11.5px;margin-bottom:2px}
+.dl-jeu span{display:block;font-size:10px;color:var(--muted2);line-height:1.45;margin-bottom:6px}
+.dl-b{font-size:11px;font-weight:600;padding:4px 10px;border:1px solid var(--rule2);
+  border-radius:5px;background:var(--white);cursor:pointer;margin-right:5px}
+.dl-b:hover{background:var(--encre,#1C1C1C);color:#fff;border-color:var(--encre,#1C1C1C)}
+.dl-b:disabled{opacity:.45;cursor:progress}
+.dl-msg{font-size:10.5px;margin-top:7px;min-height:14px}
+.dl-msg.err{color:#A33}
 .imp-pond{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:10px 18px}
 .imp-p{display:grid;grid-template-columns:1fr 110px 22px;gap:4px 10px;align-items:center;
   border:1px solid var(--rule);border-left:4px solid var(--imp-c,#8892A0);border-radius:4px;
@@ -1355,6 +1372,20 @@ engagements publics) sont imputés nominativement.</div>
     </div>
 
     <div id="fin-res"></div>
+
+    <!-- Les dossiers qui ne dépendent d'aucun calcul sont disponibles tout de
+         suite. Les enfermer derrière le bouton « Calculer » les rendrait
+         invisibles à qui vient seulement chercher le référentiel. -->
+    <div class="dl-barre" id="dl-libre">
+      <p class="dl-t">Télécharger les dossiers — Word et PDF</p>
+      <p class="dl-note">Chaque document porte la <b>version</b> de tous les référentiels
+      mobilisés, la <b>nature</b> de chaque valeur, ses <b>sources</b> et les
+      <b>réserves</b> qui les qualifient. Aucun modèle de langage n’intervient dans leur
+      rédaction : ils sont composés par calcul déterministe, et le disent en toutes lettres.
+      Ils ne portent donc pas le marquage de l’article 50, qui ne s’appliquerait pas.</p>
+      <div class="dl-jeux" id="dl-jeux"></div>
+      <p class="dl-msg" id="dl-msg"></p>
+    </div>
   </div>
 </section>
 
@@ -6401,6 +6432,31 @@ if(window.parent&&window.parent!==window){
       + 'arbitrage.</p></div>';
   }
 
+  /* Le dossier « enveloppe » exporte CE calcul-là. Le bouton vit donc sous le
+     résultat, jamais ailleurs : posé en haut de page, il laisserait croire
+     qu'il exporte des paramètres par défaut que personne n'a choisis. */
+  function blocTelecharger(){
+    return '<div class="dl-barre" id="dl-calcul">'
+      + '<p class="dl-t">Télécharger ce calcul</p>'
+      + '<p class="dl-note">Le document reprend <b>ce calcul-ci</b>, avec les paramètres '
+      + 'que vous venez de choisir : enveloppe, DPGF des quatorze lots, exploitation, '
+      + 'coût total, échéancier, écarts entre pays — et les postes que le référentiel '
+      + 'ne peut pas trancher, laissés vides avec la question à poser.</p>'
+      + '<div class="dl-jeux">'
+      + '<div class="dl-jeu"><b>Enveloppe et DPGF</b>'
+      + '<span>Le dossier d’investissement du calcul affiché.</span>'
+      + '<button type="button" class="dl-b" data-dl="enveloppe" data-fmt="docx">Word</button>'
+      + '<button type="button" class="dl-b" data-dl="enveloppe" data-fmt="pdf">PDF</button>'
+      + '</div>'
+      + '<div class="dl-jeu"><b>Dossier complet</b>'
+      + '<span>Enveloppe, référentiel d’implantation, prospectives et parc, dans '
+      + 'l’ordre de lecture d’une décision.</span>'
+      + '<button type="button" class="dl-b" data-dl="complet" data-fmt="docx">Word</button>'
+      + '<button type="button" class="dl-b" data-dl="complet" data-fmt="pdf">PDF</button>'
+      + '</div></div>'
+      + '<p class="dl-msg" id="dl-msg-calcul"></p></div>';
+  }
+
   function rendre(j){
     var h = '<div class="fin-rang">'
       + j.classement.map(function(x,i){ return carteRang(x,i,j); }).join('') + '</div>';
@@ -6433,7 +6489,11 @@ if(window.parent&&window.parent!==window){
       + j.dossiers[0].devis.trace.map(function(t){ return '<li>'+esc(t)+'</li>'; }).join('')
       + '<li><b>Coût unitaire :</b> '+esc(JSON.stringify(j.entree.cout_mw))+'</li>'
       + '</ul><p class="note">'+esc(j.avertissement)+'</p></details>';
-    $('fin-res').innerHTML = h;
+    $('fin-res').innerHTML = blocTelecharger() + h;
+    /* DERNIER est la charge utile telle que le serveur l'a renvoyée : c'est
+       elle qui repart à l'export, pas une reconstitution. Le document et
+       l'écran ne peuvent donc pas diverger. */
+    if(window.dcExportBrancher) window.dcExportBrancher($('fin-res'), function(){ return DERNIER; });
   }
 
   function demarrer(){
@@ -6640,6 +6700,135 @@ if(window.parent&&window.parent!==window){
         $('pro-note').textContent = 'prospectives indisponibles';
         $('pro-res').innerHTML = '<p class="note">Les prospectives ne sont pas accessibles '
           + 'pour le moment. Elles sont réservées aux comptes abonnés ou validés.</p>';
+      });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', demarrer);
+  else demarrer();
+})();
+
+/* ══════════════════════════════════════════════════════════════════════════
+   TÉLÉCHARGEMENT DES DOSSIERS — Word et PDF
+
+   Un chiffre lu à l'écran ne sert à rien : il finit dans une note
+   d'investissement, un dossier de crédit, un mémoire technique de réponse à
+   appel d'offres. Tant qu'il faut le recopier à la main, il perd en route ce
+   qui fait sa valeur — sa nature, sa source, son millésime, et ce que le
+   module refuse de trancher.
+
+   Deux pièges traités ici :
+
+   1. Une réponse binaire ne se lit pas comme du JSON, mais un REFUS, lui, est
+      en JSON. Sans vérifier le type de la réponse, un abonnement expiré
+      produirait un fichier Word de quatre lignes contenant un message
+      d'erreur — et l'utilisateur croirait l'export réussi.
+
+   2. L'URL objet créée pour déclencher le téléchargement se révoque. Dix
+      exports sur une même page garderaient sinon dix documents en mémoire.
+   ══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  function esc(t){ return String(t == null ? '' : t).replace(/[<>&]/g, function(c){
+    return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c]; }); }
+
+  function nomFichier(rep, dossier, fmt){
+    var cd = rep.headers.get('Content-Disposition') || '';
+    var m = cd.match(/filename="([^"]+)"/);
+    return m ? m[1] : ('CONSEILPREV-' + dossier + '.' + fmt);
+  }
+
+  function message(zone, texte, erreur){
+    var m = zone.querySelector('.dl-msg');
+    if(!m) return;
+    m.className = 'dl-msg' + (erreur ? ' err' : '');
+    m.textContent = texte;
+  }
+
+  function telecharger(bouton, zone, devisFn){
+    var dossier = bouton.getAttribute('data-dl');
+    var fmt = bouton.getAttribute('data-fmt');
+    var boutons = zone.querySelectorAll('.dl-b');
+    for(var i = 0; i < boutons.length; i++) boutons[i].disabled = true;
+    message(zone, 'Composition du document…', false);
+    var corps = {};
+    if(devisFn){
+      var d = devisFn();
+      if(d) corps.devis = d;
+    }
+    fetch('/api/export-dc/' + dossier + '.' + fmt, {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(corps)
+    }).then(function(rep){
+      var type = rep.headers.get('Content-Type') || '';
+      /* Le serveur répond en JSON pour REFUSER. Fabriquer un fichier à partir
+         de cette réponse livrerait un Word contenant un message d'erreur. */
+      if(type.indexOf('application/json') >= 0 || !rep.ok){
+        return rep.json().catch(function(){ return {}; }).then(function(j){
+          throw new Error((j && j.erreur) || ('erreur ' + rep.status));
+        });
+      }
+      var nom = nomFichier(rep, dossier, fmt);
+      return rep.blob().then(function(b){ return { blob: b, nom: nom }; });
+    }).then(function(r){
+      var url = URL.createObjectURL(r.blob);
+      var a = document.createElement('a');
+      a.href = url; a.download = r.nom;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      /* Révocation différée : Firefox annule un téléchargement dont l'URL
+         disparaît avant qu'il ne l'ait ouverte. */
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+      message(zone, 'Téléchargé : ' + r.nom + ' (' + Math.round(r.blob.size / 1024) + ' Ko).',
+              false);
+    }).catch(function(e){
+      message(zone, 'Téléchargement impossible — ' + (e && e.message ? e.message : 'erreur'),
+              true);
+    }).then(function(){
+      for(var i = 0; i < boutons.length; i++) boutons[i].disabled = false;
+    });
+  }
+
+  /* Exposé : le module financier rend son bloc de téléchargement après chaque
+     calcul, et doit pouvoir le brancher sur le résultat qu'il vient d'obtenir. */
+  window.dcExportBrancher = function(zone, devisFn){
+    if(!zone) return;
+    var bs = zone.querySelectorAll('.dl-b');
+    for(var i = 0; i < bs.length; i++){
+      (function(b){
+        if(b.__branche) return;
+        b.__branche = true;
+        b.addEventListener('click', function(){
+          telecharger(b, b.closest('.dl-barre') || zone, devisFn);
+        });
+      })(bs[i]);
+    }
+  };
+
+  function demarrer(){
+    var libre = $('dl-libre');
+    if(!libre) return;
+    fetch('/api/export-dc', { credentials:'same-origin' })
+      .then(function(r){ return r.json(); })
+      .then(function(j){
+        if(!j || !j.ok) throw new Error('catalogue indisponible');
+        /* Seuls les dossiers qui NE dépendent PAS d'un calcul figurent ici. Les
+           autres sont rendus sous le résultat, là où leurs paramètres se lisent. */
+        var libres = (j.dossiers || []).filter(function(d){ return !d.besoin_devis; });
+        $('dl-jeux').innerHTML = libres.map(function(d){
+          return '<div class="dl-jeu"><b>' + esc(d.nom) + '</b><span>' + esc(d.resume)
+               + '</span>'
+               + (j.formats || []).map(function(f){
+                   return '<button type="button" class="dl-b" data-dl="' + esc(d.cle)
+                        + '" data-fmt="' + esc(f) + '">'
+                        + (f === 'docx' ? 'Word' : 'PDF') + '</button>'; }).join('')
+               + '</div>';
+        }).join('');
+        window.dcExportBrancher(libre, null);
+      })
+      .catch(function(){
+        message(libre, 'Les téléchargements sont réservés aux comptes abonnés ou validés.',
+                true);
       });
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', demarrer);
