@@ -2393,7 +2393,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="sb-logo">Sentinel <span class="sb-logo-ai">AI</span></div>
     <div class="sb-sub">Cartographie des risques</div>
   </div>
-  <!-- Les onze parcours vivaient derrière un bouton et une fenêtre : un
+  <!-- Les parcours vivaient derrière un bouton et une fenêtre : un
        visiteur qui ne cliquait pas ne savait pas que Sentinel se lit selon son
        rôle. La liste est désormais LÀ, ouverte, dans la barre latérale — le
        rôle se choisit sans rien ouvrir, et la fenêtre ne sert plus qu'à lire le
@@ -2406,7 +2406,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
       <span aria-hidden="true">🧭</span> Parcours guidés — votre rôle</label>
     <select id="sb-role" class="sb-guided-select"
             onchange="sbRoleChoisi(this.value)"
-            title="Onze chemins de lecture selon votre métier : le parcours enchaîne les pages dans l’ordre qui vous concerne."></select>
+            title="Un chemin de lecture par métier — gouvernance, RGPD, centres de données : le parcours enchaîne les pages dans l’ordre qui vous concerne."></select>
     <button class="sb-guided-mp" onclick="monParcoursBuilder()"
             title="Composer votre propre parcours à partir de vos cas d’usage, jusqu’au coût et à l’enveloppe RaaS.">
       Créer mon parcours chiffré</button>
@@ -15636,6 +15636,7 @@ var PAGE_GUIDES = {
       {h:"Choisir un pays d’implantation", t:"La section « Implantation » compare les pays selon SEPT critères, chacun avec sa nature et sa source : intensité carbone, pilotabilité du mix (nucléaire, renouvelables, fossile — production 2024), disponibilité en eau (indice WEI+ de l’AEE, avec la part de l’irrigation agricole : là où les cultures prélèvent plus de la moitié de l’eau, un refroidissement évaporatif entre en compétition d’usage l’été), potentiel de free cooling, prix industriel de l’électricité en classes Eurostat, parc en service, et file de raccordement 2026-2030 comptée depuis nos statuts. Réglez le POIDS de chaque critère (0 à 4) selon votre projet : le classement se recalcule sous vos yeux, et la formule affichée est la formule exécutée — côté serveur."},
       {h:"Avantages, inconvénients et perspectives 2030", t:"Sous le classement, chaque pays a sa fiche dépliable : AVANTAGES et INCONVÉNIENTS en deux colonnes, un COMMENTAIRE d’arbitrage, puis les perspectives à 2030 — annonces d’investissement datées et sourcées (InvestAI, Sommet de Paris, AWS Aragon, Stargate Norway…) distinguées des CONTRAINTES constatées : moratoire de raccordement de Dublin, encadrement néerlandais des hyperscale, PUE réglementaire allemand. Une contrainte constatée vaut souvent plus qu’une promesse chiffrée. Cette analyse est de nature « analyse » : la lecture du cabinet, datée, à discuter — c’est écrit dessus."},
       {h:"Un parcours pour votre métier", t:"Sous les onglets, deux listes : VOTRE RÔLE puis LE PARCOURS. Six chemins de lecture — investisseur, banque, assurance, climatologue, spécialiste de l’eau, analyste ESG. Chacun conduit dans l’ordre qui concerne le métier et nomme, à chaque étape, LE PIÈGE propre à ce métier. La seconde liste ne propose que ce qui a un sens pour le rôle choisi, avec le nombre d’étapes ; un rôle qui n’a qu’un chemin démarre sans second clic. Le bouton « Parcours guidé » reste là pour lire les six descriptions en entier. La section visée est soulignée, jamais masquée : on lit la consigne et la donnée ensemble."},
+      {h:"Prolonger le parcours hors de cette page", t:"Les six chemins ci-dessus s’arrêtent au bord de cette page — or une décision d’implantation ne s’y arrête pas. La barre latérale de Sentinel porte, sous « Centres de données », CINQ rôles qui commencent ici et continuent ailleurs : implantation, énergie-eau-climat, financement et assurance, reporting extra-financier, et conformité de l’IA hébergée. Chacun ouvre cette page sur le chemin qui le concerne, puis enchaîne sur l’Empreinte numérique, le conseil juridique, la matrice des risques, le Registre IA ou la vue direction. Le référentiel situe et compare ; ces modules-là chiffrent votre périmètre et documentent vos preuves — la frontière entre les deux est volontaire, et le parcours vous la fait franchir au bon moment."},
       {h:"Le parcours investisseur : trois scénarios", t:"Le parcours investisseur commence par une question — construction neuve, extension d’un parc existant, ou rachat/M&A — parce que les mêmes critères ne se lisent pas dans le même ordre. NEUVE : l’électricité décide avant le foncier, puis climat/PUE/eau, la file de raccordement, et la due diligence (prix et PPA, délai opposable, eau au point exact). EXTENSION : où l’opérateur est déjà, densité du pays, la file de raccordement que les annonces réservent, et le permis d’extension qui n’est jamais acquis. M&A : le statut comme échelle de certitude, la fiche déclaré/calculé, puis la liste des questions de data room que le référentiel ne peut pas trancher — PUE mesuré douze mois, raccordement contractuel, baux, CAPEX engagé, structure de détention. L’adresse porte le scénario (#parcours=invest.ma) : envoyez à chacun le bon chemin."},
       {h:"Vérifier avant de citer", t:"La section Sources liste chaque constante du modèle — intensités, PUE, WUE, facteur de charge, gabarits, classes d’eau et de prix — avec son éditeur, son millésime et son lien, plus le registre des contrôles factuels : 40 affirmations confrontées aux sources, verdict par verdict, y compris les corrections passées. Le référentiel est versionné en tête de page : citez toujours la version et la date. Les pastilles de vérification, dans le texte, s’ouvrent au survol."},
       {h:"Deux limites à respecter", t:"Cette page SITUE et COMPARE ; elle ne chiffre ni un site ni un business plan. Aucune capacité informatique attestée ne survit à la vérification sur les 97 sites, aucun PUE de site n’est publié, et le prix réel de l’électricité est un contrat que la statistique publique ne voit pas. Si un chiffre pèse dans une décision d’investissement, de crédit ou d’assurance : remontez à la source primaire citée, exigez la mesure en data room, et traitez ce référentiel pour ce qu’il est — un point de départ documenté, pas une due diligence."},
@@ -23775,12 +23776,151 @@ var GUIDED_PATHS = [
       {id:'rgpd-conformite', go:'gnav_rgpd-conformite', label:'Conformité RGPD', action:'Consultez l\u2019indice global consolidant l\u2019ensemble du dispositif.', gain:'Un tableau de bord de pilotage et les points d\u2019attention.', tip:'L\u2019indice est une aide au pilotage, non une attestation juridique.'}
     ]
   }
+,
+  /* ══ CENTRES DE DONNÉES ══════════════════════════════════════════════════
+     Le Panorama porte déjà six chemins de lecture propres aux centres de
+     données — investisseur, banque, assurance, climat, eau, analyste. Ils
+     vivaient DANS la page, invisibles depuis la barre latérale de Sentinel :
+     un exploitant qui ouvrait la plateforme ne pouvait pas savoir qu'un
+     parcours le concernait. Les cinq rôles qui suivent les font remonter, et
+     surtout les PROLONGENT hors du Panorama — vers l'empreinte, le juridique,
+     le registre et la vue direction, qui sont dans Sentinel et non dans la
+     carte. panParcours() ouvre le module puis positionne l'iframe sur le
+     chemin voulu. */
+  {
+    id: 'dc_implantation',
+    icon: '🏗️',
+    role: 'Implantation d’un centre de données',
+    pitch: 'Choisir où construire, étendre ou racheter — et savoir ce que chaque chiffre vaut avant de le porter en comité d’investissement.',
+    steps: [
+      {id:'pan-sia', go:'panParcoursInvest', label:'Choisir le pays : le parcours investisseur',
+       action:'Le parcours commence par une question — construction neuve, extension ou rachat — parce que les mêmes critères ne se lisent pas dans le même ordre. Suivez la branche de votre projet jusqu’au bout.',
+       gain:'Un classement des pays selon SEPT critères pondérés par vous : intensité carbone, pilotabilité du mix, eau, free cooling, prix, parc en service, file de raccordement.',
+       tip:'L’intensité carbone est une moyenne annuelle nationale : un PPA dédié ou un approvisionnement horaire change votre résultat sans changer cette moyenne.'},
+      {id:'pan-sia', go:'panParcoursEau', label:'Vérifier l’eau avant de s’engager',
+       action:'Reprenez le même module par le chemin « Eau & biodiversité » : indice WEI+ de l’Agence européenne, part de l’irrigation agricole, mode de refroidissement retenu.',
+       gain:'Le point où un refroidissement évaporatif entre en compétition d’usage avec l’agriculture — c’est souvent là que se joue le permis, pas dans le dossier électrique.',
+       tip:'Un aéroréfrigérant sec affiche zéro eau SUR SITE tout en consommant davantage à la source sur un réseau thermique : WUE_source = WUE_site + EWIF × PUE.'},
+      {id:'empreinte', label:'Chiffrer l’empreinte du projet',
+       action:'Portez la consommation annoncée du site dans le module Empreinte et comparez usage, fabrication amortie et eau.',
+       gain:'Un ordre de grandeur défendable devant un financeur — et la part de fabrication, qui domine dès que le réseau est décarboné.',
+       tip:'Sur un réseau très décarboné la fabrication amortie pèse plus lourd que l’usage : ne présentez jamais l’usage seul.'},
+      {id:'juridique', label:'Sécuriser les contrats',
+       action:'Faites relire les pièces du montage : raccordement, PPA, bail, contrat de colocation ou d’hébergement.',
+       gain:'Les clauses manquantes et les engagements mal bornés, repérés avant la signature plutôt qu’au premier litige.',
+       tip:'Un délai de raccordement qui n’est pas opposable au gestionnaire de réseau n’est pas un délai : c’est une intention.'},
+      {id:'report', label:'Présenter l’arbitrage',
+       action:'Consolidez le classement, l’empreinte et les réserves juridiques en une vue de direction.',
+       gain:'Un support de comité qui dit ce qui est mesuré, ce qui est calculé et ce qui reste à trancher en data room.',
+       tip:'Datez la version du référentiel citée : les intensités carbone et les files de raccordement bougent d’un millésime à l’autre.'}
+    ]
+  },
+  {
+    id: 'dc_energie',
+    icon: '🌍',
+    role: 'Énergie, eau et climat du parc',
+    pitch: 'Piloter l’empreinte réelle d’un parc de centres de données : électricité, CO₂e, fabrication amortie et eau de refroidissement, sans confondre ce qui est publié et ce qui est calculé.',
+    steps: [
+      {id:'pan-sia', go:'panParcoursClimat', label:'Le chemin « Climat et gaz à effet de serre »',
+       action:'Parcourez le fond de carte « intensité carbone du réseau » et le tableau d’empreinte par pays, poste par poste.',
+       gain:'La distinction entre l’empreinte d’usage et l’empreinte totale — et la raison pour laquelle un pays gris n’est pas un pays à zéro.',
+       tip:'Aucun des 97 sites ne publie sa capacité, son PUE ni sa consommation : presque tout ce que vous lisez est de nature « classe », et la page le dit.'},
+      {id:'pan-sia', go:'panParcoursEau', label:'Le chemin « Eau et biodiversité »',
+       action:'Même module, autre lecture : disponibilité en eau, concurrence d’usage, choix de refroidissement.',
+       gain:'Les territoires où l’eau, et non l’électricité, sera le facteur limitant.',
+       tip:'L’eau de refroidissement se juge au point exact du site et au mois le plus tendu, jamais sur une moyenne nationale annuelle.'},
+      {id:'empreinte', label:'Consolider votre propre empreinte',
+       action:'Reportez vos consommations et vos équipements pour obtenir usage, fabrication et eau sur votre périmètre.',
+       gain:'Un chiffrage à opposer aux ordres de grandeur du marché plutôt qu’à recopier.',
+       tip:'ERE = PUE × (1 − ERF) peut descendre sous 1 quand la chaleur est réellement valorisée : ce n’est pas une anomalie de calcul.'},
+      {id:'templates', label:'Documenter et prouver',
+       action:'Constituez le dossier : sources, millésimes, hypothèses et formules retenues.',
+       gain:'De quoi soutenir un chiffre en audit — un ordre de grandeur sans hypothèses écrites ne résiste pas à la première question.',
+       tip:'Citez toujours la version du référentiel et sa date : c’est la première chose que vérifie un contrôleur.'}
+    ]
+  },
+  {
+    id: 'dc_financement',
+    icon: '🏦',
+    role: 'Financer ou assurer un centre de données',
+    pitch: 'Instruire un dossier de financement de projet ou une souscription : ce que le référentiel atteste, ce qu’il estime, et ce qui devra être mesuré en data room.',
+    steps: [
+      {id:'pan-sia', go:'panParcoursCredit', label:'Le chemin « Banque — financement de projet »',
+       action:'Suivez la lecture bancaire : statut du site comme échelle de certitude, trajectoire du parc, file de raccordement.',
+       gain:'Une hiérarchie des risques du projet fondée sur des faits datés et sourcés, pas sur des annonces.',
+       tip:'Les projets ABANDONNÉS sont conservés exprès dans le référentiel : un refus renseigne autant qu’une annonce sur les contraintes d’un territoire.'},
+      {id:'pan-sia', go:'panParcoursAssurance', label:'Le chemin « Assurance — souscription et sinistres »',
+       action:'Même module, angle assurantiel : exposition physique, dépendance au réseau, concentration géographique.',
+       gain:'Les cumuls d’exposition qu’une lecture site par site ne fait pas apparaître.',
+       tip:'La concentration se lit sur la carte, pas dans le dossier d’un site : plusieurs preneurs peuvent dépendre du même point de raccordement.'},
+      {id:'matrice', label:'Positionner les risques',
+       action:'Reportez les risques identifiés sur les axes gravité × probabilité.',
+       gain:'Un support d’arbitrage qui tranche entre ce qui se couvre, ce qui se contractualise et ce qui se refuse.',
+       tip:'Un risque non chiffrable n’est pas un risque nul : inscrivez-le avec la mention « à mesurer », il disparaîtra sinon du dossier.'},
+      {id:'juridique', label:'Les questions de data room',
+       action:'Listez, avec l’assistance juridique, ce que le référentiel ne peut pas trancher : PUE mesuré sur douze mois, raccordement contractuel, baux, CAPEX engagé, structure de détention.',
+       gain:'Une liste opposable au vendeur, écrite avant la négociation et non pendant.',
+       tip:'Le prix réel de l’électricité est un contrat : la statistique publique ne le voit pas, ne la citez jamais comme prix du projet.'}
+    ]
+  },
+  {
+    id: 'dc_reporting',
+    icon: '📑',
+    role: 'Reporting extra-financier (CSRD)',
+    pitch: 'Produire un reporting environnemental sur un parc numérique en sachant, pour chaque chiffre, s’il est publié, calculé depuis le site ou déduit d’une classe.',
+    steps: [
+      {id:'pan-sia', go:'panParcoursAnalyste', label:'Le chemin « Analyse financière et reporting »',
+       action:'Parcourez le référentiel avec la question du reporting : quelle donnée est opposable, laquelle est un ordre de grandeur.',
+       gain:'La nature de chaque valeur — publié, site, classe — écrite noir sur blanc, ce qui est exactement ce qu’un commissaire demandera.',
+       tip:'« Classe » répond à « de quel ordre est un campus de ce type ? », jamais à « combien consomme ce site ? ». Ne franchissez pas cette ligne dans un rapport.'},
+      {id:'empreinte', label:'Chiffrer votre périmètre',
+       action:'Calculez usage, fabrication amortie et eau sur vos propres installations et contrats d’hébergement.',
+       gain:'Des postes séparés, tels que les attend un référentiel de reporting.',
+       tip:'La fabrication amortie relève du scope 3 : la fondre dans l’usage revient à sous-déclarer.'},
+      {id:'templates', label:'Constituer le dossier de preuve',
+       action:'Rassemblez sources, millésimes, hypothèses et méthodes de calcul.',
+       gain:'La traçabilité exigée en vérification — chaque chiffre remonte à sa source primaire.',
+       tip:'Une capture d’écran n’est pas une source : conservez le lien, l’éditeur et la date de consultation.'},
+      {id:'report', label:'Restituer à la direction',
+       action:'Présentez les résultats avec leurs limites explicites.',
+       gain:'Un rapport dont les réserves sont écrites par vous plutôt que découvertes par le vérificateur.',
+       tip:'Annoncez les incertitudes en même temps que les chiffres : une réserve ajoutée après coup se lit comme une correction.'}
+    ]
+  },
+  {
+    id: 'dc_ia_hebergee',
+    icon: '🖥️',
+    role: 'L’IA hébergée : du site au registre',
+    pitch: 'Faire le lien entre l’infrastructure et le règlement : les systèmes d’IA qui tournent dans vos centres de données doivent être classés, inscrits et gouvernés.',
+    steps: [
+      {id:'pan-sia', label:'Voir ce qui est réellement déployé dans l’UE',
+       action:'Parcourez le panel des cas documentés — POC, pilotes, production, abandons — et leurs classes de risque AI Act.',
+       gain:'Des points de comparaison réels pour situer vos propres usages, et les vulnérabilités déjà constatées par type de système.',
+       tip:'Ce panel n’est PAS un recensement : un déploiement non communiqué n’y figure pas, et le biais de publication favorise les grands groupes.'},
+      {id:'simulateur', label:'Classer chaque système',
+       action:'Déroulez les cinq étapes de classification pour chaque système hébergé ou opéré.',
+       gain:'Le niveau de risque et les obligations exactes, avant d’avoir engagé la moindre dépense de mise en conformité.',
+       tip:'Le rôle compte autant que le système : hébergeur, déployeur et fournisseur n’ont pas les mêmes obligations sur le même outil.'},
+      {id:'registre', label:'Inscrire à l’inventaire',
+       action:'Enregistrez chaque système classifié avec sa finalité, son fournisseur et les données qu’il utilise.',
+       gain:'L’inventaire central exigé par le règlement — la première pièce demandée en contrôle.',
+       tip:'Structurez par site ou par entité dès le départ : une reprise d’inventaire après coup coûte plus cher que la saisie initiale.'},
+      {id:'audit-ia-act', label:'Passer les points de contrôle',
+       action:'Parcourez les points de contrôle en marquant chacun conforme, en cours ou à traiter.',
+       gain:'Un plan d’action point par point, avec la référence légale de chacun.',
+       tip:'Traitez d’abord les points qui exposent à une sanction directe : tout ne peut pas être mené de front.'},
+      {id:'gouvernance', label:'Tenir le dispositif dans la durée',
+       action:'Fixez le circuit de validation des nouveaux usages et la composition du comité.',
+       gain:'Un dispositif qui survit au départ de la personne qui l’a monté.',
+       tip:'Un comité sans décisions réservées et sans motif écrit n’est pas une gouvernance : c’est une réunion.'}
+    ]
+  }
 ];
 
 /* ══════════════════════════════════════════════════════════════════════════
    LA LISTE DES RÔLES DANS LA BARRE LATÉRALE
    ══════════════════════════════════════════════════════════════════════════
-   Les onze parcours existaient déjà, entiers, derrière un bouton et une
+   Les parcours existaient déjà, entiers, derrière un bouton et une
    fenêtre. Un visiteur qui ne cliquait pas ne savait pas que Sentinel se lit
    selon son rôle : la fonction était là, et invisible. La liste remplit
    maintenant la barre latérale, et la fenêtre ne sert plus qu'à LIRE le
@@ -23799,8 +23939,53 @@ var GP_FAMILLES = [
   { titre: 'Gouvernance & IA Act',
     ids: ['directeur_programme', 'grc_senior', 'risk_manager', 'ceo', 'cdo', 'caio'] },
   { titre: 'Protection des données (RGPD)',
-    ids: ['dpo', 'rgpd_conformite_init', 'rgpd_registre', 'rgpd_nouveau', 'rgpd_controle'] }
+    ids: ['dpo', 'rgpd_conformite_init', 'rgpd_registre', 'rgpd_nouveau', 'rgpd_controle'] },
+  { titre: 'Centres de données',
+    ids: ['dc_implantation', 'dc_energie', 'dc_financement', 'dc_reporting', 'dc_ia_hebergee'] }
 ];
+
+/* ══════════════════════════════════════════════════════════════════════════
+   OUVRIR LE PANORAMA SUR UN CHEMIN DE LECTURE PRÉCIS
+
+   Le Panorama porte six parcours propres aux centres de données, dans une
+   iframe. Une étape qui se contenterait d'ouvrir le module déposerait le
+   lecteur en haut d'une page de 13 700 px sans lui dire par où entrer.
+
+   On ne passe PAS par le hash : poser deux fois la même ancre ne déclenche
+   aucun « hashchange », et l'étape serait morte au second passage. L'iframe
+   étant de même origine, on appelle directement gpDemarrer dans sa fenêtre.
+
+   L'attente est une VÉRIFICATION répétée, pas un délai fixe : l'iframe est
+   préchargée au repos, donc parfois déjà prête — auquel cas l'événement
+   « load » ne se produira plus jamais et l'attendre bloquerait pour de bon.
+   ══════════════════════════════════════════════════════════════════════════ */
+window.panParcours = function(cle){
+  if(typeof go === 'function') go('pan-sia');
+  var f = document.getElementById('pan-sia-iframe');
+  if(!f) return;
+  if(!f.getAttribute('src') && f.getAttribute('data-src'))
+    f.setAttribute('src', f.getAttribute('data-src'));   /* le préchargement n'a pas eu lieu */
+  var essais = 0;
+  (function poser(){
+    var w = null;
+    try { w = f.contentWindow; } catch(e){ return; }     /* origine refusée : on renonce */
+    if(w && w.document && w.document.readyState === 'complete'
+       && typeof w.gpDemarrer === 'function'){
+      try { w.gpDemarrer(cle); } catch(e){}
+      return;
+    }
+    if(++essais > 40) return;                            /* ~8 s, puis on laisse la page telle quelle */
+    setTimeout(poser, 200);
+  })();
+};
+/* Une fonction nommée par parcours : guidedStartStep appelle window[step.go]
+   sans argument, il n'y a donc pas d'autre moyen de transmettre la clé. */
+window.panParcoursInvest    = function(){ panParcours('invest'); };
+window.panParcoursCredit    = function(){ panParcours('credit'); };
+window.panParcoursAssurance = function(){ panParcours('assurance'); };
+window.panParcoursClimat    = function(){ panParcours('climat'); };
+window.panParcoursEau       = function(){ panParcours('eau'); };
+window.panParcoursAnalyste  = function(){ panParcours('analyste'); };
 
 function gpOption(p){
   var n = (p.steps || []).length;
