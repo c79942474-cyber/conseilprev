@@ -2674,6 +2674,47 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
      d'un cadre douze fois trop grand, et la suite de Sentinel serait poussee
      hors de l'ecran. Chaque cadre suit donc son message. */
   var CADRES = { 'obs-height': 'obs-rd-iframe', 'pan-height': 'pan-sia-iframe' };
+
+  /* ── Dire au module ce que le lecteur voit de lui ──────────────────────
+     Un cadre de 1600 px n'est jamais vu en entier. Une page embarquee ne peut
+     pas connaitre le defilement de son hote — c'est une frontiere de securite
+     du navigateur — et sans cette information elle ouvre ses fenetres au
+     milieu de SES 1600 px, c'est-a-dire hors de l'ecran. C'est ainsi que les
+     six parcours guides « ne s'affichaient pas » : ils s'affichaient, ailleurs.
+
+     On annonce donc la bande visible, en coordonnees du module. Envoi limite
+     a une image par rafraichissement : poster a chaque pixel de defilement
+     ferait travailler le module pour rien. */
+  (function(){
+    var enVol = false;
+    function annoncer(){
+      enVol = false;
+      Object.keys(CADRES).forEach(function(t){
+        var f = document.getElementById(CADRES[t]);
+        if(!f || !f.contentWindow) return;
+        var r = f.getBoundingClientRect();
+        if(r.bottom < 0 || r.top > window.innerHeight) return;   // hors ecran
+        try{
+          f.contentWindow.postMessage({
+            type: 'pan-vue',
+            haut: Math.max(0, -r.top),
+            bas: Math.max(0, Math.min(r.height, window.innerHeight - r.top))
+          }, '*');
+        }catch(e){}
+      });
+    }
+    function planifier(){
+      if(enVol) return;
+      enVol = true;
+      requestAnimationFrame(annoncer);
+    }
+    window.addEventListener('scroll', planifier, { passive: true });
+    window.addEventListener('resize', planifier);
+    /* Une premiere annonce des que le cadre a charge : sans elle, un lecteur
+       qui ouvre un parcours sans avoir defile retombe sur le repli. */
+    setTimeout(annoncer, 1200);
+    setTimeout(annoncer, 3000);
+  })();
   window.addEventListener('message', function(ev){
     var d = ev && ev.data;
     if(!d || !CADRES[d.type]) return;

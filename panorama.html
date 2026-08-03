@@ -406,6 +406,10 @@ body.vue-pays .pnav a,body.vue-pays .pnav-sep{display:none}
    comment le lire, et le piege propre a ce metier. */
 
 .gp-voile{position:fixed;inset:0;z-index:70;background:rgba(20,20,20,.45);display:none}
+/* Embarqué, le voile couvre les 1 600 px du cadre : le lecteur voit un écran
+   entièrement sombre sans savoir d'où vient la fenêtre. On l'éclaircit et on
+   le laisse couvrir — c'est le seul moyen de fermer au clic hors fenêtre. */
+body.embed .gp-voile{background:rgba(20,20,20,.32)}
 .gp-voile.on{display:block}
 .gp-carte{position:fixed;z-index:72;bottom:22px;left:50%;transform:translateX(-50%);
   width:min(580px,calc(100vw - 28px));background:var(--white);border:1px solid var(--rule);
@@ -439,10 +443,24 @@ body.vue-pays .pnav a,body.vue-pays .pnav-sep{display:none}
 /* La section visee est SOULIGNEE, jamais masquee : on doit pouvoir la lire
    pendant qu'on lit la consigne, sinon le parcours devient un diaporama. */
 .gp-cible{position:relative;z-index:71;box-shadow:0 0 0 3px #1C5CAB,0 8px 40px rgba(0,0,0,.25)}
+/* Le centrage vertical vaut pour la page servie seule. EMBARQUÉE dans
+   Sentinel, la page vit dans un cadre de 1 600 px de haut : `position:fixed`
+   s'y rapporte au viewport de L'IFRAME, pas à l'écran. La fenêtre s'ouvrait
+   donc au milieu de ces 1 600 px — parfaitement, mais hors de ce que le
+   lecteur regarde. Mesuré : de 29 % à 82 % de visible selon le défilement,
+   les deux dernières fiches systématiquement sous le pli. « Les six parcours
+   ne s'affichent pas » : ils s'affichaient, ailleurs.
+
+   En mode embarqué, --gp-top et --gp-max sont posés par gpBande() depuis la
+   bande réellement visible, que la page parente annonce. */
 .gp-choix{position:fixed;z-index:72;top:50%;left:50%;transform:translate(-50%,-50%);
   width:min(700px,calc(100vw - 28px));max-height:calc(100vh - 40px);overflow:auto;
   background:var(--white);border:1px solid var(--rule);border-radius:6px;
   box-shadow:0 18px 50px rgba(0,0,0,.35);padding:22px 24px;display:none}
+body.embed .gp-choix{top:var(--gp-top,50%);transform:translate(-50%,-50%);
+  max-height:var(--gp-max,calc(100vh - 40px))}
+body.embed .gp-carte{bottom:auto;top:var(--gp-bas,auto);
+  max-height:var(--gp-max,none);overflow:auto}
 .gp-choix.on{display:block}
 .gp-choix h3{font-family:var(--serif);font-size:20px;font-weight:400;margin:0 0 4px}
 .gp-choix .st{font-size:12px;color:var(--muted);margin:0 0 14px;line-height:1.55}
@@ -5102,6 +5120,7 @@ function gpEls(){
 function gpOuvrirChoix(){
   var e = gpEls();
   gpNettoyer();
+  gpBande();
   e.voile.classList.add("on");
   e.choix.classList.add("on");
   var b = e.choix.querySelector(".gp-p");
@@ -5115,6 +5134,7 @@ function gpDemarrer(cle, branche){
   e.choix.classList.remove("on");
   GP.profil = cle; GP.i = 0;
   GP.branche = (branche && P.branches && P.branches[branche]) ? branche : null;
+  gpBande();
   e.voile.classList.add("on");
   e.carte.classList.add("on");
   if(history.replaceState) history.replaceState(null, "", "#parcours=" + cle
@@ -5241,6 +5261,53 @@ function gpAller(i){
    quinze intitulés pour trouver le sien. Ici on répond à « qui êtes-vous »,
    puis à « que cherchez-vous », et la seconde liste ne propose que ce qui a
    un sens pour le premier choix. */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   OÙ OUVRIR LA FENÊTRE QUAND LA PAGE EST EMBARQUÉE
+   ══════════════════════════════════════════════════════════════════════════
+   Servie seule, la page centre sa fenêtre dans l'écran et c'est juste. Dans
+   Sentinel, elle vit dans un cadre de 1 600 px : `position:fixed` s'y rapporte
+   au viewport de L'IFRAME. La fenêtre s'ouvrait donc au milieu de ces 1 600 px
+   — correctement, mais loin de ce que le lecteur regarde.
+
+   Une page embarquée ne peut pas connaître seule le défilement de son hôte :
+   c'est une frontière de sécurité du navigateur, et c'est très bien ainsi. La
+   page parente le lui DIT, par le même canal de messages qui sert déjà à
+   annoncer les hauteurs. Sans message — page ouverte seule, ou hôte qui ne le
+   fait pas — on retombe sur un ancrage haut plutôt que centré : au pire le
+   lecteur voit le haut de la fenêtre et peut faire défiler, ce qui reste
+   infiniment mieux que de ne rien voir. */
+var GP_BANDE = null;   /* { haut, bas } en pixels du repère de CETTE page */
+
+function gpBande(){
+  var b = document.body;
+  if(!b.classList.contains("embed")) return;
+  var haut, bas;
+  if(GP_BANDE && GP_BANDE.bas > GP_BANDE.haut + 120){
+    haut = Math.max(0, GP_BANDE.haut);
+    bas = Math.min(document.documentElement.scrollHeight, GP_BANDE.bas);
+  } else {
+    /* Repli : le haut du cadre. Un centrage sur 1 600 px est le pire choix ;
+       le haut est au moins un endroit que le lecteur atteint en remontant. */
+    haut = 0; bas = Math.min(760, window.innerHeight);
+  }
+  var h = bas - haut;
+  b.style.setProperty("--gp-top", Math.round(haut + h / 2) + "px");
+  b.style.setProperty("--gp-max", Math.max(220, Math.round(h - 32)) + "px");
+  b.style.setProperty("--gp-bas", Math.round(bas - Math.min(h - 24, 320)) + "px");
+}
+
+/* La page parente annonce la bande visible du cadre. Message volontairement
+   distinct des messages de hauteur : celui-ci part à chaque défilement, et le
+   mêler à un message qui redimensionne l'iframe ferait vibrer la page. */
+window.addEventListener("message", function(ev){
+  var d = ev && ev.data;
+  if(!d || d.type !== "pan-vue") return;
+  var h = parseFloat(d.haut), b = parseFloat(d.bas);
+  if(!isFinite(h) || !isFinite(b) || b <= h) return;
+  GP_BANDE = { haut: h, bas: b };
+  gpBande();
+}, false);
 
 function ppEls(){
   return { role: document.getElementById("pp-role"),
