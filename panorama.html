@@ -537,6 +537,26 @@ body.embed .gp-carte{bottom:auto;top:var(--gp-bas,auto);
    ce qui envoyait la valeur et la cible à la ligne et laissait la phrase
    commencer par un point isolé. */
 .fin-conf-c > b:first-child{display:block;font-size:12px;margin-bottom:2px}
+/* ══ CARTE DE RÉSULTAT ═════════════════════════════════════════════════════
+   Même projection, mêmes contours et mêmes conventions de trait que la carte
+   du panel : deux cartes de la même page qui ne se ressemblent pas obligent le
+   lecteur à réapprendre la géographie à chaque section. */
+.cres{border:1px solid var(--rule2);border-radius:8px;background:var(--white);
+  padding:11px 13px;margin:0 0 14px}
+.cres-t{font-size:12px;font-weight:700;margin:0 0 3px}
+.cres-note{font-size:10.5px;color:var(--muted2);line-height:1.5;margin:0 0 8px}
+.cres-svg{width:100%;height:auto;display:block;border-radius:6px;background:#DDE3EA;
+  max-height:560px}
+.cres-lg{display:flex;flex-wrap:wrap;gap:5px 14px;margin-top:9px;font-size:10.5px;
+  align-items:center}
+.cres-lg i{display:inline-block;width:13px;height:11px;border-radius:2px;
+  border:1px solid rgba(0,0,0,.18);margin-right:5px;vertical-align:-1px}
+.cres-pod{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+.cres-p{border:1px solid var(--rule2);border-radius:6px;padding:6px 10px;font-size:11px;
+  background:var(--bg);min-width:130px}
+.cres-p b{display:block;font-size:12px}
+.cres-p.or{border-color:#2D7A47;box-shadow:0 0 0 2px rgba(45,122,71,.12)}
+.cres-p span{font-family:var(--mono);font-size:10px;color:var(--muted2)}
 .fin-aren{background:#FFF6E5;border:1px solid #E0C088;border-radius:6px;padding:10px 13px;
   font-size:11.5px;line-height:1.55;margin:12px 0}
 .fin-aren li{margin:3px 0}
@@ -1740,6 +1760,59 @@ function centroidePays(code){
   }
   return best;
 }
+/* ══════════════════════════════════════════════════════════════════════════
+   CARTE DE RÉSULTAT — le classement, posé sur la géographie
+
+   `pays` est un objet { CODE: { couleur, rang, valeur, titre } }. Tout ce qui
+   n'y figure pas est dessiné en NEUTRE, et la légende dit pourquoi : sur une
+   carte choroplèthe, un pays gris se lit spontanément comme « mauvais », ce
+   qui serait faux dans les deux usages de cette fonction.
+
+   Combien de rangs écrire sur la carte dépend de COMBIEN il y en a. Vingt-trois
+   pastilles numérotées sur une Europe de mille pixels donneraient une carte
+   illisible : trois suffisent, le classement complet est juste au-dessus. Mais
+   sur une comparaison de quatre pays, s'arrêter à trois laisse un pays coloré
+   SANS numéro — et un pays rouge sans rang se lit comme un défaut d'affichage.
+   `opts.rangsMax` tranche, et vaut trois par défaut.
+   ══════════════════════════════════════════════════════════════════════════ */
+function carteResultat(pays, opts){
+  opts = opts || {};
+  var W = PROJ.W, H = PROJ.H;
+  var s = '<svg class="cres-svg" viewBox="0 0 ' + W + ' ' + H + '" '
+        + 'preserveAspectRatio="xMidYMid meet" role="img" aria-label="'
+        + esc(opts.alt || 'Carte de résultat par pays') + '">'
+        + '<rect width="' + W + '" height="' + H + '" fill="#DDE3EA"/>';
+  var neutres = '', colores = '', etiquettes = '';
+  Object.keys(CONTOURS).forEach(function(code){
+    var d = cheminPays(code);
+    if(!d) return;
+    var r = pays[code];
+    if(r){
+      colores += '<path d="' + d + '" fill="' + r.couleur + '" stroke="#FFF" '
+        + 'stroke-width="0.7" class="cres-pays" data-code="' + esc(code) + '">'
+        + '<title>' + esc(r.titre || (nomPays(code) + ' — ' + (r.valeur || ''))) + '</title></path>';
+    } else {
+      /* Deux gris distincts : l'UE non retenue reste plus claire que le hors-UE,
+         sinon un pays simplement non comparé se confondrait avec la Turquie. */
+      neutres += '<path d="' + d + '" fill="' + (UE[code] ? '#EFF2F6' : '#D6D8DA')
+        + '" stroke="#FFF" stroke-width="0.5"/>';
+    }
+  });
+  Object.keys(pays).forEach(function(code){
+    var r = pays[code];
+    if(!r.rang || r.rang > (opts.rangsMax || 3)) return;
+    var c = centroidePays(code);
+    if(!c) return;
+    var dx = (LBL_DECAL[code] || [0, 0])[0], dy = (LBL_DECAL[code] || [0, 0])[1];
+    var x = projX(c[0]) + dx, y = projY(c[1]) + dy;
+    etiquettes += '<g class="cres-rg"><circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1)
+      + '" r="13" fill="#FFF" stroke="' + r.couleur + '" stroke-width="2.5"/>'
+      + '<text x="' + x.toFixed(1) + '" y="' + (y + 4.5).toFixed(1) + '" text-anchor="middle" '
+      + 'font-size="14" font-weight="700" fill="' + r.couleur + '">' + r.rang + '</text></g>';
+  });
+  return s + neutres + colores + etiquettes + '</svg>';
+}
+
 /* Ajustements manuels : quelques centroides tombent mal a cette echelle
    (peninsules, archipels) ou se chevauchent entre voisins serres. */
 var LBL_DECAL = { FR:[0,6], IT:[-7,-14], HR:[3,4], DK:[-4,-7], NL:[-5,-3], BE:[-4,5],
@@ -3926,6 +3999,54 @@ function implTuile(l){
     + "</button>";
 }
 
+/* La carte du comparateur. Elle colore CHAQUE pays noté par la couleur de son
+   score — le même vert-orange-rouge que les tuiles, parce qu'une couleur doit
+   dire la même chose partout sur une page.
+
+   Deux mentions sont obligatoires sous cette carte, et ce ne sont pas des
+   précautions de style :
+
+     · les couleurs dépendent des POIDS que le lecteur vient de régler. Sans
+       le dire, un résultat d'arbitrage passerait pour une propriété du
+       référentiel — et serait cité comme telle ;
+     · un pays gris n'est pas mal noté, il est ABSENT du référentiel. Sur une
+       choroplèthe, le gris se lit spontanément comme « mauvais ». */
+function carteImplantation(toutes){
+  if(!toutes || !toutes.length) return "";
+  var pays = {};
+  toutes.forEach(function(l){
+    pays[l.x.pays] = { couleur: implCouleurNote(l.score), rang: l.rang, valeur: l.score,
+                       titre: (nomPays(l.x.pays) || l.x.pays) + " — rang " + l.rang
+                              + " sur " + toutes.length + ", score " + l.score + "/100" };
+  });
+  var podium = toutes.slice(0, 3).map(function(l, i){
+    return '<div class="cres-p' + (i === 0 ? " or" : "") + '">'
+      + '<b>' + (i + 1) + '. ' + esc(nomPays(l.x.pays) || l.x.pays) + '</b>'
+      + '<span>score ' + l.score + '/100</span></div>';
+  }).join("");
+  var absents = Object.keys(UE).filter(function(c){ return !pays[c]; }).length;
+  return '<div class="cres">'
+    + '<p class="cres-t">Le classement, posé sur la carte</p>'
+    + '<p class="cres-note">Un podium Suède / Finlande / Norvège et un podium Espagne / Italie / '
+    + 'Grèce ont les mêmes rangs et ne disent pas la même chose : l’un envoie au nord, l’autre '
+    + 'au sud. La carte le montre d’un coup d’œil. <b>Les couleurs dépendent des poids que vous '
+    + 'venez de régler</b> — ce n’est pas une propriété du référentiel, c’est le résultat de '
+    + 'votre arbitrage. Les trois premiers portent leur rang ; le classement complet est '
+    + 'juste en dessous.</p>'
+    + carteResultat(pays, { alt: "Carte de l’Union européenne colorée par le score "
+        + "d’implantation pondéré, du plus favorable au moins favorable." })
+    + '<div class="cres-lg">'
+    + '<span><i style="background:#2D7A47"></i>score 70 et plus</span>'
+    + '<span><i style="background:#C47C1A"></i>de 45 à 69</span>'
+    + '<span><i style="background:#B83222"></i>sous 45</span>'
+    + '<span><i style="background:#EFF2F6"></i>pays de l’UE hors référentiel — '
+    + 'non noté, pas mal noté (' + absents + ')</span>'
+    + '<span><i style="background:#D6D8DA"></i>hors Union européenne</span>'
+    + '</div>'
+    + '<div class="cres-pod">' + podium + '</div>'
+    + '</div>';
+}
+
 function renderImplClassement(){
   var el = document.getElementById("imp-classement");
   if(!el || !IMPL) return;
@@ -3944,6 +4065,12 @@ function renderImplClassement(){
     function(a, b){ return b.score - a.score; });
   tfCompte("tf-imp", "imp", lignes.length, toutes.length);
 
+  /* La carte se dessine sur le classement COMPLET, pas sur les lignes filtrées.
+     Un filtre « Espagne » qui effacerait le reste de l'Europe ferait perdre à la
+     carte ce qui justifie sa présence : la comparaison. Les pays filtrés sont
+     donc encore là, à leur couleur — c'est la GRILLE qui filtre, pas la carte. */
+  el.innerHTML = carteImplantation(toutes);
+
   /* Le rappel des couleurs vaut dans les deux affichages : c'est la seule chose
      qu'il faut savoir avant de balayer la grille du regard. */
   var couleurs = 'Une même couleur dit la même chose partout : '
@@ -3951,7 +4078,7 @@ function renderImplClassement(){
     + '<span class="imp-chip mauvais">défavorable</span>. ';
 
   if(!tfEnTableau("imp")){
-    el.innerHTML = '<div class="pgr" role="group" aria-label="Classement d’implantation, un pays par tuile">'
+    el.innerHTML += '<div class="pgr" role="group" aria-label="Classement d’implantation, un pays par tuile">'
       + lignes.map(implTuile).join("") + "</div>"
       + '<p class="note" style="margin-top:8px">' + couleurs
       + 'Chaque tuile porte le <b>rang au classement complet</b>, le score selon vos poids, puis '
@@ -3970,7 +4097,7 @@ function renderImplClassement(){
     return;
   }
 
-  el.innerHTML = '<div class="tablo"><table><thead><tr>'
+  el.innerHTML += '<div class="tablo"><table><thead><tr>'
     + "<th>Rang" + implTip("Rang au CLASSEMENT COMPLET des " + toutes.length
         + " pays du référentiel, selon vos poids. Il ne suit pas l’ordre d’affichage : "
         + "trié de A à Z ou restreint par un filtre, « rang 7 » veut toujours dire "
@@ -6646,9 +6773,60 @@ if(window.parent&&window.parent!==window){
       + '<p class="note" style="margin:4px 0 10px">'+esc(i.note)+' '+esc(i.source)+'</p>';
   }
 
+  /* La carte du GO / NO GO. Elle ne colore QUE les pays comparés, et la légende
+     dit pourquoi : un pays non sélectionné n'a pas perdu, il n'a pas été
+     calculé. Sur une choroplèthe, le gris se lit spontanément comme « mauvais »
+     — ici ce serait un contresens, et un contresens coûteux.
+
+     Le rang est celui du COÛT TOTAL DE POSSESSION, jamais de l'enveloppe : à
+     puissance égale, l'investissement est identique d'un pays à l'autre par
+     construction, et une carte colorée dessus afficherait un aplat uniforme. */
+  function carteFinance(j){
+    if(!window.carteResultat || !(j.classement || []).length) return '';
+    var C = j.classement;
+    var pays = {};
+    C.forEach(function(x, i){
+      pays[x.pays] = {
+        couleur: i === 0 ? '#2D7A47' : (i === C.length - 1 && C.length > 1 ? '#B83222' : '#C47C1A'),
+        rang: i + 1,
+        valeur: fourch(x.tco_meur) + ' M€',
+        titre: x.pays + ' — rang ' + (i + 1) + ' sur ' + C.length
+               + ', coût total ' + fourch(x.tco_meur) + ' M€ sur '
+               + (j.entree || {}).annees + ' ans'
+      };
+    });
+    var podium = C.map(function(x, i){
+      return '<div class="cres-p' + (i === 0 ? ' or' : '') + '">'
+        + '<b>' + (i + 1) + '. ' + esc(x.pays) + '</b>'
+        + '<span>' + fourch(x.tco_meur) + ' M€ · '
+        + (x.tient_2030 ? 'livrable avant 2030' : 'PAS avant 2030') + '</span></div>';
+    }).join('');
+    return '<div class="cres">'
+      + '<p class="cres-t">Les ' + C.length + ' pays comparés, sur la carte</p>'
+      + '<p class="cres-note">Le rang porté par la carte est celui du <b>coût total de '
+      + 'possession</b>, pas de l’investissement : à puissance égale, l’enveloppe est '
+      + 'identique d’un pays à l’autre par construction, et une carte colorée dessus '
+      + 'afficherait un aplat uniforme. <b>Les pays en gris clair n’ont pas perdu : ils '
+      + 'n’ont pas été calculés.</b> Ajoutez-les au comparateur pour qu’ils apparaissent.</p>'
+      + window.carteResultat(pays, { rangsMax: C.length,
+          alt: 'Carte de l’Union européenne : les pays comparés, '
+             + 'colorés du meilleur au moins bon coût total de possession.' })
+      + '<div class="cres-lg">'
+      + '<span><i style="background:#2D7A47"></i>coût total le plus bas</span>'
+      + '<span><i style="background:#C47C1A"></i>intermédiaire</span>'
+      + '<span><i style="background:#B83222"></i>coût total le plus élevé</span>'
+      + '<span><i style="background:#EFF2F6"></i>non comparé — aucun calcul lancé, '
+      + 'aucun verdict</span>'
+      + '<span><i style="background:#D6D8DA"></i>hors Union européenne</span>'
+      + '</div>'
+      + '<div class="cres-pod">' + podium + '</div>'
+      + '</div>';
+  }
+
   function rendre(j){
     var h = '<div class="fin-rang">'
-      + j.classement.map(function(x,i){ return carteRang(x,i,j); }).join('') + '</div>';
+      + j.classement.map(function(x,i){ return carteRang(x,i,j); }).join('') + '</div>'
+      + carteFinance(j);
     j.dossiers.forEach(function(d){
       h += '<h3 style="margin:18px 0 4px;font-size:14px">'+esc(d.pays)+' — enveloppe '
         + fourch(d.devis.enveloppe_meur)+' M€</h3>'
