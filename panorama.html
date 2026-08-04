@@ -1126,12 +1126,67 @@ tbody tr.on{background:rgba(184,50,34,.06)}
 
 /* ── Graphiques ── */
 .charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr));gap:16px}
-.chart-b h4{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted2);margin-bottom:8px}
 .hbar{margin-bottom:7px}
 .hbar .hb-l{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-bottom:2px}
 .hbar .hb-l b{color:var(--ink)}
 .hb-track{height:12px;background:#F1EFF6;border-radius:3px}
 .hb-fill{height:100%;border-radius:3px}
+/* ── Lectures d'ensemble : des barres actionnables ────────────────────────
+   Une barre est un BOUTON, pas un décor : elle filtre la grille des cas. Elle
+   en a donc les attributs — état pressé, anneau de focus, curseur — parce
+   qu'une chose cliquable qui ne se signale pas n'est pas cliquée. */
+.lec-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(380px,100%),1fr));gap:18px 22px}
+@media(min-width:1100px){ .lec-g{grid-template-columns:1fr 1fr} }
+.lec-c h4{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted2);margin:0 0 3px}
+.lec-c .lec-sous{font-size:10.5px;color:var(--muted2);margin:0 0 8px;line-height:1.45}
+.lec-b{display:block;width:100%;text-align:left;background:none;border:0;padding:3px 4px 4px;
+  margin:0 -4px 3px;border-radius:5px;cursor:pointer;font:inherit;color:inherit;
+  transition:background .12s}
+.lec-b:hover{background:var(--wash,#F6F5F2)}
+.lec-b:focus-visible{outline:2px solid var(--ink);outline-offset:1px}
+.lec-b[aria-pressed="true"]{background:var(--wash,#F1EFF6);box-shadow:inset 2px 0 0 var(--ink)}
+.lec-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;
+  font-size:11.5px;color:var(--muted);margin-bottom:2px}
+.lec-n{font-weight:700;color:var(--ink)}
+.lec-x{font-family:var(--mono);font-size:10px;color:var(--muted2);font-weight:400}
+.lec-v{flex:0 0 auto;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--ink);font-weight:700}
+.lec-p{font-family:var(--mono);font-size:10px;color:var(--muted2);font-weight:400;margin-left:5px}
+/* `display:block` n'est pas décoratif ici : la piste est un <span>, et sur un
+   élément en ligne la hauteur ne s'applique pas. Sans cette règle, les barres
+   disparaissent purement et simplement — il ne reste que les libellés et les
+   chiffres, ce qui a l'air d'un choix plutôt que d'un défaut. */
+.lec-t{display:block;position:relative;height:12px;background:#F1EFF6;border-radius:3px;overflow:hidden}
+.lec-f{position:absolute;left:0;top:0;height:100%;border-radius:3px;transition:width .18s}
+/* La part de la catégorie qui tombe dans la sélection, posée SUR la barre du
+   panel. Une hachure claire plutôt qu'une teinte : la couleur de fond porte
+   déjà un sens (la classe de risque, l'exposition), et la remplacer ferait
+   dire deux choses au même signal. */
+.lec-s{position:absolute;left:0;top:0;height:100%;border-radius:3px;
+  background:repeating-linear-gradient(135deg,rgba(255,255,255,.62) 0 3px,rgba(255,255,255,0) 3px 6px);
+  box-shadow:inset -2px 0 0 rgba(28,28,28,.55);transition:width .18s}
+/* Un zéro doit se VOIR comme un zéro, pas comme une donnée absente. */
+.lec-t.zero::before{content:"";position:absolute;left:0;top:3px;bottom:3px;width:2px;background:#C9C6C0}
+.lec-lg{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:10.5px;color:var(--muted2);
+  margin:2px 0 0;align-items:center}
+.lec-lg i{width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:4px;vertical-align:-1px}
+.lec-lg .lec-hach{background:#8A8A8A;
+  background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.7) 0 2px,rgba(255,255,255,0) 2px 4px)}
+/* Bandeau de tête : la base sur laquelle tout le reste se lit. */
+.lec-base{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px;margin:0 0 12px;
+  font-size:11.5px;color:var(--muted)}
+.lec-base b{color:var(--ink)}
+.lec-base .lec-raz{font:inherit;background:none;border:0;padding:0;color:var(--ink);
+  text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.lec-base .lec-raz:hover{color:var(--accent,#1E63A8)}
+/* ── Filtres actifs : visibles et révocables où qu'on soit dans la page ──── */
+.f-chips{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-left:2px}
+.f-chip{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-family:var(--mono);
+  background:var(--ink);color:#fff;border:0;border-radius:11px;padding:3px 5px 3px 9px;cursor:pointer}
+.f-chip:hover{background:#000}
+.f-chip:focus-visible{outline:2px solid var(--accent,#1E63A8);outline-offset:2px}
+.f-chip s{text-decoration:none;font-size:12px;line-height:1;opacity:.75}
+.f-chip:hover s{opacity:1}
 
 .chip-ech{font-family:var(--mono);font-size:10.5px;background:var(--white);border:1px solid var(--rule);
   border-left:3px solid var(--accent);border-radius:0 4px 4px 0;padding:6px 11px;color:var(--muted)}
@@ -1287,6 +1342,7 @@ engagements publics) sont imputés nominativement.</div>
     <button class="btn" id="f-raz" type="button">Réinitialiser</button>
     <button class="btn" id="f-csv" type="button" title="Exporter les cas filtrés">⬇ CSV</button>
     <span class="f-count" id="f-count"></span>
+    <span class="f-chips" id="f-actifs" role="status" aria-label="Filtres actifs"></span>
   </div>
   <div id="t-grille"></div>
   <div class="twrap" id="t-wrap">
@@ -1330,11 +1386,12 @@ engagements publics) sont imputés nominativement.</div>
     <span class="panel-note" id="stats-note"></span>
   </div>
   <div class="panel-body">
-    <div class="charts">
-      <div class="chart-b" id="ch-classes"><h4>Répartition par classe de risque AI Act</h4></div>
-      <div class="chart-b" id="ch-stades"><h4>Maturité : du POC à l'échelle</h4></div>
-      <div class="chart-b" id="ch-secteurs"><h4>Secteurs les plus représentés (exposition moyenne)</h4></div>
-      <div class="chart-b" id="ch-vuln"><h4>Vecteurs de vulnérabilité les plus fréquents du panel</h4></div>
+    <div class="lec-base" id="lec-base"></div>
+    <div class="lec-g">
+      <div class="lec-c" id="ch-classes"></div>
+      <div class="lec-c" id="ch-stades"></div>
+      <div class="lec-c" id="ch-secteurs"></div>
+      <div class="lec-c" id="ch-vuln"></div>
     </div>
     <p class="note">Ces répartitions décrivent LE PANEL (cas publiquement documentés), pas le parc européen réel —
     le biais de publication favorise les grands groupes et les cas génératifs. Elles suffisent en revanche à
@@ -2467,7 +2524,7 @@ function tipPays(code){
 }
 
 /* ── État de filtre ── */
-var F={pays:"",secteur:"",classe:"",stade:"",q:"",socle:false};
+var F={pays:"",secteur:"",classe:"",stade:"",q:"",socle:false,vuln:""};
 /* Rampe sequentielle UNE teinte (bleu), validee ordinal : les classes se
    lisent clair -> fonce, l'extremite claire tient 2:1 sur la surface. */
 var CMAP=["#E3EBF6","#86B6EF","#3987E5","#1C5CAB","#0D366B"];
@@ -2524,6 +2581,11 @@ function casFiltres(){
     /* Cas dont la matière première est publique : les seuls que le lecteur
        peut remonter jusqu'à la donnée d'entrée. */
     if(F.socle&&!(c.donnees_ouvertes&&c.donnees_ouvertes.length))return false;
+    /* Filtrer par VECTEUR d'attaque : la question que pose un RSSI devant ce
+       graphique — « quels cas sont exposés à l'injection de prompt ? ». Aucune
+       liste déroulante ne le proposait, seule la barre le déclenche ; d'où la
+       pastille révocable qui rend l'état visible depuis n'importe où. */
+    if(F.vuln&&!(c.vulnerabilites||[]).some(function(v){return v.v===F.vuln;}))return false;
     if(q&&(c.entreprise+" "+c.cas+" "+c.secteur+" "+c.pays_nom).toLowerCase().indexOf(q)<0)return false;
     return true;
   });
@@ -2999,7 +3061,15 @@ function brancherFiltres(){
     CAS_TABLEAU=this.value==="table";renderTable();
   });
   document.getElementById("f-raz").addEventListener("click",function(){
-    F={pays:"",secteur:"",classe:"",stade:"",q:""};
+    /* L'objet était REMPLACÉ, et la clé `socle` disparaissait au passage. Le
+       filtre s'en trouvait bien levé — `undefined` est faux — mais le bouton
+       du socle gardait son libellé « Afficher tout le panel » : il annonçait
+       une restriction qui n'existait plus. On remet chaque champ à sa valeur
+       de départ plutôt que de reconstruire l'objet, et on rend au bouton son
+       intitulé. */
+    F.pays=F.secteur=F.classe=F.stade=F.q=F.vuln="";F.socle=false;
+    var bs=document.getElementById("socle-filtre");
+    if(bs)bs.textContent="Ne montrer que ces cas";
     document.getElementById("f-q").value="";syncFiltres();renderTable();
     var on=document.querySelector(".pan-pays.on"); if(on)on.classList.remove("on");
   });
@@ -3059,6 +3129,7 @@ function renderTable(){
     wrap.style.display=CAS_TABLEAU?"":"none";
   }
   setHTML("f-count",liste.length+" / "+DATA.n_cas+" cas");
+  renderFiltresActifs();
 
   /* Un seul des deux existe a la fois, et l'autre est VIDE — pas seulement
      masque. Deux copies dans le DOM, c'est chaque entreprise trouvee deux fois
@@ -3150,36 +3221,269 @@ function exportCsv(){
   setTimeout(function(){URL.revokeObjectURL(a.href);},2000);
 }
 
-/* ── Graphiques (barres horizontales, DOM pur) ── */
-function hbar(label,val,max,couleur,extra){
-  var pct=max?Math.round(100*val/max):0;
-  return '<div class="hbar"><div class="hb-l"><span><b>'+esc(label)+"</b>"+(extra?" "+extra:"")+"</span><span>"+val+"</span></div>"
-    +'<div class="hb-track"><div class="hb-fill" style="width:'+pct+'%;background:'+couleur+'"></div></div></div>';
+/* ── Lectures d'ensemble : des barres qu'on peut actionner ────────────────
+   Chaque barre est un bouton qui filtre la grille des cas. Le lecteur qui voit
+   « haut risque : 21 » veut savoir LESQUELS, et la grille sait répondre : il
+   n'y a aucune raison de lui faire retrouver la valeur à la main dans une
+   liste déroulante.
+
+   Deux grandeurs coexistent sur une même barre, et il faut qu'on les
+   distingue sans les confondre :
+     · la barre PLEINE, colorée, décrit le panel entier — c'est ce que la
+       section annonce, et ça ne change pas quand on filtre ;
+     · la HACHURE, par-dessus, montre la part de cette catégorie qui tombe dans
+       la sélection en cours.
+   La hachure plutôt qu'une seconde couleur : la couleur de fond porte déjà un
+   sens — la classe de risque, l'exposition moyenne — et la remplacer ferait
+   dire deux choses au même signal. */
+function lecBarre(o){
+  var pct = o.max ? Math.round(100 * o.val / o.max) : 0;
+  var part = o.base ? Math.round(1000 * o.val / o.base) / 10 : null;
+  var pctSel = (o.sel !== null && o.sel !== undefined && o.max)
+    ? Math.round(100 * o.sel / o.max) : null;
+  var actif = o.cle && F[o.cle] === o.valeur;
+  var titre = actif
+    ? "Cliquer pour retirer ce filtre"
+    : (o.cle ? "Cliquer pour ne garder que ces cas dans la grille" : "");
+  return '<button type="button" class="lec-b"'
+    + (o.cle ? ' data-lec-k="' + esc(o.cle) + '" data-lec-v="' + esc(o.valeur) + '"' : ' disabled')
+    /* L'effectif en clair, à côté de l'effectif écrit. Le texte visible
+       accole la valeur et sa part — « 21 » suivi de « 29 % » — et tout ce qui
+       relit ce texte pour en extraire un nombre lit « 2129 ». */
+    + ' data-lec-n="' + o.val + '"'
+    + ' aria-pressed="' + (actif ? "true" : "false") + '"'
+    + (titre ? ' title="' + esc(titre) + '"' : "")
+    + '><span class="lec-h"><span><span class="lec-n">' + esc(o.label) + "</span>"
+    + (o.extra ? ' <span class="lec-x">' + o.extra + "</span>" : "")
+    + '</span><span class="lec-v">' + o.val
+    + (part !== null ? '<span class="lec-p">' + pct100(part) + "</span>" : "")
+    + (pctSel !== null ? '<span class="lec-p">dont ' + o.sel + " ici</span>" : "")
+    + '</span></span>'
+    + '<span class="lec-t' + (o.val ? "" : " zero") + '">'
+    + '<span class="lec-f" style="width:' + pct + '%;background:' + o.couleur + '"></span>'
+    + (pctSel !== null ? '<span class="lec-s" style="width:' + pctSel + '%"></span>' : "")
+    + "</span></button>";
 }
+
+/* « 29,4 % » se lit mal sur un effectif de 72 : la décimale suggère une
+   précision que le panel n'a pas. On arrondit à l'entier au-dessus de 10 %,
+   et on garde une décimale en dessous — sans quoi trois catégories distinctes
+   afficheraient toutes « 1 % ». */
+function pct100(v){
+  return (v >= 10 ? Math.round(v) : Math.round(v * 10) / 10).toString().replace(".", ",") + " %";
+}
+
+/* Un filtre est-il posé ? Sert à décider si la surimpression a un sens : sans
+   sélection, la hachure recouvrirait exactement la barre et n'apprendrait
+   rien. */
+function lecFiltreActif(){
+  return !!(F.pays || F.secteur || F.classe || F.stade || F.q || F.socle || F.vuln);
+}
+
 function renderCharts(){
-  var ag=DATA.agregats;
-  var ordre=["interdit","haut_risque","transparence","minimal"];
-  var maxC=Math.max.apply(null,ordre.map(function(k){return ag.par_classe[k]||0;}));
-  setHTML("ch-classes",'<h4>Répartition par classe de risque AI Act</h4>'
-    +ordre.map(function(k){return hbar(DATA.classes[k].nom,ag.par_classe[k]||0,maxC,DATA.classes[k].couleur);}).join(""));
-  var stades=["poc","pilote","production","echelle","abandonne"];
-  var maxS=Math.max.apply(null,stades.map(function(k){return ag.par_stade[k]||0;}));
-  setHTML("ch-stades",'<h4>Maturité : du POC à l’échelle</h4>'
-    +stades.map(function(k){return hbar(STADES[k],ag.par_stade[k]||0,maxS,"#1E63A8");}).join("")
-    +'<p class="note" style="margin-top:8px">La bascule POC → production est le moment où les obligations deviennent réelles : c’est là que le panel situe l’enjeu.</p>');
-  var top=ag.par_secteur.slice(0,8);
-  var maxSec=top.length?top[0].n:0;
-  setHTML("ch-secteurs",'<h4>Secteurs les plus représentés (exposition moyenne)</h4>'
-    +top.map(function(s){return hbar(s.secteur,s.n,maxSec,
-        s.exposition_moy>=60?"#B83222":s.exposition_moy>=40?"#C47C1A":"#2D7A47",
-        '<span style="font-family:var(--mono);font-size:10px;color:var(--muted2)">expo moy. '+fr(s.exposition_moy)+"</span>");}).join(""));
-  var vulns={};
-  DATA.cas.forEach(function(c){c.vulnerabilites.forEach(function(v){vulns[v.v]=(vulns[v.v]||0)+1;});});
-  var tv=Object.keys(vulns).map(function(k){return [k,vulns[k]];}).sort(function(a,b){return b[1]-a[1];}).slice(0,7);
-  var maxV=tv.length?tv[0][1]:0;
-  setHTML("ch-vuln",'<h4>Vecteurs de vulnérabilité les plus fréquents du panel</h4>'
-    +tv.map(function(x){return hbar(x[0],x[1],maxV,"#6A4BA8");}).join("")
-    +'<p class="note" style="margin-top:8px">Fréquence dans le panel = surface d’attaque du parc réel probable. Référentiels : OWASP LLM Top 10, MITRE ATLAS, ANSSI génAI 2024, ENISA.</p>');
+  var ag = DATA.agregats, base = DATA.n_cas || DATA.cas.length;
+  var sel = lecFiltreActif() ? casFiltres() : null;
+  var compte = function(fn){
+    if(!sel) return null;
+    var n = 0;
+    sel.forEach(function(c){ if(fn(c)) n++; });
+    return n;
+  };
+
+  /* En-tête : la base sur laquelle tout le reste se lit. Sans dénominateur
+     affiché, « 21 » n'est pas une lecture, c'est un nombre. */
+  var h = "<span>Base : <b>" + base + " cas</b> du panel"
+        + (DATA.fenetre ? " · fenêtre " + esc(DATA.fenetre) : "") + "</span>";
+  if(sel){
+    h += '<span>Sélection en cours : <b>' + sel.length + " cas</b> — la hachure "
+       + "montre où ils tombent</span>"
+       + '<button type="button" class="lec-raz" id="lec-raz">tout afficher</button>';
+  } else {
+    h += "<span>Cliquez une barre pour ne garder que ces cas dans la grille.</span>";
+  }
+  setHTML("lec-base", h);
+
+  var ordre = ["interdit", "haut_risque", "transparence", "minimal"];
+  var maxC = Math.max.apply(null, ordre.map(function(k){ return ag.par_classe[k] || 0; }));
+  setHTML("ch-classes", "<h4>Répartition par classe de risque AI Act</h4>"
+    + '<p class="lec-sous">Les quatre régimes de l’AI Act. Le haut risque porte les '
+    + 'obligations les plus lourdes : c’est par là qu’un registre interne se compare.</p>'
+    + ordre.map(function(k){
+        return lecBarre({ label: DATA.classes[k].nom, val: ag.par_classe[k] || 0, max: maxC,
+                          base: base, couleur: DATA.classes[k].couleur,
+                          cle: "classe", valeur: k,
+                          sel: compte(function(c){ return c.classe === k; }) });
+      }).join(""));
+
+  var stades = ["poc", "pilote", "production", "echelle", "abandonne"];
+  var maxS = Math.max.apply(null, stades.map(function(k){ return ag.par_stade[k] || 0; }));
+  setHTML("ch-stades", "<h4>Maturité : du POC à l’échelle</h4>"
+    + '<p class="lec-sous">La bascule POC → production est le moment où les obligations '
+    + 'deviennent réelles : c’est là que le panel situe l’enjeu.</p>'
+    + stades.map(function(k){
+        return lecBarre({ label: STADES[k], val: ag.par_stade[k] || 0, max: maxS,
+                          base: base, couleur: "#1E63A8", cle: "stade", valeur: k,
+                          sel: compte(function(c){ return c.stade === k; }) });
+      }).join(""));
+
+  /* La couleur encode l'exposition moyenne. Elle le faisait déjà — mais sans
+     le dire, ce qui revient à ne pas le faire : une couleur porteuse de sens
+     et non légendée se lit au hasard. */
+  var tousSec = ag.par_secteur || [], top = tousSec.slice(0, 8);
+  var maxSec = top.length ? top[0].n : 0;
+  var couleurExpo = function(e){ return e >= 60 ? "#B83222" : e >= 40 ? "#C47C1A" : "#2D7A47"; };
+  setHTML("ch-secteurs", "<h4>Secteurs les plus représentés</h4>"
+    + '<p class="lec-sous">La longueur compte les cas ; la <b>couleur</b> dit l’exposition '
+    + 'moyenne du secteur.'
+    + (tousSec.length > top.length
+        ? " Les " + top.length + " premiers sur " + tousSec.length + " secteurs représentés."
+        : "") + "</p>"
+    + top.map(function(x){
+        return lecBarre({ label: x.secteur, val: x.n, max: maxSec, base: base,
+                          couleur: couleurExpo(x.exposition_moy),
+                          cle: "secteur", valeur: x.secteur,
+                          extra: "expo moy. " + fr(x.exposition_moy),
+                          sel: compte(function(c){ return c.secteur === x.secteur; }) });
+      }).join("")
+    + '<p class="lec-lg"><span><i style="background:#2D7A47"></i>expo &lt; 40</span>'
+    + '<span><i style="background:#C47C1A"></i>40 à 59</span>'
+    + '<span><i style="background:#B83222"></i>60 et plus</span></p>');
+
+  var vulns = {};
+  DATA.cas.forEach(function(c){
+    (c.vulnerabilites || []).forEach(function(v){ vulns[v.v] = (vulns[v.v] || 0) + 1; });
+  });
+  var tousV = Object.keys(vulns).map(function(k){ return [k, vulns[k]]; })
+    .sort(function(a, b){ return b[1] - a[1]; });
+  var tv = tousV.slice(0, 7), maxV = tv.length ? tv[0][1] : 0;
+  setHTML("ch-vuln", "<h4>Vecteurs de vulnérabilité les plus fréquents</h4>"
+    /* Un cas porte plusieurs vecteurs : ces parts ne s'additionnent pas. Le
+       taire laisserait un lecteur additionner 17 + 17 + 17 et conclure que le
+       panel compte plus de cas qu'il n'en a. */
+    + '<p class="lec-sous">Un même cas porte souvent <b>plusieurs</b> vecteurs : ces parts '
+    + 'ne totalisent pas 100 %. Fréquence dans le panel = surface d’attaque du parc réel '
+    + 'probable.'
+    + (tousV.length > tv.length
+        ? " Les " + tv.length + " premiers sur " + tousV.length + " vecteurs recensés."
+        : "") + "</p>"
+    + tv.map(function(x){
+        return lecBarre({ label: x[0], val: x[1], max: maxV, base: base, couleur: "#6A4BA8",
+                          cle: "vuln", valeur: x[0],
+                          sel: compte(function(c){
+                            return (c.vulnerabilites || []).some(function(v){ return v.v === x[0]; });
+                          }) });
+      }).join("")
+    + '<p class="lec-lg">Référentiels : OWASP LLM Top 10, MITRE ATLAS, ANSSI génAI 2024, ENISA.</p>');
+
+}
+
+/* Les écouteurs sont posés UNE fois, sur la section : son contenu est réécrit
+   à chaque rendu, et des écouteurs posés sur les barres disparaîtraient au
+   premier clic — le deuxième ne ferait plus rien. */
+function brancherLectures(){
+  var sect = document.getElementById("s-lectures");
+  if(!sect || sect.getAttribute("data-lec") === "1") return;
+  sect.setAttribute("data-lec", "1");
+  sect.addEventListener("click", function(ev){
+    var raz = ev.target.closest ? ev.target.closest("#lec-raz") : null;
+    if(raz){ lecTout(); return; }
+    var b = ev.target.closest ? ev.target.closest(".lec-b[data-lec-k]") : null;
+    if(!b) return;
+    var k = b.getAttribute("data-lec-k"), v = b.getAttribute("data-lec-v");
+    /* Souris ou clavier ? Un <button> activé par Entrée ou Espace émet un clic
+       de `detail` nul, là où un vrai clic compte ses répétitions. La
+       distinction n'est pas cosmétique : les deux gestes appellent des suites
+       opposées, l'une qui déplace le lecteur, l'autre qui ne doit surtout pas
+       le faire. */
+    var clavier = ev.detail === 0;
+    /* Recliquer la barre active retire le filtre : sans cela, le lecteur qui a
+       cliqué par curiosité n'a aucun moyen évident de revenir en arrière. */
+    F[k] = (F[k] === v) ? "" : v;
+    syncFiltres(); renderTable(); renderCharts();
+    if(clavier){
+      /* Le rendu vient de remplacer le bouton : celui qui avait le focus
+         n'existe plus, et le focus est retombé sur le corps du document. Au
+         clavier, cela renvoie le lecteur au début de la page à chaque
+         activation. On rend le focus à la barre équivalente — et on ne fait
+         PAS défiler, parce qu'emporter ailleurs un lecteur qui navigue au
+         clavier lui fait perdre le seul repère qu'il avait. */
+      lecFocus(k, v);
+    } else if(F[k]){
+      /* À la souris, on amène la grille à l'écran, comme le fait déjà le
+         bouton du socle de données ouvertes : deux gestes de même intention
+         doivent produire le même effet, sous peine d'obliger à apprendre la
+         page deux fois. */
+      var t = document.getElementById("t-cas");
+      if(t) t.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  });
+}
+
+/* Retrouver une barre par son couple (axe, valeur). On compare les attributs
+   plutôt que d'écrire un sélecteur : les valeurs sont des libellés de secteur
+   et de vecteur d'attaque — « Injection de prompt directe et indirecte » —
+   avec espaces, accents et apostrophes, qu'un sélecteur d'attribut n'accepte
+   pas sans échappement. */
+function lecFocus(k, v){
+  var b = document.querySelectorAll("#s-lectures .lec-b[data-lec-k]");
+  for(var i = 0; i < b.length; i++){
+    if(b[i].getAttribute("data-lec-k") === k && b[i].getAttribute("data-lec-v") === v){
+      b[i].focus({ preventScroll: true });
+      return;
+    }
+  }
+}
+
+function lecTout(){
+  F.pays = F.secteur = F.classe = F.stade = F.q = F.vuln = "";
+  F.socle = false;
+  var bs = document.getElementById("socle-filtre");
+  if(bs) bs.textContent = "Ne montrer que ces cas";
+  var q = document.getElementById("f-q"); if(q) q.value = "";
+  var on = document.querySelector(".pan-pays.on"); if(on) on.classList.remove("on");
+  syncFiltres(); renderTable(); renderCharts();
+}
+
+/* ── Filtres actifs : visibles, et défaits d'un clic ──────────────────────
+   Un filtre peut être posé depuis la carte, depuis le socle ou depuis une
+   barre — c'est-à-dire loin des listes déroulantes qui en portent l'état. Le
+   lecteur voyait alors une grille amputée sans indice de la cause, et « 17 /
+   72 cas » ne dit pas LEQUEL des sept filtres est en jeu. */
+function renderFiltresActifs(){
+  var el = document.getElementById("f-actifs");
+  if(!el) return;
+  var chips = [];
+  var ajout = function(cle, quoi, valeur){
+    chips.push('<button type="button" class="f-chip" data-fx="' + esc(cle) + '" '
+      + 'title="Retirer ce filtre"><span>' + esc(quoi) + " : " + esc(valeur)
+      + "</span><s aria-hidden=\"true\">×</s></button>");
+  };
+  if(F.pays) ajout("pays", "pays", nomPays(F.pays) || F.pays);
+  if(F.secteur) ajout("secteur", "secteur", F.secteur);
+  if(F.classe) ajout("classe", "classe", (DATA.classes[F.classe] || {}).nom || F.classe);
+  if(F.stade) ajout("stade", "stade", STADES[F.stade] || F.stade);
+  if(F.vuln) ajout("vuln", "vecteur", F.vuln);
+  if(F.socle) ajout("socle", "source", "données ouvertes");
+  if(F.q) ajout("q", "recherche", "« " + F.q + " »");
+  el.innerHTML = chips.join("");
+  if(el.getAttribute("data-bx") !== "1"){
+    el.setAttribute("data-bx", "1");
+    el.addEventListener("click", function(ev){
+      var b = ev.target.closest ? ev.target.closest("[data-fx]") : null;
+      if(!b) return;
+      var k = b.getAttribute("data-fx");
+      if(k === "socle"){
+        F.socle = false;
+        var bs = document.getElementById("socle-filtre");
+        if(bs) bs.textContent = "Ne montrer que ces cas";
+      } else {
+        F[k] = "";
+        if(k === "q"){ var q = document.getElementById("f-q"); if(q) q.value = ""; }
+        if(k === "pays"){ var on = document.querySelector(".pan-pays.on"); if(on) on.classList.remove("on"); }
+      }
+      syncFiltres(); renderTable(); renderCharts();
+    });
+  }
 }
 
 /* ── Méthodologie ── */
@@ -6558,6 +6862,7 @@ function renderAll(){
         s'affiche d'abord ; le reste s'assemble ensuite, invisible du lecteur. */
   var reste = function(){
     renderEcheancier(); renderFlux(); renderTable(); renderCharts();
+    brancherLectures();
     renderMethodo(); renderSocle(); renderSources();
     pnavBrancher(); pnavCompteurs(); gpBrancher(); aideBrancher();
   };
