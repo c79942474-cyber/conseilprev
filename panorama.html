@@ -545,6 +545,49 @@ body.embed .gp-carte{bottom:auto;top:var(--gp-bas,auto);
   padding:1px 6px;border-radius:10px;border:1px solid currentColor;white-space:nowrap}
 .n-referentiel{color:#1E6336}.n-analyse{color:#4E3277}.n-hypothese{color:#8A5310}
 .n-saisi{color:#1C5CAB}.n-calcule{color:#0E7B83}
+
+/* ── L'avis de faisabilité ───────────────────────────────────────────────
+   Placé avant les chiffres du pays : la conclusion, puis ce sur quoi elle
+   repose. Le sens colore le bord gauche — c'est la seule chose qu'un lecteur
+   pressé retiendra, elle doit être juste et visible. */
+.fai{border:1px solid var(--rule2);border-radius:12px;padding:14px 16px;margin:0 0 12px;
+  background:#FBFAF8}
+.fai-arret{border-left:4px solid #B83222}
+.fai-conditions{border-left:4px solid #C47C1A}
+.fai-poursuivre{border-left:4px solid #1E6336}
+.fai-incomplet{border-left:4px solid #6B7280}
+.fai-t{margin-bottom:11px}
+.fai-s{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+  text-transform:uppercase;padding:3px 9px;border-radius:20px;border:1px solid currentColor;
+  margin-right:9px;vertical-align:2px}
+.fai-arret .fai-s{color:#B83222}.fai-conditions .fai-s{color:#C47C1A}
+.fai-poursuivre .fai-s{color:#1E6336}.fai-incomplet .fai-s{color:#6B7280}
+.fai-p{font-size:13.5px;line-height:1.6;color:var(--ink)}
+.fai-c{display:grid;gap:9px}
+.fai-l{border:1px solid var(--rule2);border-radius:9px;padding:10px 12px;background:#fff}
+.fai-l.e-bloquant{border-left:3px solid #B83222}
+.fai-l.e-vigilance{border-left:3px solid #C47C1A}
+.fai-l.e-indetermine{border-left:3px solid #6B7280}
+.fai-l.e-favorable{border-left:3px solid #1E6336}
+.fai-h{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-bottom:5px}
+.fai-e{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;
+  padding:1px 7px;border-radius:10px;border:1px solid currentColor;white-space:nowrap}
+.e-bloquant .fai-e{color:#B83222}.e-vigilance .fai-e{color:#C47C1A}
+.e-indetermine .fai-e{color:#6B7280}.e-favorable .fai-e{color:#1E6336}
+.fai-l p{margin:0 0 4px;font-size:12.5px;line-height:1.6;color:var(--muted)}
+.fai-f,.fai-r{font-size:11.5px !important;color:var(--muted2) !important}
+.fai-f b,.fai-r b{color:var(--ink)}
+.fai-nc{margin-top:10px;font-size:12.5px}
+.fai-nc summary{cursor:pointer;color:var(--muted);font-size:12px}
+.fai-nc summary:hover{color:var(--ink)}
+.fai-nc>div{padding:9px 0 0;display:grid;gap:6px;font-size:12px;color:var(--muted);
+  line-height:1.55}
+.fai-nc b{color:var(--ink)}
+/* Le plafond de ce que la phase autorise à dire. En bas, en petit, mais
+   TOUJOURS présent : un avis de faisabilité lu comme une décision
+   d'investissement est la faute la plus coûteuse de l'exercice. */
+.fai-pl{margin:11px 0 0;font-size:11.5px;line-height:1.55;color:var(--muted2);
+  padding-top:9px;border-top:1px dashed var(--rule2)}
 .fin-mod{font-size:10px;color:#1C5CAB}
 /* CRITÈRES DE CONCEPTION — repliés par défaut, mais jamais muets : un dépliant
    qui n'annonce pas son contenu ne s'ouvre pas. */
@@ -8013,6 +8056,52 @@ if(window.parent&&window.parent!==window){
       + '</div>';
   }
 
+  /* L'AVIS DE FAISABILITÉ — placé AVANT les chiffres du pays, pas après.
+     Un lecteur qui parcourt quatorze lots et trois tableaux avant d'arriver à
+     la conclusion s'est déjà fait la sienne. La conclusion d'abord, puis ce
+     sur quoi elle repose : c'est l'ordre d'une note d'ingénieur, pas celui
+     d'un tableur.
+
+     Rien n'est décidé ici : le sens, les constats et les conditions viennent
+     de faisabilite_dc. Recalculer un verdict côté page ferait exister deux
+     avis pour le même dossier. */
+  function avisFaisabilite(f){
+    if(!f || !f.avis) return '';
+    var a = f.avis;
+    var h = '<div class="fai fai-'+esc(a.sens)+'">'
+      + '<div class="fai-t"><span class="fai-s">'+esc(a.sens_nom)+'</span>'
+      + '<span class="fai-p">'+esc(a.phrase)+'</span></div>';
+    h += '<div class="fai-c">';
+    (f.constats||[]).forEach(function(c){
+      h += '<div class="fai-l e-'+esc(c.etat)+'">'
+        + '<div class="fai-h"><span class="fai-e">'+esc(c.etat_nom)+'</span>'
+        + '<b>'+esc(c.sujet)+'</b></div>'
+        + '<p>'+esc(c.constat)+'</p>'
+        + '<p class="fai-f"><b>D\'où cela vient</b> — '+esc(c.fondement)+'</p>'
+        /* Ce qui renverserait le constat : la seule partie qui se transforme
+           en plan de travail. Sans elle, l'avis n'est qu'un jugement. */
+        + (c.renverse_si ? '<p class="fai-r"><b>Ce qui le changerait</b> — '
+            + esc(c.renverse_si)+'</p>' : '')
+        + '</div>';
+    });
+    h += '</div>';
+    var nc = f.non_chiffre || {};
+    if(nc.postes && nc.postes.length){
+      h += '<details class="fai-nc"><summary>'+esc(nc.part_pct)+' % de l\'enveloppe '
+        + 'repose sur des postes non chiffrés au référentiel ('+nc.postes.length+')'
+        + '</summary><div>'
+        + nc.postes.map(function(p){
+            return '<div><b>Lot '+esc(p.code)+' — '+esc(p.nom)+'</b> ('
+              + esc(p.part_pct)+' %)'
+              + (p.question ? '<br><i>'+esc(p.question)+'</i>' : '')+'</div>';
+          }).join('')
+        + '<p class="note" style="margin:8px 0 0">'+esc(nc.note)+'</p>'
+        + '</div></details>';
+    }
+    h += '<p class="fai-pl">'+esc(f.plafond)+'</p></div>';
+    return h;
+  }
+
   function rendre(j){
     var h = '<div class="fin-rang">'
       + j.classement.map(function(x,i){ return carteRang(x,i,j); }).join('') + '</div>'
@@ -8020,6 +8109,7 @@ if(window.parent&&window.parent!==window){
     j.dossiers.forEach(function(d){
       h += '<h3 style="margin:18px 0 4px;font-size:14px">'+esc(d.pays)+' — enveloppe '
         + fourch(d.devis.enveloppe_meur)+' M€</h3>'
+        + avisFaisabilite(d.faisabilite)
         + '<p class="note" style="margin:0 0 8px">Refroidissement retenu : <b>'
         + esc(d.devis.refroidissement.nom)+'</b> (PUE '+d.devis.refroidissement.pue[0]+'–'
         + d.devis.refroidissement.pue[1]+', eau '+esc(d.devis.refroidissement.eau)+') — déduit du climat '

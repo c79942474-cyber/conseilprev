@@ -1633,6 +1633,7 @@ def api_implantation():
 # ══════════════════════════════════════════════════════════
 import finance_dc  # noqa: E402
 import tendances_dc  # noqa: E402  — chaque dossier porte ses reserves datees
+import faisabilite_dc  # noqa: E402  — conclut sur le chiffrage, ne le refait pas
 
 _FIN_INTENSITES = {}
 
@@ -1698,7 +1699,17 @@ def _fin_dossier(code, mw, gabarit, scenario, densite_ia, cout_mw, annees, depar
     # optimiste — la classe de prix finlandaise en est l'exemple type.
     prosp = tendances_dc.par_pays(code)
     prosp["jalons"] = prosp["jalons"] + tendances_dc.par_pays("UE")["jalons"]
-    return {"pays": code, "contexte": {
+    conf = finance_dc.conformite_marche(
+        devis["refroidissement"]["pue"], wue, (p.get("climat") or {}).get("classe"))
+    # L'AVIS. Il se greffe sur le chiffrage qui vient d'etre fait, il ne le
+    # refait pas : deux enveloppes voisines pour le meme projet, et c'est celle
+    # de l'avis qu'on retiendrait. Le budget vient de la conception quand le
+    # lecteur l'a saisi ; sans lui, l'avis dit qu'il ne peut rien conclure du
+    # financement plutot que de conclure quand meme.
+    verdict = faisabilite_dc.avis(
+        devis, budget_meur=C.get("budget_meur"), exploitation=expl,
+        cout_total=cout, trajectoire=traj, conformite=conf)
+    return {"pays": code, "faisabilite": verdict, "contexte": {
                 "climat": p.get("climat"), "eau": p.get("eau"), "prix": p.get("prix"),
                 "intensite_g_kwh": p.get("intensite"),
                 "en_service": p.get("en_service"), "pipeline_2030": p.get("pipeline_2030"),
@@ -1709,9 +1720,7 @@ def _fin_dossier(code, mw, gabarit, scenario, densite_ia, cout_mw, annees, depar
             # incomplet des sa premiere page, et l'exploitation seule flatte les
             # sites neufs face aux reprises de batiment existant.
             "incorpore": finance_dc.carbone_incorpore(mw),
-            "conformite": finance_dc.conformite_marche(
-                devis["refroidissement"]["pue"], wue,
-                (p.get("climat") or {}).get("classe"))}
+            "conformite": conf}
 
 
 @app.route('/api/finance-dc', methods=['GET'])
@@ -1789,7 +1798,11 @@ def api_finance_dc_devis():
              'taux de charge'),
             ('prix_contrat', 1.0, 600.0, 'prix contractuel'),
             ('intensite_contrat', 0.0, 1200.0, 'intensite carbone contractuelle'),
-            ('part_sans_carbone', 0.0, 1.0, "part d'energie sans carbone")):
+            ('part_sans_carbone', 0.0, 1.0, "part d'energie sans carbone"),
+            # L'enveloppe budgetaire visee. Facultative : sans elle, l'avis de
+            # faisabilite dit qu'il ne peut rien conclure du financement, ce qui
+            # vaut mieux que de conclure sans savoir.
+            ('budget_meur', 0.1, 100000.0, "budget d'investissement en M€")):
         v = d.get(cle)
         if v in (None, ''):
             continue
