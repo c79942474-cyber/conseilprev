@@ -1180,6 +1180,58 @@ tbody tr.on{background:rgba(184,50,34,.06)}
   text-decoration:underline;text-underline-offset:2px;cursor:pointer}
 .lec-base .lec-raz:hover{color:var(--accent,#1E63A8)}
 /* ── Filtres actifs : visibles et révocables où qu'on soit dans la page ──── */
+/* ── L'eau de la source ─────────────────────────────────────────────────── */
+.eau-w{margin:18px 0 0;padding-top:16px;border-top:2px solid var(--rule)}
+.eau-w h3{font-size:14px;margin:0 0 6px}
+.eau-kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(215px,100%),1fr));
+  gap:10px;margin:12px 0}
+.eau-k{border:1px solid var(--rule2);border-radius:7px;padding:9px 11px;background:var(--white)}
+.eau-k b{display:block;font-size:17px;line-height:1.25;font-variant-numeric:tabular-nums}
+.eau-k span{display:block;font-size:10.5px;color:var(--muted2);font-family:var(--mono);
+  letter-spacing:.05em;text-transform:uppercase;margin-bottom:3px}
+.eau-k i{display:block;font-style:normal;font-size:10.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+/* Le graphique décisif : deux eaux ramenées à la MÊME unité, donc comparables
+   à l'œil. Tant qu'on compare des m³ de site à des m³ d'amont sur des parcs de
+   tailles différentes, on ne compare rien. */
+.eau-m{margin:4px 0 0}
+.eau-r{padding:7px 0;border-bottom:1px solid var(--rule2)}
+.eau-r:last-child{border-bottom:0}
+.eau-rh{display:flex;justify-content:space-between;align-items:baseline;gap:10px;
+  font-size:11.5px;margin-bottom:4px}
+.eau-rh b{font-size:12px}
+.eau-rb{display:grid;grid-template-columns:64px 1fr;gap:3px 8px;align-items:center}
+.eau-rb u{text-decoration:none;font-family:var(--mono);font-size:9.5px;color:var(--muted2);
+  text-align:right}
+.eau-t{position:relative;height:11px;background:#F1EFF6;border-radius:3px;overflow:hidden}
+/* La fourchette est dessinée COMME une fourchette : un segment posé entre ses
+   deux bornes, jamais une barre partant de zéro. Une barre pleine sur une
+   plage 0–2,2 raconterait une valeur là où il n'y a qu'un intervalle. */
+.eau-f{position:absolute;top:0;height:100%;border-radius:3px;min-width:2px}
+.eau-f.site{background:#1E63A8}
+.eau-f.amont{background:#0E6E63}
+.eau-v{display:inline-block;font-family:var(--mono);font-size:10px;color:var(--muted2)}
+.eau-verdict{display:inline-block;font-family:var(--mono);font-size:9.5px;padding:1px 6px;
+  border-radius:9px;background:#0E6E63;color:#fff;white-space:nowrap}
+.eau-verdict.parfois{background:#C47C1A}
+.eau-verdict.non{background:#7A7A7A}
+/* Deux colonnes au plus. À trois, la ligne de valeurs — volume, EWIF, et le
+   marqueur « moyenne UE » — se faisait tronquer par la colonne suivante, et
+   c'est précisément le marqueur qui disparaissait : celui qui dit que le
+   chiffre n'est pas national. */
+.eau-pays{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(430px,100%),1fr));
+  gap:3px 24px;margin:4px 0 0}
+.eau-p{display:grid;grid-template-columns:30px minmax(70px,1fr) auto;gap:8px;align-items:center;
+  padding:3px 0;font-size:11.5px}
+.eau-p .eau-v{white-space:nowrap}
+.eau-p em{font-style:normal;font-weight:700}
+.eau-p .eau-t{height:9px}
+.eau-defaut{font-family:var(--mono);font-size:9px;color:#8A5310;border:1px solid #E0C9A0;
+  border-radius:8px;padding:0 4px;margin-left:4px;white-space:nowrap}
+.eau-eed{border:1px solid var(--rule2);border-left:3px solid #1E63A8;border-radius:0 6px 6px 0;
+  padding:10px 13px;margin:14px 0 0;background:var(--white)}
+.eau-eed h4{font-size:12px;margin:0 0 4px}
+.eau-eed ol{margin:6px 0 0 18px;padding:0;font-size:11.5px;line-height:1.6;columns:2;column-gap:24px}
+@media(max-width:700px){ .eau-eed ol{columns:1} }
 .f-chips{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-left:2px}
 .f-chip{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-family:var(--mono);
   background:var(--ink);color:#fff;border:0;border-radius:11px;padding:3px 5px 3px 9px;cursor:pointer}
@@ -1444,6 +1496,12 @@ engagements publics) sont imputés nominativement.</div>
     <div id="tf-emp"></div>
     <div class="tf-vide" id="tf-emp-vide">Aucun pays ne correspond à ces filtres.</div>
     <div id="emp-table"></div>
+    <!-- L'eau de la SOURCE. Placée APRÈS le tableau par pays, et non avant :
+         le lecteur doit d'abord voir l'eau de site — celle que tout le monde
+         publie et que le règlement exige — pour comprendre ensuite ce qu'elle
+         omet. Ouvrir par la correction avant d'avoir montré ce qu'on corrige
+         ne se lirait pas. -->
+    <div id="eau-source"></div>
     <div id="emp-methode"></div>
   </div>
 </section>
@@ -3221,6 +3279,205 @@ function exportCsv(){
   setTimeout(function(){URL.revokeObjectURL(a.href);},2000);
 }
 
+/* ══════════════════════════════════════════════════════════════════════════
+   L'EAU DE LA SOURCE — le second terme d'un bilan que tout le monde tronque
+
+   La page publiait, pour les 97 centres cartographiés, l'eau consommée SUR LE
+   SITE. C'est le chiffre que tout le monde publie, celui qu'exige le règlement
+   délégué (UE) 2024/1364, et celui que compare la presse.
+
+   Il est incomplet, et son incomplétude va toujours dans le même sens :
+   produire un kilowattheure consomme de l'eau. Un centre qui remplace son
+   refroidissement évaporatif par du sec affiche un WUE de site NUL tout en
+   consommant davantage d'électricité — donc davantage d'eau en amont.
+
+   Deux précautions de présentation, et elles ne sont pas décoratives :
+
+     · les VOLUMES du parc ne tranchent pas. Les deux fourchettes se recouvrent,
+       parce que le WUE bas de plusieurs modes vaut zéro. Afficher un rapport
+       unique tiré des bornes basses fabriquerait un vainqueur qui n'existe
+       pas ;
+
+     · ce qui tranche, c'est le rapport ramené au kilowattheure INFORMATIQUE :
+       le site vaut son WUE, l'amont vaut EWIF × PUE. Ce rapport ne dépend plus
+       ni de la taille du parc ni du facteur de charge — seulement de la
+       conception et du mix, les deux seules choses sur lesquelles on décide.
+   ══════════════════════════════════════════════════════════════════════════ */
+var EAU = null;
+
+function eauFourchette(f, max, classe){
+  if(!f || !max) return '<span class="eau-t"></span>';
+  var a = Math.max(0, Math.min(100, 100 * f[0] / max));
+  var b = Math.max(0, Math.min(100, 100 * f[1] / max));
+  return '<span class="eau-t"><span class="eau-f ' + classe + '" style="left:' + a.toFixed(1)
+    + '%;width:' + Math.max(0.6, b - a).toFixed(1) + '%"></span></span>';
+}
+
+function eauNb(n){
+  /* Des mètres cubes par an se lisent en milliers ; les écrire au litre près
+     donnerait à un ordre de grandeur l'allure d'un relevé. */
+  if(n === null || n === undefined) return "—";
+  if(n >= 1e6) return fr(Math.round(n / 1e5) / 10) + " M";
+  if(n >= 1e3) return fr(Math.round(n / 1e2) / 10) + " k";
+  return fr(Math.round(n));
+}
+
+function renderEauSource(j){
+  if(!j || !j.ok) return;
+  EAU = j;
+  var t = j.totaux, ref = j.referentiel, cv = j.couverture;
+  var eed = ref.cadre_eed;
+
+  var h = '<div class="eau-w"><h3>L’eau que le WUE ne compte pas</h3>'
+    + '<p class="note" style="margin-top:0">Le tableau ci-dessus donne l’eau consommée '
+    + '<b>sur le site</b> : celle des tours et des systèmes adiabatiques. C’est le chiffre '
+    + 'que publient les exploitants et qu’exige le règlement délégué (UE) 2024/1364. '
+    + 'Mais produire un kilowattheure consomme aussi de l’eau — les centrales thermiques '
+    + 'et nucléaires en évaporent dans leurs tours. <b>Un centre qui passe au '
+    + 'refroidissement sec affiche alors un WUE nul tout en consommant davantage d’eau à '
+    + 'la source.</b> Voici le second terme du bilan, pour les mêmes ' + t.n_dc + ' centres.</p>';
+
+  /* Les deux volumes, et surtout ce qu'ils ne permettent PAS de conclure. */
+  h += '<div class="eau-kpi">'
+    + '<div class="eau-k"><span>Eau du site</span><b>' + eauNb(t.site_m3[0]) + ' – '
+    + eauNb(t.site_m3[1]) + ' m³</b><i>par an, sur le parc cartographié</i></div>'
+    + '<div class="eau-k"><span>Eau de la source</span><b>' + eauNb(t.amont_m3[0]) + ' – '
+    + eauNb(t.amont_m3[1]) + ' m³</b><i>consommée en amont pour produire l’électricité '
+    + 'achetée</i></div>'
+    + '<div class="eau-k"><span>Ce que le total tranche</span><b>'
+    + (t.recouvrement ? "rien" : "l’amont") + '</b><i>' + esc(t.lecture) + '</i></div>'
+    + '</div>';
+
+  /* LE graphique : deux eaux dans la même unité, mode par mode. */
+  var modes = (j.par_mode || []).filter(function(m){ return m.mode !== "inconnu"; });
+  var maxL = 0;
+  modes.forEach(function(m){
+    maxL = Math.max(maxL, m.wue_site[1], m.amont_l_kwh_it[1]);
+  });
+  h += '<h4 style="font-size:12px;margin:16px 0 2px">Ramenées au kilowattheure informatique, '
+    + 'les deux eaux se comparent</h4>'
+    + '<p class="note" style="margin:0 0 6px">Le site vaut son <b>WUE</b>. L’amont vaut '
+    + '<b>EWIF × PUE</b>. Le trait montre la fourchette, pas une valeur : sur une plage de '
+    + '0 à 2,2 L/kWh, une barre pleine raconterait un chiffre là où il n’y a qu’un '
+    + 'intervalle.</p><div class="eau-m">';
+  modes.forEach(function(m){
+    var r = m.rapport;
+    var verdict = m.amont_domine_toujours
+      ? '<span class="eau-verdict">l’amont domine toujours</span>'
+      : (m.amont_domine_parfois
+          ? '<span class="eau-verdict parfois">selon les hypothèses</span>'
+          : '<span class="eau-verdict non">le site domine</span>');
+    h += '<div class="eau-r"><div class="eau-rh"><b>' + esc(m.nom) + '</b>'
+      + '<span>' + verdict + ' <span class="eau-v">amont ÷ site : ×' + fr(r.min)
+      + (r.max_indefini ? " à sans borne" : " à ×" + fr(r.max)) + '</span></span></div>'
+      + '<div class="eau-rb">'
+      + '<u>site</u>' + eauFourchette(m.wue_site, maxL, "site")
+      + '<u>amont</u>' + eauFourchette(m.amont_l_kwh_it, maxL, "amont")
+      + '</div>'
+      + '<p class="note" style="margin:3px 0 0;font-size:10.5px">WUE '
+      + fr(m.wue_site[0]) + '–' + fr(m.wue_site[1]) + ' · PUE ' + fr(m.pue[0]) + '–'
+      + fr(m.pue[1]) + ' · amont ' + fr(m.amont_l_kwh_it[0]) + '–' + fr(m.amont_l_kwh_it[1])
+      + ' L/kWh informatique'
+      + ((PART_NOTE[m.mode]) ? ' · ' + esc(PART_NOTE[m.mode]) : '') + '</p></div>';
+  });
+  h += '</div>';
+
+  /* Par pays : seul l'amont est porté en barre. L'eau de site s'étend sur deux
+     ordres de grandeur selon le WUE retenu — la tracer suggérerait une
+     précision qu'elle n'a pas. */
+  var pays = (j.par_pays || []).slice(0, 12);
+  var maxA = pays.length ? Math.max.apply(null, pays.map(function(p){ return p.amont_m3[1]; })) : 0;
+  h += '<h4 style="font-size:12px;margin:16px 0 2px">L’eau de la source, pays par pays</h4>'
+    + '<p class="note" style="margin:0 0 6px">Seule l’eau amont est portée en barre : '
+    + 'l’eau de site s’étend sur deux ordres de grandeur selon le WUE retenu, et la tracer '
+    + 'suggérerait une précision qu’elle n’a pas. <b>' + cv.pays_ewif_national + ' des '
+    + cv.pays_parc + ' pays du parc</b> disposent d’un facteur national ; les autres '
+    + 'reçoivent la moyenne européenne, ce qui est signalé sur chaque ligne.</p>'
+    + '<div class="eau-pays">';
+  pays.forEach(function(p){
+    h += '<div class="eau-p"><em>' + esc(p.pays) + '</em>'
+      + eauFourchette(p.amont_m3, maxA, "amont")
+      + '<span class="eau-v">' + eauNb(p.amont_m3[0]) + '–' + eauNb(p.amont_m3[1]) + ' m³'
+      + ' · EWIF ' + fr(p.ewif)
+      + (p.ewif_national ? '' : '<span class="eau-defaut">moyenne UE</span>')
+      + '</span></div>';
+  });
+  h += '</div>';
+  if((cv.pays_defaut_ue || []).length){
+    h += '<p class="note" style="margin:6px 0 0">Sans facteur national, donc cadrés par la '
+      + 'moyenne européenne : <b>' + cv.pays_defaut_ue.join(" · ") + '</b>. '
+      + 'Leur terme amont est un ordre de grandeur, pas une estimation de pays.</p>';
+  }
+
+  /* Ce que la réglementation demande — et ce qu'elle ne demande pas. */
+  h += '<div class="eau-eed"><h4>' + esc(eed.titre) + '</h4>'
+    + '<p class="note" style="margin:0">' + esc(eed.portee) + ' Neuf grandeurs sont à '
+    + 'déclarer chaque année :</p><ol>'
+    + eed.exige.map(function(x){ return "<li>" + esc(x) + "</li>"; }).join("")
+    + '</ol><p class="note" style="margin:6px 0 0">' + esc(eed.note) + '</p></div>';
+
+  /* Sources et natures : sans elles, ces chiffres ne sont pas opposables. */
+  h += '<p class="note" style="margin:12px 0 0"><b>Nature et sources.</b> '
+    + 'Les facteurs eau de la production électrique (EWIF) portent la nature '
+    + '<b>' + esc(ref.ewif_nature) + '</b> et une incertitude de <b>' + esc(ref.ewif_incertitude)
+    + '</b> — supérieure à celle du terme de site. ' + esc(ref.ewif_source)
+    + ' La borne d’évaporation (' + fr(ref.borne_evaporation.valeur_l_par_kwh_thermique)
+    + ' L par kWh thermique) est <b>physique</b> et non technologique : '
+    + esc(ref.borne_evaporation.formule) + '. '
+    + 'Référentiel repris du moteur d’ingénierie <b>' + esc(ref.provenance.module)
+    + '</b> (' + esc(ref.provenance.site) + ', version ' + esc(ref.provenance.version_amont)
+    + ').</p>'
+    + '<p class="note" style="margin:6px 0 0">' + esc(j.avertissement) + '</p>'
+    + '<ul class="note" style="margin:6px 0 0 18px">'
+    + (j.limites || []).map(function(x){ return "<li>" + esc(x) + "</li>"; }).join("")
+    + '</ul></div>';
+
+  setHTML("eau-source", h);
+}
+
+/* Les notes de conception, montrées sous la fourchette du mode concerné : une
+   pointe estivale ne se voit pas sur une moyenne annuelle, et c'est pourtant
+   le moment où la ressource manque. */
+var PART_NOTE = {
+  adiabatique: "l’eau n’est consommée qu’aux heures chaudes : la moyenne annuelle "
+             + "masque les pointes estivales, quand la ressource est tendue",
+  free_cooling: "aucune eau sur le site — tout le bilan eau est en amont",
+  recuperation_chaleur: "la chaleur exportée n’est plus à évacuer : elle sort du bilan eau du site",
+};
+
+/* Le bilan eau voyage AVEC l'empreinte, il ne fait pas sa propre requête.
+
+   Il décrit le même parc et s'affiche dans la même section ; une route à lui
+   ajoutait une requête par page à un chargement qui en compte déjà une
+   dizaine. Le plafond global est de 120 requêtes par minute et par IP, et
+   cette requête de plus suffisait à le franchir sur un enchaînement rapide de
+   chargements — la recette du panel l'a montré. Une route dédiée reste exposée
+   pour les exports et l'interrogation directe. */
+function chargerEauSource(){
+  if(EMP && EMP.eau_complete){
+    var j = EMP.eau_complete;
+    j.ok = true;
+    renderEauSource(j);
+    return;
+  }
+  /* Repli sur la route dédiée. Le cas se produit quand l'empreinte servie est
+     une réponse en cache antérieure à l'ajout du bilan eau — au redéploiement,
+     le temps que le cache se renouvelle. Une requête de plus dans ce cas-là
+     vaut mieux qu'une section qui s'excuse. */
+  fetch('/api/eau-dc', { credentials: 'same-origin' })
+    .then(function(r){ return r.json(); })
+    .then(function(j){
+      if(!j || !j.ok) throw new Error('bilan eau indisponible');
+      renderEauSource(j);
+    })
+    .catch(function(){
+      /* Un bloc absent vaut mieux qu'un bloc qui affiche « — » partout : le
+         second se lit comme un parc sans eau amont. */
+      setHTML("eau-source", '<p class="note" style="margin-top:14px">Le bilan eau complet '
+        + 'n’est pas accessible pour le moment.</p>');
+    });
+}
+
 /* ── Lectures d'ensemble : des barres qu'on peut actionner ────────────────
    Chaque barre est un bouton qui filtre la grille des cas. Le lecteur qui voit
    « haut risque : 21 » veut savoir LESQUELS, et la grille sait répondre : il
@@ -4735,6 +4992,7 @@ function chargerEmpreinte(){
       if(!d || !d.ok) return;
       EMP = d;
       renderEmpreinte();
+      chargerEauSource();          /* le bilan eau arrive dans la même charge */
       pnavCompteurs();
       aideBrancher();
       majBarre();                    /* les fonds carbone deviennent choisissables */

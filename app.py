@@ -1560,6 +1560,13 @@ def api_empreinte_sites():
         _pan = panorama_ia.assemble()
         data = empreinte_sites.assemble(sites=_dc.get('sites'), cas=_pan.get('cas'),
                                         live=_emps_live())
+        # Le bilan eau COMPLET voyage avec l'empreinte plutot que par une route
+        # a lui. Il decrit le meme parc, s'affiche dans la meme section, et
+        # l'appel separe ajoutait une requete par page a un chargement qui en
+        # compte deja une dizaine — assez pour approcher le plafond global de
+        # 120 requetes par minute et par IP. Une route dediee reste exposee
+        # pour les exports et l'interrogation directe.
+        data['eau_complete'] = eau_dc.assemble(sites=_dc.get('sites'))
     except Exception as e:
         logger.error(f'EMPREINTE_SITES_ERR: {e}')
         return jsonify({"ok": False, "erreur": "assemblage indisponible"}), 503
@@ -1845,6 +1852,31 @@ def api_finance_dc_devis():
 # Le module lui-meme est importe avec le bloc financier ci-dessus : chaque
 # dossier d'enveloppe porte deja les jalons et les reserves de son pays.
 # ══════════════════════════════════════════════════════════
+
+
+import eau_dc  # noqa: E402  — l'eau de la source, absente du WUE publie
+
+
+@app.route('/api/eau-dc', methods=['GET'])
+@rate_limit(limit=60, window=60)
+@reserve_abonne_api
+def api_eau_dc():
+    """Bilan eau COMPLET du parc cartographie : eau du site, et eau consommee
+    en amont pour produire l'electricite achetee.
+
+    Le WUE publie et exige par le reglement delegue (UE) 2024/1364 ne couvre
+    que le site. Un centre qui passe au refroidissement sec affiche alors un
+    WUE nul tout en consommant davantage d'eau a la source : sur un mix
+    thermique, l'arbitrage s'inverse."""
+    try:
+        _dc = datacentres.assemble()
+        data = eau_dc.assemble(sites=_dc.get('sites'))
+    except Exception as e:
+        logger.error(f'EAU_DC_ERR: {e}')
+        return jsonify({"ok": False, "erreur": "assemblage indisponible"}), 503
+    data["ok"] = True
+    data["sante"] = eau_dc.sante()
+    return jsonify(data)
 
 
 @app.route('/api/tendances-dc', methods=['GET'])
