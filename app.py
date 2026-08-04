@@ -1939,6 +1939,162 @@ def api_export_dc_produire(dossier, fmt):
 
 
 # ══════════════════════════════════════════════════════════
+# VEILLE i-aes.com ET BASCULE VERS SENTINEL
+#
+# Le site institutionnel i-aes.com est lie depuis le pied de page de CHAQUE
+# page de ce site, et la page d'accueil y charge le logo. Quand il tombe, ce
+# sont NOS pages qui affichent un lien mort et une image cassee : c'est cette
+# dependance-la que le module supprime.
+#
+# La limite doit etre dite : une bascule hebergee sur i-aes.com ne peut PAS
+# s'executer quand i-aes.com est hors ligne. Seule une bascule DNS chez le
+# bureau d'enregistrement couvre un visiteur qui arrive pendant la panne sans
+# etre jamais venu. Le module fournit les artefacts, il ne peut pas les poser.
+# ══════════════════════════════════════════════════════════
+import html as html_module  # noqa: E402
+import veille_iaes  # noqa: E402
+
+# La page de bascule est ECRITE ICI, pas dans un gabarit : elle doit s'afficher
+# quand le reste est en panne, et chaque fichier dont elle dependrait serait un
+# point de defaillance de plus, exactement au mauvais moment. Aucun script,
+# aucune police distante, aucune image : elle tient dans sa propre reponse.
+_BASCULE_HTML = """<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bascule depuis %(depuis)s — CONSEILPREV</title>
+<meta name="robots" content="noindex,nofollow">
+<style>
+  :root{color-scheme:light dark}
+  body{margin:0;font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+       background:#0A2230;color:#E9EEF2;display:grid;place-items:center;min-height:100vh;padding:24px}
+  main{max-width:620px}
+  h1{font-size:23px;line-height:1.3;margin:0 0 14px;color:#fff}
+  p{margin:0 0 14px;color:#C7D2DA}
+  b{color:#fff}
+  a.b{display:inline-block;margin:6px 10px 6px 0;background:#0E6D7C;color:#fff;
+      text-decoration:none;padding:11px 20px;border-radius:6px;font-weight:600}
+  a.s{display:inline-block;margin:6px 0;color:#8FD3DE;text-decoration:none;font-size:14px}
+  .e{border-left:3px solid #0E6D7C;padding:9px 14px;background:rgba(255,255,255,.04);
+     border-radius:0 6px 6px 0;font-size:13.5px;color:#B9C7D1;margin:0 0 18px}
+  .n{font-size:12.5px;color:#8FA3AF;margin-top:22px;line-height:1.55}
+</style>
+</head>
+<body>
+<main>
+  <h1>Vous avez été redirigé depuis %(depuis)s</h1>
+  <p>Le site institutionnel ne répondait pas. <b>La plateforme reste accessible</b> :
+  elle est hébergée séparément et ne dépend pas de ce site.</p>
+  <div class="e"><b>État relevé :</b> %(verdict)s — %(motif)s</div>
+  <p>
+    <a class="b" href="%(relais)s">Ouvrir %(relais_nom)s</a>
+    <a class="b" style="background:#25506A" href="/">Page d&#39;accueil CONSEILPREV</a>
+  </p>
+  <p><a class="s" href="https://%(domaine)s" rel="noopener">Réessayer %(domaine)s</a></p>
+  <p class="n">Cette page ne redirige pas toute seule, volontairement : un visiteur qui ne
+  comprend pas pourquoi l&#39;adresse a changé se croit égaré, ou pire, victime d&#39;un
+  détournement. L&#39;état affiché vaut <b>depuis notre serveur</b> — un blocage réseau
+  intermédiaire produirait le même constat qu&#39;une panne réelle.
+  Contact : contact@i-aes.com</p>
+</main>
+</body>
+</html>
+"""
+
+
+@app.route('/api/veille-iaes', methods=['GET'])
+@rate_limit(limit=120, window=60)
+def api_veille_iaes():
+    """Etat de disponibilite du site institutionnel, mis en cache.
+
+    Volontairement PUBLIC : il ne porte aucune donnee de client, il decrit la
+    joignabilite d'un site public, et les pages qui doivent basculer leurs liens
+    sont les pages publiques. Le reserver aux abonnes reviendrait a laisser les
+    visiteurs anonymes sur un lien mort."""
+    try:
+        e = veille_iaes.etat(force=(request.args.get('refresh') in ('1', 'true', 'yes')))
+    except Exception as ex:  # noqa: BLE001
+        logger.error(f'VEILLE_IAES_ERR: {ex}')
+        # Un echec de la VEILLE n'est pas un echec du site surveille : on ne
+        # bascule pas sur une panne de notre propre sonde.
+        return jsonify({'ok': False, 'bascule': False,
+                        'erreur': 'veille indisponible — aucune bascule declenchee'}), 503
+    e['ok'] = True
+    return jsonify(e)
+
+
+@app.route('/api/veille-iaes/historique', methods=['GET'])
+@rate_limit(limit=60, window=60)
+def api_veille_iaes_histo():
+    """Journal des releves. Une bascule sans journal est une bascule que
+    personne ne peut expliquer apres coup."""
+    try:
+        n = int(request.args.get('n') or 30)
+    except (TypeError, ValueError):
+        n = 30
+    h = veille_iaes.historique(n)
+    h['ok'] = True
+    h['consignes'] = veille_iaes.consignes()
+    h['sante'] = veille_iaes.sante()
+    return jsonify(h)
+
+
+@app.route('/api/veille-iaes/artefact/<nom>', methods=['GET'])
+@rate_limit(limit=20, window=300)
+def api_veille_iaes_artefact(nom):
+    """Les fichiers a deposer AILLEURS : l'agent de service sur i-aes.com, la
+    page de secours chez un hebergeur tiers. Reserve a l'administrateur — ce
+    sont des elements d'infrastructure, pas du contenu public."""
+    # Ces fichiers sont des elements d'infrastructure : ils nomment les URL de
+    # secours et la strategie de bascule. Rien de secret, mais rien qui ait a
+    # circuler librement non plus.
+    client = sentauth_current_client()
+    if not client or not client.get('is_conseilprev'):
+        return jsonify({'ok': False, 'erreur': 'reserve a CONSEILPREV'}), 403
+    nom = str(nom or '')[:32]
+    if nom == 'sw.js':
+        corps, mime = veille_iaes.artefact_service_worker(), 'application/javascript; charset=utf-8'
+    elif nom == 'secours.html':
+        corps, mime = veille_iaes.artefact_page_secours(), 'text/html; charset=utf-8'
+    else:
+        return jsonify({'ok': False, 'erreur': 'artefact inconnu'}), 404
+    rep = make_response(corps)
+    rep.headers['Content-Type'] = mime
+    rep.headers['Content-Disposition'] = 'attachment; filename="%s"' % nom
+    rep.headers['Cache-Control'] = 'no-store'
+    rep.headers['X-Content-Type-Options'] = 'nosniff'
+    return rep
+
+
+@app.route('/bascule')
+@rate_limit(limit=120, window=60)
+def page_bascule():
+    """Ou atterrissent les visiteurs renvoyes depuis i-aes.com.
+
+    Elle ne fait PAS de redirection automatique : un visiteur qui ne comprend
+    pas pourquoi l'adresse a change se croit egare, ou pire, victime d'un
+    detournement. On explique, puis on propose."""
+    e = veille_iaes.etat()
+    depuis = str(request.args.get('depuis') or veille_iaes.CIBLE['domaine'])[:64]
+    # `depuis` vient de l'URL : il est ECHAPPE avant de toucher le HTML. Une
+    # page de secours qui accepterait une injection serait une porte ouverte
+    # exactement au moment ou la surveillance est occupee ailleurs.
+    depuis = html_module.escape(depuis)
+    motif = html_module.escape(str(e.get('motif') or ''))
+    verdict = html_module.escape(str(e.get('verdict') or ''))
+    rep = make_response(_BASCULE_HTML % {
+        'depuis': depuis, 'relais': veille_iaes.RELAIS['chemin'],
+        'relais_nom': html_module.escape(veille_iaes.RELAIS['nom']),
+        'verdict': verdict, 'motif': motif,
+        'domaine': html_module.escape(veille_iaes.CIBLE['domaine']),
+    })
+    rep.headers['Content-Type'] = 'text/html; charset=utf-8'
+    rep.headers['Cache-Control'] = 'no-store'
+    return rep
+
+
+# ══════════════════════════════════════════════════════════
 # CONTROLES FACTUELS — registre partage par toutes les pages
 # Les chiffres du site sont lus par des professionnels de l'investissement, du
 # credit, de l'assurance et du climat : un ordre de grandeur non source n'est
