@@ -3478,8 +3478,14 @@ function renderEauSource(j){
 
   /* Ce que la réglementation demande — et ce qu'elle ne demande pas. */
   h += '<div class="eau-eed"><h4>' + esc(eed.titre) + '</h4>'
-    + '<p class="note" style="margin:0">' + esc(eed.portee) + ' Neuf grandeurs sont à '
-    + 'déclarer chaque année :</p><ol>'
+    /* Le compte vient de la liste, jamais d'un mot écrit à la main : « Neuf »
+       était en dur ici alors que le référentiel amont en énumère huit, et les
+       deux sites annonçaient des nombres différents pour le même règlement.
+       « Chaque année, » précède le compte pour qu'il ne soit pas en tête de
+       phrase juste après le seuil : « … 500 kW. 8 grandeurs » accole deux
+       nombres que l'œil lit un instant comme un seul. */
+    + '<p class="note" style="margin:0">' + esc(eed.portee) + ' Chaque année, '
+    + eed.exige.length + ' grandeurs sont à déclarer :</p><ol>'
     + eed.exige.map(function(x){ return "<li>" + esc(x) + "</li>"; }).join("")
     + '</ol><p class="note" style="margin:6px 0 0">' + esc(eed.note) + '</p></div>';
 

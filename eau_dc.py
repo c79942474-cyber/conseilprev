@@ -115,8 +115,12 @@ CADRE_EED = {
         "chaleur fatale réutilisée (ERF)",
         "trafic de données entrant et sortant",
         "quantité de données stockées",
-        "surface et puissance installée",
-        "taux d’utilisation",
+        # Une seule entrée, comme au référentiel amont : la scinder en deux
+        # faisait annoncer NEUF grandeurs ici et HUIT sur conseilprevcyber, pour
+        # le même texte réglementaire. Deux sites qui comptent différemment les
+        # obligations d’un règlement se contredisent devant le même lecteur ;
+        # c’est le module d’origine qui fait foi.
+        "surface, puissance installée, taux d’utilisation",
     ],
     "note": "Déclaration annuelle. Le WUE exigé est celui du SITE : la déclaration "
             "réglementaire ne couvre donc pas l’eau de la source, et un parc "
