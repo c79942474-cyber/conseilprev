@@ -469,8 +469,11 @@ body.embed .gp-carte{bottom:auto;top:var(--gp-bas,auto);
 .gp-choix h3{font-family:var(--serif);font-size:20px;font-weight:400;margin:0 0 4px}
 .gp-choix .st{font-size:12px;color:var(--muted);margin:0 0 14px;line-height:1.55}
 .gp-grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px}
-.gp-p{all:unset;cursor:pointer;border:1px solid var(--rule);border-radius:4px;padding:12px 14px;display:block}
-.gp-p:hover{border-color:#1C5CAB;background:#F6F9FD}
+.gp-p{all:unset;cursor:pointer;border:1px solid var(--rule);border-left:4px solid var(--m-c,#1C5CAB);
+  border-radius:0 5px 5px 0;padding:12px 14px;display:block;transition:background .14s,transform .14s}
+.gp-p:hover{border-color:var(--m-c,#1C5CAB);border-left-color:var(--m-c,#1C5CAB);
+  background:var(--m-lav,#F6F9FD);transform:translateX(2px)}
+.gp-p b{color:var(--m-c,#12233C)}
 .gp-p:focus-visible{outline:2px solid #1E63A8;outline-offset:2px}
 .gp-p b{display:block;font-size:13px;margin-bottom:3px}
 .gp-p span{font-size:11.5px;color:var(--muted);line-height:1.5;display:block}
@@ -853,14 +856,49 @@ body.vue-site .pnav a,body.vue-site .pnav-sep{display:none}
 .kpi.k-interdit .v{color:#7A1B12}
 .kpi.k-hr .v{color:var(--accent)}
 
-.panel{background:var(--white);border:1px solid var(--rule);border-radius:4px;margin-bottom:20px;overflow:hidden}
-.panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;padding:14px 20px 12px;border-bottom:1px solid var(--rule)}
+/* ── Les blocs se détachent ───────────────────────────────────────────────
+   Neuf sections au même gris se confondent : sur une page longue, un lecteur
+   qui remonte n'a aucun repère. On écarte, on pose une ombre franche et on
+   donne au bandeau de tête un fond distinct du corps — trois signaux faibles
+   qui, ensemble, font qu'un bloc se lit comme un bloc.
+
+   Le liseré du titre n'est plus une couleur fixe : il prend celle du parcours
+   en cours quand il y en a un, et reste marine sinon. */
+.panel{background:var(--white);border:1px solid var(--rule);border-radius:9px;
+  margin-bottom:34px;overflow:hidden;box-shadow:0 1px 2px rgba(18,35,60,.05),
+  0 6px 18px rgba(18,35,60,.05);transition:box-shadow .18s,border-color .18s}
+.panel:hover{box-shadow:0 1px 2px rgba(18,35,60,.06),0 10px 26px rgba(18,35,60,.09)}
+/* La section visée par le parcours en cours : elle sort du lot, dans la
+   couleur du métier — c'est une information de position, pas un ornement. */
+.panel.gp-cible{border-color:var(--m-c,#0F3D6E);
+  box-shadow:0 0 0 2px var(--m-lav,#EDF3FA),0 10px 30px rgba(18,35,60,.14)}
+.panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+  flex-wrap:wrap;padding:15px 20px 13px;border-bottom:1px solid var(--rule);
+  background:linear-gradient(180deg,var(--m-lav,#F7F8FA) 0%,var(--white) 100%)}
 .panel-title{font-size:17px;font-weight:700;letter-spacing:-.01em;color:#12233C;
-  padding-left:12px;border-left:4px solid #0F3D6E;line-height:1.3;display:inline-block;
-  transition:transform .14s;transform-origin:left center}
+  padding-left:12px;border-left:4px solid var(--m-c,#0F3D6E);line-height:1.3;
+  display:inline-block;transition:transform .14s,border-color .18s;transform-origin:left center}
 .panel-title:hover{transform:scale(1.06)}
 @media(max-width:640px){.panel-title{font-size:15px}}
 .panel-note{font-family:var(--mono);font-size:10px;color:var(--muted2);letter-spacing:.03em}
+/* Les métiers qui traversent la section. Bordure ET texte colorés, jamais un
+   aplat seul : la page se cite en comité, et un aplat clair disparaît à
+   l'impression en noir et blanc. */
+.pm{display:flex;flex-wrap:wrap;gap:5px;align-items:center;width:100%;margin-top:9px}
+.pm-t{font-family:var(--mono);font-size:9px;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--muted2);margin-right:1px}
+.pm-b{all:unset;cursor:pointer;font-family:var(--mono);font-size:9.5px;letter-spacing:.03em;
+  border:1px solid currentColor;border-radius:10px;padding:2px 8px;line-height:1.5;
+  transition:background .14s,color .14s}
+.pm-b:hover{background:currentColor}
+.pm-b:hover span{color:#fff}
+.pm-b:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.pm-b span{color:var(--m-c)}
+/* Pendant un parcours, les métiers qui ne sont pas le vôtre s'effacent : la
+   couleur ne sert plus à ranger, elle sert à dire où vous êtes. */
+body.gp-actif .pm-b{opacity:.32}
+body.gp-actif .pm-b.ici{opacity:1;background:var(--m-c)}
+body.gp-actif .pm-b.ici span{color:#fff}
 .panel-body{padding:16px 20px 18px}
 .note{font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.55;max-width:110ch}
 
@@ -5957,6 +5995,52 @@ function renderSources(){
 
    Chaque entrée nomme un module QUI EXISTE dans le dépôt, avec sa version. Une
    provenance inventée serait pire que pas de provenance : elle se cite. */
+/* ── Une couleur par métier ───────────────────────────────────────────────
+   Sept teintes choisies pour rester distinguables entre elles ET lisibles sur
+   fond blanc : chacune sert de couleur de TEXTE sur les pastilles, pas
+   seulement d'aplat, et doit donc tenir le contraste. Les pastels du milieu de
+   gamme ont été écartés pour cette raison — jolis en aplat, illisibles en
+   texte.
+
+   `lav` est la version lavée, pour les fonds. Elle n'est jamais employée seule
+   pour porter une information : un aplat clair ne se distingue plus une fois
+   imprimé en noir et blanc, et cette page se cite en comité. */
+var GP_COULEURS = {
+  invest:    { c: "#0F3D6E", lav: "#EDF3FA", nom: "Investissement" },
+  credit:    { c: "#8A5310", lav: "#FBF3E7", nom: "Crédit" },
+  assurance: { c: "#6A4BA8", lav: "#F3F0FA", nom: "Assurance" },
+  climat:    { c: "#1E7A5F", lav: "#EAF6F1", nom: "Climat" },
+  eau:       { c: "#0E6E8C", lav: "#E9F4F8", nom: "Eau" },
+  finance:   { c: "#B03A2E", lav: "#FBEEEC", nom: "Enveloppe" },
+  analyste:  { c: "#3F4A57", lav: "#F0F2F4", nom: "Analyse" },
+};
+
+function gpCouleur(cle){
+  return GP_COULEURS[cle] || { c: "#3F4A57", lav: "#F0F2F4", nom: cle };
+}
+
+/* Quels métiers traversent une section — calculé sur les parcours RÉELS, pas
+   saisi à la main. Une étiquette posée à la main se désynchronise dès qu'une
+   étape bouge, et personne ne s'en aperçoit. */
+var _GP_PAR_SECT = null;
+function gpMetiersDe(sect){
+  if(!_GP_PAR_SECT){
+    _GP_PAR_SECT = {};
+    Object.keys(GP_PROFILS).forEach(function(k){
+      var Pf = GP_PROFILS[k];
+      var lots = Pf.etapes ? [Pf.etapes]
+        : Object.keys(Pf.branches || {}).map(function(b){ return Pf.branches[b].etapes; });
+      lots.forEach(function(E){
+        (E || []).forEach(function(et){
+          if(!et.sect) return;
+          (_GP_PAR_SECT[et.sect] = _GP_PAR_SECT[et.sect] || {})[k] = true;
+        });
+      });
+    });
+  }
+  return Object.keys(_GP_PAR_SECT[sect] || {});
+}
+
 var GP_SOURCES = {
   "s-carte": {
     ref: "datacentres.py 2026-07-a (97 sites, capacités et modes de refroidissement) "
@@ -6550,6 +6634,71 @@ var GP = { profil: null, branche: null, i: 0, cible: null };
 
    Exposé pour la recette : une affirmation de couverture qu'on ne peut pas
    vérifier est une affirmation qu'on croit sur parole. */
+/* Poser sous chaque titre les métiers qui traversent la section, et en faire
+   des raccourcis : cliquer une pastille démarre CE parcours à CETTE étape. Un
+   lecteur arrivé par un lien profond, ou revenu en arrière, se demande « à qui
+   sert cette section ? » — la réponse est là, et elle est actionnable.
+
+   La liste vient des parcours réels via gpMetiersDe : aucune étiquette n'est
+   saisie à la main, donc aucune ne peut se désynchroniser d'un déplacement
+   d'étape. */
+function gpPastilles(){
+  var sects = document.querySelectorAll("section.panel[id]");
+  for(var i = 0; i < sects.length; i++){
+    var sec = sects[i], id = sec.getAttribute("id");
+    var tete = sec.querySelector(".panel-head");
+    if(!tete || tete.querySelector(".pm")) continue;
+    var mets = gpMetiersDe(id);
+    if(!mets.length) continue;
+    var h = '<div class="pm"><span class="pm-t">Sur les parcours</span>';
+    mets.forEach(function(k){
+      var C = gpCouleur(k), P2 = GP_PROFILS[k];
+      h += '<button type="button" class="pm-b" data-pm="' + esc(k) + '" data-pm-sect="'
+        + esc(id) + '" style="--m-c:' + C.c + '" title="Suivre le parcours « '
+        + esc(P2 ? P2.nom : C.nom) + ' » à partir d’ici"><span>'
+        + esc(P2 ? P2.court : C.nom) + "</span></button>";
+    });
+    tete.insertAdjacentHTML("beforeend", h + "</div>");
+  }
+  if(document.body.getAttribute("data-pm") === "1") return;
+  document.body.setAttribute("data-pm", "1");
+  document.addEventListener("click", function(ev){
+    var b = ev.target.closest ? ev.target.closest("[data-pm]") : null;
+    if(!b) return;
+    var cle = b.getAttribute("data-pm"), sect = b.getAttribute("data-pm-sect");
+    var Pf = GP_PROFILS[cle];
+    if(!Pf) return;
+    /* On démarre le parcours À L'ÉTAPE qui vise cette section, pas au début :
+       le lecteur a cliqué depuis un endroit précis, le renvoyer au premier
+       écran lui ferait refaire un chemin qu'il vient de parcourir.
+       Un profil à embranchement n'a pas d'étapes tant que le scénario n'est
+       pas choisi : celui-là s'ouvre sur sa question, ce qui est correct. */
+    gpDemarrer(cle);
+    var E = gpEtapes(Pf), j = -1;
+    for(var k = 0; k < E.length; k++){ if(E[k].sect === sect){ j = k; break; } }
+    if(j >= 0) gpAller(j);
+  });
+}
+
+/* La couleur du parcours en cours, propagée à la page. Sans cela, les
+   pastilles sauraient leur teinte et les blocs l'ignoreraient. */
+function gpTeinte(){
+  var C = GP.profil ? gpCouleur(GP.profil) : null;
+  var b = document.body;
+  if(C){
+    b.classList.add("gp-actif");
+    b.style.setProperty("--m-c", C.c);
+    b.style.setProperty("--m-lav", C.lav);
+  } else {
+    b.classList.remove("gp-actif");
+    b.style.removeProperty("--m-c");
+    b.style.removeProperty("--m-lav");
+  }
+  document.querySelectorAll(".pm-b").forEach(function(x){
+    x.classList.toggle("ici", !!GP.profil && x.getAttribute("data-pm") === GP.profil);
+  });
+}
+
 function gpSante(){
   var sections = ["s-carte", "s-cas", "s-lectures", "s-empreinte", "s-implantation",
                   "s-finance", "s-prospect", "s-socle", "s-sources"];
@@ -6604,6 +6753,7 @@ function gpDemarrer(cle, branche){
   GP.profil = cle; GP.i = 0;
   GP.branche = (branche && P.branches && P.branches[branche]) ? branche : null;
   gpBande();
+  gpTeinte();
   e.voile.classList.add("on");
   e.carte.classList.add("on");
   if(history.replaceState) history.replaceState(null, "", "#parcours=" + cle
@@ -6623,6 +6773,7 @@ function gpFermer(){
   e.carte.classList.remove("on");
   e.choix.classList.remove("on");
   GP.profil = null;
+  gpTeinte();
   if(history.replaceState) history.replaceState(null, "", location.pathname);
   var l = document.getElementById("gp-lanceur");
   if(l) l.focus({ preventScroll: true });
@@ -6971,7 +7122,13 @@ function gpBrancher(){
     + '<div class="gp-grille">'
     + Object.keys(GP_PROFILS).map(function(k){
         var P = GP_PROFILS[k];
-        return '<button type="button" class="gp-p" data-profil="' + k + '"><b>' + esc(P.nom)
+        /* Sept cartes grises se valaient : rien n'aidait à choisir, et la
+           couleur qu'on retrouvera ensuite dans la page n'était annoncée
+           nulle part. Chaque carte porte désormais la teinte de son métier,
+           la même que celle des pastilles de section. */
+        var C = gpCouleur(k);
+        return '<button type="button" class="gp-p" data-profil="' + k + '" style="--m-c:'
+          + C.c + ';--m-lav:' + C.lav + '"><b>' + esc(P.nom)
           + "</b><span>" + esc(P.quoi) + "</span><em>"
           + (P.etapes ? P.etapes.length + " étapes"
                       : Object.keys(P.branches).length + " scénarios au choix")
@@ -7300,6 +7457,7 @@ function renderAll(){
     brancherLectures();
     renderMethodo(); renderSocle(); renderSources();
     pnavBrancher(); pnavCompteurs(); gpBrancher(); aideBrancher();
+    gpPastilles(); gpTeinte();
   };
   /* Le premier des deux declencheurs gagne ; l'autre ne fait rien. La trame
      est la voie rapide quand la page est visible ; le minuteur est le filet
