@@ -1036,6 +1036,36 @@ table.socle-t a{color:#1E63A8}
 .pan-tip .t-ent{margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,.18);
   font-size:11.5px;color:#DCDCDC}
 .pan-tip .t-cta{margin-top:6px;font-size:10px;font-family:var(--mono);color:#9A9A9A}
+/* Infobulle des cartes de résultat. Même langage visuel que celle du panel —
+   une même chose doit se présenter de la même façon d'une carte à l'autre —
+   mais posée en `fixed` : ces cartes vivent dans des conteneurs qui défilent,
+   et une infobulle en `absolute` y resterait accrochée au mauvais repère. */
+.cres-tip{position:fixed;z-index:60;pointer-events:none;opacity:0;transition:opacity .1s;
+  background:rgba(28,28,28,.97);color:#fff;border-radius:5px;padding:9px 12px;
+  font-size:12px;line-height:1.45;max-width:330px;box-shadow:0 4px 18px rgba(0,0,0,.32)}
+.cres-tip.on{opacity:1}
+.cres-tip .t-nom{font-weight:700;font-size:13px;margin-bottom:1px}
+.cres-tip .t-sub{font-size:10.5px;color:#B9B9B9;font-family:var(--mono);margin-bottom:6px}
+.cres-tip .t-kv{display:flex;align-items:baseline;gap:8px;margin-bottom:2px;font-size:11.5px}
+.cres-tip .t-kv span{flex:1 1 auto;color:#DCDCDC}
+.cres-tip .t-kv b{flex:0 0 auto;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cres-tip .t-kv i{flex:0 0 auto;font-style:normal;font-size:10px;color:#9A9A9A;
+  font-family:var(--mono);white-space:nowrap}
+/* Un critère sans donnée ne pèse pas dans la moyenne : il doit se voir comme
+   une absence, pas se lire comme un zéro. */
+.cres-tip .t-kv.vide span,.cres-tip .t-kv.vide b{color:#8E8E8E}
+.cres-tip .t-ent{margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,.18);
+  font-size:11px;color:#DCDCDC}
+.cres-tip .t-pied{margin-top:5px;font-size:10px;font-family:var(--mono);color:#9A9A9A;line-height:1.45}
+/* Les pastilles de rang sont posées SUR le centroïde du pays — c'est-à-dire
+   très exactement là où l'on vise quand on veut survoler ce pays. Sans cette
+   règle, la pastille intercepte le survol et les trois premiers du classement
+   sont les seuls à ne rien afficher : le contraire de ce qu'on veut. */
+.cres-rg{pointer-events:none}
+.cres-pays{cursor:default;transition:fill-opacity .12s}
+.cres-pays:hover,.cres-abs:hover,.cres-hue:hover{fill-opacity:.78}
+.cres-pays:focus{outline:none}
+.cres-pays:focus-visible{outline:none;stroke:#1C1C1C;stroke-width:1.8}
 .obs-legend{position:absolute;left:12px;bottom:12px;z-index:2;background:rgba(255,255,255,.94);
   border:1px solid var(--rule);border-radius:4px;padding:9px 12px;box-shadow:0 1px 4px rgba(28,28,28,.08)}
 .obs-legend h3{font-size:10px;font-weight:600;margin-bottom:5px}
@@ -1786,10 +1816,38 @@ function centroidePays(code){ return CENTROIDES[code] || null; }
    SANS numéro — et un pays rouge sans rang se lit comme un défaut d'affichage.
    `opts.rangsMax` tranche, et vaut trois par défaut.
    ══════════════════════════════════════════════════════════════════════════ */
+/* ── Ce que chaque pays dit au survol ────────────────────────────────────
+   Une choroplèthe montre un ORDRE : elle range les pays par couleur. Elle ne
+   dit pas POURQUOI, et c'est le pourquoi qui se discute — « la Suède passe
+   devant parce qu'elle gagne sur le carbone et le climat, et qu'elle perd sur
+   le prix ». Sans ce détail, la carte se cite comme un verdict ; avec lui,
+   elle se vérifie.
+
+   Trois choix, et ils se justifient :
+
+     · plus de <title> SVG. Le navigateur en ferait une SECONDE infobulle, en
+       texte brut, après une seconde d'attente, par-dessus la nôtre. Le nom
+       accessible passe par `aria-label` : même office pour les lecteurs
+       d'écran, sans rien afficher en double ;
+
+     · les pays GRIS ont aussi leur infobulle. Sur une choroplèthe, le gris se
+       lit spontanément comme « mauvais » ; ici il veut dire « pas calculé ».
+       Le survol le dit en toutes lettres, au lieu de laisser la légende porter
+       seule une correction que personne ne lit ;
+
+     · les pays notés sont atteignables au clavier, et l'infobulle suit le
+       focus autant que la souris. Le détail chiffré n'existe nulle part
+       ailleurs sur la carte : le réserver à la souris reviendrait à le
+       réserver à une partie des lecteurs.
+   ──────────────────────────────────────────────────────────────────────── */
+var CRES_INFOS = {}, _cresSeq = 0;
+
 function carteResultat(pays, opts){
   opts = opts || {};
   var W = PROJ.W, H = PROJ.H;
-  var s = '<svg class="cres-svg" viewBox="0 0 ' + W + ' ' + H + '" '
+  var mid = 'cres' + (++_cresSeq);
+  CRES_INFOS[mid] = { pays: pays, absent: opts.absent || '', horsUE: opts.horsUE || '' };
+  var s = '<svg class="cres-svg" data-cres="' + mid + '" viewBox="0 0 ' + W + ' ' + H + '" '
         + 'preserveAspectRatio="xMidYMid meet" role="img" aria-label="'
         + esc(opts.alt || 'Carte de résultat par pays') + '">'
         + '<rect width="' + W + '" height="' + H + '" fill="#DDE3EA"/>';
@@ -1800,13 +1858,15 @@ function carteResultat(pays, opts){
     var r = pays[code];
     if(r){
       colores += '<path d="' + d + '" fill="' + r.couleur + '" stroke="#FFF" '
-        + 'stroke-width="0.7" class="cres-pays" data-code="' + esc(code) + '">'
-        + '<title>' + esc(r.titre || (nomPays(code) + ' — ' + (r.valeur || ''))) + '</title></path>';
+        + 'stroke-width="0.7" class="cres-pays" data-code="' + esc(code) + '" '
+        + 'tabindex="0" role="img" aria-label="'
+        + esc(r.titre || (nomPays(code) + ' — ' + (r.valeur || ''))) + '"></path>';
     } else {
       /* Deux gris distincts : l'UE non retenue reste plus claire que le hors-UE,
          sinon un pays simplement non comparé se confondrait avec la Turquie. */
       neutres += '<path d="' + d + '" fill="' + (UE[code] ? '#EFF2F6' : '#D6D8DA')
-        + '" stroke="#FFF" stroke-width="0.5"/>';
+        + '" stroke="#FFF" stroke-width="0.5" data-code="' + esc(code) + '" '
+        + 'class="' + (UE[code] ? 'cres-abs' : 'cres-hue') + '"></path>';
     }
   });
   Object.keys(pays).forEach(function(code){
@@ -1821,7 +1881,117 @@ function carteResultat(pays, opts){
       + '<text x="' + x.toFixed(1) + '" y="' + (y + 4.5).toFixed(1) + '" text-anchor="middle" '
       + 'font-size="14" font-weight="700" fill="' + r.couleur + '">' + r.rang + '</text></g>';
   });
+  cresTipInit();
   return s + neutres + colores + etiquettes + '</svg>';
+}
+
+/* Contenu de l'infobulle. `r.lignes` est fourni par l'appelant : le
+   comparateur et l'enveloppe n'ont pas les mêmes chiffres à montrer, et
+   inventer ici un dénominateur commun leur ferait dire à tous deux quelque
+   chose d'approximatif. */
+function cresTipHtml(mid, code){
+  var inf = CRES_INFOS[mid];
+  if(!inf) return '';
+  var r = inf.pays[code], nom = esc(nomPays(code) || code);
+  if(!r){
+    /* Un pays gris n'est pas un pays mal noté : il n'a pas été calculé. */
+    return '<div class="t-nom">' + nom + '</div>'
+      + '<div class="t-sub">' + (UE[code] ? 'non comparé' : 'hors Union européenne') + '</div>'
+      + '<div class="t-ent">' + esc(UE[code]
+          ? (inf.absent || 'État membre absent de cette comparaison : aucun calcul n’a été '
+             + 'lancé pour lui, et aucun verdict ne le concerne. Ajoutez-le pour qu’il '
+             + 'apparaisse.')
+          : (inf.horsUE || 'Cette comparaison ne couvre que l’Union européenne.')) + '</div>';
+  }
+  var h = '<div class="t-nom">' + nom + '</div>';
+  if(r.sous) h += '<div class="t-sub">' + esc(r.sous) + '</div>';
+  (r.lignes || []).forEach(function(l){
+    h += '<div class="t-kv' + (l.vide ? ' vide' : '') + '"><span>' + esc(l.k) + '</span>'
+      + '<b>' + esc(l.v) + '</b>' + (l.n ? '<i>' + esc(l.n) + '</i>' : '') + '</div>';
+  });
+  if(r.valeurs) h += '<div class="t-ent">' + esc(r.valeurs) + '</div>';
+  if(r.pied) h += '<div class="t-pied">' + esc(r.pied) + '</div>';
+  return h;
+}
+
+/* Un seul jeu d'écouteurs pour toutes les cartes de résultat, posé sur le
+   document. Les conteneurs de ces cartes sont réécrits par `innerHTML` à
+   chaque changement de poids ou de filtre : des écouteurs posés sur eux
+   seraient effacés au premier réglage, et l'infobulle cesserait de répondre
+   sans que rien ne le signale. La délégation survit à la réécriture.
+
+   Le suivi de la souris n'est branché QUE pendant qu'une infobulle est
+   ouverte : un `mousemove` permanent sur le document ferait travailler la
+   page à chaque pixel parcouru, y compris loin de toute carte. */
+var _cresTip = null, _cresSuivi = false;
+
+function cresTipInit(){
+  if(window.__cresTipPose) return;
+  window.__cresTipPose = true;
+  document.addEventListener('mouseover', function(ev){
+    var t = ev.target;
+    if(!t || !t.getAttribute) return;
+    var code = t.getAttribute('data-code');
+    var svg = code && t.closest ? t.closest('[data-cres]') : null;
+    if(!code || !svg){ cresTipCacher(); return; }
+    cresTipMontrer(cresTipHtml(svg.getAttribute('data-cres'), code), ev);
+  });
+  document.addEventListener('mouseleave', function(ev){
+    if(ev.target && ev.target.getAttribute && ev.target.getAttribute('data-cres')) cresTipCacher();
+  }, true);
+  /* Le clavier ouvre et ferme la même infobulle que la souris. */
+  document.addEventListener('focusin', function(ev){
+    var t = ev.target;
+    if(!t || !t.getAttribute) return;
+    var code = t.getAttribute('data-code');
+    var svg = code && t.closest ? t.closest('[data-cres]') : null;
+    if(!code || !svg) return;
+    var b = t.getBoundingClientRect();
+    cresTipMontrer(cresTipHtml(svg.getAttribute('data-cres'), code),
+      { clientX: b.left + b.width / 2, clientY: b.top + b.height / 2 });
+  });
+  document.addEventListener('focusout', function(ev){
+    if(ev.target && ev.target.getAttribute && ev.target.getAttribute('data-code')) cresTipCacher();
+  });
+  /* Échap referme : une infobulle ouverte au clavier doit pouvoir se fermer
+     au clavier, sans avoir à déplacer le focus. */
+  document.addEventListener('keydown', function(ev){
+    if(ev.key === 'Escape') cresTipCacher();
+  });
+}
+
+function cresTipSuivre(ev){ cresTipPlacer(ev); }
+
+function cresTipMontrer(html, ev){
+  if(!html){ cresTipCacher(); return; }
+  if(!_cresTip){
+    _cresTip = document.createElement('div');
+    _cresTip.className = 'cres-tip';
+    _cresTip.setAttribute('role', 'tooltip');
+    document.body.appendChild(_cresTip);
+  }
+  _cresTip.innerHTML = html;
+  _cresTip.classList.add('on');
+  cresTipPlacer(ev);
+  if(!_cresSuivi){ document.addEventListener('mousemove', cresTipSuivre); _cresSuivi = true; }
+}
+
+function cresTipCacher(){
+  if(_cresTip) _cresTip.classList.remove('on');
+  if(_cresSuivi){ document.removeEventListener('mousemove', cresTipSuivre); _cresSuivi = false; }
+}
+
+/* Placement : à côté du curseur, mais jamais hors de la fenêtre. Une infobulle
+   qui déborde à droite tronque la moitié de ses chiffres, et c'est justement
+   la colonne des valeurs qui part. */
+function cresTipPlacer(ev){
+  if(!_cresTip) return;
+  var m = 14, l = _cresTip.offsetWidth || 300, h = _cresTip.offsetHeight || 140;
+  var x = ev.clientX + m, y = ev.clientY + m;
+  if(x + l > window.innerWidth - 6) x = ev.clientX - l - m;
+  if(y + h > window.innerHeight - 6) y = ev.clientY - h - m;
+  _cresTip.style.left = Math.max(6, x) + 'px';
+  _cresTip.style.top = Math.max(6, y) + 'px';
 }
 
 /* Ajustements manuels : quelques centroides tombent mal a cette echelle
@@ -4026,9 +4196,42 @@ function carteImplantation(toutes){
   if(!toutes || !toutes.length) return "";
   var pays = {};
   toutes.forEach(function(l){
-    pays[l.x.pays] = { couleur: implCouleurNote(l.score), rang: l.rang, valeur: l.score,
-                       titre: (nomPays(l.x.pays) || l.x.pays) + " — rang " + l.rang
-                              + " sur " + toutes.length + ", score " + l.score + "/100" };
+    var x = l.x;
+    /* Le détail qui a produit la couleur : chaque critère avec sa note, et le
+       poids que le lecteur vient de régler. Un critère à poids nul est écrit
+       « écarté » plutôt que masqué — savoir ce qu'on a choisi de ne pas
+       compter fait partie du résultat. */
+    var lignes = (IMPL.criteres || []).map(function(c){
+      var n = x.notes ? x.notes[c.cle] : null, p = IMPL_POIDS[c.cle] || 0;
+      return { k: c.nom.split(" (")[0],
+               v: (n === null || n === undefined) ? "sans donnée" : n + "/100",
+               n: p ? "poids " + p : "écarté",
+               vide: (n === null || n === undefined) || !p };
+    });
+    var absents = (IMPL.criteres || []).filter(function(c){
+      var n = x.notes ? x.notes[c.cle] : null;
+      return (n === null || n === undefined) && (IMPL_POIDS[c.cle] || 0) > 0; }).length;
+    /* Les valeurs brutes derrière les notes : c'est ce qu'on recopie dans un
+       dossier, alors qu'une note sur 100 ne se cite pas. */
+    var v = [];
+    if(x.intensite != null) v.push(x.intensite + " gCO₂/kWh");
+    if(x.eau && x.eau.classe_nom) v.push("eau " + x.eau.classe_nom.replace("Stress ", "").toLowerCase());
+    if(x.prix && x.prix.classe_nom) v.push("prix " + x.prix.classe_nom.toLowerCase());
+    if(x.climat && x.climat.nom) v.push(x.climat.nom.split(" — ")[0].toLowerCase());
+    if(x.en_service != null) v.push("parc " + x.en_service);
+    if(x.pipeline_2030 != null) v.push("file 2030 : " + x.pipeline_2030);
+    pays[x.pays] = { couleur: implCouleurNote(l.score), rang: l.rang, valeur: l.score,
+                     titre: (nomPays(x.pays) || x.pays) + " — rang " + l.rang
+                            + " sur " + toutes.length + ", score " + l.score + "/100",
+                     sous: "rang " + l.rang + " sur " + toutes.length
+                           + " · score " + l.score + "/100",
+                     lignes: lignes,
+                     valeurs: v.join(" · "),
+                     pied: "Score = Σ (poids × note) ÷ Σ poids"
+                           + (absents ? " · " + absents + " critère" + (absents > 1 ? "s" : "")
+                              + " sans donnée, exclu" + (absents > 1 ? "s" : "")
+                              + " du calcul comme du diviseur" : "")
+                           + " · les poids sont les vôtres, pas ceux du référentiel" };
   });
   var podium = toutes.slice(0, 3).map(function(l, i){
     return '<div class="cres-p' + (i === 0 ? " or" : "") + '">'
@@ -4045,7 +4248,9 @@ function carteImplantation(toutes){
     + 'votre arbitrage. Les trois premiers portent leur rang ; le classement complet est '
     + 'juste en dessous.</p>'
     + carteResultat(pays, { alt: "Carte de l’Union européenne colorée par le score "
-        + "d’implantation pondéré, du plus favorable au moins favorable." })
+        + "d’implantation pondéré, du plus favorable au moins favorable.",
+        absent: "État membre absent du référentiel d’implantation : il n’a pas de note, "
+              + "ce qui n’est pas la même chose qu’une mauvaise note." })
     + '<div class="cres-lg">'
     + '<span><i style="background:#2D7A47"></i>score 70 et plus</span>'
     + '<span><i style="background:#C47C1A"></i>de 45 à 69</span>'
@@ -6796,14 +7001,34 @@ if(window.parent&&window.parent!==window){
     if(!window.carteResultat || !(j.classement || []).length) return '';
     var C = j.classement;
     var pays = {};
+    var ans = (j.entree || {}).annees;
     C.forEach(function(x, i){
+      var dos = (j.dossiers || []).filter(function(d){ return d.pays === x.pays; })[0];
+      var lignes = [
+        { k: 'Coût total ' + ans + ' ans', v: fourch(x.tco_meur) + ' M€' },
+        { k: 'Exploitation / an', v: fourch(x.opex_meur_an) + ' M€' }
+      ];
+      if(dos && dos.devis && dos.devis.enveloppe_meur != null)
+        lignes.push({ k: 'Enveloppe d’investissement', v: fourch(dos.devis.enveloppe_meur) + ' M€' });
+      if(x.co2_t_an) lignes.push({ k: 'CO₂e / an', v: fourch(x.co2_t_an) + ' t' });
+      if(x.duree_mois) lignes.push({ k: 'Délai de mise en service',
+                                     v: x.duree_mois[0] + '–' + x.duree_mois[1] + ' mois' });
+      lignes.push({ k: 'Livrable avant 2030', v: x.tient_2030 ? 'oui' : 'non',
+                    vide: !x.tient_2030 });
       pays[x.pays] = {
         couleur: i === 0 ? '#2D7A47' : (i === C.length - 1 && C.length > 1 ? '#B83222' : '#C47C1A'),
         rang: i + 1,
         valeur: fourch(x.tco_meur) + ' M€',
         titre: x.pays + ' — rang ' + (i + 1) + ' sur ' + C.length
-               + ', coût total ' + fourch(x.tco_meur) + ' M€ sur '
-               + (j.entree || {}).annees + ' ans'
+               + ', coût total ' + fourch(x.tco_meur) + ' M€ sur ' + ans + ' ans',
+        sous: 'rang ' + (i + 1) + ' sur ' + C.length + ' · coût total sur ' + ans + ' ans',
+        lignes: lignes,
+        /* Le rang porte le COÛT TOTAL, pas l'investissement : à puissance
+           égale l'enveloppe est identique d'un pays à l'autre par
+           construction, et laisser croire l'inverse ferait lire la carte à
+           l'envers. */
+        pied: 'Le rang porte le coût total de possession, pas l’enveloppe — '
+            + 'celle-ci ne dépend guère du pays à puissance égale.'
       };
     });
     var podium = C.map(function(x, i){
@@ -6821,7 +7046,9 @@ if(window.parent&&window.parent!==window){
       + 'n’ont pas été calculés.</b> Ajoutez-les au comparateur pour qu’ils apparaissent.</p>'
       + window.carteResultat(pays, { rangsMax: C.length,
           alt: 'Carte de l’Union européenne : les pays comparés, '
-             + 'colorés du meilleur au moins bon coût total de possession.' })
+             + 'colorés du meilleur au moins bon coût total de possession.',
+          absent: 'État membre non comparé : aucun calcul n’a été lancé pour lui. '
+                + 'Ajoutez-le au comparateur pour qu’il reçoive une enveloppe et un rang.' })
       + '<div class="cres-lg">'
       + '<span><i style="background:#2D7A47"></i>coût total le plus bas</span>'
       + '<span><i style="background:#C47C1A"></i>intermédiaire</span>'
