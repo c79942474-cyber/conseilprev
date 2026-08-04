@@ -426,6 +426,10 @@ body.embed .gp-voile{background:rgba(20,20,20,.32)}
 .gp-corps{padding:8px 18px 4px}
 .gp-corps h4{font-size:14px;font-weight:600;margin:2px 0 6px}
 .gp-corps p{font-size:12.5px;line-height:1.6;color:var(--ink);margin:0 0 8px}
+.gp-src{margin-top:9px;padding-top:8px;border-top:1px solid var(--rule2);
+  font-family:var(--mono);font-size:10px;line-height:1.55;color:var(--muted2)}
+.gp-src b{color:var(--muted);font-weight:700}
+.gp-src span{display:block;margin-top:2px}
 .gp-piege{border-left:3px solid var(--orange);background:var(--bg);border-radius:0 3px 3px 0;
   padding:8px 12px;font-size:11.5px;color:var(--muted);line-height:1.55;margin:0 0 6px}
 .gp-piege b{color:var(--ink)}
@@ -5944,6 +5948,67 @@ function renderSources(){
    parcours qui cacherait la donnee pour montrer sa consigne serait un
    diaporama ; ici on lit la consigne ET la donnee ensemble. */
 
+/* ── D'où vient ce que chaque étape affirme ───────────────────────────────
+   La provenance est attachée à la SECTION, jamais recopiée dans l'étape. Une
+   étape qui vise `s-empreinte` hérite du référentiel que cette section
+   consomme réellement ; le jour où ce référentiel change, il change à un seul
+   endroit. Quarante-deux citations recopiées à la main auraient divergé, et
+   c'est le genre d'écart qu'on ne découvre qu'en comité.
+
+   Chaque entrée nomme un module QUI EXISTE dans le dépôt, avec sa version. Une
+   provenance inventée serait pire que pas de provenance : elle se cite. */
+var GP_SOURCES = {
+  "s-carte": {
+    ref: "datacentres.py 2026-07-a (97 sites, capacités et modes de refroidissement) "
+       + "· panorama_ia.py 2026-07-b (cas du panel)",
+    nature: "référentiel constitué à la main + estimations dérivées",
+  },
+  "s-cas": {
+    ref: "panorama_ia.py 2026-07-b — cas publiquement documentés, classés AI Act",
+    nature: "référentiel constitué à la main",
+  },
+  "s-lectures": {
+    ref: "panorama_ia.py 2026-07-b — agrégats calculés sur le panel",
+    nature: "calculé sur le référentiel",
+  },
+  "s-empreinte": {
+    ref: "empreinte_sites.py 2026-07-a (intensités carbone, fabrication amortie) "
+       + "· eau_dc.py 2026-08-a (eau de site et eau de la source)",
+    nature: "calculé — aucune mesure, des ordres de grandeur dérivés de capacités annoncées",
+  },
+  "s-implantation": {
+    ref: "implantation.py 2026-08-a — sept critères, chacun avec sa source "
+       + "(Ember, AEE WEI+, Eurostat nrg_pc_205) et sa formule",
+    nature: "référentiel + pondération réglée par le lecteur",
+  },
+  "s-finance": {
+    ref: "finance_dc.py 2026-08-a — coûts au MW, lots DPGF, scénarios et TCO",
+    nature: "calcul déterministe sur fourchettes de marché",
+  },
+  "s-prospect": {
+    ref: "tendances_dc.py 2026-08-a — 10 tendances, 11 jalons datés, "
+       + "citations vérifiées à la page",
+    nature: "référentiel daté + réserves",
+  },
+  "s-socle": {
+    ref: "Copernicus, NASA, DINUM, Eurostat — interrogés en direct, sans clé d'API",
+    nature: "données ouvertes, rejouables par le lecteur",
+  },
+  "s-sources": {
+    ref: "registre de vérification factuelle + méthodologie du panel",
+    nature: "déclaratif — critères d'inclusion et limites",
+  },
+};
+
+/* La provenance d'une étape : la sienne si elle en porte une, sinon celle de
+   sa section. Une étape sans section ET sans source n'en a pas — et le
+   contrôle de santé la compte plutôt que de la laisser passer. */
+function gpSource(et){
+  if(!et) return null;
+  if(et.source) return et.source;
+  return (et.sect && GP_SOURCES[et.sect]) || null;
+}
+
 var GP_PROFILS = {
   invest: {
     nom: "Investissement & implantation — centres de données",
@@ -5971,6 +6036,21 @@ var GP_PROFILS = {
       neuve: {
         nom: "Construction neuve",
         etapes: [
+          /* Le comparateur pondéré ouvre la branche : c'est l'outil qui répond
+             à « quel pays », et aucun parcours ne le visitait. On commençait
+             donc par l'empreinte — une conséquence — avant d'avoir posé le
+             choix qui la produit. */
+          { sect: "s-implantation", t: "Poser vos poids avant de lire un classement",
+            d: "Sept critères — carbone, pilotabilité du mix, eau, climat, prix, parc "
+             + "en service, file de raccordement — chacun avec sa source et sa formule. "
+             + "Réglez les poids selon VOTRE modèle : si l’OPEX énergie domine, le prix "
+             + "pèse ; si vous visez un PUE bas sans payer en eau, le climat pèse. Le "
+             + "classement se recalcule sous vos yeux.",
+            piege: "Le classement obtenu n’est pas une propriété du référentiel, c’est "
+                 + "le résultat de VOTRE arbitrage. Cité sans ses poids, il devient un "
+                 + "chiffre d’autorité qu’il n’est pas. Survolez un pays sur la carte : "
+                 + "l’infobulle rend le détail critère par critère, avec le poids que "
+                 + "vous venez de régler." },
           { sect: "s-empreinte", t: "L’électricité décide avant le foncier",
             d: "Le tableau par pays porte l’intensité carbone du réseau (gCO₂e/kWh, "
              + "millésime 2024, cycle de vie). À consommation égale, elle fait varier "
@@ -6015,6 +6095,17 @@ var GP_PROFILS = {
                  + "raccordable, capacité réseau, acceptabilité locale. Le pays idéal "
                  + "sur le papier peut être saturé dans la région précise que vous "
                  + "visez — le choix final est régional, pas national." },
+          { sect: "s-empreinte", t: "L’eau : arbitrer sur le bilan complet, pas sur le WUE",
+            d: "Le refroidissement sec supprime l’eau du site. Il augmente en revanche "
+             + "la consommation électrique, donc l’eau évaporée en amont par les "
+             + "centrales. Le bilan eau complet de la page pose les deux termes côte à "
+             + "côte, ramenés au kilowattheure informatique.",
+            piege: "Sur un mix thermique, l’arbitrage S’INVERSE : un site en free "
+                 + "cooling affiche « zéro eau » et consomme 1,1 à 1,25 L/kWh "
+                 + "informatique à la source. Une implantation choisie pour économiser "
+                 + "l’eau sur la foi du seul WUE peut en consommer davantage. Onze pays "
+                 + "sur vingt-trois ont un facteur national ; pour les autres, le terme "
+                 + "amont est un cadrage." },
           { sect: "s-sources", t: "Ce que ce référentiel ne vous dira pas — la due diligence",
             d: "Quatre décisions restent hors de portée de toute carte publique et "
              + "font votre différentiel : le PRIX de l’électricité et sa couverture "
@@ -6294,13 +6385,41 @@ var GP_PROFILS = {
         piege: "Le référentiel ne porte ni bassin versant, ni indice de stress "
              + "hydrique, ni régime d’autorisation de prélèvement. Sans ces trois "
              + "couches, un volume ne dit rien de la pression sur la ressource." },
+      { sect: "s-empreinte", t: "L’eau que le WUE ne compte pas",
+        d: "Descendez jusqu’au bilan eau complet. Produire un kilowattheure consomme "
+         + "de l’eau : les centrales thermiques et nucléaires en évaporent dans leurs "
+         + "tours. Ce second terme ne figure sur aucune déclaration d’exploitant, et "
+         + "il est du même ordre — souvent davantage — que l’eau du site.",
+        piege: "Un site en free cooling affiche « zéro eau » et consomme <b>1,1 à "
+             + "1,25 litre par kilowattheure informatique</b> à la source. Sur trois "
+             + "des cinq familles de refroidissement, l’eau amont l’emporte quoi "
+             + "qu’il arrive : choisir le sec pour économiser l’eau peut en "
+             + "consommer davantage." },
+      { sect: "s-empreinte", t: "Ce que le total du parc ne tranche pas",
+        d: "Les deux volumes du parc se recouvrent largement — le WUE bas de plusieurs "
+         + "modes vaut zéro, ce qui étire la fourchette de site sur deux ordres de "
+         + "grandeur. La section le dit et refuse de désigner un vainqueur.",
+        piege: "L’arbitrage ne se tranche pas sur des mètres cubes de parc, mais sur "
+             + "le rapport EWIF × PUE ÷ WUE, mode par mode : lui ne dépend ni de la "
+             + "taille du parc ni du facteur de charge, seulement de la conception et "
+             + "du mix. C’est le seul chiffre sur lequel on décide." },
+      { sect: "s-empreinte", t: "Ce qui manque encore, et combien",
+        d: "Le facteur eau de la production électrique porte la nature "
+         + "<b>ordre de grandeur</b>, à ±40 % — davantage que le terme de site. "
+         + "Onze des vingt-trois pays du parc disposent d’une valeur nationale.",
+        piege: "Les douze autres reçoivent la moyenne européenne. Ce n’est pas une "
+             + "valeur moins précise pour ces pays : c’est l’absence de valeur, et la "
+             + "page le marque ligne par ligne plutôt que de la dissoudre dans un "
+             + "total." },
       { sect: "s-sources", t: "Ce que l’obligation européenne va changer",
         d: "Le règlement délégué 2024/1364 fait de la consommation d’eau un indicateur "
          + "déclaré au même titre que l’énergie, pour les centres de plus de 500 kW "
          + "informatiques. C’est la première fois qu’une donnée d’eau site par site "
          + "est prévue par un texte.",
-        piege: "Prévue, pas encore publique. Tant que la base européenne n’est pas "
-             + "ouverte, tout volume par site — ici comme ailleurs — reste un calcul." },
+        piege: "Prévue, pas encore publique — et surtout, le WUE exigé est celui du "
+             + "<b>site</b>. La déclaration réglementaire ne couvrira donc pas l’eau "
+             + "de la source : un parc parfaitement conforme peut voir sa "
+             + "consommation d’eau réelle croître en passant au refroidissement sec." },
     ],
   },
   finance: {
@@ -6359,6 +6478,20 @@ var GP_PROFILS = {
         piege: "Une phase qui dépasse 2030 s’affiche en rouge et n’est jamais "
              + "raccourcie pour tenir dans la case. Si la borne haute déborde, "
              + "découpez en tranches et n’annoncez que la première." },
+      /* Les prospectives n'étaient visitées par AUCUN parcours. Or elles
+         portent onze échéances datées, et c'est un calendrier réglementaire
+         qui décide de ce qu'un échéancier peut promettre. */
+      { sect: "s-prospect", t: "Le calendrier réglementaire commande l’échéancier",
+        d: "Onze échéances datées structurent un projet jusqu’en 2030 : déclaration "
+         + "annuelle au titre du règlement 2024/1364, obligations de l’AI Act par "
+         + "classe de risque, jalons nationaux de raccordement. Les prospectives disent "
+         + "aussi ce que ces échéances PÉRIMENT dans le dossier que vous venez de "
+         + "chiffrer.",
+        piege: "Un échéancier qui ignore une échéance réglementaire n’est pas "
+             + "optimiste, il est faux : la date tombe qu’on l’ait inscrite ou non. "
+             + "Vérifiez surtout les jalons dont la date est ANNONCÉE et non encore "
+             + "publiée au journal officiel — le dossier doit porter la distinction, "
+             + "pas la lisser." },
     ],
   },
   analyste: {
@@ -6407,6 +6540,41 @@ var GP = { profil: null, branche: null, i: 0, cible: null };
    `etapes` ; un profil à embranchement porte une `question` et des `branches`,
    et la suite n'existe qu'une fois le scénario choisi — un investisseur en
    construction neuve et un acheteur en M&A ne lisent pas la même page. */
+/* Ce que les parcours couvrent, et ce qu'ils laissent de côté.
+
+   Sept profils donnent l'impression de couvrir la page. Le compte dit autre
+   chose : avant ce contrôle, ni le comparateur pondéré ni les prospectives
+   n'étaient visités par un seul parcours — deux des sections les plus
+   travaillées du module. Une couverture qu'on ne compte pas est une couverture
+   qu'on suppose.
+
+   Exposé pour la recette : une affirmation de couverture qu'on ne peut pas
+   vérifier est une affirmation qu'on croit sur parole. */
+function gpSante(){
+  var sections = ["s-carte", "s-cas", "s-lectures", "s-empreinte", "s-implantation",
+                  "s-finance", "s-prospect", "s-socle", "s-sources"];
+  var vues = {}, total = 0, sansSource = 0, profils = Object.keys(GP_PROFILS);
+  profils.forEach(function(k){
+    var P = GP_PROFILS[k];
+    var lots = P.etapes ? [P.etapes]
+      : Object.keys(P.branches || {}).map(function(b){ return P.branches[b].etapes; });
+    lots.forEach(function(E){
+      (E || []).forEach(function(et){
+        total++;
+        if(et.sect) vues[et.sect] = (vues[et.sect] || 0) + 1;
+        if(!gpSource(et)) sansSource++;
+      });
+    });
+  });
+  var absentes = sections.filter(function(x){ return !vues[x]; });
+  return { profils: profils.length, etapes: total,
+           sections_visitees: Object.keys(vues).length,
+           sections_page: sections.length,
+           sections_jamais_visitees: absentes,
+           etapes_sans_source: sansSource,
+           par_section: vues };
+}
+
 function gpEtapes(P){
   if(P.etapes) return P.etapes;
   var b = GP.branche && P.branches && P.branches[GP.branche];
@@ -6511,6 +6679,15 @@ function gpAller(i){
           + esc(o.sens) + "</span></button>";
       }).join("") + "</div>" : "")
     + (et.piege ? '<div class="gp-piege"><b>Le piège :</b> ' + et.piege + "</div>" : "")
+    /* La provenance sous le piège, et pas au-dessus : on lit d'abord ce qu'il
+       faut comprendre, puis sur quoi ça repose. L'inverse ferait passer une
+       citation avant l'idée qu'elle soutient. */
+    + (function(){
+        var src = gpSource(et);
+        if(!src) return "";
+        return '<div class="gp-src"><b>D’où ça vient :</b> ' + esc(src.ref)
+          + '<span>nature : ' + esc(src.nature) + "</span></div>";
+      })()
     + "</div>"
     + '<div class="gp-pied"><div class="gp-points">' + points + "</div>"
     + (enAttente ? '<span class="gp-attente">Choisissez un scénario ci-dessus</span>' : "")
