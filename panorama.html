@@ -282,17 +282,42 @@ body.embed .pnav-parcours{padding:8px 18px 9px}
 @keyframes gp-appel{0%,100%{transform:none}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
 @media(prefers-reduced-motion:reduce){.gp-options.gp-appel{animation:none;outline:2px solid #C47C1A;
   outline-offset:3px;border-radius:5px}}
+/* ── Le lanceur des parcours ──────────────────────────────────────────────
+   Il était presque noir sur une barre sombre : la chose la plus utile de la
+   page à un premier lecteur en était la moins repérable. L'ambre le détache du
+   fond ET des pastilles bleu-vert de la barre, sans entrer en concurrence avec
+   les sept couleurs de métier — aucune ne tire vers l'orange. */
 .gp-lanceur{all:unset;box-sizing:border-box;position:absolute;right:14px;top:50%;
   transform:translateY(-50%);z-index:6;
   display:inline-flex;align-items:center;gap:7px;cursor:pointer;
-  font-size:12.5px;font-weight:700;color:#fff;padding:9px 16px;border-radius:7px;
-  background:linear-gradient(135deg,#1C1C1C,#2E3A4A);
-  box-shadow:0 2px 9px rgba(0,0,0,.2);
+  font-size:13.5px;font-weight:700;color:#fff;padding:11px 19px;border-radius:8px;
+  background:linear-gradient(135deg,#C2410C,#9A3412);
+  box-shadow:0 2px 10px rgba(154,52,18,.34),0 0 0 0 rgba(194,65,12,.55);
   transition:transform .15s,box-shadow .15s,filter .15s}
-.gp-lanceur:before{content:"🧭";font-size:14px;line-height:1}
-.gp-lanceur:hover{transform:translateY(-50%) scale(1.06);filter:brightness(1.18);
-  box-shadow:0 5px 16px rgba(0,0,0,.28)}
-.gp-lanceur:focus-visible{outline:2px solid #1E63A8;outline-offset:2px}
+.gp-lanceur:before{content:"🧭";font-size:15px;line-height:1}
+.gp-lanceur:hover{transform:translateY(-50%) scale(1.06);filter:brightness(1.12);
+  box-shadow:0 6px 20px rgba(154,52,18,.44)}
+.gp-lanceur:focus-visible{outline:2px solid #1C1C1C;outline-offset:3px}
+
+/* Le battement. Un halo qui s'écarte et s'efface — il ne modifie ni la taille
+   du bouton ni la mise en page, donc rien ne bouge autour de lui.
+
+   1,8 s par cycle : 0,55 éclat par seconde, très en dessous des trois par
+   seconde au-delà desquels un clignotement devient un risque photosensible.
+   Cinq cycles, puis `forwards` fige l'état final : l'animation s'arrête seule,
+   ce qui vaut mieux qu'un bouton « arrêter » que personne ne cherche. */
+@keyframes gp-battement{
+  0%   {box-shadow:0 2px 10px rgba(154,52,18,.34),0 0 0 0 rgba(194,65,12,.55)}
+  55%  {box-shadow:0 2px 10px rgba(154,52,18,.34),0 0 0 13px rgba(194,65,12,0)}
+  100% {box-shadow:0 2px 10px rgba(154,52,18,.34),0 0 0 0 rgba(194,65,12,0)}
+}
+.gp-lanceur.bat{animation:gp-battement 1.8s ease-out 5 forwards}
+/* Le mouvement est un RAPPEL, pas le message : coupé, la couleur et la taille
+   portent seules la visibilité, et rien n'est perdu. */
+@media(prefers-reduced-motion:reduce){
+  .gp-lanceur.bat{animation:none}
+  .gp-lanceur{transition:none}
+}
 
 /* ── Progression de lecture ───────────────────────────────────────────────
    Trois pixels qui repondent a « il m'en reste combien ? ». */
@@ -1357,7 +1382,7 @@ engagements publics) sont imputés nominativement.</div>
     <a href="#s-sources" class="f-verifier" title="Chaque source, son millésime, son lien — et le registre de vérification">Sources</a>
     <a href="#s-methodo" class="f-verifier" title="Comment les chiffres sont construits, hypothèse par hypothèse">Méthodologie</a>
   </nav>
-  <button type="button" class="gp-lanceur" id="gp-lanceur" data-tt="Les six parcours, décrits en entier|Ouvre la liste complète avec, pour chacun, ce qu’il vous fait lire et pourquoi.">Parcours guidé</button>
+  <button type="button" class="gp-lanceur" id="gp-lanceur">Parcours guidé</button>
  
 </div>
  <div class="pnav-prog" aria-hidden="true"><i id="pnav-prog-i"></i></div>
@@ -6642,6 +6667,29 @@ var GP = { profil: null, branche: null, i: 0, cible: null };
    La liste vient des parcours réels via gpMetiersDe : aucune étiquette n'est
    saisie à la main, donc aucune ne peut se désynchroniser d'un déplacement
    d'étape. */
+/* Armer le battement du lanceur, et l'éteindre pour de bon dès que le lecteur
+   a ouvert les parcours : à ce moment-là il SAIT que le bouton existe, et
+   continuer à l'agiter n'informe plus.
+
+   L'infobulle est écrite ici et non dans le balisage : elle annonçait « les six
+   parcours » alors qu'il y en a sept. Un compte écrit à la main se désynchronise
+   au premier ajout, et personne ne le relit. */
+function gpLanceurEveil(){
+  var b = document.getElementById("gp-lanceur");
+  if(!b) return;
+  var n = Object.keys(GP_PROFILS).length;
+  b.setAttribute("data-tt", "Les " + n + " parcours, décrits en entier|Ouvre la liste "
+    + "complète avec, pour chacun, ce qu’il vous fait lire et pourquoi.");
+  b.setAttribute("aria-label", "Parcours guidé — " + n + " parcours par métier");
+  var vu = false;
+  try { vu = sessionStorage.getItem("gp-vu") === "1"; } catch(e){}
+  if(!vu) b.classList.add("bat");
+  b.addEventListener("click", function(){
+    this.classList.remove("bat");
+    try { sessionStorage.setItem("gp-vu", "1"); } catch(e){}
+  });
+}
+
 function gpPastilles(){
   var sects = document.querySelectorAll("section.panel[id]");
   for(var i = 0; i < sects.length; i++){
@@ -7457,7 +7505,7 @@ function renderAll(){
     brancherLectures();
     renderMethodo(); renderSocle(); renderSources();
     pnavBrancher(); pnavCompteurs(); gpBrancher(); aideBrancher();
-    gpPastilles(); gpTeinte();
+    gpPastilles(); gpTeinte(); gpLanceurEveil();
   };
   /* Le premier des deux declencheurs gagne ; l'autre ne fait rien. La trame
      est la voie rapide quand la page est visible ; le minuteur est le filet
