@@ -2,7 +2,7 @@
 """Empreinte environnementale des SIA et des centres de données de l'UE.
 
 CE QUE CE MODULE FAIT
-Il applique au parc cartographié — 97 centres de données, 72 systèmes d'IA —
+Il applique au parc cartographié — 110 centres de données, 72 systèmes d'IA —
 la même chaîne de calcul que la page /empreinte du site : consommation, PUE,
 intensité carbone du pays, impacts incorporés de fabrication. Il en tire une
 vue par site, par pays et par cycle de vie.
@@ -160,7 +160,10 @@ AVERTISSEMENT = (
 )
 
 LIMITES = [
-    "PARC ≠ TOTAL — 97 centres de données et 72 systèmes d’IA sont cartographiés ; "
+    # Les deux comptes sont des GABARITS remplis a l'assemblage : ecrits en dur,
+    # ils mentaient des la premiere extension du referentiel — et un chiffre faux
+    # dans la phrase qui avertit du perimetre est le pire endroit pour en avoir un.
+    "PARC ≠ TOTAL — {n_dc} centres de données et {n_sia} systèmes d’IA sont cartographiés ; "
     "le parc européen réel en compte plusieurs milliers. Les cumuls par pays ne "
     "sont donc pas des inventaires nationaux.",
     "Les intensités carbone sont des moyennes annuelles. L’intensité réelle varie "
@@ -352,7 +355,9 @@ def assemble(sites=None, cas=None, live=None):
             "intensite_direct_valeurs": {k: round(float(v), 1) for k, v in (live or {}).items()},
         },
         "avertissement": AVERTISSEMENT,
-        "limites": LIMITES,
+        # Le gabarit est rempli ici, ou les deux longueurs sont connues.
+        "limites": [l.format(n_dc=len(sites), n_sia=len(cas)) if "{n_dc}" in l else l
+                    for l in LIMITES],
         "maj": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     }
 

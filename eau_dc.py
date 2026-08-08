@@ -3,7 +3,7 @@
 
 POURQUOI CE MODULE EXISTE
 
-La page publiait, pour les 97 centres cartographiés, l’eau consommée SUR LE
+La page publiait, pour les centres cartographiés, l’eau consommée SUR LE
 SITE — le volume d’appoint des tours et des systèmes adiabatiques. C’est le
 chiffre que tout le monde publie, celui qu’exige le règlement délégué (UE)
 2024/1364, et celui que compare la presse.

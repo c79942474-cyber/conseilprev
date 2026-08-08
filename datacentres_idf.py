@@ -3,7 +3,7 @@
 
 POURQUOI UN MODULE À PART, ET PAS DES LIGNES DE PLUS DANS `datacentres.py`.
 
-Le référentiel européen porte quatre-vingt-dix-sept sites pour tout le
+Le référentiel européen porte cent dix sites pour tout le
 continent, dont cinq en Île-de-France. L'Observatoire de l'Institut Paris
 Région en recense cent trente-neuf pour la seule région. Verser les seconds
 dans le premier ferait paraître la France vingt fois plus dense que
