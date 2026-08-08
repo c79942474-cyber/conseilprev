@@ -760,7 +760,7 @@ body.embed .gp-carte{bottom:auto;top:var(--gp-bas,auto);
    reglage et son effet sans lire les intitules deux fois. */
 .imp-c-carbone{--imp-c:#1E6336}.imp-c-mix{--imp-c:#4E3277}.imp-c-eau{--imp-c:#1C5CAB}
 .imp-c-climat{--imp-c:#0E7B83}.imp-c-prix{--imp-c:#8A5310}.imp-c-parc{--imp-c:#5B6472}
-.imp-c-pipeline{--imp-c:#B83222}
+.imp-c-pipeline{--imp-c:#B83222}.imp-c-climat_physique{--imp-c:#9C2D6B}
 /* Jauge de score : la couleur dit le niveau, le chiffre reste la valeur. */
 .imp-jauge{display:flex;align-items:center;gap:7px;min-width:120px}
 .imp-jauge i{flex:1 1 auto;height:7px;border-radius:4px;background:var(--rule);
@@ -4837,7 +4837,8 @@ function fourchetteT(v){
    formule executee sont une seule et meme chose. Le navigateur ne fait que la
    somme ponderee — la seule operation que le lecteur regle lui-meme. */
 var IMPL = null;
-var IMPL_POIDS = { carbone: 3, mix: 2, eau: 2, climat: 2, prix: 3, parc: 1, pipeline: 1 };
+var IMPL_POIDS = { carbone: 3, mix: 2, eau: 2, climat: 2, prix: 3,
+                   climat_physique: 2, parc: 1, pipeline: 1 };
 var IMPL_DEPLIE = null;
 
 function implScore(x){
@@ -4924,6 +4925,7 @@ function renderImplantation(){
       climat: "Potentiel de free cooling selon le climat : un pays froid achète un PUE bas sans payer en eau ; un pays chaud arbitre entre les deux.",
       prix: "Terrain de départ de la négociation d’énergie (classes Eurostat). Le prix réel sera votre PPA — pondérez fort si l’OPEX énergie domine votre modèle.",
       parc: "Filière déjà constituée : sites en service, main-d’œuvre, permis déjà instruits par les autorités. Rassurant pour une extension ou un rachat.",
+      climat_physique: "Part des centres PLANIFIÉS du pays qu’XDI modélise à haut risque de dommage physique en 2026 — probabilité annuelle de dommage atteignant 1 % du coût de remplacement, seuil à partir duquel l’éditeur juge l’assurance « de plus en plus coûteuse ou dangereusement insuffisante ». Regardez surtout l’écart entre faible résilience et résilience avancée : ce qui reste après ingénierie est un risque de LIEU, pas de bâtiment. La note ne porte QUE le dommage direct ; XDI chiffre le risque indirect dix fois plus lourd. Pondérez fort pour un actif détenu long, faible pour une prise à bail courte.",
       pipeline: "File de raccordement 2026-2030 : moins il y a de projets devant vous, plus vite votre NOUVEAU site sera raccordé. Sans objet pour un rachat.",
     };
     pond.innerHTML = '<div class="imp-pond">' + IMPL.criteres.map(function(c){
@@ -4953,7 +4955,7 @@ function renderImplantation(){
   if(src){
     var S = IMPL.sources;
     src.innerHTML = '<div class="imp-srcs"><b>Sources de cette section.</b> '
-      + ["eau", "mix", "prix", "perspectives"].map(function(k){
+      + ["eau", "mix", "prix", "climat_physique", "perspectives"].map(function(k){
           var x = S[k];
           return esc(x.titre) + " — " + esc(x.editeur) + " " + implNatBadge(x.nature);
         }).join(" · ")
@@ -5071,6 +5073,13 @@ function carteImplantation(toutes){
     if(x.eau && x.eau.classe_nom) v.push("eau " + x.eau.classe_nom.replace("Stress ", "").toLowerCase());
     if(x.prix && x.prix.classe_nom) v.push("prix " + x.prix.classe_nom.toLowerCase());
     if(x.climat && x.climat.nom) v.push(x.climat.nom.split(" — ")[0].toLowerCase());
+    if(x.climat_physique){
+      var q = x.climat_physique;
+      v.push("XDI " + q.haut_risque_pct + " % à haut risque"
+             + (q.haut_risque_adapte_pct !== q.haut_risque_pct
+                ? " (" + q.haut_risque_adapte_pct + " % après ingénierie)" : "")
+             + " · " + q.alea_nom.toLowerCase());
+    }
     if(x.en_service != null) v.push("parc " + x.en_service);
     if(x.pipeline_2030 != null) v.push("file 2030 : " + x.pipeline_2030);
     pays[x.pays] = { couleur: implCouleurNote(l.score), rang: l.rang, valeur: l.score,

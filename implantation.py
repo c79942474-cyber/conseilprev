@@ -27,7 +27,7 @@ une étude hydrologique locale, ni une due diligence.
 """
 from datetime import datetime, timezone
 
-VERSION = "2026-08-a"
+VERSION = "2026-08-b"
 
 # ═══════════════════════════════════════════════════════════════════════════
 # 1. EAU — stress hydrique national et compétition d'usages
@@ -339,6 +339,132 @@ def climat_de(pays):
     return "tempere"
 
 # ═══════════════════════════════════════════════════════════════════════════
+# 5 bis. RISQUE CLIMATIQUE PHYSIQUE — XDI, juin 2026
+#
+#    CE QUE CE BLOC AJOUTE, ET POURQUOI IL MANQUAIT. Les cinq critères
+#    précédents décrivent le kilowattheure, l'eau et le prix : ce qui fait
+#    tourner un centre. Aucun ne dit si le bâtiment sera encore là dans
+#    quarante ans. XDI modélise, pour 2 595 centres PLANIFIÉS dans le monde,
+#    la probabilité de dommage physique annuel rapporté au coût de
+#    remplacement — leur métrique MVAR — sur onze aléas climatiques.
+#
+#    LA MESURE. Un site est « à haut risque » quand son MVAR atteint 1 % par
+#    an : à ce niveau, XDI écrit que l'assurance devient « de plus en plus
+#    coûteuse ou dangereusement insuffisante ». Le pourcentage retenu ici est
+#    la PART des centres planifiés du pays qui franchissent ce seuil.
+#
+#    LES DEUX RÉGLAGES, ET CE QUE LEUR ÉCART RÉVÈLE. XDI publie deux
+#    résultats : construction à faible résilience, et construction à
+#    résilience avancée. L'écart entre les deux dit ce que l'ingénierie peut
+#    corriger — et le RESTE dit ce qu'elle ne peut pas. En Suisse, 33 % → 0 % :
+#    tout est rattrapable par la conception. En France, 26 % → 18 % : plus des
+#    deux tiers du risque tient au LIEU, pas au bâtiment. C'est la différence
+#    entre un surcoût d'ingénierie et une erreur d'implantation, et c'est
+#    l'information la plus actionnable du rapport.
+#
+#    CE QUE L'ABSENCE NE SIGNIFIE PAS. XDI ne classe que les pays comptant au
+#    moins trois centres planifiés analysés, et ne publie que les vingt-cinq
+#    premiers. Un pays absent n'est donc pas « bon » : il est HORS CLASSEMENT,
+#    et reçoit une note nulle — pas une bonne note. La Suède, la Pologne, la
+#    Belgique et l'Autriche sont dans ce cas.
+# ═══════════════════════════════════════════════════════════════════════════
+
+XDI_ALEAS = {
+    "submersion": "Submersion côtière",
+    "crue": "Crue de rivière",
+    "ruissellement": "Ruissellement pluvial",
+}
+
+# pays : (rang mondial, centres planifiés analysés, HRP % faible résilience,
+#         HRP % résilience avancée, hausse du risque 2026-2100 en %,
+#         hausse bornée par « supérieure à », aléa moteur 2026)
+XDI = {
+    "CH": (3, 3, 33, 0, 147, False, "crue"),
+    "FR": (5, 38, 26, 18, 300, True, "submersion"),
+    "NL": (6, 12, 25, 0, 83, False, "ruissellement"),
+    "FI": (10, 41, 12, 0, 85, False, "ruissellement"),
+    "NO": (12, 25, 12, 0, 185, False, "ruissellement"),
+    "IT": (17, 45, 9, 0, 142, False, "crue"),
+    "PT": (18, 12, 8, 0, 300, True, "crue"),
+    "IE": (19, 55, 7, 4, 300, True, "submersion"),
+    "DK": (20, 37, 5, 3, 300, True, "submersion"),
+    "DE": (21, 79, 5, 1, 135, False, "ruissellement"),
+    "GB": (24, 162, 4, 0, 300, True, "crue"),
+    "ES": (25, 67, 3, 1, 181, False, "submersion"),
+}
+
+# Le pire du panel européen sert d'étalon, comme pour « parc » et « pipeline ».
+# Le fixer en dur figerait la note au millésime du rapport.
+XDI_PIRE = max(v[2] for v in XDI.values())
+
+XDI_EUROPE = {
+    "analyses": 623, "haut_risque": 45, "part": 7, "hausse_2100": 289,
+    "phrase": "Sur 623 centres de données planifiés analysés en Europe, 45 "
+              "ressortent à haut risque de dommage physique en 2026, soit 7 %. "
+              "Le risque moyen de dommage est modélisé en hausse de 289 % "
+              "d'ici 2100 sous scénario d'émissions élevées.",
+}
+
+# Ce que la seule note ne dit pas, et qui pèse davantage.
+XDI_INDIRECT = (
+    "Le risque INDIRECT pèse dix fois plus que le dommage direct. Sur un "
+    "portefeuille témoin de 138 centres européens, XDI modélise une perte de "
+    "productivité multipliée par dix quand on intègre les dépendances — "
+    "réseau électrique, transport, eau, chaînes d'approvisionnement — au lieu "
+    "du seul dommage au bâtiment ; elle approche 2 % en moyenne et triple d'ici "
+    "la fin du siècle. La note ci-dessous ne porte QUE le dommage direct : "
+    "elle sous-estime donc l'exposition réelle, et dans des proportions que le "
+    "rapport chiffre.")
+
+SOURCE_XDI = {
+    "titre": "2026 Global Analysis of Planned Data Centres for Physical "
+             "Climate Risk and Resilience — Key Findings",
+    "editeur": "XDI (Cross Dependency Initiative), juin 2026",
+    "url": "https://xdi.systems/",
+    "nature": "referentiel",
+    "note": "Classement des vingt-cinq premiers pays, risque de dommage "
+            "physique modélisé en 2026, réglages de faible résilience. "
+            "Scénario d'émissions élevées RCP 8.5 / SSP5-8.5, employé par "
+            "l'éditeur comme test de résistance et non comme prévision. La "
+            "chaleur extrême est EXCLUE de ce classement : elle perturbe "
+            "l'exploitation sans endommager le bâtiment, et se mesure "
+            "autrement. Localisation des sites fournie à XDI par Data Center "
+            "Map, distincte de notre propre référentiel.",
+}
+
+
+def xdi_de(pays):
+    """La fiche de risque climatique physique d'un pays, ou None s'il est hors
+    classement — ce qui n'est pas la même chose qu'un risque faible."""
+    v = XDI.get(pays)
+    if not v:
+        return None
+    rang, n, bas, avance, hausse, borne, alea = v
+    return {
+        "rang_mondial": rang,
+        "centres_analyses": n,
+        "haut_risque_pct": bas,
+        "haut_risque_adapte_pct": avance,
+        # La part que l'ingénierie NE rattrape PAS : c'est le risque de LIEU.
+        "irreductible_pct": round(100.0 * avance / bas) if bas else 0,
+        "hausse_2100_pct": hausse,
+        "hausse_bornee": borne,
+        "alea": alea,
+        "alea_nom": XDI_ALEAS[alea],
+    }
+
+
+def _note_xdi(pays):
+    """0-100, plus haut = moins exposé. Un pays hors classement n'a pas de
+    note : le comparateur l'écarte du calcul plutôt que de lui en inventer
+    une, bonne ou mauvaise."""
+    v = XDI.get(pays)
+    if not v:
+        return None
+    return max(0, min(100, round(100 - 100.0 * v[2] / XDI_PIRE)))
+
+
+# ═══════════════════════════════════════════════════════════════════════════
 # 6. AVANTAGES / INCONVÉNIENTS — l'analyse croisée, par pays
 #    Nature « analyse » : la lecture du cabinet, datée, à partir des critères
 #    ci-dessus et du référentiel des sites. Un avis se discute — c'est le but.
@@ -476,6 +602,10 @@ CRITERES = [
     {"cle": "parc", "nom": "Parc en service (filière constituée)", "nature": "calcule",
      "source": "référentiel des 97 sites (datacentres.py)",
      "formule": "note = 100 × sites en service du pays ÷ maximum du panel"},
+    {"cle": "climat_physique", "nom": "Risque climatique physique du bâti (XDI)",
+     "nature": "referentiel",
+     "source": "XDI, juin 2026 — part des centres planifiés à haut risque de dommage, réglages de faible résilience",
+     "formule": "note = 100 − 100 × part à haut risque ÷ pire part du panel (33 %, Suisse) ; pays hors classement = pas de note"},
     {"cle": "pipeline", "nom": "File de raccordement 2026-2030 (concurrence)", "nature": "calcule",
      "source": "statuts annoncé + en construction + autorisé des 97 sites",
      "formule": "note = 100 − 100 × pipeline du pays ÷ maximum du panel (moins il y a de file, mieux c'est pour un NOUVEL entrant)"},
@@ -529,6 +659,7 @@ def assemble(sites, intensites):
             "prix": PRIX_CLASSES[prix[0]]["note"] if prix else None,
             "parc": round(100.0 * en_service.get(p, 0) / max_service),
             "pipeline": round(100 - 100.0 * pipeline.get(p, 0) / max_pipe),
+            "climat_physique": _note_xdi(p),
         }
         avis = AVIS.get(p)
         lignes.append({
@@ -538,6 +669,15 @@ def assemble(sites, intensites):
             "eau": ({"classe": eau[0], "classe_nom": EAU_CLASSES[eau[0]]["nom"],
                      "irrigation": eau[1], "bassins": eau[2]} if eau else None),
             "climat": {"classe": cl, "nom": CLIMAT[cl]["nom"]},
+            # Hors classement n'est pas « faible risque » : le champ vaut None
+            # et porte à côté la raison, sinon l'absence se lirait comme une
+            # bonne nouvelle.
+            "climat_physique": xdi_de(p),
+            "climat_physique_absence": (None if XDI.get(p) else
+                                        "hors du classement XDI des vingt-cinq "
+                                        "premiers pays : moins de trois centres "
+                                        "planifiés analysés, ou part à haut risque "
+                                        "inférieure à 3 %"),
             "prix": ({"classe": prix[0], "classe_nom": PRIX_CLASSES[prix[0]]["nom"],
                       "fourchette_eur_mwh": list(prix[1])} if prix else None),
             "en_service": en_service.get(p, 0),
@@ -553,7 +693,12 @@ def assemble(sites, intensites):
         "criteres": CRITERES,
         "classes": {"eau": EAU_CLASSES, "prix": PRIX_CLASSES, "climat": {k: v["nom"] for k, v in CLIMAT.items()}},
         "sources": {"eau": SOURCE_EAU, "mix": SOURCE_MIX, "prix": SOURCE_PRIX,
-                    "perspectives": SOURCE_PERSPECTIVES},
+                    "perspectives": SOURCE_PERSPECTIVES, "climat_physique": SOURCE_XDI},
+        "climat_physique": {"aleas": XDI_ALEAS, "europe": XDI_EUROPE,
+                            "pire_panel": XDI_PIRE, "indirect": XDI_INDIRECT,
+                            "classement": sorted(
+                                [dict(pays=k, **xdi_de(k)) for k in XDI],
+                                key=lambda x: x["rang_mondial"])},
         "perspectives_ue": [x for x in PERSPECTIVES if x["pays"] == "UE"],
         "pays": lignes,
         "avertissement": (
@@ -581,6 +726,18 @@ def sante():
         a, b = PRIX[p][1]
         if not a < b:
             pb.append("prix %s : fourchette inversée" % p)
+    for k, v in XDI.items():
+        rang, n, bas, avance, hausse, borne, alea = v
+        if alea not in XDI_ALEAS:
+            pb.append("xdi %s : alea inconnu %s" % (k, alea))
+        if avance > bas:
+            pb.append("xdi %s : la resilience avancee aggrave le risque" % k)
+        if n < 3:
+            pb.append("xdi %s : moins de trois centres analyses, XDI ne classe pas" % k)
+        if not 1 <= rang <= 25:
+            pb.append("xdi %s : rang hors du top 25" % k)
+    if XDI_PIRE <= 0:
+        pb.append("xdi : etalon du panel nul, la note serait indefinie")
     for x in PERSPECTIVES:
         if x["sens"] not in ("hausse", "contrainte"):
             pb.append("perspective %s : sens inconnu" % x["pays"])
@@ -588,4 +745,5 @@ def sante():
             pb.append("perspective %s : source ou date manquante" % x["pays"])
     return {"ok": not pb, "problemes": pb, "version": VERSION,
             "pays_eau": len(EAU), "pays_mix": len(MIX), "pays_prix": len(PRIX),
-            "perspectives": len(PERSPECTIVES), "avis": len(AVIS)}
+            "perspectives": len(PERSPECTIVES), "avis": len(AVIS),
+            "pays_xdi": len(XDI), "criteres": len(CRITERES)}
