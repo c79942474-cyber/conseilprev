@@ -1035,16 +1035,16 @@ body.gp-actif .pm-b.ici span{color:#fff}
    une aide a la lecture et qu'on replie. Une bande de 30 px masque une frange
    de mer ; la legende depliee masquait la France, l'Allemagne et l'Italie. */
 .map-barre{position:absolute;left:0;right:0;bottom:0;z-index:4;display:flex;align-items:center;
-  gap:14px;padding:6px 12px;background:rgba(252,252,251,.95);border-top:1px solid var(--rule);
-  font-family:var(--mono);font-size:10px;color:var(--muted);flex-wrap:wrap}
+  gap:16px;padding:9px 14px;background:rgba(252,252,251,.95);border-top:1px solid var(--rule);
+  font-family:var(--mono);font-size:12px;line-height:1.5;color:var(--muted);flex-wrap:wrap}
 .map-barre label{display:flex;align-items:center;gap:5px;cursor:pointer;user-select:none;white-space:nowrap}
-.map-barre input[type=checkbox]{accent-color:#B35A10;margin:0}
-.map-barre input[type=range]{accent-color:#B35A10;width:96px;margin:0}
-.map-barre select{font:inherit;font-size:10px;color:#1C1C1C;background:#FFF;
-  border:1px solid var(--rule);border-radius:3px;padding:2px 4px;max-width:150px}
+.map-barre input[type=checkbox]{accent-color:#B35A10;margin:0;width:14px;height:14px}
+.map-barre input[type=range]{accent-color:#B35A10;width:130px;height:16px;margin:0}
+.map-barre select{font:inherit;font-size:12px;color:#1C1C1C;background:#FFF;
+  border:1px solid var(--rule);border-radius:3px;padding:3px 6px;max-width:180px}
 .map-barre .sep{flex:1}
-.map-barre button{font:inherit;font-size:10px;color:var(--muted);background:none;
-  border:1px solid var(--rule);border-radius:3px;padding:2px 8px;cursor:pointer}
+.map-barre button{font:inherit;font-size:12px;color:var(--muted);background:none;
+  border:1px solid var(--rule);border-radius:3px;padding:3px 10px;cursor:pointer}
 .map-barre button:hover{color:#1C1C1C;border-color:#1C1C1C}
 .map-barre b{color:#1C1C1C}
 /* La legende est une aide a la lecture : repliee par defaut, elle laisse la
@@ -1052,7 +1052,7 @@ body.gp-actif .pm-b.ici span{color:#fff}
 .lg-plier{position:absolute;top:6px;right:8px;background:none;border:none;cursor:pointer;
   font:inherit;font-size:14px;line-height:1;color:var(--muted2);padding:2px 5px}
 .lg-plier:hover{color:#1C1C1C}
-.obs-legend{bottom:40px}                      /* au-dessus de la barre */
+.obs-legend{bottom:52px}                      /* au-dessus de la barre */
 .obs-legend.pliee{display:none}
 .lg-det{margin-top:5px;padding-top:5px}
 .lg-bascule{display:flex;align-items:center;gap:6px;margin-top:7px;padding-top:7px;
@@ -1198,11 +1198,14 @@ table.socle-t a{color:#1E63A8}
 .cres-pays:hover,.cres-abs:hover,.cres-hue:hover{fill-opacity:.78}
 .cres-pays:focus{outline:none}
 .cres-pays:focus-visible{outline:none;stroke:#1C1C1C;stroke-width:1.8}
-.obs-legend{position:absolute;left:12px;bottom:12px;z-index:2;background:rgba(255,255,255,.94);
-  border:1px solid var(--rule);border-radius:4px;padding:9px 12px;box-shadow:0 1px 4px rgba(28,28,28,.08)}
-.obs-legend h3{font-size:10px;font-weight:600;margin-bottom:5px}
-.lg-row{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;color:#4A4A4A;margin-bottom:3px}
-.lg-box{width:14px;height:11px;border-radius:2px;display:inline-block;border:1px solid rgba(28,28,28,.14)}
+.obs-legend{position:absolute;left:12px;bottom:12px;z-index:2;background:rgba(255,255,255,.96);
+  border:1px solid var(--rule);border-radius:5px;padding:12px 16px;max-width:340px;
+  box-shadow:0 2px 8px rgba(28,28,28,.10)}
+.obs-legend h3{font-size:12px;font-weight:600;margin-bottom:7px}
+.lg-row{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:11.5px;line-height:1.5;
+  color:#3D3D3D;margin-bottom:5px}
+.lg-box{width:17px;height:13px;border-radius:2px;display:inline-block;border:1px solid rgba(28,28,28,.14);
+  flex:0 0 auto}
 /* Sous une carte pleine largeur, la fiche se lit en colonnes : une seule
    colonne de 1 300 px donnerait des lignes de 180 caractères, illisibles. */
 .fiche-pays{padding:16px 20px;font-size:12.5px;columns:2 340px;column-gap:26px}
@@ -4228,7 +4231,7 @@ function renderDC(){
          pour le premier — c'est la convention deja retenue pour la couche
          francilienne, et elle vaut ici pour la meme raison. */
       + (s.provenance === "registre"
-           ? '<circle class="dc-reg" data-r="4.2" cx="' + x.toFixed(1) + '" cy="'
+           ? '<circle class="dc-reg" data-dc="' + s.id + '" data-r="4.2" cx="' + x.toFixed(1) + '" cy="'
              + y.toFixed(1) + '" r="' + (4.2 * inv).toFixed(2) + '" stroke="'
              + (st.couleur || "#7A7A7A") + '"'
              + (futur ? ' opacity="0.3"' : "") + "/>"
@@ -4262,11 +4265,85 @@ function majLegendeDC(){
   }
   bloc.innerHTML = h;
   majBarre();
+  majComptes();
 }
 
 /* Barre de commandes en pied de carte : couche, horizon, ouverture de la
    legende. Reconstruite seulement quand la couche apparait ou disparait — pas
    a chaque mouvement du curseur, qui serait alors recree sous le doigt. */
+/* ── CE QUE LE CURSEUR D'ANNÉE PEUT FAIRE BOUGER ───────────────────────────
+   Le curseur promet un « état annoncé au » : il faut donc que les comptes le
+   suivent, et qu'ils disent ce qu'ils ne peuvent pas suivre.
+
+   CENTRES DE DONNÉES. Un site en exploitation compte à toute année ; un site
+   daté ne compte qu'à partir de son année de mise en service ; un abandon ne
+   compte jamais. Reste le cas majoritaire et gênant : AUCUNE des vingt
+   annonces du référentiel ne porte d'année de mise en service — le référentiel
+   l'écrit dans ses limites, « un statut construction ou annonce fige
+   l'avancement à la date de l'annonce d'origine ». On ne peut donc pas les
+   faire apparaître année par année sans inventer leur calendrier. Elles sont
+   comptées À PART, en toutes lettres, plutôt que versées dans le total où
+   elles feraient croire à une projection qui n'existe pas.
+
+   SYSTÈMES D'IA. Là, deux grandeurs sont réellement datées. Les cas DOCUMENTÉS
+   suivent l'année du relevé. Et surtout, l'échéance AI Act de chaque cas donne
+   l'année où il tombe sous obligation : c'est la vague de conformité, et elle
+   traverse vraiment la plage du curseur. */
+function parcAu(annee){
+  var n = 0, annoncesSansDate = 0, datesFutures = 0;
+  (DC && DC.sites || []).forEach(function(s){
+    if(s.statut === "abandonne") return;
+    var a = s.annee_service;
+    if(s.statut === "service"){
+      if(!a || a <= annee) n++; else datesFutures++;
+      return;
+    }
+    if(a){ if(a <= annee) n++; else datesFutures++; }
+    else annoncesSansDate++;
+  });
+  return {n: n, sansDate: annoncesSansDate, plusTard: datesFutures};
+}
+
+/* La première année citée dans une échéance AI Act : « 2 août 2026 (annexe
+   III) · 2 août 2027 (annexe I) » tombe sous obligation dès 2026. Un cas
+   relevant des seuls « codes de conduite volontaires » n'a pas d'échéance, et
+   n'en reçoit pas une par défaut. */
+function anneeEcheance(t){
+  var m = String(t || "").match(/(20\d\d)/);
+  return m ? +m[1] : null;
+}
+
+function siaAu(annee){
+  var docu = 0, soumis = 0;
+  (DATA && DATA.cas || []).forEach(function(c){
+    if(!c.annee || c.annee <= annee) docu++;
+    var e = anneeEcheance(c.echeance);
+    if(e && e <= annee) soumis++;
+  });
+  return {documentes: docu, soumis: soumis};
+}
+
+/* Les compteurs de la barre, mis à jour SANS reconstruire la barre : le
+   curseur ne doit pas être recréé sous le doigt qui le tient. */
+function majComptes(){
+  var p = parcAu(DC_HORIZON), a = siaAu(DC_HORIZON);
+  var e = document.getElementById("dc-n");        if(e) e.textContent = p.n;
+  e = document.getElementById("dc-hors");
+  if(e) e.textContent = p.sansDate
+    ? " · " + p.sansDate + " annoncés sans date de mise en service" : "";
+  e = document.getElementById("sia-n");           if(e) e.textContent = a.documentes;
+  e = document.getElementById("sia-ob");          if(e) e.textContent = a.soumis;
+  /* Les panneaux des systèmes d'IA suivent la même règle que les drapeaux :
+     estompés tant que l'année du relevé est postérieure à l'horizon. */
+  document.querySelectorAll("#panmap .pan-pt[data-cas]").forEach(function(el){
+    var c = null, id = el.getAttribute("data-cas");
+    for(var i = 0; i < (DATA.cas || []).length; i++){
+      if(DATA.cas[i].id === id){ c = DATA.cas[i]; break; } }
+    if(c && c.annee && c.annee > DC_HORIZON) el.setAttribute("opacity", "0.28");
+    else el.removeAttribute("opacity");
+  });
+}
+
 function majBarre(){
   var hote = document.getElementById("panmap");
   if(!hote || !DC) return;
@@ -4283,7 +4360,11 @@ function majBarre(){
              + (k !== 'cas' && !EMP ? ' disabled' : '') + '>' + esc(VUES[k].nom) + '</option>'; }).join('')
     + '</select></label>'
     + '<label><input type="checkbox" id="dc-bascule"' + (DC_VISIBLE ? " checked" : "")
-    + "> centres de données <b>" + DC.n_sites + "</b></label>"
+    + '> centres de données <b id="dc-n">' + parcAu(DC_HORIZON).n + "</b>"
+    + '<i id="dc-hors" style="font-style:normal;color:var(--muted)"></i></label>'
+    + '<label style="cursor:default">systèmes d’IA <b id="sia-n">'
+    + siaAu(DC_HORIZON).documentes + '</b> documentés · <b id="sia-ob">'
+    + siaAu(DC_HORIZON).soumis + '</b> sous obligation</label>' 
     + (DC_VISIBLE
         ? '<label style="cursor:default">état annoncé au '
           + '<input type="range" id="dc-horizon" min="2024" max="2030" step="1" value="' + DC_HORIZON
@@ -4319,11 +4400,12 @@ function majBarre(){
     /* Seule l'opacite change : on retrace la couche, pas la legende, sinon le
        curseur serait recree sous le doigt qui le tient. */
     var g = document.querySelector("#panmap #dc-couche");
-    if(g) g.querySelectorAll(".dc-pt").forEach(function(el){
+    if(g) g.querySelectorAll(".dc-pt, .dc-reg").forEach(function(el){
       var site = dcParId(el.getAttribute("data-dc"));
       var futur = site && site.annee_service && site.annee_service > DC_HORIZON && site.statut !== "service";
       if(futur) el.setAttribute("opacity", "0.3"); else el.removeAttribute("opacity");
     });
+    majComptes();
   });
 }
 
