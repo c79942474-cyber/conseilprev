@@ -1692,7 +1692,26 @@ def _fin_dossier(code, mw, gabarit, scenario, densite_ia, cout_mw, annees, depar
         refroidissement=C.get("refroidissement"),
         classe_ashrae=C.get("classe_ashrae"),
         pue_impose=C.get("pue_impose"))
-    prix = (p.get("prix") or {}).get("fourchette_eur_mwh") or [100, 150]
+    # LE PRIX, ET D'OU IL VIENT. Un pays absent du referentiel des prix
+    # recevait ici, en silence, une fourchette de secours de 100-150 EUR/MWh :
+    # le dossier sortait alors un cout total complet, au meme format et avec la
+    # meme autorite qu'un pays source. Le repli reste — sans lui il n'y aurait
+    # pas de dossier du tout — mais il se DECLARE, et le lecteur voit sur quelle
+    # nature de chiffre repose l'OPEX qu'on lui presente.
+    prix_ref = (p.get("prix") or {}).get("fourchette_eur_mwh")
+    prix = prix_ref or [100, 150]
+    prix_origine = ({"nature": "referentiel",
+                     "libelle": "classe de prix nationale du referentiel "
+                                "d'implantation — Eurostat nrg_pc_205 2024 pour "
+                                "les Etats membres, sources nationales pour la "
+                                "Suisse et le Royaume-Uni"}
+                    if prix_ref else
+                    {"nature": "defaut",
+                     "libelle": "AUCUN prix national au referentiel pour ce pays : "
+                                "fourchette de secours de 100 a 150 EUR/MWh, qui "
+                                "n'est PAS une mesure. L'OPEX et le cout total qui "
+                                "en decoulent sont a lire comme un ordre de "
+                                "grandeur, pas comme un chiffrage."})
     wue = [0.1, 0.6]
     expl = finance_dc.exploitation(
         devis["enveloppe_meur"], mw, devis["refroidissement"]["pue"], prix,
@@ -1725,6 +1744,7 @@ def _fin_dossier(code, mw, gabarit, scenario, densite_ia, cout_mw, annees, depar
         cout_total=cout, trajectoire=traj, conformite=conf)
     return {"pays": code, "faisabilite": verdict, "contexte": {
                 "climat": p.get("climat"), "eau": p.get("eau"), "prix": p.get("prix"),
+                "prix_origine": prix_origine, "prix_eur_mwh": list(prix),
                 "intensite_g_kwh": p.get("intensite"),
                 "en_service": p.get("en_service"), "pipeline_2030": p.get("pipeline_2030"),
                 "avis": p.get("avis"), "perspectives": p.get("perspectives")},

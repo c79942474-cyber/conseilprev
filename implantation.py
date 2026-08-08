@@ -67,6 +67,13 @@ EAU = {
     "PL": ("modere", "~30 %", "ressource par habitant parmi les plus faibles d'Europe ; refroidissement des centrales déjà contraint en canicule"),
     "CZ": ("modere", "~10 %", "sécheresses récurrentes depuis 2015"),
     "AT": ("faible", "~5 %", "ressource alpine abondante"),
+    # L'AEE couvre explicitement la Suisse dans le WEI+ (États membres, Islande,
+    # Norvège et Suisse, au niveau des sous-bassins) — mais elle signale pour
+    # elle une INCERTITUDE ÉLEVÉE, le calcul reposant sur des données
+    # modélisées. On sert donc la classe, et l'aveu avec elle.
+    "CH": ("faible", "~3 %", "château d'eau de l'Europe, ressource alpine excédentaire ; "
+                             "l'AEE signale toutefois une incertitude ÉLEVÉE sur le WEI+ "
+                             "suisse, calculé sur données modélisées"),
     "ES": ("eleve", "~60 %", "irrigation dominante ; bassins du sud et de l'est en stress structurel — l'évaporatif y est un sujet de permis"),
     "PT": ("eleve", "~60 %", "sud en stress structurel ; nord atlantique plus détendu"),
     "IT": ("eleve", "~50 %", "Pô en sécheresse historique 2022 ; contraste nord irrigué / sud aride"),
@@ -107,6 +114,10 @@ MIX = {
     "FR": {"nucleaire": 65, "renouvelables": 30, "fossile": 5},
     "SE": {"nucleaire": 30, "renouvelables": 70, "fossile": 0},
     "NO": {"nucleaire": 0, "renouvelables": 100, "fossile": 0},
+    # Hydraulique 59,5 % de la production 2024 (statistique fédérale), nucléaire
+    # ~30 %, solaire et biomasse le reste ; le thermique fossile ~2 % s'arrondit
+    # a zéro au pas de cinq points, comme pour la Norvège.
+    "CH": {"nucleaire": 30, "renouvelables": 70, "fossile": 0},
     "FI": {"nucleaire": 40, "renouvelables": 50, "fossile": 10},
     "DK": {"nucleaire": 0, "renouvelables": 85, "fossile": 15},
     "IE": {"nucleaire": 0, "renouvelables": 40, "fossile": 60},
@@ -167,6 +178,13 @@ PRIX = {
     "AT": ("moyen", (110, 160)), "GR": ("moyen", (120, 170)), "BG": ("moyen", (90, 140)),
     "RO": ("moyen", (110, 160)), "HU": ("moyen", (110, 160)), "HR": ("moyen", (110, 160)),
     "SI": ("moyen", (110, 160)), "LU": ("moyen", (110, 155)),
+    # Suisse : un gros consommateur industriel (7,5 GWh/an) paie une MÉDIANE de
+    # 6,75 ct CHF/kWh, et les contrats à terme 2025-2027 se traitent entre 7 et
+    # 9 ct — soit environ 70 à 95 €/MWh, timbre de réseau compris. La fourchette
+    # retenue élargit vers le haut : un centre de données négocie sur le marché
+    # libre, mais la Suisse n'offre aucun régime d'exonération comparable a
+    # l'allemand, et le taux CHF/EUR déplace la borne a lui seul.
+    "CH": ("bas", (70, 110)),
 }
 
 SOURCE_PRIX = {
@@ -177,7 +195,14 @@ SOURCE_PRIX = {
     "note": "Classes et fourchettes d'ordre de grandeur, hors taxes récupérables. "
             "Le prix réel d'un centre de données est contractuel (PPA, "
             "raccordement, exonérations) : la statistique publique donne le "
-            "terrain de départ, jamais le prix payé.",
+            "terrain de départ, jamais le prix payé. DEUX PAYS NE VIENNENT PAS "
+            "D'EUROSTAT et ne peuvent pas en venir : le Royaume-Uni, sorti de "
+            "l'Union, et la Suisse, qui n'y a jamais figuré. Leurs fourchettes "
+            "sont établies sur les sources nationales — pour la Suisse, la "
+            "médiane industrielle publiée par la ElCom (6,75 ct CHF/kWh à "
+            "7,5 GWh/an) et les contrats à terme 2025-2027 à 7-9 ct. Les "
+            "comparer aux vingt-deux autres reste légitime, à condition de "
+            "savoir qu'elles ne sortent pas du même tableau.",
 }
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -210,6 +235,14 @@ PERSPECTIVES = [
                "est plus un raccordement rapide.",
      "source": "Soben (part of Accenture), Data Centre Trends Report 2026, p. 22",
      "date": "2025"},
+    {"pays": "CH", "sens": "contrainte",
+     "resume": "Accord sur l'électricité Suisse-UE : signé le 2 mars 2026 dans le "
+               "paquet Bilatérales III, adopté par le Conseil fédéral à l'intention "
+               "du Parlement le 13 mars 2026. Il ouvrirait à la Suisse le marché "
+               "intérieur de l'électricité — mais la ratification exige le Parlement "
+               "suisse, le Parlement européen, et un référendum reste possible. "
+               "Jusque-là, l'accès aux échanges transfrontaliers reste dérogatoire.",
+     "source": "Conseil fédéral / DFAE, paquet Suisse-UE", "date": "2026-03"},
     {"pays": "DE", "sens": "hausse",
      "resume": "Microsoft ~3,2 Md€ (2024) ; cloud d'IA industrielle Deutsche "
                "Telekom / NVIDIA (2025) ; Rhénanie et Brandebourg en tête.",
@@ -727,6 +760,26 @@ AVIS = {
                       "main-d'œuvre spécialisée limitée hors métropoles"],
            "comm": "Optimal pour l'entraînement (latence peu sensible) ; à arbitrer pour "
                    "l'inférence temps réel au plus près des utilisateurs."},
+    "CH": {"pour": ["mix à 35 gCO₂e/kWh : hydraulique pilotable (59,5 % de la "
+                    "production 2024) et nucléaire (~30 %)",
+                    "eau alpine excédentaire et prix industriel parmi les plus bas "
+                    "d'Europe de l'Ouest (médiane 6,75 ct CHF/kWh à 7,5 GWh/an)",
+                    "stabilité juridique et fiscale, recherchée pour l'hébergement "
+                    "de données sensibles hors juridiction de l'Union"],
+           "contre": ["hors UE ET hors EEE : ni AI Act, ni marché intérieur de "
+                      "l'électricité — l'accord Suisse-UE a été signé le 2 mars 2026 "
+                      "mais reste à ratifier, référendum possible",
+                      "sortie du nucléaire votée en 2017 : plus aucune centrale "
+                      "nouvelle autorisée, soit ~30 % du mix à remplacer",
+                      "XDI classe la Suisse TROISIÈME MONDIALE pour le risque de "
+                      "crue : 33 % des centres planifiés à haut risque de dommage, "
+                      "le pire du panel européen",
+                      "foncier et coûts de construction élevés, marché de "
+                      "colocation étroit"],
+           "comm": "Le paradoxe du panel : le kWh y est parmi les plus propres et "
+                   "les moins chers, et le SOL parmi les plus exposés. Les deux "
+                   "s'arbitrent avec les curseurs — un actif détenu trente ans ne "
+                   "pondère pas la crue comme une prise à bail de cinq."},
     "NO": {"pour": ["~100 % renouvelable (hydro pilotable), parmi les prix les plus bas d'Europe",
                     "hydrologie excédentaire, climat froid",
                     "projets d'échelle annoncés (Stargate Norway) qui valident la filière"],

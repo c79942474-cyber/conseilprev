@@ -301,6 +301,14 @@ def assemble(sites=None, cas=None, live=None):
                                        "dc_t": [0, 0], "sia_t": [0, 0], "eau_m3": [0, 0],
                                        "intensite": intensite_pays(code, live)[0]})
             par_pays[code]["n_dc"] += 1
+            # COMBIEN ONT PU ÊTRE ESTIMÉS. Un site sans capacité annoncée ni
+            # gabarit ne produit aucune empreinte : `_cumul` l'ignore, et la
+            # somme de rien vaut zéro. Un pays dont AUCUN site n'est estimable
+            # affichait donc « 0 t de CO2e » en face de son nombre de centres —
+            # une absence de calcul lue comme un parc propre. On compte donc
+            # ceux qui ont produit un chiffre, pour pouvoir dire l'autre cas.
+            if e.get("total_t"):
+                par_pays[code]["dc_estimes"] = par_pays[code].get("dc_estimes", 0) + 1
             _cumul(code, "dc_t", e.get("total_t"))
             _cumul(code, "eau_m3", e.get("eau_m3"))
 
@@ -328,6 +336,22 @@ def assemble(sites=None, cas=None, live=None):
                         round(p["dc_t"][1] + p["sia_t"][1])]
         for k in ("dc_t", "sia_t", "eau_m3"):
             p[k] = [round(p[k][0]), round(p[k][1])]
+        p.setdefault("dc_estimes", 0)
+        p["dc_non_estimes"] = p["n_dc"] - p["dc_estimes"]
+        # `estimable` est faux quand le pays porte des centres mais qu'AUCUN
+        # n'a pu être chiffré. Le zéro qui suit n'est alors pas une mesure, et
+        # l'interface doit écrire « non estimée », jamais « 0 ».
+        p["estimable"] = not (p["n_dc"] > 0 and p["dc_estimes"] == 0
+                              and p["total_t"][1] == 0)
+        p["motif_non_estimable"] = (None if p["estimable"] else
+                                    "%s recensé%s dans ce pays ne porte%s ni capacité "
+                                    "annoncée ni gabarit : aucune empreinte ne peut en "
+                                    "être dérivée. Un zéro affiché serait une absence de "
+                                    "calcul, pas une absence d'émissions"
+                                    % ("Le seul centre" if p["n_dc"] == 1
+                                       else "Les %d centres" % p["n_dc"],
+                                       "" if p["n_dc"] == 1 else "s",
+                                       "" if p["n_dc"] == 1 else "nt"))
 
     total = [sum(p["total_t"][0] for p in par_pays.values()),
              sum(p["total_t"][1] for p in par_pays.values())]

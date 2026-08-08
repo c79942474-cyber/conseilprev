@@ -725,7 +725,7 @@ PAYS_UE = {
  "IT": {"nom": "Italie", "cyber": "ACN", "dpa": "Garante",
         "autorite_ia": "ACN + AgID désignées par la loi IA nationale (2025)",
         "strategie": "Strategia italiana IA (2024)",
-        "notes": "Garante trés actif (ChatGPT, Replika) ; première loi IA nationale d'un État membre.",
+        "notes": "Garante très actif (ChatGPT, Replika) ; première loi IA nationale d'un État membre.",
         "precision": "documenté (loi 2025)"},
  "ES": {"nom": "Espagne", "cyber": "CCN / INCIBE", "dpa": "AEPD",
         "autorite_ia": "AESIA (première agence IA dédiée de l'UE, 2023)",
@@ -788,6 +788,76 @@ PAYS_UE = {
  "CY": {"nom": "Chypre", "cyber": "DSA/CSIRT-CY", "dpa": "Commissioner",
         "autorite_ia": "à désigner", "strategie": "2020", "notes": "", "precision": "à confirmer"},
 }
+
+# ═══════════════════════════════════════════════════════════════════════════
+# 6 bis. LES TROIS PAYS TIERS DU PARC — Suisse, Norvège, Royaume-Uni
+#
+#    POURQUOI ILS ENTRENT ICI. Le référentiel des centres de données y recense
+#    quarante-trois sites — neuf en Suisse, huit en Norvège, vingt-six au
+#    Royaume-Uni. Les laisser en gris sur les cartes revenait à les traiter
+#    comme des taches blanches alors qu'ils portent une part réelle du parc,
+#    et à rendre leurs tuiles d'empreinte cliquables sur une fiche vide.
+#
+#    POURQUOI ILS RESTENT À PART. Ce ne sont PAS des États membres, et
+#    l'écrire à leur place serait une faute lourde : le règlement IA ne
+#    s'applique pas de la même façon dans les trois, et pas du tout dans deux
+#    d'entre eux. Chacun porte donc `ue: False` et un champ `regime` qui dit
+#    quel droit s'applique — la carte les colore, elle ne les naturalise pas.
+#
+#    CE QUE ZÉRO CAS SIGNIFIE POUR EUX. Le panel ne recense que des systèmes
+#    déployés dans l'Union : un compte nul chez eux ne veut pas dire qu'il n'y
+#    a pas d'IA, il veut dire qu'ils sont hors du champ d'observation. C'est
+#    une nuance que l'interface doit porter, sans quoi la carte publierait une
+#    absence pour un fait.
+# ═══════════════════════════════════════════════════════════════════════════
+
+PAYS_TIERS = {
+ "CH": {"nom": "Suisse", "ue": False, "cyber": "OFCS (Office fédéral de la cybersécurité)",
+        "dpa": "PFPDT (Préposé fédéral à la protection des données et à la transparence)",
+        "autorite_ia": "aucune autorité transversale — approche sectorielle assumée",
+        "strategie": "Le Conseil fédéral a décidé le 12 février 2025 de ratifier la "
+                     "Convention-cadre du Conseil de l'Europe sur l'IA et a chargé le "
+                     "DFJP d'un avant-projet de loi mis en consultation d'ici fin 2026.",
+        "regime": "Hors UE ET hors EEE : le règlement IA ne s'applique PAS en Suisse. "
+                  "Il s'impose en revanche à tout fournisseur suisse qui met un système "
+                  "sur le marché de l'Union ou dont la sortie y est utilisée (art. 2). "
+                  "Le socle actuel est la LPD révisée, en vigueur depuis le 1er septembre 2023.",
+        "notes": "Un hébergement en Suisse place les données hors de la juridiction de "
+                 "l'Union — c'est un argument commercial, et une contrainte de transfert.",
+        "precision": "documenté (décision du Conseil fédéral, 12 février 2025)"},
+ "NO": {"nom": "Norvège", "ue": False, "cyber": "NSM / NorCERT",
+        "dpa": "Datatilsynet",
+        "autorite_ia": "Nkom (autorité des communications) désignée autorité "
+                       "coordinatrice de surveillance du marché ; Datatilsynet exploite "
+                       "un bac à sable IA",
+        "strategie": "Nasjonal strategi for kunstig intelligens (2020)",
+        "regime": "Membre de l'EEE : le règlement IA est réputé pertinent pour l'EEE et "
+                  "sera repris en droit norvégien. La loi nationale (KI-loven) a été mise "
+                  "en consultation en juin 2025 pour une entrée en vigueur visée à l'été "
+                  "2026 ; le calendrier a glissé, les adaptations EEE restant en "
+                  "négociation. Le RGPD, lui, s'applique déjà par l'EEE.",
+        "notes": "Le seul des trois qui convergera vers le régime de l'Union.",
+        "precision": "documenté (consultation publique, juin 2025)"},
+ "GB": {"nom": "Royaume-Uni", "ue": False, "cyber": "NCSC",
+        "dpa": "ICO",
+        "autorite_ia": "aucune autorité transversale — régulateurs sectoriels (ICO, FCA, "
+                       "Ofcom, CMA, MHRA) ; l'AI Security Institute évalue les modèles "
+                       "de frontière mais n'est pas un régulateur de marché",
+        "strategie": "Livre blanc « A pro-innovation approach to AI regulation » (2023), "
+                     "réaffirmé en février 2025 : réguler à l'usage, par les régulateurs "
+                     "sectoriels existants, plutôt que par une loi transversale.",
+        "regime": "Pays tiers depuis le retrait de l'Union : aucun équivalent du "
+                  "règlement IA n'est en vigueur. L'ICO est tenu de produire un code de "
+                  "pratique contraignant sur l'IA et les décisions automatisées.",
+        "notes": "Premier marché européen de colocation, et le seul du panel où aucune "
+                 "loi transversale sur l'IA n'est annoncée à échéance certaine.",
+        "precision": "documenté (livre blanc 2023, position gouvernementale février 2025)"},
+}
+
+# Ce que les cartes et les fiches consomment : les trente pays, chacun sachant
+# s'il est membre. Les deux dictionnaires restent séparés à la source pour que
+# `PAYS_UE` continue de vouloir dire « les Vingt-Sept », et rien d'autre.
+PAYS_CARTE = dict(PAYS_UE, **PAYS_TIERS)
 
 # ═══════════════════════════════════════════════════════════════════════════
 # 7. ASSEMBLAGE — enrichissement, agrégats, sortie API
@@ -1221,7 +1291,11 @@ def assemble():
         "agregats": _agreger(cas),
         "classes": CLASSES,
         "types": {k: {"nom": v["nom"]} for k, v in TYPES_SIA.items()},
-        "pays_ue": PAYS_UE,
+        # Les cartes reçoivent les trente : vingt-sept membres et trois pays
+        # tiers qui portent des sites. Chacun sait ce qu'il est — `ue: False`
+        # pour les trois — et l'interface ne les confond jamais.
+        "pays_ue": PAYS_CARTE,
+        "pays_tiers": sorted(PAYS_TIERS),
         "methodologie": METHODOLOGIE,
         "credits": CREDITS,
     }
@@ -1231,6 +1305,7 @@ def sante():
     """Bloc 'panorama' pour /api/health : référentiel + fraîcheur des signaux."""
     now = time.time()
     return {"version": VERSION, "n_cas": len(CAS), "n_pays_ue": len(PAYS_UE),
+            "n_pays_tiers": len(PAYS_TIERS), "n_pays_carte": len(PAYS_CARTE),
             "flux": {"ok": _FLUX_CACHE["erreur"] is None and _FLUX_CACHE["data"] is not None,
                      "items": len(_FLUX_CACHE["data"] or []),
                      "age_s": int(now - _FLUX_CACHE["ts_ok"]) if _FLUX_CACHE["ts_ok"] else None,
