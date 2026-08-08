@@ -1382,6 +1382,12 @@ def api_panorama():
 # Referentiel fige par version (compile puis refute), derivations
 # deterministes : la reponse ne varie pas, elle se met en cache une fois.
 import datacentres  # noqa: E402
+# La couche régionale vit dans SON module et ne rejoint jamais `SITES` : verser
+# cent trente-neuf sites franciliens dans un référentiel qui en porte
+# quatre-vingt-dix-sept pour toute l'Europe ferait paraître la France vingt
+# fois plus dense que l'Allemagne — un artefact de documentation, pas un fait.
+# Elle voyage donc sous une clé séparée, à côté de `sites` et jamais dedans.
+import datacentres_idf  # noqa: E402
 
 _DC_CACHE = {"data": None}
 
@@ -1396,6 +1402,14 @@ def api_datacentres():
         except Exception as e:
             logger.error(f'DATACENTRES_ERR: {e}')
             return jsonify({"ok": False, "erreur": "referentiel indisponible"}), 503
+        # Les couches régionales, POSÉES À CÔTÉ et jamais fondues dedans. Leur
+        # échec ne doit pas emporter le référentiel : la carte européenne se
+        # passe très bien d'un détail régional, l'inverse n'est pas vrai.
+        try:
+            d["regions"] = {"IDF": datacentres_idf.assemble(d.get("sites"))}
+        except Exception as e:
+            logger.error(f'DATACENTRES_IDF_ERR: {e}')
+            d["regions"] = {}
         _DC_CACHE["data"] = d
     # Le drapeau `ok` est posé ICI, au seul point de sortie, et non chez celui
     # qui remplit le cache. Il y avait deux remplisseurs — cette route et le
@@ -3473,6 +3487,7 @@ def health_check():
         'panorama': panorama_ia.sante(),
         'donnees_ouvertes': donnees_ouvertes.sante(),
         'datacentres': datacentres.sante(),
+        'datacentres_idf': datacentres_idf.sante(),
         'empreinte_sites': empreinte_sites.sante(),
         # Un module qui expose sante() sans que personne ne l'appelle est un
         # controle qui ne tourne jamais : on les branche tous ici.

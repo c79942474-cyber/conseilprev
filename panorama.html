@@ -1089,6 +1089,19 @@ body.gp-actif .pm-b.ici span{color:#fff}
 .carte-main .obs-legend:hover .lg-row{display:flex}
 /* Infobulle : UN seul element reutilise, deplace au survol — en creer un par
    pays saturerait le DOM pour rien. */
+/* ── Couche régionale : un amas, pas un site ──────────────────────────────
+   La forme dit le niveau de preuve. Le référentiel européen pose des
+   DRAPEAUX — un site attesté, coordonnées comprises. La couche régionale
+   pose des DISQUES creux : un amas, dont le compte vient d'un recensement
+   d'agence et non d'une vérification site par site. Deux niveaux de preuve,
+   deux formes ; personne ne doit pouvoir les confondre d'un coup d'oeil. */
+.idf-halo{fill:#0F3D6E;opacity:.10}
+.idf-pt{fill:#fff;stroke:#0F3D6E;stroke-width:0;cursor:pointer}
+.idf-amas .idf-pt{vector-effect:non-scaling-stroke;stroke-width:1.6px}
+.idf-amas:hover .idf-pt{fill:#E8EEF5}
+.idf-n{fill:#0F3D6E;font-family:var(--mono);font-weight:700;pointer-events:none;
+  paint-order:stroke;stroke:#fff;stroke-width:2.4px;stroke-linejoin:round}
+
 /* Commandes de zoom, posees sur la carte. */
 .map-zoom{position:absolute;top:10px;left:10px;z-index:5;display:flex;flex-direction:column;gap:4px}
 .map-zoom button{width:30px;height:30px;font:inherit;font-size:16px;line-height:1;font-weight:600;
@@ -2875,6 +2888,8 @@ function encartCas(code){
      ×2,25   volume et exposition moyenne, puis une pastille par cas
      ×3,4    encart nominatif du pays place au centre de la vue            */
 function detailCarte(pal, vise){
+  /* La couche régionale suit le palier — c'est tout son principe. */
+  renderRegions();
   var g = ZOOM.svg && ZOOM.svg.querySelector("#pan-detail");
   if(!g) return;
   var parPays = {};
@@ -3059,7 +3074,7 @@ function renderMap(){
      redessinee a chaque palier de zoom, sans toucher aux contours. La couche
      des centres de donnees est encore separee : elle survit aux changements
      de palier, ses marqueurs sont visibles a toutes les echelles. */
-  s+=neutres+colores+'<g id="dc-couche"></g><g id="pan-detail"></g></svg>';
+  s+=neutres+colores+'<g id="dc-region"></g><g id="dc-couche"></g><g id="pan-detail"></g></svg>';
   var vd = VUES[VUE];
   /* Ce que la vue « drapeaux » doit avouer, chiffres à l'appui : combien de
      pays dessinés portent un emblème que trois bandes de couleur ne peuvent
@@ -4126,9 +4141,60 @@ function ancrerGroupes(racine, inv){
   });
 }
 
+/* ── LA COUCHE RÉGIONALE, ET POURQUOI ELLE DÉPEND DU ZOOM ────────────────────
+   Le référentiel européen porte 97 sites pour tout le continent, dont cinq en
+   Île-de-France ; l'Observatoire de l'Institut Paris Région en recense 139
+   pour la seule région. Les mêler ferait paraître la France vingt fois plus
+   dense que l'Allemagne — un artefact de documentation, pas un fait.
+
+   Deux granularités ne se mélangent donc pas : elles s'affichent à des
+   ÉCHELLES différentes. Aux paliers bas, un marqueur unique dit le compte et
+   sa provenance ; au palier 2, les pôles ; au-delà, les sites. Le marqueur
+   agrégé est la pièce importante : il rend la densité francilienne visible
+   SANS la rendre trompeuse, parce qu'il nomme d'où elle vient. */
+function regionIDF(){ return (DC && DC.regions && DC.regions.IDF) || null; }
+
+function renderRegions(){
+  var g = document.querySelector("#panmap #dc-region");
+  if(!g) return;
+  var r = regionIDF();
+  if(!r || !DC_VISIBLE){ g.innerHTML = ""; return; }
+  var pal = zoomPalier(ZOOM.k || 1), inv = 1 / (ZOOM.k || 1), out = "";
+
+  if(pal <= 1){
+    /* Un seul point pour toute la région. Le nombre affiché est celui des
+       sites RECENSÉS, pas des sites dessinés : c'est ce qu'on veut faire
+       savoir, et l'infobulle dit combien sont réellement chargés. */
+    var x = projX(r.region.lon), y = projY(r.region.lat);
+    var rr = (11 * inv).toFixed(2);
+    out += '<g class="idf-amas"><circle class="idf-halo" cx="' + x.toFixed(1)
+      + '" cy="' + y.toFixed(1) + '" r="' + (16 * inv).toFixed(2) + '"/>'
+      + '<circle class="idf-pt" data-idf="region" cx="' + x.toFixed(1) + '" cy="'
+      + y.toFixed(1) + '" r="' + rr + '"/>'
+      + '<text class="idf-n" x="' + x.toFixed(1) + '" y="' + (y + 3.4 * inv).toFixed(1)
+      + '" text-anchor="middle" style="font-size:' + (11 * inv).toFixed(2) + 'px">'
+      + r.n_annonces + "</text></g>";
+  } else if(pal === 2){
+    (r.poles || []).forEach(function(p){
+      var x = projX(p.lon), y = projY(p.lat);
+      out += '<g class="idf-amas"><circle class="idf-pt" data-idf="pole" data-nom="'
+        + esc(p.nom) + '" data-n="' + p.n + '" cx="' + x.toFixed(1) + '" cy="'
+        + y.toFixed(1) + '" r="' + (7 * inv).toFixed(2) + '"/>'
+        + '<text class="idf-n" x="' + x.toFixed(1) + '" y="' + (y + 2.6 * inv).toFixed(1)
+        + '" text-anchor="middle" style="font-size:' + (8.5 * inv).toFixed(2) + 'px">'
+        + p.n + "</text></g>";
+    });
+  }
+  /* Au palier 3, la couche s'efface : les sites de l'Observatoire seront
+     dessinés un à un, et les cinq hérités le sont déjà par le référentiel
+     européen — les redessiner les ferait apparaître en double. */
+  g.innerHTML = out;
+}
+
 function renderDC(){
   var g = document.querySelector("#panmap #dc-couche");
   if(!g || !DC) return;
+  renderRegions();
   if(!DC_VISIBLE){ g.innerHTML = ""; majLegendeDC(); return; }
   var inv = 1 / (ZOOM.k || 1), out = "";
   DC.sites.forEach(function(s){
