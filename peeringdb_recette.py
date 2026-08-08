@@ -168,7 +168,7 @@ ok("…et elle tient aux hautes latitudes, où le référentiel a de vrais sites
    abs(P.distance_km(65.58, 22.15, 65.58, 22.30) - 6.9) < 1.0,
    round(P.distance_km(65.58, 22.15, 65.58, 22.30), 2))
 
-print("\n══ 7. Le fichier déposé peut avoir trois formes ══\n")
+print("\n══ 7. Le fichier déposé peut avoir plusieurs formes ══\n")
 
 tmp = "/tmp/claude-0/-home-user-conseilprev/e6d7dc5d-fcdb-52f0-a89f-586f900c30d5/scratchpad"
 for nom, contenu in (("liste.json", [fiche(id=401)]),
@@ -182,6 +182,23 @@ for nom, contenu in (("liste.json", [fiche(id=401)]),
     n = P.importer(chemin, existants=[])["rapport"]["retenus"]
     ok("%s → %d site(s)" % (nom, 1 if nom != "pages.json" else 2),
        n == (2 if nom == "pages.json" else 1), n)
+
+# LE DUMP COMPLET. C'est une autre forme que la réponse d'API : un objet par
+# TYPE d'objet. Un lecteur qui n'attend que l'une des deux rend « aucun site
+# trouvé » sur un fichier parfaitement valide — et ne dit pas laquelle il
+# attendait, ce qui est le pire des deux mondes.
+for nom, obj in (("dump-fac.json", {"fac": {"data": [fiche(id=501)]},
+                                    "net": {"data": [{"asn": 64500}]}}),
+                 ("dump-facility.json", {"facility": {"data": [fiche(id=502)]}}),
+                 ("dump-cle-inconnue.json", {"installations": {"data": [fiche(id=503)]}}),
+                 ("dump-net-avant.json", {"net": {"data": [{"asn": 64501, "name": "R"}]},
+                                          "fac": {"data": [fiche(id=504)]}})):
+    chemin = os.path.join(tmp, nom)
+    io.open(chemin, "w", encoding="utf-8").write(json.dumps(obj))
+    lu = P.charger(chemin)
+    ok("%s → 1 installation" % nom, len(lu) == 1, len(lu))
+    ok("…et c'est bien une installation, pas un réseau",
+       bool(lu) and "latitude" in lu[0], sorted(lu[0])[:3] if lu else "-")
 
 print("\n══ 8. La sortie s'insère telle quelle dans le référentiel ══\n")
 

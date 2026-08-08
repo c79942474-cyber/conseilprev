@@ -89,22 +89,67 @@ _FERME = ("(closed)", "(Closed)", "has been closed", "is now closed",
 # 2. LECTURE
 # ═══════════════════════════════════════════════════════════════════════════
 
+# Les clés sous lesquelles un DUMP COMPLET range ses installations. Le dump
+# quotidien de PeeringDB est un objet par type d'objet — {"fac": {...},
+# "net": {...}, "ix": {...}} — et non la réponse paginée de /api/fac. Un
+# lecteur qui n'attend que l'une des deux formes rend « aucun site trouvé »
+# sur un fichier parfaitement valide, sans dire lequel des deux il attendait.
+_CLES_FAC = ("fac", "facility", "facilities")
+
+# Ce qui fait reconnaître une installation parmi les autres objets d'un dump :
+# un réseau ou un point d'échange n'a ni adresse postale ni coordonnées.
+_MARQUEURS_FAC = ("address1", "latitude", "longitude", "clli", "npanxx")
+
+
+def _est_installation(x):
+    return isinstance(x, dict) and any(m in x for m in _MARQUEURS_FAC)
+
+
 def charger(source):
     """Une liste d'installations, quelle que soit la forme reçue.
 
-    L'API enveloppe ses résultats dans {"data": [...]} ; un export manuel est
-    souvent une liste nue ; une pagination sauvegardée est une liste
-    d'enveloppes. Les trois se lisent, parce que le format du fichier déposé
-    n'est pas au demandeur de le connaître."""
+    Quatre formes circulent, et le déposant n'a pas à savoir laquelle il tient :
+
+      [ {...}, {...} ]                      une liste nue
+      {"data": [...]}                       la réponse de /api/fac
+      [ {"data": [...]}, {"data": [...]} ]  des pages concaténées
+      {"fac": {"data": [...]}, "net": {…}}  le DUMP COMPLET, par type d'objet
+
+    La quatrième manquait. Un lecteur qui n'attendait que « facility » rendait
+    « aucun site trouvé » sur un export d'API valide ; l'inverse est tout aussi
+    vrai. On accepte donc les deux, et en dernier recours on retient les objets
+    qui PORTENT une adresse ou des coordonnées — un réseau n'en a pas."""
     if isinstance(source, (list, tuple)):
         brut = list(source)
-    elif isinstance(source, dict):
-        brut = source.get("data") or []
     else:
-        with open(source, encoding="utf-8") as f:
-            brut = json.load(f)
+        brut = source
+        if not isinstance(brut, dict):
+            with open(source, encoding="utf-8") as f:
+                brut = json.load(f)
         if isinstance(brut, dict):
-            brut = brut.get("data") or []
+            if isinstance(brut.get("data"), list):
+                brut = brut["data"]                       # réponse d'API
+            else:
+                trouve = None
+                for cle in _CLES_FAC:                     # dump complet
+                    bloc = brut.get(cle)
+                    if isinstance(bloc, dict) and isinstance(bloc.get("data"), list):
+                        trouve = bloc["data"]
+                        break
+                    if isinstance(bloc, list):
+                        trouve = bloc
+                        break
+                if trouve is None:
+                    # Dernier recours : un dump dont la clé nous est inconnue.
+                    # On ne devine pas le nom, on reconnaît la forme.
+                    trouve = []
+                    for v in brut.values():
+                        if isinstance(v, dict) and isinstance(v.get("data"), list):
+                            v = v["data"]
+                        if isinstance(v, list) and v and _est_installation(v[0]):
+                            trouve = v
+                            break
+                brut = trouve
     out = []
     for x in brut:
         if isinstance(x, dict) and "data" in x and isinstance(x["data"], list):
