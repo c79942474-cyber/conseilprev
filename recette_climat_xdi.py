@@ -127,7 +127,7 @@ ok("…et c'est le pire d'Europe",
 print("\n══ 5. Le comparateur porte le critère, et le sert ══\n")
 
 cles = [c["cle"] for c in d["criteres"]]
-ok("huit critères désormais", len(cles) == 8, len(cles))
+ok("dix critères désormais", len(cles) == 10, len(cles))
 ok("le nouveau s'appelle climat_physique", "climat_physique" in cles)
 crit = [c for c in d["criteres"] if c["cle"] == "climat_physique"][0]
 ok("il déclare sa nature « referentiel », pas « analyse »",
@@ -154,9 +154,9 @@ print("\n══ 6. Ce que le critère ne devait pas déplacer ══\n")
 
 ok("la santé du module est verte", I.sante()["ok"], I.sante()["problemes"])
 ok("elle compte les pays XDI", I.sante()["pays_xdi"] == 12)
-ok("le millésime a changé", d["version"] == "2026-08-b", d["version"])
+ok("le millésime a changé", d["version"] == "2026-08-c", d["version"])
 ok("les sept critères d'origine sont intacts",
-   [c for c in cles if c != "climat_physique"]
+   [c for c in cles if c not in ("climat_physique", "feux", "inondations")]
    == ["carbone", "mix", "eau", "climat", "prix", "parc", "pipeline"], cles)
 ok("les notes d'origine d'un pays n'ont pas bougé",
    par_pays["FR"]["notes"]["carbone"] is not None
@@ -193,8 +193,8 @@ def _n_criteres(txt):
 
 
 ok("…et ne comptait que sept critères", _n_criteres(av) == 7, _n_criteres(av))
-ok("…contre huit aujourd'hui",
-   _n_criteres(io.open(DEPOT + "/implantation.py", encoding="utf-8").read()) == 8)
+ok("…contre dix aujourd'hui",
+   _n_criteres(io.open(DEPOT + "/implantation.py", encoding="utf-8").read()) == 10)
 pan = _avant("climat_physique", "panorama.html")
 ok("avant, la page n'avait pas de poids pour ce critère",
    "climat_physique" not in pan)

@@ -761,6 +761,7 @@ body.embed .gp-carte{bottom:auto;top:var(--gp-bas,auto);
 .imp-c-carbone{--imp-c:#1E6336}.imp-c-mix{--imp-c:#4E3277}.imp-c-eau{--imp-c:#1C5CAB}
 .imp-c-climat{--imp-c:#0E7B83}.imp-c-prix{--imp-c:#8A5310}.imp-c-parc{--imp-c:#5B6472}
 .imp-c-pipeline{--imp-c:#B83222}.imp-c-climat_physique{--imp-c:#9C2D6B}
+.imp-c-feux{--imp-c:#A4460C}.imp-c-inondations{--imp-c:#15557A}
 /* Jauge de score : la couleur dit le niveau, le chiffre reste la valeur. */
 .imp-jauge{display:flex;align-items:center;gap:7px;min-width:120px}
 .imp-jauge i{flex:1 1 auto;height:7px;border-radius:4px;background:var(--rule);
@@ -4838,7 +4839,8 @@ function fourchetteT(v){
    somme ponderee — la seule operation que le lecteur regle lui-meme. */
 var IMPL = null;
 var IMPL_POIDS = { carbone: 3, mix: 2, eau: 2, climat: 2, prix: 3,
-                   climat_physique: 2, parc: 1, pipeline: 1 };
+                   climat_physique: 2, feux: 1, inondations: 2,
+                   parc: 1, pipeline: 1 };
 var IMPL_DEPLIE = null;
 
 function implScore(x){
@@ -4926,6 +4928,8 @@ function renderImplantation(){
       prix: "Terrain de départ de la négociation d’énergie (classes Eurostat). Le prix réel sera votre PPA — pondérez fort si l’OPEX énergie domine votre modèle.",
       parc: "Filière déjà constituée : sites en service, main-d’œuvre, permis déjà instruits par les autorités. Rassurant pour une extension ou un rachat.",
       climat_physique: "Part des centres PLANIFIÉS du pays qu’XDI modélise à haut risque de dommage physique en 2026 — probabilité annuelle de dommage atteignant 1 % du coût de remplacement, seuil à partir duquel l’éditeur juge l’assurance « de plus en plus coûteuse ou dangereusement insuffisante ». Regardez surtout l’écart entre faible résilience et résilience avancée : ce qui reste après ingénierie est un risque de LIEU, pas de bâtiment. La note ne porte QUE le dommage direct ; XDI chiffre le risque indirect dix fois plus lourd. Pondérez fort pour un actif détenu long, faible pour une prise à bail courte.",
+      feux: "Rang du pays au risque de dommage par FEU DE FORÊT à l’horizon 2050 (XDI, août 2025). Attention à la métrique : c’est un montant de dommage ABSOLU, si bien qu’un grand parc bâti fait monter au classement sans que le site soit plus exposé — à lire avec les régions citées, pas seul. Seuls les DIX premiers États membres sont publiés ; un pays absent n’est pas « sûr », il est inconnu. La note compare le rang aux vingt-sept États membres, donc le dixième plafonne à 35 : figurer dans une liste des pires ne peut pas valoir un bon score.",
+      inondations: "Rang du pays au risque de dommage par INONDATION à l’horizon 2050 (XDI, septembre 2025), sur les vingt-sept États membres. Métrique en RATIO du coût de remplacement : comparable d’un pays à l’autre, peu sensible à la taille du parc — c’est le plus solide des deux aléas. Crues de rivière et ruissellement seulement : la submersion côtière n’est PAS couverte ici, elle l’est par le critère XDI centres de données. Pondérez fort si vous détenez l’actif ou si votre assureur applique des franchises catastrophe naturelle.",
       pipeline: "File de raccordement 2026-2030 : moins il y a de projets devant vous, plus vite votre NOUVEAU site sera raccordé. Sans objet pour un rachat.",
     };
     pond.innerHTML = '<div class="imp-pond">' + IMPL.criteres.map(function(c){
@@ -4955,10 +4959,26 @@ function renderImplantation(){
   if(src){
     var S = IMPL.sources;
     src.innerHTML = '<div class="imp-srcs"><b>Sources de cette section.</b> '
-      + ["eau", "mix", "prix", "climat_physique", "perspectives"].map(function(k){
+      + ["eau", "mix", "prix", "climat_physique", "feux", "inondations",
+         "perspectives"].map(function(k){
           var x = S[k];
           return esc(x.titre) + " — " + esc(x.editeur) + " " + implNatBadge(x.nature);
         }).join(" · ")
+      /* Le contexte européen des deux rapports d'aléa : ce sont les seuls
+         chiffres CARDINAUX qu'ils publient — les rangs, eux, ne se
+         soustraient pas. Ils tiennent en trois phrases et donnent au lecteur
+         l'échelle qui manque à un classement. */
+      + ((IMPL.inondations && IMPL.inondations.europe
+          ? "<br><b>Inondations, à l’échelle de l’Union.</b> "
+            + esc(IMPL.inondations.europe.phrase) + " "
+            + esc(IMPL.inondations.europe.concentration)
+            + " L’Île-de-France voit son risque de dommage croître de "
+            + IMPL.inondations.europe.idf_2100 + " % d’ici 2100." : "")
+         + (IMPL.feux && IMPL.feux.europe
+            ? "<br><b>Feux de forêt.</b> " + esc(IMPL.feux.europe.phrase)
+              + " Seuls les " + IMPL.feux.publies + " premiers États membres sont "
+              + "publiés sur les " + IMPL.feux.champ + " : les autres ne sont pas "
+              + "réputés sûrs, ils sont hors classement." : ""))
       + "<br>" + esc(IMPL.avertissement) + "</div>";
   }
   aideBrancher();
@@ -5079,6 +5099,29 @@ function carteImplantation(toutes){
              + (q.haut_risque_adapte_pct !== q.haut_risque_pct
                 ? " (" + q.haut_risque_adapte_pct + " % après ingénierie)" : "")
              + " · " + q.alea_nom.toLowerCase());
+    }
+    /* Deux rangs, deux façons de ne pas en avoir. Le classement inondations
+       couvre EXACTEMENT les vingt-sept États membres : son absence est donc le
+       témoin fiable d'un pays tiers, jamais analysé. Le distinguer d'un pays
+       membre resté hors des dix feux publiés évite la lecture « pas classé,
+       donc épargné » — que le rapport ne permet dans aucun des deux cas. */
+    var rg = function(n){ return n + (n === 1 ? "er" : "e"); };
+    if(x.feux && x.feux.rang_2050){
+      v.push("feu de forêt : " + rg(x.feux.rang_2050) + " des dix plus exposés en 2050"
+             + (x.feux.entre_en_2050 ? " (hors des dix en 2025)"
+                : x.feux.rang_2025 !== x.feux.rang_2050
+                  ? " (" + rg(x.feux.rang_2025) + " en 2025)" : ""));
+    } else if(x.feux){
+      v.push("feu de forêt : " + rg(x.feux.rang_2025) + " en 2025, sort des dix d’ici 2050");
+    } else {
+      v.push("feu de forêt : non classé — " + (x.inondations ? "hors des dix publiés"
+                                                             : "hors de l’Union, non analysé"));
+    }
+    if(x.inondations){
+      v.push("inondation : " + rg(x.inondations.rang_2050) + " sur 27 en 2050 (+"
+             + x.inondations.hausse_2025_2050_pct + " % d’ici là)");
+    } else {
+      v.push("inondation : hors de l’Union, non analysé");
     }
     if(x.en_service != null) v.push("parc " + x.en_service);
     if(x.pipeline_2030 != null) v.push("file 2030 : " + x.pipeline_2030);

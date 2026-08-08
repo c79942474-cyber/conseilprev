@@ -31,10 +31,10 @@ const ok = (n, c, d) => { console.log('  ' + (c ? 'OK ' : 'KO ') + '  ' + n + (d
     fr: (IMPL.pays.find(p => p.pays === 'FR') || {}).climat_physique,
     se: (IMPL.pays.find(p => p.pays === 'SE') || {}).notes.climat_physique,
   }));
-  ok('huit critères servis', d.n === 8, d.n);
+  ok('dix critères servis', d.n === 10, d.n);
   ok('climat_physique en fait partie', d.cles.includes('climat_physique'), d.cles.join(','));
   ok('il a un poids par défaut', d.poids === 2, d.poids);
-  ok('référentiel 2026-08-b', d.version === '2026-08-b', d.version);
+  ok('référentiel 2026-08-c', d.version === '2026-08-c', d.version);
   ok('la France porte 26 % à haut risque, 18 % après ingénierie',
      d.fr && d.fr.haut_risque_pct === 26 && d.fr.haut_risque_adapte_pct === 18, JSON.stringify(d.fr));
   ok('la Suède n’a PAS de note — hors classement', d.se === null, d.se);

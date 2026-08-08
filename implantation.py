@@ -27,7 +27,7 @@ une étude hydrologique locale, ni une due diligence.
 """
 from datetime import datetime, timezone
 
-VERSION = "2026-08-b"
+VERSION = "2026-08-c"
 
 # ═══════════════════════════════════════════════════════════════════════════
 # 1. EAU — stress hydrique national et compétition d'usages
@@ -465,6 +465,246 @@ def _note_xdi(pays):
 
 
 # ═══════════════════════════════════════════════════════════════════════════
+# 5 ter. FEUX DE FORÊT ET INONDATIONS — XDI, août et septembre 2025
+#
+#    POURQUOI DEUX CRITÈRES DE PLUS, ET PAS UN SEUL. Le critère précédent
+#    porte le risque de dommage TOUS ALÉAS CONFONDUS des centres planifiés.
+#    Il répond à « ce pays est-il risqué ». Il ne dit pas DE QUOI, ni où, ni
+#    à quelle vitesse — or un site en lisière de forêt et un site en fond de
+#    vallée n'appellent ni les mêmes ouvrages, ni la même assurance, ni la
+#    même clause de continuité. Deux aléas se pondèrent donc séparément.
+#
+#    DEUX MÉTRIQUES QUI NE SE LISENT PAS PAREIL, ET C'EST DÉCISIF.
+#
+#    Les inondations sont classées par « Aggregated Damage RATIO » : XDI
+#    définit le Damage Ratio comme la perte annuelle moyenne rapportée au
+#    COÛT DE REMPLACEMENT du bâtiment, « exprimé en ratio pour permettre la
+#    comparabilité, indépendamment des taux de change et de l'inflation ».
+#    Deux bâtiments de valeurs différentes peuvent avoir le même ratio. Le
+#    classement est donc, par construction, peu sensible à la taille du parc,
+#    et les vingt-sept États membres y figurent.
+#
+#    Les feux sont classés par « Aggregated Damage RISK » : le montant total
+#    probable de dommage physique. C'est une grandeur ABSOLUE. Un pays au
+#    parc bâti étendu y remonte mécaniquement, et seuls les dix premiers sont
+#    publiés. Le rang feux mesure donc autant l'exposition que la masse
+#    exposée — la note le porte, la formule le dit, et personne ne doit lire
+#    ces deux rangs comme deux mesures de même nature.
+#
+#    CE QUE LES RANGS NE DISENT PAS. Un rang est ORDINAL : l'écart entre le
+#    premier et le deuxième n'est pas celui entre le vingt-sixième et le
+#    vingt-septième, et aucun des deux rapports ne publie les valeurs qui
+#    permettraient de le savoir. Les hausses, elles, sont cardinales et
+#    normalisées sur la trajectoire propre de chaque pays : elles sont
+#    servies à part, et c'est le seul chiffre de ces deux rapports qu'on
+#    puisse soustraire ou comparer sans précaution.
+# ═══════════════════════════════════════════════════════════════════════════
+
+# pays : (rang 2025 ou None, rang 2050 ou None, régions les plus exposées 2050)
+FEUX = {
+    "IT": (1, 2, ["Calabre", "Basilicate", "Campanie"]),
+    "FR": (2, 1, ["Pays de la Loire", "Centre-Val de Loire", "Nouvelle-Aquitaine"]),
+    "ES": (3, 3, ["Communauté de Madrid", "Andalousie", "Castille-et-León"]),
+    "HU": (4, 4, ["Budapest", "Bács-Kiskun", "Csongrád"]),
+    "BG": (5, 5, ["Smolyan", "Bourgas", "Kardjali"]),
+    "PT": (6, 6, ["Guarda", "Setúbal", "Portalegre"]),
+    "RO": (7, 7, ["Tulcea", "Caraș-Severin", "Arad"]),
+    "GR": (8, 8, ["Égée", "Macédoine et Thrace", "Épire et Macédoine occidentale"]),
+    "SK": (9, 9, ["Banskobystrický", "Bratislavský", "Nitriansky"]),
+    # La Croatie sort des dix premiers en 2050, la Pologne y entre : le
+    # classement bouge, et c'est une information, pas un détail de tableau.
+    "HR": (10, None, ["ensemble du pays"]),
+    "PL": (None, 10, ["Mazovie", "Łódzkie", "Grande-Pologne"]),
+}
+
+FEUX_HAUSSES = {
+    "1990_2025": [("RO", 200), ("GR", 153), ("BG", 151), ("IT", 133), ("FR", 108)],
+    "2025_2050": [("FR", 159), ("GR", 134), ("SK", 131), ("RO", 113), ("PT", 96)],
+}
+
+# pays : (rang 2050, hausse 1990-2025 en %, hausse 2025-2050 en %, régions)
+INONDATIONS = {
+    "IT": (1, 25, 32, ["Vénétie", "Lombardie", "Émilie-Romagne"]),
+    "FR": (2, 19, 23, ["Provence-Alpes-Côte d'Azur", "Grand Est", "Hauts-de-France"]),
+    "DE": (3, 32, 31, ["Bavière", "Rhénanie-du-Nord-Westphalie", "Basse-Saxe"]),
+    "PL": (4, 41, 17, ["Petite-Pologne", "Mazovie", "Basse-Silésie"]),
+    "NL": (5, 40, 30, ["Hollande-Méridionale", "Brabant-Septentrional",
+                       "Hollande-Septentrionale"]),
+    "RO": (6, 18, 22, ["Suceava", "Timiș", "Bacău"]),
+    "SK": (7, 29, 27, ["Prešovský", "Košický", "Žilinský"]),
+    "ES": (8, 11, 18, ["Catalogne", "Andalousie", "Castille-et-León"]),
+    "BE": (9, 27, 33, ["Flandre", "Wallonie", "Bruxelles"]),
+    "HU": (10, 44, 18, ["Pest", "Borsod-Abaúj-Zemplén", "Bács-Kiskun"]),
+    "BG": (11, 34, 12, ["Plovdiv", "Blagoevgrad", "Pazardjik"]),
+    "AT": (12, 20, 31, ["Basse-Autriche", "Haute-Autriche", "Styrie"]),
+    "GR": (13, 15, 24, ["Macédoine et Thrace", "Attique",
+                        "Thessalie et Grèce centrale"]),
+    "DK": (14, 49, 33, ["Danemark-du-Sud", "Hovedstaden", "Jutland central"]),
+    "CZ": (15, 19, 16, ["Bohême centrale", "Hradec Králové", "Moravie du Sud"]),
+    "SE": (16, 56, 27, ["Västra Götaland", "Scanie", "Stockholm"]),
+    "PT": (17, 52, 37, ["Aveiro", "Porto", "Coimbra"]),
+    "SI": (18, 45, 58, ["ensemble du pays"]),
+    "FI": (19, 54, 33, ["Finlande occidentale", "Finlande méridionale",
+                        "Finlande orientale"]),
+    "HR": (20, 34, 45, ["ensemble du pays"]),
+    "LT": (21, 41, 14, ["ensemble du pays"]),
+    "IE": (22, 31, 45, ["Leinster", "Munster", "Connacht"]),
+    "LV": (23, 21, 7, ["ensemble du pays"]),
+    "EE": (24, 31, 17, ["ensemble du pays"]),
+    "CY": (25, 39, 20, ["ensemble du pays"]),
+    "LU": (26, 13, 39, ["ensemble du pays"]),
+    "MT": (27, 88, 11, ["ensemble du pays"]),
+}
+
+INONDATIONS_UE = {
+    "hausse_1990_2025": 30,
+    "cout_2024_mdeur": 18,
+    "phrase": "Le changement climatique a déjà porté de 30 % le risque de "
+              "dommage par inondation depuis 1990 dans l'Union, et les "
+              "projections le voient doubler encore d'ici 2100 sous scénario "
+              "d'émissions élevées. Les tempêtes et inondations ont coûté "
+              "environ 18 milliards d'euros à l'Union pour la seule année 2024.",
+    "concentration": "Les vingt régions les plus exposées de l'Union se "
+                     "concentrent dans CINQ pays : Italie, Allemagne, France, "
+                     "Pologne et Belgique. Les plus exposées en 2050 sont aussi "
+                     "des poumons économiques — Milan (22 % du PIB italien), "
+                     "Paris et l'Île-de-France (31 % du PIB français), Francfort "
+                     "et la Hesse (9 % du PIB allemand), Anvers et la Flandre "
+                     "(58 % du PIB belge), Barcelone et la Catalogne (20 % du PIB "
+                     "espagnol) : le risque y est systémique, pas local.",
+    "idf_2100": 110,
+}
+
+FEUX_UE = {
+    "cout_annuel_mdeur": 2,
+    "phrase": "La Cour des comptes européenne estime à environ 2 milliards "
+              "d'euros par an les pertes économiques déjà causées par les feux "
+              "de forêt dans l'Union. Depuis 1990, le risque de dommage a plus "
+              "que doublé en France, en Italie, en Grèce, en Roumanie et en "
+              "Bulgarie.",
+}
+
+SOURCE_FEUX = {
+    "titre": "2025 European Forest Fire Risk — How bad can it get ?",
+    "editeur": "XDI (Cross Dependency Initiative), août 2025",
+    "url": "https://xdi.systems/",
+    "nature": "referentiel",
+    "note": "Classement des DIX premiers États membres par « Aggregated Damage "
+            "Risk » — le montant total probable de dommage physique au bâti, "
+            "grandeur ABSOLUE : un pays au parc étendu y remonte en partie par "
+            "sa taille. Scénario d'émissions élevées RCP 8.5 / SSP5-8.5, "
+            "employé comme test de résistance. Jeu de données XDI Gross "
+            "Domestic Climate Risk 2024. Un pays hors des dix n'a pas de "
+            "valeur publiée.",
+}
+
+SOURCE_INONDATIONS = {
+    "titre": "Flooded Future : Europe's Rising Economic Risk — 292 États et "
+             "provinces de l'Union analysés",
+    "editeur": "XDI (Cross Dependency Initiative), septembre 2025",
+    "url": "https://xdi.systems/",
+    "nature": "referentiel",
+    "note": "Classement des VINGT-SEPT États membres par « Aggregated Damage "
+            "Ratio » à l'horizon 2050 — la perte annuelle moyenne rapportée au "
+            "coût de remplacement du bâti, ratio choisi par l'éditeur pour "
+            "rester comparable indépendamment des taux de change et de "
+            "l'inflation. Crues de rivière et ruissellement pluvial "
+            "uniquement : la submersion côtière n'est PAS couverte par ce "
+            "rapport. Scénario RCP 8.5 / SSP5-8.5.",
+}
+
+
+def feux_de(pays):
+    v = FEUX.get(pays)
+    if not v:
+        return None
+    r25, r50, regions = v
+    return {"rang_2025": r25, "rang_2050": r50, "regions": list(regions),
+            "entre_en_2050": r25 is None, "sort_en_2050": r50 is None}
+
+
+def inondations_de(pays):
+    v = INONDATIONS.get(pays)
+    if not v:
+        return None
+    rang, h1, h2, regions = v
+    return {"rang_2050": rang, "hausse_1990_2025_pct": h1,
+            "hausse_2025_2050_pct": h2, "regions": list(regions)}
+
+
+def _note_rang(rang, total):
+    """Un rang en note 0-100, le premier etant le plus expose.
+
+    `total` est la taille du CHAMP — les vingt-sept Etats membres — et non
+    celle de la liste publiee. La distinction n'est pas cosmetique : le
+    classement des feux ne publie que les DIX premiers, c'est-a-dire les dix
+    PIRES. Diviser par dix donnerait 100 au dixieme, et la note dirait « le
+    meilleur profil d'Europe » d'un pays que le rapport range dans le pire
+    decile. Divise par vingt-sept, ce meme dixieme plafonne a 35 : il est mal
+    note, moins mal que les neuf autres, et la plage haute reste vide — parce
+    qu'aucun pays ne peut la meriter sur la foi d'une liste de pires.
+
+    Le rang reste ORDINAL : cette note ordonne fidelement mais ne mesure aucun
+    ecart. C'est tout ce que les rapports permettent — ils ne publient pas les
+    valeurs sous-jacentes."""
+    if not rang or total < 2:
+        return None
+    return max(0, min(100, round(100.0 * (rang - 1) / (total - 1))))
+
+
+def _note_feux(pays):
+    v = FEUX.get(pays)
+    # On note sur le rang 2050 : un centre livre en 2028 s'exploite au-dela de
+    # 2050, et c'est l'annee ou la France passe premiere.
+    return _note_rang(v[1], 27) if v and v[1] else None
+
+
+def _note_inondations(pays):
+    v = INONDATIONS.get(pays)
+    return _note_rang(v[0], 27) if v else None
+
+
+# Les deux rapports ne couvrent que l'UNION. Un pays tiers n'y est pas
+# « bien classe » : il n'etait pas eligible. Confondre les deux ferait passer
+# la Suisse pour epargnee par les crues alors que le rapport centres de
+# donnees la classe TROISIEME MONDIALE — la contradiction serait publiee sur
+# la meme page.
+UE_27 = frozenset(("AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "ES", "FI",
+                   "FR", "GR", "HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT",
+                   "NL", "PL", "PT", "RO", "SE", "SI", "SK"))
+
+
+def _absence_feux(pays):
+    """Pourquoi ce pays n'a pas de note « feux » — ou None s'il en a une."""
+    v = FEUX.get(pays)
+    if v and v[1]:
+        return None
+    if pays not in UE_27:
+        return ("hors du champ : le rapport ne couvre que les vingt-sept États "
+                "membres de l'Union. Ce pays n'a pas été analysé — ce n'est "
+                "pas un signe de faible exposition")
+    if v:
+        return ("classé %de en 2025, ce pays SORT des dix premiers à l'horizon "
+                "2050 : le rapport cesse alors de publier son rang, et la note "
+                "se calcule sur 2050" % v[0])
+    return ("hors des DIX premiers États membres publiés : le rapport s'arrête "
+            "au dixième, et un pays absent peut être onzième comme "
+            "vingt-septième. L'absence ne dit rien, surtout pas que tout va "
+            "bien")
+
+
+def _absence_inondations(pays):
+    """Pourquoi ce pays n'a pas de note « inondations » — ou None s'il en a une."""
+    if INONDATIONS.get(pays):
+        return None
+    return ("hors du champ : le rapport classe les vingt-sept États membres de "
+            "l'Union et eux seuls. Ce pays n'a pas été analysé — ce n'est pas "
+            "un signe de faible exposition, et le rapport centres de données "
+            "de juin 2026 classe justement la Suisse troisième mondiale pour "
+            "le risque de crue")
+
+
+# ═══════════════════════════════════════════════════════════════════════════
 # 6. AVANTAGES / INCONVÉNIENTS — l'analyse croisée, par pays
 #    Nature « analyse » : la lecture du cabinet, datée, à partir des critères
 #    ci-dessus et du référentiel des sites. Un avis se discute — c'est le but.
@@ -600,14 +840,22 @@ CRITERES = [
      "source": "Eurostat nrg_pc_205, 2024, classes",
      "formule": "bas=85, moyen=55, élevé=25"},
     {"cle": "parc", "nom": "Parc en service (filière constituée)", "nature": "calcule",
-     "source": "référentiel des 97 sites (datacentres.py)",
+     "source": "référentiel des {n_sites} sites (datacentres.py)",
      "formule": "note = 100 × sites en service du pays ÷ maximum du panel"},
     {"cle": "climat_physique", "nom": "Risque climatique physique du bâti (XDI)",
      "nature": "referentiel",
      "source": "XDI, juin 2026 — part des centres planifiés à haut risque de dommage, réglages de faible résilience",
      "formule": "note = 100 − 100 × part à haut risque ÷ pire part du panel (33 %, Suisse) ; pays hors classement = pas de note"},
+    {"cle": "feux", "nom": "Risque de feu de forêt à l'horizon 2050 (XDI)",
+     "nature": "referentiel",
+     "source": "XDI, août 2025 — rang au « Aggregated Damage Risk » 2050, dix premiers États membres publiés",
+     "formule": "note = 100 × (rang − 1) ÷ 26 — le rang est comparé aux VINGT-SEPT États membres, pas aux dix publiés : le dixième plafonne à 35 et non à 100. Risque ABSOLU, donc partiellement lié à la taille du parc bâti. Pays hors des dix, ou hors de l'Union = pas de note"},
+    {"cle": "inondations", "nom": "Risque d'inondation à l'horizon 2050 (XDI)",
+     "nature": "referentiel",
+     "source": "XDI, septembre 2025 — rang au « Aggregated Damage Ratio » 2050, vingt-sept États membres classés",
+     "formule": "note = 100 × (rang − 1) ÷ 26 ; ratio rapporté au coût de remplacement, donc peu sensible à la taille du parc. Crues et ruissellement seuls — submersion côtière non couverte. Pays hors de l'Union = pas de note"},
     {"cle": "pipeline", "nom": "File de raccordement 2026-2030 (concurrence)", "nature": "calcule",
-     "source": "statuts annoncé + en construction + autorisé des 97 sites",
+     "source": "statuts annoncé + en construction + autorisé des {n_sites} sites",
      "formule": "note = 100 − 100 × pipeline du pays ÷ maximum du panel (moins il y a de file, mieux c'est pour un NOUVEL entrant)"},
 ]
 
@@ -660,6 +908,8 @@ def assemble(sites, intensites):
             "parc": round(100.0 * en_service.get(p, 0) / max_service),
             "pipeline": round(100 - 100.0 * pipeline.get(p, 0) / max_pipe),
             "climat_physique": _note_xdi(p),
+            "feux": _note_feux(p),
+            "inondations": _note_inondations(p),
         }
         avis = AVIS.get(p)
         lignes.append({
@@ -678,6 +928,12 @@ def assemble(sites, intensites):
                                         "premiers pays : moins de trois centres "
                                         "planifiés analysés, ou part à haut risque "
                                         "inférieure à 3 %"),
+            # Même règle, deux aléas de plus : la valeur ou la raison de son
+            # absence, jamais un silence qui se lirait comme un feu vert.
+            "feux": feux_de(p),
+            "feux_absence": _absence_feux(p),
+            "inondations": inondations_de(p),
+            "inondations_absence": _absence_inondations(p),
             "prix": ({"classe": prix[0], "classe_nom": PRIX_CLASSES[prix[0]]["nom"],
                       "fourchette_eur_mwh": list(prix[1])} if prix else None),
             "en_service": en_service.get(p, 0),
@@ -690,15 +946,37 @@ def assemble(sites, intensites):
     return {
         "version": VERSION,
         "genere": datetime.now(timezone.utc).isoformat(),
-        "criteres": CRITERES,
+        # Les libellés qui CITENT le parc se calculent : un nombre écrit en
+        # dur vieillit en silence, et la page se contredit d'une ligne à
+        # l'autre le jour où le référentiel grandit.
+        "criteres": [dict(c, source=c["source"].replace("{n_sites}",
+                                                        str(len(sites))))
+                     for c in CRITERES],
         "classes": {"eau": EAU_CLASSES, "prix": PRIX_CLASSES, "climat": {k: v["nom"] for k, v in CLIMAT.items()}},
         "sources": {"eau": SOURCE_EAU, "mix": SOURCE_MIX, "prix": SOURCE_PRIX,
-                    "perspectives": SOURCE_PERSPECTIVES, "climat_physique": SOURCE_XDI},
+                    "perspectives": SOURCE_PERSPECTIVES, "climat_physique": SOURCE_XDI,
+                    "feux": SOURCE_FEUX, "inondations": SOURCE_INONDATIONS},
         "climat_physique": {"aleas": XDI_ALEAS, "europe": XDI_EUROPE,
                             "pire_panel": XDI_PIRE, "indirect": XDI_INDIRECT,
                             "classement": sorted(
                                 [dict(pays=k, **xdi_de(k)) for k in XDI],
                                 key=lambda x: x["rang_mondial"])},
+        # Les deux classements voyagent entiers : le lecteur doit pouvoir
+        # verifier le rang d'un pays sans refaire le calcul de la note, et
+        # constater lui-meme que le champ s'arrete aux Etats membres.
+        # `publies` est la profondeur du classement (dix par horizon), pas le
+        # nombre de lignes : elles sont onze parce que la Croatie sort et que
+        # la Pologne entre. Confondre les deux ferait ecrire « onze premiers ».
+        "feux": {"europe": FEUX_UE, "hausses": FEUX_HAUSSES,
+                 "publies": max([r for v in FEUX.values() for r in v[:2] if r]),
+                 "lignes": len(FEUX), "champ": len(UE_27),
+                 "classement": sorted(
+                     [dict(pays=k, **feux_de(k)) for k in FEUX],
+                     key=lambda x: (x["rang_2050"] or 99, x["rang_2025"] or 99))},
+        "inondations": {"europe": INONDATIONS_UE, "champ": len(UE_27),
+                        "classement": sorted(
+                            [dict(pays=k, **inondations_de(k)) for k in INONDATIONS],
+                            key=lambda x: x["rang_2050"])},
         "perspectives_ue": [x for x in PERSPECTIVES if x["pays"] == "UE"],
         "pays": lignes,
         "avertissement": (
@@ -738,6 +1016,41 @@ def sante():
             pb.append("xdi %s : rang hors du top 25" % k)
     if XDI_PIRE <= 0:
         pb.append("xdi : etalon du panel nul, la note serait indefinie")
+    for k, v in FEUX.items():
+        if k not in UE_27:
+            pb.append("feux %s : hors Union, le rapport ne le couvre pas" % k)
+        if v[0] is None and v[1] is None:
+            pb.append("feux %s : aucun rang, la ligne ne sert a rien" % k)
+        for r in v[:2]:
+            if r is not None and not 1 <= r <= 10:
+                pb.append("feux %s : rang %s hors des dix publies" % (k, r))
+        if not v[2]:
+            pb.append("feux %s : aucune region citee" % k)
+    for cle in ("1990_2025", "2025_2050"):
+        for k, h in FEUX_HAUSSES[cle]:
+            if k not in FEUX:
+                pb.append("feux : hausse citee pour %s, absent du classement" % k)
+            if h <= 0:
+                pb.append("feux : hausse %s non positive pour %s" % (cle, k))
+    for periode in ("1990_2025", "2025_2050"):
+        h = [x[1] for x in FEUX_HAUSSES[periode]]
+        if h != sorted(h, reverse=True):
+            pb.append("feux : hausses %s non triees, le podium serait faux" % periode)
+    rangs_i = sorted(v[0] for v in INONDATIONS.values())
+    if rangs_i != list(range(1, 28)):
+        pb.append("inondations : les rangs ne couvrent pas 1 a 27 sans trou")
+    if set(INONDATIONS) != set(UE_27):
+        pb.append("inondations : le classement ne recouvre pas l'UE-27")
+    for k, v in INONDATIONS.items():
+        if not v[3]:
+            pb.append("inondations %s : aucune region citee" % k)
+        if v[1] < 0 or v[2] < 0:
+            pb.append("inondations %s : hausse negative, non prevue par le rapport" % k)
+    # Un pays classe ne doit JAMAIS pouvoir atteindre la plage haute : le
+    # dixieme des feux plafonne a 35, faute de quoi figurer dans une liste de
+    # pires vaudrait un satisfecit.
+    if max([n for n in (_note_feux(k) for k in FEUX) if n is not None] or [0]) > 40:
+        pb.append("feux : un pays du pire decile recoit une note haute")
     for x in PERSPECTIVES:
         if x["sens"] not in ("hausse", "contrainte"):
             pb.append("perspective %s : sens inconnu" % x["pays"])
@@ -746,4 +1059,5 @@ def sante():
     return {"ok": not pb, "problemes": pb, "version": VERSION,
             "pays_eau": len(EAU), "pays_mix": len(MIX), "pays_prix": len(PRIX),
             "perspectives": len(PERSPECTIVES), "avis": len(AVIS),
-            "pays_xdi": len(XDI), "criteres": len(CRITERES)}
+            "pays_xdi": len(XDI), "criteres": len(CRITERES),
+            "pays_feux": len(FEUX), "pays_inondations": len(INONDATIONS)}
