@@ -11930,10 +11930,41 @@ FORM_CATALOGUE = [
     {'id': 8,  'ref': 'ISO 42001',  'titre': "ISO/IEC 42001 : construire un systeme de management de l'IA", 'jours': 2},
     {'id': 9,  'ref': 'ISO 42001',  'titre': "Auditer un systeme de management de l'IA", 'jours': 2},
     {'id': 10, 'ref': 'Transverse', 'titre': "Gouvernance de l'IA : IA Act, RGPD et ISO 42001", 'jours': 2},
+    # Un PROGRAMME, pas un seminaire : dix jours et six mille euros, contre un
+    # a deux jours et neuf cent cinquante a mille sept cent cinquante pour tout
+    # le reste du catalogue. La famille est distincte pour que l'acheteur ne
+    # decouvre pas l'ordre de grandeur au moment de payer, et le tarif est
+    # PORTE PAR LA LIGNE : il ne se deduit d'aucun nombre de jours.
+    {'id': 11, 'ref': 'Programme',  'titre': "Rendre la gouvernance de l'IA operationnelle", 'jours': 10,
+     'prix_cents': 600000},
 ]
 
 # Tarifs indicatifs HT par participant (en centimes) : 1 jour = 950 EUR, 2 jours = 1750 EUR.
+# Une formation dont la duree n'est pas au bareme porte son propre `prix_cents`.
 FORM_PRIX = {1: 95000, 2: 175000}
+
+
+def form_prix_cents(cat):
+    """Le tarif d'une formation, et JAMAIS un tarif de secours silencieux.
+
+    L'ancien calcul faisait `FORM_PRIX.get(cat['jours'], 95000)`. Tant que le
+    catalogue ne comptait que des formations d'un ou deux jours, le defaut ne
+    servait pas. Une formation de dix jours y serait tombee sans bruit : 950
+    EUR factures au lieu de 6 000, par Stripe, sur une session reelle. On sert
+    donc d'abord le prix ECRIT sur la ligne, puis le bareme, et l'absence des
+    deux se journalise au lieu de se combler."""
+    if not cat:
+        logger.error('FORM_PRIX_SANS_CATALOGUE — formation inconnue, tarif de secours applique')
+        return 95000
+    if cat.get('prix_cents'):
+        return int(cat['prix_cents'])
+    jours = cat.get('jours')
+    if jours in FORM_PRIX:
+        return FORM_PRIX[jours]
+    logger.error("FORM_PRIX_MANQUANT formation=%s jours=%s — ni prix_cents sur la ligne, "
+                 "ni bareme pour cette duree ; tarif de secours applique, A CORRIGER",
+                 cat.get('id'), jours)
+    return 95000
 
 # Taux de TVA applique au paiement (en pourcentage). Mettre 0 en cas d'exoneration
 # de la formation professionnelle continue (art. 261-4-4 a du CGI, sur attestation).
@@ -12011,6 +12042,12 @@ FORM_SESSIONS_DEFAUT = [
     (8, '2026-12-10', '2026-12-11', 'A distance (visioconference)'),
     (9, '2026-12-14', '2026-12-15', 'Presentiel — Paris'),
     (10, '2026-12-17', '2026-12-18', 'A distance (visioconference)'),
+    # Le programme court sur deux semaines PLEINES, week-end exclu : chaque
+    # session part un lundi et s'acheve un vendredi. Trois dates par an, comme
+    # les dix autres formations — une seule aurait fait de l'offre un essai.
+    (11, '2027-01-11', '2027-01-22', 'A distance (visioconference)'),
+    (11, '2027-04-12', '2027-04-23', 'Presentiel — Paris'),
+    (11, '2027-09-13', '2027-09-24', 'A distance (visioconference)'),
 ]
 
 
@@ -12029,12 +12066,26 @@ def _form_tables(cur, conn):
                 'telephone TEXT, participants INTEGER, message TEXT, montant_cents INTEGER, statut TEXT, '
                 'stripe_session_id TEXT, created_at TEXT)')
     conn.commit()
-    cur.execute('SELECT COUNT(*) AS n FROM form_sessions')
-    if int(dict(cur.fetchone()).get('n', 0)) > 0:
+    # AMORCAGE PAR FORMATION, ET NON TOUT OU RIEN. L'ancien test regardait si la
+    # table etait vide et renoncait des qu'elle contenait une ligne. Consequence :
+    # toute formation AJOUTEE APRES le premier demarrage n'obtenait jamais ses
+    # sessions. Sa carte s'affichait, son bouton d'inscription aussi, et le
+    # selecteur repondait « aucune session ouverte » — une offre visible et
+    # non reservable, sur un serveur ou tout semblait pourtant deploye.
+    # On ne comble que les TROUS : une formation qui a deja des sessions n'est
+    # pas touchee, et rien de ce qu'un exploitant a saisi n'est ecrase.
+    cur.execute('SELECT DISTINCT formation_id FROM form_sessions')
+    deja = {int(dict(r)['formation_id']) for r in cur.fetchall()
+            if dict(r).get('formation_id') is not None}
+    manquantes = [s for s in FORM_SESSIONS_DEFAUT if s[0] not in deja]
+    if not manquantes:
         return
-    for fid, date_s, date_f, lieu in FORM_SESSIONS_DEFAUT:
+    logger.info('FORM_SESSIONS_AMORCAGE — %d session(s) posee(s) pour les '
+                'formations %s, absentes de la base',
+                len(manquantes), sorted({s[0] for s in manquantes}))
+    for fid, date_s, date_f, lieu in manquantes:
         cat = next((c for c in FORM_CATALOGUE if c['id'] == fid), None)
-        prix = FORM_PRIX.get(cat['jours'] if cat else 1, 95000)
+        prix = form_prix_cents(cat)
         cur.execute(registre_sql(
             'INSERT INTO form_sessions (formation_id, date_session, date_fin, lieu, prix_cents, places, actif) VALUES (%s,%s,%s,%s,%s,%s,1)',
             'INSERT INTO form_sessions (formation_id, date_session, date_fin, lieu, prix_cents, places, actif) VALUES (?,?,?,?,?,?,1)'),
