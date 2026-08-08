@@ -392,6 +392,12 @@ def _enrichir():
     for i, brut in enumerate(SITES):
         s = dict(brut)
         s["id"] = "dc-%03d" % (i + 1)
+        # D'ou vient cette ligne. Les cent dix premieres ont ete etablies une
+        # par une, source nommee et coordonnees verifiees ; un import de
+        # registre en apporterait des centaines d'un coup, declaratives. Les
+        # laisser indiscernables ferait passer l'enregistrement pour la
+        # verification — et, au rapport de un a six, noierait la seconde.
+        s.setdefault("provenance", "referentiel")
         s["statut_nom"] = STATUTS[s["statut"]]["nom"]
         s["statut_couleur"] = STATUTS[s["statut"]]["couleur"]
         s["statut_rang"] = STATUTS[s["statut"]]["rang"]
