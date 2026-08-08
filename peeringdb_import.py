@@ -8,10 +8,15 @@ ce qui le maintient à cent dix sites quand l'Europe en compte des milliers.
 
 PeeringDB change l'échelle sans casser la règle. Ce n'est pas un annuaire
 tiers : chaque exploitant y inscrit LUI-MÊME ses installations, avec adresse
-postale et coordonnées — et l'API expose `geocode_status`, qui dit si ces
-coordonnées ont été normalisées par un géocodeur ou simplement saisies. Une
-ligne géocodée satisfait donc les deux conditions d'admission, sans qu'un
-humain ait à la retrouver.
+postale et coordonnées géocodées à partir de cette adresse.
+
+CE QUE L'EXPORT RÉEL A DÉMENTI. Le schéma expose `geocode_status`, qui devait
+distinguer une coordonnée normalisée d'une coordonnée saisie. Ce champ est un
+PARAMÈTRE DE REQUÊTE : il n'est pas sérialisé dans la fiche, et l'exiger
+rejetait deux cent vingt-six lignes sur deux cent vingt-six. Le signal de
+repli est la coordonnée elle-même — le registre laisse lat/lon à null quand le
+géocodage échoue. Le niveau de preuve est donc MOYEN, il est compté à part, et
+chaque site importé le dit dans sa note.
 
 CE QUE CE MODULE NE FAIT PAS
 Il ne fusionne rien. Les sites importés portent `provenance='registre'` et
@@ -65,10 +70,19 @@ FENETRE = {"lat_min": 34.0, "lat_max": 71.5, "lon_min": -25.0, "lon_max": 32.0}
 # qu'une ligne déjà vérifiée. 1,2 km : au-delà, dans un parc d'activités dense,
 # on écraserait des bâtiments réellement distincts ; en deçà, un même campus
 # décrit par deux adresses passerait deux fois.
-SEUIL_DOUBLON_KM = 1.2
+SEUIL_DOUBLON_KM = 1.5
 
-MOTIFS = ("hors_europe", "statut_non_actif", "sans_coordonnees", "hors_fenetre",
-          "non_geocode", "sans_exploitant", "doublon_referentiel", "doublon_interne")
+MOTIFS = ("hors_europe", "statut_non_actif", "ferme_declare", "sans_coordonnees",
+          "hors_fenetre", "non_geocode", "sans_exploitant", "doublon_referentiel",
+          "doublon_interne", "voisinage_a_verifier")
+
+# Une installation FERMÉE reste `status: "ok"` dans le registre : le champ
+# décrit l'état de la FICHE, pas celui du bâtiment. Les exploitants écrivent
+# la fermeture dans le nom ou dans les notes — « (closed) », « This facility
+# has been closed ». Les importer les afficherait « en service », ce qui est
+# précisément le contraire de ce qu'ils sont.
+_FERME = ("(closed)", "(Closed)", "has been closed", "is now closed",
+          "permanently closed", "(ferme)")
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -127,6 +141,12 @@ def _coord(v):
     return f if f == f else None            # NaN exclu
 
 
+def ferme(fac):
+    """Vrai si la fiche se déclare fermée ailleurs que dans son statut."""
+    t = "%s %s" % (fac.get("name") or "", fac.get("notes") or "")
+    return any(m.lower() in t.lower() for m in _FERME)
+
+
 def qualifier(fac, exiger_geocodage=True):
     """None si la fiche est admissible, sinon le motif du refus.
 
@@ -136,21 +156,74 @@ def qualifier(fac, exiger_geocodage=True):
         return "hors_europe"
     if (fac.get("status") or "ok") != "ok":
         return "statut_non_actif"
+    if ferme(fac):
+        return "ferme_declare"
     lat, lon = _coord(fac.get("latitude")), _coord(fac.get("longitude"))
     if lat is None or lon is None:
         return "sans_coordonnees"
     if not (FENETRE["lat_min"] <= lat <= FENETRE["lat_max"]
             and FENETRE["lon_min"] <= lon <= FENETRE["lon_max"]):
         return "hors_fenetre"
-    # Le point de bascule du module. `geocode_status` distingue une coordonnée
-    # NORMALISÉE d'une coordonnée saisie à la main — c'est-à-dire, dans le
-    # vocabulaire du référentiel, un point atteste d'un point de remplissage.
-    # Deux sites ont déjà été retirés pour cette raison exacte.
-    if exiger_geocodage and not fac.get("geocode_status"):
+    # LE POINT DE BASCULE, ET SA CORRECTION PAR LES FAITS.
+    #
+    # `geocode_status` devait distinguer une coordonnée NORMALISÉE par un
+    # géocodeur d'une coordonnée saisie à la main — la distinction même qui a
+    # fait retirer deux sites du référentiel. Le schéma l'expose... comme
+    # PARAMÈTRE DE REQUÊTE. Il n'est pas sérialisé dans la fiche : sur un
+    # export réel de 250 installations, aucune ne le porte, et l'exiger
+    # rejetait 226 lignes sur 226.
+    #
+    # Une clé ABSENTE ne vaut donc pas « faux ». Elle vaut « inconnu », et le
+    # signal de repli est la coordonnée elle-même : PeeringDB géocode les
+    # adresses et laisse lat/lon à null quand il échoue — dans cet export,
+    # douze fiches exactement. Le contrôle « sans_coordonnees » ci-dessus fait
+    # donc déjà le travail. Ce qui change, c'est le NIVEAU DE PREUVE, et
+    # `importer` le compte séparément plutôt que de le taire.
+    if exiger_geocodage and fac.get("geocode_status") is False:
         return "non_geocode"
     if not (fac.get("org_name") or "").strip():
         return "sans_exploitant"
     return None
+
+
+def _souche(nom):
+    """Le premier mot significatif d'un nom d'exploitant, en minuscules.
+
+    « NTT (Global Data Centers) », « NTT DATA's Global Data Centers division »
+    et « NTT » désignent la même maison ; comparer les chaînes entières les
+    séparerait, et le rapprochement de doublons échouerait là où il compte le
+    plus — sur les sites que le référentiel porte déjà."""
+    t = (nom or "").strip().lower()
+    for c in "(),.'":
+        t = t.replace(c, " ")
+    mots = [m for m in t.split() if m not in ("the", "de", "la", "le")]
+    return mots[0] if mots else ""
+
+
+# Mots trop courants pour identifier un bâtiment : deux fiches qui partagent
+# « data », « paris » ou « digital » ne parlent pas forcément du même site.
+_BANALS = {"data", "center", "centre", "centers", "centres", "campus", "the",
+           "digital", "realty", "interxion", "equinix", "telehouse", "global",
+           "switch", "colo", "colocation", "gmbh", "sarl", "inc", "ltd", "bv",
+           "paris", "london", "amsterdam", "frankfurt", "vienna", "vienne",
+           "madrid", "milan", "berlin", "munich", "dublin", "stockholm",
+           "networks", "group", "division", "site", "building", "batiment"}
+
+
+def _jetons(nom):
+    """Les jetons DISTINCTIFS d'un nom de site : « PAR7 », « LD4 », « BER1 »."""
+    t = (nom or "").lower()
+    out, mot = set(), ""
+    for c in t:
+        if c.isalnum():
+            mot += c
+        else:
+            if len(mot) >= 3 and mot not in _BANALS:
+                out.add(mot)
+            mot = ""
+    if len(mot) >= 3 and mot not in _BANALS:
+        out.add(mot)
+    return out
 
 
 def distance_km(lat1, lon1, lat2, lon2):
@@ -194,6 +267,12 @@ def _note(fac):
              "ni consommation d'eau, d'ou l'absence de gabarit — le moteur repond "
              "alors « aucune derivation possible » plutot que de preter a ce "
              "batiment l'ordre de grandeur d'une categorie choisie d'office.")
+    if fac.get("geocode_status") is None:
+        n.append("Coordonnees : le registre ne publie pas l'indicateur de "
+                 "geocodage dans sa reponse ; le point est celui qu'il a calcule "
+                 "depuis l'adresse, et les fiches dont le geocodage a echoue "
+                 "n'ont aucune coordonnee et n'entrent donc pas. Preuve "
+                 "moyenne, non verifiee ligne a ligne.")
     if fac.get("updated"):
         n.append("Fiche mise a jour par l'exploitant le %s." % str(fac["updated"])[:10])
     return " ".join(n)
@@ -233,8 +312,14 @@ def convertir(fac):
 # ═══════════════════════════════════════════════════════════════════════════
 
 def importer(source, existants=None, exiger_geocodage=True,
-             seuil_km=SEUIL_DOUBLON_KM):
+             seuil_km=SEUIL_DOUBLON_KM, voisinage_accepte=()):
     """Les sites retenus, et le compte de tout ce qui ne l'a pas été.
+
+    `voisinage_accepte` : les identifiants PeeringDB dont le signalement a été
+    EXAMINÉ et tranché en faveur de l'import. Un site voisin d'un autre du même
+    exploitant n'est pas forcément le même bâtiment — PAR1 et PAR7 sont à trois
+    kilomètres et sont deux centres réels. La liste rend la décision explicite
+    et relisible, au lieu de la cacher dans un seuil.
 
     `existants` : les lignes déjà présentes au référentiel. Une installation
     importée qui tombe sur l'une d'elles est ÉCARTÉE, jamais fusionnée : la
@@ -247,9 +332,14 @@ def importer(source, existants=None, exiger_geocodage=True,
     rapport["recus"] = len(facs)
 
     retenus, points = [], []
-    ancres = [(s["lat"], s["lon"]) for s in existants
+    ancres = [(s["lat"], s["lon"], _souche(s.get("operateur")),
+               _jetons("%s %s" % (s.get("nom_site") or "", s.get("ville") or "")), s)
+              for s in existants
               if isinstance(s.get("lat"), (int, float))
               and isinstance(s.get("lon"), (int, float))]
+    rapport["sur_preuve_moyenne"] = 0
+    rapport["voisinage_a_verifier"] = 0
+    rapport["a_verifier"] = []
 
     for fac in facs:
         motif = qualifier(fac, exiger_geocodage=exiger_geocodage)
@@ -257,12 +347,49 @@ def importer(source, existants=None, exiger_geocodage=True,
             rapport[motif] += 1
             continue
         s = convertir(fac)
-        if any(distance_km(s["lat"], s["lon"], a, b) <= seuil_km for a, b in ancres):
+        # Doublon avec une ligne déjà vérifiée. Deux critères, parce qu'un seul
+        # ne suffit pas : la distance seule laisse passer un même site dont le
+        # référentiel porte un point RECONSTITUÉ à deux kilomètres — c'est le
+        # cas des treize entrées ajoutées à la main faute de géocodeur. Quand
+        # l'exploitant concorde, on élargit donc la fenêtre, et on signale que
+        # le registre donne le meilleur point.
+        # DEUX RÉGIMES, ET AUCUN N'EST SILENCIEUX.
+        #
+        # Au-dessous du rayon strict, c'est le même bâtiment : la ligne
+        # importée est écartée, la ligne vérifiée reste.
+        #
+        # Au-dessus, la fusion automatique s'est révélée dangereuse. Élargir
+        # sur le seul exploitant confondait PAR1, PAR2 et PAR3 avec PAR7/PAR8 ;
+        # ajouter un jeton de nom n'a pas suffi, « Marseille » rapprochant la
+        # base sous-marine du campus MRS1-4, distant de cinq kilomètres. On ne
+        # fusionne donc plus au jugé : le voisin d'un même exploitant entre 1,5
+        # et 5 km est RETENU DEHORS et SIGNALÉ, pour que la décision revienne à
+        # qui peut la prendre.
+        double, voisin = None, None
+        for a, b, souche, jx, ligne in ancres:
+            d = distance_km(s["lat"], s["lon"], a, b)
+            if d <= seuil_km:
+                double = (ligne, d)
+                break
+            if (souche and souche == _souche(s["operateur"]) and d <= 5.0
+                    and (voisin is None or d < voisin[1])):
+                voisin = (ligne, d)
+        if double:
             rapport["doublon_referentiel"] += 1
+            continue
+        if voisin and fac.get("id") not in set(voisinage_accepte):
+            rapport["a_verifier"].append({
+                "importe": s["nom_site"], "ville": s["ville"],
+                "voisin_referentiel": voisin[0].get("nom_site") or voisin[0].get("ville"),
+                "ecart_km": round(voisin[1], 2),
+                "lat": s["lat"], "lon": s["lon"]})
+            rapport["voisinage_a_verifier"] += 1
             continue
         if any(distance_km(s["lat"], s["lon"], a, b) <= seuil_km for a, b in points):
             rapport["doublon_interne"] += 1
             continue
+        if fac.get("geocode_status") is None:
+            rapport["sur_preuve_moyenne"] += 1
         points.append((s["lat"], s["lon"]))
         retenus.append(s)
 

@@ -3,7 +3,7 @@
 
 POURQUOI UN MODULE À PART, ET PAS DES LIGNES DE PLUS DANS `datacentres.py`.
 
-Le référentiel européen porte cent dix sites pour tout le
+Le référentiel européen porte deux cent quarante-neuf sites pour tout le
 continent, dont cinq en Île-de-France. L'Observatoire de l'Institut Paris
 Région en recense cent trente-neuf pour la seule région. Verser les seconds
 dans le premier ferait paraître la France vingt fois plus dense que
@@ -241,6 +241,14 @@ def assemble(sites_europe=None):
         # confondre est l'erreur que ce module existe pour empêcher.
         "n_affiches": len(tous),
         "n_herites": len(her),
+        # L'heritage n'est plus homogene depuis l'import de registre : sur les
+        # franciliens que porte le referentiel europeen, une part a ete etablie
+        # une par une et le reste vient d'inscriptions d'exploitants. Servir un
+        # total unique laisserait croire a une attestation uniforme.
+        "n_herites_verifies": sum(1 for x in her
+                                  if x.get("provenance", "referentiel") == "referentiel"),
+        "n_herites_registre": sum(1 for x in her
+                                  if x.get("provenance") == "registre"),
         "n_observatoire": len(SITES_OBS),
         "n_annonces": OBSERVATOIRE["annonce_sites"],
         "n_manquants": manque,
@@ -259,5 +267,7 @@ def sante():
     her = herites()
     return {"version": VERSION, "region": REGION["code"],
             "n_herites": len(her), "n_observatoire": len(SITES_OBS),
+            "n_herites_verifies": sum(1 for x in her
+                                      if x.get("provenance", "referentiel") == "referentiel"),
             "observatoire_charge": OBSERVATOIRE["charge"],
             "n_annonces": OBSERVATOIRE["annonce_sites"]}

@@ -1095,6 +1095,7 @@ body.gp-actif .pm-b.ici span{color:#fff}
    pose des DISQUES creux : un amas, dont le compte vient d'un recensement
    d'agence et non d'une vérification site par site. Deux niveaux de preuve,
    deux formes ; personne ne doit pouvoir les confondre d'un coup d'oeil. */
+.dc-reg{ fill:none; stroke-width:1.5; vector-effect:non-scaling-stroke; }
 .idf-halo{fill:#0F3D6E;opacity:.10}
 .idf-pt{fill:#fff;stroke:#0F3D6E;stroke-width:0;cursor:pointer}
 .idf-amas .idf-pt{vector-effect:non-scaling-stroke;stroke-width:1.6px}
@@ -4219,7 +4220,19 @@ function renderDC(){
       + x.toFixed(1) + '" data-cy="' + y.toFixed(1) + '" x="' + (x - hc / 2).toFixed(1)
       + '" y="' + (y - hc / 2).toFixed(1) + '" width="' + hc.toFixed(1)
       + '" height="' + hc.toFixed(1) + '" fill="transparent"/>'
-      + drapeauDC(s, x, y, st, projet, futur);
+      /* Deux origines, deux formes. Un site du referentiel a ete etabli un par
+         un, source nommee et coordonnees verifiees : il porte le drapeau. Un
+         site importe d'un registre est une INSCRIPTION D'EXPLOITANT, non
+         verifiee ligne a ligne : il porte un disque creux. A cent trente-neuf
+         contre cent dix, leur donner la meme apparence ferait passer le second
+         pour le premier — c'est la convention deja retenue pour la couche
+         francilienne, et elle vaut ici pour la meme raison. */
+      + (s.provenance === "registre"
+           ? '<circle class="dc-reg" data-r="4.2" cx="' + x.toFixed(1) + '" cy="'
+             + y.toFixed(1) + '" r="' + (4.2 * inv).toFixed(2) + '" stroke="'
+             + (st.couleur || "#7A7A7A") + '"'
+             + (futur ? ' opacity="0.3"' : "") + "/>"
+           : drapeauDC(s, x, y, st, projet, futur));
   });
   g.innerHTML = out;
   ancrerGroupes(g);              /* sans quoi les drapeaux s'empilent en 0,0 */
@@ -4231,8 +4244,15 @@ function majLegendeDC(){
   if(!bloc || !DC) return;
   var h = "";
   if(DC_VISIBLE){
+    var nReg = (DC.sites || []).filter(function(x){ return x.provenance === "registre"; }).length;
+    var nRef = (DC.sites || []).length - nReg;
     h += '<div class="lg-row" style="margin-top:7px;padding-top:7px;border-top:1px solid var(--rule)">'
-      + vignetteDrapeau("#7A7A7A") + '<b style="font-size:10px">Centres de données (drapeaux)</b></div>';
+      + vignetteDrapeau("#7A7A7A") + '<b style="font-size:10px">Centres de données</b></div>';
+    h += '<div class="lg-row lg-dc">' + vignetteDrapeau("#7A7A7A")
+      + 'drapeau — établi un par un, source nommée (' + nRef + ')</div>';
+    if(nReg) h += '<div class="lg-row lg-dc"><svg width="14" height="12" aria-hidden="true">'
+      + '<circle cx="7" cy="6" r="4" fill="none" stroke="#7A7A7A" stroke-width="1.5"/></svg>'
+      + ' disque — inscrit par l’exploitant au registre (' + nReg + ')</div>';
     ["service", "construction", "autorise", "annonce"].forEach(function(k){
       var st = DC.statuts[k]; if(!st) return;
       var n = (DC.agregats.par_statut || {})[k] || 0; if(!n) return;

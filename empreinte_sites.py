@@ -2,7 +2,7 @@
 """Empreinte environnementale des SIA et des centres de données de l'UE.
 
 CE QUE CE MODULE FAIT
-Il applique au parc cartographié — 110 centres de données, 72 systèmes d'IA —
+Il applique au parc cartographié — 249 centres de données, 72 systèmes d'IA —
 la même chaîne de calcul que la page /empreinte du site : consommation, PUE,
 intensité carbone du pays, impacts incorporés de fabrication. Il en tire une
 vue par site, par pays et par cycle de vie.

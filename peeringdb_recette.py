@@ -122,14 +122,22 @@ print("\n══ 4. Les deux origines restent distinctes ══\n")
 
 ok("un site importé se déclare « registre »", s["provenance"] == "registre")
 d = D.assemble()
-ok("les 110 lignes vérifiées se déclarent « referentiel »",
-   all(x["provenance"] == "referentiel" for x in d["sites"]))
-ok("…et le référentiel n'a pas gagné de ligne à l'insu de qui que ce soit",
-   len(D.SITES) == 110, len(D.SITES))
+# Le référentiel PORTE désormais les deux origines — c'est le but. Ce qui doit
+# tenir, c'est qu'elles restent séparables, et que la part vérifiée n'ait pas
+# bougé d'une ligne : un import qui rognerait sur elle serait une perte
+# déguisée en enrichissement.
+from collections import Counter as _C                          # noqa: E402
+prov = _C(x["provenance"] for x in d["sites"])
+ok("les deux origines cohabitent et se comptent",
+   set(prov) == {"referentiel", "registre"}, dict(prov))
+ok("la part établie une par une est intacte : 110",
+   prov["referentiel"] == 110, prov["referentiel"])
+ok("aucune ligne ne porte une provenance inconnue",
+   all(x["provenance"] in ("referentiel", "registre") for x in d["sites"]))
 # DISCRIMINATION : sans le marqueur, les deux seraient indiscernables.
-ok("le marqueur est bien ce qui les sépare",
-   {x["provenance"] for x in d["sites"]} == {"referentiel"}
-   and s["provenance"] not in {x["provenance"] for x in d["sites"]})
+ok("le marqueur est la SEULE chose qui les sépare dans la donnée",
+   len({(x["operateur"], x["ville"]) for x in d["sites"]}) > 0
+   and all(set(x) == set(d["sites"][0]) for x in d["sites"]))
 
 print("\n══ 5. La coordonnée géocodée est le point de bascule ══\n")
 
@@ -201,14 +209,65 @@ ok("un filtre par pays remplace le filtre continent",
 ok("le module n'exige aucun réseau pour fonctionner",
    P.sante()["reseau_requis"] is False)
 
-print("\n══ 10. Non-régression : rien du référentiel n'a bougé ══\n")
+print("\n══ 10. L'import RÉEL est en place, et reste distinguable ══\n")
 
-ok("110 sites, 26 pays", d["n_sites"] == 110
-   and len({x["pays"] for x in d["sites"]}) == 26)
-ok("le cumul de puissance reste nul", d["agregats"]["capacite_mw_cumulee"] == 0.0)
+from collections import Counter                               # noqa: E402
+prov = Counter(x["provenance"] for x in d["sites"])
+ok("249 sites au total", d["n_sites"] == 249, d["n_sites"])
+ok("110 vérifiés, 139 importés", prov["referentiel"] == 110 and prov["registre"] == 139,
+   dict(prov))
+ok("28 pays", len({x["pays"] for x in d["sites"]}) == 28,
+   len({x["pays"] for x in d["sites"]}))
+ok("le cumul de puissance reste nul — le registre n'en publie pas",
+   d["agregats"]["capacite_mw_cumulee"] == 0.0)
+reg = [x for x in d["sites"] if x["provenance"] == "registre"]
+ok("aucun site importé ne porte de gabarit",
+   all(not x.get("gabarit") for x in reg))
+ok("…donc aucun ne reçoit d'estimation d'électricité",
+   all(x["estimation"]["nature"] == "indisponible" for x in reg))
+ok("tous portent une source PeeringDB nommée",
+   all("PeeringDB" in (x["source_libelle"] or "") for x in reg))
+ok("tous avouent le niveau de preuve dans leur note",
+   all("Preuve moyenne" in (x["note"] or "") for x in reg))
+ok("aucun site fermé n'est passé",
+   not [x for x in reg if "closed" in (x["nom_site"] or "").lower()],
+   [x["nom_site"] for x in reg if "closed" in (x["nom_site"] or "").lower()][:2])
+ok("ni la Russie ni l'Ukraine, hors périmètre déclaré",
+   not [x for x in reg if x["pays"] in ("RU", "UA")])
+
+print("\n══ 11. Les limites disent la cohabitation, la carte la montre ══\n")
+
+lim = " ".join(d["limites"])
+ok("les limites nomment les deux origines",
+   "DEUX ORIGINES" in lim and "DISQUE CREUX" in lim and "DRAPEAU" in lim)
+ok("…et disent que le registre n'apporte ni puissance ni stade",
+   "ne distingue AUCUN stade" in lim)
+ok("…et que trois fiches se déclaraient fermées en restant actives",
+   "restant actives au registre" in lim)
+ok("…et que c'est un annuaire d'interconnexion, donc biaisé",
+   "annuaire d'INTERCONNEXION" in lim)
+ok("le compte des limites suit le référentiel",
+   "sur les 249 sites" in lim and "110 sites" not in lim)
+pan = io.open(DEPOT + "/panorama.html", encoding="utf-8").read()
+ok("la carte dessine un disque pour un enregistrement",
+   'class="dc-reg"' in pan and 's.provenance === "registre"' in pan)
+ok("…et la légende explique la différence",
+   "inscrit par l" in pan and "source nommée (" in pan)
+ok("le disque est creux, jamais plein", ".dc-reg{ fill:none" in pan)
+
 import datacentres_idf as I                                   # noqa: E402
-ok("la couche francilienne hérite toujours de 5 sites",
-   I.assemble()["n_herites"] == 5)
+# L'import fait entrer neuf installations franciliennes dans le référentiel
+# européen : la couche régionale en hérite mécaniquement, et c'est correct.
+# Ce qui ne le serait pas, c'est de servir un total qui ne dise plus lequel
+# de ces points a été vérifié.
+a = I.assemble()
+ok("la couche hérite désormais de 14 franciliens", a["n_herites"] == 14, a["n_herites"])
+ok("…dont 5 établis un par un", a["n_herites_verifies"] == 5, a["n_herites_verifies"])
+ok("…et 9 venus du registre", a["n_herites_registre"] == 9, a["n_herites_registre"])
+ok("le manque annoncé se réduit d'autant",
+   a["n_manquants"] == a["n_annonces"] - a["n_affiches"], a["n_manquants"])
+ok("la santé publie aussi la part vérifiée",
+   I.sante().get("n_herites_verifies") == 5)
 
 print("")
 print("%d contrôle(s) en échec\n" % ko if ko else "tout est vert\n")
