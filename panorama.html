@@ -639,6 +639,17 @@ body.embed .gp-carte{bottom:auto;top:var(--gp-bas,auto);
   background:var(--bg);min-width:130px}
 .cres-p b{display:block;font-size:12px}
 .cres-p.or{border-color:#2D7A47;box-shadow:0 0 0 2px rgba(45,122,71,.12)}
+button.cres-p{cursor:pointer;text-align:left;background:none;font:inherit;
+  transition:border-color .12s,transform .12s}
+button.cres-p:hover{border-color:var(--encre,#1C1C1C);transform:translateY(-1px)}
+button.cres-p:focus-visible{outline:2px solid var(--encre,#1C1C1C);outline-offset:2px}
+.cres-rg[data-podium]{cursor:pointer}
+.cres-rg[data-podium]:hover circle{stroke-width:3.5}
+/* Le pays qu'on vient d'atteindre depuis le podium : un halo bref, le
+   temps que l'oeil le retrouve dans une grille de vingt-quatre lignes. */
+@keyframes cres-vise{0%{box-shadow:0 0 0 0 rgba(179,90,16,.55)}
+  100%{box-shadow:0 0 0 14px rgba(179,90,16,0)}}
+.cres-cible{animation:cres-vise 1.15s ease-out 2}
 .cres-p span{font-family:var(--mono);font-size:10px;color:var(--muted2)}
 .fin-aren{background:#FFF6E5;border:1px solid #E0C088;border-radius:6px;padding:10px 13px;
   font-size:11.5px;line-height:1.55;margin:12px 0}
@@ -1042,7 +1053,10 @@ body.gp-actif .pm-b.ici span{color:#fff}
 .map-barre input[type=checkbox]{accent-color:#B35A10;margin:0;width:14px;height:14px}
 .map-barre input[type=range]{accent-color:#B35A10;width:130px;height:16px;margin:0}
 .map-barre select{font:inherit;font-size:12px;color:#1C1C1C;background:#FFF;
-  border:1px solid var(--rule);border-radius:3px;padding:3px 6px;max-width:180px}
+  border:1px solid var(--rule);border-radius:3px;padding:3px 6px;max-width:210px}
+/* Le sélecteur de couche porte les intitulés les plus longs de la barre :
+   il se dimensionne sur son contenu plutôt que d'être coupé. */
+.map-barre select#couche-quoi{max-width:none;width:auto}
 .map-barre .sep{flex:1}
 .map-barre button{font:inherit;font-size:12px;color:var(--muted);background:none;
   border:1px solid var(--rule);border-radius:3px;padding:3px 10px;cursor:pointer}
@@ -2127,7 +2141,12 @@ function carteResultat(pays, opts){
     if(!c) return;
     var dx = (LBL_DECAL[code] || [0, 0])[0], dy = (LBL_DECAL[code] || [0, 0])[1];
     var x = projX(c[0]) + dx, y = projY(c[1]) + dy;
-    etiquettes += '<g class="cres-rg"><circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1)
+    /* La pastille chiffrée EST le rang que le lecteur voit sur la carte : elle
+       doit conduire au même endroit que la puce du podium, sinon deux
+       représentations du même rang se comporteraient différemment. */
+    etiquettes += '<g class="cres-rg" data-podium="' + esc(code) + '" tabindex="0" role="button"'
+      + ' aria-label="Rang ' + r.rang + ' — ' + esc(nomPays(code) || code)
+      + ', voir le détail"><circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1)
       + '" r="13" fill="#FFF" stroke="' + r.couleur + '" stroke-width="2.5"/>'
       + '<text x="' + x.toFixed(1) + '" y="' + (y + 4.5).toFixed(1) + '" text-anchor="middle" '
       + 'font-size="14" font-weight="700" fill="' + r.couleur + '">' + r.rang + '</text></g>';
@@ -2972,6 +2991,10 @@ function detailCarte(pal, vise){
        fournisseur hors UE dont seuls les effets sont dans l'Union — il n'y a
        alors aucun site à pointer, et le panneau se rabat au centre du pays. */
 function pastilles(){
+  /* Rien à poser quand le lecteur a demandé les centres seuls : c'est ici, et
+     non par un `display:none`, parce qu'un panneau masqué garderait sa cible de
+     survol et volerait le clic destiné au drapeau qu'il recouvre. */
+  if(!coucheSIA()) return "";
   var groupes = {}, out = "";
   DATA.cas.forEach(function(c){
     var cle, base, situe = (typeof c.lat === "number" && typeof c.lon === "number");
@@ -4001,6 +4024,22 @@ function renderFlux(){
    investissement — et ce que le module en CALCULE — électricité et eau, en
    fourchette, formule à l'appui. Les deux natures ne sont jamais mélangées. */
 var DC = null, DC_VISIBLE = true;
+/* QUELLE COUCHE MONTRER. La carte superpose deux populations qui n'ont rien à
+   voir : des centres de données (drapeaux) et des systèmes d'IA (panneaux). À
+   deux cent quarante-neuf contre soixante-douze, sur la même projection, elles
+   se disputent le même pixel — et lire l'une SANS l'autre était impossible.
+     les2  les deux, comme avant
+     dc    centres de données seuls, symbole agrandi puisque la place se libère
+     sia   systèmes d'IA seuls
+   `DC_VISIBLE` en découle et reste la variable que le reste du code interroge :
+   la dériver plutôt que la doubler évite deux états qui se contrediraient. */
+var COUCHE = "les2";
+function coucheDC(){ return COUCHE !== "sia"; }
+function coucheSIA(){ return COUCHE !== "dc"; }
+/* Seul, le drapeau peut grossir : ce qui l'empêchait, c'était le panneau
+   voisin. Le facteur s'applique à TOUTES les cotes du marqueur — mât, cartouche
+   et socle — sinon la silhouette se disloquerait au lieu de grandir. */
+function dcEchelle(){ return COUCHE === "dc" ? 1.6 : 1; }
 /* Horizon de lecture : l'etat du parc A UNE DATE, de 2024 a 2030. Les sites
    dont la mise en service annoncee depasse l'horizon restent visibles mais
    s'estompent — masquer serait perdre la trajectoire, or c'est precisement la
@@ -4106,7 +4145,8 @@ function drapeauDC(s, x, y, st, projet, futur){
      du mât, c'est-à-dire à l'emplacement du site. C'est plus sûr que de
      multiplier chaque coordonnée par 1/k à la main — il suffisait d'en oublier
      une pour que le drapeau se disloque à mesure qu'on grossit. */
-  var H = 13, lm = 1.5, lc = 8.5, hc = 6;
+  var e = dcEchelle();
+  var H = 13 * e, lm = 1.5 * e, lc = 8.5 * e, hc = 6 * e;
   var bx = -lc / 2, by = -H;
   return '<g class="dc-pt' + (projet ? " projet" : "") + '" data-anc="'
     + x.toFixed(1) + "," + y.toFixed(1) + '" data-dc="' + s.id + '"'
@@ -4118,9 +4158,9 @@ function drapeauDC(s, x, y, st, projet, futur){
        comme sur les fonds foncés du choroplèthe. */
     + '<rect class="dc-cloth" x="' + (bx + lm) + '" y="' + by + '" width="' + lc
     + '" height="' + hc + '" fill="#003399" rx="0.7"/>'
-    + etoileOr(bx + lm + lc / 2, by + hc / 2, 1.85)
+    + etoileOr(bx + lm + lc / 2, by + hc / 2, 1.85 * e)
     /* Socle : la pastille de statut, posée sur l'emplacement réel du site. */
-    + '<circle cx="0" cy="0" r="2.1" fill="' + esc(col) + '"/></g>';
+    + '<circle cx="0" cy="0" r="' + (2.1 * e).toFixed(2) + '" fill="' + esc(col) + '"/></g>';
 }
 
 /* Vignettes de légende : la même silhouette qu'à l'écran, en petit. Une légende
@@ -4263,8 +4303,9 @@ function renderDC(){
          pour le premier — c'est la convention deja retenue pour la couche
          francilienne, et elle vaut ici pour la meme raison. */
       + (s.provenance === "registre"
-           ? '<circle class="dc-reg" data-dc="' + s.id + '" data-r="4.2" cx="' + x.toFixed(1) + '" cy="'
-             + y.toFixed(1) + '" r="' + (4.2 * inv).toFixed(2) + '" stroke="'
+           ? '<circle class="dc-reg" data-dc="' + s.id + '" data-r="' + (4.2 * dcEchelle()).toFixed(2)
+             + '" cx="' + x.toFixed(1) + '" cy="'
+             + y.toFixed(1) + '" r="' + (4.2 * dcEchelle() * inv).toFixed(2) + '" stroke="'
              + (st.couleur || "#7A7A7A") + '"'
              + (futur ? ' opacity="0.3"' : "") + "/>"
            : drapeauDC(s, x, y, st, projet, futur));
@@ -4391,10 +4432,20 @@ function majBarre(){
         return '<option value="' + k + '"' + (k === VUE ? ' selected' : '')
              + (k !== 'cas' && !EMP ? ' disabled' : '') + '>' + esc(VUES[k].nom) + '</option>'; }).join('')
     + '</select></label>'
-    + '<label><input type="checkbox" id="dc-bascule"' + (DC_VISIBLE ? " checked" : "")
-    + '> centres de données <b id="dc-n">' + parcAu(DC_HORIZON).n + "</b>"
+    + '<label>afficher <select id="couche-quoi" aria-label="Ce que la carte montre">'
+    + '<option value="les2"' + (COUCHE === "les2" ? " selected" : "") + '>les deux</option>'
+    + '<option value="dc"' + (COUCHE === "dc" ? " selected" : "") + '>centres seuls</option>'
+    + '<option value="sia"' + (COUCHE === "sia" ? " selected" : "") + '>systèmes d’IA seuls</option>'
+    + '</select></label>'
+    /* Les deux comptes restent AFFICHÉS quelle que soit la couche choisie :
+       masquer les centres ne les retire pas du parc, et un compte qui
+       s'efface avec son symbole laisserait croire le contraire. Celui qui
+       n'est pas dessiné est simplement grisé. */
+    + '<label style="cursor:default' + (coucheDC() ? "" : ";opacity:.45") + '">'
+    + 'centres de données <b id="dc-n">' + parcAu(DC_HORIZON).n + "</b>"
     + '<i id="dc-hors" style="font-style:normal;color:var(--muted)"></i></label>'
-    + '<label style="cursor:default">systèmes d’IA <b id="sia-n">'
+    + '<label style="cursor:default' + (coucheSIA() ? "" : ";opacity:.45") + '">'
+    + 'systèmes d’IA <b id="sia-n">'
     + siaAu(DC_HORIZON).documentes + '</b> documentés · <b id="sia-ob">'
     + siaAu(DC_HORIZON).soumis + '</b> sous obligation</label>' 
     + (DC_VISIBLE
@@ -4406,8 +4457,21 @@ function majBarre(){
     + '<button type="button" id="lg-ouvrir">' + (plie ? "légende ▴" : "légende ▾") + "</button>";
   hote.appendChild(barre);
 
-  var c = barre.querySelector("#dc-bascule");
-  if(c) c.addEventListener("change", function(){ DC_VISIBLE = this.checked; renderDC(); });
+  var cq = barre.querySelector("#couche-quoi");
+  if(cq) cq.addEventListener("change", function(){
+    COUCHE = this.value;
+    DC_VISIBLE = coucheDC();
+    /* Les panneaux d'IA sont posés par la couche de DÉTAIL, redessinée au
+       changement de palier — pas par renderDC(). Ne rafraîchir que celle des
+       centres laisserait les panneaux à l'écran après « centres seuls », et
+       l'agrandissement du drapeau n'arriverait qu'au prochain zoom. On
+       redessine donc la carte entière en restituant le zoom courant, comme
+       le fait déjà le changement de fond. */
+    var k = ZOOM.k, zx = ZOOM.x, zy = ZOOM.y;
+    renderMap();
+    ZOOM.k = k; ZOOM.x = zx; ZOOM.y = zy; ZOOM.palier = -1; zoomAppliquer();
+    renderDC();
+  });
   aideBrancher(barre);              /* la barre est reconstruite a chaque bascule */
   var vf = barre.querySelector("#vue-fond");
   if(vf) vf.addEventListener("change", function(){
@@ -4886,6 +4950,61 @@ var IMPL_POIDS = { carbone: 3, mix: 2, eau: 2, climat: 2, prix: 3,
                    parc: 1, pipeline: 1 };
 var IMPL_DEPLIE = null;
 
+/* ── DU RANG À SES CHIFFRES ────────────────────────────────────────────────
+   Un classement qui ne conduit nulle part oblige le lecteur à chercher lui-même
+   la ligne du pays qu'il vient de voir premier — dans une grille de vingt-quatre
+   entrées, sous un tri qu'il a peut-être changé, ou après cinq dossiers de
+   plusieurs écrans. Le podium et les pastilles chiffrées de la carte mènent donc
+   au détail CALCULÉ du pays, chacun vers celui de sa propre section. */
+function flashCible(el){
+  if(!el) return;
+  el.classList.remove("cres-cible");
+  void el.offsetWidth;                 /* redémarre l'animation si on reclique */
+  el.classList.add("cres-cible");
+  setTimeout(function(){ el.classList.remove("cres-cible"); }, 2600);
+}
+
+function implVoirPays(code){
+  if(!code) return;
+  IMPL_DEPLIE = code;
+  renderImplAvis();                    /* la fiche du pays s'ouvre */
+  var a = document.getElementById("imp-avis");
+  if(a) a.scrollIntoView({ behavior: "smooth", block: "start" });
+  setTimeout(function(){
+    flashCible(document.querySelector('.imp-fiche[data-pays="' + code + '"]'));
+  }, 260);
+}
+
+function finVoirPays(code){
+  if(!code) return;
+  var h = document.getElementById("fin-dos-" + code);
+  if(!h) return;
+  h.scrollIntoView({ behavior: "smooth", block: "start" });
+  flashCible(h);
+}
+
+/* Délégation unique : les podiums sont reconstruits à chaque recalcul, et
+   rebrancher un écouteur par puce en laisserait tôt ou tard une sans. La
+   section d'accueil décide de la destination — le même marqueur `data-podium`
+   sert les deux cartes sans qu'aucune ait à connaître l'autre. */
+function podiumAller(el){
+  var code = el && el.getAttribute("data-podium");
+  if(!code) return;
+  if(el.closest("#imp-classement")) implVoirPays(code);
+  else finVoirPays(code);
+}
+document.addEventListener("click", function(ev){
+  var b = ev.target && ev.target.closest ? ev.target.closest("[data-podium]") : null;
+  if(b) podiumAller(b);
+});
+/* Les pastilles de la carte sont des <g> SVG : focalisables, mais un navigateur
+   ne déclenche pas `click` sur Entrée pour elles comme il le fait d'un bouton. */
+document.addEventListener("keydown", function(ev){
+  if(ev.key !== "Enter" && ev.key !== " ") return;
+  var b = ev.target && ev.target.closest ? ev.target.closest("[data-podium]") : null;
+  if(b && b.tagName.toLowerCase() === "g"){ ev.preventDefault(); podiumAller(b); }
+});
+
 function implScore(x){
   var somme = 0, poids = 0;
   for(var c in IMPL_POIDS){
@@ -5181,10 +5300,16 @@ function carteImplantation(toutes){
                               + " du calcul comme du diviseur" : "")
                            + " · les poids sont les vôtres, pas ceux du référentiel" };
   });
+  /* Le podium N'EST PLUS UN AFFICHAGE : c'est la porte d'entrée du détail. Un
+     lecteur qui vient de voir « 1. Suède » veut savoir POURQUOI, et il n'avait
+     d'autre recours que de chercher la Suède dans une grille de vingt-quatre
+     lignes, sous un tri qu'il avait peut-être lui-même changé. */
   var podium = toutes.slice(0, 3).map(function(l, i){
-    return '<div class="cres-p' + (i === 0 ? " or" : "") + '">'
+    return '<button type="button" class="cres-p imp-podium' + (i === 0 ? " or" : "") + '"'
+      + ' data-podium="' + esc(l.x.pays) + '" title="Voir le détail calculé pour '
+      + esc(nomPays(l.x.pays) || l.x.pays) + '">'
       + '<b>' + (i + 1) + '. ' + esc(nomPays(l.x.pays) || l.x.pays) + '</b>'
-      + '<span>score ' + l.score + '/100</span></div>';
+      + '<span>score ' + l.score + '/100 · voir le détail →</span></button>';
   }).join("");
   var absents = Object.keys(UE).filter(function(c){ return !pays[c]; }).length;
   return '<div class="cres">'
@@ -8434,10 +8559,15 @@ if(window.parent&&window.parent!==window){
       };
     });
     var podium = C.map(function(x, i){
-      return '<div class="cres-p' + (i === 0 ? ' or' : '') + '">'
-        + '<b>' + (i + 1) + '. ' + esc(x.pays) + '</b>'
+      return '<button type="button" class="cres-p fin-podium' + (i === 0 ? ' or' : '') + '"'
+        + ' data-podium="' + esc(x.pays) + '" title="Aller au dossier chiffré de '
+        + esc(nomPays(x.pays) || x.pays) + '">'
+        /* Le nom, pas le code : la puce conduit désormais à un titre qui dit
+           « Suède », et deux libellés différents pour un même pays feraient
+           douter d'être arrivé au bon endroit. */
+        + '<b>' + (i + 1) + '. ' + esc(nomPays(x.pays) || x.pays) + '</b>'
         + '<span>' + fourch(x.tco_meur) + ' M€ · '
-        + (x.tient_2030 ? 'livrable avant 2030' : 'PAS avant 2030') + '</span></div>';
+        + (x.tient_2030 ? 'livrable avant 2030' : 'PAS avant 2030') + ' · voir →</span></button>';
     }).join('');
     return '<div class="cres">'
       + '<p class="cres-t">Les ' + C.length + ' pays comparés, sur la carte</p>'
@@ -8514,7 +8644,11 @@ if(window.parent&&window.parent!==window){
       + j.classement.map(function(x,i){ return carteRang(x,i,j); }).join('') + '</div>'
       + carteFinance(j);
     j.dossiers.forEach(function(d){
-      h += '<h3 style="margin:18px 0 4px;font-size:14px">'+esc(d.pays)+' — enveloppe '
+      /* Une ancre par pays : sans elle, le podium n'aurait nulle part où
+         conduire, et le lecteur devrait faire défiler cinq dossiers pour
+         retrouver celui dont il vient de lire le rang. */
+      h += '<h3 id="fin-dos-'+esc(d.pays)+'" style="margin:18px 0 4px;font-size:14px;scroll-margin-top:16px">'
+        + esc(nomPays(d.pays) || d.pays)+' — enveloppe '
         + fourch(d.devis.enveloppe_meur)+' M€</h3>'
         + avisFaisabilite(d.faisabilite)
         + '<p class="note" style="margin:0 0 8px">Refroidissement retenu : <b>'
