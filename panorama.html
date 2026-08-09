@@ -1221,6 +1221,54 @@ table.socle-t a{color:#1E63A8}
    survol. Sans ce signe, la liaison existe mais personne ne la découvre. */
 .cres-pays[data-podium]{cursor:pointer}
 .cres-pays[data-podium]:hover{fill-opacity:.7;stroke:#1C1C1C;stroke-width:1.6}
+/* ── L'APPEL AU CLIC ────────────────────────────────────────────────────────
+   Un liseré qui n'apparaît qu'au survol ne se découvre qu'en passant dessus :
+   le lecteur qui ne survole rien ne saura jamais que la carte conduit quelque
+   part. Les trois premiers de VOTRE classement s'annoncent donc d'eux-mêmes.
+
+   Deux signes, et ils ne jouent pas le même rôle :
+     · le SURLIGNAGE bleu est permanent — il dit « ces trois-là sont votre
+       podium, et ils s'ouvrent » aussi longtemps que la carte est affichée ;
+     · le CLIGNOTEMENT est bref — cinq battements, puis plus rien. Une carte qui
+       clignote sans fin cesse d'être lisible, et le regard finit par la fuir.
+   Le clignotement s'arrête d'ailleurs au premier geste : une invitation qu'on a
+   déjà acceptée n'a plus à être répétée.
+
+   `prefers-reduced-motion` supprime le battement et garde le surlignage : la
+   consigne du lecteur porte sur le mouvement, pas sur l'information. */
+.cres-top{stroke:#1C5CAB;stroke-width:1.5}
+.cres-rg.cres-top circle{stroke-width:3.2}
+/* LE HALO. Un liseré de 1,5 px ne suffisait pas : les trois premiers sont
+   souvent VOISINS — Suède, Norvège, Finlande forment un seul bloc vert — et le
+   trait qui les sépare est alors intérieur, donc invisible. Un halo bleu posé
+   SOUS les pays déborde de leur contour et se voit quelle que soit la couleur
+   de remplissage. Il n'intercepte rien : c'est le pays au-dessus qui reçoit
+   le survol et le clic. */
+.cres-halo{fill:none;stroke:#1C5CAB;stroke-width:5.5;stroke-linejoin:round;
+  opacity:.5;pointer-events:none;filter:blur(1.7px)}
+@keyframes cres-appel{
+  0%,100%{stroke:#FFF;stroke-width:1.5}
+  50%{stroke:#1C5CAB;stroke-width:3.4}
+}
+@keyframes cres-appel-past{
+  0%,100%{stroke-width:3.2;filter:none}
+  50%{stroke-width:6;filter:drop-shadow(0 0 4px rgba(28,92,171,.85))}
+}
+@keyframes cres-appel-halo{
+  0%,100%{opacity:.4;stroke-width:4}
+  50%{opacity:.95;stroke-width:12}
+}
+.cres-pays.cres-appel{animation:cres-appel 1.15s ease-in-out 5}
+.cres-rg.cres-appel circle{animation:cres-appel-past 1.15s ease-in-out 5}
+.cres-halo.cres-appel{animation:cres-appel-halo 1.15s ease-in-out 5}
+@media (prefers-reduced-motion:reduce){
+  .cres-pays.cres-appel,.cres-rg.cres-appel circle,
+  .cres-halo.cres-appel{animation:none}
+}
+/* La ligne d'action de l'infobulle : ce qu'un clic ferait, en bleu, détachée
+   des chiffres pour qu'on ne la lise pas comme l'un d'eux. */
+.cres-tip .t-act{margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,.18);
+  font-size:11px;font-weight:700;color:#8FBCEB}
 .cres-pays:hover,.cres-abs:hover,.cres-hue:hover{fill-opacity:.78}
 .cres-pays:focus{outline:none}
 .cres-pays:focus-visible{outline:none;stroke:#1C1C1C;stroke-width:1.8}
@@ -2122,12 +2170,16 @@ function carteResultat(pays, opts){
   opts = opts || {};
   var W = PROJ.W, H = PROJ.H;
   var mid = 'cres' + (++_cresSeq);
-  CRES_INFOS[mid] = { pays: pays, absent: opts.absent || '', horsUE: opts.horsUE || '' };
+  CRES_INFOS[mid] = { pays: pays, absent: opts.absent || '', horsUE: opts.horsUE || '',
+                      /* Ce qu'un clic ferait, dit par la carte qui l'offre : le
+                         comparateur ouvre une fiche, l'enveloppe un dossier
+                         chiffré. Un libellé commun mentirait à l'une des deux. */
+                      action: opts.action || '' };
   var s = '<svg class="cres-svg" data-cres="' + mid + '" viewBox="0 0 ' + W + ' ' + H + '" '
         + 'preserveAspectRatio="xMidYMid meet" role="img" aria-label="'
         + esc(opts.alt || 'Carte de résultat par pays') + '">'
         + '<rect width="' + W + '" height="' + H + '" fill="#DDE3EA"/>';
-  var neutres = '', colores = '', etiquettes = '';
+  var neutres = '', halos = '', colores = '', etiquettes = '';
   Object.keys(CHEMINS).forEach(function(code){
     var d = cheminPays(code);
     if(!d) return;
@@ -2139,8 +2191,13 @@ function carteResultat(pays, opts){
          sans lui, un pays classé mais sans dossier chiffré offrirait une main
          de curseur et n'irait nulle part, ce qui est pire que rien. */
       var vaQuelquePart = r.aller !== false;
+      /* Les trois premiers portent l'appel : ce sont eux que le lecteur cherche,
+         et c'est sur eux que la carte doit dire qu'elle s'ouvre. */
+      var podium = vaQuelquePart && r.rang && r.rang <= 3;
+      if(podium) halos += '<path class="cres-halo cres-appel" d="' + d + '" aria-hidden="true"/>';
       colores += '<path d="' + d + '" fill="' + r.couleur + '" stroke="#FFF" '
-        + 'stroke-width="0.7" class="cres-pays" data-code="' + esc(code) + '" '
+        + 'stroke-width="0.7" class="cres-pays'
+        + (podium ? ' cres-top cres-appel' : '') + '" data-code="' + esc(code) + '" '
         + (vaQuelquePart ? 'data-podium="' + esc(code) + '" ' : '')
         + 'tabindex="0" role="' + (vaQuelquePart ? 'button' : 'img') + '" aria-label="'
         + esc(r.titre || (nomPays(code) + ' — ' + (r.valeur || '')))
@@ -2168,7 +2225,9 @@ function carteResultat(pays, opts){
        doit donc en RENDRE l'infobulle au lieu de la faire disparaître — c'est
        ce qui lui permet de redevenir cliquable sans rien coûter au survol. */
     var mene = r.aller !== false;
-    etiquettes += '<g class="cres-rg"' + (mene ? ' data-podium="' + esc(code) + '"' : '')
+    var pod3 = mene && r.rang <= 3;
+    etiquettes += '<g class="cres-rg' + (pod3 ? ' cres-top cres-appel' : '') + '"'
+      + (mene ? ' data-podium="' + esc(code) + '"' : '')
       + ' data-code="' + esc(code) + '" tabindex="0" role="' + (mene ? 'button' : 'img') + '"'
       + ' aria-label="Rang ' + r.rang + ' — ' + esc(nomPays(code) || code)
       + (mene ? ', voir le détail' : '') + '"><circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1)
@@ -2177,7 +2236,9 @@ function carteResultat(pays, opts){
       + 'font-size="14" font-weight="700" fill="' + r.couleur + '">' + r.rang + '</text></g>';
   });
   cresTipInit();
-  return s + neutres + colores + etiquettes + '</svg>';
+  /* Les halos entre les gris et les colorés : ils débordent des trois pays du
+     podium sans jamais passer devant eux ni devant les pastilles. */
+  return s + neutres + halos + colores + etiquettes + '</svg>';
 }
 
 /* Contenu de l'infobulle. `r.lignes` est fourni par l'appelant : le
@@ -2217,6 +2278,12 @@ function cresTipHtml(mid, code){
   });
   if(r.valeurs) h += '<div class="t-ent">' + esc(r.valeurs) + '</div>';
   if(r.pied) h += '<div class="t-pied">' + esc(r.pied) + '</div>';
+  /* CE QU'UN CLIC FERAIT, écrit là où le lecteur regarde déjà. L'infobulle
+     donnait les chiffres du pays sans jamais dire qu'on pouvait aller plus
+     loin : la liaison n'était découverte que par accident. Elle n'est promise
+     qu'aux pays qui ont vraiment une destination. */
+  if(inf.action && r.aller !== false)
+    h += '<div class="t-act">→ ' + esc(inf.action) + '</div>';
   return h;
 }
 
@@ -2231,9 +2298,25 @@ function cresTipHtml(mid, code){
    page à chaque pixel parcouru, y compris loin de toute carte. */
 var _cresTip = null, _cresSuivi = false;
 
+/* Le battement s'éteint au premier geste sur la carte : il appelait un clic,
+   le clic est venu — ou le survol, qui prouve que le lecteur a trouvé la
+   carte. Continuer à clignoter après serait de l'insistance, pas du guidage.
+   Seule la carte touchée s'apaise : l'autre n'a pas encore été vue. */
+function cresAppelFini(el){
+  var svg = el && el.closest ? el.closest('[data-cres]') : null;
+  if(!svg) return;
+  svg.querySelectorAll('.cres-appel').forEach(function(x){ x.classList.remove('cres-appel'); });
+}
+
 function cresTipInit(){
   if(window.__cresTipPose) return;
   window.__cresTipPose = true;
+  document.addEventListener('mouseover', function(ev){
+    if(ev.target && ev.target.closest) cresAppelFini(ev.target);
+  });
+  document.addEventListener('click', function(ev){
+    if(ev.target && ev.target.closest) cresAppelFini(ev.target);
+  });
   /* `closest` et non `getAttribute` : la pastille de rang est un <g> dont le
      survol atteint d'abord le <circle> ou le <text> qu'il contient. Lire
      l'attribut sur la cible seule laissait ces deux enfants sans pays, et
@@ -5452,9 +5535,12 @@ function carteImplantation(toutes){
     + 'venez de régler</b> — ce n’est pas une propriété du référentiel, c’est le résultat de '
     + 'votre arbitrage. Les trois premiers portent leur rang ; le classement complet est '
     + 'juste en dessous. <b>Cliquez un pays coloré — ou sa pastille de rang — pour ouvrir '
-    + 'sa fiche détaillée</b> dans le texte qui suit.</p>'
+    + 'sa fiche détaillée</b> dans le texte qui suit : les trois premiers sont cerclés de '
+    + 'bleu et clignotent brièvement pour vous les désigner, et le survol de n’importe quel '
+    + 'pays en donne le détail chiffré avant même de cliquer.</p>'
     + carteResultat(pays, { alt: "Carte de l’Union européenne colorée par le score "
         + "d’implantation pondéré, du plus favorable au moins favorable.",
+        action: "cliquez pour ouvrir la fiche détaillée de ce pays",
         absent: "État membre absent du référentiel d’implantation : il n’a pas de note, "
               + "ce qui n’est pas la même chose qu’une mauvaise note." })
     + '<div class="cres-lg">'
@@ -8715,10 +8801,13 @@ if(window.parent&&window.parent!==window){
       + 'afficherait un aplat uniforme. <b>Les pays en gris clair n’ont pas perdu : ils '
       + 'n’ont pas été calculés.</b> Ajoutez-les au comparateur pour qu’ils apparaissent. '
       + '<b>Cliquez un pays coloré — ou sa pastille de rang — pour aller à son dossier '
-      + 'chiffré</b> plus bas.</p>'
+      + 'chiffré</b> plus bas : les trois premiers sont cerclés de bleu et clignotent '
+      + 'brièvement pour vous les désigner, et le survol donne coût total, enveloppe et '
+      + 'délai avant même de cliquer.</p>'
       + window.carteResultat(pays, { rangsMax: C.length,
           alt: 'Carte de l’Union européenne : les pays comparés, '
              + 'colorés du meilleur au moins bon coût total de possession.',
+          action: 'cliquez pour aller au dossier chiffré de ce pays',
           absent: 'État membre non comparé : aucun calcul n’a été lancé pour lui. '
                 + 'Ajoutez-le au comparateur pour qu’il reçoive une enveloppe et un rang.' })
       + '<div class="cres-lg">'

@@ -270,7 +270,161 @@ const ok = (n, c, d) => { console.log('  ' + (c ? 'OK ' : 'KO ') + '  ' + n + (d
        (await pg.evaluate(() => IMPL_DEPLIE)) === past.code, past.code);
   }
 
-  console.log('\n══ 6. Discrimination : l’ancienne carte ne répondait pas ══\n');
+  console.log('\n══ 6. Le guidage : bleu, clignotement bref, et une consigne ══\n');
+  /* Une liaison qui ne se découvre qu'en survolant ne se découvre pas. Trois
+     signes la portent — et chacun a ses limites, qu'on vérifie aussi. */
+  await pg.evaluate(() => { IMPL_DEPLIE = null; renderImplClassement(); });
+  await pg.waitForTimeout(200);
+  const signes = await pg.evaluate(() => {
+    const q = s => [...document.querySelectorAll('#imp-classement ' + s)];
+    const top = q('.cres-pays.cres-top');
+    const cs = top.length ? getComputedStyle(top[0]) : null;
+    /* Le trait se mesure AU REPOS. Pendant le battement, le style calculé rend
+       la valeur interpolée de l'instant — on a lu un bleu délavé à 1,98 px là
+       où la règle en pose un franc à 1,5. Un contrôle qui mesure une animation
+       en cours ne mesure rien de stable. */
+    const t2 = top.length ? top[0].cloneNode(false) : null;
+    if (t2) { t2.classList.remove('cres-appel');
+              top[0].parentNode.appendChild(t2); }
+    const repos = t2 ? getComputedStyle(t2) : null;
+    const val = { trait: repos && repos.stroke, epaisseur: repos && parseFloat(repos.strokeWidth) };
+    if (t2) t2.remove();
+    return {
+      nTop: top.length,
+      nAppel: q('.cres-pays.cres-appel').length,
+      pastAppel: q('.cres-rg.cres-appel').length,
+      trait: val.trait, epaisseur: val.epaisseur,
+      anim: cs && cs.animationName,
+      cycles: cs && cs.animationIterationCount,
+      duree: cs && cs.animationDuration,
+      /* Le surlignage doit désigner LE PODIUM, pas tous les pays : autrement il
+         ne désigne rien. */
+      codes: top.map(p => p.getAttribute('data-code')).sort(),
+      rangs: q('.cres-rg[data-podium]').map(g => g.getAttribute('data-podium')).sort(),
+      autresSoulignes: q('.cres-pays:not(.cres-top)').filter(
+        p => getComputedStyle(p).stroke === 'rgb(28, 92, 171)').length,
+    };
+  });
+  ok('trois pays seulement portent le surlignage', signes.nTop === 3, signes.nTop);
+  ok('…et ce sont exactement ceux du podium',
+     JSON.stringify(signes.codes) === JSON.stringify(signes.rangs),
+     signes.codes.join(',') + ' vs ' + signes.rangs.join(','));
+  ok('…aucun autre pays n’est cerclé de bleu', signes.autresSoulignes === 0,
+     signes.autresSoulignes);
+  ok('le surlignage est BLEU, et épais', signes.trait === 'rgb(28, 92, 171)'
+     && signes.epaisseur >= 1.4, signes.trait + ' · ' + signes.epaisseur + 'px');
+  ok('les trois clignotent', signes.nAppel === 3 && signes.anim === 'cres-appel',
+     signes.nAppel + ' · ' + signes.anim);
+  ok('…et leurs pastilles avec eux', signes.pastAppel === 3, signes.pastAppel);
+
+  /* LE HALO. Un liseré fin ne suffit pas quand les trois premiers sont
+     VOISINS — Suède, Norvège, Finlande ne forment qu'un bloc, et le trait qui
+     les sépare est intérieur, donc invisible. */
+  const halo = await pg.evaluate(() => {
+    const h = [...document.querySelectorAll('#imp-classement .cres-halo')];
+    const cs = h.length ? getComputedStyle(h[0]) : null;
+    const svg = document.querySelector('#imp-classement .cres-svg');
+    const kids = [...svg.children];
+    const iHalo = kids.indexOf(h[0]);
+    const iPays = kids.findIndex(x => x.classList.contains('cres-pays'));
+    const iRang = kids.findIndex(x => x.classList.contains('cres-rg'));
+    return { n: h.length, trait: cs && cs.stroke, clics: cs && cs.pointerEvents,
+             flou: cs && cs.filter, anim: cs && cs.animationName,
+             cycles: cs && cs.animationIterationCount,
+             sousLesPays: iHalo >= 0 && iPays >= 0 && iHalo < iPays,
+             sousLesRangs: iHalo >= 0 && iRang >= 0 && iHalo < iRang,
+             /* Le halo reprend le contour EXACT du pays qu'il désigne. */
+             memeContour: h.every(x => [...document.querySelectorAll('#imp-classement .cres-top')]
+               .some(p => p.getAttribute('d') === x.getAttribute('d'))) };
+  });
+  ok('trois halos bleus, un par pays du podium', halo.n === 3
+     && halo.trait === 'rgb(28, 92, 171)', halo.n + ' · ' + halo.trait);
+  ok('…flous, pour déborder du contour sans le durcir', /blur/.test(halo.flou || ''),
+     halo.flou);
+  ok('…et posés SOUS les pays et sous les pastilles',
+     halo.sousLesPays && halo.sousLesRangs);
+  ok('…sur le contour exact du pays désigné, pas un cercle approximatif',
+     halo.memeContour);
+  /* Un halo qui intercepterait le pointeur volerait le clic au pays : la
+     liaison qu'on vient de créer serait cassée par son propre signal. */
+  ok('…et il n’intercepte NI le clic NI le survol', halo.clics === 'none', halo.clics);
+  ok('le halo bat au même rythme que le reste, et compté',
+     halo.anim === 'cres-appel-halo' && +halo.cycles === +signes.cycles,
+     halo.anim + ' × ' + halo.cycles);
+  /* UN CLIGNOTEMENT SANS FIN EST UNE NUISANCE, et c'est aussi une faute
+     d'accessibilité. Il doit être BREF et COMPTÉ. */
+  ok('le clignotement est compté, pas infini',
+     signes.cycles !== 'infinite' && +signes.cycles > 0 && +signes.cycles <= 8,
+     signes.cycles + ' battements de ' + signes.duree);
+  ok('…et sa durée totale reste sous huit secondes',
+     +signes.cycles * parseFloat(signes.duree) < 8,
+     (+signes.cycles * parseFloat(signes.duree)).toFixed(1) + ' s');
+  ok('…à plus d’une seconde par battement — jamais un stroboscope',
+     parseFloat(signes.duree) >= 1, signes.duree);
+
+  /* Il s'éteint au premier geste : une invitation acceptée cesse d'insister.
+     Le voisinage se teste sur une carte TÉMOIN posée pour l'occasion : mesurer
+     l'état de la carte de l'enveloppe dépendrait de tout ce que les sections
+     précédentes lui ont fait survoler, et le contrôle dirait le hasard. */
+  const apaise = await pg.evaluate(() => {
+    const t = document.createElement('div');
+    t.id = 'recette-temoin';
+    t.innerHTML = window.carteResultat(
+      { FR: { couleur: '#2D7A47', rang: 1, valeur: 1 } }, { rangsMax: 3 });
+    document.body.appendChild(t);
+    const avant = t.querySelectorAll('.cres-appel').length;
+    const p = document.querySelector('#imp-classement .cres-pays.cres-appel');
+    p.dispatchEvent(new MouseEvent('mouseover', { bubbles: true }));
+    const r = { avantTemoin: avant,
+                imp: document.querySelectorAll('#imp-classement .cres-appel').length,
+                temoin: t.querySelectorAll('.cres-appel').length,
+                topRestants: document.querySelectorAll('#imp-classement .cres-pays.cres-top').length,
+                classes: document.querySelector('#imp-classement .cres-pays.cres-top').getAttribute('class') };
+    t.remove();
+    return r;
+  });
+  ok('un survol éteint le clignotement de CETTE carte', apaise.imp === 0, apaise.imp);
+  ok('…et une autre carte clignotait bien au même moment',
+     apaise.avantTemoin > 0, apaise.avantTemoin);
+  ok('…qu’il n’éteint PAS : chaque carte s’apaise pour elle seule',
+     apaise.temoin === apaise.avantTemoin, apaise.temoin);
+  ok('…mais le surlignage bleu, lui, demeure',
+     apaise.topRestants === 3 && /cres-top/.test(apaise.classes), apaise.classes);
+
+  /* L'INFOBULLE DIT CE QU'UN CLIC FERAIT. Sans cette ligne, elle donnait les
+     chiffres sans jamais nommer la porte. */
+  const guide = await pg.evaluate(() => {
+    const dire = (sel) => {
+      const el = document.querySelector(sel);
+      if (!el) return null;
+      el.dispatchEvent(new MouseEvent('mouseover', { bubbles: true, clientX: 300, clientY: 300 }));
+      const t = document.querySelector('.cres-tip');
+      return t && t.classList.contains('on') ? t.innerText : null;
+    };
+    return { top: dire('#imp-classement .cres-pays[data-podium]'),
+             gris: dire('#imp-classement .cres-abs'),
+             fin: dire('.cres-pays[data-podium]:not(#imp-classement .cres-pays)') };
+  });
+  ok('l’infobulle du comparateur invite à ouvrir la FICHE',
+     /cliquez pour ouvrir la fiche détaillée/i.test(guide.top || ''),
+     (guide.top || '').split('\n').pop());
+  ok('celle de l’enveloppe invite à ouvrir le DOSSIER CHIFFRÉ',
+     /cliquez pour aller au dossier chiffré/i.test(guide.fin || ''),
+     (guide.fin || '').split('\n').pop());
+  ok('…les deux cartes ne se copient donc pas l’une l’autre',
+     (guide.top || '') !== (guide.fin || ''));
+  ok('un pays NON calculé ne reçoit aucune invitation',
+     !/cliquez pour/i.test(guide.gris || ''),
+     (guide.gris || '').split('\n').pop());
+  ok('…et il explique quand même pourquoi il est gris',
+     /non comparé|hors du référentiel/i.test(guide.gris || ''));
+  const notes = await pg.evaluate(() =>
+    [...document.querySelectorAll('.cres-note')].map(x => x.innerText));
+  ok('les deux notes annoncent le signal bleu',
+     notes.filter(t => /cerclés de bleu et clignotent/.test(t)).length >= 2,
+     notes.filter(t => /cerclés de bleu/.test(t)).length + ' notes sur ' + notes.length);
+
+  console.log('\n══ 7. Discrimination : l’ancienne carte ne répondait pas ══\n');
   /* On remet la carte dans l'état d'hier — pastilles inertes, pays sans cible —
      et on refait EXACTEMENT les mêmes gestes. */
   const avant = await pg.evaluate(async () => {
@@ -299,7 +453,7 @@ const ok = (n, c, d) => { console.log('  ' + (c ? 'OK ' : 'KO ') + '  ' + n + (d
      (await pg.evaluate(() =>
        document.querySelectorAll('#imp-classement .cres-pays[data-podium]').length)) > 10);
 
-  console.log('\n══ 7. Une cible n’est offerte que si elle existe ══\n');
+  console.log('\n══ 8. Une cible n’est offerte que si elle existe ══\n');
   const gris = await pg.evaluate(() => ({
     absents: document.querySelectorAll('#imp-classement .cres-abs[data-podium]').length,
     horsUE: document.querySelectorAll('#imp-classement .cres-hue[data-podium]').length,
@@ -328,7 +482,7 @@ const ok = (n, c, d) => { console.log('  ' + (c ? 'OK ' : 'KO ') + '  ' + n + (d
   ok('…tandis qu’un pays qui en a une la porte, en rôle de bouton',
      gris.faux.avecCible && gris.faux.roleDE === 'button', gris.faux.roleDE);
 
-  console.log('\n══ 8. Au clavier, et malgré un filtre actif ══\n');
+  console.log('\n══ 9. Au clavier, et malgré un filtre actif ══\n');
   await pg.evaluate(() => { IMPL_DEPLIE = null; renderImplAvis(); });
   const clav = await pg.evaluate(() => {
     const p = document.querySelector('#imp-classement .cres-pays[data-podium]');
@@ -366,7 +520,7 @@ const ok = (n, c, d) => { console.log('  ' + (c ? 'OK ' : 'KO ') + '  ' + n + (d
      filtre.actifs.length === 0, filtre.actifs.join(','));
   ok('…et le bloc reprend bien toutes ses fiches', filtre.fiches > 10, filtre.fiches);
 
-  console.log('\n══ 9. La même liaison sur la carte de l’enveloppe ══\n');
+  console.log('\n══ 10. La même liaison sur la carte de l’enveloppe ══\n');
   const cibleFin = await viser('.cres-pays[data-podium]:not(#imp-classement .cres-pays)');
   ok('un pays comparé y est atteignable à la souris', !!cibleFin,
      JSON.stringify(cibleFin));
@@ -393,7 +547,7 @@ const ok = (n, c, d) => { console.log('  ' + (c ? 'OK ' : 'KO ') + '  ' + n + (d
      (dits.fin.match(/Cliquez un pays coloré/g) || []).length >= 2,
      (dits.fin.match(/Cliquez un pays coloré/g) || []).length + ' mentions');
 
-  console.log('\n══ 10. Ce que ces deux gestes ne devaient PAS casser ══\n');
+  console.log('\n══ 11. Ce que ces deux gestes ne devaient PAS casser ══\n');
   const reste = await pg.evaluate(() => ({
     horizon: !!document.getElementById('dc-horizon'),
     fond: !!document.getElementById('vue-fond'),
