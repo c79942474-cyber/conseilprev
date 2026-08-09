@@ -23708,6 +23708,13 @@ document.addEventListener('DOMContentLoaded', function(){ if(window.cartoInit) w
 <script>
 /* ══ PARCOURS GUIDES — onboarding par profil utilisateur ══ */
 /* ══ PARCOURS GUIDES — onboarding pedagogique par profil utilisateur ══ */
+
+/* LE MILLESIME DU REFERENTIEL, ECRIT UNE SEULE FOIS. Il etait recopie dans six
+   listes de sources ; corriger deux statuts de chantier a fait passer le module
+   en 2026-08-d et la page a continue d'annoncer 2026-08-b, c'est-a-dire une
+   fraicheur de donnees fausse — la seule information de cette ligne. Une
+   recette rapproche desormais cette constante de datacentres.VERSION. */
+var DC_MILLESIME = "2026-08-d";
 var GUIDED_PATHS = [
   {
     id: 'directeur_programme',
@@ -23879,7 +23886,7 @@ var GUIDED_PATHS = [
        action:'Reprenez le même module par le chemin « Eau & biodiversité » : indice WEI+ de l’Agence européenne, part de l’irrigation agricole, mode de refroidissement retenu.',
        gain:'Le point où un refroidissement évaporatif entre en compétition d’usage avec l’agriculture — c’est souvent là que se joue le permis, pas dans le dossier électrique.',
        tip:'Un aéroréfrigérant sec affiche zéro eau SUR SITE tout en consommant davantage à la source sur un réseau thermique : WUE_source = WUE_site + EWIF × PUE.',
-       sources: ["Agence européenne pour l’environnement — WEI+ et part de l’irrigation agricole", "Référentiel des 249 centres de données CONSEILPREV, version 2026-08-b — mode de refroidissement déclaré ou déduit"],
+       sources: ["Agence européenne pour l’environnement — WEI+ et part de l’irrigation agricole", "Référentiel des 249 centres de données CONSEILPREV, version " + DC_MILLESIME + " — mode de refroidissement déclaré ou déduit"],
        calcul: "WUE_source = WUE_site + EWIF × PUE. L’eau du site et l’eau de la source sont tenues séparées : un aéroréfrigérant sec affiche zéro sur site et davantage à la source.",
        livrable: "Lecture « eau » du classement, et fiche eau par pays.",
        ia: "Aucun modèle. Tout est calculé côté serveur, formule affichée."},
@@ -23919,7 +23926,7 @@ var GUIDED_PATHS = [
        action:'Parcourez le fond de carte « intensité carbone du réseau » et le tableau d’empreinte par pays, poste par poste.',
        gain:'La distinction entre l’empreinte d’usage et l’empreinte totale — et la raison pour laquelle un pays gris n’est pas un pays à zéro.',
        tip:'Aucun des 249 sites ne publie sa capacité, son PUE ni sa consommation : presque tout ce que vous lisez est de nature « classe », et la page le dit.',
-       sources: ["Ember — mix de production 2024", "ADEME, AIE, GIEC — facteurs d’émission sur cycle de vie", "Référentiel des 249 centres de données, version 2026-08-b"],
+       sources: ["Ember — mix de production 2024", "ADEME, AIE, GIEC — facteurs d’émission sur cycle de vie", "Référentiel des 249 centres de données, version " + DC_MILLESIME],
        calcul: "Intensité carbone appliquée à la consommation estimée. Chaque valeur porte sa NATURE : publié, site (capacité annoncée) ou classe (ordre de grandeur de la catégorie).",
        livrable: "Tableau d’empreinte par pays et fond de carte « intensité carbone ».",
        ia: "Aucun modèle. Tout est calculé côté serveur, formule affichée."},
@@ -23935,7 +23942,7 @@ var GUIDED_PATHS = [
        action:'Dans la section Empreinte, comparez usage, fabrication amortie et eau pays par pays, et regardez la NATURE de chaque valeur avant de la retenir.',
        gain:'Des ordres de grandeur défendables, et la part de fabrication — majoritaire dès que le réseau est décarboné, invisible sur une carte qui n’afficherait que l’usage.',
        tip:'Cette page ne chiffre PAS votre parc : elle donne le référentiel auquel le comparer. Le calcul site par site — PUE et WUE mesurés, carbone incorporé de vos équipements — relève d’une étude d’ingénierie, pas d’un formulaire.',
-       sources: ["ADEME — Base Empreinte, facteurs d’émission sur cycle de vie, appliqués par le référentiel d’empreinte version 2026-07-a","Agence internationale de l’énergie et Centre commun de recherche de la Commission (JRC)","Référentiel des 249 centres de données CONSEILPREV, version 2026-08-b"],
+       sources: ["ADEME — Base Empreinte, facteurs d’émission sur cycle de vie, appliqués par le référentiel d’empreinte version 2026-07-a","Agence internationale de l’énergie et Centre commun de recherche de la Commission (JRC)","Référentiel des 249 centres de données CONSEILPREV, version " + DC_MILLESIME],
        calcul: "usage = électricité × intensité carbone du pays ; fabrication amortie sur la durée de vie ; eau de refroidissement. ERE = PUE × (1 − ERF), qui peut descendre sous 1 quand la chaleur est valorisée.",
        livrable: "Tableau d’empreinte par pays et fiches pays, à l’écran et à l’impression.",
        ia: "Aucun modèle. Formules exécutées côté serveur et affichées."},
@@ -23967,7 +23974,7 @@ var GUIDED_PATHS = [
        action:'Même module, angle assurantiel : exposition physique, dépendance au réseau, concentration géographique.',
        gain:'Les cumuls d’exposition qu’une lecture site par site ne fait pas apparaître.',
        tip:'La concentration se lit sur la carte, pas dans le dossier d’un site : plusieurs preneurs peuvent dépendre du même point de raccordement.',
-       sources: ["Référentiel des 249 centres de données CONSEILPREV, version 2026-08-b — implantation et exploitant", "Copernicus, DINUM et NASA via /api/donnees-ouvertes, pour la couche ouverte"],
+       sources: ["Référentiel des 249 centres de données CONSEILPREV, version " + DC_MILLESIME + " — implantation et exploitant", "Copernicus, DINUM et NASA via /api/donnees-ouvertes, pour la couche ouverte"],
        calcul: "Concentration lue sur la carte : plusieurs preneurs peuvent dépendre du même point de raccordement. Aucun modèle actuariel n’est appliqué.",
        livrable: "Vue d’exposition et fiches site, avec la nature de chaque valeur.",
        ia: "Aucun modèle. Tout est calculé côté serveur, formule affichée."},
@@ -23999,7 +24006,7 @@ var GUIDED_PATHS = [
        action:'Parcourez le référentiel avec la question du reporting : quelle donnée est opposable, laquelle est un ordre de grandeur.',
        gain:'La nature de chaque valeur — publié, site, classe — écrite noir sur blanc, ce qui est exactement ce qu’un commissaire demandera.',
        tip:'« Classe » répond à « de quel ordre est un campus de ce type ? », jamais à « combien consomme ce site ? ». Ne franchissez pas cette ligne dans un rapport.',
-       sources: ["Référentiel des 249 centres et des 72 systèmes d’IA, version 2026-08-b", "Registre des contrôles factuels — 40 affirmations vérifiées"],
+       sources: ["Référentiel des 249 centres et des 72 systèmes d’IA, version " + DC_MILLESIME, "Registre des contrôles factuels — 40 affirmations vérifiées"],
        calcul: "Aucun calcul nouveau : on LIT la nature de chaque valeur. « Classe » répond à « de quel ordre est un campus de ce type ? », jamais à « combien consomme ce site ? ».",
        livrable: "Export CSV des cas filtrés, et fiches site avec leur nature.",
        ia: "Aucun modèle. Tout est calculé côté serveur, formule affichée."},
@@ -24007,7 +24014,7 @@ var GUIDED_PATHS = [
        action:'Relevez, pour chaque valeur que vous comptez citer, si elle est publiée, calculée depuis le site ou déduite d’une classe — l’infobulle le dit à chaque fois.',
        gain:'Un rapport dont chaque chiffre porte sa qualification, ce qu’un commissaire aux comptes demandera avant toute autre chose.',
        tip:'Aucune de ces valeurs n’est votre reporting : ce sont des repères de marché. Vos propres postes se calculent sur vos factures et vos contrats d’hébergement — Sentinel ne les collecte pas.',
-       sources: ["Référentiel des 249 centres et des 72 systèmes d’IA, versions 2026-08-b et 2026-07-b","Registre des contrôles factuels, version 2026-07-a — 40 affirmations vérifiées","ADEME, AIE, JRC et GIEC pour les facteurs appliqués"],
+       sources: ["Référentiel des 249 centres et des 72 systèmes d’IA, versions " + DC_MILLESIME + " et 2026-07-b","Registre des contrôles factuels, version 2026-07-a — 40 affirmations vérifiées","ADEME, AIE, JRC et GIEC pour les facteurs appliqués"],
        calcul: "Aucun calcul nouveau : on LIT la nature de chaque valeur. « Classe » répond à « de quel ordre est un campus de ce type ? », jamais à « combien consomme ce site ? ».",
        livrable: "Export CSV des cas filtrés, et fiches site portant la nature de chaque valeur.",
        ia: "Aucun modèle. La nature de chaque valeur est posée par le référentiel, pas déduite à la volée."},

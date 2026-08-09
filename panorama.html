@@ -4138,7 +4138,7 @@ function tipDC(id){
    L'information de STATUT ne se perd pas : elle passe au mât et au socle, en
    couleur pleine, et le cartouche reste en pointillé pour un projet — la
    convention qui existait déjà sur les carrés qu'ils remplacent. */
-function drapeauDC(s, x, y, st, projet, futur){
+function drapeauDC(s, x, y, st, projet, futur, attendu, sansDate){
   var col = st.couleur || "#7A7A7A";
   /* Le groupe est ANCRÉ au point et contre-échellé par [data-anc] : à
      l'intérieur, tout est en unités d'écran constantes, origine (0,0) au pied
@@ -4150,7 +4150,7 @@ function drapeauDC(s, x, y, st, projet, futur){
   var bx = -lc / 2, by = -H;
   return '<g class="dc-pt' + (projet ? " projet" : "") + '" data-anc="'
     + x.toFixed(1) + "," + y.toFixed(1) + '" data-dc="' + s.id + '"'
-    + (futur ? ' opacity="0.3"' : '') + ">"
+    + (futur ? ' opacity="0.22"' : '') + ">"
     /* Mât : il porte la couleur du statut et descend jusqu'au point exact. */
     + '<rect x="' + bx + '" y="' + by + '" width="' + lm + '" height="' + H
     + '" fill="' + esc(col) + '" stroke="none" rx="0.5"/>'
@@ -4159,7 +4159,22 @@ function drapeauDC(s, x, y, st, projet, futur){
     + '<rect class="dc-cloth" x="' + (bx + lm) + '" y="' + by + '" width="' + lc
     + '" height="' + hc + '" fill="#003399" rx="0.7"/>'
     + etoileOr(bx + lm + lc / 2, by + hc / 2, 1.85 * e)
-    /* Socle : la pastille de statut, posée sur l'emplacement réel du site. */
+    /* Socle : la pastille de statut, posée sur l'emplacement réel du site.
+       Elle porte aussi l'ÉTAT DANS LE TEMPS, parce que c'est la pièce la plus
+       lisible du marqueur à toutes les échelles :
+         anneau doré  — le projet est ATTENDU d'ici l'année choisie ;
+         anneau creux — projet réel SANS date annoncée, montré à toutes les
+                        années plutôt que rejeté dans un avenir inconnu. */
+    + (attendu
+        ? '<circle cx="0" cy="0" r="' + (4.1 * e).toFixed(2)
+          + '" fill="none" stroke="#C9A227" stroke-width="' + (1.5 * e).toFixed(2)
+          + '" vector-effect="non-scaling-stroke"/>'
+        : sansDate
+          ? '<circle cx="0" cy="0" r="' + (3.6 * e).toFixed(2)
+            + '" fill="none" stroke="' + esc(col) + '" stroke-width="'
+            + (1.1 * e).toFixed(2) + '" stroke-dasharray="1.6 1.4"'
+            + ' vector-effect="non-scaling-stroke"/>'
+          : "")
     + '<circle cx="0" cy="0" r="' + (2.1 * e).toFixed(2) + '" fill="' + esc(col) + '"/></g>';
 }
 
@@ -4267,11 +4282,16 @@ function renderRegions(){
   g.innerHTML = out;
 }
 
-function renderDC(){
+/* `sansHabillage` : on redessine les marqueurs SANS reconstruire la légende ni
+   la barre de commandes. C'est ce qu'exige le curseur d'année — `majLegendeDC`
+   appelle `majBarre`, qui recrée le curseur, et un curseur recréé pendant qu'on
+   le tient cesse de suivre le doigt. Rien n'est perdu : le contenu de la
+   légende (statuts, comptes du parc) ne dépend pas de l'année. */
+function renderDC(sansHabillage){
   var g = document.querySelector("#panmap #dc-couche");
   if(!g || !DC) return;
   renderRegions();
-  if(!DC_VISIBLE){ g.innerHTML = ""; majLegendeDC(); return; }
+  if(!DC_VISIBLE){ g.innerHTML = ""; if(!sansHabillage) majLegendeDC(); return; }
   var inv = 1 / (ZOOM.k || 1), out = "";
   DC.sites.forEach(function(s){
     if(typeof s.lat !== "number" || typeof s.lon !== "number") return;
@@ -4280,8 +4300,14 @@ function renderDC(){
     var st = (DC.statuts || {})[s.statut] || {};
     var cote = 8.5, projet = (s.statut === "annonce" || s.statut === "autorise");
     var c = cote * inv;
-    /* Apres l'horizon choisi : estompe, pas masque. */
-    var futur = s.annee_service && s.annee_service > DC_HORIZON && s.statut !== "service";
+    /* L'ÉTAT À L'ANNÉE CHOISIE. L'ancien test comparait `annee_service`, que
+       AUCUN projet ne porte : il était donc faux quel que soit le curseur, et
+       déplacer celui-ci de 2025 à 2030 ne changeait rien à l'écran. C'est
+       exactement ce qui nous a été signalé. */
+    var etat = etatDC(s, DC_HORIZON);
+    var futur = (etat === "plus_tard");
+    var attendu = (etat === "attendu");
+    var sansDate = (etat === "sans_date");
     /* Cible de survol invisible, deux fois plus large que le marqueur : a 8 px
        de cote, viser un carre a la souris demande une precision que le travail
        quotidien ne tolere pas. Elle porte le meme data-dc, la delegation la
@@ -4308,11 +4334,11 @@ function renderDC(){
              + y.toFixed(1) + '" r="' + (4.2 * dcEchelle() * inv).toFixed(2) + '" stroke="'
              + (st.couleur || "#7A7A7A") + '"'
              + (futur ? ' opacity="0.3"' : "") + "/>"
-           : drapeauDC(s, x, y, st, projet, futur));
+           : drapeauDC(s, x, y, st, projet, futur, attendu, sansDate));
   });
   g.innerHTML = out;
   ancrerGroupes(g);              /* sans quoi les drapeaux s'empilent en 0,0 */
-  majLegendeDC();
+  if(!sansHabillage) majLegendeDC();
 }
 
 function majLegendeDC(){
@@ -4329,6 +4355,28 @@ function majLegendeDC(){
     if(nReg) h += '<div class="lg-row lg-dc"><svg width="14" height="12" aria-hidden="true">'
       + '<circle cx="7" cy="6" r="4" fill="none" stroke="#7A7A7A" stroke-width="1.5"/></svg>'
       + ' disque — inscrit par l’exploitant au registre (' + nReg + ')</div>';
+    /* CE QUE LE CURSEUR D'ANNÉE FAIT, écrit noir sur blanc. Trois anneaux, trois
+       situations : sans cette ligne, l'or et le pointillé seraient des ornements
+       et le lecteur croirait voir un parc là où il y a un calendrier. */
+    var proj = (DC.sites || []).filter(function(x){
+      return x.statut === "annonce" || x.statut === "construction" || x.statut === "autorise"; });
+    var dates = proj.filter(function(x){ return x.horizon_annonce; }).length;
+    if(proj.length){
+      h += '<div class="lg-row" style="margin-top:7px;padding-top:7px;border-top:1px solid var(--rule)">'
+        + '<b style="font-size:10px">Ce que montre le curseur d’année</b></div>'
+        + '<div class="lg-row lg-dc"><svg width="14" height="12" aria-hidden="true">'
+        + '<circle cx="7" cy="6" r="4.6" fill="none" stroke="#C9A227" stroke-width="1.6"/>'
+        + '<circle cx="7" cy="6" r="2.1" fill="#7A7A7A"/></svg>'
+        + ' anneau doré — projet <b>attendu</b> d’ici l’année choisie</div>'
+        + '<div class="lg-row lg-dc" style="opacity:.4"><svg width="14" height="12" aria-hidden="true">'
+        + '<circle cx="7" cy="6" r="2.1" fill="#7A7A7A"/></svg>'
+        + ' estompé — annoncé <b>au-delà</b> de cette année</div>'
+        + '<div class="lg-row lg-dc"><svg width="14" height="12" aria-hidden="true">'
+        + '<circle cx="7" cy="6" r="4" fill="none" stroke="#7A7A7A" stroke-width="1.2" stroke-dasharray="1.6 1.4"/>'
+        + '<circle cx="7" cy="6" r="2.1" fill="#7A7A7A"/></svg>'
+        + ' anneau pointillé — projet <b>sans date publiée</b> ('
+        + (proj.length - dates) + ' sur ' + proj.length + '), montré à toutes les années</div>';
+    }
     ["service", "construction", "autorise", "annonce"].forEach(function(k){
       var st = DC.statuts[k]; if(!st) return;
       var n = (DC.agregats.par_statut || {})[k] || 0; if(!n) return;
@@ -4362,19 +4410,46 @@ function majLegendeDC(){
    suivent l'année du relevé. Et surtout, l'échéance AI Act de chaque cas donne
    l'année où il tombe sous obligation : c'est la vague de conformité, et elle
    traverse vraiment la plage du curseur. */
+/* L'ÉTAT D'UN SITE À UNE ANNÉE DONNÉE — quatre cas, et le quatrième est
+   celui qui manquait.
+
+     service    il existe, et il existait déjà à cette date
+     attendu    projet dont l'horizon ANNONCÉ est atteint : il est censé
+                ouvrir d'ici là — c'est CELUI-CI que le curseur fait
+                apparaître, et c'est cette apparition qu'on ne voyait pas
+     plus_tard  annoncé pour après la date choisie
+     sans_date  projet réel dont AUCUN calendrier n'est publié
+
+   Le dernier cas n'est pas un détail : douze des dix-huit projets du
+   référentiel n'ont aucune date. Les estomper comme « plus tard » les
+   rejetterait dans un avenir qu'on ne connaît pas ; les compter comme
+   « attendus » leur prêterait une échéance que personne n'a annoncée. Ils
+   restent donc visibles à TOUTES les années, dans un état qui leur est propre.
+
+   `horizon_annonce` n'est PAS `annee_service` : l'un est un calendrier
+   d'opérateur, l'autre une mise en service constatée. Les confondre ferait
+   d'une intention un fait. */
+function etatDC(s, annee){
+  if(s.statut === "abandonne") return "abandonne";
+  if(s.statut === "service"){
+    return (s.annee_service && s.annee_service > annee) ? "plus_tard" : "service";
+  }
+  var h = s.horizon_annonce;
+  if(!h) return "sans_date";
+  return h <= annee ? "attendu" : "plus_tard";
+}
+
 function parcAu(annee){
-  var n = 0, annoncesSansDate = 0, datesFutures = 0;
+  var n = 0, sansDate = 0, plusTard = 0, attendus = 0;
   (DC && DC.sites || []).forEach(function(s){
-    if(s.statut === "abandonne") return;
-    var a = s.annee_service;
-    if(s.statut === "service"){
-      if(!a || a <= annee) n++; else datesFutures++;
-      return;
-    }
-    if(a){ if(a <= annee) n++; else datesFutures++; }
-    else annoncesSansDate++;
+    var e = etatDC(s, annee);
+    if(e === "abandonne") return;
+    if(e === "service") n++;
+    else if(e === "attendu"){ n++; attendus++; }
+    else if(e === "plus_tard") plusTard++;
+    else sansDate++;
   });
-  return {n: n, sansDate: annoncesSansDate, plusTard: datesFutures};
+  return {n: n, sansDate: sansDate, plusTard: plusTard, attendus: attendus};
 }
 
 /* La première année citée dans une échéance AI Act : « 2 août 2026 (annexe
@@ -4402,8 +4477,20 @@ function majComptes(){
   var p = parcAu(DC_HORIZON), a = siaAu(DC_HORIZON);
   var e = document.getElementById("dc-n");        if(e) e.textContent = p.n;
   e = document.getElementById("dc-hors");
-  if(e) e.textContent = p.sansDate
-    ? " · " + p.sansDate + " annoncés sans date de mise en service" : "";
+  if(e){
+    /* Trois nombres, trois natures — et les confondre ferait dire au compteur
+       plus que la donnée ne permet :
+         attendus  projets dont l'horizon ANNONCÉ est atteint à cette année,
+                   donc comptés dans le parc ; c'est l'évolution qu'on montre ;
+         plusTard  annoncés pour après, donc hors du compte ;
+         sansDate  projets réels dont aucun calendrier n'est publié — ni dans
+                   le parc, ni « plus tard » : simplement sans date. */
+    var bouts = [];
+    if(p.attendus) bouts.push("dont " + p.attendus + " attendus d’ici là");
+    if(p.plusTard) bouts.push(p.plusTard + " annoncés au-delà");
+    if(p.sansDate) bouts.push(p.sansDate + " projets sans date publiée");
+    e.textContent = bouts.length ? " · " + bouts.join(" · ") : "";
+  }
   e = document.getElementById("sia-n");           if(e) e.textContent = a.documentes;
   e = document.getElementById("sia-ob");          if(e) e.textContent = a.soumis;
   /* Les panneaux des systèmes d'IA suivent la même règle que les drapeaux :
@@ -4493,14 +4580,14 @@ function majBarre(){
     DC_HORIZON = +this.value;
     var v = document.getElementById("dc-horizon-v");
     if(v) v.textContent = this.value;
-    /* Seule l'opacite change : on retrace la couche, pas la legende, sinon le
-       curseur serait recree sous le doigt qui le tient. */
-    var g = document.querySelector("#panmap #dc-couche");
-    if(g) g.querySelectorAll(".dc-pt, .dc-reg").forEach(function(el){
-      var site = dcParId(el.getAttribute("data-dc"));
-      var futur = site && site.annee_service && site.annee_service > DC_HORIZON && site.statut !== "service";
-      if(futur) el.setAttribute("opacity", "0.3"); else el.removeAttribute("opacity");
-    });
+    /* AVANT : on ne touchait qu'à l'opacité, sur un test d'`annee_service` que
+       les projets ne portent pas — le curseur ne changeait donc rien pour eux.
+       MAINTENANT le socle doit apparaître ou disparaître selon que l'horizon
+       annoncé est atteint : c'est une forme, pas une transparence, et il faut
+       redessiner la couche. `renderDC()` suffit — il ne reconstruit ni la
+       barre ni la légende, le curseur n'est donc pas recréé sous le doigt qui
+       le tient. */
+    renderDC(true);
     majComptes();
   });
 }
