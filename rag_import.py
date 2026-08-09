@@ -167,6 +167,14 @@ FAMILLES = [
     ]),
 ]
 
+# Normalisation partagée : deux sections l'emploient — la déduction des pages
+# et l'appartenance à un périmètre. Elle est posée AVANT elles, plutôt qu'entre
+# les deux comme auparavant : Python s'en accommodait, pas le lecteur.
+def _sans_accents(t):
+    t = unicodedata.normalize("NFD", str(t or ""))
+    return "".join(c for c in t if not unicodedata.combining(c)).lower()
+
+
 FAMILLE_ENTREPRISES = "Entreprises & références"
 
 _INDEX_FAMILLE = {}
@@ -194,6 +202,85 @@ def est_entreprise(theme):
 
 
 # ═══════════════════════════════════════════════════════════════════════════
+# 1 bis. PÉRIMÈTRES DE RÉDACTION — une dimension à part, et il le fallait
+#
+#    LE PROBLÈME. Sentinel range ses documents par PAGE : audit, registre,
+#    fria, maturité, veille, raci, général. Ces sept pages parlent toutes IA
+#    Act et RGPD. Aucune ne parle Safety, incendie, DNV ou CCTP — si bien que
+#    tout ce qui vient d'Engineering atterrit dans « général », faute de
+#    mieux, et devient indistinguable du reste.
+#
+#    LA FAUSSE BONNE IDÉE, qu'on écarte. On pourrait forcer ces documents vers
+#    « audit » ou « registre » pour qu'ils cessent d'être orphelins. Ce serait
+#    poser une règle NFPA devant quelqu'un qui instruit un registre de systèmes
+#    d'IA : du bruit, pas de l'aide. Les pages restent ce qu'elles sont.
+#
+#    CE QU'ON FAIT. Un PÉRIMÈTRE est une seconde dimension, bâtie sur le thème
+#    d'origine — celui que l'import conserve déjà — et orthogonale aux pages.
+#    Elle sert à DISCRIMINER une rédaction : « je rédige une pièce d'incendie »
+#    n'est pas « je rédige un registre IA », et les deux puisent pourtant dans
+#    la même réserve.
+#
+#    ELLE PRIORISE, ELLE NE FILTRE PAS. Le périmètre fait remonter ce qui lui
+#    appartient ; il ne cache jamais le reste. Un document utile rangé ailleurs
+#    doit rester atteignable, sinon l'absence de résultat ne dirait plus si la
+#    pièce n'existe pas ou si elle est hors périmètre.
+# ═══════════════════════════════════════════════════════════════════════════
+
+#  cle, libellé, familles rattachées, mots reconnus dans le thème ou le nom
+PERIMETRES = (
+    ("engineering", "Engineering", ("Engineering",),
+     ("engineering", "owfarm", "oil & gas", "oil and gas", "gnl", "lng", "offshore",
+      "package")),
+    ("moe", "Maîtrise d'œuvre & pièces de marché", ("Métier & livrables",),
+     ("maitrise d'oeuvre", "maitrise d oeuvre", "cctp", "cahier des charges",
+      "appel d'offres", "appels d'offres", "amoa", "dce", "marche de travaux",
+      "bordereau", "dpgf")),
+    ("safety", "Safety & analyse de risques", (),
+     ("safety", "hazop", "hazid", "atex", "analyse de risques", "consignation",
+      "plan d'urgence", "securite des personnes")),
+    ("fire", "Incendie & fire fighting", (),
+     ("fire", "incendie", "watermist", "brouillard d'eau", "sprinkler", "extinction",
+      "desenfumage", "detection incendie")),
+    ("rules", "Règles, normes & codes", (),
+     ("rules", "dnv", "nfpa", "en 50600", "ashrae", "iso/iec", "iec 6", "norme",
+      "reglement", "code de construction")),
+    ("datacenter", "Centres de données", ("Centres de données",),
+     ("data center", "datacenter", "pue", "wue", "refroidissement", "free cooling")),
+)
+
+_INDEX_PERIMETRE = {p[0]: p for p in PERIMETRES}
+
+
+def perimetres():
+    """Les périmètres proposés au rédacteur, prêts à afficher."""
+    return [{"cle": c, "nom": n, "familles": list(f), "mots": len(m)}
+            for c, n, f, m in PERIMETRES]
+
+
+def perimetre_valide(cle):
+    return (cle or "") in _INDEX_PERIMETRE
+
+
+def dans_perimetre(cle, theme="", famille="", nom_fichier=""):
+    """Ce document appartient-il au périmètre demandé ?
+
+    Trois voies, et la troisième n'est pas un luxe : un document déposé
+    directement sur Sentinel n'a NI thème NI famille — l'import est le seul à
+    en poser. Sans le repli sur le nom de fichier, la moitié de la réserve
+    serait hors de tout périmètre, et le partage annoncé n'aurait pas lieu."""
+    p = _INDEX_PERIMETRE.get(cle or "")
+    if not p:
+        return False
+    _c, _nom, familles, mots = p
+    fam = (famille or "").strip() or famille_de(theme)
+    if familles and fam in familles:
+        return True
+    n = _sans_accents(theme) + " " + _sans_accents(nom_fichier)
+    return any(m in n for m in mots)
+
+
+# ═══════════════════════════════════════════════════════════════════════════
 # 2. DU THÈME AUX PAGES SENTINEL
 #    Sentinel rattache un document a des pages, pas a un domaine. La deduction
 #    est par MOTS-CLES et volontairement large : mieux vaut un document propose
@@ -212,11 +299,6 @@ PAGES_PAR_MOT = (
     ("raci", ("prestataire", "partie prenante", "raci", "responsabilite", "contrat",
               "clausier", "fournisseur", "juridique")),
 )
-
-
-def _sans_accents(t):
-    t = unicodedata.normalize("NFD", str(t or ""))
-    return "".join(c for c in t if not unicodedata.combining(c)).lower()
 
 
 def pages_pour(theme, titre=""):

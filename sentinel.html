@@ -19252,11 +19252,24 @@ window.ragRenderList = function(){
 };
 
 /* Fonction reutilisable par les autres pages (Audit, FRIA, Registre) pour enrichir leur contexte IA */
-window.ragSearchContext = function(query, page, topK){
+window.ragSearchContext = function(query, page, topK, perimetre){
   return fetch('/api/rag/search', {
     method: 'POST', headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({ query: query, page: page||'', top_k: topK||3 })
+    body: JSON.stringify({ query: query, page: page||'', top_k: topK||3,
+                           perimetre: perimetre||'' })
   }).then(function(r){ return r.json(); }).catch(function(){ return {resultats:[]}; });
+};
+
+/* Les perimetres de redaction, charges UNE fois et gardes. Ils viennent du
+   serveur plutot que d'une liste recopiee ici : deux vocabulaires finiraient
+   par diverger, et l'ecran proposerait un perimetre que la recherche ignore. */
+window.__ragPerimetres = null;
+window.ragPerimetres = function(){
+  if(window.__ragPerimetres) return Promise.resolve(window.__ragPerimetres);
+  return fetch('/api/rag/perimetres', { credentials:'same-origin' })
+    .then(function(r){ return r.json(); })
+    .then(function(d){ window.__ragPerimetres = (d && d.perimetres) || []; return window.__ragPerimetres; })
+    .catch(function(){ window.__ragPerimetres = []; return []; });
 };
 
 var _ragOrigGo = window.go;
@@ -19275,7 +19288,7 @@ window.go = function(id){
 (function(){
 'use strict';
 
-window.ragShowRelevantDocs = function(query, page, titre){
+window.ragShowRelevantDocs = function(query, page, titre, perimetre){
   var modal = document.getElementById("rag-docs-modal");
   if(!modal){ modal = document.createElement("div"); modal.id = "rag-docs-modal"; modal.className = "mat-modal"; document.body.appendChild(modal); }
   modal.innerHTML = '<div class="mat-modal-box"><div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Base de connaissance</div>'
@@ -19284,18 +19297,58 @@ window.ragShowRelevantDocs = function(query, page, titre){
     + '<div class="mat-modal-body"><div class="reg-loading">Recherche dans vos documents…</div></div></div>';
   modal.classList.add("on");
 
-  window.ragSearchContext(query, page, 5).then(function(res){
+  /* Le PERIMETRE de redaction. La recherche voit toute la reserve — celle de
+     Documents comme celle d'Engineering — et ce qui appartient au perimetre
+     choisi remonte devant. On ne filtre jamais : une piece utile rangee
+     ailleurs doit rester atteignable, et une liste vide doit vouloir dire
+     « rien ne correspond », pas « rien dans ce dossier ». */
+  window.__ragPerim = window.__ragPerim || '';
+  var lancer = function(per){
+    window.__ragPerim = per || '';
     var bodyEl = modal.querySelector('.mat-modal-body');
-    var results = (res && res.resultats) || [];
-    if(results.length === 0){
-      bodyEl.innerHTML = '<div class="reg-empty">Aucun document pertinent trouvé dans votre base de connaissance pour ce contexte. <a href="#" onclick="document.getElementById(\'rag-docs-modal\').classList.remove(\'on\');go(\'rag\',null,\'ESPACE\',\'Base de connaissance\');return false;">Importer un document →</a></div>';
-      return;
-    }
-    bodyEl.innerHTML = results.map(function(r){
-      return '<div class="ctrl-section" style="margin-bottom:10px"><div class="ctrl-section-head"><span class="ctrl-section-title">'+r.document+'</span><span style="font-size:9px;font-family:var(--mono);color:var(--muted2)">score '+r.score+'</span></div>'
-        + '<div style="padding:12px 16px;font-size:11.5px;color:var(--ink2);line-height:1.6">…'+r.texte.substring(0,280)+'…</div></div>';
-    }).join('');
-  });
+    bodyEl.innerHTML = '<div class="reg-loading">Recherche dans vos documents…</div>';
+    Promise.all([window.ragPerimetres(),
+                 window.ragSearchContext(query, page, 6, window.__ragPerim)])
+      .then(function(duo){
+        var pers = duo[0] || [], res = duo[1] || {};
+        var results = res.resultats || [];
+        var chips = '<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px">'
+          + [{cle:'', nom:'Toute la base'}].concat(pers).map(function(p){
+              var on = (window.__ragPerim || '') === p.cle;
+              return '<button type="button" onclick="window.__ragRelancer(\''+p.cle+'\')" '
+                + 'style="font-size:10.5px;font-weight:600;padding:4px 10px;border-radius:999px;cursor:pointer;'
+                + 'border:1px solid '+(on?'var(--ink,#111827)':'var(--rule2)')+';'
+                + 'background:'+(on?'var(--ink,#111827)':'transparent')+';color:'+(on?'#fff':'var(--ink)')+'">'
+                + String(p.nom).replace(/</g,'&lt;')+'</button>';
+            }).join('')
+          + '</div>'
+          + '<p class="note" style="margin:0 0 10px;font-size:10.5px;color:var(--muted2)">'
+          + 'La recherche porte sur <b>toute la base</b>. Le périmètre choisi ne restreint rien : '
+          + 'il fait <b>remonter</b> ses documents en tête'
+          /* Le compte ne s'affiche que s'il y a quelque chose à compter :
+             « 0 sur 0 en viennent » sous une liste vide est du bruit. */
+          + ((window.__ragPerim && results.length)
+              ? ' — <b>'+res.n_perimetre+'</b> sur '+results.length+' en viennent.' : '.')
+          + '</p>';
+        if(results.length === 0){
+          bodyEl.innerHTML = chips + '<div class="reg-empty">Aucun document pertinent trouvé dans votre base de connaissance pour ce contexte. <a href="#" onclick="document.getElementById(\'rag-docs-modal\').classList.remove(\'on\');go(\'rag\',null,\'ESPACE\',\'Base de connaissance\');return false;">Importer un document →</a></div>';
+          return;
+        }
+        bodyEl.innerHTML = chips + results.map(function(r){
+          var marque = r.dans_perimetre
+            ? '<span style="font-size:9px;font-weight:700;padding:1px 7px;border-radius:999px;background:#1C1C1C;color:#fff;margin-left:6px">périmètre</span>' : '';
+          /* Le THEME d'origine, affiche : c'est lui qui dit de quelle reserve
+             vient l'extrait, et sans lui les deux bases se confondraient. */
+          var th = r.theme ? '<div style="font-size:9.5px;font-family:var(--mono);color:var(--muted2);padding:0 16px 6px">'
+                             + String(r.theme).replace(/</g,'&lt;') + '</div>' : '';
+          return '<div class="ctrl-section" style="margin-bottom:10px"><div class="ctrl-section-head"><span class="ctrl-section-title">'+r.document+marque+'</span><span style="font-size:9px;font-family:var(--mono);color:var(--muted2)">score '+r.score+'</span></div>'
+            + th
+            + '<div style="padding:0 16px 12px;font-size:11.5px;color:var(--ink2);line-height:1.6">…'+r.texte.substring(0,280)+'…</div></div>';
+        }).join('');
+      });
+  };
+  window.__ragRelancer = lancer;
+  lancer(perimetre || window.__ragPerim);
 };
 
 })();

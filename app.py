@@ -8522,8 +8522,12 @@ def rag_delete_document(doc_id):
 
 def _rag_ligne(r, origine):
     r = dict(r)
+    # Le THEME et la FAMILLE voyagent avec le fragment : sans eux, le peri-
+    # metre de redaction n'aurait rien a quoi se raccrocher, et il faudrait une
+    # requete de plus par document pour les retrouver.
     return {'texte': r['chunk_text'], 'document': r['nom_fichier'],
             'document_id': r['doc_id'], 'score': round(float(r.get('score') or 0.0), 3),
+            'theme': r.get('theme') or '', 'famille': r.get('famille') or '',
             'origine': origine}
 
 
@@ -8542,7 +8546,7 @@ def _rag_vectoriel(cur, query, limite, filtre_sql='', filtre_params=()):
             return []
         vec = embs[0]
         cur.execute(
-            'SELECT c.chunk_text, d.nom_fichier, d.id AS doc_id, '
+            'SELECT c.chunk_text, d.nom_fichier, d.id AS doc_id, d.theme, d.famille, '
             '1 - (c.embedding <=> %s::vector) AS score '
             'FROM rag_chunks c JOIN rag_documents d ON c.document_id = d.id '
             'WHERE c.embedding IS NOT NULL ' + filtre_sql + ' '
@@ -8572,7 +8576,7 @@ def _rag_lexical(cur, query, limite, filtre_sql='', filtre_params=()):
             return
         try:
             cur.execute(
-                'SELECT c.chunk_text, d.nom_fichier, d.id AS doc_id, '
+                'SELECT c.chunk_text, d.nom_fichier, d.id AS doc_id, d.theme, d.famille, '
                 "ts_rank(c.search_vector, " + sql_op + "('french', %s)) AS score "
                 'FROM rag_chunks c JOIN rag_documents d ON c.document_id = d.id '
                 "WHERE c.search_vector @@ " + sql_op + "('french', %s) " + filtre_sql + ' '
@@ -8618,7 +8622,29 @@ def _rag_lexical(cur, query, limite, filtre_sql='', filtre_params=()):
     return sortie[:limite]
 
 
-def rag_recherche(cur, query, limite=5, page=''):
+def rag_prioriser(resultats, perimetre):
+    """Le perimetre PRIORISE, il ne filtre pas.
+
+    Ce choix est le coeur du partage demande : la recherche voit TOUTE la
+    reserve — celle de Documents comme celle d'Engineering — et ce qui
+    appartient au perimetre de redaction remonte devant. Filtrer aurait rendu
+    invisible une piece utile rangee ailleurs, et une liste vide n'aurait plus
+    dit si le document n'existe pas ou s'il est hors perimetre.
+
+    L'ordre relatif est conserve dans chaque groupe : la pertinence du moteur
+    decide a l'interieur, le perimetre ne decide qu'entre les deux groupes."""
+    if not perimetre:
+        for r in resultats:
+            r['dans_perimetre'] = None      # aucun perimetre demande
+        return resultats
+    for r in resultats:
+        r['dans_perimetre'] = rag_import.dans_perimetre(
+            perimetre, r.get('theme'), r.get('famille'), r.get('document'))
+    return ([r for r in resultats if r['dans_perimetre']]
+            + [r for r in resultats if not r['dans_perimetre']])
+
+
+def rag_recherche(cur, query, limite=5, page='', perimetre=''):
     """Les deux moteurs, puis fusion par rang reciproque. Rend (resultats, mode)."""
     filtre_sql, filtre_params = '', []
     if page and REGISTRE_USE_PG:
@@ -8627,11 +8653,16 @@ def rag_recherche(cur, query, limite=5, page=''):
 
     # Chaque moteur est sollicite plus large que la liste finale : un document
     # sixieme d un cote et deuxieme de l autre doit pouvoir remonter.
-    large = max(limite * 3, 12)
+    # Avec un perimetre, on elargit ENCORE : prioriser ne sert a rien si le
+    # document du perimetre n'a pas d'abord ete ramene. Une priorite qui ne
+    # ferait que reordonner les cinq premiers ne changerait presque rien.
+    large = max(limite * 3, 12) * (2 if perimetre else 1)
     v = _rag_vectoriel(cur, query, large, filtre_sql, filtre_params)
     l = _rag_lexical(cur, query, large, filtre_sql, filtre_params)
 
-    fusion = rag_moteur.fusionner([v, l], cle=_rag_cle)[:limite]
+    # La priorisation s'applique AVANT la coupe : appliquee apres, elle
+    # n'aurait trie que ce qui avait deja survecu, c'est-a-dire rien.
+    fusion = rag_prioriser(rag_moteur.fusionner([v, l], cle=_rag_cle), perimetre)[:limite]
     # Un fragment rendu par les deux moteurs merite d etre signale comme tel :
     # c est le resultat sur lequel on peut le plus s appuyer.
     doubles = {_rag_cle(x) for x in v} & {_rag_cle(x) for x in l}
@@ -8657,21 +8688,40 @@ def rag_search():
     data = request.get_json(force=True) or {}
     query = (data.get('query') or '').strip()
     page = (data.get('page') or '').strip()
+    perimetre = (data.get('perimetre') or '').strip()
     top_k = min(int(data.get('top_k', 5)), 10)
     if not query:
         return jsonify({'error': 'query requis'}), 400
+    # Un perimetre inconnu n'est pas applique EN SILENCE : la reponse dirait
+    # sinon avoir priorise alors qu'elle n'a rien fait.
+    perimetre_inconnu = bool(perimetre) and not rag_import.perimetre_valide(perimetre)
+    if perimetre_inconnu:
+        perimetre = ''
 
     conn = registre_get_db()
     cur = conn.cursor()
     try:
-        resultats, mode = rag_recherche(cur, query, top_k, page)
+        resultats, mode = rag_recherche(cur, query, top_k, page, perimetre)
     finally:
         conn.close()
 
     # `results` est conserve en plus de `resultats` : d anciens appels du
     # frontend lisaient l un, d autres l autre.
     return jsonify({'resultats': resultats, 'results': resultats, 'mode': mode,
-                    'termes': rag_moteur.termes_requete(query)})
+                    'termes': rag_moteur.termes_requete(query),
+                    'perimetre': perimetre,
+                    'perimetre_inconnu': perimetre_inconnu,
+                    # Combien de resultats viennent du perimetre : le lecteur
+                    # voit d'un coup si sa reserve specifique a nourri la
+                    # reponse, ou si tout vient d'ailleurs.
+                    'n_perimetre': sum(1 for r in resultats if r.get('dans_perimetre'))})
+
+
+@app.route('/api/rag/perimetres', methods=['GET'])
+def rag_perimetres():
+    """Les perimetres de redaction proposes. Servis par le module qui detient
+    la taxonomie des themes : les recopier ici les ferait diverger."""
+    return jsonify({'ok': True, 'perimetres': rag_import.perimetres()})
 
 
 # ══════════════════════════════════════════════════════════
