@@ -553,6 +553,8 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
       <div class="bv-vues" role="tablist" aria-label="Lecture du graphique">
         <button type="button" role="tab" data-vue="part" class="on" aria-selected="true">Part du monde (%)</button>
         <button type="button" role="tab" data-vue="volume" aria-selected="false">Volume accordé (échelle log)</button>
+        <button type="button" role="tab" data-vue="empile" aria-selected="false">Composition (barres empilées)</button>
+        <button type="button" role="tab" data-vue="rang" aria-selected="false">Classement 2023 (barres)</button>
       </div>
       <div class="bv-leg" id="brev-leg"></div>
     </div>
@@ -1972,9 +1974,36 @@ function brevAbs(part, an){
   return v === null ? null : Math.round(part * v) / 100;
 }
 
+/* Facteur de croissance d'une série entre la première et la dernière année,
+   en VOLUME. Une part qui baisse peut recouvrir un nombre qui monte : c'est
+   toute la question de ce panneau, et le facteur la tranche en un chiffre.
+
+   Une SEULE fonction, appelée par le texte de lecture comme par le graphique
+   du classement : deux calculs du même facteur finiraient par diverger, et
+   c'est la phrase et la barre qui se contrediraient sous les yeux du lecteur.
+   Elle prend la série de PARTS, d'où qu'elle vienne. */
+function brevFacteur(parts){
+  var b = DATA.brevets, n = b.annees.length - 1;
+  var d = brevAbs(parts[0], b.annees[0]), f = brevAbs(parts[n], b.annees[n]);
+  return (d && f) ? Math.round(f / d) : null;
+}
+
 function renderBrevets(){
+  if(BV_VUE === 'empile') return brevEmpile();
+  if(BV_VUE === 'rang') return brevRang();
   var b = DATA.brevets, series = brevSeries();
-  var W = 980, H = 380, L = 58, R = 128, T = 20, B = 44;
+  /* La marge gauche dépend de ce qu'on y écrit. En parts, les graduations font
+     deux caractères (« 25 ») ; en volumes, sept (« 100 000 ») — et la légende
+     verticale de l'axe, posée à 14 px, passait alors AU TRAVERS d'elles. */
+  /* La marge droite loge DEUX choses en vue « part » : les étiquettes de fin de
+     courbe et les graduations de l'axe du volume mondial. À 128 px elles
+     partageaient la même colonne, et le « 0 » de l'axe droit se posait sur
+     l'étiquette « Europe », qui finit précisément en bas du cadre. Deux
+     gouttières séparées, donc, et la marge s'élargit d'autant. */
+  var W = 980, H = 380, L = (BV_VUE === 'part' ? 58 : 96),
+      R = (BV_VUE === 'part' ? 176 : 128), T = 20, B = 44;
+  var XFIN = W - R + 10;                    /* colonne des étiquettes de fin */
+  var XAX = W - R + 118;                    /* colonne de l'axe droit */
   var pw = W - L - R, ph = H - T - B;
   var an0 = b.annees[0], an1 = b.annees[b.annees.length - 1];
   var x = function(yr){ return L + (yr - an0) / (an1 - an0) * pw; };
@@ -2024,11 +2053,11 @@ function renderBrevets(){
         + '" text-anchor="end">' + g + (g === 75 ? ' %' : '') + '</text>';
     });
     [0, 50, 100].forEach(function(g){
-      s += '<text class="ax" x="' + (W - R + 8) + '" y="' + (yV(g) + 3).toFixed(1) + '">'
+      s += '<text class="ax" x="' + XAX + '" y="' + (yV(g) + 3).toFixed(1) + '">'
         + g + '</text>';
     });
-    s += '<text class="ax" x="' + (W - R + 46) + '" y="' + (T + ph / 2).toFixed(1)
-      + '" text-anchor="middle" transform="rotate(-90 ' + (W - R + 46) + ' '
+    s += '<text class="ax" x="' + (XAX + 38) + '" y="' + (T + ph / 2).toFixed(1)
+      + '" text-anchor="middle" transform="rotate(-90 ' + (XAX + 38) + ' '
       + (T + ph / 2).toFixed(1) + ')">volume mondial (milliers)</text>';
   } else {
     [0.1, 1, 10, 100].forEach(function(g){
@@ -2113,12 +2142,15 @@ function renderBrevets(){
   for(var f = 1; f < fins.length; f++){
     if(fins[f].y - fins[f - 1].y < ECART) fins[f].y = fins[f - 1].y + ECART;
   }
-  var trop = fins.length ? fins[fins.length - 1].y - (H - B - 4) : 0;
+  /* La butée basse porte sur la SECONDE ligne de l'étiquette, écrite onze
+     pixels plus bas : calée sur la première, la valeur de la dernière série
+     descendait sur la ligne des années — « 2,8 % » posé sur « 2023 ». */
+  var trop = fins.length ? fins[fins.length - 1].y - (H - B - 16) : 0;
   if(trop > 0) fins.forEach(function(e){ e.y -= trop; });
   fins.forEach(function(e){
-    s += '<text class="el" x="' + (W - R + 10) + '" y="' + (e.y - 2).toFixed(1)
+    s += '<text class="el" x="' + XFIN + '" y="' + (e.y - 2).toFixed(1)
       + '" fill="' + e.col + '" style="font-size:11.5px;font-weight:700">' + esc(e.nom) + '</text>'
-      + '<text class="ax" x="' + (W - R + 10) + '" y="' + (e.y + 11).toFixed(1) + '">'
+      + '<text class="ax" x="' + XFIN + '" y="' + (e.y + 11).toFixed(1) + '">'
       + esc(e.txt) + '</text>';
   });
 
@@ -2139,6 +2171,220 @@ function renderBrevets(){
 
   brevInteraction(hote, { W: W, H: H, L: L, R: R, T: T, B: B, pw: pw, ph: ph,
                           x: x, y: y, vue: vue, series: series });
+  brevLegende(series);
+  brevTitre();
+  brevLecture();
+  brevTableau();
+}
+
+/* ══ VUE « COMPOSITION » — COLONNES EMPILÉES ════════════════════════════════
+   Les deux premières vues répondent chacune à une moitié de la question et
+   laissent l'autre au lecteur : la PART dit la répartition et perd le total,
+   le VOLUME dit le total et perd la répartition. La colonne empilée porte les
+   deux sur UN SEUL axe — le gâteau et les parts dans la même image.
+
+   Le contour clair de chaque colonne est le volume mondial COMPLET. Éteindre
+   un acteur dans la légende y creuse alors un vide visible, au lieu de
+   rétrécir le total en silence : une somme partielle ne doit jamais passer
+   pour un tout.
+
+   CE QUE CETTE VUE ÉCRASE, ET QU'IL FAUT DIRE. L'échelle est linéaire, et le
+   volume mondial a été multiplié par soixante : la colonne de 2010 fait cinq
+   pixels de haut, celle de 2016 vingt. Les premières années y sont illisibles
+   — c'est le prix à payer pour montrer la croissance du total, et c'est la vue
+   logarithmique qui rend leurs pentes. Le total est donc écrit AU-DESSUS de
+   chaque colonne : le chiffre reste lisible là où la hauteur ne l'est plus. */
+function brevEmpile(){
+  var b = DATA.brevets, series = brevSeries();
+  var W = 980, H = 380, L = 96, R = 132, T = 26, B = 44;
+  var pw = W - L - R, ph = H - T - B;
+  var an0 = b.annees[0], an1 = b.annees[b.annees.length - 1];
+  var BW = 44, ECRT = 2;                           /* largeur, écart entre segments */
+  /* Les colonnes sont RENTRÉES d'une demi-largeur de chaque côté. Un point de
+     courbe tient sur l'axe ; une colonne de 44 px le déborde de 22, et la
+     dernière venait alors se poser sur ses propres étiquettes de marge. */
+  var x = function(yr){
+    return L + BW / 2 + (yr - an0) / (an1 - an0) * (pw - BW);
+  };
+  var HAUT = 130;                                  /* milliers, plafond d'axe */
+  var yv = function(v){ return T + (1 - v / HAUT) * ph; };
+  var s = '';
+
+  [0, 25, 50, 75, 100, 125].forEach(function(g){
+    var gy = yv(g);
+    s += '<line x1="' + L + '" y1="' + gy.toFixed(1) + '" x2="' + (W - R) + '" y2="'
+      + gy.toFixed(1) + '" stroke="#EFEDF4" stroke-width="1"/>'
+      + '<text class="ax" x="' + (L - 8) + '" y="' + (gy + 3).toFixed(1)
+      + '" text-anchor="end">' + (g * 1000).toLocaleString('fr-FR') + '</text>';
+  });
+  s += '<text class="ax" x="16" y="' + (T + ph / 2).toFixed(1)
+    + '" text-anchor="middle" transform="rotate(-90 16 ' + (T + ph / 2).toFixed(1)
+    + ')">brevets accordés dans le monde</text>';
+
+  var derniers = null;
+  b.annees.forEach(function(yr, i){
+    var vol = brevVol(yr);
+    if(vol === null) return;
+    var bx = x(yr) - BW / 2;
+    /* Le contour : le monde entier, qu'on affiche ou non tous ses acteurs. */
+    s += '<path d="' + barPath(bx, yv(vol), BW, (H - B) - yv(vol), 4)
+      + '" fill="none" stroke="#CFCBD8" stroke-width="1"/>';
+    var cum = 0, visibles = [];
+    series.forEach(function(sr){
+      if(!BV_ON[sr.k]) return;
+      var seg = sr.v[i] / 100 * vol;
+      visibles.push({ sr: sr, bas: cum, haut: cum + seg, val: seg });
+      cum += seg;
+    });
+    visibles.forEach(function(sg, k){
+      var y0 = yv(sg.haut), y1 = yv(sg.bas);
+      var h = y1 - y0 - (k === visibles.length - 1 ? 0 : ECRT);
+      if(h < 0.7) return;                 /* trop mince : on n'en fait pas un trait */
+      var sommet = (k === visibles.length - 1);
+      s += (sommet
+        ? '<path class="bv-seg" data-an="' + yr + '" d="' + barPath(bx, y0, BW, h, 4) + '"'
+        : '<rect class="bv-seg" data-an="' + yr + '" x="' + bx.toFixed(1) + '" y="'
+          + y0.toFixed(1) + '" width="' + BW + '" height="' + h.toFixed(1) + '"')
+        + ' fill="' + sg.sr.col + '"'
+        + (sg.sr.deduit ? ' fill-opacity="0.82"' : '') + '>'
+        + '<title>' + yr + ' — ' + esc(sg.sr.nom) + ' ≈ ' + nbBrev(sg.val)
+        + ' brevets</title></' + (sommet ? 'path' : 'rect') + '>';
+    });
+    /* Le total, écrit : à cette échelle les premières colonnes sont des traits. */
+    s += '<text class="ax" x="' + x(yr).toFixed(1) + '" y="' + (yv(vol) - 7).toFixed(1)
+      + '" text-anchor="middle" style="font-weight:700;fill:#5C5C5C">'
+      + nbBrev(vol) + '</text>';
+    if(yr === an1) derniers = visibles;
+  });
+
+  b.annees.forEach(function(yr){
+    s += '<text class="ax" x="' + x(yr).toFixed(1) + '" y="' + (H - B + 17)
+      + '" text-anchor="middle">' + yr + '</text>';
+  });
+  s += '<line x1="' + L + '" y1="' + (H - B) + '" x2="' + (W - R) + '" y2="' + (H - B)
+    + '" stroke="#D5D2D9" stroke-width="1"/>';
+
+  /* Étiquettes directes sur la dernière colonne — quatre séries l'exigent :
+     lire une couleur au milieu de trois autres puis la retrouver dans la
+     légende demande un aller-retour que l'empilement rend pénible. Elles sont
+     posées à mi-hauteur de leur segment, puis écartées si elles se touchent. */
+  var fins = (derniers || []).map(function(sg){
+    return { y: (yv(sg.haut) + yv(sg.bas)) / 2, nom: sg.sr.nom, col: sg.sr.col,
+             txt: nbBrev(sg.val) + '  ·  ' + fr(sg.sr.v[b.annees.length - 1]) + ' %' };
+  }).sort(function(p, q){ return p.y - q.y; });
+  var ECART = 30;
+  for(var f = 1; f < fins.length; f++){
+    if(fins[f].y - fins[f - 1].y < ECART) fins[f].y = fins[f - 1].y + ECART;
+  }
+  var trop = fins.length ? fins[fins.length - 1].y - (H - B - 4) : 0;
+  if(trop > 0) fins.forEach(function(e){ e.y -= trop; });
+  fins.forEach(function(e){
+    s += '<text class="el" x="' + (W - R + 10) + '" y="' + (e.y - 2).toFixed(1)
+      + '" fill="' + e.col + '" style="font-size:11.5px;font-weight:700">' + esc(e.nom) + '</text>'
+      + '<text class="ax" x="' + (W - R + 10) + '" y="' + (e.y + 11).toFixed(1) + '">'
+      + esc(e.txt) + '</text>';
+  });
+
+  s += '<line class="bv-guide" id="bv-guide" x1="0" y1="' + T + '" x2="0" y2="' + (H - B)
+    + '" style="display:none"/>'
+    + '<rect id="bv-capte" x="' + L + '" y="' + T + '" width="' + pw + '" height="' + ph
+    + '" fill="transparent"/>';
+
+  var hote = document.getElementById('brev-chart');
+  hote.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="'
+    + 'Composition du volume mondial de brevets d’IA accordés, 2010–2023, en colonnes '
+    + 'empilées : le total passe d’environ 2 000 à 122 000, et la part chinoise de 13 % '
+    + 'à 69,7 % de la colonne."'
+    + '>' + s + '</svg><div class="bv-tip" id="bv-tip" role="status"></div>';
+
+  brevInteraction(hote, { W: W, H: H, L: L, R: R, T: T, B: B, pw: pw, ph: ph,
+                          x: x, y: yv, vue: 'empile', series: series });
+  brevLegende(series);
+  brevTitre();
+  brevLecture();
+  brevTableau();
+}
+
+/* ══ VUE « CLASSEMENT » — BARRES HORIZONTALES ═══════════════════════════════
+   Les trois autres vues sont des séries temporelles : elles répondent à
+   « comment en est-on arrivé là ». Celle-ci répond à « où en est-on », et
+   c'est une question différente — celle qu'on pose en comité.
+
+   HORIZONTALES et non verticales : « Reste du monde » et « États-Unis » sont
+   des noms longs. En colonnes, ils s'inclinent ou se tronquent ; couchés, ils
+   se lisent. C'est la seule raison, et elle suffit.
+
+   Le facteur de croissance accompagne chaque barre. Sans lui, la barre
+   européenne — quatre pour cent de la barre chinoise — ne dirait qu'une chose,
+   la petitesse, en taisant l'autre : ×21 depuis 2010. */
+function brevRang(){
+  var b = DATA.brevets, series = brevSeries();
+  var n = b.annees.length - 1, an = b.annees[n];
+  var W = 980, L = 160, R = 170, T = 26, B = 40, BH = 40, GAP = 26;
+  var pw = W - L - R;
+  var lignes = series.filter(function(sr){ return BV_ON[sr.k]; })
+    .map(function(sr){
+      return { sr: sr, val: brevAbs(sr.v[n], an), part: sr.v[n],
+               facteur: brevFacteur(sr.v) };
+    })
+    .filter(function(l){ return l.val !== null; })
+    .sort(function(p, q){ return q.val - p.val; });
+  var max = lignes.reduce(function(m, l){ return Math.max(m, l.val); }, 0) || 1;
+  /* Plafond arrondi à la dizaine de milliers supérieure : un axe qui s'arrête
+     exactement sur la plus grande valeur laisse croire à une limite. */
+  var HAUT = Math.ceil(max / 10) * 10;
+  var xv = function(v){ return L + v / HAUT * pw; };
+  /* La hauteur SUIT le nombre de barres. Fixée, elle laissait un tiers de vide
+     sous un classement réduit à deux acteurs — un blanc qu'on lit comme une
+     donnée manquante. */
+  var H = T + lignes.length * BH + Math.max(0, lignes.length - 1) * GAP + B;
+  var s = '';
+
+  var pas = HAUT / 4;
+  for(var g = 0; g <= HAUT + 0.001; g += pas){
+    s += '<line x1="' + xv(g).toFixed(1) + '" y1="' + T + '" x2="' + xv(g).toFixed(1)
+      + '" y2="' + (T + lignes.length * BH + (lignes.length - 1) * GAP + 6).toFixed(1)
+      + '" stroke="#EFEDF4" stroke-width="1"/>'
+      + '<text class="ax" x="' + xv(g).toFixed(1) + '" y="' + (T - 9)
+      + '" text-anchor="middle">' + nbBrev(g) + '</text>';
+  }
+
+  lignes.forEach(function(l, i){
+    var by = T + i * (BH + GAP), bw = xv(l.val) - L;
+    /* Extrémité arrondie du côté de la valeur, ancrée à l'axe : c'est la même
+       règle que pour les colonnes, tournée d'un quart de tour. */
+    var r = Math.min(4, bw);
+    s += '<path class="bv-bar" data-serie="' + l.sr.k + '" d="M' + L + ' ' + by
+      + 'h' + Math.max(0, bw - r).toFixed(1) + 'a' + r + ' ' + r + ' 0 0 1 ' + r + ' ' + r
+      + 'v' + (BH - 2 * r).toFixed(1) + 'a' + r + ' ' + r + ' 0 0 1 -' + r + ' ' + r
+      + 'H' + L + 'Z" fill="' + l.sr.col + '"'
+      + (l.sr.deduit ? ' fill-opacity="0.82"' : '') + '>'
+      + '<title>' + esc(l.sr.nom) + ' — ' + nbBrev(l.val) + ' brevets d’IA accordés en '
+      + an + ', soit ' + fr(l.part) + ' % du monde</title></path>'
+      /* Le nom à gauche, aligné sur la barre : jamais une légende à recouper. */
+      + '<text class="el" x="' + (L - 14) + '" y="' + (by + BH / 2 - 2).toFixed(1)
+      + '" text-anchor="end" style="font-size:12.5px;font-weight:700">'
+      + esc(l.sr.nom) + (l.sr.deduit ? ' *' : '') + '</text>'
+      + '<text class="ax" x="' + (L - 14) + '" y="' + (by + BH / 2 + 12).toFixed(1)
+      + '" text-anchor="end">' + fr(l.part) + ' % du monde</text>'
+      /* La valeur au bout de la barre, et le facteur qui la met en mouvement. */
+      + '<text class="el" x="' + (xv(l.val) + 12).toFixed(1) + '" y="'
+      + (by + BH / 2 - 2).toFixed(1) + '" style="font-size:13px;font-weight:700">'
+      + nbBrev(l.val) + '</text>'
+      + '<text class="ax" x="' + (xv(l.val) + 12).toFixed(1) + '" y="'
+      + (by + BH / 2 + 12).toFixed(1) + '">'
+      + (l.facteur ? '×' + l.facteur + ' depuis 2010' : 'facteur non calculable') + '</text>';
+  });
+  s += '<line x1="' + L + '" y1="' + T + '" x2="' + L + '" y2="'
+    + (T + lignes.length * BH + (lignes.length - 1) * GAP + 6).toFixed(1)
+    + '" stroke="#D5D2D9" stroke-width="1"/>';
+
+  var hote = document.getElementById('brev-chart');
+  hote.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="'
+    + 'Classement ' + an + ' des brevets d’IA accordés : Chine environ 85 000, '
+    + 'États-Unis 17 300, reste du monde 16 200, Europe 3 400."'
+    + '>' + s + '</svg><div class="bv-tip" id="bv-tip" role="status"></div>';
+
   brevLegende(series);
   brevTitre();
   brevLecture();
@@ -2274,19 +2520,24 @@ function brevLegende(series){
 /* Le titre du panneau suit la lecture affichée : « part du total mondial (%) »
    au-dessus de volumes absolus était un contresens, et c'est le titre qu'on lit
    en premier. */
+var BV_TITRES = {
+  part:   'Brevets d’IA accordés — part du total mondial (%)',
+  volume: 'Brevets d’IA accordés — volume déduit par acteur (2010–2023)',
+  empile: 'Brevets d’IA accordés — composition du total mondial (2010–2023)',
+  rang:   'Brevets d’IA accordés — classement 2023 par acteur'
+};
+
 function brevTitre(){
   var t = document.getElementById('t-brev');
-  if(t) t.textContent = BV_VUE === 'part'
-    ? 'Brevets d’IA accordés — part du total mondial (%)'
-    : 'Brevets d’IA accordés — volume déduit par acteur (2010–2023)';
+  if(t) t.textContent = BV_TITRES[BV_VUE] || BV_TITRES.part;
 }
 
 function brevLecture(){
   var b = DATA.brevets, n = b.annees.length - 1;
-  var mult = function(k){
-    var d = brevAbs(b[k][0], b.annees[0]), f = brevAbs(b[k][n], b.annees[n]);
-    return (d && f) ? Math.round(f / d) : null;
-  };
+  /* Le facteur passe par `brevFacteur`, comme le classement : cette fonction
+     locale en était une seconde version, et deux calculs du même nombre
+     finissent toujours par diverger. */
+  var mult = function(k){ return brevFacteur(b[k]); };
   var e = document.getElementById('brev-lecture');
   var note = document.getElementById('brev-note');
   if(BV_VUE === 'part'){
@@ -2302,6 +2553,42 @@ function brevLecture(){
       + 'la bande colorée figure l’incertitude de ± 3 points. « Reste du monde » est déduit '
       + '(100 − Chine − États-Unis − Europe), d’où son trait discontinu. Barres grises : '
       + 'volume mondial de brevets d’IA accordés, en milliers (axe de droite, lecture graphique).';
+  } else if(BV_VUE === 'empile'){
+    var v0 = brevVol(b.annees[0]), v1 = brevVol(b.annees[n]);
+    e.innerHTML = '<b>Ce que montre cette vue.</b> Le gâteau ET les parts, sur un seul axe. '
+      + 'La hauteur de chaque colonne est le volume mondial : il passe de '
+      + '<span class="ch">' + nbBrev(v0) + '</span> brevets accordés en ' + b.annees[0]
+      + ' à <span class="ch">' + nbBrev(v1) + '</span> en ' + b.annees[n] + ', soit '
+      + '<span class="ch">×' + Math.round(v1 / v0) + '</span>. La couleur qui remplit la '
+      + 'colonne est la répartition. C’est la vue qui réconcilie les deux précédentes : '
+      + 'la part européenne fond pendant que le volume européen est multiplié par 21. '
+      + '<b>Ce qu’elle ne montre pas :</b> les premières années. L’échelle est linéaire et '
+      + 'le total a été multiplié par soixante — la colonne de ' + b.annees[0] + ' fait '
+      + 'quelques pixels. Son total est écrit au-dessus d’elle, et c’est la vue '
+      + '<b>Volume accordé</b> qui rend ses pentes.';
+    note.textContent = 'Segments = part de l’acteur × volume mondial de l’année ; la colonne '
+      + 'somme donc exactement au volume mondial. Le contour clair est ce volume COMPLET : '
+      + 'si vous éteignez un acteur dans la légende, le vide qu’il laisse reste visible — '
+      + 'une somme partielle n’est pas un tout. Mêmes incertitudes que les autres vues : '
+      + 'parts en lecture graphique jusqu’en 2022, volume mondial en lecture graphique.';
+  } else if(BV_VUE === 'rang'){
+    var an = b.annees[n];
+    e.innerHTML = '<b>Ce que montre cette vue.</b> L’état des forces en ' + an + ', et lui '
+      + 'seul — la question qu’on pose en comité, quand les trois autres vues racontent '
+      + 'comment on y est arrivé. La Chine accorde <span class="ch">'
+      + nbBrev(brevAbs(b.chine[n], an)) + '</span> brevets d’IA, les États-Unis '
+      + '<span class="ch">' + nbBrev(brevAbs(b.us[n], an)) + '</span>, l’Europe '
+      + '<span class="ch">' + nbBrev(brevAbs(b.europe[n], an)) + '</span> : la barre '
+      + 'européenne fait quatre pour cent de la chinoise. Le facteur inscrit sous chaque '
+      + 'valeur rappelle ce que la longueur tait — l’Europe a tout de même été multipliée '
+      + 'par 21 depuis 2010. '
+      + '<b>Ce qu’elle ne montre pas :</b> la trajectoire, ni le croisement de 2016, où la '
+      + 'Chine est passée devant les États-Unis. Les vues en courbes le donnent.';
+    note.textContent = 'Classement de l’année ' + an + ' uniquement, par volume déduit '
+      + '(part publiée × volume mondial). L’axe s’arrête au-dessus de la plus grande barre '
+      + 'affichée : éteindre un acteur dans la légende réétalonne l’échelle, les valeurs '
+      + 'écrites au bout des barres, elles, ne bougent pas. « Reste du monde » est déduit '
+      + '(100 − Chine − États-Unis − Europe), d’où l’astérisque.';
   } else {
     e.innerHTML = '<b>Ce que montre cette vue.</b> Le nombre, et non la part. Entre 2010 et '
       + '2023, l’Europe est multipliée par <span class="ch">×' + mult('europe') + '</span>, '
