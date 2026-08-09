@@ -1205,11 +1205,22 @@ table.socle-t a{color:#1E63A8}
   font-size:11px;color:#DCDCDC}
 .cres-tip .t-pied{margin-top:5px;font-size:10px;font-family:var(--mono);color:#9A9A9A;line-height:1.45}
 /* Les pastilles de rang sont posées SUR le centroïde du pays — c'est-à-dire
-   très exactement là où l'on vise quand on veut survoler ce pays. Sans cette
-   règle, la pastille intercepte le survol et les trois premiers du classement
-   sont les seuls à ne rien afficher : le contraire de ce qu'on veut. */
+   très exactement là où l'on vise quand on veut survoler ce pays. Sans règle,
+   la pastille intercepte le survol et les trois premiers du classement sont
+   les seuls à ne rien afficher : le contraire de ce qu'on veut.
+
+   La première correction les avait rendues INERTES (`pointer-events:none`).
+   Le survol était sauvé, mais le clic aussi était mangé : la pastille montrait
+   une main de curseur et ne conduisait nulle part. Une pastille qui conduit
+   quelque part porte donc désormais le `data-code` de son pays — elle rend
+   l'infobulle de ce pays, comme le pays lui-même — et redevient cliquable. */
 .cres-rg{pointer-events:none}
+.cres-rg[data-podium]{pointer-events:auto}
 .cres-pays{cursor:default;transition:fill-opacity .12s}
+/* Un pays qui mène à son détail le dit : la main du curseur, et un liseré au
+   survol. Sans ce signe, la liaison existe mais personne ne la découvre. */
+.cres-pays[data-podium]{cursor:pointer}
+.cres-pays[data-podium]:hover{fill-opacity:.7;stroke:#1C1C1C;stroke-width:1.6}
 .cres-pays:hover,.cres-abs:hover,.cres-hue:hover{fill-opacity:.78}
 .cres-pays:focus{outline:none}
 .cres-pays:focus-visible{outline:none;stroke:#1C1C1C;stroke-width:1.8}
@@ -2122,10 +2133,18 @@ function carteResultat(pays, opts){
     if(!d) return;
     var r = pays[code];
     if(r){
+      /* LE PAYS LUI-MÊME EST LA CIBLE. Le lecteur qui veut le détail d'un pays
+         clique sur ce pays — pas sur une pastille de treize pixels posée à son
+         centre. `aller` dit si une destination existe VRAIMENT en dessous :
+         sans lui, un pays classé mais sans dossier chiffré offrirait une main
+         de curseur et n'irait nulle part, ce qui est pire que rien. */
+      var vaQuelquePart = r.aller !== false;
       colores += '<path d="' + d + '" fill="' + r.couleur + '" stroke="#FFF" '
         + 'stroke-width="0.7" class="cres-pays" data-code="' + esc(code) + '" '
-        + 'tabindex="0" role="img" aria-label="'
-        + esc(r.titre || (nomPays(code) + ' — ' + (r.valeur || ''))) + '"></path>';
+        + (vaQuelquePart ? 'data-podium="' + esc(code) + '" ' : '')
+        + 'tabindex="0" role="' + (vaQuelquePart ? 'button' : 'img') + '" aria-label="'
+        + esc(r.titre || (nomPays(code) + ' — ' + (r.valeur || '')))
+        + (vaQuelquePart ? ', voir le détail' : '') + '"></path>';
     } else {
       /* Deux gris distincts : l'UE non retenue reste plus claire que le hors-UE,
          sinon un pays simplement non comparé se confondrait avec la Turquie. */
@@ -2143,10 +2162,16 @@ function carteResultat(pays, opts){
     var x = projX(c[0]) + dx, y = projY(c[1]) + dy;
     /* La pastille chiffrée EST le rang que le lecteur voit sur la carte : elle
        doit conduire au même endroit que la puce du podium, sinon deux
-       représentations du même rang se comporteraient différemment. */
-    etiquettes += '<g class="cres-rg" data-podium="' + esc(code) + '" tabindex="0" role="button"'
+       représentations du même rang se comporteraient différemment.
+       Elle porte aussi le `data-code` de son pays : posée sur le centroïde,
+       elle occupe exactement la place qu'on vise pour survoler ce pays, et
+       doit donc en RENDRE l'infobulle au lieu de la faire disparaître — c'est
+       ce qui lui permet de redevenir cliquable sans rien coûter au survol. */
+    var mene = r.aller !== false;
+    etiquettes += '<g class="cres-rg"' + (mene ? ' data-podium="' + esc(code) + '"' : '')
+      + ' data-code="' + esc(code) + '" tabindex="0" role="' + (mene ? 'button' : 'img') + '"'
       + ' aria-label="Rang ' + r.rang + ' — ' + esc(nomPays(code) || code)
-      + ', voir le détail"><circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1)
+      + (mene ? ', voir le détail' : '') + '"><circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1)
       + '" r="13" fill="#FFF" stroke="' + r.couleur + '" stroke-width="2.5"/>'
       + '<text x="' + x.toFixed(1) + '" y="' + (y + 4.5).toFixed(1) + '" text-anchor="middle" '
       + 'font-size="14" font-weight="700" fill="' + r.couleur + '">' + r.rang + '</text></g>';
@@ -2209,11 +2234,14 @@ var _cresTip = null, _cresSuivi = false;
 function cresTipInit(){
   if(window.__cresTipPose) return;
   window.__cresTipPose = true;
+  /* `closest` et non `getAttribute` : la pastille de rang est un <g> dont le
+     survol atteint d'abord le <circle> ou le <text> qu'il contient. Lire
+     l'attribut sur la cible seule laissait ces deux enfants sans pays, et
+     l'infobulle se refermait au moment précis où le lecteur visait le rang. */
   document.addEventListener('mouseover', function(ev){
-    var t = ev.target;
-    if(!t || !t.getAttribute) return;
-    var code = t.getAttribute('data-code');
-    var svg = code && t.closest ? t.closest('[data-cres]') : null;
+    var t = ev.target && ev.target.closest ? ev.target.closest('[data-code]') : null;
+    var code = t ? t.getAttribute('data-code') : null;
+    var svg = t ? t.closest('[data-cres]') : null;
     if(!code || !svg){ cresTipCacher(); return; }
     cresTipMontrer(cresTipHtml(svg.getAttribute('data-cres'), code), ev);
   });
@@ -5055,6 +5083,14 @@ function implVoirPays(code){
   if(!code) return;
   IMPL_DEPLIE = code;
   renderImplAvis();                    /* la fiche du pays s'ouvre */
+  /* UN FILTRE ACTIF PEUT AVOIR ÉCARTÉ CE PAYS. On conduirait alors le lecteur
+     vers un bloc où sa fiche n'est pas — un aller sans arrivée. Les filtres
+     sont donc levés, et la barre se redessine vidée : le lecteur voit ce qui a
+     changé au lieu de chercher une fiche que son propre tri lui cachait. */
+  if(!document.querySelector('.imp-fiche[data-pays="' + code + '"]')){
+    TF.imp = {};
+    renderImplAvis();
+  }
   var a = document.getElementById("imp-avis");
   if(a) a.scrollIntoView({ behavior: "smooth", block: "start" });
   setTimeout(function(){
@@ -5084,12 +5120,16 @@ document.addEventListener("click", function(ev){
   var b = ev.target && ev.target.closest ? ev.target.closest("[data-podium]") : null;
   if(b) podiumAller(b);
 });
-/* Les pastilles de la carte sont des <g> SVG : focalisables, mais un navigateur
-   ne déclenche pas `click` sur Entrée pour elles comme il le fait d'un bouton. */
+/* Les cibles de la carte sont des éléments SVG — <g> pour la pastille, <path>
+   pour le pays : focalisables, mais un navigateur ne déclenche pas `click` sur
+   Entrée pour elles comme il le fait d'un vrai <button>. La condition portait
+   sur le seul <g> ; depuis que le PAYS lui-même conduit à son détail, elle
+   doit couvrir tout ce qui n'est pas un bouton, faute de quoi la carte serait
+   utilisable à la souris et pas au clavier. */
 document.addEventListener("keydown", function(ev){
   if(ev.key !== "Enter" && ev.key !== " ") return;
   var b = ev.target && ev.target.closest ? ev.target.closest("[data-podium]") : null;
-  if(b && b.tagName.toLowerCase() === "g"){ ev.preventDefault(); podiumAller(b); }
+  if(b && b.tagName.toLowerCase() !== "button"){ ev.preventDefault(); podiumAller(b); }
 });
 
 function implScore(x){
@@ -5375,6 +5415,11 @@ function carteImplantation(toutes){
     if(x.en_service != null) v.push("parc " + x.en_service);
     if(x.pipeline_2030 != null) v.push("file 2030 : " + x.pipeline_2030);
     pays[x.pays] = { couleur: implCouleurNote(l.score), rang: l.rang, valeur: l.score,
+                     /* La fiche détaillée n'existe que pour les pays qui
+                        portent un AVIS. Un pays noté mais sans avis reste
+                        coloré et survolable — il a bien un score — sans
+                        s'annoncer cliquable vers un texte qui n'existe pas. */
+                     aller: !!x.avis,
                      titre: (nomPays(x.pays) || x.pays) + " — rang " + l.rang
                             + " sur " + toutes.length + ", score " + l.score + "/100",
                      sous: "rang " + l.rang + " sur " + toutes.length
@@ -5406,7 +5451,8 @@ function carteImplantation(toutes){
     + 'au sud. La carte le montre d’un coup d’œil. <b>Les couleurs dépendent des poids que vous '
     + 'venez de régler</b> — ce n’est pas une propriété du référentiel, c’est le résultat de '
     + 'votre arbitrage. Les trois premiers portent leur rang ; le classement complet est '
-    + 'juste en dessous.</p>'
+    + 'juste en dessous. <b>Cliquez un pays coloré — ou sa pastille de rang — pour ouvrir '
+    + 'sa fiche détaillée</b> dans le texte qui suit.</p>'
     + carteResultat(pays, { alt: "Carte de l’Union européenne colorée par le score "
         + "d’implantation pondéré, du plus favorable au moins favorable.",
         absent: "État membre absent du référentiel d’implantation : il n’a pas de note, "
@@ -8632,6 +8678,11 @@ if(window.parent&&window.parent!==window){
       pays[x.pays] = {
         couleur: i === 0 ? '#2D7A47' : (i === C.length - 1 && C.length > 1 ? '#B83222' : '#C47C1A'),
         rang: i + 1,
+        /* L'ancre du dossier chiffré n'existe que pour les pays qui EN ONT un.
+           Un pays classé sans dossier ne doit donc pas s'annoncer cliquable :
+           il offrirait une main de curseur et un clic sans effet, ce qui fait
+           douter de toute la carte plutôt que d'un seul pays. */
+        aller: !!dos,
         valeur: fourch(x.tco_meur) + ' M€',
         titre: x.pays + ' — rang ' + (i + 1) + ' sur ' + C.length
                + ', coût total ' + fourch(x.tco_meur) + ' M€ sur ' + ans + ' ans',
@@ -8662,7 +8713,9 @@ if(window.parent&&window.parent!==window){
       + 'possession</b>, pas de l’investissement : à puissance égale, l’enveloppe est '
       + 'identique d’un pays à l’autre par construction, et une carte colorée dessus '
       + 'afficherait un aplat uniforme. <b>Les pays en gris clair n’ont pas perdu : ils '
-      + 'n’ont pas été calculés.</b> Ajoutez-les au comparateur pour qu’ils apparaissent.</p>'
+      + 'n’ont pas été calculés.</b> Ajoutez-les au comparateur pour qu’ils apparaissent. '
+      + '<b>Cliquez un pays coloré — ou sa pastille de rang — pour aller à son dossier '
+      + 'chiffré</b> plus bas.</p>'
       + window.carteResultat(pays, { rangsMax: C.length,
           alt: 'Carte de l’Union européenne : les pays comparés, '
              + 'colorés du meilleur au moins bon coût total de possession.',

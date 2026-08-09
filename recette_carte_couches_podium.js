@@ -174,7 +174,226 @@ const ok = (n, c, d) => { console.log('  ' + (c ? 'OK ' : 'KO ') + '  ' + n + (d
      await pg.evaluate(() => { const t = document.querySelector('.cres-cible');
        return !!t && /^fin-dos-/.test(t.id || ''); }));
 
-  console.log('\n══ 5. Ce que ces deux gestes ne devaient PAS casser ══\n');
+  console.log('\n══ 5. LE geste attendu : cliquer le PAYS sur la carte ══\n');
+  /* Les contrôles précédents appellent `.click()` sur des <button> : ils
+     prouvent que le gestionnaire route bien, jamais qu'un lecteur PEUT
+     l'atteindre. C'est ainsi qu'une pastille `pointer-events:none` a pu porter
+     un curseur en forme de main sans jamais recevoir un clic. On vise donc ici
+     avec la VRAIE souris, à des coordonnées d'écran. */
+  /* Viser un pays sur une carte demande deux précautions.
+     1. Le centre de la boîte englobante tombe souvent EN MER — la Suède en est
+        l'exemple : on balaie jusqu'à toucher le pays lui-même.
+     2. La page défile encore quand on mesure. Des coordonnées relevées pendant
+        un défilement doux désignent, une demi-seconde plus tard, le pays
+        d'à côté : on a vu le clic partir en Espagne au lieu de la France. On
+        amène donc la carte à sa place, on ATTEND, puis on mesure — et on
+        revérifie le point juste avant de cliquer. */
+  const pointer = async (sel) => pg.evaluate((s) => {
+    const el = document.querySelector(s);
+    if (!el) return null;
+    const b = el.getBoundingClientRect();
+    for (let fy = 0.5; fy <= 0.86; fy += 0.12) {
+      for (let fx = 0.2; fx <= 0.8; fx += 0.1) {
+        const x = b.x + b.width * fx, y = b.y + b.height * fy;
+        if (document.elementFromPoint(x, y) === el)
+          return { x: x, y: y, code: el.getAttribute('data-code') };
+      }
+    }
+    return null;
+  }, sel);
+  const viser = async (sel) => {
+    await pg.evaluate((s) => { const e = document.querySelector(s);
+      if (e) e.scrollIntoView({ block: 'center', behavior: 'instant' }); }, sel);
+    await pg.waitForTimeout(400);
+    const p = await pointer(sel);
+    if (!p) return null;
+    const surPlace = await pg.evaluate((q) => {
+      const t = document.elementFromPoint(q.x, q.y);
+      return t ? t.getAttribute('data-code') : null; }, p);
+    return surPlace === p.code ? p : await pointer(sel);
+  };
+
+  await pg.evaluate(() => { IMPL_DEPLIE = null; renderImplAvis(); });
+  const cible = await viser('#imp-classement .cres-pays[data-podium]');
+  ok('un pays coloré est atteignable à la souris', !!cible, JSON.stringify(cible));
+  if (cible) {
+    await pg.mouse.click(cible.x, cible.y);
+    await pg.waitForTimeout(700);
+    const apres = await pg.evaluate(() => ({ deplie: IMPL_DEPLIE,
+      ouverte: !!document.querySelector('.imp-fiche[open]'),
+      halo: !!document.querySelector('.imp-fiche.cres-cible') }));
+    ok('…et le cliquer ouvre SA fiche, pas celle d’un autre',
+       apres.deplie === cible.code, apres.deplie + ' vs ' + cible.code);
+    ok('…la fiche est effectivement dépliée', apres.ouverte);
+    ok('…et un halo dit où l’on vient d’arriver', apres.halo);
+  }
+
+  /* LA PASTILLE, à la souris. C'est elle que le lecteur vise en premier :
+     elle porte le chiffre du rang. */
+  await pg.evaluate(() => { IMPL_DEPLIE = null; renderImplAvis(); });
+  const past = await pg.evaluate(() => {
+    const g = document.querySelector('#imp-classement .cres-rg[data-podium]');
+    if (!g) return null;
+    g.scrollIntoView({ block: 'center' });
+    const b = g.getBoundingClientRect();
+    return { x: b.x + b.width / 2, y: b.y + b.height / 2,
+             code: g.getAttribute('data-podium'),
+             pe: getComputedStyle(g).pointerEvents };
+  });
+  ok('la pastille de rang n’est plus inerte', past && past.pe === 'auto',
+     past && past.pe);
+
+  /* Ce que `pointer-events:none` protégeait, et qui doit survivre : la pastille
+     est posée sur le centroïde, c'est-à-dire là où l'on vise pour survoler le
+     pays. Rendue cliquable, elle doit donc porter l'infobulle de ce pays.
+     Ce contrôle passe AVANT le clic : le clic fait défiler la page vers la
+     fiche, et la pastille ne serait plus sous le pointeur. */
+  if (past) {
+    await pg.mouse.move(5, 5);           /* `mouseover` ne naît que d'une ENTRÉE */
+    await pg.waitForTimeout(200);
+    await pg.mouse.move(past.x, past.y);
+    await pg.waitForTimeout(350);
+    /* L'infobulle est en position fixe : son `offsetParent` vaut null même
+       affichée. C'est la classe `on` qui dit si elle est ouverte. */
+    const tip = await pg.evaluate(() => {
+      const t = document.querySelector('.cres-tip');
+      return t && t.classList.contains('on') ? t.innerText.replace(/\n/g, ' · ') : null; });
+    ok('survoler la pastille montre toujours l’infobulle du pays',
+       !!tip && tip.length > 10, tip && tip.slice(0, 70));
+    ok('…et c’est bien celle du pays de la pastille',
+       !!tip && tip.indexOf(await pg.evaluate(c => nomPays(c) || c, past.code)) >= 0,
+       tip && tip.slice(0, 40));
+
+    await pg.mouse.click(past.x, past.y);
+    await pg.waitForTimeout(700);
+    ok('…et la cliquer mène au détail de SON pays',
+       (await pg.evaluate(() => IMPL_DEPLIE)) === past.code, past.code);
+  }
+
+  console.log('\n══ 6. Discrimination : l’ancienne carte ne répondait pas ══\n');
+  /* On remet la carte dans l'état d'hier — pastilles inertes, pays sans cible —
+     et on refait EXACTEMENT les mêmes gestes. */
+  const avant = await pg.evaluate(async () => {
+    IMPL_DEPLIE = null; renderImplAvis();
+    const st = document.createElement('style');
+    st.id = 'recette-avant';
+    st.textContent = '.cres-rg{pointer-events:none !important}';
+    document.head.appendChild(st);
+    const r = {};
+    document.querySelectorAll('#imp-classement .cres-pays[data-podium]')
+      .forEach(p => p.removeAttribute('data-podium'));
+    r.paysCiblables = document.querySelectorAll('#imp-classement .cres-pays[data-podium]').length;
+    return r;
+  });
+  ok('la carte d’hier n’offrait aucun pays cliquable', avant.paysCiblables === 0);
+  if (cible) await pg.mouse.click(cible.x, cible.y);
+  if (past) await pg.mouse.click(past.x, past.y);
+  await pg.waitForTimeout(600);
+  ok('…et ni le pays ni la pastille ne conduisaient nulle part',
+     (await pg.evaluate(() => IMPL_DEPLIE)) === null,
+     await pg.evaluate(() => IMPL_DEPLIE));
+  await pg.evaluate(() => { const s = document.getElementById('recette-avant');
+    if (s) s.remove(); renderImplClassement(); });
+  await pg.waitForTimeout(400);
+  ok('la vraie carte est bien revenue',
+     (await pg.evaluate(() =>
+       document.querySelectorAll('#imp-classement .cres-pays[data-podium]').length)) > 10);
+
+  console.log('\n══ 7. Une cible n’est offerte que si elle existe ══\n');
+  const gris = await pg.evaluate(() => ({
+    absents: document.querySelectorAll('#imp-classement .cres-abs[data-podium]').length,
+    horsUE: document.querySelectorAll('#imp-classement .cres-hue[data-podium]').length,
+    curseurGris: (() => { const g = document.querySelector('#imp-classement .cres-abs');
+      return g ? getComputedStyle(g).cursor : null; })(),
+    /* `aller:false` doit retirer la cible ET le rôle de bouton : une carte de
+       contrôle fabriquée ici prouve la règle sans dépendre des données. */
+    faux: (() => {
+      const d = document.createElement('div');
+      d.innerHTML = window.carteResultat(
+        { FR: { couleur: '#2D7A47', rang: 1, valeur: 1, aller: false },
+          DE: { couleur: '#C47C1A', rang: 2, valeur: 2 } }, { rangsMax: 3 });
+      return { sansCible: !!d.querySelector('.cres-pays[data-code="FR"]:not([data-podium])'),
+               roleFR: d.querySelector('.cres-pays[data-code="FR"]').getAttribute('role'),
+               avecCible: !!d.querySelector('.cres-pays[data-code="DE"][data-podium]'),
+               roleDE: d.querySelector('.cres-pays[data-code="DE"]').getAttribute('role'),
+               pastilleFR: d.querySelector('.cres-rg[data-code="FR"]').hasAttribute('data-podium') };
+    })(),
+  }));
+  ok('un pays NON comparé n’est pas cliquable', gris.absents === 0, gris.absents);
+  ok('…ni un pays hors de l’Union', gris.horsUE === 0, gris.horsUE);
+  ok('…et leur curseur ne promet rien', gris.curseurGris !== 'pointer', gris.curseurGris);
+  ok('un pays sans destination ne s’annonce pas cliquable',
+     gris.faux.sansCible && gris.faux.roleFR === 'img', gris.faux.roleFR);
+  ok('…sa pastille non plus', gris.faux.pastilleFR === false);
+  ok('…tandis qu’un pays qui en a une la porte, en rôle de bouton',
+     gris.faux.avecCible && gris.faux.roleDE === 'button', gris.faux.roleDE);
+
+  console.log('\n══ 8. Au clavier, et malgré un filtre actif ══\n');
+  await pg.evaluate(() => { IMPL_DEPLIE = null; renderImplAvis(); });
+  const clav = await pg.evaluate(() => {
+    const p = document.querySelector('#imp-classement .cres-pays[data-podium]');
+    p.focus();
+    return { code: p.getAttribute('data-podium'),
+             focalise: document.activeElement === p };
+  });
+  ok('un pays prend le focus au clavier', clav.focalise, clav.code);
+  await pg.keyboard.press('Enter');
+  await pg.waitForTimeout(600);
+  ok('…et Entrée mène au même détail que la souris',
+     (await pg.evaluate(() => IMPL_DEPLIE)) === clav.code, clav.code);
+
+  /* LE PIÈGE DU FILTRE. Un filtre actif peut avoir écarté la fiche visée : le
+     lecteur serait conduit vers un bloc où son pays n'est pas. */
+  const filtre = await pg.evaluate(() => {
+    const codes = [...document.querySelectorAll('#imp-classement .cres-pays[data-podium]')]
+      .map(p => p.getAttribute('data-podium'));
+    const vise = codes[0], autre = codes.find(c => c !== vise);
+    TF.imp = { pays: autre };                       /* on cache exprès le pays visé */
+    IMPL_DEPLIE = null; renderImplAvis();
+    const avantClic = !!document.querySelector('.imp-fiche[data-pays="' + vise + '"]');
+    implVoirPays(vise);
+    /* La barre se redessine et repose ses clés à vide : ce n'est donc pas
+       l'objet qu'il faut lire, mais l'absence de valeur ACTIVE. */
+    return { vise: vise, autre: autre, avantClic: avantClic,
+             apresClic: !!document.querySelector('.imp-fiche[data-pays="' + vise + '"]'),
+             actifs: Object.keys(TF.imp || {}).filter(k => TF.imp[k]),
+             fiches: document.querySelectorAll('.imp-fiche').length };
+  });
+  ok('le filtre cachait bien la fiche visée', filtre.avantClic === false,
+     filtre.vise + ' masqué par le filtre ' + filtre.autre);
+  ok('…et l’aller la fait tout de même apparaître', filtre.apresClic, filtre.vise);
+  ok('…en levant le filtre, visiblement, plutôt qu’en échouant en silence',
+     filtre.actifs.length === 0, filtre.actifs.join(','));
+  ok('…et le bloc reprend bien toutes ses fiches', filtre.fiches > 10, filtre.fiches);
+
+  console.log('\n══ 9. La même liaison sur la carte de l’enveloppe ══\n');
+  const cibleFin = await viser('.cres-pays[data-podium]:not(#imp-classement .cres-pays)');
+  ok('un pays comparé y est atteignable à la souris', !!cibleFin,
+     JSON.stringify(cibleFin));
+  if (cibleFin) {
+    await pg.mouse.click(cibleFin.x, cibleFin.y);
+    await pg.waitForTimeout(800);
+    const arr = await pg.evaluate((c) => {
+      const t = document.getElementById('fin-dos-' + c);
+      return { existe: !!t, halo: !!(t && t.classList.contains('cres-cible')),
+               titre: t ? t.innerText : '' };
+    }, cibleFin.code);
+    ok('…et le cliquer atteint SON dossier chiffré',
+       arr.existe && arr.halo, cibleFin.code + ' → ' + arr.titre.slice(0, 46));
+    ok('…lequel porte bien une enveloppe en euros',
+       /enveloppe/.test(arr.titre) && /M€/.test(arr.titre), arr.titre.slice(0, 50));
+  }
+  const dits = await pg.evaluate(() => ({
+    imp: (document.querySelector('#imp-classement .cres-note') || {}).innerText || '',
+    fin: [...document.querySelectorAll('.cres-note')].map(x => x.innerText).join(' ~~ '),
+  }));
+  ok('la carte du classement DIT que ses pays sont cliquables',
+     /Cliquez un pays coloré/.test(dits.imp), dits.imp.slice(-90));
+  ok('…et celle de l’enveloppe aussi',
+     (dits.fin.match(/Cliquez un pays coloré/g) || []).length >= 2,
+     (dits.fin.match(/Cliquez un pays coloré/g) || []).length + ' mentions');
+
+  console.log('\n══ 10. Ce que ces deux gestes ne devaient PAS casser ══\n');
   const reste = await pg.evaluate(() => ({
     horizon: !!document.getElementById('dc-horizon'),
     fond: !!document.getElementById('vue-fond'),
