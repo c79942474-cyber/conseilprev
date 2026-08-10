@@ -127,7 +127,9 @@ ok("…et c'est le pire d'Europe",
 print("\n══ 5. Le comparateur porte le critère, et le sert ══\n")
 
 cles = [c["cle"] for c in d["criteres"]]
-ok("dix critères désormais", len(cles) == 10, len(cles))
+ok("seize critères désormais : dix de socle et six d'aléas",
+   len(cles) == 16 and sum(1 for c in d["criteres"] if c["famille"] == "aleas") == 6,
+   len(cles))
 ok("le nouveau s'appelle climat_physique", "climat_physique" in cles)
 crit = [c for c in d["criteres"] if c["cle"] == "climat_physique"][0]
 ok("il déclare sa nature « referentiel », pas « analyse »",
@@ -154,10 +156,17 @@ print("\n══ 6. Ce que le critère ne devait pas déplacer ══\n")
 
 ok("la santé du module est verte", I.sante()["ok"], I.sante()["problemes"])
 ok("elle compte les pays XDI", I.sante()["pays_xdi"] == 12)
-ok("le millésime a changé", d["version"] == "2026-08-c", d["version"])
-ok("les sept critères d'origine sont intacts",
-   [c for c in cles if c not in ("climat_physique", "feux", "inondations")]
+ok("le millésime a changé", d["version"] == "2026-08-d", d["version"])
+# Les critères d'aléas s'AJOUTENT en fin de liste : le socle historique doit
+# rester intact ET dans son ordre, sinon les poids enregistrés par un lecteur
+# désigneraient d'autres critères que ceux qu'il a réglés.
+ok("les sept critères d'origine sont intacts, et dans l'ordre",
+   [c for c in cles if not c.startswith("alea_")
+    and c not in ("climat_physique", "feux", "inondations")]
    == ["carbone", "mix", "eau", "climat", "prix", "parc", "pipeline"], cles)
+ok("…et les six nouveaux viennent APRÈS, sans s'intercaler",
+   cles[:10] == list(("carbone", "mix", "eau", "climat", "prix", "parc",
+                      "climat_physique", "feux", "inondations", "pipeline")), cles[:10])
 ok("les notes d'origine d'un pays n'ont pas bougé",
    par_pays["FR"]["notes"]["carbone"] is not None
    and par_pays["FR"]["notes"]["climat"] == 65)

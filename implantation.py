@@ -27,7 +27,9 @@ une étude hydrologique locale, ni une due diligence.
 """
 from datetime import datetime, timezone
 
-VERSION = "2026-08-c"
+import climat_2050
+
+VERSION = "2026-08-d"
 
 # ═══════════════════════════════════════════════════════════════════════════
 # 1. EAU — stress hydrique national et compétition d'usages
@@ -912,6 +914,55 @@ CRITERES = [
      "formule": "note = 100 − 100 × pipeline du pays ÷ maximum du panel (moins il y a de file, mieux c'est pour un NOUVEL entrant)"},
 ]
 
+for _c in CRITERES:
+    _c["famille"] = "socle"
+
+# ── LES SIX ALÉAS, PONDÉRABLES UN PAR UN ────────────────────────────────────
+#
+# POURQUOI SIX CRITÈRES ET NON UN SEUL. Une note « climat » agrégée ferait
+# disparaître l'information la plus utile : un opérateur qui refroidit à l'air
+# sec ne craint pas la sécheresse comme celui qui évapore, et un site de plaine
+# se moque du glissement de terrain. Le poids doit se régler aléa par aléa,
+# sinon le comparateur impose son propre jugement sous couvert de le calculer.
+#
+# LE PIÈGE DU DOUBLE COMPTAGE, ET COMMENT IL EST TRAITÉ. Trois de ces aléas
+# recouvrent partiellement des critères déjà présents, issus de XDI. Les mettre
+# tous à poids fort compterait DEUX FOIS le même risque, et le classement s'en
+# trouverait faussé sans que rien ne le signale. Chaque critère déclare donc ce
+# qu'il recouvre, l'interface le dit, et le lecteur tranche — c'est son
+# comparateur, pas le nôtre. Ce qu'aucune des deux familles ne peut faire seule :
+# XDI mesure mieux, sur vingt-sept pays et une seule date ; les classes couvrent
+# vingt-neuf pays et deux horizons.
+ALEA_RECOUVREMENTS = {
+    "feu": ["feux"],
+    "pluie": ["inondations", "climat_physique"],
+    "submersion": ["climat_physique"],
+    "secheresse": ["eau"],
+    "hydrologie": ["eau"],
+    "glissement": [],
+}
+
+for _cle, _a in climat_2050.ALEAS.items():
+    _rec = ALEA_RECOUVREMENTS[_cle]
+    CRITERES.append({
+        "cle": "alea_" + _cle,
+        "nom": "%s — horizon retenu" % _a["nom"],
+        "nature": "analyse",
+        "famille": "aleas",
+        "alea": _cle,
+        "atteint": _a["atteint"],
+        "pourquoi": _a["pourquoi"],
+        "recouvre": _rec,
+        "source": "classes d'exposition CONSEILPREV d'après GIEC AR6, AEE et JRC "
+                  "(climat_2050.py) — couvre les 29 pays du panel, aux deux horizons",
+        "formule": "faible=85, modéré=60, élevé=30, très élevé=10"
+                   + (" ; sans objet=100 pour un pays sans littoral — un fait, "
+                      "pas une donnée manquante" if _cle == "submersion" else "")
+                   + ((" ⚠ recouvre partiellement « %s » : mettre les deux à "
+                       "poids fort compte deux fois le même risque"
+                       % "  » et «  ".join(_rec)) if _rec else ""),
+    })
+
 
 def _note_carbone(intensite):
     if intensite is None:
@@ -928,11 +979,18 @@ def _note_mix(m):
     return max(0, min(100, note))
 
 
-def assemble(sites, intensites):
+def assemble(sites, intensites, horizon=2030):
     """Le référentiel complet, prêt à afficher : un enregistrement par pays,
     notes par critère, avis, perspectives — et pour chaque famille sa source
     et sa nature. `sites` : liste des sites (datacentres), `intensites` :
-    dict pays → gCO2e/kWh (empreinte_sites.INTENSITE)."""
+    dict pays → gCO2e/kWh (empreinte_sites.INTENSITE).
+
+    `horizon` (2030 ou 2050) ne déplace QUE les six critères d'aléas : le prix
+    de l'électricité de 2050 n'est pas connu, le mix non plus, et prétendre les
+    projeter serait inventer. Ce qui bouge avec la date bouge ; le reste tient
+    sa valeur du millésime de sa source, et le dit.
+    """
+    horizon = 2050 if int(horizon) >= 2050 else 2030
     en_service, pipeline = {}, {}
     for s in sites:
         p = s.get("pays")
@@ -964,6 +1022,8 @@ def assemble(sites, intensites):
             "feux": _note_feux(p),
             "inondations": _note_inondations(p),
         }
+        for _a in climat_2050.ALEAS:
+            notes["alea_" + _a] = climat_2050.note_alea(p, _a, horizon)
         avis = AVIS.get(p)
         lignes.append({
             "pays": p,
@@ -992,6 +1052,15 @@ def assemble(sites, intensites):
             "en_service": en_service.get(p, 0),
             "pipeline_2030": pipeline.get(p, 0),
             "notes": notes,
+            # Les six fiches d'aléas à l'horizon retenu, plus le detail des
+            # deux dates : le lecteur doit pouvoir voir CE QUI SE DEGRADE sans
+            # avoir a changer d'horizon et a revenir.
+            "aleas": climat_2050.aleas_de(p, horizon),
+            "aleas_note": climat_2050.note_climat(p, horizon),
+            "aleas_dominants": climat_2050.dominants(p, horizon),
+            "aleas_satures": sorted(a for a in climat_2050.ALEAS
+                                    if climat_2050.sature(p, a)),
+            "mer_locale": climat_2050.mer_locale(p),
             "avis": avis,
             "perspectives": [x for x in PERSPECTIVES if x["pays"] == p],
         })
@@ -1008,7 +1077,33 @@ def assemble(sites, intensites):
         "classes": {"eau": EAU_CLASSES, "prix": PRIX_CLASSES, "climat": {k: v["nom"] for k, v in CLIMAT.items()}},
         "sources": {"eau": SOURCE_EAU, "mix": SOURCE_MIX, "prix": SOURCE_PRIX,
                     "perspectives": SOURCE_PERSPECTIVES, "climat_physique": SOURCE_XDI,
-                    "feux": SOURCE_FEUX, "inondations": SOURCE_INONDATIONS},
+                    "feux": SOURCE_FEUX, "inondations": SOURCE_INONDATIONS,
+                    "aleas": climat_2050.SOURCE_ALEAS,
+                    "mer": climat_2050.SOURCE_MER,
+                    "mer_locale": climat_2050.SOURCE_MER_LOCAL},
+        # L'horizon retenu, et ce qu'il déplace — pour que la page ne laisse
+        # jamais croire que TOUT le référentiel a été projeté.
+        "horizon": horizon,
+        "horizons": list(climat_2050.HORIZONS),
+        "horizon_portee": ("L'horizon ne déplace que les six critères d'aléas "
+                           "climatiques. Le prix, le mix, le parc et la file de "
+                           "raccordement gardent la valeur de leur millésime : "
+                           "personne ne connaît le prix de l'électricité de 2050, "
+                           "et le projeter serait l'inventer."),
+        "aleas": {
+            "definitions": climat_2050.ALEAS,
+            "niveaux": climat_2050.NIVEAUX,
+            "confiances": climat_2050.CONFIANCES,
+            "recouvrements": ALEA_RECOUVREMENTS,
+            "mer": climat_2050.mer(horizon),
+            "mer_ecart": climat_2050.ecart_scenarios(horizon),
+            "mer_scenarios": {s: {"en_2050": climat_2050.mer(2050, s),
+                                  "en_2100": climat_2050.mer(2100, s)}
+                              for s in climat_2050.MER},
+            "aggravations": climat_2050.aggravations(),
+            "satures": sum(1 for a in climat_2050.ALEAS
+                           for p in climat_2050.PAYS if climat_2050.sature(p, a)),
+        },
         "climat_physique": {"aleas": XDI_ALEAS, "europe": XDI_EUROPE,
                             "pire_panel": XDI_PIRE, "indirect": XDI_INDIRECT,
                             "classement": sorted(

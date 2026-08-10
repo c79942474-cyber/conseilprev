@@ -1619,8 +1619,22 @@ def api_empreinte_sites():
 # ══════════════════════════════════════════════════════════
 import implantation  # noqa: E402
 
-_IMP_CACHE = {"ts": 0.0, "data": None}
+# Un cache PAR HORIZON. Les six criteres d'aleas changent de valeur entre 2030
+# et 2050 : un cache unique servirait le referentiel de 2030 a qui demande 2050,
+# sans que rien ne le signale — le pire genre de faux, celui qui a l'air juste.
+_IMP_CACHE = {2030: {"ts": 0.0, "data": None}, 2050: {"ts": 0.0, "data": None}}
 IMP_TTL = 21600  # 6 h : le referentiel est versionne, seul le pipeline bouge
+
+
+def _horizon_demande(defaut=2030):
+    """L'horizon lu dans la requete, borne aux deux valeurs servies. Une valeur
+    hors liste retombe sur le defaut plutot que de produire un troisieme
+    referentiel qui n'existe pas."""
+    try:
+        h = int(request.args.get('horizon') or defaut)
+    except (TypeError, ValueError):
+        return defaut
+    return h if h in _IMP_CACHE else defaut
 
 
 @app.route('/api/implantation', methods=['GET'])
@@ -1630,22 +1644,29 @@ def api_implantation():
     """Referentiel d'implantation par pays : stress hydrique (WEI+ et part de
     l'irrigation), mix de production, prix industriels en classes, pipeline
     2026-2030 compte depuis les statuts des sites, perspectives datees, et
-    l'analyse avantages/inconvenients. ?refresh=1 reassemble."""
+    l'analyse avantages/inconvenients. ?refresh=1 reassemble.
+
+    ?horizon=2030|2050 deplace les six criteres d'aleas climatiques — et EUX
+    SEULS : le prix de l'electricite de 2050 n'est pas connu, et le projeter
+    serait l'inventer. La reponse porte `horizon_portee` qui le dit."""
     force = (request.args.get('refresh') or '') in ('1', 'true', 'yes')
+    h = _horizon_demande()
+    boite = _IMP_CACHE[h]
     now = time.time()
-    if (not force) and _IMP_CACHE["data"] and (now - _IMP_CACHE["ts"] < IMP_TTL):
-        payload = dict(_IMP_CACHE["data"])
+    if (not force) and boite["data"] and (now - boite["ts"] < IMP_TTL):
+        payload = dict(boite["data"])
         payload["ok"] = True
         payload["cached"] = True
         return jsonify(payload)
     try:
         _dc = datacentres.assemble()
         data = implantation.assemble(sites=_dc.get('sites'),
-                                     intensites=empreinte_sites.INTENSITE)
+                                     intensites=empreinte_sites.INTENSITE,
+                                     horizon=h)
     except Exception as e:  # noqa: BLE001
         logger.error(f'IMPLANTATION_ERR: {e}')
         return jsonify({"ok": False, "erreur": "assemblage indisponible"}), 503
-    _IMP_CACHE["ts"], _IMP_CACHE["data"] = now, data
+    boite["ts"], boite["data"] = now, data
     payload = dict(data)
     payload["ok"] = True
     payload["cached"] = False
@@ -1675,15 +1696,21 @@ _FIN_INTENSITES = {}
 
 def _fin_pays_index():
     """Donnees par pays, reprises telles quelles du referentiel d'implantation
-    (meme cache, meme version) : climat, eau, prix, intensite, parc, pipeline."""
+    (meme cache, meme version) : climat, eau, prix, intensite, parc, pipeline.
+
+    Toujours l'horizon 2030 : l'enveloppe d'investissement chiffre un projet
+    qui se construit, pas un actif a mi-vie. Prendre les aleas de 2050 pour
+    moduler un devis de 2027 melerait deux questions distinctes."""
     now = time.time()
-    if _IMP_CACHE["data"] and (now - _IMP_CACHE["ts"] < IMP_TTL):
-        data = _IMP_CACHE["data"]
+    boite = _IMP_CACHE[2030]
+    if boite["data"] and (now - boite["ts"] < IMP_TTL):
+        data = boite["data"]
     else:
         _dc = datacentres.assemble()
         data = implantation.assemble(sites=_dc.get('sites'),
-                                     intensites=empreinte_sites.INTENSITE)
-        _IMP_CACHE["ts"], _IMP_CACHE["data"] = now, data
+                                     intensites=empreinte_sites.INTENSITE,
+                                     horizon=2030)
+        boite["ts"], boite["data"] = now, data
     return {p["pays"]: p for p in (data.get("pays") or [])}, data
 
 

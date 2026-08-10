@@ -198,7 +198,9 @@ ok("les deux sont datées de 2025, pas du millésime du rapport de juin 2026",
 print("\n══ 6. Le comparateur les porte, et les sert ══\n")
 
 cles = [c["cle"] for c in d["criteres"]]
-ok("dix critères désormais", len(cles) == 10, len(cles))
+ok("seize critères désormais : dix de socle et six d'aléas",
+   len(cles) == 16 and sum(1 for c in d["criteres"] if c["famille"] == "aleas") == 6,
+   len(cles))
 ok("feux et inondations en font partie",
    "feux" in cles and "inondations" in cles, cles)
 cf = [c for c in d["criteres"] if c["cle"] == "feux"][0]
@@ -242,11 +244,17 @@ s = I.sante()
 ok("elle compte les deux nouveaux jeux",
    s["pays_feux"] == 11 and s["pays_inondations"] == 27,
    (s["pays_feux"], s["pays_inondations"]))
-ok("le millésime a changé", d["version"] == "2026-08-c", d["version"])
+ok("le millésime a changé", d["version"] == "2026-08-d", d["version"])
 ok("les huit critères antérieurs sont intacts et dans l'ordre",
-   [c for c in cles if c not in ("feux", "inondations")]
+   [c for c in cles if not c.startswith("alea_")
+    and c not in ("feux", "inondations")]
    == ["carbone", "mix", "eau", "climat", "prix", "parc", "climat_physique",
        "pipeline"], cles)
+# Les six aléas s'ajoutent en QUEUE. S'ils s'intercalaient, les poids qu'un
+# lecteur a réglés désigneraient d'autres critères au rechargement.
+ok("…et les six aléas viennent tous après le socle",
+   [i for i, c in enumerate(cles) if c.startswith("alea_")] == list(range(10, 16)),
+   cles)
 ok("les notes antérieures d'un pays n'ont pas bougé",
    par_pays["FR"]["notes"]["climat"] == 65
    and par_pays["FR"]["notes"]["climat_physique"] == 21,

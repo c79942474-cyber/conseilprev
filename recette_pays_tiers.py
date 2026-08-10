@@ -232,8 +232,14 @@ print("\n══ 6. Ce que l'ouverture ne devait PAS déplacer ══\n")
 ok("le référentiel des sites est intact", len(D.SITES) == 249, len(D.SITES))
 ok("les 28 pays du parc sont inchangés",
    len({s["pays"] for s in D.SITES}) == 28)
-ok("les dix critères du comparateur sont intacts",
-   len(impl["criteres"]) == 10, len(impl["criteres"]))
+ok("les dix critères de socle du comparateur sont intacts",
+   [c["cle"] for c in impl["criteres"] if c["famille"] == "socle"]
+   == ["carbone", "mix", "eau", "climat", "prix", "parc", "climat_physique",
+       "feux", "inondations", "pipeline"],
+   [c["cle"] for c in impl["criteres"] if c["famille"] == "socle"])
+ok("…et six critères d'aléas s'y ajoutent",
+   sum(1 for c in impl["criteres"] if c["famille"] == "aleas") == 6,
+   len(impl["criteres"]))
 ok("la France n'a pas bougé d'une note",
    pp["FR"]["notes"]["climat"] == 65 and pp["FR"]["notes"]["climat_physique"] == 21)
 ok("les feux et inondations restent hors champ pour les trois",
