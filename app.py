@@ -1963,6 +1963,8 @@ def api_tendances_dc():
 # ══════════════════════════════════════════════════════════
 import export_dc  # noqa: E402
 import export_observatoire  # noqa: E402
+import seo  # noqa: E402
+import conversion  # noqa: E402
 
 
 def _figures_du_corps(corps, cles_admises):
@@ -4255,6 +4257,52 @@ def chat():
         return jsonify({"error": "Erreur serveur"}), 500
 
 # ── Pages statiques ──
+@app.route('/donnees-structurees.json')
+@rate_limit(limit=60, window=60)
+def donnees_structurees():
+    """Les donnees structurees du catalogue de formation, en JSON-LD.
+
+    C'est le seul contenu de ce site eligible a un resultat enrichi qui ait un
+    sens : une formation a une duree, un prix et un organisme. Le prix vient de
+    `form_prix_cents`, c'est-a-dire de la MEME fonction qui facture — un tarif
+    affiche a Google et un tarif factureee qui divergeraient seraient une
+    publicite trompeuse, pas une erreur de balise.
+
+    Une formation sans prix calculable part SANS offre plutot qu'avec un prix
+    par defaut : un prix faux est opposable."""
+    try:
+        bloc = seo.jsonld_formations(FORM_CATALOGUE, prix_de=form_prix_cents)
+    except Exception as e:  # noqa: BLE001
+        logger.error(f'JSONLD_ERR: {e}')
+        return jsonify({'ok': False}), 503
+    resp = jsonify(bloc)
+    resp.headers['Cache-Control'] = 'public, max-age=3600'
+    return resp
+
+
+@app.route('/sitemap.xml')
+@rate_limit(limit=60, window=60)
+def sitemap_xml():
+    """Le plan du site. `robots.txt` l'annonce depuis l'origine et l'adresse
+    rendait 404 : un moteur qui suivait la declaration trouvait porte close.
+
+    Il est calcule a partir des pages REELLEMENT servies, avec la date de
+    modification reelle de chaque fichier — une date figee au jour de la
+    generation apprend au moteur a ne plus la croire. Ce que robots.txt
+    interdit n'y figure pas : deux consignes contraires laissent le moteur
+    choisir laquelle suivre."""
+    try:
+        xml = seo.plan(PAGES, racine=_APP_DIR)
+    except Exception as e:  # noqa: BLE001
+        logger.error(f'SITEMAP_ERR: {e}')
+        return Response('<?xml version="1.0" encoding="UTF-8"?><urlset '
+                        'xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"/>',
+                        mimetype='application/xml'), 503
+    resp = Response(xml, mimetype='application/xml')
+    resp.headers['Cache-Control'] = 'public, max-age=3600'
+    return resp
+
+
 @app.route('/robots.txt')
 def robots_txt():
     """Declare explicitement les zones interdites au crawl — n'arrete pas un bot
@@ -4320,6 +4368,13 @@ PAGES_RESERVEES = {
     '/observatoire':  'observatoire.html',
     '/panorama':      'panorama.html',
 }
+
+# De quel fichier vient quelle adresse. Le cache de pages ne connait que le nom
+# du fichier ; les balises canoniques ont besoin de l'ADRESSE publique, qui est
+# la seule que le moteur verra. Les pages reservees y figurent aussi : leurs
+# balises ne servent pas au referencement — robots.txt les interdit — mais un
+# lien partage entre abonnes doit quand meme s'afficher correctement.
+_ROUTE_DE_FICHIER = {f: r for r, f in list(PAGES.items()) + list(PAGES_RESERVEES.items())}
 
 
 @app.route('/api/chat/claude', methods=['POST'])
@@ -9046,6 +9101,20 @@ def _page_cache_entry(filename):
             return ent
         with open(os.path.join(_APP_DIR, filename), 'rb') as f:
             raw = f.read()
+        # CANONIQUE ET CARTE DE PARTAGE, posees ici et pas dans les fichiers :
+        # vingt-trois pages sur vingt-quatre n'en avaient aucune, et les ajouter
+        # a la main aurait garanti qu'une page oubliee reste sans. La source du
+        # titre et de la description reste le fichier lui-meme — on ne comble
+        # que les trous. Une seule fois par version de fichier, pas par visite.
+        try:
+            _route = _ROUTE_DE_FICHIER.get(filename, '/')
+            _html = seo.enrichir(_route, raw.decode('utf-8'))
+            # ET LE CHEMIN DE SORTIE. Dix pages n'en offraient aucun — dont
+            # celle des tarifs. Attirer un visiteur puis le laisser sans rien a
+            # cliquer revient a payer le trajet et fermer la porte.
+            raw = conversion.enrichir(_route, _html).encode('utf-8')
+        except Exception as _e:  # noqa: BLE001
+            logger.error(f'SEO_ENRICH_ERR {filename}: {_e}')
         ent = {
             'key': key,
             'raw': raw,
