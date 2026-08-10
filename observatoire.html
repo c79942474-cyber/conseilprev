@@ -56,6 +56,18 @@ body.embed .hdr{margin-bottom:14px}
 figure{margin:0}
 
 /* ── Carte ── */
+/* TÉLÉCHARGEMENTS — un chiffre recopié à la main perd sa nature, sa source et
+   sa licence. Le bouton est donc là où les chiffres se lisent. */
+.dl-barre{border:1px solid var(--rule2,#D5D2D9);border-radius:8px;background:var(--bg,#F6F4FC);
+  padding:12px 14px;margin:16px 0}
+.dl-t{font-size:12.5px;font-weight:700;margin:0 0 3px}
+.dl-note{font-size:10.5px;color:var(--muted2,#6E6E6E);line-height:1.5;margin:0 0 9px}
+.dl-b{font-size:11.5px;font-weight:600;padding:5px 12px;border:1px solid var(--rule2,#D5D2D9);
+  border-radius:5px;background:#FFF;cursor:pointer;margin-right:6px}
+.dl-b:hover{background:#1C1C1C;color:#fff;border-color:#1C1C1C}
+.dl-b:disabled{opacity:.45;cursor:progress}
+.dl-msg{font-size:10.5px;margin-top:8px;min-height:14px;color:var(--muted2,#6E6E6E)}
+.dl-msg.err{color:#A33}
 .map-wrap{position:relative}
 #obsmap{width:100%}   /* hauteur libre : le SVG impose son rapport */
 .map-count-badge{position:absolute;top:10px;right:10px;z-index:1000;background:#1C1C1C;color:#fff;font-family:var(--mono);font-size:10px;padding:6px 12px;border-radius:4px;letter-spacing:.04em}
@@ -638,6 +650,35 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
         <div class="gov-a"><a href="https://ai-watch.ec.europa.eu/" target="_blank" rel="noopener">AI Watch (JRC)</a></div>
       </li>
     </ul>
+  </div>
+</section>
+
+<!-- ══ 5 bis. EMPORTER L'OBSERVATOIRE ══
+     Ces chiffres finissent dans une note de cadrage, un comité, un mémoire
+     technique. Tant qu'il faut les recopier à la main, chacun perd en route sa
+     source, sa licence et sa PRÉCISION — « classe » et « lu sur une carte » ne
+     se citent pas comme « exact ». Le document les emporte avec eux. -->
+<section class="panel" aria-labelledby="t-dl">
+  <div class="panel-head">
+    <span class="panel-title" id="t-dl">Emporter l’Observatoire — Word et PDF</span>
+    <span class="panel-note">calcul déterministe · aucune rédaction par IA</span>
+  </div>
+  <div class="panel-body">
+    <div class="dl-barre" id="obs-dl">
+      <p class="dl-t">Dossier complet — les cinq panneaux, leurs tableaux et leurs figures</p>
+      <p class="dl-note">Le document reprend <b>tout ce que cette page calcule</b> :
+      modèles remarquables par pays, brevets accordés (parts, volumes et facteurs de
+      croissance), chercheurs d’élite et soldes nets, adoption par les entreprises de
+      l’Union, cadre et gouvernance. Les <b>cartes et graphiques affichés à l’écran</b>
+      y sont joints en image, dans la vue que vous avez choisie. Chaque chapitre porte
+      sa source, sa licence, son millésime et sa précision — et le dossier rappelle les
+      crédits à reproduire, dont la <b>licence sans dérivée</b> des données de brevets.</p>
+      <div>
+        <button type="button" class="dl-b" data-obs-fmt="docx">Télécharger en Word</button>
+        <button type="button" class="dl-b" data-obs-fmt="pdf">Télécharger en PDF</button>
+      </div>
+      <div class="dl-msg" id="obs-dl-msg" role="status" aria-live="polite"></div>
+    </div>
   </div>
 </section>
 
@@ -3600,6 +3641,77 @@ if(window.parent && window.parent !== window){
     try{ new ResizeObserver(annonceHauteur).observe(document.body); }catch(e){}
   }
 }
+</script>
+<script src="/figures_export.js"></script>
+<script>
+/* ══ EMPORTER L'OBSERVATOIRE ═════════════════════════════════════════════════
+   Les figures partent DANS LA VUE AFFICHÉE : si le lecteur a basculé les
+   brevets sur « Composition » et les chercheurs sur « Solde net », c'est cela
+   qu'il veut dans son document. Exporter une vue canonique lui livrerait un
+   dossier qui ne ressemble pas à son écran, et il ne saurait pas pourquoi.
+
+   Une figure qu'on n'a pas su produire n'est PAS envoyée : le composeur écrit
+   alors « figure non jointe » à sa place, et le message le dit ici aussi.
+   Livrer une image vide serait pire — le document paraîtrait complet. */
+(function(){
+  var zone = document.getElementById('obs-dl');
+  if(!zone || !window.FIG) return;
+  var msg = document.getElementById('obs-dl-msg');
+  var boutons = zone.querySelectorAll('[data-obs-fmt]');
+
+  function dire(t, err){
+    if(!msg) return;
+    msg.className = 'dl-msg' + (err ? ' err' : '');
+    msg.textContent = t;
+  }
+
+  /* Le SVG de chaque panneau, dans l'état où il est. Les sélecteurs sont le
+     contrat avec `export_observatoire.FIGURES` : une clé inventée d'un côté
+     serait silencieusement ignorée de l'autre. */
+  function specs(){
+    return [
+      { cle: 'carte-modeles', sel: '#obsmap svg', largeur: 1200 },
+      { cle: 'brevets',       sel: '#brev-chart svg', largeur: 1100 },
+      /* Pas d'adoption : ce panneau n'a pas de SVG, ses barres sont du HTML.
+         Réclamer sa figure produirait un manque à chaque export. */
+      { cle: 'talents',       sel: '#tal-maps svg',   largeur: 1000 }
+    ];
+  }
+
+  function exporter(fmt){
+    for(var i = 0; i < boutons.length; i++) boutons[i].disabled = true;
+    dire('Rendu des cartes…', false);
+    window.FIG.collecter(specs()).then(function(r){
+      dire('Composition du document…', false);
+      /* SEULES LES FIGURES PARTENT D'ICI. L'objet `DATA` de cette page est un
+         modèle d'AFFICHAGE — les pays y sont une liste de points à projeter,
+         les brevets des tableaux parallèles — et non le référentiel. L'envoyer
+         faisait composer le document à partir d'une forme que le module ne
+         reconnaît pas. Les chiffres, le serveur les tient de `observatoire_ia`,
+         c'est-à-dire de la source même qui alimente cet écran. */
+      var corps = { figures: r.figures };
+      return window.FIG.telecharger('/api/export-observatoire/observatoire.' + fmt,
+        corps, 'observatoire-ia.' + fmt).then(function(f){
+          var ko = Math.round(f.blob.size / 1024);
+          dire('Téléchargé : ' + f.nom + ' (' + ko + ' Ko)'
+             + (r.manques.length
+                 ? ' — ' + r.manques.length + ' figure(s) non jointe(s) : '
+                   + r.manques.join(', ') + '. Le document le signale à leur place.'
+                 : ' — ' + Object.keys(r.figures).length + ' figures jointes.'), false);
+        });
+    }).catch(function(e){
+      dire('Téléchargement impossible — ' + (e && e.message ? e.message : 'erreur'), true);
+    }).then(function(){
+      for(var i = 0; i < boutons.length; i++) boutons[i].disabled = false;
+    });
+  }
+
+  for(var i = 0; i < boutons.length; i++){
+    (function(b){
+      b.addEventListener('click', function(){ exporter(b.getAttribute('data-obs-fmt')); });
+    })(boutons[i]);
+  }
+})();
 </script>
 <script src="/fleches.js" defer></script>
 </body>

@@ -102,6 +102,16 @@ def _blocks(md):
             out.append(("hr", None))
             i += 1
             continue
+        # FIGURE : `![légende](fig:CLE)`. L'image elle-même n'est PAS dans le
+        # Markdown — elle arrive par `meta["figures"]`, en octets PNG. Un
+        # document qui porterait ses cartes en base64 au milieu du texte
+        # deviendrait illisible à la relecture, et le même Markdown ne pourrait
+        # plus servir au Word et au PDF.
+        fg = re.match(r"^\s*!\[(.*?)\]\(fig:([A-Za-z0-9_\-]+)\)\s*$", ln)
+        if fg:
+            out.append(("fig", (fg.group(2), fg.group(1).strip())))
+            i += 1
+            continue
         # tableau : ligne d'en-tête + ligne de séparation
         if (re.match(r"^\s*\|.*\|\s*$", ln) and i + 1 < n
                 and re.match(r"^\s*\|?[\s:|-]+\|?\s*$", lines[i + 1]) and "-" in lines[i + 1]):
@@ -135,6 +145,47 @@ def _blocks(md):
             i += 1
         out.append(("p", " ".join(para)))
     return out
+
+
+def _figure(meta, cle):
+    """Les octets PNG d'une figure, ou None.
+
+    Les figures arrivent du NAVIGATEUR : c'est lui qui détient les cartes et les
+    graphiques, dessinés en SVG à partir des calculs. Elles voyagent en base64
+    dans le corps de la requête, et ce module les décode ici — un seul endroit.
+
+    Trois refus, et ils comptent :
+      · ce qui n'est pas du PNG est rejeté. Accepter n'importe quel octet
+        reviendrait à coller dans un document Word ce qu'un client aurait
+        choisi d'y mettre ;
+      · au-delà de la taille limite, on rejette plutôt que de tronquer : une
+        image coupée est une image fausse ;
+      · en cas de doute, on rend None — et l'appelant ÉCRIT que la figure
+        manque. Une figure qui disparaît sans trace laisse un document qui
+        promet une carte et n'en porte pas.
+    """
+    figs = (meta or {}).get("figures") or {}
+    v = figs.get(cle)
+    if not v:
+        return None
+    if isinstance(v, str):
+        import base64
+        s = v.strip()
+        if s.startswith("data:"):
+            s = s.split(",", 1)[-1]
+        try:
+            v = base64.b64decode(s, validate=True)
+        except Exception:
+            return None
+    if not isinstance(v, (bytes, bytearray)):
+        return None
+    v = bytes(v)
+    if len(v) > FIGURE_MAX or not v.startswith(b"\x89PNG\r\n\x1a\n"):
+        return None
+    return v
+
+
+FIGURE_MAX = 6 * 1024 * 1024      # 6 Mio par figure : une carte, pas un film
 
 
 def _fiche(meta):
@@ -415,6 +466,29 @@ def build_docx(md, meta=None):
                     if k % 2:                     # zébrure : lecture des lignes longues
                         _shade(cells[j], C_ZEBRA)
             doc.add_paragraph().paragraph_format.space_after = Pt(0)
+        elif kind == "fig":
+            cle, legende = payload
+            img = _figure(meta, cle)
+            if img:
+                p = doc.add_paragraph()
+                p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                p.add_run().add_picture(io.BytesIO(img), width=Inches(6.3))
+                if legende:
+                    lg = doc.add_paragraph()
+                    lg.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                    r_ = lg.add_run(legende)
+                    r_.italic = True
+                    r_.font.size = Pt(8.5)
+                    r_.font.color.rgb = RGBColor(0x5C, 0x5C, 0x5C)
+            else:
+                # UNE FIGURE ABSENTE SE DIT. La supprimer en silence laisserait
+                # un document qui promet une carte dans son sommaire et n'en
+                # porte aucune, sans que personne sache laquelle manque.
+                p = doc.add_paragraph()
+                r_ = p.add_run("[figure non jointe : %s]" % (legende or cle))
+                r_.italic = True
+                r_.font.size = Pt(9)
+                r_.font.color.rgb = RGBColor(0x8A, 0x8A, 0x8A)
         elif kind == "hr":
             _rule(doc)
 
@@ -665,6 +739,42 @@ def build_pdf(md, meta=None):
                 for row in [head] + rows:
                     pdf.multi_cell(0, 5, _pdf_txt(" | ".join(row)))
             pdf.ln(2)
+        elif kind == "fig":
+            cle, legende = payload
+            img = _figure(meta, cle)
+            if img:
+                try:
+                    from PIL import Image
+                    with Image.open(io.BytesIO(img)) as im:
+                        pw, ph = im.size
+                    larg = pdf.epw
+                    haut = larg * ph / float(pw or 1)
+                except Exception:
+                    larg, haut = pdf.epw, pdf.epw * 0.5
+                # Une figure ne se coupe pas en deux pages : si elle ne tient
+                # pas sous le texte, elle commence à la page suivante.
+                if pdf.get_y() + haut > pdf.h - pdf.b_margin - 6:
+                    pdf.add_page()
+                try:
+                    pdf.image(io.BytesIO(img), x=pdf.l_margin, y=pdf.get_y(), w=larg)
+                    pdf.set_y(pdf.get_y() + haut + 1)
+                except Exception:
+                    pdf.set_font("Helvetica", "I", 9)
+                    pdf.set_text_color(*C_GREY)
+                    _cell(_pdf_txt("[figure illisible : %s]" % (legende or cle)), 5)
+                    pdf.set_text_color(0, 0, 0)
+                if legende:
+                    pdf.set_font("Helvetica", "I", 8.5)
+                    pdf.set_text_color(*C_GREY)
+                    _cell(_pdf_txt(legende), 4.5)
+                    pdf.set_text_color(0, 0, 0)
+                pdf.ln(2)
+            else:
+                pdf.set_font("Helvetica", "I", 9)
+                pdf.set_text_color(*C_GREY)
+                _cell(_pdf_txt("[figure non jointe : %s]" % (legende or cle)), 5)
+                pdf.set_text_color(0, 0, 0)
+                pdf.ln(1)
         elif kind == "hr":
             rule()
 

@@ -1962,6 +1962,85 @@ def api_tendances_dc():
 # marquage partout reviendrait a ne plus rien signaler la ou il compte.
 # ══════════════════════════════════════════════════════════
 import export_dc  # noqa: E402
+import export_observatoire  # noqa: E402
+
+
+def _figures_du_corps(corps, cles_admises):
+    """Les figures jointes par la page, validées.
+
+    Les cartes et les graphiques sont dessinés par le NAVIGATEUR : lui seul les
+    a sous la main. Elles remontent donc en base64 dans le corps de la requête.
+    Ce qui traverse ce guichet est borné, et ce qui n'y entre pas est ÉCRIT
+    comme absent par le composeur — jamais escamoté.
+
+    Trois bornes : les clés sont celles que le module déclare, pas celles que
+    l'appelant invente ; le nombre est plafonné ; le poids total aussi. Le
+    contenu lui-même (PNG, taille) est vérifié une seule fois, dans
+    `livrables_export._figure`.
+    """
+    figs = (corps or {}).get('figures') or {}
+    if not isinstance(figs, dict):
+        return {}, 'figures illisibles'
+    admises = set(cles_admises)
+    retenues, poids = {}, 0
+    for cle, val in list(figs.items())[:12]:
+        if cle not in admises or not isinstance(val, str):
+            continue
+        poids += len(val)
+        if poids > 24 * 1024 * 1024:
+            return {}, 'figures trop lourdes — relancez sans les cartes'
+        retenues[cle] = val
+    return retenues, None
+
+
+@app.route('/api/export-observatoire', methods=['GET'])
+@rate_limit(limit=60, window=60)
+@reserve_abonne_api
+def api_export_observatoire():
+    """Catalogue du dossier de l'Observatoire, de ses formats et de ses figures."""
+    cat = export_observatoire.catalogue()
+    cat['ok'] = True
+    cat['sante'] = export_observatoire.sante()
+    return jsonify(cat)
+
+
+@app.route('/api/export-observatoire/<dossier>.<fmt>', methods=['POST'])
+@rate_limit(limit=20, window=300)
+@reserve_abonne_api
+def api_export_observatoire_produire(dossier, fmt):
+    """Produit le dossier de l'Observatoire en Word ou en PDF.
+
+    Le corps peut porter `figures` — les cartes et graphiques de la page, en
+    PNG base64 — et `donnees`, l'état LIVE affiché. Sans `donnees`, le document
+    est composé depuis le seed : il resterait juste, mais pourrait contredire
+    l'écran d'un lecteur dont les flux ont rafraîchi une série."""
+    dossier = str(dossier or '')[:32]
+    fmt = str(fmt or '')[:8].lower()
+    if dossier not in export_observatoire.DOSSIERS:
+        return jsonify({'ok': False, 'erreur': 'dossier inconnu'}), 404
+    if fmt not in export_observatoire.FORMATS:
+        return jsonify({'ok': False, 'erreur': 'format inconnu'}), 400
+    corps = request.get_json(silent=True) or {}
+    figs, souci = _figures_du_corps(
+        corps, [c for c, _ in export_observatoire.FIGURES])
+    if souci:
+        return jsonify({'ok': False, 'erreur': souci}), 413
+    donnees = corps.get('donnees') if isinstance(corps.get('donnees'), dict) else None
+    try:
+        octets, mime, nom = export_observatoire.produire(dossier, fmt, figs, donnees)
+    except RuntimeError as e:
+        logger.error(f'EXPORT_OBS_INCOMPLET: {e}')
+        return jsonify({'ok': False, 'erreur': 'document incomplet — export refuse'}), 500
+    except Exception as e:  # noqa: BLE001
+        logger.error(f'EXPORT_OBS_ERR: {e}')
+        return jsonify({'ok': False, 'erreur': 'export indisponible'}), 503
+    rep = make_response(octets)
+    rep.headers['Content-Type'] = mime
+    rep.headers['Content-Disposition'] = 'attachment; filename="%s"' % nom
+    rep.headers['Content-Length'] = str(len(octets))
+    rep.headers['Cache-Control'] = 'no-store'
+    rep.headers['X-Content-Type-Options'] = 'nosniff'
+    return rep
 
 
 @app.route('/api/export-dc', methods=['GET'])
@@ -1998,8 +2077,11 @@ def api_export_dc_produire(dossier, fmt):
         return jsonify({'ok': False,
                         'erreur': 'ce dossier exige un calcul d\'enveloppe : '
                                   'lancez le calcul, puis exportez'}), 400
+    figs, souci = _figures_du_corps(corps, [c for c, _ in export_dc.FIGURES])
+    if souci:
+        return jsonify({'ok': False, 'erreur': souci}), 413
     try:
-        octets, mime, nom = export_dc.produire(dossier, fmt, devis)
+        octets, mime, nom = export_dc.produire(dossier, fmt, devis, figs)
     except RuntimeError as e:
         # Le garde-fou de composition : mieux vaut ne rien livrer qu'un document
         # ampute de ses reserves. L'incident est journalise pour etre corrige.

@@ -1947,6 +1947,7 @@ engagements publics) sont imputés nominativement.</div>
 
 <script src="/drapeaux.js"></script>
 <script src="/factcheck.js"></script>
+<script src="/figures_export.js"></script>
 <script>
 "use strict";
 /* Le référentiel complet est EMBARQUÉ (page autonome, motif observatoire) puis
@@ -9196,6 +9197,23 @@ if(window.parent&&window.parent!==window){
       var d = devisFn();
       if(d) corps.devis = d;
     }
+    /* LES CARTES PARTENT AVEC LES CHIFFRES. Elles sont dessinees ici, dans le
+       navigateur, a partir de ces memes calculs : le serveur ne les a jamais
+       vues. Un dossier sans elles ne porterait que des tableaux — et perdrait
+       ce qui fait qu'on regarde une carte plutot qu'une colonne de nombres.
+       On les recolte AVANT la requete ; celles qu'on n'a pas su produire ne
+       sont pas envoyees, et le document ecrit alors qu'elles manquent. */
+    var avant = (window.FIG && window.FIG.collecter)
+      ? window.FIG.collecter([
+          /* `#panmap` est le CONTENEUR ; le dessin est le <svg> qu'il porte.
+             Et il n'y a que DEUX cartes de résultat sur cette page — le
+             panneau d'empreinte n'en a pas. */
+          { cle: 'carte-parc', sel: '#panmap svg', largeur: 1300 },
+          { cle: 'carte-implantation', sel: '#imp-classement .cres-svg', largeur: 1100 },
+          { cle: 'carte-enveloppe', sel: '#fin-res .cres-svg', largeur: 1100 }
+        ]).then(function(r){ corps.figures = r.figures; return r; })
+      : Promise.resolve({ figures: {}, manques: [] });
+    avant.then(function(){
     fetch('/api/export-dc/' + dossier + '.' + fmt, {
       method: 'POST', credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
@@ -9228,6 +9246,7 @@ if(window.parent&&window.parent!==window){
               true);
     }).then(function(){
       for(var i = 0; i < boutons.length; i++) boutons[i].disabled = false;
+    });
     });
   }
 

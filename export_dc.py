@@ -35,7 +35,20 @@ import finance_dc
 import implantation
 import tendances_dc
 
-VERSION = "2026-08-a"
+VERSION = "2026-08-b"
+
+# LES FIGURES QUE LA PAGE PEUT JOINDRE. Les cartes du Panorama sont dessinees
+# par le navigateur a partir de ces memes calculs : lui seul les a sous la
+# main. La cle est le contrat entre la page et ce module — elle ne s'invente
+# pas des deux cotes. Le chapitre ou chacune se pose est ecrit ci-dessous.
+FIGURES = (
+    ("carte-parc", "Carte des centres de donnees et des systemes d'IA deployes"),
+    ("carte-implantation", "Comparateur pondere — classement des pays"),
+    ("carte-enveloppe", "Enveloppe d'investissement — pays compares"),
+    # PAS DE CARTE POUR L'EMPREINTE : ce panneau n'en dessine pas. Declarer la
+    # cle aurait produit un « figure non jointe » a chaque export, que rien ne
+    # pouvait satisfaire.
+)
 
 DOSSIERS = {
     "enveloppe": {
@@ -155,6 +168,7 @@ def md_enveloppe(devis_reponse):
     a = L.append
 
     a("# Enveloppe d'investissement et DPGF — décision GO / NO GO\n")
+    a("![Les pays comparés — coût total de possession](fig:carte-enveloppe)\n")
     a("## Ce que ce dossier chiffre, et ce qu'il refuse de chiffrer\n")
     a("Ce dossier structure une enveloppe d'investissement et sa décomposition par "
       "lot pour un centre de données, puis compare les pays sur le **coût total de "
@@ -526,6 +540,8 @@ def md_implantation(imp=None):
     L = []
     a = L.append
     a("# Référentiel de choix d'implantation — %d pays\n" % len(imp.get("pays") or []))
+    a("![Classement des pays selon les poids réglés à l'écran — carte du "
+      "comparateur](fig:carte-implantation)\n")
     a(_esc(imp.get("avertissement")) + "\n")
 
     a("## Les critères et leur source\n")
@@ -596,6 +612,11 @@ def md_parc(dc=None, emp=None):
     L = []
     a = L.append
     a("# Parc de centres de données européens et empreinte du parc\n")
+    # La carte se pose ICI, avant les chiffres qu'elle illustre. Placée après,
+    # elle serait une décoration ; placée avant, elle est ce que le lecteur
+    # regarde en ouvrant le chapitre.
+    a("![Carte des centres de données et des systèmes d'IA déployés dans "
+      "l'Union](fig:carte-parc)\n")
     a("Référentiel figé par version (%s), compilé puis réfuté site par site. "
       "**%d centres** recensés.\n" % (dc.get("version"), dc.get("n_sites") or 0))
     for lim in (dc.get("limites") or []):
@@ -742,14 +763,19 @@ def composer(dossier, devis_reponse=None):
     return _verifier(md, dossier)
 
 
-def produire(dossier, fmt, devis_reponse=None):
-    """Renvoie (octets, type MIME, nom de fichier)."""
+def produire(dossier, fmt, devis_reponse=None, figures=None):
+    """Renvoie (octets, type MIME, nom de fichier).
+
+    `figures` : les cartes de la page, en PNG base64, sous les clés de FIGURES.
+    Absentes, le document se compose quand même — et ÉCRIT quelle carte
+    manque, plutôt que de faire disparaître la ligne."""
     import livrables_export
     if fmt not in FORMATS:
         raise ValueError("format inconnu : %s" % fmt)
     md = composer(dossier, devis_reponse)
     meta = dict(MARQUE)
     meta.update(_entete(dossier, devis_reponse))
+    meta["figures"] = figures or {}
     jour = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     nom = "CONSEILPREV-%s-%s.%s" % (dossier, jour, fmt)
     if fmt == "docx":
@@ -761,10 +787,12 @@ def produire(dossier, fmt, devis_reponse=None):
 
 def catalogue():
     return {"version": VERSION, "formats": list(FORMATS),
+            "figures": [{"cle": k, "legende": v} for k, v in FIGURES],
             "dossiers": [dict(cle=k, **v) for k, v in DOSSIERS.items()]}
 
 
 def sante():
     return {"module": "export_dc", "version": VERSION,
             "dossiers": len(DOSSIERS), "formats": list(FORMATS),
+            "figures": len(FIGURES),
             "horodatage": datetime.now(timezone.utc).isoformat(timespec="seconds")}
