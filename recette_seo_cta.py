@@ -105,6 +105,45 @@ ok("une page inconnue de la table reçoit une valeur par défaut, pas zéro",
 ok("une adresse au plan dont le fichier manque est écartée",
    len(S.plan({"/fantome": "nexiste-pas.html"}, racine=DEPOT).split("<loc>")) == 1)
 
+# ── UN PLAN QUE PERSONNE NE PEUT LIRE NE SERT À RIEN ──────────────────────
+# Le controle d'en-tetes destine aux scripts anonymes s'appliquait AUSSI aux
+# moteurs declares, et repondait 404 : le message qui fait desindexer. On
+# rejoue ici la decision du middleware, sans reseau.
+_MID = io.open(DEPOT + "/app.py", encoding="utf-8").read()
+_ALLOWED = re.search(r"ALLOWED_BOTS = \[(.*?)\]", _MID, re.S).group(1)
+_ALLOWED = re.findall(r"'([^']+)'", _ALLOWED)
+
+
+def _passe(ua, chemin, lang="", enc=""):
+    """La reponse du filtre d'en-tetes : True = la page est servie."""
+    machines = ('/robots.txt', '/sitemap.xml', '/donnees-structurees.json')
+    if chemin in machines or any(b in ua.lower() for b in _ALLOWED):
+        return True
+    return not (ua and len(ua) > 10 and not lang and not enc)
+
+
+GBOT = "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
+BING = "Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)"
+LKIN = "LinkedInBot/1.0 (compatible; Mozilla/5.0; Apache-HttpClient)"
+ok("les moteurs sont bien dix dans la liste d'autorisation", len(_ALLOWED) == 10,
+   _ALLOWED)
+ok("un moteur déclaré atteint une page de contenu sans en-tête de navigateur",
+   _passe(GBOT, "/formations") and _passe(BING, "/tarifications"))
+ok("…et l'aperçu LinkedIn aussi, qui est le canal du conseil B2B",
+   _passe(LKIN, "/livre-blanc"))
+ok("le plan du site et robots.txt ne sont jamais soumis à ce test",
+   _passe("n-importe-quoi-de-long", "/sitemap.xml")
+   and _passe("n-importe-quoi-de-long", "/robots.txt"))
+# CE QUI DOIT RESTER FERMÉ : le filtre garde son objet.
+ok("un script anonyme qui usurpe un navigateur reste refusé",
+   not _passe("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+              "/formations"))
+ok("…et un vrai navigateur passe, lui", _passe(
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36", "/formations",
+    lang="fr-FR", enc="gzip"))
+ok("l'exemption est bien celle du code servi, pas une copie de la recette",
+   "_moteur_declare" in _MID and "path not in _machines" in _MID)
+
 print("\n══ 2. On n'invente pas l'identité d'une page ══\n")
 
 page = '<html><head><title>Un titre</title><meta name="description" content="Une description."></head><body>x</body></html>'
@@ -319,6 +358,22 @@ for _r, _f in PAGES.items():
         _perdues += 1
 ok("l'expression d'origine coupait dix descriptions sur vingt-quatre",
    _perdues == 10, "%d page(s) touchées" % _perdues)
+
+# Le filtre d'en-tetes, tel qu'il etait : aucune exemption.
+_avant_mid = _avant("_moteur_declare", "app.py")
+
+
+def _passe_avant(ua, chemin, lang="", enc=""):
+    return not (ua and len(ua) > 10 and not lang and not enc)
+
+
+ok("avant, le filtre d'en-têtes existait déjà", "HEADERS_INCOHERENTS" in _avant_mid)
+ok("…mais sans exemption : ni pour les moteurs, ni pour le plan du site",
+   "_moteur_declare" not in _avant_mid and "_machines" not in _avant_mid)
+ok("…si bien qu'un moteur sans Accept-Encoding recevait 404 sur tout le site",
+   not _passe_avant(GBOT, "/formations") and not _passe_avant(GBOT, "/sitemap.xml"))
+ok("…alors qu'il est servi aujourd'hui",
+   _passe(GBOT, "/formations") and _passe(GBOT, "/sitemap.xml"))
 
 print("")
 print("%d contrôle(s) en échec\n" % ko if ko else "tout est vert\n")

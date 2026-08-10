@@ -402,7 +402,28 @@ def security_middleware():
     # Un script qui usurpe juste le User-Agent (ex: 'Mozilla/5.0...' en dur dans du code Python
     # avec requests/curl) oublie generalement ces en-tetes. Applique uniquement aux pages HTML,
     # pas aux assets/API deja proteges autrement, pour ne pas bloquer des clients API legitimes.
-    if not is_auth_link and not path.startswith('/api/') and not any(path.endswith(e) for e in static_exts):
+    #
+    # DEUX EXEMPTIONS, parce que le prix d'un faux positif n'est pas le meme
+    # des deux cotes.
+    #
+    #  1. LES MOTEURS DECLARES. Un robot de la liste ALLOWED_BOTS a deja ete
+    #     reconnu dix lignes plus haut ; le refaire tomber sur une heuristique
+    #     destinee aux scripts anonymes lui repond 404 — c'est-a-dire « cette
+    #     page n'existe pas », le seul message qui fasse DESINDEXER une page.
+    #     Googlebot passe aujourd'hui parce qu'il envoie Accept-Encoding : la
+    #     visibilite du site tient donc a un en-tete que Google ne s'engage pas
+    #     a envoyer. Cette heuristique n'arrete de toute facon qu'un script qui
+    #     oublie DEUX en-tetes ; l'usurpateur qui en ajoute un passe deja.
+    #
+    #  2. LES TROIS ADRESSES MACHINES. robots.txt, le plan du site et les
+    #     donnees structurees ne sont JAMAIS lus par un navigateur. Leur
+    #     appliquer un test de « ressemblance a un navigateur » revient a
+    #     fermer la porte a leurs seuls lecteurs.
+    _machines = ('/robots.txt', '/sitemap.xml', '/donnees-structurees.json')
+    _moteur_declare = bool(ua) and any(b in ua.lower() for b in ALLOWED_BOTS)
+    if (not is_auth_link and not path.startswith('/api/')
+            and path not in _machines and not _moteur_declare
+            and not any(path.endswith(e) for e in static_exts)):
         accept_lang = request.headers.get('Accept-Language', '')
         accept_enc = request.headers.get('Accept-Encoding', '')
         if ua and len(ua) > 10 and not accept_lang and not accept_enc:
