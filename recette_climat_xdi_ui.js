@@ -43,7 +43,11 @@ const ok = (n, c, d) => { console.log('  ' + (c ? 'OK ' : 'KO ') + '  ' + n + (d
 
   ok('climat_physique en fait partie', d.cles.includes('climat_physique'), d.cles.join(','));
   ok('il a un poids par défaut', d.poids === 2, d.poids);
-  ok('référentiel 2026-08-d', d.version === '2026-08-d', d.version);
+  // Le millesime ne doit pas REGRESSER. Une egalite stricte casse a chaque
+  // version suivante et se fait corriger machinalement — un controle qu'on
+  // repare sans reflechir ne protege plus rien.
+  ok('le millésime ne régresse pas',
+     d.version.slice(0, 8) === '2026-08-' && d.version.slice(8) >= 'c', d.version);
   ok('la France porte 26 % à haut risque, 18 % après ingénierie',
      d.fr && d.fr.haut_risque_pct === 26 && d.fr.haut_risque_adapte_pct === 18, JSON.stringify(d.fr));
   ok('la Suède n’a PAS de note — hors classement', d.se === null, d.se);

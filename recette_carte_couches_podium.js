@@ -188,13 +188,25 @@ const ok = (n, c, d) => { console.log('  ' + (c ? 'OK ' : 'KO ') + '  ' + n + (d
         d'à côté : on a vu le clic partir en Espagne au lieu de la France. On
         amène donc la carte à sa place, on ATTEND, puis on mesure — et on
         revérifie le point juste avant de cliquer. */
+  /*  3. LA GRILLE DOIT COUVRIR LE PETIT PAYS AUTANT QUE LE GRAND. La première
+        version balayait vingt et un points sur une bande centrale. Cela suffit
+        pour la France ; cela manque le Luxembourg, la Slovénie ou l'Estonie —
+        dont la boîte englobante fait quelques pixels et dont la forme n'occupe
+        qu'une part de cette boîte. Le podium dépendant des poids, un pays
+        minuscule peut s'y trouver : le contrôle échouait alors par intermittence,
+        et un contrôle qui échoue une fois sur trois finit par se faire ignorer,
+        ce qui est pire que pas de contrôle du tout.
+        La grille balaie donc toute la boîte, et se resserre quand elle est
+        petite — un pas d'un pixel au minimum. */
   const pointer = async (sel) => pg.evaluate((s) => {
     const el = document.querySelector(s);
     if (!el) return null;
     const b = el.getBoundingClientRect();
-    for (let fy = 0.5; fy <= 0.86; fy += 0.12) {
-      for (let fx = 0.2; fx <= 0.8; fx += 0.1) {
-        const x = b.x + b.width * fx, y = b.y + b.height * fy;
+    if (!b.width || !b.height) return null;
+    const pas = (t) => Math.max(1, Math.min(6, t / 12));
+    const px = pas(b.width), py = pas(b.height);
+    for (let y = b.top + py / 2; y < b.bottom; y += py) {
+      for (let x = b.left + px / 2; x < b.right; x += px) {
         if (document.elementFromPoint(x, y) === el)
           return { x: x, y: y, code: el.getAttribute('data-code') };
       }

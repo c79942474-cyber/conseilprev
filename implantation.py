@@ -29,7 +29,7 @@ from datetime import datetime, timezone
 
 import climat_2050
 
-VERSION = "2026-08-d"
+VERSION = "2026-08-e"
 
 # ═══════════════════════════════════════════════════════════════════════════
 # 1. EAU — stress hydrique national et compétition d'usages
@@ -953,8 +953,13 @@ for _cle, _a in climat_2050.ALEAS.items():
         "atteint": _a["atteint"],
         "pourquoi": _a["pourquoi"],
         "recouvre": _rec,
+        # Le nombre de pays est CALCULÉ. Écrit en dur, il se serait mis à mentir
+        # au premier pays ajouté d'un côté et pas de l'autre — et c'est
+        # justement le cas : les tables d'aléas couvrent la Lituanie, que la
+        # table WEI+ n'a pas, si bien que le comparateur en affiche un de moins.
         "source": "classes d'exposition CONSEILPREV d'après GIEC AR6, AEE et JRC "
-                  "(climat_2050.py) — couvre les 29 pays du panel, aux deux horizons",
+                  "(climat_2050.py) — %d pays couverts, aux deux horizons"
+                  % len(climat_2050.PAYS),
         "formule": "faible=85, modéré=60, élevé=30, très élevé=10"
                    + (" ; sans objet=100 pour un pays sans littoral — un fait, "
                       "pas une donnée manquante" if _cle == "submersion" else "")
@@ -977,6 +982,28 @@ def _note_mix(m):
     if m["nucleaire"] >= 30:
         note += 10
     return max(0, min(100, note))
+
+
+def _peremption():
+    """L'âge de chaque famille de valeurs, si le registre est disponible.
+
+    Import TARDIF et échec SILENCIEUX : `peremption` lit ce module pour
+    vérifier ses millésimes. Un import en tête de fichier créerait un cycle, et
+    une erreur ici priverait la page de tout le référentiel pour une mention
+    d'âge. On rend None, la page n'affiche pas l'âge, et le reste est servi.
+    """
+    try:
+        import peremption
+        e = peremption.etat()
+        return {"familles": {f["cle"]: {"verdict": f["verdict"],
+                                        "age_mois": f["age_mois"],
+                                        "lecture": f["lecture"]}
+                             for f in e["familles"]},
+                "verdicts": e["verdicts"],
+                "a_traiter": e["a_traiter"],
+                "avertissement": e["avertissement"]}
+    except Exception:                                            # noqa: BLE001
+        return None
 
 
 def assemble(sites, intensites, horizon=2030):
@@ -1081,6 +1108,10 @@ def assemble(sites, intensites, horizon=2030):
                     "aleas": climat_2050.SOURCE_ALEAS,
                     "mer": climat_2050.SOURCE_MER,
                     "mer_locale": climat_2050.SOURCE_MER_LOCAL},
+        # L'ÂGE voyage avec la SOURCE, dans la même réponse. Les séparer
+        # laisserait la page citer un rapport sans dire qu'il a quatre ans —
+        # et un lecteur n'a aucun moyen de le deviner d'un titre.
+        "peremption": _peremption(),
         # L'horizon retenu, et ce qu'il déplace — pour que la page ne laisse
         # jamais croire que TOUT le référentiel a été projeté.
         "horizon": horizon,

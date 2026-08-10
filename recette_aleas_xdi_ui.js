@@ -53,7 +53,11 @@ const ok = (n, c, d) => { console.log('  ' + (c ? 'OK ' : 'KO ') + '  ' + n + (d
   ok('feux et inondations en font partie',
      d.cles.includes('feux') && d.cles.includes('inondations'), d.cles.join(','));
   ok('chacun a un poids par défaut', d.pf === 1 && d.pi === 2, d.pf + ' / ' + d.pi);
-  ok('référentiel 2026-08-d', d.version === '2026-08-d', d.version);
+  // Le millesime ne doit pas REGRESSER. Une egalite stricte casse a chaque
+  // version suivante et se fait corriger machinalement — un controle qu'on
+  // repare sans reflechir ne protege plus rien.
+  ok('le millésime ne régresse pas',
+     d.version.slice(0, 8) === '2026-08-' && d.version.slice(8) >= 'c', d.version);
   ok('la France est 1re des feux en 2050, 2e en 2025',
      d.fr && d.fr.rang_2050 === 1 && d.fr.rang_2025 === 2, JSON.stringify(d.fr));
   ok('…et 2e des inondations, +23 % d’ici 2050',

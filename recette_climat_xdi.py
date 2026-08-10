@@ -156,7 +156,12 @@ print("\n══ 6. Ce que le critère ne devait pas déplacer ══\n")
 
 ok("la santé du module est verte", I.sante()["ok"], I.sante()["problemes"])
 ok("elle compte les pays XDI", I.sante()["pays_xdi"] == 12)
-ok("le millésime a changé", d["version"] == "2026-08-d", d["version"])
+# Le millesime doit avoir ete incremente quand climat_physique est apparu, et ne doit
+# jamais REGRESSER ensuite. Une egalite stricte casserait a chaque version
+# suivante et se ferait corriger machinalement — un controle qu'on repare
+# sans reflechir ne protege plus rien.
+ok("le millésime a été incrémenté, et ne régresse pas",
+   d["version"][:8] == "2026-08-" and d["version"][8:] >= "c", d["version"])
 # Les critères d'aléas s'AJOUTENT en fin de liste : le socle historique doit
 # rester intact ET dans son ordre, sinon les poids enregistrés par un lecteur
 # désigneraient d'autres critères que ceux qu'il a réglés.

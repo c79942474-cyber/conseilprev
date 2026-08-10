@@ -244,7 +244,12 @@ s = I.sante()
 ok("elle compte les deux nouveaux jeux",
    s["pays_feux"] == 11 and s["pays_inondations"] == 27,
    (s["pays_feux"], s["pays_inondations"]))
-ok("le millésime a changé", d["version"] == "2026-08-d", d["version"])
+# Le millesime doit avoir ete incremente quand feux et inondations est apparu, et ne doit
+# jamais REGRESSER ensuite. Une egalite stricte casserait a chaque version
+# suivante et se ferait corriger machinalement — un controle qu'on repare
+# sans reflechir ne protege plus rien.
+ok("le millésime a été incrémenté, et ne régresse pas",
+   d["version"][:8] == "2026-08-" and d["version"][8:] >= "c", d["version"])
 ok("les huit critères antérieurs sont intacts et dans l'ordre",
    [c for c in cles if not c.startswith("alea_")
     and c not in ("feux", "inondations")]

@@ -1618,6 +1618,8 @@ def api_empreinte_sites():
 # affichee et la formule executee soient une seule et meme chose.
 # ══════════════════════════════════════════════════════════
 import implantation  # noqa: E402
+import climat_2050  # noqa: E402  — six aleas, deux horizons, y compris hors UE
+import peremption  # noqa: E402  — l'age reel des referentiels, que la boucle ne rajeunit pas
 
 # Un cache PAR HORIZON. Les six criteres d'aleas changent de valeur entre 2030
 # et 2050 : un cache unique servirait le referentiel de 2030 a qui demande 2050,
@@ -3644,6 +3646,8 @@ def health_check():
         # Un module qui expose sante() sans que personne ne l'appelle est un
         # controle qui ne tourne jamais : on les branche tous ici.
         'implantation': implantation.sante(),
+        'climat_2050': climat_2050.sante(),
+        'peremption': peremption.sante(),
         'gouvernance': gouvernance.sante(),
     }
 
@@ -9880,9 +9884,22 @@ threading.Thread(target=_news_warmup, daemon=True).start()
 AUTO_MAJ = (os.environ.get('AUTO_MAJ', '1') or '1').strip() not in ('0', 'false', 'no')
 AUTO_MAJ_RAPIDE = int(os.environ.get('AUTO_MAJ_RAPIDE', '1800'))    # mix electrique, empreinte
 AUTO_MAJ_LENT = int(os.environ.get('AUTO_MAJ_LENT', '21600'))       # referentiels, socle ouvert
+# Le palier HEBDOMADAIRE. Ce qu'il fait n'est pas ce qu'on attend spontanement
+# d'une « mise a jour hebdomadaire », et c'est le point important : relancer
+# chaque semaine des fonctions qui lisent des constantes ne rajeunit RIEN. Cela
+# produirait une page affichant « mis a jour il y a trois minutes » sur un
+# stress hydrique de quatre ans — un mensonge que l'automatisation fabrique et
+# que son absence ne produisait pas.
+#
+# Ce palier fait donc deux choses honnetes : il rafraichit ce qui vient d'une
+# source reellement interrogee, et il RECALCULE L'AGE de ce qui vient d'un
+# rapport, pour dire ce qui aurait du etre remplace. Un rapport ne se met pas a
+# jour : il est remplace par son edition suivante, a une date que son editeur
+# choisit et que personne ici ne controle.
+AUTO_MAJ_HEBDO = int(os.environ.get('AUTO_MAJ_HEBDO', '604800'))    # 7 jours
 
 _AUTO_ETAT = {'demarre': None, 'cycles': 0, 'dernier': None,
-              'rapide': {}, 'lent': {}, 'erreurs': []}
+              'rapide': {}, 'lent': {}, 'hebdo': {}, 'erreurs': []}
 
 
 def _auto_note(bloc, cle, ok, detail=''):
@@ -9933,6 +9950,44 @@ def _auto_lent():
         _auto_note('lent', 'socle_ouvert', False, e)
 
 
+def _auto_hebdo():
+    """Ce qui se verifie une fois par semaine — et ce qui ne se rafraichit pas.
+
+    Deux gestes distincts, et il faut qu'ils le restent :
+      1. les referentiels d'implantation et d'aleas sont REASSEMBLES pour les
+         deux horizons, de sorte que le premier visiteur de la semaine ne paie
+         pas l'assemblage ;
+      2. le registre de PEREMPTION est recalcule. C'est lui qui porte la seule
+         information hebdomadaire qui ait un sens sur des tables figees : ce
+         qui a depasse le cycle de publication de son editeur.
+    """
+    try:
+        _dc = datacentres.assemble()
+        for _h in (2030, 2050):
+            _d = implantation.assemble(sites=_dc.get('sites'),
+                                       intensites=empreinte_sites.INTENSITE,
+                                       horizon=_h)
+            _IMP_CACHE[_h]['ts'], _IMP_CACHE[_h]['data'] = time.time(), _d
+        _auto_note('hebdo', 'implantation', True, 'horizons 2030 et 2050 prets')
+    except Exception as e:                                     # noqa: BLE001
+        _auto_note('hebdo', 'implantation', False, e)
+    try:
+        e = peremption.etat()
+        _AUTO_ETAT['peremption'] = e
+        a = e['a_traiter']
+        _auto_note('hebdo', 'peremption', True,
+                   ('a jour' if not a else '%d famille(s) a reprendre : %s'
+                    % (len(a), ', '.join(a))))
+        # On JOURNALISE ce qui a vieilli. Un registre que personne ne regarde
+        # ne vaut pas mieux que pas de registre — la ligne de journal est le
+        # seul canal qui atteint l'exploitant sans qu'il ait a ouvrir la page.
+        if a:
+            logger.warning('PEREMPTION — %d famille(s) hors cycle : %s',
+                           len(a), ', '.join(a))
+    except Exception as e:                                     # noqa: BLE001
+        _auto_note('hebdo', 'peremption', False, e)
+
+
 def _auto_boucle():
     import time as _t
     # 60 s, et non 20 : sur un hebergement modeste, le premier cycle ne doit
@@ -9941,6 +9996,10 @@ def _auto_boucle():
     _t.sleep(60)
     _AUTO_ETAT['demarre'] = datetime.utcnow().isoformat()
     prochain_lent = 0.0
+    # Le palier hebdomadaire part a ZERO, donc au premier cycle : le registre de
+    # peremption doit exister des le demarrage. L'attendre une semaine
+    # laisserait la page annoncer un etat qu'elle ne connait pas encore.
+    prochain_hebdo = 0.0
     while True:
         debut = _t.time()
         try:
@@ -9948,6 +10007,9 @@ def _auto_boucle():
             if debut >= prochain_lent:
                 _auto_lent()
                 prochain_lent = debut + AUTO_MAJ_LENT
+            if debut >= prochain_hebdo:
+                _auto_hebdo()
+                prochain_hebdo = debut + AUTO_MAJ_HEBDO
             _AUTO_ETAT['cycles'] += 1
             _AUTO_ETAT['dernier'] = datetime.utcnow().isoformat()
         except Exception as e:                                 # noqa: BLE001
@@ -9966,6 +10028,15 @@ def api_auto_maj():
     e['actif'] = AUTO_MAJ
     e['cadence_rapide_s'] = AUTO_MAJ_RAPIDE
     e['cadence_lente_s'] = AUTO_MAJ_LENT
+    e['cadence_hebdo_s'] = AUTO_MAJ_HEBDO
+    # Le registre de peremption voyage avec l'etat de la boucle : « ce qui a ete
+    # rafraichi » et « ce qui aurait du l'etre » sont la meme question posee des
+    # deux cotes, et les separer laisserait croire qu'un cycle vert suffit.
+    if 'peremption' not in e:
+        try:
+            e['peremption'] = peremption.etat()
+        except Exception as _pe:                               # noqa: BLE001
+            e['peremption'] = {'erreur': str(_pe)[:120]}
     e['pays_suivis'] = len(EMPS_PAYS_LIVE)
     e['intensites_en_direct'] = sorted(_EMPS_LIVE_CACHE.get('val') or {})
     e['intensites_etat'] = _EMPS_LIVE_CACHE.get('etat') or {}

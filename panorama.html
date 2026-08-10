@@ -811,6 +811,14 @@ button.cres-p:focus-visible{outline:2px solid var(--encre,#1C1C1C);outline-offse
   border-top:1px dashed var(--rule);padding-top:4px}
 .imp-al-mer{font-size:11px;line-height:1.55;margin-top:8px;padding:7px 11px;border-radius:3px;
   background:rgba(28,92,171,.07)}
+/* ── L'age d'une source, colle a son titre ─────────────────────────────── */
+.imp-age{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.04em;
+  padding:1px 5px;border-radius:2px;white-space:nowrap}
+.imp-age.v-a_verifier{background:rgba(196,124,26,.16);color:#8A5310}
+.imp-age.v-perime{background:rgba(184,50,34,.13);color:#8F2317}
+.imp-age.v-derive{background:rgba(122,30,18,.16);color:#7A1E12;font-weight:700}
+.imp-per{margin-top:8px;padding:8px 12px;border-radius:3px;font-size:11px;line-height:1.55;
+  border-left:3px solid #C47C1A;background:rgba(196,124,26,.08)}
 .imp-pond{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:10px 18px}
 .imp-p{display:grid;grid-template-columns:1fr 110px 22px;gap:4px 10px;align-items:center;
   border:1px solid var(--rule);border-left:4px solid var(--imp-c,#8892A0);border-radius:4px;
@@ -5548,12 +5556,37 @@ function renderImplantation(){
   var src = document.getElementById("imp-sources");
   if(src){
     var S = IMPL.sources;
+    /* L'ÂGE COLLÉ À LA SOURCE. Un titre de rapport ne dit pas s'il a deux mois
+       ou quatre ans, et le lecteur n'a aucun moyen de le deviner. Le millésime
+       du WEI+ est 2022 : cinquante mois pour un indicateur annuel. Ce n'est pas
+       une raison de ne pas le servir — c'est le dernier publié — mais c'en est
+       une de l'écrire à côté du titre plutôt que dans une page d'exploitation
+       que le lecteur ne verra jamais. */
+    var PER = IMPL.peremption;
+    function ageDe(k){
+      if(!PER || !PER.familles || !PER.familles[k]) return "";
+      var f = PER.familles[k];
+      if(f.verdict === "frais" || f.age_mois === null) return "";
+      var lib = { a_verifier: "à vérifier", perime: "périmé", derive: "en dérive" };
+      return ' <span class="imp-age v-' + f.verdict + '" title="' + esc(f.lecture) + '">'
+        + (f.age_mois !== null && f.age_mois !== undefined ? f.age_mois + " mois · " : "")
+        + (lib[f.verdict] || f.verdict) + "</span>";
+    }
     src.innerHTML = '<div class="imp-srcs"><b>Sources de cette section.</b> '
       + ["eau", "mix", "prix", "climat_physique", "feux", "inondations",
          "perspectives"].map(function(k){
           var x = S[k];
-          return esc(x.titre) + " — " + esc(x.editeur) + " " + implNatBadge(x.nature);
+          return esc(x.titre) + " — " + esc(x.editeur) + " " + implNatBadge(x.nature)
+            + ageDe(k);
         }).join(" · ")
+      + (PER && PER.a_traiter && PER.a_traiter.length
+         ? '<div class="imp-per"><b>Ce qui a dépassé son cycle de publication.</b> '
+           + PER.a_traiter.map(function(k){
+               var f = PER.familles[k];
+               return esc(k) + " (" + esc(f.lecture) + ")";
+             }).join(" · ")
+           + " " + esc(PER.avertissement) + "</div>"
+         : "")
       /* Le contexte européen des deux rapports d'aléa : ce sont les seuls
          chiffres CARDINAUX qu'ils publient — les rangs, eux, ne se
          soustraient pas. Ils tiennent en trois phrases et donnent au lecteur
