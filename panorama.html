@@ -5997,6 +5997,13 @@ function renderImplAvis(){
     function(l){ return nomPays(l.x.pays) || l.x.pays; },
     function(a, b){ return (b.score || 0) - (a.score || 0); });
   tfCompte("tf-avis", "imp", lignes.length, toutesA.length);
+  /* La phrase d'introduction promet un geste — « cliquez un pays pour ouvrir
+     le détail de son parc ». Un filtre peut ne laisser aucun pays : elle
+     désignerait alors un objet absent, juste au-dessus du message qui explique
+     que la liste est vide. Deux textes qui se contredisent à deux lignes
+     d'écart font douter du reste de la page. */
+  var gA = document.getElementById("imp-guide-avis");
+  if(gA) gA.hidden = !lignes.length;
 
   /* Meme grille que le classement, meme choix « Affichage » : les deux blocs
      partagent leur barre, ils doivent se presenter pareil. Une fiche depliee
@@ -6127,6 +6134,10 @@ function renderEmpreinte(){
     return true;
   });
   tfCompte("tf-emp", "emp", paysVus.length, (EMP.par_pays || []).length);
+  /* Même règle que pour les fiches du comparateur : la phrase qui annonce
+     « cliquez sur un pays » se retire quand le filtre n'en laisse aucun. */
+  var gE = document.getElementById("emp-guide-tab");
+  if(gE) gE.hidden = !paysVus.length;
 
   /* De A à Z par défaut — on vient y chercher un pays, pas un podium. Le
      comparateur d'origine reste disponible sous « Empreinte décroissante ». */

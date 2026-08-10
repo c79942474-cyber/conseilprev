@@ -213,10 +213,34 @@ const ok = (n, c, d) => { console.log('  ' + (c ? 'OK ' : 'KO ') + '  ' + n + (d
     }
     return null;
   }, sel);
+  /*  4. ATTENDRE QUE LA MISE EN PAGE SE TAISE, PAS UN DÉLAI DEVINÉ. Le rendu
+        des vingt-quatre fiches qui précède ce contrôle déplace la carte. Un
+        `waitForTimeout(400)` suffit sur une machine au repos et pas sous
+        charge : le contrôle passait seul et tombait en rafale, ce qui est la
+        pire des situations — il finit par se faire ignorer. On boucle donc
+        jusqu'à ce que la boîte de l'élément cesse de bouger d'une image à la
+        suivante, ce qui ne dépend d'aucune supposition de vitesse. */
+  const stabiliser = async (sel) => pg.evaluate((s) => new Promise((fin) => {
+    let avant = null, stables = 0, tours = 0;
+    const tic = () => {
+      const e = document.querySelector(s);
+      if (!e) return fin(false);
+      const b = e.getBoundingClientRect();
+      const cle = [b.x, b.y, b.width, b.height].map(Math.round).join(',');
+      stables = (cle === avant) ? stables + 1 : 0;
+      avant = cle;
+      // Trois images identiques d'affilée, ou deux secondes — on ne bloque pas
+      // indéfiniment sur une animation qui, elle, ne s'arrêtera jamais.
+      if (stables >= 3 || ++tours > 120) return fin(true);
+      requestAnimationFrame(tic);
+    };
+    requestAnimationFrame(tic);
+  }), sel);
+
   const viser = async (sel) => {
     await pg.evaluate((s) => { const e = document.querySelector(s);
       if (e) e.scrollIntoView({ block: 'center', behavior: 'instant' }); }, sel);
-    await pg.waitForTimeout(400);
+    await stabiliser(sel);
     const p = await pointer(sel);
     if (!p) return null;
     const surPlace = await pg.evaluate((q) => {
