@@ -758,6 +758,59 @@ button.cres-p:focus-visible{outline:2px solid var(--encre,#1C1C1C);outline-offse
 .dl-b:disabled{opacity:.45;cursor:progress}
 .dl-msg{font-size:10.5px;margin-top:7px;min-height:14px}
 .dl-msg.err{color:#A33}
+/* ── Horizon des aleas ─────────────────────────────────────────────────── */
+.imp-hz{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin:0 0 14px;
+  padding:11px 14px;border:1px solid var(--rule);border-left:4px solid #1C5CAB;
+  border-radius:4px;background:#F6F9FC}
+.imp-hz-t{font-size:12px;font-weight:700}
+.imp-hz-b{font-family:var(--mono);font-size:12px;padding:5px 14px;border-radius:3px;
+  border:1px solid #9DB4CE;background:#fff;color:#274766;cursor:pointer}
+.imp-hz-b:hover{border-color:#1C5CAB}
+.imp-hz-b.on{background:#1C5CAB;border-color:#1C5CAB;color:#fff;font-weight:700}
+.imp-hz-b:focus-visible{outline:2px solid #1C5CAB;outline-offset:2px}
+.imp-hz-p{flex:1 1 100%;font-size:11px;color:var(--muted2);line-height:1.5}
+.imp-hz-m{flex:1 1 100%;font-size:11px;color:#274766;line-height:1.5;
+  border-top:1px dashed #C3D3E2;padding-top:7px}
+/* ── Familles de criteres et double comptage ───────────────────────────── */
+.imp-fam{margin:0 0 14px}
+.imp-fam-t{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+  color:var(--muted2);margin:0 0 7px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.imp-fam-all{font-family:var(--mono);font-size:10px;text-transform:none;letter-spacing:0;
+  padding:2px 8px;border:1px solid var(--rule);border-radius:3px;background:#fff;
+  color:var(--muted2);cursor:pointer}
+.imp-fam-all:hover{border-color:#1C5CAB;color:#1C5CAB}
+.imp-doublon{font-size:11.5px;line-height:1.55;margin:0 0 10px;padding:9px 13px;
+  border-radius:4px;border-left:4px solid #C47C1A;background:rgba(196,124,26,.09)}
+/* ── Les six aleas d'un pays ───────────────────────────────────────────── */
+.imp-aleas{margin:10px 0 0;padding:10px 12px;border:1px solid var(--rule);border-radius:4px;
+  background:#FAFBFC}
+.imp-aleas-t{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+  color:var(--muted2);display:flex;align-items:center;gap:6px;margin:0 0 8px}
+.imp-al-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:7px}
+.imp-al{border:1px solid var(--rule);border-left:4px solid #8892A0;border-radius:3px;
+  padding:7px 10px;background:#fff;display:flex;flex-direction:column;gap:2px}
+.imp-al.bas{border-left-color:#2D7A47}
+.imp-al.moyen{border-left-color:#C47C1A}
+.imp-al.haut{border-left-color:#B83222}
+.imp-al.tres{border-left-color:#7A1E12}
+.imp-al.so{border-left-color:#5B6472;background:#F5F6F8}
+.imp-al.dominant{box-shadow:inset 0 0 0 1px rgba(184,50,34,.35)}
+.imp-al-n{font-size:11px;font-weight:700}
+.imp-al-v{font-family:var(--mono);font-size:11px;font-weight:700}
+.imp-al.bas .imp-al-v{color:#215B35}
+.imp-al.moyen .imp-al-v{color:#8A5310}
+.imp-al.haut .imp-al-v,.imp-al.tres .imp-al-v{color:#8F2317}
+.imp-al.so .imp-al-v{color:#5B6472}
+.imp-al-h{font-size:10px;color:var(--muted2);line-height:1.45}
+.imp-al-up{color:#8F2317}
+.imp-al-sat{color:#8A5310}
+.imp-al-c{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.04em;
+  color:var(--muted2)}
+.imp-al-c[data-conf="faible"]{color:#8A5310}
+.imp-al-t{font-size:10.5px;color:var(--muted2);line-height:1.5;margin-top:3px;
+  border-top:1px dashed var(--rule);padding-top:4px}
+.imp-al-mer{font-size:11px;line-height:1.55;margin-top:8px;padding:7px 11px;border-radius:3px;
+  background:rgba(28,92,171,.07)}
 .imp-pond{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:10px 18px}
 .imp-p{display:grid;grid-template-columns:1fr 110px 22px;gap:4px 10px;align-items:center;
   border:1px solid var(--rule);border-left:4px solid var(--imp-c,#8892A0);border-radius:4px;
@@ -773,6 +826,16 @@ button.cres-p:focus-visible{outline:2px solid var(--encre,#1C1C1C);outline-offse
 .imp-c-climat{--imp-c:#0E7B83}.imp-c-prix{--imp-c:#8A5310}.imp-c-parc{--imp-c:#5B6472}
 .imp-c-pipeline{--imp-c:#B83222}.imp-c-climat_physique{--imp-c:#9C2D6B}
 .imp-c-feux{--imp-c:#A4460C}.imp-c-inondations{--imp-c:#15557A}
+/* Les six aleas. Chacun emprunte la teinte du critere qu'il RECOUVRE, en plus
+   sombre : l'oeil voit alors du premier coup quel curseur d'alea double quel
+   curseur de socle, avant meme de lire l'avertissement de double comptage. Le
+   glissement de terrain, qui ne recouvre rien, prend une teinte a lui. */
+.imp-c-alea_feu{--imp-c:#7A340A}          /* recouvre feux (#A4460C) */
+.imp-c-alea_pluie{--imp-c:#0F3E5A}        /* recouvre inondations (#15557A) */
+.imp-c-alea_submersion{--imp-c:#6E2049}   /* recouvre climat_physique (#9C2D6B) */
+.imp-c-alea_secheresse{--imp-c:#14427C}   /* recouvre eau (#1C5CAB) */
+.imp-c-alea_hydrologie{--imp-c:#2A6E9E}   /* recouvre eau, autre facette */
+.imp-c-alea_glissement{--imp-c:#4A4230}   /* ne recouvre rien */
 /* Jauge de score : la couleur dit le niveau, le chiffre reste la valeur. */
 .imp-jauge{display:flex;align-items:center;gap:7px;min-width:120px}
 .imp-jauge i{flex:1 1 auto;height:7px;border-radius:4px;background:var(--rule);
@@ -1740,6 +1803,7 @@ engagements publics) sont imputés nominativement.</div>
     celui du classement par score. Pour lire le podium, choisissez « Score décroissant » dans
     <b>Trier par</b> ; pour comparer critère par critère, « Tableau détaillé » dans
     <b>Affichage</b>.</p>
+    <div id="imp-horizon"></div>
     <div id="imp-ponderations"></div>
     <div id="tf-imp"></div>
     <div class="tf-vide" id="tf-imp-vide">Aucun pays ne correspond à ces filtres. Le classement se lit sur un ensemble : trop restreindre le vide de son sens comparatif.</div>
@@ -5144,10 +5208,21 @@ function fourchetteT(v){
    formule executee sont une seule et meme chose. Le navigateur ne fait que la
    somme ponderee — la seule operation que le lecteur regle lui-meme. */
 var IMPL = null;
+/* Les six aléas partent à poids 1, pas 0 : à 0 ils seraient invisibles dans le
+   classement et le lecteur ne saurait pas qu'ils existent. À 1 ils pèsent, sans
+   écraser un socle de dix critères — et le curseur est là pour qu'il tranche. */
 var IMPL_POIDS = { carbone: 3, mix: 2, eau: 2, climat: 2, prix: 3,
                    climat_physique: 2, feux: 1, inondations: 2,
-                   parc: 1, pipeline: 1 };
+                   parc: 1, pipeline: 1,
+                   alea_submersion: 1, alea_feu: 1, alea_secheresse: 1,
+                   alea_pluie: 1, alea_glissement: 1, alea_hydrologie: 1 };
 var IMPL_DEPLIE = null;
+/* L'horizon des aléas. Il ne déplace QUE les six critères climatiques — le
+   serveur le dit dans `horizon_portee`, et la page l'écrit au lecteur : laisser
+   croire que le prix de l'électricité a été projeté à 2050 serait un mensonge
+   par mise en page. */
+var IMPL_HORIZON = 2030;
+var IMPL_CACHE_H = {};      /* horizon -> référentiel, pour ne pas re-télécharger */
 
 /* ── DU RANG À SES CHIFFRES ────────────────────────────────────────────────
    Un classement qui ne conduit nulle part oblige le lecteur à chercher lui-même
@@ -5227,6 +5302,53 @@ function implScore(x){
   return poids ? Math.round(somme / poids) : null;
 }
 
+/* ── LE DOUBLE COMPTAGE ────────────────────────────────────────────────────
+   Trois des six aléas recouvrent partiellement un critère XDI déjà présent :
+   le feu recouvre « feux », la pluie recouvre « inondations », la sécheresse
+   et l'étiage recouvrent « eau ». Les mettre tous à poids fort compte DEUX
+   FOIS le même risque, et le classement s'en trouve faussé sans que rien ne
+   le dise.
+
+   On ne l'interdit pas — c'est le comparateur du lecteur, et il peut vouloir
+   croiser une mesure publiée avec une classe de synthèse. On le NOMME, et on
+   écrit à quoi tient la différence entre les deux familles. Un avertissement
+   qui se contenterait de dire « attention » sans dire quoi arbitrer serait du
+   bruit. */
+function implDoublons(){
+  var rec = (IMPL && IMPL.aleas && IMPL.aleas.recouvrements) || {};
+  var nom = {};
+  (IMPL ? IMPL.criteres : []).forEach(function(c){ nom[c.cle] = c.nom; });
+  var out = [];
+  for(var a in rec){
+    var cle = "alea_" + a;
+    if(!(IMPL_POIDS[cle] > 0)) continue;
+    rec[a].forEach(function(autre){
+      if(IMPL_POIDS[autre] > 0) out.push({ alea: cle, autre: autre });
+    });
+  }
+  return out;
+}
+
+function renderImplDoublons(){
+  var b = document.getElementById("imp-doublon");
+  if(!b) return;
+  var d = implDoublons();
+  if(!d.length){ b.hidden = true; b.innerHTML = ""; return; }
+  var nom = {};
+  IMPL.criteres.forEach(function(c){ nom[c.cle] = c.nom; });
+  b.hidden = false;
+  b.innerHTML = '<b>Un même risque compté deux fois.</b> '
+    + d.map(function(x){
+        return "« " + esc(nom[x.alea] || x.alea) + " » recouvre « "
+          + esc(nom[x.autre] || x.autre) + " »";
+      }).join(" · ")
+    + ". Ce n’est pas une erreur, c’est un arbitrage : les critères <b>XDI</b> sont des "
+    + "mesures publiées, plus précises, mais limitées aux vingt-sept États membres et à "
+    + "une seule date. Les <b>classes d’aléas</b> couvrent vingt-neuf pays et deux "
+    + "horizons, avec une résolution moindre. Gardez les deux si vous voulez les croiser ; "
+    + "mettez l’un à 0 si vous voulez un poids net.";
+}
+
 /* Le vert-orange-rouge est le meme partout : une note tient sa couleur de sa
    valeur, jamais de sa colonne. */
 function implCouleurNote(n){
@@ -5271,17 +5393,74 @@ function chargerImplantation(){
      requete partait deux fois pour un referentiel qui ne depend pas des cas. */
   if(IMPL_LANCE) return;
   IMPL_LANCE = true;
-  preAPI("/api/implantation")
+  implCharger(IMPL_HORIZON);
+}
+
+/* ── CHANGER D'HORIZON ─────────────────────────────────────────────────────
+   Le référentiel de 2050 est un AUTRE document : les six notes d'aléas y
+   diffèrent. On le télécharge une fois, on le garde, et le second aller-retour
+   est instantané. Pendant l'attente, la page dit qu'elle attend — un classement
+   qui se réordonne sans prévenir donne l'impression d'un bug. */
+function implCharger(h, apres){
+  if(IMPL_CACHE_H[h]){
+    IMPL = IMPL_CACHE_H[h]; IMPL_HORIZON = h;
+    renderImplantation(); if(apres) apres();
+    return;
+  }
+  var n = document.getElementById("imp-note");
+  if(n) n.textContent = "chargement de l’horizon " + h + "…";
+  preAPI("/api/implantation?horizon=" + h)
     .then(function(r){ return r.ok ? r.json() : null; })
     .then(function(d){
-      if(!d || !d.ok) return;
-      IMPL = d;
-      renderImplantation();
+      if(!d || !d.ok) throw new Error("indisponible");
+      IMPL_CACHE_H[h] = d; IMPL = d; IMPL_HORIZON = h;
+      renderImplantation(); if(apres) apres();
     })
     .catch(function(){
-      var n = document.getElementById("imp-note");
-      if(n) n.textContent = "référentiel injoignable — rechargez la page";
+      var e = document.getElementById("imp-note");
+      if(e) e.textContent = "référentiel injoignable — rechargez la page";
+      /* On REMET le bouton sur l'horizon réellement affiché. Le laisser sur
+         celui qu'on n'a pas pu charger ferait lire les notes de 2030 sous
+         l'étiquette 2050. */
+      renderImplHorizon();
     });
+}
+
+/* Le sélecteur, et surtout ce qu'il NE change pas. */
+function renderImplHorizon(){
+  var h = document.getElementById("imp-horizon");
+  if(!h || !IMPL) return;
+  var hs = IMPL.horizons || [2030, 2050];
+  var mer = (IMPL.aleas && IMPL.aleas.mer) || null;
+  var ec = (IMPL.aleas && IMPL.aleas.mer_ecart) || null;
+  h.innerHTML = '<div class="imp-hz" role="group" aria-label="Horizon des aléas climatiques">'
+    + '<span class="imp-hz-t">Horizon des aléas climatiques</span>'
+    + hs.map(function(v){
+        return '<button type="button" class="imp-hz-b' + (v === IMPL_HORIZON ? " on" : "")
+          + '" data-horizon="' + v + '" aria-pressed="' + (v === IMPL_HORIZON) + '">'
+          + v + "</button>";
+      }).join("")
+    + implTip("L’horizon déplace les SIX critères d’aléas climatiques, et eux seuls. "
+        + "Le prix de l’électricité, le mix, le parc et la file de raccordement gardent la "
+        + "valeur de leur millésime : personne ne connaît le prix du kWh de 2050, et le "
+        + "projeter serait l’inventer. 2030 pour un projet qu’on construit, 2050 pour un "
+        + "actif qu’on détient.")
+    + '<span class="imp-hz-p">' + esc(IMPL.horizon_portee || "") + "</span>"
+    + (mer ? '<span class="imp-hz-m"><b>Niveau de la mer à ' + mer.horizon + "</b> : +"
+        + String(mer.mediane_m).replace(".", ",") + " m"
+        + (mer.plage_m ? " (plage probable " + String(mer.plage_m[0]).replace(".", ",")
+             + "–" + String(mer.plage_m[1]).replace(".", ",") + " m)" : "")
+        + " · " + (mer.nature === "calcule" ? "valeur CALCULÉE par interpolation — le GIEC ne "
+             + "publie pas cet horizon" : "GIEC AR6, valeur publiée")
+        + (ec ? " · " + esc(ec.lecture) : "") + "</span>" : "")
+    + "</div>";
+  h.querySelectorAll("[data-horizon]").forEach(function(b){
+    b.addEventListener("click", function(){
+      var v = +this.getAttribute("data-horizon");
+      if(v === IMPL_HORIZON) return;
+      implCharger(v);
+    });
+  });
 }
 
 function renderImplantation(){
@@ -5304,27 +5483,65 @@ function renderImplantation(){
       feux: "Rang du pays au risque de dommage par FEU DE FORÊT à l’horizon 2050 (XDI, août 2025). Attention à la métrique : c’est un montant de dommage ABSOLU, si bien qu’un grand parc bâti fait monter au classement sans que le site soit plus exposé — à lire avec les régions citées, pas seul. Seuls les DIX premiers États membres sont publiés ; un pays absent n’est pas « sûr », il est inconnu. La note compare le rang aux vingt-sept États membres, donc le dixième plafonne à 35 : figurer dans une liste des pires ne peut pas valoir un bon score.",
       inondations: "Rang du pays au risque de dommage par INONDATION à l’horizon 2050 (XDI, septembre 2025), sur les vingt-sept États membres. Métrique en RATIO du coût de remplacement : comparable d’un pays à l’autre, peu sensible à la taille du parc — c’est le plus solide des deux aléas. Crues de rivière et ruissellement seulement : la submersion côtière n’est PAS couverte ici, elle l’est par le critère XDI centres de données. Pondérez fort si vous détenez l’actif ou si votre assureur applique des franchises catastrophe naturelle.",
       pipeline: "File de raccordement 2026-2030 : moins il y a de projets devant vous, plus vite votre NOUVEAU site sera raccordé. Sans objet pour un rachat.",
+      alea_submersion: "Élévation du niveau de la mer et submersion du littoral. C’est le SEUL aléa de cette liste qui ne redescend jamais : une cote gagnée est gagnée pour des siècles, et aucune ingénierie sur site ne corrige une erreur d’implantation. Un pays sans littoral vaut 100 — c’est un fait, pas une donnée manquante. Attention au sol : la Finlande se relève plus vite que la mer ne monte, les Pays-Bas s’enfoncent pendant qu’elle monte.",
+      alea_feu: "Feu de forêt. Un centre de données brûle rarement ; il s’arrête parce que la ligne haute tension et la route ont brûlé, et parce que les filtres se saturent de suie — le dommage est presque toujours INDIRECT, donc sous-estimé. Deux surprises dans la colonne : la Suède n’est pas un pays sans feu (2018, plus de vingt mille hectares), et le Royaume-Uni ne l’est plus depuis 2022.",
+      alea_secheresse: "Sécheresse. Elle ne casse rien : elle retire l’autorisation de prélever, en général l’été — exactement quand le refroidissement en a le plus besoin. Le risque est réglementaire et politique avant d’être physique. Pondérez fort si vous envisagez un refroidissement évaporatif, faible si vous refroidissez à l’air ou en circuit fermé.",
+      alea_pluie: "Précipitations extrêmes et ruissellement. LA colonne à lire en entier : une atmosphère plus chaude porte plus de vapeur, donc des averses plus intenses même là où le cumul annuel baisse. Aucun pays d’Europe n’est classé faible ici — c’est l’information principale de ce critère. Vise les locaux techniques enterrés, les chemins de câbles et les groupes électrogènes.",
+      alea_glissement: "Glissement de terrain. Deux moteurs : des pluies plus intenses partout, et la dégradation du pergélisol au-dessus de ~2 500 m, qui déstabilise des versants alpins tenus depuis la dernière glaciation. Aléa très localisé — une classe nationale ne dit rien d’un site de plaine. À ne pas ignorer pour autant : la Suède et la Norvège portent des argiles sensibles qui glissent en TERRAIN PLAT.",
+      alea_hydrologie: "Étiage et régime des cours d’eau. Distinct de la sécheresse : il ne s’agit pas de la ressource moyenne mais du DÉBIT AU PIRE MOMENT. Le Rhin de 2018 et de 2022 a contraint le refroidissement de centrales et la logistique de toute une vallée sans qu’aucun arrêté sécheresse ne soit nécessaire. Cas particulier suisse : le débit d’été soutenu par la fonte glaciaire passe par un maximum, puis décline.",
     };
-    pond.innerHTML = '<div class="imp-pond">' + IMPL.criteres.map(function(c){
-        return '<label class="imp-p imp-c-' + c.cle + '"><span class="imp-p-nom">' + esc(c.nom)
-          + " " + implNatBadge(c.nature) + implTip(TIPS[c.cle] || c.source) + '</span>'
-          + '<input type="range" min="0" max="4" step="1" value="' + (IMPL_POIDS[c.cle] || 0)
-          + '" data-critere="' + c.cle + '" aria-label="Poids : ' + esc(c.nom) + '">'
-          + '<b class="imp-p-v" id="imp-pv-' + c.cle + '">' + (IMPL_POIDS[c.cle] || 0) + "</b>"
-          + '<span class="imp-p-src">' + esc(c.source) + " — " + esc(c.formule) + "</span>"
-          + "</label>";
-      }).join("") + "</div>"
+    var FAM = { socle: "Socle — énergie, eau, prix, filière",
+                aleas: "Aléas climatiques — à l’horizon retenu" };
+    function bloc(fam){
+      var cs = IMPL.criteres.filter(function(c){ return (c.famille || "socle") === fam; });
+      if(!cs.length) return "";
+      return '<div class="imp-fam"><div class="imp-fam-t">' + esc(FAM[fam] || fam)
+        + (fam === "aleas"
+           ? ' <button type="button" class="imp-fam-all" data-fam-poids="0">tous à 0</button>'
+             + '<button type="button" class="imp-fam-all" data-fam-poids="3">tous à 3</button>'
+           : "")
+        + '</div><div class="imp-pond">' + cs.map(function(c){
+          return '<label class="imp-p imp-c-' + c.cle + '"><span class="imp-p-nom">' + esc(c.nom)
+            + " " + implNatBadge(c.nature) + implTip(TIPS[c.cle] || c.source) + '</span>'
+            + '<input type="range" min="0" max="4" step="1" value="' + (IMPL_POIDS[c.cle] || 0)
+            + '" data-critere="' + c.cle + '" data-famille="' + (c.famille || "socle")
+            + '" aria-label="Poids : ' + esc(c.nom) + '">'
+            + '<b class="imp-p-v" id="imp-pv-' + c.cle + '">' + (IMPL_POIDS[c.cle] || 0) + "</b>"
+            + '<span class="imp-p-src">' + esc(c.source) + " — " + esc(c.formule) + "</span>"
+            + "</label>";
+        }).join("") + "</div></div>";
+    }
+    pond.innerHTML = bloc("socle") + bloc("aleas")
+      + '<div id="imp-doublon" class="imp-doublon" role="status" hidden></div>'
       + '<p class="note" style="margin-top:8px">Score d’un pays = Σ (poids × note du critère) ÷ Σ poids. '
-      + "Les notes 0-100 par critère sont calculées côté serveur, formules ci-dessus.</p>";
+      + "Les notes 0-100 par critère sont calculées côté serveur, formules ci-dessus. "
+      + "Un critère sans note pour un pays est ÉCARTÉ de son calcul — il n’est jamais "
+      + "remplacé par un zéro ni par une moyenne.</p>";
     pond.querySelectorAll("input[type=range]").forEach(function(r){
       r.addEventListener("input", function(){
         IMPL_POIDS[this.getAttribute("data-critere")] = +this.value;
         var v = document.getElementById("imp-pv-" + this.getAttribute("data-critere"));
         if(v) v.textContent = this.value;
+        renderImplDoublons();
+        renderImplClassement();
+      });
+    });
+    pond.querySelectorAll("[data-fam-poids]").forEach(function(b){
+      b.addEventListener("click", function(){
+        var p = +this.getAttribute("data-fam-poids");
+        pond.querySelectorAll('input[data-famille="aleas"]').forEach(function(r){
+          r.value = p;
+          IMPL_POIDS[r.getAttribute("data-critere")] = p;
+          var v = document.getElementById("imp-pv-" + r.getAttribute("data-critere"));
+          if(v) v.textContent = p;
+        });
+        renderImplDoublons();
         renderImplClassement();
       });
     });
   }
+  renderImplHorizon();
+  renderImplDoublons();
   renderImplClassement();
   renderImplAvis();
 
@@ -5673,6 +5890,68 @@ function renderImplClassement(){
   });
 }
 
+/* ── LES SIX ALÉAS D'UN PAYS ───────────────────────────────────────────────
+   Trois choses qu'une simple barre colorée ne dirait pas, et qui changent la
+   lecture :
+
+   — LA CONFIANCE. Un « élevé » adossé à des évaluations concordantes et un
+     « élevé » qu'une seule étude soutient ne se décident pas pareil. Elle est
+     portée par case, pas par une note globale.
+   — CE QUI SE DÉGRADE. La flèche 2030 → 2050 se lit sans changer d'horizon :
+     un pays confortable aujourd'hui et intenable à mi-vie doit se voir d'un
+     coup d'œil, c'est tout l'objet de la manœuvre.
+   — CE QUI SATURE. Une case déjà au cran maximal en 2030 n'affiche AUCUNE
+     aggravation. Sans mention, ce zéro se lit « ça se calme » — le contresens
+     exact. On l'écrit. */
+function implAleasBloc(x){
+  if(!x.aleas) return "";
+  var D = (IMPL.aleas && IMPL.aleas.definitions) || {};
+  var NV = (IMPL.aleas && IMPL.aleas.niveaux) || {};
+  var sat = x.aleas_satures || [];
+  var dom = x.aleas_dominants || [];
+  var ordre = ["submersion", "feu", "secheresse", "pluie", "glissement", "hydrologie"];
+  var cells = ordre.map(function(a){
+    var f = x.aleas[a];
+    if(!f) return "";
+    var r = (NV[f.niveau] || {}).rang;
+    var ton = f.niveau === "sans_objet" ? "so"
+            : (r >= 4 ? "tres" : (r === 3 ? "haut" : (r === 2 ? "moyen" : "bas")));
+    var monte = f.aggravation > 0;
+    return '<div class="imp-al ' + ton + (dom.indexOf(a) >= 0 ? " dominant" : "") + '">'
+      + '<span class="imp-al-n">' + esc((D[a] || {}).nom || a) + "</span>"
+      + '<span class="imp-al-v">' + esc(f.niveau_nom) + "</span>"
+      + '<span class="imp-al-h">'
+      + (monte
+         ? "2030 " + esc((NV[f.niveau_2030] || {}).nom || f.niveau_2030) + " → 2050 "
+           + esc((NV[f.niveau_2050] || {}).nom || f.niveau_2050)
+           + ' <b class="imp-al-up">+' + f.aggravation + (f.aggravation > 1 ? " crans" : " cran") + "</b>"
+         : (sat.indexOf(a) >= 0
+            ? '<b class="imp-al-sat">déjà au maximum en 2030 — l’échelle bute, l’aléa ne se calme pas</b>'
+            : (f.niveau === "sans_objet"
+               ? "pays sans littoral — l’aléa ne peut pas s’y produire"
+               : "stable entre 2030 et 2050")))
+      + "</span>"
+      + '<span class="imp-al-c" data-conf="' + esc(f.confiance) + '">'
+      + esc(f.confiance_nom) + "</span>"
+      + (f.commentaire ? '<span class="imp-al-t">' + esc(f.commentaire) + "</span>" : "")
+      + "</div>";
+  }).join("");
+  var ml = x.mer_locale;
+  return '<div class="imp-aleas"><div class="imp-aleas-t">Aléas climatiques — '
+    + "classes d’exposition à l’horizon " + IMPL_HORIZON
+    + implTip("Des CLASSES nationales à cinq crans, issues d’une synthèse d’évaluations "
+        + "publiées (GIEC AR6, AEE, JRC) — pas des valeurs modélisées par site. Elles "
+        + "servent à écarter des pays et à ordonner des questions, jamais à dimensionner "
+        + "un ouvrage. La classe nationale écrase des contrastes régionaux qui, dans "
+        + "plusieurs pays, dépassent l’écart entre pays.")
+    + "</div>"
+    + '<div class="imp-al-g">' + cells + "</div>"
+    + (ml ? '<div class="imp-al-mer"><b>Mouvement du sol : ' + esc(ml.sens) + " ("
+        + (ml.mouvement_mm_an > 0 ? "+" : "") + String(ml.mouvement_mm_an).replace(".", ",")
+        + " mm/an)</b> — " + esc(ml.commentaire) + "</div>" : "")
+    + "</div>";
+}
+
 function renderImplAvis(){
   var el = document.getElementById("imp-avis");
   if(!el || !IMPL) return;
@@ -5710,6 +5989,7 @@ function renderImplAvis(){
       + x.avis.contre.map(function(t){ return "<li>" + esc(t) + "</li>"; }).join("") + "</ul></div>"
       + "</div>"
       + '<div class="imp-comm"><b>Commentaire :</b> ' + esc(x.avis.comm) + "</div>"
+      + implAleasBloc(x)
       + persp
       + '<button type="button" class="gp-btn" onclick="ouvrirPays(\'' + x.pays
       + '\')">Ouvrir le parc de ce pays</button>'

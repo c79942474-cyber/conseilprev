@@ -26,15 +26,24 @@ const ok = (n, c, d) => { console.log('  ' + (c ? 'OK ' : 'KO ') + '  ' + n + (d
   const d = await pg.evaluate(() => ({
     n: IMPL.criteres.length,
     cles: IMPL.criteres.map(c => c.cle),
+    socle: IMPL.criteres.filter(c => c.famille === 'socle').map(c => c.cle),
+    aleas: IMPL.criteres.filter(c => c.famille === 'aleas').length,
     poids: IMPL_POIDS.climat_physique,
     version: IMPL.version,
     fr: (IMPL.pays.find(p => p.pays === 'FR') || {}).climat_physique,
     se: (IMPL.pays.find(p => p.pays === 'SE') || {}).notes.climat_physique,
   }));
-  ok('dix critères servis', d.n === 10, d.n);
+  // Les six critères d'aléas s'AJOUTENT : le socle historique doit rester
+  // intact et dans son ordre, sinon les poids réglés désigneraient d'autres
+  // critères que ceux que le lecteur a vus.
+  ok('les dix critères de socle sont intacts et dans l’ordre',
+     d.socle.join(',') === 'carbone,mix,eau,climat,prix,parc,climat_physique,feux,inondations,pipeline', d.socle.join(','));
+  ok('…et les six aléas s’y ajoutent, tous en famille « aleas »',
+     d.aleas === 6, d.aleas);
+
   ok('climat_physique en fait partie', d.cles.includes('climat_physique'), d.cles.join(','));
   ok('il a un poids par défaut', d.poids === 2, d.poids);
-  ok('référentiel 2026-08-c', d.version === '2026-08-c', d.version);
+  ok('référentiel 2026-08-d', d.version === '2026-08-d', d.version);
   ok('la France porte 26 % à haut risque, 18 % après ingénierie',
      d.fr && d.fr.haut_risque_pct === 26 && d.fr.haut_risque_adapte_pct === 18, JSON.stringify(d.fr));
   ok('la Suède n’a PAS de note — hors classement', d.se === null, d.se);

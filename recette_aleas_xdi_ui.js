@@ -32,6 +32,8 @@ const ok = (n, c, d) => { console.log('  ' + (c ? 'OK ' : 'KO ') + '  ' + n + (d
   const d = await pg.evaluate(() => ({
     n: IMPL.criteres.length,
     cles: IMPL.criteres.map(c => c.cle),
+    socle: IMPL.criteres.filter(c => c.famille === 'socle').map(c => c.cle),
+    aleas: IMPL.criteres.filter(c => c.famille === 'aleas').length,
     pf: IMPL_POIDS.feux, pi: IMPL_POIDS.inondations,
     version: IMPL.version,
     fr: (IMPL.pays.find(p => p.pays === 'FR') || {}).feux,
@@ -40,11 +42,18 @@ const ok = (n, c, d) => { console.log('  ' + (c ? 'OK ' : 'KO ') + '  ' + n + (d
     chI: (IMPL.pays.find(p => p.pays === 'CH') || {}).notes.inondations,
     plF: (IMPL.pays.find(p => p.pays === 'PL') || {}).notes.feux,
   }));
-  ok('dix critères servis', d.n === 10, d.n);
+  // Les six critères d'aléas s'AJOUTENT : le socle historique doit rester
+  // intact et dans son ordre, sinon les poids réglés désigneraient d'autres
+  // critères que ceux que le lecteur a vus.
+  ok('les dix critères de socle sont intacts et dans l’ordre',
+     d.socle.join(',') === 'carbone,mix,eau,climat,prix,parc,climat_physique,feux,inondations,pipeline', d.socle.join(','));
+  ok('…et les six aléas s’y ajoutent, tous en famille « aleas »',
+     d.aleas === 6, d.aleas);
+
   ok('feux et inondations en font partie',
      d.cles.includes('feux') && d.cles.includes('inondations'), d.cles.join(','));
   ok('chacun a un poids par défaut', d.pf === 1 && d.pi === 2, d.pf + ' / ' + d.pi);
-  ok('référentiel 2026-08-c', d.version === '2026-08-c', d.version);
+  ok('référentiel 2026-08-d', d.version === '2026-08-d', d.version);
   ok('la France est 1re des feux en 2050, 2e en 2025',
      d.fr && d.fr.rang_2050 === 1 && d.fr.rang_2025 === 2, JSON.stringify(d.fr));
   ok('…et 2e des inondations, +23 % d’ici 2050',
