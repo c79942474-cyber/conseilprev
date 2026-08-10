@@ -52,7 +52,12 @@ LOCALE = "fr_FR"
 IMAGE_PARTAGE = "/emblem.png"
 
 _TITRE = re.compile(r"<title>(.*?)</title>", re.S | re.I)
-_DESC = re.compile(r'<meta\s+name=["\']description["\']\s+content=["\'](.*?)["\']',
+# La citation fermante doit etre LA MEME que l'ouvrante — d'ou la reference
+# arriere `\1`. Sans elle, `["\']` s'arrete a la premiere apostrophe francaise
+# rencontree DANS le texte : la description de /team devenait « L », celle de
+# /support « Contactez l ». Dix pages sur vingt-quatre partaient ainsi avec une
+# carte de partage vide, ce que ce module existe precisement pour eviter.
+_DESC = re.compile(r'<meta\s+name=["\']description["\']\s+content=(["\'])(.*?)\1',
                    re.S | re.I)
 _HEAD = re.compile(r"</head>", re.I)
 
@@ -67,7 +72,7 @@ def lire(html):
     t = _TITRE.search(html or "")
     d = _DESC.search(html or "")
     return (_texte(t.group(1)) if t else "",
-            _texte(d.group(1)) if d else "")
+            _texte(d.group(2)) if d else "")
 
 
 def url(route):

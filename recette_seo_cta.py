@@ -135,6 +135,38 @@ ok("l'insertion se fait AVANT la fermeture de l'en-tête",
 ok("un guillemet dans un titre ne casse pas la balise",
    "&quot;" in S.balises("/q", '<html><head><title>Le "grand" titre</title></head></html>'))
 
+# ── L'APOSTROPHE. Une description française en contient presque toujours une.
+# Si la citation fermante n'est pas la MÊME que l'ouvrante, la lecture s'arrête
+# au premier « ' » du texte : /team partait avec og:description="L".
+apos = ('<html><head><title>T</title>'
+        '<meta name="description" content="L’equipe et l\'outil de CONSEILPREV.">'
+        '</head></html>')
+ok("une apostrophe n'interrompt pas la lecture de la description",
+   S.lire(apos)[1] == "L’equipe et l'outil de CONSEILPREV.",
+   repr(S.lire(apos)[1]))
+ok("…et la description servie est complète, pas sa première lettre",
+   'content="L’equipe et l\'outil de CONSEILPREV."' in S.balises("/a", apos))
+ok("une description en simples quotes est lue de la même façon",
+   S.lire('<html><head><title>T</title>'
+          "<meta name='description' content='Un \"cas\" limite.'>"
+          '</head></html>')[1] == "Un &quot;cas&quot; limite.")
+
+# Sur les VRAIES pages : la description servie est celle du fichier, entière.
+_REEL = re.compile(r'<meta\s+name=["\']description["\']\s+content=(["\'])(.*?)\1',
+                   re.S | re.I)
+_courtes = []
+for _r, _f in sorted(PAGES.items()):
+    _p = os.path.join(DEPOT, _f)
+    if not os.path.exists(_p):
+        continue
+    with open(_p, encoding="utf-8", errors="replace") as _fh:
+        _h = _fh.read()
+    _m = _REEL.search(_h)
+    if _m and len(S.lire(_h)[1]) < len(re.sub(r"\s+", " ", _m.group(2)).strip()) - 6:
+        _courtes.append((_r, len(S.lire(_h)[1])))
+ok("aucune des vingt-quatre descriptions n'est tronquée à la lecture",
+   not _courtes, _courtes)
+
 sante = S.sante(PAGES, racine=DEPOT)
 ok("plus aucune page sans titre", not sante["sans_titre"], sante["sans_titre"])
 ok("…ni sans description", not sante["sans_description"], sante["sans_description"])
@@ -270,6 +302,23 @@ ok("le plan du site est mis en cache une heure",
    "public, max-age=3600" in app_src)
 ok("les robots d'IA restent traités à part dans robots.txt",
    "GPTBot" in app_src and "ClaudeBot" in app_src)
+
+# La première version de `_DESC` s'arrêtait à la première apostrophe. Le défaut
+# n'était pas théorique : on le rejoue ici sur les vraies pages.
+_VIEUX = re.compile(r'<meta\s+name=["\']description["\']\s+content=["\'](.*?)["\']',
+                    re.S | re.I)
+_perdues = 0
+for _r, _f in PAGES.items():
+    _p = os.path.join(DEPOT, _f)
+    if not os.path.exists(_p):
+        continue
+    with open(_p, encoding="utf-8", errors="replace") as _fh:
+        _h = _fh.read()
+    _v, _n = _VIEUX.search(_h), _REEL.search(_h)
+    if _v and _n and len(_v.group(1)) < len(_n.group(2)) - 6:
+        _perdues += 1
+ok("l'expression d'origine coupait dix descriptions sur vingt-quatre",
+   _perdues == 10, "%d page(s) touchées" % _perdues)
 
 print("")
 print("%d contrôle(s) en échec\n" % ko if ko else "tout est vert\n")
