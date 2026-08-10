@@ -1548,6 +1548,39 @@ th .fl{font-size:9px;margin-left:3px}
   .filtres{padding:10px 12px}
   .f-count{margin-left:0;width:100%}
 }
+
+  /* ── LE PONT VERS L'ÉTUDE DE DURABILITÉ ─────────────────────────────── */
+  .pont-dc{border:1px solid var(--cyan,#22d3ee);border-radius:12px;
+    background:rgba(34,211,238,.06);padding:14px 17px;margin:18px 0 6px}
+  .pont-t{font-size:15px;font-weight:600;margin:0 0 6px}
+  .pont-d{font-size:13px;line-height:1.65;margin:0 0 11px;color:var(--muted,#9fb0c0)}
+  .pont-b{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end}
+  .pont-voie{font-size:11.5px;color:var(--muted2,#7b8b9a);display:flex;
+    flex-direction:column;gap:4px}
+  .pont-voie select{font-family:inherit;font-size:13px;padding:7px 10px;
+    border-radius:8px;border:1px solid var(--line,#233);background:rgba(0,0,0,.24);
+    color:inherit;min-width:230px}
+  .pont-go{font-family:inherit;font-size:13px;font-weight:600;padding:8px 16px;
+    border-radius:9px;border:1px solid var(--cyan,#22d3ee);
+    background:rgba(34,211,238,.14);color:var(--cyan,#22d3ee);cursor:pointer}
+  .pont-go:hover{background:rgba(34,211,238,.24)}
+  .pont-out{margin-top:12px}
+  .pont-url{display:block;font-family:var(--mono,monospace);font-size:11.5px;
+    line-height:1.55;word-break:break-all;padding:9px 12px;border-radius:8px;
+    background:rgba(0,0,0,.26);border:1px solid var(--line,#233);margin:0 0 9px}
+  .pont-l{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 11px}
+  .pont-l a,.pont-l button{font-family:inherit;font-size:12.5px;padding:6px 13px;
+    border-radius:8px;border:1px solid var(--line,#233);background:rgba(0,0,0,.20);
+    color:inherit;cursor:pointer;text-decoration:none}
+  .pont-l a{border-color:var(--cyan,#22d3ee);color:var(--cyan,#22d3ee)}
+  .pont-porte,.pont-exclus,.pont-refus{font-size:12.5px;line-height:1.6;
+    margin:0 0 9px;padding:9px 12px;border-radius:8px;border:1px solid var(--line,#233)}
+  .pont-porte{background:rgba(39,195,154,.07);border-color:rgba(39,195,154,.28)}
+  .pont-exclus{background:rgba(0,0,0,.20)}
+  .pont-refus{background:rgba(217,164,65,.08);border-color:rgba(217,164,65,.30)}
+  .pont-porte ul,.pont-exclus ul,.pont-refus ul{margin:6px 0 0;padding-left:18px}
+  .pont-porte li,.pont-exclus li,.pont-refus li{margin-bottom:4px}
+  .pont-de{color:var(--muted2,#7b8b9a);font-size:11.5px}
 </style>
 </head>
 <body>
@@ -1822,6 +1855,33 @@ engagements publics) sont imputés nominativement.</div>
     <div id="tf-avis"></div>
     <div class="tf-vide" id="tf-avis-vide">Aucun pays ne correspond à ces filtres.</div>
     <div id="imp-avis"></div>
+
+    <!-- ══ LE PONT VERS L'ÉTUDE DE DURABILITÉ ═══════════════════════════════
+         Une étude d'implantation se termine sur deux réponses : quel pays, et
+         combien. La suite — bilan énergie / eau / carbone, trajectoire de
+         décarbonation — se mène sur l'autre site du cabinet, et il fallait
+         jusqu'ici retaper le profil. Retaper, c'est se tromper : la puissance
+         saisie ici en mégawatts se ressaisit là-bas en kilowatts, et l'écart
+         d'un facteur mille ne se voit qu'au résultat.
+
+         C'EST LE CLIENT QUI DÉCIDE. Le lien est FABRIQUÉ et MONTRÉ, jamais
+         suivi : on affiche ce qu'il porte et ce qu'il ne porte pas, puis on
+         laisse la main. -->
+    <div class="pont-dc" id="pont-imp">
+      <p class="pont-t">Poursuivre sur l’étude de durabilité</p>
+      <p class="pont-d">Le bilan énergie, eau et carbone et la trajectoire de décarbonation
+      se mènent sur l’autre site du cabinet. Ce bouton fabrique un lien qui y porte
+      <b>le profil technique</b> — pays et puissance — pour ne pas le ressaisir. Il vous
+      montre ce qu’il contient avant que vous n’en fassiez quoi que ce soit&nbsp;: rien
+      n’est envoyé tant que vous ne suivez pas le lien.</p>
+      <div class="pont-b">
+        <label class="pont-voie">Commencer par
+          <select data-pont-voie></select>
+        </label>
+        <button type="button" class="pont-go" data-pont-go>Créer le lien</button>
+      </div>
+      <div class="pont-out" data-pont-out></div>
+    </div>
     <div id="imp-sources"></div>
   </div>
 </section>
@@ -1918,6 +1978,33 @@ engagements publics) sont imputés nominativement.</div>
     </div>
 
     <div id="fin-res"></div>
+
+    <!-- ══ LE PONT VERS L'ÉTUDE DE DURABILITÉ ═══════════════════════════════
+         Une étude d'implantation se termine sur deux réponses : quel pays, et
+         combien. La suite — bilan énergie / eau / carbone, trajectoire de
+         décarbonation — se mène sur l'autre site du cabinet, et il fallait
+         jusqu'ici retaper le profil. Retaper, c'est se tromper : la puissance
+         saisie ici en mégawatts se ressaisit là-bas en kilowatts, et l'écart
+         d'un facteur mille ne se voit qu'au résultat.
+
+         C'EST LE CLIENT QUI DÉCIDE. Le lien est FABRIQUÉ et MONTRÉ, jamais
+         suivi : on affiche ce qu'il porte et ce qu'il ne porte pas, puis on
+         laisse la main. -->
+    <div class="pont-dc" id="pont-fin">
+      <p class="pont-t">Poursuivre sur l’étude de durabilité</p>
+      <p class="pont-d">Le bilan énergie, eau et carbone et la trajectoire de décarbonation
+      se mènent sur l’autre site du cabinet. Ce bouton fabrique un lien qui y porte
+      <b>le profil technique</b> — pays et puissance — pour ne pas le ressaisir. Il vous
+      montre ce qu’il contient avant que vous n’en fassiez quoi que ce soit&nbsp;: rien
+      n’est envoyé tant que vous ne suivez pas le lien.</p>
+      <div class="pont-b">
+        <label class="pont-voie">Commencer par
+          <select data-pont-voie></select>
+        </label>
+        <button type="button" class="pont-go" data-pont-go>Créer le lien</button>
+      </div>
+      <div class="pont-out" data-pont-out></div>
+    </div>
 
     <!-- Les dossiers qui ne dépendent d'aucun calcul sont disponibles tout de
          suite. Les enfermer derrière le bouton « Calculer » les rendrait
@@ -9194,6 +9281,21 @@ if(window.parent&&window.parent!==window){
   }
 
   function rendre(j){
+    /* CE QUE LE PONT VERS L'ÉTUDE DE DURABILITÉ LIT. Publié explicitement
+       plutôt que gratté dans le balisage : un sélecteur posé sur une classe de
+       présentation survit mal à une refonte, et il échouerait EN SILENCE — le
+       lien partirait sans pays, et le visiteur arriverait sur un formulaire
+       qu'il croirait pré-rempli. Ici, si cette ligne disparaît, le pont le dit.
+
+       Le pays retenu est le PREMIER DU CLASSEMENT par coût total de possession :
+       c'est le seul chiffre qui départage les pays, l'enveloppe
+       d'investissement étant identique par construction. */
+    window.PONT_DC = {
+      mw: (j.entree || {}).mw,
+      pays: ((j.classement || [])[0] || {}).pays || null,
+      de: "classement par coût total de possession",
+      quand: Date.now()
+    };
     var h = '<div class="fin-rang">'
       + j.classement.map(function(x,i){ return carteRang(x,i,j); }).join('') + '</div>'
       + carteFinance(j);
@@ -9618,6 +9720,197 @@ if(window.parent&&window.parent!==window){
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', demarrer);
   else demarrer();
+})();
+</script>
+<script>
+/* ══ LE PONT VERS L'ÉTUDE DE DURABILITÉ ═══════════════════════════════════
+ *
+ * Deux blocs identiques, l'un sous l'enveloppe d'investissement, l'autre sous
+ * le comparateur pondéré. Ils fabriquent un lien vers l'étude de durabilité du
+ * cabinet, portant le profil technique — pays et puissance — pour qu'il ne soit
+ * pas ressaisi.
+ *
+ * L'URL N'EST PAS CONSTRUITE ICI. Elle vient de `/api/pont-datacenter`, qui
+ * tient le contrat : les noms des paramètres appartiennent au formulaire de
+ * l'AUTRE site, et écrits à la main dans cette page ils divergeraient au
+ * premier renommage. Le lien continuerait de fonctionner sans rien pré-remplir
+ * — une panne silencieuse, la pire espèce.
+ *
+ * ON MONTRE AVANT DE PARTIR. Le lien est affiché avec ce qu'il porte ET ce
+ * qu'il ne porte pas ; rien n'est envoyé tant que le client ne le suit pas.
+ */
+(function () {
+  "use strict";
+  var CONTRAT = null;
+
+  function esc(x) {
+    return String(x === null || x === undefined ? "" : x)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  /* Les valeurs courantes, lues sur la page au moment du clic. On ne garde
+     aucun état : un profil mémorisé se désynchronise du formulaire, et le lien
+     porterait alors autre chose que ce que le lecteur a sous les yeux. */
+  function profilCourant() {
+    var p = {}, origine = null;
+    var mw = document.getElementById("fin-mw");
+    if (mw && mw.value) p.mw = parseFloat(mw.value);
+    /* Le pays vient d'abord du dépôt publié par l'enveloppe d'investissement —
+       le premier du classement par coût total de possession, seul chiffre qui
+       départage les pays, l'enveloppe étant identique par construction. */
+    var d = window.PONT_DC || {};
+    if (d.pays) {
+      p.pays = d.pays;
+      if (d.mw) p.mw = d.mw;
+      origine = "l’enveloppe d’investissement — premier au "
+        + (d.de || "classement");
+    }
+    /* À défaut de calcul d'enveloppe lancé, le PODIUM du comparateur pondéré,
+       qui est l'autre réponse de cette page.
+
+       LE PODIUM, PAS LA PREMIÈRE LIGNE AFFICHÉE. La grille et le tableau se
+       trient et se filtrent : sous un tri A-Z, leur première ligne est
+       l'Allemagne, et le lien serait parti avec elle en se réclamant du
+       comparateur — une valeur fausse portant une étiquette juste, qui ne se
+       verrait qu'au résultat. Le podium, lui, est bâti sur le classement
+       COMPLET trié par score : il ne bouge ni au tri ni au filtre.
+
+       Il est cherché dans « .cres-pod » et non dans tout le bloc : les pays
+       coloriés de la carte portent eux aussi « data-podium », dans l'ordre des
+       tracés du fond de carte — un ordre géographique, qui n'est pas un rang. */
+    if (!p.pays) {
+      var pod = document.querySelector("#imp-classement .cres-pod [data-podium]");
+      if (pod) {
+        p.pays = pod.getAttribute("data-podium");
+        origine = "le comparateur pondéré — premier au classement, selon les "
+          + "poids réglés ci-dessus";
+      }
+    }
+    var f = document.getElementById("fin-froid");
+    if (f && f.value) p.refroidissement = f.value;
+    return { p: p, origine: origine };
+  }
+
+  function rendre(zone, r, origine) {
+    var h = '<code class="pont-url">' + esc(r.url) + "</code>";
+    h += '<div class="pont-l">'
+      + '<a href="' + esc(r.url) + '" target="_blank" rel="noopener">Ouvrir l’étude de durabilité</a>'
+      + '<button type="button" data-pont-copier>Copier le lien</button></div>';
+    if ((r.porte || []).length) {
+      h += '<div class="pont-porte"><b>Ce que le lien porte</b><ul>'
+        + r.porte.map(function (x) {
+            /* D'OÙ VIENT LE PAYS, EXACTEMENT. Le contrat du serveur nomme les
+               deux origines possibles — comparateur pondéré ou classement par
+               coût total de possession — mais il ne sait pas laquelle a joué :
+               seule la page le sait. Or elles ne donnent pas toujours le même
+               pays, et un client qui croit lire le résultat d'un calcul qu'il
+               n'a pas lancé arbitrerait sur un chiffre qui n'est pas le sien. */
+            var de = (x.champ.toLowerCase().indexOf("pays") === 0 && origine)
+              ? origine : x.de;
+            return "<li>" + esc(x.champ) + " : <b>" + esc(x.valeur) + "</b>"
+              + ' <span class="pont-de">— repris de ' + esc(de) + "</span>"
+              + (x.reserve ? ' <span class="pont-de">' + esc(x.reserve) + "</span>" : "")
+              + "</li>";
+          }).join("")
+        + "</ul></div>";
+    }
+    /* L'ABSENCE SE DIT. Sans pays déterminé, le lien reste valable — l'autre
+       site demandera le pays — mais il faut le savoir AVANT de le transmettre,
+       sinon le formulaire à moitié rempli passe pour une panne du lien. */
+    if (!(r.porte || []).some(function (x) {
+          return x.champ.toLowerCase().indexOf("pays") === 0; })) {
+      h += '<div class="pont-refus"><b>Aucun pays transmis</b> — lancez le '
+        + "comparateur pondéré ou l’enveloppe d’investissement pour qu’un pays "
+        + "soit déterminé ici. Le lien reste utilisable : l’étude de durabilité "
+        + "vous demandera le pays.</div>";
+    }
+    if ((r.refuses || []).length) {
+      h += '<div class="pont-refus"><b>Non transmis</b> — ces valeurs n’ont pas '
+        + "été retenues, et le lien part sans elles :<ul>"
+        + r.refuses.map(function (x) {
+            return "<li>" + esc(x.champ) + " — " + esc(x.motif) + "</li>";
+          }).join("")
+        + "</ul></div>";
+    }
+    h += '<div class="pont-exclus"><b>Ce que le lien ne porte pas</b><ul>'
+      + (r.exclus || []).map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("")
+      + "</ul>" + (r.note ? "<p>" + esc(r.note) + "</p>" : "") + "</div>";
+    zone.innerHTML = h;
+    var b = zone.querySelector("[data-pont-copier]");
+    if (b) {
+      b.addEventListener("click", function () {
+        var fini = function (ok) { b.textContent = ok ? "Lien copié" : "Copie refusée — sélectionnez le lien"; };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(r.url).then(function () { fini(true); },
+                                                    function () { fini(false); });
+        } else { fini(false); }
+      });
+    }
+  }
+
+  function creer(bloc) {
+    var zone = bloc.querySelector("[data-pont-out]");
+    var sel = bloc.querySelector("[data-pont-voie]");
+    var c = profilCourant();
+    var p = c.p;
+    p.voie = sel ? sel.value : "";
+    zone.innerHTML = '<p class="note">Construction du lien…</p>';
+    fetch("/api/pont-datacenter", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(p)
+    }).then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (!j.ok) throw new Error(j.erreur || "lien indisponible");
+        rendre(zone, j, c.origine);
+      })
+      .catch(function (e) {
+        zone.innerHTML = '<p class="note">Le lien n’a pas pu être construit ('
+          + esc(e.message || "erreur") + "). Le reste de la page fonctionne "
+          + "indépendamment.</p>";
+      });
+  }
+
+  function demarrer() {
+    var blocs = [].slice.call(document.querySelectorAll(".pont-dc"));
+    if (!blocs.length) return;
+    fetch("/api/pont-datacenter")
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (!j.ok) throw new Error("contrat indisponible");
+        CONTRAT = j.referentiel;
+        blocs.forEach(function (bloc) {
+          var sel = bloc.querySelector("[data-pont-voie]");
+          if (sel) {
+            /* Les voies viennent du serveur : la liste appartient au module qui
+               tient le contrat, et la recopier ici la ferait diverger. */
+            sel.innerHTML = Object.keys(CONTRAT.voies).map(function (k) {
+              return '<option value="' + esc(k) + '"'
+                + (k === CONTRAT.voie_defaut ? " selected" : "") + ">"
+                + esc(CONTRAT.voies[k]) + "</option>";
+            }).join("");
+          }
+          var go = bloc.querySelector("[data-pont-go]");
+          if (go) go.addEventListener("click", function () { creer(bloc); });
+        });
+      })
+      .catch(function () {
+        /* L'échec le dit DANS le bloc concerné : le reste de la page — carte,
+           comparateur, enveloppe — n'en dépend pas. */
+        blocs.forEach(function (bloc) {
+          var z = bloc.querySelector("[data-pont-out]");
+          if (z) z.innerHTML = '<p class="note">Le pont vers l’étude de '
+            + "durabilité est momentanément indisponible.</p>";
+          var go = bloc.querySelector("[data-pont-go]");
+          if (go) go.disabled = true;
+        });
+      });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", demarrer);
+  } else { demarrer(); }
 })();
 </script>
 </body>

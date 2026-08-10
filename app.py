@@ -1690,6 +1690,7 @@ def api_implantation():
 # sources, et la liste explicite de ce que le referentiel ne peut pas trancher.
 # ══════════════════════════════════════════════════════════
 import finance_dc  # noqa: E402
+import pont_dc  # noqa: E402  — le lien vers l'etude de durabilite, et son contrat
 import tendances_dc  # noqa: E402  — chaque dossier porte ses reserves datees
 import faisabilite_dc  # noqa: E402  — conclut sur le chiffrage, ne le refait pas
 
@@ -1817,6 +1818,36 @@ def api_finance_dc():
     ref["ok"] = True
     ref["sante"] = finance_dc.sante()
     return jsonify(ref)
+
+
+@app.route('/api/pont-datacenter', methods=['GET', 'POST'])
+@rate_limit(limit=60, window=60)
+def api_pont_datacenter():
+    """Le lien vers l'etude de durabilite du cabinet, et ce qu'il porte.
+
+    GET rend le CONTRAT : les champs transmissibles, leur unite, la conversion
+    appliquee, et la liste explicite de ce qui ne voyage pas. Le client peut
+    donc voir ce qui partira avant de demander quoi que ce soit.
+
+    POST construit le lien depuis un pays et une puissance. Il ne suit pas le
+    lien, ne le raccourcit pas et n'ouvre rien : c'est le client qui decide.
+
+    OUVERT, et sans donnee nominative par construction : le profil technique
+    seul. Une URL se copie, se colle dans un courriel et se journalise sur les
+    serveurs qu'elle traverse — ce qu'on y met devient public au premier
+    partage, et c'est pourquoi la liste des exclusions est servie avec.
+    """
+    if request.method == 'GET':
+        return jsonify({'ok': True, 'referentiel': pont_dc.referentiel()})
+    d = request.get_json(silent=True) or {}
+    try:
+        r = pont_dc.lien(mw=d.get('mw'), pays=d.get('pays'),
+                         refroidissement=d.get('refroidissement'),
+                         voie=str(d.get('voie') or pont_dc.VOIE_DEFAUT))
+    except Exception as e:  # noqa: BLE001
+        logger.error(f'PONT_DC_ERR: {e}')
+        return jsonify({'ok': False, 'erreur': 'lien indisponible'}), 503
+    return jsonify(dict(r, ok=True))
 
 
 @app.route('/api/finance-dc/devis', methods=['POST'])
