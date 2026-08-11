@@ -2443,6 +2443,12 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="sb-item" onclick="go('maturite',this,'CARTOGRAPHIER','Audit de maturité IA')" title="Audit de maturite IA sectoriel : 8 piliers, questionnaire, KPIs, budget et livrables generes par IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 3 5-6"/></svg></span>Audit de maturité IA</div>
     <div class="sb-section">Évaluer le risque</div>
     <div class="sb-item" onclick="go('pan-sia',this,'ÉVALUER LE RISQUE','Panorama IA & centres de données — UE')" title="Cas d IA reels documentes dans l UE et parc de centres de donnees : classes de risque AI Act, vulnerabilites cyber, exposition, couche pays, electricite, eau et carbone."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a14 14 0 010 18M3.6 9h16.8M3.6 15h16.8"/><circle cx="9" cy="9" r="1.4" fill="currentColor"/><circle cx="15" cy="13" r="1.4" fill="currentColor"/></svg></span>Panorama IA &amp; data centres</div>
+    <!-- L'ÉTUDE D'ENVELOPPE A SON PROPRE MODULE, et il suit immédiatement le
+         panorama : c'en est la suite logique — on situe le terrain, puis on
+         chiffre. La laisser au bas d'une page qui portait déjà neuf sections
+         obligeait à faire défiler huit blocs pour atteindre le seul qui décide
+         d'un GO ou d'un NO GO. -->
+    <div class="sb-item" onclick="go('enveloppe',this,'ÉVALUER LE RISQUE','Enveloppe d’investissement — décision GO / NO GO')" title="Enveloppe d investissement, DPGF par lot, comparaison entre pays sur le cout total de possession, et lecture de creation de valeur : EVA, ROCE, free cash flow."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2v20"/><path d="M17 6.5c0-1.9-2.2-3-5-3s-5 1.1-5 3 2.2 2.7 5 3.2 5 1.3 5 3.3-2.2 3-5 3-5-1.1-5-3"/></svg></span>Enveloppe d’investissement</div>
     <div class="sb-item" onclick="go('audit-ia-act',this,'ÉVALUER LE RISQUE','Audit IA Act')" title="Audit de conformite EU AI Act structure - 33 points de controle, Reglement (UE) 2024/1689."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M21 12a9 9 0 1 1-9-9"/></svg></span>Audit IA Act</div>
     <div class="sb-item" onclick="go('matrice',this,'ÉVALUER LE RISQUE','Matrice risques')" title="Positionnement de vos systemes IA selon probabilite de non-conformite et impact potentiel."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 3v18h18"/><circle cx="9" cy="15" r="1.6"/><circle cx="15" cy="9" r="1.6"/><circle cx="18" cy="6" r="1.6"/><circle cx="7" cy="18" r="1.6"/></svg></span>Matrice risques</div>
     <div class="sb-item" onclick="go('radar',this,'ÉVALUER LE RISQUE','Radar multi-critères')" title="Visualisation hexagonale de votre posture de conformite sur 6 dimensions reglementaires."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg></span>Radar des risques</div>
@@ -2643,6 +2649,22 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="mod-skel" id="skel-pan-sia-iframe">Chargement du panorama…</div><iframe id="pan-sia-iframe" data-src="/panorama?embed=1" style="width:100%;height:1600px;border:none;display:block" title="Panorama des systèmes d'IA en entreprise et des centres de données dans l'UE"></iframe>
   </div>
 </div>
+
+<div class="page page-large" id="p-enveloppe">
+  <span class="eyebrow">Panorama · chiffrage</span>
+  <h1 class="page-h">Enveloppe d’investissement et DPGF —
+  décision <em>GO / NO GO</em></h1>
+  <p class="page-lead">La suite du panorama : une fois le terrain situé, ce module chiffre.
+  Enveloppe d’investissement, décomposition par lot de la DPGF, comparaison entre pays sur le
+  <b>coût total de possession</b> — le seul chiffre qui les départage, l’investissement étant
+  identique par construction — et lecture de <b>création de valeur</b> : EVA, ROCE, free cash flow.
+  Chaque grandeur porte sa nature et sa source, et les postes que le référentiel ne peut pas
+  trancher restent affichés <b>vides</b>, avec la question à poser : les masquer donnerait
+  l’illusion d’une décision complète.</p>
+  <div style="margin-bottom:24px;border:1px solid var(--rule);border-radius:4px;overflow:hidden;background:var(--white)">
+    <div class="mod-skel" id="skel-enveloppe-iframe">Chargement de l’étude d’enveloppe…</div><iframe id="enveloppe-iframe" data-src="/enveloppe?embed=1" style="width:100%;height:1600px;border:none;display:block" title="Enveloppe d'investissement, DPGF et décision GO / NO GO"></iframe>
+  </div>
+</div>
 <script>
 /* ── Prechargement des modules cartographiques ────────────────────────────
    Ces iframes portaient loading="lazy" DANS UN CONTENEUR MASQUE : le
@@ -2665,8 +2687,9 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     f.setAttribute('src', src);
   }
   var MODULES = [
-    {id:'pan-sia-iframe', nav:"'pan-sia'"},
-    {id:'obs-rd-iframe',  nav:"'obs-rd'"}
+    {id:'pan-sia-iframe',   nav:"'pan-sia'"},
+    {id:'enveloppe-iframe', nav:"'enveloppe'"},
+    {id:'obs-rd-iframe',    nav:"'obs-rd'"}
   ];
   function survol(){
     MODULES.forEach(function(m){
@@ -2695,11 +2718,22 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 </script>
 
 <script>
+/* SECOND ECOUTEUR DE HAUTEUR — et il visait un cadre en dur.
+   Depuis que l'etude d'enveloppe est un module a part, DEUX cadres servent le
+   meme document : tous deux annoncent « pan-height ». Celui-ci redimensionnait
+   le panorama avec la hauteur de l'enveloppe, et l'enveloppe restait bloquee a
+   ses 1600 px de depart. On reconnait l'emetteur par sa fenetre, qui ne se
+   confond pas — comme l'ecouteur principal plus haut. */
 (function(){
+  var SUIVIS = ['pan-sia-iframe', 'enveloppe-iframe'];
   window.addEventListener('message', function(ev){
     var d = ev && ev.data;
     if(!d || d.type !== 'pan-height') return;
-    var f = document.getElementById('pan-sia-iframe');
+    var f = null;
+    for(var i = 0; i < SUIVIS.length; i++){
+      var c = document.getElementById(SUIVIS[i]);
+      if(c && c.contentWindow === ev.source){ f = c; break; }
+    }
     if(!f) return;
     var h = parseInt(d.height, 10);
     if(!(h > 400 && h < 20000)) return;
@@ -2732,6 +2766,20 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
      d'un cadre douze fois trop grand, et la suite de Sentinel serait poussee
      hors de l'ecran. Chaque cadre suit donc son message. */
   var CADRES = { 'obs-height': 'obs-rd-iframe', 'pan-height': 'pan-sia-iframe' };
+  /* TOUS LES CADRES SUIVIS, ET RECONNUS PAR LEUR FENETRE — pas par le type du
+     message. Depuis que l'etude d'enveloppe est un module a part, DEUX cadres
+     servent le meme document : ils annoncent donc tous deux « pan-height ».
+     Router sur le type ferait redimensionner le panorama par la hauteur de
+     l'enveloppe, et le second cadre resterait bloque a sa hauteur de depart.
+     On identifie l'emetteur par son contentWindow, qui ne se confond pas. */
+  var CADRES_TOUS = ['obs-rd-iframe', 'pan-sia-iframe', 'enveloppe-iframe'];
+  function cadreDe(source){
+    for(var i = 0; i < CADRES_TOUS.length; i++){
+      var f = document.getElementById(CADRES_TOUS[i]);
+      if(f && f.contentWindow === source) return f;
+    }
+    return null;
+  }
 
   /* ── Dire au module ce que le lecteur voit de lui ──────────────────────
      Un cadre de 1600 px n'est jamais vu en entier. Une page embarquee ne peut
@@ -2747,8 +2795,8 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     var enVol = false;
     function annoncer(){
       enVol = false;
-      Object.keys(CADRES).forEach(function(t){
-        var f = document.getElementById(CADRES[t]);
+      CADRES_TOUS.forEach(function(id){
+        var f = document.getElementById(id);
         if(!f || !f.contentWindow) return;
         var r = f.getBoundingClientRect();
         if(r.bottom < 0 || r.top > window.innerHeight) return;   // hors ecran
@@ -2776,7 +2824,10 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   window.addEventListener('message', function(ev){
     var d = ev && ev.data;
     if(!d || !CADRES[d.type]) return;
-    var f = document.getElementById(CADRES[d.type]);
+    /* L'emetteur d'abord ; le type ne sert plus qu'a reconnaitre un message de
+       hauteur. Le repli sur la table reste pour un cadre qu'on n'aurait pas
+       inscrit dans CADRES_TOUS. */
+    var f = cadreDe(ev.source) || document.getElementById(CADRES[d.type]);
     if(!f) return;
     var h = parseInt(d.height, 10);
     /* Bornes : sous 400 px on tient une mesure prise trop tot pour fiable ;
@@ -7686,6 +7737,7 @@ function juReferentiel(){
 
 var PAGE_META = {
     'pan-sia': { section: 'ÉVALUER LE RISQUE', label: 'Panorama IA & centres de données — UE' },
+    'enveloppe': { section: 'ÉVALUER LE RISQUE', label: 'Enveloppe d\'investissement — décision GO / NO GO' },
     'obs-rd': { section: 'SE TENIR INFORMÉ', label: 'Observatoire R&D IA' },
     'juridique': { section: 'JURIDIQUE', label: 'Conseil juridique assisté' },
     'empreinte': { section: 'EMPREINTE', label: 'Empreinte numérique' },

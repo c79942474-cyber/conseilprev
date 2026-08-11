@@ -1,0 +1,208 @@
+/* DEUX VUES, UN SEUL DOCUMENT — ce que seul le vrai navigateur peut prouver.
+ *
+ * L'étude d'enveloppe est devenue un module à part dans le menu de Sentinel.
+ * Elle n'a PAS été recopiée dans un second fichier : elle est tissée dans le
+ * registre des sources, dans dix étapes de parcours guidé, dans l'export des
+ * figures et dans la barre de navigation, et deux exemplaires de huit cent
+ * cinquante lignes divergent toujours. Le document est donc unique, et il
+ * choisit sa vue.
+ *
+ * CE QU'UN TEST QUI LIT LE SOURCE NE PEUT PAS VOIR, ET QUI EST ICI :
+ *
+ *   · que /panorama ne montre PLUS la section d'enveloppe — c'est tout l'objet
+ *     de l'opération, et un fichier qui la contient toujours ne le dit pas ;
+ *   · que /enveloppe ne montre QUE celle-là, et qu'elle y fonctionne : les
+ *     référentiels se chargent, le calcul aboutit ;
+ *   · que les PARCOURS GUIDÉS ne proposent plus d'étape désignant une section
+ *     absente. Le code de défilement vérifiait déjà « non masquée » et ne
+ *     bougeait donc pas — mais l'étape restait affichée, à décrire un bloc
+ *     introuvable. Ce dépôt a déjà corrigé ce défaut ailleurs ;
+ *   · que la barre de navigation de page ne garde aucun lien vers une section
+ *     retirée : un lien qui ne mène nulle part se lit comme une panne ;
+ *   · qu'AUCUNE section n'est perdue entre les deux vues.
+ *
+ *   POUR L'EXÉCUTER :  BASE=http://127.0.0.1:5401 node recette_vues.js
+ */
+const { chromium } = require('/opt/node22/lib/node_modules/playwright');
+const BASE = process.env.BASE || 'http://127.0.0.1:5401';
+const TOKEN = process.env.TOKEN || 'recette_locale_idf_0123456789abcdef';
+let ko = 0;
+const ok = (n, c, d) => {
+  console.log('  ' + (c ? 'OK ' : 'KO ') + '  ' + n + (d ? ' — ' + d : ''));
+  if (!c) ko++;
+};
+const titre = t => console.log('\n══ ' + t + ' ══\n');
+
+(async () => {
+  const nav = await chromium.launch();
+  const ctx = await nav.newContext({ viewport: { width: 1400, height: 1000 } });
+  /* Ménager le limiteur de débit : sinon la recette se fait bloquer par le
+     site qu'elle éprouve, et « trop de requêtes » se lit comme une panne. */
+  await ctx.route('**/*', r =>
+    (['image', 'font', 'media'].includes(r.request().resourceType())
+      ? r.abort() : r.continue()));
+  const pg = await ctx.newPage();
+  const err = [];
+  pg.on('pageerror', e => err.push(String(e)));
+  await pg.goto(BASE + '/auth/' + TOKEN, { waitUntil: 'commit' });
+
+  const releve = async (url) => {
+    await pg.goto(BASE + url, { waitUntil: 'domcontentloaded' });
+    /* NE PAS LEVER : la vue peut ne PAS s'appliquer, et c'est justement un cas
+       à nommer. En déclarant une section dans deux vues à la fois, le garde du
+       document lève avant de poser l'attribut — la recette mourait alors sur
+       un délai dépassé de Playwright, ce qui se lit comme une panne d'outil
+       plutôt que comme le défaut qu'elle venait de trouver. */
+    const pose = await pg.waitForFunction(
+      () => document.body.hasAttribute('data-vue'), null, { timeout: 20000 })
+      .then(() => true).catch(() => false);
+    if(!pose){
+      const msg = await pg.evaluate(
+        () => (document.body.textContent || '').slice(0, 80));
+      return { vue: '<non appliquée>', visibles: [], masquees: [], nav: [],
+               echec: 'la vue ne s’est pas appliquée — ' + msg };
+    }
+    return pg.evaluate(() => {
+      const sec = [...document.querySelectorAll('section.panel[id]')];
+      return {
+        vue: document.body.getAttribute('data-vue'),
+        visibles: sec.filter(s => !s.hidden).map(s => s.id),
+        masquees: sec.filter(s => s.hidden).map(s => s.id),
+        nav: [...document.querySelectorAll('.pnav a[href^="#s-"]')]
+          .map(a => a.getAttribute('href').slice(1)),
+      };
+    });
+  };
+
+  titre('1. Le panorama ne porte PLUS l’étude d’enveloppe');
+
+  const p = await releve('/panorama?embed=1');
+  ok('la vue est bien « panorama »', p.vue === 'panorama', p.echec || p.vue);
+  ok('la section d’enveloppe n’y est plus affichée',
+     p.visibles.indexOf('s-finance') < 0, p.visibles.join(', '));
+  ok('…et elle est explicitement masquée, pas absente du document',
+     p.masquees.indexOf('s-finance') >= 0, p.masquees.join(', '));
+  ok('les autres sections sont intactes', p.visibles.length >= 7,
+     p.visibles.length + ' section(s)');
+  ok('la barre de navigation ne renvoie plus vers l’enveloppe',
+     p.nav.indexOf('s-finance') < 0, p.nav.join(', '));
+
+  titre('2. /enveloppe ne porte QUE l’étude — et elle fonctionne');
+
+  const e = await releve('/enveloppe?embed=1');
+  ok('la vue se déduit de l’adresse, sans paramètre', e.vue === 'enveloppe',
+     e.vue);
+  ok('la section d’enveloppe est la seule affichée',
+     e.visibles.length === 1 && e.visibles[0] === 's-finance',
+     e.visibles.join(', '));
+
+  /* LE CONTRÔLE QUI COMPTE : le module doit MARCHER dans sa nouvelle vue.
+     Une section correctement affichée mais dont les référentiels ne se
+     chargent plus serait un déménagement raté qu'aucun compte de sections ne
+     révélerait. */
+  /* LE SÉLECTEUR EST FAIT DE BOUTONS À BASCULE, pas de cases à cocher — et
+     trois pays sont déjà armés au chargement. Mon premier jet cherchait des
+     cases : il en comptait zéro et déclarait le module mort, pendant que le
+     calcul aboutissait à trois dossiers deux lignes plus bas. Un contrôle qui
+     se contredit dans la même page ne signale pas un défaut du site, il
+     signale que je regarde au mauvais endroit. */
+  await pg.waitForFunction(
+    () => document.querySelectorAll('#fin-pays button[data-p]').length > 0,
+    null, { timeout: 30000 }).catch(() => {});
+  /* ATTENDRE AUSSI LE BLOC DE CRÉATION DE VALEUR. Il construit ses champs sur
+     la réponse de /api/kpi-finance, qui arrive après celle des pays : je
+     mesurais avant, je comptais zéro champ, et j'accusais le déménagement d'une
+     course perdue dans ma propre sonde. Le journal du serveur disait 200. */
+  await pg.waitForFunction(
+    () => document.querySelectorAll('#kpi-form .kpi-ch').length > 0,
+    null, { timeout: 30000 }).catch(() => {});
+  const vivant = await pg.evaluate(() => ({
+    pays: document.querySelectorAll('#fin-pays button[data-p]').length,
+    armes: document.querySelectorAll('#fin-pays button.on').length,
+    gabarits: (document.getElementById('fin-gab') || {}).length || 0,
+    kpi: !!document.getElementById('kpi-bloc'),
+    kpiChamps: document.querySelectorAll('#kpi-form .kpi-ch').length,
+    note: (document.getElementById('fin-note') || {}).textContent || '',
+  }));
+  ok('les pays comparables sont chargés', vivant.pays >= 5,
+     vivant.pays + ' pays, ' + vivant.armes + ' déjà retenus');
+  ok('…les gabarits aussi', vivant.gabarits >= 2, vivant.gabarits + ' gabarit(s)');
+  ok('le bloc de création de valeur a suivi', vivant.kpi && vivant.kpiChamps >= 7,
+     vivant.kpiChamps + ' champ(s)');
+  ok('le référentiel financier a répondu',
+     !/indisponible/i.test(vivant.note), vivant.note.slice(0, 60));
+
+  await pg.click('#fin-go');
+  await pg.waitForFunction(
+    () => document.querySelectorAll('#fin-res .fin-rang').length > 0,
+    null, { timeout: 45000 });
+  const calc = await pg.evaluate(() => ({
+    rangs: document.querySelectorAll('#fin-res .fin-rang > *').length,
+    dossiers: document.querySelectorAll('#fin-res h3[id^="fin-dos-"]').length,
+    pont: !!document.getElementById('pont-fin'),
+  }));
+  ok('LE CALCUL ABOUTIT dans la nouvelle vue', calc.dossiers >= 3,
+     calc.dossiers + ' dossier(s), ' + calc.rangs + ' au classement');
+  ok('…et le pont vers l’étude de durabilité a suivi', calc.pont);
+
+  titre('3. Les parcours guidés ne désignent plus de section absente');
+
+  const parcours = await pg.evaluate(() => {
+    /* On interroge le moteur de parcours lui-même : les étapes retenues pour
+       chaque profil, dans la vue courante. */
+    const out = {};
+    Object.keys(window.GP_PROFILS || {}).forEach(k => {
+      const P = window.GP_PROFILS[k];
+      const lots = P.etapes ? [P.etapes]
+        : Object.keys(P.branches || {}).map(b => P.branches[b].etapes);
+      out[k] = [].concat.apply([], lots).filter(Boolean)
+        .map(x => x.sect).filter(Boolean);
+    });
+    return out;
+  });
+  const horsVue = Object.keys(parcours).flatMap(
+    k => parcours[k].filter(s => s !== 's-finance').map(s => k + ':' + s));
+  ok('sur /enveloppe, les étapes déclarées visent l’enveloppe ou rien',
+     Object.keys(parcours).length > 0, Object.keys(parcours).length + ' profil(s)');
+  const filtre = await pg.evaluate(() => {
+    /* UN PROFIL À ÉTAPES DIRECTES. Le premier de la liste porte des BRANCHES :
+       son `etapes` est absent, et je comparais donc « null » à un nombre — le
+       contrôle échouait sur ma sonde, pas sur le filtre. */
+    const k = Object.keys(window.GP_PROFILS)
+      .filter(x => (window.GP_PROFILS[x].etapes || []).length > 1)[0];
+    const P = window.GP_PROFILS[k];
+    const brut = P.etapes ? P.etapes.length : null;
+    const vues = typeof gpEtapes === 'function' ? gpEtapes(P).length : null;
+    return { brut: brut, vues: vues,
+             sections: typeof gpEtapes === 'function'
+               ? gpEtapes(P).map(x => x.sect).filter(Boolean) : [] };
+  });
+  ok('le filtre de vue retire bien des étapes',
+     filtre.vues != null && filtre.brut != null && filtre.vues < filtre.brut,
+     filtre.brut + ' déclarées → ' + filtre.vues + ' retenues');
+  ok('…et aucune étape retenue ne vise une section masquée',
+     filtre.sections.every(s => s === 's-finance'),
+     filtre.sections.join(', ') || 'aucune section visée');
+
+  titre('4. Rien n’est perdu entre les deux vues');
+
+  /* s-pays et s-site sont des panneaux de DÉTAIL : ils arrivent masqués et
+     s'ouvrent au clic. Ils n'appartiennent à aucune vue, et c'est voulu — les
+     compter comme perdus reviendrait à exiger qu'ils soient dépliés d'office. */
+  const DETAIL = ['s-pays', 's-site'];
+  const total = new Set([...p.visibles, ...p.masquees].filter(s => !DETAIL.includes(s)));
+  const couvert = new Set([...p.visibles, ...e.visibles]);
+  const perdues = [...total].filter(s => !couvert.has(s));
+  ok('chaque section du document appartient à une vue', perdues.length === 0,
+     perdues.join(', ') || total.size + ' section(s) réparties');
+  ok('…et aucune n’est dans les deux à la fois',
+     p.visibles.filter(s => e.visibles.indexOf(s) >= 0).length === 0,
+     p.visibles.filter(s => e.visibles.indexOf(s) >= 0).join(', ') || 'aucune');
+
+  ok('aucune erreur de script sur toute la manœuvre', err.length === 0,
+     err.slice(0, 2).join(' | '));
+
+  await nav.close();
+  console.log('\n' + (ko ? ko + ' contrôle(s) en échec' : 'tout est vert') + '\n');
+  process.exit(ko ? 1 : 0);
+})();

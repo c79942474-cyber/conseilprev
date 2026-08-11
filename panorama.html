@@ -2327,6 +2327,94 @@ function setHTML(id,h){var e=document.getElementById(id);if(e)e.innerHTML=h;}
 if(/[?&]embed=1(&|$)/.test(window.location.search)){document.body.classList.add("embed");}
 
 /* ══════════════════════════════════════════════════════════════════════════
+   DEUX VUES, UN SEUL DOCUMENT
+
+   POURQUOI PAS DEUX FICHIERS. L'étude d'enveloppe devient un module à part
+   dans le menu de Sentinel — c'est ce qui aère la page du panorama, devenue
+   trop longue. La façon évidente serait d'en faire un second fichier ; ce
+   serait la mauvaise. Cette section n'est pas un bloc autonome : elle est
+   tissée dans le registre des sources, dans dix étapes de parcours guidé, dans
+   l'export des figures et dans la barre de navigation. La recopier, c'est
+   créer deux exemplaires de huit cent cinquante lignes qui divergeront — et
+   c'est toujours l'exemplaire qu'on oublie de corriger qui reste en ligne.
+
+   UN SEUL DOCUMENT, DONC, ET DEUX VUES. Chaque section appartient à une vue et
+   une seule ; celles qui ne sont pas de la vue courante sont retirées de la
+   page, de la barre de navigation ET des parcours guidés. Une section oubliée
+   dans ce tableau ferait tomber la vérification au chargement plutôt que de
+   disparaître en silence : c'est le seul moyen qu'un ajout futur ne se perde
+   pas dans une vue que personne ne regarde.
+   ══════════════════════════════════════════════════════════════════════════ */
+/* MODULE_VUES ET NON « VUES ». La page portait déjà un VUES et un VUE — les
+   couches de la carte : cas, CO2, mix, drapeaux. Mes deux globales du même nom
+   ont été écrasées par les leurs, déclarées plus bas : la vue valait « cas », et
+   `VUES[v].forEach` levait une exception sur un objet qui n'était pas celui
+   attendu. Rien ne le signalait à la lecture du diff — les deux blocs sont à
+   huit cents lignes l'un de l'autre. */
+var MODULE_VUES = {
+  panorama: ["s-carte", "s-signaux", "s-cas", "s-lectures", "s-empreinte",
+             "s-implantation", "s-prospect", "s-methodo", "s-socle", "s-sources"],
+  enveloppe: ["s-finance"]
+};
+/* LES PANNEAUX DE DÉTAIL NE SONT D'AUCUNE VUE, et il ne faut surtout pas y
+   toucher : ils arrivent `hidden` et s'ouvrent au clic sur un pays ou un site.
+   Ma première version les traitait comme des sections orphelines « à garder
+   par sécurité » — donc les rendait visibles au chargement, dépliant deux
+   fiches vides sous la carte. Ce qu'une page gère elle-même, on le laisse. */
+var PANNEAUX_DETAIL = ["s-pays", "s-site"];
+var MODULE_VUE = (function(){
+  var m = /[?&]vue=([a-z]+)/.exec(window.location.search);
+  if(m && MODULE_VUES[m[1]]) return m[1];
+  /* L'adresse dédiée vaut déclaration de vue : un lien partagé vers
+     /enveloppe doit ouvrir l'étude, pas le panorama entier. */
+  if(/\/enveloppe(\.html)?$/.test(window.location.pathname)) return "enveloppe";
+  return "panorama";
+})();
+function vueContient(sect){ return MODULE_VUES[MODULE_VUE].indexOf(sect) >= 0; }
+/* Une étape de parcours sans section (une question, un choix de scénario)
+   appartient à toutes les vues : elle ne désigne aucun bloc. */
+function vueMontre(et){ return !et || !et.sect || vueContient(et.sect); }
+
+function vueAppliquer(){
+  var toutes = [].slice.call(document.querySelectorAll("section.panel[id]"))
+    .map(function(s){ return s.id; });
+  var declarees = {};
+  Object.keys(MODULE_VUES).forEach(function(v){
+    MODULE_VUES[v].forEach(function(s){
+      if(declarees[s]) throw new Error("vue : " + s + " déclarée deux fois");
+      declarees[s] = v;
+    });
+  });
+  var orphelines = toutes.filter(function(s){
+    return !declarees[s] && PANNEAUX_DETAIL.indexOf(s) < 0;
+  });
+  if(orphelines.length){
+    /* Bruyant à dessein. Une section qu'aucune vue ne réclame disparaîtrait
+       des deux — c'est-à-dire du site — sans que rien ne le signale. Ce
+       contrôle a servi dès sa première exécution : quatre sections manquaient
+       à ma liste, recopiée d'un inventaire qui était lui-même incomplet. */
+    console.error("vue : section(s) sans vue déclarée — " + orphelines.join(", "));
+  }
+  document.body.setAttribute("data-vue", MODULE_VUE);
+  toutes.forEach(function(id){
+    if(PANNEAUX_DETAIL.indexOf(id) >= 0) return;   // la page les gère seule
+    var s = document.getElementById(id);
+    if(!s) return;
+    var garde = vueContient(id) || orphelines.indexOf(id) >= 0;
+    s.hidden = !garde;
+  });
+  /* La barre de navigation de page : un lien vers une section retirée
+     conduirait à un endroit vide, ce qui se lit comme une panne. */
+  [].forEach.call(document.querySelectorAll('.pnav a[href^="#s-"]'), function(a){
+    var id = a.getAttribute("href").slice(1);
+    if(!vueContient(id) && orphelines.indexOf(id) < 0) a.remove();
+  });
+}
+if(document.readyState === "loading")
+  document.addEventListener("DOMContentLoaded", vueAppliquer);
+else vueAppliquer();
+
+/* ══════════════════════════════════════════════════════════════════════════
    GÉOGRAPHIE — tracés déjà prêts, calculés hors du navigateur
 
    Ces tables sont produites par `cartes_precalc.py` à partir de la géométrie
@@ -8062,9 +8150,20 @@ function gpSante(){
 }
 
 function gpEtapes(P){
-  if(P.etapes) return P.etapes;
-  var b = GP.branche && P.branches && P.branches[GP.branche];
-  return b ? [P.question].concat(b.etapes) : [P.question];
+  var E;
+  if(P.etapes) E = P.etapes;
+  else {
+    var b = GP.branche && P.branches && P.branches[GP.branche];
+    E = b ? [P.question].concat(b.etapes) : [P.question];
+  }
+  /* FILTRER SUR LA VUE, ET NON SEULEMENT SUR LE DÉFILEMENT.
+     Le code qui déplace l'écran vérifiait déjà `!sec.hidden` : une étape visant
+     une section absente ne faisait donc rien bouger — mais elle restait dans le
+     parcours, avec son titre et son texte, à décrire un bloc que le lecteur ne
+     voit nulle part. Ce dépôt a déjà corrigé exactement cela ailleurs (« une
+     consigne ne doit pas désigner un objet que la page n'affiche pas ») : la
+     leçon vaut ici. On retire l'étape. */
+  return E.filter(vueMontre);
 }
 
 function gpEls(){

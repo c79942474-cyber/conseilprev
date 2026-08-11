@@ -4502,6 +4502,13 @@ PAGES = {
 PAGES_RESERVEES = {
     '/observatoire':  'observatoire.html',
     '/panorama':      'panorama.html',
+    # L'ETUDE D'ENVELOPPE A SON ADRESSE, ET LE MEME FICHIER. Elle est devenue un
+    # module a part dans le menu de Sentinel — c'est ce qui allege la page du
+    # panorama. Un second FICHIER aurait duplique huit cent cinquante lignes
+    # tissees dans le registre des sources, dix etapes de parcours guide et
+    # l'export des figures ; c'est toujours l'exemplaire qu'on oublie de
+    # corriger qui reste en ligne. Le document choisit sa vue d'apres l'adresse.
+    '/enveloppe':     'panorama.html',
 }
 
 # De quel fichier vient quelle adresse. Le cache de pages ne connait que le nom
@@ -9310,7 +9317,7 @@ for route, filename in PAGES.items():
 # le plus interne, donc le plus proche de la vue — le refus est décidé APRÈS
 # le comptage de débit, jamais avant, sinon un anonyme pourrait marteler la
 # route sans jamais consommer son quota.
-def _make_view_reservee(fn, suffixe=''):
+def _make_view_reservee(fn, nom):
     @rate_limit(limit=60, window=60)
     @reserve_abonne_page
     def view():
@@ -9318,18 +9325,28 @@ def _make_view_reservee(fn, suffixe=''):
         # intermédiaire qui garderait cette page la rendrait lisible au
         # visiteur suivant, abonné ou non.
         return _serve_page_fast(fn, cache_control='private, no-cache, must-revalidate')
-    view.__name__ = 'reserve_' + fn.replace('.', '_').replace('-', '_') + suffixe
+    # LE NOM VIENT DE LA ROUTE, PAS DU FICHIER. Deux adresses peuvent servir le
+    # meme document — /panorama et /enveloppe en sont deux vues — et Flask
+    # refuse alors d'enregistrer la seconde : « View function mapping is
+    # overwriting an existing endpoint ». L'application ne demarrait plus.
+    view.__name__ = 'reserve_' + nom.strip('/').replace('.', '_').replace('-', '_')
     return view
 
 
+_FICHIERS_RESERVES_VUS = set()
 for route, filename in PAGES_RESERVEES.items():
-    app.add_url_rule(route, view_func=_make_view_reservee(filename))
+    app.add_url_rule(route, view_func=_make_view_reservee(filename, route))
     # L'application est servie avec static_folder='.' et static_url_path='' :
     # TOUT fichier de la racine est accessible par son nom. Verrouiller
     # /panorama en laissant /panorama.html ouvert ne verrouille rien du tout.
     # Une règle explicite prime sur la route statique attrape-tout, qui porte
     # un convertisseur <path:> et se classe donc après.
-    app.add_url_rule('/' + filename, view_func=_make_view_reservee(filename, '_html'))
+    # Une seule fois par FICHIER : deux routes vers le meme document
+    # tenteraient d'enregistrer deux fois /panorama.html.
+    if filename not in _FICHIERS_RESERVES_VUS:
+        _FICHIERS_RESERVES_VUS.add(filename)
+        app.add_url_rule('/' + filename,
+                         view_func=_make_view_reservee(filename, filename))
 
 # ══════════════════════════════════════════════════════════════════════════
 #  CONSEIL JURIDIQUE ASSISTÉ — services numériques, cyber IT/OT/ICS, IA
