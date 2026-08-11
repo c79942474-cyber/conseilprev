@@ -52,7 +52,12 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
   pg.on('pageerror', e => err.push(String(e)));
 
   await pg.goto(BASE + '/auth/' + TOKEN, { waitUntil: 'commit' });
-  await pg.goto(BASE + '/panorama', { waitUntil: 'domcontentloaded' });
+  /* LE BLOC A DÉMÉNAGÉ AVEC SA SECTION. L'étude d'enveloppe est devenue un
+     module à part : sur /panorama, `s-finance` est désormais masquée, et cette
+     recette y attendait indéfiniment un bloc que la vue cachait. Elle mourait
+     sur un délai dépassé — c'est-à-dire qu'elle ne couvrait plus rien du tout,
+     sans le dire. */
+  await pg.goto(BASE + '/enveloppe', { waitUntil: 'domcontentloaded' });
   await pg.waitForSelector('#kpi-bloc', { timeout: 25000 });
 
   titre('1. Le bloc se présente avant tout calcul, et dit ce qui manque');

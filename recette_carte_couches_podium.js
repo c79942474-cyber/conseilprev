@@ -32,6 +32,15 @@ const ok = (n, c, d) => { console.log('  ' + (c ? 'OK ' : 'KO ') + '  ' + n + (d
   const pg = await ctx.newPage();
   const err = [];
   pg.on('pageerror', e => err.push(String(e)));
+  /* LES DEUX CARTES NE VIVENT PLUS SUR LA MÊME PAGE. L'étude d'enveloppe est
+     devenue un module à part : sa carte est sur /enveloppe, celle
+     d'implantation reste sur /panorama. Cette recette cherchait les deux sur
+     /panorama et mourait sur un délai dépassé en voulant cliquer un bouton
+     masqué — c'est-à-dire qu'elle ne couvrait PLUS le podium d'investissement
+     sans le dire. Le second onglet rend cette couverture, sans réordonner un
+     contrôle qui vaut par sa suite. */
+  const pgE = await ctx.newPage();
+  pgE.on('pageerror', e => err.push('[/enveloppe] ' + String(e)));
   await pg.goto(BASE + '/auth/recette_locale_idf_0123456789abcdef', { waitUntil: 'domcontentloaded' });
   await pg.goto(BASE + '/panorama', { waitUntil: 'networkidle' });
   await pg.waitForFunction(() => document.querySelector('#couche-quoi'), null, { timeout: 30000 });
@@ -142,10 +151,16 @@ const ok = (n, c, d) => { console.log('  ' + (c ? 'OK ' : 'KO ') + '  ' + n + (d
      clic3.code + ' vs ' + clicImp.code);
 
   console.log('\n══ 4. Le podium d’investissement mène au dossier chiffré ══\n');
-  await pg.locator('#fin-go').scrollIntoViewIfNeeded();
-  await pg.locator('#fin-go').click();
-  await pg.waitForTimeout(4200);
-  const fin = await pg.evaluate(() => ({
+  await pgE.goto(BASE + '/enveloppe', { waitUntil: 'domcontentloaded' });
+  await pgE.waitForFunction(
+    () => document.querySelectorAll('#fin-pays button[data-p]').length > 0,
+    null, { timeout: 30000 });
+  await pgE.locator('#fin-go').scrollIntoViewIfNeeded();
+  await pgE.locator('#fin-go').click();
+  /* On attend le RÉSULTAT, pas un délai deviné : sous charge, 4,2 s ne
+     suffisaient pas et l'échec se lisait comme un podium absent. */
+  await pgE.waitForSelector('#fin-res .fin-podium', { timeout: 60000 });
+  const fin = await pgE.evaluate(() => ({
     puces: [...document.querySelectorAll('.fin-podium')]
       .map(b => ({ code: b.getAttribute('data-podium'), t: b.tagName.toLowerCase(),
                    txt: b.innerText.replace(/\n/g, ' · ') })),
@@ -158,20 +173,30 @@ const ok = (n, c, d) => { console.log('  ' + (c ? 'OK ' : 'KO ') + '  ' + n + (d
      fin.ancres.join(', '));
   ok('…et la puce nomme le pays, comme le titre qu’elle vise',
      !/^\d\. [A-Z]{2} /.test(fin.puces[0].txt), fin.puces[0].txt.slice(0, 40));
-  const clicFin = await pg.evaluate(() => {
+  /* LE DOSSIER EST REPLIÉ TANT QU'ON N'A PAS DÉSIGNÉ SON PAYS. On mesure donc
+     l'état AVANT le clic — c'est lui la promesse — puis ce que le clic ouvre. */
+  const avantClic = await pgE.evaluate(() =>
+    [...document.querySelectorAll('#fin-res .fin-dos')]
+      .filter(d => d.offsetParent !== null).length);
+  ok('avant tout clic, aucun dossier n’est déplié sous la carte',
+     avantClic === 0, avantClic + ' déplié(s)');
+  const clicFin = await pgE.evaluate(() => {
     const b = document.querySelector('.fin-podium');
     const code = b.getAttribute('data-podium');
     b.click();
     const t = document.getElementById('fin-dos-' + code);
-    return { code: code, cible: t ? t.id : null, titre: t ? t.innerText : '' };
+    return { code: code, cible: t ? t.id : null, titre: t ? t.innerText : '',
+             ouvert: !!t && !t.hidden };
   });
-  await pg.waitForTimeout(600);
+  await pgE.waitForTimeout(600);
   ok('un clic atteint le dossier du bon pays',
      clicFin.cible === 'fin-dos-' + clicFin.code, clicFin.cible);
+  ok('…et l’OUVRE, au lieu de conduire à un bloc replié', clicFin.ouvert);
   ok('…et ce dossier porte son enveloppe chiffrée',
-     /enveloppe/.test(clicFin.titre) && /M€/.test(clicFin.titre), clicFin.titre);
+     /enveloppe/.test(clicFin.titre) && /M€/.test(clicFin.titre),
+     clicFin.titre.split('\n')[0]);
   ok('…avec le halo d’arrivée',
-     await pg.evaluate(() => { const t = document.querySelector('.cres-cible');
+     await pgE.evaluate(() => { const t = document.querySelector('.cres-cible');
        return !!t && /^fin-dos-/.test(t.id || ''); }));
 
   console.log('\n══ 5. LE geste attendu : cliquer le PAYS sur la carte ══\n');
@@ -198,7 +223,10 @@ const ok = (n, c, d) => { console.log('  ' + (c ? 'OK ' : 'KO ') + '  ' + n + (d
         ce qui est pire que pas de contrôle du tout.
         La grille balaie donc toute la boîte, et se resserre quand elle est
         petite — un pas d'un pixel au minimum. */
-  const pointer = async (sel) => pg.evaluate((s) => {
+  /* Les trois auxiliaires prennent la page en argument : la carte de
+     l'enveloppe est dans l'autre onglet, et une sonde câblée sur `pg` la
+     chercherait là où elle n'est pas. */
+  const pointer = async (sel, page) => (page || pg).evaluate((s) => {
     const el = document.querySelector(s);
     if (!el) return null;
     const b = el.getBoundingClientRect();
@@ -220,7 +248,7 @@ const ok = (n, c, d) => { console.log('  ' + (c ? 'OK ' : 'KO ') + '  ' + n + (d
         pire des situations — il finit par se faire ignorer. On boucle donc
         jusqu'à ce que la boîte de l'élément cesse de bouger d'une image à la
         suivante, ce qui ne dépend d'aucune supposition de vitesse. */
-  const stabiliser = async (sel) => pg.evaluate((s) => new Promise((fin) => {
+  const stabiliser = async (sel, page) => (page || pg).evaluate((s) => new Promise((fin) => {
     let avant = null, stables = 0, tours = 0;
     const tic = () => {
       const e = document.querySelector(s);
@@ -237,16 +265,17 @@ const ok = (n, c, d) => { console.log('  ' + (c ? 'OK ' : 'KO ') + '  ' + n + (d
     requestAnimationFrame(tic);
   }), sel);
 
-  const viser = async (sel) => {
-    await pg.evaluate((s) => { const e = document.querySelector(s);
+  const viser = async (sel, page) => {
+    const pp = page || pg;
+    await pp.evaluate((s) => { const e = document.querySelector(s);
       if (e) e.scrollIntoView({ block: 'center', behavior: 'instant' }); }, sel);
-    await stabiliser(sel);
-    const p = await pointer(sel);
+    await stabiliser(sel, pp);
+    const p = await pointer(sel, pp);
     if (!p) return null;
-    const surPlace = await pg.evaluate((q) => {
+    const surPlace = await pp.evaluate((q) => {
       const t = document.elementFromPoint(q.x, q.y);
       return t ? t.getAttribute('data-code') : null; }, p);
-    return surPlace === p.code ? p : await pointer(sel);
+    return surPlace === p.code ? p : await pointer(sel, pp);
   };
 
   await pg.evaluate(() => { IMPL_DEPLIE = null; renderImplAvis(); });
@@ -438,26 +467,36 @@ const ok = (n, c, d) => { console.log('  ' + (c ? 'OK ' : 'KO ') + '  ' + n + (d
       return t && t.classList.contains('on') ? t.innerText : null;
     };
     return { top: dire('#imp-classement .cres-pays[data-podium]'),
-             gris: dire('#imp-classement .cres-abs'),
-             fin: dire('.cres-pays[data-podium]:not(#imp-classement .cres-pays)') };
+             gris: dire('#imp-classement .cres-abs') };
+  });
+  /* L'infobulle de l'enveloppe se relève dans SON onglet : la carte du GO /
+     NO GO n'est plus sur /panorama. */
+  const guideFin = await pgE.evaluate(() => {
+    const el = document.querySelector('#fin-res .cres-pays[data-podium]');
+    if (!el) return null;
+    el.dispatchEvent(new MouseEvent('mouseover', { bubbles: true, clientX: 300, clientY: 300 }));
+    const t = document.querySelector('.cres-tip');
+    return t && t.classList.contains('on') ? t.innerText : null;
   });
   ok('l’infobulle du comparateur invite à ouvrir la FICHE',
      /cliquez pour ouvrir la fiche détaillée/i.test(guide.top || ''),
      (guide.top || '').split('\n').pop());
-  ok('celle de l’enveloppe invite à ouvrir le DOSSIER CHIFFRÉ',
-     /cliquez pour aller au dossier chiffré/i.test(guide.fin || ''),
-     (guide.fin || '').split('\n').pop());
+  ok('celle de l’enveloppe invite à OUVRIR le DOSSIER CHIFFRÉ',
+     /cliquez pour ouvrir le dossier chiffré/i.test(guideFin || ''),
+     (guideFin || '').split('\n').pop());
   ok('…les deux cartes ne se copient donc pas l’une l’autre',
-     (guide.top || '') !== (guide.fin || ''));
+     (guide.top || '') !== (guideFin || ''));
   ok('un pays NON calculé ne reçoit aucune invitation',
      !/cliquez pour/i.test(guide.gris || ''),
      (guide.gris || '').split('\n').pop());
   ok('…et il explique quand même pourquoi il est gris',
      /non comparé|hors du référentiel/i.test(guide.gris || ''));
-  const notes = await pg.evaluate(() =>
-    [...document.querySelectorAll('.cres-note')].map(x => x.innerText));
-  ok('les deux notes annoncent le signal bleu',
-     notes.filter(t => /cerclés de bleu et clignotent/.test(t)).length >= 2,
+  const notes = [
+    await pg.evaluate(() => (document.querySelector('#imp-classement .cres-note') || {}).innerText || ''),
+    await pgE.evaluate(() => (document.querySelector('#fin-res .cres-note') || {}).innerText || ''),
+  ];
+  ok('les deux notes annoncent le signal bleu — chacune sur sa page',
+     notes.filter(t => /cerclés de bleu et clignotent/.test(t)).length === 2,
      notes.filter(t => /cerclés de bleu/.test(t)).length + ' notes sur ' + notes.length);
 
   console.log('\n══ 7. Discrimination : l’ancienne carte ne répondait pas ══\n');
@@ -557,31 +596,51 @@ const ok = (n, c, d) => { console.log('  ' + (c ? 'OK ' : 'KO ') + '  ' + n + (d
   ok('…et le bloc reprend bien toutes ses fiches', filtre.fiches > 10, filtre.fiches);
 
   console.log('\n══ 10. La même liaison sur la carte de l’enveloppe ══\n');
-  const cibleFin = await viser('.cres-pays[data-podium]:not(#imp-classement .cres-pays)');
+  /* Sur /enveloppe : c'est là que vit désormais la carte du GO / NO GO. */
+  const cibleFin = await viser('#fin-res .cres-pays[data-podium]', pgE);
   ok('un pays comparé y est atteignable à la souris', !!cibleFin,
      JSON.stringify(cibleFin));
   if (cibleFin) {
-    await pg.mouse.click(cibleFin.x, cibleFin.y);
-    await pg.waitForTimeout(800);
-    const arr = await pg.evaluate((c) => {
+    /* On repart d'un écran où RIEN n'est ouvert : sinon le contrôle
+       constaterait un dossier déjà déplié par le clic de la section 4 et ne
+       prouverait rien du geste qu'il éprouve. */
+    await pgE.evaluate(() => {
+      const t = document.querySelector('#fin-ouvre-l [data-fermer="*"]')
+             || document.querySelector('#fin-ouvre-l [data-fermer]');
+      if (t) t.click();
+    });
+    await pgE.mouse.click(cibleFin.x, cibleFin.y);
+    await pgE.waitForTimeout(800);
+    const arr = await pgE.evaluate((c) => {
       const t = document.getElementById('fin-dos-' + c);
+      const vus = [...document.querySelectorAll('#fin-res .fin-dos')]
+        .filter(d => d.offsetParent !== null).map(d => d.getAttribute('data-pays'));
       return { existe: !!t, halo: !!(t && t.classList.contains('cres-cible')),
-               titre: t ? t.innerText : '' };
+               titre: t ? t.innerText : '', vus: vus };
     }, cibleFin.code);
-    ok('…et le cliquer atteint SON dossier chiffré',
-       arr.existe && arr.halo, cibleFin.code + ' → ' + arr.titre.slice(0, 46));
+    ok('…et le cliquer OUVRE SON dossier chiffré',
+       arr.existe && arr.halo, cibleFin.code + ' → ' + arr.titre.split('\n')[0]);
+    ok('…LUI SEUL, les autres restant repliés',
+       arr.vus.length === 1 && arr.vus[0] === cibleFin.code, arr.vus.join(', '));
     ok('…lequel porte bien une enveloppe en euros',
-       /enveloppe/.test(arr.titre) && /M€/.test(arr.titre), arr.titre.slice(0, 50));
+       /enveloppe/.test(arr.titre) && /M€/.test(arr.titre),
+       arr.titre.split('\n')[0].slice(0, 50));
   }
-  const dits = await pg.evaluate(() => ({
-    imp: (document.querySelector('#imp-classement .cres-note') || {}).innerText || '',
-    fin: [...document.querySelectorAll('.cres-note')].map(x => x.innerText).join(' ~~ '),
-  }));
+  /* Chaque note est relevée SUR SA PAGE : les compter toutes sur /panorama
+     donnerait une, et un « il en manque une » qui ne décrit rien de réel. */
+  const dits = {
+    imp: await pg.evaluate(
+      () => (document.querySelector('#imp-classement .cres-note') || {}).innerText || ''),
+    fin: await pgE.evaluate(
+      () => (document.querySelector('#fin-res .cres-note') || {}).innerText || ''),
+  };
   ok('la carte du classement DIT que ses pays sont cliquables',
      /Cliquez un pays coloré/.test(dits.imp), dits.imp.slice(-90));
   ok('…et celle de l’enveloppe aussi',
-     (dits.fin.match(/Cliquez un pays coloré/g) || []).length >= 2,
-     (dits.fin.match(/Cliquez un pays coloré/g) || []).length + ' mentions');
+     /Cliquez un pays coloré/.test(dits.fin), dits.fin.slice(-90));
+  ok('…mais elle annonce une OUVERTURE, pas un simple renvoi plus bas',
+     /OUVRIR son dossier/i.test(dits.fin) && /repli/i.test(dits.fin),
+     dits.fin.slice(0, 0) || 'la note dit le repli');
 
   console.log('\n══ 11. Ce que ces deux gestes ne devaient PAS casser ══\n');
   const reste = await pg.evaluate(() => ({
@@ -591,10 +650,16 @@ const ok = (n, c, d) => { console.log('  ' + (c ? 'OK ' : 'KO ') + '  ' + n + (d
     cartes: document.querySelectorAll('[data-cres]').length,
     lignes: document.querySelectorAll('#imp-classement .imp-l').length,
   }));
+  const carteFin = await pgE.evaluate(
+    () => document.querySelectorAll('#fin-res [data-cres]').length);
   ok('le curseur d’année est toujours là', reste.horizon);
   ok('le choix du fond de carte aussi', reste.fond);
   ok('…et le bouton de légende', reste.legende);
-  ok('les deux cartes de résultat coexistent', reste.cartes >= 2, reste.cartes);
+  /* Les deux cartes ne coexistent plus sur une page : chacune est dans SA vue.
+     Le contrôle porte donc sur leur présence respective — l'ancien compte
+     « au moins deux sur /panorama » ne décrirait plus rien de réel. */
+  ok('la carte d’implantation est sur /panorama', reste.cartes >= 1, reste.cartes);
+  ok('…et celle de l’enveloppe sur /enveloppe', carteFin >= 1, carteFin);
   ok('le classement complet reste accessible ligne à ligne',
      reste.lignes > 10, reste.lignes + ' lignes');
   ok('aucune erreur JavaScript', err.length === 0, err.slice(0, 2).join(' | '));

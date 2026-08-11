@@ -138,7 +138,12 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
     null, { timeout: 45000 });
   const calc = await pg.evaluate(() => ({
     rangs: document.querySelectorAll('#fin-res .fin-rang > *').length,
-    dossiers: document.querySelectorAll('#fin-res h3[id^="fin-dos-"]').length,
+    /* L'ancre porte désormais le DOSSIER entier et non son seul titre : les
+       dossiers sont repliés tant qu'on n'a pas désigné leur pays sur la carte,
+       et c'est le dossier qu'on ouvre. Compter des `h3` ici rendrait zéro et
+       se lirait « le calcul n'aboutit pas » — un faux négatif sur la seule
+       chose que ce contrôle éprouve. */
+    dossiers: document.querySelectorAll('#fin-res .fin-dos[id^="fin-dos-"]').length,
     pont: !!document.getElementById('pont-fin'),
   }));
   ok('LE CALCUL ABOUTIT dans la nouvelle vue', calc.dossiers >= 3,

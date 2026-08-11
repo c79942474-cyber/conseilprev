@@ -554,6 +554,35 @@ body.embed .gp-carte{bottom:auto;top:var(--gp-bas,auto);
 .n-referentiel{color:#1E6336}.n-analyse{color:#4E3277}.n-hypothese{color:#8A5310}
 .n-saisi{color:#1C5CAB}.n-calcule{color:#0E7B83}
 
+/* ── Les dossiers repliés, et la barre qui dit lesquels sont ouverts ───────
+   Un blanc sous la carte se lirait comme un calcul qui n'a rien rendu. La
+   barre occupe donc la place et porte la consigne : elle est ENCADREE et non
+   posée en note, parce qu'elle est la seule chose entre la carte et le vide. */
+.fin-ouvre{border:1px dashed var(--rule2);border-radius:8px;padding:11px 14px;margin:14px 0 4px;
+  background:var(--bg)}
+.fin-ouvre-v{margin:0;font-size:12px;line-height:1.55}
+.fin-ouvre-l{display:flex;flex-wrap:wrap;gap:7px;margin:9px 0 0}
+.fin-ouvre-l:empty{display:none}
+.fin-ouvre-p{font-size:11px;font-family:inherit;padding:4px 10px;border-radius:20px;cursor:pointer;
+  border:1px solid var(--rule2);background:var(--white);color:var(--ink2)}
+.fin-ouvre-p:hover{border-color:var(--encre,#1C1C1C)}
+.fin-ouvre-p:focus-visible{outline:2px solid var(--encre,#1C1C1C);outline-offset:2px}
+.fin-ouvre-p span{font-family:var(--mono);color:var(--muted2);margin-left:2px}
+.fin-ouvre-p.tout{border-style:dashed}
+.fin-ouvre-n{margin:9px 0 0;font-size:10.5px;line-height:1.5;color:var(--muted2)}
+/* Le titre porte le bouton de repli à droite : c'est là qu'on le cherche
+   quand on vient de finir de lire le dossier. */
+.fin-dos > h3{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.fin-dos-x{font-size:10.5px;font-family:var(--mono);font-weight:400;padding:3px 9px;
+  border:1px solid var(--rule2);border-radius:20px;background:var(--white);color:var(--muted2);
+  cursor:pointer;white-space:nowrap}
+.fin-dos-x:hover{border-color:var(--encre,#1C1C1C);color:var(--ink2)}
+.fin-dos-x:focus-visible{outline:2px solid var(--encre,#1C1C1C);outline-offset:2px}
+/* À L'IMPRESSION, TOUT S'OUVRE. Un dossier replié pour tenir à l'écran n'a
+   aucune raison de manquer sur le papier, où il n'y a plus rien à ménager. */
+@media print{.fin-dos[hidden]{display:block !important}
+  .fin-dos-x,.fin-ouvre-l{display:none !important}}
+
 /* ── L'avis de faisabilité ───────────────────────────────────────────────
    Placé avant les chiffres du pays : la conclusion, puis ce sur quoi elle
    repose. Le sens colore le bord gauche — c'est la seule chose qu'un lecteur
@@ -5596,12 +5625,22 @@ function implVoirPays(code){
   }, 260);
 }
 
+/* LES DOSSIERS SONT REPLIÉS TANT QU'ON N'A PAS DÉSIGNÉ LEUR PAYS. Défiler vers
+   un dossier caché conduirait à un endroit vide : on l'ouvre d'abord, on y va
+   ensuite. Et comme l'ouverture change la hauteur du document, le défilement
+   est reporté d'une image — mesuré avant, il viserait l'ancienne position. */
 function finVoirPays(code){
   if(!code) return;
   var h = document.getElementById("fin-dos-" + code);
   if(!h) return;
-  h.scrollIntoView({ behavior: "smooth", block: "start" });
-  flashCible(h);
+  var ferme = h.hidden;
+  if(window.finDossierOuvrir) window.finDossierOuvrir(code);
+  var aller = function(){
+    h.scrollIntoView({ behavior: "smooth", block: "start" });
+    flashCible(h);
+  };
+  if(ferme && window.requestAnimationFrame) requestAnimationFrame(aller);
+  else aller();
 }
 
 /* Délégation unique : les podiums sont reconstruits à chaque recalcul, et
@@ -9451,14 +9490,14 @@ if(window.parent&&window.parent!==window){
     });
     var podium = C.map(function(x, i){
       return '<button type="button" class="cres-p fin-podium' + (i === 0 ? ' or' : '') + '"'
-        + ' data-podium="' + esc(x.pays) + '" title="Aller au dossier chiffré de '
+        + ' data-podium="' + esc(x.pays) + '" title="Ouvrir le dossier chiffré de '
         + esc(nomPays(x.pays) || x.pays) + '">'
         /* Le nom, pas le code : la puce conduit désormais à un titre qui dit
            « Suède », et deux libellés différents pour un même pays feraient
            douter d'être arrivé au bon endroit. */
         + '<b>' + (i + 1) + '. ' + esc(nomPays(x.pays) || x.pays) + '</b>'
         + '<span>' + fourch(x.tco_meur) + ' M€ · '
-        + (x.tient_2030 ? 'livrable avant 2030' : 'PAS avant 2030') + ' · voir →</span></button>';
+        + (x.tient_2030 ? 'livrable avant 2030' : 'PAS avant 2030') + ' · ouvrir →</span></button>';
     }).join('');
     return '<div class="cres">'
       + '<p class="cres-t">Les ' + C.length + ' pays comparés, sur la carte</p>'
@@ -9467,14 +9506,15 @@ if(window.parent&&window.parent!==window){
       + 'identique d’un pays à l’autre par construction, et une carte colorée dessus '
       + 'afficherait un aplat uniforme. <b>Les pays en gris clair n’ont pas perdu : ils '
       + 'n’ont pas été calculés.</b> Ajoutez-les au comparateur pour qu’ils apparaissent. '
-      + '<b>Cliquez un pays coloré — ou sa pastille de rang — pour aller à son dossier '
-      + 'chiffré</b> plus bas : les trois premiers sont cerclés de bleu et clignotent '
-      + 'brièvement pour vous les désigner, et le survol donne coût total, enveloppe et '
-      + 'délai avant même de cliquer.</p>'
+      + '<b>Cliquez un pays coloré — ou sa pastille de rang — pour OUVRIR son dossier '
+      + 'chiffré</b> sous la carte : seuls les pays que vous désignez y sont dépliés, '
+      + 'les autres restent calculés mais repliés. Les trois premiers sont cerclés de bleu '
+      + 'et clignotent brièvement pour vous les désigner, et le survol donne coût total, '
+      + 'enveloppe et délai avant même de cliquer.</p>'
       + window.carteResultat(pays, { rangsMax: C.length,
           alt: 'Carte de l’Union européenne : les pays comparés, '
              + 'colorés du meilleur au moins bon coût total de possession.',
-          action: 'cliquez pour aller au dossier chiffré de ce pays',
+          action: 'cliquez pour ouvrir le dossier chiffré de ce pays',
           absent: 'État membre non comparé : aucun calcul n’a été lancé pour lui. '
                 + 'Ajoutez-le au comparateur pour qu’il reçoive une enveloppe et un rang.' })
       + '<div class="cres-lg">'
@@ -9553,14 +9593,31 @@ if(window.parent&&window.parent!==window){
     };
     var h = '<div class="fin-rang">'
       + j.classement.map(function(x,i){ return carteRang(x,i,j); }).join('') + '</div>'
-      + carteFinance(j);
+      + carteFinance(j)
+      + barreDossiers(j);
+    /* L'ÉCART APPARTIENT AU PAYS COMPARÉ, pas à la suite du document. Le
+       serveur rend « référence → X » pour chaque pays autre que le premier
+       sélectionné. Laissé en bas de page, cet écart parlerait d'un dossier
+       replié : on le range donc DANS le dossier de X, où il se lit avec les
+       chiffres qu'il commente. */
+    var parPays = {};
+    (j.ecarts || []).forEach(function(e){
+      var c = (e.b || {}).pays; if(c) parPays[c] = (parPays[c] || '') + blocEcart(e);
+    });
     j.dossiers.forEach(function(d){
       /* Une ancre par pays : sans elle, le podium n'aurait nulle part où
          conduire, et le lecteur devrait faire défiler cinq dossiers pour
-         retrouver celui dont il vient de lire le rang. */
-      h += '<h3 id="fin-dos-'+esc(d.pays)+'" style="margin:18px 0 4px;font-size:14px;scroll-margin-top:16px">'
+         retrouver celui dont il vient de lire le rang. Elle porte désormais le
+         dossier ENTIER et non son seul titre, parce que c'est le dossier qu'on
+         ouvre et referme. */
+      h += '<section class="fin-dos" id="fin-dos-'+esc(d.pays)+'" data-pays="'+esc(d.pays)+'"'
+        + ' aria-label="Dossier chiffré — '+esc(nomPays(d.pays) || d.pays)+'" hidden>'
+        + '<h3 style="margin:18px 0 4px;font-size:14px;scroll-margin-top:16px">'
         + esc(nomPays(d.pays) || d.pays)+' — enveloppe '
-        + fourch(d.devis.enveloppe_meur)+' M€</h3>'
+        + fourch(d.devis.enveloppe_meur)+' M€'
+        + '<button type="button" class="fin-dos-x" data-fermer="'+esc(d.pays)+'"'
+        + ' title="Replier le dossier de '+esc(nomPays(d.pays) || d.pays)+'">replier ✕</button>'
+        + '</h3>'
         + avisFaisabilite(d.faisabilite)
         + '<p class="note" style="margin:0 0 8px">Refroidissement retenu : <b>'
         + esc(d.devis.refroidissement.nom)+'</b> (PUE '+d.devis.refroidissement.pue[0]+'–'
@@ -9589,20 +9646,106 @@ if(window.parent&&window.parent!==window){
               + 'd’une entreprise générale, pas l’accord du gestionnaire de réseau.' : '')
         + '</p>'
         + blocConformite(d) + blocReserve(d) + tableDpgf(d) + blocIncorpore(d)
-        + blocAren(d) + blocTraj(d);
+        + blocAren(d) + blocTraj(d)
+        + (parPays[d.pays] || '')
+        + '</section>';
     });
-    j.ecarts.forEach(function(e){ h += blocEcart(e); });
     h += '<details style="margin-top:16px"><summary class="note" style="cursor:pointer">'
       + 'Trace du calcul et hypothèses</summary><ul class="note">'
       + j.dossiers[0].devis.trace.map(function(t){ return '<li>'+esc(t)+'</li>'; }).join('')
       + '<li><b>Coût unitaire :</b> '+esc(JSON.stringify(j.entree.cout_mw))+'</li>'
       + '</ul><p class="note">'+esc(j.avertissement)+'</p></details>';
     $('fin-res').innerHTML = blocTelecharger() + h;
+    majBarre();
     /* DERNIER est la charge utile telle que le serveur l'a renvoyée : c'est
        elle qui repart à l'export, pas une reconstitution. Le document et
        l'écran ne peuvent donc pas diverger. */
     if(window.dcExportBrancher) window.dcExportBrancher($('fin-res'), function(){ return DERNIER; });
   }
+
+  /* ══ LES DOSSIERS S'OUVRENT À LA DEMANDE ═══════════════════════════════════
+     CE QUE CE REPLI CHANGE, ET CE QU'IL NE CHANGE PAS.
+
+     Six pays comparés produisaient six dossiers complets déroulés d'affilée :
+     six avis de faisabilité, six DPGF de quatorze lots, six échéanciers. La
+     carte qui les résume devenait un titre posé sur trente écrans, et le
+     lecteur perdait le classement avant d'avoir atteint le premier tableau.
+     Les dossiers sont donc CALCULÉS pour tous les pays comparés, mais REPLIÉS :
+     on ouvre celui qu'on désigne sur la carte.
+
+     DEUX PRÉCAUTIONS, PARCE QU'UN CONTENU REPLIÉ EST UN CONTENU QU'ON CROIT
+     ABSENT :
+     · un dossier replié n'est pas un dossier manquant, et la barre le dit en
+       toutes lettres plutôt que de laisser un blanc sous la carte ;
+     · L'EXPORT N'EST PAS CONCERNÉ. Word et PDF partent de la réponse du
+       serveur, pas de l'écran : le document remis contient les six dossiers,
+       qu'on en ait ouvert un seul ou aucun. Un lecteur qui croirait exporter
+       ce qu'il voit exporterait un dossier amputé — la barre l'écrit aussi. */
+  function barreDossiers(j){
+    var n = (j.dossiers || []).length;
+    return '<div class="fin-ouvre" id="fin-ouvre">'
+      + '<p class="fin-ouvre-v" id="fin-ouvre-v" aria-live="polite"></p>'
+      + '<div class="fin-ouvre-l" id="fin-ouvre-l"></div>'
+      + '<p class="fin-ouvre-n">Les ' + n + ' dossiers sont calculés&nbsp;: replier n’en '
+      + 'retire aucun. <b>Le Word et le PDF contiennent les ' + n + ' dossiers complets</b>, '
+      + 'quel que soit le nombre ouvert à l’écran.</p>'
+      + '</div>';
+  }
+
+  function ouverts(){
+    return [].slice.call(document.querySelectorAll('#fin-res .fin-dos'))
+      .filter(function(d){ return !d.hidden; });
+  }
+
+  function majBarre(){
+    var v = $('fin-ouvre-v'), l = $('fin-ouvre-l');
+    if(!v || !l) return;
+    var o = ouverts();
+    var tous = document.querySelectorAll('#fin-res .fin-dos').length;
+    if(!o.length){
+      v.innerHTML = '<b>Aucun dossier ouvert.</b> Cliquez un pays coloré sur la carte '
+        + '— ou sa pastille de rang, ou sa puce de podium — pour afficher son enveloppe, '
+        + 'sa DPGF par lot et son échéancier. Les ' + tous + ' pays comparés en ont un.';
+      l.innerHTML = '';
+      return;
+    }
+    v.innerHTML = '<b>' + o.length + ' dossier' + (o.length > 1 ? 's ouverts' : ' ouvert')
+      + ' sur ' + tous + '.</b> Cliquez un autre pays sur la carte pour l’ajouter.';
+    l.innerHTML = o.map(function(d){
+      var c = d.getAttribute('data-pays');
+      return '<button type="button" class="fin-ouvre-p" data-fermer="' + esc(c) + '"'
+        + ' title="Replier le dossier de ' + esc(nomPays(c) || c) + '">'
+        + esc(nomPays(c) || c) + ' <span>✕</span></button>';
+    }).join('')
+      + (o.length > 1 ? '<button type="button" class="fin-ouvre-p tout" data-fermer="*"'
+          + ' title="Replier tous les dossiers ouverts">tout replier</button>' : '');
+  }
+
+  /* Le podium et la carte sont reconstruits à chaque calcul : la délégation
+     évite d'avoir à rebrancher, et surtout d'en oublier un. */
+  document.addEventListener('click', function(ev){
+    var b = ev.target && ev.target.closest ? ev.target.closest('[data-fermer]') : null;
+    if(!b || !b.closest('#fin-res')) return;
+    var c = b.getAttribute('data-fermer');
+    (c === '*' ? ouverts() : [].slice.call(
+        document.querySelectorAll('#fin-res .fin-dos[data-pays="' + c + '"]')))
+      .forEach(function(d){ d.hidden = true; });
+    majBarre();
+    /* On revient à la carte : refermer un dossier depuis son propre pied
+       laisserait le lecteur au milieu du dossier voisin. */
+    var k = document.querySelector('#fin-res .cres');
+    if(k && c !== '*' && !b.closest('.fin-ouvre')) k.scrollIntoView({ behavior:'smooth', block:'center' });
+  });
+
+  /* Le seul point d'entrée pour ouvrir : la carte, les pastilles de rang et le
+     podium passent tous par `finVoirPays`, qui appelle ceci avant de défiler. */
+  window.finDossierOuvrir = function(code){
+    var d = document.querySelector('#fin-res .fin-dos[data-pays="' + code + '"]');
+    if(!d) return false;
+    d.hidden = false;
+    majBarre();
+    return true;
+  };
 
   function demarrer(){
     if(!$('fin-go')) return;
