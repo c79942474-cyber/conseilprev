@@ -1872,6 +1872,77 @@ def api_kpi_finance():
                    version=kpi_finance.VERSION)
 
 
+import moe_dc  # noqa: E402  — honoraires de maitrise d'oeuvre, par mission et
+               # par phase, sur l'assiette travaux de l'enveloppe
+
+
+@app.route('/api/moe-dc', methods=['GET', 'POST'])
+@rate_limit(limit=60, window=60)
+@reserve_abonne_api
+def api_moe_dc():
+    """Honoraires de maitrise d'oeuvre — treize missions, cinq phases.
+
+    EN GET : le bareme — missions, taux par assiette, repartition par phase, et
+    ce que chaque phase produit ou coute si on l'ecarte.
+
+    EN POST : le chiffrage, sur les phases et les missions que le client confie
+    reellement. L'assiette n'est PAS l'enveloppe : la ligne de maitrise d'oeuvre
+    et la provision pour aleas en sont retirees, et le bareme distingue le
+    clos-couvert du lot technique, dont les taux different d'un facteur huit sur
+    certaines missions."""
+    if request.method == 'GET':
+        ref = moe_dc.referentiel()
+        ref["ok"] = True
+        ref["sante"] = moe_dc.sante()
+        return jsonify(ref)
+
+    d = request.get_json(silent=True) or {}
+    env = d.get("enveloppe_meur") or []
+    try:
+        env = [float(x) for x in env][:2]
+    except (TypeError, ValueError):
+        env = []
+    if len(env) != 2 or min(env) <= 0:
+        return jsonify(ok=False, error="enveloppe_absente",
+                       message="Calculez d'abord l'enveloppe : les honoraires "
+                               "se calculent sur le montant des travaux."), 400
+
+    # Les parts de lots viennent du devis affiche, pas d'une reconstitution :
+    # l'ecran et le calcul ne peuvent donc pas diverger.
+    parts = d.get("parts_lots") or {}
+    if not isinstance(parts, dict) or not parts:
+        parts = {l["code"]: (l["part"][0] + l["part"][1]) / 2
+                 for l in finance_dc.LOTS}
+    propre = {}
+    for k, v in parts.items():
+        try:
+            propre[str(k)] = float(v)
+        except (TypeError, ValueError):
+            continue
+    # POURCENTAGES OU FRACTIONS : on normalise plutot que de supposer. Le devis
+    # sert les parts en POURCENTAGE (4,1 · 6,9 · 11,6…) ; le bareme raisonne en
+    # fractions. Prendre les unes pour les autres multiplie l'assiette par cent,
+    # et un total d'honoraires cent fois trop grand se lit comme une panne
+    # plutot que comme une erreur d'unite. Le test porte sur la SOMME, qui vaut
+    # 1 dans un cas et 100 dans l'autre : aucune ambiguite possible entre les
+    # deux.
+    somme = sum(propre.values())
+    if somme > 2.0:
+        propre = {k: v / 100.0 for k, v in propre.items()}
+
+    phases = d.get("phases")
+    missions = d.get("missions")
+    r = moe_dc.honoraires(propre, env,
+                          phases=phases if phases is not None else None,
+                          missions=missions if missions is not None else None,
+                          taux_perso=d.get("taux_perso") or None)
+    if not r.get("ok"):
+        return jsonify(r), 400
+    r["consequences"] = moe_dc.consequences(r["phases_retenues"])
+    r["version"] = moe_dc.VERSION
+    return jsonify(r)
+
+
 @app.route('/api/pont-datacenter', methods=['GET', 'POST'])
 @rate_limit(limit=60, window=60)
 def api_pont_datacenter():
