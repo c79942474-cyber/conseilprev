@@ -393,8 +393,143 @@ def consequences(phases):
             for p in PHASES if p["cle"] not in ph]
 
 
+# ═══════════════════════════════════════════════════════════════════════════
+# 5. LE MÊME BARÈME, DANS LE VOCABULAIRE DE LA LOI MOP
+# ═══════════════════════════════════════════════════════════════════════════
+# La page d'ingénierie de conseilprevcyber ne parle pas des cinq groupes du
+# barème : elle parle des NEUF éléments de mission de la loi MOP, qu'un maître
+# d'ouvrage français reconnaît. Il faut donc traduire — et dire honnêtement ce
+# que la traduction ne peut pas faire.
+#
+# LE BARÈME GROUPE CE QUE LA LOI SÉPARE, et je n'invente pas la sous-répartition.
+# « APS-PC » couvre l'esquisse ET l'avant-projet sommaire ; « PRO-DCE » couvre le
+# projet ET le dossier de consultation ; « EXE » couvre le visa, la direction de
+# l'exécution ET la réception. Le relevé ne dit pas comment le montant se divise
+# À L'INTÉRIEUR d'un groupe. Proposer de ne prendre que l'esquisse reviendrait
+# donc à fabriquer un chiffre : le module refuse, et le dit.
+PHASES_MOP = {
+    "aps": {"mop": ["ESQ", "APS"],
+            "note": "Le relevé groupe l'esquisse et l'avant-projet sommaire "
+                    "avec le permis. Il ne dit pas comment le montant se "
+                    "partage entre les deux : on ne peut pas n'en prendre "
+                    "qu'une."},
+    "apd": {"mop": ["APD"], "note": ""},
+    "pro": {"mop": ["PRO", "DCE"],
+            "note": "Projet et dossier de consultation sont groupés dans le "
+                    "relevé — le DCE est la mise en forme du projet, et les "
+                    "séparer demanderait une hypothèse que la source ne porte "
+                    "pas."},
+    "act": {"mop": ["ACT"], "note": ""},
+    "exe": {"mop": ["EXE-VISA", "DET", "AOR"],
+            "note": "Visa, direction de l'exécution et réception sont groupés. "
+                    "C'est le poste le plus lourd du barème : le détacher "
+                    "élément par élément demanderait un second relevé."},
+}
+
+# CE BARÈME NE CHIFFRE QUE DE LA MAÎTRISE D'ŒUVRE. L'appliquer à une assistance
+# à maîtrise d'ouvrage, à un audit ou à l'ingénierie interne d'un contractant
+# EPC donnerait un nombre parfaitement faux et parfaitement crédible — c'est la
+# pire des deux combinaisons. Le module refuse plutôt que de rendre ce nombre.
+PORTEE_MISSION = {
+    "moe": {"phases": ORDRE_PHASES, "couvre": True,
+            "dit": "Conception et suivi de réalisation : le barème couvre la "
+                   "mission entière."},
+    "moe_conception": {"phases": ["aps", "apd", "pro"], "couvre": True,
+                       "dit": "La mission s'arrête à la consultation : "
+                              "l'assistance aux contrats et le suivi de "
+                              "chantier ne sont pas confiés, et le barème ne "
+                              "les compte pas."},
+    "amo": {"phases": [], "couvre": False,
+            "dit": "L'assistance à maîtrise d'ouvrage ne conçoit pas : elle ne "
+                   "se rémunère pas au pourcentage des travaux, mais au temps "
+                   "passé ou au forfait. Ce barème ne s'y applique pas."},
+    "bet": {"phases": [], "couvre": False,
+            "dit": "Un bureau d'études dans la maîtrise d'œuvre d'un tiers est "
+                   "rémunéré par ce tiers, sur SA discipline seule : le barème "
+                   "d'une maîtrise d'œuvre complète ne le représente pas."},
+    "epc": {"phases": [], "couvre": False,
+            "dit": "Dans un contrat EPC, l'ingénierie est incluse dans le prix "
+                   "du contractant : il n'y a pas d'honoraires séparés à "
+                   "chiffrer, et en afficher créerait une ligne qui n'existe "
+                   "pas au contrat."},
+    "audit": {"phases": [], "couvre": False,
+              "dit": "Un audit constate, il ne conçoit pas : sa rémunération "
+                     "est un forfait sur un périmètre défini, sans rapport "
+                     "avec le montant des travaux examinés."},
+}
+
+# Part du lot technique dans les travaux, à défaut de DPGF. Relevée sur le
+# projet de référence : le lot technique y faisait 70 % des travaux. C'est une
+# HYPOTHÈSE, affichée comme telle et modifiable — sur un centre de données, ce
+# partage commande le résultat plus que n'importe quel taux.
+PART_TECHNIQUE_DEFAUT = 0.70
+
+
+def assiette_directe(travaux_meur, part_technique=None):
+    """L'assiette quand il n'y a pas de DPGF, seulement un montant de travaux.
+
+    POURQUOI CETTE PORTE D'ENTRÉE EXISTE. La page d'ingénierie de
+    conseilprevcyber ne calcule PAS l'enveloppe d'investissement — elle le dit
+    en toutes lettres et renvoie vers conseilprev pour cela. Elle dispose donc
+    d'un montant de travaux, pas d'une décomposition par lot. Reconstituer une
+    DPGF à partir d'un total serait inventer ; on demande le partage, et on
+    affiche l'hypothèse retenue à défaut."""
+    bas, haut = float(min(travaux_meur)), float(max(travaux_meur))
+    pt = PART_TECHNIQUE_DEFAUT if part_technique is None else float(part_technique)
+    pt = max(0.0, min(1.0, pt))
+    pc = 1.0 - pt
+    return {
+        "clos_couvert_meur": [_f(bas * pc), _f(haut * pc)],
+        "technique_meur": [_f(bas * pt), _f(haut * pt)],
+        "vrd_meur": [_f(bas * pc * PART_VRD_DANS_CLOS),
+                     _f(haut * pc * PART_VRD_DANS_CLOS)],
+        "part_clos": _f(pc), "part_technique": _f(pt),
+        "part_hors_assiette": 0.0, "hors_assiette": [],
+        "part_saisie": part_technique is not None,
+        "note": ("Partage clos-couvert / technique : %.0f %% de technique%s. "
+                 "Sur un centre de données, ce partage pèse plus lourd que "
+                 "n'importe quel taux du barème."
+                 % (pt * 100,
+                    "" if part_technique is not None
+                    else " — hypothèse relevée sur le projet de référence, à "
+                         "remplacer par votre décomposition")),
+    }
+
+
+def honoraires_directs(travaux_meur, part_technique=None, phases=None,
+                       missions=None, taux_perso=None):
+    """Comme `honoraires`, mais sur un montant de travaux au lieu d'une DPGF."""
+    A = assiette_directe(travaux_meur, part_technique)
+    # On rejoue le calcul principal en lui présentant l'assiette déjà faite :
+    # une seconde implémentation du barème divergerait de la première.
+    faux_lots = {}
+    total = A["clos_couvert_meur"][1] + A["technique_meur"][1]
+    if total > 0:
+        for c in LOTS_CLOS_COUVERT[:1]:
+            faux_lots[c] = A["clos_couvert_meur"][1] / total
+        for c in LOTS_TECHNIQUE[:1]:
+            faux_lots[c] = A["technique_meur"][1] / total
+    r = honoraires(faux_lots, [A["clos_couvert_meur"][0] + A["technique_meur"][0],
+                               total],
+                   phases=phases, missions=missions, taux_perso=taux_perso)
+    if r.get("ok"):
+        r["assiettes"] = A          # l'assiette réelle, pas la reconstituée
+    return r
+
+
+def portee(mission):
+    """Ce barème s'applique-t-il à cette mission — et sinon, pourquoi."""
+    p = PORTEE_MISSION.get(mission or "moe")
+    if not p:
+        return {"couvre": False, "phases": [],
+                "dit": "Mission inconnue de ce barème."}
+    return dict(p, mission=mission or "moe")
+
+
 def referentiel():
     return {"version": VERSION, "phases": PHASES, "ordre_phases": ORDRE_PHASES,
+            "phases_mop": PHASES_MOP, "portee_mission": PORTEE_MISSION,
+            "part_technique_defaut": PART_TECHNIQUE_DEFAUT,
             "missions": MISSIONS, "ordre_missions": ORDRE_MISSIONS,
             "obligatoires": OBLIGATOIRES, "source": SOURCE,
             "avertissement": AVERTISSEMENT,

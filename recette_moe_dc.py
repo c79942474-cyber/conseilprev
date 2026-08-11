@@ -245,5 +245,70 @@ ok("sans enveloppe, la route dit qu'il faut la calculer d'abord",
    and "travaux" in sans_env.get_json().get("message", ""),
    sans_env.get_json().get("message", "")[:60])
 
+
+# ── 8. LE MÊME BARÈME DANS LE VOCABULAIRE DE LA LOI MOP ───────────────────
+titre("8. LE VOCABULAIRE DE LA LOI MOP, ET CE QUE LA TRADUCTION NE PEUT PAS")
+
+mop = set()
+for g, v in M.PHASES_MOP.items():
+    mop |= set(v["mop"])
+ok("les cinq groupes couvrent les neuf éléments de mission", len(mop) == 9,
+   sorted(mop))
+groupes = [g for g, v in M.PHASES_MOP.items() if len(v["mop"]) > 1]
+ok("trois groupes en réunissent plusieurs", len(groupes) == 3, groupes)
+ok("…et chacun DIT qu'on ne peut pas les séparer",
+   all(M.PHASES_MOP[g]["note"] for g in groupes),
+   M.PHASES_MOP["exe"]["note"][:70])
+ok("les groupes simples n'ont pas de note inutile",
+   not M.PHASES_MOP["apd"]["note"] and not M.PHASES_MOP["act"]["note"])
+
+
+# ── 9. CE BARÈME NE CHIFFRE QUE DE LA MAÎTRISE D'ŒUVRE ────────────────────
+titre("9. CE BARÈME NE CHIFFRE QUE DE LA MAÎTRISE D'ŒUVRE")
+
+ok("la maîtrise d'œuvre complète est couverte, sur les cinq groupes",
+   M.portee("moe")["couvre"] and M.portee("moe")["phases"] == M.ORDRE_PHASES)
+ok("la conception seule s'arrête à la consultation",
+   M.portee("moe_conception")["phases"] == ["aps", "apd", "pro"],
+   M.portee("moe_conception")["phases"])
+refus = [m for m in ("amo", "bet", "epc", "audit") if not M.portee(m)["couvre"]]
+ok("QUATRE MISSIONS SONT REFUSÉES — un chiffre faux et crédible est le pire",
+   refus == ["amo", "bet", "epc", "audit"], refus)
+ok("…et chacune dit POURQUOI, pas seulement « non »",
+   all(len(M.portee(m)["dit"]) >= 80 for m in refus),
+   min(len(M.portee(m)["dit"]) for m in refus))
+ok("une mission inconnue est refusée aussi",
+   not M.portee("inventee")["couvre"])
+
+concept_mop = M.honoraires_directs([600.0, 750.0],
+                                   phases=M.portee("moe_conception")["phases"])
+complete = M.honoraires_directs([600.0, 750.0])
+ok("la conception seule coûte nettement moins que la mission complète",
+   concept_mop["total_meur"][1] < 0.5 * complete["total_meur"][1],
+   "%.1f contre %.1f M€" % (concept_mop["total_meur"][1],
+                            complete["total_meur"][1]))
+
+
+# ── 10. SANS DPGF : un montant de travaux suffit ──────────────────────────
+titre("10. SANS DPGF — un montant de travaux suffit, et le partage se dit")
+
+d = M.honoraires_directs([600.0, 750.0])
+ok("l'assiette vaut le montant de travaux, sans rien en retirer",
+   abs(d["travaux_meur"][1] - 750.0) < 0.5, d["travaux_meur"])
+ok("…et le partage retenu est affiché", "%" in d["assiettes"]["note"],
+   d["assiettes"]["note"][:64])
+ok("…marqué comme HYPOTHÈSE tant qu'il n'est pas saisi",
+   d["assiettes"]["part_saisie"] is False and "hypothèse" in d["assiettes"]["note"])
+saisi = M.honoraires_directs([600.0, 750.0], part_technique=0.55)
+ok("un partage saisi est repris, et il change le résultat",
+   saisi["assiettes"]["part_saisie"] is True
+   and saisi["total_meur"] != d["total_meur"],
+   "%.1f → %.1f M€" % (d["total_meur"][1], saisi["total_meur"][1]))
+ok("LE PARTAGE PÈSE PLUS QUE N'IMPORTE QUEL TAUX — et le module le dit",
+   "pèse plus lourd" in d["assiettes"]["note"])
+ok("le taux effectif reste plausible dans les deux cas",
+   3 <= d["taux_effectif_pct"][1] <= 15 and 3 <= saisi["taux_effectif_pct"][1] <= 15,
+   "%.1f %% et %.1f %%" % (d["taux_effectif_pct"][1], saisi["taux_effectif_pct"][1]))
+
 print("\n" + (("%d contrôle(s) en échec" % ko) if ko else "tout est vert") + "\n")
 sys.exit(1 if ko else 0)
