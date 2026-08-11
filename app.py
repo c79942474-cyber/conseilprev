@@ -1820,6 +1820,58 @@ def api_finance_dc():
     return jsonify(ref)
 
 
+import kpi_finance  # noqa: E402  — EVA, ROCE, free cash flow : la lecture de
+                    # creation de valeur qui manquait au GO / NO GO
+
+
+@app.route('/api/kpi-finance', methods=['GET', 'POST'])
+@rate_limit(limit=60, window=60)
+@reserve_abonne_api
+def api_kpi_finance():
+    """EVA, ROCE et free cash flow — la creation de valeur du GO / NO GO.
+
+    EN GET : le referentiel — les hypotheses a fournir avec leur question, les
+    trois indicateurs avec leur formule et leur piege, et ce que le module ne
+    fait pas encore.
+
+    EN POST : la serie annuelle et sa lecture. Le module d'enveloppe dit ce que
+    le projet COUTE ; celui-ci dit ce qu'il RAPPORTE — et il ne peut pas le
+    faire seul. Revenu, cout du capital et taux d'impot viennent de
+    l'investisseur : rien ici ne les estime a sa place, et ce qui manque est
+    rendu NON INSTRUIT, jamais zero. Un EVA nul faute de revenu se lirait « ce
+    projet ne cree pas de valeur » ; c'est faux, et cette confusion decide d'un
+    GO ou d'un NO GO."""
+    if request.method == 'GET':
+        ref = kpi_finance.referentiel()
+        ref["ok"] = True
+        ref["sante"] = kpi_finance.sante()
+        return jsonify(ref)
+
+    d = request.get_json(silent=True) or {}
+    capex = d.get("capex_meur") or []
+    opex = d.get("opex_an_meur") or []
+    try:
+        capex = [float(x) for x in capex][:2]
+        opex = [float(x) for x in opex][:2]
+    except (TypeError, ValueError):
+        capex, opex = [], []
+    if len(capex) != 2 or len(opex) != 2 or min(capex) <= 0:
+        return jsonify(ok=False, error="enveloppe_absente",
+                       message="Calculez d'abord l'enveloppe : ces indicateurs "
+                               "se construisent sur elle."), 400
+
+    annees = d.get("annees") or 10
+    try:
+        annees = int(annees)
+    except (TypeError, ValueError):
+        annees = 10
+
+    s = kpi_finance.serie(capex, opex, annees, d.get("hypotheses") or {})
+    lec = kpi_finance.lecture(s, d.get("cibles") or {})
+    return jsonify(ok=True, serie=s, lecture=lec,
+                   version=kpi_finance.VERSION)
+
+
 @app.route('/api/pont-datacenter', methods=['GET', 'POST'])
 @rate_limit(limit=60, window=60)
 def api_pont_datacenter():

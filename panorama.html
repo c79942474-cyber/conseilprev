@@ -1549,6 +1549,69 @@ th .fl{font-size:9px;margin-left:3px}
   .f-count{margin-left:0;width:100%}
 }
 
+  /* ── CRÉATION DE VALEUR — EVA, ROCE, FREE CASH FLOW ─────────────────────
+     LES TROIS VERDICTS ONT TROIS TEINTES, ET L'INDÉCIDABLE EST LA PLUS
+     VISIBLE. C'est délibéré : quand la fourchette d'enveloppe traverse le
+     seuil de création de valeur, le message le plus utile n'est pas « bien »
+     ni « mal », c'est « on ne peut pas trancher, et voici ce qu'il faudrait
+     resserrer ». Le teindre en gris le ferait passer pour un détail. */
+  .kpi-bloc{border:1px solid var(--line,#233);border-radius:12px;
+    background:rgba(0,0,0,.16);padding:14px 17px;margin:18px 0 6px}
+  .kpi-t{font-size:15px;font-weight:600;margin:0 0 6px}
+  .kpi-d{font-size:13px;line-height:1.65;margin:0 0 12px;color:var(--muted,#9fb0c0)}
+  .kpi-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));
+    gap:11px;margin-bottom:11px}
+  .kpi-ch{display:flex;flex-direction:column;gap:4px}
+  .kpi-ch label{font-size:11.5px;color:var(--muted2,#7b8b9a)}
+  .kpi-ch label b{color:var(--cyan,#22d3ee);font-weight:600}
+  .kpi-ch input{font-family:inherit;font-size:13px;padding:7px 10px;border-radius:8px;
+    border:1px solid var(--line,#233);background:rgba(0,0,0,.24);color:inherit}
+  .kpi-aide{font-size:11px;line-height:1.5;color:var(--muted2,#7b8b9a)}
+  .kpi-cibles{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));
+    gap:11px;margin-bottom:11px}
+  .kpi-go{font-family:inherit;font-size:13px;font-weight:600;padding:8px 16px;
+    border-radius:9px;border:1px solid var(--cyan,#22d3ee);
+    background:rgba(34,211,238,.14);color:var(--cyan,#22d3ee);cursor:pointer}
+  .kpi-go:hover{background:rgba(34,211,238,.24)}
+  .kpi-go[disabled]{opacity:.45;cursor:not-allowed}
+  .kpi-msg{font-size:12.5px;line-height:1.6;color:var(--muted2,#7b8b9a);margin:9px 0 0}
+  .kpi-out{margin-top:13px}
+  .kpi-synth{font-size:13.5px;line-height:1.65;padding:10px 13px;border-radius:9px;
+    border:1px solid var(--line,#233);background:rgba(0,0,0,.22);margin:0 0 12px}
+  .kpi-carte{border:1px solid var(--line,#233);border-radius:10px;padding:11px 14px;
+    margin:0 0 10px;background:rgba(0,0,0,.20)}
+  .kpi-carte.favorable{border-color:rgba(39,195,154,.42);background:rgba(39,195,154,.07)}
+  .kpi-carte.defavorable{border-color:rgba(217,90,90,.42);background:rgba(217,90,90,.07)}
+  .kpi-carte.indecidable{border-color:rgba(217,164,65,.55);background:rgba(217,164,65,.10)}
+  .kpi-nom{font-size:13.5px;font-weight:600;margin:0 0 3px}
+  .kpi-val{font-family:var(--mono,monospace);font-size:17px;margin:2px 0 6px}
+  .kpi-eti{display:inline-block;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;
+    border-radius:999px;padding:2px 9px;margin-left:7px;vertical-align:middle;
+    border:1px solid var(--line,#233)}
+  .kpi-eti.favorable{border-color:rgba(39,195,154,.5);color:#27c39a}
+  .kpi-eti.defavorable{border-color:rgba(217,90,90,.5);color:#d95a5a}
+  .kpi-eti.indecidable{border-color:rgba(217,164,65,.6);color:#d9a441}
+  .kpi-dit{font-size:12.5px;line-height:1.6;margin:0 0 7px}
+  .kpi-piege{font-size:12px;line-height:1.6;margin:7px 0 0;padding:8px 11px;
+    border-radius:8px;border:1px solid var(--line,#233);background:rgba(0,0,0,.24);
+    color:var(--muted,#9fb0c0)}
+  .kpi-alerte{font-size:12.5px;line-height:1.6;margin:7px 0 0;padding:8px 11px;
+    border-radius:8px;border:1px solid rgba(217,164,65,.45);
+    background:rgba(217,164,65,.09)}
+  .kpi-serie{width:100%;border-collapse:collapse;font-size:12px;margin-top:9px}
+  .kpi-serie th,.kpi-serie td{padding:4px 7px;border-bottom:1px solid var(--line,#233);
+    text-align:right;font-family:var(--mono,monospace)}
+  .kpi-serie th{text-align:right;font-family:inherit;font-size:11px;
+    color:var(--muted2,#7b8b9a);font-weight:500}
+  .kpi-serie th:first-child,.kpi-serie td:first-child{text-align:left}
+  .kpi-trous{font-size:12.5px;line-height:1.65;padding:10px 13px;border-radius:9px;
+    border:1px solid rgba(217,164,65,.42);background:rgba(217,164,65,.08)}
+  .kpi-trous ul{margin:7px 0 0;padding-left:18px}
+  .kpi-trous li{margin-bottom:5px}
+  .kpi-suite{margin-top:12px}
+  .kpi-suite summary{cursor:pointer;font-size:12.5px;color:var(--muted,#9fb0c0)}
+  .kpi-suite li{font-size:12px;line-height:1.6;margin-bottom:6px}
+
   /* ── LE PONT VERS L'ÉTUDE DE DURABILITÉ ─────────────────────────────── */
   .pont-dc{border:1px solid var(--cyan,#22d3ee);border-radius:12px;
     background:rgba(34,211,238,.06);padding:14px 17px;margin:18px 0 6px}
@@ -1978,6 +2041,36 @@ engagements publics) sont imputés nominativement.</div>
     </div>
 
     <div id="fin-res"></div>
+
+    <!-- ══ CRÉATION DE VALEUR — EVA, ROCE, FREE CASH FLOW ═══════════════════
+         CE QUE CE BLOC AJOUTE, ET POURQUOI IL EST SÉPARÉ DU PRÉCÉDENT.
+         L'enveloppe dit ce que le projet COÛTE. Un comité d'investissement ne
+         décide pas là-dessus : il décide sur ce que le projet RAPPORTE au
+         regard du capital qu'il immobilise. Les trois indicateurs qui portent
+         cette lecture — EVA, ROCE, free cash flow — ont besoin d'un revenu,
+         d'un coût du capital et d'un taux d'impôt. Aucun des trois n'est dans
+         le référentiel, et ce module s'interdit de les estimer : ce sont des
+         décisions d'investisseur, exactement comme le taux d'actualisation que
+         le module d'enveloppe refuse déjà de choisir.
+
+         LA CONSÉQUENCE EST VOULUE : tant que ces hypothèses ne sont pas
+         saisies, les trois indicateurs sont NON INSTRUITS — pas nuls. Un EVA
+         affiché à zéro faute de revenu se lirait « ce projet ne crée pas de
+         valeur ». C'est faux, et cette confusion décide d'un GO ou d'un NO GO. -->
+    <div class="kpi-bloc" id="kpi-bloc">
+      <p class="kpi-t">Création de valeur — EVA, ROCE, free cash flow</p>
+      <p class="kpi-d">L’enveloppe dit ce que le projet <b>coûte</b>. Ces trois indicateurs
+      disent ce qu’il <b>rapporte au regard du capital immobilisé</b> — et ils ne peuvent
+      pas se calculer sans vous&nbsp;: revenu attendu, coût du capital et taux d’impôt sont
+      des décisions d’investisseur, pas des données de référentiel. Tant qu’elles ne sont
+      pas saisies, les trois sont <b>non instruits</b>, et non pas nuls.</p>
+      <div class="kpi-form" id="kpi-form"></div>
+      <div class="kpi-cibles" id="kpi-cibles"></div>
+      <button type="button" class="kpi-go" id="kpi-go">Lire la création de valeur →</button>
+      <p class="kpi-msg" id="kpi-msg">Calculez d’abord l’enveloppe ci-dessus&nbsp;: ces
+      indicateurs se construisent sur elle.</p>
+      <div class="kpi-out" id="kpi-out"></div>
+    </div>
 
     <!-- ══ LE PONT VERS L'ÉTUDE DE DURABILITÉ ═══════════════════════════════
          Une étude d'implantation se termine sur deux réponses : quel pays, et
@@ -9355,6 +9448,230 @@ if(window.parent&&window.parent!==window){
     Promise.all([chargerRef(), chargerPays()]).catch(function(){
       $('fin-note').textContent = 'référentiel indisponible';
     });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', demarrer);
+  else demarrer();
+
+  /* Le bloc de création de valeur se nourrit de l'enveloppe : il lui faut donc
+     un accès à la dernière réponse du serveur. On l'expose plutôt que de le
+     recalculer — une reconstitution finirait par diverger de ce que l'écran
+     affiche, et c'est exactement le genre d'écart que ce module reproche
+     ailleurs. */
+  window.FIN_DERNIER = function(){ return DERNIER; };
+})();
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CRÉATION DE VALEUR — EVA, ROCE, FREE CASH FLOW
+
+   CE QUE CE BLOC FAIT, ET CE QU'IL REFUSE DE FAIRE
+
+   L'enveloppe chiffre le COÛT. Un comité d'investissement décide sur ce que le
+   projet rapporte au regard du capital immobilisé — et ces trois indicateurs
+   ont besoin d'un revenu, d'un coût du capital et d'un taux d'impôt que le
+   référentiel n'a pas et n'inventera pas.
+
+   TROIS PARTIS PRIS DE LECTURE, ET CHACUN RÉPOND À UN PIÈGE :
+
+   1. TANT QUE LES HYPOTHÈSES MANQUENT, RIEN N'EST AFFICHÉ — pas même un zéro.
+      Un EVA à zéro faute de revenu se lirait « ce projet ne crée pas de
+      valeur » ; il faut lire « personne n'a encore dit ce qu'il rapporte ».
+      Le bloc affiche donc les QUESTIONS à poser, pas des cases vides.
+
+   2. QUAND LA FOURCHETTE TRAVERSE LE SEUIL, LE VERDICT EST « INDÉCIDABLE » ET
+      IL EST LE PLUS VISIBLE DES TROIS. Le projet crée de la valeur au bas de
+      l'enveloppe et en détruit au haut : aucun avis ne peut sortir de là, et
+      c'est cette impossibilité qui est l'information.
+
+   3. LA SÉRIE EST DONNÉE, PAS SEULEMENT LE CHIFFRE DE L'ANNÉE DE RÉGIME. Ces
+      indicateurs ne s'interprètent jamais isolément : c'est leur évolution, et
+      leur écart à un objectif, qui portent le sens décisionnel.
+   ══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  var REF = null;
+  var $ = function(id){ return document.getElementById(id); };
+  function esc(s){ return String(s == null ? '' : s)
+    .replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function nb(x){ return (Math.round(x*100)/100).toLocaleString('fr-FR'); }
+  function fourch(a, u){
+    if(!a || a[0] == null) return '—';
+    return nb(a[0]) + ' – ' + nb(a[1]) + (u ? ' ' + u : '');
+  }
+  /* Vide reste VIDE. Le serveur distingue « absent » de « zéro », et toute la
+     valeur de ce bloc tient dans ce distinguo : la page ne doit pas le perdre
+     en chemin en transformant une case blanche en 0. */
+  function saisi(id){
+    var e = $(id);
+    if(!e) return undefined;
+    var t = String(e.value == null ? '' : e.value).trim();
+    return t === '' ? undefined : Number(t.replace(',', '.'));
+  }
+
+  function champs(){
+    if(!REF) return;
+    $('kpi-form').innerHTML = REF.entrees.map(function(e){
+      var req = e.obligatoire ? ' <b>· requis</b>' : '';
+      var ph = e.obligatoire ? 'à renseigner'
+             : (e.defaut != null ? 'défaut ' + nb(e.defaut) : '');
+      return '<div class="kpi-ch"><label for="kpi-' + esc(e.cle) + '">'
+        + esc(e.nom) + req + '</label>'
+        + '<input type="text" id="kpi-' + esc(e.cle) + '" placeholder="'
+        + esc(ph) + '" title="' + esc(e.question) + '">'
+        + '<span class="kpi-aide">' + esc(e.question) + '</span></div>';
+    }).join('');
+    /* LES OBJECTIFS SONT FACULTATIFS, ET LEUR ABSENCE EST DITE. Ce module ne
+       propose aucune référence sectorielle : il n'en a pas de publiable, et en
+       inventer une la rendrait crue. Sans objectif, on lit une trajectoire. */
+    $('kpi-cibles').innerHTML = REF.ordre.map(function(k){
+      var m = REF.indicateurs[k];
+      return '<div class="kpi-ch"><label for="kpi-c-' + esc(k) + '">Objectif '
+        + esc(m.nom.split('—')[0].trim()) + ' (' + esc(m.unite) + ')</label>'
+        + '<input type="text" id="kpi-c-' + esc(k) + '" placeholder="facultatif">'
+        + '<span class="kpi-aide">' + esc(m.seuil_sens) + '</span></div>';
+    }).join('');
+  }
+
+  function enveloppe(){
+    var d = window.FIN_DERNIER && window.FIN_DERNIER();
+    if(!d || !d.classement || !d.classement.length) return null;
+    /* LE PREMIER DU CLASSEMENT, c'est-à-dire le meilleur coût total de
+       possession — la même convention que le pont vers l'étude de durabilité.
+       Prendre le premier dossier RENDU trierait par ordre alphabétique de code
+       pays, et l'écran dirait une chose pendant que le calcul en ferait une
+       autre. */
+    var code = d.classement[0].pays;
+    var dos = (d.dossiers || []).filter(function(x){ return x.pays === code; })[0];
+    if(!dos) return null;
+    return { pays: code,
+             capex: dos.devis.enveloppe_meur,
+             opex: dos.exploitation.total_meur_an,
+             annees: (d.entree || {}).annees || 10 };
+  }
+
+  function carte(i){
+    var cl = i.verdict === 'favorable' ? 'favorable'
+           : i.verdict === 'defavorable' ? 'defavorable'
+           : i.verdict === 'indecidable' ? 'indecidable' : '';
+    var eti = cl ? '<span class="kpi-eti ' + cl + '">'
+        + (cl === 'indecidable' ? 'indécidable' : cl) + '</span>' : '';
+    var h = '<div class="kpi-carte ' + cl + '">'
+      + '<p class="kpi-nom">' + esc(i.nom) + eti + '</p>'
+      + '<p class="kpi-val">' + fourch(i.fourchette, i.unite)
+      + ' <span style="font-size:11px;color:var(--muted2,#7b8b9a)">année '
+      + i.annee_regime + ' · tendance ' + esc(i.tendance) + '</span></p>'
+      + '<p class="kpi-dit">' + esc(i.dit) + '</p>';
+    if(i.alerte) h += '<p class="kpi-alerte">⚠ ' + esc(i.alerte) + '</p>';
+    if(i.cible != null){
+      h += '<p class="kpi-dit">Objectif ' + nb(i.cible) + ' ' + esc(i.unite)
+        + ' — atteint : <b>' + esc(i.atteint) + '</b>, écart ' + nb(i.ecart_cible)
+        + ' ' + esc(i.unite) + '.</p>';
+    } else if(i.sans_cible){
+      h += '<p class="kpi-dit" style="color:var(--muted2,#7b8b9a)">'
+        + esc(i.sans_cible) + '</p>';
+    }
+    h += '<p class="kpi-piege"><b>Ce que ce chiffre peut faire croire à tort.</b> '
+      + esc(i.piege) + '</p>'
+      + '<p class="kpi-piege" style="background:none;border:none;padding:6px 0 0">'
+      + '<b>Formule.</b> ' + esc(i.formule) + '</p></div>';
+    return h;
+  }
+
+  function tableSerie(s){
+    var l = s.annees;
+    if(!l.length) return '';
+    return '<details style="margin-top:4px"><summary class="note" style="cursor:pointer">'
+      + 'La série année par année — c’est elle qui porte le sens, pas le chiffre seul'
+      + '</summary><table class="kpi-serie"><thead><tr><th>Année</th><th>Charge</th>'
+      + '<th>Revenu</th><th>Capitaux employés</th><th>EVA</th><th>ROCE</th>'
+      + '<th>ROCE brut</th><th>FCF</th></tr></thead><tbody>'
+      + l.map(function(x){
+          return '<tr><td>' + x.annee + '</td><td>'
+            + Math.round(x.charge*100) + ' %</td><td>' + nb(x.revenu_meur) + '</td><td>'
+            + fourch(x.capitaux_employes_meur) + '</td><td>' + fourch(x.eva_meur)
+            + '</td><td>' + fourch(x.roce_pct) + '</td><td>'
+            + fourch(x.roce_brut_pct) + '</td><td>' + fourch(x.fcf_meur)
+            + '</td></tr>';
+        }).join('')
+      + '</tbody></table><p class="note" style="margin-top:7px">' + esc(s.trace)
+      + '</p></details>';
+  }
+
+  function suite(){
+    if(!REF || !REF.suite) return '';
+    return '<details class="kpi-suite"><summary>Ce que cette lecture ne fait pas '
+      + 'encore — et ce qu’il faudrait pour le faire</summary><ul>'
+      + REF.suite.map(function(s){
+          return '<li><b>' + esc(s.quoi) + '</b> — manque : ' + esc(s.manque)
+            + '. Apporterait : ' + esc(s.apporte) + '.</li>';
+        }).join('')
+      + '</ul></details>';
+  }
+
+  function lire(){
+    var env = enveloppe();
+    if(!env){
+      $('kpi-msg').textContent = 'Calculez d’abord l’enveloppe ci-dessus : ces '
+        + 'indicateurs se construisent sur elle.';
+      return;
+    }
+    var hyp = {}, cib = {};
+    (REF ? REF.entrees : []).forEach(function(e){
+      var v = saisi('kpi-' + e.cle);
+      if(v !== undefined) hyp[e.cle] = v;
+    });
+    (REF ? REF.ordre : []).forEach(function(k){
+      var v = saisi('kpi-c-' + k);
+      if(v !== undefined) cib[k] = v;
+    });
+
+    $('kpi-msg').textContent = 'lecture en cours…';
+    fetch('/api/kpi-finance', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ capex_meur: env.capex, opex_an_meur: env.opex,
+                             annees: env.annees, hypotheses: hyp, cibles: cib })
+    }).then(function(r){ return r.json(); }).then(function(j){
+      if(!j.ok){
+        $('kpi-msg').textContent = j.message || 'lecture indisponible';
+        return;
+      }
+      var s = j.serie, lec = j.lecture;
+      $('kpi-msg').textContent = 'Sur le pays le mieux classé au coût total de '
+        + 'possession (' + env.pays + '), enveloppe ' + fourch(env.capex, 'M€')
+        + ', exploitation ' + fourch(env.opex, 'M€/an') + '.';
+
+      if(!lec.instruit){
+        /* PAS DE CASES VIDES : les questions à poser. Un tableau de zéros
+           serait lu comme un résultat ; une question se répond. */
+        $('kpi-out').innerHTML = '<div class="kpi-trous"><b>Ces trois indicateurs '
+          + 'ne sont pas instruits — ils ne valent pas zéro.</b><br>'
+          + esc(lec.message) + '<ul>'
+          + lec.manquantes.map(function(m){
+              return '<li><b>' + esc(m.nom) + '</b> — ' + esc(m.question)
+                + ' <span style="color:var(--muted2,#7b8b9a)">(' + esc(m.pourquoi)
+                + ')</span></li>';
+            }).join('')
+          + '</ul></div>' + suite();
+        return;
+      }
+      var h = '<p class="kpi-synth"><b>Ce que cela dit.</b> ' + esc(lec.synthese) + '</p>'
+        + lec.indicateurs.map(carte).join('')
+        + tableSerie(s)
+        + lec.reserves.map(function(r){
+            return '<p class="note" style="margin-top:8px">' + esc(r) + '</p>'; }).join('')
+        + suite();
+      $('kpi-out').innerHTML = h;
+    }).catch(function(){
+      $('kpi-msg').textContent = 'lecture indisponible — réessayez';
+    });
+  }
+
+  function demarrer(){
+    if(!$('kpi-go')) return;
+    $('kpi-go').addEventListener('click', lire);
+    fetch('/api/kpi-finance').then(function(r){ return r.json(); })
+      .then(function(j){ if(j && j.ok){ REF = j; champs(); } })
+      .catch(function(){
+        $('kpi-msg').textContent = 'référentiel des indicateurs indisponible';
+      });
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', demarrer);
   else demarrer();
