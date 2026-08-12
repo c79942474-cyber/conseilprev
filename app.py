@@ -1691,6 +1691,7 @@ def api_implantation():
 # ══════════════════════════════════════════════════════════
 import finance_dc  # noqa: E402
 import pont_dc  # noqa: E402  — le lien vers l'etude de durabilite, et son contrat
+import pont_moe  # noqa: E402  — le lien vers le chiffrage de MOE, et son contrat
 import tendances_dc  # noqa: E402  — chaque dossier porte ses reserves datees
 import faisabilite_dc  # noqa: E402  — conclut sur le chiffrage, ne le refait pas
 
@@ -1969,6 +1970,33 @@ def api_pont_datacenter():
                          voie=str(d.get('voie') or pont_dc.VOIE_DEFAUT))
     except Exception as e:  # noqa: BLE001
         logger.error(f'PONT_DC_ERR: {e}')
+        return jsonify({'ok': False, 'erreur': 'lien indisponible'}), 503
+    return jsonify(dict(r, ok=True))
+
+
+@app.route('/api/pont-moe', methods=['GET', 'POST'])
+@rate_limit(limit=60, window=60)
+def api_pont_moe():
+    """Le lien vers le chiffrage de maitrise d'oeuvre, et ce qu'il porte.
+
+    GET rend le CONTRAT ; POST construit le lien depuis l'assiette de travaux,
+    la part du lot technique et le pays.
+
+    CE PONT PORTE UN MONTANT, contrairement a celui de l'etude de durabilite —
+    c'est ce qu'on lui demande de transporter, et le contrat le dit en toutes
+    lettres plutot que de le faire discretement. Le montant est arrondi a la
+    centaine de milliers d'euros, aucune donnee nominative ne voyage, et le
+    client voit l'adresse avant de la suivre : ce module ne l'ouvre pas.
+    """
+    if request.method == 'GET':
+        return jsonify({'ok': True, 'referentiel': pont_moe.referentiel()})
+    d = request.get_json(silent=True) or {}
+    try:
+        r = pont_moe.lien(travaux_meur=d.get('travaux_meur'),
+                          part_technique=d.get('part_technique'),
+                          pays=d.get('pays'))
+    except Exception as e:  # noqa: BLE001
+        logger.error(f'PONT_MOE_ERR: {e}')
         return jsonify({'ok': False, 'erreur': 'lien indisponible'}), 503
     return jsonify(dict(r, ok=True))
 

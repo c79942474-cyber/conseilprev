@@ -1693,6 +1693,15 @@ th .fl{font-size:9px;margin-left:3px}
     border-radius:9px;border:1px solid var(--cyan,#22d3ee);
     background:rgba(34,211,238,.14);color:var(--cyan,#22d3ee);cursor:pointer}
   .pont-go:hover{background:rgba(34,211,238,.24)}
+  /* Le report vers l'autre site, sous le chiffrage de MOE. Même famille que
+     le pont vers l'étude de durabilité — mais l'avertissement y est plus
+     ferme, parce que ce lien-ci porte un montant. */
+  .moe-pont{margin-top:16px;border:1px dashed var(--cyan,#22d3ee);border-radius:10px;
+    padding:13px 15px;background:rgba(34,211,238,.05)}
+  .moe-pont-t{font-size:13.5px;font-weight:600;margin:0 0 5px}
+  .moe-pont-d{font-size:12px;line-height:1.6;margin:0 0 10px;color:var(--muted,#9fb0c0)}
+  .moe-pont-av{font-size:11.5px;line-height:1.55;margin:11px 0 0;padding:8px 11px;
+    border-left:3px solid #d9a441;background:rgba(217,164,65,.10);border-radius:0 6px 6px 0}
   .pont-out{margin-top:12px}
   .pont-url{display:block;font-family:var(--mono,monospace);font-size:11.5px;
     line-height:1.55;word-break:break-all;padding:9px 12px;border-radius:8px;
@@ -9901,7 +9910,91 @@ if(window.parent&&window.parent!==window){
     }
     h += '<p class="moe-src">' + esc(j.source.origine) + ' — ' + esc(j.source.reserve)
       + ' ' + esc(j.source.anonymisation) + '</p>';
+    /* LE REPORT VERS L'AUTRE SITE. Le bloc « Le prix de la maîtrise d'œuvre »
+       de conseilprevcyber calcule le même barème, mais il ne calcule PAS
+       l'enveloppe : il attend qu'on lui reporte le montant des travaux et la
+       part du lot technique. Reportés à la main, ils se retapent — et le
+       partage clos-couvert / technique, s'il n'est pas saisi, retombe sur une
+       hypothèse à 70 % qui déplace les honoraires plus que n'importe quel
+       taux du barème.
+
+       LE BOUTON N'EST PROPOSÉ QU'ICI, sous un chiffrage abouti : proposé plus
+       haut, il porterait des valeurs que le lecteur n'a pas encore vues. */
+    h += '<div class="moe-pont" id="moe-pont">'
+      + '<p class="moe-pont-t">Reporter ce chiffrage sur conseilprevcyber</p>'
+      + '<p class="moe-pont-d">Le module « Le prix de la maîtrise d’œuvre » de '
+      + '<b>l’ingénierie de projet — centres de données</b> applique le même barème, '
+      + 'mais il ne calcule pas l’enveloppe. Ce bouton fabrique un lien qui y porte '
+      + '<b>l’assiette de travaux</b>, <b>la part du lot technique</b> et <b>le pays '
+      + 'de l’étude</b>, pour qu’il n’y ait rien à retaper. Il vous montre ce qu’il '
+      + 'contient avant que vous n’en fassiez quoi que ce soit.</p>'
+      + '<button type="button" class="pont-go" id="moe-pont-go">Créer le lien</button>'
+      + '<div class="pont-out" id="moe-pont-out"></div></div>';
     $('moe-out').innerHTML = h;
+    var b = $('moe-pont-go');
+    if(b) b.addEventListener('click', function(){ pont(j); });
+  }
+
+  /* Le lien est fabriqué PAR LE SERVEUR : les noms des paramètres appartiennent
+     au formulaire de l'autre site, et écrits ici ils divergeraient au premier
+     renommage — le lien continuerait de fonctionner sans rien pré-remplir. */
+  function pont(j){
+    var z = $('moe-pont-out');
+    var e = enveloppe();
+    z.innerHTML = '<p class="note">fabrication du lien…</p>';
+    fetch('/api/pont-moe', {
+      method: 'POST', credentials: 'same-origin',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        travaux_meur: j.travaux_meur,
+        /* LA PART RAPPORTÉE AUX TRAVAUX, PAS À L'ENVELOPPE. Les deux existent
+           dans la réponse et ne se valent pas : l'autre module ne reçoit qu'un
+           montant de travaux, sans décomposition par lot, et lit donc la part
+           comme une fraction de CE montant. Ma première version envoyait
+           `part_technique` (rapportée à l'enveloppe, 13 % plus basse) : les
+           deux sites annonçaient alors des honoraires différents sur le même
+           projet et le même barème — 50,9 M€ ici, 53,9 M€ là-bas. */
+        part_technique: (j.assiettes || {}).part_technique_travaux,
+        pays: e && e.pays })
+    }).then(function(r){ return r.json(); })
+      .then(function(r){
+        if(!r || !r.ok){ z.innerHTML = '<p class="note">lien indisponible</p>'; return; }
+        var h = '<code class="pont-url">' + esc(r.url) + '</code>'
+          + '<div class="pont-l"><a href="' + esc(r.url)
+          + '" target="_blank" rel="noopener">Ouvrir le chiffrage de MOE</a>'
+          + '<button type="button" id="moe-pont-copier">Copier le lien</button></div>';
+        if((r.porte || []).length){
+          h += '<div class="pont-porte"><b>Ce que le lien porte</b><ul>'
+            + r.porte.map(function(x){
+                return '<li>' + esc(x.champ) + ' : <b>' + esc(x.valeur) + '</b>'
+                  + ' <span class="pont-de">— repris de ' + esc(x.de) + '</span>'
+                  + (x.reserve ? ' <span class="pont-de">(' + esc(x.reserve) + ')</span>' : '')
+                  + '</li>'; }).join('')
+            + '</ul></div>';
+        }
+        if((r.refuses || []).length){
+          h += '<div class="pont-porte"><b>Ce qui n’a pas pu être transmis</b><ul>'
+            + r.refuses.map(function(x){
+                return '<li>' + esc(x.champ) + ' — ' + esc(x.motif) + '</li>'; }).join('')
+            + '</ul></div>';
+        }
+        /* L'AVERTISSEMENT EST AFFICHÉ, PAS RANGÉ DANS UN REPLI. Ce lien porte
+           un montant, contrairement à celui de l'étude de durabilité : le
+           lecteur doit le savoir avant de le coller dans un courriel. */
+        h += '<p class="moe-pont-av">' + esc(r.avertissement) + '</p>'
+          + '<div class="pont-porte"><b>Ce que le lien ne porte pas</b><ul>'
+          + (r.exclus || []).map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('')
+          + '</ul></div>';
+        z.innerHTML = h;
+        var c = $('moe-pont-copier');
+        if(c) c.addEventListener('click', function(){
+          try {
+            navigator.clipboard.writeText(r.url);
+            c.textContent = 'Lien copié';
+          } catch(err) { c.textContent = 'Copie impossible — sélectionnez l’adresse'; }
+        });
+      })
+      .catch(function(){ z.innerHTML = '<p class="note">lien indisponible</p>'; });
   }
 
   function chiffrer(){

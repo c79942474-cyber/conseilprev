@@ -82,12 +82,20 @@ VOIES = {
 }
 VOIE_DEFAUT = "inventaire"
 
-# Ce que le lien NE porte PAS. Écrit noir sur blanc parce que c'est ce que le
+# Ce que CE lien NE porte PAS. Écrit noir sur blanc parce que c'est ce que le
 # client doit pouvoir vérifier avant de cliquer.
+#
+# « AUCUN MONTANT » VAUT POUR CE LIEN-CI, ET LA PRÉCISION COMPTE. Le pont vers
+# le chiffrage de maîtrise d'œuvre (`pont_moe`) porte, lui, une assiette de
+# travaux : c'est sa raison d'être, il l'annonce, et il l'arrondit. Laisser
+# cette phrase non qualifiée en ferait une promesse à l'échelle du site — donc
+# une promesse fausse, et personne ne relit une liste d'exclusions.
 EXCLUS = [
     "Aucun nom de client, de société ou de projet.",
-    "Aucun montant : ni enveloppe, ni coût total de possession, ni écart entre "
-    "pays.",
+    "Aucun montant sur CE lien : ni enveloppe, ni coût total de possession, "
+    "ni écart entre pays — l'étude de durabilité n'en a aucun besoin. "
+    "(Le lien vers le chiffrage de maîtrise d'œuvre, lui, porte l'assiette "
+    "de travaux et le dit.)",
     "Aucun site nommé, aucune adresse, aucune coordonnée.",
     "Aucun identifiant de session : le lien n'ouvre aucun compte et n'en "
     "réclame aucun.",
