@@ -239,6 +239,68 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
      nu.trav || 'vide');
   ok('…et aucun bandeau de provenance ne s’affiche pour rien', !nu.bandeau);
 
+  titre('8. Ce qui est écrit doit être LISIBLE — contraste réellement peint');
+
+  /* UN CONTRÔLE QU'AUCUNE LECTURE DU SOURCE NE REMPLACE. `getComputedStyle`
+     rend « transparent » pour un fond hérité et ignore l'opacité : il annonçait
+     18,55:1 sur un bouton qui s'affichait à 6,7. On compose donc les couches
+     jusqu'au premier fond opaque, et on applique l'opacité — c'est ce que
+     l'œil reçoit.
+
+     CE QU'IL A ATTRAPÉ, ET QUE LA CAPTURE D'ÉCRAN M'A FAIT VOIR : j'avais posé
+     des jetons de thème CLAIR (--white, --muted2) sur une page sombre. Le
+     bouton « oublier » sortait beige sur blanc — 1,76:1. Et la page portait
+     déjà la même faute sur ses pastilles de phase : décochée, une phase
+     passait à 1,13:1, c'est-à-dire qu'elle DISPARAISSAIT — le client ne
+     voyait plus ce qu'il venait d'écarter, donc ne pouvait plus le reprendre. */
+  await pg2.goto(CYBER + '/ingenierie-datacenter?travaux_meur=600-750'
+                 + '&part_technique=70&pays=FR', { waitUntil: 'domcontentloaded' });
+  await pg2.waitForSelector('#ig-moe-trav', { timeout: 30000 });
+  await pg2.waitForTimeout(700);
+  await pg2.goto(CYBER + '/ingenierie-datacenter', { waitUntil: 'domcontentloaded' });
+  await pg2.waitForSelector('.moe-oubli', { timeout: 30000 });
+  await pg2.click('#ig-moe-phases button');
+  await pg2.waitForTimeout(250);
+
+  const contrastes = await pg2.evaluate(() => {
+    const px = c => c.match(/[\d.]+/g).map(Number);
+    const melange = (av, ar, a) => av.map((v, i) => v * a + ar[i] * (1 - a));
+    const fondPeint = (el) => {
+      let couches = [], n = el.parentElement;
+      while (n) {
+        const p = px(getComputedStyle(n).backgroundColor);
+        const a = p[3] === undefined ? 1 : p[3];
+        if (p.length >= 3 && a > 0) { couches.unshift([p.slice(0, 3), a]);
+                                      if (a === 1) break; }
+        n = n.parentElement;
+      }
+      let fond = [255, 255, 255];
+      couches.forEach(([c, a]) => { fond = melange(c, fond, a); });
+      return fond;
+    };
+    const lum = c => { const [r, g, b] = c.map(v => { v /= 255;
+      return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); });
+      return .2126 * r + .7152 * g + .0722 * b; };
+    const ratio = (a, b) => { const l1 = lum(a), l2 = lum(b);
+      return +(((Math.max(l1, l2) + .05) / (Math.min(l1, l2) + .05)).toFixed(2)); };
+    const m = (sel) => {
+      const el = document.querySelector(sel);
+      if (!el) return null;
+      const cs = getComputedStyle(el), fond = fondPeint(el);
+      return ratio(melange(px(cs.color).slice(0, 3), fond,
+                           parseFloat(cs.opacity) || 1), fond);
+    };
+    return { bouton: m('.moe-oubli'),
+             decochee: m('#ig-moe-phases button:not(.on)'),
+             bandeau: m('.moe-recu') };
+  });
+  ok('le bouton « oublier » est lisible', contrastes.bouton >= 4.5,
+     contrastes.bouton + ':1');
+  ok('UNE PHASE DÉCOCHÉE RESTE VISIBLE — sinon on ne peut plus la reprendre',
+     contrastes.decochee >= 4.5, contrastes.decochee + ':1');
+  ok('…et le bandeau de provenance aussi', contrastes.bandeau >= 4.5,
+     contrastes.bandeau + ':1');
+
   ok('aucune erreur de script sur les deux sites', err.length === 0,
      err.slice(0, 2).join(' | '));
 
