@@ -168,16 +168,75 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
      'Sentinel ' + chiffrage.nombre + ' M€ · conseilprevcyber ' + res.nombre
      + ' M€ — écart ' + (ecart * 100).toFixed(2) + ' %');
 
-  titre('5. Une adresse sans paramètres reste une page normale');
+  titre('5. LE RETOUR DIRECT : la page se souvient de l’étude');
 
+  /* CE QUE LE LIEN SEUL NE RÉSOUT PAS. Le client mène son enveloppe sur
+     Sentinel, suit le lien une fois — puis revient sur la page par le MENU,
+     le lendemain. Sans mémoire, il retrouve deux champs vides et retape ; et
+     retaper la part du lot technique, c'est la laisser vide, donc retomber sur
+     l'hypothèse à 70 %. */
   await pg2.goto(CYBER + '/ingenierie-datacenter', { waitUntil: 'domcontentloaded' });
+  await pg2.waitForSelector('#ig-moe-trav', { timeout: 30000 });
+  await pg2.waitForTimeout(600);
+  const memo = await pg2.evaluate(() => ({
+    trav: (document.getElementById('ig-moe-trav') || {}).value || '',
+    pt: (document.getElementById('ig-moe-pt') || {}).value || '',
+    bandeau: (document.querySelector('.moe-recu') || {}).innerText || '',
+    url: window.location.search,
+  }));
+  ok('l’adresse ne porte PLUS aucun paramètre', memo.url === '', memo.url || 'nue');
+  ok('LES DEUX CHAMPS SONT QUAND MÊME PRÉ-REMPLIS',
+     memo.trav === recu.trav && memo.pt === recu.pt,
+     memo.trav + ' M€ · ' + memo.pt + ' %');
+  ok('…et le bandeau dit que c’est une MÉMOIRE, pas le calcul du jour',
+     /mémoris/i.test(memo.bandeau), memo.bandeau.slice(0, 62) + '…');
+  ok('…il propose de l’oublier — c’est un montant sur l’appareil du client',
+     await pg2.evaluate(() => !!document.querySelector('[data-moe-oubli]')));
+
+  titre('6. Une enveloppe trop vieille n’est PAS re-injectée en silence');
+
+  await pg2.evaluate(() => {
+    const b = JSON.parse(window.localStorage.getItem('cp.moe.enveloppe.v1'));
+    b.quand = Date.now() - 95 * 86400000;          /* 95 jours */
+    window.localStorage.setItem('cp.moe.enveloppe.v1', JSON.stringify(b));
+  });
+  await pg2.reload({ waitUntil: 'domcontentloaded' });
+  await pg2.waitForSelector('#ig-moe-trav', { timeout: 30000 });
+  await pg2.waitForTimeout(600);
+  const vieux = await pg2.evaluate(() => ({
+    trav: (document.getElementById('ig-moe-trav') || {}).value || '',
+    pt: (document.getElementById('ig-moe-pt') || {}).value || '',
+    bandeau: (document.querySelector('.moe-recu') || {}).innerText || '',
+    ambre: !!document.querySelector('.moe-recu-vieux'),
+  }));
+  ok('AUCUN CHAMP N’EST REMPLI par une valeur de 95 jours',
+     !vieux.trav && !vieux.pt, (vieux.trav || 'vide') + ' / ' + (vieux.pt || 'vide'));
+  ok('…mais l’abandon est ANNONCÉ, pas silencieux',
+     /écartée/i.test(vieux.bandeau) && /95 jours/.test(vieux.bandeau),
+     vieux.bandeau.slice(0, 66) + '…');
+  ok('…et il se distingue à l’œil d’un report réussi', vieux.ambre);
+  ok('…il dit quoi faire : relancer l’étude', /Relancez/i.test(vieux.bandeau));
+
+  titre('7. Oublier la valeur la retire vraiment de l’appareil');
+
+  await pg2.click('[data-moe-oubli]');
+  await pg2.waitForTimeout(200);
+  const apres = await pg2.evaluate(() => ({
+    reste: window.localStorage.getItem('cp.moe.enveloppe.v1'),
+    dit: (document.querySelector('.moe-recu') || {}).innerText || '',
+  }));
+  ok('plus rien n’est mémorisé', !apres.reste, apres.reste || 'rien');
+  ok('…et le geste se voit', /oubliée/i.test(apres.dit), apres.dit.slice(0, 48));
+
+  await pg2.reload({ waitUntil: 'domcontentloaded' });
   await pg2.waitForSelector('#ig-moe-trav', { timeout: 30000 });
   await pg2.waitForTimeout(500);
   const nu = await pg2.evaluate(() => ({
     trav: (document.getElementById('ig-moe-trav') || {}).value || '',
     bandeau: !!document.querySelector('.moe-recu'),
   }));
-  ok('aucun champ n’est pré-rempli sans lien', !nu.trav, nu.trav || 'vide');
+  ok('aucun champ n’est pré-rempli sans lien ni mémoire', !nu.trav,
+     nu.trav || 'vide');
   ok('…et aucun bandeau de provenance ne s’affiche pour rien', !nu.bandeau);
 
   ok('aucune erreur de script sur les deux sites', err.length === 0,
