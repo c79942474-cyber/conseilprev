@@ -554,6 +554,62 @@ body.embed .gp-carte{bottom:auto;top:var(--gp-bas,auto);
 .n-referentiel{color:#1E6336}.n-analyse{color:#4E3277}.n-hypothese{color:#8A5310}
 .n-saisi{color:#1C5CAB}.n-calcule{color:#0E7B83}
 
+/* ── LE DOSSIER SUR TROIS COLONNES ────────────────────────────────────────
+   Un dossier de pays empile un avis, deux notes, des repères de conformité,
+   une réserve, une DPGF de quatorze lots, le carbone incorporé, les postes non
+   chiffrables et l'échéancier. En pleine largeur, cela fait un ruban de
+   plusieurs écrans où chaque bloc court sur toute la ligne : on lit vite le
+   premier, on fait défiler, et on a perdu le total avant d'arriver au dernier.
+
+   TROIS COLONNES POUR CE QUI SE LIT EN BLOC, PLEINE LARGEUR POUR CE QUI SE
+   LIT EN LIGNES. Un tableau de quatorze lots comprimé au tiers de la largeur
+   serait illisible : les tableaux, les titres et l'échéancier gardent donc
+   toute la largeur, et c'est le texte — avis, repères, réserves, postes à
+   renseigner — qui se met en colonnes. `align-items:start` évite que trois
+   blocs de hauteurs différentes s'étirent au plus haut.
+
+   ON REDESCEND À DEUX PUIS À UNE. Sous 1100 px, trois colonnes rendent des
+   lignes de six mots ; la page est aussi servie en cadre, où la largeur utile
+   dépend du menu latéral. */
+.fin-dos-g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px 18px;align-items:start}
+.fin-dos-g > table,.fin-dos-g > h4,.fin-dos-g > .fin-phases,
+.fin-dos-g > .fin-ecart,.fin-dos-g > .fai{grid-column:1/-1}
+/* L'AVIS TIENT TOUTE LA LARGEUR — c'est la conclusion, elle se lit d'abord —
+   mais SES CONSTATS s'empilaient sur six lignes pleines : le plus long bloc
+   du dossier, et celui qu'on parcourt le plus vite. Ils passent en colonnes à
+   l'intérieur, sans que l'avis cesse d'être un bloc. */
+.fin-dos-g .fai-c{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px 16px;align-items:start}
+@media (max-width:1100px){.fin-dos-g .fai-c{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:760px){.fin-dos-g .fai-c{grid-template-columns:1fr}}
+@media (max-width:1100px){.fin-dos-g{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:760px){.fin-dos-g{grid-template-columns:1fr}}
+
+/* ── L'assiette du barème, à l'écran avant le calcul ───────────────────── */
+/* JETONS QUI EXISTENT VRAIMENT. Mon premier jet employait --ink2 et --rule2 :
+   ils ne sont définis nulle part sur ce document, et une variable inconnue sans
+   repli rend la déclaration invalide — la couleur retombait alors en héritage,
+   silencieusement. Un style qui ne s'applique pas ne se voit pas ; il se
+   mesure. Ici : --ink, --bg, --white, --muted2, avec repli explicite. */
+.moe-src-bloc{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px 14px;margin:0 0 12px;padding:11px 13px;
+  border:1px solid rgba(0,0,0,.14);border-radius:9px;background:var(--bg,#F7F6F3)}
+.moe-ch{display:flex;flex-direction:column;gap:4px;font-size:11px;
+  color:var(--muted,#5A5A5A)}
+.moe-ch > span{font-weight:600}
+.moe-ch select{font-family:inherit;font-size:12.5px;padding:6px 9px;
+  border:1px solid rgba(0,0,0,.22);border-radius:6px;background:var(--white,#fff);
+  color:var(--ink,#1C1C1C)}
+.moe-ch select:disabled{opacity:.72}
+/* Une grandeur LUE, pas saisie : elle se présente comme une valeur, pas comme
+   un champ vide qui appellerait la frappe. */
+.moe-ch output{font-family:var(--mono);font-size:14px;font-weight:600;
+  color:var(--ink,#1C1C1C);padding:5px 0}
+.moe-src-n{grid-column:1/-1;margin:0;font-size:10.5px;line-height:1.5;
+  color:var(--muted,#5A5A5A)}
+@media (max-width:760px){.moe-src-bloc{grid-template-columns:1fr}}
+
 /* ── Les dossiers repliés, et la barre qui dit lesquels sont ouverts ───────
    Un blanc sous la carte se lirait comme un calcul qui n'a rien rendu. La
    barre occupe donc la place et porte la consigne : elle est ENCADREE et non
@@ -1637,8 +1693,15 @@ th .fl{font-size:9px;margin-left:3px}
     gap:11px;margin-bottom:11px}
   .kpi-go{font-family:inherit;font-size:13px;font-weight:600;padding:8px 16px;
     border-radius:9px;border:1px solid var(--cyan,#22d3ee);
-    background:rgba(34,211,238,.14);color:var(--cyan,#22d3ee);cursor:pointer}
-  .kpi-go:hover{background:rgba(34,211,238,.24)}
+    /* CYAN SUR CYAN PÂLE : 1,25:1 mesuré — le bouton qui LANCE le calcul était
+       le moins lisible du bloc. Ces styles ont été écrits pour une surface
+       sombre, où un aplat translucide suffit ; cette page-ci est claire, et le
+       même aplat y donne un pâle sur pâle. On reprend la paire que la page
+       emploie déjà pour ses pastilles retenues — cyan plein, encre foncée —
+       qui tient sur les deux fonds. */
+    background:var(--cyan,#22d3ee);color:#04222a;font-weight:700;cursor:pointer}
+  .kpi-go:hover{background:#12bcd8}
+  .kpi-go:focus-visible{outline:2px solid #04222a;outline-offset:2px}
   .kpi-go[disabled]{opacity:.45;cursor:not-allowed}
   .kpi-msg{font-size:12.5px;line-height:1.6;color:var(--muted2,#7b8b9a);margin:9px 0 0}
   .kpi-out{margin-top:13px}
@@ -2150,6 +2213,29 @@ engagements publics) sont imputés nominativement.</div>
       <b>travaux</b> — la ligne de maîtrise d’œuvre et la provision pour aléas en sont
       retirées —, et le barème distingue le <b>clos-couvert</b> du <b>lot technique</b>, dont
       les taux diffèrent d’un facteur huit sur certaines missions.</p>
+      <!-- ══ L'ASSIETTE, LUE SUR LE PAYS QU'ON A CHOISI ═══════════════════
+           Le bloc prenait le PREMIER DU CLASSEMENT, en silence. Depuis que
+           les dossiers s'ouvrent pays par pays sur la carte, c'était un piège :
+           on ouvrait l'Allemagne, on chiffrait, et on obtenait les honoraires
+           de la France — sans que rien ne le dise. Le pays est donc choisi
+           ici, il suit le dossier qu'on ouvre, et les deux grandeurs qui en
+           découlent s'affichent AVANT le calcul plutôt qu'après.
+
+           ELLES NE SE SAISISSENT PAS : elles viennent de la DPGF du pays,
+           c'est-à-dire du calcul affiché juste au-dessus. Les rendre
+           modifiables ferait exister deux vérités pour la même étude — le
+           tableau dirait une assiette, le barème en chiffrerait une autre. -->
+      <div class="moe-src-bloc">
+        <label class="moe-ch"><span>Pays de l’étude</span>
+          <select id="moe-pays"></select></label>
+        <label class="moe-ch"><span>Montant des travaux (M€)</span>
+          <output id="moe-trav">—</output></label>
+        <label class="moe-ch"><span>Part du lot technique (%)</span>
+          <output id="moe-pt">—</output></label>
+        <p class="moe-src-n" id="moe-src-n">Ces deux grandeurs sont <b>lues sur la
+        DPGF</b> du pays retenu — elles ne se saisissent pas ici : le tableau
+        ci-dessus et le barème doivent dire la même assiette.</p>
+      </div>
       <div class="moe-phases" id="moe-phases"></div>
       <div class="moe-missions" id="moe-missions"></div>
       <button type="button" class="kpi-go" id="moe-go">Chiffrer la maîtrise d’œuvre →</button>
@@ -9626,7 +9712,7 @@ if(window.parent&&window.parent!==window){
         + fourch(d.devis.enveloppe_meur)+' M€'
         + '<button type="button" class="fin-dos-x" data-fermer="'+esc(d.pays)+'"'
         + ' title="Replier le dossier de '+esc(nomPays(d.pays) || d.pays)+'">replier ✕</button>'
-        + '</h3>'
+        + '</h3><div class="fin-dos-g">'
         + avisFaisabilite(d.faisabilite)
         + '<p class="note" style="margin:0 0 8px">Refroidissement retenu : <b>'
         + esc(d.devis.refroidissement.nom)+'</b> (PUE '+d.devis.refroidissement.pue[0]+'–'
@@ -9657,7 +9743,7 @@ if(window.parent&&window.parent!==window){
         + blocConformite(d) + blocReserve(d) + tableDpgf(d) + blocIncorpore(d)
         + blocAren(d) + blocTraj(d)
         + (parPays[d.pays] || '')
-        + '</section>';
+        + '</div></section>';
     });
     h += '<details style="margin-top:16px"><summary class="note" style="cursor:pointer">'
       + 'Trace du calcul et hypothèses</summary><ul class="note">'
@@ -9665,7 +9751,14 @@ if(window.parent&&window.parent!==window){
       + '<li><b>Coût unitaire :</b> '+esc(JSON.stringify(j.entree.cout_mw))+'</li>'
       + '</ul><p class="note">'+esc(j.avertissement)+'</p></details>';
     $('fin-res').innerHTML = blocTelecharger() + h;
+    /* Nouveau calcul, nouveau classement : le pays retenu repart du premier,
+       sinon il resterait accroché à un pays qu'on ne compare peut-être plus. */
+    PAYS_RETENU = ((j.classement || [])[0] || {}).pays || null;
     majBarre();
+    /* Les blocs qui vivent sous l'enveloppe se rafraîchissent sur annonce
+       plutôt qu'en se surveillant les uns les autres : un module qui va lire
+       dans le DOM d'un autre se casse au premier remaniement. */
+    document.dispatchEvent(new CustomEvent('fin-calcul'));
     /* DERNIER est la charge utile telle que le serveur l'a renvoyée : c'est
        elle qui repart à l'export, pas une reconstitution. Le document et
        l'écran ne peuvent donc pas diverger. */
@@ -9753,6 +9846,11 @@ if(window.parent&&window.parent!==window){
     if(!d) return false;
     d.hidden = false;
     majBarre();
+    /* OUVRIR UN DOSSIER, C'EST RETENIR CE PAYS. Le lecteur qui clique
+       l'Allemagne sur la carte désigne l'Allemagne : les blocs qui suivent —
+       honoraires, création de valeur — doivent parler du même pays que le
+       dossier qu'il vient d'ouvrir. */
+    if(window.FIN_PAYS_CHOISIR) window.FIN_PAYS_CHOISIR(code);
     return true;
   };
 
@@ -9772,6 +9870,48 @@ if(window.parent&&window.parent!==window){
      affiche, et c'est exactement le genre d'écart que ce module reproche
      ailleurs. */
   window.FIN_DERNIER = function(){ return DERNIER; };
+
+  /* ══ LE PAYS RETENU — une seule notion, partagée ═══════════════════════════
+     Les blocs qui vivent SOUS l'enveloppe (honoraires de MOE, création de
+     valeur) lisaient chacun `classement[0]`, le meilleur coût total de
+     possession. C'était défendable tant que les dossiers se déroulaient tous
+     ensemble ; ça ne l'est plus depuis qu'on les ouvre PAYS PAR PAYS sur la
+     carte. On ouvrait l'Allemagne, on chiffrait la maîtrise d'œuvre, et on
+     obtenait les honoraires de la France — sans que rien ne le dise.
+
+     Le pays retenu est donc explicite, il suit le dossier qu'on ouvre, et il
+     s'annonce. Par défaut, le premier du classement : c'est la convention de
+     toute la page, et un choix vide obligerait à cliquer avant de calculer. */
+  var PAYS_RETENU = null;
+
+  window.FIN_PAYS = function(){
+    var d = DERNIER;
+    if(!d || !(d.classement || []).length) return null;
+    var connus = d.classement.map(function(x){ return x.pays; });
+    if(PAYS_RETENU && connus.indexOf(PAYS_RETENU) >= 0) return PAYS_RETENU;
+    return connus[0];
+  };
+
+  /* `silencieux` : le recalcul d'enveloppe repose le pays sans prévenir les
+     blocs, qui se redessinent de toute façon. Un clic sur la carte, lui, doit
+     les rafraîchir. */
+  window.FIN_PAYS_CHOISIR = function(code, silencieux){
+    var d = DERNIER;
+    if(!d || !(d.classement || []).length) return;
+    if(d.classement.filter(function(x){ return x.pays === code; }).length === 0) return;
+    PAYS_RETENU = code;
+    if(!silencieux) document.dispatchEvent(
+      new CustomEvent('fin-pays', { detail: { pays: code } }));
+  };
+
+  /* Le dossier d'un pays, tel que le serveur l'a rendu — jamais reconstitué :
+     l'écran et le calcul ne peuvent pas diverger sur la même étude. */
+  window.FIN_DOSSIER = function(code){
+    var d = DERNIER;
+    if(!d) return null;
+    code = code || window.FIN_PAYS();
+    return (d.dossiers || []).filter(function(x){ return x.pays === code; })[0] || null;
+  };
 })();
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -9836,7 +9976,10 @@ if(window.parent&&window.parent!==window){
   function enveloppe(){
     var d = window.FIN_DERNIER && window.FIN_DERNIER();
     if(!d || !d.classement || !d.classement.length) return null;
-    var code = d.classement[0].pays;
+    /* LE PAYS RETENU, pas le premier du classement : depuis que les dossiers
+       s'ouvrent un par un sur la carte, « le premier » n'est plus celui que le
+       lecteur regarde. */
+    var code = (window.FIN_PAYS && window.FIN_PAYS()) || d.classement[0].pays;
     var dos = (d.dossiers || []).filter(function(x){ return x.pays === code; })[0];
     if(!dos) return null;
     /* LES PARTS DE LOTS VIENNENT DU DEVIS AFFICHÉ, pas d'une reconstitution :
@@ -9851,6 +9994,64 @@ if(window.parent&&window.parent!==window){
       if(l.code != null && typeof l.part === 'number') parts[l.code] = l.part / 100;
     });
     return { pays: code, env: dos.devis.enveloppe_meur, parts: parts };
+  }
+
+  /* ══ L'ASSIETTE À L'ÉCRAN, EN TEMPS RÉEL ══════════════════════════════════
+     Les deux grandeurs qui commandent le chiffrage — montant des travaux et
+     part du lot technique — étaient invisibles jusqu'au résultat. Le lecteur
+     lançait un calcul sans savoir SUR QUOI il portait, et découvrait l'assiette
+     après coup, dans une phrase du total. Elles s'affichent donc avant, et
+     elles suivent le pays qu'on désigne.
+
+     LA PART EST CELLE RAPPORTÉE AUX TRAVAUX, pas à l'enveloppe : c'est celle
+     sur laquelle le barème s'applique, et c'est aussi celle qui part vers
+     l'autre site. Afficher l'autre ici ferait lire 65 % là où le calcul en
+     utilise 75. */
+  function assietteVue(){
+    var e = enveloppe();
+    var sel = $('moe-pays'), t = $('moe-trav'), p = $('moe-pt'), n = $('moe-src-n');
+    if(!sel || !t || !p) return;
+    var d = window.FIN_DERNIER && window.FIN_DERNIER();
+    /* La liste des pays suit le classement : elle se refait à chaque calcul,
+       et l'ordre y porte une information — le meilleur coût total en tête. */
+    var codes = (d && d.classement || []).map(function(x){ return x.pays; });
+    var courant = (window.FIN_PAYS && window.FIN_PAYS()) || codes[0] || '';
+    var signature = codes.join(',');
+    if(sel.getAttribute('data-codes') !== signature){
+      sel.setAttribute('data-codes', signature);
+      sel.innerHTML = codes.map(function(c, i){
+        return '<option value="' + esc(c) + '">' + esc(nomPays(c) || c)
+          + (i === 0 ? ' — meilleur coût total' : '') + '</option>'; }).join('');
+    }
+    if(sel.value !== courant) sel.value = courant;
+    sel.disabled = codes.length < 2;
+
+    var msg = $('moe-msg');
+    if(!e){
+      t.textContent = '—'; p.textContent = '—';
+      if(msg && !msg.getAttribute('data-dit')) msg.textContent =
+        'Calculez d’abord l’enveloppe ci-dessus : les honoraires se calculent '
+        + 'sur les travaux qu’elle contient.';
+      return;
+    }
+    /* LE MESSAGE D'ATTENTE DOIT S'EN ALLER. Il disait « calculez d'abord
+       l'enveloppe » au-dessus d'une assiette affichée : le lecteur, voyant le
+       montant, lisait la phrase comme une panne. */
+    if(msg && !msg.getAttribute('data-dit')) msg.textContent = '';
+    var som = function(liste){
+      return liste.reduce(function(a, c){ return a + (e.parts[c] || 0); }, 0); };
+    var pc = som(['01', '02']);
+    var pt = som(['03','04','05','06','07','08','09','10','11','12']);
+    var trav = [e.env[0] * (pc + pt), e.env[1] * (pc + pt)];
+    t.textContent = fourch(trav) + ' M€';
+    p.textContent = (pc + pt) > 0
+      ? (pt / (pc + pt) * 100).toFixed(1).replace('.', ',') + ' %' : '—';
+    if(n) n.innerHTML = 'Lues sur la <b>DPGF de ' + esc(nomPays(e.pays) || e.pays)
+      + '</b> — enveloppe ' + fourch(e.env) + ' M€, dont '
+      + ((1 - pc - pt) * 100).toFixed(1).replace('.', ',')
+      + ' % hors assiette (maîtrise d’œuvre et provision pour aléas). '
+      + 'Elles ne se saisissent pas ici : le tableau ci-dessus et le barème '
+      + 'doivent dire la même assiette.';
   }
 
   function ligneMission(l){
@@ -10019,6 +10220,27 @@ if(window.parent&&window.parent!==window){
 
   function demarrer(){
     if(!$('moe-go')) return;
+    /* TROIS SOURCES DE RAFRAÎCHISSEMENT, et une seule fonction d'affichage :
+       un nouveau calcul d'enveloppe, un dossier ouvert sur la carte, ou le
+       sélecteur de ce bloc. Les trois disent la même chose — quel pays. */
+    document.addEventListener('fin-calcul', assietteVue);
+    document.addEventListener('fin-pays', assietteVue);
+    var sel = $('moe-pays');
+    if(sel) sel.addEventListener('change', function(){
+      if(window.FIN_PAYS_CHOISIR) window.FIN_PAYS_CHOISIR(sel.value, true);
+      assietteVue();
+      /* Le chiffrage affiché portait sur l'AUTRE pays : le laisser à l'écran
+         sous une assiette qui vient de changer ferait lire deux études pour
+         une. On l'efface, et on dit pourquoi. */
+      var out = $('moe-out');
+      if(out && out.innerHTML){
+        out.innerHTML = '';
+        var m = $('moe-msg');
+        m.textContent = 'Pays changé : relancez le chiffrage.';
+        m.setAttribute('data-dit', '1');
+      }
+    });
+    assietteVue();
     $('moe-go').addEventListener('click', chiffrer);
     fetch('/api/moe-dc').then(function(r){ return r.json(); })
       .then(function(j){ if(j && j.ok){ REF = j; boutons(); } })
@@ -10101,12 +10323,12 @@ if(window.parent&&window.parent!==window){
   function enveloppe(){
     var d = window.FIN_DERNIER && window.FIN_DERNIER();
     if(!d || !d.classement || !d.classement.length) return null;
-    /* LE PREMIER DU CLASSEMENT, c'est-à-dire le meilleur coût total de
-       possession — la même convention que le pont vers l'étude de durabilité.
-       Prendre le premier dossier RENDU trierait par ordre alphabétique de code
-       pays, et l'écran dirait une chose pendant que le calcul en ferait une
-       autre. */
-    var code = d.classement[0].pays;
+    /* LE PAYS RETENU — celui dont le dossier est ouvert, à défaut le premier
+       du classement (meilleur coût total de possession). Ce bloc lisait lui
+       aussi `classement[0]` : il annonçait donc la création de valeur d'un
+       pays pendant qu'on lisait le dossier d'un autre. Prendre le premier
+       dossier RENDU trierait par code pays, ce qui serait pire encore. */
+    var code = (window.FIN_PAYS && window.FIN_PAYS()) || d.classement[0].pays;
     var dos = (d.dossiers || []).filter(function(x){ return x.pays === code; })[0];
     if(!dos) return null;
     return { pays: code,
