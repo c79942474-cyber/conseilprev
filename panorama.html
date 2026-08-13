@@ -805,7 +805,11 @@ button.cres-p:focus-visible{outline:2px solid var(--encre,#1C1C1C);outline-offse
 .dl2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:0 0 14px;
   align-items:start}
 @media(max-width:900px){.dl2{grid-template-columns:1fr}}
-.dpl{border:1px solid var(--rule2);border-radius:7px;background:var(--white);
+/* `--rule` et non `--rule2` : ce dernier n'existe pas dans les jetons de cette
+   page, la déclaration était donc INVALIDE et ces dépliants n'avaient aucune
+   bordure — mesuré à 0px none. Ils en portent d'autant plus besoin qu'ils
+   servent désormais à structurer toute la section d'eau. */
+.dpl{border:1px solid var(--rule);border-radius:7px;background:var(--white);
   font-size:11.5px;line-height:1.55}
 .dpl[open]{box-shadow:0 1px 4px rgba(0,0,0,.06)}
 .dpl > summary{cursor:pointer;padding:9px 12px;list-style:none;display:flex;
@@ -1660,6 +1664,61 @@ tbody tr.on{background:rgba(184,50,34,.06)}
 .eau-eed h4{font-size:12px;margin:0 0 4px}
 .eau-eed ol{margin:6px 0 0 18px;padding:0;font-size:11.5px;line-height:1.6;columns:2;column-gap:24px}
 @media(max-width:700px){ .eau-eed ol{columns:1} }
+
+/* LES DÉPLIANTS DE LA SECTION D'EAU, et la règle qui les gouverne : REPLIÉ, UN
+   DÉPLIANT N'EST JAMAIS MUET. Son résumé porte de quoi décider s'il faut
+   l'ouvrir — le nombre d'origines, le verdict de la confrontation, le nombre de
+   régions tendues. Un sommaire qui obligerait à tout ouvrir pour savoir où
+   regarder ne serait pas un sommaire. */
+.eau-d{margin:14px 0 0}
+.eau-d.large > summary{border-left:3px solid var(--orange);border-radius:7px 0 0 0}
+.dpl-i{font-weight:400;font-size:10.5px;color:var(--muted);font-family:var(--mono)}
+.dpl-c{padding:0 12px 11px}
+
+/* PAR OÙ COMMENCER. Neuf blocs sans ordre de lecture se prennent au hasard. */
+.eau-guide{margin:10px 0 0;padding:9px 12px;background:var(--bg);
+  border-left:3px solid var(--blue);border-radius:0 5px 5px 0;font-size:11.5px;
+  line-height:1.55}
+.eau-guide em{font-style:normal;font-weight:600}
+.eau-guide a{display:inline-block;margin-top:3px;font-weight:600}
+
+/* LES NAPPES. Le liseré porte le niveau, la pastille le foncier annoncé : c'est
+   leur RENCONTRE qui informe, et elle doit se voir sans lire. */
+.eau-nap{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(270px,100%),1fr));
+  gap:8px;margin:10px 0 0}
+.eau-n{border:1px solid var(--rule);border-left:4px solid var(--rule);
+  border-radius:0 6px 6px 0;padding:8px 10px;background:var(--white);font-size:11.5px;
+  line-height:1.5}
+.eau-n.tresbas{border-left-color:#8E1D12}
+.eau-n.bas{border-left-color:var(--accent)}
+.eau-n.modbas{border-left-color:var(--orange)}
+.eau-n.haut{border-left-color:var(--blue)}
+.eau-n.gris{border-left-color:var(--muted2);background:var(--bg);border-style:dashed}
+.eau-n-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.eau-n-h b{font-size:12px}
+.eau-n-f{font-family:var(--mono);font-size:9px;white-space:nowrap;padding:1px 6px;
+  border:1px solid var(--rule);border-radius:9px;color:var(--muted)}
+.eau-n-v{display:flex;justify-content:space-between;gap:8px;margin:2px 0 3px}
+.eau-n-v em{font-style:normal;font-weight:600}
+.eau-n-t{font-family:var(--mono);font-size:10px;color:var(--muted);white-space:nowrap}
+.eau-n p{margin:0;color:var(--muted)}
+.eau-n-gris{margin-top:4px !important;font-weight:600;color:var(--ink) !important}
+.eau-nap-src{font-family:var(--mono);font-size:10px}
+.eau-nap-src span{color:var(--muted)}
+.eau-nap-sais{margin:8px 0 0;padding:8px 11px;background:#FDF6E9;
+  border-left:3px solid var(--orange);border-radius:0 5px 5px 0;font-size:11.5px;
+  line-height:1.5}
+.eau-nap-sais b{display:block;font-size:12px;margin-bottom:2px}
+.eau-nap-sais p{margin:3px 0 0}
+.eau-nap-cons{color:var(--muted)}
+.eau-nap-lec{margin:10px 0 0;padding:9px 12px;background:var(--bg);border-radius:5px;
+  font-size:11.5px;line-height:1.55}
+.eau-nap-lec .note{display:block;margin-top:4px}
+
+/* LES MOTS-CLÉS QUI MÈNENT AILLEURS, en clôture de section. */
+.eau-vers{margin:14px 0 0;padding-top:10px;border-top:2px solid var(--rule);
+  font-size:11.5px;line-height:1.7}
+.eau-vers em{font-style:normal;font-weight:600}
 
 /* CONFRONTATION AU RÉEL. Encadré parce que c'est le seul endroit de la section
    où le calcul est jugé plutôt qu'exposé — et la variante « large » le teinte
@@ -4303,20 +4362,113 @@ function eauNb(n){
   return fr(Math.round(n));
 }
 
+/* L'ÉTAT DES NAPPES FRANÇAISES, ET LE FONCIER ANNONCÉ DESSUS.
+
+   POURQUOI CE BLOC EST ICI ET PAS DANS LE COMPARATEUR. Le comparateur note
+   l'eau au niveau NATIONAL — indice WEI+ — et il écrit lui-même que « la lecture
+   nationale ÉCRASE les contrastes ». La France y est en stress MODÉRÉ : une
+   classe qui recouvre à la fois des bassins détendus et des bassins en crise.
+   Un lecteur qui s'arrêterait à la note conclurait que l'eau n'est pas le sujet
+   en France. C'est faux, et ce bloc le montre — sans produire aucune note, parce
+   qu'un indice annuel d'exploitation et un état piézométrique instantané ne
+   mesurent pas la même chose et ne s'additionnent pas.
+
+   CE QUI EN FAIT UNE INFORMATION ET NON UNE CARTE DE PLUS : le CROISEMENT. Une
+   intention publique d'implantation d'un côté, l'état de la ressource dessous de
+   l'autre. Ni l'une ni l'autre ne se lit seule. */
+function blocNappes(){
+  var n = (typeof EMP !== "undefined" && EMP) ? EMP.nappes_fr : null;
+  if(!n || !n.regions || !n.regions.length) return "";
+  var c = n.croisement, s = n.source, sa = n.saisonnalite;
+  var age = (EMP.peremption && EMP.peremption.familles
+             && EMP.peremption.familles.nappes) || null;
+
+  var h = '<details class="dpl eau-d"><summary>L’eau française, bassin par bassin — '
+    + 'l’état des <span data-aide="nappe">nappes</span> sous le foncier annoncé'
+    + '<span class="dpl-i">' + c.n_tendues + ' des ' + c.n_regions_foncier
+    + ' régions à <span data-aide="foncier_dc">foncier identifié</span> portent des nappes basses · '
+    + c.n_en_baisse + ' sur ' + c.n_regions_foncier + ' en BAISSE</span></summary>'
+    + '<div class="dpl-c">'
+    + '<p class="note" style="margin:0"><b>Ce que ce bloc corrige.</b> Le comparateur '
+    + 'd’implantation note l’eau au niveau <b>national</b> : la France y est en stress '
+    + '<em>modéré</em>. Cette classe recouvre des bassins détendus ET des bassins en crise. '
+    + 'Voici le contraste, à une date et pour un seul pays. '
+    + '<b>Aucune note n’en sort</b> — il se lit à côté du classement, jamais dedans.</p>'
+    + '<p class="note eau-nap-src" style="margin:5px 0 0">' + esc(s.titre) + ' · '
+    + esc(s.editeur) + ' <span>' + esc(s.reprise) + '</span>'
+    + (age ? ' — ' + esc(age.lecture) : '') + '</p>';
+
+  /* L'AVERTISSEMENT DE SAISON PASSE AVANT LES CHIFFRES. Un relevé du 1er août est
+     pris au creux de l'année : servi sans cette phrase, il ferait conclure à une
+     catastrophe là où il y a une saison — et masquerait ce qui est vraiment
+     anormal, la tendance. */
+  h += '<div class="eau-nap-sais"><b>' + esc(sa.titre) + '</b><p>' + esc(sa.texte)
+    + '</p><p class="eau-nap-cons">' + esc(sa.consequence) + '</p></div>';
+
+  h += '<div class="eau-nap">';
+  n.regions.forEach(function(r){
+    var gris = r.niveau_rang === null;
+    var cls = gris ? "gris" : (r.niveau_rang <= 1 ? "tresbas"
+              : (r.niveau_rang <= 2 ? "bas" : (r.niveau_rang <= 3 ? "modbas" : "haut")));
+    h += '<div class="eau-n ' + cls + (r.foncier_dc ? ' fonc' : '') + '">'
+      + '<div class="eau-n-h"><b>' + esc(r.nom) + '</b>'
+      /* `title` ET NON `data-aide` : une infobulle « ? » sur chacun des neuf
+         badges ferait neuf boutons identiques dans un même bloc — du bruit qui
+         finit par faire ignorer les infobulles là où elles servent. L'explication
+         complète est portée UNE fois, sur l'intitulé du bloc. */
+      + (r.foncier_dc ? '<span class="eau-n-f" title="Région où l’État a annoncé, '
+          + 'en février 2025, du foncier prêt pour des centres de données bas carbone '
+          + 'destinés à l’IA. Une intention publique n’est pas un permis, et elle ne dit '
+          + 'rien de la ressource en eau sous la parcelle.">foncier identifié</span>' : '')
+      + '</div>'
+      + '<div class="eau-n-v"><em>' + esc(r.niveau_nom) + '</em>'
+      + '<span class="eau-n-t" title="Évolution des niveaux : ' + esc(r.tendance_nom) + '">'
+      + esc(r.tendance_signe) + ' ' + esc(r.tendance_nom) + '</span></div>'
+      + '<p>' + esc(r.lecture) + '</p>'
+      + (r.niveau_note ? '<p class="eau-n-gris">' + esc(r.niveau_note) + '</p>' : '')
+      + '</div>';
+  });
+  h += '</div>';
+
+  h += '<div class="eau-nap-lec"><b>Le croisement.</b> ' + esc(c.lecture)
+    + ' <span class="note">Seuil retenu pour « tendue » : ' + esc(c.seuil_tendue)
+    + ' — délibérément strict, pour que le signal ne se dilue pas dans le '
+    + '« modérément bas », qui est presque partout.</span></div>';
+
+  h += '<ul class="note" style="margin:8px 0 0 18px">'
+    + (n.limites || []).map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('')
+    + '</ul></div></details>';
+  return h;
+}
+
 function renderEauSource(j){
   if(!j || !j.ok) return;
   EAU = j;
   var t = j.totaux, ref = j.referentiel, cv = j.couverture;
   var eed = ref.cadre_eed;
 
-  var h = '<div class="eau-w"><h3>L’eau que le WUE ne compte pas</h3>'
-    + '<p class="note" style="margin-top:0">Le tableau ci-dessus donne l’eau consommée '
-    + '<b>sur le site</b> : celle des tours et des systèmes adiabatiques. C’est le chiffre '
+  var h = '<div class="eau-w"><h3 data-aide="wue">L’eau que le WUE ne compte pas</h3>'
+    + '<p class="note" style="margin-top:0">Le tableau ci-dessus donne l’eau '
+    + '<span data-aide="eau_consommee">consommée</span> <b>sur le site</b> : celle des tours '
+    + 'et des systèmes <span data-aide="adiabatique">adiabatiques</span>. C’est le chiffre '
     + 'que publient les exploitants et qu’exige le règlement délégué (UE) 2024/1364. '
     + 'Mais produire un kilowattheure consomme aussi de l’eau — les centrales thermiques '
     + 'et nucléaires en évaporent dans leurs tours. <b>Un centre qui passe au '
     + 'refroidissement sec affiche alors un WUE nul tout en consommant davantage d’eau à '
-    + 'la source.</b> Voici le second terme du bilan, pour les mêmes ' + t.n_dc + ' centres.</p>';
+    + 'la source.</b> Voici le second terme du bilan, pour les mêmes ' + t.n_dc + ' centres.</p>'
+
+    /* CE QU'IL FAUT LIRE, ET DANS QUEL ORDRE. La section porte désormais neuf
+       blocs : sans cette phrase, le lecteur les prend dans l'ordre où ils
+       tombent, c'est-à-dire au hasard. Les deux premiers sont dépliés parce
+       qu'ils DÉCIDENT ; les sept autres sont repliés parce qu'ils justifient. */
+    + '<div class="eau-guide"><b>Par où commencer.</b> Les deux blocs ouverts '
+    + 'ci-dessous suffisent à trancher : les <em>deux volumes</em>, puis la '
+    + 'comparaison <em>mode par mode</em> — c’est elle, et elle seule, qui dit '
+    + 'quelle conception consomme le moins d’eau au total. Les blocs repliés '
+    + 'justifient ce résultat et se picorent : chacun annonce son contenu sans '
+    + 'qu’on ait à l’ouvrir. '
+    + '<a href="#" data-gp="eau">Suivre le parcours guidé « Eau et biodiversité » →</a>'
+    + '</div>';
 
   /* Les deux volumes, et surtout ce qu'ils ne permettent PAS de conclure. */
   h += '<div class="eau-kpi">'
@@ -4335,12 +4487,14 @@ function renderEauSource(j){
   modes.forEach(function(m){
     maxL = Math.max(maxL, m.wue_site[1], m.amont_l_kwh_it[1]);
   });
-  h += '<h4 style="font-size:12px;margin:16px 0 2px">Ramenées au kilowattheure informatique, '
-    + 'les deux eaux se comparent</h4>'
-    + '<p class="note" style="margin:0 0 6px">Le site vaut son <b>WUE</b>. L’amont vaut '
-    + '<b>EWIF × PUE</b>. Le trait montre la fourchette, pas une valeur : sur une plage de '
-    + '0 à 2,2 L/kWh, une barre pleine raconterait un chiffre là où il n’y a qu’un '
-    + 'intervalle.</p><div class="eau-m">';
+  h += '<details class="dpl eau-d" open><summary>Ramenées au kilowattheure informatique, '
+    + 'les deux eaux se comparent<span class="dpl-i">LE BLOC QUI TRANCHE — '
+    + modes.length + ' modes de refroidissement comparés</span></summary>'
+    + '<div class="dpl-c">'
+    + '<p class="note" style="margin:0 0 6px">Le site vaut son <b data-aide="wue">WUE</b>. '
+    + 'L’amont vaut <b data-aide="ewif">EWIF</b> × PUE. Le trait montre la fourchette, pas '
+    + 'une valeur : sur une plage de 0 à 2,2 L/kWh, une barre pleine raconterait un chiffre '
+    + 'là où il n’y a qu’un intervalle.</p><div class="eau-m">';
   modes.forEach(function(m){
     var r = m.rapport;
     var verdict = m.amont_domine_toujours
@@ -4361,14 +4515,17 @@ function renderEauSource(j){
       + ' L/kWh informatique'
       + ((PART_NOTE[m.mode]) ? ' · ' + esc(PART_NOTE[m.mode]) : '') + '</p></div>';
   });
-  h += '</div>';
+  h += '</div></div></details>';
 
   /* Par pays : seul l'amont est porté en barre. L'eau de site s'étend sur deux
      ordres de grandeur selon le WUE retenu — la tracer suggérerait une
      précision qu'elle n'a pas. */
   var pays = (j.par_pays || []).slice(0, 12);
   var maxA = pays.length ? Math.max.apply(null, pays.map(function(p){ return p.amont_m3[1]; })) : 0;
-  h += '<h4 style="font-size:12px;margin:16px 0 2px">L’eau de la source, pays par pays</h4>'
+  h += '<details class="dpl eau-d"><summary>L’eau de la source, pays par pays'
+    + '<span class="dpl-i">' + pays.length + ' pays · ' + cv.pays_ewif_national
+    + ' sur ' + cv.pays_parc + ' disposent d’un facteur national</span></summary>'
+    + '<div class="dpl-c">'
     + '<p class="note" style="margin:0 0 6px">Seule l’eau amont est portée en barre : '
     + 'l’eau de site s’étend sur deux ordres de grandeur selon le WUE retenu, et la tracer '
     + 'suggérerait une précision qu’elle n’a pas. <b>' + cv.pays_ewif_national + ' des '
@@ -4389,6 +4546,7 @@ function renderEauSource(j){
       + 'moyenne européenne : <b>' + cv.pays_defaut_ue.join(" · ") + '</b>. '
       + 'Leur terme amont est un ordre de grandeur, pas une estimation de pays.</p>';
   }
+  h += '</div></details>';
 
   /* LE MODÈLE RENCONTRE L'OBSERVATION. Deux autorités publiques ont publié les
      DEUX termes pour un parc national entier : le rapport observé s'en déduit,
@@ -4396,8 +4554,13 @@ function renderEauSource(j){
      confrontation ne nous flatte pas. */
   var cf = j.confrontation, cfr = j.confrontation_fr;
   if(cf && cf.comparable){
-    h += '<div class="eau-conf' + (cf.informatif ? '' : ' large') + '">'
-      + '<h4>Ce que le calcul vaut, confronté à ce qui a été publié</h4>'
+    /* LE VERDICT EST DANS LE RÉSUMÉ, pas derrière le clic. Un dépliant qui
+       cacherait sa conclusion obligerait à ouvrir pour savoir s'il faut ouvrir. */
+    h += '<details class="dpl eau-d' + (cf.informatif ? '' : ' large') + '"><summary>'
+      + 'Ce que le calcul vaut, confronté à ce qui a été publié'
+      + '<span class="dpl-i">' + (cf.informatif
+          ? 'concordance vérifiable' : 'intervalle trop large pour conclure — et c’est dit')
+      + '</span></summary><div class="dpl-c eau-conf">'
       + '<div class="eau-rep">';
     (j.reperes || []).forEach(function(r){
       h += '<div class="eau-rp"><b>×' + fr(r.rapport) + '</b>'
@@ -4410,7 +4573,7 @@ function renderEauSource(j){
       h += '<p class="note" style="margin:6px 0 0"><b>Et sur la France seule</b>, '
         + 'qui est le périmètre du repère Arcep : ' + esc(cfr.lecture) + '</p>';
     }
-    h += '</div>';
+    h += '</div></details>';
   }
 
   /* D'OÙ VIENT L'EAU. Le volume ne le dit pas, et c'est pourtant la première
@@ -4419,8 +4582,10 @@ function renderEauSource(j){
   var cles = Object.keys(sr).filter(function(k){ return sr[k].tension !== null; })
     .sort(function(a,b){ return sr[b].tension - sr[a].tension; });
   if(cles.length){
-    h += '<h4 style="font-size:12px;margin:16px 0 2px">Un mètre cube n’est pas un '
-      + 'mètre cube — d’où vient l’eau</h4>'
+    h += '<details class="dpl eau-d"><summary>Un mètre cube n’est pas un mètre cube — '
+      + 'd’où vient l’eau<span class="dpl-i">' + cles.length + ' origines · l’Arcep mesure '
+      + 'que le parc français prélève en quasi-totalité de l’eau POTABLE</span></summary>'
+      + '<div class="dpl-c">'
       + '<p class="note" style="margin:0 0 6px">L’Arcep mesure que les prélèvements '
       + 'directs du parc français sont <b>en quasi-totalité de l’eau potable</b> : '
       + 'de l’eau traitée pour être bue, évaporée pour refroidir des serveurs, prise '
@@ -4439,16 +4604,29 @@ function renderEauSource(j){
         + '<i>' + esc(s.sens) + (s.observe ? ' <b>' + esc(s.observe) + '</b>' : '')
         + '</i></div>';
     });
-    h += '</div>';
+    h += '</div></div></details>';
   }
+
+  /* L'ÉTAT DES NAPPES FRANÇAISES, posé juste après « d'où vient l'eau » : c'est
+     la suite de la même question. Le comparateur d'implantation note l'eau au
+     niveau NATIONAL, et il l'écrit lui-même — « la lecture nationale ÉCRASE les
+     contrastes ». La France y est en stress MODÉRÉ, ce qui recouvre à la fois
+     des bassins détendus et des bassins en crise. Ce bloc rend le contraste,
+     pour un seul pays et à une seule date, et il ne produit AUCUNE note : un
+     indice annuel d'exploitation et un état piézométrique instantané ne mesurent
+     pas la même chose. */
+  h += blocNappes();
 
   /* LES FAMILLES DE L'ÈRE IA, servies à part : elles ne décrivent aucun site du
      parc, et les mêler aux modes observés ferait lire de la prospective comme
      un relevé. */
   var hp = j.hors_parc || [];
   if(hp.length){
-    h += '<h4 style="font-size:12px;margin:16px 0 2px">Les familles que le parc ne '
-      + 'code pas encore</h4>'
+    var alerte = hp.filter(function(m){ return m.hors_modele; }).length;
+    h += '<details class="dpl eau-d"><summary>Les familles que le parc ne code pas encore'
+      + '<span class="dpl-i">' + hp.length + ' familles'
+      + (alerte ? ' · dont ' + alerte + ' où CE modèle est en défaut' : '')
+      + '</span></summary><div class="dpl-c">'
       + '<p class="note" style="margin:0 0 6px">'
       + esc(ref.familles_hors_parc_source || '') + '</p><div class="eau-hp">';
     hp.forEach(function(m){
@@ -4471,24 +4649,29 @@ function renderEauSource(j){
         + (m.points_ouverts || []).map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('')
         + '</ul></div>';
     });
-    h += '</div>';
+    h += '</div></div></details>';
   }
 
   /* Les faits de cadrage : ils situent, ils ne vérifient pas — d'où leur place
      après les repères et non parmi eux. */
   if((j.faits || []).length){
-    h += '<h4 style="font-size:12px;margin:16px 0 2px">Quelques ordres de grandeur '
-      + 'pour situer</h4><div class="eau-faits">';
+    h += '<details class="dpl eau-d"><summary>Quelques ordres de grandeur pour situer'
+      + '<span class="dpl-i">' + (j.faits || []).length + ' faits datés, avec leur éditeur'
+      + '</span></summary><div class="dpl-c"><div class="eau-faits">';
     (j.faits || []).forEach(function(f){
       /* `eau-ft` : `eau-f` est le SEGMENT de fourchette, en position absolue. */
       h += '<div class="eau-ft"><b>' + esc(f.valeur) + '</b><em>' + esc(f.quoi)
         + '</em><i>' + esc(f.portee) + ' <span>' + esc(f.editeur) + '</span></i></div>';
     });
-    h += '</div>';
+    h += '</div></div></details>';
   }
 
   /* Ce que la réglementation demande — et ce qu'elle ne demande pas. */
-  h += '<div class="eau-eed"><h4>' + esc(eed.titre) + '</h4>'
+  h += '<details class="dpl eau-d"><summary>Ce que la réglementation demande — et ce '
+    + 'qu’elle ne demande pas<span class="dpl-i">' + eed.exige.length + ' grandeurs à '
+    + 'déclarer chaque année · le WUE exigé est celui du SITE, l’eau de la source n’y est '
+    + 'pas</span></summary><div class="dpl-c">'
+    + '<div class="eau-eed"><h4>' + esc(eed.titre) + '</h4>'
     /* Le compte vient de la liste, jamais d'un mot écrit à la main : « Neuf »
        était en dur ici alors que le référentiel amont en énumère huit, et les
        deux sites annonçaient des nombres différents pour le même règlement.
@@ -4498,10 +4681,14 @@ function renderEauSource(j){
     + '<p class="note" style="margin:0">' + esc(eed.portee) + ' Chaque année, '
     + eed.exige.length + ' grandeurs sont à déclarer :</p><ol>'
     + eed.exige.map(function(x){ return "<li>" + esc(x) + "</li>"; }).join("")
-    + '</ol><p class="note" style="margin:6px 0 0">' + esc(eed.note) + '</p></div>';
+    + '</ol><p class="note" style="margin:6px 0 0">' + esc(eed.note) + '</p></div>'
+    + '</div></details>';
 
   /* Sources et natures : sans elles, ces chiffres ne sont pas opposables. */
-  h += '<p class="note" style="margin:12px 0 0"><b>Nature et sources.</b> '
+  h += '<details class="dpl eau-d"><summary>Nature, sources et limites'
+    + '<span class="dpl-i">incertitude ' + esc(ref.ewif_incertitude) + ' sur le terme amont · '
+    + (j.limites || []).length + ' limites assumées</span></summary><div class="dpl-c">'
+    + '<p class="note" style="margin:0"><b>Nature et sources.</b> '
     + 'Les facteurs eau de la production électrique (EWIF) portent la nature '
     + '<b>' + esc(ref.ewif_nature) + '</b> et une incertitude de <b>' + esc(ref.ewif_incertitude)
     + '</b> — supérieure à celle du terme de site. ' + esc(ref.ewif_source)
@@ -4514,9 +4701,41 @@ function renderEauSource(j){
     + '<p class="note" style="margin:6px 0 0">' + esc(j.avertissement) + '</p>'
     + '<ul class="note" style="margin:6px 0 0 18px">'
     + (j.limites || []).map(function(x){ return "<li>" + esc(x) + "</li>"; }).join("")
-    + '</ul></div>';
+    + '</ul></div></details>'
+
+    /* LES MOTS-CLÉS QUI MÈNENT AILLEURS. Cette section conclut sur une question
+       — « où implanter ? » — à laquelle elle ne répond pas. Le renvoi est
+       explicite plutôt que laissé au menu : un lecteur qui vient de comprendre
+       que l'eau amont domine doit pouvoir aller pondérer le critère eau tout de
+       suite, pas le retrouver de mémoire. */
+    + '<div class="eau-vers"><b>Où cela se décide.</b> '
+    + '<a href="/panorama#s-implantation">Comparateur pondéré d’implantation</a> — '
+    + 'régler le poids du critère <em>eau</em> et lire le paradoxe de l’évaporation · '
+    + '<a href="/enveloppe#s-finance">Enveloppe et DPGF</a> — ce que coûte le mode de '
+    + 'refroidissement retenu · '
+    + '<a href="https://conseilprevcyber.onrender.com/ingenierie-datacenter" target="_blank" '
+    + 'rel="noopener">Ingénierie de projet</a> — la séquence des pièces, phase par phase '
+    + '(accès abonné)</div>'
+    + '</div>';
 
   setHTML("eau-source", h);
+  /* Les infobulles et le lanceur de parcours n'existent que dans ce qu'on vient
+     d'écrire : il faut les brancher APRÈS, sur la racine concernée. */
+  if(typeof aideBrancher === "function") aideBrancher(document.getElementById("eau-source"));
+  var lien = document.querySelector('#eau-source [data-gp]');
+  if(lien && !lien.getAttribute("data-branche")){
+    lien.setAttribute("data-branche", "1");
+    lien.addEventListener("click", function(ev){
+      ev.preventDefault();
+      /* NE PAS LEVER SI LE PARCOURS N'EXISTE PAS. Un lien de pédagogie qui
+         casserait la page vaudrait moins que pas de lien du tout : on renvoie
+         alors au choix des parcours, qui, lui, existe toujours. */
+      var cle = this.getAttribute("data-gp");
+      if(typeof gpDemarrer === "function" && typeof GP_PROFILS !== "undefined"
+         && GP_PROFILS[cle]) gpDemarrer(cle);
+      else if(typeof gpOuvrirChoix === "function") gpOuvrirChoix();
+    });
+  }
 }
 
 /* Les notes de conception, montrées sous la fourchette du mode concerné : une
@@ -5633,6 +5852,66 @@ var AIDES = {
      + "Même chaîne de calcul que la page Empreinte du site.",
     pas: "Rien n’est mesuré. Sur un site suédois, la fabrication pèse plus lourd que l’usage — "
        + "une lecture qui n’afficherait que l’usage classerait la Suède à tort près de zéro.",
+  },
+  /* LES SIX TERMES QUI BLOQUENT LA LECTURE DE LA SECTION D'EAU. Chacun est un
+     mot que le lecteur croit connaître et dont le sens exact décide du
+     résultat — c'est précisément le cas où une infobulle vaut mieux qu'une
+     parenthèse : elle explique sans couper la phrase. */
+  wue: {
+    t: "WUE — Water Usage Effectiveness",
+    d: "Litres d’eau consommés sur le SITE par kilowattheure informatique produit. "
+     + "C’est l’indicateur que publient les exploitants et qu’exige le règlement "
+     + "délégué (UE) 2024/1364.",
+    pas: "Ce n’est PAS l’eau du bilan. Il ne compte que le site : un centre passé "
+       + "au refroidissement sec affiche un WUE nul tout en consommant DAVANTAGE "
+       + "d’eau en amont, puisqu’il consomme davantage d’électricité.",
+  },
+  ewif: {
+    t: "EWIF — l’eau qu’il faut pour produire un kilowattheure",
+    d: "Energy Water Intensity Factor : litres d’eau CONSOMMÉS par la production "
+     + "de l’électricité achetée. Les centrales thermiques et nucléaires en "
+     + "évaporent dans leurs tours aéroréfrigérantes ; l’éolien et le solaire "
+     + "quasiment pas. Le facteur dépend donc du mix du pays.",
+    pas: "Ce n’est pas une mesure de votre site : c’est un ordre de grandeur "
+       + "national, à ±40 %, qui varie davantage selon la technologie de "
+       + "refroidissement des CENTRALES que selon le mix lui-même.",
+  },
+  eau_consommee: {
+    t: "Eau consommée, eau prélevée : l’écart va jusqu’à un facteur dix",
+    d: "PRÉLEVÉE : ce qu’on retire au milieu. CONSOMMÉE : ce qu’on ne lui rend "
+     + "pas, parce qu’on l’a évaporée. Un circuit ouvert prélève énormément et "
+     + "ne consomme presque rien ; une tour évaporative fait l’inverse. Tout ce "
+     + "module raisonne en eau CONSOMMÉE.",
+    pas: "Les sources publiques confondent souvent les deux. Sur un parc "
+       + "nucléaire en circuit ouvert, l’écart atteint un facteur dix — c’est "
+       + "l’erreur la plus fréquente des dossiers d’implantation.",
+  },
+  adiabatique: {
+    t: "Refroidissement adiabatique",
+    d: "De fines gouttelettes d’eau sont pulvérisées dans l’air : en s’évaporant, "
+     + "elles absorbent la chaleur. Le procédé n’est sollicité qu’aux heures "
+     + "chaudes, ce qui donne un WUE annuel modeste.",
+    pas: "Cette moyenne annuelle masque des POINTES ESTIVALES, exactement au "
+       + "moment où la ressource est tendue. C’est la perte de son alimentation "
+       + "en eau — pas la chaleur — qui a mis un centre francilien en défaut le "
+       + "24 juin 2026.",
+  },
+  nappe: {
+    t: "Nappe phréatique, et niveau piézométrique",
+    d: "La nappe libre est la réserve d’eau souterraine la plus proche de la "
+     + "surface, celle qui alimente puits, sources et débits d’étiage. Son "
+     + "niveau se mesure dans des ouvrages de suivi — d’où le mot piézométrie.",
+    pas: "Un niveau seul ne dit rien sans sa DATE ni sa TENDANCE : les nappes se "
+       + "rechargent l’hiver et se vident l’été. Un relevé du 1er août est pris "
+       + "au creux de l’année ; c’est la tendance qui informe.",
+  },
+  foncier_dc: {
+    t: "Foncier identifié pour les centres de données",
+    d: "Régions où l’État français a annoncé, en février 2025, du foncier prêt "
+     + "pour l’implantation de centres de données bas carbone destinés à l’IA.",
+    pas: "Une intention publique n’est pas un permis, et elle ne dit RIEN de la "
+       + "ressource en eau sous la parcelle : c’est tout l’objet du croisement "
+       + "présenté ici.",
   },
   natures: {
     t: "Publié, site, classe",

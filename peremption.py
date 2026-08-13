@@ -136,6 +136,21 @@ FAMILLES = {
         "quoi_faire": "relire la synthèse à chaque parution d'un rapport majeur — "
                       "évaluation européenne des risques climatiques, PESETA, AR7",
     },
+    "nappes": {
+        "titre": "État des nappes phréatiques françaises",
+        # LA FAMILLE QUI VIEILLIT LE PLUS VITE DE TOUTES, avec les perspectives.
+        # Un état piézométrique est un INSTANTANÉ pris au creux de l'année : il
+        # ne décrit ni l'automne ni le printemps suivant. Trois mois est déjà
+        # généreux — c'est la cadence de publication des bulletins, pas la durée
+        # de validité d'une décision d'implantation.
+        "millesime": (2026, 8), "cadence_mois": 3, "vivant": False,
+        "module": "nappes_fr", "source": "SOURCE", "preuve": "1er août 2026",
+        "editeur": "BRGM",
+        "quoi_faire": "reprendre le bulletin de situation hydrologique à chaque "
+                      "parution. Un état d'août ne se prolonge PAS en octobre : "
+                      "la recharge d'automne le change, et son absence encore "
+                      "davantage",
+    },
     "perspectives": {
         "titre": "Annonces et jalons réglementaires 2026-2030",
         "millesime": (2026, 8), "cadence_mois": 3, "vivant": False,

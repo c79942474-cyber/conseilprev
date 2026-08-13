@@ -73,9 +73,17 @@ const VISIBLES = () => [].slice.call(document.querySelectorAll('section.panel[id
     { timeout: 60000 }).then(() => true).catch(() => false);
   ok('LES CHIFFRES DE L’EMPREINTE ARRIVENT', chiffres,
      chiffres ? '' : 'aucun indicateur dans #emp-kpis après 60 s');
-  const eau = await pg.waitForSelector('#eau-source .eau-conf', { timeout: 60000 })
-    .then(() => true).catch(() => false);
+  /* `state: 'attached'` ET NON la visibilité par défaut. La confrontation vit
+     désormais dans un dépliant REPLIÉ — c'est voulu, la section en compte neuf
+     et un seul s'ouvre. `waitForSelector` attend la visibilité par défaut :
+     il expirait donc sur un bloc parfaitement présent, et déclarait absent ce
+     qui était simplement fermé. */
+  const eau = await pg.waitForSelector('#eau-source .eau-conf',
+    { state: 'attached', timeout: 60000 }).then(() => true).catch(() => false);
   ok('le bilan d’eau et sa confrontation aux repères s’y rendent', eau);
+  const dep = await pg.evaluate(() =>
+    document.querySelectorAll('#eau-source details.eau-d').length);
+  ok('…et la section est bien réagencée en dépliants', dep >= 7, dep + ' dépliants');
   /* `[data-pays]` ET NON `tr` : le bloc se présente en TUILES par défaut, et en
      tableau seulement si le lecteur choisit « Tableau détaillé ». Compter les
      lignes ne voyait donc qu'une des deux présentations — et rendait zéro sur

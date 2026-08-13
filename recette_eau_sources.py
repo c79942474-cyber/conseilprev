@@ -265,5 +265,38 @@ ok("les invariants du comparateur passent", sante.get("ok") is True,
    str(sante.get("problemes"))[:120])
 
 
+# ── 7. UNE SEULE FABRIQUE DE CHARGE UTILE ─────────────────────────────────
+
+titre("7. La réponse d’empreinte n’a qu’UNE fabrique")
+
+# LE DÉFAUT QUE CE CONTRÔLE FIGE. La charge utile de /api/empreinte-sites était
+# construite à DEUX endroits : la route, et la tâche de rafraîchissement de
+# fond. La seconde en bâtissait une version plus PAUVRE — sans le bilan d’eau —
+# puis écrasait le cache avec. Toutes les trente minutes, la page recevait une
+# réponse amputée. Le bloc des nappes, lui, n’avait aucun rattrapage : il
+# disparaissait purement et simplement.
+#
+# POURQUOI CE CONTRÔLE EST STATIQUE ET NON DANS LE NAVIGATEUR. Il l’a d’abord
+# été : le résultat dépendait alors de l’instant où la tâche de fond passait, et
+# la recette restait verte une fois sur deux. Un contrôle au minutage ne prouve
+# rien. Ici on lit le code : deux constructions d’un même objet divergent
+# toujours, il ne doit y en avoir qu’une.
+with open("app.py", encoding="utf-8") as _f:
+    _src = _f.read()
+
+ok("la fabrique partagée existe", "def _empreinte_charge(" in _src)
+_n = _src.count("data['eau_complete'] = eau_dc.assemble")
+ok("le bilan d’eau n’est attaché qu’à UN endroit", _n == 1, "%d occurrence(s)" % _n)
+_n2 = _src.count("data['nappes_fr'] = nappes_fr.assemble")
+ok("l’état des nappes n’est attaché qu’à UN endroit", _n2 == 1, "%d occurrence(s)" % _n2)
+
+# La tâche de fond doit PASSER PAR la fabrique, et ne rien assembler elle-même.
+_i = _src.index("def _auto_rapide(")
+_bloc = _src[_i:_src.index("def ", _i + 10)]
+ok("la tâche de fond passe par la fabrique", "_empreinte_charge(" in _bloc)
+ok("…et n’assemble plus l’empreinte elle-même",
+   "empreinte_sites.assemble(" not in _bloc,
+   "elle rebâtit une charte à part — le cache sera écrasé par une version pauvre")
+
 print("\n" + ("%d contrôle(s) en échec" % len(KO) if KO else "tout est vert") + "\n")
 sys.exit(1 if KO else 0)

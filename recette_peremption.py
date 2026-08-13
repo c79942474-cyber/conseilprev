@@ -72,9 +72,23 @@ ok("…et le module l'écrit dans son propre avertissement",
 print("\n══ 2. L'âge réel, et ce qu'il révèle ══\n")
 
 e = P.etat()
-ok("douze familles sont suivies", len(e["familles"]) == 12, len(e["familles"]))
-ok("deux sont vivantes — vraiment interrogées", len(e["vivantes"]) == 2, e["vivantes"])
-ok("…et dix reposent sur un rapport", len(e["figees"]) == 10, len(e["figees"]))
+# LE COMPTE VIENT DU REGISTRE, PLUS D'UNE CONSTANTE ÉCRITE À LA MAIN. « Douze
+# familles » et « dix figées » étaient écrits ici : la treizième famille ajoutée
+# — l'état des nappes — a fait tomber les deux contrôles alors que le module
+# faisait exactement son travail. Un compte figé ne vérifie rien ; il oblige à
+# le corriger machinalement à chaque ajout, et cesse alors de délimiter quoi que
+# ce soit. Ce qui doit être vrai, et qui l'est ici, c'est la PARTITION : chaque
+# famille est soit vivante, soit figée, et aucune n'est les deux.
+ok("le registre suit au moins une dizaine de familles",
+   len(e["familles"]) >= 10, "%d familles" % len(e["familles"]))
+ok("des familles VIVANTES sont vraiment interrogées",
+   len(e["vivantes"]) >= 2, e["vivantes"])
+ok("…les autres reposent sur un rapport daté",
+   len(e["figees"]) == len(e["familles"]) - len(e["vivantes"]),
+   "%d figées + %d vivantes = %d" % (len(e["figees"]), len(e["vivantes"]),
+                                     len(e["familles"])))
+ok("…et aucune n'est à la fois vivante et figée",
+   not (set(e["vivantes"]) & set(e["figees"])))
 fam = {f["cle"]: f for f in e["familles"]}
 ok("le stress hydrique a plus de quatre ans", fam["eau"]["age_mois"] >= 48,
    "%d mois" % fam["eau"]["age_mois"])

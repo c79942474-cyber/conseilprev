@@ -1578,6 +1578,39 @@ def _emps_live(force=False):
     return dict(_EMPS_LIVE_CACHE['val'])
 
 
+def _empreinte_charge(live):
+    """LA charge utile de l'empreinte — UNE fabrique, deux appelants.
+
+    POURQUOI ELLE EXISTE. Cette charge etait construite a DEUX endroits : ici,
+    pour la route, et dans la tache de rafraichissement de fond. La seconde en
+    batissait une version plus PAUVRE — sans le bilan d'eau — puis ecrasait le
+    cache avec. Toutes les trente minutes, la page recevait donc une reponse
+    amputee, et il fallait une requete de rattrapage pour retrouver l'eau. Le
+    commentaire de la page attribuait cela a « une reponse anterieure a l'ajout
+    du bilan », c'est-a-dire a une fenetre de redeploiement : c'etait faux, le
+    phenomene se reproduisait indefiniment. Un second bloc ajoute — l'etat des
+    nappes — n'avait, lui, aucun rattrapage : il disparaissait tout court.
+
+    Deux constructions d'un meme objet divergent toujours. Il n'y en a plus
+    qu'une, et les deux appelants la partagent.
+    """
+    _dc = datacentres.assemble()
+    _pan = panorama_ia.assemble()
+    data = empreinte_sites.assemble(sites=_dc.get('sites'), cas=_pan.get('cas'),
+                                    live=live)
+    # Le bilan eau COMPLET voyage avec l'empreinte plutot que par une route a
+    # lui : il decrit le meme parc, s'affiche dans la meme section, et l'appel
+    # separe ajoutait une requete par page a un chargement qui en compte deja
+    # une dizaine — assez pour approcher le plafond de 120 requetes par minute
+    # et par IP. Une route dediee reste exposee pour les exports.
+    data['eau_complete'] = eau_dc.assemble(sites=_dc.get('sites'))
+    # L'ETAT DES NAPPES suit le meme chemin. C'est le CONTRASTE DE BASSINS que
+    # la note nationale du comparateur ecrase — il se lit a cote du volume,
+    # jamais dedans.
+    data['nappes_fr'] = nappes_fr.assemble()
+    return data
+
+
 @app.route('/api/empreinte-sites', methods=['GET'])
 @rate_limit(limit=60, window=60)
 @reserve_abonne_api
@@ -1591,17 +1624,7 @@ def api_empreinte_sites():
         payload["cached"] = True
         return jsonify(payload)
     try:
-        _dc = datacentres.assemble()
-        _pan = panorama_ia.assemble()
-        data = empreinte_sites.assemble(sites=_dc.get('sites'), cas=_pan.get('cas'),
-                                        live=_emps_live())
-        # Le bilan eau COMPLET voyage avec l'empreinte plutot que par une route
-        # a lui. Il decrit le meme parc, s'affiche dans la meme section, et
-        # l'appel separe ajoutait une requete par page a un chargement qui en
-        # compte deja une dizaine — assez pour approcher le plafond global de
-        # 120 requetes par minute et par IP. Une route dediee reste exposee
-        # pour les exports et l'interrogation directe.
-        data['eau_complete'] = eau_dc.assemble(sites=_dc.get('sites'))
+        data = _empreinte_charge(_emps_live())
     except Exception as e:
         logger.error(f'EMPREINTE_SITES_ERR: {e}')
         return jsonify({"ok": False, "erreur": "assemblage indisponible"}), 503
@@ -2134,6 +2157,7 @@ def api_finance_dc_devis():
 
 
 import eau_dc  # noqa: E402  — l'eau de la source, absente du WUE publie
+import nappes_fr  # noqa: E402  — le contraste de bassins que le WEI+ national ecrase
 
 
 @app.route('/api/eau-dc', methods=['GET'])
@@ -10127,9 +10151,10 @@ def _auto_rapide():
         _auto_note('rapide', 'intensites', False, e)
         live = {}
     try:
-        _dc = datacentres.assemble()
-        _pan = panorama_ia.assemble()
-        data = empreinte_sites.assemble(sites=_dc.get('sites'), cas=_pan.get('cas'), live=live)
+        # LA MEME FABRIQUE QUE LA ROUTE, et c'est tout l'objet de la correction :
+        # cette tache batissait ici une charge plus pauvre, puis ecrasait le
+        # cache avec — toutes les trente minutes.
+        data = _empreinte_charge(live)
         _EMPS_CACHE['ts'], _EMPS_CACHE['data'] = time.time(), data
         _auto_note('rapide', 'empreinte', True,
                    f"{(data.get('totaux') or {}).get('n_centres', 0)} centres")
