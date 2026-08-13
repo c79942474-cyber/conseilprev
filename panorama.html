@@ -1027,6 +1027,93 @@ th .ttip{margin-left:5px}
 .imp-pour li,.imp-contre li{margin:3px 0;line-height:1.5}
 .imp-comm{font-size:12px;background:var(--bg);border-left:3px solid #1C5CAB;
   border-radius:0 3px 3px 0;padding:8px 12px;margin:8px 0}
+/* ══ LE FIL CONDUCTEUR DE L'ENVELOPPE ═══════════════════════════════════════ */
+.fin-fil{margin:0 0 16px;padding:11px 13px;background:var(--bg);
+  border:1px solid var(--rule);border-radius:8px}
+.fin-fil-t{font-size:11.5px;line-height:1.55;display:flex;gap:10px;
+  align-items:baseline;flex-wrap:wrap}
+.fin-fil-t b{font-size:12px}
+.fin-fil-g{margin-left:auto;font-family:var(--mono);font-size:10.5px;
+  padding:4px 10px;border:1px solid var(--ink);border-radius:14px;
+  background:var(--white);color:var(--ink);cursor:pointer;white-space:nowrap}
+.fin-fil-g:hover{background:var(--ink);color:var(--white)}
+.fin-fil-g[aria-pressed="true"]{background:var(--ink);color:var(--white)}
+.fin-fil-l{list-style:none;margin:10px 0 0;padding:0;display:flex;
+  gap:4px;align-items:stretch;flex-wrap:wrap}
+.fin-e{flex:1 1 190px;min-width:0}
+.fin-e button{all:unset;box-sizing:border-box;display:flex;gap:8px;width:100%;
+  height:100%;cursor:pointer;padding:8px 10px;border-radius:6px;
+  border:1px solid var(--rule);background:var(--white)}
+.fin-e button:hover{border-color:var(--ink)}
+.fin-e button:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+.fin-e-n{flex:0 0 auto;width:20px;height:20px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:11px;background:var(--rule);color:var(--ink)}
+.fin-e-c{min-width:0}
+.fin-e-c b{display:block;font-size:11.5px;line-height:1.35}
+.fin-e-c i{display:block;font-style:normal;font-size:10.5px;color:var(--muted);
+  line-height:1.4;margin-top:2px}
+/* FAIT ≠ VALIDÉ. Le vert dit « ce bloc a produit quelque chose », jamais « ce
+   choix est bon » — le module ne juge aucun choix. */
+.fin-e.fait .fin-e-n{background:var(--green);color:#fff}
+.fin-e.cours button{border-color:var(--blue);border-width:2px;padding:7px 9px}
+.fin-e.cours .fin-e-n{background:var(--blue);color:#fff}
+.fin-e.reste .fin-e-c b{color:var(--muted)}
+.fin-e-fl{flex:0 0 auto;align-self:center;color:var(--muted2);font-size:13px;
+  padding:0 1px}
+@media(max-width:860px){ .fin-e-fl{display:none} .fin-e{flex:1 1 100%} }
+
+/* LES FLÈCHES ENTRE BLOCS. Elles portent un texte : une flèche muette occupe
+   la place sans rien apprendre. */
+.fin-fleche{display:grid;grid-template-columns:26px 1fr;gap:10px;
+  align-items:start;margin:18px 0;padding:9px 12px 9px 6px;
+  border-left:3px solid var(--blue);background:var(--bg);border-radius:0 6px 6px 0}
+.fin-fl-a{font-size:19px;line-height:1;color:var(--blue);text-align:center}
+.fin-fl-t{font-size:11.5px;line-height:1.55}
+
+/* LES DEUX PONTS, CÔTE À CÔTE. */
+.fin-ponts{margin:14px 0 0}
+.fin-pt-t{font-size:11.5px;line-height:1.55;margin-bottom:8px}
+.fin-pt-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));
+  gap:10px}
+.fin-pt{border:1px solid var(--rule);border-top:3px solid var(--blue);
+  border-radius:0 0 7px 7px;padding:10px 12px;background:var(--white);
+  font-size:11.5px;line-height:1.5}
+.fin-pt-n{display:block;font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.fin-pt > b{display:block;font-size:12.5px;margin:2px 0 4px}
+.fin-pt p{margin:4px 0 0}
+.fin-pt-non{color:var(--muted);border-left:2px solid var(--rule);padding-left:8px}
+.fin-pt-b{all:unset;display:inline-block;margin-top:8px;cursor:pointer;
+  font-family:var(--mono);font-size:10.5px;padding:5px 11px;border-radius:14px;
+  background:var(--ink);color:var(--white)}
+.fin-pt-b:hover{background:#000}
+.fin-pt-b:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+/* ══ LA DÉSIGNATION DE L'ÉTAPE COURANTE ═════════════════════════════════════
+   UNE PULSATION, PAS UN CLIGNOTEMENT. Le besoin est juste : l'œil doit trouver
+   l'étape sans la chercher. Mais un clignotement franc capte l'attention en
+   continu, fatigue à la lecture, et au-delà de trois éclats par seconde il
+   devient un risque pour les personnes photosensibles. Ici : un halo qui enfle
+   et retombe, 1,6 s par cycle — soit 0,6 éclat par seconde —, DEUX cycles, puis
+   plus rien. Le texte ne bouge ni ne disparaît à aucun moment : seul le halo
+   respire, ce qui laisse lire pendant la pulsation. */
+@keyframes fin-pulse{
+  0%   {box-shadow:0 0 0 0 rgba(30,99,168,.55); border-color:var(--blue)}
+  60%  {box-shadow:0 0 0 12px rgba(30,99,168,0); border-color:var(--blue)}
+  100% {box-shadow:0 0 0 0 rgba(30,99,168,0)}
+}
+.fin-vise{position:relative;border-radius:8px;
+  animation:fin-pulse 1.6s ease-out 2;outline:2px solid var(--blue);
+  outline-offset:3px}
+/* ET LA VARIANTE IMMOBILE, qui n'est pas une privation : le cadre reste plus
+   longtemps, et désigne aussi bien. Ne rien afficher du tout aurait puni ceux
+   qui demandent moins d'animation. */
+.fin-vise-fixe{outline:3px solid var(--blue);outline-offset:3px;border-radius:8px}
+@media (prefers-reduced-motion: reduce){
+  .fin-vise{animation:none;outline:3px solid var(--blue)}
+}
+
 /* LE PARADOXE, sous les curseurs. Ambré et non rouge : ce n'est pas une panne,
    c'est une tension à arbitrer — et elle est permanente. */
 .imp-paradoxe{margin:10px 0 0;padding:9px 12px;background:#FDF6E9;
@@ -2270,6 +2357,26 @@ engagements publics) sont imputés nominativement.</div>
     <span class="panel-note" id="fin-note">réglez, puis calculez</span>
   </div>
   <div class="panel-body">
+    <!-- ══ LE FIL CONDUCTEUR ══════════════════════════════════════════════
+         POURQUOI IL MANQUAIT. Cette section enchaîne six blocs qui se lisent
+         DANS UN ORDRE — on règle, on calcule, on lit le dossier du pays, on
+         chiffre la maîtrise d'œuvre, on lit la création de valeur, on poursuit
+         sur le site d'ingénierie. Rien ne le disait : les blocs se suivaient
+         sans transition, et un lecteur arrivé au milieu ne pouvait pas savoir
+         ce qu'il avait sauté ni pourquoi le bloc devant lui répondait « calculez
+         d'abord l'enveloppe ».
+
+         CE QU'IL FAIT, ET CE QU'IL NE FAIT PAS. Il indique où l'on en est, il
+         mène au bloc voulu, et il marque ce qui est FAIT — pas ce qui est
+         « validé ». Aucune étape n'est obligatoire et aucune ne bloque la
+         suivante : le fil oriente, il n'enferme pas.
+
+         L'ÉTAT EST DÉDUIT DE LA PAGE, JAMAIS TENU À PART. Une barre d'étapes
+         qui garderait sa propre idée de l'avancement se désynchroniserait au
+         premier recalcul, et afficherait « fait » devant un bloc vide. -->
+    <div class="fin-fil" id="fin-fil" role="navigation"
+         aria-label="Les six étapes de la décision d’enveloppe"></div>
+
     <div class="fin-bandeau"><b>D’où vient le coût au mégawatt, et ce qu’il ne dit pas.</b>
     Il provient d’un relevé publié — <b>Soben, part of Accenture, Data Centre Trends Report
     2026</b> : « cloud data centres currently cost between $8 million and $10 million per MW,
@@ -2383,6 +2490,16 @@ engagements publics) sont imputés nominativement.</div>
          la baisse du montant en décochant une phase conseillerait de les
          décocher toutes. Chaque phase écartée dit donc ce qu'elle produisait
          et quel risque elle couvrait. -->
+    <!-- LA FLÈCHE DIT CE QU'ON EMPORTE. Une flèche qui ne porterait qu'un
+         chevron ne ferait qu'occuper la place ; celle-ci nomme ce que le bloc
+         précédent vient de produire et ce que le suivant va en faire. C'est la
+         seule forme de flèche qui informe. -->
+    <div class="fin-fleche" data-vers="etape-moe"><span class="fin-fl-a">↓</span>
+      <span class="fin-fl-t"><b>Vous avez une enveloppe et un pays retenu.</b>
+      Le bloc suivant en tire le <b>montant des travaux</b> et la <b>part du lot
+      technique</b> — les deux seules grandeurs dont dépendent les honoraires de
+      maîtrise d’œuvre.</span></div>
+
     <div class="moe-bloc" id="moe-bloc">
       <p class="kpi-t">Honoraires de maîtrise d’œuvre — par mission et par phase</p>
       <p class="kpi-d">Choisissez les <b>phases</b> que vous confiez et les <b>missions</b> que
@@ -2421,6 +2538,11 @@ engagements publics) sont imputés nominativement.</div>
       <div class="kpi-out" id="moe-out"></div>
     </div>
 
+    <div class="fin-fleche" data-vers="etape-kpi"><span class="fin-fl-a">↓</span>
+      <span class="fin-fl-t"><b>Vous avez un investissement et un coût d’exploitation.</b>
+      Le bloc suivant les confronte au <b>capital employé</b> : un projet peut être
+      le moins cher et rester destructeur de valeur, et c’est là que cela se voit.</span></div>
+
     <div class="kpi-bloc" id="kpi-bloc">
       <p class="kpi-t">Création de valeur — EVA, ROCE, free cash flow</p>
       <p class="kpi-d">L’enveloppe dit ce que le projet <b>coûte</b>. Ces trois indicateurs
@@ -2447,6 +2569,14 @@ engagements publics) sont imputés nominativement.</div>
          C'EST LE CLIENT QUI DÉCIDE. Le lien est FABRIQUÉ et MONTRÉ, jamais
          suivi : on affiche ce qu'il porte et ce qu'il ne porte pas, puis on
          laisse la main. -->
+    <div class="fin-fleche" data-vers="etape-pont"><span class="fin-fl-a">↓</span>
+      <span class="fin-fl-t"><b>La décision est chiffrée ; elle n’est pas instruite.</b>
+      Ce qui suit part sur le <b>site d’ingénierie</b> : le bilan énergie-eau-carbone
+      d’un côté, la séquence des pièces et le prix de la maîtrise d’œuvre de l’autre.
+      Deux chemins, deux contenus — ils sont nommés ci-dessous.</span></div>
+
+    <div class="fin-ponts" id="fin-ponts"></div>
+
     <div class="pont-dc" id="pont-fin">
       <p class="pont-t">Poursuivre sur l’étude de durabilité</p>
       <p class="pont-d">Le bilan énergie, eau et carbone et la trajectoire de décarbonation
@@ -2809,6 +2939,25 @@ function vueAppliquer(){
 if(document.readyState === "loading")
   document.addEventListener("DOMContentLoaded", vueAppliquer);
 else vueAppliquer();
+
+/* CE BLOC ÉTAIT POSÉ ENTRE LE `if` CI-DESSUS ET SON `else`, qu'il orphelinait :
+   « SyntaxError: Unexpected token 'else' », et TOUT le script de la page
+   s'arrêtait là — pas seulement le fil. Un point d'insertion choisi sur deux
+   lignes de contexte peut tomber au milieu d'une instruction ; celui-ci est
+   désormais après l'instruction entière.
+
+   Le fil conducteur et les deux ponts se posent avec la page. Ils ne dépendent
+   d'aucune donnée serveur : ce sont des repères de lecture, ils doivent être là
+   AVANT que le lecteur n'ait rien calculé — c'est même là qu'ils servent le
+   plus. Le fil se recalcule ensuite à chaque avancée. */
+function finFilAmorcer(){
+  if(typeof finFil !== "function") return;
+  if(!document.getElementById("fin-fil")) return;
+  finFil(); finFilBrancher(); finPonts();
+}
+if(document.readyState === "loading")
+  document.addEventListener("DOMContentLoaded", finFilAmorcer);
+else finFilAmorcer();
 
 /* ══════════════════════════════════════════════════════════════════════════
    GÉOGRAPHIE — tracés déjà prêts, calculés hors du navigateur
@@ -4360,6 +4509,219 @@ function eauNb(n){
   if(n >= 1e6) return fr(Math.round(n / 1e5) / 10) + " M";
   if(n >= 1e3) return fr(Math.round(n / 1e2) / 10) + " k";
   return fr(Math.round(n));
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LE FIL CONDUCTEUR DE L'ENVELOPPE — six étapes, et un mode pas à pas
+
+   CE QU'IL RÉSOUT. La section enchaîne six blocs qui se lisent dans un ordre,
+   et rien ne le disait. Un lecteur arrivé au milieu tombait sur « Calculez
+   d'abord l'enveloppe ci-dessus » sans savoir où était ce « ci-dessus » ni ce
+   qu'il avait manqué.
+
+   L'ÉTAT SE DÉDUIT DE LA PAGE, IL NE SE STOCKE PAS. Une barre d'avancement qui
+   tiendrait sa propre comptabilité se désynchroniserait au premier recalcul et
+   afficherait « fait » devant un bloc vidé. On regarde donc le DOM à chaque
+   événement : un dossier présent, un chiffrage rendu, un lien créé.
+
+   SUR LA PULSATION, ET POURQUOI CE N'EST PAS UN CLIGNOTEMENT. Le besoin est
+   juste : il faut que l'œil trouve l'étape courante sans la chercher. Mais un
+   clignotement franc — allumé/éteint — est une gêne connue : il capte
+   l'attention en permanence, fatigue à la lecture, et au-delà de trois éclats
+   par seconde il devient un risque pour les personnes photosensibles. Ce qui
+   est posé ici est une PULSATION : un halo qui enfle et retombe deux fois,
+   lentement, puis s'arrête de lui-même. Elle s'interrompt dès que le lecteur
+   agit, et elle est REMPLACÉE PAR UN CADRE FIXE — pas simplement supprimée —
+   si le système déclare préférer les animations réduites. L'étape reste alors
+   désignée aussi clairement, sans mouvement.
+   ══════════════════════════════════════════════════════════════════════════ */
+var FIN_ETAPES = [
+  { cle: "regler", n: 1, nom: "Régler le projet", cible: "fin-form",
+    quoi: "Puissance, gabarit, scénario, calendrier — et les critères d’ingénierie "
+        + "sous « Aller plus loin ».",
+    fait: function(){ var e = document.getElementById("fin-mw");
+                      return !!(e && parseFloat(e.value) > 0); } },
+  { cle: "pays", n: 2, nom: "Choisir les pays", cible: "fin-pays",
+    quoi: "De deux à six pays comparés. En dessous de deux, il n’y a rien à comparer.",
+    fait: function(){ return document.querySelectorAll("#fin-pays button[data-p].on").length >= 2; } },
+  { cle: "calculer", n: 3, nom: "Calculer l’enveloppe", cible: "fin-go",
+    quoi: "L’enveloppe en fourchette, la DPGF par lot, le coût total et l’échéancier.",
+    fait: function(){ return document.querySelectorAll("#fin-res .fin-dos").length > 0; } },
+  { cle: "moe", n: 4, nom: "Chiffrer la maîtrise d’œuvre", cible: "moe-bloc",
+    quoi: "Les honoraires, phase par phase et mission par mission, sur le montant "
+        + "des travaux du pays retenu.",
+    fait: function(){ return !!document.querySelector("#moe-out .moe-tab"); } },
+  { cle: "kpi", n: 5, nom: "Lire la création de valeur", cible: "kpi-bloc",
+    quoi: "EVA, ROCE, free cash flow : le projet le moins cher n’est pas toujours "
+        + "celui qui crée de la valeur.",
+    fait: function(){ return !!document.querySelector("#kpi-out table, #kpi-out .kpi-c"); } },
+  { cle: "pont", n: 6, nom: "Poursuivre sur l’ingénierie", cible: "fin-ponts",
+    quoi: "Le bilan énergie-eau-carbone, ou la séquence des pièces et le prix de "
+        + "la maîtrise d’œuvre — sur le site d’ingénierie.",
+    /* « FAIT » VEUT DIRE : UN LIEN A ÉTÉ CRÉÉ. Écrit d'abord comme la présence
+       d'un lien dans `#fin-ponts`, ce test comptait le renvoi STATIQUE qu'on
+       vient d'y poser — l'étape s'affichait donc faite avant que le lecteur
+       n'ait rien fait, dès le chargement. Une barre d'avancement qui coche une
+       étape que personne n'a franchie détruit la confiance dans toutes les
+       autres. Seule la sortie du pont, qui n'existe qu'après un clic, en
+       témoigne. */
+    fait: function(){ return !!document.querySelector("#pont-fin .pont-out a"); } },
+];
+
+/* Le pas courant : la PREMIÈRE étape non faite. Rien de plus — une position
+   calculée ne peut pas mentir sur l'avancement, alors qu'un compteur gardé à
+   part le peut. */
+function finPasCourant(){
+  for(var i = 0; i < FIN_ETAPES.length; i++){
+    try { if(!FIN_ETAPES[i].fait()) return i; } catch(e){ return i; }
+  }
+  return FIN_ETAPES.length - 1;
+}
+
+var FIN_GUIDE = false;      /* le mode pas à pas est-il enclenché ? */
+
+function finFil(){
+  var el = document.getElementById("fin-fil");
+  if(!el) return;
+  var cur = finPasCourant();
+  var h = '<div class="fin-fil-t"><b>Les six étapes de la décision.</b> '
+    + 'Chacune mène à son bloc. Aucune n’est obligatoire, aucune ne bloque la '
+    + 'suivante : le fil oriente, il n’enferme pas.'
+    + '<button type="button" class="fin-fil-g" id="fin-fil-g" aria-pressed="'
+    + (FIN_GUIDE ? 'true' : 'false') + '">'
+    + (FIN_GUIDE ? '⏸ Arrêter le guidage' : '▶ Guidez-moi pas à pas') + '</button></div>'
+    + '<ol class="fin-fil-l">';
+  FIN_ETAPES.forEach(function(e, i){
+    var fait = false;
+    try { fait = !!e.fait(); } catch(err){ fait = false; }
+    var etat = fait ? "fait" : (i === cur ? "cours" : "reste");
+    h += '<li class="fin-e ' + etat + '">'
+      + '<button type="button" data-fin-etape="' + e.cle + '">'
+      + '<span class="fin-e-n">' + (fait ? "✓" : e.n) + '</span>'
+      + '<span class="fin-e-c"><b>' + esc(e.nom) + '</b>'
+      + '<i>' + esc(e.quoi) + '</i></span></button></li>';
+    if(i < FIN_ETAPES.length - 1) h += '<li class="fin-e-fl" aria-hidden="true">→</li>';
+  });
+  el.innerHTML = h + '</ol>';
+}
+
+/* Mener à une étape : on y va, et on la DÉSIGNE. Le défilement seul ne suffit
+   pas — sur un écran haut, le bloc visé arrive au milieu d'autres blocs et rien
+   ne dit lequel on vient de demander. */
+function finAller(cle){
+  var e = null;
+  FIN_ETAPES.forEach(function(x){ if(x.cle === cle) e = x; });
+  if(!e) return;
+  var cib = document.getElementById(e.cible);
+  if(!cib) return;
+  cib.scrollIntoView({ block: "center",
+    behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? "auto" : "smooth" });
+  finDesigner(cib);
+}
+
+/* LA DÉSIGNATION. Deux formes, et le choix ne nous appartient pas : il revient
+   au réglage système du lecteur.
+     — par défaut, une pulsation lente, DEUX cycles, puis plus rien ;
+     — si les animations réduites sont demandées, un cadre fixe qui reste huit
+       secondes. Aussi visible, immobile.
+   Dans les deux cas la marque disparaît d'elle-même : une mise en évidence
+   permanente cesse d'en être une. */
+var FIN_MARQUE = null;
+function finDesigner(el){
+  if(FIN_MARQUE){ FIN_MARQUE.el.classList.remove("fin-vise", "fin-vise-fixe");
+                  clearTimeout(FIN_MARQUE.t); FIN_MARQUE = null; }
+  var reduit = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var cls = reduit ? "fin-vise-fixe" : "fin-vise";
+  el.classList.add(cls);
+  var t = setTimeout(function(){ el.classList.remove(cls); FIN_MARQUE = null; },
+                     reduit ? 8000 : 3200);
+  FIN_MARQUE = { el: el, t: t, cls: cls };
+}
+
+/* Le mode pas à pas : on désigne l'étape courante, et on la redésigne à chaque
+   fois que la page avance. Il s'arrête tout seul à la dernière étape — un
+   guidage qui tournerait en boucle finirait par être ignoré. */
+function finGuidePas(){
+  if(!FIN_GUIDE) return;
+  var e = FIN_ETAPES[finPasCourant()];
+  if(!e) return;
+  var cib = document.getElementById(e.cible);
+  if(cib) finDesigner(cib);
+}
+
+function finFilBrancher(){
+  var el = document.getElementById("fin-fil");
+  if(!el || el.getAttribute("data-pret")) return;
+  el.setAttribute("data-pret", "1");
+  el.addEventListener("click", function(ev){
+    var b = ev.target.closest("[data-fin-etape]");
+    if(b){ finAller(b.getAttribute("data-fin-etape")); return; }
+    if(ev.target.closest("#fin-fil-g")){
+      FIN_GUIDE = !FIN_GUIDE;
+      finFil();
+      if(FIN_GUIDE) finGuidePas();
+      else if(FIN_MARQUE){ FIN_MARQUE.el.classList.remove(FIN_MARQUE.cls);
+                           clearTimeout(FIN_MARQUE.t); FIN_MARQUE = null; }
+    }
+  });
+  /* TOUTE ACTION DU LECTEUR INTERROMPT LA MARQUE. Une pulsation qui
+     continuerait pendant qu'il remplit un champ deviendrait une gêne, et c'est
+     exactement le reproche qu'on fait au clignotement. */
+  document.addEventListener("pointerdown", function(){
+    if(FIN_MARQUE){ FIN_MARQUE.el.classList.remove(FIN_MARQUE.cls);
+                    clearTimeout(FIN_MARQUE.t); FIN_MARQUE = null; }
+  }, true);
+  /* La page avance : le fil se recalcule, et le guidage suit. */
+  ["fin-calcul", "fin-pays"].forEach(function(ev){
+    document.addEventListener(ev, function(){ finFil(); finGuidePas(); });
+  });
+  document.addEventListener("click", function(ev){
+    if(ev.target.closest("#fin-go, #moe-go, #kpi-go, [data-pont-go]"))
+      setTimeout(function(){ finFil(); finGuidePas(); }, 900);
+  });
+}
+
+/* LES DEUX PONTS VERS LE SITE D'INGÉNIERIE, CÔTE À CÔTE ET NOMMÉS.
+
+   POURQUOI ILS ÉTAIENT CONFONDUS. Deux liens partent d'ici vers l'autre site,
+   et ils n'emportent pas la même chose : l'un porte le profil de l'installation
+   vers l'étude de durabilité, l'autre porte l'assiette de travaux vers le
+   chiffrage de maîtrise d'œuvre. Le premier ne transporte AUCUN montant, le
+   second en transporte un et le dit. Présentés l'un sous l'autre sans être
+   nommés, ils se lisaient comme un seul renvoi — et le lecteur ne savait pas
+   lequel des deux répondait à sa question.
+
+   CHAQUE PONT DIT CE QU'IL N'EMPORTE PAS. C'est la moitié qui compte : un lien
+   inter-sites qui annoncerait seulement ce qu'il transmet laisserait supposer
+   qu'il transmet tout. */
+function finPonts(){
+  var el = document.getElementById("fin-ponts");
+  if(!el || el.getAttribute("data-pret")) return;
+  el.setAttribute("data-pret", "1");
+  el.innerHTML =
+      '<div class="fin-pt-t"><b>Deux chemins vers le site d’ingénierie, et ils ne '
+    + 'portent pas la même chose.</b> Choisissez selon la question qui vous reste.</div>'
+    + '<div class="fin-pt-g">'
+    + '<div class="fin-pt"><span class="fin-pt-n">Poursuivre l’instruction</span>'
+    + '<b>Bilan énergie, eau et carbone</b>'
+    + '<p>Le profil de l’installation — puissance, gabarit, refroidissement, pays — '
+    + 'part vers l’étude de durabilité, qui calcule le PUE, l’eau et le carbone, puis '
+    + 'la trajectoire de décarbonation.</p>'
+    + '<p class="fin-pt-non"><b>Ce lien n’emporte AUCUN montant.</b> Ni enveloppe, ni '
+    + 'coût unitaire, ni prix d’électricité : une adresse se copie et se journalise.</p>'
+    + '<button type="button" class="fin-pt-b" data-fin-etape="pont">Le lien est '
+    + 'ci-dessous ↓</button></div>'
+    + '<div class="fin-pt"><span class="fin-pt-n">Chiffrer l’ingénierie</span>'
+    + '<b>Prix de la maîtrise d’œuvre, phase par phase</b>'
+    + '<p>Le <b>montant des travaux</b> et la <b>part du lot technique</b> du pays '
+    + 'retenu partent vers la section 6 de la page d’ingénierie de projet, où ils '
+    + 'pré-remplissent le calcul — <b>le même barème des deux côtés</b>.</p>'
+    + '<p class="fin-pt-non"><b>Ce lien-là, lui, porte une assiette de travaux</b> — '
+    + 'et il le dit sur la page d’arrivée. Accès abonné.</p>'
+    + '<a class="fin-pt-b" href="https://conseilprevcyber.onrender.com/ingenierie-datacenter#ig-moe" '
+    + 'target="_blank" rel="noopener">Ouvrir l’ingénierie de projet →</a></div>'
+    + '</div>';
 }
 
 /* L'ÉTAT DES NAPPES FRANÇAISES, ET LE FONCIER ANNONCÉ DESSUS.
