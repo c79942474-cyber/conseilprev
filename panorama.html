@@ -2617,10 +2617,22 @@ if(/[?&]embed=1(&|$)/.test(window.location.search)){document.body.classList.add(
    `VUES[v].forEach` levait une exception sur un objet qui n'était pas celui
    attendu. Rien ne le signalait à la lecture du diff — les deux blocs sont à
    huit cents lignes l'un de l'autre. */
+/* TROIS VUES DÉSORMAIS. L'empreinte suit l'enveloppe hors du panorama, et pour
+   la même raison : c'est une étude à part entière — cycle de vie, eau de site,
+   eau de la source, confrontation aux repères publiés — qui obligeait à faire
+   défiler quatre blocs pour l'atteindre. Le procédé ne change pas d'un iota :
+   un seul document, une section par vue, et la vérification au chargement.
+
+   L'ADRESSE EST `/empreinte-parc` ET NON `/empreinte`. Cette dernière est déjà
+   prise, par la page où un client calcule SA propre empreinte numérique. Deux
+   études d'empreinte qui se disputeraient la même adresse ne se seraient pas
+   signalées : l'une aurait simplement cessé de répondre. Le suffixe dit ce que
+   celle-ci mesure — le PARC cartographié, pas le visiteur. */
 var MODULE_VUES = {
-  panorama: ["s-carte", "s-signaux", "s-cas", "s-lectures", "s-empreinte",
+  panorama: ["s-carte", "s-signaux", "s-cas", "s-lectures",
              "s-implantation", "s-prospect", "s-methodo", "s-socle", "s-sources"],
-  enveloppe: ["s-finance"]
+  enveloppe: ["s-finance"],
+  empreinte: ["s-empreinte"]
 };
 /* LES PANNEAUX DE DÉTAIL NE SONT D'AUCUNE VUE, et il ne faut surtout pas y
    toucher : ils arrivent `hidden` et s'ouvrent au clic sur un pays ou un site.
@@ -2634,12 +2646,32 @@ var MODULE_VUE = (function(){
   /* L'adresse dédiée vaut déclaration de vue : un lien partagé vers
      /enveloppe doit ouvrir l'étude, pas le panorama entier. */
   if(/\/enveloppe(\.html)?$/.test(window.location.pathname)) return "enveloppe";
+  if(/\/empreinte-parc(\.html)?$/.test(window.location.pathname)) return "empreinte";
   return "panorama";
 })();
 function vueContient(sect){ return MODULE_VUES[MODULE_VUE].indexOf(sect) >= 0; }
 /* Une étape de parcours sans section (une question, un choix de scénario)
    appartient à toutes les vues : elle ne désigne aucun bloc. */
 function vueMontre(et){ return !et || !et.sect || vueContient(et.sect); }
+
+/* OÙ REVENIR EN FERMANT UNE FICHE DE PAYS OU DE SITE.
+
+   Les deux panneaux de détail n'appartiennent à aucune vue — on les ouvre
+   depuis la CARTE dans le panorama, et depuis le TABLEAU PAR PAYS dans
+   l'empreinte. Leur fermeture ramenait, en dur, à `#s-empreinte`. Tant que
+   cette section vivait dans le panorama, c'était juste dans les deux cas.
+   Depuis qu'elle en sort, fermer une fiche depuis la carte renverrait vers un
+   bloc RETIRÉ de la page : le défilement ne se produit pas, l'adresse porte une
+   ancre morte, et le lecteur reste où il est sans comprendre pourquoi. La panne
+   est silencieuse — rien ne lève, rien ne s'affiche.
+
+   On revient donc au premier bloc de la vue COURANTE qui puisse accueillir le
+   regard : celui d'où l'on vient. */
+function sectionRetour(){
+  var pref = ["s-empreinte", "s-carte", "s-implantation", "s-finance"];
+  for(var i = 0; i < pref.length; i++) if(vueContient(pref[i])) return pref[i];
+  return MODULE_VUES[MODULE_VUE][0] || null;
+}
 
 function vueAppliquer(){
   var toutes = [].slice.call(document.querySelectorAll("section.panel[id]"))
@@ -7270,9 +7302,12 @@ function fermerPays(sansAncre){
   var sec = document.getElementById("s-pays");
   if(sec) sec.hidden = true;
   if(!sansAncre){
-    if(history.replaceState) history.replaceState(null, "", "#s-empreinte");
-    var e = document.getElementById("s-empreinte");
-    if(e) e.scrollIntoView({ block: "start" });
+    var r = sectionRetour();
+    if(r){
+      if(history.replaceState) history.replaceState(null, "", "#" + r);
+      var e = document.getElementById(r);
+      if(e) e.scrollIntoView({ block: "start" });
+    }
   }
 }
 
@@ -9079,9 +9114,12 @@ function fermerSite(){
   if(sec) sec.hidden = true;
   if(RETOUR_PAYS){ var c = RETOUR_PAYS; RETOUR_PAYS = null; ouvrirPays(c); }
   else {
-    if(history.replaceState) history.replaceState(null, "", "#s-empreinte");
-    var e = document.getElementById("s-empreinte");
-    if(e) e.scrollIntoView({ block: "start" });
+    var r = sectionRetour();
+    if(r){
+      if(history.replaceState) history.replaceState(null, "", "#" + r);
+      var e = document.getElementById(r);
+      if(e) e.scrollIntoView({ block: "start" });
+    }
   }
 }
 

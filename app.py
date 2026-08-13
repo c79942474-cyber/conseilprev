@@ -4608,6 +4608,16 @@ PAGES_RESERVEES = {
     # l'export des figures ; c'est toujours l'exemplaire qu'on oublie de
     # corriger qui reste en ligne. Le document choisit sa vue d'apres l'adresse.
     '/enveloppe':     'panorama.html',
+    # L'EMPREINTE DU PARC SUIT LE MEME CHEMIN, pour la meme raison : c'est une
+    # etude a part entiere — cycle de vie, eau de site, eau de la source,
+    # confrontation aux reperes publies — qu'il fallait atteindre en faisant
+    # defiler quatre blocs.
+    #
+    # « -parc » N'EST PAS DECORATIF. L'adresse /empreinte est deja prise, par la
+    # page ou un client calcule SA propre empreinte numerique. Deux etudes
+    # d'empreinte sur la meme adresse ne se seraient pas signalees : l'une
+    # aurait cesse de repondre, et le tableau des pages ne le dit pas.
+    '/empreinte-parc': 'panorama.html',
 }
 
 # De quel fichier vient quelle adresse. Le cache de pages ne connait que le nom

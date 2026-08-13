@@ -189,14 +189,28 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
      filtre.sections.every(s => s === 's-finance'),
      filtre.sections.join(', ') || 'aucune section visée');
 
-  titre('4. Rien n’est perdu entre les deux vues');
+  titre('4. Rien n’est perdu entre les vues');
 
   /* s-pays et s-site sont des panneaux de DÉTAIL : ils arrivent masqués et
      s'ouvrent au clic. Ils n'appartiennent à aucune vue, et c'est voulu — les
-     compter comme perdus reviendrait à exiger qu'ils soient dépliés d'office. */
+     compter comme perdus reviendrait à exiger qu'ils soient dépliés d'office.
+
+     LA COUVERTURE EST LUE DANS LE MODULE, PLUS DÉDUITE DE DEUX VISITES. Ce
+     contrôle réunissait les sections vues sur /panorama et sur /enveloppe, et
+     concluait que tout ce qui n'y figurait pas était perdu. Il a donc accusé la
+     section d'empreinte le jour où elle est passée dans une TROISIÈME vue,
+     qu'aucune des deux visites ne traversait — un vrai KO sur un site correct,
+     ce qui est la pire sorte : on cherche le défaut là où il n'est pas, et on
+     finit par débrancher le contrôle. La liste des vues appartient au module ;
+     on la lui demande. */
   const DETAIL = ['s-pays', 's-site'];
+  const declarees = await pg.evaluate(() => {
+    const out = {};
+    Object.keys(MODULE_VUES).forEach(v => MODULE_VUES[v].forEach(s => { out[s] = v; }));
+    return out;
+  });
   const total = new Set([...p.visibles, ...p.masquees].filter(s => !DETAIL.includes(s)));
-  const couvert = new Set([...p.visibles, ...e.visibles]);
+  const couvert = new Set(Object.keys(declarees));
   const perdues = [...total].filter(s => !couvert.has(s));
   ok('chaque section du document appartient à une vue', perdues.length === 0,
      perdues.join(', ') || total.size + ' section(s) réparties');

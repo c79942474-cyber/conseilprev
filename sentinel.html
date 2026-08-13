@@ -2449,6 +2449,16 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
          obligeait à faire défiler huit blocs pour atteindre le seul qui décide
          d'un GO ou d'un NO GO. -->
     <div class="sb-item" onclick="go('enveloppe',this,'ÉVALUER LE RISQUE','Enveloppe d’investissement — décision GO / NO GO')" title="Enveloppe d investissement, DPGF par lot, comparaison entre pays sur le cout total de possession, et lecture de creation de valeur : EVA, ROCE, free cash flow."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2v20"/><path d="M17 6.5c0-1.9-2.2-3-5-3s-5 1.1-5 3 2.2 2.7 5 3.2 5 1.3 5 3.3-2.2 3-5 3-5-1.1-5-3"/></svg></span>Enveloppe d’investissement</div>
+    <!-- L'EMPREINTE DU PARC, JUSTE SOUS L'ENVELOPPE. L'ordre du menu suit celui
+         de la décision : on situe le terrain (panorama), on chiffre (enveloppe),
+         on mesure ce que cela pèse (empreinte). Elle sort du panorama pour la
+         même raison que l'enveloppe — c'est une étude entière, avec l'eau de
+         site, l'eau de la source et la confrontation aux repères publiés, qu'il
+         fallait atteindre en faisant défiler quatre blocs.
+         L'identifiant est « empreinte-parc » : « empreinte » désigne déjà le
+         module où un client calcule SA propre empreinte numérique, et deux
+         modules de même nom se seraient écrasés en silence. -->
+    <div class="sb-item" onclick="go('empreinte-parc',this,'ÉVALUER LE RISQUE','Empreinte environnementale du parc')" title="Cycle de vie du parc cartographie : electricite, CO2e par pays, fabrication amortie, eau de refroidissement et eau consommee en amont pour produire l electricite."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 21c-4-2.5-6-5.5-6-9a6 6 0 0 1 12 0c0 3.5-2 6.5-6 9z"/><path d="M12 21V9"/><path d="M12 13l3-3M12 15l-3-3"/></svg></span>Empreinte environnementale</div>
     <div class="sb-item" onclick="go('audit-ia-act',this,'ÉVALUER LE RISQUE','Audit IA Act')" title="Audit de conformite EU AI Act structure - 33 points de controle, Reglement (UE) 2024/1689."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M21 12a9 9 0 1 1-9-9"/></svg></span>Audit IA Act</div>
     <div class="sb-item" onclick="go('matrice',this,'ÉVALUER LE RISQUE','Matrice risques')" title="Positionnement de vos systemes IA selon probabilite de non-conformite et impact potentiel."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 3v18h18"/><circle cx="9" cy="15" r="1.6"/><circle cx="15" cy="9" r="1.6"/><circle cx="18" cy="6" r="1.6"/><circle cx="7" cy="18" r="1.6"/></svg></span>Matrice risques</div>
     <div class="sb-item" onclick="go('radar',this,'ÉVALUER LE RISQUE','Radar multi-critères')" title="Visualisation hexagonale de votre posture de conformite sur 6 dimensions reglementaires."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg></span>Radar des risques</div>
@@ -2665,6 +2675,23 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="mod-skel" id="skel-enveloppe-iframe">Chargement de l’étude d’enveloppe…</div><iframe id="enveloppe-iframe" data-src="/enveloppe?embed=1" style="width:100%;height:1600px;border:none;display:block" title="Enveloppe d'investissement, DPGF et décision GO / NO GO"></iframe>
   </div>
 </div>
+
+<div class="page page-large" id="p-empreinte-parc">
+  <span class="eyebrow">Panorama · mesure</span>
+  <h1 class="page-h">Empreinte environnementale du <em>parc cartographié</em></h1>
+  <p class="page-lead">Ce que pèse réellement le parc recensé, sur tout le cycle de vie :
+  l’électricité consommée, le CO₂e que cette électricité représente <b>dans son pays</b>, la
+  fabrication des équipements amortie sur leur durée de vie, et l’eau. L’eau à deux titres, et
+  c’est le cœur du module : celle du <b>refroidissement</b>, que les exploitants publient et que
+  le règlement exige — et celle de la <b>source</b>, consommée en amont pour produire
+  l’électricité achetée, que le WUE ne compte pas et qui pèse, sur les parcs nationaux où les
+  deux termes sont publiés, <b>huit à douze fois</b> davantage. Rien n’y est mesuré : tout est
+  calculé, formule affichée, avec la nature de chaque estimation — et le calcul est
+  <b>confronté aux repères publiés</b>, y compris quand la confrontation ne l’avantage pas.</p>
+  <div style="margin-bottom:24px;border:1px solid var(--rule);border-radius:4px;overflow:hidden;background:var(--white)">
+    <div class="mod-skel" id="skel-empreinte-parc-iframe">Chargement de l’étude d’empreinte…</div><iframe id="empreinte-parc-iframe" data-src="/empreinte-parc?embed=1" style="width:100%;height:1600px;border:none;display:block" title="Empreinte environnementale du parc cartographié — cycle de vie, eau de site et eau de la source"></iframe>
+  </div>
+</div>
 <script>
 /* ── Prechargement des modules cartographiques ────────────────────────────
    Ces iframes portaient loading="lazy" DANS UN CONTENEUR MASQUE : le
@@ -2687,9 +2714,10 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     f.setAttribute('src', src);
   }
   var MODULES = [
-    {id:'pan-sia-iframe',   nav:"'pan-sia'"},
-    {id:'enveloppe-iframe', nav:"'enveloppe'"},
-    {id:'obs-rd-iframe',    nav:"'obs-rd'"}
+    {id:'pan-sia-iframe',        nav:"'pan-sia'"},
+    {id:'enveloppe-iframe',      nav:"'enveloppe'"},
+    {id:'empreinte-parc-iframe', nav:"'empreinte-parc'"},
+    {id:'obs-rd-iframe',         nav:"'obs-rd'"}
   ];
   function survol(){
     MODULES.forEach(function(m){
@@ -2725,7 +2753,10 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
    ses 1600 px de depart. On reconnait l'emetteur par sa fenetre, qui ne se
    confond pas — comme l'ecouteur principal plus haut. */
 (function(){
-  var SUIVIS = ['pan-sia-iframe', 'enveloppe-iframe'];
+  /* Un cadre de plus a chaque module qui sert ce document : l'empreinte du
+     parc annonce elle aussi « pan-height ». Un identifiant oublie ici laisse
+     le cadre bloque a ses 1600 px de depart, sans erreur. */
+  var SUIVIS = ['pan-sia-iframe', 'enveloppe-iframe', 'empreinte-parc-iframe'];
   window.addEventListener('message', function(ev){
     var d = ev && ev.data;
     if(!d || d.type !== 'pan-height') return;
@@ -2772,7 +2803,8 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
      Router sur le type ferait redimensionner le panorama par la hauteur de
      l'enveloppe, et le second cadre resterait bloque a sa hauteur de depart.
      On identifie l'emetteur par son contentWindow, qui ne se confond pas. */
-  var CADRES_TOUS = ['obs-rd-iframe', 'pan-sia-iframe', 'enveloppe-iframe'];
+  var CADRES_TOUS = ['obs-rd-iframe', 'pan-sia-iframe', 'enveloppe-iframe',
+                     'empreinte-parc-iframe'];
   function cadreDe(source){
     for(var i = 0; i < CADRES_TOUS.length; i++){
       var f = document.getElementById(CADRES_TOUS[i]);
@@ -7738,6 +7770,7 @@ function juReferentiel(){
 var PAGE_META = {
     'pan-sia': { section: 'ÉVALUER LE RISQUE', label: 'Panorama IA & centres de données — UE' },
     'enveloppe': { section: 'ÉVALUER LE RISQUE', label: 'Enveloppe d\'investissement — décision GO / NO GO' },
+    'empreinte-parc': { section: 'ÉVALUER LE RISQUE', label: 'Empreinte environnementale du parc cartographié' },
     'obs-rd': { section: 'SE TENIR INFORMÉ', label: 'Observatoire R&D IA' },
     'juridique': { section: 'JURIDIQUE', label: 'Conseil juridique assisté' },
     'empreinte': { section: 'EMPREINTE', label: 'Empreinte numérique' },
