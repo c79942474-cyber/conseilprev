@@ -68,7 +68,14 @@ const MESURE = `(el) => {
   pg.on('pageerror', e => err.push(String(e)));
 
   await pg.goto(BASE + '/auth/' + TOKEN, { waitUntil: 'commit' });
-  await pg.goto(BASE + '/panorama', { waitUntil: 'domcontentloaded' });
+  /* L'ADRESSE A CHANGÉ, ET CETTE RECETTE A FAILLI LE MANQUER. Le bilan d'eau
+     vit dans la section d'empreinte, et l'empreinte est devenue un module à
+     part : cette recette continuait d'ouvrir /panorama, où la section n'est
+     plus. C'est la panne exacte que ce dépôt a déjà rencontrée deux fois en
+     déplaçant un module — et elle l'a DITE cette fois, au lieu d'expirer sur un
+     « Timeout » qu'on aurait pris pour une panne d'outil. C'est tout l'intérêt
+     d'un échec nommé. */
+  await pg.goto(BASE + '/empreinte-parc', { waitUntil: 'domcontentloaded' });
 
   titre('1. Le modèle confronté aux repères publiés');
 
@@ -148,12 +155,30 @@ const MESURE = `(el) => {
   ok('le DLC, lui, affiche bien ses bornes', !!dlc && /WUE de site/.test(dlc.texte));
   ok('…et dit que la chaleur reste à évacuer', !!dlc && /DÉPLACE/i.test(dlc.texte));
 
+  /* LES MESURES DE CONTRASTE SE FONT SUR LA PAGE OÙ VIT LA CIBLE. Depuis que
+     l'empreinte et le comparateur sont deux modules, une seule passe de mesure
+     rendrait « introuvable » pour la moitié des cibles — un faux échec, qui est
+     la pire sorte : il fait chercher un défaut absent, puis débrancher le
+     contrôle. On mesure donc l'eau ICI, avant de changer de page. */
+  const mesEau = await pg.evaluate((f) => {
+    const m = eval('(' + f + ')');
+    return [
+      ['pastille de tension', '#eau-source .eau-tn'],
+      ['avertissement du circuit ouvert', '#eau-source .eau-hm'],
+      ['maturité d’une famille', '#eau-source .eau-mat'],
+      ['éditeur d’un repère', '#eau-source .eau-rp i'],
+      ['fait de cadrage', '#eau-source .eau-ft i'],
+      ['éditeur d’un fait', '#eau-source .eau-ft i span'],
+    ].map(([nom, sel]) => {
+      const el = document.querySelector(sel);
+      return { nom: nom, trouve: !!el, ratio: el ? m(el) : null };
+    });
+  }, MESURE);
+
   titre('4. Le comparateur : le paradoxe et le droit du sol');
 
-  await pg.evaluate(() => {
-    const b = document.querySelector('[data-vue="implantation"], #t-imp');
-    if (b) b.click();
-  });
+  /* Le comparateur, lui, est resté dans le panorama : on change de page. */
+  await pg.goto(BASE + '/panorama', { waitUntil: 'domcontentloaded' });
   const par = await pg.waitForSelector('.imp-paradoxe', { timeout: 45000 })
     .then(() => true).catch(() => false);
   ok('le paradoxe de l’évaporation est posé SOUS les curseurs', par);
@@ -182,15 +207,9 @@ const MESURE = `(el) => {
 
   titre('5. Tout cela se lit');
 
-  const mes = await pg.evaluate((f) => {
+  const mesImp = await pg.evaluate((f) => {
     const m = eval('(' + f + ')');
     const cibles = [
-      ['pastille de tension', '#eau-source .eau-tn'],
-      ['avertissement du circuit ouvert', '#eau-source .eau-hm'],
-      ['maturité d’une famille', '#eau-source .eau-mat'],
-      ['éditeur d’un repère', '#eau-source .eau-rp i'],
-      ['fait de cadrage', '#eau-source .eau-ft i'],
-      ['éditeur d’un fait', '#eau-source .eau-ft i span'],
       ['paradoxe', '.imp-paradoxe p'],
       ['sortie du paradoxe', '.imp-paradoxe .imp-sortie'],
       ['étiquette du cadre juridique', '.imp-cadre-2 em'],
@@ -200,6 +219,7 @@ const MESURE = `(el) => {
       return { nom: nom, trouve: !!el, ratio: el ? m(el) : null };
     });
   }, MESURE);
+  const mes = mesEau.concat(mesImp);
   mes.forEach(x => {
     /* 4,5:1 est le seuil AA du texte courant ; 3:1 celui du texte large et des
        éléments d'interface. On applique le plus strict — ces textes sont petits. */
@@ -210,6 +230,9 @@ const MESURE = `(el) => {
   /* La bordure des cartes d'indicateurs : `var(--rule2)` n'existe pas dans les
      jetons de cette page, et une propriété personnalisée non définie SANS repli
      rend la déclaration invalide — la bordure disparaît sans erreur. */
+  await pg.goto(BASE + '/empreinte-parc', { waitUntil: 'domcontentloaded' });
+  await pg.waitForSelector('#eau-source .eau-k', { timeout: 60000 })
+    .then(() => true).catch(() => false);
   const bord = await pg.evaluate(() => {
     const el = document.querySelector('#eau-source .eau-k');
     if (!el) return null;

@@ -1032,6 +1032,45 @@ th .ttip{margin-left:5px}
 .imp-paradoxe p{margin:4px 0 0}
 .imp-paradoxe .imp-sortie{color:var(--muted)}
 
+/* LE POINT DE CONCEPTION. Encadré comme le paradoxe, en rouge cette fois : le
+   paradoxe est une tension à arbitrer, ceci est un constat de défaillance. */
+.imp-conc{margin:10px 0 0;padding:10px 13px;background:var(--white);
+  border:1px solid var(--rule);border-left:3px solid var(--accent);
+  border-radius:0 5px 5px 0;font-size:11.5px;line-height:1.55}
+.imp-conc > b{display:block;font-size:12px;margin-bottom:4px}
+.imp-conc p{margin:5px 0 0}
+.imp-conc-k{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;
+  align-items:baseline;margin:6px 0;padding:7px 10px;background:var(--bg);
+  border-radius:5px}
+.imp-conc-k em{grid-row:1/3;font-style:normal;font-size:24px;font-weight:700;
+  font-variant-numeric:tabular-nums;line-height:1}
+.imp-conc-k span{font-weight:600}
+.imp-conc-k i{font-style:normal;color:var(--muted)}
+.imp-conc-p{border-left:2px solid var(--green);padding-left:9px}
+.imp-conc-p .imp-src{display:block;font-family:var(--mono);font-size:9.5px;
+  color:var(--muted)}
+.imp-inc{margin:8px 0 0}
+.imp-inc > em,.imp-conc-q > em{display:block;font-style:normal;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--muted);margin:8px 0 3px}
+.imp-i{padding:5px 0;border-top:1px solid var(--rule)}
+.imp-i b{font-size:11px}
+.imp-i p{margin:1px 0 0}
+.imp-i-m{color:var(--muted)}
+.imp-conc-q ul{margin:2px 0 0 17px;padding:0}
+.imp-conc-q li{margin:2px 0}
+.imp-conc-cj{margin-top:8px;padding-top:7px;border-top:1px solid var(--rule)}
+
+/* LE DRAPEAU DE CONJONCTION, sur la fiche du pays. Il ne peut pas ressembler à
+   une note : il n'en est pas une, et le dire en toutes lettres ne suffirait pas
+   si la forme le contredisait. */
+.imp-conj{margin:8px 0 0;padding:9px 12px;background:#FBEDEB;
+  border-left:3px solid var(--accent);border-radius:0 5px 5px 0;
+  font-size:11.5px;line-height:1.5}
+.imp-conj > b{display:block;font-size:12px;margin-bottom:3px}
+.imp-conj p{margin:4px 0 0}
+.imp-conj-m{color:var(--muted)}
+
 /* LE CADRE JURIDIQUE, dans la fiche du pays. Deux colonnes parce que le texte
    fait DEUX choses en sens contraire, et qu'un résumé qui n'en garderait qu'une
    serait faux dans les deux cas. */
@@ -6208,7 +6247,13 @@ function renderImplantation(){
           + esc(IMPL.paradoxe_evaporation.constat) + '</p>'
           + '<p>' + esc(IMPL.paradoxe_evaporation.consequence) + '</p>'
           + '<p class="imp-sortie">' + esc(IMPL.paradoxe_evaporation.sortie) + '</p>'
-          + '</div>' : "");
+          + '</div>' : "")
+      /* LE POINT DE CONCEPTION, sous les curseurs lui aussi. Aucun des seize
+         critères ne dit si le refroidissement TIENDRA : celui de climat mesure
+         une opportunité, pas une résilience. C'est ici, au moment de pondérer,
+         que la nuance décide — et elle est adossée à des défaillances datées,
+         sans quoi elle se lirait comme une précaution d'ingénieur. */
+      + implConception();
     pond.querySelectorAll("input[type=range]").forEach(function(r){
       r.addEventListener("input", function(){
         IMPL_POIDS[this.getAttribute("data-critere")] = +this.value;
@@ -6694,6 +6739,75 @@ function implCadre(code){
     + '</div>';
 }
 
+/* LE POINT DE CONCEPTION, ET CE QUI EST RÉELLEMENT TOMBÉ.
+
+   Les deux vont ensemble et ne se séparent pas : une prescription sans
+   défaillance en face se lit comme une précaution d'ingénieur et se pondère à
+   zéro ; des défaillances sans le chiffre qui les explique restent des faits
+   divers. Le chiffre est la période de retour — un seuil supposé franchi une
+   fois tous les deux cents ans, et franchi deux fois en quatre ans. */
+function implConception(){
+  var c = IMPL && IMPL.conception;
+  if(!c) return "";
+  var p = c.prescription || {};
+  var h = '<div class="imp-conc"><b>' + esc(c.titre) + '</b>'
+    + '<div class="imp-conc-k"><em>' + fr(c.temperature_projet_c) + ' °C</em>'
+    + '<span>température extérieure de projet</span>'
+    + '<i>supposée dépassée <b>une fois tous les 200 ans</b> — hypothèse tirée '
+    + 'de moyennes historiques</i></div>'
+    + '<p>' + esc(c.contradiction) + '</p>'
+    + '<p class="imp-conc-p"><b>Ce qu’il faut rattraper :</b> ' + esc(p.texte)
+    + ' <span class="imp-src">' + esc(p.editeur) + '</span></p>'
+    + '<p>' + esc(c.aggravant) + '</p>';
+  var inc = IMPL.incidents || [];
+  if(inc.length){
+    h += '<div class="imp-inc"><em>Ce qui est tombé, et par quel mécanisme</em>';
+    inc.forEach(function(x){
+      h += '<div class="imp-i"><b>' + esc(x.quand) + ' · ' + esc(x.ou) + '</b>'
+        + '<p>' + esc(x.quoi) + '</p><p class="imp-i-m">' + esc(x.mecanisme)
+        + '</p></div>';
+    });
+    h += '</div>';
+  }
+  h += '<div class="imp-conc-q"><em>À demander au concepteur</em><ul>'
+    + (c.ce_qu_il_faut_demander || []).map(function(q){
+        return '<li>' + esc(q) + '</li>'; }).join('')
+    + '</ul></div>';
+  var cj = (IMPL.conjonctions || {}).chaleur_eau;
+  if(cj){
+    var n = (IMPL.conjonction_pays || []).length;
+    h += '<p class="imp-conc-cj"><b>' + esc(cj.contre_intuitif) + '</b> '
+      + esc(IMPL.regle_conjonction || '') + ' À l’horizon affiché, <b>' + n
+      + ' pays</b> réunissent cette conjonction'
+      + (n ? ' : ' + esc((IMPL.conjonction_pays || []).join(' · ')) : '')
+      + '. Le signalement figure sur leur fiche, jamais dans leur note.</p>';
+  }
+  return h + '</div>';
+}
+
+/* LA CONJONCTION, SUR LA FICHE DU PAYS.
+
+   Elle n'entre dans aucune note, et c'est délibéré : un score pondéré ADDITIONNE,
+   or une conjonction n'est pas une somme. Deux critères peuvent être bons
+   séparément et fatals ensemble — c'est exactement ce qui est arrivé à Pantin le
+   24 juin, où l'adiabatique n'a pas cédé à la chaleur mais à la perte de son
+   alimentation en eau. La noter reviendrait par-dessus le marché à compter une
+   troisième fois l'eau et le climat, ce que ce module s'interdit ailleurs.
+
+   Elle est donc POSÉE À CÔTÉ du score, avec son motif — un drapeau sans sa
+   raison est une accusation, pas une information, et il finit ignoré. */
+function implConjonction(x){
+  var c = x && x.conjonction;
+  if(!c || !c.connu || !c.signale) return "";
+  var d = (IMPL.conjonctions || {}).chaleur_eau || {};
+  return '<div class="imp-conj"><b>⚠ ' + esc(d.titre || "Conjonction chaleur × eau")
+    + '</b><p>' + esc(c.motif) + '</p>'
+    + (d.mecanisme ? '<p class="imp-conj-m">' + esc(d.mecanisme) + '</p>' : "")
+    + '<p class="note" style="margin:4px 0 0">Ce signalement <b>n’entre dans '
+    + 'aucune note</b> : un score pondéré additionne, une conjonction ne '
+    + 's’additionne pas. Il se lit à côté du classement, jamais dedans.</p></div>';
+}
+
 function renderImplAvis(){
   var el = document.getElementById("imp-avis");
   if(!el || !IMPL) return;
@@ -6739,6 +6853,7 @@ function renderImplAvis(){
       + "</div>"
       + '<div class="imp-comm"><b>Commentaire :</b> ' + esc(x.avis.comm) + "</div>"
       + implAleasBloc(x)
+      + implConjonction(x)
       + implCadre(x.pays)
       + persp
       + '<button type="button" class="gp-btn" onclick="ouvrirPays(\'' + x.pays

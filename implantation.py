@@ -151,6 +151,224 @@ CADRE_IMPLANTATION = {
         "nature": "referentiel",
     },
 }
+# ═══════════════════════════════════════════════════════════════════════════
+#  LE POINT DE CONCEPTION, ET POURQUOI IL EST DÉJÀ PÉRIMÉ
+#
+#  CE QUE LE COMPARATEUR NE DISAIT PAS. Seize critères décrivent le
+#  kilowattheure, l'eau, le prix, le climat, les aléas — et pas un seul ne dit
+#  si le refroidissement TIENDRA le jour le plus chaud. Le critère « climat »
+#  mesure une OPPORTUNITÉ (combien d'heures de free cooling on gagne), jamais
+#  une RÉSILIENCE (à partir de quand la machine s'arrête). Ce sont deux
+#  questions opposées, et l'été 2026 a montré laquelle décide.
+#
+#  LE CHIFFRE QUI FAIT TOUT. La norme de conception des centres de données
+#  retient une température extérieure de projet allant jusqu'à 37,7 °C, établie
+#  sur des MOYENNES HISTORIQUES qui supposent ce seuil dépassé une fois tous les
+#  DEUX CENTS ANS. Cette hypothèse n'est pas prudente : elle est fausse au regard
+#  des projections climatiques, et elle est inscrite dans le dimensionnement de
+#  tout le parc existant. Un ouvrage conçu sur l'observé d'hier n'est pas
+#  sous-dimensionné par négligence — il l'est par construction.
+#
+#  ET LA PUISSANCE A AUGMENTÉ PENDANT CE TEMPS. Les charges d'IA produisent
+#  bien plus de chaleur à surface égale : le besoin de refroidissement monte
+#  pendant que la marge de conception descend. Les deux courbes vont l'une vers
+#  l'autre.
+# ═══════════════════════════════════════════════════════════════════════════
+
+CONCEPTION = {
+    "titre": "Le point de conception du refroidissement, et son écart au climat qui vient",
+    "temperature_projet_c": 37.7,
+    "hypothese": "Norme de conception des centres de données : température "
+                 "extérieure de projet jusqu’à 37,7 °C, établie sur des moyennes "
+                 "historiques supposant ce seuil dépassé une fois tous les deux "
+                 "cents ans en moyenne.",
+    "contradiction": "Cette période de retour est en décalage complet avec les "
+                     "projections climatiques. Le dimensionnement du parc "
+                     "existant repose donc sur un climat qui n’est plus celui "
+                     "dans lequel il fonctionne.",
+    "prescription": {
+        "moyenne_pct": 11,
+        "sites_contraints_pct": 48,
+        "texte": "Accroître la capacité de refroidissement de 11 % en moyenne, "
+                 "et jusqu’à 48 % pour les sites les plus exposés aux "
+                 "contraintes.",
+        "editeur": "travaux de recherche Google sur la conception des centres de "
+                   "données face au climat projeté",
+    },
+    "aggravant": "À surface égale, les charges d’IA dissipent bien davantage : "
+                 "le besoin de refroidissement monte pendant que la marge de "
+                 "conception descend.",
+    "ce_qu_il_faut_demander": [
+        "Sur quelle SÉRIE le refroidissement a-t-il été dimensionné — normales "
+        "observées, ou projections ? La réponse « normales » suffit à connaître "
+        "la marge : aucune.",
+        "Quelle température extérieure de projet, et quelle période de retour "
+        "retenue pour son dépassement ?",
+        "Que se passe-t-il AU-DELÀ du point de projet : dégradation progressive, "
+        "délestage de charge, ou arrêt ?",
+        "La capacité a-t-elle été majorée depuis, et de combien ? Un ouvrage "
+        "conçu avant cette question ne l’a pas été.",
+    ],
+    "nature": "referentiel",
+}
+
+# ── CE QUI EST RÉELLEMENT TOMBÉ, ET PAR QUEL MÉCANISME ─────────────────────
+#
+# POURQUOI UN REGISTRE DE CONSTATS. Une prescription sans défaillance en face se
+# lit comme une précaution d'ingénieur, et se pondère à zéro. Ces entrées sont
+# datées, situées, et portent leur MÉCANISME — c'est le mécanisme qui instruit,
+# pas le fait divers. Celui de Pantin, en particulier, ne se déduit d'aucun
+# critère de ce comparateur pris isolément.
+INCIDENTS = [
+    {"quand": "24 juin 2026", "ou": "Pantin (Seine-Saint-Denis), France",
+     "quoi": "Incident de refroidissement sur un centre de données en exploitation",
+     "mecanisme": "PERTE D’ALIMENTATION EN EAU du système de refroidissement "
+                  "adiabatique. Ce n’est pas la chaleur qui a mis l’installation "
+                  "en défaut : c’est l’eau qui a manqué, le jour où l’adiabatique "
+                  "en avait le plus besoin.",
+     "enseigne": "conjonction"},
+    {"quand": "été 2026", "ou": "Rennes, France",
+     "quoi": "Arrêt annoncé des opérations d’un site",
+     "mecanisme": "« Températures historiques » rendant « impossible de maintenir "
+                  "les conditions environnementales requises pour réaliser ses "
+                  "opérations de façon sûre ». La décision d’arrêt précède la "
+                  "panne : on s’arrête pour ne pas casser.",
+     "enseigne": "marge"},
+    {"quand": "juillet 2022", "ou": "Royaume-Uni, région londonienne",
+     "quoi": "Défaillance du refroidissement de deux grands centres de données "
+             "hospitaliers ; systèmes d’information de plusieurs hôpitaux "
+             "paralysés. Perturbations signalées par plusieurs grands "
+             "fournisseurs de services dans la même zone.",
+     "mecanisme": "Vague de chaleur au-delà du point de projet, dans un climat "
+                  "tempéré océanique — c’est-à-dire là où le dimensionnement "
+                  "supposait des étés doux.",
+     "enseigne": "marge"},
+    {"quand": "été 2026", "ou": "France (réseau électrique)",
+     "quoi": "Trois réacteurs nucléaires arrêtés ; défaillances de "
+             "transformateurs privant de courant 119 000 foyers dans le "
+             "Finistère, 27 000 dans les Yvelines, 1 400 à Nantes.",
+     "mecanisme": "La canicule atteint le centre de données par un SECOND chemin, "
+                  "l’alimentation. Le secours est assuré par groupes "
+                  "électrogènes, le plus souvent au fioul : la réponse à la "
+                  "défaillance climatique est carbonée.",
+     "enseigne": "secours"},
+    {"quand": "constat rapporté", "ou": "Pays-Bas",
+     "quoi": "Consommation d’eau réelle d’un centre de données QUATRE FOIS "
+             "supérieure à la prévision déposée.",
+     "mecanisme": "L’écart ne vient pas d’un dérapage d’exploitation mais de "
+                  "l’HYPOTHÈSE : une prévision d’eau bâtie sur un climat moyen "
+                  "ne décrit pas la consommation d’un été réel.",
+     "enseigne": "marge"},
+]
+SOURCE_INCIDENTS = {
+    "titre": "Défaillances constatées de refroidissement et d’alimentation",
+    "nature": "constat",
+    "note": "Faits publiés, repris pour leur MÉCANISME. Cette liste n’est pas un "
+            "inventaire : elle retient les cas dont on connaît la cause, qui sont "
+            "les seuls à instruire une décision d’implantation.",
+}
+
+# ── LES DEUX CONJONCTIONS QU'AUCUN CRITÈRE NE PEUT VOIR SEUL ───────────────
+#
+# LA DIFFÉRENCE AVEC `ALEA_RECOUVREMENTS`, ET POURQUOI IL FALLAIT UN SECOND
+# MÉCANISME. Les recouvrements disent : « ces deux critères mesurent en partie la
+# MÊME chose, ne les pondérez pas fort tous les deux ». Ici c'est l'inverse :
+# deux critères mesurent des choses DIFFÉRENTES, chacun peut être bon, et leur
+# conjonction est fatale. Un score pondéré, quelle que soit la pondération, ne
+# peut structurellement pas la rendre — il additionne, et une conjonction n'est
+# pas une somme.
+#
+# ON NE LA NOTE DONC PAS, ON LA SIGNALE. En faire un dix-septième critère
+# reviendrait à compter une troisième fois l'eau et le climat, ce que ce module
+# s'interdit ailleurs et devrait s'interdire ici. La règle est écrite, le calcul
+# est publié avec elle, et le lecteur vérifie.
+CONJONCTIONS = {
+    "chaleur_eau": {
+        "titre": "Refroidissement adiabatique privé d’eau pendant la canicule",
+        "critere_a": "climat", "critere_b": "eau",
+        "mecanisme": "L’adiabatique consomme de l’eau précisément aux heures les "
+                     "plus chaudes. La sécheresse, elle, restreint le prélèvement "
+                     "aux mêmes heures. Chacun des deux critères peut être bon : "
+                     "c’est leur RENCONTRE qui arrête l’installation, et c’est ce "
+                     "qui s’est produit à Pantin le 24 juin.",
+        "ou_elle_mord": "Là où le refroidissement a été conçu pour un été DOUX — "
+                        "climat nordique ou tempéré — et où la ressource en eau "
+                        "se tend. Un site méridional, lui, a été dimensionné pour "
+                        "la chaleur dès l’origine : son point de conception est "
+                        "plus haut, et son exploitant le sait.",
+        "contre_intuitif": "Le risque n’est donc PAS maximal là où il fait le plus "
+                           "chaud. Il est maximal là où l’on ne s’y attendait "
+                           "pas — Rennes, Pantin, Londres, et non Séville.",
+    },
+    "chaleur_reseau": {
+        "titre": "Canicule sur le réseau, secours au fioul",
+        "critere_a": "climat", "critere_b": "carbone",
+        "mecanisme": "La même canicule contraint la production électrique et le "
+                     "transport : réacteurs à l’arrêt, transformateurs en "
+                     "défaillance. Le centre bascule alors sur ses groupes "
+                     "électrogènes, le plus souvent au fioul.",
+        "ou_elle_mord": "Partout où la continuité est contractuelle. Elle ne se "
+                        "voit sur aucun critère de ce comparateur : l’intensité "
+                        "carbone affichée est celle du RÉSEAU, jamais celle du "
+                        "secours.",
+        "contre_intuitif": "Un pays très peu carboné peut voir son centre de "
+                           "données émettre le plus, précisément les jours où le "
+                           "réseau flanche : la moyenne annuelle ne dit rien de "
+                           "ces heures-là.",
+    },
+}
+
+# La règle du drapeau, écrite pour être relue à voix haute — puis exécutée telle
+# quelle par `conjonction_de`. Deux formulations qui divergeraient donneraient un
+# drapeau que personne ne pourrait vérifier.
+REGLE_CONJONCTION = (
+    "Un pays est signalé quand il réunit les DEUX conditions : (1) son climat a "
+    "conçu le refroidissement pour un été doux — classe nordique ou tempérée ; "
+    "(2) l’eau s’y tend, soit par l’aléa sécheresse à l’horizon retenu (niveau "
+    "élevé ou très élevé), soit par le stress hydrique national déjà classé "
+    "élevé. Un pays méridional n’est jamais signalé : non parce qu’il est "
+    "épargné, mais parce que son point de conception a été posé pour la chaleur."
+)
+CLIMATS_ETE_DOUX = ("nordique", "tempere")
+SECHERESSE_TENDUE = ("eleve", "tres_eleve")
+
+
+def conjonction_de(pays, horizon=2030):
+    """Le pays réunit-il la conjonction chaleur × eau, à cet horizon ?
+
+    Rend le verdict ET ses deux motifs : un drapeau sans sa raison est une
+    accusation, pas une information — et il devient impossible de vérifier que
+    la règle écrite plus haut est bien celle qui s'exécute.
+    """
+    cl = climat_de(pays)
+    eau = EAU.get(pays)
+    if cl is None or not eau:
+        return {"signale": False, "connu": False,
+                "motif": "pays hors du référentiel de climat ou d’eau — "
+                         "aucun verdict ne peut être posé"}
+    ete_doux = cl in CLIMATS_ETE_DOUX
+    a = climat_2050.alea_de(pays, "secheresse", horizon) or {}
+    niv = a.get("niveau")
+    eau_tendue = (niv in SECHERESSE_TENDUE) or (eau[0] == "eleve")
+    return {
+        "signale": bool(ete_doux and eau_tendue), "connu": True,
+        "climat": cl, "conçu_pour_ete_doux": ete_doux,
+        "secheresse": niv, "stress_eau": eau[0], "eau_tendue": eau_tendue,
+        "horizon": horizon,
+        "motif": (
+            ("Conçu pour un été doux (climat %s) ET eau tendue à l’horizon %d "
+             "(sécheresse %s, stress hydrique %s) : c’est la conjonction de "
+             "Pantin." % (cl, horizon, niv or "non classée", eau[0]))
+            if (ete_doux and eau_tendue) else
+            ("Point de conception posé pour la chaleur (climat méridional) : la "
+             "conjonction ne s’applique pas — ce qui ne dit rien de la ressource "
+             "en eau, notée par ailleurs.")
+            if not ete_doux else
+            ("Été doux, mais l’eau n’est pas tendue à l’horizon %d (sécheresse "
+             "%s, stress hydrique %s)." % (horizon, niv or "non classée", eau[0]))),
+    }
+
+
 SOURCE_CADRE = {
     "titre": "Cadre juridique de l’implantation — décisions publiques datées",
     "nature": "referentiel",
@@ -967,7 +1185,14 @@ CRITERES = [
      "formule": "nordique=90, tempéré=65, méridional=35 — la classe dit combien"
                 " d'heures par an l'air extérieur reste sous le seuil du free"
                 " cooling direct (~24-25 °C, ADEME) ; au-delà, la climatisation"
-                " prend le relais et, selon la conception, l'eau avec elle"},
+                " prend le relais et, selon la conception, l'eau avec elle."
+                " ⚠ CETTE NOTE MESURE UNE OPPORTUNITÉ, PAS UNE RÉSILIENCE : elle"
+                " dit ce qu'on économise les jours ordinaires, jamais si"
+                " l'installation tient le jour le plus chaud. Les défaillances"
+                " constatées ont eu lieu en climat TEMPÉRÉ — Rennes, Pantin,"
+                " Londres — précisément là où le dimensionnement supposait des"
+                " étés doux. Voir « point de conception » et la conjonction"
+                " chaleur × eau"},
     {"cle": "prix", "nom": "Prix de l'électricité industrielle", "nature": "referentiel",
      "source": "Eurostat nrg_pc_205, 2024, classes",
      "formule": "bas=85, moyen=55, élevé=25"},
@@ -1165,6 +1390,11 @@ def assemble(sites, intensites, horizon=2030):
             "aleas_satures": sorted(a for a in climat_2050.ALEAS
                                     if climat_2050.sature(p, a)),
             "mer_locale": climat_2050.mer_locale(p),
+            # LA CONJONCTION, PAR PAYS ET PAR HORIZON. Elle n'entre dans aucune
+            # note — la noter compterait une troisième fois l'eau et le climat.
+            # Elle se pose à côté du score, avec son motif, parce qu'un score
+            # pondéré additionne et qu'une conjonction n'est pas une somme.
+            "conjonction": conjonction_de(p, horizon),
             "avis": avis,
             "perspectives": [x for x in PERSPECTIVES if x["pays"] == p],
         })
@@ -1194,6 +1424,17 @@ def assemble(sites, intensites, horizon=2030):
         # pourtant lui qui délivre ou refuse le permis.
         "paradoxe_evaporation": dict(PARADOXE_EVAPORATION),
         "cadre_implantation": {k: dict(v) for k, v in CADRE_IMPLANTATION.items()},
+        # LE POINT DE CONCEPTION ET CE QUI EST TOMBÉ. Sans le second, le premier
+        # se lit comme une précaution d'ingénieur et se pondère à zéro.
+        "conception": dict(CONCEPTION),
+        "incidents": [dict(x) for x in INCIDENTS],
+        "conjonctions": {k: dict(v) for k, v in CONJONCTIONS.items()},
+        "regle_conjonction": REGLE_CONJONCTION,
+        # Les pays réunissant la conjonction à l'horizon retenu, calculés — pas
+        # recopiés. Écrite à la main, cette liste aurait cessé de correspondre à
+        # la règle au premier changement d'un référentiel d'aléa.
+        "conjonction_pays": sorted(
+            l["pays"] for l in lignes if (l.get("conjonction") or {}).get("signale")),
         # L'ÂGE voyage avec la SOURCE, dans la même réponse. Les séparer
         # laisserait la page citer un rapport sans dire qu'il a quatre ans —
         # et un lecteur n'a aucun moyen de le deviner d'un titre.
@@ -1263,6 +1504,47 @@ def sante():
     for p in EAU:
         if EAU[p][0] not in EAU_CLASSES:
             pb.append("eau %s : classe inconnue" % p)
+    # LA RÈGLE ÉCRITE DOIT ÊTRE LA RÈGLE EXÉCUTÉE. `REGLE_CONJONCTION` se lit à
+    # voix haute devant un client ; si le code s'en écartait, le drapeau
+    # deviendrait invérifiable — et un drapeau qu'on ne peut pas vérifier finit
+    # par être ignoré, y compris quand il a raison. On contrôle donc les trois
+    # affirmations de la phrase, une par une, sur des cas témoins.
+    for _cl in CLIMATS_ETE_DOUX:
+        if _cl not in CLIMAT:
+            pb.append("conjonction : classe de climat inconnue — %s" % _cl)
+    if "meridional" in CLIMATS_ETE_DOUX:
+        pb.append("conjonction : le méridional ne doit PAS compter comme été "
+                  "doux — son point de conception a été posé pour la chaleur")
+    for _n in SECHERESSE_TENDUE:
+        if _n not in climat_2050.NIVEAUX:
+            pb.append("conjonction : niveau de sécheresse inconnu — %s" % _n)
+    # Un pays méridional signalé voudrait dire que la règle a changé de sens.
+    _mer = [p for p in EAU if climat_de(p) == "meridional"
+            and conjonction_de(p, 2050).get("signale")]
+    if _mer:
+        pb.append("conjonction : pays méridional(aux) signalé(s) — %s" % _mer)
+    # Et si PLUS AUCUN pays n'est signalé à 2050, ce n'est pas une bonne
+    # nouvelle : c'est que la règle ne mord plus sur rien, donc qu'elle
+    # n'informe plus. Le silence total est le symptôme à attraper.
+    if not any(conjonction_de(p, 2050).get("signale") for p in EAU):
+        pb.append("conjonction : aucun pays signalé à 2050 — la règle ne mord "
+                  "plus sur le référentiel, elle n'informe donc plus")
+    if CONCEPTION["prescription"]["moyenne_pct"] >= \
+            CONCEPTION["prescription"]["sites_contraints_pct"]:
+        pb.append("conception : la majoration moyenne ne peut pas dépasser "
+                  "celle des sites les plus contraints")
+    for _i in INCIDENTS:
+        for _c in ("quand", "ou", "quoi", "mecanisme"):
+            if not str(_i.get(_c, "")).strip():
+                pb.append("incident sans « %s » : un constat sans mécanisme "
+                          "n'instruit rien" % _c)
+    # Un couplage qui désignerait un critère inexistant ne s'afficherait jamais.
+    _cles = {c["cle"] for c in CRITERES}
+    for _k, _c in CONJONCTIONS.items():
+        for _f in ("critere_a", "critere_b"):
+            if _c[_f] not in _cles:
+                pb.append("conjonction %s : critère inconnu — %s" % (_k, _c[_f]))
+
     # Un cadre juridique posé sur un pays absent du référentiel d'eau ne
     # s'afficherait jamais : il serait écrit pour personne.
     for p in CADRE_IMPLANTATION:
