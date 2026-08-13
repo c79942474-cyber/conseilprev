@@ -169,10 +169,23 @@ LIMITES = [
     "Les intensités carbone sont des moyennes annuelles. L’intensité réelle varie "
     "d’un facteur trois dans la journée : un calcul déplacé de la nuit au midi "
     "solaire change son empreinte sans changer sa consommation.",
-    "L’eau comptée est celle du refroidissement. L’eau consommée en amont pour "
-    "produire l’électricité — considérable pour le thermique et le nucléaire — "
-    "n’est PAS incluse : la faire figurer sans la distinguer mélangerait deux "
-    "responsabilités différentes.",
+    # CETTE LIMITE DISAIT LE CONTRAIRE, ET ELLE AVAIT CESSÉ D'ÊTRE VRAIE. Elle
+    # annonçait que l'eau amont n'est PAS incluse — c'était exact tant que
+    # personne ne la calculait. Elle l'est depuis, par eau_dc.py, et elle
+    # s'affiche dans la même section, quelques lignes plus bas. Un avertissement
+    # qui survit à sa cause envoie chercher ailleurs ce qui est sous les yeux.
+    "L’eau de la colonne ci-contre est celle du REFROIDISSEMENT, et elle seule. "
+    "L’eau consommée en amont pour produire l’électricité — considérable pour le "
+    "thermique et le nucléaire — n’y est pas ajoutée, pour ne pas mélanger deux "
+    "responsabilités : elle est calculée et publiée À PART, dans le bilan « l’eau "
+    "que le WUE ne compte pas » de cette même section. Sur les parcs nationaux "
+    "où les deux termes sont publiés, l’amont pèse de huit à douze fois le site.",
+    "L’eau de FABRICATION du matériel n’est comptée nulle part — ni ici, ni dans "
+    "le bilan amont. Une usine de semi-conducteurs consomme de l’ordre de "
+    "38 millions de litres d’eau ultrapure par jour ; la part imputable à un "
+    "serveur ne se reconstitue pas sans données constructeur, et les fabricants "
+    "ne les publient pas. Le poste fabrication ci-dessus porte donc le CARBONE "
+    "incorporé, jamais l’eau incorporée.",
     "La fabrication est amortie linéairement, sans tenir compte du taux de "
     "renouvellement réel des serveurs, plus rapide sur les charges d’IA.",
     "Un projet annoncé qui ne se réalise pas figure au cumul de son pays tant "

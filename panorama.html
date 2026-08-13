@@ -1023,6 +1023,30 @@ th .ttip{margin-left:5px}
 .imp-pour li,.imp-contre li{margin:3px 0;line-height:1.5}
 .imp-comm{font-size:12px;background:var(--bg);border-left:3px solid #1C5CAB;
   border-radius:0 3px 3px 0;padding:8px 12px;margin:8px 0}
+/* LE PARADOXE, sous les curseurs. Ambré et non rouge : ce n'est pas une panne,
+   c'est une tension à arbitrer — et elle est permanente. */
+.imp-paradoxe{margin:10px 0 0;padding:9px 12px;background:#FDF6E9;
+  border-left:3px solid var(--orange);border-radius:0 5px 5px 0;font-size:11.5px;
+  line-height:1.55}
+.imp-paradoxe b{display:block;font-size:12px;margin-bottom:3px}
+.imp-paradoxe p{margin:4px 0 0}
+.imp-paradoxe .imp-sortie{color:var(--muted)}
+
+/* LE CADRE JURIDIQUE, dans la fiche du pays. Deux colonnes parce que le texte
+   fait DEUX choses en sens contraire, et qu'un résumé qui n'en garderait qu'une
+   serait faux dans les deux cas. */
+.imp-cadre{margin:8px 0 0;padding:9px 12px;background:var(--white);
+  border:1px solid var(--rule);border-radius:5px;font-size:11.5px;line-height:1.5}
+.imp-cadre > b{font-size:12px}
+.imp-cadre-t{margin:2px 0 6px;font-weight:600}
+.imp-cadre-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr));
+  gap:8px}
+.imp-cadre-a,.imp-cadre-d{padding:6px 9px;border-radius:4px;background:var(--bg)}
+.imp-cadre-a{border-left:3px solid var(--green)}
+.imp-cadre-d{border-left:3px solid var(--accent)}
+.imp-cadre-2 em{display:block;font-style:normal;font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.imp-cadre-2 p{margin:0}
 .imp-persp{font-size:11.5px;margin:6px 0;padding:7px 11px;border-radius:3px;line-height:1.5}
 .imp-persp.hausse{background:rgba(30,99,54,.07)}
 .imp-persp.contrainte{background:rgba(184,50,34,.07)}
@@ -1550,7 +1574,7 @@ tbody tr.on{background:rgba(184,50,34,.06)}
 .eau-w h3{font-size:14px;margin:0 0 6px}
 .eau-kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(215px,100%),1fr));
   gap:10px;margin:12px 0}
-.eau-k{border:1px solid var(--rule2);border-radius:7px;padding:9px 11px;background:var(--white)}
+.eau-k{border:1px solid var(--rule);border-radius:7px;padding:9px 11px;background:var(--white)}
 .eau-k b{display:block;font-size:17px;line-height:1.25;font-variant-numeric:tabular-nums}
 .eau-k span{display:block;font-size:10.5px;color:var(--muted2);font-family:var(--mono);
   letter-spacing:.05em;text-transform:uppercase;margin-bottom:3px}
@@ -1559,7 +1583,7 @@ tbody tr.on{background:rgba(184,50,34,.06)}
    à l'œil. Tant qu'on compare des m³ de site à des m³ d'amont sur des parcs de
    tailles différentes, on ne compare rien. */
 .eau-m{margin:4px 0 0}
-.eau-r{padding:7px 0;border-bottom:1px solid var(--rule2)}
+.eau-r{padding:7px 0;border-bottom:1px solid var(--rule)}
 .eau-r:last-child{border-bottom:0}
 .eau-rh{display:flex;justify-content:space-between;align-items:baseline;gap:10px;
   font-size:11.5px;margin-bottom:4px}
@@ -1592,11 +1616,66 @@ tbody tr.on{background:rgba(184,50,34,.06)}
 .eau-p .eau-t{height:9px}
 .eau-defaut{font-family:var(--mono);font-size:9px;color:#8A5310;border:1px solid #E0C9A0;
   border-radius:8px;padding:0 4px;margin-left:4px;white-space:nowrap}
-.eau-eed{border:1px solid var(--rule2);border-left:3px solid #1E63A8;border-radius:0 6px 6px 0;
+.eau-eed{border:1px solid var(--rule);border-left:3px solid #1E63A8;border-radius:0 6px 6px 0;
   padding:10px 13px;margin:14px 0 0;background:var(--white)}
 .eau-eed h4{font-size:12px;margin:0 0 4px}
 .eau-eed ol{margin:6px 0 0 18px;padding:0;font-size:11.5px;line-height:1.6;columns:2;column-gap:24px}
 @media(max-width:700px){ .eau-eed ol{columns:1} }
+
+/* CONFRONTATION AU RÉEL. Encadré parce que c'est le seul endroit de la section
+   où le calcul est jugé plutôt qu'exposé — et la variante « large » le teinte
+   d'orange quand l'intervalle est trop lâche pour conclure : un verdict qui ne
+   nous flatte pas doit se voir autant qu'un verdict qui nous arrange. */
+.eau-conf{border:1px solid var(--rule);border-left:3px solid var(--green);
+  border-radius:0 6px 6px 0;padding:10px 13px;margin:16px 0 0;background:var(--white)}
+.eau-conf.large{border-left-color:var(--orange)}
+.eau-conf h4{font-size:12px;margin:0 0 6px}
+.eau-rep{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:8px}
+.eau-rp{border:1px solid var(--rule);border-radius:6px;padding:7px 9px;background:var(--bg)}
+.eau-rp b{display:block;font-size:18px;line-height:1.2;font-variant-numeric:tabular-nums}
+.eau-rp span{display:block;font-size:11px;font-weight:600;margin:1px 0 2px}
+.eau-rp i{display:block;font-style:normal;font-size:10.5px;color:var(--muted);line-height:1.45}
+
+/* D'OÙ VIENT L'EAU. Le coefficient est posé en pastille et NON en barre : une
+   barre se lit comme une quantité, or c'est un rang. */
+.eau-src{display:grid;gap:4px}
+.eau-s{display:grid;grid-template-columns:minmax(140px,220px) 44px 1fr;gap:10px;
+  align-items:baseline;padding:5px 0;border-bottom:1px solid var(--rule);font-size:11.5px}
+.eau-s:last-child{border-bottom:0}
+.eau-s em{font-style:normal;font-weight:700}
+.eau-tn{font-family:var(--mono);font-size:11px;text-align:center;border:1px solid var(--rule);
+  border-radius:9px;padding:1px 0;background:var(--bg);font-variant-numeric:tabular-nums}
+.eau-s i{font-style:normal;color:var(--muted);line-height:1.5}
+.eau-s i b{color:var(--ink)}
+@media(max-width:640px){ .eau-s{grid-template-columns:1fr 44px;gap:4px 10px}
+  .eau-s i{grid-column:1/-1} }
+
+/* LES FAMILLES HORS PARC. Fond distinct du reste de la section : elles ne
+   décrivent AUCUN site cartographié, et rien ne doit permettre de les lire
+   comme un relevé. La variante « alerte » est pour le circuit ouvert, dont la
+   consommation quasi nulle serait autrement lue comme un bon résultat. */
+.eau-hp{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:10px}
+.eau-h{border:1px dashed var(--rule);border-radius:7px;padding:9px 11px;background:var(--bg)}
+.eau-h.alerte{border-style:solid;border-left:3px solid var(--accent);border-radius:0 7px 7px 0}
+.eau-hh{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.eau-hh b{font-size:12px}
+/* `--muted` et non `--muted2`. Le second (#8A8A8A) ne donne que 3,19:1 sur le
+   fond de ces cartes : conforme pour un élément d'interface, insuffisant pour
+   du texte de 9 px, et c'est bien du texte qu'on lit ici. Mesuré, pas supposé —
+   getComputedStyle ne dit rien du fond hérité. */
+.eau-mat{font-family:var(--mono);font-size:9px;color:var(--muted);white-space:nowrap}
+.eau-trompe{border-left:2px solid var(--rule);padding-left:8px}
+.eau-hm{color:var(--accent);font-weight:600}
+
+/* Les faits de cadrage : ils situent, ils ne vérifient rien — d'où la forme
+   plate, sans encadré, qui les distingue des repères. */
+.eau-faits{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));
+  gap:8px 18px}
+.eau-ft{padding:5px 0;border-top:1px solid var(--rule)}
+.eau-ft b{display:block;font-size:13px;font-variant-numeric:tabular-nums}
+.eau-ft em{display:block;font-style:normal;font-size:11px;font-weight:600;margin:1px 0 2px}
+.eau-ft i{display:block;font-style:normal;font-size:10.5px;color:var(--muted);line-height:1.45}
+.eau-ft i span{font-family:var(--mono);font-size:9.5px;color:var(--muted)}
 .f-chips{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-left:2px}
 .f-chip{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-family:var(--mono);
   background:var(--ink);color:#fff;border:0;border-radius:11px;padding:3px 5px 3px 9px;cursor:pointer}
@@ -4240,6 +4319,103 @@ function renderEauSource(j){
       + 'Leur terme amont est un ordre de grandeur, pas une estimation de pays.</p>';
   }
 
+  /* LE MODÈLE RENCONTRE L'OBSERVATION. Deux autorités publiques ont publié les
+     DEUX termes pour un parc national entier : le rapport observé s'en déduit,
+     et notre calcul devient vérifiable. On le montre même — surtout — quand la
+     confrontation ne nous flatte pas. */
+  var cf = j.confrontation, cfr = j.confrontation_fr;
+  if(cf && cf.comparable){
+    h += '<div class="eau-conf' + (cf.informatif ? '' : ' large') + '">'
+      + '<h4>Ce que le calcul vaut, confronté à ce qui a été publié</h4>'
+      + '<div class="eau-rep">';
+    (j.reperes || []).forEach(function(r){
+      h += '<div class="eau-rp"><b>×' + fr(r.rapport) + '</b>'
+        + '<span>' + esc(r.perimetre) + '</span>'
+        + '<i>' + esc(r.editeur) + ' — site ' + eauNb(r.site_m3) + ' m³, amont '
+        + eauNb(r.amont_m3) + ' m³</i></div>';
+    });
+    h += '</div><p class="note" style="margin:6px 0 0">' + esc(cf.lecture) + '</p>';
+    if(cfr && cfr.comparable){
+      h += '<p class="note" style="margin:6px 0 0"><b>Et sur la France seule</b>, '
+        + 'qui est le périmètre du repère Arcep : ' + esc(cfr.lecture) + '</p>';
+    }
+    h += '</div>';
+  }
+
+  /* D'OÙ VIENT L'EAU. Le volume ne le dit pas, et c'est pourtant la première
+     question d'un service instructeur. */
+  var sr = ref.sources_eau || {};
+  var cles = Object.keys(sr).filter(function(k){ return sr[k].tension !== null; })
+    .sort(function(a,b){ return sr[b].tension - sr[a].tension; });
+  if(cles.length){
+    h += '<h4 style="font-size:12px;margin:16px 0 2px">Un mètre cube n’est pas un '
+      + 'mètre cube — d’où vient l’eau</h4>'
+      + '<p class="note" style="margin:0 0 6px">L’Arcep mesure que les prélèvements '
+      + 'directs du parc français sont <b>en quasi-totalité de l’eau potable</b> : '
+      + 'de l’eau traitée pour être bue, évaporée pour refroidir des serveurs, prise '
+      + 'sur le même réseau que les habitants. Le coefficient ci-dessous <b>classe</b> '
+      + 'les origines selon la concurrence d’usage qu’elles engagent ; il ne se '
+      + 'multiplie à aucun volume — ce serait faire passer un arbitrage pour une '
+      + 'mesure. <b>' + (cv.sites_source_connue || 0) + ' des ' + t.n_dc + ' sites '
+      + 'du parc publient leur origine d’eau.</b></p><div class="eau-src">';
+    cles.forEach(function(k){
+      var s = sr[k];
+      /* `eau-tn` et non `eau-t` : cette dernière est la PISTE des fourchettes
+         quelques lignes plus haut (position:relative, hauteur imposée). La
+         réutiliser ici aurait cassé les deux blocs à la fois, sans erreur. */
+      h += '<div class="eau-s"><em>' + esc(s.nom) + '</em>'
+        + '<span class="eau-tn">' + fr(s.tension) + '</span>'
+        + '<i>' + esc(s.sens) + (s.observe ? ' <b>' + esc(s.observe) + '</b>' : '')
+        + '</i></div>';
+    });
+    h += '</div>';
+  }
+
+  /* LES FAMILLES DE L'ÈRE IA, servies à part : elles ne décrivent aucun site du
+     parc, et les mêler aux modes observés ferait lire de la prospective comme
+     un relevé. */
+  var hp = j.hors_parc || [];
+  if(hp.length){
+    h += '<h4 style="font-size:12px;margin:16px 0 2px">Les familles que le parc ne '
+      + 'code pas encore</h4>'
+      + '<p class="note" style="margin:0 0 6px">'
+      + esc(ref.familles_hors_parc_source || '') + '</p><div class="eau-hp">';
+    hp.forEach(function(m){
+      h += '<div class="eau-h' + (m.hors_modele ? ' alerte' : '') + '">'
+        + '<div class="eau-hh"><b>' + esc(m.nom) + '</b>'
+        + '<span class="eau-mat">' + esc(m.maturite) + '</span></div>'
+        + '<p class="note" style="margin:2px 0 0">' + esc(m.resume) + '</p>'
+        + '<p class="note eau-trompe" style="margin:4px 0 0">'
+        + esc(m.ce_qui_trompe) + '</p>';
+      if(m.hors_modele){
+        h += '<p class="note eau-hm" style="margin:4px 0 0">⚠ '
+          + esc(m.hors_modele_motif) + '</p>';
+      } else {
+        h += '<p class="note" style="margin:4px 0 0;font-size:10.5px">PUE '
+          + fr(m.pue[0]) + '–' + fr(m.pue[1]) + ' · WUE de site ' + fr(m.wue_site[0])
+          + '–' + fr(m.wue_site[1]) + ' · amont ' + fr(m.amont_l_kwh_it[0]) + '–'
+          + fr(m.amont_l_kwh_it[1]) + ' L/kWh informatique</p>';
+      }
+      h += '<ul class="note" style="margin:4px 0 0 16px;font-size:10.5px">'
+        + (m.points_ouverts || []).map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('')
+        + '</ul></div>';
+    });
+    h += '</div>';
+  }
+
+  /* Les faits de cadrage : ils situent, ils ne vérifient pas — d'où leur place
+     après les repères et non parmi eux. */
+  if((j.faits || []).length){
+    h += '<h4 style="font-size:12px;margin:16px 0 2px">Quelques ordres de grandeur '
+      + 'pour situer</h4><div class="eau-faits">';
+    (j.faits || []).forEach(function(f){
+      /* `eau-ft` : `eau-f` est le SEGMENT de fourchette, en position absolue. */
+      h += '<div class="eau-ft"><b>' + esc(f.valeur) + '</b><em>' + esc(f.quoi)
+        + '</em><i>' + esc(f.portee) + ' <span>' + esc(f.editeur) + '</span></i></div>';
+    });
+    h += '</div>';
+  }
+
   /* Ce que la réglementation demande — et ce qu'elle ne demande pas. */
   h += '<div class="eau-eed"><h4>' + esc(eed.titre) + '</h4>'
     /* Le compte vient de la liste, jamais d'un mot écrit à la main : « Neuf »
@@ -5989,7 +6165,18 @@ function renderImplantation(){
       + '<p class="note" style="margin-top:8px">Score d’un pays = Σ (poids × note du critère) ÷ Σ poids. '
       + "Les notes 0-100 par critère sont calculées côté serveur, formules ci-dessus. "
       + "Un critère sans note pour un pays est ÉCARTÉ de son calcul — il n’est jamais "
-      + "remplacé par un zéro ni par une moyenne.</p>";
+      + "remplacé par un zéro ni par une moyenne.</p>"
+      /* LE PARADOXE, POSÉ SOUS LES CURSEURS ET NON EN NOTE DE BAS DE PAGE. C'est
+         ici, au moment de régler le poids de l'eau, qu'on se trompe : une bonne
+         note d'eau CONTREDIT l'optimum thermique, et sans cette phrase le
+         classement paraît incohérent là où il est seulement honnête. */
+      + (IMPL.paradoxe_evaporation ? '<div class="imp-paradoxe"><b>⚠ '
+          + esc(IMPL.paradoxe_evaporation.titre) + '</b>'
+          + '<p>' + esc(IMPL.paradoxe_evaporation.mecanisme) + ' '
+          + esc(IMPL.paradoxe_evaporation.constat) + '</p>'
+          + '<p>' + esc(IMPL.paradoxe_evaporation.consequence) + '</p>'
+          + '<p class="imp-sortie">' + esc(IMPL.paradoxe_evaporation.sortie) + '</p>'
+          + '</div>' : "");
     pond.querySelectorAll("input[type=range]").forEach(function(r){
       r.addEventListener("input", function(){
         IMPL_POIDS[this.getAttribute("data-critere")] = +this.value;
@@ -6450,6 +6637,31 @@ function implAleasBloc(x){
     + "</div>";
 }
 
+/* LE DROIT DU SOL, dans la fiche du pays et nulle part ailleurs.
+
+   Aucun des seize critères n'est un fait juridique — ils décrivent le
+   kilowattheure, l'eau, le prix, le climat. C'est pourtant le permis qui décide
+   si un projet sort. On ne le NOTE pas : un texte ne se met pas sur une échelle
+   de 0 à 100 sans arbitraire. On le montre là où le lecteur regarde déjà un
+   pays, avec ce qu'il assouplit ET ce qu'il durcit — un texte qui ferait l'un
+   sans l'autre serait résumé de travers.
+
+   Une case vide ne s'affiche pas, et ne veut pas dire « pas de contrainte » :
+   la source le dit en toutes lettres. */
+function implCadre(code){
+  var c = (IMPL && IMPL.cadre_implantation) ? IMPL.cadre_implantation[code] : null;
+  if(!c) return "";
+  return '<div class="imp-cadre"><b>Cadre juridique de l’implantation</b>'
+    + '<p class="imp-cadre-t">' + esc(c.texte) + '</p>'
+    + '<div class="imp-cadre-2">'
+    + '<div class="imp-cadre-a"><em>Ce qu’il assouplit</em><p>' + esc(c.assouplit) + '</p></div>'
+    + '<div class="imp-cadre-d"><em>Ce qu’il durcit</em><p>' + esc(c.durcit) + '</p></div>'
+    + '</div>'
+    + (c.a_surveiller ? '<p class="note" style="margin:5px 0 0">À surveiller : '
+        + esc(c.a_surveiller) + '</p>' : "")
+    + '</div>';
+}
+
 function renderImplAvis(){
   var el = document.getElementById("imp-avis");
   if(!el || !IMPL) return;
@@ -6495,6 +6707,7 @@ function renderImplAvis(){
       + "</div>"
       + '<div class="imp-comm"><b>Commentaire :</b> ' + esc(x.avis.comm) + "</div>"
       + implAleasBloc(x)
+      + implCadre(x.pays)
       + persp
       + '<button type="button" class="gp-btn" onclick="ouvrirPays(\'' + x.pays
       + '\')">Ouvrir le parc de ce pays</button>'

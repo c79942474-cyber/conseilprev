@@ -88,6 +88,78 @@ EAU = {
     "LU": ("modere", "~5 %", "petite ressource, dépendance amont"),
 }
 
+# ── LE PARADOXE QUI FAIT CHOISIR LE PIRE ENDROIT ───────────────────────────
+#
+# Il fallait l'écrire ici, à côté de la note d'eau, parce que c'est exactement
+# au moment de lire cette note qu'on se trompe.
+#
+# Un refroidissement évaporatif est PLUS EFFICACE EN AIR SEC : c'est de la
+# physique, l'air sec absorbe davantage de vapeur. Une implantation optimisée
+# sur le rendement du refroidissement est donc attirée vers les zones arides —
+# c'est-à-dire précisément celles où l'eau manque. S'y ajoutent, aux
+# États-Unis, un foncier bon marché et une fiscalité avantageuse dans les mêmes
+# régions peu peuplées : environ deux tiers des projets s'y concentrent, et les
+# deux plus grands exploitants déclarent un tiers à près de la moitié de leurs
+# prélèvements en zone de stress hydrique.
+#
+# CONSÉQUENCE POUR CE COMPARATEUR : une note d'eau élevée ne récompense pas le
+# choix qu'un ingénieur thermicien ferait spontanément — elle le CONTREDIT. Le
+# lecteur doit le savoir, sinon il lira la note comme une confirmation alors
+# qu'elle est un avertissement.
+PARADOXE_EVAPORATION = {
+    "titre": "L’évaporatif est plus efficace là où l’eau manque",
+    "mecanisme": "L’air sec absorbe davantage de vapeur : à charge égale, une tour "
+                 "évapore mieux en climat aride qu’en climat humide. Le rendement "
+                 "du refroidissement pousse donc vers les bassins tendus.",
+    "constat": "Aux États-Unis, environ deux tiers des projets annoncés visent les "
+               "régions les plus sèches — foncier abordable, fiscalité "
+               "avantageuse et rendement évaporatif y convergent. Les "
+               "prélèvements en zone de stress hydrique atteignent le tiers chez "
+               "un grand exploitant, près de la moitié chez un autre.",
+    "consequence": "Dans ce comparateur, une bonne note d’eau va souvent à "
+                   "l’encontre de l’optimum thermique. Ce n’est pas une "
+                   "incohérence du classement : c’est l’arbitrage lui-même, et "
+                   "c’est au poids que vous donnez au critère « eau » de le "
+                   "trancher.",
+    "sortie": "La sortie du paradoxe n’est pas géographique, elle est technique : "
+              "un refroidissement sec ou une boucle fermée à haute température "
+              "rend le site indifférent à l’hygrométrie — au prix d’une "
+              "électricité plus élevée, donc d’une eau amont plus élevée. "
+              "L’arbitrage complet se fait dans le module « eau de la source ».",
+    "nature": "analyse",
+}
+
+# ── LE LEVIER RÉGLEMENTAIRE, PAYS PAR PAYS ─────────────────────────────────
+#
+# Le comparateur notait sept puis quinze critères techniques et pas un seul
+# fait de DROIT DU SOL — alors que c'est lui qui décide si un projet sort. On
+# n'en met qu'un par pays, et seulement là où une décision publique DATÉE
+# existe : une liste d'intentions générales n'aurait servi à rien.
+CADRE_IMPLANTATION = {
+    "FR": {
+        "texte": "Loi de simplification de la vie économique, adoptée en avril 2026",
+        "assouplit": "Statut de « projet d’intérêt national majeur » (PINM) pour les "
+                     "plus grands projets — quelques-uns tout au plus. L’autorisation "
+                     "d’urbanisme d’un PINM peut déroger aux règles de hauteur du "
+                     "plan local d’urbanisme.",
+        "durcit": "Le même texte permet de REFUSER un permis de construire pour un "
+                  "centre de données en cas de « tensions structurelles sur la "
+                  "ressource en eau ». C’est, à ce jour, le seul critère hydrique "
+                  "OPPOSABLE à l’implantation dans le droit français.",
+        "a_surveiller": "L’application de ce motif de refus : un critère écrit et "
+                        "jamais opposé ne vaut pas un critère.",
+        "nature": "referentiel",
+    },
+}
+SOURCE_CADRE = {
+    "titre": "Cadre juridique de l’implantation — décisions publiques datées",
+    "nature": "referentiel",
+    "note": "Un seul pays documenté à ce jour. Une case vide signifie « pas de "
+            "décision datée relevée », jamais « pas de contrainte » : la plupart "
+            "des États encadrent l’implantation par le droit de l’eau ordinaire, "
+            "qui ne se résume pas en une ligne.",
+}
+
 SOURCE_EAU = {
     "titre": "Water exploitation index plus (WEI+) — millésime 2022",
     "editeur": "Agence européenne pour l'environnement (AEE)",
@@ -887,10 +959,15 @@ CRITERES = [
      "formule": "note = part non fossile, +10 si nucléaire ≥ 30 % (pilotable), bornée 0-100"},
     {"cle": "eau", "nom": "Disponibilité en eau (WEI+, compétition d'usages)", "nature": "referentiel",
      "source": "AEE WEI+ 2022 + parts d'irrigation",
-     "formule": "classe faible=90, modéré=55, élevé=20"},
+     "formule": "classe faible=90, modéré=55, élevé=20"
+                " ⚠ à contre-courant de l'optimum thermique : l'évaporatif rend"
+                " MIEUX en air sec, donc là où ce critère note mal"},
     {"cle": "climat", "nom": "Potentiel free cooling (PUE)", "nature": "analyse",
      "source": "classes latitudinales — PUE par mode (datacentres.py)",
-     "formule": "nordique=90, tempéré=65, méridional=35"},
+     "formule": "nordique=90, tempéré=65, méridional=35 — la classe dit combien"
+                " d'heures par an l'air extérieur reste sous le seuil du free"
+                " cooling direct (~24-25 °C, ADEME) ; au-delà, la climatisation"
+                " prend le relais et, selon la conception, l'eau avec elle"},
     {"cle": "prix", "nom": "Prix de l'électricité industrielle", "nature": "referentiel",
      "source": "Eurostat nrg_pc_205, 2024, classes",
      "formule": "bas=85, moyen=55, élevé=25"},
@@ -1107,7 +1184,16 @@ def assemble(sites, intensites, horizon=2030):
                     "feux": SOURCE_FEUX, "inondations": SOURCE_INONDATIONS,
                     "aleas": climat_2050.SOURCE_ALEAS,
                     "mer": climat_2050.SOURCE_MER,
-                    "mer_locale": climat_2050.SOURCE_MER_LOCAL},
+                    "mer_locale": climat_2050.SOURCE_MER_LOCAL,
+                    "cadre": SOURCE_CADRE},
+        # DEUX CHOSES QUI NE SE NOTENT PAS ET QUI DÉCIDENT QUAND MÊME.
+        # Le paradoxe, parce qu'il explique pourquoi une bonne note d'eau
+        # contredit l'optimum thermique — sans lui, le classement paraît
+        # incohérent là où il est simplement honnête. Le cadre juridique, parce
+        # qu'aucun des critères n'est un fait de droit du sol, et que c'est
+        # pourtant lui qui délivre ou refuse le permis.
+        "paradoxe_evaporation": dict(PARADOXE_EVAPORATION),
+        "cadre_implantation": {k: dict(v) for k, v in CADRE_IMPLANTATION.items()},
         # L'ÂGE voyage avec la SOURCE, dans la même réponse. Les séparer
         # laisserait la page citer un rapport sans dire qu'il a quatre ans —
         # et un lecteur n'a aucun moyen de le deviner d'un titre.
@@ -1177,6 +1263,15 @@ def sante():
     for p in EAU:
         if EAU[p][0] not in EAU_CLASSES:
             pb.append("eau %s : classe inconnue" % p)
+    # Un cadre juridique posé sur un pays absent du référentiel d'eau ne
+    # s'afficherait jamais : il serait écrit pour personne.
+    for p in CADRE_IMPLANTATION:
+        if p not in EAU:
+            pb.append("cadre %s : pays absent du référentiel — la fiche ne "
+                      "s'affichera nulle part" % p)
+        for champ in ("texte", "assouplit", "durcit"):
+            if not str(CADRE_IMPLANTATION[p].get(champ, "")).strip():
+                pb.append("cadre %s : champ « %s » vide" % (p, champ))
     for p in PRIX:
         if PRIX[p][0] not in PRIX_CLASSES:
             pb.append("prix %s : classe inconnue" % p)
