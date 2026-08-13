@@ -1890,9 +1890,19 @@ def api_kpi_finance():
     except (TypeError, ValueError):
         annees = 10
 
-    s = kpi_finance.serie(capex, opex, annees, d.get("hypotheses") or {})
+    hyp = d.get("hypotheses") or {}
+
+    # LES PROPOSITIONS VOYAGENT AVEC LE CALCUL, et repartent meme quand celui-ci
+    # n'aboutit pas. C'est justement quand il MANQUE des hypotheses que le
+    # lecteur a besoin de savoir lesquelles le module peut deduire de son
+    # enveloppe — et lesquelles il refuse de deduire, avec le motif. Les servir
+    # seulement en cas de succes les rendrait inutiles au moment ou elles
+    # servent.
+    props = kpi_finance.propositions(capex, opex, annees, hyp)
+
+    s = kpi_finance.serie(capex, opex, annees, hyp)
     lec = kpi_finance.lecture(s, d.get("cibles") or {})
-    return jsonify(ok=True, serie=s, lecture=lec,
+    return jsonify(ok=True, serie=s, lecture=lec, propositions=props,
                    version=kpi_finance.VERSION)
 
 

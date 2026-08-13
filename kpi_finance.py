@@ -314,6 +314,180 @@ def serie(capex_meur, opex_an_meur, annees, hypotheses):
             "nature": "calcule"}
 
 
+# ═══════════════════════════════════════════════════════════════════════════
+#  CE QUE L'ENVELOPPE PERMET DE PROPOSER — et ce qu'elle ne permettra jamais
+#
+#  LE PROBLÈME. Ce bloc présentait sept cases vides. Le lecteur venait de faire
+#  calculer une enveloppe complète — investissement, exploitation, DPGF, coût
+#  total — et on lui redemandait tout à zéro, sans lui dire lesquelles de ces
+#  sept valeurs son propre calcul venait de rendre déductibles. Résultat : on
+#  saisit au jugé, ou on renonce.
+#
+#  LA LIGNE À NE PAS FRANCHIR. Proposer n'est pas inventer. Ce module refuse
+#  depuis toujours de publier des références sectorielles, faute d'en avoir de
+#  publiables — et cette règle ne change pas ici. Ne sont donc proposées que des
+#  valeurs de TROIS natures, toutes trois vérifiables :
+#     · `defaut`    — la valeur du référentiel, déjà publiée, déjà motivée ;
+#     · `enveloppe` — une grandeur reprise du calcul précédent, telle quelle ;
+#     · `seuil`     — de l'ARITHMÉTIQUE sur les valeurs présentes, sans aucune
+#                     hypothèse extérieure. Un seuil n'est pas une prévision :
+#                     il dit ce qu'il FAUT atteindre, jamais ce qu'on atteindra.
+#
+#  ET DEUX ENTRÉES RESTENT VIDES, DÉLIBÉRÉMENT. Le coût du capital et le taux
+#  d'impôt sont des DÉCISIONS — de comité d'investissement, de montage fiscal.
+#  Aucun calcul ne les déduit. Les pré-remplir d'une valeur « courante » ferait
+#  passer un choix pour un résultat, et c'est précisément ce que tout ce module
+#  s'interdit. Le refus est donc SERVI, avec son motif : mieux vaut une case
+#  vide qui s'explique qu'une case remplie qu'on croit.
+# ═══════════════════════════════════════════════════════════════════════════
+
+#: Les deux entrées qu'aucun calcul ne peut proposer, et pourquoi.
+REFUS_PROPOSITION = {
+    "wacc": "Le coût du capital est une décision du comité d'investissement, "
+            "pas un résultat : il dépend de votre structure de financement et "
+            "de votre appétit au risque. Le proposer reviendrait à choisir à "
+            "votre place le taux qui juge votre projet.",
+    "is_taux": "Le taux effectif dépend du véhicule qui portera l'actif, des "
+               "crédits d'impôt et des régimes locaux. Aucune valeur générique "
+               "n'est juste pour un projet donné.",
+}
+
+
+def seuil_revenu(capex_meur, opex_an_meur, annees, wacc_pct, is_pct,
+                 amort_ans=None, bfr_meur=None):
+    """Le revenu À PLEINE CHARGE qui annule l'EVA — pas une prévision, un seuil.
+
+    C'est l'inversion exacte de `serie` sur son cas le plus défavorable :
+
+        EVA_bas = (r − OPEX_haut − dotation_haute) × (1 − IS) − CE_haut × CMPC
+
+    posée à zéro et résolue en r. Aucune hypothèse ne s'ajoute : tout vient de
+    l'enveloppe déjà calculée et des deux décisions que le lecteur vient de
+    prendre.
+
+    DEUX ANNÉES, ET C'EST L'ÉCART QUI INSTRUIT. La première année à pleine
+    charge porte des capitaux employés presque intacts : c'est l'année la plus
+    exigeante. La dernière les porte largement amortis : c'est la plus facile.
+    Un seuil unique cacherait que l'exigence DÉCROÎT mécaniquement, et ferait
+    juger tout le projet sur son année la plus dure.
+    """
+    if wacc_pct is None or is_pct is None:
+        return None
+    h = dict(DEFAUTS)
+    if amort_ans is not None:
+        h["amort_ans"] = amort_ans
+    if bfr_meur is not None:
+        h["bfr_meur"] = bfr_meur
+    cap_haut = float(max(capex_meur))
+    op_haut = float(max(opex_an_meur))
+    n_max = int(max(1, min(40, annees or 10)))
+    amort = max(1.0, float(h["amort_ans"]))
+    bfr = float(h["bfr_meur"])
+    wacc = float(wacc_pct) / 100.0
+    impot = float(is_pct) / 100.0
+    if impot >= 1.0:
+        return None
+    dot_haut = cap_haut / amort
+
+    def _r(n):
+        use = min(1.0, (n - 1) / amort)
+        ce_haut = cap_haut * (1.0 - use) + bfr
+        return op_haut + dot_haut + ce_haut * wacc / (1.0 - impot)
+
+    # La première année à PLEINE charge : avant, le revenu nominal serait
+    # divisé par la part de charge et gonflerait artificiellement le seuil.
+    n1 = int(max(1, min(n_max, round(h["montee_ans"]) or 1)))
+    return {
+        "premiere_annee_pleine": n1,
+        "revenu_seuil_meur": [_f(_r(n_max)), _f(_r(n1))],
+        "formule": "r = OPEX_haut + dotation_haute + capitaux_employés_hauts "
+                   "× CMPC ÷ (1 − IS), résolu sur le cas le plus défavorable "
+                   "de la fourchette d'enveloppe",
+        "nature": "seuil",
+        "lecture": "Au-dessous de cette fourchette, l'EVA reste négative même "
+                   "dans l'hypothèse basse de coûts : le projet détruit de la "
+                   "valeur au sens de ce calcul. Ce n'est PAS une prévision de "
+                   "chiffre d'affaires — c'est le minimum à battre.",
+    }
+
+
+def propositions(capex_meur=None, opex_an_meur=None, annees=10, hypotheses=None):
+    """Pour chaque entrée : ce qu'on peut proposer, d'où ça vient, ou pourquoi non.
+
+    Rien n'est appliqué ici. Le module PROPOSE et se justifie ; c'est la page
+    qui offre, et le lecteur qui retient. Une valeur poussée d'autorité dans un
+    formulaire finit par être crue sans être lue.
+    """
+    h = dict(hypotheses or {})
+    out, proposables = {}, 0
+    seuil = None
+    if capex_meur and opex_an_meur:
+        seuil = seuil_revenu(capex_meur, opex_an_meur, annees,
+                             _num(h.get("wacc")), _num(h.get("is_taux")),
+                             _num(h.get("amort_ans")), _num(h.get("bfr_meur")))
+
+    for e in ENTREES:
+        cle = e["cle"]
+        props = []
+        if cle in REFUS_PROPOSITION:
+            out[cle] = {"propositions": [], "refus": REFUS_PROPOSITION[cle]}
+            continue
+        if cle == "revenu_meur_an":
+            if seuil:
+                props.append({
+                    "origine": "seuil", "nature": "seuil",
+                    "libelle": "Revenu d'équilibre — l'EVA s'annule",
+                    "valeur": seuil["revenu_seuil_meur"][1],
+                    "fourchette": seuil["revenu_seuil_meur"],
+                    "formule": seuil["formule"], "lecture": seuil["lecture"]})
+            else:
+                out[cle] = {"propositions": [],
+                            "refus": "Le revenu d'équilibre se calcule dès que "
+                                     "le coût du capital et le taux d'impôt "
+                                     "sont renseignés — ce sont les deux seules "
+                                     "valeurs que ce module ne peut pas déduire."}
+                continue
+        elif cle == "amort_ans":
+            # LE RAPPROCHEMENT QUI MANQUAIT. L'enveloppe a été calculée sur une
+            # durée d'étude ; amortir sur une autre laisse une valeur résiduelle
+            # que personne ne commente. On propose donc les deux, et on le dit.
+            props.append({
+                "origine": "enveloppe", "nature": "reprise",
+                "libelle": "Aligner sur la durée d'étude de l'enveloppe",
+                "valeur": _f(float(annees or 10), 0),
+                "formule": "durée retenue pour le coût total de possession",
+                "lecture": "Amortir sur une durée plus longue que l'étude laisse "
+                           "une valeur résiduelle à la fin de l'horizon : elle "
+                           "n'apparaît dans aucun des trois indicateurs."})
+            props.append({"origine": "defaut", "nature": "defaut",
+                          "libelle": "Valeur du référentiel", "valeur": e["defaut"],
+                          "formule": "hypothèse par défaut de ce module",
+                          "lecture": e["pourquoi"]})
+        elif "defaut" in e:
+            props.append({"origine": "defaut", "nature": "defaut",
+                          "libelle": "Valeur du référentiel", "valeur": e["defaut"],
+                          "formule": "hypothèse par défaut de ce module",
+                          "lecture": e["pourquoi"]})
+        out[cle] = {"propositions": props, "refus": None}
+        if props:
+            proposables += 1
+
+    refusees = [c for c in out if not out[c]["propositions"]]
+    return {
+        "entrees": out,
+        "seuil_revenu": seuil,
+        "resume": {
+            "proposables": proposables, "total": len(ENTREES),
+            "refusees": sorted(refusees),
+            "motif": "Ce module propose ce que le calcul permet de déduire et "
+                     "REFUSE le reste. Les entrées sans proposition sont des "
+                     "décisions, pas des résultats : les pré-remplir ferait "
+                     "passer un choix pour un calcul.",
+        },
+        "nature": "calcule",
+    }
+
+
 def _traverse(fourchette, seuil):
     """La fourchette traverse-t-elle le seuil ? C'est LA question du GO/NO GO."""
     bas, haut = min(fourchette), max(fourchette)

@@ -1027,6 +1027,34 @@ th .ttip{margin-left:5px}
 .imp-pour li,.imp-contre li{margin:3px 0;line-height:1.5}
 .imp-comm{font-size:12px;background:var(--bg);border-left:3px solid #1C5CAB;
   border-radius:0 3px 3px 0;padding:8px 12px;margin:8px 0}
+/* ══ LES ENTRÉES DE CRÉATION DE VALEUR : d'où vient chaque chiffre ════════ */
+.kpi-barre{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:8px 0}
+.kpi-pre{all:unset;cursor:pointer;font-family:var(--mono);font-size:10.5px;
+  padding:5px 12px;border-radius:14px;background:var(--ink);color:var(--white)}
+.kpi-pre:hover{background:#000}
+.kpi-pre:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.kpi-gp{font-size:11px;font-weight:600}
+.kpi-prerempli{font-size:11.5px;line-height:1.55;margin:6px 0 10px;
+  padding:8px 11px;background:var(--bg);border-left:3px solid var(--green);
+  border-radius:0 5px 5px 0}
+/* Le menu de provenance. Discret : c'est le CHAMP qu'on remplit, le menu n'est
+   qu'un raccourci vers une valeur justifiée. */
+.kpi-src{font-size:11px;padding:4px 6px;border:1px solid var(--rule);
+  border-radius:5px;background:var(--bg);font-family:inherit;margin-bottom:3px;
+  max-width:100%}
+/* LE BADGE DE PROVENANCE. Sans lui, une valeur pré-remplie est crue sans être
+   lue — et c'est précisément ce que ce module refuse partout ailleurs. */
+.kpi-orig{display:block;font-family:var(--mono);font-size:9.5px;margin-top:3px;
+  color:var(--muted)}
+.kpi-orig.enveloppe{color:var(--blue);font-weight:600}
+.kpi-orig.seuil{color:var(--green);font-weight:600}
+.kpi-orig.saisie{color:var(--ink);font-weight:600}
+/* LE REFUS DE PROPOSER, montré et non deviné : une case obligatoire et vide
+   sans explication se lit comme un oubli du site. */
+.kpi-refus{display:block;font-size:10.5px;line-height:1.45;margin-top:4px;
+  padding:5px 8px;background:#FDF6E9;border-left:2px solid var(--orange);
+  border-radius:0 4px 4px 0;color:var(--ink)}
+
 /* ══ LE FIL CONDUCTEUR DE L'ENVELOPPE ═══════════════════════════════════════ */
 .fin-fil{margin:0 0 16px;padding:11px 13px;background:var(--bg);
   border:1px solid var(--rule);border-radius:8px}
@@ -2550,6 +2578,17 @@ engagements publics) sont imputés nominativement.</div>
       pas se calculer sans vous&nbsp;: revenu attendu, coût du capital et taux d’impôt sont
       des décisions d’investisseur, pas des données de référentiel. Tant qu’elles ne sont
       pas saisies, les trois sont <b>non instruits</b>, et non pas nuls.</p>
+      <!-- LE PRÉ-REMPLISSAGE, ET LE PARCOURS. Le premier propose ce que
+           l'enveloppe permet de déduire ; le second explique pourquoi ces trois
+           indicateurs se lisent ensemble. Tous deux restent facultatifs : ce
+           bloc doit rester utilisable sans eux. -->
+      <div class="kpi-barre">
+        <button type="button" class="kpi-pre" id="kpi-pre" hidden>
+          ⤵ Pré-remplir depuis l’enveloppe</button>
+        <a href="#" class="kpi-gp" data-gp-kpi="finance">Suivre le parcours
+          « Enveloppe d’investissement et DPGF » →</a>
+      </div>
+      <p class="kpi-prerempli" id="kpi-prerempli" hidden></p>
       <div class="kpi-form" id="kpi-form"></div>
       <div class="kpi-cibles" id="kpi-cibles"></div>
       <button type="button" class="kpi-go" id="kpi-go">Lire la création de valeur →</button>
@@ -11303,16 +11342,72 @@ if(window.parent&&window.parent!==window){
     return t === '' ? undefined : Number(t.replace(',', '.'));
   }
 
+  /* LES PROPOSITIONS DU SERVEUR, et d'où vient chaque valeur affichée.
+
+     CE QUE CE BLOC PRÉSENTAIT AVANT : sept cases vides. Le lecteur venait de
+     faire calculer une enveloppe complète, et on lui redemandait tout à zéro
+     sans lui dire lesquelles de ces sept valeurs son propre calcul rendait
+     déductibles. On saisissait au jugé, ou on renonçait.
+
+     LE MENU DÉROULANT N'EST PAS UN CONFORT : c'est ce qui rend la PROVENANCE
+     lisible. Une valeur pré-remplie sans son origine est crue sans être lue ;
+     ici, chaque entrée dit si elle vient du référentiel, de l'enveloppe, d'un
+     seuil calculé, ou du lecteur — et le champ reste modifiable dans tous les
+     cas. Le calcul, lui, reste au serveur : recopier ces formules ici en
+     ferait deux exemplaires qui divergeraient. */
+  var KPI_PROP = null;              /* propositions servies par le serveur */
+
+  function kpiOrigines(cle){
+    var p = KPI_PROP && KPI_PROP.entrees && KPI_PROP.entrees[cle];
+    return (p && p.propositions) || [];
+  }
+  function kpiRefus(cle){
+    var p = KPI_PROP && KPI_PROP.entrees && KPI_PROP.entrees[cle];
+    return (p && p.refus) || null;
+  }
+  var KPI_ORIG_NOM = { defaut: "référentiel", enveloppe: "enveloppe",
+                       seuil: "seuil calculé", saisie: "votre saisie" };
+
+  /* Le badge de provenance, posé sous le champ. Il change quand le lecteur
+     tape : une valeur modifiée à la main cesse d'être « proposée ». */
+  function kpiBadge(cle, origine, texte){
+    var b = document.getElementById('kpi-o-' + cle);
+    if(!b) return;
+    if(!origine){ b.textContent = ''; b.className = 'kpi-orig'; return; }
+    b.className = 'kpi-orig ' + origine;
+    b.textContent = (KPI_ORIG_NOM[origine] || origine) + (texte ? ' — ' + texte : '');
+  }
+
   function champs(){
     if(!REF) return;
     $('kpi-form').innerHTML = REF.entrees.map(function(e){
       var req = e.obligatoire ? ' <b>· requis</b>' : '';
       var ph = e.obligatoire ? 'à renseigner'
              : (e.defaut != null ? 'défaut ' + nb(e.defaut) : '');
-      return '<div class="kpi-ch"><label for="kpi-' + esc(e.cle) + '">'
+      var props = kpiOrigines(e.cle), refus = kpiRefus(e.cle);
+      /* LE MENU N'APPARAÎT QUE S'IL A QUELQUE CHOSE À OFFRIR. Un menu à une
+         seule ligne — « votre saisie » — occuperait la place en promettant un
+         choix qui n'existe pas. */
+      var menu = props.length
+        ? '<select class="kpi-src" id="kpi-s-' + esc(e.cle) + '" '
+          + 'aria-label="D’où vient la valeur — ' + esc(e.nom) + '">'
+          + '<option value="">— je saisis ma valeur —</option>'
+          + props.map(function(x, i){
+              return '<option value="' + i + '">' + esc(x.libelle) + ' : '
+                + nb(x.valeur) + '</option>'; }).join('')
+          + '</select>'
+        : '';
+      /* LE REFUS SE MONTRE, il ne se devine pas. Une case obligatoire et vide
+         sans explication se lit comme un oubli du site. */
+      var mot = refus ? '<span class="kpi-refus">' + esc(refus) + '</span>' : '';
+      return '<div class="kpi-ch"><label for="kpi-' + esc(e.cle) + '" '
+        + 'data-aide="kpi_' + esc(e.cle) + '">'
         + esc(e.nom) + req + '</label>'
+        + menu
         + '<input type="text" id="kpi-' + esc(e.cle) + '" placeholder="'
         + esc(ph) + '" title="' + esc(e.question) + '">'
+        + '<span class="kpi-orig" id="kpi-o-' + esc(e.cle) + '"></span>'
+        + mot
         + '<span class="kpi-aide">' + esc(e.question) + '</span></div>';
     }).join('');
     /* LES OBJECTIFS SONT FACULTATIFS, ET LEUR ABSENCE EST DITE. Ce module ne
@@ -11325,6 +11420,99 @@ if(window.parent&&window.parent!==window){
         + '<input type="text" id="kpi-c-' + esc(k) + '" placeholder="facultatif">'
         + '<span class="kpi-aide">' + esc(m.seuil_sens) + '</span></div>';
     }).join('');
+    kpiBrancher();
+    /* Les infobulles portent la QUESTION et le POURQUOI du référentiel — ils
+       n'étaient jusqu'ici que dans un attribut `title`, que personne ne survole
+       et que rien n'annonce. */
+    if(typeof AIDES !== "undefined" && REF){
+      REF.entrees.forEach(function(e){
+        AIDES["kpi_" + e.cle] = { t: e.nom,
+          d: e.question,
+          pas: "Ce module ne l’estime pas à votre place : " + e.pourquoi + "." };
+      });
+    }
+    if(typeof aideBrancher === "function") aideBrancher($('kpi-form'));
+  }
+
+  /* Choisir une provenance remplit le champ ; taper dedans reprend la main.
+     Délégation : le formulaire est reconstruit à chaque arrivée de
+     propositions, et une écoute par champ mourrait avec lui. */
+  function kpiBrancher(){
+    var f = $('kpi-form');
+    if(!f || f.getAttribute('data-pret')) return;
+    f.setAttribute('data-pret', '1');
+    f.addEventListener('change', function(ev){
+      var sel = ev.target.closest('.kpi-src');
+      if(!sel) return;
+      var cle = sel.id.replace('kpi-s-', '');
+      var props = kpiOrigines(cle);
+      var i = sel.value === '' ? -1 : parseInt(sel.value, 10);
+      var champ = $('kpi-' + cle);
+      if(!champ) return;
+      if(i < 0 || !props[i]){ kpiBadge(cle, null); return; }
+      champ.value = String(props[i].valeur).replace('.', ',');
+      kpiBadge(cle, props[i].origine, props[i].libelle);
+    });
+    f.addEventListener('input', function(ev){
+      var champ = ev.target.closest('input[id^="kpi-"]');
+      if(!champ) return;
+      var cle = champ.id.replace(/^kpi-/, '');
+      /* LA VALEUR MODIFIÉE CESSE D'ÊTRE PROPOSÉE. Laisser le badge
+         « enveloppe » sur un chiffre retapé à la main serait un mensonge sur
+         l'origine — exactement ce que ce badge existe pour empêcher. */
+      var sel = $('kpi-s-' + cle);
+      if(sel) sel.value = '';
+      kpiBadge(cle, 'saisie');
+    });
+  }
+
+  /* LE PRÉ-REMPLISSAGE D'UN COUP, et le compte rendu de ce qu'il n'a PAS fait.
+     Un bouton qui remplirait cinq champs sur sept en silence laisserait croire
+     que les deux autres ont été oubliés. */
+  /* Les deux commandes de la barre. Le lien de parcours ne LÈVE PAS si le
+     parcours n'existe pas : il ouvre alors le choix des parcours, qui existe
+     toujours. Un lien de pédagogie qui casserait la page vaudrait moins que
+     pas de lien du tout. */
+  document.addEventListener('click', function(ev){
+    if(ev.target.closest('#kpi-pre')){ ev.preventDefault(); kpiPreremplir(); return; }
+    var g = ev.target.closest('[data-gp-kpi]');
+    if(g){
+      ev.preventDefault();
+      var cle = g.getAttribute('data-gp-kpi');
+      if(typeof gpDemarrer === 'function' && typeof GP_PROFILS !== 'undefined'
+         && GP_PROFILS[cle]) gpDemarrer(cle);
+      else if(typeof gpOuvrirChoix === 'function') gpOuvrirChoix();
+    }
+  });
+
+  function kpiPreremplir(){
+    if(!KPI_PROP) return;
+    var mis = [], laisses = [];
+    (REF ? REF.entrees : []).forEach(function(e){
+      var props = kpiOrigines(e.cle);
+      var champ = $('kpi-' + e.cle);
+      if(!champ) return;
+      if(!props.length){ laisses.push(e.nom); return; }
+      /* On ne PIÉTINE PAS une valeur saisie : le lecteur a déjà tranché. */
+      if(String(champ.value).trim() !== ''){ return; }
+      champ.value = String(props[0].valeur).replace('.', ',');
+      var sel = $('kpi-s-' + e.cle);
+      if(sel) sel.value = '0';
+      kpiBadge(e.cle, props[0].origine, props[0].libelle);
+      mis.push(e.nom);
+    });
+    var z = $('kpi-prerempli');
+    if(z){
+      z.innerHTML = '<b>' + mis.length + ' entrée(s) pré-remplie(s)</b> depuis '
+        + 'l’enveloppe et le référentiel. '
+        + (laisses.length
+            ? '<b>' + laisses.length + ' laissée(s) vide(s) délibérément :</b> '
+              + esc(laisses.join(', ')) + '. '
+              + esc((KPI_PROP.resume || {}).motif || '')
+            : '')
+        + ' Les valeurs restent modifiables — chaque champ dit d’où vient la sienne.';
+      z.hidden = false;
+    }
   }
 
   function enveloppe(){
@@ -11429,6 +11617,22 @@ if(window.parent&&window.parent!==window){
       if(!j.ok){
         $('kpi-msg').textContent = j.message || 'lecture indisponible';
         return;
+      }
+      /* LES PROPOSITIONS ARRIVENT AVEC LE CALCUL, y compris quand celui-ci
+         n'aboutit pas — c'est justement là qu'elles servent. On redessine le
+         formulaire pour que les menus apparaissent, en conservant ce que le
+         lecteur a déjà saisi. */
+      if(j.propositions){
+        var garde = {};
+        (REF ? REF.entrees : []).forEach(function(e){
+          var c = $('kpi-' + e.cle); if(c && c.value) garde[e.cle] = c.value; });
+        KPI_PROP = j.propositions;
+        champs();
+        Object.keys(garde).forEach(function(k){
+          var c = $('kpi-' + k);
+          if(c){ c.value = garde[k]; kpiBadge(k, 'saisie'); }
+        });
+        var bp = $('kpi-pre'); if(bp) bp.hidden = false;
       }
       var s = j.serie, lec = j.lecture;
       $('kpi-msg').textContent = 'Sur le pays le mieux classé au coût total de '
