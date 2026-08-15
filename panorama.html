@@ -2732,7 +2732,7 @@ engagements publics) sont imputés nominativement.</div>
 
 <script src="/drapeaux.js"></script>
 <script src="/factcheck.js"></script>
-<script src="/figures_export.js"></script>
+<script src="/figures_export.js" defer></script>
 <script>
 "use strict";
 /* Le référentiel complet est EMBARQUÉ (page autonome, motif observatoire) puis
@@ -10980,6 +10980,12 @@ if(window.parent&&window.parent!==window){
    ══════════════════════════════════════════════════════════════════════════ */
 (function(){
   var REF = null, PH = null, MI = null;
+  /* LE BARÈME PART TOUT DE SUITE : la requête s'ouvre à l'évaluation du
+     script, pendant que le navigateur analyse encore le reste de la page —
+     plus à DOMContentLoaded, qui lui ajoutait un aller-retour complet. Le
+     serveur pose désormais ETag + Cache-Control : les visites suivantes
+     s'arment sans toucher le réseau. */
+  var REF_PROMESSE = fetch('/api/moe-dc').then(function(r){ return r.json(); });
   var $ = function(id){ return document.getElementById(id); };
   function esc(s){ return String(s == null ? '' : s)
     .replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
@@ -11288,11 +11294,20 @@ if(window.parent&&window.parent!==window){
     });
     assietteVue();
     $('moe-go').addEventListener('click', chiffrer);
-    fetch('/api/moe-dc').then(function(r){ return r.json(); })
-      .then(function(j){ if(j && j.ok){ REF = j; boutons(); } })
+    REF_PROMESSE
+      .then(function(j){ if(j && j.ok){ REF = j; boutons(); }
+                         else { $('moe-msg').textContent = 'barème indisponible'; } })
       .catch(function(){ $('moe-msg').textContent = 'barème indisponible'; });
   }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', demarrer);
+  /* LE BLOC S'ARME SANS ATTENDRE DOMContentLoaded. Son balisage précède ce
+     script : quand ces lignes s'exécutent, #moe-go existe déjà. Attendre la
+     fin du chargement de TOUTE la page ajoutait, après le DCL, un
+     aller-retour réseau complet pour le barème — le bloc s'armait à
+     DCL + RTT au lieu de s'armer pendant l'analyse de la page. Le repli
+     DOMContentLoaded ne sert plus que si ce script remontait un jour
+     au-dessus de son balisage. */
+  if($('moe-go')) demarrer();
+  else if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', demarrer);
   else demarrer();
 })();
 

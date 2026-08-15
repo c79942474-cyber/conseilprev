@@ -1910,6 +1910,9 @@ import moe_dc  # noqa: E402  — honoraires de maitrise d'oeuvre, par mission et
                # par phase, sur l'assiette travaux de l'enveloppe
 
 
+_MOE_REF_FIGE = None  # (corps JSON, etag) — figé au premier GET du processus
+
+
 @app.route('/api/moe-dc', methods=['GET', 'POST'])
 @rate_limit(limit=60, window=60)
 @reserve_abonne_api
@@ -1925,10 +1928,30 @@ def api_moe_dc():
     clos-couvert du lot technique, dont les taux different d'un facteur huit sur
     certaines missions."""
     if request.method == 'GET':
-        ref = moe_dc.referentiel()
-        ref["ok"] = True
-        ref["sante"] = moe_dc.sante()
-        return jsonify(ref)
+        # LE BARÈME EST FIGÉ PAR PROCESSUS, avec ETag et Cache-Control : il ne
+        # change qu'avec le code (moe_dc.VERSION), et il était re-sérialisé à
+        # CHAQUE visite du bloc — puis re-téléchargé en entier, faute d'en-tête
+        # de cache. La revisite coûte désormais un 304 sans corps, et le
+        # navigateur s'arme depuis sa propre copie. « private » : la réponse
+        # est derrière session, aucun cache partagé ne doit la retenir.
+        global _MOE_REF_FIGE
+        if _MOE_REF_FIGE is None:
+            ref = moe_dc.referentiel()
+            ref["ok"] = True
+            ref["sante"] = moe_dc.sante()
+            corps = json.dumps(ref, ensure_ascii=False, separators=(',', ':'))
+            _MOE_REF_FIGE = (corps,
+                             '"moe-' + hashlib.sha1(corps.encode()).hexdigest()[:16] + '"')
+        corps, etag = _MOE_REF_FIGE
+        if etag in (request.headers.get('If-None-Match') or ''):
+            r304 = Response(status=304)
+            r304.headers['ETag'] = etag
+            r304.headers['Cache-Control'] = 'private, max-age=3600'
+            return r304
+        resp = Response(corps, mimetype='application/json')
+        resp.headers['ETag'] = etag
+        resp.headers['Cache-Control'] = 'private, max-age=3600'
+        return resp
 
     d = request.get_json(silent=True) or {}
     env = d.get("enveloppe_meur") or []
