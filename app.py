@@ -4571,35 +4571,98 @@ def sitemap_xml():
     return resp
 
 
+# Les robots des moteurs generatifs, ADMIS nommement sur le perimetre public.
+# RENVERSEMENT ASSUME : ce fichier interdisait GPTBot, CCBot, ClaudeBot et
+# anthropic-ai — un choix anti-entrainement d'une autre epoque du site. La
+# strategie est aujourd'hui d'etre CITE par ChatGPT, Gemini, Perplexity et
+# Claude (GEO) ; on ne peut pas etre cite par ce qu'on bloque. Les zones
+# privees, elles, restent fermees a tous — etre lisible n'est pas etre ouvert.
+ROBOTS_IA = [
+    'GPTBot', 'OAI-SearchBot', 'ChatGPT-User',        # OpenAI / ChatGPT
+    'ClaudeBot', 'Claude-User', 'Claude-SearchBot',   # Anthropic / Claude
+    'anthropic-ai',
+    'PerplexityBot', 'Perplexity-User',               # Perplexity
+    'Google-Extended',                                # Gemini, au-dela de Googlebot
+    'CCBot',                                          # Common Crawl, corpus commun
+]
+
+
 @app.route('/robots.txt')
 def robots_txt():
-    """Declare explicitement les zones interdites au crawl — n'arrete pas un bot
-    malveillant decide, mais cadre les bots respectueux (SEO, archivistes) et
-    sert de preuve de bonne foi en cas de litige sur l'usage des donnees du site."""
-    # /panorama et /observatoire sont desormais reserves aux abonnes : les
-    # laisser au crawl ferait indexer une page de refus sous le titre du
-    # module, ce qui abime le referencement ET promet au visiteur un contenu
-    # qu'il ne verra pas en arrivant.
-    content = """User-agent: *
-Disallow: /api/
-Disallow: /admin
-Disallow: /panorama
-Disallow: /observatoire
-Sitemap: https://conseilprev.onrender.com/sitemap.xml
+    """Le perimetre d'exploration, ecrit UNE fois et servi a tous : le groupe
+    « * » et chaque robot d'IA recoivent LES MEMES regles. Dans le protocole
+    robots, un groupe nomme REMPLACE le generique — un « User-agent: GPTBot »
+    qui ne repeterait pas les Disallow lui ouvrirait /admin."""
+    # Les reserves viennent de PAGES_RESERVEES : les lister a la main ici a
+    # deja oublie /enveloppe et /empreinte-parc a leur creation.
+    regles = ['Allow: /', 'Disallow: /api/', 'Disallow: /admin'] + \
+             ['Disallow: %s' % p for p in sorted(PAGES_RESERVEES)]
 
-User-agent: GPTBot
-Disallow: /
+    def groupe(ua):
+        return "\n".join(['User-agent: %s' % ua] + regles)
 
-User-agent: CCBot
-Disallow: /
+    corps = "\n".join(
+        [groupe('*'), '',
+         '# Moteurs generatifs (GEO) : memes regles que le web classique —',
+         '# tout le public est citable, rien du prive n\'est offert.', '']
+        + [groupe(bot) + '\n' for bot in ROBOTS_IA]
+        + ['Sitemap: https://conseilprev.onrender.com/sitemap.xml',
+           '# Resume du site pour les assistants : '
+           'https://conseilprev.onrender.com/llms.txt', ''])
+    return Response(corps, mimetype='text/plain')
 
-User-agent: ClaudeBot
-Disallow: /
 
-User-agent: anthropic-ai
-Disallow: /
-"""
-    return Response(content, mimetype='text/plain')
+@app.route('/llms.txt')
+@rate_limit(limit=60, window=60)
+def llms_txt():
+    """Le resume du site pour les assistants (convention llmstxt.org) : qui
+    nous sommes, ce que chaque page publique contient, et ce que les etudes
+    reservees CALCULENT — pour qu'un moteur qui ne peut pas les lire puisse
+    quand meme les decrire exactement. Aucune adresse reservee n'y figure."""
+    b = 'https://conseilprev.onrender.com'
+    corps = """# ConseilPrev — Sentinel
+
+> Cabinet de conseil français : gouvernance de l'intelligence artificielle et
+> conformité (AI Act, RGPD, NIS2, ISO 27001, DORA), et plateforme Sentinel
+> d'études pour centres de données — enveloppe d'investissement, panorama du
+> marché, empreinte environnementale, prix de maîtrise d'œuvre. Contenus en
+> français. Fondé par Christophe Cerf, Paris.
+
+Les études Sentinel sont réservées aux comptes clients ; les pages ci-dessous
+sont publiques et citables.
+
+## Pages publiques
+
+- [Accueil]({b}/) : le cabinet, les offres, les huit risques systémiques IA
+- [AIES]({b}/aies) : l'outil d'évaluation et de documentation des systèmes IA
+- [Plateforme]({b}/platform) : ce que Sentinel regroupe, module par module
+- [Formations]({b}/formations) : catalogue avec durées et tarifs (JSON-LD servi)
+- [FAQ]({b}/faq) : AI Act, RGPD, cas d'usage, guides — et la plateforme Sentinel
+- [Livre blanc]({b}/livre-blanc) · [Ressources]({b}/ressources) · [Actualités]({b}/actualites)
+- [Données]({b}/donnees) : jeux et connecteurs (data.gouv.fr)
+- [Tarifications]({b}/tarifications) · [Démo]({b}/demo) : premier contact
+- [Empreinte]({b}/empreinte) · [Équipe]({b}/team) · [Support]({b}/support)
+
+## Études réservées aux clients — ce qu'elles calculent
+
+- Enveloppe d'investissement data centre : ordres de grandeur d'investissement
+  par lots techniques, indicateurs financiers dérivés, provenance de chaque
+  montant — à substituer par les devis réels, et l'étude dit ce qui est estimé.
+- Panorama du marché et observatoire : la donnée sourcée, datée, avec la
+  nature de chaque source.
+- Empreinte du parc : cycle de vie, eau de site et eau de la source.
+- Prix de maîtrise d'œuvre par phases (loi MOP), module juridique,
+  gouvernance de l'IA en exploitation.
+
+## Site frère
+
+- [ConseilPrev Cyber](https://conseilprevcyber.onrender.com) : cybersécurité
+  industrielle (OT/IACS, IEC 62443), NIS2, et les studios techniques data
+  centre — énergie, eau, carbone, stratégie durable.
+""".replace('{b}', b)
+    r = Response(corps, mimetype='text/plain; charset=utf-8')
+    r.headers['Cache-Control'] = 'public, max-age=3600'
+    return r
 
 PAGES = {
     '/':              'index.html',

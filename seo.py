@@ -163,7 +163,11 @@ DEFAUT = (0.5, "monthly")
 # Ce que `robots.txt` interdit ne doit PAS figurer au plan. Annoncer à un
 # moteur une adresse qu'on lui interdit par ailleurs, c'est lui envoyer deux
 # consignes contraires — et c'est lui qui choisit laquelle suivre.
-INTERDITES = ("/api/", "/admin", "/panorama", "/observatoire")
+# /enveloppe et /empreinte-parc MANQUAIENT : réservées aux abonnés depuis
+# leur création, elles restaient annoncées au plan du site — un moteur y
+# envoyait ses visiteurs trouver une porte close sous un titre prometteur.
+INTERDITES = ("/api/", "/admin", "/panorama", "/observatoire",
+              "/enveloppe", "/empreinte-parc")
 
 
 def exclue(route):
@@ -273,3 +277,72 @@ def sante(pages=None, racine="."):
             "problemes": (["%d page(s) sans titre" % len(sans_titre)] if sans_titre else [])
                          + (["%d page(s) sans description" % len(sans_desc)]
                             if sans_desc else [])}
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# GEO — LE BALISAGE FAQ, DÉRIVÉ DE LA PAGE
+#
+# Les moteurs génératifs (ChatGPT, Gemini, Perplexity, Claude) s'appuient sur
+# le FAQPage pour citer des réponses. La règle absolue : le bloc DIT ce que la
+# page MONTRE. Il est donc dérivé du HTML par le même extracteur qui le
+# contrôle en recette — une seule implémentation, aucun écart possible.
+#
+# Régénérer après modification de la FAQ :
+#     python3 -c "import seo; print(seo.bloc_faq(open('faq.html').read()))"
+# ═══════════════════════════════════════════════════════════════════════════
+
+import html as _html
+import json as _json
+
+_FAQ_Q = re.compile(r'<button class="faq-q".*?>(.*?)</button>', re.S)
+_FAQ_R = re.compile(r'<div class="faq-a-inner">(.*?)</div>', re.S)
+_FAQ_FLECHE = re.compile(r'<span class="faq-arrow"[^>]*>.*?</span>', re.S)
+_FAQ_BLOC = re.compile(
+    r'<script type="application/ld\+json" data-geo="faq">(.*?)</script>', re.S)
+_TOUTE_BALISE = re.compile(r"<[^>]+>")
+
+
+def _texte_nu(fragment):
+    t = _FAQ_FLECHE.sub(" ", fragment or "")
+    t = _TOUTE_BALISE.sub(" ", t)
+    t = _html.unescape(t)
+    return re.sub(r"\s+", " ", t).strip()
+
+
+def extraire_faq(page_html):
+    """Les paires question/réponse RÉELLEMENT affichées par la page."""
+    qs = [_texte_nu(m) for m in _FAQ_Q.findall(page_html or "")]
+    rs = [_texte_nu(m) for m in _FAQ_R.findall(page_html or "")]
+    if len(qs) != len(rs):
+        raise ValueError("FAQ déséquilibrée : %d questions, %d réponses"
+                         % (len(qs), len(rs)))
+    return list(zip(qs, rs))
+
+
+def jsonld_faq(page_html):
+    paires = extraire_faq(page_html)
+    if not paires:
+        return None
+    return {"@context": "https://schema.org", "@type": "FAQPage",
+            "inLanguage": "fr",
+            "mainEntity": [{"@type": "Question", "name": q,
+                            "acceptedAnswer": {"@type": "Answer", "text": r}}
+                           for q, r in paires]}
+
+
+def bloc_faq(page_html):
+    d = jsonld_faq(page_html)
+    if d is None:
+        return ""
+    return ('<script type="application/ld+json" data-geo="faq">'
+            + _json.dumps(d, ensure_ascii=False) + "</script>")
+
+
+def bloc_faq_en_place(page_html):
+    m = _FAQ_BLOC.search(page_html or "")
+    if not m:
+        return None
+    try:
+        return _json.loads(m.group(1))
+    except ValueError:
+        return None
