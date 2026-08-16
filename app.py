@@ -1848,6 +1848,54 @@ import kpi_finance  # noqa: E402  — EVA, ROCE, free cash flow : la lecture de
                     # creation de valeur qui manquait au GO / NO GO
 
 
+import pilotage_dc  # noqa: E402  — formes, seuils et alertes : le tableau
+                   # de bord dont la maturité dit ce qu'il peut promettre
+
+
+@app.route('/api/pilotage-dc', methods=['GET', 'POST'])
+@rate_limit(limit=60, window=60)
+@reserve_abonne_api
+def api_pilotage_dc():
+    """Le pilotage d'un investissement data centre.
+
+    EN GET : le cadre — les trois formes et QUAND chacune se lit, les cinq
+    états de seuil, les cinq indicateurs avec leur incertitude par défaut, et
+    ce qui est tenable à chaque niveau de maturité.
+
+    EN POST : le tableau de bord — état, tendance et forme par indicateur,
+    plus les alertes.
+
+    CE QUE CETTE ROUTE FAIT ET QU'UN TABLEUR NE FAIT PAS : elle refuse
+    d'alerter sur du bruit. Une enveloppe à ±30 % qui dépasse sa cible de
+    12 % n'a rien franchi — l'écart est dans l'incertitude de la grandeur.
+    Le rouge exige un dépassement supérieur À LA FOIS à la tolérance et à
+    l'incertitude ; entre les deux, l'état est « écart non démontré ». Sans
+    cette règle, le troisième faux positif éteint la vigilance sur tous les
+    autres.
+    """
+    if request.method == 'GET':
+        r = pilotage_dc.referentiel()
+        r['ok'] = True
+        r['sante'] = pilotage_dc.sante()
+        return jsonify(r)
+
+    d = request.get_json(silent=True) or {}
+    mesures = d.get('mesures') if isinstance(d.get('mesures'), dict) else {}
+    niveau = d.get('niveau_maturite')
+    try:
+        niveau = None if niveau in (None, '') else int(niveau)
+    except (TypeError, ValueError):
+        niveau = None
+    try:
+        r = pilotage_dc.piloter(mesures, niveau)
+    except Exception as e:  # noqa: BLE001
+        logger.error(f'PILOTAGE_ERR: {e}')
+        return jsonify(ok=False, error='calcul',
+                       message="Le pilotage n'a pas pu être établi."), 500
+    r['ok'] = True
+    return jsonify(r)
+
+
 import maturite_decision  # noqa: E402  — la maturité ANALYTIQUE de
                          # l'organisation : peut-elle instruire la décision
                          # que ces chiffres préparent ?

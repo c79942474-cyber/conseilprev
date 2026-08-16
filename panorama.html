@@ -1927,6 +1927,61 @@ th .fl{font-size:9px;margin-left:3px}
 }
 
   /* ── HONORAIRES DE MAÎTRISE D'ŒUVRE ──────────────────────────────────── */
+  /* ── PILOTAGE, SEUILS ET ALERTES ────────────────────────────────────── */
+  .pil-tab{width:100%;border-collapse:collapse;font-size:12.5px;margin:12px 0}
+  .pil-tab th{text-align:left;font-size:11px;text-transform:uppercase;
+    letter-spacing:.04em;color:var(--mu,#9aa);padding:6px 8px;
+    border-bottom:1px solid var(--line,#233)}
+  .pil-tab td{padding:7px 8px;border-bottom:1px solid var(--line,#233);
+    vertical-align:top}
+  .pil-tab input{background:rgba(0,0,0,.24);border:1px solid var(--line,#233);
+    border-radius:6px;color:inherit;font-size:12px;padding:5px 8px;width:100%}
+  .pil-u{font-size:11px;color:var(--mu,#9aa)}
+  .pil-glob{border:1px solid var(--line,#233);border-left:3px solid var(--mu,#9aa);
+    border-radius:10px;padding:11px 14px;font-size:13px;line-height:1.65;
+    background:rgba(0,0,0,.14);margin-bottom:10px}
+  .pil-glob.alerte{border-left-color:#E06C5A}
+  .pil-ten{font-size:12px;line-height:1.6;color:#7DD3A0;margin:0 0 14px}
+  .pil-ten.non{color:#F0B27A}
+  .pil-cartes{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));
+    gap:11px}
+  .pil-c{border:1px solid var(--line,#233);border-left:3px solid var(--mu,#9aa);
+    border-radius:11px;padding:11px 13px;background:rgba(0,0,0,.10)}
+  .pil-c.conforme{border-left-color:#7DD3A0}
+  .pil-c.surveiller{border-left-color:#F0B27A}
+  .pil-c.alerte{border-left-color:#E06C5A}
+  .pil-t{font-size:12.5px;font-weight:600;line-height:1.4}
+  .pil-pt{font-size:15px}
+  .pil-fl{font-size:14px;color:var(--mu,#9aa)}
+  .pil-v{font-family:var(--mono,monospace);font-size:19px;margin:5px 0 3px}
+  .pil-svg{width:100%;height:64px;display:block;margin:6px 0}
+  .pil-l{font-size:11.5px;line-height:1.55;color:var(--mu,#9aa);margin-top:4px}
+  .pil-tend{font-style:italic}
+  /* Le refus de forme est une INFORMATION, pas une erreur : il se lit. */
+  .pil-refus{font-size:11.5px;line-height:1.55;margin-top:7px;padding:6px 9px;
+    border-radius:7px;background:rgba(240,178,122,.10);
+    border:1px solid rgba(240,178,122,.30)}
+  .pil-pq{margin-top:7px}
+  .pil-pq summary{cursor:pointer;font-size:11.5px;color:var(--mu,#9aa)}
+  .pil-pq p{font-size:11.5px;line-height:1.6;margin:5px 0 0}
+  .pil-al{margin:0;padding-left:18px;font-size:12.5px;line-height:1.7}
+  /* L'explication composée : c'est ce qu'on lit en premier, donc ce qui
+     doit se détacher — sans crier, car elle accompagne, elle ne remplace pas
+     la figure. */
+  .pil-exp{font-size:12px;line-height:1.65;margin-top:9px;padding:8px 10px;
+    border-radius:8px;background:rgba(139,92,246,.08);
+    border:1px solid rgba(139,92,246,.20)}
+  .pil-an,.pil-pr{margin-top:7px}
+  .pil-an summary,.pil-pr summary{cursor:pointer;font-size:11.5px;font-weight:600}
+  .pil-an p,.pil-pr p{font-size:11.5px;line-height:1.6;margin:5px 0 0}
+  .pil-me{color:var(--mu,#9aa);font-style:italic}
+  .pil-formes{margin-top:16px;border:1px solid var(--line,#233);border-radius:10px;
+    padding:10px 14px;background:rgba(0,0,0,.10)}
+  .pil-formes summary{cursor:pointer;font-size:13px;font-weight:600}
+  .pil-fm{margin-top:10px}
+  .pil-fm p{font-size:12px;line-height:1.6;margin:3px 0}
+  .pil-ev{color:#F0B27A}
+
   /* ── MATURITÉ ANALYTIQUE DÉCISIONNELLE ──────────────────────────────── */
   .mat-form{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(400px,100%),1fr));
     gap:12px;margin:14px 0}
@@ -2751,6 +2806,57 @@ engagements publics) sont imputés nominativement.</div>
   </div>
 </section>
 
+<!-- ══ PILOTAGE, SEUILS ET ALERTES ═══════════════════════════════════════
+     Le diagnostic de maturité, juste au-dessus, dit ce qu'on PEUT promettre
+     comme tableau de bord ; celui-ci est le tableau. Les deux se lisent dans
+     cet ordre — construire le second sans le premier, c'est promettre des
+     notifications proactives à une organisation qui ne date pas ses
+     données. -->
+<section class="panel" id="s-pilotage" aria-labelledby="t-pil">
+  <div class="panel-head">
+    <span class="panel-title" id="t-pil">Pilotage, seuils et alertes — attirer l'attention là où une action est nécessaire</span>
+    <span class="panel-note" id="pil-note">cinq indicateurs</span>
+  </div>
+  <div class="panel-body">
+    <p class="lead" style="max-width:78ch">
+      Un tableau de bord ne doit pas seulement afficher des données&nbsp;: il doit
+      signaler <b>où une décision est attendue</b>, sans que le lecteur ait à
+      comparer mentalement chaque valeur à sa cible. Trois mécanismes s'en
+      chargent ici — la forme choisie pour la donnée, le seuil coloré, et la
+      tendance mesurée. S'y ajoutent les trois apports de l'analyse augmentée&nbsp;:
+      <b>projection</b> de l'indicateur, <b>détection d'anomalies</b> et
+      <b>commentaire en langage naturel</b>.
+    </p>
+    <p class="note" style="max-width:78ch">
+      <b>Ces trois-là sont déterministes, sans modèle de langage — et c'est un choix.</b>
+      Une projection doit pouvoir être refaite à la main par celui qui la conteste&nbsp;;
+      une anomalie doit dire <i>pourquoi</i> elle en est une, «&nbsp;le modèle l'a
+      détectée&nbsp;» n'étant pas une raison qu'on oppose à un exploitant&nbsp;; et un
+      commentaire annexé à un dossier ne doit rien pouvoir inventer. Composé depuis
+      les grandeurs déjà calculées, celui-ci n'affirme que ce qui a été mesuré et
+      pose les causes en question.
+    </p>
+    <p class="note" style="max-width:78ch">
+      <b>Une alerte ne se déclenche pas sur du bruit.</b> C'est ce que ce moteur
+      tient et qu'un tableur ne tient pas&nbsp;: il connaît l'incertitude de ses
+      grandeurs. Une enveloppe à ±30&nbsp;% qui dépasse sa cible de 12&nbsp;% n'a
+      rien franchi — l'écart est dans le bruit. Le rouge exige un dépassement
+      supérieur à la fois à la tolérance et à l'incertitude&nbsp;; entre les deux,
+      l'état affiché est «&nbsp;écart non démontré&nbsp;». Sans cette règle, le
+      troisième faux positif éteint la vigilance sur tous les autres.
+    </p>
+    <div id="pil-form" class="pil-form"><p class="note">chargement du cadre…</p></div>
+    <div class="mat-cmd">
+      <button type="button" class="btn-p" id="pil-go">Établir le tableau de bord</button>
+      <span class="note" id="pil-msg"></span>
+    </div>
+    <div id="pil-out"></div>
+    <details class="pil-formes"><summary>Quelle forme pour quelle donnée — et quand ce moteur refuse d'en produire une</summary>
+      <div id="pil-guide"></div>
+    </details>
+  </div>
+</section>
+
 <section class="panel" id="s-prospect" aria-labelledby="t-pro">
   <div class="panel-head">
     <span class="panel-title" id="t-pro">Prospectives 2026-2030 — ce qui change, et ce que ça périme</span>
@@ -2989,7 +3095,7 @@ if(/[?&]embed=1(&|$)/.test(window.location.search)){document.body.classList.add(
 var MODULE_VUES = {
   panorama: ["s-carte", "s-signaux", "s-cas", "s-lectures",
              "s-implantation", "s-prospect", "s-methodo", "s-socle", "s-sources"],
-  enveloppe: ["s-finance", "s-maturite"],
+  enveloppe: ["s-finance", "s-maturite", "s-pilotage"],
   empreinte: ["s-empreinte"]
 };
 /* LES PANNEAUX DE DÉTAIL NE SONT D'AUCUNE VUE, et il ne faut surtout pas y
@@ -11399,6 +11505,232 @@ if(window.parent&&window.parent!==window){
      au-dessus de son balisage. */
   if($('moe-go')) demarrer();
   else if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', demarrer);
+  else demarrer();
+})();
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PILOTAGE — FORMES, SEUILS, ALERTES
+   ═════════════════════════════════════════════════════════════════════════
+   Les figures sont dessinées en SVG ici même : aucune bibliothèque externe
+   à charger, donc rien qui puisse manquer, ralentir ou changer sans
+   prévenir. Trois formes, et le SERVEUR décide laquelle — y compris pour
+   refuser un camembert illisible. */
+(function(){
+  var CADRE = null;
+  function $(i){ return document.getElementById(i); }
+  function esc(t){ return String(t == null ? "" : t)
+    .replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+  function nb(v){ return (v === null || v === undefined || v === "") ? null : parseFloat(String(v).replace(",", ".")); }
+
+  var COUL = { vert:"#7DD3A0", orange:"#F0B27A", rouge:"#E06C5A", gris:"#8b93a7" };
+
+  /* ── LA COURBE : une évolution. Les points sont marqués — une ligne nue
+     laisse croire à une mesure continue là où il y a cinq relevés. */
+  function courbe(serie, coul){
+    if(!serie || serie.length < 2) return "";
+    var w = 260, h = 64, p = 6;
+    var mn = Math.min.apply(null, serie), mx = Math.max.apply(null, serie);
+    var amp = (mx - mn) || 1;
+    var pts = serie.map(function(v, i){
+      var x = p + i * (w - 2 * p) / (serie.length - 1);
+      var y = h - p - (v - mn) / amp * (h - 2 * p);
+      return [x, y];
+    });
+    return '<svg class="pil-svg" viewBox="0 0 ' + w + " " + h + '" role="img"'
+      + ' aria-label="Évolution sur ' + serie.length + ' points">'
+      + '<polyline fill="none" stroke="' + coul + '" stroke-width="2" points="'
+      + pts.map(function(q){ return q[0].toFixed(1) + "," + q[1].toFixed(1); }).join(" ")
+      + '"/>'
+      + pts.map(function(q){ return '<circle cx="' + q[0].toFixed(1) + '" cy="'
+          + q[1].toFixed(1) + '" r="2.5" fill="' + coul + '"/>'; }).join("")
+      + "</svg>";
+  }
+
+  /* ── L'HISTOGRAMME : une comparaison. Base commune, l'œil compare des
+     longueurs — c'est pour cela qu'il remplace le camembert refusé. */
+  function histogramme(vals, coul){
+    if(!vals || !vals.length) return "";
+    var w = 260, h = 64, p = 6;
+    var mx = Math.max.apply(null, vals.map(Math.abs)) || 1;
+    var lb = (w - 2 * p) / vals.length;
+    return '<svg class="pil-svg" viewBox="0 0 ' + w + " " + h + '" role="img"'
+      + ' aria-label="Comparaison de ' + vals.length + ' valeurs">'
+      + vals.map(function(v, i){
+          var ht = Math.abs(v) / mx * (h - 2 * p);
+          return '<rect x="' + (p + i * lb + lb * 0.15).toFixed(1) + '" y="'
+            + (h - p - ht).toFixed(1) + '" width="' + (lb * 0.7).toFixed(1)
+            + '" height="' + ht.toFixed(1) + '" fill="' + coul + '" rx="1.5"/>';
+        }).join("") + "</svg>";
+  }
+
+  function rendreGuide(){
+    var z = $("pil-guide");
+    if(!z || !CADRE) return;
+    var h = "";
+    Object.keys(CADRE.formes || {}).forEach(function(k){
+      var f = CADRE.formes[k];
+      h += '<div class="pil-fm"><b>' + esc(f.nom) + "</b>"
+        + "<p><i>Pour&nbsp;:</i> " + esc(f.pour) + "</p>"
+        + "<p><i>Ce qu'elle montre&nbsp;:</i> " + esc(f.montre) + "</p>"
+        + '<p class="pil-ev"><i>À éviter&nbsp;:</i> ' + esc(f.eviter) + "</p></div>";
+    });
+    h += '<p class="note">Le camembert est REFUSÉ au-delà de '
+      + CADRE.camembert_parts_max + " parts, ou lorsque deux parts diffèrent de "
+      + "moins de " + Math.round(CADRE.camembert_ecart_min * 100) + "&nbsp;%"
+      + " — l'histogramme trié est alors proposé à la place.</p>";
+    z.innerHTML = h;
+  }
+
+  function rendreForm(){
+    var z = $("pil-form");
+    if(!z || !CADRE) return;
+    var h = '<table class="pil-tab"><thead><tr><th>Indicateur</th>'
+      + "<th>Valeur</th><th>Cible</th><th>Série (séparée par des virgules)</th></tr></thead><tbody>";
+    (CADRE.indicateurs || []).forEach(function(i){
+      h += '<tr><td><b>' + esc(i.nom) + "</b><br>"
+        + '<span class="pil-u">' + esc(i.unite) + " · tolérance "
+        + Math.round(i.tolerance * 100) + "&nbsp;% · incertitude ±"
+        + Math.round(i.incertitude * 100) + "&nbsp;%</span></td>"
+        + '<td><input type="text" inputmode="decimal" data-pi="' + esc(i.cle) + '" data-ch="valeur" size="7"></td>'
+        + '<td><input type="text" inputmode="decimal" data-pi="' + esc(i.cle) + '" data-ch="cible" size="7"></td>'
+        + '<td><input type="text" data-pi="' + esc(i.cle) + '" data-ch="serie" placeholder="ex. 12, 13, 15, 14"></td></tr>';
+    });
+    z.innerHTML = h + "</tbody></table>";
+  }
+
+  function mesures(){
+    var m = {};
+    [].slice.call(document.querySelectorAll("#pil-form input")).forEach(function(e){
+      var k = e.getAttribute("data-pi"), c = e.getAttribute("data-ch");
+      var v = (e.value || "").trim();
+      if(!v) return;
+      if(!m[k]) m[k] = {};
+      if(c === "serie"){
+        m[k].serie = v.split(/[;,]/).map(function(x){ return nb(x); })
+          .filter(function(x){ return x !== null && !isNaN(x); });
+      } else { m[k][c] = nb(v); }
+    });
+    return m;
+  }
+
+  function rendre(d){
+    var z = $("pil-out");
+    if(!z) return;
+    var h = '<div class="pil-glob' + (d.alertes && d.alertes.length ? " alerte" : "")
+      + '">' + esc(d.lecture) + "</div>";
+
+    /* CE QUI EST TENABLE : dit AVANT le tableau, pas après. Une organisation
+       qui découvre en bas de page que ses notifications ne sont pas tenables
+       a déjà annoncé la fonctionnalité à son comité. */
+    if(d.tenable){
+      h += '<p class="pil-ten' + (d.tenable.alertes ? "" : " non") + '">'
+        + (d.tenable.alertes ? "✓ " : "⚠ ") + esc(d.tenable.dit) + "</p>";
+    }
+
+    h += '<div class="pil-cartes">';
+    (d.indicateurs || []).forEach(function(i){
+      var c = COUL[i.seuil.couleur] || COUL.gris;
+      var fig = "";
+      if(i.serie && i.serie.length >= 2){
+        fig = i.forme.forme === "courbe" ? courbe(i.serie, c)
+                                         : histogramme(i.serie, c);
+      }
+      h += '<div class="pil-c ' + esc(i.seuil.etat) + '">'
+        + '<div class="pil-t"><span class="pil-pt" style="color:' + c + '">'
+        + esc(i.seuil.signe) + "</span> " + esc(i.nom)
+        + ' <span class="pil-fl" title="' + esc(i.tendance.lecture) + '">'
+        + esc(i.tendance.fleche) + "</span></div>"
+        + '<div class="pil-v">' + (i.valeur === null || i.valeur === undefined
+            ? "—" : esc(String(i.valeur)))
+        + ' <span class="pil-u">' + esc(i.unite)
+        + (i.cible !== null && i.cible !== undefined
+            ? " · cible " + esc(String(i.cible)) : "") + "</span></div>"
+        + fig
+        + '<div class="pil-l">' + esc(i.seuil.lecture) + "</div>"
+        + '<div class="pil-l pil-tend">' + esc(i.tendance.lecture) + "</div>"
+        + (i.forme.impose
+            ? '<div class="pil-refus">Forme imposée&nbsp;: ' + esc(i.forme.pourquoi) + "</div>"
+            : "")
+        /* LES TROIS APPORTS DE L'ANALYSE AUGMENTÉE. L'explication passe en
+           PREMIER : c'est elle qui fait gagner du temps — le lecteur qui
+           s'arrête là a déjà l'essentiel, les détails sont dépliables. */
+        + (i.explication
+            ? '<div class="pil-exp">' + esc(i.explication) + "</div>" : "")
+        + ((i.anomalies && i.anomalies.possible
+            && ((i.anomalies.aberrantes || []).length || i.anomalies.rupture))
+            ? '<details class="pil-an"><summary>Anomalies détectées</summary>'
+              + "<p>" + esc(i.anomalies.lecture) + "</p>"
+              + (i.anomalies.rupture
+                  ? "<p><b>Rupture (" + esc(i.anomalies.rupture.nature) + ")</b> — "
+                    + esc(i.anomalies.rupture.pourquoi) + "</p>" : "")
+              + (i.anomalies.aberrantes || []).map(function(x){
+                  return "<p><b>Valeur " + esc(String(x.valeur)) + "</b> — "
+                    + esc(x.pourquoi) + "</p>"; }).join("")
+              + '<p class="pil-me">' + esc(i.anomalies.methode) + "</p></details>"
+            : "")
+        + (i.prediction
+            ? '<details class="pil-pr"><summary>' + (i.prediction.possible
+                ? "Projection — " + esc(String(i.prediction.points[i.prediction.points.length - 1].valeur))
+                : "Aucune projection possible") + "</summary>"
+              + "<p>" + esc(i.prediction.possible ? i.prediction.lecture : i.prediction.motif) + "</p>"
+              + (i.prediction.possible
+                  ? '<p class="pil-me">' + esc(i.prediction.methode) + "</p>"
+                    + '<p class="pil-me">' + esc(i.prediction.variables_manquantes) + "</p>"
+                  : "")
+              + "</details>"
+            : "")
+        + '<details class="pil-pq"><summary>Pourquoi cet indicateur, et ce qu\'il risque</summary>'
+        + "<p>" + esc(i.pourquoi) + "</p><p><b>Risque&nbsp;:</b> " + esc(i.risque) + "</p></details>"
+        + "</div>";
+    });
+    h += "</div>";
+
+    if(d.alertes && d.alertes.length){
+      h += '<h4 class="mat-h">Les alertes — qui décide, et quand</h4><ul class="pil-al">';
+      d.alertes.forEach(function(a){
+        h += "<li><b>" + esc(a.nom) + "</b> — " + esc(a.lecture)
+          + "<br><i>" + esc(a.risque) + "</i><br>"
+          + "Portée " + esc(a.quand)
+          + (a.notifiable ? " (notification proactive tenable à ce niveau de maturité)."
+                          : " (la notification proactive n'est pas tenable à ce niveau).")
+          + "</li>";
+      });
+      h += "</ul>";
+    }
+    h += '<p class="note mat-res">' + esc(d.reserve) + "</p>";
+    z.innerHTML = h;
+  }
+
+  function demarrer(){
+    if(!$("pil-go")) return;
+    fetch("/api/pilotage-dc").then(function(r){ return r.json(); })
+      .then(function(j){ if(j && j.ok){ CADRE = j; rendreForm(); rendreGuide(); } })
+      .catch(function(){ $("pil-form").innerHTML = '<p class="note">cadre indisponible</p>'; });
+
+    $("pil-go").addEventListener("click", function(){
+      /* LE NIVEAU DE MATURITÉ EST REPRIS DU DIAGNOSTIC S'IL A ÉTÉ ÉTABLI —
+         c'est lui qui décide de ce que le pilotage peut promettre. Sans
+         diagnostic, on ne suppose rien : le module le dira. */
+      var niv = null;
+      var g = document.querySelector("#mat-out .mat-glob");
+      if(g){
+        var mm = /niveau (\d) sur/.exec(g.textContent || "");
+        if(mm) niv = parseInt(mm[1], 10);
+      }
+      $("pil-msg").textContent = "calcul en cours…";
+      fetch("/api/pilotage-dc", {
+        method: "POST", headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ mesures: mesures(), niveau_maturite: niv })
+      }).then(function(r){ return r.json(); }).then(function(j){
+        if(!j || !j.ok){ $("pil-msg").textContent = (j && j.message) || "pilotage indisponible"; return; }
+        $("pil-msg").textContent = niv === null
+          ? "Maturité non diagnostiquée : établissez le diagnostic ci-dessus pour savoir ce qui est tenable."
+          : "Maturité constatée : niveau " + niv + ".";
+        rendre(j);
+      }).catch(function(){ $("pil-msg").textContent = "pilotage indisponible"; });
+    });
+  }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", demarrer);
   else demarrer();
 })();
 

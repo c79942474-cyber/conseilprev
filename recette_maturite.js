@@ -156,6 +156,83 @@ const titre = (t) => console.log('\n══ ' + t + ' ══\n');
   ok('…et la réserve distingue les deux questions',
      /ne dit pas si l'investissement est bon/.test(note.txt));
 
+  titre('5. Le pilotage : seuils, formes et les trois apports augmentés');
+
+  /* La section de pilotage vit sur la MÊME vue : le diagnostic dit ce qu'on
+     peut promettre, le pilotage est ce qu'on livre. On saisit une mesure qui
+     dépasse largement sa cible ET une série porteuse d'une rupture, pour
+     éprouver les trois apports d'un coup. */
+  let pilArme = true;
+  try {
+    await pg.waitForFunction(() =>
+      document.querySelectorAll('#pil-form input').length > 0, null, { timeout: 20000 });
+  } catch (e) { pilArme = false; }
+  ok('le tableau de bord est armé depuis le serveur', pilArme,
+     pilArme ? '' : 'aucun champ de mesure');
+
+  if (pilArme) {
+    await pg.evaluate(() => {
+      const set = (cle, champ, v) => {
+        const e = document.querySelector('#pil-form input[data-pi="' + cle
+          + '"][data-ch="' + champ + '"]');
+        if (e) { e.value = v; }
+      };
+      /* PUE promis 1,25, constaté 1,45 : au-delà de la tolérance ET de
+         l'incertitude — une vraie alerte. La série porte une accélération. */
+      set('pue_constate', 'valeur', '1.45');
+      set('pue_constate', 'cible', '1.25');
+      set('pue_constate', 'serie', '1.26, 1.27, 1.28, 1.34, 1.40, 1.45');
+      /* Enveloppe +12 % sur une grandeur à ±30 % : DANS le bruit. Le module
+         doit refuser d'alerter — c'est le contrôle qui compte le plus. */
+      set('enveloppe_kw', 'valeur', '11200');
+      set('enveloppe_kw', 'cible', '10000');
+    });
+    await pg.click('#pil-go');
+    let rendu = true;
+    try {
+      await pg.waitForFunction(() =>
+        document.querySelectorAll('#pil-out .pil-c').length > 0, null, { timeout: 20000 });
+    } catch (e) { rendu = false; }
+    const pil = await pg.evaluate(() => {
+      const carte = (cle) => {
+        const cs = [...document.querySelectorAll('#pil-out .pil-c')];
+        return cs.find(c => (c.querySelector('.pil-t') || {}).textContent
+          && /PUE constaté/.test(c.querySelector('.pil-t').textContent)) || null;
+      };
+      const cs = [...document.querySelectorAll('#pil-out .pil-c')].map(c => ({
+        titre: (c.querySelector('.pil-t') || {}).textContent.replace(/\s+/g, ' ').trim(),
+        classe: c.className,
+        exp: (c.querySelector('.pil-exp') || {}).textContent || '',
+        an: !!c.querySelector('.pil-an'),
+        pr: (c.querySelector('.pil-pr summary') || {}).textContent || '',
+        svg: !!c.querySelector('svg'),
+      }));
+      return {
+        cartes: cs,
+        glob: (document.querySelector('#pil-out .pil-glob') || {}).textContent || '',
+        alertes: document.querySelectorAll('#pil-out .pil-al li').length,
+      };
+    });
+    ok('les cartes du tableau de bord sont rendues', rendu && pil.cartes.length === 5,
+       pil.cartes.length + ' carte(s)');
+    const pue = pil.cartes.find(c => /PUE/.test(c.titre)) || {};
+    const env = pil.cartes.find(c => /Enveloppe/.test(c.titre)) || {};
+    ok('un écart démontré passe à l’alerte ou à la surveillance',
+       /alerte|surveiller/.test(pue.classe || ''), pue.classe);
+    ok('UN ÉCART DANS L’INCERTITUDE NE DÉCLENCHE PAS D’ALERTE',
+       /indetermine/.test(env.classe || ''),
+       (env.classe || 'carte introuvable') + ' — +12 % sur une grandeur à ±30 %');
+    ok('…et la page l’explique au lieu de le taire',
+       /incertitude/.test(pil.glob) || /non démontré/.test(env.exp || ''),
+       (env.exp || '').slice(0, 100));
+    ok('la figure est dessinée pour les séries fournies', !!pue.svg);
+    ok('L’EXPLICATION EST COMPOSÉE, et le dit',
+       /sans modèle de langage/.test(pue.exp), pue.exp.slice(0, 110));
+    ok('…elle cite les valeurs MESURÉES', /1\.45/.test(pue.exp) && /1\.25/.test(pue.exp));
+    ok('la détection d’anomalies est proposée sur la série', pue.an);
+    ok('la projection est offerte, ou son refus motivé', !!pue.pr, pue.pr.slice(0, 60));
+  }
+
   ok('aucune erreur de script sur toute la manœuvre', err.length === 0,
      err.join(' | ').slice(0, 160));
 
