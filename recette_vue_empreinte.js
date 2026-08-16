@@ -58,11 +58,22 @@ const VISIBLES = () => [].slice.call(document.querySelectorAll('section.panel[id
       .map(a => a.getAttribute('href')),
   }));
   ok('la vue déclarée est « empreinte »', e1.vue === 'empreinte', e1.vue);
-  ok('SEULE la section d’empreinte est montrée',
-     e1.visibles.length === 1 && e1.visibles[0] === 's-empreinte',
-     e1.visibles.join(', ') || 'aucune');
+  /* ON DEMANDE LA COMPOSITION À LA PAGE, ON NE LA RECOPIE PAS. Ce contrôle
+     exigeait « une seule section, s-empreinte » : un inventaire figé, qui
+     tombe à la première section ajoutée à la vue et n'atteste plus rien
+     d'autre que son propre âge. Ce qu'il protège, lui, ne change pas : la
+     vue empreinte montre ce qu'elle déclare, et rien qui appartienne à une
+     autre lecture. */
+  const decl = await pg.evaluate(() => MODULE_VUES);
+  ok('la vue empreinte montre EXACTEMENT ce qu’elle déclare',
+     e1.visibles.length === decl.empreinte.length
+       && e1.visibles.every(id => decl.empreinte.indexOf(id) >= 0),
+     'affichées : ' + e1.visibles.join(', ') + '  |  déclarées : '
+       + decl.empreinte.join(', '));
+  ok('…et l’empreinte du parc en fait partie',
+     e1.visibles.indexOf('s-empreinte') >= 0, e1.visibles.join(', '));
   ok('la barre de navigation ne garde aucun lien mort',
-     e1.pnav.every(h => h === '#s-empreinte'), e1.pnav.join(' '));
+     e1.pnav.every(h => decl.empreinte.indexOf(h.slice(1)) >= 0), e1.pnav.join(' '));
 
   titre('2. …et l’étude y FONCTIONNE, sinon la séparation l’a cassée');
 
@@ -156,9 +167,11 @@ const VISIBLES = () => [].slice.call(document.querySelectorAll('section.panel[id
   const vues = { panorama: p1.visibles, empreinte: e1.visibles };
   await pg.goto(BASE + '/enveloppe', { waitUntil: 'domcontentloaded' });
   vues.enveloppe = await pg.evaluate(VISIBLES);
-  ok('/enveloppe ne montre que l’étude d’enveloppe',
-     vues.enveloppe.length === 1 && vues.enveloppe[0] === 's-finance',
-     vues.enveloppe.join(', '));
+  ok('/enveloppe montre EXACTEMENT ce que la vue enveloppe déclare',
+     vues.enveloppe.length === decl.enveloppe.length
+       && vues.enveloppe.every(id => decl.enveloppe.indexOf(id) >= 0),
+     'affichées : ' + vues.enveloppe.join(', ') + '  |  déclarées : '
+       + decl.enveloppe.join(', '));
 
   const declarees = await pg.evaluate(() => {
     const out = {};
@@ -175,11 +188,19 @@ const VISIBLES = () => [].slice.call(document.querySelectorAll('section.panel[id
     s => declarees.toutes.indexOf(s) < 0);
   ok('aucune vue ne réclame une section qui n’existe pas',
      doublons.length === 0, doublons.join(', '));
-  const total = vues.panorama.length + vues.enveloppe.length + vues.empreinte.length;
+  /* UNE UNION, PAS UNE SOMME. Additionner les trois vues comptait deux fois
+     toute section partagée — « s-equipements » sert la lecture budget ET la
+     lecture carbone — et déclarait un excédent là où la couverture était
+     exacte. Ce qu'on veut savoir est : chaque section est-elle atteignable
+     depuis au moins une vue ? C'est une réunion d'ensembles. */
+  const atteintes = new Set([].concat(vues.panorama, vues.enveloppe, vues.empreinte));
+  const attendues = declarees.toutes.filter(
+    s => declarees.panneaux.indexOf(s) < 0);
+  const jamaisVues = attendues.filter(s => !atteintes.has(s));
   ok('les trois vues couvrent ensemble toutes les sections',
-     total === declarees.toutes.length - declarees.panneaux.length,
-     total + ' montrées / ' + (declarees.toutes.length - declarees.panneaux.length)
-     + ' attendues');
+     jamaisVues.length === 0,
+     jamaisVues.join(', ') || (atteintes.size + ' atteintes / '
+       + attendues.length + ' attendues'));
 
   ok('aucune erreur de script', err.length === 0, err.slice(0, 2).join(' | '));
 

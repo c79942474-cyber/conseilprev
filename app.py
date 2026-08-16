@@ -2006,6 +2006,79 @@ def api_kpi_finance():
                    version=kpi_finance.VERSION)
 
 
+import equipements_it  # noqa: E402  — LE MEME FICHIER que dans
+                      # conseilprevcyber, octet pour octet, comme moe_dc.
+                      # L'enveloppe d'investissement et l'empreinte
+                      # environnementale doivent lire les mêmes quantités :
+                      # deux nomenclatures pour un projet, c'est un écart
+                      # qui se découvre en comité.
+
+
+@app.route('/api/equipements-it', methods=['GET', 'POST'])
+@rate_limit(limit=60, window=60)
+@reserve_abonne_api
+def api_equipements_it():
+    """Les équipements informatiques : ce que l'enveloppe travaux NE contient
+    pas.
+
+    EN GET : le référentiel — neuf postes avec leur règle de quantité, les
+    quatre classes de densité, les trois périmètres, les hypothèses de prix
+    et de carbone avec leur incertitude.
+
+    EN POST : la nomenclature dimensionnée, la place de l'informatique dans
+    l'investissement, le bilan scope 3, et — si une durée cible est donnée —
+    le point de bascule de l'allongement de durée de vie.
+
+    CE QUE CETTE ROUTE DIT ET QUE LES QUATORZE LOTS NE DISENT PAS : le lot
+    « Aménagement des salles informatiques » couvre les planchers, les
+    chemins de câbles et la distribution — il porte la mention « HORS
+    serveurs ». L'informatique est un investissement SÉPARÉ, et en centre
+    propre il pèse le tiers du total. Raisonner sur la seule enveloppe
+    travaux fait arbitrer des économies de génie civil pendant que le poste
+    le plus lourd passe sans discussion.
+
+    Un refus — densité inconnue, pays hors référentiel, allongement au-delà
+    de quinze ans — est servi en 200 avec son motif : c'est le verdict.
+    """
+    if request.method == 'GET':
+        r = equipements_it.referentiel()
+        r['ok'] = True
+        r['sante'] = equipements_it.sante()
+        r['lots_sans_it'] = equipements_it.LOTS_SANS_IT
+        return jsonify(r)
+
+    d = request.get_json(silent=True) or {}
+    try:
+        n = equipements_it.nomenclature(
+            d.get('puissance_it_kw'), densite=d.get('densite'),
+            duree_vie_serveur=d.get('duree_vie_serveur'))
+        if not n.get('ok'):
+            return jsonify(ok=True, nomenclature=n)
+
+        part = equipements_it.part_investissement(
+            n, enveloppe_travaux_eur=d.get('enveloppe_travaux_eur'),
+            perimetre=d.get('perimetre') or 'propre')
+
+        prolong = None
+        if d.get('duree_cible') is not None:
+            prolong = equipements_it.prolongation(
+                d.get('puissance_it_kw'), duree_base=d.get('duree_base'),
+                duree_cible=d.get('duree_cible'), pays=d.get('pays') or 'FR',
+                intensite_g=d.get('intensite_g'), densite=d.get('densite'),
+                pue=d.get('pue') or 1.0, derive_an=d.get('derive_an'))
+
+        scope3 = equipements_it.bilan_scope3(
+            n, prolong if (prolong and prolong.get('ok')) else None)
+    except Exception as e:  # noqa: BLE001
+        logger.error(f'EQUIP_IT_ERR: {e}')
+        return jsonify(ok=False, error='calcul',
+                       message="La nomenclature n'a pas pu être établie."), 500
+
+    return jsonify(ok=True, nomenclature=n, part=part,
+                   prolongation=prolong, scope3=scope3,
+                   version=equipements_it.VERSION)
+
+
 import moe_dc  # noqa: E402  — honoraires de maitrise d'oeuvre, par mission et
                # par phase, sur l'assiette travaux de l'enveloppe
 

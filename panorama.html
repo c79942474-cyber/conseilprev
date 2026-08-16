@@ -1982,6 +1982,62 @@ th .fl{font-size:9px;margin-left:3px}
   .pil-fm p{font-size:12px;line-height:1.6;margin:3px 0}
   .pil-ev{color:#F0B27A}
 
+  /* ── ÉQUIPEMENTS INFORMATIQUES ──────────────────────────────────────────
+     La RÈGLE de quantité occupe une colonne pleine, à côté du nombre : sans
+     elle, « 168 commutateurs » se recopie dans un budget sans que personne
+     ne sache d'où ça sort. */
+  .eq-form{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin:14px 0}
+  .eq-ch{display:flex;flex-direction:column;gap:4px;min-width:165px;flex:1 1 165px}
+  .eq-ch>span{font-size:11px;letter-spacing:.03em;text-transform:uppercase;
+    color:var(--mu,#9aa)}
+  .eq-ch input,.eq-ch select{background:rgba(0,0,0,.24);border:1px solid var(--line,#233);
+    border-radius:7px;color:inherit;font-size:12.5px;padding:7px 9px;width:100%}
+  .eq-tab-w{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:14px 0 10px}
+  .eq-tab{width:100%;border-collapse:collapse;font-size:12.5px;min-width:740px}
+  .eq-tab caption{caption-side:top;text-align:left;font-size:11.5px;
+    letter-spacing:.03em;text-transform:uppercase;color:var(--mu,#9aa);padding-bottom:8px}
+  .eq-tab th,.eq-tab td{border-bottom:1px solid var(--line,#233);padding:7px 10px;
+    text-align:left;vertical-align:top}
+  .eq-tab td.r,.eq-tab th.r{text-align:right;white-space:nowrap}
+  .eq-tab thead th{font-size:11px;letter-spacing:.03em;text-transform:uppercase;
+    color:var(--mu,#9aa);font-weight:600}
+  .eq-tab tbody th{font-weight:600;max-width:22ch}
+  .eq-tab tbody td{color:var(--mu,#9aa)}
+  .eq-tab tfoot th,.eq-tab tfoot td{border-top:2px solid var(--line,#233);
+    border-bottom:none;padding-top:9px;font-weight:700}
+  .eq-badge{display:block;font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;
+    font-weight:400;margin-top:2px;color:var(--mu,#9aa)}
+  .eq-ind .eq-badge{color:#7DD3A0}
+  .eq-bloc{border:1px solid var(--line,#233);border-radius:11px;padding:13px 16px;
+    margin-top:15px;background:rgba(0,0,0,.12)}
+  .eq-bloc>h4{margin:0 0 11px;font-size:11.5px;letter-spacing:.04em;
+    text-transform:uppercase;color:var(--mu,#9aa);font-weight:600}
+  .eq-bloc p{font-size:12.5px;line-height:1.65;margin:9px 0 0;max-width:80ch}
+  .eq-chiffres{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr));
+    gap:10px}
+  .eq-c{border:1px solid var(--line,#233);border-radius:10px;padding:9px 12px;
+    background:rgba(0,0,0,.10)}
+  .eq-c .v{display:block;font-size:19px;font-weight:700;line-height:1.15}
+  .eq-c .l{display:block;font-size:10.5px;color:var(--mu,#9aa);margin-top:3px}
+  .eq-c-fort{border-left:3px solid #7DD3A0}
+  /* Le verdict porte sa COULEUR et son ICÔNE : la couleur seule ne se lit ni
+     en niveaux de gris, ni par un lecteur daltonien. */
+  .eq-bloc.eq-fav{border-left:3px solid #7DD3A0}
+  .eq-bloc.eq-def{border-left:3px solid #F0B27A}
+  .eq-bloc.eq-refus{border-left:3px solid #E06C5A}
+  .eq-verdict{font-size:13.5px;font-weight:700;margin-bottom:10px}
+  .eq-fav .eq-verdict{color:#7DD3A0}
+  .eq-def .eq-verdict{color:#F0B27A}
+  .eq-formules{font-size:11.5px;color:var(--mu,#9aa);line-height:1.75;
+    margin:6px 0 0;padding-left:18px}
+  .eq-trous{font-size:12px;color:var(--mu,#9aa);line-height:1.7;margin:6px 0 0;
+    padding-left:18px}
+  .eq-dl{margin:8px 0 0}
+  .eq-dl dt{font-weight:600;font-size:12.5px;margin-top:8px}
+  .eq-dl dd{margin:2px 0 0;font-size:12.5px;color:var(--mu,#9aa);line-height:1.6}
+  .eq-det{margin-top:12px}
+  .eq-det summary{cursor:pointer;font-size:12.5px;font-weight:600}
+
   /* ── MATURITÉ ANALYTIQUE DÉCISIONNELLE ──────────────────────────────── */
   .mat-form{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(400px,100%),1fr));
     gap:12px;margin:14px 0}
@@ -2776,6 +2832,77 @@ engagements publics) sont imputés nominativement.</div>
      serait le genre de raccourci qu'un comité d'investissement relève.
      La jonction, elle, est calculée : chaque famille de décision dit ce que
      les blocs RÉELLEMENT calculés lui apportent, et ce qui reste ailleurs. -->
+<!-- ══ LES ÉQUIPEMENTS INFORMATIQUES ══════════════════════════════════════
+     LE POSTE QUE L'ENVELOPPE NE CONTIENT PAS. Les quatorze lots ci-dessus
+     s'arrêtent aux murs, aux fluides et à l'électricité : le lot 11,
+     « Aménagement des salles informatiques », porte lui-même la mention
+     « HORS serveurs ». L'informatique est un budget séparé — et, quand le
+     même maître d'ouvrage porte les deux, elle pèse le tiers du total.
+
+     Ce bloc figure DANS LES DEUX VUES, enveloppe et empreinte, parce que
+     c'est le même calcul qui répond aux deux questions : combien ça coûte,
+     et combien ça pèse en carbone. Le module est partagé octet pour octet
+     avec conseilprevcyber, comme moe_dc : deux nomenclatures pour un même
+     projet, c'est un écart qui se découvre en comité. -->
+<section class="panel" id="s-equipements" aria-labelledby="t-eq">
+  <div class="panel-head">
+    <span class="panel-title" id="t-eq">Équipements informatiques — le poste que l'enveloppe travaux ne contient pas</span>
+    <span class="panel-note" id="eq-note">neuf postes, scope&nbsp;3</span>
+  </div>
+  <div class="panel-body">
+    <p class="lead" style="max-width:78ch">
+      Les quatorze lots ci-dessus s'arrêtent aux murs, aux fluides et à l'électricité.
+      Le lot <b>Aménagement des salles informatiques</b> couvre les planchers
+      techniques, les chemins de câbles et la distribution en salle — il porte
+      lui-même la mention «&nbsp;hors serveurs&nbsp;». Les machines sont un
+      investissement <b>séparé</b>, et quand le même maître d'ouvrage porte les deux,
+      elles pèsent le tiers de l'investissement total. Raisonner sur la seule
+      enveloppe travaux fait arbitrer des économies de génie civil pendant que le
+      poste le plus lourd passe sans discussion.
+    </p>
+    <p class="note" style="max-width:78ch">
+      <b>Le même calcul répond à deux questions, c'est pourquoi ce bloc figure dans
+      les deux vues.</b> Côté investissement&nbsp;: combien d'équipements la puissance
+      informatique impose, à quel prix indicatif, et quelle part du total. Côté
+      empreinte&nbsp;: leur carbone de fabrication au <b>scope&nbsp;3 du GHG
+      Protocol</b>, catégories 1 et 2 — la troisième composante, sans laquelle les
+      scopes 1 et 2 ne font pas un bilan. Le module est partagé <b>octet pour
+      octet</b> avec la page d'ingénierie de conseilprevcyber&nbsp;: les quantités y
+      sont les mêmes, à la ligne près.
+    </p>
+    <div id="eq-form" class="eq-form"><p class="note">chargement du référentiel…</p></div>
+    <div class="mat-cmd">
+      <button type="button" class="btn-p" id="eq-go">Dimensionner les équipements</button>
+      <span class="note" id="eq-msg"></span>
+    </div>
+    <div id="eq-out"></div>
+
+    <!-- LE LEVIER DE LA DURÉE DE VIE, ET SA LIMITE. « Prolongez, vous allégez
+         votre bilan » est vrai sur un réseau décarboné et FAUX sur un réseau
+         charbon : un matériel ancien consomme davantage à service rendu égal,
+         et cette surconsommation finit par dépasser le carbone de fabrication
+         évité. Le moteur calcule la bascule plutôt que de recommander sans
+         réserve, ce qui serait de la plaquette. -->
+    <div id="eq-vie-bloc" hidden>
+      <p class="note" style="max-width:78ch;margin-top:22px">
+        <b>Prolonger la durée de vie&nbsp;: le gain, et son point de bascule.</b>
+        Allonger la vie d'un serveur étale son carbone de fabrication sur plus
+        d'années et repousse la fabrication d'un remplaçant. Le gain est réel. Mais
+        un parc dont l'âge moyen augmente consomme davantage à service rendu égal.
+        La question n'est donc pas <i>si</i> l'allongement paie&nbsp;: c'est
+        <b>jusqu'où</b>, et cela dépend du mix électrique qui alimente le site.
+      </p>
+      <div id="eq-vie-form" class="eq-form"></div>
+      <div class="mat-cmd">
+        <button type="button" class="btn-p" id="eq-vie-go">Calculer le point de bascule</button>
+        <span class="note" id="eq-vie-msg"></span>
+      </div>
+      <div id="eq-vie-out"></div>
+    </div>
+    <div id="eq-s3-out"></div>
+  </div>
+</section>
+
 <section class="panel" id="s-maturite" aria-labelledby="t-mat">
   <div class="panel-head">
     <span class="panel-title" id="t-mat">Maturité analytique — l'entreprise peut-elle instruire cette décision&nbsp;?</span>
@@ -3095,8 +3222,13 @@ if(/[?&]embed=1(&|$)/.test(window.location.search)){document.body.classList.add(
 var MODULE_VUES = {
   panorama: ["s-carte", "s-signaux", "s-cas", "s-lectures",
              "s-implantation", "s-prospect", "s-methodo", "s-socle", "s-sources"],
-  enveloppe: ["s-finance", "s-maturite", "s-pilotage"],
-  empreinte: ["s-empreinte"]
+  /* « s-equipements » figure dans LES DEUX vues, et c'est voulu : le même
+     calcul répond à la question du budget et à celle du carbone. Le placer
+     dans une seule obligerait à passer d'une vue à l'autre pour lire deux
+     colonnes du même tableau — et l'une des deux finirait par être oubliée,
+     ce qui est exactement le trou que ce bloc vient combler. */
+  enveloppe: ["s-finance", "s-equipements", "s-maturite", "s-pilotage"],
+  empreinte: ["s-empreinte", "s-equipements"]
 };
 /* LES PANNEAUX DE DÉTAIL NE SONT D'AUCUNE VUE, et il ne faut surtout pas y
    toucher : ils arrivent `hidden` et s'ouvrent au clic sur un pays ou un site.
@@ -3104,6 +3236,12 @@ var MODULE_VUES = {
    par sécurité » — donc les rendait visibles au chargement, dépliant deux
    fiches vides sous la carte. Ce qu'une page gère elle-même, on le laisse. */
 var PANNEAUX_DETAIL = ["s-pays", "s-site"];
+/* LES SECTIONS QUI SERVENT DÉLIBÉRÉMENT PLUSIEURS VUES. La liste est courte
+   et doit le rester : c'est elle qui empêche le contrôle de doublon de tout
+   laisser passer. Une section qui figure deux fois SANS être ici lève une
+   erreur, et c'est voulu — un doublon involontaire ferait apparaître un bloc
+   dans une lecture où il n'a rien à faire. */
+var VUES_PARTAGEES = ["s-equipements"];
 var MODULE_VUE = (function(){
   var m = /[?&]vue=([a-z]+)/.exec(window.location.search);
   if(m && MODULE_VUES[m[1]]) return m[1];
@@ -3143,7 +3281,17 @@ function vueAppliquer(){
   var declarees = {};
   Object.keys(MODULE_VUES).forEach(function(v){
     MODULE_VUES[v].forEach(function(s){
-      if(declarees[s]) throw new Error("vue : " + s + " déclarée deux fois");
+      /* UN DOUBLON EST UNE FAUTE, SAUF S'IL EST ASSUMÉ PAR ÉCRIT. Ce contrôle
+         supposait que les vues PARTITIONNENT les sections — c'était vrai tant
+         qu'aucune section ne servait deux lectures. « s-equipements » en sert
+         deux : le même calcul répond à la question du budget et à celle du
+         carbone. Le laisser lever a cassé toute la fonction, donc l'affichage
+         par vue, donc la page — un doublon accidentel doit donc continuer de
+         lever, et seul un doublon NOMMÉ ci-dessous passe. */
+      if(declarees[s] && VUES_PARTAGEES.indexOf(s) < 0){
+        throw new Error("vue : " + s + " déclarée deux fois sans être "
+          + "inscrite dans VUES_PARTAGEES");
+      }
       declarees[s] = v;
     });
   });
@@ -11873,6 +12021,278 @@ if(window.parent&&window.parent!==window){
   }
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", demarrer);
   else demarrer();
+})();
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ÉQUIPEMENTS INFORMATIQUES — LE POSTE QUE L'ENVELOPPE NE CONTIENT PAS
+   ═════════════════════════════════════════════════════════════════════════
+   Ce bloc ne calcule RIEN : quantités, prix et carbone viennent de
+   `equipements_it.py`, le MÊME fichier que dans conseilprevcyber, octet pour
+   octet. Recalculer ici « pour aller plus vite » ferait exister deux
+   nomenclatures pour un même projet, et l'écart se découvrirait en comité.
+
+   La puissance informatique et l'enveloppe travaux sont REPRISES de l'étude
+   déjà faite plus haut quand elle a tourné : les retaper est le meilleur
+   moyen d'obtenir deux chiffres différents sur la même page. */
+(function(){
+  var REF = null, NOMEN = null;
+  function $(i){ return document.getElementById(i); }
+  function esc(t){ return String(t == null ? "" : t)
+    .replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+  function fr(n, d){
+    if(n === null || n === undefined || n === "") return "—";
+    var x = Number(n);
+    if(!isFinite(x)) return String(n);
+    if(d === undefined) d = Math.abs(x) >= 100 ? 0 : (Math.abs(x) >= 10 ? 1 : 2);
+    return x.toFixed(d).replace(".", ",").replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  }
+  function eur(n){
+    var x = Number(n);
+    if(!isFinite(x)) return "—";
+    if(Math.abs(x) >= 1e6) return fr(x / 1e6, 2) + " M€";
+    if(Math.abs(x) >= 1e3) return fr(x / 1e3, 0) + " k€";
+    return fr(x, 0) + " €";
+  }
+
+  /* CE QUE L'ÉTUDE D'ENVELOPPE A DÉJÀ ÉTABLI. Constaté, jamais supposé :
+     si elle n'a pas tourné, les champs restent à leur valeur de saisie et
+     le bloc le dit — plutôt que de reprendre un montant qui n'existe pas. */
+  function reprise(){
+    var d = window.FIN_DERNIER && window.FIN_DERNIER();
+    if(!d || !d.entree) return null;
+    var env = null;
+    if(d.enveloppe_meur && d.enveloppe_meur.length === 2){
+      env = (Number(d.enveloppe_meur[0]) + Number(d.enveloppe_meur[1])) / 2 * 1e6;
+    }
+    return { kw: Number(d.entree.mw || 0) * 1000, enveloppe: env,
+             pays: (window.FIN_PAYS && window.FIN_PAYS()) || null };
+  }
+
+  function rendreForm(){
+    var z = $("eq-form");
+    if(!z || !REF) return;
+    var r = reprise();
+    var h = '<label class="eq-ch"><span>Puissance informatique (kW)</span>'
+      + '<input type="number" id="eq-pit" min="1" step="10" value="'
+      + (r && r.kw ? Math.round(r.kw) : 1000) + '"></label>'
+      + '<label class="eq-ch"><span>Densité par baie</span><select id="eq-densite">';
+    Object.keys(REF.densites).forEach(function(k){
+      var d = REF.densites[k];
+      h += '<option value="' + esc(k) + '"' + (k === REF.densite_defaut ? " selected" : "")
+        + ">" + esc(d.nom) + " — " + fr(d.kw_baie, 0) + " kW/baie</option>";
+    });
+    h += "</select></label>"
+      + '<label class="eq-ch"><span>Périmètre du projet</span><select id="eq-perimetre">';
+    Object.keys(REF.perimetres).forEach(function(k){
+      h += '<option value="' + esc(k) + '"' + (k === "propre" ? " selected" : "")
+        + ">" + esc(REF.perimetres[k].nom) + "</option>";
+    });
+    h += "</select></label>"
+      + '<label class="eq-ch"><span>Enveloppe travaux (€)</span>'
+      + '<input type="number" id="eq-enveloppe" min="0" step="100000" value="'
+      + (r && r.enveloppe ? Math.round(r.enveloppe) : "")
+      + '" placeholder="lancez l’enveloppe ci-dessus"></label>';
+    z.innerHTML = h;
+    $("eq-msg").textContent = (r && r.kw)
+      ? "Puissance et enveloppe reprises de l’étude ci-dessus."
+      : "Enveloppe non calculée : lancez-la plus haut pour que la part se calcule.";
+  }
+
+  function rendreVieForm(){
+    var z = $("eq-vie-form");
+    if(!z || !REF) return;
+    var pays = REF.pays_connus || [];
+    var r = reprise();
+    var courant = (r && r.pays && pays.indexOf(r.pays) >= 0) ? r.pays
+                : (pays.indexOf("FR") >= 0 ? "FR" : pays[0]);
+    var h = '<label class="eq-ch"><span>Durée actuelle (ans)</span>'
+      + '<input type="number" id="eq-d0" min="1" max="14" step="1" value="'
+      + (NOMEN && NOMEN.duree_vie_serveur_ans ? NOMEN.duree_vie_serveur_ans : 5)
+      + '"></label>'
+      + '<label class="eq-ch"><span>Durée visée (ans)</span>'
+      + '<input type="number" id="eq-d1" min="2" max="15" step="1" value="8"></label>'
+      + '<label class="eq-ch"><span>Pays du site</span><select id="eq-pays">';
+    pays.forEach(function(c){
+      h += '<option value="' + esc(c) + '"' + (c === courant ? " selected" : "")
+        + ">" + esc(c) + "</option>";
+    });
+    h += "</select></label>"
+      + '<label class="eq-ch"><span>PUE retenu</span>'
+      + '<input type="number" id="eq-pue" min="1" max="3" step="0.05" value="1.3"></label>';
+    z.innerHTML = h;
+  }
+
+  function tableau(n){
+    var h = '<div class="eq-tab-w"><table class="eq-tab">'
+      + "<caption>Nomenclature pour " + fr(n.puissance_it_kw, 0) + " kW informatiques — "
+      + esc(n.densite_nom) + ", " + fr(n.kw_par_baie, 0) + " kW/baie, "
+      + fr(n.baies, 0) + " baies</caption>"
+      + '<thead><tr><th scope="col">Poste</th><th scope="col">Règle de quantité</th>'
+      + '<th scope="col" class="r">Quantité</th><th scope="col" class="r">Prix indicatif</th>'
+      + '<th scope="col" class="r">Carbone fabrication</th>'
+      + '<th scope="col" class="r">Durée de vie</th></tr></thead><tbody>';
+    n.lignes.forEach(function(l){
+      h += '<tr class="' + (l.indispensable ? "eq-ind" : "eq-utile") + '">'
+        + '<th scope="row">' + esc(l.nom) + '<span class="eq-badge">'
+        + (l.indispensable ? "indispensable" : "utile") + "</span></th>"
+        + "<td>" + esc(l.regle) + "</td>"
+        + '<td class="r">' + fr(l.quantite, 0) + " " + esc(l.unite) + "</td>"
+        + '<td class="r">' + eur(l.prix_total_eur) + "</td>"
+        + '<td class="r">' + fr(l.carbone_total_kg / 1000, 1) + " t</td>"
+        + '<td class="r">' + fr(l.duree_vie_ans, 0) + " ans</td></tr>";
+    });
+    h += '</tbody><tfoot><tr><th scope="row" colspan="3">Total</th>'
+      + '<td class="r">' + eur(n.total_eur) + "</td>"
+      + '<td class="r">' + fr(n.carbone_total_t, 0) + " t</td>"
+      + '<td class="r">' + fr(n.carbone_annualise_t, 0) + " t/an</td>"
+      + "</tr></tfoot></table></div>"
+      + '<details class="eq-det"><summary>Les gestes d’achat durable, poste par poste '
+      + "— à écrire au marché, pas à espérer</summary><dl class=\"eq-dl\">";
+    n.lignes.forEach(function(l){
+      h += "<dt>" + esc(l.nom) + "</dt><dd>" + esc(l.achat_durable) + "</dd>";
+    });
+    return h + "</dl></details>";
+  }
+
+  function part(p){
+    if(!p || !p.ok) return '<p class="note">' + esc((p && p.motif) || "") + "</p>";
+    var h = '<div class="eq-bloc"><h4>La place de l’informatique dans l’investissement</h4>'
+      + '<div class="eq-chiffres">'
+      + '<div class="eq-c"><span class="v">' + eur(p.it_eur)
+      + '</span><span class="l">Équipements informatiques</span></div>'
+      + '<div class="eq-c"><span class="v">' + fr(p.part_lots_pct, 0)
+      + ' %</span><span class="l">Part dans les lots travaux</span></div>';
+    if(p.part_total_pct !== null && p.part_total_pct !== undefined){
+      h += '<div class="eq-c eq-c-fort"><span class="v">' + fr(p.part_total_pct, 1)
+        + ' %</span><span class="l">Part de l’investissement total</span></div>';
+    }
+    if(p.rapport_it_travaux !== null && p.rapport_it_travaux !== undefined){
+      h += '<div class="eq-c"><span class="v">×' + fr(p.rapport_it_travaux, 2)
+        + '</span><span class="l">Rapport informatique / travaux</span></div>';
+    }
+    return h + "</div><p>" + esc(p.lecture) + "</p>"
+      + '<p class="note"><b>Pourquoi zéro dans les lots.</b> ' + esc(p.lots_dit) + "</p>"
+      + '<p class="note"><b>' + esc(p.perimetre_nom) + ".</b> " + esc(p.dit)
+      + " <i>Qui porte l’informatique : " + esc(p.porteur_it) + ".</i></p></div>";
+  }
+
+  /* Le verdict s'affiche AVEC son seuil. « Favorable » sans dire à partir de
+     quelle intensité carbone cela cesse de l'être serait de la plaquette, et
+     se retournerait contre le dossier au premier site polonais. */
+  function vie(v){
+    if(!v) return "";
+    if(!v.ok) return '<div class="eq-bloc eq-refus"><b>Le calcul refuse : </b>'
+      + esc(v.motif) + "</div>";
+    var fav = v.verdict === "favorable";
+    return '<div class="eq-bloc ' + (fav ? "eq-fav" : "eq-def") + '">'
+      + '<div class="eq-verdict">' + (fav ? "▲ Favorable" : "▼ Défavorable")
+      + " — allonger de " + fr(v.duree_base, 0) + " à " + fr(v.duree_cible, 0) + " ans</div>"
+      + '<div class="eq-chiffres">'
+      + '<div class="eq-c"><span class="v">' + fr(v.gain_fabrication_kg_an / 1000, 1)
+      + ' t/an</span><span class="l">Fabrication évitée (scope 3)</span></div>'
+      + '<div class="eq-c"><span class="v">' + fr(v.cout_exploitation_kg_an / 1000, 1)
+      + ' t/an</span><span class="l">Surconsommation (scope 2)</span></div>'
+      + '<div class="eq-c eq-c-fort"><span class="v">'
+      + (v.net_kg_an >= 0 ? "−" : "+") + fr(Math.abs(v.net_t_an), 1)
+      + ' t/an</span><span class="l">Bilan net</span></div>'
+      + '<div class="eq-c"><span class="v">' + fr(v.intensite_bascule_g, 0)
+      + ' g/kWh</span><span class="l">Intensité de bascule</span></div>'
+      + "</div><p>" + esc(v.lecture) + "</p>"
+      + '<details class="eq-det"><summary>Le modèle, ses formules et sa réserve</summary>'
+      + "<p>" + esc(v.modele) + '</p><ul class="eq-formules">'
+      + v.formules.map(function(f){ return "<li>" + esc(f) + "</li>"; }).join("")
+      + "</ul><p><b>Dérive d’efficacité retenue : " + fr(v.derive_an * 100, 1)
+      + " %/an.</b> " + esc(v.derive_source) + "</p>"
+      + "<p><b>Ce que ce bilan ne dit pas.</b> " + esc(v.reserve) + "</p></details></div>";
+  }
+
+  function scope3(s){
+    if(!s || !s.ok) return "";
+    var h = '<div class="eq-bloc"><h4>Scope 3 du GHG Protocol — la troisième composante</h4>'
+      + '<div class="eq-chiffres">'
+      + '<div class="eq-c eq-c-fort"><span class="v">' + fr(s.total_t, 0)
+      + ' t</span><span class="l">Carbone de fabrication total</span></div>'
+      + '<div class="eq-c"><span class="v">' + fr(s.categorie_2_t, 0)
+      + ' t</span><span class="l">Catégorie 2 — biens d’équipement</span></div>'
+      + '<div class="eq-c"><span class="v">' + fr(s.categorie_1_t, 1)
+      + ' t</span><span class="l">Catégorie 1 — biens et services</span></div>'
+      + '<div class="eq-c"><span class="v">' + fr(s.annualise_t, 0)
+      + ' t/an</span><span class="l">Annualisé sur les durées de vie</span></div>'
+      + "</div><p>" + esc(s.complement) + "</p>";
+    if(s.effet_prolongation){
+      h += '<p class="note"><b>Effet de l’allongement.</b> '
+        + esc(s.effet_prolongation.dit) + " <i>"
+        + esc(s.effet_prolongation.avertissement) + "</i></p>";
+    }
+    return h + '<details class="eq-det"><summary>Ce que ce bilan NE couvre pas — '
+      + s.non_couvert.length + ' postes nommés</summary><ul class="eq-trous">'
+      + s.non_couvert.map(function(x){ return "<li>" + esc(x) + "</li>"; }).join("")
+      + '</ul><p class="note">Incertitude sur les facteurs de fabrication : ±'
+      + fr(s.incertitude_pct, 0) + " %. " + esc(s.source) + "</p></details></div>";
+  }
+
+  function corps(avecVie){
+    var env = $("eq-enveloppe") ? $("eq-enveloppe").value : "";
+    var c = {
+      puissance_it_kw: Number(($("eq-pit") || {}).value),
+      densite: ($("eq-densite") || {}).value || null,
+      perimetre: ($("eq-perimetre") || {}).value || "propre",
+      enveloppe_travaux_eur: env === "" ? null : Number(env)
+    };
+    if(avecVie && $("eq-d1")){
+      c.duree_base = Number($("eq-d0").value);
+      c.duree_cible = Number($("eq-d1").value);
+      c.pays = ($("eq-pays") || {}).value || "FR";
+      c.pue = Number($("eq-pue").value) || 1.0;
+    }
+    return c;
+  }
+
+  function appeler(avecVie, cible, msg){
+    $(msg).textContent = "calcul en cours…";
+    fetch("/api/equipements-it", {
+      method: "POST", headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(corps(avecVie))
+    }).then(function(x){ return x.json(); }).then(function(j){
+      if(!j || !j.ok){ $(msg).textContent = (j && j.message) || "calcul indisponible"; return; }
+      var n = j.nomenclature;
+      if(!n.ok){
+        $(cible).innerHTML = '<div class="eq-bloc eq-refus"><b>Le calcul refuse : </b>'
+          + esc(n.motif) + "</div>";
+        $(msg).textContent = "";
+        return;
+      }
+      NOMEN = n;
+      if(avecVie){
+        $("eq-vie-out").innerHTML = vie(j.prolongation);
+      } else {
+        $("eq-out").innerHTML = tableau(n) + part(j.part);
+        $("eq-vie-bloc").hidden = false;
+        rendreVieForm();
+      }
+      $("eq-s3-out").innerHTML = scope3(j.scope3);
+      $(msg).textContent = "";
+    }).catch(function(){ $(msg).textContent = "calcul indisponible"; });
+  }
+
+  function demarrer(){
+    if(!$("eq-go")) return;
+    fetch("/api/equipements-it").then(function(r){ return r.json(); })
+      .then(function(j){ if(j && j.ok){ REF = j; rendreForm(); } })
+      .catch(function(){ $("eq-form").innerHTML =
+        '<p class="note">référentiel indisponible</p>'; });
+    $("eq-go").addEventListener("click", function(){ appeler(false, "eq-out", "eq-msg"); });
+    $("eq-vie-go").addEventListener("click", function(){
+      appeler(true, "eq-vie-out", "eq-vie-msg"); });
+  }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", demarrer);
+  else demarrer();
+
+  /* Exposé pour la recette : elle relance le calcul sans simuler des clics et
+     lit ce que le serveur a réellement rendu. */
+  window.EQUIP_IT = { calculer: function(){ appeler(false, "eq-out", "eq-msg"); },
+                      bascule: function(){ appeler(true, "eq-vie-out", "eq-vie-msg"); },
+                      nomenclature: function(){ return NOMEN; } };
 })();
 
 /* ══════════════════════════════════════════════════════════════════════════

@@ -92,9 +92,31 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
   const e = await releve('/enveloppe?embed=1');
   ok('la vue se déduit de l’adresse, sans paramètre', e.vue === 'enveloppe',
      e.vue);
-  ok('la section d’enveloppe est la seule affichée',
-     e.visibles.length === 1 && e.visibles[0] === 's-finance',
-     e.visibles.join(', '));
+  /* CE CONTRÔLE ÉTAIT UN INVENTAIRE FIGÉ — « s-finance et rien d'autre » —
+     et il a péri à la première section ajoutée à la vue : maturité, pilotage,
+     puis équipements. Il ne signalait plus une fuite entre vues, seulement
+     qu'il n'avait pas été relu. Ce qu'il doit protéger n'a pourtant pas
+     changé : la vue enveloppe montre l'étude et CE QUI L'ENTOURE, jamais un
+     bloc appartenant à une autre lecture. On le demande donc à la page, qui
+     porte déjà la carte des vues, plutôt que de la recopier ici. */
+  const attendu = await pg.evaluate(() => ({
+    vue: (typeof MODULE_VUES !== 'undefined') ? MODULE_VUES.enveloppe : null,
+    partagees: (typeof VUES_PARTAGEES !== 'undefined') ? VUES_PARTAGEES : []
+  }));
+  ok('la page publie la composition de la vue enveloppe',
+     !!attendu.vue && attendu.vue.length >= 1,
+     attendu.vue ? attendu.vue.join(', ') : 'MODULE_VUES absent');
+  ok('l’étude d’enveloppe en fait partie',
+     !!attendu.vue && attendu.vue.indexOf('s-finance') >= 0);
+  ok('la section d’enveloppe est affichée, et RIEN d’une autre vue ne l’est',
+     !!attendu.vue
+       && e.visibles.length === attendu.vue.length
+       && e.visibles.every(id => attendu.vue.indexOf(id) >= 0),
+     'affichées : ' + e.visibles.join(', ') + '  |  déclarées : '
+       + (attendu.vue || []).join(', '));
+  ok('…et les sections des autres vues sont masquées, pas absentes',
+     e.masquees.length > 0 && e.masquees.indexOf('s-carte') >= 0,
+     e.masquees.join(', '));
 
   /* LE CONTRÔLE QUI COMPTE : le module doit MARCHER dans sa nouvelle vue.
      Une section correctement affichée mais dont les référentiels ne se
@@ -214,9 +236,31 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
   const perdues = [...total].filter(s => !couvert.has(s));
   ok('chaque section du document appartient à une vue', perdues.length === 0,
      perdues.join(', ') || total.size + ' section(s) réparties');
-  ok('…et aucune n’est dans les deux à la fois',
-     p.visibles.filter(s => e.visibles.indexOf(s) >= 0).length === 0,
-     p.visibles.filter(s => e.visibles.indexOf(s) >= 0).join(', ') || 'aucune');
+  /* CE CONTRÔLE PROMETTAIT PLUS QU'IL N'ÉPROUVAIT : il annonçait qu'aucune
+     section n'est dans deux vues, en ne comparant QUE panorama et enveloppe —
+     la troisième vue, empreinte, n'était jamais regardée. Une section qui s'y
+     serait glissée en double serait passée sous un contrôle vert. On compare
+     donc TOUTES les paires de vues déclarées, et on exempte celles que la
+     page inscrit explicitement comme partagées : « s-equipements » sert à la
+     fois la lecture budget et la lecture carbone, et c'est écrit. */
+  const partagees = await pg.evaluate(
+    () => (typeof VUES_PARTAGEES !== 'undefined') ? VUES_PARTAGEES : []);
+  const vues = await pg.evaluate(() => MODULE_VUES);
+  const noms = Object.keys(vues);
+  const doubles = [];
+  for (let i = 0; i < noms.length; i++) {
+    for (let j = i + 1; j < noms.length; j++) {
+      vues[noms[i]].forEach(s => {
+        if (vues[noms[j]].indexOf(s) >= 0 && partagees.indexOf(s) < 0) {
+          doubles.push(s + ' (' + noms[i] + ' + ' + noms[j] + ')');
+        }
+      });
+    }
+  }
+  ok('…et aucune n’est dans deux vues sans être déclarée partagée',
+     doubles.length === 0,
+     doubles.join(', ') || (noms.length + ' vues croisées, partagées assumées : '
+       + (partagees.join(', ') || 'aucune')));
 
   ok('aucune erreur de script sur toute la manœuvre', err.length === 0,
      err.slice(0, 2).join(' | '));
