@@ -190,20 +190,39 @@ const ETATS = () => [...document.querySelectorAll('#fin-fil .fin-e')]
 
   titre('4. Le mode « guidez-moi »');
 
+  /* CE CONTRÔLE FIGEAIT LE SENS DE DÉPART. Il exigeait « éteint puis allumé » :
+     il est tombé le jour où le guidage a été armé d'emblée — une demande
+     explicite —, en criant à la régression sur un comportement voulu. Ce qu'il
+     protège ne dépend pas du sens : le bouton bascule DANS LES DEUX SENS, son
+     libellé annonce toujours ce que le clic va faire, et l'état allumé désigne
+     l'étape courante. */
   const g = await pg.evaluate(async () => {
     const b = document.getElementById('fin-fil-g');
     if (!b) return null;
-    const avant = b.getAttribute('aria-pressed');
-    b.click();
+    const lire = () => {
+      const x = document.getElementById('fin-fil-g');
+      return { presse: x.getAttribute('aria-pressed'), texte: x.textContent };
+    };
+    const a0 = lire();
+    b.click(); await new Promise(r => setTimeout(r, 400));
+    const a1 = lire();
+    const marqueApres = !!document.querySelector('.fin-guide-ici, .fin-vise, .fin-vise-fixe');
+    document.getElementById('fin-fil-g').click();
     await new Promise(r => setTimeout(r, 400));
-    const b2 = document.getElementById('fin-fil-g');
-    return { avant: avant, apres: b2.getAttribute('aria-pressed'),
-             texte: b2.textContent,
-             marque: !!document.querySelector('.fin-vise, .fin-vise-fixe') };
+    const a2 = lire();
+    return { a0: a0, a1: a1, a2: a2, marqueApres: marqueApres,
+             marqueAllume: !!document.querySelector('.fin-guide-ici, .fin-vise, .fin-vise-fixe') };
   });
-  ok('le bouton de guidage existe et bascule', g && g.avant === 'false' && g.apres === 'true');
-  ok('…il annonce comment l’arrêter', g && /Arrêter/.test(g.texte), g && g.texte);
-  ok('…et il désigne aussitôt l’étape courante', g && g.marque);
+  ok('le bouton de guidage bascule dans les deux sens',
+     g && g.a0.presse !== g.a1.presse && g.a1.presse !== g.a2.presse
+       && g.a0.presse === g.a2.presse,
+     g ? g.a0.presse + ' → ' + g.a1.presse + ' → ' + g.a2.presse : 'bouton absent');
+  ok('…et son libellé annonce toujours ce que le clic va faire',
+     g && /Arrêter/.test(g.a0.presse === 'true' ? g.a0.texte : g.a1.texte)
+       && /Guidez-moi/.test(g.a0.presse === 'true' ? g.a1.texte : g.a0.texte),
+     g ? g.a0.texte.trim() + '  |  ' + g.a1.texte.trim() : '');
+  ok('…et l’état allumé désigne l’étape courante',
+     g && (g.a2.presse === 'true' ? g.marqueAllume : g.marqueApres));
 
   titre('5. Les flèches entre blocs disent ce qu’on emporte');
 

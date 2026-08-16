@@ -1158,9 +1158,87 @@ th .ttip{margin-left:5px}
    longtemps, et désigne aussi bien. Ne rien afficher du tout aurait puni ceux
    qui demandent moins d'animation. */
 .fin-vise-fixe{outline:3px solid var(--blue);outline-offset:3px;border-radius:8px}
+/* « VOUS ÊTES ICI » — PERSISTANT, MAIS IMMOBILE.
+   Le guidage étant désormais armé d'emblée, désigner le bloc courant par la
+   PULSATION la renouvelait à chaque mise à jour du fil : elle ne s'arrêtait
+   plus, et un battement permanent cesse d'être une désignation — c'est la
+   règle que ce fichier s'était donnée, et elle vaut toujours. Le mouvement
+   est donc porté par la flèche et par les pastilles ; le bloc courant, lui,
+   reçoit un cadre calme qui reste tant qu'il est courant. */
+.fin-guide-ici{outline:2px solid var(--blue);outline-offset:4px;border-radius:8px;
+  animation:none}
 @media (prefers-reduced-motion: reduce){
   .fin-vise{animation:none;outline:3px solid var(--blue)}
 }
+
+/* ── LES PHASES NON VALIDÉES CLIGNOTENT ─────────────────────────────────────
+   Le fil marquait le fait et le reste par une simple couleur : à froid, rien
+   ne bougeait et l'œil ne trouvait pas où reprendre.
+
+   LA CADENCE EST UN CHOIX DE SÉCURITÉ, PAS UN GOÛT. Au-delà de trois éclats
+   par seconde, un clignotement devient un risque pour les personnes
+   photosensibles — c'est le seuil retenu par les règles d'accessibilité. Le
+   cycle posé ici dure 1,8 s, soit 0,55 éclat par seconde : six fois sous la
+   limite. Il reste franchement visible parce qu'il fait varier l'opacité ET
+   la couleur du fond, pas parce qu'il va vite.
+
+   L'ÉTAPE COURANTE bat plus fort que les suivantes : sur neuf pastilles,
+   neuf battements identiques ne désignent plus rien. */
+@keyframes fin-bat-reste{
+  0%,100% {opacity:1}
+  50%     {opacity:.42}
+}
+@keyframes fin-bat-cours{
+  0%,100% {background:var(--blue);      box-shadow:0 0 0 0 rgba(30,99,168,.55)}
+  50%     {background:var(--ink);       box-shadow:0 0 0 7px rgba(30,99,168,0)}
+}
+.fin-e.reste .fin-e-n{animation:fin-bat-reste 1.8s ease-in-out infinite}
+.fin-e.cours .fin-e-n{animation:fin-bat-cours 1.8s ease-in-out infinite}
+/* Le fait ne bat pas : c'est justement ce qui distingue les deux d'un coup
+   d'œil, et un point d'arrivée immobile rend le mouvement lisible. */
+.fin-e.fait .fin-e-n{animation:none}
+
+/* ── LA FLÈCHE QUI MÈNE À L'ÉTAPE COURANTE ──────────────────────────────────
+   Elle ne défile pas avec la page : elle reste à l'écran et pointe VERS le
+   bloc à traiter — vers le bas s'il est plus loin, vers le haut s'il est
+   au-dessus. Une flèche qui indiquerait toujours la même direction ferait
+   remonter un lecteur qui devait descendre. */
+.fin-fleche-guide{position:fixed;right:22px;bottom:26px;z-index:60;
+  display:flex;align-items:center;gap:10px;padding:10px 14px;
+  background:var(--blue);color:#fff;border:none;border-radius:26px;
+  box-shadow:0 6px 22px rgba(0,0,0,.22);cursor:pointer;
+  font-family:inherit;font-size:12.5px;font-weight:600;max-width:min(340px,72vw);
+  animation:fin-bat-fleche 1.8s ease-in-out infinite}
+@keyframes fin-bat-fleche{
+  0%,100% {box-shadow:0 6px 22px rgba(0,0,0,.22), 0 0 0 0 rgba(30,99,168,.55)}
+  50%     {box-shadow:0 6px 22px rgba(0,0,0,.22), 0 0 0 12px rgba(30,99,168,0)}
+}
+.fin-fleche-guide:hover{background:var(--ink)}
+.fin-fleche-guide:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.fin-fg-a{font-size:19px;line-height:1;animation:fin-fg-saut 1.8s ease-in-out infinite}
+@keyframes fin-fg-saut{
+  0%,100% {transform:translateY(0)}
+  50%     {transform:translateY(var(--fg-saut,4px))}
+}
+.fin-fleche-guide[data-sens="haut"] .fin-fg-a{--fg-saut:-4px}
+.fin-fg-t{display:flex;flex-direction:column;align-items:flex-start;line-height:1.25;
+  min-width:0}
+.fin-fg-t small{font-size:10px;font-weight:400;opacity:.85;
+  text-transform:uppercase;letter-spacing:.06em}
+.fin-fg-t span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.fin-fg-x{background:transparent;border:none;color:#fff;font-size:15px;
+  cursor:pointer;opacity:.75;padding:2px 2px 2px 6px;line-height:1}
+.fin-fg-x:hover{opacity:1}
+/* MOUVEMENT RÉDUIT : plus rien ne bouge, et rien n'est perdu — la flèche reste,
+   sa direction reste lisible, et les pastilles gardent un contraste franc. */
+@media (prefers-reduced-motion: reduce){
+  .fin-e.reste .fin-e-n,.fin-e.cours .fin-e-n,
+  .fin-fleche-guide,.fin-fg-a{animation:none}
+  .fin-e.cours .fin-e-n{background:var(--blue);outline:2px solid var(--ink);
+    outline-offset:1px}
+  .fin-e.reste .fin-e-n{opacity:.62}
+}
+@media(max-width:700px){ .fin-fleche-guide{right:12px;bottom:14px;font-size:12px} }
 
 /* LE PARADOXE, sous les curseurs. Ambré et non rouge : ce n'est pas une panne,
    c'est une tension à arbitrer — et elle est permanente. */
@@ -5013,7 +5091,14 @@ function finPasCourant(){
   return FIN_ETAPES.length - 1;
 }
 
-var FIN_GUIDE = false;      /* le mode pas à pas est-il enclenché ? */
+/* LE GUIDAGE EST ARMÉ D'EMBLÉE, et c'est le point de la demande. Il partait
+   éteint : le lecteur arrivait sur une page de quatorze écrans, devait
+   trouver le bouton « Guidez-moi » pour qu'il se passe quoi que ce soit — et
+   la marque qu'il obtenait alors s'effaçait au bout de 3,2 secondes. Un
+   parcours guidé qu'il faut d'abord débloquer soi-même ne guide personne.
+   Il reste interruptible : le bouton coupe, et la flèche porte sa propre
+   fermeture. */
+var FIN_GUIDE = true;       /* le mode pas à pas est-il enclenché ? */
 
 /* LE RETOUR AU FIL APRÈS CHAQUE ÉTAPE FRANCHIE.
    ─────────────────────────────────────────────
@@ -5161,11 +5246,89 @@ function finDesigner(el){
    fois que la page avance. Il s'arrête tout seul à la dernière étape — un
    guidage qui tournerait en boucle finirait par être ignoré. */
 function finGuidePas(){
-  if(!FIN_GUIDE) return;
+  if(!FIN_GUIDE){ finGuideIciRetirer(); finFlecheRetirer(); return; }
   var e = FIN_ETAPES[finPasCourant()];
   if(!e) return;
   var cib = document.getElementById(e.cible);
-  if(cib) finDesigner(cib);
+  /* UN CADRE, PAS UNE PULSATION RENOUVELÉE. `finDesigner` marque pour trois
+     secondes puis retire ; l'appeler à chaque mise à jour du fil relançait le
+     battement sans fin. Le cadre reste tant que l'étape est courante, et part
+     avec elle. */
+  finGuideIciRetirer();
+  if(cib) cib.classList.add("fin-guide-ici");
+  finFlecheMaj();
+}
+
+function finGuideIciRetirer(){
+  [].forEach.call(document.querySelectorAll(".fin-guide-ici"), function(el){
+    el.classList.remove("fin-guide-ici");
+  });
+}
+
+/* ── LA FLÈCHE QUI MÈNE À L'ÉTAPE COURANTE ─────────────────────────────────
+   CE QU'ELLE RÉSOUT. La désignation du bloc s'efface au bout de trois
+   secondes — à dessein, une mise en évidence permanente cesse d'en être une.
+   Mais une fois éteinte, plus rien n'indiquait où aller sur une page de
+   quatorze écrans. La flèche, elle, reste : elle ne défile pas, elle nomme
+   l'étape et elle POINTE dans la bonne direction.
+
+   LE SENS EST CALCULÉ À CHAQUE DÉFILEMENT, jamais supposé : vers le bas si le
+   bloc est plus loin, vers le haut s'il est au-dessus. Une flèche qui
+   pointerait toujours vers le bas ferait descendre quelqu'un qui devait
+   remonter — et lui ferait perdre confiance dans tout le guidage.
+
+   ELLE DISPARAÎT QUAND LE BLOC EST SOUS LES YEUX : y pointer encore serait du
+   bruit. Elle disparaît aussi quand tout est fait, et quand le lecteur la
+   ferme. */
+var FIN_FLECHE_FERMEE = false;
+
+function finFlecheRetirer(){
+  var f = document.getElementById("fin-fleche-guide");
+  if(f) f.remove();
+}
+
+function finFlecheMaj(){
+  if(!FIN_GUIDE || FIN_FLECHE_FERMEE){ finFlecheRetirer(); return; }
+  var i = finPasCourant();
+  var e = FIN_ETAPES[i];
+  var faites = finFaites();
+  var toutFait = FIN_ETAPES.every(function(x){ return faites[x.cle]; });
+  var cib = e ? document.getElementById(e.cible) : null;
+  if(!e || !cib || toutFait){ finFlecheRetirer(); return; }
+
+  var r = cib.getBoundingClientRect();
+  var h = window.innerHeight || 800;
+  /* « Sous les yeux » : le bloc occupe une part utile de la fenêtre. Un seul
+     pixel visible ne suffit pas — on pointerait vers un titre coupé. */
+  if(r.top < h * 0.65 && r.bottom > h * 0.18){ finFlecheRetirer(); return; }
+  var sens = (r.top >= h * 0.65) ? "bas" : "haut";
+
+  var f = document.getElementById("fin-fleche-guide");
+  if(!f){
+    f = document.createElement("button");
+    f.type = "button";
+    f.id = "fin-fleche-guide";
+    f.className = "fin-fleche-guide";
+    document.body.appendChild(f);
+    f.addEventListener("click", function(ev){
+      if(ev.target.closest(".fin-fg-x")){
+        FIN_FLECHE_FERMEE = true;
+        finFlecheRetirer();
+        return;
+      }
+      finAller(FIN_ETAPES[finPasCourant()].cle);
+    });
+  }
+  f.setAttribute("data-sens", sens);
+  f.setAttribute("aria-label", "Aller à l’étape " + e.n + " : " + e.nom
+    + (sens === "bas" ? ", plus bas dans la page" : ", plus haut dans la page"));
+  var neuf = '<span class="fin-fg-a" aria-hidden="true">'
+    + (sens === "bas" ? "▼" : "▲") + '</span>'
+    + '<span class="fin-fg-t"><small>Étape ' + e.n + ' sur ' + FIN_ETAPES.length
+    + '</small><span>' + esc(e.nom) + '</span></span>'
+    + '<span class="fin-fg-x" role="button" aria-label="Masquer ce guide" '
+    + 'title="Masquer ce guide">✕</span>';
+  if(f.innerHTML !== neuf) f.innerHTML = neuf;
 }
 
 /* REVENIR AU FIL. On y remonte, on le désigne, et on DIT ce qui vient d'être
@@ -5258,10 +5421,17 @@ function finFilBrancher(){
     }
     if(ev.target.closest("#fin-fil-g")){
       FIN_GUIDE = !FIN_GUIDE;
+      /* Rallumer le guidage rouvre aussi la flèche : l'avoir fermée une fois
+         ne doit pas la condamner pour la session. */
+      if(FIN_GUIDE) FIN_FLECHE_FERMEE = false;
       finFil();
-      if(FIN_GUIDE) finGuidePas();
-      else if(FIN_MARQUE){ FIN_MARQUE.el.classList.remove(FIN_MARQUE.cls);
-                           clearTimeout(FIN_MARQUE.t); FIN_MARQUE = null; }
+      if(FIN_GUIDE){ finGuidePas(); }
+      else {
+        finFlecheRetirer();
+        finGuideIciRetirer();
+        if(FIN_MARQUE){ FIN_MARQUE.el.classList.remove(FIN_MARQUE.cls);
+                        clearTimeout(FIN_MARQUE.t); FIN_MARQUE = null; }
+      }
     }
   });
   /* TOUTE ACTION DU LECTEUR INTERROMPT LA MARQUE. Une pulsation qui
@@ -5291,10 +5461,27 @@ function finFilBrancher(){
                          + "[data-pont-go]"))
       finSurveiller();
   });
+  /* LE SENS DE LA FLÈCHE SE RECALCULE QUAND LA PAGE BOUGE. Posé une fois, il
+     désignerait « vers le bas » à un lecteur qui a depuis dépassé le bloc.
+     `passive` parce qu'on ne bloque jamais un défilement pour dessiner. */
+  var enCours = false;
+  function suivre(){
+    if(enCours) return;
+    enCours = true;
+    requestAnimationFrame(function(){ enCours = false; finFlecheMaj(); });
+  }
+  window.addEventListener("scroll", suivre, { passive: true });
+  window.addEventListener("resize", suivre, { passive: true });
+
   /* LE PREMIER RELEVÉ SERT DE POINT DE COMPARAISON. Sans lui, l'étape 1 —
      faite dès le chargement, la puissance étant pré-remplie — passerait pour
      un franchissement et remonterait le lecteur avant qu'il n'ait rien fait. */
   finMajFil();
+  /* LA FLÈCHE EST POSÉE D'EMBLÉE. `finMajFil` rend la main avant le guidage au
+     tout premier appel — c'est voulu, rien n'a encore été franchi — mais sans
+     cet appel la flèche n'apparaissait qu'au premier changement d'état : le
+     lecteur qui arrive et descend n'était guidé par rien. */
+  finFlecheMaj();
 }
 
 /* LES DEUX PONTS VERS LE SITE D'INGÉNIERIE, CÔTE À CÔTE ET NOMMÉS.
