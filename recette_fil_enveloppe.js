@@ -50,6 +50,19 @@ const ETATS = () => [...document.querySelectorAll('#fin-fil .fin-e')]
   const ouvrir = async (reduit) => {
     const ctx = await nav.newContext({ viewport: { width: 1500, height: 1100 },
       reducedMotion: reduit ? 'reduce' : 'no-preference' });
+    /* CE MASQUE N'EST PAS UN CONFORT, IL EST INDISPENSABLE — et son absence
+       ici a coûté cher en diagnostics. La page envoie un signal au serveur
+       quand elle se voit pilotée (`navigator.webdriver`, aucun greffon,
+       aucune langue) ; le serveur BLOQUE alors l'adresse pendant TRENTE
+       MINUTES. Ce fichier se coupait donc l'herbe sous le pied, et coupait
+       surtout celle de toutes les recettes lancées après lui : on croyait
+       lire des pannes du site, on lisait la trace de ce blocage.
+       Les autres recettes posent ce masque ; celle-ci l'avait oublié. */
+    await ctx.addInitScript(() => {
+      Object.defineProperty(navigator, 'webdriver', { get: () => false });
+      Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3] });
+      Object.defineProperty(navigator, 'languages', { get: () => ['fr-FR', 'fr'] });
+    });
     await ctx.route('**/*', r => (['image', 'font', 'media'].includes(r.request().resourceType())
       ? r.abort() : r.continue()));
     const pg = await ctx.newPage();

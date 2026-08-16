@@ -54,6 +54,24 @@ const titre = (t) => console.log('\n══ ' + t + ' ══\n');
     return { statut: r.status, j: await r.json().catch(() => null) };
   }, [url, corps || null]);
 
+  /* ATTENDRE LE RÉSULTAT, PAS UNE DURÉE. Un délai fixe parie sur la vitesse du
+     serveur : sur une base momentanément contrariée, une réponse met plusieurs
+     secondes, la recette lit une page pas encore rendue et dénonce un défaut
+     du site là où il n'y a qu'une attente. On attend que le bloc CHANGE, et
+     l'expiration est NOMMÉE — un délai dépassé de Playwright se lirait comme
+     une panne d'outil. */
+  const htmlDe = (sel) => pg.evaluate(
+    (s) => { const e = document.querySelector(s); return e ? e.innerHTML : ''; }, sel);
+  const rendu = async (sel, avant, quoi) => {
+    const vu = await pg.waitForFunction(([s, a]) => {
+      const e = document.querySelector(s);
+      return !!e && e.innerHTML.length > 0 && e.innerHTML !== a;
+    }, [sel, avant], { timeout: 30000 }).then(() => true).catch(() => false);
+    if (!vu) ok('le serveur rend ' + quoi + ' en moins de 30 s', false,
+                'rien de nouveau dans ' + sel);
+    return vu;
+  };
+
   // ── 1 ────────────────────────────────────────────────────────────────────
   titre('1. Le bloc est présent dans LES DEUX vues — investissement et empreinte');
 
@@ -162,8 +180,9 @@ const titre = (t) => console.log('\n══ ' + t + ' ══\n');
 
   titre('4. En colocation, deux bilans distincts ne sont pas additionnés');
   await pg.selectOption('#eq-perimetre', 'colocation');
+  let avantOut = await htmlDe('#eq-out');
   await pg.click('#eq-go');
-  await pg.waitForTimeout(1400);
+  await rendu('#eq-out', avantOut, 'la part en colocation');
   const coloc = await pg.evaluate(() => {
     const b = [...document.querySelectorAll('#eq-out .eq-bloc')]
       .find(x => /investissement/i.test((x.querySelector('h4') || {}).textContent || ''));
@@ -176,8 +195,9 @@ const titre = (t) => console.log('\n══ ' + t + ' ══\n');
   ok('…et la page dit pourquoi : deux bilans distincts',
      !!coloc && /deux bilans/i.test(coloc.texte));
   await pg.selectOption('#eq-perimetre', 'propre');
+  avantOut = await htmlDe('#eq-out');
   await pg.click('#eq-go');
-  await pg.waitForTimeout(1400);
+  await rendu('#eq-out', avantOut, 'le retour en centre propre');
 
   // ── 5 : LA BASCULE ───────────────────────────────────────────────────────
   titre('5. L’allongement de durée de vie affiche son point de bascule');
@@ -193,8 +213,9 @@ const titre = (t) => console.log('\n══ ' + t + ' ══\n');
     await pg.fill('#eq-d0', '5');
     await pg.fill('#eq-d1', '8');
     await pg.fill('#eq-pue', '1.3');
+    const avantVie = await htmlDe('#eq-vie-out');
     await pg.click('#eq-vie-go');
-    await pg.waitForTimeout(1400);
+    await rendu('#eq-vie-out', avantVie, 'la bascule pour ' + pays);
     return pg.evaluate(() => {
       const b = document.querySelector('#eq-vie-out .eq-bloc');
       if (!b) return null;

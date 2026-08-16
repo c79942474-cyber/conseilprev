@@ -11,6 +11,18 @@ return Math.round(((Math.max(l1,l2)+.05)/(Math.min(l1,l2)+.05))*100)/100}`;
 (async()=>{
   const nav=await chromium.launch();
   const ctx=await nav.newContext({viewport:{width:1500,height:1100}});
+  /* SANS CE MASQUE, LA RECETTE SE FAIT BANNIR — et bannit les suivantes. La
+     page signale au serveur qu'elle se voit pilotée (`navigator.webdriver`,
+     aucun greffon, aucune langue) et le serveur bloque alors l'adresse
+     TRENTE MINUTES. Un fichier qui l'oublie ne rate pas seulement ses propres
+     contrôles : il fait échouer toutes les recettes lancées dans la
+     demi-heure, sur un site parfaitement sain. */
+  await ctx.addInitScript(() => {
+    Object.defineProperty(navigator, 'webdriver', { get: () => false });
+    Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3] });
+    Object.defineProperty(navigator, 'languages', { get: () => ['fr-FR', 'fr'] });
+  });
+
   await ctx.route('**/*',r=>(['image','font','media'].includes(r.request().resourceType())?r.abort():r.continue()));
   const pg=await ctx.newPage(); const err=[]; pg.on('pageerror',e=>err.push(String(e)));
   await pg.goto(BASE+'/auth/'+TOKEN,{waitUntil:'commit'});

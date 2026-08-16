@@ -1066,6 +1066,26 @@ th .ttip{margin-left:5px}
   background:var(--white);color:var(--ink);cursor:pointer;white-space:nowrap}
 .fin-fil-g:hover{background:var(--ink);color:var(--white)}
 .fin-fil-g[aria-pressed="true"]{background:var(--ink);color:var(--white)}
+/* L'AVANCEMENT ET LA PROCHAINE ÉTAPE, NOMMÉE. Une rangée de pastilles laisse
+   au lecteur le soin de chercher laquelle vient ensuite ; cette ligne le dit
+   et y mène. C'est elle que le fil met sous les yeux quand il ramène. */
+.fin-fil-p{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  margin-top:10px;padding:8px 11px;border-radius:6px;background:var(--white);
+  border:1px solid var(--rule);border-left:3px solid var(--blue)}
+.fin-fil-p.fini{border-left-color:var(--green)}
+.fin-fil-pn{flex:0 0 auto;font-family:var(--mono);font-size:12px;font-weight:700;
+  color:var(--ink);padding:2px 9px;border-radius:11px;background:var(--bg)}
+.fin-fil-p.fini .fin-fil-pn{background:var(--green);color:#fff}
+.fin-fil-px{flex:1 1 240px;font-size:11.5px;line-height:1.5;min-width:0}
+.fin-fil-s{flex:0 0 auto;font-family:var(--mono);font-size:10.5px;
+  padding:5px 12px;border:1px solid var(--blue);border-radius:14px;
+  background:var(--blue);color:var(--white);cursor:pointer;white-space:nowrap}
+.fin-fil-s:hover{background:var(--ink);border-color:var(--ink)}
+.fin-fil-s:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+/* L'ANNONCE DU FRANCHISSEMENT. Discrète, mais PRÉSENTE à l'écran : la réserver
+   aux lecteurs d'écran laisserait les autres devant un mouvement inexpliqué. */
+.fin-fil-a{margin:8px 0 0;font-size:11px;line-height:1.5;color:var(--muted)}
+.fin-fil-a:empty{display:none}
 .fin-fil-l{list-style:none;margin:10px 0 0;padding:0;display:flex;
   gap:4px;align-items:stretch;flex-wrap:wrap}
 .fin-e{flex:1 1 190px;min-width:0}
@@ -4964,20 +4984,97 @@ function finPasCourant(){
 
 var FIN_GUIDE = false;      /* le mode pas à pas est-il enclenché ? */
 
+/* LE RETOUR AU FIL APRÈS CHAQUE ÉTAPE FRANCHIE.
+   ─────────────────────────────────────────────
+   Le fil disait où l'on en était, mais il fallait le retrouver soi-même : on
+   remplissait un bloc, le fil se mettait à jour tout en haut, et personne ne
+   le voyait. Le lecteur restait devant le bloc qu'il venait de terminer, sans
+   savoir lequel venait ensuite — un menu qu'on ne revoit jamais ne sert
+   qu'une fois.
+
+   La boucle est donc : franchir une étape → revenir AU FIL → il nomme la
+   suivante et y mène → franchir → revenir, jusqu'aux six.
+
+   TROIS PRÉCAUTIONS, parce qu'une page qui déplace le lecteur sans prévenir
+   est pire qu'une page qui ne l'aide pas :
+     — le retour ne part que sur un FRANCHISSEMENT réel, jamais sur un simple
+       recalcul. Une étape déjà faite qui se recalcule ne fait rien bouger ;
+     — le fil ANNONCE ce qui vient d'être franchi et ce qui suit : on sait
+       pourquoi la page a bougé, et le bouton de l'étape validée y ramène en
+       un clic si on veut relire le résultat ;
+     — il se coupe. Un lecteur qui étudie la DPGF en détail ne doit pas être
+       remonté toutes les trente secondes ; l'interrupteur est dans le fil, et
+       le fil dit qu'il ramène AVANT de le faire la première fois. */
+var FIN_RETOUR = true;
+/* Ce que le fil a montré la dernière fois. PAS un état d'avancement — celui-là
+   reste déduit de la page à chaque appel. Uniquement de quoi reconnaître un
+   franchissement : sans point de comparaison, tout recalcul ressemblerait à
+   une étape franchie et la page passerait son temps à remonter. */
+var FIN_VU = null;
+/* LE LECTEUR A-T-IL AGI ? Sans cette condition, une étape qui se coche TOUTE
+   SEULE remonte quelqu'un qui n'a rien demandé — et le cas n'est pas
+   théorique : le référentiel des pays arrive après le chargement et arme
+   d'office l'étape 2. Un lecteur descendu lire la DPGF se retrouvait projeté
+   en haut de page une seconde après son arrivée, sans comprendre pourquoi.
+   Le fil se met alors à jour en silence : il est juste, il ne bouscule pas. */
+var FIN_AGI = false;
+
+function finFaites(){
+  var f = {};
+  FIN_ETAPES.forEach(function(e){
+    try { f[e.cle] = !!e.fait(); } catch(err){ f[e.cle] = false; }
+  });
+  return f;
+}
+
 function finFil(){
   var el = document.getElementById("fin-fil");
   if(!el) return;
+  /* La zone d'annonce vit HORS du fragment réécrit : recréée à chaque rendu,
+     elle ne serait jamais lue par un lecteur d'écran — le contenu d'une
+     région live qui vient d'apparaître n'est pas annoncé. */
+  var corps = document.getElementById("fin-fil-c");
+  if(!corps){
+    el.innerHTML = '<div id="fin-fil-c"></div>'
+      + '<p class="fin-fil-a" id="fin-fil-a" role="status" aria-live="polite"></p>';
+    corps = document.getElementById("fin-fil-c");
+  }
+  var faites = finFaites();
+  var n = 0;
+  FIN_ETAPES.forEach(function(e){ if(faites[e.cle]) n++; });
   var cur = finPasCourant();
+  var suite = FIN_ETAPES[cur];
+  var fini = (n === FIN_ETAPES.length);
+
   var h = '<div class="fin-fil-t"><b>Les six étapes de la décision.</b> '
     + 'Chacune mène à son bloc. Aucune n’est obligatoire, aucune ne bloque la '
     + 'suivante : le fil oriente, il n’enferme pas.'
     + '<button type="button" class="fin-fil-g" id="fin-fil-g" aria-pressed="'
     + (FIN_GUIDE ? 'true' : 'false') + '">'
-    + (FIN_GUIDE ? '⏸ Arrêter le guidage' : '▶ Guidez-moi pas à pas') + '</button></div>'
-    + '<ol class="fin-fil-l">';
+    + (FIN_GUIDE ? '⏸ Arrêter le guidage' : '▶ Guidez-moi pas à pas') + '</button>'
+    + '<button type="button" class="fin-fil-g" id="fin-fil-r" aria-pressed="'
+    + (FIN_RETOUR ? 'true' : 'false') + '">'
+    + (FIN_RETOUR ? '↩ Me ramener ici à chaque étape' : '⤫ Ne plus me ramener')
+    + '</button></div>';
+
+  /* L'AVANCEMENT ET LA PROCHAINE ÉTAPE, NOMMÉE. Une rangée de pastilles laisse
+     au lecteur le soin de chercher laquelle vient ensuite ; cette ligne le dit
+     et y mène. C'est elle que le fil met sous les yeux quand il ramène. */
+  h += '<div class="fin-fil-p' + (fini ? ' fini' : '') + '">'
+    + '<span class="fin-fil-pn">' + n + ' / ' + FIN_ETAPES.length + '</span>'
+    + (fini
+        ? '<span class="fin-fil-px"><b>Les six étapes sont faites.</b> '
+          + 'Reprenez n’importe quel bloc pour ajuster une hypothèse&nbsp;: '
+          + 'l’avancement se recalcule tout seul, il n’est jamais tenu à part.</span>'
+        : '<span class="fin-fil-px">Prochaine étape&nbsp;: <b>'
+          + esc(suite.nom) + '</b> — ' + esc(suite.quoi) + '</span>'
+          + '<button type="button" class="fin-fil-s" data-fin-suite="'
+          + suite.cle + '">Aller à l’étape ' + suite.n + ' →</button>')
+    + '</div>';
+
+  h += '<ol class="fin-fil-l">';
   FIN_ETAPES.forEach(function(e, i){
-    var fait = false;
-    try { fait = !!e.fait(); } catch(err){ fait = false; }
+    var fait = faites[e.cle];
     var etat = fait ? "fait" : (i === cur ? "cours" : "reste");
     h += '<li class="fin-e ' + etat + '">'
       + '<button type="button" data-fin-etape="' + e.cle + '">'
@@ -4986,7 +5083,7 @@ function finFil(){
       + '<i>' + esc(e.quoi) + '</i></span></button></li>';
     if(i < FIN_ETAPES.length - 1) h += '<li class="fin-e-fl" aria-hidden="true">→</li>';
   });
-  el.innerHTML = h + '</ol>';
+  corps.innerHTML = h + '</ol>';
 }
 
 /* Mener à une étape : on y va, et on la DÉSIGNE. Le défilement seul ne suffit
@@ -5034,13 +5131,94 @@ function finGuidePas(){
   if(cib) finDesigner(cib);
 }
 
+/* REVENIR AU FIL. On y remonte, on le désigne, et on DIT ce qui vient d'être
+   franchi. Sans la phrase, le lecteur remonté se demande ce qui s'est passé —
+   et un mouvement qu'on ne s'explique pas se lit comme un défaut de la page.
+   Le fil est amené EN HAUT de la fenêtre, pas au centre : la ligne « prochaine
+   étape » et les six pastilles doivent tenir dans le champ de vision, sinon on
+   ramène vers un menu qu'il faut encore chercher. */
+function finRetourFil(cle){
+  var el = document.getElementById("fin-fil");
+  if(!el) return;
+  var e = null;
+  FIN_ETAPES.forEach(function(x){ if(x.cle === cle) e = x; });
+  var faites = finFaites(), n = 0;
+  FIN_ETAPES.forEach(function(x){ if(faites[x.cle]) n++; });
+  var suite = FIN_ETAPES[finPasCourant()];
+  var z = document.getElementById("fin-fil-a");
+  if(z && e){
+    z.textContent = "Étape " + e.n + " — " + e.nom + " — faite. "
+      + (n === FIN_ETAPES.length
+           ? "Les six étapes sont faites."
+           : "Prochaine : étape " + suite.n + ", " + suite.nom + ". "
+             + "Le bouton ci-dessus y mène ; la pastille " + e.n
+             + " ramène au résultat que vous venez d’obtenir.");
+  }
+  el.scrollIntoView({ block: "start",
+    behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? "auto" : "smooth" });
+  finDesigner(el);
+}
+
+/* LE POINT DE PASSAGE UNIQUE. Tout ce qui fait avancer la page appelle ceci,
+   et rien d'autre : deux chemins de mise à jour finiraient par se contredire,
+   l'un ramenant au fil et l'autre non. Rend la clé de l'étape franchie, ou
+   null — c'est ce que la surveillance attend pour s'arrêter. */
+function finMajFil(){
+  var avant = FIN_VU;
+  var apres = finFaites();
+  FIN_VU = apres;
+  finFil();
+  if(!avant) return null;            /* premier relevé : rien n'a été franchi */
+  var franchie = null;
+  FIN_ETAPES.forEach(function(e){
+    if(apres[e.cle] && !avant[e.cle]) franchie = e.cle;
+  });
+  if(franchie && FIN_RETOUR && FIN_AGI) finRetourFil(franchie);
+  else if(FIN_GUIDE) finGuidePas();
+  return franchie;
+}
+
+/* UNE RÉPONSE SERVEUR N'ARRIVE PAS À HEURE FIXE. Regarder une seule fois,
+   900 ms après le clic, ratait tout ce qui prenait plus longtemps — et le fil
+   ne ramenait alors jamais, précisément les jours où le lecteur en avait le
+   plus besoin. On regarde plusieurs fois, de plus en plus tard, et on s'arrête
+   dès qu'une étape a été franchie. */
+var FIN_ATTENTES = [350, 900, 1700, 2800, 4200, 6000, 8500];
+function finSurveiller(){
+  var trouve = false;      /* propre à CETTE surveillance : deux clics
+                              rapprochés ne doivent pas s'éteindre l'un l'autre */
+  FIN_ATTENTES.forEach(function(ms){
+    setTimeout(function(){
+      if(trouve) return;
+      if(finMajFil()) trouve = true;
+    }, ms);
+  });
+}
+
 function finFilBrancher(){
   var el = document.getElementById("fin-fil");
   if(!el || el.getAttribute("data-pret")) return;
   el.setAttribute("data-pret", "1");
   el.addEventListener("click", function(ev){
+    /* « Aller à l'étape N » et le clic sur une pastille mènent au même
+       endroit. Le bouton de suite existe parce qu'on ne doit pas avoir à
+       chercher laquelle des six est la prochaine — c'est tout l'objet du
+       retour au fil. */
+    var s = ev.target.closest("[data-fin-suite]");
+    if(s){ finAller(s.getAttribute("data-fin-suite")); return; }
     var b = ev.target.closest("[data-fin-etape]");
     if(b){ finAller(b.getAttribute("data-fin-etape")); return; }
+    if(ev.target.closest("#fin-fil-r")){
+      FIN_RETOUR = !FIN_RETOUR;
+      finFil();
+      var z = document.getElementById("fin-fil-a");
+      if(z) z.textContent = FIN_RETOUR
+        ? "Le fil vous ramènera ici à chaque étape franchie."
+        : "Le fil ne vous ramènera plus : il continue de se mettre à jour sur "
+          + "place, et la ligne « prochaine étape » reste à jour.";
+      return;
+    }
     if(ev.target.closest("#fin-fil-g")){
       FIN_GUIDE = !FIN_GUIDE;
       finFil();
@@ -5051,19 +5229,31 @@ function finFilBrancher(){
   });
   /* TOUTE ACTION DU LECTEUR INTERROMPT LA MARQUE. Une pulsation qui
      continuerait pendant qu'il remplit un champ deviendrait une gêne, et c'est
-     exactement le reproche qu'on fait au clignotement. */
-  document.addEventListener("pointerdown", function(){
-    if(FIN_MARQUE){ FIN_MARQUE.el.classList.remove(FIN_MARQUE.cls);
-                    clearTimeout(FIN_MARQUE.t); FIN_MARQUE = null; }
-  }, true);
-  /* La page avance : le fil se recalcule, et le guidage suit. */
-  ["fin-calcul", "fin-pays"].forEach(function(ev){
-    document.addEventListener(ev, function(){ finFil(); finGuidePas(); });
+     exactement le reproche qu'on fait au clignotement.
+     C'est aussi ici qu'on retient qu'il A AGI : à partir de là, une étape
+     franchie peut le ramener au fil — avant, jamais. */
+  ["pointerdown", "keydown", "change"].forEach(function(t){
+    document.addEventListener(t, function(){
+      FIN_AGI = true;
+      if(FIN_MARQUE){ FIN_MARQUE.el.classList.remove(FIN_MARQUE.cls);
+                      clearTimeout(FIN_MARQUE.t); FIN_MARQUE = null; }
+    }, true);
   });
+  /* La page avance : le fil se recalcule, et s'il y a franchissement il
+     ramène. Tout passe par finMajFil — c'est le seul endroit qui compare. */
+  ["fin-calcul", "fin-pays"].forEach(function(ev){
+    document.addEventListener(ev, function(){ finMajFil(); });
+  });
+  /* Les commandes qui font franchir une étape. Le résultat arrive quand le
+     serveur répond : on surveille au lieu de parier sur un délai. */
   document.addEventListener("click", function(ev){
     if(ev.target.closest("#fin-go, #moe-go, #kpi-go, [data-pont-go]"))
-      setTimeout(function(){ finFil(); finGuidePas(); }, 900);
+      finSurveiller();
   });
+  /* LE PREMIER RELEVÉ SERT DE POINT DE COMPARAISON. Sans lui, l'étape 1 —
+     faite dès le chargement, la puissance étant pré-remplie — passerait pour
+     un franchissement et remonterait le lecteur avant qu'il n'ait rien fait. */
+  finMajFil();
 }
 
 /* LES DEUX PONTS VERS LE SITE D'INGÉNIERIE, CÔTE À CÔTE ET NOMMÉS.
