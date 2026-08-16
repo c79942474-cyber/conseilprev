@@ -1,4 +1,4 @@
-/* Le fil des six étapes RAMÈNE au menu à chaque étape franchie — /enveloppe.
+/* Le fil des étapes RAMÈNE au menu à chaque étape franchie — /enveloppe.
  *
  * CE QU'ON PROTÈGE, ET LA FAUTE QUE CHAQUE CONTRÔLE EMPÊCHE :
  *
@@ -77,9 +77,17 @@ const titre = (t) => console.log('\n══ ' + t + ' ══\n');
   titre('1. Le fil dit où l’on en est ET ce qui vient ensuite');
 
   const d = await etatFil();
-  ok('les six étapes sont affichées', d.total === 6, String(d.total));
-  ok('un compteur d’avancement est donné', /^\d+ \/ 6$/.test(d.compteur.trim()),
-     d.compteur);
+  /* LE COMPTE VIENT DE LA PAGE, PAS D'ICI. Ce contrôle exigeait six étapes :
+     il est tombé le jour où le fil a couvert toute la vue — équipements,
+     maturité et pilotage —, en signalant une régression là où il n'y avait
+     qu'un inventaire figé de plus. Ce qu'il protège n'a pas changé : le fil
+     affiche autant de pastilles qu'il déclare d'étapes, et son compteur
+     s'accorde avec elles. */
+  const attendu = await pg.evaluate(() => FIN_ETAPES.length);
+  ok('le fil affiche autant de pastilles qu’il déclare d’étapes',
+     d.total === attendu, d.total + ' pastille(s) pour ' + attendu + ' déclarée(s)');
+  ok('un compteur d’avancement est donné',
+     new RegExp('^\\d+ / ' + attendu + '$').test(d.compteur.trim()), d.compteur);
   ok('…et il correspond aux étapes cochées',
      d.compteur.trim().split('/')[0].trim() === String(d.faites),
      d.compteur + ' contre ' + d.faites + ' cochée(s)');

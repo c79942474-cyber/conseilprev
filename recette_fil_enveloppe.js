@@ -1,6 +1,6 @@
-/* LE FIL CONDUCTEUR DE L'ENVELOPPE — six étapes, des flèches, deux ponts.
+/* LE FIL CONDUCTEUR DE L'ENVELOPPE — ses étapes, des flèches, deux ponts.
  *
- * CE QU'IL RÉSOUT. La section enchaîne six blocs qui se lisent DANS UN ORDRE, et
+ * CE QU'IL RÉSOUT. La vue enchaîne des blocs qui se lisent DANS UN ORDRE, et
  * rien ne le disait : un lecteur arrivé au milieu tombait sur « Calculez d'abord
  * l'enveloppe ci-dessus » sans savoir où était ce « ci-dessus ».
  *
@@ -87,11 +87,18 @@ const ETATS = () => [...document.querySelectorAll('#fin-fil .fin-e')]
     process.exit(1);
   }
   const e0 = await pg.evaluate(ETATS);
-  ok('les six étapes sont affichées', e0.length === 6,
-     e0.map(x => x.nom).join(' · '));
+  /* LE COMPTE VIENT DE LA PAGE. Figé à six, ce contrôle est tombé le jour où
+     le fil a couvert toute la vue — équipements, maturité, pilotage —, en
+     criant à la régression sur un ajout voulu. Ce qu'il protège est ailleurs :
+     toutes les étapes déclarées sont affichées, et elles sont séparées. */
+  const declarees = await pg.evaluate(() => FIN_ETAPES.length);
+  ok('toutes les étapes déclarées sont affichées', e0.length === declarees,
+     e0.length + ' affichée(s) pour ' + declarees + ' déclarée(s) : '
+     + e0.map(x => x.nom).join(' · '));
   const fl = await pg.evaluate(() =>
     document.querySelectorAll('#fin-fil .fin-e-fl').length);
-  ok('…séparées par des flèches', fl === 5, fl + ' flèches');
+  ok('…séparées par des flèches', fl === declarees - 1,
+     fl + ' flèche(s) pour ' + declarees + ' étape(s)');
   /* AUCUNE ÉTAPE NE PEUT ÊTRE « FAITE » AVANT D'AVOIR ÉTÉ FRANCHIE. Ce
      contrôle manquait, et il aurait fallu qu'il existe : la dernière étape
      s'affichait faite dès le chargement, parce que son test comptait un lien

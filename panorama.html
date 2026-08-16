@@ -2585,7 +2585,7 @@ engagements publics) sont imputés nominativement.</div>
          qui garderait sa propre idée de l'avancement se désynchroniserait au
          premier recalcul, et afficherait « fait » devant un bloc vide. -->
     <div class="fin-fil" id="fin-fil" role="navigation"
-         aria-label="Les six étapes de la décision d’enveloppe"></div>
+         aria-label="Les étapes de la décision d’enveloppe"></div>
 
     <div class="fin-bandeau"><b>D’où vient le coût au mégawatt, et ce qu’il ne dit pas.</b>
     Il provient d’un relevé publié — <b>Soben, part of Accenture, Data Centre Trends Report
@@ -2601,7 +2601,12 @@ engagements publics) sont imputés nominativement.</div>
     comparaison entre pays sur le <b>coût total de possession</b> — car sur le seul
     investissement, elle afficherait zéro.</div>
 
-    <div class="fin-form">
+    <!-- L'IDENTIFIANT MANQUAIT. La première étape du fil visait « fin-form »,
+         qui n'était qu'une CLASSE : `getElementById` rendait null, et
+         `finAller` abandonnait en silence. Cliquer « Régler le projet » ne
+         faisait donc rien — la première étape du parcours, celle que tout le
+         monde essaie en premier. -->
+    <div class="fin-form" id="fin-form">
       <div class="fin-ch"><label for="fin-mw">Puissance IT (MW)</label>
         <input type="number" id="fin-mw" value="100" min="0.1" max="2000" step="1">
         <span class="fin-aide">La puissance informatique, pas la puissance raccordée.</span></div>
@@ -4916,7 +4921,7 @@ function eauNb(n){
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   LE FIL CONDUCTEUR DE L'ENVELOPPE — six étapes, et un mode pas à pas
+   LE FIL CONDUCTEUR DE L'ENVELOPPE — les étapes, et un mode pas à pas
 
    CE QU'IL RÉSOUT. La section enchaîne six blocs qui se lisent dans un ordre,
    et rien ne le disait. Un lecteur arrivé au milieu tombait sur « Calculez
@@ -4955,11 +4960,37 @@ var FIN_ETAPES = [
     quoi: "Les honoraires, phase par phase et mission par mission, sur le montant "
         + "des travaux du pays retenu.",
     fait: function(){ return !!document.querySelector("#moe-out .moe-tab"); } },
-  { cle: "kpi", n: 5, nom: "Lire la création de valeur", cible: "kpi-bloc",
+  /* LES ÉQUIPEMENTS VIENNENT AVANT LA CRÉATION DE VALEUR, ET L'ORDRE EST UN
+     FAIT DE CALCUL, PAS UNE PRÉFÉRENCE : l'EVA et le ROCE se calculent sur le
+     capital employé, et l'informatique en fait partie quand le même maître
+     d'ouvrage la porte. Les lire avant de l'avoir chiffrée donne un ROCE
+     surestimé — sur la page même qui décide d'un GO ou d'un NO GO. */
+  { cle: "equipements", n: 5, nom: "Chiffrer les équipements informatiques",
+    cible: "s-equipements",
+    quoi: "Le poste que les quatorze lots ne contiennent pas — et qui pèse le "
+        + "tiers de l’investissement quand vous le portez.",
+    fait: function(){ return !!document.querySelector("#eq-out .eq-tab"); } },
+  { cle: "kpi", n: 6, nom: "Lire la création de valeur", cible: "kpi-bloc",
     quoi: "EVA, ROCE, free cash flow : le projet le moins cher n’est pas toujours "
         + "celui qui crée de la valeur.",
     fait: function(){ return !!document.querySelector("#kpi-out table, #kpi-out .kpi-c"); } },
-  { cle: "pont", n: 6, nom: "Poursuivre sur l’ingénierie", cible: "fin-ponts",
+  /* INSTRUIRE, PUIS SUIVRE. Ces deux blocs vivaient sur la vue sans que le
+     fil les mentionne : un lecteur qui suivait le fil terminait a l'etape
+     precedente et ne savait pas qu'ils existaient. Ils viennent APRES les
+     chiffres, et dans cet ordre : la maturite dit si l'organisation peut
+     instruire la decision que ces chiffres preparent, et le pilotage n'a de
+     sens qu'une fois qu'on sait ce qu'il est tenable de promettre. */
+  { cle: "maturite", n: 7, nom: "Diagnostiquer la maturité", cible: "s-maturite",
+    quoi: "L’organisation a-t-elle de quoi instruire cette décision, puis en "
+        + "suivre l’exécution ? À poser avant de promettre un tableau de bord.",
+    fait: function(){ var o = document.getElementById("mat-out");
+                      return !!(o && o.innerHTML && o.innerHTML.length > 200); } },
+  { cle: "pilotage", n: 8, nom: "Armer le pilotage", cible: "s-pilotage",
+    quoi: "Seuils, tendances et alertes : où une action est attendue — sans "
+        + "crier au loup sur un écart qui tient dans l’incertitude.",
+    fait: function(){ var o = document.getElementById("pil-out");
+                      return !!(o && o.innerHTML && o.innerHTML.length > 200); } },
+  { cle: "pont", n: 9, nom: "Poursuivre sur l’ingénierie", cible: "fin-ponts",
     quoi: "Le bilan énergie-eau-carbone, ou la séquence des pièces et le prix de "
         + "la maîtrise d’œuvre — sur le site d’ingénierie.",
     /* « FAIT » VEUT DIRE : UN LIEN A ÉTÉ CRÉÉ. Écrit d'abord comme la présence
@@ -5046,7 +5077,12 @@ function finFil(){
   var suite = FIN_ETAPES[cur];
   var fini = (n === FIN_ETAPES.length);
 
-  var h = '<div class="fin-fil-t"><b>Les six étapes de la décision.</b> '
+  /* LE NOMBRE D'ÉTAPES EST DÉRIVÉ. Il était écrit « six » à quatre endroits ;
+     la vue en porte maintenant neuf, l'informatique, la maturité et le pilotage
+     s'étant ajoutés. Un fil qui annonce six étapes et en affiche neuf se
+     décrédibilise sur son premier mot. */
+  var h = '<div class="fin-fil-t"><b>Les ' + FIN_ETAPES.length
+    + ' étapes de la décision.</b> '
     + 'Chacune mène à son bloc. Aucune n’est obligatoire, aucune ne bloque la '
     + 'suivante : le fil oriente, il n’enferme pas.'
     + '<button type="button" class="fin-fil-g" id="fin-fil-g" aria-pressed="'
@@ -5063,7 +5099,8 @@ function finFil(){
   h += '<div class="fin-fil-p' + (fini ? ' fini' : '') + '">'
     + '<span class="fin-fil-pn">' + n + ' / ' + FIN_ETAPES.length + '</span>'
     + (fini
-        ? '<span class="fin-fil-px"><b>Les six étapes sont faites.</b> '
+        ? '<span class="fin-fil-px"><b>Les ' + FIN_ETAPES.length
+          + ' étapes sont faites.</b> '
           + 'Reprenez n’importe quel bloc pour ajuster une hypothèse&nbsp;: '
           + 'l’avancement se recalcule tout seul, il n’est jamais tenu à part.</span>'
         : '<span class="fin-fil-px">Prochaine étape&nbsp;: <b>'
@@ -5149,7 +5186,7 @@ function finRetourFil(cle){
   if(z && e){
     z.textContent = "Étape " + e.n + " — " + e.nom + " — faite. "
       + (n === FIN_ETAPES.length
-           ? "Les six étapes sont faites."
+           ? "Les " + FIN_ETAPES.length + " étapes sont faites."
            : "Prochaine : étape " + suite.n + ", " + suite.nom + ". "
              + "Le bouton ci-dessus y mène ; la pastille " + e.n
              + " ramène au résultat que vous venez d’obtenir.");
@@ -5247,7 +5284,11 @@ function finFilBrancher(){
   /* Les commandes qui font franchir une étape. Le résultat arrive quand le
      serveur répond : on surveille au lieu de parier sur un délai. */
   document.addEventListener("click", function(ev){
-    if(ev.target.closest("#fin-go, #moe-go, #kpi-go, [data-pont-go]"))
+    /* LES NEUF ÉTAPES, PAS SIX. Les commandes des équipements, de la maturité
+       et du pilotage manquaient à cette liste : franchir ces étapes-là ne
+       ramenait donc jamais au fil, et le parcours s'arrêtait sans le dire. */
+    if(ev.target.closest("#fin-go, #moe-go, #kpi-go, #eq-go, #mat-go, #pil-go, "
+                         + "[data-pont-go]"))
       finSurveiller();
   });
   /* LE PREMIER RELEVÉ SERT DE POINT DE COMPARAISON. Sans lui, l'étape 1 —
@@ -12225,7 +12266,7 @@ if(window.parent&&window.parent!==window){
    déjà faite plus haut quand elle a tourné : les retaper est le meilleur
    moyen d'obtenir deux chiffres différents sur la même page. */
 (function(){
-  var REF = null, NOMEN = null;
+  var REF = null, NOMEN = null, DERNIER_EQ = null;
   function $(i){ return document.getElementById(i); }
   function esc(t){ return String(t == null ? "" : t)
     .replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
@@ -12453,6 +12494,7 @@ if(window.parent&&window.parent!==window){
         return;
       }
       NOMEN = n;
+      DERNIER_EQ = j;
       if(avecVie){
         $("eq-vie-out").innerHTML = vie(j.prolongation);
       } else {
@@ -12471,6 +12513,24 @@ if(window.parent&&window.parent!==window){
       .then(function(j){ if(j && j.ok){ REF = j; rendreForm(); } })
       .catch(function(){ $("eq-form").innerHTML =
         '<p class="note">référentiel indisponible</p>'; });
+    /* L'ENVELOPPE ARRIVE APRÈS CE FORMULAIRE. Il est construit au chargement,
+       quand l'étude d'enveloppe n'a pas encore tourné : le champ « enveloppe
+       travaux » restait donc vide pour qui suit le fil dans l'ordre, et la
+       part de l'informatique ne pouvait pas se calculer. On le reprend quand
+       le calcul aboutit — sans écraser ce que le lecteur a saisi lui-même. */
+    document.addEventListener("fin-calcul", function(){
+      var r = reprise();
+      if(!r) return;
+      var e = $("eq-enveloppe");
+      if(e && !e.value && r.enveloppe) e.value = Math.round(r.enveloppe);
+      var k = $("eq-pit");
+      if(k && r.kw && !k.dataset.saisi) k.value = Math.round(r.kw);
+      var m = $("eq-msg");
+      if(m) m.textContent = "Puissance et enveloppe reprises de l’étude ci-dessus.";
+    });
+    var pit = $("eq-pit");
+    if(pit) pit.addEventListener("input", function(){ pit.dataset.saisi = "1"; });
+
     $("eq-go").addEventListener("click", function(){ appeler(false, "eq-out", "eq-msg"); });
     $("eq-vie-go").addEventListener("click", function(){
       appeler(true, "eq-vie-out", "eq-vie-msg"); });
@@ -12480,9 +12540,37 @@ if(window.parent&&window.parent!==window){
 
   /* Exposé pour la recette : elle relance le calcul sans simuler des clics et
      lit ce que le serveur a réellement rendu. */
+  /* LE MONTANT INFORMATIQUE EST EXPOSÉ, parce qu'un autre bloc en a besoin.
+     La création de valeur calcule l'EVA et le ROCE sur le CAPITAL EMPLOYÉ ;
+     elle ne prenait que l'enveloppe travaux. Or en centre propre
+     l'informatique en represente un tiers : le capital etait sous-estime
+     d'autant, donc le ROCE surestime et l'EVA flattee. Les deux blocs
+     doivent lire le meme projet. */
   window.EQUIP_IT = { calculer: function(){ appeler(false, "eq-out", "eq-msg"); },
                       bascule: function(){ appeler(true, "eq-vie-out", "eq-vie-msg"); },
-                      nomenclature: function(){ return NOMEN; } };
+                      nomenclature: function(){ return NOMEN; },
+                      dernier: function(){ return DERNIER_EQ; },
+                      /* Le montant a ajouter au capital employe, et rien si le
+                         perimetre le porte ailleurs (colocation, hebergement). */
+                      capexMeur: function(){
+                        if(!DERNIER_EQ || !DERNIER_EQ.part || !DERNIER_EQ.part.ok) return null;
+                        var p = DERNIER_EQ.part;
+                        /* LE CRITÈRE EST LE PORTEUR, pas la présence d'un montant
+                           de travaux. Le premier jet exigeait `part_total_pct`,
+                           qui n'existe que si l'enveloppe travaux a été reportée
+                           dans CE formulaire : en suivant le fil dans l'ordre, le
+                           champ est encore vide à ce moment-là, et l'informatique
+                           était silencieusement écartée du capital employé —
+                           exactement le défaut qu'on venait corriger. Le montant
+                           informatique, lui, est connu dès le dimensionnement. */
+                        var per = (REF && REF.perimetres) ? REF.perimetres[p.perimetre] : null;
+                        if(!per || !per.meme_maitre_ouvrage) return null;
+                        var inc = (DERNIER_EQ.nomenclature || {}).incertitude_prix_pct || 0;
+                        var m = p.it_eur / 1e6;
+                        return { meur: m, perimetre: p.perimetre_nom,
+                                 bas: m * (1 - inc / 100), haut: m * (1 + inc / 100),
+                                 incertitude: inc };
+                      } };
 })();
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -12715,8 +12803,25 @@ if(window.parent&&window.parent!==window){
     var code = (window.FIN_PAYS && window.FIN_PAYS()) || d.classement[0].pays;
     var dos = (d.dossiers || []).filter(function(x){ return x.pays === code; })[0];
     if(!dos) return null;
+    /* LE CAPITAL EMPLOYÉ, C'EST LES TRAVAUX **ET** L'INFORMATIQUE.
+       Ce bloc ne prenait que l'enveloppe travaux. Or les quatorze lots ne
+       contiennent aucun serveur — le module d'équipements le dit et le
+       chiffre — et en centre propre l'informatique represente le tiers de
+       l'investissement total. L'EVA et le ROCE se calculaient donc sur un
+       capital ampute d'un tiers : le ROCE en ressortait surestime et l'EVA
+       flattee, sur la page meme qui sert a decider d'un GO ou d'un NO GO.
+       L'informatique n'est ajoutee QUE si le module la rattache a ce projet —
+       en colocation ou en hebergement elle est portee par un autre acteur, et
+       l'ajouter melangerait deux bilans. Son incertitude propre (±40 %) est
+       propagee aux deux bornes plutot qu'ecrasee par un point milieu. */
+    var cap = dos.devis.enveloppe_meur;
+    var it = window.EQUIP_IT && window.EQUIP_IT.capexMeur && window.EQUIP_IT.capexMeur();
+    if(it && cap && cap.length === 2){
+      cap = [cap[0] + it.bas, cap[1] + it.haut];
+    }
     return { pays: code,
-             capex: dos.devis.enveloppe_meur,
+             capex: cap,
+             capexIT: it || null,
              opex: dos.exploitation.total_meur_an,
              annees: (d.entree || {}).annees || 10 };
   }
@@ -12824,9 +12929,28 @@ if(window.parent&&window.parent!==window){
         var bp = $('kpi-pre'); if(bp) bp.hidden = false;
       }
       var s = j.serie, lec = j.lecture;
-      $('kpi-msg').textContent = 'Sur le pays le mieux classé au coût total de '
-        + 'possession (' + env.pays + '), enveloppe ' + fourch(env.capex, 'M€')
+      /* CE QUI COMPOSE LE CAPITAL EMPLOYÉ EST DIT. Ajouter l'informatique
+         sans l'annoncer aurait été pire que de l'omettre : le lecteur aurait
+         vu son ROCE bouger sans savoir pourquoi, et n'aurait pas pu refaire
+         le calcul. Quand elle n'entre pas — colocation, hébergement — on le
+         dit aussi, avec la raison. */
+      var socle = 'Sur le pays le mieux classé au coût total de possession ('
+        + env.pays + '), enveloppe ' + fourch(env.capex, 'M€')
         + ', exploitation ' + fourch(env.opex, 'M€/an') + '.';
+      if(env.capexIT){
+        socle += ' Le capital employé ADDITIONNE les travaux et l’informatique ('
+          + nb(env.capexIT.meur) + ' M€, ±' + Math.round(env.capexIT.incertitude)
+          + ' %) — ' + env.capexIT.perimetre + '.';
+      } else if(window.EQUIP_IT && window.EQUIP_IT.dernier && window.EQUIP_IT.dernier()){
+        socle += ' L’informatique chiffrée plus haut n’est PAS ajoutée : dans ce '
+          + 'périmètre elle est portée par un autre acteur, et l’additionner '
+          + 'mélangerait deux bilans.';
+      } else {
+        socle += ' L’informatique n’est pas comptée : les quatorze lots n’en '
+          + 'contiennent aucune. Dimensionnez-la à l’étape « Équipements '
+          + 'informatiques » pour que le capital employé soit complet.';
+      }
+      $('kpi-msg').textContent = socle;
 
       if(!lec.instruit){
         /* PAS DE CASES VIDES : les questions à poser. Un tableau de zéros
