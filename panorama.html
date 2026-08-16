@@ -1927,6 +1927,57 @@ th .fl{font-size:9px;margin-left:3px}
 }
 
   /* ── HONORAIRES DE MAÎTRISE D'ŒUVRE ──────────────────────────────────── */
+  /* ── MATURITÉ ANALYTIQUE DÉCISIONNELLE ──────────────────────────────── */
+  .mat-form{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(400px,100%),1fr));
+    gap:12px;margin:14px 0}
+  .mat-ax{border:1px solid var(--line,#233);border-radius:12px;padding:12px 15px;
+    background:rgba(0,0,0,.10);margin:0}
+  .mat-ax legend{font-size:13px;font-weight:700;padding:0 6px}
+  .mat-r{font-size:12px;color:var(--mu,#9aa);margin:2px 0 4px}
+  .mat-pq{font-size:11.5px;color:var(--mu,#9aa);line-height:1.55;margin:0 0 10px;
+    font-style:italic}
+  .mat-q{display:block;margin-bottom:11px}
+  .mat-qt{display:block;font-size:12.5px;line-height:1.5;margin-bottom:2px}
+  .mat-pr{display:block;font-size:11px;color:var(--mu,#9aa);margin-bottom:4px}
+  .mat-q select{width:100%;background:rgba(0,0,0,.24);border:1px solid var(--line,#233);
+    border-radius:7px;color:inherit;font-size:12px;padding:6px 9px}
+  .mat-cmd{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:6px 0 14px}
+  /* Le verdict global : sa couleur suit le NIVEAU, jamais l'envie de rassurer. */
+  .mat-glob{border:1px solid var(--line,#233);border-left:3px solid var(--mu,#9aa);
+    border-radius:10px;padding:11px 14px;font-size:13px;line-height:1.65;
+    background:rgba(0,0,0,.14);margin-bottom:14px}
+  .mat-glob.mauvais{border-left-color:#E06C5A}
+  .mat-glob.moyen{border-left-color:#F0B27A}
+  .mat-glob.bon{border-left-color:#7DD3A0}
+  .mat-axes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(190px,100%),1fr));
+    gap:10px;margin-bottom:16px}
+  .mat-cx{border:1px solid var(--line,#233);border-radius:10px;padding:10px 12px;
+    background:rgba(0,0,0,.10)}
+  .mat-cx h4{font-size:12.5px;margin:0 0 5px}
+  .mat-n{font-family:var(--mono,monospace);font-size:11.5px}
+  .mat-i{font-size:11px;color:var(--mu,#9aa);margin-top:3px}
+  .mat-h{font-size:13.5px;margin:18px 0 8px}
+  .mat-dec{border:1px solid var(--line,#233);border-left:3px solid var(--mu,#9aa);
+    border-radius:10px;padding:11px 14px;margin-bottom:10px;font-size:12.5px;
+    line-height:1.65;background:rgba(0,0,0,.10)}
+  .mat-dec.mauvais{border-left-color:#E06C5A}
+  .mat-dec.moyen{border-left-color:#F0B27A}
+  .mat-dec.bon{border-left-color:#7DD3A0}
+  .mat-ap{font-size:11.5px;color:var(--mu,#9aa);margin-top:6px}
+  .mat-hp{margin-top:7px}
+  .mat-hp summary{cursor:pointer;font-size:12px;font-weight:600}
+  .mat-hp ul{margin:6px 0 0;padding-left:18px;font-size:12px;line-height:1.6}
+  .mat-act{margin:0;padding-left:18px;font-size:12.5px;line-height:1.7}
+  /* Le rang commande la couleur : rang 1 = ce qui DÉPLACE la maturité. */
+  .mat-act li.r1{color:var(--pp,#d4baff)}
+  .mat-act li.r2{color:var(--mu,#9aa)}
+  .mat-rest{margin-top:16px;border:1px solid var(--line,#233);border-radius:10px;
+    padding:10px 14px;background:rgba(0,0,0,.14)}
+  .mat-rest summary{cursor:pointer;font-size:13px;font-weight:600}
+  .mat-md{white-space:pre-wrap;font-size:11.5px;line-height:1.65;margin:10px 0 0;
+    max-height:460px;overflow:auto;font-family:var(--mono,monospace)}
+  .mat-res{margin-top:12px;max-width:82ch}
+
   .moe-bloc{border:1px solid var(--line,#233);border-radius:12px;
     background:rgba(0,0,0,.16);padding:14px 17px;margin:18px 0 6px}
   .moe-phases{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:11px}
@@ -2660,6 +2711,46 @@ engagements publics) sont imputés nominativement.</div>
      daté, au lieu de la corriger en silence. Un référentiel qui se réécrit sans
      le dire fait perdre au lecteur la trace de ce qu'il a cité la semaine
      dernière. -->
+<!-- ══ MATURITÉ ANALYTIQUE DÉCISIONNELLE ═══════════════════════════════════
+     EN COMPLÉMENT DE L'ÉTUDE, PAS FONDU DEDANS — et c'est un choix.
+     L'enveloppe, les KPI et la MOE calculent SUR LE PROJET : combien coûte
+     ce centre, ce qu'il rend, ce que vaut sa maîtrise d'œuvre. Ce diagnostic
+     évalue L'ORGANISATION : peut-elle instruire la décision que ces chiffres
+     préparent ? Fondre les deux ferait croire qu'un score de maturité
+     déplace un montant — il ne le déplace pas, et laisser croire l'inverse
+     serait le genre de raccourci qu'un comité d'investissement relève.
+     La jonction, elle, est calculée : chaque famille de décision dit ce que
+     les blocs RÉELLEMENT calculés lui apportent, et ce qui reste ailleurs. -->
+<section class="panel" id="s-maturite" aria-labelledby="t-mat">
+  <div class="panel-head">
+    <span class="panel-title" id="t-mat">Maturité analytique — l'entreprise peut-elle instruire cette décision&nbsp;?</span>
+    <span class="panel-note" id="mat-note">quatre axes, treize constats</span>
+  </div>
+  <div class="panel-body">
+    <p class="lead" style="max-width:78ch">
+      Les chiffres ci-dessus préparent une décision d'investissement. Ce diagnostic
+      répond à l'autre question, celle qu'on pose rarement avant de commander un
+      tableau de bord&nbsp;: <b>l'organisation a-t-elle de quoi l'instruire, et
+      ensuite suivre son exécution&nbsp;?</b> Un comité qui reçoit une enveloppe à
+      ±30&nbsp;% sans série datée ni grille de lecture ne décide pas mieux avec un
+      graphique de plus — il décide à l'intuition, avec un chiffre pour se rassurer.
+    </p>
+    <p class="note" style="max-width:78ch">
+      <b>À présenter aux sponsors dès le départ, y compris si la conclusion déçoit.</b>
+      Recalibrer une ambition en ouverture coûte une réunion&nbsp;; expliquer six mois
+      plus tard pourquoi le tableau de bord n'est pas utilisé coûte le projet — et la
+      confiance qui allait avec. La note de restitution ci-dessous porte le verdict
+      en tête, jamais en annexe.
+    </p>
+    <div id="mat-form" class="mat-form"><p class="note">chargement du cadre…</p></div>
+    <div class="mat-cmd">
+      <button type="button" class="btn-p" id="mat-go">Établir le diagnostic</button>
+      <span class="note" id="mat-msg"></span>
+    </div>
+    <div id="mat-out"></div>
+  </div>
+</section>
+
 <section class="panel" id="s-prospect" aria-labelledby="t-pro">
   <div class="panel-head">
     <span class="panel-title" id="t-pro">Prospectives 2026-2030 — ce qui change, et ce que ça périme</span>
@@ -2898,7 +2989,7 @@ if(/[?&]embed=1(&|$)/.test(window.location.search)){document.body.classList.add(
 var MODULE_VUES = {
   panorama: ["s-carte", "s-signaux", "s-cas", "s-lectures",
              "s-implantation", "s-prospect", "s-methodo", "s-socle", "s-sources"],
-  enveloppe: ["s-finance"],
+  enveloppe: ["s-finance", "s-maturite"],
   empreinte: ["s-empreinte"]
 };
 /* LES PANNEAUX DE DÉTAIL NE SONT D'AUCUNE VUE, et il ne faut surtout pas y
@@ -11308,6 +11399,147 @@ if(window.parent&&window.parent!==window){
      au-dessus de son balisage. */
   if($('moe-go')) demarrer();
   else if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', demarrer);
+  else demarrer();
+})();
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MATURITÉ ANALYTIQUE DÉCISIONNELLE
+   ═════════════════════════════════════════════════════════════════════════
+   Le questionnaire est rendu depuis le SERVEUR : treize constats recopiés
+   dans la page auraient divergé du module au premier ajout de critère, et
+   c'est le module qui calcule. */
+(function(){
+  var CADRE = null;
+  function $(i){ return document.getElementById(i); }
+  function esc(t){ return String(t == null ? "" : t)
+    .replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+
+  /* CE QUE LA PAGE A RÉELLEMENT CALCULÉ — constaté dans le DOM, jamais
+     supposé. Le diagnostic ne doit promettre un apport que s'il est là :
+     annoncer « l'enveloppe couvre vos projections » alors qu'elle n'a pas
+     été lancée serait exactement le raccourci que ce module dénonce. */
+  function blocsCalcules(){
+    var out = $("fin-out"), kpi = $("kpi-out"), moe = $("moe-out");
+    return {
+      enveloppe: !!(out && out.innerHTML && out.innerHTML.length > 200),
+      kpi: !!(kpi && kpi.innerHTML && kpi.innerHTML.length > 120),
+      moe: !!(moe && moe.innerHTML && moe.innerHTML.length > 120),
+      pays: !!(document.querySelector("#fin-pays") || {}).value
+    };
+  }
+
+  function rendreForm(){
+    var z = $("mat-form");
+    if(!z || !CADRE) return;
+    var h = "";
+    (CADRE.axes || []).forEach(function(a){
+      h += '<fieldset class="mat-ax"><legend>' + esc(a.nom) + "</legend>"
+        + '<p class="mat-r">' + esc(a.resume) + "</p>"
+        + '<p class="mat-pq">' + esc(a.pourquoi) + "</p>";
+      (a.criteres || []).forEach(function(c){
+        h += '<label class="mat-q"><span class="mat-qt">' + esc(c.question) + "</span>"
+          + '<span class="mat-pr">Preuve attendue&nbsp;: ' + esc(c.preuve) + "</span>"
+          + '<select data-ax="' + esc(a.cle) + '" data-cr="' + esc(c.cle) + '">'
+          + '<option value="">— non instruit —</option>'
+          + (CADRE.niveaux || []).map(function(n){
+              return '<option value="' + n.n + '">' + n.n + " — " + esc(n.nom)
+                + " : " + esc(n.constat) + "</option>";
+            }).join("")
+          + "</select></label>";
+      });
+      h += "</fieldset>";
+    });
+    z.innerHTML = h;
+  }
+
+  function reponses(){
+    var r = {};
+    [].slice.call(document.querySelectorAll("#mat-form select")).forEach(function(s){
+      var a = s.getAttribute("data-ax"), c = s.getAttribute("data-cr");
+      if(s.value === "") return;
+      if(!r[a]) r[a] = {};
+      r[a][c] = parseInt(s.value, 10);
+    });
+    return r;
+  }
+
+  var TONS = { non_instruit:"n", non_instruisable:"mauvais", fragile:"moyen",
+               instruisable:"bon", pilotable:"bon" };
+
+  function rendre(d){
+    var z = $("mat-out");
+    if(!z) return;
+    var h = '<div class="mat-glob ' + (d.niveau_global === null ? "n"
+      : d.niveau_global <= 1 ? "mauvais" : d.niveau_global === 2 ? "moyen" : "bon") + '">'
+      + "<b>" + esc(d.niveau_global_nom) + "</b> " + esc(d.lecture) + "</div>";
+
+    h += '<div class="mat-axes">';
+    (d.axes || []).forEach(function(a){
+      h += '<div class="mat-cx"><h4>' + esc(a.nom) + "</h4>"
+        + '<div class="mat-n">' + (a.niveau === null ? "non instruit"
+            : "niveau " + a.niveau + " — " + esc(a.niveau_nom)) + "</div>"
+        + '<div class="mat-i">' + a.instruit + "/" + a.total + " constat"
+        + (a.total > 1 ? "s" : "") + " instruit" + (a.instruit > 1 ? "s" : "") + "</div>"
+        + "</div>";
+    });
+    h += "</div>";
+
+    h += "<h4 class=\"mat-h\">Ce que l’entreprise peut décider aujourd’hui</h4>";
+    (d.decisions || []).forEach(function(x){
+      h += '<div class="mat-dec ' + (TONS[x.verdict] || "n") + '">'
+        + "<b>" + esc(x.nom) + "</b> — " + esc(x.lecture)
+        + '<div class="mat-ap">Apports de cette étude&nbsp;: '
+        + x.apports_disponibles + "/" + x.apports_total + " calculé"
+        + (x.apports_total > 1 ? "s" : "")
+        + (x.apports_disponibles < x.apports_total
+            ? " — lancez les blocs manquants ci-dessus pour les mobiliser." : ".")
+        + "</div>"
+        + '<details class="mat-hp"><summary>Ce qui reste à instruire hors de cette étude ('
+        + (x.hors_perimetre || []).length + ")</summary><ul>"
+        + (x.hors_perimetre || []).map(function(t){ return "<li>" + esc(t) + "</li>"; }).join("")
+        + "</ul></details></div>";
+    });
+
+    h += "<h4 class=\"mat-h\">Le plan, hiérarchisé par effet</h4><ul class=\"mat-act\">";
+    (d.actions || []).forEach(function(a){
+      h += '<li class="r' + a.rang + '"><b>' + esc(a.axe_nom) + "</b> — " + esc(a.quoi)
+        + ' <i>(' + esc(a.effet) + ")</i></li>";
+    });
+    h += "</ul>";
+
+    if(d.restitution){
+      h += '<details class="mat-rest"><summary>La note de restitution aux sponsors'
+        + " — à présenter dès le départ</summary>"
+        + '<pre class="mat-md">' + esc(d.restitution) + "</pre></details>";
+    }
+    h += '<p class="note mat-res">' + esc(d.reserve) + "</p>";
+    z.innerHTML = h;
+  }
+
+  function demarrer(){
+    if(!$("mat-go")) return;
+    fetch("/api/maturite-decision").then(function(r){ return r.json(); })
+      .then(function(j){ if(j && j.ok){ CADRE = j; rendreForm(); } })
+      .catch(function(){ $("mat-form").innerHTML =
+        '<p class="note">cadre indisponible</p>'; });
+
+    $("mat-go").addEventListener("click", function(){
+      var r = reponses(), n = 0;
+      Object.keys(r).forEach(function(k){ n += Object.keys(r[k]).length; });
+      $("mat-msg").textContent = n ? "diagnostic en cours…"
+        : "Aucun constat renseigné : le diagnostic dira ce qu’il manque.";
+      fetch("/api/maturite-decision", {
+        method: "POST", headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ reponses: r, etude: blocsCalcules() })
+      }).then(function(x){ return x.json(); }).then(function(j){
+        if(!j || !j.ok){ $("mat-msg").textContent = (j && j.message) || "diagnostic indisponible"; return; }
+        $("mat-msg").textContent = n + " constat" + (n > 1 ? "s" : "") + " sur "
+          + (CADRE ? CADRE.sante.criteres : 13) + ".";
+        rendre(j);
+      }).catch(function(){ $("mat-msg").textContent = "diagnostic indisponible"; });
+    });
+  }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", demarrer);
   else demarrer();
 })();
 

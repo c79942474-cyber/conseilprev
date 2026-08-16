@@ -1848,6 +1848,58 @@ import kpi_finance  # noqa: E402  — EVA, ROCE, free cash flow : la lecture de
                     # creation de valeur qui manquait au GO / NO GO
 
 
+import maturite_decision  # noqa: E402  — la maturité ANALYTIQUE de
+                         # l'organisation : peut-elle instruire la décision
+                         # que ces chiffres préparent ?
+
+
+@app.route('/api/maturite-decision', methods=['GET', 'POST'])
+@rate_limit(limit=60, window=60)
+@reserve_abonne_api
+def api_maturite_decision():
+    """Le diagnostic de maturité analytique décisionnelle.
+
+    EN GET : le cadre — quatre axes, treize constats, l'échelle à quatre
+    niveaux et les trois familles de décision d'investissement.
+
+    EN POST : le diagnostic, et la note de restitution aux sponsors.
+
+    CE QU'IL NE FAIT PAS, et c'est écrit dans le module : il ne dit pas si
+    l'investissement est bon. Il dit si l'organisation peut l'instruire —
+    l'autre question, celle qu'on ne pose jamais avant de commander un
+    tableau de bord, et qui décide pourtant de son abandon au troisième mois.
+
+    LE POINT DE JONCTION AVEC L'ÉTUDE. `etude` porte ce que la page a
+    RÉELLEMENT calculé (enveloppe, KPI, MOE, comparaison de pays) : le
+    diagnostic dit alors, famille de décision par famille, ce que ces blocs
+    apportent déjà et ce qui reste à instruire ailleurs. Sans ce constat,
+    aucun apport n'est réputé disponible — on ne promet pas un chiffre qu'on
+    n'a pas vu.
+    """
+    if request.method == 'GET':
+        r = maturite_decision.referentiel()
+        r['ok'] = True
+        r['sante'] = maturite_decision.sante()
+        return jsonify(r)
+
+    d = request.get_json(silent=True) or {}
+    reponses = d.get('reponses') if isinstance(d.get('reponses'), dict) else {}
+    etude = d.get('etude') if isinstance(d.get('etude'), dict) else {}
+    try:
+        diag = maturite_decision.diagnostic(reponses, etude)
+    except Exception as e:  # noqa: BLE001
+        logger.error(f'MATURITE_ERR: {e}')
+        return jsonify(ok=False, error='calcul',
+                       message="Le diagnostic n'a pas pu être établi."), 500
+    diag['ok'] = True
+    # La note de restitution part AVEC le diagnostic : demandée séparément,
+    # elle serait demandée après coup — c'est-à-dire une fois l'ambition déjà
+    # annoncée aux sponsors, ce que ce diagnostic sert précisément à éviter.
+    diag['restitution'] = maturite_decision.restitution_sponsors(
+        diag, str(d.get('projet') or '')[:120])
+    return jsonify(diag)
+
+
 @app.route('/api/kpi-finance', methods=['GET', 'POST'])
 @rate_limit(limit=60, window=60)
 @reserve_abonne_api
