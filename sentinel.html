@@ -9014,9 +9014,30 @@ window.artFilter = function(val, el){
 })();
 
 /* ══ APERCU VEILLE DANS REGLEMENTATIONS — reutilise les vraies donnees RSS/IA ══ */
+/* CETTE VARIABLE EST DÉCLARÉE PLUS BAS, DANS UN AUTRE BLOC <script>. Un `var`
+   n'est hissé que dans SON bloc : la fonction ci-dessous, définie près de
+   quatre mille lignes plus haut, lève donc « VEILLE_DATA_RAW is not defined »
+   si elle s'exécute avant que le bloc tardif n'ait été évalué — ce qui arrive
+   dès qu'on ouvre Réglementations tôt. L'exception interrompait la suite de
+   l'initialisation, en silence. On la déclare ici, sans écraser la valeur si
+   elle existe déjà. */
+window.VEILLE_DATA_RAW = window.VEILLE_DATA_RAW || [];
+
 function veilleRenderRegsPreview(){
   var b = document.getElementById('veille-list-regs');
   if(!b) return;
+
+  /* CETTE FONCTION DÉPEND D'UN BLOC <script> SITUÉ PLUS BAS. Elle est appelée
+     80 ms après l'ouverture de Réglementations ; si la page a été ouverte tôt,
+     `veilleFetchRaw` n'existe pas encore et l'appel lève — ce qui interrompait
+     le rendu sans rien afficher ni rien dire. On attend le bloc au lieu de
+     lever : l'aperçu arrive un instant plus tard, ce qui est très exactement
+     ce qu'on veut. */
+  if(typeof veilleFetchRaw !== 'function'){
+    b.innerHTML = '<div class="reg-loading">Chargement des actualités…</div>';
+    setTimeout(veilleRenderRegsPreview, 120);
+    return;
+  }
 
   if(VEILLE_DATA_RAW.length === 0){
     b.innerHTML = '<div class="reg-loading">Chargement des actualités…</div>';
@@ -12823,7 +12844,9 @@ window.go = function(id){
 var VEILLE_MODE = "qualifiee"; /* "qualifiee" | "brute" */
 var VEILLE_LANG = "all"; /* "all" | "fr" | "en" */
 var VEILLE_DATA = [];
-var VEILLE_DATA_RAW = []; /* cache complet non filtre, pour la veille qualifiee */
+/* Déjà posée plus haut si l'aperçu de veille s'est exécuté avant : on ne
+   remet pas à zéro un cache déjà rempli. */
+var VEILLE_DATA_RAW = window.VEILLE_DATA_RAW || []; /* cache complet non filtre, pour la veille qualifiee */
 var VEILLE_BRUTE_RAW = []; /* cache complet non filtre, pour le flux brut */
 
 var IMPACT_LABELS = {

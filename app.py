@@ -11,7 +11,7 @@ from werkzeug.utils import secure_filename
 from functools import wraps
 from collections import defaultdict
 from urllib.parse import quote
-from flask import Flask, send_from_directory, jsonify, request, abort, make_response, after_this_request, Response, session, redirect
+from flask import Flask, send_from_directory, jsonify, request, abort, make_response, after_this_request, Response, session, redirect, g, has_request_context
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import timedelta as _timedelta_auth
 from flask_cors import CORS
@@ -5023,9 +5023,17 @@ class _PooledConnWrapper:
     def __init__(self, pool, conn):
         self._pool = pool
         self._conn = conn
+        self._rendu = False
     def __getattr__(self, name):
         return getattr(self._conn, name)
     def close(self):
+        # IDEMPOTENT. Le filet de securite pose plus bas ferme ce qui traine en
+        # fin de requete ; sans ce garde, une connexion deja rendue au pool y
+        # serait rendue une seconde fois — et le pool distribuerait alors la
+        # meme connexion a deux appelants.
+        if self._rendu:
+            return
+        self._rendu = True
         try:
             # Nettoie systematiquement l etat transactionnel avant de rendre la
             # connexion au pool : un rollback sur une transaction deja terminee
@@ -5041,19 +5049,93 @@ class _PooledConnWrapper:
             try: self._conn.close()
             except Exception: pass
 
+class _ConnSuivie:
+    """Connexion ordinaire (SQLite, ou PostgreSQL hors pool) qui RETIENT si
+    elle a deja ete fermee.
+
+    Sans ce drapeau, le filet ci-dessous ne saurait pas distinguer une
+    connexion abandonnee d'une connexion proprement fermee — `close()` sur une
+    base SQLite deja close ne leve pas — et son journal accuserait toutes les
+    requetes, y compris les saines. Un avertissement qui se declenche toujours
+    ne se lit plus."""
+    def __init__(self, conn):
+        self._conn = conn
+        self._rendu = False
+    def __getattr__(self, name):
+        return getattr(self._conn, name)
+    def close(self):
+        if self._rendu:
+            return
+        self._rendu = True
+        try:
+            self._conn.close()
+        except Exception:
+            pass
+
+
+def _suivre_connexion(conn):
+    """Rattache la connexion a la requete en cours, pour qu'elle soit fermee
+    quoi qu'il arrive.
+
+    POURQUOI CE FILET EXISTE. Le code ouvre une connexion et la ferme a la fin
+    de la fonction — mais presque partout le `close()` est DANS le `try`. Une
+    requete qui leve saute donc la fermeture, et la connexion reste ouverte
+    avec sa transaction. Sur SQLite elle garde le verrou d'ecriture : la
+    PREMIERE erreur bloque toutes les requetes suivantes du processus, qui
+    attendent cinq secondes chacune avant d'echouer a leur tour — et fuient a
+    leur tour. C'est exactement ce qui a ete mesure ici : dix requetes
+    authentifiees, neuf connexions abandonnees, et un affichage de /sentinel
+    a vingt-cinq secondes.
+    Sur PostgreSQL il n'y a pas de verrou global, mais chaque fuite retire une
+    connexion du pool : le meme incident finit par epuiser le pool.
+    Corriger les 147 appels un par un aurait laisse passer le prochain. Le
+    filet, lui, ne depend pas de la discipline de l'appelant."""
+    try:
+        if has_request_context():
+            g._connexions_db = getattr(g, '_connexions_db', [])
+            g._connexions_db.append(conn)
+    except Exception:
+        pass
+    return conn
+
+
+@app.teardown_appcontext
+def _fermer_connexions_db(_exc=None):
+    ouvertes = getattr(g, '_connexions_db', None)
+    if not ouvertes:
+        return
+    oubliees = 0
+    for conn in ouvertes:
+        # Seules celles qui n'ont PAS ete fermees par leur appelant comptent.
+        if getattr(conn, '_rendu', True):
+            continue
+        try:
+            conn.close()
+            oubliees += 1
+        except Exception:
+            pass
+    g._connexions_db = []
+    # UNE FUITE REPAREE EN SILENCE EST UNE FUITE QUI RESTE. Le filet rattrape,
+    # le journal nomme — sans quoi le defaut d'origine ne serait jamais corrige.
+    if oubliees:
+        logger.warning("DB_CONNEXION_ABANDONNEE %d sur %s — fermee par le filet",
+                       oubliees, request.path if has_request_context() else '?')
+
+
 def registre_get_db():
     if REGISTRE_USE_PG:
         if REGISTRE_POOL is not None:
             try:
                 conn = REGISTRE_POOL.getconn()
-                return _PooledConnWrapper(REGISTRE_POOL, conn)
+                return _suivre_connexion(_PooledConnWrapper(REGISTRE_POOL, conn))
             except Exception as _e:
                 logger.warning(f"REGISTRE_IA — getconn pool echoue, connexion directe : {_e}")
-        return psycopg.connect(DATABASE_URL, row_factory=psycopg.rows.dict_row)
+        return _suivre_connexion(_ConnSuivie(
+            psycopg.connect(DATABASE_URL, row_factory=psycopg.rows.dict_row)))
     else:
         conn = sqlite3.connect(REGISTRE_SQLITE_PATH)
         conn.row_factory = sqlite3.Row
-        return conn
+        return _suivre_connexion(_ConnSuivie(conn))
 
 def registre_sql(pg_query, sqlite_query):
     """Retourne la requete adaptee au moteur actif (placeholders %s vs ?)."""
@@ -5426,41 +5508,80 @@ RAAS_ENVELOPE_RATE = 0.60  # enveloppe resultats = 60 % du SaaS annuel
 
 CONSEILPREV_INTERNAL_EMAIL = 'conseilprev@internal.system'
 
+# L'IDENTIFIANT CONSEILPREV NE CHANGE JAMAIS — il n'a donc rien a faire sur le
+# chemin critique de chaque affichage.
+#
+# CE QUI SE PASSAIT. `sentauth_current_client()` est appele par le garde de
+# session, donc a CHAQUE requete authentifiee. Un affichage de /sentinel en
+# declenche une dizaine (la page, puis les API qu'elle tire). Chacune ouvrait
+# une connexion a la base pour relire un identifiant cree une fois pour toutes
+# et immuable depuis. Dix allers-retours de base pour dix fois la meme reponse,
+# avant meme que le premier octet de la page ne parte.
+#
+# Mesure locale : 5 012 ms par appel quand la base est contrariee — soit
+# exactement le delai d'attente de verrou —, et l'affichage complet passait a
+# 25 secondes. Sur PostgreSQL il n'y a pas ce verrou, mais il reste un
+# aller-retour reseau par requete, paye dix fois par affichage.
+#
+# La valeur est donc retenue apres la premiere lecture reussie. Un echec n'est
+# PAS memorise : sans cela, un incident de base au demarrage figerait l'acces
+# degrade (id=0) jusqu'au prochain deploiement.
+_CP_CLIENT_ID = None
+
 def ensure_conseilprev_client_id():
     """Garantit l'existence d'un enregistrement CONSEILPREV dans la table clients
     (idempotent — cree au premier appel, retrouve ensuite). Necessaire pour que
     CONSEILPREV ait un vrai client_id numerique, comme tout client normal, afin
     de pouvoir lui assigner les donnees du Registre IA crees avant l isolation
-    par client (migration)."""
+    par client (migration).
+
+    Le resultat est retenu en memoire du processus : cet identifiant est cree
+    une fois et ne bouge plus."""
+    global _CP_CLIENT_ID
+    if _CP_CLIENT_ID:
+        return _CP_CLIENT_ID
     conn = registre_get_db()
-    cur = conn.cursor()
-    cur.execute(registre_sql(
-        'SELECT id FROM clients WHERE email=%s', 'SELECT id FROM clients WHERE email=?'
-    ), (CONSEILPREV_INTERNAL_EMAIL,))
-    row = cur.fetchone()
-    if row:
-        cid = row['id'] if isinstance(row, dict) else row[0]
+    # LA FERMETURE EST DANS UN `finally`, ET C'EST LE POINT DECISIF.
+    # Cette fonction ECHOUAIT ici sur une base incomplete, et son `close()`
+    # etant place apres le code qui levait, la connexion restait ouverte AVEC
+    # sa transaction d'insertion — donc avec le verrou d'ecriture SQLite. La
+    # premiere erreur bloquait ainsi TOUTES les requetes suivantes du
+    # processus : cinq secondes d'attente chacune, puis « database is locked »,
+    # puis une fuite de plus. Un defaut ponctuel devenait permanent.
+    try:
+        cur = conn.cursor()
+        cur.execute(registre_sql(
+            'SELECT id FROM clients WHERE email=%s', 'SELECT id FROM clients WHERE email=?'
+        ), (CONSEILPREV_INTERNAL_EMAIL,))
+        row = cur.fetchone()
+        if row:
+            cid = row['id'] if isinstance(row, dict) else row[0]
+            conn.close()
+            _CP_CLIENT_ID = cid
+            return cid
+        now = datetime.utcnow().isoformat()
+        if REGISTRE_USE_PG:
+            cur.execute(
+                "INSERT INTO clients (nom_entreprise, email, actif, rgpd_consenti, rgpd_consenti_date, date_creation, plan) "
+                "VALUES (%s,%s,TRUE,TRUE,%s,%s,'entreprise') RETURNING id",
+                ('CONSEILPREV', CONSEILPREV_INTERNAL_EMAIL, now, now)
+            )
+            cid = cur.fetchone()['id']
+        else:
+            cur.execute(
+                "INSERT INTO clients (nom_entreprise, email, actif, rgpd_consenti, rgpd_consenti_date, date_creation, plan) "
+                "VALUES (?,?,1,1,?,?,'entreprise')",
+                ('CONSEILPREV', CONSEILPREV_INTERNAL_EMAIL, now, now)
+            )
+            cid = cur.lastrowid
+        conn.commit()
         conn.close()
+        logger.info(f"CONSEILPREV_CLIENT_CREATED id={cid}")
+        _CP_CLIENT_ID = cid
         return cid
-    now = datetime.utcnow().isoformat()
-    if REGISTRE_USE_PG:
-        cur.execute(
-            "INSERT INTO clients (nom_entreprise, email, actif, rgpd_consenti, rgpd_consenti_date, date_creation, plan) "
-            "VALUES (%s,%s,TRUE,TRUE,%s,%s,'entreprise') RETURNING id",
-            ('CONSEILPREV', CONSEILPREV_INTERNAL_EMAIL, now, now)
-        )
-        cid = cur.fetchone()['id']
-    else:
-        cur.execute(
-            "INSERT INTO clients (nom_entreprise, email, actif, rgpd_consenti, rgpd_consenti_date, date_creation, plan) "
-            "VALUES (?,?,1,1,?,?,'entreprise')",
-            ('CONSEILPREV', CONSEILPREV_INTERNAL_EMAIL, now, now)
-        )
-        cid = cur.lastrowid
-    conn.commit()
-    conn.close()
-    logger.info(f"CONSEILPREV_CLIENT_CREATED id={cid}")
-    return cid
+    finally:
+        try: conn.close()
+        except Exception: pass
 
 
 def sentauth_current_client():
