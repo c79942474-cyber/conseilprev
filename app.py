@@ -5560,17 +5560,30 @@ def ensure_conseilprev_client_id():
             _CP_CLIENT_ID = cid
             return cid
         now = datetime.utcnow().isoformat()
+        # LE MOT DE PASSE EST FOURNI, VIDE, ET C'EST LA CAUSE DU DEFAUT CI-DESSUS.
+        # L'insertion ne renseignait pas `mot_de_passe_hash`. Sur PostgreSQL la
+        # colonne est nullable et rien ne se voyait ; sur SQLite elle est
+        # declaree NOT NULL, donc l'insertion echouait A TOUS LES COUPS et
+        # l'acces CONSEILPREV retombait en permanence sur l'identifiant degrade
+        # id=0 — un compte fantome, jamais cree, sans qu'aucune page ne le dise.
+        # C'est exactement le genre de divergence entre les deux moteurs que ce
+        # fichier documente plus haut : les deux branches recoivent desormais la
+        # meme colonne.
+        # UN HACHE VIDE N'OUVRE AUCUNE PORTE : la connexion par mot de passe
+        # refuse explicitement un hache absent ou vide avant meme de le
+        # verifier. Ce compte interne reste donc inaccessible par identifiants,
+        # comme il doit l'etre — il n'existe que pour porter un client_id.
         if REGISTRE_USE_PG:
             cur.execute(
-                "INSERT INTO clients (nom_entreprise, email, actif, rgpd_consenti, rgpd_consenti_date, date_creation, plan) "
-                "VALUES (%s,%s,TRUE,TRUE,%s,%s,'entreprise') RETURNING id",
+                "INSERT INTO clients (nom_entreprise, email, mot_de_passe_hash, actif, rgpd_consenti, rgpd_consenti_date, date_creation, plan) "
+                "VALUES (%s,%s,'',TRUE,TRUE,%s,%s,'entreprise') RETURNING id",
                 ('CONSEILPREV', CONSEILPREV_INTERNAL_EMAIL, now, now)
             )
             cid = cur.fetchone()['id']
         else:
             cur.execute(
-                "INSERT INTO clients (nom_entreprise, email, actif, rgpd_consenti, rgpd_consenti_date, date_creation, plan) "
-                "VALUES (?,?,1,1,?,?,'entreprise')",
+                "INSERT INTO clients (nom_entreprise, email, mot_de_passe_hash, actif, rgpd_consenti, rgpd_consenti_date, date_creation, plan) "
+                "VALUES (?,?,'',1,1,?,?,'entreprise')",
                 ('CONSEILPREV', CONSEILPREV_INTERNAL_EMAIL, now, now)
             )
             cid = cur.lastrowid
