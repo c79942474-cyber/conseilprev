@@ -529,6 +529,35 @@ body.embed .gp-carte{bottom:auto;top:var(--gp-bas,auto)}
 .gp-p span{font-size:11.5px;color:var(--muted);line-height:1.5;display:block}
 .gp-p em{display:block;font-style:normal;font-family:var(--mono);font-size:9px;
   text-transform:uppercase;letter-spacing:.05em;color:var(--muted2);margin-top:6px}
+/* ── LES PARCOURS ENREGISTRÉS ────────────────────────────────────────────
+   Sous les six métiers, et non au-dessus : on choisit un métier plus souvent
+   qu'on ne reprend, et la liste est vide au premier passage. */
+.gp-liste-t{font-size:12px;font-weight:600;margin:18px 0 8px;padding-top:14px;
+  border-top:1px solid var(--rule2);color:var(--ink)}
+.gp-liste{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:8px}
+.gp-l{display:flex;align-items:stretch;gap:0;border:1px solid var(--rule);border-radius:5px}
+.gp-l-go{all:unset;cursor:pointer;flex:1 1 auto;padding:9px 11px;border-radius:5px 0 0 5px}
+.gp-l-go:hover{background:var(--bg)}
+.gp-l-go:focus-visible{outline:2px solid #1E63A8;outline-offset:-2px}
+.gp-l-go b{display:block;font-size:12.5px;margin-bottom:2px;color:var(--ink)}
+.gp-l-go span{display:block;font-size:11px;color:var(--muted);line-height:1.45}
+.gp-l-x{all:unset;cursor:pointer;flex:0 0 auto;padding:0 10px;display:flex;
+  align-items:center;color:var(--muted2);font-size:15px;border-left:1px solid var(--rule);
+  border-radius:0 5px 5px 0}
+.gp-l-x:hover{color:#B83222;background:var(--bg)}
+.gp-l-x:focus-visible{outline:2px solid #1E63A8;outline-offset:-2px}
+.gp-liste-vide{font-size:11.5px;color:var(--muted);line-height:1.55;margin:18px 0 0;
+  padding-top:14px;border-top:1px solid var(--rule2)}
+/* LE MOT DU BOUTON — ce qui vient de se passer, à côté du geste qui l'a
+   déclenché. Une confirmation ailleurs sur la page n'aurait pas été lue. */
+.gp-mot{font-size:10.5px;color:var(--muted);margin-right:6px;align-self:center}
+.gp-mot.mal{color:#B83222;font-weight:600}
+/* CE QUI N'A PAS PU ÊTRE REPRIS. En ambre : ce n'est pas un échec — l'étude
+   s'est rouverte — mais elle n'est pas dans l'état enregistré, et le taire
+   ferait relire des chiffres sous des conditions qui ne sont plus celles-là. */
+.gp-repris-mal{font-size:11.5px;line-height:1.55;color:var(--muted);margin:0 0 9px;
+  padding:8px 11px;border-left:3px solid var(--orange);background:var(--bg);
+  border-radius:0 4px 4px 0}
 /* ══ ENVELOPPE & DPGF ══════════════════════════════════════════════════════
    Un tableau de DPGF se lit en diagonale : le lecteur cherche d'abord les deux
    ou trois lots qui portent l'enveloppe. La part est donc alignée à droite et
@@ -10666,6 +10695,10 @@ function gpOuvrirChoix(){
   gpBande();
   e.voile.classList.add("on");
   e.choix.classList.add("on");
+  /* LA LISTE SE RELIT À CHAQUE OUVERTURE. Peinte une seule fois au chargement,
+     elle aurait ignoré le parcours enregistré depuis — et le lecteur aurait
+     cherché en vain ce qu'il venait de ranger. */
+  gpPoserListe(document.getElementById("gp-repris"));
   var b = e.choix.querySelector(".gp-p");
   if(b) b.focus({ preventScroll: true });
 }
@@ -10809,6 +10842,14 @@ function gpAller(i){
        première désignerait le geste qu'on vient de faire. */
     + (i > 0 ? '<button type="button" class="gp-btn" id="gp-zero" '
         + 'title="Revenir à la première étape de ce parcours">↺ Recommencer</button>' : "")
+    /* ENREGISTRER, ET CE QUI PART AVEC. Le bouton ne range pas un signet : il
+       emporte les hypothèses du formulaire avec le rang de l'étape. Rouvrir à
+       l'étape 6 sur un formulaire revenu à ses défauts rendrait une PLACE et
+       non un TRAVAIL — et les chiffres lus ne seraient plus ceux qu'on avait
+       laissés. Absent tant que le scénario n'est pas choisi : il n'y aurait
+       rien à enregistrer qu'un choix qu'on n'a pas fait. */
+    + (enAttente ? "" : '<button type="button" class="gp-btn" id="gp-save" '
+        + 'title="Enregistrer ce parcours et les hypothèses du formulaire">⤓ Enregistrer</button>')
     + '<button type="button" class="gp-btn" id="gp-prec"' + (i === 0 ? " disabled" : "") + ">Précédent</button>"
     + '<button type="button" class="gp-btn suiv" id="gp-suiv"' + (enAttente ? " disabled" : "") + ">"
     + (enAttente ? "Suivant" : (i === E.length - 1 ? "Terminer" : "Suivant")) + "</button></div>";
@@ -10832,6 +10873,8 @@ function gpAller(i){
      pas : celui qui veut sortir a déjà la croix, et confondre les deux ferait
      perdre le chemin à qui voulait seulement le reprendre. */
   if(bz) bz.addEventListener("click", function(){ gpAller(0); });
+  var bs = document.getElementById("gp-save");
+  if(bs) bs.addEventListener("click", function(){ gpEnregistrer(this); });
   document.getElementById("gp-suiv").addEventListener("click", function(){
     if(gpEtapes(P)[GP.i] && gpEtapes(P)[GP.i].options && !GP.branche) return;
     if(GP.i === gpEtapes(P).length - 1) gpFermer(); else gpAller(GP.i + 1);
@@ -11111,6 +11154,216 @@ function ttBrancher(racine){
   }
 }
 
+/* ══════════════════════════════════════════════════════════════════════════
+   LES PARCOURS ENREGISTRÉS
+   ══════════════════════════════════════════════════════════════════════════
+   CE QU'ON ENREGISTRE, ET POURQUOI CE N'EST PAS UN SIGNET. Reprendre un
+   parcours à l'étape 6 sur un formulaire revenu à 100 MW et trois pays par
+   défaut rendrait une PLACE et non un TRAVAIL : les chiffres lus à l'écran ne
+   seraient plus ceux qu'on avait laissés, et rien ne le dirait. Les hypothèses
+   partent donc avec le rang de l'étape, et c'est le formulaire qu'on remet en
+   état à la reprise.
+
+   LES CHAMPS SONT LUS SUR LA PAGE, jamais recopiés dans une liste. Une liste
+   écrite ici aurait cessé d'être vraie au premier champ ajouté au formulaire —
+   et le parcours se serait rouvert en silence sur une hypothèse manquante. */
+
+function gpVue(){
+  var p = window.location.pathname;
+  if(p.indexOf("/enveloppe") === 0) return "enveloppe";
+  if(p.indexOf("/empreinte-parc") === 0) return "empreinte-parc";
+  return "panorama";
+}
+
+function gpHypotheses(){
+  var h = {};
+  var f = document.getElementById("fin-form");
+  if(f){
+    f.querySelectorAll("input[id],select[id],textarea[id]").forEach(function(el){
+      if(el.type === "button" || el.type === "submit" || el.disabled) return;
+      if(el.type === "checkbox" || el.type === "radio"){
+        if(el.checked) h[el.id] = true;
+        return;
+      }
+      var v = String(el.value == null ? "" : el.value).trim();
+      if(v !== "") h[el.id] = v;
+    });
+  }
+  /* LES PAYS NE SONT PAS UN CHAMP : ce sont des boutons à bascule, et les
+     oublier aurait rouvert l'étude sur une comparaison différente de celle
+     qu'on avait enregistrée. */
+  var p = [];
+  document.querySelectorAll("#fin-pays button[data-p].on").forEach(function(b){
+    p.push(b.getAttribute("data-p"));
+  });
+  if(p.length) h["_pays"] = p;
+  return h;
+}
+
+function gpRestituer(h){
+  if(!h) return 0;
+  var n = 0;
+  Object.keys(h).forEach(function(k){
+    if(k === "_pays") return;
+    var el = document.getElementById(k);
+    if(!el) return;
+    if(el.type === "checkbox" || el.type === "radio"){
+      el.checked = !!h[k];
+    } else {
+      el.value = h[k];
+    }
+    el.dispatchEvent(new Event("input", { bubbles: true }));
+    el.dispatchEvent(new Event("change", { bubbles: true }));
+    n++;
+  });
+  var voulus = h["_pays"];
+  if(voulus && voulus.length){
+    document.querySelectorAll("#fin-pays button[data-p]").forEach(function(b){
+      var doit = voulus.indexOf(b.getAttribute("data-p")) >= 0;
+      if(doit !== b.classList.contains("on")){ b.click(); }
+    });
+    n++;
+  }
+  return n;
+}
+
+/* CE QUI N'A PAS PU ÊTRE RENDU SE DIT. Un champ disparu du formulaire depuis
+   l'enregistrement laisserait une hypothèse au vestiaire : la taire ferait
+   relire une étude sous des conditions qui ne sont plus celles-là. */
+function gpManquants(h){
+  var m = [];
+  Object.keys(h || {}).forEach(function(k){
+    if(k === "_pays") return;
+    if(!document.getElementById(k)) m.push(k);
+  });
+  return m;
+}
+
+function gpMot(el, texte, bon){
+  if(!el) return;
+  var v = el.parentNode.querySelector(".gp-mot");
+  if(!v){
+    v = document.createElement("span");
+    v.className = "gp-mot";
+    el.parentNode.insertBefore(v, el);
+  }
+  v.textContent = texte;
+  v.classList.toggle("mal", !bon);
+}
+
+function gpEnregistrer(bouton){
+  var P = GP_PROFILS[GP.profil];
+  if(!P) return;
+  var defaut = (P.court || P.nom)
+    + (GP.branche && P.branches ? " · " + P.branches[GP.branche].nom : "")
+    + " — " + new Date().toLocaleDateString("fr-FR");
+  var nom = window.prompt("Sous quel nom enregistrer ce parcours ?", defaut);
+  if(nom === null) return;
+  nom = String(nom).trim();
+  if(!nom){ gpMot(bouton, "un nom est requis", false); return; }
+  var h = gpHypotheses();
+  gpMot(bouton, "enregistrement…", true);
+  fetch("/api/parcours", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    credentials: "same-origin",
+    body: JSON.stringify({ nom: nom, vue: gpVue(), profil: GP.profil,
+                           branche: GP.branche || "", etape: GP.i,
+                           hypotheses: h })
+  }).then(function(r){ return r.json().then(function(j){ return { s: r.status, j: j }; }); })
+    .then(function(x){
+      if(x.j && x.j.ok){
+        var n = Object.keys(h).length;
+        gpMot(bouton, "enregistré — " + n + " hypothèse" + (n > 1 ? "s" : ""), true);
+        GP_LISTE = null;                     /* la liste est périmée */
+      } else {
+        gpMot(bouton, (x.j && x.j.error) || ("erreur " + x.s), false);
+      }
+    })
+    .catch(function(){ gpMot(bouton, "enregistrement impossible", false); });
+}
+
+var GP_LISTE = null;          /* dernier relevé servi, ou null si périmé */
+
+function gpListe(){
+  if(GP_LISTE) return Promise.resolve(GP_LISTE);
+  return fetch("/api/parcours?vue=" + encodeURIComponent(gpVue()),
+               { credentials: "same-origin" })
+    .then(function(r){ return r.json(); })
+    .then(function(j){
+      GP_LISTE = (j && j.ok && j.parcours) ? j.parcours : [];
+      return GP_LISTE;
+    })
+    .catch(function(){ GP_LISTE = []; return GP_LISTE; });
+}
+
+function gpReprendre(pid){
+  return fetch("/api/parcours/" + pid, { credentials: "same-origin" })
+    .then(function(r){ return r.json(); })
+    .then(function(j){
+      if(!j || !j.ok || !j.parcours) return null;
+      var p = j.parcours;
+      var manque = gpManquants(p.hypotheses);
+      gpRestituer(p.hypotheses);
+      gpDemarrer(p.profil, p.branche || null);
+      /* LE RANG EST REPRIS APRÈS le démarrage : gpDemarrer part au premier pas,
+         et sauter là-bas d'abord aurait été effacé par lui. */
+      if(p.etape > 0) gpAller(p.etape);
+      if(manque.length){
+        var e = gpEls();
+        var av = document.createElement("div");
+        av.className = "gp-repris-mal";
+        av.textContent = "Repris, mais " + manque.length + " hypothèse"
+          + (manque.length > 1 ? "s n’ont" : " n’a") + " pas de champ sur cette vue : "
+          + manque.join(", ") + ". L’étude n’est donc pas dans l’état enregistré.";
+        var c = e.carte.querySelector(".gp-corps");
+        if(c) c.insertBefore(av, c.firstChild);
+      }
+      return p;
+    })
+    .catch(function(){ return null; });
+}
+
+function gpPoserListe(hote){
+  return gpListe().then(function(L){
+    if(!hote) return;
+    if(!L.length){
+      hote.innerHTML = '<p class="gp-liste-vide">Aucun parcours enregistré sur cette '
+        + 'vue. Le bouton « ⤓ Enregistrer », en bas de la fenêtre de parcours, '
+        + 'range le chemin ET les hypothèses du formulaire.</p>';
+      return;
+    }
+    hote.innerHTML = '<h4 class="gp-liste-t">Reprendre un parcours — ' + L.length
+      + " enregistré" + (L.length > 1 ? "s" : "") + "</h4>"
+      + '<div class="gp-liste">'
+      + L.map(function(p){
+          var P = GP_PROFILS[p.profil];
+          return '<div class="gp-l"><button type="button" class="gp-l-go" data-pid="'
+            + p.id + '"><b>' + esc(p.nom) + "</b><span>"
+            + esc((P && P.court) || p.profil)
+            + (p.branche && P && P.branches && P.branches[p.branche]
+                ? " · " + esc(P.branches[p.branche].nom) : "")
+            + " — étape " + (p.etape + 1) + ", " + p.n_hypotheses + " hypothèse"
+            + (p.n_hypotheses > 1 ? "s" : "") + "</span></button>"
+            + '<button type="button" class="gp-l-x" data-pdel="' + p.id
+            + '" title="Supprimer ce parcours" aria-label="Supprimer '
+            + esc(p.nom) + '">×</button></div>';
+        }).join("")
+      + "</div>";
+    hote.querySelectorAll("[data-pid]").forEach(function(b){
+      b.addEventListener("click", function(){
+        gpReprendre(this.getAttribute("data-pid"));
+      });
+    });
+    hote.querySelectorAll("[data-pdel]").forEach(function(b){
+      b.addEventListener("click", function(){
+        var id = this.getAttribute("data-pdel");
+        fetch("/api/parcours/" + id, { method: "DELETE", credentials: "same-origin" })
+          .then(function(){ GP_LISTE = null; gpPoserListe(hote); });
+      });
+    });
+  });
+}
+
 function gpBrancher(){
   var e = gpEls();
   if(!e.choix || e.choix.getAttribute("data-pret") === "1") return;
@@ -11135,10 +11388,15 @@ function gpBrancher(){
                       : Object.keys(P.branches).length + " scénarios au choix")
           + "</em></button>";
       }).join("")
-    + "</div>";
+    + "</div>"
+    /* LA REPRISE EST SOUS LES SIX CARTES, pas au-dessus : on choisit un métier
+       plus souvent qu'on ne reprend, et mettre la reprise en tête ferait lire
+       une liste vide comme première chose au premier visiteur. */
+    + '<div id="gp-repris"></div>';
   e.choix.querySelectorAll("[data-profil]").forEach(function(b){
     b.addEventListener("click", function(){ gpDemarrer(this.getAttribute("data-profil")); });
   });
+  gpPoserListe(document.getElementById("gp-repris"));
   e.voile.addEventListener("click", gpFermer);
   var l = document.getElementById("gp-lanceur");
   if(l) l.addEventListener("click", gpOuvrirChoix);

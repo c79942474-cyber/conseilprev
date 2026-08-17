@@ -11404,6 +11404,205 @@ def entreprise_formations_delete(fid):
     return jsonify({'ok': True})
 
 
+# ══════════════════════════════════════════════════════════
+# LES PARCOURS ENREGISTRES
+#
+# CE QU'ON ENREGISTRE, ET POURQUOI CE N'EST PAS SEULEMENT LA POSITION.
+# Un parcours guide arrete a l'etape 6 ne vaut rien si on le rouvre sur un
+# formulaire remis a 100 MW et trois pays par defaut : on aurait restitue une
+# PLACE, pas un TRAVAIL. Ce qui a de la valeur, ce sont les hypotheses qui ont
+# produit les chiffres — puissance, gabarit, pays compares, criteres de
+# conception imposes. Elles partent donc avec le rang de l'etape, dans le meme
+# enregistrement, et c'est le formulaire qui est remis en etat a la reprise.
+#
+# LA PAGE EST RESERVEE AUX ABONNES (voir PAGES_RESERVEES) : il y a toujours un
+# client authentifie derriere un parcours, et aucun repli anonyme a prevoir.
+#
+# BORNES. Un parcours pese le contenu d'un formulaire, pas un dossier : au-dela
+# de 24 ko l'enregistrement est refuse plutot que tronque — un parcours tronque
+# se rouvrirait sur des hypotheses fausses sans le dire. Et 60 parcours par
+# client suffisent a une pratique reelle ; au-dela on le dit, on n'efface pas
+# en silence le plus ancien.
+# ══════════════════════════════════════════════════════════
+
+_PARCOURS_MAX_OCTETS = 24 * 1024
+_PARCOURS_MAX_PAR_CLIENT = 60
+_PARCOURS_VUES = ('panorama', 'enveloppe', 'empreinte-parc')
+
+
+def _parcours_fermer(conn):
+    try:
+        conn.close()
+    except Exception:
+        pass
+
+
+def _parcours_table(cur):
+    cur.execute(
+        "CREATE TABLE IF NOT EXISTS client_parcours ("
+        "id SERIAL PRIMARY KEY, client_id INTEGER, nom TEXT, vue TEXT, "
+        "profil TEXT, branche TEXT, etape INTEGER, hypotheses TEXT, "
+        "cree_le TEXT, maj_le TEXT)"
+        if REGISTRE_USE_PG else
+        "CREATE TABLE IF NOT EXISTS client_parcours ("
+        "id INTEGER PRIMARY KEY AUTOINCREMENT, client_id INTEGER, nom TEXT, vue TEXT, "
+        "profil TEXT, branche TEXT, etape INTEGER, hypotheses TEXT, "
+        "cree_le TEXT, maj_le TEXT)")
+
+
+def _parcours_ligne(r, avec_hypotheses=False):
+    d = dict(r)
+    o = {'id': d.get('id'), 'nom': d.get('nom'), 'vue': d.get('vue'),
+         'profil': d.get('profil'), 'branche': d.get('branche'),
+         'etape': d.get('etape'), 'cree_le': d.get('cree_le'),
+         'maj_le': d.get('maj_le')}
+    # LE COMPTE D'HYPOTHESES EST SERVI MEME QUAND LEUR CONTENU NE L'EST PAS :
+    # la liste doit pouvoir dire « ce parcours porte 9 hypotheses » sans
+    # transporter neuf formulaires pour l'afficher.
+    brut = d.get('hypotheses') or ''
+    try:
+        h = json.loads(brut) if brut else {}
+    except Exception:
+        h = {}
+    o['n_hypotheses'] = len(h) if isinstance(h, dict) else 0
+    if avec_hypotheses:
+        o['hypotheses'] = h
+    return o
+
+
+@app.route('/api/parcours', methods=['GET', 'POST'])
+def api_parcours():
+    cid = _ent_client_id()
+    if cid is None:
+        return jsonify({'ok': False, 'error': 'Non authentifie'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    _parcours_table(cur); conn.commit()
+
+    if request.method == 'POST':
+        d = request.get_json(silent=True) or {}
+        nom = (d.get('nom') or '').strip()[:120]
+        vue = (d.get('vue') or 'panorama').strip()
+        profil = (d.get('profil') or '').strip()[:60]
+        branche = (d.get('branche') or '').strip()[:60] or None
+        try:
+            etape = max(0, int(d.get('etape') or 0))
+        except (TypeError, ValueError):
+            etape = 0
+        if not nom:
+            _parcours_fermer(conn)
+            return jsonify({'ok': False, 'error': 'Un parcours enregistre porte un nom'}), 400
+        if vue not in _PARCOURS_VUES:
+            _parcours_fermer(conn)
+            return jsonify({'ok': False, 'error': 'Vue inconnue : ' + vue}), 400
+        if not profil:
+            _parcours_fermer(conn)
+            return jsonify({'ok': False, 'error': 'Aucun profil de parcours'}), 400
+
+        hyp = d.get('hypotheses')
+        if hyp is None:
+            hyp = {}
+        if not isinstance(hyp, dict):
+            _parcours_fermer(conn)
+            return jsonify({'ok': False, 'error': 'Les hypotheses doivent etre un objet'}), 400
+        brut = json.dumps(hyp, ensure_ascii=False)
+        # REFUSER PLUTOT QUE TRONQUER. Un parcours tronque se rouvrirait sur des
+        # hypotheses fausses sans jamais le dire.
+        if len(brut.encode('utf-8')) > _PARCOURS_MAX_OCTETS:
+            _parcours_fermer(conn)
+            return jsonify({'ok': False, 'error':
+                            'Hypotheses trop volumineuses (%d ko max) — rien n\'a ete '
+                            'enregistre, plutot qu\'un parcours tronque'
+                            % (_PARCOURS_MAX_OCTETS // 1024)}), 413
+
+        maintenant = datetime.utcnow().isoformat()
+        pid = d.get('id')
+        # ENREGISTRER SOUS LE MEME NOM MET A JOUR, il ne double pas : sans cela,
+        # sauvegarder trois fois la meme etude produisait trois parcours
+        # identiques et le lecteur ne savait plus lequel etait le dernier.
+        if pid is None:
+            cur.execute(registre_sql(
+                'SELECT id FROM client_parcours WHERE client_id=%s AND nom=%s AND vue=%s',
+                'SELECT id FROM client_parcours WHERE client_id=? AND nom=? AND vue=?'),
+                (cid, nom, vue))
+            row = cur.fetchone()
+            if row:
+                pid = dict(row).get('id')
+
+        if pid is not None:
+            cur.execute(registre_sql(
+                'UPDATE client_parcours SET nom=%s, vue=%s, profil=%s, branche=%s, '
+                'etape=%s, hypotheses=%s, maj_le=%s WHERE id=%s AND client_id=%s',
+                'UPDATE client_parcours SET nom=?, vue=?, profil=?, branche=?, '
+                'etape=?, hypotheses=?, maj_le=? WHERE id=? AND client_id=?'),
+                (nom, vue, profil, branche, etape, brut, maintenant, pid, cid))
+            conn.commit()
+            if cur.rowcount == 0:
+                _parcours_fermer(conn)
+                return jsonify({'ok': False, 'error': 'Parcours introuvable'}), 404
+        else:
+            cur.execute(registre_sql(
+                'SELECT COUNT(*) AS n FROM client_parcours WHERE client_id=%s',
+                'SELECT COUNT(*) AS n FROM client_parcours WHERE client_id=?'), (cid,))
+            n = dict(cur.fetchone())['n']
+            if n >= _PARCOURS_MAX_PAR_CLIENT:
+                _parcours_fermer(conn)
+                return jsonify({'ok': False, 'error':
+                                'Limite de %d parcours atteinte — supprimez-en un plutot '
+                                'que d\'en perdre un sans le savoir'
+                                % _PARCOURS_MAX_PAR_CLIENT}), 409
+            cur.execute(registre_sql(
+                'INSERT INTO client_parcours (client_id, nom, vue, profil, branche, '
+                'etape, hypotheses, cree_le, maj_le) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)',
+                'INSERT INTO client_parcours (client_id, nom, vue, profil, branche, '
+                'etape, hypotheses, cree_le, maj_le) VALUES (?,?,?,?,?,?,?,?,?)'),
+                (cid, nom, vue, profil, branche, etape, brut, maintenant, maintenant))
+            conn.commit()
+
+    vue_f = (request.args.get('vue') or '').strip()
+    if vue_f and vue_f in _PARCOURS_VUES:
+        cur.execute(registre_sql(
+            'SELECT * FROM client_parcours WHERE client_id=%s AND vue=%s ORDER BY maj_le DESC',
+            'SELECT * FROM client_parcours WHERE client_id=? AND vue=? ORDER BY maj_le DESC'),
+            (cid, vue_f))
+    else:
+        cur.execute(registre_sql(
+            'SELECT * FROM client_parcours WHERE client_id=%s ORDER BY maj_le DESC',
+            'SELECT * FROM client_parcours WHERE client_id=? ORDER BY maj_le DESC'), (cid,))
+    rows = [_parcours_ligne(r) for r in cur.fetchall()]
+    _parcours_fermer(conn)
+    return jsonify({'ok': True, 'parcours': rows,
+                    'limite': _PARCOURS_MAX_PAR_CLIENT})
+
+
+@app.route('/api/parcours/<int:pid>', methods=['GET', 'DELETE'])
+def api_parcours_un(pid):
+    cid = _ent_client_id()
+    if cid is None:
+        return jsonify({'ok': False, 'error': 'Non authentifie'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    _parcours_table(cur); conn.commit()
+    if request.method == 'DELETE':
+        cur.execute(registre_sql(
+            'DELETE FROM client_parcours WHERE id=%s AND client_id=%s',
+            'DELETE FROM client_parcours WHERE id=? AND client_id=?'), (pid, cid))
+        conn.commit()
+        n = cur.rowcount
+        _parcours_fermer(conn)
+        if n == 0:
+            return jsonify({'ok': False, 'error': 'Parcours introuvable'}), 404
+        return jsonify({'ok': True})
+    # LA CLAUSE client_id N'EST PAS DECORATIVE : sans elle, un identifiant
+    # devine ouvrirait l'etude d'un autre client.
+    cur.execute(registre_sql(
+        'SELECT * FROM client_parcours WHERE id=%s AND client_id=%s',
+        'SELECT * FROM client_parcours WHERE id=? AND client_id=?'), (pid, cid))
+    row = cur.fetchone()
+    _parcours_fermer(conn)
+    if not row:
+        return jsonify({'ok': False, 'error': 'Parcours introuvable'}), 404
+    return jsonify({'ok': True, 'parcours': _parcours_ligne(row, avec_hypotheses=True)})
+
+
 @app.route('/api/entreprise/connecteurs/<int:cxid>/sync', methods=['POST'])
 def entreprise_connecteurs_sync(cxid):
     """Echange de donnees reel : transmet a l'API du connecteur un contenu propre
