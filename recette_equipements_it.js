@@ -111,8 +111,98 @@ const titre = (t) => console.log('\n══ ' + t + ' ══\n');
        v.densites >= 4 && v.perimetres === 3, v.densites + ' / ' + v.perimetres);
   }
 
-  // ── 2 ────────────────────────────────────────────────────────────────────
-  titre('2. La nomenclature s’affiche, chaque quantité avec sa règle');
+  // ── 2 : LE CHAMP DÉCISIF DE CE BLOC ──────────────────────────────────────
+  titre('2. L’enveloppe travaux se reprend toute seule de l’étude');
+
+  /* POURQUOI CE CONTRÔLE EXISTE. Sans enveloppe travaux, ce bloc ne peut pas
+     calculer la part de l'informatique dans l'investissement — et c'est tout
+     son objet. La reprise automatique était écrite, mais elle lisait
+     `d.enveloppe_meur`, qui n'existe pas : le résultat porte `entree`,
+     `classement`, `dossiers`, et l'enveloppe vit sous
+     `dossiers[…].devis.enveloppe_meur`. Le champ restait donc vide et
+     affichait « lancez l'enveloppe ci-dessus » APRÈS qu'elle avait été
+     lancée, pendant que le message annonçait l'avoir reprise.
+
+     LA SUITE DE CETTE RECETTE REMPLISSAIT LE CHAMP À LA MAIN, ce qui est
+     précisément pourquoi elle n'a rien vu. On l'éprouve donc ici, avant toute
+     saisie. */
+  const avant = await pg.evaluate(() => ({
+    env: (document.getElementById('eq-enveloppe') || {}).value,
+    msg: (document.getElementById('eq-msg') || {}).textContent || ''
+  }));
+  ok('avant tout calcul, le champ est vide', avant.env === '',
+     '« ' + avant.env + ' »');
+  ok('…et le message ne prétend PAS l’avoir repris',
+     !/enveloppe travaux .*reprise/i.test(avant.msg) && /non calculée/i.test(avant.msg),
+     avant.msg);
+
+  await pg.evaluate(() => document.getElementById('fin-go').click());
+  await pg.waitForFunction(() => window.FIN_DERNIER && window.FIN_DERNIER(),
+    null, { timeout: 60000 });
+  await pg.waitForTimeout(2200);
+
+  const apres = await pg.evaluate(() => ({
+    env: (document.getElementById('eq-enveloppe') || {}).value,
+    kw: (document.getElementById('eq-pit') || {}).value,
+    msg: (document.getElementById('eq-msg') || {}).textContent || ''
+  }));
+  /* On recalcule l'attendu DEPUIS LA SOURCE plutôt que de relire le champ :
+     comparer le champ à lui-même ne prouverait rien. */
+  const attendu = await pg.evaluate(() => {
+    const d = window.FIN_DERNIER();
+    const pays = (window.FIN_PAYS && window.FIN_PAYS()) || d.classement[0].pays;
+    const dos = d.dossiers.filter(x => x.pays === pays)[0];
+    const f = dos.devis.enveloppe_meur;
+    return { pays: pays, milieu: Math.round((f[0] + f[1]) / 2 * 1e6),
+             bas: f[0], haut: f[1], kw: d.entree.mw * 1000 };
+  });
+  ok('L’ENVELOPPE CALCULÉE REMPLIT LE CHAMP — sans elle, la part ne se calcule pas',
+     apres.env !== '' && Number(apres.env) > 0, '« ' + apres.env + ' »');
+  ok('…et c’est le milieu de la fourchette du PAYS RETENU, pas un autre montant',
+     Number(apres.env) === attendu.milieu,
+     apres.env + ' pour ' + attendu.milieu + ' recalculé sur ' + attendu.pays);
+  ok('…la puissance informatique suit la même étude',
+     Number(apres.kw) === attendu.kw, apres.kw + ' pour ' + attendu.kw + ' kW');
+  ok('…et le message NOMME ce qu’il a repris : montant, fourchette et pays',
+     new RegExp(String(attendu.bas)).test(apres.msg)
+       && new RegExp(String(attendu.haut)).test(apres.msg)
+       && new RegExp(attendu.pays).test(apres.msg),
+     apres.msg);
+
+  /* CE QUE LE LECTEUR A SAISI N'EST JAMAIS ÉCRASÉ. L'effacer sous les yeux de
+     celui qui vient de le taper est la façon la plus sûre de lui faire perdre
+     confiance dans tout le reste de la page. */
+  const autre = await pg.evaluate(async () => {
+    const e = document.getElementById('eq-enveloppe');
+    e.value = '333000000';
+    e.dispatchEvent(new Event('input', { bubbles: true }));
+    const d = window.FIN_DERNIER();
+    const courant = (window.FIN_PAYS && window.FIN_PAYS()) || d.classement[0].pays;
+    const cible = d.classement.map(c => c.pays).filter(p => p !== courant)[0];
+    /* SANS LE SECOND ARGUMENT : `silencieux` supprime l'événement `fin-pays`,
+       et c'est bien ce que fait le sélecteur du bloc de maîtrise d'œuvre, qui
+       se rafraîchit lui-même. Un clic de lecteur sur la carte, lui, le
+       déclenche — c'est ce parcours-là qu'on éprouve. */
+    if (window.FIN_PAYS_CHOISIR) window.FIN_PAYS_CHOISIR(cible);
+    await new Promise(r => setTimeout(r, 1200));
+    return { cible: cible,
+             env: document.getElementById('eq-enveloppe').value,
+             msg: (document.getElementById('eq-msg') || {}).textContent || '' };
+  });
+  ok('un montant SAISI À LA MAIN survit à un changement de pays',
+     autre.env === '333000000', '« ' + autre.env +' » après passage sur ' + autre.cible);
+  /* LE MESSAGE NE PEUT PAS ANNONCER UNE REPRISE QUE LE LECTEUR A REMPLACÉE :
+     une phrase qui décrit autre chose que ce qui est à l'écran fait repartir
+     avec la mauvaise assiette. */
+  ok('…et le message CESSE d’annoncer une reprise, puisqu’il n’y en a plus eu',
+     /saisie est conservée/i.test(autre.msg) && !/reprises de l’étude/i.test(autre.msg),
+     autre.msg.slice(0, 120));
+  ok('…tout en disant ce que l’étude donnerait, et sur quel pays',
+     new RegExp(autre.cible).test(autre.msg) && /donnerait/i.test(autre.msg),
+     autre.msg.slice(0, 140));
+
+  // ── 3 ────────────────────────────────────────────────────────────────────
+  titre('3. La nomenclature s’affiche, chaque quantité avec sa règle');
 
   /* On est DÉJÀ sur /enveloppe : la boucle ci-dessus s'y est terminée. La
      recharger coûterait une vingtaine d'appels d'API pour rien. */
@@ -154,8 +244,8 @@ const titre = (t) => console.log('\n══ ' + t + ' ══\n');
   ok('…le geste d’achat durable est donné poste par poste',
      !!tab && tab.gestes === tab.n, tab && tab.gestes + '/' + tab.n);
 
-  // ── 3 : LE CONSTAT DE PÉRIMÈTRE ──────────────────────────────────────────
-  titre('3. L’informatique n’est PAS dans les lots travaux — et la page le dit');
+  // ── 4 : LE CONSTAT DE PÉRIMÈTRE ──────────────────────────────────────────
+  titre('4. L’informatique n’est PAS dans les lots travaux — et la page le dit');
 
   const part = await pg.evaluate(() => {
     const b = [...document.querySelectorAll('#eq-out .eq-bloc')]
@@ -178,7 +268,7 @@ const titre = (t) => console.log('\n══ ' + t + ' ══\n');
   ok('…et donne la part de l’investissement TOTAL en centre propre',
      !!part && part.cartes.some(x => /investissement total/i.test(x.l)));
 
-  titre('4. En colocation, deux bilans distincts ne sont pas additionnés');
+  titre('5. En colocation, deux bilans distincts ne sont pas additionnés');
   await pg.selectOption('#eq-perimetre', 'colocation');
   let avantOut = await htmlDe('#eq-out');
   await pg.click('#eq-go');
@@ -199,8 +289,8 @@ const titre = (t) => console.log('\n══ ' + t + ' ══\n');
   await pg.click('#eq-go');
   await rendu('#eq-out', avantOut, 'le retour en centre propre');
 
-  // ── 5 : LA BASCULE ───────────────────────────────────────────────────────
-  titre('5. L’allongement de durée de vie affiche son point de bascule');
+  // ── 6 : LA BASCULE ───────────────────────────────────────────────────────
+  titre('6. L’allongement de durée de vie affiche son point de bascule');
 
   const visible = await pg.evaluate(() => {
     const b = document.getElementById('eq-vie-bloc');
@@ -252,8 +342,8 @@ const titre = (t) => console.log('\n══ ' + t + ' ══\n');
      !!fr && !!pl && fr.seuil.trim() === pl.seuil.trim(),
      fr && pl ? fr.seuil + ' ≠ ' + pl.seuil : '');
 
-  // ── 6 : LE SCOPE 3 ───────────────────────────────────────────────────────
-  titre('6. Le scope 3 dit ce qu’il couvre, et ce qu’il ne couvre pas');
+  // ── 7 : LE SCOPE 3 ───────────────────────────────────────────────────────
+  titre('7. Le scope 3 dit ce qu’il couvre, et ce qu’il ne couvre pas');
   const s3 = await pg.evaluate(() => {
     const b = [...document.querySelectorAll('#eq-s3-out .eq-bloc')]
       .find(x => /scope/i.test((x.querySelector('h4') || {}).textContent || ''));
@@ -268,8 +358,8 @@ const titre = (t) => console.log('\n══ ' + t + ' ══\n');
   ok('…il avertit du transfert entre scopes quand on prolonge',
      !!s3 && /scope 2/i.test(s3.texte));
 
-  // ── 7 : LES REFUS ────────────────────────────────────────────────────────
-  titre('7. Le module refuse plutôt que d’inventer');
+  // ── 8 : LES REFUS ────────────────────────────────────────────────────────
+  titre('8. Le module refuse plutôt que d’inventer');
   const r1 = await api('/api/equipements-it', { puissance_it_kw: 1000, densite: 'supersonique' });
   ok('une densité inconnue est refusée avec son motif',
      r1.statut === 200 && r1.j && r1.j.nomenclature && r1.j.nomenclature.ok === false
@@ -295,8 +385,8 @@ const titre = (t) => console.log('\n══ ' + t + ' ══\n');
   ok('un pays dont le mix est inconnu est refusé, jamais supposé',
      r4.statut === 200 && r4.j && r4.j.prolongation && r4.j.prolongation.ok === false);
 
-  // ── 8 : LE MODULE PARTAGÉ ────────────────────────────────────────────────
-  titre('8. Les quantités sont celles du module partagé, pas une seconde table');
+  // ── 9 : LE MODULE PARTAGÉ ────────────────────────────────────────────────
+  titre('9. Les quantités sont celles du module partagé, pas une seconde table');
   const ref = await api('/api/equipements-it');
   ok('le référentiel est servi', ref.statut === 200 && ref.j && ref.j.ok);
   ok('…il nomme le moteur dont il lit l’intensité carbone',

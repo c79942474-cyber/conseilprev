@@ -12776,16 +12776,69 @@ if(window.parent&&window.parent!==window){
 
   /* CE QUE L'ÉTUDE D'ENVELOPPE A DÉJÀ ÉTABLI. Constaté, jamais supposé :
      si elle n'a pas tourné, les champs restent à leur valeur de saisie et
-     le bloc le dit — plutôt que de reprendre un montant qui n'existe pas. */
+     le bloc le dit — plutôt que de reprendre un montant qui n'existe pas.
+
+     L'ENVELOPPE EST DANS LE DOSSIER DU PAYS RETENU, PAS À LA RACINE DU
+     RÉSULTAT. Cette fonction lisait `d.enveloppe_meur`, qui n'a jamais existé :
+     le résultat porte `entree`, `classement`, `dossiers`, `ecarts` — et
+     l'enveloppe vit sous `dossiers[…].devis.enveloppe_meur`. Le champ restait
+     donc vide, et affichait « lancez l'enveloppe ci-dessus » APRÈS qu'elle
+     avait été lancée, pendant que le message annonçait l'avoir reprise : deux
+     affirmations contradictoires sur le même écran, et c'est la fausse qui
+     décidait — sans enveloppe travaux, la part de l'informatique ne se
+     calculait pas, et c'est tout l'objet de ce bloc.
+
+     LE PAYS EST CELUI DE L'ÉTUDE OUVERTE, comme partout ailleurs sur la page.
+     Prendre le premier dossier rendu trierait par code pays, ce qui donnerait
+     l'enveloppe d'un pays pendant qu'on lit le dossier d'un autre. */
   function reprise(){
     var d = window.FIN_DERNIER && window.FIN_DERNIER();
     if(!d || !d.entree) return null;
-    var env = null;
-    if(d.enveloppe_meur && d.enveloppe_meur.length === 2){
-      env = (Number(d.enveloppe_meur[0]) + Number(d.enveloppe_meur[1])) / 2 * 1e6;
-    }
+    var pays = (window.FIN_PAYS && window.FIN_PAYS())
+      || ((d.classement || [])[0] || {}).pays || null;
+    var dos = (d.dossiers || []).filter(function(x){ return x.pays === pays; })[0]
+      || (d.dossiers || [])[0] || null;
+    var f = (dos && dos.devis) ? dos.devis.enveloppe_meur : null;
+    var env = (f && f.length === 2 && f[0] != null && f[1] != null)
+      ? (Number(f[0]) + Number(f[1])) / 2 * 1e6 : null;
     return { kw: Number(d.entree.mw || 0) * 1000, enveloppe: env,
-             pays: (window.FIN_PAYS && window.FIN_PAYS()) || null };
+             fourchette: (f && f.length === 2) ? f : null,
+             pays: dos ? dos.pays : pays };
+  }
+
+  /* LE MESSAGE DIT CE QU'IL A VRAIMENT REPRIS. Il annonçait « puissance et
+     enveloppe » dans tous les cas, y compris quand l'enveloppe manquait. Un
+     champ vide sous une phrase qui le dit rempli se lit comme un défaut
+     d'affichage, et on passe outre. */
+  function direReprise(r, pris){
+    var m = $("eq-msg");
+    if(!m) return;
+    if(!r || !r.kw){
+      m.textContent = "Enveloppe non calculée : lancez-la plus haut pour que "
+        + "la part se calcule.";
+      return;
+    }
+    if(!r.enveloppe){
+      m.textContent = "Puissance reprise de l’étude ci-dessus. L’enveloppe "
+        + "travaux, elle, n’a pas pu l’être : sans elle, la part de "
+        + "l’informatique dans l’investissement ne se calcule pas.";
+      return;
+    }
+    var socle = (r.fourchette
+        ? "milieu de la fourchette " + fr(r.fourchette[0], 0) + " – "
+          + fr(r.fourchette[1], 0) + " M€"
+        : "montant de l’étude")
+      + (r.pays ? ", pays " + r.pays : "");
+    /* LE MESSAGE N'ANNONCE JAMAIS UNE REPRISE QUE LE LECTEUR A REMPLACÉE.
+       C'est le défaut même qu'on corrige ici : une phrase qui décrit autre
+       chose que ce qui est à l'écran fait douter de tout le reste — et c'est
+       en la croyant qu'on repart avec la mauvaise assiette. */
+    m.textContent = (pris === false)
+      ? "Enveloppe travaux : votre saisie est conservée. L’étude ci-dessus "
+        + "donnerait " + eur(r.enveloppe) + " — " + socle + "."
+      : "Puissance " + fr(r.kw, 0) + " kW et enveloppe travaux "
+        + eur(r.enveloppe) + " reprises de l’étude ci-dessus — " + socle
+        + ". Les deux restent modifiables.";
   }
 
   function rendreForm(){
@@ -12813,9 +12866,7 @@ if(window.parent&&window.parent!==window){
       + (r && r.enveloppe ? Math.round(r.enveloppe) : "")
       + '" placeholder="lancez l’enveloppe ci-dessus"></label>';
     z.innerHTML = h;
-    $("eq-msg").textContent = (r && r.kw)
-      ? "Puissance et enveloppe reprises de l’étude ci-dessus."
-      : "Enveloppe non calculée : lancez-la plus haut pour que la part se calcule.";
+    direReprise(r);
   }
 
   function rendreVieForm(){
@@ -13007,18 +13058,46 @@ if(window.parent&&window.parent!==window){
        travaux » restait donc vide pour qui suit le fil dans l'ordre, et la
        part de l'informatique ne pouvait pas se calculer. On le reprend quand
        le calcul aboutit — sans écraser ce que le lecteur a saisi lui-même. */
-    document.addEventListener("fin-calcul", function(){
+    function reprendre(){
       var r = reprise();
       if(!r) return;
       var e = $("eq-enveloppe");
-      if(e && !e.value && r.enveloppe) e.value = Math.round(r.enveloppe);
+      /* CE QUE LE LECTEUR A SAISI N'EST JAMAIS ÉCRASÉ. Un montant repris se
+         remplace quand l'étude change ; un montant tapé à la main est une
+         décision, et l'effacer sous les yeux de celui qui l'a prise est la
+         façon la plus sûre de lui faire perdre confiance dans le reste. */
+      var pris = true;
+      if(e && r.enveloppe){
+        if(!e.value || e.dataset.repris === "1"){
+          e.value = Math.round(r.enveloppe);
+          e.dataset.repris = "1";
+        } else {
+          pris = false;
+        }
+      }
       var k = $("eq-pit");
       if(k && r.kw && !k.dataset.saisi) k.value = Math.round(r.kw);
-      var m = $("eq-msg");
-      if(m) m.textContent = "Puissance et enveloppe reprises de l’étude ci-dessus.";
+      direReprise(r, pris);
+    }
+    document.addEventListener("fin-calcul", reprendre);
+    /* CHANGER DE PAYS CHANGE L'ENVELOPPE. Sans cette écoute, le bloc gardait
+       le montant du pays précédent et chiffrait la part de l'informatique sur
+       une assiette qui n'était plus celle de l'étude affichée. */
+    document.addEventListener("fin-pays", reprendre);
+    /* L'ÉCOUTE EST POSÉE SUR LE CONTENEUR, PAS SUR LES CHAMPS — et c'est un
+       second défaut, plus discret que le premier. Le formulaire n'est
+       construit qu'à l'arrivée du référentiel, donc APRÈS cette fonction :
+       `$("eq-pit")` valait null ici, l'écoute n'était jamais posée, et la
+       garde « ne pas écraser ce que le lecteur a saisi » ne s'armait donc
+       jamais. Le conteneur, lui, existe dans le balisage et survit aux
+       reconstructions. */
+    var form = $("eq-form");
+    if(form) form.addEventListener("input", function(ev){
+      var t = ev.target;
+      if(!t || !t.id) return;
+      if(t.id === "eq-pit") t.dataset.saisi = "1";
+      if(t.id === "eq-enveloppe") t.dataset.repris = "0";
     });
-    var pit = $("eq-pit");
-    if(pit) pit.addEventListener("input", function(){ pit.dataset.saisi = "1"; });
 
     $("eq-go").addEventListener("click", function(){ appeler(false, "eq-out", "eq-msg"); });
     $("eq-vie-go").addEventListener("click", function(){
