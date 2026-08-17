@@ -89,6 +89,26 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
      BOUTON ENTIER porte donc la couleur, et c'est lui qui bat. Ces contrôles
      visaient le disque ; ils visent maintenant le bouton, sans quoi ils
      testeraient un élément qui ne décide plus de rien. */
+
+  /* ON PRODUIT UNE ÉTAPE VALIDÉE AVANT D'EN PARLER. Cette section s'appuyait
+     sur l'étape 1, verte dès le chargement parce que la puissance arrive
+     pré-remplie à 100 MW. Le fil ne crédite plus une valeur par défaut — un
+     avancement qui se félicite d'un formulaire livré rempli ne veut rien dire
+     — et il n'y a donc plus AUCUNE étape verte à l'arrivée. Les contrôles ne
+     sont pas devenus faux : leur mise en scène l'était. On donne une vraie
+     réponse, et on observe ce qu'elle produit. */
+  await pg.evaluate(() => {
+    const e = document.getElementById('fin-mw');
+    e.value = '250';
+    e.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+  await pg.waitForTimeout(800);
+  ok('une réponse du lecteur produit bien une étape validée à observer',
+     await pg.evaluate(() =>
+       document.querySelectorAll('#fin-fil .fin-e.fait').length === 1),
+     await pg.evaluate(() =>
+       document.querySelectorAll('#fin-fil .fin-e.fait').length + ' validée(s)'));
+
   const bat = await pg.evaluate(() => {
     const lire = (sel) => [...document.querySelectorAll(sel)].map(b => {
       const sb = getComputedStyle(b);
@@ -501,6 +521,15 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
   titre('7. Mouvement réduit : plus rien ne bouge, et rien n’est perdu');
 
   const pg2 = await ouvrir(true);
+  /* MÊME MISE EN SCÈNE QU'À LA SECTION 2 : cette page est neuve, donc sans
+     aucune étape validée — le fil ne crédite plus la valeur par défaut. Sans
+     réponse du lecteur, il n'y aurait rien de vert à observer, et le contrôle
+     du vert en mouvement réduit ne prouverait rien. */
+  await pg2.evaluate(() => {
+    const e = document.getElementById('fin-mw');
+    if (e) { e.value = '250'; e.dispatchEvent(new Event('input', { bubbles: true })); }
+  });
+  await pg2.waitForTimeout(800);
   const immobile = await pg2.evaluate(() => {
     const lum = (c) => {
       const v = c.match(/[\d.]+/g).slice(0, 3).map(Number).map(x => {

@@ -5190,16 +5190,86 @@ function eauNb(n){
    agit, et elle est REMPLACÉE PAR UN CADRE FIXE — pas simplement supprimée —
    si le système déclare préférer les animations réduites. L'étape reste alors
    désignée aussi clairement, sans mouvement.
+   ── CE QUI EST « FAIT » : LA RÈGLE VIENT DU SITE D'INGÉNIERIE ─────────────
+   Le parcours guidé de conseilprevcyber (`guide-etapes.js`) a rencontré ce
+   problème avant nous et l'a tranché ; on applique ici la même règle, parce
+   que deux sites du même cabinet ne peuvent pas compter l'avancement de deux
+   façons.
+
+   CE FORMULAIRE ARRIVE DÉJÀ REMPLI, et c'est tout le problème. La puissance
+   ouvre à 100 MW, trois pays sont pré-cochés. Compter « renseigné » tout ce
+   qui porte une valeur faisait afficher « 1 / 9 » à un lecteur qui n'avait
+   RIEN touché — mesuré : étape 1 verte au chargement. Le fil se félicitait
+   d'un formulaire livré pré-rempli, et son avancement ne voulait plus rien
+   dire.
+
+   UNE RÉPONSE EST UNE VALEUR QUI A BOUGÉ de celle qu'on a vue en arrivant.
+   La valeur de départ est relevée à la PREMIÈRE RENCONTRE et non au
+   chargement : la liste des pays se peuple par requête bien après, et relever
+   au chargement l'aurait trouvée vide — elle serait repassée « renseignée »
+   par le seul fait d'exister.
+
+   AVEC UNE ADAPTATION QUE LE SITE D'INGÉNIERIE N'A PAS À FAIRE : ici, les
+   étapes 1 et 2 ALIMENTENT l'étape 3. Lancer le calcul, c'est valider les
+   deux en acte — même sans les avoir touchées. Elles passent donc à « fait »
+   dès qu'un dossier est rendu. Refuser de les créditer alors que leur
+   résultat est à l'écran serait une rigueur qui se retournerait contre le
+   lecteur.
    ══════════════════════════════════════════════════════════════════════════ */
+
+/* La valeur vue à la PREMIÈRE RENCONTRE, jamais au chargement. */
+var FIN_DEPART = new WeakMap();
+function finDepart(el){
+  if(!FIN_DEPART.has(el)){
+    FIN_DEPART.set(el, el.type === "checkbox" || el.type === "radio"
+      ? (el.checked ? "1" : "")
+      : String(el.value == null ? "" : el.value).trim());
+  }
+  return FIN_DEPART.get(el);
+}
+function finABouge(el){
+  if(!el) return false;
+  var d = finDepart(el);
+  var v = String(el.value == null ? "" : el.value).trim();
+  if(v === "") return false;
+  /* Partie vide puis renseignée : c'est une réponse. Partie sur une valeur et
+     restée dessus : on ne peut pas savoir, donc on ne l'affirme pas. */
+  return d === "" || v !== d;
+}
+/* Le compte des pays cochés, relevé à la première rencontre de la liste. */
+var FIN_PAYS_DEPART = null;
+function finPaysABouge(){
+  var n = document.querySelectorAll("#fin-pays button[data-p].on").length;
+  if(FIN_PAYS_DEPART === null){
+    /* Tant que la liste n'est pas peuplée, on ne fige aucune référence : une
+       liste vide prise pour un départ ferait passer le premier rendu pour un
+       choix du lecteur. */
+    if(!document.querySelectorAll("#fin-pays button[data-p]").length) return false;
+    FIN_PAYS_DEPART = n;
+    return false;
+  }
+  return n !== FIN_PAYS_DEPART;
+}
+/* Un dossier rendu vaut validation des étapes qui l'alimentent. */
+function finCalculLance(){
+  return document.querySelectorAll("#fin-res .fin-dos").length > 0;
+}
+
 var FIN_ETAPES = [
   { cle: "regler", n: 1, nom: "Régler le projet", cible: "fin-form",
     quoi: "Puissance, gabarit, scénario, calendrier — et les critères d’ingénierie "
         + "sous « Aller plus loin ».",
+    /* PAS « une puissance est saisie » — elle l'est d'office, à 100 MW. Mais
+       « le lecteur l'a changée », ou « il a lancé le calcul qui la consomme ». */
     fait: function(){ var e = document.getElementById("fin-mw");
-                      return !!(e && parseFloat(e.value) > 0); } },
+                      if(!e || !(parseFloat(e.value) > 0)) return false;
+                      return finABouge(e) || finCalculLance(); } },
   { cle: "pays", n: 2, nom: "Choisir les pays", cible: "fin-pays",
     quoi: "De deux à six pays comparés. En dessous de deux, il n’y a rien à comparer.",
-    fait: function(){ return document.querySelectorAll("#fin-pays button[data-p].on").length >= 2; } },
+    /* Trois pays arrivent pré-cochés : les compter suffisait à cocher l'étape
+       avant que le lecteur n'ait rien choisi. */
+    fait: function(){ return document.querySelectorAll("#fin-pays button[data-p].on").length >= 2
+                        && (finPaysABouge() || finCalculLance()); } },
   { cle: "calculer", n: 3, nom: "Calculer l’enveloppe", cible: "fin-go",
     commande: "#fin-go",
     quoi: "L’enveloppe en fourchette, la DPGF par lot, le coût total et l’échéancier.",
@@ -5670,7 +5740,34 @@ function finFilBrancher(){
     if(ev.target.closest("#fin-go, #moe-go, #kpi-go, #eq-go, #mat-go, #pil-go, "
                          + "[data-pont-go]"))
       finSurveiller();
+    /* CHOISIR UN PAYS EST UNE RÉPONSE, et elle se donne au clic — pas dans un
+       champ. Sans cette ligne, l'étape 2 ne se cochait qu'au calcul suivant. */
+    if(ev.target.closest("#fin-pays button[data-p]")) finMajFilBientot();
   });
+
+  /* LE FIL SE MET À JOUR QUAND LE LECTEUR RÉPOND, pas seulement quand il
+     lance un calcul. Il ne s'évaluait qu'au clic sur une commande : tant que
+     les étapes 1 et 2 étaient « faites » d'office, cela ne se voyait pas ;
+     maintenant qu'elles attendent une vraie réponse, un fil qui ignore la
+     saisie laisserait « 0 / 9 » sous un formulaire que le lecteur vient de
+     remplir. On écoute donc la saisie — en la groupant, pour ne pas
+     recalculer neuf états à chaque frappe. */
+  var _majEnAttente = null;
+  function finMajFilBientot(){
+    if(_majEnAttente) return;
+    _majEnAttente = setTimeout(function(){
+      _majEnAttente = null;
+      finMajFil();
+      finFlecheMaj();
+    }, 220);
+  }
+  ["input", "change"].forEach(function(t){
+    document.addEventListener(t, function(ev){
+      if(ev.target.closest && ev.target.closest("#fin-form, #fin-pays"))
+        finMajFilBientot();
+    }, true);
+  });
+
   /* LE SENS DE LA FLÈCHE SE RECALCULE QUAND LA PAGE BOUGE. Posé une fois, il
      désignerait « vers le bas » à un lecteur qui a depuis dépassé le bloc.
      `passive` parce qu'on ne bloque jamais un défilement pour dessiner. */
@@ -5687,6 +5784,29 @@ function finFilBrancher(){
      faite dès le chargement, la puissance étant pré-remplie — passerait pour
      un franchissement et remonterait le lecteur avant qu'il n'ait rien fait. */
   finMajFil();
+
+  /* LE FIL RESTAIT PÉRIMÉ AU CHARGEMENT, et c'est un défaut mesuré : la liste
+     des pays se peuple par requête APRÈS ce premier relevé. L'état affiché
+     n'était donc pas celui de la page — « étape 2 en cours » pendant que trois
+     pays étaient déjà cochés — et il se corrigeait tout seul, sans raison
+     visible, à la première interaction. On regarde donc la liste apparaître.
+
+     UN OBSERVATEUR, PAS UN MINUTEUR. Attendre « une seconde, ça devrait
+     suffire » marche sur une machine de développement et rate sur un réseau
+     lent — exactement là où le lecteur a le plus besoin que la page soit
+     juste. Il se débranche dès que la liste est là : son travail est fini. */
+  var zPays = document.getElementById("fin-pays");
+  if(zPays && typeof MutationObserver === "function"){
+    var obs = new MutationObserver(function(){
+      if(!zPays.querySelector("button[data-p]")) return;
+      obs.disconnect();
+      /* La référence de départ se fige ICI, à la première rencontre réelle. */
+      finPaysABouge();
+      finMajFil();
+      finFlecheMaj();
+    });
+    obs.observe(zPays, { childList: true, subtree: true });
+  }
   /* LA FLÈCHE EST POSÉE D'EMBLÉE. `finMajFil` rend la main avant le guidage au
      tout premier appel — c'est voulu, rien n'a encore été franchi — mais sans
      cet appel la flèche n'apparaissait qu'au premier changement d'état : le
