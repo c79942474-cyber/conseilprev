@@ -21,6 +21,24 @@
     var d={ necessary:true, functional:!!p.functional, analytics:!!p.analytics, marketing:!!p.marketing,
             ts:Date.now(), date:new Date().toLocaleString('fr-FR'), version:'1.0' };
     try{ localStorage.setItem(CK_KEY, JSON.stringify(d)); }catch(e){}
+    /* LA PREUVE PART AU SERVEUR (art. 7). Le choix rangé dans localStorage
+       n'est une preuve pour personne : il vit dans le navigateur du visiteur,
+       et la charge de la preuve du consentement pèse sur le responsable de
+       traitement — pas sur le visiteur. Seule la page d'accueil déposait
+       cette preuve ; les autres pages recueillaient sans pouvoir prouver.
+       Le refus est enregistré au même titre que l'acceptation : prouver
+       qu'on a respecté un refus est exactement aussi nécessaire. */
+    try{
+      var toutRefuse = !d.functional && !d.analytics && !d.marketing;
+      fetch('/api/rgpd/consentement', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({
+          finalites: { fonctionnel:d.functional, analytique:d.analytics, marketing:d.marketing },
+          methode: 'banniere-partagee:' + (location.pathname || '/'),
+          retrait: toutRefuse
+        })
+      }).catch(function(){});
+    }catch(e){}
     return d;
   }
   function ckApply(p){

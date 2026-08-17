@@ -4605,6 +4605,20 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <button class="mat-export-btn" style="margin-left:auto" title="Générer l'attestation de transparence, imprimable / PDF, pour une demande externe" onclick="ia50Rapport()">Attestation de transparence</button>
   </div>
 
+  <!-- LA VÉRIFICATION MESURÉE, AVANT LE REGISTRE DÉCLARÉ. Le registre a déjà
+       déclaré « EN PLACE » une mention que la page ne portait pas : ce
+       panneau relit les artefacts réellement servis à chaque mesure, et
+       signale d'abord les contradictions entre l'attestation et la mesure. -->
+  <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px">
+      <div class="rgpd-h" style="font-weight:700;font-size:13px;color:var(--ink)">Vérification mesurée — sur les artefacts réellement servis</div>
+      <button class="mat-export-btn" title="Relire immédiatement les pages servies et re-générer un document de contrôle" onclick="ia50Verifier()">↻ Mesurer maintenant</button>
+      <label style="font-size:10.5px;color:var(--muted);display:inline-flex;align-items:center;gap:5px;cursor:pointer" title="Re-mesure automatiquement toutes les 30 secondes tant que cette page est ouverte"><input type="checkbox" id="ia50-auto" checked onchange="ia50AutoToggle()"> Temps réel</label>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Les mentions d'IA, le bandeau « AI GENERATED » et le marquage des documents sont mesurés sur les fichiers servis et sur un document généré à l'instant — jamais déclarés. Ce qui n'est pas mesurable par une machine (l'examen humain de l'art. 50.4) est rendu comme attestation, pas converti en vert.</div>
+    <div id="ia50-mesures" style="font-size:12px">Mesure en cours…</div>
+  </div>
+
   <div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px">
     <div class="rgpd-h" style="font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px">Registre des usages d'IA (art. 50)</div>
     <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px">Cochez « Conforme » lorsque la mesure est effectivement en place et vérifiée. Le rôle de fournisseur emporte le marquage lisible par machine ; le rôle de déployeur emporte l'étiquetage visible des contenus diffusés.</div>
@@ -9765,6 +9779,13 @@ try {
       <div class="cpc-ctx-label" id="cpcCtxLabel">Sentinel AI</div>
       <div class="cpc-api-indicator" id="cpcApiIndicator">Mistral Large</div>
     </div>
+    <!-- LA MENTION D'IA, AVANT LE PREMIER ÉCHANGE (art. 50.1). Le registre de
+         transparence déclarait cette mention « EN PLACE » ; elle l'était sur le
+         chat du site public, pas ici — les boutons Mistral/Claude nomment des
+         modèles sans dire qu'on parle à une machine, ce qui suppose ce que
+         l'article interdit de supposer. Même formulation que le site public :
+         deux mentions différentes finiraient par diverger. -->
+    <div class="cpc-ia-mention" style="font-size:10px;font-family:var(--mono);color:rgba(255,255,255,.82);background:rgba(255,255,255,.07);border-top:1px solid rgba(255,255,255,.12);padding:6px 20px;letter-spacing:.03em">🤖 Vous interagissez avec une IA — <a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:2px" title="Texte officiel Art. 50 sur EUR-Lex">Art. 50 Règl. (UE) 2024/1689</a></div>
   </div>
   <div class="cpc-tags" id="cpcTags"></div>
   <div class="cpc-msgs" id="cpcMsgs"></div>
@@ -23177,7 +23198,62 @@ window.gouvExportWord = function(){
   URL.revokeObjectURL(u);
 };
 
+/* LA MESURE, A COTE DE L'ATTESTATION. La case « Conforme » reste une
+   attestation humaine — elle ne se coche jamais toute seule. Mais le registre
+   a deja declare « EN PLACE » une mention que la page ne portait pas : la
+   colonne « Mesure » interroge donc /api/ia50/verification, qui relit les
+   artefacts reellement servis a chaque appel, et signale d'abord les
+   CONTRADICTIONS — atteste conforme, mesure non conforme. */
+var IA50_MESURES = null;
+
+window.ia50Verifier = function(){
+  return fetch('/api/ia50/verification', { credentials:'same-origin', cache:'no-store' })
+    .then(function(r){ return r.json(); })
+    .then(function(v){
+      if(!v || !v.ok) return null;
+      IA50_MESURES = v;
+      var z = document.getElementById('ia50-mesures');
+      if(z){
+        var etat = function(st){
+          if(st === 'conforme') return '<span style="color:var(--green,#0E7C7B);font-weight:700">mesur\u00e9 conforme</span>';
+          if(st === 'non-conforme') return '<span style="color:var(--accent);font-weight:800">MESUR\u00c9 NON CONFORME</span>';
+          if(st === 'partiel') return '<span style="color:#c98a00;font-weight:700">mesur\u00e9 en partie \u2014 attestation requise</span>';
+          return '<span style="color:var(--muted)">non mesurable \u2014 attestation humaine</span>';
+        };
+        z.innerHTML =
+          ((v.contradictions || []).length
+            ? '<div style="border:1px solid var(--accent);border-left:3px solid var(--accent);border-radius:8px;padding:10px 12px;margin-bottom:10px;background:rgba(184,50,34,.05)">'
+              + '<strong style="color:var(--accent)">' + v.contradictions.length + ' contradiction(s)</strong> \u2014 attest\u00e9 conforme au registre, mais la mesure dit le contraire :'
+              + v.contradictions.map(function(c){ return '<div style="font-size:11px;color:var(--muted);margin-top:4px">\u2022 <strong style="color:var(--ink)">' + rgpdEsc(c.systeme) + '</strong> \u2014 ' + rgpdEsc(c.dit) + '</div>'; }).join('')
+              + '</div>'
+            : '')
+          + (v.mesures || []).map(function(m){
+              return '<div style="display:flex;gap:10px;align-items:baseline;padding:4px 0;border-bottom:1px solid var(--rule2);flex-wrap:wrap">'
+                + '<div style="flex:1;min-width:200px;font-size:11.5px;color:var(--ink)">' + rgpdEsc(m.quoi) + '</div>'
+                + '<div style="font-size:11px">' + etat(m.statut) + '</div>'
+                + '<div style="flex:2;min-width:220px;font-size:10.5px;color:var(--muted)">' + rgpdEsc(m.preuve) + '</div></div>';
+            }).join('')
+          + '<div style="font-size:10px;color:var(--muted);margin-top:6px">Mesur\u00e9 le ' + rgpdEsc((v.mesure_le || '').replace('T', ' ').slice(0, 19)) + ' UTC \u2014 les fichiers servis sont relus \u00e0 chaque mesure ; la case \u00ab Conforme \u00bb reste une attestation humaine.</div>';
+      }
+      return v;
+    }).catch(function(){ return null; });
+};
+
+/* Temps reel : re-mesure toutes les 30 s tant que la page est ouverte, comme
+   le tableau RGPD. */
+var IA50_AUTO_T = null;
+window.ia50AutoToggle = function(){
+  var c = document.getElementById('ia50-auto');
+  if(IA50_AUTO_T){ clearInterval(IA50_AUTO_T); IA50_AUTO_T = null; }
+  if(!c || c.checked){ IA50_AUTO_T = setInterval(function(){
+    var p = document.getElementById('p-ia50');
+    if(p && p.classList.contains('on')) ia50Verifier();
+  }, 30000); }
+};
+
 window.ia50Load = function(){
+  var verif = ia50Verifier();
+  ia50AutoToggle();
   fetch('/api/ia50/usages', { credentials:'same-origin' }).then(function(r){ return r.json(); }).then(function(d){
     if(!d || !d.ok) return;
     var t = document.getElementById('ia50-taux');
@@ -23192,14 +23268,31 @@ window.ia50Load = function(){
     }).join('');
     var box = document.getElementById('ia50-liste');
     if(!box) return;
-    box.innerHTML = rgpdTable(['Système', 'Rôle', 'Contenu', 'Marquage', 'Étiquetage', 'Exception', 'Responsable', 'Conforme', ''],
-      (d.usages || []).map(function(u){
-        return ['<strong style="color:var(--ink)">' + rgpdEsc(u.systeme) + '</strong>',
-          '<span style="font-size:10px;font-weight:700;color:' + (u.role === 'fournisseur' ? '#6B46C1' : '#0E7C7B') + '">' + rgpdEsc(u.role) + '</span>',
-          rgpdEsc(u.contenu), rgpdEsc(u.marquage), rgpdEsc(u.etiquetage), rgpdEsc(u.exception), rgpdEsc(u.responsable),
-          '<input type="checkbox" ' + (u.conforme ? 'checked' : '') + ' onchange="ia50Conforme(' + u.id + ', this.checked)">',
-          '<button onclick="ia50Del(' + u.id + ')" style="font-size:10px;color:var(--accent);background:none;border:none;cursor:pointer">Retirer</button>'];
-      }));
+    /* La colonne « Mesure » attend la verification : deux requetes, un seul
+       rendu — un tableau peint deux fois ferait clignoter la page. */
+    Promise.resolve(verif).then(function(v){
+      var parLigne = {};
+      ((v && v.mesures) || []).forEach(function(m){
+        (m.lignes || []).forEach(function(id){ parLigne[id] = m; });
+      });
+      var mesCol = function(u){
+        var m = parLigne[u.id];
+        if(!m) return '<span style="font-size:10px;color:var(--muted)">\u2014</span>';
+        if(m.statut === 'conforme') return '<span style="font-size:10px;color:var(--green,#0E7C7B);font-weight:700" title="' + rgpdEsc(m.preuve) + '">mesur\u00e9 \u2713</span>';
+        if(m.statut === 'non-conforme') return '<span style="font-size:10px;color:var(--accent);font-weight:800" title="' + rgpdEsc(m.preuve) + '">mesur\u00e9 \u2717</span>';
+        if(m.statut === 'partiel') return '<span style="font-size:10px;color:#c98a00;font-weight:700" title="' + rgpdEsc(m.preuve) + '">partiel</span>';
+        return '<span style="font-size:10px;color:var(--muted)" title="' + rgpdEsc(m.preuve) + '">attestation</span>';
+      };
+      box.innerHTML = rgpdTable(['Syst\u00e8me', 'R\u00f4le', 'Contenu', 'Marquage', '\u00c9tiquetage', 'Exception', 'Responsable', 'Mesur\u00e9', 'Conforme', ''],
+        (d.usages || []).map(function(u){
+          return ['<strong style="color:var(--ink)">' + rgpdEsc(u.systeme) + '</strong>',
+            '<span style="font-size:10px;font-weight:700;color:' + (u.role === 'fournisseur' ? '#6B46C1' : '#0E7C7B') + '">' + rgpdEsc(u.role) + '</span>',
+            rgpdEsc(u.contenu), rgpdEsc(u.marquage), rgpdEsc(u.etiquetage), rgpdEsc(u.exception), rgpdEsc(u.responsable),
+            mesCol(u),
+            '<input type="checkbox" ' + (u.conforme ? 'checked' : '') + ' onchange="ia50Conforme(' + u.id + ', this.checked)">',
+            '<button onclick="ia50Del(' + u.id + ')" style="font-size:10px;color:var(--accent);background:none;border:none;cursor:pointer">Retirer</button>'];
+        }));
+    });
   }).catch(function(){});
 };
 window.ia50Conforme = function(id, val){

@@ -11937,11 +11937,22 @@ def sentinel_explorer():
             synthese = _expl_synthese(question, resultats)
         except Exception:
             synthese = None
-    return jsonify({'ok': True, 'question': question, 'cadres': cadres,
-                    'synthese': synthese,
-                    'resultats': resultats, 'par_source': par_source,
-                    'total': len(resultats),
-                    'moteur': 'vectoriel' if (RAG_PGVECTOR_AVAILABLE and REGISTRE_USE_PG) else 'lexical'})
+    # LE MARQUAGE LISIBLE PAR MACHINE VOYAGE AVEC LE CONTENU (art. 50.2).
+    # Le bandeau « AI GENERATED » de l'ecran est un etiquetage pour l'oeil ;
+    # un client d'API qui consomme cette reponse ne voit pas l'ecran. Les
+    # champs ne sont poses QUE si une synthese generee est presente : marquer
+    # une reponse sans generation apposerait un marquage qui ne correspond a
+    # rien, et un marquage appose partout ne signale plus rien.
+    charge = {'ok': True, 'question': question, 'cadres': cadres,
+              'synthese': synthese,
+              'resultats': resultats, 'par_source': par_source,
+              'total': len(resultats),
+              'moteur': 'vectoriel' if (RAG_PGVECTOR_AVAILABLE and REGISTRE_USE_PG) else 'lexical'}
+    if synthese:
+        charge['ia_generated'] = True
+        charge['marquage'] = 'AI-generated'
+        charge['marquage_reference'] = 'Reglement (UE) 2024/1689, art. 50'
+    return jsonify(charge)
 
 
 
@@ -13024,9 +13035,25 @@ def _ia50_table(cur, conn):
     cur.execute('CREATE TABLE IF NOT EXISTS ia50_usages (id ' + _pk + ', systeme TEXT, role TEXT, '
                 'contenu TEXT, marquage TEXT, etiquetage TEXT, exception TEXT, responsable TEXT, '
                 'conforme INTEGER DEFAULT 0, date_maj TEXT)')
+    # L'AMORCAGE N'A LIEU QU'UNE FOIS DANS LA VIE DE LA BASE. Il se declenchait
+    # sur « table vide » : retirer la derniere ligne du registre RESSUSCITAIT
+    # les sept lignes par defaut au chargement suivant, sans confirmation — un
+    # registre qu'on ne peut pas vider n'est pas un registre, c'est une
+    # brochure. Une ligne-temoin memorise que l'amorcage a eu lieu ; seule la
+    # route /api/ia50/reset, qui est une demande explicite, la retire.
+    cur.execute('CREATE TABLE IF NOT EXISTS ia50_meta (cle TEXT PRIMARY KEY, valeur TEXT)')
     conn.commit()
+    cur.execute(registre_sql("SELECT valeur FROM ia50_meta WHERE cle=%s",
+                             "SELECT valeur FROM ia50_meta WHERE cle=?"), ('seme',))
+    if cur.fetchone():
+        return
     cur.execute('SELECT COUNT(*) AS n FROM ia50_usages')
-    if int(dict(cur.fetchone()).get('n', 0)) > 0:
+    deja = int(dict(cur.fetchone()).get('n', 0)) > 0
+    cur.execute(registre_sql('INSERT INTO ia50_meta (cle, valeur) VALUES (%s,%s)',
+                             'INSERT INTO ia50_meta (cle, valeur) VALUES (?,?)'),
+                ('seme', datetime.utcnow().isoformat()))
+    if deja:
+        conn.commit()
         return
     for u in IA50_USAGES_DEFAUT:
         cur.execute(registre_sql(
@@ -13037,6 +13064,190 @@ def _ia50_table(cur, conn):
             (u['systeme'], u['role'], u['contenu'], u['marquage'], u['etiquetage'], u['exception'],
              u['responsable'], 0, datetime.utcnow().isoformat()))
     conn.commit()
+
+
+# ══════════════════════════════════════════════════════════
+# TRANSPARENCE IA ACT — LA MESURE, A COTE DE L'ATTESTATION
+#
+# Le registre de l'article 50 porte des declarations (« mention EN PLACE »),
+# et une case « Conforme » que seul un humain coche. Ces deux-la ne suffisent
+# pas : le registre declarait la mention du Copilote Sentinel EN PLACE alors
+# que la page ne la portait pas — une declaration ne se perime pas toute
+# seule quand le code change.
+#
+# Ce module MESURE donc ce qui est mesurable, au moment de la requete, sur
+# les artefacts reellement servis :
+#   - les fichiers HTML sont relus du disque A CHAQUE verification — ce sont
+#     eux que le serveur sert ; verifier une copie en memoire d'un autre age
+#     reviendrait a verifier un souvenir ;
+#   - le marquage des documents est mesure en GENERANT un document et en
+#     lisant ses proprietes — pas en faisant confiance au code qui promet.
+#
+# CE QUE LA MESURE NE FAIT PAS : cocher « Conforme ». La case reste une
+# attestation humaine ; la mesure dit si l'artefact porte la mesure declaree,
+# et surtout quand l'attestation et l'artefact se contredisent. Une exception
+# d'art. 50.4 (controle editorial) n'est PAS mesurable par une machine : elle
+# est rendue comme telle, jamais convertie en vert.
+# ══════════════════════════════════════════════════════════
+
+_IA50_ICI = os.path.dirname(os.path.abspath(__file__))
+
+
+def _ia50_page(nom):
+    """Le fichier HTML tel qu'il sera servi, relu du disque a chaque appel."""
+    try:
+        with open(os.path.join(_IA50_ICI, nom), encoding='utf-8') as f:
+            return f.read()
+    except Exception:
+        return None
+
+
+def _ia50_mesure_mention_chat(page, nom):
+    """La mention d'IA de l'art. 50.1, dans le panneau de chat de la page."""
+    if page is None:
+        return {'statut': 'non-mesurable', 'preuve': nom + ' introuvable sur le serveur'}
+    if 'interagissez avec une IA' in page and '2024/1689' in page:
+        return {'statut': 'conforme',
+                'preuve': 'mention « Vous interagissez avec une IA » presente dans ' + nom
+                          + ', avec la reference au Regl. (UE) 2024/1689'}
+    return {'statut': 'non-conforme',
+            'preuve': nom + ' ne porte pas la mention « Vous interagissez avec une IA » : '
+                      'la personne n\'est pas informee des la premiere interaction (art. 50.1)'}
+
+
+def _ia50_mesure_bandeau_explorateur(page):
+    """Le bandeau AI GENERATED sur la synthese de l'explorateur."""
+    if page is None:
+        return {'statut': 'non-mesurable', 'preuve': 'sentinel.html introuvable'}
+    if 'AI GENERATED' in page:
+        return {'statut': 'conforme',
+                'preuve': 'bandeau « AI GENERATED » present dans le rendu de la synthese '
+                          '(sentinel.html)'}
+    return {'statut': 'non-conforme',
+            'preuve': 'aucun bandeau « AI GENERATED » dans sentinel.html : la synthese '
+                      'generee serait servie sans etiquette'}
+
+
+def _ia50_mesure_documents():
+    """Genere un document Word minimal marque IA et LIT ses proprietes.
+
+    C'est la seule preuve honnete : le code peut promettre un marquage et ne
+    plus l'apposer ; le document, lui, porte ou ne porte pas ses proprietes."""
+    try:
+        import io
+        import zipfile
+        import livrables_export
+        blob = livrables_export.build_docx(
+            '# Controle de marquage\n\nDocument de verification, jamais distribue.\n',
+            {'ia': True, 'label': 'Controle art. 50', 'model': 'controle'})
+        with zipfile.ZipFile(io.BytesIO(blob)) as z:
+            core = z.read('docProps/core.xml').decode('utf-8', 'replace')
+        marque = livrables_export.MARQUE_IA in core
+        ref = 'art. 50' in core or '2024/1689' in core
+        if marque and ref:
+            return {'statut': 'conforme',
+                    'preuve': 'document genere a l\'instant : proprietes du fichier '
+                              'portant « ' + livrables_export.MARQUE_IA + ' » et la '
+                              'reference a l\'article 50 (docProps/core.xml lu, pas suppose)'}
+        return {'statut': 'non-conforme',
+                'preuve': 'document genere a l\'instant : proprietes SANS '
+                          + ('reference art. 50' if marque else 'marque IA')
+                          + ' — le marquage lisible par machine a disparu'}
+    except Exception as e:
+        return {'statut': 'non-mesurable',
+                'preuve': 'generation de controle impossible : ' + str(e)[:120]}
+
+
+def _ia50_mesure_actualites(page):
+    """L'exception 50.4 exige une responsabilite editoriale PUBLIEE. La
+    relecture humaine elle-meme n'est pas mesurable par une machine ; la
+    publication de la mention l'est."""
+    if page is None:
+        return {'statut': 'non-mesurable', 'preuve': 'actualites.html introuvable'}
+    if 'responsabilité éditoriale' in page or 'responsabilite editoriale' in page:
+        return {'statut': 'partiel',
+                'preuve': 'la mention de responsabilite editoriale est publiee sur la page '
+                          'Actualites — la realite de l\'examen humain reste une attestation, '
+                          'qu\'aucune machine ne peut mesurer (art. 50.4)'}
+    return {'statut': 'non-conforme',
+            'preuve': 'aucune mention de responsabilite editoriale sur la page Actualites : '
+                      'l\'exception de l\'art. 50.4 est invoquee sans etre documentee — '
+                      'a defaut, l\'etiquetage s\'impose'}
+
+
+# Quelle mesure sert quelle ligne du registre. On rattache par motif sur le nom
+# du systeme : les lignes sont modifiables par l'interface, et un rattachement
+# par identifiant se romprait a la premiere re-creation de la table.
+_IA50_MESURES = [
+    {'cle': 'chat_public',
+     'motif': r'site public',
+     'quoi': 'Mention d\'IA des la premiere interaction — chat du site public',
+     'mesure': lambda: _ia50_mesure_mention_chat(_ia50_page('index.html'), 'index.html')},
+    {'cle': 'chat_sentinel',
+     'motif': r'[Cc]opilote|Sentinel \(chat|chat plateforme',
+     'quoi': 'Mention d\'IA des la premiere interaction — assistant Sentinel',
+     'mesure': lambda: _ia50_mesure_mention_chat(_ia50_page('sentinel.html'), 'sentinel.html')},
+    {'cle': 'explorateur',
+     'motif': r'[Ss]ynthese de la base|explorateur',
+     'quoi': 'Bandeau « AI GENERATED » sur la synthese de l\'explorateur',
+     'mesure': lambda: _ia50_mesure_bandeau_explorateur(_ia50_page('sentinel.html'))},
+    {'cle': 'documents',
+     'motif': r'[Rr]apports generes|[Aa]nalyses generees',
+     'quoi': 'Marquage lisible par machine dans les documents exportes',
+     'mesure': _ia50_mesure_documents},
+    {'cle': 'actualites',
+     'motif': r'[Aa]ctualites',
+     'quoi': 'Responsabilite editoriale publiee (exception art. 50.4)',
+     'mesure': lambda: _ia50_mesure_actualites(_ia50_page('actualites.html'))},
+]
+
+
+@app.route('/api/ia50/verification', methods=['GET'])
+def ia50_verification():
+    """Mesure, au moment de la requete, les obligations de l'article 50 qui
+    sont mesurables sur les artefacts reellement servis. Ne coche jamais la
+    case « Conforme » : la mesure et l'attestation restent deux colonnes."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    mesures = []
+    for m in _IA50_MESURES:
+        try:
+            r = m['mesure']()
+        except Exception as e:
+            r = {'statut': 'non-mesurable', 'preuve': 'mesure en erreur : ' + str(e)[:120]}
+        mesures.append({'cle': m['cle'], 'quoi': m['quoi'], 'motif': m['motif'],
+                        'statut': r['statut'], 'preuve': r['preuve']})
+    # LES CONTRADICTIONS : une ligne ATTESTEE conforme dont la mesure dit le
+    # contraire. C'est exactement ce qu'une verification en temps reel doit
+    # faire remonter en premier.
+    contradictions = []
+    try:
+        conn = registre_get_db(); cur = conn.cursor()
+        _ia50_table(cur, conn)
+        cur.execute('SELECT * FROM ia50_usages ORDER BY id')
+        lignes = [dict(r) for r in cur.fetchall()]
+        try: conn.close()
+        except Exception: pass
+        for m in mesures:
+            for l in lignes:
+                if _re.search(m['motif'], l.get('systeme') or ''):
+                    m.setdefault('lignes', []).append(l.get('id'))
+                    if m['statut'] == 'non-conforme' and l.get('conforme'):
+                        contradictions.append({
+                            'ligne': l.get('id'), 'systeme': l.get('systeme'),
+                            'mesure': m['cle'],
+                            'dit': 'attestee conforme, mais la mesure dit : ' + m['preuve']})
+    except Exception:
+        pass
+    non_conformes = [m for m in mesures if m['statut'] == 'non-conforme']
+    return jsonify({'ok': True,
+                    'mesure_le': datetime.utcnow().isoformat(),
+                    'mesures': mesures,
+                    'non_conformes': len(non_conformes),
+                    'contradictions': contradictions,
+                    'note': 'La mesure ne coche jamais « Conforme » : la case reste une '
+                            'attestation humaine. Elle dit si l\'artefact servi porte la '
+                            'mesure declaree, et quand les deux se contredisent.'})
 
 
 @app.route('/api/ia50/usages', methods=['GET', 'POST'])
@@ -13102,6 +13313,10 @@ def ia50_reset():
     conn = registre_get_db(); cur = conn.cursor()
     _ia50_table(cur, conn)
     cur.execute('DELETE FROM ia50_usages')
+    # La ligne-temoin part avec les donnees : ICI le re-amorcage est demande,
+    # c'est tout l'objet de la route.
+    cur.execute(registre_sql('DELETE FROM ia50_meta WHERE cle=%s',
+                             'DELETE FROM ia50_meta WHERE cle=?'), ('seme',))
     conn.commit()
     _ia50_table(cur, conn)
     try: conn.close()
