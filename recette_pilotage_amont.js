@@ -71,9 +71,9 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
     null, { timeout: 60000 });
 
   // ── 1 ─────────────────────────────────────────────────────────────────────
-  titre('1. Le raccourci n’apparaît que lorsqu’il y a de quoi reprendre');
+  titre('1. La reprise se fait SEULE, dès qu’il y a de quoi reprendre');
 
-  ok('avant tout calcul, rien à reprendre : le bouton reste caché',
+  ok('avant tout calcul, rien à reprendre : le rattrapage reste caché',
      await pg.evaluate(() => document.getElementById('pil-pre').hidden));
 
   const nInd = await pg.evaluate(() =>
@@ -94,7 +94,20 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
   await pg.waitForFunction(() => window.FIN_DERNIER && window.FIN_DERNIER(),
     null, { timeout: 60000 });
   await pg.waitForTimeout(1500);
-  ok('l’enveloppe calculée fait apparaître le bouton',
+
+  /* LE CONTRÔLE QUI PORTE LA DEMANDE. La reprise était offerte derrière un
+     bouton : le lecteur qui suit le fil arrivait sur cinq lignes vides sans
+     savoir qu'un clic ailleurs les aurait remplies — et pour lui, le tableau
+     de bord ne reprenait rien. AUCUN CLIC N'EST FAIT ICI : le calcul
+     d'enveloppe doit suffire. */
+  const seul = await pg.evaluate(() =>
+    [...document.querySelectorAll('#pil-form input[data-ch="valeur"], '
+      + '#pil-form input[data-ch="cible"]')]
+      .filter(e => (e.value || '').trim() !== '')
+      .map(e => e.getAttribute('data-pi') + '.' + e.getAttribute('data-ch')));
+  ok('LE CALCUL D’ENVELOPPE REMPLIT LE TABLEAU — sans le moindre clic de plus',
+     seul.length >= 3, seul.join(', ') || 'aucune ligne remplie');
+  ok('…le rattrapage reste offert, pour revenir aux valeurs de l’étude ensuite',
      await pg.evaluate(() => document.getElementById('pil-pre').hidden === false));
 
   await pg.evaluate(() => document.getElementById('moe-go').click());
@@ -102,12 +115,15 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
     null, { timeout: 60000 });
   ok('…et le chiffrage des honoraires est publié pour les blocs qui en dépendent',
      await pg.evaluate(() => !!window.MOE_DERNIER().taux_effectif_pct));
+  await pg.waitForTimeout(700);
+  ok('…lequel remplit à son tour la part de maîtrise d’œuvre, toujours sans clic',
+     await pg.evaluate(() => {
+       const e = document.querySelector('#pil-form input[data-pi="part_moe"][data-ch="valeur"]');
+       return !!e && (e.value || '').trim() !== '';
+     }));
 
   // ── 2 ─────────────────────────────────────────────────────────────────────
   titre('2. Chaque valeur reprise correspond à SA source, recalculée à part');
-
-  await pg.evaluate(() => document.getElementById('pil-pre').click());
-  await pg.waitForTimeout(500);
 
   const lu = async () => pg.evaluate(() => {
     const val = {};
@@ -228,9 +244,8 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
     const nom = b.textContent.trim();
     b.click();
     document.getElementById('moe-go').click();
-    await new Promise(r => setTimeout(r, 2600));
-    document.getElementById('pil-pre').click();
-    await new Promise(r => setTimeout(r, 400));
+    /* AUCUN CLIC DE REPRISE : le nouveau chiffrage doit se propager seul. */
+    await new Promise(r => setTimeout(r, 3000));
     return nom;
   });
   const v2 = await lu();
@@ -246,7 +261,58 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
      (apres.cible - apres.valeur).toFixed(2) + ' point(s) d’écart');
 
   // ── 6 ─────────────────────────────────────────────────────────────────────
-  titre('6. Le tableau de bord se calcule sur ces reprises');
+  titre('6. Une mesure saisie survit à la reprise automatique');
+
+  /* LA CONTREPARTIE DE L'AUTOMATISME. La reprise repasse à chaque recalcul et
+     à chaque changement de pays : sans garde, elle effacerait une mesure de
+     terrain que le lecteur vient de taper. C'est le seul endroit de ce module
+     où une valeur RÉELLE peut entrer — un tableau de bord qui l'écrase perd
+     tout ce qui fait sa raison d'être. */
+  const saisi = await pg.evaluate(async () => {
+    const e = document.querySelector('#pil-form input[data-pi="pue_constate"][data-ch="valeur"]');
+    e.value = '1,32';
+    e.dispatchEvent(new Event('input', { bubbles: true }));
+    const k = document.querySelector('#pil-form input[data-pi="enveloppe_kw"][data-ch="valeur"]');
+    const reprisAvant = (k.value || '').trim();
+    document.dispatchEvent(new CustomEvent('fin-calcul'));
+    await new Promise(r => setTimeout(r, 700));
+    return { pue: (e.value || '').trim(), marque: e.dataset.auto,
+             reprisAvant: reprisAvant,
+             reprisApres: (k.value || '').trim() };
+  });
+  ok('LE PUE MESURÉ SUR SITE N’EST PAS EFFACÉ par une nouvelle reprise',
+     saisi.pue === '1,32', '« ' + saisi.pue + ' »');
+  ok('…et la ligne cesse d’être marquée comme reprise',
+     saisi.marque === '0', 'auto=' + saisi.marque);
+  ok('…tandis que les lignes NON saisies continuent de suivre l’étude',
+     saisi.reprisApres === saisi.reprisAvant && saisi.reprisApres !== '',
+     saisi.reprisAvant + ' → ' + saisi.reprisApres);
+
+  /* LE RATTRAPAGE REND CE QUE L'ÉTUDE SAIT — il n'EFFACE pas ce qu'elle ignore.
+     Ce contrôle attendait d'abord que le PUE mesuré redevienne vide : c'était
+     demander au bouton de détruire la seule donnée de terrain de la page, donc
+     exactement la faute que la section ci-dessus interdit. Il vérifie
+     maintenant ce qui a un sens — une ligne DÉDUITE, modifiée à la main,
+     revient à sa valeur d'étude ; la ligne MESURÉE, elle, ne bouge pas. */
+  const rattrape = await pg.evaluate(async () => {
+    const k = document.querySelector('#pil-form input[data-pi="enveloppe_kw"][data-ch="valeur"]');
+    const etude = (k.value || '').trim();
+    k.value = '4242';
+    k.dispatchEvent(new Event('input', { bubbles: true }));
+    document.getElementById('pil-pre').click();
+    await new Promise(r => setTimeout(r, 500));
+    const e = document.querySelector('#pil-form input[data-pi="pue_constate"][data-ch="valeur"]');
+    return { etude: etude, revenu: (k.value || '').trim(),
+             pue: (e.value || '').trim() };
+  });
+  ok('le rattrapage REND une ligne déduite qu’on avait modifiée',
+     rattrape.revenu === rattrape.etude && rattrape.etude !== '',
+     '4242 → ' + rattrape.revenu + ' (valeur d’étude ' + rattrape.etude + ')');
+  ok('…SANS détruire la mesure de terrain, que l’étude ne sait pas produire',
+     rattrape.pue === '1,32', '« ' + rattrape.pue + ' »');
+
+  // ── 7 ─────────────────────────────────────────────────────────────────────
+  titre('7. Le tableau de bord se calcule sur ces reprises');
 
   await pg.evaluate(() => document.getElementById('pil-go').click());
   await pg.waitForFunction(() => document.querySelectorAll('#pil-out .pil-c').length > 0,
@@ -264,10 +330,17 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
   ok('la carte d’enveloppe porte la valeur reprise, pas un champ vide',
      !!cEnv && new RegExp(String(attendu.env_kw)).test(cEnv.valeur),
      cEnv && cEnv.valeur.trim());
+  /* LA MESURE DE TERRAIN FAIT PARLER L'INDICATEUR — et c'est la démonstration
+     que le refus de le pré-remplir compte. La section précédente a saisi un
+     PUE constaté de 1,32 contre une cible de conception de 1,175 : la carte
+     doit désormais SIGNALER cet écart. Pré-rempli depuis la conception, elle
+     aurait affiché « conforme » à jamais et n'aurait jamais rien signalé. */
   const cPue = cartes.filter(c => /PUE/i.test(c.titre))[0];
-  ok('la carte du PUE reste « non mesurée » — et NON pas conforme',
-     !!cPue && /non_mesure/.test(cPue.etat) && !/conforme/.test(cPue.etat),
-     cPue && cPue.etat);
+  ok('la mesure saisie FAIT PARLER la carte du PUE — elle ne dort plus',
+     !!cPue && !/non_mesure/.test(cPue.etat), cPue && cPue.etat);
+  ok('…et elle n’est PAS « conforme » : l’écart au PUE de conception est signalé',
+     !!cPue && !/conforme/.test(cPue.etat) && /surveiller|alerte/.test(cPue.etat),
+     cPue && cPue.etat + ' — ' + (cPue.lecture || '').slice(0, 90));
   const cRac = cartes.filter(c => /raccordement/i.test(c.titre))[0];
   ok('le raccordement n’alerte pas : son écart reste dans son incertitude',
      !!cRac && /indetermine/.test(cRac.etat), cRac && cRac.etat);

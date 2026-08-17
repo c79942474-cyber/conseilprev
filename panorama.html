@@ -3165,8 +3165,10 @@ engagements publics) sont imputés nominativement.</div>
          être remplis d'office. Le bouton n'apparaît que lorsqu'il y a de quoi
          déduire, et il DIT ce qu'il a rempli, d'où, et ce qu'il a laissé vide. -->
     <div class="pil-barre">
+      <!-- LA REPRISE SE FAIT SEULE : ce bouton n'est plus qu'un rattrapage,
+           pour revenir aux valeurs de l'étude après les avoir modifiées. -->
       <button type="button" class="pil-pre" id="pil-pre" hidden>
-        ⤵ Reprendre les calculs précédents</button>
+        ↻ Revenir aux valeurs de l’étude</button>
     </div>
     <p class="pil-prerempli" id="pil-prerempli" hidden></p>
     <div class="mat-cmd">
@@ -12272,6 +12274,10 @@ if(window.parent&&window.parent!==window){
         + '<td><input type="text" data-pi="' + esc(i.cle) + '" data-ch="serie" placeholder="ex. 12, 13, 15, 14"></td></tr>';
     });
     z.innerHTML = h + "</tbody></table>";
+    /* LE TABLEAU VIENT D'ÊTRE (RE)CONSTRUIT : s'il y a de quoi reprendre, on
+       reprend tout de suite. Sans cet appel, un référentiel arrivant APRÈS le
+       calcul d'enveloppe laisserait les lignes vides jusqu'au calcul suivant. */
+    preMaj();
   }
 
   function mesures(){
@@ -12431,7 +12437,7 @@ if(window.parent&&window.parent!==window){
     avancement_etudes: "se constate sur pièces remises"
   };
 
-  function appliquer(){
+  function appliquer(force){
     var r = deduire();
     if(!r) return;
     var champs = document.querySelectorAll("#pil-form input");
@@ -12439,7 +12445,14 @@ if(window.parent&&window.parent!==window){
       var k = e.getAttribute("data-pi"), c = e.getAttribute("data-ch");
       var d = r.valeurs[k];
       if(d && d[c] != null){
+        /* CE QUE LE LECTEUR A SAISI N'EST JAMAIS ÉCRASÉ. La reprise étant
+           désormais automatique, elle repasse à chaque recalcul d'enveloppe et
+           à chaque changement de pays : sans cette garde, elle effacerait une
+           mesure de terrain que le lecteur venait de taper — exactement ce
+           qu'un tableau de bord ne doit jamais faire. */
+        if(!force && String(e.value).trim() !== "" && e.dataset.auto !== "1") return;
         e.value = String(d[c]).replace(".", ",");
+        e.dataset.auto = "1";
         e.classList.add("pil-dedu");
         e.setAttribute("title", "Repris des calculs de cette page — modifiable.");
         /* UNE INCERTITUDE NULLE NE SE TRANSMET PAS. Le taux d'honoraires vaut
@@ -12469,10 +12482,17 @@ if(window.parent&&window.parent!==window){
     }
   }
 
+  /* LA REPRISE EST AUTOMATIQUE — c'était le sens de la demande, et un bouton
+     n'y répond pas. Elle était offerte derrière « Reprendre les calculs
+     précédents » : le lecteur qui suit le fil arrivait donc sur cinq lignes
+     vides, sans savoir qu'un clic ailleurs les aurait remplies. Le bouton
+     reste, mais comme RATTRAPAGE : il sert à revenir aux valeurs de l'étude
+     après les avoir modifiées à la main. */
   function preMaj(){
+    var dispo = !!amont();
     var b = $("pil-pre");
-    if(!b) return;
-    b.hidden = !amont();
+    if(b) b.hidden = !dispo;
+    if(dispo) appliquer();
   }
 
   function rendre(d){
@@ -12576,8 +12596,22 @@ if(window.parent&&window.parent!==window){
     document.addEventListener("fin-calcul", preMaj);
     document.addEventListener("fin-pays", preMaj);
     document.addEventListener("moe-calcul", preMaj);
+    /* LE BOUTON FORCE la reprise : sans cela, il ne ferait plus rien dès que
+       le lecteur a modifié une ligne — c'est-à-dire précisément dans le seul
+       cas où il sert encore. */
     var pre = $("pil-pre");
-    if(pre) pre.addEventListener("click", appliquer);
+    if(pre) pre.addEventListener("click", function(){ appliquer(true); });
+    /* TAPER DANS UNE LIGNE LA SOUSTRAIT À LA REPRISE. L'écoute est posée sur le
+       conteneur : le tableau est reconstruit à l'arrivée du référentiel, et
+       une écoute par champ viserait des éléments qui n'existent pas encore. */
+    var pf = $("pil-form");
+    if(pf) pf.addEventListener("input", function(ev){
+      var t = ev.target;
+      if(t && t.getAttribute && t.getAttribute("data-pi")){
+        t.dataset.auto = "0";
+        t.classList.remove("pil-dedu");
+      }
+    });
 
     $("pil-go").addEventListener("click", function(){
       /* LE NIVEAU DE MATURITÉ EST REPRIS DU DIAGNOSTIC S'IL A ÉTÉ ÉTABLI —
