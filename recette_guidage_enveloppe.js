@@ -81,17 +81,27 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
   ok('…et elle porte sa propre fermeture', !!f0 && f0.fermeture);
 
   // ── 2 ────────────────────────────────────────────────────────────────────
-  titre('2. Ce qui attend un clic bat en bleu, ce qui est validé s’encadre de vert');
+  titre('2. Les neuf étapes sont des BOUTONS : bleus battants, verts une fois faits');
 
+  /* CE QUE CETTE SECTION SUIT DÉSORMAIS. L'état était porté par un disque de
+     vingt pixels dans une carte blanche : de loin — la distance à laquelle on
+     embrasse les neuf d'un coup — neuf rectangles blancs se ressemblent. Le
+     BOUTON ENTIER porte donc la couleur, et c'est lui qui bat. Ces contrôles
+     visaient le disque ; ils visent maintenant le bouton, sans quoi ils
+     testeraient un élément qui ne décide plus de rien. */
   const bat = await pg.evaluate(() => {
-    const lire = (sel) => [...document.querySelectorAll(sel)].map(e => {
-      const s = getComputedStyle(e);
-      const b = e.closest('button');
-      const sb = b ? getComputedStyle(b) : null;
-      return { nom: s.animationName, duree: s.animationDuration,
-               iter: s.animationIterationCount, fond: s.backgroundColor,
-               cadre: sb ? sb.borderTopColor : null,
-               epaisseur: sb ? parseFloat(sb.borderTopWidth) : 0 };
+    const lire = (sel) => [...document.querySelectorAll(sel)].map(b => {
+      const sb = getComputedStyle(b);
+      const d = b.querySelector('.fin-e-n');
+      const sd = d ? getComputedStyle(d) : null;
+      const t = b.querySelector('.fin-e-c b');
+      return { nom: sb.animationName, duree: sb.animationDuration,
+               iter: sb.animationIterationCount, fond: sb.backgroundColor,
+               encre: t ? getComputedStyle(t).color : sb.color,
+               disque: sd ? sd.backgroundColor : null,
+               chiffre: sd ? sd.color : null,
+               cadre: sb.borderTopColor,
+               epaisseur: parseFloat(sb.borderTopWidth) || 0 };
     });
     /* On résout le jeton de charte EN L'APPLIQUANT : lu brut il vaut « #2D7A47 »
        alors que la bordure calculée vaut « rgb(45, 122, 71) », et comparer les
@@ -105,15 +115,15 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
       return c;
     };
     return {
-      reste: lire('#fin-fil .fin-e.reste .fin-e-n'),
-      cours: lire('#fin-fil .fin-e.cours .fin-e-n'),
-      fait: lire('#fin-fil .fin-e.fait .fin-e-n'),
+      reste: lire('#fin-fil .fin-e.reste button'),
+      cours: lire('#fin-fil .fin-e.cours button'),
+      fait: lire('#fin-fil .fin-e.fait button'),
       bleu: jeton('--blue'), vert: jeton('--green')
     };
   });
   ok('les étapes qui restent battent',
      bat.reste.length > 0 && bat.reste.every(x => x.nom !== 'none'),
-     bat.reste.length + ' pastille(s), animation ' + (bat.reste[0] || {}).nom);
+     bat.reste.length + ' bouton(s), animation ' + (bat.reste[0] || {}).nom);
   ok('l’étape COURANTE bat aussi, et différemment',
      bat.cours.length === 1 && bat.cours[0].nom !== 'none'
        && bat.cours[0].nom !== (bat.reste[0] || {}).nom,
@@ -139,27 +149,39 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
     if (h < 0) h += 360;
     return h >= 185 && h <= 255;
   };
-  ok('les cadrans en attente d’un clic sont BLEUS, pas gris',
+  ok('les boutons en attente d’un clic sont BLEUS, pas blancs',
      bat.reste.every(x => bleuit(x.fond)) && bat.cours.every(x => bleuit(x.fond)),
      'reste ' + (bat.reste[0] || {}).fond + ' · courante ' + (bat.cours[0] || {}).fond);
+  /* LE DISQUE S'INVERSE SUR FOND PLEIN : bleu sur bleu, il disparaîtrait. */
+  ok('…et leur disque s’inverse, pour ne pas se fondre dans le bouton',
+     bat.reste.every(x => !bleuit(x.disque)) && bat.cours.every(x => !bleuit(x.disque)),
+     'disque ' + (bat.reste[0] || {}).disque + ', chiffre ' + (bat.reste[0] || {}).chiffre);
 
   /* LE CADRE VERT. Il ne suffit pas qu'il soit vert quelque part : il doit
      être vert LÀ et nulle part ailleurs, sinon il ne distingue rien. */
   const memeCouleur = (a, b) => a && b
     && a.match(/[\d.]+/g).slice(0, 3).join() === b.match(/[\d.]+/g).slice(0, 3).join();
-  ok('les étapes validées portent un cadre VERT',
-     bat.fait.length > 0 && bat.fait.every(x => memeCouleur(x.cadre, bat.vert)),
-     bat.fait.length + ' validée(s), cadre ' + (bat.fait[0] || {}).cadre
+  ok('LES ÉTAPES VALIDÉES SONT VERTES — le bouton entier, pas un liseré',
+     bat.fait.length > 0 && bat.fait.every(x => memeCouleur(x.fond, bat.vert)),
+     bat.fait.length + ' validée(s), fond ' + (bat.fait[0] || {}).fond
        + ' pour --green ' + bat.vert);
-  ok('…et il est assez épais pour se voir à distance',
-     bat.fait.every(x => x.epaisseur >= 2), (bat.fait[0] || {}).epaisseur + 'px');
-  ok('…tandis que les étapes NON validées ne l’ont pas — sinon il ne dirait rien',
-     bat.reste.every(x => !memeCouleur(x.cadre, bat.vert))
-       && bat.cours.every(x => !memeCouleur(x.cadre, bat.vert)),
-     'reste ' + (bat.reste[0] || {}).cadre + ' · courante ' + (bat.cours[0] || {}).cadre);
+  ok('…leur disque aussi s’inverse, chiffre vert sur blanc',
+     bat.fait.every(x => memeCouleur(x.chiffre, bat.vert)),
+     'disque ' + (bat.fait[0] || {}).disque + ', chiffre ' + (bat.fait[0] || {}).chiffre);
+  ok('…tandis que les étapes NON validées ne sont PAS vertes — sinon rien ne dirait',
+     bat.reste.every(x => !memeCouleur(x.fond, bat.vert))
+       && bat.cours.every(x => !memeCouleur(x.fond, bat.vert)),
+     'reste ' + (bat.reste[0] || {}).fond + ' · courante ' + (bat.cours[0] || {}).fond);
+  /* L'ÉTAPE COURANTE NE SE FOND PAS DANS LES SUIVANTES : sur neuf boutons du
+     même bleu, il faut encore savoir lequel est le prochain. */
+  ok('…et l’étape courante se distingue par un liseré, malgré le même bleu',
+     bat.cours.length === 1 && bat.cours[0].epaisseur >= 2
+       && bat.reste.every(x => x.epaisseur < 2),
+     'courante ' + (bat.cours[0] || {}).epaisseur + 'px contre '
+       + (bat.reste[0] || {}).epaisseur + 'px');
 
   // ── 3 ────────────────────────────────────────────────────────────────────
-  titre('3. Sécurité : cadence bornée, et le chiffre lisible à CHAQUE phase');
+  titre('3. Sécurité : cadence bornée, et le LIBELLÉ lisible à CHAQUE phase');
 
   const cycles = [...bat.reste, ...bat.cours].map(x => parseFloat(x.duree));
   const plusRapide = Math.min.apply(null, cycles.concat([
@@ -174,10 +196,17 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
      plusRapide >= 1.0, plusRapide + ' s');
 
   /* LE CONTRÔLE QUI PROTÈGE LE PLUS. Faire varier l'opacité est le geste
-     évident pour « faire clignoter » — et il rend le chiffre illisible une
+     évident pour « faire clignoter » — et il rend le texte illisible une
      demi-seconde sur deux. On relit donc les images-clés elles-mêmes, on
      résout les variables de charte en les appliquant à une sonde, et on
-     mesure le contraste fond/chiffre À CHAQUE PHASE. */
+     mesure le contraste À CHAQUE PHASE.
+
+     LE BATTEMENT PORTE MAINTENANT SUR LE BOUTON ENTIER : ce qui doit rester
+     lisible n'est plus un chiffre sur un disque, mais le TITRE et le
+     SOUS-TITRE de l'étape sur le fond du bouton. Le texte, lui, garde sa
+     couleur d'un bout à l'autre — la faire varier ferait clignoter les mots
+     eux-mêmes. On mesure donc les deux encres réellement appliquées contre
+     chacun des fonds du cycle. */
   const phases = await pg.evaluate((noms) => {
     const lum = (c) => {
       const v = c.match(/[\d.]+/g).slice(0, 3).map(Number).map(x => {
@@ -194,6 +223,13 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
       let rr; try { rr = ss.cssRules } catch (e) { continue }
       for (const r of rr) if (r.type === 7 && noms.includes(r.name)) kfs.push(r);
     }
+    /* LES DEUX ENCRES RÉELLEMENT APPLIQUÉES au titre et au sous-titre : c'est
+       contre elles que le fond doit tenir, pas contre une valeur supposée. */
+    const b0 = document.querySelector('#fin-fil .fin-e button');
+    const encres = b0
+      ? [getComputedStyle(b0.querySelector('.fin-e-c b')).color,
+         getComputedStyle(b0.querySelector('.fin-e-c i')).color]
+      : ['rgb(255, 255, 255)'];
     const sonde = document.createElement('span');
     document.body.appendChild(sonde);
     const out = kfs.map(kf => ({
@@ -203,10 +239,11 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
         const s = getComputedStyle(sonde);
         return { cle: k.keyText,
                  declareFond: !!(k.style.background || k.style.backgroundColor),
-                 declareEncre: !!k.style.color,
                  declareOpacite: !!k.style.opacity,
-                 fond: s.backgroundColor, encre: s.color,
-                 contraste: contraste(s.backgroundColor, s.color) };
+                 fond: s.backgroundColor,
+                 encre: encres.join(' + '),
+                 contraste: Math.min.apply(null,
+                   encres.map(e => contraste(s.backgroundColor, e))) };
       })
     }));
     sonde.remove();
@@ -217,19 +254,19 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
   ok('les deux battements sont bien relus depuis la feuille de style',
      phases.length === 2 && toutes.length >= 4,
      phases.map(p => p.nom + ' (' + p.images.length + ' images)').join(' · '));
-  ok('LE DISQUE ET LE CHIFFRE CHANGENT TOUS LES DEUX à chaque image',
-     toutes.length > 0 && toutes.every(i => i.declareFond && i.declareEncre),
-     toutes.filter(i => !(i.declareFond && i.declareEncre)).length + ' image(s) incomplète(s)');
-  ok('…et le chiffre change vraiment de couleur d’une phase à l’autre',
-     phases.every(p => new Set(p.images.map(i => i.encre)).size >= 2),
-     phases.map(p => p.nom + ' : ' + [...new Set(p.images.map(i => i.encre))].length
-       + ' encre(s)').join(' · '));
+  ok('CHAQUE IMAGE PEINT LE FOND — sans quoi le bouton ne battrait pas',
+     toutes.length > 0 && toutes.every(i => i.declareFond),
+     toutes.filter(i => !i.declareFond).length + ' image(s) sans fond');
+  ok('…et le fond change vraiment d’une phase à l’autre',
+     phases.every(p => new Set(p.images.map(i => i.fond)).size >= 2),
+     phases.map(p => p.nom + ' : ' + [...new Set(p.images.map(i => i.fond))].length
+       + ' fond(s)').join(' · '));
   const pire = Math.min.apply(null, toutes.map(i => i.contraste));
-  ok('LE CHIFFRE RESTE LISIBLE À CHAQUE PHASE — 4,5:1 au minimum',
+  ok('LE LIBELLÉ RESTE LISIBLE À CHAQUE PHASE — 4,5:1 au minimum',
      pire >= 4.5,
      'phase la plus faible : ' + pire.toFixed(2) + ':1 — '
        + toutes.map(i => i.cle + ' ' + i.contraste.toFixed(2)).join(' · '));
-  ok('…et aucun battement ne se joue sur l’opacité, qui efface le chiffre',
+  ok('…et aucun battement ne se joue sur l’opacité, qui efface le texte',
      toutes.every(i => !i.declareOpacite),
      toutes.filter(i => i.declareOpacite).length + ' image(s) à opacité variable');
 
@@ -475,20 +512,21 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
       const [h, l] = [lum(a), lum(b)].sort((p, q) => q - p);
       return (h + 0.05) / (l + 0.05);
     };
-    const lire = (sel) => [...document.querySelectorAll(sel)].map(e => {
-      const s = getComputedStyle(e);
-      const b = e.closest('button');
-      return { anim: s.animationName, fond: s.backgroundColor, encre: s.color,
+    const lire = (sel) => [...document.querySelectorAll(sel)].map(b => {
+      const s = getComputedStyle(b);
+      const t = b.querySelector('.fin-e-c b');
+      const encre = t ? getComputedStyle(t).color : s.color;
+      return { anim: s.animationName, fond: s.backgroundColor, encre: encre,
                opacite: parseFloat(s.opacity),
-               contraste: contraste(s.backgroundColor, s.color),
-               cadre: b ? getComputedStyle(b).borderTopColor : null };
+               contraste: contraste(s.backgroundColor, encre),
+               cadre: s.backgroundColor };
     });
     const f = document.getElementById('fin-fleche-guide');
     return {
-      pastilles: lire('#fin-fil .fin-e-n'),
-      attente: lire('#fin-fil .fin-e.reste .fin-e-n, #fin-fil .fin-e.cours .fin-e-n'),
-      fait: lire('#fin-fil .fin-e.fait .fin-e-n'),
-      cours: lire('#fin-fil .fin-e.cours .fin-e-n'),
+      pastilles: lire('#fin-fil .fin-e button'),
+      attente: lire('#fin-fil .fin-e.reste button, #fin-fil .fin-e.cours button'),
+      fait: lire('#fin-fil .fin-e.fait button'),
+      cours: lire('#fin-fil .fin-e.cours button'),
       fleche: f ? getComputedStyle(f).animationName : null,
       flechePresente: !!f
     };
@@ -496,7 +534,7 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
   const memeVert = (c) => c && bat.vert
     && c.match(/[\d.]+/g).slice(0, 3).join()
        === bat.vert.match(/[\d.]+/g).slice(0, 3).join();
-  ok('aucune pastille ne bat', immobile.pastilles.every(x => x.anim === 'none'),
+  ok('aucun bouton d’étape ne bat', immobile.pastilles.every(x => x.anim === 'none'),
      immobile.pastilles.filter(x => x.anim !== 'none').map(x => x.anim).join(', ')
        || 'toutes immobiles');
   ok('la flèche ne bat pas non plus',
@@ -507,17 +545,17 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
   /* CE QUI EST REFUSÉ, C'EST LE MOUVEMENT — PAS L'INFORMATION. Les cadrans en
      attente gardent leur bleu et leur lisibilité, et le cadre vert du validé
      ne dépend d'aucune animation : il doit survivre tel quel. */
-  ok('les cadrans en attente gardent leur bleu, sans être atténués',
+  ok('les boutons en attente gardent leur bleu plein, sans être atténués',
      immobile.attente.length > 0
        && immobile.attente.every(x => bleuit(x.fond) && x.opacite === 1),
      immobile.attente.map(x => x.fond + ' à ' + x.opacite).slice(0, 2).join(' · '));
-  ok('…et leur chiffre reste lisible — 4,5:1 au minimum',
+  ok('…et leur libellé reste lisible — 4,5:1 au minimum',
      immobile.attente.every(x => x.contraste >= 4.5),
      'le plus faible : '
        + Math.min.apply(null, immobile.attente.map(x => x.contraste)).toFixed(2) + ':1');
-  ok('le cadre vert du validé survit au mouvement réduit',
+  ok('le vert du validé survit au mouvement réduit',
      immobile.fait.length > 0 && immobile.fait.every(x => memeVert(x.cadre)),
-     immobile.fait.length + ' validée(s), cadre ' + (immobile.fait[0] || {}).cadre);
+     immobile.fait.length + ' validée(s), fond ' + (immobile.fait[0] || {}).cadre);
 
   /* LES COMMANDES AUSSI : le battement est refusé, le REPÈRE ne l'est pas. */
   const cmdRed = await pg2.evaluate(() =>

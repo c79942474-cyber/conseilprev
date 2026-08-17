@@ -1100,24 +1100,42 @@ th .ttip{margin-left:5px}
 .fin-fil-l{list-style:none;margin:10px 0 0;padding:0;display:flex;
   gap:4px;align-items:stretch;flex-wrap:wrap}
 .fin-e{flex:1 1 190px;min-width:0}
+/* ── LES NEUF ÉTAPES SONT DES BOUTONS PLEINS ───────────────────────────────
+   Elles étaient des cartes blanches où seule une petite pastille portait la
+   couleur. De loin — la distance à laquelle on embrasse les neuf d'un coup —
+   neuf rectangles blancs se ressemblent, et l'état ne se lisait qu'en
+   cherchant un disque de vingt pixels. La carte ENTIÈRE porte donc l'état,
+   dans la même forme que la pastille flottante qui guide plus bas : fond
+   plein, texte blanc, coins arrondis.
+
+   LE DISQUE S'INVERSE. Sur un fond bleu, un disque bleu disparaît : il devient
+   blanc, et c'est le CHIFFRE qui porte la couleur d'état — bleu tant qu'il
+   reste, vert une fois fait. Il garde ainsi son rôle de repère sans lutter
+   contre le fond. */
 .fin-e button{all:unset;box-sizing:border-box;display:flex;gap:8px;width:100%;
-  height:100%;cursor:pointer;padding:8px 10px;border-radius:6px;
-  border:1px solid var(--rule);background:var(--white)}
-.fin-e button:hover{border-color:var(--ink)}
-.fin-e button:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+  height:100%;cursor:pointer;padding:9px 12px;border-radius:12px;
+  border:1px solid transparent;background:var(--blue);color:var(--white)}
+.fin-e button:hover{filter:brightness(1.12)}
+.fin-e button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .fin-e-n{flex:0 0 auto;width:20px;height:20px;border-radius:50%;
   display:inline-flex;align-items:center;justify-content:center;
-  font-family:var(--mono);font-size:11px;background:var(--rule);color:var(--ink)}
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  background:var(--white);color:var(--blue)}
 .fin-e-c{min-width:0}
-.fin-e-c b{display:block;font-size:11.5px;line-height:1.35}
-.fin-e-c i{display:block;font-style:normal;font-size:10.5px;color:var(--muted);
-  line-height:1.4;margin-top:2px}
+.fin-e-c b{display:block;font-size:11.5px;line-height:1.35;color:var(--white)}
+/* Le sous-titre est atténué, jamais effacé : 92 % de blanc tient 5,5:1 sur le
+   bleu et 4,7:1 sur le vert — au-dessus du seuil sur les deux fonds. */
+.fin-e-c i{display:block;font-style:normal;font-size:10.5px;
+  color:rgba(255,255,255,.92);line-height:1.4;margin-top:2px}
 /* FAIT ≠ VALIDÉ. Le vert dit « ce bloc a produit quelque chose », jamais « ce
    choix est bon » — le module ne juge aucun choix. */
-.fin-e.fait .fin-e-n{background:var(--green);color:#fff}
-.fin-e.cours button{border-color:var(--blue);border-width:2px;padding:7px 9px}
-.fin-e.cours .fin-e-n{background:var(--blue);color:#fff}
-.fin-e.reste .fin-e-c b{color:var(--muted)}
+.fin-e.fait button{background:var(--green)}
+.fin-e.fait .fin-e-n{background:var(--white);color:var(--green)}
+/* L'ÉTAPE COURANTE se distingue des suivantes par un liseré clair et une
+   ombre portée : sur neuf boutons du même bleu, il faut encore savoir lequel
+   est le prochain. */
+.fin-e.cours button{border-color:rgba(255,255,255,.85);border-width:2px;
+  padding:8px 11px;box-shadow:0 2px 10px rgba(30,99,168,.45)}
 .fin-e-fl{flex:0 0 auto;align-self:center;color:var(--muted2);font-size:13px;
   padding:0 1px}
 @media(max-width:860px){ .fin-e-fl{display:none} .fin-e{flex:1 1 100%} }
@@ -1202,34 +1220,30 @@ th .ttip{margin-left:5px}
    7,4:1 pour ce qui reste ; 6,2:1 et 5,8:1 pour l'étape courante). Rien ne
    s'efface jamais.
 
-   L'AMPLITUDE N'EST PAS LA FRÉQUENCE. Le disque en attente passe d'un bleu
-   très clair à un bleu franc — un écart large, pour que le battement se voie
-   à la distance où l'on embrasse les neuf étapes. Ce que borne la règle des
-   trois éclats, c'est la CADENCE, tenue à 0,55 Hz ; l'autre borne, celle des
-   grandes surfaces clignotantes, ne s'applique pas à neuf disques de 20 px.
+   LE BATTEMENT PORTE SUR LE BOUTON ENTIER, plus sur le seul disque. Il y en a
+   donc UN par étape au lieu de deux qui se disputaient l'œil, et il se voit à
+   la distance où l'on embrasse les neuf d'un coup — ce qu'un disque de vingt
+   pixels ne permettait pas. Ce que borne la règle des trois éclats, c'est la
+   CADENCE, tenue à 0,55 Hz.
 
    L'ÉTAPE COURANTE bat plus fort que les suivantes, et ne se confond pas avec
-   elles : elle seule porte le disque plein et le halo qui s'ouvre. Sur neuf
-   pastilles, neuf battements identiques ne désigneraient plus rien. */
+   elles : creux plus sombre, halo plus large, liseré clair. Sur neuf boutons,
+   neuf battements identiques ne désigneraient plus rien. */
 @keyframes fin-bat-reste{
-  0%,100% {background:#DCE9F7; color:var(--blue);
-           box-shadow:inset 0 0 0 1.5px var(--blue)}
-  50%     {background:#7FB0DC; color:var(--ink);
-           box-shadow:inset 0 0 0 1.5px rgba(30,99,168,.15)}
+  0%,100% {background:var(--blue); box-shadow:0 0 0 0 rgba(30,99,168,.45)}
+  50%     {background:#0E4E8C;     box-shadow:0 0 0 5px rgba(30,99,168,0)}
 }
 @keyframes fin-bat-cours{
-  0%,100% {background:var(--blue); color:#fff;
-           box-shadow:0 0 0 0 rgba(30,99,168,.55)}
-  50%     {background:#0E4E8C;     color:#BFD9F2;
-           box-shadow:0 0 0 7px rgba(30,99,168,0)}
+  0%,100% {background:var(--blue); box-shadow:0 2px 10px rgba(30,99,168,.45),
+                                              0 0 0 0 rgba(30,99,168,.75)}
+  50%     {background:#0A3E71;     box-shadow:0 2px 10px rgba(30,99,168,.45),
+                                              0 0 0 9px rgba(30,99,168,0)}
 }
 /* L'état posé hors animation est déjà le bon : si le battement est refusé —
-   mouvement réduit, animation coupée —, le disque reste bleu et le chiffre
+   mouvement réduit, animation coupée —, le bouton reste bleu et son libellé
    lisible. On ne s'appuie jamais sur l'animation pour PEINDRE. */
-.fin-e.reste .fin-e-n{background:#DCE9F7;color:var(--blue);
-  box-shadow:inset 0 0 0 1.5px var(--blue);
-  animation:fin-bat-reste 1.8s ease-in-out infinite}
-.fin-e.cours .fin-e-n{animation:fin-bat-cours 1.8s ease-in-out infinite}
+.fin-e.reste button{animation:fin-bat-reste 1.8s ease-in-out infinite}
+.fin-e.cours button{animation:fin-bat-cours 1.8s ease-in-out infinite}
 
 /* ── LES BOUTONS D'ACTION, MÊME LANGAGE QUE LES PASTILLES ──────────────────
    Bleu battant tant que l'étape reste à faire, vert et immobile une fois
@@ -1304,18 +1318,19 @@ th .ttip{margin-left:5px}
   cursor:pointer;opacity:.75;padding:2px 2px 2px 6px;line-height:1}
 .fin-fg-x:hover{opacity:1}
 /* MOUVEMENT RÉDUIT : plus rien ne bouge, et rien n'est perdu. La flèche reste,
-   sa direction reste lisible, le cadre vert des étapes validées reste — il ne
-   dépend d'aucune animation —, et les pastilles gardent leur couleur pleine.
-   Elles gardaient auparavant une opacité réduite « pour rappeler » qu'elles
+   sa direction reste lisible, le vert des étapes validées reste — il ne dépend
+   d'aucune animation —, et les boutons gardent leur couleur pleine. Les
+   pastilles portaient auparavant une opacité réduite « pour rappeler » qu'elles
    attendaient : cela ne rappelait rien et abaissait le contraste chez ceux qui
-   demandent justement moins d'effets. C'est l'anneau bleu qui les distingue. */
+   demandent justement moins d'effets. C'est le liseré clair de l'étape courante
+   qui la distingue, et il ne bouge pas. */
 @media (prefers-reduced-motion: reduce){
-  .fin-e.reste .fin-e-n,.fin-e.cours .fin-e-n,
+  .fin-e.reste button,.fin-e.cours button,
   .fin-fleche-guide,.fin-fg-a{animation:none}
-  .fin-e.cours .fin-e-n{background:var(--blue);color:#fff;
-    outline:2px solid var(--ink);outline-offset:1px}
-  .fin-e.reste .fin-e-n{background:#DCE9F7;color:var(--blue);
-    box-shadow:inset 0 0 0 1.5px var(--blue)}
+  .fin-e.cours button{background:var(--blue);
+    border-color:rgba(255,255,255,.9);border-width:2px;padding:8px 11px;
+    outline:2px solid var(--ink);outline-offset:2px}
+  .fin-e.reste button{background:var(--blue)}
 }
 @media(max-width:700px){ .fin-fleche-guide{right:12px;bottom:14px;font-size:12px} }
 
