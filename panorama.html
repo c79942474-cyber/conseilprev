@@ -1171,6 +1171,40 @@ th .ttip{margin-left:5px}
 .fin-pt{border:1px solid var(--rule);border-top:3px solid var(--blue);
   border-radius:0 0 7px 7px;padding:10px 12px;background:var(--white);
   font-size:11.5px;line-height:1.5}
+/* ── LES DEUX CHEMINS, QUAND ON ARRIVE À L'ÉTAPE 9 ─────────────────────────
+   Les deux cartes se ressemblaient trait pour trait et ne signalaient rien à
+   l'arrivée : le lecteur y parvenait après huit étapes et devait relire les
+   deux pavés pour comprendre qu'ils ne portent pas la même chose. Elles
+   s'encadrent donc de bleu et battent — à la cadence des pastilles, 1,8 s,
+   0,55 Hz — tant qu'aucun lien n'a été fabriqué.
+
+   LE BATTEMENT S'ARRÊTE DÈS QU'UN CHEMIN EST PRIS : il désigne un choix à
+   faire, pas un état permanent. Et il ne touche ni à l'opacité ni au texte —
+   ce sont des pavés à LIRE, les faire clignoter les rendrait illisibles. Seuls
+   le cadre et le halo bougent. */
+@keyframes fin-pt-bat{
+  0%,100% {border-color:var(--blue); box-shadow:0 0 0 0 rgba(30,99,168,.45)}
+  50%     {border-color:#0E4E8C;     box-shadow:0 0 0 8px rgba(30,99,168,0)}
+}
+.fin-pt.ici{border:2px solid var(--blue);border-top-width:3px;padding:9px 11px;
+  animation:fin-pt-bat 1.8s ease-in-out infinite}
+.fin-pt.pris{border-color:var(--green);border-top-color:var(--green);
+  animation:none}
+/* LE CHEMIN NON PRIS RESTE OUVERT : cadre bleu, sans battement. Le battement
+   dit « choisissez maintenant » ; le cadre dit « celui-ci reste disponible ». */
+.fin-pt.dispo{border:2px solid var(--blue);border-top-width:3px;padding:9px 11px;
+  animation:none}
+.fin-pt.dispo .fin-pt-n::after{content:" · reste disponible";color:var(--blue)}
+.fin-pt.pris .fin-pt-n::after{content:" · chemin pris";color:var(--green);
+  font-weight:700}
+@media (prefers-reduced-motion: reduce){
+  .fin-pt.ici{animation:none;outline:2px solid var(--ink);outline-offset:2px}
+}
+/* LA CONSIGNE DE CHOIX, au-dessus des deux cartes. Elle ne répète pas leur
+   contenu : elle donne le CRITÈRE qui départage, seul manque réel du bloc. */
+.fin-pt-choix{margin:0 0 10px;padding:9px 12px;font-size:11.5px;line-height:1.6;
+  background:var(--bg);border-left:3px solid var(--blue);border-radius:0 6px 6px 0}
+.fin-pt-choix b{display:block;margin-bottom:3px}
 .fin-pt-n{display:block;font-family:var(--mono);font-size:9.5px;
   letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
 .fin-pt > b{display:block;font-size:12.5px;margin:2px 0 4px}
@@ -5649,6 +5683,8 @@ function finMajFil(){
   FIN_VU = apres;
   finFil();
   finCommandes(apres);
+  /* Les deux chemins de l'étape 9 suivent le même état que le reste du fil. */
+  if(typeof finPontsEtat === "function") finPontsEtat();
   if(!avant) return null;            /* premier relevé : rien n'a été franchi */
   var franchie = null;
   FIN_ETAPES.forEach(function(e){
@@ -5834,6 +5870,16 @@ function finPonts(){
   el.innerHTML =
       '<div class="fin-pt-t"><b>Deux chemins vers le site d’ingénierie, et ils ne '
     + 'portent pas la même chose.</b> Choisissez selon la question qui vous reste.</div>'
+    /* LE CRITÈRE QUI DÉPARTAGE, et non un résumé des deux cartes — elles se
+       décrivent déjà. Ce qui manquait, c'est la question à se poser AVANT de
+       lire : de quoi ai-je encore besoin ? Sans elle, le lecteur compare deux
+       pavés de six lignes et choisit au hasard. */
+    + '<div class="fin-pt-choix"><b>Comment choisir, en une question&nbsp;:</b>'
+    + 'votre question restante porte-t-elle sur <b>ce que le site consommera</b> '
+    + '— énergie, eau, carbone&nbsp;? Prenez le premier. Porte-t-elle sur <b>ce '
+    + 'que les études coûteront</b> — honoraires, phases, pièces à produire&nbsp;? '
+    + 'Prenez le second. Les deux se prennent l’un après l’autre&nbsp;: ils ne '
+    + 's’excluent pas, et aucun ne referme l’étude en cours.</div>'
     + '<div class="fin-pt-g">'
     + '<div class="fin-pt"><span class="fin-pt-n">Poursuivre l’instruction</span>'
     + '<b>Bilan énergie, eau et carbone</b>'
@@ -5872,7 +5918,37 @@ function finPonts(){
    qu'une fois les honoraires chiffrés : y envoyer sans prévenir ferait atterrir
    dans le vide. Tant qu'il n'existe pas, on l'annonce et on laisse le lien nu,
    qui au moins ouvre la bonne page. */
+/* LES DEUX CHEMINS S'ALLUMENT QUAND C'EST LEUR TOUR — et l'état vient du fil,
+   pas d'une seconde comptabilité. Ils s'encadrent de bleu et battent dès que
+   l'étape 9 est l'étape courante, et le battement s'arrête sur celui qu'on a
+   pris : un signal qui resterait après le choix ne désignerait plus rien. */
+function finPontsEtat(){
+  var cartes = document.querySelectorAll("#fin-ponts .fin-pt");
+  if(!cartes.length) return;
+  var faites = finFaites();
+  var ici = FIN_ETAPES[finPasCourant()];
+  var aChoisir = !!(ici && ici.cle === "pont") && !faites.pont;
+  /* « Pris » se CONSTATE : une sortie de pont n'existe qu'après un clic. */
+  var prisDurabilite = !!document.querySelector("#pont-fin .pont-out a, "
+    + "#pont-fin .pont-out .pont-copier, #pont-fin .pont-out code");
+  var prisMoe = !!document.querySelector("#moe-pont-out a, #moe-pont-out code");
+  /* PRENDRE UN CHEMIN NE FERME PAS L'AUTRE. Les deux répondent à des questions
+     différentes — ce que le site consommera, ce que les études coûteront — et
+     l'un ne répond pas pour l'autre. Éteindre les deux au premier lien
+     fabriqué laissait croire que l'étape était close ; le chemin non pris
+     garde donc son cadre, sans battement. Le battement dit « choisissez
+     maintenant » ; le cadre dit « celui-ci reste ouvert ». */
+  var unPris = prisDurabilite || prisMoe;
+  [].forEach.call(cartes, function(c, i){
+    var pris = i === 0 ? prisDurabilite : prisMoe;
+    c.classList.toggle("pris", pris);
+    c.classList.toggle("ici", aChoisir && !pris);
+    c.classList.toggle("dispo", !pris && unPris);
+  });
+}
+
 function finPontsMaj(){
+  finPontsEtat();
   var z = document.getElementById("fin-pt-moe-non");
   if(!z) return;
   var pret = !!document.getElementById("moe-pont");
@@ -10531,6 +10607,20 @@ function gpSante(){
            par_section: vues };
 }
 
+/* LE MÊME FILTRE, SANS LIRE L'ÉTAT COURANT. Le sélecteur doit pouvoir compter
+   les étapes d'un parcours qui n'est pas encore lancé — donc sans dépendre de
+   `GP.branche`. Une seconde fonction de comptage aurait divergé du filtre réel
+   au premier ajustement : c'est celle-ci qui filtre, et `gpEtapes` s'y ramène. */
+function gpEtapesDe(P, branche){
+  var E;
+  if(P.etapes) E = P.etapes;
+  else {
+    var b = branche && P.branches && P.branches[branche];
+    E = b ? [P.question].concat(b.etapes) : [P.question];
+  }
+  return E.filter(vueMontre);
+}
+
 function gpEtapes(P){
   var E;
   if(P.etapes) E = P.etapes;
@@ -10601,6 +10691,30 @@ function gpAller(i){
   var P = GP_PROFILS[GP.profil];
   if(!P) return;
   var E = gpEtapes(P);
+  /* UN PARCOURS VIDE SE DIT, IL NE PLANTE PAS. Sans cette garde, `E[0]` valait
+     `undefined` et la ligne suivante levait « Cannot read properties of
+     undefined » : le lecteur choisissait un parcours et n'obtenait RIEN — pas
+     de première étape, pas de message, et le script mort pour le reste de la
+     page. Le sélecteur ne propose plus ces parcours ; cette garde reste, parce
+     qu'un lien direct « #parcours=analyste » y mène encore. */
+  if(!E.length){
+    var ev = gpEls();
+    gpNettoyer();
+    ev.voile.classList.add("on");
+    ev.carte.classList.add("on");
+    ev.carte.innerHTML =
+        '<div class="gp-tete"><span class="gp-profil">' + esc(P.court || P.nom)
+      + '</span><span class="gp-etape">indisponible ici</span>'
+      + '<button type="button" class="gp-fermer" id="gp-x" '
+      + 'aria-label="Fermer le parcours">×</button></div>'
+      + '<div class="gp-corps"><h4>Ce parcours ne passe pas par cette vue</h4>'
+      + '<p>Toutes ses étapes visent des sections que cette page n’affiche pas. '
+      + 'Rien ne serait désigné, et un parcours qui ne désigne rien ne guide '
+      + 'personne.</p>'
+      + '<p><a class="gp-lien" href="/panorama">Ouvrir le Panorama, où il se '
+      + 'déroule →</a></p></div>';
+    return;
+  }
   i = Math.max(0, Math.min(E.length - 1, i));
   GP.i = i;
   var et = E[i];
@@ -10671,6 +10785,13 @@ function gpAller(i){
     + "</div>"
     + '<div class="gp-pied"><div class="gp-points">' + points + "</div>"
     + (enAttente ? '<span class="gp-attente">Choisissez un scénario ci-dessus</span>' : "")
+    /* RECOMMENCER, ET C'EST UNE DEMANDE EXPLICITE. Un parcours qu'on ne peut
+       que fermer oblige à rouvrir le menu, rechoisir un rôle, rechoisir un
+       chemin — trois gestes pour revenir au premier pas. Le bouton n'apparaît
+       qu'à partir de la deuxième étape : proposer « recommencer » sur la
+       première désignerait le geste qu'on vient de faire. */
+    + (i > 0 ? '<button type="button" class="gp-btn" id="gp-zero" '
+        + 'title="Revenir à la première étape de ce parcours">↺ Recommencer</button>' : "")
     + '<button type="button" class="gp-btn" id="gp-prec"' + (i === 0 ? " disabled" : "") + ">Précédent</button>"
     + '<button type="button" class="gp-btn suiv" id="gp-suiv"' + (enAttente ? " disabled" : "") + ">"
     + (enAttente ? "Suivant" : (i === E.length - 1 ? "Terminer" : "Suivant")) + "</button></div>";
@@ -10689,6 +10810,11 @@ function gpAller(i){
     });
   }
   document.getElementById("gp-prec").addEventListener("click", function(){ if(GP.i > 0) gpAller(GP.i - 1); });
+  var bz = document.getElementById("gp-zero");
+  /* La remise à zéro rend le parcours à son premier pas — elle ne le referme
+     pas : celui qui veut sortir a déjà la croix, et confondre les deux ferait
+     perdre le chemin à qui voulait seulement le reprendre. */
+  if(bz) bz.addEventListener("click", function(){ gpAller(0); });
   document.getElementById("gp-suiv").addEventListener("click", function(){
     if(gpEtapes(P)[GP.i] && gpEtapes(P)[GP.i].options && !GP.branche) return;
     if(GP.i === gpEtapes(P).length - 1) gpFermer(); else gpAller(GP.i + 1);
@@ -10779,14 +10905,21 @@ function ppEls(){
 function ppParcoursDe(cle){
   var P = GP_PROFILS[cle];
   if(!P) return [];
+  /* ON COMPTE CE QUI EST DISPONIBLE ICI, PAS CE QUI EST DÉCLARÉ. Le compte
+     venait de `P.etapes.length` — le nombre écrit dans le référentiel — alors
+     que la vue en retire celles qui visent une section absente. Sur
+     /enveloppe, ce menu annonçait « Parcours complet · 4 étapes » pour un
+     parcours qui n'en avait AUCUNE ici ; le choisir levait une erreur de
+     script et n'affichait rien. Le lecteur voyait un parcours promis, cliquait,
+     et n'obtenait pas de première étape — pas même un message. */
   if(P.branches && P.question && P.question.options){
     return P.question.options.map(function(o){
       return { cle: o.cle, nom: o.nom, sens: o.sens || "",
-               n: (P.branches[o.cle] && P.branches[o.cle].etapes || []).length };
+               n: gpEtapesDe(P, o.cle).length };
     });
   }
   return [{ cle: "", nom: "Parcours complet", sens: P.quoi || "",
-            n: (P.etapes || []).length }];
+            n: gpEtapesDe(P, null).length }];
 }
 
 function ppRemplirRoles(){
@@ -10810,14 +10943,28 @@ function ppRemplirParcours(cleRole){
     return;
   }
   var liste = ppParcoursDe(cleRole);
+  /* UN PARCOURS SANS ÉTAPE SUR CETTE VUE N'EST PAS PROPOSABLE — et le dire
+     vaut mieux que le masquer : le lecteur qui cherche « Analyste / ESG »
+     doit apprendre que ce chemin vit sur une AUTRE vue, pas conclure que le
+     site l'a perdu. L'option reste visible, désactivée, et nomme la vue. */
   e.parc.innerHTML = '<option value="">— Le parcours —</option>'
     + liste.map(function(o){
-        return '<option value="' + esc(o.cle) + '">' + esc(o.nom)
-             + (o.n ? " · " + o.n + " étapes" : "") + "</option>";
+        return '<option value="' + esc(o.cle) + '"' + (o.n ? "" : " disabled") + '>'
+             + esc(o.nom)
+             + (o.n ? " · " + o.n + " étape" + (o.n > 1 ? "s" : "")
+                    : " · aucune étape sur cette vue")
+             + "</option>";
       }).join("");
   e.parc.disabled = false;
   var P = GP_PROFILS[cleRole];
-  if(e.aide) e.aide.textContent = P.quoi || "";
+  var dispo = liste.filter(function(o){ return o.n > 0; }).length;
+  if(e.aide){
+    e.aide.textContent = dispo
+      ? (P.quoi || "")
+      : "Ce rôle n’a aucun parcours sur cette vue : ses étapes visent des "
+        + "sections que cette page n’affiche pas. Ouvrez le Panorama pour le "
+        + "suivre.";
+  }
 }
 
 function ppBrancher(){
