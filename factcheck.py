@@ -632,6 +632,50 @@ CONTROLES = [
 # ═══════════════════════════════════════════════════════════════════════════
 
 
+# ── AJOUT DE L'AUDIT D'AOÛT 2026 : LES DEUX SITES NE DISENT PAS LA MÊME CHOSE
+#
+# Ce contrôle-ci n'est pas né d'une source extérieure mais d'un recoupement
+# INTERNE, et c'est le seul écart de ce registre qu'un client puisse constater
+# sans quitter le cabinet : ouvrir un livrable Sentinel et un livrable Cyber
+# côte à côte.
+CONTROLES.append({
+    "cle": "intensite_deux_sites",
+    "sujet": "Intensité carbone — écart entre les deux sites du cabinet",
+    "portee": ["panorama", "empreinte"],
+    "affirmation": "Les deux sites du cabinet servent la même intensité carbone "
+                   "pour un pays donné.",
+    "verdict": "corrige",
+    "avant": "Écart non signalé : Sentinel sert 45 gCO2e/kWh pour la France, "
+             "conseilprevcyber en sert 56.",
+    "constat": "Mesuré par comparaison des deux tables, août 2026 : 28 des 29 pays "
+               "communs divergent, de 12,1 % en moyenne (France 45 contre 56, "
+               "Finlande 65 contre 79, Chypre 510 contre 600). Les deux tables "
+               "citent la MÊME source primaire — Ember — mais deux millésimes : "
+               "empreinte_sites.py retient 2024 en approche cycle de vie, "
+               "datacenter.py retient 2023-2024 en approche location-based, "
+               "recoupée avec l'Agence européenne pour l'environnement. L'écart "
+               "n'est donc pas une erreur de saisie mais une divergence de "
+               "millésime et de périmètre — les réseaux européens se décarbonent "
+               "vite, et un an d'écart suffit à produire 24 % sur la France. "
+               "AUCUNE DES DEUX VALEURS N'EST FAUSSE ; ce qui manquait, c'est que "
+               "le lecteur puisse le savoir. Un client qui compare deux livrables "
+               "du même cabinet doit trouver ici la raison de l'écart, et non le "
+               "découvrir en réunion.",
+    "verifie_le": "2026-08-17",
+    "source": {"titre": "Yearly Electricity Data — CO2 intensity",
+               "editeur": "Ember",
+               "url": "https://ember-energy.org/data/yearly-electricity-data/"},
+    "corroborations": [
+        {"titre": "Greenhouse gas emission intensity of electricity generation",
+         "editeur": "Agence européenne pour l'environnement",
+         "url": "https://www.eea.europa.eu/en/analysis/indicators/"
+                "greenhouse-gas-emission-intensity-of-1"},
+        {"titre": "Base Empreinte — facteurs d'émission de l'électricité",
+         "editeur": "ADEME",
+         "url": "https://base-empreinte.ademe.fr/"},
+    ],
+})
+
 def par_portee(portee=None):
     """Contrôles d'une page, triés du plus défavorable au plus favorable.
 
@@ -671,15 +715,89 @@ def resume(portee=None):
     }
 
 
+# ═══════════════════════════════════════════════════════════════════════════
+#  LE RECOUPEMENT — COMBIEN DE MAISONS DIFFÉRENTES ÉTAYENT CHAQUE CONTRÔLE
+#
+#  CE QUI MANQUAIT, ET QUI SE MESURE. Le registre porte un champ `source` au
+#  SINGULIER : un contrôle ne peut donc PAS enregistrer qu'il a été recoupé.
+#  Quand le recoupement était fait, il finissait dans la prose du `constat` —
+#  invisible à tout comptage. Mesuré sur ce fichier : 27 des 40 contrôles
+#  reposent sur le même éditeur (Ember), et 20 des 27 corrections aussi.
+#
+#  Vérifier une valeur avec une seule maison n'est pas un recoupement, et un
+#  registre qui présente les deux du même œil laisse croire à une robustesse
+#  qu'il n'a pas. On ajoute donc `corroborations` — facultatif, sans rien
+#  casser — et on CALCULE le nombre de maisons distinctes. Calculé, jamais
+#  écrit : un compte écrit à la main cesse d'être vrai au premier ajout.
+
+def _maisons(controle):
+    """Les éditeurs distincts qui étayent ce contrôle, source principale
+    comprise. La comparaison est faite sur le nom normalisé : « Ember » et
+    « Ember / SEAI » ne sont pas deux maisons indépendantes."""
+    vus, out = set(), []
+    for s in [controle.get("source") or {}] + list(controle.get("corroborations") or []):
+        e = (s.get("editeur") or "").strip()
+        if not e:
+            continue
+        racine = e.split("/")[0].split("(")[0].strip().lower()
+        if racine and racine not in vus:
+            vus.add(racine)
+            out.append(e)
+    return out
+
+
+def recoupement(controle):
+    """Ce que vaut l'étaiement de CE contrôle, dit en clair."""
+    m = _maisons(controle)
+    return {
+        "maisons": m,
+        "nombre": len(m),
+        "recoupe": len(m) >= 2,
+        "dit": ("Recoupé sur %d maisons indépendantes." % len(m)) if len(m) >= 2
+               else ("Étayé par une seule maison (%s) : l'ordre de grandeur tient, "
+                     "le recoupement reste à faire." % (m[0] if m else "aucune")),
+    }
+
+
+def concentration(portee=None):
+    """La robustesse du registre PRISE DANS SON ENSEMBLE — c'est le chiffre
+    qu'un lecteur exigeant demande avant de citer le référentiel."""
+    lot = par_portee(portee)
+    from collections import Counter
+    compte = Counter()
+    recoupes = 0
+    for c in lot:
+        m = _maisons(c)
+        if len(m) >= 2:
+            recoupes += 1
+        for e in m:
+            compte[e.split("/")[0].split("(")[0].strip()] += 1
+    total = len(lot)
+    dominant = compte.most_common(1)[0] if compte else (None, 0)
+    return {
+        "total": total,
+        "recoupes": recoupes,
+        "part_recoupee": round(recoupes / total, 3) if total else 0.0,
+        "editeur_dominant": dominant[0],
+        "part_dominant": round(dominant[1] / total, 3) if total else 0.0,
+        "par_editeur": dict(compte.most_common()),
+        "dit": ("%d contrôles sur %d sont recoupés sur au moins deux maisons ; "
+                "%s en étaye %d à lui seul." % (recoupes, total, dominant[0] or "—",
+                                                dominant[1]) if total else "registre vide"),
+    }
+
+
 def sources(portee=None):
     """Sources distinctes citées, dédoublonnées par URL puis par éditeur."""
     vues, out = set(), []
     for c in par_portee(portee):
-        s = c.get("source") or {}
-        cle = (s.get("url") or "") + "|" + (s.get("editeur") or "")
-        if cle.strip("|") and cle not in vues:
-            vues.add(cle)
-            out.append(s)
+        # LES CORROBORATIONS SONT DES SOURCES À PART ENTIÈRE. Les omettre ici
+        # aurait publié un registre plus pauvre que le travail réellement fait.
+        for s in [c.get("source") or {}] + list(c.get("corroborations") or []):
+            cle = (s.get("url") or "") + "|" + (s.get("editeur") or "")
+            if cle.strip("|") and cle not in vues:
+                vues.add(cle)
+                out.append(s)
     return sorted(out, key=lambda s: (s.get("editeur") or "").lower())
 
 
@@ -691,6 +809,7 @@ def etat(portee=None):
         "verdicts": VERDICTS,
         "portees": PORTEES,
         "resume": resume(portee),
-        "controles": par_portee(portee),
+        "controles": [dict(c, recoupement=recoupement(c)) for c in par_portee(portee)],
         "sources": sources(portee),
+        "concentration": concentration(portee),
     }
