@@ -10018,6 +10018,50 @@ var GP_PROFILS = {
             piege: "Cette page SITUE ; elle ne chiffre pas un business plan. Si un "
                  + "chiffre pèse dans la décision, remontez à la source primaire "
                  + "citée, et datez votre citation : le référentiel est versionné." },
+          /* ── LA VUE /enveloppe. Les étapes ci-dessus visent le panorama ;
+             sans celles-ci, choisir « construction neuve » sur l'étude
+             d'enveloppe affichait « Étape 1 sur 1 » — la carte du scénario,
+             et rien derrière : un parcours qui ne mène nulle part. Chaque
+             scénario lit les MÊMES quatre sections avec sa question à lui. */
+          { sect: "s-finance", t: "L’enveloppe est votre premier chiffre engageable",
+            d: "Posez la puissance et les pays, lancez le calcul : enveloppe par "
+             + "pays, décomposition en quatorze lots (DPGF), exploitation annuelle "
+             + "et coût total de possession sur la durée choisie, échéancier vers "
+             + "2030. C’est le chiffrage qui précède tout mandat de conception — "
+             + "et chaque valeur porte sa source et son incertitude.",
+            piege: "À puissance égale, l’enveloppe d’investissement est identique "
+                 + "d’un pays à l’autre — ce référentiel n’a pas d’indice national "
+                 + "de coût de construction. Ce qui départage les pays est le coût "
+                 + "TOTAL DE POSSESSION, où l’électricité multipliée par le PUE "
+                 + "creuse des écarts de plus du quart sur dix ans." },
+          { sect: "s-equipements", t: "Le poste que l’enveloppe travaux ne contient pas",
+            d: "Serveurs, baies, réseau, onduleurs : la nomenclature chiffre "
+             + "l’informatique — souvent plus lourde que les travaux eux-mêmes — "
+             + "avec son carbone incorporé, annualisé sur la durée de vie de "
+             + "chaque poste. En périmètre propre, le capital employé du projet "
+             + "ADDITIONNE les deux : décider sur les seuls travaux, c’est "
+             + "décider sur une moitié.",
+            piege: "Ces prix portent ±40 % et le carbone ±50 % : c’est un ordre "
+                 + "de grandeur d’avant-projet, jamais un budget d’achat. Vos "
+                 + "devis constructeurs le remplaceront ligne à ligne." },
+          { sect: "s-maturite", t: "Votre organisation peut-elle instruire ce GO ?",
+            d: "Quatre axes, treize constats : la décision que ces chiffres "
+             + "préparent exige une organisation capable de produire, tracer et "
+             + "contester ses propres données. Le diagnostic dit ce que votre "
+             + "niveau actuel permet de promettre — et ce qu’il interdit encore.",
+            piege: "Un niveau bas n’invalide pas le projet : il invalide le "
+                 + "CALENDRIER qui suppose des mesures que personne ne sait "
+                 + "encore produire. C’est l’écart le moins cher à corriger "
+                 + "avant la signature, et le plus cher après." },
+          { sect: "s-pilotage", t: "Les seuils qui suivront le chantier",
+            d: "Cinq indicateurs, chacun avec sa cible, sa tolérance et son "
+             + "INCERTITUDE : le tableau refuse d’alerter sur du bruit — une "
+             + "enveloppe à ±30 % qui dérive de 12 % n’a rien franchi. "
+             + "Renseignez les mesures au fil du projet ; les alertes ne "
+             + "sonneront que sur un dépassement démontré.",
+            piege: "Un tableau de bord installé au premier coup de pelle arrive "
+                 + "trop tard : les seuils se posent AVANT l’engagement, quand "
+                 + "personne n’a encore intérêt à les déplacer." },
         ],
       },
       extension: {
@@ -10074,6 +10118,42 @@ var GP_PROFILS = {
                  + "Zeewolde et Dublin l’ont montré sur ce même référentiel. Traitez "
                  + "l’extension comme un projet neuf en instruction, avec l’avantage "
                  + "du foncier — pas comme un droit acquis." },
+          /* ── LA VUE /enveloppe, lue en extension : la tranche AJOUTÉE. ── */
+          { sect: "s-finance", t: "Chiffrez la tranche, pas le site",
+            d: "Posez la puissance de la TRANCHE SUPPLÉMENTAIRE seule : "
+             + "l’enveloppe, la DPGF et le coût total de possession valent pour "
+             + "ce que vous ajoutez. Le site existant a déjà payé son foncier et "
+             + "son raccordement — recompter le tout écraserait le coût marginal "
+             + "qui justifie l’extension.",
+            piege: "L’exploitation, elle, ne s’additionne pas proprement : la "
+                 + "tranche partage refroidissement et pertes avec l’existant, "
+                 + "et le PUE de l’ensemble bouge. Le TCO affiché vaut pour une "
+                 + "tranche autonome — votre exploitant doit dire ce qu’elle "
+                 + "mutualise." },
+          { sect: "s-equipements", t: "L’informatique de la tranche, et le sort de l’ancienne",
+            d: "La nomenclature chiffre les équipements de la tranche ajoutée — "
+             + "et le module d’allongement répond à l’autre question de "
+             + "l’extension : prolonger le parc EXISTANT plutôt que le "
+             + "remplacer, avec le bilan carbone net de la décision, pays par "
+             + "pays.",
+            piege: "Le bilan d’allongement ne porte QUE sur le carbone, à "
+                 + "service rendu constant : un gain carbone ne justifie pas de "
+                 + "garder un serveur qui ne reçoit plus de correctifs." },
+          { sect: "s-maturite", t: "L’exploitation en cours produit-elle déjà ses chiffres ?",
+            d: "Une extension a un avantage que le neuf n’a pas : le site "
+             + "existant MESURE déjà — ou devrait. Le diagnostic dit si vos "
+             + "données d’exploitation (consommations, PUE, incidents) ont la "
+             + "discipline qu’exige la décision d’étendre.",
+            piege: "Si le site existant ne sait pas produire son PUE mesuré, "
+                 + "l’extension héritera du même angle mort — en double." },
+          { sect: "s-pilotage", t: "Intégrer la tranche au tableau existant",
+            d: "Les cinq indicateurs valent pour la tranche comme pour le site : "
+             + "renseignez les mesures de l’ensemble APRÈS intégration, et "
+             + "laissez les seuils tenir compte de l’incertitude — un écart "
+             + "dans la marge d’erreur n’est pas une dérive.",
+            piege: "Comparer l’ensemble étendu aux seuils de l’ancien périmètre "
+                 + "fabrique de fausses alertes : recalez cibles et tolérances "
+                 + "sur le périmètre NOUVEAU dès la mise en service." },
         ],
       },
       ma: {
@@ -10135,6 +10215,49 @@ var GP_PROFILS = {
                  + "évaluation : rien ici n’est audité par un tiers ni opposable. "
                  + "La valeur d’un site se prouve avec ses mesures, ses contrats et "
                  + "ses permis — jamais avec une carte publique." },
+          /* ── LA VUE /enveloppe, lue en rachat : l'étude d'un site NEUF sert
+             de CONTRE-VALEUR au prix demandé. C'était le trou signalé :
+             « Étape 1 sur 1 », la carte du scénario et rien derrière. ── */
+          { sect: "s-finance", t: "Le coût de reconstruction est votre contre-valeur",
+            d: "Calculez l’enveloppe d’un site NEUF à la puissance de la cible, "
+             + "dans son pays : c’est le coût de reconstruction. La prime que "
+             + "le vendeur demande au-dessus n’achète ni béton ni serveurs — "
+             + "elle achète le temps, le raccordement acquis et les contrats en "
+             + "place. Nommer ce qu’elle paie est le premier test du prix. Et "
+             + "le coût total de possession donne la base d’exploitation que "
+             + "votre modèle devra battre.",
+            piege: "L’enveloppe vaut pour un site neuf à l’état de l’art : un "
+                 + "actif de dix ans se compare après CAPEX de remise à niveau "
+                 + "— demandez-le à la data room, ce référentiel ne peut pas "
+                 + "le connaître." },
+          { sect: "s-equipements", t: "À qui appartient l’informatique que vous achetez ?",
+            d: "Le même calcul sert deux vérifications : en COLOCATION, les "
+             + "serveurs sont aux clients — la nomenclature dit ce qu’il ne "
+             + "faut PAS compter dans l’actif ; en site propre, elle chiffre le "
+             + "renouvellement du parc que l’âge des équipements rendra dû, et "
+             + "le module d’allongement dit ce que repousser ce CAPEX coûte ou "
+             + "rapporte en carbone.",
+            piege: "Un parc en fin de vie est un CAPEX caché qui ne figure dans "
+                 + "aucune annonce : exigez l’âge moyen et la durée résiduelle "
+                 + "par poste — la nomenclature vous donne l’ordre de grandeur "
+                 + "de ce que leur remplacement pèsera." },
+          { sect: "s-maturite", t: "L’organisation que vous achetez sait-elle produire ses chiffres ?",
+            d: "Les treize constats du diagnostic sont autant de questions de "
+             + "data room : si l’équipe cible ne sait pas produire un PUE "
+             + "mesuré, des séries de consommation et une piste d’audit, vous "
+             + "achetez aussi le coût de bâtir cette discipline.",
+            piege: "Un niveau bas ne disqualifie pas l’actif — il se chiffre "
+                 + "dans le plan des cent jours. Ce qui disqualifie, c’est un "
+                 + "vendeur qui refuse de montrer son niveau." },
+          { sect: "s-pilotage", t: "Le tableau de bord des cent premiers jours",
+            d: "Les cinq indicateurs sont ceux à instrumenter dès la signature : "
+             + "cibles, tolérances et incertitudes posées AVANT que les équipes "
+             + "reprises n’héritent des habitudes du vendeur. Le tableau "
+             + "n’alerte que sur un dépassement démontré — pas sur le bruit "
+             + "d’une reprise.",
+            piege: "Reprendre les seuils du vendeur sans les recalculer, c’est "
+                 + "hériter de ses angles morts : des seuils qu’il tenait "
+                 + "toujours ne mesuraient peut-être rien." },
         ],
       },
     },
