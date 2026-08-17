@@ -1171,7 +1171,7 @@ th .ttip{margin-left:5px}
   .fin-vise{animation:none;outline:3px solid var(--blue)}
 }
 
-/* ── LES PHASES NON VALIDÉES CLIGNOTENT ─────────────────────────────────────
+/* ── CE QUI ATTEND UN CLIC BAT EN BLEU ; CE QUI EST VALIDÉ S'ENCADRE DE VERT ─
    Le fil marquait le fait et le reste par une simple couleur : à froid, rien
    ne bougeait et l'œil ne trouvait pas où reprendre.
 
@@ -1179,23 +1179,58 @@ th .ttip{margin-left:5px}
    par seconde, un clignotement devient un risque pour les personnes
    photosensibles — c'est le seuil retenu par les règles d'accessibilité. Le
    cycle posé ici dure 1,8 s, soit 0,55 éclat par seconde : six fois sous la
-   limite. Il reste franchement visible parce qu'il fait varier l'opacité ET
-   la couleur du fond, pas parce qu'il va vite.
+   limite. Il reste franchement visible parce qu'il fait varier trois choses
+   à la fois — le disque, l'anneau ET le chiffre —, pas parce qu'il va vite.
 
-   L'ÉTAPE COURANTE bat plus fort que les suivantes : sur neuf pastilles,
-   neuf battements identiques ne désignent plus rien. */
+   LE CHIFFRE BAT SANS JAMAIS DEVENIR ILLISIBLE, et c'est le point délicat.
+   Faire varier l'OPACITÉ était le geste évident, et c'est celui qui était en
+   place : le disque s'effaçait à 42 %, entraînant le chiffre avec lui, et le
+   contraste tombait alors à 2,2:1 — sous le seuil de 4,5:1, une demi-seconde
+   sur deux, pour tout le monde. Le battement se joue donc sur la COULEUR :
+   chaque phase est un couple fond/chiffre lisible pris isolément (5,0:1 et
+   7,4:1 pour ce qui reste ; 6,2:1 et 5,8:1 pour l'étape courante). Rien ne
+   s'efface jamais.
+
+   L'AMPLITUDE N'EST PAS LA FRÉQUENCE. Le disque en attente passe d'un bleu
+   très clair à un bleu franc — un écart large, pour que le battement se voie
+   à la distance où l'on embrasse les neuf étapes. Ce que borne la règle des
+   trois éclats, c'est la CADENCE, tenue à 0,55 Hz ; l'autre borne, celle des
+   grandes surfaces clignotantes, ne s'applique pas à neuf disques de 20 px.
+
+   L'ÉTAPE COURANTE bat plus fort que les suivantes, et ne se confond pas avec
+   elles : elle seule porte le disque plein et le halo qui s'ouvre. Sur neuf
+   pastilles, neuf battements identiques ne désigneraient plus rien. */
 @keyframes fin-bat-reste{
-  0%,100% {opacity:1}
-  50%     {opacity:.42}
+  0%,100% {background:#DCE9F7; color:var(--blue);
+           box-shadow:inset 0 0 0 1.5px var(--blue)}
+  50%     {background:#7FB0DC; color:var(--ink);
+           box-shadow:inset 0 0 0 1.5px rgba(30,99,168,.15)}
 }
 @keyframes fin-bat-cours{
-  0%,100% {background:var(--blue);      box-shadow:0 0 0 0 rgba(30,99,168,.55)}
-  50%     {background:var(--ink);       box-shadow:0 0 0 7px rgba(30,99,168,0)}
+  0%,100% {background:var(--blue); color:#fff;
+           box-shadow:0 0 0 0 rgba(30,99,168,.55)}
+  50%     {background:#0E4E8C;     color:#BFD9F2;
+           box-shadow:0 0 0 7px rgba(30,99,168,0)}
 }
-.fin-e.reste .fin-e-n{animation:fin-bat-reste 1.8s ease-in-out infinite}
+/* L'état posé hors animation est déjà le bon : si le battement est refusé —
+   mouvement réduit, animation coupée —, le disque reste bleu et le chiffre
+   lisible. On ne s'appuie jamais sur l'animation pour PEINDRE. */
+.fin-e.reste .fin-e-n{background:#DCE9F7;color:var(--blue);
+  box-shadow:inset 0 0 0 1.5px var(--blue);
+  animation:fin-bat-reste 1.8s ease-in-out infinite}
 .fin-e.cours .fin-e-n{animation:fin-bat-cours 1.8s ease-in-out infinite}
-/* Le fait ne bat pas : c'est justement ce qui distingue les deux d'un coup
-   d'œil, et un point d'arrivée immobile rend le mouvement lisible. */
+
+/* LE CADRE VERT DE CE QUI EST VALIDÉ. La pastille passait au vert, mais la
+   carte gardait son filet gris : de loin, une étape faite et une étape à
+   faire avaient la même silhouette. Le cadre se lit à la distance où l'on
+   embrasse les neuf étapes d'un coup d'œil — c'est là qu'on a besoin de
+   compter ce qui reste. Même épaisseur que le cadre bleu de l'étape courante,
+   et le remplissage est réduit d'autant pour que rien ne bouge au passage.
+   Le vert garde ici le sens qu'il a plus haut : « ce bloc a produit quelque
+   chose », jamais « ce choix est bon ». */
+.fin-e.fait button{border-color:var(--green);border-width:2px;padding:7px 9px}
+/* Le fait ne bat pas : c'est justement ce qui le distingue d'un coup d'œil,
+   et un point d'arrivée immobile rend le mouvement lisible. */
 .fin-e.fait .fin-e-n{animation:none}
 
 /* ── LA FLÈCHE QUI MÈNE À L'ÉTAPE COURANTE ──────────────────────────────────
@@ -1229,14 +1264,19 @@ th .ttip{margin-left:5px}
 .fin-fg-x{background:transparent;border:none;color:#fff;font-size:15px;
   cursor:pointer;opacity:.75;padding:2px 2px 2px 6px;line-height:1}
 .fin-fg-x:hover{opacity:1}
-/* MOUVEMENT RÉDUIT : plus rien ne bouge, et rien n'est perdu — la flèche reste,
-   sa direction reste lisible, et les pastilles gardent un contraste franc. */
+/* MOUVEMENT RÉDUIT : plus rien ne bouge, et rien n'est perdu. La flèche reste,
+   sa direction reste lisible, le cadre vert des étapes validées reste — il ne
+   dépend d'aucune animation —, et les pastilles gardent leur couleur pleine.
+   Elles gardaient auparavant une opacité réduite « pour rappeler » qu'elles
+   attendaient : cela ne rappelait rien et abaissait le contraste chez ceux qui
+   demandent justement moins d'effets. C'est l'anneau bleu qui les distingue. */
 @media (prefers-reduced-motion: reduce){
   .fin-e.reste .fin-e-n,.fin-e.cours .fin-e-n,
   .fin-fleche-guide,.fin-fg-a{animation:none}
-  .fin-e.cours .fin-e-n{background:var(--blue);outline:2px solid var(--ink);
-    outline-offset:1px}
-  .fin-e.reste .fin-e-n{opacity:.62}
+  .fin-e.cours .fin-e-n{background:var(--blue);color:#fff;
+    outline:2px solid var(--ink);outline-offset:1px}
+  .fin-e.reste .fin-e-n{background:#DCE9F7;color:var(--blue);
+    box-shadow:inset 0 0 0 1.5px var(--blue)}
 }
 @media(max-width:700px){ .fin-fleche-guide{right:12px;bottom:14px;font-size:12px} }
 

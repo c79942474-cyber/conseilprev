@@ -81,18 +81,34 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
   ok('…et elle porte sa propre fermeture', !!f0 && f0.fermeture);
 
   // ── 2 ────────────────────────────────────────────────────────────────────
-  titre('2. Les phases non validées battent, les validées non');
+  titre('2. Ce qui attend un clic bat en bleu, ce qui est validé s’encadre de vert');
 
   const bat = await pg.evaluate(() => {
     const lire = (sel) => [...document.querySelectorAll(sel)].map(e => {
       const s = getComputedStyle(e);
+      const b = e.closest('button');
+      const sb = b ? getComputedStyle(b) : null;
       return { nom: s.animationName, duree: s.animationDuration,
-               iter: s.animationIterationCount };
+               iter: s.animationIterationCount, fond: s.backgroundColor,
+               cadre: sb ? sb.borderTopColor : null,
+               epaisseur: sb ? parseFloat(sb.borderTopWidth) : 0 };
     });
+    /* On résout le jeton de charte EN L'APPLIQUANT : lu brut il vaut « #2D7A47 »
+       alors que la bordure calculée vaut « rgb(45, 122, 71) », et comparer les
+       deux écritures ferait échouer un contrôle sur une couleur pourtant juste. */
+    const jeton = (n) => {
+      const s = document.createElement('span');
+      s.style.color = 'var(' + n + ')';
+      document.body.appendChild(s);
+      const c = getComputedStyle(s).color;
+      s.remove();
+      return c;
+    };
     return {
       reste: lire('#fin-fil .fin-e.reste .fin-e-n'),
       cours: lire('#fin-fil .fin-e.cours .fin-e-n'),
-      fait: lire('#fin-fil .fin-e.fait .fin-e-n')
+      fait: lire('#fin-fil .fin-e.fait .fin-e-n'),
+      bleu: jeton('--blue'), vert: jeton('--green')
     };
   });
   ok('les étapes qui restent battent',
@@ -106,8 +122,44 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
      bat.fait.length > 0 && bat.fait.every(x => x.nom === 'none'),
      bat.fait.length + ' validée(s), animation ' + (bat.fait[0] || {}).nom);
 
+  /* LES CADRANS EN ATTENTE SONT BLEUS — pas gris. On ne compare pas à une
+     teinte écrite en dur, qui interdirait de nuancer la charte : on mesure la
+     TEINTE. Comparer les canaux ne suffisait pas — un bleu très clair
+     (#DCE9F7) n'a que 27 points d'écart entre rouge et bleu et se serait fait
+     rejeter, alors que sa teinte vaut 211°, franchement bleue. On exige aussi
+     un minimum de saturation, sinon un gris neutre passerait par accident. */
+  const bleuit = (c) => {
+    const [r, g, b] = c.match(/[\d.]+/g).slice(0, 3).map(Number);
+    const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min;
+    if (d < 12) return false;
+    let h;
+    if (max === r) h = 60 * (((g - b) / d) % 6);
+    else if (max === g) h = 60 * ((b - r) / d + 2);
+    else h = 60 * ((r - g) / d + 4);
+    if (h < 0) h += 360;
+    return h >= 185 && h <= 255;
+  };
+  ok('les cadrans en attente d’un clic sont BLEUS, pas gris',
+     bat.reste.every(x => bleuit(x.fond)) && bat.cours.every(x => bleuit(x.fond)),
+     'reste ' + (bat.reste[0] || {}).fond + ' · courante ' + (bat.cours[0] || {}).fond);
+
+  /* LE CADRE VERT. Il ne suffit pas qu'il soit vert quelque part : il doit
+     être vert LÀ et nulle part ailleurs, sinon il ne distingue rien. */
+  const memeCouleur = (a, b) => a && b
+    && a.match(/[\d.]+/g).slice(0, 3).join() === b.match(/[\d.]+/g).slice(0, 3).join();
+  ok('les étapes validées portent un cadre VERT',
+     bat.fait.length > 0 && bat.fait.every(x => memeCouleur(x.cadre, bat.vert)),
+     bat.fait.length + ' validée(s), cadre ' + (bat.fait[0] || {}).cadre
+       + ' pour --green ' + bat.vert);
+  ok('…et il est assez épais pour se voir à distance',
+     bat.fait.every(x => x.epaisseur >= 2), (bat.fait[0] || {}).epaisseur + 'px');
+  ok('…tandis que les étapes NON validées ne l’ont pas — sinon il ne dirait rien',
+     bat.reste.every(x => !memeCouleur(x.cadre, bat.vert))
+       && bat.cours.every(x => !memeCouleur(x.cadre, bat.vert)),
+     'reste ' + (bat.reste[0] || {}).cadre + ' · courante ' + (bat.cours[0] || {}).cadre);
+
   // ── 3 ────────────────────────────────────────────────────────────────────
-  titre('3. La cadence reste sous le seuil de sécurité (3 éclats/seconde)');
+  titre('3. Sécurité : cadence bornée, et le chiffre lisible à CHAQUE phase');
 
   const cycles = [...bat.reste, ...bat.cours].map(x => parseFloat(x.duree));
   const plusRapide = Math.min.apply(null, cycles.concat([
@@ -120,6 +172,66 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
      'cycle le plus court : ' + plusRapide + ' s (' + (1 / plusRapide).toFixed(2) + ' Hz)');
   ok('…et la cadence retenue reste lente, donc lisible',
      plusRapide >= 1.0, plusRapide + ' s');
+
+  /* LE CONTRÔLE QUI PROTÈGE LE PLUS. Faire varier l'opacité est le geste
+     évident pour « faire clignoter » — et il rend le chiffre illisible une
+     demi-seconde sur deux. On relit donc les images-clés elles-mêmes, on
+     résout les variables de charte en les appliquant à une sonde, et on
+     mesure le contraste fond/chiffre À CHAQUE PHASE. */
+  const phases = await pg.evaluate((noms) => {
+    const lum = (c) => {
+      const v = c.match(/[\d.]+/g).slice(0, 3).map(Number).map(x => {
+        x /= 255; return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4);
+      });
+      return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2];
+    };
+    const contraste = (a, b) => {
+      const [h, l] = [lum(a), lum(b)].sort((p, q) => q - p);
+      return (h + 0.05) / (l + 0.05);
+    };
+    const kfs = [];
+    for (const ss of document.styleSheets) {
+      let rr; try { rr = ss.cssRules } catch (e) { continue }
+      for (const r of rr) if (r.type === 7 && noms.includes(r.name)) kfs.push(r);
+    }
+    const sonde = document.createElement('span');
+    document.body.appendChild(sonde);
+    const out = kfs.map(kf => ({
+      nom: kf.name,
+      images: [...kf.cssRules].map(k => {
+        sonde.style.cssText = k.style.cssText;
+        const s = getComputedStyle(sonde);
+        return { cle: k.keyText,
+                 declareFond: !!(k.style.background || k.style.backgroundColor),
+                 declareEncre: !!k.style.color,
+                 declareOpacite: !!k.style.opacity,
+                 fond: s.backgroundColor, encre: s.color,
+                 contraste: contraste(s.backgroundColor, s.color) };
+      })
+    }));
+    sonde.remove();
+    return out;
+  }, ['fin-bat-reste', 'fin-bat-cours']);
+
+  const toutes = phases.flatMap(p => p.images);
+  ok('les deux battements sont bien relus depuis la feuille de style',
+     phases.length === 2 && toutes.length >= 4,
+     phases.map(p => p.nom + ' (' + p.images.length + ' images)').join(' · '));
+  ok('LE DISQUE ET LE CHIFFRE CHANGENT TOUS LES DEUX à chaque image',
+     toutes.length > 0 && toutes.every(i => i.declareFond && i.declareEncre),
+     toutes.filter(i => !(i.declareFond && i.declareEncre)).length + ' image(s) incomplète(s)');
+  ok('…et le chiffre change vraiment de couleur d’une phase à l’autre',
+     phases.every(p => new Set(p.images.map(i => i.encre)).size >= 2),
+     phases.map(p => p.nom + ' : ' + [...new Set(p.images.map(i => i.encre))].length
+       + ' encre(s)').join(' · '));
+  const pire = Math.min.apply(null, toutes.map(i => i.contraste));
+  ok('LE CHIFFRE RESTE LISIBLE À CHAQUE PHASE — 4,5:1 au minimum',
+     pire >= 4.5,
+     'phase la plus faible : ' + pire.toFixed(2) + ':1 — '
+       + toutes.map(i => i.cle + ' ' + i.contraste.toFixed(2)).join(' · '));
+  ok('…et aucun battement ne se joue sur l’opacité, qui efface le chiffre',
+     toutes.every(i => !i.declareOpacite),
+     toutes.filter(i => i.declareOpacite).length + ' image(s) à opacité variable');
 
   // ── 4 : LE POINT QUI DÉCIDE ──────────────────────────────────────────────
   titre('4. LE POINT QUI DÉCIDE : la flèche pointe dans la bonne direction');
@@ -195,23 +307,59 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
 
   const pg2 = await ouvrir(true);
   const immobile = await pg2.evaluate(() => {
-    const lire = (sel) => [...document.querySelectorAll(sel)]
-      .map(e => getComputedStyle(e).animationName);
+    const lum = (c) => {
+      const v = c.match(/[\d.]+/g).slice(0, 3).map(Number).map(x => {
+        x /= 255; return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4);
+      });
+      return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2];
+    };
+    const contraste = (a, b) => {
+      const [h, l] = [lum(a), lum(b)].sort((p, q) => q - p);
+      return (h + 0.05) / (l + 0.05);
+    };
+    const lire = (sel) => [...document.querySelectorAll(sel)].map(e => {
+      const s = getComputedStyle(e);
+      const b = e.closest('button');
+      return { anim: s.animationName, fond: s.backgroundColor, encre: s.color,
+               opacite: parseFloat(s.opacity),
+               contraste: contraste(s.backgroundColor, s.color),
+               cadre: b ? getComputedStyle(b).borderTopColor : null };
+    });
     const f = document.getElementById('fin-fleche-guide');
     return {
       pastilles: lire('#fin-fil .fin-e-n'),
+      attente: lire('#fin-fil .fin-e.reste .fin-e-n, #fin-fil .fin-e.cours .fin-e-n'),
+      fait: lire('#fin-fil .fin-e.fait .fin-e-n'),
+      cours: lire('#fin-fil .fin-e.cours .fin-e-n'),
       fleche: f ? getComputedStyle(f).animationName : null,
-      flechePresente: !!f,
-      contraste: lire('#fin-fil .fin-e.cours .fin-e-n').length
+      flechePresente: !!f
     };
   });
-  ok('aucune pastille ne bat', immobile.pastilles.every(n => n === 'none'),
-     immobile.pastilles.filter(n => n !== 'none').join(', ') || 'toutes immobiles');
+  const memeVert = (c) => c && bat.vert
+    && c.match(/[\d.]+/g).slice(0, 3).join()
+       === bat.vert.match(/[\d.]+/g).slice(0, 3).join();
+  ok('aucune pastille ne bat', immobile.pastilles.every(x => x.anim === 'none'),
+     immobile.pastilles.filter(x => x.anim !== 'none').map(x => x.anim).join(', ')
+       || 'toutes immobiles');
   ok('la flèche ne bat pas non plus',
      immobile.fleche === null || immobile.fleche === 'none', immobile.fleche);
   ok('…MAIS elle est toujours là : on ne prive pas de guidage',
      immobile.flechePresente);
-  ok('…et l’étape courante reste distinguée', immobile.contraste === 1);
+  ok('…et l’étape courante reste distinguée', immobile.cours.length === 1);
+  /* CE QUI EST REFUSÉ, C'EST LE MOUVEMENT — PAS L'INFORMATION. Les cadrans en
+     attente gardent leur bleu et leur lisibilité, et le cadre vert du validé
+     ne dépend d'aucune animation : il doit survivre tel quel. */
+  ok('les cadrans en attente gardent leur bleu, sans être atténués',
+     immobile.attente.length > 0
+       && immobile.attente.every(x => bleuit(x.fond) && x.opacite === 1),
+     immobile.attente.map(x => x.fond + ' à ' + x.opacite).slice(0, 2).join(' · '));
+  ok('…et leur chiffre reste lisible — 4,5:1 au minimum',
+     immobile.attente.every(x => x.contraste >= 4.5),
+     'le plus faible : '
+       + Math.min.apply(null, immobile.attente.map(x => x.contraste)).toFixed(2) + ':1');
+  ok('le cadre vert du validé survit au mouvement réduit',
+     immobile.fait.length > 0 && immobile.fait.every(x => memeVert(x.cadre)),
+     immobile.fait.length + ' validée(s), cadre ' + (immobile.fait[0] || {}).cadre);
   await pg2.close();
 
   console.log('\n' + (ko === 0 ? 'tout est vert' : ko + ' contrôle(s) en échec') + '\n');
