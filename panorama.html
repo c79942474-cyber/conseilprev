@@ -2075,6 +2075,24 @@ th .fl{font-size:9px;margin-left:3px}
   .pil-tab input{background:rgba(0,0,0,.24);border:1px solid var(--line,#233);
     border-radius:6px;color:inherit;font-size:12px;padding:5px 8px;width:100%}
   .pil-u{font-size:11px;color:var(--mu,#9aa)}
+  /* ── LE PRÉ-REMPLISSAGE. Discret : c'est le TABLEAU qu'on remplit, ce bouton
+     n'est qu'un raccourci vers des valeurs déjà calculées plus haut. Les
+     champs déduits se distinguent des champs saisis — sans quoi on ne sait
+     plus, trois minutes après, ce qu'on a soi-même écrit. */
+  .pil-barre{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:10px 0 0}
+  .pil-pre{all:unset;cursor:pointer;font-family:var(--mono,monospace);font-size:10.5px;
+    font-weight:600;padding:5px 12px;border-radius:14px;background:#12bcd8;color:#04222a}
+  .pil-pre:hover{background:#3fd0e6}
+  .pil-pre:focus-visible{outline:2px solid #12bcd8;outline-offset:2px}
+  .pil-prerempli{font-size:11.5px;line-height:1.6;margin:9px 0 0;padding:9px 12px;
+    background:rgba(0,0,0,.18);border-left:3px solid #7DD3A0;border-radius:0 6px 6px 0}
+  .pil-prerempli ul{margin:5px 0 0;padding-left:17px}
+  .pil-prerempli li{margin:2px 0}
+  /* Ce qui est LAISSÉ VIDE À DESSEIN se lit en ambre : ce n'est pas un oubli,
+     c'est un refus motivé, et il doit se distinguer de ce qui a été rempli. */
+  .pil-prerempli .non{color:#F0B27A}
+  .pil-tab input.pil-dedu{border-color:#7DD3A0;background:rgba(125,211,160,.10)}
+  .pil-tab input::placeholder{color:var(--mu,#9aa);opacity:.8;font-style:italic}
   .pil-glob{border:1px solid var(--line,#233);border-left:3px solid var(--mu,#9aa);
     border-radius:10px;padding:11px 14px;font-size:13px;line-height:1.65;
     background:rgba(0,0,0,.14);margin-bottom:10px}
@@ -3085,7 +3103,9 @@ engagements publics) sont imputés nominativement.</div>
 <section class="panel" id="s-pilotage" aria-labelledby="t-pil">
   <div class="panel-head">
     <span class="panel-title" id="t-pil">Pilotage, seuils et alertes — attirer l'attention là où une action est nécessaire</span>
-    <span class="panel-note" id="pil-note">cinq indicateurs</span>
+    <!-- Le compte se DÉDUIT du référentiel : écrit en dur, il annonçait
+         « cinq indicateurs » quel que soit le nombre réellement servi. -->
+    <span class="panel-note" id="pil-note">chargement…</span>
   </div>
   <div class="panel-body">
     <p class="lead" style="max-width:78ch">
@@ -3116,6 +3136,15 @@ engagements publics) sont imputés nominativement.</div>
       troisième faux positif éteint la vigilance sur tous les autres.
     </p>
     <div id="pil-form" class="pil-form"><p class="note">chargement du cadre…</p></div>
+    <!-- LE PRÉ-REMPLISSAGE. Trois des cinq indicateurs se déduisent des blocs
+         précédents ; deux ne se déduisent d'aucun calcul et ne doivent pas
+         être remplis d'office. Le bouton n'apparaît que lorsqu'il y a de quoi
+         déduire, et il DIT ce qu'il a rempli, d'où, et ce qu'il a laissé vide. -->
+    <div class="pil-barre">
+      <button type="button" class="pil-pre" id="pil-pre" hidden>
+        ⤵ Reprendre les calculs précédents</button>
+    </div>
+    <p class="pil-prerempli" id="pil-prerempli" hidden></p>
     <div class="mat-cmd">
       <button type="button" class="btn-p" id="pil-go">Établir le tableau de bord</button>
       <span class="note" id="pil-msg"></span>
@@ -11782,7 +11811,7 @@ if(window.parent&&window.parent!==window){
       et la mission reste comptée même décochée.
    ══════════════════════════════════════════════════════════════════════════ */
 (function(){
-  var REF = null, PH = null, MI = null;
+  var REF = null, PH = null, MI = null, DERNIER = null;
   /* LE BARÈME PART TOUT DE SUITE : la requête s'ouvre à l'évaluation du
      script, pendant que le navigateur analyse encore le reste de la page —
      plus à DOMContentLoaded, qui lui ajoutait un aller-retour complet. Le
@@ -11987,6 +12016,13 @@ if(window.parent&&window.parent!==window){
       + '<button type="button" class="pont-go" id="moe-pont-go">Créer le lien</button>'
       + '<div class="pont-out" id="moe-pont-out"></div></div>';
     $('moe-out').innerHTML = h;
+    /* LE CHIFFRAGE EST PUBLIÉ, comme l'enveloppe l'est par FIN_DERNIER. Le
+       bloc de pilotage, plus bas, a besoin du taux effectif et de l'assiette :
+       les faire retaper serait recopier à la main un chiffre déjà calculé
+       trois écrans plus haut — et la recopie est l'endroit où les deux
+       chiffres se mettent à diverger. */
+    DERNIER = j;
+    document.dispatchEvent(new CustomEvent('moe-calcul'));
     var b = $('moe-pont-go');
     if(b) b.addEventListener('click', function(){ pont(j); });
   }
@@ -12112,6 +12148,10 @@ if(window.parent&&window.parent!==window){
   if($('moe-go')) demarrer();
   else if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', demarrer);
   else demarrer();
+  /* Rendu nul tant que rien n'est chiffré : un bloc qui lit d'ici doit
+     pouvoir constater l'absence, pas recevoir un objet vide qui ressemble à
+     un résultat. */
+  window.MOE_DERNIER = function(){ return DERNIER; };
 })();
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -12187,9 +12227,15 @@ if(window.parent&&window.parent!==window){
     z.innerHTML = h;
   }
 
+  var MOTS = ["aucun", "un", "deux", "trois", "quatre", "cinq", "six", "sept",
+              "huit", "neuf", "dix"];
+
   function rendreForm(){
     var z = $("pil-form");
     if(!z || !CADRE) return;
+    var n = (CADRE.indicateurs || []).length;
+    var note = $("pil-note");
+    if(note) note.textContent = (MOTS[n] || n) + " indicateur" + (n > 1 ? "s" : "");
     var h = '<table class="pil-tab"><thead><tr><th>Indicateur</th>'
       + "<th>Valeur</th><th>Cible</th><th>Série (séparée par des virgules)</th></tr></thead><tbody>";
     (CADRE.indicateurs || []).forEach(function(i){
@@ -12215,8 +12261,194 @@ if(window.parent&&window.parent!==window){
         m[k].serie = v.split(/[;,]/).map(function(x){ return nb(x); })
           .filter(function(x){ return x !== null && !isNaN(x); });
       } else { m[k][c] = nb(v); }
+      /* L'INCERTITUDE RÉELLE PREND LE PAS SUR LA VALEUR PAR DÉFAUT, et c'est
+         le point qui change le verdict. Le référentiel porte une incertitude
+         générique par indicateur — ±30 % pour l'enveloppe, l'ordre de grandeur
+         d'une étude amont. Mais quand la grandeur vient d'un calcul de cette
+         page, sa fourchette est CONNUE : 736–920 M€, c'est ±11 %, pas ±30 %.
+         Garder les ±30 % rendrait « écart non démontré » un dépassement que
+         la fourchette calculée démontre pourtant. Le moteur accepte une
+         incertitude par mesure : on lui donne la vraie. */
+      if(c === "valeur"){
+        var inc = e.getAttribute("data-inc");
+        if(inc) m[k].incertitude = parseFloat(inc);
+      }
     });
     return m;
+  }
+
+  /* ── CE QUI SE DÉDUIT DES CALCULS PRÉCÉDENTS — ET CE QUI NE S'EN DÉDUIT PAS
+     ═══════════════════════════════════════════════════════════════════════
+     Ce tableau de bord demandait de retaper à la main des grandeurs calculées
+     trois écrans plus haut. La recopie n'est pas seulement fastidieuse : c'est
+     l'endroit où les deux chiffres se mettent à diverger, et où l'on pilote
+     alors sur une valeur que plus rien ne rattache à l'étude.
+
+     MAIS TOUT NE SE DÉDUIT PAS, et c'est la moitié importante de ce code.
+     Deux des cinq indicateurs mesurent un CONSTAT — ce que le chantier a
+     réellement remis, ce que l'exploitation a réellement mesuré. Les remplir
+     depuis les hypothèses de conception les rendrait verts par construction :
+     le PUE constaté vaudrait toujours le PUE promis, et l'indicateur qui
+     existe précisément pour révéler l'écart entre les deux ne pourrait plus
+     jamais rien révéler. Ces deux-là restent vides, avec la raison écrite
+     dans le champ.
+
+     LES CIBLES SUIVENT LA MÊME RÈGLE. Une cible n'est déduite que lorsqu'elle
+     est INDÉPENDANTE de la valeur — le barème complet face aux honoraires
+     réellement retenus, le délai sans file d'attente face au délai avec.
+     Pour l'enveloppe par kW, la cible est votre budget : la déduire de
+     l'enveloppe reviendrait à comparer un chiffre à lui-même, et l'écart
+     serait nul quoi qu'il arrive. */
+  var PREREMPLI = null;
+
+  function mil(f){ return (f && f.length === 2 && f[0] != null && f[1] != null)
+    ? (Number(f[0]) + Number(f[1])) / 2 : null; }
+  function demi(f){ var m = mil(f);
+    return (m && m > 0) ? Math.abs(Number(f[1]) - Number(f[0])) / 2 / m : null; }
+  function arr(v, n){ var p = Math.pow(10, n || 0);
+    return v == null ? null : Math.round(v * p) / p; }
+  function fr(v){ return v == null ? "—" : String(v).replace(".", ","); }
+
+  function amont(){
+    var d = window.FIN_DERNIER && window.FIN_DERNIER();
+    if(!d || !d.dossiers || !d.dossiers.length) return null;
+    var code = (window.FIN_PAYS && window.FIN_PAYS())
+      || ((d.classement || [])[0] || {}).pays;
+    var dos = d.dossiers.filter(function(x){ return x.pays === code; })[0];
+    if(!dos) return null;
+    return { d: d, dos: dos, pays: code,
+             moe: (window.MOE_DERNIER && window.MOE_DERNIER()) || null };
+  }
+
+  function deduire(){
+    var a = amont();
+    if(!a) return null;
+    var v = {}, dit = [], mut = [];
+
+    /* 1. ENVELOPPE PAR kW IT — l'enveloppe calculée divisée par la puissance
+       informatique saisie. Rien d'autre n'entre dans ce ratio. */
+    var mw = (a.d.entree || {}).mw;
+    var env = a.dos.devis.enveloppe_meur;
+    if(mw > 0 && mil(env) != null){
+      v.enveloppe_kw = { valeur: arr(mil(env) * 1e6 / (mw * 1000), 0),
+                         incertitude: demi(env) };
+      dit.push("<b>Enveloppe par kW</b> — " + fr(arr(mil(env), 1)) + " M€ "
+        + "÷ " + fr(mw) + " MW IT, avec l’incertitude réelle de la fourchette "
+        + "(±" + fr(arr(demi(env) * 100, 1)) + " %) et non les ±30 % par défaut.");
+      mut.push("La <b>cible</b> de l’enveloppe par kW reste vide&nbsp;: c’est "
+        + "votre budget. La déduire de l’enveloppe reviendrait à comparer un "
+        + "chiffre à lui-même, et l’écart serait nul quoi qu’il arrive.");
+    }
+
+    /* 2. PART DE LA MAÎTRISE D'ŒUVRE — le taux effectif du bloc précédent,
+       face au barème COMPLET des mêmes missions. La comparaison n'est pas
+       circulaire : le taux effectif tombe sous le barème dès qu'une phase est
+       écartée, et c'est exactement le risque que cet indicateur porte. */
+    if(a.moe && a.moe.taux_effectif_pct && mil(a.moe.taux_effectif_pct) != null){
+      var tx = mil(a.moe.taux_effectif_pct);
+      var plein = [0, 0], connu = false;
+      (a.moe.missions || []).forEach(function(m){
+        var t = m.montant_toutes_phases_meur;
+        if(t && t[0] != null){ plein[0] += Number(t[0]); plein[1] += Number(t[1]); connu = true; }
+      });
+      var trav = a.moe.travaux_meur;
+      var bareme = (connu && mil(trav) > 0) ? arr(mil(plein) / mil(trav) * 100, 2) : null;
+      v.part_moe = { valeur: arr(tx, 2), incertitude: demi(a.moe.taux_effectif_pct) };
+      if(bareme != null) v.part_moe.cible = bareme;
+      dit.push("<b>Part de la maîtrise d’œuvre</b> — " + fr(arr(tx, 2))
+        + " % des travaux, repris du chiffrage ci-dessus"
+        + (bareme != null
+            ? ", face au barème complet des mêmes missions (" + fr(bareme)
+              + " %) : l’écart mesure les phases écartées."
+            : "."));
+    } else {
+      mut.push("La <b>part de la maîtrise d’œuvre</b> attend le chiffrage des "
+        + "honoraires&nbsp;: lancez-le et reprenez ce bouton.");
+    }
+
+    /* 3. DÉLAI DE RACCORDEMENT — l'instruction réseau (6 à 24 mois, constante
+       de filière) AUGMENTÉE de ce que la file d'attente du pays ajoute, qui
+       est calculé pour ce pays. La cible est le même délai sans file tendue :
+       l'écart mesure donc exactement la pénalité du pays retenu. */
+    var ph = ((a.dos.trajectoire || {}).phases || []).filter(function(p){
+      return p.cle === "raccordement"; })[0];
+    var rac = (a.dos.devis || {}).raccordement;
+    if(ph && ph.duree_mois && rac && rac.mois_sup){
+      var base = ph.duree_mois;
+      var avec = [Number(base[0]) + Number(rac.mois_sup[0]),
+                  Number(base[1]) + Number(rac.mois_sup[1])];
+      v.delai_raccordement = { valeur: arr(mil(avec), 1), cible: arr(mil(base), 1),
+                               incertitude: demi(avec) };
+      dit.push("<b>Délai de raccordement</b> — " + fr(arr(mil(base), 1))
+        + " mois d’instruction réseau, plus ce que la file d’attente du pays "
+        + "ajoute (« " + esc(rac.nom) + " »)&nbsp;: " + fr(arr(mil(avec), 1))
+        + " mois. La cible est le même délai sans file tendue.");
+    }
+
+    /* 4 ET 5. LES DEUX CONSTATS. Ils ne se déduisent d'aucun calcul — et les
+       déduire quand même les rendrait verts par construction. */
+    v.pue_constate = { cible: arr(mil(((a.dos.devis || {}).refroidissement || {}).pue), 3) };
+    if(v.pue_constate.cible == null) delete v.pue_constate;
+    else dit.push("<b>PUE</b> — seule la <b>cible</b> est reprise ("
+      + fr(v.pue_constate.cible) + ", le PUE de conception).");
+    mut.push("Le <b>PUE constaté</b> reste vide&nbsp;: il se mesure en "
+      + "exploitation. Le remplir avec le PUE de conception rendrait l’écart "
+      + "nul par construction — or c’est cet écart, et lui seul, que "
+      + "l’indicateur existe pour révéler.");
+    mut.push("L’<b>avancement des études</b> reste vide&nbsp;: il se constate "
+      + "sur les pièces remises, pas sur un calcul d’enveloppe.");
+
+    return { valeurs: v, dit: dit, muet: mut, pays: a.pays,
+             moe: !!a.moe };
+  }
+
+  var VIDES = {
+    pue_constate: "se mesure en exploitation",
+    avancement_etudes: "se constate sur pièces remises"
+  };
+
+  function appliquer(){
+    var r = deduire();
+    if(!r) return;
+    var champs = document.querySelectorAll("#pil-form input");
+    [].slice.call(champs).forEach(function(e){
+      var k = e.getAttribute("data-pi"), c = e.getAttribute("data-ch");
+      var d = r.valeurs[k];
+      if(d && d[c] != null){
+        e.value = String(d[c]).replace(".", ",");
+        e.classList.add("pil-dedu");
+        e.setAttribute("title", "Repris des calculs de cette page — modifiable.");
+        /* UNE INCERTITUDE NULLE NE SE TRANSMET PAS. Le taux d'honoraires vaut
+           7,85 % aux deux bornes de l'enveloppe — numérateur et dénominateur
+           varient ensemble —, ce qui donnerait une demi-largeur de zéro. La
+           transmettre reviendrait à annoncer une précision parfaite sur un
+           taux qui dépend d'un barème lui-même donné en fourchette, et à
+           faire alerter sur le moindre écart. Le référentiel garde alors son
+           incertitude déclarée, qui est prudente et assumée. */
+        if(c === "valeur" && d.incertitude != null && d.incertitude > 0)
+          e.setAttribute("data-inc", String(d.incertitude));
+      } else if(c === "valeur" && VIDES[k]){
+        /* LE CHAMP DIT LUI-MÊME POURQUOI IL EST VIDE. Un champ vide sans
+           explication se lit comme un oubli, et se remplit au jugé. */
+        e.setAttribute("placeholder", VIDES[k]);
+      }
+    });
+    PREREMPLI = r;
+    var z = $("pil-prerempli");
+    if(z){
+      z.innerHTML = "<b>Repris des calculs de cette page</b> (pays retenu&nbsp;: "
+        + esc(r.pays) + ") — chaque valeur reste modifiable.<ul>"
+        + r.dit.map(function(x){ return "<li>" + x + "</li>"; }).join("")
+        + r.muet.map(function(x){ return '<li class="non">' + x + "</li>"; }).join("")
+        + "</ul>";
+      z.hidden = false;
+    }
+  }
+
+  function preMaj(){
+    var b = $("pil-pre");
+    if(!b) return;
+    b.hidden = !amont();
   }
 
   function rendre(d){
@@ -12310,8 +12542,18 @@ if(window.parent&&window.parent!==window){
   function demarrer(){
     if(!$("pil-go")) return;
     fetch("/api/pilotage-dc").then(function(r){ return r.json(); })
-      .then(function(j){ if(j && j.ok){ CADRE = j; rendreForm(); rendreGuide(); } })
+      .then(function(j){ if(j && j.ok){ CADRE = j; rendreForm(); rendreGuide(); preMaj(); } })
       .catch(function(){ $("pil-form").innerHTML = '<p class="note">cadre indisponible</p>'; });
+
+    /* LE BOUTON SUIT L'AMONT. Il n'apparaît que lorsqu'il y a quelque chose à
+       reprendre, et se réarme quand l'enveloppe est recalculée, quand le pays
+       change, ou quand les honoraires viennent d'être chiffrés — sans quoi il
+       resterait absent après le calcul qui vient de le rendre utile. */
+    document.addEventListener("fin-calcul", preMaj);
+    document.addEventListener("fin-pays", preMaj);
+    document.addEventListener("moe-calcul", preMaj);
+    var pre = $("pil-pre");
+    if(pre) pre.addEventListener("click", appliquer);
 
     $("pil-go").addEventListener("click", function(){
       /* LE NIVEAU DE MATURITÉ EST REPRIS DU DIAGNOSTIC S'IL A ÉTÉ ÉTABLI —
