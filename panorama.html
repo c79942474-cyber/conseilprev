@@ -1037,6 +1037,17 @@ th .ttip{margin-left:5px}
 .kpi-prerempli{font-size:11.5px;line-height:1.55;margin:6px 0 10px;
   padding:8px 11px;background:var(--bg);border-left:3px solid var(--green);
   border-radius:0 5px 5px 0}
+/* LE MINIMUM À BATTRE. Il passe avant les trois indicateurs et se voit comme
+   tel : c'est la seule réponse que ce bloc puisse donner sans plan d'affaires,
+   et elle décide autant qu'eux. */
+.kpi-seuil{margin:0 0 14px;padding:12px 15px;border:1px solid var(--rule);
+  border-left:4px solid var(--blue);border-radius:0 8px 8px 0;background:var(--bg)}
+.kpi-seuil.attente{border-left-color:var(--muted2);font-size:12px;line-height:1.6}
+.kpi-seuil-t{margin:0;font-size:10.5px;text-transform:uppercase;
+  letter-spacing:.07em;color:var(--muted);font-weight:600}
+.kpi-seuil-v{margin:3px 0 6px;font-size:21px;font-weight:700;line-height:1.2}
+.kpi-seuil-d{margin:0 0 6px;font-size:12px;line-height:1.6}
+.kpi-seuil-f{margin:4px 0 0;font-size:11px;line-height:1.55;color:var(--muted)}
 /* Le menu de provenance. Discret : c'est le CHAMP qu'on remplit, le menu n'est
    qu'un raccourci vers une valeur justifiée. */
 .kpi-src{font-size:11px;padding:4px 6px;border:1px solid var(--rule);
@@ -2901,6 +2912,15 @@ engagements publics) sont imputés nominativement.</div>
       pas se calculer sans vous&nbsp;: revenu attendu, coût du capital et taux d’impôt sont
       des décisions d’investisseur, pas des données de référentiel. Tant qu’elles ne sont
       pas saisies, les trois sont <b>non instruits</b>, et non pas nuls.</p>
+      <!-- LA QUESTION EST INVERSÉE, ET ELLE PASSE EN PREMIER. Attendre un plan
+           d'affaires pour dire quoi que ce soit laissait ce bloc muet dans son
+           cas le plus fréquent. Le seuil, lui, se calcule sans prévision. -->
+      <p class="kpi-d"><b>Vous n’avez pas encore de plan d’affaires&nbsp;?</b> Le calcul
+      répond quand même à la question qui décide&nbsp;: <b>combien ce projet doit-il
+      rapporter pour ne pas détruire de valeur&nbsp;?</b> Ce seuil sort de l’enveloppe
+      déjà calculée et de <b>deux chiffres seulement</b> — coût du capital et taux
+      d’impôt, qui sont des décisions, pas des prévisions. Il s’affiche en tête du
+      résultat&nbsp;; les trois indicateurs viennent ensuite, pour qui a le plan.</p>
       <!-- LE PRÉ-REMPLISSAGE, ET LE PARCOURS. Le premier propose ce que
            l'enveloppe permet de déduire ; le second explique pourquoi ces trois
            indicateurs se lisent ensemble. Tous deux restent facultatifs : ce
@@ -13323,6 +13343,49 @@ if(window.parent&&window.parent!==window){
     return h;
   }
 
+  /* ── LE MINIMUM À BATTRE ───────────────────────────────────────────────────
+     CE QUE CE BLOC CORRIGE. Les trois indicateurs exigent sept hypothèses,
+     dont un revenu attendu que cette page ne peut pas fournir : tant qu'il
+     manque, ils restent « non instruits » — et c'est leur état le plus
+     fréquent. Un lecteur qui arrive ici sans plan d'affaires repartait donc
+     avec sept champs vides et aucune réponse, sur la page même qui sert à
+     décider d'un GO ou d'un NO GO.
+
+     LA QUESTION EST INVERSÉE, et c'est tout le gain. Non pas « que rapporte
+     ce projet ? » — nul ne le sait à ce stade — mais « QUE DOIT-IL RAPPORTER
+     pour ne pas détruire de valeur ? ». Cette réponse-là ne demande que deux
+     taux, et ce sont deux DÉCISIONS du lecteur, pas des prévisions. Elle sort
+     de l'enveloppe déjà calculée par simple inversion, sans hypothèse ajoutée.
+
+     ELLE PASSE DONC EN PREMIER. Les trois indicateurs restent, entiers, pour
+     qui a un plan d'affaires — ils disent alors ce que le seuil ne dit pas :
+     l'évolution, la comparaison à un objectif, le piège de l'amortissement. */
+  function seuilBloc(j){
+    var s = j && j.seuil_revenu;
+    if(!s || !s.revenu_seuil_meur || s.revenu_seuil_meur[0] == null){
+      return '<div class="kpi-seuil attente"><b>Ce que ce projet doit rapporter '
+        + 'pour ne pas détruire de valeur</b> se calcule avec deux chiffres '
+        + 'seulement&nbsp;: le <b>coût du capital</b> et le <b>taux d’impôt</b>. '
+        + 'Renseignez-les ci-dessus — cette réponse-là n’attend pas votre plan '
+        + 'd’affaires, et c’est la seule que ce bloc puisse donner sans lui.</div>';
+    }
+    var f = s.revenu_seuil_meur;
+    return '<div class="kpi-seuil">'
+      + '<p class="kpi-seuil-t">Le minimum à battre</p>'
+      + '<p class="kpi-seuil-v">' + fourch(f, 'M€/an') + '</p>'
+      + '<p class="kpi-seuil-d">' + esc(s.lecture) + '</p>'
+      /* DEUX BORNES, ET C'EST L'ÉCART QUI INSTRUIT. Un seuil unique cacherait
+         que l'exigence décroît mécaniquement avec l'amortissement, et ferait
+         juger tout le projet sur son année la plus dure. */
+      + '<p class="kpi-seuil-d">La borne haute est l’année '
+      + esc(String(s.premiere_annee_pleine)) + ', la première à pleine charge&nbsp;: '
+      + 'les capitaux employés y sont presque intacts, c’est l’année la plus '
+      + 'exigeante. La borne basse est la dernière, largement amortie. '
+      + '<b>L’exigence décroît mécaniquement</b> — un seuil unique ferait juger '
+      + 'tout le projet sur son année la plus dure.</p>'
+      + '<p class="kpi-seuil-f"><b>Formule.</b> ' + esc(s.formule) + '</p></div>';
+  }
+
   function tableSerie(s){
     var l = s.annees;
     if(!l.length) return '';
@@ -13424,7 +13487,7 @@ if(window.parent&&window.parent!==window){
       if(!lec.instruit){
         /* PAS DE CASES VIDES : les questions à poser. Un tableau de zéros
            serait lu comme un résultat ; une question se répond. */
-        $('kpi-out').innerHTML = '<div class="kpi-trous"><b>Ces trois indicateurs '
+        $('kpi-out').innerHTML = seuilBloc(j) + '<div class="kpi-trous"><b>Ces trois indicateurs '
           + 'ne sont pas instruits — ils ne valent pas zéro.</b><br>'
           + esc(lec.message) + '<ul>'
           + lec.manquantes.map(function(m){
@@ -13435,7 +13498,8 @@ if(window.parent&&window.parent!==window){
           + '</ul></div>' + suite();
         return;
       }
-      var h = '<p class="kpi-synth"><b>Ce que cela dit.</b> ' + esc(lec.synthese) + '</p>'
+      var h = seuilBloc(j)
+        + '<p class="kpi-synth"><b>Ce que cela dit.</b> ' + esc(lec.synthese) + '</p>'
         + lec.indicateurs.map(carte).join('')
         + tableSerie(s)
         + lec.reserves.map(function(r){

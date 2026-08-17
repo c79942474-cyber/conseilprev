@@ -2000,10 +2000,35 @@ def api_kpi_finance():
     # servent.
     props = kpi_finance.propositions(capex, opex, annees, hyp)
 
+    # LE SEUIL DE REVENU — LA QUESTION QU'ON PEUT REPONDRE AVANT D'AVOIR UN
+    # PLAN D'AFFAIRES. Les trois indicateurs exigent sept hypotheses, dont un
+    # revenu attendu que cette page ne peut pas fournir : tant qu'il manque,
+    # ils restent « non instruits », et c'est leur etat le plus frequent.
+    # `seuil_revenu` inverse la question — non pas « que rapporte ce projet ? »
+    # mais « que DOIT-IL rapporter pour ne pas detruire de valeur ? ». Cette
+    # reponse-la ne demande que deux taux, et ce sont deux DECISIONS du
+    # lecteur, pas des previsions. Elle etait calculable depuis le premier
+    # jour et n'etait servie nulle part.
+    def _taux(cle):
+        try:
+            v = hyp.get(cle)
+            return None if v in (None, "") else float(v)
+        except (TypeError, ValueError):
+            return None
+
+    def _opt(cle):
+        v = _taux(cle)
+        return v if v and v > 0 else None
+
+    seuil = kpi_finance.seuil_revenu(capex, opex, annees,
+                                     _taux("wacc"), _taux("is_taux"),
+                                     amort_ans=_opt("amort_ans"),
+                                     bfr_meur=_taux("bfr_meur"))
+
     s = kpi_finance.serie(capex, opex, annees, hyp)
     lec = kpi_finance.lecture(s, d.get("cibles") or {})
     return jsonify(ok=True, serie=s, lecture=lec, propositions=props,
-                   version=kpi_finance.VERSION)
+                   seuil_revenu=seuil, version=kpi_finance.VERSION)
 
 
 import equipements_it  # noqa: E402  — LE MEME FICHIER que dans
