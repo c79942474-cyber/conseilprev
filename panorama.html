@@ -1065,6 +1065,13 @@ th .ttip{margin-left:5px}
 .kpi-refus{display:block;font-size:10.5px;line-height:1.45;margin-top:4px;
   padding:5px 8px;background:#FDF6E9;border-left:2px solid var(--orange);
   border-radius:0 4px 4px 0;color:var(--ink)}
+/* LA RÉSERVE DIT CE QUE LE MENU N'EST PAS. Ambre comme le refus — même famille
+   de message : « attention à ce que vous croyez lire ». Quatre chiffres ronds
+   dans une liste déroulante passent pour une référence de marché ; la réserve
+   est ce qui les en empêche, et elle doit donc rester visible, pas repliée. */
+.kpi-reserve{display:block;font-size:10.5px;line-height:1.45;margin-top:4px;
+  padding:5px 8px;background:var(--bg);border-left:2px solid var(--muted2);
+  border-radius:0 4px 4px 0;color:var(--muted)}
 
 /* ══ LE FIL CONDUCTEUR DE L'ENVELOPPE ═══════════════════════════════════════ */
 .fin-fil{margin:0 0 16px;padding:11px 13px;background:var(--bg);
@@ -13324,9 +13331,27 @@ if(window.parent&&window.parent!==window){
      ferait deux exemplaires qui divergeraient. */
   var KPI_PROP = null;              /* propositions servies par le serveur */
 
+  /* LES PROPOSITIONS QUI NE DÉPENDENT D'AUCUN CALCUL SONT SERVIES AVEC LE
+     RÉFÉRENTIEL. Les quatre jalons de coût du capital ne dépendent de rien, et
+     le plancher mondial de 15 % non plus : les réserver au premier calcul les
+     rendait absents au moment où le lecteur découvre le formulaire — donc au
+     moment où il en a besoin. Le calcul, lui, les remplace ensuite par des
+     propositions qui connaissent le pays de l'étude. */
+  function kpiStatiques(cle){
+    var p = REF && REF.propositions_statiques && REF.propositions_statiques[cle];
+    return p || null;
+  }
   function kpiOrigines(cle){
     var p = KPI_PROP && KPI_PROP.entrees && KPI_PROP.entrees[cle];
-    return (p && p.propositions) || [];
+    if(p && p.propositions && p.propositions.length) return p.propositions;
+    var st = kpiStatiques(cle);
+    return (st && st.propositions) || [];
+  }
+  function kpiReserve(cle){
+    var p = KPI_PROP && KPI_PROP.entrees && KPI_PROP.entrees[cle];
+    if(p && p.reserve) return p.reserve;
+    var st = kpiStatiques(cle);
+    return (st && st.reserve) || null;
   }
   function kpiRefus(cle){
     var p = KPI_PROP && KPI_PROP.entrees && KPI_PROP.entrees[cle];
@@ -13357,6 +13382,7 @@ if(window.parent&&window.parent!==window){
       var ph = e.obligatoire ? 'à renseigner'
              : (e.defaut != null ? 'défaut ' + nb(e.defaut) : '');
       var props = kpiOrigines(e.cle), refus = kpiRefus(e.cle);
+      var p = KPI_PROP && KPI_PROP.entrees && KPI_PROP.entrees[e.cle];
       /* LE MENU N'APPARAÎT QUE S'IL A QUELQUE CHOSE À OFFRIR. Un menu à une
          seule ligne — « votre saisie » — occuperait la place en promettant un
          choix qui n'existe pas. */
@@ -13365,13 +13391,29 @@ if(window.parent&&window.parent!==window){
           + 'aria-label="D’où vient la valeur — ' + esc(e.nom) + '">'
           + '<option value="">— je saisis ma valeur —</option>'
           + props.map(function(x, i){
+              /* LE POURCENTAGE DE L'INVESTISSEMENT VOYAGE AVEC LE MONTANT.
+                 C'est sous cette forme qu'un revenu se juge : un montant seul
+                 ne dit pas s'il est ambitieux ou modeste au regard de ce que
+                 l'actif aura coûté à construire. */
               return '<option value="' + i + '">' + esc(x.libelle) + ' : '
-                + nb(x.valeur) + '</option>'; }).join('')
+                + nb(x.valeur)
+                + (x.pct_investissement != null
+                    ? ' M€ — ' + nb(x.pct_investissement)
+                      + ' % de l’investissement' : '')
+                + '</option>'; }).join('')
           + '</select>'
         : '';
       /* LE REFUS SE MONTRE, il ne se devine pas. Une case obligatoire et vide
          sans explication se lit comme un oubli du site. */
       var mot = refus ? '<span class="kpi-refus">' + esc(refus) + '</span>' : '';
+      /* LA RÉSERVE AUSSI, ET C'EST ELLE QUI PORTE L'HONNÊTETÉ DU MENU. Quatre
+         chiffres ronds dans une liste déroulante se lisent comme une référence
+         de marché ; les quatre coûts du capital n'en sont pas, et les taux
+         d'impôt sont nominaux, pas effectifs. Sans cette phrase sous le champ,
+         le menu promettrait une autorité qu'il n'a pas. */
+      var reserve = kpiReserve(e.cle);
+      var res = reserve
+        ? '<span class="kpi-reserve">' + esc(reserve) + '</span>' : '';
       return '<div class="kpi-ch"><label for="kpi-' + esc(e.cle) + '" '
         + 'data-aide="kpi_' + esc(e.cle) + '">'
         + esc(e.nom) + req + '</label>'
@@ -13379,7 +13421,7 @@ if(window.parent&&window.parent!==window){
         + '<input type="text" id="kpi-' + esc(e.cle) + '" placeholder="'
         + esc(ph) + '" title="' + esc(e.question) + '">'
         + '<span class="kpi-orig" id="kpi-o-' + esc(e.cle) + '"></span>'
-        + mot
+        + mot + res
         + '<span class="kpi-aide">' + esc(e.question) + '</span></div>';
     }).join('');
     /* LES OBJECTIFS SONT FACULTATIFS, ET LEUR ABSENCE EST DITE. Ce module ne
@@ -13605,6 +13647,9 @@ if(window.parent&&window.parent!==window){
       cap = [cap[0] + it.bas, cap[1] + it.haut];
     }
     return { pays: code,
+             /* LES PAYS COMPARÉS, pour que les taux d'impôt proposés bornent
+                RÉELLEMENT l'étude en cours au lieu d'être une table générale. */
+             compares: (d.dossiers || []).map(function(x){ return x.pays; }),
              capex: cap,
              capexIT: it || null,
              opex: dos.exploitation.total_meur_an,
@@ -13733,8 +13778,12 @@ if(window.parent&&window.parent!==window){
     $('kpi-msg').textContent = 'lecture en cours…';
     fetch('/api/kpi-finance', {
       method: 'POST', headers: {'Content-Type': 'application/json'},
+      /* LE PAYS PART AVEC LA REQUÊTE : les taux d'impôt proposés sont ceux du
+         pays retenu et des pays comparés. Sans eux, le module ne pourrait
+         offrir qu'une table générique — fausse pour l'étude en cours. */
       body: JSON.stringify({ capex_meur: env.capex, opex_an_meur: env.opex,
-                             annees: env.annees, hypotheses: hyp, cibles: cib })
+                             annees: env.annees, hypotheses: hyp, cibles: cib,
+                             pays: env.pays, pays_compares: env.compares })
     }).then(function(r){ return r.json(); }).then(function(j){
       if(!j.ok){
         $('kpi-msg').textContent = j.message || 'lecture indisponible';

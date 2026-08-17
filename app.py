@@ -1998,7 +1998,16 @@ def api_kpi_finance():
     # enveloppe — et lesquelles il refuse de deduire, avec le motif. Les servir
     # seulement en cas de succes les rendrait inutiles au moment ou elles
     # servent.
-    props = kpi_finance.propositions(capex, opex, annees, hyp)
+    # LE PAYS VOYAGE AVEC LE CALCUL. Les taux d'impot proposes sont ceux du
+    # pays retenu et des pays compares : sans eux, le module ne pourrait offrir
+    # qu'une table generique, c'est-a-dire fausse pour l'etude en cours.
+    _pays = d.get("pays") or None
+    _compares = d.get("pays_compares") or []
+    if not isinstance(_compares, list):
+        _compares = []
+    _compares = [str(x)[:4] for x in _compares][:12]
+    props = kpi_finance.propositions(capex, opex, annees, hyp,
+                                     pays=_pays, pays_compares=_compares)
 
     # LE SEUIL DE REVENU — LA QUESTION QU'ON PEUT REPONDRE AVANT D'AVOIR UN
     # PLAN D'AFFAIRES. Les trois indicateurs exigent sept hypotheses, dont un

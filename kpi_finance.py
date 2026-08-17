@@ -342,15 +342,125 @@ def serie(capex_meur, opex_an_meur, annees, hypotheses):
 # ═══════════════════════════════════════════════════════════════════════════
 
 #: Les deux entrées qu'aucun calcul ne peut proposer, et pourquoi.
-REFUS_PROPOSITION = {
-    "wacc": "Le coût du capital est une décision du comité d'investissement, "
-            "pas un résultat : il dépend de votre structure de financement et "
-            "de votre appétit au risque. Le proposer reviendrait à choisir à "
-            "votre place le taux qui juge votre projet.",
-    "is_taux": "Le taux effectif dépend du véhicule qui portera l'actif, des "
-               "crédits d'impôt et des régimes locaux. Aucune valeur générique "
-               "n'est juste pour un projet donné.",
+REFUS_PROPOSITION = {}
+
+# ═══════════════════════════════════════════════════════════════════════════
+# 1 bis. CE QU'ON PROPOSE POUR LES TROIS ENTREES OBLIGATOIRES
+# ═══════════════════════════════════════════════════════════════════════════
+# CE MODULE REFUSAIT DE PROPOSER LE COUT DU CAPITAL ET LE TAUX D'IMPOT, avec un
+# motif juste : ce sont des decisions, pas des resultats. Mais un champ vide et
+# obligatoire n'est pas neutre non plus — il se remplit au juge, ou il arrete
+# le lecteur. On propose donc, EN DISANT DE QUELLE NATURE EST CHAQUE CHIFFRE.
+# C'est cette distinction qui fait toute la difference entre proposer et
+# inventer, et elle est portee par le champ `nature` :
+#
+#   · « calcule »   — sorti de VOTRE enveloppe par une formule ecrite. Le
+#                     revenu d'equilibre et ses paliers en sont : rien n'y est
+#                     suppose, tout se refait a la main.
+#   · « statutaire » — un taux nominal publie par un Etat. C'est un fait, pas
+#                     un avis ; mais c'est le taux NOMINAL, et le taux effectif
+#                     s'en ecarte par les credits, les regimes et les deficits
+#                     reportables. Il se confirme aupres d'un conseil fiscal.
+#   · « jalon »     — NI un calcul NI une donnee de marche : un reper rond,
+#                     pose pour eprouver la sensibilite du resultat. Les quatre
+#                     couts du capital en sont. Les presenter comme une
+#                     reference sectorielle serait un mensonge sur leur source :
+#                     ce module n'a aucune enquete de marche publiable, et en
+#                     fabriquer une serait pire que de ne rien proposer.
+#
+# LE LECTEUR DOIT POUVOIR LIRE CETTE NATURE AU MOMENT OU IL CHOISIT — sinon la
+# distinction ne sert a rien. Chaque proposition porte donc son libelle, sa
+# formule et sa lecture jusqu'a l'ecran.
+
+# QUATRE JALONS DE COUT DU CAPITAL. Ils ne decrivent pas un marche : ils
+# decrivent QUATRE STRUCTURES DE FINANCEMENT, de la plus securisee a la plus
+# exposee. L'ecart entre le premier et le dernier vaut le double — c'est
+# justement ce que le lecteur doit voir avant de trancher.
+CMPC_JALONS = [
+    {"valeur": 6.0, "nom": "Dette majoritaire, actif sécurisé",
+     "quand": "l'actif est loué à un locataire de premier rang sur un bail "
+              "long, et la dette porte l'essentiel du financement"},
+    {"valeur": 8.0, "nom": "Structure équilibrée",
+     "quand": "part de fonds propres et part de dette comparables, locataire "
+              "identifié mais bail non encore signé"},
+    {"valeur": 10.0, "nom": "Fonds propres dominants",
+     "quand": "développement en blanc, sans locataire engagé : le risque de "
+              "commercialisation reste chez l'investisseur"},
+    {"valeur": 12.0, "nom": "Prime de risque pays ou contrepartie",
+     "quand": "pays à prime de risque, contrepartie non notée, ou horizon de "
+              "sortie incertain"},
+]
+
+CMPC_RESERVE = (
+    "Ces quatre taux ne sont PAS une référence de marché : ce module n'en a "
+    "aucune de publiable, et en fabriquer une la rendrait crue. Ce sont quatre "
+    "structures de financement, posées pour que vous voyiez de combien le "
+    "verdict bouge entre elles — l'écart du simple au double. Le taux qui "
+    "jugera votre projet est celui de votre comité d'investissement.")
+
+# TAUX D'IMPOT SUR LES SOCIETES — NOMINAUX ET STATUTAIRES, par pays. Ce sont
+# des faits publies, non des avis : c'est ce qui les distingue des jalons
+# ci-dessus. Mais ce sont les taux NOMINAUX, combines Etat + local la ou le
+# local pese (Allemagne, Italie), et le taux EFFECTIF s'en ecarte toujours.
+IS_STATUTAIRE = {
+    "FR": (25.0, "impôt sur les sociétés au taux normal"),
+    "DE": (30.0, "15 % fédéral + contribution de solidarité + taxe "
+                 "professionnelle communale — le total varie avec la commune"),
+    "IE": (12.5, "taux des bénéfices d'exploitation"),
+    "SE": (20.6, "impôt national sur les sociétés"),
+    "NL": (25.8, "taux supérieur ; un taux réduit s'applique aux premiers "
+                 "bénéfices"),
+    "ES": (25.0, "taux general"),
+    "IT": (27.9, "24 % IRES + 3,9 % IRAP, l'IRAP variant par région"),
+    "BE": (25.0, "taux normal"),
+    "PL": (19.0, "taux normal"),
+    "DK": (22.0, "taux normal"),
+    "FI": (20.0, "taux normal"),
+    "PT": (20.0, "taux normal continental, hors derrama municipale et "
+                 "derrama d'État sur les bénéfices élevés"),
+    "AT": (23.0, "taux normal"),
+    "LU": (24.9, "impôt sur le revenu des collectivités + impôt commercial "
+                 "communal, Luxembourg-Ville"),
+    "CZ": (21.0, "taux normal"),
+    "HU": (9.0, "taux normal — le plus bas de l'Union ; une taxe locale "
+                "d'entreprise s'y ajoute"),
+    "RO": (16.0, "taux normal"),
+    "GR": (22.0, "taux normal"),
+    "BG": (10.0, "taux normal"),
+    "HR": (18.0, "taux normal au-delà du seuil de chiffre d'affaires"),
+    "SI": (22.0, "taux normal"),
+    "SK": (21.0, "taux normal ; un taux majoré s'applique aux grandes bases"),
+    "LT": (16.0, "taux normal"),
+    "LV": (20.0, "sur les bénéfices DISTRIBUÉS : les bénéfices réinvestis ne "
+                 "sont pas imposés, ce qui change tout le profil de trésorerie"),
+    "EE": (22.0, "sur les bénéfices DISTRIBUÉS : les bénéfices réinvestis ne "
+                 "sont pas imposés, ce qui change tout le profil de trésorerie"),
+    "CY": (12.5, "taux normal"),
+    "MT": (35.0, "taux nominal ; un mécanisme de remboursement aux actionnaires "
+                 "abaisse fortement la charge effective"),
 }
+
+# LE PLANCHER MONDIAL DE 15 %. Il concerne exactement la population de ce
+# module : les groupes au-dela de 750 M€ de chiffre d'affaires consolide, donc
+# tout operateur de centre de donnees de cette taille. Retenir 12,5 % en
+# Irlande pour un groupe dans le champ produirait un impot sous-estime.
+PILIER_DEUX = {
+    "taux": 15.0,
+    "nom": "Plancher mondial de 15 % (Pilier Deux de l'OCDE)",
+    "quand": "groupe dont le chiffre d'affaires consolidé dépasse 750 M€ — "
+             "c'est le cas de la plupart des porteurs de projets de cette "
+             "taille",
+    "lecture": "Un impôt complémentaire ramène la charge effective à 15 % dans "
+               "les juridictions où elle serait inférieure. Retenir le taux "
+               "national quand il est sous ce plancher sous-estime l'impôt.",
+}
+
+IS_RESERVE = (
+    "Taux NOMINAUX statutaires, servis à titre indicatif : ils changent, et "
+    "plusieurs États les ont modifiés récemment. Le taux EFFECTIF de votre "
+    "véhicule s'en écarte par les crédits d'impôt, les régimes locaux, les "
+    "déficits reportables et les conventions — c'est lui qu'il faut saisir, et "
+    "il se confirme auprès de votre conseil fiscal.")
 
 
 def seuil_revenu(capex_meur, opex_an_meur, annees, wacc_pct, is_pct,
@@ -411,7 +521,138 @@ def seuil_revenu(capex_meur, opex_an_meur, annees, wacc_pct, is_pct,
     }
 
 
-def propositions(capex_meur=None, opex_an_meur=None, annees=10, hypotheses=None):
+def _cmpc_proposes():
+    """Les quatre jalons de cout du capital, servis a l'identique partout.
+
+    Ils ne dependent d'AUCUN calcul : c'est ce qui permet de les offrir des le
+    referentiel, avant meme qu'une enveloppe existe. La fonction est unique
+    pour que le referentiel et le calcul ne puissent pas diverger."""
+    return [{"origine": "jalon", "nature": "jalon",
+             "valeur": j["valeur"],
+             "libelle": "%s — %s %%" % (j["nom"], _f(j["valeur"], 1)),
+             "formule": "jalon de sensibilité, non une donnée de marché",
+             "lecture": "À retenir quand %s." % j["quand"]}
+            for j in CMPC_JALONS]
+
+
+def _is_proposes(pays=None, pays_compares=None):
+    """QUATRE TAUX D'IMPOT, tires d'une table statutaire — et du plancher OCDE.
+
+    L'ORDRE EST L'ARGUMENT. Le pays retenu vient en premier, parce que c'est
+    celui de l'etude. Le plancher mondial vient ensuite, parce qu'il PRIME sur
+    le taux national quand celui-ci lui est inferieur — un groupe dans le champ
+    du Pilier Deux qui retiendrait 12,5 % en Irlande sous-estimerait son impot.
+    Les deux bornes des pays compares ferment la marche : elles disent de
+    combien le verdict bougerait ailleurs, ce qui est exactement la question
+    d'une etude qui compare des pays.
+    """
+    out, vus = [], set()
+
+    def _ajouter(code, taux, libelle, lecture):
+        if taux is None or round(float(taux), 2) in vus:
+            return
+        vus.add(round(float(taux), 2))
+        out.append({"origine": "statutaire", "nature": "statutaire",
+                    "pays": code, "valeur": _f(float(taux), 1),
+                    "libelle": libelle,
+                    "formule": "taux statutaire nominal publié",
+                    "lecture": lecture})
+
+    if pays and pays in IS_STATUTAIRE:
+        t, note = IS_STATUTAIRE[pays]
+        _ajouter(pays, t, "%s — taux statutaire %s %%" % (pays, _f(t, 1)),
+                 ("Pays retenu par l'étude. " + note[0].upper() + note[1:] + ".")
+                 if note else "Pays retenu par l'étude.")
+
+    _ajouter("UE", PILIER_DEUX["taux"], PILIER_DEUX["nom"],
+             "%s A retenir pour %s." % (PILIER_DEUX["lecture"],
+                                        PILIER_DEUX["quand"]))
+
+    connus = [(c, IS_STATUTAIRE[c][0]) for c in (pays_compares or [])
+              if c in IS_STATUTAIRE]
+    if connus:
+        haut = max(connus, key=lambda x: x[1])
+        bas = min(connus, key=lambda x: x[1])
+        _ajouter(haut[0], haut[1],
+                 "%s — le plus imposé des pays comparés (%s %%)"
+                 % (haut[0], _f(haut[1], 1)),
+                 "Borne haute de votre comparaison : c'est le cas le moins "
+                 "favorable à l'EVA parmi les pays que vous étudiez.")
+        _ajouter(bas[0], bas[1],
+                 "%s — le moins imposé des pays comparés (%s %%)"
+                 % (bas[0], _f(bas[1], 1)),
+                 "Borne basse de votre comparaison. Vérifiez d'abord si le "
+                 "plancher mondial de 15 %% s'applique à votre groupe : il "
+                 "annulerait une partie de cet écart.")
+    return out[:4]
+
+
+def revenus_proposes(capex_meur, opex_an_meur, annees, wacc_pct, is_pct,
+                     amort_ans=None, bfr_meur=None):
+    """QUATRE NIVEAUX DE REVENU, tous CALCULES sur l'enveloppe — aucun suppose.
+
+    LE PREMIER EST LE SEUIL D'EQUILIBRE : le revenu ou l'EVA s'annule. Les
+    trois suivants s'en deduisent par une identite exacte, et non par des
+    pourcentages ronds choisis au gout. Poser
+
+        EVA = (r − OPEX − dotation) × (1 − IS) − CE × CMPC = s × CE
+
+    puis soustraire le cas s = 0 laisse
+
+        Δr = s × CE ÷ (1 − IS)
+
+    Chaque palier ajoute donc UN POINT D'EVA rapporte aux capitaux employes.
+    C'est la grandeur qui decide d'un GO / NO GO — pas un rendement invente.
+
+    CHAQUE NIVEAU EST AUSSI RENDU EN POURCENTAGE DE L'INVESTISSEMENT TOTAL.
+    C'est sous cette forme que la profession raisonne : un revenu annuel se
+    juge rapporte a ce que l'actif a coute a construire. Le pourcentage n'est
+    pas une source de plus, c'est le meme chiffre sous l'autre angle.
+    """
+    base = seuil_revenu(capex_meur, opex_an_meur, annees, wacc_pct, is_pct,
+                        amort_ans, bfr_meur)
+    if not base:
+        return []
+    h = dict(DEFAUTS)
+    if amort_ans is not None:
+        h["amort_ans"] = amort_ans
+    if bfr_meur is not None:
+        h["bfr_meur"] = bfr_meur
+    cap_haut = float(max(capex_meur))
+    amort = max(1.0, float(h["amort_ans"]))
+    bfr = float(h["bfr_meur"])
+    impot = float(is_pct) / 100.0
+    if impot >= 1.0:
+        return []
+    n1 = int(base["premiere_annee_pleine"])
+    use = min(1.0, (n1 - 1) / amort)
+    ce_haut = cap_haut * (1.0 - use) + bfr
+    r0 = float(base["revenu_seuil_meur"][1])       # l'annee la plus exigeante
+
+    out = []
+    for s in (0.0, 0.01, 0.02, 0.03):
+        r = r0 + s * ce_haut / (1.0 - impot)
+        out.append({
+            "origine": "seuil", "nature": "calcule",
+            "spread_pct": _f(s * 100, 0),
+            "valeur": _f(r),
+            "pct_investissement": _f(r / cap_haut * 100, 1) if cap_haut else None,
+            "libelle": ("Revenu d'équilibre — l'EVA s'annule" if s == 0 else
+                        "Équilibre + %d point%s d'EVA sur capitaux employés"
+                        % (round(s * 100), "s" if s > 0.011 else "")),
+            "formule": ("r = OPEX_haut + dotation + CE × CMPC ÷ (1 − IS)" if s == 0
+                        else "r = seuil + %d %% × CE ÷ (1 − IS)" % round(s * 100)),
+            "lecture": (base["lecture"] if s == 0 else
+                        "À ce revenu, le projet dégage %d %% de son capital "
+                        "employé au-delà du coût de ce capital — soit %s M€ "
+                        "d'EVA la première année à pleine charge."
+                        % (round(s * 100), _f(s * ce_haut))),
+        })
+    return out
+
+
+def propositions(capex_meur=None, opex_an_meur=None, annees=10, hypotheses=None,
+                 pays=None, pays_compares=None):
     """Pour chaque entrée : ce qu'on peut proposer, d'où ça vient, ou pourquoi non.
 
     Rien n'est appliqué ici. Le module PROPOSE et se justifie ; c'est la page
@@ -433,20 +674,40 @@ def propositions(capex_meur=None, opex_an_meur=None, annees=10, hypotheses=None)
             out[cle] = {"propositions": [], "refus": REFUS_PROPOSITION[cle]}
             continue
         if cle == "revenu_meur_an":
-            if seuil:
-                props.append({
-                    "origine": "seuil", "nature": "seuil",
-                    "libelle": "Revenu d'équilibre — l'EVA s'annule",
-                    "valeur": seuil["revenu_seuil_meur"][1],
-                    "fourchette": seuil["revenu_seuil_meur"],
-                    "formule": seuil["formule"], "lecture": seuil["lecture"]})
-            else:
+            props.extend(revenus_proposes(
+                capex_meur, opex_an_meur, annees,
+                _num(h.get("wacc")), _num(h.get("is_taux")),
+                _num(h.get("amort_ans")), _num(h.get("bfr_meur"))))
+            if not props:
                 out[cle] = {"propositions": [],
-                            "refus": "Le revenu d'équilibre se calcule dès que "
-                                     "le coût du capital et le taux d'impôt "
-                                     "sont renseignés — ce sont les deux seules "
-                                     "valeurs que ce module ne peut pas déduire."}
+                            "refus": "Les niveaux de revenu se calculent dès que "
+                                     "le coût du capital et le taux d'impôt sont "
+                                     "renseignés : ils se déduisent l'un de "
+                                     "l'autre, et sans eux il n'y a rien à "
+                                     "inverser."}
                 continue
+        elif cle == "wacc":
+            # QUATRE STRUCTURES DE FINANCEMENT, pas quatre points de marche.
+            # La nature « jalon » voyage avec chaque proposition, et la reserve
+            # avec l'entree : sans elles, ces chiffres ronds passeraient pour
+            # une reference sectorielle que ce module n'a pas.
+            props.extend(_cmpc_proposes())
+            out[cle] = {"propositions": props, "refus": None,
+                        "reserve": CMPC_RESERVE}
+            proposables += 1
+            continue
+        elif cle == "is_taux":
+            props.extend(_is_proposes(pays, pays_compares))
+            if not props:
+                out[cle] = {"propositions": [],
+                            "refus": "Aucun taux statutaire n'est connu pour ce "
+                                     "pays dans ce référentiel : l'inventer "
+                                     "serait pire que de le laisser vide."}
+                continue
+            out[cle] = {"propositions": props, "refus": None,
+                        "reserve": IS_RESERVE}
+            proposables += 1
+            continue
         elif cle == "amort_ans":
             # LE RAPPROCHEMENT QUI MANQUAIT. L'enveloppe a été calculée sur une
             # durée d'étude ; amortir sur une autre laisse une valeur résiduelle
@@ -672,6 +933,20 @@ def referentiel():
     """Ce que la page doit savoir pour composer le bloc."""
     return {"version": VERSION, "avertissement": AVERTISSEMENT,
             "entrees": ENTREES, "obligatoires": OBLIGATOIRES,
+            # LES PROPOSITIONS QUI NE DEPENDENT D'AUCUN CALCUL VOYAGENT AVEC LE
+            # REFERENTIEL. Les quatre jalons de cout du capital ne dependent de
+            # rien ; le plancher mondial de 15 % non plus. Ne les servir qu'avec
+            # le premier calcul les rendait absents au moment ou le lecteur
+            # decouvre le formulaire — c'est-a-dire au moment ou il en a besoin.
+            # ELLES SONT PRODUITES PAR LES MEMES FONCTIONS que les propositions
+            # du POST : recopier la liste ici en ferait deux exemplaires qui
+            # divergeraient au premier ajustement.
+            "propositions_statiques": {
+                "wacc": {"propositions": _cmpc_proposes(),
+                         "reserve": CMPC_RESERVE},
+                "is_taux": {"propositions": _is_proposes(None, None),
+                            "reserve": IS_RESERVE},
+            },
             # LES REFUS VOYAGENT AVEC LE REFERENTIEL, et non plus seulement
             # avec le calcul. Une entree obligatoire, vide et sans motif se lit
             # comme un oubli du site : le lecteur la remplit au juge, ou
@@ -691,8 +966,16 @@ def sante():
             "indicateurs": len(INDICATEURS), "entrees": len(ENTREES),
             "obligatoires": len(OBLIGATOIRES), "suite": len(SUITE),
             "portee": "Ne calcule rien sans hypothèses de revenu, de coût du "
-                      "capital et d'impôt ; ne propose aucune référence "
-                      "sectorielle, faute de source publiable."}
+                      "capital et d'impôt. Il en PROPOSE désormais, en disant "
+                      "de quelle nature est chaque chiffre : « calculé » pour "
+                      "les niveaux de revenu, tirés de votre enveloppe ; "
+                      "« statutaire » pour les taux d'impôt nominaux, qui sont "
+                      "des faits publiés ; « jalon » pour les coûts du capital, "
+                      "qui ne sont NI un calcul NI une donnée de marché — ce "
+                      "module n'a aucune enquête sectorielle publiable, et il "
+                      "ne prétend pas en avoir une.",
+            "propositions": {"revenu": 4, "wacc": len(CMPC_JALONS),
+                             "is_pays": len(IS_STATUTAIRE)}}
 
 
 def _verifier():

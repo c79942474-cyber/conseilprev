@@ -106,8 +106,14 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
       l[cle] = { v: (e.value || '').trim(),
                  badge: (b && b.textContent) || '', auto: e.dataset.auto || '' };
     });
-    return { champs: l,
+    const menus = {};
+    document.querySelectorAll('#kpi-form select.kpi-src').forEach(s => {
+      menus[s.id.replace('kpi-s-', '')] = s.options.length - 1;  // hors « je saisis »
+    });
+    return { champs: l, menus: menus,
              refus: [...document.querySelectorAll('#kpi-form .kpi-refus')]
+               .map(x => x.textContent),
+             reserves: [...document.querySelectorAll('#kpi-form .kpi-reserve')]
                .map(x => x.textContent),
              ligne: (document.getElementById('kpi-prerempli') || {}).textContent || '' };
   });
@@ -121,15 +127,37 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
   /* LES DEUX REFUS SONT LE POINT DÉLICAT : ils doivent être VISIBLES avant le
      premier calcul, sinon deux cases obligatoires et vides se lisent comme un
      oubli du site — et se remplissent au jugé. */
+  /* CES DEUX-LÀ NE SE POSENT PAS D'OFFICE : ce sont des décisions, et poser le
+     taux qui juge le projet reviendrait à choisir le verdict. Mais ils ne sont
+     plus laissés nus — un champ obligatoire et vide se remplit au jugé. Ils
+     reçoivent un MENU, et le menu porte sa RÉSERVE. */
   ok('LE COÛT DU CAPITAL ET L’IMPÔT RESTENT VIDES — ce sont des décisions',
      pose.champs.wacc.v === '' && pose.champs.is_taux.v === '',
      'CMPC « ' + pose.champs.wacc.v + ' », IS « ' + pose.champs.is_taux.v + ' »');
-  ok('…et leur refus est AFFICHÉ dès l’arrivée, pas après un calcul pour rien',
-     pose.refus.length === 2, pose.refus.length + ' motif(s) visible(s)');
-  ok('…le motif dit pourquoi : proposer le taux qui juge, c’est choisir le verdict',
-     pose.refus.some(t => /décision du comité/i.test(t))
-       && pose.refus.some(t => /véhicule qui portera/i.test(t)),
-     pose.refus.map(t => t.slice(0, 55)).join(' | '));
+  /* CE QUI EST OFFERT DÈS L'ARRIVÉE EST CE QUI NE DÉPEND DE RIEN. Les quatre
+     jalons de coût du capital sont là tout de suite ; côté impôt, seul le
+     plancher mondial l'est, parce que les taux par pays supposent qu'un pays
+     ait été retenu. Exiger quatre options ici reviendrait à demander au module
+     de nommer un pays que le lecteur n'a pas encore choisi — la section 3 ter
+     vérifie qu'elles arrivent une fois l'étude faite. */
+  ok('…mais ils ne sont plus laissés nus : le coût du capital reçoit ses jalons',
+     pose.menus.wacc >= 4, 'CMPC ' + pose.menus.wacc + ' options');
+  ok('…et l’impôt reçoit déjà ce qui ne dépend d’aucun pays',
+     pose.menus.is_taux >= 1, 'IS ' + pose.menus.is_taux + ' option(s)');
+  /* LA RÉSERVE EST CE QUI SÉPARE PROPOSER D'INVENTER. Quatre chiffres ronds
+     dans une liste déroulante se lisent comme une référence de marché ; les
+     quatre coûts du capital n'en sont pas, et les taux d'impôt sont nominaux,
+     pas effectifs. Sans cette phrase sous le champ, le menu promettrait une
+     autorité que ce module n'a pas — et elle doit être là DÈS L'ARRIVÉE, pas
+     après un premier calcul pour rien. */
+  ok('…et la RÉSERVE est affichée dès l’arrivée, sous chacun des deux',
+     pose.reserves.length >= 2, pose.reserves.length + ' réserve(s) visible(s)');
+  ok('…elle dit que les coûts du capital ne sont PAS une donnée de marché',
+     pose.reserves.some(t => /PAS une référence de marché/i.test(t)),
+     (pose.reserves.find(t => /marché/i.test(t)) || '').slice(0, 70));
+  ok('…et que les taux d’impôt sont NOMINAUX, à confirmer',
+     pose.reserves.some(t => /NOMINAUX/.test(t) && /conseil fiscal/i.test(t)),
+     (pose.reserves.find(t => /NOMINAUX/.test(t)) || '').slice(0, 70));
   ok('…et le relevé annonce ce qui est posé ET ce qui reste',
      /déjà posée/i.test(pose.ligne) && /Il vous en reste/i.test(pose.ligne),
      pose.ligne.replace(/\s+/g, ' ').slice(0, 120));
@@ -262,6 +290,36 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
      geste.revenu === '', '« ' + geste.revenu + ' »');
   ok('le bouton du revenu d’équilibre est offert une fois les deux taux posés',
      geste.visible);
+
+  /* LES QUATRE TAUX D'IMPÔT ARRIVENT AVEC LE PAYS, et ils portent bien SUR
+     l'étude en cours : le pays retenu, le plancher mondial, et les deux bornes
+     des pays réellement comparés. Une table générique ne dirait rien de cette
+     étude-ci. */
+  const menusApres = await pg.evaluate(() => {
+    const s = document.getElementById('kpi-s-is_taux');
+    const r = document.getElementById('kpi-s-revenu_meur_an');
+    const d = window.FIN_DERNIER && window.FIN_DERNIER();
+    return {
+      is: s ? [...s.options].slice(1).map(o => o.textContent) : [],
+      revenu: r ? [...r.options].slice(1).map(o => o.textContent) : [],
+      pays: (window.FIN_PAYS && window.FIN_PAYS()) || (d ? d.classement[0].pays : null)
+    };
+  });
+  ok('QUATRE TAUX D’IMPÔT sont proposés une fois le pays connu',
+     menusApres.is.length === 4, menusApres.is.length + ' option(s)');
+  ok('…dont celui du pays retenu par l’étude',
+     !!menusApres.pays && menusApres.is.some(t => t.indexOf(menusApres.pays) === 0),
+     'pays ' + menusApres.pays + ' · ' + (menusApres.is[0] || ''));
+  ok('…et le plancher mondial de 15 %, qui prime quand le taux national est dessous',
+     menusApres.is.some(t => /Pilier Deux/i.test(t)),
+     menusApres.is.find(t => /Pilier/i.test(t)) || 'absent');
+  ok('QUATRE NIVEAUX DE REVENU sont proposés, chacun en M€ ET en part de l’investissement',
+     menusApres.revenu.length === 4
+       && menusApres.revenu.every(t => /M€/.test(t) && /% de l’investissement/.test(t)),
+     menusApres.revenu[0] || 'aucun');
+  ok('…le premier est l’équilibre, et les suivants montent',
+     /équilibre/i.test(menusApres.revenu[0] || ''),
+     (menusApres.revenu[0] || '').slice(0, 80));
   ok('…et son libellé annonce l’équilibre, pas une prévision',
      /équilibre/i.test(geste.libelle) && !/prévision/i.test(geste.libelle),
      geste.libelle);
