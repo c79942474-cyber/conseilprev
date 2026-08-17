@@ -571,6 +571,14 @@ body.embed .gp-carte{bottom:auto;top:var(--gp-bas,auto);
    ON REDESCEND À DEUX PUIS À UNE. Sous 1100 px, trois colonnes rendent des
    lignes de six mots ; la page est aussi servie en cadre, où la largeur utile
    dépend du menu latéral. */
+/* CE QUE L'ENVELOPPE NE SAIT PAS DU PAYS. Ambré quand l'indice manque : ce
+   n'est pas une panne, c'est une limite du référentiel qu'il faut connaître
+   AVANT de comparer deux pays sur leur enveloppe. Vert quand il est posé. */
+.fin-indice{grid-column:1/-1;margin:0 0 10px;padding:9px 12px;font-size:11.5px;
+  line-height:1.6;border-radius:0 6px 6px 0}
+.fin-indice.absent{background:#FDF6E9;border-left:3px solid var(--orange)}
+.fin-indice.pose{background:var(--bg);border-left:3px solid var(--green)}
+.fin-indice-s{display:block;margin-top:4px;font-size:10.5px;color:var(--muted)}
 .fin-dos-g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
   gap:12px 18px;align-items:start}
 .fin-dos-g > table,.fin-dos-g > h4,.fin-dos-g > .fin-phases,
@@ -5714,8 +5722,12 @@ function finPonts(){
     + 'la trajectoire de décarbonation.</p>'
     + '<p class="fin-pt-non"><b>Ce lien n’emporte AUCUN montant.</b> Ni enveloppe, ni '
     + 'coût unitaire, ni prix d’électricité : une adresse se copie et se journalise.</p>'
-    + '<button type="button" class="fin-pt-b" data-fin-etape="pont">Le lien est '
-    + 'ci-dessous ↓</button></div>'
+    /* CE BOUTON RENVOYAIT SUR LUI-MÊME. Il portait `data-fin-etape="pont"`,
+       dont la cible EST ce bloc : cliquer faisait défiler vers l'endroit où
+       l'on se trouvait déjà. Il mène désormais au fabricant de lien, qui est
+       le geste suivant réel. */
+    + '<button type="button" class="fin-pt-b" data-fin-mener="pont-fin">'
+    + 'Fabriquer le lien ↓</button></div>'
     + '<div class="fin-pt"><span class="fin-pt-n">Chiffrer l’ingénierie</span>'
     + '<b>Prix de la maîtrise d’œuvre, phase par phase</b>'
     + '<p>Le <b>montant des travaux</b> et la <b>part du lot technique</b> du pays '
@@ -5723,10 +5735,55 @@ function finPonts(){
     + 'pré-remplissent le calcul — <b>le même barème des deux côtés</b>.</p>'
     + '<p class="fin-pt-non"><b>Ce lien-là, lui, porte une assiette de travaux</b> — '
     + 'et il le dit sur la page d’arrivée. Accès abonné.</p>'
-    + '<a class="fin-pt-b" href="https://conseilprevcyber.onrender.com/ingenierie-datacenter#ig-moe" '
-    + 'target="_blank" rel="noopener">Ouvrir l’ingénierie de projet →</a></div>'
+    /* ET CELUI-CI OUVRAIT LE SITE DISTANT LES MAINS VIDES. Un lien nu vers
+       `#ig-moe` fait arriver sur un formulaire à ressaisir — alors que le bloc
+       de maîtrise d'œuvre, plus haut, sait fabriquer un lien qui porte
+       l'assiette et la part technique. On renvoie donc vers CE fabricant, et
+       le lien nu ne reste offert que pour qui n'a rien chiffré. */
+    + '<button type="button" class="fin-pt-b" data-fin-mener="moe-pont">'
+    + 'Fabriquer le lien pré-rempli ↑</button>'
+    + '<p class="fin-pt-non" id="fin-pt-moe-non"></p></div>'
     + '</div>';
+  finPontsMaj();
 }
+
+/* CE QUE CHAQUE CARTE PEUT PROMETTRE DÉPEND DE CE QUI A ÉTÉ CALCULÉ, et il
+   faut le dire AVANT le clic. Le fabricant de lien de maîtrise d'œuvre n'existe
+   qu'une fois les honoraires chiffrés : y envoyer sans prévenir ferait atterrir
+   dans le vide. Tant qu'il n'existe pas, on l'annonce et on laisse le lien nu,
+   qui au moins ouvre la bonne page. */
+function finPontsMaj(){
+  var z = document.getElementById("fin-pt-moe-non");
+  if(!z) return;
+  var pret = !!document.getElementById("moe-pont");
+  var b = z.parentNode.querySelector('[data-fin-mener="moe-pont"]');
+  if(pret){
+    z.innerHTML = "";
+    if(b){ b.hidden = false;
+           b.textContent = "Fabriquer le lien pré-rempli ↑"; }
+  } else {
+    z.innerHTML = '<b>Chiffrez d’abord la maîtrise d’œuvre</b> (étape 4)&nbsp;: '
+      + 'le lien pré-rempli se fabrique sur ce chiffrage. Sans lui, il ne reste '
+      + 'que l’adresse nue, où tout est à ressaisir — '
+      + '<a href="https://conseilprevcyber.onrender.com/ingenierie-datacenter#ig-moe" '
+      + 'target="_blank" rel="noopener">ouvrir quand même</a>.';
+    if(b) b.hidden = true;
+  }
+}
+
+/* MENER À UN BLOC, ET LE DÉSIGNER. `data-fin-mener` vise un élément par son
+   identifiant, sans passer par les étapes du fil : les deux cartes ci-dessus
+   mènent à des blocs qui ne SONT pas des étapes — un fabricant de lien n'est
+   pas une étape, c'est le geste qui la termine. */
+document.addEventListener("click", function(ev){
+  var b = ev.target.closest && ev.target.closest("[data-fin-mener]");
+  if(!b) return;
+  var cib = document.getElementById(b.getAttribute("data-fin-mener"));
+  if(!cib) return;
+  ev.preventDefault();
+  cib.scrollIntoView({ behavior: "smooth", block: "center" });
+  if(typeof finDesigner === "function") finDesigner(cib);
+});
 
 /* L'ÉTAT DES NAPPES FRANÇAISES, ET LE FONCIER ANNONCÉ DESSUS.
 
@@ -11644,6 +11701,36 @@ if(window.parent&&window.parent!==window){
      Rien n'est décidé ici : le sens, les constats et les conditions viennent
      de faisabilite_dc. Recalculer un verdict côté page ferait exister deux
      avis pour le même dossier. */
+  /* ── CE QUE L'ENVELOPPE NE SAIT PAS DU PAYS ────────────────────────────────
+     LE DÉFAUT QU'IL CORRIGE. Le coût unitaire de ce module est une hypothèse
+     de FILIÈRE, en M€ par MW informatique : elle ne connaît pas le pays. Trois
+     pays rendaient donc trois enveloppes rigoureusement identiques, et rien ne
+     le disait. Comparer l'Irlande et la Pologne sur une enveloppe commune,
+     c'est comparer deux chantiers au même prix de main-d'œuvre.
+
+     LE MODULE NE FABRIQUE PAS LE COEFFICIENT. Les indices de niveau de prix de
+     la construction existent chez Eurostat, ils sont publics et ils changent
+     chaque année ; les recopier de mémoire dans ce référentiel en ferait des
+     chiffres sans millésime que personne ne pourrait vérifier. Le mécanisme
+     est fourni, la source est nommée, la valeur vient du lecteur. */
+  function indiceConstruction(i){
+    if(!i) return "";
+    if(i.applique){
+      return '<p class="fin-indice pose"><b>Coût de construction ajusté — indice '
+        + nb(i.valeur) + ' (' + esc(i.nom) + ').</b> ' + esc(i.dit)
+        + ' L’ajustement porte sur le coût unitaire, donc il se propage à '
+        + '<b>chaque lot</b>, à l’échéancier, au coût total et à l’assiette de '
+        + 'maîtrise d’œuvre.</p>';
+    }
+    return '<p class="fin-indice absent"><b>⚠ L’enveloppe ci-dessous ne dépend PAS '
+      + 'du pays.</b> ' + esc(i.dit) + ' Ce que le pays change vraiment — prix de '
+      + 'l’électricité, intensité carbone, eau, file de raccordement, coût total '
+      + 'de possession — est chiffré plus bas et diffère bien d’un pays à l’autre. '
+      + '<br><span class="fin-indice-s">Pour l’ajuster&nbsp;: ' + esc(i.source)
+      + ' Ce référentiel ne recopie pas ces indices — sans millésime, ils ne se '
+      + 'vérifieraient pas.</span></p>';
+  }
+
   function avisFaisabilite(f){
     if(!f || !f.avis) return '';
     var a = f.avis;
@@ -11716,6 +11803,10 @@ if(window.parent&&window.parent!==window){
          retrouver celui dont il vient de lire le rang. Elle porte désormais le
          dossier ENTIER et non son seul titre, parce que c'est le dossier qu'on
          ouvre et referme. */
+      /* LE BANDEAU DE L'INDICE. Ambré quand il manque — ce n'est pas une
+         panne, c'est une limite du référentiel qu'il faut connaître AVANT de
+         comparer deux pays sur leur enveloppe. Vert quand il est posé : le
+         coût unitaire est alors ajusté, et tout ce qui en découle avec lui. */
       h += '<section class="fin-dos" id="fin-dos-'+esc(d.pays)+'" data-pays="'+esc(d.pays)+'"'
         + ' aria-label="Dossier chiffré — '+esc(nomPays(d.pays) || d.pays)+'" hidden>'
         + '<h3 style="margin:18px 0 4px;font-size:14px;scroll-margin-top:16px">'
@@ -11724,6 +11815,17 @@ if(window.parent&&window.parent!==window){
         + '<button type="button" class="fin-dos-x" data-fermer="'+esc(d.pays)+'"'
         + ' title="Replier le dossier de '+esc(nomPays(d.pays) || d.pays)+'">replier ✕</button>'
         + '</h3><div class="fin-dos-g">'
+        /* CE QUE L'ENVELOPPE NE SAIT PAS DU PAYS, DIT AU-DESSUS D'ELLE.
+           Trois pays rendaient trois enveloppes RIGOUREUSEMENT IDENTIQUES —
+           736 à 920 M€ pour l'Irlande, la Suède et la France — sans que rien
+           ne l'explique. Le lecteur qui compare en conclut que construire
+           coûte la même chose partout dans l'Union : c'est faux, et l'écart
+           entre les extrêmes dépasse le rapport du simple au double. Ce que
+           le pays change vraiment — l'électricité, le carbone, l'eau, le
+           raccordement, le coût total — est plus bas ; le coût de
+           construction, lui, n'est pas dans ce référentiel, et le module le
+           dit plutôt que de l'inventer. */
+        + indiceConstruction(d.devis.indice_construction)
         + avisFaisabilite(d.faisabilite)
         + '<p class="note" style="margin:0 0 8px">Refroidissement retenu : <b>'
         + esc(d.devis.refroidissement.nom)+'</b> (PUE '+d.devis.refroidissement.pue[0]+'–'
@@ -12156,6 +12258,9 @@ if(window.parent&&window.parent!==window){
        chiffres se mettent à diverger. */
     DERNIER = j;
     document.dispatchEvent(new CustomEvent('moe-calcul'));
+    /* LA CARTE DU PONT APPREND QUE LE FABRICANT EXISTE. Sans cet appel, elle
+       continuerait d'annoncer « chiffrez d'abord » sous un chiffrage rendu. */
+    if(typeof finPontsMaj === 'function') finPontsMaj();
     var b = $('moe-pont-go');
     if(b) b.addEventListener('click', function(){ pont(j); });
   }

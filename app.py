@@ -1742,7 +1742,7 @@ def _fin_pays_index():
 
 
 def _fin_dossier(code, mw, gabarit, scenario, densite_ia, cout_mw, annees, depart,
-                 vitesse="aucune", conception=None):
+                 vitesse="aucune", conception=None, indice_construction=None):
     """Dossier complet d'un pays : DPGF, exploitation, cout total, trajectoire.
 
     `conception` porte les criteres que le lecteur IMPOSE — famille de
@@ -1766,7 +1766,12 @@ def _fin_dossier(code, mw, gabarit, scenario, densite_ia, cout_mw, annees, depar
         cout_mw=cout_mw, vitesse=vitesse,
         refroidissement=C.get("refroidissement"),
         classe_ashrae=C.get("classe_ashrae"),
-        pue_impose=C.get("pue_impose"))
+        pue_impose=C.get("pue_impose"),
+        indice_construction=indice_construction)
+    # UN DEVIS QUI REFUSE FAIT TOMBER LE DOSSIER, il ne se poursuit pas sur une
+    # enveloppe absente : les postes suivants s'appuient tous dessus.
+    if devis.get("ok") is False:
+        return {"pays": code, "ok": False, "message": devis.get("message")}
     # LE PRIX, ET D'OU IL VIENT. Un pays absent du referentiel des prix
     # recevait ici, en silence, une fourchette de secours de 100-150 EUR/MWh :
     # le dossier sortait alors un cout total complet, au meme format et avec la
@@ -2344,11 +2349,24 @@ def api_finance_dc_devis():
                             'erreur': '%s hors bornes (%s a %s)' % (libelle, mini, maxi)}), 400
         conception[cle] = v
 
+    # L'INDICE DE COUT DE CONSTRUCTION, PAR PAYS. Sans lui, la meme enveloppe
+    # sort pour tous les pays compares — ce qui reviendrait a dire que
+    # construire coute la meme chose partout dans l'Union. Le module ne
+    # l'invente pas : il vient d'ici, pays par pays, et il est declare comme
+    # saisi dans le dossier rendu.
+    _ind = d.get('indices_construction')
+    _ind = _ind if isinstance(_ind, dict) else {}
+    _ind = {str(k).upper()[:2]: v for k, v in _ind.items()}
+
     try:
         dossiers = [x for x in (_fin_dossier(c, mw, gabarit, scenario, densite_ia,
                                              cout_mw, annees, depart, vitesse,
-                                             conception)
+                                             conception, _ind.get(c))
                                 for c in pays) if x]
+        _refus = [x for x in dossiers if x.get('ok') is False]
+        if _refus:
+            return jsonify({'ok': False, 'erreur': 'indice_hors_bornes',
+                            'message': _refus[0].get('message')}), 400
     except Exception as e:  # noqa: BLE001
         logger.error(f'FINANCE_DC_ERR: {e}')
         return jsonify({'ok': False, 'erreur': 'calcul indisponible'}), 503

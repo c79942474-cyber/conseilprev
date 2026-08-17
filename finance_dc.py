@@ -569,10 +569,34 @@ def tension_de(parc_mw_ou_sites, pipeline):
     return "ouverte", _f(ratio, 2)
 
 
+INDICE_CONSTRUCTION = {
+    "reference": 100.0,
+    "nom": "Indice de niveau de prix de la construction (UE27 = 100)",
+    "source": "Eurostat — programme des parites de pouvoir d'achat, indices de "
+              "niveau de prix pour la construction (prc_ppp_ind). Publie chaque "
+              "annee, par pays, base UE27 = 100.",
+    "pourquoi": "Le cout unitaire retenu par ce module est une hypothese de "
+                "FILIERE, en M€ par MW informatique : elle ne connait pas le "
+                "pays. Sans indice, la meme enveloppe sort pour l'Irlande, la "
+                "Suede et la France — ce qui reviendrait a dire que construire "
+                "coute la meme chose partout dans l'Union. C'est faux, et "
+                "l'ecart entre les extremes de l'UE depasse le rapport du "
+                "simple au double.",
+    "refus": "AUCUNE VALEUR PAR PAYS N'EST FOURNIE ICI, et c'est deliberé. "
+             "Ces indices existent, ils sont publics, ils changent chaque "
+             "annee — mais les recopier de memoire dans ce fichier en ferait "
+             "des chiffres sans millesime que personne ne pourrait verifier. "
+             "Le module fournit le MECANISME et nomme la source ; la valeur "
+             "vient de vous, avec l'annee que vous retenez.",
+    "min": 40.0, "max": 200.0,
+}
+
+
 def dpgf(mw, gabarit="hyperscale", scenario="neuve", pays=None,
          climat_classe=None, eau_classe=None, densite_ia=False,
          parc_sites=0, pipeline_sites=0, cout_mw=None, vitesse="aucune",
-         refroidissement=None, classe_ashrae=None, pue_impose=None):
+         refroidissement=None, classe_ashrae=None, pue_impose=None,
+         indice_construction=None):
     """Enveloppe et DPGF pour une puissance IT donnée, dans un pays donné.
 
     Retourne l'enveloppe en fourchette, la décomposition par lot, les postes
@@ -585,6 +609,31 @@ def dpgf(mw, gabarit="hyperscale", scenario="neuve", pays=None,
     V = PRIME_VITESSE.get(vitesse) or PRIME_VITESSE["aucune"]
     if V["coef"] != 1.0:
         base = [base[0] * V["coef"], base[1] * V["coef"]]
+
+    # L'INDICE DE COUT DE CONSTRUCTION DU PAYS. Il s'applique au cout unitaire,
+    # donc il se propage a TOUT ce qui en decoule : l'enveloppe, chaque lot de
+    # la DPGF, l'echeancier, le cout total de possession et l'assiette de
+    # maitrise d'oeuvre. C'est le seul endroit ou le poser ; l'appliquer plus
+    # loin laisserait des grandeurs incoherentes entre elles.
+    ind = None
+    if indice_construction is not None:
+        try:
+            ind = float(indice_construction)
+        except (TypeError, ValueError):
+            ind = None
+    if ind is not None:
+        # HORS BORNES, ON REFUSE PLUTOT QUE DE CORRIGER EN SILENCE. Un indice
+        # a 12 ou a 900 est une faute de saisie ; l'appliquer produirait une
+        # enveloppe absurde qu'aucune alerte ne rattraperait ensuite.
+        if not (INDICE_CONSTRUCTION["min"] <= ind <= INDICE_CONSTRUCTION["max"]):
+            return {"ok": False, "erreur": "indice_hors_bornes",
+                    "message": "Indice de construction hors bornes (%s) : "
+                               "attendu entre %s et %s, base UE27 = 100."
+                               % (_fr(_f(ind, 1)),
+                                  _fr(INDICE_CONSTRUCTION["min"]),
+                                  _fr(INDICE_CONSTRUCTION["max"]))}
+        k = ind / INDICE_CONSTRUCTION["reference"]
+        base = [base[0] * k, base[1] * k]
 
     mode = refroidissement_retenu(climat_classe, eau_classe, densite_ia, refroidissement)
     R = REFROIDISSEMENT[mode]
@@ -691,6 +740,24 @@ def dpgf(mw, gabarit="hyperscale", scenario="neuve", pays=None,
                             "nature": "saisi" if refroidissement in REFROIDISSEMENT else "calcule"},
         "raccordement": {"cle": ten_cle, "nom": T["nom"], "ratio": ten_ratio,
                          "mois_sup": T["mois_sup"], "sens": T["sens"], "nature": "calcule"},
+        # CE CHAMP DIT LA VERITE MEME QUAND IL N'Y A PAS D'INDICE, et c'est son
+        # interet principal. Sans lui, trois pays rendaient trois enveloppes
+        # identiques sans que rien n'explique pourquoi : le lecteur en
+        # concluait que construire coute la meme chose partout dans l'Union.
+        "indice_construction": {
+            "applique": ind is not None,
+            "valeur": _f(ind, 1) if ind is not None else None,
+            "reference": INDICE_CONSTRUCTION["reference"],
+            "nom": INDICE_CONSTRUCTION["nom"],
+            "source": INDICE_CONSTRUCTION["source"],
+            "nature": "saisi" if ind is not None else "absent",
+            "dit": ("Cout unitaire ajuste de %s %% par rapport au niveau UE27."
+                    % _fr(_f(ind - 100.0, 1))) if ind is not None else
+                   ("Aucun indice : l'enveloppe ci-dessous est celle d'un cout "
+                    "de filiere, la MEME pour tous les pays compares. L'ecart "
+                    "de cout de construction entre pays de l'Union n'y est "
+                    "donc PAS pris en compte."),
+        },
         "enveloppe_meur": _fourchette(ebas, ehaut, 1),
         "lots": lignes,
         "arenseigner": A_RENSEIGNER,
