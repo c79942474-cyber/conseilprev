@@ -82,6 +82,19 @@ DOSSIERS = {
                   "d'investissement.",
         "besoin_devis": True,
     },
+    # LE DOSSIER D'INGÉNIERIE FINANCIÈRE. Il verse les réponses des quatre
+    # moteurs de la page — équipements, création de valeur, maturité,
+    # pilotage — TELLES QUE SERVIES : le document et l'écran montrent la même
+    # chose, ou le document écrit qu'un bloc n'a pas été lancé. Il ne recalcule
+    # rien : recalculer ferait diverger les deux au premier écart.
+    "ingenierie": {
+        "nom": "Ingénierie financière — équipements, valeur, maturité, pilotage",
+        "resume": "Nomenclature des équipements informatiques et leur carbone, "
+                  "EVA / ROCE / flux de trésorerie disponibles, diagnostic de "
+                  "maturité et tableau de pilotage — chaque bloc tel que la page "
+                  "l'a calculé, avec ses refus et ses incertitudes.",
+        "besoin_devis": False,
+    },
 }
 
 FORMATS = ("docx", "pdf")
@@ -701,6 +714,198 @@ def _entete(dossier, devis_reponse=None):
 #
 # Un export ne doit jamais échouer en silence sur ce point : mieux vaut refuser
 # de produire le fichier que d'en livrer un qui a perdu ses réserves.
+# ═══════════════════════════════════════════════════════════════════════════
+# Le dossier d'ingénierie financière — quatre moteurs, versés tels que servis
+# ═══════════════════════════════════════════════════════════════════════════
+
+def _abs(titre, geste):
+    """Un bloc jamais lancé s'écrit, il ne disparaît pas : un dossier qui
+    tait un bloc absent laisse croire à une étude complète."""
+    return ("## %s\n*Ce bloc n'a pas été lancé sur la page : rien n'est versé "
+            "ici, plutôt qu'un chiffre inventé. %s*\n" % (titre, geste))
+
+
+def _paire(v, d=1, unite=""):
+    """Une fourchette [bas, haut] du moteur, ou une valeur seule."""
+    if isinstance(v, (list, tuple)) and len(v) == 2:
+        a, b = v
+        if a is None or b is None:
+            return "non instruit"
+        return "%s à %s%s" % (_n(a, d), _n(b, d), (" " + unite if unite else ""))
+    if v is None:
+        return "non instruit"
+    return _n(v, d) + ((" " + unite) if unite else "")
+
+
+def md_ingenierie(complements):
+    """`complements` porte les dernières réponses des moteurs, telles que la
+    page les a reçues : equipements, kpi, maturite, pilotage. Rien n'est
+    recalculé ici — le document et l'écran montrent la même chose."""
+    c = complements or {}
+    L = []
+    a = L.append
+
+    a("# Ingénierie financière — équipements, valeur, maturité, pilotage\n")
+    a("Ce dossier verse les résultats des quatre moteurs de la page, tels que "
+      "servis au moment de l'export. Chaque bloc porte ses incertitudes et ses "
+      "refus ; **un bloc jamais lancé est écrit comme tel** — le document ne "
+      "complète pas ce que la page n'a pas calculé.\n")
+
+    # ── Équipements informatiques ────────────────────────────────────────
+    eq = c.get("equipements") or {}
+    n = eq.get("nomenclature") or {}
+    if not n or not n.get("ok"):
+        a(_abs("Équipements informatiques",
+               "Lancez le calcul d'équipements sur la page d'enveloppe."))
+    else:
+        a("## Équipements informatiques — la nomenclature\n")
+        a("Puissance informatique %s kW, densité « %s » (%s), %s baie(s) à "
+          "%s kW.\n" % (_n(n.get("puissance_it_kw"), 0), n.get("densite_nom"),
+                        n.get("densite_note"), _n(n.get("baies"), 0),
+                        _n(n.get("kw_par_baie"), 1)))
+        a(_tab(["Poste", "Quantité", "Unité", "Prix total (€)",
+                "Carbone total (kg)", "Annualisé (kg/an)"],
+               [[l.get("nom"), _n(l.get("quantite"), 0), l.get("unite"),
+                 _n(l.get("prix_total_eur"), 0), _n(l.get("carbone_total_kg"), 0),
+                 _n(l.get("carbone_annualise_kg"), 1)]
+                for l in (n.get("lignes") or [])]))
+        a("Total **%s €** (indispensable %s €, utile %s €), soit %s €/kW "
+          "informatique. Carbone incorporé **%s t**, annualisé **%s t/an** sur "
+          "la durée de vie de chaque poste. Incertitudes : ±%s %% sur les "
+          "prix, ±%s %% sur le carbone.\n"
+          % (_n(n.get("total_eur"), 0), _n(n.get("total_indispensable_eur"), 0),
+             _n(n.get("total_utile_eur"), 0), _n(n.get("eur_par_kw_it"), 0),
+             _n(n.get("carbone_total_t"), 1), _n(n.get("carbone_annualise_t"), 1),
+             _n(n.get("incertitude_prix_pct"), 0),
+             _n(n.get("incertitude_carbone_pct"), 0)))
+        a("Sources : %s Carbone : %s\n" % (n.get("prix_source", ""),
+                                           n.get("carbone_source", "")))
+        p = eq.get("part") or {}
+        if p.get("ok"):
+            a("### Le poste que l'enveloppe travaux ne contient pas\n")
+            a((p.get("lecture") or "") + "\n")
+        pr = eq.get("prolongation") or {}
+        if pr.get("ok"):
+            a("### Allonger la durée de vie — le bilan carbone\n")
+            a("De %s à %s an(s), pays %s : gain de fabrication %s kg/an, coût "
+              "d'exploitation %s kg/an, **net %s t/an** — verdict : %s.\n"
+              % (_n(pr.get("duree_base"), 0), _n(pr.get("duree_cible"), 0),
+                 pr.get("pays"), _n(pr.get("gain_fabrication_kg_an"), 0),
+                 _n(pr.get("cout_exploitation_kg_an"), 0),
+                 _n(pr.get("net_t_an"), 2), pr.get("verdict", "")))
+            a((pr.get("lecture") or "") + "\n")
+            a("*Réserve du moteur : " + (pr.get("reserve") or "") + "*\n")
+        s3 = eq.get("scope3") or {}
+        if s3.get("ok"):
+            a("### Ce que ces équipements pèsent au GHG Protocol (scope 3)\n")
+            a("Catégorie 1 (biens achetés) **%s t**, catégorie 2 "
+              "(immobilisations) **%s t**, total **%s t**, annualisé %s t/an "
+              "(±%s %%).\n" % (_n(s3.get("categorie_1_t"), 1),
+                               _n(s3.get("categorie_2_t"), 1),
+                               _n(s3.get("total_t"), 1),
+                               _n(s3.get("annualise_t"), 1),
+                               _n(s3.get("incertitude_pct"), 0)))
+            nc = s3.get("non_couvert") or []
+            if nc:
+                a("Ce que ce chiffre NE couvre PAS :\n")
+                for x in nc:
+                    a("- " + x + "\n")
+
+    # ── Création de valeur ───────────────────────────────────────────────
+    k = c.get("kpi") or {}
+    serie = k.get("serie") or {}
+    lect = k.get("lecture") or {}
+    if not k or not k.get("ok"):
+        a(_abs("Création de valeur — EVA, ROCE, flux disponibles",
+               "Calculez d'abord l'enveloppe, puis lancez la lecture des "
+               "indicateurs."))
+    elif not serie.get("instruit"):
+        a("## Création de valeur — EVA, ROCE, flux disponibles\n")
+        # `manquantes` est une liste d'OBJETS — cle, nom, question, pourquoi.
+        # On verse le nom ET la question : c'est elle qui dit au lecteur quoi
+        # aller chercher, pas l'identifiant technique.
+        a("**Le moteur refuse de produire la série** : hypothèses manquantes."
+          + " " + (serie.get("message") or "") + "\n")
+        for mq in (serie.get("manquantes") or []):
+            if isinstance(mq, dict):
+                a("- **%s** — %s\n" % (mq.get("nom", mq.get("cle", "?")),
+                                       mq.get("question", "")))
+            else:
+                a("- " + str(mq) + "\n")
+    else:
+        a("## Création de valeur — EVA, ROCE, flux disponibles\n")
+        a((serie.get("avertissement") or "") + "\n")
+        a(_tab(["Année", "Charge", "Revenu (M€)", "Capitaux employés (M€)",
+                "EBIT (M€)", "EVA (M€)", "ROCE (%)", "FCF (M€)"],
+               [[str(l.get("annee")), _n(l.get("charge"), 2),
+                 _n(l.get("revenu_meur"), 1),
+                 _paire(l.get("capitaux_employes_meur")),
+                 _paire(l.get("ebit_meur")), _paire(l.get("eva_meur")),
+                 _paire(l.get("roce_pct")), _paire(l.get("fcf_meur"))]
+                for l in (serie.get("annees") or [])]))
+        a("*" + (serie.get("trace") or "") + "*\n")
+        for ind in (lect.get("indicateurs") or []):
+            a("### %s (%s)\n" % (ind.get("nom"), ind.get("unite", "")))
+            a("%s — année de régime : %s. %s\n"
+              % (ind.get("formule", ""), ind.get("annee_regime", "?"),
+                 ind.get("dit") or ""))
+            if ind.get("piege"):
+                a("*Le piège : " + ind["piege"] + "*\n")
+        for r in (lect.get("reserves") or []):
+            a("- *Réserve : " + str(r) + "*\n")
+        if lect.get("synthese"):
+            a("**Synthèse du moteur : " + lect["synthese"] + "**\n")
+    sr = k.get("seuil_revenu") or {}
+    if sr.get("instruit"):
+        a("### Le revenu qui ne détruit pas de valeur\n")
+        a((sr.get("dit") or "") + "\n")
+
+    # ── Maturité ─────────────────────────────────────────────────────────
+    m = c.get("maturite") or {}
+    if not m or not m.get("ok"):
+        a(_abs("Maturité analytique de l'organisation",
+               "Répondez au diagnostic de maturité sur la page."))
+    else:
+        a("## Maturité analytique de l'organisation\n")
+        a("Niveau global : **%s — %s**. %s\n"
+          % (m.get("niveau_global", "?"), m.get("niveau_global_nom", ""),
+             m.get("lecture") or ""))
+        for ax in (m.get("axes") or []):
+            a("- **%s** : niveau %s — %s\n"
+              % (ax.get("nom", ax.get("cle", "?")), ax.get("niveau", "?"),
+                 ax.get("lecture") or ax.get("dit") or ""))
+        if m.get("reserve"):
+            a("*" + str(m["reserve"]) + "*\n")
+
+    # ── Pilotage ─────────────────────────────────────────────────────────
+    p = c.get("pilotage") or {}
+    if not p or not p.get("ok"):
+        a(_abs("Pilotage, seuils et alertes",
+               "Renseignez les mesures du tableau de pilotage sur la page."))
+    else:
+        a("## Pilotage, seuils et alertes\n")
+        a((p.get("lecture") or "") + "\n")
+        a(_tab(["Indicateur", "Valeur", "Cible", "Seuil", "État", "Tendance"],
+               [[i.get("nom"), _paire(i.get("valeur")),
+                 _paire(i.get("cible")), _paire(i.get("seuil")),
+                 str((i.get("risque") or {}).get("etat")
+                     if isinstance(i.get("risque"), dict) else i.get("risque") or "—"),
+                 str((i.get("tendance") or {}).get("dit")
+                     if isinstance(i.get("tendance"), dict) else i.get("tendance") or "—")]
+                for i in (p.get("indicateurs") or [])]))
+        for al in (p.get("alertes") or []):
+            a("- **Alerte** : %s\n" % (al.get("dit") if isinstance(al, dict) else al))
+        if p.get("reserve"):
+            a("*" + str(p["reserve"]) + "*\n")
+
+    a("## Ce que ce dossier ne dit pas\n")
+    a("Les quatre blocs sont des **instruments d'avant-projet** : chaque "
+      "moteur écrit ses incertitudes et ses refus, et ce dossier les "
+      "reproduit. Aucun de ces chiffres ne remplace un devis, un plan "
+      "d'affaires audité ni un bilan carbone opposable.\n")
+    return "".join(L)
+
+
 ATTENDU = {
     "enveloppe": ["Ce que ce dossier ne peut PAS trancher",
                   "Décomposition par lot (DPGF)",
@@ -717,6 +922,10 @@ ATTENDU = {
 }
 ATTENDU["complet"] = (ATTENDU["enveloppe"] + ATTENDU["implantation"]
                       + ATTENDU["prospectives"] + ATTENDU["parc"])
+# Le dossier d'ingénierie n'exige que sa section d'honnêteté : chaque bloc de
+# moteur peut légitimement être absent — mais alors il est ÉCRIT absent, et la
+# section finale, elle, ne peut jamais manquer.
+ATTENDU["ingenierie"] = ["Ce que ce dossier ne dit pas"]
 
 
 def _verifier(md, dossier):
@@ -742,7 +951,7 @@ def _verifier(md, dossier):
     return md
 
 
-def composer(dossier, devis_reponse=None):
+def composer(dossier, devis_reponse=None, complements=None):
     """Le Markdown du dossier demandé. Un seul point d'entrée : le Word et le PDF
     partent du même texte, ils ne peuvent donc pas diverger."""
     if dossier not in DOSSIERS:
@@ -757,13 +966,15 @@ def composer(dossier, devis_reponse=None):
         md = md_implantation()
     elif dossier == "parc":
         md = md_parc()
+    elif dossier == "ingenierie":
+        md = md_ingenierie(complements)
     else:
         md = "\n\n".join([md_enveloppe(devis_reponse), md_implantation(),
                           md_prospectives(), md_parc()])
     return _verifier(md, dossier)
 
 
-def produire(dossier, fmt, devis_reponse=None, figures=None):
+def produire(dossier, fmt, devis_reponse=None, figures=None, complements=None):
     """Renvoie (octets, type MIME, nom de fichier).
 
     `figures` : les cartes de la page, en PNG base64, sous les clés de FIGURES.
@@ -772,7 +983,7 @@ def produire(dossier, fmt, devis_reponse=None, figures=None):
     import livrables_export
     if fmt not in FORMATS:
         raise ValueError("format inconnu : %s" % fmt)
-    md = composer(dossier, devis_reponse)
+    md = composer(dossier, devis_reponse, complements)
     meta = dict(MARQUE)
     meta.update(_entete(dossier, devis_reponse))
     meta["figures"] = figures or {}

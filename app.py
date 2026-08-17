@@ -2596,8 +2596,20 @@ def api_export_dc_produire(dossier, fmt):
     figs, souci = _figures_du_corps(corps, [c for c, _ in export_dc.FIGURES])
     if souci:
         return jsonify({'ok': False, 'erreur': souci}), 413
+    # Les complements : les dernieres reponses des moteurs de la page —
+    # equipements, kpi, maturite, pilotage — versees TELLES QUELLES au dossier
+    # d'ingenierie. Bornes a 512 ko : ce sont des reponses de moteur, pas des
+    # pieces jointes.
+    complements = corps.get('complements')
+    if complements is not None:
+        if not isinstance(complements, dict):
+            complements = None
+        elif len(json.dumps(complements)) > 512 * 1024:
+            return jsonify({'ok': False,
+                            'erreur': 'complements trop volumineux'}), 413
     try:
-        octets, mime, nom = export_dc.produire(dossier, fmt, devis, figs)
+        octets, mime, nom = export_dc.produire(dossier, fmt, devis, figs,
+                                               complements=complements)
     except RuntimeError as e:
         # Le garde-fou de composition : mieux vaut ne rien livrer qu'un document
         # ampute de ses reserves. L'incident est journalise pour etre corrige.

@@ -13390,6 +13390,7 @@ if(window.parent&&window.parent!==window){
         method: "POST", headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ mesures: mesures(), niveau_maturite: niv })
       }).then(function(r){ return r.json(); }).then(function(j){
+        window.DERNIER_PIL = j;
         if(!j || !j.ok){ $("pil-msg").textContent = (j && j.message) || "pilotage indisponible"; return; }
         $("pil-msg").textContent = niv === null
           ? "Maturité non diagnostiquée : établissez le diagnostic ci-dessus pour savoir ce qui est tenable."
@@ -13532,6 +13533,7 @@ if(window.parent&&window.parent!==window){
         method: "POST", headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ reponses: r, etude: blocsCalcules() })
       }).then(function(x){ return x.json(); }).then(function(j){
+        window.DERNIER_MAT = j;
         if(!j || !j.ok){ $("mat-msg").textContent = (j && j.message) || "diagnostic indisponible"; return; }
         $("mat-msg").textContent = n + " constat" + (n > 1 ? "s" : "") + " sur "
           + (CADRE ? CADRE.sante.criteres : 13) + ".";
@@ -13958,6 +13960,7 @@ if(window.parent&&window.parent!==window){
       }
       NOMEN = n;
       DERNIER_EQ = j;
+      window.DERNIER_EQ = j;
       if(avecVie){
         $("eq-vie-out").innerHTML = vie(j.prolongation);
       } else {
@@ -14587,6 +14590,9 @@ if(window.parent&&window.parent!==window){
                              annees: env.annees, hypotheses: hyp, cibles: cib,
                              pays: env.pays, pays_compares: env.compares })
     }).then(function(r){ return r.json(); }).then(function(j){
+      /* LA RÉPONSE PART AU DOSSIER TELLE QUELLE — l'export verse ce que
+         l'écran a reçu, jamais un recalcul. */
+      window.DERNIER_KPI = j;
       if(!j.ok){
         $('kpi-msg').textContent = j.message || 'lecture indisponible';
         return;
@@ -14940,13 +14946,26 @@ if(window.parent&&window.parent!==window){
     m.textContent = texte;
   }
 
+  /* LES COMPLÉMENTS DU DOSSIER D'INGÉNIERIE : les dernières réponses des
+     quatre moteurs, TELLES QUE SERVIES. L'export verse ce que l'écran a
+     reçu ; un bloc jamais lancé part absent, et le document l'écrit — il ne
+     l'invente pas. */
+  function complements(){
+    var c = {};
+    if(window.DERNIER_EQ) c.equipements = window.DERNIER_EQ;
+    if(window.DERNIER_KPI) c.kpi = window.DERNIER_KPI;
+    if(window.DERNIER_MAT) c.maturite = window.DERNIER_MAT;
+    if(window.DERNIER_PIL) c.pilotage = window.DERNIER_PIL;
+    return c;
+  }
+
   function telecharger(bouton, zone, devisFn){
     var dossier = bouton.getAttribute('data-dl');
     var fmt = bouton.getAttribute('data-fmt');
     var boutons = zone.querySelectorAll('.dl-b');
     for(var i = 0; i < boutons.length; i++) boutons[i].disabled = true;
     message(zone, 'Composition du document…', false);
-    var corps = {};
+    var corps = { complements: complements() };
     if(devisFn){
       var d = devisFn();
       if(d) corps.devis = d;
