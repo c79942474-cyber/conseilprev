@@ -245,9 +245,14 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
   ok('LA VALEUR DÉJÀ SAISIE N’EST PAS ÉCRASÉE', !!pre && pre.montee === '7',
      absent || (pre && pre.montee));
   ok('le compte rendu s’affiche', !!pre && pre.visible === true, absent);
+  /* CE CONTRÔLE ÉTAIT ÉPINGLÉ SUR UNE FORMULE — « entrée(s) pré-remplie(s) ».
+     Il est tombé le jour où le bouton a changé de rôle : les quatre valeurs de
+     référentiel se posant désormais seules à l'ouverture, il ne pose plus que
+     le revenu d'équilibre, et le libellé le dit. Ce qu'il protège ne dépend
+     pas des mots : le compte rendu doit ANNONCER UN NOMBRE d'entrées. */
   ok('…il dit combien d’entrées ont été remplies',
-     !!pre && !!pre.compte && /entrée\(s\) pré-remplie\(s\)/.test(pre.compte),
-     absent);
+     !!pre && !!pre.compte && /\d+\s*entrée\(s\)\s+\S+/.test(pre.compte),
+     absent || (pre && (pre.compte || '').replace(/\s+/g, ' ').slice(0, 70)));
   ok('…ET combien ont été laissées vides délibérément',
      !!pre && !!pre.compte && /laissée\(s\) vide\(s\) délibérément/.test(pre.compte),
      absent || (pre && pre.compte.slice(0, 110)));

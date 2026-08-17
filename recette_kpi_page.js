@@ -92,6 +92,56 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
      /enveloppe/i.test(dep.msg), dep.msg.slice(0, 70));
   ok('…et n’affiche AUCUN chiffre', dep.out.trim() === '', dep.out.slice(0, 60));
 
+  /* ── CE QUI PEUT SE REMPLIR EST DÉJÀ REMPLI ──────────────────────────────
+     Sept champs vides accueillaient le lecteur. Quatre d'entre eux portent
+     pourtant une valeur écrite dans le référentiel : les laisser vides lui
+     faisait porter le coût d'un choix que le module avait déjà fait et
+     documenté. Le bouton qui les remplissait n'apparaissait qu'APRÈS un
+     premier calcul infructueux — donc après le moment où il servait. */
+  const pose = await pg.evaluate(() => {
+    const l = {};
+    document.querySelectorAll('#kpi-form input[id^="kpi-"]').forEach(e => {
+      const cle = e.id.replace(/^kpi-/, '');
+      const b = document.getElementById('kpi-o-' + cle);
+      l[cle] = { v: (e.value || '').trim(),
+                 badge: (b && b.textContent) || '', auto: e.dataset.auto || '' };
+    });
+    return { champs: l,
+             refus: [...document.querySelectorAll('#kpi-form .kpi-refus')]
+               .map(x => x.textContent),
+             ligne: (document.getElementById('kpi-prerempli') || {}).textContent || '' };
+  });
+  const remplis = Object.keys(pose.champs).filter(k => pose.champs[k].v !== '');
+  ok('DÈS L’OUVERTURE, les hypothèses de référentiel sont déjà posées',
+     remplis.length >= 4, remplis.join(', ') || 'aucune');
+  ok('…et CHACUNE dit d’où elle vient — sans badge, un chiffre posé se croit saisi',
+     remplis.every(k => /référentiel|enveloppe/i.test(pose.champs[k].badge)),
+     remplis.map(k => k + ' [' + pose.champs[k].badge + ']').join(' · '));
+
+  /* LES DEUX REFUS SONT LE POINT DÉLICAT : ils doivent être VISIBLES avant le
+     premier calcul, sinon deux cases obligatoires et vides se lisent comme un
+     oubli du site — et se remplissent au jugé. */
+  ok('LE COÛT DU CAPITAL ET L’IMPÔT RESTENT VIDES — ce sont des décisions',
+     pose.champs.wacc.v === '' && pose.champs.is_taux.v === '',
+     'CMPC « ' + pose.champs.wacc.v + ' », IS « ' + pose.champs.is_taux.v + ' »');
+  ok('…et leur refus est AFFICHÉ dès l’arrivée, pas après un calcul pour rien',
+     pose.refus.length === 2, pose.refus.length + ' motif(s) visible(s)');
+  ok('…le motif dit pourquoi : proposer le taux qui juge, c’est choisir le verdict',
+     pose.refus.some(t => /décision du comité/i.test(t))
+       && pose.refus.some(t => /véhicule qui portera/i.test(t)),
+     pose.refus.map(t => t.slice(0, 55)).join(' | '));
+  ok('…et le relevé annonce ce qui est posé ET ce qui reste',
+     /déjà posée/i.test(pose.ligne) && /Il vous en reste/i.test(pose.ligne),
+     pose.ligne.replace(/\s+/g, ' ').slice(0, 120));
+
+  /* LE REVENU N'EST PAS POSÉ D'OFFICE, et c'est délibéré : le seul montant que
+     ce module sache calculer est le revenu d'ÉQUILIBRE, celui qui annule
+     l'EVA. Le poser sans le dire ferait répondre « à l'équilibre » aux trois
+     indicateurs — l'hypothèse renvoyée au lecteur, prise pour un résultat. */
+  ok('LE REVENU N’EST PAS POSÉ D’OFFICE — il annulerait l’EVA par construction',
+     pose.champs.revenu_meur_an.v === '',
+     '« ' + pose.champs.revenu_meur_an.v + ' »');
+
   titre('2. LE POINT QUI DÉCIDE : sans hypothèses, des QUESTIONS, pas des zéros');
 
   /* Calculer l'enveloppe d'abord — le bloc s'appuie dessus. */
@@ -152,6 +202,84 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
   } else {
     console.log('  ··   les deux coïncident sur ce jeu : contrôle non concluant ici');
   }
+
+  titre('3 bis. La durée d’amortissement suit l’étude, la saisie est protégée');
+
+  /* AMORTIR SUR UNE AUTRE DURÉE QUE L'ÉTUDE laisse en fin d'horizon une valeur
+     résiduelle qui n'apparaît dans aucun des trois indicateurs. Le référentiel
+     propose 20 ans, l'étude en retient 10 : c'est l'étude qui doit gagner une
+     fois qu'elle a tourné. */
+  const amort = await pg.evaluate(() => {
+    const c = document.getElementById('kpi-amort_ans');
+    const b = document.getElementById('kpi-o-amort_ans');
+    const d = window.FIN_DERNIER && window.FIN_DERNIER();
+    return { v: (c.value || '').trim(), badge: (b && b.textContent) || '',
+             etude: d && d.entree ? d.entree.annees : null };
+  });
+  ok('l’enveloppe calculée ALIGNE la durée d’amortissement sur l’étude',
+     amort.etude != null && Number(amort.v.replace(',', '.')) === Number(amort.etude),
+     amort.v + ' pour une étude sur ' + amort.etude + ' ans');
+  ok('…et le badge cesse de dire « référentiel » : la provenance a changé',
+     /enveloppe/i.test(amort.badge), amort.badge);
+
+  /* CE QUE LE LECTEUR A TAPÉ N'EST JAMAIS REMPLACÉ, même par une valeur que la
+     page avait posée elle-même auparavant. */
+  const garde = await pg.evaluate(async () => {
+    const c = document.getElementById('kpi-montee_ans');
+    c.value = '7';
+    c.dispatchEvent(new Event('input', { bubbles: true }));
+    document.dispatchEvent(new CustomEvent('fin-calcul'));
+    await new Promise(r => setTimeout(r, 500));
+    const b = document.getElementById('kpi-o-montee_ans');
+    return { v: (c.value || '').trim(), badge: (b && b.textContent) || '' };
+  });
+  ok('une valeur SAISIE survit à un nouveau calcul d’enveloppe',
+     garde.v === '7', '« ' + garde.v + ' »');
+  ok('…et son badge dit « votre saisie », pas « référentiel »',
+     /saisie/i.test(garde.badge), garde.badge);
+
+  titre('3 ter. Le revenu d’équilibre est un GESTE, et il s’annonce comme tel');
+
+  /* LE SEUL REVENU QUE CE MODULE SACHE CALCULER EST CELUI QUI ANNULE L'EVA.
+     Le poser d'office ferait répondre « à l'équilibre » aux trois indicateurs :
+     l'hypothèse renvoyée au lecteur, prise pour un résultat. Il reste donc un
+     bouton — et le bouton doit DIRE ce qu'il fait. */
+  await pg.fill('#kpi-wacc', '8');
+  await pg.fill('#kpi-is_taux', '25');
+  await pg.click('#kpi-go');
+  await pg.waitForTimeout(2600);
+  const geste = await pg.evaluate(() => {
+    const b = document.getElementById('kpi-pre');
+    return { visible: !!b && !b.hidden, libelle: (b ? b.textContent : '').trim(),
+             revenu: (document.getElementById('kpi-revenu_meur_an').value || '').trim() };
+  });
+  /* LE MOMENT OÙ LE DÉFAUT POURRAIT SE PRODUIRE. Au chargement, le revenu
+     d'équilibre n'est pas calculable — les propositions n'arrivent qu'avec le
+     premier calcul. C'est ICI, propositions en main et deux taux posés, qu'un
+     remplissage d'office deviendrait possible : le contrôle doit donc porter
+     à cet instant précis, et non seulement à l'ouverture. */
+  ok('APRÈS CALCUL ET DEUX TAUX POSÉS, le revenu reste vide sans geste du lecteur',
+     geste.revenu === '', '« ' + geste.revenu + ' »');
+  ok('le bouton du revenu d’équilibre est offert une fois les deux taux posés',
+     geste.visible);
+  ok('…et son libellé annonce l’équilibre, pas une prévision',
+     /équilibre/i.test(geste.libelle) && !/prévision/i.test(geste.libelle),
+     geste.libelle);
+
+  const apresGeste = await pg.evaluate(async () => {
+    document.getElementById('kpi-pre').click();
+    await new Promise(r => setTimeout(r, 500));
+    return { revenu: (document.getElementById('kpi-revenu_meur_an').value || '').trim(),
+             dit: (document.getElementById('kpi-prerempli') || {}).textContent || '' };
+  });
+  ok('le geste pose un revenu chiffré', /\d/.test(apresGeste.revenu),
+     apresGeste.revenu + ' M€/an');
+  ok('…et AVERTIT que les trois indicateurs diront « à l’équilibre »',
+     /n’est pas une prévision/i.test(apresGeste.dit)
+       && /équilibre/i.test(apresGeste.dit),
+     apresGeste.dit.replace(/\s+/g, ' ').slice(0, 130));
+  ok('…en nommant ce que ce cas limite sert à voir',
+     /au-dessus/i.test(apresGeste.dit) && /en dessous/i.test(apresGeste.dit));
 
   titre('4. Avec les hypothèses : trois cartes, un verdict, une série');
 

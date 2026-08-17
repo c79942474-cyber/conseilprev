@@ -2926,8 +2926,12 @@ engagements publics) sont imputés nominativement.</div>
            indicateurs se lisent ensemble. Tous deux restent facultatifs : ce
            bloc doit rester utilisable sans eux. -->
       <div class="kpi-barre">
+        <!-- CE BOUTON NE POSE PLUS QUE LE REVENU. Les quatre hypothèses de
+             référentiel se posent désormais toutes seules à l'ouverture ; il
+             ne reste ici que le revenu d'équilibre, et il DOIT rester un
+             geste : le poser d'office annulerait l'EVA par construction. -->
         <button type="button" class="kpi-pre" id="kpi-pre" hidden>
-          ⤵ Pré-remplir depuis l’enveloppe</button>
+          ⤵ Poser le revenu d’ÉQUILIBRE (EVA nulle) — pour voir le cas limite</button>
         <a href="#" class="kpi-gp" data-gp-kpi="finance">Suivre le parcours
           « Enveloppe d’investissement et DPGF » →</a>
       </div>
@@ -13208,7 +13212,12 @@ if(window.parent&&window.parent!==window){
   }
   function kpiRefus(cle){
     var p = KPI_PROP && KPI_PROP.entrees && KPI_PROP.entrees[cle];
-    return (p && p.refus) || null;
+    /* LE REFUS VIENT AUSSI DU RÉFÉRENTIEL, servi au chargement. Il n'arrivait
+       qu'avec le premier calcul — donc après le moment où il sert : le lecteur
+       voyait deux cases obligatoires et vides, sans savoir que leur vacuité
+       est un parti pris et non un défaut de la page. */
+    return (p && p.refus)
+      || ((REF && REF.refus_proposition && REF.refus_proposition[cle]) || null);
   }
   var KPI_ORIG_NOM = { defaut: "référentiel", enveloppe: "enveloppe",
                        seuil: "seuil calculé", saisie: "votre saisie" };
@@ -13277,6 +13286,9 @@ if(window.parent&&window.parent!==window){
       });
     }
     if(typeof aideBrancher === "function") aideBrancher($('kpi-form'));
+    /* LES VALEURS SE POSENT DÈS QUE LE FORMULAIRE EXISTE — pas au clic d'un
+       bouton qui n'apparaissait qu'après un premier calcul infructueux. */
+    kpiAppliquerDefauts();
   }
 
   /* Choisir une provenance remplit le champ ; taper dedans reprend la main.
@@ -13307,6 +13319,11 @@ if(window.parent&&window.parent!==window){
          l'origine — exactement ce que ce badge existe pour empêcher. */
       var sel = $('kpi-s-' + cle);
       if(sel) sel.value = '';
+      /* ET ELLE CESSE D'ÊTRE REMPLAÇABLE. Sans cette marque, la valeur posée
+         d'office se réécrirait par-dessus la saisie au prochain calcul
+         d'enveloppe — effacer un chiffre sous les yeux de celui qui vient de
+         le taper est la façon la plus sûre de lui faire perdre confiance. */
+      champ.dataset.auto = '0';
       kpiBadge(cle, 'saisie');
     });
   }
@@ -13330,6 +13347,76 @@ if(window.parent&&window.parent!==window){
     }
   });
 
+  /* ── CE QUI PEUT SE REMPLIR SE REMPLIT — ET LE RESTE EST NOMMÉ ────────────
+     Sept champs accueillaient le lecteur, tous vides. Cinq d'entre eux ont
+     pourtant une réponse écrite : montée en charge, besoin en fonds de
+     roulement, investissement de maintien et durée d'amortissement portent
+     une valeur de référentiel, et le revenu d'équilibre se calcule dès que les
+     deux taux sont posés. Les laisser vides faisait porter au lecteur le coût
+     d'un choix que le module avait déjà fait et documenté — et le bouton qui
+     les remplissait n'apparaissait qu'APRÈS un premier calcul infructueux,
+     c'est-à-dire après le moment où il servait.
+
+     DEUX RESTENT VIDES, ET C'EST DÉLIBÉRÉ. Le coût du capital et le taux
+     d'impôt sont les deux décisions du comité. Le CMPC est le taux QUI JUGE ce
+     projet : le proposer reviendrait à choisir le verdict, et le module le
+     refuse explicitement, motif à l'appui. La page ne contourne pas ce refus —
+     elle le rend visible dès l'arrivée, au lieu de le réserver à ceux qui ont
+     déjà calculé une fois pour rien.
+
+     RIEN N'EST FIGÉ : chaque valeur posée porte son badge de provenance, son
+     menu reste ouvert, et une valeur tapée à la main n'est jamais écrasée. */
+  function kpiDuree(){
+    var e = enveloppe();
+    return e && e.annees ? e.annees : null;
+  }
+
+  function kpiAppliquerDefauts(){
+    if(!REF || !$('kpi-form')) return null;
+    var duree = kpiDuree(), mis = [], vides = [];
+    REF.entrees.forEach(function(e){
+      var champ = $('kpi-' + e.cle);
+      if(!champ) return;
+      var val = (e.defaut === undefined || e.defaut === null) ? null : e.defaut;
+      var origine = 'defaut', libelle = 'valeur du référentiel';
+      /* LA DURÉE D'AMORTISSEMENT S'ALIGNE SUR L'ÉTUDE quand celle-ci a tourné.
+         Amortir sur une autre durée laisse en fin d'horizon une valeur
+         résiduelle qui n'apparaît dans aucun des trois indicateurs. */
+      if(e.cle === 'amort_ans' && duree){
+        val = duree; origine = 'enveloppe'; libelle = 'durée de l’étude';
+      }
+      if(val === null || kpiRefus(e.cle)){
+        if(!String(champ.value).trim()) vides.push(e);
+        return;
+      }
+      /* ON NE PIÉTINE PAS UNE VALEUR SAISIE : le lecteur a déjà tranché. Seule
+         une valeur que nous avions posée nous-mêmes se remplace. */
+      if(String(champ.value).trim() !== '' && champ.dataset.auto !== '1') return;
+      champ.value = String(val).replace('.', ',');
+      champ.dataset.auto = '1';
+      kpiBadge(e.cle, origine, libelle);
+      mis.push(e);
+    });
+    var z = $('kpi-prerempli');
+    if(z){
+      z.innerHTML = '<b>' + mis.length + ' hypothèse' + (mis.length > 1 ? 's' : '')
+        + ' sur ' + REF.entrees.length + ' ' + (mis.length > 1 ? 'sont' : 'est')
+        + ' déjà posée' + (mis.length > 1 ? 's' : '') + '</b> — '
+        + mis.map(function(e){ return esc(e.nom.split('(')[0].trim()); }).join(', ')
+        + '. Chacune porte sa provenance et reste modifiable.'
+        + (vides.length
+            ? ' <b>Il vous en reste ' + vides.length + '</b> : '
+              + vides.map(function(e){
+                  return esc(e.nom.split('(')[0].trim()); }).join(' et ')
+              + '. Ce module refuse de les proposer — ce sont des décisions, '
+              + 'pas des résultats, et le coût du capital est précisément le '
+              + 'taux qui juge ce projet.'
+            : '');
+      z.hidden = false;
+    }
+    return { mis: mis, vides: vides };
+  }
+
   function kpiPreremplir(){
     if(!KPI_PROP) return;
     var mis = [], laisses = [];
@@ -13348,14 +13435,26 @@ if(window.parent&&window.parent!==window){
     });
     var z = $('kpi-prerempli');
     if(z){
-      z.innerHTML = '<b>' + mis.length + ' entrée(s) pré-remplie(s)</b> depuis '
-        + 'l’enveloppe et le référentiel. '
+      /* CE QUE CE GESTE FAIT, ET CE QU'IL NE PROUVE PAS. Poser le revenu
+         d'équilibre place le projet exactement au point où l'EVA s'annule :
+         les trois indicateurs répondront donc « à l'équilibre », ce qui n'est
+         pas un résultat mais l'hypothèse renvoyée au lecteur. C'est utile
+         comme CAS LIMITE — au-dessus on crée, en dessous on détruit — et
+         trompeur si on le prend pour une prévision. Le dire ici est la seule
+         façon que ce soit lu au moment où ça sert. */
+      z.innerHTML = '<b>' + mis.length + ' entrée(s) posée(s)</b> — '
+        + esc(mis.join(', ')) + '. '
+        + '<b>Le revenu d’équilibre n’est pas une prévision :</b> c’est le '
+        + 'montant exact où l’EVA s’annule. Les trois indicateurs diront donc '
+        + '« à l’équilibre » — ce n’est pas un résultat, c’est votre hypothèse '
+        + 'renvoyée. Elle sert de CAS LIMITE : au-dessus le projet crée de la '
+        + 'valeur, en dessous il en détruit. Remplacez-la par le revenu de '
+        + 'votre plan d’affaires pour lire les trois indicateurs.'
         + (laisses.length
-            ? '<b>' + laisses.length + ' laissée(s) vide(s) délibérément :</b> '
+            ? ' <b>' + laisses.length + ' laissée(s) vide(s) délibérément :</b> '
               + esc(laisses.join(', ')) + '. '
               + esc((KPI_PROP.resume || {}).motif || '')
-            : '')
-        + ' Les valeurs restent modifiables — chaque champ dit d’où vient la sienne.';
+            : '');
       z.hidden = false;
     }
   }
@@ -13528,14 +13627,24 @@ if(window.parent&&window.parent!==window){
          formulaire pour que les menus apparaissent, en conservant ce que le
          lecteur a déjà saisi. */
       if(j.propositions){
+        /* LA PROVENANCE SURVIT À LA RECONSTRUCTION. Tout ce qui était en place
+           était restauré puis badgé « votre saisie » — y compris les valeurs
+           que la page avait posées elle-même, dont l'origine devenait fausse
+           à chaque calcul. On garde donc la marque avec la valeur. */
         var garde = {};
         (REF ? REF.entrees : []).forEach(function(e){
-          var c = $('kpi-' + e.cle); if(c && c.value) garde[e.cle] = c.value; });
+          var c = $('kpi-' + e.cle);
+          if(c && c.value) garde[e.cle] = { v: c.value, auto: c.dataset.auto === '1' };
+        });
         KPI_PROP = j.propositions;
         champs();
         Object.keys(garde).forEach(function(k){
           var c = $('kpi-' + k);
-          if(c){ c.value = garde[k]; kpiBadge(k, 'saisie'); }
+          if(!c) return;
+          if(garde[k].auto){ c.dataset.auto = '1'; return; }
+          c.value = garde[k].v;
+          c.dataset.auto = '0';
+          kpiBadge(k, 'saisie');
         });
         var bp = $('kpi-pre'); if(bp) bp.hidden = false;
       }
@@ -13598,6 +13707,13 @@ if(window.parent&&window.parent!==window){
       .catch(function(){
         $('kpi-msg').textContent = 'référentiel des indicateurs indisponible';
       });
+    /* LA DURÉE D'AMORTISSEMENT SUIT L'ÉTUDE. Elle n'est connue qu'une fois
+       l'enveloppe calculée : posée au chargement, elle vaudrait la valeur du
+       référentiel et laisserait, en fin d'horizon, une valeur résiduelle que
+       personne ne commente. */
+    ['fin-calcul', 'fin-pays'].forEach(function(ev){
+      document.addEventListener(ev, function(){ kpiAppliquerDefauts(); });
+    });
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', demarrer);
   else demarrer();

@@ -672,6 +672,12 @@ def referentiel():
     """Ce que la page doit savoir pour composer le bloc."""
     return {"version": VERSION, "avertissement": AVERTISSEMENT,
             "entrees": ENTREES, "obligatoires": OBLIGATOIRES,
+            # LES REFUS VOYAGENT AVEC LE REFERENTIEL, et non plus seulement
+            # avec le calcul. Une entree obligatoire, vide et sans motif se lit
+            # comme un oubli du site : le lecteur la remplit au juge, ou
+            # attend. Le motif etait pourtant ecrit — il n'arrivait qu'apres un
+            # premier calcul, c'est-a-dire apres le moment ou il servait.
+            "refus_proposition": dict(REFUS_PROPOSITION),
             # ORDRE est servi comme LISTE : un dictionnaire JSON se fait
             # réordonner alphabétiquement en chemin, et « eva, fcf, roce » ne
             # raconte pas la même histoire que « eva, roce, fcf ».
