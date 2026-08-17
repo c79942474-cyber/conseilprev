@@ -436,11 +436,20 @@ body.vue-pays .pnav a,body.vue-pays .pnav-sep{display:none}
    le laisse couvrir — c'est le seul moyen de fermer au clic hors fenêtre. */
 body.embed .gp-voile{background:rgba(20,20,20,.32)}
 .gp-voile.on{display:block}
+/* LE PIED DE LA FENÊTRE NE PASSE JAMAIS SOUS LE PLI.
+   La carte était un bloc de hauteur libre : dès qu'elle dépassait la place
+   disponible, « Précédent / Suivant » sortait de l'écran. Le lecteur voyait la
+   consigne et n'avait plus AUCUN moyen d'avancer — la première étape du
+   parcours investisseur, qui porte trois scénarios, tombait exactement là.
+   La carte devient donc une colonne bornée : la tête et le pied gardent leur
+   place, et c'est le CORPS qui défile. Il vaut mieux faire défiler un texte
+   que perdre le bouton qui fait avancer. */
 .gp-carte{position:fixed;z-index:72;bottom:22px;left:50%;transform:translateX(-50%);
   width:min(580px,calc(100vw - 28px));background:var(--white);border:1px solid var(--rule);
-  border-radius:6px;box-shadow:0 18px 50px rgba(0,0,0,.35);display:none}
-.gp-carte.on{display:block}
-.gp-tete{display:flex;align-items:baseline;gap:10px;padding:12px 18px 0}
+  border-radius:6px;box-shadow:0 18px 50px rgba(0,0,0,.35);display:none;
+  max-height:var(--gp-cmax,calc(100vh - 44px))}
+.gp-carte.on{display:flex;flex-direction:column}
+.gp-tete{display:flex;align-items:baseline;gap:10px;padding:12px 18px 0;flex:0 0 auto}
 .gp-etape{font-family:var(--mono);font-size:9.5px;color:var(--muted2);letter-spacing:.05em}
 .gp-profil{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.06em;
   background:var(--bg);border:1px solid var(--rule);border-radius:3px;padding:2px 8px;color:var(--muted)}
@@ -448,7 +457,8 @@ body.embed .gp-voile{background:rgba(20,20,20,.32)}
   padding:1px 7px;border-radius:3px}
 .gp-fermer:hover{color:var(--ink);background:var(--bg)}
 .gp-fermer:focus-visible{outline:2px solid #1E63A8;outline-offset:1px}
-.gp-corps{padding:8px 18px 4px}
+.gp-corps{padding:8px 18px 4px;flex:1 1 auto;min-height:0;overflow-y:auto;
+  overscroll-behavior:contain}
 .gp-corps h4{font-size:14px;font-weight:600;margin:2px 0 6px}
 .gp-corps p{font-size:12.5px;line-height:1.6;color:var(--ink);margin:0 0 8px}
 .gp-src{margin-top:9px;padding-top:8px;border-top:1px solid var(--rule2);
@@ -466,7 +476,10 @@ body.embed .gp-voile{background:rgba(20,20,20,.32)}
 .gp-piege{border-left:3px solid var(--orange);background:var(--bg);border-radius:0 3px 3px 0;
   padding:8px 12px;font-size:11.5px;color:var(--muted);line-height:1.55;margin:0 0 6px}
 .gp-piege b{color:var(--ink)}
-.gp-pied{display:flex;align-items:center;gap:8px;padding:8px 18px 14px}
+/* Le filet du pied n'est pas un ornement : quand le corps défile, il est le
+   seul signe que le texte continue au-dessus du bouton. */
+.gp-pied{display:flex;align-items:center;gap:8px;padding:8px 18px 14px;flex:0 0 auto;
+  border-top:1px solid var(--rule2);background:var(--white);border-radius:0 0 6px 6px}
 .gp-points{display:flex;gap:5px;margin-right:auto}
 .gp-points i{width:7px;height:7px;border-radius:50%;background:var(--rule);display:block}
 .gp-points i.fait{background:#8FB3DC}
@@ -496,8 +509,12 @@ body.embed .gp-voile{background:rgba(20,20,20,.32)}
   box-shadow:0 18px 50px rgba(0,0,0,.35);padding:22px 24px;display:none}
 body.embed .gp-choix{top:var(--gp-top,50%);transform:translate(-50%,-50%);
   max-height:var(--gp-max,calc(100vh - 40px))}
-body.embed .gp-carte{bottom:auto;top:var(--gp-bas,auto);
-  max-height:var(--gp-max,none);overflow:auto}
+/* LE DÉFAUT MESURÉ ICI : la carte était ancrée 320 px au-dessus du bas de la
+   bande visible, mais autorisée à occuper TOUTE la bande (`--gp-max`). Une
+   carte de 470 px posée à 320 px du bas dépasse de 150 px : son pied tombait
+   sous la bande, hors de l'écran. La hauteur permise doit être celle qui reste
+   SOUS son propre haut — c'est ce que dit `--gp-cmax`, posé par gpBande(). */
+body.embed .gp-carte{bottom:auto;top:var(--gp-bas,auto)}
 .gp-choix.on{display:block}
 .gp-choix h3{font-family:var(--serif);font-size:20px;font-weight:400;margin:0 0 4px}
 .gp-choix .st{font-size:12px;color:var(--muted);margin:0 0 14px;line-height:1.55}
@@ -10878,7 +10895,15 @@ function gpBande(){
   var h = bas - haut;
   b.style.setProperty("--gp-top", Math.round(haut + h / 2) + "px");
   b.style.setProperty("--gp-max", Math.max(220, Math.round(h - 32)) + "px");
-  b.style.setProperty("--gp-bas", Math.round(bas - Math.min(h - 24, 320)) + "px");
+  /* LA PLACE DE LA CARTE, ET LA HAUTEUR QU'ELLE A LE DROIT DE PRENDRE, SONT LA
+     MÊME MESURE. Les séparer est ce qui faisait sortir son pied de l'écran.
+     On lui réserve le bas de la bande — assez pour trois scénarios, jamais plus
+     de 460 px, pour que la section désignée au-dessus reste lisible. */
+  var place = Math.min(Math.max(120, h - 16),
+                       Math.max(200, Math.min(460, Math.round(h * 0.6))));
+  var hautCarte = Math.max(Math.round(haut), Math.round(bas - place));
+  b.style.setProperty("--gp-bas", hautCarte + "px");
+  b.style.setProperty("--gp-cmax", Math.max(150, Math.round(bas - hautCarte - 14)) + "px");
 }
 
 /* La page parente annonce la bande visible du cadre. Message volontairement
