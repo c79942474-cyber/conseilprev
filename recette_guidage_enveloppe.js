@@ -299,11 +299,169 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
   ok('le rallumer rouvre la flèche, même fermée auparavant',
      (await fleche()) !== null);
 
+  // ── 6 ────────────────────────────────────────────────────────────────────
+  titre('6. Les BOUTONS parlent la même langue que les pastilles');
+
+  /* CE QUE CETTE SECTION PROTÈGE. Le bandeau disait, en haut, ce qui restait à
+     faire — pendant que les boutons qui le font, plus bas, gardaient tous la
+     même apparence. Le lecteur descendait dans la page et n'avait plus aucun
+     repère. Les commandes portent donc l'état de LEUR étape : bleu battant
+     tant qu'elle reste, vert immobile une fois franchie.
+
+     ET L'ÉTAT VIENT DU FIL, PAS D'UNE SECONDE COMPTABILITÉ : un bouton vert
+     au-dessus d'une pastille qui reste, et plus personne ne croirait ni l'un
+     ni l'autre. C'est le dernier contrôle de la section qui l'éprouve. */
+  const lireCmd = () => pg.evaluate(() => {
+    const lum = (c) => {
+      const v = c.match(/[\d.]+/g).slice(0, 3).map(Number).map(x => {
+        x /= 255; return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4);
+      });
+      return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2];
+    };
+    const contraste = (a, b) => {
+      const [h, l] = [lum(a), lum(b)].sort((p, q) => q - p);
+      return (h + 0.05) / (l + 0.05);
+    };
+    const faites = (window.finFaites ? window.finFaites() : null);
+    return (window.FIN_ETAPES || []).filter(e => e.commande).map(e => {
+      const b = document.querySelector(e.commande);
+      if (!b) return { cle: e.cle, absent: true };
+      const s = getComputedStyle(b);
+      const av = getComputedStyle(b, '::before');
+      const pastille = [...document.querySelectorAll('#fin-fil .fin-e')]
+        .map((li, i) => ({ li, e: (window.FIN_ETAPES || [])[i] }))
+        .filter(x => x.e && x.e.cle === e.cle)[0];
+      return {
+        cle: e.cle, n: e.n,
+        att: b.classList.contains('fin-cmd-att'),
+        fait: b.classList.contains('fin-cmd-fait'),
+        fond: s.backgroundColor, encre: s.color,
+        anim: s.animationName, duree: parseFloat(s.animationDuration) || 0,
+        contraste: contraste(s.backgroundColor, s.color),
+        marque: (av.content || '').replace(/["']/g, '').trim(),
+        titre: b.getAttribute('title') || '',
+        pastilleFaite: pastille ? pastille.li.classList.contains('fait') : null,
+        selonFil: faites ? !!faites[e.cle] : null
+      };
+    });
+  });
+
+  const c0 = await lireCmd();
+  ok('chaque étape à commande a bien son bouton sur la page',
+     c0.length > 0 && c0.every(x => !x.absent),
+     c0.filter(x => x.absent).map(x => x.cle).join(', ') || c0.length + ' bouton(s)');
+  ok('AUCUN bouton ne reste sans repère d’état',
+     c0.every(x => x.att || x.fait),
+     c0.filter(x => !(x.att || x.fait)).map(x => x.cle).join(', ') || 'tous marqués');
+  ok('au départ, les commandes non franchies BATTENT en bleu',
+     c0.filter(x => x.att).length > 0
+       && c0.filter(x => x.att).every(x => x.anim !== 'none'
+            && (() => { const [r, , b] = x.fond.match(/[\d.]+/g).map(Number);
+                        return b > r + 30; })()),
+     c0.filter(x => x.att).length + ' en attente, ' + (c0[0] || {}).fond);
+  ok('…à la MÊME cadence que les pastilles, sous le seuil de sécurité',
+     c0.filter(x => x.att).every(x => x.duree >= 1.0),
+     'cycle ' + (c0.find(x => x.att) || {}).duree + ' s');
+  ok('…et le libellé reste lisible : 4,5:1 au minimum',
+     c0.every(x => x.contraste >= 4.5),
+     'le plus faible : '
+       + Math.min.apply(null, c0.map(x => x.contraste)).toFixed(2) + ':1');
+  ok('…chaque bouton DIT son rang et son état, il ne le peint pas seulement',
+     c0.every(x => /Étape \d+ sur \d+/.test(x.titre)),
+     (c0[0] || {}).titre);
+
+  /* LE CONTRÔLE QUI PROTÈGE LE PLUS, ET IL A MANQUÉ AU PREMIER JET. Mesurer la
+     couleur du bouton à un instant donné ne dit rien de ce qu'il devient à
+     mi-cycle : un battement ramené à l'opacité — le geste évident — passait
+     tous les contrôles ci-dessus tout en rendant le libellé illisible une
+     demi-seconde sur deux. On relit donc les images-clés elles-mêmes, on
+     résout les variables de charte sur une sonde, et on mesure le contraste
+     du libellé contre CHAQUE fond du cycle.
+
+     Le libellé, lui, garde sa couleur d'un bout à l'autre : sur un bouton, la
+     faire varier ferait clignoter le texte lui-même. C'est le fond et le halo
+     qui portent le battement — d'où une règle différente de celle des
+     pastilles, où c'est le chiffre qui doit bouger. */
+  const phasesCmd = await pg.evaluate(() => {
+    const lum = (c) => {
+      const v = c.match(/[\d.]+/g).slice(0, 3).map(Number).map(x => {
+        x /= 255; return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4);
+      });
+      return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2];
+    };
+    const contraste = (a, b) => {
+      const [h, l] = [lum(a), lum(b)].sort((p, q) => q - p);
+      return (h + 0.05) / (l + 0.05);
+    };
+    let kf = null;
+    for (const ss of document.styleSheets) {
+      let rr; try { rr = ss.cssRules } catch (e) { continue }
+      for (const r of rr) if (r.type === 7 && r.name === 'fin-cmd-bat') kf = r;
+    }
+    if (!kf) return null;
+    const b = document.querySelector('#moe-go');
+    const encre = b ? getComputedStyle(b).color : 'rgb(255,255,255)';
+    const sonde = document.createElement('span');
+    document.body.appendChild(sonde);
+    const images = [...kf.cssRules].map(k => {
+      sonde.style.cssText = k.style.cssText;
+      const s = getComputedStyle(sonde);
+      return { cle: k.keyText,
+               opacite: !!k.style.opacity,
+               fond: s.backgroundColor,
+               contraste: contraste(s.backgroundColor, encre) };
+    });
+    sonde.remove();
+    return { encre: encre, images: images };
+  });
+  ok('le battement des commandes est relu depuis la feuille de style',
+     !!phasesCmd && phasesCmd.images.length >= 2,
+     phasesCmd ? phasesCmd.images.length + ' image(s)' : 'keyframes introuvables');
+  ok('AUCUNE PHASE NE SE JOUE SUR L’OPACITÉ — elle effacerait le libellé',
+     !!phasesCmd && phasesCmd.images.every(i => !i.opacite),
+     phasesCmd
+       ? phasesCmd.images.filter(i => i.opacite).length + ' image(s) à opacité variable'
+       : '');
+  ok('LE LIBELLÉ RESTE LISIBLE À CHAQUE PHASE DU CYCLE — 4,5:1 au minimum',
+     !!phasesCmd && phasesCmd.images.every(i => i.contraste >= 4.5),
+     phasesCmd
+       ? phasesCmd.images.map(i => i.cle + ' ' + i.contraste.toFixed(2)).join(' · ')
+       : '');
+
+  /* LE POINT QUI DÉCIDE : franchir une étape doit faire basculer SA commande,
+     et elle seule. Une bascule globale colorerait tout en vert au premier
+     calcul et ne dirait plus rien. */
+  await pg.evaluate(() => document.getElementById('fin-go').click());
+  await pg.waitForFunction(() => window.FIN_DERNIER && window.FIN_DERNIER(),
+    null, { timeout: 60000 });
+  await pg.waitForTimeout(3000);
+  const c1 = await lireCmd();
+  const calc = c1.filter(x => x.cle === 'calculer')[0];
+  ok('FRANCHIR UNE ÉTAPE FAIT PASSER SA COMMANDE AU VERT',
+     !!calc && calc.fait && !calc.att, calc && calc.fond);
+  ok('…et le vert ne bat pas — c’est ce qui le distingue',
+     !!calc && calc.anim === 'none', calc && calc.anim);
+  ok('…il porte une marque, pas seulement une couleur',
+     !!calc && /✓/.test(calc.marque), (calc && calc.marque) || 'aucune');
+  ok('…et les AUTRES commandes restent bleues : la bascule n’est pas globale',
+     c1.filter(x => x.cle !== 'calculer').every(x => x.att && !x.fait),
+     c1.filter(x => x.fait).map(x => x.cle).join(', '));
+  ok('…son infobulle bascule elle aussi', !!calc && /faite/i.test(calc.titre),
+     calc && calc.titre);
+  ok('LE BOUTON NE PEUT PAS CONTREDIRE SA PASTILLE — même source d’état',
+     c1.every(x => x.selonFil === null || x.fait === x.selonFil),
+     c1.filter(x => x.selonFil !== null && x.fait !== x.selonFil)
+       .map(x => x.cle).join(', ') || 'tous d’accord');
+  ok('…ni le bandeau des étapes, qui se coche de la même façon',
+     c1.every(x => x.pastilleFaite === null || x.fait === x.pastilleFaite),
+     c1.filter(x => x.pastilleFaite !== null && x.fait !== x.pastilleFaite)
+       .map(x => x.cle).join(', ') || 'tous d’accord');
+
   ok('aucune erreur de script sur toute la manœuvre', err.length === 0,
      err.slice(0, 2).join(' | '));
 
-  // ── 6 ────────────────────────────────────────────────────────────────────
-  titre('6. Mouvement réduit : plus rien ne bouge, et rien n’est perdu');
+  // ── 7 ────────────────────────────────────────────────────────────────────
+  titre('7. Mouvement réduit : plus rien ne bouge, et rien n’est perdu');
 
   const pg2 = await ouvrir(true);
   const immobile = await pg2.evaluate(() => {
@@ -360,6 +518,26 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
   ok('le cadre vert du validé survit au mouvement réduit',
      immobile.fait.length > 0 && immobile.fait.every(x => memeVert(x.cadre)),
      immobile.fait.length + ' validée(s), cadre ' + (immobile.fait[0] || {}).cadre);
+
+  /* LES COMMANDES AUSSI : le battement est refusé, le REPÈRE ne l'est pas. */
+  const cmdRed = await pg2.evaluate(() =>
+    (window.FIN_ETAPES || []).filter(e => e.commande).map(e => {
+      const b = document.querySelector(e.commande);
+      if (!b) return null;
+      const s = getComputedStyle(b);
+      return { cle: e.cle, anim: s.animationName, fond: s.backgroundColor,
+               marque: b.classList.contains('fin-cmd-att')
+                 || b.classList.contains('fin-cmd-fait'),
+               contour: s.outlineStyle + ' ' + s.outlineWidth };
+    }).filter(Boolean));
+  ok('aucune commande ne bat en mouvement réduit',
+     cmdRed.length > 0 && cmdRed.every(x => x.anim === 'none'),
+     cmdRed.filter(x => x.anim !== 'none').map(x => x.cle).join(', ') || 'toutes immobiles');
+  ok('…MAIS elles gardent leur état : on ne prive pas de repère',
+     cmdRed.every(x => x.marque));
+  ok('…et celles qui restent à faire reçoivent un contour, faute de battement',
+     cmdRed.some(x => /solid/.test(x.contour)),
+     (cmdRed[0] || {}).contour);
   await pg2.close();
 
   console.log('\n' + (ko === 0 ? 'tout est vert' : ko + ' contrôle(s) en échec') + '\n');

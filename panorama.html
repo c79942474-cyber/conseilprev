@@ -1231,6 +1231,34 @@ th .ttip{margin-left:5px}
   animation:fin-bat-reste 1.8s ease-in-out infinite}
 .fin-e.cours .fin-e-n{animation:fin-bat-cours 1.8s ease-in-out infinite}
 
+/* ── LES BOUTONS D'ACTION, MÊME LANGAGE QUE LES PASTILLES ──────────────────
+   Bleu battant tant que l'étape reste à faire, vert et immobile une fois
+   qu'elle a produit quelque chose. Le `!important` est ici le propos : ces
+   boutons appartiennent à cinq blocs aux styles différents, et c'est
+   justement cette disparité qui empêchait de les lire comme une séquence.
+
+   LE BATTEMENT NE TOUCHE PAS À L'OPACITÉ. Le libellé doit rester lisible à
+   chaque instant du cycle : blanc sur le bleu de charte, 6,2:1 ; blanc sur le
+   bleu sombre de mi-cycle, 8,4:1 ; blanc sur le vert du fait, 5,3:1. Aucune
+   phase ne descend sous le seuil de 4,5:1. */
+@keyframes fin-cmd-bat{
+  0%,100% {background:var(--blue); box-shadow:0 0 0 0 rgba(30,99,168,.55)}
+  50%     {background:#0E4E8C;     box-shadow:0 0 0 8px rgba(30,99,168,0)}
+}
+.fin-cmd-att{background:var(--blue) !important;color:#fff !important;
+  border-color:var(--blue) !important;
+  animation:fin-cmd-bat 1.8s ease-in-out infinite}
+.fin-cmd-fait{background:var(--green) !important;color:#fff !important;
+  border-color:var(--green) !important;animation:none !important}
+/* LA MARQUE EST UN CARACTÈRE, PAS UNE COULEUR SEULE : qui ne distingue pas le
+   vert du bleu doit tout de même voir ce qui est fait. Le contenu d'un
+   pseudo-élément n'entre pas dans le texte du bouton — les contrôles qui
+   lisent son libellé restent donc valables. */
+.fin-cmd-fait::before{content:"✓\00a0";font-weight:700}
+@media (prefers-reduced-motion: reduce){
+  .fin-cmd-att{animation:none;outline:2px solid var(--ink);outline-offset:2px}
+}
+
 /* LE CADRE VERT DE CE QUI EST VALIDÉ. La pastille passait au vert, mais la
    carte gardait son filet gris : de loin, une étape faite et une étape à
    faire avaient la même silhouette. Le cadre se lit à la distance où l'on
@@ -5127,9 +5155,11 @@ var FIN_ETAPES = [
     quoi: "De deux à six pays comparés. En dessous de deux, il n’y a rien à comparer.",
     fait: function(){ return document.querySelectorAll("#fin-pays button[data-p].on").length >= 2; } },
   { cle: "calculer", n: 3, nom: "Calculer l’enveloppe", cible: "fin-go",
+    commande: "#fin-go",
     quoi: "L’enveloppe en fourchette, la DPGF par lot, le coût total et l’échéancier.",
     fait: function(){ return document.querySelectorAll("#fin-res .fin-dos").length > 0; } },
   { cle: "moe", n: 4, nom: "Chiffrer la maîtrise d’œuvre", cible: "moe-bloc",
+    commande: "#moe-go",
     quoi: "Les honoraires, phase par phase et mission par mission, sur le montant "
         + "des travaux du pays retenu.",
     fait: function(){ return !!document.querySelector("#moe-out .moe-tab"); } },
@@ -5139,11 +5169,12 @@ var FIN_ETAPES = [
      d'ouvrage la porte. Les lire avant de l'avoir chiffrée donne un ROCE
      surestimé — sur la page même qui décide d'un GO ou d'un NO GO. */
   { cle: "equipements", n: 5, nom: "Chiffrer les équipements informatiques",
-    cible: "s-equipements",
+    cible: "s-equipements", commande: "#eq-go",
     quoi: "Le poste que les quatorze lots ne contiennent pas — et qui pèse le "
         + "tiers de l’investissement quand vous le portez.",
     fait: function(){ return !!document.querySelector("#eq-out .eq-tab"); } },
   { cle: "kpi", n: 6, nom: "Lire la création de valeur", cible: "kpi-bloc",
+    commande: "#kpi-go",
     quoi: "EVA, ROCE, free cash flow : le projet le moins cher n’est pas toujours "
         + "celui qui crée de la valeur.",
     fait: function(){ return !!document.querySelector("#kpi-out table, #kpi-out .kpi-c"); } },
@@ -5154,16 +5185,19 @@ var FIN_ETAPES = [
      instruire la decision que ces chiffres preparent, et le pilotage n'a de
      sens qu'une fois qu'on sait ce qu'il est tenable de promettre. */
   { cle: "maturite", n: 7, nom: "Diagnostiquer la maturité", cible: "s-maturite",
+    commande: "#mat-go",
     quoi: "L’organisation a-t-elle de quoi instruire cette décision, puis en "
         + "suivre l’exécution ? À poser avant de promettre un tableau de bord.",
     fait: function(){ var o = document.getElementById("mat-out");
                       return !!(o && o.innerHTML && o.innerHTML.length > 200); } },
   { cle: "pilotage", n: 8, nom: "Armer le pilotage", cible: "s-pilotage",
+    commande: "#pil-go",
     quoi: "Seuils, tendances et alertes : où une action est attendue — sans "
         + "crier au loup sur un écart qui tient dans l’incertitude.",
     fait: function(){ var o = document.getElementById("pil-out");
                       return !!(o && o.innerHTML && o.innerHTML.length > 200); } },
   { cle: "pont", n: 9, nom: "Poursuivre sur l’ingénierie", cible: "fin-ponts",
+    commande: "[data-pont-go]",
     quoi: "Le bilan énergie-eau-carbone, ou la séquence des pièces et le prix de "
         + "la maîtrise d’œuvre — sur le site d’ingénierie.",
     /* « FAIT » VEUT DIRE : UN LIEN A ÉTÉ CRÉÉ. Écrit d'abord comme la présence
@@ -5459,11 +5493,46 @@ function finRetourFil(cle){
    et rien d'autre : deux chemins de mise à jour finiraient par se contredire,
    l'un ramenant au fil et l'autre non. Rend la clé de l'étape franchie, ou
    null — c'est ce que la surveillance attend pour s'arrêter. */
+/* ── LES COMMANDES PARLENT LA MÊME LANGUE QUE LES PASTILLES ────────────────
+   Le bandeau des neuf étapes disait, en haut, ce qui restait à faire — pendant
+   que les boutons qui le font, plus bas, gardaient tous la même apparence.
+   Le lecteur descendait dans la page et n'avait plus aucun repère : rien ne
+   distinguait le bouton qu'il devait presser de ceux qu'il avait déjà pressés.
+
+   L'ÉTAT VIENT DU FIL, IL N'EST PAS RECALCULÉ ICI. Chaque commande est
+   rattachée à SON étape, et l'apparence se déduit du même `fait()` qui pilote
+   la pastille. Deux comptabilités séparées finiraient par se contredire — un
+   bouton vert au-dessus d'une pastille qui reste, et plus personne ne croirait
+   ni l'un ni l'autre.
+
+   MÊME CADENCE, MÊME SEUIL DE SÉCURITÉ que les pastilles : 1,8 s, soit
+   0,55 éclat par seconde, six fois sous la limite des trois éclats. Et le
+   battement se joue sur la couleur du fond et sur le halo, jamais sur
+   l'opacité : le libellé du bouton doit rester lisible à chaque instant. */
+function finCommandes(faites){
+  FIN_ETAPES.forEach(function(e){
+    if(!e.commande) return;
+    var fait = !!faites[e.cle];
+    [].forEach.call(document.querySelectorAll(e.commande), function(b){
+      b.classList.toggle("fin-cmd-fait", fait);
+      b.classList.toggle("fin-cmd-att", !fait);
+      /* LE SENS EST DIT, PAS SEULEMENT PEINT. Une couleur seule laisse sans
+         repère qui ne la distingue pas — et un lecteur d'écran n'en voit
+         rien du tout. */
+      b.setAttribute("title", fait
+        ? "Étape " + e.n + " sur " + FIN_ETAPES.length + " — faite. "
+          + "Relancer met le résultat à jour."
+        : "Étape " + e.n + " sur " + FIN_ETAPES.length + " — reste à faire.");
+    });
+  });
+}
+
 function finMajFil(){
   var avant = FIN_VU;
   var apres = finFaites();
   FIN_VU = apres;
   finFil();
+  finCommandes(apres);
   if(!avant) return null;            /* premier relevé : rien n'a été franchi */
   var franchie = null;
   FIN_ETAPES.forEach(function(e){
