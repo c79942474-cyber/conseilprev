@@ -2222,6 +2222,11 @@ th .fl{font-size:9px;margin-left:3px}
   .eq-tab tbody td{color:var(--mu,#9aa)}
   .eq-tab tfoot th,.eq-tab tfoot td{border-top:2px solid var(--line,#233);
     border-bottom:none;padding-top:9px;font-weight:700}
+  /* L'UNITÉ SOUS L'INTITULÉ. Un en-tête de colonne qui ne porte pas son unité
+     laisse le lecteur la déduire du chiffre — et « carbone fabrication » se
+     déduit spontanément en tonnes PAR AN, ce qu'il n'est pas. */
+  .eq-u{display:block;font-size:9.5px;font-weight:400;letter-spacing:.03em;
+    text-transform:none;color:var(--mu,#9aa);margin-top:1px}
   .eq-badge{display:block;font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;
     font-weight:400;margin-top:2px;color:var(--mu,#9aa)}
   .eq-ind .eq-badge{color:#7DD3A0}
@@ -3105,6 +3110,17 @@ engagements publics) sont imputés nominativement.</div>
       octet</b> avec la page d'ingénierie de conseilprevcyber&nbsp;: les quantités y
       sont les mêmes, à la ligne près.
     </p>
+    <!-- CE QUE CE BLOC REÇOIT, ET CE QU'IL TRANSMET. Les blocs voisins portent
+         cette flèche ; celui-ci n'en avait aucune, et se lisait donc comme une
+         annexe posée là — alors qu'il tient la cinquième étape du parcours et
+         qu'il DÉCIDE du capital employé lu deux blocs plus bas. -->
+    <div class="fin-fleche" data-vers="etape-equipements"><span class="fin-fl-a">↓</span>
+      <span class="fin-fl-t"><b>La puissance informatique et l’enveloppe travaux sont
+      reprises de l’étude ci-dessus.</b> Ce bloc en déduit les quantités, le prix
+      indicatif et le carbone de fabrication — puis il rend le montant qui
+      <b>s’ajoutera au capital employé</b> de la création de valeur, deux blocs plus
+      bas. Le lire après l’EVA donnerait un ROCE surestimé d’un tiers.</span></div>
+
     <div id="eq-form" class="eq-form"><p class="note">chargement du référentiel…</p></div>
     <div class="mat-cmd">
       <button type="button" class="btn-p" id="eq-go">Dimensionner les équipements</button>
@@ -13022,15 +13038,136 @@ if(window.parent&&window.parent!==window){
     z.innerHTML = h;
   }
 
+  /* ── LES INFOBULLES DES CHIFFRES CALCULÉS ─────────────────────────────────
+     CE QU'ELLES CORRIGENT. Ce bloc affiche des tonnes, des euros, un rapport et
+     une intensité en g/kWh, tous calculés — et aucun ne disait ce qu'il
+     recouvre. Le carbone de fabrication, en particulier, se lisait comme un
+     flux annuel alors qu'il est un TOTAL sur la vie du matériel : c'est la
+     confusion qui fait diviser par vingt un bilan, ou le multiplier.
+
+     ELLES CITENT LE MODULE, ELLES NE LE PARAPHRASENT PAS. Sources et
+     incertitudes viennent du référentiel servi ; les recopier ici en ferait
+     deux exemplaires qui divergeraient au premier ajustement. Chacune porte ce
+     que le chiffre N'EST PAS — c'est la moitié qui manque partout ailleurs. */
+  function aidesPoser(){
+    if(typeof AIDES === "undefined" || !REF) return;
+    var incP = fr(REF.incertitude_prix_pct, 0);
+    var incC = fr(REF.incertitude_carbone_pct, 0);
+    AIDES.eq_prix = {
+      t: "Prix indicatif (€)",
+      d: "Quantité × prix unitaire du référentiel, pour le poste entier. "
+       + REF.prix_source,
+      pas: "Ce n’est PAS un devis, et l’incertitude est de ±" + incP + " %. "
+         + "Les remises constructeur et les options ne sont pas comptées : "
+         + "l’écart avec une consultation réelle se joue sur elles."
+    };
+    AIDES.eq_carbone = {
+      t: "Carbone de fabrication (t CO₂e, TOTAL)",
+      d: "Le carbone émis pour FABRIQUER le matériel de ce poste, sur toute sa "
+       + "vie utile — un total, pas un flux annuel. Scope 3 du GHG Protocol, "
+       + "catégories 1 et 2. " + REF.carbone_source,
+      pas: "Ce n’est PAS une émission annuelle, et ce n’est PAS l’électricité "
+         + "consommée en exploitation, qui relève du scope 2. Incertitude ±"
+         + incC + " % : les empreintes produit varient fortement d’un "
+         + "constructeur à l’autre pour un matériel équivalent."
+    };
+    AIDES.eq_annualise = {
+      t: "Carbone annualisé (t CO₂e/an)",
+      d: "Le carbone de fabrication RAPPORTÉ à la durée de vie du poste : c’est "
+       + "lui qui entre dans un bilan annuel, aux côtés des scopes 1 et 2. Un "
+       + "poste lourd mais durable pèse moins qu’un poste léger renouvelé tous "
+       + "les trois ans.",
+      pas: "Ce n’est PAS un amortissement comptable : la durée retenue est la "
+         + "durée d’usage technique, qui n’a aucune raison de coïncider avec "
+         + "celle du plan comptable."
+    };
+    AIDES.eq_duree = {
+      t: "Durée de vie (ans)",
+      d: "La durée d’usage retenue pour annualiser le carbone de fabrication. "
+       + "C’est elle qui commande la colonne précédente.",
+      pas: "Ce n’est PAS une garantie constructeur, ni une durée d’amortissement "
+         + "comptable. L’allonger allège la fabrication mais alourdit "
+         + "l’exploitation — le bloc « durée de vie » plus bas calcule où la "
+         + "bascule se produit, plutôt que de recommander sans réserve."
+    };
+    AIDES.eq_part_lots = {
+      t: "Part dans les lots travaux",
+      d: "Le montant informatique rapporté à l’enveloppe des quatorze lots. Il "
+       + "dit de combien l’étude de génie civil sous-estime l’investissement "
+       + "réel quand elle s’arrête au bâtiment.",
+      pas: "Ce n’est PAS une part de l’investissement total : les lots ne "
+         + "contiennent ni la maîtrise d’œuvre ni la provision pour aléas."
+    };
+    AIDES.eq_part_total = {
+      t: "Part de l’investissement total",
+      d: "Le montant informatique rapporté à l’enveloppe travaux AUGMENTÉE de "
+       + "lui-même — c’est-à-dire à ce que le projet coûte réellement.",
+      pas: "Elle n’a de sens que si le même maître d’ouvrage porte les deux. "
+         + "En colocation ou en hébergement, l’informatique est portée par un "
+         + "autre acteur et l’additionner mélangerait deux bilans."
+    };
+    AIDES.eq_rapport = {
+      t: "Rapport informatique / travaux",
+      d: "Combien d’euros d’informatique pour un euro de travaux. C’est le "
+       + "ratio qui se compare d’un projet à l’autre, indépendamment de la "
+       + "taille.",
+      pas: "Ce n’est PAS un ratio de marché : il dépend entièrement de la "
+         + "densité par baie retenue plus haut, qui est votre hypothèse."
+    };
+    AIDES.eq_gain_fab = {
+      t: "Fabrication évitée (scope 3)",
+      d: "Le carbone de fabrication qu’on n’émet pas en gardant le matériel "
+       + "plus longtemps : on renouvelle moins souvent, donc on fabrique moins.",
+      pas: "Ce n’est PAS un gain net. Il faut lui soustraire la surconsommation "
+         + "du matériel vieillissant — c’est l’objet des deux cases suivantes."
+    };
+    AIDES.eq_surconso = {
+      t: "Surconsommation (scope 2)",
+      d: "L’électricité supplémentaire qu’un parc vieillissant consomme à "
+       + "service rendu égal, convertie au mix du pays retenu.",
+      pas: "Ce n’est PAS une panne ni une dérive de conception : c’est l’écart "
+         + "d’efficacité entre une génération de matériel et la suivante."
+    };
+    AIDES.eq_net = {
+      t: "Bilan net de la prolongation",
+      d: "Fabrication évitée moins surconsommation. Négatif, la prolongation "
+       + "allège le bilan ; positif, elle l’alourdit.",
+      pas: "Ce n’est PAS un verdict universel : il dépend du mix électrique du "
+         + "pays. Le même geste allège en Suède et alourdit en Pologne."
+    };
+    AIDES.eq_bascule = {
+      t: "Intensité de bascule (g CO₂e/kWh)",
+      d: "L’intensité carbone du réseau à laquelle la prolongation cesse d’être "
+       + "favorable. Au-dessous, prolonger allège ; au-dessus, prolonger "
+       + "alourdit.",
+      pas: "Ce n’est PAS un seuil de marché : il se déduit de VOS hypothèses de "
+         + "puissance, de PUE et de dérive d’efficacité. Elle ne dépend pas de "
+         + "la taille du site — la même intensité vaut à 200 kW et à 20 MW."
+    };
+    if(typeof aideBrancher === "function") aideBrancher($("eq-out"));
+  }
+
   function tableau(n){
     var h = '<div class="eq-tab-w"><table class="eq-tab">'
       + "<caption>Nomenclature pour " + fr(n.puissance_it_kw, 0) + " kW informatiques — "
       + esc(n.densite_nom) + ", " + fr(n.kw_par_baie, 0) + " kW/baie, "
       + fr(n.baies, 0) + " baies</caption>"
+      /* LES UNITÉS SONT DANS L'EN-TÊTE, ET LA COLONNE ANNUALISÉE EXISTE.
+         « Carbone fabrication » sans unité laissait croire à des tonnes PAR AN,
+         alors que la colonne porte le carbone TOTAL de fabrication, sur toute
+         la vie du matériel. Le pied de tableau rendait bien un t/an — mais dans
+         la colonne « Durée de vie », donc sous un intitulé qui parle d'années :
+         un chiffre annuel posé sous « ans » se lit comme une durée. La colonne
+         annualisée manquait ; elle est ici, et le pied retombe en face. */
       + '<thead><tr><th scope="col">Poste</th><th scope="col">Règle de quantité</th>'
-      + '<th scope="col" class="r">Quantité</th><th scope="col" class="r">Prix indicatif</th>'
-      + '<th scope="col" class="r">Carbone fabrication</th>'
-      + '<th scope="col" class="r">Durée de vie</th></tr></thead><tbody>';
+      + '<th scope="col" class="r">Quantité</th>'
+      + '<th scope="col" class="r" data-aide="eq_prix">Prix indicatif (€)</th>'
+      + '<th scope="col" class="r" data-aide="eq_carbone">Carbone fabrication'
+      + '<br><span class="eq-u">t CO₂e, total</span></th>'
+      + '<th scope="col" class="r" data-aide="eq_annualise">Carbone annualisé'
+      + '<br><span class="eq-u">t CO₂e/an</span></th>'
+      + '<th scope="col" class="r" data-aide="eq_duree">Durée de vie (ans)</th>'
+      + '</tr></thead><tbody>';
     n.lignes.forEach(function(l){
       h += '<tr class="' + (l.indispensable ? "eq-ind" : "eq-utile") + '">'
         + '<th scope="row">' + esc(l.nom) + '<span class="eq-badge">'
@@ -13038,13 +13175,15 @@ if(window.parent&&window.parent!==window){
         + "<td>" + esc(l.regle) + "</td>"
         + '<td class="r">' + fr(l.quantite, 0) + " " + esc(l.unite) + "</td>"
         + '<td class="r">' + eur(l.prix_total_eur) + "</td>"
-        + '<td class="r">' + fr(l.carbone_total_kg / 1000, 1) + " t</td>"
-        + '<td class="r">' + fr(l.duree_vie_ans, 0) + " ans</td></tr>";
+        + '<td class="r">' + fr(l.carbone_total_kg / 1000, 1) + "</td>"
+        + '<td class="r">' + fr(l.carbone_annualise_kg / 1000, 1) + "</td>"
+        + '<td class="r">' + fr(l.duree_vie_ans, 0) + "</td></tr>";
     });
     h += '</tbody><tfoot><tr><th scope="row" colspan="3">Total</th>'
       + '<td class="r">' + eur(n.total_eur) + "</td>"
-      + '<td class="r">' + fr(n.carbone_total_t, 0) + " t</td>"
-      + '<td class="r">' + fr(n.carbone_annualise_t, 0) + " t/an</td>"
+      + '<td class="r">' + fr(n.carbone_total_t, 1) + "</td>"
+      + '<td class="r">' + fr(n.carbone_annualise_t, 1) + "</td>"
+      + '<td class="r">—</td>'
       + "</tr></tfoot></table></div>"
       + '<details class="eq-det"><summary>Les gestes d’achat durable, poste par poste '
       + "— à écrire au marché, pas à espérer</summary><dl class=\"eq-dl\">";
@@ -13061,14 +13200,14 @@ if(window.parent&&window.parent!==window){
       + '<div class="eq-c"><span class="v">' + eur(p.it_eur)
       + '</span><span class="l">Équipements informatiques</span></div>'
       + '<div class="eq-c"><span class="v">' + fr(p.part_lots_pct, 0)
-      + ' %</span><span class="l">Part dans les lots travaux</span></div>';
+      + ' %</span><span class="l" data-aide="eq_part_lots">Part dans les lots travaux</span></div>';
     if(p.part_total_pct !== null && p.part_total_pct !== undefined){
       h += '<div class="eq-c eq-c-fort"><span class="v">' + fr(p.part_total_pct, 1)
-        + ' %</span><span class="l">Part de l’investissement total</span></div>';
+        + ' %</span><span class="l" data-aide="eq_part_total">Part de l’investissement total</span></div>';
     }
     if(p.rapport_it_travaux !== null && p.rapport_it_travaux !== undefined){
       h += '<div class="eq-c"><span class="v">×' + fr(p.rapport_it_travaux, 2)
-        + '</span><span class="l">Rapport informatique / travaux</span></div>';
+        + '</span><span class="l" data-aide="eq_rapport">Rapport informatique / travaux</span></div>';
     }
     return h + "</div><p>" + esc(p.lecture) + "</p>"
       + '<p class="note"><b>Pourquoi zéro dans les lots.</b> ' + esc(p.lots_dit) + "</p>"
@@ -13089,14 +13228,14 @@ if(window.parent&&window.parent!==window){
       + " — allonger de " + fr(v.duree_base, 0) + " à " + fr(v.duree_cible, 0) + " ans</div>"
       + '<div class="eq-chiffres">'
       + '<div class="eq-c"><span class="v">' + fr(v.gain_fabrication_kg_an / 1000, 1)
-      + ' t/an</span><span class="l">Fabrication évitée (scope 3)</span></div>'
+      + ' t/an</span><span class="l" data-aide="eq_gain_fab">Fabrication évitée (scope 3)</span></div>'
       + '<div class="eq-c"><span class="v">' + fr(v.cout_exploitation_kg_an / 1000, 1)
-      + ' t/an</span><span class="l">Surconsommation (scope 2)</span></div>'
+      + ' t/an</span><span class="l" data-aide="eq_surconso">Surconsommation (scope 2)</span></div>'
       + '<div class="eq-c eq-c-fort"><span class="v">'
       + (v.net_kg_an >= 0 ? "−" : "+") + fr(Math.abs(v.net_t_an), 1)
-      + ' t/an</span><span class="l">Bilan net</span></div>'
+      + ' t/an</span><span class="l" data-aide="eq_net">Bilan net</span></div>'
       + '<div class="eq-c"><span class="v">' + fr(v.intensite_bascule_g, 0)
-      + ' g/kWh</span><span class="l">Intensité de bascule</span></div>'
+      + ' g/kWh</span><span class="l" data-aide="eq_bascule">Intensité de bascule</span></div>'
       + "</div><p>" + esc(v.lecture) + "</p>"
       + '<details class="eq-det"><summary>Le modèle, ses formules et sa réserve</summary>'
       + "<p>" + esc(v.modele) + '</p><ul class="eq-formules">'
@@ -13172,6 +13311,14 @@ if(window.parent&&window.parent!==window){
         rendreVieForm();
       }
       $("eq-s3-out").innerHTML = scope3(j.scope3);
+      /* LES INFOBULLES SE POSENT APRÈS CHAQUE RENDU. Le tableau et les cases
+         chiffrées sont reconstruits à chaque calcul : branchées une fois pour
+         toutes, elles viseraient des éléments qui n'existent plus. */
+      aidesPoser();
+      if(typeof aideBrancher === "function"){
+        aideBrancher($("eq-vie-out"));
+        aideBrancher($("eq-s3-out"));
+      }
       $(msg).textContent = "";
     }).catch(function(){ $(msg).textContent = "calcul indisponible"; });
   }
