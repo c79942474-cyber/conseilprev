@@ -766,6 +766,111 @@ def mer(horizon=2050, scenario="SSP2-4.5"):
             "nature": "referentiel", "source": SOURCE_MER["editeur"]}
 
 
+# ═══════════════════════════════════════════════════════════════════════════
+#  LA TRAJECTOIRE — SOUS QUEL MONDE CES CLASSES SONT-ELLES ÉCRITES
+#
+#  CE QUI MANQUAIT, ET QUI SE VOIT UNE FOIS DIT. Les six aléas portent une
+#  classe à 2030 et une classe à 2050. Une seule — la submersion — déclarait la
+#  trajectoire d'émissions dont elle dépend, par ses trois scénarios SSP. Les
+#  CINQ AUTRES n'en déclaraient aucune : « feu : élevé en 2030, très élevé en
+#  2050 » ne disait pas dans quel monde. Or l'aléa de feu, de sécheresse et de
+#  pluie extrême diverge selon la trajectoire — pas autant que le niveau de la
+#  mer diverge à 2100, mais assez pour qu'un lecteur doive savoir.
+#
+#  LE PIÈGE ÉTAIT DOUBLE. Le seul énoncé de scénario visible sur cette page
+#  disait que « la trajectoire d'émissions ne change que 4 cm ». C'est VRAI, et
+#  seulement pour la mer. Un lecteur qui étend ce raisonnement au feu ou à la
+#  sécheresse conclut que la trajectoire est indifférente : elle ne l'est pas.
+#
+#  D'OÙ VIENNENT CES CHIFFRES. Du résumé à l'intention des décideurs du GIEC
+#  AR6, GROUPE DE TRAVAIL III (atténuation, 2022) — le volume qui établit où
+#  mènent les politiques et les engagements, et donc quelle colonne d'aléa un
+#  actif de vingt-cinq ans doit lire. Les aléas eux-mêmes ne viennent PAS de ce
+#  volume : ils relèvent des groupes I (base physique) et II (impacts et
+#  adaptation), et c'est ce que la source des classes cite déjà.
+#
+#  Tous les niveaux de réchauffement sont relatifs à 1850-1900.
+
+TRAJECTOIRES = {
+    "C1": {
+        "nom": "1,5 °C, dépassement nul ou limité",
+        "definition": "Catégorie C1 du GIEC AR6 : scénarios qui limitent le "
+                      "réchauffement à 1,5 °C en 2100 avec une probabilité "
+                      "supérieure à 50 %, et n'atteignent ou ne dépassent 1,5 °C "
+                      "au cours du siècle qu'avec une probabilité d'au plus 67 %.",
+        "atteint_2100": "1,2 à 1,4 °C selon que le zéro net GES est atteint",
+        "statut": "objectif — aucune politique en vigueur n'y conduit",
+    },
+    "C3": {
+        "nom": "2 °C, probabilité supérieure à 67 %",
+        "definition": "Catégorie C3 du GIEC AR6 : scénarios qui limitent le pic "
+                      "de réchauffement à 2 °C sur tout le XXIe siècle avec une "
+                      "probabilité supérieure à 67 %.",
+        "atteint_2100": "environ 2 °C au pic",
+        "statut": "objectif — suppose une action immédiate (sous-catégorie C3a)",
+    },
+    "ndc": {
+        "nom": "Engagements nationaux annoncés avant la COP26",
+        "definition": "Trajectoires cohérentes avec les contributions "
+                      "déterminées au niveau national jusqu'en 2030, sans "
+                      "relèvement d'ambition ensuite.",
+        "atteint_2100": "2,8 °C [2,1 – 3,4] en médiane, confiance moyenne",
+        "statut": "engagements pris, non tenus par les politiques en vigueur",
+    },
+    "politiques": {
+        "nom": "Politiques mises en œuvre fin 2020",
+        "definition": "Sans renforcement au-delà des politiques en vigueur fin "
+                      "2020, les émissions repartent à la hausse après 2025.",
+        "atteint_2100": "3,2 °C [2,2 – 3,5] en médiane, confiance moyenne",
+        "statut": "la trajectoire observée — c'est elle qu'un actif construit "
+                  "aujourd'hui rencontrera, faute de renforcement",
+    },
+}
+
+SOURCE_TRAJECTOIRES = {
+    "titre": "AR6, Groupe de travail III — Résumé à l'intention des décideurs, "
+             "§ B.6, C.1.1 et C.1.3 ; catégories de scénarios, encadré SPM.1",
+    "editeur": "GIEC (IPCC), 2022",
+    "url": "https://www.ipcc.ch/report/ar6/wg3/",
+    "nature": "referentiel",
+    "note": "Ce volume porte l'ATTÉNUATION : il dit où mènent les politiques et "
+            "les engagements, pas quels aléas en résultent localement. Les "
+            "classes d'aléas de ce module ne s'en réclament pas — elles citent "
+            "les groupes I et II, qui sont les volumes compétents. Les niveaux "
+            "de réchauffement sont relatifs à 1850-1900.",
+}
+
+# CE QUE LES CLASSES SUPPOSENT, ET CE QU'ELLES REFUSENT DE PRÉTENDRE.
+# On ne publie PAS une classe par trajectoire : aucune n'a été calculée, et en
+# fabriquer une serait exactement ce que ce module reproche ailleurs. On
+# publie ce qui est vrai — l'horizon auquel la trajectoire ne départage pas
+# encore, et celui où elle départage.
+TRAJECTOIRE_DES_CLASSES = {
+    "retenue": "politiques",
+    "dit": "Les classes 2030 et 2050 décrivent le réchauffement DÉJÀ ENGAGÉ et "
+           "la poursuite des politiques en vigueur — la trajectoire observée, "
+           "et non un objectif. À 2030, les trajectoires ne se distinguent pas : "
+           "l'aléa de la décennie est acquis quel que soit le choix collectif. "
+           "À 2050, elles commencent à diverger sans que l'écart renverse le "
+           "classement relatif des pays, qui est ce que ces classes portent.",
+    "refus": "AUCUNE CLASSE PAR TRAJECTOIRE N'EST PUBLIÉE ICI. Il faudrait pour "
+             "cela un jeu d'aléas modélisé par scénario, que ce module n'a pas. "
+             "Un dossier qui doit opposer 1,5 °C et 3 °C sur un aléa précis "
+             "relève d'une étude d'aléa dédiée, pas d'une classe nationale.",
+}
+
+
+def trajectoire_des_classes():
+    """La trajectoire sous laquelle lire les classes, et ce qu'on refuse d'en
+    tirer. Servi avec les aléas : une classe sans trajectoire déclarée est une
+    classe pour un monde qu'on ne nomme pas."""
+    cle = TRAJECTOIRE_DES_CLASSES["retenue"]
+    t = TRAJECTOIRES[cle]
+    return dict(TRAJECTOIRE_DES_CLASSES, cle=cle, nom=t["nom"],
+                atteint_2100=t["atteint_2100"], statut=t["statut"],
+                repere=TRAJECTOIRES, source=SOURCE_TRAJECTOIRES)
+
+
 def ecart_scenarios(horizon=2050):
     """De combien le CHOIX collectif d'émissions change le résultat.
 
@@ -777,12 +882,22 @@ def ecart_scenarios(horizon=2050):
     haut = MER["SSP5-8.5"][h][0]
     return {"horizon": h, "sobre_m": bas, "emetteur_m": haut,
             "ecart_m": round(haut - bas, 2),
+            "porte": "submersion",
+            # CETTE LECTURE NE VAUT QUE POUR LA MER, et il faut l'écrire :
+            # c'était le seul énoncé de scénario visible de la page, et un
+            # lecteur pouvait l'étendre aux cinq autres aléas — pour lesquels
+            # elle est fausse.
             "lecture": ("À cet horizon, la trajectoire d'émissions ne change que "
                         "%d cm : l'élévation est déjà engagée." % round((haut - bas) * 100)
                         if h == 2050 else
                         "À cet horizon, la trajectoire d'émissions change %d cm : "
                         "le choix collectif devient déterminant."
-                        % round((haut - bas) * 100))}
+                        % round((haut - bas) * 100)),
+            "ne_pas_generaliser": "Ce constat porte sur le NIVEAU DE LA MER et sur "
+                                  "lui seul. Le feu, la sécheresse, les pluies "
+                                  "extrêmes et l'étiage divergent, eux, selon la "
+                                  "trajectoire : en conclure que le scénario est "
+                                  "indifférent serait une erreur de lecture."}
 
 
 def mer_locale(pays):
@@ -883,13 +998,15 @@ def assemble(horizon=2030):
         "pays": lignes,
         "mer": mer(h),
         "mer_ecart": ecart_scenarios(h),
+        "trajectoire": trajectoire_des_classes(),
         "mer_scenarios": {s: {**mer(2050, s), "en_2100": mer(2100, s)}
                           for s in MER},
         "aggravations": aggravations(),
         # Le nombre de cases déjà au maximum en 2030 : la mesure de ce que
         # l'échelle ne peut plus exprimer.
         "satures": sum(1 for a in ALEAS for p in PAYS if sature(p, a)),
-        "sources": {"aleas": SOURCE_ALEAS, "mer": SOURCE_MER,
+        "sources": {"aleas": SOURCE_ALEAS, "trajectoire": SOURCE_TRAJECTOIRES,
+                    "mer": SOURCE_MER,
                     "mer_locale": SOURCE_MER_LOCAL},
         "avertissement":
             "Classes NATIONALES d'exposition, issues d'une synthèse d'évaluations "

@@ -1413,6 +1413,12 @@ def assemble(sites, intensites, horizon=2030):
                     "perspectives": SOURCE_PERSPECTIVES, "climat_physique": SOURCE_XDI,
                     "feux": SOURCE_FEUX, "inondations": SOURCE_INONDATIONS,
                     "aleas": climat_2050.SOURCE_ALEAS,
+                    # LA TRAJECTOIRE VOYAGE AVEC LE CLASSEMENT. Six des critères
+                    # de ce comparateur sont des classes d'aléas à 2030 ou 2050 :
+                    # sans la trajectoire d'émissions sous laquelle elles sont
+                    # écrites, le classement compare des pays dans un monde que
+                    # personne n'a nommé.
+                    "trajectoire": climat_2050.SOURCE_TRAJECTOIRES,
                     "mer": climat_2050.SOURCE_MER,
                     "mer_locale": climat_2050.SOURCE_MER_LOCAL,
                     "cadre": SOURCE_CADRE},
@@ -1422,6 +1428,12 @@ def assemble(sites, intensites, horizon=2030):
         # incohérent là où il est simplement honnête. Le cadre juridique, parce
         # qu'aucun des critères n'est un fait de droit du sol, et que c'est
         # pourtant lui qui délivre ou refuse le permis.
+        # SOUS QUEL MONDE CE CLASSEMENT EST-IL ÉTABLI. Six critères sur les
+        # quatorze sont des classes d'aléas ; les servir sans leur trajectoire
+        # laisserait le lecteur croire à un classement valable en toute
+        # hypothèse. Il ne l'est pas — et le module dit aussi ce qu'il refuse
+        # d'en tirer.
+        "trajectoire": climat_2050.trajectoire_des_classes(),
         "paradoxe_evaporation": dict(PARADOXE_EVAPORATION),
         "cadre_implantation": {k: dict(v) for k, v in CADRE_IMPLANTATION.items()},
         # LE POINT DE CONCEPTION ET CE QUI EST TOMBÉ. Sans le second, le premier
