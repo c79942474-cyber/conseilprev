@@ -2118,11 +2118,63 @@ def api_equipements_it():
                    version=equipements_it.VERSION)
 
 
+import repartition_honoraires  # noqa: E402  — tableau de repartition MOE
 import moe_dc  # noqa: E402  — honoraires de maitrise d'oeuvre, par mission et
                # par phase, sur l'assiette travaux de l'enveloppe
 
 
 _MOE_REF_FIGE = None  # (corps JSON, etag) — figé au premier GET du processus
+
+
+@app.route('/api/moe-dc/repartition', methods=['POST'])
+@rate_limit(limit=20, window=60)
+@reserve_abonne_api
+def api_moe_repartition():
+    """Le tableau de repartition des honoraires, en donnees ou en classeur.
+
+    POURQUOI CETTE ROUTE EXISTE. Le tableau de situation des honoraires est la
+    piece que la maitrise d'ouvrage reclame au moment de contractualiser :
+    phases MOP en lignes, cotraitants en colonnes. Il etait jusqu'ici rempli a
+    la main a partir du calcul affiche a l'ecran — c'est-a-dire recopie, avec
+    ce que la recopie coute.
+
+    ?format=xlsx rend le classeur ; sans quoi les memes donnees en JSON, pour
+    que la page montre a l'ecran EXACTEMENT ce qui sera telecharge.
+    """
+    d = request.get_json(silent=True) or {}
+    try:
+        trav = d.get('travaux_meur')
+        if isinstance(trav, (int, float)):
+            trav = [float(trav), float(trav)]
+        if not isinstance(trav, (list, tuple)) or len(trav) != 2:
+            return jsonify(ok=False, erreur='travaux_meur attendu : [bas, haut]'), 400
+        trav = [max(0.0, float(trav[0])), max(0.0, float(trav[1]))]
+        if trav[1] <= 0:
+            return jsonify(ok=False, erreur='montant de travaux nul'), 400
+        cote = 'bas' if (d.get('cote') == 'bas') else 'haut'
+        res = moe_dc.honoraires_directs(
+            trav,
+            part_technique=d.get('part_technique'),
+            phases=d.get('phases'), missions=d.get('missions'))
+        if not res.get('ok'):
+            return jsonify(ok=False, erreur='calcul indisponible'), 400
+        operation = str(d.get('operation') or '')[:120]
+        reference = str(d.get('reference') or '')[:60]
+        if (request.args.get('format') or '') != 'xlsx':
+            return jsonify(repartition_honoraires.etat(
+                res, cote, operation, reference))
+        blob = repartition_honoraires.octets(res, cote, operation, reference)
+        rep = make_response(blob)
+        rep.headers['Content-Type'] = ('application/vnd.openxmlformats-'
+                                       'officedocument.spreadsheetml.sheet')
+        rep.headers['Content-Disposition'] = (
+            'attachment; filename="repartition-honoraires-moe.xlsx"')
+        rep.headers['Cache-Control'] = 'no-store'
+        rep.headers['X-Content-Type-Options'] = 'nosniff'
+        return rep
+    except Exception as e:  # noqa: BLE001
+        logger.error(f'MOE_REPARTITION_ERR: {e}')
+        return jsonify(ok=False, erreur='tableau indisponible'), 500
 
 
 @app.route('/api/moe-dc', methods=['GET', 'POST'])
