@@ -740,6 +740,66 @@ CONTROLES.append({
     ],
 })
 
+# ── AJOUT D'AOÛT 2026 : LE CARBONE INCORPORÉ, L'AUTRE FACTEUR D'ÉMISSION
+#
+# L'électricité n'est pas le seul facteur que ces moteurs emploient, et la
+# confrontation à la Base Carbone ne devait pas s'arrêter là. Le carbone
+# incorporé des machines pèse lourd sur un centre de données, et il est ici
+# porté par un ordre de grandeur, pas par une empreinte produit.
+CONTROLES.append({
+    "cle": "ademe_carbone_incorpore",
+    "sujet": "Carbone incorporé d'un serveur : 1 200 kgCO2e contre 600 à l'ADEME",
+    "portee": ["panorama", "empreinte"],
+    "affirmation": "Le facteur de carbone incorporé par serveur employé par les "
+                   "deux sites du cabinet est encadré par la référence ADEME.",
+    "verdict": "plausible",
+    "avant": "",
+    "constat": "Confronté à la Base Carbone v22.0, août 2026. Les DEUX sites du "
+               "cabinet retiennent 1 200 kgCO2e par serveur (fabrication et "
+               "transport, serveur biprocesseur de volume) : equipements_it."
+               "SERVEUR_REPLI_KG ici, datacenter.INCORPORE là-bas. La Base "
+               "Carbone publie 600 kgCO2e par appareil pour « Serveurs "
+               "informatiques », avec une INCERTITUDE DÉCLARÉE DE 80 %, soit un "
+               "intervalle [120 ; 1 080]. La valeur employée en SORT PAR LE "
+               "HAUT, de 11 %. "
+               "CE N'EST PAS UNE CONTRADICTION FRANCHE, et le dire autrement "
+               "serait malhonnête : l'entrée ADEME ne nomme ni modèle, ni "
+               "gamme, ni millésime — c'est un serveur moyen — quand les deux "
+               "moteurs décrivent une machine biprocesseur de volume, plus "
+               "grosse que la moyenne d'un parc où figurent des machines "
+               "d'entrée de gamme. Un dépassement de 11 % sur une référence "
+               "annoncée à ±80 % ne tranche rien. Ce qu'il établit, c'est que "
+               "le facteur employé est HAUT DANS SA FOURCHETTE et non au "
+               "milieu, et que les deux sites y sont exposés ensemble. "
+               "LA CONCLUSION PRATIQUE NE CHANGE PAS, elle se renforce : les "
+               "deux moteurs écrivent déjà qu'il faut remplacer cet ordre de "
+               "grandeur par l'empreinte produit (PCF) du matériel retenu dès "
+               "qu'elle est disponible. La confrontation dit pourquoi ce n'est "
+               "pas une formule de style. "
+               "CE QUI N'A PAS PU ÊTRE CONFRONTÉ, ET POURQUOI ON NE L'A PAS "
+               "INVENTÉ : le carbone incorporé du bâti (2 500 kgCO2e/kW "
+               "informatique) et des lots techniques (1 400 kgCO2e/kW). La Base "
+               "Carbone les exprime AU MÈTRE CARRÉ — 650 kgCO2e/m² SHON pour "
+               "des bureaux, 825 pour un bâtiment industriel à structure béton, "
+               "275 à structure métallique, tous à ±50 %. Aucun des deux "
+               "moteurs ne modélise de surface : rapprocher les deux unités "
+               "demanderait un ratio mètres carrés par kilowatt que personne "
+               "n'a publié ici. La comparaison est donc DÉCLARÉE IMPOSSIBLE "
+               "plutôt que forcée.",
+    "verifie_le": "2026-08-18",
+    "source": {"titre": "Base Carbone® v22.0 — poste « Serveurs informatiques » "
+                        "(600 kgCO2e/appareil, incertitude 80 %)",
+               "editeur": "ADEME (Agence de la transition écologique)",
+               "url": "https://base-empreinte.ademe.fr/"},
+    "corroborations": [
+        {"titre": "Base de données ouverte d'impacts environnementaux du "
+                  "numérique",
+         "editeur": "Boavizta",
+         "url": "https://dataviz.boavizta.org/"},
+    ],
+})
+
+
 def par_portee(portee=None):
     """Contrôles d'une page, triés du plus défavorable au plus favorable.
 

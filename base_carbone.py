@@ -194,6 +194,82 @@ def facteur(pays, frontiere="production"):
     return e.get(frontiere) or e.get("production") or e.get("consommation")
 
 
+def poste(nom_base, attribut=None):
+    """Un poste NOMMÉ de la base — « Serveurs informatiques », par exemple.
+
+    L'électricité n'est pas le seul facteur d'émission que ces moteurs
+    emploient : le carbone incorporé des machines et du bâti en est un autre,
+    et il pèse lourd sur un centre de données. Cette fonction ouvre le reste de
+    la base sans rien y recopier.
+
+    ELLE REND UNE LISTE, PAS UNE VALEUR. Un poste porte souvent plusieurs
+    éléments — un bâtiment industriel à structure béton et un autre à structure
+    métallique n'ont pas la même empreinte, et les moyenner produirait un
+    chiffre que personne n'a publié.
+    """
+    cible = (nom_base or "").strip().lower()
+    out = []
+    for x in _charger():
+        if (x.get("Nom base français") or "").strip().lower() != cible:
+            continue
+        if (x.get("Type Ligne") or "") != "Elément":
+            continue
+        att = (x.get("Nom attribut français") or "").strip()
+        if attribut and attribut.lower() not in att.lower():
+            continue
+        v = _nombre(x.get("Total poste non décomposé"))
+        if v is None:
+            continue
+        out.append({
+            "poste": (x.get("Nom base français") or "").strip(),
+            "attribut": att or None,
+            "valeur": v,
+            "unite": (x.get("Unité français") or "").strip() or None,
+            "incertitude_pct": _nombre(x.get("Incertitude")),
+            "validite": (x.get("Période de validité") or "").strip() or None,
+            "identifiant": (x.get("Identifiant de l'élément") or "").strip(),
+        })
+    return out
+
+
+def encadre(valeur, ref):
+    """La valeur employée tient-elle DANS l'incertitude déclarée par l'ADEME ?
+
+    C'est la seule question qui vaille pour un ordre de grandeur : deux
+    chiffres qui diffèrent d'un facteur deux ne se contredisent pas si la
+    référence annonce ±80 %. On rend donc l'intervalle, la réponse, et de
+    combien on en sort — jamais un verdict « juste / faux ».
+    """
+    v0 = ref.get("valeur")
+    inc = ref.get("incertitude_pct")
+    if v0 is None or valeur is None:
+        return None
+    if not inc:
+        # SANS INCERTITUDE DÉCLARÉE, ON N'EN INVENTE PAS. L'encadrement est
+        # alors impossible, et le dire vaut mieux que supposer un ±50 % maison.
+        return {"encadre": None, "bas": None, "haut": None,
+                "dit": "La référence ne déclare pas d'incertitude : il n'y a "
+                       "pas d'intervalle dans lequel encadrer la valeur."}
+    bas, haut = v0 * (1 - inc / 100.0), v0 * (1 + inc / 100.0)
+    dedans = bas <= valeur <= haut
+    if dedans:
+        ecart = 0.0
+    else:
+        ecart = (valeur - haut) / haut * 100.0 if valeur > haut \
+            else (valeur - bas) / bas * 100.0
+    return {
+        "encadre": dedans, "bas": round(bas, 1), "haut": round(haut, 1),
+        "depassement_pct": round(ecart, 1),
+        "dit": ("La valeur employée (%s) tient dans l'intervalle déclaré par "
+                "l'ADEME [%s ; %s], à ±%s %%." % (valeur, round(bas, 1),
+                                                  round(haut, 1), inc)
+                if dedans else
+                "La valeur employée (%s) SORT de l'intervalle déclaré par "
+                "l'ADEME [%s ; %s] (±%s %%), de %.0f %%."
+                % (valeur, round(bas, 1), round(haut, 1), inc, abs(ecart))),
+    }
+
+
 def comparer(pays, valeur_g_kwh, frontiere="production"):
     """Confronte une valeur employée par un moteur au facteur réglementaire.
 
@@ -255,21 +331,38 @@ def confronter(table, frontiere="production"):
         m = len(v) // 2
         return round(v[m] if len(v) % 2 else (v[m - 1] + v[m]) / 2.0, 1)
     quasi_nuls = [x["pays"] for x in connues if (x["ademe_g_kwh"] or 0) < 5]
+    moyenne = round(sum(ecarts) / len(ecarts), 1) if ecarts else None
+
+    # LA PHRASE S'ADAPTE À CE QU'ELLE A MESURÉ, au lieu de raconter toujours la
+    # même histoire. Rédigée sur la seule table qui contient l'Islande, elle
+    # affirmait la déformation même quand il n'y avait rien pour déformer : sur
+    # une table sans référence quasi nulle, elle produisait « la moyenne est
+    # tirée par AUCUN PAYS, dont le facteur ADEME est proche de zéro ». C'était
+    # faux et illisible, et cela ne s'est vu qu'en confrontant une deuxième
+    # table — un défaut latent ne se révèle qu'au deuxième cas d'emploi.
+    if not ecarts:
+        lecture = "aucune comparaison possible"
+    elif quasi_nuls:
+        lecture = ("Écart MÉDIAN de %s %% sur %d pays. La moyenne (%s %%) est "
+                   "tirée par %s, dont le facteur ADEME est proche de zéro : un "
+                   "écart relatif y est exact et sans portée."
+                   % (_med(ecarts), len(connues), moyenne, ", ".join(quasi_nuls)))
+    else:
+        lecture = ("Écart MÉDIAN de %s %% sur %d pays, moyenne %s %%. Aucun "
+                   "facteur ADEME n'est ici proche de zéro : la moyenne n'est "
+                   "déformée par aucun dénominateur minuscule, et les deux "
+                   "énoncés se valent."
+                   % (_med(ecarts), len(connues), moyenne))
+
     return {
         "lignes": lignes,
         "pays_compares": len(connues),
         "pays_absents": [x["pays"] for x in lignes if not x["connu"]],
         "ecart_median_pct": _med(ecarts),
-        "ecart_moyen_pct": round(sum(ecarts) / len(ecarts), 1) if ecarts else None,
+        "ecart_moyen_pct": moyenne,
         "ecart_max_pct": round(max(ecarts), 1) if ecarts else None,
         "references_quasi_nulles": quasi_nuls,
-        "lecture": ("Écart MÉDIAN de %s %% sur %d pays. La moyenne (%s %%) est "
-                    "tirée par %s, dont le facteur ADEME est proche de zéro : un "
-                    "écart relatif y est exact et sans portée."
-                    % (_med(ecarts), len(connues),
-                       round(sum(ecarts) / len(ecarts), 1) if ecarts else "—",
-                       ", ".join(quasi_nuls) or "aucun pays")
-                   if ecarts else "aucune comparaison possible"),
+        "lecture": lecture,
         "source": SOURCE,
     }
 

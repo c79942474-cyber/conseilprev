@@ -155,3 +155,76 @@ def test_le_registre_de_verification_porte_le_constat():
     assert "millésime" in c["constat"]
     assert "BEGES" in c["constat"]
     assert factcheck.recoupement(c)["recoupe"] is True
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  L'AUTRE FACTEUR D'ÉMISSION : LE CARBONE INCORPORÉ
+# ═══════════════════════════════════════════════════════════════════════════
+
+def test_le_reste_de_la_base_est_LU_lui_aussi():
+    """L'électricité n'est pas le seul facteur d'émission de ces moteurs. La
+    confrontation ne devait pas s'y arrêter."""
+    srv = BC.poste("Serveurs informatiques")
+    assert srv, "le poste « Serveurs informatiques » n'est pas lu"
+    assert srv[0]["unite"] and "appareil" in srv[0]["unite"]
+    assert srv[0]["incertitude_pct"], "incertitude non lue"
+
+
+def test_un_poste_rend_TOUS_ses_elements_et_ne_les_moyenne_pas():
+    """Un bâtiment industriel à structure béton et un autre à structure
+    métallique n'ont pas la même empreinte. En rendre la moyenne produirait un
+    chiffre que personne n'a publié."""
+    bat = BC.poste("Bâtiment industriel")
+    assert len(bat) >= 2, "un seul élément rendu : %s" % bat
+    attributs = {x["attribut"] for x in bat}
+    assert any(a and "béton" in a for a in attributs), attributs
+    assert any(a and "métallique" in a for a in attributs), attributs
+    # …ET LES DEUX VALEURS DIFFÈRENT VRAIMENT : si elles étaient égales, les
+    # rendre séparément ne prouverait rien.
+    valeurs = {x["valeur"] for x in bat}
+    assert len(valeurs) >= 2, "les éléments portent tous la même valeur : %s" % valeurs
+    # Le filtre par attribut retient l'un et écarte l'autre.
+    beton = BC.poste("Bâtiment industriel", attribut="béton")
+    assert len(beton) == 1, "%d élément(s) retenus au lieu d'un" % len(beton)
+    assert "béton" in (beton[0]["attribut"] or "")
+    assert len(beton) < len(bat), "le filtre n'a rien écarté"
+
+
+def test_LE_POINT_QUI_DECIDE_l_encadrement_repond_a_l_incertitude_declaree():
+    """DEUX CHIFFRES QUI DIFFÈRENT D'UN FACTEUR DEUX NE SE CONTREDISENT PAS si
+    la référence annonce ±80 %. La question n'est pas « sont-ils égaux » mais
+    « la valeur employée tient-elle dans l'intervalle publié ». Mesuré : le
+    facteur des deux sites (1 200) sort par le haut de [120 ; 1 080], de 11 %
+    seulement — ce qui ne tranche rien et doit être écrit ainsi."""
+    import equipements_it
+    srv = BC.poste("Serveurs informatiques")[0]
+    e = BC.encadre(equipements_it.SERVEUR_REPLI_KG, srv)
+    assert e["encadre"] is False
+    assert e["haut"] == 1080.0, e
+    assert 0 < e["depassement_pct"] < 20, e
+    assert "SORT de l'intervalle" in e["dit"]
+    # Une valeur au milieu de l'intervalle est, elle, encadrée.
+    assert BC.encadre(600, srv)["encadre"] is True
+
+
+def test_sans_incertitude_declaree_on_N_EN_INVENTE_PAS():
+    """Un ±50 % maison appliqué à une référence qui n'en déclare aucune
+    fabriquerait un encadrement qui n'existe pas."""
+    e = BC.encadre(1000, {"valeur": 600, "incertitude_pct": None})
+    assert e["encadre"] is None
+    assert "ne déclare pas d'incertitude" in e["dit"]
+
+
+def test_le_registre_porte_le_carbone_incorpore_ET_ce_qui_n_a_pas_pu_etre_compare():
+    """Le bâti et les lots techniques sont exprimés au kW informatique ici, au
+    mètre carré à l'ADEME, et aucun moteur ne modélise de surface. La
+    comparaison est déclarée IMPOSSIBLE plutôt que forcée par un ratio
+    inventé."""
+    import factcheck
+    c = factcheck.par_cle("ademe_carbone_incorpore")
+    assert c is not None
+    assert "1 200" in c["constat"] and "600" in c["constat"]
+    assert "80 %" in c["constat"], "l'incertitude déclarée n'est pas dite"
+    assert "IMPOSSIBLE" in c["constat"]
+    assert "mètre carré" in c["constat"].lower() or "m² SHON" in c["constat"]
+    assert factcheck.recoupement(c)["recoupe"] is True
