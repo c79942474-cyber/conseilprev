@@ -81,6 +81,15 @@
     ".fc-dc{padding:0 11px 10px 27px}" +
     ".fc-dc p{margin:0 0 5px}" +
     ".fc-dc p:last-child{margin-bottom:0}" +
+    /* LA CONCENTRATION DU REGISTRE — sobre quand elle est bonne, ambrée quand
+       une seule maison porte la moitié des contrôles. La couleur n'est pas le
+       seul signal : la phrase qui l'accompagne dit ce que cela change. */
+    ".fc-conc{font-size:11.5px;line-height:1.55;color:#3A3A3A;margin:0 0 10px;padding:8px 11px;" +
+    "border-left:3px solid #C9C4BC;background:#F6F4F1;border-radius:0 5px 5px 0}" +
+    ".fc-conc.tendu{border-left-color:#8A5310;background:#FBF5EC}" +
+    ".fc-conc b{color:#1C1C1C}" +
+    ".fc-conc span{display:block;margin-top:4px;font-size:11px;color:#5A5A5A}" +
+    ".fc-seul{margin:5px 0 0;font-size:10.5px;line-height:1.5;color:#8A5310}" +
     ".fc-dc .fc-src{font-size:10.5px;color:#5A5A5A}" +
     ".fc-dc .fc-av{display:block;margin-top:4px;font-size:10.5px;color:#8A5310}" +
     "@media print{.fc-b{border-color:#999}.fc-d{break-inside:avoid}}";
@@ -251,8 +260,48 @@
             : esc(s.titre || "—"))
         + (s.editeur ? " — " + esc(s.editeur) : "")
         + (c.verifie_le ? " · contrôlé le " + esc(c.verifie_le) : "")
-        + "</p></div></details>";
+        + "</p>"
+        /* LES SOURCES QUI CORROBORENT, ET CE QUE VAUT L'ÉTAIEMENT. Sans cette
+           ligne, un contrôle vérifié par trois maisons et un contrôle vérifié
+           par une seule s'affichaient à l'identique. */
+        + ((c.corroborations || []).length
+            ? '<p class="fc-src">Recoupé avec : '
+              + c.corroborations.map(function (x) {
+                  return x.url
+                    ? '<a href="' + esc(x.url) + '" target="_blank" rel="noopener">'
+                      + esc(x.editeur || x.titre) + "</a>"
+                    : esc(x.editeur || x.titre);
+                }).join(" · ")
+              + "</p>"
+            : "")
+        + ((c.recoupement && !c.recoupement.recoupe)
+            ? '<p class="fc-seul">' + esc(c.recoupement.dit) + "</p>" : "")
+        + "</div></details>";
     }).join("");
+
+    /* ── SUR QUOI CE REGISTRE REPOSE-T-IL RÉELLEMENT ? ────────────────────
+       Un registre de vérification qui compte ses verdicts sans dire sur
+       combien de maisons il s'appuie laisse croire à une robustesse qu'il n'a
+       pas : quarante contrôles étayés par un seul éditeur, ce sont quarante
+       fois la même source. La mesure est CALCULÉE par le serveur sur les
+       sources elles-mêmes ; elle n'est pas écrite ici, donc elle ne peut pas
+       s'y démoder. */
+    var k = d.concentration || {};
+    var conc = k.total
+      ? '<div class="fc-conc' + (k.part_dominant >= 0.5 ? " tendu" : "") + '">'
+        + '<b>' + k.recoupes + ' / ' + k.total + '</b> contrôle(s) recoupé(s) sur au '
+        + 'moins deux maisons indépendantes'
+        + (k.editeur_dominant
+            ? ' · <b>' + esc(k.editeur_dominant) + '</b> en étaye '
+              + Math.round((k.part_dominant || 0) * 100) + ' %'
+            : '')
+        + (k.part_dominant >= 0.5
+            ? '<span>Vérifier une valeur avec une seule maison n’est pas un '
+              + 'recoupement : ces contrôles tiennent comme ordre de grandeur, '
+              + 'pas comme confirmation indépendante.</span>'
+            : '')
+        + '</div>'
+      : "";
 
     h.innerHTML =
       '<div class="fc-reg"><div class="fc-tete">' + compte
@@ -260,6 +309,7 @@
           + esc(r.verifie_depuis === r.verifie_jusqu_a ? r.verifie_jusqu_a
                 : r.verifie_depuis + " au " + r.verifie_jusqu_a) + "</span>" : "")
       + "</div>"
+      + conc
       + barre
       + (lignes
           ? '<div class="fc-g" role="list">' + lignes + "</div>"
