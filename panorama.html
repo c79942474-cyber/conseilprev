@@ -1702,7 +1702,18 @@ body.gp-actif .pm-b.ici span{color:#fff}
    colonnes, elle occupait 1,7/2,7 de la largeur : les marqueurs de Belgique et
    des Pays-Bas se chevauchaient à l'échelle de départ, et il fallait zoomer pour
    distinguer ce que la carte est censée montrer d'un coup d'œil. */
-.geo-grid{display:grid;grid-template-columns:1fr;gap:0}
+/* `minmax(0,1fr)` ET NON `1fr` — LA BARRE ÉLARGISSAIT LA CARTE, ET C'EST
+   MESURÉ. Une colonne `1fr` vaut `minmax(auto,1fr)` : son minimum est le
+   min-content de ce qu'elle porte. Or la barre de commandes contient du texte
+   en `white-space:nowrap` — « 233 centres de données · dont 6 attendus d'ici
+   là · 12 projets sans date publiée ». Ce minimum s'imposait à la colonne
+   entière : sur une fenêtre de 390 px, la carte ET sa barre s'étalaient sur
+   622 px, et le premier compteur sortait de l'écran. Le contenu peut désormais
+   se réduire ; c'est aux éléments qui refusent de se couper de gérer leur
+   propre débordement. */
+.geo-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:0}
+.map-wrap{min-width:0}
+.map-barre{min-width:0}
 .map-wrap{position:relative;border-bottom:1px solid var(--rule)}
 .obs-svg-map{display:block;width:100%;height:auto}
 .pan-pays{cursor:pointer;transition:fill-opacity .12s}
@@ -1754,20 +1765,105 @@ body.gp-actif .pm-b.ici span{color:#fff}
    une aide a la lecture et qu'on replie. Une bande de 30 px masque une frange
    de mer ; la legende depliee masquait la France, l'Allemagne et l'Italie. */
 .map-barre{position:absolute;left:0;right:0;bottom:0;z-index:4;display:flex;align-items:center;
-  gap:16px;padding:9px 14px;background:rgba(252,252,251,.95);border-top:1px solid var(--rule);
-  font-family:var(--mono);font-size:12px;line-height:1.5;color:var(--muted);flex-wrap:wrap}
-.map-barre label{display:flex;align-items:center;gap:5px;cursor:pointer;user-select:none;white-space:nowrap}
-.map-barre input[type=checkbox]{accent-color:#B35A10;margin:0;width:14px;height:14px}
-.map-barre input[type=range]{accent-color:#B35A10;width:130px;height:16px;margin:0}
+  gap:8px 18px;padding:8px 14px;background:rgba(252,252,251,.96);backdrop-filter:blur(6px);
+  border-top:1px solid var(--rule);font-family:var(--mono);font-size:12px;line-height:1.5;
+  color:var(--muted);flex-wrap:wrap}
+
+/* SUR ÉCRAN ÉTROIT, LA BARRE PASSE SOUS LA CARTE — et c'est le défaut le plus
+   grave qu'on ait mesuré ici. Superposée, elle occupait 227 px pour une carte
+   qui n'en faisait que 244 : 93 % de la carte effacés par ses propres
+   commandes. Rendue au flux, elle ne prend plus rien à personne. */
+@media(max-width:760px){
+  .map-barre{position:static;backdrop-filter:none;border-top:1px solid var(--rule);
+    border-radius:0 0 6px 6px;gap:9px 12px}
+  .map-barre .sep{display:none}
+  /* Les deux réglages prennent toute la largeur — ce sont eux qu'on manipule.
+     Le reste se serre pour ne pas empiler six rangées sur un écran de poche :
+     mesuré, l'empilement d'origine faisait 230 px de commandes. */
+  .map-barre .mb-grp{width:100%}
+  .map-barre .mb-grp select{flex:1 1 auto;min-width:0}
+  /* Les deux compteurs partagent une rangée ; leur seconde ligne passe
+     dessous plutôt que de pousser la largeur. */
+  /* CHAQUE COMPTEUR TIENT SUR UNE LIGNE. Répartis sur deux colonnes, ils
+     s'enroulaient sur trois lignes et montaient à 70 px — plus haut que les
+     deux réglages réunis. Pleine largeur et sans repli, ils font 20 px. */
+  .map-barre .mb-cpt{width:100%;min-width:0;border-left:none;padding:0;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .map-barre .mb-cpt-l,.map-barre .mb-cpt-s,.map-barre .mb-grp{min-width:0}
+  .map-barre .mb-cpt-l,.map-barre .mb-cpt-s{font-size:10.5px}
+  /* L'horizon et la légende terminent la barre CÔTE À CÔTE : l'horizon étiré
+     sur toute la largeur rejetait le bouton à une sixième rangée. Les mots
+     « état annoncé au » sont masqués À L'ŒIL SEULEMENT — les bornes et la
+     valeur les remplacent à l'écran, l'aide vocale les entend toujours. */
+  /* L'horizon ne PREND QUE CE QU'IL LUI FAUT : étiré, il repoussait le
+     bouton de légende à une sixième rangée. */
+  .map-barre .mb-grp.mb-hor{width:auto;flex:0 1 auto;border-left:none;padding-left:0;gap:6px}
+  .map-barre .mb-hor .mb-hor-txt{position:absolute;width:1px;height:1px;
+    overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  /* LA VALEUR SE LIT APRÈS LA GLISSIÈRE, PAS AVANT. Les mots masqués, la
+     rangée donnait « 2030  2024 ——— 2030 » : trois nombres dont le premier
+     semblait une borne. Placée en bout, la valeur se lit comme le résultat
+     de la glissière, et les deux bornes encadrent la course. */
+  .map-barre .mb-hor > label{order:3;margin-right:0;margin-left:2px}
+  .map-barre .mb-hor input[type=range]{flex:1 1 auto;width:auto;min-width:64px}
+  .map-barre button{margin-left:auto;flex:0 0 auto}
+}
+
+/* Un groupe = un réglage : son intitulé et son contrôle ne se séparent jamais,
+   et deux groupes ne se confondent pas. */
+.map-barre .mb-grp{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.map-barre .mb-grp > label{color:var(--muted2);font-size:11px;letter-spacing:.03em;
+  text-transform:uppercase;cursor:pointer;user-select:none}
+
+/* LES SÉLECTEURS. Chevron dessiné plutôt que celui du système : celui-ci
+   change de forme d'un navigateur à l'autre et se perd sur fond clair. La
+   cible fait 26 px de haut — au-dessous de 24 px, un doigt manque le contrôle
+   plus souvent qu'il ne l'atteint (WCAG 2.5.8). */
 .map-barre select{font:inherit;font-size:12px;color:#1C1C1C;background:#FFF;
-  border:1px solid var(--rule);border-radius:3px;padding:3px 6px;max-width:210px}
-/* Le sélecteur de couche porte les intitulés les plus longs de la barre :
-   il se dimensionne sur son contenu plutôt que d'être coupé. */
+  border:1px solid var(--rule);border-radius:5px;padding:4px 26px 4px 9px;min-height:26px;
+  max-width:210px;cursor:pointer;appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='6'%3E%3Cpath d='M0 0h9L4.5 6z' fill='%235A5A5A'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 9px center;
+  transition:border-color .12s,box-shadow .12s}
+.map-barre select:hover{border-color:#1C1C1C}
+.map-barre select:focus-visible{outline:none;border-color:#B35A10;
+  box-shadow:0 0 0 3px rgba(179,90,16,.18)}
+.map-barre select:disabled{opacity:.5;cursor:not-allowed}
 .map-barre select#couche-quoi{max-width:none;width:auto}
+
+/* LES COMPTEURS. Le nombre porte le regard, le libellé le qualifie : les lire
+   d'un coup d'œil est tout leur usage. */
+.map-barre .mb-cpt{display:flex;align-items:baseline;gap:6px;white-space:nowrap;
+  padding:2px 10px 2px 0;border-left:1px solid var(--rule2);padding-left:14px}
+.map-barre .mb-cpt-n{font-size:15px;font-weight:700;color:#1C1C1C;letter-spacing:-.01em}
+.map-barre .mb-cpt-l{font-size:11px;color:var(--muted)}
+.map-barre .mb-cpt-s{font-size:11px;color:var(--muted2)}
+.map-barre .mb-cpt-s b{color:#1C1C1C;font-weight:700}
+/* UNE COUCHE MASQUÉE SE DIT AVEC UN MOT, pas seulement avec de la pâleur. Une
+   information portée par la seule couleur échappe à qui ne la distingue pas —
+   et l'estompe seule laissait croire à un compte tombé à zéro. */
+.map-barre .mb-cpt.mb-off .mb-cpt-n,
+.map-barre .mb-cpt.mb-off .mb-cpt-s b{color:var(--muted2);font-weight:400}
+.map-barre .mb-masq{font-style:italic;color:var(--muted2)}
+
+/* LE CURSEUR. Ses bornes encadrent la glissière : on ne devait pas avoir à la
+   tirer pour apprendre qu'elle va de 2024 à 2030. */
+.map-barre .mb-hor{border-left:1px solid var(--rule2);padding-left:14px;gap:8px}
+.map-barre .mb-hor > label{margin-right:4px}
+.map-barre .mb-borne{font-size:10px;color:var(--muted2);flex:0 0 auto}
+.map-barre input[type=range]{accent-color:#B35A10;width:120px;height:24px;margin:0;
+  cursor:pointer;background:transparent}
+.map-barre input[type=range]:focus-visible{outline:2px solid #B35A10;outline-offset:3px;
+  border-radius:3px}
+.map-barre input[type=checkbox]{accent-color:#B35A10;margin:0;width:16px;height:16px}
+
 .map-barre .sep{flex:1}
-.map-barre button{font:inherit;font-size:12px;color:var(--muted);background:none;
-  border:1px solid var(--rule);border-radius:3px;padding:3px 10px;cursor:pointer}
+.map-barre button{font:inherit;font-size:12px;color:var(--muted);background:#FFF;
+  border:1px solid var(--rule);border-radius:5px;padding:5px 12px;min-height:26px;
+  cursor:pointer;transition:border-color .12s,color .12s}
 .map-barre button:hover{color:#1C1C1C;border-color:#1C1C1C}
+.map-barre button:focus-visible{outline:none;border-color:#B35A10;
+  box-shadow:0 0 0 3px rgba(179,90,16,.18)}
 .map-barre b{color:#1C1C1C}
 /* La legende est une aide a la lecture : repliee par defaut, elle laisse la
    carte entiere visible et se deplie a la demande. */
@@ -7387,36 +7483,65 @@ function majBarre(){
   barre.className = "map-barre";
   var lg = hote.querySelector(".obs-legend");
   var plie = !lg || lg.classList.contains("pliee");
+  /* LA BARRE EST REGROUPÉE, ET CHAQUE MOT DÉSIGNE UNE SEULE CHOSE.
+     Trois défauts mesurés sur la version précédente :
+
+       — TROIS DES SIX `label` N'AVAIENT AUCUN CONTRÔLE. « couche » flottait
+         devant un sélecteur nommé « fond », et les deux compteurs étaient eux
+         aussi des `label` : une aide vocale les annonçait comme des étiquettes
+         de champ. Les compteurs deviennent des `output`, qui est fait pour
+         cela, et le mot « couche » disparaît — il nommait un groupe, pas un
+         réglage, et brouillait les deux sélecteurs qu'il précédait ;
+       — L'ATTRIBUT `aria-label` ÉCRASAIT LE LIBELLÉ VISIBLE : on lisait
+         « fond », une aide vocale annonçait « Fond de carte ». Qui pilote à la
+         voix prononce ce qu'il voit, et ne déclenchait rien (WCAG 2.5.3). Les
+         libellés visibles sont désormais explicites et suffisent seuls ;
+       — LE CURSEUR N'ANNONÇAIT PAS SES BORNES. On ne pouvait connaître
+         l'étendue 2024-2030 qu'en le tirant. Elles encadrent la glissière. */
   barre.innerHTML =
-      '<label data-aide="dc">couche</label>'
-    + '<label>fond <select id="vue-fond" aria-label="Fond de carte">'
+      '<div class="mb-grp">'
+    + '<label for="vue-fond" data-aide="dc">couleur des pays</label>'
+    + '<select id="vue-fond">'
     + Object.keys(VUES).map(function(k){
         return '<option value="' + k + '"' + (k === VUE ? ' selected' : '')
              + (k !== 'cas' && !EMP ? ' disabled' : '') + '>' + esc(VUES[k].nom) + '</option>'; }).join('')
-    + '</select></label>'
-    + '<label>afficher <select id="couche-quoi" aria-label="Ce que la carte montre">'
+    + '</select></div>'
+    + '<div class="mb-grp">'
+    + '<label for="couche-quoi">marqueurs</label>'
+    + '<select id="couche-quoi">'
     + '<option value="les2"' + (COUCHE === "les2" ? " selected" : "") + '>les deux</option>'
     + '<option value="dc"' + (COUCHE === "dc" ? " selected" : "") + '>centres seuls</option>'
     + '<option value="sia"' + (COUCHE === "sia" ? " selected" : "") + '>systèmes d’IA seuls</option>'
-    + '</select></label>'
+    + '</select></div>'
     /* Les deux comptes restent AFFICHÉS quelle que soit la couche choisie :
        masquer les centres ne les retire pas du parc, et un compte qui
        s'efface avec son symbole laisserait croire le contraire. Celui qui
-       n'est pas dessiné est simplement grisé. */
-    + '<label style="cursor:default' + (coucheDC() ? "" : ";opacity:.45") + '">'
-    + 'centres de données <b id="dc-n">' + parcAu(DC_HORIZON).n + "</b>"
-    + '<i id="dc-hors" style="font-style:normal;color:var(--muted)"></i></label>'
-    + '<label style="cursor:default' + (coucheSIA() ? "" : ";opacity:.45") + '">'
-    + 'systèmes d’IA <b id="sia-n">'
-    + siaAu(DC_HORIZON).documentes + '</b> documentés · <b id="sia-ob">'
-    + siaAu(DC_HORIZON).soumis + '</b> sous obligation</label>' 
+       n'est pas dessiné est ESTOMPÉ ET DIT POURQUOI — l'opacité seule serait
+       une information portée par la seule couleur, ce que cette page refuse
+       partout ailleurs (WCAG 1.4.1). */
+    + '<output class="mb-cpt' + (coucheDC() ? '' : ' mb-off') + '" for="couche-quoi">'
+    + '<span class="mb-cpt-n" id="dc-n">' + parcAu(DC_HORIZON).n + '</span>'
+    + '<span class="mb-cpt-l">centres de données'
+    + (coucheDC() ? '' : ' <span class="mb-masq">masqués</span>') + '</span>'
+    + '<i id="dc-hors" style="font-style:normal"></i></output>'
+    + '<output class="mb-cpt' + (coucheSIA() ? '' : ' mb-off') + '" for="couche-quoi">'
+    + '<span class="mb-cpt-n" id="sia-n">' + siaAu(DC_HORIZON).documentes + '</span>'
+    + '<span class="mb-cpt-l">systèmes d’IA documentés'
+    + (coucheSIA() ? '' : ' <span class="mb-masq">masqués</span>') + '</span>'
+    + '<span class="mb-cpt-s"><b id="sia-ob">' + siaAu(DC_HORIZON).soumis
+    + '</b> sous obligation</span></output>'
     + (DC_VISIBLE
-        ? '<label style="cursor:default">état annoncé au '
-          + '<input type="range" id="dc-horizon" min="2024" max="2030" step="1" value="' + DC_HORIZON
-          + '" aria-label="Horizon de lecture du parc"> <b id="dc-horizon-v">' + DC_HORIZON + "</b></label>"
+        ? '<div class="mb-grp mb-hor">'
+          + '<label for="dc-horizon"><span class="mb-hor-txt">état annoncé au </span>'
+          + '<b id="dc-horizon-v">' + DC_HORIZON + '</b></label>'
+          + '<span class="mb-borne">2024</span>'
+          + '<input type="range" id="dc-horizon" min="2024" max="2030" step="1" value="'
+          + DC_HORIZON + '">'
+          + '<span class="mb-borne">2030</span></div>'
         : "")
     + '<span class="sep"></span>'
-    + '<button type="button" id="lg-ouvrir">' + (plie ? "légende ▴" : "légende ▾") + "</button>";
+    + '<button type="button" id="lg-ouvrir" aria-expanded="' + (plie ? 'false' : 'true')
+    + '">légende <span aria-hidden="true">' + (plie ? "▴" : "▾") + '</span></button>';
   hote.appendChild(barre);
 
   var cq = barre.querySelector("#couche-quoi");
