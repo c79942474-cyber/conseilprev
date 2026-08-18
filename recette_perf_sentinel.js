@@ -152,6 +152,35 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
      lentsChaud.length === 0,
      lentsChaud.map(x => x.c + ' (' + x.ms + ' ms)').join(', '));
 
+  // ── LE PREMIER VISITEUR APRÈS UN RÉVEIL ────────────────────────────────
+  titre('5. Le TOUT PREMIER affichage ne paie pas la compression');
+  /* CE QUE CE CONTRÔLE EMPÊCHE DE REVENIR. Le cache de pages était construit à
+     la première requête qui réclamait la page : cette requête-là payait la
+     lecture, l'enrichissement et la compression gzip niveau 9 de deux
+     méga-octets. MESURÉ : 303 ms de premier octet, contre 5 ms ensuite.
+     Ce n'était pas une fois pour toutes mais une fois PAR PROCESSUS — donc
+     après chaque déploiement et après chaque réveil d'une instance endormie.
+     Sur un hébergement qui endort les instances inactives, le premier visiteur
+     payait systématiquement. Le cache est désormais construit au démarrage, en
+     tâche de fond.
+
+     ON NE PEUT PAS REDÉMARRER LE SERVEUR DEPUIS ICI : on mesure donc ce qui
+     reste observable — une page LOURDE et JAMAIS DEMANDÉE dans cette session
+     doit répondre aussi vite qu'une page déjà servie. Si le préchauffage
+     n'avait pas eu lieu, elle paierait sa compression maintenant. */
+  const froides = await pg.evaluate(async () => {
+    const t = async (u) => { const d = performance.now();
+      await fetch(u, { credentials: 'same-origin', cache: 'no-store' });
+      return Math.round(performance.now() - d); };
+    // Une page lourde qu'aucun contrôle précédent n'a demandée.
+    return { jamaisVue: await t('/observatoire'), dejaVue: await t('/sentinel') };
+  });
+  ok('une page LOURDE jamais demandée répond sous 200 ms',
+     froides.jamaisVue < BUDGET, froides.jamaisVue + ' ms');
+  ok('…aussi vite qu’une page déjà servie — le cache était prêt AVANT la visite',
+     froides.jamaisVue < froides.dejaVue + 120,
+     'jamais vue ' + froides.jamaisVue + ' ms · déjà vue ' + froides.dejaVue + ' ms');
+
   ok('aucune erreur de script sur toute la manœuvre', err.length === 0,
      err.slice(0, 2).join(' | '));
 

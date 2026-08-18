@@ -9961,6 +9961,50 @@ for route, filename in PAGES.items():
         return view
     app.add_url_rule(route, view_func=make_view(filename))
 
+
+def _prechauffer_cache_pages():
+    """Construit le cache des pages AVANT la premiere visite, en tache de fond.
+
+    POURQUOI, ET CE QUE CELA COUTE AU VISITEUR SANS CELA. Le cache est
+    paresseux : la premiere requete qui reclame une page paie sa lecture, son
+    enrichissement et sa compression gzip niveau 9. MESURE sur /sentinel, deux
+    mega-octets : 303 ms de premier octet, contre 5 ms ensuite. Ce n'est pas
+    une fois pour toutes — c'est une fois PAR PROCESSUS, donc apres chaque
+    deploiement et apres chaque reveil d'une instance mise en veille. Sur un
+    hebergement qui endort les instances inactives, le premier visiteur paie
+    systematiquement.
+
+    EN TACHE DE FOND, ET SANS FAIRE ECHOUER LE DEMARRAGE. Le serveur doit
+    accepter des requetes immediatement : le prechauffage ne doit pas retarder
+    la mise en ecoute. Une page illisible n'empeche pas les autres — elle sera
+    reconstruite a la demande, comme avant.
+
+    LES PLUS LOURDES D'ABORD : c'est la ou l'ecart est le plus grand, et si le
+    processus est tue avant la fin, ce sont elles qu'on aura gagnees.
+    """
+    def _travail():
+        try:
+            fichiers = sorted(
+                set(PAGES.values()) | {'sentinel.html'},
+                key=lambda f: -os.path.getsize(os.path.join(_APP_DIR, f))
+                if os.path.exists(os.path.join(_APP_DIR, f)) else 0)
+        except Exception:  # noqa: BLE001
+            fichiers = list(PAGES.values())
+        n = 0
+        for f in fichiers:
+            try:
+                _page_cache_entry(f)
+                n += 1
+            except Exception:  # noqa: BLE001
+                pass          # une page illisible se reconstruira a la demande
+        logger.info('CACHE_PAGES prechauffe : %d page(s)', n)
+
+    threading.Thread(target=_travail, name='prechauffe-pages',
+                     daemon=True).start()
+
+
+_prechauffer_cache_pages()
+
 # Les deux modules d'observation, servis par la même mécanique rapide mais
 # derrière le verrou. L'ordre des décorateurs compte : reserve_abonne_page est
 # le plus interne, donc le plus proche de la vue — le refus est décidé APRÈS
