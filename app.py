@@ -2152,10 +2152,17 @@ def api_moe_repartition():
         if trav[1] <= 0:
             return jsonify(ok=False, erreur='montant de travaux nul'), 400
         cote = 'bas' if (d.get('cote') == 'bas') else 'haut'
-        res = moe_dc.honoraires_directs(
-            trav,
-            part_technique=d.get('part_technique'),
-            phases=d.get('phases'), missions=d.get('missions'))
+        # À L'EURO PRÈS, PARCE QUE CE TABLEAU RÉPARTIT AU LIEU D'AFFICHER.
+        # Le barème arrondit au millier — bonne granularité pour lire un ordre
+        # de grandeur, mais ce tableau additionne soixante-cinq montants ainsi
+        # arrondis : la somme s'écartait de la base contractuelle de 1,21 % sur
+        # un projet de 2 M€ de travaux. Dans une piece qui sert a payer, ce
+        # n'est plus un arrondi.
+        with moe_dc.precision_fine():
+            res = moe_dc.honoraires_directs(
+                trav,
+                part_technique=d.get('part_technique'),
+                phases=d.get('phases'), missions=d.get('missions'))
         if not res.get('ok'):
             return jsonify(ok=False, erreur='calcul indisponible'), 400
         operation = str(d.get('operation') or '')[:120]
