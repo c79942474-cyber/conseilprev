@@ -504,6 +504,14 @@ body.embed .gp-voile{background:rgba(20,20,20,.32)}
 .gp-suite b{display:block;font-size:12.5px;color:var(--ink);margin-bottom:4px}
 .gp-suite p{margin:0;font-size:12px;line-height:1.55;color:var(--muted)}
 .gp-suite a{display:inline-block;margin-top:7px;font-size:12px;font-weight:600}
+/* « Même bloc » — sobre : c'est une précision, pas une alerte. Elle doit se
+   lire avant le texte de l'étape, et se laisser oublier ensuite. */
+/* La règle, au-dessus de la liste : pleine largeur, pour qu'on la lise comme
+   ce qu'elle est — une note de méthode, pas la fiche d'un pays. */
+.imp-conj-regle{grid-column:1/-1;margin-bottom:10px}
+.gp-meme{font-size:11.5px;line-height:1.5;color:var(--muted);margin:0 0 7px;
+  padding:5px 9px;border-left:2px solid var(--rule);background:var(--bg);
+  border-radius:0 3px 3px 0}
 .gp-piege{border-left:3px solid var(--orange);background:var(--bg);border-radius:0 3px 3px 0;
   padding:8px 12px;font-size:11.5px;color:var(--muted);line-height:1.55;margin:0 0 6px}
 .gp-piege b{color:var(--ink)}
@@ -8805,16 +8813,36 @@ function implConception(){
 
    Elle est donc POSÉE À CÔTÉ du score, avec son motif — un drapeau sans sa
    raison est une accusation, pas une information, et il finit ignoré. */
+/* LA RÈGLE UNE FOIS, LE PAYS AUTANT DE FOIS QU'IL Y A DE PAYS.
+   Le mécanisme de la conjonction et la réserve « n'entre dans aucune note »
+   décrivent la RÈGLE : ils ne changent pas d'un pays à l'autre. Ils étaient
+   pourtant réécrits dans chaque fiche signalée. Mesuré sur la page : cinq
+   phrases identiques répétées TROIS FOIS dans la même section. Un lecteur qui
+   relit trois fois la même mise en garde cesse de la lire — c'est la
+   répétition qui tue l'avertissement, pas son absence.
+   La règle monte donc au-dessus de la liste, une fois ; la fiche ne garde que
+   ce qui lui est propre, son motif. */
+function implConjonctionRegle(lignes){
+  var vises = lignes.filter(function(l){
+    var c = l.x && l.x.conjonction; return c && c.connu && c.signale; });
+  if(!vises.length) return "";
+  var d = (IMPL.conjonctions || {}).chaleur_eau || {};
+  return '<div class="imp-conj imp-conj-regle"><b>⚠ ' + esc(d.titre || "Conjonction chaleur × eau")
+    + " — " + vises.length + " pays signalé" + (vises.length > 1 ? "s" : "") + "</b>"
+    + (d.mecanisme ? '<p class="imp-conj-m">' + esc(d.mecanisme) + '</p>' : "")
+    + '<p class="note" style="margin:4px 0 0">Ce signalement <b>n’entre dans '
+    + 'aucune note</b> : un score pondéré additionne, une conjonction ne '
+    + 's’additionne pas. Il se lit à côté du classement, jamais dedans. '
+    + 'Chaque fiche concernée porte son motif propre.</p></div>';
+}
+
 function implConjonction(x){
   var c = x && x.conjonction;
   if(!c || !c.connu || !c.signale) return "";
   var d = (IMPL.conjonctions || {}).chaleur_eau || {};
+  /* Seulement ce qui est PROPRE À CE PAYS. Le reste est dit une fois, au-dessus. */
   return '<div class="imp-conj"><b>⚠ ' + esc(d.titre || "Conjonction chaleur × eau")
-    + '</b><p>' + esc(c.motif) + '</p>'
-    + (d.mecanisme ? '<p class="imp-conj-m">' + esc(d.mecanisme) + '</p>' : "")
-    + '<p class="note" style="margin:4px 0 0">Ce signalement <b>n’entre dans '
-    + 'aucune note</b> : un score pondéré additionne, une conjonction ne '
-    + 's’additionne pas. Il se lit à côté du classement, jamais dedans.</p></div>';
+    + '</b><p>' + esc(c.motif) + '</p></div>';
 }
 
 function renderImplAvis(){
@@ -8842,7 +8870,7 @@ function renderImplAvis(){
      reprend toute la largeur (CSS .pgr-f .imp-fiche[open]). */
   var grille = !tfEnTableau("imp");
   el.className = grille ? "pgr-f" : "";
-  el.innerHTML = lignes.map(function(l){
+  el.innerHTML = implConjonctionRegle(lignes) + lignes.map(function(l){
     var x = l.x, ouvert = IMPL_DEPLIE === x.pays;
     var persp = (x.perspectives || []).map(function(pr){
       return '<div class="imp-persp ' + pr.sens + '"><b>'
@@ -10413,7 +10441,7 @@ var GP_PROFILS = {
         piege: "Un investissement annoncé porte souvent sur PLUSIEURS sites ou "
              + "plusieurs tranches. Deux montants seulement survivent à la "
              + "vérification dans tout le référentiel — les autres ont été purgés." },
-      { sect: "s-empreinte", t: "L’exposition énergétique du pays d’implantation",
+      { sect: "s-empreinte", ancre: "emp-kpis", t: "L’exposition énergétique du pays d’implantation",
         d: "L’intensité carbone du réseau national conditionne à la fois l’empreinte "
          + "reportable du projet et son exposition au prix du carbone. À consommation "
          + "égale, un site polonais émet environ onze fois un site suédois.",
@@ -10442,7 +10470,7 @@ var GP_PROFILS = {
         piege: "Le référentiel ne porte AUCUNE donnée d’aléa (inondation, sécheresse, "
              + "submersion). Croisez avec vos propres couches — la carte situe, elle "
              + "ne qualifie pas le risque." },
-      { sect: "s-empreinte", t: "L’eau, avant le volume : le mode",
+      { sect: "s-empreinte", ancre: "eau-source", t: "L’eau, avant le volume : le mode",
         d: "Les volumes d’eau sont déduits d’un WUE typique du mode de refroidissement. "
          + "Le mode est donc l’information de premier rang ; le volume n’en est que la "
          + "conséquence calculée.",
@@ -10473,7 +10501,7 @@ var GP_PROFILS = {
     quoi: "La frontière exacte entre ce qui est mesuré, ce qui est déduit, et ce "
         + "que le modèle ne capte pas.",
     etapes: [
-      { sect: "s-empreinte", t: "Deux postes, deux dynamiques",
+      { sect: "s-empreinte", ancre: "emp-postes", t: "Deux postes, deux dynamiques",
         d: "L’usage — électricité × intensité du réseau — et la fabrication amortie "
          + "sur la durée de vie des équipements. Les deux ne répondent pas aux mêmes "
          + "leviers : décarboner le réseau agit sur le premier seulement.",
@@ -10481,7 +10509,7 @@ var GP_PROFILS = {
              + "60 g), la fabrication pèse plus lourd que l’usage. Une lecture qui "
              + "n’afficherait que l’usage classerait ces pays près de zéro — ce serait "
              + "faux, et c’est l’erreur la plus fréquente du domaine." },
-      { sect: "s-empreinte", t: "L’intensité du réseau, et son unité",
+      { sect: "s-empreinte", ancre: "emp-kpis", t: "L’intensité du réseau, et son unité",
         d: "Les intensités sont en approche CYCLE DE VIE : la construction des moyens "
          + "de production est incluse, ce qui interdit de compter le nucléaire ou "
          + "l’éolien à zéro.",
@@ -10523,7 +10551,7 @@ var GP_PROFILS = {
          + "situe entre les deux.",
         piege: "« Non précisé » est fréquent et n’est pas un mode : c’est une absence "
              + "d’information, et la fourchette d’eau s’en trouve alors très large." },
-      { sect: "s-empreinte", t: "Les volumes, et leur fabrication",
+      { sect: "s-empreinte", ancre: "emp-kpis", t: "Les volumes, et leur fabrication",
         d: "Les mètres cubes affichés sont déduits d’un WUE — litres d’eau par "
          + "kilowattheure informatique — typique du mode déclaré, multiplié par une "
          + "consommation elle-même estimée. Deux estimations en chaîne.",
@@ -10537,7 +10565,7 @@ var GP_PROFILS = {
         piege: "Le référentiel ne porte ni bassin versant, ni indice de stress "
              + "hydrique, ni régime d’autorisation de prélèvement. Sans ces trois "
              + "couches, un volume ne dit rien de la pression sur la ressource." },
-      { sect: "s-empreinte", t: "L’eau que le WUE ne compte pas",
+      { sect: "s-empreinte", ancre: "eau-source", t: "L’eau que le WUE ne compte pas",
         d: "Descendez jusqu’au bilan eau complet. Produire un kilowattheure consomme "
          + "de l’eau : les centrales thermiques et nucléaires en évaporent dans leurs "
          + "tours. Ce second terme ne figure sur aucune déclaration d’exploitant, et "
@@ -10547,7 +10575,7 @@ var GP_PROFILS = {
              + "des cinq familles de refroidissement, l’eau amont l’emporte quoi "
              + "qu’il arrive : choisir le sec pour économiser l’eau peut en "
              + "consommer davantage." },
-      { sect: "s-empreinte", t: "Ce que le total du parc ne tranche pas",
+      { sect: "s-empreinte", ancre: "emp-table", t: "Ce que le total du parc ne tranche pas",
         d: "Les deux volumes du parc se recouvrent largement — le WUE bas de plusieurs "
          + "modes vaut zéro, ce qui étire la fourchette de site sur deux ordres de "
          + "grandeur. La section le dit et refuse de désigner un vainqueur.",
@@ -10555,7 +10583,7 @@ var GP_PROFILS = {
              + "le rapport EWIF × PUE ÷ WUE, mode par mode : lui ne dépend ni de la "
              + "taille du parc ni du facteur de charge, seulement de la conception et "
              + "du mix. C’est le seul chiffre sur lequel on décide." },
-      { sect: "s-empreinte", t: "Ce qui manque encore, et combien",
+      { sect: "s-empreinte", ancre: "emp-methode", t: "Ce qui manque encore, et combien",
         d: "Le facteur eau de la production électrique porte la nature "
          + "<b>ordre de grandeur</b>, à ±40 % — davantage que le terme de site. "
          + "Onze des vingt-trois pays du parc disposent d’une valeur nationale.",
@@ -10612,7 +10640,7 @@ var GP_PROFILS = {
         piege: "Commencer par l’enveloppe donne l’illusion que les pays se valent. "
              + "Ils se valent à l’investissement et pas du tout à l’exploitation : "
              + "sur dix ans, l’écart dépasse le quart du coût complet." },
-      { sect: "s-finance", t: "L’enveloppe est une fourchette, pas un montant",
+      { sect: "s-finance", ancre: "fin-form", t: "L’enveloppe est une fourchette, pas un montant",
         d: "Le coût au mégawatt vient d’un relevé publié, en dollars, converti à un "
          + "taux affiché et modifiable. Il couvre le cloud et les campus d’IA, pas "
          + "la colocation ni le site régional. L’enveloppe qui en sort est donnée "
@@ -10670,7 +10698,7 @@ var GP_PROFILS = {
     quoi: "Chiffrer une décision GO / NO GO : enveloppe, décomposition par lot, "
         + "écart entre pays et échéancier jusqu’en 2030.",
     etapes: [
-      { sect: "s-finance", t: "Ce que ce module ne fera PAS pour vous",
+      { sect: "s-finance", ancre: "fin-note", t: "Ce que ce module ne fera PAS pour vous",
         d: "Il ne fabrique pas un prix. Aucun des 97 centres du référentiel ne publie "
          + "sa capacité, deux seulement publient un montant — et sans la capacité "
          + "correspondante. Le coût au mégawatt est donc un PARAMÈTRE, donné en "
@@ -10687,7 +10715,7 @@ var GP_PROFILS = {
         piege: "Les bornes basses de tous les lots ne surviennent pas ensemble. Leur "
              + "somme reconstitue la borne basse de l’enveloppe, elle ne décrit "
              + "aucun chantier réel." },
-      { sect: "s-finance", t: "Le refroidissement se déduit, il ne se choisit pas",
+      { sect: "s-finance", ancre: "fin-froid", t: "Le refroidissement se déduit, il ne se choisit pas",
         d: "Le mode retenu découle du climat et du stress hydrique du pays : free "
          + "cooling au nord, adiabatique en zone tempérée, aéroréfrigérants secs "
          + "là où l’eau est contrainte, liquide dès que la densité IA l’impose. "
@@ -10757,7 +10785,7 @@ var GP_PROFILS = {
          + "alors qu’ils dominent les classes hautes du panel, c’est l’angle mort.",
         piege: "Ne présentez jamais ces répartitions comme celles du parc européen "
              + "réel. Elles décrivent ce qui a été rendu public." },
-      { sect: "s-empreinte", t: "Trois natures, jamais mélangées",
+      { sect: "s-empreinte", ancre: "emp-table", t: "Trois natures, jamais mélangées",
         d: "« publié » : l’exploitant a donné le chiffre. « site » : calculé depuis la "
          + "capacité annoncée de ce site précis. « classe » : calculé depuis l’ordre de "
          + "grandeur typique de sa catégorie. L’étiquette accompagne chaque valeur, "
@@ -10776,7 +10804,7 @@ var GP_PROFILS = {
   },
 };
 
-var GP = { profil: null, branche: null, i: 0, cible: null };
+var GP = { profil: null, branche: null, i: 0, cible: null, cibleId: null };
 
 /* Les étapes EFFECTIVES d'un profil. Un profil linéaire les porte dans
    `etapes` ; un profil à embranchement porte une `question` et des `branches`,
@@ -10909,7 +10937,12 @@ function gpSante(){
    les étapes d'un parcours qui n'est pas encore lancé — donc sans dépendre de
    `GP.branche`. Une seconde fonction de comptage aurait divergé du filtre réel
    au premier ajustement : c'est celle-ci qui filtre, et `gpEtapes` s'y ramène. */
+/* « * » DÉSIGNE LE PARCOURS ENTIER, pas une branche. Le convertir ici plutôt
+   qu'à chaque appelant évite qu'un seul l'oublie. */
+function gpBranche(b){ return (b && b !== "*") ? b : null; }
+
 function gpEtapesDe(P, branche){
+  branche = gpBranche(branche);
   var E;
   if(P.etapes) E = P.etapes;
   else {
@@ -10961,6 +10994,7 @@ function gpDemarrer(cle, branche){
   var e = gpEls();
   e.choix.classList.remove("on");
   GP.profil = cle; GP.i = 0;
+  gpOublierCible();
   GP.branche = (branche && P.branches && P.branches[branche]) ? branche : null;
   gpBande();
   gpTeinte();
@@ -10975,6 +11009,12 @@ function gpDemarrer(cle, branche){
 function gpNettoyer(){
   if(GP.cible){ GP.cible.classList.remove("gp-cible"); GP.cible = null; }
 }
+
+/* REPARTIR DE ZÉRO. L'identifiant du bloc désigné survit au nettoyage — c'est
+   voulu, il sert à comparer deux étapes successives. Mais il doit tomber quand
+   on CHANGE de parcours, sinon la première étape du nouveau se croirait « la
+   même » que la dernière de l'ancien. */
+function gpOublierCible(){ GP.cibleId = null; }
 
 function gpFermer(){
   var e = gpEls();
@@ -11036,10 +11076,24 @@ function gpAller(i){
     }
   }
 
-  var idCible = et.pays ? "s-pays" : et.sect;
+  /* CE QUE L'ÉTAPE DÉSIGNE : le SOUS-BLOC quand elle en nomme un, la section
+     sinon. Sans les sous-blocs, six étapes du parcours « finance » se
+     succédaient toutes sur `s-finance` : on cliquait « Suivant » six fois et
+     le cadre bleu ne bougeait pas d'un pixel. Le lecteur ne conclut pas qu'on
+     lui parle d'autre chose dans le même bloc — il conclut que le bouton est
+     cassé. Mesuré sur les trois vues : dix-sept enchaînements de ce type. */
+  var idCible = et.pays ? "s-pays" : (et.ancre || et.sect);
   var sec = document.getElementById(idCible);
+  if(!sec || sec.hidden){            /* un sous-bloc absent retombe sur sa section */
+    idCible = et.pays ? "s-pays" : et.sect;
+    sec = document.getElementById(idCible);
+  }
+  /* LE CADRE A-T-IL BOUGÉ ? La question se pose AVANT de le poser, parce que
+     c'est l'ancien emplacement qui répond. */
+  var memeQuAvant = !!(GP.cibleId && GP.cibleId === idCible);
   if(sec && !sec.hidden){
     GP.cible = sec;
+    GP.cibleId = idCible;
     sec.classList.add("gp-cible");
     sec.scrollIntoView({ behavior: "smooth", block: "start" });
   }
@@ -11057,7 +11111,16 @@ function gpAller(i){
     + '<span class="gp-etape">' + (enAttente ? "Choix du scénario"
         : "Étape " + (i + 1) + " sur " + E.length) + "</span>"
     + '<button type="button" class="gp-fermer" id="gp-x" aria-label="Fermer le parcours">×</button></div>'
-    + '<div class="gp-corps"><h4>' + esc(et.t) + "</h4><p>" + et.d + "</p>"
+    + '<div class="gp-corps"><h4>' + esc(et.t) + "</h4>"
+    /* QUAND LE CADRE NE BOUGE PAS, ON LE DIT. C'est la garantie générale :
+       soit le bloc désigné change, soit le lecteur apprend qu'il ne change
+       pas — et pourquoi. Sans elle, une page immobile après un clic se lit
+       comme une panne. */
+    + (memeQuAvant
+        ? '<p class="gp-meme">Même bloc qu’à l’étape précédente : ce qui change '
+          + 'est ce qu’on vient y lire, pas l’endroit.</p>'
+        : "")
+    + "<p>" + et.d + "</p>"
     + (et.options ? '<div class="gp-options">' + et.options.map(function(o){
         return '<button type="button" class="gp-opt' + (GP.branche === o.cle ? " on" : "")
           + '" data-branche="' + o.cle + '"><b>' + esc(o.nom) + "</b><span>"
@@ -11238,7 +11301,15 @@ function ppParcoursDe(cle){
                n: gpEtapesDe(P, o.cle).length };
     });
   }
-  return [{ cle: "", nom: "Parcours complet", sens: P.quoi || "",
+  /* UNE CLÉ VIDE ÉTAIT UN PIÈGE. L'option « Parcours complet » portait la
+     MÊME valeur que l'intitulé d'attente — chaîne vide — si bien que la
+     choisir était indiscernable de ne rien choisir : le gestionnaire sort sur
+     `!this.value`, et le clic ne faisait rien. Le défaut restait masqué parce
+     qu'un profil sans scénario démarre d'office au choix du rôle ; il serait
+     apparu au premier profil linéaire à deux parcours. Une clé propre le
+     retire, et gpDemarrer la traite comme « aucune branche » puisqu'elle ne
+     figure dans aucune table de branches. */
+  return [{ cle: "*", nom: "Parcours complet", sens: P.quoi || "",
             n: gpEtapesDe(P, null).length }];
 }
 
