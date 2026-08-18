@@ -126,42 +126,63 @@ body.embed .hdr{margin-bottom:12px}
       defiler hors de vue.
    ══════════════════════════════════════════════════════════════════════════ */
 
+/* LE CADRE BLEU. La barre se fondait dans la page : posée sur un fond à
+   peine plus clair et bordée d'un filet gris, elle se lisait comme un bandeau
+   décoratif, pas comme la commande de la page. Le cadre bleu dit ce qu'elle
+   est — l'appareil de navigation — et le trait supérieur plus épais l'ancre
+   en haut de l'écran quand elle devient collante. */
 .pnav-wrap{position:sticky;top:0;z-index:40;margin:0 -22px 18px;
-  background:rgba(247,246,243,.94);backdrop-filter:blur(8px);
-  border-bottom:1px solid var(--rule)}
+  background:rgba(247,246,243,.96);backdrop-filter:blur(8px);
+  border:1px solid color-mix(in srgb,#1E63A8 30%,#fff);
+  border-top:3px solid #1E63A8;
+  border-radius:0 0 12px 12px;
+  box-shadow:0 4px 16px rgba(15,42,74,.08)}
 body.embed .pnav-wrap{margin:0 -18px 14px}
 
-/* Les fentes laterales : ce sont elles qui disent « ca continue ». */
-.pnav-piste{position:relative}
-.pnav-piste:before,.pnav-piste:after{content:"";position:absolute;top:0;bottom:0;width:38px;
+/* LA PISTE EST UNE RANGÉE, PLUS UN EMPILEMENT.
+   Les deux flèches et le lanceur étaient posés EN ABSOLU par-dessus la bande
+   d'onglets, et une variable mesurée en JavaScript (--gp-w) tentait de leur
+   réserver la place par du remplissage. Le remplissage ne protège que les
+   extrémités du contenu défilant : dès qu'on faisait glisser la bande, un
+   onglet passait sous la flèche. MESURÉ : la flèche de droite recouvrait 26 px
+   — 14 % — de l'onglet « Choix d'implantation », ce que la capture montrait
+   par « Données ouvert› ».
+   En rangée, les onglets n'occupent que la place qui reste : aucun ne peut
+   passer sous quoi que ce soit, et la mesure JavaScript devient inutile. */
+.pnav-piste{position:relative;display:flex;align-items:center;gap:4px;
+  padding-right:14px}
+/* Les fentes disent « ça continue » — et elles se posent sur la BANDE, pas
+   sur la piste : depuis que les flèches sont hors du flux, une fente calée sur
+   la piste entière aurait pâli le lanceur. */
+.pnav-bande{position:relative;flex:1 1 auto;min-width:0}
+.pnav-bande:before,.pnav-bande:after{content:"";position:absolute;top:0;bottom:0;width:30px;
   pointer-events:none;z-index:3;opacity:0;transition:opacity .18s}
-.pnav-piste:before{left:0;background:linear-gradient(90deg,rgba(247,246,243,.98),rgba(247,246,243,0))}
-/* Le lanceur est colle a droite : la fente et la fleche s'arretent a son bord,
-   sinon il les recouvre et l'affordance disparait sous le bouton. */
-.pnav-piste:after{right:0;width:calc(var(--gp-w,0px) + 40px);
-  background:linear-gradient(270deg,rgba(247,246,243,1) 0,
-    rgba(247,246,243,1) var(--gp-w,0px),rgba(247,246,243,0) 100%)}
-.pnav-piste.deb-g:before{opacity:1}
-.pnav-piste.deb-d:after{opacity:1}
+.pnav-bande:before{left:0;background:linear-gradient(90deg,rgba(247,246,243,.98),rgba(247,246,243,0))}
+.pnav-bande:after{right:0;background:linear-gradient(270deg,rgba(247,246,243,.98),rgba(247,246,243,0))}
+.pnav-piste.deb-g .pnav-bande:before{opacity:1}
+.pnav-piste.deb-d .pnav-bande:after{opacity:1}
 
-.pnav-fl{position:absolute;top:50%;transform:translateY(-50%);z-index:4;width:26px;height:26px;
-  border-radius:50%;border:1px solid var(--rule);background:var(--white);color:#0F3D6E;
+/* LES FLÈCHES SONT DES ÉLÉMENTS DE LA RANGÉE, plus des calques. Elles ne
+   prennent leur place que lorsqu'elles servent : `display:none` les retire du
+   flux, et les onglets récupèrent les 30 px. */
+.pnav-fl{flex:0 0 auto;width:26px;height:26px;margin:0 2px;
+  border-radius:50%;border:1px solid color-mix(in srgb,#1E63A8 34%,#fff);
+  background:var(--white);color:#0F3D6E;
   cursor:pointer;display:none;align-items:center;justify-content:center;font-size:14px;
-  line-height:1;padding:0;box-shadow:0 1px 5px rgba(15,42,74,.14);transition:background .14s}
-.pnav-fl:hover{background:#EEF3F9}
+  line-height:1;padding:0;box-shadow:0 1px 5px rgba(15,42,74,.14);
+  transition:background .14s,transform .14s}
+.pnav-fl:hover{background:#EEF3F9;transform:scale(1.12)}
 .pnav-fl:focus-visible{outline:2px solid #1E63A8;outline-offset:2px}
-.pnav-fl.g{left:5px}.pnav-fl.d{right:calc(var(--gp-w,0px) + 8px)}
 .pnav-piste.deb-g .pnav-fl.g,.pnav-piste.deb-d .pnav-fl.d{display:flex}
 
 /* La reserve de droite (--gp-w, mesuree en JS) fait partie du raccourci :
    deux endroits ou regler le meme padding, c'est celui du bas qui gagne, et
    c'est ainsi que la reserve avait ete perdue une premiere fois. Le dernier
    onglet peut venir entierement dans la vue sans finir sous le bouton. */
-.pnav{display:flex;gap:5px;align-items:center;
-  padding:8px calc(var(--gp-w,0px) + 22px) 8px 22px;
+.pnav{display:flex;gap:5px;align-items:center;padding:8px 14px 8px 22px;
   overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;scroll-behavior:smooth}
 .pnav::-webkit-scrollbar{display:none}   /* les fentes et les fleches remplacent la barre */
-body.embed .pnav{padding:8px calc(var(--gp-w,0px) + 18px) 8px 18px}
+body.embed .pnav{padding:8px 12px 8px 18px}
 
 /* ── L'onglet ─────────────────────────────────────────────────────────────
    Une pastille de couleur dit la famille AVANT que le mot soit lu. */
@@ -261,6 +282,17 @@ body.embed .pnav-parcours{padding:8px 18px 9px}
 .pnav-parcours select:hover{border-color:#1E63A8}
 .pnav-parcours select:focus-visible{outline:2px solid #1E63A8;outline-offset:1px}
 .pnav-parcours select:disabled{opacity:.55;cursor:not-allowed;color:var(--muted2)}
+/* LA LISTE EN ATTENTE. Un rôle choisi, il reste un geste — et rien ne le
+   disait. Le halo bat à 1,8 s, la cadence des guidages du reste du site, très
+   en dessous du seuil de photosensibilité ; seul le HALO anime, la bordure et
+   le texte gardent leur contraste à chaque phase. */
+@keyframes ppAttend{0%,100%{box-shadow:0 0 0 0 rgba(30,99,168,0)}
+  50%{box-shadow:0 0 0 4px rgba(30,99,168,.22)}}
+.pnav-parcours select.pp-attend{border-color:#1E63A8;border-width:2px;
+  animation:ppAttend 1.8s ease-in-out infinite}
+@media(prefers-reduced-motion:reduce){
+  .pnav-parcours select.pp-attend{animation:none;box-shadow:0 0 0 3px rgba(30,99,168,.22)}}
+.pnav-parcours .pp-suite{color:#0F3D6E;font-weight:700}
 .pnav-parcours .pp-aide{font-size:11.5px;color:var(--muted);line-height:1.5;
   flex:1 1 240px;min-width:0}
 .pnav-parcours .pp-reprendre{all:unset;box-sizing:border-box;cursor:pointer;
@@ -287,15 +319,14 @@ body.embed .pnav-parcours{padding:8px 18px 9px}
    page à un premier lecteur en était la moins repérable. L'ambre le détache du
    fond ET des pastilles bleu-vert de la barre, sans entrer en concurrence avec
    les sept couleurs de métier — aucune ne tire vers l'orange. */
-.gp-lanceur{all:unset;box-sizing:border-box;position:absolute;right:14px;top:50%;
-  transform:translateY(-50%);z-index:6;
+.gp-lanceur{all:unset;box-sizing:border-box;flex:0 0 auto;z-index:6;
   display:inline-flex;align-items:center;gap:7px;cursor:pointer;
   font-size:13.5px;font-weight:700;color:#fff;padding:11px 19px;border-radius:8px;
   background:linear-gradient(135deg,#C2410C,#9A3412);
   box-shadow:0 2px 10px rgba(154,52,18,.34),0 0 0 0 rgba(194,65,12,.55);
   transition:transform .15s,box-shadow .15s,filter .15s}
 .gp-lanceur:before{content:"🧭";font-size:15px;line-height:1}
-.gp-lanceur:hover{transform:translateY(-50%) scale(1.06);filter:brightness(1.12);
+.gp-lanceur:hover{transform:scale(1.06);filter:brightness(1.12);
   box-shadow:0 6px 20px rgba(154,52,18,.44)}
 .gp-lanceur:focus-visible{outline:2px solid #1C1C1C;outline-offset:3px}
 
@@ -327,13 +358,13 @@ body.embed .pnav-parcours{padding:8px 18px 9px}
 
 @media(prefers-reduced-motion:reduce){
   .pnav a:hover,.pnav a:focus-visible,.pnav a.on:hover,.panel-title:hover{transform:none}
-  .gp-lanceur:hover{transform:translateY(-50%)}
+  .gp-lanceur:hover,.pnav-fl:hover{transform:none}
   .pnav{scroll-behavior:auto}
   .pnav-prog i{transition:none}
 }
 @media(max-width:640px){
   .pnav a{font-size:12px;padding:7px 11px;gap:6px}
-  .pnav{padding:7px calc(var(--gp-w,0px) + 12px) 7px 12px}
+  .pnav{padding:7px 10px 7px 12px}
   /* Le bord perdu de la barre doit valoir la marge du corps, qui tombe a 12 px
      ici : reste a -22, la barre depassait de 10 px de chaque cote et TOUTE la
      page se decalait horizontalement au doigt. */
@@ -2589,7 +2620,7 @@ engagements publics) sont imputés nominativement.</div>
 <div class="pnav-wrap" id="pnav-wrap">
  <div class="pnav-piste" id="pnav-piste">
   <button type="button" class="pnav-fl g" id="pnav-fl-g" aria-label="Onglets precedents" tabindex="-1">‹</button>
-  <button type="button" class="pnav-fl d" id="pnav-fl-d" aria-label="Onglets suivants" tabindex="-1">›</button>
+  <div class="pnav-bande">
   <nav class="pnav" id="pnav" aria-label="Sections de la page">
     <span class="pnav-sep" aria-hidden="true"><span>Observer</span></span>
     <a href="#s-carte" title="La carte de l’UE : systèmes d’IA, centres de données, droit national">Carte UE &amp; droit national</a>
@@ -2604,6 +2635,8 @@ engagements publics) sont imputés nominativement.</div>
     <a href="#s-sources" class="f-verifier" title="Chaque source, son millésime, son lien — et le registre de vérification">Sources</a>
     <a href="#s-methodo" class="f-verifier" title="Comment les chiffres sont construits, hypothèse par hypothèse">Méthodologie</a>
   </nav>
+  </div>
+  <button type="button" class="pnav-fl d" id="pnav-fl-d" aria-label="Onglets suivants" tabindex="-1">›</button>
   <button type="button" class="gp-lanceur" id="gp-lanceur">Parcours guidé</button>
  
 </div>
@@ -9239,10 +9272,14 @@ function pnavDecor(){
     requestAnimationFrame(function(){ enCours = false; progression(); });
   }, { passive: true });
 
+  /* LA MESURE DU LANCEUR N'A PLUS D'OBJET. Elle existait pour réserver, par du
+     remplissage, la place d'un bouton posé en absolu au-dessus des onglets.
+     Depuis que la piste est une rangée, le bouton occupe sa place de lui-même
+     et aucun onglet ne peut passer dessous. La fonction reste — deux appelants
+     la connaissent — mais elle ne fait plus que retirer la variable devenue
+     inutile, plutôt que d'entretenir un réglage qui ne règle rien. */
   function mesurerLanceur(){
-    var l = document.getElementById("gp-lanceur");
-    var w = l && getComputedStyle(l).display !== "none" ? Math.ceil(l.offsetWidth) + 22 : 0;
-    piste.style.setProperty("--gp-w", w + "px");
+    piste.style.removeProperty("--gp-w");
   }
   window.addEventListener("resize", mesurerLanceur, { passive: true });
 
@@ -11241,12 +11278,32 @@ function ppRemplirParcours(cleRole){
   e.parc.disabled = false;
   var P = GP_PROFILS[cleRole];
   var dispo = liste.filter(function(o){ return o.n > 0; }).length;
+  /* LE GESTE SUIVANT SE DÉSIGNE. Un rôle choisi, la seconde liste restait sur
+     son intitulé vide et l'aide affichait la DESCRIPTION DU RÔLE : le lecteur
+     lisait une phrase de contexte là où il attendait quoi faire, et rien ne
+     disait qu'il manquait un choix. C'est l'état exact que montrait la capture
+     d'écran — « Climat », « — Le parcours — », et une phrase qui flotte.
+     La liste en attente se signale ; elle cesse dès qu'un parcours est pris. */
+  e.parc.classList.toggle("pp-attend", dispo > 0 && !e.parc.value);
   if(e.aide){
-    e.aide.textContent = dispo
-      ? (P.quoi || "")
+    e.aide.innerHTML = dispo
+      ? ((!e.parc.value
+            ? '<b class="pp-suite">Choisissez maintenant votre parcours ↑</b> '
+            : "") + esc(P.quoi || ""))
       : "Ce rôle n’a aucun parcours sur cette vue : ses étapes visent des "
         + "sections que cette page n’affiche pas. Ouvrez le Panorama pour le "
         + "suivre.";
+  }
+}
+
+/* L'APPEL S'ÉTEINT QUAND LE GESTE EST FAIT. Un guidage qui reste allumé après
+   coup cesse d'être un guidage : il devient du bruit, et le bruit fait ignorer
+   les vrais signaux. */
+function ppAppelFini(e){
+  if(e.parc) e.parc.classList.remove("pp-attend");
+  if(e.aide){
+    var b = e.aide.querySelector(".pp-suite");
+    if(b) b.remove();
   }
 }
 
@@ -11263,12 +11320,16 @@ function ppBrancher(){
     if(this.value && ppParcoursDe(this.value).length === 1){
       gpDemarrer(this.value, null);
       e.parc.selectedIndex = 1;
+      /* Le parcours est pris d'office : l'appel n'a plus lieu d'être, et le
+         laisser battre demanderait un geste déjà fait. */
+      ppAppelFini(e);
     }
   });
 
   e.parc.addEventListener("change", function(){
     var r = e.role.value;
     if(!r || !this.value) return;
+    ppAppelFini(e);
     gpDemarrer(r, this.value);
   });
 
