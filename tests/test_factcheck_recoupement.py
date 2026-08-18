@@ -81,3 +81,68 @@ def test_l_ECART_ENTRE_LES_DEUX_SITES_EST_AU_REGISTRE():
     assert "45" in c["constat"] and "56" in c["constat"]
     assert "millésime" in c["constat"]
     assert F.recoupement(c)["recoupe"] is True
+
+
+def test_LE_CHIFFRE_PUBLIE_SE_REMESURE_quand_les_deux_depots_sont_la():
+    """UN CONSTAT ÉCRIT À LA MAIN SE DÉMODE EN SILENCE — celui-ci l'avait fait.
+
+    La version publiée annonçait « 12,1 % en moyenne ». Re-mesuré, aucun
+    dénominateur défendable ne redonne ce chiffre : c'est 12,8 % en rapportant
+    l'écart à la valeur Sentinel sur les 29 pays communs (médiane 9,0 %,
+    maximum 50 % au Luxembourg). Le chiffre était faux et il était publié.
+
+    Ce contrôle recalcule l'écart sur les DEUX TABLES RÉELLES et exige que le
+    constat porte le résultat. Il ne peut le faire que si le dépôt cyber est
+    présent à côté ; quand il ne l'est pas, il le DIT au lieu de passer en
+    silence — un contrôle qui s'ignore lui-même ne vaut pas mieux qu'un chiffre
+    figé."""
+    import os
+    import statistics
+    import importlib.util
+    import empreinte_sites
+
+    ailleurs = os.path.join(os.path.dirname(os.path.dirname(
+        os.path.dirname(os.path.abspath(__file__)))), "conseilprevcyber",
+        "datacenter.py")
+    if not os.path.exists(ailleurs):
+        import pytest
+        pytest.skip("dépôt conseilprevcyber absent : écart non re-mesurable "
+                    "ici — le constat reste sous la seule foi de son auteur")
+
+    spec = importlib.util.spec_from_file_location("_dc_cyber", ailleurs)
+    dc = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(dc)
+
+    S, C = empreinte_sites.INTENSITE, dc.INTENSITE_RESEAU
+    communs = sorted(set(S) & set(C))
+    ecarts = [abs(C[p] - S[p]) / S[p] * 100.0 for p in communs if S[p]]
+    moyenne = sum(ecarts) / len(ecarts)
+    mediane = statistics.median(ecarts)
+
+    c = F.par_cle("intensite_deux_sites")
+    # ON ANCRE SUR LA PHRASE, PAS SUR LE CHIFFRE NU — et c'est mesuré : la
+    # première rédaction de ce contrôle cherchait « 12.8 » n'importe où dans le
+    # constat. Elle passait donc alors même que le chiffre de tête était resté
+    # faux à 12,1 %, parce que le bon chiffre figurait plus bas, dans la réserve
+    # qui raconte la correction. Un contrôle qui se satisfait d'une occurrence
+    # ailleurs ne contrôle rien.
+    # LES DEUX ÉCRITURES D'UN ENTIER SONT ACCEPTÉES — « 50 % » et « 50,0 % ».
+    # Exiger la seconde obligerait à écrire « maximum 50,0 % » dans une phrase
+    # française, ce qui est laid sans rien prouver de plus. On tolère la forme,
+    # jamais la valeur.
+    def formes(x):
+        s = ("%.1f" % x).replace(".", ",")
+        return [s] + ([s[:-2]] if s.endswith(",0") else [])
+
+    maximum = max(ecarts)
+    for etiquette, valeur in (("MÉDIAN", mediane), ("moyen", moyenne),
+                              ("maximum", maximum)):
+        attendus = ["%s %s %%" % (etiquette, f) for f in formes(valeur)]
+        assert any(a in c["constat"] for a in attendus), (
+            "le constat n'annonce pas « %s » — mesuré sur les deux tables"
+            % attendus[0])
+    # LE COMPTE DE PAYS DIVERGENTS EST LUI AUSSI MESURÉ, pas recopié.
+    divergents = sum(1 for p in communs if C[p] != S[p])
+    assert "%d des %d" % (divergents, len(communs)) in c["constat"], (
+        "le constat annonce un autre compte que les %d / %d mesurés"
+        % (divergents, len(communs)))
