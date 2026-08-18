@@ -527,6 +527,17 @@ body.embed .gp-carte{bottom:auto;top:var(--gp-bas,auto)}
 .gp-p:focus-visible{outline:2px solid #1E63A8;outline-offset:2px}
 .gp-p b{display:block;font-size:13px;margin-bottom:3px}
 .gp-p span{font-size:11.5px;color:var(--muted);line-height:1.5;display:block}
+/* ── LE REGISTRE COMPLET DES SOURCES, en fin de page ─────────────────────
+   Une liste, pas un tableau : on y vient pour cliquer un lien, pas pour
+   comparer des colonnes. Ce qui n'a pas de lien le dit à sa place, en gris —
+   assez pour être lu, pas assez pour concurrencer ce qui s'ouvre. */
+.reg-l{list-style:none;margin:0 0 6px;padding:0;display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2px 18px}
+.reg-l li{font-size:12px;line-height:1.5;padding:4px 0;border-bottom:1px solid var(--rule2)}
+.reg-l a{font-weight:600}
+.reg-e{display:block;font-family:var(--mono);font-size:9.5px;color:var(--muted2);margin-top:1px}
+.reg-sans{display:block;font-size:10.5px;color:var(--muted);font-style:italic;margin-top:1px}
+.reg-n{font-family:var(--mono);font-size:10px;color:var(--muted2);font-weight:400}
 .gp-p em{display:block;font-style:normal;font-family:var(--mono);font-size:9px;
   text-transform:uppercase;letter-spacing:.05em;color:var(--muted2);margin-top:6px}
 /* ── LES PARCOURS ENREGISTRÉS ────────────────────────────────────────────
@@ -2737,18 +2748,21 @@ engagements publics) sont imputés nominativement.</div>
     <span class="panel-note" id="socle-note">Copernicus · NASA · DINUM · Eurostat — sans clé d'API</span>
   </div>
   <div class="panel-body">
-    <p class="note" style="margin-top:0"><b>Pourquoi cette section.</b> Tout le reste de cette page repose sur un
-    panel constitué à la main : vous devez nous croire sur parole. Les données ci-dessous, non. Elles sont
-    publiques, sous licence explicite, interrogeables sans inscription — <b>vous pouvez refaire la requête</b>.
-    C'est la seule couche du module qui soit vérifiable de bout en bout par le lecteur.</p>
+    <!-- RACCOURCI. Quatre phrases disaient une seule chose : ces données-là,
+         vous pouvez les refaire vous-même. Le reste — « vous devez nous croire
+         sur parole », « la seule couche vérifiable » — répétait l'idée en la
+         retournant. La liste complète des sources est en fin de page. -->
+    <p class="note" style="margin-top:0">Publiques, sous licence explicite, interrogeables sans
+    inscription : <b>vous pouvez refaire la requête</b>. C'est la seule couche de cette page qu'un
+    lecteur vérifie de bout en bout, sans nous.</p>
     <div id="socle-mesures" class="socle-grille">
       <p class="note" style="margin:0">Interrogation des sources ouvertes en cours…</p>
     </div>
     <div id="socle-sources"></div>
     <div id="socle-cas"></div>
-    <p class="note"><b>Contexte, pas preuve.</b> Aucune mesure satellitaire ne démontre l'usage d'une IA :
-    ces couches décrivent le sol et l'activité d'observation. Elles figurent ici parce qu'elles sont la
-    matière première d'une partie des systèmes recensés — jamais comme indice indirect de leur existence.</p>
+    <p class="note"><b>Contexte, pas preuve.</b> Aucune mesure satellitaire ne démontre l'usage d'une
+    IA. Ces couches sont la matière première d'une partie des systèmes recensés — jamais l'indice
+    de leur existence.</p>
   </div>
 </section>
 
@@ -3399,6 +3413,23 @@ engagements publics) sont imputés nominativement.</div>
   <div class="panel-body" id="src-corps"></div>
 </section>
 
+<!-- ══ 6 bis. TOUTES LES SOURCES, RÉCOLTÉES ══════════════════════════════
+     La section précédente porte une sélection commentée, écrite à la main.
+     Celle-ci porte TOUT ce que les moteurs déclarent, récolté à chaque appel :
+     ajouter une source à un module suffit à la faire paraître ici. Les deux ne
+     font pas double emploi — l'une explique, l'autre recense et n'oublie rien.
+     Placée en dernier, parce qu'on y vient pour vérifier, pas pour lire. -->
+<section class="panel" id="s-registre" aria-labelledby="t-registre">
+  <div class="panel-head">
+    <span class="panel-title" id="t-registre">Toutes les sources, avec leurs liens</span>
+    <span class="panel-note" id="reg-note">récolté sur les moteurs — chargement…</span>
+  </div>
+  <div class="panel-body">
+    <div id="reg-couv"></div>
+    <div id="reg-corps"></div>
+  </div>
+</section>
+
 <!-- ══ 7. MÉTHODOLOGIE ══ -->
 <section class="panel" id="s-methodo" aria-labelledby="t-methodo">
   <div class="panel-head"><span class="panel-title" id="t-methodo">Méthodologie, limites, référentiels</span>
@@ -3573,7 +3604,8 @@ if(/[?&]embed=1(&|$)/.test(window.location.search)){document.body.classList.add(
    celle-ci mesure — le PARC cartographié, pas le visiteur. */
 var MODULE_VUES = {
   panorama: ["s-carte", "s-signaux", "s-cas", "s-lectures",
-             "s-implantation", "s-prospect", "s-methodo", "s-socle", "s-sources"],
+             "s-implantation", "s-prospect", "s-methodo", "s-socle", "s-sources",
+             "s-registre"],
   /* « s-equipements » figure dans LES DEUX vues, et c'est voulu : le même
      calcul répond à la question du budget et à celle du carbone. Le placer
      dans une seule obligerait à passer d'une vue à l'autre pour lire deux
@@ -9665,6 +9697,65 @@ var SRC_DONNEES = [
    verifiable, il serait promotionnel. */
 var SRC_VERIF = null;
 
+/* ── TOUTES LES SOURCES, RÉCOLTÉES ────────────────────────────────────────
+   La section précédente est une sélection commentée, écrite à la main : elle
+   explique. Celle-ci recense, et elle n'oublie rien — le serveur relit les
+   moteurs à chaque appel. Mesuré avant d'écrire ce bloc : la liste à la main
+   portait dix-sept entrées quand les moteurs et le registre de vérification en
+   déclaraient trente-huit. Une liste à la main ne se trompe pas le jour où on
+   l'écrit ; elle se trompe le jour où quelqu'un ajoute une source ailleurs. */
+function registreSources(){
+  fetch("/api/sources", { credentials: "same-origin" })
+    .then(function(r){ return r.json(); })
+    .then(function(j){
+      if(!j || !j.ok) throw new Error("indisponible");
+      var k = j.couverture || {};
+      setHTML("reg-note", esc(k.total + " sources · " + k.avec_lien + " ouvrables d’un clic"));
+      /* CE QU'ON PEUT ROUVRIR, DIT AVANT LA LISTE. C'est le seul chiffre qui
+         compte pour qui vient chercher des sources vérifiables, et c'est
+         celui qu'une liste écrite à la main ne donne jamais. */
+      setHTML("reg-couv",
+        '<p class="note" style="margin-top:0">' + esc(k.dit) + "</p>"
+        + '<p class="note" style="margin-top:6px;color:var(--muted2)">' + esc(j.limite) + "</p>");
+
+      var tout = (j.sources || []).concat(j.verification || []);
+      var dom = {};
+      tout.forEach(function(x){ (dom[x.domaine] = dom[x.domaine] || []).push(x); });
+      var h = Object.keys(dom).sort(function(a, b){
+        return dom[b].length - dom[a].length || a.localeCompare(b, "fr");
+      }).map(function(d){
+        return '<h3 class="pv-sh">' + esc(d) + ' <span class="reg-n">'
+          + dom[d].length + "</span></h3><ul class=\"reg-l\">"
+          + dom[d].map(function(x){
+              return "<li>"
+                + (x.lien
+                    ? '<a href="' + esc(x.lien) + '" target="_blank" rel="noopener">'
+                      + esc(x.titre) + "</a>"
+                    : "<b>" + esc(x.titre) + "</b>")
+                + '<span class="reg-e">' + esc(x.editeur) + "</span>"
+                /* CE QUI N'A PAS DE LIEN LE DIT, et dit pourquoi : une synthèse
+                   du cabinet n'a aucune publication à citer — ce n'est pas un
+                   manquement — tandis qu'un éditeur nommé sans adresse est un
+                   trou qui reste à combler. Les confondre serait injuste dans
+                   un sens et complaisant dans l'autre. */
+                + (x.lien ? ""
+                    : '<span class="reg-sans">' + (x.propre
+                        ? "synthèse du cabinet — aucune publication à citer"
+                        : "adresse non enregistrée") + "</span>")
+                + "</li>";
+            }).join("")
+          + "</ul>";
+      }).join("");
+      setHTML("reg-corps", h);
+    })
+    .catch(function(){
+      setHTML("reg-note", "registre indisponible");
+      setHTML("reg-corps", '<p class="note" style="margin:0">Le registre des sources '
+        + "n’a pas répondu. Les sources commentées de la section précédente "
+        + "restent lisibles.</p>");
+    });
+}
+
 function renderSources(){
   var lignes = SRC_CONSTANTES.map(function(c){
     return "<tr><th scope=\"row\">" + esc(c.g) + "</th>"
@@ -9775,6 +9866,7 @@ function renderSources(){
   }
 
   setHTML("src-corps", h);
+  registreSources();
   /* Le registre est servi par /api/factcheck et rendu par le composant partage :
      les trois pages qui l'affichent lisent la MEME source, sans recopie. */
   if(window.factcheck){

@@ -2793,6 +2793,25 @@ def page_bascule():
 import factcheck  # noqa: E402
 
 
+import registre_sources  # noqa: E402
+
+
+@app.route('/api/sources', methods=['GET'])
+@rate_limit(limit=60, window=60)
+@reserve_abonne_api
+def api_registre_sources():
+    """Toutes les sources declarees par les moteurs, RECOLTEES et non recopiees.
+
+    La page portait une liste ecrite a la main. Une liste ecrite a la main ne
+    se trompe pas le jour ou on l'ecrit : elle se trompe le jour ou quelqu'un
+    ajoute une source ailleurs. Celle-ci se reconstruit a chaque appel."""
+    try:
+        return jsonify(registre_sources.etat())
+    except Exception as e:  # noqa: BLE001
+        logger.error(f'REGISTRE_SOURCES_ERR: {e}')
+        return jsonify({'ok': False, 'erreur': 'registre indisponible'}), 503
+
+
 @app.route('/api/factcheck', methods=['GET'])
 @rate_limit(limit=60, window=60)
 @reserve_abonne_api
@@ -4123,6 +4142,7 @@ def health_check():
         # controle qui ne tourne jamais : on les branche tous ici.
         'implantation': implantation.sante(),
         'climat_2050': climat_2050.sante(),
+        'registre_sources': registre_sources.sante(),
         'peremption': peremption.sante(),
         'gouvernance': gouvernance.sante(),
     }
