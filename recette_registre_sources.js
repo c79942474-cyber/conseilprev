@@ -175,6 +175,16 @@ const titre = t => console.log('\n══ ' + t + ' ══\n');
   // ── 5 ───────────────────────────────────────────────────────────────────
   titre('5. Le socle a été raccourci sans perdre ce qu’il portait');
 
+  /* LE TABLEAU DU SOCLE N'EST PAS SERVI AVEC LA PAGE. Le registre l'est ; le
+     socle, lui, attend `/api/donnees-ouvertes`, qui interroge trois services
+     externes et met plusieurs secondes à rendre la main. Ne pas l'attendre
+     faisait tomber le contrôle sur un tableau parfaitement rendu, une seconde
+     plus tard — ma faute, pas celle de la page. L'attente reste bornée : si le
+     tableau ne vient jamais, le contrôle tombe, et c'est ce qu'on veut. */
+  await pg.waitForFunction(
+    () => document.querySelectorAll('.socle-t tbody tr').length > 0,
+    null, { timeout: 30000 }).catch(() => {});
+
   const socle = await sur(() => {
     const s = document.getElementById('s-socle');
     if (!s) return { err: 'section absente' };

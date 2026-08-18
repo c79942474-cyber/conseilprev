@@ -2793,7 +2793,35 @@ def page_bascule():
 import factcheck  # noqa: E402
 
 
+import base_carbone  # noqa: E402
 import registre_sources  # noqa: E402
+
+
+@app.route('/api/base-carbone', methods=['GET'])
+@rate_limit(limit=60, window=60)
+@reserve_abonne_api
+def api_base_carbone():
+    """La Base Carbone ADEME, et la confrontation de nos facteurs aux siens.
+
+    ?table=empreinte confronte la table d'intensites employee par le module
+    d'empreinte. Le module NE SUBSTITUE RIEN : il sert les deux valeurs et
+    nomme l'usage de chacune."""
+    try:
+        if not base_carbone.disponible():
+            return jsonify({'ok': False,
+                            'erreur': 'Base Carbone absente du depot'}), 503
+        out = {'ok': True, 'version': base_carbone.VERSION,
+               'source': base_carbone.SOURCE,
+               'electricite': base_carbone.electricite()}
+        if (request.args.get('table') or '') == 'empreinte':
+            import empreinte_sites
+            out['confrontation'] = base_carbone.confronter(
+                empreinte_sites.INTENSITE,
+                (request.args.get('frontiere') or 'production'))
+        return jsonify(out)
+    except Exception as e:  # noqa: BLE001
+        logger.error(f'BASE_CARBONE_ERR: {e}')
+        return jsonify({'ok': False, 'erreur': 'base indisponible'}), 503
 
 
 @app.route('/api/sources', methods=['GET'])
@@ -4143,6 +4171,7 @@ def health_check():
         'implantation': implantation.sante(),
         'climat_2050': climat_2050.sante(),
         'registre_sources': registre_sources.sante(),
+        'base_carbone': base_carbone.sante(),
         'peremption': peremption.sante(),
         'gouvernance': gouvernance.sante(),
     }

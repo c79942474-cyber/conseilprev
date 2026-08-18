@@ -676,6 +676,50 @@ CONTROLES.append({
     ],
 })
 
+# ── AJOUT D'AOÛT 2026 : LA BASE CARBONE ADEME, ET POURQUOI ELLE NE REMPLACE
+#    PAS NOS FACTEURS
+#
+# Le réflexe est naturel — l'ADEME est la référence réglementaire française,
+# donc on substitue. Mesuré, ce serait une erreur : ce contrôle existe pour
+# qu'elle ne se fasse pas par inadvertance.
+CONTROLES.append({
+    "cle": "ademe_base_carbone",
+    "sujet": "Facteurs d'électricité : Base Carbone ADEME contre moyennes annuelles",
+    "portee": ["panorama", "empreinte"],
+    "affirmation": "Les facteurs d'émission de l'électricité employés par ce site "
+                   "devraient être ceux de la Base Carbone de l'ADEME.",
+    "verdict": "plausible",
+    "avant": "",
+    "constat": "La Base Carbone v22.0 a été versée au dépôt et confrontée ligne à "
+               "ligne à la table employée, août 2026 : 31 pays comparés, écart "
+               "MÉDIAN de 41,7 %. France 79,1 contre 45, Allemagne 461 contre "
+               "355, Estonie 1010 contre 415. L'explication est le millésime : "
+               "les facteurs d'électricité étrangère de cette version portent "
+               "une validité de décembre 2017 pour la plupart des pays, "
+               "décembre 2019 pour six d'entre eux, quand la table employée suit "
+               "Ember 2024. Les réseaux européens se sont décarbonés vite dans "
+               "l'intervalle. AUCUNE DES DEUX N'EST FAUSSE, et la substitution "
+               "rendrait le calcul MOINS juste selon l'usage : pour un bilan "
+               "réglementaire français (BEGES, art. L229-25), c'est le facteur "
+               "ADEME qui fait foi quel que soit son âge ; pour comparer des "
+               "pays en 2026 ou dimensionner un projet neuf, un facteur de 2017 "
+               "décrit un réseau qui n'existe plus. Les deux sont donc servies, "
+               "avec l'usage de chacune. Réserve de méthode : la MOYENNE des "
+               "écarts relatifs vaut 521 %, tirée par l'Islande dont le facteur "
+               "ADEME est de 0,2 gCO2e/kWh — un écart relatif sur un "
+               "dénominateur quasi nul est exact et sans portée ; c'est la "
+               "médiane qui est publiée.",
+    "verifie_le": "2026-08-18",
+    "source": {"titre": "Base Carbone® v22.0 — facteurs d'émission publics",
+               "editeur": "ADEME (Agence de la transition écologique)",
+               "url": "https://base-empreinte.ademe.fr/"},
+    "corroborations": [
+        {"titre": "Yearly Electricity Data — CO2 intensity",
+         "editeur": "Ember",
+         "url": "https://ember-energy.org/data/yearly-electricity-data/"},
+    ],
+})
+
 def par_portee(portee=None):
     """Contrôles d'une page, triés du plus défavorable au plus favorable.
 
