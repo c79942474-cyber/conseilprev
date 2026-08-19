@@ -517,9 +517,39 @@ def pue_de(mode, classe_ashrae=None, pue_impose=None):
     site, qu'aucune moyenne nationale ne remplace."""
     bande = list(REFROIDISSEMENT[mode]["pue"])
     if pue_impose:
-        v = _f(max(1.02, min(2.5, float(pue_impose))), 2)
-        return [v, v], "saisi", ("PUE imposé par le cahier des charges : %s. La bande de "
-                                 "la famille (%s à %s) n'est pas retenue."
+        brut = float(pue_impose)
+        v = _f(max(1.02, min(2.5, brut)), 2)
+        # LE PUE IMPOSÉ EST RETENU, MAIS PLUS EN SILENCE.
+        #
+        # LE DÉFAUT MESURÉ. Ce chemin acceptait n'importe quelle valeur entre
+        # 1,02 et 2,5 sans jamais la confronter à la famille de refroidissement
+        # retenue : un PUE de 1,05 annoncé sur une famille dont la bande
+        # commence à 1,25 passait sans une ligne. Or c'est exactement le
+        # dossier qu'un maître d'ouvrage apporte — une promesse de contrat — et
+        # exactement ce qu'une étude sert à instruire.
+        #
+        # ON NE LE REJETTE PAS : un cahier des charges peut imposer une valeur
+        # que la famille ne porte pas, et c'est alors une CONTRAINTE à tenir,
+        # pas une erreur à corriger. Ce module publie l'écart et le laisse
+        # décider — comme il publie l'écart d'arrondi ailleurs plutôt que de le
+        # dissoudre.
+        if v < bande[0] or v > bande[1]:
+            sens = "en deçà de" if v < bande[0] else "au-delà de"
+            ecart = (bande[0] - v) if v < bande[0] else (v - bande[1])
+            note = ("PUE imposé par le cahier des charges : %s. Il tombe %s la "
+                    "bande de la famille « %s » (%s à %s), de %s point. CE "
+                    "N'EST PAS UNE ERREUR EN SOI — un cahier des charges peut "
+                    "imposer ce que la famille ne porte pas d'ordinaire — mais "
+                    "c'est alors un ENGAGEMENT à tenir, pas une hypothèse : il "
+                    "suppose un équipement, une classe d'air ou un site que la "
+                    "bande de famille ne suppose pas, et il doit être justifié "
+                    "avant d'être repris dans une offre."
+                    % (_fr(v), sens, REFROIDISSEMENT[mode]["nom"],
+                       _fr(bande[0]), _fr(bande[1]), _fr(_f(ecart, 2))))
+            return [v, v], "saisi_hors_bande", note
+        return [v, v], "saisi", ("PUE imposé par le cahier des charges : %s. Il tient "
+                                 "dans la bande de la famille (%s à %s), qui n'est "
+                                 "donc pas retenue mais ne le contredit pas."
                                  % (_fr(v), _fr(bande[0]), _fr(bande[1])))
     A = CLASSES_ASHRAE.get(classe_ashrae or "")
     if not A:
