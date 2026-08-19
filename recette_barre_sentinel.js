@@ -297,6 +297,205 @@ const RELEVE = () => {
   ok('…et un titre reste retrouvable par son texte',
      !survit.err && survit.parTexte === 1, survit.err);
 
+  // ── 8 ───────────────────────────────────────────────────────────────────
+  titre('8. La barre s’atteint au clavier');
+
+  /* LE DÉFAUT MESURÉ : ZÉRO ONGLET SUR CINQUANTE. Les entrées sont des <div>
+     porteurs d'un `onclick`. Sans `tabindex`, aucune n'était atteignable au
+     clavier ni annoncée comme actionnable — WCAG 2.1.1, niveau A : la barre
+     entière était inutilisable sans souris. */
+  const clav = await sur(() => {
+    const it = [...document.querySelectorAll('.sb-nav .sb-item')];
+    return {
+      n: it.length,
+      tabulables: it.filter(x => x.tabIndex >= 0).length,
+      avecRole: it.filter(x => x.getAttribute('role') === 'button').length,
+      courantAnnonce: document.querySelectorAll('.sb-item[aria-current="page"]').length,
+      courantPeint: document.querySelectorAll('.sb-item.on').length
+    };
+  });
+  ok('LE POINT QUI DÉCIDE — les cinquante onglets sont atteignables au clavier',
+     !clav.err && clav.n > 0 && clav.tabulables === clav.n, clav.err,
+     clav.err ? '' : clav.tabulables + ' / ' + clav.n);
+  ok('…et annoncés comme actionnables',
+     !clav.err && clav.avecRole === clav.n, clav.err,
+     clav.err ? '' : clav.avecRole + ' / ' + clav.n);
+  ok('…l’onglet courant est ANNONCÉ, pas seulement peint',
+     !clav.err && clav.courantAnnonce === clav.courantPeint && clav.courantPeint === 1,
+     clav.err || (clav.courantAnnonce + ' annoncé(s) pour ' + clav.courantPeint + ' peint(s)'));
+
+  /* …ET ON L'OUVRE VRAIMENT. Un `tabindex` sans activation promettrait un
+     accès qu'on n'a pas : on atteindrait l'onglet sans pouvoir l'ouvrir. Ce
+     contrôle-ci appuie sur les touches. */
+  const avant = await sur(() => (document.querySelector('.page.on') || {}).id || null);
+  await pg.evaluate(() => {
+    const it = [...document.querySelectorAll('.sb-nav .sb-item')];
+    const cible = it.find(x => /Radar des risques/.test(x.textContent));
+    if (cible) cible.focus();
+  });
+  const focalise = await sur(() => (document.activeElement || {}).className || '');
+  await pg.keyboard.press('Enter');
+  await pg.waitForTimeout(600);
+  const apresEntree = await sur(() => (document.querySelector('.page.on') || {}).id || null);
+  ok('la tabulation atteint réellement un onglet',
+     typeof focalise === 'string' && /sb-item/.test(focalise), 'focus sur ' + focalise);
+  ok('LE POINT QUI DÉCIDE — Entrée ouvre l’onglet focalisé',
+     apresEntree === 'p-radar' && avant !== apresEntree,
+     'avant ' + avant + ', après ' + apresEntree, 'page ' + apresEntree);
+
+  /* L'ESPACE AUSSI, et il ne doit pas faire défiler la page sous le doigt. */
+  await pg.evaluate(() => {
+    const c = [...document.querySelectorAll('.sb-nav .sb-item')]
+      .find(x => /Comparateur/.test(x.textContent));
+    if (c) c.focus();
+  });
+  const defAvant = await sur(() => window.scrollY);
+  await pg.keyboard.press(' ');
+  await pg.waitForTimeout(600);
+  const apresEspace = await sur(() => ({
+    page: (document.querySelector('.page.on') || {}).id || null, y: window.scrollY }));
+  ok('…Espace aussi, et il ne fait pas défiler la page',
+     apresEspace.page === 'p-comp' && apresEspace.y === defAvant,
+     'page ' + apresEspace.page + ', défilement ' + defAvant + ' → ' + apresEspace.y);
+
+  const focusVu = await sur(() => {
+    const it = document.querySelector('.sb-nav .sb-item');
+    it.focus();
+    const cs = getComputedStyle(it, null);
+    return { contour: cs.outlineStyle + ' ' + cs.outlineWidth };
+  });
+  ok('…et le focus se VOIT (WCAG 2.4.7)',
+     !focusVu.err && /solid/.test(focusVu.contour) && !/^0/.test(focusVu.contour.split(' ')[1]),
+     focusVu.err || focusVu.contour, focusVu.err ? '' : focusVu.contour);
+
+  // ── 9 ───────────────────────────────────────────────────────────────────
+  titre('9. Le filtre — deux lettres plutôt que deux écrans de défilement');
+
+  const champ = await sur(() => {
+    const i = document.getElementById('sb-filtre');
+    if (!i) return { absent: true };
+    const l = document.querySelector('label[for="sb-filtre"]');
+    return { absent: false, type: i.type,
+             etiquetee: !!l && l.textContent.trim().length > 3,
+             etiquette: l ? l.textContent.trim() : null,
+             compteurLive: (document.getElementById('sb-filtre-cpt') || {})
+               .getAttribute ? document.getElementById('sb-filtre-cpt')
+               .getAttribute('aria-live') : null };
+  });
+  ok('le champ de filtre est là et porte une étiquette',
+     !champ.err && champ.absent === false && champ.etiquetee === true,
+     champ.err || (champ.absent ? 'absent' : 'sans étiquette'),
+     champ.err || champ.absent ? '' : '« ' + champ.etiquette +' »');
+  ok('…et son compte se dit aux aides vocales',
+     !champ.err && champ.compteurLive === 'polite', champ.err || String(champ.compteurLive));
+
+  const filtre = async (q) => {
+    await pg.evaluate(v => {
+      const i = document.getElementById('sb-filtre');
+      i.value = v; window.sbFiltrer(v);
+    }, q);
+    await pg.waitForTimeout(150);
+    return await sur(() => {
+      const it = [...document.querySelectorAll('.sb-nav .sb-item')];
+      const secs = [...document.querySelectorAll('.sb-nav .sb-section')];
+      const visibles = it.filter(x => x.offsetParent !== null);
+      const secVisibles = secs.filter(x => x.offsetParent !== null);
+      /* UNE RUBRIQUE VISIBLE SANS AUCUN ONGLET serait un titre orphelin :
+         le lecteur croirait le groupe vide alors qu'il est masqué. */
+      const orphelines = secVisibles.filter(sec => {
+        let n = sec.nextElementSibling, k = 0;
+        while (n && !n.classList.contains('sb-section')) {
+          if (n.classList.contains('sb-item') && n.offsetParent !== null) k++;
+          n = n.nextElementSibling;
+        }
+        return k === 0;
+      }).map(x => x.textContent.trim());
+      const cpt = document.getElementById('sb-filtre-cpt');
+      return { total: it.length, visibles: visibles.length,
+               rubriques: secVisibles.length, orphelines,
+               dit: cpt ? cpt.textContent.trim() : null,
+               premiers: visibles.slice(0, 3).map(x => x.textContent.trim()),
+               pagerVisible: window.pagerGetSections ? null : null };
+    });
+  };
+
+  const tout = await filtre('');
+  ok('à vide, tout est là', !tout.err && tout.visibles === tout.total, tout.err,
+     tout.err ? '' : tout.visibles + ' onglet(s), ' + tout.rubriques + ' rubrique(s)');
+
+  const fRisque = await filtre('risque');
+  ok('LE POINT QUI DÉCIDE — le filtre réduit vraiment la liste',
+     !fRisque.err && fRisque.visibles > 0 && fRisque.visibles < tout.total,
+     fRisque.err, fRisque.err ? '' : fRisque.visibles + ' sur ' + fRisque.total);
+  ok('…et aucune rubrique ne reste en titre orphelin',
+     !fRisque.err && fRisque.orphelines.length === 0,
+     fRisque.err || (fRisque.orphelines || []).join(', '));
+  /* LE COMPTE PUBLIÉ EST RELU DANS LE DOM : s'il était calculé à part, les
+     deux pourraient diverger sans que rien ne le dise. */
+  ok('…et le compte annoncé est celui qu’on peut recompter',
+     !fRisque.err && fRisque.dit === (fRisque.visibles + ' onglet'
+       + (fRisque.visibles > 1 ? 's' : '') + ' sur ' + fRisque.total),
+     fRisque.err || ('annoncé « ' + fRisque.dit + ' » pour ' + fRisque.visibles),
+     fRisque.err ? '' : '« ' + fRisque.dit + ' »');
+
+  /* SANS ACCENTS, SINON LE FILTRE NE SERT QU'À CEUX QUI SAVENT DÉJÀ ÉCRIRE
+     L'INTITULÉ EXACT. */
+  const fSans = await filtre('evaluer');
+  const fAvec = await filtre('évaluer');
+  ok('LE POINT QUI DÉCIDE — « evaluer » trouve autant que « évaluer »',
+     !fSans.err && !fAvec.err && fSans.visibles === fAvec.visibles && fSans.visibles > 0,
+     'sans accent ' + fSans.visibles + ', avec accent ' + fAvec.visibles,
+     fSans.err ? '' : fSans.visibles + ' onglet(s) dans les deux cas');
+
+  /* LE NOM DE LA RUBRIQUE COMPTE AUSSI : qui tape « rgpd » attend le groupe
+     entier, pas seulement les onglets qui répètent le mot. */
+  const fRgpd = await filtre('rgpd');
+  ok('…et le nom d’une rubrique ramène TOUT son groupe',
+     !fRgpd.err && fRgpd.visibles >= 9, fRgpd.err,
+     fRgpd.err ? '' : fRgpd.visibles + ' onglet(s) pour « rgpd »');
+
+  const fRien = await filtre('zzzzq');
+  ok('quand rien ne correspond, il le DIT au lieu de laisser une colonne vide',
+     !fRien.err && fRien.visibles === 0 && /aucun/.test(fRien.dit || ''),
+     fRien.err || ('« ' + fRien.dit + ' »'), fRien.err ? '' : '« ' + fRien.dit + ' »');
+
+  /* LE PAGER NE DOIT PAS SAUTER : replié, `offsetTop` vaut zéro et les flèches
+     précédent/suivant menaient toutes au même endroit. */
+  const pager = await sur(() => {
+    const vues = window.pagerGetSections ? window.pagerGetSections() : [];
+    return { n: vues.length, tops: vues.map(s => s.offsetTop) };
+  });
+  ok('…et les flèches de rubrique ne comptent que ce qui est visible',
+     !pager.err && pager.n === 0, pager.err,
+     pager.err ? '' : pager.n + ' rubrique(s) retenue(s) quand tout est masqué');
+
+  const retour = await filtre('');
+  ok('vider le champ rend TOUT le menu',
+     !retour.err && retour.visibles === tout.total && retour.dit === '',
+     retour.err, retour.err ? '' : retour.visibles + ' onglet(s)');
+
+  // ── 10 ──────────────────────────────────────────────────────────────────
+  titre('10. Rien de flottant ne recouvre plus la barre');
+
+  const flot = await sur(() => {
+    const sb = document.querySelector('.sb');
+    const r = sb.getBoundingClientRect();
+    const gene = [];
+    ['nav-prev', 'nav-pos', 'nav-next', 'nav-top', 'nav-bottom'].forEach(id => {
+      const e = document.getElementById(id);
+      if (!e) return;
+      const b = e.getBoundingClientRect();
+      if (b.width && b.height && b.left < r.right - 1 && b.right > r.left + 1)
+        gene.push(id + ' à x=' + Math.round(b.left));
+    });
+    return { gene, borddroit: Math.round(r.right) };
+  });
+  ok('LE POINT QUI DÉCIDE — aucun repère flottant ne masque un titre de '
+     + 'rubrique',
+     !flot.err && flot.gene.length === 0,
+     flot.err || (flot.gene || []).join(', '),
+     flot.err ? '' : 'barre jusqu’à x=' + flot.borddroit);
+
   ok('aucune erreur de script sur toute la manœuvre', err.length === 0,
      err.slice(0, 2).join(' | '));
 
