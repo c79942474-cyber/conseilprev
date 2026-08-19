@@ -237,6 +237,58 @@ ok("la Suède porte les DEUX régimes, et le texte le dit",
 ok("la Finlande et la Suède sont donc classées faibles en submersion aux deux horizons",
    all(C.TABLES["submersion"][p][:2] == ("faible", "faible") for p in ("FI", "SE")))
 
+print("\n══ 6 bis. Les chiffres du GIEC, confrontés aux documents ══\n")
+
+# CONFRONTÉ AU RÉSUMÉ AR6 GROUPE III (SPM, 2022), page par page. Cinq chiffres
+# y sont repris ; ils ont été relus dans le document et non de mémoire.
+ok("la définition C1 est celle du tableau SPM.1",
+   "1,5 °C en 2100 avec une probabilité supérieure à 50 %"
+   in C.TRAJECTOIRES["C1"]["definition"]
+   and "au plus 67 %" in C.TRAJECTOIRES["C1"]["definition"])
+ok("la définition C3 est celle du tableau SPM.1",
+   "pic de réchauffement à 2 °C" in C.TRAJECTOIRES["C3"]["definition"]
+   and "supérieure à 67 %" in C.TRAJECTOIRES["C3"]["definition"])
+ok("C1 atteint 1,2 à 1,4 °C en 2100 selon le zéro net GES (§ C.2.4)",
+   "1,2 à 1,4" in C.TRAJECTOIRES["C1"]["atteint_2100"])
+ok("les engagements pré-COP26 mènent à 2,8 °C [2,1-3,4] (§ B.6, confiance moyenne)",
+   "2,8" in C.TRAJECTOIRES["ndc"]["atteint_2100"]
+   and "2,1" in C.TRAJECTOIRES["ndc"]["atteint_2100"]
+   and "3,4" in C.TRAJECTOIRES["ndc"]["atteint_2100"])
+ok("les politiques de fin 2020 mènent à 3,2 °C [2,2-3,5] (§ C.1, confiance moyenne)",
+   "3,2" in C.TRAJECTOIRES["politiques"]["atteint_2100"]
+   and "2,2" in C.TRAJECTOIRES["politiques"]["atteint_2100"]
+   and "3,5" in C.TRAJECTOIRES["politiques"]["atteint_2100"])
+
+# ── LA VALEUR 2030 SE REFAIT, ELLE NE SE RECOPIE PAS ───────────────────────
+# LE DÉFAUT MESURÉ : écrite 0,10 m en dur, elle ne se reproduisait PAS par la
+# méthode déclarée juste au-dessus — qui rend 0,116 m. Treize pour cent et
+# demi d'écart, dans le sens qui minimise l'aléa, sur la seule colonne du
+# module qui se lise comme une cote. Ce contrôle refait le calcul plutôt que
+# de figer un second nombre à côté du premier : figer le résultat attendu
+# reproduirait exactement la faute qu'on corrige.
+_base = 2004.5   # centre de la moyenne 1995-2014, base du GIEC
+_med50 = sum(d[2050][0] for d in C.MER.values()) / len(C.MER)
+_attendu = round(_med50 * (2030 - _base) / (2050 - _base), 3)
+ok("la valeur 2030 SE REPRODUIT par la méthode que le module déclare",
+   abs(C.MER_2030["valeur_m"] - _attendu) < 1e-9,
+   "publiée %s, méthode %s" % (C.MER_2030["valeur_m"], _attendu))
+ok("…et elle reste encadrée par les trois scénarios interpolés un à un",
+   min(d[2050][0] for d in C.MER.values()) * (2030 - _base) / (2050 - _base)
+   <= C.MER_2030["valeur_m"]
+   <= max(d[2050][0] for d in C.MER.values()) * (2030 - _base) / (2050 - _base))
+ok("…la réserve dit toujours que l'interpolation SOUS-ESTIME",
+   "sous-estime" in C.MER_2030["reserve"])
+ok("…et l'horizon 2030 s'annonce comme CALCULÉ, jamais comme publié",
+   C.mer(2030)["nature"] == "calcule" and C.mer(2050)["nature"] == "referentiel")
+
+# L'ÉCART ENTRE SCÉNARIOS À 2050 EST LE FAIT QUI DÉCIDE, et il se recalcule.
+_e50 = max(d[2050][0] for d in C.MER.values()) - min(d[2050][0] for d in C.MER.values())
+_e100 = max(d[2100][0] for d in C.MER.values()) - min(d[2100][0] for d in C.MER.values())
+ok("à 2050 les scénarios ne se séparent que de 4 cm — le choix ne protège pas encore",
+   abs(_e50 - 0.04) < 0.005, "%.2f m" % _e50)
+ok("…alors qu'à 2100 ils se séparent de 33 cm",
+   abs(_e100 - 0.33) < 0.005, "%.2f m" % _e100)
+
 print("\n══ 7. Ce que la colonne « pluie » dit, et qui vaut pour tous ══\n")
 
 # LA thèse du module : l'averse extrême monte partout, y compris là où le
@@ -247,6 +299,21 @@ ok("aucun pays d'Europe n'est classé faible aux précipitations extrêmes",
    not faibles_pluie, faibles_pluie)
 ok("…et le module l'écrit comme son information principale",
    "Aucun pays" in C.ALEAS["pluie"]["pourquoi"])
+# LE DÉFAUT MESURÉ, ET IL VENAIT DE LA PROSE, PAS DES DONNÉES. Le texte
+# affirmait que l'aléa « monte PARTOUT ». Le SR1.5 (§ B.1) relève les fortes
+# précipitations en hausse « dans plusieurs régions », en confiance MOYENNE, et
+# assigne une confiance FAIBLE aux différences régionales ailleurs (§ B.1.3).
+# Les classes du module, elles, n'ont jamais prétendu à l'uniformité : quatre
+# cases y sont en confiance faible. C'est la phrase qui dépassait sa table.
+ok("le texte ne dit plus « partout » — le GIEC ne l'écrit pas",
+   "PARTOUT" not in C.ALEAS["pluie"]["pourquoi"]
+   and "partout" not in C.ALEAS["pluie"]["pourquoi"])
+ok("…il cite la portée que le GIEC donne réellement",
+   "plusieurs régions" in C.ALEAS["pluie"]["pourquoi"]
+   and "SR1.5" in C.ALEAS["pluie"]["pourquoi"])
+ok("…et la table le confirme : la confiance n'y est pas uniforme",
+   len({v[2] for v in C.TABLES["pluie"].values()}) > 1
+   and sum(1 for v in C.TABLES["pluie"].values() if v[2] == "faible") == 4)
 ok("les pays méditerranéens, qui s'assèchent, y montent quand même",
    all(C.NIVEAUX[C.TABLES["pluie"][p][1]]["rang"] >= 3 for p in ("ES", "GR", "PT")))
 ok("les pays nordiques aussi — le nord n'est pas au calme",

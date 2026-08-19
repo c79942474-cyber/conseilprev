@@ -141,11 +141,17 @@ ALEAS = {
     "pluie": {
         "nom": "Précipitations extrêmes et ruissellement",
         "atteint": "les locaux techniques enterrés, les chemins de câbles, les groupes électrogènes",
-        "pourquoi": "C'est l'aléa qui monte PARTOUT, y compris là où le total "
-                    "annuel baisse : une atmosphère plus chaude porte plus de "
-                    "vapeur, donc des averses plus intenses même en climat qui "
-                    "s'assèche. Aucun pays d'Europe n'est classé faible ici, et "
-                    "c'est l'information principale de cette colonne.",
+        "pourquoi": "Aucun pays d'Europe n'est classé faible ici, et c'est "
+                    "l'information principale de cette colonne : une atmosphère "
+                    "plus chaude porte plus de vapeur, donc des averses plus "
+                    "intenses même là où le cumul annuel baisse. LE SENS EST "
+                    "ÉTABLI, LA CARTE NE L'EST PAS — le GIEC (SR1.5, § B.1 et "
+                    "B.1.3) relève l'augmentation des fortes précipitations "
+                    "« dans plusieurs régions », en confiance moyenne, et "
+                    "attribue une confiance FAIBLE aux différences régionales "
+                    "ailleurs. Cette colonne dit donc un niveau relatif, pas "
+                    "une uniformité : la confiance est portée case par case, et "
+                    "quatre pays y sont en confiance faible.",
     },
     "glissement": {
         "nom": "Glissement de terrain",
@@ -202,8 +208,27 @@ MER = {
 # L'AR6 ne publie PAS 2030 : ses horizons de référence sont 2050, 2100 et 2150.
 # On sert donc un ordre de grandeur interpolé, et on le dit — plutôt que de
 # laisser une case vide sur l'horizon que le comparateur propose.
+def _mer_2030():
+    """LA VALEUR EST RECALCULÉE, ELLE N'EST PLUS ÉCRITE À LA MAIN.
+
+    LE DÉFAUT MESURÉ. Elle valait 0,10 m en dur, et elle NE SE REPRODUISAIT PAS
+    par la méthode écrite juste à côté : l'interpolation déclarée rend 0,116 m,
+    soit 13,7 % de plus. Un nombre figé à côté de la formule qui le produit finit
+    toujours par s'en écarter, et rien ne le signale — d'autant qu'ici l'écart
+    allait dans le sens qui MINIMISE l'aléa, sur la seule colonne du module que
+    l'on peut lire comme une cote.
+
+    La moyenne 1995-2014 est centrée sur 2004,5 : c'est de là que part la droite.
+    « Tous scénarios confondus » est pris au mot — la moyenne des trois médianes
+    à 2050 — parce qu'ils ne se distinguent que de 4 cm à cet horizon.
+    """
+    base = 2004.5
+    mediane_2050 = sum(d[2050][0] for d in MER.values()) / len(MER)
+    return round(mediane_2050 * (2030 - base) / (2050 - base), 3)
+
+
 MER_2030 = {
-    "valeur_m": 0.10,
+    "valeur_m": _mer_2030(),
     "nature": "calcule",
     "methode": "interpolation linéaire entre la moyenne 1995-2014 et la médiane 2050, "
                "tous scénarios confondus — ils ne se distinguent pas à cet horizon",
