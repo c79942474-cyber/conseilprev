@@ -2604,6 +2604,20 @@ th .fl{font-size:9px;margin-left:3px}
     color:#d9a441;font-family:inherit}
   .moe-tab tr.loi.impose td:first-child::after{content:" ⚖ imposée — comptée "
     "malgré le décochage"}
+  /* UNE MISSION SANS TAUX RELEVÉ. Le signal est écrit, pas seulement coloré :
+     « taux à saisir » se lit en niveaux de gris comme en couleur. */
+  .moe-missions button.ouv{border-style:dashed}
+  .moe-missions button.ouv::before{content:"◇ ";opacity:.85}
+  /* PAS DE ::after ICI, à la différence de la ligne « obligatoire » : le
+     contenu généré par CSS n'est pas restitué de façon fiable par les
+     lecteurs d'écran, et il n'apparaît pas non plus dans le texte de la page.
+     Le marqueur « taux à saisir » de la colonne des taux est du VRAI texte —
+     il suffit, et il se lit partout. */
+  .moe-tab tr.ouv td{opacity:.78}
+  .moe-asaisir{font-family:inherit;font-size:10px;letter-spacing:.04em;
+    text-transform:uppercase;padding:1px 6px;border-radius:3px;
+    border:1px solid rgba(217,164,65,.6);color:#d9a441;white-space:nowrap}
+  .moe-ouvertes ul{margin:8px 0 0;padding-left:18px}
   .moe-tot{font-family:var(--mono,monospace);font-size:17px;margin:10px 0 2px}
   .moe-perdu{margin-top:12px;padding:10px 13px;border-radius:9px;
     border:1px solid rgba(217,164,65,.42);background:rgba(217,164,65,.08);
@@ -13124,11 +13138,20 @@ if(window.parent&&window.parent!==window){
       return '<button type="button" class="on" data-ph="' + esc(p.cle) + '" title="'
         + esc(p.titre + ' — ' + p.produit) + '">' + esc(p.nom) + '</button>';
     }).join('');
+    /* TROIS MISSIONS N'ONT PAS DE TAUX AU RELEVÉ — économie de la
+       construction, sécurité incendie, coordination SSI. Le bilan de 2018 ne
+       les distinguait pas, et leur inventer un taux « d'ordre de grandeur »
+       les rendrait indiscernables des treize relevées. Le bouton le DIT :
+       sans cette marque, on les coche comme les autres et on croit les avoir
+       chiffrées. */
     $('moe-missions').innerHTML = REF.missions.map(function(m){
       var loi = !!m.obligation;
-      return '<button type="button" class="on' + (loi ? ' loi' : '') + '" data-mi="'
+      var ouv = (m.taux_sc == null || m.taux_mep == null);
+      return '<button type="button" class="on' + (loi ? ' loi' : '')
+        + (ouv ? ' ouv' : '') + '" data-mi="'
         + esc(m.cle) + '" title="' + esc(m.role
-            + (loi ? ' — ' + m.obligation.texte + ' (' + m.obligation.reference + ')' : ''))
+            + (loi ? ' — ' + m.obligation.texte + ' (' + m.obligation.reference + ')' : '')
+            + (ouv && m.hors_releve ? ' — TAUX NON RELEVÉ : ' + m.hors_releve.pourquoi : ''))
         + '">' + esc(m.nom.split('—')[0].trim()) + '</button>';
     }).join('');
     $('moe-phases').addEventListener('click', function(e){
@@ -13233,16 +13256,27 @@ if(window.parent&&window.parent!==window){
        « impose » dit qu'il a essayé et qu'elle est comptée quand même. Ma
        première version ne posait que la seconde : tant que rien n'était
        décoché, rien n'indiquait qu'on ne pouvait pas décocher. */
-    var cls = l.obligation ? (l.impose ? ' class="loi impose"' : ' class="loi"') : '';
+    /* UN TAUX ABSENT N'EST PAS UN TAUX NUL. Le module publie 0,0 pour la
+       commodité du calcul et signale l'état par `etat` : rendu tel quel, on
+       lisait « 0,0 / 0,0 % » et « 0,00 M€ » — une mission retenue passait
+       pour gratuite. La ligne dit désormais qu'elle attend un taux, et son
+       montant reste vide plutôt que nul. */
+    var ouvert = l.etat === 'taux_a_saisir';
+    var cls = l.obligation ? (l.impose ? 'loi impose' : 'loi') : '';
+    if(ouvert) cls += (cls ? ' ' : '') + 'ouv';
+    cls = cls ? ' class="' + cls + '"' : '';
     var cells = REF.ordre_phases.map(function(p){
       var d = l.phases[p];
       return '<td' + (d.retenue ? '' : ' style="opacity:.35"') + '>'
-        + (d.part ? fourch(d.montant_meur) : '—') + '</td>';
+        + (ouvert ? '—' : (d.part ? fourch(d.montant_meur) : '—')) + '</td>';
     }).join('');
-    return '<tr' + cls + '><td title="' + esc(l.role) + '">' + esc(l.nom) + '</td>'
-      + '<td>' + (l.taux_sc*100).toFixed(1).replace('.', ',') + ' / '
-      + (l.taux_mep*100).toFixed(1).replace('.', ',') + ' %</td>'
-      + cells + '<td><b>' + fourch(l.montant_meur) + '</b></td></tr>';
+    var titre = l.role + (ouvert && l.hors_releve
+      ? ' — TAUX NON RELEVÉ : ' + l.hors_releve.pourquoi : '');
+    return '<tr' + cls + '><td title="' + esc(titre) + '">' + esc(l.nom) + '</td>'
+      + '<td>' + (ouvert ? '<span class="moe-asaisir">taux à saisir</span>'
+          : (l.taux_sc*100).toFixed(1).replace('.', ',') + ' / '
+            + (l.taux_mep*100).toFixed(1).replace('.', ',') + ' %') + '</td>'
+      + cells + '<td><b>' + (ouvert ? '—' : fourch(l.montant_meur)) + '</b></td></tr>';
   }
 
   function rendre(j){
@@ -13265,6 +13299,21 @@ if(window.parent&&window.parent!==window){
           return '<td>' + fourch(j.par_phase[p]) + '</td>'; }).join('')
       + '<td><b>' + fourch(j.total_meur) + '</b></td></tr></tfoot></table>';
 
+    /* CE QUI RESTE OUVERT EST PUBLIÉ, PAS DISSOUS. Un total qui tairait trois
+       missions retenues serait exact et trompeur : le lecteur croirait avoir
+       chiffré ce qu'il a coché. */
+    if(j.missions_ouvertes && j.missions_ouvertes.length){
+      h += '<div class="moe-perdu moe-ouvertes"><b>'
+        + j.missions_ouvertes.length + ' mission(s) retenue(s) n’entrent pas '
+        + 'dans ce total.</b> ' + esc(j.lecture_ouvertes) + '<ul>'
+        + j.missions_ouvertes.map(function(m){
+            return '<li><b>' + esc(m.nom) + '</b> — '
+              + esc(m.hors_releve ? m.hors_releve.pourquoi : '')
+              + (m.hors_releve && m.hors_releve.ou_chercher
+                 ? '<br><i>Où le trouver&nbsp;:</i> ' + esc(m.hors_releve.ou_chercher)
+                 : '') + '</li>'; }).join('')
+        + '</ul></div>';
+    }
     if(j.imposees && j.imposees.length){
       h += '<p class="moe-perdu"><b>⚖ Deux missions ne se décochent pas.</b> '
         + j.imposees.map(function(i){
