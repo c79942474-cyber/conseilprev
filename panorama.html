@@ -1290,6 +1290,22 @@ th .ttip{margin-left:5px}
   border-left:3px solid var(--blue);background:var(--bg);border-radius:0 6px 6px 0}
 .fin-fl-a{font-size:19px;line-height:1;color:var(--blue);text-align:center}
 .fin-fl-t{font-size:11.5px;line-height:1.55}
+/* LE REPÈRE DE PARCOURS, posé au-dessus du texte de liaison. Son état est
+   ÉCRIT — « Vous êtes ici », « Franchie », « À venir » —, la teinte ne fait
+   que redoubler ce qui se lit déjà (WCAG 1.4.1). */
+/* LES DEUX RESTENT DANS LA COLONNE DE DROITE. Sans cette règle, le texte de
+   liaison — troisième enfant d'une grille à deux colonnes — se replaçait tout
+   seul dans la colonne de 26 px réservée à la flèche, et s'affichait à raison
+   d'un mot par ligne. */
+.fin-fl-r,.fin-fleche .fin-fl-t{grid-column:2}
+.fin-fl-r{display:block;font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.09em;text-transform:uppercase;color:var(--muted2,#7b8b9a);
+  margin-bottom:4px}
+.fin-fleche.fait{border-left-color:#1F7A5A}
+.fin-fleche.fait .fin-fl-a,.fin-fleche.fait .fin-fl-r{color:#1F7A5A}
+.fin-fleche.ici{border-left-width:5px;background:rgba(30,99,168,.07)}
+.fin-fleche.ici .fin-fl-r{color:var(--blue);font-weight:700}
+.fin-fleche.avenir{opacity:.72}
 
 /* LES DEUX PONTS, CÔTE À CÔTE. */
 .fin-ponts{margin:14px 0 0}
@@ -5609,8 +5625,10 @@ var FIN_ETAPES = [
                       return !!(o && o.innerHTML && o.innerHTML.length > 200); } },
   { cle: "pont", n: 9, nom: "Poursuivre sur l’ingénierie", cible: "fin-ponts",
     commande: "[data-pont-go]",
-    quoi: "Le bilan énergie-eau-carbone, ou la séquence des pièces et le prix de "
-        + "la maîtrise d’œuvre — sur le site d’ingénierie.",
+    quoi: "Le bilan énergie-eau-carbone, ou la séquence des pièces — et, sur le "
+        + "site d’ingénierie, la suite de la chaîne d’argent : le coût des "
+        + "travaux poste par poste, puis les honoraires qu’ils portent, avec "
+        + "une part technique CALCULÉE au lieu d’être supposée.",
     /* « FAIT » VEUT DIRE : UN LIEN A ÉTÉ CRÉÉ. Écrit d'abord comme la présence
        d'un lien dans `#fin-ponts`, ce test comptait le renvoi STATIQUE qu'on
        vient d'y poser — l'étape s'affichait donc faite avant que le lecteur
@@ -5938,12 +5956,53 @@ function finCommandes(faites){
   });
 }
 
+/* LES FLÈCHES ENTRE BLOCS DISENT AUSSI OÙ L'ON EST.
+   ─────────────────────────────────────────────────
+   Elles disaient déjà ce qui passe d'un bloc au suivant — « vous avez une
+   enveloppe et un pays retenu, le bloc suivant en tire… ». C'était vrai quel
+   que soit l'avancement, donc muet sur l'avancement : arrivé au sixième écran,
+   le lecteur ne savait plus si les blocs dépassés comptaient.
+
+   Chacune porte donc maintenant son rang et son état. L'ÉTAT EST ÉCRIT, pas
+   seulement teinté : « Vous êtes ici », « Franchie », « À venir » se lisent en
+   niveaux de gris comme en couleur. */
+function finMajFleches(faits){
+  var par = {};
+  FIN_ETAPES.forEach(function(e){ par[e.cle] = e; });
+  var courant = FIN_ETAPES[finPasCourant()];
+  document.querySelectorAll(".fin-fleche[data-vers]").forEach(function(d){
+    var cle = String(d.getAttribute("data-vers")).replace(/^etape-/, "");
+    var e = par[cle];
+    if(!e) return;
+    var etat, cls;
+    if(courant && courant.cle === cle){ etat = "Vous êtes ici"; cls = "ici"; }
+    else if(faits[cle]){ etat = "Franchie"; cls = "fait"; }
+    else { etat = "À venir"; cls = "avenir"; }
+    d.classList.remove("fait", "ici", "avenir");
+    d.classList.add(cls);
+    var a = d.querySelector(".fin-fl-a");
+    if(a) a.textContent = cls === "fait" ? "✓" : "↓";
+    /* Le repère se pose une fois puis se met à jour : réécrire la flèche
+       entière effacerait le texte rédigé à la main qu'elle porte. */
+    var p = d.querySelector(".fin-fl-r");
+    if(!p){
+      p = document.createElement("span");
+      p.className = "fin-fl-r";
+      var t = d.querySelector(".fin-fl-t");
+      if(t) t.parentNode.insertBefore(p, t); else d.appendChild(p);
+    }
+    p.textContent = "Étape " + e.n + " sur " + FIN_ETAPES.length + " · " + etat
+      + " — " + e.nom;
+  });
+}
+
 function finMajFil(){
   var avant = FIN_VU;
   var apres = finFaites();
   FIN_VU = apres;
   finFil();
   finCommandes(apres);
+  finMajFleches(apres);
   /* Les deux chemins de l'étape 9 suivent le même état que le reste du fil. */
   if(typeof finPontsEtat === "function") finPontsEtat();
   if(!avant) return null;            /* premier relevé : rien n'a été franchi */
