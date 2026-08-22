@@ -311,14 +311,70 @@ def natures():
     return [dict(NATURES[c], cle=c) for c in ORDRE_NATURES]
 
 
+# ── ADMISE N'EST PAS LUE ───────────────────────────────────────────────────
+# DÉFAUT CORRIGÉ. Le registre annonçait neuf sources — chacune avec son bouton
+# « Sonder » prouvant qu'elle répond — alors que quatre seulement nourrissaient
+# le corpus. Un lecteur en concluait que le site s'appuie sur neuf sources.
+# L'écart ne se voyait de nulle part : ni le registre ni les fiches ne
+# distinguaient « admise » de « lue ».
+#
+# Chaque source non lue porte donc SA RAISON. Une liste d'admises sans motif
+# finit par accueillir n'importe quoi : c'est le motif écrit qui rend une
+# admission coûteuse, donc réfléchie.
+POURQUOI_PAS_LUE = {
+    "cve_list": "Son adresse de données est `delta.json`, un flux des "
+                "CHANGEMENTS des dernières minutes — deux entrées à l'instant "
+                "de l'écriture. Ce n'est pas un catalogue : deux collectes "
+                "successives rendraient deux corpus sans rapport, et aucune "
+                "ne serait reproductible. La source reste admise parce qu'une "
+                "fiche PEUT la citer ; elle n'alimente pas la collecte.",
+    "owid_co2": "Elle porte les émissions de l'économie entière, par pays et "
+                "par secteur. La rubrique « centres de données » de ce site "
+                "raisonne sur le MIX ÉLECTRIQUE, que `owid_energie` sert déjà : "
+                "verser des totaux nationaux ajouterait du contexte sans "
+                "changer un arbitrage d'implantation. Admise pour un usage à "
+                "venir, pas lue aujourd'hui.",
+    "helm_stanford": "Son adresse publique est un README : elle documente un "
+                     "PROTOCOLE d'évaluation, elle ne publie pas de résultats "
+                     "structurés à cette adresse. En tirer des fiches "
+                     "reviendrait à paraphraser une page de présentation. "
+                     "Admise comme référence de méthode, pas comme flux.",
+    "mlcommons": "Même situation : le README décrit la suite MLPerf et son "
+                 "protocole, sans servir les résultats. Une fiche « MLPerf "
+                 "existe » n'apprendrait rien à personne.",
+}
+
+
+def _lues():
+    """Les clés que les collecteurs lisent réellement.
+
+    L'import est TARDIF et protégé : `sources` ne doit pas dépendre
+    d'`ingestion`, qui dépend de lui. Si la lecture échoue, on ne prétend rien
+    — `collectee` vaut None, et l'écran dit « indéterminé » plutôt que de
+    trancher au hasard.
+    """
+    try:
+        import ingestion
+        return ingestion.sources_collectees()
+    except Exception:  # noqa: BLE001
+        return None
+
+
 def registre(sujet=None):
-    """Les sources admises, éventuellement restreintes à un sujet."""
+    """Les sources admises, éventuellement restreintes à un sujet.
+
+    Chaque entrée dit si elle est LUE par un collecteur — dérivé de la table
+    des collecteurs, jamais recopié — et, sinon, pourquoi.
+    """
+    lues = _lues()
     out = []
     for cle, s in SOURCES.items():
         if sujet and sujet not in s["sujets"]:
             continue
         out.append(dict(s, cle=cle, nature_nom=NATURES[s["nature"]]["nom"],
-                        nature_poids=NATURES[s["nature"]]["poids"]))
+                        nature_poids=NATURES[s["nature"]]["poids"],
+                        collectee=(None if lues is None else cle in lues),
+                        pourquoi_pas_lue=POURQUOI_PAS_LUE.get(cle, "")))
     out.sort(key=lambda s: (ORDRE_NATURES.index(s["nature"]), s["nom"]))
     return out
 

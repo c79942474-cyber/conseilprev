@@ -426,16 +426,50 @@ def _fiche_mix(code, part, an, L, s):
 
 # ═══════════════════════════════════════════════════════════════════════════
 
+# ── LA TABLE DES COLLECTEURS, ET POURQUOI ELLE EST ICI ────────────────────
+# Elle était écrite en clair dans la boucle de `collecter_tout`. Rien ne
+# permettait alors de savoir, DE L'EXTÉRIEUR, quelles sources du registre sont
+# réellement lues — et le registre en annonçait neuf quand le corpus en
+# employait quatre, sans que rien ne le signale. Hissée ici, la même table
+# sert à collecter ET à répondre à la question « cette source est-elle lue ? ».
+#
+# UNE SEULE TABLE, DEUX USAGES : la déclaration ne peut plus diverger de la
+# réalité, puisqu'elle EST la réalité. Une seconde liste écrite à côté aurait
+# recommencé la dérive qu'on répare.
+#
+# La clé de gauche est la clé de source du registre — sauf `mitre_atlas_tech`,
+# qui lit la même source qu'`mitre_atlas` sous un autre angle : la
+# correspondance est donnée par SOURCE_DU_COLLECTEUR.
+def _table_collecteurs(limite_kev, limite_mix):
+    return (("cisa_kev", lambda: collecter_kev(limite=limite_kev)),
+            ("mitre_attack_ics", lambda: collecter_attack_ics()),
+            ("mitre_atlas", lambda: collecter_atlas()),
+            ("mitre_atlas_tech", lambda: collecter_atlas_techniques()),
+            ("owid_energie", lambda: collecter_mix_electrique(limite=limite_mix)),
+            # BRANCHÉE APRÈS COUP, et c'est le sujet : elle était au registre
+            # depuis le premier jour sans qu'aucun collecteur ne la lise.
+            ("electricity_maps", lambda: collecter_electricity_maps()))
+
+
+SOURCE_DU_COLLECTEUR = {"mitre_atlas_tech": "mitre_atlas"}
+
+
+def sources_collectees():
+    """Les clés de source qu'un collecteur lit RÉELLEMENT.
+
+    Dérivée de la table ci-dessus, jamais recopiée : c'est ce qui empêche le
+    registre d'annoncer une source que plus personne ne lit.
+    """
+    return {SOURCE_DU_COLLECTEUR.get(nom, nom)
+            for nom, _ in _table_collecteurs(0, None)}
+
+
 def collecter_tout(limite_kev=30, limite_mix=None):
     """Lance les collecteurs et rend le corpus, avec le journal de ce qui a
     échoué. Un échec ne fait pas tomber les autres : une source injoignable
     ne doit pas priver le site de celles qui répondent."""
     corpus, journal = [], []
-    for nom, fn in (("cisa_kev", lambda: collecter_kev(limite=limite_kev)),
-                    ("mitre_attack_ics", lambda: collecter_attack_ics()),
-                    ("mitre_atlas", lambda: collecter_atlas()),
-                    ("mitre_atlas_tech", lambda: collecter_atlas_techniques()),
-                    ("owid_energie", lambda: collecter_mix_electrique(limite=limite_mix))):
+    for nom, fn in _table_collecteurs(limite_kev, limite_mix):
         try:
             r = fn()
         except Exception as e:  # noqa: BLE001
@@ -522,7 +556,7 @@ def _relier_atlas(corpus, atlas=None):
 def sante():
     return {
         "module": "ingestion", "version": VERSION,
-        "collecteurs": 5,
+        "collecteurs": 6,
         "editeurs_industriels": len(EDITEURS_INDUSTRIELS),
         "indices_produit": len(INDICES_PRODUIT_INDUSTRIEL),
         "pays_suivis": len(PAYS_SUIVIS),
@@ -1010,3 +1044,210 @@ def collecter_atlas_techniques(limite=8):
             "fiches": fiches, "retenues": len(fiches),
             "dit": "ATLAS v%s — %d technique(s) servies sur %d au référentiel, "
                    "les plus récemment révisées." % (version, len(fiches), len(tech))}
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  COLLECTEUR 6 — ELECTRICITY MAPS : le facteur d'émission, avec SA source
+#
+#  POURQUOI CETTE SOURCE MÉRITAIT D'ÊTRE BRANCHÉE. Elle était au registre
+#  depuis le premier jour, avec son bouton « Sonder » qui prouvait qu'elle
+#  répond — et AUCUN collecteur ne la lisait. Le registre annonçait donc neuf
+#  sources quand le corpus en employait quatre : c'est le genre d'écart qui ne
+#  se voit pas de l'extérieur et qui vide le registre de son sens.
+#
+#  CE QU'ELLE APPORTE QUE LES AUTRES N'ONT PAS. Chaque facteur d'émission y
+#  porte SA PROPRE SOURCE et SA DATE — « EU-ETS 2025, ENTSO-E 2025 » pour le
+#  charbon français, « UNECE 2022 » pour l'hydraulique. Ailleurs sur ce site,
+#  une valeur porte la source du jeu de données entier ; ici, elle porte la
+#  sienne. C'est la granularité qu'on aimerait partout.
+#
+#  ELLE COMPLÈTE OWID SANS LE DOUBLER. OWID donne la PART bas-carbone du mix,
+#  Electricity Maps donne le FACTEUR D'ÉMISSION par filière. Deux grandeurs
+#  différentes sur le même pays : c'est précisément ce qui fait un croisement
+#  utile — et les premiers liens « même pays » du site.
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Les filières qui décident de l'empreinte d'un centre de données. On ne sert
+# pas les dix modes du fichier : le stockage et la décharge de batterie sont
+# des grandeurs dérivées du mix, les servir ferait compter deux fois.
+FILIERES_EM = ("coal", "gas", "oil", "nuclear", "hydro", "wind", "solar",
+               "biomass", "geothermal")
+FILIERES_EM_NOM = {
+    "coal": "charbon", "gas": "gaz", "oil": "fioul", "nuclear": "nucléaire",
+    "hydro": "hydraulique", "wind": "éolien", "solar": "solaire",
+    "biomass": "biomasse", "geothermal": "géothermie",
+}
+_EM_GABARIT = ("https://raw.githubusercontent.com/electricitymaps/"
+               "electricitymaps-contrib/master/config/zones/%s.yaml")
+
+
+def _em_dernier(entrees):
+    """La valeur la PLUS RÉCENTE d'une série, avec sa date et sa source.
+
+    Le fichier porte l'historique : prendre la première entrée servirait un
+    facteur de 2014 pour un pays dont le mix a changé depuis. On prend la
+    dernière datée, et on garde la date pour que la fiche la porte.
+    """
+    if isinstance(entrees, dict):
+        entrees = [entrees]
+    if not isinstance(entrees, list) or not entrees:
+        return None
+    datees = [e for e in entrees if isinstance(e, dict) and e.get("value") is not None]
+    if not datees:
+        return None
+    return sorted(datees, key=lambda e: str(e.get("datetime") or ""))[-1]
+
+
+def collecter_electricity_maps(pays=None, limite=None):
+    """Une fiche par zone : les facteurs d'émission en cycle de vie.
+
+    LE CYCLE DE VIE PLUTÔT QUE LE DIRECT, et c'est un choix qui se discute :
+    le facteur « direct » ne compte que la combustion, le « cycle de vie »
+    ajoute la construction, le combustible et le démantèlement. Pour un
+    centre de données, dont l'arbitrage porte sur des décennies, le second
+    est le seul qui compare l'éolien au gaz sans avantager l'éolien par
+    omission. La fiche dit lequel elle emploie.
+    """
+    codes = list(pays or PAYS_SUIVIS)
+    if limite:
+        codes = codes[:limite]
+    s = SRC.SOURCES["electricity_maps"]
+    try:
+        import yaml
+    except ImportError:
+        return {"ok": False, "source": "electricity_maps", "erreur": "pyyaml_absent",
+                "message": "PyYAML n'est pas installé : les zones sont en YAML."}
+
+    fiches, muettes, injoignables = [], [], []
+    for code in codes:
+        r = _lire(_EM_GABARIT % code, delai=30)
+        if not r["ok"]:
+            injoignables.append(code)
+            continue
+        try:
+            z = yaml.safe_load(r["corps"].decode("utf-8", "replace")) or {}
+        except Exception:  # noqa: BLE001
+            injoignables.append(code)
+            continue
+
+        lc = ((z.get("emissionFactors") or {}).get("lifecycle") or {})
+        retenus = {}
+        for f in FILIERES_EM:
+            d = _em_dernier(lc.get(f))
+            if d:
+                retenus[f] = d
+        if not retenus:
+            # UNE ZONE SANS FACTEUR N'EST PAS UNE ERREUR : certaines zones du
+            # référentiel n'en publient pas. On le dit plutôt que de servir
+            # une fiche vide ou d'inventer un repli.
+            muettes.append(code)
+            continue
+
+        nom = V._texte(z.get("zone_name") or z.get("country_name") or code)
+        # La date de la fiche est celle du facteur le plus récent EMPLOYÉ :
+        # dater d'aujourd'hui une valeur de 2020 la ferait passer pour neuve.
+        dates = sorted(str(d.get("datetime") or "")[:10] for d in retenus.values())
+        iso = dates[-1] if dates and re.match(r"^\d{4}-\d{2}-\d{2}$", dates[-1]) else None
+        if not iso:
+            muettes.append(code)
+            continue
+
+        ordonnes = sorted(retenus.items(), key=lambda kv: -float(kv[1]["value"]))
+        pire, meilleur = ordonnes[0], ordonnes[-1]
+        ecart = (float(pire[1]["value"]) / float(meilleur[1]["value"])
+                 if float(meilleur[1]["value"]) else 0.0)
+
+        detail = " ; ".join(
+            "%s %s gCO2e/kWh (%s, %s)"
+            % (FILIERES_EM_NOM.get(f, f), _nb(d["value"]),
+               str(d.get("datetime"))[:4], V._texte(d.get("source")) or "source non nommée")
+            for f, d in ordonnes[:5])
+
+        lecture = (
+            "Facteurs d'émission en CYCLE DE VIE — construction, combustible et "
+            "démantèlement compris, pas seulement la combustion. C'est le seul "
+            "périmètre qui compare l'éolien au gaz sans avantager le premier par "
+            "omission, et c'est celui qui compte pour un arbitrage "
+            "d'implantation qui engage des décennies. %s. "
+            "Chaque valeur porte ici SA source et SA date, ce qui est rare : "
+            "elles ne viennent pas toutes du même millésime, et la fiche "
+            "affiche celui de chacune."
+            % detail)
+        if ecart >= 5:
+            lecture += (" L'écart entre la filière la plus émettrice (%s) et la "
+                        "moins émettrice (%s) est d'un facteur %s : sur ce "
+                        "territoire, l'heure à laquelle un centre consomme pèse "
+                        "davantage que son PUE."
+                        % (FILIERES_EM_NOM.get(pire[0], pire[0]),
+                           FILIERES_EM_NOM.get(meilleur[0], meilleur[0]),
+                           _nb(round(ecart))))
+
+        fiches.append(V.normaliser({
+            "id": "em-facteurs-%s" % code.lower(),
+            "titre": "%s — facteurs d'émission par filière, du simple au %s"
+                     % (nom, "quintuple" if ecart >= 5 else "double"),
+            "chapeau": _abrege(
+                "Facteurs d'émission en cycle de vie retenus par Electricity "
+                "Maps pour la zone %s : %s." % (code, detail), 330),
+            "lecture": lecture,
+            "lecture_nature": "regle",
+            "portee": "À confronter au contrat d'électricité du site : un "
+                      "facteur moyen annuel ne dit rien de l'heure à laquelle "
+                      "vous consommez. Si l'écart entre filières est large, un "
+                      "décalage de charge de quelques heures déplace davantage "
+                      "l'empreinte qu'un point de PUE gagné — et il ne coûte "
+                      "aucun matériel.",
+            "incertitude": "Ces facteurs sont des moyennes de filière, pas des "
+                           "mesures de votre fourniture. Ils ne disent ni le mix "
+                           "horaire réel, ni ce que porte votre contrat "
+                           "(garanties d'origine, approche « market-based »). "
+                           "Les millésimes diffèrent d'une filière à l'autre : "
+                           "la fiche les affiche plutôt que de les uniformiser.",
+            "sujet": "datacenter",
+            "editeur": None,
+            # LES FILIÈRES NE SONT PAS DES TECHNOLOGIES DE LA FICHE.
+            # DÉFAUT CORRIGÉ AVANT MISE EN LIGNE. Les trois filières les plus
+            # émettrices entraient ici : mesuré, cela produisait 132 liens
+            # « même technologie » portant tous le motif identique
+            # « charbon, fioul, gaz » — parce que ces trois-là sont en tête
+            # dans presque tous les pays. Le champ reliait donc chaque zone à
+            # toutes les autres, avec la même phrase recopiée.
+            #
+            # C'est mot pour mot la faute pour laquelle « mode operatoire » a
+            # été écarté et « technique et faille » retiré du croisement. Une
+            # filière n'est pas une technologie DE LA FICHE : c'est une ligne
+            # de son tableau. Le lien utile entre deux fiches de pays est
+            # « même pays » avec la fiche de mix OWID, pas « même charbon ».
+            "technologies": ["Mix électrique", "Empreinte carbone"],
+            "pays": [code],
+            "date_fait": iso,
+            "source_cle": "electricity_maps",
+            "source_url": _EM_GABARIT % code,
+            "statut": "verifiee_source_primaire",
+            "impact": "structurant",
+            "horizon": "constate",
+            "signe_par": "Collecte automatique — règles publiées dans ingestion.py",
+        })["fiche"])
+
+    if not fiches:
+        return {"ok": False, "source": "electricity_maps", "erreur": "aucune_zone",
+                "message": "Aucune zone n'a rendu de facteur exploitable."}
+    return {
+        "ok": True, "source": "electricity_maps", "fiches": fiches,
+        "retenues": len(fiches),
+        "dit": "%d zone(s) servies sur %d demandées%s%s. Chaque facteur porte "
+               "sa propre source et sa propre date — la fiche les affiche "
+               "plutôt que de les uniformiser."
+               % (len(fiches), len(codes),
+                  " ; %d sans facteur publié" % len(muettes) if muettes else "",
+                  " ; %d injoignables" % len(injoignables) if injoignables else ""),
+    }
+
+
+def _nb(x):
+    """Un nombre lisible : « 1 028 » plutôt que « 1028.5 » dans une phrase."""
+    try:
+        v = float(x)
+    except (TypeError, ValueError):
+        return str(x)
+    return ("%d" % round(v)) if abs(v) >= 10 else ("%.1f" % v).replace(".", ",")

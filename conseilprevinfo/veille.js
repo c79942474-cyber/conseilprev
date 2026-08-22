@@ -291,13 +291,26 @@
   function chargerSources() {
     demander("/api/sources").then(function (d) {
       if (!d.ok) return;
+      /* ADMISE N'EST PAS LUE, ET LA CARTE LE DIT.
+         Le registre affichait neuf sources, chacune avec son bouton
+         « Sonder » prouvant qu'elle répond — alors que cinq seulement
+         nourrissent le corpus. Un lecteur en concluait que le site s'appuie
+         sur neuf. L'état vient du serveur, dérivé de la table des
+         collecteurs : il ne peut pas diverger de la réalité. */
       $("sources").innerHTML = (d.sources || []).map(function (s) {
-        return '<div class="src">'
+        var lue = s.collectee === true, ind = s.collectee === null;
+        return '<div class="src' + (lue || ind ? '' : ' src-dormante') + '">'
           + '<span class="na">' + esc(s.nature_nom) + '</span>'
+          + '<span class="lue ' + (ind ? 'ind' : (lue ? 'oui' : 'non')) + '">'
+          + (ind ? 'état indéterminé' : (lue ? 'lue par la collecte'
+                                             : 'admise, pas encore lue')) + '</span>'
           + '<h3>' + esc(s.nom) + '</h3>'
           + '<p class="ed">' + esc(s.editeur) + '</p>'
           + '<p>' + esc(s.couvre) + '</p>'
           + '<p class="non"><b>Ne couvre pas.</b> ' + esc(s.ne_couvre_pas) + '</p>'
+          + (!lue && s.pourquoi_pas_lue
+              ? '<p class="non"><b>Pourquoi elle n\'alimente pas le corpus.</b> '
+                + esc(s.pourquoi_pas_lue) + '</p>' : '')
           + '<p class="lic">' + esc(s.licence) + ' · mise à jour '
           + esc(s.cadence) + '</p>'
           + '<button type="button" class="sonde" data-sonde="' + esc(s.cle)

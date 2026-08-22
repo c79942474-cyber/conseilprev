@@ -26,10 +26,16 @@ La lecture critique vient de l'un de trois endroits, jamais confondus :
 
 ## Les sources
 
-Neuf sources admises, toutes **atteintes et lues** depuis l'environnement de
-conception le 22 août 2026 — voir `sources.py`, champ `verifie_le`. Le bouton
-« Sonder » de la page va réellement rechercher l'adresse et rend ce qu'elle
-répond, à l'instant.
+Neuf sources admises, toutes **atteintes** depuis l'environnement de
+conception — voir `sources.py`, champ `verifie_le`. Le bouton « Sonder » de la
+page va réellement rechercher l'adresse et rend ce qu'elle répond, à l'instant.
+
+**Admise n'est pas lue**, et le registre le dit désormais pour chacune. Cinq
+alimentent le corpus ; quatre sont admises sans être lues, et chacune porte le
+motif écrit de son sommeil — un flux de changements qui n'est pas un
+catalogue, un README qui décrit un protocole sans publier de résultats. L'état
+se **dérive de la table des collecteurs**, jamais recopié : il ne peut pas
+diverger de la réalité, puisqu'il l'est.
 
 Six autres sont déclarées `A_BRANCHER` : elles sont refusées (403) ou
 injoignables depuis l'environnement de conception. Elles se brancheront en
@@ -96,7 +102,7 @@ engage le responsable de traitement.
 
     python -m pytest tests/ -q
 
-113 contrôles. Ils ne vérifient pas que le code « marche » : ils gardent les
+119 contrôles. Ils ne vérifient pas que le code « marche » : ils gardent les
 règles éditoriales, et chacun a été confronté à une **mutation du code qu'il
 garde** pour établir qu'il tomberait si la règle sautait.
 

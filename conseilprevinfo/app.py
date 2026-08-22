@@ -22,6 +22,7 @@ from flask import Flask, jsonify, request, send_from_directory
 
 import abonnes as AB
 import bulletin as BUL
+import confrontation as CONF
 import croisement as X
 import decision as DEC
 import ingestion
@@ -32,6 +33,24 @@ ICI = os.path.dirname(os.path.abspath(__file__))
 VERSION = "2026.08.22"
 
 app = Flask(__name__, static_folder=None)
+
+# LA BORNE EST POSÉE AU SERVEUR, PAS SEULEMENT DANS LE MODULE. Le contrôle de
+# `confrontation.lire()` s'applique une fois le fichier REÇU EN ENTIER : sans
+# cette borne-ci, un envoi de deux gigaoctets serait d'abord absorbé, puis
+# refusé poliment. Flask coupe désormais la connexion avant.
+# La marge sur OCTETS_MAX couvre l'enveloppe multipart, qui n'est pas du
+# document mais compte dans la taille de la requête.
+app.config["MAX_CONTENT_LENGTH"] = CONF.OCTETS_MAX + 512 * 1024
+
+
+@app.errorhandler(413)
+def _trop_gros(_e):
+    """Sans ce gestionnaire, Flask rend une page HTML et le client, qui attend
+    du JSON, échoue sur « Unexpected token '<' » — il afficherait donc une
+    panne au lieu de la vraie raison."""
+    return jsonify(ok=False, erreur="trop_volumineux",
+                   message="Document trop volumineux : maximum %d Mo."
+                           % (CONF.OCTETS_MAX // 1048576)), 413
 
 # ── LE CORPUS EN MÉMOIRE ──────────────────────────────────────────────────
 # Rafraîchi au plus toutes les TTL secondes, et JAMAIS pendant qu'un visiteur
@@ -340,6 +359,46 @@ def api_bulletin():
     return jsonify(ok=True, bulletin=b, texte=BUL.texte(b))
 
 
+@app.route("/confronter")
+def page_confronter():
+    return send_from_directory(ICI, "confronter.html")
+
+
+@app.route("/api/confrontation", methods=["POST"])
+def api_confrontation():
+    """Confronte un document déposé au corpus. RÉSERVÉ AUX ABONNÉS.
+
+    POURQUOI LA PORTE. Le document d'un industriel — politique de sécurité,
+    schéma d'architecture, cahier des charges — est une donnée d'exposition :
+    savoir ce qu'il contient renseigne sur son installation. Ouvrir cette
+    route sans compte reviendrait à offrir un dépôt anonyme dont personne ne
+    répond.
+
+    LE DOCUMENT N'EST PAS CONSERVÉ. Il est lu en mémoire, confronté, et jeté
+    avec la requête. La réponse ne contient pas le texte déposé — seulement
+    des termes et des comptes.
+    """
+    c = AB.compte_de(_jeton())
+    if not c:
+        return jsonify(ok=False, erreur="non_connecte",
+                       message="Cette confrontation demande un compte : le "
+                               "document que vous déposez est une donnée "
+                               "d'exposition."), 401
+    f = request.files.get("document")
+    if not f:
+        return jsonify(ok=False, erreur="sans_document",
+                       message="Aucun document reçu."), 400
+    texte, faute = CONF.lire(f.filename or "", f.read())
+    if faute:
+        return jsonify(ok=False, erreur="illisible", message=faute), 400
+    r = CONF.confronter(texte, corpus(), sujet=request.form.get("sujet") or None)
+    # LE TEXTE EST OUBLIÉ ICI, explicitement : le laisser vivre dans la portée
+    # de la fonction jusqu'au retour ne coûte rien, mais l'effacer écrit la
+    # règle là où quelqu'un ajouterait un jour une journalisation.
+    del texte
+    return (jsonify(r), 200 if r.get("ok") else 400)
+
+
 @app.route("/api/sante")
 def api_sante():
     c = corpus()
@@ -347,6 +406,7 @@ def api_sante():
                    veille=V.sante(c), sources=SRC.sante(),
                    ingestion=ingestion.sante(), croisement=X.sante(c),
                    decision=DEC.sante(c), abonnes=AB.sante(),
+                   confrontation=CONF.sante(),
                    bulletin=BUL.sante(),
                    corpus=_etat_corpus())
 

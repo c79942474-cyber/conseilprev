@@ -205,7 +205,20 @@ main{max-width:var(--maxw);margin:0 auto;padding:26px 22px 70px}
 .src h3{font-family:var(--serif);font-size:16.5px;margin:0 0 3px;line-height:1.25}
 .src .ed{font-size:12.5px;color:var(--sourd);margin:0 0 8px}
 .src .na{font-family:var(--fix);font-size:9.5px;letter-spacing:.08em;
-  text-transform:uppercase;color:var(--bleu);display:block;margin-bottom:7px}
+  text-transform:uppercase;color:var(--bleu);display:inline-block;
+  margin-bottom:7px;margin-right:9px}
+/* ADMISE N'EST PAS LUE. Le bandeau annonce l'ÉTAT DE LECTURE, à côté de la
+   nature de la source : le registre affichait neuf sources quand cinq
+   seulement nourrissent le corpus, et rien ne le distinguait. La source
+   dormante est grisée par son filet gauche — visible sans être disqualifiée :
+   elle reste admise, elle n'est simplement pas lue. */
+.src .lue{font-family:var(--fix);font-size:9.5px;letter-spacing:.08em;
+  text-transform:uppercase;display:inline-block;margin-bottom:7px;
+  padding:1px 6px;border:1px solid currentColor;border-radius:3px}
+.src .lue.oui{color:var(--vert)}
+.src .lue.non{color:var(--sourd)}
+.src .lue.ind{color:var(--ambre)}
+.src-dormante{border-left-color:var(--filet2);background:var(--papier)}
 .src p{margin:0 0 7px;font-size:13px;line-height:1.55;color:var(--encre2)}
 .src .non{color:var(--ambre)}
 .src .lic{font-family:var(--fix);font-size:10.5px;color:var(--sourd)}

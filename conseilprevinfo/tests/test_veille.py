@@ -300,3 +300,83 @@ def test_deux_lectures_de_la_meme_donnee_rendent_le_meme_texte():
     a = I._lecture_kev(e, True, "éditeur au répertoire", date(2026, 8, 22))
     b = I._lecture_kev(e, True, "éditeur au répertoire", date(2026, 8, 22))
     assert a == b and len(a) > 200
+
+
+# ── 7. Le registre ne peut plus annoncer ce qu'il ne lit pas ──────────────
+
+def test_le_registre_dit_quelles_sources_sont_reellement_lues():
+    """DÉFAUT CORRIGÉ. Le registre annonçait neuf sources — chacune avec son
+    bouton « Sonder » prouvant qu'elle répond — alors que quatre seulement
+    nourrissaient le corpus. Un lecteur en concluait que le site s'appuie sur
+    neuf sources, et l'écart ne se voyait de nulle part."""
+    lues = I.sources_collectees()
+    assert lues <= set(SRC.SOURCES), sorted(lues - set(SRC.SOURCES))
+    for s in SRC.registre():
+        assert s["collectee"] in (True, False), s["cle"]
+        if not s["collectee"]:
+            assert len(s["pourquoi_pas_lue"]) >= 60, s["cle"]
+
+
+def test_l_etat_de_lecture_se_derive_de_la_table_des_collecteurs():
+    """Il ne peut pas diverger de la réalité parce qu'il EST la réalité : une
+    seconde liste écrite à côté aurait recommencé la dérive qu'on répare."""
+    src = open(os.path.join(ICI, "ingestion.py"), encoding="utf-8").read()
+    assert "def _table_collecteurs" in src
+    # la boucle de collecte et la déclaration lisent la MÊME table
+    i = src.index("def collecter_tout")
+    assert "_table_collecteurs(limite_kev, limite_mix)" in src[i:i + 900]
+    j = src.index("def sources_collectees")
+    assert "_table_collecteurs(" in src[j:j + 500]
+
+
+def test_une_source_qui_cesse_d_etre_lue_ne_peut_pas_passer_inapercue():
+    """Le contrôle qui garde la correction : toute source du registre est soit
+    lue, soit accompagnée du motif écrit de son sommeil."""
+    muettes = [s["cle"] for s in SRC.registre()
+               if not s["collectee"] and not s["pourquoi_pas_lue"]]
+    assert not muettes, muettes
+
+
+# ── 8. Une filière n'est pas une technologie de la fiche ──────────────────
+
+def test_une_fiche_de_zone_ne_porte_pas_ses_filieres_en_technologies():
+    """DÉFAUT CORRIGÉ AVANT MISE EN LIGNE. Les trois filières les plus
+    émettrices entraient dans `technologies` : mesuré, cela produisait 132
+    liens « même technologie » portant tous le motif identique « charbon,
+    fioul, gaz » — ces trois-là sont en tête dans presque tous les pays. Le
+    champ reliait donc chaque zone à toutes les autres, avec la même phrase
+    recopiée. C'est mot pour mot la faute pour laquelle « mode operatoire » a
+    été écarté du croisement."""
+    r = I.collecter_electricity_maps(limite=3)
+    if not r.get("ok"):
+        import pytest
+        pytest.skip("Electricity Maps injoignable")
+    for f in r["fiches"]:
+        assert set(f["technologies"]) == {"Mix électrique", "Empreinte carbone"}, \
+            (f["id"], f["technologies"])
+
+
+def test_chaque_facteur_servi_porte_sa_source_et_son_millesime():
+    """C'est ce que cette source apporte que les autres n'ont pas : ailleurs
+    une valeur porte la source du jeu entier, ici elle porte la sienne."""
+    r = I.collecter_electricity_maps(limite=2)
+    if not r.get("ok"):
+        import pytest
+        pytest.skip("Electricity Maps injoignable")
+    import re as _re
+    for f in r["fiches"]:
+        # « charbon 1028 gCO2e/kWh (2025, EU-ETS 2025, ENTSO-E 2025; IPCC 2014) »
+        assert _re.search(r"gCO2e/kWh \(\d{4}, ", f["chapeau"]), f["chapeau"][:120]
+        assert "CYCLE DE VIE" in f["lecture"]
+
+
+def test_la_date_de_la_fiche_est_celle_du_facteur_le_plus_recent():
+    """Dater d'aujourd'hui une valeur de 2020 la ferait passer pour neuve."""
+    r = I.collecter_electricity_maps(limite=2)
+    if not r.get("ok"):
+        import pytest
+        pytest.skip("Electricity Maps injoignable")
+    from datetime import date as _d
+    for f in r["fiches"]:
+        assert f["date_fait"] <= _d.today().isoformat(), f["id"]
+        assert f["date_fait"] >= "2000-01-01", f["id"]
