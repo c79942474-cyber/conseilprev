@@ -15,6 +15,7 @@ pour cette fiche-là » :
      paramètre d'URL ne doit faire sortir une fiche non publiable.
 """
 import os
+import re
 import sys
 
 ICI = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -124,6 +125,33 @@ def test_une_projection_doit_nommer_qui_la_porte():
 
 def test_une_date_dans_l_avenir_est_refusee():
     assert any("avenir" in x for x in V.valider(_fiche(date_fait="2099-01-01")))
+
+
+def test_une_date_de_convention_doit_dire_de_quoi_elle_tient_lieu():
+    """DÉFAUT CONSTATÉ EN SERVICE. Une source qui date son ÉDITION sans dater
+    ses entrées oblige le collecteur à poser un jour. Le poser est légitime ;
+    le poser SANS LE DIRE ne l'est pas — le lecteur ne peut pas distinguer un
+    fait daté d'un rang de classement."""
+    fautes = V.valider(_fiche(date_convention=True))
+    assert any("convention" in x for x in fautes), fautes
+    assert not V.valider(_fiche(
+        date_convention=True,
+        date_convention_dit="OWASP date son édition, pas ses entrées."))
+
+
+def test_l_horizon_constate_cesse_de_promettre_une_date_qu_il_n_a_pas():
+    """« Constaté » dit « Établi à la date indiquée » — précisément la
+    promesse qu'une date fabriquée ne tient pas. Aucun autre horizon ne
+    conviendrait : un risque reconnu EST établi, il n'est ni engagé ni
+    projeté. C'est donc la PHRASE qui doit dire vrai, pas l'horizon qu'il faut
+    fausser."""
+    ordinaire = V.normaliser(_fiche())["fiche"]
+    assert ordinaire["horizon_dit"] == V.HORIZONS["constate"]["dit"]
+    convenue = V.normaliser(_fiche(
+        date_convention=True,
+        date_convention_dit="La source date son édition, pas ses entrées."))["fiche"]
+    assert "PAS à la date affichée" in convenue["horizon_dit"]
+    assert "édition" in convenue["horizon_dit"]
 
 
 # ── 4. Les filtres n'ouvrent pas ce que la porte ferme ────────────────────
@@ -380,3 +408,426 @@ def test_la_date_de_la_fiche_est_celle_du_facteur_le_plus_recent():
     for f in r["fiches"]:
         assert f["date_fait"] <= _d.today().isoformat(), f["id"]
         assert f["date_fait"] >= "2000-01-01", f["id"]
+
+
+# ── 9. OWASP : une source qu'on lit mal ressemble à une source muette ─────
+#
+# La rubrique « systèmes d'IA » ne portait que des INCIDENTS (ATLAS). OWASP
+# apporte l'autre face — ce qu'une communauté RECONNAÎT comme menaçant. Trois
+# choses doivent être gardées : que les dix entrées soient réellement lues,
+# que ce qui est lu vienne de la SECTION ANNONCÉE, et que chaque fiche dise
+# laquelle des deux natures elle porte.
+
+_OWASP_DOCS = {}
+
+
+def _owasp_reels():
+    """Les dix documents d'OWASP, lus UNE SEULE FOIS pour tout le fichier.
+
+    Trois contrôles portent sur les données réelles ; en laissant chacun aller
+    les chercher, le fichier faisait trente lectures réseau, et l'une d'elles
+    a fini par échouer — rendant rouge un contrôle qui n'avait rien à
+    reprocher au code. Un test qui rougit au hasard apprend à relancer jusqu'au
+    vert, et c'est exactement ainsi qu'une vraie panne finit ignorée.
+    """
+    if not _OWASP_DOCS:
+        for fichier, _ in I.OWASP_LLM:
+            r = I._lire(I._OWASP_BASE + fichier + ".md", delai=25)
+            if not r["ok"]:
+                import pytest
+                pytest.skip("OWASP injoignable")
+            _OWASP_DOCS[fichier] = r["corps"].decode("utf-8", "replace")
+    return _OWASP_DOCS
+
+
+def test_les_dix_entrees_owasp_sont_toutes_lues():
+    """LE CONTRÔLE QUI AURAIT ATTRAPÉ LE PREMIER DÉFAUT. En cherchant un
+    libellé de section EXACT, le collecteur rejetait deux entrées sur trois —
+    et les comptait « illisibles », c'est-à-dire du même mot qu'une source qui
+    ne répond pas. Rien à l'écran ne distinguait « OWASP est en panne » de
+    « nous lisons mal OWASP ».
+
+    CE CONTRÔLE NE SUFFIT PAS, et il faut l'écrire ici : il mesure qu'une
+    section SORT, pas qu'elle soit la bonne. C'est le contrôle suivant qui
+    porte cette seconde question."""
+    r = I.collecter_owasp_llm(documents=_owasp_reels())
+    assert r["ok"], r
+    assert r["retenues"] == len(I.OWASP_LLM), r["dit"]
+    assert "illisibles" not in r["dit"], r["dit"]
+
+
+def test_une_section_qu_on_ne_sait_pas_lire_est_comptee():
+    """LE TROU QUE LA MUTATION A RÉVÉLÉ. Rétablir le libellé exact — le défaut
+    d'origine — laissait passer TOUS les contrôles : les manifestations
+    n'entrent pas dans le garde-fou de publication, si bien que sept entrées
+    sur dix repartaient amputées de leur section, sans que rien ne bouge.
+
+    OWASP publie ces exemples sur les dix entrées. Un compteur non nul ne dit
+    donc pas que la source s'est tue : il dit que NOUS la lisons mal, et il le
+    dit à l'écran, pas seulement ici."""
+    r = I.collecter_owasp_llm(documents=_owasp_reels())
+    assert r["ok"], r
+    assert r["sans_manifestation"] == 0, r["dit"]
+
+
+def test_owasp_declare_que_sa_date_est_une_convention():
+    """DÉFAUT CONSTATÉ EN SERVICE, et le contrôle qui manquait. La règle
+    « une date fabriquée ne rapproche rien » vit dans le croisement, et elle
+    y est gardée ; mais RIEN NE VÉRIFIAIT que le collecteur qui invente la
+    date la déclare. Sans ce contrôle, retirer une ligne d'`ingestion.py`
+    rouvrait le défaut d'origine sans faire tomber un seul essai.
+
+    OWASP date son édition, pas ses entrées : ce jour est de nous."""
+    r = I.collecter_owasp_llm(documents=_owasp_reels())
+    assert r["ok"], r
+    for f in r["fiches"]:
+        assert f.get("date_convention") is True, f["id"]
+        assert "ÉDITION" in f["date_convention_dit"], f["id"]
+        assert "PAS à la date affichée" in f["horizon_dit"], f["id"]
+
+
+def test_aucune_fiche_owasp_n_est_rapprochee_par_sa_date():
+    """LE CONTRÔLE DE BOUT EN BOUT. Les deux précédents gardent chacun une
+    moitié du chemin — la déclaration ici, la règle dans le croisement. Celui-
+    ci mesure ce que le lecteur voit : dix fiches portant toutes le 1er
+    janvier ne doivent former aucun voisinage entre elles."""
+    import croisement as X
+    fiches = I.collecter_owasp_llm(documents=_owasp_reels())["fiches"]
+    ids = {f["id"] for f in fiches}
+    for f in fiches:
+        periode = [v for v in X.liens(f, fiches)
+                   if v["lien"] == "meme_periode" and v["id"] in ids]
+        assert not periode, (f["id"], periode[:2])
+
+
+def test_le_compteur_de_section_manquante_se_dit_quand_il_n_est_pas_nul():
+    """Un compteur qu'on tient sans l'afficher ne garde rien : il faut que
+    l'écart se voie là où le lecteur lit la source."""
+    ampute = ("## LLM01:2025 Essai\n\n### Description\n\nUne description assez "
+              "longue pour tenir lieu de chapeau.\n\n"
+              "### Prevention and Mitigation Strategies\n\n"
+              "- Une parade publiée par la source, assez longue.\n")
+    fichier = I.OWASP_LLM[0][0]
+    r = I.collecter_owasp_llm(limite=1, documents={fichier: ampute})
+    assert r["ok"] and r["retenues"] == 1        # la fiche vaut sans elles
+    assert r["sans_manifestation"] == 1
+    assert "manifestation" in r["dit"], r["dit"]
+
+
+def test_une_section_lue_s_arrete_avant_la_suivante():
+    """LE SECOND DÉFAUT, ET IL ÉTAIT PIRE. Le motif s'appliquait sous `re.S`,
+    où le point franchit les retours à la ligne : « Types of .+ » avalait le
+    document entier et rendait sa QUEUE. La fiche LLM01 publiait donc
+    « AML.T0054 — LLM Jailbreak Injection » en exemple de manifestation : le
+    pied de page des références, servi comme un contenu de section.
+
+    L'INVARIANT A DÛ ÊTRE REFORMULÉ, et le premier essai mérite d'être écrit :
+    « un bloc lu ne contient aucun titre » ne garde rien du tout, puisque le
+    regard-avant `(?=\\n#{2,3})` l'assure quelle que soit la faute. Ce qui
+    déraille n'est pas où le bloc FINIT, c'est où il COMMENCE. Le contrôle
+    porte donc là : le texte rendu doit être précédé, immédiatement, d'une
+    ligne qui est le titre demandé — ce qu'un titre débordant sur les lignes
+    suivantes ne peut pas produire. L'invariant ne connaît rien du texte
+    d'OWASP et survivra donc à ses rééditions."""
+    for fichier, t in _owasp_reels().items():
+        for motif in ("Description",
+                      r"(?:Common Examples? of \w+|Types of .+)",
+                      "Prevention and Mitigation Strategies"):
+            bloc = I._owasp_bloc(t, motif)
+            assert bloc, (fichier, motif)
+            avant = t[:t.index(bloc)].rstrip("\n").rsplit("\n", 1)[-1]
+            assert re.match(r"^#{2,4}[ \t]*(?:%s)[ \t]*$" % motif, avant,
+                            re.I), (fichier, motif, avant[:120])
+
+
+_OWASP_MODELE = """## LLM0X:2025 Essai
+
+### Description
+
+Une description suffisamment longue pour que la fiche apprenne quelque chose
+au lecteur qui la reçoit, et non un intitulé recopié.
+
+### %s
+
+1. **Premier cas** : ce qui se produit concrètement.
+2. **Deuxième cas** : une autre manifestation du même risque.
+
+### Prevention and Mitigation Strategies
+
+#### 1. Contraindre le comportement du modèle
+Une parade publiée par la source.
+
+#### 2. Valider le format attendu en sortie
+Une seconde parade publiée par la source.
+"""
+
+
+def test_les_quatre_intitules_de_la_meme_section_sont_tous_lus():
+    """Les dix entrées n'emploient pas le même titre pour la section des
+    manifestations : quatre formulations sur dix entrées. Le motif les couvre
+    par FAMILLE, jamais par libellé exact — sinon chaque édition d'OWASP
+    rouvre le défaut."""
+    for titre in ("Common Examples of Risks", "Common Examples of Risk",
+                  "Common Examples of Vulnerability",
+                  "Types of Prompt Injection Vulnerabilities"):
+        items = I._owasp_puces(_OWASP_MODELE % titre,
+                               r"(?:Common Examples? of \w+|Types of .+)")
+        assert len(items) == 2, (titre, items)
+        assert items[0] == "Premier cas : ce qui se produit concrètement.", items
+
+
+def test_une_parade_en_sous_titre_numerote_est_lue_comme_une_puce():
+    """Les parades sont tantôt des puces, tantôt des sous-titres numérotés.
+    Ne lire que les puces revenait à déclarer SANS PARADE les entrées les
+    mieux structurées — et une fiche sans parade n'est pas servie."""
+    p = I._owasp_puces(_OWASP_MODELE % "Common Examples of Risks",
+                       r"Prevention and Mitigation Strategies")
+    assert p == ["Contraindre le comportement du modèle",
+                 "Valider le format attendu en sortie"], p
+
+
+def test_une_entree_sans_parade_n_est_pas_servie_vide():
+    """On ne sert pas une entrée creuse sous prétexte que la source l'annonce.
+    Le document est FOURNI plutôt qu'allé chercher : les dix entrées réelles
+    portent toutes leurs parades, si bien qu'un contrôle branché sur le réseau
+    passerait au vert sans rien garder."""
+    creuse = "## LLM01:2025 Essai\n\n### Description\n\nUne description.\n"
+    fichier = I.OWASP_LLM[0][0]
+    r = I.collecter_owasp_llm(limite=1, documents={fichier: creuse})
+    assert not r["ok"] and r["erreur"] == "aucune_entree"
+
+
+def test_chaque_fiche_owasp_dit_qu_elle_n_est_pas_un_incident():
+    """LA DISTINCTION EST LE TOUT. « C'est arrivé » et « c'est reconnu comme
+    un risque » sont deux énoncés différents, qu'un empilement confondrait.
+    ATLAS et OWASP se retrouvent dans la même rubrique : sans cette phrase, le
+    lecteur lit dix incidents de plus."""
+    fichier, _ = I.OWASP_LLM[0]
+    r = I.collecter_owasp_llm(
+        limite=1,
+        documents={fichier: _OWASP_MODELE % "Common Examples of Risks"})
+    assert r["ok"], r
+    f = r["fiches"][0]
+    assert "CONSENSUS DE PRATICIENS" in f["lecture"]
+    assert "ATLAS" in f["lecture"]
+    assert "pas une norme opposable" in f["incertitude"]
+    assert "convention" in f["incertitude"]      # la date est une convention
+
+
+# ── 10. Le pont entre les deux natures de la rubrique ─────────────────────
+#
+# ATLAS documente ce qui EST ARRIVÉ, OWASP ce qui EST RECONNU comme menaçant.
+# Les deux cohabitaient sans se toucher, et les fiches OWASP se retrouvaient
+# isolées une fois retiré le faux rapprochement par leur date de convention.
+# OWASP publie lui-même la correspondance : ce site la reprend, il ne
+# l'invente pas — c'est le seul type de lien qui n'engage pas le cabinet.
+
+_LIENS_OWASP = """## LLM01:2025 Essai
+
+### Description
+
+Une description assez longue pour tenir lieu de chapeau de fiche.
+
+### Prevention and Mitigation Strategies
+
+- Une parade publiée par la source, assez longue pour être retenue.
+
+### Related Frameworks and Taxonomies
+
+- [AML.T0051.000 - LLM Prompt Injection: Direct](https://atlas.mitre.org/x) **MITRE ATLAS**
+- [AML.T0051.001 - LLM Prompt Injection: Indirect](https://atlas.mitre.org/y) **MITRE ATLAS**
+
+### References
+
+- [Un article](https://arxiv.org/abs/0000) **arXiv**
+- [AML.T0999 - Une technique citée en bibliographie](https://atlas.mitre.org/z) **MITRE ATLAS**
+"""
+
+
+def test_la_correspondance_est_lue_dans_la_section_qu_owasp_lui_consacre():
+    """Elle est DÉCLARÉE par la source, pas déduite par ce site. Les
+    références du pied de page, elles, ne sont pas des correspondances : les
+    confondre servirait un article de recherche comme s'il était une
+    technique du référentiel."""
+    r = I._owasp_atlas(_LIENS_OWASP)
+    assert [x[0] for x in r] == ["AML.T0051.000", "AML.T0051.001"], r
+    assert r[0][1] == "LLM Prompt Injection: Direct", r
+    # AML.T0999 est cité en BIBLIOGRAPHIE, pas dans la section des cadres
+    # apparentés. Lire tout le document confondrait « OWASP renvoie à cette
+    # lecture » avec « OWASP affirme la correspondance » — deux énoncés que
+    # la source, elle, prend soin de séparer.
+    assert "AML.T0999" not in [x[0] for x in r], r
+
+
+def test_une_sous_technique_n_est_pas_repliee_sur_sa_mere():
+    """Rendre « AML.T0051 » là où la source écrit « AML.T0051.000 » dirait
+    « injection d'invite » quand elle dit « injection d'invite DIRECTE » —
+    c'est-à-dire moins que ce qu'elle affirme."""
+    refs = [x[0] for x in I._owasp_atlas(_LIENS_OWASP)]
+    assert "AML.T0051" not in refs
+    assert len(set(refs)) == 2
+
+
+def test_une_correspondance_sans_les_deux_bouts_n_est_pas_posee():
+    """Même règle que pour ATLAS, et pour la même raison : ce site sert seize
+    techniques sur cent quarante et quelques. Un lien vers une fiche absente
+    est un lien mort."""
+    ow = {"id": "owasp-llm-llm01", "titre": "Le risque",
+          "_owasp_atlas": [("AML.T0051.000", "Direct"),
+                           ("AML.T9999", "Une technique non servie")]}
+    tech = {"id": "atlas-tech-aml-t0051-000", "titre": "La technique"}
+    n = I.relier_owasp_atlas([ow, tech])
+    assert n == 1
+    assert [r["vers"] for r in ow["relations"]] == ["atlas-tech-aml-t0051-000"]
+    assert [r["vers"] for r in tech["relations"]] == ["owasp-llm-llm01"]
+
+
+def test_la_correspondance_dit_qu_elle_vient_de_la_source():
+    """C'est ce qui la sépare de toutes les autres règles de ce site : le
+    lecteur doit pouvoir remonter à OWASP sans nous croire sur parole."""
+    ow = {"id": "owasp-llm-llm01", "titre": "Le risque",
+          "_owasp_atlas": [("AML.T0051.000", "LLM Prompt Injection: Direct")]}
+    tech = {"id": "atlas-tech-aml-t0051-000", "titre": "La technique"}
+    I.relier_owasp_atlas([ow, tech])
+    rel = ow["relations"][0]
+    assert "OWASP rattache lui-même" in rel["dit"]
+    assert "pas de ce site" in rel["dit"]
+    assert rel["citations"] and "Related Frameworks" in rel["citations"][0]
+
+
+def test_le_champ_de_transport_ne_survit_pas_a_la_publication():
+    """`_owasp_atlas` sert à porter les références jusqu'au corpus réuni. Il
+    n'a rien à faire dans ce que le site sert, et un champ technique qui
+    fuit dans l'API finit par être lu comme une donnée."""
+    ow = {"id": "owasp-llm-llm01", "titre": "Le risque",
+          "_owasp_atlas": [("AML.T0051.000", "Direct")]}
+    I.relier_owasp_atlas([ow])
+    assert "_owasp_atlas" not in ow
+
+
+def test_une_technique_est_servie_parce_qu_une_source_la_nomme():
+    """LE CRITÈRE AJOUTÉ, ET POURQUOI IL VAUT MIEUX QUE L'ANCIEN. Le
+    collecteur retenait les huit techniques « les plus récemment révisées » —
+    un proxy qui ne dit rien de ce corpus : sur les onze correspondances
+    qu'OWASP déclare, DEUX seulement tombaient sur une fiche servie."""
+    corpus = [{"id": "owasp-llm-llm01", "titre": "Le risque",
+               "_owasp_atlas": [("AML.T0051.000", "Direct")]}]
+    ajoutees, perdues = I.completer_atlas_techniques(corpus)
+    if ajoutees == 0 and perdues:
+        import pytest
+        pytest.skip("ATLAS injoignable")
+    assert ajoutees == 1 and perdues == 0
+    ajoutee = corpus[-1]
+    assert ajoutee["id"] == "atlas-tech-aml-t0051-000"
+    assert ajoutee["source"]["cle"] == "mitre_atlas"
+
+
+def test_rien_n_est_ajoute_pour_une_technique_deja_servie():
+    """Sinon la même technique sortirait deux fois dans le fil, et le lecteur
+    y lirait deux faits."""
+    corpus = [{"id": "owasp-llm-llm01", "titre": "Le risque",
+               "_owasp_atlas": [("AML.T0051.000", "Direct")]},
+              {"id": "atlas-tech-aml-t0051-000", "titre": "Déjà là"}]
+    assert I.completer_atlas_techniques(corpus) == (0, 0)
+    assert len(corpus) == 2
+
+
+def test_une_reference_absente_du_referentiel_est_comptee_pas_ignoree():
+    """Le cas ne se produit pas aujourd'hui, mais un identifiant retiré
+    d'ATLAS le produirait — et il ne doit pas passer en silence."""
+    corpus = [{"id": "owasp-llm-llm01", "titre": "Le risque",
+               "_owasp_atlas": [("AML.T9999", "Une technique qui n'existe pas")]}]
+    ajoutees, perdues = I.completer_atlas_techniques(corpus)
+    assert (ajoutees, perdues) == (0, 1)
+
+
+def test_le_pont_est_pose_apres_la_completion_jamais_avant():
+    """L'ORDRE EST LA RÈGLE, pas un détail d'écriture. Poser les liens avant
+    de servir les techniques que la source nomme, c'est les poser sur des
+    fiches absentes : ils sont écartés, et le pont ne relie plus rien. C'est
+    exactement l'état mesuré avant cette passe — deux correspondances sur
+    onze."""
+    def _ow():
+        return [{"id": "owasp-llm-llm01", "titre": "Le risque",
+                 "_owasp_atlas": [("AML.T0051.000", "Direct")]}]
+
+    avant = _ow()
+    assert I.relier_owasp_atlas(avant) == 0     # la technique n'est pas servie
+
+    apres = _ow()
+    ajoutees, perdues = I.completer_atlas_techniques(apres)
+    if ajoutees == 0 and perdues:
+        import pytest
+        pytest.skip("ATLAS injoignable")
+    assert I.relier_owasp_atlas(apres) == 1
+
+    # et la chaîne de collecte les appelle DANS CET ORDRE
+    src = open(os.path.join(ICI, "ingestion.py"), encoding="utf-8").read()
+    bloc = src[src.index("def collecter_tout"):src.index("def _relier_atlas")]
+    assert (bloc.index("completer_atlas_techniques(corpus)")
+            < bloc.index("relier_owasp_atlas(corpus)")), \
+        "la complétion doit précéder la pose des liens"
+
+
+def test_le_journal_dit_pourquoi_ces_techniques_ont_ete_servies():
+    """Servir une technique parce qu'une source la nomme est un CRITÈRE
+    ÉDITORIAL, différent de celui qu'annonce le collecteur (« les plus
+    récemment révisées »). Un lecteur du registre doit pouvoir le lire, sinon
+    le site sert selon une règle qu'il n'affiche pas."""
+    src = open(os.path.join(ICI, "ingestion.py"), encoding="utf-8").read()
+    bloc = src[src.index("croisement_owasp_atlas"):][:1200]
+    # Le message est écrit en littéraux concaténés sur plusieurs lignes ; on
+    # les recolle avant de chercher, sinon le contrôle tomberait au premier
+    # reformatage sans que la phrase ait changé.
+    plat = re.sub(r'"\s*\n\s*"', "", bloc)
+    assert "parce qu'OWASP les nomme" in plat, plat[:300]
+    assert "et non parce qu'elles ont été révisées récemment" in plat
+
+
+_TECHNIQUES = [
+    {"id": "AML.T0051", "name": "LLM Prompt Injection", "tactics": ["AML.TA0005"],
+     "modified_date": "2025-11-05", "description": "La technique mère, décrite."},
+    {"id": "AML.T0051.000", "name": "Direct", "specializes": "AML.T0051",
+     "modified_date": "2023-10-25", "description": "Le cas particulier, décrit."},
+]
+_TACTIQUES = {"AML.TA0005": "Execution"}
+
+
+def _par_ref():
+    return {t["id"]: t for t in _TECHNIQUES}
+
+
+def test_une_sous_technique_porte_le_nom_de_sa_mere():
+    """DÉFAUT CONSTATÉ EN SERVICE, apparu avec les sous-techniques qu'OWASP
+    désigne. ATLAS ne nomme qu'un SUFFIXE : « AML.T0051.000 » s'appelle
+    « Direct ». Servie telle quelle, elle donnait une fiche intitulée
+    « Direct — technique documentée contre l'IA » : un titre qui ne dit rien,
+    et surtout pas de quoi il est le cas particulier."""
+    f = I._fiche_technique_atlas(_TECHNIQUES[1], _TACTIQUES, "2023-10-25",
+                                 _par_ref())
+    assert f["titre"].startswith("LLM Prompt Injection : Direct —"), f["titre"]
+    assert "AML.T0051.000" in f["titre"]
+
+
+def test_une_technique_mere_ne_recoit_aucun_prefixe():
+    """La règle ne doit pas inventer un parent à qui n'en a pas."""
+    f = I._fiche_technique_atlas(_TECHNIQUES[0], _TACTIQUES, "2025-11-05",
+                                 _par_ref())
+    assert f["titre"].startswith("LLM Prompt Injection —"), f["titre"]
+
+
+def test_une_sous_technique_herite_la_tactique_de_sa_mere():
+    """Le référentiel ne la répète pas sur l'enfant. Sans héritage, la lecture
+    disait « rattachée à une tactique du référentiel » — une phrase qui
+    remplit la place sans rien apprendre."""
+    f = I._fiche_technique_atlas(_TECHNIQUES[1], _TACTIQUES, "2023-10-25",
+                                 _par_ref())
+    assert "« Execution »" in f["lecture"], f["lecture"][:120]
+    assert "une tactique du référentiel" not in f["lecture"]
+
+
+def test_un_parent_absent_ne_fait_pas_tomber_la_fiche():
+    """Un identifiant retiré du référentiel ne doit pas empêcher de servir
+    l'enfant : mieux vaut un titre court qu'aucune fiche."""
+    f = I._fiche_technique_atlas(_TECHNIQUES[1], _TACTIQUES, "2023-10-25", {})
+    assert f["titre"].startswith("Direct —"), f["titre"]

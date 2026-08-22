@@ -146,3 +146,24 @@ def test_l_api_dossiers_dit_ce_que_l_axe_par_entite_a_mesure(client):
     m = d["mesure_entites"]
     assert m["dit"] and m["fiches"] == len(V.publiables(A.corpus()))
     assert d["tension"]["dit"]
+
+
+def test_les_filtres_de_l_ecran_sont_ceux_que_l_api_lit():
+    """LE CONTRAT ENTRE L'ÉCRAN ET LE MOTEUR. La page écrit désormais ses
+    filtres dans l'adresse, pour qu'une vue se transmette — ce site répète
+    partout que sans lien, rien ne se cite. Une adresse partagée qui nomme un
+    filtre que l'API ignore rendrait une AUTRE vue que celle qu'on croyait
+    envoyer, sans un mot : c'est la panne la plus trompeuse possible, puisque
+    la page s'affiche normalement.
+
+    Le contrôle lit la table unique de veille.js, celle qui sert à la fois à
+    interroger, à écrire l'adresse et à la relire."""
+    import re as _re
+    js = open(os.path.join(ICI, "veille.js"), encoding="utf-8").read()
+    bloc = js[js.index("var FILTRES = ["):js.index("function parametres")]
+    noms = _re.findall(r'\["(\w+)",\s*"f-[\w-]+"\]', bloc)
+    assert len(noms) >= 7, noms
+    src = open(os.path.join(ICI, "app.py"), encoding="utf-8").read()
+    api = src[src.index("def api_veille"):src.index("def page_abonnement")]
+    for n in noms:
+        assert 'request.args.get("%s")' % n in api, n

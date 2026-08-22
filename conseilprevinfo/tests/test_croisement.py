@@ -166,6 +166,85 @@ def test_une_vraie_technologie_commune_relie_bien():
     assert v and v[0]["lien"] == "meme_technologie" and "modbus" in v[0]["pourquoi"]
 
 
+# ── LA RÈGLE CALCULÉE, ET CE QU'ELLE DOIT ÉPARGNER ───────────────────────
+# Le défaut d'étiquette de collecteur est revenu QUATRE FOIS. Les trois
+# premières ont été réparées en écrivant le mot dans TROP_GENERIQUES, ce qui
+# suppose que quelqu'un y pense au branchement de chaque source. Ces contrôles
+# gardent la règle qui n'a plus besoin de cette vigilance — et surtout ils
+# gardent les DEUX FORMULATIONS FAUSSES qui l'ont précédée, chacune ayant sa
+# propre victime.
+
+def _source(cle, techno, combien, autres=0, sujet="cyber_industriel"):
+    """`combien` fiches d'une source portent `techno`, `autres` n'en portent
+    pas. Les dates sont espacées de deux mois — au-delà de FENETRE_JOURS —
+    pour qu'aucun lien de période ne vienne se mêler à ce qui est mesuré ici,
+    et restent dans le passé, que le validateur exige."""
+    out = []
+    for i in range(combien + autres):
+        out.append(_fiche(
+            id="%s-%02d" % (cle.replace("_", "-"), i), source_cle=cle,
+            sujet=sujet,
+            date_fait="%04d-%02d-15" % (2012 + i // 6, (i % 6) * 2 + 1),
+            source_url="https://exemple.test/%s/%d" % (cle, i),
+            technologies=[techno] if i < combien else ["Divers %d" % i]))
+    return out
+
+
+def test_une_etiquette_de_collecteur_est_reperee_sans_liste_noire():
+    """« Risque reconnu » sur les dix fiches OWASP sur dix : c'est une
+    étiquette de catégorie, et la règle doit le voir SANS que le mot ait été
+    écrit à la main nulle part."""
+    corpus = _source("owasp_llm", "Risque reconnu", 10)
+    assert "risque reconnu" not in X.TROP_GENERIQUES
+    assert "risque reconnu" in X._technos_frequentes(corpus)
+    assert X.liens(corpus[0], corpus) == []
+
+
+def test_une_vraie_technologie_survit_a_sa_source_unique():
+    """PREMIÈRE FORMULATION FAUSSE, ET SA VICTIME. « Portée par une seule
+    source » supprimait aussi les vraies technologies : sur un corpus mono-
+    source, deux entrées de vulnérabilité sur Modbus cessaient de se
+    rejoindre. Ce qu'un collecteur pose sur une PARTIE de ses fiches est une
+    technologie, quel que soit le nombre de sources qui l'emploient."""
+    corpus = _source("cisa_kev", "Modbus", 4, autres=8)
+    assert "modbus" not in X._technos_frequentes(corpus)
+    v = X.liens(corpus[0], corpus)
+    assert v and v[0]["lien"] == "meme_technologie"
+
+
+def test_la_part_du_corpus_ne_dit_pas_ce_qui_cloche():
+    """SECONDE FORMULATION FAUSSE, ET SA VICTIME. « Au-delà d'un cinquième du
+    corpus » ne rattrapait rien : dix fiches OWASP dans un corpus de
+    quatre-vingt-dix pèsent onze pour cent, tout en produisant à elles seules
+    les liens fautifs. Ici l'étiquette pèse moins d'un cinquième du corpus —
+    sous l'ancien seuil — et doit tomber quand même."""
+    corpus = _source("owasp_llm", "Risque reconnu", 10) \
+        + _source("cisa_kev", "Modbus", 20, autres=30)
+    part = len([f for f in corpus
+                if "Risque reconnu" in f["technologies"]]) / len(corpus)
+    assert part < 0.20
+    assert "risque reconnu" in X._technos_frequentes(corpus)
+
+
+def test_une_petite_source_ne_perd_pas_ses_technologies():
+    """Une part calculée sur deux fiches ne signifie rien : deux sur deux
+    font cent pour cent par accident d'échantillon, pas par nature
+    d'étiquette. Sous MINI_FICHES_SOURCE, la source n'est pas jugée."""
+    corpus = _source("mlcommons", "Modbus", 2)
+    assert len(corpus) < X.MINI_FICHES_SOURCE
+    assert X._technos_frequentes(corpus) == set()
+
+
+def test_un_mot_etiquette_ici_et_technologie_ailleurs_est_conserve():
+    """La règle exige la quasi-totalité dans CHAQUE source qui emploie le
+    mot. Un collecteur qui appose « Modbus » sur tout ce qu'il produit ne
+    doit pas faire disparaître le Modbus d'un catalogue de vulnérabilités,
+    où il ne concerne qu'une partie des entrées."""
+    corpus = _source("mitre_attack_ics", "Modbus", 8) \
+        + _source("cisa_kev", "Modbus", 3, autres=9)
+    assert "modbus" not in X._technos_frequentes(corpus)
+
+
 def test_l_editeur_est_lu_dans_le_champ_declare_jamais_devine():
     """DÉFAUT CORRIGÉ : il était deviné en prenant la première technologie non
     générique, ce qui rangeait des libellés de catégorie parmi les
@@ -212,6 +291,61 @@ def test_hors_fenetre_la_periode_ne_relie_plus():
     loin = _fiche(id="essai-ccc", date_fait="2025-01-15")
     rendus = [v["id"] for v in X.liens(a, [a, proche, loin])]
     assert "essai-bbb" in rendus and "essai-ccc" not in rendus
+
+
+# ── UNE DATE FABRIQUÉE NE RAPPROCHE RIEN ─────────────────────────────────
+# DÉFAUT CONSTATÉ EN SERVICE. OWASP date son ÉDITION, pas ses entrées ; le
+# collecteur leur a posé le 1er janvier, et l'a écrit honnêtement dans
+# l'incertitude de chaque fiche. Mais le croisement ne lit pas l'incertitude :
+# il a vu dix fiches à la même date et les a rapprochées. Le site reliait donc
+# des fiches par une valeur QU'IL AVAIT LUI-MÊME FABRIQUÉE — en affichant
+# sous le rapprochement que la date était « la seule chose qu'elles aient en
+# commun ». C'était exact, et c'est ce qui rendait le lien indéfendable.
+
+def _convention(**kw):
+    return _fiche(date_convention=True,
+                  date_convention_dit="La source date son édition, pas ses "
+                                      "entrées : ce jour tient lieu de rang "
+                                      "de classement.", **kw)
+
+
+def test_deux_dates_de_convention_ne_se_rapprochent_pas():
+    a = _convention(id="essai-aaa", sujet="sia", date_fait="2025-01-01")
+    b = _convention(id="essai-bbb", sujet="sia", date_fait="2025-01-01")
+    assert X.liens(a, [a, b]) == []
+
+
+def test_une_seule_des_deux_suffit_a_retirer_le_rapprochement():
+    """Rapprocher une date observée d'une date inventée ne vaut pas mieux :
+    l'écart mesuré n'a de sens que si les deux bouts en ont un."""
+    a = _convention(id="essai-aaa", sujet="sia", date_fait="2025-01-01")
+    b = _fiche(id="essai-bbb", sujet="sia", date_fait="2025-01-10")
+    assert X.liens(a, [a, b]) == []
+    assert X.liens(b, [a, b]) == []
+
+
+def test_une_date_reelle_rapproche_toujours():
+    """La règle retire ce qui est fabriqué, pas la période elle-même."""
+    a = _fiche(id="essai-aaa", sujet="sia", date_fait="2026-01-15")
+    b = _fiche(id="essai-bbb", sujet="sia", date_fait="2026-01-20")
+    v = X.liens(a, [a, b])
+    assert v and v[0]["lien"] == "meme_periode"
+
+
+def test_le_motif_de_periode_nomme_l_ecart_reel():
+    """« À moins de 45 jours » était la MÊME PHRASE sur tous les voisinages du
+    site — la seule des cinq à ne rien nommer de ce qui est commun. Un motif
+    identique partout apprend à ne plus lire les motifs."""
+    a = _fiche(id="essai-aaa", sujet="sia", date_fait="2026-01-15")
+    proche = _fiche(id="essai-bbb", sujet="sia", date_fait="2026-01-16")
+    loin = _fiche(id="essai-ccc", sujet="sia", date_fait="2026-02-10")
+    memejour = _fiche(id="essai-ddd", sujet="sia", date_fait="2026-01-15")
+    motifs = {v["id"]: v["pourquoi"]
+              for v in X.liens(a, [a, proche, loin, memejour])}
+    assert motifs["essai-bbb"] == "Même sujet, à un jour d'écart."
+    assert motifs["essai-ccc"] == "Même sujet, à 26 jours d'écart."
+    assert motifs["essai-ddd"] == "Même sujet, le même jour."
+    assert len(set(motifs.values())) == 3, motifs
 
 
 def test_le_lien_le_plus_fort_sort_en_premier():

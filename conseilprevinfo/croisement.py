@@ -132,8 +132,75 @@ def _technos(f):
     return {_sansaccent(t) for t in (f.get("technologies") or []) if t}
 
 
-def _technos_utiles(f):
-    return _technos(f) - TROP_GENERIQUES
+# ── LA LISTE NOIRE NE SUFFIT PAS, ET NE POUVAIT PAS SUFFIRE ───────────────
+# QUATRIÈME OCCURRENCE DU MÊME DÉFAUT. Chaque nouveau collecteur apporte ses
+# étiquettes de catégorie — « Mode opératoire », « Incident réel », « Risque
+# reconnu » —, et chacune relie entre elles TOUTES les fiches de ce
+# collecteur : dix fiches OWASP portant « Risque reconnu » ont produit
+# quatre-vingt-dix liens au motif identique, le jour où la source a été
+# branchée.
+#
+# Écrire l'étiquette dans TROP_GENERIQUES après coup marche une fois. Ce qui
+# ne marche pas, c'est de compter sur quelqu'un pour y penser à chaque ajout
+# de source : le défaut est revenu quatre fois, dont trois de ma main.
+#
+# LA RÈGLE EST DONC CALCULÉE, en plus d'être écrite — et il a fallu deux
+# essais pour la formuler juste.
+#
+#   · « au-delà d'un cinquième du corpus » ne rattrapait rien : « Risque
+#     reconnu » ne pèse que dix fiches sur quatre-vingt-dix, soit onze pour
+#     cent, tout en produisant à lui seul les quatre-vingt-dix liens fautifs.
+#     La part du corpus ne dit pas ce qui cloche.
+#   · « portée par une seule source » rattrapait trop : sur un corpus mono-
+#     source, elle supprimait AUSSI les vraies technologies partagées — deux
+#     entrées de vulnérabilité sur Modbus cessaient de se rejoindre.
+#
+# CE QU'EST RÉELLEMENT UNE ÉTIQUETTE DE CATÉGORIE : un mot que le collecteur
+# appose sur la QUASI-TOTALITÉ de ses propres fiches. « Risque reconnu » est
+# sur les dix fiches OWASP sur dix ; « Mix électrique » sur les quatorze
+# fiches Electricity Maps sur quatorze. Une vraie technologie, elle, ne
+# concerne qu'une partie de ce que sa source produit : Modbus n'est pas dans
+# toutes les vulnérabilités du catalogue.
+#
+# Le seuil ne s'applique qu'aux sources d'une certaine taille : une part
+# calculée sur deux fiches ne signifie rien.
+PART_DANS_LA_SOURCE = 0.80
+MINI_FICHES_SOURCE = 5
+
+
+def _technos_frequentes(corpus):
+    """Les technologies qui sont des ÉTIQUETTES DE COLLECTEUR.
+
+    Le nom reste `_technos_frequentes` par continuité d'appel ; le critère,
+    lui, est devenu : « ce mot couvre-t-il presque tout ce que sa source
+    produit ? ». Si oui dans TOUTES les sources qui l'emploient, c'est une
+    étiquette et non une technologie.
+    """
+    pub = V.publiables(corpus)
+    if not pub:
+        return set()
+    total_source, par_source = {}, {}
+    for f in pub:
+        cle = (f.get("source") or {}).get("cle") or "?"
+        total_source[cle] = total_source.get(cle, 0) + 1
+        for t in _technos(f):
+            par_source.setdefault(t, {})
+            par_source[t][cle] = par_source[t].get(cle, 0) + 1
+
+    etiquettes = set()
+    for t, comptes in par_source.items():
+        parts = []
+        for cle, n in comptes.items():
+            if total_source[cle] < MINI_FICHES_SOURCE:
+                continue          # une part sur si peu de fiches ne dit rien
+            parts.append(n / total_source[cle])
+        if parts and all(p >= PART_DANS_LA_SOURCE for p in parts):
+            etiquettes.add(t)
+    return etiquettes
+
+
+def _technos_utiles(f, frequentes=None):
+    return _technos(f) - TROP_GENERIQUES - (frequentes or set())
 
 
 def _jours(a, b):
@@ -142,6 +209,23 @@ def _jours(a, b):
                     - date.fromisoformat(str(b)[:10])).days)
     except (TypeError, ValueError):
         return 10**6
+
+
+def _ecart_dit(j):
+    """L'écart réel, en toutes lettres.
+
+    « Même sujet, à moins de 45 jours » était la MÊME PHRASE sur tous les
+    voisinages du site — la seule des cinq à ne rien nommer de ce qui est
+    commun, alors que les quatre autres nomment l'éditeur, le territoire, la
+    technologie ou la citation. Un motif identique partout apprend au lecteur
+    à ne plus lire les motifs, et c'est le défaut que ce fichier passe son
+    temps à réparer ailleurs.
+    """
+    if j <= 0:
+        return "le même jour"
+    if j == 1:
+        return "à un jour d'écart"
+    return "à %d jours d'écart" % j
 
 
 def _editeur(f):
@@ -179,7 +263,8 @@ def liens(fiche, corpus, maxi=6):
         if rel.get("vers"):
             declarees.setdefault(rel["vers"], rel)
     ed_a = _editeur(fiche)
-    techs_a = _technos_utiles(fiche)
+    frequentes = _technos_frequentes(corpus)
+    techs_a = _technos_utiles(fiche, frequentes)
     pays_a = {str(p).upper() for p in (fiche.get("pays") or [])}
 
     for g in V.publiables(corpus):
@@ -204,16 +289,28 @@ def liens(fiche, corpus, maxi=6):
             motifs.append(("meme_pays",
                            "Même territoire : %s." % ", ".join(sorted(communs))))
 
-        techs_c = techs_a & _technos_utiles(g)
+        techs_c = techs_a & _technos_utiles(g, frequentes)
         if techs_c:
             motifs.append(("meme_technologie",
                            "Technologie commune : %s."
                            % ", ".join(sorted(techs_c)[:3])))
 
+        # UNE DATE FABRIQUÉE NE RAPPROCHE RIEN. Si l'une des deux fiches
+        # déclare sa date comme une CONVENTION (champ `date_convention`), la
+        # proximité n'est pas un fait du monde : c'est une propriété de notre
+        # propre classement. Les dix fiches OWASP, toutes datées du 1er
+        # janvier faute d'entrées datées à la source, se rapprochaient ainsi
+        # les unes des autres « à moins de 45 jours » — et l'écran ajoutait,
+        # exactement, que la date était « la seule chose qu'elles aient en
+        # commun ». C'était vrai, et c'est ce qui rendait le lien indéfendable.
         if (not motifs and fiche.get("sujet") == g.get("sujet")
+                and not fiche.get("date_convention")
+                and not g.get("date_convention")
                 and _jours(fiche.get("date_fait"), g.get("date_fait")) <= FENETRE_JOURS):
             motifs.append(("meme_periode",
-                           "Même sujet, à moins de %d jours." % FENETRE_JOURS))
+                           "Même sujet, %s." % _ecart_dit(
+                               _jours(fiche.get("date_fait"),
+                                      g.get("date_fait")))))
 
         if not motifs:
             continue

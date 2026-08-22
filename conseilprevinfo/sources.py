@@ -236,6 +236,52 @@ SOURCES = {
         "verifie_quoi": "ATLAS v5.6.0 — 57 études de cas datées, 170 "
                         "techniques, 16 tactiques, 35 atténuations.",
     },
+    # ── AJOUTÉE APRÈS MESURE ──────────────────────────────────────────────
+    # La rubrique IA ne portait que huit fiches, toutes issues d'ATLAS,
+    # c'est-à-dire toutes de la même nature : des INCIDENTS OBSERVÉS. Une
+    # veille qui ne connaît d'un domaine que ses incidents n'en donne qu'une
+    # face — celle qui s'est déjà produite. OWASP apporte l'autre : le
+    # CONSENSUS d'une communauté de praticiens sur ce qui menace un système à
+    # base de modèle de langage, indépendamment de ce qui a été observé.
+    #
+    # Deux natures différentes sur le même terrain : c'est ce qui permet à un
+    # lecteur de distinguer « c'est arrivé » de « c'est reconnu comme un
+    # risque », deux énoncés qu'un agrégateur confondrait.
+    "owasp_llm": {
+        "nom": "OWASP Top 10 pour les applications à modèle de langage (2025)",
+        "editeur": "OWASP Foundation",
+        "nature": "referentiel_communautaire",
+        "sujets": ["ia", "sia"],
+        "url_humaine": "https://genai.owasp.org/llm-top-10/",
+        "url_donnee": ("https://raw.githubusercontent.com/OWASP/"
+                       "www-project-top-10-for-large-language-model-"
+                       "applications/main/2_0_vulns/LLM01_PromptInjection.md"),
+        "format": "markdown",
+        "licence": "Creative Commons BY-SA 4.0 — réutilisation libre avec "
+                   "citation et partage à l'identique",
+        "cadence": "une édition majeure environ tous les dix-huit mois",
+        "couvre": "Les dix familles de risques que la communauté OWASP retient "
+                  "pour une application bâtie sur un modèle de langage : "
+                  "injection d'invite, fuite d'information sensible, chaîne "
+                  "d'approvisionnement, empoisonnement des données et du "
+                  "modèle, traitement fautif des sorties, agentivité "
+                  "excessive, fuite d'invite système, faiblesses des index "
+                  "vectoriels, désinformation, consommation non bornée. "
+                  "Chaque entrée porte sa description, des exemples de "
+                  "risques, des mesures de prévention et des scénarios "
+                  "d'attaque, avec ses références.",
+        "ne_couvre_pas": "Ni la fréquence de ces risques, ni leur coût, ni "
+                         "aucune obligation réglementaire — c'est un consensus "
+                         "de praticiens, pas une norme opposable. La liste ne "
+                         "dit pas non plus si un risque s'est RÉALISÉ : elle "
+                         "recense ce qui est reconnu comme menaçant, quand "
+                         "ATLAS recense ce qui a été observé. Confondre les "
+                         "deux ferait passer un risque théorique pour un "
+                         "incident.",
+        "verifie_le": "2026-08-22",
+        "verifie_quoi": "Les dix entrées de l'édition 2025 ont été atteintes "
+                        "et lues une à une depuis cet environnement.",
+    },
     "helm_stanford": {
         "nom": "Stanford CRFM — HELM",
         "editeur": "Center for Research on Foundation Models, Stanford",

@@ -62,7 +62,12 @@
       + '<span class="past sujet">' + esc(f.sujet_nom) + '</span>'
       + (f.horizon === "projete"
           ? '<span class="past signal_faible">Projection</span>' : "")
-      + '<span class="fdate">' + esc(frDate(f.date_fait)) + '</span></div>';
+      /* UNE DATE FABRIQUÉE PORTE SA MARQUE DÈS LA VIGNETTE. Sans elle, le
+         fil aligne des dates dont certaines sont observées et d'autres
+         posées par nous, sans que rien ne les distingue. */
+      + '<span class="fdate">' + esc(frDate(f.date_fait))
+      + (f.date_convention ? ' <b class="conv">convention</b>' : "")
+      + '</span></div>';
 
     /* CHAQUE FICHE A SON ADRESSE. Sans lien, rien ne se cite ni ne se
        transmet : un lecteur ne peut renvoyer un collègue qu'au site entier. */
@@ -104,16 +109,58 @@
     if (garde) el.value = garde;
   }
 
+  /* LA SEULE TABLE DES FILTRES. Elle sert à interroger le serveur, à écrire
+     l'adresse et à la relire : trois listes séparées auraient divergé, et une
+     vue partagée se serait ouverte différemment de celle qu'on avait sous les
+     yeux. */
+  var FILTRES = [["sujet", "f-sujet"], ["pays", "f-pays"],
+                 ["techno", "f-techno"], ["impact", "f-impact"],
+                 ["horizon", "f-horizon"], ["depuis", "f-depuis"],
+                 ["q", "f-q"]];
+
   function parametres() {
     var q = [];
-    [["sujet", "f-sujet"], ["pays", "f-pays"], ["techno", "f-techno"],
-     ["impact", "f-impact"], ["horizon", "f-horizon"], ["depuis", "f-depuis"],
-     ["q", "f-q"]]
-      .forEach(function (p) {
-        var v = ($(p[1]) || {}).value;
-        if (v) q.push(p[0] + "=" + encodeURIComponent(v));
-      });
+    FILTRES.forEach(function (p) {
+      var v = ($(p[1]) || {}).value;
+      if (v) q.push(p[0] + "=" + encodeURIComponent(v));
+    });
     return q.length ? "?" + q.join("&") : "";
+  }
+
+  /* ── UNE VUE FILTRÉE DOIT POUVOIR SE TRANSMETTRE ──────────────────────
+     Ce site écrit, sur chaque fiche : « sans lien, rien ne se cite ni ne se
+     transmet ». L'argument valait pour les fiches et pas pour les vues : un
+     lecteur qui filtrait « systèmes d'IA, depuis janvier » ne pouvait
+     envoyer à un collègue que l'adresse du site entier, à charge pour lui de
+     refaire les mêmes gestes — et rien ne garantissait qu'il les refasse.
+
+     `replaceState` et non `pushState` : un filtre n'est pas une navigation.
+     Empiler une entrée d'historique par frappe dans la recherche obligerait
+     à appuyer douze fois sur « Précédent » pour sortir de la page. */
+  function ecrireAdresse() {
+    if (!window.history || !history.replaceState) return;
+    try {
+      history.replaceState(null, "", parametres() || location.pathname);
+    } catch (e) { /* adresse non modifiable : la page reste utilisable */ }
+  }
+
+  /* Lue AVANT le premier chargement, sinon la page s'ouvre sur le corpus
+     entier puis se rétracte — et le lecteur voit passer des fiches qu'il n'a
+     pas demandées. */
+  function lireAdresse() {
+    var p;
+    try { p = new URLSearchParams(location.search); } catch (e) { return; }
+    FILTRES.forEach(function (f) {
+      var el = $(f[1]), v = p.get(f[0]);
+      if (!el || v == null) return;
+      /* UNE VALEUR ABSENTE DE LA LISTE EST IGNORÉE, pas forcée. Une adresse
+         ancienne peut nommer un pays que le corpus ne porte plus ; l'imposer
+         afficherait un écran vide sans dire pourquoi. */
+      if (el.tagName === "SELECT"
+          && !Array.prototype.some.call(el.options, function (o) {
+               return o.value === v; })) return;
+      el.value = v;
+    });
   }
 
   function rendreEtat(d) {
@@ -159,6 +206,11 @@
 
   function charger() {
     var url = "/api/veille" + parametres();
+    /* L'ADRESSE EST ÉCRITE AVANT LA RÉPONSE, pas après : elle décrit ce qui a
+       été DEMANDÉ. Attendre la réponse laisserait, le temps d'un aller-retour,
+       une adresse qui contredit l'écran — et c'est cet instant-là qu'un
+       lecteur choisit pour copier le lien. */
+    ecrireAdresse();
     var mien = ++DEMANDE;
     demander(url).then(function (d) {
       if (mien !== DEMANDE) return;
@@ -353,11 +405,10 @@
     $("or-date").textContent = d.getDate() + " " + MOIS[d.getMonth()] + " "
       + d.getFullYear();
 
-    ["f-sujet", "f-pays", "f-techno", "f-impact", "f-horizon", "f-depuis", "f-q"]
-      .forEach(function (id) {
-        var el = $(id);
-        if (el) el.addEventListener("change", charger);
-      });
+    FILTRES.forEach(function (f) {
+      var el = $(f[1]);
+      if (el) el.addEventListener("change", charger);
+    });
     /* La recherche se déclenche à la frappe, mais PAS à chaque caractère :
        une requête par lettre ferait clignoter la page et taperait le serveur
        pour rien. */
@@ -368,12 +419,11 @@
     });
     var raz = $("f-raz");
     if (raz) raz.addEventListener("click", function () {
-      ["f-sujet", "f-pays", "f-techno", "f-impact", "f-horizon", "f-depuis", "f-q"]
-        .forEach(function (id) { var el = $(id); if (el) el.value = ""; });
+      FILTRES.forEach(function (f) { var el = $(f[1]); if (el) el.value = ""; });
       charger();
     });
 
-    chargerFacettes().then(charger);
+    chargerFacettes().then(function () { lireAdresse(); charger(); });
     chargerSources();
     chargerDossiers();
     chargerPistes();

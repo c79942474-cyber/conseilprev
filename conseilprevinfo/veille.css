@@ -158,6 +158,29 @@ main{max-width:var(--maxw);margin:0 auto;padding:26px 22px 70px}
 .past.sujet{color:var(--bleu);background:rgba(26,76,110,.07)}
 .fdate{font-family:var(--fix);font-size:11px;color:var(--sourd);margin-left:auto}
 
+/* LA MARQUE D'UNE DATE FABRIQUÉE. Elle est en pointillé comme « Projection »
+   — même famille visuelle, parce que c'est la même nature de réserve : ce qui
+   est affiché n'est pas une observation. Elle ne crie pas pour autant : une
+   alerte rouge sur une convention de classement ferait passer une précision
+   honnête pour un défaut. */
+.conv{
+  font-family:var(--fix);font-size:9.5px;font-weight:500;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--sourd2);border:1px dashed var(--filet2);
+  border-radius:2px;padding:1px 4px;margin-left:5px;white-space:nowrap;
+}
+.conv-dit{
+  font-size:13px;line-height:1.6;color:var(--encre2);margin:0 0 18px;
+  padding-left:12px;border-left:2px dashed var(--filet2);
+}
+.conv-dit b{color:var(--encre)}
+
+/* LA MARQUE D'UNE CONFRONTATION ÉLARGIE. La phrase l'explique déjà, mais elle
+   est longue : un lecteur pressé la survole et croit lire son domaine. Le
+   filet, lui, ne se survole pas. */
+.dos-dit.elargi{
+  border-left:2px dashed var(--ocre);padding-left:12px;color:var(--encre2);
+}
+
 .ftitre{
   font-family:var(--serif);font-weight:700;font-size:20px;line-height:1.22;
   letter-spacing:-.012em;margin:0 0 8px;color:var(--encre);text-wrap:balance;

@@ -448,7 +448,11 @@ def _table_collecteurs(limite_kev, limite_mix):
             ("owid_energie", lambda: collecter_mix_electrique(limite=limite_mix)),
             # BRANCHÉE APRÈS COUP, et c'est le sujet : elle était au registre
             # depuis le premier jour sans qu'aucun collecteur ne la lise.
-            ("electricity_maps", lambda: collecter_electricity_maps()))
+            ("electricity_maps", lambda: collecter_electricity_maps()),
+            # La rubrique IA ne portait que des INCIDENTS (ATLAS). OWASP
+            # apporte l'autre face : ce qui est reconnu comme risque,
+            # indépendamment de ce qui a été observé.
+            ("owasp_llm", lambda: collecter_owasp_llm()))
 
 
 SOURCE_DU_COLLECTEUR = {"mitre_atlas_tech": "mitre_atlas"}
@@ -494,6 +498,27 @@ def collecter_tout(limite_kev=30, limite_mix=None):
                            "par ATLAS dans ses propres étapes de procédure. "
                            "Aucune n'est déduite : chacune porte la phrase par "
                            "laquelle la source décrit l'étape." % n})
+
+    # LE PONT ENTRE LES DEUX NATURES DE LA RUBRIQUE. ATLAS documente ce qui
+    # EST ARRIVÉ, OWASP ce qui EST RECONNU comme menaçant ; jusqu'ici les deux
+    # cohabitaient sans se toucher. OWASP publie la correspondance lui-même,
+    # dans sa section des cadres apparentés — ce site la reprend, il ne
+    # l'invente pas.
+    ajoutees, perdues = completer_atlas_techniques(corpus)
+    m = relier_owasp_atlas(corpus)
+    journal.append({"source": "croisement_owasp_atlas", "ok": True,
+                    "retenues": m,
+                    "dit": "%d correspondance(s) risque reconnu ↔ technique "
+                           "observée, DÉCLARÉES par OWASP%s.%s Une "
+                           "correspondance vers une technique que ce site ne "
+                           "sert pas n'est pas posée : elle donnerait un lien "
+                           "mort."
+                           % (m,
+                              " ; %d technique(s) servies parce qu'OWASP les "
+                              "nomme, et non parce qu'elles ont été révisées "
+                              "récemment" % ajoutees if ajoutees else "",
+                              " %d référence(s) restent introuvables au "
+                              "référentiel." % perdues if perdues else "")})
 
     return {"ok": True, "corpus": corpus, "journal": journal,
             "collecte_le": datetime.now(timezone.utc).isoformat(timespec="seconds")}
@@ -556,7 +581,7 @@ def _relier_atlas(corpus, atlas=None):
 def sante():
     return {
         "module": "ingestion", "version": VERSION,
-        "collecteurs": 6,
+        "collecteurs": 7,
         "editeurs_industriels": len(EDITEURS_INDUSTRIELS),
         "indices_produit": len(INDICES_PRODUIT_INDUSTRIEL),
         "pays_suivis": len(PAYS_SUIVIS),
@@ -989,6 +1014,9 @@ def collecter_atlas_techniques(limite=8):
     mat = (d.get("matrices") or [{}])[0]
     tech = [t for t in (mat.get("techniques") or []) if t.get("id")]
     tact = {t.get("id"): t.get("name") for t in (mat.get("tactics") or [])}
+    # Le référentiel entier, indexé : une sous-technique a besoin de son
+    # parent pour porter son nom complet et sa tactique.
+    par_ref = {t["id"]: t for t in tech}
 
     def _quand(t):
         v = t.get("modified_date") or t.get("created_date")
@@ -1000,11 +1028,57 @@ def collecter_atlas_techniques(limite=8):
         iso = _quand(t)
         if not re.match(r"^\d{4}-\d{2}-\d{2}$", iso):
             continue
-        noms = [tact.get(x) for x in (t.get("tactics") or []) if tact.get(x)]
-        fiches.append(V.normaliser({
+        fiches.append(_fiche_technique_atlas(t, tact, iso, par_ref))
+        if len(fiches) >= limite:
+            break
+
+    return {"ok": True, "source": "mitre_atlas", "version_referentiel": version,
+            "fiches": fiches, "retenues": len(fiches),
+            "dit": "ATLAS v%s — %d technique(s) servies sur %d au référentiel, "
+                   "les plus récemment révisées." % (version, len(fiches), len(tech))}
+
+
+def _nom_technique_atlas(t, par_ref):
+    """Le nom COMPLET d'une technique, sous-technique comprise.
+
+    DÉFAUT CONSTATÉ EN SERVICE, apparu avec les sous-techniques qu'OWASP
+    désigne. ATLAS ne nomme qu'un SUFFIXE : « AML.T0051.000 » s'appelle
+    « Direct », et « AML.T0024.001 » s'appelle « Invert AI Model ». Servies
+    telles quelles, elles produisaient des fiches intitulées « Direct —
+    technique documentée contre l'IA » : un titre qui ne dit rien, et qui ne
+    dit surtout pas de quoi il est le cas particulier.
+
+    Le champ `specializes` porte le parent. Le nom rendu est donc « LLM Prompt
+    Injection: Direct » — celui-là même qu'OWASP emploie quand il cite la
+    technique, ce qui n'est pas un hasard : c'est ainsi qu'elle se lit.
+    """
+    nom = V._texte(t.get("name"))
+    parent = par_ref.get(t.get("specializes")) if t.get("specializes") else None
+    if parent and V._texte(parent.get("name")):
+        return "%s : %s" % (V._texte(parent["name"]), nom)
+    return nom
+
+
+def _fiche_technique_atlas(t, tact, iso, par_ref=None):
+    """La fiche d'une technique ATLAS.
+
+    Extraite de son collecteur parce que DEUX passes la construisent : celle
+    qui sert les techniques les plus récemment révisées, et celle qui complète
+    avec les techniques que nos propres sources désignent. Deux copies du même
+    texte auraient divergé au premier ajustement.
+    """
+    par_ref = par_ref or {}
+    # UNE SOUS-TECHNIQUE N'A PAS DE TACTIQUE PROPRE : elle hérite celle de son
+    # parent. Sans cet héritage, sa lecture disait « rattachée à une tactique
+    # du référentiel » — une phrase qui remplit la place sans rien apprendre.
+    tactiques = t.get("tactics") or []
+    if not tactiques and t.get("specializes"):
+        tactiques = (par_ref.get(t["specializes"]) or {}).get("tactics") or []
+    noms = [tact.get(x) for x in tactiques if tact.get(x)]
+    return V.normaliser({
             "id": "atlas-tech-%s" % str(t["id"]).lower().replace(".", "-"),
             "titre": "%s — technique documentée contre l'IA (%s)"
-                     % (V._texte(t.get("name")), t["id"]),
+                     % (_nom_technique_atlas(t, par_ref), t["id"]),
             "chapeau": _abrege(_propre_stix(t.get("description")), 330),
             "lecture": "Technique rattachée à %s. Une technique au référentiel "
                        "signifie qu'elle a été employée ou démontrée, donc "
@@ -1036,14 +1110,7 @@ def collecter_atlas_techniques(limite=8):
             "impact": "structurant",
             "horizon": "constate",
             "signe_par": "Collecte automatique — règles publiées dans ingestion.py",
-        })["fiche"])
-        if len(fiches) >= limite:
-            break
-
-    return {"ok": True, "source": "mitre_atlas", "version_referentiel": version,
-            "fiches": fiches, "retenues": len(fiches),
-            "dit": "ATLAS v%s — %d technique(s) servies sur %d au référentiel, "
-                   "les plus récemment révisées." % (version, len(fiches), len(tech))}
+        })["fiche"]
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -1251,3 +1318,356 @@ def _nb(x):
     except (TypeError, ValueError):
         return str(x)
     return ("%d" % round(v)) if abs(v) >= 10 else ("%.1f" % v).replace(".", ",")
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  COLLECTEUR 7 — OWASP LLM TOP 10 : le CONSENSUS, en regard des incidents
+#
+#  POURQUOI CETTE SOURCE, ET POURQUOI MAINTENANT. La rubrique IA ne portait
+#  que huit fiches, toutes issues d'ATLAS — donc toutes de la même nature :
+#  des INCIDENTS OBSERVÉS. Une veille qui ne connaît d'un domaine que ses
+#  incidents n'en donne qu'une face, celle qui s'est déjà produite. OWASP
+#  apporte l'autre : ce qu'une communauté de praticiens RECONNAÎT comme
+#  menaçant, indépendamment de ce qui a été constaté.
+#
+#  LA DISTINCTION EST LE TOUT. « C'est arrivé » et « c'est reconnu comme un
+#  risque » sont deux énoncés différents, qu'un agrégateur confondrait en les
+#  empilant. Chaque fiche le dit dans sa lecture, et la source le dit dans son
+#  « ne couvre pas ».
+# ═══════════════════════════════════════════════════════════════════════════
+
+_OWASP_BASE = ("https://raw.githubusercontent.com/OWASP/www-project-top-10-"
+               "for-large-language-model-applications/main/2_0_vulns/")
+
+# Les dix entrées de l'édition 2025, avec le nom de fichier et un intitulé
+# français. L'intitulé est du cabinet : OWASP publie en anglais, et laisser
+# « Improper Output Handling » brut sur un site français reviendrait à ne pas
+# faire le travail.
+OWASP_LLM = [
+    ("LLM01_PromptInjection", "Injection d'invite"),
+    ("LLM02_SensitiveInformationDisclosure", "Divulgation d'information sensible"),
+    ("LLM03_SupplyChain", "Chaîne d'approvisionnement"),
+    ("LLM04_DataModelPoisoning", "Empoisonnement des données et du modèle"),
+    ("LLM05_ImproperOutputHandling", "Traitement fautif des sorties"),
+    ("LLM06_ExcessiveAgency", "Agentivité excessive"),
+    ("LLM07_SystemPromptLeakage", "Fuite de l'invite système"),
+    ("LLM08_VectorAndEmbeddingWeaknesses", "Faiblesses des index vectoriels"),
+    ("LLM09_Misinformation", "Désinformation"),
+    ("LLM10_UnboundedConsumption", "Consommation non bornée"),
+]
+
+# L'ÉDITION EST DATÉE, PAS L'ENTRÉE. OWASP publie une édition 2025 sans dater
+# chaque risque. Afficher une date au jour près serait inventer une précision
+# que la source ne porte pas ; la convention est donc écrite ici ET dans
+# l'incertitude de chaque fiche.
+OWASP_EDITION = "2025"
+OWASP_DATE_CONVENTION = "%s-01-01" % OWASP_EDITION
+
+
+def _owasp_bloc(texte, motif):
+    r"""Le contenu d'une section désignée par un MOTIF, pas par un titre exact.
+
+    DÉFAUT CORRIGÉ AVANT MISE EN LIGNE. Les dix entrées n'emploient pas les
+    mêmes intitulés : « Common Examples of Risks » ici, « … of Risk » là,
+    « … of Vulnerability » ailleurs, et LLM01 titre carrément « Types of
+    Prompt Injection Vulnerabilities ». Chercher un libellé exact rejetait
+    deux entrées sur trois — silencieusement, en les comptant « illisibles ».
+    Une source qu'on lit mal ressemble en tout point à une source qui répond
+    mal.
+
+    SECOND DÉFAUT, TROUVÉ PAR LE CONTRÔLE QUI GARDE LE PREMIER — et pire que
+    lui. Le motif s'appliquait sous `re.S`, où le point traverse les retours à
+    la ligne : « Types of .+ » avalait le document entier, et le bloc rendu
+    était sa QUEUE. La fiche LLM01 publiait ainsi « AML.T0054 — LLM Jailbreak
+    Injection » comme exemple de manifestation : c'est le pied de page des
+    références. Le contrôle « dix entrées sur dix lues » passait au vert,
+    puisqu'il mesurait qu'une section sorte, pas qu'elle soit la bonne.
+
+    Le titre est donc borné à SA LIGNE — `re.S` ne vaut plus que pour le corps
+    capturé, et `[ \t]*` remplace `\s*`, qui franchit lui aussi les lignes.
+    """
+    m = re.search(r"^#{2,4}[ \t]*(?:%s)[ \t]*\n(?s:(.+?))(?=\n#{2,3}[ \t]|\Z)"
+                  % motif, texte, re.M | re.I)
+    return m.group(1) if m else ""
+
+
+def _owasp_section(texte, motif):
+    return " ".join(_owasp_bloc(texte, motif).split())
+
+
+def _owasp_puces(texte, motif, maxi=4):
+    """Les items d'une section, qu'ils soient en puces OU en sous-titres.
+
+    Les parades sont tantôt des puces, tantôt des sous-titres numérotés
+    (`#### 1. Constrain model behavior`). Ne lire que les puces revenait à
+    déclarer sans parade les entrées les mieux structurées.
+    """
+    bloc = _owasp_bloc(texte, motif)
+    if not bloc:
+        return []
+    out = []
+    for l in bloc.splitlines():
+        l = l.strip()
+        m = (re.match(r"^#{3,5}\s*(?:\d+[.)]\s*)?(.+)$", l)
+             or re.match(r"^(?:[-*]|\d+[.)])\s+(.+)$", l))
+        if not m:
+            continue
+        t = re.sub(r"\*\*(.+?)\*\*", r"\1", m.group(1)).strip()
+        t = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", t)
+        t = t.rstrip(":").strip()
+        if len(t) > 8 and t.lower() not in {x.lower() for x in out}:
+            out.append(t)
+        if len(out) >= maxi:
+            break
+    return out
+
+
+def _owasp_atlas(texte):
+    """Les techniques ATLAS qu'OWASP RATTACHE LUI-MÊME à ce risque.
+
+    C'EST LE PONT QUE LA RUBRIQUE ATTENDAIT. Elle porte deux natures — les
+    incidents observés d'ATLAS, les risques reconnus d'OWASP — et rien ne les
+    joignait : les fiches OWASP se retrouvaient isolées une fois retiré le
+    faux rapprochement par leur date de convention.
+
+    Or OWASP publie une section « Related Frameworks and Taxonomies » où il
+    nomme les techniques ATLAS correspondantes. Le rapprochement n'est donc
+    pas de nous : c'est la source qui l'affirme, et c'est le seul type de lien
+    de ce site qui n'engage pas le cabinet. Nous ne faisons que le reprendre.
+
+    Les sous-techniques (`AML.T0051.000`) sont conservées telles quelles : les
+    replier sur leur technique mère reviendrait à dire « injection d'invite »
+    là où la source dit « injection d'invite DIRECTE ». La correspondance avec
+    une fiche réellement servie est vérifiée plus loin, jamais ici.
+    """
+    bloc = _owasp_bloc(texte, r"Related Frameworks and Taxonomies")
+    out = []
+    for m in re.finditer(r"\[(AML\.T[0-9.]*[0-9])\s*[-–—]\s*([^\]]+)\]", bloc):
+        ref, nom = m.group(1), " ".join(m.group(2).split())
+        if ref not in [x[0] for x in out]:
+            out.append((ref, nom))
+    return out
+
+
+def completer_atlas_techniques(corpus):
+    """Sert les techniques ATLAS que NOS PROPRES SOURCES désignent.
+
+    POURQUOI CETTE PASSE EXISTE. Le collecteur de techniques retient les huit
+    « les plus récemment révisées » — un critère arbitraire, et qui ne dit rien
+    de ce corpus-ci : une technique éditée le mois dernier n'est pas plus
+    pertinente qu'une autre pour un lecteur de ce site. Résultat mesuré : sur
+    les onze correspondances qu'OWASP déclare vers ATLAS, DEUX seulement
+    tombaient sur une fiche servie ; les neuf autres n'auraient donné aucun
+    lien, faute d'un bout.
+
+    Le critère ajouté vaut mieux parce qu'il vient du corpus et non d'un
+    proxy : une technique qu'une source déjà servie NOMME EXPLICITEMENT
+    appartient à ce que ce site couvre. Elle n'est pas ajoutée pour faire
+    nombre — elle est ajoutée parce qu'une fiche pointe dessus.
+
+    Rendu : le nombre de techniques ajoutées, et le nombre de références
+    restées introuvables au référentiel. Le second cas ne se produit pas
+    aujourd'hui, mais un identifiant retiré d'ATLAS le produirait, et il ne
+    doit pas passer en silence.
+    """
+    voulues = set()
+    for f in corpus:
+        for ref, _ in (f.get("_owasp_atlas") or []):
+            voulues.add(ref)
+    deja = {f.get("id") for f in corpus}
+    voulues = {r for r in voulues
+               if "atlas-tech-%s" % r.lower().replace(".", "-") not in deja}
+    if not voulues:
+        return 0, 0
+
+    d, err = _atlas_charge()
+    if err:
+        return 0, len(voulues)
+    mat = (d.get("matrices") or [{}])[0]
+    tact = {t.get("id"): t.get("name") for t in (mat.get("tactics") or [])}
+    par_ref = {t.get("id"): t for t in (mat.get("techniques") or []) if t.get("id")}
+
+    ajoutees, introuvables = 0, 0
+    for ref in sorted(voulues):
+        t = par_ref.get(ref)
+        iso = str((t or {}).get("modified_date")
+                  or (t or {}).get("created_date") or "")[:10]
+        if not t or not re.match(r"^\d{4}-\d{2}-\d{2}$", iso):
+            introuvables += 1
+            continue
+        corpus.append(_fiche_technique_atlas(t, tact, iso, par_ref))
+        ajoutees += 1
+    return ajoutees, introuvables
+
+
+def relier_owasp_atlas(corpus):
+    """Pose les relations OWASP ↔ ATLAS dont les DEUX bouts sont servis.
+
+    Une relation vers une technique que ce site ne publie pas donnerait un
+    lien mort ; ATLAS en référence plus de cent quarante, le site en sert une
+    poignée. La règle est celle de `_relier_atlas`, et pour la même raison.
+    """
+    par_id = {f.get("id"): f for f in corpus if f.get("id")}
+    n = 0
+    for f in corpus:
+        for ref, nom in (f.get("_owasp_atlas") or []):
+            cle = "atlas-tech-%s" % ref.lower().replace(".", "-")
+            tech = par_id.get(cle)
+            if not tech:
+                continue
+            for de, vers, sens in ((f, tech, "technique correspondante"),
+                                   (tech, f, "risque reconnu correspondant")):
+                de.setdefault("relations", []).append({
+                    "vers": vers["id"], "titre": vers["titre"],
+                    "nature": "correspondance_owasp_atlas", "nature_nom": sens,
+                    "dit": "OWASP rattache lui-même ce risque à la technique "
+                           "ATLAS « %s » (%s), dans sa section des cadres "
+                           "apparentés. Le rapprochement est de la source, "
+                           "pas de ce site." % (nom, ref),
+                    "citations": ["OWASP Top 10 for LLM Applications %s — "
+                                  "Related Frameworks and Taxonomies"
+                                  % OWASP_EDITION],
+                })
+            n += 1
+    for f in corpus:
+        f.pop("_owasp_atlas", None)
+    return n
+
+
+def collecter_owasp_llm(limite=None, documents=None):
+    """Une fiche par famille de risque de l'édition 2025.
+
+    CHAQUE FICHE DIT CE QU'ELLE EST : un consensus de praticiens, pas un
+    incident et pas une norme opposable. C'est la seule chose qui empêche un
+    lecteur de la lire comme ATLAS — dont les fiches, elles, décrivent des
+    faits survenus.
+
+    `documents` est une COUTURE DE CONTRÔLE, sur le modèle de `_relier_atlas` :
+    la règle « sans description ni parade, on ne sert pas la fiche » ne peut
+    pas être éprouvée sur les données réelles, puisque les dix entrées d'OWASP
+    portent aujourd'hui les deux. Un contrôle branché sur le réseau passerait
+    au vert sans rien garder.
+    """
+    s = SRC.SOURCES["owasp_llm"]
+    entrees = OWASP_LLM[:limite] if limite else OWASP_LLM
+    fiches, muettes, sans_manifestation = [], [], []
+    for fichier, intitule in entrees:
+        if documents is not None:
+            if fichier not in documents:
+                muettes.append(fichier)
+                continue
+            t = documents[fichier]
+        else:
+            r = _lire(_OWASP_BASE + fichier + ".md", delai=25)
+            if not r["ok"]:
+                muettes.append(fichier)
+                continue
+            t = r["corps"].decode("utf-8", "replace")
+        ref = fichier.split("_")[0]                      # LLM01, LLM02, …
+        description = _owasp_section(t, "Description")
+        # LES INTITULÉS VARIENT D'UNE ENTRÉE À L'AUTRE : on les désigne par
+        # famille. « Risks », « Risk », « Vulnerability », « Types of … » —
+        # quatre formulations pour la même section sur dix entrées.
+        risques = _owasp_puces(t, r"(?:Common Examples? of \w+|Types of .+)")
+        parades = _owasp_puces(t, r"Prevention and Mitigation Strategies")
+        if not description or not parades:
+            # SANS DESCRIPTION NI PARADE, LA FICHE N'APPRENDRAIT RIEN. On ne
+            # sert pas une entrée vide sous prétexte que la source l'annonce.
+            muettes.append(fichier)
+            continue
+        # UNE SECTION QU'ON NE SAIT PAS LIRE SE COMPTE. Les manifestations ne
+        # conditionnent pas la publication — la fiche vaut sans elles —, mais
+        # leur absence ne doit pas être SILENCIEUSE : c'est précisément par ce
+        # silence que le libellé exact a pu rejeter sept entrées sur dix sans
+        # que rien ne bouge à l'écran. OWASP les publie sur les dix ; un
+        # compteur non nul dit donc que NOUS lisons mal, pas que la source
+        # s'est tue.
+        if not risques:
+            sans_manifestation.append(fichier)
+
+        lecture = (
+            "OWASP range ce risque parmi les dix qui menacent une application "
+            "bâtie sur un modèle de langage. C'est un CONSENSUS DE PRATICIENS, "
+            "et il faut le lire comme tel : la liste ne dit pas que ce risque "
+            "s'est réalisé chez quelqu'un — c'est ce que documente ATLAS, sur "
+            "ce même site —, elle dit qu'il est reconnu comme sérieux par ceux "
+            "qui construisent ces systèmes. Confondre les deux ferait passer "
+            "un risque reconnu pour un incident constaté.")
+        if parades:
+            lecture += (" La source publie ses parades, ce qui rend le risque "
+                        "actionnable : %s%s."
+                        % ("; ".join(_abrege(p, 130) for p in parades[:3]),
+                           " (et d'autres)" if len(parades) > 3 else ""))
+
+        fiches.append(V.normaliser({
+            "id": "owasp-llm-%s" % ref.lower(),
+            "titre": "%s — %s (OWASP %s:%s)"
+                     % (intitule, "risque reconnu pour les applications à "
+                        "modèle de langage", ref, OWASP_EDITION),
+            "chapeau": _abrege(description, 330),
+            "lecture": lecture,
+            "lecture_nature": "regle",
+            "portee": "À confronter à l'inventaire de vos systèmes d'IA : la "
+                      "question n'est pas de savoir si ce risque existe — "
+                      "OWASP l'établit — mais si votre application y est "
+                      "exposée, et si les parades publiées y sont en place. "
+                      "C'est un point à porter au registre exigé par le "
+                      "règlement européen sur l'IA, où la maîtrise des risques "
+                      "doit être documentée, pas seulement affirmée."
+                      + (" Exemples de manifestation : %s."
+                         % "; ".join(_abrege(x, 110) for x in risques[:2])
+                         if risques else ""),
+            "incertitude": "Consensus de praticiens, pas une norme opposable : "
+                           "aucune obligation n'en découle, et le classement "
+                           "des dix familles ne reflète pas une fréquence "
+                           "mesurée. L'édition %s n'est pas datée entrée par "
+                           "entrée — le jour affiché est une convention de "
+                           "classement, pas une observation."
+                           % OWASP_EDITION,
+            "sujet": "sia",
+            "editeur": None,
+            # Transporté jusqu'à `relier_owasp_atlas`, qui a besoin du corpus
+            # entier pour savoir lesquelles de ces techniques sont servies. Le
+            # champ est retiré une fois les relations posées : il n'a rien à
+            # faire dans ce que le site publie.
+            "_owasp_atlas": _owasp_atlas(t),
+            "technologies": ["Sécurité des systèmes d'IA", "Risque reconnu"],
+            "pays": [],
+            "date_fait": OWASP_DATE_CONVENTION,
+            # LA DATE EST DÉCLARÉE FABRIQUÉE, et pas seulement dans la prose.
+            # L'écrire dans l'incertitude ne suffisait pas : le croisement ne
+            # lit pas l'incertitude, il lit les dates — il rapprochait donc
+            # les dix fiches « à moins de 45 jours » sur une valeur que ce
+            # fichier venait d'inventer. Un champ, lui, se vérifie.
+            "date_convention": True,
+            "date_convention_dit":
+                "OWASP date son ÉDITION (%s), pas chacune de ses entrées. Le "
+                "1er janvier tient lieu de rang de classement ; la source ne "
+                "dit pas quand ce risque a été reconnu."
+                % OWASP_EDITION,
+            "source_cle": "owasp_llm",
+            "source_url": _OWASP_BASE + fichier + ".md",
+            "statut": "verifiee_source_primaire",
+            "impact": "structurant",
+            "horizon": "constate",
+            "signe_par": "Collecte automatique — règles publiées dans ingestion.py",
+        })["fiche"])
+
+    if not fiches:
+        return {"ok": False, "source": "owasp_llm", "erreur": "aucune_entree",
+                "message": "Aucune entrée OWASP n'a pu être lue."}
+    return {
+        "ok": True, "source": "owasp_llm", "fiches": fiches,
+        "retenues": len(fiches),
+        "sans_manifestation": len(sans_manifestation),
+        "dit": "OWASP LLM Top 10, édition %s — %d famille(s) de risque "
+               "servies sur %d%s%s. Ce sont des risques RECONNUS, pas des "
+               "incidents constatés : la distinction est portée par chaque "
+               "fiche."
+               % (OWASP_EDITION, len(fiches), len(entrees),
+                  " ; %d entrée(s) illisibles" % len(muettes) if muettes else "",
+                  " ; %d servie(s) sans leurs exemples de manifestation, que "
+                  "la source publie pourtant — c'est notre lecture qui a "
+                  "échoué" % len(sans_manifestation)
+                  if sans_manifestation else ""),
+    }

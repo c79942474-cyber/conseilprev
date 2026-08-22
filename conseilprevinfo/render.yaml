@@ -1,0 +1,74 @@
+# DÉPLOIEMENT SUR RENDER — le service se décrit lui-même.
+#
+# POURQUOI UN BLUEPRINT PLUTÔT QUE LE FORMULAIRE. Les réglages qui suivent ne
+# sont pas des préférences : un seul « worker » et un délai long sont des
+# CONSÉQUENCES de la façon dont ce site tient son corpus. Saisis à la main
+# dans le tableau de bord, ils vivraient hors du dépôt, et le premier qui
+# recréerait le service reprendrait les valeurs par défaut sans savoir ce
+# qu'elles cassent. Ici, ils voyagent avec le code et portent leur motif.
+#
+# DEUX CHEMINS, SELON LE DÉPÔT D'OÙ CE DOSSIER EST DÉPLOYÉ.
+#
+# 1. DEPUIS SON PROPRE DÉPÔT (c79942474-cyber/conseilprevinfo) :
+#    Render → New → Blueprint → choisir le dépôt. Render lit ce fichier et
+#    crée le service. Aucun champ à remplir.
+#
+# 2. DEPUIS LE DÉPÔT conseilprev, où ce dossier réside en attendant :
+#    Render → New → Web Service → choisir c79942474-cyber/conseilprev, puis
+#    RENSEIGNER À LA MAIN les réglages ci-dessous, avec en plus
+#    « Root Directory » = conseilprevinfo.
+#
+#    NE PAS passer par Blueprint dans ce cas : le dépôt conseilprev porte
+#    déjà un render.yaml à sa racine, pour le site en service. Un Blueprint
+#    réévaluerait CE fichier-là, donc le service vivant — un risque pris pour
+#    rien, puisqu'un service créé à la main donne exactement le même résultat.
+
+services:
+  - type: web
+    name: conseilprevinfo
+    runtime: python
+    plan: free
+    region: frankfurt          # les sources et les lecteurs sont européens
+    # LA BRANCHE. `main` vaut pour le dépôt propre à ce site. Déployé depuis
+    # conseilprev, ce dossier vit pour l'instant sur la branche de travail
+    # `claude/github-connexion-4j0mbe` : c'est ELLE qu'il faut désigner dans le
+    # tableau de bord tant qu'elle n'est pas fusionnée, sinon Render déploie
+    # une branche où ce dossier n'existe pas encore et échoue à la
+    # construction sans que la cause soit lisible.
+    branch: main
+    buildCommand: pip install -r requirements.txt
+
+    # UN SEUL « WORKER », ET C'EST DÉLIBÉRÉ. Le corpus vit EN MÉMOIRE DE
+    # PROCESSUS (`_CORPUS` dans app.py). Deux workers, ce sont deux corpus,
+    # donc deux collectes complètes contre CISA, MITRE, OWASP et les autres —
+    # le double de charge sur des sources publiques, pour rien. Les fils
+    # d'exécution suffisent : ce site attend le réseau, il ne calcule pas.
+    #
+    # LE DÉLAI DE 120 SECONDES tient au fait que la PREMIÈRE requête après un
+    # démarrage attend la collecte (app.py : « premier appel : on attend »).
+    # Avec les 30 secondes par défaut, gunicorn tuerait le worker en pleine
+    # collecte, redémarrerait, et recommencerait — une boucle où le site ne
+    # servirait jamais rien.
+    startCommand: gunicorn --workers 1 --threads 8 --timeout 120 app:app
+
+    healthCheckPath: /api/sante
+
+    envVars:
+      # 3.11 comme le reste du cabinet, et comme la version sur laquelle les
+      # 178 contrôles passent. Monter en 3.12 est peut-être sans effet, mais
+      # « peut-être » n'est pas une raison de changer un socle en service.
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+      # Fraîcheur du corpus. Au-delà, la première requête sert l'ancien
+      # corpus ET déclenche la collecte en fond : personne n'attend.
+      - key: VEILLE_TTL
+        value: "1800"
+      # Nombre d'entrées lues dans le catalogue KEV. Le catalogue en compte
+      # plus d'un millier ; les servir toutes noierait les autres sources.
+      - key: KEV_MAX
+        value: "40"
+      # PAS DE CLÉ D'ENVOI DE COURRIEL ICI, et c'est volontaire. Tant
+      # qu'aucun prestataire n'est raccordé, `abonnes.py` l'écrit à l'écran
+      # au lieu de laisser croire qu'un bulletin part. Le jour où il y en aura
+      # un, sa clé se pose dans le tableau de bord — jamais dans ce fichier,
+      # qui est public.

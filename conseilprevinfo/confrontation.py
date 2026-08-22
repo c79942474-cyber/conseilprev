@@ -348,59 +348,96 @@ def confronter(texte, corpus, maxi_questions=12, maxi_echos=8, sujet=None):
                           % (("%.1f" % avance).replace(".", ","),
                              ("%.1f" % AVANCE_SUJET_MIN).replace(".", ",")))
 
-    portee = ([f for f in V.publiables(corpus) if f.get("sujet") == retenu]
-              if retenu else V.publiables(corpus))
-    par_terme, porteurs, sources = _termes_du_corpus(portee)
     presents = set(mots)
 
-    # ── CE QUE LE CORPUS PORTE ET QUE LE DOCUMENT NE NOMME PAS ───────────
-    plafond = max(MINI_FICHES, int(len(portee) * PART_MAX_CORPUS))
-    questions, ecartes_gabarit, ecartes_partout = [], 0, 0
-    for t, n in par_terme.most_common():
-        if n < MINI_FICHES or t in presents:
-            continue
-        # CE QUI EST PARTOUT N'EST NULLE PART : au-delà du plafond, le terme
-        # décrit la façon dont ce site écrit, pas un thème du corpus.
-        if n > plafond:
-            ecartes_partout += 1
-            continue
-        # UN SEUL GABARIT N'EST PAS UN THÈME. Quatorze fiches issues d'une
-        # même phrase ne valent pas quatorze témoignages.
-        if len(sources.get(t, ())) < MINI_SOURCES:
-            ecartes_gabarit += 1
-            continue
-        fs = porteurs[t]
-        sujets = sorted({f.get("sujet") for f in fs})
-        questions.append({
-            "terme": t, "fiches": n,
-            "sources": sorted(x for x in sources[t] if x),
-            "sujets": sujets,
-            "sujets_nom": [V.SUJETS.get(x, {}).get("nom", x) for x in sujets],
-            "exemples": [{"id": f.get("id"), "titre": f.get("titre")}
-                         for f in sorted(fs, key=lambda x: str(x.get("date_fait")),
-                                         reverse=True)[:3]],
-            "question": ("« %s » revient dans %d fiche(s) issues de %d source(s) "
-                         "et n'apparaît pas dans votre document. Le sujet y "
-                         "est-il traité sous un autre nom ?"
-                         % (t, n, len(sources[t]))),
-        })
-        if len(questions) >= maxi_questions:
-            break
+    def _mesurer(portee):
+        """Ce que le document et un ensemble de fiches se disent l'un à
+        l'autre. Extrait de la suite parce que la mesure peut être REFAITE :
+        une rubrique déduite qui ne donne rien est élargie au corpus entier,
+        et deux copies de ce calcul auraient divergé.
+        """
+        par_terme, porteurs, sources = _termes_du_corpus(portee)
 
-    # ── CE QUE LE DOCUMENT ET LE CORPUS ONT EN COMMUN ────────────────────
-    echos = []
-    for t in sorted(presents & set(par_terme), key=lambda x: -par_terme[x]):
-        if (par_terme[t] < MINI_FICHES or par_terme[t] > plafond
-                or len(sources.get(t, ())) < MINI_SOURCES):
-            continue
-        echos.append({
-            "terme": t, "fiches": par_terme[t],
-            "occurrences_document": mots[t],
-            "exemples": [{"id": f.get("id"), "titre": f.get("titre")}
-                         for f in porteurs[t][:2]],
-        })
-        if len(echos) >= maxi_echos:
-            break
+        # ── CE QUE LE CORPUS PORTE ET QUE LE DOCUMENT NE NOMME PAS ───────
+        plafond = max(MINI_FICHES, int(len(portee) * PART_MAX_CORPUS))
+        questions, ecartes_gabarit, ecartes_partout = [], 0, 0
+        for t, n in par_terme.most_common():
+            if n < MINI_FICHES or t in presents:
+                continue
+            # CE QUI EST PARTOUT N'EST NULLE PART : au-delà du plafond, le terme
+            # décrit la façon dont ce site écrit, pas un thème du corpus.
+            if n > plafond:
+                ecartes_partout += 1
+                continue
+            # UN SEUL GABARIT N'EST PAS UN THÈME. Quatorze fiches issues d'une
+            # même phrase ne valent pas quatorze témoignages.
+            if len(sources.get(t, ())) < MINI_SOURCES:
+                ecartes_gabarit += 1
+                continue
+            fs = porteurs[t]
+            sujets = sorted({f.get("sujet") for f in fs})
+            questions.append({
+                "terme": t, "fiches": n,
+                "sources": sorted(x for x in sources[t] if x),
+                "sujets": sujets,
+                "sujets_nom": [V.SUJETS.get(x, {}).get("nom", x) for x in sujets],
+                "exemples": [{"id": f.get("id"), "titre": f.get("titre")}
+                             for f in sorted(fs, key=lambda x: str(x.get("date_fait")),
+                                             reverse=True)[:3]],
+                "question": ("« %s » revient dans %d fiche(s) issues de %d source(s) "
+                             "et n'apparaît pas dans votre document. Le sujet y "
+                             "est-il traité sous un autre nom ?"
+                             % (t, n, len(sources[t]))),
+            })
+            if len(questions) >= maxi_questions:
+                break
+
+        # ── CE QUE LE DOCUMENT ET LE CORPUS ONT EN COMMUN ────────────────────
+        echos = []
+        for t in sorted(presents & set(par_terme), key=lambda x: -par_terme[x]):
+            if (par_terme[t] < MINI_FICHES or par_terme[t] > plafond
+                    or len(sources.get(t, ())) < MINI_SOURCES):
+                continue
+            echos.append({
+                "terme": t, "fiches": par_terme[t],
+                "occurrences_document": mots[t],
+                "exemples": [{"id": f.get("id"), "titre": f.get("titre")}
+                             for f in porteurs[t][:2]],
+            })
+            if len(echos) >= maxi_echos:
+                break
+        return {"questions": questions, "echos": echos, "plafond": plafond,
+                "portee": portee, "ecartes_gabarit": ecartes_gabarit,
+                "ecartes_partout": ecartes_partout}
+
+    # ── LA RUBRIQUE DÉDUITE PEUT NE RIEN DONNER, ET ALORS ON ÉLARGIT ──────
+    # DÉFAUT MESURÉ. Les seuils de terme — trois fiches, deux sources, un
+    # plafond de part — sont calibrés sur le corpus entier. Appliqués à une
+    # seule rubrique, ils peuvent ne rien laisser passer : une rubrique servie
+    # par DEUX sources exige qu'un terme figure dans les deux, ce qui
+    # n'arrive presque jamais. Le document rendait alors zéro pont là où le
+    # corpus entier en donnait six.
+    #
+    # LA RÈGLE NE S'APPLIQUE QU'À UNE RUBRIQUE DÉDUITE. Si vous l'avez
+    # imposée, ce site ne passe pas outre : il dit que cette rubrique-là ne
+    # donne rien, et c'est une réponse.
+    m = _mesurer([f for f in V.publiables(corpus) if f.get("sujet") == retenu]
+                 if retenu else V.publiables(corpus))
+    elargi = False
+    if retenu and not impose and not m["echos"] and len(m["questions"]) < 3:
+        large = _mesurer(V.publiables(corpus))
+        if large["echos"] or large["questions"]:
+            m, elargi = large, True
+            pourquoi_sujet += (" CETTE RUBRIQUE N'A RIEN DONNÉ — trop peu de "
+                               "fiches pour que les seuils de terme y laissent "
+                               "passer quoi que ce soit —, la confrontation a "
+                               "donc été refaite sur le corpus entier. Les "
+                               "rapprochements ci-dessous peuvent sortir de "
+                               "votre domaine.")
+
+    questions, echos, plafond = m["questions"], m["echos"], m["plafond"]
+    portee = m["portee"]
+    ecartes_gabarit, ecartes_partout = m["ecartes_gabarit"], m["ecartes_partout"]
 
     # ── LES QUESTIONS TIENNENT-ELLES DEBOUT ? ────────────────────────────
     # On ne sert pas une liste parce qu'elle est non vide. Un corpus dont les
@@ -438,6 +475,10 @@ def confronter(texte, corpus, maxi_questions=12, maxi_echos=8, sujet=None):
         "sujet": retenu,
         "sujet_nom": V.SUJETS.get(retenu, {}).get("nom") if retenu else None,
         "sujet_pourquoi": pourquoi_sujet,
+        # L'ÉLARGISSEMENT EST DÉCLARÉ, pas seulement raconté dans la phrase :
+        # une page qui l'affiche doit pouvoir le marquer, et un contrôle doit
+        # pouvoir le lire sans analyser du texte.
+        "sujet_elargi": elargi,
         "sujet_scores": {c: round(v * 100) for c, v in (scores or {}).items()},
         "fiches_confrontees": len(portee),
         "fiches_corpus": len(V.publiables(corpus)),

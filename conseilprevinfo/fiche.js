@@ -28,10 +28,22 @@
       var h = '<div class="fmeta" style="margin-bottom:14px">'
         + '<span class="past ' + esc(f.impact) + '">' + esc(f.impact_nom) + '</span>'
         + '<span class="past sujet">' + esc(f.sujet_nom) + '</span>'
-        + '<span class="fdate">' + esc(frDate(f.date_fait)) + '</span></div>';
+        + '<span class="fdate">' + esc(frDate(f.date_fait))
+        + (f.date_convention ? ' <b class="conv">convention</b>' : "")
+        + '</span></div>';
       h += '<h1 class="titre-journal" style="font-size:clamp(26px,3.6vw,40px);'
         + 'line-height:1.1;margin:0 0 12px">' + esc(f.titre) + '</h1>';
       h += '<p class="devise" style="font-size:16px">' + esc(f.chapeau) + '</p>';
+
+      /* UNE DATE FABRIQUÉE LE DIT SOUS ELLE-MÊME. Elle est écrite en toutes
+         lettres dans l'incertitude, mais l'incertitude se lit APRÈS la
+         lecture critique — trop tard pour un lecteur qui a déjà pris la date
+         pour un constat. La réserve va donc là où la date est lue. */
+      if (f.date_convention) {
+        h += '<p class="conv-dit"><b>Cette date n\'est pas une observation.</b> '
+          + esc(f.date_convention_dit || "") + ' ' + esc(f.horizon_dit || "")
+          + '</p>';
+      }
 
       h += '<div class="fbloc lecture" style="margin-top:22px"><span class="fbloc-t">'
         + 'Lecture — ' + esc(f.lecture_nom) + '</span><p>' + esc(f.lecture) + '</p></div>';

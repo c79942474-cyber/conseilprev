@@ -1,0 +1,23 @@
+# CE QUE CE SITE INSTALLE, ET RIEN D'AUTRE.
+#
+# Aucune bibliothèque de modèle de langage n'apparaît ici, et c'est un
+# contrôle du code, pas une intention : `test_aucun_modele_de_langage_dans_la
+# _chaine_de_collecte` refuse le mot « anthropic », « openai » ou
+# « mistralai » dans la chaîne de collecte. Une dépendance ajoutée ici sans
+# être employée serait donc visible, mais inutile.
+
+flask==3.0.3
+
+# ATLAS et Electricity Maps publient en YAML — pas en JSON.
+pyyaml==6.0.2
+
+# LE SERVEUR DE PRODUCTION. `app.run()` reste pour la mise au point ; Flask
+# lui-même déconseille son serveur intégré en ligne.
+gunicorn==23.0.0
+
+# LECTURE DES PDF DANS LA CONFRONTATION — la seule dépendance FACULTATIVE.
+# Sans elle, `confrontation.py` le dit à l'écran et accepte les autres
+# formats, au lieu de renvoyer une erreur que l'utilisateur ne peut pas
+# comprendre. Elle est listée parce que le déploiement, lui, peut se la
+# permettre.
+pypdf==5.1.0

@@ -302,6 +302,27 @@ def valider(fiche):
                       "(champ « projette_qui ») : sans cela, une hypothèse "
                       "se lit comme un fait établi")
 
+    # ── UNE DATE INVENTÉE DOIT SE DÉCLARER COMME TELLE ────────────────────
+    # DÉFAUT CONSTATÉ EN SERVICE, sur les dix fiches OWASP. La source publie
+    # une ÉDITION datée, pas des entrées datées ; le collecteur leur a donc
+    # posé le 1er janvier — une convention de classement, et il l'écrivait
+    # honnêtement dans l'incertitude de chaque fiche.
+    #
+    # SAUF QUE LA PROSE NE PROTÈGE RIEN. Le croisement, lui, ne lit pas
+    # l'incertitude : il a vu dix fiches à la même date, et les a rapprochées
+    # « à moins de 45 jours ». Le site reliait donc des fiches par une valeur
+    # QU'IL AVAIT LUI-MÊME FABRIQUÉE, en affichant sous le rapprochement que
+    # la date était « la seule chose qu'elles aient en commun ». C'était vrai,
+    # et c'est bien ce qui était grave.
+    #
+    # La convention devient donc un CHAMP, que le collecteur qui l'invente
+    # déclare. Aucune règle ne la devine — deviner rouvrirait la même faute
+    # sous une autre forme.
+    if f.get("date_convention") and not _texte(f.get("date_convention_dit")):
+        fautes.append("une date de convention doit dire de quoi elle tient "
+                      "lieu (champ « date_convention_dit ») : sans cela, une "
+                      "date fabriquée se lit comme une observation")
+
     return fautes
 
 
@@ -326,6 +347,15 @@ def normaliser(fiche):
     f["impact_nom"] = IMPACTS[f["impact"]]["nom"]
     f["impact_rang"] = IMPACTS[f["impact"]]["rang"]
     f["horizon_nom"] = HORIZONS[f["horizon"]]["nom"]
+    f["horizon_dit"] = HORIZONS[f["horizon"]]["dit"]
+    # « CONSTATÉ » DIT « ÉTABLI À LA DATE INDIQUÉE » — et c'est exactement la
+    # promesse qu'une date de convention ne tient pas. Aucun autre horizon ne
+    # conviendrait pour autant : un risque reconnu par OWASP EST établi, il
+    # n'est ni « engagé » ni « projeté ». Ce n'est donc pas l'horizon qu'il
+    # faut changer, c'est sa phrase — là où la promesse est faite.
+    if f.get("date_convention"):
+        f["horizon_dit"] = ("Établi — mais PAS à la date affichée : %s"
+                            % _texte(f["date_convention_dit"]))
     ln = LECTURES[f["lecture_nature"]]
     f["lecture_nom"] = ln["nom"]
     f["lecture_dit"] = ln["dit"]

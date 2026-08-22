@@ -86,8 +86,13 @@
     $("resultat").hidden = false;
 
     /* LA RUBRIQUE RETENUE EST DITE, et pourquoi. Un filtrage silencieux
-       laisserait croire que le corpus ne porte que cela. */
+       laisserait croire que le corpus ne porte que cela.
+
+       QUAND LA RUBRIQUE A ÉTÉ ÉLARGIE, ÇA SE VOIT. La phrase le dit déjà,
+       mais elle est longue : un lecteur pressé la survole et croit lire son
+       domaine. La marque, elle, ne se survole pas. */
     $("c-portee").textContent = r.sujet_pourquoi + " " + r.dit;
+    $("c-portee").className = r.sujet_elargi ? "dos-dit elargi" : "dos-dit";
     $("c-ponts").textContent = r.n_echos + " terme(s) en commun";
 
     $("c-echos").innerHTML = (r.echos || []).map(function (e) {

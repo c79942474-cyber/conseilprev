@@ -362,3 +362,49 @@ def test_un_docx_illisible_le_dit_au_lieu_de_rendre_un_texte_vide():
 
 def test_deux_confrontations_du_meme_document_rendent_le_meme_resultat(corpus):
     assert C.confronter(DOC, corpus) == C.confronter(DOC, corpus)
+
+
+# ── L'ÉLARGISSEMENT — quand une rubrique déduite ne donne rien ────────────
+#
+# DÉFAUT MESURÉ EN SERVICE. Les seuils de terme — trois fiches, deux sources,
+# un plafond de part — sont calibrés sur le corpus entier. Appliqués à une
+# seule rubrique, ils peuvent ne rien laisser passer : une rubrique servie par
+# DEUX sources exige qu'un terme figure dans les deux, ce qui n'arrive presque
+# jamais. Le même document rendait six ponts sur le corpus entier et zéro dès
+# que la détection de rubrique se déclenchait.
+
+def test_une_rubrique_deduite_qui_ne_donne_rien_est_elargie(corpus):
+    """Et l'élargissement est DIT : le lecteur doit savoir qu'il regarde plus
+    large que sa rubrique, sinon il croit son domaine mieux couvert qu'il ne
+    l'est."""
+    r = C.confronter(DOC, corpus)
+    if not r["sujet"]:
+        pytest.skip("aucune rubrique déduite sur ce corpus")
+    if not r["sujet_elargi"]:
+        assert r["echos"] or r["questions_brutes"], \
+            "la rubrique ne donne rien ET n'a pas été élargie"
+        return
+    assert r["echos"], "élargi sans rien rendre de plus"
+    assert r["fiches_confrontees"] == len(V.publiables(corpus))
+    assert "RIEN DONNÉ" in r["sujet_pourquoi"]
+    assert "corpus entier" in r["sujet_pourquoi"]
+
+
+def test_une_rubrique_imposee_n_est_jamais_elargie(corpus):
+    """Passer outre votre choix serait pire que de ne rien rendre : vous avez
+    demandé cette rubrique-là, et « elle ne donne rien » est une réponse."""
+    vides = [c for c in V.SUJETS
+             if not [f for f in V.publiables(corpus) if f.get("sujet") == c]]
+    cible = vides[0] if vides else "datacenter"
+    r = C.confronter(DOC, corpus, sujet=cible)
+    assert r["sujet"] == cible
+    assert r["sujet_elargi"] is False
+    assert "imposée par vous" in r["sujet_pourquoi"]
+
+
+def test_l_elargissement_ne_se_declenche_pas_quand_la_rubrique_donne(corpus):
+    """Il ne doit pas devenir le régime normal : une rubrique qui produit des
+    ponts est celle qu'on sert, sans aller chercher ailleurs."""
+    r = C.confronter(DOC, corpus)
+    if r["sujet"] and not r["sujet_elargi"]:
+        assert r["fiches_confrontees"] < len(V.publiables(corpus))
