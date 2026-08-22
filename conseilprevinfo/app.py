@@ -1,0 +1,356 @@
+"""CONSEILPREV INFO — veille sourcée : cyber industrielle, IA, SIA, centres de données.
+
+CE QUE CETTE APPLICATION SERT, ET CE QU'ELLE REFUSE DE SERVIR. Elle rend des
+fiches de veille dont chacune porte sa source, sa date, son statut de
+vérification et une lecture critique dont la PROVENANCE est déclarée. Une
+fiche qui ne remplit pas ces conditions n'est pas servie — pas « servie avec
+une réserve » : refusée par `veille.publiables()`, qui est la seule porte.
+
+LE CORPUS N'EST PAS DANS LE CODE. Il est collecté depuis les sources ouvertes
+du registre, puis gardé en mémoire pour un temps borné. Un corpus figé dans un
+fichier serait périmé le jour de la mise en ligne ; une collecte à chaque
+requête taperait sur les serveurs des éditeurs à chaque visiteur.
+
+DÉMARRAGE LOCAL :  python app.py
+"""
+import os
+import threading
+import time
+from datetime import datetime, timezone
+
+from flask import Flask, jsonify, request, send_from_directory
+
+import abonnes as AB
+import bulletin as BUL
+import croisement as X
+import decision as DEC
+import ingestion
+import sources as SRC
+import veille as V
+
+ICI = os.path.dirname(os.path.abspath(__file__))
+VERSION = "2026.08.22"
+
+app = Flask(__name__, static_folder=None)
+
+# ── LE CORPUS EN MÉMOIRE ──────────────────────────────────────────────────
+# Rafraîchi au plus toutes les TTL secondes, et JAMAIS pendant qu'un visiteur
+# attend : la première requête après expiration sert l'ancien corpus et
+# déclenche la collecte en fond. Faire attendre un lecteur le temps de
+# télécharger neuf mégaoctets serait le rendre otage de la cadence des
+# éditeurs.
+_CORPUS = {"fiches": [], "journal": [], "quand": 0.0, "collectes": 0}
+_VERROU = threading.Lock()
+_EN_COURS = threading.Event()
+TTL = int(os.environ.get("VEILLE_TTL", "1800"))
+
+
+def _collecter():
+    if _EN_COURS.is_set():
+        return
+    _EN_COURS.set()
+    try:
+        r = ingestion.collecter_tout(limite_kev=int(os.environ.get("KEV_MAX", "40")))
+        with _VERROU:
+            # ON NE REMPLACE QUE SI LA COLLECTE A RAPPORTÉ QUELQUE CHOSE. Une
+            # source momentanément injoignable ne doit pas vider le site :
+            # une fiche d'hier vaut mieux qu'une page blanche, à condition que
+            # sa date soit affichée — elle l'est.
+            if r.get("corpus"):
+                _CORPUS["fiches"] = r["corpus"]
+                _CORPUS["quand"] = time.time()
+                _CORPUS["collectes"] += 1
+            _CORPUS["journal"] = r.get("journal", [])
+    except Exception as e:  # noqa: BLE001
+        app.logger.warning("collecte échouée : %s", e)
+        with _VERROU:
+            _CORPUS["journal"] = [{"source": "*", "ok": False,
+                                   "erreur": "exception", "message": str(e)}]
+    finally:
+        _EN_COURS.clear()
+
+
+def corpus():
+    with _VERROU:
+        fiches = list(_CORPUS["fiches"])
+        age = time.time() - _CORPUS["quand"]
+    if not fiches:
+        _collecter()                      # premier appel : on attend
+        with _VERROU:
+            fiches = list(_CORPUS["fiches"])
+    elif age > TTL:
+        threading.Thread(target=_collecter, daemon=True).start()
+    return fiches
+
+
+def _etat_corpus():
+    with _VERROU:
+        return {
+            "fiches": len(_CORPUS["fiches"]),
+            "collectes": _CORPUS["collectes"],
+            "collecte_le": (datetime.fromtimestamp(_CORPUS["quand"], timezone.utc)
+                            .isoformat(timespec="seconds")
+                            if _CORPUS["quand"] else None),
+            "age_s": int(time.time() - _CORPUS["quand"]) if _CORPUS["quand"] else None,
+            "ttl_s": TTL,
+            "journal": _CORPUS["journal"],
+        }
+
+
+# ── PAGES ─────────────────────────────────────────────────────────────────
+@app.route("/")
+def accueil():
+    return send_from_directory(ICI, "index.html")
+
+
+@app.route("/<path:nom>.css")
+def css(nom):
+    return send_from_directory(ICI, nom + ".css")
+
+
+@app.route("/<path:nom>.js")
+def js(nom):
+    return send_from_directory(ICI, nom + ".js")
+
+
+# ── INTERFACES ────────────────────────────────────────────────────────────
+@app.route("/api/veille")
+def api_veille():
+    """Les fiches, filtrées. Aucun paramètre ne peut faire sortir une fiche
+    non publiable : `filtrer()` applique la porte avant tout le reste."""
+    f = V.filtrer(
+        corpus(),
+        sujet=request.args.get("sujet") or None,
+        pays=request.args.get("pays") or None,
+        techno=request.args.get("techno") or None,
+        depuis=request.args.get("depuis") or None,
+        jusqua=request.args.get("jusqua") or None,
+        impact=request.args.get("impact") or None,
+        horizon=request.args.get("horizon") or None,
+    )
+    q = (request.args.get("q") or "").strip()
+    if q:
+        f = V.chercher(f, q)
+    try:
+        n = max(1, min(200, int(request.args.get("n") or 60)))
+    except ValueError:
+        n = 60
+    # UNE COUPE QUI NE SE DIT PAS SE LIT COMME UNE COUVERTURE COMPLÈTE.
+    # DÉFAUT CORRIGÉ, constaté au navigateur : la page annonçait « 66 fiches
+    # retenues » et en affichait 60, sans rien signaler. Le lecteur croyait
+    # tenir tout le corpus filtré. La coupe est donc rendue explicitement,
+    # avec de quoi la lever — ce n'est pas au client de la deviner en
+    # comparant deux nombres.
+    coupe = len(f) > n
+    return jsonify(ok=True, version=VERSION, total=len(f), fiches=f[:n],
+                   affichees=min(n, len(f)), plafond=n, tronque=coupe,
+                   tronque_dit=("%d fiche(s) retenues, %d affichées. La liste "
+                                "est coupée au %dᵉ rang : ce n'est pas la "
+                                "fin du corpus filtré."
+                                % (len(f), min(n, len(f)), n)) if coupe else "",
+                   etat=_etat_corpus())
+
+
+@app.route("/abonnement")
+def page_abonnement():
+    return send_from_directory(ICI, "abonnement.html")
+
+
+@app.route("/fiche/<ident>")
+def page_fiche(ident):
+    """UNE ADRESSE PAR FICHE. Sans cela, rien ne se cite ni ne se transmet :
+    un lecteur qui veut renvoyer un collègue à une information ne peut lui
+    donner que l'adresse du site entier, à charge pour lui de la retrouver.
+
+    LE STATUT HTTP DIT LA VÉRITÉ, PAS SEULEMENT LA PAGE. Constaté au
+    navigateur : une adresse inventée rendait « 200 OK » tout en affichant
+    « Fiche introuvable ». Ce n'est pas un détail d'indexation — c'est le
+    site qui affirme dans son protocole le contraire de ce qu'il écrit à
+    l'écran, et tout ce qui le lit sans yeux (moteur, lien archivé,
+    surveillance) enregistre une page valide.
+    """
+    connue = any(x.get("id") == ident for x in V.publiables(corpus()))
+    r = send_from_directory(ICI, "fiche.html")
+    return r if connue else (r, 404)
+
+
+@app.route("/api/veille/fiche/<ident>")
+def api_fiche(ident):
+    """La fiche seule, et ses voisines.
+
+    Une fiche non publiable répond 404 comme si elle n'existait pas : dire
+    « cette fiche existe mais vous n'y avez pas droit » renseignerait sur le
+    contenu de la réserve éditoriale."""
+    tout = corpus()
+    f = next((x for x in V.publiables(tout) if x.get("id") == ident), None)
+    if not f:
+        return jsonify(ok=False, erreur="introuvable",
+                       message="Aucune fiche publiée sous cet identifiant."), 404
+    # LES VOISINES : même sujet, jamais la fiche elle-même. Elles donnent au
+    # lecteur la suite naturelle sans qu'il retourne au fil.
+    # LE CROISEMENT REMPLACE « ARTICLES SIMILAIRES ». Chaque voisine porte le
+    # MOTIF de son rapprochement : sans lui, le lecteur ne sait pas s'il tient
+    # une coïncidence de vocabulaire ou une vraie dépendance.
+    # LE VOISINAGE DE DATE EST RENDU À PART, sous son vrai nom. Mêlé aux
+    # liens, il les noyait : mesuré sur le corpus, il représentait 312
+    # rapprochements sur 314, tous porteurs du même motif recopié.
+    # LA COMPOSITION D'ENSEMBLE ACCOMPAGNE LA FICHE. Sans elle, un lecteur qui
+    # lit « aucun lien établi » croit tenir une particularité de CETTE fiche,
+    # alors que c'est l'état de tout le corpus — et il en conclurait que la
+    # rubrique est en panne.
+    return jsonify(ok=True, fiche=f, types_de_lien=X.LIENS,
+                   composition=X.mesure_liens(tout), **X.croiser(f, tout))
+
+
+@app.route("/api/veille/facettes")
+def api_facettes():
+    return jsonify(ok=True, **V.facettes(corpus()))
+
+
+@app.route("/api/veille/dossiers")
+def api_dossiers():
+    """Les regroupements que le corpus FORME de lui-même — jamais des
+    rubriques décidées à l'avance, qui resteraient vides ou trop pleines."""
+    c = corpus()
+    return jsonify(ok=True,
+                   par_terme=X.dossiers_par_terme(c),
+                   par_entite=X.dossiers(c),
+                   mesure_entites=X.mesure_entites(c),
+                   tension=X.tension(c))
+
+
+@app.route("/api/veille/pistes")
+def api_pistes():
+    """Les pistes d'instruction que le corpus permet d'ouvrir.
+
+    LA MESURE ACCOMPAGNE TOUJOURS LES PISTES, y compris les déclencheurs
+    muets : un module qui n'afficherait que ce qu'il trouve laisserait croire
+    que le reste ne donne rien parce qu'il n'y a rien — alors que le plus
+    souvent, la source qui le nourrirait n'est pas branchée.
+    """
+    c = corpus()
+    return jsonify(ok=True, version=DEC.VERSION,
+                   pistes=DEC.pistes(c), mesure=DEC.mesure(c),
+                   solidites=DEC.SOLIDITES)
+
+
+@app.route("/api/veille/referentiel")
+def api_referentiel():
+    """Le vocabulaire du site, servi plutôt que recopié dans la page.
+
+    Écrit dans le HTML, il divergerait du moteur au premier ajout de statut —
+    et c'est l'écran qui ferait foi pour le lecteur."""
+    return jsonify(ok=True, version=VERSION,
+                   sujets=V.sujets(), statuts=V.statuts(),
+                   lectures=V.lectures(), impacts=V.impacts(),
+                   horizons=V.horizons())
+
+
+@app.route("/api/sources")
+def api_sources():
+    return jsonify(ok=True, version=SRC.VERSION,
+                   sources=SRC.registre(request.args.get("sujet") or None),
+                   natures=SRC.natures(), a_brancher=SRC.A_BRANCHER)
+
+
+@app.route("/api/sources/sonde/<cle>")
+def api_sonde(cle):
+    """Va RÉELLEMENT chercher la source et dit ce qu'elle a répondu.
+
+    Ouverte : elle ne divulgue rien qu'un lecteur ne puisse constater
+    lui-même en ouvrant l'adresse, et elle rend vérifiable la promesse
+    « nos sources sont atteignables »."""
+    r = SRC.sonder(cle)
+    return jsonify(r) if r.get("ok") else (jsonify(r), 502 if r.get("cle") else 404)
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  LES ABONNÉS. Le jeton voyage dans l'en-tête `Authorization`, jamais dans
+#  l'URL : une adresse se retrouve dans les journaux du serveur, dans
+#  l'historique du navigateur et dans le `Referer` envoyé aux tiers.
+# ═══════════════════════════════════════════════════════════════════════════
+
+def _jeton():
+    a = request.headers.get("Authorization") or ""
+    return a[7:].strip() if a.lower().startswith("bearer ") else ""
+
+
+@app.route("/api/abonnes/inscription", methods=["POST"])
+def api_inscription():
+    d = request.get_json(silent=True) or {}
+    r = AB.creer(d.get("email"), d.get("motdepasse"),
+                 d.get("sujets"), d.get("seuil") or "structurant")
+    # LA RÉPONSE NE DIT PAS SI L'ADRESSE ÉTAIT DÉJÀ INSCRITE : ce serait
+    # confirmer à un tiers qu'une personne est abonnée ici.
+    r.pop("deja", None)
+    return (jsonify(r), 200 if r.get("ok") else 400)
+
+
+@app.route("/api/abonnes/connexion", methods=["POST"])
+def api_connexion():
+    d = request.get_json(silent=True) or {}
+    r = AB.connecter(d.get("email"), d.get("motdepasse"))
+    return (jsonify(r), 200 if r.get("ok") else 401)
+
+
+@app.route("/api/abonnes/deconnexion", methods=["POST"])
+def api_deconnexion():
+    return jsonify(AB.deconnecter(_jeton()))
+
+
+@app.route("/api/abonnes/moi")
+def api_moi():
+    c = AB.compte_de(_jeton())
+    if not c:
+        return jsonify(ok=False, erreur="non_connecte"), 401
+    return jsonify(ok=True, compte=AB._public(c),
+                   envoi_raccorde=bool(AB.PRESTATAIRE_COURRIEL),
+                   pourquoi_pas_d_envoi=AB.POURQUOI_PAS_D_ENVOI
+                   if not AB.PRESTATAIRE_COURRIEL else None)
+
+
+@app.route("/api/abonnes/reglages", methods=["POST"])
+def api_reglages():
+    d = request.get_json(silent=True) or {}
+    r = AB.regler(_jeton(), d.get("sujets"), d.get("seuil"))
+    return (jsonify(r), 200 if r.get("ok")
+            else (401 if r.get("erreur") == "non_connecte" else 400))
+
+
+@app.route("/api/abonnes/effacer", methods=["POST"])
+def api_effacer():
+    r = AB.oublier(_jeton())
+    return (jsonify(r), 200 if r.get("ok") else 401)
+
+
+@app.route("/api/abonnes/bulletin")
+def api_bulletin():
+    """LE BULLETIN TEL QU'IL SERAIT ENVOYÉ — et il n'est pas envoyé.
+
+    Montrer le courrier avant de pouvoir l'expédier n'est pas un pis-aller :
+    c'est ce qui permet de le relire en entier. Un bulletin qu'on ne voit
+    qu'une fois parti se corrige toujours trop tard.
+    """
+    c = AB.compte_de(_jeton())
+    if not c:
+        return jsonify(ok=False, erreur="non_connecte"), 401
+    b = BUL.composer(corpus(), AB._public(c))
+    b["pourquoi_pas_envoye"] = (None if AB.PRESTATAIRE_COURRIEL
+                                else AB.POURQUOI_PAS_D_ENVOI)
+    return jsonify(ok=True, bulletin=b, texte=BUL.texte(b))
+
+
+@app.route("/api/sante")
+def api_sante():
+    c = corpus()
+    return jsonify(ok=True, version=VERSION,
+                   veille=V.sante(c), sources=SRC.sante(),
+                   ingestion=ingestion.sante(), croisement=X.sante(c),
+                   decision=DEC.sante(c), abonnes=AB.sante(),
+                   bulletin=BUL.sante(),
+                   corpus=_etat_corpus())
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", "5000")),
+            debug=bool(os.environ.get("DEBUG")))

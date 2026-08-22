@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Votre abonnement — CONSEILPREV INFO</title>
+<meta name="description" content="Réglez les sujets que vous suivez et le seuil à partir duquel une information mérite de vous être signalée. Le bulletin est composé sous vos yeux avant tout envoi.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,700;6..72,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/veille.css">
+</head>
+<body>
+
+<div class="oreille">
+  <div class="in">
+    <span><a href="/" style="color:inherit">← CONSEILPREV INFO</a></span>
+    <span id="or-date">—</span>
+  </div>
+</div>
+
+<main class="in" style="max-width:820px;padding-top:26px">
+  <h1 class="titre-journal" style="font-size:clamp(26px,3.6vw,38px);margin:0 0 12px">
+    Votre abonnement</h1>
+
+  <!-- CE QU'ON PROMET EST ÉCRIT AVANT LE FORMULAIRE, pas dans une note en
+       bas. Un lecteur décide de s'inscrire avec ce qu'il a lu au-dessus du
+       champ, jamais avec ce qui suit le bouton. -->
+  <p class="devise">
+    Vous choisissez <b>les sujets que vous suivez</b> et <b>le seuil</b> à
+    partir duquel un fait mérite de vous être signalé. Le bulletin ne
+    contient rien qui ne soit déjà publié sur ce site : ni analyse rédigée
+    pour l'envoi, ni fait requalifié pour remplir la semaine. <b>Quand rien
+    ne franchit votre seuil, le bulletin est vide et il le dit.</b>
+  </p>
+
+  <div class="bandeau-etat" id="etat"></div>
+
+  <!-- ── S'INSCRIRE / SE CONNECTER ─────────────────────────────────── -->
+  <section id="hors" hidden>
+    <h2 class="rubrique">S'inscrire ou se connecter</h2>
+    <form class="fmr" id="f-compte" autocomplete="on">
+      <div class="fgrp2">
+        <label for="a-email">Adresse professionnelle</label>
+        <input type="email" id="a-email" name="email" required
+               autocomplete="username" placeholder="prenom.nom@societe.fr">
+      </div>
+      <div class="fgrp2">
+        <label for="a-mdp">Mot de passe</label>
+        <input type="password" id="a-mdp" name="motdepasse" required
+               autocomplete="current-password" minlength="12">
+        <!-- LA RÈGLE EST DONNÉE AVANT LA SAISIE, et elle est expliquée : une
+             contrainte qu'on subit sans la comprendre se contourne. -->
+        <p class="aide">Douze caractères au minimum. <b>Une phrase entière
+          vaut mieux qu'un mot compliqué</b> : elle est plus longue, et vous
+          la retenez. Aucune règle de majuscule ni de caractère spécial — ces
+          règles produisent « Motdepasse1! » et rétrécissent la recherche au
+          lieu de l'élargir.</p>
+      </div>
+      <!-- CE QUE FAIT LE BOUTON EST DIT AVANT LE BOUTON. Un compte se crée
+           sur les réglages par défaut ; les préférences se posent juste
+           après, à l'écran suivant, où elles sont visibles et modifiables. -->
+      <p class="aide">Un nouveau compte suit d'abord <b>tous les sujets</b>, au
+        seuil « structurant ». Vous réglez ce que vous suivez dès la
+        connexion — et le bulletin correspondant s'affiche aussitôt.</p>
+      <div class="fbtns">
+        <button type="submit" class="fraz" id="b-connexion">Se connecter</button>
+        <button type="button" class="fraz" id="b-inscription">Créer un compte</button>
+      </div>
+    </form>
+    <p class="dos-dit">Ce site ne conserve <b>aucun mot de passe</b>, ni en
+      clair ni sous une forme réversible : seul un dérivé <code>scrypt</code>
+      est gardé, avec un sel propre à chaque compte. Nous ne pourrions pas
+      lire le vôtre même si on nous y forçait.</p>
+  </section>
+
+  <!-- ── LE COMPTE ─────────────────────────────────────────────────── -->
+  <section id="dedans" hidden>
+    <h2 class="rubrique">Ce que vous suivez <span id="c-email"></span></h2>
+    <form class="fmr" id="f-reglages">
+      <fieldset class="fset">
+        <legend>Sujets</legend>
+        <div id="a-sujets" class="cases"></div>
+      </fieldset>
+      <div class="fgrp2">
+        <label for="a-seuil">Seuil de signalement</label>
+        <select id="a-seuil"></select>
+        <p class="aide">Vous ne recevez <b>que</b> ce qui atteint ce seuil.
+          Rien n'est ajouté « parce que c'était intéressant » : élargir votre
+          sélection sans vous le demander est la première étape vers la lettre
+          qu'on ne lit plus.</p>
+      </div>
+      <div class="fbtns">
+        <button type="submit" class="fraz">Enregistrer</button>
+        <button type="button" class="fraz" id="b-deconnexion">Se déconnecter</button>
+        <button type="button" class="fraz danger" id="b-effacer">Effacer mon compte</button>
+      </div>
+    </form>
+
+    <h2 class="rubrique">Votre bulletin, tel qu'il partirait
+      <span id="c-bul"></span></h2>
+    <!-- LE COURRIER EST MONTRÉ AVANT DE POUVOIR ÊTRE ENVOYÉ. Ce n'est pas un
+         pis-aller : un bulletin qu'on ne voit qu'une fois parti se corrige
+         toujours trop tard. -->
+    <p class="bandeau-etat" id="envoi"></p>
+    <pre class="bul" id="bulletin">—</pre>
+  </section>
+</main>
+
+<footer>
+  <div class="in">
+    <p><b>Ce que devient votre adresse.</b> Elle sert à composer et, le jour
+    où l'envoi existera, à expédier ce bulletin. Rien d'autre. La liste des
+    sujets que vous suivez est une donnée d'exposition — savoir qu'un
+    industriel suit un automaticien précis renseigne sur son parc — et elle
+    est traitée comme telle : elle ne sort pas d'ici.</p>
+    <p><b>L'effacement est réel.</b> « Effacer mon compte » retire le compte
+    du registre et ferme ses sessions. Rien n'est marqué « inactif » pour être
+    conservé ailleurs.</p>
+  </div>
+</footer>
+
+<script src="/abonnement.js" defer></script>
+</body>
+</html>

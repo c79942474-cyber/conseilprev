@@ -1,0 +1,327 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   CONSEILPREV INFO — mise en page de presse professionnelle.
+
+   POURQUOI DU PAPIER ET NON DU SOMBRE. Les deux autres sites du cabinet sont
+   des OUTILS : on y calcule, l'écran est un poste de travail, le fond sombre
+   s'y défend. Celui-ci se LIT — des paragraphes, des analyses, des sources.
+   Le fond clair chaud est ce que la presse professionnelle emploie depuis
+   toujours parce qu'il tient sur la longueur ; un fil d'actualité en blanc
+   sur noir se parcourt, il ne se lit pas.
+
+   LA COULEUR PORTE UNE INFORMATION, JAMAIS UN ORNEMENT. Le rouge est réservé
+   à ce qui rompt ; le bleu classe le sujet ; le vert dit qu'une source a été
+   confrontée ; l'ambre signale une réserve. Un lecteur qui apprend ces quatre
+   codes lit la page sans lire les mots — et c'est le but.
+
+   ACCESSIBILITÉ : la couleur ne décide jamais seule. Chaque pastille porte
+   son intitulé écrit, chaque niveau de portée porte un rang chiffré. Qui ne
+   distingue pas le rouge de l'ambre lit « Rupture » et « Signal faible ».
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root{
+  --papier:#FBF8F2;
+  --papier2:#F3EDE2;
+  --papier3:#EAE2D4;
+  --encre:#14110D;
+  --encre2:#3E362B;
+  --sourd:#75695A;
+  --sourd2:#93866F;
+  --filet:#DBD1C0;
+  --filet2:#C6B9A3;
+
+  --rouge:#9E1F14;     /* rupture, la une */
+  --bleu:#1A4C6E;      /* sujet, classement */
+  --vert:#2B6147;      /* vérifié à la source */
+  --ambre:#8A6209;     /* réserve, incertitude */
+  --ocre:#A9701F;
+
+  --serif:'Newsreader',Georgia,'Times New Roman',serif;
+  --sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --fix:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+  --maxw:1240px;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--papier);color:var(--encre);
+  font-family:var(--sans);font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--bleu)}
+
+/* ── LE BANDEAU DE TITRE ─────────────────────────────────────────────── */
+.oreille{
+  background:var(--encre);color:var(--papier);font-family:var(--fix);
+  font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;
+}
+.oreille .in{max-width:var(--maxw);margin:0 auto;padding:7px 22px;
+  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.oreille b{color:#F3C88A;font-weight:500}
+
+.tete{border-bottom:3px solid var(--encre);background:var(--papier)}
+.tete .in{max-width:var(--maxw);margin:0 auto;padding:22px 22px 16px}
+.titre-journal{
+  font-family:var(--serif);font-weight:800;font-size:clamp(34px,5.6vw,60px);
+  line-height:.98;letter-spacing:-.028em;margin:0;color:var(--encre);
+}
+.titre-journal span{color:var(--rouge)}
+.devise{
+  margin:9px 0 0;font-size:14.5px;line-height:1.55;color:var(--encre2);
+  max-width:74ch;
+}
+.devise b{color:var(--encre)}
+
+/* ── LA BARRE DE FILTRES ─────────────────────────────────────────────── */
+.filtres{
+  position:sticky;top:0;z-index:30;background:var(--papier2);
+  border-bottom:1px solid var(--filet2);
+  box-shadow:0 2px 10px rgba(20,17,13,.06);
+}
+.filtres .in{max-width:var(--maxw);margin:0 auto;padding:11px 22px;
+  display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.fgrp{display:flex;align-items:center;gap:6px}
+.flab{font-family:var(--fix);font-size:10px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--sourd)}
+.filtres select,.filtres input{
+  font-family:var(--sans);font-size:13.5px;padding:6px 10px;
+  border:1px solid var(--filet2);border-radius:5px;background:var(--papier);
+  color:var(--encre);max-width:190px;
+}
+.filtres select:focus,.filtres input:focus{outline:2px solid var(--bleu);
+  outline-offset:1px}
+.fraz{
+  font-family:var(--sans);font-size:13px;padding:6px 13px;cursor:pointer;
+  border:1px solid var(--filet2);border-radius:5px;background:var(--papier);
+  color:var(--encre2);
+}
+.fraz:hover{border-color:var(--rouge);color:var(--rouge)}
+.fcompte{margin-left:auto;font-family:var(--fix);font-size:12px;
+  color:var(--sourd);white-space:nowrap}
+.fcompte b{color:var(--encre)}
+
+/* ── CORPS ───────────────────────────────────────────────────────────── */
+main{max-width:var(--maxw);margin:0 auto;padding:26px 22px 70px}
+
+.bandeau-etat{
+  margin:0 0 24px;padding:12px 16px;border-left:3px solid var(--bleu);
+  background:var(--papier2);font-size:13.5px;line-height:1.6;color:var(--encre2);
+}
+.bandeau-etat b{color:var(--encre)}
+.bandeau-etat.alerte{border-left-color:var(--ambre);
+  background:rgba(138,98,9,.07)}
+
+.rubrique{
+  font-family:var(--fix);font-size:11px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--rouge);
+  border-bottom:2px solid var(--encre);padding-bottom:6px;margin:34px 0 18px;
+  display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+}
+.rubrique span{color:var(--sourd);letter-spacing:.06em}
+.rubrique:first-of-type{margin-top:0}
+
+/* ── LA UNE ──────────────────────────────────────────────────────────── */
+.une{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));
+  gap:0;border-top:1px solid var(--filet)}
+.une .fiche{border-bottom:1px solid var(--filet);border-right:1px solid var(--filet);
+  padding:20px 22px 22px}
+.une .fiche:nth-child(odd):last-child{border-right:0}
+
+/* ── UNE FICHE ───────────────────────────────────────────────────────── */
+/* LE FILET APPARTIENT À LA CARTE, PAS À LA GRILLE. Porté par la grille, il
+   courait sur toute la largeur même quand une seule fiche l'occupait — un
+   croisement à un seul lien montrait donc un long trait devant une case
+   vide, et la page paraissait avoir raté un chargement. Porté par la carte,
+   il s'arrête où la matière s'arrête.
+   `auto-fill` est conservé : `auto-fit` étirerait une carte isolée sur les
+   1 200 px de la colonne, ce qui est pire que la case vide. */
+.grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
+  gap:0}
+.fiche{
+  border-top:1px solid var(--filet);
+  border-bottom:1px solid var(--filet);border-right:1px solid var(--filet);
+  padding:18px 20px 20px;background:var(--papier);
+  display:flex;flex-direction:column;
+}
+.fiche:hover{background:var(--papier2)}
+
+.fmeta{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:9px}
+.past{
+  font-family:var(--fix);font-size:9.5px;letter-spacing:.08em;
+  text-transform:uppercase;padding:2px 7px;border-radius:3px;
+  border:1px solid currentColor;white-space:nowrap;
+}
+.past.rupture{color:var(--rouge);background:rgba(158,31,20,.07);font-weight:500}
+.past.structurant{color:var(--ocre);background:rgba(169,112,31,.08)}
+.past.incremental{color:var(--sourd);background:rgba(117,105,90,.07)}
+.past.signal_faible{color:var(--sourd2);background:transparent;border-style:dashed}
+.past.sujet{color:var(--bleu);background:rgba(26,76,110,.07)}
+.fdate{font-family:var(--fix);font-size:11px;color:var(--sourd);margin-left:auto}
+
+.ftitre{
+  font-family:var(--serif);font-weight:700;font-size:20px;line-height:1.22;
+  letter-spacing:-.012em;margin:0 0 8px;color:var(--encre);text-wrap:balance;
+}
+.une .ftitre{font-size:25px}
+.fchapeau{margin:0 0 13px;font-size:14.5px;line-height:1.6;color:var(--encre2)}
+
+/* LES TROIS BLOCS QUI FONT LA VALEUR DU SITE. Ils sont visuellement
+   distincts parce qu'ils n'engagent pas la même chose : le fait, la lecture,
+   la réserve. Les fondre en un seul paragraphe rendrait l'avis
+   indiscernable du constat. */
+.fbloc{margin:0 0 11px;padding-left:11px;border-left:2px solid var(--filet2)}
+.fbloc-t{
+  display:block;font-family:var(--fix);font-size:9.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--sourd);margin-bottom:3px;
+}
+.fbloc p{margin:0;font-size:13.5px;line-height:1.6;color:var(--encre2)}
+.fbloc.lecture{border-left-color:var(--bleu)}
+.fbloc.lecture .fbloc-t{color:var(--bleu)}
+.fbloc.portee{border-left-color:var(--vert)}
+.fbloc.portee .fbloc-t{color:var(--vert)}
+.fbloc.doute{border-left-color:var(--ambre)}
+.fbloc.doute .fbloc-t{color:var(--ambre)}
+
+.fsource{
+  margin-top:auto;padding-top:11px;border-top:1px dotted var(--filet2);
+  font-family:var(--fix);font-size:11px;line-height:1.55;color:var(--sourd);
+}
+.fsource a{color:var(--bleu);text-decoration:underline;text-underline-offset:2px}
+.fsource .st{display:inline-block;margin-right:6px;color:var(--vert)}
+.fsource .st.faible{color:var(--ambre)}
+
+.vide{
+  padding:48px 24px;text-align:center;color:var(--sourd);font-size:15px;
+  border:1px dashed var(--filet2);border-radius:8px;
+}
+.vide b{color:var(--encre);display:block;margin-bottom:6px;font-size:17px;
+  font-family:var(--serif)}
+
+/* ── LE REGISTRE DES SOURCES ─────────────────────────────────────────── */
+.sources{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:14px}
+.src{border:1px solid var(--filet);border-left:3px solid var(--bleu);
+  border-radius:0 6px 6px 0;padding:14px 16px;background:var(--papier2)}
+.src h3{font-family:var(--serif);font-size:16.5px;margin:0 0 3px;line-height:1.25}
+.src .ed{font-size:12.5px;color:var(--sourd);margin:0 0 8px}
+.src .na{font-family:var(--fix);font-size:9.5px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--bleu);display:block;margin-bottom:7px}
+.src p{margin:0 0 7px;font-size:13px;line-height:1.55;color:var(--encre2)}
+.src .non{color:var(--ambre)}
+.src .lic{font-family:var(--fix);font-size:10.5px;color:var(--sourd)}
+.src .sonde{font-family:var(--sans);font-size:12px;padding:4px 10px;
+  margin-top:8px;border:1px solid var(--filet2);border-radius:5px;
+  background:var(--papier);color:var(--encre2);cursor:pointer}
+.src .sonde:hover{border-color:var(--vert);color:var(--vert)}
+.src .resu{font-family:var(--fix);font-size:11px;margin-top:6px;color:var(--vert)}
+.src .resu.ko{color:var(--rouge)}
+
+/* ── PIED ────────────────────────────────────────────────────────────── */
+footer{border-top:3px solid var(--encre);background:var(--papier2);
+  margin-top:50px}
+footer .in{max-width:var(--maxw);margin:0 auto;padding:26px 22px 34px;
+  font-size:13px;line-height:1.7;color:var(--encre2)}
+footer b{color:var(--encre)}
+footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
+  margin-top:14px;padding-top:12px;border-top:1px solid var(--filet2)}
+
+@media(max-width:760px){
+  .tete .in,.filtres .in,main,.oreille .in,footer .in{padding-left:15px;padding-right:15px}
+  .fiche,.une .fiche{border-right:0;padding:16px 15px 18px}
+  .filtres select,.filtres input{max-width:none;flex:1 1 130px}
+  .fcompte{margin-left:0;width:100%}
+  .une .ftitre{font-size:21px}
+}
+
+/* ── LES DOSSIERS — ce que le corpus regroupe de lui-même ─────────────── */
+.dossiers{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:6px}
+.dos{
+  font-family:var(--sans);font-size:13px;padding:7px 13px;cursor:pointer;
+  border:1px solid var(--filet2);border-radius:20px;background:var(--papier);
+  color:var(--encre2);
+}
+.dos:hover{border-color:var(--rouge);color:var(--rouge)}
+.dos b{font-weight:600}
+.dos .n{font-family:var(--fix);font-size:11px;color:var(--sourd);margin-left:5px}
+.dos-dit{font-size:12.5px;line-height:1.6;color:var(--sourd);margin:8px 0 0;
+  max-width:80ch}
+/* CE QUE L'AXE PAR ENTITÉ N'A PAS TROUVÉ. Détaché par un filet plutôt que
+   fondu dans la note au-dessus : l'aveu de couverture est une information,
+   pas une mention légale. Vide, le bloc ne laisse aucune trace — d'où le
+   :empty, sans quoi un filet flotterait seul sous les dossiers. */
+.dos-ent{border-left:2px solid var(--filet2);padding-left:11px;margin-top:11px}
+.dos-ent:empty{display:none}
+/* L'AVEU DE COUPE, au bout du fil. Assez visible pour arrêter le lecteur qui
+   croit avoir tout lu, assez sobre pour n'être pas pris pour une alerte. */
+.coupe{
+  font-family:var(--sans);font-size:12.5px;line-height:1.6;color:var(--encre2);
+  margin:14px 0 0;padding:9px 13px;background:var(--papier2);
+  border-left:3px solid var(--sourd);max-width:80ch;
+}
+.coupe[hidden]{display:none}
+/* ── LES PISTES ────────────────────────────────────────────────────────
+   Traitées comme des ENCADRÉS et non comme des articles : bord marqué,
+   fond légèrement distinct du papier. Rendues comme les fiches, elles se
+   liraient comme des faits, alors que ce sont des propositions dérivées.
+   La réserve (« ce qu'elle n'établit pas ») garde le rouge du doute — le
+   même que sur les fiches, pour que le code de couleur reste unique. */
+.pistes{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));
+  gap:16px;margin-top:14px}
+.piste{
+  border:1px solid var(--filet2);border-left:4px solid var(--bleu);
+  background:var(--papier2);padding:18px 20px 16px;
+}
+.piste h3{font-family:var(--serif);font-size:20px;line-height:1.2;
+  margin:9px 0 13px;color:var(--encre)}
+.pi-sol{
+  font-family:var(--fix);font-size:10px;letter-spacing:.06em;
+  text-transform:uppercase;padding:3px 7px;border:1px solid currentColor;
+  display:inline-block;color:var(--sourd);
+}
+.pi-sol.s1{color:var(--vert)}
+.pi-sol.s2{color:var(--bleu)}
+.pi-sol.s3{color:var(--ambre)}
+.pi-src{font-size:12.5px;line-height:1.6;color:var(--sourd);margin:13px 0 0;
+  padding-top:11px;border-top:1px solid var(--filet2)}
+.pi-src a{color:var(--bleu)}
+@media (max-width:760px){.pistes{grid-template-columns:1fr}}
+
+/* ── L'ABONNEMENT ──────────────────────────────────────────────────────
+   Les champs sont larges et l'aide est SOUS le champ mais AVANT le bouton :
+   une explication placée après l'action arrive quand la décision est prise. */
+.fmr{margin:18px 0 8px;display:flex;flex-direction:column;gap:18px}
+.fgrp2{display:flex;flex-direction:column;gap:6px;max-width:56ch}
+.fgrp2 label{font-family:var(--sans);font-size:12px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--sourd)}
+.fgrp2 input,.fgrp2 select{
+  font-family:var(--sans);font-size:15px;padding:10px 12px;
+  border:1px solid var(--filet2);background:var(--papier);color:var(--encre);
+}
+.fgrp2 input:focus,.fgrp2 select:focus,.fraz:focus-visible,.case:focus-within{
+  outline:2px solid var(--bleu);outline-offset:2px}
+.aide{font-size:12.5px;line-height:1.6;color:var(--sourd);margin:2px 0 0}
+.fset{border:1px solid var(--filet2);padding:14px 16px;margin:0}
+.fset legend{font-family:var(--sans);font-size:12px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--sourd);padding:0 6px}
+.cases{display:flex;flex-wrap:wrap;gap:10px 20px}
+.case{font-family:var(--sans);font-size:14.5px;display:flex;align-items:center;
+  gap:7px;cursor:pointer}
+.fbtns{display:flex;flex-wrap:wrap;gap:10px}
+/* LE BOUTON DESTRUCTEUR NE RESSEMBLE PAS AUX AUTRES. Il n'est pas rouge vif
+   pour autant : un bouton alarmant se clique par réflexe pour faire taire
+   l'alarme. Il est distinct, et c'est la confirmation qui protège. */
+.fraz.danger{color:var(--rouge);border-color:var(--rouge)}
+/* LE BULLETIN EN TEXTE BRUT — la version de référence, celle qu'on peut
+   relire en entier avant d'envoyer. */
+.bul{
+  font-family:var(--fix);font-size:12.5px;line-height:1.65;
+  white-space:pre-wrap;word-break:break-word;background:var(--papier2);
+  border-left:3px solid var(--filet2);padding:16px 18px;margin:12px 0 0;
+  overflow-x:auto;
+}
+
+/* LA CHAÎNE DE PREUVE d'un lien repris d'un référentiel. En petit et en
+   monospace : c'est un appareil de notes, il se consulte, il ne se lit pas. */
+.cit{font-family:var(--fix);font-size:11px;line-height:1.5;color:var(--sourd);
+  margin:7px 0 0;padding-top:7px;border-top:1px dotted var(--filet2)}
+.ftitre a:hover{color:var(--rouge)}

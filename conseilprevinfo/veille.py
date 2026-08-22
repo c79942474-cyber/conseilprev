@@ -1,0 +1,530 @@
+"""LE MODÈLE ÉDITORIAL — une fiche de veille, et ce qui l'autorise à paraître.
+
+CE QUE CE SITE PROMET, ET QU'IL DOIT DONC TENIR. Il ne promet pas d'être le
+plus rapide ni le plus complet : il promet que tout ce qu'il affiche porte son
+origine, sa date, et une lecture critique SIGNÉE. C'est peu de mots et
+beaucoup de conséquences — la première étant qu'une fiche sans source ne peut
+pas exister dans ce moteur. Elle n'est pas « affichée avec une réserve » :
+elle est REFUSÉE.
+
+LES QUATRE CHOSES QU'UNE FICHE SÉPARE, ET QUE PRESQUE TOUS LES SITES DE VEILLE
+CONFONDENT :
+
+  1. LE FAIT — ce qui est établi, avec la source qui l'établit et la date du
+     fait (jamais la date où on l'a lu, qui ne dit rien).
+  2. LA LECTURE — ce que le cabinet en comprend. C'est un AVIS. Il est daté,
+     signé, et présenté comme tel : le confondre avec le fait est la faute
+     qui transforme une veille en publicité.
+  3. LA PORTÉE — ce que cela change pour une décision. C'est là qu'un lecteur
+     professionnel va directement, et c'est le seul endroit où ce site vaut
+     mieux qu'un fil d'actualité.
+  4. CE QU'ON NE SAIT PAS. Un point d'incertitude déclaré vaut mieux qu'une
+     assurance empruntée. Le champ est OBLIGATOIRE.
+
+LE STATUT DE VÉRIFICATION N'EST PAS DÉCORATIF. Il commande la publication :
+seule une fiche `verifiee_source_primaire` ou `source_secondaire` peut être
+servie au public. Le reste reste en réserve, visible des seuls rédacteurs.
+Une fiche rédigée par un modèle de langage entre au statut le plus bas et n'en
+sort que par une main humaine — le moteur n'a aucun chemin pour l'en sortir
+tout seul, et c'est délibéré.
+
+AUCUNE FICHE N'EST ÉCRITE DANS CE FICHIER. Le corpus vit en base, alimenté
+par `ingestion.py` depuis les sources du registre. Ce module tient la RÈGLE,
+pas le contenu — un corpus figé dans le code serait périmé le jour de sa
+première mise en ligne.
+"""
+import re
+import unicodedata
+from datetime import date, datetime, timezone
+
+import sources as SRC
+
+VERSION = "2026.08.22"
+
+# ── Les sujets ────────────────────────────────────────────────────────────
+# Quatre, et la distinction IA / SIA est volontaire : un système d'IA au sens
+# du règlement européen n'est pas la même chose qu'une technologie d'IA. Le
+# premier porte des obligations, la seconde non — et les confondre fait
+# promettre une conformité à qui n'y est pas soumis, ou l'inverse.
+SUJETS = {
+    "cyber_industriel": {
+        "nom": "Cybersécurité industrielle",
+        "sous_titre": "IT · OT · IIoT",
+        "quoi": "Les systèmes d'automatisation et de contrôle, leurs "
+                "vulnérabilités avérées, les modes opératoires observés et "
+                "les obligations qui s'y attachent.",
+    },
+    "ia": {
+        "nom": "Intelligence artificielle",
+        "sous_titre": "Modèles, matériel, usages",
+        "quoi": "L'état de la technique : capacités mesurées, coûts, "
+                "matériel, et ce que les évaluations publiques établissent "
+                "réellement.",
+    },
+    "sia": {
+        "nom": "Systèmes d'IA & conformité",
+        "sous_titre": "AI Act · ISO/IEC 42001 · gouvernance",
+        "quoi": "Le régime juridique des systèmes d'IA : classification, "
+                "obligations par rôle, échéances, et la gouvernance qui les "
+                "rend tenables.",
+    },
+    "datacenter": {
+        "nom": "Centres de données",
+        "sous_titre": "Énergie · eau · carbone",
+        "quoi": "L'infrastructure de calcul et ses ressources : puissance, "
+                "refroidissement, eau, carbone, implantation et les textes "
+                "qui les encadrent.",
+    },
+}
+ORDRE_SUJETS = ["cyber_industriel", "ia", "sia", "datacenter"]
+
+# ── Le statut de vérification ─────────────────────────────────────────────
+# `publiable` est la seule chose qui compte : elle décide de ce qui sort.
+STATUTS = {
+    "verifiee_source_primaire": {
+        "nom": "Vérifiée à la source",
+        "dit": "Le fait a été confronté au document d'origine, pas à un "
+               "article qui en parle.",
+        "publiable": True, "rang": 1,
+    },
+    "source_secondaire": {
+        "nom": "Source secondaire",
+        "dit": "Le fait vient d'un intermédiaire fiable, sans que l'original "
+               "ait été lu. Utilisable, à condition que ce soit écrit.",
+        "publiable": True, "rang": 2,
+    },
+    "a_verifier": {
+        "nom": "À vérifier",
+        "dit": "Retenue pour instruction, pas encore confrontée à sa source. "
+               "Ne sort pas.",
+        "publiable": False, "rang": 3,
+    },
+    "redigee_par_ia": {
+        "nom": "Rédigée par IA — non validée",
+        "dit": "Produite par un modèle de langage. Ne sort JAMAIS sans "
+               "relecture humaine, et le moteur n'a aucun moyen de l'en "
+               "sortir seul.",
+        "publiable": False, "rang": 4,
+    },
+    "refutee": {
+        "nom": "Réfutée",
+        "dit": "Confrontée et démentie. Conservée — une réfutation est une "
+               "information, et l'effacer reviendrait à réécrire l'histoire "
+               "de sa propre veille.",
+        "publiable": False, "rang": 5,
+    },
+}
+ORDRE_STATUTS = ["verifiee_source_primaire", "source_secondaire", "a_verifier",
+                 "redigee_par_ia", "refutee"]
+
+# ── D'où vient la LECTURE ─────────────────────────────────────────────────
+# Le champ le plus important de ce modèle après la source. Une lecture
+# critique peut venir de trois endroits qui n'engagent pas la même chose, et
+# les afficher pareillement serait exactement la confusion que ce site existe
+# pour ne pas commettre.
+LECTURES = {
+    "regle": {
+        "nom": "Lecture dérivée par règles",
+        "dit": "Composée automatiquement à partir des seules données de la "
+               "source, par des règles écrites et publiées. Reproductible : "
+               "deux passages sur la même donnée rendent le même texte. "
+               "Aucun modèle de langage n'intervient.",
+        "engage_le_cabinet": False,
+        "publiable": True,
+    },
+    "redaction": {
+        "nom": "Lecture rédigée et signée",
+        "dit": "Écrite par un analyste du cabinet, datée et signée. C'est un "
+               "AVIS — argumenté, révisable, et qui engage celui qui le "
+               "signe.",
+        "engage_le_cabinet": True,
+        "publiable": True,
+    },
+    "modele": {
+        "nom": "Brouillon de modèle — non validé",
+        "dit": "Proposé par un modèle de langage. Sert de point de départ à "
+               "un analyste, jamais de contenu. Ne sort pas.",
+        "engage_le_cabinet": False,
+        "publiable": False,
+    },
+}
+ORDRE_LECTURES = ["regle", "redaction", "modele"]
+
+
+# ── La portée d'une information ───────────────────────────────────────────
+# Un rang, pas une note. Un site qui afficherait « impact 8,4/10 » emprunterait
+# le vocabulaire de la mesure pour désigner un jugement.
+IMPACTS = {
+    "rupture": {
+        "nom": "Rupture",
+        "dit": "Change ce qu'il est possible ou obligatoire de faire. Se "
+               "traite en comité, pas en veille.",
+        "rang": 1,
+    },
+    "structurant": {
+        "nom": "Structurant",
+        "dit": "Déplace un arbitrage ou une trajectoire déjà engagée.",
+        "rang": 2,
+    },
+    "incremental": {
+        "nom": "Incrémental",
+        "dit": "S'inscrit dans une tendance connue sans l'infléchir.",
+        "rang": 3,
+    },
+    "signal_faible": {
+        "nom": "Signal faible",
+        "dit": "Isolé, mal établi, mais qui mérite d'être daté pour qu'on "
+               "puisse y revenir. Sa fragilité est la donnée principale.",
+        "rang": 4,
+    },
+}
+ORDRE_IMPACTS = ["rupture", "structurant", "incremental", "signal_faible"]
+
+# ── L'horizon ─────────────────────────────────────────────────────────────
+HORIZONS = {
+    "constate": {"nom": "Constaté", "dit": "Établi à la date indiquée."},
+    "engage": {"nom": "Engagé", "dit": "Décidé, daté, pas encore en vigueur "
+                                       "ou pas encore déployé."},
+    "projete": {"nom": "Projeté", "dit": "Projection à horizon 2030. C'est une "
+                                         "HYPOTHÈSE, portée par qui la publie — "
+                                         "jamais un fait."},
+}
+ORDRE_HORIZONS = ["constate", "engage", "projete"]
+
+_CHAMPS_OBLIGATOIRES = ("id", "titre", "chapeau", "lecture", "lecture_nature",
+                        "portee", "incertitude", "sujet", "date_fait",
+                        "source_cle", "source_url", "statut", "impact",
+                        "horizon")
+
+_ID = re.compile(r"^[a-z0-9][a-z0-9-]{2,79}$")
+_ISO = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+
+
+def _texte(x):
+    return " ".join(str(x or "").split())
+
+
+def sujets():
+    return [dict(SUJETS[c], cle=c) for c in ORDRE_SUJETS]
+
+
+def statuts():
+    return [dict(STATUTS[c], cle=c) for c in ORDRE_STATUTS]
+
+
+def lectures():
+    return [dict(LECTURES[c], cle=c) for c in ORDRE_LECTURES]
+
+
+def impacts():
+    return [dict(IMPACTS[c], cle=c) for c in ORDRE_IMPACTS]
+
+
+def horizons():
+    return [dict(HORIZONS[c], cle=c) for c in ORDRE_HORIZONS]
+
+
+def valider(fiche):
+    """Dit si une fiche a le droit d'exister, et NOMME chaque manque.
+
+    Rend une liste de fautes plutôt qu'une exception : un rédacteur doit voir
+    tout ce qui manque d'un coup, pas le découvrir une erreur à la fois.
+    """
+    f = dict(fiche or {})
+    fautes = []
+
+    for champ in _CHAMPS_OBLIGATOIRES:
+        if not _texte(f.get(champ)):
+            fautes.append("champ obligatoire vide : %s" % champ)
+
+    if f.get("id") and not _ID.match(str(f["id"])):
+        fautes.append("identifiant non conforme (minuscules, chiffres et "
+                      "tirets, 3 à 80 signes) : %r" % f["id"])
+
+    if f.get("sujet") and f["sujet"] not in SUJETS:
+        fautes.append("sujet inconnu : %r" % f["sujet"])
+    if f.get("statut") and f["statut"] not in STATUTS:
+        fautes.append("statut inconnu : %r" % f["statut"])
+    if f.get("impact") and f["impact"] not in IMPACTS:
+        fautes.append("portée inconnue : %r" % f["impact"])
+    if f.get("horizon") and f["horizon"] not in HORIZONS:
+        fautes.append("horizon inconnu : %r" % f["horizon"])
+    if f.get("lecture_nature") and f["lecture_nature"] not in LECTURES:
+        fautes.append("nature de lecture inconnue : %r" % f["lecture_nature"])
+    # UNE LECTURE DE MODÈLE NE PEUT PAS ÊTRE PORTÉE PAR UNE FICHE PUBLIABLE.
+    # Les deux champs sont indépendants ; sans ce contrôle croisé, il
+    # suffirait d'oublier l'un pour publier l'autre.
+    if (f.get("lecture_nature") == "modele"
+            and STATUTS.get(f.get("statut"), {}).get("publiable")):
+        fautes.append("une lecture de modèle de langage ne peut pas porter un "
+                      "statut publiable : relisez-la et signez-la, ou "
+                      "laissez-la en réserve")
+    # UNE LECTURE SIGNÉE DOIT NOMMER SON SIGNATAIRE.
+    if f.get("lecture_nature") == "redaction" and not _texte(f.get("signe_par")):
+        fautes.append("une lecture rédigée doit être signée (champ "
+                      "« signe_par ») : un avis anonyme n'engage personne")
+
+    # LA SOURCE DOIT ÊTRE AU REGISTRE. C'est ce qui empêche d'inventer une
+    # provenance : on ne peut citer que ce qui a été admis et sondé.
+    if f.get("source_cle") and f["source_cle"] not in SRC.SOURCES:
+        fautes.append("source hors registre : %r — une fiche ne peut citer "
+                      "qu'une source admise" % f["source_cle"])
+    if f.get("source_url") and not str(f["source_url"]).startswith("https://"):
+        fautes.append("adresse de source non chiffrée")
+
+    if f.get("date_fait") and not _ISO.match(str(f["date_fait"])):
+        fautes.append("date du fait mal formée (AAAA-MM-JJ) : %r" % f["date_fait"])
+    else:
+        try:
+            d = date.fromisoformat(str(f.get("date_fait")))
+            if d > date.today():
+                fautes.append("date du fait dans l'avenir : %s" % d)
+        except (TypeError, ValueError):
+            pass
+
+    # LES TROIS TEXTES QUI FONT LA VALEUR DU SITE ont une longueur minimale.
+    # Une « lecture critique » de six mots est un slogan ; l'exiger courte
+    # produirait exactement ce qu'on veut éviter.
+    for champ, mini, quoi in (("lecture", 80, "la lecture critique"),
+                              ("portee", 60, "ce que cela change"),
+                              ("incertitude", 40, "ce qu'on ne sait pas")):
+        v = _texte(f.get(champ))
+        if v and len(v) < mini:
+            fautes.append("%s est trop courte (%d signes, minimum %d) : ce "
+                          "champ porte l'essentiel de la valeur du site"
+                          % (quoi, len(v), mini))
+
+    # UNE PROJECTION N'EST PAS UN CONSTAT. Si l'horizon est « projeté », la
+    # fiche doit dire QUI projette — sinon elle présente une hypothèse comme
+    # un fait, ce qui est la faute la plus coûteuse de ce site.
+    if f.get("horizon") == "projete" and not _texte(f.get("projette_qui")):
+        fautes.append("une projection doit nommer qui la porte "
+                      "(champ « projette_qui ») : sans cela, une hypothèse "
+                      "se lit comme un fait établi")
+
+    return fautes
+
+
+def normaliser(fiche):
+    """Complète une fiche valide de ce qui se DÉDUIT, et de rien d'autre."""
+    fautes = valider(fiche)
+    if fautes:
+        return {"ok": False, "erreur": "fiche_invalide", "fautes": fautes}
+    f = dict(fiche)
+    s = SRC.SOURCES[f["source_cle"]]
+    st = STATUTS[f["statut"]]
+    f["source"] = {
+        "cle": f["source_cle"], "nom": s["nom"], "editeur": s["editeur"],
+        "nature": s["nature"], "nature_nom": SRC.NATURES[s["nature"]]["nom"],
+        "licence": s["licence"], "url": f["source_url"],
+        "url_editeur": s["url_humaine"],
+    }
+    f["statut_nom"] = st["nom"]
+    f["statut_dit"] = st["dit"]
+    f["publiable"] = bool(st["publiable"])
+    f["sujet_nom"] = SUJETS[f["sujet"]]["nom"]
+    f["impact_nom"] = IMPACTS[f["impact"]]["nom"]
+    f["impact_rang"] = IMPACTS[f["impact"]]["rang"]
+    f["horizon_nom"] = HORIZONS[f["horizon"]]["nom"]
+    ln = LECTURES[f["lecture_nature"]]
+    f["lecture_nom"] = ln["nom"]
+    f["lecture_dit"] = ln["dit"]
+    f["lecture_engage"] = bool(ln["engage_le_cabinet"])
+    f.setdefault("pays", [])
+    f.setdefault("technologies", [])
+    f.setdefault("signe_par", "CONSEILPREV")
+    f.setdefault("lecture_datee_le", f["date_fait"])
+    return {"ok": True, "fiche": f}
+
+
+def publiables(fiches):
+    """Ce qui sort. Le filtre est ici et NULLE PART AILLEURS.
+
+    Une seule porte, pour qu'on puisse la lire en entier. Répartie sur les
+    gabarits, la règle deviendrait invérifiable — et c'est exactement le
+    genre d'endroit où une fiche non validée finit à l'écran.
+    """
+    return [f for f in fiches
+            if STATUTS.get(f.get("statut"), {}).get("publiable")
+            and LECTURES.get(f.get("lecture_nature"), {}).get("publiable")]
+
+
+def filtrer(fiches, sujet=None, pays=None, techno=None, depuis=None,
+            jusqua=None, impact=None, horizon=None, statut=None,
+            inclure_non_publiables=False):
+    """Les filtres du site. Aucun ne peut faire sortir une fiche non publiable
+    sauf demande EXPLICITE — réservée à l'espace de rédaction."""
+    out = list(fiches)
+    if not inclure_non_publiables:
+        out = publiables(out)
+    if sujet:
+        out = [f for f in out if f.get("sujet") == sujet]
+    if pays:
+        p = str(pays).upper()
+        out = [f for f in out if p in [str(x).upper() for x in f.get("pays", [])]]
+    if techno:
+        t = _sansaccent(techno)
+        out = [f for f in out
+               if any(t in _sansaccent(x) for x in f.get("technologies", []))]
+    if depuis:
+        out = [f for f in out if str(f.get("date_fait", "")) >= str(depuis)]
+    if jusqua:
+        out = [f for f in out if str(f.get("date_fait", "")) <= str(jusqua)]
+    if impact:
+        out = [f for f in out if f.get("impact") == impact]
+    if horizon:
+        out = [f for f in out if f.get("horizon") == horizon]
+    if statut:
+        out = [f for f in out if f.get("statut") == statut]
+    # LE PLUS IMPORTANT D'ABORD, PUIS LE PLUS RÉCENT. Trier d'abord par date
+    # ferait descendre une rupture sous trois brèves du lendemain.
+    out.sort(key=lambda f: (IMPACTS.get(f.get("impact"), {}).get("rang", 9),
+                            _inverse(f.get("date_fait", ""))))
+    return out
+
+
+def _inverse(d):
+    """Clef de tri décroissant sur une date ISO, sans dépendre du type."""
+    return tuple(-int(x) for x in str(d).split("-")) if _ISO.match(str(d)) else (0,)
+
+
+def _sansaccent(x):
+    s = unicodedata.normalize("NFD", str(x or "").lower())
+    return "".join(c for c in s if unicodedata.category(c) != "Mn")
+
+
+def chercher(fiches, q):
+    """Recherche plein texte, sans accent ni casse.
+
+    Elle porte sur ce que le lecteur voit — titre, chapeau, lecture, portée,
+    réserve, technologies — et PAS sur les champs internes. Chercher dans un
+    identifiant technique rendrait des résultats qu'aucun mot de la page ne
+    justifie, et le lecteur croirait le moteur détraqué.
+
+    Tous les mots doivent être présents : une recherche à deux mots qui rend
+    tout ce qui contient l'un OU l'autre ne filtre rien.
+    """
+    mots = [_sansaccent(m) for m in str(q or "").split() if len(m) > 1]
+    if not mots:
+        return list(fiches)
+    out = []
+    for f in fiches:
+        foin = _sansaccent(" ".join([
+            str(f.get("titre", "")), str(f.get("chapeau", "")),
+            str(f.get("lecture", "")), str(f.get("portee", "")),
+            str(f.get("incertitude", "")),
+            " ".join(str(x) for x in (f.get("technologies") or [])),
+            str((f.get("source") or {}).get("nom", "")),
+        ]))
+        if all(m in foin for m in mots):
+            out.append(f)
+    return out
+
+
+def facettes(fiches):
+    """Ce que les filtres peuvent réellement proposer, COMPTÉ sur le corpus.
+
+    Jamais une liste écrite à la main : une facette qui propose un pays sans
+    aucune fiche rend un écran vide, et le lecteur croit le site cassé.
+    """
+    pub = publiables(fiches)
+    def _compte(cle):
+        c = {}
+        for f in pub:
+            for v in (f.get(cle) or []):
+                c[str(v)] = c.get(str(v), 0) + 1
+        return c
+    par_sujet = {}
+    for f in pub:
+        par_sujet[f.get("sujet")] = par_sujet.get(f.get("sujet"), 0) + 1
+    annees = sorted({str(f.get("date_fait", ""))[:4] for f in pub if f.get("date_fait")},
+                    reverse=True)
+    return {
+        "sujets": [dict(SUJETS[c], cle=c, n=par_sujet.get(c, 0))
+                   for c in ORDRE_SUJETS if par_sujet.get(c)],
+        "pays": sorted(({"cle": k, "n": v} for k, v in _compte("pays").items()),
+                       key=lambda x: (-x["n"], x["cle"])),
+        "technologies": sorted(({"cle": k, "n": v}
+                                for k, v in _compte("technologies").items()),
+                               key=lambda x: (-x["n"], x["cle"])),
+        "impacts": [dict(IMPACTS[c], cle=c,
+                         n=sum(1 for f in pub if f.get("impact") == c))
+                    for c in ORDRE_IMPACTS
+                    if any(f.get("impact") == c for f in pub)],
+        "horizons": [dict(HORIZONS[c], cle=c,
+                          n=sum(1 for f in pub if f.get("horizon") == c))
+                     for c in ORDRE_HORIZONS
+                     if any(f.get("horizon") == c for f in pub)],
+        "annees": annees,
+        "total_publiable": len(pub),
+        "total_corpus": len(fiches),
+    }
+
+
+def sante(fiches=None):
+    fiches = list(fiches or [])
+    par_statut = {c: sum(1 for f in fiches if f.get("statut") == c)
+                  for c in ORDRE_STATUTS}
+    invalides = []
+    for f in fiches:
+        if valider(f):
+            invalides.append(f.get("id") or "?")
+    return {
+        "module": "veille", "version": VERSION,
+        "sujets": len(SUJETS), "statuts": len(STATUTS),
+        "corpus": len(fiches),
+        "publiables": len(publiables(fiches)),
+        "par_statut": par_statut,
+        "fiches_invalides": sorted(invalides),
+        "par_lecture": {c: sum(1 for f in fiches
+                               if f.get("lecture_nature") == c)
+                        for c in ORDRE_LECTURES},
+        "sources_admises": len(SRC.SOURCES),
+        "portee": "Tient la RÈGLE éditoriale, jamais le contenu. Une fiche "
+                  "sans source admise, sans lecture critique ou sans "
+                  "incertitude déclarée est refusée.",
+    }
+
+
+def _verifier():
+    if set(ORDRE_SUJETS) != set(SUJETS):
+        raise RuntimeError("veille : l'ordre des sujets ne les couvre pas")
+    if set(ORDRE_STATUTS) != set(STATUTS):
+        raise RuntimeError("veille : l'ordre des statuts ne les couvre pas")
+    if set(ORDRE_IMPACTS) != set(IMPACTS):
+        raise RuntimeError("veille : l'ordre des portées ne les couvre pas")
+    if set(ORDRE_HORIZONS) != set(HORIZONS):
+        raise RuntimeError("veille : l'ordre des horizons ne les couvre pas")
+
+    # LA GARDE QUI COMPTE LE PLUS DANS TOUT CE FICHIER. Si une fiche rédigée
+    # par un modèle devenait publiable, tout l'édifice tomberait — et il
+    # tomberait en silence, parce que rien à l'écran ne distingue une bonne
+    # fiche d'une fiche plausible.
+    if STATUTS["redigee_par_ia"]["publiable"]:
+        raise RuntimeError(
+            "veille : une fiche rédigée par un modèle de langage est devenue "
+            "publiable sans relecture — c'est la seule faute que ce site ne "
+            "peut pas se permettre")
+    if STATUTS["refutee"]["publiable"] or STATUTS["a_verifier"]["publiable"]:
+        raise RuntimeError("veille : un statut non validé est devenu publiable")
+    if not STATUTS["verifiee_source_primaire"]["publiable"]:
+        raise RuntimeError("veille : plus aucune fiche ne peut être publiée")
+
+    if set(ORDRE_LECTURES) != set(LECTURES):
+        raise RuntimeError("veille : l'ordre des lectures ne les couvre pas")
+    if LECTURES["modele"]["publiable"]:
+        raise RuntimeError(
+            "veille : une lecture de modèle de langage est devenue publiable — "
+            "c'est la porte par laquelle un avis fabriqué passerait pour une "
+            "analyse du cabinet")
+    if LECTURES["regle"]["engage_le_cabinet"]:
+        raise RuntimeError(
+            "veille : une lecture dérivée par règles ne doit pas être "
+            "présentée comme engageant le cabinet")
+
+    rangs = sorted(IMPACTS[c]["rang"] for c in IMPACTS)
+    if rangs != list(range(1, len(IMPACTS) + 1)):
+        raise RuntimeError("veille : les rangs de portée ne forment pas une suite")
+
+
+_verifier()
