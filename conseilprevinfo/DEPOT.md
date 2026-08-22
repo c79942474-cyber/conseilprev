@@ -15,7 +15,7 @@ perdre.
 
 ## Comment le remettre à sa place
 
-`HISTORIQUE.bundle` contient **l'historique git complet** des cinq commits,
+`HISTORIQUE.bundle` contient **l'historique git complet** des six commits,
 messages compris. Il ne s'agit donc pas de repartir d'une copie à plat.
 
 1. Créer le dépôt `c79942474-cyber/conseilprevinfo` (vide, sans README).
@@ -41,7 +41,7 @@ Ce site se déploie **séparément** sur Render : `python app.py`, port lu dans
 `PORT`. Il n'a aucune dépendance vers `conseilprev` ni vers
 `conseilprevcyber`, et ne doit pas partager leur service.
 
-## Les cinq commits contenus dans le bundle
+## Les six commits contenus dans le bundle
 
     89f52b3  Abonnement, réglages, et un bulletin qui sait se taire
     cd99020  Des pistes d'instruction dérivées du corpus, jamais d'un pari
