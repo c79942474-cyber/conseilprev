@@ -5313,6 +5313,48 @@ def registre_sql(pg_query, sqlite_query):
     """Retourne la requete adaptee au moteur actif (placeholders %s vs ?)."""
     return pg_query if REGISTRE_USE_PG else sqlite_query
 
+
+def registre_ajouter_colonne(cur, table, colonne, definition):
+    """Ajoute une colonne SI ELLE MANQUE — sur PostgreSQL comme sur SQLite.
+
+    DEFAUT CORRIGE, CONSTATE EN DEPLOIEMENT. Les migrations du registre
+    s'ecrivaient « ALTER TABLE ... ADD COLUMN IF NOT EXISTS », qui est de la
+    syntaxe PostgreSQL. SQLite ne la connait pas et repond
+    « near "EXISTS": syntax error ».
+
+    CE N'ETAIT PAS UNE COLONNE PERDUE, C'ETAIT LES NEUF. Les migrations
+    s'enchainaient sans garde : l'exception remontait des la PREMIERE, et
+    registre_init_db() s'arretait la. Sous SQLite, systemes_ia n'avait donc
+    aucune des neuf colonnes — a commencer par client_id, dont depend
+    l'isolation par client, et que ce fichier interroge a plus de quatre cents
+    endroits. Le repli SQLite du registre n'a jamais fonctionne, et le seul
+    signe visible etait une ligne d'erreur au demarrage.
+
+    POURQUOI PAS UN try/except AUTOUR DE CHAQUE ALTER. Avaler l'exception
+    ferait passer une VRAIE erreur de migration — un type invalide, une table
+    absente — pour un « la colonne existait deja ». On regarde donc ce que la
+    table porte, et on n'ajoute que ce qui manque : ce qui echoue ensuite
+    echoue pour de bon, et doit remonter.
+
+    `table`, `colonne` et `definition` sont des litteraux de ce fichier, jamais
+    des entrees d'utilisateur : SQLite comme PostgreSQL refusent un parametre
+    lie a la place d'un nom d'objet.
+    """
+    if REGISTRE_USE_PG:
+        cur.execute('ALTER TABLE %s ADD COLUMN IF NOT EXISTS %s %s'
+                    % (table, colonne, definition))
+        return
+    cur.execute('PRAGMA table_info(%s)' % table)
+    presentes = set()
+    for r in cur.fetchall():
+        try:
+            presentes.add(r['name'])
+        except (TypeError, IndexError, KeyError):
+            presentes.add(r[1])
+    if colonne not in presentes:
+        cur.execute('ALTER TABLE %s ADD COLUMN %s %s'
+                    % (table, colonne, definition))
+
 import secrets as _secrets_auth
 # ── Lien maitre /auth/<token> — acces CONSEILPREV a Sentinel ────────────────
 #
@@ -8124,7 +8166,7 @@ def registre_init_db():
 
     # Migration isolation par client : ajout de la colonne, puis assignation des
     # systemes deja existants (crees avant l isolation) au compte CONSEILPREV.
-    cur.execute("ALTER TABLE systemes_ia ADD COLUMN IF NOT EXISTS client_id INTEGER")
+    registre_ajouter_colonne(cur, 'systemes_ia', 'client_id', "INTEGER")
     conn.commit()
     conseilprev_id = ensure_conseilprev_client_id()
     cur.execute(registre_sql(
@@ -8137,9 +8179,9 @@ def registre_init_db():
     # -> pre-production -> production -> revue periodique. Les systemes deja existants
     # sont par defaut consideres en 'production' (hypothese la plus sure : ils etaient
     # deja deployes avant l introduction de ce suivi).
-    cur.execute("ALTER TABLE systemes_ia ADD COLUMN IF NOT EXISTS cycle_vie TEXT DEFAULT 'production'")
-    cur.execute("ALTER TABLE systemes_ia ADD COLUMN IF NOT EXISTS product_owner TEXT")
-    cur.execute("ALTER TABLE systemes_ia ADD COLUMN IF NOT EXISTS derniere_revue TEXT")
+    registre_ajouter_colonne(cur, 'systemes_ia', 'cycle_vie', "TEXT DEFAULT 'production'")
+    registre_ajouter_colonne(cur, 'systemes_ia', 'product_owner', "TEXT")
+    registre_ajouter_colonne(cur, 'systemes_ia', 'derniere_revue', "TEXT")
     cur.execute(registre_sql(
         "UPDATE systemes_ia SET cycle_vie='production' WHERE cycle_vie IS NULL",
         "UPDATE systemes_ia SET cycle_vie='production' WHERE cycle_vie IS NULL"
@@ -8148,11 +8190,11 @@ def registre_init_db():
 
     # Registre "parfait professionnel" — gap analyse vs les 10 questions essentielles
     # de la conformite IA Act (cf. Hub France IA, guide Premiers pas vers l IA de Confiance).
-    cur.execute("ALTER TABLE systemes_ia ADD COLUMN IF NOT EXISTS service TEXT")
-    cur.execute("ALTER TABLE systemes_ia ADD COLUMN IF NOT EXISTS roles TEXT")  # JSON: ["fournisseur","deployeur",...]
-    cur.execute("ALTER TABLE systemes_ia ADD COLUMN IF NOT EXISTS personnes_concernees TEXT")
-    cur.execute("ALTER TABLE systemes_ia ADD COLUMN IF NOT EXISTS transparence_art50 TEXT DEFAULT 'a_evaluer'")
-    cur.execute("ALTER TABLE systemes_ia ADD COLUMN IF NOT EXISTS preuves_conformite TEXT")
+    registre_ajouter_colonne(cur, 'systemes_ia', 'service', "TEXT")
+    registre_ajouter_colonne(cur, 'systemes_ia', 'roles', "TEXT")  # JSON: ["fournisseur","deployeur",...]
+    registre_ajouter_colonne(cur, 'systemes_ia', 'personnes_concernees', "TEXT")
+    registre_ajouter_colonne(cur, 'systemes_ia', 'transparence_art50', "TEXT DEFAULT 'a_evaluer'")
+    registre_ajouter_colonne(cur, 'systemes_ia', 'preuves_conformite', "TEXT")
     conn.commit()
 
     cur.execute('SELECT COUNT(*) AS n FROM systemes_ia')
