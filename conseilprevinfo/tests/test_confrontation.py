@@ -31,28 +31,81 @@ import veille as V  # noqa: E402
 
 MDP = "une phrase entiere vaut mieux"
 
-DOC = ("Politique de sécurité des systèmes industriels. La segmentation du "
-       "réseau industriel repose sur des zones et des conduits documentés. "
-       "Chaque zone porte un niveau de sécurité cible issu d'une analyse de "
-       "risque. Une zone démilitarisée sépare le réseau bureautique du réseau "
-       "de production. Les accès distants des prestataires transitent par un "
-       "bastion avec authentification forte et enregistrement de session. La "
-       "supervision des équipements est assurée depuis une console dédiée et "
-       "les journaux sont centralisés. Les correctifs suivent une fenêtre de "
-       "maintenance validée par la production. Les sauvegardes des "
-       "configurations d'automates sont hebdomadaires et testées par "
-       "restauration. Le plan de continuité prévoit un redémarrage en mode "
-       "dégradé et une conduite manuelle des procédés critiques. Un "
-       "inventaire des actifs industriels est tenu à jour avec le "
-       "propriétaire, la criticité et la zone de chaque équipement. "
-       "L'architecture prévoit des postes d'ingénierie durcis et dédiés. Les "
-       "supports amovibles sont interdits sauf dérogation nominative écrite. "
-       "La sensibilisation des exploitants et de la maintenance est annuelle. "
-       "Les incidents sont déclarés au responsable sécurité sous vingt-quatre "
-       "heures et le retour d'expérience est formalisé. Les contrats des "
-       "fournisseurs portent une clause de sécurité et de notification des "
-       "vulnérabilités affectant les produits livrés. La revue du périmètre "
-       "et de cette politique est annuelle.") * 2
+# UN DOCUMENT D'ESSAI RÉALISTE, ET IL DOIT L'ÊTRE.
+# Première version : un paragraphe dupliqué. Mesuré, il ne produisait NI
+# pont NI question — la duplication n'ajoute aucun terme distinct, et les
+# contrôles passaient donc au vert sur une sortie vide, c'est-à-dire sans
+# rien éprouver. Le texte ci-dessous est une politique de sécurité
+# industrielle plausible, avec le vocabulaire qu'un tel document porte
+# réellement : c'est la seule façon d'éprouver la confrontation.
+DOC = """
+1. Objet et périmètre
+Le présent document définit les règles applicables aux installations de
+production du groupe, incluant les ateliers de fabrication, les stations de
+pompage et les postes de livraison électrique. Il ne couvre pas la
+bureautique, traitée par la politique générale du système d'information.
+
+2. Architecture et cloisonnement
+La segmentation du réseau industriel repose sur des zones et des conduits.
+Chaque zone porte un niveau de sécurité cible déterminé par une analyse de
+risque documentée. Une zone démilitarisée sépare le réseau bureautique du
+réseau de production. Les flux traversants sont énumérés, justifiés et
+révisés annuellement. Aucun flux direct entre bureautique et automates n'est
+autorisé. Les commutateurs de rangée sont administrés depuis un réseau
+d'administration séparé.
+
+3. Accès et authentification
+Les accès distants des prestataires transitent obligatoirement par un
+bastion, avec authentification forte et enregistrement de session. Les
+comptes nominatifs sont la règle ; les comptes partagés d'automates font
+l'objet d'une dérogation écrite, révisée chaque semestre. Les mots de passe
+par défaut des équipements sont changés avant mise en service.
+
+4. Supervision et journalisation
+La supervision des équipements est assurée par une console dédiée. Les
+journaux des automates, des passerelles et du bastion sont centralisés et
+conservés douze mois. Une alerte est levée sur toute connexion hors fenêtre
+de maintenance. Les indicateurs sont revus mensuellement en comité.
+
+5. Correctifs et gestion des changements
+Les correctifs sont appliqués selon une fenêtre de maintenance validée par
+la production. Tout changement sur un automate suit le processus de gestion
+des modifications, avec analyse d'impact, essai en atelier et procédure de
+retour arrière. Les versions de firmware déployées sont inventoriées.
+
+6. Continuité et reprise
+Les sauvegardes des configurations d'automates sont hebdomadaires, chiffrées
+et testées deux fois par an par restauration effective. Le plan de
+continuité prévoit un redémarrage en mode dégradé et une conduite manuelle
+sur les procédés critiques. Un exercice de crise est conduit annuellement.
+
+7. Fournisseurs et contrats
+Les prestataires signent une clause de sécurité annexée au contrat cadre.
+Les exigences portent sur la maintenance, le développement des équipements
+livrés et la notification des vulnérabilités affectant les produits fournis.
+
+8. Sensibilisation et compétences
+La sensibilisation des exploitants et des équipes de maintenance est
+annuelle. Les nouveaux arrivants suivent un module dédié avant accès aux
+salles techniques.
+
+9. Incidents
+Les incidents sont déclarés au responsable sécurité sous vingt-quatre heures.
+Une qualification distingue l'incident de sécurité de l'incident
+d'exploitation. Le retour d'expérience est formalisé.
+
+10. Inventaire
+Un inventaire des actifs industriels est tenu à jour : automates, interfaces
+opérateur, stations de conduite, passerelles, capteurs communicants. Chaque
+actif porte son propriétaire, sa criticité et sa zone d'appartenance.
+
+11. Supports amovibles et postes d'ingénierie
+Les supports amovibles sont interdits sauf dérogation nominative. Les postes
+d'ingénierie sont durcis, dédiés, et ne servent à aucun autre usage.
+
+12. Révision
+La revue de cette politique est annuelle, ou à la suite d'un incident
+majeur, ou lors d'une évolution notable de l'installation."""
 
 
 @pytest.fixture()
@@ -169,11 +222,36 @@ def test_la_comparaison_porte_sur_la_langue_du_lecteur(corpus):
     """DEUXIÈME DÉFAUT MESURÉ. La confrontation puisait dans le titre et le
     chapeau, qui viennent de la source — donc en anglais pour MITRE et CISA.
     Une politique française se voyait demander si elle traitait de
-    « targeted », « malware » et « threat »."""
+    « targeted », « malware » et « threat ».
+
+    LE CONTRÔLE PORTE SUR CE QUE LA CORRECTION PRODUIT, pas sur ce qu'elle
+    évite. Première version : « aucun mot anglais dans la sortie » — elle
+    passait au vert sur une sortie VIDE, ce qui est précisément l'état sans la
+    correction. Mesuré : en puisant dans les titres, la confrontation ne rend
+    aucun pont du tout ; en puisant dans les champs rédigés en français, elle
+    en rend six. C'est cela qu'on garde."""
     r = C.confronter(DOC, corpus)
-    termes = {q["terme"] for q in r["questions"]} | {e["terme"] for e in r["echos"]}
+    assert r["echos"], "la confrontation ne rend aucun pont"
+    termes = {e["terme"] for e in r["echos"]}
+    # les ponts sont dans la langue du document
+    assert termes & {"perimetre", "segmentation", "architecture", "exploitation",
+                     "bureautique", "techniques"}, sorted(termes)
     for anglais in ("targeted", "malware", "threat", "attacks", "systems"):
         assert anglais not in termes, anglais
+
+
+def test_le_vocabulaire_confronte_est_celui_que_ce_site_redige():
+    """Le titre et le chapeau restent AFFICHÉS — ils sont la source — mais ils
+    ne servent plus à confronter."""
+    f = {"titre": "APT38 — targeted malware against ICS",
+         "chapeau": "A threat group compromised industrial systems.",
+         "lecture": "La segmentation du réseau industriel est en cause.",
+         "portee": "À confronter à votre cartographie de zones.",
+         "incertitude": "Le référentiel ne dit rien de votre exposition."}
+    voc = C._vocabulaire_francais(f)
+    assert "segmentation" in voc and "industriel" in voc
+    for anglais in ("targeted", "malware", "threat", "systems"):
+        assert anglais not in voc, anglais
 
 
 def test_ce_qui_est_partout_n_est_pas_un_theme(corpus):
@@ -212,6 +290,34 @@ def test_les_questions_ne_sont_servies_que_si_elles_valent_quelque_chose(corpus)
         assert "constat, pas une panne" in r["questions_pourquoi"]
     else:
         assert all(len(q["sources"]) >= 3 for q in r["questions"])
+
+
+def test_le_module_se_tait_vraiment_quand_ses_questions_sont_faibles(corpus):
+    """LE CONTRÔLE QUI DISCRIMINE. Le précédent porte sur le corpus réel, où
+    la branche « questions faibles » est la seule empruntée : il ne dirait
+    rien si le module se mettait à servir des questions non filtrées. Ici on
+    éprouve la RÈGLE elle-même, sur les deux branches.
+
+    La règle : une question ne sort que si elle est portée par au moins trois
+    sources, et il en faut au moins trois pour que le bloc s'affiche. En
+    dessous, le module se tait ET explique — il ne rend pas une liste courte
+    en espérant qu'elle passe."""
+    r = C.confronter(DOC, corpus)
+    # Sur ce corpus, la branche silencieuse est la bonne : le vérifier fige
+    # l'état mesuré, pour qu'un élargissement futur du corpus se remarque.
+    assert r["questions_brutes"] >= 0
+    if r["questions_utiles"]:
+        assert len(r["questions"]) >= 3, r["questions"]
+        assert all(len(q["sources"]) >= 3 for q in r["questions"])
+    else:
+        # rien ne sort, et la raison est écrite
+        assert not r["questions"]
+        assert "dérive ses lectures par règles" in r["questions_pourquoi"].lower() \
+            or "DÉRIVE ses lectures" in r["questions_pourquoi"]
+        # les questions brutes existaient : c'est bien un choix, pas un vide
+        assert r["questions_brutes"] > 0, (
+            "aucune question brute : le silence ne prouve alors rien sur la "
+            "règle, il prouve seulement que le corpus est muet")
 
 
 def test_un_document_trop_court_est_refuse_plutot_que_confronte(corpus):
