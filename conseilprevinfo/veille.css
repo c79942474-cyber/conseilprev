@@ -361,3 +361,116 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
 .cit{font-family:var(--fix);font-size:11px;line-height:1.5;color:var(--sourd);
   margin:7px 0 0;padding-top:7px;border-top:1px dotted var(--filet2)}
 .ftitre a:hover{color:var(--rouge)}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LA BARRE LATÉRALE ET LA BASCULE DE LANGUE
+
+   POURQUOI UNE BARRE, SUR UN SITE QUI TIENT EN QUATRE PAGES. Ce n'est pas la
+   navigation entre pages qui la justifie — l'oreille y suffisait —, c'est la
+   LONGUEUR de l'accueil : cinq rubriques, dont les sources et les pistes qui
+   vivent tout en bas. Sans repère latéral, un lecteur qui filtre sur « IA »
+   ne sait pas que le registre des sources existe, parce qu'il n'y descend
+   jamais. La barre dit ce que la page contient, et où l'on en est.
+
+   ELLE NE S'IMPOSE PAS SOUS 1100 px. Une colonne fixe de 230 px sur un écran
+   de 390 en prendrait la moitié pour de la navigation, c'est-à-dire pour
+   rien : elle se replie derrière un bouton.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.page{display:block}
+.col{min-width:0}
+
+@media (min-width:1100px){
+  .page{
+    display:grid;grid-template-columns:236px minmax(0,1fr);
+    max-width:calc(var(--maxw) + 236px);margin:0 auto;
+  }
+  /* La barre suit la lecture sans bouger : `sticky` la garde sous les filtres
+     collants, dont la hauteur est reprise ici. */
+  .bl{
+    position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;
+    padding:26px 4px 40px 22px;border-right:1px solid var(--filet);
+  }
+  /* Les blocs internes reprennent leur propre largeur : la colonne les borne
+     déjà, un second `max-width` les décentrerait. */
+  .col main,.col .tete .in,.col .filtres .in,.col footer .in{max-width:none}
+  .col main{padding-left:26px;padding-right:26px}
+}
+
+.bl-t{
+  font-family:var(--fix);font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--sourd2);margin:0 0 8px;
+  padding-bottom:5px;border-bottom:1px solid var(--filet);
+}
+.bl-t:not(:first-child){margin-top:26px}
+.bl-l{list-style:none;margin:0;padding:0}
+.bl-l li{margin:0 0 2px}
+.bl-l a{
+  display:block;padding:7px 9px;border-radius:4px;text-decoration:none;
+  color:var(--encre2);border-left:2px solid transparent;
+}
+.bl-l a:hover{background:var(--papier2);color:var(--encre)}
+.bl-l a b{display:block;font-size:13.5px;font-weight:600;line-height:1.3}
+.bl-l a span{display:block;font-size:11.5px;line-height:1.4;color:var(--sourd);
+  margin-top:1px}
+.bl-l a[aria-current="page"]{
+  background:var(--papier2);border-left-color:var(--rouge);color:var(--encre);
+}
+
+/* LES SECTIONS. Plus serrées que les pages : ce sont des repères de lecture,
+   pas des destinations. */
+.bl-s a{
+  font-size:12.5px;line-height:1.35;padding:5px 9px;
+  display:flex;gap:8px;align-items:baseline;justify-content:space-between;
+}
+.bl-s a i{
+  font-style:normal;font-family:var(--fix);font-size:10px;color:var(--sourd2);
+  white-space:nowrap;font-variant-numeric:tabular-nums;
+}
+/* OÙ L'ON EST, et pas seulement où l'on peut aller. Une barre qui ne marque
+   pas la section courante dit la moitié de ce qu'elle promet. */
+.bl-s a.bl-ici{
+  background:var(--papier2);border-left-color:var(--bleu);color:var(--encre);
+  font-weight:500;
+}
+
+/* ── LE BOUTON, ET LA BARRE REPLIÉE ──────────────────────────────────── */
+#bl-bouton{
+  position:fixed;left:12px;bottom:16px;z-index:60;width:44px;height:44px;
+  border-radius:8px;border:1px solid var(--filet2);background:var(--papier);
+  box-shadow:0 3px 12px rgba(20,17,13,.16);cursor:pointer;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  gap:4px;padding:0;
+}
+#bl-bouton span{display:block;width:19px;height:2px;background:var(--encre2);
+  border-radius:1px}
+#bl-bouton:focus-visible{outline:2px solid var(--bleu);outline-offset:2px}
+
+@media (max-width:1099px){
+  .bl{
+    position:fixed;inset:0 auto 0 0;z-index:55;width:min(84vw,290px);
+    background:var(--papier);border-right:1px solid var(--filet2);
+    box-shadow:6px 0 24px rgba(20,17,13,.18);
+    padding:22px 18px 80px;overflow-y:auto;
+    transform:translateX(-102%);transition:transform .18s ease;
+  }
+  .bl.bl-ouverte{transform:none}
+}
+@media (min-width:1100px){ #bl-bouton{display:none} }
+@media (prefers-reduced-motion:reduce){ .bl{transition:none} }
+
+/* ── LA BASCULE DE LANGUE ────────────────────────────────────────────── */
+/* Dans l'oreille, qui est sombre : les couleurs y sont inversées. */
+.or-d{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.or-d a{color:inherit;text-decoration:none}
+.or-d a:hover{color:#F3C88A}
+.lg-grp{display:inline-flex;border:1px solid rgba(251,248,242,.30);
+  border-radius:3px;overflow:hidden}
+.lg{
+  font-family:var(--fix);font-size:10px;letter-spacing:.10em;
+  padding:3px 8px;border:0;background:transparent;color:rgba(251,248,242,.72);
+  cursor:pointer;line-height:1.6;
+}
+.lg:hover{color:var(--papier);background:rgba(251,248,242,.10)}
+.lg-on{background:var(--papier);color:var(--encre);font-weight:500}
+.lg:focus-visible{outline:2px solid #F3C88A;outline-offset:-2px}

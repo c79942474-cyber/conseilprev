@@ -1,4 +1,8 @@
-# Ce dossier n'est pas à sa place — et voici comment le déployer quand même
+# Ce dossier n'est pas à sa place — mais il est en ligne
+
+**https://conseilprevinfo.onrender.com/** — servi depuis le sous-dossier
+`conseilprevinfo` de ce dépôt, par un Web Service Render distinct de celui
+de la racine.
 
 `conseilprevinfo` est un **site distinct** des deux autres : sa propre
 application Flask, son propre corpus, son propre déploiement. Il n'a rien à
@@ -76,7 +80,7 @@ Depuis votre poste, aucune session nécessaire :
       https://github.com/c79942474-cyber/conseilprevinfo
     git push -u origin master
 
-`HISTORIQUE.bundle` porte **l'historique git complet — onze commits**,
+`HISTORIQUE.bundle` porte **l'historique git complet — douze commits**,
 messages compris. Il ne s'agit donc pas de repartir d'une copie à plat : le
 détail des corrections, des mesures et des défauts constatés vit dans ces
 messages, et c'est souvent là qu'est l'information.
@@ -96,14 +100,24 @@ Et ce dossier peut alors quitter `conseilprev` :
 quatre autres portent chacune le motif écrit de leur sommeil, parce qu'un
 registre qui annonce ce qu'il ne lit pas se vide de son sens.
 
-**178 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
+Une **barre latérale** dit ce que la page contient et où l'on en est. Elle ne
+peut pas mentir sur son contenu : ses entrées sont LUES DANS LA PAGE, et ses
+comptes recopiés de chaque rubrique.
+
+Une **bascule FR/EN** traduit toute l'interface — écrite à la main, ce site
+n'employant aucune traduction automatique nulle part. Elle **déclare ce
+qu'elle ne traduit pas** : les lectures critiques, dérivées de gabarits
+français, et les titres, qui portent la langue de leur source. Le nombre
+affiché avec cette réserve est mesuré, pas écrit.
+
+**190 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
 gardent les règles éditoriales, et chacun est écrit pour tomber le jour où
 quelqu'un les assouplira. Chaque règle nouvelle a été confrontée à une
-**mutation du code qu'elle garde** — la mutation a révélé deux contrôles qui
-ne gardaient rien, et ils ont été refaits.
+**mutation du code qu'elle garde**.
 
-### Les onze commits du bundle
+### Les douze commits du bundle
 
+    4544401  Barre latérale, et une bascule FR/EN qui dit ce qu'elle ne traduit pas
     f5aee5e  Déploiement : les deux chemins, et pourquoi pas Blueprint
     0c1f527  OWASP, et quatre défauts que le pont a fait sortir
     64aabd7  Trois contrôles de la confrontation ne gardaient rien

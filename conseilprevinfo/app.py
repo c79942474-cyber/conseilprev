@@ -262,7 +262,13 @@ def api_referentiel():
     return jsonify(ok=True, version=VERSION,
                    sujets=V.sujets(), statuts=V.statuts(),
                    lectures=V.lectures(), impacts=V.impacts(),
-                   horizons=V.horizons())
+                   horizons=V.horizons(),
+                   # CE QUE LA BASCULE FR/EN NE TRADUIT PAS, avec son compte.
+                   # L'écran l'affiche au moment où la bascule sert : une
+                   # interface anglaise posée sur des analyses françaises est
+                   # un mensonge par omission. Le nombre vient d'ici, pas
+                   # d'une phrase écrite une fois pour toutes.
+                   langues=V.langues(corpus()))
 
 
 @app.route("/api/sources")

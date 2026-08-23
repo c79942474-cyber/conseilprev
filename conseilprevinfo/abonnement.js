@@ -10,6 +10,7 @@
    envoyé aux tiers. */
 (function () {
   "use strict";
+  function tr(c) { return (window.L && window.L.t) ? window.L.t(c) : c; }
   var CLE = "cpinfo.jeton";
   var DELAI = 15000;
 
@@ -63,11 +64,19 @@
     e.hidden = !msg;
   }
 
-  var MOIS = ["janvier","février","mars","avril","mai","juin","juillet",
-              "août","septembre","octobre","novembre","décembre"];
   var d = new Date();
-  $("or-date").textContent = d.getDate() + " " + MOIS[d.getMonth()] + " "
-    + d.getFullYear();
+    /* LA DATE SE REDESSINE À LA BASCULE. Posée une seule fois au chargement,
+     elle restait « 23 août 2026 » sur une interface anglaise — le genre de
+     reste qui fait douter de tout le reste. */
+  function dater() {
+    var e = $("or-date");
+    if (!e) return;
+    e.textContent = (window.L && window.L.date)
+      ? window.L.date(d.toISOString().slice(0, 10))
+      : d.toISOString().slice(0, 10);
+  }
+  dater();
+  document.addEventListener("langue", dater);
 
   var REF = null;
 
@@ -77,11 +86,13 @@
       REF = r;
       $("a-sujets").innerHTML = (r.sujets || []).map(function (s) {
         return '<label class="case"><input type="checkbox" value="'
-          + esc(s.cle) + '"> ' + esc(s.nom) + '</label>';
+          + esc(s.cle) + '"> ' + esc((window.L && window.L.courante() === "en" && s.nom_en) ? s.nom_en : s.nom) + '</label>';
       }).join("");
       $("a-seuil").innerHTML = (r.impacts || []).map(function (i) {
-        return '<option value="' + esc(i.cle) + '">' + esc(i.nom)
-          + " et au-dessus</option>";
+        return '<option value="' + esc(i.cle) + '">'
+          + esc((window.L && window.L.courante() === "en" && i.nom_en)
+                ? i.nom_en : i.nom)
+          + " " + esc(tr("ab.audessus")) + "</option>";
       }).join("");
     });
   }
@@ -194,6 +205,15 @@
       jeton(""); montrer(null);
       dire(r.message || "Compte effacé.");
     }).catch(function () { dire("Le serveur n'a pas répondu.", true); });
+  });
+
+  /* LES LISTES SE REDESSINENT À LA BASCULE. Composées une seule fois au
+     chargement, les sujets suivis et les seuils restaient français sur une
+     interface anglaise — et ce sont précisément les libellés sur lesquels le
+     lecteur clique. Le choix en cours est repris depuis le compte, que
+     `moi()` relit. */
+  document.addEventListener("langue", function () {
+    referentiel().then(moi);
   });
 
   referentiel().then(moi);

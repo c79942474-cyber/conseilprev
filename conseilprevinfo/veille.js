@@ -14,6 +14,30 @@
   var DELAI = 20000;
   var REF = null, FACETTES = null;
 
+  /* Nommé `tr` et non `t` : deux fonctions de ce fichier emploient déjà `t`
+     comme variable locale — le minuteur de `demander`, la liste des termes de
+     `chargerDossiers`. Une ombre silencieuse y aurait fait appeler un tableau
+     comme une fonction, au premier usage et pas avant. */
+  function tr(c) { return (window.L && window.L.t) ? window.L.t(c) : c; }
+
+  /* LES LIBELLÉS DU RÉFÉRENTIEL, DANS LES DEUX LANGUES. Le serveur sert
+     `sujet_nom` en français sur chaque fiche : le recopier tel quel laisserait
+     des pastilles françaises sur une interface anglaise. La table est bâtie
+     depuis `/api/veille/referentiel`, qui porte `nom` ET `nom_en` — la page
+     ne traduit rien elle-même, elle choisit parmi ce que le moteur déclare. */
+  var NOMS = {};
+  function nommer(genre, cle, defaut) {
+    var e = NOMS[genre] && NOMS[genre][cle];
+    if (!e) return defaut || cle || "";
+    return (window.L && window.L.courante() === "en" && e.en) ? e.en : e.fr;
+  }
+  function ranger(genre, liste) {
+    NOMS[genre] = {};
+    (liste || []).forEach(function (x) {
+      NOMS[genre][x.cle] = { fr: x.nom, en: x.nom_en || x.nom };
+    });
+  }
+
   function $(id) { return document.getElementById(id); }
   function esc(x) {
     return String(x == null ? "" : x).replace(/[&<>"]/g, function (c) {
@@ -44,7 +68,13 @@
 
   var MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
               "août", "septembre", "octobre", "novembre", "décembre"];
+  /* LA DATE SUIT LA LANGUE — `langue.js` la formate pour les quatre pages.
+     DÉFAUT CONSTATÉ AU NAVIGATEUR : la table de mois locale rendait
+     « collected on 23 août 2026 » au milieu d'une phrase anglaise, et
+     « 23 février 2026 » sur chaque carte. Un reste de ce genre fait douter
+     de tout le reste. */
   function frDate(iso) {
+    if (window.L && window.L.date) return window.L.date(iso);
     if (!iso) return "—";
     var p = String(iso).slice(0, 10).split("-");
     if (p.length !== 3) return String(iso);
@@ -58,8 +88,10 @@
   function fiche(f) {
     var h = '<article class="fiche">';
     h += '<div class="fmeta">'
-      + '<span class="past ' + esc(f.impact) + '">' + esc(f.impact_nom) + '</span>'
-      + '<span class="past sujet">' + esc(f.sujet_nom) + '</span>'
+      + '<span class="past ' + esc(f.impact) + '">'
+      + esc(nommer("impact", f.impact, f.impact_nom)) + '</span>'
+      + '<span class="past sujet">'
+      + esc(nommer("sujet", f.sujet, f.sujet_nom)) + '</span>'
       + (f.horizon === "projete"
           ? '<span class="past signal_faible">Projection</span>' : "")
       /* UNE DATE FABRIQUÉE PORTE SA MARQUE DÈS LA VIGNETTE. Sans elle, le
@@ -76,21 +108,22 @@
       + '</a></h3>';
     if (f.chapeau) h += '<p class="fchapeau">' + esc(f.chapeau) + '</p>';
 
-    h += '<div class="fbloc lecture"><span class="fbloc-t">Lecture — '
-      + esc(f.lecture_nom) + '</span><p>' + esc(f.lecture) + '</p></div>';
-    h += '<div class="fbloc portee"><span class="fbloc-t">Ce que cela change</span>'
-      + '<p>' + esc(f.portee) + '</p></div>';
-    h += '<div class="fbloc doute"><span class="fbloc-t">Ce qu\'on ne sait pas</span>'
-      + '<p>' + esc(f.incertitude) + '</p></div>';
+    h += '<div class="fbloc lecture"><span class="fbloc-t">' + esc(tr("js.lecture"))
+      + esc(nommer("lecture", f.lecture_nature, f.lecture_nom))
+      + '</span><p>' + esc(f.lecture) + '</p></div>';
+    h += '<div class="fbloc portee"><span class="fbloc-t">' + esc(tr("js.change"))
+      + '</span><p>' + esc(f.portee) + '</p></div>';
+    h += '<div class="fbloc doute"><span class="fbloc-t">' + esc(tr("js.doute"))
+      + '</span><p>' + esc(f.incertitude) + '</p></div>';
 
     var s = f.source || {};
     var faible = f.statut !== "verifiee_source_primaire";
     h += '<div class="fsource">'
       + '<span class="st' + (faible ? " faible" : "") + '">● '
-      + esc(f.statut_nom) + '</span>'
+      + esc(nommer("statut", f.statut, f.statut_nom)) + '</span>'
       + esc(s.nom || "") + ' — ' + esc(s.editeur || "")
       + (s.url ? ' · <a href="' + esc(s.url) + '" target="_blank" rel="noopener">'
-                 + 'consulter la source</a>' : "")
+                 + esc(tr("js.consulter")) + '</a>' : "")
       + (s.licence ? '<br>' + esc(s.licence) : "")
       + '</div></article>';
     return h;
@@ -169,19 +202,18 @@
     var et = d.etat || {};
     var mauvaises = (et.journal || []).filter(function (j) { return !j.ok; });
     var quand = et.collecte_le ? frDate(et.collecte_le) : "—";
-    var h = "<b>Corpus : " + (et.fiches || 0) + " fiche(s)</b>, collectées le "
-      + esc(quand) + ".";
+    var h = "<b>" + esc(tr("js.corpus")) + (et.fiches || 0) + " "
+      + esc(tr("js.fiches")) + "</b>" + esc(tr("js.collectees")) + esc(quand) + ".";
     if (mauvaises.length) {
-      h += " <b>" + mauvaises.length + " source(s) n'ont pas répondu :</b> "
+      h += " <b>" + mauvaises.length + " " + esc(tr("js.muettes")) + "</b> "
         + mauvaises.map(function (j) {
             return esc(j.source) + " — " + esc(j.message || j.erreur || "");
           }).join(" ; ")
-        + ". Les fiches affichées viennent des sources qui ont répondu ; "
-        + "aucune n'est complétée d'estimation.";
+        + esc(tr("js.muettes.fin"));
       e.className = "bandeau-etat alerte";
     } else {
       e.className = "bandeau-etat";
-      h += " Toutes les sources interrogées ont répondu.";
+      h += " " + esc(tr("js.toutes.ok"));
     }
     e.innerHTML = h;
   }
@@ -224,25 +256,23 @@
 
       $("une").innerHTML = une.length
         ? une.map(fiche).join("")
-        : '<div class="vide"><b>Rien ne rompt aujourd\'hui.</b>'
-          + 'Aucune fiche du corpus filtré n\'est classée « rupture ». '
-          + 'C\'est une information, pas un manque — et c\'est pourquoi cette '
-          + 'zone ne se remplit pas des fiches suivantes.</div>';
-      $("c-une").textContent = une.length + " fiche(s)";
+        : '<div class="vide"><b>' + esc(tr("js.une.rien")) + '</b>'
+          + esc(tr("js.une.vide")) + ' ' + esc(tr("js.une.vide2")) + '</div>';
+      $("c-une").textContent = une.length + " " + tr("js.fiches");
 
       $("fil").innerHTML = fil.length
         ? fil.map(fiche).join("")
-        : '<div class="vide"><b>Aucune fiche pour ces filtres.</b>'
-          + 'Élargissez la sélection — le corpus ne contient peut-être rien '
-          + 'sur ce croisement, et le site ne comble pas ce vide.</div>';
-      $("c-fil").textContent = fil.length + " fiche(s)";
+        : '<div class="vide"><b>' + esc(tr("js.fil.vide")) + '</b>'
+          + esc(tr("js.fil.vide2")) + '</div>';
+      $("c-fil").textContent = fil.length + " " + tr("js.fiches");
 
       /* LA COUPE EST ANNONCÉE, jamais laissée à la soustraction du lecteur.
          Le serveur dit lui-même s'il a coupé : le client ne le déduit pas de
          deux nombres, sans quoi la règle vivrait à deux endroits et l'un des
          deux finirait faux. */
-      $("f-compte").innerHTML = "<b>" + d.total + "</b> fiche(s) retenues"
-        + (d.tronque ? ", <b>" + d.affichees + "</b> affichées" : "");
+      $("f-compte").innerHTML = "<b>" + d.total + "</b> " + esc(tr("js.fiches"))
+        + " " + esc(tr("js.retenues"))
+        + (d.tronque ? ", <b>" + d.affichees + "</b> " + esc(tr("js.affichees")) : "");
       var c = $("f-coupe");
       if (c) {
         c.textContent = d.tronque_dit || "";
@@ -253,23 +283,54 @@
          résultat n'intéresse plus personne. */
       if (mien !== DEMANDE) return;
       var msg = (e && e.name === "DelaiDepasse")
-        ? "Le serveur n'a pas répondu en " + Math.round(DELAI / 1000)
-          + " secondes. La veille n'est pas perdue : rechargez dans un instant."
-        : "La veille n'a pas pu être chargée. Rechargez la page.";
+        ? tr("js.delai") : tr("js.erreur");
       $("etat").className = "bandeau-etat alerte";
       $("etat").textContent = msg;
     });
+  }
+
+  /* LE RÉFÉRENTIEL EST LU AVANT LE PREMIER RENDU : sans lui, `nommer()`
+     retomberait sur le libellé français servi avec la fiche, et l'interface
+     anglaise s'ouvrirait avec des pastilles françaises avant de se corriger.
+     Il porte aussi la RÉSERVE DE TRADUCTION, mesurée par le serveur. */
+  function chargerReferentiel() {
+    return demander("/api/veille/referentiel").then(function (d) {
+      if (!d.ok) return;
+      REF = d;
+      ranger("sujet", d.sujets); ranger("impact", d.impacts);
+      ranger("horizon", d.horizons); ranger("statut", d.statuts);
+      ranger("lecture", d.lectures);
+      direReserve();
+    }).catch(function () { /* les libellés servis avec la fiche font foi */ });
+  }
+
+  /* CE QUE LA BASCULE NE TRADUIT PAS, DIT QUAND ELLE SERT — et seulement
+     alors. Afficher la réserve en français à un lecteur français serait lui
+     expliquer que le site français est en français. */
+  function direReserve() {
+    var e = $("tr-dit");
+    if (!e) return;
+    var lg = REF && REF.langues;
+    var en = window.L && window.L.courante() === "en";
+    if (!lg || !en) { e.hidden = true; return; }
+    e.hidden = false;
+    e.innerHTML = "<b>" + esc(tr("tr.titre")) + ".</b> " + esc(lg.dit_en);
   }
 
   function chargerFacettes() {
     return demander("/api/veille/facettes").then(function (d) {
       if (!d.ok) return;
       FACETTES = d;
-      options("f-sujet", d.sujets, "cle", "nom", true);
+      /* LES PAYS ET LES TECHNOLOGIES NE SE TRADUISENT PAS : ce sont des
+         données du corpus, pas des libellés du cabinet. « Modbus » et « FR »
+         s'écrivent de la même façon dans les deux langues, et les traduire
+         reviendrait à réécrire ce que la source déclare. */
+      var lib = (window.L && window.L.courante() === "en") ? "nom_en" : "nom";
+      options("f-sujet", d.sujets, "cle", lib, true);
       options("f-pays", d.pays, "cle", "cle", true);
       options("f-techno", d.technologies, "cle", "cle", true);
-      options("f-impact", d.impacts, "cle", "nom", true);
-      options("f-horizon", d.horizons, "cle", "nom", true);
+      options("f-impact", d.impacts, "cle", lib, true);
+      options("f-horizon", d.horizons, "cle", lib, true);
     }).catch(function () { /* les filtres restent sur « Tous » */ });
   }
 
@@ -281,7 +342,7 @@
     demander("/api/veille/pistes").then(function (d) {
       if (!d.ok) return;
       var ps = d.pistes || [];
-      $("c-pistes").textContent = ps.length + " piste(s)";
+      $("c-pistes").textContent = ps.length + " " + tr("js.pistes");
       $("pistes").innerHTML = ps.map(function (p) {
         return '<article class="piste">'
           + '<span class="pi-sol s' + p.solidite + '">' + esc(p.solidite_nom)
@@ -301,11 +362,11 @@
               return '<a href="/fiche/' + esc(f.id) + '">' + esc(f.titre) + '</a>';
             }).join(' · ')
           + (p.fiches_non_listees
-              ? ' <i>(+' + p.fiches_non_listees + ' non listée(s))</i>' : '')
+              ? ' <i>(+' + p.fiches_non_listees + ' '
+                + esc(tr("js.non_listees")) + ')</i>' : '')
           + '</p></article>';
-      }).join("") || '<div class="vide"><b>Aucune piste aujourd\'hui.</b>'
-        + 'Aucun déclencheur ne trouve dans le corpus de quoi en former une. '
-        + 'Proposer quand même serait proposer sans matière.</div>';
+      }).join("") || '<div class="vide"><b>' + esc(tr("js.pistes.vide")) + '</b>'
+        + esc(tr("js.pistes.vide2")) + '</div>';
       var m = d.mesure, e = $("pistes-mesure");
       if (e && m && m.dit) e.textContent = m.dit;
     }).catch(function () { /* les pistes sont dérivées, pas le contenu */ });
@@ -318,12 +379,11 @@
     demander("/api/veille/dossiers").then(function (d) {
       if (!d.ok) return;
       var t = d.par_terme || [];
-      $("c-dos").textContent = t.length + " dossier(s)";
+      $("c-dos").textContent = t.length + " " + tr("js.dossiers");
       $("dossiers").innerHTML = t.map(function (x) {
         return '<button type="button" class="dos" data-terme="' + esc(x.libelle)
           + '"><b>' + esc(x.libelle) + '</b><span class="n">' + x.n + '</span></button>';
-      }).join("") || '<span class="dos-dit">Aucun terme ne revient sur assez '
-        + 'de fiches pour former un dossier.</span>';
+      }).join("") || '<span class="dos-dit">' + esc(tr("js.dos.vide")) + '</span>';
       /* L'AXE PAR ENTITÉ DIT CE QU'IL A MESURÉ, MÊME QUAND IL NE FORME RIEN.
          Le taire laisserait croire que le site regroupe par fournisseur et
          qu'il n'y a rien à signaler — alors que c'est la matière des sources
@@ -395,15 +455,24 @@
       .catch(function () {
         if (!z) return;
         z.className = "resu ko";
-        z.textContent = "✗ injoignable depuis ce serveur — l'état est dit, "
-          + "pas masqué";
+        z.textContent = "✗ " + tr("js.sonde.ko");
       });
   });
 
   function demarrer() {
     var d = new Date();
-    $("or-date").textContent = d.getDate() + " " + MOIS[d.getMonth()] + " "
-      + d.getFullYear();
+      /* LA DATE SE REDESSINE À LA BASCULE. Posée une seule fois au chargement,
+     elle restait « 23 août 2026 » sur une interface anglaise — le genre de
+     reste qui fait douter de tout le reste. */
+  function dater() {
+    var e = $("or-date");
+    if (!e) return;
+    e.textContent = (window.L && window.L.date)
+      ? window.L.date(d.toISOString().slice(0, 10))
+      : d.toISOString().slice(0, 10);
+  }
+  dater();
+  document.addEventListener("langue", dater);
 
     FILTRES.forEach(function (f) {
       var el = $(f[1]);
@@ -423,10 +492,24 @@
       charger();
     });
 
+    chargerReferentiel();
     chargerFacettes().then(function () { lireAdresse(); charger(); });
     chargerSources();
     chargerDossiers();
     chargerPistes();
+
+    /* LA BASCULE NE RECHARGE PAS LA PAGE — elle perdrait les filtres en
+       cours, et un lecteur qui a construit sa vue ne doit pas la payer pour
+       changer de langue. Les listes de filtres sont reconstruites (leurs
+       libellés changent), et le fil est redemandé : `garde` dans `options()`
+       préserve la valeur choisie. */
+    document.addEventListener("langue", function () {
+      direReserve();
+      chargerFacettes().then(charger);
+      chargerSources();
+      chargerDossiers();
+      chargerPistes();
+    });
   }
 
   if (document.readyState === "loading")

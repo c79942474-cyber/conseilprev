@@ -23,11 +23,19 @@
     try { return sessionStorage.getItem(CLE) || ""; } catch (e) { return ""; }
   }
 
-  var MOIS = ["janvier","février","mars","avril","mai","juin","juillet",
-              "août","septembre","octobre","novembre","décembre"];
   var d = new Date();
-  $("or-date").textContent = d.getDate() + " " + MOIS[d.getMonth()] + " "
-    + d.getFullYear();
+    /* LA DATE SE REDESSINE À LA BASCULE. Posée une seule fois au chargement,
+     elle restait « 23 août 2026 » sur une interface anglaise — le genre de
+     reste qui fait douter de tout le reste. */
+  function dater() {
+    var e = $("or-date");
+    if (!e) return;
+    e.textContent = (window.L && window.L.date)
+      ? window.L.date(d.toISOString().slice(0, 10))
+      : d.toISOString().slice(0, 10);
+  }
+  dater();
+  document.addEventListener("langue", dater);
 
   function dire(msg, alerte) {
     var e = $("etat");
@@ -67,7 +75,12 @@
       var sel = $("c-sujet");
       (r.sujets || []).forEach(function (s) {
         var o = document.createElement("option");
-        o.value = s.cle; o.textContent = s.nom;
+        /* LE LIBELLÉ SUIT LA LANGUE. Le serveur porte les deux ; recopier
+           `nom` laissait des rubriques françaises dans un formulaire
+           anglais. */
+        o.value = s.cle;
+        o.textContent = (window.L && window.L.courante() === "en" && s.nom_en)
+          ? s.nom_en : s.nom;
         sel.appendChild(o);
       });
     }).catch(function () { /* le champ reste sur « déduire » */ });
@@ -163,6 +176,14 @@
                + "été conservé — réessayez."
              : "Le serveur n'a pas répondu.", true);
       });
+  });
+
+  /* À la bascule, la liste des rubriques est reconstruite : ses libellés
+     changent de langue, et le choix en cours est préservé. */
+  document.addEventListener("langue", function () {
+    var sel = $("c-sujet"), garde = sel.value;
+    while (sel.options.length > 1) sel.remove(1);
+    rubriques().then(function () { sel.value = garde; });
   });
 
   rubriques().then(moi);

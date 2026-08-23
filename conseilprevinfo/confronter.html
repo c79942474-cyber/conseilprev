@@ -15,84 +15,101 @@
 
 <div class="oreille">
   <div class="in">
-    <span><a href="/" style="color:inherit">← CONSEILPREV INFO</a></span>
-    <span><a href="/abonnement" style="color:inherit">Votre abonnement</a>
-      · <span id="or-date">—</span></span>
+    <span><a href="/" data-i18n="or.retour">← CONSEILPREV INFO</a></span>
+    <span class="or-d">
+      <a href="/abonnement" data-i18n="or.abonnement">Votre abonnement</a>
+      <span id="or-date">—</span>
+      <span data-langue></span>
+    </span>
   </div>
 </div>
 
+<!-- LE BOUTON DE LA BARRE, replié sous 1100 px. -->
+<button type="button" id="bl-bouton" aria-expanded="false"
+        aria-controls="barre" data-i18n-aria="bl.ouvrir">
+  <span></span><span></span><span></span>
+</button>
+
+<div class="page">
+  <aside class="bl" id="barre" data-barre></aside>
+  <div class="col">
+
 <main class="in" style="max-width:860px;padding-top:26px">
-  <h1 class="titre-journal" style="font-size:clamp(26px,3.6vw,38px);margin:0 0 12px">
-    Confronter un document</h1>
+  <h1 class="titre-journal" style="font-size:clamp(26px,3.6vw,38px);margin:0 0 12px"><span data-i18n="cf.titre">Confronter un document</span></h1>
 
   <!-- CE QUE FAIT L'OUTIL EST DIT AVANT LE CHAMP DE DÉPÔT, pas après le
        bouton. Un industriel décide de déposer son schéma d'architecture avec
        ce qu'il a lu AU-DESSUS du champ. -->
   <p class="devise">
-    Déposez un document — politique de sécurité, cahier des charges, note
-    d'architecture — et voyez <b>quelles fiches du corpus traitent de ce dont
-    il parle</b>. C'est une entrée dans la veille par votre propre
-    vocabulaire.
+    <span data-i18n="cf.devise">Déposez un document — politique de sécurité,
+    cahier des charges, note d'architecture — et voyez</span>
+    <b data-i18n="cf.devise.b">quelles fiches du corpus traitent de ce dont il
+    parle</b><span data-i18n="cf.devise.fin">. C'est une entrée dans la veille
+    par votre propre vocabulaire.</span>
   </p>
 
   <div class="bandeau-etat alerte" style="border-left-color:var(--rouge)">
-    <b>Ce que cet outil ne fait pas, et ne fera pas.</b> Il <b>ne lit pas</b>
-    votre document : il compare des mots. Il ne le comprend pas, ne le juge
-    pas, ne le note pas, et ne certifie aucune conformité. Un rapprochement de
-    vocabulaire n'est pas une lecture — et un outil qui prétendrait auditer un
-    document en comparant des mots serait exactement le genre de promesse que
-    ce site refuse.
+    <b data-i18n="cf.ne.b">Ce que cet outil ne fait pas, et ne fera pas.</b>
+    <span data-i18n="cf.ne.t">Il ne lit pas votre document : il compare des
+    mots. Il ne le comprend pas, ne le juge pas, ne le note pas, et ne
+    certifie aucune conformité. Un rapprochement de vocabulaire n'est pas une
+    lecture — et un outil qui prétendrait auditer un document en comparant des
+    mots serait exactement le genre de promesse que ce site refuse.</span>
   </div>
 
   <div class="bandeau-etat">
-    <b>Ce que devient votre document.</b> Rien. Il est lu en mémoire,
-    confronté, puis jeté avec la requête. <b>Aucune copie n'est écrite sur
-    disque</b>, aucun extrait n'est conservé, et la réponse renvoyée à votre
-    navigateur ne contient pas le texte déposé — seulement des termes et des
-    comptes. Un cabinet qui garderait les documents de ses prospects pour
-    « améliorer son service » ferait précisément ce qu'un industriel redoute
-    en confiant son architecture.
+    <b data-i18n="cf.dev.b">Ce que devient votre document.</b>
+    <span data-i18n="cf.dev.t">Rien. Il est lu en mémoire, confronté, puis
+    jeté avec la requête. Aucune copie n'est écrite sur disque, aucun extrait
+    n'est conservé, et la réponse renvoyée à votre navigateur ne contient pas
+    le texte déposé — seulement des termes et des comptes. Un cabinet qui
+    garderait les documents de ses prospects pour « améliorer son service »
+    ferait précisément ce qu'un industriel redoute en confiant son
+    architecture.</span>
   </div>
 
   <div class="bandeau-etat" id="etat" hidden></div>
 
   <section id="hors" hidden>
-    <h2 class="rubrique">Compte requis</h2>
-    <p>Le document que vous déposez est une donnée d'exposition : ce qu'il
-      contient renseigne sur votre installation. Le dépôt anonyme n'est donc
-      pas ouvert. <a href="/abonnement">Connectez-vous ou créez un compte</a>,
-      puis revenez sur cette page.</p>
+    <h2 class="rubrique" id="r-compte"><span data-i18n="cf.r.compte">Compte requis</span></h2>
+    <p><span data-i18n="cf.compte.t">Le document que vous déposez est une
+      donnée d'exposition : ce qu'il contient renseigne sur votre
+      installation. Le dépôt anonyme n'est donc pas ouvert.</span>
+      <a href="/abonnement" data-i18n="cf.compte.a">Connectez-vous ou créez un
+      compte</a><span data-i18n="cf.compte.fin">, puis revenez sur cette
+      page.</span></p>
   </section>
 
   <section id="dedans" hidden>
     <form class="fmr" id="f-conf">
       <div class="fgrp2">
-        <label for="c-fichier">Votre document</label>
+        <label for="c-fichier" data-i18n="cf.l.fichier">Votre document</label>
         <input type="file" id="c-fichier" accept=".txt,.md,.docx,.pdf" required>
-        <p class="aide" id="c-formats">Formats lus : .txt, .md, .docx, .pdf
-          (le PDF doit porter du texte, pas des images numérisées).</p>
+        <p class="aide" id="c-formats" data-i18n="cf.formats">Formats lus :
+          .txt, .md, .docx, .pdf (le PDF doit porter du texte, pas des images
+          numérisées).</p>
       </div>
       <div class="fgrp2">
-        <label for="c-sujet">Rubrique de comparaison</label>
-        <select id="c-sujet"><option value="">Déduire de mon document</option></select>
-        <p class="aide">Le corpus couvre quatre rubriques, votre document une
-          seule. Confronté au tout, il reçoit des questions hors de son
-          domaine. La rubrique est <b>déduite de votre document</b> et
-          affichée — vous pouvez la corriger.</p>
+        <label for="c-sujet" data-i18n="cf.l.sujet">Rubrique de comparaison</label>
+        <select id="c-sujet"><option value="" data-i18n="cf.o.deduire">Déduire de mon document</option></select>
+        <p class="aide" data-i18n="cf.aide.sujet">Le corpus couvre quatre
+          rubriques, votre document une seule. Confronté au tout, il reçoit
+          des questions hors de son domaine. La rubrique est déduite de votre
+          document et affichée — vous pouvez la corriger.</p>
       </div>
       <div class="fbtns">
-        <button type="submit" class="fraz">Confronter au corpus</button>
+        <button type="submit" class="fraz" data-i18n="cf.b.envoyer">Confronter au corpus</button>
       </div>
     </form>
 
     <div id="resultat" hidden>
-      <h2 class="rubrique">Ce que votre document touche
+      <h2 class="rubrique" id="r-touche"><span data-i18n="cf.r.touche">Ce que votre document touche</span>
         <span id="c-ponts"></span></h2>
       <p class="dos-dit" id="c-portee"></p>
       <div class="dossiers" id="c-echos"></div>
       <div id="c-fiches"></div>
 
-      <h2 class="rubrique">Ce qu'il ne nomme pas <span id="c-nq"></span></h2>
+      <h2 class="rubrique" id="r-nomme"><span data-i18n="cf.r.nomme">Ce qu'il ne nomme pas</span> <span id="c-nq"></span></h2>
       <p class="bandeau-etat" id="c-questions-dit"></p>
       <div id="c-questions"></div>
 
@@ -104,15 +121,21 @@
 
 <footer>
   <div class="in">
-    <p><b>Pourquoi l'absence d'un mot ne vaut pas l'absence de la chose.</b>
-    Votre document peut traiter parfaitement d'un sujet en l'appelant
-    autrement — « cloisonnement » pour « segmentation », « journalisation »
-    pour « traçabilité ». Tout ce qui est présenté ici comme manquant est
-    donc une <b>question à poser à votre document</b>, jamais un manque
-    constaté.</p>
+    <p><b data-i18n="cf.pi.b">Pourquoi l'absence d'un mot ne vaut pas
+    l'absence de la chose.</b> <span data-i18n="cf.pi.t">Votre document peut
+    traiter parfaitement d'un sujet en l'appelant autrement —
+    « cloisonnement » pour « segmentation », « journalisation » pour
+    « traçabilité ». Tout ce qui est présenté ici comme manquant est donc une
+    question à poser à votre document, jamais un manque constaté.</span></p>
   </div>
 </footer>
 
+
+  </div><!-- .col -->
+</div><!-- .page -->
+
+<script src="/langue.js" defer></script>
+<script src="/barre.js" defer></script>
 <script src="/confronter.js" defer></script>
 </body>
 </html>

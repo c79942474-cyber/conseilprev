@@ -15,22 +15,45 @@
 
 <div class="oreille">
   <div class="in">
-    <span>CONSEILPREV INFO — <b>veille sourcée</b></span>
-    <span><a href="/confronter" style="color:inherit">Confronter un document</a>
-      · <a href="/abonnement" style="color:inherit">Votre abonnement</a>
-      · <span id="or-date">—</span></span>
+    <span><span data-i18n="or.marque">CONSEILPREV INFO — </span><b data-i18n="or.veille">veille sourcée</b></span>
+    <span class="or-d">
+      <a href="/confronter" data-i18n="or.confronter">Confronter un document</a>
+      <a href="/abonnement" data-i18n="or.abonnement">Votre abonnement</a>
+      <span id="or-date">—</span>
+      <!-- LA BASCULE DE LANGUE EST POSÉE ICI PAR `langue.js`. Recopier son
+           balisage dans les quatre pages le ferait diverger à la première
+           correction — et c'est toujours la version la moins regardée qui
+           reste en arrière. -->
+      <span data-langue></span>
+    </span>
   </div>
 </div>
+
+<!-- LE BOUTON DE LA BARRE. Visible seulement sous 1100 px, là où une colonne
+     fixe prendrait la moitié de l'écran pour de la navigation. -->
+<button type="button" id="bl-bouton" aria-expanded="false"
+        aria-controls="barre" data-i18n-aria="bl.ouvrir">
+  <span></span><span></span><span></span>
+</button>
+
+<div class="page">
+  <!-- LA BARRE LATÉRALE. Son contenu est LU DANS LA PAGE par `barre.js` :
+       une liste écrite ici promettrait une rubrique le jour où elle serait
+       retirée, et le lecteur cliquerait dans le vide. -->
+  <aside class="bl" id="barre" data-barre></aside>
+
+  <div class="col">
 
 <header class="tete">
   <div class="in">
     <h1 class="titre-journal">CONSEILPREV <span>INFO</span></h1>
     <p class="devise">
-      Cybersécurité industrielle · Intelligence artificielle · Systèmes d'IA ·
-      Centres de données. <b>Chaque information porte sa source, sa date et
-      une lecture critique dont la provenance est écrite</b> — dérivée par
-      règles publiées, ou rédigée et signée. Rien n'est produit par un modèle
-      de langage.
+      <span data-i18n="ac.devise">Cybersécurité industrielle · Intelligence
+      artificielle · Systèmes d'IA · Centres de données.</span>
+      <b data-i18n="ac.devise.b">Chaque information porte sa source, sa date
+      et une lecture critique dont la provenance est écrite</b>
+      <span data-i18n="ac.devise.fin">— dérivée par règles publiées, ou
+      rédigée et signée. Rien n'est produit par un modèle de langage.</span>
     </p>
   </div>
 </header>
@@ -41,44 +64,54 @@
      panne. -->
 <div class="filtres">
   <div class="in">
-    <div class="fgrp"><label class="flab" for="f-sujet">Sujet</label>
-      <select id="f-sujet"><option value="">Tous</option></select></div>
-    <div class="fgrp"><label class="flab" for="f-pays">Pays</label>
-      <select id="f-pays"><option value="">Tous</option></select></div>
-    <div class="fgrp"><label class="flab" for="f-techno">Technologie</label>
-      <select id="f-techno"><option value="">Toutes</option></select></div>
-    <div class="fgrp"><label class="flab" for="f-impact">Portée</label>
-      <select id="f-impact"><option value="">Toutes</option></select></div>
-    <div class="fgrp"><label class="flab" for="f-horizon">Horizon</label>
-      <select id="f-horizon"><option value="">Tous</option></select></div>
-    <div class="fgrp"><label class="flab" for="f-depuis">Depuis</label>
+    <div class="fgrp"><label class="flab" for="f-sujet" data-i18n="f.sujet">Sujet</label>
+      <select id="f-sujet"><option value="" data-i18n="f.tous">Tous</option></select></div>
+    <div class="fgrp"><label class="flab" for="f-pays" data-i18n="f.pays">Pays</label>
+      <select id="f-pays"><option value="" data-i18n="f.tous">Tous</option></select></div>
+    <div class="fgrp"><label class="flab" for="f-techno" data-i18n="f.techno">Technologie</label>
+      <select id="f-techno"><option value="" data-i18n="f.toutes">Toutes</option></select></div>
+    <div class="fgrp"><label class="flab" for="f-impact" data-i18n="f.portee">Portée</label>
+      <select id="f-impact"><option value="" data-i18n="f.toutes">Toutes</option></select></div>
+    <div class="fgrp"><label class="flab" for="f-horizon" data-i18n="f.horizon">Horizon</label>
+      <select id="f-horizon"><option value="" data-i18n="f.tous">Tous</option></select></div>
+    <div class="fgrp"><label class="flab" for="f-depuis" data-i18n="f.depuis">Depuis</label>
       <input type="date" id="f-depuis"></div>
-    <div class="fgrp"><label class="flab" for="f-q">Recherche</label>
-      <input type="search" id="f-q" placeholder="mot du titre ou du texte"></div>
-    <button type="button" class="fraz" id="f-raz">Tout afficher</button>
+    <div class="fgrp"><label class="flab" for="f-q" data-i18n="f.recherche">Recherche</label>
+      <input type="search" id="f-q" data-i18n-ph="f.placeholder"
+             placeholder="mot du titre ou du texte"></div>
+    <button type="button" class="fraz" id="f-raz" data-i18n="f.raz">Tout afficher</button>
     <span class="fcompte" id="f-compte">—</span>
   </div>
 </div>
 
 <main>
-  <div class="bandeau-etat" id="etat">Chargement de la veille…</div>
+  <div class="bandeau-etat" id="etat" data-i18n="et.chargement">Chargement de la veille…</div>
 
-  <h2 class="rubrique">Dossiers — ce que le corpus regroupe de lui-même
+  <!-- CE QUE LA BASCULE NE TRADUIT PAS, DIT AU MOMENT OÙ ELLE SERT. Une
+       interface anglaise posée sur des analyses françaises est un mensonge
+       par omission : le lecteur conclut que le site est cassé, ou pire, ne
+       les lit pas et croit avoir tout vu. Le compte vient du serveur. -->
+  <p class="bandeau-etat alerte" id="tr-dit" hidden></p>
+
+  <h2 class="rubrique" id="r-dossiers"><span data-i18n="r.dossiers">Dossiers — ce que le corpus regroupe de lui-même</span>
     <span id="c-dos"></span></h2>
   <div class="dossiers" id="dossiers"></div>
-  <p class="dos-dit">Ces regroupements ne sont pas des rubriques décidées à
-    l'avance : ce sont les termes qui reviennent dans plusieurs titres, toutes
-    sources confondues. <b>C'est un rapprochement de vocabulaire</b> — il
-    signale une famille de faits, il ne prouve aucune relation entre eux.</p>
+  <p class="dos-dit">
+    <span data-i18n="r.dossiers.dit">Ces regroupements ne sont pas des
+    rubriques décidées à l'avance : ce sont les termes qui reviennent dans
+    plusieurs titres, toutes sources confondues.</span>
+    <b data-i18n="r.dossiers.dit.b">C'est un rapprochement de vocabulaire</b>
+    <span data-i18n="r.dossiers.fin">— il signale une famille de faits, il ne
+    prouve aucune relation entre eux.</span></p>
   <!-- L'AXE QUI NE DONNE RIEN LE DIT QUAND MÊME. Un site qui n'affiche que
        ses axes féconds enseigne au lecteur une couverture qu'il n'a pas. -->
   <p class="dos-dit dos-ent" id="dos-ent"></p>
 
-  <h2 class="rubrique" id="r-une">À la une — ce qui rompt
+  <h2 class="rubrique" id="r-une"><span data-i18n="r.une">À la une — ce qui rompt</span>
     <span id="c-une"></span></h2>
   <div class="une" id="une"></div>
 
-  <h2 class="rubrique">Le fil — tout le corpus filtré
+  <h2 class="rubrique" id="r-fil"><span data-i18n="r.fil">Le fil — tout le corpus filtré</span>
     <span id="c-fil"></span></h2>
   <div class="grille" id="fil"></div>
   <!-- QUAND LA LISTE EST COUPÉE, ELLE LE DIT — sous le fil, là où le lecteur
@@ -88,52 +121,69 @@
   <!-- LES PISTES. Placées APRÈS le fil, jamais avant : ce sont des
        propositions dérivées du corpus, et les faire précéder les faits
        laisserait croire qu'elles en sont la conclusion. -->
-  <h2 class="rubrique" id="r-pistes">Pistes d'instruction — ce que le corpus
-    permet d'ouvrir <span id="c-pistes"></span></h2>
+  <h2 class="rubrique" id="r-pistes"><span data-i18n="r.pistes">Pistes
+    d'instruction — ce que le corpus permet d'ouvrir</span>
+    <span id="c-pistes"></span></h2>
   <p class="bandeau-etat">
-    <b>Ce ne sont pas des recommandations.</b> Chaque piste dit ce qui la
-    déclenche, avec les fiches nommées, ce qu'elle suppose, et
-    <b>ce qu'elle n'établit pas</b> — à commencer par l'existence d'un
-    acheteur. Aucune ne porte de chiffre de marché : le corpus n'en contient
-    aucun, et en produire un reviendrait à l'inventer. Elles sont rangées par
-    <b>solidité du déclencheur</b>, pas par attrait commercial supposé, que ce
-    site n'a aucun moyen d'évaluer.
+    <b data-i18n="r.pistes.b1">Ce ne sont pas des recommandations.</b>
+    <span data-i18n="r.pistes.t1">Chaque piste dit ce qui la déclenche, avec
+    les fiches nommées, ce qu'elle suppose, et</span>
+    <b data-i18n="r.pistes.b2">ce qu'elle n'établit pas</b>
+    <span data-i18n="r.pistes.t2">— à commencer par l'existence d'un acheteur.
+    Aucune ne porte de chiffre de marché : le corpus n'en contient aucun, et
+    en produire un reviendrait à l'inventer. Elles sont rangées par</span>
+    <b data-i18n="r.pistes.b3">solidité du déclencheur</b><span
+    data-i18n="r.pistes.t3">, pas par attrait commercial supposé, que ce site
+    n'a aucun moyen d'évaluer.</span>
   </p>
   <div class="pistes" id="pistes"></div>
   <p class="dos-dit dos-ent" id="pistes-mesure"></p>
 
-  <h2 class="rubrique" id="r-sources">Le registre des sources
-    <span>ce dont ce site a le droit de parler</span></h2>
+  <h2 class="rubrique" id="r-sources"><span data-i18n="r.sources">Le registre
+    des sources</span>
+    <span data-i18n="r.sources.st">ce dont ce site a le droit de parler</span></h2>
   <p class="bandeau-etat">
-    <b>Une fiche qui ne cite aucune de ces sources n'est pas publiable</b> —
-    le moteur la refuse, elle n'est pas « affichée avec une réserve ».
-    Chaque source porte ce qu'elle couvre <b>et ce qu'elle ne couvre pas</b> :
-    une source dont on ne dirait que les forces finirait citée hors de son
-    domaine. Le bouton « Sonder » va réellement chercher l'adresse et rend ce
-    qu'elle répond, à l'instant.
+    <b data-i18n="r.sources.b1">Une fiche qui ne cite aucune de ces sources
+    n'est pas publiable</b>
+    <span data-i18n="r.sources.t1">— le moteur la refuse, elle n'est pas
+    « affichée avec une réserve ». Chaque source porte ce qu'elle couvre</span>
+    <b data-i18n="r.sources.b2">et ce qu'elle ne couvre pas</b><span
+    data-i18n="r.sources.t2"> : une source dont on ne dirait que les forces
+    finirait citée hors de son domaine. Le bouton « Sonder » va réellement
+    chercher l'adresse et rend ce qu'elle répond, à l'instant.</span>
   </p>
   <div class="sources" id="sources"></div>
 </main>
 
 <footer>
   <div class="in">
-    <p><b>Ce que ce site ne fait pas.</b> Il ne classe pas par pertinence
-    supposée, ne note aucune information sur dix, et ne conclut pas à votre
-    place. Il n'agrège pas non plus : deux sources qui se contredisent restent
-    deux fiches contradictoires — la contradiction est l'information.</p>
-    <p><b>Ce que « vérifié » veut dire ici.</b> Que le fait a été confronté au
-    document d'origine, pas à un article qui en parle. Le statut est écrit sur
-    chaque fiche, et il commande la publication.</p>
-    <p><b>La lecture critique n'est pas le fait.</b> Elle est signalée comme
-    dérivée par règles — reproductible, sans modèle de langage — ou rédigée et
-    signée par un analyste. Dans le second cas elle engage celui qui la signe.</p>
-    <p class="fam">CONSEILPREV — Paris · Ce site complète
-      <b>conseilprevcyber.onrender.com</b> (cybersécurité industrielle et
-      ingénierie de centres de données) et <b>conseilprev.onrender.com</b>
-      (gouvernance de l'IA et décision d'investissement).</p>
+    <p><b data-i18n="pi.b1">Ce que ce site ne fait pas.</b>
+      <span data-i18n="pi.t1">Il ne classe pas par pertinence supposée, ne
+      note aucune information sur dix, et ne conclut pas à votre place. Il
+      n'agrège pas non plus : deux sources qui se contredisent restent deux
+      fiches contradictoires — la contradiction est l'information.</span></p>
+    <p><b data-i18n="pi.b2">Ce que « vérifié » veut dire ici.</b>
+      <span data-i18n="pi.t2">Que le fait a été confronté au document
+      d'origine, pas à un article qui en parle. Le statut est écrit sur chaque
+      fiche, et il commande la publication.</span></p>
+    <p><b data-i18n="pi.b3">La lecture critique n'est pas le fait.</b>
+      <span data-i18n="pi.t3">Elle est signalée comme dérivée par règles —
+      reproductible, sans modèle de langage — ou rédigée et signée par un
+      analyste. Dans le second cas elle engage celui qui la signe.</span></p>
+    <p class="fam"><span data-i18n="pi.fam">CONSEILPREV — Paris · Ce site
+      complète</span> <b>conseilprevcyber.onrender.com</b>
+      <span data-i18n="pi.fam2">(cybersécurité industrielle et ingénierie de
+      centres de données) et</span> <b>conseilprev.onrender.com</b>
+      <span data-i18n="pi.fam3">(gouvernance de l'IA et décision
+      d'investissement).</span></p>
   </div>
 </footer>
 
+  </div><!-- .col -->
+</div><!-- .page -->
+
+<script src="/langue.js" defer></script>
+<script src="/barre.js" defer></script>
 <script src="/veille.js" defer></script>
 </body>
 </html>

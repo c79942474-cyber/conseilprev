@@ -49,6 +49,7 @@ VERSION = "2026.08.22"
 SUJETS = {
     "cyber_industriel": {
         "nom": "Cybersécurité industrielle",
+        "nom_en": "Industrial cybersecurity",
         "sous_titre": "IT · OT · IIoT",
         "quoi": "Les systèmes d'automatisation et de contrôle, leurs "
                 "vulnérabilités avérées, les modes opératoires observés et "
@@ -56,6 +57,7 @@ SUJETS = {
     },
     "ia": {
         "nom": "Intelligence artificielle",
+        "nom_en": "Artificial intelligence",
         "sous_titre": "Modèles, matériel, usages",
         "quoi": "L'état de la technique : capacités mesurées, coûts, "
                 "matériel, et ce que les évaluations publiques établissent "
@@ -63,6 +65,7 @@ SUJETS = {
     },
     "sia": {
         "nom": "Systèmes d'IA & conformité",
+        "nom_en": "AI systems & compliance",
         "sous_titre": "AI Act · ISO/IEC 42001 · gouvernance",
         "quoi": "Le régime juridique des systèmes d'IA : classification, "
                 "obligations par rôle, échéances, et la gouvernance qui les "
@@ -70,6 +73,7 @@ SUJETS = {
     },
     "datacenter": {
         "nom": "Centres de données",
+        "nom_en": "Data centres",
         "sous_titre": "Énergie · eau · carbone",
         "quoi": "L'infrastructure de calcul et ses ressources : puissance, "
                 "refroidissement, eau, carbone, implantation et les textes "
@@ -83,24 +87,28 @@ ORDRE_SUJETS = ["cyber_industriel", "ia", "sia", "datacenter"]
 STATUTS = {
     "verifiee_source_primaire": {
         "nom": "Vérifiée à la source",
+        "nom_en": "Verified against the primary source",
         "dit": "Le fait a été confronté au document d'origine, pas à un "
                "article qui en parle.",
         "publiable": True, "rang": 1,
     },
     "source_secondaire": {
         "nom": "Source secondaire",
+        "nom_en": "Secondary source",
         "dit": "Le fait vient d'un intermédiaire fiable, sans que l'original "
                "ait été lu. Utilisable, à condition que ce soit écrit.",
         "publiable": True, "rang": 2,
     },
     "a_verifier": {
         "nom": "À vérifier",
+        "nom_en": "To be verified",
         "dit": "Retenue pour instruction, pas encore confrontée à sa source. "
                "Ne sort pas.",
         "publiable": False, "rang": 3,
     },
     "redigee_par_ia": {
         "nom": "Rédigée par IA — non validée",
+        "nom_en": "Written by AI — not validated",
         "dit": "Produite par un modèle de langage. Ne sort JAMAIS sans "
                "relecture humaine, et le moteur n'a aucun moyen de l'en "
                "sortir seul.",
@@ -108,6 +116,7 @@ STATUTS = {
     },
     "refutee": {
         "nom": "Réfutée",
+        "nom_en": "Refuted",
         "dit": "Confrontée et démentie. Conservée — une réfutation est une "
                "information, et l'effacer reviendrait à réécrire l'histoire "
                "de sa propre veille.",
@@ -125,6 +134,7 @@ ORDRE_STATUTS = ["verifiee_source_primaire", "source_secondaire", "a_verifier",
 LECTURES = {
     "regle": {
         "nom": "Lecture dérivée par règles",
+        "nom_en": "Reading derived by published rules",
         "dit": "Composée automatiquement à partir des seules données de la "
                "source, par des règles écrites et publiées. Reproductible : "
                "deux passages sur la même donnée rendent le même texte. "
@@ -134,6 +144,7 @@ LECTURES = {
     },
     "redaction": {
         "nom": "Lecture rédigée et signée",
+        "nom_en": "Reading written and signed",
         "dit": "Écrite par un analyste du cabinet, datée et signée. C'est un "
                "AVIS — argumenté, révisable, et qui engage celui qui le "
                "signe.",
@@ -142,6 +153,7 @@ LECTURES = {
     },
     "modele": {
         "nom": "Brouillon de modèle — non validé",
+        "nom_en": "Model draft — not validated",
         "dit": "Proposé par un modèle de langage. Sert de point de départ à "
                "un analyste, jamais de contenu. Ne sort pas.",
         "engage_le_cabinet": False,
@@ -157,22 +169,26 @@ ORDRE_LECTURES = ["regle", "redaction", "modele"]
 IMPACTS = {
     "rupture": {
         "nom": "Rupture",
+        "nom_en": "Break",
         "dit": "Change ce qu'il est possible ou obligatoire de faire. Se "
                "traite en comité, pas en veille.",
         "rang": 1,
     },
     "structurant": {
         "nom": "Structurant",
+        "nom_en": "Structural",
         "dit": "Déplace un arbitrage ou une trajectoire déjà engagée.",
         "rang": 2,
     },
     "incremental": {
         "nom": "Incrémental",
+        "nom_en": "Incremental",
         "dit": "S'inscrit dans une tendance connue sans l'infléchir.",
         "rang": 3,
     },
     "signal_faible": {
         "nom": "Signal faible",
+        "nom_en": "Weak signal",
         "dit": "Isolé, mal établi, mais qui mérite d'être daté pour qu'on "
                "puisse y revenir. Sa fragilité est la donnée principale.",
         "rang": 4,
@@ -182,10 +198,13 @@ ORDRE_IMPACTS = ["rupture", "structurant", "incremental", "signal_faible"]
 
 # ── L'horizon ─────────────────────────────────────────────────────────────
 HORIZONS = {
-    "constate": {"nom": "Constaté", "dit": "Établi à la date indiquée."},
-    "engage": {"nom": "Engagé", "dit": "Décidé, daté, pas encore en vigueur "
+    "constate": {"nom": "Constaté",
+        "nom_en": "Established", "dit": "Établi à la date indiquée."},
+    "engage": {"nom": "Engagé",
+        "nom_en": "Committed", "dit": "Décidé, daté, pas encore en vigueur "
                                        "ou pas encore déployé."},
-    "projete": {"nom": "Projeté", "dit": "Projection à horizon 2030. C'est une "
+    "projete": {"nom": "Projeté",
+        "nom_en": "Projected", "dit": "Projection à horizon 2030. C'est une "
                                          "HYPOTHÈSE, portée par qui la publie — "
                                          "jamais un fait."},
 }
@@ -488,6 +507,51 @@ def facettes(fiches):
         "annees": annees,
         "total_publiable": len(pub),
         "total_corpus": len(fiches),
+    }
+
+
+def langues(fiches=None):
+    """CE QUE LA BASCULE FR/EN TRADUIT, ET CE QU'ELLE NE TRADUIT PAS.
+
+    UNE INTERFACE ANGLAISE POSÉE SUR UN CORPUS FRANÇAIS EST UN MENSONGE PAR
+    OMISSION. Le lecteur qui bascule en anglais et voit des paragraphes
+    français en conclut que le site est cassé — ou pire, il ne les lit pas et
+    croit avoir tout vu.
+
+    LA DISTINCTION EST NETTE ET TIENT AU MOTEUR :
+
+      · Le TITRE et le CHAPEAU viennent de la source. MITRE, CISA et OWASP
+        publient en anglais : ces champs le sont donc aussi, sans que ce site
+        y soit pour quoi que ce soit.
+      · La LECTURE, la PORTÉE et l'INCERTITUDE sont DÉRIVÉES par des gabarits
+        écrits en français dans `ingestion.py`. Les traduire demanderait des
+        gabarits anglais — un vrai travail, pas un réglage —, et les traduire
+        par machine serait exactement ce que ce site refuse partout ailleurs.
+
+    Cette fonction ne suppose rien : elle COMPTE. Le nombre affiché à côté de
+    la réserve vient d'ici, pas d'une phrase écrite une fois pour toutes.
+    """
+    pub = publiables(fiches or [])
+    avec_analyse = [f for f in pub if _texte(f.get("lecture"))]
+    return {
+        "interface": ["fr", "en"],
+        "analyses_langue": "fr",
+        "analyses": len(avec_analyse),
+        "total": len(pub),
+        "dit_fr": ("Les %d analyses du corpus sont en français : elles sont "
+                   "dérivées par des gabarits écrits en français, et ce site "
+                   "n'emploie aucune traduction automatique. Les titres et "
+                   "chapeaux, eux, portent la langue de leur source — "
+                   "l'anglais pour MITRE, CISA et OWASP."
+                   % len(avec_analyse)),
+        "dit_en": ("The interface is translated; the %d critical readings are "
+                   "not, nor are the measurement notes that accompany them. "
+                   "All of that text is derived from rule templates written "
+                   "in French, and this site uses no machine translation "
+                   "anywhere — translating it here would break the one "
+                   "promise it makes. Titles, summaries and technology names "
+                   "carry their source's own language, which is English for "
+                   "MITRE, CISA and OWASP." % len(avec_analyse)),
     }
 
 

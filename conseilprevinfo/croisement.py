@@ -48,6 +48,7 @@ LIENS = {
     # citer, et la citation d'origine voyage avec le lien.
     "declaree_par_la_source": {
         "nom": "Déclaré par la source",
+        "nom_en": "Declared by the source",
         "force": 1,
         "dit": "Le référentiel d'origine affirme lui-même la relation entre "
                "ces deux fiches, et fournit les références sur lesquelles il "
@@ -56,6 +57,7 @@ LIENS = {
     },
     "meme_editeur": {
         "nom": "Même éditeur",
+        "nom_en": "Same vendor",
         "force": 2,
         "dit": "Les deux fiches portent sur le même fournisseur. C'est le lien "
                "le plus opérationnel : elles concernent le même contrat, le "
@@ -63,17 +65,20 @@ LIENS = {
     },
     "meme_pays": {
         "nom": "Même pays",
+        "nom_en": "Same country",
         "force": 3,
         "dit": "Les deux fiches portent sur le même territoire, donc sur le "
                "même régime juridique et le même réseau électrique.",
     },
     "meme_technologie": {
         "nom": "Même technologie",
+        "nom_en": "Same technology",
         "force": 4,
         "dit": "Les deux fiches partagent au moins une technologie déclarée.",
     },
     "meme_periode": {
         "nom": "Même période",
+        "nom_en": "Same period",
         "force": 5,
         "dit": "Faits rapprochés dans le temps sur le même sujet. La "
                "proximité de date n'est PAS une relation de cause : c'est un "
@@ -322,6 +327,10 @@ def liens(fiche, corpus, maxi=6):
             "date_fait": g.get("date_fait"),
             "impact": g.get("impact"), "impact_nom": g.get("impact_nom"),
             "lien": type_, "lien_nom": LIENS[type_]["nom"],
+            # LE NOM ANGLAIS VOYAGE AVEC LE LIEN, comme le français. La page
+            # choisit, elle ne traduit pas : traduire côté écran remettrait
+            # une deuxième source de vérité en face du moteur.
+            "lien_nom_en": LIENS[type_].get("nom_en", LIENS[type_]["nom"]),
             "lien_force": LIENS[type_]["force"],
             "pourquoi": pourquoi,
             # LA CHAÎNE DE PREUVE VOYAGE AVEC LE LIEN. Un rapprochement repris

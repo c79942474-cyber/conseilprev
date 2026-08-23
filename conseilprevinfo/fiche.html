@@ -12,16 +12,38 @@
 </head>
 <body>
 <div class="oreille"><div class="in">
-  <span><a href="/" style="color:inherit;text-decoration:none">← CONSEILPREV INFO</a></span>
-  <span id="or-date">—</span>
+  <span><a href="/" data-i18n="or.retour">← CONSEILPREV INFO</a></span>
+  <span class="or-d">
+    <a href="/confronter" data-i18n="or.confronter">Confronter un document</a>
+    <span id="or-date">—</span>
+    <span data-langue></span>
+  </span>
 </div></div>
-<main id="page"><div class="bandeau-etat">Chargement de la fiche…</div></main>
+
+<!-- LE BOUTON DE LA BARRE, replié sous 1100 px. -->
+<button type="button" id="bl-bouton" aria-expanded="false"
+        aria-controls="barre" data-i18n-aria="bl.ouvrir">
+  <span></span><span></span><span></span>
+</button>
+
+<div class="page">
+  <aside class="bl" id="barre" data-barre></aside>
+  <div class="col">
+
+<main id="page"><div class="bandeau-etat" data-i18n="fi.chargement">Chargement de la fiche…</div></main>
 <footer><div class="in">
-  <p><b>La lecture critique n'est pas le fait.</b> Elle est signalée comme
-  dérivée par règles — reproductible, sans modèle de langage — ou rédigée et
-  signée par un analyste.</p>
+  <p><b data-i18n="fi.pi.b">La lecture critique n'est pas le fait.</b>
+  <span data-i18n="fi.pi.t">Elle est signalée comme dérivée par règles —
+  reproductible, sans modèle de langage — ou rédigée et signée par un
+  analyste.</span></p>
   <p class="fam">CONSEILPREV — Paris</p>
 </div></footer>
+
+  </div><!-- .col -->
+</div><!-- .page -->
+
+<script src="/langue.js" defer></script>
+<script src="/barre.js" defer></script>
 <script src="/fiche.js" defer></script>
 </body>
 </html>
