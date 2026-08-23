@@ -474,3 +474,11 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
 .lg:hover{color:var(--papier);background:rgba(251,248,242,.10)}
 .lg-on{background:var(--papier);color:var(--encre);font-weight:500}
 .lg:focus-visible{outline:2px solid #F3C88A;outline-offset:-2px}
+
+/* UN MENU QUI N'A RIEN À PROPOSER LE DIT, et se désactive. En pointillé
+   comme les autres réserves de ce site : ce n'est pas une panne, c'est un
+   axe qui ne donne rien sur les fiches trouvées. */
+.filtres select.vide-dit{
+  border-style:dashed;color:var(--sourd2);background:transparent;
+  max-width:230px;
+}

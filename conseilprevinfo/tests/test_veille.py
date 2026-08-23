@@ -831,3 +831,113 @@ def test_un_parent_absent_ne_fait_pas_tomber_la_fiche():
     l'enfant : mieux vaut un titre court qu'aucune fiche."""
     f = I._fiche_technique_atlas(_TECHNIQUES[1], _TACTIQUES, "2023-10-25", {})
     assert f["titre"].startswith("Direct —"), f["titre"]
+
+
+# ── 11. Les facettes décrivent LES FICHES TROUVÉES ────────────────────────
+#
+# DÉFAUT MESURÉ À L'ÉCRAN, ET C'ÉTAIT LE PIRE GENRE. Les menus étaient calculés
+# sur tout le corpus, quels que soient les filtres. Choisir « Systèmes d'IA »
+# laissait le menu Pays proposer quatorze pays avec leurs comptes — alors
+# qu'AUCUNE des vingt-huit fiches de cette rubrique ne porte de pays. Le
+# lecteur cliquait « DE (2) », obtenait un écran vide, et n'avait aucun moyen
+# de savoir si le site était cassé ou le corpus pauvre.
+
+def _corpus_facettes():
+    """Deux rubriques : l'une porte des pays, l'autre non — exactement la
+    forme qui produisait l'impasse."""
+    out = []
+    for i, p in enumerate(("FR", "DE")):
+        out.append(V.normaliser(_fiche(
+            id="dc-%s" % p.lower(), sujet="datacenter", pays=[p],
+            technologies=["Mix électrique"],
+            date_fait="2026-0%d-15" % (i + 1)))["fiche"])
+    for i in range(3):
+        out.append(V.normaliser(_fiche(
+            id="sia-%d" % i, sujet="sia", pays=[],
+            date_fait="2025-0%d-15" % (i + 1)))["fiche"])
+    return out
+
+
+def test_un_menu_ne_propose_jamais_une_impasse():
+    """LE CONTRÔLE QUI GARDE LA CORRECTION. La rubrique « sia » ne porte aucun
+    pays : son menu Pays doit être VIDE, et non offrir ceux d'une autre
+    rubrique."""
+    c = _corpus_facettes()
+    assert len(V.facettes(c)["pays"]) == 2, "sans filtre, les deux pays"
+    assert V.facettes(c, sujet="sia")["pays"] == [], \
+        "le menu Pays propose des pays absents de la rubrique"
+    assert V.facettes(c, sujet="datacenter")["pays"], \
+        "le menu Pays s'est vidé là où il y a des pays"
+
+
+def test_chaque_axe_est_compte_hors_de_son_propre_filtre():
+    """SANS CETTE RÈGLE, ON NE PEUT PLUS CHANGER D'AVIS. Choisir la France
+    réduirait le menu Pays à la seule France, et il faudrait tout remettre à
+    zéro pour regarder l'Allemagne. L'axe voit donc l'effet des AUTRES
+    filtres, jamais du sien."""
+    c = _corpus_facettes()
+    f = V.facettes(c, pays="FR")
+    assert {p["cle"] for p in f["pays"]} == {"FR", "DE"}, \
+        "le menu Pays s'est réduit à son propre choix"
+    # les autres axes, eux, voient bien le filtre pays
+    assert {s["cle"] for s in f["sujets"]} == {"datacenter"}, \
+        "le menu Sujet propose une rubrique sans fiche française"
+
+
+def test_le_compte_annonce_est_celui_des_fiches_trouvees():
+    """`total_publiable` disait la taille du corpus ; les menus décrivaient
+    autre chose que ce que la page affiche, et l'écart ne se voyait pas."""
+    c = _corpus_facettes()
+    f = V.facettes(c, sujet="sia")
+    assert f["total_trouve"] == 3
+    assert f["total_publiable"] == 5
+    assert f["filtre"] == {"sujet": "sia"}
+
+
+def test_la_recherche_libre_resserre_aussi_les_menus():
+    """Le champ de recherche est un filtre comme les autres : les menus
+    doivent décrire ce qu'il laisse."""
+    c = _corpus_facettes()
+    f = V.facettes(c, q="mix")
+    assert f["total_trouve"] <= 2
+    assert {s["cle"] for s in f["sujets"]} <= {"datacenter"}
+
+
+def test_un_pays_porte_son_nom_et_pas_son_code():
+    """DÉFAUT CONSTATÉ À L'ÉCRAN. Le menu proposait « BE (2) », « DK (2) » :
+    un lecteur qui cherche la France doit savoir qu'elle s'écrit FR, et la
+    trouver entre ES et GB dans une liste de sigles."""
+    c = _corpus_facettes()
+    noms = {p["cle"]: (p["nom"], p["nom_en"]) for p in V.facettes(c)["pays"]}
+    assert noms["FR"] == ("France", "France")
+    assert noms["DE"] == ("Allemagne", "Germany")
+
+
+def test_un_pays_hors_registre_reste_proposable():
+    """Le masquer ferait disparaître du menu un pays réellement présent : mieux
+    vaut un code lisible qu'une fiche introuvable."""
+    c = _corpus_facettes() + [V.normaliser(_fiche(
+        id="zz-1", sujet="datacenter", pays=["ZZ"]))["fiche"]]
+    noms = {p["cle"]: p["nom"] for p in V.facettes(c)["pays"]}
+    assert noms.get("ZZ") == "ZZ"
+
+
+def test_les_pays_suivis_derivent_de_la_table_editoriale():
+    """Deux tables auraient divergé au premier pays ajouté, et l'écart se
+    serait vu comme une source « injoignable » plutôt que comme une faute de
+    recopie. Le nom employé pour l'appariement n'est pas le nom affiché : les
+    séparer est ce qui permet de traduire l'un sans casser l'autre."""
+    assert I.PAYS_SUIVIS == {c: v["owid"] for c, v in V.PAYS.items()}
+    assert V.PAYS["DE"]["fr"] != V.PAYS["DE"]["owid"]
+
+
+def test_l_api_des_facettes_lit_les_memes_filtres_que_le_fil():
+    """Deux listes de paramètres auraient divergé, et les menus se seraient
+    mis à décrire autre chose que ce que la page affiche."""
+    src = open(os.path.join(ICI, "app.py"), encoding="utf-8").read()
+    i = src.index("_FILTRES_FIL = (")
+    noms = set(re.findall(r'"(\w+)"', src[i:src.index(")", i)]))
+    api = src[src.index("def api_veille"):src.index("def page_abonnement")]
+    for n in noms - {"q"}:
+        assert 'request.args.get("%s")' % n in api, n
+    assert "V.facettes(corpus(), **_filtres_demandes())" in src

@@ -82,6 +82,45 @@ SUJETS = {
 }
 ORDRE_SUJETS = ["cyber_industriel", "ia", "sia", "datacenter"]
 
+
+# ── Les pays, et pourquoi une seule table ─────────────────────────────────
+# DÉFAUT CONSTATÉ À L'ÉCRAN. Le menu « Pays » proposait « BE (2) », « DK (2) »,
+# « FI (2) » — des codes ISO. Un lecteur qui cherche la France doit savoir
+# qu'elle s'écrit FR, et parcourir une liste alphabétique de sigles pour la
+# trouver entre ES et GB. Un filtre qu'on n'ose pas employer ne filtre rien.
+#
+# `owid` EST LA CLÉ D'APPARIEMENT, PAS UN LIBELLÉ. Les jeux de données de Our
+# World in Data et d'Electricity Maps nomment leurs entités en anglais ; c'est
+# ce nom-là qu'`ingestion.py` compare. Le séparer du nom affiché est ce qui
+# permet de traduire l'un sans casser l'autre — et les tenir dans DEUX tables
+# les aurait fait diverger au premier ajout de pays.
+PAYS = {
+    "FR": {"fr": "France",        "en": "France",         "owid": "France"},
+    "DE": {"fr": "Allemagne",     "en": "Germany",        "owid": "Germany"},
+    "IE": {"fr": "Irlande",       "en": "Ireland",        "owid": "Ireland"},
+    "NL": {"fr": "Pays-Bas",      "en": "Netherlands",    "owid": "Netherlands"},
+    "SE": {"fr": "Suède",         "en": "Sweden",         "owid": "Sweden"},
+    "NO": {"fr": "Norvège",       "en": "Norway",         "owid": "Norway"},
+    "FI": {"fr": "Finlande",      "en": "Finland",        "owid": "Finland"},
+    "DK": {"fr": "Danemark",      "en": "Denmark",        "owid": "Denmark"},
+    "ES": {"fr": "Espagne",       "en": "Spain",          "owid": "Spain"},
+    "IT": {"fr": "Italie",        "en": "Italy",          "owid": "Italy"},
+    "PL": {"fr": "Pologne",       "en": "Poland",         "owid": "Poland"},
+    "BE": {"fr": "Belgique",      "en": "Belgium",        "owid": "Belgium"},
+    "GB": {"fr": "Royaume-Uni",   "en": "United Kingdom", "owid": "United Kingdom"},
+    "US": {"fr": "États-Unis",    "en": "United States",  "owid": "United States"},
+}
+
+
+def nom_pays(code):
+    """Le nom d'un pays, ou son code s'il n'est pas au registre.
+
+    UN CODE INCONNU SORT TEL QUEL. Le masquer ferait disparaître du menu un
+    pays réellement présent dans le corpus : mieux vaut « ZZ » lisible qu'une
+    fiche introuvable."""
+    e = PAYS.get(str(code).upper())
+    return {"fr": e["fr"], "en": e["en"]} if e else {"fr": code, "en": code}
+
 # ── Le statut de vérification ─────────────────────────────────────────────
 # `publiable` est la seule chose qui compte : elle décide de ce qui sort.
 STATUTS = {
@@ -470,43 +509,79 @@ def chercher(fiches, q):
     return out
 
 
-def facettes(fiches):
-    """Ce que les filtres peuvent réellement proposer, COMPTÉ sur le corpus.
+def facettes(fiches, **filtres):
+    """Ce que les filtres peuvent réellement proposer — COMPTÉ SUR LES FICHES
+    TROUVÉES, et non sur le corpus entier.
+
+    DÉFAUT MESURÉ À L'ÉCRAN, ET C'ÉTAIT LE PIRE GENRE. Les menus étaient
+    calculés sur tout le corpus, quels que soient les filtres en cours.
+    Choisir « Systèmes d'IA » laissait donc le menu Pays proposer quatorze
+    pays avec leurs comptes — alors qu'AUCUNE des vingt-huit fiches de cette
+    rubrique ne porte de pays. Le lecteur cliquait « DE (2) », obtenait un
+    écran vide, et n'avait aucun moyen de savoir si le site était cassé ou si
+    le corpus était pauvre. Un menu qui promet des résultats inexistants est
+    pire qu'un menu absent.
+
+    CHAQUE AXE EST COMPTÉ HORS DE SON PROPRE FILTRE. C'est la règle d'une
+    recherche à facettes, et elle n'est pas un raffinement : sans elle,
+    choisir un pays réduirait le menu Pays à ce seul pays, et l'on ne pourrait
+    plus en changer sans tout remettre à zéro. Le menu Pays voit donc l'effet
+    du sujet, de la technologie et des dates — mais pas le sien.
 
     Jamais une liste écrite à la main : une facette qui propose un pays sans
     aucune fiche rend un écran vide, et le lecteur croit le site cassé.
     """
-    pub = publiables(fiches)
-    def _compte(cle):
+    def _garde(sauf):
+        """Les fiches retenues par tous les filtres SAUF celui de cet axe."""
+        aut = {k: v for k, v in filtres.items() if k != sauf and v}
+        q = aut.pop("q", None)
+        out = filtrer(fiches, **aut)
+        return chercher(out, q) if q else out
+
+    def _compte(cle, sauf):
         c = {}
-        for f in pub:
+        for f in _garde(sauf):
             for v in (f.get(cle) or []):
                 c[str(v)] = c.get(str(v), 0) + 1
         return c
+
+    pub = _garde(None)          # tous les filtres appliqués : le fil affiché
     par_sujet = {}
-    for f in pub:
+    for f in _garde("sujet"):
         par_sujet[f.get("sujet")] = par_sujet.get(f.get("sujet"), 0) + 1
     annees = sorted({str(f.get("date_fait", ""))[:4] for f in pub if f.get("date_fait")},
                     reverse=True)
+    par_impact = _garde("impact")
+    par_horizon = _garde("horizon")
     return {
         "sujets": [dict(SUJETS[c], cle=c, n=par_sujet.get(c, 0))
                    for c in ORDRE_SUJETS if par_sujet.get(c)],
-        "pays": sorted(({"cle": k, "n": v} for k, v in _compte("pays").items()),
-                       key=lambda x: (-x["n"], x["cle"])),
+        # LE PAYS PORTE SON NOM, dans les deux langues. Un menu de codes ISO
+        # oblige le lecteur à savoir que la France s'écrit FR et à la chercher
+        # entre ES et GB.
+        "pays": sorted(({"cle": k, "n": v,
+                         "nom": nom_pays(k)["fr"], "nom_en": nom_pays(k)["en"]}
+                        for k, v in _compte("pays", "pays").items()),
+                       key=lambda x: (-x["n"], x["nom"])),
         "technologies": sorted(({"cle": k, "n": v}
-                                for k, v in _compte("technologies").items()),
+                                for k, v in _compte("technologies", "techno").items()),
                                key=lambda x: (-x["n"], x["cle"])),
         "impacts": [dict(IMPACTS[c], cle=c,
-                         n=sum(1 for f in pub if f.get("impact") == c))
+                         n=sum(1 for f in par_impact if f.get("impact") == c))
                     for c in ORDRE_IMPACTS
-                    if any(f.get("impact") == c for f in pub)],
+                    if any(f.get("impact") == c for f in par_impact)],
         "horizons": [dict(HORIZONS[c], cle=c,
-                          n=sum(1 for f in pub if f.get("horizon") == c))
+                          n=sum(1 for f in par_horizon if f.get("horizon") == c))
                      for c in ORDRE_HORIZONS
-                     if any(f.get("horizon") == c for f in pub)],
+                     if any(f.get("horizon") == c for f in par_horizon)],
         "annees": annees,
-        "total_publiable": len(pub),
+        # CE QUE LES MENUS DÉCRIVENT : le nombre de fiches trouvées, pas la
+        # taille du corpus. Les deux étaient confondus, et c'est ce qui rendait
+        # l'écart invisible.
+        "total_trouve": len(pub),
+        "total_publiable": len(publiables(fiches)),
         "total_corpus": len(fiches),
+        "filtre": {k: v for k, v in filtres.items() if v},
     }
 
 

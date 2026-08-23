@@ -221,9 +221,24 @@ def api_fiche(ident):
                    composition=X.mesure_liens(tout), **X.croiser(f, tout))
 
 
+# LES MÊMES PARAMÈTRES QUE LE FIL, ET C'EST TOUT LE POINT. Les facettes
+# décrivent LES FICHES TROUVÉES : servies sur le corpus entier, elles
+# proposaient des combinaisons qui ne rendaient rien — « Systèmes d'IA » puis
+# « DE (2) », alors qu'aucune fiche de cette rubrique ne porte de pays.
+_FILTRES_FIL = ("sujet", "pays", "techno", "depuis", "jusqua",
+                "impact", "horizon", "q")
+
+
+def _filtres_demandes():
+    """Les filtres de la requête, dans une seule table lue par le fil ET par
+    les facettes. Deux listes séparées auraient divergé, et les menus se
+    seraient mis à décrire autre chose que ce que la page affiche."""
+    return {k: (request.args.get(k) or None) for k in _FILTRES_FIL}
+
+
 @app.route("/api/veille/facettes")
 def api_facettes():
-    return jsonify(ok=True, **V.facettes(corpus()))
+    return jsonify(ok=True, **V.facettes(corpus(), **_filtres_demandes()))
 
 
 @app.route("/api/veille/dossiers")

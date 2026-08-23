@@ -129,17 +129,38 @@
     return h;
   }
 
-  function options(sel, liste, valeur, libelle, compte) {
+  /* UN MENU VIDE DIT POURQUOI IL L'EST — il ne se contente pas de l'être.
+
+     Depuis que les menus décrivent LES FICHES TROUVÉES, certains se vident
+     légitimement : la rubrique « Systèmes d'IA » ne porte aucun pays, et son
+     menu Pays n'a donc rien à proposer. C'est une information, pas une panne
+     — mais un menu réduit à « Tous », désactivé sans un mot, se lit
+     exactement comme un chargement raté. Il porte donc son motif, à
+     l'endroit même où le lecteur allait cliquer. */
+  function options(sel, liste, valeur, libelle, compte, videDit) {
     var el = $(sel);
     if (!el) return;
     var garde = el.value;
-    var h = el.options.length ? el.options[0].outerHTML : "";
+    var premier = el.options.length ? el.options[0] : null;
+    var neutre = premier ? premier.getAttribute("data-i18n") : null;
+    var h = premier ? premier.outerHTML : "";
     (liste || []).forEach(function (x) {
       h += '<option value="' + esc(x[valeur]) + '">' + esc(x[libelle])
         + (compte && x.n != null ? " (" + x.n + ")" : "") + "</option>";
     });
     el.innerHTML = h;
     if (garde) el.value = garde;
+
+    var vide = !(liste || []).length && !garde;
+    el.disabled = vide && !!videDit;
+    el.classList.toggle("vide-dit", vide && !!videDit);
+    if (el.options[0]) {
+      /* L'intitulé neutre reprend sa place dès que l'axe redonne quelque
+         chose : sans cela, « aucun pays » resterait affiché après un
+         élargissement du filtre. */
+      el.options[0].textContent = vide && videDit ? tr(videDit)
+        : (neutre ? tr(neutre) : el.options[0].textContent);
+    }
   }
 
   /* LA SEULE TABLE DES FILTRES. Elle sert à interroger le serveur, à écrire
@@ -243,6 +264,10 @@
        une adresse qui contredit l'écran — et c'est cet instant-là qu'un
        lecteur choisit pour copier le lien. */
     ecrireAdresse();
+    /* LES MENUS SUIVENT LE FIL, dans la même respiration. Rechargés à part,
+       ils décriraient l'état précédent le temps d'un aller-retour — et c'est
+       cet instant-là que le lecteur choisit pour ouvrir un menu. */
+    chargerFacettes();
     var mien = ++DEMANDE;
     demander(url).then(function (d) {
       if (mien !== DEMANDE) return;
@@ -317,9 +342,22 @@
     e.innerHTML = "<b>" + esc(tr("tr.titre")) + ".</b> " + esc(lg.dit_en);
   }
 
+  /* LES MENUS DÉCRIVENT LES FICHES TROUVÉES, donc ils suivent les filtres :
+     la requête porte les MÊMES paramètres que le fil. Servis sur le corpus
+     entier, ils proposaient des combinaisons qui ne rendent rien — choisir
+     « Systèmes d'IA » laissait le menu Pays offrir quatorze pays, alors
+     qu'aucune fiche de cette rubrique n'en porte. */
+  /* LE NUMÉRO DE DEMANDE VAUT AUSSI POUR LES MENUS. Le fil le porte déjà,
+     pour une raison mesurée au navigateur : une réponse tardive réécrivait la
+     page après un dégagement de filtre. Les menus courent le même risque, en
+     pire — ils sont des `<select>`, et une réponse en retard les reconstruit
+     SOUS LE DOIGT du lecteur, effaçant le choix qu'il vient de faire. */
+  var DEMANDE_F = 0;
+
   function chargerFacettes() {
-    return demander("/api/veille/facettes").then(function (d) {
-      if (!d.ok) return;
+    var mien = ++DEMANDE_F;
+    return demander("/api/veille/facettes" + parametres()).then(function (d) {
+      if (mien !== DEMANDE_F || !d.ok) return;
       FACETTES = d;
       /* LES PAYS ET LES TECHNOLOGIES NE SE TRADUISENT PAS : ce sont des
          données du corpus, pas des libellés du cabinet. « Modbus » et « FR »
@@ -327,8 +365,10 @@
          reviendrait à réécrire ce que la source déclare. */
       var lib = (window.L && window.L.courante() === "en") ? "nom_en" : "nom";
       options("f-sujet", d.sujets, "cle", lib, true);
-      options("f-pays", d.pays, "cle", "cle", true);
-      options("f-techno", d.technologies, "cle", "cle", true);
+      /* LE PAYS PORTE SON NOM. Un menu de codes ISO oblige le lecteur à
+         savoir que la France s'écrit FR, et à la chercher entre ES et GB. */
+      options("f-pays", d.pays, "cle", lib, true, "f.pays.vide");
+      options("f-techno", d.technologies, "cle", "cle", true, "f.techno.vide");
       options("f-impact", d.impacts, "cle", lib, true);
       options("f-horizon", d.horizons, "cle", lib, true);
     }).catch(function () { /* les filtres restent sur « Tous » */ });

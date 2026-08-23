@@ -300,12 +300,12 @@ def _technos_kev(e, industriel):
 # Les pays retenus : ceux où se décident aujourd'hui les implantations de
 # centres de données en Europe, plus les repères hors UE. Restreindre est un
 # choix — servir 200 pays produirait un filtre inutilisable.
-PAYS_SUIVIS = {
-    "FR": "France", "DE": "Germany", "IE": "Ireland", "NL": "Netherlands",
-    "SE": "Sweden", "NO": "Norway", "FI": "Finland", "DK": "Denmark",
-    "ES": "Spain", "IT": "Italy", "PL": "Poland", "BE": "Belgium",
-    "GB": "United Kingdom", "US": "United States",
-}
+# LES PAYS SUIVIS SONT DÉRIVÉS DE LA TABLE ÉDITORIALE, pas recopiés. Le nom
+# employé ici est celui qui APPARIE les entités d'Our World in Data et
+# d'Electricity Maps ; le nom affiché à l'écran, lui, se traduit. Deux tables
+# auraient divergé au premier pays ajouté, et l'écart se serait vu comme une
+# source « injoignable » plutôt que comme une faute de recopie.
+PAYS_SUIVIS = {c: v["owid"] for c, v in V.PAYS.items()}
 
 
 def collecter_mix_electrique(annee=None, limite=None):

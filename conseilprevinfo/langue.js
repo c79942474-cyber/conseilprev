@@ -72,6 +72,9 @@
     "f.tous":          ["Tous", "All"],
     "f.toutes":        ["Toutes", "All"],
     "f.placeholder":   ["mot du titre ou du texte", "word from the title or the text"],
+    "f.pays.vide":     ["Aucun pays sur ces fiches", "No country on these entries"],
+    "f.techno.vide":   ["Aucune technologie sur ces fiches",
+                        "No technology on these entries"],
     "f.raz":           ["Tout afficher", "Show everything"],
 
     "et.chargement":   ["Chargement de la veille…", "Loading…"],
