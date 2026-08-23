@@ -27,6 +27,21 @@
   var CLE = "cpinfo.lues";
   var MAXI = 600;      /* au-delà, les plus anciennes sortent */
 
+  /* ── RIEN N'EST ÉCRIT SANS ACCORD ────────────────────────────────────────
+     CETTE MÉMOIRE EST LA SEULE CHOSE DE CE SITE QUI S'ÉCRIVE TOUTE SEULE. La
+     langue, le repli de la barre, le jeton de session sont écrits parce que
+     vous avez cliqué : ils sont le service demandé, et l'article 5(3) de la
+     directive ePrivacy les exempte. Celle-ci s'écrit AU FIL DE LA LECTURE,
+     sans geste de votre part — elle n'est donc pas exemptée, et elle attend.
+
+     LE DÉFAUT EST LE REFUS, y compris si `vieprivee.js` manque : sans lui,
+     `window.VP` est absent, et une porte absente doit se lire fermée. Une
+     mémoire qui s'écrirait « en attendant que le module de consentement
+     charge » serait exactement le contournement que ce contrôle interdit. */
+  function autorise() {
+    return !!(window.VP && window.VP.accorde && window.VP.accorde("memoire"));
+  }
+
   function lire() {
     try {
       var v = JSON.parse(localStorage.getItem(CLE) || "[]");
@@ -43,17 +58,17 @@
   function ensemble() {
     if (!_lues) {
       _lues = {};
-      lire().forEach(function (id) { _lues[id] = true; });
+      if (autorise()) lire().forEach(function (id) { _lues[id] = true; });
     }
     return _lues;
   }
 
-  function estLue(id) { return !!ensemble()[id]; }
+  function estLue(id) { return autorise() && !!ensemble()[id]; }
 
   /* Rend `true` si l'état vient de CHANGER — c'est ce qui déclenche la
      pulsation. Marquer une fiche déjà lue ne doit rien faire clignoter. */
   function marquer(id) {
-    if (!id || estLue(id)) return false;
+    if (!autorise() || !id || estLue(id)) return false;
     ensemble()[id] = true;
     var l = lire();
     l.push(id);
@@ -85,8 +100,22 @@
     setTimeout(function () { el.classList.remove("pulse"); }, 2400);
   }
 
+  /* L'ACCORD PEUT ARRIVER APRÈS LA PAGE. Le lecteur répond au bandeau alors
+     que soixante cartes sont déjà à l'écran, marquées « non lue » parce que
+     rien n'était lisible à ce moment-là. L'ensemble est donc reconstruit, et
+     `lecture-effacee` fait repeindre les cartes — le même signal que
+     l'effacement, parce que c'est le même besoin : l'état affiché a changé. */
+  document.addEventListener("accord", function (e) {
+    if (!e.detail || e.detail.cle !== "memoire") return;
+    _lues = null;
+    document.dispatchEvent(new CustomEvent("lecture-effacee"));
+  });
+
   window.LU = {
     estLue: estLue, marquer: marquer, oublier: oublier,
-    combien: combien, classe: classe, pulser: pulser
+    combien: combien, classe: classe, pulser: pulser,
+    /* Ce que la barre affiche à côté du compte : sans accord, « 0 à lire »
+       serait faux — ce n'est pas zéro, c'est « non tenu ». */
+    autorise: autorise
   };
 })();

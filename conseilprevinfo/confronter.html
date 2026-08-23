@@ -6,9 +6,11 @@
 <title>Confronter un document — CONSEILPREV INFO</title>
 <meta name="description" content="Déposez un document et voyez quelles fiches du corpus traitent de ce dont il parle. Le document n'est pas conservé, et la comparaison ne le lit pas : elle compare des mots.">
 <meta name="robots" content="noindex">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,700;6..72,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<!-- LES POLICES SONT SERVIES PAR CE SITE. Trois lignes vers Google
+     partaient d'ici à chaque visite, avant tout consentement, et
+     emportaient l'adresse IP du lecteur pour de la typographie.
+     Voir polices.css. -->
+<link rel="stylesheet" href="/polices.css">
 <link rel="stylesheet" href="/veille.css">
 </head>
 <body>
@@ -34,8 +36,8 @@
   <aside class="bl" id="barre" data-barre></aside>
   <div class="col">
 
-<main class="in" style="max-width:860px;padding-top:26px">
-  <h1 class="titre-journal" style="font-size:clamp(26px,3.6vw,38px);margin:0 0 12px"><span data-i18n="cf.titre">Confronter un document</span></h1>
+<main class="in pg pg-conf">
+  <h1 class="titre-journal pg-titre"><span data-i18n="cf.titre">Confronter un document</span></h1>
 
   <!-- CE QUE FAIT L'OUTIL EST DIT AVANT LE CHAMP DE DÉPÔT, pas après le
        bouton. Un industriel décide de déposer son schéma d'architecture avec
@@ -48,7 +50,7 @@
     par votre propre vocabulaire.</span>
   </p>
 
-  <div class="bandeau-etat alerte" style="border-left-color:var(--rouge)">
+  <div class="bandeau-etat alerte grave">
     <b data-i18n="cf.ne.b">Ce que cet outil ne fait pas, et ne fera pas.</b>
     <span data-i18n="cf.ne.t">Il ne lit pas votre document : il compare des
     mots. Il ne le comprend pas, ne le juge pas, ne le note pas, et ne
@@ -135,7 +137,9 @@
 </div><!-- .page -->
 
 <script src="/langue.js" defer></script>
+<script src="/vieprivee.js" defer></script>
 <script src="/barre.js" defer></script>
+<script src="/fleches.js" defer></script>
 <script src="/confronter.js" defer></script>
 </body>
 </html>

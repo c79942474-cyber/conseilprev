@@ -116,7 +116,7 @@
     /* CHAQUE FICHE A SON ADRESSE. Sans lien, rien ne se cite ni ne se
        transmet : un lecteur ne peut renvoyer un collègue qu'au site entier. */
     h += '<h3 class="ftitre"><a href="/fiche/' + esc(f.id)
-      + '" style="color:inherit;text-decoration:none">' + esc(f.titre)
+      + '" class="nu">' + esc(f.titre)
       + '</a></h3>';
     if (f.chapeau) h += '<p class="fchapeau">' + esc(f.chapeau) + '</p>';
 
@@ -184,6 +184,24 @@
                  ["horizon", "f-horizon"], ["depuis", "f-depuis"],
                  ["q", "f-q"]];
 
+  /* COMBIEN DE FILTRES SONT ACTIFS — compté depuis la MÊME table que la
+     requête et l'adresse. Un compte tenu à part finirait par annoncer
+     « 2 actifs » sur une page qui n'en applique qu'un, et c'est le genre
+     d'écart qui fait douter du reste.
+
+     REMONTÉE AU NIVEAU DU MODULE : elle vivait dans `demarrer()`, où elle ne
+     servait qu'au bouton de repli. L'ordre de lecture noté pour les flèches a
+     besoin du même nombre, et le recompter à côté aurait produit exactement
+     l'écart que le commentaire ci-dessus décrit. */
+  function compterActifs() {
+    var n = FILTRES.filter(function (f) {
+      var el = $(f[1]); return el && el.value;
+    }).length;
+    var e = $("f-actifs");
+    if (e) e.textContent = n ? n + " " + tr("f.actifs") : tr("f.aucun.actif");
+    return n;
+  }
+
   function parametres() {
     var q = [];
     FILTRES.forEach(function (p) {
@@ -229,26 +247,51 @@
     });
   }
 
-  function rendreEtat(d) {
+  function rendreEtat(d, ruptures) {
     var e = $("etat");
     if (!e) return;
     var et = d.etat || {};
     var mauvaises = (et.journal || []).filter(function (j) { return !j.ok; });
     var quand = et.collecte_le ? frDate(et.collecte_le) : "—";
-    var h = "<b>" + esc(tr("js.corpus")) + (et.fiches || 0) + " "
-      + esc(tr("js.fiches")) + "</b>" + esc(tr("js.collectees")) + esc(quand) + ".";
-    if (mauvaises.length) {
-      h += " <b>" + mauvaises.length + " " + esc(tr("js.muettes")) + "</b> "
+
+    /* LA MANCHETTE — LE CAS NORMAL, EN UNE LIGNE. Ses quatre valeurs sortent
+       des MÊMES variables que le bandeau et que la barre, et c'est tout le
+       point : trois endroits qui affichent le même compte ne valent que s'ils
+       ne peuvent pas diverger, et la seule façon de s'en assurer est qu'un
+       seul calcul les remplisse tous les trois. */
+    var mn = $("manchette");
+    if (mn) {
+      $("mn-date").textContent = quand;
+      $("mn-fiches").textContent = et.fiches || 0;
+      $("mn-rupt").textContent = (ruptures == null ? "—" : ruptures);
+      var s = $("mn-src");
+      s.className = "mn-src " + (mauvaises.length ? "ko" : "ok");
+      s.textContent = mauvaises.length
+        ? mauvaises.length + " " + tr("js.muettes")
+        : tr("mn.src.ok");
+      mn.hidden = false;
+    }
+
+    /* LE BANDEAU NE RESTE QUE POUR CE QUI NE VA PAS. Il annonçait « Corpus :
+       98 fiches, collectées le 23 août 2026. Toutes les sources interrogées
+       ont répondu. » à chaque visite — un bandeau d'alerte qui s'affiche aussi
+       quand il n'y a pas d'alerte n'alerte plus. Il nomme les sources muettes,
+       ce que la manchette ne peut pas faire en une ligne : c'est ce qui lui
+       reste, et c'est ce pour quoi il servait vraiment. */
+    if (!mauvaises.length) {
+      e.hidden = true;
+      e.innerHTML = "";
+    } else {
+      e.hidden = false;
+      e.className = "bandeau-etat alerte";
+      e.innerHTML = "<b>" + esc(tr("js.corpus")) + (et.fiches || 0) + " "
+        + esc(tr("js.fiches")) + "</b>" + esc(tr("js.collectees")) + esc(quand)
+        + "." + " <b>" + mauvaises.length + " " + esc(tr("js.muettes")) + "</b> "
         + mauvaises.map(function (j) {
             return esc(j.source) + " — " + esc(j.message || j.erreur || "");
           }).join(" ; ")
         + esc(tr("js.muettes.fin"));
-      e.className = "bandeau-etat alerte";
-    } else {
-      e.className = "bandeau-etat";
-      h += " " + esc(tr("js.toutes.ok"));
     }
-    e.innerHTML = h;
 
     /* LA BARRE PORTE L'ÉTAT DISTILLÉ, DEPUIS LE MÊME CALCUL. Le bandeau dit
        tout ; la barre dit l'essentiel — combien de fiches, de quand, et si
@@ -334,6 +377,16 @@
   function direLecture() {
     var e = $("bl-lu");
     if (!e || !window.LU) return;
+    /* SANS ACCORD, LE COMPTE N'EST PAS ZÉRO — IL N'EXISTE PAS. Afficher
+       « 98 à lire » à qui a refusé la mémoire de lecture affirmerait un suivi
+       qui n'a pas lieu, et le nombre ne bougerait jamais : le lecteur en
+       conclurait une panne. La barre dit donc ce qui est, et où le changer. */
+    if (window.LU.autorise && !window.LU.autorise()) {
+      e.hidden = false;
+      e.innerHTML = '<span class="bl-lu-non">' + esc(tr("bl.lu.non"))
+        + ' <a href="/confidentialite">' + esc(tr("bl.lu.non.lien")) + "</a></span>";
+      return;
+    }
     var total = (FACETTES && FACETTES.total_publiable) || 0;
     var lues = window.LU.combien();
     var reste = Math.max(0, total - lues);
@@ -347,6 +400,38 @@
          et rien d'autre ne disparaît. */
       if (window.confirm(tr("bl.oublier.sur"))) window.LU.oublier();
     });
+  }
+
+  /* LES INTERTITRES DE PORTÉE — l'ordre du moteur, rendu visible.
+     ─────────────────────────────────────────────────────────────
+     LE FIL EST CLASSÉ « le plus important d'abord, puis le plus récent ». Ce
+     classement était invisible : soixante cartes identiques dont un lecteur
+     ne pouvait pas savoir qu'elles étaient rangées, ni selon quoi. Il
+     parcourait donc le haut de la liste en croyant lire du récent, alors
+     qu'il lisait du structurant.
+
+     RIEN N'EST AJOUTÉ, RIEN N'EST RÉORDONNÉ. Un intertitre est posé LÀ OÙ LA
+     PORTÉE CHANGE, en lisant la liste dans l'ordre où elle arrive. Le jour où
+     le tri du moteur changerait, ces marques changeraient avec lui — et si le
+     tri cessait de grouper les portées, elles se répéteraient, ce qui est
+     exactement ce qu'il faudrait voir. Une mise en page qui trierait
+     elle-même cacherait ce défaut au lieu de le montrer.
+
+     LE COMPTE DE CHAQUE BLOC EST MESURÉ sur la même liste, dans la même
+     passe. */
+  function composerFil(fil) {
+    var blocs = [], prec = null;
+    fil.forEach(function (f) {
+      if (f.impact !== prec) { blocs.push([f]); prec = f.impact; }
+      else blocs[blocs.length - 1].push(f);
+    });
+    return blocs.map(function (b) {
+      var f = b[0];
+      return '<h3 class="intertitre ' + esc(f.impact) + '">'
+        + '<span>' + esc(nommer("impact", f.impact, f.impact_nom)) + '</span>'
+        + '<i>' + b.length + ' ' + esc(tr("js.fiches")) + '</i></h3>'
+        + b.map(function (x) { return fiche(x); }).join("");
+    }).join("");
   }
 
   function charger() {
@@ -364,12 +449,16 @@
     demander(url).then(function (d) {
       if (mien !== DEMANDE) return;
       if (!d.ok) throw new Error("api");
-      rendreEtat(d);
       var toutes = d.fiches || [];
       /* LA UNE : ce qui rompt, et rien d'autre. Une « une » qui reprendrait
          les premières fiches du fil ne serait qu'un doublon de mise en page. */
       var une = toutes.filter(function (f) { return f.impact === "rupture"; });
       var fil = toutes.filter(function (f) { return f.impact !== "rupture"; });
+      /* L'ÉTAT EST RENDU APRÈS LA SÉPARATION, et non avant : la manchette
+         porte le nombre de ruptures, qui est la longueur de la une. Le
+         recompter dans `rendreEtat` referait le même filtre à un second
+         endroit — le genre d'écart qui finit par afficher deux nombres. */
+      rendreEtat(d, une.length);
 
       $("une").innerHTML = une.length
         ? une.map(function (f, i) { return fiche(f, i === 0 ? "tete" : ""); }).join("")
@@ -378,11 +467,28 @@
       $("c-une").textContent = une.length + " " + tr("js.fiches");
 
       $("fil").innerHTML = fil.length
-        ? fil.map(fiche).join("")
+        ? composerFil(fil)
         : '<div class="vide"><b>' + esc(tr("js.fil.vide")) + '</b>'
           + esc(tr("js.fil.vide2")) + '</div>';
       $("c-fil").textContent = fil.length + " " + tr("js.fiches");
       direLecture();
+
+      /* L'ORDRE DE LECTURE EST NOTÉ ICI, ET NULLE PART AILLEURS — c'est le
+         seul endroit qui connaisse l'ordre RÉELLEMENT AFFICHÉ : la une
+         d'abord, le fil ensuite, tous deux issus du tri du moteur et de VOS
+         filtres. Le reconstruire ailleurs, même correctement, produirait tôt
+         ou tard un « suivant » qui n'est pas celui de l'écran.
+
+         Il sert aux flèches ← et →, qui portent alors le rang et la taille du
+         fil. Sans lui, elles s'éteignent en disant pourquoi plutôt que de
+         renvoyer au hasard du corpus entier. */
+      if (window.FL) {
+        window.FL.noter(
+          toutes.map(function (f) { return f.id; }),
+          compterActifs()
+            ? tr("fl.filtre").replace("{n}", compterActifs())
+            : tr("fl.toutcorpus"));
+      }
 
       /* LA COUPE EST ANNONCÉE, jamais laissée à la soustraction du lecteur.
          Le serveur dit lui-même s'il a coupé : le client ne le déduit pas de
@@ -619,19 +725,6 @@
       clearTimeout(minuteur);
       minuteur = setTimeout(charger, 320);
     });
-    /* COMBIEN DE FILTRES SONT ACTIFS — compté depuis la MÊME table que la
-       requête et l'adresse. Un compte tenu à part finirait par annoncer
-       « 2 actifs » sur une page qui n'en applique qu'un, et c'est le genre
-       d'écart qui fait douter du reste. */
-    function compterActifs() {
-      var n = FILTRES.filter(function (f) {
-        var el = $(f[1]); return el && el.value;
-      }).length;
-      var e = $("f-actifs");
-      if (e) e.textContent = n ? n + " " + tr("f.actifs") : tr("f.aucun.actif");
-      return n;
-    }
-
     var plier = $("f-plier"), champs = $("f-champs");
     if (plier && champs) {
       var ouvrirF = function (o) {

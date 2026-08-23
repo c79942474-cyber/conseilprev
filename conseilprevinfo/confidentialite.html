@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ce que ce site garde de vous — CONSEILPREV INFO</title>
+<meta name="description" content="L'inventaire complet de ce que ce site conserve : aucun cookie, aucune requête vers un tiers, six entrées de stockage local dont une seule vous est demandée.">
+<meta name="robots" content="index, follow">
+<!-- LES POLICES SONT SERVIES PAR CE SITE. Trois lignes vers Google
+     partaient d'ici à chaque visite, avant tout consentement, et
+     emportaient l'adresse IP du lecteur pour de la typographie.
+     Voir polices.css. -->
+<link rel="stylesheet" href="/polices.css">
+<link rel="stylesheet" href="/veille.css">
+</head>
+<body>
+<div class="oreille"><div class="in">
+  <span><a href="/" data-i18n="or.retour">← CONSEILPREV INFO</a></span>
+  <span class="or-d">
+    <a href="/confronter" data-i18n="or.confronter">Confronter un document</a>
+    <a href="/abonnement" data-i18n="or.abonnement">Votre abonnement</a>
+    <span data-langue></span>
+  </span>
+</div></div>
+
+<button type="button" id="bl-bouton" aria-expanded="false"
+        aria-controls="barre" data-i18n-aria="bl.ouvrir">
+  <span></span><span></span><span></span>
+</button>
+
+<div class="page">
+  <!-- Pas de légende ici : cette page ne porte aucune pastille de portée. -->
+  <aside class="bl" id="barre" data-barre></aside>
+  <div class="col">
+
+<main class="in pg pg-vp">
+  <h1 class="titre-journal pg-titre" data-i18n="vp.h1">Ce que ce site garde de vous</h1>
+  <p class="devise">
+    <b data-i18n="vp.h1.b">Aucun cookie. Aucune requête vers un tiers. Aucune
+    mesure d'audience.</b>
+    <span data-i18n="vp.h1.t">Ce n'est pas une promesse : c'est un inventaire,
+    et il tient sur cette page. Ce qui suit dit ce qui est écrit, où, pourquoi,
+    combien de temps, et comment l'effacer.</span>
+  </p>
+
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <h2 class="rubrique" id="r-choix"><span data-i18n="vp.r.choix">Votre choix,
+    et il n'y en a qu'un</span></h2>
+
+  <p class="bandeau-etat">
+    <b data-i18n="vp.choix.b">Pourquoi ce site ne vous montre pas un mur de
+    cookies.</b>
+    <span data-i18n="vp.choix.t">Parce qu'il n'en pose aucun, et qu'un bandeau
+    « Tout accepter » posé sur un site qui ne dépose rien apprend au lecteur
+    que celui-ci fait comme les autres — alors que sa seule promesse est de ne
+    pas le faire. L'article 5(3) de la directive ePrivacy exempte ce qui est
+    strictement nécessaire au service que vous avez demandé : la langue que
+    vous avez choisie, la barre que vous avez repliée, le jeton de votre
+    session, le refus que vous avez exprimé. Une seule chose ici s'écrit
+    toute seule, sans que vous l'ayez demandée — la liste des fiches que vous
+    avez ouvertes. C'est donc la seule qui vous soit demandée.</span>
+  </p>
+
+  <!-- Les deux boutons sont posés ici par `vieprivee.js` : les écrire dans
+       cette page les ferait diverger de ceux du bandeau, et c'est toujours
+       celui qu'on regarde le moins qui reste en arrière. -->
+  <div class="vp-choix" data-accord></div>
+
+  <p class="dos-dit">
+    <span data-i18n="vp.choix.f">Refuser coûte un clic, comme accepter, et
+    peut se faire à tout moment depuis cette page. Ne rien répondre vaut
+    refus : c'est le défaut, et il n'y a rien à faire pour l'obtenir.</span>
+  </p>
+
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <h2 class="rubrique" id="r-inventaire"><span data-i18n="vp.r.inv">L'inventaire
+    de ce qui est écrit dans votre navigateur</span>
+    <span id="c-inv">6</span></h2>
+
+  <div class="vp-tab-cadre">
+  <table class="vp-tab">
+    <thead><tr>
+      <th data-i18n="vp.th.nom">Nom</th>
+      <th data-i18n="vp.th.quoi">Ce que c'est</th>
+      <th data-i18n="vp.th.duree">Combien de temps</th>
+      <th data-i18n="vp.th.regime">Régime</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td><code>cpinfo.langue</code></td>
+        <td data-i18n="vp.l.langue">La langue que vous avez choisie, FR ou EN.</td>
+        <td data-i18n="vp.d.jusqua">Jusqu'à ce que vous effaciez les données du site.</td>
+        <td class="vp-ex" data-i18n="vp.reg.exempt">Exempté — c'est le service demandé</td>
+      </tr>
+      <tr>
+        <td><code>cpinfo.barre</code></td>
+        <td data-i18n="vp.l.barre">La barre latérale, repliée ou dépliée.</td>
+        <td data-i18n="vp.d.jusqua">Jusqu'à ce que vous effaciez les données du site.</td>
+        <td class="vp-ex" data-i18n="vp.reg.exempt">Exempté — c'est le service demandé</td>
+      </tr>
+      <tr>
+        <td><code>cpinfo.accord</code></td>
+        <td data-i18n="vp.l.accord">Votre réponse à la question ci-dessus.</td>
+        <td data-i18n="vp.d.jusqua">Jusqu'à ce que vous effaciez les données du site.</td>
+        <td class="vp-ex" data-i18n="vp.reg.refus">Exempté — garder un refus est nécessaire pour l'honorer</td>
+      </tr>
+      <tr>
+        <td><code>cpinfo.jeton</code></td>
+        <td data-i18n="vp.l.jeton">Le jeton de votre session, si vous vous connectez.</td>
+        <td data-i18n="vp.d.onglet">La durée de l'onglet — il disparaît à sa fermeture.</td>
+        <td class="vp-ex" data-i18n="vp.reg.auth">Exempté — authentification</td>
+      </tr>
+      <tr>
+        <td><code>cpinfo.ordre</code></td>
+        <td data-i18n="vp.l.ordre">L'ordre des fiches du fil que vous parcourez, tel qu'il est affiché — ce qui permet aux flèches « précédente » et « suivante » de dire où vous en êtes.</td>
+        <td data-i18n="vp.d.onglet">La durée de l'onglet — il disparaît à sa fermeture.</td>
+        <td class="vp-ex" data-i18n="vp.reg.exempt">Exempté — c'est le service demandé</td>
+      </tr>
+      <tr class="vp-demande">
+        <td><code>cpinfo.lues</code></td>
+        <td data-i18n="vp.l.lues">Les identifiants des fiches que vous avez ouvertes — au plus six cents, les plus anciens sortent.</td>
+        <td data-i18n="vp.d.jusqua">Jusqu'à ce que vous effaciez les données du site.</td>
+        <td class="vp-de" data-i18n="vp.reg.demande">Demandé — voir ci-dessus</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p class="dos-dit">
+    <b data-i18n="vp.inv.b">Rien de tout cela n'est envoyé au serveur.</b>
+    <span data-i18n="vp.inv.t">Ce ne sont pas des cookies : un cookie
+    accompagne chaque requête, celles-ci restent dans le navigateur et n'en
+    sortent jamais. Le code qui les écrit ne contient ni <code>fetch</code>,
+    ni <code>XMLHttpRequest</code>, ni <code>sendBeacon</code> — et un
+    contrôle automatique refuse qu'ils y entrent.</span>
+  </p>
+
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <h2 class="rubrique" id="r-serveur"><span data-i18n="vp.r.srv">Ce que le
+    serveur garde</span></h2>
+
+  <p class="bandeau-etat">
+    <b data-i18n="vp.srv.b">Si vous n'avez pas de compte : rien.</b>
+    <span data-i18n="vp.srv.t">Lire ce site n'écrit aucune ligne à votre
+    sujet. Il n'y a ni profil, ni identifiant de visiteur, ni mesure
+    d'audience — aucun outil de ce genre n'est installé, et il n'y a donc rien
+    à désactiver.</span>
+  </p>
+
+  <ul class="vp-l">
+    <li><b data-i18n="vp.srv.c1">Un compte</b>
+      <span data-i18n="vp.srv.t1">porte votre adresse électronique, l'empreinte
+      de votre mot de passe — jamais le mot de passe —, les sujets que vous
+      suivez et votre seuil d'alerte. Rien d'autre.</span></li>
+    <li><b data-i18n="vp.srv.c2">Votre classeur</b>
+      <span data-i18n="vp.srv.t2">garde les documents que vous y déposez, et
+      eux seuls, pour votre compte seul.</span></li>
+    <li><b data-i18n="vp.srv.c3">Un document confronté n'est pas conservé.</b>
+      <span data-i18n="vp.srv.t3">Il est lu en mémoire, comparé, puis oublié
+      avec la requête. La réponse ne contient jamais le texte déposé —
+      seulement des termes et des comptes.</span></li>
+  </ul>
+
+  <p class="bandeau-etat alerte">
+    <b data-i18n="vp.srv.mem.b">Ces données vivent en mémoire du processus, et
+    disparaissent à chaque redémarrage.</b>
+    <span data-i18n="vp.srv.mem.t">Ce n'est pas une garantie de
+    confidentialité, c'est une limite technique, et elle est écrite ici parce
+    qu'elle vous concerne : un redémarrage de l'hébergeur — mise à jour,
+    inactivité, incident — efface les comptes et les classeurs. Le site le dit
+    aussi au moment du dépôt. Le jour où une base durable sera branchée, cette
+    page changera avant elle.</span>
+  </p>
+
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <h2 class="rubrique" id="r-tiers"><span data-i18n="vp.r.tiers">Les tiers, et
+    pourquoi il n'y en a pas</span></h2>
+
+  <ul class="vp-l">
+    <li><b data-i18n="vp.t.c1">Aucune police distante.</b>
+      <span data-i18n="vp.t.t1">Les caractères venaient de
+      <code>fonts.googleapis.com</code> : une requête vers Google à chaque
+      visite, avant tout consentement, emportant votre adresse IP, votre page
+      de provenance et la signature de votre navigateur — pour de la
+      typographie. Le tribunal régional de Munich a jugé ce montage contraire
+      au RGPD le 20 janvier 2022. Les fichiers sont désormais servis par ce
+      site.</span></li>
+    <li><b data-i18n="vp.t.c2">Aucune image, aucun script, aucun cadre
+      extérieur.</b>
+      <span data-i18n="vp.t.t2">La politique de sécurité de contenu de ce site
+      s'écrit <code>default-src 'self'</code>, sans exception : le navigateur
+      lui-même refuserait une requête vers un tiers.</span></li>
+    <li><b data-i18n="vp.t.c3">Les sources sont lues par le serveur, jamais par
+      votre navigateur.</b>
+      <span data-i18n="vp.t.t3">Consulter une fiche sur une vulnérabilité ne
+      signale rien à la CISA, au MITRE ni à la Commission européenne. C'est le
+      point : une veille qui ferait charger ses sources par le poste du
+      lecteur renseignerait ces sources sur ce que cherche son entreprise.
+      Suivre un lien vers une source, en revanche, vous y emmène — comme tout
+      lien, et ce site n'envoie alors même pas la page d'où vous
+      venez.</span></li>
+  </ul>
+
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <h2 class="rubrique" id="r-droits"><span data-i18n="vp.r.dr">Vos droits, et
+    par où ils passent</span></h2>
+
+  <ul class="vp-l">
+    <li><b data-i18n="vp.dr.c1">Effacement.</b>
+      <span data-i18n="vp.dr.t1">Le bouton « Effacer mon compte », sur la page
+      d'abonnement, efface le compte, ses réglages et son classeur dans la
+      même opération. Il n'y a pas de corbeille ni de délai de grâce : rien
+      n'en subsiste dans ce processus.</span>
+      <a href="/abonnement" data-i18n="vp.dr.l1">Aller à la page
+      d'abonnement</a></li>
+    <li><b data-i18n="vp.dr.c2">Accès et rectification.</b>
+      <span data-i18n="vp.dr.t2">La page d'abonnement affiche tout ce que le
+      serveur détient de vous — il n'y a pas d'autre champ ailleurs — et
+      permet d'en changer les réglages.</span></li>
+    <li><b data-i18n="vp.dr.c3">Ce qui est dans votre navigateur vous
+      appartient.</b>
+      <span data-i18n="vp.dr.t3">Le bouton « Oublier », dans la barre
+      latérale, efface la mémoire de lecture. Les réglages de votre navigateur
+      effacent le reste, sans passer par ce site.</span></li>
+  </ul>
+
+  <p class="bandeau-etat alerte">
+    <b data-i18n="vp.dr.man.b">Ce que cette page n'a pas encore.</b>
+    <span data-i18n="vp.dr.man.t">L'identité complète du responsable de
+    traitement, son adresse postale et une adresse de contact dédiée aux
+    demandes RGPD relèvent du cabinet, pas du moteur : les inventer ici
+    donnerait une mention légale fausse, ce qui est pire que son absence. Elles
+    seront écrites à cet endroit. En attendant, une demande passe par
+    l'adresse de contact de CONSEILPREV.</span>
+  </p>
+
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <h2 class="rubrique" id="r-securite"><span data-i18n="vp.r.sec">Ce qui
+    protège la connexion</span></h2>
+
+  <ul class="vp-l">
+    <li><b data-i18n="vp.s.c1">Le jeton de session ne voyage jamais dans
+      l'adresse.</b>
+      <span data-i18n="vp.s.t1">Il passe par l'en-tête
+      <code>Authorization</code> : une adresse se retrouve dans les journaux
+      du serveur, dans l'historique du navigateur et dans le référent envoyé
+      aux tiers.</span></li>
+    <li><b data-i18n="vp.s.c2">Le mot de passe n'est pas conservé.</b>
+      <span data-i18n="vp.s.t2">Seule son empreinte l'est, dérivée avec un sel
+      propre à chaque compte.</span></li>
+    <li><b data-i18n="vp.s.c3">Les en-têtes de sécurité sont posés par
+      l'application, pas par l'hébergeur.</b>
+      <span data-i18n="vp.s.t3">Politique de sécurité de contenu fermée,
+      <code>nosniff</code>, aucun référent, encadrement interdit, HSTS sur
+      connexion chiffrée. Un réglage d'hébergeur disparaîtrait au premier
+      déménagement sans que rien ne le signale ; ceux-ci voyagent avec le code,
+      et des contrôles automatiques les vérifient sur des réponses
+      réelles.</span></li>
+    <li><b data-i18n="vp.s.c4">Une réponse d'inscription ne dit jamais si
+      l'adresse était déjà connue.</b>
+      <span data-i18n="vp.s.t4">Ce serait confirmer à un tiers qu'une personne
+      est abonnée ici.</span></li>
+  </ul>
+
+  <p class="dos-dit dos-ent">
+    <span data-i18n="vp.fin">Cette page décrit l'état du code au jour de sa
+    lecture. Elle est modifiée en même temps que ce qu'elle décrit, et jamais
+    après : une politique de confidentialité écrite une fois puis oubliée
+    finit par affirmer le contraire de ce que le site fait.</span>
+  </p>
+</main>
+
+<footer><div class="in">
+  <p class="fam">CONSEILPREV — Paris</p>
+</div></footer>
+
+  </div><!-- .col -->
+</div><!-- .page -->
+
+<script src="/langue.js" defer></script>
+<script src="/lecture.js" defer></script>
+<script src="/vieprivee.js" defer></script>
+<script src="/barre.js" defer></script>
+<script src="/fleches.js" defer></script>
+</body>
+</html>

@@ -1,7 +1,19 @@
-Liberation Serif — SIL Open Font License 1.1
-https://github.com/liberationfonts/liberation-fonts
+TOUTES LES POLICES DE CE DOSSIER SONT SOUS SIL OPEN FONT LICENSE 1.1, qui
+autorise explicitement la redistribution et l'hébergement. Ce fichier porte la
+mention que la licence exige.
 
-POURQUOI CES FICHIERS SONT AU DÉPÔT. La production d'un PDF exige une police
+  Liberation Serif  — https://github.com/liberationfonts/liberation-fonts
+  Newsreader        — https://github.com/productiontype/Newsreader
+  Inter             — https://github.com/rsms/inter
+  JetBrains Mono    — https://github.com/JetBrains/JetBrainsMono
+
+Deux usages, deux raisons distinctes de les avoir ici.
+
+───────────────────────────────────────────────────────────────────────────
+1. LIBERATION SERIF — la composition des PDF emportés
+───────────────────────────────────────────────────────────────────────────
+
+La production d'un PDF exige une police
 Unicode : les polices intégrées de fpdf2 sont en latin-1, et le corpus est
 plein de tirets cadratins et de guillemets français que le latin-1 ne porte
 pas. S'appuyer sur une police du système reviendrait à produire un document
@@ -9,5 +21,17 @@ correct ici et cassé sur l'hébergeur, sans que rien ne le signale — un PDF
 dont les tirets sont devenus des points d'interrogation ne se voit qu'à
 l'ouverture, par le lecteur.
 
-La licence SIL OFL autorise la redistribution ; ce fichier la porte, comme
-elle l'exige.
+───────────────────────────────────────────────────────────────────────────
+2. NEWSREADER, INTER, JETBRAINS MONO — l'affichage du site
+───────────────────────────────────────────────────────────────────────────
+
+Elles venaient de `fonts.googleapis.com`. Une ligne dans quatre pages, qui
+envoyait à Google — à chaque visite, avant tout consentement, et pour de la
+typographie — l'adresse IP du lecteur, sa page de provenance et la signature
+de son navigateur. Le tribunal régional de Munich a jugé ce montage contraire
+au RGPD le 20 janvier 2022 (3 O 17493/20).
+
+Les fichiers `.woff2` sont donc ici, sous-ensembles `latin` et `latin-ext`
+seulement. Le site n'émet plus aucune requête vers un tiers, et cette phrase
+est vérifiée par un contrôle plutôt qu'affirmée : voir `polices.css` pour le
+détail, et `tests/test_securite.py` pour la garde.

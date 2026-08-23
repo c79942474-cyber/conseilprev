@@ -380,6 +380,11 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
    ELLE NE S'IMPOSE PAS SOUS 1100 px. Une colonne fixe de 230 px sur un écran
    de 390 en prendrait la moitié pour de la navigation, c'est-à-dire pour
    rien : elle se replie derrière un bouton.
+
+   ET ELLE SE REPLIE AUSSI AU-DESSUS. Un lecteur qui veut la pleine largeur —
+   pour le registre des sources, qui est un tableau — n'avait aucun moyen de
+   l'obtenir : la colonne était imposée. Repliée, la grille redevient une
+   colonne unique et la page reprend sa largeur maximale, sans ressaut.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .page{display:block}
@@ -390,17 +395,47 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
     display:grid;grid-template-columns:236px minmax(0,1fr);
     max-width:calc(var(--maxw) + 236px);margin:0 auto;
   }
+  /* REPLIÉE, LA COLONNE N'EST PAS SEULEMENT VIDE : elle est retirée de la
+     grille. Une piste de 236 px laissée en place déplacerait tout le journal
+     vers la droite pour ne rien montrer. */
+  html.bl-repliee .page{display:block;max-width:var(--maxw)}
+  html.bl-repliee .bl{display:none}
   /* La barre suit la lecture sans bouger : `sticky` la garde sous les filtres
      collants, dont la hauteur est reprise ici. */
+  /* LA MARGE BASSE EST CELLE DU BOUTON. Il flotte désormais à toutes les
+     largeurs, en bas à gauche, donc au-dessus du pied de la colonne : sans
+     cette réserve, la dernière entrée de la barre resterait sous lui, cachée
+     pour de bon puisque la barre ne défile pas plus bas. */
   .bl{
     position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;
-    padding:26px 4px 40px 22px;border-right:1px solid var(--filet);
+    padding:26px 4px 74px 22px;border-right:1px solid var(--filet);
   }
   /* Les blocs internes reprennent leur propre largeur : la colonne les borne
      déjà, un second `max-width` les décentrerait. */
   .col main,.col .tete .in,.col .filtres .in,.col footer .in{max-width:none}
   .col main{padding-left:26px;padding-right:26px}
 }
+
+/* LA TÊTE DE BARRE. Elle porte la marque — sur un panneau qui recouvre la
+   page, le lecteur doit savoir de quel site est ce menu — et le bouton qui la
+   referme. Un panneau qu'on n'ouvre et ne ferme que par un bouton situé
+   AILLEURS se referme mal : on cherche. */
+.bl-tete{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin:0 0 18px;padding-bottom:10px;border-bottom:2px solid var(--encre);
+}
+.bl-marque{
+  font-family:var(--serif);font-size:14px;font-weight:700;letter-spacing:-.01em;
+  color:var(--encre);line-height:1.1;
+}
+.bl-marque b{color:var(--rouge);font-weight:800}
+.bl-x{
+  border:1px solid var(--filet2);background:transparent;color:var(--sourd);
+  border-radius:4px;width:26px;height:26px;line-height:1;cursor:pointer;
+  font-size:13px;flex:none;
+}
+.bl-x:hover{border-color:var(--rouge);color:var(--rouge)}
+.bl-x:focus-visible{outline:2px solid var(--bleu);outline-offset:2px}
 
 .bl-t{
   font-family:var(--fix);font-size:9.5px;letter-spacing:.14em;
@@ -411,27 +446,64 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
 .bl-l{list-style:none;margin:0;padding:0}
 .bl-l li{margin:0 0 2px}
 .bl-l a{
-  display:block;padding:7px 9px;border-radius:4px;text-decoration:none;
+  display:flex;gap:9px;align-items:flex-start;
+  padding:7px 9px;border-radius:4px;text-decoration:none;
   color:var(--encre2);border-left:2px solid transparent;
 }
 .bl-l a:hover{background:var(--papier2);color:var(--encre)}
+.bl-lb{display:block;min-width:0}
 .bl-l a b{display:block;font-size:13.5px;font-weight:600;line-height:1.3}
-.bl-l a span{display:block;font-size:11.5px;line-height:1.4;color:var(--sourd);
-  margin-top:1px}
+.bl-l a .bl-lb span{display:block;font-size:11.5px;line-height:1.4;
+  color:var(--sourd);margin-top:1px}
 .bl-l a[aria-current="page"]{
   background:var(--papier2);border-left-color:var(--rouge);color:var(--encre);
 }
+/* LA SILHOUETTE N'EST JAMAIS SEULE À PORTER L'INFORMATION — l'intitulé est
+   écrit à côté, et les formes sont distinctes entre elles plutôt qu'une même
+   forme en quatre teintes (WCAG 1.4.1). Elle prend la couleur du texte, donc
+   celle de l'état courant, sans règle supplémentaire. */
+.bl-ic{flex:none;margin-top:2px;color:var(--sourd2)}
+.bl-l a:hover .bl-ic,.bl-l a[aria-current="page"] .bl-ic{color:var(--rouge)}
+.bl-ic-s{margin-top:1px;opacity:.85}
+.bl-s a:hover .bl-ic,.bl-s a.bl-ici .bl-ic{color:var(--bleu)}
 
 /* LES SECTIONS. Plus serrées que les pages : ce sont des repères de lecture,
    pas des destinations. */
 .bl-s a{
   font-size:12.5px;line-height:1.35;padding:5px 9px;
-  display:flex;gap:8px;align-items:baseline;justify-content:space-between;
+  display:flex;gap:8px;align-items:baseline;
 }
+.bl-s a>span{flex:1;min-width:0}
 .bl-s a i{
   font-style:normal;font-family:var(--fix);font-size:10px;color:var(--sourd2);
-  white-space:nowrap;font-variant-numeric:tabular-nums;
+  white-space:nowrap;font-variant-numeric:tabular-nums;margin-left:auto;
 }
+
+/* ── LA LÉGENDE ────────────────────────────────────────────────────────────
+   LES TÉMOINS SONT LES ÉLÉMENTS EUX-MÊMES, pas des carrés peints à la main :
+   `.past.rupture` dans la légende est exactement `.past.rupture` sur la carte.
+   Une retouche de la feuille de style ne peut donc pas décaler l'un sans
+   l'autre — ce qui est la seule façon qu'une légende reste vraie. */
+.bl-lg{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;
+  gap:5px}
+.bl-lg li{display:flex;align-items:center;gap:7px;font-size:11.5px;
+  color:var(--sourd);line-height:1.3}
+.bl-lg li b{font-weight:500;color:var(--encre2);min-width:0}
+.bl-lg .fsource{border:0;padding:0;margin:0;font-size:11px}
+.bl-lg .st{margin:0}
+/* Les deux contours de fiche : ils n'ont pas de témoin ailleurs, puisque
+   l'état de lecture ne quitte jamais le navigateur. */
+.bl-lg-c{display:block;width:15px;height:15px;flex:none;border-radius:2px;
+  background:var(--papier2)}
+.bl-lg-c.neuf{border-left:3px solid var(--bleu)}
+.bl-lg-c.lu{border-left:3px solid var(--vert)}
+.bl-lg-non{font-size:11.5px;line-height:1.5;color:var(--sourd);margin:0;
+  border-left:2px solid var(--filet2);padding-left:9px}
+
+.bl-pied{margin:24px 0 0;padding-top:10px;border-top:1px solid var(--filet);
+  font-size:11.5px}
+.bl-pied a{color:var(--sourd);text-decoration:none}
+.bl-pied a:hover{color:var(--bleu);text-decoration:underline}
 /* OÙ L'ON EST, et pas seulement où l'on peut aller. Une barre qui ne marque
    pas la section courante dit la moitié de ce qu'elle promet. */
 .bl-s a.bl-ici{
@@ -461,7 +533,14 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
   }
   .bl.bl-ouverte{transform:none}
 }
-@media (min-width:1100px){ #bl-bouton{display:none} }
+/* EN COLONNE, LA TÊTE DE BARRE NE SERT QU'À LA REFERMER. La marque y serait
+   la troisième occurrence du nom du site sur le même écran — oreille, titre
+   de journal, barre —, ce qui est deux de trop. */
+@media (min-width:1100px){
+  .bl-tete{border-bottom:0;padding-bottom:0;margin-bottom:12px;
+    justify-content:flex-end}
+  .bl-marque{display:none}
+}
 @media (prefers-reduced-motion:reduce){ .bl{transition:none} }
 
 /* ── LA BASCULE DE LANGUE ────────────────────────────────────────────── */
@@ -535,6 +614,13 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
    Le bandeau dit tout, mais il disparaît dès qu'on descend : un lecteur au
    milieu du fil ne sait plus si ce qu'il lit date d'aujourd'hui ou de la
    semaine dernière. La barre en garde l'essentiel sous les yeux. */
+/* `hidden` NE SUFFIT PAS QUAND ON DÉCLARE UN AFFICHAGE. DÉFAUT CONSTATÉ AU
+   NAVIGATEUR : l'attribut `hidden` du HTML pose `display:none` par la feuille
+   du navigateur, que TOUTE règle d'auteur écrase — y compris `display:flex`.
+   Ces deux cadres restaient donc visibles, vides, sur les pages où rien ne
+   les remplit. La règle est posée ici pour les deux, avant les leurs. */
+.bl-etat[hidden],.bl-lu[hidden]{display:none}
+
 .bl-etat{
   display:flex;flex-wrap:wrap;align-items:baseline;gap:0 7px;
   padding:9px 10px;margin:0 0 4px;background:var(--papier2);
@@ -716,3 +802,284 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
 }
 .cl-b:hover{border-color:var(--bleu);color:var(--bleu)}
 .cl-x:hover{border-color:var(--rouge);color:var(--rouge)}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LES CLASSES QUI REMPLACENT LES ATTRIBUTS `style`
+
+   POURQUOI CE DÉPLACEMENT N'EST PAS COSMÉTIQUE. Une politique de sécurité de
+   contenu qui autorise `style-src 'unsafe-inline'` n'en est plus une : elle
+   laisse passer exactement ce qu'une injection de balise dans une fiche
+   emploierait. Or ce site compose ses pages À PARTIR DE SOURCES TIERCES — CISA,
+   MITRE, la Commission — dont il ne contrôle pas le texte. Une douzaine
+   d'attributs `style` dispersés valaient donc la directive entière.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Un lien qui porte le style de son titre, et non celui d'un lien. */
+.nu{color:inherit;text-decoration:none}
+
+/* La fiche entière */
+.fi-meta{margin-bottom:14px}
+.fi-titre{font-size:clamp(26px,3.6vw,40px);line-height:1.1;margin:0 0 12px}
+.fi-chapeau{font-size:16px}
+.fi-lecture{margin-top:22px}
+.fi-src{margin-top:24px}
+.fi-retour{margin-top:26px}
+/* Les vignettes de croisement et de voisinage */
+.vg-titre{font-size:17px}
+
+/* Les pages secondaires : abonnement, confrontation, confidentialité */
+.pg{padding-top:26px}
+.pg-abo{max-width:820px}
+.pg-conf{max-width:860px}
+.pg-vp{max-width:820px}
+.pg-titre{font-size:clamp(26px,3.6vw,38px);margin:0 0 12px}
+/* Une réserve GRAVE — celle qui dit qu'un document ne doit pas être déposé —
+   se distingue d'une réserve ordinaire, qui est ambre. */
+.bandeau-etat.grave{border-left-color:var(--rouge)}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   L'ACCORD ET L'INVENTAIRE
+
+   LE BANDEAU NE BLOQUE PAS LA LECTURE. Ni voile, ni fenêtre modale, ni piège
+   au défilement : il se pose en bas, le journal se lit pendant qu'il est là.
+   Un bandeau qui empêche de lire tant qu'on n'a pas cliqué obtient des clics,
+   pas des consentements — et un consentement obtenu par la fatigue n'en est
+   pas un.
+
+   LES DEUX BOUTONS SONT IDENTIQUES. Même taille, même graisse, même contour,
+   même contraste : refuser coûte exactement ce que coûte accepter. C'est la
+   condition que le RGPD pose au consentement « libre », et c'est celle que la
+   quasi-totalité des bandeaux du web enfreint en pâlissant le refus.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.vp-b{
+  position:fixed;left:0;right:0;bottom:0;z-index:70;
+  background:var(--papier);border-top:3px solid var(--encre);
+  box-shadow:0 -4px 22px rgba(20,17,13,.14);
+  padding:16px 22px;font-size:13.5px;line-height:1.6;color:var(--encre2);
+}
+.vp-b p{margin:0 0 8px;max-width:88ch}
+.vp-t{
+  font-family:var(--fix);font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--rouge);
+}
+.vp-a{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:4px}
+/* MÊME BOUTON POUR LES DEUX RÉPONSES — la règle est dans le sélecteur, pas
+   dans la discipline de qui écrira la suite. */
+.vp-a button{
+  font-family:var(--sans);font-size:13.5px;font-weight:500;padding:8px 16px;
+  border:1px solid var(--encre);border-radius:5px;background:var(--papier);
+  color:var(--encre);cursor:pointer;
+}
+.vp-a button:hover{background:var(--papier3)}
+.vp-a button:focus-visible{outline:2px solid var(--bleu);outline-offset:2px}
+.vp-a button[disabled]{opacity:.45;cursor:default;background:var(--papier2)}
+.vp-a a{font-size:12.5px;color:var(--bleu)}
+@media (max-width:600px){
+  .vp-b{padding:14px 16px;max-height:70vh;overflow-y:auto}
+  .vp-a button{flex:1 1 42%}
+}
+
+/* L'état courant, sur la page de confidentialité. */
+/* LE BOUTON DE MENU SE HAUSSE AU-DESSUS DU BANDEAU. Mesuré au navigateur :
+   le bandeau le recouvrait entièrement, et l'unique moyen d'ouvrir la barre
+   latérale disparaissait tant qu'on n'avait pas répondu. La hauteur vient de
+   `vieprivee.js`, qui la MESURE — écrite en dur, elle serait fausse dès qu'un
+   lecteur agrandit ses caractères. */
+html.vp-ouvert #bl-bouton{bottom:calc(var(--vp-h,120px) + 14px)}
+
+.vp-choix{margin:0 0 6px}
+.vp-etat{
+  font-family:var(--fix);font-size:12px;letter-spacing:.04em;margin:0 0 10px;
+  padding-left:11px;border-left:3px solid var(--filet2);
+}
+.vp-etat.on{border-left-color:var(--vert);color:var(--vert)}
+.vp-etat.off{border-left-color:var(--sourd2);color:var(--sourd)}
+/* Dans la barre latérale, quand la mémoire n'est pas tenue : ce n'est pas
+   « zéro à lire », c'est « pas de compte tenu ». */
+.bl-lu-non{font-size:11.5px;line-height:1.45;color:var(--sourd)}
+.bl-lu-non a{color:var(--bleu)}
+
+/* L'INVENTAIRE. Un tableau, parce que c'en est un : cinq entrées, quatre
+   colonnes, et rien à raconter — la forme de liste l'aurait allongé sans le
+   rendre plus lisible. Il défile dans son propre cadre plutôt que de pousser
+   la page de côté. */
+.vp-tab-cadre{overflow-x:auto;border:1px solid var(--filet);
+  background:var(--papier)}
+.vp-tab{border-collapse:collapse;width:100%;min-width:640px;font-size:13px}
+.vp-tab th,.vp-tab td{
+  text-align:left;vertical-align:top;padding:9px 12px;
+  border-bottom:1px solid var(--filet);line-height:1.5;
+}
+.vp-tab th{
+  font-family:var(--fix);font-size:9.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--sourd);background:var(--papier2);
+  border-bottom:2px solid var(--encre);white-space:nowrap;
+}
+.vp-tab code{font-family:var(--fix);font-size:11.5px;color:var(--encre);
+  white-space:nowrap}
+.vp-tab tr:last-child td{border-bottom:0}
+.vp-ex{color:var(--sourd);font-size:12px}
+.vp-de{color:var(--ambre);font-size:12px;font-weight:500}
+/* LA SEULE LIGNE QUI VOUS EST DEMANDÉE SE VOIT. Elle est ambre comme toutes
+   les réserves de ce site — c'en est une, et de la même nature : quelque
+   chose que le lecteur doit décider lui-même. */
+.vp-demande{background:rgba(138,98,9,.05)}
+.vp-demande td:first-child{border-left:3px solid var(--ambre)}
+
+.vp-l{list-style:none;margin:16px 0 0;padding:0;display:flex;
+  flex-direction:column;gap:13px}
+.vp-l li{
+  border-left:2px solid var(--filet2);padding-left:13px;
+  font-size:13.5px;line-height:1.6;color:var(--encre2);
+}
+.vp-l li b{color:var(--encre)}
+.vp-l li a{display:block;margin-top:4px;font-size:12.5px}
+.vp-l code{font-family:var(--fix);font-size:11.5px}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LES QUATRE FLÈCHES
+
+   POURQUOI UNE CROIX ET NON DEUX BLOCS. Les autres sites du cabinet posent
+   deux boîtes en coins opposés ; ici le bouton du menu occupe déjà le coin
+   bas-gauche et le bandeau d'accord le bas de l'écran. Une croix unique au
+   bord droit, à mi-hauteur, ne recouvre rien — et elle DIT sa fonction par sa
+   forme : haut, bas, précédent, suivant se lisent d'un coup d'œil, ce que
+   quatre boutons alignés ne font pas.
+
+   UNE FLÈCHE ÉTEINTE RESTE VISIBLE. La faire disparaître ferait sauter la
+   croix d'une forme à l'autre au fil des pages, et le lecteur ne saurait plus
+   où viser. Elle pâlit, elle refuse le curseur, et son infobulle dit pourquoi.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* EN BAS À DROITE, ET NON À MI-HAUTEUR. Constaté au navigateur sur une
+   fenêtre de 700 px de haut : la barre de filtres, collante et sur deux
+   lignes à cette largeur, descend jusqu'à 340 px — la croix centrée à 350 px
+   recouvrait « 60 affichées ». Une position à mi-hauteur dépend de la hauteur
+   de la fenêtre ET de celle d'une barre qui se replie ; le coin, lui, ne
+   dépend de rien. Le bouton du menu tient l'autre coin. */
+.fl{
+  position:fixed;right:16px;bottom:18px;z-index:60;
+  display:grid;grid-template-columns:repeat(3,34px);
+  grid-template-rows:repeat(3,34px);gap:2px;
+}
+/* Le bandeau d'accord occupe le bas de l'écran tant qu'on n'a pas répondu :
+   la croix se hausse au-dessus, comme le bouton du menu, sur la hauteur
+   MESURÉE du bandeau. */
+html.vp-ouvert .fl{bottom:calc(var(--vp-h,120px) + 14px)}
+.fl-h{grid-area:1/2}
+.fl-g{grid-area:2/1}
+.fl-d{grid-area:2/3}
+.fl-b{grid-area:3/2}
+.fl-b-t{
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--sans);font-size:15px;line-height:1;
+  border:1px solid var(--filet2);border-radius:6px;background:var(--papier);
+  color:var(--encre2);cursor:pointer;padding:0;
+  box-shadow:0 2px 8px rgba(20,17,13,.10);
+}
+.fl-b-t:hover:not([disabled]){border-color:var(--rouge);color:var(--rouge)}
+.fl-b-t:focus-visible{outline:2px solid var(--bleu);outline-offset:2px}
+.fl-b-t[disabled]{
+  opacity:.34;cursor:default;box-shadow:none;border-style:dashed;
+}
+/* SUR UN TÉLÉPHONE, LA CROIX DESCEND DANS LE COIN. À mi-hauteur au bord
+   droit, elle couvrait le texte des cartes — mesuré : 34 px sur une colonne
+   de 350. En bas à droite, elle ne recouvre que la marge. */
+@media (max-width:760px){
+  .fl{right:8px;bottom:14px;
+    grid-template-columns:repeat(3,30px);grid-template-rows:repeat(3,30px)}
+  .fl-b-t{font-size:13px}
+}
+@media print{ .fl,#bl-bouton,.vp-b{display:none} }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LA MANCHETTE ET LES INTERTITRES DE PORTÉE
+
+   DEUX EMPRUNTS À LA PRESSE, ET CE QU'ILS DOIVENT PORTER POUR ÊTRE ADMIS.
+   Une manchette de quotidien dit la date de l'édition et ce qu'elle contient ;
+   ici la date est celle de la COLLECTE et les nombres sont mesurés, faute de
+   quoi ce ne serait qu'une frise. Un intertitre de rubrique découpe une
+   colonne ; ici il marque l'endroit où LA PORTÉE CHANGE dans le classement
+   du moteur, faute de quoi ce ne serait qu'un ornement — ou pire, un second
+   classement en face du premier.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.manchette{
+  border-bottom:1px solid var(--filet2);background:var(--papier);
+  font-family:var(--fix);font-size:11px;letter-spacing:.06em;
+  color:var(--sourd);
+  max-width:var(--maxw);margin:0 auto;padding:9px 22px;
+  display:flex;flex-wrap:wrap;gap:4px 22px;align-items:baseline;
+}
+.manchette[hidden]{display:none}
+.manchette b{color:var(--encre);font-weight:600;font-variant-numeric:tabular-nums}
+.mn-ed{text-transform:uppercase;letter-spacing:.13em}
+.mn-src{margin-left:auto}
+.mn-src.ok{color:var(--vert)}
+.mn-src.ko{color:var(--rouge);font-weight:500}
+@media (max-width:760px){
+  .manchette{gap:3px 14px;padding:8px 16px}
+  .mn-src{margin-left:0;flex-basis:100%}
+}
+
+/* L'INTERTITRE TRAVERSE LA GRILLE. Posé dans une case, il occuperait la
+   largeur d'une carte et se lirait comme une carte vide. */
+.intertitre{
+  grid-column:1 / -1;
+  display:flex;align-items:baseline;justify-content:space-between;gap:14px;
+  font-family:var(--fix);font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;font-weight:500;
+  margin:0;padding:16px 0 5px;
+  border-bottom:1px solid var(--filet2);
+}
+.intertitre:first-child{padding-top:0}
+.intertitre i{
+  font-style:normal;letter-spacing:.05em;color:var(--sourd2);
+  font-variant-numeric:tabular-nums;white-space:nowrap;
+}
+/* MÊME CODE DE COULEUR QUE LES PASTILLES, sans quoi le lecteur apprendrait
+   deux vocabulaires pour la même chose. */
+.intertitre.rupture{color:var(--rouge);border-bottom-color:var(--rouge)}
+.intertitre.structurant{color:var(--ocre)}
+.intertitre.incremental{color:var(--sourd)}
+.intertitre.signal_faible{color:var(--sourd2);border-bottom-style:dashed}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LA FICHE COMPOSÉE COMME UN ARTICLE
+
+   MESURÉ AU NAVIGATEUR : sur la colonne de 1 240 px, un paragraphe de lecture
+   critique faisait CENT QUATRE-VINGTS SIGNES par ligne. La typographie de
+   presse tient depuis toujours entre soixante et soixante-quinze, et pour une
+   raison mécanique : au-delà, l'œil ne retrouve pas le début de la ligne
+   suivante et relit la précédente. Ce n'est pas une préférence esthétique,
+   c'est ce qui décide si l'analyse est lue ou parcourue.
+
+   CE QUI GARDE LA PLEINE LARGEUR : le croisement et le voisinage. Ce sont des
+   grilles de vignettes, pas du texte suivi — les borner à 68 signes les
+   réduirait à une colonne unique et allongerait la page pour rien.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.art{max-width:68ch;margin:0 auto 34px}
+.art .fi-titre{font-size:clamp(27px,3.6vw,42px);line-height:1.05;
+  letter-spacing:-.022em}
+.art .fi-chapeau{font-size:17.5px;line-height:1.62;color:var(--encre2);
+  max-width:none}
+/* LE TEXTE SUIVI RESPIRE PLUS QUE LES VIGNETTES. Sur une carte de fil, un
+   interligne serré tient l'information à l'œil ; sur une page qu'on lit en
+   entier, il fatigue. */
+.art .fbloc{margin-bottom:18px;padding-left:15px;border-left-width:3px}
+.art .fbloc p{font-size:15.5px;line-height:1.72}
+.art .fbloc-t{font-size:10px;letter-spacing:.14em}
+/* LA SOURCE FERME L'ARTICLE COMME UNE SIGNATURE — filet plein au-dessus,
+   ce que la presse fait du bloc « auteur, date, provenance ». */
+.art .fi-src{
+  border:0;border-top:2px solid var(--encre);border-radius:0;
+  background:transparent;padding:14px 0 0;margin-top:30px;
+}
+.art .fi-src h3{font-size:18px}
+/* Le rappel de rubrique au-dessus du titre, comme une manchette d'article. */
+.art .fi-meta{padding-bottom:9px;border-bottom:1px solid var(--filet);
+  margin-bottom:16px}
+.fi-retour{margin-top:26px;font-family:var(--fix);font-size:12px;
+  letter-spacing:.06em}

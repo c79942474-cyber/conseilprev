@@ -6,9 +6,11 @@
 <title>Votre abonnement — CONSEILPREV INFO</title>
 <meta name="description" content="Réglez les sujets que vous suivez et le seuil à partir duquel une information mérite de vous être signalée. Le bulletin est composé sous vos yeux avant tout envoi.">
 <meta name="robots" content="noindex">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,700;6..72,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<!-- LES POLICES SONT SERVIES PAR CE SITE. Trois lignes vers Google
+     partaient d'ici à chaque visite, avant tout consentement, et
+     emportaient l'adresse IP du lecteur pour de la typographie.
+     Voir polices.css. -->
+<link rel="stylesheet" href="/polices.css">
 <link rel="stylesheet" href="/veille.css">
 </head>
 <body>
@@ -34,8 +36,8 @@
   <aside class="bl" id="barre" data-barre></aside>
   <div class="col">
 
-<main class="in" style="max-width:820px;padding-top:26px">
-  <h1 class="titre-journal" style="font-size:clamp(26px,3.6vw,38px);margin:0 0 12px" data-i18n="ab.titre">Votre abonnement</h1>
+<main class="in pg pg-abo">
+  <h1 class="titre-journal pg-titre" data-i18n="ab.titre">Votre abonnement</h1>
 
   <!-- CE QU'ON PROMET EST ÉCRIT AVANT LE FORMULAIRE, pas dans une note en
        bas. Un lecteur décide de s'inscrire avec ce qu'il a lu au-dessus du
@@ -143,7 +145,9 @@
 </div><!-- .page -->
 
 <script src="/langue.js" defer></script>
+<script src="/vieprivee.js" defer></script>
 <script src="/barre.js" defer></script>
+<script src="/fleches.js" defer></script>
 <script src="/abonnement.js" defer></script>
 </body>
 </html>

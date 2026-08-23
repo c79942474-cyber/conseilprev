@@ -140,6 +140,106 @@ def js(nom):
     return send_from_directory(ICI, nom + ".js")
 
 
+@app.route("/polices/<nom>.woff2")
+def police(nom):
+    """LES POLICES SONT SERVIES D'ICI, ET NON DE GOOGLE. Le `<link>` vers
+    `fonts.googleapis.com` envoyait à un tiers, à chaque visite et avant tout
+    consentement, l'adresse IP du lecteur, sa page de provenance et la
+    signature de son navigateur — pour de la typographie. Le motif complet est
+    dans `polices.css` ; ici il ne reste qu'une route.
+
+    UN AN DE CACHE, ET C'EST SANS RISQUE : le nom du fichier porte la famille
+    et le sous-ensemble, jamais une version. Le jour où une police change, elle
+    change de nom."""
+    r = send_from_directory(os.path.join(ICI, "polices"), nom + ".woff2")
+    r.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+    return r
+
+
+@app.route("/confidentialite")
+def page_confidentialite():
+    return send_from_directory(ICI, "confidentialite.html")
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  LES EN-TÊTES DE SÉCURITÉ
+#
+#  POURQUOI ILS SONT POSÉS ICI ET NON DANS UN RÉGLAGE D'HÉBERGEUR. Un en-tête
+#  configuré chez Render vaut pour Render : il disparaît au premier
+#  déménagement, sans que rien ne le signale, et le site continue de se servir
+#  en paraissant identique. Posé dans l'application, il voyage avec elle — et
+#  `tests/test_securite.py` le vérifie sur des réponses réelles.
+#
+#  LA POLITIQUE DE CONTENU EST FERMÉE, sans exception à justifier : depuis que
+#  les polices sont au dépôt, ce site ne charge RIEN d'un tiers. Écrire
+#  `default-src 'self'` n'est donc pas une rigueur d'affichage, c'est la
+#  description exacte de ce que les pages font.
+# ═══════════════════════════════════════════════════════════════════════════
+
+CSP = "; ".join([
+    "default-src 'self'",
+    # Aucun script en ligne, aucun `eval` : les quatre pages ne portent que des
+    # `<script src>`. Sans `'unsafe-inline'`, une injection de balise dans une
+    # fiche ne s'exécute pas — et c'est le seul cas où cette règle sert
+    # vraiment, puisque le corpus vient de sources tierces.
+    "script-src 'self'",
+    # Idem pour le style : plus aucun attribut `style=` dans les pages ni dans
+    # ce que le JavaScript compose. C'est ce qui permet de se passer de
+    # `'unsafe-inline'` ici — la seule directive qui, laissée ouverte, vide la
+    # politique de son sens.
+    "style-src 'self'",
+    "font-src 'self'",
+    "img-src 'self' data:",
+    "connect-src 'self'",
+    "form-action 'self'",
+    # RIEN NE PEUT ENCADRER CE SITE, ET IL N'ENCADRE RIEN. Les deux sens
+    # comptent : le premier interdit le détournement de clic, le second retire
+    # une surface entière.
+    "frame-ancestors 'none'",
+    "frame-src 'none'",
+    "object-src 'none'",
+    # `base-uri` est la directive qu'on oublie : sans elle, une seule balise
+    # `<base>` injectée détourne toutes les adresses relatives de la page,
+    # y compris celles des scripts déjà autorisés.
+    "base-uri 'none'",
+])
+
+PERMISSIONS = ", ".join(
+    "%s=()" % p for p in
+    # CE SITE NE DEMANDE AUCUNE DE CES CAPACITÉS. Les refuser explicitement
+    # coûte une ligne et retire la question : un script tiers introduit un jour
+    # par erreur ne pourra pas les demander non plus.
+    ("geolocation", "camera", "microphone", "payment", "usb", "magnetometer",
+     "gyroscope", "accelerometer", "midi", "serial", "bluetooth",
+     "display-capture", "browsing-topics", "interest-cohort")
+)
+
+
+@app.after_request
+def _entetes(r):
+    r.headers.setdefault("Content-Security-Policy", CSP)
+    r.headers.setdefault("X-Content-Type-Options", "nosniff")
+    r.headers.setdefault("X-Frame-Options", "DENY")
+    # AUCUN RÉFÉRENT N'EST ENVOYÉ, MÊME PAS L'ORIGINE. Les fiches renvoient aux
+    # sources — CISA, MITRE, la Commission —, et l'adresse d'une fiche dit ce
+    # que le lecteur consultait. `strict-origin-when-cross-origin` enverrait
+    # tout de même « conseilprevinfo.onrender.com » : c'est peu, mais c'est
+    # gratuit à retirer et cela n'enlève rien au site.
+    r.headers.setdefault("Referrer-Policy", "no-referrer")
+    r.headers.setdefault("Permissions-Policy", PERMISSIONS)
+    r.headers.setdefault("Cross-Origin-Opener-Policy", "same-origin")
+    r.headers.setdefault("Cross-Origin-Resource-Policy", "same-origin")
+    # HSTS N'EST POSÉ QUE SUR UNE CONNEXION DÉJÀ CHIFFRÉE. Envoyé en clair, il
+    # est ignoré par les navigateurs — et en développement, sur `localhost`, il
+    # verrouillerait le poste du développeur sur du HTTPS que rien n'y sert.
+    # Render termine le TLS en amont : c'est `X-Forwarded-Proto` qui fait foi.
+    proto = request.headers.get("X-Forwarded-Proto", request.scheme)
+    if proto == "https":
+        r.headers.setdefault("Strict-Transport-Security",
+                             "max-age=31536000; includeSubDomains")
+    return r
+
+
 # ── INTERFACES ────────────────────────────────────────────────────────────
 @app.route("/api/veille")
 def api_veille():

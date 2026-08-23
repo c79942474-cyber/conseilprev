@@ -93,7 +93,15 @@
   function rendre(j) {
       var f = j.fiche, s = f.source || {};
       document.title = f.titre + " — CONSEILPREV INFO";
-      var h = '<div class="fmeta" style="margin-bottom:14px">'
+      /* LA FICHE SE COMPOSE COMME UN ARTICLE, ET LE RESTE COMME UNE PAGE.
+         La colonne courait sur les 1 240 px de la page : les paragraphes de
+         lecture critique faisaient cent quatre-vingts signes par ligne, soit
+         près du triple de ce qui se lit sans perdre la ligne suivante. Le
+         corps de l'article est donc borné à sa mesure ; le croisement et le
+         voisinage, qui sont des grilles de vignettes et non du texte suivi,
+         gardent toute la largeur. */
+      var h = '<article class="art">';
+      h += '<div class="fmeta fi-meta">'
         + '<span class="past ' + esc(f.impact) + '">'
         + esc(nommer("impact", f.impact, f.impact_nom)) + '</span>'
         + '<span class="past sujet">'
@@ -101,9 +109,8 @@
         + '<span class="fdate">' + esc(frDate(f.date_fait))
         + (f.date_convention ? ' <b class="conv">convention</b>' : "")
         + '</span></div>';
-      h += '<h1 class="titre-journal" style="font-size:clamp(26px,3.6vw,40px);'
-        + 'line-height:1.1;margin:0 0 12px">' + esc(f.titre) + '</h1>';
-      h += '<p class="devise" style="font-size:16px">' + esc(f.chapeau) + '</p>';
+      h += '<h1 class="titre-journal fi-titre">' + esc(f.titre) + '</h1>';
+      h += '<p class="devise fi-chapeau">' + esc(f.chapeau) + '</p>';
 
       /* UNE DATE FABRIQUÉE LE DIT SOUS ELLE-MÊME. Elle est écrite en toutes
          lettres dans l'incertitude, mais l'incertitude se lit APRÈS la
@@ -115,7 +122,7 @@
           + '</p>';
       }
 
-      h += '<div class="fbloc lecture" style="margin-top:22px"><span class="fbloc-t">'
+      h += '<div class="fbloc lecture fi-lecture"><span class="fbloc-t">'
         + esc(tr("js.lecture")) + esc(nommer("lecture", f.lecture_nature, f.lecture_nom))
         + '</span><p>' + esc(f.lecture) + '</p></div>';
       h += '<div class="fbloc portee"><span class="fbloc-t">' + esc(tr("js.change")) + '</span>'
@@ -123,7 +130,7 @@
       h += '<div class="fbloc doute"><span class="fbloc-t">' + esc(tr("js.doute")) + '</span>'
         + '<p>' + esc(f.incertitude) + '</p></div>';
 
-      h += '<div class="src" style="margin-top:24px">'
+      h += '<div class="src fi-src">'
         + '<span class="na">' + esc(s.nature_nom || "") + ' · '
         + esc(nommer("statut", f.statut, f.statut_nom)) + '</span>'
         + '<h3>' + esc(s.nom || "") + '</h3>'
@@ -133,6 +140,7 @@
         + (s.url ? '<p><a href="' + esc(s.url) + '" target="_blank" rel="noopener">'
                    + 'Consulter la source →</a></p>' : "")
         + '<p class="lic">' + esc(s.licence || "") + '</p></div>';
+      h += '</article>';
 
       /* UNE VIGNETTE, DEUX EMPLOIS — mais jamais le même mot. Le bloc dit
          « Lien » quand une règle rattache vraiment les deux fiches, et
@@ -142,8 +150,8 @@
           + '<span class="past ' + esc(l.impact) + '">'
           + esc(nommer("impact", l.impact, l.impact_nom)) + '</span>'
           + '<span class="fdate">' + esc(frDate(l.date_fait)) + '</span></div>'
-          + '<h3 class="ftitre" style="font-size:17px"><a href="/fiche/'
-          + esc(l.id) + '" style="color:inherit;text-decoration:none">'
+          + '<h3 class="ftitre vg-titre"><a class="nu" href="/fiche/'
+          + esc(l.id) + '">'
           + esc(l.titre) + '</a></h3>'
           + '<div class="fbloc"><span class="fbloc-t">' + mot + ' — '
           + esc((window.L && window.L.courante() === "en" && l.lien_nom_en)
@@ -159,9 +167,15 @@
           + '</div></article>';
       }
 
+      /* LES RUBRIQUES DE LA FICHE PORTENT UN IDENTIFIANT, comme celles de
+         l'accueil. Sans lui, la barre latérale — qui LIT les rubriques de la
+         page — n'en trouvait aucune ici : sur la page la plus longue du site
+         après le fil, elle n'offrait que la liste des pages. */
       var liens = j.liens || [];
-      h += '<h2 class="rubrique">' + esc(tr("fi.croisement"))
-        + '<span>' + liens.length + ' ' + esc(tr("fi.liens")) + '</span></h2>';
+      h += '<h2 class="rubrique" id="r-croisement"><span>'
+        + esc(tr("fi.croisement")) + '</span>'
+        + '<span id="c-liens">' + liens.length + ' ' + esc(tr("fi.liens"))
+        + '</span></h2>';
       if (!liens.length) {
         var co = j.composition || {};
         /* L'ÉTAT D'ENSEMBLE, PAS SEULEMENT CELUI DE CETTE FICHE. Lu seul,
@@ -187,8 +201,9 @@
          « croisement » veut dire « paru la même semaine ». */
       var vois = j.voisinage || [];
       if (vois.length) {
-        h += '<h2 class="rubrique">' + esc(tr("fi.voisinage"))
-          + '<span>' + vois.length
+        h += '<h2 class="rubrique" id="r-voisinage"><span>'
+          + esc(tr("fi.voisinage")) + '</span>'
+          + '<span id="c-vois">' + vois.length
           + (j.voisinage_total > vois.length
               ? ' ' + esc(tr("fi.sur")) + ' ' + j.voisinage_total : '')
           + '</span></h2>';
@@ -208,7 +223,7 @@
         + '<span class="emp-d">' + esc(tr("fi.emporter.dit")) + '</span>'
         + '</div>';
 
-      h += '<p style="margin-top:26px"><a href="/">' + esc(tr("fi.retour"))
+      h += '<p class="fi-retour"><a href="/">' + esc(tr("fi.retour"))
         + '</a></p>';
       document.getElementById("page").innerHTML = h;
   }

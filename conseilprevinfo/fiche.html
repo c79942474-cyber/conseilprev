@@ -5,9 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fiche — CONSEILPREV INFO</title>
 <meta name="robots" content="index, follow">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,700;6..72,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<!-- LES POLICES SONT SERVIES PAR CE SITE. Trois lignes vers Google
+     partaient d'ici à chaque visite, avant tout consentement, et
+     emportaient l'adresse IP du lecteur pour de la typographie.
+     Voir polices.css. -->
+<link rel="stylesheet" href="/polices.css">
 <link rel="stylesheet" href="/veille.css">
 </head>
 <body>
@@ -20,14 +22,16 @@
   </span>
 </div></div>
 
-<!-- LE BOUTON DE LA BARRE, replié sous 1100 px. -->
+<!-- LE BOUTON DE LA BARRE, qui se replie à toutes les largeurs. -->
 <button type="button" id="bl-bouton" aria-expanded="false"
         aria-controls="barre" data-i18n-aria="bl.ouvrir">
   <span></span><span></span><span></span>
 </button>
 
 <div class="page">
-  <aside class="bl" id="barre" data-barre></aside>
+  <!-- La légende est demandée ici aussi : la fiche porte les mêmes pastilles
+       de portée, le même témoin de source et le même contour de lecture. -->
+  <aside class="bl" id="barre" data-barre data-barre-legende></aside>
   <div class="col">
 
 <main id="page"><div class="bandeau-etat" data-i18n="fi.chargement">Chargement de la fiche…</div></main>
@@ -44,7 +48,9 @@
 
 <script src="/langue.js" defer></script>
 <script src="/lecture.js" defer></script>
+<script src="/vieprivee.js" defer></script>
 <script src="/barre.js" defer></script>
+<script src="/fleches.js" defer></script>
 <script src="/fiche.js" defer></script>
 </body>
 </html>

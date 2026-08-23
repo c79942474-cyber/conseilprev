@@ -80,7 +80,7 @@ Depuis votre poste, aucune session nécessaire :
       https://github.com/c79942474-cyber/conseilprevinfo
     git push -u origin master
 
-`HISTORIQUE.bundle` porte **l'historique git complet — quinze commits**,
+`HISTORIQUE.bundle` porte **l'historique git complet — dix-huit commits**,
 messages compris. Il ne s'agit donc pas de repartir d'une copie à plat : le
 détail des corrections, des mesures et des défauts constatés vit dans ces
 messages, et c'est souvent là qu'est l'information.
@@ -100,22 +100,43 @@ Et ce dossier peut alors quitter `conseilprev` :
 quatre autres portent chacune le motif écrit de leur sommeil, parce qu'un
 registre qui annonce ce qu'il ne lit pas se vide de son sens.
 
-Une **barre latérale** dit ce que la page contient et où l'on en est. Elle ne
-peut pas mentir sur son contenu : ses entrées sont LUES DANS LA PAGE, et ses
-comptes recopiés de chaque rubrique.
+Une **manchette** porte la date de l'édition — qui est celle de la collecte —,
+le nombre de fiches et celui des ruptures. Le bandeau, lui, ne reste que pour
+ce qui ne va pas : il annonçait « toutes les sources ont répondu » à chaque
+visite, et un bandeau d'alerte qui s'affiche aussi quand il n'y a pas d'alerte
+n'alerte plus.
+
+Une **barre latérale rétractable à toute largeur** dit ce que la page contient
+et où l'on en est. Elle ne peut pas mentir sur son contenu : ses entrées sont
+LUES DANS LA PAGE, ses comptes recopiés de chaque rubrique, et sa **légende**
+est faite des éléments eux-mêmes — la pastille de la légende est celle des
+cartes, ses noms viennent du référentiel. Un contrôle exige une silhouette
+pour chaque rubrique servie, y compris celles qu'écrit le JavaScript.
+
+**Quatre flèches** parcourent la page et le fil. Aucune ne fait silencieusement
+rien : chacune voit son sens résolu au moment où elle est posée, ce sens
+devient son intitulé, et une flèche sans emploi s'éteint en disant pourquoi.
+Sur une fiche, gauche et droite sont la fiche précédente et la suivante dans
+l'ordre du fil que vous lisiez, filtres compris ; ailleurs, la rubrique
+précédente et la suivante.
+
+La **première page montre le tri du moteur** au lieu de l'aplatir : la tête est
+la première fiche du classement déjà publié, et des **intertitres de portée**
+marquent, dans le fil, l'endroit où le classement change de niveau. Rien n'est
+réordonné — si le tri cessait de grouper les portées, ces marques se
+répéteraient, ce qu'il faudrait précisément voir.
+
+Une **fiche se lit comme un article** : mesure bornée à 68 signes, texte suivi
+plus aéré que les vignettes, bloc de source en signature. Mesuré au
+navigateur, un paragraphe faisait auparavant cent quatre-vingts signes par
+ligne — près du triple de ce qui se lit.
 
 Chaque fiche porte **où vous en êtes** : contour bleu tant qu'elle reste à
 lire, vert une fois ouverte — une mémoire qui ne quitte jamais votre
-navigateur. Une fiche **s'emporte en PDF ou en Word**, avec son statut, la
-nature de sa lecture et ce qu'on ne sait pas : un document qui circule sans
-sa page doit porter de quoi en juger. Un compte dispose d'un **classeur**
-pour ses propres documents, qui dit avant le dépôt ce qu'il conserve — en
-mémoire, comme le compte lui-même, et donc jusqu'au prochain redémarrage.
-
-La **première page montre le tri du moteur** au lieu de l'aplatir : la tête est
-la première fiche du classement déjà publié, jamais un choix de mise en page.
-La barre porte l'état du corpus, recopié du même calcul. Sur téléphone, la
-barre de filtres se replie — elle y prenait 44 % de l'écran.
+navigateur, et qui **n'est pas tenue sans votre accord**. Une fiche
+**s'emporte en PDF ou en Word**, avec son statut, la nature de sa lecture et ce
+qu'on ne sait pas. Un compte dispose d'un **classeur** pour ses propres
+documents, qui dit avant le dépôt ce qu'il conserve.
 
 Les **menus de filtre décrivent les fiches trouvées**, pas le corpus : ils
 suivent les filtres en cours, chaque axe compté hors du sien pour qu'on puisse
@@ -128,13 +149,45 @@ qu'elle ne traduit pas** : les lectures critiques, dérivées de gabarits
 français, et les titres, qui portent la langue de leur source. Le nombre
 affiché avec cette réserve est mesuré, pas écrit.
 
-**230 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
+### Ce que le site garde de vous — et ce qu'il ne garde pas
+
+**Aucun cookie. Aucune requête vers un tiers. Aucune mesure d'audience.** Les
+polices venaient de `fonts.googleapis.com` : une requête vers Google à chaque
+visite, avant tout consentement, emportant l'adresse IP du lecteur pour de la
+typographie — montage jugé contraire au RGPD par le tribunal régional de
+Munich en janvier 2022. Elles sont au dépôt, sous licence SIL OFL qui
+l'autorise.
+
+**Pas de mur de cookies**, donc : il n'y a rien à accepter. Six entrées de
+stockage local, dont cinq sont exemptées par l'article 5(3) ePrivacy parce
+qu'elles sont le service demandé — langue, repli de la barre, jeton de session,
+ordre de lecture, réponse elle-même. **Une seule s'écrit toute seule** : la
+liste des fiches ouvertes. C'est la seule qui vous soit demandée, et rien
+n'est écrit avant la réponse. **`/confidentialite` porte l'inventaire
+complet**, et deux contrôles le comparent aux clés réellement écrites dans le
+code — dans les deux sens.
+
+Les **en-têtes de sécurité sont posés par l'application**, pas par
+l'hébergeur : un réglage d'hébergeur disparaît au premier déménagement sans
+que rien ne le signale. Politique de contenu fermée sur `default-src 'self'`,
+sans `unsafe-inline` — ce qui a demandé de retirer les douze attributs `style`
+dispersés dans les pages et le JavaScript.
+
+**277 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
 gardent les règles éditoriales, et chacun est écrit pour tomber le jour où
 quelqu'un les assouplira. Chaque règle nouvelle a été confrontée à une
-**mutation du code qu'elle garde**.
+**mutation du code qu'elle garde** — et trois de ces mutations ont révélé des
+contrôles trop faibles, qui ont été resserrés.
 
-### Les quinze commits du bundle
+### Les dix-huit commits du bundle
 
+    65be8bd  Une manchette, des intertitres de portée, et la fiche composée
+             comme un article
+    8e817a1  Quatre flèches dont aucune ne fait silencieusement rien
+    a179c5f  La barre se replie partout, et ce que ce site garde de vous
+    93de6bc  Ce que vous avez lu, ce que vous emportez, ce que vous rangez
+    e44b55f  Une première page qui montre le tri, et une barre d'outils qui
+             cesse d'en être un obstacle
     ee260cd  Les menus décrivaient le corpus, pas les fiches trouvées
     4544401  Barre latérale, et une bascule FR/EN qui dit ce qu'elle ne traduit pas
     f5aee5e  Déploiement : les deux chemins, et pourquoi pas Blueprint

@@ -77,11 +77,32 @@ def test_l_etat_de_la_barre_vient_du_meme_calcul_que_le_bandeau():
 
 
 def test_la_barre_ne_sait_pas_compter_des_fiches():
-    """Elle réserve la place, le moteur écrit dedans. Si `barre.js` se mettait
-    à interroger l'API, la barre deviendrait une seconde source de vérité."""
+    """Elle réserve la place, le moteur écrit dedans.
+
+    LA RÈGLE A ÉTÉ RESSERRÉE, PAS ASSOUPLIE. Elle disait « aucun `/api/` dans
+    `barre.js` » — une formulation commode tant que la barre ne servait qu'à
+    naviguer. La légende, elle, doit lire le RÉFÉRENTIEL : les noms des portées
+    et des statuts appartiennent au moteur, et les recopier ici les ferait
+    diverger au premier ajout. Ce que la règle protégeait vraiment, c'est que
+    la barre ne devienne pas une seconde autorité sur LE CORPUS — qu'elle ne
+    compte pas, ne filtre pas, ne classe pas. C'est cela qui est vérifié
+    maintenant, et c'est plus étroit que « pas d'API » : le vocabulaire est
+    permis, les fiches ne le sont pas.
+    """
     b = _lire("barre.js")
     assert 'id="bl-etat"' in b
-    assert "/api/" not in b, "la barre latérale interroge le serveur"
+    # Le seul point d'appel autorisé, et il est nommé.
+    appels = re.findall(r'fetch\("([^"]+)"', b)
+    assert appels == ["/api/veille/referentiel"], appels
+    # Aucune route de corpus, sous aucune forme.
+    for interdit in ("/api/veille?", "/api/veille/fiche", "/api/veille/facettes",
+                     "/api/veille/dossiers", "/api/veille/pistes", "/api/sources",
+                     "/api/classeur", "/api/abonnes"):
+        assert interdit not in b, interdit
+    # Et les comptes restent RECOPIÉS de la rubrique, jamais recalculés :
+    # `data-de` désigne l'élément source, l'observateur en suit les changements.
+    assert "data-de" in b and "MutationObserver" in b
+    assert "cible.textContent = v" in b
 
 
 # ── 3. Le repli des filtres ───────────────────────────────────────────────
@@ -126,3 +147,238 @@ def test_la_mesure_qui_a_motive_le_repli_est_ecrite():
     repli en le trouvant inutile."""
     css = _lire("veille.css")
     assert "373 px" in css and "QUARANTE-QUATRE POUR" in css
+
+
+# ── 4. La barre latérale : ce qui la garde complète et honnête ────────────
+
+def _rubriques_declarees():
+    """Tous les identifiants de rubrique servis par le site — ceux du HTML et
+    ceux qu'écrit `fiche.js`. Les lire des deux endroits est le point : une
+    rubrique posée par du JavaScript est aussi visible qu'une autre, et c'est
+    justement celle qu'on oublie."""
+    ids = set()
+    for nom in ("index.html", "abonnement.html", "confronter.html", "fiche.js"):
+        for m in re.finditer(r'h2 class="rubrique" id="([a-z0-9-]+)"', _lire(nom)):
+            ids.add(m.group(1))
+    return ids
+
+
+def test_chaque_rubrique_servie_a_sa_silhouette():
+    """L'icône est une commodité — une entrée sans icône reste lisible. Mais
+    elle ne doit pas manquer PAR OUBLI : une barre où trois entrées sur onze
+    portent un pictogramme se lit comme une barre à moitié chargée. Ce contrôle
+    tombe le jour où quelqu'un ajoute une rubrique sans sa silhouette."""
+    b = _lire("barre.js")
+    ids = _rubriques_declarees()
+    assert len(ids) >= 11, ids
+    manquantes = [i for i in sorted(ids) if ('"%s":' % i) not in b]
+    assert not manquantes, "rubriques sans silhouette : %s" % manquantes
+
+
+def test_aucune_silhouette_orpheline():
+    """L'inverse compte autant : une icône pour une rubrique retirée reste dans
+    le fichier des années, et personne ne sait plus si elle sert."""
+    b = _lire("barre.js")
+    i = b.index("var ICONES = {")
+    bloc = b[i:b.index("\n  };", i)]
+    declares = set(re.findall(r'"(r-[a-z0-9-]+)":', bloc))
+    orphelines = sorted(declares - _rubriques_declarees())
+    assert not orphelines, "silhouettes sans rubrique : %s" % orphelines
+
+
+def test_la_silhouette_n_est_jamais_seule_a_porter_l_information():
+    """WCAG 1.4.1. L'intitulé est écrit à côté de l'icône, et l'icône est
+    retirée de l'arbre d'accessibilité — annoncée, elle ferait dire deux fois
+    la même chose à un lecteur d'écran."""
+    b = _lire("barre.js")
+    i = b.index("function icone(")
+    bloc = b[i:i + 600]
+    assert 'aria-hidden="true"' in bloc and 'focusable="false"' in bloc
+    assert "currentColor" in bloc, "l'icône impose sa couleur au lieu de suivre l'état"
+
+
+def test_la_legende_reprend_les_classes_des_cartes():
+    """Une légende peinte à la main dérive à la première retouche de feuille de
+    style : le témoin dirait une couleur, la carte en montrerait une autre. Ici
+    le témoin EST l'élément — `.past` avec la clé du référentiel."""
+    b = _lire("barre.js")
+    i = b.index("function legende(")
+    bloc = b[i:b.index("\n  function rendre(", i)]
+    serre = re.sub(r"\s+", " ", bloc.replace('"', "'"))
+    assert "class='past ' + esc(im.cle)" in serre, serre[:400]
+    assert "fsource" in bloc and "class=\"st" in bloc
+    # et les noms viennent du serveur, jamais du fichier
+    assert "nom(im)" in bloc and "nom(s)" in bloc
+
+
+def test_la_legende_ne_montre_que_les_statuts_qui_sortent():
+    """« À vérifier », « rédigée par IA », « réfutée » ne sont jamais servis.
+    Les mettre en légende apprendrait au lecteur qu'il peut les rencontrer."""
+    b = _lire("barre.js")
+    i = b.index("function legende(")
+    bloc = b[i:b.index("\n  function rendre(", i)]
+    assert "s.publiable" in bloc, "la légende annonce des statuts non publiables"
+
+
+def test_une_legende_sans_referentiel_dit_pourquoi():
+    """Un axe qui ne donne rien le dit — la règle vaut ici comme ailleurs. Une
+    légende écrite en dur survivrait à la panne en affirmant des couleurs que
+    le moteur n'emploie peut-être plus."""
+    b = _lire("barre.js")
+    assert 'if (!_ref) {' in b
+    assert 'bl.leg.non' in b
+    lg = _lire("langue.js")
+    assert '"bl.leg.non"' in lg
+
+
+def test_la_barre_se_replie_a_toute_largeur_et_s_en_souvient():
+    """Elle ne se repliait que sous 1100 px : au-dessus, la colonne était
+    imposée, et un lecteur qui veut la pleine largeur pour le registre des
+    sources n'avait aucun moyen de l'obtenir."""
+    css = _lire("veille.css")
+    serre = css.replace(" ", "").replace("\n", "")
+    assert "html.bl-repliee.bl{display:none}" in serre, "la barre repliée reste en place"
+    assert "html.bl-repliee.page{display:block" in serre
+    # Le bouton n'est plus caché sur grand écran.
+    assert "@media(min-width:1100px){#bl-bouton{display:none}}" not in serre
+    b = _lire("barre.js")
+    assert 'CLE_ETAT = "cpinfo.barre"' in b
+    assert "localStorage.setItem(CLE_ETAT" in b
+
+
+def test_une_barre_repliee_sort_du_parcours_clavier():
+    """Masquée par la grille ou déplacée par `transform`, elle reste dans
+    l'ordre de tabulation : un lecteur au clavier traverse une dizaine de liens
+    hors écran avant d'atteindre la page."""
+    b = _lire("barre.js")
+    i = b.index("function ouvrir(")
+    bloc = b[i:i + 900]
+    assert 'setAttribute("inert"' in bloc and 'aria-hidden' in bloc
+    assert 'removeAttribute("inert")' in bloc
+
+
+def test_la_barre_suit_une_page_rendue_apres_elle():
+    """Les rubriques d'une fiche sont écrites par `fiche.js` une fois la
+    réponse revenue, donc APRÈS la construction de la barre. Une convocation
+    explicite depuis `fiche.js` marcherait aujourd'hui et tomberait à la
+    troisième page à rendu différé ; l'observation ne peut pas être oubliée."""
+    b = _lire("barre.js")
+    assert "function suivrePage(" in b
+    # DÉFAUT DU PREMIER CONTRÔLE, trouvé en mutant le code : il vérifiait que
+    # la fonction EXISTE, pas qu'elle est APPELÉE. Retirer l'appel dans
+    # `demarrer()` laissait passer — et la barre cessait de suivre la page sans
+    # qu'aucun contrôle ne bouge.
+    d = b[b.index("function demarrer("):]
+    assert "suivrePage();" in d[:d.index("\n  }")], "l'observation n'est pas mise en route"
+    i = b.index("function suivrePage(")
+    bloc = b[i:i + 700]
+    assert 'querySelector("main")' in bloc
+    assert "childList: true, subtree: true" in bloc
+    # et elle ne reconstruit QUE si la liste des rubriques a changé
+    assert "if (s === _signature) return;" in bloc
+    f = _lire("fiche.js")
+    assert 'id="r-croisement"' in f and 'id="r-voisinage"' in f
+
+
+def test_la_glose_coupee_de_la_barre_est_rendue_en_infobulle():
+    """La barre coupe « Le fil — tout le corpus filtré » à « Le fil » : la
+    glose repousserait le compteur hors du cadre. Couper sans rien offrir en
+    échange, c'est retirer la seule phrase qui dit ce que la rubrique
+    contient."""
+    b = _lire("barre.js")
+    assert "glose: i > 0 ? titre : \"\"" in b
+    assert 's.glose ? \' title="\'' in b
+
+
+def test_les_blocs_de_la_barre_ne_sont_poses_que_la_ou_ils_sont_remplis():
+    """DÉFAUT CONSTATÉ AU NAVIGATEUR. Sur la page de confidentialité, où aucun
+    moteur ne tourne, la barre affichait « LE CORPUS » suivi de deux cadres
+    vides : un titre qui promet un état et ne le donne jamais. Deux causes,
+    corrigées ensemble — le bloc était posé partout, et `hidden` ne le cachait
+    pas puisque `display:flex` écrase la feuille du navigateur."""
+    b = _lire("barre.js")
+    assert 'hote.hasAttribute("data-barre-etat")' in b
+    css = _lire("veille.css").replace(" ", "").replace("\n", "")
+    assert ".bl-etat[hidden],.bl-lu[hidden]{display:none}" in css
+    # Seule la page qui le remplit le demande.
+    assert "data-barre-etat" in _lire("index.html")
+    for nom in ("confidentialite.html", "abonnement.html", "confronter.html",
+                "fiche.html"):
+        assert "data-barre-etat" not in _lire(nom), nom
+    # Et c'est bien `veille.js`, servi par cette page-là seule, qui l'écrit.
+    assert '$("bl-etat")' in _lire("veille.js")
+
+
+# ── 5. La manchette, les intertitres, l'article ───────────────────────────
+
+def test_la_manchette_est_remplie_par_le_meme_calcul_que_le_reste():
+    """Trois endroits affichent le compte de fiches — la manchette, le bandeau
+    et la barre. Ils ne valent que s'ils ne peuvent pas diverger, et la seule
+    façon de s'en assurer est qu'UN SEUL calcul les remplisse tous les trois."""
+    js = _lire("veille.js")
+    i = js.index("function rendreEtat")
+    fin = js.index("\n  /* LE NUMÉRO DE DEMANDE", i)
+    bloc = js[i:fin]
+    for cible in ('$("mn-fiches")', '$("mn-date")', '$("mn-rupt")',
+                  '$("mn-src")', '$("bl-etat")', '$("etat")'):
+        assert cible in bloc, "%s est rempli hors de rendreEtat" % cible
+    # Un seul appel, et il vient APRÈS la séparation une / fil : la manchette
+    # porte le nombre de ruptures, qui est la longueur de la une.
+    assert js.count("rendreEtat(") == 2, "rendreEtat est appelé plusieurs fois"
+    assert "rendreEtat(d, une.length);" in js
+    assert js.index("var une = toutes.filter") < js.index("rendreEtat(d, une.length)")
+
+
+def test_le_bandeau_ne_reste_que_pour_ce_qui_ne_va_pas():
+    """Un bandeau d'alerte qui s'affiche aussi quand il n'y a pas d'alerte
+    n'alerte plus. Il annonçait « toutes les sources ont répondu » sur soixante
+    pixels, à chaque visite."""
+    js = _lire("veille.js")
+    i = js.index("function rendreEtat")
+    bloc = js[i:i + 2600]
+    assert "if (!mauvaises.length) {" in bloc
+    j = bloc.index("if (!mauvaises.length) {")
+    assert "e.hidden = true;" in bloc[j:j + 200], bloc[j:j + 200]
+    # Mais il nomme toujours les sources muettes — ce que la manchette ne peut
+    # pas faire en une ligne, et c'est ce pour quoi il servait vraiment.
+    assert "j.message || j.erreur" in bloc
+
+
+def test_les_intertitres_lisent_l_ordre_et_ne_le_refont_pas():
+    """La mise en page rend lisible l'ordre du moteur, elle n'en invente aucun.
+    Un intertitre est posé LÀ OÙ LA PORTÉE CHANGE, en lisant la liste dans
+    l'ordre où elle arrive — et si le tri cessait de grouper les portées, ils
+    se répéteraient, ce qui est exactement ce qu'il faudrait voir."""
+    js = _lire("veille.js")
+    i = js.index("function composerFil(")
+    bloc = js[i:js.index("\n  function charger()", i)]
+    assert "f.impact !== prec" in bloc, bloc[:300]
+    for interdit in ("sort(", "reverse(", "IMPACTS", "rang"):
+        assert interdit not in bloc, "la composition du fil réordonne : %s" % interdit
+    # Le libellé vient du référentiel servi avec la fiche, jamais d'ici.
+    assert 'nommer("impact", f.impact, f.impact_nom)' in bloc
+
+
+def test_l_intertitre_traverse_la_grille():
+    """Posé dans une case, il occuperait la largeur d'une carte et se lirait
+    comme une carte vide."""
+    css = _lire("veille.css").replace(" ", "").replace("\n", "")
+    i = css.index(".intertitre{")
+    assert "grid-column:1/-1" in css[i:i + 260], css[i:i + 260]
+
+
+def test_la_fiche_est_bornee_a_une_mesure_lisible():
+    """Mesuré au navigateur : sur la colonne de 1 240 px, un paragraphe de
+    lecture critique faisait cent quatre-vingts signes par ligne — près du
+    triple de ce qui se lit sans perdre la ligne suivante."""
+    f = _lire("fiche.js")
+    assert '<article class="art">' in f
+    assert "h += '</article>';" in f
+    # Le croisement et le voisinage restent HORS de l'article : ce sont des
+    # grilles de vignettes, pas du texte suivi.
+    i = f.index("h += '</article>';")
+    assert f.index('id="r-croisement"') > i
+    assert f.index('id="r-voisinage"') > i
+    css = _lire("veille.css").replace(" ", "").replace("\n", "")
+    assert ".art{max-width:68ch" in css
+    assert "CENTQUATRE-VINGTS" in _lire("veille.css").replace(" ", "")
