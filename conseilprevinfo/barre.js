@@ -78,6 +78,13 @@
     var secs = sections();
     var h = '<nav class="bl-nav" aria-label="' + esc(t("bl.pages")) + '">';
 
+    /* L'ÉTAT DU CORPUS EN TÊTE DE BARRE. Il est REMPLI par la page — la
+       barre ne sait pas compter des fiches et ne doit pas apprendre : elle
+       réserve la place, le moteur écrit dedans. Caché tant qu'il est vide,
+       pour ne pas afficher un cadre creux pendant le chargement. */
+    h += '<p class="bl-t">' + esc(t("bl.etat")) + "</p>"
+      + '<div class="bl-etat" id="bl-etat" hidden></div>';
+
     h += '<p class="bl-t">' + esc(t("bl.pages")) + "</p><ul class=\"bl-l\">";
     PAGES.forEach(function (p) {
       h += '<li><a href="' + p.href + '"' + (ici(p.href) ? ' aria-current="page"' : "")

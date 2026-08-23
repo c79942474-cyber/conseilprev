@@ -80,7 +80,7 @@ Depuis votre poste, aucune session nécessaire :
       https://github.com/c79942474-cyber/conseilprevinfo
     git push -u origin master
 
-`HISTORIQUE.bundle` porte **l'historique git complet — treize commits**,
+`HISTORIQUE.bundle` porte **l'historique git complet — quatorze commits**,
 messages compris. Il ne s'agit donc pas de repartir d'une copie à plat : le
 détail des corrections, des mesures et des défauts constatés vit dans ces
 messages, et c'est souvent là qu'est l'information.
@@ -104,6 +104,11 @@ Une **barre latérale** dit ce que la page contient et où l'on en est. Elle ne
 peut pas mentir sur son contenu : ses entrées sont LUES DANS LA PAGE, et ses
 comptes recopiés de chaque rubrique.
 
+La **première page montre le tri du moteur** au lieu de l'aplatir : la tête est
+la première fiche du classement déjà publié, jamais un choix de mise en page.
+La barre porte l'état du corpus, recopié du même calcul. Sur téléphone, la
+barre de filtres se replie — elle y prenait 44 % de l'écran.
+
 Les **menus de filtre décrivent les fiches trouvées**, pas le corpus : ils
 suivent les filtres en cours, chaque axe compté hors du sien pour qu'on puisse
 toujours changer d'avis. Un menu qui n'a rien à proposer le dit au lieu de se
@@ -115,12 +120,12 @@ qu'elle ne traduit pas** : les lectures critiques, dérivées de gabarits
 français, et les titres, qui portent la langue de leur source. Le nombre
 affiché avec cette réserve est mesuré, pas écrit.
 
-**198 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
+**207 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
 gardent les règles éditoriales, et chacun est écrit pour tomber le jour où
 quelqu'un les assouplira. Chaque règle nouvelle a été confrontée à une
 **mutation du code qu'elle garde**.
 
-### Les treize commits du bundle
+### Les quatorze commits du bundle
 
     ee260cd  Les menus décrivaient le corpus, pas les fiches trouvées
     4544401  Barre latérale, et une bascule FR/EN qui dit ce qu'elle ne traduit pas

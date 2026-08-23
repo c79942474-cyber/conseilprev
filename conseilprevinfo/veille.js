@@ -85,8 +85,15 @@
      Les trois blocs — lecture, portée, réserve — sont rendus SÉPARÉMENT et
      étiquetés. Fondus en un paragraphe, l'avis deviendrait indiscernable du
      constat, ce qui est exactement la confusion que ce site refuse. */
-  function fiche(f) {
-    var h = '<article class="fiche">';
+  function fiche(f, rang) {
+    /* LE RANG N'EST PAS UNE DÉCORATION, C'EST L'ORDRE DU MOTEUR RENDU
+       LISIBLE. Le site classe déjà par portée puis par date — « le plus
+       important d'abord, puis le plus récent » — mais l'affichait à plat, si
+       bien qu'un lecteur ne pouvait pas voir ce qui vient en tête. Une
+       première page de journal fait exactement cela : elle donne à la tête la
+       place qui dit son rang. Rien n'est ajouté, rien n'est noté ; c'est le
+       même tri, montré. */
+    var h = '<article class="fiche' + (rang === "tete" ? " tete" : "") + '">';
     h += '<div class="fmeta">'
       + '<span class="past ' + esc(f.impact) + '">'
       + esc(nommer("impact", f.impact, f.impact_nom)) + '</span>'
@@ -237,6 +244,26 @@
       h += " " + esc(tr("js.toutes.ok"));
     }
     e.innerHTML = h;
+
+    /* LA BARRE PORTE L'ÉTAT DISTILLÉ, DEPUIS LE MÊME CALCUL. Le bandeau dit
+       tout ; la barre dit l'essentiel — combien de fiches, de quand, et si
+       une source a manqué — parce que le bandeau disparaît dès qu'on
+       descend, et qu'un lecteur au milieu du fil ne sait plus si ce qu'il
+       lit date d'aujourd'hui ou de la semaine dernière.
+
+       ELLE RECOPIE, ELLE NE RECALCULE PAS. Un second calcul, même juste,
+       finirait par afficher un autre nombre que celui d'à côté. */
+    var b = $("bl-etat");
+    if (b) {
+      b.innerHTML =
+        '<span class="bl-n">' + (et.fiches || 0) + '</span>'
+        + '<span class="bl-q">' + esc(tr("js.fiches")) + '</span>'
+        + '<span class="bl-d">' + esc(quand) + '</span>'
+        + (mauvaises.length
+            ? '<span class="bl-ko">' + mauvaises.length + ' '
+              + esc(tr("bl.muettes")) + '</span>' : "");
+      b.hidden = false;
+    }
   }
 
   /* LE NUMÉRO DE DEMANDE — pourquoi il existe.
@@ -280,7 +307,7 @@
       var fil = toutes.filter(function (f) { return f.impact !== "rupture"; });
 
       $("une").innerHTML = une.length
-        ? une.map(fiche).join("")
+        ? une.map(function (f, i) { return fiche(f, i === 0 ? "tete" : ""); }).join("")
         : '<div class="vide"><b>' + esc(tr("js.une.rien")) + '</b>'
           + esc(tr("js.une.vide")) + ' ' + esc(tr("js.une.vide2")) + '</div>';
       $("c-une").textContent = une.length + " " + tr("js.fiches");
@@ -526,6 +553,39 @@
       clearTimeout(minuteur);
       minuteur = setTimeout(charger, 320);
     });
+    /* COMBIEN DE FILTRES SONT ACTIFS — compté depuis la MÊME table que la
+       requête et l'adresse. Un compte tenu à part finirait par annoncer
+       « 2 actifs » sur une page qui n'en applique qu'un, et c'est le genre
+       d'écart qui fait douter du reste. */
+    function compterActifs() {
+      var n = FILTRES.filter(function (f) {
+        var el = $(f[1]); return el && el.value;
+      }).length;
+      var e = $("f-actifs");
+      if (e) e.textContent = n ? n + " " + tr("f.actifs") : tr("f.aucun.actif");
+      return n;
+    }
+
+    var plier = $("f-plier"), champs = $("f-champs");
+    if (plier && champs) {
+      var ouvrirF = function (o) {
+        champs.classList.toggle("f-ouvert", o);
+        plier.setAttribute("aria-expanded", o ? "true" : "false");
+      };
+      plier.addEventListener("click", function () {
+        ouvrirF(!champs.classList.contains("f-ouvert"));
+      });
+      ouvrirF(false);
+      /* LE COMPTE SUIT CHAQUE CHANGEMENT, y compris ceux qui viennent de
+         l'adresse partagée : sans cela, une vue ouverte sur deux filtres
+         annoncerait « aucun » tant que le lecteur n'y touche pas. */
+      FILTRES.forEach(function (f) {
+        var el = $(f[1]);
+        if (el) el.addEventListener("change", compterActifs);
+      });
+      document.addEventListener("langue", compterActifs);
+    }
+
     var raz = $("f-raz");
     if (raz) raz.addEventListener("click", function () {
       FILTRES.forEach(function (f) { var el = $(f[1]); if (el) el.value = ""; });
@@ -533,7 +593,9 @@
     });
 
     chargerReferentiel();
-    chargerFacettes().then(function () { lireAdresse(); charger(); });
+    chargerFacettes().then(function () {
+      lireAdresse(); compterActifs(); charger();
+    });
     chargerSources();
     chargerDossiers();
     chargerPistes();

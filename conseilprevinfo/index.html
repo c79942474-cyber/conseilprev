@@ -62,8 +62,17 @@
      corpus réel : une liste écrite à la main proposerait un pays ou une
      technologie sans aucune fiche, et l'écran vide se lirait comme une
      panne. -->
-<div class="filtres">
-  <div class="in">
+<div class="filtres" id="filtres">
+  <!-- LE REPLI DES FILTRES, SOUS 900 px. Mesuré au navigateur : sur un écran
+       de 390 px, la barre collante occupait 373 px — QUARANTE-QUATRE POUR
+       CENT de la hauteur, en permanence. On lisait le fil par une fente. Le
+       bouton n'existe qu'à cette largeur ; au-dessus, la barre tient sur deux
+       lignes et se replier serait une gêne pour rien. -->
+  <button type="button" class="f-plier" id="f-plier"
+          aria-expanded="false" aria-controls="f-champs">
+    <span data-i18n="f.plier">Filtres</span><span id="f-actifs"></span>
+  </button>
+  <div class="in" id="f-champs">
     <div class="fgrp"><label class="flab" for="f-sujet" data-i18n="f.sujet">Sujet</label>
       <select id="f-sujet"><option value="" data-i18n="f.tous">Tous</option></select></div>
     <div class="fgrp"><label class="flab" for="f-pays" data-i18n="f.pays">Pays</label>

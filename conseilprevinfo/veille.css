@@ -123,6 +123,11 @@ main{max-width:var(--maxw);margin:0 auto;padding:26px 22px 70px}
 /* ── LA UNE ──────────────────────────────────────────────────────────── */
 .une{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));
   gap:0;border-top:1px solid var(--filet)}
+/* TROIS FILETS S'EMPILAIENT SOUS LA TÊTE DE RUBRIQUE : le sien, celui de la
+   grille, celui de la tête de une. La grille cède le sien — le rouge de la
+   tête porte une information (c'est une rupture), le filet neutre n'en
+   portait aucune à cet endroit. */
+.une:has(.fiche.tete){border-top:0}
 .une .fiche{border-bottom:1px solid var(--filet);border-right:1px solid var(--filet);
   padding:20px 22px 22px}
 .une .fiche:nth-child(odd):last-child{border-right:0}
@@ -482,3 +487,127 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
   border-style:dashed;color:var(--sourd2);background:transparent;
   max-width:230px;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LA COMPOSITION DE PREMIÈRE PAGE
+
+   POURQUOI UNE TÊTE. Le moteur classe déjà « le plus important d'abord, puis
+   le plus récent ». La grille l'affichait à plat : quatre cartes identiques,
+   dont un lecteur ne pouvait pas savoir laquelle vient en tête. Une première
+   page de journal fait exactement le contraire, et depuis longtemps — elle
+   donne à la tête la place qui DIT son rang.
+
+   RIEN N'EST AJOUTÉ ICI. Pas de note, pas de score, pas de « à la une selon
+   nous » : c'est le même tri, rendu lisible. Le jour où le tri change, la
+   tête change avec lui, sans qu'une ligne de mise en page soit touchée.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.une .fiche.tete{
+  grid-column:1 / -1;
+  padding:26px 26px 24px;
+  background:var(--papier);
+  border-top:3px solid var(--rouge);
+}
+.une .fiche.tete .ftitre{
+  font-size:clamp(26px,3.1vw,38px);line-height:1.06;letter-spacing:-.02em;
+  margin-bottom:10px;
+}
+.une .fiche.tete .fchapeau{
+  font-size:17px;line-height:1.62;color:var(--encre2);max-width:62ch;
+  margin-bottom:16px;
+}
+/* LES TROIS BLOCS EN COLONNES, comme un article de tête en tiendrait. Sur la
+   largeur d'une une, un paragraphe unique ferait 160 signes par ligne — le
+   double de ce qui se lit. */
+@media (min-width:900px){
+  .une .fiche.tete .fbloc{margin:0}
+  .une .fiche.tete .fbloc.lecture,
+  .une .fiche.tete .fbloc.portee,
+  .une .fiche.tete .fbloc.doute{
+    display:inline-block;vertical-align:top;width:calc(33.333% - 12px);
+    margin-right:14px;
+  }
+  .une .fiche.tete .fbloc.doute{margin-right:0}
+  .une .fiche.tete .fsource{margin-top:18px}
+}
+
+/* ── L'ÉTAT DU CORPUS, DANS LA BARRE ─────────────────────────────────────
+   Le bandeau dit tout, mais il disparaît dès qu'on descend : un lecteur au
+   milieu du fil ne sait plus si ce qu'il lit date d'aujourd'hui ou de la
+   semaine dernière. La barre en garde l'essentiel sous les yeux. */
+.bl-etat{
+  display:flex;flex-wrap:wrap;align-items:baseline;gap:0 7px;
+  padding:9px 10px;margin:0 0 4px;background:var(--papier2);
+  border-left:2px solid var(--vert);
+}
+.bl-n{
+  font-family:var(--serif);font-weight:700;font-size:25px;line-height:1;
+  color:var(--encre);font-variant-numeric:tabular-nums;
+}
+.bl-q{font-size:12px;color:var(--sourd)}
+.bl-d{
+  flex-basis:100%;font-family:var(--fix);font-size:10.5px;color:var(--sourd);
+  margin-top:3px;
+}
+/* UNE SOURCE MUETTE SE VOIT DEPUIS N'IMPORTE OÙ DANS LA PAGE. C'est la seule
+   chose qui change la lecture de tout le reste : un corpus amputé n'est pas
+   un corpus à jour. */
+.bl-ko{
+  flex-basis:100%;font-family:var(--fix);font-size:10.5px;color:var(--ambre);
+  margin-top:2px;
+}
+.bl-etat:has(.bl-ko){border-left-color:var(--ambre)}
+
+/* ── LES TÊTES DE RUBRIQUE ───────────────────────────────────────────────
+   Elles séparaient les sections d'un filet de 2 px. Sur une page qui en porte
+   cinq, dont deux tout en bas, cela ne suffit pas à marquer un changement de
+   matière — le lecteur défile sans voir qu'il a changé de sujet. Le filet
+   double, la respiration au-dessus s'agrandit, et le compte prend la forme
+   d'un chiffre plutôt que d'une phrase. */
+.rubrique{
+  border-top:1px solid var(--filet2);
+  padding-top:13px;margin-top:44px;
+  align-items:center;
+}
+.rubrique > span:last-child{
+  font-family:var(--fix);font-size:10.5px;letter-spacing:.06em;
+  color:var(--sourd);white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+  border:1px solid var(--filet);border-radius:3px;padding:2px 8px;
+  background:var(--papier);
+}
+.rubrique:first-of-type{border-top:0;padding-top:0;margin-top:0}
+
+/* ── LE REPLI DES FILTRES SUR PETIT ÉCRAN ────────────────────────────────
+   MESURÉ AU NAVIGATEUR. Sur un écran de 390 px, la barre collante occupait
+   373 px — QUARANTE-QUATRE POUR CENT de la hauteur, en permanence. Le lecteur
+   parcourait le fil par une fente de 470 px. Une barre d'outils qui prend
+   presque la moitié de l'écran a cessé d'être un outil.
+
+   AU-DESSUS DE 900 px, RIEN NE CHANGE : la barre tient sur deux lignes, et la
+   replier serait une gêne pour rien. */
+.f-plier{display:none}
+
+@media (max-width:899px){
+  .f-plier{
+    display:flex;width:100%;align-items:baseline;gap:8px;cursor:pointer;
+    font-family:var(--fix);font-size:11px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--encre2);
+    background:transparent;border:0;padding:11px 22px;text-align:left;
+  }
+  .f-plier::after{
+    content:"▾";margin-left:auto;font-size:13px;color:var(--sourd);
+    transition:transform .15s ease;
+  }
+  .f-plier[aria-expanded="true"]::after{transform:rotate(180deg)}
+  #f-actifs{
+    font-size:10px;letter-spacing:.06em;color:var(--sourd);
+    border:1px solid var(--filet2);border-radius:3px;padding:1px 6px;
+  }
+  .filtres .in{display:none}
+  .filtres .in.f-ouvert{display:flex;max-height:62vh;overflow-y:auto}
+  /* Le compte de fiches reste visible même replié : c'est la seule chose de
+     cette barre qu'on lit sans vouloir agir. */
+  .f-plier + .in .fcompte{margin-left:0;flex-basis:100%}
+}
+@media (prefers-reduced-motion:reduce){ .f-plier::after{transition:none} }

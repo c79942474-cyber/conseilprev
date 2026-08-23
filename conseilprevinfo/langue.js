@@ -39,6 +39,8 @@
     /* ── La barre latérale ──────────────────────────────────────────── */
     "bl.ouvrir":       ["Ouvrir le menu", "Open the menu"],
     "bl.fermer":       ["Fermer le menu", "Close the menu"],
+    "bl.etat":         ["Le corpus", "The corpus"],
+    "bl.muettes":      ["source(s) muette(s)", "source(s) silent"],
     "bl.pages":        ["Le site", "The site"],
     "bl.sections":     ["Sur cette page", "On this page"],
     "bl.fil":          ["Le fil", "The feed"],
@@ -75,6 +77,9 @@
     "f.pays.vide":     ["Aucun pays sur ces fiches", "No country on these entries"],
     "f.techno.vide":   ["Aucune technologie sur ces fiches",
                         "No technology on these entries"],
+    "f.plier":         ["Filtres", "Filters"],
+    "f.actifs":        ["actif(s)", "active"],
+    "f.aucun.actif":   ["aucun", "none"],
     "f.raz":           ["Tout afficher", "Show everything"],
 
     "et.chargement":   ["Chargement de la veille…", "Loading…"],
