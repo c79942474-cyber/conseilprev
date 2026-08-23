@@ -15,6 +15,13 @@ pyyaml==6.0.2
 # lui-même déconseille son serveur intégré en ligne.
 gunicorn==23.0.0
 
+# LA COMPOSITION DES PDF EMPORTÉS. La police, elle, est AU DÉPÔT (dossier
+# `polices/`) et non prise au système : les polices intégrées de fpdf2 sont en
+# latin-1, et le corpus est plein de tirets cadratins et de guillemets
+# français qui en sortiraient en points d'interrogation — un défaut invisible
+# au développement, visible par le seul lecteur qui ouvre le fichier.
+fpdf2==2.7.9
+
 # LECTURE DES PDF DANS LA CONFRONTATION — la seule dépendance FACULTATIVE.
 # Sans elle, `confrontation.py` le dit à l'écran et accepte les autres
 # formats, au lieu de renvoyer une erreur que l'utilisateur ne peut pas

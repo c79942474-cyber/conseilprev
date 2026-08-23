@@ -80,7 +80,7 @@ Depuis votre poste, aucune session nécessaire :
       https://github.com/c79942474-cyber/conseilprevinfo
     git push -u origin master
 
-`HISTORIQUE.bundle` porte **l'historique git complet — quatorze commits**,
+`HISTORIQUE.bundle` porte **l'historique git complet — quinze commits**,
 messages compris. Il ne s'agit donc pas de repartir d'une copie à plat : le
 détail des corrections, des mesures et des défauts constatés vit dans ces
 messages, et c'est souvent là qu'est l'information.
@@ -104,6 +104,14 @@ Une **barre latérale** dit ce que la page contient et où l'on en est. Elle ne
 peut pas mentir sur son contenu : ses entrées sont LUES DANS LA PAGE, et ses
 comptes recopiés de chaque rubrique.
 
+Chaque fiche porte **où vous en êtes** : contour bleu tant qu'elle reste à
+lire, vert une fois ouverte — une mémoire qui ne quitte jamais votre
+navigateur. Une fiche **s'emporte en PDF ou en Word**, avec son statut, la
+nature de sa lecture et ce qu'on ne sait pas : un document qui circule sans
+sa page doit porter de quoi en juger. Un compte dispose d'un **classeur**
+pour ses propres documents, qui dit avant le dépôt ce qu'il conserve — en
+mémoire, comme le compte lui-même, et donc jusqu'au prochain redémarrage.
+
 La **première page montre le tri du moteur** au lieu de l'aplatir : la tête est
 la première fiche du classement déjà publié, jamais un choix de mise en page.
 La barre porte l'état du corpus, recopié du même calcul. Sur téléphone, la
@@ -120,12 +128,12 @@ qu'elle ne traduit pas** : les lectures critiques, dérivées de gabarits
 français, et les titres, qui portent la langue de leur source. Le nombre
 affiché avec cette réserve est mesuré, pas écrit.
 
-**207 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
+**230 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
 gardent les règles éditoriales, et chacun est écrit pour tomber le jour où
 quelqu'un les assouplira. Chaque règle nouvelle a été confrontée à une
 **mutation du code qu'elle garde**.
 
-### Les quatorze commits du bundle
+### Les quinze commits du bundle
 
     ee260cd  Les menus décrivaient le corpus, pas les fiches trouvées
     4544401  Barre latérale, et une bascule FR/EN qui dit ce qu'elle ne traduit pas

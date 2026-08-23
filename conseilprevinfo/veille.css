@@ -611,3 +611,108 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
   .f-plier + .in .fcompte{margin-left:0;flex-basis:100%}
 }
 @media (prefers-reduced-motion:reduce){ .f-plier::after{transition:none} }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CE QUE VOUS AVEZ DÉJÀ LU
+
+   POURQUOI CE CANAL-LÀ. Les pastilles portent déjà quatre codes — rouge pour
+   ce qui rompt, bleu pour le sujet, vert pour une source confrontée, ambre
+   pour une réserve. Elles disent ce que la fiche EST. Le contour de la carte,
+   lui, ne portait rien : il dit désormais où VOUS en êtes. Deux natures
+   d'information, deux canaux — un lecteur qui a appris les pastilles ne les
+   relit pas différemment.
+
+   LE CLIGNOTEMENT PERMANENT A ÉTÉ ÉCARTÉ, ET C'EST UN REFUS ARGUMENTÉ. Les
+   règles d'accessibilité l'interdisent : au-delà de cinq secondes, tout
+   clignotement doit pouvoir être arrêté, et rien ne doit dépasser trois
+   éclats par seconde — au-delà, c'est un risque de crise pour les personnes
+   photosensibles. Soixante cartes clignotant en continu rendraient par
+   ailleurs la page illisible pour tout le monde. La pulsation joue TROIS FOIS
+   puis s'arrête, et seulement sur une carte dont l'état vient de changer.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.fiche.neuf{border-left:3px solid var(--bleu)}
+.fiche.lu{border-left:3px solid var(--vert)}
+/* Une carte lue s'efface un peu : ce qui reste à lire doit ressortir, et
+   c'est tout l'objet du repère. Jamais au point d'être illisible — une fiche
+   lue reste une fiche du corpus. */
+.fiche.lu .ftitre{color:var(--encre2)}
+.fiche.lu:hover .ftitre{color:var(--encre)}
+
+@keyframes cp-pulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(43,97,71,0)}
+  50%    {box-shadow:0 0 0 4px rgba(43,97,71,.30)}
+}
+.fiche.pulse{animation:cp-pulse .8s ease-in-out 3}
+@media (prefers-reduced-motion:reduce){
+  .fiche.pulse{animation:none;box-shadow:0 0 0 3px rgba(43,97,71,.22)}
+}
+
+/* LE COMPTE DE CE QUI RESTE À LIRE, dans la barre — et de quoi l'oublier.
+   Une mémoire qu'on ne peut pas effacer n'est pas une commodité, c'est un
+   fichier. */
+.bl-lu{
+  display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;
+  font-family:var(--fix);font-size:10.5px;color:var(--sourd);
+  padding:7px 10px;margin:0 0 4px;border-left:2px solid var(--bleu);
+  background:var(--papier2);
+}
+.bl-lu b{font-family:var(--sans);font-size:13px;color:var(--encre);
+  font-variant-numeric:tabular-nums}
+.bl-lu button{
+  margin-left:auto;font-family:var(--fix);font-size:9.5px;letter-spacing:.06em;
+  text-transform:uppercase;background:transparent;border:1px solid var(--filet2);
+  border-radius:3px;padding:2px 6px;color:var(--sourd);cursor:pointer;
+}
+.bl-lu button:hover{border-color:var(--rouge);color:var(--rouge)}
+
+/* ── EMPORTER UNE FICHE ──────────────────────────────────────────────────
+   Placé APRÈS la source et le croisement : on emporte ce qu'on a lu. Un
+   bouton de téléchargement au-dessus du texte invite à emporter sans lire,
+   et c'est exactement ce qu'un document sorti de son contexte fait de pire. */
+.emporter{
+  margin:30px 0 0;padding:16px 18px;background:var(--papier2);
+  border-left:3px solid var(--encre);
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px;
+}
+.emp-t{
+  font-family:var(--fix);font-size:10.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--encre2);
+}
+.emp-b{
+  font-family:var(--sans);font-size:13.5px;font-weight:500;text-decoration:none;
+  padding:6px 15px;border:1px solid var(--encre2);border-radius:4px;
+  color:var(--encre);background:var(--papier);
+}
+.emp-b:hover{background:var(--encre);color:var(--papier)}
+.emp-b:focus-visible{outline:2px solid var(--bleu);outline-offset:2px}
+.emp-d{
+  flex-basis:100%;font-size:12.5px;line-height:1.55;color:var(--sourd);
+  margin-top:2px;
+}
+
+/* ── LE CLASSEUR ─────────────────────────────────────────────────────────
+   Une ligne par document, avec ce qui permet de le reconnaître ET de vérifier
+   qu'il est intact : nom, poids, date, empreinte. L'empreinte n'est pas là
+   pour décorer — cet espace n'étant pas durable, elle est le seul moyen de
+   s'assurer que le fichier récupéré est bien celui qui a été déposé. */
+.cl-d{
+  display:flex;flex-wrap:wrap;align-items:center;gap:8px;
+  padding:11px 13px;border:1px solid var(--filet);border-bottom:0;
+  background:var(--papier);
+}
+.cl-d:last-child{border-bottom:1px solid var(--filet)}
+.cl-d:hover{background:var(--papier2)}
+.cl-nom{font-weight:500;color:var(--encre);flex:1 1 220px;
+  overflow-wrap:anywhere}
+.cl-m{
+  font-family:var(--fix);font-size:10.5px;color:var(--sourd);
+  flex-basis:100%;order:3;
+}
+.cl-b{
+  font-family:var(--sans);font-size:12.5px;text-decoration:none;cursor:pointer;
+  padding:4px 11px;border:1px solid var(--filet2);border-radius:4px;
+  background:var(--papier);color:var(--encre2);
+}
+.cl-b:hover{border-color:var(--bleu);color:var(--bleu)}
+.cl-x:hover{border-color:var(--rouge);color:var(--rouge)}

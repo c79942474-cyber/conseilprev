@@ -225,12 +225,33 @@ def regler(jeton, sujets=None, seuil=None):
     return {"ok": True, "compte": _public(c)}
 
 
+# ── CE QUI DOIT DISPARAÎTRE AVEC UN COMPTE ───────────────────────────────
+# LA PHRASE « RIEN N'EN SUBSISTE DANS CE PROCESSUS » DOIT RESTER VRAIE. Elle
+# l'était tant que ce module tenait seul les données d'un compte. Le jour où
+# un autre module en garde — le classeur de documents —, elle devient fausse
+# si personne n'y pense, et c'est le pire genre de mensonge : celui qu'un
+# ajout légitime introduit sans le vouloir.
+#
+# Le crochet renverse la charge : un module qui garde quelque chose s'inscrit
+# ICI, et `oublier()` l'appelle. Il n'y a plus de liste à tenir à jour dans
+# une fonction que personne ne relit.
+_PURGES = []
+
+
+def a_purger(fonction):
+    """Inscrit une fonction `f(courriel)` appelée à l'effacement d'un compte."""
+    if fonction not in _PURGES:
+        _PURGES.append(fonction)
+    return fonction
+
+
 def oublier(jeton):
     """L'effacement, et il est réel.
 
     Un bouton « supprimer mon compte » qui se contenterait de marquer le
     compte inactif serait un mensonge tenu par le code. Le compte sort du
-    registre, et ses sessions avec lui.
+    registre, ses sessions avec lui, et TOUT CE QUE D'AUTRES MODULES EN
+    GARDENT — chacun s'étant inscrit auprès de `a_purger`.
     """
     c = compte_de(jeton)
     if not c:
@@ -239,6 +260,15 @@ def oublier(jeton):
         _COMPTES.pop(c["email"], None)
         for j in [j for j, s in _SESSIONS.items() if s["email"] == c["email"]]:
             _SESSIONS.pop(j, None)
+    for purge in _PURGES:
+        try:
+            purge(c["email"])
+        except Exception:  # noqa: BLE001
+            # UN MODULE QUI ÉCHOUE NE DOIT PAS EMPÊCHER LES AUTRES DE PURGER.
+            # L'effacement partiel vaut mieux que l'effacement abandonné à
+            # mi-chemin, et il n'y a rien à rendre au demandeur : son compte
+            # EST parti.
+            pass
     return {"ok": True, "message": "Compte effacé, sessions fermées. Rien "
                                    "n'en subsiste dans ce processus."}
 

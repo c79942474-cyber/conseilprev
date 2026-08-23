@@ -83,7 +83,12 @@
        réserve la place, le moteur écrit dedans. Caché tant qu'il est vide,
        pour ne pas afficher un cadre creux pendant le chargement. */
     h += '<p class="bl-t">' + esc(t("bl.etat")) + "</p>"
-      + '<div class="bl-etat" id="bl-etat" hidden></div>';
+      + '<div class="bl-etat" id="bl-etat" hidden></div>'
+      /* CE QUI RESTE À LIRE, ET DE QUOI L'OUBLIER. Une mémoire qu'on ne peut
+         pas effacer n'est pas une commodité, c'est un fichier — même tenu
+         dans le navigateur du lecteur. Le bouton est donc à côté du compte,
+         pas dans une page de réglages qu'on ne trouve jamais. */
+      + '<div class="bl-lu" id="bl-lu" hidden></div>';
 
     h += '<p class="bl-t">' + esc(t("bl.pages")) + "</p><ul class=\"bl-l\">";
     PAGES.forEach(function (p) {

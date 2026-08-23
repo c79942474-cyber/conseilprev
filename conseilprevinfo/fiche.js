@@ -72,7 +72,15 @@
 
   fetch("/api/veille/fiche/" + encodeURIComponent(ident), {credentials:"same-origin"})
     .then(function (r) { if (!r.ok) throw new Error("404"); return r.json(); })
-    .then(function (j) { DERNIERE = j; rendre(j); })
+    .then(function (j) {
+      DERNIERE = j;
+      /* OUVRIR UNE FICHE LA MARQUE LUE. Le clic sur le fil la marque déjà,
+         mais une fiche atteinte par une adresse partagée, un signet ou le
+         croisement d'une autre fiche ne passe par aucun clic du fil — et
+         resterait « à lire » alors qu'elle vient de l'être. */
+      if (window.LU) window.LU.marquer(j.fiche && j.fiche.id);
+      rendre(j);
+    })
     .catch(function () {
       document.getElementById("page").innerHTML =
         '<div class="vide"><b>' + esc(tr("fi.absente")) + '</b>'
@@ -189,6 +197,17 @@
           + vois.map(function (l) { return vignette(l, tr("fi.rapproch")); }).join("")
           + '</div>';
       }
+      /* EMPORTER LA FICHE. Placé APRÈS la source et le croisement, jamais en
+         tête : on emporte ce qu'on a lu. Un bouton de téléchargement au-dessus
+         du texte invite à emporter sans lire, et c'est précisément ce qu'un
+         document sorti de son contexte fait de pire. */
+      h += '<div class="emporter">'
+        + '<span class="emp-t">' + esc(tr("fi.emporter")) + '</span>'
+        + '<a class="emp-b" href="/fiche/' + esc(f.id) + '.pdf">PDF</a>'
+        + '<a class="emp-b" href="/fiche/' + esc(f.id) + '.docx">Word</a>'
+        + '<span class="emp-d">' + esc(tr("fi.emporter.dit")) + '</span>'
+        + '</div>';
+
       h += '<p style="margin-top:26px"><a href="/">' + esc(tr("fi.retour"))
         + '</a></p>';
       document.getElementById("page").innerHTML = h;

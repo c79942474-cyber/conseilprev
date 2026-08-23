@@ -12,6 +12,7 @@
   "use strict";
   function tr(c) { return (window.L && window.L.t) ? window.L.t(c) : c; }
   var CLE = "cpinfo.jeton";
+  var DELAI_FICHIER = 45000;
   var DELAI = 15000;
 
   function $(i) { return document.getElementById(i); }
@@ -38,13 +39,19 @@
   function demander(url, options) {
     var o = options || {};
     var ctrl = new AbortController();
-    var minuteur = setTimeout(function () { ctrl.abort(); }, DELAI);
-    var entetes = { "Content-Type": "application/json" };
+    var minuteur = setTimeout(function () { ctrl.abort(); },
+                              o.corpsForm ? DELAI_FICHIER : DELAI);
+    /* UN DOCUMENT NE PASSE PAS PAR `JSON.stringify`. Encodé en base64 dans
+       un corps JSON, il serait d'abord chargé EN ENTIER dans la mémoire de
+       l'onglet — et le navigateur doit poser lui-même la frontière
+       multipart, ce qu'imposer `application/json` l'empêche de faire. */
+    var entetes = {};
+    if (!o.corpsForm) entetes["Content-Type"] = "application/json";
     if (jeton()) entetes.Authorization = "Bearer " + jeton();
     return fetch(url, {
       method: o.method || "GET", signal: ctrl.signal,
       credentials: "same-origin", headers: entetes,
-      body: o.corps ? JSON.stringify(o.corps) : undefined
+      body: o.corpsForm || (o.corps ? JSON.stringify(o.corps) : undefined)
     }).then(function (r) {
       clearTimeout(minuteur);
       return r.json().then(function (j) { j._statut = r.status; return j; });
@@ -107,6 +114,12 @@
       $("a-sujets").querySelectorAll("input"),
       function (c) { c.checked = suivis.indexOf(c.value) >= 0; });
     $("a-seuil").value = compte.seuil;
+    /* LE CLASSEUR SE PEUPLE DÈS QUE LE COMPTE EST OUVERT, pas au premier
+       dépôt. DÉFAUT CONSTATÉ AU NAVIGATEUR : la réserve sur la durabilité —
+       « ces documents vivent en mémoire, un redémarrage les efface » —
+       n'apparaissait qu'APRÈS le premier rangement. Elle doit être lue AVANT,
+       c'est toute sa raison d'être. */
+    if (typeof classeur === "function") classeur();
   }
 
   function moi() {
@@ -216,5 +229,85 @@
     referentiel().then(moi);
   });
 
-  referentiel().then(moi);
+  /* ═══════════════════════════════════════════════════════════════════════
+     LE CLASSEUR
+
+     CE QU'IL CONSERVE EST DIT AVANT LE CHAMP DE DÉPÔT. La phrase vient du
+     SERVEUR, avec les plafonds : écrite ici, elle vieillirait au premier
+     changement de borne et promettrait 40 Mio là où le moteur en accepte 20.
+     ═══════════════════════════════════════════════════════════════════════ */
+  function octets(n) {
+    if (n < 1024) return n + " o";
+    if (n < 1048576) return (n / 1024).toFixed(0) + " Kio";
+    return (n / 1048576).toFixed(1) + " Mio";
+  }
+
+  function classeur() {
+    if (!jeton()) return Promise.resolve();
+    return demander("/api/classeur").then(function (r) {
+      if (!r || !r.ok) return;
+      var lg = (window.L && window.L.courante() === "en");
+      $("cl-dit").textContent = lg ? r.dit_en : r.dit;
+      $("cl-n").textContent = r.n + " / " + r.plafond_documents
+        + " · " + octets(r.octets) + " " + tr("cl.occupe");
+      $("cl-formats").textContent =
+        tr("cl.formats") + " " + (r.formats || []).join(", ") + "  ·  "
+        + tr("cl.plafond") + " "
+        + tr("cl.plafond.dit")
+            .replace("%d", r.plafond_documents)
+            .replace("%d", Math.round(r.plafond_octets / 1048576))
+            .replace("%d", Math.round(r.plafond_par_document / 1048576));
+
+      $("cl-liste").innerHTML = (r.documents || []).map(function (d) {
+        return '<div class="cl-d"><span class="cl-nom">' + esc(d.nom) + "</span>"
+          + '<span class="cl-m">' + octets(d.octets) + " · "
+          + esc((d.depose_le || "").slice(0, 10)) + " · "
+          + esc(tr("cl.empreinte")) + " " + esc(d.empreinte) + "</span>"
+          + '<a class="cl-b" href="/api/classeur/' + esc(d.id) + '">'
+          + esc(tr("cl.b.telecharger")) + "</a>"
+          + '<button type="button" class="cl-b cl-x" data-cl="' + esc(d.id)
+          + '">' + esc(tr("cl.b.effacer")) + "</button></div>";
+      }).join("") || '<p class="dos-dit"><b>' + esc(tr("cl.vide")) + "</b> "
+        + esc(tr("cl.vide2")) + "</p>";
+
+      Array.prototype.forEach.call($("cl-liste").querySelectorAll("[data-cl]"),
+        function (b) {
+          b.addEventListener("click", function () {
+            if (!window.confirm(tr("cl.effacer.sur"))) return;
+            demander("/api/classeur/" + b.getAttribute("data-cl") + "/effacer",
+                     { method: "POST" })
+              .then(classeur)
+              .catch(function () { dire(tr("js.erreur"), true); });
+          });
+        });
+    }).catch(function () { /* le reste de la page reste utilisable */ });
+  }
+
+  var fcl = $("f-classeur");
+  if (fcl) fcl.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var f = $("cl-fichier").files[0];
+    if (!f) return;
+    var fd = new FormData();
+    fd.append("document", f);
+    dire(tr("cl.envoi"));
+    demander("/api/classeur", { method: "POST", corpsForm: fd })
+      .then(function (r) {
+        /* LE CHAMP EST VIDÉ QUOI QU'IL ARRIVE : un document laissé dans un
+           formulaire repart au prochain envoi accidentel, et sur un poste
+           partagé il reste visible au suivant. */
+        $("cl-fichier").value = "";
+        dire(r && r.ok ? tr("cl.range") : (r && r.message) || tr("js.erreur"),
+             !(r && r.ok));
+        return classeur();
+      })
+      .catch(function () {
+        $("cl-fichier").value = "";
+        dire(tr("js.erreur"), true);
+      });
+  });
+
+  document.addEventListener("langue", classeur);
+
+  referentiel().then(moi).then(classeur);
 })();

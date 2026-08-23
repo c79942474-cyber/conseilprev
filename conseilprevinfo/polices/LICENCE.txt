@@ -1,0 +1,13 @@
+Liberation Serif — SIL Open Font License 1.1
+https://github.com/liberationfonts/liberation-fonts
+
+POURQUOI CES FICHIERS SONT AU DÉPÔT. La production d'un PDF exige une police
+Unicode : les polices intégrées de fpdf2 sont en latin-1, et le corpus est
+plein de tirets cadratins et de guillemets français que le latin-1 ne porte
+pas. S'appuyer sur une police du système reviendrait à produire un document
+correct ici et cassé sur l'hébergeur, sans que rien ne le signale — un PDF
+dont les tirets sont devenus des points d'interrogation ne se voit qu'à
+l'ouverture, par le lecteur.
+
+La licence SIL OFL autorise la redistribution ; ce fichier la porte, comme
+elle l'exige.

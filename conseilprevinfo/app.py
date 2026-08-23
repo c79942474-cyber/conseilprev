@@ -18,19 +18,27 @@ import threading
 import time
 from datetime import datetime, timezone
 
-from flask import Flask, jsonify, request, send_from_directory
+from flask import (Flask, jsonify, make_response, request,
+                   send_from_directory)
 
 import abonnes as AB
 import bulletin as BUL
 import confrontation as CONF
+import classeur as CL
 import croisement as X
+import exporter as EXP
 import decision as DEC
 import ingestion
 import sources as SRC
 import veille as V
 
 ICI = os.path.dirname(os.path.abspath(__file__))
-VERSION = "2026.08.22"
+VERSION = "2026.08.23"
+
+# LE CLASSEUR SE VIDE AVEC LE COMPTE. `abonnes.oublier()` promet que « rien
+# n'en subsiste dans ce processus » ; cette inscription est ce qui maintient
+# la phrase vraie maintenant qu'un autre module garde des données de compte.
+AB.a_purger(CL.vider)
 
 app = Flask(__name__, static_folder=None)
 
@@ -236,6 +244,41 @@ def _filtres_demandes():
     return {k: (request.args.get(k) or None) for k in _FILTRES_FIL}
 
 
+# ── EMPORTER UNE FICHE ────────────────────────────────────────────────────
+# LA MÊME PORTE QUE LA PAGE. Une fiche non publiable répond 404 à l'export
+# comme elle y répond à l'écran : un format de sortie ne doit jamais devenir
+# le chemin de contournement d'une règle éditoriale.
+@app.route("/fiche/<ident>.<format_>")
+def emporter(ident, format_):
+    if format_ not in ("pdf", "docx"):
+        return (jsonify(ok=False, erreur="format_inconnu",
+                        message="Formats servis : pdf, docx."), 404)
+    f = next((x for x in V.publiables(corpus()) if x.get("id") == ident), None)
+    if not f:
+        return (jsonify(ok=False, erreur="introuvable",
+                        message="Aucune fiche publiée ne porte cet "
+                                "identifiant."), 404)
+    url = request.url_root.rstrip("/") + "/fiche/" + ident
+    try:
+        octets = EXP.pdf(f, url) if format_ == "pdf" else EXP.docx(f, url)
+    except RuntimeError as e:
+        # LE MOTIF EST RENDU, PAS UNE ERREUR NUE. « 500 » laisserait croire à
+        # une panne du site ; ici c'est une capacité absente, et elle se dit.
+        return (jsonify(ok=False, erreur="format_indisponible",
+                        message=str(e)), 503)
+    mime = ("application/pdf" if format_ == "pdf"
+            else "application/vnd.openxmlformats-officedocument."
+                 "wordprocessingml.document")
+    r = make_response(octets)
+    r.headers["Content-Type"] = mime
+    r.headers["Content-Disposition"] = (
+        'attachment; filename="%s"' % EXP._nom_fichier(f, format_))
+    # RIEN N'EST MIS EN CACHE PAR UN INTERMÉDIAIRE : une fiche corrigée doit
+    # ressortir corrigée, y compris pour qui a déjà téléchargé la précédente.
+    r.headers["Cache-Control"] = "no-store"
+    return r
+
+
 @app.route("/api/veille/facettes")
 def api_facettes():
     return jsonify(ok=True, **V.facettes(corpus(), **_filtres_demandes()))
@@ -385,6 +428,69 @@ def page_confronter():
     return send_from_directory(ICI, "confronter.html")
 
 
+# ═══════════════════════════════════════════════════════════════════════════
+#  LE CLASSEUR — les documents d'un compte, et rien qu'à lui.
+#
+#  LE COMPTE EST RÉSOLU ICI, ET PASSÉ AU MODULE. `classeur.py` n'a aucune
+#  fonction qui prenne un identifiant de document sans prendre aussi le
+#  compte : il suffirait d'un chemin d'API oublié pour ouvrir le classeur
+#  d'autrui, et cette forme-là rend l'oubli impossible.
+# ═══════════════════════════════════════════════════════════════════════════
+
+def _courriel():
+    c = AB.compte_de(_jeton())
+    return c["email"] if c else None
+
+
+@app.route("/api/classeur")
+def api_classeur():
+    e = _courriel()
+    if not e:
+        return jsonify(ok=False, erreur="non_connecte"), 401
+    return jsonify(CL.lister(e))
+
+
+@app.route("/api/classeur", methods=["POST"])
+def api_classeur_deposer():
+    e = _courriel()
+    if not e:
+        return jsonify(ok=False, erreur="non_connecte"), 401
+    fichier = request.files.get("document")
+    if not fichier:
+        return jsonify(ok=False, erreur="sans_document",
+                       message="Aucun document reçu."), 400
+    r = CL.deposer(e, fichier.filename, fichier.read())
+    return jsonify(r), (200 if r.get("ok") else 400)
+
+
+@app.route("/api/classeur/<ident>")
+def api_classeur_lire(ident):
+    e = _courriel()
+    if not e:
+        return jsonify(ok=False, erreur="non_connecte"), 401
+    d = CL.contenu(e, ident)
+    if not d:
+        return jsonify(ok=False, erreur="introuvable"), 404
+    r = make_response(d["octets_bruts"])
+    r.headers["Content-Type"] = d["type"]
+    # LE NOM EST CELUI DU DÉPÔT, entre guillemets échappés : un nom porteur de
+    # guillemets casserait l'en-tête et ferait servir le fichier sous un autre
+    # nom que celui affiché.
+    r.headers["Content-Disposition"] = (
+        'attachment; filename="%s"' % d["nom"].replace('"', ""))
+    r.headers["Cache-Control"] = "no-store, private"
+    return r
+
+
+@app.route("/api/classeur/<ident>/effacer", methods=["POST"])
+def api_classeur_effacer(ident):
+    e = _courriel()
+    if not e:
+        return jsonify(ok=False, erreur="non_connecte"), 401
+    r = CL.effacer(e, ident)
+    return jsonify(r), (200 if r.get("ok") else 404)
+
+
 @app.route("/api/confrontation", methods=["POST"])
 def api_confrontation():
     """Confronte un document déposé au corpus. RÉSERVÉ AUX ABONNÉS.
@@ -428,6 +534,7 @@ def api_sante():
                    ingestion=ingestion.sante(), croisement=X.sante(c),
                    decision=DEC.sante(c), abonnes=AB.sante(),
                    confrontation=CONF.sante(),
+                   classeur=CL.sante(), export=EXP.sante(),
                    bulletin=BUL.sante(),
                    corpus=_etat_corpus())
 

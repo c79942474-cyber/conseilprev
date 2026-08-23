@@ -93,7 +93,12 @@
        première page de journal fait exactement cela : elle donne à la tête la
        place qui dit son rang. Rien n'est ajouté, rien n'est noté ; c'est le
        même tri, montré. */
-    var h = '<article class="fiche' + (rang === "tete" ? " tete" : "") + '">';
+    /* L'ÉTAT DE LECTURE EST PORTÉ PAR LA CARTE, pas par une pastille : les
+       pastilles disent ce que la fiche EST, ce contour dit où VOUS en êtes.
+       Deux natures d'information, deux canaux. */
+    var etat = (window.LU ? window.LU.classe(f.id) : "");
+    var h = '<article class="fiche ' + etat
+      + (rang === "tete" ? " tete" : "") + '" data-fid="' + esc(f.id) + '">';
     h += '<div class="fmeta">'
       + '<span class="past ' + esc(f.impact) + '">'
       + esc(nommer("impact", f.impact, f.impact_nom)) + '</span>'
@@ -284,6 +289,66 @@
      ne sont pas des erreurs, elles sont périmées. */
   var DEMANDE = 0;
 
+  /* OUVRIR UNE FICHE LA MARQUE LUE, et la carte change sous les yeux — sans
+     recharger le fil, qui ferait perdre la position de défilement au moment
+     précis où l'on revient de la lecture. */
+  function suivreLecture() {
+    var f = $("fil"), u = $("une");
+    [f, u].forEach(function (z) {
+      if (!z) return;
+      z.addEventListener("click", function (ev) {
+        var a = ev.target.closest && ev.target.closest("a[href^='/fiche/']");
+        if (!a) return;
+        var carte = a.closest(".fiche");
+        var id = carte && carte.getAttribute("data-fid");
+        if (window.LU && window.LU.marquer(id)) {
+          carte.classList.remove("neuf");
+          carte.classList.add("lu");
+          window.LU.pulser(carte);
+        }
+      });
+    });
+  }
+
+  /* AU RETOUR SUR LE FIL, les fiches lues entre-temps changent d'état. Le
+     navigateur restitue la page depuis son cache sans relancer le script :
+     sans cette écoute, un lecteur reviendrait sur un fil qui ignore ce qu'il
+     vient de lire. */
+  function rafraichirEtats() {
+    if (!window.LU) return;
+    Array.prototype.forEach.call(document.querySelectorAll(".fiche[data-fid]"),
+      function (c) {
+        var id = c.getAttribute("data-fid");
+        var lue = window.LU.estLue(id);
+        var avant = c.classList.contains("lu");
+        c.classList.toggle("lu", lue);
+        c.classList.toggle("neuf", !lue);
+        if (lue && !avant) window.LU.pulser(c);
+      });
+    direLecture();
+  }
+
+  /* LE COMPTE DE LECTURE — rempli par la page, comme l'état du corpus. Il dit
+     ce qui reste, pas ce qui est lu : c'est ce qui reste qui décide de la
+     visite suivante. */
+  function direLecture() {
+    var e = $("bl-lu");
+    if (!e || !window.LU) return;
+    var total = (FACETTES && FACETTES.total_publiable) || 0;
+    var lues = window.LU.combien();
+    var reste = Math.max(0, total - lues);
+    e.hidden = false;
+    e.innerHTML = "<b>" + reste + "</b><span>" + esc(tr("bl.reste")) + "</span>"
+      + (lues ? '<button type="button" id="bl-oubli">'
+                + esc(tr("bl.oublier")) + "</button>" : "");
+    var b = $("bl-oubli");
+    if (b) b.addEventListener("click", function () {
+      /* PAS DE « ÊTES-VOUS SÛR ? » CREUX : la question dit ce qui disparaît,
+         et rien d'autre ne disparaît. */
+      if (window.confirm(tr("bl.oublier.sur"))) window.LU.oublier();
+    });
+  }
+
   function charger() {
     var url = "/api/veille" + parametres();
     /* L'ADRESSE EST ÉCRITE AVANT LA RÉPONSE, pas après : elle décrit ce qui a
@@ -317,6 +382,7 @@
         : '<div class="vide"><b>' + esc(tr("js.fil.vide")) + '</b>'
           + esc(tr("js.fil.vide2")) + '</div>';
       $("c-fil").textContent = fil.length + " " + tr("js.fiches");
+      direLecture();
 
       /* LA COUPE EST ANNONCÉE, jamais laissée à la soustraction du lecteur.
          Le serveur dit lui-même s'il a coupé : le client ne le déduit pas de
@@ -591,6 +657,13 @@
       FILTRES.forEach(function (f) { var el = $(f[1]); if (el) el.value = ""; });
       charger();
     });
+
+    suivreLecture();
+    window.addEventListener("pageshow", rafraichirEtats);
+    document.addEventListener("visibilitychange", function () {
+      if (!document.hidden) rafraichirEtats();
+    });
+    document.addEventListener("lecture-effacee", rafraichirEtats);
 
     chargerReferentiel();
     chargerFacettes().then(function () {

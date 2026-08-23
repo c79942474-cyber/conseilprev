@@ -100,6 +100,27 @@
       </div>
     </form>
 
+    <h2 class="rubrique" id="r-classeur"><span data-i18n="cl.titre">Votre
+      classeur</span> <span id="cl-n"></span></h2>
+
+    <!-- CE QUE LE CLASSEUR CONSERVE EST DIT AVANT LE CHAMP DE DÉPÔT, jamais
+         après le bouton. Un espace qui perdrait des documents en silence
+         serait pire que pas d'espace du tout. -->
+    <div class="bandeau-etat alerte" id="cl-dit"></div>
+
+    <form class="fmr" id="f-classeur">
+      <div class="fgrp2">
+        <label for="cl-fichier" data-i18n="cl.l.fichier">Document à ranger</label>
+        <input type="file" id="cl-fichier" required>
+        <p class="aide" id="cl-formats"></p>
+      </div>
+      <div class="fbtns">
+        <button type="submit" class="fraz" data-i18n="cl.b.ranger">Ranger</button>
+      </div>
+    </form>
+
+    <div id="cl-liste"></div>
+
     <h2 class="rubrique" id="r-bulletin"><span data-i18n="ab.r.bulletin">Votre bulletin, tel qu'il partirait</span>
       <span id="c-bul"></span></h2>
     <!-- LE COURRIER EST MONTRÉ AVANT DE POUVOIR ÊTRE ENVOYÉ. Ce n'est pas un
