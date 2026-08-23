@@ -80,25 +80,56 @@ def _fiche(**kw):
     return V.normaliser(base)["fiche"]
 
 
-def test_la_reserve_compte_les_analyses_au_lieu_de_les_supposer():
-    """Le nombre affiché à côté de la réserve vient du corpus réel. Une phrase
-    écrite une fois pour toutes vieillirait sans que personne ne le voie."""
+def test_la_couverture_est_comptee_et_non_supposee():
+    """Le nombre affiché vient du corpus réel. Une phrase écrite une fois pour
+    toutes vieillirait sans que personne ne le voie — et c'est justement ce qui
+    vient d'arriver : la réserve annonçait « les analyses sont en français »
+    alors qu'elles ne le sont plus."""
     pub = _fiche()
     cachee = dict(_fiche(id="essai-c2"), statut="a_verifier")
     lg = V.langues([pub, cachee])
-    assert lg["total"] == 1 and lg["analyses"] == 1
-    assert "1 analyses" in lg["dit_fr"] or "1 analyse" in lg["dit_fr"]
-    assert "1 critical readings" in lg["dit_en"]
+    assert lg["total"] == 1 and lg["analyses_total"] == 1
+    # `_fiche()` n'a pas de colonne anglaise : elle compte donc pour non
+    # traduite, et la phrase le dit plutôt que d'arrondir.
+    assert lg["analyses_traduites"] == 0
+    assert lg["complet"] is False
+    assert "1 analyses" in lg["dit_fr"] or "0 des 1" in lg["dit_fr"]
 
 
-def test_la_reserve_dit_pourquoi_elle_ne_traduit_pas():
-    """Elle ne se contente pas de constater : elle doit nommer la raison, qui
-    est la promesse même du site. « Non traduit » sans motif se lit comme un
-    chantier en retard."""
+def test_une_fiche_traduite_a_moitie_ne_compte_pas_pour_traduite():
+    """Une fiche dont la lecture serait anglaise et l'incertitude française est
+    PIRE qu'une fiche entièrement française : le lecteur, ayant lu deux
+    paragraphes dans sa langue, prend le troisième pour une citation et ne le
+    lit pas."""
+    moitie = dict(_fiche(), lecture_en="A reading.", portee_en="A scope.")
+    assert V._traduite(moitie) is False
+    entiere = dict(moitie, incertitude_en="What is not known.")
+    assert V._traduite(entiere) is True
+    lg = V.langues([entiere])
+    assert lg["complet"] is True and lg["analyses_traduites"] == 1
+
+
+def test_la_promesse_de_ne_pas_traduire_par_machine_tient_dans_les_deux_cas():
+    """Ce qui a changé, c'est que les gabarits anglais existent. Ce qui n'a pas
+    changé, c'est POURQUOI : aucune traduction automatique, ni pour combler un
+    manque, ni pour aller plus vite. La phrase doit le dire que la couverture
+    soit complète ou non — c'est dans le second cas qu'elle sert le plus, parce
+    que c'est là qu'on serait tenté."""
+    for corpus in ([_fiche()],
+                   [dict(_fiche(), lecture_en="A.", portee_en="B.",
+                         incertitude_en="C.")]):
+        lg = V.langues(corpus)
+        assert "traduction automatique" in lg["dit_fr"], lg["dit_fr"]
+        assert "machine translation" in lg["dit_en"], lg["dit_en"]
+
+
+def test_une_couverture_incomplete_nomme_les_sources_en_cause():
+    """« 43 sur 98 » ne dit pas quoi réparer. La source manquante désigne le
+    collecteur dont les gabarits anglais restent à écrire."""
     lg = V.langues([_fiche()])
-    assert "machine translation" in lg["dit_en"]
-    assert "traduction automatique" in lg["dit_fr"]
-    assert "MITRE" in lg["dit_en"] and "MITRE" in lg["dit_fr"]
+    assert lg["manquantes_par_source"], lg
+    cle = list(lg["manquantes_par_source"])[0]
+    assert cle in lg["dit_fr"] and cle in lg["dit_en"]
 
 
 def test_la_reserve_est_servie_avec_le_referentiel():
@@ -151,7 +182,10 @@ def test_aucune_traduction_anglaise_ne_recopie_le_francais():
     paires = re.findall(r'^\s*"([a-z][\w.]*)":\s*\[\s*"((?:[^"\\]|\\.)*)"\s*,\s*'
                         r'"((?:[^"\\]|\\.)*)"\s*\]', d, re.M)
     assert len(paires) > 80, "le dictionnaire n'a pas été lu : %d" % len(paires)
-    ADMIS = {"or.retour", "or.marque", "f.horizon"}
+    # « source(s) » s'écrit pareil dans les deux langues, parenthèse de
+    # pluriel comprise. L'inscrire ici est un geste conscient : la règle
+    # continue de tomber pour tout ce qui aurait dû être traduit.
+    ADMIS = {"or.retour", "or.marque", "f.horizon", "br.sources"}
     identiques = sorted(c for c, fr, en in paires if fr == en and c not in ADMIS)
     assert not identiques, identiques
 

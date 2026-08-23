@@ -68,12 +68,14 @@
     "g-site": '<path d="m3 10.5 9-7 9 7"/><path d="M5.5 9v11.5h13V9"/><path d="M10 20.5v-6h4v6"/>',
     "g-sections": '<path d="M4 5.5h16"/><path d="M7 10h13"/><path d="M7 14.5h13"/><path d="M7 19h9"/><path d="M4.2 10h.01"/><path d="M4.2 14.5h.01"/><path d="M4.2 19h.01"/>',
     "g-legende": '<circle cx="7.5" cy="8" r="3"/><circle cx="7.5" cy="16.5" r="3"/><path d="M13.5 8h7"/><path d="M13.5 16.5h7"/>',
+    "g-analyses": '<path d="M4 6.5h7"/><path d="M7.5 6.5v11"/><path d="M13 17.5h7"/><path d="M16.5 6.5v11"/><path d="M4 17.5h3.5"/><path d="M16.5 6.5H20"/>',
     /* Les rubriques de l'accueil — mêmes identifiants que dans index.html */
     "r-dossiers": '<path d="M3.5 6.5h6l1.6 2.2h9.4v9.8H3.5z"/><path d="M3.5 11h17"/>',
     "r-une": '<path d="M13 3 4.5 13.6h6L10 21l8.5-10.6h-6z"/>',
     "r-fil": '<path d="M4 6.5h16"/><path d="M4 12h16"/><path d="M4 17.5h10"/>',
     "r-pistes": '<path d="M6 20.5V9"/><path d="M6 9c4-3 8 3 12 0V4c-4 3-8-3-12 0z"/>',
     "r-sources": '<path d="M5 4.5h9l5 5v10H5z"/><path d="M14 4.5v5h5"/><path d="M8.5 13h7"/><path d="M8.5 16h4.5"/>',
+    "r-brancher": '<path d="M8 3.5v6"/><path d="M16 3.5v6"/><path d="M5.5 9.5h13v3a6.5 6.5 0 0 1-13 0z"/><path d="M12 19v1.5"/>',
     /* Les rubriques de la fiche — posées par `fiche.js` */
     "r-croisement": '<circle cx="8.5" cy="8.5" r="4.8"/><circle cx="15.5" cy="15.5" r="4.8"/><path d="m11.6 11.6 1 1"/>',
     "r-voisinage": '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.2V12l3.2 2"/>',
@@ -303,6 +305,14 @@
       h += groupe("legende", t("bl.legende"), legende());
     }
 
+    /* LA LANGUE DES ANALYSES. Posée ici et non dans l'oreille : deux bascules
+       côte à côte se confondent, et celle-ci demande une phrase pour dire ce
+       qu'elle règle. `langue.js` la remplit — la barre réserve la place, comme
+       elle le fait pour l'état du corpus. */
+    if (hote.hasAttribute("data-barre-analyses")) {
+      h += groupe("analyses", t("an.titre"), '<div data-analyses></div>');
+    }
+
     /* CE QUE LE SITE GARDE DE VOUS, à un clic de toutes les pages. Une
        politique de confidentialité qu'on ne trouve qu'au pied de l'accueil
        n'est pas consultée ; celle-ci dit un inventaire court, et c'est
@@ -312,6 +322,11 @@
 
     h += "</nav>";
     hote.innerHTML = h;
+    /* LA COMMANDE EST REMONTÉE APRÈS CHAQUE RECONSTRUCTION. La barre se
+       réécrit à chaque bascule de langue ; sans cela, les deux boutons
+       resteraient là mais ne répondraient plus — le pire des états. */
+    if (window.L && window.L.appliquer) window.L.appliquer(hote);
+    if (window.L && window.L.monterAnalyses) window.L.monterAnalyses();
     suivreCompteurs();
     suivreLecture(secs);
     var x = $("bl-x");

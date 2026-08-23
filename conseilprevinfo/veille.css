@@ -1248,3 +1248,63 @@ html.vp-ouvert .fl{bottom:calc(var(--vp-h,120px) + 14px)}
   margin-bottom:16px}
 .fi-retour{margin-top:26px;font-family:var(--fix);font-size:12px;
   letter-spacing:.06em}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LA LANGUE DES ANALYSES
+
+   POURQUOI UN SECOND RÉGLAGE, ET POURQUOI PAS DANS L'OREILLE. Deux bascules
+   FR/EN côte à côte se confondent : le lecteur en actionne une pour l'autre.
+   Celle-ci vit dans la barre, sous un intitulé et une phrase qui disent ce
+   qu'elle règle — et si elle suit l'interface ou si le lecteur l'a fixée.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.an-t{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin:0 0 6px;font-family:var(--serif);font-size:13.5px;color:var(--encre2);
+}
+/* La bascule reprend le groupe de l'oreille, mais sur fond clair : les
+   couleurs y sont celles de l'encre, pas celles du papier. */
+.an-t .lg-grp{border-color:var(--filet2);flex:none}
+.an-t .lg{color:var(--sourd)}
+.an-t .lg:hover{color:var(--encre);background:var(--papier3)}
+.an-t .lg-on{background:var(--encre);color:var(--papier);font-weight:500}
+.an-t .lg:focus-visible{outline:2px solid var(--bleu);outline-offset:-2px}
+.an-d{margin:0;font-size:11px;line-height:1.45;color:var(--sourd)}
+
+/* LE REPÈRE POSÉ SUR UNE FICHE DONT L'ANALYSE N'A PAS PU SUIVRE. Le bandeau
+   de tête annonce la réserve pour tout le corpus ; il ne dit pas LAQUELLE des
+   soixante cartes à l'écran est concernée. Sans ce repère, un lecteur
+   anglophone tombe sur un paragraphe français au milieu de la page et en
+   conclut que le site est cassé. */
+.an-r{
+  margin:0 0 10px;padding:6px 10px;font-size:11.5px;line-height:1.45;
+  color:var(--ambre);border-left:2px dashed var(--ambre);
+  background:color-mix(in srgb,var(--ambre) 5%,transparent);
+}
+.fiche.an-repli{border-left:3px solid var(--ambre)}
+
+/* ── CE QUE CE SITE NE LIT PAS ENCORE ─────────────────────────────────────
+   GROUPÉ PAR NATURE D'OBSTACLE, et c'est tout le point : « bloqué par le
+   réseau de l'environnement » et « licence commerciale requise » ne se
+   règlent pas pareil. Le premier se règle en déployant, le second demande un
+   contrat. Pêle-mêle, la liste laisserait croire qu'un développeur peut tout
+   brancher. */
+.brancher{display:flex;flex-direction:column;gap:22px}
+.brg{border-left:3px solid var(--ambre);padding-left:15px}
+.brg-t{
+  display:flex;align-items:baseline;gap:9px;margin:0 0 5px;
+  font-family:var(--fix);font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ambre);
+}
+.brg-t i{font-style:normal;color:var(--sourd2);letter-spacing:.04em;
+  font-variant-numeric:tabular-nums}
+.brg-d{margin:0 0 13px;font-size:12.5px;line-height:1.6;color:var(--sourd)}
+.brs{margin:0 0 12px;padding-bottom:12px;
+  border-bottom:1px dotted var(--filet2)}
+.brs:last-child{border-bottom:0;padding-bottom:0;margin-bottom:0}
+.brs b{font-family:var(--serif);font-size:16px;color:var(--encre)}
+.brs-p{margin:3px 0 0;font-size:13px;line-height:1.55;color:var(--encre2)}
+.brs-o{margin:6px 0 0;font-size:12.5px;line-height:1.55;color:var(--sourd)}
+/* CE QU'IL FAUDRAIT — la seule ligne qui transforme un mur en décision. */
+.brs-f{margin:6px 0 0;font-size:12.5px;line-height:1.55;color:var(--encre2);
+  padding-left:11px;border-left:2px solid var(--vert)}

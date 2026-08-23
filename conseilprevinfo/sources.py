@@ -99,6 +99,7 @@ SOURCES = {
                       "known_exploited_vulnerabilities.json",
         "format": "json",
         "licence": "Domaine public (œuvre du gouvernement fédéral américain)",
+        "licence_en": "Public domain (work of the US federal government)",
         "cadence": "quotidienne",
         "couvre": "Vulnérabilités dont l'exploitation en conditions réelles est "
                   "AVÉRÉE — pas une liste de failles théoriques. Porte l'éditeur, "
@@ -122,6 +123,7 @@ SOURCES = {
                       "attack-stix-data/master/ics-attack/ics-attack.json",
         "format": "stix",
         "licence": "MITRE ATT&CK Terms of Use — réutilisation libre avec citation",
+        "licence_en": "MITRE ATT&CK Terms of Use — free reuse with attribution",
         "cadence": "quelques versions par an",
         "couvre": "Les techniques d'attaque OBSERVÉES sur systèmes industriels, "
                   "les groupes d'attaquants qui les emploient, les logiciels "
@@ -145,6 +147,7 @@ SOURCES = {
                       "main/cves/delta.json",
         "format": "json",
         "licence": "CVE Program Terms of Use — redistribution libre",
+        "licence_en": "CVE Program Terms of Use — free redistribution",
         "cadence": "continue",
         "couvre": "L'enregistrement officiel des vulnérabilités publiées, avec "
                   "leur descriptif et l'autorité qui les a attribuées.",
@@ -163,6 +166,7 @@ SOURCES = {
                       "master/owid-energy-data.csv",
         "format": "csv",
         "licence": "CC BY 4.0",
+        "licence_en": "CC BY 4.0",
         "cadence": "annuelle, avec révisions",
         "couvre": "Production, consommation et mix électrique par pays et par "
                   "année — le substrat de tout calcul d'intensité carbone et "
@@ -183,6 +187,7 @@ SOURCES = {
                       "master/owid-co2-data.csv",
         "format": "csv",
         "licence": "CC BY 4.0",
+        "licence_en": "CC BY 4.0",
         "cadence": "annuelle",
         "couvre": "Émissions par pays, par secteur et par habitant, sur série "
                   "longue.",
@@ -202,6 +207,7 @@ SOURCES = {
         "format": "yaml",
         "licence": "Dépôt sous licence libre ; les données temps réel, elles, "
                    "relèvent d'un service commercial",
+        "licence_en": "Repository under an open licence; the real-time data, however, falls under a commercial service",
         "cadence": "continue",
         "couvre": "Le paramétrage par zone électrique : facteurs d'émission "
                   "retenus, capacités, sources déclarées.",
@@ -220,6 +226,7 @@ SOURCES = {
                       "main/dist/ATLAS.yaml",
         "format": "yaml",
         "licence": "MITRE ATLAS Terms of Use — réutilisation libre avec citation",
+        "licence_en": "MITRE ATLAS Terms of Use — free reuse with attribution",
         "cadence": "quelques versions par an",
         "couvre": "Les attaques OBSERVÉES contre des systèmes d'intelligence "
                   "artificielle en production : études de cas datées avec leur "
@@ -259,6 +266,7 @@ SOURCES = {
         "format": "markdown",
         "licence": "Creative Commons BY-SA 4.0 — réutilisation libre avec "
                    "citation et partage à l'identique",
+        "licence_en": "Creative Commons BY-SA 4.0 — free reuse with attribution and share-alike",
         "cadence": "une édition majeure environ tous les dix-huit mois",
         "couvre": "Les dix familles de risques que la communauté OWASP retient "
                   "pour une application bâtie sur un modèle de langage : "
@@ -292,6 +300,7 @@ SOURCES = {
                       "main/README.md",
         "format": "texte",
         "licence": "Apache 2.0 (code) ; résultats publiés",
+        "licence_en": "Apache 2.0 (code); published results",
         "cadence": "continue",
         "couvre": "L'évaluation reproductible de modèles de fondation sur des "
                   "tâches déclarées, avec le protocole.",
@@ -311,6 +320,7 @@ SOURCES = {
                       "master/README.md",
         "format": "texte",
         "licence": "Apache 2.0",
+        "licence_en": "Apache 2.0",
         "cadence": "deux campagnes par an",
         "couvre": "Les performances d'inférence mesurées selon un protocole "
                   "commun — le seul terrain où des matériels se comparent sans "
@@ -326,24 +336,101 @@ SOURCES = {
 # Elles sont écrites ici plutôt que tues : le jour où le réseau s'ouvre, la
 # liste de ce qu'il reste à brancher est déjà faite. Aucune ne doit être
 # citée par une fiche tant que `sonder()` ne l'a pas confirmée.
+#: LES DEUX NATURES D'OBSTACLE — et pourquoi les distinguer.
+#:
+#: Elles se lisaient pareil, et ce n'est pas pareil du tout. « Refusé par la
+#: politique réseau de l'environnement de conception » veut dire : cela
+#: marchera en production, il suffit de déployer. « Licence commerciale
+#: requise » veut dire : cela ne marchera JAMAIS sans contrat, quel que soit
+#: l'hébergement, et aucune quantité de code n'y changera rien. Un lecteur —
+#: ou le cabinet lui-même dans six mois — doit pouvoir trier d'un coup d'œil
+#: ce qui est un chantier de ce qui est une dépense.
+NATURES_OBSTACLE = {
+    "environnement": {
+        "nom": "Bloqué ici, pas ailleurs",
+        "nom_en": "Blocked here, not elsewhere",
+        "dit": "La politique réseau de l'environnement de conception refuse "
+               "cet hôte. Rien à décider : la source se branche au "
+               "déploiement, et le bouton « Sonder » du registre le confirme "
+               "en un clic.",
+        "dit_en": "The design environment's network policy refuses this host. "
+                  "Nothing to decide: the source connects on deployment, and "
+                  "the register's “Probe” button confirms it in one click."},
+    "licence": {
+        "nom": "Contrat commercial requis",
+        "nom_en": "Commercial contract required",
+        "dit": "Le contenu existe et se lit, mais sa redistribution demande "
+               "une licence payante. Ce site cite la licence de chaque source "
+               "sous chaque fiche : publier sans licence reviendrait à écrire "
+               "une mention fausse à l'endroit précis où il promet de dire "
+               "vrai. C'est une décision du cabinet, pas un travail de "
+               "développement.",
+        "dit_en": "The content exists and can be read, but redistributing it "
+                  "requires a paid licence. This site cites each source's "
+                  "licence under every entry: publishing without one would "
+                  "mean writing a false notice at the exact place where it "
+                  "promises to tell the truth. That is a decision for the "
+                  "firm, not a development task."},
+    "format": {
+        "nom": "Rien de lisible par machine",
+        "nom_en": "Nothing machine-readable",
+        "dit": "La source ne publie ni flux, ni interface, ni fichier stable. "
+               "La lire supposerait de découper des pages HTML, ce qui casse "
+               "à la première refonte et sans prévenir.",
+        "dit_en": "The source publishes no feed, no interface and no stable "
+                  "file. Reading it would mean scraping HTML pages, which "
+                  "breaks at the first redesign and without warning."},
+}
+ORDRE_OBSTACLES = ["environnement", "licence", "format"]
+
 A_BRANCHER = [
+    # ── CE QUI TIENT À UNE LICENCE, ET NON À DU CODE ──────────────────────
+    # Le cabinet a demandé de brancher les dépêches AFP et Reuters. Les deux
+    # sont ici, avec ce qu'il faudrait — et ce n'est pas du développement.
+    {"cle": "afp", "nom": "AFP — dépêches",
+     "nature_obstacle": "licence",
+     "pourquoi": "L'agence couvre les quatre thèmes de ce site, et elle date "
+                 "ses dépêches à la minute — ce qu'aucune source publique ne "
+                 "fait sur la cyber industrielle.",
+     "obstacle": "AFP ne publie aucun flux libre. L'accès passe par AFP Forum "
+                 "ou l'API AFP, sous contrat commercial, avec un régime de "
+                 "citation et une durée de conservation contractuels. Sans ce "
+                 "contrat, republier une dépêche est une contrefaçon — et "
+                 "afficher « licence : libre » sous la fiche serait un "
+                 "mensonge à l'endroit exact où ce site promet de dire vrai.",
+     "ce_qu_il_faudrait": "Un contrat AFP, une clé d'API, et la mention "
+                          "contractuelle portée par chaque fiche. Le "
+                          "collecteur, lui, est du travail ordinaire."},
+    {"cle": "reuters", "nom": "Reuters — dépêches",
+     "nature_obstacle": "licence",
+     "pourquoi": "Même couverture, et une antériorité utile sur les "
+                 "incidents industriels signalés hors d'Europe.",
+     "obstacle": "Reuters a retiré ses flux RSS publics ; il ne reste que "
+                 "Reuters Connect, sous contrat. La page « rssfeed » citée "
+                 "un peu partout ne répond plus. Comme pour l'AFP, republier "
+                 "sans licence reviendrait à écrire une mention fausse.",
+     "ce_qu_il_faudrait": "Un contrat Reuters Connect et ses identifiants. "
+                          "Aucune quantité de code n'y supplée."},
+
+    # ── CE QUI TIENT À CET ENVIRONNEMENT, ET SE BRANCHE AU DÉPLOIEMENT ────
     {"cle": "data_europa", "nom": "data.europa.eu — portail européen",
+     "nature_obstacle": "environnement",
      "pourquoi": "Le point d'entrée des jeux publics de l'Union.",
      "obstacle": "Refusé (403) par la politique réseau de l'environnement de "
                  "conception. À rebrancher en production."},
-    {"cle": "data_gouv_fr", "nom": "data.gouv.fr",
+    {"cle": "data_gouv_fr", "nature_obstacle": "environnement", "nom": "data.gouv.fr",
      "pourquoi": "Jeux publics français, dont l'énergie et les réseaux.",
      "obstacle": "Refusé (403) dans cet environnement."},
-    {"cle": "ember", "nom": "Ember — Electricity Data",
+    {"cle": "ember", "nature_obstacle": "environnement", "nom": "Ember — Electricity Data",
      "pourquoi": "Intensité carbone de l'électricité, séries mensuelles.",
      "obstacle": "API refusée (403) dans cet environnement."},
-    {"cle": "enisa", "nom": "ENISA — Threat Landscape",
+    {"cle": "enisa", "nature_obstacle": "environnement", "nom": "ENISA — Threat Landscape",
      "pourquoi": "Panorama européen des menaces, annuel.",
      "obstacle": "Non sondé : lecture de page bloquée dans cet environnement."},
-    {"cle": "cert_fr", "nom": "CERT-FR (ANSSI) — avis et alertes",
+    {"cle": "cert_fr", "nature_obstacle": "environnement", "nom": "CERT-FR (ANSSI) — avis et alertes",
      "pourquoi": "Les avis qui engagent l'autorité française.",
      "obstacle": "Non sondé : lecture de page bloquée dans cet environnement."},
-    {"cle": "eur_lex", "nom": "EUR-Lex",
+    {"cle": "eur_lex", "nature_obstacle": "environnement", "nom": "EUR-Lex",
      "pourquoi": "Le texte faisant foi des règlements cités (AI Act, NIS2, EED).",
      "obstacle": "Non sondé : lecture de page bloquée dans cet environnement."},
 ]
@@ -474,6 +561,11 @@ def sante():
         "sources": len(SOURCES),
         "verifiees": len(verifiees),
         "a_brancher": len(A_BRANCHER),
+        # LE DÉTAIL COMPTE PLUS QUE LE TOTAL : « huit sources à brancher » ne
+        # dit pas si c'est un après-midi de travail ou deux contrats à signer.
+        "a_brancher_par_obstacle": {
+            n: sum(1 for x in A_BRANCHER if x.get("nature_obstacle") == n)
+            for n in ORDRE_OBSTACLES},
         "par_nature": {n: sum(1 for s in SOURCES.values() if s["nature"] == n)
                        for n in ORDRE_NATURES},
         "par_sujet": {s: sum(1 for x in SOURCES.values() if s in x["sujets"])
@@ -482,6 +574,11 @@ def sante():
         "portee": "Registre des sources admises. Une fiche qui n'en cite "
                   "aucune n'est pas publiable — le moteur la refuse.",
     }
+
+
+def obstacles():
+    """Les natures d'obstacle, servies comme le reste du vocabulaire."""
+    return [dict(NATURES_OBSTACLE[c], cle=c) for c in ORDRE_OBSTACLES]
 
 
 def _verifier():
@@ -512,6 +609,16 @@ def _verifier():
             raise RuntimeError(
                 "sources : %s ne dit pas assez ce qu'elle NE couvre PAS — une "
                 "source sans limite écrite sera citée hors de son domaine" % cle)
+    for x in A_BRANCHER:
+        # UNE ENTRÉE SANS NATURE D'OBSTACLE EST LA PORTE OUVERTE au retour de
+        # l'indistinction : « bloqué ici » et « contrat requis » se liraient à
+        # nouveau pareil, et la liste redeviendrait un fourre-tout.
+        if x.get("nature_obstacle") not in NATURES_OBSTACLE:
+            raise RuntimeError("sources : %s n'a pas de nature d'obstacle"
+                               % x.get("cle"))
+        if x["nature_obstacle"] == "licence" and not x.get("ce_qu_il_faudrait"):
+            raise RuntimeError("sources : %s est bloquée par une licence sans "
+                               "dire ce qu'il faudrait" % x["cle"])
 
     if set(ORDRE_NATURES) != set(NATURES):
         raise RuntimeError("sources : l'ordre des natures ne les couvre pas")

@@ -80,7 +80,7 @@ Depuis votre poste, aucune session nécessaire :
       https://github.com/c79942474-cyber/conseilprevinfo
     git push -u origin master
 
-`HISTORIQUE.bundle` porte **l'historique git complet — dix-neuf commits**,
+`HISTORIQUE.bundle` porte **l'historique git complet — vingt et un commits**,
 messages compris. Il ne s'agit donc pas de repartir d'une copie à plat : le
 détail des corrections, des mesures et des défauts constatés vit dans ces
 messages, et c'est souvent là qu'est l'information.
@@ -159,11 +159,35 @@ suivent les filtres en cours, chaque axe compté hors du sien pour qu'on puisse
 toujours changer d'avis. Un menu qui n'a rien à proposer le dit au lieu de se
 taire, et les pays portent leur nom plutôt que leur code ISO.
 
-Une **bascule FR/EN** traduit toute l'interface — écrite à la main, ce site
-n'employant aucune traduction automatique nulle part. Elle **déclare ce
-qu'elle ne traduit pas** : les lectures critiques, dérivées de gabarits
-français, et les titres, qui portent la langue de leur source. Le nombre
-affiché avec cette réserve est mesuré, pas écrit.
+Une **bascule FR/EN** traduit l'interface, et **les analyses existent
+désormais en anglais** : les gabarits de dérivation portent leurs deux colonnes
+côte à côte dans `gabarits.py`, écrites à la main. Ce site n'emploie aucune
+traduction automatique nulle part, et les deux colonnes ne peuvent pas
+diverger — la logique qui choisit les phrases ne s'écrit qu'une fois.
+
+**La langue des analyses est un réglage séparé de celle de l'interface** : un
+francophone qui travaille en anglais veut souvent l'interface en anglais et les
+analyses dans leur version d'origine ; un anglophone qui reçoit un lien veut
+l'inverse. Le défaut suit l'interface, un clic explicite le fixe. Ce qui vient
+de la SOURCE — titres d'origine, résumés, noms de techniques — garde sa langue.
+La couverture est **mesurée, pas déclarée**, et une fiche qui n'a pas pu suivre
+le dit sur elle-même. Le document emporté est dans la langue où il a été lu,
+intertitres, dates et licence compris, et il dit sa langue en pied.
+
+**Chaque source est relue au rythme auquel elle change** — un quart d'heure
+pour le catalogue des vulnérabilités exploitées, vingt-quatre pour les
+référentiels MITRE, qui pèsent neuf mégaoctets et bougent quelques fois par an.
+Mesuré : un tour complet passe de 9,4 s à 1,4 s, ce qui permet au site de se
+rafraîchir toutes les cinq minutes au lieu de trente sans devenir un visiteur
+impoli. Le journal dit, source par source, si elle a été **relue** ou si l'on
+n'y est pas retourné.
+
+Le registre dit aussi **ce que ce site ne lit pas encore**, en distinguant deux
+natures d'obstacle : ce qui se branchera au déploiement, et ce qui demande un
+contrat commercial. **Les dépêches AFP et Reuters sont dans la seconde
+catégorie** — aucune des deux n'a de flux libre, et publier sans licence
+reviendrait à écrire une mention fausse à l'endroit précis où ce site promet de
+dire vrai.
 
 ### Ce que le site garde de vous — et ce qu'il ne garde pas
 
@@ -189,7 +213,7 @@ que rien ne le signale. Politique de contenu fermée sur `default-src 'self'`,
 sans `unsafe-inline` — ce qui a demandé de retirer les douze attributs `style`
 dispersés dans les pages et le JavaScript.
 
-**294 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
+**326 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
 gardent les règles éditoriales, et chacun est écrit pour tomber le jour où
 quelqu'un les assouplira. Chaque règle nouvelle a été confrontée à une
 **mutation du code qu'elle garde** — et cinq de ces mutations ont révélé des
@@ -197,8 +221,11 @@ contrôles trop faibles, qui ont été resserrés. Un contrôle écrit trop STRI
 aussi été corrigé plutôt que contourné : il supprimait la distinction qu'il
 était censé protéger.
 
-### Les dix-neuf commits du bundle
+### Les vingt et un commits du bundle
 
+    0541ce3  Chaque source relue à SA cadence, et le registre dit ce qu'il
+             ne lit pas
+    f12c4e6  Les analyses existent en anglais, et le lecteur choisit — ou pas
     3642a69  Le papier passe au couché brillant, et le menu prend les
              caractères du journal
     65be8bd  Une manchette, des intertitres de portée, et la fiche composée

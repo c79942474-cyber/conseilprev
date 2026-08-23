@@ -325,9 +325,17 @@ def test_deux_lectures_de_la_meme_donnee_rendent_le_meme_texte():
          "product": "SIMATIC", "vulnerabilityName": "Essai",
          "dateAdded": "2026-02-01", "dueDate": "2026-03-01",
          "knownRansomwareCampaignUse": "Known"}
-    a = I._lecture_kev(e, True, "éditeur au répertoire", date(2026, 8, 22))
-    b = I._lecture_kev(e, True, "éditeur au répertoire", date(2026, 8, 22))
-    assert a == b and len(a) > 200
+    motif = ("éditeur au répertoire", "vendor in the directory")
+    a = I._lecture_kev(e, True, motif, date(2026, 8, 22))
+    b = I._lecture_kev(e, True, motif, date(2026, 8, 22))
+    # LA LECTURE REND DEUX LANGUES : la reproductibilité vaut pour les deux,
+    # et pas seulement pour la colonne qu'on regarde.
+    assert a == b
+    assert len(a) == 2 and all(len(x) > 200 for x in a)
+    # ET LES DEUX SUIVENT LES MÊMES CONDITIONS. Une lecture française à quatre
+    # phrases en face d'une anglaise à trois voudrait dire que la logique de
+    # choix s'est dédoublée — ce que `gabarits.Deux` existe pour empêcher.
+    assert a[0].count(".") == a[1].count(".")
 
 
 # ── 7. Le registre ne peut plus annoncer ce qu'il ne lit pas ──────────────
@@ -431,7 +439,7 @@ def _owasp_reels():
     vert, et c'est exactement ainsi qu'une vraie panne finit ignorée.
     """
     if not _OWASP_DOCS:
-        for fichier, _ in I.OWASP_LLM:
+        for fichier, _, _en in I.OWASP_LLM:
             r = I._lire(I._OWASP_BASE + fichier + ".md", delai=25)
             if not r["ok"]:
                 import pytest
@@ -602,7 +610,7 @@ def test_chaque_fiche_owasp_dit_qu_elle_n_est_pas_un_incident():
     un risque » sont deux énoncés différents, qu'un empilement confondrait.
     ATLAS et OWASP se retrouvent dans la même rubrique : sans cette phrase, le
     lecteur lit dix incidents de plus."""
-    fichier, _ = I.OWASP_LLM[0]
+    fichier = I.OWASP_LLM[0][0]
     r = I.collecter_owasp_llm(
         limite=1,
         documents={fichier: _OWASP_MODELE % "Common Examples of Risks"})
@@ -941,3 +949,44 @@ def test_l_api_des_facettes_lit_les_memes_filtres_que_le_fil():
     for n in noms - {"q"}:
         assert 'request.args.get("%s")' % n in api, n
     assert "V.facettes(corpus(), **_filtres_demandes())" in src
+
+
+# ── Les sources qu'on ne peut pas brancher, et pourquoi ───────────────────
+
+def test_chaque_source_a_brancher_dit_la_NATURE_de_son_obstacle():
+    """« Bloqué par la politique réseau de l'environnement » et « licence
+    commerciale requise » se lisaient pareil, et ce n'est pas pareil du tout :
+    le premier se règle en déployant, le second demande un contrat. Un lecteur
+    — ou le cabinet dans six mois — doit trier d'un coup d'œil ce qui est un
+    chantier de ce qui est une dépense."""
+    for x in SRC.A_BRANCHER:
+        assert x.get("nature_obstacle") in SRC.NATURES_OBSTACLE, x.get("cle")
+        assert x.get("obstacle"), x.get("cle")
+
+
+def test_une_source_bloquee_par_une_licence_dit_ce_qu_il_faudrait():
+    """Sans cela, « licence requise » est un mur sans porte. Avec, c'est une
+    décision chiffrable."""
+    payantes = [x for x in SRC.A_BRANCHER
+                if x["nature_obstacle"] == "licence"]
+    assert payantes, "aucune source à licence déclarée"
+    for x in payantes:
+        assert x.get("ce_qu_il_faudrait"), x["cle"]
+
+
+def test_les_depeches_d_agence_sont_declarees_et_non_branchees():
+    """DEMANDE DU CABINET, ET RÉPONSE ÉCRITE. AFP et Reuters couvrent les
+    quatre thèmes, mais ni l'un ni l'autre ne publie de flux libre : AFP passe
+    par un contrat, Reuters a retiré ses flux RSS publics. Ce site cite la
+    licence de chaque source SOUS CHAQUE FICHE — publier sans licence
+    reviendrait à écrire une mention fausse à l'endroit précis où il promet de
+    dire vrai. Elles sont donc au registre des sources à brancher, avec le
+    motif, plutôt qu'absentes sans explication."""
+    cles = {x["cle"] for x in SRC.A_BRANCHER}
+    assert {"afp", "reuters"} <= cles, sorted(cles)
+    for cle in ("afp", "reuters"):
+        x = next(y for y in SRC.A_BRANCHER if y["cle"] == cle)
+        assert x["nature_obstacle"] == "licence"
+    # Et surtout : elles ne sont PAS au registre des sources admises, où leur
+    # présence autoriserait une fiche à les citer.
+    assert "afp" not in SRC.SOURCES and "reuters" not in SRC.SOURCES

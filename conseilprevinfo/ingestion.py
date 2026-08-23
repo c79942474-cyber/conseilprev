@@ -26,14 +26,17 @@ libre ; seules quelques adresses passent. Les collecteurs ci-dessous ONT été
 exécutés contre les vraies sources depuis cet environnement. Ceux qui
 dépendent d'adresses refusées sont écrits mais non exécutés, et le disent.
 """
+import copy
 import json
 import re
 import ssl
+import time
 import urllib.error
 import urllib.request
 from datetime import date, datetime, timezone
 
 import sources as SRC
+import gabarits as GB
 import veille as V
 
 VERSION = "2026.08.22"
@@ -81,6 +84,31 @@ def _fr_date(iso):
     return "%d %s %d" % (d.day, _MOIS[d.month - 1], d.year)
 
 
+#: Les mois anglais, en regard des français juste au-dessus. Une date ISO
+#: dans un texte anglais signale un contenu non relu tout autant qu'en
+#: français, et « 21 août 2026 » au milieu d'une phrase anglaise plus encore.
+_MOIS_EN = ("January", "February", "March", "April", "May", "June", "July",
+            "August", "September", "October", "November", "December")
+
+
+def _en_date(iso):
+    """« 2026-08-21 » → « 21 August 2026 ». La forme britannique, sans virgule
+    ni ordinal : c'est celle des normes et des textes réglementaires que ce
+    corpus cite, et elle ne se confond avec aucune autre — « 08/21 » et
+    « 21/08 » ne se distinguent pas à l'œil."""
+    try:
+        d = date.fromisoformat(str(iso)[:10])
+    except (TypeError, ValueError):
+        return str(iso)
+    return "%d %s %d" % (d.day, _MOIS_EN[d.month - 1], d.year)
+
+
+def _date_deux(iso):
+    """La même date dans les deux langues, en un couple — ce que les gabarits
+    savent recevoir."""
+    return (_fr_date(iso), _en_date(iso))
+
+
 def _lire(url, delai=60, octets_max=40_000_000):
     """Télécharge, ou dit pourquoi il n'a pas pu. Jamais d'exception nue :
     une collecte qui échoue est une information d'exploitation, pas un
@@ -119,7 +147,7 @@ def _industriel(vendeur, produit):
     v = str(vendeur or "").strip().lower()
     p = str(produit or "").strip().lower()
     if v in EDITEURS_INDUSTRIELS:
-        return True, "éditeur au répertoire industriel du cabinet"
+        return True, GB.deux("kev.motif.repertoire")
     for indice in sorted(INDICES_PRODUIT_INDUSTRIEL):
         # LE SIGLE SUIVI D'UN NUMÉRO EST UNE RÉFÉRENCE DE MODÈLE, pas un mot.
         # Les caméras « D-Link DCS-2530L » entraient au périmètre industriel
@@ -127,8 +155,10 @@ def _industriel(vendeur, produit):
         # « DCS » n'y est qu'un préfixe de gamme. Trois des neuf fiches
         # retenues venaient de là.
         if re.search(r"(?<![a-z0-9])%s(?![a-z0-9])(?!-\d)" % re.escape(indice), p):
-            return True, "le nom du produit porte le mot « %s »" % indice
-    return False, ""
+            return True, GB.deux("kev.motif.mot", indice)
+    # LE MOTIF EST UN COUPLE (fr, en) MÊME VIDE : son type ne change pas selon
+    # la branche, sans quoi l'appelant devrait tester avant de s'en servir.
+    return False, ("", "")
 
 
 def _lecture_kev(e, industriel, motif, aujourdhui):
@@ -137,43 +167,30 @@ def _lecture_kev(e, industriel, motif, aujourdhui):
     Chaque phrase produite ici est adossée à un champ du catalogue. Aucune
     n'ajoute d'information : elles disent ce que la donnée porte déjà, dans
     l'ordre où un exploitant doit le lire.
+
+    ELLE REND LES DEUX LANGUES, ET LA LOGIQUE DE CHOIX NE S'ÉCRIT QU'UNE FOIS.
+    Un constructeur français et un constructeur anglais tiendraient deux fois
+    le même enchaînement de conditions ; ils finiraient par ne plus retenir
+    les mêmes phrases dans les mêmes cas, et personne ne le verrait — le
+    français, lui, continuerait à marcher. `Deux` accumule dans les deux
+    colonnes en même temps.
     """
     rancon = str(e.get("knownRansomwareCampaignUse", "")).lower() == "known"
-    phrases = []
+    d = GB.Deux()
 
     if industriel:
-        phrases.append(
-            "L'éditeur relève du périmètre industriel (%s) : la faille est "
-            "donc à instruire côté OT, où le correctif ne se pose pas au "
-            "même rythme qu'en bureautique." % motif)
+        d.plus("kev.industriel", motif)
     else:
-        phrases.append(
-            "L'éditeur n'est pas au répertoire industriel du cabinet. La "
-            "faille reste à instruire si le produit est présent dans votre "
-            "chaîne — un poste d'ingénierie ou un serveur d'historisation "
-            "compte comme surface industrielle.")
+        d.plus("kev.non_industriel")
 
-    if rancon:
-        phrases.append(
-            "Elle est associée à des campagnes de rançongiciel connues : "
-            "c'est le signal le plus fort du catalogue, car il indique une "
-            "exploitation outillée et non un cas isolé.")
-    else:
-        phrases.append(
-            "Aucune campagne de rançongiciel n'y est associée à ce jour — ce "
-            "qui ne vaut pas absence d'exploitation, seulement absence "
-            "d'exploitation par ce mode opératoire.")
+    d.plus("kev.rancon" if rancon else "kev.sans_rancon")
 
     echeance = str(e.get("dueDate") or "")
     if echeance:
         depasse = echeance < aujourdhui.isoformat()
-        phrases.append(
-            "L'échéance de remédiation imposée aux agences fédérales "
-            "américaines était le %s%s. Elle ne vous oblige pas, mais elle "
-            "date le moment où le risque a été jugé non tenable par une "
-            "autorité." % (_fr_date(echeance),
-                           " — elle est dépassée" if depasse else ""))
-    return " ".join(phrases)
+        d.plus("kev.echeance", _date_deux(echeance),
+               GB.deux("kev.echeance.depasse") if depasse else ("", ""))
+    return d.rendre()
 
 
 def _impact_kev(industriel, rancon):
@@ -217,26 +234,23 @@ def collecter_kev(limite=40, depuis=None, seulement_industriel=True):
         if not cve:
             continue
 
+        lecture_fr, lecture_en = _lecture_kev(e, industriel, motif, aujourdhui)
         fiche = {
             "id": "kev-%s" % cve.lower(),
             "titre": "%s — %s %s" % (cve, e.get("vendorProject") or "",
                                      e.get("product") or ""),
+            # LE CHAPEAU EST MIXTE, ET C'EST ASSUMÉ : le nom de la
+            # vulnérabilité vient de la source — donc en anglais chez CISA —,
+            # la phrase qui le date est de nous, donc traduite.
             "chapeau": V._texte(e.get("vulnerabilityName") or "")
-                       + ". Inscrite au catalogue des vulnérabilités dont "
-                         "l'exploitation est avérée le %s." % _fr_date(ajoute),
-            "lecture": _lecture_kev(e, industriel, motif, aujourdhui),
+                       + GB.dire("kev.chapeau", "fr", _fr_date(ajoute)),
+            "chapeau_en": V._texte(e.get("vulnerabilityName") or "")
+                          + GB.dire("kev.chapeau", "en", _en_date(ajoute)),
+            "lecture": lecture_fr,
+            "lecture_en": lecture_en,
             "lecture_nature": "regle",
-            "portee": "À confronter à votre inventaire : si ce produit est "
-                      "présent, la question n'est plus s'il faut corriger "
-                      "mais quand, et par quelle mesure compensatoire d'ici "
-                      "là. Une fenêtre d'arrêt de production se demande des "
-                      "semaines à l'avance — c'est ce délai, pas le correctif, "
-                      "qui commande le calendrier.",
-            "incertitude": "Le catalogue dit qu'une exploitation existe, pas "
-                           "qu'elle vous vise, ni qu'elle atteindrait votre "
-                           "installation compte tenu de sa segmentation. "
-                           "L'absence d'un produit au catalogue ne vaut pas "
-                           "absence de faille.",
+            **GB.champs("portee", "kev.portee"),
+            **GB.champs("incertitude", "kev.incertitude"),
             "sujet": "cyber_industriel",
             # L'ÉDITEUR EST DÉCLARÉ, pas deviné plus tard depuis les
             # étiquettes : seul ce collecteur sait ce qu'est un fournisseur
@@ -365,52 +379,34 @@ def collecter_mix_electrique(annee=None, limite=None):
 
 
 def _fiche_mix(code, part, an, L, s):
-    nom = PAYS_SUIVIS[code]
+    # LE NOM DU PAYS EST BILINGUE, comme partout ailleurs sur ce site : il est
+    # interpolé dans le titre, dans le chapeau et dans les menus, et
+    # « Allemagne » au milieu d'une phrase anglaise se voit tout de suite.
+    p = V.nom_pays(code)
+    nom = (p["fr"], p["en"])
     renouv = (L.get("renewables_share_elec") or "").strip()
     fossile = round(100.0 - part, 1)
     if part >= 90:
-        lecture = ("Un mix à %.1f %% bas carbone place ce pays parmi ceux où "
-                   "l'électricité pèse peu dans l'empreinte d'exploitation "
-                   "d'un centre. L'arbitrage s'y déplace vers le carbone "
-                   "INCORPORÉ — construction et serveurs — qui devient "
-                   "majoritaire dès lors que l'usage est décarboné." % part)
+        lecture_fr, lecture_en = GB.deux("mix.haut", part)
         impact = "structurant"
     elif part >= 60:
-        lecture = ("À %.1f %% bas carbone, l'électricité reste un poste "
-                   "significatif sans être dominant. C'est la zone où le "
-                   "choix du mode de refroidissement se juge sur l'eau ET sur "
-                   "le carbone ensemble, l'un ne dominant pas l'autre." % part)
+        lecture_fr, lecture_en = GB.deux("mix.moyen", part)
         impact = "structurant"
     else:
-        lecture = ("Avec %.1f %% bas carbone — donc environ %.1f %% de "
-                   "production fossile — l'électricité domine l'empreinte "
-                   "d'exploitation. C'est aussi la configuration où le WUE de "
-                   "SOURCE s'écarte le plus du WUE de site : l'eau prélevée "
-                   "en amont pour produire le courant devient le terme "
-                   "principal, et un refroidissement sec peut y consommer "
-                   "plus d'eau qu'une tour." % (part, fossile))
+        lecture_fr, lecture_en = GB.deux("mix.bas", part, fossile)
         impact = "structurant"
 
     return V.normaliser({
         "id": "mix-elec-%s-%d" % (code.lower(), an),
-        "titre": "%s — %.1f %% d'électricité bas carbone (%d)" % (nom, part, an),
-        "chapeau": "Part de l'électricité produite sans carbone (nucléaire et "
-                   "renouvelables) dans le mix national de %s en %d%s."
-                   % (nom, an,
-                      ", dont %.1f %% de renouvelables" % float(renouv)
-                      if renouv else ""),
-        "lecture": lecture,
+        **GB.champs("titre", "mix.titre", nom, part, an),
+        **GB.champs("chapeau", "mix.chapeau", nom, an,
+                    GB.deux("mix.chapeau.renouv", float(renouv))
+                    if renouv else ("", "")),
+        "lecture": lecture_fr,
+        "lecture_en": lecture_en,
         "lecture_nature": "regle",
-        "portee": "Cette part commande l'empreinte d'exploitation à "
-                  "consommation égale, et donc l'arbitrage entre implanter "
-                  "près de la charge ou près de l'électricité propre. Elle ne "
-                  "décide pas seule : le stress hydrique, le prix et le délai "
-                  "de raccordement pèsent au moins autant.",
-        "incertitude": "Une moyenne ANNUELLE et NATIONALE. Elle ne dit rien de "
-                       "l'intensité à l'heure où tourne votre charge, ni du "
-                       "mix réellement livré par votre contrat. Un centre "
-                       "adossé à un contrat d'achat direct peut s'en écarter "
-                       "fortement, dans les deux sens.",
+        **GB.champs("portee", "mix.portee"),
+        **GB.champs("incertitude", "mix.incertitude"),
         "sujet": "datacenter",
         "technologies": ["Mix électrique", "Empreinte carbone"],
         "pays": [code],
@@ -440,6 +436,37 @@ def _fiche_mix(code, part, an, L, s):
 # La clé de gauche est la clé de source du registre — sauf `mitre_atlas_tech`,
 # qui lit la même source qu'`mitre_atlas` sous un autre angle : la
 # correspondance est donnée par SOURCE_DU_COLLECTEUR.
+# ═══════════════════════════════════════════════════════════════════════════
+#  LES CADENCES — chaque source relue au rythme auquel ELLE change
+#
+#  POURQUOI CE N'EST PAS UN RÉGLAGE D'OPTIMISATION. Le site rafraîchissait tout
+#  d'un bloc, toutes les trente minutes. Rapprocher cette cadence pour suivre
+#  l'actualité de plus près — ce qui est la demande — aurait retéléchargé à
+#  chaque tour le référentiel ATT&CK et celui d'ATLAS, soit près de neuf
+#  mégaoctets, pour des fichiers que MITRE révise quelques fois par an. Ce
+#  n'est pas une dépense de serveur : c'est de la charge prise sur des sources
+#  publiques et gratuites, qui la supportent parce que personne n'en abuse.
+#
+#  LES CADENCES SUIVENT DONC CE QUE LA SOURCE FAIT, pas ce que le site
+#  voudrait. Un catalogue de vulnérabilités exploitées bouge dans la journée ;
+#  un référentiel de tactiques bouge dans l'année ; une série énergétique
+#  annuelle bouge une fois par an. Écrire l'inverse ferait de ce site un
+#  visiteur impoli, et le ferait bannir avant longtemps.
+CADENCES = {
+    "cisa_kev": 900,               # 15 min — la source publie en journée
+    "owasp_llm": 6 * 3600,         # 6 h — une édition par an, révisions rares
+    "mitre_attack_ics": 24 * 3600,  # 24 h — quelques révisions par an, 9 Mo
+    "mitre_atlas": 24 * 3600,
+    "mitre_atlas_tech": 24 * 3600,
+    "electricity_maps": 12 * 3600,  # facteurs révisés au fil des millésimes
+    "owid_energie": 24 * 3600,      # série ANNUELLE
+}
+#: Une source sans cadence déclarée est relue à chaque tour. C'est le choix le
+#: plus prudent pour le site et le moins poli pour la source : le contrôle
+#: `test_chaque_collecteur_declare_sa_cadence` refuse donc l'oubli.
+CADENCE_DEFAUT = 900
+
+
 def _table_collecteurs(limite_kev, limite_mix):
     return (("cisa_kev", lambda: collecter_kev(limite=limite_kev)),
             ("mitre_attack_ics", lambda: collecter_attack_ics()),
@@ -455,6 +482,61 @@ def _table_collecteurs(limite_kev, limite_mix):
             ("owasp_llm", lambda: collecter_owasp_llm()))
 
 
+#: LE CACHE PAR COLLECTEUR. Il vit dans le processus, comme le corpus lui-même,
+#: et il ne garde QUE ce que le collecteur a rendu — jamais une fiche recomposée
+#: ici, sans quoi ce module deviendrait une seconde autorité sur le corpus.
+_CACHE = {}
+
+
+def _copie(r):
+    """UNE COPIE, JAMAIS L'OBJET GARDÉ.
+
+    DÉFAUT MESURÉ DÈS LE PREMIER ESSAI DES CADENCES : le corpus tombait de 98
+    à 90 fiches au deuxième tour. La cause n'était pas la collecte mais le
+    cache — il rendait les MÊMES dictionnaires, et les étapes qui suivent la
+    collecte les modifient. `_relier_atlas` pose les liens sur les fiches,
+    `completer_atlas_techniques` en ajoute d'après ce qu'OWASP nomme : au tour
+    suivant, ces fiches portaient déjà leurs liens, l'étape croyait n'avoir
+    rien à faire, et les huit techniques ajoutées la première fois ne
+    revenaient pas.
+
+    C'est le piège habituel des caches d'objets, et il est vicieux ici : rien
+    ne plante, rien ne s'affiche en rouge, le site sert simplement huit fiches
+    de moins à partir du deuxième quart d'heure. Une copie profonde coûte
+    quelques millisecondes contre neuf secondes de réseau."""
+    return dict(r, fiches=copy.deepcopy(r.get("fiches") or []))
+
+
+def _relire(nom, fn, maintenant, forcer=False):
+    """Rend (résultat, relu). `relu` dit si la source a RÉELLEMENT été
+    interrogée — c'est ce que le journal affiche, et c'est ce qui distingue
+    « la source a répondu » de « on n'y est pas retourné »."""
+    cadence = CADENCES.get(nom, CADENCE_DEFAUT)
+    garde = _CACHE.get(nom)
+    if not forcer and garde and (maintenant - garde["quand"]) < cadence:
+        return _copie(garde["r"]), False
+    r = fn()
+    # ON NE GARDE QUE CE QUI A MARCHÉ. Mettre un échec en cache reviendrait à
+    # servir l'erreur pendant toute la cadence, alors qu'une panne de réseau
+    # dure souvent quelques secondes.
+    if r.get("ok"):
+        # ON GARDE UNE COPIE, ET ON REND L'ORIGINAL : les deux doivent être
+        # indépendants dès la première fois, pas seulement à partir de la
+        # deuxième.
+        _CACHE[nom] = {"r": _copie(r), "quand": maintenant}
+    elif garde:
+        # UNE SOURCE MOMENTANÉMENT MUETTE NE VIDE PAS SA RUBRIQUE : on resert
+        # ce qu'elle avait donné, et le journal dit que la relecture a échoué.
+        return dict(_copie(garde["r"]), relecture_echouee=r), True
+    return r, True
+
+
+def oublier_cache():
+    """Vide le cache des collecteurs. Sert aux contrôles, et à un exploitant
+    qui veut forcer un tour complet."""
+    _CACHE.clear()
+
+
 SOURCE_DU_COLLECTEUR = {"mitre_atlas_tech": "mitre_atlas"}
 
 
@@ -468,24 +550,45 @@ def sources_collectees():
             for nom, _ in _table_collecteurs(0, None)}
 
 
-def collecter_tout(limite_kev=30, limite_mix=None):
+def collecter_tout(limite_kev=30, limite_mix=None, forcer=False):
     """Lance les collecteurs et rend le corpus, avec le journal de ce qui a
     échoué. Un échec ne fait pas tomber les autres : une source injoignable
-    ne doit pas priver le site de celles qui répondent."""
+    ne doit pas priver le site de celles qui répondent.
+
+    CHAQUE SOURCE EST RELUE À SA PROPRE CADENCE. Un tour de collecte n'est donc
+    plus un tour de TOUT : les référentiels MITRE, qui pèsent neuf mégaoctets
+    et bougent quelques fois par an, ne sont pas retéléchargés parce que le
+    catalogue KEV, lui, vaut d'être relu tous les quarts d'heure. C'est ce qui
+    permet de rapprocher la cadence du site sans devenir un visiteur impoli.
+
+    `forcer` ignore les cadences — pour un exploitant qui veut un tour complet.
+    """
     corpus, journal = [], []
+    maintenant = time.time()
     for nom, fn in _table_collecteurs(limite_kev, limite_mix):
         try:
-            r = fn()
+            r, relu = _relire(nom, fn, maintenant, forcer=forcer)
         except Exception as e:  # noqa: BLE001
             journal.append({"source": nom, "ok": False, "erreur": "exception",
                             "message": str(e)})
             continue
         if r.get("ok"):
             corpus.extend(r["fiches"])
-            journal.append({"source": nom, "ok": True,
-                            "retenues": r.get("retenues"), "dit": r.get("dit")})
+            ligne = {"source": nom, "ok": True, "relu": relu,
+                     "cadence_s": CADENCES.get(nom, CADENCE_DEFAUT),
+                     "retenues": r.get("retenues"), "dit": r.get("dit")}
+            # LA RELECTURE ÉCHOUÉE SE DIT, MÊME QUAND LES FICHES SONT LÀ. Sans
+            # cette ligne, une source muette depuis trois jours servirait ses
+            # fiches d'origine sans que rien ne le signale — et le lecteur
+            # daterait le corpus de la dernière collecte réussie du site, pas
+            # de celle de cette source-là.
+            e = r.get("relecture_echouee")
+            if e:
+                ligne["relecture_echouee"] = {
+                    "erreur": e.get("erreur"), "message": e.get("message")}
+            journal.append(ligne)
         else:
-            journal.append({"source": nom, "ok": False,
+            journal.append({"source": nom, "ok": False, "relu": relu,
                             "erreur": r.get("erreur"),
                             "message": r.get("message")})
     # LES RELATIONS QUI TRAVERSENT DEUX COLLECTEURS s'établissent ici, une
@@ -585,6 +688,13 @@ def sante():
         "editeurs_industriels": len(EDITEURS_INDUSTRIELS),
         "indices_produit": len(INDICES_PRODUIT_INDUSTRIEL),
         "pays_suivis": len(PAYS_SUIVIS),
+        # LES CADENCES, ET CE QUI A ÉTÉ RELU. Un exploitant doit pouvoir
+        # voir d'un coup d'œil qu'une source n'a pas été rouverte depuis
+        # trois jours — le journal le dit par tour, ceci le dit d'ensemble.
+        "cadences_s": dict(CADENCES),
+        "cadence_defaut_s": CADENCE_DEFAUT,
+        "en_cache": {n: int(time.time() - g["quand"])
+                     for n, g in sorted(_CACHE.items())},
         "modeles_de_langage": 0,
         "portee": "Transforme une source ouverte en fiches. La lecture "
                   "critique est DÉRIVÉE par règles publiées ; aucun modèle de "
@@ -684,28 +794,15 @@ def collecter_attack_ics(limite_groupes=10, limite_logiciels=10):
         ident = _ident(o)
         fiches.append(V.normaliser({
             "id": "attack-ics-groupe-%s" % (ident or o["id"][-8:]).lower(),
-            "titre": "%s — mode opératoire documenté contre l'ICS%s"
-                     % (o.get("name"), " (%s)" % ident if ident else ""),
+            **GB.champs("titre", "attack.groupe.titre", o.get("name"),
+                        " (%s)" % ident if ident else ""),
+            # LE CHAPEAU VIENT DE LA SOURCE — MITRE publie en anglais, et ce
+            # site ne traduit pas ce qu'il n'a pas écrit.
             "chapeau": _abrege(_propre_stix(o.get("description")), 330),
-            "lecture": "ATT&CK ICS décrit ici un ensemble d'activités OBSERVÉES "
-                       "sur des installations industrielles, pas une "
-                       "attribution : le référentiel dit ce qui a été fait, "
-                       "jamais qui l'a commandité. Sa présence au référentiel "
-                       "signifie que les techniques employées sont documentées "
-                       "et donc détectables — c'est le seul point qui vous "
-                       "concerne directement, et il se traduit en règles de "
-                       "supervision, pas en communiqué.",
+            **GB.champs("lecture", "attack.groupe.lecture"),
             "lecture_nature": "regle",
-            "portee": "À confronter à votre cartographie de zones et conduits : "
-                      "les techniques rattachées à ce mode opératoire désignent "
-                      "des points de détection concrets. Un plan de supervision "
-                      "qui ne couvre aucune des techniques documentées pour "
-                      "votre filière surveille ce qui est facile à voir, pas ce "
-                      "qui arrive.",
-            "incertitude": "Le référentiel recense ce qui a été observé ET "
-                           "publié. Ce qui n'a pas été détecté, ou l'a été sans "
-                           "être documenté, n'y figure pas — l'absence d'une "
-                           "technique ne vaut donc pas absence de risque.",
+            **GB.champs("portee", "attack.groupe.portee"),
+            **GB.champs("incertitude", "attack.groupe.incertitude"),
             "sujet": "cyber_industriel",
             "technologies": ["ATT&CK ICS", "Mode opératoire"],
             "pays": [],
@@ -725,24 +822,13 @@ def collecter_attack_ics(limite_groupes=10, limite_logiciels=10):
         ident = _ident(o)
         fiches.append(V.normaliser({
             "id": "attack-ics-logiciel-%s" % (ident or o["id"][-8:]).lower(),
-            "titre": "%s — logiciel malveillant documenté contre l'ICS%s"
-                     % (o.get("name"), " (%s)" % ident if ident else ""),
+            **GB.champs("titre", "attack.logiciel.titre", o.get("name"),
+                        " (%s)" % ident if ident else ""),
             "chapeau": _abrege(_propre_stix(o.get("description")), 330),
-            "lecture": "Un logiciel inscrit au référentiel ICS a été employé "
-                       "contre des systèmes d'automatisation, pas seulement "
-                       "contre de la bureautique. La distinction commande la "
-                       "réponse : sur un procédé qui tourne, l'isolement d'un "
-                       "poste n'est pas une mesure neutre, et la remise en "
-                       "service se prépare avant l'incident, pas pendant.",
+            **GB.champs("lecture", "attack.logiciel.lecture"),
             "lecture_nature": "regle",
-            "portee": "À verser au plan de continuité OT plutôt qu'au seul plan "
-                      "cyber : ce qui se joue est la capacité à redémarrer un "
-                      "procédé dans un état sûr, ce qu'aucune restauration de "
-                      "données ne fait à elle seule.",
-            "incertitude": "La description dit ce que le logiciel PEUT faire, "
-                           "sur les cas analysés. Elle ne dit ni sa prévalence, "
-                           "ni s'il circule encore, ni s'il atteindrait votre "
-                           "architecture compte tenu de sa segmentation.",
+            **GB.champs("portee", "attack.logiciel.portee"),
+            **GB.champs("incertitude", "attack.logiciel.incertitude"),
             "sujet": "cyber_industriel",
             "technologies": ["ATT&CK ICS", "Logiciel malveillant"],
             "pays": [],
@@ -890,30 +976,19 @@ def collecter_atlas(limite_cas=18):
         # LA GRANULARITÉ EST DITE. Un « 1er janvier » issu d'une date connue à
         # l'année près se lirait comme une observation au jour près.
         precision = {
-            "YEAR": "L'incident n'est daté qu'à l'ANNÉE par la source ; le jour "
-                    "affiché est une convention de classement, pas une "
-                    "observation.",
-            "MONTH": "L'incident n'est daté qu'au MOIS par la source ; le jour "
-                     "affiché est une convention de classement.",
-        }.get(gran, "")
+            "YEAR": GB.deux("atlas.date.annee"),
+            "MONTH": GB.deux("atlas.date.mois"),
+        }.get(gran)
 
-        lecture = (
-            "ATLAS documente ici un incident %s contre un système d'IA en "
-            "production%s. Le déroulé est décomposé en %d étape(s) rattachées "
-            "aux tactiques du référentiel : ce n'est pas un récit, c'est une "
-            "séquence technique reproductible côté défense, donc traduisible "
-            "en points de contrôle. %s"
-            % ("réel" if typ == "incident" else "documenté (exercice ou "
-               "démonstration cadrée)",
-               " visant %s" % cible if cible else "",
+        d = GB.Deux()
+        d.plus("atlas.lecture",
+               GB.deux("atlas.reel" if typ == "incident" else "atlas.exercice"),
+               GB.deux("atlas.cible", cible) if cible else ("", ""),
                len(procedures),
-               precision or "La date est donnée au jour par la source.")
-        ).strip()
+               precision or GB.deux("atlas.date.jour"))
 
         if typ == "exercise":
-            lecture += (" Attention à la nature du cas : c'est un EXERCICE, "
-                        "pas une attaque subie. Il établit qu'une chose est "
-                        "faisable, pas qu'elle a été faite contre un tiers.")
+            d.coller("atlas.avertissement.exercice")
 
         # L'ENTITÉ NOMMÉE PAR LA SOURCE, AVEC SON RÔLE — en toutes lettres.
         # Le champ `actor` d'ATLAS désigne tantôt l'attaquant, tantôt l'équipe
@@ -923,34 +998,24 @@ def collecter_atlas(limite_cas=18):
         # c'est, puisque `case-study-type` le distingue. Ce qu'un libellé
         # unique ne peut pas porter, une phrase le porte.
         if acteur and "unknown" not in acteur.lower():
-            lecture += (" La source nomme %s %s."
-                        % ("l'équipe qui a conduit l'exercice :"
-                           if typ == "exercise" else
-                           "l'entité à laquelle elle rattache l'incident :",
-                           acteur))
+            d.coller("atlas.acteur.equipe" if typ == "exercise"
+                     else "atlas.acteur.entite", acteur)
         elif acteur:
-            lecture += (" La source ne nomme aucune entité : elle inscrit "
-                        "« %s », c'est-à-dire qu'elle ne sait pas." % acteur)
+            d.coller("atlas.acteur.inconnu", acteur)
+        lecture_fr, lecture_en = d.rendre()
 
         fiches.append(V.normaliser({
             "id": "atlas-%s" % str(c["id"]).lower().replace(".", "-"),
             "titre": "%s — %s" % (V._texte(c.get("name")), c["id"]),
             "chapeau": _abrege(_propre_stix(c.get("summary")), 330),
-            "lecture": lecture,
+            "lecture": lecture_fr,
+            "lecture_en": lecture_en,
             "lecture_nature": "regle",
-            "portee": "À confronter à vos propres usages d'IA : si un modèle "
-                      "décide, filtre ou authentifie chez vous, la question "
-                      "n'est plus de savoir si ce type d'attaque existe — "
-                      "ATLAS l'établit — mais si votre chaîne d'entraînement "
-                      "et votre interface d'inférence y sont exposées. C'est "
-                      "un point à porter au registre des systèmes d'IA exigé "
-                      "par le règlement européen, pas seulement au plan cyber.",
-            "incertitude": "ATLAS recense ce qui a été observé ET publié : "
-                           "l'absence d'un cas ne vaut pas absence d'incident. "
-                           "La base ne dit ni la fréquence de ces attaques, ni "
-                           "leur coût, ni si votre configuration y est "
-                           "vulnérable."
-                           + (" " + precision if precision else ""),
+            **GB.champs("portee", "atlas.portee"),
+            "incertitude": GB.dire("atlas.incertitude", "fr")
+                           + (" " + precision[0] if precision else ""),
+            "incertitude_en": GB.dire("atlas.incertitude", "en")
+                              + (" " + precision[1] if precision else ""),
             "sujet": "sia",
             # L'ACTEUR N'EST NI UN ÉDITEUR NI UNE TECHNOLOGIE — il a été retiré
             # des deux, et voici pourquoi c'est écrit plutôt que silencieux.
@@ -1077,29 +1142,19 @@ def _fiche_technique_atlas(t, tact, iso, par_ref=None):
     noms = [tact.get(x) for x in tactiques if tact.get(x)]
     return V.normaliser({
             "id": "atlas-tech-%s" % str(t["id"]).lower().replace(".", "-"),
-            "titre": "%s — technique documentée contre l'IA (%s)"
-                     % (_nom_technique_atlas(t, par_ref), t["id"]),
+            **GB.champs("titre", "atlastech.titre",
+                        _nom_technique_atlas(t, par_ref), t["id"]),
             "chapeau": _abrege(_propre_stix(t.get("description")), 330),
-            "lecture": "Technique rattachée à %s. Une technique au référentiel "
-                       "signifie qu'elle a été employée ou démontrée, donc "
-                       "qu'elle est descriptible et détectable — c'est ce qui "
-                       "la sépare d'un risque théorique. Elle se traduit en "
-                       "contrôle sur la chaîne d'entraînement, sur l'accès au "
-                       "modèle ou sur l'interface d'inférence, selon la "
-                       "tactique qu'elle sert."
-                       % (", ".join("« %s »" % n for n in noms) if noms
-                          else "une tactique du référentiel"),
+            # LES NOMS DE TACTIQUE VIENNENT DU RÉFÉRENTIEL : ils restent en
+            # l'état dans les deux langues. Seuls les guillemets suivent la
+            # langue, parce qu'ils sont de nous.
+            **GB.champs("lecture", "atlastech.lecture",
+                        (", ".join("« %s »" % n for n in noms),
+                         ", ".join("“%s”" % n for n in noms)) if noms
+                        else GB.deux("atlastech.tactique.aucune")),
             "lecture_nature": "regle",
-            "portee": "Sert à instruire la question que l'AI Act pose sans y "
-                      "répondre : quelles mesures de robustesse et de "
-                      "cybersécurité sont appropriées pour ce système. Une "
-                      "liste de techniques documentées est un point de départ "
-                      "défendable ; « nous avons sécurisé le modèle » n'en est "
-                      "pas un.",
-            "incertitude": "Le référentiel dit ce qui est faisable, pas ce qui "
-                           "est fréquent ni ce qui vous vise. Il ne hiérarchise "
-                           "pas les techniques entre elles et ne dit pas "
-                           "lesquelles s'appliquent à votre architecture.",
+            **GB.champs("portee", "atlastech.portee"),
+            **GB.champs("incertitude", "atlastech.incertitude"),
             "sujet": "ia",
             "technologies": ["MITRE ATLAS"] + noms[:2],
             "pays": [],
@@ -1139,11 +1194,26 @@ def _fiche_technique_atlas(t, tact, iso, par_ref=None):
 # des grandeurs dérivées du mix, les servir ferait compter deux fois.
 FILIERES_EM = ("coal", "gas", "oil", "nuclear", "hydro", "wind", "solar",
                "biomass", "geothermal")
+#: LES FILIÈRES, DANS LES DEUX LANGUES. Elles sont interpolées dans la lecture
+#: critique : « the gap between coal and éolien » se voit tout de suite. Les
+#: clés sont celles d'Electricity Maps, qui publie en anglais — la colonne
+#: anglaise n'est donc pas une traduction mais le terme d'origine, et c'est
+#: pour cela qu'elle est écrite plutôt que dérivée de la clé : « oil » se dit
+#: « fuel oil » dans ce contexte, pas « oil ».
 FILIERES_EM_NOM = {
-    "coal": "charbon", "gas": "gaz", "oil": "fioul", "nuclear": "nucléaire",
-    "hydro": "hydraulique", "wind": "éolien", "solar": "solaire",
-    "biomass": "biomasse", "geothermal": "géothermie",
+    "coal": ("charbon", "coal"), "gas": ("gaz", "gas"),
+    "oil": ("fioul", "fuel oil"), "nuclear": ("nucléaire", "nuclear"),
+    "hydro": ("hydraulique", "hydro"), "wind": ("éolien", "wind"),
+    "solar": ("solaire", "solar"), "biomass": ("biomasse", "biomass"),
+    "geothermal": ("géothermie", "geothermal"),
 }
+
+
+def _filiere(cle, langue):
+    """Le nom d'une filière dans la langue demandée, ou la clé de la source si
+    elle n'est pas au registre — jamais un blanc."""
+    v = FILIERES_EM_NOM.get(cle)
+    return v[GB.LANGUES.index(langue)] if v else cle
 _EM_GABARIT = ("https://raw.githubusercontent.com/electricitymaps/"
                "electricitymaps-contrib/master/config/zones/%s.yaml")
 
@@ -1224,52 +1294,40 @@ def collecter_electricity_maps(pays=None, limite=None):
         ecart = (float(pire[1]["value"]) / float(meilleur[1]["value"])
                  if float(meilleur[1]["value"]) else 0.0)
 
-        detail = " ; ".join(
-            "%s %s gCO2e/kWh (%s, %s)"
-            % (FILIERES_EM_NOM.get(f, f), _nb(d["value"]),
-               str(d.get("datetime"))[:4], V._texte(d.get("source")) or "source non nommée")
-            for f, d in ordonnes[:5])
+        # LE DÉTAIL EST COMPOSÉ DANS LES DEUX LANGUES : seuls les noms de
+        # filière et la mention d'une source anonyme y sont du texte ; les
+        # valeurs et les millésimes sont les mêmes partout.
+        def _detail(langue):
+            return " ; ".join(
+                "%s %s gCO2e/kWh (%s, %s)"
+                % (_filiere(f, langue), _nb(d["value"]),
+                   str(d.get("datetime"))[:4],
+                   V._texte(d.get("source"))
+                   or GB.dire("em.source.anonyme", langue))
+                for f, d in ordonnes[:5])
 
-        lecture = (
-            "Facteurs d'émission en CYCLE DE VIE — construction, combustible et "
-            "démantèlement compris, pas seulement la combustion. C'est le seul "
-            "périmètre qui compare l'éolien au gaz sans avantager le premier par "
-            "omission, et c'est celui qui compte pour un arbitrage "
-            "d'implantation qui engage des décennies. %s. "
-            "Chaque valeur porte ici SA source et SA date, ce qui est rare : "
-            "elles ne viennent pas toutes du même millésime, et la fiche "
-            "affiche celui de chacune."
-            % detail)
+        detail = (_detail("fr"), _detail("en"))
+        d = GB.Deux()
+        d.plus("em.lecture", detail)
         if ecart >= 5:
-            lecture += (" L'écart entre la filière la plus émettrice (%s) et la "
-                        "moins émettrice (%s) est d'un facteur %s : sur ce "
-                        "territoire, l'heure à laquelle un centre consomme pèse "
-                        "davantage que son PUE."
-                        % (FILIERES_EM_NOM.get(pire[0], pire[0]),
-                           FILIERES_EM_NOM.get(meilleur[0], meilleur[0]),
-                           _nb(round(ecart))))
+            d.coller("em.ecart",
+                     (_filiere(pire[0], "fr"), _filiere(pire[0], "en")),
+                     (_filiere(meilleur[0], "fr"), _filiere(meilleur[0], "en")),
+                     _nb(round(ecart)))
+        lecture_fr, lecture_en = d.rendre()
 
         fiches.append(V.normaliser({
             "id": "em-facteurs-%s" % code.lower(),
-            "titre": "%s — facteurs d'émission par filière, du simple au %s"
-                     % (nom, "quintuple" if ecart >= 5 else "double"),
-            "chapeau": _abrege(
-                "Facteurs d'émission en cycle de vie retenus par Electricity "
-                "Maps pour la zone %s : %s." % (code, detail), 330),
-            "lecture": lecture,
+            **GB.champs("titre", "em.titre", nom,
+                        GB.deux("em.titre.quintuple" if ecart >= 5
+                                else "em.titre.double")),
+            "chapeau": _abrege(GB.dire("em.chapeau", "fr", code, detail[0]), 330),
+            "chapeau_en": _abrege(GB.dire("em.chapeau", "en", code, detail[1]), 330),
+            "lecture": lecture_fr,
+            "lecture_en": lecture_en,
             "lecture_nature": "regle",
-            "portee": "À confronter au contrat d'électricité du site : un "
-                      "facteur moyen annuel ne dit rien de l'heure à laquelle "
-                      "vous consommez. Si l'écart entre filières est large, un "
-                      "décalage de charge de quelques heures déplace davantage "
-                      "l'empreinte qu'un point de PUE gagné — et il ne coûte "
-                      "aucun matériel.",
-            "incertitude": "Ces facteurs sont des moyennes de filière, pas des "
-                           "mesures de votre fourniture. Ils ne disent ni le mix "
-                           "horaire réel, ni ce que porte votre contrat "
-                           "(garanties d'origine, approche « market-based »). "
-                           "Les millésimes diffèrent d'une filière à l'autre : "
-                           "la fiche les affiche plutôt que de les uniformiser.",
+            **GB.champs("portee", "em.portee"),
+            **GB.champs("incertitude", "em.incertitude"),
             "sujet": "datacenter",
             "editeur": None,
             # LES FILIÈRES NE SONT PAS DES TECHNOLOGIES DE LA FICHE.
@@ -1339,21 +1397,32 @@ def _nb(x):
 _OWASP_BASE = ("https://raw.githubusercontent.com/OWASP/www-project-top-10-"
                "for-large-language-model-applications/main/2_0_vulns/")
 
-# Les dix entrées de l'édition 2025, avec le nom de fichier et un intitulé
-# français. L'intitulé est du cabinet : OWASP publie en anglais, et laisser
+# Les dix entrées de l'édition 2025 : nom de fichier, intitulé français,
+# intitulé anglais.
+#
+# L'INTITULÉ FRANÇAIS EST DU CABINET — OWASP publie en anglais, et laisser
 # « Improper Output Handling » brut sur un site français reviendrait à ne pas
-# faire le travail.
+# faire le travail. L'INTITULÉ ANGLAIS EST CELUI D'OWASP, à la lettre : sur
+# une interface anglaise, un lecteur qui a la liste OWASP sous les yeux doit
+# retrouver le même nom, pas une reformulation. C'est la seule colonne de tout
+# ce site qui ne soit pas une traduction mais une CITATION.
 OWASP_LLM = [
-    ("LLM01_PromptInjection", "Injection d'invite"),
-    ("LLM02_SensitiveInformationDisclosure", "Divulgation d'information sensible"),
-    ("LLM03_SupplyChain", "Chaîne d'approvisionnement"),
-    ("LLM04_DataModelPoisoning", "Empoisonnement des données et du modèle"),
-    ("LLM05_ImproperOutputHandling", "Traitement fautif des sorties"),
-    ("LLM06_ExcessiveAgency", "Agentivité excessive"),
-    ("LLM07_SystemPromptLeakage", "Fuite de l'invite système"),
-    ("LLM08_VectorAndEmbeddingWeaknesses", "Faiblesses des index vectoriels"),
-    ("LLM09_Misinformation", "Désinformation"),
-    ("LLM10_UnboundedConsumption", "Consommation non bornée"),
+    ("LLM01_PromptInjection", "Injection d'invite", "Prompt Injection"),
+    ("LLM02_SensitiveInformationDisclosure", "Divulgation d'information sensible",
+     "Sensitive Information Disclosure"),
+    ("LLM03_SupplyChain", "Chaîne d'approvisionnement", "Supply Chain"),
+    ("LLM04_DataModelPoisoning", "Empoisonnement des données et du modèle",
+     "Data and Model Poisoning"),
+    ("LLM05_ImproperOutputHandling", "Traitement fautif des sorties",
+     "Improper Output Handling"),
+    ("LLM06_ExcessiveAgency", "Agentivité excessive", "Excessive Agency"),
+    ("LLM07_SystemPromptLeakage", "Fuite de l'invite système",
+     "System Prompt Leakage"),
+    ("LLM08_VectorAndEmbeddingWeaknesses", "Faiblesses des index vectoriels",
+     "Vector and Embedding Weaknesses"),
+    ("LLM09_Misinformation", "Désinformation", "Misinformation"),
+    ("LLM10_UnboundedConsumption", "Consommation non bornée",
+     "Unbounded Consumption"),
 ]
 
 # L'ÉDITION EST DATÉE, PAS L'ENTRÉE. OWASP publie une édition 2025 sans dater
@@ -1362,6 +1431,18 @@ OWASP_LLM = [
 # l'incertitude de chaque fiche.
 OWASP_EDITION = "2025"
 OWASP_DATE_CONVENTION = "%s-01-01" % OWASP_EDITION
+
+
+def _manifestations(langue, risques):
+    """Les exemples de manifestation, quand la source en publie.
+
+    LE TEXTE DES EXEMPLES VIENT D'OWASP — il reste en anglais dans les deux
+    langues, comme tout ce que ce site n'a pas écrit. Seule la phrase qui les
+    introduit suit la langue de lecture."""
+    if not risques:
+        return ""
+    return GB.dire("owasp.manifestations", langue,
+                   "; ".join(_abrege(x, 110) for x in risques[:2]))
 
 
 def _owasp_bloc(texte, motif):
@@ -1551,7 +1632,7 @@ def collecter_owasp_llm(limite=None, documents=None):
     s = SRC.SOURCES["owasp_llm"]
     entrees = OWASP_LLM[:limite] if limite else OWASP_LLM
     fiches, muettes, sans_manifestation = [], [], []
-    for fichier, intitule in entrees:
+    for fichier, intitule, intitule_en in entrees:
         if documents is not None:
             if fichier not in documents:
                 muettes.append(fichier)
@@ -1585,45 +1666,30 @@ def collecter_owasp_llm(limite=None, documents=None):
         if not risques:
             sans_manifestation.append(fichier)
 
-        lecture = (
-            "OWASP range ce risque parmi les dix qui menacent une application "
-            "bâtie sur un modèle de langage. C'est un CONSENSUS DE PRATICIENS, "
-            "et il faut le lire comme tel : la liste ne dit pas que ce risque "
-            "s'est réalisé chez quelqu'un — c'est ce que documente ATLAS, sur "
-            "ce même site —, elle dit qu'il est reconnu comme sérieux par ceux "
-            "qui construisent ces systèmes. Confondre les deux ferait passer "
-            "un risque reconnu pour un incident constaté.")
-        if parades:
-            lecture += (" La source publie ses parades, ce qui rend le risque "
-                        "actionnable : %s%s."
-                        % ("; ".join(_abrege(p, 130) for p in parades[:3]),
-                           " (et d'autres)" if len(parades) > 3 else ""))
+        d = GB.Deux()
+        d.plus("owasp.lecture")
 
+        if parades:
+            # LES PARADES VIENNENT DE LA SOURCE : même texte anglais dans les
+            # deux langues. Seule la phrase qui les introduit est de nous.
+            d.coller("owasp.parades",
+                     "; ".join(_abrege(p, 130) for p in parades[:3]),
+                     GB.deux("owasp.parades.autres") if len(parades) > 3
+                     else ("", ""))
+
+        lecture_fr, lecture_en = d.rendre()
         fiches.append(V.normaliser({
             "id": "owasp-llm-%s" % ref.lower(),
-            "titre": "%s — %s (OWASP %s:%s)"
-                     % (intitule, "risque reconnu pour les applications à "
-                        "modèle de langage", ref, OWASP_EDITION),
+            **GB.champs("titre", "owasp.titre",
+                        (intitule, intitule_en), ref, OWASP_EDITION),
             "chapeau": _abrege(description, 330),
-            "lecture": lecture,
+            "lecture": lecture_fr,
+            "lecture_en": lecture_en,
             "lecture_nature": "regle",
-            "portee": "À confronter à l'inventaire de vos systèmes d'IA : la "
-                      "question n'est pas de savoir si ce risque existe — "
-                      "OWASP l'établit — mais si votre application y est "
-                      "exposée, et si les parades publiées y sont en place. "
-                      "C'est un point à porter au registre exigé par le "
-                      "règlement européen sur l'IA, où la maîtrise des risques "
-                      "doit être documentée, pas seulement affirmée."
-                      + (" Exemples de manifestation : %s."
-                         % "; ".join(_abrege(x, 110) for x in risques[:2])
-                         if risques else ""),
-            "incertitude": "Consensus de praticiens, pas une norme opposable : "
-                           "aucune obligation n'en découle, et le classement "
-                           "des dix familles ne reflète pas une fréquence "
-                           "mesurée. L'édition %s n'est pas datée entrée par "
-                           "entrée — le jour affiché est une convention de "
-                           "classement, pas une observation."
-                           % OWASP_EDITION,
+            "portee": GB.dire("owasp.portee", "fr") + _manifestations("fr", risques),
+            "portee_en": GB.dire("owasp.portee", "en") + _manifestations("en", risques),
+            "incertitude": GB.dire("owasp.incertitude", "fr", OWASP_EDITION),
+            "incertitude_en": GB.dire("owasp.incertitude", "en", OWASP_EDITION),
             "sujet": "sia",
             "editeur": None,
             # Transporté jusqu'à `relier_owasp_atlas`, qui a besoin du corpus
@@ -1640,11 +1706,8 @@ def collecter_owasp_llm(limite=None, documents=None):
             # les dix fiches « à moins de 45 jours » sur une valeur que ce
             # fichier venait d'inventer. Un champ, lui, se vérifie.
             "date_convention": True,
-            "date_convention_dit":
-                "OWASP date son ÉDITION (%s), pas chacune de ses entrées. Le "
-                "1er janvier tient lieu de rang de classement ; la source ne "
-                "dit pas quand ce risque a été reconnu."
-                % OWASP_EDITION,
+            **GB.champs("date_convention_dit", "owasp.convention",
+                        OWASP_EDITION),
             "source_cle": "owasp_llm",
             "source_url": _OWASP_BASE + fichier + ".md",
             "statut": "verifiee_source_primaire",

@@ -103,6 +103,29 @@
     "fl.filtre":       ["{n} filtre(s) actif(s)", "{n} filter(s) active"],
     "fl.toutcorpus":   ["tout le corpus", "the whole corpus"],
 
+    /* ── Ce que ce site ne lit pas encore ───────────────────────────── */
+    "r.brancher":      ["Ce que ce site ne lit pas encore — et pourquoi",
+                        "What this site does not read yet — and why"],
+    "r.brancher.b":    ["Toutes ne se règlent pas de la même façon.",
+                        "They are not all fixed the same way."],
+    "r.brancher.t":    ["Certaines sont refusées par le réseau de l'environnement de conception et se brancheront au déploiement ; d'autres demandent un contrat commercial, et aucune quantité de code n'y supplée. C'est le cas des dépêches d'agence. Ce site cite la licence de chaque source sous chaque fiche : publier sans licence reviendrait à écrire une mention fausse à l'endroit précis où il promet de dire vrai.",
+                        "Some are refused by the design environment's network and will connect on deployment; others require a commercial contract, and no amount of code substitutes for one. That is the case for wire-service dispatches. This site cites each source's licence under every entry: publishing without one would mean writing a false notice at the exact place where it promises to tell the truth."],
+    "br.faudrait":     ["Ce qu'il faudrait :", "What it would take:"],
+    "br.sources":      ["source(s)", "source(s)"],
+
+    /* ── La langue des analyses ──────────────────────────────────────
+       DEUX RÉGLAGES ET NON UN, parce que les deux sens existent : un
+       francophone qui travaille en anglais veut l'interface en anglais et
+       les analyses dans leur version d'origine ; un anglophone qui reçoit
+       un lien veut l'inverse. */
+    "an.titre":        ["Les analyses", "The analyses"],
+    "an.suit":         ["Elles suivent la langue de l'interface. Choisissez pour fixer.",
+                        "They follow the interface language. Choose one to fix it."],
+    "an.fixe":         ["Fixée par vous : la bascule d'interface ne la changera plus.",
+                        "Fixed by you: the interface switch will no longer change it."],
+    "an.repli":        ["Analyse en français — pas encore de gabarit anglais pour cette source. Rien n'est passé à une machine.",
+                        "Reading in French — no English template for this source yet. Nothing has been run through a machine."],
+
     /* ── L'accord, et l'inventaire de ce qui est gardé ──────────────── */
     "vp.titre":        ["Une seule chose vous est demandée",
                         "One thing, and one only, is asked of you"],
@@ -387,6 +410,8 @@
                         "The sidebar, collapsed or open."],
     "vp.l.accord":     ["Votre réponse à la question ci-dessus.",
                         "Your answer to the question above."],
+    "vp.l.analyses":   ["La langue dans laquelle vous avez choisi de lire les analyses, quand vous l'avez fixée séparément de celle de l'interface.",
+                        "The language you chose for reading the analyses, when you have fixed it separately from the interface language."],
     "vp.l.jeton":      ["Le jeton de votre session, si vous vous connectez.",
                         "Your session token, if you sign in."],
     "vp.l.ordre":      ["L'ordre des fiches du fil que vous parcourez, tel qu'il est affiché — ce qui permet aux flèches « précédente » et « suivante » de dire où vous en êtes.",
@@ -506,6 +531,46 @@
     document.documentElement.setAttribute("lang", courante());
   }
 
+  /* ── LA LANGUE DES ANALYSES, DISTINCTE DE CELLE DE L'INTERFACE ──────────
+     POURQUOI DEUX RÉGLAGES ET NON UN. Depuis que les gabarits anglais
+     existent, la bascule pourrait tout traduire d'un coup. Ce serait décider
+     à la place du lecteur, et dans les deux sens :
+
+       · un francophone qui travaille en anglais veut souvent l'interface en
+         anglais ET les analyses dans leur version d'origine — c'est le texte
+         que le cabinet a écrit, et il le relit tel quel ;
+       · un anglophone qui reçoit un lien vers une fiche veut l'inverse.
+
+     LE DÉFAUT SUIT L'INTERFACE, ce qui donne le comportement attendu sans
+     rien régler. Une valeur écrite ne s'obtient que par un clic explicite, et
+     elle prime alors — c'est ce que « ou pas » veut dire. */
+  var CLE_ANALYSES = "cpinfo.analyses";
+
+  function analyses() {
+    try {
+      var v = localStorage.getItem(CLE_ANALYSES);
+      if (v === "fr" || v === "en") return v;
+    } catch (e) { /* navigation privée : le défaut s'applique */ }
+    return courante();
+  }
+
+  function analysesChoisies() {
+    try {
+      var v = localStorage.getItem(CLE_ANALYSES);
+      return v === "fr" || v === "en";
+    } catch (e) { return false; }
+  }
+
+  function choisirAnalyses(l) {
+    if (l !== "fr" && l !== "en") return;
+    try { localStorage.setItem(CLE_ANALYSES, l); } catch (e) { /* idem */ }
+    marquer();
+    /* UN ÉVÉNEMENT DISTINCT DE `langue` : changer la langue des analyses ne
+       doit pas retraduire l'interface, et les pages n'ont pas les mêmes
+       choses à refaire dans les deux cas. */
+    document.dispatchEvent(new CustomEvent("analyses", { detail: { langue: l } }));
+  }
+
   function choisir(l) {
     if (l !== "fr" && l !== "en") return;
     try { localStorage.setItem(CLE, l); } catch (e) { /* navigation privée */ }
@@ -524,6 +589,18 @@
       b.className = "lg" + (sien ? " lg-on" : "");
       b.setAttribute("aria-pressed", sien ? "true" : "false");
     });
+    var a = analyses();
+    Array.prototype.forEach.call(document.querySelectorAll("[data-an]"), function (b) {
+      var sien = b.getAttribute("data-an") === a;
+      b.className = "lg" + (sien ? " lg-on" : "");
+      b.setAttribute("aria-pressed", sien ? "true" : "false");
+    });
+    /* LE RÉGLAGE DIT S'IL SUIT L'INTERFACE OU S'IL A ÉTÉ CHOISI. Sans cela,
+       un lecteur voit « FR » sélectionné et ne peut pas savoir si c'est son
+       choix ou le défaut — donc s'il changera tout seul à la bascule
+       suivante. */
+    var e = document.getElementById("an-dit");
+    if (e) e.textContent = t(analysesChoisies() ? "an.fixe" : "an.suit");
   }
 
   /* LA COMMANDE EST POSÉE PAR CE FICHIER, pas recopiée dans quatre pages.
@@ -542,8 +619,29 @@
     });
   }
 
+  /* LA COMMANDE DES ANALYSES, posée là où la page la demande. Elle n'est pas
+     dans l'oreille avec celle de l'interface : deux bascules côte à côte se
+     confondent, et celle-ci demande une phrase pour dire ce qu'elle règle. */
+  function monterAnalyses() {
+    var hote = document.querySelector("[data-analyses]");
+    if (!hote) return;
+    hote.innerHTML =
+      '<p class="an-t"><span data-i18n="an.titre">Les analyses</span>'
+      + '<span class="lg-grp" role="group" data-i18n-aria="an.titre">'
+      + '<button type="button" class="lg" data-an="fr" lang="fr">FR</button>'
+      + '<button type="button" class="lg" data-an="en" lang="en">EN</button>'
+      + '</span></p>'
+      + '<p class="an-d" id="an-dit"></p>';
+    Array.prototype.forEach.call(hote.querySelectorAll("[data-an]"), function (b) {
+      b.addEventListener("click", function () {
+        choisirAnalyses(b.getAttribute("data-an"));
+      });
+    });
+  }
+
   function demarrer() {
     monter();
+    monterAnalyses();
     appliquer();
     marquer();
   }
@@ -569,7 +667,12 @@
   }
 
   window.L = { t: t, courante: courante, appliquer: appliquer,
-               choisir: choisir, date: date };
+               choisir: choisir, date: date,
+               analyses: analyses, choisirAnalyses: choisirAnalyses,
+               analysesChoisies: analysesChoisies,
+               /* La barre latérale se réécrit à chaque bascule : elle doit
+                  pouvoir remonter la commande dans son hôte neuf. */
+               monterAnalyses: function () { monterAnalyses(); marquer(); } };
 
   if (document.readyState === "loading")
     document.addEventListener("DOMContentLoaded", demarrer);

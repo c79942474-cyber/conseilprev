@@ -129,6 +129,7 @@ STATUTS = {
         "nom_en": "Verified against the primary source",
         "dit": "Le fait a été confronté au document d'origine, pas à un "
                "article qui en parle.",
+        "dit_en": "The fact was checked against the original document, not against an article about it.",
         "publiable": True, "rang": 1,
     },
     "source_secondaire": {
@@ -136,6 +137,7 @@ STATUTS = {
         "nom_en": "Secondary source",
         "dit": "Le fait vient d'un intermédiaire fiable, sans que l'original "
                "ait été lu. Utilisable, à condition que ce soit écrit.",
+        "dit_en": "The fact comes from a reliable intermediary, without the original having been read. Usable, provided that is stated.",
         "publiable": True, "rang": 2,
     },
     "a_verifier": {
@@ -143,6 +145,7 @@ STATUTS = {
         "nom_en": "To be verified",
         "dit": "Retenue pour instruction, pas encore confrontée à sa source. "
                "Ne sort pas.",
+        "dit_en": "Kept for review, not yet checked against its source. Does not go out.",
         "publiable": False, "rang": 3,
     },
     "redigee_par_ia": {
@@ -151,6 +154,7 @@ STATUTS = {
         "dit": "Produite par un modèle de langage. Ne sort JAMAIS sans "
                "relecture humaine, et le moteur n'a aucun moyen de l'en "
                "sortir seul.",
+        "dit_en": "Produced by a language model. NEVER goes out without human review, and the engine has no way of releasing it on its own.",
         "publiable": False, "rang": 4,
     },
     "refutee": {
@@ -159,6 +163,7 @@ STATUTS = {
         "dit": "Confrontée et démentie. Conservée — une réfutation est une "
                "information, et l'effacer reviendrait à réécrire l'histoire "
                "de sa propre veille.",
+        "dit_en": "Checked and disproved. Kept — a refutation is information, and erasing it would mean rewriting the history of one's own intelligence work.",
         "publiable": False, "rang": 5,
     },
 }
@@ -178,6 +183,7 @@ LECTURES = {
                "source, par des règles écrites et publiées. Reproductible : "
                "deux passages sur la même donnée rendent le même texte. "
                "Aucun modèle de langage n'intervient.",
+        "dit_en": "Composed automatically from the source's data alone, by written and published rules. Reproducible: two passes over the same data produce the same text. No language model is involved.",
         "engage_le_cabinet": False,
         "publiable": True,
     },
@@ -187,6 +193,7 @@ LECTURES = {
         "dit": "Écrite par un analyste du cabinet, datée et signée. C'est un "
                "AVIS — argumenté, révisable, et qui engage celui qui le "
                "signe.",
+        "dit_en": "Written by an analyst of the firm, dated and signed. It is an OPINION — argued, open to revision, and binding on whoever signs it.",
         "engage_le_cabinet": True,
         "publiable": True,
     },
@@ -195,6 +202,7 @@ LECTURES = {
         "nom_en": "Model draft — not validated",
         "dit": "Proposé par un modèle de langage. Sert de point de départ à "
                "un analyste, jamais de contenu. Ne sort pas.",
+        "dit_en": "Suggested by a language model. Serves an analyst as a starting point, never as content. Does not go out.",
         "engage_le_cabinet": False,
         "publiable": False,
     },
@@ -211,18 +219,21 @@ IMPACTS = {
         "nom_en": "Break",
         "dit": "Change ce qu'il est possible ou obligatoire de faire. Se "
                "traite en comité, pas en veille.",
+        "dit_en": "Changes what it is possible or mandatory to do. Handled in committee, not in a watch list.",
         "rang": 1,
     },
     "structurant": {
         "nom": "Structurant",
         "nom_en": "Structural",
         "dit": "Déplace un arbitrage ou une trajectoire déjà engagée.",
+        "dit_en": "Moves a trade-off or a course of action already under way.",
         "rang": 2,
     },
     "incremental": {
         "nom": "Incrémental",
         "nom_en": "Incremental",
         "dit": "S'inscrit dans une tendance connue sans l'infléchir.",
+        "dit_en": "Falls within a known trend without bending it.",
         "rang": 3,
     },
     "signal_faible": {
@@ -230,6 +241,7 @@ IMPACTS = {
         "nom_en": "Weak signal",
         "dit": "Isolé, mal établi, mais qui mérite d'être daté pour qu'on "
                "puisse y revenir. Sa fragilité est la donnée principale.",
+        "dit_en": "Isolated, poorly established, but worth dating so it can be revisited. Its fragility is the main datum.",
         "rang": 4,
     },
 }
@@ -237,15 +249,19 @@ ORDRE_IMPACTS = ["rupture", "structurant", "incremental", "signal_faible"]
 
 # ── L'horizon ─────────────────────────────────────────────────────────────
 HORIZONS = {
-    "constate": {"nom": "Constaté",
-        "nom_en": "Established", "dit": "Établi à la date indiquée."},
-    "engage": {"nom": "Engagé",
-        "nom_en": "Committed", "dit": "Décidé, daté, pas encore en vigueur "
-                                       "ou pas encore déployé."},
-    "projete": {"nom": "Projeté",
-        "nom_en": "Projected", "dit": "Projection à horizon 2030. C'est une "
-                                         "HYPOTHÈSE, portée par qui la publie — "
-                                         "jamais un fait."},
+    "constate": {"nom": "Constaté", "nom_en": "Established",
+                 "dit": "Établi à la date indiquée.",
+                 "dit_en": "Established as at the date shown."},
+    "engage": {"nom": "Engagé", "nom_en": "Committed",
+               "dit": "Décidé, daté, pas encore en vigueur ou pas encore "
+                      "déployé.",
+               "dit_en": "Decided, dated, not yet in force or not yet "
+                         "deployed."},
+    "projete": {"nom": "Projeté", "nom_en": "Projected",
+                "dit": "Projection à horizon 2030. C'est une HYPOTHÈSE, "
+                       "portée par qui la publie — jamais un fait.",
+                "dit_en": "A projection to 2030. It is a HYPOTHESIS, carried "
+                          "by whoever publishes it — never a fact."},
 }
 ORDRE_HORIZONS = ["constate", "engage", "projete"]
 
@@ -593,41 +609,155 @@ def langues(fiches=None):
     français en conclut que le site est cassé — ou pire, il ne les lit pas et
     croit avoir tout vu.
 
-    LA DISTINCTION EST NETTE ET TIENT AU MOTEUR :
+    CE QUI A CHANGÉ. Cette fonction disait « les analyses sont en français, et
+    voilà pourquoi ». La raison était juste : la lecture, la portée et
+    l'incertitude sont DÉRIVÉES par des gabarits, et il n'en existait qu'en
+    français. Le site annonçait aussi le remède — « des gabarits anglais, un
+    vrai travail, pas un réglage ». Ils sont écrits : `gabarits.py` porte les
+    deux colonnes côte à côte. Cette fonction ne raconte donc plus une
+    absence, elle MESURE une couverture.
 
-      · Le TITRE et le CHAPEAU viennent de la source. MITRE, CISA et OWASP
-        publient en anglais : ces champs le sont donc aussi, sans que ce site
-        y soit pour quoi que ce soit.
-      · La LECTURE, la PORTÉE et l'INCERTITUDE sont DÉRIVÉES par des gabarits
-        écrits en français dans `ingestion.py`. Les traduire demanderait des
-        gabarits anglais — un vrai travail, pas un réglage —, et les traduire
-        par machine serait exactement ce que ce site refuse partout ailleurs.
+    ELLE NE SUPPOSE TOUJOURS RIEN. Une fiche est comptée traduite si elle
+    porte RÉELLEMENT ses trois champs dérivés en anglais. Un collecteur
+    ajouté demain sans gabarits anglais fera baisser ce nombre tout seul, et
+    l'écran le dira — c'est le seul mécanisme qui empêche la promesse de
+    survivre à sa propre fausseté.
 
-    Cette fonction ne suppose rien : elle COMPTE. Le nombre affiché à côté de
-    la réserve vient d'ici, pas d'une phrase écrite une fois pour toutes.
+    LA DISTINCTION DE FOND N'A PAS BOUGÉ :
+
+      · Le TITRE et le CHAPEAU sont MIXTES. Ce que la source publie reste
+        dans sa langue — MITRE, CISA et OWASP publient en anglais —, ce que
+        ce site y ajoute est traduit. Un titre n'est donc jamais « traduit »
+        en entier, et c'est voulu : recomposer le nom d'une technique du
+        référentiel reviendrait à en inventer un second.
+      · La LECTURE, la PORTÉE et l'INCERTITUDE sont entièrement de ce site :
+        elles sont traduites, ou elles ne le sont pas, et le compte le dit.
     """
     pub = publiables(fiches or [])
     avec_analyse = [f for f in pub if _texte(f.get("lecture"))]
+    traduites = [f for f in avec_analyse if _traduite(f)]
+    manquantes = [f for f in avec_analyse if not _traduite(f)]
+    # PAR SOURCE, parce que c'est par là qu'on répare : une source manquante
+    # désigne le collecteur dont les gabarits anglais restent à écrire.
+    par_source = {}
+    for f in manquantes:
+        c = (f.get("source") or {}).get("cle") or f.get("source_cle") or "?"
+        par_source[c] = par_source.get(c, 0) + 1
+    n, t = len(traduites), len(avec_analyse)
     return {
         "interface": ["fr", "en"],
-        "analyses_langue": "fr",
-        "analyses": len(avec_analyse),
+        "analyses": n,
+        "analyses_traduites": n,
+        "analyses_total": t,
+        "analyses_manquantes": t - n,
+        "manquantes_par_source": dict(sorted(par_source.items())),
+        "complet": n == t,
         "total": len(pub),
-        "dit_fr": ("Les %d analyses du corpus sont en français : elles sont "
-                   "dérivées par des gabarits écrits en français, et ce site "
-                   "n'emploie aucune traduction automatique. Les titres et "
-                   "chapeaux, eux, portent la langue de leur source — "
-                   "l'anglais pour MITRE, CISA et OWASP."
-                   % len(avec_analyse)),
-        "dit_en": ("The interface is translated; the %d critical readings are "
-                   "not, nor are the measurement notes that accompany them. "
-                   "All of that text is derived from rule templates written "
-                   "in French, and this site uses no machine translation "
-                   "anywhere — translating it here would break the one "
-                   "promise it makes. Titles, summaries and technology names "
-                   "carry their source's own language, which is English for "
-                   "MITRE, CISA and OWASP." % len(avec_analyse)),
+        # LES DEUX PHRASES SONT COMPOSÉES DEPUIS LE MÊME COMPTE. Écrire « tout
+        # est traduit » en dur laisserait la phrase vraie le jour où elle
+        # cesserait de l'être.
+        "dit_fr": (
+            "Les %d analyses du corpus sont dérivées par des gabarits publiés, "
+            "et elles existent en français comme en anglais : ce site n'emploie "
+            "aucune traduction automatique, chaque phrase des deux colonnes a "
+            "été écrite. Les titres et les chapeaux restent mixtes — ce que la "
+            "source publie garde sa langue, ce que ce site y ajoute est traduit."
+            % t
+            if n == t else
+            "%d des %d analyses du corpus existent en anglais. Les %d autres "
+            "n'ont pas encore de gabarit anglais et restent en français : %s. "
+            "Ce site n'emploie aucune traduction automatique — une analyse non "
+            "traduite s'affiche donc telle quelle, signalée, plutôt que passée "
+            "à la machine."
+            % (n, t, t - n,
+               " ; ".join("%s (%d)" % (c, k) for c, k in sorted(par_source.items()))
+               or "source non identifiée")),
+        "dit_en": (
+            "The %d critical readings in this corpus are derived from published "
+            "rule templates, and they exist in French and in English alike: this "
+            "site uses no machine translation anywhere, and every sentence in "
+            "both columns was written. Titles and summaries stay mixed — what "
+            "the source publishes keeps its own language, what this site adds "
+            "is translated."
+            % t
+            if n == t else
+            "%d of the %d critical readings in this corpus exist in English. "
+            "The other %d have no English template yet and remain in French: "
+            "%s. This site uses no machine translation — an untranslated "
+            "reading is therefore shown as it is, flagged, rather than run "
+            "through a machine."
+            % (n, t, t - n,
+               " ; ".join("%s (%d)" % (c, k) for c, k in sorted(par_source.items()))
+               or "source not identified")),
     }
+
+
+#: Les champs qui sont ENTIÈREMENT de ce site, donc entièrement traduisibles.
+#: Le titre et le chapeau n'y sont pas : ils portent du texte de la source,
+#: qu'on ne recompose pas.
+CHAMPS_TRADUITS = ("lecture", "portee", "incertitude")
+
+
+def _traduite(f):
+    """Une fiche est traduite quand ses TROIS champs dérivés le sont.
+
+    DEUX SUR TROIS NE COMPTE PAS. Une fiche dont la lecture serait anglaise et
+    l'incertitude française est pire qu'une fiche entièrement française : le
+    lecteur, ayant lu deux paragraphes dans sa langue, prend le troisième pour
+    une citation et ne le lit pas."""
+    return all(_texte(f.get(c + "_en")) for c in CHAMPS_TRADUITS)
+
+
+def dans(f, langue):
+    """La fiche vue dans une langue — les champs traduits remplacés quand ils
+    existent, et un drapeau qui dit ce qui ne l'était pas.
+
+    LE REPLI EST LE FRANÇAIS, ET IL SE DIT. Servir un champ vide serait pire
+    que servir du français : le lecteur croirait la fiche incomplète."""
+    if langue != "en":
+        return dict(f, langue_analyses="fr", analyses_traduites=True)
+    out = dict(f)
+    for c in CHAMPS_TRADUITS + ("titre", "chapeau"):
+        v = _texte(f.get(c + "_en"))
+        if v:
+            out[c] = v
+    # LES LIBELLÉS DU RÉFÉRENTIEL AUSSI. Ils sont posés par `normaliser()`
+    # depuis les tables ci-dessus, qui portent leurs deux colonnes. Les
+    # oublier laissait « Reading — Lecture dérivée par règles » en tête du
+    # document exporté : le pire des mélanges, parce qu'il se lit comme une
+    # citation et qu'il n'en est pas une.
+    for champ, table, cle in (
+            ("statut", STATUTS, "statut"), ("sujet", SUJETS, "sujet"),
+            ("impact", IMPACTS, "impact"), ("horizon", HORIZONS, "horizon"),
+            ("lecture", LECTURES, "lecture_nature")):
+        e = table.get(f.get(cle))
+        if not e:
+            continue
+        if e.get("nom_en"):
+            out[champ + "_nom"] = e["nom_en"]
+        if e.get("dit_en"):
+            out[champ + "_dit"] = e["dit_en"]
+    # LA RÉSERVE DE DATE EST RECOMPOSÉE, pas traduite : `normaliser()` colle
+    # une phrase française devant le motif. On la refait dans la langue.
+    if f.get("date_convention"):
+        # LE MOTIF LUI-MÊME EST TRADUIT quand le collecteur l'a écrit dans les
+        # deux langues ; sinon on garde le français plutôt qu'un blanc.
+        motif = _texte(f.get("date_convention_dit_en")) \
+            or _texte(f.get("date_convention_dit"))
+        out["date_convention_dit"] = motif
+        out["horizon_dit"] = ("Established — but NOT on the date shown: %s"
+                              % motif)
+    # LA LICENCE AUSSI : elle est affichée sous chaque fiche et dans chaque
+    # document emporté. « réutilisation libre avec citation » sous un texte
+    # anglais est le genre de reste qui fait douter du reste.
+    src = out.get("source")
+    if isinstance(src, dict):
+        e = SRC.SOURCES.get(src.get("cle")) or {}
+        if e.get("licence_en"):
+            out["source"] = dict(src, licence=e["licence_en"])
+    out["langue_analyses"] = "en" if _traduite(f) else "fr"
+    out["analyses_traduites"] = _traduite(f)
+    return out
 
 
 def sante(fiches=None):

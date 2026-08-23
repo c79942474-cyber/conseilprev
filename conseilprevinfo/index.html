@@ -47,7 +47,7 @@
        `data-barre-legende` : cette page affiche des pastilles et des contours
        de couleur, donc elle demande la légende qui les décode. Sur une page
        qui n'en affiche pas, elle expliquerait des couleurs invisibles. -->
-  <aside class="bl" id="barre" data-barre data-barre-legende data-barre-etat></aside>
+  <aside class="bl" id="barre" data-barre data-barre-legende data-barre-analyses data-barre-etat></aside>
 
   <div class="col">
 
@@ -191,6 +191,24 @@
     chercher l'adresse et rend ce qu'elle répond, à l'instant.</span>
   </p>
   <div class="sources" id="sources"></div>
+
+  <!-- CE QUE CE SITE NE LIT PAS ENCORE. La liste vivait dans l'interface
+       depuis le premier jour sans qu'aucune page ne l'affiche : un registre
+       qui dit ce qu'il lit sans dire ce qu'il ne lit pas enseigne au lecteur
+       une couverture qu'il n'a pas. -->
+  <h2 class="rubrique" id="r-brancher"><span data-i18n="r.brancher">Ce que ce
+    site ne lit pas encore — et pourquoi</span>
+    <span id="c-brancher"></span></h2>
+  <p class="bandeau-etat">
+    <b data-i18n="r.brancher.b">Toutes ne se règlent pas de la même façon.</b>
+    <span data-i18n="r.brancher.t">Certaines sont refusées par le réseau de
+    l'environnement de conception et se brancheront au déploiement ; d'autres
+    demandent un contrat commercial, et aucune quantité de code n'y supplée.
+    C'est le cas des dépêches d'agence. Ce site cite la licence de chaque
+    source sous chaque fiche : publier sans licence reviendrait à écrire une
+    mention fausse à l'endroit précis où il promet de dire vrai.</span>
+  </p>
+  <div class="brancher" id="brancher"></div>
 </main>
 
 <footer>

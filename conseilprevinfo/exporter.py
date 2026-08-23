@@ -36,6 +36,8 @@ import zipfile
 from datetime import date, datetime, timezone
 from xml.sax.saxutils import escape as _x
 
+import gabarits as GB
+
 VERSION = "2026.08.23"
 
 ICI = os.path.dirname(os.path.abspath(__file__))
@@ -67,12 +69,18 @@ def _nom_fichier(fiche, ext):
     return (sur or "fiche")[:80] + "." + ext
 
 
-def blocs(fiche, url_fiche=None):
+def blocs(fiche, url_fiche=None, langue="fr"):
     """LA STRUCTURE DU DOCUMENT, une seule fois pour les deux formats.
 
     Deux compositions séparées auraient divergé : le jour où l'on ajoute un
     champ, l'un des deux formats l'aurait porté et l'autre non — et personne
     ne s'en apercevrait, puisque personne n'ouvre les deux.
+
+    LE DOCUMENT EST DANS LA LANGUE OÙ IL A ÉTÉ LU, INTERTITRES COMPRIS. Un PDF
+    exporté depuis une interface anglaise avec « Ce qu'on ne sait pas » au
+    milieu est pire qu'un document entièrement français : le lecteur qui le
+    reçoit ne sait plus dans quelle langue est le texte qu'il n'a pas encore
+    lu. Et le document DIT sa langue, en pied : il circule sans sa page.
     """
     f = fiche
     s = f.get("source") or {}
@@ -82,49 +90,57 @@ def blocs(fiche, url_fiche=None):
                                        f.get("sujet_nom") or "")))
     out.append(("titre", f.get("titre") or ""))
 
-    daté = _fr(f.get("date_fait"))
+    daté = GB.date(f.get("date_fait"), langue)
     if f.get("date_convention"):
         # LA RÉSERVE VOYAGE AVEC LA DATE, dans le document comme à l'écran.
         # Séparées, la date serait lue comme une observation par quiconque
         # n'ouvre pas le paragraphe suivant.
-        daté += "  —  CETTE DATE N'EST PAS UNE OBSERVATION. %s" % (
-            f.get("date_convention_dit") or "")
+        daté += GB.dire("exp.convention", langue,
+                        f.get("date_convention_dit") or "")
     out.append(("date", daté))
 
     if f.get("chapeau"):
         out.append(("chapeau", f["chapeau"]))
 
-    out.append(("titre2", "Lecture — %s" % (f.get("lecture_nom") or "")))
+    out.append(("titre2", GB.dire("exp.lecture", langue,
+                                  f.get("lecture_nom") or "")))
     out.append(("corps", f.get("lecture") or ""))
     if f.get("lecture_dit"):
         out.append(("note", f["lecture_dit"]))
 
-    out.append(("titre2", "Ce que cela change"))
+    out.append(("titre2", GB.dire("exp.change", langue)))
     out.append(("corps", f.get("portee") or ""))
 
-    out.append(("titre2", "Ce qu'on ne sait pas"))
+    out.append(("titre2", GB.dire("exp.ignore", langue)))
     out.append(("corps", f.get("incertitude") or ""))
 
-    out.append(("titre2", "La source"))
+    out.append(("titre2", GB.dire("exp.source", langue)))
     out.append(("corps", "%s — %s" % (s.get("nom") or "", s.get("editeur") or "")))
-    out.append(("note", "Statut : %s. %s" % (f.get("statut_nom") or "",
-                                             f.get("statut_dit") or "")))
+    out.append(("note", GB.dire("exp.statut", langue,
+                                f.get("statut_nom") or "",
+                                f.get("statut_dit") or "")))
     if s.get("url"):
-        out.append(("note", "Document d'origine : %s" % s["url"]))
+        out.append(("note", GB.dire("exp.origine", langue, s["url"])))
     if s.get("licence"):
-        out.append(("note", "Licence : %s" % s["licence"]))
+        out.append(("note", GB.dire("exp.licence", langue,
+                                    s.get("licence_en") if langue == "en"
+                                    and s.get("licence_en") else s["licence"])))
 
     # CE QUI PERMET DE REVENIR. Un document emporté circule sans sa page ; sans
     # son adresse, un lecteur qui le reçoit six mois plus tard ne peut pas
     # vérifier s'il a été corrigé depuis.
-    pied = "Exporté de CONSEILPREV INFO le %s" % _fr(
-        datetime.now(timezone.utc).date().isoformat())
+    pied = GB.dire("exp.pied", langue,
+                   GB.date(datetime.now(timezone.utc).date().isoformat(), langue))
     if url_fiche:
         pied += " · %s" % url_fiche
     out.append(("pied", pied))
-    out.append(("pied", "Ce document reprend une fiche publiée, sans rien y "
-                        "réécrire. La lecture critique n'est pas le fait : sa "
-                        "nature est indiquée ci-dessus."))
+    out.append(("pied", GB.dire("exp.pied.regle", langue)))
+    # LA LANGUE DU DOCUMENT, ÉCRITE DEDANS. Et si la fiche n'avait pas de
+    # gabarit anglais, la réserve part avec elle : un document reçu six mois
+    # plus tard doit dire lui-même pourquoi son texte est en français.
+    out.append(("pied", GB.dire("exp.langue." + langue, langue)))
+    if langue == "en" and f.get("analyses_traduites") is False:
+        out.append(("pied", GB.dire("exp.langue.repli", langue)))
     return out
 
 
@@ -157,9 +173,9 @@ def _p(genre, texte):
     )
 
 
-def docx(fiche, url_fiche=None):
+def docx(fiche, url_fiche=None, langue="fr"):
     """Rend les octets d'un `.docx` que Word, LibreOffice et Pages ouvrent."""
-    corps = "".join(_p(g, t) for g, t in blocs(fiche, url_fiche) if t)
+    corps = "".join(_p(g, t) for g, t in blocs(fiche, url_fiche, langue) if t)
     document = (
         '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
         '<w:document xmlns:w="http://schemas.openxmlformats.org/'
@@ -225,7 +241,7 @@ def pdf_disponible():
     return True, ""
 
 
-def pdf(fiche, url_fiche=None):
+def pdf(fiche, url_fiche=None, langue="fr"):
     """Rend les octets d'un PDF A4.
 
     LA POLICE EST CELLE DU DÉPÔT, jamais celle du système. Les polices
@@ -246,7 +262,7 @@ def pdf(fiche, url_fiche=None):
     d.set_margins(20, 20, 20)
     d.add_page()
 
-    for genre, texte in blocs(fiche, url_fiche):
+    for genre, texte in blocs(fiche, url_fiche, langue):
         if not texte:
             continue
         gras = genre in ("titre", "titre2")

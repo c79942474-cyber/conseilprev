@@ -26,10 +26,18 @@
      depuis `/api/veille/referentiel`, qui porte `nom` ET `nom_en` — la page
      ne traduit rien elle-même, elle choisit parmi ce que le moteur déclare. */
   var NOMS = {};
+  /* LE LIBELLÉ SUIT LA LANGUE DE CE QU'IL NOMME, pas celle de l'interface.
+     La portée, le sujet et le statut qualifient LA FICHE : « Lecture dérivée
+     par règles » en tête d'un paragraphe anglais est un libellé qui ment sur
+     ce qu'il coiffe. Le serveur a déjà posé le bon nom dans la fiche — c'est
+     lui qui détient les deux colonnes — et `defaut` le porte ; la table
+     locale ne sert que de repli, dans la langue des analyses. */
   function nommer(genre, cle, defaut) {
+    var l = (window.L && window.L.analyses) ? window.L.analyses()
+            : (window.L && window.L.courante ? window.L.courante() : "fr");
     var e = NOMS[genre] && NOMS[genre][cle];
     if (!e) return defaut || cle || "";
-    return (window.L && window.L.courante() === "en" && e.en) ? e.en : e.fr;
+    return (l === "en" && e.en) ? e.en : e.fr;
   }
   function ranger(genre, liste) {
     NOMS[genre] = {};
@@ -97,8 +105,15 @@
        pastilles disent ce que la fiche EST, ce contour dit où VOUS en êtes.
        Deux natures d'information, deux canaux. */
     var etat = (window.LU ? window.LU.classe(f.id) : "");
+    /* LA FICHE DIT ELLE-MÊME QUAND SON ANALYSE N'A PAS SUIVI. Le bandeau de
+       tête annonce la réserve pour tout le corpus ; il ne dit pas LAQUELLE
+       des soixante cartes à l'écran est concernée. Sans ce repère, un lecteur
+       anglophone tombe sur un paragraphe français au milieu de la page et en
+       conclut que le site est cassé. */
+    var repli = (langueAnalyses() === "en" && f.analyses_traduites === false);
     var h = '<article class="fiche ' + etat
-      + (rang === "tete" ? " tete" : "") + '" data-fid="' + esc(f.id) + '">';
+      + (rang === "tete" ? " tete" : "")
+      + (repli ? " an-repli" : "") + '" data-fid="' + esc(f.id) + '">';
     h += '<div class="fmeta">'
       + '<span class="past ' + esc(f.impact) + '">'
       + esc(nommer("impact", f.impact, f.impact_nom)) + '</span>'
@@ -120,6 +135,7 @@
       + '</a></h3>';
     if (f.chapeau) h += '<p class="fchapeau">' + esc(f.chapeau) + '</p>';
 
+    if (repli) h += '<p class="an-r" lang="fr">' + esc(tr("an.repli")) + '</p>';
     h += '<div class="fbloc lecture"><span class="fbloc-t">' + esc(tr("js.lecture"))
       + esc(nommer("lecture", f.lecture_nature, f.lecture_nom))
       + '</span><p>' + esc(f.lecture) + '</p></div>';
@@ -202,12 +218,24 @@
     return n;
   }
 
-  function parametres() {
+  /* LA LANGUE DES ANALYSES VOYAGE AVEC LA REQUÊTE, jamais après. Traduire au
+     client supposerait d'avoir les deux colonnes en mémoire ; c'est le serveur
+     qui les a, et lui seul sait laquelle existe pour chaque fiche. */
+  function langueAnalyses() {
+    return (window.L && window.L.analyses) ? window.L.analyses() : "fr";
+  }
+
+  function parametres(pourAdresse) {
     var q = [];
     FILTRES.forEach(function (p) {
       var v = ($(p[1]) || {}).value;
       if (v) q.push(p[0] + "=" + encodeURIComponent(v));
     });
+    /* L'ADRESSE DE LA PAGE NE PORTE PAS LA LANGUE : c'est un réglage de
+       lecteur, pas un filtre. Collée dans l'adresse, elle voyagerait avec
+       chaque lien partagé et imposerait au destinataire la langue de
+       l'expéditeur. */
+    if (!pourAdresse && langueAnalyses() === "en") q.push("analyses=en");
     return q.length ? "?" + q.join("&") : "";
   }
 
@@ -224,7 +252,7 @@
   function ecrireAdresse() {
     if (!window.history || !history.replaceState) return;
     try {
-      history.replaceState(null, "", parametres() || location.pathname);
+      history.replaceState(null, "", parametres(true) || location.pathname);
     } catch (e) { /* adresse non modifiable : la page reste utilisable */ }
   }
 
@@ -669,10 +697,55 @@
           + '<div class="resu" id="resu-' + esc(s.cle) + '"></div>'
           + '</div>';
       }).join("");
+      rendreABrancher(d);
     }).catch(function () {
       $("sources").innerHTML = '<div class="vide">Le registre des sources '
         + 'n\'a pas pu être chargé.</div>';
     });
+  }
+
+  /* ── CE QUE CE SITE NE LIT PAS ENCORE, ET POURQUOI ──────────────────────
+     LA LISTE EXISTAIT DANS L'INTERFACE DEPUIS LE PREMIER JOUR, ET PERSONNE NE
+     LA VOYAIT : `/api/sources` servait `a_brancher`, aucune page ne l'affichait.
+     Un registre qui dit ce qu'il lit sans dire ce qu'il ne lit pas enseigne au
+     lecteur une couverture qu'il n'a pas — c'est le défaut même que la colonne
+     « lue / non lue » avait corrigé pour les sources admises.
+
+     ELLES SONT GROUPÉES PAR NATURE D'OBSTACLE, parce que « bloqué par la
+     politique réseau de l'environnement de conception » et « licence
+     commerciale requise » ne se règlent pas du tout pareil : le premier se
+     règle en déployant, le second demande un contrat. Les afficher pêle-mêle
+     laisserait croire qu'un développeur peut tout brancher. */
+  function rendreABrancher(d) {
+    var z = $("brancher");
+    if (!z) return;
+    var liste = d.a_brancher || [];
+    var natures = d.obstacles || [];
+    if (!liste.length) { z.innerHTML = ""; return; }
+    var en = window.L && window.L.courante() === "en";
+    var h = "";
+    natures.forEach(function (n) {
+      var siennes = liste.filter(function (x) {
+        return x.nature_obstacle === n.cle;
+      });
+      if (!siennes.length) return;
+      h += '<div class="brg"><p class="brg-t">' + esc(en && n.nom_en ? n.nom_en : n.nom)
+        + '<i>' + siennes.length + '</i></p>'
+        + '<p class="brg-d">' + esc(en && n.dit_en ? n.dit_en : n.dit) + '</p>';
+      siennes.forEach(function (x) {
+        h += '<div class="brs"><b>' + esc(x.nom) + '</b>'
+          + '<p class="brs-p">' + esc(x.pourquoi) + '</p>'
+          + '<p class="brs-o">' + esc(x.obstacle) + '</p>'
+          + (x.ce_qu_il_faudrait
+              ? '<p class="brs-f">' + esc(tr("br.faudrait")) + " "
+                + esc(x.ce_qu_il_faudrait) + '</p>' : "")
+          + '</div>';
+      });
+      h += "</div>";
+    });
+    z.innerHTML = h;
+    var c = $("c-brancher");
+    if (c) c.textContent = liste.length + " " + tr("br.sources");
   }
 
   /* Sonder : on va RÉELLEMENT chercher la source. C'est ce qui rend
@@ -777,6 +850,14 @@
       chargerSources();
       chargerDossiers();
       chargerPistes();
+    });
+    /* CHANGER LA LANGUE DES ANALYSES NE RETRADUIT PAS L'INTERFACE : seul le
+       fil est redemandé, avec les filtres en cours. Les menus, les dossiers
+       et les pistes ne portent pas d'analyse — les recharger serait quatre
+       requêtes pour rien. */
+    document.addEventListener("analyses", function () {
+      direReserve();
+      charger();
     });
   }
 

@@ -12,10 +12,18 @@
   /* LES LIBELLÉS DU RÉFÉRENTIEL, DANS LA LANGUE COURANTE — même mécanique que
      le fil : le serveur sert le français sur la fiche, la table dit les deux. */
   var NOMS = {};
+  /* LE LIBELLÉ SUIT LA LANGUE DE CE QU'IL NOMME, pas celle de l'interface.
+     La portée, le sujet et le statut qualifient LA FICHE : « Lecture dérivée
+     par règles » en tête d'un paragraphe anglais est un libellé qui ment sur
+     ce qu'il coiffe. Le serveur a déjà posé le bon nom dans la fiche — c'est
+     lui qui détient les deux colonnes — et `defaut` le porte ; la table
+     locale ne sert que de repli, dans la langue des analyses. */
   function nommer(genre, cle, defaut) {
+    var l = (window.L && window.L.analyses) ? window.L.analyses()
+            : (window.L && window.L.courante ? window.L.courante() : "fr");
     var e = NOMS[genre] && NOMS[genre][cle];
     if (!e) return defaut || cle || "";
-    return (window.L && window.L.courante() === "en" && e.en) ? e.en : e.fr;
+    return (l === "en" && e.en) ? e.en : e.fr;
   }
   function ranger(genre, liste) {
     NOMS[genre] = {};
@@ -70,7 +78,19 @@
     if (DERNIERE) rendre(DERNIERE);
   });
 
-  fetch("/api/veille/fiche/" + encodeURIComponent(ident), {credentials:"same-origin"})
+  function langueAnalyses() {
+    return (window.L && window.L.analyses) ? window.L.analyses() : "fr";
+  }
+
+  /* LA FICHE EST REDEMANDÉE quand le lecteur change la langue des analyses :
+     c'est le serveur qui détient les deux colonnes, et lui seul sait laquelle
+     existe pour cette fiche-là. */
+  document.addEventListener("analyses", function () { charger(); });
+
+  function charger() {
+  fetch("/api/veille/fiche/" + encodeURIComponent(ident)
+        + (langueAnalyses() === "en" ? "?analyses=en" : ""),
+        {credentials:"same-origin"})
     .then(function (r) { if (!r.ok) throw new Error("404"); return r.json(); })
     .then(function (j) {
       DERNIERE = j;
@@ -86,6 +106,8 @@
         '<div class="vide"><b>' + esc(tr("fi.absente")) + '</b>'
         + esc(tr("fi.absente2")) + ' <a href="/">' + esc(tr("fi.retour")) + '</a></div>';
     });
+  }
+  charger();
 
   /* LE RENDU EST UNE FONCTION, pas un corps de promesse : la bascule de
      langue le rejoue sur la réponse déjà reçue. La redemander au serveur pour
@@ -122,6 +144,8 @@
           + '</p>';
       }
 
+      if (langueAnalyses() === "en" && f.analyses_traduites === false)
+        h += '<p class="an-r" lang="fr">' + esc(tr("an.repli")) + '</p>';
       h += '<div class="fbloc lecture fi-lecture"><span class="fbloc-t">'
         + esc(tr("js.lecture")) + esc(nommer("lecture", f.lecture_nature, f.lecture_nom))
         + '</span><p>' + esc(f.lecture) + '</p></div>';
@@ -216,10 +240,15 @@
          tête : on emporte ce qu'on a lu. Un bouton de téléchargement au-dessus
          du texte invite à emporter sans lire, et c'est précisément ce qu'un
          document sorti de son contexte fait de pire. */
+      /* LE DOCUMENT EMPORTÉ EST DANS LA LANGUE OÙ IL A ÉTÉ LU. Un PDF anglais
+         obtenu depuis une page anglaise est ce qu'attend celui qui clique ;
+         un PDF français le surprendrait au moment où il l'ouvre, c'est-à-dire
+         trop tard. */
+      var q = langueAnalyses() === "en" ? "?analyses=en" : "";
       h += '<div class="emporter">'
         + '<span class="emp-t">' + esc(tr("fi.emporter")) + '</span>'
-        + '<a class="emp-b" href="/fiche/' + esc(f.id) + '.pdf">PDF</a>'
-        + '<a class="emp-b" href="/fiche/' + esc(f.id) + '.docx">Word</a>'
+        + '<a class="emp-b" href="/fiche/' + esc(f.id) + '.pdf' + q + '">PDF</a>'
+        + '<a class="emp-b" href="/fiche/' + esc(f.id) + '.docx' + q + '">Word</a>'
         + '<span class="emp-d">' + esc(tr("fi.emporter.dit")) + '</span>'
         + '</div>';
 

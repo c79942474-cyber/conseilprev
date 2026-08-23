@@ -69,7 +69,16 @@ def _trop_gros(_e):
 _CORPUS = {"fiches": [], "journal": [], "quand": 0.0, "collectes": 0}
 _VERROU = threading.Lock()
 _EN_COURS = threading.Event()
-TTL = int(os.environ.get("VEILLE_TTL", "1800"))
+
+# CINQ MINUTES, ET NON PLUS TRENTE — ce que les cadences par source rendent
+# possible. Le tour de collecte ne relit plus TOUT : chaque source est relue au
+# rythme auquel ELLE change (`ingestion.CADENCES`), si bien qu'un tour qui
+# prenait neuf secondes et neuf mégaoctets en prend une et quelques kilo-octets
+# dès que les référentiels sont à jour. Rapprocher la cadence AVANT cette
+# séparation aurait retéléchargé ATT&CK et ATLAS toutes les cinq minutes — de
+# la charge prise sur des sources publiques qui la supportent parce que
+# personne n'en abuse.
+TTL = int(os.environ.get("VEILLE_TTL", "300"))
 
 
 def _collecter():
@@ -241,6 +250,21 @@ def _entetes(r):
 
 
 # ── INTERFACES ────────────────────────────────────────────────────────────
+def _langue_analyses():
+    """LA LANGUE DEMANDÉE POUR LES ANALYSES, et rien d'autre.
+
+    ELLE EST SÉPARÉE DE LA LANGUE D'INTERFACE, ET C'EST LE POINT. Un lecteur
+    peut vouloir l'interface en anglais et garder les analyses en français —
+    c'est ce que fait un francophone qui travaille en anglais mais relit les
+    textes du cabinet dans leur version d'origine —, et l'inverse est vrai
+    aussi. Une seule bascule pour les deux déciderait à sa place.
+
+    LE DÉFAUT EST LE FRANÇAIS parce que c'est la langue d'écriture de ce site :
+    un paramètre absent ne doit jamais faire servir une traduction que
+    personne n'a demandée."""
+    return "en" if (request.args.get("analyses") or "").lower() == "en" else "fr"
+
+
 @app.route("/api/veille")
 def api_veille():
     """Les fiches, filtrées. Aucun paramètre ne peut faire sortir une fiche
@@ -255,6 +279,11 @@ def api_veille():
         impact=request.args.get("impact") or None,
         horizon=request.args.get("horizon") or None,
     )
+    # LA TRADUCTION PRÉCÈDE LA RECHERCHE, ET NON L'INVERSE. Un lecteur qui
+    # cherche « poisoning » sur une interface anglaise cherche dans ce qu'il a
+    # sous les yeux ; chercher dans le français lui rendrait des fiches dont
+    # aucun mot visible ne porte son terme, ce qui se lit comme une panne.
+    f = [V.dans(x, _langue_analyses()) for x in f]
     q = (request.args.get("q") or "").strip()
     if q:
         f = V.chercher(f, q)
@@ -313,6 +342,7 @@ def api_fiche(ident):
     if not f:
         return jsonify(ok=False, erreur="introuvable",
                        message="Aucune fiche publiée sous cet identifiant."), 404
+    f = V.dans(f, _langue_analyses())
     # LES VOISINES : même sujet, jamais la fiche elle-même. Elles donnent au
     # lecteur la suite naturelle sans qu'il retourne au fil.
     # LE CROISEMENT REMPLACE « ARTICLES SIMILAIRES ». Chaque voisine porte le
@@ -358,9 +388,12 @@ def emporter(ident, format_):
         return (jsonify(ok=False, erreur="introuvable",
                         message="Aucune fiche publiée ne porte cet "
                                 "identifiant."), 404)
+    langue = _langue_analyses()
+    f = V.dans(f, langue)
     url = request.url_root.rstrip("/") + "/fiche/" + ident
     try:
-        octets = EXP.pdf(f, url) if format_ == "pdf" else EXP.docx(f, url)
+        octets = (EXP.pdf(f, url, langue) if format_ == "pdf"
+                  else EXP.docx(f, url, langue))
     except RuntimeError as e:
         # LE MOTIF EST RENDU, PAS UNE ERREUR NUE. « 500 » laisserait croire à
         # une panne du site ; ici c'est une capacité absente, et elle se dit.
@@ -433,7 +466,11 @@ def api_referentiel():
 def api_sources():
     return jsonify(ok=True, version=SRC.VERSION,
                    sources=SRC.registre(request.args.get("sujet") or None),
-                   natures=SRC.natures(), a_brancher=SRC.A_BRANCHER)
+                   natures=SRC.natures(), a_brancher=SRC.A_BRANCHER,
+                   # LES NATURES D'OBSTACLE VOYAGENT AVEC LA LISTE : sans
+                   # elles, la page devrait recopier les libellés, et ils
+                   # divergeraient à la première correction.
+                   obstacles=SRC.obstacles())
 
 
 @app.route("/api/sources/sonde/<cle>")
