@@ -110,8 +110,13 @@
   var MARGE_HAUT = 90;   /* la barre de filtres est collante */
 
   function rubriques() {
+    /* MASQUÉE, UNE RUBRIQUE N'EST PAS UNE ÉTAPE. Sur la page d'abonnement,
+       les rubriques du panneau caché avaient un rectangle de hauteur nulle en
+       haut de page : la flèche « rubrique suivante » se croyait donc arrivée
+       à la dernière, et s'éteignait alors qu'il restait tout à parcourir. */
     return Array.prototype.slice.call(
-      document.querySelectorAll("main h2.rubrique[id]"));
+      document.querySelectorAll("main h2.rubrique[id]"))
+      .filter(function (h) { return h.getClientRects().length > 0; });
   }
 
   function titreDe(h) {
@@ -271,7 +276,8 @@
       new MutationObserver(function () {
         if (attente) return;
         attente = setTimeout(function () { attente = null; peindre(); }, 120);
-      }).observe(m, { childList: true, subtree: true });
+      }).observe(m, { childList: true, subtree: true,
+                      attributes: true, attributeFilter: ["hidden", "class"] });
     }
   }
 

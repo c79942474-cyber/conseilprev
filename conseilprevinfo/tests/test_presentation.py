@@ -271,7 +271,7 @@ def test_la_barre_suit_une_page_rendue_apres_elle():
     d = b[b.index("function demarrer("):]
     assert "suivrePage();" in d[:d.index("\n  }")], "l'observation n'est pas mise en route"
     i = b.index("function suivrePage(")
-    bloc = b[i:i + 700]
+    bloc = b[i:i + 1400]
     assert 'querySelector("main")' in bloc
     assert "childList: true, subtree: true" in bloc
     # et elle ne reconstruit QUE si la liste des rubriques a changé
@@ -382,3 +382,40 @@ def test_la_fiche_est_bornee_a_une_mesure_lisible():
     css = _lire("veille.css").replace(" ", "").replace("\n", "")
     assert ".art{max-width:68ch" in css
     assert "CENTQUATRE-VINGTS" in _lire("veille.css").replace(" ", "")
+
+
+def test_la_barre_n_annonce_pas_une_rubrique_masquee():
+    """DÉFAUT CONSTATÉ AU NAVIGATEUR, sur la page d'abonnement. Elle porte deux
+    panneaux exclusifs — « hors compte » et « dans le compte » — dont un seul
+    est affiché, l'autre étant `hidden`. La barre lisait les rubriques des DEUX
+    et en annonçait quatre quand une seule était à l'écran : trois entrées qui
+    menaient à du vide.
+
+    C'est le défaut même que la lecture dans la page devait rendre impossible.
+    Lire un élément masqué le reproduit par un autre chemin : il ne suffit pas
+    qu'une rubrique EXISTE, il faut qu'elle SOIT RENDUE."""
+    b = _lire("barre.js")
+    assert "function rendue(h)" in b
+    assert "h.getClientRects().length > 0" in b
+    i = b.index("function sections()")
+    assert ".filter(rendue)" in b[i:i + 260], b[i:i + 260]
+    # Les flèches lisent la même chose, et doivent l'ignorer de même : un
+    # titre masqué a un rectangle de hauteur nulle en haut de page, donc
+    # « déjà dépassé », donc la flèche « rubrique suivante » se croit arrivée.
+    f = _lire("fleches.js")
+    i = f.index("function rubriques()")
+    assert "getClientRects().length > 0" in f[i:i + 500]
+    # Et la page d'abonnement porte bien les deux panneaux exclusifs qui ont
+    # révélé le défaut : si elle cessait, ce contrôle garderait une règle sans
+    # objet, et il faudrait le savoir.
+    h = _lire("abonnement.html")
+    assert '<section id="hors" hidden>' in h and '<section id="dedans" hidden>' in h
+
+
+def test_la_barre_suit_un_panneau_qu_on_revele():
+    """Retirer `hidden` ne change aucun nœud : sans surveillance des attributs,
+    la barre resterait sur les rubriques d'avant la connexion, et resterait
+    fausse jusqu'au prochain rechargement."""
+    for nom in ("barre.js", "fleches.js"):
+        s = _lire(nom)
+        assert 'attributeFilter: ["hidden", "class"]' in s, nom

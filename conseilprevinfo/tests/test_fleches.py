@@ -196,7 +196,7 @@ def test_hors_fiche_les_deux_fleches_parcourent_les_rubriques():
     assert "versRub(r - 1)" in bloc[i:] and "versRub(r + 1)" in bloc[i:]
     js = _lire("fleches.js")
     i = js.index("function rubriques()")
-    assert 'querySelectorAll("main h2.rubrique[id]")' in js[i:i + 200]
+    assert 'querySelectorAll("main h2.rubrique[id]")' in js[i:i + 700]
     # La rubrique courante est la DERNIÈRE passée sous la marge haute :
     # prendre la plus proche du centre ferait reculer d'une rubrique au moment
     # où l'on vient d'en atteindre une.

@@ -59,6 +59,15 @@
     "/": '<path d="M4 5.5h16v13H4z"/><path d="M4 9h16"/><path d="M8 12.5h8"/><path d="M8 15.5h5"/>',
     "/confronter": '<path d="M12 4v16"/><path d="M6.5 7.5 3.5 14h6z"/><path d="M17.5 7.5 14.5 14h6z"/><path d="M6 5.5h12"/>',
     "/abonnement": '<path d="M12 3.5a5 5 0 0 0-5 5c0 5-2 6.5-2 6.5h14s-2-1.5-2-6.5a5 5 0 0 0-5-5z"/><path d="M10.4 18a1.9 1.9 0 0 0 3.2 0"/>',
+    /* LES QUATRE GROUPES DU MENU. Les icônes de rubrique, plus haut dans la
+       colonne, portent la teinte de leur groupe à pleine intensité ; celles
+       des entrées la reprennent en retrait. Deux niveaux également voyants et
+       l'on ne sait plus lequel structure l'autre — c'est la leçon du tiroir de
+       conseilprevcyber, et elle vaut ici. */
+    "g-corpus": '<path d="M4 6.5h16v13H4z"/><path d="M8 10h8"/><path d="M8 13h8"/><path d="M8 16h5"/>',
+    "g-site": '<path d="m3 10.5 9-7 9 7"/><path d="M5.5 9v11.5h13V9"/><path d="M10 20.5v-6h4v6"/>',
+    "g-sections": '<path d="M4 5.5h16"/><path d="M7 10h13"/><path d="M7 14.5h13"/><path d="M7 19h9"/><path d="M4.2 10h.01"/><path d="M4.2 14.5h.01"/><path d="M4.2 19h.01"/>',
+    "g-legende": '<circle cx="7.5" cy="8" r="3"/><circle cx="7.5" cy="16.5" r="3"/><path d="M13.5 8h7"/><path d="M13.5 16.5h7"/>',
     /* Les rubriques de l'accueil — mêmes identifiants que dans index.html */
     "r-dossiers": '<path d="M3.5 6.5h6l1.6 2.2h9.4v9.8H3.5z"/><path d="M3.5 11h17"/>',
     "r-une": '<path d="M13 3 4.5 13.6h6L10 21l8.5-10.6h-6z"/>',
@@ -99,10 +108,32 @@
     return href === "/" ? (p === "/" || p === "") : p.indexOf(href) === 0;
   }
 
+  /* CE QUI EST DANS LA PAGE N'EST PAS FORCÉMENT SUR L'ÉCRAN.
+
+     DÉFAUT CONSTATÉ AU NAVIGATEUR, sur la page d'abonnement. Elle porte deux
+     panneaux exclusifs — « hors compte » et « dans le compte » — dont un seul
+     est affiché à la fois, l'autre étant `hidden`. La barre lisait les
+     rubriques des DEUX et en annonçait quatre quand une seule était à
+     l'écran : trois entrées qui menaient à du vide.
+
+     C'est exactement le défaut que la lecture dans la page devait rendre
+     impossible — « une liste écrite ici promettrait une rubrique le jour où
+     elle serait retirée, et le lecteur cliquerait dans le vide ». Lire un
+     élément masqué produit le même mensonge par un autre chemin : il ne
+     suffit pas qu'une rubrique EXISTE, il faut qu'elle SOIT RENDUE.
+
+     `getClientRects()` est le bon juge — vide dès qu'aucune boîte n'est
+     dessinée, quelle que soit la cause : attribut `hidden`, `display:none`,
+     ancêtre replié. Une vérification du seul attribut `hidden` manquerait les
+     deux autres cas, et ce site en emploie au moins un de plus. */
+  function rendue(h) {
+    return h.getClientRects().length > 0;
+  }
+
   function sections() {
     return Array.prototype.slice.call(
       document.querySelectorAll("main h2.rubrique[id]")
-    ).map(function (h) {
+    ).filter(rendue).map(function (h) {
       /* LE TITRE EST LE PREMIER SPAN SANS IDENTIFIANT ; LE COMPTEUR EST
          CELUI QUI EN PORTE UN.
 
@@ -199,6 +230,22 @@
     return h + "</ul>";
   }
 
+  /* UN GROUPE DU MENU — son titre, son icône, sa teinte.
+
+     LA TEINTE EST PORTÉE PAR UNE CLASSE, PAS PAR UN ATTRIBUT `style`.
+     conseilprevcyber écrit `style="--nav-ic:var(--cyan)"` sur chaque section,
+     et c'est très bien chez lui. Ici la politique de sécurité de contenu se
+     ferme sur `style-src 'self'` : un attribut `style` serait refusé par le
+     navigateur lui-même, et les icônes sortiraient toutes grises sans qu'une
+     erreur ne s'affiche nulle part. La teinte vit donc dans la feuille de
+     style, avec le reste des décisions de couleur — ce qui est de toute façon
+     sa place. */
+  function groupe(cle, titre, dedans) {
+    return '<section class="bl-g g-' + cle + '">'
+      + '<p class="bl-t">' + icone("g-" + cle, "bl-ic-g") + "<span>"
+      + esc(titre) + "</span></p>" + dedans + "</section>";
+  }
+
   function rendre() {
     var hote = document.querySelector("[data-barre]");
     if (!hote) return;
@@ -221,39 +268,39 @@
        qui promet un état et ne le donne jamais. La page déclare donc si elle
        remplit ce bloc, comme elle déclare si elle veut la légende. */
     if (hote.hasAttribute("data-barre-etat")) {
-      h += '<p class="bl-t">' + esc(t("bl.etat")) + "</p>"
-        + '<div class="bl-etat" id="bl-etat" hidden></div>'
+      h += groupe("corpus", t("bl.etat"),
+        '<div class="bl-etat" id="bl-etat" hidden></div>'
         /* CE QUI RESTE À LIRE, ET DE QUOI L'OUBLIER. Une mémoire qu'on ne peut
            pas effacer n'est pas une commodité, c'est un fichier — même tenu
            dans le navigateur du lecteur. Le bouton est donc à côté du compte,
            pas dans une page de réglages qu'on ne trouve jamais. */
-        + '<div class="bl-lu" id="bl-lu" hidden></div>';
+        + '<div class="bl-lu" id="bl-lu" hidden></div>');
     }
 
-    h += '<p class="bl-t">' + esc(t("bl.pages")) + "</p><ul class=\"bl-l\">";
+    var l = "";
     PAGES.forEach(function (p) {
-      h += '<li><a href="' + p.href + '"' + (ici(p.href) ? ' aria-current="page"' : "")
+      l += '<li><a href="' + p.href + '"' + (ici(p.href) ? ' aria-current="page"' : "")
         + '>' + icone(p.href, "bl-ic")
         + '<span class="bl-lb"><b>' + esc(t(p.cle)) + "</b><span>"
         + esc(t(p.dit)) + "</span></span></a></li>";
     });
-    h += "</ul>";
+    h += groupe("site", t("bl.pages"), '<ul class="bl-l">' + l + "</ul>");
 
     if (secs.length) {
-      h += '<p class="bl-t">' + esc(t("bl.sections")) + "</p><ul class=\"bl-l bl-s\">";
+      l = "";
       secs.forEach(function (s) {
-        h += '<li><a href="#' + esc(s.id) + '" data-va="' + esc(s.id) + '"'
+        l += '<li><a href="#' + esc(s.id) + '" data-va="' + esc(s.id) + '"'
           + (s.glose ? ' title="' + esc(s.glose) + '"' : "")
           + ">" + icone(s.id, "bl-ic bl-ic-s")
           + "<span>" + esc(s.titre) + "</span>"
           + (s.compteur ? '<i data-de="' + esc(s.compteur) + '"></i>' : "")
           + "</a></li>";
       });
-      h += "</ul>";
+      h += groupe("sections", t("bl.sections"), '<ul class="bl-l bl-s">' + l + "</ul>");
     }
 
     if (hote.hasAttribute("data-barre-legende")) {
-      h += '<p class="bl-t">' + esc(t("bl.legende")) + "</p>" + legende();
+      h += groupe("legende", t("bl.legende"), legende());
     }
 
     /* CE QUE LE SITE GARDE DE VOUS, à un clic de toutes les pages. Une
@@ -420,7 +467,12 @@
         rendre();
       }, 60);
     });
-    obs.observe(m, { childList: true, subtree: true });
+    /* LES ATTRIBUTS COMPTENT AUTANT QUE LES ENFANTS. Un panneau qu'on révèle
+       en retirant `hidden` ne change aucun nœud : sans cette ligne, la barre
+       resterait sur les rubriques d'avant la connexion, et resterait fausse
+       jusqu'au prochain rechargement. */
+    obs.observe(m, { childList: true, subtree: true,
+                     attributes: true, attributeFilter: ["hidden", "class"] });
   }
 
   function demarrer() {

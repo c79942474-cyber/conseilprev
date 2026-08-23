@@ -80,7 +80,7 @@ Depuis votre poste, aucune session nécessaire :
       https://github.com/c79942474-cyber/conseilprevinfo
     git push -u origin master
 
-`HISTORIQUE.bundle` porte **l'historique git complet — dix-huit commits**,
+`HISTORIQUE.bundle` porte **l'historique git complet — dix-neuf commits**,
 messages compris. Il ne s'agit donc pas de repartir d'une copie à plat : le
 détail des corrections, des mesures et des défauts constatés vit dans ces
 messages, et c'est souvent là qu'est l'information.
@@ -106,12 +106,28 @@ ce qui ne va pas : il annonçait « toutes les sources ont répondu » à chaque
 visite, et un bandeau d'alerte qui s'affiche aussi quand il n'y a pas d'alerte
 n'alerte plus.
 
+Le site est imprimé sur un **papier couché brillant** — noirs denses, filets
+fins, blanc légèrement froid, et le lustre diffus qui distingue un couché d'un
+mat à l'œil nu. Ce n'est pas un crème refroidi : c'est un autre papier, celui
+du supplément plutôt que du quotidien. Le changement a servi à corriger deux
+**défauts de contraste** qui vivaient là depuis l'origine — « SIGNAL FAIBLE »
+et « STRUCTURANT » s'affichaient sous le seuil AA, et personne ne l'avait vu
+parce que personne ne l'avait mesuré.
+
 Une **barre latérale rétractable à toute largeur** dit ce que la page contient
-et où l'on en est. Elle ne peut pas mentir sur son contenu : ses entrées sont
-LUES DANS LA PAGE, ses comptes recopiés de chaque rubrique, et sa **légende**
-est faite des éléments eux-mêmes — la pastille de la légende est celle des
-cartes, ses noms viennent du référentiel. Un contrôle exige une silhouette
-pour chaque rubrique servie, y compris celles qu'écrit le JavaScript.
+et où l'on en est. Elle emploie les **trois caractères du journal** —
+Newsreader nomme, JetBrains Mono étiquette et mesure, Inter tient les gloses —
+et chaque groupe porte sa teinte, dont héritent son icône, son filet et les
+icônes de ses entrées. Les teintes sont délibérément désaturées, hors des
+familles du code éditorial : un menu peint en rouge et en vert apprendrait un
+second vocabulaire de couleurs en face du premier.
+
+Elle ne peut pas mentir sur son contenu : ses entrées sont LUES DANS LA PAGE —
+et seulement celles qui sont RENDUES, une rubrique masquée n'étant pas une
+destination —, ses comptes recopiés de chaque rubrique, et sa **légende** est
+faite des éléments eux-mêmes : la pastille de la légende est celle des cartes,
+ses noms viennent du référentiel. Un contrôle exige une silhouette pour chaque
+rubrique servie, y compris celles qu'écrit le JavaScript.
 
 **Quatre flèches** parcourent la page et le fil. Aucune ne fait silencieusement
 rien : chacune voit son sens résolu au moment où elle est posée, ce sens
@@ -173,14 +189,18 @@ que rien ne le signale. Politique de contenu fermée sur `default-src 'self'`,
 sans `unsafe-inline` — ce qui a demandé de retirer les douze attributs `style`
 dispersés dans les pages et le JavaScript.
 
-**277 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
+**294 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
 gardent les règles éditoriales, et chacun est écrit pour tomber le jour où
 quelqu'un les assouplira. Chaque règle nouvelle a été confrontée à une
-**mutation du code qu'elle garde** — et trois de ces mutations ont révélé des
-contrôles trop faibles, qui ont été resserrés.
+**mutation du code qu'elle garde** — et cinq de ces mutations ont révélé des
+contrôles trop faibles, qui ont été resserrés. Un contrôle écrit trop STRICT a
+aussi été corrigé plutôt que contourné : il supprimait la distinction qu'il
+était censé protéger.
 
-### Les dix-huit commits du bundle
+### Les dix-neuf commits du bundle
 
+    3642a69  Le papier passe au couché brillant, et le menu prend les
+             caractères du journal
     65be8bd  Une manchette, des intertitres de portée, et la fiche composée
              comme un article
     8e817a1  Quatre flèches dont aucune ne fait silencieusement rien
