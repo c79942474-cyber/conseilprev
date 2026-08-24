@@ -19,6 +19,7 @@
   <div class="in">
     <span><span data-i18n="or.marque">CONSEILPREV INFO — </span><b data-i18n="or.veille">veille sourcée</b></span>
     <span class="or-d">
+      <a href="/revue" data-i18n="or.revue">La revue</a>
       <a href="/confronter" data-i18n="or.confronter">Confronter un document</a>
       <a href="/abonnement" data-i18n="or.abonnement">Votre abonnement</a>
       <span id="or-date">—</span>
@@ -104,6 +105,15 @@
   <div class="in" id="f-champs">
     <div class="fgrp"><label class="flab" for="f-sujet" data-i18n="f.sujet">Sujet</label>
       <select id="f-sujet"><option value="" data-i18n="f.tous">Tous</option></select></div>
+    <!-- L'ENTREPRISE NOMMÉE PAR LA SOURCE. Le menu ne propose que ce qui est
+         RÉELLEMENT nommé dans le corpus filtré : un répertoire de cinquante
+         entreprises dont quarante-six ne rendraient rien serait un piège. -->
+    <div class="fgrp"><label class="flab" for="f-orga" data-i18n="f.orga">Entreprise nommée</label>
+      <select id="f-orga"><option value="" data-i18n="f.toutes">Toutes</option></select></div>
+    <!-- DEUX PROVENANCES DE PAYS DANS UN SEUL MENU, chacune sous son titre.
+         Le fait a un territoire (une zone électrique) ; l'entreprise nommée a
+         un siège. Les fondre ferait d'un incident contre un produit Microsoft
+         un « fait américain », ce qu'il n'est pas. -->
     <div class="fgrp"><label class="flab" for="f-pays" data-i18n="f.pays">Pays</label>
       <select id="f-pays"><option value="" data-i18n="f.tous">Tous</option></select></div>
     <div class="fgrp"><label class="flab" for="f-techno" data-i18n="f.techno">Technologie</label>

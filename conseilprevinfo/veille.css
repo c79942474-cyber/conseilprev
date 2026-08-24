@@ -409,6 +409,29 @@ main{max-width:var(--maxw);margin:0 auto;padding:26px 22px 70px}
   padding:1px 6px;border:1px solid currentColor;border-radius:3px}
 .src .lue.oui{color:var(--vert)}
 .src .lue.non{color:var(--sourd)}
+
+/* ── LES ENTREPRISES QUE LA SOURCE NOMME, sur la fiche ────────────────────
+   PLACÉ AVANT LE BLOC DE SOURCE, ET C'EST VOULU : ces noms viennent de la
+   source, et le bloc qui la nomme suit immédiatement. Les poser après lui
+   les ferait lire comme un ajout du cabinet, ce qu'ils ne sont pas — sauf le
+   pays du siège, qui l'est, et qui porte sa mention sous le bloc. */
+.fi-orgs{margin:18px 0 0;display:flex;flex-wrap:wrap;gap:7px;
+  align-items:center}
+.fi-orgs .fbloc-t{flex-basis:100%}
+.fi-orgs .orga{
+  font-family:var(--fix);font-size:11px;
+  border:1px solid var(--filet2);border-radius:3px;
+  padding:2px 8px;color:var(--encre2);background:var(--papier2);
+  display:inline-flex;align-items:baseline;gap:7px;
+}
+/* LE PAYS EST EN RETRAIT DU NOM, parce qu'il n'a pas la même provenance : le
+   nom vient de la source, le siège de ce cabinet. Deux origines, deux poids
+   à l'œil. */
+.fi-orgs .orga i{font-style:normal;font-size:9.5px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--sourd2)}
+.fi-orgs .orga i.dispute{color:var(--ocre);cursor:help}
+.fi-orgs-dit{flex-basis:100%;margin:2px 0 0;font-size:11.5px;line-height:1.5;
+  color:var(--sourd2)}
 .src .lue.ind{color:var(--ambre)}
 .src-dormante{border-left-color:var(--filet2);background:var(--papier)}
 .src p{margin:0 0 7px;font-size:13px;line-height:1.55;color:var(--encre2)}
@@ -1190,6 +1213,94 @@ html.cp-fixe .fiche.lu{animation:none}
 /* Une réserve GRAVE — celle qui dit qu'un document ne doit pas être déposé —
    se distingue d'une réserve ordinaire, qui est ambre. */
 .bandeau-etat.grave{border-left-color:var(--rouge)}
+
+/* ── LA REVUE ─────────────────────────────────────────────────────────────
+   ELLE N'A PAS DE MESURE BORNÉE. Le fil et la revue sont des GRILLES de
+   vignettes, pas du texte suivi : les brider à 860 px laisserait une colonne
+   unique sur un écran large, là où la fiche, elle, est bornée parce qu'on la
+   lit ligne à ligne. */
+.rv-choix{display:flex;gap:0;margin:18px 0 0;flex-wrap:wrap}
+.rv-choix button{
+  font-family:var(--fix);font-size:11px;letter-spacing:.06em;
+  text-transform:uppercase;cursor:pointer;
+  background:var(--papier2);color:var(--sourd2);
+  border:1px solid var(--filet);border-bottom-width:2px;
+  padding:9px 16px;margin:0 -1px 0 0;
+}
+.rv-choix button:hover{color:var(--encre2)}
+/* L'ONGLET RETENU PORTE SON FILET, ET IL EST BLEU comme tout ce qui désigne
+   un sujet dans ce site. Le rouge dirait une rupture, ce qu'un onglet n'est
+   pas. */
+.rv-choix button.actif{
+  background:var(--papier);color:var(--encre);
+  border-bottom-color:var(--bleu);
+}
+.rv-choix button:focus-visible{outline:2px solid var(--lien);outline-offset:-2px}
+
+.rv-nav{display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  margin:14px 0 4px;font-family:var(--fix);font-size:11px}
+.rv-nav button{
+  font:inherit;cursor:pointer;background:var(--papier2);color:var(--lien);
+  border:1px solid var(--filet2);border-radius:3px;padding:4px 10px;
+}
+.rv-nav button:hover{border-color:var(--lien)}
+.rv-nav button:focus-visible{outline:2px solid var(--lien);outline-offset:1px}
+.rv-per{font-family:var(--serif);font-size:17px;color:var(--encre);
+  font-weight:600;margin-right:auto}
+
+.rv-regle{margin:10px 0 0;padding:9px 13px;font-size:12.5px;line-height:1.55;
+  color:var(--encre2);background:var(--papier2);
+  border-left:3px solid var(--ocre)}
+
+/* LE SOMMAIRE — des comptes, et rien qui les commente. */
+.rv-som{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;
+  margin:16px 0 6px;font-family:var(--fix);font-size:11px;
+  color:var(--sourd2)}
+.rv-som-n b,.rv-som-e b{font-size:15px;color:var(--encre);
+  font-family:var(--serif)}
+.rv-som-e{margin-right:8px}
+.rv-src{border:1px solid var(--filet2);border-radius:3px;padding:1px 7px}
+
+.rv-bloc{margin-top:22px}
+.rv-n{font-family:var(--fix);font-size:10.5px;color:var(--sourd2)}
+
+/* LE TERRITOIRE SUR LA CARTE DE LA REVUE — et pas sur celle du fil. La revue
+   mensuelle est SÉLECTIONNÉE sur un critère de territoire : le lecteur doit
+   voir ce qui a valu à chaque entrée d'y figurer. */
+.rv-terr{display:flex;flex-wrap:wrap;gap:5px;margin:6px 0 0}
+.rv-terr .orga{font-family:var(--fix);font-size:9.5px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--sourd2);
+  border:1px solid var(--filet2);border-radius:3px;padding:1px 6px}
+
+/* CE QUE LA PÉRIODE NE DIT PAS. Posé APRÈS les fiches et non avant : c'est
+   une réserve sur ce qu'on vient de lire, pas un avertissement qui
+   dispenserait de le lire. */
+.rv-abs{margin:26px 0 0;padding:12px 15px;background:var(--papier2);
+  border:1px solid var(--filet);border-left:3px solid var(--ocre);
+  border-radius:0 4px 4px 0}
+.rv-abs-t{margin:0 0 7px;font-family:var(--fix);font-size:10px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ocre)}
+.rv-abs p{margin:0 0 6px;font-size:12.5px;line-height:1.55;color:var(--encre2)}
+.rv-abs p:last-child{margin-bottom:0}
+
+/* LES DEUX RUBRIQUES SIGNÉES. Vides, elles gardent leur cadre : une rubrique
+   qui disparaît se lit comme une rubrique non prévue. */
+.rv-rub{margin:14px 0 0;padding:14px 16px;background:var(--papier2);
+  border:1px solid var(--filet);border-left:3px solid var(--vert);
+  border-radius:0 4px 4px 0}
+.rv-rub.rv-vide{border-left-color:var(--sourd2)}
+.rv-rub h3{font-family:var(--serif);font-size:18px;margin:0 0 4px}
+.rv-rub-d{margin:0 0 8px;font-size:12.5px;line-height:1.55;color:var(--sourd2)}
+.rv-rub-v{margin:0;font-size:13px;line-height:1.6;color:var(--encre2)}
+.rv-rub-v b{color:var(--encre)}
+.rv-piece{margin-top:12px;padding-top:12px;border-top:1px solid var(--filet)}
+.rv-piece h4{font-family:var(--serif);font-size:19px;margin:0 0 5px}
+/* LA SIGNATURE N'EST PAS UNE MENTION LÉGALE RELÉGUÉE EN BAS : elle est ce
+   qui distingue ce texte d'un texte dérivé. */
+.rv-sign{font-family:var(--fix);font-size:10.5px;letter-spacing:.04em;
+  color:var(--vert);margin-top:6px}
+.rv-sign span{display:block;color:var(--sourd2);letter-spacing:0;
+  text-transform:none;margin-top:3px}
 
 /* ═══════════════════════════════════════════════════════════════════════════
    L'ACCORD ET L'INVENTAIRE

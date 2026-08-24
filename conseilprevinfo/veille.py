@@ -37,6 +37,7 @@ import re
 import unicodedata
 from datetime import date, datetime, timezone
 
+import organisations as ORG
 import sources as SRC
 
 VERSION = "2026.08.22"
@@ -109,6 +110,22 @@ PAYS = {
     "BE": {"fr": "Belgique",      "en": "Belgium",        "owid": "Belgium"},
     "GB": {"fr": "Royaume-Uni",   "en": "United Kingdom", "owid": "United Kingdom"},
     "US": {"fr": "États-Unis",    "en": "United States",  "owid": "United States"},
+    # ── NOMMÉS, MAIS PAS SUIVIS ───────────────────────────────────────────
+    # Ces pays n'entrent au registre que pour NOMMER le siège d'une entreprise
+    # que les sources citent. `owid` est à None, et c'est ce qui les tient
+    # hors de la collecte énergétique : `PAYS_SUIVIS` s'en sert comme d'une
+    # clé d'appariement, si bien qu'ajouter le Japon ici sans cette marque
+    # lancerait une requête pour un mix électrique japonais que ce site n'a
+    # jamais annoncé suivre. Une table unique, deux emplois, une marque qui
+    # les distingue — plutôt que deux tables qui divergeraient au premier
+    # ajout.
+    "CH": {"fr": "Suisse",        "en": "Switzerland",    "owid": None},
+    "JP": {"fr": "Japon",         "en": "Japan",          "owid": None},
+    "TW": {"fr": "Taïwan",        "en": "Taiwan",         "owid": None},
+    "IL": {"fr": "Israël",        "en": "Israel",         "owid": None},
+    "CA": {"fr": "Canada",        "en": "Canada",         "owid": None},
+    "AU": {"fr": "Australie",     "en": "Australia",      "owid": None},
+    "RU": {"fr": "Russie",        "en": "Russia",         "owid": None},
 }
 
 
@@ -436,6 +453,11 @@ def normaliser(fiche):
     f["lecture_engage"] = bool(ln["engage_le_cabinet"])
     f.setdefault("pays", [])
     f.setdefault("technologies", [])
+    # LES ORGANISATIONS SONT POSÉES PAR LE COLLECTEUR, jamais ici. Cette
+    # fonction ne voit que la fiche COMPOSÉE : y chercher un nom d'entreprise
+    # reviendrait à le chercher aussi dans nos phrases d'analyse, alors que la
+    # règle est de ne le chercher que là où la SOURCE nomme une entité.
+    f.setdefault("organisations", [])
     f.setdefault("signe_par", "CONSEILPREV")
     f.setdefault("lecture_datee_le", f["date_fait"])
     return {"ok": True, "fiche": f}
@@ -455,9 +477,19 @@ def publiables(fiches):
 
 def filtrer(fiches, sujet=None, pays=None, techno=None, depuis=None,
             jusqua=None, impact=None, horizon=None, statut=None,
-            inclure_non_publiables=False):
+            organisation=None, siege=None, inclure_non_publiables=False):
     """Les filtres du site. Aucun ne peut faire sortir une fiche non publiable
-    sauf demande EXPLICITE — réservée à l'espace de rédaction."""
+    sauf demande EXPLICITE — réservée à l'espace de rédaction.
+
+    `pays` ET `siege` SONT DEUX AXES, ET ILS NE DOIVENT JAMAIS FUSIONNER.
+    `pays` dit où le FAIT se situe : une zone électrique, un réseau national,
+    ce que la source elle-même rattache à un territoire. `siege` dit d'où
+    vient l'ENTREPRISE NOMMÉE par la source, et ce renseignement-là vient de
+    ce cabinet — aucune source lue ne le porte. Confondre les deux ferait d'un
+    incident contre un produit Microsoft un « fait américain », ce qu'il n'est
+    pas. Ils sont donc filtrés séparément, et le menu les présente sous deux
+    intitulés distincts.
+    """
     out = list(fiches)
     if not inclure_non_publiables:
         out = publiables(out)
@@ -466,6 +498,12 @@ def filtrer(fiches, sujet=None, pays=None, techno=None, depuis=None,
     if pays:
         p = str(pays).upper()
         out = [f for f in out if p in [str(x).upper() for x in f.get("pays", [])]]
+    if organisation:
+        out = [f for f in out if organisation in (f.get("organisations") or [])]
+    if siege:
+        s = str(siege).upper()
+        out = [f for f in out
+               if any(ORG.siege(c) == s for c in (f.get("organisations") or []))]
     if techno:
         t = _sansaccent(techno)
         out = [f for f in out
@@ -485,6 +523,49 @@ def filtrer(fiches, sujet=None, pays=None, techno=None, depuis=None,
     out.sort(key=lambda f: (IMPACTS.get(f.get("impact"), {}).get("rang", 9),
                             _inverse(f.get("date_fait", ""))))
     return out
+
+
+def organisations():
+    """LE RÉPERTOIRE DES ORGANISATIONS, AVEC LE NOM DE LEUR PAYS.
+
+    LA JOINTURE SE FAIT ICI ET NULLE PART AILLEURS. `organisations.py` ne
+    connaît que des codes ISO — lui faire importer ce module créerait un
+    cycle, puisque celui-ci l'importe déjà. Recopier les noms de pays là-bas
+    ferait la deuxième table que `PAYS` existe précisément pour éviter.
+
+    UN CODE INCONNU SORT TEL QUEL, comme dans `nom_pays` : masquer une entrée
+    parce que son pays manque au registre ferait disparaître une entreprise
+    réellement nommée par une source.
+    """
+    out = []
+    for o in ORG.referentiel():
+        p = o.get("pays")
+        out.append(dict(o,
+                        pays_nom=nom_pays(p)["fr"] if p else None,
+                        pays_nom_en=nom_pays(p)["en"] if p else None))
+    return out
+
+
+def _sieges(fiches):
+    """LES PAYS DES SIÈGES DES ORGANISATIONS NOMMÉES, comptés par FICHE.
+
+    UNE FICHE COMPTE UNE FOIS PAR PAYS, pas une fois par organisation. Trois
+    entreprises américaines nommées dans une même étude de cas ATLAS donnent
+    « États-Unis (1) », et non « (3) » : le compte annonce ce que le filtre
+    servira, et le filtre sert des fiches. Un menu qui promet trois résultats
+    et en rend un est le défaut qui a déjà été corrigé sur les autres axes.
+
+    UNE ORGANISATION AU SIÈGE DISPUTÉ NE PÈSE DANS AUCUN PAYS. Elle reste
+    filtrable par son nom ; c'est le pays qui manque, pas elle.
+    """
+    c = {}
+    for f in fiches:
+        for p in {ORG.siege(x) for x in (f.get("organisations") or [])} - {None}:
+            c[p] = c.get(p, 0) + 1
+    return sorted(({"cle": k, "n": v,
+                    "nom": nom_pays(k)["fr"], "nom_en": nom_pays(k)["en"]}
+                   for k, v in c.items()),
+                  key=lambda x: (-x["n"], x["nom"]))
 
 
 def _inverse(d):
@@ -582,6 +663,26 @@ def facettes(fiches, **filtres):
         "technologies": sorted(({"cle": k, "n": v}
                                 for k, v in _compte("technologies", "techno").items()),
                                key=lambda x: (-x["n"], x["cle"])),
+        # ── LES ORGANISATIONS NOMMÉES PAR LES SOURCES ────────────────────
+        # Comptées comme tous les autres axes : sur les fiches TROUVÉES, hors
+        # de leur propre filtre. Une entreprise du répertoire qui n'est nommée
+        # nulle part n'apparaît pas — un menu de cinquante entreprises dont
+        # quarante-six ne donnent rien serait un piège, pas un filtre.
+        # LES DEUX COLONNES SONT SERVIES, comme pour les pays : c'est l'écran
+        # qui choisit la langue, et il la choisit sur la même donnée. Traduire
+        # côté serveur obligerait à savoir ici quelle langue le lecteur lit,
+        # alors que ce choix vit dans son navigateur.
+        "organisations": sorted(
+            ({"cle": k, "n": v, "nom": ORG.nom(k, "fr"),
+              "nom_en": ORG.nom(k, "en"), "pays": ORG.siege(k)}
+             for k, v in _compte("organisations", "organisation").items()),
+            key=lambda x: (-x["n"], x["nom"])),
+        # LE SIÈGE EST UN AXE À PART, ET SA MENTION VOYAGE AVEC LUI. Servi
+        # sans elle, il se lirait comme le pays du fait — c'est la confusion
+        # que `filtrer` refuse, et l'écran doit la refuser aussi.
+        "sieges": _sieges(_garde("siege")),
+        "siege_origine": ORG.ORIGINE_DU_SIEGE[0],
+        "siege_origine_en": ORG.ORIGINE_DU_SIEGE[1],
         "impacts": [dict(IMPACTS[c], cle=c,
                          n=sum(1 for f in par_impact if f.get("impact") == c))
                     for c in ORDRE_IMPACTS

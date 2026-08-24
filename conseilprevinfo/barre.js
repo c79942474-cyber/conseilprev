@@ -58,6 +58,8 @@
     /* Les pages du site */
     "/": '<path d="M4 5.5h16v13H4z"/><path d="M4 9h16"/><path d="M8 12.5h8"/><path d="M8 15.5h5"/>',
     "/confronter": '<path d="M12 4v16"/><path d="M6.5 7.5 3.5 14h6z"/><path d="M17.5 7.5 14.5 14h6z"/><path d="M6 5.5h12"/>',
+    /* La revue : un journal plié, et la barre du temps qui le découpe. */
+    "/revue": '<path d="M4.5 5h11v14h-11z"/><path d="M15.5 8.5h4v10.5h-4"/><path d="M7.5 8.5h5"/><path d="M7.5 11.5h5"/><path d="M7.5 14.5h3"/>',
     "/abonnement": '<path d="M12 3.5a5 5 0 0 0-5 5c0 5-2 6.5-2 6.5h14s-2-1.5-2-6.5a5 5 0 0 0-5-5z"/><path d="M10.4 18a1.9 1.9 0 0 0 3.2 0"/>',
     /* LES QUATRE GROUPES DU MENU. Les icônes de rubrique, plus haut dans la
        colonne, portent la teinte de leur groupe à pleine intensité ; celles
@@ -85,7 +87,21 @@
     "r-classeur": '<rect x="3.5" y="6" width="17" height="13" rx="1.6"/><path d="M9 6V4.6A1.1 1.1 0 0 1 10.1 3.5h3.8A1.1 1.1 0 0 1 15 4.6V6"/><path d="M3.5 11.5h17"/>',
     "r-bulletin": '<rect x="2.8" y="5.5" width="18.4" height="13" rx="1.6"/><path d="m3.6 6.6 8.4 6.2 8.4-6.2"/>',
     "r-touche": '<path d="M4 12h4.6l2.2-5.4 2.6 11 2.2-5.6H20"/>',
-    "r-nomme": '<circle cx="12" cy="12" r="8.5"/><path d="m7.2 7.2 9.6 9.6"/>'
+    "r-nomme": '<circle cx="12" cy="12" r="8.5"/><path d="m7.2 7.2 9.6 9.6"/>',
+    /* Les rubriques de `/confidentialite`. ELLES N'EN AVAIENT AUCUNE, et
+       personne ne l'avait vu : le contrôle qui les exige énumérait quatre
+       fichiers écrits à la main, et cette page n'y était pas. Depuis qu'il
+       énumère le dossier, six rubriques servies se sont découvertes sans
+       silhouette — la barre de cette page s'affichait donc à moitié chargée
+       en face de six autres qui en portaient. */
+    "r-choix": '<path d="M4.5 12.5 9.5 17.5 19.5 6.5"/>',
+    "r-inventaire": '<path d="M4.5 5.5h15v13h-15z"/><path d="M4.5 10h15"/><path d="M4.5 14.5h15"/><path d="M9.5 5.5v13"/>',
+    "r-serveur": '<rect x="3.5" y="5" width="17" height="6" rx="1.4"/><rect x="3.5" y="13" width="17" height="6" rx="1.4"/><path d="M6.8 8h.01"/><path d="M6.8 16h.01"/>',
+    "r-tiers": '<circle cx="8" cy="9.5" r="3.2"/><circle cx="17" cy="14.5" r="2.6"/><path d="M2.8 19.5a5.6 5.6 0 0 1 10.4 0"/>',
+    "r-droits": '<path d="M12 3.5 4.5 6.5v6c0 4.4 3.1 8.2 7.5 9.2 4.4-1 7.5-4.8 7.5-9.2v-6z"/><path d="M9 12.2l2 2 4-4.2"/>',
+    "r-securite": '<rect x="5" y="10.5" width="14" height="9.5" rx="1.4"/><path d="M8.2 10.5V7.8a3.8 3.8 0 0 1 7.6 0v2.7"/>',
+    /* La rubrique signée de la revue : une plume. Ce qui ne se dérive pas. */
+    "r-signees": '<path d="M4.5 19.5s2-6.5 7-11 8-4 8-4-1 5-4.5 8.5-8.5 4-8.5 4"/><path d="M4.5 19.5 9 15"/>'
   };
 
   function icone(cle, classe) {
@@ -101,6 +117,7 @@
      demanderait un index que ce site n'a pas, et l'inventer serait pire. */
   var PAGES = [
     { href: "/", cle: "bl.fil", dit: "bl.fil.dit" },
+    { href: "/revue", cle: "bl.revue", dit: "bl.revue.dit" },
     { href: "/confronter", cle: "bl.conf", dit: "bl.conf.dit" },
     { href: "/abonnement", cle: "bl.abo", dit: "bl.abo.dit" }
   ];

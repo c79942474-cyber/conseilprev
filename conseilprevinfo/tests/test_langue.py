@@ -137,8 +137,13 @@ def test_la_reserve_est_servie_avec_le_referentiel():
     requête pourrait échouer seule, et la page afficherait alors une interface
     anglaise SANS sa réserve — exactement l'état qu'on veut interdire."""
     src = _lire("app.py")
+    # LA FENÊTRE EST LA VUE, PAS NEUF CENTS CARACTÈRES. Le compte était
+    # arbitraire, et l'ajout du répertoire des organisations a suffi à pousser
+    # la ligne hors de la fenêtre : le contrôle est tombé alors que la réserve
+    # partait toujours par la même requête. On lit donc la fonction entière.
     i = src.index("def api_referentiel")
-    assert "langues=V.langues(" in src[i:i + 900]
+    vue = src[i:src.index("\n\n\n", i)]
+    assert "langues=V.langues(" in vue, vue
 
 
 # ── 3. Le dictionnaire ne peut pas mentir ─────────────────────────────────

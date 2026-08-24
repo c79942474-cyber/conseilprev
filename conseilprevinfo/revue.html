@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La revue — CONSEILPREV INFO</title>
+<meta name="description" content="La revue de presse hebdomadaire du corpus, et la revue mensuelle internationale. Ce qui est entré, ce qui manque, et ce que la période ne dit pas — chaque entrée porte sa source et son statut.">
+<meta name="robots" content="index, follow">
+<!-- LES POLICES SONT SERVIES PAR CE SITE. Voir polices.css. -->
+<link rel="stylesheet" href="/polices.css">
+<link rel="stylesheet" href="/veille.css">
+</head>
+<body>
+
+<div class="oreille">
+  <div class="in">
+    <span><a href="/" data-i18n="or.retour">← CONSEILPREV INFO</a></span>
+    <span class="or-d">
+      <a href="/confronter" data-i18n="or.confronter">Confronter un document</a>
+      <a href="/abonnement" data-i18n="or.abonnement">Votre abonnement</a>
+      <span id="or-date">—</span>
+      <span data-langue></span>
+    </span>
+  </div>
+</div>
+
+<button type="button" id="bl-bouton" aria-expanded="false"
+        aria-controls="barre" data-i18n-aria="bl.ouvrir">
+  <span></span><span></span><span></span>
+</button>
+
+<div class="page">
+  <!-- `data-barre-legende` : cette page affiche les pastilles de portée et le
+       contour de lecture des cartes, donc elle demande la clé qui les
+       décode. -->
+  <aside class="bl" id="barre" data-barre data-barre-legende data-barre-analyses></aside>
+  <div class="col">
+
+<main class="in pg pg-revue">
+  <h1 class="titre-journal pg-titre"><span data-i18n="rv.titre">La revue</span></h1>
+
+  <p class="devise">
+    <span data-i18n="rv.devise">Deux découpes du même corpus :</span>
+    <b data-i18n="rv.devise.b">la semaine, et le mois vu hors de France</b>
+    <span data-i18n="rv.devise.fin">. Rien n'est réécrit pour l'occasion —
+    chaque entrée renvoie à sa fiche, avec sa source et son statut.</span>
+  </p>
+
+  <!-- CE QUE LA REVUE COMPTE, DIT AVANT LA REVUE. C'est la seule chose qui
+       permette de la lire : une revue de presse qui ne dit pas sur quelle
+       date elle découpe laisse croire qu'elle couvre l'actualité de la
+       semaine, alors qu'elle couvre les faits DATÉS de cette semaine et
+       entrés au corpus. -->
+  <div class="bandeau-etat alerte">
+    <b data-i18n="rv.compte.b">Ce que cette revue compte.</b>
+    <span data-i18n="rv.compte.t">Les fiches dont LE FAIT est daté de la
+    période — jamais celles que nous avons collectées pendant la période. Les
+    deux dates ne coïncident pas : CISA inscrit en mars une faille exploitée
+    depuis des mois, MITRE publie en août l'étude d'un incident de janvier.
+    Une période sans entrée ne dit donc pas qu'il ne s'est rien passé : elle
+    dit qu'aucun fait daté de ces jours-là n'est entré au corpus.</span>
+  </div>
+
+  <!-- LES DEUX REVUES SONT DEUX ONGLETS, ET NON DEUX PAGES. Elles portent la
+       même mécanique et le même avertissement ; deux pages auraient fait
+       diverger l'un des deux au premier amendement. -->
+  <div class="rv-choix" role="tablist">
+    <button type="button" id="rv-hebdo" role="tab" aria-selected="true"
+            data-i18n="rv.hebdo">Revue hebdomadaire</button>
+    <button type="button" id="rv-mensuel" role="tab" aria-selected="false"
+            data-i18n="rv.mensuel">Revue mensuelle internationale</button>
+  </div>
+
+  <!-- LA NAVIGATION DANS LE TEMPS. Elle ne propose pas un calendrier : le
+       corpus ne documente pas toutes les semaines, et un sélecteur de date
+       laisserait choisir des périodes vides sans le dire. -->
+  <div class="rv-nav">
+    <button type="button" id="rv-prec" data-i18n="rv.prec">← Période précédente</button>
+    <span class="rv-per" id="rv-per">—</span>
+    <button type="button" id="rv-suiv" data-i18n="rv.suiv">Période suivante →</button>
+    <button type="button" id="rv-dernier" data-i18n="rv.dernier">La plus récente documentée</button>
+  </div>
+
+  <p class="bandeau-etat" id="rv-retard" hidden></p>
+  <p class="rv-regle" id="rv-regle" hidden></p>
+
+  <div id="rv-corps"></div>
+
+  <!-- LES DEUX RUBRIQUES QUI NE SE DÉRIVENT PAS. Elles sont ici, à leur
+       place, et elles disent leur vide plutôt que de disparaître. -->
+  <h2 class="rubrique" id="r-signees"><span data-i18n="rv.signees">Reportages et
+    entretiens — ce qui ne se dérive pas</span></h2>
+  <div id="rv-rubriques"></div>
+</main>
+
+<footer>
+  <div class="in">
+    <p><b data-i18n="rv.pi.b">Pourquoi cette revue ne commente pas.</b>
+      <span data-i18n="rv.pi.t">Une revue de presse qui commente cesse d'en
+      être une. Le classement par portée est celui du moteur, déjà publié sur
+      chaque fiche ; les comptes sont des comptes. Aucune phrase de cette page
+      n'apprécie ce qu'elle range — et les deux rubriques qui demanderaient
+      une plume sont vides, signées par personne, plutôt que remplies par une
+      machine.</span></p>
+  </div>
+</footer>
+
+  </div><!-- .col -->
+</div><!-- .page -->
+
+<script src="/langue.js" defer></script>
+<script src="/lecture.js" defer></script>
+<script src="/vieprivee.js" defer></script>
+<script src="/barre.js" defer></script>
+<script src="/fleches.js" defer></script>
+<script src="/revue.js" defer></script>
+</body>
+</html>

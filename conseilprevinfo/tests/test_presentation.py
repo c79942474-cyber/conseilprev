@@ -153,11 +153,20 @@ def test_la_mesure_qui_a_motive_le_repli_est_ecrite():
 
 def _rubriques_declarees():
     """Tous les identifiants de rubrique servis par le site — ceux du HTML et
-    ceux qu'écrit `fiche.js`. Les lire des deux endroits est le point : une
-    rubrique posée par du JavaScript est aussi visible qu'une autre, et c'est
-    justement celle qu'on oublie."""
+    ceux qu'écrit le JavaScript. Les lire des deux endroits est le point : une
+    rubrique posée par du script est aussi visible qu'une autre, et c'est
+    justement celle qu'on oublie.
+
+    LE PÉRIMÈTRE EST ÉNUMÉRÉ PAR LE DOSSIER, pas tenu à la main. Il l'était :
+    quatre fichiers nommés ici, et `revue.html` n'en faisait pas partie — sa
+    rubrique aurait pu vivre sans silhouette sans qu'aucun contrôle ne bouge,
+    tandis que l'icône écrite pour elle passait pour orpheline. Un inventaire
+    dont le périmètre est lui-même tenu à la main a exactement le défaut qu'il
+    est censé empêcher ; c'est la leçon déjà payée sur `fleches.js` dans
+    `test_securite`, et elle vaut ici."""
     ids = set()
-    for nom in ("index.html", "abonnement.html", "confronter.html", "fiche.js"):
+    for nom in sorted(f for f in os.listdir(ICI)
+                      if f.endswith(".html") or f.endswith(".js")):
         for m in re.finditer(r'h2 class="rubrique" id="([a-z0-9-]+)"', _lire(nom)):
             ids.add(m.group(1))
     return ids

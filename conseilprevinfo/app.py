@@ -14,6 +14,7 @@ requête taperait sur les serveurs des éditeurs à chaque visiteur.
 DÉMARRAGE LOCAL :  python app.py
 """
 import os
+import re
 import threading
 import time
 from datetime import datetime, timezone
@@ -29,6 +30,9 @@ import croisement as X
 import exporter as EXP
 import decision as DEC
 import ingestion
+import organisations as ORG
+import redaction as RED
+import revue as RV
 import sources as SRC
 import veille as V
 
@@ -170,6 +174,11 @@ def page_confidentialite():
     return send_from_directory(ICI, "confidentialite.html")
 
 
+@app.route("/revue")
+def page_revue():
+    return send_from_directory(ICI, "revue.html")
+
+
 # ═══════════════════════════════════════════════════════════════════════════
 #  LES EN-TÊTES DE SÉCURITÉ
 #
@@ -278,6 +287,8 @@ def api_veille():
         jusqua=request.args.get("jusqua") or None,
         impact=request.args.get("impact") or None,
         horizon=request.args.get("horizon") or None,
+        organisation=request.args.get("organisation") or None,
+        siege=request.args.get("siege") or None,
     )
     # LA TRADUCTION PRÉCÈDE LA RECHERCHE, ET NON L'INVERSE. Un lecteur qui
     # cherche « poisoning » sur une interface anglaise cherche dans ce qu'il a
@@ -364,7 +375,7 @@ def api_fiche(ident):
 # proposaient des combinaisons qui ne rendaient rien — « Systèmes d'IA » puis
 # « DE (2) », alors qu'aucune fiche de cette rubrique ne porte de pays.
 _FILTRES_FIL = ("sujet", "pays", "techno", "depuis", "jusqua",
-                "impact", "horizon", "q")
+                "impact", "horizon", "organisation", "siege", "q")
 
 
 def _filtres_demandes():
@@ -454,12 +465,57 @@ def api_referentiel():
                    sujets=V.sujets(), statuts=V.statuts(),
                    lectures=V.lectures(), impacts=V.impacts(),
                    horizons=V.horizons(),
+                   # LE RÉPERTOIRE DES ORGANISATIONS, EN ENTIER — y compris
+                   # celles qu'aucune fiche ne nomme aujourd'hui. Les menus,
+                   # eux, ne montrent que ce qui est trouvé : cette liste-ci
+                   # sert à NOMMER une clé déjà portée par une fiche, et une
+                   # fiche ancienne peut nommer une entreprise absente du
+                   # corpus du jour.
+                   organisations=V.organisations(),
+                   origine_du_siege=ORG.ORIGINE_DU_SIEGE[0],
+                   origine_du_siege_en=ORG.ORIGINE_DU_SIEGE[1],
                    # CE QUE LA BASCULE FR/EN NE TRADUIT PAS, avec son compte.
                    # L'écran l'affiche au moment où la bascule sert : une
                    # interface anglaise posée sur des analyses françaises est
                    # un mensonge par omission. Le nombre vient d'ici, pas
                    # d'une phrase écrite une fois pour toutes.
                    langues=V.langues(corpus()))
+
+
+@app.route("/api/revue")
+def api_revue():
+    """LA REVUE D'UNE PÉRIODE — hebdomadaire, ou mensuelle internationale.
+
+    L'ANCRE PAR DÉFAUT EST LA PLUS RÉCENTE QUE LE CORPUS DOCUMENTE, et non
+    aujourd'hui. Mesuré : le fait le plus récent du corpus a plusieurs
+    semaines, si bien qu'ouvrir sur la semaine en cours servirait une page
+    vide à chaque visite — le lecteur en conclurait une panne plutôt qu'un
+    état du corpus. La page dit laquelle elle ouvre, et de combien elle est
+    en arrière.
+
+    L'ANCRE SUIT LA RÈGLE DE LA REVUE DEMANDÉE : la dernière semaine
+    documentée et le dernier mois documenté SOUS LA RÈGLE INTERNATIONALE ne
+    sont pas la même date."""
+    genre = request.args.get("genre") or "semaine"
+    if genre not in RV.GENRES:
+        return (jsonify(ok=False, erreur="genre_inconnu",
+                        message="Genres servis : %s." % ", ".join(RV.GENRES)), 400)
+    inter = (request.args.get("international") or "") in ("1", "oui", "true")
+    langue = _langue_analyses()
+    c = corpus()
+    ancre = request.args.get("ancre") or None
+    if ancre and not re.match(r"^\d{4}-\d{2}-\d{2}$", ancre):
+        # UNE ANCRE ILLISIBLE N'EST PAS FORCÉE À AUJOURD'HUI EN SILENCE : le
+        # lecteur croirait avoir ouvert la période qu'il a demandée.
+        return (jsonify(ok=False, erreur="ancre_illisible",
+                        message="La date doit s'écrire AAAA-MM-JJ."), 400)
+    if not ancre:
+        ancre = RV.derniere_ancre(c, genre, international=inter)
+    # LES ANALYSES SONT TRADUITES AVANT LE DÉCOUPAGE, comme sur le fil : une
+    # revue anglaise composée de fiches françaises se lirait comme une panne.
+    fiches = [V.dans(x, langue) for x in c]
+    return jsonify(RV.revue(fiches, genre, ancre, international=inter,
+                            langue=langue))
 
 
 @app.route("/api/sources")
@@ -672,7 +728,8 @@ def api_sante():
                    decision=DEC.sante(c), abonnes=AB.sante(),
                    confrontation=CONF.sante(),
                    classeur=CL.sante(), export=EXP.sante(),
-                   bulletin=BUL.sante(),
+                   bulletin=BUL.sante(), organisations=ORG.sante(),
+                   revue=RV.sante(c), redaction=RED.sante(),
                    corpus=_etat_corpus())
 
 

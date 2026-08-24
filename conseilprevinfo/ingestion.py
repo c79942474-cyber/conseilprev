@@ -37,6 +37,7 @@ from datetime import date, datetime, timezone
 
 import sources as SRC
 import gabarits as GB
+import organisations as ORG
 import veille as V
 
 VERSION = "2026.08.22"
@@ -256,6 +257,12 @@ def collecter_kev(limite=40, depuis=None, seulement_industriel=True):
             # étiquettes : seul ce collecteur sait ce qu'est un fournisseur
             # dans sa source.
             "editeur": V._texte(e.get("vendorProject")) or None,
+            # L'ORGANISATION EST CHERCHÉE DANS LES SEULS CHAMPS DE LA SOURCE.
+            # `vendorProject` et `product` sont ce que CISA écrit ; le titre,
+            # lui, est composé par nous à partir d'eux — l'y chercher aussi
+            # reviendrait à compter deux fois la même affirmation.
+            "organisations": ORG.reconnaitre(e.get("vendorProject"),
+                                             e.get("product")),
             "technologies": _technos_kev(e, industriel),
             "pays": [],
             "date_fait": ajoute,
@@ -319,7 +326,14 @@ def _technos_kev(e, industriel):
 # d'Electricity Maps ; le nom affiché à l'écran, lui, se traduit. Deux tables
 # auraient divergé au premier pays ajouté, et l'écart se serait vu comme une
 # source « injoignable » plutôt que comme une faute de recopie.
-PAYS_SUIVIS = {c: v["owid"] for c, v in V.PAYS.items()}
+#
+# UN PAYS SANS CLÉ D'APPARIEMENT N'EST PAS SUIVI, et c'est la marque qui le
+# dit. Le registre porte désormais des pays qui n'y figurent QUE POUR NOMMER
+# le siège d'une entreprise citée par une source — le Japon, Taïwan, la
+# Suisse. Les collecter reviendrait à annoncer un suivi du mix électrique
+# japonais que ce site n'a jamais promis, et à lancer une requête pour une
+# entité que les jeux de données ne nomment pas ainsi.
+PAYS_SUIVIS = {c: v["owid"] for c, v in V.PAYS.items() if v.get("owid")}
 
 
 def collecter_mix_electrique(annee=None, limite=None):
@@ -1045,6 +1059,12 @@ def collecter_atlas(limite_cas=18):
             # faudrait le déduire, donc en faire un jugement du cabinet, à
             # déclarer comme tel.
             "editeur": None,
+            # LA CIBLE, ET ELLE SEULE. `target` est le champ où ATLAS NOMME ce
+            # qui a été attaqué ; `actor` est écarté ici pour la raison écrite
+            # juste au-dessus — il désigne tantôt l'attaquant, tantôt l'équipe
+            # de recherche, et un filtre « entreprise » qui mélangerait la
+            # victime et l'assaillant serait pire qu'absent.
+            "organisations": ORG.reconnaitre(c.get("target")),
             "technologies": ["MITRE ATLAS", "Sécurité des systèmes d'IA"]
                             + (["Incident réel"] if typ == "incident" else []),
             "pays": [],

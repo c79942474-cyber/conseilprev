@@ -80,7 +80,7 @@ Depuis votre poste, aucune session nécessaire :
       https://github.com/c79942474-cyber/conseilprevinfo
     git push -u origin master
 
-`HISTORIQUE.bundle` porte **l'historique git complet — vingt-trois commits**,
+`HISTORIQUE.bundle` porte **l'historique git complet — vingt-cinq commits**,
 messages compris. Il ne s'agit donc pas de repartir d'une copie à plat : le
 détail des corrections, des mesures et des défauts constatés vit dans ces
 messages, et c'est souvent là qu'est l'information.
@@ -179,6 +179,41 @@ suivent les filtres en cours, chaque axe compté hors du sien pour qu'on puisse
 toujours changer d'avis. Un menu qui n'a rien à proposer le dit au lieu de se
 taire, et les pays portent leur nom plutôt que leur code ISO.
 
+Un menu **« Entreprise nommée »** s'y ajoute. Il ne repose sur aucune
+extraction : `organisations.py` porte cinquante entrées écrites à la main,
+chacune avec les formes **sous lesquelles les sources l'écrivent**, et le nom
+n'est cherché QUE dans les champs où une source désigne une entité — `target`
+chez ATLAS, `vendorProject` chez CISA. Jamais dans nos phrases d'analyse : le
+filtre annoncerait sinon « les fiches qui concernent Microsoft » en servant
+« les fiches où nous avons tapé Microsoft ». Le champ `target` d'ATLAS contient
+aussi bien « OpenAI ChatGPT » que « Cloud-Based LLM Services » ou « Multiple
+systems » — une extraction automatique en ferait des entreprises.
+
+Le menu **Pays porte deux groupes nommés** : *le fait s'y situe*, et *siège de
+l'entreprise nommée*. Le second ne dérive d'aucune source lue — c'est un apport
+du cabinet, et sa mention voyage avec lui, du menu jusqu'à la fiche. Les fondre
+ferait d'un incident contre un produit Microsoft un « fait américain ». Quand le
+siège est disputé — VirusTotal, né à Málaga et filiale américaine ; Johnson
+Controls, de droit irlandais et dirigé depuis Milwaukee — il reste **vide**, et
+le module refuse de se charger si l'entrée n'écrit pas son motif.
+
+**La revue** découpe le même corpus en deux : la semaine, et le mois **vu hors
+de France**. Elle compte les fiches dont LE FAIT est daté de la période, jamais
+celles collectées pendant la période — les deux dates ne coïncident pas, et une
+revue bâtie sur la collecte titrerait la semaine en cours au-dessus de faits de
+2021. Une période vide le dit, sans jamais écrire « il ne s'est rien passé » :
+elle ne peut parler que du corpus. Les dates posées faute de mieux en sont
+écartées et comptées ; la règle « internationale » est écrite et servie avec la
+sélection ; ce qu'elle écarte est compté à part.
+
+**Les reportages et les entretiens ne se dérivent pas, et la revue le dit.**
+Les deux rubriques existent, elles sont **vides**, elles écrivent pourquoi et ce
+qu'il faudrait. Le registre refuse toute pièce sans auteur nommé — « la
+rédaction » n'est pas une signature —, sans méthode, sans source vérifiable, et
+pour un entretien sans interlocuteur, sans date et sans accord explicite de
+publication. Les fabriquer aurait été la seule chose que ce site s'interdit
+absolument : un entretien inventé fait DIRE quelque chose à une personne nommée.
+
 Une **bascule FR/EN** traduit l'interface, et **les analyses existent
 désormais en anglais** : les gabarits de dérivation portent leurs deux colonnes
 côte à côte dans `gabarits.py`, écrites à la main. Ce site n'emploie aucune
@@ -233,7 +268,7 @@ que rien ne le signale. Politique de contenu fermée sur `default-src 'self'`,
 sans `unsafe-inline` — ce qui a demandé de retirer les douze attributs `style`
 dispersés dans les pages et le JavaScript.
 
-**336 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
+**374 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
 gardent les règles éditoriales, et chacun est écrit pour tomber le jour où
 quelqu'un les assouplira. Chaque règle nouvelle a été confrontée à une
 **mutation du code qu'elle garde** — et cinq de ces mutations ont révélé des
@@ -241,8 +276,12 @@ contrôles trop faibles, qui ont été resserrés. Un contrôle écrit trop STRI
 aussi été corrigé plutôt que contourné : il supprimait la distinction qu'il
 était censé protéger.
 
-### Les vingt-trois commits du bundle
+### Les vingt-cinq commits du bundle
 
+    b6937a6  Une revue hebdomadaire, une revue mensuelle internationale —
+             et deux rubriques vides qui disent pourquoi
+    fd06ed7  Un filtre par entreprise nommée, et deux provenances de pays
+             qui ne se confondent pas
     ad5d9aa  Rendre visible ce qui est lu, et taire ce qui n'est pas su
     074c9e9  La barre latérale devient un meuble : blanc cassé le jour,
              ardoise glacée la nuit

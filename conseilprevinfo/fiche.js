@@ -60,13 +60,22 @@
   /* LE RÉFÉRENTIEL EST LU EN PARALLÈLE de la fiche : sans lui, `nommer()`
      retombe sur le libellé français servi avec la fiche, et une page anglaise
      s'ouvre avec des pastilles françaises. */
-  var DERNIERE = null;
+  var DERNIERE = null, ORGS = null, ORIGINE_SIEGE = "", ORIGINE_SIEGE_EN = "";
   fetch("/api/veille/referentiel", {credentials:"same-origin"})
     .then(function (r) { return r.json(); })
     .then(function (d) {
       if (!d || !d.ok) return;
       ranger("sujet", d.sujets); ranger("impact", d.impacts);
       ranger("statut", d.statuts); ranger("lecture", d.lectures);
+      /* LE RÉPERTOIRE DES ORGANISATIONS EST RANGÉ PAR CLÉ. La fiche ne porte
+         que des clés — c'est le référentiel qui les nomme, comme pour les
+         sujets et les statuts. Une fiche ancienne peut nommer une entreprise
+         absente du corpus du jour : c'est pourquoi le répertoire est servi en
+         entier, et non déduit des facettes. */
+      ORGS = {};
+      (d.organisations || []).forEach(function (o) { ORGS[o.cle] = o; });
+      ORIGINE_SIEGE = d.origine_du_siege || "";
+      ORIGINE_SIEGE_EN = d.origine_du_siege_en || "";
       if (DERNIERE) rendre(DERNIERE);
     })
     .catch(function () { /* les libellés servis avec la fiche font foi */ });
@@ -161,6 +170,48 @@
         + '<p>' + esc(f.portee) + '</p></div>';
       h += '<div class="fbloc doute"><span class="fbloc-t">' + esc(tr("js.doute")) + '</span>'
         + '<p>' + esc(f.incertitude) + '</p></div>';
+
+      /* LES ENTREPRISES QUE LA SOURCE NOMME — et rien d'autre.
+         ─────────────────────────────────────────────────────
+         POURQUOI CE BLOC EXISTE. Le fil porte un filtre « Entreprise
+         nommée » ; sans ce bloc, un lecteur qui filtre sur Siemens ouvre une
+         fiche où le mot Siemens n'apparaît nulle part à l'écran, et il ne
+         peut ni vérifier le rattachement ni le contester.
+
+         POURQUOI IL DIT « NOMMÉE » ET NON « CONCERNÉE ». Ce site ne sait pas
+         qui est concerné par une faille — il sait qui la source a nommé dans
+         son champ d'entité. La nuance est tout l'écart entre un constat et
+         une mise en cause, et c'est l'intitulé qui la tient.
+
+         LE SIÈGE PORTE SA MENTION. Il ne vient d'aucune source lue : il est
+         écrit à la main par ce cabinet, et il se lit ici comme il se lit dans
+         le menu — jamais comme le pays du fait. */
+      if ((f.organisations || []).length && ORGS) {
+        /* LES DEUX COLONNES SONT SERVIES, ET C'EST ICI QUE L'UNE EST PRISE.
+           Le répertoire arrive une fois ; la bascule de langue rejoue ce
+           rendu sans rien redemander — c'est la règle du site pour les
+           sujets et les statuts, et elle vaut pour les entreprises.
+
+           LA LANGUE DE L'INTERFACE, ET NON CELLE DES ANALYSES. Ces mots-ci —
+           « siège disputé », le nom du pays — sont de ce site, pas de la
+           source ; le nom de l'entreprise, lui, ne change pas de langue. */
+        var en = !!(window.L && window.L.courante() === "en");
+        var lo = (f.organisations || []).map(function (c) {
+          var o = ORGS[c];
+          if (!o) return '<span class="orga">' + esc(c) + '</span>';
+          var pn = (en && o.pays_nom_en) ? o.pays_nom_en : o.pays_nom;
+          var pm = (en && o.pays_motif_en) ? o.pays_motif_en : o.pays_motif;
+          return '<span class="orga">' + esc((en && o.nom_en) ? o.nom_en : o.nom)
+            + (o.pays ? '<i>' + esc(pn || o.pays) + '</i>'
+                      : '<i class="dispute" title="' + esc(pm || "") + '">'
+                        + esc(tr("og.dispute")) + '</i>')
+            + '</span>';
+        }).join("");
+        h += '<div class="fi-orgs"><span class="fbloc-t">'
+          + esc(tr("og.titre")) + '</span>' + lo
+          + '<p class="fi-orgs-dit">'
+          + esc((en ? ORIGINE_SIEGE_EN : ORIGINE_SIEGE) || "") + '</p></div>';
+      }
 
       h += '<div class="src fi-src">'
         + '<span class="na">' + esc(s.nature_nom || "") + ' · '

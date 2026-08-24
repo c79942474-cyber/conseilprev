@@ -934,9 +934,23 @@ def test_les_pays_suivis_derivent_de_la_table_editoriale():
     """Deux tables auraient divergé au premier pays ajouté, et l'écart se
     serait vu comme une source « injoignable » plutôt que comme une faute de
     recopie. Le nom employé pour l'appariement n'est pas le nom affiché : les
-    séparer est ce qui permet de traduire l'un sans casser l'autre."""
-    assert I.PAYS_SUIVIS == {c: v["owid"] for c, v in V.PAYS.items()}
+    séparer est ce qui permet de traduire l'un sans casser l'autre.
+
+    LA RÈGLE S'EST PRÉCISÉE, ET CE CONTRÔLE AVEC ELLE. Le registre porte
+    désormais des pays qui n'y sont QUE POUR NOMMER le siège d'une entreprise
+    citée par une source — le Japon, Taïwan, la Suisse. Ils n'ont pas de clé
+    d'appariement, et les suivre reviendrait à annoncer un suivi du mix
+    électrique japonais que ce site n'a jamais promis. Ce qui est gardé n'est
+    donc plus l'égalité stricte, c'est la DÉRIVATION : rien de suivi qui ne
+    vienne du registre, aucun nom recopié, et aucun pays sans clé collecté."""
+    assert I.PAYS_SUIVIS == {c: v["owid"] for c, v in V.PAYS.items() if v["owid"]}
     assert V.PAYS["DE"]["fr"] != V.PAYS["DE"]["owid"]
+    # AUCUN PAYS SUIVI HORS REGISTRE — c'est le sens même de « dérivé ».
+    assert set(I.PAYS_SUIVIS) <= set(V.PAYS)
+    # ET LE REGISTRE PORTE RÉELLEMENT LES DEUX SORTES, sans quoi ce contrôle
+    # se satisferait d'un registre où tout serait suivi et ne garderait rien.
+    assert any(v["owid"] for v in V.PAYS.values())
+    assert any(not v["owid"] for v in V.PAYS.values())
 
 
 def test_l_api_des_facettes_lit_les_memes_filtres_que_le_fil():

@@ -174,6 +174,66 @@
      — mais un menu réduit à « Tous », désactivé sans un mot, se lit
      exactement comme un chargement raté. Il porte donc son motif, à
      l'endroit même où le lecteur allait cliquer. */
+  /* ── LE MENU PAYS, ET SES DEUX PROVENANCES ───────────────────────────────
+     UN SEUL MENU, DEUX GROUPES NOMMÉS. Le lecteur cherche « France » à un
+     seul endroit ; ce qu'il trouve, en revanche, ne dit pas la même chose
+     selon le groupe où il le prend :
+
+       · LE FAIT — le pays que la SOURCE rattache au fait : une zone
+         électrique, un réseau national. C'est le seul axe « pays » que ce
+         site ait jamais servi.
+       · LE SIÈGE — le pays d'où vient l'ENTREPRISE NOMMÉE par la source. Ce
+         renseignement-là ne vient d'aucune source lue : il est écrit à la
+         main par ce cabinet, et le menu le dit dans son intitulé de groupe.
+
+     LES FONDRE SERAIT LE DÉFAUT. Un incident ATLAS contre un produit
+     Microsoft deviendrait un « fait américain », et le filtre par pays
+     mélangerait la géographie des faits avec la nationalité des fournisseurs
+     — deux questions dont aucune ne répond à l'autre.
+
+     LA VALEUR PORTE SON AXE : « FR » interroge le fait, « siege:FR »
+     interroge le siège. C'est `parametres()` qui traduit, en un seul endroit,
+     pour que l'adresse partagée dise laquelle des deux questions a été
+     posée. */
+  function paysGroupes(d, lib) {
+    var el = $("f-pays");
+    if (!el) return;
+    var garde = el.value;
+    var premier = el.options.length ? el.options[0] : null;
+    var neutre = premier ? premier.getAttribute("data-i18n") : null;
+    var h = premier ? premier.outerHTML : "";
+    var faits = d.pays || [], sieges = d.sieges || [];
+
+    function grp(titre, liste, prefixe, glose) {
+      if (!liste.length) return "";
+      var g = '<optgroup label="' + esc(titre) + '"'
+        + (glose ? ' title="' + esc(glose) + '"' : "") + ">";
+      liste.forEach(function (x) {
+        g += '<option value="' + esc(prefixe + x.cle) + '">'
+          + esc(x[lib] || x.nom) + " (" + x.n + ")</option>";
+      });
+      return g + "</optgroup>";
+    }
+    /* LES GROUPES NE SONT POSÉS QUE S'ILS ONT QUELQUE CHOSE. Un intitulé de
+       groupe vide apprend au lecteur une catégorie qu'il ne peut pas
+       employer. Et s'il n'y en a qu'un, le titre reste : c'est lui qui dit
+       ce que les valeurs signifient. */
+    h += grp(tr("f.pays.fait"), faits, "");
+    h += grp(tr("f.pays.siege"), sieges, "siege:",
+             (window.L && window.L.courante() === "en")
+               ? d.siege_origine_en : d.siege_origine);
+    el.innerHTML = h;
+    if (garde) el.value = garde;
+
+    var vide = !faits.length && !sieges.length && !garde;
+    el.disabled = vide;
+    el.classList.toggle("vide-dit", vide);
+    if (el.options[0]) {
+      el.options[0].textContent = vide ? tr("f.pays.vide")
+        : (neutre ? tr(neutre) : el.options[0].textContent);
+    }
+  }
+
   function options(sel, liste, valeur, libelle, compte, videDit) {
     var el = $(sel);
     if (!el) return;
@@ -204,10 +264,10 @@
      l'adresse et à la relire : trois listes séparées auraient divergé, et une
      vue partagée se serait ouverte différemment de celle qu'on avait sous les
      yeux. */
-  var FILTRES = [["sujet", "f-sujet"], ["pays", "f-pays"],
-                 ["techno", "f-techno"], ["impact", "f-impact"],
-                 ["horizon", "f-horizon"], ["depuis", "f-depuis"],
-                 ["q", "f-q"]];
+  var FILTRES = [["sujet", "f-sujet"], ["organisation", "f-orga"],
+                 ["pays", "f-pays"], ["techno", "f-techno"],
+                 ["impact", "f-impact"], ["horizon", "f-horizon"],
+                 ["depuis", "f-depuis"], ["q", "f-q"]];
 
   /* COMBIEN DE FILTRES SONT ACTIFS — compté depuis la MÊME table que la
      requête et l'adresse. Un compte tenu à part finirait par annoncer
@@ -238,7 +298,17 @@
     var q = [];
     FILTRES.forEach(function (p) {
       var v = ($(p[1]) || {}).value;
-      if (v) q.push(p[0] + "=" + encodeURIComponent(v));
+      if (!v) return;
+      /* LE MENU PAYS PORTE DEUX AXES, ET C'EST ICI — EN UN SEUL ENDROIT —
+         QU'ILS SE SÉPARENT. Une valeur préfixée « siege: » interroge le
+         siège de l'entreprise nommée, pas le territoire du fait. Traduire
+         cela à plusieurs endroits produirait tôt ou tard une adresse
+         partagée qui ne pose pas la question affichée. */
+      if (p[0] === "pays" && v.indexOf("siege:") === 0) {
+        q.push("siege=" + encodeURIComponent(v.slice(6)));
+        return;
+      }
+      q.push(p[0] + "=" + encodeURIComponent(v));
     });
     /* L'ADRESSE DE LA PAGE NE PORTE PAS LA LANGUE : c'est un réglage de
        lecteur, pas un filtre. Collée dans l'adresse, elle voyagerait avec
@@ -273,6 +343,11 @@
     try { p = new URLSearchParams(location.search); } catch (e) { return; }
     FILTRES.forEach(function (f) {
       var el = $(f[1]), v = p.get(f[0]);
+      /* L'ADRESSE PEUT PORTER `siege=` LÀ OÙ LE MENU ATTEND `siege:XX` —
+         c'est le pendant exact de `parametres()`, et il doit vivre à côté de
+         lui : une adresse partagée qui ne se relit pas est un lien qui ment
+         sur ce qu'il ouvre. */
+      if (f[0] === "pays" && v == null && p.get("siege")) v = "siege:" + p.get("siege");
       if (!el || v == null) return;
       /* UNE VALEUR ABSENTE DE LA LISTE EST IGNORÉE, pas forcée. Une adresse
          ancienne peut nommer un pays que le corpus ne porte plus ; l'imposer
@@ -700,7 +775,8 @@
       options("f-sujet", d.sujets, "cle", lib, true);
       /* LE PAYS PORTE SON NOM. Un menu de codes ISO oblige le lecteur à
          savoir que la France s'écrit FR, et à la chercher entre ES et GB. */
-      options("f-pays", d.pays, "cle", lib, true, "f.pays.vide");
+      paysGroupes(d, lib);
+      options("f-orga", d.organisations, "cle", lib, true, "f.orga.vide");
       options("f-techno", d.technologies, "cle", "cle", true, "f.techno.vide");
       options("f-impact", d.impacts, "cle", lib, true);
       options("f-horizon", d.horizons, "cle", lib, true);

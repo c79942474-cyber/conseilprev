@@ -224,8 +224,14 @@ def test_la_langue_ne_part_pas_dans_l_adresse_partagee():
     imposerait au destinataire la langue de l'expéditeur."""
     js = _lire("veille.js")
     assert "parametres(true)" in js
+    # LA FENÊTRE EST LA FONCTION, PAS NEUF CENTS CARACTÈRES. Le compte était
+    # arbitraire : un commentaire ajouté dans `parametres()` a suffi à pousser
+    # la ligne cherchée hors de la fenêtre, et le contrôle est tombé sur un
+    # code qui tenait toujours sa promesse. Un contrôle qui se déclenche sur
+    # la longueur d'un commentaire n'apprend rien à personne.
     i = js.index("function parametres(")
-    assert "if (!pourAdresse && langueAnalyses() === \"en\")" in js[i:i + 900]
+    corps = js[i:js.index("\n  }", i)]
+    assert "if (!pourAdresse && langueAnalyses() === \"en\")" in corps, corps
 
 
 def test_une_fiche_non_traduite_le_dit_sur_elle_meme():
