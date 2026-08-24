@@ -80,7 +80,7 @@ Depuis votre poste, aucune session nécessaire :
       https://github.com/c79942474-cyber/conseilprevinfo
     git push -u origin master
 
-`HISTORIQUE.bundle` porte **l'historique git complet — vingt-six commits**,
+`HISTORIQUE.bundle` porte **l'historique git complet — vingt-sept commits**,
 messages compris. Il ne s'agit donc pas de repartir d'une copie à plat : le
 détail des corrections, des mesures et des défauts constatés vit dans ces
 messages, et c'est souvent là qu'est l'information.
@@ -161,7 +161,10 @@ côté de la date — parce que bleu et vert sont exactement la paire que la
 deutéranopie confond. Le battement dure une seconde et demie, soit un
 vingtième du seuil de trois éclats par seconde au-delà duquel un clignotement
 devient un risque ; il s'arrête d'office si le système du lecteur le demande,
-et par un interrupteur posé au-dessus du fil comme dans la barre. Ce repère
+et par un interrupteur posé au-dessus du fil comme dans la barre — qui **dit
+quand rien ne bat**, puisque le vert n'apparaît que sur une fiche déjà ouverte
+et qu'un bouton dont on ne peut pas constater l'effet apprend à se méfier de
+tous les autres. Ce repère
 tenait auparavant sur trois pixels d'un seul bord, en deux teintes sombres et
 voisines : la mécanique marchait, mais personne ne pouvait le constater.
 
@@ -275,7 +278,7 @@ que rien ne le signale. Politique de contenu fermée sur `default-src 'self'`,
 sans `unsafe-inline` — ce qui a demandé de retirer les douze attributs `style`
 dispersés dans les pages et le JavaScript.
 
-**386 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
+**388 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
 gardent les règles éditoriales, et chacun est écrit pour tomber le jour où
 quelqu'un les assouplira. Chaque règle nouvelle a été confrontée à une
 **mutation du code qu'elle garde** — et cinq de ces mutations ont révélé des
@@ -283,8 +286,10 @@ contrôles trop faibles, qui ont été resserrés. Un contrôle écrit trop STRI
 aussi été corrigé plutôt que contourné : il supprimait la distinction qu'il
 était censé protéger.
 
-### Les vingt-six commits du bundle
+### Les vingt-sept commits du bundle
 
+    919ad8d  L'interrupteur du clignotement obéissait sans qu'on puisse le
+             constater
     a4afe6d  La revue s'emporte en PDF et en Word — réserves comprises
     b6937a6  Une revue hebdomadaire, une revue mensuelle internationale —
              et deux rubriques vides qui disent pourquoi

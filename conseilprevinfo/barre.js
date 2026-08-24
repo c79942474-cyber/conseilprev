@@ -266,10 +266,18 @@
       if (window.LU.motionReduit()) {
         h += '<p class="bl-lg-sys">' + esc(t("lc.systeme")) + "</p>";
       } else {
-        var bat = window.LU.clignote();
+        /* MÊME CORRECTION QUE DANS LE FIL, ET POUR LE MÊME MOTIF. Le lecteur
+           a signalé « Arrêter le clignotement : ne fonctionne pas ». Il
+           fonctionnait — mais seul le contour VERT bat, et il n'apparaît que
+           sur une fiche déjà ouverte. À la première visite il n'y en a
+           aucune : le bouton obéissait sans que rien ne bouge à l'écran.
+           La barre dit donc, elle aussi, que rien ne bat pour l'instant. */
+        var actif = window.LU.clignote();
+        if (!document.querySelector(".fiche.lu"))
+          h += '<p class="bl-lg-sys">' + esc(t("lc.rien")) + "</p>";
         h += '<button type="button" class="bl-lg-cli" id="bl-cli" aria-pressed="'
-          + (bat ? "false" : "true") + '">'
-          + esc(t(bat ? "lc.stop" : "lc.repart")) + "</button>";
+          + (actif ? "false" : "true") + '">'
+          + esc(t(actif ? "lc.stop" : "lc.repart")) + "</button>";
       }
     }
     return h;
@@ -392,7 +400,20 @@
   /* LE COMPTE DE LA BARRE EST CELUI DE LA RUBRIQUE, recopié à chaque fois
      qu'il change. Deux nombres différents pour la même chose sur le même
      écran valent moins qu'aucun nombre. */
+  /* LES OBSERVATEURS DE LA PASSE PRÉCÉDENTE SONT COUPÉS AVANT D'EN POSER
+     D'AUTRES, et ce n'est pas une précaution de principe.
+
+     LES CIBLES SONT DANS LA BARRE, LES SOURCES DANS LA PAGE. Reconstruire la
+     barre détruit les cibles ; les sources, elles, survivent — et l'ancien
+     observateur avec elles, à recopier indéfiniment dans un nœud que plus
+     personne n'affiche. Tant que la barre n'était refaite qu'au changement de
+     langue, le tas restait minuscule et invisible. Depuis qu'elle l'est à
+     CHAQUE rendu du fil, chaque filtre posé en ajoutait une série. */
+  var _obs = [];
+
   function suivreCompteurs() {
+    _obs.forEach(function (o) { try { o.disconnect(); } catch (e) {} });
+    _obs = [];
     Array.prototype.forEach.call(document.querySelectorAll("[data-de]"), function (cible) {
       var src = $(cible.getAttribute("data-de"));
       if (!src) return;
@@ -402,7 +423,11 @@
         cible.hidden = !v;
       };
       copier();
-      try { new MutationObserver(copier).observe(src, { childList: true, characterData: true, subtree: true }); }
+      try {
+        var o = new MutationObserver(copier);
+        o.observe(src, { childList: true, characterData: true, subtree: true });
+        _obs.push(o);
+      }
       catch (e) { /* sans observateur, le compte reste celui du chargement */ }
     });
   }
@@ -560,6 +585,21 @@
        sans réécrire la barre laisserait le lecteur devant une légende qui
        nie le code de couleur qu'il vient d'allumer. */
     document.addEventListener("lecture-effacee", rendre);
+    /* ET À LA PREMIÈRE FICHE LUE. La légende dit « rien ne bat pour
+       l'instant » tant qu'aucune carte n'est verte ; sans cette écoute, la
+       phrase survivrait à la lecture qui la dément. */
+    document.addEventListener("lecture-changee", rendre);
+    /* ET QUAND LE FIL EST À L'ÉCRAN. LA BARRE SE COMPOSE AVANT LES CARTES :
+       elle est bâtie au chargement du document, elles arrivent après un
+       aller-retour réseau. Sa légende demandait « y a-t-il une carte verte
+       à l'écran ? » et obtenait TOUJOURS non — non parce qu'aucune fiche
+       n'était lue, mais parce qu'aucune n'existait encore.
+
+       C'est la même faute que celle qui a motivé `suivreCompteurs()`, et elle
+       appelle la même réponse : la barre est PRÉVENUE plutôt qu'elle ne
+       devine. `veille.js` annonce après chaque rendu du fil, y compris au
+       retour depuis le cache du navigateur. */
+    document.addEventListener("fil-rendu", rendre);
   }
 
   if (document.readyState === "loading")

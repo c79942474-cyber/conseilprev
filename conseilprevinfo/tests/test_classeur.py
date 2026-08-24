@@ -429,3 +429,80 @@ def test_la_promesse_de_la_confrontation_a_ete_amendee():
     bloc = d[i:i + 1800]
     assert "classeur" in bloc, "la confrontation promet encore sans réserve"
     assert "folder" in bloc, "la version anglaise n'a pas été amendée"
+
+
+def test_l_interrupteur_ne_propose_pas_d_arreter_ce_qui_ne_bat_pas():
+    """DÉFAUT SIGNALÉ PAR LE LECTEUR : « Arrêter le clignotement — ne
+    fonctionne pas ». IL FONCTIONNAIT, et c'est ce qui rend le défaut
+    intéressant : il écrivait son réglage, posait `cp-fixe`, changeait son
+    propre intitulé. Mais à l'écran, RIEN NE BOUGEAIT.
+
+    LA CAUSE. Seul le contour vert bat, et le vert n'apparaît que sur une
+    fiche DÉJÀ OUVERTE. Un lecteur qui vient d'accorder la mémoire n'en a
+    aucune : soixante cartes bleues, immobiles. Le bouton proposait donc
+    d'arrêter ce qui n'avait pas commencé, et rien ne permettait de constater
+    qu'il avait obéi.
+
+    C'est exactement la faute déjà écrite pour `prefers-reduced-motion` —
+    « proposer d'arrêter ce qui ne bouge pas apprend au lecteur à se méfier de
+    tous les autres boutons du site » — et elle n'avait été traitée que pour
+    ce cas-là, qui est le plus RARE. Le cas courant, la première visite,
+    restait ouvert.
+
+    LE BOUTON N'EST PAS CACHÉ POUR AUTANT : il faudrait alors lire une fiche
+    pour pouvoir refuser une animation. Il reste, et la page dit que rien ne
+    bat."""
+    v, b = _lire("veille.js"), _lire("barre.js")
+
+    # LES DEUX RÉGIONS EXACTES, et non les deux fichiers entiers. PREMIER
+    # ESSAI, ET IL NE GARDAIT RIEN : le contrôle cherchait `lc.rien` et le
+    # comptage n'importe où dans le fichier. Remplacer `if (!bat)` par
+    # `if (false)` laissait les deux en place — la phrase n'était plus jamais
+    # écrite, et le contrôle restait vert. Un contrôle qui vérifie qu'un
+    # ingrédient EXISTE ne vérifie pas qu'on s'en sert.
+    fil = v[v.index("var actif = !window.LU.clignote"):v.index("e.innerHTML = h;")]
+    bar = b[b.index("var actif = window.LU.clignote();"):b.index("return h;")]
+
+    # LE COMPTE EST FAIT SUR LA PAGE, pas déduit du réglage : c'est ce que le
+    # lecteur a sous les yeux qui décide de la phrase — ET IL DÉCIDE.
+    assert 'document.querySelectorAll(".fiche.lu").length > 0' in fil
+    assert 'if (!bat) h += ' in fil and 'tr("lc.rien")' in fil
+    assert 'if (!document.querySelector(".fiche.lu"))' in bar
+    assert 't("lc.rien")' in bar
+
+    # LE BOUTON RESTE, ET SANS CONDITION — sinon il faudrait lire une fiche
+    # pour pouvoir refuser une animation. Le cacher serait la correction
+    # facile, et elle enfermerait le lecteur que le mouvement dérange.
+    # ANCRÉ EN DÉBUT DE LIGNE, et c'est le point. Chercher la sous-chaîne
+    # `h += '<button…` laissait passer `if (false) h += '<button…` : le
+    # fragment restait dans le fichier, le bouton n'était plus écrit, et le
+    # contrôle restait vert. La condition, si elle revenait, se glisserait
+    # exactement là.
+    assert re.search(r"""(?m)^\s*h \+= '<button type="button" id="rp-cli\"""", fil)
+    assert re.search(
+        r"""(?m)^\s*h \+= '<button type="button" class="bl-lg-cli" id="bl-cli\"""", bar)
+    for region, nom in ((fil, "veille.js"), (bar, "barre.js")):
+        assert "lc.stop" in region and "lc.repart" in region, nom
+
+    # LA PHRASE NE SURVIT PAS À LA LECTURE QUI LA DÉMENT. Une seule annonce,
+    # au seul endroit où une fiche devient lue, et les deux repères l'écoutent.
+    l = _lire("lecture.js")
+    i = l.index("function marquer(")
+    assert "lecture-changee" in l[i:l.index("\n  }", i)], "l'annonce manque"
+    assert 'addEventListener("lecture-changee"' in b, "la barre ne l'écoute pas"
+    j = v.index("function suivreLecture(")
+    assert "direRepere();" in v[j:v.index("\n  }", j)], "le fil ne se refait pas"
+
+    # ET LA BARRE NE DEVINE PAS UN ÉTAT DE PAGE QUI N'EXISTE PAS ENCORE.
+    # DÉFAUT TROUVÉ EN VÉRIFIANT LA CORRECTION PRÉCÉDENTE, et plus profond
+    # qu'elle : la barre se compose au chargement du document, les cartes
+    # arrivent après un aller-retour réseau. Sa question « y a-t-il une carte
+    # verte ? » recevait TOUJOURS non — non parce qu'aucune fiche n'était lue,
+    # mais parce qu'aucune n'existait. C'est la faute qui avait déjà motivé
+    # `suivreCompteurs()`, et elle appelle la même réponse : être prévenue.
+    assert "function annoncerFil(" in v and 'CustomEvent("fil-rendu")' in v
+    assert 'addEventListener("fil-rendu", rendre)' in b, \
+        "la barre décide encore sur une page qui n'est pas rendue"
+    # L'ANNONCE EST FAITE AUX DEUX ENDROITS QUI POSENT LES CARTES : le rendu
+    # du fil, et le rafraîchissement au retour depuis le cache.
+    assert v.count("annoncerFil();") == 2, v.count("annoncerFil();")

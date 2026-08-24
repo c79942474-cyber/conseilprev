@@ -84,6 +84,13 @@
     "lc.repart":       ["Remettre le clignotement", "Bring the blinking back"],
     "lc.systeme":      ["Votre système a déjà coupé les animations — rien ne clignote ici.",
                         "Your system already switched animations off — nothing blinks here."],
+    /* POURQUOI L'INTERRUPTEUR SEMBLE NE RIEN FAIRE. Seul le contour vert
+       bat, et il n'apparaît que sur une fiche déjà ouverte : à la
+       première visite, il n'y en a aucune. Le bouton obéissait, mais rien
+       ne bougeait — et un bouton dont on ne peut pas constater l'effet
+       apprend à se méfier de tous les autres. */
+    "lc.rien":         ["Rien ne bat pour l'instant : le contour vert n'apparaît que sur les fiches déjà ouvertes.",
+                        "Nothing is beating for now: the green outline appears only on entries you have already opened."],
     "lc.non":          ["Ce site ne garde pas trace de ce que vous lisez.",
                         "This site keeps no record of what you read."],
     "lc.non.dit":      ["Les contours ne distinguent donc rien : ce n'est pas que vous n'avez rien lu, c'est que rien n'est su.",

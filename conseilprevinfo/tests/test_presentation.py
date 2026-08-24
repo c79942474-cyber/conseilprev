@@ -428,3 +428,25 @@ def test_la_barre_suit_un_panneau_qu_on_revele():
     for nom in ("barre.js", "fleches.js"):
         s = _lire(nom)
         assert 'attributeFilter: ["hidden", "class"]' in s, nom
+
+
+def test_la_barre_ne_laisse_pas_ses_observateurs_derriere_elle():
+    """DÉFAUT TROUVÉ EN CONTRÔLANT UNE AUTRE CORRECTION, ET C'EST LA
+    CORRECTION QUI L'A CRÉÉ. La barre recopie les compteurs des rubriques et
+    suit leurs changements par des `MutationObserver`. Les CIBLES sont dans la
+    barre, les SOURCES dans la page : la reconstruire détruit les cibles, mais
+    les sources survivent — et l'ancien observateur avec elles, à recopier
+    indéfiniment dans un nœud que plus personne n'affiche.
+
+    Tant que la barre n'était refaite qu'au changement de langue, le tas
+    restait minuscule. Depuis qu'elle l'est à CHAQUE rendu du fil — c'est ce
+    qui répare la légende « rien ne bat » —, chaque filtre posé en ajoutait
+    une série. Une correction qui installe une fuite n'est pas une
+    correction."""
+    b = _lire("barre.js")
+    i = b.index("function suivreCompteurs(")
+    corps = b[i:b.index("\n  }", i)]
+    # LA COUPURE PRÉCÈDE LA POSE, dans cet ordre : couper après aurait coupé
+    # les neufs.
+    assert corps.index("disconnect()") < corps.index("new MutationObserver"), corps
+    assert "_obs = []" in corps and "_obs.push(o)" in corps

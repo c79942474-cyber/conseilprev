@@ -88,6 +88,13 @@
     var l = lire();
     l.push(id);
     ecrire(l);
+    /* LA PREMIÈRE FICHE LUE CHANGE CE QUE LES REPÈRES DOIVENT DIRE : avant
+       elle, rien ne bat, et l'interrupteur doit le dire ; après elle, quelque
+       chose bat. C'est ici — le seul endroit où une fiche devient lue — que
+       l'annonce se fait, plutôt que dans chacune des pages qui l'observent. */
+    document.dispatchEvent(new CustomEvent("lecture-changee", {
+      detail: { id: id }
+    }));
     return true;
   }
 

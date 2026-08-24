@@ -460,6 +460,12 @@
           carte.classList.remove("neuf");
           carte.classList.add("lu");
           marquerCarte(carte, true);
+          /* LE REPÈRE EST REFAIT, PAS LE FIL. Il annonce « rien ne bat pour
+             l'instant » tant qu'aucune carte n'est verte : cette carte-ci
+             vient de le devenir, et la phrase serait démentie par le contour
+             qui bat trois centimètres plus bas. Recomposer le fil ferait
+             perdre la position de défilement au moment du départ. */
+          direRepere();
         }
       });
     });
@@ -481,6 +487,23 @@
       });
     direLecture();
     direRepere();
+    annoncerFil();
+  }
+
+  /* ── LE FIL ANNONCE QU'IL EST À L'ÉCRAN ──────────────────────────────────
+     DÉFAUT TROUVÉ EN VÉRIFIANT LA CORRECTION PRÉCÉDENTE, ET IL ÉTAIT PLUS
+     PROFOND QU'ELLE. La barre latérale se compose au chargement du document ;
+     les cartes, elles, arrivent après un aller-retour réseau. Quand la
+     légende demandait « y a-t-il une carte verte à l'écran ? », la réponse
+     était donc TOUJOURS non — non parce qu'aucune fiche n'était lue, mais
+     parce qu'aucune fiche n'existait encore. Sa phrase « rien ne bat pour
+     l'instant » survivait ensuite au fil entier.
+
+     C'est la même nature de faute que celle qui a motivé `suivreCompteurs()`
+     un peu plus haut dans `barre.js` : la barre décide sur un état de page
+     qui n'est pas encore là. La réponse est la même — elle est prévenue. */
+  function annoncerFil() {
+    document.dispatchEvent(new CustomEvent("fil-rendu"));
   }
 
   /* LE MOT POSÉ SUR UNE CARTE QUI VIENT DE CHANGER D'ÉTAT.
@@ -560,16 +583,39 @@
       + '<b>' + esc(tr("lc.neuf")) + '</b>'
       + '<span class="rp-c lu" aria-hidden="true"></span>'
       + '<b>' + esc(tr("lc.lu")) + '</b>';
-    /* QUAND LE SYSTÈME A DÉJÀ COUPÉ, LE BOUTON DISPARAÎT ET LA PAGE LE DIT.
-       Proposer d'arrêter ce qui ne bouge pas apprend au lecteur à se méfier
-       de tous les autres boutons du site. */
+    /* ── L'INTERRUPTEUR NE PROMET QUE CE QU'IL PEUT TENIR ──────────────────
+       DÉFAUT SIGNALÉ PAR LE LECTEUR : « Arrêter le clignotement — ne
+       fonctionne pas ». Il fonctionnait, et c'est ce qui rend le défaut
+       intéressant. Il écrivait bien son réglage, posait bien `cp-fixe`,
+       changeait bien son propre intitulé — mais À L'ÉCRAN, RIEN NE BOUGEAIT.
+
+       LA CAUSE : SEUL LE CONTOUR VERT BAT, et le contour vert n'apparaît que
+       sur une fiche DÉJÀ OUVERTE. Un lecteur qui vient d'accorder la mémoire
+       n'en a aucune : les soixante cartes sont bleues, immobiles. Le bouton
+       proposait donc d'arrêter quelque chose qui n'avait pas commencé, et il
+       n'y avait aucun moyen de constater qu'il avait obéi.
+
+       C'est exactement la faute écrite deux lignes plus bas pour le réglage
+       du système — « proposer d'arrêter ce qui ne bouge pas apprend au
+       lecteur à se méfier de tous les autres boutons du site » — et elle
+       n'avait été traitée que pour ce cas-là, qui est le plus rare. Le cas
+       courant, celui de la première visite, restait ouvert.
+
+       LA CORRECTION N'EST PAS DE CACHER LE BOUTON : le réglage doit rester
+       accessible avant que ça batte, sinon il faut lire une fiche pour
+       pouvoir refuser une animation. Le bouton reste, et la page DIT que
+       rien ne bat pour l'instant, et pourquoi. */
     if (window.LU.motionReduit && window.LU.motionReduit()) {
       h += '<span class="rp-sys">' + esc(tr("lc.systeme")) + '</span>';
     } else {
-      var bat = !window.LU.clignote || window.LU.clignote();
+      var actif = !window.LU.clignote || window.LU.clignote();
+      /* CE QUI BAT VRAIMENT, COMPTÉ SUR LA PAGE et non déduit du réglage :
+         c'est ce que le lecteur a sous les yeux qui décide de la phrase. */
+      var bat = document.querySelectorAll(".fiche.lu").length > 0;
+      if (!bat) h += '<span class="rp-sys">' + esc(tr("lc.rien")) + '</span>';
       h += '<button type="button" id="rp-cli" class="rp-cli" aria-pressed="'
-        + (bat ? "false" : "true") + '">'
-        + esc(tr(bat ? "lc.stop" : "lc.repart")) + '</button>';
+        + (actif ? "false" : "true") + '">'
+        + esc(tr(actif ? "lc.stop" : "lc.repart")) + '</button>';
     }
     e.innerHTML = h;
     var c = $("rp-cli");
@@ -681,6 +727,7 @@
       $("c-fil").textContent = fil.length + " " + tr("js.fiches");
       direLecture();
       direRepere();
+      annoncerFil();
 
       /* L'ORDRE DE LECTURE EST NOTÉ ICI, ET NULLE PART AILLEURS — c'est le
          seul endroit qui connaisse l'ordre RÉELLEMENT AFFICHÉ : la une
