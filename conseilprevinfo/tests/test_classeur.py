@@ -282,37 +282,130 @@ def test_la_memoire_de_lecture_ne_quitte_pas_le_navigateur():
         assert interdit not in js, interdit
 
 
-def test_le_clignotement_permanent_a_ete_ecarte():
-    """Les règles d'accessibilité l'interdisent : au-delà de cinq secondes,
-    tout clignotement doit pouvoir être arrêté, et rien ne doit dépasser trois
-    éclats par seconde. La pulsation est donc BORNÉE, et le motif du refus est
-    écrit là où quelqu'un serait tenté de la rendre infinie."""
+def test_le_clignotement_permanent_est_encadre():
+    """CE CONTRÔLE GARDAIT L'ENGAGEMENT INVERSE — « le clignotement permanent a
+    été écarté » — et il a été RÉÉCRIT, pas retiré. Le clignotement est
+    désormais demandé et rendu ; ce qu'il faut garder, ce sont les quatre
+    conditions qui le rendent tenable. Les perdre une par une est exactement
+    ainsi qu'une animation devient nuisible.
+
+    UNE : le cycle reste loin des trois éclats par seconde de la règle WCAG
+    2.3.1, seuil du risque de crise pour les personnes photosensibles.
+    DEUX : il s'arrête, ce qu'exige la règle WCAG 2.2.2 au-delà de cinq
+    secondes — et de deux façons, dont une qui ne demande aucun geste.
+    TROIS : seul le vert bat. Quatre-vingt-dix-huit contours battant ensemble
+    rendraient la page inutilisable, et le mouvement ne dirait plus rien
+    puisqu'il serait partout.
+    QUATRE : l'interrupteur existe VRAIMENT. Une classe `cp-fixe` que rien
+    n'écrirait serait une conformité de façade."""
     css = _lire("veille.css")
-    i = css.index("@keyframes cp-pulse")
-    regle = css[i:i + 400]
-    assert "infinite" not in regle, "la pulsation est devenue infinie"
-    m = re.search(r"\.fiche\.pulse\{animation:cp-pulse [\d.]+s [\w-]+ (\d+)\}", css)
-    assert m and int(m.group(1)) <= 3, "plus de trois pulsations"
-    assert "prefers-reduced-motion" in css[i:i + 700]
+    assert "@keyframes cp-clignote" in css
+
+    # UN — la durée du cycle, lue dans la règle et non supposée.
+    m = re.search(r"\.fiche\.lu\{animation:cp-clignote ([\d.]+)s", css)
+    assert m, "aucune règle d'animation sur .fiche.lu"
+    assert float(m.group(1)) >= 1.0, \
+        "un cycle de %ss s'approche du seuil des trois éclats par seconde" \
+        % m.group(1)
+
+    # DEUX — les deux arrêts, et le second est celui du système.
+    serre = css.replace(" ", "").replace("\n", "")
+    assert "html.cp-fixe.fiche.lu{animation:none}" in serre, \
+        "l'interrupteur ne coupe plus l'animation"
+    # LA FEUILLE PORTE PLUSIEURS `prefers-reduced-motion` — la première trouvée
+    # coupait les transitions des cartes, pas ce clignotement. Un contrôle qui
+    # se contente de la première dit « c'est coupé » d'une règle qui ne coupe
+    # pas celle-ci : on cherche donc CETTE règle-là, entière.
+    assert "@media(prefers-reduced-motion:reduce){.fiche.lu{animation:none}}" \
+        in serre, "le réglage du système ne coupe plus CE clignotement"
+
+    # TROIS — le bleu ne bat pas, et la carte nue non plus.
+    for jamais in (".fiche.neuf{animation:", ".fiche{animation:"):
+        assert jamais.replace(" ", "") not in serre, jamais
+
+    # QUATRE — quelqu'un pose réellement la classe, et quelqu'un l'appelle.
     js = _lire("lecture.js")
+    assert 'classList.toggle("cp-fixe"' in js
+    assert "clignoter:" in js, "l'interrupteur n'est pas exposé"
     assert "prefers-reduced-motion" in js
+    appels = sum("LU.clignoter(" in _lire(f) for f in ("veille.js", "barre.js"))
+    assert appels == 2, \
+        "l'interrupteur doit être atteignable depuis le fil ET depuis la barre"
 
 
 def test_l_etat_de_lecture_ne_touche_pas_au_code_des_pastilles():
     """Les pastilles portent quatre codes de couleur que le lecteur apprend.
     L'état de lecture passe par le CONTOUR de la carte — un autre canal, pour
     une autre nature d'information : ce que la fiche EST, contre où VOUS en
-    êtes."""
+    êtes.
+
+    LA FORME DU CONTOUR A CHANGÉ, ET C'ÉTAIT LE DÉFAUT : trois pixels du seul
+    bord gauche, en deux teintes sombres et voisines, dans une grille à trois
+    colonnes. Le lecteur ne distinguait rien. Ce que ce contrôle garde n'est
+    donc pas la forme d'hier, c'est la SÉPARATION DES CANAUX — et le fait que
+    le contour soit complet, ce qui est ce qui l'a rendu visible."""
     # LES ESPACES SONT RETIRÉS DES DEUX CÔTÉS. Premier essai : retirés de la
     # source seule, ce qui rendait le contrôle impossible à satisfaire — il
     # cherchait un motif espacé dans un texte qui ne l'était plus.
     def serre(x):
         return x.replace(" ", "").replace("\n", "")
     css = serre(_lire("veille.css"))
-    assert serre(".fiche.neuf{border-left:3px solid var(--bleu)}") in css
-    assert serre(".fiche.lu{border-left:3px solid var(--vert)}") in css
+    assert serre(".fiche.neuf{outline:2px solid var(--bleu)") in css
+    assert serre(".fiche.lu{outline:2px solid var(--vert)") in css
     # aucune pastille n'a été repeinte
     assert serre(".past.sujet{color:var(--bleu)") in css
+
+
+def test_la_couleur_ne_decide_pas_seule_de_l_etat_de_lecture():
+    """RÈGLE WCAG 1.4.1, et elle mord ici plus qu'ailleurs : bleu et vert sont
+    précisément la paire que la deutéranopie confond, et sur un filet de deux
+    pixels aucune nuance ne sauve personne. La carte lue porte donc son MOT.
+
+    SEULE LA CARTE LUE. L'absence est le second canal du cas courant :
+    quatre-vingt-dix-huit étiquettes « non lue » n'apprendraient rien à
+    personne et encombreraient chaque vignette."""
+    for nom in ("veille.js", "fiche.js"):
+        js = _lire(nom)
+        assert 'class="fmarque"' in js, nom
+        assert "lc.marque" in js, nom
+        assert '=== "lu"' in js, nom
+    css = _lire("veille.css").replace(" ", "").replace("\n", "")
+    assert ".fmarque{" in css
+
+
+def test_sans_accord_la_page_n_affirme_pas_que_rien_n_a_ete_lu():
+    """LE DÉFAUT QUI A MOTIVÉ TOUT CECI, et le plus grave des deux. `classe()`
+    rendait « neuf » quand la mémoire n'est pas tenue : la page peignait alors
+    les quatre-vingt-dix-huit cartes en « à lire », ce qui AFFIRME que le
+    lecteur n'a rien lu — alors que la vérité est que le site ne sait pas.
+
+    Il voyait donc un code parfaitement uniforme et en concluait, à juste
+    titre, qu'il ne distinguait rien. Sans accord : aucune marque, et le fil
+    dit pourquoi en toutes lettres, là où les cartes sont."""
+    js = _lire("lecture.js")
+    i = js.index("function classe(")
+    corps = js[i:js.index("\n  }", i)]
+    assert 'if (!autorise()) return ""' in corps, corps
+
+    # ET LE FIL LE DIT — un silence sans phrase serait la même panne muette.
+    v = _lire("veille.js")
+    assert "function direRepere(" in v
+    assert "lc.non" in v
+    # La porte s'ouvre depuis le repère, et c'est le module de consentement
+    # qui l'ouvre : une seule fonction du site écrit l'accord.
+    assert 'VP.repondre("memoire", true)' in v
+    assert 'id="repere"' in _lire("index.html")
+
+
+def test_la_legende_ressemble_a_ce_qu_elle_designe():
+    """Un témoin qui ne reproduit pas le contour de la carte n'apprend pas à le
+    reconnaître — et c'était le cas : filet de 3 px à gauche dans la barre,
+    contour complet de 2 px sur les cartes. Les deux légendes du site montrent
+    donc exactement ce qu'on verra."""
+    css = _lire("veille.css").replace(" ", "").replace("\n", "")
+    for etat, ton in (("neuf", "bleu"), ("lu", "vert")):
+        assert ".bl-lg-c.%s{outline:2pxsolidvar(--%s)" % (etat, ton) in css, etat
+        assert ".repere.rp-c.%s{outline:2pxsolidvar(--%s)" % (etat, ton) in css, etat
 
 
 def test_la_memoire_de_lecture_peut_s_effacer():

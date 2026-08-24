@@ -126,7 +126,16 @@
          posées par nous, sans que rien ne les distingue. */
       + '<span class="fdate">' + esc(frDate(f.date_fait))
       + (f.date_convention ? ' <b class="conv">convention</b>' : "")
-      + '</span></div>';
+      + '</span>'
+      /* LE MOT, PARCE QUE LA COULEUR NE DÉCIDE JAMAIS SEULE. Bleu et vert
+         sont exactement la paire que la deutéranopie confond, et sur un filet
+         de deux pixels aucune nuance ne rattrape cela. Seule la carte LUE
+         porte son mot : l'absence est le second canal du cas courant, et
+         quatre-vingt-dix-huit étiquettes « non lue » n'apprendraient rien à
+         personne. */
+      + (etat === "lu"
+          ? '<span class="fmarque">' + esc(tr("lc.marque")) + '</span>' : "")
+      + '</div>';
 
     /* CHAQUE FICHE A SON ADRESSE. Sans lien, rien ne se cite ni ne se
        transmet : un lecteur ne peut renvoyer un collègue qu'au site entier. */
@@ -375,7 +384,7 @@
         if (window.LU && window.LU.marquer(id)) {
           carte.classList.remove("neuf");
           carte.classList.add("lu");
-          window.LU.pulser(carte);
+          marquerCarte(carte, true);
         }
       });
     });
@@ -390,13 +399,109 @@
     Array.prototype.forEach.call(document.querySelectorAll(".fiche[data-fid]"),
       function (c) {
         var id = c.getAttribute("data-fid");
-        var lue = window.LU.estLue(id);
-        var avant = c.classList.contains("lu");
-        c.classList.toggle("lu", lue);
-        c.classList.toggle("neuf", !lue);
-        if (lue && !avant) window.LU.pulser(c);
+        var etat = window.LU.classe(id);
+        c.classList.toggle("lu", etat === "lu");
+        c.classList.toggle("neuf", etat === "neuf");
+        marquerCarte(c, etat === "lu");
       });
     direLecture();
+    direRepere();
+  }
+
+  /* LE MOT POSÉ SUR UNE CARTE QUI VIENT DE CHANGER D'ÉTAT.
+     ─────────────────────────────────────────────────────
+     `fiche()` écrit l'étiquette au moment de composer le fil ; celle-ci la
+     pose SANS RECOMPOSER, pour les deux cas où la carte est déjà à l'écran :
+     le clic qui vient de la marquer, et le retour sur un fil restitué depuis
+     le cache du navigateur. Recomposer le fil ferait perdre la position de
+     défilement au moment précis où le lecteur revient de sa lecture.
+
+     ELLE RETIRE AUTANT QU'ELLE POSE : « Oublier mes lectures » remet
+     quatre-vingt-dix-huit cartes à l'état neuf, et une étiquette oubliée là
+     affirmerait une lecture que le site vient justement d'effacer. */
+  function marquerCarte(carte, lue) {
+    if (!carte) return;
+    var m = carte.querySelector(".fmarque");
+    if (!lue) {
+      if (m && m.parentNode) m.parentNode.removeChild(m);
+      return;
+    }
+    if (m) { m.textContent = tr("lc.marque"); return; }
+    var meta = carte.querySelector(".fmeta");
+    if (!meta) return;
+    m = document.createElement("span");
+    m.className = "fmarque";
+    m.textContent = tr("lc.marque");
+    meta.appendChild(m);
+  }
+
+  /* CE QUE LES CONTOURS DISENT — ET LE CAS OÙ ILS NE DISENT RIEN.
+     ────────────────────────────────────────────────────────────
+     DÉFAUT CONSTATÉ AU NAVIGATEUR, ET C'EST LUI QUI A MOTIVÉ TOUT CE QUI
+     PRÉCÈDE : le lecteur ne distinguait pas une fiche lue d'une fiche neuve.
+     Deux causes se cumulaient, et la seconde était la pire.
+
+       · LE SIGNAL NE SE VOYAIT PAS. Trois pixels du seul bord gauche, en deux
+         teintes sombres et voisines. La mécanique marchait ; personne ne
+         pouvait le constater.
+       · SANS ACCORD, LA PAGE MENTAIT PAR UNIFORMITÉ. Elle peignait les
+         quatre-vingt-dix-huit cartes en « à lire », ce qui affirme que vous
+         n'avez rien lu — alors que la vérité est que ce site NE SAIT PAS.
+         Le lecteur voyait un code parfaitement uniforme et en concluait, à
+         juste titre, qu'il ne distinguait rien.
+
+     UNE LÉGENDE EXISTE DÉJÀ DANS LA BARRE. Elle ne suffit pas : la barre se
+     replie, disparaît sous 900 px, et un lecteur qui ne comprend pas un
+     contour ne va pas ouvrir un menu pour chercher sa clé. Ce repère-ci est
+     posé LÀ OÙ LES CARTES SONT, juste au-dessus de la première.
+
+     IL PORTE AUSSI L'INTERRUPTEUR, pour la même raison : celui que le
+     clignotement gêne le cherche à côté de ce qui clignote, pas ailleurs. */
+  function direRepere() {
+    var e = $("repere");
+    if (!e || !window.LU) return;
+    e.hidden = false;
+
+    if (window.LU.autorise && !window.LU.autorise()) {
+      e.className = "repere repere-non";
+      e.innerHTML = '<b>' + esc(tr("lc.non")) + '</b> '
+        + '<span>' + esc(tr("lc.non.dit")) + '</span>'
+        + '<button type="button" id="rp-oui">' + esc(tr("lc.non.oui"))
+        + '</button>'
+        + '<a href="/confidentialite">' + esc(tr("lc.non.lien")) + '</a>';
+      var b = $("rp-oui");
+      /* LA PORTE S'OUVRE D'ICI — mais c'est bien le module de consentement
+         qui l'ouvre, pas cette page : une seule fonction écrit l'accord, et
+         c'est celle qui sait aussi le retirer. */
+      if (b) b.addEventListener("click", function () {
+        if (window.VP && window.VP.repondre) window.VP.repondre("memoire", true);
+      });
+      return;
+    }
+
+    e.className = "repere";
+    var h = '<span class="rp-t">' + esc(tr("lc.titre")) + '</span>'
+      + '<span class="rp-c neuf" aria-hidden="true"></span>'
+      + '<b>' + esc(tr("lc.neuf")) + '</b>'
+      + '<span class="rp-c lu" aria-hidden="true"></span>'
+      + '<b>' + esc(tr("lc.lu")) + '</b>';
+    /* QUAND LE SYSTÈME A DÉJÀ COUPÉ, LE BOUTON DISPARAÎT ET LA PAGE LE DIT.
+       Proposer d'arrêter ce qui ne bouge pas apprend au lecteur à se méfier
+       de tous les autres boutons du site. */
+    if (window.LU.motionReduit && window.LU.motionReduit()) {
+      h += '<span class="rp-sys">' + esc(tr("lc.systeme")) + '</span>';
+    } else {
+      var bat = !window.LU.clignote || window.LU.clignote();
+      h += '<button type="button" id="rp-cli" class="rp-cli" aria-pressed="'
+        + (bat ? "false" : "true") + '">'
+        + esc(tr(bat ? "lc.stop" : "lc.repart")) + '</button>';
+    }
+    e.innerHTML = h;
+    var c = $("rp-cli");
+    if (c) c.addEventListener("click", function () {
+      window.LU.clignoter(!window.LU.clignote());
+      direRepere();
+    });
   }
 
   /* LE COMPTE DE LECTURE — rempli par la page, comme l'état du corpus. Il dit
@@ -500,6 +605,7 @@
           + esc(tr("js.fil.vide2")) + '</div>';
       $("c-fil").textContent = fil.length + " " + tr("js.fiches");
       direLecture();
+      direRepere();
 
       /* L'ORDRE DE LECTURE EST NOTÉ ICI, ET NULLE PART AILLEURS — c'est le
          seul endroit qui connaisse l'ordre RÉELLEMENT AFFICHÉ : la une

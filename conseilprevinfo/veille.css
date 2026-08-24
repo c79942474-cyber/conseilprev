@@ -727,11 +727,33 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
 .bl-lg .fsource{border:0;padding:0;margin:0;font-size:11px}
 .bl-lg .st{margin:0}
 /* Les deux contours de fiche : ils n'ont pas de témoin ailleurs, puisque
-   l'état de lecture ne quitte jamais le navigateur. */
-.bl-lg-c{display:block;width:15px;height:15px;flex:none;border-radius:2px;
-  background:var(--papier2)}
-.bl-lg-c.neuf{border-left:3px solid var(--bleu)}
-.bl-lg-c.lu{border-left:3px solid var(--vert)}
+   l'état de lecture ne quitte jamais le navigateur.
+
+   LE TÉMOIN EST LE CONTOUR DE LA CARTE, pas un rappel approximatif. Il
+   portait un filet de 3 px au seul bord gauche quand la carte, elle, porte un
+   contour complet de 2 px : une légende qui ne ressemble pas à ce qu'elle
+   désigne n'apprend rien, et c'était l'une des deux raisons pour lesquelles
+   le code de couleur ne se lisait pas.
+
+   LA PALETTE RESTE CELLE DE LA FEUILLE, comme pour les pastilles voisines :
+   un témoin recoloré pour tenir sur l'ardoise ne serait plus le contour qu'on
+   verra sur une carte, et la légende cesserait de légender. Il garde donc son
+   carton clair dans les deux états du panneau. */
+.bl-lg-c{display:block;width:22px;height:15px;flex:none;border-radius:2px;
+  background:var(--papier)}
+.bl-lg-c.neuf{outline:2px solid var(--bleu);outline-offset:-2px}
+.bl-lg-c.lu{outline:2px solid var(--vert);outline-offset:-2px}
+.bl-lg-non-t{display:block;font-size:11px;line-height:1.5;color:var(--bl-sourd)}
+.bl-lg-non-t b{color:var(--bl-encre2)}
+.bl-lg-non-t a{color:var(--bl-lien)}
+.bl-lg-sys{margin:8px 0 0;font-size:11px;line-height:1.5;
+  color:var(--bl-sourd);font-style:italic}
+.bl-lg-cli{
+  display:block;margin-top:9px;width:100%;font:inherit;font-size:11px;
+  cursor:pointer;background:var(--bl-fond2);color:var(--bl-lien);
+  border:1px solid var(--bl-filet2);border-radius:3px;padding:4px 8px;
+}
+.bl-lg-cli:hover{border-color:var(--bl-lien)}
 .bl-lg-non{font-size:11.5px;line-height:1.5;color:var(--bl-sourd);margin:0;
   border-left:2px solid var(--bl-filet2);padding-left:9px}
 
@@ -955,23 +977,115 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
    puis s'arrête, et seulement sur une carte dont l'état vient de changer.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-.fiche.neuf{border-left:3px solid var(--bleu)}
-.fiche.lu{border-left:3px solid var(--vert)}
+/* LE CONTOUR ENTIER, ET NON UN LISERÉ À GAUCHE.
+   ─────────────────────────────────────────────
+   DÉFAUT CONSTATÉ AU NAVIGATEUR, ET C'EST CE QUI A MOTIVÉ CETTE RÉÉCRITURE :
+   le repère existait — la mécanique marchait, une fiche ouverte passait bien
+   en « lu » — mais il tenait sur TROIS PIXELS DU SEUL BORD GAUCHE, en
+   #1C6146 contre #12555E. Deux verts-bleus sombres, sur un filet de trois
+   pixels, dans une grille à trois colonnes : à l'œil, rigoureusement la même
+   ligne. Le lecteur ne distinguait donc pas ce qu'il avait lu de ce qui lui
+   restait, ce qui vidait le dispositif entier de son objet.
+
+   `outline` PLUTÔT QUE `box-shadow` : la carte porte déjà une ombre au survol
+   (`--ombre-h`), et deux `box-shadow` sur le même élément se remplacent au
+   lieu de s'ajouter — le contour aurait disparu sous le doigt. `outline` est
+   un canal séparé, et `outline-offset` négatif le pose À L'INTÉRIEUR, sans
+   décaler la grille d'un pixel. */
+.fiche.neuf{outline:2px solid var(--bleu);outline-offset:-2px}
+.fiche.lu{outline:2px solid var(--vert);outline-offset:-2px}
+
 /* Une carte lue s'efface un peu : ce qui reste à lire doit ressortir, et
    c'est tout l'objet du repère. Jamais au point d'être illisible — une fiche
    lue reste une fiche du corpus. */
 .fiche.lu .ftitre{color:var(--encre2)}
 .fiche.lu:hover .ftitre{color:var(--encre)}
 
-@keyframes cp-pulse{
-  0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--vert) 0%,transparent)}
-  50%    {box-shadow:0 0 0 4px color-mix(in srgb,var(--vert) 30%,transparent)}
+/* ── LE CLIGNOTEMENT DU CONTOUR VERT ─────────────────────────────────────
+   DEMANDÉ DEUX FOIS, ET DONC FAIT — mais fait de façon à ne blesser personne,
+   ce qui est possible et ne coûte rien au signal.
+
+   UNE SECONDE ET DEMIE PAR CYCLE, soit deux tiers de battement par seconde.
+   La règle WCAG 2.3.1 vise trois éclats PAR SECONDE et au-delà, seuil à
+   partir duquel un clignotement devient un risque de crise pour les personnes
+   photosensibles. On en est à un vingtième de ce seuil, et ce qui varie est
+   l'opacité d'un filet de deux pixels — pas la luminance d'une surface.
+
+   ET IL S'ARRÊTE, ce qui n'est pas une politesse mais la règle WCAG 2.2.2 :
+   tout clignotement qui dure plus de cinq secondes doit pouvoir être stoppé.
+   Deux façons de le faire, et aucune n'exige de chercher : le réglage du
+   système (`prefers-reduced-motion`) le coupe tout seul, et la barre latérale
+   porte un interrupteur pour qui veut le couper sans toucher à son système.
+
+   SEUL LE VERT CLIGNOTE. Le bleu est l'état par défaut de tout le corpus :
+   quatre-vingt-dix-huit contours qui battent ensemble rendraient la page
+   inutilisable, et le mouvement ne dirait plus rien puisqu'il serait partout.
+   Ce qui bouge est ce qui a CHANGÉ par votre fait. */
+@keyframes cp-clignote{
+  0%,100%{outline-color:var(--vert)}
+  50%    {outline-color:color-mix(in srgb,var(--vert) 16%,transparent)}
 }
-.fiche.pulse{animation:cp-pulse .8s ease-in-out 3}
+.fiche.lu{animation:cp-clignote 1.5s ease-in-out infinite}
+/* L'INTERRUPTEUR — et le réglage du système, qui vaut d'office. */
+html.cp-fixe .fiche.lu{animation:none}
 @media (prefers-reduced-motion:reduce){
-  .fiche.pulse{animation:none;
-    box-shadow:0 0 0 3px color-mix(in srgb,var(--vert) 22%,transparent)}
+  .fiche.lu{animation:none}
 }
+
+/* LA COULEUR NE DÉCIDE JAMAIS SEULE — la règle du site vaut ici comme
+   ailleurs. Bleu et vert sont précisément la paire que la deutéranopie
+   confond, et sur un filet de deux pixels aucune nuance ne sauve personne.
+   Une carte lue porte donc son mot, dans la ligne de méta où vit déjà la
+   date. Une carte non lue ne porte rien : l'absence est le second canal, et
+   elle n'encombre pas les quatre-vingt-dix-huit cartes du cas courant. */
+.fmarque{
+  font-family:var(--fix);font-size:9px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--vert);
+  border:1px solid currentColor;border-radius:3px;padding:1px 5px;
+  white-space:nowrap;
+}
+
+/* ── LE REPÈRE AU-DESSUS DES CARTES ──────────────────────────────────────
+   LA LÉGENDE DE LA BARRE NE SUFFIT PAS. Elle se replie, et sous 900 px elle
+   n'est plus là du tout : un lecteur qui ne comprend pas un contour n'ouvre
+   pas un menu pour y chercher sa clé. Celle-ci est posée juste au-dessus de
+   la première carte, en une ligne, et elle disparaît de la mise en page dès
+   que la question ne se pose plus. */
+.repere{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  margin:0 0 14px;padding:8px 12px;
+  background:var(--papier2);border:1px solid var(--filet);border-radius:4px;
+  font-family:var(--fix);font-size:11px;line-height:1.5;color:var(--sourd2);
+}
+.repere b{font-weight:600;color:var(--encre2);margin-right:10px}
+/* L'ENTRÉE EN MATIÈRE, sans laquelle la ligne commence par « pas encore
+   ouverte » — un fragment de phrase dont on ne sait pas ce qu'il qualifie. */
+.repere .rp-t{color:var(--encre2);margin-right:2px}
+.repere .rp-c{
+  display:inline-block;width:22px;height:14px;flex:none;
+  background:var(--papier);border-radius:2px;
+}
+/* LES TÉMOINS SONT LE MÊME CONTOUR QUE LES CARTES, à la même épaisseur — un
+   échantillon qui ne ressemble pas à ce qu'il désigne n'est pas une légende,
+   c'est une décoration. Ils ne battent pas : une légende qui clignote fait
+   deux mouvements pour un seul sens. */
+.repere .rp-c.neuf{outline:2px solid var(--bleu);outline-offset:-2px}
+.repere .rp-c.lu{outline:2px solid var(--vert);outline-offset:-2px}
+.repere .rp-sys{color:var(--sourd2);font-style:italic}
+.repere button{
+  font:inherit;cursor:pointer;margin-left:auto;
+  background:var(--papier);color:var(--lien);
+  border:1px solid var(--filet2);border-radius:3px;padding:3px 9px;
+}
+.repere button:hover{border-color:var(--lien)}
+
+/* QUAND LA MÉMOIRE N'EST PAS TENUE, le repère ne décrit plus un code : il
+   dit qu'il n'y en a pas. L'ambre est la couleur de la réserve dans tout le
+   site, et c'en est une — pas une alerte, pas une panne. */
+.repere-non{border-left:3px solid var(--ocre)}
+.repere-non span{color:var(--sourd2)}
+.repere-non button{margin-left:0}
+.repere-non a{color:var(--lien)}
 
 /* LE COMPTE DE CE QUI RESTE À LIRE, dans la barre — et de quoi l'oublier.
    Une mémoire qu'on ne peut pas effacer n'est pas une commodité, c'est un

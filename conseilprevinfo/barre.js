@@ -226,10 +226,48 @@
       });
     /* LE CONTOUR DE LA FICHE. Ces deux-là n'ont pas de référentiel côté
        serveur : l'état de lecture ne quitte jamais le navigateur, le serveur
-       ne le connaît donc pas et ne peut pas le nommer. */
+       ne le connaît donc pas et ne peut pas le nommer.
+
+       ET LA LÉGENDE SE TAIT QUAND LE CODE NE S'APPLIQUE PAS. Sans accord,
+       aucune carte ne porte de contour : nommer deux couleurs absentes
+       enverrait le lecteur les chercher sur un écran qui n'en a pas, et il en
+       conclurait un défaut d'affichage plutôt que le refus qu'il a lui-même
+       exprimé. */
+    if (window.LU && window.LU.autorise && !window.LU.autorise()) {
+      h += '<li class="bl-lg-non-t"><b>' + esc(t("bl.lu.non")) + '</b> '
+        + '<a href="/confidentialite">' + esc(t("bl.lu.non.lien")) + "</a></li>";
+      return h + "</ul>";
+    }
     h += '<li><span class="bl-lg-c neuf"></span><b>' + esc(t("bl.leg.neuf")) + "</b></li>"
       + '<li><span class="bl-lg-c lu"></span><b>' + esc(t("bl.leg.lu")) + "</b></li>";
-    return h + "</ul>";
+    h += "</ul>";
+    /* L'INTERRUPTEUR EST AUSSI ICI, et pas seulement au-dessus du fil : la
+       barre suit le lecteur sur les quatre pages, le fil n'existe que sur
+       l'accueil. Celui que le clignotement gêne sur une fiche doit pouvoir
+       l'arrêter sans revenir en arrière. */
+    if (window.LU && window.LU.clignoter) {
+      if (window.LU.motionReduit()) {
+        h += '<p class="bl-lg-sys">' + esc(t("lc.systeme")) + "</p>";
+      } else {
+        var bat = window.LU.clignote();
+        h += '<button type="button" class="bl-lg-cli" id="bl-cli" aria-pressed="'
+          + (bat ? "false" : "true") + '">'
+          + esc(t(bat ? "lc.stop" : "lc.repart")) + "</button>";
+      }
+    }
+    return h;
+  }
+
+  /* LE BOUTON EST REMONTÉ APRÈS CHAQUE RECONSTRUCTION — la barre se réécrit à
+     chaque bascule de langue, et un bouton resté à l'écran sans écoute est
+     pire qu'un bouton absent. */
+  function suivreClignotement() {
+    var b = $("bl-cli");
+    if (!b || !window.LU) return;
+    b.addEventListener("click", function () {
+      window.LU.clignoter(!window.LU.clignote());
+      rendre();
+    });
   }
 
   /* UN GROUPE DU MENU — son titre, son icône, sa teinte.
@@ -329,6 +367,7 @@
     if (window.L && window.L.monterAnalyses) window.L.monterAnalyses();
     suivreCompteurs();
     suivreLecture(secs);
+    suivreClignotement();
     var x = $("bl-x");
     if (x) x.addEventListener("click", function () { ouvrir(false); });
   }
@@ -499,6 +538,11 @@
        dictionnaire, et les titres de section viennent de la page — qui vient
        elle aussi d'être retraduite. L'ordre importe, d'où l'écoute. */
     document.addEventListener("langue", rendre);
+    /* ET À LA RÉPONSE AU BANDEAU. La légende dit deux choses différentes
+       selon que la mémoire de lecture est tenue ou non ; répondre « oui »
+       sans réécrire la barre laisserait le lecteur devant une légende qui
+       nie le code de couleur qu'il vient d'allumer. */
+    document.addEventListener("lecture-effacee", rendre);
   }
 
   if (document.readyState === "loading")

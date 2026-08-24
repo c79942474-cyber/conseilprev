@@ -80,7 +80,7 @@ Depuis votre poste, aucune session nécessaire :
       https://github.com/c79942474-cyber/conseilprevinfo
     git push -u origin master
 
-`HISTORIQUE.bundle` porte **l'historique git complet — vingt-deux commits**,
+`HISTORIQUE.bundle` porte **l'historique git complet — vingt-trois commits**,
 messages compris. Il ne s'agit donc pas de repartir d'une copie à plat : le
 détail des corrections, des mesures et des défauts constatés vit dans ces
 messages, et c'est souvent là qu'est l'information.
@@ -155,9 +155,21 @@ plus aéré que les vignettes, bloc de source en signature. Mesuré au
 navigateur, un paragraphe faisait auparavant cent quatre-vingts signes par
 ligne — près du triple de ce qui se lit.
 
-Chaque fiche porte **où vous en êtes** : contour bleu tant qu'elle reste à
-lire, vert une fois ouverte — une mémoire qui ne quitte jamais votre
-navigateur, et qui **n'est pas tenue sans votre accord**. Une fiche
+Chaque fiche porte **où vous en êtes** : contour bleu complet tant qu'elle
+reste à lire, contour vert **qui bat** une fois ouverte, et le mot « LUE » à
+côté de la date — parce que bleu et vert sont exactement la paire que la
+deutéranopie confond. Le battement dure une seconde et demie, soit un
+vingtième du seuil de trois éclats par seconde au-delà duquel un clignotement
+devient un risque ; il s'arrête d'office si le système du lecteur le demande,
+et par un interrupteur posé au-dessus du fil comme dans la barre. Ce repère
+tenait auparavant sur trois pixels d'un seul bord, en deux teintes sombres et
+voisines : la mécanique marchait, mais personne ne pouvait le constater.
+
+**Sans accord, aucune carte ne porte de marque** — et le fil dit pourquoi.
+Peindre les quatre-vingt-dix-huit cartes en « à lire » affirmerait que vous
+n'avez rien lu, alors que la vérité est que ce site **ne sait pas** : c'est
+une autre chose, et c'est celle qui doit s'écrire. La mémoire ne quitte jamais
+votre navigateur et **n'est pas tenue sans votre accord**. Une fiche
 **s'emporte en PDF ou en Word**, avec son statut, la nature de sa lecture et ce
 qu'on ne sait pas. Un compte dispose d'un **classeur** pour ses propres
 documents, qui dit avant le dépôt ce qu'il conserve.
@@ -206,14 +218,14 @@ typographie — montage jugé contraire au RGPD par le tribunal régional de
 Munich en janvier 2022. Elles sont au dépôt, sous licence SIL OFL qui
 l'autorise.
 
-**Pas de mur de cookies**, donc : il n'y a rien à accepter. Six entrées de
-stockage local, dont cinq sont exemptées par l'article 5(3) ePrivacy parce
-qu'elles sont le service demandé — langue, repli de la barre, jeton de session,
-ordre de lecture, réponse elle-même. **Une seule s'écrit toute seule** : la
-liste des fiches ouvertes. C'est la seule qui vous soit demandée, et rien
-n'est écrit avant la réponse. **`/confidentialite` porte l'inventaire
-complet**, et deux contrôles le comparent aux clés réellement écrites dans le
-code — dans les deux sens.
+**Pas de mur de cookies**, donc : il n'y a rien à accepter. Huit entrées de
+stockage local, dont sept sont exemptées par l'article 5(3) ePrivacy parce
+qu'elles sont le service demandé — langue de l'interface, langue des analyses,
+repli de la barre, jeton de session, ordre de lecture, arrêt du clignotement,
+et la réponse elle-même. **Une seule s'écrit toute seule** : la liste des
+fiches ouvertes. C'est la seule qui vous soit demandée, et rien n'est écrit avant la
+réponse. **`/confidentialite` porte l'inventaire complet**, et deux contrôles
+le comparent aux clés réellement écrites dans le code — dans les deux sens.
 
 Les **en-têtes de sécurité sont posés par l'application**, pas par
 l'hébergeur : un réglage d'hébergeur disparaît au premier déménagement sans
@@ -221,7 +233,7 @@ que rien ne le signale. Politique de contenu fermée sur `default-src 'self'`,
 sans `unsafe-inline` — ce qui a demandé de retirer les douze attributs `style`
 dispersés dans les pages et le JavaScript.
 
-**333 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
+**336 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
 gardent les règles éditoriales, et chacun est écrit pour tomber le jour où
 quelqu'un les assouplira. Chaque règle nouvelle a été confrontée à une
 **mutation du code qu'elle garde** — et cinq de ces mutations ont révélé des
@@ -229,8 +241,9 @@ contrôles trop faibles, qui ont été resserrés. Un contrôle écrit trop STRI
 aussi été corrigé plutôt que contourné : il supprimait la distinction qu'il
 était censé protéger.
 
-### Les vingt-deux commits du bundle
+### Les vingt-trois commits du bundle
 
+    ad5d9aa  Rendre visible ce qui est lu, et taire ce qui n'est pas su
     074c9e9  La barre latérale devient un meuble : blanc cassé le jour,
              ardoise glacée la nuit
     0541ce3  Chaque source relue à SA cadence, et le registre dit ce qu'il

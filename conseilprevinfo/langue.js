@@ -66,6 +66,28 @@
                         "Reading memory not kept."],
     "bl.lu.non.lien":  ["L'activer", "Turn it on"],
 
+    /* ── LE REPÈRE DE LECTURE ───────────────────────────────────────
+       CE QUE LE CONTOUR D'UNE CARTE DIT, et le mot qui le double parce
+       que la couleur ne décide jamais seule. Les deux teintes en jeu —
+       bleu et vert — sont exactement la paire que la deutéranopie
+       confond ; sur un filet de deux pixels, aucune nuance ne rattrape
+       cela, et seule l'étiquette le fait. */
+    "lc.marque":       ["Lue", "Read"],
+    "lc.titre":        ["Le contour des cartes :", "The outline of the cards:"],
+    "lc.neuf":         ["pas encore ouverte", "not opened yet"],
+    "lc.lu":           ["déjà ouverte", "already opened"],
+    "lc.stop":         ["Arrêter le clignotement", "Stop the blinking"],
+    "lc.repart":       ["Remettre le clignotement", "Bring the blinking back"],
+    "lc.systeme":      ["Votre système a déjà coupé les animations — rien ne clignote ici.",
+                        "Your system already switched animations off — nothing blinks here."],
+    "lc.non":          ["Ce site ne garde pas trace de ce que vous lisez.",
+                        "This site keeps no record of what you read."],
+    "lc.non.dit":      ["Les contours ne distinguent donc rien : ce n'est pas que vous n'avez rien lu, c'est que rien n'est su.",
+                        "The outlines therefore tell nothing apart: it is not that you have read nothing, it is that nothing is known."],
+    "lc.non.oui":      ["Garder mes lectures dans ce navigateur",
+                        "Keep my reading in this browser"],
+    "lc.non.lien":     ["Ce que cela écrit", "What that writes"],
+
     /* ── La manchette ───────────────────────────────────────────────
        L'« édition » n'est pas une décision d'éditeur : c'est la date de
        collecte, et elle est écrite comme telle. */
@@ -416,6 +438,8 @@
                         "Your session token, if you sign in."],
     "vp.l.ordre":      ["L'ordre des fiches du fil que vous parcourez, tel qu'il est affiché — ce qui permet aux flèches « précédente » et « suivante » de dire où vous en êtes.",
                         "The order of the entries in the feed you are browsing, as displayed — which is what lets the “previous” and “next” arrows say where you are."],
+    "vp.l.clignote":   ["Votre réponse au bouton « Arrêter le clignotement » — le contour vert des fiches déjà lues bat une fois toutes les une seconde et demie, et vous pouvez l'arrêter. Rien de ce que vous lisez n'est écrit ici : seulement « oui » ou « non ».",
+                        "Your answer to the “Stop the blinking” button — the green outline of entries you have opened beats once every second and a half, and you can stop it. Nothing about what you read is written here: only “yes” or “no”."],
     "vp.l.lues":       ["Les identifiants des fiches que vous avez ouvertes — au plus six cents, les plus anciens sortent.",
                         "The identifiers of the entries you have opened — six hundred at most, the oldest drop out."],
     "vp.d.jusqua":     ["Jusqu'à ce que vous effaciez les données du site.",

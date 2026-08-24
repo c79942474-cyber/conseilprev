@@ -13,14 +13,29 @@
    vulnérabilités. La page le dit à l'écran, elle ne se contente pas de le
    faire.
 
-   LE CLIGNOTEMENT PERMANENT A ÉTÉ ÉCARTÉ, ET C'EST UN REFUS ARGUMENTÉ. Les
-   règles d'accessibilité l'interdisent : au-delà de cinq secondes, tout
-   clignotement doit pouvoir être arrêté (WCAG 2.2.2), et rien ne doit
-   dépasser trois éclats par seconde (WCAG 2.3.1) — au-delà, c'est un risque
-   de crise pour les personnes photosensibles. Une soixantaine de cartes
-   clignotant en continu rendrait par ailleurs la page illisible pour tout le
-   monde. La pulsation joue donc TROIS FOIS puis s'arrête, et seulement sur
-   les fiches dont l'état vient de changer — c'est là qu'un signal sert. */
+   LE CONTOUR VERT CLIGNOTE, ET VOICI À QUELLES CONDITIONS. Ce commentaire
+   disait auparavant que le clignotement permanent avait été « écarté ». Il
+   avait tort sur un point : les règles d'accessibilité ne l'interdisent pas,
+   elles l'encadrent, et l'encadrement est tenable.
+
+     · WCAG 2.3.1 vise trois éclats PAR SECONDE et au-delà — le seuil du
+       risque de crise pour les personnes photosensibles. Le contour bat une
+       fois toutes les une seconde et demie, soit un vingtième de ce seuil, et
+       ce qui varie est l'opacité d'un filet de deux pixels, pas la luminance
+       d'une surface.
+     · WCAG 2.2.2 exige qu'un clignotement de plus de cinq secondes puisse
+       être ARRÊTÉ. Il peut l'être de deux façons, et aucune ne demande de
+       chercher : le réglage `prefers-reduced-motion` du système le coupe
+       d'office, et la barre latérale porte un interrupteur.
+     · SEUL LE VERT BAT. Le bleu est l'état par défaut de tout le corpus :
+       quatre-vingt-dix-huit contours battant ensemble rendraient la page
+       inutilisable, et le mouvement ne dirait plus rien puisqu'il serait
+       partout.
+
+   CE QUI A MOTIVÉ LA RÉÉCRITURE, ce n'est pas le clignotement : c'est que le
+   repère ne se VOYAIT PAS. Il tenait sur trois pixels du seul bord gauche, en
+   deux teintes sombres et voisines. La mécanique marchait ; personne ne
+   pouvait le constater. */
 (function () {
   "use strict";
 
@@ -84,20 +99,72 @@
 
   function combien() { return Object.keys(ensemble()).length; }
 
-  /* LA CLASSE POSÉE SUR UNE CARTE. `lu` ou `neuf` — jamais rien : une carte
-     sans marque laisserait croire que la mémoire est en panne. */
-  function classe(id) { return estLue(id) ? "lu" : "neuf"; }
+  /* ── L'INTERRUPTEUR DU CLIGNOTEMENT ─────────────────────────────────────
+     WCAG 2.2.2 EXIGE QU'UN CLIGNOTEMENT DE PLUS DE CINQ SECONDES PUISSE ÊTRE
+     ARRÊTÉ par celui qui le subit. Deux mécanismes le permettent ici, et ils
+     ne servent pas la même personne :
 
-  /* LA PULSATION, BORNÉE. Elle est retirée à la fin de l'animation pour que
-     rien ne reste en mouvement, et elle n'est pas posée du tout si le lecteur
-     a demandé moins d'animation. */
-  function pulser(el) {
-    if (!el) return;
+       · `prefers-reduced-motion` le coupe d'office, sans un geste — la
+         feuille de style s'en charge. C'est le seul chemin pour qui a réglé
+         son système une fois pour toutes et n'a pas à le redire site par site.
+       · CET INTERRUPTEUR-CI sert l'autre cas, plus fréquent : quelqu'un qui
+         n'a rien réglé et que ce mouvement-ci gêne, ici, maintenant.
+
+     IL S'ÉCRIT SANS ACCORD, ET C'EST RÉGULIER. Il n'est écrit que si vous
+     cliquez, il ne dit rien de vous, et l'article 5(3) exempte ce qui est le
+     service demandé — comme la langue ou le repli de la barre. Le refus de la
+     MÉMOIRE DE LECTURE ne l'emporte donc pas : ce refus porte sur ce que vous
+     lisez, pas sur la vitesse d'une animation. */
+  var CLE_CLI = "cpinfo.clignote";
+
+  function clignote() {
+    try { return localStorage.getItem(CLE_CLI) !== "non"; }
+    catch (e) { return true; }   /* stockage refusé : le défaut reste le défaut */
+  }
+
+  /* LE RÉGLAGE DU SYSTÈME EST LU, PAS DEVINÉ. La barre et le fil doivent
+     pouvoir dire « votre système l'a déjà coupé » plutôt que proposer
+     d'arrêter ce qui ne bouge pas — un bouton qui ne fait rien de visible
+     apprend au lecteur à se méfier de tous les autres. */
+  function motionReduit() {
     try {
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    } catch (e) { /* navigateur ancien : on pulse */ }
-    el.classList.add("pulse");
-    setTimeout(function () { el.classList.remove("pulse"); }, 2400);
+      return !!(window.matchMedia
+                && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    } catch (e) { return false; }
+  }
+
+  function poserFixe() {
+    document.documentElement.classList.toggle("cp-fixe", !clignote());
+  }
+
+  function clignoter(oui) {
+    try { localStorage.setItem(CLE_CLI, oui ? "oui" : "non"); } catch (e) {}
+    poserFixe();
+    document.dispatchEvent(new CustomEvent("clignotement",
+                                           { detail: { oui: !!oui } }));
+  }
+
+  /* POSÉ AVANT LA PREMIÈRE CARTE. Les cartes sont composées par `veille.js`
+     après un aller-retour réseau : la classe est en place bien avant qu'une
+     seule d'entre elles existe, et personne ne voit battre un contour qu'il
+     avait justement demandé d'arrêter. */
+  poserFixe();
+
+  /* LA CLASSE POSÉE SUR UNE CARTE — et le cas où il ne faut RIEN poser.
+     ──────────────────────────────────────────────────────────────────
+     ELLE RENDAIT « neuf » QUAND LA MÉMOIRE N'EST PAS TENUE, et c'était un
+     mensonge tranquille. Sans accord, ce site ne SAIT PAS ce que vous avez
+     lu ; peindre les quatre-vingt-dix-huit cartes en « à lire » affirme que
+     vous n'avez rien lu, ce qui est une autre chose. Le lecteur voyait alors
+     un code de couleur parfaitement uniforme et en concluait, à juste titre,
+     qu'il ne distinguait rien.
+
+     Sans accord, la carte ne porte donc AUCUNE marque, et le fil dit pourquoi
+     en toutes lettres — voir `direRepere()` dans `veille.js`. Une absence
+     expliquée vaut mieux qu'une affirmation fausse. */
+  function classe(id) {
+    if (!autorise()) return "";
+    return estLue(id) ? "lu" : "neuf";
   }
 
   /* L'ACCORD PEUT ARRIVER APRÈS LA PAGE. Le lecteur répond au bandeau alors
@@ -113,9 +180,15 @@
 
   window.LU = {
     estLue: estLue, marquer: marquer, oublier: oublier,
-    combien: combien, classe: classe, pulser: pulser,
+    /* `pulser` A ÉTÉ RETIRÉE. Elle posait trois battements sur la carte qui
+       VENAIT de changer d'état. Depuis que le contour vert clignote en
+       permanence, ce supplément ne dit plus rien de neuf : il ajoutait du
+       mouvement là où il y en avait déjà, et deux animations sur le même
+       élément se disputaient la même propriété. */
+    combien: combien, classe: classe,
     /* Ce que la barre affiche à côté du compte : sans accord, « 0 à lire »
        serait faux — ce n'est pas zéro, c'est « non tenu ». */
-    autorise: autorise
+    autorise: autorise,
+    clignote: clignote, clignoter: clignoter, motionReduit: motionReduit
   };
 })();

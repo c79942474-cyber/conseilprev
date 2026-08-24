@@ -78,6 +78,14 @@
     if (DERNIERE) rendre(DERNIERE);
   });
 
+  /* ET QUAND L'ÉTAT DE LECTURE CHANGE SOUS LA PAGE — accord donné au bandeau,
+     ou « Oublier mes lectures » depuis la barre. Les vignettes de croisement
+     portent cet état ; les laisser figées afficherait un code de couleur que
+     le lecteur vient d'éteindre ou d'allumer. */
+  document.addEventListener("lecture-effacee", function () {
+    if (DERNIERE) rendre(DERNIERE);
+  });
+
   function langueAnalyses() {
     return (window.L && window.L.analyses) ? window.L.analyses() : "fr";
   }
@@ -170,10 +178,20 @@
          « Lien » quand une règle rattache vraiment les deux fiches, et
          « Rapprochement » quand il n'y a qu'une date en commun. */
       function vignette(l, mot) {
-        return '<article class="fiche"><div class="fmeta">'
+        /* LE CROISEMENT MÈNE À D'AUTRES FICHES, DONC IL PORTE LEUR ÉTAT.
+           Sans lui, un lecteur qui suit un lien de voisinage retombe sur une
+           fiche qu'il a déjà lue sans qu'aucune de ces vignettes ne l'ait
+           prévenu — et le code de couleur du fil s'arrête à la porte de la
+           fiche, ce qui le rend deux fois moins fiable qu'il ne l'est. */
+        var e = (window.LU ? window.LU.classe(l.id) : "");
+        return '<article class="fiche ' + e + '" data-fid="' + esc(l.id)
+          + '"><div class="fmeta">'
           + '<span class="past ' + esc(l.impact) + '">'
           + esc(nommer("impact", l.impact, l.impact_nom)) + '</span>'
-          + '<span class="fdate">' + esc(frDate(l.date_fait)) + '</span></div>'
+          + '<span class="fdate">' + esc(frDate(l.date_fait)) + '</span>'
+          + (e === "lu"
+              ? '<span class="fmarque">' + esc(tr("lc.marque")) + '</span>' : "")
+          + '</div>'
           + '<h3 class="ftitre vg-titre"><a class="nu" href="/fiche/'
           + esc(l.id) + '">'
           + esc(l.titre) + '</a></h3>'
