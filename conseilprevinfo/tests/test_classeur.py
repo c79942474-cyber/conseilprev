@@ -506,3 +506,78 @@ def test_l_interrupteur_ne_propose_pas_d_arreter_ce_qui_ne_bat_pas():
     # L'ANNONCE EST FAITE AUX DEUX ENDROITS QUI POSENT LES CARTES : le rendu
     # du fil, et le rafraîchissement au retour depuis le cache.
     assert v.count("annoncerFil();") == 2, v.count("annoncerFil();")
+
+
+def test_le_document_emporte_porte_le_caractere_de_titre():
+    """LA TYPOGRAPHIE DU SITE VA JUSQU'AU FICHIER, ou elle s'arrête à l'écran —
+    et c'est le fichier qui circule. Un PDF EMBARQUE ses polices : le document
+    reçu en comité est exactement celui qui a été composé, sur n'importe
+    quelle machine. Les titres y prennent donc le même caractère qu'à
+    l'écran.
+
+    SON ABSENCE N'EMPÊCHE PAS UN EXPORT. Si le fichier de fonte manquait au
+    dépôt, le document se composerait entièrement dans le caractère de texte —
+    moins bien, et parfaitement lisible. Refuser l'export serait faire dépendre
+    une fonction d'une décoration."""
+    ok, _ = EXP.pdf_disponible()
+    if not ok:
+        return
+    try:
+        import pypdf
+    except ImportError:
+        return
+    import io as _io
+    assert os.path.exists(EXP.TITRE_PDF), EXP.TITRE_PDF
+
+    # ON REGARDE QUELLE FONTE A TRACÉ QUEL TEXTE, et non lesquelles sont
+    # embarquées. PREMIER ESSAI, ET IL NE GARDAIT RIEN : il se contentait de
+    # trouver « Playfair » parmi les ressources de la page. Or fpdf embarque
+    # toute fonte DÉCLARÉE, même si aucune ligne ne l'emploie — remplacer la
+    # condition d'usage par `if False:` laissait donc le contrôle vert sur un
+    # document composé entièrement dans le caractère de texte.
+    vues = {}
+
+    def voir(texte, cm, tm, police, taille):
+        nom = ""
+        try:
+            nom = str((police or {}).get("/BaseFont") or "")
+        except Exception:  # noqa: BLE001 — une ressource illisible n'est pas une fonte
+            nom = ""
+        t = (texte or "").strip()
+        if t:
+            vues.setdefault(t, set()).add(nom)
+
+    lu = pypdf.PdfReader(_io.BytesIO(EXP.pdf(_fiche())))
+    for pg in lu.pages:
+        pg.extract_text(visitor_text=voir)
+
+    def fontes(fragment):
+        out = set()
+        for t, f in vues.items():
+            if fragment in t:
+                out |= f
+        return out
+
+    titre = fontes("tiret cadratin")
+    assert titre and all("Playfair" in f for f in titre), titre
+    # ET LE CORPS RESTE AU CARACTÈRE DE TEXTE. Un document composé entièrement
+    # dans un caractère de titre est une affiche, pas un document.
+    corps = fontes("LLLL")
+    assert corps and all("Liberation" in f for f in corps), corps
+
+
+def test_le_word_ne_promet_pas_une_police_que_le_lecteur_n_a_pas():
+    """UN `.docx` N'EMBARQUE PAS SES POLICES. Word substitue en silence ce
+    qu'il a sous la main, et un titre composé dans une police absente change de
+    dessin sans prévenir. Or le Word existe précisément pour être REPRIS : le
+    donner dans un caractère que le destinataire n'a pas, c'est lui laisser un
+    document dont la mise en page se défera à la première frappe.
+
+    Il garde donc Liberation Serif, métriquement compatible avec le Times de
+    tout le monde. C'est la seule différence assumée entre les deux formats,
+    et elle est écrite là où quelqu'un voudrait « harmoniser »."""
+    src = _lire("exporter.py")
+    i = src.index("_STYLES = {")
+    fin = src.index("def docx(", i)
+    assert "Playfair" not in src[i:fin], src[i:fin]
+    assert 'w:ascii="Liberation Serif"' in src[i:fin]

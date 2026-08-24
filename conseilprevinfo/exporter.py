@@ -405,6 +405,18 @@ _PDF_COULEURS = {"entete": (128, 128, 128), "titre": (20, 17, 13),
                  "note": (117, 105, 90), "pied": (147, 134, 111)}
 
 
+#: LE CARACTÈRE DE TITRE DES DOCUMENTS, et pourquoi il n'est QUE dans le PDF.
+#: Un PDF EMBARQUE ses polices : le document que reçoit un comité est
+#: exactement celui qui a été composé, sur n'importe quelle machine. Un `.docx`
+#: ne les embarque pas — Word substitue en silence ce qu'il a sous la main, et
+#: un titre composé dans une police absente change de dessin sans prévenir.
+#: Or le Word existe précisément pour être REPRIS : le donner dans un
+#: caractère que le destinataire n'a pas, c'est lui laisser un document dont la
+#: mise en page se défera à la première frappe. Il garde donc Liberation Serif,
+#: métriquement compatible avec le Times de tout le monde.
+TITRE_PDF = os.path.join(POLICES, "PlayfairDisplay-Bold.ttf")
+
+
 def pdf_disponible():
     """Dit si l'export PDF peut réellement se faire, et pourquoi non le cas
     échéant. Un bouton qui rend une erreur cinq secondes après le clic est
@@ -445,14 +457,29 @@ def _pdf(lot):
     d.set_auto_page_break(True, margin=20)
     d.add_font("lib", "", os.path.join(POLICES, "LiberationSerif-Regular.ttf"))
     d.add_font("lib", "B", os.path.join(POLICES, "LiberationSerif-Bold.ttf"))
+    # LE CARACTÈRE DE TITRE, SI LE DÉPÔT LE PORTE. Son absence ne doit pas
+    # empêcher un export : le document se compose alors entièrement dans le
+    # caractère de texte, ce qui est moins bien et parfaitement lisible.
+    titre = os.path.exists(TITRE_PDF)
+    if titre:
+        d.add_font("titre", "", TITRE_PDF)
     d.set_margins(20, 20, 20)
     d.add_page()
 
     for genre, texte in lot:
         if not texte:
             continue
+        # LES TITRES PRENNENT LE CARACTÈRE DE TITRE, le reste celui du texte.
+        # C'est la même règle qu'à l'écran, et elle vient de la même raison :
+        # un quotidien ne compose pas ses manchettes avec le caractère de sa
+        # colonne. Les intertitres de rubrique (`titre2`) en font partie ; les
+        # notes et les pieds n'y touchent pas — en petit corps, les déliés de
+        # ce dessin disparaissent.
         gras = genre in ("titre", "titre2")
-        d.set_font("lib", "B" if gras else "", _PDF_TAILLES.get(genre, 10.5))
+        if gras and titre:
+            d.set_font("titre", "", _PDF_TAILLES.get(genre, 10.5))
+        else:
+            d.set_font("lib", "B" if gras else "", _PDF_TAILLES.get(genre, 10.5))
         d.set_text_color(*_PDF_COULEURS.get(genre, (20, 17, 13)))
         if genre == "titre2":
             d.ln(3)
@@ -469,6 +496,7 @@ def sante():
         "pdf_disponible": ok,
         "pdf_pourquoi_pas": pourquoi,
         "documents": ["fiche", "revue"],
+        "caractere_de_titre": os.path.basename(TITRE_PDF) if os.path.exists(TITRE_PDF) else None,
         "portee": "Reprend une fiche PUBLIÉE telle quelle, avec son statut, "
                   "la nature de sa lecture, ce qu'on ne sait pas et sa "
                   "source — ou une REVUE de période, avec ce qu'elle compte, "

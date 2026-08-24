@@ -148,8 +148,8 @@
         + '<span class="fdate">' + esc(frDate(f.date_fait))
         + (f.date_convention ? ' <b class="conv">convention</b>' : "")
         + '</span></div>';
-      h += '<h1 class="titre-journal fi-titre">' + esc(f.titre) + '</h1>';
-      h += '<p class="devise fi-chapeau">' + esc(f.chapeau) + '</p>';
+      h += '<h1 class="fi-titre">' + esc(f.titre) + '</h1>';
+      h += '<p class="fi-chapeau">' + esc(f.chapeau) + '</p>';
 
       /* UNE DATE FABRIQUÉE LE DIT SOUS ELLE-MÊME. Elle est écrite en toutes
          lettres dans l'incertitude, mais l'incertitude se lit APRÈS la

@@ -6,6 +6,8 @@ mention que la licence exige.
   Newsreader        — https://github.com/productiontype/Newsreader
   Inter             — https://github.com/rsms/inter
   JetBrains Mono    — https://github.com/JetBrains/JetBrainsMono
+  Playfair Display  — https://github.com/clauseggers/Playfair-Display
+  Grenze Gotisch    — https://github.com/Omnibus-Type/Grenze-Gotisch
 
 Deux usages, deux raisons distinctes de les avoir ici.
 
@@ -35,3 +37,23 @@ Les fichiers `.woff2` sont donc ici, sous-ensembles `latin` et `latin-ext`
 seulement. Le site n'émet plus aucune requête vers un tiers, et cette phrase
 est vérifiée par un contrôle plutôt qu'affirmée : voir `polices.css` pour le
 détail, et `tests/test_securite.py` pour la garde.
+
+───────────────────────────────────────────────────────────────────────────
+3. PLAYFAIR DISPLAY ET GRENZE GOTISCH — la composition de presse
+───────────────────────────────────────────────────────────────────────────
+
+Un quotidien ne compose pas ses titres avec le caractère de son texte.
+Newsreader tient la colonne — c'est son métier — mais à soixante pixels il
+reste aimable là où une manchette doit trancher. PLAYFAIR DISPLAY prend donc
+les titres et les citations, et rien en dessous de dix-huit pixels : sous
+cette taille ses déliés disparaissent à l'écran.
+
+GRENZE GOTISCH NE SERT QU'AU BANDEAU DE TITRE. Une gothique au bandeau est
+une convention de genre, vieille de deux siècles et partagée par la moitié
+des quotidiens d'Europe. Ce qui est composé dedans est LE NOM DE CE SITE —
+pas l'emblème d'un autre journal, qui est une marque déposée et ne se reprend
+pas. Le fichier est sous-ensemblé aux capitales seules, puisque le bandeau
+n'emploie rien d'autre : dix-sept kilo-octets.
+
+Les deux sont sous SIL Open Font License 1.1, dont le texte intégral
+accompagne chaque projet aux adresses ci-dessus.

@@ -276,9 +276,69 @@ def test_le_menu_nomme_dans_la_fonte_du_journal():
     assert "font-family:var(--fix)" in serre[i:i + 260]
     i = serre.index(".bl-sai{")
     assert "font-family:var(--fix)" in serre[i:i + 200]
-    # Et aucune quatrième fonte n'est introduite.
+    # Et aucune fonte hors des CINQ déclarées n'est introduite. Elles étaient
+    # trois ; deux caractères de presse s'y sont ajoutés, chacun avec un rôle
+    # écrit — voir le contrôle suivant, qui garde ces rôles plutôt que de se
+    # contenter de compter.
     familles = set(re.findall(r"font-family:\s*var\(--([a-z]+)\)", CSS))
-    assert familles <= {"serif", "sans", "fix"}, familles
+    assert familles <= {"serif", "sans", "fix", "titre", "gothique"}, familles
+
+
+def _taille_mini(corps):
+    """La plus petite taille qu'une règle puisse rendre. `clamp(a,b,c)` en
+    rend `a` : c'est cette borne-là qui décide si un dessin tient."""
+    m = re.search(r"font-size:\s*clamp\(\s*([\d.]+)px", corps)
+    if m:
+        return float(m.group(1))
+    m = re.search(r"font-size:\s*([\d.]+)px", corps)
+    return float(m.group(1)) if m else None
+
+
+def test_le_caractere_de_titre_ne_descend_pas_sous_dix_huit_pixels():
+    """CE N'EST PAS UNE PRÉFÉRENCE, C'EST UNE RÈGLE DE COMPOSITION. Playfair a
+    des déliés très fins : à douze pixels sur un écran ordinaire, ils
+    disparaissent purement et simplement, et le mot se met à clignoter d'un
+    pixel à l'autre selon l'arrondi. Le caractère de texte fait exactement
+    l'inverse — Newsreader est dessiné pour tenir en petit corps.
+
+    Un titre de carte à vingt-et-un pixels le porte donc ; une glose à douze ne
+    doit jamais le porter. Ce contrôle tombe le jour où quelqu'un l'appliquera
+    à un libellé « pour l'harmonie »."""
+    fautes = []
+    for m in re.finditer(r"(?m)^([^{}\n][^{\n]*)\{([^}]*)\}", CODE_CSS):
+        sel, corps = m.group(1).strip(), m.group(2)
+        if "var(--titre)" not in corps:
+            continue
+        t = _taille_mini(corps)
+        # UNE RÈGLE SANS TAILLE HÉRITE DE LA SIENNE : elle n'est pas jugée ici,
+        # mais elle doit être rare et volontaire.
+        if t is not None and t < 18:
+            fautes.append("%s : %spx" % (sel, t))
+    assert not fautes, fautes
+
+
+def test_la_gothique_ne_compose_que_le_bandeau_de_titre():
+    """LE FICHIER EST SOUS-ENSEMBLÉ AUX LETTRES, et c'est ce qui rend cette
+    règle nécessaire plutôt que décorative : il ne porte NI CHIFFRE, NI
+    PONCTUATION au-delà de l'espace, du tiret et de l'esperluette. Composer
+    « 98 fiches » dedans ferait tomber les chiffres dans une fonte de secours
+    au milieu du mot — un défaut qui ne se voit qu'à l'écran, et seulement là
+    où il y a un chiffre.
+
+    ELLE NE COMPOSE DONC QU'UN SEUL SÉLECTEUR, et c'est le nom du site."""
+    porteurs = []
+    for m in re.finditer(r"(?m)^([^{}\n][^{\n]*)\{([^}]*)\}", CODE_CSS):
+        if "var(--gothique)" in m.group(2):
+            porteurs.append(m.group(1).strip())
+    assert porteurs == [".titre-journal"], porteurs
+    # ET LA PLAGE DÉCLARÉE CORRESPOND AU FICHIER : annoncer des chiffres que
+    # le fichier ne porte pas ferait chercher au navigateur un glyphe absent.
+    pol = open(os.path.join(ICI, "polices.css"), encoding="utf-8").read()
+    i = pol.index("font-family: 'Gothique'")
+    plage = pol[i:i + 420]
+    for chiffre in ("U+0030", "0030-0039"):
+        assert chiffre not in plage, "la plage annonce des chiffres"
+    assert "U+0041-005A" in plage and "U+0061-007A" in plage
 
 
 def test_chaque_groupe_du_menu_porte_sa_teinte_par_une_classe():

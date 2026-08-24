@@ -80,7 +80,7 @@ Depuis votre poste, aucune session nécessaire :
       https://github.com/c79942474-cyber/conseilprevinfo
     git push -u origin master
 
-`HISTORIQUE.bundle` porte **l'historique git complet — vingt-sept commits**,
+`HISTORIQUE.bundle` porte **l'historique git complet — vingt-huit commits**,
 messages compris. Il ne s'agit donc pas de repartir d'une copie à plat : le
 détail des corrections, des mesures et des défauts constatés vit dans ces
 messages, et c'est souvent là qu'est l'information.
@@ -106,6 +106,27 @@ ce qui ne va pas : il annonçait « toutes les sources ont répondu » à chaque
 visite, et un bandeau d'alerte qui s'affiche aussi quand il n'y a pas d'alerte
 n'alerte plus.
 
+Il est **composé comme un quotidien**. Une gothique au bandeau — convention de
+genre, vieille de deux siècles, dans laquelle est composé LE NOM DE CE SITE et
+non l'emblème d'un autre, qui est une marque déposée. Playfair Display aux
+titres, Newsreader à la colonne : un journal ne compose pas ses manchettes avec
+le caractère de son texte. La règle est bornée — **Playfair ne descend pas sous
+dix-huit pixels**, ses déliés y disparaissent, et un contrôle lit la taille
+minimale de chaque règle qui l'emploie. La gothique, elle, ne compose qu'un
+seul sélecteur : son fichier est sous-ensemblé aux lettres et ne porte pas de
+chiffres.
+
+**Les angles sont droits**, les filets hiérarchisés — épais sous le bandeau,
+fins entre les blocs. Un usage de presse n'est pas repris, et c'est écrit : la
+**justification**, essayée puis retirée. Un journal justifie parce qu'il coupe
+les mots ; le navigateur ne coupe que dans la langue déclarée de la page, or
+les chapeaux portent le texte des sources, anglais neuf fois sur dix.
+
+**La typographie va jusqu'au fichier.** Un PDF embarque ses polices : ses
+titres prennent le même caractère qu'à l'écran. Le Word non, délibérément — il
+n'embarque rien, il existe pour être repris, et un caractère absent chez le
+destinataire fait une mise en page qui se défait à la première frappe.
+
 Le site est imprimé sur un **papier couché brillant** — noirs denses, filets
 fins, blanc légèrement froid, et le lustre diffus qui distingue un couché d'un
 mat à l'œil nu. Ce n'est pas un crème refroidi : c'est un autre papier, celui
@@ -123,7 +144,7 @@ elle, ne bascule pas : ce site est un journal, et un papier ne devient pas noir
 la nuit.
 
 Elle est **rétractable à toute largeur**, dit ce que la page contient et où
-l'on en est. Elle emploie les **trois caractères du journal** —
+l'on en est. Elle emploie les **caractères du journal** —
 Newsreader nomme, JetBrains Mono étiquette et mesure, Inter tient les gloses —
 et chaque groupe porte sa teinte, dont héritent son icône, son filet et les
 icônes de ses entrées. Les teintes sont délibérément désaturées, hors des
@@ -278,7 +299,7 @@ que rien ne le signale. Politique de contenu fermée sur `default-src 'self'`,
 sans `unsafe-inline` — ce qui a demandé de retirer les douze attributs `style`
 dispersés dans les pages et le JavaScript.
 
-**388 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
+**392 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
 gardent les règles éditoriales, et chacun est écrit pour tomber le jour où
 quelqu'un les assouplira. Chaque règle nouvelle a été confrontée à une
 **mutation du code qu'elle garde** — et cinq de ces mutations ont révélé des
@@ -286,8 +307,10 @@ contrôles trop faibles, qui ont été resserrés. Un contrôle écrit trop STRI
 aussi été corrigé plutôt que contourné : il supprimait la distinction qu'il
 était censé protéger.
 
-### Les vingt-sept commits du bundle
+### Les vingt-huit commits du bundle
 
+    3ea43c3  La composition passe à celle d'un quotidien — jusque dans les
+             documents emportés
     919ad8d  L'interrupteur du clignotement obéissait sans qu'on puisse le
              constater
     a4afe6d  La revue s'emporte en PDF et en Word — réserves comprises

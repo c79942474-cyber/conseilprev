@@ -79,6 +79,16 @@
   --serif:'Newsreader',Georgia,'Times New Roman',serif;
   --sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
   --fix:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+  /* ── LES DEUX CARACTÈRES DE PRESSE ────────────────────────────────────
+     `--titre` NE SERT QU'AU-DESSUS DE DIX-HUIT PIXELS, et c'est une règle
+     de composition, pas une préférence : Playfair a des déliés très fins
+     qui s'effacent à l'écran en petit corps. Un titre de carte à 20 px le
+     porte, une glose à 12 px ne doit jamais le porter — c'est Newsreader
+     qui tient la colonne, dessiné pour cela.
+     `--gothique` NE SERT QU'AU BANDEAU DE TITRE. Le fichier est
+     sous-ensemblé aux capitales : il n'y a rien d'autre à y composer. */
+  --titre:'Playfair Display','Newsreader',Georgia,'Times New Roman',serif;
+  --gothique:'Gothique','Playfair Display',Georgia,serif;
   --maxw:1240px;
 
   /* ── LE PANNEAU LATÉRAL A SA PROPRE ENCRE ─────────────────────────────
@@ -194,17 +204,39 @@ a{color:var(--bleu)}
    court sous toute la page. Un bloc peint en `--papier` par-dessus le dégradé
    y découpe un rectangle mat — visible au navigateur comme une bande plus
    terne sous le titre, exactement l'inverse de l'effet cherché. */
-.tete{border-bottom:3px solid var(--encre);background:transparent}
-.tete .in{max-width:var(--maxw);margin:0 auto;padding:22px 22px 16px}
+/* ── LE BANDEAU DE TITRE ──────────────────────────────────────────────────
+   IL EST CENTRÉ ET NOIR, ce qu'un bandeau de quotidien est depuis deux
+   siècles. Il ne l'était pas : aligné à gauche, avec un mot en rouge — or le
+   rouge de ce site VEUT DIRE QUELQUE CHOSE. Il dit la rupture, sur les
+   pastilles et sur les filets, et le lecteur l'apprend en trois cartes. Un
+   mot du titre peint dans cette couleur-là lui enseignait qu'elle décore
+   aussi, ce qui la vide de la moitié de son sens. Le bandeau est donc d'une
+   seule encre, et le rouge reste au corpus.
+
+   LE FILET SOUS LE BANDEAU EST ÉPAIS, celui qui sépare les blocs est fin.
+   Cette hiérarchie-là fait plus pour l'allure de presse que n'importe quel
+   caractère : elle dit ce qui est un étage et ce qui est une couture. */
+.tete{border-bottom:4px solid var(--encre);background:transparent}
+.tete .in{max-width:var(--maxw);margin:0 auto;padding:26px 22px 14px}
 .titre-journal{
-  font-family:var(--serif);font-weight:800;font-size:clamp(34px,5.6vw,60px);
-  line-height:.98;letter-spacing:-.028em;margin:0;color:var(--encre);
+  font-family:var(--gothique);font-weight:400;
+  font-size:clamp(40px,7.4vw,86px);
+  line-height:.92;letter-spacing:0;margin:0;color:var(--encre);
+  text-align:center;
 }
-.titre-journal span{color:var(--rouge)}
+/* LE SECOND MOT NE CHANGE PAS DE COULEUR, IL CHANGE DE POIDS. La distinction
+   demandée par le nom se fait donc sans emprunter au code éditorial. */
+.titre-journal span{color:inherit;font-weight:700}
 .devise{
-  margin:9px 0 0;font-size:14.5px;line-height:1.55;color:var(--encre2);
+  margin:13px 0 0;font-size:14.5px;line-height:1.55;color:var(--encre2);
   max-width:74ch;
 }
+/* LA DEVISE DU BANDEAU EST CENTRÉE, LES AUTRES NON. La classe est partagée
+   par les cinq pages : centrée pour toutes, elle mettait six lignes de texte
+   courant au milieu de la colonne — ce qui se lit mal au-delà de trois. Sous
+   le logotype, où elle en fait deux, la centration est à sa place. */
+.tete .devise{margin-left:auto;margin-right:auto;max-width:62ch;
+  text-align:center;text-wrap:balance}
 .devise b{color:var(--encre)}
 
 /* ── LA BARRE DE FILTRES ─────────────────────────────────────────────── */
@@ -229,14 +261,14 @@ a{color:var(--bleu)}
   text-transform:uppercase;color:var(--sourd)}
 .filtres select,.filtres input{
   font-family:var(--sans);font-size:13.5px;padding:6px 10px;
-  border:1px solid var(--filet2);border-radius:5px;background:var(--papier);
+  border:1px solid var(--filet2);border-radius:0;background:var(--papier);
   color:var(--encre);max-width:190px;
 }
 .filtres select:focus,.filtres input:focus{outline:2px solid var(--bleu);
   outline-offset:1px}
 .fraz{
   font-family:var(--sans);font-size:13px;padding:6px 13px;cursor:pointer;
-  border:1px solid var(--filet2);border-radius:5px;background:var(--papier);
+  border:1px solid var(--filet2);border-radius:0;background:var(--papier);
   color:var(--encre2);
 }
 .fraz:hover{border-color:var(--rouge);color:var(--rouge)}
@@ -303,7 +335,7 @@ main{max-width:var(--maxw);margin:0 auto;padding:26px 22px 70px}
 .fmeta{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:9px}
 .past{
   font-family:var(--fix);font-size:9.5px;letter-spacing:.08em;
-  text-transform:uppercase;padding:2px 7px;border-radius:3px;
+  text-transform:uppercase;padding:2px 7px;border-radius:0;
   border:1px solid currentColor;white-space:nowrap;
 }
 /* LE FOND D'UNE PASTILLE EST DÉRIVÉ DE SA COULEUR, jamais recopié à côté.
@@ -334,7 +366,7 @@ main{max-width:var(--maxw);margin:0 auto;padding:26px 22px 70px}
 .conv{
   font-family:var(--fix);font-size:9.5px;font-weight:500;letter-spacing:.06em;
   text-transform:uppercase;color:var(--sourd2);border:1px dashed var(--filet2);
-  border-radius:2px;padding:1px 4px;margin-left:5px;white-space:nowrap;
+  border-radius:0;padding:1px 4px;margin-left:5px;white-space:nowrap;
 }
 .conv-dit{
   font-size:13px;line-height:1.6;color:var(--encre2);margin:0 0 18px;
@@ -350,10 +382,22 @@ main{max-width:var(--maxw);margin:0 auto;padding:26px 22px 70px}
 }
 
 .ftitre{
-  font-family:var(--serif);font-weight:700;font-size:20px;line-height:1.22;
+  font-family:var(--titre);font-weight:700;font-size:21px;line-height:1.16;
   letter-spacing:-.012em;margin:0 0 8px;color:var(--encre);text-wrap:balance;
 }
 .une .ftitre{font-size:25px}
+/* LE CHAPEAU N'EST PAS JUSTIFIÉ, ET C'EST LE SEUL USAGE DE PRESSE QU'ON NE
+   REPREND PAS. Essayé, regardé, retiré : dans une colonne de trois cent
+   trente pixels, la justification creuse des rivières de blanc de deux
+   centimètres au milieu des lignes.
+
+   LA CAUSE EST PRÉCISE, ET ELLE N'EST PAS RÉPARABLE ICI. Un journal justifie
+   parce qu'il coupe les mots, avec un dictionnaire par langue. Le navigateur
+   ne coupe que s'il a ce dictionnaire pour la langue DÉCLARÉE de la page — or
+   la page est en français et le chapeau porte le texte de la source, qui est
+   anglais neuf fois sur dix. Aucune césure ne s'applique, et la ligne
+   s'étire. Un drapeau à droite est plus laid en principe et plus lisible en
+   fait. */
 .fchapeau{margin:0 0 13px;font-size:14.5px;line-height:1.6;color:var(--encre2)}
 
 /* LES TROIS BLOCS QUI FONT LA VALEUR DU SITE. Ils sont visuellement
@@ -383,7 +427,7 @@ main{max-width:var(--maxw);margin:0 auto;padding:26px 22px 70px}
 
 .vide{
   padding:48px 24px;text-align:center;color:var(--sourd);font-size:15px;
-  border:1px dashed var(--filet2);border-radius:8px;
+  border:1px dashed var(--filet2);border-radius:0;
 }
 .vide b{color:var(--encre);display:block;margin-bottom:6px;font-size:17px;
   font-family:var(--serif)}
@@ -393,8 +437,9 @@ main{max-width:var(--maxw);margin:0 auto;padding:26px 22px 70px}
   gap:14px}
 .src{border:1px solid var(--filet);border-left:3px solid var(--bleu);
   background:var(--lustre);box-shadow:var(--ombre);
-  border-radius:0 6px 6px 0;padding:14px 16px;background:var(--papier2)}
-.src h3{font-family:var(--serif);font-size:16.5px;margin:0 0 3px;line-height:1.25}
+  border-radius:0;padding:14px 16px;background:var(--papier2)}
+.src h3{font-family:var(--titre);font-weight:700;font-size:18px;
+  margin:0 0 3px;line-height:1.16}
 .src .ed{font-size:12.5px;color:var(--sourd);margin:0 0 8px}
 .src .na{font-family:var(--fix);font-size:9.5px;letter-spacing:.08em;
   text-transform:uppercase;color:var(--bleu);display:inline-block;
@@ -406,7 +451,7 @@ main{max-width:var(--maxw);margin:0 auto;padding:26px 22px 70px}
    elle reste admise, elle n'est simplement pas lue. */
 .src .lue{font-family:var(--fix);font-size:9.5px;letter-spacing:.08em;
   text-transform:uppercase;display:inline-block;margin-bottom:7px;
-  padding:1px 6px;border:1px solid currentColor;border-radius:3px}
+  padding:1px 6px;border:1px solid currentColor;border-radius:0}
 .src .lue.oui{color:var(--vert)}
 .src .lue.non{color:var(--sourd)}
 
@@ -420,7 +465,7 @@ main{max-width:var(--maxw);margin:0 auto;padding:26px 22px 70px}
 .fi-orgs .fbloc-t{flex-basis:100%}
 .fi-orgs .orga{
   font-family:var(--fix);font-size:11px;
-  border:1px solid var(--filet2);border-radius:3px;
+  border:1px solid var(--filet2);border-radius:0;
   padding:2px 8px;color:var(--encre2);background:var(--papier2);
   display:inline-flex;align-items:baseline;gap:7px;
 }
@@ -438,7 +483,7 @@ main{max-width:var(--maxw);margin:0 auto;padding:26px 22px 70px}
 .src .non{color:var(--ambre)}
 .src .lic{font-family:var(--fix);font-size:10.5px;color:var(--sourd)}
 .src .sonde{font-family:var(--sans);font-size:12px;padding:4px 10px;
-  margin-top:8px;border:1px solid var(--filet2);border-radius:5px;
+  margin-top:8px;border:1px solid var(--filet2);border-radius:0;
   background:var(--papier);color:var(--encre2);cursor:pointer}
 .src .sonde:hover{border-color:var(--vert);color:var(--vert)}
 .src .resu{font-family:var(--fix);font-size:11px;margin-top:6px;color:var(--vert)}
@@ -499,7 +544,7 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
   border:1px solid var(--filet2);border-left:4px solid var(--bleu);
   background:var(--papier2);padding:18px 20px 16px;
 }
-.piste h3{font-family:var(--serif);font-size:20px;line-height:1.2;
+.piste h3{font-family:var(--titre);font-weight:700;font-size:21px;line-height:1.14;
   margin:9px 0 13px;color:var(--encre)}
 .pi-sol{
   font-family:var(--fix);font-size:10px;letter-spacing:.06em;
@@ -620,7 +665,7 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
 .bl-x{
   border:1px solid var(--bl-filet2);background:transparent;
   color:var(--bl-sourd);
-  border-radius:4px;width:26px;height:26px;line-height:1;cursor:pointer;
+  border-radius:0;width:26px;height:26px;line-height:1;cursor:pointer;
   font-size:13px;flex:none;
 }
 .bl-x:hover{border-color:var(--bl-actif);color:var(--bl-actif)}
@@ -677,7 +722,7 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
 .bl-l li{margin:0 0 2px}
 .bl-l a{
   display:flex;gap:9px;align-items:flex-start;
-  padding:7px 9px;border-radius:5px;text-decoration:none;
+  padding:7px 9px;border-radius:0;text-decoration:none;
   color:var(--bl-encre2);border-left:2px solid transparent;
   transition:background .14s ease,color .14s ease;
 }
@@ -742,7 +787,7 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
    les témoins y sont exactement les éléments de la page. */
 .bl-lg{list-style:none;margin:0;padding:11px 12px;display:flex;
   flex-direction:column;gap:5px;
-  background:var(--papier);border:1px solid var(--filet);border-radius:5px}
+  background:var(--papier);border:1px solid var(--filet);border-radius:0}
 .bl-lg li{display:flex;align-items:center;gap:7px;font-size:11.5px;
   color:var(--sourd);line-height:1.3}
 .bl-lg li b{font-family:var(--serif);font-size:13px;font-weight:600;
@@ -762,7 +807,7 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
    un témoin recoloré pour tenir sur l'ardoise ne serait plus le contour qu'on
    verra sur une carte, et la légende cesserait de légender. Il garde donc son
    carton clair dans les deux états du panneau. */
-.bl-lg-c{display:block;width:22px;height:15px;flex:none;border-radius:2px;
+.bl-lg-c{display:block;width:22px;height:15px;flex:none;border-radius:0;
   background:var(--papier)}
 .bl-lg-c.neuf{outline:2px solid var(--bleu);outline-offset:-2px}
 .bl-lg-c.lu{outline:2px solid var(--vert);outline-offset:-2px}
@@ -774,7 +819,7 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
 .bl-lg-cli{
   display:block;margin-top:9px;width:100%;font:inherit;font-size:11px;
   cursor:pointer;background:var(--bl-fond2);color:var(--bl-lien);
-  border:1px solid var(--bl-filet2);border-radius:3px;padding:4px 8px;
+  border:1px solid var(--bl-filet2);border-radius:0;padding:4px 8px;
 }
 .bl-lg-cli:hover{border-color:var(--bl-lien)}
 .bl-lg-non{font-size:11.5px;line-height:1.5;color:var(--bl-sourd);margin:0;
@@ -794,13 +839,13 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
 /* ── LE BOUTON, ET LA BARRE REPLIÉE ──────────────────────────────────── */
 #bl-bouton{
   position:fixed;left:12px;bottom:16px;z-index:60;width:44px;height:44px;
-  border-radius:8px;border:1px solid var(--filet2);background:var(--papier);
+  border-radius:0;border:1px solid var(--filet2);background:var(--papier);
   box-shadow:0 3px 12px rgba(14,19,25,.16);cursor:pointer;
   display:flex;flex-direction:column;justify-content:center;align-items:center;
   gap:4px;padding:0;
 }
 #bl-bouton span{display:block;width:19px;height:2px;background:var(--encre2);
-  border-radius:1px}
+  border-radius:0}
 #bl-bouton:focus-visible{outline:2px solid var(--bleu);outline-offset:2px}
 
 @media (max-width:1099px){
@@ -830,7 +875,7 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
 .or-d a:hover{color:#F3C88A}
 .lg-grp{display:inline-flex;
   border:1px solid color-mix(in srgb,var(--papier) 30%,transparent);
-  border-radius:3px;overflow:hidden}
+  border-radius:0;overflow:hidden}
 .lg{
   font-family:var(--fix);font-size:10px;letter-spacing:.10em;
   padding:3px 8px;border:0;background:transparent;
@@ -942,7 +987,7 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
   font-family:var(--fix);font-size:10.5px;letter-spacing:.06em;
   color:var(--sourd);white-space:nowrap;
   font-variant-numeric:tabular-nums;
-  border:1px solid var(--filet);border-radius:3px;padding:2px 8px;
+  border:1px solid var(--filet);border-radius:0;padding:2px 8px;
   background:var(--papier);
 }
 .rubrique:first-of-type{border-top:0;padding-top:0;margin-top:0}
@@ -971,7 +1016,7 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
   .f-plier[aria-expanded="true"]::after{transform:rotate(180deg)}
   #f-actifs{
     font-size:10px;letter-spacing:.06em;color:var(--sourd);
-    border:1px solid var(--filet2);border-radius:3px;padding:1px 6px;
+    border:1px solid var(--filet2);border-radius:0;padding:1px 6px;
   }
   .filtres .in{display:none}
   .filtres .in.f-ouvert{display:flex;max-height:62vh;overflow-y:auto}
@@ -1064,7 +1109,7 @@ html.cp-fixe .fiche.lu{animation:none}
 .fmarque{
   font-family:var(--fix);font-size:9px;letter-spacing:.14em;
   text-transform:uppercase;color:var(--vert);
-  border:1px solid currentColor;border-radius:3px;padding:1px 5px;
+  border:1px solid currentColor;border-radius:0;padding:1px 5px;
   white-space:nowrap;
 }
 
@@ -1077,7 +1122,7 @@ html.cp-fixe .fiche.lu{animation:none}
 .repere{
   display:flex;align-items:center;gap:8px;flex-wrap:wrap;
   margin:0 0 14px;padding:8px 12px;
-  background:var(--papier2);border:1px solid var(--filet);border-radius:4px;
+  background:var(--papier2);border:1px solid var(--filet);border-radius:0;
   font-family:var(--fix);font-size:11px;line-height:1.5;color:var(--sourd2);
 }
 .repere b{font-weight:600;color:var(--encre2);margin-right:10px}
@@ -1086,7 +1131,7 @@ html.cp-fixe .fiche.lu{animation:none}
 .repere .rp-t{color:var(--encre2);margin-right:2px}
 .repere .rp-c{
   display:inline-block;width:22px;height:14px;flex:none;
-  background:var(--papier);border-radius:2px;
+  background:var(--papier);border-radius:0;
 }
 /* LES TÉMOINS SONT LE MÊME CONTOUR QUE LES CARTES, à la même épaisseur — un
    échantillon qui ne ressemble pas à ce qu'il désigne n'est pas une légende,
@@ -1098,7 +1143,7 @@ html.cp-fixe .fiche.lu{animation:none}
 .repere button{
   font:inherit;cursor:pointer;margin-left:auto;
   background:var(--papier);color:var(--lien);
-  border:1px solid var(--filet2);border-radius:3px;padding:3px 9px;
+  border:1px solid var(--filet2);border-radius:0;padding:3px 9px;
 }
 .repere button:hover{border-color:var(--lien)}
 
@@ -1125,7 +1170,7 @@ html.cp-fixe .fiche.lu{animation:none}
   margin-left:auto;font-family:var(--fix);font-size:9.5px;letter-spacing:.06em;
   text-transform:uppercase;background:transparent;
   border:1px solid var(--bl-filet2);
-  border-radius:3px;padding:2px 6px;color:var(--bl-sourd);cursor:pointer;
+  border-radius:0;padding:2px 6px;color:var(--bl-sourd);cursor:pointer;
 }
 .bl-lu button:hover{border-color:var(--bl-actif);color:var(--bl-actif)}
 
@@ -1144,7 +1189,7 @@ html.cp-fixe .fiche.lu{animation:none}
 }
 .emp-b{
   font-family:var(--sans);font-size:13.5px;font-weight:500;text-decoration:none;
-  padding:6px 15px;border:1px solid var(--encre2);border-radius:4px;
+  padding:6px 15px;border:1px solid var(--encre2);border-radius:0;
   color:var(--encre);background:var(--papier);
 }
 .emp-b:hover{background:var(--encre);color:var(--papier)}
@@ -1174,7 +1219,7 @@ html.cp-fixe .fiche.lu{animation:none}
 }
 .cl-b{
   font-family:var(--sans);font-size:12.5px;text-decoration:none;cursor:pointer;
-  padding:4px 11px;border:1px solid var(--filet2);border-radius:4px;
+  padding:4px 11px;border:1px solid var(--filet2);border-radius:0;
   background:var(--papier);color:var(--encre2);
 }
 .cl-b:hover{border-color:var(--bleu);color:var(--bleu)}
@@ -1196,20 +1241,25 @@ html.cp-fixe .fiche.lu{animation:none}
 
 /* La fiche entière */
 .fi-meta{margin-bottom:14px}
-.fi-titre{font-size:clamp(26px,3.6vw,40px);line-height:1.1;margin:0 0 12px}
+.fi-titre{font-family:var(--titre);font-weight:800;
+  font-size:clamp(26px,3.6vw,40px);line-height:1.04;
+  letter-spacing:-.014em;margin:0 0 12px}
 .fi-chapeau{font-size:16px}
 .fi-lecture{margin-top:22px}
 .fi-src{margin-top:24px}
 .fi-retour{margin-top:26px}
 /* Les vignettes de croisement et de voisinage */
-.vg-titre{font-size:17px}
+.vg-titre{font-family:var(--titre);font-weight:700;font-size:18px;
+  line-height:1.14}
 
 /* Les pages secondaires : abonnement, confrontation, confidentialité */
 .pg{padding-top:26px}
 .pg-abo{max-width:820px}
 .pg-conf{max-width:860px}
 .pg-vp{max-width:820px}
-.pg-titre{font-size:clamp(26px,3.6vw,38px);margin:0 0 12px}
+.pg-titre{font-family:var(--titre);font-weight:800;
+  font-size:clamp(28px,3.8vw,42px);line-height:1.06;
+  letter-spacing:-.012em;margin:0 0 12px}
 /* Une réserve GRAVE — celle qui dit qu'un document ne doit pas être déposé —
    se distingue d'une réserve ordinaire, qui est ambre. */
 .bandeau-etat.grave{border-left-color:var(--rouge)}
@@ -1241,11 +1291,11 @@ html.cp-fixe .fiche.lu{animation:none}
   margin:14px 0 4px;font-family:var(--fix);font-size:11px}
 .rv-nav button{
   font:inherit;cursor:pointer;background:var(--papier2);color:var(--lien);
-  border:1px solid var(--filet2);border-radius:3px;padding:4px 10px;
+  border:1px solid var(--filet2);border-radius:0;padding:4px 10px;
 }
 .rv-nav button:hover{border-color:var(--lien)}
 .rv-nav button:focus-visible{outline:2px solid var(--lien);outline-offset:1px}
-.rv-per{font-family:var(--serif);font-size:17px;color:var(--encre);
+.rv-per{font-family:var(--titre);font-weight:700;font-size:19px;color:var(--encre);
   font-weight:600;margin-right:auto}
 
 .rv-regle{margin:10px 0 0;padding:9px 13px;font-size:12.5px;line-height:1.55;
@@ -1259,7 +1309,7 @@ html.cp-fixe .fiche.lu{animation:none}
 .rv-som-n b,.rv-som-e b{font-size:15px;color:var(--encre);
   font-family:var(--serif)}
 .rv-som-e{margin-right:8px}
-.rv-src{border:1px solid var(--filet2);border-radius:3px;padding:1px 7px}
+.rv-src{border:1px solid var(--filet2);border-radius:0;padding:1px 7px}
 
 .rv-bloc{margin-top:22px}
 .rv-n{font-family:var(--fix);font-size:10.5px;color:var(--sourd2)}
@@ -1270,14 +1320,14 @@ html.cp-fixe .fiche.lu{animation:none}
 .rv-terr{display:flex;flex-wrap:wrap;gap:5px;margin:6px 0 0}
 .rv-terr .orga{font-family:var(--fix);font-size:9.5px;letter-spacing:.06em;
   text-transform:uppercase;color:var(--sourd2);
-  border:1px solid var(--filet2);border-radius:3px;padding:1px 6px}
+  border:1px solid var(--filet2);border-radius:0;padding:1px 6px}
 
 /* CE QUE LA PÉRIODE NE DIT PAS. Posé APRÈS les fiches et non avant : c'est
    une réserve sur ce qu'on vient de lire, pas un avertissement qui
    dispenserait de le lire. */
 .rv-abs{margin:26px 0 0;padding:12px 15px;background:var(--papier2);
   border:1px solid var(--filet);border-left:3px solid var(--ocre);
-  border-radius:0 4px 4px 0}
+  border-radius:0}
 .rv-abs-t{margin:0 0 7px;font-family:var(--fix);font-size:10px;
   letter-spacing:.1em;text-transform:uppercase;color:var(--ocre)}
 .rv-abs p{margin:0 0 6px;font-size:12.5px;line-height:1.55;color:var(--encre2)}
@@ -1287,14 +1337,16 @@ html.cp-fixe .fiche.lu{animation:none}
    qui disparaît se lit comme une rubrique non prévue. */
 .rv-rub{margin:14px 0 0;padding:14px 16px;background:var(--papier2);
   border:1px solid var(--filet);border-left:3px solid var(--vert);
-  border-radius:0 4px 4px 0}
+  border-radius:0}
 .rv-rub.rv-vide{border-left-color:var(--sourd2)}
-.rv-rub h3{font-family:var(--serif);font-size:18px;margin:0 0 4px}
+.rv-rub h3{font-family:var(--titre);font-weight:700;font-size:19px;
+  line-height:1.16;margin:0 0 4px}
 .rv-rub-d{margin:0 0 8px;font-size:12.5px;line-height:1.55;color:var(--sourd2)}
 .rv-rub-v{margin:0;font-size:13px;line-height:1.6;color:var(--encre2)}
 .rv-rub-v b{color:var(--encre)}
 .rv-piece{margin-top:12px;padding-top:12px;border-top:1px solid var(--filet)}
-.rv-piece h4{font-family:var(--serif);font-size:19px;margin:0 0 5px}
+.rv-piece h4{font-family:var(--titre);font-weight:700;font-size:20px;
+  line-height:1.14;margin:0 0 5px}
 /* LA SIGNATURE N'EST PAS UNE MENTION LÉGALE RELÉGUÉE EN BAS : elle est ce
    qui distingue ce texte d'un texte dérivé. */
 .rv-sign{font-family:var(--fix);font-size:10.5px;letter-spacing:.04em;
@@ -1333,7 +1385,7 @@ html.cp-fixe .fiche.lu{animation:none}
    dans la discipline de qui écrira la suite. */
 .vp-a button{
   font-family:var(--sans);font-size:13.5px;font-weight:500;padding:8px 16px;
-  border:1px solid var(--encre);border-radius:5px;background:var(--papier);
+  border:1px solid var(--encre);border-radius:0;background:var(--papier);
   color:var(--encre);cursor:pointer;
 }
 .vp-a button:hover{background:var(--papier3)}
@@ -1439,7 +1491,7 @@ html.vp-ouvert .fl{bottom:calc(var(--vp-h,120px) + 14px)}
 .fl-b-t{
   display:flex;align-items:center;justify-content:center;
   font-family:var(--sans);font-size:15px;line-height:1;
-  border:1px solid var(--filet2);border-radius:6px;background:var(--papier);
+  border:1px solid var(--filet2);border-radius:0;background:var(--papier);
   color:var(--encre2);cursor:pointer;padding:0;
   box-shadow:0 2px 8px rgba(14,19,25,.10);
 }
@@ -1470,16 +1522,23 @@ html.vp-ouvert .fl{bottom:calc(var(--vp-h,120px) + 14px)}
    classement en face du premier.
    ═══════════════════════════════════════════════════════════════════════════ */
 
+/* ── LA MANCHETTE, COMPOSÉE COMME UN BANDEAU DE GENRE ────────────────────
+   C'est la bande qu'un quotidien pose sous son titre : quelques mots en
+   capitales espacées, entre deux filets, qui disent de quelle édition on
+   parle avant qu'on lise quoi que ce soit. Elle portait déjà exactement ce
+   contenu — la date de collecte, le nombre de fiches, celui des ruptures —
+   mais dans le corps de texte d'une ligne d'état. La composition la remet à
+   son rang : ce n'est pas une note de bas de bloc, c'est l'ours du jour. */
 .manchette{
-  border-bottom:1px solid var(--filet2);background:var(--papier);
-  font-family:var(--fix);font-size:11px;letter-spacing:.06em;
-  color:var(--sourd);
-  max-width:var(--maxw);margin:0 auto;padding:9px 22px;
-  display:flex;flex-wrap:wrap;gap:4px 22px;align-items:baseline;
+  border-bottom:1px solid var(--encre);background:var(--papier);
+  font-family:var(--fix);font-size:11px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--sourd2);
+  max-width:var(--maxw);margin:0 auto;padding:11px 22px 10px;
+  display:flex;flex-wrap:wrap;gap:5px 26px;align-items:baseline;
 }
 .manchette[hidden]{display:none}
 .manchette b{color:var(--encre);font-weight:600;font-variant-numeric:tabular-nums}
-.mn-ed{text-transform:uppercase;letter-spacing:.13em}
+.mn-ed{color:var(--encre);font-weight:500}
 .mn-src{margin-left:auto}
 .mn-src.ok{color:var(--vert)}
 .mn-src.ko{color:var(--rouge);font-weight:500}
@@ -1526,7 +1585,12 @@ html.vp-ouvert .fl{bottom:calc(var(--vp-h,120px) + 14px)}
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .art{max-width:68ch;margin:0 auto 34px}
-.art .fi-titre{font-size:clamp(27px,3.6vw,42px);line-height:1.05;
+/* LE TITRE D'ARTICLE EST CENTRÉ SUR SA COLONNE, et il est le seul. C'est le
+   traitement d'un article de tête dans un quotidien : la colonne est bornée à
+   soixante-huit signes, un titre de deux ou trois lignes y tient centré sans
+   qu'on perde le début de la ligne suivante. Le chapeau, lui, reste au
+   drapeau : c'est du texte courant, et six lignes centrées se lisent mal. */
+.art .fi-titre{text-align:center;font-size:clamp(27px,3.6vw,42px);line-height:1.02;
   letter-spacing:-.022em}
 .art .fi-chapeau{font-size:17.5px;line-height:1.62;color:var(--encre2);
   max-width:none}
