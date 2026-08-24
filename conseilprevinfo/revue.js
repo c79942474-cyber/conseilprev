@@ -198,6 +198,7 @@
        « CVE-2021-22681 » hier doit le voir ici aussi. */
     etats();
     $("rv-rubriques").innerHTML = (d.rubriques || []).map(rubrique).join("");
+    emporter();
   }
 
   function sommaire(d) {
@@ -311,6 +312,23 @@
         + '<span>' + esc(p.methode) + "</span></div></article>";
     });
     return h + "</div>";
+  }
+
+  /* ── LES DEUX ADRESSES D'EXPORT ─────────────────────────────────────────
+     ELLES PORTENT LA PÉRIODE AFFICHÉE, et elles sont refaites à chaque rendu.
+     Une adresse figée à `/revue.pdf` rendrait toujours la période PAR DÉFAUT :
+     le lecteur qui a reculé de trois semaines emporterait la revue d'une
+     autre semaine que celle qu'il a sous les yeux, et il ne s'en apercevrait
+     qu'en ouvrant le fichier — c'est-à-dire trop tard, ou jamais.
+
+     LA LANGUE DES ANALYSES PART AVEC ELLES, comme sur la fiche : un document
+     français obtenu depuis une page anglaise surprendrait à l'ouverture. */
+  function emporter() {
+    var q = parametres();
+    [["rv-pdf", "pdf"], ["rv-docx", "docx"]].forEach(function (x) {
+      var a = $(x[0]);
+      if (a) a.setAttribute("href", "/revue." + x[1] + q);
+    });
   }
 
   function etats() {

@@ -552,6 +552,88 @@ G = {
         "RESERVATION: this entry has no English template yet. The analyses "
         "above are therefore in French, as written, rather than run through "
         "a machine."),
+
+    # ── LA REVUE EMPORTÉE ─────────────────────────────────────────────────
+    # UNE REVUE DE PRESSE EST LE DOCUMENT QUI CIRCULE LE PLUS. Elle est
+    # transférée, jointe à un comité, relue par quelqu'un qui n'a jamais vu le
+    # site — et elle a l'autorité d'un résumé : le lecteur lui accorde d'avoir
+    # vu ce qu'il n'a pas lu. Tout ce qui la relativise doit donc partir AVEC
+    # elle, en tête et non en annexe.
+    "exp.rv.hebdo": ("Revue de presse hebdomadaire",
+                     "Weekly press review"),
+    "exp.rv.mensuel": ("Revue mensuelle internationale",
+                       "Monthly international review"),
+    "exp.rv.compte": (
+        "CE QUE CETTE REVUE COMPTE. Les fiches dont LE FAIT est daté de la "
+        "période — jamais celles collectées pendant la période. Les deux "
+        "dates ne coïncident pas : une faille est inscrite au catalogue des "
+        "mois après avoir été exploitée. Une période sans entrée ne dit donc "
+        "pas qu'il ne s'est rien passé : elle dit qu'aucun fait daté de ces "
+        "jours-là n'est entré au corpus.",
+        "WHAT THIS REVIEW COUNTS. The entries whose FACT is dated within the "
+        "period — never the ones collected during the period. The two dates "
+        "do not coincide: a flaw is catalogued months after being exploited. "
+        "A period with no items therefore does not say that nothing "
+        "happened: it says that no fact dated within those days has entered "
+        "the corpus."),
+    "exp.rv.regle": ("LA RÈGLE DE SÉLECTION. %s",
+                     "THE SELECTION RULE. %s"),
+    "exp.rv.compteur": ("%s fiche(s) — période précédente : %s (%s)",
+                        "%s entry(ies) — previous period: %s (%s)"),
+    "exp.rv.sujets": ("Par sujet : %s", "By topic: %s"),
+    "exp.rv.sources": ("Par source : %s", "By source: %s"),
+    "exp.rv.vide": (
+        "Aucun fait daté de cette période n'est entré au corpus.",
+        "No fact dated within this period has entered the corpus."),
+    "exp.rv.retard": (
+        "Cette période n'est pas celle en cours : elle s'est achevée il y a "
+        "%s jours. Le fait le plus récent que le corpus porte est daté du %s.",
+        "This period is not the current one: it ended %s days ago. The most "
+        "recent fact the corpus carries is dated %s."),
+    "exp.rv.absences": ("Ce que cette période ne dit pas",
+                        "What this period does not say"),
+    "exp.rv.muets": ("Sujets sans aucune entrée : %s",
+                     "Topics with no item at all: %s"),
+    "exp.rv.conv": (
+        "Dates posées, écartées : %s fiche(s) de cette période portent une "
+        "date que ce site a posée faute de mieux — un jeu annuel devient le "
+        "1er janvier. Elles tomberaient toutes dans la même semaine.",
+        "Set dates, left out: %s entry(ies) in this period carry a date this "
+        "site set for want of better — an annual dataset becomes 1 January. "
+        "They would all fall in the same week."),
+    "exp.rv.hors": (
+        "Sans territoire, écartées : %s fiche(s) ne rattachent le fait à "
+        "aucun pays et ne nomment aucune entreprise. Elles ne sont ni "
+        "internationales ni françaises.",
+        "With no territory, left out: %s entry(ies) tie the fact to no "
+        "country and name no company. They are neither international nor "
+        "French."),
+    "exp.rv.fr": (
+        "France seulement, écartées : %s fiche(s) ne rattachent le fait qu'à "
+        "la France.",
+        "France only, left out: %s entry(ies) tie the fact to France alone."),
+    "exp.rv.signees": ("Reportages et entretiens — ce qui ne se dérive pas",
+                       "Reports and interviews — what cannot be derived"),
+    "exp.rv.entree": ("%s · %s", "%s · %s"),
+    "exp.rv.terr": ("Nommées : %s", "Named: %s"),
+    "exp.rv.signe": ("Signé : %s, le %s", "Signed: %s, on %s"),
+    "exp.rv.entretien": ("Entretien avec %s, %s — recueilli le %s",
+                         "Interview with %s, %s — gathered on %s"),
+    "exp.rv.pied.regle": (
+        "Ce document reprend des fiches publiées, sans rien y réécrire ni "
+        "rien y ajouter. Le classement par portée est celui du moteur, déjà "
+        "publié sur chaque fiche ; les comptes sont des comptes. Aucune "
+        "phrase de ce document n'apprécie ce qu'il range.",
+        "This document reproduces published entries without rewriting or "
+        "adding anything. The ordering by reach is the engine's, already "
+        "published on each entry; the counts are counts. No sentence in this "
+        "document appraises what it files."),
+    "exp.rv.corpus.vide": (
+        "AVERTISSEMENT : le corpus était vide au moment de cet export. Ce "
+        "document ne dit donc rien de la période — il n'y avait rien à "
+        "découper.",
+        "WARNING: the corpus was empty when this document was exported. It "
+        "therefore says nothing about the period — there was nothing to cut."),
 }
 
 

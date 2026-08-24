@@ -518,6 +518,56 @@ def api_revue():
                             langue=langue))
 
 
+# ── EMPORTER LA REVUE ─────────────────────────────────────────────────────
+# LE DOCUMENT EST COMPOSÉ PAR LE MÊME CALCUL QUE LA PAGE. Refaire ici une
+# sélection « pour l'export » produirait tôt ou tard un PDF qui ne dit pas ce
+# que l'écran disait — et c'est le PDF qui circule.
+# LES DEUX FORMATS SONT NOMMÉS DANS LA ROUTE, ET C'EST UNE CORRECTION.
+# DÉFAUT CONSTATÉ AU NAVIGATEUR : écrite `/revue.<format_>`, cette route
+# capturait AUSSI `/revue.js`. Werkzeug la préfère à `/<path:nom>.js`, qui est
+# plus générique ; le script de la page répondait donc 404 « format inconnu »,
+# et `/revue` s'affichait complètement inerte — les onglets ne réagissaient
+# plus, les boutons gardaient leur adresse par défaut. La page RENDAIT quand
+# même, ce qui est le pire cas : rien ne signalait la panne.
+@app.route("/revue.<any(pdf,docx):format_>")
+def emporter_revue(format_):
+    genre = request.args.get("genre") or "semaine"
+    if genre not in RV.GENRES:
+        return (jsonify(ok=False, erreur="genre_inconnu",
+                        message="Genres servis : %s." % ", ".join(RV.GENRES)), 400)
+    ancre = request.args.get("ancre") or None
+    if ancre and not re.match(r"^\d{4}-\d{2}-\d{2}$", ancre):
+        return (jsonify(ok=False, erreur="ancre_illisible",
+                        message="La date doit s'écrire AAAA-MM-JJ."), 400)
+    inter = (request.args.get("international") or "") in ("1", "oui", "true")
+    langue = _langue_analyses()
+    c = corpus()
+    if not ancre:
+        ancre = RV.derniere_ancre(c, genre, international=inter)
+    fiches = [V.dans(x, langue) for x in c]
+    rv = RV.revue(fiches, genre, ancre, international=inter, langue=langue)
+    # L'ADRESSE DE LA PAGE EST CELLE DE CETTE REVUE-LÀ, pas de la page nue :
+    # un document reçu six mois plus tard doit rouvrir la MÊME période.
+    url = "%s/revue?genre=%s&ancre=%s%s" % (
+        request.url_root.rstrip("/"), genre, rv["periode"]["debut"],
+        "&international=1" if inter else "")
+    try:
+        octets = (EXP.pdf_revue(rv, url, langue) if format_ == "pdf"
+                  else EXP.docx_revue(rv, url, langue))
+    except RuntimeError as e:
+        return (jsonify(ok=False, erreur="format_indisponible",
+                        message=str(e)), 503)
+    mime = ("application/pdf" if format_ == "pdf"
+            else "application/vnd.openxmlformats-officedocument."
+                 "wordprocessingml.document")
+    r = make_response(octets)
+    r.headers["Content-Type"] = mime
+    r.headers["Content-Disposition"] = (
+        'attachment; filename="%s"' % EXP._nom_fichier_revue(rv, format_))
+    r.headers["Cache-Control"] = "no-store"
+    return r
+
+
 @app.route("/api/sources")
 def api_sources():
     return jsonify(ok=True, version=SRC.VERSION,

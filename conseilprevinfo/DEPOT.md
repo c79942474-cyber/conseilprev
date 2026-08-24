@@ -80,7 +80,7 @@ Depuis votre poste, aucune session nécessaire :
       https://github.com/c79942474-cyber/conseilprevinfo
     git push -u origin master
 
-`HISTORIQUE.bundle` porte **l'historique git complet — vingt-cinq commits**,
+`HISTORIQUE.bundle` porte **l'historique git complet — vingt-six commits**,
 messages compris. Il ne s'agit donc pas de repartir d'une copie à plat : le
 détail des corrections, des mesures et des défauts constatés vit dans ces
 messages, et c'est souvent là qu'est l'information.
@@ -206,6 +206,13 @@ elle ne peut parler que du corpus. Les dates posées faute de mieux en sont
 écartées et comptées ; la règle « internationale » est écrite et servie avec la
 sélection ; ce qu'elle écarte est compté à part.
 
+**La revue s'emporte en PDF et en Word**, et le document porte ce que porte la
+page : ce qu'elle compte — en tête, pas en annexe —, ce qu'elle écarte, le
+statut et la source de chaque entrée, et les deux rubriques vides. Un PDF qui
+les omettrait serait la version « propre » de la revue, et il aurait perdu la
+seule chose qu'elle dit d'elle-même. L'adresse écrite dedans rouvre la MÊME
+période : un fichier reçu en comité doit pouvoir y ramener.
+
 **Les reportages et les entretiens ne se dérivent pas, et la revue le dit.**
 Les deux rubriques existent, elles sont **vides**, elles écrivent pourquoi et ce
 qu'il faudrait. Le registre refuse toute pièce sans auteur nommé — « la
@@ -268,7 +275,7 @@ que rien ne le signale. Politique de contenu fermée sur `default-src 'self'`,
 sans `unsafe-inline` — ce qui a demandé de retirer les douze attributs `style`
 dispersés dans les pages et le JavaScript.
 
-**374 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
+**386 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
 gardent les règles éditoriales, et chacun est écrit pour tomber le jour où
 quelqu'un les assouplira. Chaque règle nouvelle a été confrontée à une
 **mutation du code qu'elle garde** — et cinq de ces mutations ont révélé des
@@ -276,8 +283,9 @@ contrôles trop faibles, qui ont été resserrés. Un contrôle écrit trop STRI
 aussi été corrigé plutôt que contourné : il supprimait la distinction qu'il
 était censé protéger.
 
-### Les vingt-cinq commits du bundle
+### Les vingt-six commits du bundle
 
+    a4afe6d  La revue s'emporte en PDF et en Word — réserves comprises
     b6937a6  Une revue hebdomadaire, une revue mensuelle internationale —
              et deux rubriques vides qui disent pourquoi
     fd06ed7  Un filtre par entreprise nommée, et deux provenances de pays

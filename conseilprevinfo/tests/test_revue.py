@@ -394,3 +394,206 @@ def test_la_pastille_de_la_revue_ne_ment_pas_sur_le_code_de_couleur():
     js = _sans_commentaires(_lire("revue.js"))
     assert '<span class="past sujet">' in js
     assert 'class="past ' + "' + esc(f.impact)" not in js
+
+
+# ══ 7. LA REVUE EMPORTÉE ══════════════════════════════════════════════════
+
+import exporter as E  # noqa: E402
+
+
+def _revue(**kw):
+    c = kw.pop("corpus", [_fiche(id="r-x1", date_fait="2026-01-15"),
+                          _fiche(id="r-x2", date_fait="2026-01-16",
+                                 impact="rupture", pays=["DE"])])
+    return R.revue(c, kw.pop("genre", "semaine"), kw.pop("ancre", "2026-01-15"),
+                   **kw)
+
+
+def test_le_document_porte_ce_que_la_revue_compte():
+    """LA RÈGLE LA PLUS IMPORTANTE DE CE MODULE, ET ELLE MORD DEUX FOIS PLUS
+    ICI QU'À L'ÉCRAN. Une revue de presse est le document qui circule le
+    plus : transférée, jointe à un ordre du jour, lue en comité par des gens
+    qui n'ouvriront jamais le site. Elle a l'autorité d'un résumé — le lecteur
+    lui accorde d'avoir vu ce qu'il n'a pas lu.
+
+    Sans cette phrase EN TÊTE, « Revue de la semaine du 12 janvier » se lit
+    comme « l'actualité de cette semaine-là », alors que c'est « les faits
+    DATÉS de cette semaine et entrés au corpus »."""
+    lot = E.blocs_revue(_revue())
+    genres = [g for g, _ in lot]
+    textes = [t for _, t in lot]
+    assert genres[0] == "entete" and genres[1] == "titre"
+    compte = next(i for i, t in enumerate(textes) if "CE QUE CETTE REVUE COMPTE" in t)
+    # EN TÊTE, PAS EN ANNEXE : reléguée en pied, elle arriverait après la
+    # décision. On exige qu'elle précède la première entrée.
+    premiere = next(i for i, g in enumerate(genres) if g == "titre2")
+    assert compte < premiere, (compte, premiere)
+
+
+def test_le_document_emporte_ce_que_la_revue_ecarte():
+    """Trois comptes qui, absents, feraient croire que la période ne portait
+    que ce qui est imprimé. Un PDF « propre » est exactement le PDF qui les
+    perd."""
+    c = [_fiche(id="r-y1", date_fait="2026-01-15", pays=["DE"]),
+         _fiche(id="r-y2", date_fait="2026-01-15", pays=["FR"]),
+         _fiche(id="r-y3", date_fait="2026-01-15"),
+         _fiche(id="r-y4", date_fait="2026-01-15", date_convention="année 2025",
+                date_convention_dit="Le jeu de données est annuel.")]
+    rv = R.revue(c, "mois", "2026-01-15", international=True)
+    texte = " ".join(t for _, t in E.blocs_revue(rv))
+    assert "Dates posées, écartées : 1" in texte
+    assert "Sans territoire, écartées : 1" in texte
+    assert "France seulement, écartées : 1" in texte
+    # ET LA RÈGLE QUI A PRÉSIDÉ À LA SÉLECTION.
+    assert "LA RÈGLE DE SÉLECTION" in texte
+
+
+def test_le_document_porte_les_deux_rubriques_vides():
+    """Un PDF qui les omettrait serait la version « propre » de la revue — et
+    il aurait perdu la seule chose qu'elle dise d'elle-même : qu'elle ne
+    contient ni reportage ni entretien, et pourquoi."""
+    texte = " ".join(t for _, t in E.blocs_revue(_revue()))
+    assert "Aucun reportage n'a été mené" in texte
+    assert "Aucun entretien n'a été conduit" in texte
+    # ET CE QU'IL FAUDRAIT — un manque sans remède se lit comme un renoncement.
+    assert "doit aller constater un fait et le signer" in texte
+
+
+def test_chaque_entree_du_document_porte_sa_source_et_son_statut():
+    """Une revue qui aligne douze titres sans dire d'où ils viennent est une
+    revue de presse au sens le plus creux du mot — et c'est celle-là qui
+    circule en comité."""
+    lot = E.blocs_revue(_revue())
+    textes = [t for _, t in lot]
+    assert sum(1 for t in textes if t.startswith("Statut :")) == 2
+
+
+def test_le_document_ne_reecrit_aucun_texte():
+    """Ce qui sort est ce qui est publié — sans quoi il existerait deux
+    versions d'une même revue, et rien ne dirait laquelle fait foi."""
+    f = _fiche(id="r-z1", date_fait="2026-01-15", titre="Un titre précis",
+               chapeau="Un chapeau qui dit exactement ceci.")
+    rv = R.revue([f], "semaine", "2026-01-15")
+    textes = [t for _, t in E.blocs_revue(rv)]
+    assert any("Un titre précis" in t for t in textes)
+    assert "Un chapeau qui dit exactement ceci." in textes
+
+
+def test_le_document_est_dans_la_langue_ou_il_a_ete_lu():
+    """Un PDF anglais avec « Ce que cette revue compte » au milieu est pire
+    qu'un document entièrement français : celui qui le reçoit ne sait plus
+    dans quelle langue est le texte qu'il n'a pas encore lu."""
+    rv = R.revue([_fiche(id="r-z2", date_fait="2026-01-15")], "semaine",
+                 "2026-01-15", langue="en")
+    textes = " ".join(t for _, t in E.blocs_revue(rv, None, "en"))
+    assert "WHAT THIS REVIEW COUNTS" in textes
+    assert "CE QUE CETTE REVUE COMPTE" not in textes
+    assert "English version" in textes
+
+
+def test_les_deux_formats_composent_le_meme_document():
+    """Deux compositions séparées auraient divergé : le jour où l'on ajoute un
+    champ, l'un des deux formats l'aurait porté et l'autre non — et personne
+    ne s'en apercevrait, puisque personne n'ouvre les deux."""
+    src = _lire("exporter.py")
+    assert "def _docx(" in src and "def _pdf(" in src
+    assert "_docx(blocs_revue(" in src and "_pdf(blocs_revue(" in src
+    assert "_docx(blocs(" in src and "_pdf(blocs(" in src
+    rv = _revue()
+    assert len(E.docx_revue(rv)) > 1000
+    ok, _ = E.pdf_disponible()
+    if ok:
+        assert len(E.pdf_revue(rv)) > 1000
+
+
+def test_le_nom_du_fichier_distingue_les_revues_entre_elles():
+    """Un dossier de comité en accumule douze : « revue.pdf » les rendrait
+    indiscernables au moment précis où l'on cherche celle de mars."""
+    assert E._nom_fichier_revue(_revue(), "pdf") == "revue-hebdomadaire-2026-01-12.pdf"
+    m = _revue(genre="mois", international=True)
+    assert E._nom_fichier_revue(m, "docx") == \
+        "revue-mensuelle-internationale-2026-01-01.docx"
+
+
+def test_l_adresse_du_document_rouvre_la_meme_periode():
+    """Un fichier reçu en comité doit pouvoir rouvrir la MÊME période. Une
+    adresse vers `/revue` nu rendrait la période par défaut, c'est-à-dire une
+    autre — et le lecteur ne s'en apercevrait qu'en comparant deux comptes."""
+    src = _lire("app.py")
+    i = src.index("def emporter_revue")
+    corps = src[i:src.index("\n@app.route", i)]
+    assert 'rv["periode"]["debut"]' in corps, corps
+    assert "genre=%s&ancre=%s" in corps
+    # ET LES BOUTONS DE LA PAGE PORTENT LA PÉRIODE AFFICHÉE, pas la défaut.
+    js = _lire("revue.js")
+    assert 'a.setAttribute("href", "/revue." + x[1] + q)' in js
+    assert "emporter();" in js
+
+
+def test_l_export_de_la_revue_passe_par_le_meme_calcul_que_la_page():
+    """Refaire ici une sélection « pour l'export » produirait tôt ou tard un
+    PDF qui ne dit pas ce que l'écran disait — et c'est le PDF qui circule."""
+    src = _lire("app.py")
+    i = src.index("def emporter_revue")
+    corps = src[i:src.index("\n@app.route", i)]
+    assert "RV.revue(fiches, genre, ancre" in corps
+    assert "RV.derniere_ancre(c, genre, international=inter)" in corps
+    # LA PORTE ÉDITORIALE RESTE LA MÊME : un format de sortie ne doit jamais
+    # devenir le chemin de contournement d'une règle.
+    assert "V.dans(x, langue)" in corps
+
+
+def test_la_route_d_export_ne_masque_pas_le_script_de_la_page():
+    """DÉFAUT CONSTATÉ AU NAVIGATEUR, ET DU PIRE GENRE : LA PAGE RENDAIT QUAND
+    MÊME. Écrite `/revue.<format_>`, la route d'export capturait aussi
+    `/revue.js` — Werkzeug la préfère à `/<path:nom>.js`, qui est plus
+    générique. Le script de la page répondait donc 404 « format inconnu ». Les
+    onglets ne réagissaient plus, les boutons gardaient leur adresse par
+    défaut, et RIEN ne le signalait : le HTML s'affichait entier, seule la
+    mécanique manquait.
+
+    Le contrôle vérifie les DEUX côtés — que le script est servi, et que
+    l'export l'est aussi. Ne garder que l'un des deux laisserait revenir la
+    faute par l'autre bout."""
+    import app as A
+    c = A.app.test_client()
+    r = c.get("/revue.js")
+    assert r.status_code == 200 and len(r.data) > 2000
+    assert b"function emporter" in r.data
+    for f in ("pdf", "docx"):
+        assert c.get("/revue." + f).status_code == 200, f
+    # ET TOUTE PAGE SERVIE GARDE SON SCRIPT. La faute n'a pas de raison de se
+    # limiter à celle-ci le jour où une autre route d'export sera écrite.
+    for nom in ("veille", "fiche", "barre", "langue", "lecture"):
+        assert c.get("/%s.js" % nom).status_code == 200, nom
+
+
+def test_le_pdf_rendu_porte_reellement_ce_qu_on_y_met():
+    """LE SEUL CONTRÔLE QUI OUVRE LE FICHIER. Tous les autres lisent la
+    composition — la liste de blocs — et concluent que le document la porte.
+    Entre les deux, il y a un rendu, une police et un encodage : c'est
+    exactement là qu'un tiret cadratin devient un point d'interrogation, et
+    ce défaut-là n'est visible que par le lecteur qui ouvre le fichier.
+
+    Il est PASSÉ si `pypdf` manque, qui est déclarée facultative : un contrôle
+    qui échoue faute de bibliothèque de lecture n'apprend rien sur le site."""
+    ok, _ = E.pdf_disponible()
+    if not ok:
+        return
+    try:
+        import pypdf
+    except ImportError:
+        return
+    import io as _io
+    rv = _revue()
+    lu = pypdf.PdfReader(_io.BytesIO(E.pdf_revue(rv, "https://exemple/revue")))
+    texte = "\n".join(p.extract_text() or "" for p in lu.pages)
+    for att in ("Revue de presse hebdomadaire", "CE QUE CETTE REVUE COMPTE",
+                "Reportages et entretiens", "Aucun reportage",
+                "Exporté de CONSEILPREV INFO", "https://exemple/revue"):
+        assert att in texte, att
+    # LES SIGNES FRANÇAIS SURVIVENT AU RENDU. C'est le motif écrit dans
+    # `requirements.txt` pour lequel la police est au dépôt plutôt qu'au
+    # système ; ce contrôle est ce qui le vérifie sur un fichier réel.
+    assert "—" in texte, "le tiret cadratin n'a pas survécu au rendu"
+    assert "é" in texte and "è" in texte

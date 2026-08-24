@@ -144,6 +144,175 @@ def blocs(fiche, url_fiche=None, langue="fr"):
     return out
 
 
+def _nom_fichier_revue(revue, ext):
+    """« revue-hebdomadaire-2026-07-27.pdf ». Le genre ET la date, parce qu'un
+    dossier de comité en accumule douze : « revue.pdf » les rendrait
+    indiscernables au moment précis où l'on cherche celle de mars."""
+    p = revue.get("periode") or {}
+    genre = "mensuelle-internationale" if revue.get("international") else \
+        ("hebdomadaire" if p.get("genre") == "semaine" else "mensuelle")
+    return "revue-%s-%s.%s" % (genre, p.get("debut") or "sans-date", ext)
+
+
+def blocs_revue(revue, url_revue=None, langue="fr"):
+    """LA REVUE, COMPOSÉE UNE SEULE FOIS POUR LES DEUX FORMATS.
+
+    ═══════════════════════════════════════════════════════════════════════
+    CE QUE CE DOCUMENT DOIT PORTER, ET POURQUOI CE N'EST PAS NÉGOCIABLE
+    ═══════════════════════════════════════════════════════════════════════
+    UNE REVUE DE PRESSE EST LE DOCUMENT QUI CIRCULE LE PLUS. Elle est
+    transférée, jointe à un ordre du jour, lue en comité par des gens qui
+    n'ouvriront jamais le site. Et elle a l'autorité d'un résumé : le lecteur
+    lui accorde d'avoir vu ce qu'il n'a pas lu lui-même.
+
+    D'où trois règles, toutes appliquées ici et vérifiables ligne à ligne :
+
+      · CE QU'ELLE COMPTE EST ÉCRIT EN TÊTE, pas en annexe. Sans cette
+        phrase, « Revue de la semaine du 27 juillet » se lit comme
+        « l'actualité de cette semaine-là », alors que c'est « les faits
+        DATÉS de cette semaine et entrés au corpus ». Reléguée en pied, elle
+        arriverait après la décision.
+      · CE QU'ELLE ÉCARTE PART AVEC ELLE. Les dates posées, les fiches sans
+        territoire, celles qui ne concernent que la France : trois comptes
+        qui, absents, feraient croire que la période ne portait que ce qui
+        est imprimé.
+      · LES DEUX RUBRIQUES VIDES SONT DANS LE DOCUMENT. Un PDF qui les
+        omettrait serait la version « propre » de la revue — et il aurait
+        perdu la seule chose qu'elle dise d'elle-même : qu'elle ne contient
+        ni reportage ni entretien, et pourquoi.
+
+    AUCUN TEXTE N'EST RÉÉCRIT. Les titres et les chapeaux sont ceux des
+    fiches, les comptes ceux du moteur, le classement le sien.
+    """
+    p = revue.get("periode") or {}
+    out = []
+    lib = p.get("libelle_en") if langue == "en" else p.get("libelle")
+
+    out.append(("entete", GB.dire("exp.rv.mensuel" if revue.get("international")
+                                  else "exp.rv.hebdo", langue)))
+    out.append(("titre", lib or ""))
+
+    # LE CORPUS VIDE EN PREMIER, s'il l'était : tout ce qui suit ne dirait
+    # alors rien de la période, et le lecteur doit le savoir avant de lire.
+    if revue.get("corpus_vide"):
+        out.append(("note", GB.dire("exp.rv.corpus.vide", langue)))
+
+    out.append(("note", GB.dire("exp.rv.compte", langue)))
+    if revue.get("regle_internationale"):
+        out.append(("note", GB.dire("exp.rv.regle", langue,
+                                    revue["regle_internationale"])))
+
+    t = revue.get("retard") or {}
+    if (t.get("jours_depuis_la_fin") or 0) > 6 and t.get("dernier_fait"):
+        out.append(("note", GB.dire("exp.rv.retard", langue,
+                                    t["jours_depuis_la_fin"],
+                                    GB.date(t["dernier_fait"], langue))))
+
+    prec = revue.get("precedente") or {}
+    ecart = prec.get("ecart", 0)
+    out.append(("date", GB.dire("exp.rv.compteur", langue, revue.get("n", 0),
+                                prec.get("n", 0),
+                                ("+%d" % ecart) if ecart > 0 else str(ecart))))
+    if revue.get("par_sujet"):
+        out.append(("note", GB.dire(
+            "exp.rv.sujets", langue,
+            " · ".join("%s (%d)" % (x["nom"], x["n"])
+                       for x in revue["par_sujet"]))))
+    if revue.get("par_source"):
+        out.append(("note", GB.dire(
+            "exp.rv.sources", langue,
+            " · ".join("%s (%d)" % (x["nom"], x["n"])
+                       for x in revue["par_source"]))))
+
+    if not revue.get("n"):
+        out.append(("corps", GB.dire("exp.rv.vide", langue)))
+
+    for b in revue.get("blocs") or []:
+        out.append(("titre2", "%s — %d" % (b["nom"], b["n"])))
+        for f in b["fiches"]:
+            # LE TITRE ET LA DATE SUR LA MÊME LIGNE : douze entrées à quatre
+            # lignes chacune font une revue qu'on ne parcourt plus.
+            out.append(("chapeau", "%s — %s"
+                        % (GB.date(f.get("date_fait"), langue),
+                           f.get("titre") or "")))
+            if f.get("chapeau"):
+                out.append(("corps", f["chapeau"]))
+            terr = list(f.get("organisations") or []) + list(f.get("pays") or [])
+            if terr:
+                out.append(("note", GB.dire("exp.rv.terr", langue,
+                                            " · ".join(terr))))
+            # LE STATUT ET LA SOURCE SUR CHAQUE ENTRÉE, comme sur la fiche.
+            # Une revue qui aligne douze titres sans dire d'où ils viennent
+            # est une revue de presse au sens le plus creux du mot.
+            out.append(("note", GB.dire("exp.statut", langue,
+                                        f.get("statut_nom") or "",
+                                        f.get("source_nom") or "")))
+
+    # ── CE QUE LA PÉRIODE NE DIT PAS ──────────────────────────────────────
+    absences = []
+    if revue.get("muets"):
+        absences.append(GB.dire("exp.rv.muets", langue,
+                                " · ".join(m["nom"] for m in revue["muets"])))
+    if revue.get("conventions_ecartees"):
+        absences.append(GB.dire("exp.rv.conv", langue,
+                                revue["conventions_ecartees"]))
+    if revue.get("ecartees_sans_territoire"):
+        absences.append(GB.dire("exp.rv.hors", langue,
+                                revue["ecartees_sans_territoire"]))
+    if revue.get("ecartees_france"):
+        absences.append(GB.dire("exp.rv.fr", langue, revue["ecartees_france"]))
+    if absences:
+        out.append(("titre2", GB.dire("exp.rv.absences", langue)))
+        for a in absences:
+            out.append(("note", a))
+
+    # ── LES DEUX RUBRIQUES QUI NE SE DÉRIVENT PAS ─────────────────────────
+    out.append(("titre2", GB.dire("exp.rv.signees", langue)))
+    for r in revue.get("rubriques") or []:
+        out.append(("chapeau", r["nom"]))
+        out.append(("note", r["dit"]))
+        if not r["n"]:
+            out.append(("corps", r["vide_motif"]))
+            out.append(("note", r["ce_qu_il_faudrait"]))
+            continue
+        for piece in r["pieces"]:
+            out.append(("chapeau", piece.get("titre") or ""))
+            if piece.get("chapeau"):
+                out.append(("corps", piece["chapeau"]))
+            if piece.get("texte"):
+                out.append(("corps", piece["texte"]))
+            if piece.get("interlocuteur"):
+                out.append(("note", GB.dire(
+                    "exp.rv.entretien", langue, piece["interlocuteur"],
+                    piece.get("fonction") or "",
+                    GB.date(piece.get("date_entretien"), langue))))
+            # LA SIGNATURE N'EST PAS UNE MENTION LÉGALE EN PIED : elle est ce
+            # qui distingue ce texte de tout le reste du document, qui est
+            # dérivé. Elle voyage donc avec la pièce.
+            out.append(("note", GB.dire("exp.rv.signe", langue,
+                                        piece.get("auteur") or "",
+                                        GB.date(piece.get("date"), langue))))
+            if piece.get("methode"):
+                out.append(("note", piece["methode"]))
+
+    pied = GB.dire("exp.pied", langue,
+                   GB.date(datetime.now(timezone.utc).date().isoformat(), langue))
+    if url_revue:
+        pied += " · %s" % url_revue
+    out.append(("pied", pied))
+    out.append(("pied", GB.dire("exp.rv.pied.regle", langue)))
+    out.append(("pied", GB.dire("exp.langue." + langue, langue)))
+    return out
+
+
+def docx_revue(revue, url_revue=None, langue="fr"):
+    return _docx(blocs_revue(revue, url_revue, langue))
+
+
+def pdf_revue(revue, url_revue=None, langue="fr"):
+    return _pdf(blocs_revue(revue, url_revue, langue))
+
+
 # ── WORD ──────────────────────────────────────────────────────────────────
 # ÉCRIT AVEC LA BIBLIOTHÈQUE STANDARD, et c'est un choix. Un `.docx` est une
 # archive ZIP de trois fichiers XML ; l'écrire à la main évite une dépendance
@@ -175,7 +344,18 @@ def _p(genre, texte):
 
 def docx(fiche, url_fiche=None, langue="fr"):
     """Rend les octets d'un `.docx` que Word, LibreOffice et Pages ouvrent."""
-    corps = "".join(_p(g, t) for g, t in blocs(fiche, url_fiche, langue) if t)
+    return _docx(blocs(fiche, url_fiche, langue))
+
+
+def _docx(lot):
+    """LE RENDU WORD, UNE SEULE FOIS POUR TOUS LES DOCUMENTS.
+
+    La fiche et la revue sont deux COMPOSITIONS différentes ; elles n'ont
+    aucune raison d'être deux MISES EN PAGE différentes. Deux renderers
+    auraient divergé exactement comme deux compositions l'auraient fait —
+    c'est l'argument écrit au-dessus de `blocs()`, et il vaut d'un cran
+    au-dessus."""
+    corps = "".join(_p(g, t) for g, t in lot if t)
     document = (
         '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
         '<w:document xmlns:w="http://schemas.openxmlformats.org/'
@@ -250,6 +430,12 @@ def pdf(fiche, url_fiche=None, langue="fr"):
     sortiraient en points d'interrogation — un défaut invisible ici, visible
     par le seul lecteur qui ouvre le fichier.
     """
+    return _pdf(blocs(fiche, url_fiche, langue))
+
+
+def _pdf(lot):
+    """LE RENDU PDF, UNE SEULE FOIS POUR TOUS LES DOCUMENTS — même argument
+    que `_docx`."""
     ok, pourquoi = pdf_disponible()
     if not ok:
         raise RuntimeError(pourquoi)
@@ -262,7 +448,7 @@ def pdf(fiche, url_fiche=None, langue="fr"):
     d.set_margins(20, 20, 20)
     d.add_page()
 
-    for genre, texte in blocs(fiche, url_fiche, langue):
+    for genre, texte in lot:
         if not texte:
             continue
         gras = genre in ("titre", "titre2")
@@ -282,9 +468,11 @@ def sante():
         "formats": ["docx"] + (["pdf"] if ok else []),
         "pdf_disponible": ok,
         "pdf_pourquoi_pas": pourquoi,
+        "documents": ["fiche", "revue"],
         "portee": "Reprend une fiche PUBLIÉE telle quelle, avec son statut, "
                   "la nature de sa lecture, ce qu'on ne sait pas et sa "
-                  "source. Aucun texte n'est réécrit, résumé ni raccourci : "
-                  "un document emporté circule sans sa page, il doit porter "
-                  "de quoi en juger.",
+                  "source — ou une REVUE de période, avec ce qu'elle compte, "
+                  "ce qu'elle écarte et ses deux rubriques vides. Aucun texte "
+                  "n'est réécrit, résumé ni raccourci : un document emporté "
+                  "circule sans sa page, il doit porter de quoi en juger.",
     }
