@@ -80,7 +80,7 @@ Depuis votre poste, aucune session nécessaire :
       https://github.com/c79942474-cyber/conseilprevinfo
     git push -u origin master
 
-`HISTORIQUE.bundle` porte **l'historique git complet — vingt et un commits**,
+`HISTORIQUE.bundle` porte **l'historique git complet — vingt-deux commits**,
 messages compris. Il ne s'agit donc pas de repartir d'une copie à plat : le
 détail des corrections, des mesures et des défauts constatés vit dans ces
 messages, et c'est souvent là qu'est l'information.
@@ -114,8 +114,16 @@ du supplément plutôt que du quotidien. Le changement a servi à corriger deux
 et « STRUCTURANT » s'affichaient sous le seuil AA, et personne ne l'avait vu
 parce que personne ne l'avait mesuré.
 
-Une **barre latérale rétractable à toute largeur** dit ce que la page contient
-et où l'on en est. Elle emploie les **trois caractères du journal** —
+La **barre latérale est un meuble, pas une marge** : un blanc cassé glacé
+nettement plus soutenu que la feuille le jour, une **ardoise** quand le lecteur
+a réglé son système en mode sombre. Elle a ses propres jetons de couleur, si
+bien que la bascule redéfinit dix valeurs et rien d'autre — les teintes des
+icônes comprises, sans quoi elles seraient invisibles sur l'ardoise. La feuille,
+elle, ne bascule pas : ce site est un journal, et un papier ne devient pas noir
+la nuit.
+
+Elle est **rétractable à toute largeur**, dit ce que la page contient et où
+l'on en est. Elle emploie les **trois caractères du journal** —
 Newsreader nomme, JetBrains Mono étiquette et mesure, Inter tient les gloses —
 et chaque groupe porte sa teinte, dont héritent son icône, son filet et les
 icônes de ses entrées. Les teintes sont délibérément désaturées, hors des
@@ -213,7 +221,7 @@ que rien ne le signale. Politique de contenu fermée sur `default-src 'self'`,
 sans `unsafe-inline` — ce qui a demandé de retirer les douze attributs `style`
 dispersés dans les pages et le JavaScript.
 
-**326 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
+**333 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
 gardent les règles éditoriales, et chacun est écrit pour tomber le jour où
 quelqu'un les assouplira. Chaque règle nouvelle a été confrontée à une
 **mutation du code qu'elle garde** — et cinq de ces mutations ont révélé des
@@ -221,8 +229,10 @@ contrôles trop faibles, qui ont été resserrés. Un contrôle écrit trop STRI
 aussi été corrigé plutôt que contourné : il supprimait la distinction qu'il
 était censé protéger.
 
-### Les vingt et un commits du bundle
+### Les vingt-deux commits du bundle
 
+    074c9e9  La barre latérale devient un meuble : blanc cassé le jour,
+             ardoise glacée la nuit
     0541ce3  Chaque source relue à SA cadence, et le registre dit ce qu'il
              ne lit pas
     f12c4e6  Les analyses existent en anglais, et le lecteur choisit — ou pas

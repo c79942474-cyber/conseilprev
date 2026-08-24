@@ -81,12 +81,71 @@
   --fix:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace;
   --maxw:1240px;
 
+  /* ── LE PANNEAU LATÉRAL A SA PROPRE ENCRE ─────────────────────────────
+     POURQUOI DES JETONS À PART, ET NON LES MÊMES QUE LA PAGE. La barre cesse
+     d'être une marge de la feuille pour devenir un MEUBLE posé à côté : un
+     blanc cassé franchement plus soutenu le jour, une ardoise glacée la nuit.
+     Elle a donc son fond, son encre et ses filets, tous préfixés `--bl-`.
+
+     C'EST CE QUI REND LES DEUX ÉTATS TENABLES. Sans jetons, chaque règle du
+     menu porterait `var(--encre)` et il faudrait la redéclarer une par une
+     sous la requête de média — une trentaine de règles, dont on en oublierait
+     trois, et ces trois-là seraient du texte noir sur ardoise. Ici la requête
+     redéfinit SEPT valeurs et rien d'autre.
+
+     LA FEUILLE, ELLE, NE BASCULE PAS. Ce site est un journal : il se lit sur
+     du papier, et un papier ne devient pas noir la nuit. Le menu n'est pas du
+     texte à lire, c'est du mobilier — il peut s'assombrir sans que la page
+     change de nature. Un lecteur en mode sombre obtient donc un rail d'ardoise
+     le long d'un journal clair, ce qui est exactement ce qu'on cherche : le
+     contraste demandé, sans faire semblant d'avoir un thème sombre qu'on
+     n'aurait pas mesuré sur les quatre-vingt-dix-huit fiches. */
+  --bl-fond:#DCE3EC;      /* blanc cassé glacé — 1,26 contre la feuille */
+  --bl-fond2:#CFD8E4;     /* les cadres internes : état, mémoire, légende */
+  --bl-encre:#0E1319;
+  --bl-encre2:#333C47;
+  --bl-sourd:#4E5967;
+  --bl-sourd2:#545E6A;
+  --bl-filet:#B4C0CE;
+  --bl-filet2:#9FADBE;
+  --bl-actif:#A81509;     /* la page courante — le rouge du code */
+  --bl-lien:#12557E;
+
   /* LE LUSTRE DU COUCHÉ, en deux valeurs réutilisées partout — une ombre très
      douce et un dégradé de surface. Écrites ici plutôt que recopiées : une
      ombre retouchée à un seul endroit ferait deux papiers sur la même page. */
   --lustre:linear-gradient(180deg,#FFFFFF 0%,var(--papier) 100%);
   --ombre:0 1px 2px rgba(14,19,25,.04),0 1px 8px rgba(14,19,25,.03);
   --ombre-h:0 2px 4px rgba(14,19,25,.06),0 6px 22px rgba(14,19,25,.07);
+}
+
+/* ── L'ARDOISE, QUAND LE LECTEUR A RÉGLÉ SON SYSTÈME EN SOMBRE ───────────
+   SEPT VALEURS, ET RIEN D'AUTRE. Les teintes de navigation basculent avec
+   elles : `--nav-graphite` à #4A5568 sur une ardoise à #262C34 donne 1,4 de
+   contraste, c'est-à-dire une icône invisible. Chacune a donc son jumeau
+   clair, mesuré sur les DEUX fonds du panneau — celui des entrées et celui
+   des cadres internes, qui n'est pas le même.
+
+   CE QUI NE BASCULE PAS : la feuille, les pastilles de portée, le code de
+   couleur. La légende du menu, elle, garde ses pastilles sur un carton clair
+   — voir plus bas, avec le motif. */
+@media (prefers-color-scheme: dark){
+  :root{
+    --bl-fond:#262C34;    /* gris foncé glacé */
+    --bl-fond2:#323942;
+    --bl-encre:#EEF1F5;   /* blanc cassé */
+    --bl-encre2:#C6CEDA;
+    --bl-sourd:#A3AEBD;
+    --bl-sourd2:#9DA8B7;
+    --bl-filet:#454E5A;
+    --bl-filet2:#4F5A67;
+    --bl-actif:#FF9A8C;
+    --bl-lien:#8FC4E6;
+    --nav-graphite:#A7B2C3;
+    --nav-ardoise:#7FB6C7;
+    --nav-prune:#B4A6C7;
+    --nav-sable:#C6B189;
+  }
 }
 
 *{box-sizing:border-box}
@@ -513,7 +572,8 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
      pour de bon puisque la barre ne défile pas plus bas. */
   .bl{
     position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;
-    padding:26px 4px 74px 22px;border-right:1px solid var(--filet);
+    padding:26px 16px 74px 22px;
+    background:var(--bl-fond);border-right:1px solid var(--bl-filet2);
   }
   /* Les blocs internes reprennent leur propre largeur : la colonne les borne
      déjà, un second `max-width` les décentrerait. */
@@ -527,20 +587,25 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
    AILLEURS se referme mal : on cherche. */
 .bl-tete{
   display:flex;align-items:center;justify-content:space-between;gap:10px;
-  margin:0 0 18px;padding-bottom:10px;border-bottom:2px solid var(--encre);
+  margin:0 0 18px;padding-bottom:10px;border-bottom:2px solid var(--bl-encre);
 }
 .bl-marque{
   font-family:var(--serif);font-size:15px;font-weight:800;letter-spacing:-.015em;
-  color:var(--encre);line-height:1.1;
+  color:var(--bl-encre);line-height:1.1;
 }
-.bl-marque b{color:var(--rouge);font-weight:800}
+.bl-marque b{color:var(--bl-actif);font-weight:800}
 .bl-x{
-  border:1px solid var(--filet2);background:transparent;color:var(--sourd);
+  border:1px solid var(--bl-filet2);background:transparent;
+  color:var(--bl-sourd);
   border-radius:4px;width:26px;height:26px;line-height:1;cursor:pointer;
   font-size:13px;flex:none;
 }
-.bl-x:hover{border-color:var(--rouge);color:var(--rouge)}
-.bl-x:focus-visible{outline:2px solid var(--bleu);outline-offset:2px}
+.bl-x:hover{border-color:var(--bl-actif);color:var(--bl-actif)}
+/* DÉFAUT TROUVÉ PAR LE CONTRÔLE, PAS À L'ŒIL : un anneau de focus au bleu de
+   la page donne 1,7 de contraste sur l'ardoise — invisible, et invisible pour
+   le seul lecteur qui en dépend, celui qui navigue au clavier en mode sombre.
+   C'est exactement le genre de règle qu'on n'aurait jamais vue ici. */
+.bl-x:focus-visible{outline:2px solid var(--bl-lien);outline-offset:2px}
 
 /* ── LE MENU : LES MÊMES TROIS CARACTÈRES QUE LE JOURNAL ─────────────────
    IL EN EMPLOYAIT DEUX SUR TROIS, ET PAS AUX BONS ENDROITS. Les intitulés de
@@ -573,7 +638,7 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
 .bl-t{
   display:flex;align-items:center;gap:8px;
   font-family:var(--fix);font-size:9.5px;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--sourd);margin:0 0 9px;
+  text-transform:uppercase;color:var(--bl-sourd);margin:0 0 9px;
   padding-bottom:6px;
   /* LE FILET REPREND LA TEINTE DU GROUPE, très dilué : on situe le groupe
      avant d'avoir lu son nom. */
@@ -590,10 +655,10 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
 .bl-l a{
   display:flex;gap:9px;align-items:flex-start;
   padding:7px 9px;border-radius:5px;text-decoration:none;
-  color:var(--encre2);border-left:2px solid transparent;
+  color:var(--bl-encre2);border-left:2px solid transparent;
   transition:background .14s ease,color .14s ease;
 }
-.bl-l a:hover{background:var(--papier2);color:var(--encre)}
+.bl-l a:hover{background:var(--bl-fond2);color:var(--bl-encre)}
 .bl-lb{display:block;min-width:0}
 /* LE NOM D'UNE PAGE EST COMPOSÉ COMME UN TITRE DE JOURNAL. */
 .bl-l a b{
@@ -602,11 +667,12 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
 }
 /* La glose, elle, reste une ligne de service : Inter, plus petite, sourde. */
 .bl-l a .bl-lb span{display:block;font-family:var(--sans);font-size:11.5px;
-  line-height:1.4;color:var(--sourd);margin-top:2px}
+  line-height:1.4;color:var(--bl-sourd);margin-top:2px}
 .bl-l a[aria-current="page"]{
-  background:var(--papier2);border-left-color:var(--rouge);color:var(--encre);
+  background:var(--bl-fond2);border-left-color:var(--bl-actif);
+  color:var(--bl-encre);
 }
-.bl-l a[aria-current="page"] b{color:var(--rouge)}
+.bl-l a[aria-current="page"] b{color:var(--bl-actif)}
 
 /* LA SILHOUETTE N'EST JAMAIS SEULE À PORTER L'INFORMATION — l'intitulé est
    écrit à côté, et les formes sont distinctes entre elles plutôt qu'une même
@@ -618,7 +684,7 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
 .bl-ic{flex:none;margin-top:2px;color:var(--nav-ic);opacity:.7;
   transition:opacity .14s ease}
 .bl-l a:hover .bl-ic,.bl-l a[aria-current="page"] .bl-ic{opacity:1}
-.bl-l a[aria-current="page"] .bl-ic{color:var(--rouge)}
+.bl-l a[aria-current="page"] .bl-ic{color:var(--bl-actif)}
 .bl-ic-s{margin-top:3px}
 .bl-s a.bl-ici .bl-ic{opacity:1}
 @media (prefers-reduced-motion:reduce){
@@ -634,7 +700,8 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
 }
 .bl-s a>span{flex:1;min-width:0}
 .bl-s a i{
-  font-style:normal;font-family:var(--fix);font-size:9.5px;color:var(--sourd2);
+  font-style:normal;font-family:var(--fix);font-size:9.5px;
+  color:var(--bl-sourd2);
   white-space:nowrap;font-variant-numeric:tabular-nums;margin-left:auto;
   letter-spacing:.02em;
 }
@@ -644,8 +711,15 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
    `.past.rupture` dans la légende est exactement `.past.rupture` sur la carte.
    Une retouche de la feuille de style ne peut donc pas décaler l'un sans
    l'autre — ce qui est la seule façon qu'une légende reste vraie. */
-.bl-lg{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;
-  gap:5px}
+/* LA LÉGENDE RESTE SUR DU PAPIER, MÊME QUAND LE PANNEAU EST EN ARDOISE.
+   Ce n'est pas un oubli de bascule : c'est son travail. Une pastille
+   « RUPTURE » recolorée pour tenir sur l'ardoise ne serait plus celle des
+   cartes — or la légende sert précisément à montrer ce qu'on VERRA sur une
+   carte. Elle est donc posée sur un carton de la couleur de la feuille, et
+   les témoins y sont exactement les éléments de la page. */
+.bl-lg{list-style:none;margin:0;padding:11px 12px;display:flex;
+  flex-direction:column;gap:5px;
+  background:var(--papier);border:1px solid var(--filet);border-radius:5px}
 .bl-lg li{display:flex;align-items:center;gap:7px;font-size:11.5px;
   color:var(--sourd);line-height:1.3}
 .bl-lg li b{font-family:var(--serif);font-size:13px;font-weight:600;
@@ -658,18 +732,18 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
   background:var(--papier2)}
 .bl-lg-c.neuf{border-left:3px solid var(--bleu)}
 .bl-lg-c.lu{border-left:3px solid var(--vert)}
-.bl-lg-non{font-size:11.5px;line-height:1.5;color:var(--sourd);margin:0;
-  border-left:2px solid var(--filet2);padding-left:9px}
+.bl-lg-non{font-size:11.5px;line-height:1.5;color:var(--bl-sourd);margin:0;
+  border-left:2px solid var(--bl-filet2);padding-left:9px}
 
-.bl-pied{margin:24px 0 0;padding-top:10px;border-top:1px solid var(--filet);
-  font-size:11.5px}
-.bl-pied a{color:var(--sourd);text-decoration:none}
-.bl-pied a:hover{color:var(--bleu);text-decoration:underline}
+.bl-pied{margin:24px 0 0;padding-top:10px;
+  border-top:1px solid var(--bl-filet);font-size:11.5px}
+.bl-pied a{color:var(--bl-sourd);text-decoration:none}
+.bl-pied a:hover{color:var(--bl-lien);text-decoration:underline}
 /* OÙ L'ON EST, et pas seulement où l'on peut aller. Une barre qui ne marque
    pas la section courante dit la moitié de ce qu'elle promet. */
 .bl-s a.bl-ici{
-  background:var(--papier2);border-left-color:var(--bleu);color:var(--encre);
-  font-weight:500;
+  background:var(--bl-fond2);border-left-color:var(--nav-ic);
+  color:var(--bl-encre);font-weight:500;
 }
 
 /* ── LE BOUTON, ET LA BARRE REPLIÉE ──────────────────────────────────── */
@@ -687,8 +761,8 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
 @media (max-width:1099px){
   .bl{
     position:fixed;inset:0 auto 0 0;z-index:55;width:min(84vw,290px);
-    background:var(--papier);border-right:1px solid var(--filet2);
-    box-shadow:6px 0 24px rgba(14,19,25,.18);
+    background:var(--bl-fond);border-right:1px solid var(--bl-filet2);
+    box-shadow:6px 0 24px rgba(14,19,25,.28);
     padding:22px 18px 80px;overflow-y:auto;
     transform:translateX(-102%);transition:transform .18s ease;
   }
@@ -787,17 +861,17 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
 
 .bl-etat{
   display:flex;flex-wrap:wrap;align-items:baseline;gap:0 7px;
-  padding:9px 10px;margin:0 0 4px;background:var(--papier2);
+  padding:9px 10px;margin:0 0 4px;background:var(--bl-fond2);
   border-left:2px solid var(--vert);
 }
 .bl-n{
   font-family:var(--serif);font-weight:700;font-size:25px;line-height:1;
-  color:var(--encre);font-variant-numeric:tabular-nums;
+  color:var(--bl-encre);font-variant-numeric:tabular-nums;
 }
-.bl-q{font-size:12px;color:var(--sourd)}
+.bl-q{font-size:12px;color:var(--bl-sourd)}
 .bl-d{
-  flex-basis:100%;font-family:var(--fix);font-size:10.5px;color:var(--sourd);
-  margin-top:3px;
+  flex-basis:100%;font-family:var(--fix);font-size:10.5px;
+  color:var(--bl-sourd);margin-top:3px;
 }
 /* UNE SOURCE MUETTE SE VOIT DEPUIS N'IMPORTE OÙ DANS LA PAGE. C'est la seule
    chose qui change la lecture de tout le reste : un corpus amputé n'est pas
@@ -904,18 +978,19 @@ footer .fam{font-family:var(--fix);font-size:11.5px;color:var(--sourd);
    fichier. */
 .bl-lu{
   display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;
-  font-family:var(--fix);font-size:10.5px;color:var(--sourd);
-  padding:7px 10px;margin:0 0 4px;border-left:2px solid var(--bleu);
-  background:var(--papier2);
+  font-family:var(--fix);font-size:10.5px;color:var(--bl-sourd);
+  padding:7px 10px;margin:0 0 4px;border-left:2px solid var(--bl-lien);
+  background:var(--bl-fond2);
 }
-.bl-lu b{font-family:var(--sans);font-size:13px;color:var(--encre);
+.bl-lu b{font-family:var(--sans);font-size:13px;color:var(--bl-encre);
   font-variant-numeric:tabular-nums}
 .bl-lu button{
   margin-left:auto;font-family:var(--fix);font-size:9.5px;letter-spacing:.06em;
-  text-transform:uppercase;background:transparent;border:1px solid var(--filet2);
-  border-radius:3px;padding:2px 6px;color:var(--sourd);cursor:pointer;
+  text-transform:uppercase;background:transparent;
+  border:1px solid var(--bl-filet2);
+  border-radius:3px;padding:2px 6px;color:var(--bl-sourd);cursor:pointer;
 }
-.bl-lu button:hover{border-color:var(--rouge);color:var(--rouge)}
+.bl-lu button:hover{border-color:var(--bl-actif);color:var(--bl-actif)}
 
 /* ── EMPORTER UNE FICHE ──────────────────────────────────────────────────
    Placé APRÈS la source et le croisement : on emporte ce qu'on a lu. Un
@@ -1062,8 +1137,8 @@ html.vp-ouvert #bl-bouton{bottom:calc(var(--vp-h,120px) + 14px)}
 .vp-etat.off{border-left-color:var(--sourd2);color:var(--sourd)}
 /* Dans la barre latérale, quand la mémoire n'est pas tenue : ce n'est pas
    « zéro à lire », c'est « pas de compte tenu ». */
-.bl-lu-non{font-size:11.5px;line-height:1.45;color:var(--sourd)}
-.bl-lu-non a{color:var(--bleu)}
+.bl-lu-non{font-size:11.5px;line-height:1.45;color:var(--bl-sourd)}
+.bl-lu-non a{color:var(--bl-lien)}
 
 /* L'INVENTAIRE. Un tableau, parce que c'en est un : cinq entrées, quatre
    colonnes, et rien à raconter — la forme de liste l'aurait allongé sans le
@@ -1260,16 +1335,17 @@ html.vp-ouvert .fl{bottom:calc(var(--vp-h,120px) + 14px)}
 
 .an-t{
   display:flex;align-items:center;justify-content:space-between;gap:10px;
-  margin:0 0 6px;font-family:var(--serif);font-size:13.5px;color:var(--encre2);
+  margin:0 0 6px;font-family:var(--serif);font-size:13.5px;
+  color:var(--bl-encre2);
 }
 /* La bascule reprend le groupe de l'oreille, mais sur fond clair : les
    couleurs y sont celles de l'encre, pas celles du papier. */
-.an-t .lg-grp{border-color:var(--filet2);flex:none}
-.an-t .lg{color:var(--sourd)}
-.an-t .lg:hover{color:var(--encre);background:var(--papier3)}
-.an-t .lg-on{background:var(--encre);color:var(--papier);font-weight:500}
-.an-t .lg:focus-visible{outline:2px solid var(--bleu);outline-offset:-2px}
-.an-d{margin:0;font-size:11px;line-height:1.45;color:var(--sourd)}
+.an-t .lg-grp{border-color:var(--bl-filet2);flex:none}
+.an-t .lg{color:var(--bl-sourd)}
+.an-t .lg:hover{color:var(--bl-encre);background:var(--bl-fond2)}
+.an-t .lg-on{background:var(--bl-encre);color:var(--bl-fond);font-weight:500}
+.an-t .lg:focus-visible{outline:2px solid var(--bl-lien);outline-offset:-2px}
+.an-d{margin:0;font-size:11px;line-height:1.45;color:var(--bl-sourd)}
 
 /* LE REPÈRE POSÉ SUR UNE FICHE DONT L'ANALYSE N'A PAS PU SUIVRE. Le bandeau
    de tête annonce la réserve pour tout le corpus ; il ne dit pas LAQUELLE des

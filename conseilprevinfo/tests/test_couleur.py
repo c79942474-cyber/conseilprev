@@ -293,3 +293,124 @@ def test_chaque_groupe_du_menu_porte_sa_teinte_par_une_classe():
     serre = CSS.replace(" ", "").replace("\n", "")
     for g in ("corpus", "site", "sections", "legende"):
         assert ".bl-g.g-%s{--nav-ic:" % g in serre, g
+
+
+# ── 6. LE PANNEAU LATÉRAL — deux états, sept valeurs, et rien d'autre ─────
+
+def _bloc_sombre():
+    """Le contenu de `@media (prefers-color-scheme: dark)`."""
+    i = CODE_CSS.index("@media (prefers-color-scheme: dark)")
+    j = CODE_CSS.index("\n}\n", CODE_CSS.index(":root{", i))
+    return CODE_CSS[i:j]
+
+
+def _palette_sombre():
+    """La palette telle qu'elle est EN MODE SOMBRE : celle de `:root`, avec
+    les valeurs que la requête de média redéfinit."""
+    p = dict(P)
+    for m in re.finditer(r"--([a-z0-9-]+):\s*(#[0-9A-Fa-f]{6})", _bloc_sombre()):
+        p[m.group(1)] = m.group(2)
+    return p
+
+
+PANNEAU = ("bl-fond", "bl-fond2", "bl-encre", "bl-encre2", "bl-sourd",
+           "bl-sourd2", "bl-filet", "bl-filet2", "bl-actif", "bl-lien")
+#: Les encres du panneau, celles qui composent du texte.
+PANNEAU_ENCRES = ("bl-encre", "bl-encre2", "bl-sourd", "bl-sourd2",
+                  "bl-actif", "bl-lien")
+
+
+def test_le_panneau_a_ses_propres_jetons():
+    """Sans jetons à part, chaque règle du menu porterait `var(--encre)` et il
+    faudrait la redéclarer une par une sous la requête de média — une
+    trentaine de règles, dont on en oublierait trois, et ces trois-là seraient
+    du texte noir sur ardoise."""
+    manquants = [c for c in PANNEAU if c not in P]
+    assert not manquants, manquants
+
+
+def test_les_deux_etats_du_panneau_sont_lisibles():
+    """Le jour comme la nuit, sur SES DEUX fonds — celui des entrées et celui
+    des cadres internes, qui n'est pas le même."""
+    faibles = []
+    for etat, pal in (("clair", P), ("sombre", _palette_sombre())):
+        for encre in PANNEAU_ENCRES:
+            for fond in ("bl-fond", "bl-fond2"):
+                r = contraste(pal[encre], pal[fond])
+                if r < AA:
+                    faibles.append("%s : %s sur %s = %.2f"
+                                   % (etat, encre, fond, r))
+    assert not faibles, faibles
+
+
+def test_les_teintes_de_navigation_basculent_avec_le_panneau():
+    """`--nav-graphite` à #4A5568 sur une ardoise à #262C34 donne 1,4 de
+    contraste, c'est-à-dire une icône invisible. Chacune doit avoir son jumeau
+    clair, et le contrôle vaut sur les deux fonds du panneau."""
+    sombre = _palette_sombre()
+    # Elles changent RÉELLEMENT de valeur : garder les mêmes passerait le
+    # contrôle du dictionnaire tout en laissant les icônes dans le noir.
+    for n in NAV:
+        assert sombre[n] != P[n], n
+    faibles = []
+    for etat, pal in (("clair", P), ("sombre", sombre)):
+        for n in NAV:
+            for fond in ("bl-fond", "bl-fond2"):
+                r = contraste(pal[n], pal[fond])
+                if r < 3.0:
+                    faibles.append("%s : %s sur %s = %.2f" % (etat, n, fond, r))
+    assert not faibles, faibles
+
+
+def test_le_panneau_se_detache_de_la_feuille():
+    """C'est la demande : « plus contrasté que la feuille principale ». Le
+    panneau clair s'en écarte franchement sans inverser ; le sombre l'oppose."""
+    assert contraste(P["bl-fond"], P["papier"]) >= 1.2
+    assert contraste(_palette_sombre()["bl-fond"], P["papier"]) >= 7.0
+
+
+def test_la_feuille_ne_bascule_pas_avec_le_panneau():
+    """Ce site est un journal : il se lit sur du papier, et un papier ne
+    devient pas noir la nuit. Le menu, lui, est du mobilier — il peut
+    s'assombrir sans que la page change de nature. Basculer la feuille
+    demanderait de mesurer un thème sombre sur les quatre-vingt-dix-huit
+    fiches, ce qui n'a pas été fait et ne doit pas être prétendu."""
+    sombre = _palette_sombre()
+    for c in ("papier", "papier2", "papier3", "encre", "encre2") + CODE:
+        assert sombre[c] == P[c], c
+
+
+def test_la_requete_sombre_ne_redefinit_que_des_jetons():
+    """UNE RÈGLE DE COMPOSANT POSÉE LÀ s'appliquerait la nuit et pas le jour :
+    c'est le défaut classique du mode sombre, et il ne se voit que sur l'un des
+    deux écrans. La requête ne contient qu'un `:root`."""
+    bloc = _bloc_sombre()
+    # Un seul sélecteur, et c'est `:root`.
+    # `:root` commence par deux-points : la classe de caractères doit
+    # l'admettre, sinon le contrôle ne trouve RIEN et se croit satisfait.
+    selecteurs = [x.strip() for x in
+                  re.findall(r"(?m)^\s*([:.#a-zA-Z][^{\n]*)\{", bloc)]
+    assert selecteurs == [":root"], selecteurs
+
+
+def test_aucune_regle_du_menu_ne_peint_avec_la_palette_de_la_page():
+    """Une seule oubliée devient du texte noir sur ardoise — et elle ne se voit
+    que sur l'écran d'un lecteur en mode sombre, c'est-à-dire jamais ici.
+
+    LA LÉGENDE EST L'EXCEPTION, ET ELLE EST NOMMÉE. Elle reste sur un carton de
+    la couleur de la feuille parce que c'est son travail : une pastille
+    « RUPTURE » recolorée pour tenir sur l'ardoise ne serait plus celle des
+    cartes, or la légende sert à montrer ce qu'on VERRA sur une carte."""
+    # On isole les règles dont le sélecteur appartient au menu.
+    fautives = []
+    for m in re.finditer(r"(?m)^([^{}\n][^{\n]*)\{([^}]*)\}", CODE_CSS):
+        sel, corps = m.group(1).strip(), m.group(2)
+        if not re.search(r"(^|[\s,])\.(bl|an)[-\s.:\[]", " " + sel):
+            continue
+        if ".bl-lg" in sel:          # la légende, exception nommée ci-dessus
+            continue
+        for jeton in re.findall(r"var\(--([a-z0-9-]+)\)", corps):
+            if jeton in ("papier", "papier2", "papier3", "encre", "encre2",
+                         "sourd", "sourd2", "filet", "filet2", "rouge", "bleu"):
+                fautives.append("%s : var(--%s)" % (sel, jeton))
+    assert not fautives, fautives
