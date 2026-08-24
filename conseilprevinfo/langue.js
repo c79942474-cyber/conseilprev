@@ -177,8 +177,8 @@
                         "What this switch does not translate"],
 
     /* ── L'accueil ──────────────────────────────────────────────────── */
-    "ac.devise":       ["Cybersécurité industrielle · Intelligence artificielle · Systèmes d'IA · Centres de données.",
-                        "Industrial cybersecurity · Artificial intelligence · AI systems · Data centres."],
+    "ac.devise":       ["Cybersécurité industrielle · Intelligence artificielle · Systèmes d'IA · Centres de données",
+                        "Industrial cybersecurity · Artificial intelligence · AI systems · Data centres"],
     "ac.devise.b":     ["Chaque information porte sa source, sa date et une lecture critique dont la provenance est écrite",
                         "Every item carries its source, its date and a critical reading whose provenance is stated"],
     "ac.devise.fin":   ["— dérivée par règles publiées, ou rédigée et signée. Rien n'est produit par un modèle de langage.",

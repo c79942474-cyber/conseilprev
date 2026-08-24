@@ -474,3 +474,53 @@ def test_aucune_regle_du_menu_ne_peint_avec_la_palette_de_la_page():
                          "sourd", "sourd2", "filet", "filet2", "rouge", "bleu"):
                 fautives.append("%s : var(--%s)" % (sel, jeton))
     assert not fautives, fautives
+
+
+def test_le_bandeau_de_titre_ne_melange_pas_deux_registres():
+    """DÉFAUT SIGNALÉ PAR LE LECTEUR, ET IL AVAIT L'ŒIL. Le mot-titre était
+    passé à la gothique ; la ligne dessous était restée en Inter — un
+    sans-serif d'interface posé sous un logotype de 1850, soit deux siècles
+    d'écart en dix-huit pixels. Le bandeau était à moitié converti.
+
+    LE CHAPEAU D'UNE PREMIÈRE PAGE EST COMPOSÉ DANS LE CARACTÈRE DE LA
+    COLONNE : c'est ce qui le rattache au journal plutôt qu'à sa barre
+    d'outils. Ailleurs, la même classe sert de sous-titre de page et garde le
+    sans, qui y est à sa place — la règle porte donc sur `.tete .devise`, pas
+    sur `.devise`.
+
+    ET LES DEUX MOTS DU LOGOTYPE SONT DU MÊME POIDS. Le second était à 700 :
+    dans une gothique, cela ne se lit pas comme une emphase mais comme un
+    AUTRE caractère, les pleins s'épaississant au point de changer le
+    dessin."""
+    serre = CODE_CSS.replace(" ", "").replace("\n", "")
+    i = serre.index(".tete.devise{")
+    bloc = serre[i:i + 260]
+    assert "font-family:var(--serif)" in bloc, bloc
+    assert "var(--sans)" not in bloc, bloc
+    j = serre.index(".titre-journalspan{")
+    assert "font-weight:400" in serre[j:j + 90], serre[j:j + 90]
+
+
+def test_le_bandeau_de_genre_ne_recopie_pas_ce_qu_il_annonce():
+    """LA BANDE PORTE L'ÉNUMÉRATION DES SUJETS, et elle la porte UNE fois. Le
+    paragraphe du dessous la portait aussi : les fondre était le défaut, les
+    dupliquer en serait un pire — deux listes de sujets à trente pixels l'une
+    de l'autre divergeraient au premier sujet ajouté, et c'est toujours celle
+    qu'on regarde le moins qui reste en arrière.
+
+    Elles viennent donc de DEUX clés distinctes du dictionnaire, et le
+    paragraphe ne porte plus la première."""
+    h = open(os.path.join(ICI, "index.html"), encoding="utf-8").read()
+    i = h.index('<p class="genre"')
+    assert 'data-i18n="ac.devise"' in h[i:i + 200], h[i:i + 200]
+    j = h.index('<p class="devise">')
+    bloc = h[j:h.index("</p>", j)]
+    assert 'data-i18n="ac.devise"' not in bloc, "l'énumération est écrite deux fois"
+    assert 'data-i18n="ac.devise.b"' in bloc and 'data-i18n="ac.devise.fin"' in bloc
+    # ET LA BANDE EST COMPOSÉE COMME UNE BANDE : capitales espacées, entre
+    # deux filets. Sans les filets, ce n'est qu'une ligne de petites capitales.
+    serre = CODE_CSS.replace(" ", "").replace("\n", "")
+    k = serre.index(".genre{")
+    g = serre[k:k + 320]
+    assert "text-transform:uppercase" in g and "letter-spacing:" in g
+    assert "border-top:1pxsolidvar(--encre)" in g and "border-bottom:1pxsolidvar(--encre)" in g

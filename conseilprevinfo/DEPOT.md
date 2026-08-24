@@ -80,7 +80,7 @@ Depuis votre poste, aucune session nécessaire :
       https://github.com/c79942474-cyber/conseilprevinfo
     git push -u origin master
 
-`HISTORIQUE.bundle` porte **l'historique git complet — vingt-huit commits**,
+`HISTORIQUE.bundle` porte **l'historique git complet — vingt-neuf commits**,
 messages compris. Il ne s'agit donc pas de repartir d'une copie à plat : le
 détail des corrections, des mesures et des défauts constatés vit dans ces
 messages, et c'est souvent là qu'est l'information.
@@ -115,6 +115,13 @@ dix-huit pixels**, ses déliés y disparaissent, et un contrôle lit la taille
 minimale de chaque règle qui l'emploie. La gothique, elle, ne compose qu'un
 seul sélecteur : son fichier est sous-ensemblé aux lettres et ne porte pas de
 chiffres.
+
+Le bandeau se lit comme une première page : le mot-titre, un filet, le
+**bandeau de genre** — les quatre sujets en capitales espacées entre deux
+filets, la bande qu'un quotidien pose entre son titre et sa une —, puis le
+chapeau dans le caractère de la colonne. Ce n'est pas un découpage
+d'agrément : une ÉNUMÉRATION et une PROMESSE ne se composent pas pareil, et
+les fondre donnait quatre lignes de texte centré sous un logotype.
 
 **Les angles sont droits**, les filets hiérarchisés — épais sous le bandeau,
 fins entre les blocs. Un usage de presse n'est pas repris, et c'est écrit : la
@@ -299,7 +306,7 @@ que rien ne le signale. Politique de contenu fermée sur `default-src 'self'`,
 sans `unsafe-inline` — ce qui a demandé de retirer les douze attributs `style`
 dispersés dans les pages et le JavaScript.
 
-**392 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
+**394 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
 gardent les règles éditoriales, et chacun est écrit pour tomber le jour où
 quelqu'un les assouplira. Chaque règle nouvelle a été confrontée à une
 **mutation du code qu'elle garde** — et cinq de ces mutations ont révélé des
@@ -307,8 +314,9 @@ contrôles trop faibles, qui ont été resserrés. Un contrôle écrit trop STRI
 aussi été corrigé plutôt que contourné : il supprimait la distinction qu'il
 était censé protéger.
 
-### Les vingt-huit commits du bundle
+### Les vingt-neuf commits du bundle
 
+    25458c4  Le bandeau de titre était converti à moitié
     3ea43c3  La composition passe à celle d'un quotidien — jusque dans les
              documents emportés
     919ad8d  L'interrupteur du clignotement obéissait sans qu'on puisse le
