@@ -13566,6 +13566,24 @@ FORM_CATALOGUE = [
     # PORTE PAR LA LIGNE : il ne se deduit d'aucun nombre de jours.
     {'id': 11, 'ref': 'Programme',  'titre': "Rendre la gouvernance de l'IA operationnelle", 'jours': 10,
      'prix_cents': 600000},
+    # ── ADOPTION ────────────────────────────────────────────────────────────
+    # Le catalogue n'apprenait qu'a se METTRE EN REGLE. Aucune ligne n'apprenait
+    # a SE SERVIR de ce qu'on deploie — or une organisation parfaitement
+    # conforme sur un outil que personne n'ouvre a depense pour rien. Ces
+    # quatre lignes forment une famille distincte, et non un ajout aux
+    # familles reglementaires : le public n'est pas le meme (les metiers, pas
+    # la conformite) et la promesse non plus.
+    #
+    # LA DEMI-JOURNEE PORTE SON PRIX. `FORM_PRIX` n'a que deux entrees, un et
+    # deux jours ; une duree hors bareme retombe a 950 EUR en silence — le
+    # defaut que la recette protege depuis le programme de dix jours. Une
+    # demi-journee ne vaut pas la moitie d'une journee : la preparation, le
+    # deplacement et l'animation ne se coupent pas en deux.
+    {'id': 12, 'ref': 'Adoption',   'titre': "Litteratie IA pour les metiers", 'jours': 0.5,
+     'prix_cents': 55000},
+    {'id': 13, 'ref': 'Adoption',   'titre': "Repenser mon processus en IA-first", 'jours': 1},
+    {'id': 14, 'ref': 'Adoption',   'titre': "Animer un atelier d'adoption — former les formateurs", 'jours': 2},
+    {'id': 15, 'ref': 'Adoption',   'titre': "Constituer un reseau d'ambassadeurs", 'jours': 1},
 ]
 
 # Tarifs indicatifs HT par participant (en centimes) : 1 jour = 950 EUR, 2 jours = 1750 EUR.
@@ -13677,6 +13695,23 @@ FORM_SESSIONS_DEFAUT = [
     (11, '2027-01-11', '2027-01-22', 'A distance (visioconference)'),
     (11, '2027-04-12', '2027-04-23', 'Presentiel — Paris'),
     (11, '2027-09-13', '2027-09-24', 'A distance (visioconference)'),
+    # ── ADOPTION ── Trois dates chacune, comme tout le catalogue : une seule
+    # aurait fait de la famille un essai plutot qu'une offre. La litteratie
+    # (12) est une DEMI-JOURNEE : date de debut et date de fin identiques,
+    # comme les formations d'un jour — le systeme ne compte pas les heures, et
+    # l'inventer ici aurait demande une colonne que personne d'autre ne lit.
+    (12, '2027-01-14', '2027-01-14', 'A distance (visioconference)'),
+    (12, '2027-03-11', '2027-03-11', 'Presentiel — Paris'),
+    (12, '2027-05-13', '2027-05-13', 'A distance (visioconference)'),
+    (13, '2027-01-28', '2027-01-28', 'Presentiel — Paris'),
+    (13, '2027-03-25', '2027-03-25', 'A distance (visioconference)'),
+    (13, '2027-06-10', '2027-06-10', 'Presentiel — Paris'),
+    (14, '2027-02-08', '2027-02-09', 'Presentiel — Paris'),
+    (14, '2027-04-19', '2027-04-20', 'A distance (visioconference)'),
+    (14, '2027-06-21', '2027-06-22', 'Presentiel — Paris'),
+    (15, '2027-02-25', '2027-02-25', 'A distance (visioconference)'),
+    (15, '2027-05-06', '2027-05-06', 'Presentiel — Paris'),
+    (15, '2027-09-30', '2027-09-30', 'A distance (visioconference)'),
 ]
 
 

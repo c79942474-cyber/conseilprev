@@ -29,7 +29,15 @@ import re
 import subprocess
 import sys
 
-DEPOT = "/home/user/conseilprev"
+# LE DÉPÔT EXAMINÉ EST SURCHARGEABLE, et il ne l'était pas. Le chemin était
+# écrit en dur : lancée depuis une copie, la recette rechargeait quand même les
+# fichiers d'origine et rendait « tout est vert » sur des fichiers qu'elle
+# n'avait pas lus. C'est exactement ce qui s'est produit en confrontant les
+# nouveaux contrôles à des mutations : les dix mutations ont « survécu » sans
+# qu'aucune n'ait jamais été examinée. Une recette qu'on ne peut pas pointer
+# ailleurs ne peut pas être mise à l'épreuve — et une recette qu'on ne met pas
+# à l'épreuve ne prouve rien de ce qu'elle affirme.
+DEPOT = os.environ.get("CP_DEPOT") or "/home/user/conseilprev"
 sys.path.insert(0, DEPOT)
 os.chdir(DEPOT)
 
@@ -51,7 +59,13 @@ PROG = next((c for c in CAT if c["id"] == 11), None)
 
 print("\n══ 1. Le programme est au catalogue, et il s'y distingue ══\n")
 
-ok("onze formations au catalogue", len(CAT) == 11, len(CAT))
+# LE COMPTE NE SE RECOPIE PLUS. Il était écrit « 11 » ici, « onze » dans trois
+# autres contrôles et dans deux gabarits : la famille « Adoption » les a tous
+# rendus faux d'un coup, alors qu'aucun n'avait rien de faux à signaler. Ce qui
+# doit tenir n'est pas un nombre, c'est que LES TROIS COPIES DISENT LA MÊME
+# CHOSE — et cela se vérifie en les comparant entre elles.
+N_CAT = len(CAT)
+ok("le catalogue n'est pas vide", N_CAT >= 11, N_CAT)
 ok("la onzième existe", bool(PROG), PROG)
 ok("elle dure dix jours — deux semaines", PROG["jours"] == 10, PROG["jours"])
 ok("…et porte son propre tarif : 6 000 € HT",
@@ -60,10 +74,25 @@ ok("elle forme une famille à part, « Programme »", PROG["ref"] == "Programme"
 ok("…que les dix autres ne partagent pas",
    [c["ref"] for c in CAT].count("Programme") == 1)
 ok("les identifiants restent uniques",
-   len({c["id"] for c in CAT}) == 11, sorted(c["id"] for c in CAT))
-ok("aucune autre formation ne porte de prix en dur",
-   [c["id"] for c in CAT if c.get("prix_cents")] == [11],
-   [c["id"] for c in CAT if c.get("prix_cents")])
+   len({c["id"] for c in CAT}) == N_CAT, sorted(c["id"] for c in CAT))
+ok("…et se suivent sans trou",
+   sorted(c["id"] for c in CAT) == list(range(1, N_CAT + 1)),
+   sorted(c["id"] for c in CAT))
+# LA RÈGLE PORTE SUR LE BARÈME, PAS SUR UN IDENTIFIANT. Elle disait « seule la
+# formation 11 porte un prix » — une formulation qui nomme le coupable connu au
+# lieu de la propriété. La demi-journée d'Adoption a la même raison d'en porter
+# un : sa durée n'est pas au barème, et sans prix explicite elle retomberait à
+# 950 € en silence. Ce qui doit être vrai, dans les deux sens :
+#   durée hors barème  ⇒  la ligne porte son prix
+#   durée au barème    ⇒  la ligne ne le porte PAS (sinon deux sources)
+horsbareme = [c["id"] for c in CAT if c["jours"] not in APP.FORM_PRIX]
+avecprix = [c["id"] for c in CAT if c.get("prix_cents")]
+ok("toute durée hors barème porte son propre prix",
+   sorted(avecprix) == sorted(horsbareme),
+   "hors barème %s, avec prix %s" % (sorted(horsbareme), sorted(avecprix)))
+ok("…et aucune durée au barème n'en porte un second",
+   not [c["id"] for c in CAT if c["jours"] in APP.FORM_PRIX and c.get("prix_cents")],
+   [c["id"] for c in CAT if c["jours"] in APP.FORM_PRIX and c.get("prix_cents")])
 # Trois sessions par an, comme les dix autres formations : une seule aurait
 # fait de l'offre un essai, et n'aurait laissé au client aucune alternative.
 sess11 = [s for s in APP.FORM_SESSIONS_DEFAUT if s[0] == 11]
@@ -114,7 +143,8 @@ print("\n══ 3. Les trois copies du catalogue disent la même chose ══\n"
 sent = io.open(DEPOT + "/sentinel.html", encoding="utf-8").read()
 i = sent.find("window.FORMATIONS_CAT = ")
 hub = json.loads(sent[i + len("window.FORMATIONS_CAT = "):sent.find("\n", i)].rstrip().rstrip(";"))
-ok("le Hub Training porte onze formations", len(hub) == 11, len(hub))
+ok("le Hub Training porte autant de formations que le module",
+   len(hub) == N_CAT, "%d au Hub, %d au module" % (len(hub), N_CAT))
 ok("…avec les mêmes numéros que le module",
    sorted(x["n"] for x in hub) == sorted(c["id"] for c in CAT))
 ok("…et les mêmes familles",
@@ -132,14 +162,56 @@ ok("la carte porte les six modules ET les livrables", len(ph["g"]) == 7, len(ph[
 for mot in ("agentique", "model cards", "RACI", "NIST", "ISO 42001", "littératie"):
     ok("…elle nomme « %s »" % mot, mot in json.dumps(ph, ensure_ascii=False))
 ok("la famille « Programme » a sa couleur au Hub", "'Programme':'#B03A2E'" in sent)
-ok("…et son bouton de filtre", "'Transverse', 'Programme'" in sent)
+ok("la famille « Adoption » a la sienne", "'Adoption':'#1F5E8C'" in sent)
+# DEUX FAMILLES DE LA MÊME COULEUR SE CONFONDENT DANS UN FILTRE. Le contrôle
+# porte sur l'unicité, pas sur la valeur : n'importe quel bleu ferait l'affaire,
+# un second sarcelle non.
+import re as _re                                                 # noqa: E402
+_cols = _re.findall(r"'([^']+)':'(#[0-9A-Fa-f]{6})'",
+                    _re.search(r"var COL = \{([^}]*)\}", sent).group(1))
+ok("chaque famille du Hub a une couleur qui n'appartient qu'à elle",
+   len({c for _, c in _cols}) == len(_cols), _cols)
+ok("…et il y a une couleur par famille servie",
+   {f for f, _ in _cols} == {c["ref"] for c in CAT},
+   {f for f, _ in _cols} ^ {c["ref"] for c in CAT})
+# LE BOUTON DE FILTRE DOIT EXISTER POUR CHAQUE FAMILLE, sans quoi une famille
+# est servie mais introuvable — elle n'apparaît qu'en vue « toutes ».
+_refsbar = _re.findall(r"'([^']*)'",
+                       _re.search(r"var refs = \[([^\]]*)\]", sent).group(1))
+ok("chaque famille a son bouton de filtre au Hub",
+   {r for r in _refsbar if r} == {c["ref"] for c in CAT},
+   {r for r in _refsbar if r} ^ {c["ref"] for c in CAT})
+ok("…et le bouton « toutes » ouvre toujours la barre", _refsbar[0] == "")
 
 pub = io.open(DEPOT + "/formations.html", encoding="utf-8").read()
-ok("la page publique porte onze cartes",
-   pub.count('<article class="fo-card"') == 11,
-   pub.count('<article class="fo-card"'))
+ok("la page publique porte autant de cartes que le module",
+   pub.count('<article class="fo-card"') == N_CAT,
+   "%d cartes, %d au module" % (pub.count('<article class="fo-card"'), N_CAT))
 ok("…dont celle du programme", 'data-ref="Programme"' in pub)
 ok("…et son bouton de filtre", 'data-r="Programme"' in pub)
+# LA PAGE PUBLIQUE PORTE LES MÊMES FAMILLES QUE LE MODULE, boutons et cartes.
+# Une carte sans bouton reste invisible au filtre ; un bouton sans carte rend
+# une liste vide, ce qui se lit comme une panne.
+_pubrefs = set(_re.findall(r'data-ref="([^"]+)"', pub))
+_pubbtn = {r for r in _re.findall(r'data-r="([^"]*)"', pub) if r}
+ok("la page publique porte les mêmes familles que le module",
+   _pubrefs == {c["ref"] for c in CAT}, _pubrefs ^ {c["ref"] for c in CAT})
+ok("…et un bouton de filtre pour chacune", _pubbtn == _pubrefs, _pubbtn ^ _pubrefs)
+# LA FAMILLE ADOPTION N'APPREND PAS À SE METTRE EN RÈGLE, mais à se servir de
+# ce qu'on déploie. Si ses quatre lignes se mettaient à parler d'articles et
+# d'annexes, elle aurait rejoint les cinq autres sans que rien ne le signale.
+_adop = [c for c in hub if c["ref"] == "Adoption"]
+ok("la famille Adoption compte quatre formations", len(_adop) == 4, len(_adop))
+ok("…dont une demi-journée", any("½" in c["d"] for c in _adop),
+   [c["d"] for c in _adop])
+# La comparaison ignore la casse : « CE QUI DISPARAÎT » est une emphase
+# éditoriale, pas un autre mot, et un contrôle qui trébuche dessus signale une
+# faute qui n'existe pas.
+_txtadop = json.dumps(_adop, ensure_ascii=False).lower()
+for _mot in ("processus", "disparaît", "abandon", "ambassadeur", "littératie"):
+    ok("…elle nomme « %s »" % _mot, _mot in _txtadop)
+ok("…et son tarif de demi-journée est écrit sur la page publique",
+   "550 € HT" in pub)
 ok("la phrase tarifaire cite les trois tarifs, pas deux",
    all(x in pub for x in ("950 € HT", "1 750 € HT", "6 000 € HT")))
 ok("…et nomme la durée du programme", "programme de deux semaines" in pub)
@@ -190,7 +262,7 @@ with APP.app.test_client() as c:
     r = c.get("/api/formations/sessions", headers=NAV)
     j = r.get_json() or {}
 ok("les sessions répondent", r.status_code == 200 and j.get("ok"), r.status_code)
-ok("…et servent les onze formations", len(j.get("catalogue") or []) == 11,
+ok("…et servent tout le catalogue", len(j.get("catalogue") or []) == N_CAT,
    len(j.get("catalogue") or []))
 s11 = [s for s in (j.get("sessions") or []) if s["formation_id"] == 11]
 ok("les trois sessions du programme sont ouvertes", len(s11) == 3, len(s11))
