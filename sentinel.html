@@ -1986,6 +1986,44 @@ textarea.form-el{min-height:86px;resize:vertical}
 .carto-fam.ML{background:rgba(45,122,71,.14);color:var(--green)}
 .carto-fam.RPA{background:rgba(201,162,39,.18);color:#8a6d00}
 
+/* LA QUALIFICATION IA ACT SUR UNE CARTE DE CAS D'USAGE. Deux niveaux et non
+   un : « Art. 50 — transparence » demande un marquage, « Annexe III — HAUT
+   RISQUE » demande un dossier technique, une évaluation de conformité et un
+   marquage CE. Les rendre identiques ferait lire le second comme le premier.
+   LA COULEUR NE PORTE JAMAIS SEULE LA DIFFÉRENCE : les mots « HAUT RISQUE »
+   sont dans le texte, et le trait à gauche s'épaissit. */
+.carto-ac{display:block;font-size:10px;font-family:var(--mono);line-height:1.4;
+  margin:0 0 6px;padding:3px 8px;border-left:2px solid var(--rule2);
+  background:var(--bg);color:var(--muted2);border-radius:0 4px 4px 0}
+.carto-ac.hr{border-left-width:4px;border-left-color:var(--accent);
+  background:rgba(184,50,34,.08);color:var(--accent);font-weight:700}
+
+/* ══ ÉTAPE 6 — REDÉCOUPAGE DU PROCESSUS ══
+   UN CAS REDESSINÉ SE DISTINGUE D'UN CAS EN BLANC PAR PLUS QUE SA COULEUR :
+   le compteur au-dessus le dit en toutes lettres, et la bordure change
+   d'épaisseur autant que de teinte. Une carte qui ne se distinguerait qu'au
+   vert ne se lirait ni en niveaux de gris ni par un daltonien. */
+.carto-rd{border:1px solid var(--rule2);border-left:3px solid var(--rule2);
+  border-radius:0 10px 10px 0;padding:14px 16px;margin-top:12px;background:var(--white)}
+.carto-rd.ok{border-left-width:5px;border-left-color:var(--green)}
+.carto-rd-h{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-bottom:10px}
+.carto-rd-h strong{font-size:13.5px}
+.carto-rd-p{font-size:10px;font-family:var(--mono);color:var(--muted2);text-transform:uppercase}
+.carto-rd-pr{margin-left:auto;font-size:10px;font-family:var(--mono);font-weight:700;
+  color:var(--accent);border:1px solid currentColor;border-radius:5px;padding:1px 6px}
+.carto-rd-l{display:block;font-size:10.5px;font-family:var(--mono);letter-spacing:.04em;
+  text-transform:uppercase;color:var(--muted2);margin:10px 0 3px;font-weight:600}
+.carto-rd-t{width:100%;box-sizing:border-box;font-family:inherit;font-size:12.5px;
+  line-height:1.55;padding:8px 10px;border:1px solid var(--rule2);border-radius:7px;
+  background:var(--bg);color:var(--ink);resize:vertical;min-height:46px}
+.carto-rd-t:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+.carto-rd-t::placeholder{color:var(--muted2);opacity:1}
+.carto-rd-compte{font-size:13px;color:var(--ink2);padding:11px 14px;background:var(--bg);
+  border:1px solid var(--rule2);border-radius:8px}
+.carto-rd-avert{margin-top:10px;font-size:12.5px;line-height:1.55;color:var(--accent);
+  padding:11px 14px;border-left:4px solid var(--accent);background:rgba(184,50,34,.07);
+  border-radius:0 8px 8px 0}
+
 /* ══ GUIDE D'UTILISATION CARTOGRAPHIE ══ */
 .carto-guide{margin:14px 0 4px;border:1px solid var(--rule2);border-radius:10px;background:var(--bg);overflow:hidden}
 .carto-guide-sum{cursor:pointer;padding:12px 16px;font-size:13px;font-weight:600;color:var(--ink);list-style:none;display:flex;align-items:center;gap:8px;user-select:none}
@@ -4102,7 +4140,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 <div class="page" id="p-carto-uc">
   <span class="eyebrow">Business — Valeur métier</span>
   <h1 class="page-title">Cartographie des cas d’usage IA</h1>
-  <p class="page-intro">Identifier, qualifier et prioriser les cas d’usage IA à fort impact métier pour les organisations industrielles. Un parcours guidé en cinq temps : cibler le secteur et les processus, explorer les cas d’usage pertinents, les qualifier, chiffrer le retour attendu, puis évaluer la maturité de déploiement.</p>
+  <p class="page-intro">Identifier, qualifier et prioriser les cas d’usage IA à fort impact métier — pour les organisations industrielles comme pour leurs fonctions transverses (marketing, ressources humaines, juridique, finance). Un parcours guidé en six temps : cibler le secteur et les processus, explorer les cas d’usage pertinents, les qualifier, chiffrer le retour attendu, évaluer la maturité de déploiement, puis <strong>redessiner le processus</strong> — la seule étape qui transforme un outil installé en travail réellement changé.</p>
 
   <div class="carto-eco">
     <div class="carto-eco-head">
@@ -4133,7 +4171,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
       <line x1="342" y1="352" x2="342" y2="522" stroke="var(--muted2)" stroke-width="1.4" stroke-dasharray="2 4" marker-end="url(#aCoh)"/>
       <line x1="386" y1="352" x2="500" y2="522" stroke="var(--muted2)" stroke-width="1.4" stroke-dasharray="2 4" marker-end="url(#aCoh)"/>
 
-      <g class="eco-hub eco-node" data-tip="Point d\u2019entrée valeur métier : identifier, qualifier, chiffrer puis évaluer la maturité des cas d\u2019usage IA (5 étapes)." onmousemove="ecoTip(event,this)" onmouseleave="ecoTipHide()"><rect x="250" y="290" width="180" height="62" rx="10"/><text class="eco-t" x="340" y="314">Cartographie cas d’usage</text><text class="eco-s" x="340" y="334">5 étapes · valeur métier</text></g>
+      <g class="eco-hub eco-node" data-tip="Point d\u2019entrée valeur métier : identifier, qualifier, chiffrer, évaluer la maturité puis redessiner le processus (6 étapes)." onmousemove="ecoTip(event,this)" onmouseleave="ecoTipHide()"><rect x="250" y="290" width="180" height="62" rx="10"/><text class="eco-t" x="340" y="314">Cartographie cas d’usage</text><text class="eco-s" x="340" y="334">6 étapes · valeur métier</text></g>
       <g class="eco-prio eco-node" data-tip="Lien prioritaire (établi) : classer un cas retenu selon les niveaux de risque de l\u2019AI Act." onmousemove="ecoTip(event,this)" onmouseleave="ecoTipHide()"><rect x="90" y="122" width="180" height="56" rx="10"/><text class="eco-t" x="180" y="144">Simulateur IA Act</text><text class="eco-s" x="180" y="162">Classer un cas retenu</text></g>
       <g class="eco-prio eco-node" data-tip="Lien prioritaire (établi) : inscrire un cas retenu à l\u2019inventaire central du registre." onmousemove="ecoTip(event,this)" onmouseleave="ecoTipHide()"><rect x="290" y="122" width="180" height="56" rx="10"/><text class="eco-t" x="380" y="144">Registre IA</text><text class="eco-s" x="380" y="162">Inscrire à l’inventaire</text></g>
       <g class="eco-est eco-node" data-tip="Lien établi : la cartographie est la 1re étape des parcours par rôle (directeur programme, CEO, CDO, CAIO)." onmousemove="ecoTip(event,this)" onmouseleave="ecoTipHide()"><rect x="482" y="122" width="168" height="56" rx="10"/><text class="eco-t" x="566" y="144">Parcours guidés</text><text class="eco-s" x="566" y="162">1re étape par rôle</text></g>
@@ -4153,13 +4191,14 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   <details class="carto-guide" id="carto-guide">
     <summary class="carto-guide-sum"><span class="carto-guide-ico">ℹ️</span> Guide d’utilisation — comment utiliser cette cartographie</summary>
     <div class="carto-guide-body">
-      <p style="margin-top:0">Cette cartographie vous accompagne, en cinq étapes, pour passer d’une intention d’adopter l’IA à un plan d’action concret, chiffré et réaliste. Chaque étape produit un résultat qui alimente la suivante ; vous pouvez revenir en arrière à tout moment.</p>
+      <p style="margin-top:0">Cette cartographie vous accompagne, en six étapes, pour passer d’une intention d’adopter l’IA à un plan d’action concret, chiffré et réaliste. Chaque étape produit un résultat qui alimente la suivante ; vous pouvez revenir en arrière à tout moment.</p>
       <div class="carto-guide-grid">
         <div class="carto-guide-item"><span class="carto-guide-n">1</span><div><strong>Cibler</strong><div>Choisissez votre secteur industriel et, si vous le souhaitez, les processus métiers prioritaires (achats, finance, supply chain, opérations, relation client). La cartographie s’adapte à votre contexte.</div></div></div>
         <div class="carto-guide-item"><span class="carto-guide-n">2</span><div><strong>Explorer et sélectionner</strong><div>Parcourez les cas d’usage proposés. Chaque carte indique la famille technologique (IA générative, apprentissage automatique ou automatisation), les résultats mesurables attendus et les données requises. Cliquez pour retenir les cas pertinents.</div></div></div>
         <div class="carto-guide-item"><span class="carto-guide-n">3</span><div><strong>Qualifier et prioriser</strong><div>Notez chaque cas retenu de 1 à 5 sur quatre axes : impact, faisabilité, données et maîtrise du risque. Le score, la priorité (P1 à P3) et le positionnement se calculent automatiquement.</div></div></div>
         <div class="carto-guide-item"><span class="carto-guide-n">4</span><div><strong>Chiffrer le retour</strong><div>Renseignez l’assiette annuelle du processus, le taux de gain estimé et les coûts. Le gain annuel, le retour net, le retour sur investissement et le délai de récupération s’affichent en temps réel.</div></div></div>
         <div class="carto-guide-item"><span class="carto-guide-n">5</span><div><strong>Évaluer la maturité</strong><div>Auto-évaluez vos données et vos compétences techniques. Le diagnostic signale les écarts à combler avant de déployer les cas retenus.</div></div></div>
+        <div class="carto-guide-item"><span class="carto-guide-n">6</span><div><strong>Redessiner le processus</strong><div>Pour chaque cas retenu, écrivez le déroulé d’aujourd’hui, celui d’après, ce qui disparaît, et nommez qui arbitre. C’est l’étape que les projets d’IA sautent le plus souvent, et celle dont l’absence explique la plupart des abandons : un outil posé sur un processus inchangé ajoute du travail au lieu d’en retirer.</div></div></div>
       </div>
       <div class="carto-guide-tips">
         <strong>Bon à savoir</strong>
@@ -4179,6 +4218,14 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="carto-step" id="carto-step-3"><span class="carto-num">3</span> Qualifier &amp; prioriser</div>
     <div class="carto-step" id="carto-step-4"><span class="carto-num">4</span> Chiffrer le retour</div>
     <div class="carto-step" id="carto-step-5"><span class="carto-num">5</span> Évaluer la maturité</div>
+    <!-- LA SIXIÈME ÉTAPE, ET CELLE QUI DÉCIDE DU RESTE. Les cinq premières
+         identifient, notent, chiffrent et vérifient qu'on saura déployer.
+         Aucune ne demande à quiconque de CHANGER SA FAÇON DE TRAVAILLER — et
+         c'est là que les projets meurent : un outil posé sur un processus
+         inchangé produit un double travail, puis l'abandon. Le gain chiffré à
+         l'étape 4 suppose le processus redessiné ; sans ce redécoupage, il
+         n'est pas prudent, il est faux. -->
+    <div class="carto-step" id="carto-step-6"><span class="carto-num">6</span> Redessiner le processus</div>
   </div>
 
   <!-- Étape 1 : Cibler -->
@@ -4205,6 +4252,18 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
               <option>Transport &amp; mobilité</option><option>Logistique &amp; entreposage</option><option>BTP &amp; construction</option>
               <option>Distribution</option><option>Immobilier</option><option>Télécommunications</option>
             </optgroup>
+            <!-- LES TROIS GROUPES CI-DESSUS SONT TOUS INDUSTRIELS. Une société
+                 de conseil, un cabinet, une collectivité ou une banque n'y
+                 trouvaient aucune ligne, et devaient rester sur « Tous
+                 secteurs » — c'est-à-dire renoncer au filtre. Les cas des
+                 fonctions transverses valent pour toutes ces organisations :
+                 ils portent « * » et remontent donc quel que soit le choix
+                 fait ici. -->
+            <optgroup label="Services &amp; fonctions transverses">
+              <option>Conseil &amp; services professionnels</option><option>Banque, assurance &amp; finance</option>
+              <option>Santé &amp; médico-social</option><option>Secteur public &amp; collectivités</option>
+              <option>Éducation &amp; formation</option><option>Médias &amp; communication</option>
+            </optgroup>
           </select>
         </div>
         <div style="flex:2;min-width:260px">
@@ -4225,6 +4284,12 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
       <h3 style="margin:0">Étape 2 — Explorer et sélectionner</h3>
       <div style="font-size:12px;color:var(--muted2)"><span id="carto-count">0</span> cas d’usage · <span id="carto-selected-count">0</span> sélectionné(s)</div>
     </div>
+    <!-- CE QUE LA PASTILLE DIT, ET CE QU'ELLE NE DIT PAS. Sans cette phrase,
+         une carte sans mention se lirait « aucune obligation » — c'est faux,
+         et c'est le contresens le plus coûteux qu'un catalogue de valeur
+         puisse induire. La pastille est une alerte, pas une classification :
+         seul le Simulateur qualifie un système, sur son usage réel. -->
+    <div class="carto-xref" style="margin-bottom:12px"><span class="carto-xref-ico">⚑</span><div><strong>Les pastilles réglementaires signalent, elles ne qualifient pas.</strong> Une carte sans mention n’est <em>pas</em> une carte sans obligation : la qualification dépend de l’usage réel, du rôle tenu dans la chaîne de valeur et des données mobilisées. Passez chaque cas retenu au <a class="carto-xref-link" onclick="go('simulateur',null,'CARTOGRAPHIER','Simulateur IA Act')">Simulateur IA Act</a>, qui seul détermine le niveau de risque et les obligations exactes.</div></div>
     <div id="carto-catalog" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px"></div>
     <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
       <button class="mat-export-btn" onclick="cartoGoStep(1)">← Revenir</button>
@@ -4271,11 +4336,39 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
       <button class="mat-export-btn" onclick="cartoGoStep(4)">← Revenir au chiffrage</button>
       <button class="mat-export-btn" onclick="cartoMaturiteExport()">Exporter le diagnostic (PDF)</button>
-      <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="cartoAttachInit()" title="Rattacher la synthese de la cartographie a la fiche d un client (Gestion des clients)">↗ Rattacher à un client</button>
+      <button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="cartoGoStep(6)">Redessiner le processus →</button>
+      <button class="mat-export-btn" onclick="cartoAttachInit()" title="Rattacher la synthese de la cartographie a la fiche d un client (Gestion des clients)">↗ Rattacher à un client</button>
     </div>
     <div id="carto-attach" style="display:none;margin-top:12px;padding:12px 14px;background:var(--bg);border:1px solid var(--rule2);border-radius:8px"></div>
     <div style="margin-top:14px;padding:12px 14px;background:var(--bg);border:1px solid var(--rule2);border-radius:8px;font-size:12px;color:var(--muted2)">
-      Ce diagnostic clôt le parcours d’identification et de préparation. Les cas prioritaires, chiffrés et jugés déployables peuvent être rattachés à des jalons de conformité AI Act dans le module RaaS, reliant valeur métier, faisabilité et trajectoire de conformité.
+      Ce diagnostic clôt la phase d’identification et de préparation : vous savez quoi faire, ce que ça vaut et si vous saurez le déployer. Il reste la question qui décide du résultat — <strong style="color:var(--ink)">comment le travail sera fait après</strong>. C’est l’étape 6. Les cas prioritaires, chiffrés et jugés déployables peuvent aussi être rattachés à des jalons de conformité AI Act dans le module RaaS, reliant valeur métier, faisabilité et trajectoire de conformité.
+    </div>
+  </div>
+
+  <!-- Étape 6 : Redessiner le processus ────────────────────────────────────
+       POURQUOI CETTE ÉTAPE EXISTE. Les cinq précédentes conduisent à une
+       liste de cas chiffrés et déployables. Elles ne demandent à personne de
+       changer sa façon de travailler — et c'est précisément là que les
+       projets d'IA meurent : l'outil s'ajoute au processus au lieu de le
+       remplacer, chacun continue de faire ce qu'il faisait « pour vérifier »,
+       et le gain de l'étape 4 ne se matérialise jamais.
+
+       CE QUE CETTE ÉTAPE PRODUIT est un artefact avant / après, par cas :
+       comment le travail se fait aujourd'hui, comment il se fera, ce qui
+       disparaît, et QUI SIGNE la décision. Le dernier point est le plus
+       important : un redécoupage sans décideur nommé est un atelier, pas un
+       changement. -->
+  <div class="carto-panel" id="carto-panel-6" style="display:none">
+    <h3 style="margin-top:0">Étape 6 — Redessiner le processus</h3>
+    <p style="color:var(--muted2);font-size:13px">Un cas d’usage installé sur un processus inchangé produit un double travail, puis l’abandon. Pour chaque cas retenu, décrivez le déroulé <strong>d’aujourd’hui</strong>, celui <strong>d’après</strong>, ce qui <strong>disparaît</strong> — et nommez qui arbitre. Le gain chiffré à l’étape 4 suppose ce redécoupage : sans lui, il n’est pas prudent, il est faux.</p>
+    <div id="carto-redesign"></div>
+    <div class="carto-xref"><span class="carto-xref-ico">↔</span><div><strong>Le redécoupage se décide, il ne se déduit pas.</strong> Ce que vous écrivez ici n’est vérifié par personne — c’est une intention de conception. Ce qui se mesure ensuite, c’est l’usage réel : part d’équipe qui s’en sert chaque semaine, processus effectivement redessinés, temps rendu. <a class="carto-xref-link" onclick="go('adoption',null,'BUSINESS','Adoption')">Ouvrir le tableau de bord d’adoption →</a></div></div>
+    <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="mat-export-btn" onclick="cartoGoStep(5)">← Revenir à la maturité</button>
+      <button class="mat-export-btn" onclick="cartoRedesignExport()">Exporter l’avant / après (PDF)</button>
+    </div>
+    <div style="margin-top:14px;padding:12px 14px;background:var(--bg);border:1px solid var(--rule2);border-radius:8px;font-size:12px;color:var(--muted2)">
+      Ce document est celui qu’on emmène devant les équipes concernées. Il ne dit pas « nous allons déployer un outil » ; il dit ce que chacun ne fera plus, et ce qu’il fera à la place. C’est la seule version de l’annonce à laquelle on puisse répondre.
     </div>
   </div>
 </div>
@@ -15861,7 +15954,7 @@ var PAGE_GUIDES = {
   'carto-uc': {
     title: "Cartographie des cas d’usage IA",
     sections: [
-      {h:"À quoi sert cette page", t:"Parcours guidé en cinq temps pour identifier, qualifier et prioriser les cas d’usage IA à fort impact métier, orienté organisations industrielles. C’est l’étape amont : la valeur métier avant la conformité."},
+      {h:"À quoi sert cette page", t:"Parcours guidé en six temps pour identifier, qualifier, prioriser puis redessiner les processus autour des cas d’usage IA à fort impact métier, orienté organisations industrielles. C’est l’étape amont : la valeur métier avant la conformité."},
       {h:"Comment l’utiliser", t:"Ciblez le secteur et les processus, explorez les cas d’usage proposés, retenez ceux qui parlent à votre réalité, puis priorisez selon l’impact et la faisabilité. Le résultat alimente vos arbitrages d’investissement."},
       {h:"Enchaînement", t:"Un cas d’usage retenu doit ensuite passer au Simulateur IA Act : sa classe de risque conditionne le coût réel du projet. Un cas prometteur classé haut risque n’est pas disqualifié, mais son budget doit intégrer la mise en conformité."}
     ]
@@ -20947,9 +21040,45 @@ window.CARTO_UC = [
   {p:'Opérations', n:'Maintenance prédictive', f:'ML', r:'Arrêts non planifiés −25 % ; durée de vie équipements allongée.', d:'Données capteurs/IoT, historiques de pannes.', s:['Énergie','Oil & gas','Nucléaire','Manufacturing','Automobile','Aéronautique & défense','Ferroviaire & naval','Transport & mobilité','Métallurgie & sidérurgie','Chimie & pétrochimie','Utilities & réseaux','Eau & environnement','Mines & matières premières']},
   {p:'Opérations', n:'Traitement automatisé de documents', f:'LLM', r:'Temps de traitement −60 % ; extraction correcte >95 %.', d:'Documents techniques, formulaires, plans.', s:['*']},
   {p:'Relation client', n:'Assistant IA (support/interne)', f:'LLM', r:'Temps de réponse −50 % ; résolution au 1er contact +20 pts.', d:'Base de connaissance, historiques tickets.', s:['*']},
-  {p:'Relation client', n:'Analyse de la voix du client', f:'LLM', r:'Irritants prioritaires identifiés ; satisfaction mesurable.', d:'Réclamations, enquêtes, verbatims.', s:['Transport & mobilité','Énergie','Distribution','Télécommunications','Utilities & réseaux','Immobilier','Automobile']}
+  {p:'Relation client', n:'Analyse de la voix du client', f:'LLM', r:'Irritants prioritaires identifiés ; satisfaction mesurable.', d:'Réclamations, enquêtes, verbatims.', s:['Transport & mobilité','Énergie','Distribution','Télécommunications','Utilities & réseaux','Immobilier','Automobile']},
+
+  /* ── FONCTIONS TRANSVERSES ────────────────────────────────────────────────
+     LA CARTE NE S'OUVRAIT QU'AUX PROCESSUS DE LA CHAÎNE DE VALEUR — achats,
+     finance, supply chain, opérations, relation client. Or c'est dans le
+     marketing, les ressources humaines et le juridique que l'IA générative
+     entre le plus vite dans une entreprise, souvent sans que personne l'ait
+     décidé. Une carte qui les ignore laisse ces usages hors du dossier de
+     valeur ET hors du dossier de conformité.
+
+     LE CHAMP `a` — LA QUALIFICATION IA ACT QUAND ELLE MORD. C'est ici qu'elle
+     devient indispensable : le tri de candidatures et l'évaluation de la
+     performance sont à l'annexe III, donc à HAUT RISQUE, et proposer ces cas
+     dans un catalogue de valeur sans le dire reviendrait à présenter une
+     obligation lourde comme une simple opportunité. Le champ reste vide quand
+     rien ne mord clairement — l'étape 2 dit alors que l'absence de mention
+     n'est pas une absence d'obligation, et renvoie au Simulateur, qui seul
+     qualifie un système. */
+  {p:'Marketing', n:'Production et déclinaison de contenus', f:'LLM', r:'Délai de production −50 % ; déclinaisons par canal ×3.', d:'Charte éditoriale, contenus publiés, personas.', a:'Art. 50 — marquage du contenu généré', s:['*']},
+  {p:'Marketing', n:'Segmentation et ciblage', f:'ML', r:'Taux de conversion +10 à +25 % ; coût par acquisition −15 %.', d:'CRM, historiques d’achat, parcours web.', s:['*']},
+  {p:'Marketing', n:'Analyse de la performance des campagnes', f:'ML', r:'Budget réalloué en continu ; arbitrages documentés.', d:'Dépenses média, conversions, modèle d’attribution.', s:['*']},
+  {p:'Marketing', n:'Veille concurrentielle et écoute des signaux', f:'LLM', r:'Couverture élargie ; signaux remontés en jours, non en mois.', d:'Presse, réseaux, sites concurrents, dépôts de marques.', s:['*']},
+
+  {p:'Ressources humaines', n:'Tri et pré-qualification des candidatures', f:'ML', r:'Délai de présélection −60 % ; volume traité sans renfort.', d:'CV, descriptions de poste, historiques de recrutement.', a:'Annexe III 4(a) — HAUT RISQUE', s:['*']},
+  {p:'Ressources humaines', n:'Évaluation automatisée de la performance', f:'ML', r:'Revues annuelles outillées ; critères homogènes entre équipes.', d:'Objectifs, résultats, évaluations passées.', a:'Annexe III 4(c) — HAUT RISQUE', s:['*']},
+  {p:'Ressources humaines', n:'Assistant de réponse aux questions RH', f:'LLM', r:'Sollicitations de niveau 1 −50 % ; réponse immédiate.', d:'Convention collective, accords d’entreprise, procédures paie.', a:'Art. 50 — transparence', s:['*']},
+  {p:'Ressources humaines', n:'Rédaction et harmonisation des offres d’emploi', f:'LLM', r:'Délai de publication −40 % ; formulations homogènes.', d:'Référentiel de postes, offres passées, grille de rémunération.', s:['*']},
+
+  {p:'Juridique', n:'Recherche et synthèse documentaire', f:'LLM', r:'Temps de recherche −50 % ; sources citées et vérifiables.', d:'Corpus jurisprudentiel, doctrine, notes internes.', s:['*']},
+  {p:'Juridique', n:'Pré-qualification des demandes entrantes', f:'LLM', r:'Orientation immédiate ; charge de tri du service divisée.', d:'Historique des saisines, arbre de compétences du service.', s:['*']},
+  {p:'Juridique', n:'Veille réglementaire et alertes', f:'LLM', r:'Textes applicables repérés dès publication ; échéances tenues.', d:'Journaux officiels, sources sectorielles, périmètre réglementaire.', s:['*']},
+  {p:'Juridique', n:'Caviardage et anonymisation de pièces', f:'ML', r:'Préparation d’un dossier −70 % ; oublis mesurables et corrigés.', d:'Pièces à communiquer, référentiel des données à masquer.', s:['*']}
 ];
-window.CARTO_PROCS = ['Achats','Finance','Supply chain','Opérations','Relation client'];
+/* LES PROCESSUS OFFERTS AU FILTRE. « Direction financière » n'est pas ajouté
+   à part : le processus « Finance » ci-dessus porte déjà ses cas (clôtures,
+   anomalies, prévisions de trésorerie). Deux libellés pour le même périmètre
+   auraient donné deux puces dont l'une renvoie toujours zéro résultat. */
+window.CARTO_PROCS = ['Achats','Finance','Supply chain','Opérations','Relation client',
+                      'Marketing','Ressources humaines','Juridique'];
 window.__cartoState = {procs:[], selected:{}};
 
 window.cartoInit = function(){
@@ -20969,9 +21098,14 @@ window.cartoToggleProc = function(el){
   if(i>=0) window.__cartoState.procs.splice(i,1); else window.__cartoState.procs.push(p);
 };
 
+window.CARTO_NB_ETAPES = 6;
 window.cartoGoStep = function(step){
   window.__cartoStep=step;
-  for(var i=1;i<=5;i++){
+  /* LA BORNE VIENT DE `CARTO_NB_ETAPES`, PAS D'UN 5 ÉCRIT ICI. Le premier
+     jet gardait `i<=5` : l'étape 6 s'affichait, mais aucune des cinq autres
+     ne se masquait en y arrivant — six panneaux empilés, et la puce 6 jamais
+     allumée. Une borne recopiée est une borne qu'on oublie. */
+  for(var i=1;i<=window.CARTO_NB_ETAPES;i++){
     var panel=document.getElementById('carto-panel-'+i);
     var stp=document.getElementById('carto-step-'+i);
     if(panel) panel.style.display=(i===step)?'block':'none';
@@ -20981,6 +21115,7 @@ window.cartoGoStep = function(step){
   if(step===3) cartoRenderShortlist();
   if(step===4) cartoRenderRoi();
   if(step===5) cartoRenderMaturite();
+  if(step===6) cartoRenderRedesign();
   var pg=document.getElementById('p-carto-uc'); if(pg) pg.scrollIntoView({behavior:'smooth',block:'start'});
 };
 
@@ -21007,6 +21142,10 @@ window.cartoRenderCatalog = function(){
       + '<span style="font-size:10px;font-family:var(--mono);color:var(--muted2);text-transform:uppercase">'+u.p+'</span>'
       + '<span class="carto-fam '+u.f+'">'+u.f+'</span></div>'
       + '<div style="font-weight:600;font-size:13px;margin-bottom:6px">'+u.n+'</div>'
+      /* LA QUALIFICATION IA ACT AVANT LE GAIN, quand elle mord. Plac\u00e9e apr\u00e8s
+         le retour attendu, elle serait lue une fois l'int\u00e9r\u00eat acquis \u2014 et un
+         tri de candidatures \u00e0 haut risque se retiendrait sur son gain. */
+      + (u.a ? '<div class="carto-ac'+(/HAUT RISQUE/.test(u.a)?' hr':'')+'">'+u.a+'</div>' : '')
       + '<div style="font-size:11px;color:var(--green);margin-bottom:5px">\u25b8 '+u.r+'</div>'
       + '<div style="font-size:10.5px;color:var(--muted2)">Données : '+u.d+'</div>'
       + '<div style="position:absolute;top:12px;right:12px;font-size:15px;color:var(--accent);display:'+(sel?'block':'none')+'">\u2713</div>'
@@ -23862,6 +24001,150 @@ window.cartoMaturiteExport = function(){
     +'<h3>Écarts à combler avant déploiement</h3><ul>'+gapRows+'</ul>'
     +'<div class="foot">Diagnostic de cadrage \u2014 à valider avec la DSI et les métiers. Barème : 1 absent, 3 en construction, 5 maîtrisé. Généré par Sentinel AI.</div>'
     +'</body></html>';
+  var w=window.open('','_blank'); if(!w){ alert('Autorisez les pop-ups pour exporter.'); return; }
+  w.document.write(html+'<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>'); w.document.close();
+};
+
+/* ══ ÉTAPE 6 — REDESSINER LE PROCESSUS ════════════════════════════════════
+   CE QUI SE SAISIT ICI N'EST PAS UNE DONNÉE, C'EST UNE DÉCISION DE CONCEPTION.
+   Rien ne la vérifie, et le module ne prétend pas le contraire : il structure
+   quatre questions, compte celles qui ont reçu une réponse, et refuse de
+   présenter un cas non redessiné comme prêt.
+
+   LES QUATRE CHAMPS, ET POURQUOI CEUX-LÀ.
+   « Aujourd'hui » et « Après » suffiraient à faire un joli schéma. Ce qui
+   manque à un joli schéma, c'est ce qui DISPARAÎT — sans quoi le nouveau
+   processus s'ajoute à l'ancien, chacun continue de vérifier « au cas où », et
+   le gain chiffré à l'étape 4 ne vient jamais. Et il manque QUI ARBITRE : un
+   redécoupage sans décideur nommé est un atelier, pas un changement. */
+window.CARTO_RD_CHAMPS = [
+  {id:'avant', lbl:'Aujourd’hui — comment le travail se fait',
+   ph:'Qui fait quoi, dans quel ordre, avec quels délais et quelles reprises. Décrivez le réel, pas la procédure affichée.'},
+  {id:'apres', lbl:'Après — ce que fait la machine, ce que garde l’humain',
+   ph:'Ce que le système produit, ce qui reste jugé par une personne, et à quel moment elle intervient. Nommez ce qui doit rester sous décision humaine.'},
+  {id:'disparait', lbl:'Ce qui disparaît',
+   ph:'La tâche, le fichier, la réunion, le contrôle qui n’a plus de raison d’être. Un champ vide ici signifie que le nouveau processus s’AJOUTE à l’ancien.'},
+  {id:'arbitre', lbl:'Qui arbitre, et quand',
+   ph:'Le nom d’une personne et une échéance. « La direction » et « au deuxième trimestre » ne sont pas des réponses.'}
+];
+if(!window.__cartoState.redesign) window.__cartoState.redesign = {};
+
+window.cartoRdOf = function(key){ return window.__cartoState.redesign[key] || {}; };
+window.cartoRdSet = function(keyEnc, champ, val){
+  var key=decodeURIComponent(keyEnc);
+  var o=window.__cartoState.redesign[key] || (window.__cartoState.redesign[key]={});
+  o[champ]=val;
+  cartoRdMajCompte();
+};
+/* UN CAS EST REDESSINÉ QUAND SES QUATRE CHAMPS SONT RENSEIGNÉS. Trois sur
+   quatre n'est pas « presque » : c'est le champ manquant qui décide, et c'est
+   presque toujours « ce qui disparaît ». */
+window.cartoRdComplet = function(key){
+  var o=cartoRdOf(key);
+  return window.CARTO_RD_CHAMPS.every(function(c){ return (o[c.id]||'').trim().length>0; });
+};
+window.cartoRdMajCompte = function(){
+  var list=cartoSelectedList();
+  var n=list.filter(function(u){ return cartoRdComplet(cartoKey(u)); }).length;
+  /* LE LISERÉ DE LA CARTE SUIT LA SAISIE, PAS LE RENDU. Premier jet : la
+     classe `ok` n'était posée qu'à la construction du panneau ; le compteur
+     montait, l'avertissement s'effaçait, et le liseré des cartes restait gris
+     — l'écran affichait deux états contradictoires du même fait, et c'est
+     celui d'à côté de la ligne qu'on croit. */
+  document.querySelectorAll('#carto-redesign .carto-rd[data-rd]').forEach(function(c){
+    c.classList.toggle('ok', cartoRdComplet(decodeURIComponent(c.getAttribute('data-rd'))));
+  });
+  var el=document.getElementById('carto-rd-compte'); if(!el) return;
+  el.innerHTML = list.length
+    ? '<strong>'+n+' sur '+list.length+'</strong> cas retenu(s) redessiné(s)'
+      + (n===list.length ? ' — chacun dit ce qui disparaît et qui arbitre.'
+         : ' — les autres restent des outils posés sur un processus inchangé.')
+    : '';
+  /* Le repère de l'étape 4 remis à sa place : un gain annoncé sur un
+     processus non redessiné n'est pas prudent, il est faux. */
+  var av=document.getElementById('carto-rd-avert'); if(av)
+    av.style.display = (list.length && n<list.length) ? 'block' : 'none';
+};
+
+window.cartoRenderRedesign = function(){
+  var box=document.getElementById('carto-redesign'); if(!box) return;
+  var list=cartoSelectedList();
+  if(!list.length){
+    box.innerHTML='<div style="color:var(--muted2);font-size:13px;padding:16px;background:var(--bg);border-radius:8px">'
+      +'Aucun cas retenu. Revenez à l’étape 2 pour en sélectionner : il n’y a pas de processus à redessiner tant qu’aucun cas n’est choisi.</div>';
+    return;
+  }
+  list=list.slice().sort(function(a,b){ return cartoGlobal(cartoScoreOf(cartoKey(b)))-cartoGlobal(cartoScoreOf(cartoKey(a))); });
+  var h='<div id="carto-rd-compte" class="carto-rd-compte"></div>'
+    + '<div id="carto-rd-avert" class="carto-rd-avert" style="display:none">'
+    + 'Le retour chiffré à l’étape 4 suppose le processus redessiné. Pour les cas laissés en blanc ci-dessous, ce chiffre décrit un gain que rien n’ira chercher.</div>';
+  list.forEach(function(u){
+    var key=cartoKey(u), enc=encodeURIComponent(key), o=cartoRdOf(key);
+    var pr=cartoPriority(cartoGlobal(cartoScoreOf(key)));
+    h += '<div class="carto-rd'+(cartoRdComplet(key)?' ok':'')+'" data-rd="'+enc+'">'
+      + '<div class="carto-rd-h"><span class="carto-rd-p">'+u.p+'</span>'
+      + '<strong>'+u.n+'</strong><span class="carto-rd-pr">'+pr+'</span></div>';
+    window.CARTO_RD_CHAMPS.forEach(function(c){
+      h += '<label class="carto-rd-l" for="rd-'+c.id+'-'+enc+'">'+c.lbl+'</label>'
+        + '<textarea class="carto-rd-t" id="rd-'+c.id+'-'+enc+'" rows="2" placeholder="'
+        + c.ph.replace(/"/g,'&quot;')+'" oninput="cartoRdSet(\''+enc+'\',\''+c.id+'\',this.value)">'
+        + (o[c.id]||'').replace(/</g,'&lt;') + '</textarea>';
+    });
+    h += '</div>';
+  });
+  box.innerHTML=h;
+  cartoRdMajCompte();
+};
+
+window.cartoRedesignExport = function(){
+  var list=cartoSelectedList();
+  if(!list.length){ alert('Sélectionnez au moins un cas d’usage à l’étape 2.'); return; }
+  var today=new Date().toLocaleDateString('fr-FR');
+  var sec=(document.getElementById('carto-secteur')||{}).value||'Tous secteurs';
+  list=list.slice().sort(function(a,b){ return cartoGlobal(cartoScoreOf(cartoKey(b)))-cartoGlobal(cartoScoreOf(cartoKey(a))); });
+  var faits=list.filter(function(u){ return cartoRdComplet(cartoKey(u)); }).length;
+  function esc(t){ return String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  var blocs=list.map(function(u){
+    var key=cartoKey(u), o=cartoRdOf(key);
+    var champs=window.CARTO_RD_CHAMPS.map(function(c){
+      var v=(o[c.id]||'').trim();
+      /* UN CHAMP VIDE EST IMPRIMÉ COMME VIDE, et il dit ce que son absence
+         signifie. Le passer sous silence donnerait un document où le cas non
+         redessiné ressemble au cas redessiné. */
+      return '<tr><th>'+esc(c.lbl)+'</th><td'+(v?'':' class="vide"')+'>'
+        + (v ? esc(v) : 'Non renseigné — à trancher avant tout déploiement.')+'</td></tr>';
+    }).join('');
+    return '<h3>'+esc(u.p)+' — '+esc(u.n)+'</h3>'
+      + (u.a ? '<div class="ac">'+esc(u.a)+'</div>' : '')
+      + '<table>'+champs+'</table>';
+  }).join('');
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Redécoupage des processus</title>'
+    +'<style>@page{margin:1.8cm}body{font-family:Arial,sans-serif;color:#1C1C1C;max-width:900px;margin:0 auto;padding:18px}'
+    +'h1{font-size:19px;border-bottom:3px solid #B83222;padding-bottom:8px;margin-bottom:4px}'
+    +'h3{font-size:13px;color:#B83222;margin-top:20px;margin-bottom:4px}'
+    +'.sub{color:#666;font-size:11px;margin-bottom:12px}'
+    +'.big{font-size:14px;font-weight:bold;margin:10px 0}'
+    +'.warn{border-left:4px solid #B83222;background:#fbf1ef;padding:9px 12px;font-size:11.5px;margin:12px 0;line-height:1.5}'
+    +'.ac{font-size:10.5px;font-family:monospace;color:#B83222;margin-bottom:4px}'
+    +'table{width:100%;border-collapse:collapse;font-size:11px;margin-top:4px}'
+    +'th{background:#f4f2f5;text-align:left;padding:6px 8px;width:31%;vertical-align:top;font-weight:600;border:1px solid #ddd}'
+    +'td{padding:6px 8px;border:1px solid #ddd;vertical-align:top;line-height:1.5}'
+    +'td.vide{color:#999;font-style:italic}'
+    +'.foot{margin-top:22px;padding-top:9px;border-top:1px solid #ddd;font-size:10px;color:#666;line-height:1.5}'
+    +'</style></head><body>'
+    +'<h1>Redécoupage des processus — avant / après</h1>'
+    +'<div class="sub">CONSEILPREV — Sentinel AI · Secteur : '+esc(sec)+' · Établi le '+today+'</div>'
+    +'<div class="warn"><strong>Ce document décrit une intention de conception, pas un constat.</strong> '
+    +'Rien de ce qui suit n’a été observé : ce sont les choix que l’organisation se propose de faire. '
+    +'Ce qui se mesure ensuite est l’usage réel — part d’équipe qui s’en sert chaque semaine, '
+    +'processus effectivement redessinés, temps rendu. Un usage déclaré n’est pas un usage observé.</div>'
+    +'<div class="big">'+faits+' cas redessiné(s) sur '+list.length+' retenu(s)</div>'
+    + (faits<list.length ? '<div class="warn">Le retour chiffré au dossier de valeur suppose le processus redessiné. '
+        +'Pour les cas restés incomplets ci-dessous, ce chiffre décrit un gain que rien n’ira chercher.</div>' : '')
+    + blocs
+    +'<div class="foot">Artefact de redécoupage — à présenter aux équipes concernées avant tout déploiement. '
+    +'Il ne dit pas « nous allons déployer un outil » : il dit ce que chacun ne fera plus, et ce qu’il fera à la place. '
+    +'Généré par Sentinel AI.</div></body></html>';
   var w=window.open('','_blank'); if(!w){ alert('Autorisez les pop-ups pour exporter.'); return; }
   w.document.write(html+'<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>'); w.document.close();
 };
