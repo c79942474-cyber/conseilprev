@@ -2024,6 +2024,71 @@ textarea.form-el{min-height:86px;resize:vertical}
   padding:11px 14px;border-left:4px solid var(--accent);background:rgba(184,50,34,.07);
   border-radius:0 8px 8px 0}
 
+/* ══ TABLEAU DE BORD D'ADOPTION ══
+   LA NATURE DE LA SOURCE EST ÉCRITE EN TOUTES LETTRES SUR CHAQUE CARTE —
+   « OBSERVÉ », « DÉCLARÉ », « CALCULÉ ». La couleur ne fait que redoubler le
+   mot : un tableau de bord où la différence entre mesuré et affirmé tiendrait
+   à une teinte se lirait exactement comme celui qui ne la fait pas du tout,
+   pour qui l'imprime en noir et blanc ou ne distingue pas le rouge du vert. */
+.adp-dur{margin:16px 0 20px;padding:14px 18px;border-left:4px solid var(--accent);
+  background:rgba(184,50,34,.07);border-radius:0 10px 10px 0;font-size:13.5px;
+  line-height:1.65;color:var(--ink2)}
+.adp-dur strong{color:var(--accent)}
+.adp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.adp-k{background:var(--white);border:1px solid var(--rule);border-radius:6px;padding:16px 18px}
+.adp-k-calc{border-color:var(--green);border-top:3px solid var(--green)}
+.adp-k-decl{border-top:3px solid var(--accent)}
+.adp-src{display:inline-block;font-size:9px;font-family:var(--mono);letter-spacing:.13em;
+  font-weight:700;padding:2px 7px;border-radius:4px;margin-bottom:9px}
+.adp-src.calcule{background:rgba(45,122,71,.14);color:var(--green)}
+.adp-src.observe{background:rgba(45,122,71,.14);color:var(--green)}
+.adp-src.declare{background:rgba(184,50,34,.10);color:var(--accent)}
+.adp-src.vide{background:var(--bg2);color:var(--muted2)}
+.adp-lbl{font-size:11.5px;color:var(--ink2);line-height:1.4;margin-bottom:8px;font-weight:600}
+.adp-val{font-family:var(--serif);font-size:31px;color:var(--ink);line-height:1;letter-spacing:-.02em}
+.adp-u{font-family:var(--sans);font-size:14px;color:var(--muted2);letter-spacing:0}
+.adp-dit{font-size:11px;color:var(--muted2);line-height:1.5;margin-top:8px}
+
+.adp-d{border:1px solid var(--rule2);border-radius:10px;padding:15px 17px;margin-top:14px;
+  background:var(--white)}
+.adp-d-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.adp-d-h strong{font-size:13.5px}
+.adp-d-h .adp-src{margin:0 0 0 auto}
+.adp-d-p{font-size:12.5px;color:var(--muted2);line-height:1.6;margin:7px 0 0}
+.adp-d-c{font-size:11.5px;color:var(--muted2);line-height:1.55;margin:9px 0 0;
+  padding-top:9px;border-top:1px solid var(--rule2)}
+.adp-d-c strong{color:var(--ink2)}
+.adp-d-champs{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px}
+.adp-f{display:flex;flex-direction:column;gap:4px;min-width:150px}
+.adp-f label,.adp-l{font-size:10px;font-family:var(--mono);letter-spacing:.07em;
+  text-transform:uppercase;color:var(--muted2);font-weight:600}
+.adp-f input{padding:7px 9px;border:1px solid var(--rule2);border-radius:7px;
+  font-size:13px;font-family:inherit;background:var(--bg);color:var(--ink)}
+.adp-l{display:block;margin:12px 0 4px}
+.adp-t{width:100%;box-sizing:border-box;font-family:inherit;font-size:12.5px;line-height:1.55;
+  padding:8px 10px;border:1px solid var(--rule2);border-radius:7px;background:var(--bg);
+  color:var(--ink);resize:vertical;min-height:44px}
+.adp-f input:focus,.adp-t:focus{outline:2px solid var(--accent);outline-offset:1px;
+  border-color:var(--accent)}
+.adp-t::placeholder{color:var(--muted2);opacity:1}
+.adp-court{margin-top:8px;font-size:11.5px;line-height:1.55;color:var(--accent);
+  padding:8px 11px;border-left:3px solid var(--accent);background:rgba(184,50,34,.07);
+  border-radius:0 7px 7px 0}
+
+.adp-v{border:1px solid var(--rule2);border-left:3px solid var(--rule2);
+  border-radius:0 10px 10px 0;padding:14px 17px;margin-top:12px;background:var(--white)}
+.adp-v.faite{border-left-width:5px;border-left-color:var(--green)}
+.adp-v-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.adp-v-h strong{font-size:14px}
+.adp-v-n{font-size:10px;font-family:var(--mono);font-weight:700;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--accent)}
+.adp-v-e{margin-left:auto;font-size:10px;font-family:var(--mono);color:var(--muted2)}
+.adp-v.faite .adp-v-e{color:var(--green);font-weight:700}
+.adp-v-p{font-size:12.5px;color:var(--muted2);line-height:1.6;margin:5px 0 0}
+.adp-v-p b{color:var(--ink2)}
+.adp-v-s{font-size:12px;color:var(--ink2);line-height:1.55;margin:9px 0 0;padding-top:8px;
+  border-top:1px solid var(--rule2);font-style:italic}
+
 /* ══ GUIDE D'UTILISATION CARTOGRAPHIE ══ */
 .carto-guide{margin:14px 0 4px;border:1px solid var(--rule2);border-radius:10px;background:var(--bg);overflow:hidden}
 .carto-guide-sum{cursor:pointer;padding:12px 16px;font-size:13px;font-weight:600;color:var(--ink);list-style:none;display:flex;align-items:center;gap:8px;user-select:none}
@@ -2615,6 +2680,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="sb-item" data-grp="equipe-et-formation" role="button" tabindex="0" onclick="go('training',this,'ÉQUIPE & FORMATION','Hub Training')" title="Modules de formation sur l EU AI Act, les 8 piliers et la gouvernance IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polygon points="5 3 19 12 5 21 5 3"/></svg></span>Hub Training</div>
     <div class="sb-section" data-grp="business"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="2.5" y="7" width="19" height="13" rx="2"/><path d="M8.5 7V5.2A1.7 1.7 0 0 1 10.2 3.5h3.6A1.7 1.7 0 0 1 15.5 5.2V7"/><path d="M2.5 12.5h19"/></svg><span>Business</span></div>
     <div class="sb-item" data-grp="business" role="button" tabindex="0" onclick="go('carto-uc',this,'BUSINESS','Cartographie des cas d\u2019usage IA')" title="Identifier, qualifier et prioriser les cas d usage IA a fort impact metier (achats, finance, supply chain, operations, relation client)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>Cartographie des cas d’usage</div>
+    <div class="sb-item" data-grp="business" role="button" tabindex="0" onclick="go('adoption',this,'BUSINESS','Tableau de bord d\u2019adoption')" title="Si l organisation se sert de ce qui est deploye : usage hebdomadaire, processus redessines, temps rendu, abandon a 90 jours — avec la nature de chaque source."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 20h18"/><path d="M6 20V11"/><path d="M11 20V5"/><path d="M16 20v-6"/><path d="M21 20V8"/></svg></span>Adoption</div>
 <div class="sb-item" data-grp="business" role="button" tabindex="0" onclick="go('benchmark',this,'BUSINESS','Benchmark sectoriel')" title="Comparez votre niveau de conformite a celui d autres acteurs de votre secteur."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>Benchmark</div>
     <div class="sb-item" data-grp="business" role="button" tabindex="0" onclick="go('pricing',this,'BUSINESS','Tarification par résultats')" title="Simulateur de modele commercial hybride RaaS (resultats) vs SaaS classique."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2v2M12 20v2"/><path d="M5 7a3 3 0 0 1 3-3h8.5L20 8.5 16.5 12 20 15.5 16.5 19H8a3 3 0 0 1-3-3"/><path d="M9 9h4M9 14h4"/></svg></span>Tarification résultats</div>
     <div class="sb-section" data-grp="rgpd-et-privacy"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="10.5" width="16" height="10" rx="2"/><path d="M7.8 10.5V7.5a4.2 4.2 0 0 1 8.4 0v3"/></svg><span>RGPD &amp; Privacy</span></div>
@@ -4370,6 +4436,48 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div style="margin-top:14px;padding:12px 14px;background:var(--bg);border:1px solid var(--rule2);border-radius:8px;font-size:12px;color:var(--muted2)">
       Ce document est celui qu’on emmène devant les équipes concernées. Il ne dit pas « nous allons déployer un outil » ; il dit ce que chacun ne fera plus, et ce qu’il fera à la place. C’est la seule version de l’annonce à laquelle on puisse répondre.
     </div>
+  </div>
+</div>
+
+<!-- ══ ADOPTION ════════════════════════════════════════════════════════════
+     POURQUOI CETTE PAGE EXISTE, À CÔTÉ DE L'INDICE DE CONFORMITÉ.
+     Sentinel savait dire si une organisation est EN RÈGLE. Il ne savait pas
+     dire si elle SE SERT de ce qu'elle a déployé — et les deux échouent
+     séparément : on peut être parfaitement conforme sur un outil que
+     personne n'ouvre, et on peut avoir une adoption massive sur un usage qui
+     n'aurait jamais dû être déployé.
+
+     LE POINT DUR, ET C'EST LA RAISON D'ÊTRE DE LA PAGE :
+     UN USAGE DÉCLARÉ N'EST PAS UN USAGE OBSERVÉ. « Les équipes ont bien
+     adopté l'outil » est la phrase la plus répétée et la moins vérifiée des
+     comités de pilotage. Chaque indicateur porte donc, à côté de sa valeur,
+     LA NATURE DE SA SOURCE — calculé, observé, ou simplement déclaré — et
+     un indicateur qui ne nomme pas sa méthode de mesure n'a pas le droit de
+     se dire observé. C'est structurel, pas une note de bas de page. -->
+<div class="page" id="p-adoption">
+  <span class="eyebrow">Business · Adoption</span>
+  <h1 class="page-h">Tableau de bord <em>d’adoption</em></h1>
+  <p class="page-lead">L’indice de conformité dit si vous êtes en règle. Celui-ci dit si l’organisation <strong>s’en sert</strong>. Les deux échouent séparément : on peut être parfaitement conforme sur un outil que personne n’ouvre.</p>
+
+  <div class="adp-dur">
+    <strong>Un usage déclaré n’est pas un usage observé.</strong> « Les équipes ont bien adopté l’outil » est la phrase la plus répétée et la moins vérifiée des comités de pilotage. Chaque indicateur ci-dessous porte la nature de sa source. Un indicateur qui ne nomme pas sa méthode de mesure reste <em>déclaré</em> — il ne devient pas <em>observé</em> parce qu’on y croit.
+  </div>
+
+  <div id="adp-kpi" class="adp-grid"></div>
+  <div id="adp-detail"></div>
+
+  <div class="carto-xref" style="margin-top:20px"><span class="carto-xref-ico">↔</span><div><strong>Le seul indicateur que cette plateforme calcule elle-même</strong> est le nombre de processus redessinés, lu à l’étape 6 de la cartographie. Les trois autres se mesurent chez vous, avec vos outils. <a class="carto-xref-link" onclick="go('carto-uc',null,'BUSINESS','Cartographie des cas d’usage IA');cartoGoStep(6)">Ouvrir l’étape 6 — Redessiner le processus →</a></div></div>
+
+  <h2 class="sec-h" style="margin-top:34px">Roadmap d’adoption</h2>
+  <p style="font-size:13px;color:var(--muted2);max-width:80ch;margin:0 0 4px">Quatre vagues, à côté des quatre phases de la <a class="carto-xref-link" onclick="go('roadmap',null,'PILOTAGE','Roadmap conformité')">roadmap de conformité</a> et non à leur place. Une vague ne s’ouvre pas parce que la précédente est « lancée » : elle s’ouvre quand la précédente a produit ce qu’elle devait produire, et l’ordre porte une contrainte réelle — <strong>mesurer avant de généraliser</strong>, sans quoi on ne saura jamais ce que la généralisation a changé.</p>
+  <div id="adp-vagues"></div>
+
+  <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
+    <button class="mat-export-btn" onclick="adpExport()">Exporter le tableau de bord (PDF)</button>
+    <button class="mat-export-btn" onclick="adpReset()">Effacer mes relevés</button>
+  </div>
+  <div class="trait-note" style="margin-top:16px">
+    Ces relevés restent dans ce navigateur : rien n’est envoyé ni conservé sur nos serveurs. Ils décrivent le fonctionnement interne d’une organisation, et ce n’est pas à nous de le détenir.
   </div>
 </div>
 
@@ -7999,6 +8107,7 @@ var PAGE_META = {
     'entreprise': { section: 'ENTREPRISE', label: 'Offre Entreprise' },
     'ia-act-hub': { section: 'PILOTAGE', label: 'Vue d\u2019ensemble IA Act' },
     'conformite-globale': { section: 'PILOTAGE', label: 'Indice de conformité global' },
+    'adoption': { section: 'BUSINESS', label: 'Tableau de bord d’adoption' },
     'cadre-normatif': { section: 'PILOTAGE', label: 'Cadre normatif' },
     'rgpd-hub': { section: 'RGPD & PRIVACY', label: 'Vue d\u2019ensemble' },
     'rgpd-conformite': { section: 'RGPD & PRIVACY', label: 'Conformité RGPD' },
@@ -8080,6 +8189,7 @@ function go(id, el, sec, pg) {
   if (id === 'ia50' && typeof window.ia50Load === 'function') setTimeout(window.ia50Load, 60);
   if (id === 'empreinte' && typeof window.empInit === 'function') setTimeout(window.empInit, 60);
   if (id === 'gouvernance' && typeof window.gouvInit === 'function') setTimeout(window.gouvInit, 60);
+  if (id === 'adoption' && typeof window.adpInit === 'function') setTimeout(window.adpInit, 60);
   /* L'ONGLET COURANT EST AUSSI ANNONCÉ, pas seulement peint : à un lecteur
      d'écran, la pastille terre cuite ne dit rien. */
   function _ici(i){ i.classList.add('on'); i.setAttribute('aria-current', 'page'); }
@@ -21081,10 +21191,39 @@ window.CARTO_PROCS = ['Achats','Finance','Supply chain','Opérations','Relation 
                       'Marketing','Ressources humaines','Juridique'];
 window.__cartoState = {procs:[], selected:{}};
 
+/* ══ LE PARCOURS SURVIT À LA VISITE ═══════════════════════════════════════
+   L'état vivait en mémoire seule : un rechargement effaçait la sélection, les
+   notes, le chiffrage, la maturité et le redécoupage. C'était supportable
+   tant que le parcours se faisait d'une traite ; il ne l'est plus depuis que
+   l'étape 6 demande d'écrire, pour chaque cas, ce qui disparaît et qui
+   arbitre — personne n'écrit cela sans y revenir. Et le tableau de bord
+   d'adoption compte les processus redessinés : un compteur remis à zéro à
+   chaque visite ne mesurerait rien.
+
+   TOUT RESTE DANS CE NAVIGATEUR. Ces réponses décrivent l'organisation
+   interne d'une entreprise ; rien ne part au serveur. Le stockage local peut
+   être refusé (navigation privée, réglage) : on le tente, et le parcours
+   fonctionne sans lui — simplement, il ne se souvient plus. */
+window.CARTO_CLE = 'cp-sentinel-carto-v1';
+window.cartoSave = function(){
+  try{ localStorage.setItem(window.CARTO_CLE, JSON.stringify(window.__cartoState)); }catch(e){}
+};
+window.cartoLoad = function(){
+  try{
+    var r=JSON.parse(localStorage.getItem(window.CARTO_CLE)||'null');
+    if(!r || typeof r!=='object') return;
+    ['procs','selected','scores','roi','maturite','redesign'].forEach(function(k){
+      if(r[k]!==undefined) window.__cartoState[k]=r[k];
+    });
+  }catch(e){}
+};
+
 window.cartoInit = function(){
   var box=document.getElementById('carto-proc-filter'); if(!box) return;
+  cartoLoad();
   box.innerHTML = window.CARTO_PROCS.map(function(p){
-    return '<span class="carto-chip" data-proc="'+p+'" onclick="cartoToggleProc(this)">'+p+'</span>';
+    var on = window.__cartoState.procs.indexOf(p)>=0 ? ' on' : '';
+    return '<span class="carto-chip'+on+'" data-proc="'+p+'" onclick="cartoToggleProc(this)">'+p+'</span>';
   }).join('');
   var sec=document.getElementById('carto-secteur');
   if(sec && !sec.__bound){ sec.addEventListener('change', function(){ if(window.__cartoStep===2) cartoRenderCatalog(); }); sec.__bound=true; }
@@ -21096,6 +21235,7 @@ window.cartoToggleProc = function(el){
   var p=el.getAttribute('data-proc');
   var i=window.__cartoState.procs.indexOf(p);
   if(i>=0) window.__cartoState.procs.splice(i,1); else window.__cartoState.procs.push(p);
+  cartoSave();
 };
 
 window.CARTO_NB_ETAPES = 6;
@@ -21159,6 +21299,7 @@ window.cartoToggleSel = function(el,keyEnc){
   if(window.__cartoState.selected[key]){ delete window.__cartoState.selected[key]; el.classList.remove('sel'); }
   else { window.__cartoState.selected[key]=true; el.classList.add('sel'); }
   var chk=el.querySelector('div[style*="absolute"]'); if(chk) chk.style.display=window.__cartoState.selected[key]?'block':'none';
+  cartoSave();
   cartoUpdateCount();
 };
 
@@ -21203,6 +21344,7 @@ window.cartoSetScore = function(keyEnc, axe, val){
   var key=decodeURIComponent(keyEnc);
   if(!window.__cartoState.scores[key]) window.__cartoState.scores[key]={impact:3,faisabilite:3,donnees:3,risque:3};
   window.__cartoState.scores[key][axe]=parseInt(val,10);
+  cartoSave();
   cartoRefreshRow(key);
 };
 
@@ -21249,6 +21391,7 @@ window.cartoRoiSet = function(keyEnc, champ, val){
   var r=cartoRoiOf(key,u);
   var num = (champ==='gain') ? (parseFloat(val)/100) : Math.max(0, parseFloat(val)||0);
   r[champ]=num;
+  cartoSave();
   cartoRoiRefresh(key);
 };
 window.cartoRoiRefresh = function(key){
@@ -21284,7 +21427,7 @@ window.CARTO_MATURITE_AXES = [
 ];
 if(!window.__cartoState.maturite) window.__cartoState.maturite = {};
 window.cartoMatOf = function(id){ var v=window.__cartoState.maturite[id]; return (v===undefined?3:v); };
-window.cartoMatSet = function(id,val){ window.__cartoState.maturite[id]=parseInt(val,10); cartoMatRefresh(); };
+window.cartoMatSet = function(id,val){ window.__cartoState.maturite[id]=parseInt(val,10); cartoSave(); cartoMatRefresh(); };
 
 window.cartoMatGlobal = function(){
   var s=0,n=0; window.CARTO_MATURITE_AXES.forEach(function(a){ s+=cartoMatOf(a.id); n++; });
@@ -24034,6 +24177,7 @@ window.cartoRdSet = function(keyEnc, champ, val){
   var key=decodeURIComponent(keyEnc);
   var o=window.__cartoState.redesign[key] || (window.__cartoState.redesign[key]={});
   o[champ]=val;
+  cartoSave();
   cartoRdMajCompte();
 };
 /* UN CAS EST REDESSINÉ QUAND SES QUATRE CHAMPS SONT RENSEIGNÉS. Trois sur
@@ -24148,6 +24292,313 @@ window.cartoRedesignExport = function(){
   var w=window.open('','_blank'); if(!w){ alert('Autorisez les pop-ups pour exporter.'); return; }
   w.document.write(html+'<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>'); w.document.close();
 };
+
+/* ══ TABLEAU DE BORD D'ADOPTION ═══════════════════════════════════════════
+   TROIS NATURES DE SOURCE, ET LA DIFFÉRENCE EST TOUT LE SUJET.
+
+     CALCULÉ — la plateforme le tire de ses propres données. Un seul
+       indicateur est dans ce cas, et c'est déjà beaucoup : les processus
+       redessinés, lus à l'étape 6 de la cartographie.
+     OBSERVÉ — mesuré chez le client, par une méthode que quelqu'un a écrite.
+       Le champ « méthode » n'est pas décoratif : sans lui, l'indicateur
+       retombe en DÉCLARÉ, automatiquement, quoi qu'en pense celui qui l'a
+       saisi.
+     DÉCLARÉ — quelqu'un l'affirme. C'est une information, pas une mesure.
+
+   LA RÈGLE EST APPLIQUÉE PAR LE CODE, PAS PAR LA BONNE VOLONTÉ. `adpNature`
+   ne rend « observé » que si une méthode est écrite ET assez précise pour
+   qu'on puisse la refaire. Un tableau de bord où chacun coche « observé »
+   parce qu'il en est convaincu ne vaut pas mieux qu'un tour de table. */
+window.ADP_CLE = 'cp-sentinel-adoption-v1';
+window.ADP_METHODE_MINI = 25;
+
+window.ADP_KPI = [
+  {id:'usage', lbl:'Part d’équipe qui s’en sert chaque semaine', unite:'%', max:100,
+   dit:'Sur les personnes à qui l’usage est destiné, combien l’ouvrent au moins une fois par semaine. Pas « ont un accès » : « s’en servent ».',
+   comment:'Journaux de connexion de l’outil, sur quatre semaines glissantes, rapportés à la liste nominative des destinataires. Une extraction ponctuelle un lendemain de formation ne mesure rien.',
+   sens:'haut'},
+  {id:'temps', lbl:'Temps rendu, par personne et par semaine', unite:'h', max:40,
+   dit:'Le temps que les personnes ne passent plus à faire ce qu’elles faisaient. Mesuré, pas estimé à partir d’un taux de gain théorique.',
+   comment:'Un relevé du même processus avant et après, sur les mêmes personnes et le même volume. Le taux de gain saisi à l’étape 4 de la cartographie est une hypothèse de cadrage : la reprendre ici transformerait une hypothèse en constat.',
+   sens:'haut'},
+  {id:'abandon', lbl:'Abandon à quatre-vingt-dix jours', unite:'%', max:100,
+   dit:'Sur les personnes qui s’en servaient au premier mois, combien ont cessé au troisième. C’est l’indicateur que les tableaux de bord d’adoption omettent le plus souvent, et le seul qui distingue un lancement réussi d’un changement tenu.',
+   comment:'Deux extractions des mêmes journaux, à trente et à quatre-vingt-dix jours, sur la même cohorte nominative. Sans la date de départ écrite quelque part, le chiffre ne veut rien dire.',
+   sens:'bas'}
+];
+
+window.__adp = {releves:{}};
+window.adpLoad = function(){
+  try{ var r=JSON.parse(localStorage.getItem(window.ADP_CLE)||'null');
+    if(r && typeof r==='object' && r.releves) window.__adp=r; }catch(e){}
+};
+window.adpSave = function(){
+  try{ localStorage.setItem(window.ADP_CLE, JSON.stringify(window.__adp)); }catch(e){}
+};
+window.adpOf = function(id){ return window.__adp.releves[id] || {}; };
+/* LA SAISIE NE RECONSTRUIT PAS LE FORMULAIRE QU'ON EST EN TRAIN DE REMPLIR.
+   Premier jet : `adpSet` appelait `adpRender`, qui réécrivait l'innerHTML du
+   panneau — donc détruisait et recréait le champ sous le curseur à chaque
+   frappe. Mesuré au navigateur : en tapant « Journaux de connexion »,
+   il restait « J ». Le contrôle qui avait laissé passer cela remplissait le
+   champ d'un bloc (`fill`), ce qu'aucune personne ne fait ; il fallait taper
+   caractère par caractère pour le voir.
+
+   `adpRefresh` ne repeint donc que ce qui se DÉDUIT de la saisie — les
+   cartes, les vagues, les pastilles — et ne touche jamais aux champs. */
+window.adpSet = function(id, champ, val){
+  var o=window.__adp.releves[id] || (window.__adp.releves[id]={});
+  o[champ]=val; adpSave(); adpRefresh();
+};
+
+/* LA NATURE DE LA SOURCE SE DÉDUIT, ELLE NE SE CHOISIT PAS. C'est le cœur de
+   la page : personne ne coche « observé ». On l'est quand on a écrit comment
+   on a mesuré, ou on ne l'est pas. */
+window.adpNature = function(id){
+  var o=adpOf(id);
+  if(o.valeur===undefined || o.valeur==='' || isNaN(parseFloat(o.valeur))) return 'vide';
+  return (String(o.methode||'').trim().length >= window.ADP_METHODE_MINI) ? 'observe' : 'declare';
+};
+window.ADP_NATURES = {
+  calcule:{lbl:'CALCULÉ', dit:'Tiré des données de cette plateforme.'},
+  observe:{lbl:'OBSERVÉ', dit:'Mesuré chez vous, par la méthode écrite ci-dessous.'},
+  declare:{lbl:'DÉCLARÉ', dit:'Affirmé sans méthode de mesure écrite. C’est une information, pas une mesure.'},
+  vide:{lbl:'NON RELEVÉ', dit:'Rien n’a été mesuré ni déclaré.'}
+};
+
+/* L'INDICATEUR CALCULÉ — les processus effectivement redessinés, lus à
+   l'étape 6. C'est le seul chiffre de cette page que personne n'a besoin de
+   croire sur parole, et il vient de la cartographie plutôt que d'une seconde
+   saisie : recopier ici ce qui est écrit là-bas aurait donné deux comptes
+   qui divergent au premier changement. */
+window.adpRedessines = function(){
+  if(typeof cartoSelectedList!=='function') return {n:0, sur:0, dispo:false};
+  var list=cartoSelectedList();
+  var n=list.filter(function(u){ return cartoRdComplet(cartoKey(u)); }).length;
+  return {n:n, sur:list.length, dispo:true};
+};
+
+window.adpRenderKpi = function(){
+  var box=document.getElementById('adp-kpi'); if(!box) return;
+  var rd=adpRedessines();
+  var h='';
+  /* Le calculé en premier : c'est le seul qui ne demande rien à personne. */
+  h += '<div class="adp-k adp-k-calc">'
+    + '<div class="adp-src calcule">'+window.ADP_NATURES.calcule.lbl+'</div>'
+    + '<div class="adp-lbl">Processus effectivement redessinés</div>'
+    + '<div class="adp-val">'+rd.n+'<span class="adp-u"> / '+rd.sur+'</span></div>'
+    + '<div class="adp-dit">'
+    + (rd.sur ? (rd.n===rd.sur
+        ? 'Chaque cas retenu dit ce qui disparaît et qui arbitre.'
+        : 'Les autres sont des outils posés sur un processus inchangé — le gain chiffré au dossier de valeur ne viendra pas les chercher.')
+      : 'Aucun cas retenu dans la cartographie. Un déploiement sans processus redessiné n’a rien à mesurer ici.')
+    + '</div></div>';
+  window.ADP_KPI.forEach(function(k){
+    var o=adpOf(k.id), nat=adpNature(k.id), n=window.ADP_NATURES[nat];
+    var v=(o.valeur===undefined||o.valeur==='')?null:parseFloat(o.valeur);
+    h += '<div class="adp-k'+(nat==='declare'?' adp-k-decl':'')+'">'
+      + '<div class="adp-src '+nat+'">'+n.lbl+'</div>'
+      + '<div class="adp-lbl">'+k.lbl+'</div>'
+      + '<div class="adp-val">'+(v===null?'—':String(v).replace('.',','))
+      + '<span class="adp-u">'+(v===null?'':' '+k.unite)+'</span></div>'
+      + '<div class="adp-dit">'+n.dit+'</div></div>';
+  });
+  box.innerHTML=h;
+};
+
+/* Le repaint de saisie : les cartes, les vagues, et les deux éléments dérivés
+   du panneau de détail — jamais les champs eux-mêmes. */
+window.adpRefresh = function(){
+  adpRenderKpi();
+  adpRenderVagues();
+  window.ADP_KPI.forEach(function(k){
+    var nat=adpNature(k.id), n=window.ADP_NATURES[nat];
+    var b=document.getElementById('adp-b-'+k.id);
+    if(b){ b.className='adp-src '+nat; b.textContent=n.lbl; }
+    var c=document.getElementById('adp-c-'+k.id);
+    if(c) c.style.display=(String(adpOf(k.id).methode||'').trim().length>0 && nat==='declare')
+      ? 'block' : 'none';
+  });
+};
+
+/* La construction complète — appelée à l'ouverture de la page, pas à la
+   frappe. */
+window.adpRender = function(){
+  adpRenderKpi();
+  adpRenderDetail();
+  adpRenderVagues();
+};
+
+window.adpRenderDetail = function(){
+  var box=document.getElementById('adp-detail'); if(!box) return;
+  var h='';
+  window.ADP_KPI.forEach(function(k){
+    var o=adpOf(k.id), nat=adpNature(k.id);
+    var court=(String(o.methode||'').trim().length>0 && nat==='declare');
+    h += '<div class="adp-d"><div class="adp-d-h"><strong>'+k.lbl+'</strong>'
+      + '<span class="adp-src '+nat+'" id="adp-b-'+k.id+'">'+window.ADP_NATURES[nat].lbl+'</span></div>'
+      + '<p class="adp-d-p">'+k.dit+'</p>'
+      + '<div class="adp-d-champs">'
+      + '<div class="adp-f"><label for="adp-v-'+k.id+'">Valeur relevée ('+k.unite+')</label>'
+      + '<input type="number" id="adp-v-'+k.id+'" min="0" max="'+k.max+'" step="0.1" value="'
+      + (o.valeur===undefined?'':String(o.valeur).replace(/"/g,'&quot;'))
+      + '" oninput="adpSet(\''+k.id+'\',\'valeur\',this.value)"></div>'
+      + '<div class="adp-f"><label for="adp-d-'+k.id+'">Date du relevé</label>'
+      + '<input type="date" id="adp-d-'+k.id+'" value="'+(o.date||'')
+      + '" oninput="adpSet(\''+k.id+'\',\'date\',this.value)"></div>'
+      + '</div>'
+      + '<label class="adp-l" for="adp-m-'+k.id+'">Comment ce chiffre a été obtenu</label>'
+      + '<textarea class="adp-t" id="adp-m-'+k.id+'" rows="2" placeholder="'
+      + k.comment.replace(/"/g,'&quot;')+'" oninput="adpSet(\''+k.id+'\',\'methode\',this.value)">'
+      + String(o.methode||'').replace(/</g,'&lt;')+'</textarea>'
+      /* L'AVERTISSEMENT EST TOUJOURS DANS LA PAGE, MASQUÉ OU NON. Le créer à
+         la volée obligerait à reconstruire le panneau à chaque frappe — le
+         défaut même que ce découpage corrige. */
+      + '<div class="adp-court" id="adp-c-'+k.id+'" style="display:'+(court?'block':'none')
+      + '">Tant que la méthode n’est pas écrite assez précisément pour qu’on sache la refaire, ce chiffre reste <strong>déclaré</strong>. Ce n’est pas une punition : une mesure qu’on ne sait pas reproduire n’est pas une mesure.</div>'
+      + '<p class="adp-d-c"><strong>Méthode attendue.</strong> '+k.comment+'</p>'
+      + '</div>';
+  });
+  box.innerHTML=h;
+};
+
+/* ══ ROADMAP D'ADOPTION ═══════════════════════════════════════════════════
+   QUATRE VAGUES, ET L'ORDRE PORTE UNE CONTRAINTE RÉELLE. Elle tient en un
+   point : MESURER AVANT DE GÉNÉRALISER. Une organisation qui déploie partout
+   puis installe la mesure ne saura jamais ce que le déploiement a changé —
+   elle n'aura pas de point de départ, et toute variation constatée ensuite
+   sera attribuée à ce qu'on voudra.
+
+   CHAQUE VAGUE DIT COMMENT ON SAIT QU'ELLE EST FINIE. Une vague dont on ne
+   peut pas dire si elle est terminée reste ouverte indéfiniment, et le
+   programme entier glisse derrière elle. */
+window.ADP_VAGUES = [
+  {n:1, t:'Rendre l’usage possible',
+   produit:'Les accès ouverts aux personnes visées, une littératie IA suffisante pour ne pas croire la machine sur parole, et un cas pilote sur un périmètre où l’erreur se rattrape.',
+   fini:'La liste nominative des destinataires existe, et chacun a ouvert l’outil au moins une fois.',
+   bloque:'Sans liste nominative, la vague 3 n’aura pas de dénominateur : « part d’équipe qui s’en sert » suppose qu’on sache de quelle équipe on parle.'},
+  {n:2, t:'Redessiner',
+   produit:'Pour chaque cas prioritaire, l’artefact avant / après de l’étape 6 : ce que fait la machine, ce que garde l’humain, ce qui disparaît, qui arbitre.',
+   fini:'L’indicateur « processus effectivement redessinés » est au complet, et chaque ligne nomme une suppression.',
+   bloque:'Sans suppression nommée, le nouveau processus s’ajoute à l’ancien : le temps rendu mesuré en vague 3 sera nul, et il aura raison de l’être.'},
+  {n:3, t:'Mesurer',
+   produit:'La mesure d’usage posée AVANT la généralisation : point de départ daté, méthode écrite, cohorte nominative.',
+   fini:'Les trois indicateurs de cette page sont OBSERVÉS — c’est-à-dire qu’une méthode est écrite pour chacun, et qu’on saurait refaire le relevé.',
+   bloque:'Généraliser sans point de départ rend toute variation ultérieure ininterprétable : il n’y aura plus rien à comparer, et personne ne pourra dire si le programme a servi.'},
+  {n:4, t:'Généraliser et tenir',
+   produit:'L’extension au reste du périmètre, un réseau d’ambassadeurs qui porte l’usage au quotidien, et une revue à quatre-vingt-dix jours inscrite au calendrier.',
+   fini:'La revue à quatre-vingt-dix jours a eu lieu et son taux d’abandon est relevé — la vague ne se termine pas au déploiement.',
+   bloque:'Une vague 4 déclarée finie au jour du déploiement laisse l’abandon se produire sans témoin, et le programme se conclut sur son meilleur jour.'}
+];
+
+/* L'ÉTAT D'UNE VAGUE SE CONSTATE, IL NE SE COCHE PAS. Chaque vague est reliée
+   à ce que la page sait déjà : c'est ce qui empêche une roadmap d'être un
+   calendrier de bonnes intentions. */
+window.adpVagueEtat = function(v){
+  var rd=adpRedessines();
+  var natures=window.ADP_KPI.map(function(k){ return adpNature(k.id); });
+  if(v.n===1) return rd.sur>0
+    ? {e:'faite', d:'Des cas d’usage sont retenus dans la cartographie.'}
+    : {e:'ouverte', d:'Aucun cas retenu : commencez par l’étape 2 de la cartographie.'};
+  if(v.n===2) return (rd.sur>0 && rd.n===rd.sur)
+    ? {e:'faite', d:(rd.sur===1 ? 'Le cas retenu est redessiné.'
+                                : 'Les '+rd.sur+' cas retenus sont redessinés.')}
+    : {e:'ouverte', d:rd.sur ? (rd.n+' sur '+rd.sur+' cas redessiné'+(rd.n>1?'s':'')+'.')
+                             : 'Aucun cas retenu.'};
+  if(v.n===3) return natures.every(function(n){ return n==='observe'; })
+    ? {e:'faite', d:'Les trois indicateurs portent une méthode de mesure écrite.'}
+    : {e:'ouverte', d:natures.filter(function(n){return n==='observe';}).length
+        +' indicateur(s) sur 3 réellement observé(s).'};
+  return natures[2]==='observe'
+    ? {e:'faite', d:'L’abandon à quatre-vingt-dix jours est relevé, avec sa méthode.'}
+    : {e:'ouverte', d:'Tant que l’abandon à quatre-vingt-dix jours n’est pas relevé, le programme se conclut sur son meilleur jour.'};
+};
+
+window.adpRenderVagues = function(){
+  var box=document.getElementById('adp-vagues'); if(!box) return;
+  box.innerHTML = window.ADP_VAGUES.map(function(v){
+    var st=adpVagueEtat(v);
+    return '<div class="adp-v '+st.e+'"><div class="adp-v-h">'
+      + '<span class="adp-v-n">Vague '+v.n+'</span><strong>'+v.t+'</strong>'
+      + '<span class="adp-v-e">'+(st.e==='faite'?'✓ produite':'en cours')+'</span></div>'
+      + '<p class="adp-v-p"><b>Ce qu’elle produit.</b> '+v.produit+'</p>'
+      + '<p class="adp-v-p"><b>Comment on sait qu’elle est finie.</b> '+v.fini+'</p>'
+      + '<p class="adp-v-p"><b>Ce que son absence bloque.</b> '+v.bloque+'</p>'
+      + '<p class="adp-v-s">'+st.d+'</p></div>';
+  }).join('');
+};
+
+window.adpReset = function(){
+  if(!confirm('Effacer les relevés d’adoption enregistrés dans ce navigateur ?')) return;
+  window.__adp={releves:{}}; adpSave(); adpRender();
+};
+
+window.adpExport = function(){
+  var rd=adpRedessines();
+  var today=new Date().toLocaleDateString('fr-FR');
+  function esc(t){ return String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  /* LA DATE EST RENDUE EN FRANÇAIS. Le champ HTML la rend en ISO
+     (2026-08-20) : la recopier telle quelle dans un document français
+     signalerait une valeur passée de la machine au papier sans relecture. */
+  function dateFr(v){
+    if(!v) return '—';
+    var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(String(v));
+    return m ? (m[3]+'/'+m[2]+'/'+m[1]) : String(v);
+  }
+  var rows=window.ADP_KPI.map(function(k){
+    var o=adpOf(k.id), nat=adpNature(k.id);
+    var v=(o.valeur===undefined||o.valeur==='')?'—':String(o.valeur).replace('.',',')+' '+k.unite;
+    return '<tr><td>'+esc(k.lbl)+'</td><td class="c">'+v+'</td><td class="c">'+esc(dateFr(o.date))+'</td>'
+      + '<td class="c n-'+nat+'">'+window.ADP_NATURES[nat].lbl+'</td>'
+      + '<td>'+(String(o.methode||'').trim() ? esc(o.methode) : '<i>Aucune méthode écrite.</i>')+'</td></tr>';
+  }).join('');
+  var vagues=window.ADP_VAGUES.map(function(v){
+    var st=adpVagueEtat(v);
+    return '<h3>Vague '+v.n+' — '+esc(v.t)+' ('+(st.e==='faite'?'produite':'en cours')+')</h3>'
+      + '<p><b>Ce qu’elle produit.</b> '+esc(v.produit)+'</p>'
+      + '<p><b>Comment on sait qu’elle est finie.</b> '+esc(v.fini)+'</p>'
+      + '<p><b>Ce que son absence bloque.</b> '+esc(v.bloque)+'</p>'
+      + '<p class="etat">'+esc(st.d)+'</p>';
+  }).join('');
+  var nObs=window.ADP_KPI.filter(function(k){ return adpNature(k.id)==='observe'; }).length;
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Tableau de bord d’adoption</title>'
+    +'<style>@page{margin:1.8cm}body{font-family:Arial,sans-serif;color:#1C1C1C;max-width:900px;margin:0 auto;padding:18px}'
+    +'h1{font-size:19px;border-bottom:3px solid #B83222;padding-bottom:8px;margin-bottom:4px}'
+    +'h2{font-size:14px;color:#1C1C1C;margin-top:24px;border-bottom:1px solid #ddd;padding-bottom:4px}'
+    +'h3{font-size:12.5px;color:#B83222;margin:16px 0 3px}'
+    +'p{font-size:11px;line-height:1.55;margin:3px 0}'
+    +'.sub{color:#666;font-size:11px;margin-bottom:12px}'
+    +'.warn{border-left:4px solid #B83222;background:#fbf1ef;padding:9px 12px;font-size:11.5px;margin:12px 0;line-height:1.55}'
+    +'.big{font-size:14px;font-weight:bold;margin:10px 0}'
+    +'.etat{font-style:italic;color:#666}'
+    +'table{width:100%;border-collapse:collapse;font-size:10.5px;margin-top:6px}'
+    +'th{background:#f4f2f5;text-align:left;padding:6px 7px;border:1px solid #ddd;font-weight:600}'
+    +'td{padding:6px 7px;border:1px solid #ddd;vertical-align:top;line-height:1.45}'
+    +'td.c{text-align:center;white-space:nowrap}'
+    +'.n-observe{color:#2D7A47;font-weight:bold}.n-declare{color:#B83222;font-weight:bold}'
+    +'.n-vide{color:#999}'
+    +'.foot{margin-top:22px;padding-top:9px;border-top:1px solid #ddd;font-size:10px;color:#666;line-height:1.5}'
+    +'</style></head><body>'
+    +'<h1>Tableau de bord d’adoption</h1>'
+    +'<div class="sub">CONSEILPREV — Sentinel AI · Établi le '+today+'</div>'
+    +'<div class="warn"><strong>Un usage déclaré n’est pas un usage observé.</strong> '
+    +'La colonne « source » ci-dessous n’est pas un choix de celui qui saisit : un indicateur '
+    +'n’est OBSERVÉ que si la méthode qui l’a produit est écrite et refaisable. '
+    +'Les indicateurs marqués DÉCLARÉ sont des affirmations, et ce document ne les présente pas autrement.</div>'
+    +'<div class="big">'+nObs+' indicateur(s) sur '+window.ADP_KPI.length+' réellement observé(s) · '
+    + rd.n+' processus redessiné(s) sur '+rd.sur+' cas retenu(s)</div>'
+    +'<h2>Indicateurs</h2>'
+    +'<table><thead><tr><th>Indicateur</th><th class="c">Valeur</th><th class="c">Relevé le</th>'
+    +'<th class="c">Source</th><th>Méthode écrite</th></tr></thead><tbody>'+rows+'</tbody></table>'
+    +'<h2>Roadmap d’adoption</h2>'+vagues
+    +'<div class="foot">Tableau de bord d’adoption — à lire à côté de l’indice de conformité, jamais à sa place. '
+    +'Une organisation peut être parfaitement conforme sur un outil que personne n’ouvre. Généré par Sentinel AI.</div>'
+    +'</body></html>';
+  var w=window.open('','_blank'); if(!w){ alert('Autorisez les pop-ups pour exporter.'); return; }
+  w.document.write(html+'<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>'); w.document.close();
+};
+
+window.adpInit = function(){ adpLoad(); cartoLoad(); adpRender(); };
 
 window.cartoRenderRoi = function(){
   var box=document.getElementById('carto-roi'); if(!box) return;
