@@ -2089,6 +2089,55 @@ textarea.form-el{min-height:86px;resize:vertical}
 .adp-v-s{font-size:12px;color:var(--ink2);line-height:1.55;margin:9px 0 0;padding-top:8px;
   border-top:1px solid var(--rule2);font-style:italic}
 
+/* ══ DÉVELOPPEMENT ASSISTÉ ══
+   L'OPTION RETENUE NE SE DISTINGUE PAS QUE PAR SA TEINTE : le bouton radio
+   coché la porte déjà, le liseré s'épaissit, et le fond change. Trois canaux
+   pour un même fait — sur un formulaire de politique, l'option qu'on croit
+   avoir choisie et celle qu'on a choisie doivent être la même. */
+.ing-d{border:1px solid var(--rule2);border-radius:10px;padding:15px 17px;margin-top:14px;
+  background:var(--white)}
+.ing-d-q{display:flex;align-items:baseline;gap:10px;font-weight:700;font-size:14px;
+  color:var(--ink);line-height:1.35}
+.ing-d-n{flex:0 0 auto;width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;
+  font-family:var(--mono);font-size:11px;display:inline-flex;align-items:center;
+  justify-content:center;font-weight:700}
+.ing-opts{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.ing-o{display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:10px 12px;
+  border:1px solid var(--rule2);border-left:3px solid var(--rule2);border-radius:0 8px 8px 0;
+  background:var(--bg)}
+.ing-o:hover{border-color:var(--accent)}
+.ing-o.on{border-left-width:5px;border-left-color:var(--accent);background:rgba(184,50,34,.06)}
+.ing-o input{flex:0 0 auto;margin-top:3px;width:16px;height:16px;accent-color:var(--accent);
+  cursor:pointer}
+.ing-o input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ing-o-l{display:block;font-size:13px;font-weight:600;color:var(--ink);line-height:1.4}
+.ing-o.on .ing-o-l{color:var(--accent)}
+.ing-o-c{display:block;font-size:12px;color:var(--muted2);line-height:1.55;margin-top:5px}
+.ing-o-c b{color:var(--ink2)}
+
+.ing-r{border:1px solid var(--rule2);border-radius:10px;padding:13px 16px;margin-top:11px;
+  background:var(--white)}
+.ing-r-t{display:flex;align-items:baseline;gap:9px;font-weight:600;font-size:13.5px;
+  color:var(--ink);line-height:1.35}
+.ing-r-n{flex:0 0 auto;font-family:var(--mono);font-size:11px;font-weight:700;color:var(--accent)}
+.ing-r-p{font-size:12.5px;color:var(--muted2);line-height:1.6;margin:6px 0 0}
+.ing-r-p b{color:var(--ink2)}
+
+.ing-s{display:flex;gap:14px;flex-wrap:wrap;padding:11px 15px;border-bottom:1px solid var(--rule2)}
+.ing-s:first-child{border-top:1px solid var(--rule2)}
+.ing-s strong{flex:0 0 300px;font-size:13px;color:var(--ink)}
+.ing-s span{flex:1 1 260px;font-size:12.5px;color:var(--muted2);line-height:1.55}
+
+/* LE REFUS EST UN BLOC, PAS UNE NOTE. Une compétence qu'on n'a pas et qu'on
+   laisse espérer coûte plus cher au client que le refus ; elle doit donc se
+   lire aussi fort que ce qu'on propose. */
+.ing-refus{margin-top:32px;padding:18px 22px;border:2px solid var(--accent);
+  border-radius:12px;background:rgba(184,50,34,.05)}
+.ing-refus h3{margin:0 0 8px;font-size:15px;color:var(--accent)}
+.ing-refus p{font-size:13px;color:var(--ink2);line-height:1.7;margin:0 0 8px}
+.ing-refus p:last-child{margin-bottom:0}
+.ing-refus strong{color:var(--ink)}
+
 /* ══ GUIDE D'UTILISATION CARTOGRAPHIE ══ */
 .carto-guide{margin:14px 0 4px;border:1px solid var(--rule2);border-radius:10px;background:var(--bg);overflow:hidden}
 .carto-guide-sum{cursor:pointer;padding:12px 16px;font-size:13px;font-weight:600;color:var(--ink);list-style:none;display:flex;align-items:center;gap:8px;user-select:none}
@@ -2681,6 +2730,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="sb-section" data-grp="business"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="2.5" y="7" width="19" height="13" rx="2"/><path d="M8.5 7V5.2A1.7 1.7 0 0 1 10.2 3.5h3.6A1.7 1.7 0 0 1 15.5 5.2V7"/><path d="M2.5 12.5h19"/></svg><span>Business</span></div>
     <div class="sb-item" data-grp="business" role="button" tabindex="0" onclick="go('carto-uc',this,'BUSINESS','Cartographie des cas d\u2019usage IA')" title="Identifier, qualifier et prioriser les cas d usage IA a fort impact metier (achats, finance, supply chain, operations, relation client)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>Cartographie des cas d’usage</div>
     <div class="sb-item" data-grp="business" role="button" tabindex="0" onclick="go('adoption',this,'BUSINESS','Tableau de bord d\u2019adoption')" title="Si l organisation se sert de ce qui est deploye : usage hebdomadaire, processus redessines, temps rendu, abandon a 90 jours — avec la nature de chaque source."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 20h18"/><path d="M6 20V11"/><path d="M11 20V5"/><path d="M16 20v-6"/><path d="M21 20V8"/></svg></span>Adoption</div>
+    <div class="sb-item" data-grp="business" role="button" tabindex="0" onclick="go('ingenierie',this,'BUSINESS','D\u00e9veloppement assist\u00e9 par IA')" title="Politique de developpement assiste, grille de revue du code genere, et ce qui exige encore une signature humaine."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 17l-5-5 5-5"/><path d="M16 7l5 5-5 5"/><path d="M13.5 4l-3 16"/></svg></span>Développement assisté</div>
 <div class="sb-item" data-grp="business" role="button" tabindex="0" onclick="go('benchmark',this,'BUSINESS','Benchmark sectoriel')" title="Comparez votre niveau de conformite a celui d autres acteurs de votre secteur."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>Benchmark</div>
     <div class="sb-item" data-grp="business" role="button" tabindex="0" onclick="go('pricing',this,'BUSINESS','Tarification par résultats')" title="Simulateur de modele commercial hybride RaaS (resultats) vs SaaS classique."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2v2M12 20v2"/><path d="M5 7a3 3 0 0 1 3-3h8.5L20 8.5 16.5 12 20 15.5 16.5 19H8a3 3 0 0 1-3-3"/><path d="M9 9h4M9 14h4"/></svg></span>Tarification résultats</div>
     <div class="sb-section" data-grp="rgpd-et-privacy"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="10.5" width="16" height="10" rx="2"/><path d="M7.8 10.5V7.5a4.2 4.2 0 0 1 8.4 0v3"/></svg><span>RGPD &amp; Privacy</span></div>
@@ -4478,6 +4528,50 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   </div>
   <div class="trait-note" style="margin-top:16px">
     Ces relevés restent dans ce navigateur : rien n’est envoyé ni conservé sur nos serveurs. Ils décrivent le fonctionnement interne d’une organisation, et ce n’est pas à nous de le détenir.
+  </div>
+</div>
+
+<!-- ══ DÉVELOPPEMENT ASSISTÉ ══════════════════════════════════════════════
+     POURQUOI CETTE PAGE EXISTE. Les trois volets précédents portent sur les
+     métiers : cartographier les cas d'usage, mesurer l'adoption, former les
+     équipes. Il manquait le volet où l'IA est déjà entrée sans qu'aucune
+     décision n'ait été prise — l'ingénierie. Les développeurs s'en servent,
+     souvent depuis longtemps, et l'organisation n'a le plus souvent ni
+     politique écrite, ni grille de revue, ni idée de ce qui doit encore
+     porter une signature.
+
+     CE QUE CETTE PAGE NE FAIT PAS, ET C'EST ÉCRIT DEDANS : le recrutement
+     technique. Ce n'est pas le métier de ce cabinet, et une page qui le
+     laisserait croire vendrait une compétence qu'il n'a pas. -->
+<div class="page" id="p-ingenierie">
+  <span class="eyebrow">Business · Ingénierie</span>
+  <h1 class="page-h">Développement <em>assisté par IA</em></h1>
+  <p class="page-lead">Vos développeurs s’en servent déjà — probablement depuis plus longtemps que la direction ne le pense. Ce qui manque n’est pas l’outil : c’est la politique qui dit ce qui est permis, la grille qui dit ce qu’on vérifie en plus, et la liste de ce qui doit encore porter une signature.</p>
+
+  <h2 class="sec-h" style="margin-top:28px">1 · La politique de développement assisté</h2>
+  <p style="font-size:13px;color:var(--muted2);max-width:80ch;margin:0 0 6px">Six décisions. Aucune n’a de bonne réponse universelle — chacune porte sa conséquence écrite, et c’est la conséquence qui doit être acceptée, pas l’option. Une politique qui n’a rien interdit n’a rien décidé.</p>
+  <div id="ing-pol"></div>
+
+  <h2 class="sec-h" style="margin-top:32px">2 · Ce qu’on vérifie sur du code généré, et qu’on ne vérifie pas sur du code écrit</h2>
+  <p style="font-size:13px;color:var(--muted2);max-width:80ch;margin:0 0 6px">La revue ordinaire reste entière : elle ne suffit plus. Sept points s’y ajoutent, chacun parce qu’un modèle échoue autrement qu’une personne — il ne se trompe pas là où l’on a l’habitude de regarder.</p>
+  <div id="ing-revue"></div>
+
+  <h2 class="sec-h" style="margin-top:32px">3 · Ce qui exige encore une signature humaine</h2>
+  <p style="font-size:13px;color:var(--muted2);max-width:80ch;margin:0 0 6px">Non pas « une relecture » : une <strong>signature</strong> — quelqu’un de nommé qui répond de la décision, et qu’on pourra interroger dessus dans deux ans. « L’IA l’a écrit » n’a jamais été une réponse recevable, ni devant un auditeur, ni devant un juge, ni devant l’équipe d’astreinte.</p>
+  <div id="ing-sign"></div>
+
+  <div class="ing-refus">
+    <h3>Ce que ce cabinet ne fait pas — le recrutement technique</h3>
+    <p>Une transformation IA-first fait presque toujours surgir la question du recrutement : quels profils, quel niveau, comment les évaluer. <strong>Ce n’est pas notre métier.</strong> CONSEILPREV ne source pas de développeurs, n’évalue pas un niveau technique et ne conduit pas d’entretien d’embauche. Nous n’avons ni le vivier, ni la méthode d’évaluation, ni la responsabilité juridique qui va avec.</p>
+    <p>Ce que nous faisons à la place, quand la question se pose : nous écrivons avec vous <strong>ce que le poste doit produire</strong> — le périmètre, les décisions qu’il porte, ce qu’il devra pouvoir démontrer — et vous confiez le recrutement à un cabinet spécialisé, que nous pouvons aider à briefer. Nous le disons <strong>avant</strong> la proposition commerciale, pas après la signature : une compétence qu’on n’a pas et qu’on laisse espérer coûte plus cher au client que le refus.</p>
+  </div>
+
+  <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
+    <button class="mat-export-btn" onclick="ingExport()">Exporter la politique (PDF)</button>
+    <button class="mat-export-btn" onclick="ingReset()">Effacer mes choix</button>
+  </div>
+  <div class="trait-note" style="margin-top:16px">
+    Vos choix restent dans ce navigateur : rien n’est envoyé ni conservé sur nos serveurs. Le document exporté est un projet de politique — il devient une politique le jour où quelqu’un le signe.
   </div>
 </div>
 
@@ -8108,6 +8202,7 @@ var PAGE_META = {
     'ia-act-hub': { section: 'PILOTAGE', label: 'Vue d\u2019ensemble IA Act' },
     'conformite-globale': { section: 'PILOTAGE', label: 'Indice de conformité global' },
     'adoption': { section: 'BUSINESS', label: 'Tableau de bord d’adoption' },
+    'ingenierie': { section: 'BUSINESS', label: 'Développement assisté par IA' },
     'cadre-normatif': { section: 'PILOTAGE', label: 'Cadre normatif' },
     'rgpd-hub': { section: 'RGPD & PRIVACY', label: 'Vue d\u2019ensemble' },
     'rgpd-conformite': { section: 'RGPD & PRIVACY', label: 'Conformité RGPD' },
@@ -8190,6 +8285,7 @@ function go(id, el, sec, pg) {
   if (id === 'empreinte' && typeof window.empInit === 'function') setTimeout(window.empInit, 60);
   if (id === 'gouvernance' && typeof window.gouvInit === 'function') setTimeout(window.gouvInit, 60);
   if (id === 'adoption' && typeof window.adpInit === 'function') setTimeout(window.adpInit, 60);
+  if (id === 'ingenierie' && typeof window.ingInit === 'function') setTimeout(window.ingInit, 60);
   /* L'ONGLET COURANT EST AUSSI ANNONCÉ, pas seulement peint : à un lecteur
      d'écran, la pastille terre cuite ne dit rien. */
   function _ici(i){ i.classList.add('on'); i.setAttribute('aria-current', 'page'); }
@@ -24605,6 +24701,211 @@ window.adpExport = function(){
 };
 
 window.adpInit = function(){ adpLoad(); cartoLoad(); adpRender(); };
+
+/* ══ DÉVELOPPEMENT ASSISTÉ PAR IA ═════════════════════════════════════════
+   TROIS TABLES ÉCRITES À LA MAIN, ET ELLES S'ANNONCENT COMME TELLES. Ce ne
+   sont pas des exigences normatives : ce sont les décisions que ce cabinet
+   estime devoir être prises, et les vérifications qu'il estime devoir être
+   faites. Chaque option porte sa CONSÉQUENCE plutôt qu'un jugement — c'est
+   la conséquence qu'on accepte en choisissant, et une politique dont on ne
+   voit pas le prix ne se décide pas, elle se coche. */
+window.ING_CLE = 'cp-sentinel-ingenierie-v1';
+
+window.ING_POLITIQUE = [
+  {id:'perimetre', q:'Sur quel code l’assistance est-elle permise ?',
+   opts:[
+     {v:'tout', l:'Partout, sans restriction',
+      c:'Le code de sûreté et de sécurité passe alors par le même chemin que le reste. C’est tenable si — et seulement si — la revue renforcée du point 2 s’y applique intégralement, ce qui suppose des relecteurs qui la connaissent.'},
+     {v:'sauf-critique', l:'Partout sauf le code de sécurité et de sûreté',
+      c:'Il faut alors que « code de sécurité » soit défini quelque part, fichier par fichier ou module par module. Une frontière que chacun interprète n’est pas une frontière : elle se déplace au premier délai serré.'},
+     {v:'outillage', l:'Seulement les tests, l’outillage et les scripts',
+      c:'La restriction la plus facile à tenir, et celle qui rapporte le moins. Attention au faux confort : un test généré qui ne teste rien laisse passer ce qu’il devait attraper, et personne ne le remarque tant que rien ne casse.'},
+     {v:'aucun', l:'Nulle part',
+      c:'Décision légitime, à condition d’être appliquée. Interdire sans moyen de le constater produit l’usage clandestin : le code généré entre quand même, et sans aucune des vérifications du point 2.'}]},
+  {id:'donnees', q:'Quelles données peuvent partir vers le service ?',
+   opts:[
+     {v:'rien', l:'Rien du dépôt — questions générales seulement',
+      c:'Le service ne voit jamais votre code. C’est le seul réglage où la question de la confidentialité ne se pose pas, et il réduit fortement l’aide obtenue.'},
+     {v:'code-sans-secrets', l:'Le code applicatif, sans secrets ni données de production',
+      c:'Le réglage courant, et celui qui demande le plus de discipline : un secret collé dans une invite est un secret divulgué, et la seule remédiation est de le renouveler. Prévoyez la procédure de renouvellement avant d’en avoir besoin, pas après.'},
+     {v:'tout', l:'Tout, y compris les données de production',
+      c:'À n’envisager que sous contrat écartant explicitement la réutilisation pour l’entraînement, avec une localisation des traitements connue. Si des données personnelles sont concernées, l’envoi est un transfert au sens du RGPD, avec tout ce que cela suppose.'}]},
+  {id:'marquage', q:'Le code généré est-il signalé comme tel ?',
+   opts:[
+     {v:'non', l:'Non',
+      c:'Dans six mois, plus personne ne saura quels fichiers ont été produits ainsi. Le jour où un défaut systématique est découvert dans une famille de générations, vous ne pourrez pas savoir où chercher.'},
+     {v:'commit', l:'Dans le message de commit',
+      c:'Traçable et peu coûteux. Le lien se perd au premier écrasement d’historique ou au premier portage de fichier, mais il tient dans l’usage ordinaire.'},
+     {v:'code', l:'Dans le code lui-même, et dans le commit',
+      c:'Le plus durable, le plus bruyant. À réserver aux zones où l’origine change ce qu’un relecteur doit faire — sans quoi le marquage devient un bruit qu’on cesse de lire.'}]},
+  {id:'responsable', q:'Qui répond du code généré une fois intégré ?',
+   opts:[
+     {v:'auteur', l:'Celui qui l’a produit',
+      c:'La règle la plus simple et la plus claire. Elle suppose que produire du code assisté prenne le même engagement que l’écrire — donc que le temps de relecture soit compté comme du temps de travail, et non gagné sur le gain annoncé.'},
+     {v:'relecteur', l:'Celui qui l’a relu et intégré',
+      c:'Déplace la charge sur la revue, qui devient le point de contrôle réel. À ne choisir que si les relecteurs ont le temps et le mandat de refuser.'},
+     {v:'personne', l:'Personne n’est nommé',
+      c:'Ce n’est pas une option, c’est l’état par défaut quand on ne décide pas. Devant un auditeur, un client ou un tribunal, « l’IA l’a écrit » n’a jamais constitué une réponse.'}]},
+  {id:'dependances', q:'Que fait-on d’une dépendance proposée par la machine ?',
+   opts:[
+     {v:'verif', l:'On vérifie qu’elle existe, qui la publie, et qu’elle est déjà utilisée ailleurs',
+      c:'La seule réponse sûre. Les modèles inventent des noms de paquets plausibles, et des attaquants publient ces noms inventés en attendant qu’on les installe — l’installation suffit à exécuter leur code.'},
+     {v:'lock', l:'On ne l’installe que si elle figure déjà au verrou de dépendances',
+      c:'Plus strict encore, au prix d’un frottement réel sur les projets neufs. Cohérent avec une chaîne de construction reproductible.'},
+     {v:'confiance', l:'On l’installe, on verra bien',
+      c:'C’est le vecteur d’attaque le plus direct ouvert par l’assistance au développement, et il ne demande à l’attaquant aucun accès à votre système d’information.'}]},
+  {id:'iaact', q:'Ce code entre-t-il dans un produit soumis à l’IA Act ou à une certification ?',
+   opts:[
+     {v:'non', l:'Non',
+      c:'Les cinq décisions ci-dessus restent des décisions d’ingénierie interne. Vérifiez tout de même que la réponse est encore vraie dans un an : un produit change de qualification en changeant d’usage, pas en changeant de code.'},
+     {v:'oui', l:'Oui',
+      c:'La documentation technique doit alors décrire le processus de développement, méthodes et outils compris (art. 11 et annexe IV). Une politique de développement assisté non écrite devient une pièce manquante du dossier, constatable lors de l’évaluation de conformité.'},
+     {v:'sais-pas', l:'Nous ne savons pas',
+      c:'C’est la réponse la plus fréquente, et elle se traite : passez le produit au Simulateur avant d’arbitrer les cinq autres points, car la réponse change ce qu’ils doivent contenir.'}]}
+];
+
+window.ING_REVUE = [
+  {t:'Les dépendances existent-elles, et sont-elles celles qu’on croit ?',
+   p:'Un modèle produit un nom de paquet plausible avec la même assurance qu’un nom réel. Des attaquants publient ces noms inventés en s’appuyant précisément sur cette régularité. Un relecteur humain ne vérifie jamais spontanément qu’un import existe : il suppose que l’auteur le savait.'},
+  {t:'Les cas d’erreur sont-ils traités, ou seulement le chemin nominal ?',
+   p:'Un modèle produit d’abord ce qui marche. Une personne qui écrit du code se heurte aux cas limites en chemin ; une génération les contourne sans jamais les rencontrer, et le code paraît complet.'},
+  {t:'Les tests testent-ils quelque chose, ou seulement que le code fait ce qu’il fait ?',
+   p:'Le piège propre au code généré : un test écrit d’après l’implémentation passe toujours, y compris quand l’implémentation est fausse. Le test doit venir de ce qui est ATTENDU, pas de ce qui a été produit.'},
+  {t:'Le code reproduit-il un extrait dont la licence s’imposerait ?',
+   p:'Un extrait mémorisé arrive sans son en-tête. Sur du code d’une trentaine de lignes qui ressemble à un projet connu, la question se pose — et elle se pose avant la publication, pas après.'},
+  {t:'Le code fait-il plus que ce qui a été demandé ?',
+   p:'Les générations ajoutent volontiers une fonctionnalité voisine, une option, un cache. Ce qui n’a pas été demandé n’a pas été spécifié, donc pas revu, donc pas testé — et se retrouve pourtant en production.'},
+  {t:'Les commentaires décrivent-ils le code, ou ce qu’il devrait faire ?',
+   p:'Un commentaire généré est aussi affirmatif quand il est faux. Un relecteur qui s’y fie lit deux fois la même erreur : dans l’intention et dans le code, sans jamais les confronter.'},
+  {t:'Quelqu’un peut-il dire POURQUOI chaque choix a été fait ?',
+   p:'C’est le seul point qui ne se rattrape pas plus tard. Du code dont personne ne connaît les raisons ne se maintient pas : à la première évolution, on le réécrit, et le gain annoncé est rendu avec les intérêts.'}
+];
+
+window.ING_SIGNATURE = [
+  {t:'La mise en production', p:'Une personne nommée, qui accepte l’indisponibilité si elle survient.'},
+  {t:'La qualification d’un système au sens de l’IA Act', p:'Elle engage l’organisation sur des obligations dont le coût se compte en mois.'},
+  {t:'L’analyse d’impact — FRIA, AIPD', p:'Le règlement et le RGPD demandent un auteur, pas une production.'},
+  {t:'La revue de sécurité d’un composant exposé', p:'Quelqu’un doit pouvoir dire ce qu’il a regardé, et ce qu’il n’a pas regardé.'},
+  {t:'L’acceptation d’une dépendance nouvelle', p:'C’est l’entrée d’un tiers dans votre chaîne de construction ; elle se décide, elle ne se subit pas.'},
+  {t:'Tout code qui décide d’un droit d’une personne', p:'Refus, tarif, score, orientation, sanction. La personne concernée a le droit de savoir qui en répond.'}
+];
+
+window.__ing = {choix:{}};
+window.ingLoad = function(){
+  try{ var r=JSON.parse(localStorage.getItem(window.ING_CLE)||'null');
+    if(r && r.choix) window.__ing=r; }catch(e){}
+};
+window.ingSave = function(){
+  try{ localStorage.setItem(window.ING_CLE, JSON.stringify(window.__ing)); }catch(e){}
+};
+window.ingSet = function(id, v){
+  window.__ing.choix[id]=v; ingSave(); ingRefresh();
+};
+window.ingReset = function(){
+  if(!confirm('Effacer les choix de politique enregistrés dans ce navigateur ?')) return;
+  window.__ing={choix:{}}; ingSave(); ingRender();
+};
+
+window.ingRender = function(){
+  var box=document.getElementById('ing-pol'); if(!box) return;
+  box.innerHTML = window.ING_POLITIQUE.map(function(d, i){
+    var choisi=window.__ing.choix[d.id];
+    var opts=d.opts.map(function(o){
+      var on=(choisi===o.v);
+      return '<label class="ing-o'+(on?' on':'')+'" data-o="'+d.id+'|'+o.v+'">'
+        + '<input type="radio" name="ing-'+d.id+'" value="'+o.v+'"'+(on?' checked':'')
+        + ' onchange="ingSet(\''+d.id+'\',\''+o.v+'\')">'
+        + '<span><span class="ing-o-l">'+o.l+'</span>'
+        + '<span class="ing-o-c"><b>Ce que cela implique.</b> '+o.c+'</span></span></label>';
+    }).join('');
+    return '<div class="ing-d"><div class="ing-d-q"><span class="ing-d-n">'+(i+1)+'</span>'+d.q+'</div>'
+      + '<div class="ing-opts">'+opts+'</div></div>';
+  }).join('');
+
+  document.getElementById('ing-revue').innerHTML = window.ING_REVUE.map(function(r, i){
+    return '<div class="ing-r"><div class="ing-r-t"><span class="ing-r-n">'+(i+1)+'</span>'+r.t+'</div>'
+      + '<p class="ing-r-p"><b>Pourquoi ce point n’existe pas sur du code écrit.</b> '+r.p+'</p></div>';
+  }).join('');
+
+  document.getElementById('ing-sign').innerHTML = window.ING_SIGNATURE.map(function(s){
+    return '<div class="ing-s"><strong>'+s.t+'</strong><span>'+s.p+'</span></div>';
+  }).join('');
+  ingRefresh();
+};
+
+/* Le repaint de sélection : les libellés des options se rallument sans que le
+   bloc soit reconstruit — un radio qu'on recrée sous le doigt perd le focus,
+   et la page saute. */
+window.ingRefresh = function(){
+  document.querySelectorAll('#ing-pol .ing-o[data-o]').forEach(function(el){
+    var pair=el.getAttribute('data-o').split('|');
+    el.classList.toggle('on', window.__ing.choix[pair[0]]===pair[1]);
+  });
+};
+
+window.ingExport = function(){
+  var today=new Date().toLocaleDateString('fr-FR');
+  function esc(t){ return String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  var pris=0;
+  var pol=window.ING_POLITIQUE.map(function(d,i){
+    var v=window.__ing.choix[d.id];
+    var o=d.opts.filter(function(x){ return x.v===v; })[0];
+    if(o) pris++;
+    /* UNE DÉCISION NON PRISE EST IMPRIMÉE COMME NON PRISE. L'omettre donnerait
+       un document où le point non tranché ressemble à un point tranché. */
+    return '<h3>'+(i+1)+'. '+esc(d.q)+'</h3>'
+      + (o ? '<p><b>Décision : '+esc(o.l)+'.</b></p><p>'+esc(o.c)+'</p>'
+           : '<p class="vide"><b>Non tranché.</b> Ce point reste ouvert ; tant qu’il l’est, '
+             + 'chacun décide pour lui-même et la politique ne dit rien de ce qui se fait.</p>');
+  }).join('');
+  var rev=window.ING_REVUE.map(function(r,i){
+    return '<h3>'+(i+1)+'. '+esc(r.t)+'</h3><p>'+esc(r.p)+'</p>';
+  }).join('');
+  var sig=window.ING_SIGNATURE.map(function(s){
+    return '<tr><th>'+esc(s.t)+'</th><td>'+esc(s.p)+'</td></tr>';
+  }).join('');
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Politique de développement assisté par IA</title>'
+    +'<style>@page{margin:1.8cm}body{font-family:Arial,sans-serif;color:#1C1C1C;max-width:900px;margin:0 auto;padding:18px}'
+    +'h1{font-size:19px;border-bottom:3px solid #B83222;padding-bottom:8px;margin-bottom:4px}'
+    +'h2{font-size:14px;margin-top:26px;border-bottom:1px solid #ddd;padding-bottom:4px}'
+    +'h3{font-size:12.5px;color:#B83222;margin:15px 0 3px}'
+    +'p{font-size:11px;line-height:1.6;margin:3px 0}'
+    +'p.vide{color:#B83222}'
+    +'.sub{color:#666;font-size:11px;margin-bottom:12px}'
+    +'.big{font-size:14px;font-weight:bold;margin:10px 0}'
+    +'.warn{border-left:4px solid #B83222;background:#fbf1ef;padding:9px 12px;font-size:11.5px;margin:12px 0;line-height:1.55}'
+    +'table{width:100%;border-collapse:collapse;font-size:11px;margin-top:6px}'
+    +'th{background:#f4f2f5;text-align:left;padding:6px 8px;border:1px solid #ddd;width:36%;vertical-align:top}'
+    +'td{padding:6px 8px;border:1px solid #ddd;vertical-align:top;line-height:1.5}'
+    +'.foot{margin-top:22px;padding-top:9px;border-top:1px solid #ddd;font-size:10px;color:#666;line-height:1.5}'
+    +'</style></head><body>'
+    +'<h1>Politique de développement assisté par IA</h1>'
+    +'<div class="sub">CONSEILPREV — Sentinel AI · Projet établi le '+today+'</div>'
+    +'<div class="warn"><strong>Ceci est un projet, pas une politique.</strong> '
+    +'Il le devient le jour où quelqu’un le signe et le date. Une politique qu’aucune personne '
+    +'nommée ne porte se lit comme une intention, et se plaide comme une intention.</div>'
+    +'<div class="big">'+pris+' décision(s) sur '+window.ING_POLITIQUE.length+' tranchée(s)</div>'
+    +'<h2>1 · Les décisions</h2>'+pol
+    +'<h2>2 · Ce qu’on vérifie sur du code généré, en plus de la revue ordinaire</h2>'
+    +'<p>La revue habituelle reste entière ; ces sept points s’y ajoutent, chacun parce qu’un modèle échoue autrement qu’une personne.</p>'+rev
+    +'<h2>3 · Ce qui exige une signature humaine</h2>'
+    +'<p>Non pas une relecture : une signature — quelqu’un de nommé, qu’on pourra interroger dans deux ans.</p>'
+    +'<table>'+sig+'</table>'
+    +'<h2>4 · Ce que CONSEILPREV ne fait pas</h2>'
+    +'<p><b>Le recrutement technique.</b> Nous ne sourçons pas de développeurs, n’évaluons pas '
+    +'un niveau technique et ne conduisons pas d’entretien d’embauche : ni le vivier, ni la méthode '
+    +'d’évaluation, ni la responsabilité juridique correspondante. Ce que nous faisons à la place, '
+    +'quand la question se pose : écrire avec vous ce que le poste doit produire — périmètre, '
+    +'décisions portées, ce qu’il devra pouvoir démontrer — et vous confier à un cabinet spécialisé, '
+    +'que nous pouvons aider à briefer.</p>'
+    +'<div class="foot">Projet de politique de développement assisté — établi depuis Sentinel AI. '
+    +'Les six décisions sont celles de votre organisation ; les conséquences écrites sont l’avis de '
+    +'ce cabinet, et se discutent. Généré par Sentinel AI.</div></body></html>';
+  var w=window.open('','_blank'); if(!w){ alert('Autorisez les pop-ups pour exporter.'); return; }
+  w.document.write(html+'<scr'+'ipt>window.onload=function(){window.print();}<'+'/scr'+'ipt>'); w.document.close();
+};
+
+window.ingInit = function(){ ingLoad(); ingRender(); };
 
 window.cartoRenderRoi = function(){
   var box=document.getElementById('carto-roi'); if(!box) return;
