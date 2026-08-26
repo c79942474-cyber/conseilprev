@@ -1,9 +1,37 @@
+# DÉPLOIEMENT SUR RENDER.
+#
+# LA RÉGION N'ÉTAIT PAS DÉCLARÉE, ET ELLE NE L'EST JAMAIS PAR DÉFAUT. Render
+# place alors le service en Oregon (côte ouest des États-Unis). Les visiteurs
+# de ce cabinet sont européens : chaque aller-retour vers le serveur leur coûte
+# environ 150 ms de plus qu'un service en Europe, et une page en demande
+# plusieurs avant d'afficher quoi que ce soit. C'est l'écart qui se ressent
+# entre i-aes.eu (ce service) et i-aes.com (conseilprevcyber, déclaré à
+# Francfort depuis toujours), à contenu comparable.
+#
+# CE QUE CETTE LIGNE FAIT, ET CE QU'ELLE NE FAIT PAS. Render fixe la région à
+# la CRÉATION du service ; elle ne déplace pas un service existant. Déclarée
+# ici, elle vaut pour la prochaine recréation — et, en attendant, elle dit noir
+# sur blanc où ce service DEVRAIT être, au lieu de laisser un défaut implicite
+# décider à sa place. Pour la rendre effective tout de suite, il faut recréer
+# le Web Service à Francfort et rebasculer le domaine ; le déplacement ne peut
+# pas se faire depuis ce fichier.
 services:
   - type: web
     name: conseilprev
+    region: frankfurt
     env: python
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app --worker-class gthread --threads 8 --timeout 90 --keep-alive 5
+
+    # LA SONDE DE VIE, ET POURQUOI CE N'EST PAS `/api/health`. `/api/health`
+    # est un diagnostic d'exploitant : 3,6 Ko de HTML, qui va vérifier la
+    # configuration SMTP et les clés d'API. Interrogé toutes les quelques
+    # secondes, il coûte pour rien — et surtout il ferait déclarer le service
+    # en panne pour une clé absente, alors qu'il sert parfaitement les pages.
+    # `/health` ne répond qu'à la seule question qui vaut ici : ce processus
+    # peut-il encore servir une requête.
+    healthCheckPath: /health
+
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
@@ -12,6 +40,19 @@ services:
           name: conseilprev-registre-db
           property: connectionString
 
+# LA BASE N'EST PAS DÉPLACÉE ICI, ET C'EST DÉLIBÉRÉ. Le réseau privé de Render
+# ne franchit pas les régions : un service à Francfort ne peut pas joindre par
+# `connectionString` interne une base restée en Oregon. Avant toute recréation
+# du Web Service à Francfort, il faut donc VÉRIFIER dans le tableau de bord où
+# se trouve réellement `conseilprev-registre-db` — ce fichier ne le dit pas, et
+# l'écrire ici sans l'avoir constaté serait une supposition présentée comme un
+# fait. Si elle est ailleurs, elle se recrée à Francfort et se restaure AVANT
+# la bascule.
+#
+# La région n'est pas ajoutée à ce bloc pour la même raison qu'elle ne déplace
+# pas le service : Render la fixe à la création. L'ajouter à une base en
+# service ne la déplacerait pas et ferait seulement échouer la synchronisation
+# du blueprint sur une propriété immuable.
 databases:
   - name: conseilprev-registre-db
     plan: free

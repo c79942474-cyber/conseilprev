@@ -9591,8 +9591,6 @@ def rag_document_status(doc_id):
     return jsonify({'statut': d['statut_indexation'], 'chunks_indexes': d['chunks_indexes'] or 0, 'nb_chunks': d['nb_chunks']})
 
 @app.route('/api/rag/download/<int:doc_id>', methods=['GET'])
-
-@app.route('/api/rag/download/<int:doc_id>', methods=['GET'])
 @rate_limit(limit=30, window=60)
 @rag_require_access
 def rag_download(doc_id):
@@ -10791,9 +10789,28 @@ def hero_bg():
 def favicon():
     return '', 204
 
-@app.route('/api/health')
+@app.route('/health')
 def health():
-    return jsonify({"status": "ok", "version": "8.0", "security": "enabled"})
+    """LA SONDE DE VIE — celle que Render interroge, et rien de plus.
+
+    ELLE ÉTAIT INJOIGNABLE. Cette fonction était déclarée sur `/api/health`,
+    adresse déjà prise quelques milliers de lignes plus haut par
+    `health_check`, le diagnostic complet. Flask accepte deux règles pour la
+    même URL quand leurs points d'entrée diffèrent, et sert la PREMIÈRE
+    enregistrée : ce code n'a donc jamais répondu. Aucune erreur ne le disait.
+
+    ET LES DEUX NE FONT PAS LE MÊME MÉTIER. `/api/health` rend 3,6 Ko de HTML
+    et va sonder la configuration SMTP et les clés d'API : c'est un diagnostic
+    d'exploitant, utile quand on le demande. Une sonde de vie est interrogée
+    toutes les quelques secondes et ne doit répondre qu'à une question — ce
+    processus peut-il encore servir une requête. Y brancher le diagnostic
+    ferait déclarer le service en panne pour une clé SMTP absente, alors qu'il
+    sert parfaitement les pages.
+
+    AUCUN NUMÉRO DE VERSION ICI. L'ancien corps annonçait « 8.0 », écrit à la
+    main : une déclaration qui ne peut que vieillir, et qui aurait menti sans
+    que rien ne la contredise."""
+    return jsonify({"status": "ok"})
 
 # ── 404 et 429 personnalisés ──
 @app.errorhandler(404)
