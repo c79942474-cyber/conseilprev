@@ -13,6 +13,7 @@ requête taperait sur les serveurs des éditeurs à chaque visiteur.
 
 DÉMARRAGE LOCAL :  python app.py
 """
+import gzip
 import os
 import re
 import threading
@@ -255,6 +256,97 @@ def _entetes(r):
     if proto == "https":
         r.headers.setdefault("Strict-Transport-Security",
                              "max-age=31536000; includeSubDomains")
+    return r
+
+
+# ── COMPRESSION ───────────────────────────────────────────────────────────
+# CE QUI PARTAIT EN CLAIR, ET CE QUE ÇA COÛTAIT. Ni Flask ni Render ne
+# compressent quoi que ce soit par défaut. Ce site sert 354 Ko de feuilles de
+# style et de scripts — `veille.css` fait 91 Ko à lui seul, `langue.js` 73 Ko —
+# et les envoyait tels quels à chaque première visite. Du texte, qui se réduit
+# des trois quarts pour quelques millisecondes.
+#
+# CE QU'ON NE COMPRESSE PAS. Les polices `.woff2` sont DÉJÀ compressées :
+# les repasser au gzip coûte du processeur et rend des octets en plus. Le
+# filtre par type de contenu s'en charge, et un contrôle le vérifie.
+#
+# LE PIÈGE, DÉCOUVERT SUR L'AUTRE SITE. Une réponse de `send_from_directory`
+# a pour corps un FileWrapper, objet sans longueur, que Werkzeug déclare
+# `is_streamed`. Écarter tout ce qui est `is_streamed` reviendrait à écarter
+# EXACTEMENT les fichiers à comprimer — sans que rien ne le signale. On
+# distingue donc un fichier sur disque (borné, lisible) d'un vrai flux.
+#
+# L'ÉTIQUETTE ETAG N'EST PAS TOUCHÉE : Flask évalue If-None-Match avant ce
+# point, et une revisite reçoit son 304 sans corps. `Vary: Accept-Encoding`
+# dit aux caches intermédiaires de distinguer les deux représentations.
+_GZIP_MIN = 1400        # en dessous d'un paquet réseau, comprimer ne gagne rien
+_GZIP_MAX = 8_388_608   # au-delà, on ne met pas la réponse entière en mémoire
+_GZIP_CACHE = {}
+_GZIP_CACHE_MAX = 64
+
+
+def _gz_memo(cle, data):
+    """Comprime `data`, en gardant le résultat si `cle` identifie une version
+    stable d'un fichier. `cle` vaut None pour une réponse calculée à la volée —
+    le corpus change à chaque collecte — et on comprime alors sans rien garder.
+
+    Un fichier stable mérite le niveau 9 : il n'est payé qu'une fois."""
+    if cle is None:
+        return gzip.compress(data, 5)
+    fait = _GZIP_CACHE.get(cle)
+    if fait is not None:
+        return fait
+    gz = gzip.compress(data, 9)
+    if len(_GZIP_CACHE) >= _GZIP_CACHE_MAX:
+        _GZIP_CACHE.clear()
+    _GZIP_CACHE[cle] = gz
+    return gz
+
+
+@app.after_request
+def _comprimer(r):
+    try:
+        if r.status_code != 200 or r.headers.get("Content-Encoding"):
+            return r
+        fichier = r.direct_passthrough
+        if r.is_streamed and not fichier:
+            return r  # vrai flux : ne pas le rassembler en mémoire
+        mt = r.mimetype or ""
+        if not (mt.endswith("json") or mt.endswith("xml")
+                or mt == "application/javascript"
+                or (mt.startswith("text/") and mt != "text/event-stream")):
+            return r
+        if "gzip" not in (request.headers.get("Accept-Encoding") or "").lower():
+            return r
+        try:
+            annonce = int(r.headers.get("Content-Length") or 0)
+        except ValueError:
+            annonce = 0
+        if annonce > _GZIP_MAX:
+            return r
+        # Sortir du mode passe-plat : sans cela Werkzeug refuse de lire le
+        # corps. `get_data` transforme le FileWrapper en séquence et enregistre
+        # sa fermeture — le descripteur de fichier n'est pas perdu.
+        r.direct_passthrough = False
+        data = r.get_data()
+        if len(data) < _GZIP_MIN or len(data) > _GZIP_MAX:
+            return r
+        modifie = r.headers.get("Last-Modified")
+        cle = (request.path, modifie, len(data)) if (fichier and modifie) else None
+        gz = _gz_memo(cle, data)
+        if len(gz) >= len(data):
+            return r
+        # `set_data` remet Content-Length sur la longueur du corps compressé.
+        # Ne pas contourner cet appel : une assignation directe de `r.response`
+        # laisserait la longueur d'origine, et le lecteur attendrait
+        # indéfiniment des octets qui ne viennent pas.
+        r.set_data(gz)
+        r.headers["Content-Encoding"] = "gzip"
+        r.vary.add("Accept-Encoding")
+    except Exception:  # noqa: BLE001
+        # Une compression qui échoue ne doit jamais priver le lecteur de la
+        # réponse : on sert en clair.
+        return r
     return r
 
 

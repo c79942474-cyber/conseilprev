@@ -80,7 +80,7 @@ Depuis votre poste, aucune session nécessaire :
       https://github.com/c79942474-cyber/conseilprevinfo
     git push -u origin master
 
-`HISTORIQUE.bundle` porte **l'historique git complet — vingt-neuf commits**,
+`HISTORIQUE.bundle` porte **l'historique git complet — 31 commits**,
 messages compris. Il ne s'agit donc pas de repartir d'une copie à plat : le
 détail des corrections, des mesures et des défauts constatés vit dans ces
 messages, et c'est souvent là qu'est l'information.
@@ -96,9 +96,18 @@ Et ce dossier peut alors quitter `conseilprev` :
 
 ## Ce que le site sert aujourd'hui
 
-**98 fiches**, 7 collecteurs, **6 sources lues sur 10** au registre — les
-quatre autres portent chacune le motif écrit de leur sommeil, parce qu'un
-registre qui annonce ce qu'il ne lit pas se vide de son sens.
+**8 collecteurs, 25 sources au registre dont 10 réellement sondées** — les
+autres portent chacune le motif écrit de leur sommeil, parce qu'un registre
+qui annonce ce qu'il ne lit pas se vide de son sens. Huit sources de plus
+attendent au
+tableau `A_BRANCHER`, qui dit ce qui manque pour les brancher.
+
+Le nombre de fiches n'est pas écrit ici, et c'est voulu : le corpus est
+collecté à chaque expiration du cache, pas figé dans un fichier. Un chiffre
+recopié dans ce document serait faux le lendemain — ce qui est exactement ce
+qui était arrivé à celui qui s'y trouvait. `/api/sante` le donne à l'instant
+où on le demande. Pour les chiffres du registre :
+`python -c "import sources as S; print(len(S.SOURCES), len(S.A_BRANCHER))"`.
 
 Une **manchette** porte la date de l'édition — qui est celle de la collecte —,
 le nombre de fiches et celui des ruptures. Le bandeau, lui, ne reste que pour
@@ -331,8 +340,15 @@ contrôles trop faibles, qui ont été resserrés. Un contrôle écrit trop STRI
 aussi été corrigé plutôt que contourné : il supprimait la distinction qu'il
 était censé protéger.
 
-### Les trente commits du bundle
+### Les 31 commits du bundle
 
+Liste régénérée depuis le dépôt, jamais recopiée à la main — elle
+avait pris deux commits de retard, et le compte annoncé plus haut ne
+disait pas la même chose que ce titre. Pour la refaire :
+`git -C conseilprevinfo log --format="%h  %s"`.
+
+    701205f  354 Ko de scripts et de styles partaient en clair à chaque
+             première visite
     db4575a  Les quinze flux de conseilprev entrent au registre — et un
              article n'y est pas un fait
     25458c4  Le bandeau de titre était converti à moitié
@@ -346,26 +362,30 @@ aussi été corrigé plutôt que contourné : il supprimait la distinction qu'il
     fd06ed7  Un filtre par entreprise nommée, et deux provenances de pays
              qui ne se confondent pas
     ad5d9aa  Rendre visible ce qui est lu, et taire ce qui n'est pas su
-    074c9e9  La barre latérale devient un meuble : blanc cassé le jour,
-             ardoise glacée la nuit
-    0541ce3  Chaque source relue à SA cadence, et le registre dit ce qu'il
+    074c9e9  La barre laterale devient un meuble : blanc casse le jour,
+             ardoise glacee la nuit
+    0541ce3  Chaque source relue a SA cadence, et le registre dit ce qu'il
              ne lit pas
-    f12c4e6  Les analyses existent en anglais, et le lecteur choisit — ou pas
-    3642a69  Le papier passe au couché brillant, et le menu prend les
-             caractères du journal
-    65be8bd  Une manchette, des intertitres de portée, et la fiche composée
+    f12c4e6  Les analyses existent en anglais, et le lecteur choisit — ou
+             pas
+    3642a69  Le papier passe au couche brillant, et le menu prend les
+             caracteres du journal
+    65be8bd  Une manchette, des intertitres de portee, et la fiche composee
              comme un article
-    8e817a1  Quatre flèches dont aucune ne fait silencieusement rien
+    8e817a1  Quatre fleches dont aucune ne fait silencieusement rien
     a179c5f  La barre se replie partout, et ce que ce site garde de vous
     93de6bc  Ce que vous avez lu, ce que vous emportez, ce que vous rangez
-    e44b55f  Une première page qui montre le tri, et une barre d'outils qui
-             cesse d'en être un obstacle
-    ee260cd  Les menus décrivaient le corpus, pas les fiches trouvées
-    4544401  Barre latérale, et une bascule FR/EN qui dit ce qu'elle ne traduit pas
+    e44b55f  Une premiere page qui montre le tri, et une barre d'outils qui
+             cesse d'en etre un obstacle
+    ee260cd  Les menus decrivaient le corpus, pas les fiches trouvees
+    4544401  Barre laterale, et une bascule FR/EN qui dit ce qu'elle ne
+             traduit pas
     f5aee5e  Déploiement : les deux chemins, et pourquoi pas Blueprint
+             depuis conseilprev
     0c1f527  OWASP, et quatre défauts que le pont a fait sortir
     64aabd7  Trois contrôles de la confrontation ne gardaient rien
-    000b815  Confronter un document au corpus — et dire quand ça ne marche pas
+    000b815  Confronter un document au corpus — et dire quand ça ne marche
+             pas
     182da88  Le registre annonçait neuf sources, le corpus en lisait quatre
     89f52b3  Abonnement, réglages, et un bulletin qui sait se taire
     cd99020  Des pistes d'instruction dérivées du corpus, jamais d'un pari
