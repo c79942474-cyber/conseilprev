@@ -5268,6 +5268,11 @@ REGISTRE_SQLITE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 
 # lit leverait un NameError en pleine requete, loin d'ici.
 REGISTRE_CONNECT_TIMEOUT = int(os.environ.get('REGISTRE_CONNECT_TIMEOUT', '5'))
 
+# Combien de secondes une ecriture SQLite attend qu'un autre processus lache
+# le verrou avant d'abandonner. Sans ce reglage, Python s'arrete a cinq
+# secondes et rend « database is locked » — visible en 500 cote visiteur.
+REGISTRE_SQLITE_ATTENTE = int(os.environ.get('REGISTRE_SQLITE_ATTENTE', '15'))
+
 if REGISTRE_USE_PG:
     import psycopg
     import psycopg.rows
@@ -5441,7 +5446,34 @@ def registre_get_db():
             psycopg.connect(DATABASE_URL, row_factory=psycopg.rows.dict_row,
                             connect_timeout=REGISTRE_CONNECT_TIMEOUT)))
     else:
-        conn = sqlite3.connect(REGISTRE_SQLITE_PATH)
+        # LE REPLI SQLITE DOIT SURVIVRE A PLUSIEURS PROCESSUS. Tant que le
+        # service tournait avec UN worker, un seul processus ouvrait ce
+        # fichier. Il en tourne deux depuis que le timeout de worker a ete
+        # corrige — et deux processus de huit fils, c'est jusqu'a seize
+        # ecrivains sur un fichier qui n'en admet qu'un a la fois. Sans
+        # reglage, la seconde ecriture leve « database is locked » au bout du
+        # delai par defaut, et l'utilisateur voit une erreur 500.
+        #
+        # DEUX REGLAGES, ET UN SEUL EST A POSER ICI.
+        #
+        # L'ATTENTE DU VERROU passe par `timeout=` de `sqlite3.connect` : ce
+        # parametre EST le `busy_timeout`, en secondes. Une premiere version
+        # reposait en plus un « PRAGMA busy_timeout » — la mutation qui le
+        # retirait a survecu, parce qu'elle ne retirait rien. La ligne inutile
+        # est partie.
+        #
+        # LE MODE DE JOURNAL, lui, doit bien etre pose. `WAL` laisse les
+        # lectures se poursuivre pendant une ecriture, ce qu'il faut des qu'il
+        # y a plusieurs processus. Il est inscrit DANS LE FICHIER, donc une
+        # base deja en WAL le reste : sur un poste de developpement la ligne
+        # semble sans effet. Elle ne l'est pas la ou ca compte — chaque
+        # deploiement recree un fichier NEUF, en mode « delete », et c'est
+        # cette ligne qui le bascule.
+        conn = sqlite3.connect(REGISTRE_SQLITE_PATH, timeout=REGISTRE_SQLITE_ATTENTE)
+        try:
+            conn.execute('PRAGMA journal_mode=WAL')
+        except Exception as _pe:                                   # noqa: BLE001
+            logger.warning('REGISTRE_IA — mode WAL refuse par SQLite : %s', _pe)
         conn.row_factory = sqlite3.Row
         return _suivre_connexion(_ConnSuivie(conn))
 
@@ -8357,7 +8389,44 @@ def registre_init_db():
 
 try:
     registre_init_db()
-    logger.info(f"REGISTRE_IA — moteur actif : {'PostgreSQL (externe)' if REGISTRE_USE_PG else 'SQLite (local, fallback dev)'}")
+    if REGISTRE_USE_PG:
+        logger.info('REGISTRE_IA — moteur actif : PostgreSQL (externe)')
+    else:
+        # CE REPLI S'ANNONCAIT EN « INFO », AVEC LE MOT « DEV ».
+        #
+        # En developpement c'est exact : une base de travail dans le dossier
+        # du projet, et tant mieux. En ligne, la meme ligne signifie tout
+        # autre chose — le fichier est ecrit DANS le dossier de
+        # l'application, qui est reconstruit depuis git a chaque
+        # deploiement, et `registre_ia.db` n'est pas suivi par git. Les
+        # trente-trois tables repartent donc vides a chaque mise en ligne :
+        # comptes, contrats, factures, evenements de paiement (dont depend
+        # l'idempotence des notifications Stripe), preuves de consentement et
+        # registre RGPD compris.
+        #
+        # UNE LIGNE « INFO » NE SE VOIT PAS dans un journal de demarrage qui
+        # en compte vingt. Celle-ci se declare en ERREUR et dit ce qu'elle
+        # coute, parce que c'est la seule facon qu'elle soit lue. Le message
+        # nomme aussi le remede : DATABASE_URL.
+        # LE NOMBRE DE TABLES EST COMPTE, PAS ECRIT. Un chiffre recopie ici
+        # serait faux a la premiere table ajoutee, et personne ne reviendrait
+        # le corriger.
+        try:
+            _c = sqlite3.connect(REGISTRE_SQLITE_PATH)
+            _n = _c.execute("SELECT COUNT(*) FROM sqlite_master "
+                            "WHERE type='table' AND name NOT LIKE 'sqlite_%'"
+                            ).fetchone()[0]
+            _c.close()
+        except Exception:                                          # noqa: BLE001
+            _n = -1
+        logger.error(
+            'REGISTRE_IA — AUCUNE base externe : repli sur SQLite dans %s. '
+            'Ce fichier n\'est pas conserve entre deux deploiements — ses %s '
+            'tables (comptes, contrats, factures, evenements Stripe, preuves '
+            'de consentement, registre RGPD) repartiront VIDES a la prochaine '
+            'mise en ligne. Definissez DATABASE_URL pour retablir la '
+            'persistance. En developpement local, ce repli est normal.',
+            REGISTRE_SQLITE_PATH, _n if _n >= 0 else 'nombreuses')
 except Exception as _e:
     logger.error(f"REGISTRE_IA — erreur init DB : {_e}")
 
