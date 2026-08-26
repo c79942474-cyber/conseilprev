@@ -170,7 +170,24 @@ ok("le contrôle est revenu à l'état initial", not D.sante()["problemes"])
 
 print("\n══ 6. La fraîcheur annoncée à l'écran suit le référentiel ══\n")
 
-sent = io.open(DEPOT + "/sentinel.html", encoding="utf-8").read()
+def _page(nom):
+    """Le HTML d'une page ET le JavaScript qu'elle exécute.
+
+    Le JavaScript en ligne a été sorti des pages vers des fichiers `.page.js`
+    servis à côté : ce qui s'exécutait DANS `sentinel.html` s'exécute
+    désormais dans `sentinel.page.js`. Ces contrôles cherchent des marqueurs
+    dans « ce que la page fait » — ils doivent donc lire les deux fichiers.
+    Ne lire que le HTML déclarerait absent un code simplement déplacé, et
+    c'est ce qui s'est produit : trois recettes vertes sont tombées le jour de
+    l'extraction, sans qu'aucune page ait cessé de fonctionner."""
+    s = io.open(os.path.join(DEPOT, nom), encoding="utf-8").read()
+    js = os.path.join(DEPOT, nom.replace(".html", ".page.js"))
+    if os.path.exists(js):
+        s += "\n" + io.open(js, encoding="utf-8").read()
+    return s
+
+
+sent = _page("sentinel.html")
 mil = [l for l in sent.splitlines() if l.startswith("var DC_MILLESIME")]
 ok("le millésime est déclaré UNE fois dans l'interface", len(mil) == 1, mil)
 ok("…et il vaut celui du module", ('"%s"' % D.VERSION) in (mil[0] if mil else ""),

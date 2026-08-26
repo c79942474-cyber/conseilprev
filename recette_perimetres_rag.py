@@ -25,7 +25,9 @@ CE QU'ON PROTÈGE.
    priorité tant qu'on ne cherche pas hors périmètre.
 """
 import copy
+import gzip
 import io
+import json
 import os
 import subprocess
 import sys
@@ -140,19 +142,35 @@ APP.app.config["TESTING"] = True
 NAV = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
                      "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
        "Accept-Language": "fr-FR,fr;q=0.9", "Accept-Encoding": "gzip, deflate"}
+
+
+def _json(r):
+    """Ce que fait un navigateur, et que le client de test ne fait pas.
+
+    Ces contrôles envoient de VRAIS en-têtes de navigateur, `Accept-Encoding`
+    compris. L'application compresse aussi ses réponses JSON : le corps arrive
+    gzippé, et un navigateur — comme `fetch` ou `requests` — le décompresse
+    tout seul. Le client de test de Werkzeug est le seul à ne pas le faire.
+    Retirer `Accept-Encoding` des en-têtes ferait passer le contrôle en
+    cessant de ressembler à un navigateur : c'est l'inverse de ce qu'on veut."""
+    if r.headers.get("Content-Encoding") == "gzip":
+        return json.loads(gzip.decompress(r.data).decode("utf-8"))
+    return r.get_json()
+
+
 with APP.app.test_client() as c:
     with c.session_transaction() as s:
         s["is_conseilprev"] = True
     rp = c.get("/api/rag/perimetres", headers=NAV)
-    jp = rp.get_json() or {}
+    jp = _json(rp) or {}
     r1 = c.post("/api/rag/search", headers=NAV,
                 json={"query": "protection incendie brouillard d'eau", "perimetre": "fire"})
-    j1 = r1.get_json() or {}
+    j1 = _json(r1) or {}
     r2 = c.post("/api/rag/search", headers=NAV,
                 json={"query": "incendie", "perimetre": "perimetre-invente"})
-    j2 = r2.get_json() or {}
+    j2 = _json(r2) or {}
     r3 = c.post("/api/rag/search", headers=NAV, json={"query": "incendie"})
-    j3 = r3.get_json() or {}
+    j3 = _json(r3) or {}
 ok("les périmètres sont servis par l'API", rp.status_code == 200
    and len(jp.get("perimetres") or []) == 6, rp.status_code)
 ok("…par le module qui détient la taxonomie, pas par une copie",
@@ -207,7 +225,24 @@ ok("…et la reconnaissance des entreprises aussi", R.est_entreprise("EDF"))
 ok("la normalisation partagée est définie AVANT ses usages",
    io.open(DEPOT + "/rag_import.py", encoding="utf-8").read().find("def _sans_accents(")
    < io.open(DEPOT + "/rag_import.py", encoding="utf-8").read().find("def dans_perimetre("))
-sent = io.open(DEPOT + "/sentinel.html", encoding="utf-8").read()
+def _page(nom):
+    """Le HTML d'une page ET le JavaScript qu'elle exécute.
+
+    Le JavaScript en ligne a été sorti des pages vers des fichiers `.page.js`
+    servis à côté : ce qui s'exécutait DANS `sentinel.html` s'exécute
+    désormais dans `sentinel.page.js`. Ces contrôles cherchent des marqueurs
+    dans « ce que la page fait » — ils doivent donc lire les deux fichiers.
+    Ne lire que le HTML déclarerait absent un code simplement déplacé, et
+    c'est ce qui s'est produit : trois recettes vertes sont tombées le jour de
+    l'extraction, sans qu'aucune page ait cessé de fonctionner."""
+    s = io.open(os.path.join(DEPOT, nom), encoding="utf-8").read()
+    js = os.path.join(DEPOT, nom.replace(".html", ".page.js"))
+    if os.path.exists(js):
+        s += "\n" + io.open(js, encoding="utf-8").read()
+    return s
+
+
+sent = _page("sentinel.html")
 ok("l'interface charge les périmètres depuis le serveur",
    "/api/rag/perimetres" in sent)
 ok("…une seule fois, et les garde", "window.__ragPerimetres" in sent)

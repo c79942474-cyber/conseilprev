@@ -349,6 +349,116 @@ def add_security_headers(response):
         response.headers['Pragma']                 = 'no-cache'
     return response
 
+
+# ══════════════════════════════════════════════════════════
+# COMPRESSION DES RÉPONSES TEXTE — y compris les fichiers statiques
+# ══════════════════════════════════════════════════════════
+# CE QUI MANQUAIT, ET CE QUE ÇA COÛTAIT. `_serve_page_fast` compresse les
+# pages HTML, une fois pour toutes, en memoire. Rien ne compressait le RESTE :
+# ni les fichiers .js et .css servis par Flask, ni les reponses JSON des API.
+# Flask et Render n'appliquent aucune compression par defaut — c'est ecrit
+# quelques centaines de lignes plus bas, a propos des pages, et c'etait vrai
+# aussi pour tout le reste.
+#
+# LE DEFAUT S'EST REVELE EN SORTANT LE JAVASCRIPT DES PAGES. Cent
+# soixante-onze kilo-octets deplaces d'une reponse gzippee (-78 %) vers un
+# fichier .js qui, lui, partait en clair : l'extraction gagnait sur les
+# visites de retour et PERDAIT sur la premiere. Comprimer les fichiers
+# statiques remet les deux gains du meme cote.
+#
+# L'ETAG N'EST PAS TOUCHE, ET C'EST VOULU. Flask evalue If-None-Match AVANT
+# ce point : une revisite recoit donc son 304 sans corps, et ce crochet passe
+# son chemin (il ne traite que les 200). Ajouter un suffixe a l'etiquette
+# casserait justement ce 304. `Vary: Accept-Encoding` dit aux caches
+# intermediaires de distinguer les deux representations.
+#
+# LE PIEGE QUI A COUTE UNE PREMIERE VERSION MUETTE. Une reponse de
+# `send_from_directory` a pour corps un FileWrapper, objet sans longueur :
+# Werkzeug la declare donc `is_streamed`. Une premiere version rejetait tout
+# ce qui etait `is_streamed` — c'est-a-dire EXACTEMENT les fichiers statiques
+# qu'il s'agissait de comprimer. Le crochet ne servait a rien et ne le disait
+# pas. Il faut distinguer deux choses que `is_streamed` confond :
+#   - `direct_passthrough` VRAI : un fichier sur disque, borne, lisible ;
+#   - `is_streamed` sans passe-plat : un vrai flux (generateur), qu'on ne
+#     bufferise pas — le lire jusqu'au bout annulerait sa raison d'etre.
+_GZIP_MIN = 1400        # en dessous d'un paquet reseau, comprimer ne gagne rien
+_GZIP_MAX = 8_388_608   # au-dela, on ne met pas la reponse entiere en memoire
+
+# CE QU'ON NE RECALCULE PAS. Comprimer sentinel.page.js (1,4 Mo) coute 36 ms a
+# chaque requete au niveau 5 — pour un fichier qui ne change qu'au deploiement.
+# Compresse une fois et garde, le niveau 9 devient gratuit : il rend 5 Ko de
+# plus que le niveau 5 sur ce fichier. La signature est prise sur la reponse
+# elle-meme (Last-Modified + longueur, poses par send_file), pas sur une
+# relecture du disque : un fichier remplace change de signature et se
+# recomprime tout seul.
+_GZIP_CACHE = {}
+_GZIP_CACHE_MAX = 96
+
+
+def _gz_memo(cle, data):
+    """Compresse `data`, en gardant le resultat si `cle` identifie une version
+    stable du fichier. `cle` vaut None pour une reponse calculee a la volee :
+    on comprime alors sans rien garder."""
+    if cle is None:
+        return gzip.compress(data, 5)
+    ent = _GZIP_CACHE.get(cle)
+    if ent is not None:
+        return ent
+    gz = gzip.compress(data, 9)
+    if len(_GZIP_CACHE) >= _GZIP_CACHE_MAX:
+        _GZIP_CACHE.clear()
+    _GZIP_CACHE[cle] = gz
+    return gz
+
+
+@app.after_request
+def compresser_texte(response):
+    try:
+        if (response.status_code != 200
+                or response.headers.get('Content-Encoding')):
+            return response
+        fichier = response.direct_passthrough
+        if response.is_streamed and not fichier:
+            return response  # vrai flux : ne pas le rassembler en memoire
+        mt = response.mimetype or ''
+        if not (mt.endswith('json') or mt.endswith('xml')
+                or mt == 'application/javascript'
+                or (mt.startswith('text/') and mt != 'text/event-stream')):
+            return response
+        if 'gzip' not in (request.headers.get('Accept-Encoding') or '').lower():
+            return response
+        try:
+            annonce = int(response.headers.get('Content-Length') or 0)
+        except ValueError:
+            annonce = 0
+        if annonce > _GZIP_MAX:
+            return response
+        # Sortir du mode passe-plat : sans cela Werkzeug refuse de lire le
+        # corps. `get_data` transforme le FileWrapper en sequence et enregistre
+        # sa fermeture — le descripteur de fichier n'est pas perdu.
+        response.direct_passthrough = False
+        data = response.get_data()
+        if len(data) < _GZIP_MIN or len(data) > _GZIP_MAX:
+            return response
+        modifie = response.headers.get('Last-Modified')
+        cle = (request.path, modifie, len(data)) if (fichier and modifie) else None
+        gz = _gz_memo(cle, data)
+        if len(gz) >= len(data):
+            return response
+        # `set_data` remet Content-Length sur la longueur du corps compresse.
+        # Ne pas contourner cet appel : une assignation directe de
+        # `response.response` laisserait la longueur d'origine, et le client
+        # attendrait indefiniment des octets qui ne viennent pas.
+        response.set_data(gz)
+        response.headers['Content-Encoding'] = 'gzip'
+        response.vary.add('Accept-Encoding')
+    except Exception as e:  # noqa: BLE001
+        # Une compression qui echoue ne doit jamais priver le visiteur de la
+        # reponse : on sert en clair et on le journalise.
+        logger.warning(f'GZIP_ECHEC {request.path}: {e}')
+    return response
+
+
 # ══════════════════════════════════════════════════════════
 # 6. MIDDLEWARE GLOBAL DE SÉCURITÉ
 # ══════════════════════════════════════════════════════════

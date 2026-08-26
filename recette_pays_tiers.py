@@ -27,6 +27,7 @@ CE QU'ON PROTÈGE.
    que le jour où les deux cessaient de dire la même chose — c'est-à-dire
    aujourd'hui.
 """
+import gzip
 import io
 import json
 import os
@@ -162,13 +163,30 @@ APP.app.config["TESTING"] = True
 NAV = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
                      "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
        "Accept-Language": "fr-FR,fr;q=0.9", "Accept-Encoding": "gzip, deflate"}
+
+
+def _json(r):
+    """Ce que fait un navigateur, et que le client de test ne fait pas.
+
+    Ces contrôles envoient de VRAIS en-têtes de navigateur, `Accept-Encoding`
+    compris. Depuis que l'application compresse aussi ses réponses JSON, le
+    corps arrive gzippé : un navigateur, `fetch` et `requests` le
+    décompressent tout seuls, le client de test de Werkzeug est le seul à ne
+    pas le faire. Retirer `Accept-Encoding` des en-têtes ferait passer le
+    contrôle en cessant de ressembler à un navigateur — c'est l'inverse de ce
+    qu'on veut."""
+    if r.headers.get("Content-Encoding") == "gzip":
+        return json.loads(gzip.decompress(r.data).decode("utf-8"))
+    return r.get_json()
+
+
 with APP.app.test_client() as c:
     with c.session_transaction() as sess:
         sess["is_conseilprev"] = True
     r = c.post("/api/finance-dc/devis", headers=NAV,
                json={"pays": ["CH", "NO", "GB", "FR", "LI"], "mw": 20,
                      "gabarit": "hyperscale", "annees": 10})
-    j = r.get_json() or {}
+    j = _json(r) or {}
 ok("le comparateur d'investissement répond", r.status_code == 200 and j.get("ok"),
    r.status_code)
 dos = {x["pays"]: x for x in (j.get("dossiers") or [])}

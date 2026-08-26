@@ -22,6 +22,7 @@ CE QU'ON PROTÈGE.
    d'un coup — sur une page qui montre les cartes juste en dessous. Ils se
    calculent maintenant à l'affichage.
 """
+import gzip
 import io
 import json
 import os
@@ -140,7 +141,24 @@ ok("…et une formation inconnue aussi", APP.form_prix_cents(None) == 95000)
 
 print("\n══ 3. Les trois copies du catalogue disent la même chose ══\n")
 
-sent = io.open(DEPOT + "/sentinel.html", encoding="utf-8").read()
+def _page(nom):
+    """Le HTML d'une page ET le JavaScript qu'elle exécute.
+
+    Le JavaScript en ligne a été sorti des pages vers des fichiers `.page.js`
+    servis à côté : ce qui s'exécutait DANS `sentinel.html` s'exécute
+    désormais dans `sentinel.page.js`. Ces contrôles cherchent des marqueurs
+    dans « ce que la page fait » — ils doivent donc lire les deux fichiers.
+    Ne lire que le HTML déclarerait absent un code simplement déplacé, et
+    c'est ce qui s'est produit : trois recettes vertes sont tombées le jour de
+    l'extraction, sans qu'aucune page ait cessé de fonctionner."""
+    s = io.open(os.path.join(DEPOT, nom), encoding="utf-8").read()
+    js = os.path.join(DEPOT, nom.replace(".html", ".page.js"))
+    if os.path.exists(js):
+        s += "\n" + io.open(js, encoding="utf-8").read()
+    return s
+
+
+sent = _page("sentinel.html")
 i = sent.find("window.FORMATIONS_CAT = ")
 hub = json.loads(sent[i + len("window.FORMATIONS_CAT = "):sent.find("\n", i)].rstrip().rstrip(";"))
 ok("le Hub Training porte autant de formations que le module",
@@ -256,11 +274,27 @@ APP.app.config["TESTING"] = True
 NAV = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
                      "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
        "Accept-Language": "fr-FR,fr;q=0.9", "Accept-Encoding": "gzip, deflate"}
+
+
+def _json(r):
+    """Ce que fait un navigateur, et que le client de test ne fait pas.
+
+    Ces contrôles envoient de VRAIS en-têtes de navigateur, `Accept-Encoding`
+    compris. L'application compresse aussi ses réponses JSON : le corps arrive
+    gzippé, et un navigateur — comme `fetch` ou `requests` — le décompresse
+    tout seul. Le client de test de Werkzeug est le seul à ne pas le faire.
+    Retirer `Accept-Encoding` des en-têtes ferait passer le contrôle en
+    cessant de ressembler à un navigateur : c'est l'inverse de ce qu'on veut."""
+    if r.headers.get("Content-Encoding") == "gzip":
+        return json.loads(gzip.decompress(r.data).decode("utf-8"))
+    return r.get_json()
+
+
 with APP.app.test_client() as c:
     with c.session_transaction() as s:
         s["is_conseilprev"] = True
     r = c.get("/api/formations/sessions", headers=NAV)
-    j = r.get_json() or {}
+    j = _json(r) or {}
 ok("les sessions répondent", r.status_code == 200 and j.get("ok"), r.status_code)
 ok("…et servent tout le catalogue", len(j.get("catalogue") or []) == N_CAT,
    len(j.get("catalogue") or []))
@@ -298,7 +332,7 @@ ok("…en le journalisant", "FORM_SESSIONS_AMORCAGE" in _form_src)
 with APP.app.test_client() as c:
     with c.session_transaction() as s:
         s["is_conseilprev"] = True
-    j2 = (c.get("/api/formations/sessions", headers=NAV).get_json() or {})
+    j2 = _json(c.get("/api/formations/sessions", headers=NAV)) or {}
 sess_bd = j2.get("sessions") or []
 par_bd = Counter(s["formation_id"] for s in sess_bd)
 ok("la base porte bien trois sessions pour le programme", par_bd.get(11) == 3,
@@ -313,7 +347,7 @@ ok("…et aucune formation du catalogue n'est sans session",
 with APP.app.test_client() as c:
     with c.session_transaction() as s:
         s["is_conseilprev"] = True
-    j3 = (c.get("/api/formations/sessions", headers=NAV).get_json() or {})
+    j3 = _json(c.get("/api/formations/sessions", headers=NAV)) or {}
 ok("un second appel n'ajoute aucun doublon",
    len(j3.get("sessions") or []) == len(sess_bd),
    "%d puis %d" % (len(sess_bd), len(j3.get("sessions") or [])))
