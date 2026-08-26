@@ -2,6 +2,76 @@
    Le HTML est servi en no-store : ce fichier, lui, obtient un ETag
    et répond 304 dès la deuxième visite. */
 
+/* ══ UNE SEULE INTERROGATION DE LA SESSION PAR CHARGEMENT ═══════════════
+   CE QUE FAISAIT LA PAGE. Six endroits demandaient « qui est connecté ? »,
+   chacun avec son propre `fetch('/api/sentinel-auth/me')`. Mesuré dans un
+   navigateur, cela donnait SEPT requêtes réelles au chargement, étalées de
+   295 à 713 ms — la même réponse, sept fois.
+
+   ET CE N'ÉTAIT PAS QUE DU RÉSEAU. Cette route ne se contente pas de lire la
+   session : elle appelle `check_pending_reports()` et `_essai_relances()`,
+   deux travaux de fond greffés dessus, qui ouvrent chacun la base. Sept
+   appels, c'est sept connexions et quatorze requêtes SQL — quelques
+   millisecondes en SQLite local, dix à quarante fois plus sur un PostgreSQL
+   distant, pour un résultat identique.
+
+   LA PROMESSE EST PARTAGÉE : le premier appelant lance la requête, les
+   suivants attendent la même. En cas d'échec réseau, la mémoire est vidée
+   pour qu'un appel ultérieur puisse retenter — sans quoi une coupure d'une
+   seconde condamnerait la page entière.
+
+   AUCUNE INVALIDATION N'EST NÉCESSAIRE, et c'est vérifiable : toutes les
+   transitions d'authentification de cette page sont des navigations
+   complètes (`location.replace('/login?logout=1')` à la déconnexion,
+   redirection Stripe au changement d'offre). La mémoire meurt avec la page.
+   Le jour où une connexion se ferait SANS quitter la page, il faudrait la
+   vider ici. ────────────────────────────────────────────────────────────── */
+/* ══ UNE FOIS, ET UNE SEULE, QUAND LE DOM EST PRÊT ══════════════════════
+   LE DÉFAUT, ET SON ORIGINE. Quatre endroits de cette page écrivaient :
+
+       document.addEventListener('DOMContentLoaded', function(){ … });
+       if(document.readyState !== 'loading'){ … }
+
+   Deux instructions INDÉPENDANTES là où il fallait une alternative. Tant que
+   ce code vivait dans un <script> en ligne, il tirait juste : au moment de
+   son exécution `readyState` vaut 'loading', le `if` est faux, seul
+   l'écouteur se déclenche.
+
+   L'EXTRACTION VERS UN FICHIER `defer` A CASSÉ CE RAISONNEMENT. Un script
+   différé s'exécute après l'analyse du document mais AVANT
+   `DOMContentLoaded` : `readyState` vaut alors 'interactive'. Le `if` est
+   donc vrai — et l'écouteur se déclenchera quand même, un instant plus tard.
+   Les quatre fonctions tournaient deux fois, ce qui se voyait au réseau :
+   `/api/notifications/summary` demandé deux fois par chargement.
+
+   `_auDomPret` est une alternative : exactement une branche s'exécute, quelle
+   que soit la façon dont ce fichier est chargé. ────────────────────────── */
+function _auDomPret(fn, delai){
+  /* `delai` absent ou nul : on appelle DIRECTEMENT, sans passer par un
+     minuteur. Deux des sept endroits corrigés n'avaient pas de `setTimeout`,
+     et les y forcer aurait décalé leur exécution d'un tour de boucle — un
+     changement de comportement gratuit, glissé dans une correction. */
+  var lancer = delai ? function(){ setTimeout(fn, delai); } : fn;
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', lancer, {once:true});
+  } else {
+    lancer();
+  }
+}
+
+var _sentAuthPromesse = null;
+window.sentAuthMoi = function(){
+  if(!_sentAuthPromesse){
+    /* La route rend du JSON valide MÊME en 401 (`{authenticated:false}`) :
+       les six appelants d'origine se comportaient donc à l'identique, et les
+       réunir ne change aucun comportement. */
+    _sentAuthPromesse = fetch('/api/sentinel-auth/me', {credentials:'same-origin'})
+      .then(function(r){ return r.json(); })
+      .catch(function(e){ _sentAuthPromesse = null; throw e; });
+  }
+  return _sentAuthPromesse;
+};
+
 ;/* ── bloc 1/59 ── */
 
 /* ── Prechargement des modules cartographiques ────────────────────────────
@@ -3309,15 +3379,10 @@ function cpEvalRenderList(){
 }
 
 /* Init au chargement */
-document.addEventListener("DOMContentLoaded", function(){
+_auDomPret(function(){
   cpEvalUpdateBadge();
   cpEvalRenderList();
 });
-/* Si DOM deja charge (script en fin de page) */
-if(document.readyState !== "loading"){
-  cpEvalUpdateBadge();
-  cpEvalRenderList();
-}
 
 })();
 
@@ -9048,8 +9113,7 @@ window.go = function(){
 };
 
 /* Injection initiale au chargement */
-document.addEventListener("DOMContentLoaded", function(){ setTimeout(guideInjectButton, 300); });
-if(document.readyState !== "loading"){ setTimeout(guideInjectButton, 300); }
+_auDomPret(guideInjectButton, 300);
 
 })();
 
@@ -10177,7 +10241,7 @@ window.pricingSubmitRequest = function(){
     var r = _pricingOrigGo ? _pricingOrigGo.apply(this,arguments) : undefined;
     if(id === 'pricing'){
       // Pré-remplir les champs si l'utilisateur est connecté
-      fetch('/api/sentinel-auth/me').then(function(r2){ return r2.json(); }).then(function(d){
+      sentAuthMoi().then(function(d){
         if(!d.authenticated) return;
         var nomEl   = document.getElementById('pricing-req-nom');
         var emailEl = document.getElementById('pricing-req-email');
@@ -10753,8 +10817,7 @@ window.apercuUpdateStats = function(){
   }
 };
 
-document.addEventListener("DOMContentLoaded", function(){ setTimeout(window.apercuUpdateStats, 200); });
-if(document.readyState !== "loading"){ setTimeout(window.apercuUpdateStats, 200); }
+_auDomPret(window.apercuUpdateStats, 200);
 
 var _apercuOrigGo = window.go;
 window.go = function(id){
@@ -12495,7 +12558,7 @@ try {
 
 
 (function(){
-  fetch('/api/sentinel-auth/me').then(function(r){ return r.json(); }).then(function(d){
+  sentAuthMoi().then(function(d){
     var el = document.getElementById('tb-client-name');
     if(el && d.authenticated) el.textContent = d.is_conseilprev ? 'CONSEILPREV' : d.nom_entreprise;
   }).catch(function(){});
@@ -12571,7 +12634,7 @@ window.clientsRenderList = function(){
 };
 
 window.clientsInitPage = function(){
-  fetch('/api/sentinel-auth/me').then(function(r){ return r.json(); }).then(function(d){
+  sentAuthMoi().then(function(d){
     var contentEl = document.getElementById('clients-content');
     var deniedEl = document.getElementById('clients-access-denied');
     if(d.authenticated && d.is_conseilprev){
@@ -12652,13 +12715,12 @@ window.emailHealthRender = function(){
 
 /* Masquer l'item sidebar pour les non-CONSEILPREV (la vraie protection reste cote serveur) */
 function clientsCheckSidebarVisibility(){
-  fetch('/api/sentinel-auth/me').then(function(r){ return r.json(); }).then(function(d){
+  sentAuthMoi().then(function(d){
     var item = document.querySelector('.sb-item[onclick*="go(\'clients\'"]');
     if(item && !(d.authenticated && d.is_conseilprev)) item.style.display = 'none';
   }).catch(function(){});
 }
-document.addEventListener('DOMContentLoaded', function(){ setTimeout(clientsCheckSidebarVisibility, 300); });
-if(document.readyState !== 'loading'){ setTimeout(clientsCheckSidebarVisibility, 300); }
+_auDomPret(clientsCheckSidebarVisibility, 300);
 
 var _clientsOrigGo = window.go;
 window.go = function(id){
@@ -12720,10 +12782,7 @@ function sentinelPlanBanner(plan){
 
 function sentinelFetchPlan(){
   if(window.__SENTINEL_PLAN === undefined) window.__SENTINEL_PLAN = null;
-  fetch('/api/sentinel-auth/me', {credentials:'same-origin'}).then(function(r){
-    if(r.status === 401){ return {authenticated:false}; }
-    return r.json();
-  }).then(function(d){
+  sentAuthMoi().then(function(d){
     if(!d || !d.authenticated){ window.__SENTINEL_PLAN = null; sentinelApplyGating(); return; }
     if(d.is_conseilprev || d.nom_entreprise === 'CONSEILPREV'){ window.__SENTINEL_PLAN = 'entreprise'; window.__IS_CONSEILPREV = true;
       var _rg = document.getElementById('raas-guide-admin'); if(_rg) _rg.style.display = 'block';
@@ -12738,8 +12797,7 @@ function sentinelFetchPlan(){
     if(window.sentinelEssaiBanner) sentinelEssaiBanner();
   }).catch(function(){ window.__SENTINEL_PLAN = null; sentinelApplyGating(); });
 }
-document.addEventListener('DOMContentLoaded', function(){ setTimeout(sentinelFetchPlan, 300); });
-if(document.readyState !== 'loading'){ setTimeout(sentinelFetchPlan, 300); }
+_auDomPret(sentinelFetchPlan, 300);
 
 
 window.sentinelEssaiBanner = function(){
@@ -18431,8 +18489,7 @@ document.addEventListener('click', function(e){
   }
 });
 
-document.addEventListener('DOMContentLoaded', function(){ setTimeout(window.bellRefresh, 400); });
-if(document.readyState !== 'loading'){ setTimeout(window.bellRefresh, 400); }
+_auDomPret(window.bellRefresh, 400);
 
 
 
@@ -18476,7 +18533,7 @@ window.pagerGo = function(direction){
 window.editionRefresh = function(){
   var el = document.getElementById('sb-edition-el');
   if(!el) return;
-  fetch('/api/sentinel-auth/me').then(function(r){ return r.json(); }).then(function(d){
+  sentAuthMoi().then(function(d){
     if(!d.authenticated) return;
     var labels = {
       gratuit: 'Édition Gratuite',
@@ -18487,8 +18544,7 @@ window.editionRefresh = function(){
     el.textContent = labels[plan] || 'Édition';
   }).catch(function(){});
 };
-document.addEventListener('DOMContentLoaded', function(){ setTimeout(window.editionRefresh, 400); });
-if(document.readyState !== 'loading'){ setTimeout(window.editionRefresh, 400); }
+_auDomPret(window.editionRefresh, 400);
 
 
 
