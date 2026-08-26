@@ -5258,6 +5258,16 @@ DATABASE_URL = os.environ.get('DATABASE_URL', '').strip()
 REGISTRE_USE_PG = bool(DATABASE_URL)
 REGISTRE_SQLITE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'registre_ia.db')
 
+# UN SEUL DELAI POUR TOUS LES CHEMINS VERS POSTGRES. Il etait ecrit en dur
+# dans le test de demarrage et ABSENT du repli de `registre_get_db()` — deux
+# endroits, deux comportements, et c'est le second qui retenait le worker.
+#
+# DEFINI ICI, HORS DU `if`, ET C'EST VOULU. Place a l'interieur du bloc
+# `if REGISTRE_USE_PG:`, il n'existerait pas quand ce bloc est saute ; le jour
+# ou `REGISTRE_USE_PG` passerait a vrai par un autre chemin, la ligne qui le
+# lit leverait un NameError en pleine requete, loin d'ici.
+REGISTRE_CONNECT_TIMEOUT = int(os.environ.get('REGISTRE_CONNECT_TIMEOUT', '5'))
+
 if REGISTRE_USE_PG:
     import psycopg
     import psycopg.rows
@@ -5276,7 +5286,8 @@ if REGISTRE_USE_PG:
     # Test de connexion reel au demarrage : si echec, on bascule proprement sur SQLite
     # plutot que de rester bloque sur un moteur Postgres inaccessible a chaque requete.
     try:
-        _test_conn = psycopg.connect(DATABASE_URL, row_factory=psycopg.rows.dict_row, connect_timeout=5)
+        _test_conn = psycopg.connect(DATABASE_URL, row_factory=psycopg.rows.dict_row,
+                                     connect_timeout=REGISTRE_CONNECT_TIMEOUT)
         _test_conn.close()
         logger.info("REGISTRE_IA — connexion Postgres testee avec succes")
     except Exception as _conn_err:
@@ -5412,8 +5423,23 @@ def registre_get_db():
                 return _suivre_connexion(_PooledConnWrapper(REGISTRE_POOL, conn))
             except Exception as _e:
                 logger.warning(f"REGISTRE_IA — getconn pool echoue, connexion directe : {_e}")
+        # LA SEULE ATTENTE NON BORNEE DU FICHIER, ET ELLE COUTAIT LE SERVICE
+        # ENTIER. Les deux autres chemins vers Postgres se donnent un delai :
+        # le test de demarrage (connect_timeout=5) et le pool (timeout=10).
+        # Celui-ci, le repli emprunte quand le pool ne rend pas de connexion,
+        # n'en avait aucun. Or un SYN TCP sans reponse — base injoignable,
+        # suspendue, ou dans une autre region — est retente par Linux pendant
+        # environ 127 secondes. Gunicorn, lui, tue le worker a 90. Et comme le
+        # service tourne avec UN SEUL worker, ce n'est pas une requete qui
+        # echoue : c'est le site qui tombe, le temps du redemarrage.
+        #
+        # CINQ SECONDES, COMME LE TEST DE DEMARRAGE. Passe ce delai, l'erreur
+        # remonte et se journalise au lieu de retenir le worker. On ne bascule
+        # PAS sur SQLite ici : ce serait servir une base vide sous le meme nom,
+        # ce qui se lit comme des donnees perdues plutot que comme une panne.
         return _suivre_connexion(_ConnSuivie(
-            psycopg.connect(DATABASE_URL, row_factory=psycopg.rows.dict_row)))
+            psycopg.connect(DATABASE_URL, row_factory=psycopg.rows.dict_row,
+                            connect_timeout=REGISTRE_CONNECT_TIMEOUT)))
     else:
         conn = sqlite3.connect(REGISTRE_SQLITE_PATH)
         conn.row_factory = sqlite3.Row
