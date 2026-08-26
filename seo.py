@@ -44,8 +44,14 @@ from datetime import datetime, timezone
 
 VERSION = "2026-08-a"
 
-BASE = (os.environ.get("SITE_BASE_URL")
-        or "https://conseilprev.onrender.com").rstrip("/")
+BASE_PAR_DEFAUT = "https://conseilprev.onrender.com"
+BASE = (os.environ.get("SITE_BASE_URL") or BASE_PAR_DEFAUT).rstrip("/")
+
+# NOS ADRESSES : la courante, et celle d'où l'on vient. Le recalage ne touche
+# QU'À CELLES-LÀ. Une canonique qui désigne un AUTRE site est un choix
+# éditorial — du contenu syndiqué, par exemple — et ce module ne défait pas
+# le travail fait à la main : c'est son principe depuis le début.
+NOS_ADRESSES = tuple({BASE, BASE_PAR_DEFAUT.rstrip("/")})
 
 SITE_NOM = "CONSEILPREV"
 LOCALE = "fr_FR"
@@ -114,12 +120,66 @@ def balises(route, html):
     return "".join(out)
 
 
+_ADRESSES_A_RECALER = (
+    # (motif de la balise, nom de l'attribut qui porte l'adresse)
+    (re.compile(r'<link\b[^>]*\brel=["\']canonical["\'][^>]*>', re.I), "href"),
+    (re.compile(r'<meta\b[^>]*\bproperty=["\']og:url["\'][^>]*>', re.I), "content"),
+    (re.compile(r'<meta\b[^>]*\bproperty=["\']og:image["\'][^>]*>', re.I), "content"),
+    (re.compile(r'<meta\b[^>]*\bname=["\']twitter:image["\'][^>]*>', re.I), "content"),
+)
+
+
+def _recaler(html, motif, attribut, valeur):
+    """Réécrit l'adresse d'une balise DÉJÀ présente — mais seulement si elle
+    désigne une de NOS adresses. Une canonique pointant ailleurs est laissée
+    intacte : c'est une décision, pas une coordonnée périmée."""
+    def _sub(m):
+        def _attr(a):
+            ancienne = a.group(2)
+            if not ancienne.startswith(NOS_ADRESSES):
+                return a.group(0)          # adresse étrangère : on n'y touche pas
+            return a.group(1) + valeur + a.group(3)
+        return re.sub(r'(\b%s=["\'])([^"\']*)(["\'])' % attribut,
+                      _attr, m.group(0), count=1)
+    return motif.sub(_sub, html, count=1)
+
+
+def recaler_adresses(route, html):
+    """LES ADRESSES ABSOLUES DE LA PAGE, RAMENÉES SUR `SITE_BASE_URL`.
+
+    CE QUE CE MODULE PROMETTAIT, ET NE TENAIT PAS. Son en-tête annonce que
+    changer d'adresse ne demande « aucune ligne de code » et que « rien ne
+    reste en arrière avec l'ancienne adresse en dur, ce qui serait le pire des
+    deux mondes : des canoniques qui pointent vers un site qu'on a quitté ».
+
+    C'était pourtant exactement ce qui se passait. `balises()` ne comble QUE
+    les trous — « on n'écrase jamais ce qui est déjà là » —, et seize pages
+    portent leur canonique écrite à la main. `SITE_BASE_URL` n'avait donc
+    aucun effet sur elles : mesuré, vingt-six occurrences de l'ancien hôte
+    survivaient dans les pages servies, dont neuf sur la seule page d'accueil.
+    Le module décrivait le défaut qu'il causait.
+
+    LA DISTINCTION QUE `balises()` GARDE, ET QUI RESTE JUSTE : un titre ou une
+    description écrits à la main sont un travail éditorial, et on n'y touche
+    pas. Une adresse absolue n'est pas de l'écriture — c'est une coordonnée,
+    et elle doit suivre le site."""
+    u = url(route)
+    for motif, attribut in _ADRESSES_A_RECALER:
+        cible = u if attribut == "href" or "og:url" in motif.pattern \
+            else BASE + IMAGE_PARTAGE
+        html = _recaler(html, motif, attribut, cible)
+    return html
+
+
 def enrichir(route, html):
     """La page, complétée. Sans `</head>`, on rend la page INCHANGÉE plutôt que
     de coller des balises n'importe où : un fragment mal placé casse le rendu,
     et un site cassé ne se référence pas."""
+    if not html:
+        return html
+    html = recaler_adresses(route, html)
     b = balises(route, html)
-    if not b or not _HEAD.search(html or ""):
+    if not b or not _HEAD.search(html):
         return html
     return _HEAD.sub(b + "</head>", html, count=1)
 
