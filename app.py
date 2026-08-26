@@ -10176,19 +10176,35 @@ def _serve_page_fast(filename, cache_control=None):
         resp.headers['X-Perf-Cache'] = '1'
     return resp
 
-# Pages embarquees en iframe dans Sentinel : elles sont RECHARGEES a chaque
-# ouverture du module, et leur referentiel embarque les rend lourdes (100 a
-# 170 Ko). Sans politique de cache, le navigateur les retelecharge en entier a
-# chaque fois — c'est la cause principale de la lenteur ressentie. Avec un ETag
-# fort et « no-cache, must-revalidate », la 2e visite coute un 304 sans corps :
-# la revalidation reste obligatoire, donc une mise a jour est prise en compte
-# immediatement, mais on ne repaie plus le transfert. Meme politique que
-# /sentinel, pour la meme raison.
-_PAGES_REVALIDATION = {'map.html', 'observatoire.html', 'panorama.html'}
+# TOUTES CES PAGES REVALIDENT, ET AUCUNE NE SE RETELECHARGE EN ENTIER.
+#
+# CE QUI SE PASSAIT AVANT. Trois pages seulement — celles embarquees en iframe
+# dans Sentinel — recevaient une politique de cache. Les vingt et une autres
+# n'en avaient AUCUNE, et retombaient donc sur le defaut pose par
+# `add_security_headers` : « no-store ». Or « no-store » interdit au navigateur
+# de GARDER la reponse : il ne peut meme pas proposer d'etiquette au retour,
+# et retelecharge la page entiere a chaque visite. Vingt-quatre pages, 1,8 Mo
+# en clair, 429 Ko compresses — repayes a chaque clic sur le menu.
+#
+# POURQUOI C'EST SANS RISQUE, ET LE CODE LE DIT DEJA quelques lignes plus
+# haut : ces pages sont servies depuis un cache MEMOIRE PARTAGE, les memes
+# octets pour tout le monde. Elles ne PEUVENT pas contenir de donnee
+# personnelle — la personnalisation passe par les API. Une page qui varierait
+# selon le visiteur serait deja cassee par ce cache, independamment de cette
+# ligne.
+#
+# CE QUE LA POLITIQUE GARDE. « no-cache, must-revalidate » n'autorise pas a
+# servir sans demander : le navigateur revalide a CHAQUE visite. Une mise en
+# ligne est donc prise en compte immediatement. Ce qu'on economise n'est pas
+# l'aller-retour, c'est le CORPS : un 304 sans octet au lieu de 100 Ko.
+# « private » interdit a un cache intermediaire de garder la reponse —
+# obligatoire pour les pages derriere le verrou d'abonnement, gratuit pour les
+# autres.
+_CACHE_PAGES = 'private, no-cache, must-revalidate'
 
 for route, filename in PAGES.items():
     def make_view(fn):
-        cc = 'private, no-cache, must-revalidate' if fn in _PAGES_REVALIDATION else None
+        cc = _CACHE_PAGES
         @rate_limit(limit=60, window=60)
         def view():
             return _serve_page_fast(fn, cache_control=cc)
@@ -10252,7 +10268,7 @@ def _make_view_reservee(fn, nom):
         # « private » est ici obligatoire, pas décoratif : un cache
         # intermédiaire qui garderait cette page la rendrait lisible au
         # visiteur suivant, abonné ou non.
-        return _serve_page_fast(fn, cache_control='private, no-cache, must-revalidate')
+        return _serve_page_fast(fn, cache_control=_CACHE_PAGES)
     # LE NOM VIENT DE LA ROUTE, PAS DU FICHIER. Deux adresses peuvent servir le
     # meme document — /panorama et /enveloppe en sont deux vues — et Flask
     # refuse alors d'enregistrer la seconde : « View function mapping is
@@ -10788,7 +10804,7 @@ def sentinel_page():
     # cote serveur) au lieu de re-telecharger 1,75 Mo, tout en conservant la
     # redirection /login des que la session expire (la revalidation passe par
     # sentinel_login_required avant de repondre 304).
-    return _serve_page_fast('sentinel.html', cache_control='private, no-cache, must-revalidate')
+    return _serve_page_fast('sentinel.html', cache_control=_CACHE_PAGES)
 
 @app.route('/datasets.json')
 @rate_limit(limit=20, window=60)
