@@ -31,7 +31,27 @@ app.config['PERMANENT_SESSION_LIFETIME'] = _timedelta_auth(days=30)
 app.config['SESSION_COOKIE_SECURE'] = True
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
-CORS(app, resources={r"/api/*": {"origins": ["https://conseilprev.onrender.com"]}})
+# LES ORIGINES AUTORISEES SUIVENT LE SITE, ELLES NE SONT PLUS ECRITES EN DUR.
+# Une seule adresse y figurait : `conseilprev.onrender.com`. Tant que le site
+# vit dessus, personne ne s'en apercoit — les appels de la page a sa propre API
+# sont de MEME ORIGINE et ne passent pas par CORS. Le jour ou le site est servi
+# depuis un autre nom (un second service Render, ou i-aes.eu en domaine
+# propre), cette liste designe une adresse ou plus rien ne repond : tout appel
+# CROISE est refuse, sans que rien ne l'explique cote navigateur autrement que
+# par un message CORS.
+#
+# `SITE_ORIGINES` accepte plusieurs adresses separees par des virgules, ce
+# qu'exige une bascule progressive : l'ancien et le nouveau nom doivent etre
+# admis ENSEMBLE le temps que le domaine change de cible.
+SITE_ORIGINES = [o.strip().rstrip('/') for o in
+                 (os.environ.get('SITE_ORIGINES')
+                  or 'https://conseilprev.onrender.com').split(',') if o.strip()]
+CORS(app, resources={r"/api/*": {"origins": SITE_ORIGINES}})
+
+# `includeSubDomains` est conserve par defaut — c'est le bon choix — mais il
+# doit pouvoir etre retire avant de brancher un domaine propre dont tous les
+# sous-domaines ne sont pas encore en HTTPS. Voir add_security_headers.
+HSTS = os.environ.get('HSTS', 'max-age=31536000; includeSubDomains')
 
 # ── Secrets & config ──
 MISTRAL_API_KEY = os.environ.get('MISTRAL_API_KEY', '')
@@ -333,7 +353,23 @@ def add_security_headers(response):
     response.headers['X-XSS-Protection']           = '1; mode=block'
     response.headers['Referrer-Policy']            = 'strict-origin-when-cross-origin'
     response.headers['Permissions-Policy']         = 'geolocation=(), microphone=(), camera=()'
-    response.headers['Strict-Transport-Security']  = 'max-age=31536000; includeSubDomains'
+    # HSTS N'EST POSE QUE SUR UNE CONNEXION DEJA CHIFFREE. Envoye en clair il
+    # est ignore par les navigateurs — la specification l'exige — donc il ne
+    # protegeait rien la ou il etait pose sans condition. En developpement sur
+    # localhost, en revanche, il verrouille le poste du developpeur sur du
+    # HTTPS que rien n'y sert, pour un an. Render termine le TLS en amont :
+    # c'est `X-Forwarded-Proto` qui fait foi, jamais `request.scheme`.
+    #
+    # `includeSubDomains` ET LE DOMAINE PROPRE. Tant que le site vit sur
+    # `*.onrender.com`, cette directive ne couvre rien — ce nom n'a pas de
+    # sous-domaine a nous. Le jour ou i-aes.eu est branche en domaine propre,
+    # elle force le HTTPS sur TOUS ses sous-domaines pendant un an, aupres de
+    # chaque navigateur qui a vu l'en-tete une fois. Un sous-domaine reste en
+    # clair devient alors injoignable, et revenir en arriere demande de servir
+    # `max-age=0` puis d'attendre que chaque visiteur repasse. La directive est
+    # donc reglable — sans la retirer par defaut, qui reste le bon choix.
+    if request.headers.get('X-Forwarded-Proto', request.scheme) == 'https':
+        response.headers['Strict-Transport-Security'] = HSTS
     # Anti-scraping
     response.headers['X-Robots-Tag']               = 'index, follow'
     # Cache control pour les pages HTML.
