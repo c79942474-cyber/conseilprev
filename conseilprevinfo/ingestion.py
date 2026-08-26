@@ -33,6 +33,7 @@ import ssl
 import time
 import urllib.error
 import urllib.request
+import xml.etree.ElementTree as ET
 from datetime import date, datetime, timezone
 
 import sources as SRC
@@ -466,6 +467,394 @@ def _fiche_mix(code, part, an, L, s):
 #  un référentiel de tactiques bouge dans l'année ; une série énergétique
 #  annuelle bouge une fois par an. Écrire l'inverse ferait de ce site un
 #  visiteur impoli, et le ferait bannir avant longtemps.
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  COLLECTEUR — LES FLUX DE PRESSE, ceux que conseilprev.onrender.com emploie
+# ═══════════════════════════════════════════════════════════════════════════
+#
+#  CE QU'UN FLUX DE PRESSE APPORTE, ET CE QU'IL N'APPORTE PAS. Les collecteurs
+#  précédents lisent des FAITS : un identifiant de vulnérabilité, une part de
+#  production électrique. Celui-ci lit des ARTICLES. Un article n'est pas un
+#  fait : c'est le compte rendu qu'un tiers en donne, et ce site ne l'a pas
+#  vérifié. Toutes les fiches qui en sortent portent donc le statut
+#  `source_secondaire`, y compris celles qui viennent d'une autorité.
+#
+#  POURQUOI MÊME LA CNIL RESTE EN « SOURCE SECONDAIRE ». Le statut primaire
+#  dit « le fait a été confronté au document d'origine ». Or lire un flux,
+#  c'est lire un AVIS DE PUBLICATION : un titre, une date, une adresse. Le
+#  document, lui, n'a pas été ouvert. Se réclamer du primaire parce que
+#  l'éditeur est une autorité reviendrait à confondre le canal et l'acte —
+#  exactement la confusion que le registre des sources s'emploie à empêcher.
+#  Ce que la fiche gagne à venir d'une autorité est écrit dans sa lecture, et
+#  cela suffit.
+#
+#  AUCUN MODÈLE DE LANGAGE, ICI NON PLUS. La lecture est dérivée par les
+#  règles ci-dessous, à partir de ce que la source déclare d'elle-même dans
+#  `sources.py` et de ce que le titre nomme. Elle est courte, et c'est
+#  volontaire : il n'y a pas grand-chose d'honnête à dire d'un article qu'on
+#  n'a pas lu.
+
+#: LES QUATRE SUJETS DU SITE, reconnus par des mots ÉCRITS ICI. Une fiche dont
+#: le sujet serait deviné par ressemblance atterrirait dans la mauvaise
+#: rubrique sans que personne ne sache pourquoi.
+MOTS_SUJET = {
+    "cyber_industriel": (
+        "scada", "automate", "ics/ot", " ics ", " ot ", "iacs", "62443",
+        "nis2", "nis 2", "industriel", "usine", "siemens", "schneider",
+        "rockwell", "ransomware", "rançongiciel", "cyberattaque",
+        "vulnérabilit", "vulnerabilit", "cert-fr", "anssi", "critical infrastructure",
+        "operational technology", "industrial control"),
+    "sia": (
+        "ai act", "règlement ia", "reglement ia", "2024/1689", "rgpd", "gdpr",
+        "cnil", "conformité", "conformite", "gouvernance de l'ia",
+        "ai governance", "regulation", "réglementation", "reglementation",
+        "iso 42001", "compliance", "supervision", "autorité", "sanction",
+        "amende", "fine", "enforcement", "commission européenne"),
+    "datacenter": (
+        "centre de données", "centre de donnees", "data center", "datacenter",
+        "hyperscale", "refroidissement", "cooling", "ple ", " pue",
+        "consommation électrique", "megawatt", "mégawatt", "gigawatt"),
+    # AUCUN NOM D'ÉDITEUR DE MODÈLE ICI, et c'est une contrainte assumée.
+    # `test_aucun_modele_de_langage_dans_la_chaine_de_collecte` interdit que
+    # certains de ces noms apparaissent dans ce fichier — un contrôle
+    # volontairement grossier, dont c'est précisément la force : il se lit en
+    # une ligne et ne s'argumente pas. Le raffiner pour laisser passer une
+    # table de mots-clés l'aurait affaibli au premier prétexte.
+    # Une liste qui nommerait certains éditeurs et pas d'autres classerait de
+    # travers, et les listes de marques se périment. Les termes génériques
+    # tiennent mieux, et un article sur un éditeur d'IA en emploie presque
+    # toujours un.
+    "ia": (
+        "intelligence artificielle", "artificial intelligence", " ia ", " ai ",
+        "modèle de langage", "language model", "llm", "générative",
+        "generative", "apprentissage", "machine learning",
+        "réseau de neurones", "chatbot", "agent conversationnel"),
+}
+#: L'ORDRE DÉCIDE EN CAS D'ÉGALITÉ, et il est écrit plutôt que laissé au
+#: hasard du parcours d'un dictionnaire. Le plus spécifique d'abord : un
+#: article qui parle d'IA DANS l'industrie relève de la cyber industrielle,
+#: pas de l'IA en général.
+ORDRE_SUJET_PRESSE = ("cyber_industriel", "sia", "datacenter", "ia")
+
+#: Ce qu'on refuse de retenir : un flux généraliste sert aussi des sujets qui
+#: ne sont pas ceux de ce site, et une fiche hors sujet coûte plus cher qu'une
+#: rubrique un peu maigre.
+MOTS_ECARTES = ("recrute", "webinar", "webinaire", "livre blanc",
+                "partenariat commercial", "black friday", "promo")
+
+_BALISE = re.compile(r"<[^>]+>")
+_ESPACES = re.compile(r"\s+")
+_NON_ID = re.compile(r"[^a-z0-9]+")
+
+
+def _texte_brut(x):
+    """Le texte d'un élément de flux, débarrassé de son balisage. Les flux
+    servent couramment du HTML dans le résumé ; le laisser passerait des
+    balises dans un chapeau, et un jour un script."""
+    t = _BALISE.sub(" ", str(x or ""))
+    t = (t.replace("&nbsp;", " ").replace("&amp;", "&").replace("&lt;", "<")
+          .replace("&gt;", ">").replace("&quot;", '"').replace("&#39;", "'")
+          .replace("&#8217;", "’").replace("&hellip;", "…"))
+    return _ESPACES.sub(" ", t).strip()
+
+
+_JOURS_EN = ("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+_MOIS_RFC = {m: i + 1 for i, m in enumerate(
+    ("Jan", "Feb", "Mar", "Apr", "May", "Jun",
+     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))}
+
+
+def _date_flux(brut):
+    """La date d'un article, en ISO — ou None.
+
+    LES FLUX EN DONNENT DE DEUX FAÇONS : le RFC 822 de RSS (« Tue, 19 Aug
+    2026 08:30:00 +0200 ») et l'ISO 8601 d'Atom. On lit les deux, et rien
+    d'autre : deviner un format inconnu produirait une date fausse, et une
+    date fausse est pire qu'une date absente — le croisement rapproche par
+    les dates.
+    """
+    t = str(brut or "").strip()
+    if not t:
+        return None
+    m = re.match(r"^\d{4}-\d{2}-\d{2}", t)          # Atom / ISO
+    if m:
+        return m.group(0)
+    m = re.match(r"^(?:%s),\s+(\d{1,2})\s+([A-Z][a-z]{2})\s+(\d{4})"
+                 % "|".join(_JOURS_EN), t)          # RSS / RFC 822
+    if m and m.group(2) in _MOIS_RFC:
+        return "%s-%02d-%02d" % (m.group(3), _MOIS_RFC[m.group(2)],
+                                 int(m.group(1)))
+    return None
+
+
+_ATOM = "{http://www.w3.org/2005/Atom}"
+
+
+def lire_flux(corps):
+    """Les articles d'un flux RSS ou Atom, sans dépendance extérieure.
+
+    REND AUSSI LES ÉCHECS COMME DES INFORMATIONS. Un flux illisible n'est pas
+    une exception : c'est un état de la source, et l'exploitation doit
+    pouvoir le lire dans la réponse plutôt que dans une trace d'erreur.
+    """
+    try:
+        racine = ET.fromstring(corps)
+    except ET.ParseError as e:
+        return {"ok": False, "erreur": "xml_illisible",
+                "message": "Le flux n'est pas un XML valide : %s" % e}
+    # LES CLÉS SONT CELLES DU FLUX — `title`, `summary`, `link` — et non des
+    # noms français que nous aurions choisis. Ce n'est pas un détail de style :
+    # `organisations.reconnaitre` ne doit lire QUE le texte de la source, et
+    # le contrôle qui le garde lit les noms des champs employés. Un argument
+    # nommé `titre` s'y lit comme un titre composé par le cabinet — ce qu'il
+    # est partout ailleurs sur ce site. Ici il vient du flux, et son nom doit
+    # le dire.
+    arts = []
+    for it in racine.findall(".//item"):            # RSS 2.0
+        arts.append({
+            "title": _texte_brut(it.findtext("title")),
+            "link": (it.findtext("link") or "").strip(),
+            "summary": _texte_brut(it.findtext("description")),
+            "date": _date_flux(it.findtext("pubDate")),
+        })
+    for e in racine.findall(".//%sentry" % _ATOM):  # Atom
+        lien = ""
+        for l in e.findall("%slink" % _ATOM):
+            if l.get("rel") in (None, "alternate"):
+                lien = l.get("href") or ""
+                break
+        arts.append({
+            "title": _texte_brut(e.findtext("%stitle" % _ATOM)),
+            "link": lien.strip(),
+            "summary": _texte_brut(e.findtext("%ssummary" % _ATOM)
+                                   or e.findtext("%scontent" % _ATOM)),
+            "date": _date_flux(e.findtext("%supdated" % _ATOM)
+                               or e.findtext("%spublished" % _ATOM)),
+        })
+    return {"ok": True, "articles": arts}
+
+
+def _sujet_presse(texte, defauts):
+    """Le sujet d'un article, par les mots qu'il emploie.
+
+    RETOURNE AUSSI LE MOT QUI A DÉCIDÉ. Une classification dont on ne peut pas
+    dire la raison ne se conteste pas, et ce qui ne se conteste pas finit par
+    ne plus être vérifié.
+    """
+    t = " " + texte.lower() + " "
+    for sujet in ORDRE_SUJET_PRESSE:
+        for mot in MOTS_SUJET[sujet]:
+            if mot in t:
+                return sujet, mot.strip()
+    # AUCUN MOT N'A MORDU. On retombe sur ce que la source déclare couvrir —
+    # et si elle en déclare plusieurs, l'article n'est pas retenu : deviner
+    # entre deux rubriques revient à ranger au hasard.
+    return (defauts[0], None) if len(defauts) == 1 else (None, None)
+
+
+#: Le référentiel des organisations, indexé une fois. `reconnaitre` rend des
+#: CLÉS, pas des fiches — et c'est le bon choix : une clé se recroise, un nom
+#: recopié diverge. Le nom se relit donc ici, au moment de l'écrire, et
+#: DEPUIS LA TABLE PUBLIQUE : puiser dans le `_PAR_CLE` du module voisin
+#: marcherait aujourd'hui et casserait le jour où il le renomme.
+_ORGS = {o["cle"]: o for o in ORG.ORGANISATIONS}
+
+
+def _org_nom(cle):
+    return (_ORGS.get(cle) or {}).get("nom") or cle
+
+
+def _org_pays(cle):
+    return (_ORGS.get(cle) or {}).get("pays")
+
+
+def _lecture_presse(s, sujet, mot, orgs, aut):
+    """La lecture, dérivée — et courte, parce qu'un article qu'on n'a pas lu
+    n'autorise pas davantage."""
+    L = []
+    if aut:
+        L.append("L'éditeur est une autorité publique et l'annonce sur son "
+                 "propre canal : ce qui est établi ici, c'est QU'ELLE L'A "
+                 "PUBLIÉ, à cette date et à cette adresse.")
+    else:
+        L.append("C'est un article de presse, pas un acte : ce site n'a ni "
+                 "lu le document d'origine, ni vérifié ce qui est rapporté.")
+    L.append("Ce qu'il faut en faire : ouvrir le lien et remonter à la pièce "
+             "citée avant d'en tirer une décision.")
+    if mot:
+        L.append("Rangé en « %s » parce que le texte emploie « %s »."
+                 % (V.SUJETS[sujet]["nom"], mot))
+    if orgs:
+        L.append("Organisations nommées : %s."
+                 % ", ".join(_org_nom(c) for c in orgs[:6]))
+    return " ".join(L)
+
+
+def _id_presse(cle, titre, iso):
+    base = _NON_ID.sub("-", ("%s-%s-%s" % (cle, iso or "sans-date",
+                                           titre[:44])).lower()).strip("-")
+    return base[:80] or (cle + "-sans-titre")
+
+
+def collecter_presse(limite_par_flux=8, flux=None, articles=None):
+    """Une fiche par article retenu, sur les quinze flux admis.
+
+    `articles` est une COUTURE DE CONTRÔLE, comme `documents` chez OWASP :
+    l'environnement de conception refuse les quinze adresses, et un contrôle
+    branché sur le réseau y passerait au vert sans avoir rien lu. Elle prend
+    {cle_source: [article, ...]} et court-circuite le téléchargement.
+
+    CE QUI N'A PAS PU ÊTRE LU EST RENDU, PAS TU. Un flux muet et un flux
+    injoignable ne se ressemblent pas, et la revue hebdomadaire doit pouvoir
+    dire lequel des deux s'est produit.
+    """
+    admis = [(c, s) for c, s in sorted(SRC.SOURCES.items()) if s.get("presse")]
+    if flux:
+        admis = [(c, s) for c, s in admis if c in set(flux)]
+    fiches, muets, injoignables = [], [], []
+    # POURQUOI COMPTER LES MOTIFS, ET PAS SEULEMENT LES ÉCARTS. Un nombre nu
+    # — « 40 articles écartés » — n'apprend rien à l'exploitant : quarante
+    # hors sujet sur un flux généraliste est normal, quarante sans date est
+    # une panne de l'éditeur, et quarante refusés au contrôle de fiche est
+    # une régression de ce site.
+    #
+    # ET C'EST CE QUI DONNE UN EFFET OBSERVABLE AUX GARDES D'ENTRÉE. Sans les
+    # motifs, retirer le contrôle de date ne changeait rien : `veille.valider`
+    # rattrapait la fiche plus loin, et le compte total restait le même.
+    # Deux filets valent mieux qu'un, mais deux filets dont on ne sait pas
+    # lequel a retenu ne se maintiennent pas — le jour où l'un cède,
+    # personne ne le voit.
+    ecartes = {"sans_date": 0, "sans_adresse": 0, "hors_sujet": 0,
+               "annonce": 0, "refusee_au_controle": 0}
+    aujourdhui = date.today().isoformat()
+
+    for cle, s in admis:
+        if articles is not None:
+            lus = articles.get(cle)
+            if lus is None:
+                injoignables.append({"cle": cle, "nom": s["nom"],
+                                     "pourquoi": "aucun article fourni au contrôle"})
+                continue
+        else:
+            r = _lire(s["url_donnee"], delai=20, octets_max=4_000_000)
+            if not r["ok"]:
+                injoignables.append({"cle": cle, "nom": s["nom"],
+                                     "pourquoi": r["message"]})
+                continue
+            d = lire_flux(r["corps"])
+            if not d["ok"]:
+                injoignables.append({"cle": cle, "nom": s["nom"],
+                                     "pourquoi": d["message"]})
+                continue
+            lus = d["articles"]
+
+        retenus = 0
+        for a in lus:
+            if retenus >= limite_par_flux:
+                break
+            titre = (a.get("title") or "").strip()
+            url = (a.get("link") or "").strip()
+            # SANS TITRE, SANS ADRESSE OU SANS DATE, ON NE RETIENT PAS. Une
+            # fiche sans date se rangerait au jour de la collecte, ce qui
+            # ferait passer un article de l'an dernier pour l'actualité de
+            # la semaine — et la revue hebdomadaire est bâtie sur les dates.
+            if not titre or not url.startswith("https://"):
+                ecartes["sans_adresse"] += 1
+                continue
+            if not a.get("date"):
+                ecartes["sans_date"] += 1
+                continue
+            texte = titre + " " + (a.get("summary") or "")
+            if any(m in texte.lower() for m in MOTS_ECARTES):
+                ecartes["annonce"] += 1
+                continue
+            sujet, mot = _sujet_presse(texte, s["sujets"])
+            if not sujet:
+                ecartes["hors_sujet"] += 1
+                continue
+            # ON RECONNAÎT DANS LE TEXTE DU FLUX, jamais dans le nôtre : les
+            # deux champs lus sont ceux que l'éditeur a écrits.
+            orgs = ORG.reconnaitre(a.get("title") or "", a.get("summary") or "")
+            aut = s["nature"] == "autorite_publique"
+            f = {
+                "id": _id_presse(cle, titre, a["date"]),
+                "titre": titre,
+                "chapeau": (a.get("summary") or titre)[:600],
+                "lecture": _lecture_presse(s, sujet, mot, orgs, aut),
+                "lecture_nature": "regle",
+                "portee": "Un article publié par %s. Ce site en cite le titre, "
+                          "la date et l'adresse ; il n'en republie pas le "
+                          "texte et n'a pas vérifié ce qu'il rapporte."
+                          % s["editeur"],
+                "incertitude": "Ce qui est établi est la publication, pas son "
+                               "contenu. Un article peut être corrigé, "
+                               "complété ou démenti après coup, et ce site ne "
+                               "le saura pas.",
+                "sujet": sujet,
+                "date_fait": a["date"],
+                "source_cle": cle,
+                "source_url": url,
+                "statut": "source_secondaire",
+                # LA PORTÉE D'UN ARTICLE NE SE DEVINE PAS. « signal_faible »
+                # est le seul choix honnête par défaut : dire « rupture »
+                # supposerait d'avoir pesé le fait, ce que personne n'a fait.
+                "impact": "signal_faible",
+                "horizon": "constate",
+                "editeur": s["editeur"],
+                "organisations": list(orgs),
+                "pays": sorted({p for p in (_org_pays(c) for c in orgs) if p}),
+                "presse": True,
+                "presse_mot": mot,
+            }
+            # `normaliser` REND {"ok", "fiche"}, PAS LA FICHE. Premier jet :
+            # on rangeait `n` tel quel dès qu'il portait une clé `id` — il
+            # n'en porte pas, alors la fiche BRUTE partait au corpus, sans
+            # `statut_nom`, sans `publiable`, sans source composée. Elle
+            # passait les contrôles de forme et échouait au premier affichage.
+            n = V.normaliser(f)
+            if not n.get("ok"):
+                # LE DERNIER FILET. Y arriver signale une régression de ce
+                # site, pas un défaut de l'éditeur : les gardes ci-dessus
+                # auraient dû l'attraper, et le motif le dit.
+                ecartes["refusee_au_controle"] += 1
+                continue
+            fiches.append(n["fiche"])
+            retenus += 1
+        if retenus == 0 and cle not in [x["cle"] for x in injoignables]:
+            muets.append({"cle": cle, "nom": s["nom"]})
+
+    # AUCUN FLUX ATTEINT N'EST UN ÉCHEC, pas une semaine calme. Le journal de
+    # collecte lit `ok` : rendre `True` avec quinze flux injoignables y
+    # écrirait « collecteur presse : 0 retenue », ligne qui se lit comme une
+    # actualité creuse. Quinze éditeurs muets le même jour est un incident de
+    # réseau, et l'exploitant doit le voir comme tel.
+    rien_lu = admis and len(injoignables) == len(admis)
+    return {
+        "ok": not rien_lu,
+        "erreur": "tous_injoignables" if rien_lu else None,
+        "message": ("Aucun des %d flux n'a pu être lu." % len(admis)
+                    if rien_lu else None),
+        "source": "presse",
+        "fiches": fiches,
+        "retenues": len(fiches),
+        "ecartees": sum(ecartes.values()),
+        "ecartees_par_motif": dict(ecartes),
+        # DEUX ÉTATS QUI NE SE CONFONDENT PAS. « Muet » veut dire que le flux
+        # a répondu et que rien n'a été retenu ; « injoignable » que rien n'a
+        # été lu. Les additionner ferait passer une panne de réseau pour une
+        # semaine sans actualité.
+        "muets": muets,
+        "injoignables": injoignables,
+        "flux_admis": len(admis),
+        "dit": "%d article(s) retenu(s) sur %d flux ; %d flux muet(s), "
+               "%d injoignable(s), %d article(s) écarté(s) (%s)."
+               % (len(fiches), len(admis), len(muets), len(injoignables),
+                  sum(ecartes.values()),
+                  ", ".join("%s : %d" % (m, n) for m, n in sorted(ecartes.items())
+                            if n) or "aucun"),
+        "collecte_le": aujourdhui,
+    }
+
 CADENCES = {
     "cisa_kev": 900,               # 15 min — la source publie en journée
     "owasp_llm": 6 * 3600,         # 6 h — une édition par an, révisions rares
@@ -474,6 +863,10 @@ CADENCES = {
     "mitre_atlas_tech": 24 * 3600,
     "electricity_maps": 12 * 3600,  # facteurs révisés au fil des millésimes
     "owid_energie": 24 * 3600,      # série ANNUELLE
+    # LES FLUX DE PRESSE PUBLIENT EN CONTINU, mais quinze éditeurs relus en
+    # boucle feraient de ce site un visiteur pesant. Un quart d'heure suffit
+    # pour un hebdomadaire, et c'est la cadence que conseilprev tient déjà.
+    "presse": 900,
 }
 #: Une source sans cadence déclarée est relue à chaque tour. C'est le choix le
 #: plus prudent pour le site et le moins poli pour la source : le contrôle
@@ -493,7 +886,12 @@ def _table_collecteurs(limite_kev, limite_mix):
             # La rubrique IA ne portait que des INCIDENTS (ATLAS). OWASP
             # apporte l'autre face : ce qui est reconnu comme risque,
             # indépendamment de ce qui a été observé.
-            ("owasp_llm", lambda: collecter_owasp_llm()))
+            ("owasp_llm", lambda: collecter_owasp_llm()),
+            # LES QUINZE FLUX DE PRESSE, en un seul collecteur : ils ont la
+            # même cadence, le même format et la même façon d'échouer. Quinze
+            # entrées ici auraient donné quinze lignes à tenir à jour pour un
+            # seul comportement.
+            ("presse", lambda: collecter_presse()))
 
 
 #: LE CACHE PAR COLLECTEUR. Il vit dans le processus, comme le corpus lui-même,
@@ -553,6 +951,16 @@ def oublier_cache():
 
 SOURCE_DU_COLLECTEUR = {"mitre_atlas_tech": "mitre_atlas"}
 
+#: UN COLLECTEUR PEUT LIRE PLUSIEURS SOURCES. `presse` en lit quinze, et la
+#: liste ne s'écrit pas ici : elle SE DÉRIVE du registre, par le drapeau que
+#: les entrées de flux y portent. Une seizième source de presse ajoutée à
+#: `sources.py` sera donc lue sans qu'on ait à y penser — et surtout sans
+#: qu'on puisse oublier de le déclarer, ce qui est le défaut que
+#: `sources_collectees` existe pour empêcher.
+SOURCES_DU_COLLECTEUR = {
+    "presse": lambda: {c for c, s in SRC.SOURCES.items() if s.get("presse")},
+}
+
 
 def sources_collectees():
     """Les clés de source qu'un collecteur lit RÉELLEMENT.
@@ -560,8 +968,14 @@ def sources_collectees():
     Dérivée de la table ci-dessus, jamais recopiée : c'est ce qui empêche le
     registre d'annoncer une source que plus personne ne lit.
     """
-    return {SOURCE_DU_COLLECTEUR.get(nom, nom)
-            for nom, _ in _table_collecteurs(0, None)}
+    out = set()
+    for nom, _ in _table_collecteurs(0, None):
+        plusieurs = SOURCES_DU_COLLECTEUR.get(nom)
+        if plusieurs:
+            out |= set(plusieurs())
+        else:
+            out.add(SOURCE_DU_COLLECTEUR.get(nom, nom))
+    return out
 
 
 def collecter_tout(limite_kev=30, limite_mix=None, forcer=False):
@@ -602,7 +1016,11 @@ def collecter_tout(limite_kev=30, limite_mix=None, forcer=False):
                     "erreur": e.get("erreur"), "message": e.get("message")}
             journal.append(ligne)
         else:
+            # LA CADENCE EST DITE MÊME QUAND LA SOURCE A ÉCHOUÉ. Sans elle,
+            # le lecteur du journal ne sait pas dans combien de temps le site
+            # réessaiera — l'information qui décide s'il faut s'inquiéter.
             journal.append({"source": nom, "ok": False, "relu": relu,
+                            "cadence_s": CADENCES.get(nom, CADENCE_DEFAUT),
                             "erreur": r.get("erreur"),
                             "message": r.get("message")})
     # LES RELATIONS QUI TRAVERSENT DEUX COLLECTEURS s'établissent ici, une

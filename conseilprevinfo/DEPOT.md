@@ -306,7 +306,24 @@ que rien ne le signale. Politique de contenu fermée sur `default-src 'self'`,
 sans `unsafe-inline` — ce qui a demandé de retirer les douze attributs `style`
 dispersés dans les pages et le JavaScript.
 
-**394 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
+**Les quinze flux de presse de conseilprev sont au registre** — les mêmes que
+ceux de son actualité IA et de sa veille réglementaire. Ils y arrivent à part,
+et c'est le point : les dix sources d'origine livrent des **faits**, un flux
+livre un **article**, c'est-à-dire le compte rendu qu'un tiers donne d'un fait
+que ce site n'a pas vérifié. Toutes les fiches qui en naissent portent
+`source_secondaire`, **la CNIL et le CERT-FR compris** : lire un flux, c'est
+lire un avis de publication, pas ouvrir le document. Deux étiquettes reprises
+de conseilprev sont corrigées — `artificialintelligenceact.eu` et `dig.watch`
+y passent pour des autorités alors qu'ils sont édités par des organisations
+privées, et le nom de domaine du premier prête à confusion. Deux requêtes
+Google News sont refusées : un agrégateur n'est pas une source, et l'admettre
+ferait entrer par une porte dérobée tout éditeur que la requête rapporte.
+**Aucun des quinze ne porte « vérifiée »** : les vingt adresses ont été
+réellement sondées, les vingt sont refusées par la politique réseau de
+l'environnement de conception, et une date de vérification qu'on n'a pas faite
+serait un mensonge à l'endroit exact où ce site promet de dire vrai.
+
+**426 contrôles** passent. Ils ne vérifient pas que le code « marche » : ils
 gardent les règles éditoriales, et chacun est écrit pour tomber le jour où
 quelqu'un les assouplira. Chaque règle nouvelle a été confrontée à une
 **mutation du code qu'elle garde** — et cinq de ces mutations ont révélé des
@@ -314,8 +331,10 @@ contrôles trop faibles, qui ont été resserrés. Un contrôle écrit trop STRI
 aussi été corrigé plutôt que contourné : il supprimait la distinction qu'il
 était censé protéger.
 
-### Les vingt-neuf commits du bundle
+### Les trente commits du bundle
 
+    db4575a  Les quinze flux de conseilprev entrent au registre — et un
+             article n'y est pas un fait
     25458c4  Le bandeau de titre était converti à moitié
     3ea43c3  La composition passe à celle d'un quotidien — jusque dans les
              documents emportés

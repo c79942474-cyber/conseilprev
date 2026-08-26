@@ -332,6 +332,210 @@ SOURCES = {
     },
 }
 
+# ══════════════════════════════════════════════════════════════════════════
+#  LES FLUX DE PRESSE — les mêmes que ceux de conseilprev.onrender.com
+# ══════════════════════════════════════════════════════════════════════════
+# POURQUOI ILS ARRIVENT À PART, ET POURQUOI C'EST IMPORTANT. Les dix sources
+# ci-dessus livrent des FAITS : un identifiant de vulnérabilité, une part de
+# production électrique, une technique répertoriée. Un flux de presse livre
+# autre chose — UN ARTICLE, écrit par quelqu'un, qui rapporte un fait sans
+# que ce site l'ait vérifié. Les ranger ensemble sans le dire ferait passer
+# un papier d'hebdomadaire pour une entrée de catalogue d'autorité, et c'est
+# la faute que `NATURES` désigne comme la plus coûteuse.
+#
+# CE QUI SE VÉRIFIE ICI EST DONC L'ARTICLE, PAS LE FAIT. Une fiche née d'un
+# flux porte le titre, la date et l'adresse de l'article, et son statut dit
+# qu'elle relaie un éditeur. Ce qu'elle ne dira jamais, c'est « vérifié » au
+# sens des dix sources du dessus.
+#
+# DEUX ÉTIQUETTES REPRISES DE conseilprev SONT CORRIGÉES ICI, et il faut le
+# dire : `artificialintelligenceact.eu` y figure comme source réglementaire
+# de confiance, et `dig.watch` comme observatoire. Le premier est édité par
+# le Future of Life Institute, le second par la Geneva Internet Platform :
+# deux organisations privées, utiles et sérieuses, mais qui ne sont pas des
+# autorités. Le nom de domaine du premier prête particulièrement à
+# confusion. Les classer « autorité publique » ici aurait recopié l'erreur
+# en lui donnant l'apparence d'une vérification.
+
+#: Ce que tous les flux partagent — écrit UNE fois. Quinze blocs quasi
+#: identiques auraient divergé au premier ajout, et c'est toujours celui
+#: qu'on relit le moins qui serait resté faux.
+PRESSE_COMMUN = {
+    "format": "rss",
+    "licence": "Flux public. Ce site n'en republie ni le texte ni les images : "
+               "il cite le titre, la date et l'adresse, et renvoie à "
+               "l'éditeur — ce que le droit de courte citation permet et ce "
+               "que l'usage des flux suppose.",
+    "licence_en": "Public feed. This site republishes neither text nor "
+                  "images: it cites the headline, the date and the address, "
+                  "and links back to the publisher.",
+    "cadence": "continue",
+}
+
+
+def _presse(nom, editeur, nature, sujets, humaine, flux, couvre,
+            ne_couvre_pas, langue="fr"):
+    """Une entrée de flux, bâtie sur le fond commun. Les champs qui restent
+    sont exactement ceux qui DISTINGUENT une source d'une autre : qui édite,
+    ce que cela vaut, ce que le flux couvre et ce qu'il ne couvre pas."""
+    e = dict(PRESSE_COMMUN)
+    e.update({"nom": nom, "editeur": editeur, "nature": nature,
+              "sujets": list(sujets), "url_humaine": humaine,
+              "url_donnee": flux, "couvre": couvre,
+              "ne_couvre_pas": ne_couvre_pas, "langue": langue,
+              "presse": True})
+    return e
+
+
+#: LES QUINZE FLUX, dans l'ordre où le lecteur devrait les peser : les
+#: autorités d'abord, les éditeurs ensuite. Aucun n'a pu être sondé depuis
+#: l'environnement de conception — la politique réseau y refuse les vingt
+#: adresses, sans exception — donc aucun ne porte `verifie_le`. Ils le
+#: porteront le jour où une exécution en production les aura atteints, et
+#: pas avant : c'est la règle du fichier, et elle ne souffre pas d'exception
+#: parce que la source vient d'un site voisin.
+SOURCES.update({
+    "cnil": _presse(
+        "CNIL — actualités", "Commission nationale de l'informatique et des libertés (France)",
+        "autorite_publique", ["sia"],
+        "https://www.cnil.fr/fr/actualites", "https://www.cnil.fr/fr/rss.xml",
+        "Les prises de position, sanctions et recommandations de l'autorité "
+        "française de protection des données — y compris sur les systèmes "
+        "d'IA qui traitent des données personnelles.",
+        "Ni le droit d'autres États membres, ni la conformité d'un système "
+        "que la CNIL n'a pas examiné. Une recommandation n'est pas une "
+        "décision."),
+    "cert_fr_flux": _presse(
+        "CERT-FR — avis et alertes", "ANSSI (France)",
+        "autorite_publique", ["cyber_industriel"],
+        "https://www.cert.ssi.gouv.fr/", "https://www.cert.ssi.gouv.fr/feed/",
+        "Les avis et alertes du centre gouvernemental de veille : "
+        "vulnérabilités qualifiées, campagnes actives, mesures d'urgence. "
+        "C'est l'autorité qui engage l'État français.",
+        "Ni l'exhaustivité — le CERT-FR publie ce qu'il juge utile de "
+        "publier — ni la criticité pour une installation donnée."),
+    "anssi_flux": _presse(
+        "ANSSI — actualités", "Agence nationale de la sécurité des systèmes d'information (France)",
+        "autorite_publique", ["cyber_industriel"],
+        "https://cyber.gouv.fr/actualites", "https://cyber.gouv.fr/feed",
+        "Doctrine, guides, qualifications de produits et positions de "
+        "l'agence. Distinct du CERT-FR, qui traite l'urgence.",
+        "Ni les avis techniques d'urgence (voir CERT-FR), ni les décisions "
+        "d'autres autorités nationales."),
+    "ce_numerique": _presse(
+        "Commission européenne — stratégie numérique",
+        "Commission européenne", "autorite_publique", ["sia", "ia"],
+        "https://digital-strategy.ec.europa.eu/en/news",
+        "https://digital-strategy.ec.europa.eu/en/rss.xml",
+        "Les communications de la Commission sur le numérique : actes "
+        "d'exécution, consultations, lignes directrices — dont celles qui "
+        "précisent l'application du règlement sur l'IA.",
+        "Ni le texte faisant foi (voir EUR-Lex, non branché), ni la "
+        "jurisprudence, ni la transposition dans chaque État membre.",
+        langue="en"),
+    "ai_act_eu": _presse(
+        "AI Act Explorer", "Future of Life Institute (organisation privée)",
+        "publication_editeur", ["sia"],
+        "https://artificialintelligenceact.eu/",
+        "https://artificialintelligenceact.eu/feed/",
+        "Un suivi article par article du règlement (UE) 2024/1689, avec "
+        "chronologie et analyses. Le travail est soigné et à jour.",
+        "CE N'EST PAS UNE SOURCE OFFICIELLE, malgré le nom de domaine en "
+        "« .eu » : le site est édité par une organisation privée, sans "
+        "mandat de l'Union. Le texte faisant foi est au Journal officiel.",
+        langue="en"),
+    "digital_watch": _presse(
+        "Digital Watch Observatory", "Geneva Internet Platform (fondation suisse)",
+        "publication_editeur", ["sia", "ia"],
+        "https://dig.watch/", "https://dig.watch/feed/",
+        "Un suivi des politiques numériques dans le monde : négociations "
+        "internationales, régulations nationales, gouvernance de l'IA.",
+        "Ce n'est pas un observatoire intergouvernemental : la fondation est "
+        "privée. Sa couverture est large mais sa sélection lui appartient.",
+        langue="en"),
+    "actuia": _presse(
+        "ActuIA", "ActuIA (France)", "publication_editeur", ["ia", "sia"],
+        "https://www.actuia.com/", "https://www.actuia.com/feed/",
+        "L'actualité francophone de l'intelligence artificielle : "
+        "recherche, industrie, réglementation, avec une part importante "
+        "d'écosystème français.",
+        "Ni relecture par les pairs, ni distance systématique avec les "
+        "annonces d'éditeurs. Un communiqué repris reste un communiqué."),
+    "usine_digitale": _presse(
+        "L'Usine Digitale", "Groupe Infopro Digital (France)",
+        "publication_editeur", ["ia", "centres_de_donnees"],
+        "https://www.usine-digitale.fr/", "https://www.usine-digitale.fr/rss/all",
+        "La transformation numérique de l'industrie française, dont les "
+        "investissements en centres de données et les projets d'IA "
+        "industrielle.",
+        "Publication d'un groupe de presse professionnelle : les sujets "
+        "suivent l'intérêt de ses lecteurs industriels, ce qui est un choix "
+        "éditorial et non un défaut — mais c'en est un."),
+    "lmi": _presse(
+        "Le Monde Informatique", "IT News Info (France)",
+        "publication_editeur", ["ia", "cyber_industriel", "centres_de_donnees"],
+        "https://www.lemondeinformatique.fr/",
+        "https://www.lemondeinformatique.fr/rss/rss-actu.xml",
+        "L'actualité des systèmes d'information en français : "
+        "infrastructures, sécurité, IA en entreprise.",
+        "Couverture centrée sur l'informatique de gestion. Les systèmes "
+        "industriels n'y apparaissent qu'à l'occasion d'un incident."),
+    "cybersecurite_info": _presse(
+        "Cybersécurité-info", "Cybersécurité-info (France)",
+        "publication_editeur", ["cyber_industriel"],
+        "https://cybersecurite-info.fr/", "https://cybersecurite-info.fr/feed/",
+        "Veille francophone de cybersécurité, incidents et vulnérabilités.",
+        "Éditeur de taille modeste : la couverture dépend de sa capacité de "
+        "traitement, et une absence ne signifie rien."),
+    "infosecurity": _presse(
+        "Infosecurity Magazine", "Infosecurity Group (Royaume-Uni)",
+        "publication_editeur", ["cyber_industriel"],
+        "https://www.infosecurity-magazine.com/",
+        "https://www.infosecurity-magazine.com/rss/news/",
+        "Incidents, campagnes et analyses de sécurité, couverture "
+        "internationale.",
+        "Publication adossée à un salon professionnel : son agenda et son "
+        "calendrier éditorial se croisent.", langue="en"),
+    "hacker_news": _presse(
+        "The Hacker News", "The Hacker News (Inde)",
+        "publication_editeur", ["cyber_industriel"],
+        "https://thehackernews.com/",
+        "https://feeds.feedburner.com/TheHackersNews",
+        "Publication rapide sur les vulnérabilités et les campagnes "
+        "d'attaque, souvent la première à relayer.",
+        "La rapidité se paie en vérification : les premiers articles "
+        "reprennent fréquemment le communiqué d'un éditeur de sécurité, "
+        "dont l'intérêt commercial n'est pas neutre.", langue="en"),
+    "mit_tr": _presse(
+        "MIT Technology Review", "Massachusetts Institute of Technology (États-Unis)",
+        "publication_editeur", ["ia", "sia"],
+        "https://www.technologyreview.com/",
+        "https://www.technologyreview.com/feed/",
+        "Analyses de fond sur les technologies émergentes, dont les "
+        "capacités et les limites réelles des modèles.",
+        "Adossée à une université mais éditorialement indépendante : ce "
+        "n'est ni une publication scientifique, ni une source institutionnelle "
+        "du MIT.", langue="en"),
+    "ars_technica_ia": _presse(
+        "Ars Technica — IA", "Condé Nast (États-Unis)",
+        "publication_editeur", ["ia", "sia"],
+        "https://arstechnica.com/ai/", "https://arstechnica.com/ai/feed/",
+        "Couverture technique de l'IA, avec un goût pour la mesure et le "
+        "démenti des annonces excessives.",
+        "Couverture centrée sur l'écosystème américain, et sur le grand "
+        "public technique plutôt que sur l'industrie.", langue="en"),
+    "techcrunch_ia": _presse(
+        "TechCrunch — IA", "Yahoo Inc. (États-Unis)",
+        "publication_editeur", ["ia"],
+        "https://techcrunch.com/category/artificial-intelligence/",
+        "https://techcrunch.com/category/artificial-intelligence/feed/",
+        "L'actualité des entreprises d'IA : levées, produits, dirigeants.",
+        "C'est une presse d'écosystème entrepreneurial : elle relaie les "
+        "annonces avant de les éprouver, et le volume d'un sujet n'y mesure "
+        "pas son importance.", langue="en"),
+})
+
+
 # ── Sources visées mais NON atteintes depuis l'environnement de conception ──
 # Elles sont écrites ici plutôt que tues : le jour où le réseau s'ouvre, la
 # liste de ce qu'il reste à brancher est déjà faite. Aucune ne doit être
@@ -384,6 +588,36 @@ NATURES_OBSTACLE = {
 ORDRE_OBSTACLES = ["environnement", "licence", "format"]
 
 A_BRANCHER = [
+    # ── UN AGRÉGATEUR N'EST PAS UNE SOURCE ────────────────────────────────
+    # Deux des vingt flux de conseilprev sont des REQUÊTES Google News : une
+    # recherche par mots-clés, servie en RSS. Elles rendent de vrais articles,
+    # et elles sont utiles — mais la source d'un article n'est pas le moteur
+    # qui l'a trouvé. Inscrire « Google News » sous une fiche reviendrait à
+    # citer un index à la place d'un éditeur, et le lecteur qui veut remonter
+    # à l'origine tomberait sur une page de résultats.
+    #
+    # LE FLUX PORTE POURTANT L'ÉDITEUR RÉEL, dans un élément `source`. Ce
+    # n'est donc pas un obstacle technique : c'est que l'éditeur ainsi
+    # découvert n'est, par construction, pas au registre — et le moteur
+    # refuse une fiche dont la source n'y est pas. Admettre l'agrégateur
+    # ferait entrer, par une porte dérobée, n'importe quel éditeur que la
+    # requête ramène. La règle tient ; la conséquence est qu'on renonce à ces
+    # deux flux tant qu'on n'a pas décidé d'admettre leurs éditeurs un par un.
+    {"cle": "gnews_euractiv", "nom": "EURACTIV / politique IA de l'UE (via Google News)",
+     "nature_obstacle": "format",
+     "pourquoi": "La requête ramène la couverture bruxelloise de la "
+                 "négociation et de l'application du règlement sur l'IA, que "
+                 "les quinze flux admis ne donnent pas de première main.",
+     "obstacle": "C'est une requête d'agrégateur, pas un éditeur. Chaque "
+                 "article vient d'une rédaction différente, qui n'est pas au "
+                 "registre — et une fiche dont la source n'est pas au "
+                 "registre est refusée par le moteur, à juste titre. "
+                 "L'admettre ouvrirait la porte à tout éditeur que la requête "
+                 "rapporte, sans qu'aucun n'ait été pesé.",
+     "ce_qu_il_faudrait": "Décider d'admettre EURACTIV lui-même — son flux "
+                          "propre existe — plutôt que la requête qui le "
+                          "trouve. C'est une décision éditoriale, pas du "
+                          "développement."},
     # ── CE QUI TIENT À UNE LICENCE, ET NON À DU CODE ──────────────────────
     # Le cabinet a demandé de brancher les dépêches AFP et Reuters. Les deux
     # sont ici, avec ce qu'il faudrait — et ce n'est pas du développement.
@@ -424,12 +658,22 @@ A_BRANCHER = [
     {"cle": "ember", "nature_obstacle": "environnement", "nom": "Ember — Electricity Data",
      "pourquoi": "Intensité carbone de l'électricité, séries mensuelles.",
      "obstacle": "API refusée (403) dans cet environnement."},
-    {"cle": "enisa", "nature_obstacle": "environnement", "nom": "ENISA — Threat Landscape",
-     "pourquoi": "Panorama européen des menaces, annuel.",
-     "obstacle": "Non sondé : lecture de page bloquée dans cet environnement."},
-    {"cle": "cert_fr", "nature_obstacle": "environnement", "nom": "CERT-FR (ANSSI) — avis et alertes",
-     "pourquoi": "Les avis qui engagent l'autorité française.",
-     "obstacle": "Non sondé : lecture de page bloquée dans cet environnement."},
+    {"cle": "enisa", "nature_obstacle": "format",
+     "hote": "www.enisa.europa.eu",
+     "nom": "ENISA — panorama des menaces et lignes directrices",
+     "pourquoi": "L'agence europeenne de cybersecurite publie le panorama "
+                 "annuel des menaces et les lignes directrices NIS2, que ce "
+                 "site cite sans les recevoir.",
+     "obstacle": "L'agence ne publie aucun flux general : c'est precisement "
+                 "pourquoi conseilprev la suit par une requete d'agregateur. "
+                 "Et une requete n'est pas une source, pour la raison ecrite "
+                 "a l'entree gnews_euractiv ci-dessus. S'y ajoute que "
+                 "l'adresse n'a pas pu etre sondee depuis l'environnement de "
+                 "conception.",
+     "ce_qu_il_faudrait": "Un collecteur qui lise la page de publications, ou "
+                          "l'attente d'un flux officiel. Le decoupage de page "
+                          "casse a la premiere refonte : c'est un choix, pas "
+                          "une evidence."},
     {"cle": "eur_lex", "nature_obstacle": "environnement", "nom": "EUR-Lex",
      "pourquoi": "Le texte faisant foi des règlements cités (AI Act, NIS2, EED).",
      "obstacle": "Non sondé : lecture de page bloquée dans cet environnement."},
@@ -625,6 +869,29 @@ def _verifier():
     rangs = {NATURES[n]["rang"] for n in NATURES}
     if not rangs <= {1, 2, 3, 4}:
         raise RuntimeError("sources : rang de nature hors barème")
+
+    # UNE SOURCE NE PEUT PAS ÊTRE À LA FOIS ADMISE ET « À BRANCHER », et le
+    # contrôle par clé ne suffisait pas à l'empêcher. DÉFAUT RÉEL, commis en
+    # branchant les flux de presse : le CERT-FR a été admis sous la clé
+    # `cert_fr_flux` alors qu'il figurait encore à brancher sous `cert_fr`.
+    # Le registre disait donc en même temps « on ne sait pas l'atteindre » et
+    # « elle est admise » — deux clés, un seul organisme, et rien pour le
+    # signaler. La comparaison porte désormais sur L'HÔTE, qui est ce qui
+    # identifie réellement une source.
+    def _hote(u):
+        u = str(u or "")
+        return u.split("//", 1)[-1].split("/", 1)[0].lower()
+
+    admis = {}
+    for cle, s_ in SOURCES.items():
+        admis.setdefault(_hote(s_["url_donnee"]), []).append(cle)
+    for a in A_BRANCHER:
+        h = a.get("hote")
+        if h and _hote(h) in admis:
+            raise RuntimeError(
+                "sources : %s est déclarée à brancher alors que %s sert déjà "
+                "%s — le registre se contredit sur la même source"
+                % (a["cle"], ", ".join(admis[_hote(h)]), _hote(h)))
 
     for a in A_BRANCHER:
         for champ in ("cle", "nom", "pourquoi", "obstacle"):

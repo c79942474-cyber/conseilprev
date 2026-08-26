@@ -94,7 +94,16 @@ def test_la_reconnaissance_ne_lit_que_les_champs_de_la_source():
     # ET LES CHAMPS EMPLOYÉS SONT BIEN CEUX DE LA SOURCE, nommés. Un contrôle
     # qui ne ferait qu'interdire laisserait passer un appel sur un champ neuf
     # dont personne n'aurait vérifié la provenance.
-    admis = ("target", "vendorProject", "product")
+    #
+    # AJOUTER UN CHAMP ICI EST UN ACTE, et c'est le but de cette liste. Deux
+    # s'y ajoutent avec les flux de presse : `title` et `summary`, qui sont
+    # les balises du flux — donc le texte de l'ÉDITEUR, pas le nôtre. C'est ce
+    # qui les rend admissibles là où « titre » et « chapeau » restent
+    # interdits : sur ce site, ces deux-là désignent partout ailleurs un texte
+    # composé par le cabinet. Le collecteur de presse lit donc `a["title"]` et
+    # `a["summary"]` — les clés du flux, gardées telles quelles précisément
+    # pour que leur provenance se lise dans leur nom.
+    admis = ("target", "vendorProject", "product", "title", "summary")
     for a in appels:
         assert any(x in a for x in admis), a
 

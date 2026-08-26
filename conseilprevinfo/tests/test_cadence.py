@@ -107,9 +107,28 @@ def test_le_corpus_est_le_meme_a_chaque_tour():
         len(un["corpus"]), len(deux["corpus"]))
     assert ({f["id"] for f in un["corpus"]}
             == {f["id"] for f in deux["corpus"]})
-    # Et le second tour n'a rouvert aucune source.
-    assert all(j.get("relu") is False
-               for j in deux["journal"] if "relu" in j)
+    # ET LE SECOND TOUR N'A ROUVERT AUCUNE SOURCE QUI AVAIT RÉPONDU.
+    #
+    # « Aucune source », tout court, était trop fort — et ne se voyait pas
+    # tant que toutes répondaient depuis cet environnement. La règle écrite
+    # dans `_relire` est double : un succès se garde pour la durée de sa
+    # cadence, UN ÉCHEC NE SE GARDE PAS, parce que servir l'erreur pendant un
+    # quart d'heure serait pire qu'une panne de quelques secondes. Une source
+    # en échec est donc rouverte au tour suivant, et c'est voulu.
+    #
+    # Les flux de presse rendent ce cas ordinaire : la politique réseau de
+    # l'environnement de conception les refuse tous les quinze.
+    reussies = {j["source"] for j in deux["journal"] if j.get("ok")}
+    for j in deux["journal"]:
+        if "relu" not in j:
+            continue
+        if j["source"] in reussies:
+            assert j["relu"] is False, "%s a été rouverte alors qu'elle avait répondu" % j["source"]
+        else:
+            assert j["relu"] is True, (
+                "%s a échoué et n'a pas été retentée : l'échec a été mis en "
+                "cache, et l'erreur se servira pendant toute la cadence"
+                % j["source"])
 
 
 def test_le_journal_dit_ce_qui_a_ete_relu_et_a_quelle_cadence():
