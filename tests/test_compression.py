@@ -175,13 +175,22 @@ def test_un_vrai_flux_nest_pas_rassemble_en_memoire():
         'un flux a été rassemblé en mémoire pour être compressé')
 
 
-def test_une_image_nest_pas_compressee():
+def test_une_image_nest_meme_pas_soumise_au_compresseur(compressions):
     """Un JPEG est déjà compressé : le repasser au gzip coûte du processeur
-    et rend des octets en plus."""
+    et rend des octets en plus.
+
+    ET C'EST L'ESSAI QU'ON MESURE, PAS SON RÉSULTAT. Le crochet garde une
+    sécurité de dernier ressort — si la version compressée est plus grosse,
+    elle est jetée —, si bien qu'une image recomprimée par erreur arriverait
+    quand même intacte, en-tête absent. Un contrôle qui ne regarderait que
+    l'en-tête dépendrait alors de l'entropie du fichier d'essai, pas de la
+    règle. On compte donc les appels au compresseur."""
     r = _get('/hero-bg.jpg')
     if r.status_code != 200:
         pytest.skip('hero-bg.jpg absent du dépôt')
     assert not r.headers.get('Content-Encoding')
+    assert compressions['n'] == 0, (
+        'une image déjà compressée est passée au compresseur pour rien')
 
 
 # ──────────────────────────────────────────────────────────────────────
