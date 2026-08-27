@@ -529,7 +529,146 @@ CADRE = {
   "Facteur de charge : un site n'a jamais tous ses serveurs à pleine charge en permanence. Retenir 100 % gonfle mécaniquement tous les résultats."
  ]
 }
-LIMITES = ["Aucune capacite informatique attestee ne survit a la refutation : capacite_mw est nul sur les 249 sites. Les chiffres de MW qui circulent sont presque toujours des capacites cibles de campus (Sines 1,2 GW), des ambitions a terme (Narvik 230 MW), des capacites de raccordement disponibles (Vantage Newport), des puissances potentielles de terrain (Bulk Vennesla, Lefdal) ou des puissances de machine et non de site (LUMI, MareNostrum 5, Helios, Karolina). Aucun agregat de puissance europeenne ne peut donc etre construit a partir de ce referentiel. Nouveaute de la version 2026-08 : les fiches NTT publient, site par site, une charge informatique MAXIMALE (Francfort 1 ~77 MW, Berlin 2 ~24 MW, Berlin 1 ~17 MW, Munich 2 ~14 MW). C'est une capacite de CONCEPTION, pas une puissance installee ni consommee : elle est consignee dans la note de chaque site et volontairement laissee hors de capacite_mw, faute de quoi la derivation d'electricite et d'eau prendrait un plafond pour un fonctionnement.", "DEUX ORIGINES, DEUX NIVEAUX DE PREUVE, ET LA CARTE LES SEPARE. Cent dix lignes ont ete etablies une par une — source nommee, coordonnees verifiees, refutation adversariale — et portent provenance='referentiel' ; elles sont dessinees en DRAPEAU. Cent trente-neuf viennent du registre PeeringDB, ou chaque exploitant inscrit lui-meme ses installations : elles portent provenance='registre', sont dessinees en DISQUE CREUX, et n'ont ete verifiees ni une par une ni sur place. Un enregistrement declaratif n'est pas une attestation, et a cent trente-neuf contre cent dix la seconde serait noyee dans la premiere si rien ne les distinguait a l'oeil.", "CE QUE L'IMPORT DE REGISTRE N'APPORTE PAS. PeeringDB ne publie ni puissance, ni PUE, ni consommation d'eau, et ne distingue AUCUN stade d'avancement : tout ce qui y figure est tenu pour en service. Les cent trente-neuf lignes importees arrivent donc sans gabarit — le moteur repond « aucune derivation possible » plutot que de leur preter l'ordre de grandeur d'une categorie choisie d'office — et leur statut 'service' est un defaut, pas un constat. Trois fiches se declaraient fermees dans leur nom ou leurs notes tout en restant actives au registre : elles ont ete ecartees, ce qui montre que le champ de statut du registre decrit l'etat de la FICHE et non du batiment.", "Le registre est un annuaire d'INTERCONNEXION avant d'etre un annuaire de batiments : un exploitant s'y inscrit pour etre trouve par des reseaux, et les sites qui ne cherchent pas d'interconnexion — campus hyperscale en propre, salles d'entreprise — n'y figurent pas ou peu. La couverture est donc biaisee vers les points d'echange des grandes metropoles. Quarante-six fiches ont par ailleurs ete fusionnees entre elles parce qu'elles designent un MEME BATIMENT loue par plusieurs exploitants (quatre a Nuremberg Deutschherrnstrasse, trois a Berlin Lutzowstrasse) : la carte compte des batiments, pas des baux.", "Biais de publication massif : les seules donnees d'eau et d'electricite disponibles sont celles que les operateurs choisissent de publier, ou celles qu'une controverse locale a fait sortir. Le cas Microsoft Middenmeer est exemplaire : les ~84 millions de litres de 2021 ne sont connus que parce qu'un conflit local a force leur divulgation, ils correspondent a une annee d'exception tres superieure a l'annonce initiale, et les publier comme consommation annuelle transformerait un pic de polemique en constante. Le champ a ete vide. Consequence : les sites les plus documentes sont les plus contestes, pas les plus consommateurs.", "Les annonces ne se realisent pas toutes, et le referentiel en garde la trace : Meta Zeewolde (166 ha approuves puis bloques par l'Etat neerlandais), Apple Athenry (retire en 2018 apres des annees de recours), Apple Aabenraa/Kasso (terrain reaffecte a un projet energetique), extension Google Dublin refusee en 2022 pour motifs de reseau electrique. Quatre projets abandonnes sur 249 lignes, alors que le taux reel d'abandon des annonces hyperscale est vraisemblablement plus eleve : les projets morts avant publicite ne laissent aucune trace et sont structurellement absents.", "Les capacites et investissements 'a terme' sont systematiquement presentes comme acquis par les communications d'operateurs. Le referentiel a refuse d'imputer a un site les enveloppes nationales pluriannuelles (Microsoft 3,2 Md EUR Allemagne, 4 Md EUR France, engagements Espagne, Italie, Grece et Pologne ; Google 1 Md EUR Allemagne et 1 Md USD Royaume-Uni ; Brookfield ~20 Md EUR France ; Blackstone ~10 Md GBP ; programmes AWS Aragon et Italie), qui couvrent plusieurs implantations et souvent des depenses non immobilieres (cloud, formation). Seuls 850 M EUR subsistent, pour Apple Athenry, parce que l'annonce de 2015 portait sur 1,7 Md EUR pour deux sites nommes — mais c'est un montant ANNONCE ET JAMAIS ENGAGE sur un projet abandonne, qu'aucun agregat d'investissement realise ne doit additionner.", "Fausse precision geographique : de nombreux couples lat/lon sont des centroides de commune ou de ville, affiches avec trois ou quatre decimales qui suggerent une adresse de batiment. C'est le cas des regions cloud (Azure Poland Central, Google europe-central2, AWS Milan, Microsoft Italy North, Microsoft Spain Central, Microsoft Greece Central), des implantations AWS non confirmees adresse par adresse, et de la plupart des centres de calcul d'Europe centrale (Prague, Sofia, Riga, Zagreb, Craiova). Ecarts connus et signales : Green Mountain Rennesoy (~10 km), Karolina/Ostrava-Poruba, Discoverer/Sofia Tech Park, AWS Huesca (zone logistique au sud-ouest du chef-lieu). Deux sites avaient ete retires plutot que de publier un point faux (NTT Francfort, Greenergy Tallinn) ; ils sont revenus en 2026-08 sur l'adresse publiee par leur exploitant, et la liste REINTEGRES en garde la trace. Un troisieme reste dehors pour localisation entierement presumee (4iG Hongrie). Les treize sites ajoutes en 2026-08 portent un point RECONSTITUE depuis une adresse postale publiee, a la precision du quartier ou de la commune : aucun geocodeur n'etait joignable au moment de la compilation, ce que chaque note dit en toutes lettres. Ces points valent donc pour situer, jamais pour mesurer une distance.", "Granularite heterogene : le referentiel melange des batiments identifies, des campus multi-batiments agreges sous une seule ligne (Equinix Slough LD4-LD6, Equinix Francfort, Equinix Madrid qui recouvre des communes differentes, Telehouse Docklands, Digital Realty La Courneuve PAR7+PAR8, campus DUB de Dublin, Atman Duchnice), des regions cloud multi-sites incluant de l'espace loue, une entree de niveau operateur-ville (DEAC Riga) et un evenement d'urbanisme rattache a un campus existant (extension Google Dublin refusee, aux memes coordonnees que Profile Park). Un denombrement brut de lignes n'est donc pas un denombrement de centres de donnees.", "Le champ refroidissement est structurellement fragile. 'recuperation_chaleur' decrit un debouche de chaleur fatale en aval, pas la technologie de refroidissement primaire : il a ete purge la ou le verdict l'exigeait (Digital Realty Francfort est, Microsoft region Finlande) mais subsiste la ou les verdicts l'ont conserve (AWS Tallaght, Equinix Saint-Denis, EcoDataCenter Falun, Meta Odense, Google Fredericia, CSC Kajaani). Ces lignes sont exclues de toute derivation d'eau. De meme, 'free_cooling' releve parfois de la revendication commerciale (Kao Data) et ne doit jamais justifier une consommation d'eau nulle.", "Les identites d'exploitants vieillissent vite : Global Switch Londres (demantelement du portefeuille), Nabiax (mouvements d'actionnariat post-Asterion), Altice Portugal, les operateurs baltes et nordiques de colocation, DATA4 (Brookfield). Le champ operateur doit etre reconfirme a chaque rafraichissement ; il ne vaut qu'a la date de compilation.", "Perimetre non homogene, et desormais moins lacunaire. La version 2026-08 a LEVE le cadrage sur le bassin rhenan qui avait fait retirer trois sites allemands reels : Berlin, Munich, Hambourg et Biere entrent, l'Allemagne passe de six a quinze lignes, l'Autriche, la Slovaquie et l'Estonie deviennent representees. Le desequilibre demeure : le Royaume-Uni et la Norvege sont hors Union europeenne, l'Irlande et les Pays-Bas restent sur-representes parce que la contestation locale y a produit de la documentation, et des pays entiers (Lituanie, pays balkaniques hors Slovenie et Croatie, Chypre, Malte) sont toujours absents faute de compilation, non faute de sites. L'Allemagne elle-meme, premiere du continent avec plus de cinq cents centres recenses par les annuaires professionnels, n'est couverte qu'a hauteur de quinze : combler un trou n'est pas atteindre l'exhaustivite.", "Le referentiel ne dit rien de la temporalite : un statut 'construction' ou 'annonce' fige l'etat d'avancement a la date de l'annonce d'origine, souvent depassee (QTS Cambois, Microsoft Greece Central, Google Horndal, ClusterPower Craiova). La version 2026-08-d a verifie deux de ces statuts et les a CORRIGES : Google Waltham Cross, inaugure le 16 septembre 2025, et Eclairion Bruyeres-le-Chatel, en exploitation depuis le printemps 2026, passent de 'construction' a 'service'. Elle a par ailleurs pose un HORIZON ANNONCE sur six projets dont un calendrier public existe (Bedburg et Bergheim 2027, Espoo 2027, Narvik 2027, Sines SIN02 2027, Fos-sur-Mer 2028). Les douze autres projets n'ont AUCUNE date publiee : la carte les montre en permanence, sans les faire glisser vers un avenir qu'on ne connait pas. Trois statuts ont d'ailleurs du etre reconstruits par defaut apres purge, faute de pouvoir laisser le champ vide : ils sont signales site par site et doivent etre reverifies avant toute publication."]
+# ══════════════════════════════════════════════════════════════════════════
+# CE QUE D'AUTRES ONT COMPTE, ET QUE NOUS NE COMPTONS PAS
+# ══════════════════════════════════════════════════════════════════════════
+# POURQUOI CE TABLEAU EXISTE. Une carte qui montre trente-trois sites francais
+# laisse croire qu'il y en a trente-trois. Les LIMITES disaient deja la
+# sous-couverture ALLEMANDE — « plus de cinq cents centres recenses par les
+# annuaires professionnels, [...] couverte qu'a hauteur de quinze » — mais en
+# PROSE, et pour un seul pays. Une phrase ne se compare pas toute seule au
+# denombrement qu'elle commente : elle vieillit en silence des qu'une ligne
+# entre ou sort.
+#
+# Le compte exterieur devient donc une DONNEE, avec sa source et sa date, et
+# `_limite_couverture()` rapproche les deux a chaque appel de sante().
+#
+# CE QUE CES NOMBRES NE SONT PAS. Ni une cible a atteindre, ni un chiffre a
+# additionner avec le notre. Les perimetres different — un « centre de
+# donnees » chez DCWatch est un batiment repere par imagerie satellite, chez
+# PeeringDB une fiche d'interconnexion, ici une ligne qui peut agreger un
+# campus entier. Un ecart de dix ne se lit donc pas comme dix sites manquants,
+# mais comme deux facons de compter qu'il faut nommer avant de comparer.
+COUVERTURE_NATIONALE = {
+    "FR": {
+        "nom": "France",
+        "recense": 350,
+        "approx": True,
+        "source": "« Les Echos », 2026 — sources citees : Hubblo-DCWatch, AEF Info",
+        "methode": ("DCWatch : base ouverte et collaborative, recensement par imagerie "
+                    "satellite (dimensions des batiments, estimation de puissance), "
+                    "croise avec les registres cadastraux et les rapports "
+                    "extra-financiers. Declaree NON exhaustive par ses auteurs."),
+    },
+    "DE": {
+        "nom": "Allemagne",
+        "recense": 500,
+        "approx": True,
+        "source": "Annuaires professionnels du secteur, cites dans les LIMITES depuis 2026-08",
+        "methode": ("Denombrement d'annuaire, sans methode publiee ni definition "
+                    "commune du perimetre d'un « centre »."),
+    },
+}
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# REPERES NATIONAUX FRANCAIS — des agregats publies, jamais des sites
+# ══════════════════════════════════════════════════════════════════════════
+# CE QU'ILS FONT ICI. Ce referentiel refuse toute puissance par site, et il a
+# raison : les MW qui circulent sont des cibles, des ambitions ou des
+# raccordements. Mais des agregats NATIONAUX existent, publies par des
+# institutions qui les assument. Les tenir a l'ecart du referentiel les
+# rendrait introuvables ; les melanger aux sites en ferait des donnees de
+# site. Ils vivent donc ici, nommes, dates, et hors de tout agregat.
+#
+# AUCUN DE CES CHIFFRES N'EST DERIVE DES SITES, ET AUCUN NE DOIT L'ETRE.
+REPERES_FR = [
+    {"cle": "raccordement_reserve",
+     "valeur": 15.0, "unite": "GW",
+     "libelle": "Puissance deja reservee aupres de RTE pour des centres de donnees",
+     "source": ("Rapport de la commission d'enquete parlementaire sur « les "
+                "vulnerabilites numeriques de la France », cite par « Les Echos » (2026)"),
+     "reserve": ("Une reservation de raccordement n'est ni une puissance installee "
+                 "ni une consommation : elle mesure une intention aupres du "
+                 "gestionnaire de reseau, et une part inconnue n'aboutira pas.")},
+    {"cle": "raccordement_reserve_europeen",
+     "valeur": 1.4, "unite": "GW",
+     "libelle": "Part de cette reservation portee par des acteurs europeens",
+     "source": ("Rapport de la commission d'enquete parlementaire sur « les "
+                "vulnerabilites numeriques de la France », cite par « Les Echos » (2026)"),
+     "reserve": ("Soit environ neuf pour cent des 15 GW. Le rapport qualifie "
+                 "l'acteur qui RESERVE, pas l'utilisateur final — que le modele "
+                 "de colocation rend precisement introuvable.")},
+    {"cle": "emissions_filiere",
+     "valeur": 23.0, "unite": "% de hausse",
+     "libelle": "Hausse des emissions de gaz a effet de serre de la filiere, a fin 2024",
+     "source": "Arcep, 5e edition du rapport « Pour un numerique soutenable »",
+     "reserve": ("Les centres de donnees dedies a l'IA les plus recents n'y sont "
+                 "pas encore pris en compte : la tendance est un plancher.")},
+    {"cle": "trajectoire_elec_2035",
+     "valeur": 3.0, "unite": "× (facteur)",
+     "libelle": "Multiplication possible de la consommation electrique du numerique d'ici 2035",
+     "source": "Trajectoires prospectives de l'Ademe",
+     "reserve": ("Trajectoire prospective, non prevision. Elle porte sur le "
+                 "NUMERIQUE entier, pas sur les seuls centres de donnees.")},
+    {"cle": "part_electricite_couts",
+     "valeur": 30.0, "unite": "% des depenses",
+     "libelle": "Part de l'electricite dans les depenses d'un centre de donnees",
+     "source": ("Michael Reffay, directeur general de France Datacenter, "
+                "cite par « Les Echos » (2026)"),
+     "reserve": ("Chiffre avance par le syndicat professionnel de la filiere. "
+                 "Il sert un argument — l'incitation naturelle a l'efficacite — "
+                 "et n'est pas issu d'une mesure publiee.")},
+]
+
+# ══════════════════════════════════════════════════════════════════════════
+# CE QUI MANQUE, ET POURQUOI CE N'EST PAS COMBLE
+# ══════════════════════════════════════════════════════════════════════════
+# UNE SOURCE QU'ON NE PEUT PAS ATTEINDRE EST UNE INTENTION, PAS UNE SOURCE.
+# Ces entrees disent ce qu'il faudrait brancher et ce qui l'empeche. Elles ne
+# fournissent aucune donnee et n'en simulent aucune.
+SOURCES_A_BRANCHER = [
+    {"cle": "dcwatch",
+     "nom": "DCWatch (projet de recherche Hubblo)",
+     "apporte": ("Un recensement par site avec ESTIMATION DE PUISSANCE, obtenue "
+                 "par mesure des dimensions sur imagerie satellite puis croisement "
+                 "avec le cadastre et les rapports extra-financiers. C'est "
+                 "exactement ce qui manque a ce referentiel, dont capacite_mw est "
+                 "nul sur toutes les lignes."),
+     "manque": ("Base non recuperee : la sortie reseau de l'environnement de "
+                "compilation est refusee pour ce domaine. La licence de "
+                "reutilisation n'a pas ete instruite — « base ouverte et "
+                "collaborative » decrit un mode de contribution, pas un droit de "
+                "republication. Republier n'est pas consulter : cela se tranche "
+                "avant, pas apres."),
+     "reserve": ("Ses auteurs la declarent non exhaustive, et l'estimation par "
+                 "imagerie est une mesure de BATIMENT, pas de charge informatique. "
+                 "L'importer ne leverait donc pas l'avertissement sur les MW : "
+                 "elle le deplacerait vers une autre methode, qu'il faudrait "
+                 "documenter a son tour.")},
+    {"cle": "origine_operateur",
+     "nom": "Origine geographique de l'operateur d'infrastructure",
+     "apporte": ("L'axe d'analyse que ce referentiel n'a pas : la nationalite de "
+                 "l'exploitant du batiment. C'est la variable de couleur des "
+                 "cartes publiees par « Les Echos », et elle eclaire la question "
+                 "de souverainete que les 15 GW / 1,4 GW posent au niveau national."),
+     "manque": ("Le champ `operateur` porte un NOM, pas un pays. Le renseigner "
+                "demande d'etablir la nationalite de chaque exploitant a la date "
+                "de compilation — or les identites d'exploitants vieillissent "
+                "vite, ce que les LIMITES disent deja. Le faire de memoire "
+                "produirait un axe faux qui aurait l'air juste."),
+     "reserve": ("ET SURTOUT : L'ORIGINE DE L'OPERATEUR N'EST PAS CELLE DE "
+                 "L'UTILISATEUR. Le modele de la colocation loue metres carres et "
+                 "megawatts a des tiers dont l'identite est couverte par le secret "
+                 "des affaires. Une carte coloriee par nationalite d'exploitant "
+                 "se lit tres facilement comme une carte de la souverainete des "
+                 "DONNEES : elle ne l'est pas, et l'intitule doit le dire — "
+                 "« origine de l'operateur (infrastructure) », jamais « origine "
+                 "des donnees ».")},
+]
+
+
+LIMITES = ["Aucune capacite informatique attestee ne survit a la refutation : capacite_mw est nul sur les 249 sites. Les chiffres de MW qui circulent sont presque toujours des capacites cibles de campus (Sines 1,2 GW), des ambitions a terme (Narvik 230 MW), des capacites de raccordement disponibles (Vantage Newport), des puissances potentielles de terrain (Bulk Vennesla, Lefdal) ou des puissances de machine et non de site (LUMI, MareNostrum 5, Helios, Karolina). Aucun agregat de puissance europeenne ne peut donc etre construit a partir de ce referentiel. Nouveaute de la version 2026-08 : les fiches NTT publient, site par site, une charge informatique MAXIMALE (Francfort 1 ~77 MW, Berlin 2 ~24 MW, Berlin 1 ~17 MW, Munich 2 ~14 MW). C'est une capacite de CONCEPTION, pas une puissance installee ni consommee : elle est consignee dans la note de chaque site et volontairement laissee hors de capacite_mw, faute de quoi la derivation d'electricite et d'eau prendrait un plafond pour un fonctionnement.", "DEUX ORIGINES, DEUX NIVEAUX DE PREUVE, ET LA CARTE LES SEPARE. Cent dix lignes ont ete etablies une par une — source nommee, coordonnees verifiees, refutation adversariale — et portent provenance='referentiel' ; elles sont dessinees en DRAPEAU. Cent trente-neuf viennent du registre PeeringDB, ou chaque exploitant inscrit lui-meme ses installations : elles portent provenance='registre', sont dessinees en DISQUE CREUX, et n'ont ete verifiees ni une par une ni sur place. Un enregistrement declaratif n'est pas une attestation, et a cent trente-neuf contre cent dix la seconde serait noyee dans la premiere si rien ne les distinguait a l'oeil.", "CE QUE L'IMPORT DE REGISTRE N'APPORTE PAS. PeeringDB ne publie ni puissance, ni PUE, ni consommation d'eau, et ne distingue AUCUN stade d'avancement : tout ce qui y figure est tenu pour en service. Les cent trente-neuf lignes importees arrivent donc sans gabarit — le moteur repond « aucune derivation possible » plutot que de leur preter l'ordre de grandeur d'une categorie choisie d'office — et leur statut 'service' est un defaut, pas un constat. Trois fiches se declaraient fermees dans leur nom ou leurs notes tout en restant actives au registre : elles ont ete ecartees, ce qui montre que le champ de statut du registre decrit l'etat de la FICHE et non du batiment.", "Le registre est un annuaire d'INTERCONNEXION avant d'etre un annuaire de batiments : un exploitant s'y inscrit pour etre trouve par des reseaux, et les sites qui ne cherchent pas d'interconnexion — campus hyperscale en propre, salles d'entreprise — n'y figurent pas ou peu. La couverture est donc biaisee vers les points d'echange des grandes metropoles. Quarante-six fiches ont par ailleurs ete fusionnees entre elles parce qu'elles designent un MEME BATIMENT loue par plusieurs exploitants (quatre a Nuremberg Deutschherrnstrasse, trois a Berlin Lutzowstrasse) : la carte compte des batiments, pas des baux.", "Biais de publication massif : les seules donnees d'eau et d'electricite disponibles sont celles que les operateurs choisissent de publier, ou celles qu'une controverse locale a fait sortir. Le cas Microsoft Middenmeer est exemplaire : les ~84 millions de litres de 2021 ne sont connus que parce qu'un conflit local a force leur divulgation, ils correspondent a une annee d'exception tres superieure a l'annonce initiale, et les publier comme consommation annuelle transformerait un pic de polemique en constante. Le champ a ete vide. Consequence : les sites les plus documentes sont les plus contestes, pas les plus consommateurs.", "Les annonces ne se realisent pas toutes, et le referentiel en garde la trace : Meta Zeewolde (166 ha approuves puis bloques par l'Etat neerlandais), Apple Athenry (retire en 2018 apres des annees de recours), Apple Aabenraa/Kasso (terrain reaffecte a un projet energetique), extension Google Dublin refusee en 2022 pour motifs de reseau electrique. Quatre projets abandonnes sur 249 lignes, alors que le taux reel d'abandon des annonces hyperscale est vraisemblablement plus eleve : les projets morts avant publicite ne laissent aucune trace et sont structurellement absents.", "Les capacites et investissements 'a terme' sont systematiquement presentes comme acquis par les communications d'operateurs. Le referentiel a refuse d'imputer a un site les enveloppes nationales pluriannuelles (Microsoft 3,2 Md EUR Allemagne, 4 Md EUR France, engagements Espagne, Italie, Grece et Pologne ; Google 1 Md EUR Allemagne et 1 Md USD Royaume-Uni ; Brookfield ~20 Md EUR France ; Blackstone ~10 Md GBP ; programmes AWS Aragon et Italie), qui couvrent plusieurs implantations et souvent des depenses non immobilieres (cloud, formation). Seuls 850 M EUR subsistent, pour Apple Athenry, parce que l'annonce de 2015 portait sur 1,7 Md EUR pour deux sites nommes — mais c'est un montant ANNONCE ET JAMAIS ENGAGE sur un projet abandonne, qu'aucun agregat d'investissement realise ne doit additionner.", "Fausse precision geographique : de nombreux couples lat/lon sont des centroides de commune ou de ville, affiches avec trois ou quatre decimales qui suggerent une adresse de batiment. C'est le cas des regions cloud (Azure Poland Central, Google europe-central2, AWS Milan, Microsoft Italy North, Microsoft Spain Central, Microsoft Greece Central), des implantations AWS non confirmees adresse par adresse, et de la plupart des centres de calcul d'Europe centrale (Prague, Sofia, Riga, Zagreb, Craiova). Ecarts connus et signales : Green Mountain Rennesoy (~10 km), Karolina/Ostrava-Poruba, Discoverer/Sofia Tech Park, AWS Huesca (zone logistique au sud-ouest du chef-lieu). Deux sites avaient ete retires plutot que de publier un point faux (NTT Francfort, Greenergy Tallinn) ; ils sont revenus en 2026-08 sur l'adresse publiee par leur exploitant, et la liste REINTEGRES en garde la trace. Un troisieme reste dehors pour localisation entierement presumee (4iG Hongrie). Les treize sites ajoutes en 2026-08 portent un point RECONSTITUE depuis une adresse postale publiee, a la precision du quartier ou de la commune : aucun geocodeur n'etait joignable au moment de la compilation, ce que chaque note dit en toutes lettres. Ces points valent donc pour situer, jamais pour mesurer une distance.", "Granularite heterogene : le referentiel melange des batiments identifies, des campus multi-batiments agreges sous une seule ligne (Equinix Slough LD4-LD6, Equinix Francfort, Equinix Madrid qui recouvre des communes differentes, Telehouse Docklands, Digital Realty La Courneuve PAR7+PAR8, campus DUB de Dublin, Atman Duchnice), des regions cloud multi-sites incluant de l'espace loue, une entree de niveau operateur-ville (DEAC Riga) et un evenement d'urbanisme rattache a un campus existant (extension Google Dublin refusee, aux memes coordonnees que Profile Park). Un denombrement brut de lignes n'est donc pas un denombrement de centres de donnees.", "Le champ refroidissement est structurellement fragile. 'recuperation_chaleur' decrit un debouche de chaleur fatale en aval, pas la technologie de refroidissement primaire : il a ete purge la ou le verdict l'exigeait (Digital Realty Francfort est, Microsoft region Finlande) mais subsiste la ou les verdicts l'ont conserve (AWS Tallaght, Equinix Saint-Denis, EcoDataCenter Falun, Meta Odense, Google Fredericia, CSC Kajaani). Ces lignes sont exclues de toute derivation d'eau. De meme, 'free_cooling' releve parfois de la revendication commerciale (Kao Data) et ne doit jamais justifier une consommation d'eau nulle.", "Les identites d'exploitants vieillissent vite : Global Switch Londres (demantelement du portefeuille), Nabiax (mouvements d'actionnariat post-Asterion), Altice Portugal, les operateurs baltes et nordiques de colocation, DATA4 (Brookfield). Le champ operateur doit etre reconfirme a chaque rafraichissement ; il ne vaut qu'a la date de compilation.", "Perimetre non homogene, et desormais moins lacunaire. La version 2026-08 a LEVE le cadrage sur le bassin rhenan qui avait fait retirer trois sites allemands reels : Berlin, Munich, Hambourg et Biere entrent, l'Allemagne passe de six a quinze lignes, l'Autriche, la Slovaquie et l'Estonie deviennent representees. Le desequilibre demeure : le Royaume-Uni et la Norvege sont hors Union europeenne, l'Irlande et les Pays-Bas restent sur-representes parce que la contestation locale y a produit de la documentation, et des pays entiers (Lituanie, pays balkaniques hors Slovenie et Croatie, Chypre, Malte) sont toujours absents faute de compilation, non faute de sites. L'Allemagne elle-meme, premiere du continent avec plus de cinq cents centres recenses par les annuaires professionnels, n'est couverte qu'a hauteur de quinze : combler un trou n'est pas atteindre l'exhaustivite. LA FRANCE EST DANS LE MEME CAS, ET DESORMAIS CHIFFRABLE. Treize lignes y ont ete etablies une par une et vingt viennent du registre, soit trente-trois au total — pour environ trois cent cinquante centres recenses sur le territoire par le projet DCWatch (Hubblo), relaye par « Les Echos » en 2026. Moins d'un site sur dix, et l'ecart n'est pas seulement de nombre : DCWatch estime une PUISSANCE par site, mesuree sur imagerie satellite puis croisee avec le cadastre et les rapports extra-financiers, la ou ce referentiel n'en attribue aucune. Ses auteurs la declarent elle aussi non exhaustive. Le detail des comptes exterieurs vit dans COUVERTURE_NATIONALE, et `couverture()` en derive la part reelle plutot que de la recopier ici.", "Le referentiel ne dit rien de la temporalite : un statut 'construction' ou 'annonce' fige l'etat d'avancement a la date de l'annonce d'origine, souvent depassee (QTS Cambois, Microsoft Greece Central, Google Horndal, ClusterPower Craiova). La version 2026-08-d a verifie deux de ces statuts et les a CORRIGES : Google Waltham Cross, inaugure le 16 septembre 2025, et Eclairion Bruyeres-le-Chatel, en exploitation depuis le printemps 2026, passent de 'construction' a 'service'. Elle a par ailleurs pose un HORIZON ANNONCE sur six projets dont un calendrier public existe (Bedburg et Bergheim 2027, Espoo 2027, Narvik 2027, Sines SIN02 2027, Fos-sur-Mer 2028). Les douze autres projets n'ont AUCUNE date publiee : la carte les montre en permanence, sans les faire glisser vers un avenir qu'on ne connait pas. Trois statuts ont d'ailleurs du etre reconstruits par defaut apres purge, faute de pouvoir laisser le champ vide : ils sont signales site par site et doivent etre reverifies avant toute publication."]
 
 
 def _enrichir():
@@ -640,6 +779,13 @@ def assemble():
         },
         "cadre": CADRE,
         "limites": LIMITES,
+        # CE QUE LA CARTE DOIT POUVOIR DIRE D'ELLE-MEME : sur combien de
+        # sites recenses ailleurs elle en montre combien. Sans cela, une
+        # carte de trente-trois points laisse croire qu'il y en a
+        # trente-trois.
+        "couverture": couverture(),
+        "reperes_fr": REPERES_FR,
+        "a_brancher": SOURCES_A_BRANCHER,
         "retires": RETIRES,
         "reintegres": REINTEGRES,
         "maj": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -671,11 +817,121 @@ def _limite_temporalite(pipe):
     return maux
 
 
+def couverture():
+    """Ce que nous portons, rapporte a ce que d'autres ont compte.
+
+    LE TAUX EST CALCULE, JAMAIS ECRIT. C'est tout l'objet de ce bloc : une
+    phrase qui annonce « quinze lignes sur cinq cents » devient fausse des
+    qu'une ligne entre, et personne ne revient la corriger. Le denominateur
+    vient de `COUVERTURE_NATIONALE` (source nommee), le numerateur du compte
+    reel des sites."""
+    out = {}
+    for pays, ref in COUVERTURE_NATIONALE.items():
+        lignes = [s for s in SITES if s.get("pays") == pays]
+        # LES DEUX PROVENANCES SONT COMPTEES A PART, comme partout ailleurs
+        # dans ce module. Les confondre a failli me faire « corriger » une
+        # phrase juste : la prose dit l'Allemagne « couverte qu'a hauteur de
+        # quinze », et c'est exact — quinze lignes ETABLIES UNE PAR UNE. Les
+        # vingt et une autres viennent de l'import de registre, que les
+        # LIMITES decrivent separement. Deux denominateurs, deux phrases.
+        # MEME DEFAUT QUE `_enrichir()` : une ligne sans `provenance` a ete
+        # etablie a la main. Lire SITES brut sans ce defaut comptait zero
+        # ligne etablie, et le controle passait alors sur un « zero » que
+        # `str(0)` retrouvait dans la premiere date venue.
+        n_ref = sum(1 for s in lignes
+                    if s.get("provenance", "referentiel") == "referentiel")
+        n_reg = len(lignes) - n_ref
+        out[pays] = {
+            "nom": ref["nom"],
+            "porte": len(lignes),
+            "porte_referentiel": n_ref,
+            "porte_registre": n_reg,
+            "recense_ailleurs": ref["recense"],
+            "approx": ref.get("approx", False),
+            "part_pct": (round(100.0 * len(lignes) / ref["recense"], 1)
+                         if ref["recense"] else None),
+            "source": ref["source"],
+            "methode": ref["methode"],
+        }
+    return out
+
+
+_DIZAINES = {2: "vingt", 3: "trente", 4: "quarante", 5: "cinquante",
+             6: "soixante"}
+
+
+def en_lettres(n):
+    """Un entier de 0 a 69 en toutes lettres, comme l'ecrit la prose du module.
+
+    POURQUOI PAS EN CHIFFRES. Les LIMITES sont ecrites en lettres — « quinze
+    lignes », « cinq cents centres ». Un controle qui exigerait des chiffres
+    obligerait a casser ce style pour se rendre verifiable, ce qui est le
+    mauvais sens : c'est au controle de parler la langue du texte."""
+    if n < len(_LETTRES):
+        return _LETTRES[n]
+    d, u = divmod(n, 10)
+    if d not in _DIZAINES:
+        return str(n)
+    if u == 0:
+        return _DIZAINES[d]
+    if u == 1:
+        return "%s et un" % _DIZAINES[d]
+    return "%s-%s" % (_DIZAINES[d], _LETTRES[u])
+
+
+def _limite_couverture(couv):
+    """La sous-couverture doit etre DITE, et avec LE BON NOMBRE.
+
+    UNE PREMIERE VERSION DE CE CONTROLE CHERCHAIT LE CODE PAYS — « DE », « FR »
+    — comme sous-chaine. « DE » apparait dans n'importe quelle prose francaise :
+    l'Allemagne passait par accident, sans que rien ne soit verifie. Le controle
+    porte donc sur le NOM du pays et sur le compte REEL, ecrit en toutes lettres.
+
+    ET LE COMPTE VERIFIE EST CELUI DES LIGNES ETABLIES UNE PAR UNE, pas le
+    total. Une deuxieme version comparait la prose au total et signalait une
+    derive qui n'existait pas : la phrase dit l'Allemagne « couverte qu'a
+    hauteur de quinze », ce qui est EXACT pour les quinze lignes du
+    referentiel ; les vingt et une autres viennent de l'import de registre,
+    dont les LIMITES parlent ailleurs et autrement. Verifier un chiffre contre
+    le mauvais denominateur, c'est fabriquer un faux defaut — et j'ai failli
+    « corriger » une phrase juste."""
+    maux = []
+    for pays in sorted(couv):
+        v = couv[pays]
+        nom = v["nom"]
+        # LE COMPTE DOIT SE TROUVER DANS LA LIMITE QUI NOMME LE PAYS, et non
+        # quelque part dans l'ensemble du texte. Deux versions de ce controle
+        # sont passees par accident : la premiere cherchait le code « DE »,
+        # qu'on lit dans n'importe quelle prose francaise ; la seconde
+        # cherchait « treize » dans tout le texte, ou ce mot figure deja au
+        # sujet de la precision geographique. Chercher un mot n'importe ou
+        # dans un long texte ne verifie rien.
+        portant = [x for x in LIMITES if nom.lower() in x.lower()]
+        if not portant:
+            maux.append("aucune limite ne nomme la couverture de %s "
+                        "(%d portes sur %s recenses ailleurs)"
+                        % (nom, v["porte"], v["recense_ailleurs"]))
+            continue
+        mot = en_lettres(v["porte_referentiel"])
+        # PAS DE REPLI EN CHIFFRES : « 13 » ou « 0 » se retrouvent dans
+        # n'importe quelle date du texte. La prose est en lettres ; le
+        # controle l'exige en lettres.
+        if not any(mot in x.lower() for x in portant):
+            maux.append("la limite qui nomme %s ne dit pas le compte etabli "
+                        "« %s » (%d lignes du referentiel)"
+                        % (nom, mot, v["porte_referentiel"]))
+    return maux
+
+
 def sante():
     pipe = _pipeline(_enrichir())
+    couv = couverture()
     return {"version": VERSION, "n_sites": len(SITES),
             "n_retires": len(RETIRES),
             "n_reintegres": len(REINTEGRES),
             "statuts": sorted(STATUTS),
             "pipeline": pipe,
-            "problemes": _limite_temporalite(pipe)}
+            "couverture": couv,
+            "reperes_fr": len(REPERES_FR),
+            "a_brancher": [s["cle"] for s in SOURCES_A_BRANCHER],
+            "problemes": _limite_temporalite(pipe) + _limite_couverture(couv)}
