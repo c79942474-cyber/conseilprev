@@ -161,6 +161,89 @@ def test_sans_variable_denvironnement_rien_ne_bouge():
     assert 'conseilprev.onrender.com' in seo.BASE
 
 
+def test_les_mentions_EN_TOUTES_LETTRES_suivent_aussi():
+    """SEIZE PIEDS DE PAGE AFFICHAIENT L'ADRESSE COMME DU TEXTE.
+
+    « <a href="/">conseilprev.onrender.com</a> » : le lien est relatif et
+    fonctionne partout, mais le libellé, lui, nomme un service qu'on
+    s'apprête à éteindre. Une adresse affichée n'est pas de l'écriture, c'est
+    une coordonnée rendue lisible — elle doit suivre le site."""
+    seo = _seo(AUTRE)
+    reste = []
+    for nom, route, html in _pages():
+        if 'conseilprev.onrender.com' not in html:
+            continue
+        n = seo.enrichir(route, html).count('conseilprev.onrender.com')
+        if n:
+            reste.append('%s : %d' % (nom, n))
+    assert not reste, (
+        "l'ancienne adresse survit dans les pages servies : %s" % reste[:8])
+
+
+def test_la_donnee_structuree_suit_aussi():
+    """LE POINT LE PLUS FACILE À OUBLIER. Le JSON-LD déclare l'url de
+    l'organisation : c'est ce que Google lit pour l'identifier. Laissé sur
+    l'ancien service, il désignerait une adresse morte dans le graphe de
+    connaissances — sans qu'aucune page ne cesse de s'afficher."""
+    seo = _seo(AUTRE)
+    html = io.open(os.path.join(ICI, 'index.html'), encoding='utf-8').read()
+    assert re.search(r'"url"\s*:\s*"https?://conseilprev\.onrender\.com', html), (
+        "index.html ne porte plus de donnée structurée à recaler : ce contrôle "
+        "ne mesure plus rien")
+    sorti = seo.enrichir('/', html)
+    assert '"url":"%s"' % AUTRE in sorti.replace('" : "', '":"')
+
+
+def test_limage_de_partage_garde_son_chemin():
+    """UNE REGRESSION QUE J'AI INTRODUITE ET QUE CE CONTRÔLE EMPÊCHE DE
+    REVENIR. Une première version forçait `og:image` sur IMAGE_PARTAGE
+    (« /emblem.png ») — or les pages déclarent « /og-image.png ». Le recalage
+    remplaçait donc l'image de partage choisie par une autre : ce que LinkedIn
+    affiche quand on partage la page changeait, sans que personne l'ait
+    demandé. Le CHEMIN d'une image est éditorial ; seul son HÔTE est une
+    coordonnée."""
+    seo = _seo(AUTRE)
+    html = io.open(os.path.join(ICI, 'index.html'), encoding='utf-8').read()
+    avant = re.search(r'og:image"\s+content="https?://[^/]+(/[^"]*)"', html)
+    assert avant, "index.html ne déclare plus d'og:image : le contrôle est vide"
+    chemin = avant.group(1)
+    sorti = seo.enrichir('/', html)
+    assert 'og:image" content="%s%s"' % (AUTRE, chemin) in sorti, (
+        "l'image de partage a changé de chemin : %s"
+        % re.search(r'<meta property="og:image"[^>]*>', sorti).group(0))
+
+
+def test_la_canonique_reprend_le_chemin_de_LA_PAGE():
+    """CE QUE LE REMPLACEMENT GLOBAL NE PEUT PAS FAIRE. Il corrige l'hôte et
+    garde le chemin. Une page servie à /x qui déclarerait /y se tromperait
+    d'adresse — et deux mutations ont survécu jusqu'à ce que ce cas soit
+    éprouvé, le remplacement global rattrapant l'hôte à leur place."""
+    seo = _seo(AUTRE)
+    page = ('<html><head><title>T</title>'
+            '<link rel="canonical" href="%s/mauvais-chemin">'
+            '<meta property="og:title" content="T">'
+            '<meta name="twitter:card" content="summary">'
+            '</head><body>t</body></html>' % seo.BASE_PAR_DEFAUT)
+    sorti = seo.enrichir('/bonne-page', page)
+    assert 'href="%s/bonne-page"' % AUTRE in sorti, (
+        "le chemin n'est pas corrigé : %s"
+        % re.search(r'<link rel="canonical"[^>]*>', sorti).group(0))
+
+
+def test_une_adresse_sans_schema_est_completee():
+    """`SITE_BASE_URL` se saisit à la main. Écrire « i-aes.eu » plutôt que
+    « https://i-aes.eu » rendrait toutes les canoniques relatives, donc
+    invalides — sans qu'aucune page ne cesse de s'afficher."""
+    seo = _seo('exemple-sans-schema.test')
+    assert seo.BASE == 'https://exemple-sans-schema.test'
+
+
+def test_une_barre_finale_ne_double_pas_les_adresses():
+    seo = _seo(AUTRE + '/')
+    assert seo.BASE == AUTRE
+    assert seo.url('/') == AUTRE + '/'
+
+
 # ── CE QU'IL NE FAUT SURTOUT PAS ÉCRASER ─────────────────────────────────
 
 def test_le_travail_editorial_nest_pas_touche():

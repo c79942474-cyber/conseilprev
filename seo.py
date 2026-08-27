@@ -45,7 +45,27 @@ from datetime import datetime, timezone
 VERSION = "2026-08-a"
 
 BASE_PAR_DEFAUT = "https://conseilprev.onrender.com"
-BASE = (os.environ.get("SITE_BASE_URL") or BASE_PAR_DEFAUT).rstrip("/")
+
+
+def _normaliser(u):
+    """UNE ADRESSE SANS SCHEMA EST UN PIEGE SILENCIEUX. `SITE_BASE_URL` se
+    saisit a la main dans un tableau de bord ; ecrire « i-aes.eu » plutot que
+    « https://i-aes.eu » est l'erreur naturelle. Toutes les canoniques du site
+    deviendraient alors « i-aes.eu/ », une adresse relative que les moteurs
+    rejettent — sans qu'aucune page ne cesse de s'afficher, donc sans que rien
+    ne le signale. On complete le schema plutot que de servir cela."""
+    u = (u or "").strip().rstrip("/")
+    if u and not u.startswith(("http://", "https://")):
+        u = "https://" + u
+    return u
+
+
+def _hote(u):
+    """L'hote seul, tel qu'il s'ecrit dans un pied de page."""
+    return re.sub(r"^https?://", "", u).rstrip("/")
+
+
+BASE = _normaliser(os.environ.get("SITE_BASE_URL")) or BASE_PAR_DEFAUT
 
 # NOS ADRESSES : la courante, et celle d'où l'on vient. Le recalage ne touche
 # QU'À CELLES-LÀ. Une canonique qui désigne un AUTRE site est un choix
@@ -120,12 +140,23 @@ def balises(route, html):
     return "".join(out)
 
 
+# SEULES LES ADRESSES DE *CETTE PAGE* SONT RECALEES EN ENTIER.
+#
+# `canonical` et `og:url` designent la page elle-meme : leur valeur juste est
+# `url(route)`, chemin compris, et une page servie a /x qui declarerait /y se
+# trompe d'adresse.
+#
+# `og:image` ET `twitter:image` N'Y SONT PLUS, ET C'EST UNE CORRECTION. Une
+# premiere version les forcait sur IMAGE_PARTAGE — or les pages declarent
+# « /og-image.png », qui n'est pas « /emblem.png ». Le recalage remplacait donc
+# silencieusement l'image de partage choisie par une autre : ce qu'on voit sur
+# LinkedIn quand on partage la page changeait, sans que personne l'ait demande.
+# Le CHEMIN d'une image est un choix editorial ; seul son HOTE est une
+# coordonnee, et le remplacement global s'en charge deja.
 _ADRESSES_A_RECALER = (
     # (motif de la balise, nom de l'attribut qui porte l'adresse)
     (re.compile(r'<link\b[^>]*\brel=["\']canonical["\'][^>]*>', re.I), "href"),
     (re.compile(r'<meta\b[^>]*\bproperty=["\']og:url["\'][^>]*>', re.I), "content"),
-    (re.compile(r'<meta\b[^>]*\bproperty=["\']og:image["\'][^>]*>', re.I), "content"),
-    (re.compile(r'<meta\b[^>]*\bname=["\']twitter:image["\'][^>]*>', re.I), "content"),
 )
 
 
@@ -164,10 +195,31 @@ def recaler_adresses(route, html):
     pas. Une adresse absolue n'est pas de l'écriture — c'est une coordonnée,
     et elle doit suivre le site."""
     u = url(route)
+    # 1. LES COORDONNEES NOMMEES prennent la valeur exacte de CETTE page.
     for motif, attribut in _ADRESSES_A_RECALER:
-        cible = u if attribut == "href" or "og:url" in motif.pattern \
-            else BASE + IMAGE_PARTAGE
-        html = _recaler(html, motif, attribut, cible)
+        html = _recaler(html, motif, attribut, u)
+
+    # 2. TOUTE AUTRE MENTION DE NOS ADRESSES. Elles ne sont pas toutes dans
+    #    des balises : seize pieds de page affichent l'adresse EN TOUTES
+    #    LETTRES (« <a href="/">conseilprev.onrender.com</a> »), une donnee
+    #    structurée JSON-LD declare l'url de l'organisation — c'est ce que
+    #    Google lit pour l'identifier — et une chaine de script signe les
+    #    messages de contact « Envoye depuis … ». Aucune n'etait recalee.
+    #
+    #    UN REMPLACEMENT DE CHAINE, PAS UNE ANALYSE DE BALISES. C'est
+    #    volontaire : deux tentatives d'analyse par expression reguliere se
+    #    sont trompees aujourd'hui meme sur ce depot. Remplacer un nom d'hote
+    #    connu par un autre ne demande aucune comprehension de la structure,
+    #    et ne peut donc pas se tromper sur elle.
+    #
+    #    L'ORDRE COMPTE : la forme avec schema d'abord, la forme nue ensuite.
+    #    L'inverse produirait « https://i-aes.eu » puis un second passage sur
+    #    un hote deja remplace.
+    for ancienne in NOS_ADRESSES:
+        if ancienne == BASE:
+            continue
+        html = html.replace(ancienne, BASE)
+        html = html.replace(_hote(ancienne), _hote(BASE))
     return html
 
 
