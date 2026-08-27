@@ -1112,6 +1112,21 @@ VEILLE_FEEDS = [
     # Le mode diagnostic /api/veille?debug=1 indique, pour chaque flux, le statut HTTP et le nombre d'items.
 ]
 VEILLE_TTL = 1800  # cache serveur (secondes) = 30 min
+# ET UN SECOND DELAI, POUR LA COLLECTE QUI NE REND RIEN.
+#
+# LE DEFAUT : le cache etait bien ECRIT quand aucun flux ne repondait,
+# mais la condition de lecture exigeait `items` non vide. Une collecte
+# vide n'etait donc jamais servie, et CHAQUE requete refaisait le tour
+# des flux — cinq secondes mesurees sur un processus neuf, par requete,
+# tant que les flux restaient injoignables. Avec huit fils par worker,
+# quelques visiteurs simultanes suffisent a saturer le service, au moment
+# precis ou il va deja mal.
+#
+# DEUX MINUTES, ET NON TRENTE : une panne de flux est souvent passagere,
+# et garder un resultat vide une demi-heure ferait durer la panne bien
+# apres son retablissement. Assez court pour se corriger seul, assez long
+# pour que la centieme requete ne repaie pas la collecte.
+VEILLE_TTL_VIDE = 120
 VEILLE_MAX_PER_SOURCE = 6  # plafond par source (equilibrage)
 _VEILLE_CACHE = {"ts": 0.0, "items": [], "errors": []}
 VEILLE_THEMES = [
@@ -1202,7 +1217,8 @@ def api_veille():
         return jsonify({"ok": True, "debug": True, "count": len(diag),
                         "working": sum(1 for d in diag if d.get("ok")), "feeds": diag})
     now = _time.time()
-    if (not force) and _VEILLE_CACHE["items"] and (now - _VEILLE_CACHE["ts"] < VEILLE_TTL):
+    _ttl = VEILLE_TTL if _VEILLE_CACHE["items"] else VEILLE_TTL_VIDE
+    if (not force) and _VEILLE_CACHE["ts"] and (now - _VEILLE_CACHE["ts"] < _ttl):
         return jsonify({
             "ok": True, "cached": True,
             "updated_at": datetime.utcfromtimestamp(_VEILLE_CACHE["ts"]).isoformat() + "Z",
@@ -11022,6 +11038,29 @@ def _news_warmup():
             logger.info(f"[warmup] RSS pré-chargé : {len(unique)} articles")
     except Exception as exc:
         logger.warning(f"[warmup] Echec pre-chargement RSS : {exc}")
+
+    # LE SECOND CACHE, QUI N'ETAIT PAS PRECHAUFFE — ET C'EST LUI QUE LA PAGE
+    # APPELLE. Ce fil remplissait `_news_cache`, celui de /api/news. Mais
+    # /api/veille a SON PROPRE cache, et Sentinel l'interroge au chargement.
+    # Mesure sur un processus neuf : /api/news repondait en 482 ms, /api/veille
+    # en 5 085 ms — cinq secondes d'agregation de flux RSS payees par le
+    # PREMIER visiteur, a chaque redemarrage. Sur un service qui s'endort faute
+    # de trafic, chaque visiteur est le premier.
+    #
+    # ON APPELLE LA ROUTE, ON NE RECOPIE PAS SA COLLECTE. Elle tient une
+    # cinquantaine de lignes dans `api_veille` ; les dupliquer ici creerait
+    # deux chemins qui divergeraient au premier ajout de flux, et le cache
+    # prechauffe cesserait de ressembler a ce qui est servi.
+    try:
+        t0 = _t.time()
+        with app.test_request_context('/api/veille'):
+            api_veille()
+        logger.info("[warmup] veille pré-chargée : %d entrées en %.1f s",
+                    len(_VEILLE_CACHE.get("items") or []), _t.time() - t0)
+    except Exception as exc:                                       # noqa: BLE001
+        # Un prechauffage qui echoue ne doit rien casser : la route refera le
+        # travail a la premiere demande, comme avant.
+        logger.warning("[warmup] Echec pre-chargement veille : %s", exc)
 
 threading.Thread(target=_news_warmup, daemon=True).start()
 
