@@ -8687,6 +8687,56 @@ window.trainingOpenFiche = function(key){
 'use strict';
 
 var PAGE_GUIDES = {
+  // ── Cinq panneaux qui retombaient sur le guide générique.
+  // Chacun est écrit à partir de ce que le panneau dit de lui-même —
+  // surtitre, titre, chapeau — et des dépendances que ces chapeaux
+  // déclarent. La troisième section dit ce que le module NE fait pas,
+  // ou l'ordre sans lequel il ne sert à rien : c'est ce qu'un guide
+  // apporte qu'un titre ne dit pas.
+  //
+  // Les clés de cette table sont uniques : une clé répétée plus bas
+  // écrase silencieusement celle d'ici (littéral d'objet JS), et rien
+  // dans la page ne le signale. test_guides_sentinel.py l'interdit.
+  'adoption': {
+    title: "Tableau de bord d’adoption",
+    sections: [
+      {h:"À quoi sert cette page", t:"L’indice de conformité dit si vous êtes en règle ; celui-ci dit si l’organisation s’en sert."},
+      {h:"Comment l’utiliser", t:"Croisez-le systématiquement avec l’indice de conformité : ce sont deux mesures indépendantes."},
+      {h:"Les deux échouent séparément", t:"On peut être parfaitement conforme sur un outil que personne n’ouvre — et très utilisé sans être en règle. Une seule des deux mesures ne dit rien de l’autre."}
+    ]
+  },
+  'empreinte-parc': {
+    title: "Empreinte environnementale du parc",
+    sections: [
+      {h:"À quoi sert cette page", t:"Ce que pèse le parc recensé sur son cycle de vie : électricité, CO₂e selon le pays, fabrication amortie, et eau."},
+      {h:"Comment l’utiliser", t:"Comparez les sites entre eux plutôt que de lire un total : c’est l’écart qui désigne où agir."},
+      {h:"Le périmètre est celui du parc CARTOGRAPHIÉ", t:"Un site non recensé ne pèse rien dans ce total. Le chiffre mesure ce qu’on a compté, pas ce qui existe."}
+    ]
+  },
+  'enveloppe': {
+    title: "Enveloppe d’investissement et DPGF",
+    sections: [
+      {h:"À quoi sert cette page", t:"La suite du panorama : une fois le terrain situé, ce module chiffre — enveloppe, décomposition par lot, comparaison entre pays, création de valeur."},
+      {h:"Comment l’utiliser", t:"Suivez le fil des étapes : chacune reprend les résultats de la précédente, et sauter une étape laisse un chiffre non fondé."},
+      {h:"Un chiffrage n’est pas un devis", t:"Il est bâti sur des quantités et des prix unitaires déclarés. Il sert à décider d’engager, pas à contracter."}
+    ]
+  },
+  'gouvernance': {
+    title: "Gouvernance opérationnelle de l’IA",
+    sections: [
+      {h:"À quoi sert cette page", t:"Qui décide, ce qu’il a le droit de trancher, et par quel chemin passe un nouvel usage avant d’exister."},
+      {h:"Comment l’utiliser", t:"Commencez par le circuit d’un usage nouveau : c’est lui qui révèle les décisions que personne n’assume."},
+      {h:"La matrice RACI est ailleurs", t:"Elle vit dans Parties prenantes, et ce module ne la duplique pas volontairement : deux copies d’une matrice divergent au premier arbitrage."}
+    ]
+  },
+  'ingenierie': {
+    title: "Développement assisté par IA",
+    sections: [
+      {h:"À quoi sert cette page", t:"Vos développeurs s’en servent déjà. Ce module traite ce qui manque : la politique qui dit ce qui est permis, et la grille qui dit comment le relire."},
+      {h:"Comment l’utiliser", t:"Commencez par la politique : sans elle, la revue de code n’a pas de critère et se réduit à un avis."},
+      {h:"L’outil n’est pas le sujet", t:"Interdire un outil déplace l’usage hors de votre vue. Ce qui se pilote est ce qui est permis, et la façon dont on le vérifie."}
+    ]
+  },
   // ── Guides ajoutes : exploitation module par module ──────────────────────
   'ia-act-hub': {
     title: "Vue d’ensemble IA Act",
@@ -8893,7 +8943,8 @@ var PAGE_GUIDES = {
     title: "Historique des calculs",
     sections: [
       {h:"À quoi sert cette page", t:"Centralise tous les calculs enregistrés depuis Sentinel (simulations, audits, tarification, sanctions, FRIA, RACI) — preuve documentaire traçable et conforme RGPD (conservation 3 ans)."},
-      {h:"Comment l utiliser", t:"Filtrez par type de calcul avec le menu déroulant. Chaque calcul enregistré ailleurs sur Sentinel (bouton 💾 Enregistrer dans l historique) apparaît ici automatiquement, daté et consultable à tout moment."}
+      {h:"Comment l utiliser", t:"Filtrez par type de calcul avec le menu déroulant. Chaque calcul enregistré ailleurs sur Sentinel (bouton 💾 Enregistrer dans l historique) apparaît ici automatiquement, daté et consultable à tout moment."},
+      {h:"La traçabilité est le sujet", t:"Un chiffre qu’on ne sait plus reconstituer ne se défend pas. C’est ce que cette page conserve : moins le résultat que le chemin qui y mène."}
     ]
   },
   rag: {
@@ -8910,14 +8961,16 @@ var PAGE_GUIDES = {
     title: "Gestion des clients",
     sections: [
       {h:"À quoi sert cette page", t:"Réservée à CONSEILPREV : création d accès clients externes, suivi du statut technique de l infrastructure (Postgres, pgvector) et de la santé des envois d email."},
-      {h:"Comment l utiliser", t:"Créez un nouveau client via le formulaire dédié — un email d invitation sécurisé lui est envoyé pour qu il définisse lui-même son mot de passe. Consultez les 2 widgets de statut technique en haut de page pour diagnostiquer rapidement un incident."}
+      {h:"Comment l utiliser", t:"Créez un nouveau client via le formulaire dédié — un email d invitation sécurisé lui est envoyé pour qu il définisse lui-même son mot de passe. Consultez les 2 widgets de statut technique en haut de page pour diagnostiquer rapidement un incident."},
+      {h:"L’isolation doit être activée", t:"Tant qu’elle ne l’est pas, un accès créé ne garantit pas qu’un client ne voie que ses données. Vérifiez-le avant d’ouvrir le premier accès."}
     ]
   },
   apercu: {
     title: "Vue d ensemble",
     sections: [
       {h:"À quoi sert cette page", t:"Tableau de bord global : juridictions couvertes, sévérité réglementaire moyenne, classements innovation/sévérité. Point de départ pour explorer la conformité IA mondiale."},
-      {h:"Comment l utiliser", t:"Cliquez sur les 3 cartes (Explorer, Comparer, Simuler) pour accéder directement aux outils correspondants. Les listes de droite sont triées par score, cliquables vers les fiches détaillées."}
+      {h:"Comment l utiliser", t:"Cliquez sur les 3 cartes (Explorer, Comparer, Simuler) pour accéder directement aux outils correspondants. Les listes de droite sont triées par score, cliquables vers les fiches détaillées."},
+      {h:"Ce n’est pas une source juridique", t:"Pour un texte exact, allez aux Réglementations, qui citent le Règlement article par article. Cette page en donne la lecture, pas la lettre."}
     ]
   },
   carto: {
@@ -8925,21 +8978,24 @@ var PAGE_GUIDES = {
     sections: [
       {h:"À quoi sert cette page", t:"Visualise 46 juridictions sur 12 critères réglementaires (portée, sanctions, transparence...), avec mise à jour en temps réel par IA."},
       {h:"Comment l utiliser", t:"La carte et le tableau sont synchronisés. Cliquez une juridiction pour voir son détail. Le bouton 🤖 Actualiser via IA interroge Mistral/Claude pour vérifier l état réglementaire actuel."},
-      {h:"Voir aussi", t:"Le lien Voir les 12 critères d évaluation → explique la méthodologie complète de scoring."}
+      {h:"Voir aussi", t:"Le lien Voir les 12 critères d évaluation → explique la méthodologie complète de scoring."},
+      {h:"La sévérité n’est pas l’applicabilité", t:"Un régime sévère ne vous concerne que si vous y déployez, y vendez ou y traitez des données. Croiser avec vos implantations réelles est un travail qui reste à faire à la main."}
     ]
   },
   comp: {
     title: "Comparateur de juridictions",
     sections: [
       {h:"À quoi sert cette page", t:"Compare jusqu à 4 juridictions côte à côte sur 6 dimensions (Sévérité, Transparence, Responsabilité, Souveraineté, Sanctions, Innovation)."},
-      {h:"Comment l utiliser", t:"Cliquez + Ajouter un pays pour sélectionner jusqu à 4 juridictions. Le radar et le tableau se mettent à jour automatiquement. Utile pour choisir où déployer un système IA avec le moins de contraintes."}
+      {h:"Comment l utiliser", t:"Cliquez + Ajouter un pays pour sélectionner jusqu à 4 juridictions. Le radar et le tableau se mettent à jour automatiquement. Utile pour choisir où déployer un système IA avec le moins de contraintes."},
+      {h:"Une comparaison n’est pas une équivalence", t:"Deux régimes peuvent obtenir un score voisin par des chemins opposés — l’un exigeant sur la donnée, l’autre sur la transparence. Lisez les dimensions, pas seulement le total."}
     ]
   },
   geo: {
     title: "Géopolitique réglementaire",
     sections: [
       {h:"À quoi sert cette page", t:"Analyse narrative des tensions normatives entre blocs (UE, USA, Chine) : extraterritorialité, fragmentation, influence des standards."},
-      {h:"Comment l utiliser", t:"Complémentaire à la Cartographie (qui est quantitative) : ici vous trouvez le contexte stratégique et les instruments clés de chaque bloc."}
+      {h:"Comment l utiliser", t:"Complémentaire à la Cartographie (qui est quantitative) : ici vous trouvez le contexte stratégique et les instruments clés de chaque bloc."},
+      {h:"Elle décrit un rapport de force, pas un droit", t:"Rien ici n’est opposable. C’est une aide à la décision d’implantation et de sourcing, à ne jamais citer comme fondement d’une obligation."}
     ]
   },
   maturite: {
@@ -8947,14 +9003,16 @@ var PAGE_GUIDES = {
     sections: [
       {h:"À quoi sert cette page", t:"Évalue votre conformité sur les 8 piliers de l EU AI Act (Explicabilité, Contrôlabilité, Transparence, Sûreté, Équité, Gouvernance, Confidentialité, Robustesse), par secteur."},
       {h:"Comment l utiliser", t:"1) Sélectionnez votre secteur en haut. 2) Répondez au questionnaire de 16 questions — les scores se recalculent en temps réel. 3) Générez les 6 livrables IA (registre, manuel de gouvernance, rapport, formation, outils, plan de maintenance) ou les 4 guides de procédure d audit, avec vos propres données si besoin."},
-      {h:"Astuce", t:"Le budget et les KPIs détaillés sont accessibles via les cartes dédiées, sans surcharger la page principale."}
+      {h:"Astuce", t:"Le budget et les KPIs détaillés sont accessibles via les cartes dédiées, sans surcharger la page principale."},
+      {h:"Elle alimente les formations", t:"Le Hub Training calcule votre progression à partir de vos scores par pilier. Un audit passé au jugé désigne donc les mauvaises formations."}
     ]
   },
   parties: {
     title: "Parties prenantes",
     sections: [
       {h:"À quoi sert cette page", t:"Matrice RACI (Responsable / Approbateur / Consulté / Informé) pour 14 processus de gouvernance IA + spécificités sectorielles."},
-      {h:"Comment l utiliser", t:"Cliquez sur une cellule pour faire défiler son statut. Changez de secteur pour voir les rôles et processus spécifiques apparaître (badge Sectoriel). Le bouton 🤖 génère un document complet d analyse de votre matrice par IA."}
+      {h:"Comment l utiliser", t:"Cliquez sur une cellule pour faire défiler son statut. Changez de secteur pour voir les rôles et processus spécifiques apparaître (badge Sectoriel). Le bouton 🤖 génère un document complet d analyse de votre matrice par IA."},
+      {h:"Un seul « A » par ligne", t:"Deux approbateurs sur un même processus, c’est aucun : la décision se renvoie. C’est le défaut le plus fréquent, et le plus coûteux le jour d’un incident."}
     ]
   },
   registre: {
@@ -8962,35 +9020,40 @@ var PAGE_GUIDES = {
     sections: [
       {h:"À quoi sert cette page", t:"Inventaire obligatoire (Art. 49, 71) de vos systèmes IA, connecté à une vraie base de données persistante (pas une démo)."},
       {h:"Comment l utiliser", t:"+ Ajouter un système pour créer une fiche complète (classification, justification Annexe III, statut). Cliquez une ligne pour la modifier. La recherche filtre par nom, secteur, type ou responsable."},
-      {h:"Connexions", t:"Ce registre alimente automatiquement la Matrice des risques, le Radar, et peut être enrichi directement depuis le Simulateur."}
+      {h:"Connexions", t:"Ce registre alimente automatiquement la Matrice des risques, le Radar, et peut être enrichi directement depuis le Simulateur."},
+      {h:"C’est la source de presque tout le reste", t:"Le benchmark, le radar, la matrice, la feuille de route et la veille qualifiée lisent TOUS ce registre. Un registre vide ne rend pas ces modules neutres : il les rend faux."}
     ]
   },
   matrice: {
     title: "Matrice risques / impact",
     sections: [
       {h:"À quoi sert cette page", t:"Positionne vos systèmes réels du Registre IA sur une grille Probabilité de non-conformité × Impact, pour repérer en un coup d œil les priorités."},
-      {h:"Comment l utiliser", t:"Cliquez une icône dans la grille ou un système en zone critique pour ouvrir directement sa fiche dans le Registre IA."}
+      {h:"Comment l utiliser", t:"Cliquez une icône dans la grille ou un système en zone critique pour ouvrir directement sa fiche dans le Registre IA."},
+      {h:"Elle ne montre que ce que le Registre contient", t:"Un système absent du Registre n’apparaît nulle part sur cette matrice — et le quadrant vide se lit alors comme une bonne nouvelle."}
     ]
   },
   radar: {
     title: "Radar des risques IA",
     sections: [
       {h:"À quoi sert cette page", t:"Visualise votre posture sur 6 dimensions réglementaires, calculées à partir de 8 risques systémiques pondérés par secteur et par votre Registre IA réel."},
-      {h:"Comment l utiliser", t:"Changez de secteur pour recalculer le radar. Les sections du bas détaillent le poids de chaque risque systémique (avec sources : ENISA, NIST AI RMF, OCDE) et les risques sectoriels spécifiques."}
+      {h:"Comment l utiliser", t:"Changez de secteur pour recalculer le radar. Les sections du bas détaillent le poids de chaque risque systémique (avec sources : ENISA, NIST AI RMF, OCDE) et les risques sectoriels spécifiques."},
+      {h:"La pondération vient de votre secteur", t:"Le même profil ne donne pas le même radar dans la santé et dans la logistique. Comparer votre radar à celui d’une autre organisation n’a de sens qu’à secteur égal."}
     ]
   },
   regs: {
     title: "Réglementations",
     sections: [
       {h:"2 onglets disponibles", t:"Textes réglementaires (sources officielles, actualités) et Obligations article par article (113 articles du Règlement, filtrables par rôle : fournisseur, déployeur, GPAI)."},
-      {h:"Comment l utiliser", t:"Pour classifier un nouveau système IA, utilisez le Simulateur IA Act (section Cartographier). Pour auditer votre conformité en détail, utilisez l Audit IA Act (section Évaluer le risque)."}
+      {h:"Comment l utiliser", t:"Pour classifier un nouveau système IA, utilisez le Simulateur IA Act (section Cartographier). Pour auditer votre conformité en détail, utilisez l Audit IA Act (section Évaluer le risque)."},
+      {h:"Vos obligations dépendent de votre rôle", t:"Fournisseur, déployeur, importateur, distributeur : le même article n’impose pas la même chose. Identifiez votre rôle avant de lire, sinon vous appliquerez le devoir d’un autre."}
     ]
   },
   simulateur: {
     title: "Simulateur IA Act",
     sections: [
       {h:"À quoi sert cette page", t:"Détermine la classification d un système IA (interdit, haut risque, risque limité, minimal) et ses obligations associées, en répondant à 5 étapes guidées — avant même de l enregistrer au Registre."},
-      {h:"Comment l utiliser", t:"Décrivez le système (étape 1), répondez aux questions de classification (étape 2), indiquez vos pratiques actuelles (étape 3), précisez les aspects GPAI/données si pertinent (étape 4), puis consultez le résultat détaillé (étape 5). Vous pourrez ensuite l ajouter directement au Registre IA, sauvegarder la simulation dans l historique, ou lancer l audit complet."}
+      {h:"Comment l utiliser", t:"Décrivez le système (étape 1), répondez aux questions de classification (étape 2), indiquez vos pratiques actuelles (étape 3), précisez les aspects GPAI/données si pertinent (étape 4), puis consultez le résultat détaillé (étape 5). Vous pourrez ensuite l ajouter directement au Registre IA, sauvegarder la simulation dans l historique, ou lancer l audit complet."},
+      {h:"C’est le point de départ, pas l’arrivée", t:"Auditer ou évaluer un système non classé fait perdre du temps : les obligations DÉPENDENT de la classe. Passez ici d’abord, versez au Registre ensuite."}
     ]
   },
   'audit-ia-act': {
@@ -9004,77 +9067,88 @@ var PAGE_GUIDES = {
     title: "Veille qualifiée par IA",
     sections: [
       {h:"À quoi sert cette page", t:"Chaque actualité réglementaire est analysée par IA et croisée avec votre Registre IA réel pour évaluer son impact concret sur vos systèmes."},
-      {h:"Comment l utiliser", t:"L onglet Veille qualifiée affiche un score d impact (haut/moyen/faible) personnalisé. Le filtre FR/EN limite les sources par langue. Le bouton Notifier alerte par email sur les impacts hauts."}
+      {h:"Comment l utiliser", t:"L onglet Veille qualifiée affiche un score d impact (haut/moyen/faible) personnalisé. Le filtre FR/EN limite les sources par langue. Le bouton Notifier alerte par email sur les impacts hauts."},
+      {h:"La qualification dépend du Registre", t:"Sans systèmes enregistrés, tout se vaut et rien ne ressort. C’est le registre qui transforme un flux d’actualités en liste de choses à faire."}
     ]
   },
   evals: {
     title: "Mes évaluations",
     sections: [
       {h:"À quoi sert cette page", t:"Historique de toutes vos simulations et audits enregistrés, avec leur score et la date."},
-      {h:"Comment l utiliser", t:"Cliquez une ligne pour revenir directement à l outil correspondant (Simulateur ou Audit). Utile pour suivre votre progression dans le temps."}
+      {h:"Comment l utiliser", t:"Cliquez une ligne pour revenir directement à l outil correspondant (Simulateur ou Audit). Utile pour suivre votre progression dans le temps."},
+      {h:"Un score ancien n’est pas un score faux", t:"Il est daté. Gardez-le, et datez ce que vous présentez : c’est la comparaison qui prouve le travail, pas le dernier chiffre seul."}
     ]
   },
   fria: {
     title: "Évaluation FRIA",
     sections: [
       {h:"À quoi sert cette page", t:"Évaluation d impact sur les droits fondamentaux (Art. 27 EU AI Act) — obligation du déployeur, distincte d une DPIA RGPD, applicable à 3 catégories précises."},
-      {h:"Comment l utiliser", t:"L applicabilité est calculée automatiquement par système selon votre secteur. Si applicable, répondez au questionnaire sur les 8 droits fondamentaux — le score se met à jour en temps réel."}
+      {h:"Comment l utiliser", t:"L applicabilité est calculée automatiquement par système selon votre secteur. Si applicable, répondez au questionnaire sur les 8 droits fondamentaux — le score se met à jour en temps réel."},
+      {h:"Ce n’est pas une AIPD", t:"Une analyse d’impact RGPD déjà faite ne vaut pas FRIA, et l’inverse est vrai aussi : les deux protègent des choses différentes et se conduisent séparément."}
     ]
   },
   equipe: {
     title: "Espace équipe",
     sections: [
       {h:"À quoi sert cette page", t:"Affiche les rôles de gouvernance IA définis dans votre matrice RACI, avec leur statut d assignation réel."},
-      {h:"Comment l utiliser", t:"Pour modifier les rôles ou leur assignation, rendez-vous sur la page Parties prenantes — cette page en est le reflet en lecture."}
+      {h:"Comment l utiliser", t:"Pour modifier les rôles ou leur assignation, rendez-vous sur la page Parties prenantes — cette page en est le reflet en lecture."},
+      {h:"Elle dérive de Parties prenantes", t:"Modifier un rôle ici ne réécrit pas la matrice. Si l’organisation change, c’est la matrice qu’il faut reprendre — cette page en est le reflet."}
     ]
   },
   training: {
     title: "Hub Training",
     sections: [
       {h:"À quoi sert cette page", t:"4 modules de formation dont la progression est calculée depuis vos scores réels de l Audit de maturité IA (un pilier faible = formation prioritaire)."},
-      {h:"Comment l utiliser", t:"Cliquez un module pour ouvrir sa fiche complète : objectifs, programme détaillé, articles couverts, quiz et certification visée."}
+      {h:"Comment l utiliser", t:"Cliquez un module pour ouvrir sa fiche complète : objectifs, programme détaillé, articles couverts, quiz et certification visée."},
+      {h:"L’audit décide du programme", t:"Un audit bâclé désigne les mauvaises formations. Si l’ordre proposé vous surprend, c’est l’audit qu’il faut reprendre, pas la liste."}
     ]
   },
   espace: {
     title: "Mes actions du jour",
     sections: [
       {h:"À quoi sert cette page", t:"Vue personnelle : votre activité récente et les actions à traiter en priorité (systèmes non conformes, points d audit à compléter, FRIA à vérifier)."},
-      {h:"Différence avec Reporting", t:"Cette page est orientée tâches individuelles. Pour une vue stratégique consolidée à présenter à votre direction, consultez Reporting."}
+      {h:"Différence avec Reporting", t:"Cette page est orientée tâches individuelles. Pour une vue stratégique consolidée à présenter à votre direction, consultez Reporting."},
+      {h:"Comment l’utiliser", t:"Ouvrez-la en début de séance : « Actions prioritaires » dit ce qui attend une décision de votre part, « Activité récente » ce qui a bougé depuis votre dernier passage. Refermez-la quand la liste des actions est vide."}
     ]
   },
   sanctions: {
     title: "Calculateur de sanctions",
     sections: [
       {h:"À quoi sert cette page", t:"Estime l exposition financière en cas de non-conformité, selon le barème de l Art. 99 EU AI Act (jusqu à 35M€ ou 7% du CA mondial)."},
-      {h:"Comment l utiliser", t:"Le bouton 📊 Pré-remplir depuis le Registre IA charge automatiquement le système le plus exposé de votre registre pour un calcul instantané."}
+      {h:"Comment l utiliser", t:"Le bouton 📊 Pré-remplir depuis le Registre IA charge automatiquement le système le plus exposé de votre registre pour un calcul instantané."},
+      {h:"Un plafond n’est pas une amende", t:"Le Règlement fixe des maxima ; l’autorité module selon la gravité, la coopération et la récidive. Ce chiffre borne le risque, il ne le prédit pas."}
     ]
   },
   benchmark: {
     title: "Benchmark sectoriel",
     sections: [
       {h:"À quoi sert cette page", t:"Compare le taux de conformité réel de vos systèmes (Registre IA) à la moyenne de maturité calculée pour chaque secteur d activité."},
-      {h:"Comment l utiliser", t:"Les KPIs en haut et le tableau détaillé utilisent les mêmes données réelles — aucune incohérence entre les deux."}
+      {h:"Comment l utiliser", t:"Les KPIs en haut et le tableau détaillé utilisent les mêmes données réelles — aucune incohérence entre les deux."},
+      {h:"Comparer suppose un registre à jour", t:"Le taux affiché est celui de vos systèmes ENREGISTRÉS. S’il en manque, vous vous comparez avantageusement à un secteur qui, lui, a tout compté."}
     ]
   },
   templates: {
     title: "Documentation & modèles",
     sections: [
       {h:"À quoi sert cette page", t:"Catalogue de tous les documents réellement générables dans Sentinel AI (pas des fichiers statiques) : les 6 livrables IA, les 4 guides de procédure, la matrice RACI, le rapport d audit, l évaluation FRIA."},
-      {h:"Comment l utiliser", t:"Cliquez une carte pour être redirigé directement vers l outil qui génère ce document, avec vos données réelles déjà chargées."}
+      {h:"Comment l utiliser", t:"Cliquez une carte pour être redirigé directement vers l outil qui génère ce document, avec vos données réelles déjà chargées."},
+      {h:"Un modèle n’est pas une preuve", t:"Rempli sans être vécu, il documente une conformité qui n’existe pas — et c’est exactement ce qu’un contrôle cherche à distinguer."}
     ]
   },
   report: {
     title: "Vue direction",
     sections: [
       {h:"À quoi sert cette page", t:"Tableau de bord exécutif consolidé : KPIs stratégiques, répartition du registre par classification, dernières évaluations — pensé pour la présentation à votre direction ou client."},
-      {h:"Différence avec Mon Espace", t:"Cette page est orientée pilotage stratégique. Pour vos actions personnelles au quotidien, consultez Mon Espace."}
+      {h:"Différence avec Mon Espace", t:"Cette page est orientée pilotage stratégique. Pour vos actions personnelles au quotidien, consultez Mon Espace."},
+      {h:"Ce qu’elle vaut dépend d’ailleurs", t:"Elle agrège ce qui a été saisi ailleurs et ne se remplit pas ici. Un Registre IA incomplet produit une vue direction rassurante et fausse : vérifiez le registre avant de présenter la synthèse."}
     ]
   },
   roadmap: {
     title: "Roadmap conformité",
     sections: [
       {h:"À quoi sert cette page", t:"Plan d action en 4 phases (même méthodologie que l Audit de maturité), avec progression calculée à partir de votre Registre IA et de l Audit IA Act réels — pas des chiffres figés."},
-      {h:"Échéance clé", t:"Le 2 août 2026 marque l entrée en application complète des obligations pour les systèmes à haut risque (Art. 113)."}
+      {h:"Échéance clé", t:"Le 2 août 2026 marque l entrée en application complète des obligations pour les systèmes à haut risque (Art. 113)."},
+      {h:"L’avancement n’est pas déclaratif", t:"Il se déduit de vos données. On ne peut donc pas le faire progresser en cochant : il faut compléter le Registre ou l’Audit."}
     ]
   },
   pricing: {
@@ -9122,7 +9196,16 @@ function guideInjectButton(){
   if(old) old.remove();
 
   var guide = guidePour(pid);
-  var h1 = activePage.querySelector("h1.page-h");
+
+  /* LE TITRE DU PANNEAU, QUELLE QUE SOIT SA CLASSE. La version precedente
+     n'acceptait que `h1.page-h`. Or les vingt-quatre fiches pays titrent en
+     `h1.fiche-h` et la cartographie des cas d'usage en `h1.page-title` :
+     sur ces vingt-cinq panneaux le bouton n'etait jamais injecte, et leur
+     guide — pourtant ecrit — restait inatteignable. Rien ne le signalait,
+     puisque l'absence de bouton ne produit aucune erreur.
+     L'ancrage porte donc sur la PROPRIETE (le premier titre de niveau un du
+     panneau) et non sur une classe. */
+  var h1 = activePage.querySelector("h1");
   if(!h1) return;
 
   var btn = document.createElement("button");
@@ -9132,7 +9215,12 @@ function guideInjectButton(){
   btn.innerHTML = "❔ Guide d'utilisation";
   btn.onclick = function(){ guideOpenModal(pid); };
 
-  h1.insertAdjacentElement("afterend", btn);
+  /* Sur les fiches pays le titre vit dans une rangee flex (`.fiche-title`)
+     aux cotes du code pays et du badge de risque : y glisser le bouton le
+     rangerait dans la rangee. On se pose donc apres le CONTENEUR quand le
+     titre n'est pas un enfant direct du panneau. */
+  var ancre = (h1.parentNode && h1.parentNode !== activePage) ? h1.parentNode : h1;
+  ancre.insertAdjacentElement("afterend", btn);
 }
 window.guideInjectButton = guideInjectButton;
 
