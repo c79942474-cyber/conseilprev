@@ -513,13 +513,28 @@ def security_middleware():
     ua  = request.headers.get('User-Agent', '')
     path = request.path
 
-    # ── Exemption partielle /auth/<token> des verifications anti-injection/coherence
-    # des en-tetes : ce chemin ne contient que des tokens generes par le serveur
-    # (jamais d'input libre), donc ces 2 verifications specifiques n'ont pas de sens
-    # ici et peuvent causer des faux positifs selon les caracteres aleatoires du token
-    # (ex: une sequence '--' ou '#' par hasard). Le rate limiting global RESTE applique
-    # (voir plus bas) pour empecher le brute-force du token.
-    is_auth_link = path.startswith('/auth/')
+    # ── Exemption partielle des chemins qui ne portent QU'UN JETON EMIS PAR LE
+    # SERVEUR, des verifications anti-injection et de coherence des en-tetes.
+    # Ces chemins ne contiennent aucune saisie libre : ces deux verifications
+    # n'y ont pas de sens, et elles y produisent des faux positifs selon les
+    # caracteres tires au hasard dans le jeton. Le rate limiting global RESTE
+    # applique (voir plus bas) pour empecher le brute-force du jeton.
+    #
+    # L'EXEMPTION EXISTAIT, ET NE COUVRAIT QU'UN CHEMIN SUR QUATRE. Les trois
+    # autres portent pourtant des jetons produits par le meme
+    # `secrets.token_urlsafe`, dont l'alphabet contient le tiret : environ UN
+    # JETON SUR CENT contient la sequence « -- », lue comme un debut de
+    # commentaire SQL. Mesure sur 200 000 tirages : 0,98 %.
+    #
+    # CE QUE ÇA COÛTAIT, ET POURQUOI PERSONNE NE POUVAIT LE VOIR. Un client sur
+    # cent cliquait sur son lien de confirmation, recevait un 403 — et son IP
+    # etait bloquee une heure pour tentative d'injection. Il ne pouvait donc ni
+    # activer son compte, ni redemander un lien, ni meme revenir sur le site.
+    # Cote journal, il apparaissait comme un attaquant. Trouve par accident : un
+    # jeton tire pendant une recette contenait « -- ».
+    CHEMINS_A_JETON = ('/auth/', '/verify-email/', '/reset-password/',
+                       '/invitation/')
+    is_auth_link = path.startswith(CHEMINS_A_JETON)
 
     # ── Whitelist assets statiques (pas de check UA) ──
     static_exts = ('.jpg','.jpeg','.png','.gif','.svg','.ico',
@@ -659,6 +674,29 @@ def send_via_brevo_api(to_email, to_name, subject, html_content,
     except Exception as e:
         logger.error(f'BREVO_API_EXCEPTION: {e}')
         return False, str(e)
+
+
+def _pour_courriel(valeur):
+    """Ce qu'un inconnu a saisi, rendu inoffensif dans le corps d'un courrier.
+
+    CE QUI A DÉCLENCHÉ CETTE FONCTION. Le nom d'entreprise est choisi librement
+    au moment de l'inscription, et il etait recopie tel quel dans le HTML de
+    DEUX courriers : celui du nouvel inscrit, et surtout LA NOTIFICATION
+    ENVOYÉE À CONSEILPREV. S'inscrire sous le nom
+    `Societe <a href="…">Cliquez ici pour valider le compte</a>` suffisait donc
+    a faire arriver, dans la boite de l'administrateur, un lien de son choix —
+    porte par l'expediteur du site, avec sa mise en page. Verifie : le lien
+    etait bien rendu, dans les deux courriers.
+
+    L'adresse d'envoi, elle, n'est jamais passee ici : echapper une adresse de
+    destinataire la rendrait invalide. Seul ce qui entre dans le CORPS est
+    echappe.
+    """
+    # Import local : cette fonction est definie bien avant `import html` plus
+    # bas dans le fichier, et une dependance a l'ordre des lignes est une
+    # fragilite qu'on ne veut pas sur un garde-fou de securite.
+    import html as _h
+    return _h.escape(str(valeur if valeur is not None else ''), quote=True)
 
 
 def send_email_smart(to_email, to_name, subject, html_content,
@@ -2711,6 +2749,55 @@ import conversion  # noqa: E402
 import empreintes  # noqa: E402
 
 
+# ══════════════════════════════════════════════════════════
+# L'ADRESSE QUE PORTENT LES COURRIERS
+# ══════════════════════════════════════════════════════════
+# CE QUI A DÉCLENCHÉ CETTE FONCTION, ET CE QUE ÇA CASSAIT. Trois courriers
+# portent un JETON, et ce sont les trois qui ouvrent un compte : la
+# confirmation d'inscription, la reinitialisation de mot de passe,
+# l'invitation envoyee par CONSEILPREV. Leurs liens etaient ecrits en dur vers
+# `https://conseilprev.onrender.com`. Le service vit desormais ailleurs.
+#
+# Un jeton n'existe QUE dans la base du service qui l'a emis. Un lien qui
+# designe un autre service ne mene donc nulle part : le nouveau client
+# confirme son adresse — et son compte reste inactif. Celui qui a oublie son
+# mot de passe ne peut pas le changer. Les deux parcours etaient morts de bout
+# en bout, sans qu'aucune page cesse de s'afficher.
+#
+# POURQUOI PAS L'HÔTE DE LA REQUÊTE, QUI SERAIT POURTANT AUTOMATIQUE.
+# `request.host` vient d'un en-tete envoye par le client. Le fabriquer suffit
+# a se faire adresser un lien de reinitialisation pointant vers son propre
+# serveur — l'empoisonnement de reinitialisation de mot de passe, l'un des
+# defauts les mieux documentes du genre. L'adresse vient donc de la
+# CONFIGURATION, jamais de la requete.
+def lien_du_site(chemin):
+    """Une adresse absolue vers ce service, pour un courrier.
+
+    Source unique : `seo.BASE`, elle-meme derivee de `SITE_BASE_URL` (ou de
+    `BASE_URL`). Changer de nom de domaine reste une variable a changer, pas
+    une chasse aux adresses en dur.
+    """
+    return seo.BASE.rstrip('/') + '/' + str(chemin or '').lstrip('/')
+
+
+# UNE VALEUR PAR DÉFAUT QUI DÉSIGNE UN SERVICE QU'ON A QUITTÉ NE SE VOIT PAS.
+# C'est le meme piege que `DATABASE_URL` absente : tout demarre, toutes les
+# pages s'affichent, et seul le nouveau client s'en apercoit — en cliquant sur
+# un lien de confirmation qui ne mene nulle part. Ce releve ne corrige rien, il
+# refuse le silence : il nomme l'adresse qui partira dans les courriers et la
+# variable qui la change.
+if not (os.environ.get('SITE_BASE_URL') or os.environ.get('BASE_URL')):
+    logger.error(
+        "ADRESSE DU SITE non configuree : les liens de confirmation "
+        "d'inscription, de reinitialisation de mot de passe et d'invitation "
+        "partiront vers %s. Un jeton n'existe que dans la base du service qui "
+        "l'a emis : si ce n'est pas l'adresse de CE service, ces trois "
+        "parcours sont sans issue. Definissez SITE_BASE_URL sur Render.",
+        seo.BASE)
+else:
+    logger.info("Adresse du site pour les courriers : %s", seo.BASE)
+
+
 def _figures_du_corps(corps, cles_admises):
     """Les figures jointes par la page, validées.
 
@@ -3292,11 +3379,21 @@ def test_brevo_cv():
 
 @app.route('/api/test-email', methods=['GET'])
 def test_email():
-    """Route de diagnostic email — accessible uniquement depuis conseilprev.onrender.com"""
+    """Route de diagnostic email — reservee au domaine du service lui-meme."""
     ip = limiter.get_ip(request)
     # Vérifier que la requête vient du même domaine
     origin = request.headers.get('Origin','') + request.headers.get('Referer','')
     result = {
+        # L'ADRESSE QUE PORTERONT LES LIENS DES COURRIERS. C'est le
+        # renseignement qui manquait ici : trois courriers portent un jeton, et
+        # un jeton n'existe que dans la base du service qui l'a emis. Voir
+        # cette adresse d'un coup d'oeil evite d'avoir a inscrire un compte
+        # pour decouvrir que le lien de confirmation mene ailleurs.
+        'adresse_du_site': seo.BASE,
+        'source_adresse': ('SITE_BASE_URL' if os.environ.get('SITE_BASE_URL')
+                           else 'BASE_URL' if os.environ.get('BASE_URL')
+                           else 'valeur par defaut — AUCUNE variable definie'),
+        'notification_administrateur': CONSEILPREV_NOTIFY_EMAIL,
         'smtp_host':     SMTP_HOST,
         'smtp_port':     SMTP_PORT,
         'smtp_user':     SMTP_USER[:4] + '***' if SMTP_USER else 'NON CONFIGURÉ',
@@ -3518,8 +3615,7 @@ def _validate_password_strength(pw):
 
 def send_validation_email(email, prenom, token):
     """Envoie l'email de validation de compte."""
-    base_url = os.environ.get('BASE_URL', 'https://conseilprev.onrender.com')
-    validate_link = f"{base_url}/api/auth/verify?token={token}&email={email}"
+    validate_link = lien_du_site(f'api/auth/verify?token={token}&email={email}')
     data = {
         'form_type': 'validation_compte',
         'prenom': prenom, 'nom': '', 'email': email,
@@ -4104,7 +4200,10 @@ def brevo_webhook():
     Webhook Brevo — reçoit les événements email :
     delivered, opened, clicked, bounced, unsubscribed.
     À configurer dans Brevo : Paramètres > Webhooks > Transactionnel
-    URL : https://conseilprev.onrender.com/api/brevo/webhook
+    URL : <adresse du service>/api/brevo/webhook — l'adresse en dur qui figurait
+    ici a suivi le service d'un nom à l'autre sans être corrigée, et une
+    consigne de configuration périmée envoie régler un webhook au mauvais
+    endroit. `GET /api/test-email` affiche l'adresse courante.
     """
     try:
         events = request.get_json(force=True, silent=True)
@@ -5643,6 +5742,9 @@ def sentauth_init_db():
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS plan TEXT DEFAULT 'gratuit'")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS reset_token TEXT")
             cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS reset_expire TEXT")
+            # CHANGER SON MOT DE PASSE NE FERMAIT AUCUNE SESSION. Voir la note
+            # detaillee sur `sentauth_generation_de_session`.
+            cur.execute("ALTER TABLE clients ADD COLUMN IF NOT EXISTS generation_session INTEGER DEFAULT 0")
             conn.commit()
         except Exception: conn.rollback()
     else:
@@ -5669,6 +5771,7 @@ def sentauth_init_db():
             ('rgpd_consenti', 'INTEGER DEFAULT 0'), ('rgpd_consenti_date', 'TEXT'),
             ('plan', "TEXT DEFAULT 'gratuit'"),
             ('reset_token', 'TEXT'), ('reset_expire', 'TEXT'),
+            ('generation_session', 'INTEGER DEFAULT 0'),
         ):
             try:
                 cur.execute(f'ALTER TABLE clients ADD COLUMN {_col} {_decl}')
@@ -6040,6 +6143,41 @@ def ensure_conseilprev_client_id():
         except Exception: pass
 
 
+# ══════════════════════════════════════════════════════════
+# CHANGER SON MOT DE PASSE FERME LES AUTRES SESSIONS
+# ══════════════════════════════════════════════════════════
+# CE QUI A DÉCLENCHÉ CE MÉCANISME. Le cookie de session de Flask est SIGNÉ,
+# pas stocké : le serveur ne tient aucune liste des sessions ouvertes, et n'a
+# donc aucun moyen d'en fermer une. Il vit trente jours.
+#
+# LA CONSÉQUENCE, SUR LE GESTE EXACT QU'ON DEMANDE AU CLIENT DE FAIRE. Le
+# courrier d'alerte de connexion lui dit de reagir s'il ne reconnait pas une
+# connexion ; celui qui confirme un changement de mot de passe lui dit de
+# detecter un changement qu'il n'aurait pas demande. Dans les deux cas le
+# reflexe est le meme : changer son mot de passe. Or cela ne fermait PAS la
+# session de celui qui etait deja entre — il gardait l'acces jusqu'a trente
+# jours, y compris apres l'incident et apres l'alerte.
+#
+# COMMENT ON FERME UNE SESSION QU'ON NE STOCKE PAS. On ne la ferme pas : on la
+# PÉRIME. Le compte porte un numero de generation ; le cookie emporte celui
+# qu'il avait a la connexion ; toute requete compare les deux. Changer le mot
+# de passe incremente le numero, et tous les cookies emis avant cessent d'etre
+# valables — sans table de sessions, sans requete supplementaire, puisque la
+# ligne du client est deja lue a chaque requete.
+#
+# COMPATIBILITÉ AVEC LES SESSIONS DÉJÀ OUVERTES. Un cookie anterieur a cette
+# mise en ligne ne porte aucun numero : il est lu comme generation 0, celle
+# des comptes existants. Personne n'est deconnecte par le deploiement — et la
+# protection prend effet des la premiere reinitialisation, qui est exactement
+# le moment ou elle doit agir.
+def sentauth_generation_de_session(d):
+    """Le numero de generation d'un compte, tel qu'il fait foi."""
+    try:
+        return int(d.get('generation_session') or 0)
+    except (TypeError, ValueError):
+        return 0
+
+
 def sentauth_current_client():
     """Retourne le dict client connecte, ou {'is_conseilprev': True} si acces
     CONSEILPREV via le lien maitre, ou None si non authentifie."""
@@ -6064,6 +6202,12 @@ def sentauth_current_client():
     if not row:
         return None
     d = dict(row) if not isinstance(row, dict) else row
+    # Le cookie a-t-il ete emis avant le dernier changement de mot de passe ?
+    if int(session.get('sgen', 0) or 0) != sentauth_generation_de_session(d):
+        logger.info("SESSION_PERIMEE client=%s — cookie anterieur au dernier "
+                    "changement de mot de passe", d.get('id'))
+        session.clear()
+        return None
     # CONSEILPREV connecte par le formulaire habituel (et non par le lien maitre) :
     # reconnu par son e-mail interne ou sa denomination, il conserve l'acces
     # administrateur complet et n'est pas concerne par la protection anti-elevation.
@@ -6453,6 +6597,10 @@ def sentauth_send_login_alert(email, nom_entreprise, ip):
     connexion avec la latence SMTP (~1-2s)."""
     try:
         date_str = datetime.utcnow().strftime('%d/%m/%Y à %H:%M UTC')
+    # Ce que l'inscrit a saisi n'entre dans le HTML qu'echappe : voir
+    # `_pour_courriel`. L'adresse de destinataire, elle, reste brute.
+        nom_entreprise = _pour_courriel(nom_entreprise)
+        ip = _pour_courriel(ip)
         html = f"""
         <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;padding:24px;background:#F5F2ED">
           <div style="background:#fff;border-radius:8px;padding:32px;border:1px solid #E0DDD8">
@@ -6515,6 +6663,10 @@ def sentauth_login():
     bf_protector.record_attempt(bf_key, success=True)
     session.clear()
     session['client_id'] = d['id']
+    # Le cookie emporte la generation en cours : elle sera comparee a chaque
+    # requete, et un changement de mot de passe la perimera. Voir
+    # `sentauth_generation_de_session`.
+    session['sgen'] = sentauth_generation_de_session(d)
     session.permanent = True
 
     conn = registre_get_db()
@@ -7008,7 +7160,10 @@ def sentauth_validate_password_strength(password):
 
 def sentauth_send_invitation_email(email, nom_entreprise, token):
     try:
-        link = f"https://conseilprev.onrender.com/invitation/{token}"
+        link = lien_du_site(f"invitation/{token}")
+    # Ce que l'inscrit a saisi n'entre dans le HTML qu'echappe : voir
+    # `_pour_courriel`. L'adresse de destinataire, elle, reste brute.
+        nom_entreprise = _pour_courriel(nom_entreprise)
         html = f"""
         <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;padding:24px;background:#F5F2ED">
           <div style="background:#fff;border-radius:8px;padding:32px;border:1px solid #E0DDD8">
@@ -7905,7 +8060,10 @@ RESET_PASSWORD_VALIDITY_HOURS = 2  # plus court qu une invitation : usage immedi
 
 def sentauth_send_reset_email(email, nom_entreprise, token):
     try:
-        link = f"https://conseilprev.onrender.com/reset-password/{token}"
+        link = lien_du_site(f"reset-password/{token}")
+    # Ce que l'inscrit a saisi n'entre dans le HTML qu'echappe : voir
+    # `_pour_courriel`. L'adresse de destinataire, elle, reste brute.
+        nom_entreprise = _pour_courriel(nom_entreprise)
         html = f"""
         <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;padding:24px;background:#F5F2ED">
           <div style="background:#fff;border-radius:8px;padding:32px;border:1px solid #E0DDD8">
@@ -7934,6 +8092,10 @@ def sentauth_send_reset_confirmation_email(email, nom_entreprise, ip):
     reussi — permet au client de detecter immediatement un changement qu il
     n aurait pas demande lui-meme."""
     try:
+    # Ce que l'inscrit a saisi n'entre dans le HTML qu'echappe : voir
+    # `_pour_courriel`. L'adresse de destinataire, elle, reste brute.
+        nom_entreprise = _pour_courriel(nom_entreprise)
+        ip = _pour_courriel(ip)
         html = f"""
         <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;padding:24px;background:#F5F2ED">
           <div style="background:#fff;border-radius:8px;padding:32px;border:1px solid #E0DDD8">
@@ -8067,9 +8229,15 @@ def sentauth_reset_password_confirm():
         return jsonify({'error': 'Ce lien a expiré.'}), 410
 
     pw_hash = generate_password_hash(password)
+    # ET TOUTES LES SESSIONS OUVERTES CESSENT D'ÊTRE VALABLES. Sans cette
+    # incrementation, celui qui etait deja entre le restait jusqu'a trente
+    # jours — y compris apres l'incident qui a motive le changement, et apres
+    # l'alerte qui l'a signale. Voir `sentauth_generation_de_session`.
     cur.execute(registre_sql(
-        'UPDATE clients SET mot_de_passe_hash=%s, reset_token=NULL, reset_expire=NULL WHERE id=%s',
-        'UPDATE clients SET mot_de_passe_hash=?, reset_token=NULL, reset_expire=NULL WHERE id=?'
+        'UPDATE clients SET mot_de_passe_hash=%s, reset_token=NULL, reset_expire=NULL, '
+        'generation_session=COALESCE(generation_session,0)+1 WHERE id=%s',
+        'UPDATE clients SET mot_de_passe_hash=?, reset_token=NULL, reset_expire=NULL, '
+        'generation_session=COALESCE(generation_session,0)+1 WHERE id=?'
     ), (pw_hash, d['id']))
     conn.commit()
     conn.close()
@@ -8099,7 +8267,10 @@ def sentauth_register_captcha():
 
 def sentauth_send_verification_email(email, nom_entreprise, token):
     try:
-        link = f"https://conseilprev.onrender.com/verify-email/{token}"
+        link = lien_du_site(f"verify-email/{token}")
+        # Ce que l'inscrit a saisi n'entre dans le HTML qu'echappe : voir
+        # `_pour_courriel`. L'adresse de destinataire, elle, reste brute.
+        nom_entreprise = _pour_courriel(nom_entreprise)
         html = f"""
         <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;padding:24px;background:#F5F2ED">
           <div style="background:#fff;border-radius:8px;padding:32px;border:1px solid #E0DDD8">
@@ -8110,7 +8281,7 @@ def sentauth_send_verification_email(email, nom_entreprise, token):
             <div style="text-align:center;margin:28px 0">
               <a href="{link}" style="display:inline-block;background:#B83222;color:#fff;padding:13px 28px;border-radius:6px;text-decoration:none;font-weight:600;font-size:14px">Confirmer mon email →</a>
             </div>
-            <p style="font-size:12px;color:#767676;line-height:1.6">Ce lien est valable {INVITATION_VALIDITY_HOURS} heures. Si vous n êtes pas à l origine de cette inscription, ignorez cet email.</p>
+            <p style="font-size:12px;color:#767676;line-height:1.6">Ce lien est valable {VERIFY_EMAIL_VALIDITY_HOURS} heures. Si vous n êtes pas à l origine de cette inscription, ignorez cet email.</p>
           </div>
           <p style="font-size:11px;color:#A8A8A8;text-align:center;margin-top:16px">CONSEILPREV — Sentinel AI</p>
         </div>
@@ -8124,13 +8295,27 @@ def sentauth_send_verification_email(email, nom_entreprise, token):
 
 def sentauth_notify_conseilprev_new_signup(nom_entreprise, email, ip):
     try:
+        # CE COURRIER EST LE SEUL OÙ UN INCONNU ÉCRIT À L'ADMINISTRATEUR.
+        # Le nom d'entreprise est choisi librement a l'inscription, l'adresse
+        # aussi, et l'IP se dicte par un en-tete. Les trois sont echappes :
+        # sans cela, s'inscrire sous un nom contenant un lien suffisait a faire
+        # arriver ce lien, cliquable, dans la boite de CONSEILPREV — avec
+        # l'expediteur et la mise en page du site. Verifie sur pieces.
+        nom_entreprise = _pour_courriel(nom_entreprise)
+        email = _pour_courriel(email)
+        ip = _pour_courriel(ip)
+        # ET UN CHEMIN POUR AGIR. Le courrier disait « connectez-vous a
+        # Sentinel AI » sans dire ou : l'administrateur devait retrouver
+        # l'adresse lui-meme, alors que la consigne est d'aller desactiver un
+        # compte sans tarder si quelque chose cloche.
+        lien_clients = lien_du_site('sentinel')
         html = f"""<div style="font-family:Arial,sans-serif;padding:20px">
           <p><strong>Nouvelle auto-inscription Sentinel AI</strong></p>
           <table style="font-size:13px"><tr><td style="padding:4px 12px 4px 0;color:#767676">Entreprise</td><td><strong>{nom_entreprise}</strong></td></tr>
           <tr><td style="padding:4px 12px 4px 0;color:#767676">Email</td><td>{email}</td></tr>
           <tr><td style="padding:4px 12px 4px 0;color:#767676">IP</td><td>{ip}</td></tr>
           <tr><td style="padding:4px 12px 4px 0;color:#767676">Date</td><td>{datetime.utcnow().strftime('%d/%m/%Y à %H:%M UTC')}</td></tr></table>
-          <p style="font-size:12px;color:#767676;margin-top:12px">Connectez-vous à Sentinel AI → Gestion des clients pour désactiver ce compte si nécessaire.</p></div>"""
+          <p style="font-size:12px;color:#767676;margin-top:12px"><a href="{lien_clients}" style="color:#B83222">Ouvrir Sentinel AI</a> → Gestion des clients, pour désactiver ce compte si nécessaire.</p></div>"""
         send_email_smart(CONSEILPREV_NOTIFY_EMAIL, 'CONSEILPREV', f"Nouvelle inscription Sentinel AI : {nom_entreprise}", html, tags=['sentinel-new-signup-notify'])
     except Exception as e:
         logger.error(f"NOTIFY_CONSEILPREV_FAILED : {e}")
@@ -8239,8 +8424,24 @@ def sentauth_register():
     now = datetime.utcnow().isoformat()
     pw_hash = generate_password_hash(password)
 
-    conn = registre_get_db()
-    cur = conn.cursor()
+    # DEUX PANNES QUI SE RESSEMBLAIENT, ET UNE SEULE RÉPONSE POUR LES DEUX.
+    # `registre_get_db()` etait AVANT le `try` : une base injoignable ne
+    # produisait donc pas le message prevu mais une erreur 500 avec une trace
+    # d'execution — sur la route d'inscription, page la plus exposee du site.
+    # Et a l'interieur, `except Exception` repondait « cet email est deja
+    # utilise » a TOUTE defaillance : un visiteur voyait qu'il possedait deja
+    # un compte alors que la base etait simplement tombee, et il allait
+    # demander une reinitialisation pour un compte inexistant.
+    #
+    # On distingue donc les deux, en s'appuyant sur ce que la base dit
+    # elle-meme : une violation d'unicite se nomme, dans les deux moteurs.
+    try:
+        conn = registre_get_db()
+        cur = conn.cursor()
+    except Exception as _exc:                                      # noqa: BLE001
+        logger.error("REGISTER_DB_INJOIGNABLE : %s", _exc)
+        return jsonify({'error': "Service momentanément indisponible. "
+                                 "Réessayez dans quelques instants."}), 503
     try:
         _essai_fin = (datetime.utcnow() + timedelta(days=15)).isoformat()
         if REGISTRE_USE_PG:
@@ -8251,10 +8452,23 @@ def sentauth_register():
             cur.execute('INSERT INTO clients (nom_entreprise, email, mot_de_passe_hash, date_creation, verify_email_token, verify_email_expire, actif, rgpd_consenti, rgpd_consenti_date, plan, essai_fin) VALUES (?,?,?,?,?,?,0,1,?,?,?)', (nom, email, pw_hash, now, verify_token, verify_expire, now, plan, _essai_fin))
             new_id = cur.lastrowid
         conn.commit()
-    except Exception:
-        conn.rollback()
-        conn.close()
-        return jsonify({'error': 'Cet email est déjà utilisé.'}), 409
+    except Exception as _exc:                                      # noqa: BLE001
+        try:
+            conn.rollback()
+        except Exception:
+            pass
+        try:
+            conn.close()
+        except Exception:
+            pass
+        _m = str(_exc).lower()
+        _doublon = ('unique' in _m or 'duplicate' in _m
+                    or 'already exists' in _m or 'contrainte' in _m)
+        if _doublon:
+            return jsonify({'error': 'Cet email est déjà utilisé.'}), 409
+        logger.error("REGISTER_ECHEC %s : %s", email, _exc)
+        return jsonify({'error': "Inscription impossible pour le moment. "
+                                 "Réessayez dans quelques instants."}), 503
     conn.close()
 
     session.pop('register_captcha_answer', None)
@@ -12875,7 +13089,20 @@ def rgpd_verification():
     nb_retraits = dict(cur.fetchone()).get('n', 0)
     try: conn.close()
     except Exception: pass
-    cookie_secure = bool(app.config.get('SESSION_COOKIE_HTTPONLY', True))
+    # UNE VÉRIFICATION QUI NOMMAIT UNE PROPRIÉTÉ ET EN CONTRÔLAIT UNE AUTRE.
+    # La variable s'appelait `cookie_secure` et lisait `SESSION_COOKIE_HTTPONLY`.
+    # Le constat « cookies de session proteges » etait donc rendu conforme par
+    # un reglage qui n'est pas celui qu'il annonce : couper `Secure` — le seul
+    # qui empeche le cookie de partir en clair — n'aurait rien change au
+    # verdict. On controle les trois reglages qui font la phrase, et une
+    # conformite affirmee redevient une conformite constatee.
+    _cookie = {
+        'Secure': bool(app.config.get('SESSION_COOKIE_SECURE')),
+        'HttpOnly': bool(app.config.get('SESSION_COOKIE_HTTPONLY')),
+        'SameSite': str(app.config.get('SESSION_COOKIE_SAMESITE') or '') in ('Lax', 'Strict'),
+    }
+    _cookie_manquants = [k for k, v in _cookie.items() if not v]
+    cookie_secure = not _cookie_manquants
     checks = [
         {'article': 'Art. 5', 'intitule': 'Minimisation et exactitude', 'mode': 'automatique',
          'statut': 'conforme', 'detail': 'IP hachees et agent utilisateur tronque dans les preuves ; donnees limitees aux finalites declarees.'},
@@ -12890,7 +13117,11 @@ def rgpd_verification():
          'statut': 'conforme', 'detail': 'Procedure d\'effacement operationnelle : anonymisation du compte, suppression des donnees liees, preuves anonymisees.'},
         {'article': 'Art. 25', 'intitule': 'Protection des la conception', 'mode': 'automatique',
          'statut': 'conforme' if cookie_secure else 'a-verifier',
-         'detail': 'Cles d\'API cote serveur uniquement ; acces administrateur restreint ; cookies de session proteges ; HTTPS via Render.'},
+         'detail': ('Cles d\'API cote serveur uniquement ; acces administrateur restreint ; '
+                    'HTTPS via Render ; cookie de session Secure + HttpOnly + SameSite.'
+                    if cookie_secure else
+                    'Cookie de session INCOMPLET — reglage(s) manquant(s) : '
+                    + ', '.join(_cookie_manquants))},
         {'article': 'Art. 30', 'intitule': 'Registre des activites de traitement', 'mode': 'automatique',
          'statut': 'conforme', 'detail': str(len(RGPD_TRAITEMENTS)) + ' traitements documentes (finalite, base, duree, destinataires), exportables.'},
         {'article': 'Chap. V', 'intitule': 'Transferts hors UE encadres', 'mode': 'declaratif',

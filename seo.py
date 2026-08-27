@@ -65,7 +65,16 @@ def _hote(u):
     return re.sub(r"^https?://", "", u).rstrip("/")
 
 
-BASE = _normaliser(os.environ.get("SITE_BASE_URL")) or BASE_PAR_DEFAUT
+# DEUX NOMS POUR LA MÊME CHOSE, ET C'EST VOULU — MAIS UNE SEULE VALEUR.
+# `BASE_URL` existait déjà dans `app.py` pour les liens d'un courrier de
+# validation. Laisser vivre deux variables séparées pour « l'adresse du site »
+# garantit qu'un jour l'une sera mise à jour et pas l'autre : les canoniques
+# désigneraient un site, les liens de confirmation un autre. On les fait donc
+# converger ici, `SITE_BASE_URL` l'emportant, sans casser une configuration
+# existante qui n'aurait renseigné que `BASE_URL`.
+BASE = (_normaliser(os.environ.get("SITE_BASE_URL"))
+        or _normaliser(os.environ.get("BASE_URL"))
+        or BASE_PAR_DEFAUT)
 
 # NOS ADRESSES : la courante, et celle d'où l'on vient. Le recalage ne touche
 # QU'À CELLES-LÀ. Une canonique qui désigne un AUTRE site est un choix
