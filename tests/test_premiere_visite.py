@@ -69,8 +69,25 @@ def sans_flux(monkeypatch):
 # ── LE PRÉCHAUFFAGE COUVRE LES DEUX CACHES ───────────────────────────────
 
 def _corps_du_prechauffage():
+    """Le corps de `_news_warmup()`, borné par la fin de son indentation.
+
+    IL ÉTAIT BORNÉ PAR SON POINT DE DÉMARRAGE — la ligne
+    `threading.Thread(target=_news_warmup…)` qui le suivait immédiatement. Cette
+    ligne a dû bouger : sous `--preload`, un fil démarré à l'import démarre dans
+    le maître, qui ne sert aucune requête, et aucun worker n'en hérite (voir
+    test_fils_du_processus.py). Le déplacer a fait tomber ces trois contrôles
+    d'un coup, non parce que le préchauffage avait changé, mais parce qu'ils
+    s'ancraient sur son voisinage.
+
+    Une borne prise sur l'INDENTATION ne dépend plus de ce qui suit."""
     i = SOURCE.index('def _news_warmup():')
-    return SOURCE[i:SOURCE.index('\nthreading.Thread(target=_news_warmup', i)]
+    lignes = SOURCE[i:].split('\n')
+    corps = [lignes[0]]
+    for l in lignes[1:]:
+        if l and not l[0].isspace():
+            break
+        corps.append(l)
+    return '\n'.join(corps)
 
 
 def test_le_prechauffage_remplit_aussi_le_cache_de_veille():

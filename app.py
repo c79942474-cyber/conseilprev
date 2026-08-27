@@ -11439,7 +11439,8 @@ def _news_warmup():
     except Exception as exc:                                       # noqa: BLE001
         logger.warning("[warmup] Echec pre-chargement intensites : %s", exc)
 
-threading.Thread(target=_news_warmup, daemon=True).start()
+# Le fil de prechauffage ne demarre plus ICI : voir
+# `_demarrer_fils_du_processus()`, plus bas, et la raison qui l'accompagne.
 
 
 # ══════════════════════════════════════════════════════════
@@ -11628,9 +11629,74 @@ def api_auto_maj():
     return jsonify(e)
 
 
-if AUTO_MAJ:
-    threading.Thread(target=_auto_boucle, daemon=True).start()
-    logger.info('AUTO_MAJ actif — %ds (rapide) / %ds (lent)', AUTO_MAJ_RAPIDE, AUTO_MAJ_LENT)
+# ══════════════════════════════════════════════════════════════════════════
+# LES FILS DE FOND APPARTIENNENT AU PROCESSUS QUI SERT LES REQUETES.
+#
+# MEME CAUSE QUE LE POOL, MEME MESURE. `fork()` ne copie pas les fils. Sous
+# `--preload`, ces deux-la demarraient a l'import, donc dans le MAITRE — qui ne
+# sert aucune requete. Releve sur ce poste, apres import puis fork :
+#
+#   maitre : Thread-1 (_news_warmup), Thread-2 (_auto_boucle),
+#            pool-1-scheduler, pool-1-worker-0, pool-1-worker-1, pool-1-worker-2
+#   enfant : aucun
+#
+# DEUX CONSEQUENCES, TOUTES DEUX VISIBLES DANS LE JOURNAL DE PRODUCTION.
+#
+# 1. Le rafraichissement automatique tournait dans le maitre et n'y actualisait
+#    que SA copie. Les workers servaient des donnees figees a l'instant du
+#    fork, jusqu'au deploiement suivant. Les lignes « EMPS_LIVE 12/27 pays en
+#    direct » du journal sont celles d'un processus que personne n'interroge.
+#
+# 2. Le prechauffage de la veille se terminait DIX SECONDES apres le demarrage
+#    des workers — « [warmup] veille pré-chargée : 48 entrées en 4.3 s » a
+#    15:10:08, workers demarres a 15:09:58 — donc entierement dans le maitre.
+#    Le premier visiteur de chaque worker repayait le chargement complet. C'est
+#    exactement le defaut que le prechauffage avait ete ecrit pour supprimer :
+#    `--preload` l'avait silencieusement retabli.
+#
+# CE QUI RESTE A L'IMPORT, ET POURQUOI. Le prechauffage du cache de PAGES, lui,
+# y reste : il ne remplit qu'un dictionnaire en memoire, et la memoire, elle,
+# EST copiee par `fork()`. Mesure : 25 entrees dans le maitre, 25 dans
+# l'enfant. Sous `--preload` chaque worker herite donc d'un cache deja chaud,
+# gratuitement — le deplacer serait perdre cela.
+#
+# LE DEMARRAGE SE FAIT DONC A LA PREMIERE REQUETE, une fois par processus. Le
+# maitre, qui n'en recoit jamais, ne demarre rien ; chaque worker demarre les
+# siens. Sans `--preload`, le processus qui importe est deja le worker : la
+# garde par PID voit le meme identifiant et ne demarre qu'une fois.
+# ══════════════════════════════════════════════════════════════════════════
+_FILS_DEMARRES = set()
+_FILS_VERROU = threading.Lock()
+
+
+def _demarrer_fils_du_processus():
+    """Les fils de fond du processus courant. Idempotent, et sans effet dans un
+    processus qui les a deja."""
+    pid = os.getpid()
+    if pid in _FILS_DEMARRES:
+        return
+    with _FILS_VERROU:
+        if pid in _FILS_DEMARRES:
+            return
+        # Un identifiant herite d'un autre processus ne vaut rien ici : ses
+        # fils ne sont pas passes de l'autre cote du fork.
+        _FILS_DEMARRES.clear()
+        _FILS_DEMARRES.add(pid)
+        threading.Thread(target=_news_warmup, daemon=True,
+                         name='veille-warmup').start()
+        if AUTO_MAJ:
+            threading.Thread(target=_auto_boucle, daemon=True,
+                             name='auto-maj').start()
+            logger.info('AUTO_MAJ actif dans le processus %d — %ds (rapide) / %ds (lent)',
+                        pid, AUTO_MAJ_RAPIDE, AUTO_MAJ_LENT)
+
+
+@app.before_request
+def _fils_du_processus():
+    # Un test d'appartenance a un ensemble : quelques dizaines de nanosecondes,
+    # sur un chemin qui en coute des milliers.
+    if os.getpid() not in _FILS_DEMARRES:
+        _demarrer_fils_du_processus()
 
 # ══════════════════════════════════════════════════════════
 # FACTURATION ECHELONNEE PAR RESULTATS — LIEN Tarification par resultats /
