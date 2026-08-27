@@ -72,6 +72,45 @@ window.sentAuthMoi = function(){
   return _sentAuthPromesse;
 };
 
+/* ── LE REGISTRE, UNE FOIS AU LIEU DE DIX ─────────────────────────────────
+   DIX PANNEAUX AFFICHENT LE REGISTRE IA — la liste, la matrice, le radar, la
+   pertinence sectorielle de l'audit, la FRIA, le tableau de bord, les
+   sanctions, le benchmark, les cartes, les tarifs. Chacun le retéléchargeait
+   pour son propre compte. Un parcours du menu déclenchait DOUZE appels à
+   `/api/registre` — deux panneaux le demandent même deux fois dans le même
+   clic. C'est la même liste, du même client, à la même seconde.
+
+   CE QUE ÇA COÛTE, ET OÙ. En local l'aller-retour vaut trois millisecondes et
+   ne se voit pas. Depuis un navigateur français vers Francfort il vaut
+   quarante : onze appels de trop font près d'une demi-seconde de temps mort
+   répartie sur le parcours, et autant de requêtes comptées par le limiteur.
+
+   POURQUOI UNE PROMESSE ET PAS UN OBJET. Les dix appelants partent souvent
+   dans la même image : un cache d'objet arriverait trop tard, dix requêtes
+   seraient déjà en vol. La promesse, elle, est partagée dès le premier
+   appelant — les neuf suivants attendent la même réponse.
+
+   CE QU'ELLE NE FAIT PAS. Elle ne périme pas toute seule. Le registre ne
+   change que si l'utilisateur l'édite, et ces trois endroits-là appellent
+   `sentRegistreOublier()`. Un cache qui expirerait au bout de N secondes
+   donnerait l'illusion de la fraîcheur sans jamais la garantir. */
+var _regPromesse = null;
+window.sentRegistre = function(){
+  if(!_regPromesse){
+    /* La route rend du JSON valide MÊME en 401 et 403 — le statut est reporté
+       sur le corps parce que deux appelants sur dix en ont besoin pour
+       afficher « session expirée » plutôt qu'une liste vide. */
+    _regPromesse = fetch('/api/registre', {credentials:'same-origin'})
+      .then(function(r){
+        var s = r.status;
+        return r.json().then(function(d){ d._statut = s; return d; });
+      })
+      .catch(function(e){ _regPromesse = null; throw e; });
+  }
+  return _regPromesse;
+};
+window.sentRegistreOublier = function(){ _regPromesse = null; };
+
 ;/* ── bloc 1/59 ── */
 
 /* ── Prechargement des modules cartographiques ────────────────────────────
@@ -121,8 +160,21 @@ window.sentAuthMoi = function(){
     if(window.requestIdleCallback) requestIdleCallback(auRepos, {timeout:4000});
     else setTimeout(auRepos, 1800);
   }
-  if(document.readyState === 'complete') demarrer();
-  else window.addEventListener('load', demarrer);
+  /* ON N'ATTEND PAS `load`, ON ATTEND LE DOM.
+     `load` ne se declenche qu'une fois TOUTES les sous-ressources arrivees —
+     la feuille de styles Google Fonts comprise. Un reseau d'entreprise qui
+     filtre fonts.googleapis.com, ou simplement lent, repoussait donc le
+     prechargement des quatre modules de plusieurs secondes ; passe ce delai,
+     chaque clic sur Panorama, Enveloppe, Empreinte du parc ou Observatoire
+     repayait le chargement complet d'une page en iframe sous les yeux de
+     l'utilisateur. Mesure faite ainsi : 275 ms pour Panorama, 170 pour
+     Enveloppe. Ce n'est pas une hypothese sur les fontes — c'est ce que fait
+     `load` par definition.
+     Rien n'est avance pour autant : `requestIdleCallback` garde la main et
+     n'agit qu'au premier temps mort du navigateur. On retire une dependance,
+     on ne prend pas de priorite. */
+  if(document.readyState !== 'loading') demarrer();
+  else document.addEventListener('DOMContentLoaded', demarrer, {once:true});
 })();
 
 
@@ -814,6 +866,23 @@ var PAGE_META = {
   'fiche-ng': {section:'JURIDICTION', label:'Nigéria'}
 };
 
+/* APRÈS LA PEINTURE, ET PAS « DANS SOIXANTE MILLISECONDES ».
+   Huit panneaux differaient leur initialisation d'un delai fixe de 60 ms. Le
+   but etait bon — laisser le navigateur AFFICHER le panneau avant de lancer un
+   travail lourd — mais le moyen ne le garantissait pas : soixante
+   millisecondes ne sont ni le moment de la peinture, ni une borne superieure.
+   Sur une machine rapide c'etaient 45 ms d'attente pour rien ; sur une machine
+   chargee, l'initialisation partait quand meme avant l'affichage.
+   `requestAnimationFrame` se declenche AVANT la peinture de l'image suivante :
+   le `setTimeout(…, 0)` qu'il enveloppe s'execute donc juste APRÈS. C'est la
+   garantie que le delai fixe n'apportait pas, pour environ 16 ms au lieu de
+   60. Repli sur l'ancien delai la ou rAF n'existe pas. */
+function _apresPeinture(fn) {
+  if (window.requestAnimationFrame)
+    requestAnimationFrame(function(){ setTimeout(fn, 0); });
+  else setTimeout(fn, 60);
+}
+
 function go(id, el, sec, pg) {
   if(window.navRefresh) setTimeout(window.navRefresh, 30);
   document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('on'); });
@@ -821,14 +890,14 @@ function go(id, el, sec, pg) {
     i.classList.remove('on'); i.removeAttribute('aria-current'); });
   var p = document.getElementById('p-'+id);
   if (p) p.classList.add('on');
-  if (id === 'templates' && typeof window.templatesRenderPage === 'function') setTimeout(window.templatesRenderPage, 60);
-  if (id === 'rgpd-site' && typeof window.rgpdInit === 'function') setTimeout(window.rgpdInit, 60);
-  if (id === 'training' && typeof window.formCatRender === 'function') setTimeout(window.formCatRender, 60);
-  if (id === 'ia50' && typeof window.ia50Load === 'function') setTimeout(window.ia50Load, 60);
-  if (id === 'empreinte' && typeof window.empInit === 'function') setTimeout(window.empInit, 60);
-  if (id === 'gouvernance' && typeof window.gouvInit === 'function') setTimeout(window.gouvInit, 60);
-  if (id === 'adoption' && typeof window.adpInit === 'function') setTimeout(window.adpInit, 60);
-  if (id === 'ingenierie' && typeof window.ingInit === 'function') setTimeout(window.ingInit, 60);
+  if (id === 'templates' && typeof window.templatesRenderPage === 'function') _apresPeinture(window.templatesRenderPage);
+  if (id === 'rgpd-site' && typeof window.rgpdInit === 'function') _apresPeinture(window.rgpdInit);
+  if (id === 'training' && typeof window.formCatRender === 'function') _apresPeinture(window.formCatRender);
+  if (id === 'ia50' && typeof window.ia50Load === 'function') _apresPeinture(window.ia50Load);
+  if (id === 'empreinte' && typeof window.empInit === 'function') _apresPeinture(window.empInit);
+  if (id === 'gouvernance' && typeof window.gouvInit === 'function') _apresPeinture(window.gouvInit);
+  if (id === 'adoption' && typeof window.adpInit === 'function') _apresPeinture(window.adpInit);
+  if (id === 'ingenierie' && typeof window.ingInit === 'function') _apresPeinture(window.ingInit);
   /* L'ONGLET COURANT EST AUSSI ANNONCÉ, pas seulement peint : à un lecteur
      d'écran, la pastille terre cuite ne dit rien. */
   function _ici(i){ i.classList.add('on'); i.setAttribute('aria-current', 'page'); }
@@ -5451,22 +5520,16 @@ function regSkeletonHTML(){
 function regFetch(){
   var body = document.getElementById("reg-sys-body");
   if(body) body.innerHTML = regSkeletonHTML();
-  fetch('/api/registre')
-    .then(function(r){
-      if(r.status === 401 || r.status === 403){
-        return r.json().then(function(d){
-          var msg = r.status === 401
-            ? '🔒 Session expirée — <a href="/login" style="color:var(--blue)">reconnectez-vous</a> pour accéder au Registre IA.'
-            : '🔒 '+(d.error || 'Accès réservé aux plans Pro/Entreprise.');
-          if(body) body.innerHTML = '<div class="reg-loading" style="color:var(--accent)">'+msg+'</div>';
-          return null;
-        });
-      }
-      if(!r.ok){ throw new Error('HTTP '+r.status); }
-      return r.json();
-    })
+  window.sentRegistre()
     .then(function(d){
-      if(!d) return;
+      if(d._statut === 401 || d._statut === 403){
+        var msg = d._statut === 401
+          ? '🔒 Session expirée — <a href="/login" style="color:var(--blue)">reconnectez-vous</a> pour accéder au Registre IA.'
+          : '🔒 '+(d.error || 'Accès réservé aux plans Pro/Entreprise.');
+        if(body) body.innerHTML = '<div class="reg-loading" style="color:var(--accent)">'+msg+'</div>';
+        return;
+      }
+      if(d._statut >= 400){ throw new Error('HTTP '+d._statut); }
       REG_DATA = d.systemes || [];
       regRender();
     })
@@ -5657,6 +5720,11 @@ window.regSave = function(){
     .then(function(d){
       if(d.error){ alert(d.error); return; }
       regCloseModal();
+      /* LE REGISTRE VIENT DE CHANGER : la promesse partagée par les neuf
+         autres panneaux tient l'ancienne liste. Sans cet oubli, la matrice, le
+         radar et le tableau de bord montreraient un registre d'avant
+         l'édition, jusqu'au prochain rechargement complet de la page. */
+      window.sentRegistreOublier();
       /* Mise a jour locale de REG_DATA avec l objet retourne par le serveur,
          au lieu de recharger toute la liste (regFetch) : evite un aller-retour
          reseau complet et inutile, le serveur a deja renvoye tout ce qu il faut. */
@@ -5679,6 +5747,7 @@ window.regDelete = function(id){
     .then(function(res){
       if(res.status !== 200){ alert(res.data.error || "Erreur lors de la suppression."); return; }
       regCloseModal();
+      window.sentRegistreOublier();   /* même raison qu'à l'enregistrement */
       /* Retrait local de REG_DATA, sans recharger toute la liste depuis le serveur. */
       REG_DATA = REG_DATA.filter(function(s){ return s.id !== id; });
       regRender();
@@ -5954,7 +6023,7 @@ window.matriceOpenSys = function(id){
 function matriceFetch(){
   var g = document.getElementById('matrix-grid');
   if(g) g.innerHTML = '<div class="reg-loading" style="grid-column:1/-1">Chargement du registre…</div>';
-  fetch('/api/registre').then(function(r){ return r.json(); }).then(function(d){
+  window.sentRegistre().then(function(d){
     matriceRender(d.systemes || []);
   }).catch(function(){
     if(g) g.innerHTML = '<div class="reg-loading" style="grid-column:1/-1;color:var(--accent)">Erreur de chargement du registre.</div>';
@@ -6322,7 +6391,7 @@ window.radarUnhighlight = function(){
 
 /* ── Rendu complet de la page ── */
 function radarRenderPage(){
-  fetch('/api/registre').then(function(r){ return r.json(); }).then(function(d){
+  window.sentRegistre().then(function(d){
     RADAR_REG_CACHE = d.systemes || [];
     radarRenderAll();
   }).catch(function(){ RADAR_REG_CACHE = []; radarRenderAll(); });
@@ -6462,7 +6531,7 @@ window.auditSelectRelSector = function(sectorKey){
 };
 
 window.auditRenderSectorRelevance = function(){
-  fetch('/api/registre').then(function(r){ return r.json(); }).then(function(d){
+  window.sentRegistre().then(function(d){
     AUDIT_REL_REG_CACHE = d.systemes || [];
     auditApplySectorRelevance();
   }).catch(function(){ AUDIT_REL_REG_CACHE = []; auditApplySectorRelevance(); });
@@ -6769,23 +6838,17 @@ function friaFetch(){
   if(holder) holder.innerHTML = '<div class="reg-loading">Chargement de vos systèmes IA…</div>';
   var info = document.getElementById("fria-registre-info");
   if(info){ info.innerHTML = 'Vérification de l applicabilité Art. 27 en cours…'; info.className = "radar-registre-info"; }
-  fetch('/api/registre')
-    .then(function(r){
-      if(r.status === 401 || r.status === 403){
-        return r.json().then(function(d){
-          var msg = r.status === 401
-            ? '🔒 Session expirée — <a href="/login" style="color:var(--blue)">reconnectez-vous</a> pour accéder à FRIA.'
-            : '🔒 '+(d.error || 'Accès réservé aux plans Pro/Entreprise.');
-          if(holder) holder.innerHTML = '<div class="reg-loading" style="color:var(--accent)">'+msg+'</div>';
-          if(info){ info.innerHTML = msg; info.className = "radar-registre-info radar-registre-warn"; }
-          return null;
-        });
-      }
-      if(!r.ok){ throw new Error('HTTP '+r.status); }
-      return r.json();
-    })
+  window.sentRegistre()
     .then(function(d){
-      if(!d) return;
+      if(d._statut === 401 || d._statut === 403){
+        var msg = d._statut === 401
+          ? '🔒 Session expirée — <a href="/login" style="color:var(--blue)">reconnectez-vous</a> pour accéder à FRIA.'
+          : '🔒 '+(d.error || 'Accès réservé aux plans Pro/Entreprise.');
+        if(holder) holder.innerHTML = '<div class="reg-loading" style="color:var(--accent)">'+msg+'</div>';
+        if(info){ info.innerHTML = msg; info.className = "radar-registre-info radar-registre-warn"; }
+        return;
+      }
+      if(d._statut >= 400){ throw new Error('HTTP '+d._statut); }
       FRIA_REG_CACHE = d.systemes || [];
       friaRenderAll();
     })
@@ -6888,7 +6951,7 @@ window.cpGetDashboardData = function(callback){
     registreNonConforme: 0,
     registreHautRisque: 0
   };
-  fetch('/api/registre').then(function(r){ return r.json(); }).then(function(d){
+  window.sentRegistre().then(function(d){
     data.registre = d.systemes || [];
     data.registreNonConforme = data.registre.filter(function(s){ return s.statut_conformite==='non_conforme' || s.statut_conformite==='a_evaluer'; }).length;
     data.registreHautRisque = data.registre.filter(function(s){ return s.classification==='haut' || s.classification==='inacceptable'; }).length;
@@ -7111,7 +7174,7 @@ window.go = function(id){
 'use strict';
 
 window.sanctionsPrefillFromRegistry = function(){
-  fetch('/api/registre').then(function(r){ return r.json(); }).then(function(d){
+  window.sentRegistre().then(function(d){
     var systemes = d.systemes || [];
     var hautRisque = systemes.filter(function(s){ return s.classification==='haut' || s.classification==='inacceptable'; });
     if(hautRisque.length === 0){
@@ -7155,7 +7218,7 @@ window.benchmarkRenderPage = function(){
   if(!holder || !window.MAT_SECTORS) return;
   holder.innerHTML = '<div class="reg-loading">Calcul des scores sectoriels…</div>';
 
-  fetch('/api/registre').then(function(r){ return r.json(); }).then(function(d){
+  window.sentRegistre().then(function(d){
     var systemes = d.systemes || [];
 
     function scoreFor(sectorLabel){
@@ -8238,7 +8301,7 @@ var CARD_CLASSIF_LABELS = {inacceptable:"Inacceptable", haut:"Haut risque", limi
 
 /* ── Donnees agregees pour les 3 cartes ── */
 function cardsGetData(callback){
-  fetch('/api/registre').then(function(r){ return r.json(); }).then(function(d){
+  window.sentRegistre().then(function(d){
     var registre = d.systemes || [];
     var byClassif = {};
     registre.forEach(function(s){ byClassif[s.classification] = (byClassif[s.classification]||0)+1; });
@@ -9205,7 +9268,7 @@ var SECTOR_PACE = {
 };
 
 function pricingGetData(callback){
-  fetch('/api/registre').then(function(r){ return r.json(); }).then(function(d){
+  window.sentRegistre().then(function(d){
     var registre = d.systemes || [];
     var auditPct = 0, auditTotal = 0, auditDone = 0, auditEngage = false;
     if(window.AUDIT_SECTIONS){

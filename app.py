@@ -380,6 +380,14 @@ def add_security_headers(response):
     # clic). Le marqueur est retire de la reponse dans tous les cas.
     if response.headers.pop('X-Perf-Cache', None):
         pass  # Cache-Control deja pose par _serve_page_fast — ne pas ecraser
+    elif (request.method in ('GET', 'HEAD') and response.status_code == 200
+          and empreintes.immuable(request.path, request.args.get('v'))):
+        # UNE ADRESSE QUI PORTE SON EMPREINTE NE DÉSIGNERA JAMAIS AUTRE CHOSE.
+        # Elle peut donc etre gardee un an sans revalidation. Les pages HTML,
+        # elles, restent en `no-cache` : c'est la que la nouvelle adresse est
+        # annoncee des la mise en ligne suivante. Voir empreintes.py.
+        response.headers['Cache-Control'] = empreintes.IMMUABLE
+        response.headers.pop('Pragma', None)
     elif response.content_type and 'html' in response.content_type:
         response.headers['Cache-Control']          = 'no-store, no-cache, must-revalidate'
         response.headers['Pragma']                 = 'no-cache'
@@ -2700,6 +2708,7 @@ import export_dc  # noqa: E402
 import export_observatoire  # noqa: E402
 import seo  # noqa: E402
 import conversion  # noqa: E402
+import empreintes  # noqa: E402
 
 
 def _figures_du_corps(corps, cles_admises):
@@ -10259,7 +10268,13 @@ def _page_cache_entry(filename):
             # ET LE CHEMIN DE SORTIE. Dix pages n'en offraient aucun — dont
             # celle des tarifs. Attirer un visiteur puis le laisser sans rien a
             # cliquer revient a payer le trajet et fermer la porte.
-            raw = conversion.enrichir(_route, _html).encode('utf-8')
+            _html = conversion.enrichir(_route, _html)
+            # ET L'EMPREINTE DES FICHIERS QU'ELLE APPELLE. Une session Sentinel
+            # ordinaire redemandait dix-sept fois au serveur la permission de
+            # se servir de fichiers qu'elle avait deja et qui n'avaient pas
+            # change. Une adresse qui porte sa version se garde un an sans
+            # risque. Pose ici, une fois par version de page, jamais par visite.
+            raw = empreintes.marquer(_html).encode('utf-8')
         except Exception as _e:  # noqa: BLE001
             logger.error(f'SEO_ENRICH_ERR {filename}: {_e}')
         ent = {
@@ -11061,6 +11076,17 @@ def _news_warmup():
         # Un prechauffage qui echoue ne doit rien casser : la route refera le
         # travail a la premiere demande, comme avant.
         logger.warning("[warmup] Echec pre-chargement veille : %s", exc)
+
+    # LE TROISIEME APPEL SORTANT SUR LE CHEMIN D'UNE PAGE. Le panneau
+    # « Empreinte » interrogeait ODRE (RTE) pendant la requete du visiteur.
+    # Depuis `_emp_relever_en_fond` il ne le fait plus — mais tant que le
+    # releve n'a pas eu lieu une premiere fois, c'est le facteur par defaut qui
+    # s'affiche. On le declenche donc ici, pour que cette fenetre dure quelques
+    # secondes apres le demarrage au lieu d'attendre le premier curieux.
+    try:
+        _emp_prechauffer_intensites()
+    except Exception as exc:                                       # noqa: BLE001
+        logger.warning("[warmup] Echec pre-chargement intensites : %s", exc)
 
 threading.Thread(target=_news_warmup, daemon=True).start()
 
@@ -14363,16 +14389,72 @@ def _emp_fe_filiere(nom):
 
 _EMP_INT_DE_CACHE = {'ts': 0.0, 'val': None, 'src': ''}
 
+# ══════════════════════════════════════════════════════════
+# AUCUNE PAGE N'ATTEND UN SERVEUR ÉTRANGER
+# ══════════════════════════════════════════════════════════
+# CE QUI A DÉCLENCHÉ CE BLOC. Chronometrage du panneau « Empreinte » de
+# Sentinel : 571 ms, dont l'essentiel dans /api/empreinte/live. La cause n'est
+# pas la base — c'est un appel sortant vers ODRE (RTE eCO2mix), fait PENDANT la
+# requete du visiteur, avec six secondes de patience. Quinze minutes de cache
+# plus tard, le visiteur suivant repaie. Apres chaque mise en ligne aussi.
+#
+# C'EST EXACTEMENT LE DÉFAUT DÉJÀ CORRIGÉ SUR /api/veille, et la correction est
+# la meme : ON NE FAIT JAMAIS ATTENDRE UNE PAGE POUR UNE DONNÉE QU'ON SAIT
+# DÉJÀ APPROCHER. La derniere valeur connue part tout de suite, le releve se
+# fait derriere.
+#
+# CE QUE ÇA CHANGE POUR LE LECTEUR, ET POURQUOI C'EST HONNÊTE. Le tout premier
+# affichage apres un demarrage montre le facteur ADEME par defaut au lieu du
+# temps reel — et le DIT, dans la source affichee a cote du chiffre. Un chiffre
+# qui annonce sa provenance vaut mieux qu'un chiffre exact obtenu en faisant
+# patienter six secondes. Le prechauffage du demarrage reduit de toute facon
+# cette fenetre a quelques secondes.
+_EMP_INT_FRAIS = 900          # au-dela, la valeur est rafraichie — en fond
+_EMP_INT_VERROUS = {}
+
+
+def _emp_relever_en_fond(cle, cache, collecter):
+    """Declenche le releve si la valeur a vieilli, et rend la main aussitot.
+
+    Le verrou n'est pas la pour proteger le cache (une affectation de dict est
+    atomique) mais pour qu'une rafale de visiteurs ne lance pas une rafale de
+    fils vers le meme serveur : le premier prend le verrou, les autres passent
+    leur chemin et sont servis avec la valeur en place."""
+    if time.time() - cache['ts'] < _EMP_INT_FRAIS:
+        return
+    verrou = _EMP_INT_VERROUS.setdefault(cle, threading.Lock())
+    if not verrou.acquire(blocking=False):
+        return
+    def _travail():
+        try:
+            collecter()
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("[empreinte] releve %s echoue : %s", cle, exc)
+        finally:
+            verrou.release()
+    threading.Thread(target=_travail, daemon=True, name='emp-' + cle).start()
+
 
 def _emp_intensite_de():
     """Intensite carbone du reseau allemand — pertinente car la plateforme est
     hebergee a Francfort. Reconstituee en temps reel a partir du mix de
     production publie par Fraunhofer ISE (Energy-Charts, licence ouverte),
     pondere par des facteurs d'emission par filiere en cycle de vie.
-    Repli sur le facteur moyen pays en cas d'indisponibilite."""
+    Repli sur le facteur moyen pays en cas d'indisponibilite.
+
+    NE FAIT AUCUN APPEL SORTANT : elle rend ce qui est en cache et confie le
+    releve a `_emp_collecter_de`, execute en tache de fond."""
+    if _EMP_INT_DE_CACHE['val'] is None:
+        _EMP_INT_DE_CACHE.update({'ts': 0.0, 'val': EMP_INTENSITE_DEFAUT['DE'],
+                                  'src': 'Facteur moyen pays (releve en cours)'})
+    _emp_relever_en_fond('de', _EMP_INT_DE_CACHE, _emp_collecter_de)
+    return _EMP_INT_DE_CACHE['val'], _EMP_INT_DE_CACHE['src']
+
+
+def _emp_collecter_de():
+    """Le releve lui-meme. Appele hors du chemin de requete, il a le droit
+    d'attendre sept secondes : personne ne le regarde."""
     maintenant = time.time()
-    if _EMP_INT_DE_CACHE['val'] is not None and (maintenant - _EMP_INT_DE_CACHE['ts']) < 900:
-        return _EMP_INT_DE_CACHE['val'], _EMP_INT_DE_CACHE['src']
     try:
         resp = requests.get('https://api.energy-charts.info/public_power',
                             params={'country': 'de'}, timeout=7)
@@ -14401,6 +14483,18 @@ def _emp_intensite_de():
     val = EMP_INTENSITE_DEFAUT['DE']
     _EMP_INT_DE_CACHE.update({'ts': maintenant, 'val': val, 'src': 'Facteur moyen pays (repli)'})
     return val, _EMP_INT_DE_CACHE['src']
+
+
+def _emp_prechauffer_intensites():
+    """Lance les deux releves au demarrage, pour que la fenetre pendant
+    laquelle on sert le facteur par defaut se compte en secondes et non en
+    minutes. C'est un confort : un echec ne doit rien casser."""
+    for cle, cache, collecte in (('fr', _EMP_INT_CACHE, _emp_collecter_fr),
+                                 ('de', _EMP_INT_DE_CACHE, _emp_collecter_de)):
+        if cache['val'] is None:
+            cache.update({'ts': 0.0, 'val': EMP_INTENSITE_DEFAUT[cle.upper()],
+                          'src': 'Facteur par defaut (releve en cours)'})
+        _emp_relever_en_fond(cle, cache, collecte)
 
 
 def _emp_intensite_hebergement():
@@ -14451,10 +14545,21 @@ def _emp_intensite_fr():
     """Intensite carbone du reseau francais, en temps reel (RTE / eCO2mix via
     ODRE, pas de quinze minutes, donnees ouvertes). Valeur de combustion
     directe : une majoration est appliquee pour approcher le cycle de vie.
-    Repli sur le facteur par defaut en cas d'indisponibilite."""
+    Repli sur le facteur par defaut en cas d'indisponibilite.
+
+    NE FAIT AUCUN APPEL SORTANT : elle rend ce qui est en cache et confie le
+    releve a `_emp_collecter_fr`, execute en tache de fond."""
+    if _EMP_INT_CACHE['val'] is None:
+        _EMP_INT_CACHE.update({'ts': 0.0, 'val': EMP_INTENSITE_DEFAUT['FR'],
+                               'src': 'Facteur par defaut (ADEME, releve en cours)'})
+    _emp_relever_en_fond('fr', _EMP_INT_CACHE, _emp_collecter_fr)
+    return _EMP_INT_CACHE['val'], _EMP_INT_CACHE['src']
+
+
+def _emp_collecter_fr():
+    """Le releve lui-meme. Appele hors du chemin de requete, il a le droit
+    d'attendre six secondes : personne ne le regarde."""
     maintenant = time.time()
-    if _EMP_INT_CACHE['val'] is not None and (maintenant - _EMP_INT_CACHE['ts']) < 900:
-        return _EMP_INT_CACHE['val'], _EMP_INT_CACHE['src']
     try:
         resp = requests.get(
             'https://odre.opendatasoft.com/api/records/1.0/search/',

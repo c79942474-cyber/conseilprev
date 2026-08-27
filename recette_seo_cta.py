@@ -333,8 +333,26 @@ print("\n══ 6. Ce que cette mise en visibilité ne devait PAS déplacer ═�
 ok("les vingt-quatre pages publiques sont toujours servies", len(PAGES) == 24)
 ok("les deux modules réservés le restent",
    "PAGES_RESERVEES" in app_src and "reserve_abonne_page" in app_src)
+# CE CONTRÔLE LISAIT UNE LIGNE, PAS UNE PROPRIÉTÉ. Il exigeait le texte exact
+# « raw = conversion.enrichir(_route, _html).encode('utf-8') ». Le jour où une
+# troisième injection s'est ajoutée (l'empreinte des fichiers statiques), la
+# ligne est devenue deux — et le contrôle a viré au rouge alors que ce qu'il
+# gardait n'avait pas bougé d'un pouce. On regarde donc OÙ se fait l'injection,
+# ce qui est la question posée, et non comment elle s'écrit.
+def _corps(nom, fin):
+    i = app_src.index("def %s(" % nom)
+    return app_src[i:app_src.index(fin, i)]
+
+
+_construction = _corps("_page_cache_entry", "\ndef _serve_page_fast")
+_service = _corps("_serve_page_fast", "\n_CACHE_PAGES")
 ok("l'injection se fait à la construction du cache, pas à chaque visite",
-   "raw = conversion.enrichir(_route, _html).encode('utf-8')" in app_src)
+   all(q in _construction for q in ("seo.enrichir(", "conversion.enrichir(",
+                                    "empreintes.marquer("))
+   and not any(q in _service for q in ("seo.enrichir(", "conversion.enrichir(",
+                                       "empreintes.marquer(")),
+   "une injection a migré vers le chemin de service : elle serait alors "
+   "refaite à chaque visite, sur 693 Ko de HTML")
 ok("…et une erreur d'injection est journalisée, pas avalée",
    "SEO_ENRICH_ERR" in app_src)
 ok("le plan du site est mis en cache une heure",
