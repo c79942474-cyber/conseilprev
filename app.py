@@ -5433,6 +5433,34 @@ REGISTRE_CONNECT_TIMEOUT = int(os.environ.get('REGISTRE_CONNECT_TIMEOUT', '5'))
 # secondes et rend « database is locked » — visible en 500 cote visiteur.
 REGISTRE_SQLITE_ATTENTE = int(os.environ.get('REGISTRE_SQLITE_ATTENTE', '15'))
 
+# ── LE POOL, ET LES REGLAGES QUI LE GOUVERNENT ───────────────────────────
+# Definis ICI, hors du `if`, pour la raison ecrite quinze lignes plus haut :
+# a l'interieur, ils n'existeraient pas quand le bloc est saute, et la ligne
+# qui les lit leverait un NameError en pleine requete, loin d'ici.
+REGISTRE_POOL = None                 # conserve : voir registre_pool()
+_REGISTRE_POOLS = {}                 # pid -> ConnectionPool
+_REGISTRE_POOL_VERROU = threading.Lock()
+_REGISTRE_POOL_ECHEC = {}            # pid -> horodatage du dernier echec
+
+# AUTANT DE CONNEXIONS QUE DE FILS, ET LA RAISON EST ARITHMETIQUE. Un worker
+# gthread sert jusqu'a `--threads` requetes a la fois ; un pool plus petit que
+# ce nombre fait attendre des fils pour rien. Avec deux workers de huit fils,
+# le total tient en seize connexions, tres en dessous des cent que Postgres
+# admet par defaut.
+REGISTRE_POOL_MAX = int(os.environ.get('REGISTRE_POOL_MAX', '8'))
+
+# LE DELAI N'A PLUS A ETRE LONG. Il ne se declenche desormais que sur une
+# panne reelle — le pool ne pouvant plus etre sature par construction — et le
+# repli en connexion directe suit immediatement. Dix secondes d'attente AVANT
+# un repli qui, lui, fonctionne, c'etait payer deux fois.
+REGISTRE_POOL_TIMEOUT = float(os.environ.get('REGISTRE_POOL_TIMEOUT', '5'))
+
+# Un pool qui a echoue n'est pas retente a chaque requete — ce serait ajouter
+# l'attente d'ouverture au repli — mais il est retente : une base momentanement
+# injoignable au demarrage ne doit pas condamner le processus a la connexion
+# directe jusqu'au prochain deploiement.
+REGISTRE_POOL_RETENTE = float(os.environ.get('REGISTRE_POOL_RETENTE', '60'))
+
 if REGISTRE_USE_PG:
     import psycopg
     import psycopg.rows
@@ -5459,20 +5487,124 @@ if REGISTRE_USE_PG:
         logger.error(f"REGISTRE_IA — connexion Postgres impossible ({_conn_err}) — bascule sur SQLite local")
         REGISTRE_USE_PG = False
 
-    # Pool de connexions persistant : elimine la latence de handshake TCP/TLS/auth
-    # (1-3s observes sur Render) qui se produisait a CHAQUE requete avec psycopg.connect()
-    # appele individuellement. Le pool maintient des connexions ouvertes et les reutilise.
-    REGISTRE_POOL = None
-    try:
-        from psycopg_pool import ConnectionPool
-        REGISTRE_POOL = ConnectionPool(
-            DATABASE_URL, min_size=1, max_size=5, timeout=10,
-            kwargs={"row_factory": psycopg.rows.dict_row}, open=True
-        )
-        logger.info("REGISTRE_IA — pool de connexions Postgres initialise (min=1, max=5)")
-    except Exception as _pool_err:
-        logger.warning(f"REGISTRE_IA — pool de connexions indisponible, repli sur connexion directe : {_pool_err}")
-        REGISTRE_POOL = None
+# ══════════════════════════════════════════════════════════════════════
+# UN POOL PAR PROCESSUS, ET JAMAIS CELUI D'UN AUTRE.
+#
+# CE QUI SE PASSAIT. Le pool etait construit ICI, au niveau module. Sous
+# gunicorn en mode `--preload`, le module est importe UNE FOIS dans le
+# maitre, qui forke ensuite ses workers. Le journal de production le montre
+# noir sur blanc : les lignes d'initialisation de l'application portent des
+# horodatages ANTERIEURS a « Starting gunicorn », et il n'y en a qu'un jeu
+# pour deux workers.
+#
+# `fork()` COPIE LA MEMOIRE, PAS LES FILS D'EXECUTION. L'enfant herite donc
+# d'un objet pool complet — sa file de connexions disponibles comprise —
+# mais d'AUCUN fil de maintenance. Or, dans psycopg_pool 3.2 :
+#   · `putconn()` rend la connexion SYNCHRONEMENT (`_add_to_pool`) : un
+#     enfant sait donc recycler ce dont il a herite ;
+#   · `_add_connection()`, qui CREE une connexion, n'est atteint que par
+#     `run_task()` → `self._tasks.put_nowait(task)`, c'est-a-dire par un fil
+#     de maintenance. Dans l'enfant, cette file n'est jamais depilee.
+#
+# Un worker ne peut donc JAMAIS depasser le nombre de connexions heritees,
+# quel que soit `max_size`. Mesure sur ce poste, PostgreSQL 16 local, pool
+# min=2 max=8, delai ramene a 3 s pour la lisibilite :
+#
+#   pool cree AVANT le fork      pool cree APRES le fork
+#   connexion 1 : 0,00 s  OK     connexion 1 : 0,00 s  OK
+#   connexion 2 : 0,00 s  OK     connexion 2 : 0,00 s  OK
+#   connexion 3 : 3,00 s  ECHEC  connexion 3 : 0,00 s  OK
+#                                connexion 4 : 0,00 s  OK
+#
+# « couldn't get a connection after 3.00 sec » : le message exact du
+# journal de production, au delai pres.
+#
+# ET LA PERTE EST DEFINITIVE, ce qui explique le reste. Meme mesure, en
+# cassant UNE connexion apres le fork :
+#
+#   pool cree AVANT le fork              pool cree APRES le fork
+#   1. avant l'incident  0,00 s  OK      1. avant l'incident  0,00 s  OK
+#   2. juste apres       3,00 s  ECHEC   2. juste apres       0,00 s  OK
+#   3. deux secondes ap. 3,00 s  ECHEC   3. deux secondes ap. 0,00 s  OK
+#   4. et encore         3,00 s  ECHEC   4. et encore         0,00 s  OK
+#
+# `_return_connection` d'une connexion cassee appelle
+# `run_task(AddConnection(self))` : le remplacement est confie au fil qui
+# n'existe pas. Or maitre et enfants tiennent les MEMES sockets et s'en
+# servent tous : une connexion FINIT par se casser. A partir de la, la file
+# de l'enfant est vide pour de bon, et CHAQUE requete paie le delai entier
+# avant de se rabattre sur une connexion directe. C'est exactement ce que
+# montre le journal : reponses 200, et « getconn pool echoue » sur chaque
+# « GET / », pendant des heures.
+#
+# CE N'EST PAS LA CONSTRUCTION A L'IMPORT QUI EST FAUTIVE, c'est le PARTAGE.
+# Un pool ouvert a l'import reste parfaitement sain tant qu'il ne sert qu'au
+# processus qui l'a ouvert — et il le sera encore ici, puisque les migrations
+# touchent la base des l'import. Ce qui change, c'est qu'un autre processus
+# n'y touchera plus.
+#
+# LE REMEDE NE DEPEND D'AUCUN REGLAGE. Le pool est desormais ouvert
+# PARESSEUSEMENT, a la premiere utilisation, et retenu par PID. Un pool
+# herite d'un autre processus est ABANDONNE — jamais ferme : ses sockets
+# appartiennent aussi a celui qui l'a cree, et un `close()` y enverrait un
+# paquet de terminaison qui casserait SA connexion. Le correctif vaut que
+# `--preload` soit actif ou non, et survivra a un changement de reglage
+# dans le tableau de bord Render.
+# ══════════════════════════════════════════════════════════════════════
+
+
+def registre_pool():
+    """Le pool du processus courant, ouvert a la demande. `None` si Postgres
+    n'est pas le moteur, ou si l'ouverture a echoue recemment."""
+    if not REGISTRE_USE_PG:
+        return None
+    pid = os.getpid()
+    pool = _REGISTRE_POOLS.get(pid)
+    if pool is not None:
+        return pool
+    dernier = _REGISTRE_POOL_ECHEC.get(pid)
+    if dernier is not None and (time.time() - dernier) < REGISTRE_POOL_RETENTE:
+        return None
+    with _REGISTRE_POOL_VERROU:
+        pool = _REGISTRE_POOLS.get(pid)
+        if pool is not None:
+            return pool
+        dernier = _REGISTRE_POOL_ECHEC.get(pid)
+        if dernier is not None and (time.time() - dernier) < REGISTRE_POOL_RETENTE:
+            return None
+        # Le pool d'un autre processus est laisse tel quel : on lache la
+        # reference, on ne touche pas a ses sockets.
+        _REGISTRE_POOLS.clear()
+        _REGISTRE_POOL_ECHEC.clear()
+        pool = None
+        try:
+            from psycopg_pool import ConnectionPool
+            pool = ConnectionPool(
+                DATABASE_URL, min_size=1, max_size=REGISTRE_POOL_MAX,
+                timeout=REGISTRE_POOL_TIMEOUT,
+                kwargs={"row_factory": psycopg.rows.dict_row}, open=True
+            )
+            # `open=True` DEMANDE le remplissage, il ne l'attend pas : la
+            # creation des connexions est confiee au fil de maintenance. Sans
+            # cette attente, la toute premiere requete du processus courrait
+            # apres une file encore vide.
+            pool.wait(timeout=max(REGISTRE_CONNECT_TIMEOUT, 5))
+            _REGISTRE_POOLS[pid] = pool
+            logger.info("REGISTRE_IA — pool Postgres ouvert dans le processus %d "
+                        "(min=1, max=%d, delai=%.0fs)",
+                        pid, REGISTRE_POOL_MAX, REGISTRE_POOL_TIMEOUT)
+        except Exception as _pool_err:
+            _REGISTRE_POOL_ECHEC[pid] = time.time()
+            logger.warning("REGISTRE_IA — pool indisponible dans le processus %d, "
+                           "repli sur connexion directe : %s", pid, _pool_err)
+            if pool is not None:
+                # Celui-la est le notre : on peut le fermer.
+                try:
+                    pool.close()
+                except Exception:
+                    pass
+            pool = None
+    return pool
 
 class _PooledConnWrapper:
     """Wrapper de compatibilite : le code existant appelle conn.close() partout (sans
@@ -5582,10 +5714,15 @@ def _fermer_connexions_db(_exc=None):
 
 def registre_get_db():
     if REGISTRE_USE_PG:
-        if REGISTRE_POOL is not None:
+        # Le pool DU PROCESSUS COURANT, ouvert a la premiere demande. Lire une
+        # variable de module donnerait, dans un worker, le pool du maitre —
+        # celui dont les fils de maintenance sont restes de l'autre cote du
+        # fork, et qui fait attendre le delai entier a chaque requete.
+        _pool = registre_pool()
+        if _pool is not None:
             try:
-                conn = REGISTRE_POOL.getconn()
-                return _suivre_connexion(_PooledConnWrapper(REGISTRE_POOL, conn))
+                conn = _pool.getconn()
+                return _suivre_connexion(_PooledConnWrapper(_pool, conn))
             except Exception as _e:
                 logger.warning(f"REGISTRE_IA — getconn pool echoue, connexion directe : {_e}")
         # LA SEULE ATTENTE NON BORNEE DU FICHIER, ET ELLE COUTAIT LE SERVICE
