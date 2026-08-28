@@ -1,6 +1,6 @@
 """LES MIGRATIONS DU REGISTRE IA — deux moteurs, une seule syntaxe possible.
 
-LA FAUTE, ET CE QU'ELLE COÛTAIT. Les neuf migrations de `systemes_ia`
+LA FAUTE, ET CE QU'ELLE COÛTAIT. Les migrations de `systemes_ia`
 s'écrivaient « ALTER TABLE ... ADD COLUMN IF NOT EXISTS », qui est de la
 syntaxe PostgreSQL. SQLite ne la connaît pas et répond
 « near "EXISTS": syntax error ».
@@ -58,12 +58,18 @@ def _migrer(moteur_pg=False):
 
 
 def _colonnes_attendues():
-    """Les neuf migrations telles qu'`app.py` les appelle.
+    """Les migrations de `systemes_ia` telles qu'`app.py` les appelle.
 
     Le motif distingue les deux styles de guillemets : deux déclarations
     portent une valeur par défaut entre apostrophes — `"TEXT DEFAULT
     'production'"` —, et un motif qui ne verrait qu'un seul style les
-    laisserait tomber. Sept migrations sur neuf, silencieusement."""
+    laisserait tomber. Sept migrations sur neuf, silencieusement.
+
+    LA LISTE EST LUE DANS `app.py`, PAS RECOPIÉE ICI — mais son EFFECTIF est
+    fixé plus bas. Ajouter une colonne fait donc tomber le contrôle, et c'est
+    voulu : une migration s'ajoute en connaissance de cause, pas au fil de
+    l'eau. La colonne `famille` a été ajoutée le 28 août 2026 pour la
+    documentation commune à une famille de systèmes voisins."""
     trouvees = re.findall(
         r"""registre_ajouter_colonne\(cur,\s*'systemes_ia',\s*'(\w+)',\s*"""
         r"""("[^"]*"|'[^']*')\s*\)""", SOURCE)
@@ -103,12 +109,18 @@ def test_sqlite_refuse_bien_cette_syntaxe():
     assert 'EXISTS' in str(e.value)
 
 
-# ── 2. Les neuf colonnes arrivent vraiment, sur SQLite ────────────────────
+# ── 2. Les dix colonnes arrivent vraiment, sur SQLite ─────────────────────
 
-def test_les_neuf_colonnes_sont_ajoutees_sur_sqlite():
+def test_les_colonnes_migrees_arrivent_vraiment_sur_sqlite():
     """C'est l'état que le démarrage n'atteignait jamais."""
     attendues = _colonnes_attendues()
-    assert len(attendues) == 9, [c for c, _ in attendues]
+    assert len(attendues) == 10, (
+        "le nombre de migrations de systemes_ia a changé : %s. Si c'est\n"
+        "délibéré, mettez ce compte à jour ; sinon, une migration a disparu."
+        % [c for c, _ in attendues])
+    assert 'famille' in [c for c, _ in attendues], (
+        "la colonne `famille` n'est plus migrée : la documentation commune à\n"
+        "une famille de systèmes voisins n'a plus où se ranger")
     c = _table_sqlite(sqlite3.connect(':memory:'))
     ajouter = _migrer(moteur_pg=False)
     cur = c.cursor()

@@ -5996,6 +5996,20 @@ window.regOpenModal = function(id){
           ])+'</select>'),
         regField("Preuves de conformité conservées", '<input type="text" id="rf-preuves" class="reg-input" value="'+val("preuves_conformite")+'" placeholder="Ex: Documentation technique, FRIA, contrat fournisseur, captures écran">')
       ])
+    /* LA FAMILLE — LE SEUL CHAMP DE CE FORMULAIRE QUI FAIT GAGNER DU TEMPS.
+       Le guide d'application autorise une documentation de gestion des risques
+       et de conformité COMMUNE à une famille de systèmes voisins. Sans ce
+       champ, un parc de vingt systèmes proches se documente vingt fois.
+       La liste propose les familles DÉJÀ employées : sans elle, « chatbots »,
+       « Chatbots » et « chat-bots » deviennent trois familles, et le
+       regroupement ne regroupe plus rien. */
+    + regField("Famille de systèmes <span style=\"font-weight:400;color:var(--muted)\">— documentation commune autorisée pour des systèmes voisins</span>",
+        '<input type="text" id="rf-famille" class="reg-input" list="rf-familles-connues" value="'+val("famille")+'" placeholder="Ex : Assistants conversationnels internes, Modèles de scoring crédit">'
+        + '<datalist id="rf-familles-connues">'
+        + regFamillesConnues().map(function(f){ return '<option value="'+f.replace(/"/g,'&quot;')+'">'; }).join('')
+        + '</datalist>'
+        + (sys ? '' : '<div style="margin-top:8px"><button type="button" class="mat-export-btn" style="font-size:11px;padding:5px 12px" onclick="regReprendreFamille()" title="Reprendre le dossier d un systeme deja documente de cette famille">Reprendre le dossier d’un système de cette famille</button>'
+             + '<span id="rf-famille-msg" style="margin-left:10px;font-size:11px;color:var(--muted)"></span></div>'))
     + (sys && (sys.classification==="haut"||sys.classification==="inacceptable") ? '<div class="radar-registre-info radar-registre-warn">⚖️ Système à haut risque — une <a href="#" onclick="regCloseModal();go(\'fria\',null,\'CONFORMITÉ\',\'Évaluation FRIA\');return false;">évaluation FRIA</a> peut être requise (Art. 27).</div>' : '')
     + '</div></div>'
     + '<div class="mat-modal-foot">'
@@ -6007,6 +6021,62 @@ window.regOpenModal = function(id){
 
 function regField(label, input){ return '<div class="reg-field"><label class="reg-label">'+label+'</label>'+input+'</div>'; }
 function regRow(fields){ return '<div class="reg-form-row">'+fields.join("")+'</div>'; }
+
+/* Les familles déjà employées, triées et sans doublon. */
+function regFamillesConnues(){
+  var vues = {};
+  REG_DATA.forEach(function(s){
+    var f = (s.famille || '').trim();
+    if(f) vues[f] = true;
+  });
+  return Object.keys(vues).sort(function(a,b){ return a.localeCompare(b, 'fr'); });
+}
+
+/* CE QUE LA FAMILLE PERMET RÉELLEMENT : ne pas réécrire vingt fois le même
+   dossier. On reprend le système le plus récemment mis à jour de la famille
+   saisie, et on ne recopie QUE ce qui est propre au type de système — jamais
+   le nom, jamais le responsable, jamais les preuves déjà constituées, qui
+   sont propres à chaque système et dont la recopie serait un faux. */
+var REG_CHAMPS_DE_FAMILLE = [
+  ['finalite', 'rf-finalite'], ['secteur', 'rf-secteur'], ['type_systeme', 'rf-type'],
+  ['donnees_utilisees', 'rf-donnees'], ['classification', 'rf-classif'],
+  ['justification', 'rf-justif'], ['service', 'rf-service'],
+  ['personnes_concernees', 'rf-personnes'], ['transparence_art50', 'rf-transp']
+];
+
+window.regReprendreFamille = function(){
+  var champ = document.getElementById('rf-famille');
+  var msg = document.getElementById('rf-famille-msg');
+  var dire = function(t, couleur){ if(msg){ msg.textContent = t; msg.style.color = couleur || 'var(--muted)'; } };
+  var famille = (champ && champ.value || '').trim();
+  if(!famille){ dire('Saisissez d’abord un nom de famille.', 'var(--orange)'); return; }
+  var voisins = REG_DATA.filter(function(s){
+    return (s.famille || '').trim().toLowerCase() === famille.toLowerCase();
+  }).sort(function(a, b){ return String(b.date_maj || '').localeCompare(String(a.date_maj || '')); });
+  if(!voisins.length){
+    dire('Aucun système enregistré dans « ' + famille + ' » — ce sera le premier.', 'var(--muted)');
+    return;
+  }
+  var modele = voisins[0];
+  var repris = 0;
+  REG_CHAMPS_DE_FAMILLE.forEach(function(paire){
+    var v = modele[paire[0]];
+    if(v === null || v === undefined || v === '') return;
+    var el = document.getElementById(paire[1]);
+    if(!el) return;
+    el.value = v;
+    repris++;
+  });
+  var cases = document.querySelectorAll('#rf-roles input[type=checkbox]');
+  if(modele.roles && modele.roles.length){
+    cases.forEach(function(cb){ cb.checked = modele.roles.indexOf(cb.value) !== -1; });
+    repris++;
+  }
+  /* ON NE DIT PAS « conforme », ON DIT « repris ». Un dossier hérité reste à
+     vérifier : c'est un point de départ, pas une conformité acquise. */
+  dire(repris + ' champ(s) repris de « ' + modele.nom + ' ». À relire et à ajuster : '
+       + 'le nom, le responsable et les preuves restent propres à ce système.', 'var(--green)');
+};
 
 window.regCloseModal = function(){ var m = document.getElementById("reg-modal"); if(m) m.classList.remove("on"); };
 
@@ -6031,7 +6101,8 @@ window.regSave = function(){
     personnes_concernees: document.getElementById("rf-personnes").value.trim(),
     roles: rolesChecked,
     transparence_art50: document.getElementById("rf-transp").value,
-    preuves_conformite: document.getElementById("rf-preuves").value.trim()
+    preuves_conformite: document.getElementById("rf-preuves").value.trim(),
+    famille: (document.getElementById("rf-famille") || {value:""}).value.trim()
   };
   if(!payload.nom){ alert("Le nom du système est obligatoire."); return; }
 

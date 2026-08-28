@@ -8857,6 +8857,20 @@ def registre_init_db():
     registre_ajouter_colonne(cur, 'systemes_ia', 'preuves_conformite', "TEXT")
     conn.commit()
 
+    # FAMILLE DE SYSTEMES. Le guide d'application de l'IA Act autorise une
+    # documentation de gestion des risques et de conformite COMMUNE a une
+    # famille de systemes voisins — meme technologie, meme finalite, meme
+    # profil de risque. Sans ce champ, un parc de vingt systemes proches se
+    # documente vingt fois, et c'est le seul ecart releve le 28 aout 2026 qui
+    # fait GAGNER du temps au client au lieu de lui en demander.
+    #
+    # Colonne libre plutot qu'une table de familles : une famille n'a pas
+    # d'existence propre, c'est un nom que le client donne a un regroupement
+    # qu'il connait. Une table imposerait de la creer avant de s'en servir,
+    # et personne ne cree une famille vide.
+    registre_ajouter_colonne(cur, 'systemes_ia', 'famille', "TEXT")
+    conn.commit()
+
     cur.execute('SELECT COUNT(*) AS n FROM systemes_ia')
     row = cur.fetchone()
     count = row['n'] if isinstance(row, dict) else row[0]
@@ -9102,7 +9116,8 @@ def registre_row_to_dict(row):
         'service': d.get('service'), 'roles': roles_parsed,
         'personnes_concernees': d.get('personnes_concernees'),
         'transparence_art50': d.get('transparence_art50') or 'a_evaluer',
-        'preuves_conformite': d.get('preuves_conformite')
+        'preuves_conformite': d.get('preuves_conformite'),
+        'famille': d.get('famille')
     }
 
 @app.route('/api/registre', methods=['GET'])
@@ -9155,17 +9170,18 @@ def registre_create():
         json.dumps(roles_list)[:300],
         (data.get('personnes_concernees') or '')[:500],
         (data.get('transparence_art50') or 'a_evaluer')[:30],
-        (data.get('preuves_conformite') or '')[:500]
+        (data.get('preuves_conformite') or '')[:500],
+        (data.get('famille') or '')[:120]
     )
     if REGISTRE_USE_PG:
         cur.execute('''INSERT INTO systemes_ia
-            (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj, client_id, cycle_vie, product_owner, service, roles, personnes_concernees, transparence_art50, preuves_conformite)
-            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING *''', values)
+            (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj, client_id, cycle_vie, product_owner, service, roles, personnes_concernees, transparence_art50, preuves_conformite, famille)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING *''', values)
         row = cur.fetchone()
     else:
         cur.execute('''INSERT INTO systemes_ia
-            (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj, client_id, cycle_vie, product_owner, service, roles, personnes_concernees, transparence_art50, preuves_conformite)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', values)
+            (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj, client_id, cycle_vie, product_owner, service, roles, personnes_concernees, transparence_art50, preuves_conformite, famille)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', values)
         new_id = cur.lastrowid
         cur.execute('SELECT * FROM systemes_ia WHERE id=?', (new_id,))
         row = cur.fetchone()
@@ -9183,7 +9199,7 @@ def registre_update(sys_id):
     conn = registre_get_db()
     cur = conn.cursor()
     now = datetime.utcnow().isoformat()
-    fields = ['nom','finalite','secteur','type_systeme','donnees_utilisees','classification','justification','statut_conformite','responsable','fournisseur','cycle_vie','product_owner','service','personnes_concernees','transparence_art50','preuves_conformite']
+    fields = ['nom','finalite','secteur','type_systeme','donnees_utilisees','classification','justification','statut_conformite','responsable','fournisseur','cycle_vie','product_owner','service','personnes_concernees','transparence_art50','preuves_conformite','famille']
     # Si le cycle de vie passe explicitement a 'revue', on horodate la derniere revue —
     # trace la conformite a l obligation de revue periodique des cas d usage en production.
     derniere_revue_val = now if data.get('cycle_vie') == 'revue' else None
@@ -9204,7 +9220,7 @@ def registre_update(sys_id):
             service=COALESCE(%s,service), roles=COALESCE(%s,roles),
             personnes_concernees=COALESCE(%s,personnes_concernees),
             transparence_art50=COALESCE(%s,transparence_art50),
-            preuves_conformite=COALESCE(%s,preuves_conformite), date_maj=%s
+            preuves_conformite=COALESCE(%s,preuves_conformite), famille=COALESCE(%s,famille), date_maj=%s
             WHERE id=%s AND client_id=%s RETURNING *''', (
             data.get('nom'), data.get('finalite'), data.get('secteur'), data.get('type_systeme'),
             data.get('donnees_utilisees'), data.get('classification'), data.get('justification'),
@@ -9212,7 +9228,7 @@ def registre_update(sys_id):
             data.get('score_risque'), data.get('cycle_vie'), data.get('product_owner'),
             derniere_revue_val,
             data.get('service'), roles_json, data.get('personnes_concernees'),
-            data.get('transparence_art50'), data.get('preuves_conformite'),
+            data.get('transparence_art50'), data.get('preuves_conformite'), data.get('famille'),
             now, sys_id, client['id']))
         row = cur.fetchone()
         conn.commit()
@@ -9235,11 +9251,11 @@ def registre_update(sys_id):
         cur.execute('''UPDATE systemes_ia SET nom=?, finalite=?, secteur=?, type_systeme=?, donnees_utilisees=?,
            classification=?, justification=?, statut_conformite=?, responsable=?, fournisseur=?, score_risque=?,
            cycle_vie=?, product_owner=?, derniere_revue=?,
-           service=?, roles=?, personnes_concernees=?, transparence_art50=?, preuves_conformite=?, date_maj=?
+           service=?, roles=?, personnes_concernees=?, transparence_art50=?, preuves_conformite=?, famille=?, date_maj=?
            WHERE id=? AND client_id=?''', (vals['nom'], vals['finalite'], vals['secteur'], vals['type_systeme'], vals['donnees_utilisees'],
             vals['classification'], vals['justification'], vals['statut_conformite'], vals['responsable'], vals['fournisseur'],
             score, vals['cycle_vie'], vals['product_owner'], derniere_revue_final,
-            vals['service'], roles_final, vals['personnes_concernees'], vals['transparence_art50'], vals['preuves_conformite'],
+            vals['service'], roles_final, vals['personnes_concernees'], vals['transparence_art50'], vals['preuves_conformite'], vals['famille'],
             now, sys_id, client['id']))
         conn.commit()
         cur.execute('SELECT * FROM systemes_ia WHERE id=?', (sys_id,))
