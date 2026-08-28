@@ -10674,6 +10674,57 @@ _PAGE_CACHE = {}
 _PAGE_CACHE_LOCK = threading.Lock()
 _APP_DIR = os.path.dirname(os.path.abspath(__file__))
 
+
+# ══════════════════════════════════════════════════════════════════════════
+# UN VERROU PRIS AU MOMENT DU fork() RESTE PRIS, ET PLUS PERSONNE NE LE REND.
+#
+# CE QUI S'EST PASSE, ET C'ETAIT UNE PANNE TOTALE. `fork()` copie la memoire
+# — les mutex compris, DANS L'ETAT OU ILS SONT — mais pas les fils. Un verrou
+# tenu par un fil du parent a l'instant du fork arrive donc VERROUILLE dans
+# l'enfant, sans proprietaire et sans espoir : il ne sera jamais rendu.
+#
+# `_PAGE_CACHE_LOCK` etait exactement dans ce cas. Le prechauffage tournait
+# en tache de fond dans le maitre — sous `--preload`, le seul processus qui
+# importe — et tenait ce verrou pendant qu'il lisait, enrichissait et
+# compressait vingt-cinq pages, dont `sentinel.html` et ses 1,75 Mo. Quand
+# gunicorn forkait pendant cette fenetre, CHAQUE page HTML de CHAQUE worker
+# se bloquait a `with _PAGE_CACHE_LOCK`, definitivement.
+#
+# Releve avec py-spy sur les deux workers, requete `/` en cours :
+#
+#   Thread "ThreadPoolExecutor-0_0"
+#       _page_cache_entry (app.py:10685)      ← with _PAGE_CACHE_LOCK
+#       _serve_page_fast  (app.py:10726)
+#       view              (app.py:10777)
+#
+# `/health` repondait en 11 ms — il ne touche pas au cache de pages — pendant
+# que `/`, `/faq` et `/tarifications` ne repondaient plus du tout. Vu du
+# navigateur : le site est mort. Vu du journal : rien, pas une ligne.
+#
+# DEUX PARADES, ET LES DEUX SONT NECESSAIRES.
+#   1. Le prechauffage ne tourne plus dans un fil (voir plus bas) : sans fil,
+#      aucun verrou ne peut etre tenu au moment du fork.
+#   2. Ce qui suit remet a neuf les verrous du module DANS L'ENFANT, quoi
+#      qu'il arrive. `os.register_at_fork` est fait pour cela ; la
+#      bibliotheque `logging` s'en sert deja pour les siens. C'est la parade
+#      qui protege des fils qu'on ajoutera demain sans y penser.
+# ══════════════════════════════════════════════════════════════════════════
+def _verrous_neufs_dans_l_enfant():
+    global _PAGE_CACHE_LOCK, _FILS_VERROU, _REGISTRE_POOL_VERROU
+    _PAGE_CACHE_LOCK = threading.Lock()
+    try:
+        _FILS_VERROU = threading.Lock()
+    except NameError:                    # module pas encore entierement charge
+        pass
+    try:
+        _REGISTRE_POOL_VERROU = threading.Lock()
+    except NameError:
+        pass
+
+
+if hasattr(os, 'register_at_fork'):
+    os.register_at_fork(after_in_child=_verrous_neufs_dans_l_enfant)
+
 def _page_cache_entry(filename):
     """Retourne l'entree de cache {raw, gz, etag} du fichier, reconstruite si
     le fichier a change sur disque (cle mtime+taille)."""
@@ -10792,10 +10843,24 @@ def _prechauffer_cache_pages():
     hebergement qui endort les instances inactives, le premier visiteur paie
     systematiquement.
 
-    EN TACHE DE FOND, ET SANS FAIRE ECHOUER LE DEMARRAGE. Le serveur doit
-    accepter des requetes immediatement : le prechauffage ne doit pas retarder
-    la mise en ecoute. Une page illisible n'empeche pas les autres — elle sera
-    reconstruite a la demande, comme avant.
+    PLUS EN TACHE DE FOND, ET C'EST UNE CORRECTION DE PANNE. Ce travail
+    tournait dans un fil, pour ne pas retarder la mise en ecoute. Il tenait
+    `_PAGE_CACHE_LOCK` pendant qu'il compressait vingt-cinq pages — dont
+    `sentinel.html` et ses 1,75 Mo — et sous `--preload` il tournait dans le
+    MAITRE, celui-la meme que gunicorn forke. Un verrou tenu a l'instant du
+    fork arrive verrouille dans l'enfant, sans proprietaire : chaque page HTML
+    de chaque worker se bloquait alors sur ce verrou, definitivement. Le
+    journal ne disait rien, `/health` repondait, et le site etait mort.
+
+    SYNCHRONE, DONC AVANT LE fork. Aucun fil, aucun verrou en vol au moment ou
+    gunicorn se duplique. Le prix est un demarrage plus long de quelques
+    centaines de millisecondes, une fois — c'est-a-dire exactement ce que le
+    prechauffage economise ensuite a chaque premier visiteur. Et sous
+    `--preload`, le cache ainsi construit est HERITE par tous les workers :
+    la memoire, elle, est bien copiee par le fork.
+
+    Une page illisible n'empeche pas les autres — elle sera reconstruite a la
+    demande, comme avant.
 
     LES PLUS LOURDES D'ABORD : c'est la ou l'ecart est le plus grand, et si le
     processus est tue avant la fin, ce sont elles qu'on aura gagnees.
@@ -10817,8 +10882,10 @@ def _prechauffer_cache_pages():
                 pass          # une page illisible se reconstruira a la demande
         logger.info('CACHE_PAGES prechauffe : %d page(s)', n)
 
-    threading.Thread(target=_travail, name='prechauffe-pages',
-                     daemon=True).start()
+    # APPEL DIRECT, PAS DE FIL. Voir la raison en tete de fonction : un fil
+    # qui tient `_PAGE_CACHE_LOCK` au moment du fork condamne toutes les pages
+    # de tous les workers.
+    _travail()
 
 
 _prechauffer_cache_pages()
