@@ -5530,12 +5530,35 @@ if REGISTRE_USE_PG:
 #
 # `_return_connection` d'une connexion cassee appelle
 # `run_task(AddConnection(self))` : le remplacement est confie au fil qui
-# n'existe pas. Or maitre et enfants tiennent les MEMES sockets et s'en
-# servent tous : une connexion FINIT par se casser. A partir de la, la file
-# de l'enfant est vide pour de bon, et CHAQUE requete paie le delai entier
-# avant de se rabattre sur une connexion directe. C'est exactement ce que
-# montre le journal : reponses 200, et « getconn pool echoue » sur chaque
-# « GET / », pendant des heures.
+# n'existe pas. A partir de la, la file de l'enfant est vide pour de bon, et
+# CHAQUE requete paie le delai entier avant de se rabattre sur une connexion
+# directe — reponses 200, et « getconn pool echoue » sur chaque « GET / »,
+# pendant des heures. C'est le journal de production, mot pour mot.
+#
+# ── CE QUI N'EST PAS ETABLI, ET QUI NE DOIT PAS ETRE PRESENTE COMME TEL ──
+#
+# QUEL EVENEMENT, EXACTEMENT, A VIDE LA FILE DES WORKERS. Une premiere
+# redaction de ce commentaire l'affirmait : « maitre et enfants tiennent les
+# memes sockets, une connexion FINIT par se casser ». C'est plausible, ce
+# n'est pas mesure. Une relecture adverse a reproduit la configuration de
+# production — vrai app.py d'avant correctif, deux workers forkes, fils du
+# pool morts, vraies requetes — et n'a obtenu AUCUN avertissement : l'enfant
+# recycle indefiniment ce dont il a herite. La signature n'apparait qu'une
+# fois les connexions heritees devenues inutilisables.
+#
+# DEUX CHEMINS Y MENENT, ET AUCUN N'EST DEPARTAGE PAR LE JOURNAL :
+#   · la file etait DEJA VIDE au fork. `open=True` demande le remplissage, il
+#     ne l'attend pas ; forker dans les millisecondes qui suivent donne un
+#     enfant a zero connexion, et 10 s des sa premiere requete. Le journal
+#     montre le pool construit a 15:09:58,013 et les workers demarres dans la
+#     meme seconde — mais les migrations, elles, ont touche la base entre les
+#     deux, ce qui a pu remplir la file avant le fork.
+#   · une connexion partagee entre maitre et enfants s'est corrompue.
+#
+# CE QUI EST ETABLI SUFFIT A CORRIGER : un enfant ne peut RIEN creer, donc
+# des que sa file est vide — pour quelque raison que ce soit — il n'en sort
+# plus. Le correctif retire la classe entiere, quel que soit le declencheur.
+# L'INSTANT PRECIS OU LA PRODUCTION A BASCULE RESTE, LUI, NON DETERMINE.
 #
 # CE N'EST PAS LA CONSTRUCTION A L'IMPORT QUI EST FAUTIVE, c'est le PARTAGE.
 # Un pool ouvert a l'import reste parfaitement sain tant qu'il ne sert qu'au
