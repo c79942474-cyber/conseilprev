@@ -40,6 +40,21 @@ services:
           name: conseilprev-registre-db
           property: connectionString
 
+      # LA CLÉ QUI SIGNE LES SESSIONS. Elle n'était définie NULLE PART — ni
+      # ici, ni dans le tableau de bord — et l'application se rabattait sur une
+      # constante écrite en clair dans app.py, donc calculable par quiconque lit
+      # ce dépôt. Un cookie de session Flask est signé, pas chiffré : cette
+      # constante permettait de s'en fabriquer un pour n'importe quel compte,
+      # accès administrateur compris.
+      #
+      # `generateValue` demande à Render un secret aléatoire, posé une fois et
+      # conservé ensuite. Comme tout ce fichier, il ne vaut qu'à la CRÉATION du
+      # service : sur le service existant, la variable doit être ajoutée à la
+      # main dans le tableau de bord. Tant qu'elle manque, le code dérive une
+      # clé de DATABASE_URL et le journal le dit à chaque démarrage.
+      - key: FLASK_SECRET_KEY
+        generateValue: true
+
 # LA BASE N'EST PAS DÉPLACÉE ICI, ET C'EST DÉLIBÉRÉ. Le réseau privé de Render
 # ne franchit pas les régions : un service à Francfort ne peut pas joindre par
 # `connectionString` interne une base restée en Oregon. Avant toute recréation

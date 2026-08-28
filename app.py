@@ -26,7 +26,58 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(mess
 logger = logging.getLogger('conseilprev')
 
 app = Flask(__name__, static_folder='.', static_url_path='')
-app.secret_key = os.environ.get('FLASK_SECRET_KEY', '').strip() or hashlib.sha256(b'conseilprev-sentinel-fallback-2026').hexdigest()
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# LA CLE QUI SIGNE LES SESSIONS NE PEUT PAS ETRE PUBLIQUE.
+#
+# CE QUI SE PASSAIT. En l'absence de `FLASK_SECRET_KEY`, cette ligne se
+# rabattait sur `sha256(b'…-fallback-2026')` — une constante calculable par
+# QUICONQUE lit ce depot. Elle etait effectivement en service : la variable
+# n'est pas definie sur le service en ligne.
+#
+# CE QUE CELA OUVRE. Le cookie de session de Flask est SIGNE, pas chiffre :
+# connaitre la cle suffit a en fabriquer un. Un tiers pouvait donc se
+# delivrer `{'client_id': N}` — le compte de son choix — ou
+# `{'is_conseilprev': True}`, qui accorde l'acces administrateur complet a
+# Sentinel sans passer par aucun mot de passe. Le meme secret sale par
+# ailleurs `_rgpd_hash()` : les empreintes d'adresses IP et d'identifiants
+# cessent d'etre des pseudonymes des lors que le sel est connu.
+#
+# LE REMEDE, PAR ORDRE DE PREFERENCE.
+#   1. `FLASK_SECRET_KEY` definie : on l'emploie, et c'est la bonne facon.
+#   2. Absente mais `DATABASE_URL` presente — donc un vrai deploiement : la
+#      cle est DERIVEE de la chaine de connexion, qui porte un mot de passe et
+#      ne figure dans aucun depot. Tous les workers en tirent la meme valeur,
+#      elle survit aux redemarrages, et elle n'est pas publique. Changer de
+#      base invalide les sessions, ce qui est le comportement souhaitable.
+#   3. Ni l'une ni l'autre : poste de developpement. La constante d'origine
+#      reste, parce qu'elle y est commode et sans consequence.
+#
+# DANS LES CAS 2 ET 3, LE JOURNAL LE DIT. Une cle derivee est un pis-aller :
+# elle protege des sessions forgees, elle ne remplace pas un secret declare.
+# ══════════════════════════════════════════════════════════════════════════
+_CLE_DECLAREE = os.environ.get('FLASK_SECRET_KEY', '').strip()
+if _CLE_DECLAREE:
+    app.secret_key = _CLE_DECLAREE
+elif os.environ.get('DATABASE_URL', '').strip():
+    import hmac as _hmac
+    app.secret_key = _hmac.new(
+        os.environ['DATABASE_URL'].strip().encode('utf-8'),
+        b'conseilprev-session-v1', hashlib.sha256).hexdigest()
+    logger.error(
+        "FLASK_SECRET_KEY absente — la cle de session est DERIVEE de "
+        "DATABASE_URL. Les sessions ne sont plus forgeables depuis le depot, "
+        "mais elles seront toutes invalidees le jour ou la base changera. "
+        "Definissez FLASK_SECRET_KEY sur Render (valeur aleatoire de 64 "
+        "caracteres) pour rendre les deux independants.")
+else:
+    app.secret_key = hashlib.sha256(b'conseilprev-sentinel-fallback-2026').hexdigest()
+    logger.error(
+        "FLASK_SECRET_KEY absente et aucune base declaree — repli sur une "
+        "constante PUBLIQUE, presente dans le depot. Acceptable en "
+        "developpement local, JAMAIS en ligne : cette cle permet de fabriquer "
+        "un cookie de session pour n'importe quel compte.")
 app.config['PERMANENT_SESSION_LIFETIME'] = _timedelta_auth(days=30)
 app.config['SESSION_COOKIE_SECURE'] = True
 app.config['SESSION_COOKIE_HTTPONLY'] = True
