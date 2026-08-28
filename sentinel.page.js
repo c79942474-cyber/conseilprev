@@ -2105,6 +2105,14 @@ window.simNext = function(from){
     SIM_DATA.secteur = document.getElementById('sim-secteur').value;
     SIM_DATA.type = document.getElementById('sim-type').value;
     SIM_DATA.desc = document.getElementById('sim-desc').value;
+    /* LE RÔLE, ET CE QUI PEUT LE REQUALIFIER. Relevés ici parce que tout le
+       reste en dépend : c'est le rôle qui décide QUELLES obligations sont
+       rendues, pas seulement combien. */
+    SIM_DATA.role = simGetRadio('r-role');
+    SIM_DATA.art25 = simGetRadio('r-art25');
+    SIM_DATA.fria = simGetRadio('r-fria');
+    SIM_DATA.definition = simGetCheckboxes('cb-definition');
+    SIM_DATA.anteriorite = simGetRadio('r-anteriorite');
     if(!SIM_DATA.secteur || !SIM_DATA.type){ alert('Veuillez sélectionner un secteur et un type de système.'); return; }
   }
   if(from === 2){
@@ -2133,12 +2141,18 @@ window.simCompute = function(){
   SIM_DATA.rgpd = simGetRadio('r-rgpd');
   SIM_DATA.ca = document.getElementById('sim-ca').value;
   SIM_DATA.territoire = simGetRadio('r-territoire');
+  SIM_DATA.oss = simGetRadio('r-oss');
+  SIM_DATA.monetisation = simGetCheckboxes('cb-monetisation');
   simShowPanel(5);
   simRender();
 };
 window.simReset = function(){
   SIM_DATA = {};
   SIM_STEP = 1;
+  /* Les groupes sont vidés par classe, sans énumération : c'est ce qui a permis
+     d'ajouter le rôle, la définition et la monétisation sans que la remise à
+     zéro les oublie. Seuls les champs nommés ci-dessous demandent encore une
+     liste, et c'est un défaut à surveiller à chaque ajout. */
   document.querySelectorAll('.sim-radio-opt').forEach(function(el){ el.classList.remove('selected'); });
   document.querySelectorAll('.sim-checkbox-opt').forEach(function(el){ el.classList.remove('checked'); });
   ['sim-name','sim-desc'].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=''; });
@@ -2276,6 +2290,110 @@ function simClassify(){
   return result;
 }
 
+/* ══ LE RÔLE COMMANDE LES OBLIGATIONS ══════════════════════════════════════
+   CE QUI MANQUAIT, ET CE QUE CELA PRODUISAIT. Le simulateur posait vingt et
+   une questions et ne demandait jamais la PLACE occupée dans la chaîne de
+   valeur. Il rendait ensuite, pour tout système classé haut risque, les
+   articles 9 à 17 — qui sont les obligations du FOURNISSEUR. Les articles 26
+   et 27, qui sont celles du déployeur, n'apparaissaient nulle part dans ses
+   sorties. Or la majorité des organisations qui l'emploient achètent leurs
+   systèmes : elles sont déployeurs. Elles recevaient donc une liste plausible,
+   détaillée, chiffrée — et fausse de bout en bout, en excès sur ce qu'elles
+   doivent et muette sur ce qu'elles doivent vraiment.
+
+   LA REQUALIFICATION DE L'ARTICLE 25. Le rôle déclaré ne suffit pas : apposer
+   son nom sur un système, le modifier substantiellement, ou changer sa
+   destination de sorte qu'il devienne à haut risque, fait de vous son
+   fournisseur. C'est la bascule que les organisations découvrent le plus tard,
+   typiquement après avoir affiné un modèle acheté. Elle est ici calculée, pas
+   laissée à l'appréciation de celui qui répond.
+
+   « JE NE SAIS PAS » EST UNE RÉPONSE, ET ELLE EST TRAITÉE. Un simulateur qui
+   force à trancher ce que l'utilisateur ignore fabrique une fausse certitude.
+   Le rôle indéterminé rend les obligations de CHAQUE rôle, en le disant. */
+var SIM_ROLES = {
+  fournisseur:  { nom:'Fournisseur',  art:'Art. 3(3)' },
+  deployeur:    { nom:'Déployeur',    art:'Art. 3(4)' },
+  importateur:  { nom:'Importateur',  art:'Art. 3(6)' },
+  distributeur: { nom:'Distributeur', art:'Art. 3(7)' },
+  indetermine:  { nom:'Rôle non déterminé', art:'Art. 3(3) à 3(7)' }
+};
+
+var SIM_ART25_MOTIFS = {
+  nom:           'vous avez apposé votre nom ou votre marque sur le système',
+  substantielle: 'vous l\'avez modifié substantiellement',
+  finalite:      'vous avez changé sa destination, et il devient de ce fait à haut risque'
+};
+
+/* Le rôle EFFECTIF : celui déclaré, sauf requalification par l'article 25. */
+function simRole(){
+  var d = SIM_DATA;
+  var declare = d.role || 'indetermine';
+  if(d.art25 && d.art25 !== 'non' && SIM_ART25_MOTIFS[d.art25]){
+    return { role:'fournisseur', declare:declare, requalifie:(declare !== 'fournisseur'),
+             motif:SIM_ART25_MOTIFS[d.art25] };
+  }
+  return { role:declare, declare:declare, requalifie:false, motif:null };
+}
+
+/* ── La définition de l'article 3(1), et la première sortie du champ ──
+   Six éléments cumulatifs, plus un facultatif (l'adaptativité). L'inférence
+   est le discriminant : un logiciel qui déroule des règles écrites à la main
+   n'est pas un système d'IA, et le règlement ne s'y applique pas du tout.
+   AUCUNE CASE COCHÉE N'EST PAS UNE RÉPONSE NÉGATIVE. Une question non posée ne
+   doit jamais produire un verdict : sans cela, tout utilisateur qui saute
+   l'écran verrait son système déclaré hors champ. */
+var SIM_DEF_REQUISES = ['def-machine','def-autonomie','def-inference','def-objectifs','def-sorties','def-influence'];
+function simDefinition(){
+  var coches = SIM_DATA.definition || [];
+  if(coches.length === 0) return { statut:'non_renseigne' };
+  var manquantes = SIM_DEF_REQUISES.filter(function(e){ return coches.indexOf(e) === -1; });
+  if(coches.indexOf('def-inference') === -1) return { statut:'hors_champ', manquantes:manquantes };
+  if(manquantes.length) return { statut:'a_verifier', manquantes:manquantes };
+  return { statut:'systeme_ia', manquantes:[] };
+}
+
+/* ── L'exemption « libre et ouverte », et le test qui décide si elle tient ──
+   Sentinel citait l'exemption sans donner le moyen de savoir si elle
+   s'applique, ce qui revient à laisser croire qu'elle s'applique. Une seule
+   contrepartie la fait tomber, quelle que soit la licence. */
+var SIM_MONETISATION = {
+  'mon-prix':    'vous en demandez un prix',
+  'mon-service': 'vous monétisez un service qui en dépend, ou exigez des données personnelles en contrepartie',
+  'mon-support': 'vous vendez du support, de l\'intégration ou de la maintenance autour',
+  'mon-dons':    'vous recevez des dons liés à sa mise à disposition'
+};
+function simOpenSource(classif){
+  var d = SIM_DATA;
+  if(d.oss !== 'oui') return { statut:'sans_objet' };
+  var declencheurs = (d.monetisation || []).map(function(m){ return SIM_MONETISATION[m]; }).filter(Boolean);
+  if(declencheurs.length) return { statut:'tombe', declencheurs:declencheurs };
+  /* L'exemption existe, mais elle est étroite. Ce qu'elle NE couvre pas doit
+     être dit dans la même phrase, sans quoi elle s'entend comme générale. */
+  var exclusions = [];
+  if(classif.art5) exclusions.push('les pratiques interdites de l\'article 5 restent interdites');
+  if(classif.level === 'haut') exclusions.push('un système à haut risque reste soumis à son régime complet');
+  if(d.interaction === 'oui' || d.interaction === 'genere') exclusions.push('les obligations de transparence de l\'article 50 restent dues');
+  if(d.gpai === 'oui_flop') exclusions.push('un modèle à risque systémique reste soumis aux articles 53 et 55 — l\'exemption de l\'article 53(2) ne joue pas');
+  return { statut:'tient', exclusions:exclusions };
+}
+
+/* ── L'antériorité de l'article 111(2) ── */
+function simAnteriorite(classif){
+  var a = SIM_DATA.anteriorite;
+  if(!a) return null;
+  if(a === 'avant_inchange' && classif.level === 'haut'){
+    return { statut:'differe', texte:'Ce système était sur le marché avant la date d\'application et sa conception n\'a pas changé de façon importante depuis : l\'article 111(2) diffère le régime complet des systèmes à haut risque de l\'annexe III tant que cette conception ne change pas. Cet aménagement ne couvre PAS les obligations indépendantes de l\'annexe III — pratiques interdites de l\'article 5, transparence de l\'article 50, maîtrise de l\'IA de l\'article 4 — qui restent dues aujourd\'hui. La moindre modification importante de conception fait tomber l\'antériorité et rend le régime complet applicable.' };
+  }
+  if(a === 'avant_modifie'){
+    return { statut:'perdue', texte:'Ce système était sur le marché avant la date d\'application, mais sa conception a changé de façon importante depuis : l\'aménagement de l\'article 111(2) ne s\'applique plus. Il est traité comme un système neuf.' };
+  }
+  if(a === 'projet'){
+    return { statut:'projet', texte:'Système non encore mis sur le marché : c\'est le moment où la conformité coûte le moins cher à construire, et le seul où l\'évaluation de conformité peut être menée sans reprise.' };
+  }
+  return null;
+}
+
 /* Calcul du gap conformité */
 function simGap(classif){
   var d = SIM_DATA;
@@ -2309,13 +2427,84 @@ function simGap(classif){
     { id:'art22_rep', name:'Mandataire UE obligatoire', desc:'Un représentant établi dans l\'UE doit être désigné par mandat écrit avant mise sur le marché ou en service dans l\'UE.', refs:['Art. 22'], prio:'p1', level:'extra' },
   ];
 
+  /* CE QUE LE FOURNISSEUR DOIT EN PLUS DES SEPT POINTS AUTO-DÉCLARÉS. L'étape 3
+     interroge les articles 9 à 17 ; elle laissait de côté tout l'aval, qui est
+     pourtant ce qui bloque une mise sur le marché. Ces obligations ne sont pas
+     auto-déclarées : elles sont rendues sans statut, comme des points à
+     traiter. */
+  var FOURNISSEUR_AVAL_OBL = [
+    { id:'art15', name:'Exactitude, robustesse et cybersécurité', desc:'Niveaux d\'exactitude déclarés, résilience aux erreurs et aux incohérences, résistance aux tentatives d\'altération du système ou de ses données.', refs:['Art. 15'], prio:'p1', level:'haut' },
+    { id:'art43', name:'Évaluation de la conformité avant mise sur le marché', desc:'Procédure d\'évaluation applicable au système — contrôle interne, ou intervention d\'un organisme notifié selon le cas.', refs:['Art. 43'], prio:'p1', level:'haut' },
+    { id:'art47_48', name:'Déclaration UE de conformité et marquage CE', desc:'Déclaration écrite tenue à disposition des autorités pendant dix ans, et apposition du marquage CE avant mise sur le marché.', refs:['Art. 47','Art. 48'], prio:'p1', level:'haut' },
+    { id:'art49', name:'Enregistrement dans la base de données de l\'Union', desc:'Enregistrement du système avant sa mise sur le marché ou en service.', refs:['Art. 49'], prio:'p1', level:'haut' },
+    { id:'art72', name:'Surveillance après commercialisation', desc:'Plan documenté de collecte et d\'analyse des données d\'usage sur toute la durée de vie du système.', refs:['Art. 72'], prio:'p2', level:'haut' },
+    { id:'art73', name:'Signalement des incidents graves', desc:'Notification à l\'autorité de surveillance : quinze jours, ramenés à dix en cas de décès et à deux en cas d\'incident généralisé.', refs:['Art. 73'], prio:'p1', level:'haut' },
+  ];
+
+  /* LES OBLIGATIONS DU DÉPLOYEUR — ABSENTES DES SORTIES JUSQU'ICI.
+     L'article 26 n'apparaissait dans aucun résultat du simulateur, alors qu'il
+     porte l'essentiel de ce que doit l'organisation qui achète son système. */
+  var DEPLOYEUR_OBL = [
+    { id:'art26_notice', name:'Employer le système conformément à sa notice', desc:'Mesures techniques et organisationnelles garantissant un usage conforme aux instructions du fournisseur. Sortir de la destination prévue fait basculer sous l\'article 25.', refs:['Art. 26(1)'], prio:'p1', level:'deployeur' },
+    { id:'art26_supervision', name:'Confier la supervision humaine à des personnes compétentes', desc:'Personnes formées, disposant du temps, de l\'autorité et du soutien nécessaires pour interrompre ou écarter une sortie du système.', refs:['Art. 26(2)'], prio:'p1', level:'deployeur' },
+    { id:'art26_donnees', name:'S\'assurer de la pertinence des données d\'entrée', desc:'Dans la mesure du contrôle exercé sur elles : données pertinentes et suffisamment représentatives au regard de la destination du système.', refs:['Art. 26(4)'], prio:'p1', level:'deployeur' },
+    { id:'art26_surveillance', name:'Surveiller le fonctionnement et savoir suspendre', desc:'Surveillance sur la base de la notice ; suspension de l\'usage et information du fournisseur et de l\'autorité en cas de risque identifié.', refs:['Art. 26(5)'], prio:'p1', level:'deployeur' },
+    { id:'art26_journaux', name:'Conserver les journaux générés automatiquement', desc:'Six mois au moins, sauf disposition contraire — les journaux sont ce qui rendra l\'usage démontrable en cas de contrôle.', refs:['Art. 26(6)'], prio:'p1', level:'deployeur' },
+    { id:'art26_travailleurs', name:'Informer les travailleurs et leurs représentants', desc:'Avant la mise en service d\'un système à haut risque sur le lieu de travail, les personnes concernées sont informées qu\'elles y seront soumises.', refs:['Art. 26(7)'], prio:'p2', level:'deployeur' },
+    { id:'art26_personnes', name:'Informer les personnes soumises à une décision', desc:'Toute personne physique faisant l\'objet d\'une décision prise ou assistée par le système est informée de cet usage.', refs:['Art. 26(11)'], prio:'p1', level:'deployeur' },
+    { id:'art86', name:'Répondre au droit à l\'explication', desc:'La personne concernée par une décision produisant des effets juridiques ou l\'affectant significativement peut obtenir des explications claires sur le rôle du système dans cette décision.', refs:['Art. 86'], prio:'p2', level:'deployeur' },
+  ];
+
+  var FRIA_OBL = { id:'art27', name:'Analyse d\'impact sur les droits fondamentaux (AIDF)', desc:'Description des processus concernés, période et fréquence d\'usage, catégories de personnes affectées, risques de préjudice identifiés, mesures de supervision humaine et de recours. À notifier à l\'autorité de surveillance.', refs:['Art. 27'], prio:'p1', level:'deployeur' };
+
+  var IMPORTATEUR_OBL = [
+    { id:'art23_verif', name:'Vérifier la conformité avant mise sur le marché', desc:'Évaluation de conformité conduite, documentation technique établie, marquage CE apposé, déclaration UE et notice disponibles, mandataire désigné le cas échéant.', refs:['Art. 23(1)'], prio:'p1', level:'importateur' },
+    { id:'art23_abstention', name:'S\'abstenir en cas de non-conformité', desc:'Un système présumé non conforme ne peut être mis sur le marché ; en cas de risque, information du fournisseur et des autorités de surveillance.', refs:['Art. 23(2)'], prio:'p1', level:'importateur' },
+    { id:'art23_identite', name:'Indiquer ses coordonnées et conserver les documents', desc:'Nom, raison sociale et adresse sur le système ou son emballage ; conservation de la déclaration UE et de la notice pendant dix ans.', refs:['Art. 23(3)','Art. 23(5)'], prio:'p2', level:'importateur' },
+  ];
+
+  var DISTRIBUTEUR_OBL = [
+    { id:'art24_verif', name:'Vérifier marquage, déclaration et notice', desc:'Avant mise à disposition : marquage CE présent, déclaration UE et notice jointes, obligations du fournisseur et de l\'importateur respectées.', refs:['Art. 24(1)'], prio:'p1', level:'distributeur' },
+    { id:'art24_abstention', name:'S\'abstenir et faire corriger', desc:'Ne pas mettre à disposition un système présumé non conforme ; prendre ou faire prendre les mesures correctives, retrait ou rappel compris.', refs:['Art. 24(2)','Art. 24(4)'], prio:'p1', level:'distributeur' },
+  ];
+
+  /* Due par TOUS les opérateurs, quel que soit le niveau de risque. */
+  var LITTERATIE_OBL = { id:'art4', name:'Maîtrise de l\'IA du personnel', desc:'Niveau suffisant de maîtrise de l\'IA chez les personnes chargées du fonctionnement et de l\'usage des systèmes, au regard de leurs connaissances, de leur formation et du contexte d\'emploi.', refs:['Art. 4'], prio:'p2', level:'tous' };
+
+  var role = simRole();
+  /* Un rôle indéterminé rend les obligations de chaque rôle plutôt que de
+     trancher au hasard : c'est le seul traitement honnête de « je ne sais pas ». */
+  var estFournisseur  = (role.role === 'fournisseur'  || role.role === 'indetermine');
+  var estDeployeur    = (role.role === 'deployeur'    || role.role === 'indetermine');
+  var estImportateur  = (role.role === 'importateur'  || role.role === 'indetermine');
+  var estDistributeur = (role.role === 'distributeur' || role.role === 'indetermine');
+
   var activeObls = [];
-  if(classif.level === 'haut'){
+  if(classif.level === 'haut' && estFournisseur){
     ALL_OBL.forEach(function(o){
       var val = d[o.id] || 'none';
       var severity = val === 'none' ? 'critical' : val === 'partial' ? 'warning' : 'ok';
       activeObls.push({ obl:o, severity:severity, status:val });
     });
+    FOURNISSEUR_AVAL_OBL.forEach(function(o){ activeObls.push({ obl:o, severity:'warning', status:'' }); });
+  }
+  if(classif.level === 'haut' && estDeployeur){
+    DEPLOYEUR_OBL.forEach(function(o){ activeObls.push({ obl:o, severity:'warning', status:'' }); });
+    /* L'AIDF n'est pas due par tous les déployeurs : seulement organismes
+       publics, organismes privés chargés d'un service public, et — pour tout
+       acteur — solvabilité et tarification en assurance vie ou santé. */
+    if(d.fria && d.fria !== 'non'){
+      activeObls.push({ obl:FRIA_OBL, severity:'critical', status:'none' });
+    }
+  }
+  if(classif.level === 'haut' && estImportateur){
+    IMPORTATEUR_OBL.forEach(function(o){ activeObls.push({ obl:o, severity:'warning', status:'' }); });
+  }
+  if(classif.level === 'haut' && estDistributeur){
+    DISTRIBUTEUR_OBL.forEach(function(o){ activeObls.push({ obl:o, severity:'warning', status:'' }); });
+  }
+  if(classif.level !== 'interdit'){
+    activeObls.push({ obl:LITTERATIE_OBL, severity:'warning', status:'' });
   }
   if(d.interaction === 'oui' || d.interaction === 'genere'){
     TRANSPARENCY_OBL.forEach(function(o){ activeObls.push({ obl:o, severity:'warning', status:'partial' }); });
@@ -2410,6 +2599,67 @@ function simRender(){
     gpaiInfo = "<div style=\"background:rgba(196,124,26,.06);border:1px solid rgba(196,124,26,.2);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--orange);margin-bottom:16px\"><strong>GPAI :</strong> " + gpaiMsg + "</div>";
   }
 
+  /* ── LE RÔLE, DIT AVANT LES OBLIGATIONS ──────────────────────────────────
+     Une liste d'obligations sans le rôle qui la commande est illisible : rien
+     n'indique au lecteur POURQUOI ce sont celles-là, ni ce qui changerait si
+     sa place dans la chaîne de valeur était autre. */
+  var role = simRole();
+  var roleNom = (SIM_ROLES[role.role] || SIM_ROLES.indetermine).nom;
+  var roleArt = (SIM_ROLES[role.role] || SIM_ROLES.indetermine).art;
+  var roleInfo = '';
+  if(role.requalifie){
+    roleInfo = '<div style="background:rgba(184,50,34,.07);border:1px solid rgba(184,50,34,.3);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--accent);margin-bottom:16px">'
+      + '<strong>Requalification — Art. 25(1)</strong> : vous vous êtes déclaré <em>'
+      + ((SIM_ROLES[role.declare] || SIM_ROLES.indetermine).nom).toLowerCase()
+      + '</em>, mais ' + role.motif + '. Vous êtes donc le <strong>fournisseur</strong> de ce système au sens du règlement, et vous en portez toutes les obligations — celles listées ci-dessous.</div>';
+  } else if(role.role === 'indetermine'){
+    roleInfo = '<div style="background:rgba(196,124,26,.06);border:1px solid rgba(196,124,26,.2);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--orange);margin-bottom:16px">'
+      + '<strong>Rôle non déterminé</strong> : les obligations de <em>chaque</em> rôle sont rendues ci-dessous, sans arbitrage. Pour trancher, une seule question suffit le plus souvent — mettez-vous ce système sur le marché sous votre nom (fournisseur), ou l\'employez-vous sous votre autorité (déployeur) ?</div>';
+  } else {
+    roleInfo = '<div style="background:rgba(28,90,138,.06);border:1px solid rgba(28,90,138,.2);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--blue);margin-bottom:16px">'
+      + '<strong>Rôle retenu : ' + roleNom + '</strong> (' + roleArt + '). Les obligations ci-dessous sont celles de ce rôle, et de lui seul. Un même système peut être à haut risque pour tous les opérateurs sans que chacun doive la même chose.</div>';
+  }
+
+  /* ── LA DÉFINITION : LA PREMIÈRE SORTIE POSSIBLE DU CHAMP ─────────────── */
+  var def = simDefinition();
+  var defInfo = '';
+  if(def.statut === 'hors_champ'){
+    defInfo = '<div style="background:rgba(45,122,71,.08);border:2px solid rgba(45,122,71,.35);border-radius:4px;padding:14px 16px;font-size:12px;color:var(--green);margin-bottom:16px">'
+      + '<strong>Ce n\'est probablement pas un système d\'IA — Art. 3(1)</strong><br>'
+      + 'L\'inférence n\'est pas cochée : le système ne déduit pas de ses entrées la manière de produire ses sorties. Un logiciel qui déroule des règles écrites par une personne n\'entre pas dans la définition, et le règlement ne s\'y applique pas — ni haut risque, ni transparence, ni sanctions. La classification ci-dessous est donnée à titre indicatif ; c\'est cette question qu\'il faut trancher d\'abord, et la documenter.</div>';
+  } else if(def.statut === 'a_verifier'){
+    defInfo = '<div style="background:rgba(196,124,26,.06);border:1px solid rgba(196,124,26,.2);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--orange);margin-bottom:16px">'
+      + '<strong>Définition incomplète — Art. 3(1)</strong> : ' + def.manquantes.length
+      + ' des six éléments cumulatifs ne sont pas cochés. L\'inférence l\'est, donc la qualification reste probable, mais elle doit être établie et écrite avant de s\'appuyer sur la suite.</div>';
+  } else if(def.statut === 'non_renseigne'){
+    defInfo = '<div style="background:rgba(120,120,120,.06);border:1px solid var(--rule);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--muted);margin-bottom:16px">'
+      + '<strong>Qualification non renseignée</strong> : les sept éléments de la définition de l\'article 3(1) n\'ont pas été examinés. Tout ce qui suit suppose que le système en est un.</div>';
+  }
+
+  /* ── L'ANTÉRIORITÉ DE L'ARTICLE 111(2) ────────────────────────────────── */
+  var ant = simAnteriorite(classif);
+  var antInfo = '';
+  if(ant){
+    var antCouleur = ant.statut === 'differe' ? 'var(--green)' : ant.statut === 'perdue' ? 'var(--orange)' : 'var(--blue)';
+    var antFond = ant.statut === 'differe' ? 'rgba(45,122,71,.07)' : ant.statut === 'perdue' ? 'rgba(196,124,26,.06)' : 'rgba(28,90,138,.06)';
+    antInfo = '<div style="background:' + antFond + ';border:1px solid ' + antCouleur + ';border-radius:3px;padding:10px 14px;font-size:11px;color:' + antCouleur + ';margin-bottom:16px">'
+      + '<strong>Antériorité — Art. 111(2)</strong> : ' + ant.texte + '</div>';
+  }
+
+  /* ── L'EXEMPTION LIBRE ET OUVERTE, ET LE TEST QUI LA DÉCIDE ───────────── */
+  var oss = simOpenSource(classif);
+  var ossInfo = '';
+  if(oss.statut === 'tombe'){
+    ossInfo = '<div style="background:rgba(184,50,34,.07);border:1px solid rgba(184,50,34,.3);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--accent);margin-bottom:16px">'
+      + '<strong>L\'exemption « libre et ouverte » ne s\'applique pas</strong> : elle suppose une mise à disposition à titre gratuit, et '
+      + oss.declencheurs.join(' ; ') + '. La licence est peut-être libre, le régime reste entier.</div>';
+  } else if(oss.statut === 'tient'){
+    ossInfo = '<div style="background:rgba(45,122,71,.07);border:1px solid rgba(45,122,71,.25);border-radius:3px;padding:10px 14px;font-size:11px;color:var(--green);margin-bottom:16px">'
+      + '<strong>L\'exemption « libre et ouverte » paraît applicable</strong> : aucune contrepartie déclarée.'
+      + (oss.exclusions.length ? ' Elle ne couvre cependant pas tout — ' + oss.exclusions.join(' ; ') + '.' : '')
+      + ' À réexaminer à chaque changement de modèle économique : c\'est la contrepartie, et non la licence, qui la fait tomber.</div>';
+  }
+
   var scoreColor = classif.level === 'interdit' ? '#8B0000' : classif.level === 'haut' ? 'var(--accent)' : classif.level === 'limite' ? 'var(--orange)' : 'var(--green)';
 
   container.innerHTML =
@@ -2428,10 +2678,11 @@ function simRender(){
 
     + (classif.art5 ? '<div style="background:rgba(139,0,0,.08);border:2px solid rgba(139,0,0,.4);border-radius:4px;padding:16px;margin-bottom:20px;font-size:12px;color:#8B0000"><strong>Pratique interdite — Art. 5</strong><br>Ce type de système est formellement interdit par l\'EU AI Act. La mise sur le marché, la mise en service ou l\'utilisation est prohibée dans toute l\'UE. Amendes pouvant atteindre 35 M€ ou 7% du CA mondial. Une refonte complète du système est nécessaire avant tout déploiement.</div>' : '')
 
-    + extra + gpaiInfo
+    + defInfo + roleInfo + antInfo + extra + gpaiInfo + ossInfo
 
     +'<div class="sim-obligations">'
-    +'<div class="sim-obl-title">Obligations identifiées et gaps de conformité</div>'
+    +'<div class="sim-obl-title">Obligations identifiées et gaps de conformité — '
+      + (role.role === 'indetermine' ? 'tous rôles confondus' : roleNom) + '</div>'
     + oblHtml
     +'</div>'
 
@@ -18125,6 +18376,52 @@ var GUIDED_PATHS = [
        livrable: "Charte du comité, circuit de validation et registre des décisions, exportables en Word, marquage IA porté dans les métadonnées du fichier (art. 50 du règlement (UE) 2024/1689), avec le nom exact du modèle employé.",
        ia: "Claude (Anthropic) ou Mistral Large, au choix dans l’interface. Le modèle RÉDIGE et EXPLIQUE ; il ne décide pas de ce qui s’applique — la qualification est calculée avant lui et lui est transmise."}
     ]
+  },
+
+  /* ══ LES DEUX PARCOURS QUI SUIVENT LA TAXONOMIE DU RÈGLEMENT ═════════════
+     Les seize parcours précédents suivent des MÉTIERS — directeur de
+     programme, DPO, risk manager. C'est utile, et ce n'est pas la façon dont
+     le règlement s'organise : lui répartit les obligations entre fournisseur,
+     déployeur, importateur et distributeur. Aucun chemin de lecture ne suivait
+     cette ligne-là, si bien qu'un client qui savait exactement ce qu'il est
+     n'avait aucun parcours à sa mesure.
+
+     CES DEUX-LÀ FONT ENTRER QUATRE PANNEAUX QUE PLUS AUCUN PARCOURS
+     N'ATTEIGNAIT : Shadow AI, Transparence art. 50, Obligations article par
+     article, et Indice de conformité global. Shadow AI ouvre le parcours du
+     déployeur, à la place que le guide d'application lui donne — on ne peut
+     pas être déployeur conforme d'un système dont on ignore l'existence. */
+  {
+    id: 'role_deployeur',
+    icon: '🛠️',
+    role: 'Déployeur — j’emploie un système acheté',
+    pitch: 'Vous n’avez pas conçu ce système : vous l’employez sous votre autorité. Le règlement ne vous demande donc pas le dossier technique de l’annexe IV, mais l’article 26 — et personne ne vous le dira à votre place. Ce parcours suit vos obligations, pas celles de votre fournisseur.',
+    steps: [
+      {id:'shadow-ai', label:'Découverte Shadow AI', action:'Recensez les outils d’IA déjà employés dans l’organisation sans être passés par une décision : extensions de navigateur, assistants intégrés aux suites bureautiques, abonnements souscrits par une équipe.', gain:'On ne peut pas être déployeur conforme d’un système qu’on ignore. C’est la première étape, et celle qu’on saute presque toujours.', tip:'TPE : commencez par les moyens de paiement et les connexions par compte professionnel. Grand compte : croisez avec les journaux du proxy et le catalogue SaaS avant d’interroger les équipes.'},
+      {id:'simulateur', label:'Simulateur IA Act', action:'Répondez d’abord à la question du rôle — déployeur — puis aux trois questions de l’article 25 : avez-vous apposé votre nom, modifié substantiellement, ou changé la destination ?', gain:'Détermine si vous restez déployeur ou si vous êtes devenu FOURNISSEUR sans le savoir. C’est la bascule que les organisations découvrent le plus tard, généralement après avoir affiné un modèle acheté.', tip:'Refaites cette étape après chaque affinage ou changement d’usage : le rôle n’est pas acquis une fois pour toutes.'},
+      {id:'registre', label:'Registre IA', action:'Inscrivez le système avec son fournisseur, sa finalité, ses données d’entrée et la région d’hébergement effective.', gain:'L’inventaire exigé en cas de contrôle — et le seul endroit où se lira, le jour venu, de qui vous dépendez.', tip:'Notez dès maintenant s’il existe une solution de repli identifiée : cette information ne se reconstitue pas dans l’urgence.'},
+      {id:'fria', label:'Analyse d’impact sur les droits fondamentaux', action:'Vérifiez si l’article 27 vous vise : organisme public, organisme privé chargé d’un service public, ou système évaluant la solvabilité ou tarifant un risque en assurance vie ou santé.', gain:'L’AIDF n’est pas due par tous les déployeurs. La faire sans y être tenu coûte ; ne pas la faire en y étant tenu s’expose.', tip:'Elle est à notifier à l’autorité de surveillance — prévoyez le délai correspondant dans votre calendrier.'},
+      {id:'gouvernance', label:'Supervision humaine', action:'Désignez nommément les personnes chargées de la supervision, et vérifiez qu’elles ont la compétence, le temps ET l’autorité d’écarter une sortie du système.', gain:'L’article 26(2) n’exige pas qu’un humain regarde : il exige qu’il puisse dire non. Une supervision sans autorité de contredire n’en est pas une.', tip:'Écrivez ce qui se passe quand la personne dit non — c’est cette procédure, et non la désignation, qui sera examinée.'},
+      {id:'ia50', label:'Transparence (art. 50) et information des personnes', action:'Vérifiez le marquage des contenus générés, l’information dès la première interaction, et l’information des personnes soumises à une décision au titre de l’article 26(11).', gain:'Ces obligations sont dues même quand le système n’est pas à haut risque — et elles ne dépendent pas de votre fournisseur.', tip:'Conservez une trace datée de ce qui est affiché : la preuve compte autant que la pratique.'},
+      {id:'parties', label:'Parties prenantes et information des travailleurs', action:'Avant toute mise en service sur le lieu de travail, informez les travailleurs concernés et leurs représentants (article 26(7)), et fixez qui répond au droit à l’explication (article 86).', gain:'Deux obligations qui se traitent avant le déploiement et deviennent impossibles à rattraper après.', tip:'En France, articulez cette information avec la consultation du CSE plutôt que de mener deux démarches parallèles.'},
+      {id:'radar', label:'Surveillance et journaux', action:'Organisez la surveillance du fonctionnement au regard de la notice (article 26(5)) et la conservation des journaux générés automatiquement, six mois au moins (article 26(6)).', gain:'Les journaux sont ce qui rendra votre usage démontrable — et la surveillance ce qui vous permettra de suspendre à temps plutôt que d’expliquer après.', tip:'Vérifiez que votre fournisseur vous DONNE accès à ces journaux : beaucoup de contrats ne le prévoient pas.'}
+    ]
+  },
+  {
+    id: 'role_fournisseur',
+    icon: '🏗️',
+    role: 'Fournisseur — je mets un système sur le marché',
+    pitch: 'Vous développez le système, ou vous le mettez sur le marché sous votre nom. C’est le régime le plus lourd, et il se construit avant la mise sur le marché, pas après : l’évaluation de conformité ne se rattrape pas.',
+    steps: [
+      {id:'simulateur', label:'Simulateur IA Act', action:'Classez le système, en commençant par les sept éléments de la définition de l’article 3(1) et la question du rôle.', gain:'Deux sorties possibles y sont vérifiées avant tout le reste : ce n’est peut-être pas un système d’IA, et ce n’est peut-être pas à vous de porter le régime.', tip:'Si l’inférence n’est pas là, arrêtez-vous et documentez-le : c’est la sortie du champ la moins souvent vérifiée et la plus économique.'},
+      {id:'registre', label:'Registre IA', action:'Inscrivez le système et rattachez-lui, dès ce stade, la famille à laquelle il appartient si vous en produisez plusieurs voisins.', gain:'Le registre est le point d’ancrage de tout le dossier : documentation, audits et preuves s’y rattachent.', tip:'Un parc de systèmes proches se documente par famille — la reprise d’un dossier existant vaut mieux que dix dossiers rédigés séparément.'},
+      {id:'audit-ia-act', label:'Audit IA Act — articles 9 à 17', action:'Passez les 34 points de contrôle : gestion des risques, gouvernance des données, documentation technique, journalisation, transparence, supervision humaine, exactitude et robustesse, système de qualité.', gain:'C’est la mesure détaillée de vos obligations de fournisseur, point par point et avec la référence légale exacte.', tip:'Traitez d’abord les points P1 : ce sont ceux qui bloquent une mise sur le marché, pas seulement ceux qui exposent à une sanction.'},
+      {id:'matrice', label:'Gestion des risques (art. 9)', action:'Positionnez les risques identifiés sur les axes probabilité × impact et documentez les mesures d’atténuation retenues.', gain:'L’article 9 exige un processus ITÉRATIF et documenté sur tout le cycle de vie — pas une analyse faite une fois avant le lancement.', tip:'Datez chaque révision : c’est le caractère continu du processus qui sera examiné, autant que son contenu.'},
+      {id:'templates', label:'Documentation technique (annexe IV)', action:'Constituez le dossier technique : architecture, données d’entraînement et de validation, performances mesurées, limitations connues, mesures de supervision humaine.', gain:'Sans ce dossier, aucune évaluation de conformité n’est possible — c’est la pièce dont tout le reste dépend.', tip:'Écrivez les limitations connues franchement : un dossier qui n’en déclare aucune est le premier signal d’un dossier non tenu.'},
+      {id:'articles', label:'Évaluation de conformité, marquage CE, enregistrement', action:'Lisez les articles 43, 47, 48 et 49 : quelle procédure d’évaluation s’applique, quelle déclaration UE établir, où apposer le marquage CE, et quand enregistrer le système dans la base de données de l’Union.', gain:'Quatre obligations qui conditionnent la mise sur le marché elle-même, et qui ne se traitent pas après coup.', tip:'Déterminez tôt si un organisme notifié doit intervenir : son délai d’intervention commande tout votre calendrier.'},
+      {id:'conformite-globale', label:'Indice de conformité global', action:'Consolidez IA Act, RGPD et ISO/IEC 42001 en une vue unique avant de figer la déclaration UE de conformité.', gain:'Une déclaration signée sur un dossier incomplet engage la personne qui la signe. Cette vue dit ce qui reste ouvert.', tip:'Conservez une copie datée de l’indice au moment de la signature : c’est l’état des lieux que vous pourrez opposer.'},
+      {id:'radar', label:'Surveillance après commercialisation et incidents', action:'Mettez en place le plan de surveillance de l’article 72, et le circuit de signalement de l’article 73 — quinze jours, dix en cas de décès, deux en cas d’incident généralisé.', gain:'Les obligations du fournisseur ne s’arrêtent pas à la mise sur le marché : elles courent sur toute la durée de vie du système.', tip:'Les délais de l’article 73 sont courts : le circuit de remontée doit exister AVANT le premier incident, pas être improvisé le jour venu.'}
+    ]
   }
 ];
 
@@ -18147,6 +18444,12 @@ var GUIDED_PATHS = [
    Un seul constructeur d'options sert la barre latérale ET la fenêtre : deux
    listes recopiées finissent toujours par diverger. */
 var GP_FAMILLES = [
+  /* EN TÊTE, ET DÉLIBÉRÉMENT. C'est la seule famille qui suive la taxonomie du
+     règlement plutôt que l'organigramme du client : un lecteur qui sait ce
+     qu'il est au sens de l'IA Act doit trouver son chemin avant ceux qui
+     supposent un intitulé de poste. */
+  { titre: 'Par rôle au sens du règlement',
+    ids: ['role_deployeur', 'role_fournisseur'] },
   { titre: 'Gouvernance & IA Act',
     ids: ['directeur_programme', 'grc_senior', 'risk_manager', 'ceo', 'cdo', 'caio'] },
   { titre: 'Protection des données (RGPD)',

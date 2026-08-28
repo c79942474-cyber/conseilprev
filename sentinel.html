@@ -5205,6 +5205,40 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
       <div class="sim-panel-sub">Décrivez votre système et son contexte de déploiement.</div>
 
       <div class="sim-q">
+        <div class="sim-q-label">Quel rôle tenez-vous pour ce système ? <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="Art. 3(3) à 3(7) — Définitions des opérateurs (EUR-Lex)">Art. 3(3) à 3(7)</a><span class="legal-ref-ext">↗</span></span></div>
+        <div class="sim-q-hint"><strong>C'est la question qui commande toutes les autres.</strong> Le règlement ne classe pas seulement les systèmes, il répartit les obligations entre les opérateurs : un même système peut être à haut risque pour tout le monde et n'obliger chacun que sur sa part. Le fournisseur porte les articles 9 à 17 ; le déployeur l'article 26 ; l'importateur l'article 23 ; le distributeur l'article 24. Répondre « fournisseur » quand on est déployeur produit une liste d'obligations entièrement fausse.</div>
+        <div class="sim-radio-group" id="r-role">
+          <div class="sim-radio-opt" onclick="simRadio('r-role','fournisseur')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Fournisseur — nous le développons, ou nous le mettons sur le marché sous notre nom<div class="sim-radio-sub">Art. 3(3). Le régime le plus lourd : gestion des risques, données, documentation technique, journalisation, supervision humaine, qualité, évaluation de conformité, marquage CE, enregistrement, surveillance après commercialisation.</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-role','deployeur')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Déployeur — nous l'utilisons sous notre autorité, dans un cadre professionnel<div class="sim-radio-sub">Art. 3(4). Le cas le plus fréquent, et de loin. Obligations propres de l'article 26, analyse d'impact sur les droits fondamentaux de l'article 27 dans certains cas, et information des personnes concernées.</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-role','importateur')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Importateur — nous mettons sur le marché de l'Union un système d'un fournisseur établi hors UE<div class="sim-radio-sub">Art. 3(6). Obligations de vérification avant mise sur le marché : article 23.</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-role','distributeur')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Distributeur — nous le mettons à disposition sans être ni fournisseur ni importateur<div class="sim-radio-sub">Art. 3(7). Obligations de vérification et d'abstention : article 24.</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-role','indetermine')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Je ne sais pas encore<div class="sim-radio-sub">Le simulateur rendra alors les obligations de CHAQUE rôle, sans trancher — et vous dira ce qui manque pour trancher.</div></div></div>
+        </div>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Avez-vous fait l'une de ces trois choses avec ce système ? <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="Art. 25(1) — Requalification en fournisseur (EUR-Lex)">Art. 25(1)</a><span class="legal-ref-ext">↗</span></span></div>
+        <div class="sim-q-hint">Chacune de ces trois situations fait de vous le <strong>fournisseur</strong> du système, quel que soit le rôle déclaré ci-dessus — et vous transfère l'intégralité des obligations des articles 9 à 17. C'est la requalification que les organisations découvrent le plus tard, souvent après avoir affiné un modèle acheté.</div>
+        <div class="sim-radio-group" id="r-art25">
+          <div class="sim-radio-opt" onclick="simRadio('r-art25','nom')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Nous avons apposé notre nom ou notre marque sur le système<div class="sim-radio-sub">Art. 25(1)(a). Y compris en marque blanche sur un produit acheté.</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-art25','substantielle')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Nous l'avons modifié substantiellement<div class="sim-radio-sub">Art. 25(1)(b). Réentraînement, affinage sur nos données, modification de l'architecture — au-delà de ce que la notice du fournisseur prévoit.</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-art25','finalite')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Nous avons changé sa destination, et il devient de ce fait à haut risque<div class="sim-radio-sub">Art. 25(1)(c). Un outil vendu pour trier des courriels employé pour présélectionner des candidatures.</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-art25','non')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Aucune des trois — nous l'employons tel que fourni<div class="sim-radio-sub">Dans les conditions et pour la destination prévues par le fournisseur.</div></div></div>
+        </div>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Votre organisation relève-t-elle de l'un de ces cas ? <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="Art. 27 — Analyse d'impact sur les droits fondamentaux (EUR-Lex)">Art. 27(1)</a><span class="legal-ref-ext">↗</span></span></div>
+        <div class="sim-q-hint">L'analyse d'impact sur les droits fondamentaux (AIDF) n'est pas due par tous les déployeurs de systèmes à haut risque : elle ne l'est que dans les cas énumérés ci-dessous. Cette question ne sert qu'au rôle de déployeur ; elle est sans effet sur les autres.</div>
+        <div class="sim-radio-group" id="r-fria">
+          <div class="sim-radio-opt" onclick="simRadio('r-fria','public')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Organisme de droit public<div class="sim-radio-sub">État, collectivité, établissement public, agence.</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-fria','service_public')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Organisme privé fournissant un service public<div class="sim-radio-sub">Délégation de service public, mission d'intérêt général : hôpital privé, opérateur de transport, organisme de protection sociale.</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-fria','credit_assurance')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Ni l'un ni l'autre — mais le système évalue la solvabilité, ou tarife un risque en assurance vie ou santé<div class="sim-radio-sub">Annexe III, points 5 b) et 5 c). L'AIDF est due dans ces deux cas même pour un acteur purement privé.</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-fria','non')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Aucun de ces cas<div class="sim-radio-sub">Pas d'AIDF au titre de l'article 27 — les autres obligations du déployeur restent dues.</div></div></div>
+        </div>
+      </div>
+
+      <div class="sim-q">
         <div class="sim-q-label">Nom du système IA <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="Art. 11 — Documentation technique (EUR-Lex)">Art. 11</a><span class="legal-ref-ext">↗</span></span></div>
         <input class="sim-input" id="sim-name" type="text" placeholder="Ex : CreditScore-Pro v2.1, MedDiag-AI, ChatSupport…">
       </div>
@@ -5277,6 +5311,31 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
       <div class="sim-q">
         <div class="sim-q-label">Description du cas d'usage</div>
         <textarea class="sim-textarea" id="sim-desc" placeholder="Décrivez brièvement le fonctionnement, l'objectif et le contexte d'utilisation de votre système IA. Ex : Modèle ML de scoring crédit analysant 200+ variables pour prédire la solvabilité des demandeurs et déclencher automatiquement l'octroi ou le refus de prêt."></textarea>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Est-ce bien un « système d'IA » au sens du règlement ? <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="Art. 3(1) — Définition du système d'IA (EUR-Lex)">Art. 3(1)</a><span class="legal-ref-ext">↗</span></span></div>
+        <div class="sim-q-hint">La définition compte <strong>sept éléments</strong>, et ils sont cumulatifs. Cochez ceux qui décrivent votre système. Un logiciel qui applique des règles écrites à la main, sans rien inférer, <em>n'est pas</em> un système d'IA — et le règlement ne s'y applique pas du tout. C'est la première sortie possible du champ, et la moins souvent vérifiée.</div>
+        <div class="sim-checkbox-group" id="cb-definition">
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'def-machine')"><div class="sim-checkbox-box">✓</div><div><div>C'est un système automatisé</div><div class="sim-checkbox-sub">Il s'exécute sur une machine, matériel ou logiciel.</div></div></div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'def-autonomie')"><div class="sim-checkbox-box">✓</div><div><div>Il fonctionne avec un certain degré d'autonomie</div><div class="sim-checkbox-sub">Il produit un résultat sans qu'un humain valide chaque étape intermédiaire.</div></div></div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'def-inference')"><div class="sim-checkbox-box">✓</div><div><div>Il <strong>infère</strong>, à partir des entrées reçues, la manière de produire ses sorties</div><div class="sim-checkbox-sub">L'élément décisif. Apprentissage, raisonnement, modélisation — par opposition à un enchaînement de règles écrites par une personne.</div></div></div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'def-objectifs')"><div class="sim-checkbox-box">✓</div><div><div>Il poursuit des objectifs explicites ou implicites</div><div class="sim-checkbox-sub">Une fonction-objectif déclarée, ou un but déduit de son entraînement.</div></div></div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'def-sorties')"><div class="sim-checkbox-box">✓</div><div><div>Il produit des prédictions, contenus, recommandations ou décisions</div><div class="sim-checkbox-sub">Les quatre types de sorties visés par la définition.</div></div></div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'def-influence')"><div class="sim-checkbox-box">✓</div><div><div>Ses sorties influencent un environnement physique ou virtuel</div><div class="sim-checkbox-sub">Elles sont employées, et pas seulement produites.</div></div></div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'def-adaptativite')"><div class="sim-checkbox-box">✓</div><div><div>Il peut faire preuve d'adaptativité après son déploiement</div><div class="sim-checkbox-sub">Le seul élément facultatif de la définition : « peut », et non « doit ».</div></div></div>
+        </div>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Depuis quand ce système est-il sur le marché ? <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="Art. 111 — Systèmes déjà mis sur le marché (EUR-Lex)">Art. 111(2)</a><span class="legal-ref-ext">↗</span></span></div>
+        <div class="sim-q-hint">Les systèmes à haut risque de l'annexe III déjà sur le marché à la date d'application ne basculent dans le régime complet que si leur <strong>conception</strong> change de façon importante. La date retenue ici est celle du calendrier affiché en haut de cette page.</div>
+        <div class="sim-radio-group" id="r-anteriorite">
+          <div class="sim-radio-opt" onclick="simRadio('r-anteriorite','avant_inchange')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Avant le 2 août 2026, et sa conception n'a pas changé de façon importante depuis<div class="sim-radio-sub">Art. 111(2) : le régime complet ne s'applique pas tant que la conception ne change pas. Les obligations qui ne dépendent pas de l'annexe III, elles, restent dues.</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-anteriorite','avant_modifie')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Avant le 2 août 2026, mais sa conception a changé de façon importante depuis<div class="sim-radio-sub">L'antériorité tombe : le système est traité comme un système neuf.</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-anteriorite','apres')"><div class="sim-radio-dot"></div><div class="sim-radio-text">À partir du 2 août 2026<div class="sim-radio-sub">Régime complet, sans aménagement d'antériorité.</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-anteriorite','projet')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Pas encore mis sur le marché — projet en cours<div class="sim-radio-sub">Le moment où la conformité coûte le moins cher à construire.</div></div></div>
+        </div>
       </div>
 
       <div class="sim-nav">
@@ -5464,8 +5523,28 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
         <div class="sim-radio-group" id="r-gpai">
           <div class="sim-radio-opt" onclick="simRadio('r-gpai','oui_sys')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — je développe/fournis un modèle GPAI<div class="sim-radio-sub">Obligations spécifiques Art. 53 (documentation, politique de droits d'auteur, résumé de données)</div></div></div>
           <div class="sim-radio-opt" onclick="simRadio('r-gpai','oui_flop')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — GPAI à capacités systémiques (seuil 10^25 FLOPs)<div class="sim-radio-sub">Obligations renforcées Art. 55 : évaluation adversariale, signalement incidents, cybersécurité</div></div></div>
-          <div class="sim-radio-opt" onclick="simRadio('r-gpai','deploie')"><div class="sim-radio-opt" onclick="simRadio('r-gpai','deploie')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Je déploie un GPAI tiers (OpenAI, Anthropic, Mistral…)<div class="sim-radio-sub">Obligations de déployeur : vérification des politiques fournisseur, transparence utilisateurs</div></div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-gpai','deploie')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Je déploie un GPAI tiers (OpenAI, Anthropic, Mistral…)<div class="sim-radio-sub">Obligations de déployeur : vérification des politiques fournisseur, transparence utilisateurs</div></div></div>
           <div class="sim-radio-opt" onclick="simRadio('r-gpai','non')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Non — système IA spécifique à une tâche<div class="sim-radio-sub">Pas soumis au régime GPAI des Art. 51-55</div></div></div>
+        </div>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">Le diffusez-vous sous licence libre et ouverte ? <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="Art. 2(12) et Art. 53(2) — Exemption libre et ouverte (EUR-Lex)">Art. 2(12) · Art. 53(2)</a><span class="legal-ref-ext">↗</span></span></div>
+        <div class="sim-q-hint">Le règlement exempte partiellement ce qui est diffusé sous licence libre et ouverte — mais <strong>seulement à titre gratuit</strong>. La question suivante décide si l'exemption tient réellement, et elle se pose avant de compter dessus.</div>
+        <div class="sim-radio-group" id="r-oss">
+          <div class="sim-radio-opt" onclick="simRadio('r-oss','oui')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — licence libre et ouverte<div class="sim-radio-sub">Poids, architecture et paramètres accessibles, licence permettant l'usage, la modification et la redistribution.</div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-oss','non')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Non — diffusion propriétaire ou fermée<div class="sim-radio-sub">L'exemption ne se pose pas.</div></div></div>
+        </div>
+      </div>
+
+      <div class="sim-q">
+        <div class="sim-q-label">En tirez-vous une contrepartie, sous quelque forme que ce soit ? <span class="sim-q-art">Art. 2(12) — test de monétisation</span></div>
+        <div class="sim-q-hint"><strong>Une seule réponse positive fait tomber l'exemption</strong>, quelle que soit la licence. C'est le point sur lequel l'exemption « open source » est le plus souvent invoquée à tort : la licence est bien libre, mais le modèle est monétisé par ailleurs. Ne cochez que ce qui est vrai.</div>
+        <div class="sim-checkbox-group" id="cb-monetisation">
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'mon-prix')"><div class="sim-checkbox-box">✓</div><div><div>Nous en demandons un prix</div><div class="sim-checkbox-sub">Licence payante, abonnement, paiement à l'usage.</div></div></div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'mon-service')"><div class="sim-checkbox-box">✓</div><div><div>Nous monétisons un autre service qui en dépend, ou exigeons des données personnelles en contrepartie</div><div class="sim-checkbox-sub">Version hébergée payante, création de compte obligatoire, données d'usage exploitées à d'autres fins que la sécurité ou l'interopérabilité.</div></div></div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'mon-support')"><div class="sim-checkbox-box">✓</div><div><div>Nous vendons du support, de l'intégration ou de la maintenance autour</div><div class="sim-checkbox-sub">Assistance payante, garanties, prestations d'adaptation.</div></div></div>
+          <div class="sim-checkbox-opt" onclick="simCheckbox(this,'mon-dons')"><div class="sim-checkbox-box">✓</div><div><div>Nous recevons des dons liés à sa mise à disposition</div><div class="sim-checkbox-sub">À apprécier au cas par cas : un don libre et sans contrepartie ne vaut pas prix, un « don » qui conditionne l'accès en est un.</div></div></div>
         </div>
       </div>
 
@@ -5473,7 +5552,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
         <div class="sim-q-label">Votre système traite-t-il des données personnelles ? <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32016R0679" target="_blank" rel="noopener" class="legal-ref-link" title="RGPD Art. 22 — Décisions automatisées (EUR-Lex)">RGPD Art. 22</a> + <a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="AI Act Art. 10 — Données et gouvernance (EUR-Lex)">AI Act Art. 10</a><span class="legal-ref-ext">↗</span></span></div>
         <div class="sim-radio-group" id="r-rgpd">
           <div class="sim-radio-opt" onclick="simRadio('r-rgpd','sensibles')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — données sensibles (santé, biométrie, opinions politiques, origine ethnique…)<div class="sim-radio-sub">AIPD obligatoire, base légale Art. 9 RGPD, restrictions strictes</div></div></div>
-          <div class="sim-radio-opt" onclick="simRadio('r-rgpd','standard')"><div class="sim-radio-opt" onclick="simRadio('r-rgpd','standard')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — données personnelles standard<div class="sim-radio-sub">RGPD applicable, AIPD si risque élevé, droit d'opposition aux décisions automatisées (Art. 22)</div></div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-rgpd','standard')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Oui — données personnelles standard<div class="sim-radio-sub">RGPD applicable, AIPD si risque élevé, droit d'opposition aux décisions automatisées (Art. 22)</div></div></div>
           <div class="sim-radio-opt" onclick="simRadio('r-rgpd','non')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Non — données anonymisées ou techniques uniquement<div class="sim-radio-sub">RGPD non applicable — vérifier réelle anonymisation</div></div></div>
         </div>
       </div>
@@ -5494,7 +5573,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
         <div class="sim-q-label">Votre organisation est-elle établie dans l'UE ou vise-t-elle le marché européen ? <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="Art. 2 AI Act — Champ d'application territorial (EUR-Lex)">Art. 2 — Champ d'application territorial</a><span class="legal-ref-ext">↗</span></span></div>
         <div class="sim-radio-group" id="r-territoire">
           <div class="sim-radio-opt" onclick="simRadio('r-territoire','ue')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Établie dans l'UE — fournisseur ou déployeur<div class="sim-radio-sub">AI Act pleinement applicable</div></div></div>
-          <div class="sim-radio-opt" onclick="simRadio('r-territoire','hors_ue')"><div class="sim-radio-opt" onclick="simRadio('r-territoire','hors_ue')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Hors UE — mais système utilisé dans l'UE ou affectant des personnes dans l'UE<div class="sim-radio-sub">AI Act applicable par extraterritorialité — mandataire UE requis (Art. 22)</div></div></div></div>
+          <div class="sim-radio-opt" onclick="simRadio('r-territoire','hors_ue')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Hors UE — mais système utilisé dans l'UE ou affectant des personnes dans l'UE<div class="sim-radio-sub">AI Act applicable par extraterritorialité — mandataire UE requis (Art. 22)</div></div></div>
           <div class="sim-radio-opt" onclick="simRadio('r-territoire','hors')"><div class="sim-radio-dot"></div><div class="sim-radio-text">Hors UE — système uniquement utilisé hors UE<div class="sim-radio-sub">AI Act non applicable — vérifier les réglementations locales</div></div></div>
         </div>
       </div>
