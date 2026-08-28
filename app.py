@@ -109,7 +109,9 @@ MISTRAL_API_KEY = os.environ.get('MISTRAL_API_KEY', '')
 MISTRAL_URL     = "https://api.mistral.ai/v1/chat/completions"
 ANTHROPIC_URL   = "https://api.anthropic.com/v1/messages"
 ANTHROPIC_MODEL = os.environ.get('ANTHROPIC_MODEL', 'claude-haiku-4-5-20251001')
-SECRET_SALT     = os.environ.get('SECRET_SALT', 'conseilprev_security_2025_xK9#mP')
+# `SECRET_SALT` a ete retire : il etait lu, jamais employe. Un reglage mort
+# qui porte un nom de secret invite a le definir, et laisse croire qu'on a
+# securise quelque chose.
 
 # ══════════════════════════════════════════════════════════
 # 1. RATE LIMITING — Anti-DDoS & Brute Force
@@ -3611,7 +3613,11 @@ import secrets as _secrets
 import hmac as _hmac
 
 USERS_FILE = os.path.join(os.path.dirname(__file__), 'users_db.json')
-SESSION_SECRET = os.environ.get('SESSION_SECRET', _secrets.token_hex(32))
+# `SESSION_SECRET` a ete retire, et c'etait le plus trompeur des deux : lu,
+# jamais employe, alors que la cle qui signe REELLEMENT les sessions est
+# `FLASK_SECRET_KEY` (voir en tete de fichier). Un exploitant qui definissait
+# `SESSION_SECRET` sur Render pouvait croire ses sessions protegees ; elles ne
+# l'etaient pas, et la vraie variable restait absente.
 
 # ── Administrateur CONSEILPREV (accès réservé, hors flux client) ──
 ADMIN_EMAIL    = os.environ.get('ADMIN_EMAIL', 'christophe.cerf@outlook.com').strip().lower()

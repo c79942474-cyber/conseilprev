@@ -31,6 +31,7 @@ CE QU'ILS NE PEUVENT PAS FAIRE. Vérifier que la variable est définie sur
 Render. Cela se lit dans le tableau de bord, et c'est la vraie correction —
 le repli dérivé n'est qu'un pis-aller qui empêche le pire.
 """
+import collections
 import io
 import os
 import re
@@ -160,6 +161,45 @@ def test_le_repli_public_se_dit_plus_fort_encore():
     assert 'PUBLIQUE' in j.upper(), (
         "le journal ne dit pas que la clé employée est publique : c'est "
         "pourtant la seule chose qui compte dans ce cas")
+
+
+def test_aucun_reglage_lu_puis_jamais_employe():
+    """LE LEURRE. `SESSION_SECRET` était lu au démarrage et n'était utilisé
+    nulle part — alors que la clé qui signe RÉELLEMENT les sessions s'appelle
+    `FLASK_SECRET_KEY`. Un exploitant qui définissait `SESSION_SECRET` sur
+    Render pouvait croire ses sessions protégées ; elles ne l'étaient pas, et
+    la vraie variable restait absente. `SECRET_SALT` était dans le même cas.
+
+    Un réglage mort qui porte un nom de secret est pire qu'un réglage absent :
+    il invite à le définir et rend le vrai manque invisible."""
+    import ast
+    arbre = ast.parse(SOURCE)
+
+    # LE COMPTAGE SE FAIT SUR L'ARBRE, PAS SUR LE TEXTE. Une première version
+    # comptait les occurrences du nom dans le fichier : le commentaire qui
+    # EXPLIQUE le retrait de `SESSION_SECRET` contenait le mot, et suffisait à
+    # faire passer la règle. La mutation qui remettait le réglage mort a
+    # survécu — une règle qu'un commentaire satisfait ne garde rien.
+    lectures = collections.Counter()
+    for n in ast.walk(arbre):
+        if isinstance(n, ast.Name) and isinstance(n.ctx, ast.Load):
+            lectures[n.id] += 1
+
+    morts = []
+    for n in arbre.body:
+        if not isinstance(n, ast.Assign) or len(n.targets) != 1:
+            continue
+        cible = n.targets[0]
+        if not isinstance(cible, ast.Name):
+            continue
+        if 'os.environ' not in ast.unparse(n.value):
+            continue
+        if lectures[cible.id] == 0:
+            morts.append(cible.id)
+    assert not morts, (
+        "réglage(s) lu(s) dans l'environnement et jamais employé(s) : %s. "
+        "Un nom de secret sans effet invite à le définir et masque celui qui "
+        "compte." % ', '.join(sorted(morts)))
 
 
 def test_aucun_autre_chemin_ne_pose_la_cle_de_session():
