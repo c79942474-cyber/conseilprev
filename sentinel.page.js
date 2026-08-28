@@ -2124,15 +2124,11 @@ window.simNext = function(from){
     SIM_DATA.impact = simGetRadio('r-impact');
     SIM_DATA.interaction = simGetRadio('r-interaction');
   }
-  if(from === 3){
-    SIM_DATA.art9 = document.getElementById('sim-art9').value;
-    SIM_DATA.art10 = document.getElementById('sim-art10').value;
-    SIM_DATA.art11 = document.getElementById('sim-art11').value;
-    SIM_DATA.art12 = document.getElementById('sim-art12').value;
-    SIM_DATA.art13 = document.getElementById('sim-art13').value;
-    SIM_DATA.art14 = document.getElementById('sim-art14').value;
-    SIM_DATA.art17 = document.getElementById('sim-art17').value;
-  }
+  /* L'ÉTAPE 3 NE RELÈVE PLUS RIEN, ET C'EST LE BUT. Elle posait sept questions
+     que l'audit IA Act pose déjà en trente-quatre points, avec la référence
+     exacte et la preuve attendue. Le client répondait deux fois, et les deux
+     réponses pouvaient se contredire sans que rien ne le signale. L'état vient
+     désormais de l'audit seul — voir simEtatDesArticles(). */
   simShowPanel(from + 1);
 };
 window.simPrev = function(from){ simShowPanel(from - 1); };
@@ -2156,12 +2152,85 @@ window.simReset = function(){
   document.querySelectorAll('.sim-radio-opt').forEach(function(el){ el.classList.remove('selected'); });
   document.querySelectorAll('.sim-checkbox-opt').forEach(function(el){ el.classList.remove('checked'); });
   ['sim-name','sim-desc'].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=''; });
-  ['sim-secteur','sim-type','sim-art9','sim-art10','sim-art11','sim-art12','sim-art13','sim-art14','sim-art17','sim-ca'].forEach(function(id){ var el=document.getElementById(id); if(el) el.selectedIndex=0; });
+  ['sim-secteur','sim-type','sim-ca'].forEach(function(id){ var el=document.getElementById(id); if(el) el.selectedIndex=0; });
   simShowPanel(1);
 };
 
+/* ══ L'ÉTAT DES ARTICLES 9 À 17 VIENT DE L'AUDIT, ET DE LUI SEUL ═══════════
+   LA REDITE QUI POUVAIT SE CONTREDIRE. L'étape 3 du simulateur demandait
+   « avez-vous un système de gestion des risques ? » ; l'audit IA Act pose la
+   même question en cinq points, avec l'article exact et la preuve attendue.
+   Deux réponses pour une seule réalité : le simulateur pouvait afficher
+   « conforme » pendant que l'audit comptait le point comme non traité, et rien
+   ne rapprochait jamais les deux. On garde celle qui demande des preuves.
+
+   LE RATTACHEMENT SE FAIT SUR LA RÉFÉRENCE ÉCRITE DANS L'AUDIT, pas sur une
+   table recopiée ici : un point d'audit ajouté demain sera compté sans qu'on y
+   pense. La sentinelle `(?![0-9])` évite que « Art. 1 » attrape « Art. 15 ». */
+function simEtatAudit(numero){
+  if(typeof AUDIT_SECTIONS === 'undefined' || typeof AUDIT_STATE === 'undefined') return null;
+  var rx = new RegExp('Art\\.\\s*' + numero + '(?![0-9])');
+  var total = 0, faits = 0, partiels = 0;
+  AUDIT_SECTIONS.forEach(function(s){
+    (s.items || []).forEach(function(it){
+      if(!rx.test(it.art || '')) return;
+      total++;
+      var st = AUDIT_STATE[it.id] || 'none';
+      if(st === 'done') faits++; else if(st === 'partial') partiels++;
+    });
+  });
+  if(!total) return null;
+  return { total:total, faits:faits, partiels:partiels,
+           statut: (faits === total) ? 'ok' : (faits || partiels) ? 'partial' : 'none' };
+}
+
+/* Les sept articles que l'étape 3 interrogeait, désormais lus dans l'audit. */
+var SIM_ARTICLES_SUIVIS = ['art9','art10','art11','art12','art13','art14','art17'];
+function simEtatDesArticles(){
+  var etats = {};
+  SIM_ARTICLES_SUIVIS.forEach(function(id){
+    etats[id] = simEtatAudit(id.replace('art',''));
+  });
+  return etats;
+}
+
+/* L'écran de lecture. Il ne demande rien : il montre ce que l'audit dit déjà,
+   et renvoie l'y compléter. Un audit vide se dit vide plutôt que de laisser
+   croire que tout est à zéro parce que tout a été examiné. */
+function simRendreLectureAudit(){
+  var zone = document.getElementById('sim-audit-lecture');
+  if(!zone) return;
+  var noms = { art9:'Gestion des risques', art10:'Gouvernance des données',
+               art11:'Documentation technique (annexe IV)', art12:'Journalisation',
+               art13:'Notice d\'utilisation', art14:'Supervision humaine',
+               art17:'Système de gestion de la qualité' };
+  var etats = simEtatDesArticles();
+  var examines = 0, lignes = '';
+  SIM_ARTICLES_SUIVIS.forEach(function(id){
+    var e = etats[id];
+    var libelle, couleur;
+    if(!e){ libelle = 'aucun point d\'audit rattaché'; couleur = 'var(--muted2)'; }
+    else {
+      examines += e.faits + e.partiels;
+      libelle = e.faits + ' traité(s), ' + e.partiels + ' en cours, sur ' + e.total;
+      couleur = e.statut === 'ok' ? 'var(--green)' : e.statut === 'partial' ? 'var(--orange)' : 'var(--accent)';
+    }
+    lignes += '<div style="display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid var(--rule);font-size:12px">'
+      + '<span>' + noms[id] + ' <span style="font-family:var(--mono);font-size:10px;color:var(--muted2)">'
+      + id.replace('art', 'Art. ') + '</span></span>'
+      + '<span style="color:' + couleur + ';font-family:var(--mono);font-size:11px;white-space:nowrap">' + libelle + '</span></div>';
+  });
+  var entete = examines
+    ? '<div class="sim-q-hint">Repris de votre audit IA Act — c\'est la seule source, pour que les deux ne puissent plus se contredire. Modifiez-y un point et cet écran suit.</div>'
+    : '<div class="sim-q-hint"><strong>Votre audit IA Act n\'a pas encore été rempli.</strong> Ces sept obligations seront donc comptées comme non traitées, ce qui est exact : ce qui n\'est pas documenté n\'est pas démontrable. Renseignez l\'audit pour que le calcul d\'écart ait un sens.</div>';
+  zone.innerHTML = entete + lignes
+    + '<div style="margin-top:14px"><button class="sim-btn-next" onclick="go(\'audit-ia-act\')" '
+    + 'title="Ouvrir l audit IA Act pour renseigner ces points">Ouvrir l\'audit IA Act →</button></div>';
+}
+
 function simShowPanel(step){
   SIM_STEP = step;
+  if(step === 3) simRendreLectureAudit();
   for(var i=1;i<=5;i++){
     var panel = document.getElementById('sim-panel-'+i);
     var dot = document.getElementById('step-dot-'+i);
@@ -2479,10 +2548,16 @@ function simGap(classif){
   var estImportateur  = (role.role === 'importateur'  || role.role === 'indetermine');
   var estDistributeur = (role.role === 'distributeur' || role.role === 'indetermine');
 
+  /* L'ÉTAT VIENT DE L'AUDIT, PLUS DE SEPT LISTES DÉROULANTES. Un système sans
+     audit rempli est compté « non traité » : ce n'est pas une pénalité, c'est
+     la vérité — ce qui n'est pas documenté n'est pas démontrable. */
+  var etatsAudit = simEtatDesArticles();
+
   var activeObls = [];
   if(classif.level === 'haut' && estFournisseur){
     ALL_OBL.forEach(function(o){
-      var val = d[o.id] || 'none';
+      var e = etatsAudit[o.id];
+      var val = (e && e.statut) || 'none';
       var severity = val === 'none' ? 'critical' : val === 'partial' ? 'warning' : 'ok';
       activeObls.push({ obl:o, severity:severity, status:val });
     });

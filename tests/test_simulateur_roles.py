@@ -43,13 +43,39 @@ NODE = shutil.which('node')
 # Les bornes de l'extrait exécuté. Elles sont vérifiées par un contrôle dédié :
 # si elles se déplaçaient sans qu'on le voie, toutes les règles de ce fichier
 # cesseraient de mesurer quoi que ce soit.
-DEBUT = 'var SIM_ROLES = {'
+#
+# LA BORNE DE DÉBUT A DÛ ÊTRE REMONTÉE, ET LES RÈGLES L'ONT SIGNALÉ. Quand
+# `simGap` a cessé de lire sept listes déroulantes pour lire l'audit, il s'est
+# mis à appeler `simEtatDesArticles()`, défini plus haut — hors de la tranche.
+# Dix-neuf contrôles sont tombés d'un coup sur un ReferenceError plutôt que de
+# continuer à passer sur un moteur amputé. C'est exactement ce qu'on leur
+# demande.
+DEBUT = 'function simEtatAudit(numero){'
 FIN = "/* Timeline d'application */"
+
+# `window.simRadio = …` s'exécute à la définition ; hors navigateur, `window`
+# n'existe pas. On le stube plutôt que d'exclure ces lignes de la tranche :
+# les découper au plus juste, c'est se ménager un moteur de test qui n'est
+# plus celui de la page.
+PRELUDE = 'var window = {};\n'
 
 
 def _extrait():
     d = MOTEUR.index(DEBUT)
     return MOTEUR[d:MOTEUR.index(FIN, d)]
+
+
+def _audit_js(audit):
+    """L'audit réel du fichier, avec l'état demandé — ou rien du tout.
+
+    Sans `AUDIT_SECTIONS`, `simEtatAudit` rend `null` et tout est compté « non
+    traité ». C'est le cas du client qui n'a pas encore rempli son audit, et
+    il doit être testé comme les autres."""
+    if audit is None:
+        return ''
+    d = MOTEUR.index('var AUDIT_SECTIONS')
+    sections = MOTEUR[d:MOTEUR.index('\n];', d) + 3]
+    return '%s\nvar AUDIT_STATE = %s;' % (sections, json.dumps(audit))
 
 
 def _evaluer(reponses, classif=None, expression='simGap(CLASSIF).map(function(x){return x.obl.id;})'):
@@ -62,9 +88,10 @@ def _evaluer(reponses, classif=None, expression='simGap(CLASSIF).map(function(x)
         pytest.skip('node absent : le moteur du simulateur ne peut pas être exécuté')
     classif = dict({'level': 'haut', 'art5': False, 'extra_territorial': False}, **(classif or {}))
     programme = (
-        'var SIM_DATA = %s;\nvar CLASSIF = %s;\n%s\n'
+        '%svar SIM_DATA = %s;\nvar CLASSIF = %s;\n%s\n%s\n'
         'console.log(JSON.stringify(%s));'
-        % (json.dumps(reponses), json.dumps(classif), _extrait(), expression))
+        % (PRELUDE, json.dumps(reponses), json.dumps(classif),
+           _audit_js(reponses.pop('_audit', None)), _extrait(), expression))
     r = subprocess.run([NODE, '-e', programme], capture_output=True, text=True, timeout=60)
     if r.returncode != 0:
         pytest.fail('le moteur du simulateur ne s\'exécute pas :\n%s' % (r.stderr or '')[-1500:])
@@ -367,6 +394,94 @@ def test_tout_groupe_present_dans_la_page_est_bien_relu():
     assert not orphelins, (
         "question(s) posée(s) dans le simulateur et jamais relue(s) par le "
         "moteur : %s" % ', '.join(orphelins))
+
+
+# ── LA REDITE SUPPRIMÉE : L'ÉTAT VIENT DE L'AUDIT ────────────────────────
+
+ETATS = 'simGap(CLASSIF).reduce(function(a,x){a[x.obl.id]=x.status;return a;},{})'
+
+
+def test_les_sept_questions_en_double_ont_disparu_de_l_ecran():
+    """LA REDITE. L'étape 3 demandait « avez-vous un système de gestion des
+    risques ? » ; l'audit IA Act pose la même question en cinq points, avec la
+    référence exacte et la preuve attendue. Le client répondait deux fois, et
+    les deux réponses pouvaient se contredire sans que rien ne le signale."""
+    revenus = [i for i in ('sim-art9', 'sim-art10', 'sim-art11', 'sim-art12',
+                           'sim-art13', 'sim-art14', 'sim-art17')
+               if ('id="%s"' % i) in PAGE]
+    assert not revenus, (
+        "les listes déroulantes en double sont revenues dans le simulateur : "
+        "%s. Elles doublonnent l'audit et peuvent le contredire."
+        % ', '.join(revenus))
+
+
+@pytest.mark.parametrize('audit,cas', [
+    (None, "le module d'audit n'est pas chargé"),
+    ({}, "l'audit est chargé mais aucun point n'est coché"),
+])
+def test_sans_audit_rempli_les_obligations_sont_comptees_non_traitees(audit, cas):
+    """Ce n'est pas une pénalité, c'est la vérité : ce qui n'est pas documenté
+    n'est pas démontrable. Et c'est le cas de départ de tout nouveau client.
+
+    LES DEUX CAS, PAS UN SEUL. Une première version n'éprouvait que le premier :
+    sans `AUDIT_SECTIONS`, `simEtatAudit` sort par sa garde et rend `null` avant
+    d'avoir rien calculé. La mutation qui faisait rendre « conforme » à un audit
+    VIDE a donc survécu — elle portait sur du code que ce cas n'atteint jamais.
+    Or c'est le second cas qu'un navigateur rencontre : la page charge toujours
+    l'audit, ce sont les cases qui sont vides."""
+    reponses = _reponses(role='fournisseur')
+    if audit is not None:
+        reponses['_audit'] = audit
+    etats = _evaluer(reponses, expression=ETATS)
+    pas_none = {k: v for k, v in etats.items()
+                if k in ('art9', 'art10', 'art11', 'art12', 'art13', 'art14', 'art17')
+                and v != 'none'}
+    assert not pas_none, (
+        "quand %s, des obligations sont déjà comptées traitées : %s" % (cas, pas_none))
+
+
+def test_un_audit_rempli_remonte_dans_le_simulateur():
+    """LA RÈGLE QUI PROUVE QUE LA FUSION EST RÉELLE. Si le simulateur lisait
+    encore ses propres listes, remplir l'audit ne changerait rien ici."""
+    etats = _evaluer(_reponses(role='fournisseur',
+                               _audit={'a11_1': 'done', 'a11_2': 'done', 'a9_1': 'partial'}),
+                     expression=ETATS)
+    assert etats.get('art11') == 'ok', (
+        "les deux points de documentation technique sont traités dans l'audit "
+        "et le simulateur affiche « %s »" % etats.get('art11'))
+    assert etats.get('art9') == 'partial', (
+        "un point de gestion des risques est en cours et le simulateur affiche "
+        "« %s »" % etats.get('art9'))
+    assert etats.get('art12') == 'none', (
+        "la journalisation n'est pas renseignée dans l'audit et le simulateur "
+        "ne la compte pas comme telle")
+
+
+def test_l_article_1_n_attrape_pas_l_article_15():
+    """LA SENTINELLE QUI ÉVITE UN FAUX RATTACHEMENT. Le rattachement se fait
+    sur la référence écrite dans l'audit (« Art. 15(1) »), par expression
+    rationnelle. Sans le garde-fou `(?![0-9])`, l'article 1 compterait tous
+    les points des articles 10 à 19 et le simulateur afficherait un état de
+    conformité entièrement faux."""
+    r = _evaluer(_reponses(_audit={'a15_1': 'done', 'a15_2': 'done'}),
+                 expression='[simEtatAudit(1), simEtatAudit(15)]')
+    quinze = r[1]
+    assert quinze and quinze['faits'] == 2, (
+        "l'article 15 ne retrouve pas ses deux points traités : %s" % quinze)
+    assert r[0] is None or r[0]['total'] < quinze['total'] + 5, (
+        "l'article 1 attrape les points des articles 10 à 19 : %s" % r[0])
+
+
+def test_le_rattachement_suit_les_references_ecrites_dans_l_audit():
+    """Une table de correspondance recopiée dans le simulateur cesserait
+    d'être juste au premier point d'audit ajouté. Le rattachement se lit dans
+    la donnée, pas dans une liste tenue à la main."""
+    extrait = _extrait()
+    d = extrait.index('function simEtatAudit(')
+    corps = extrait[d:extrait.index('\n}', d)]
+    assert 'AUDIT_SECTIONS' in corps and 'it.art' in corps, (
+        "simEtatAudit ne lit plus les références écrites dans l'audit : un "
+        "point ajouté demain ne sera plus compté")
 
 
 def test_le_role_est_releve_a_l_etape_1():

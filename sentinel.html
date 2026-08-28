@@ -5433,76 +5433,17 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <!-- ÉTAPE 3 — Obligations existantes -->
     <div class="sim-panel" id="sim-panel-3">
       <div class="sim-panel-title">État de vos obligations de conformité</div>
-      <div class="sim-panel-sub">Indiquez ce que vous avez déjà mis en place. Cela permettra de calculer votre gap de conformité.</div>
+      <div class="sim-panel-sub">Cet écran ne pose plus de questions : il LIT votre audit IA Act.</div>
 
-      <div class="sim-q">
-        <div class="sim-q-label">Système de gestion des risques <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="Art. 9 — Système de gestion des risques (EUR-Lex)">Art. 9</a><span class="legal-ref-ext">↗</span></span></div>
-        <div class="sim-q-hint">Processus itératif documenté couvrant l'identification, estimation et gestion des risques tout au long du cycle de vie.</div>
-        <select class="sim-select" id="sim-art9">
-          <option value="none">Non — pas encore mis en place</option>
-          <option value="partial">En cours — partiellement documenté</option>
-          <option value="done">Oui — système de gestion des risques complet et documenté</option>
-        </select>
-      </div>
-
-      <div class="sim-q">
-        <div class="sim-q-label">Gouvernance des données d'entraînement <span class="sim-q-art">Art. 10</span></div>
-        <div class="sim-q-hint">Qualité, représentativité, absence de biais, traçabilité des jeux de données d'entraînement, validation et test.</div>
-        <select class="sim-select" id="sim-art10">
-          <option value="none">Non — aucune gouvernance formalisée</option>
-          <option value="partial">Partielle — quelques contrôles qualité en place</option>
-          <option value="done">Oui — gouvernance complète (origine, qualité, biais, traçabilité)</option>
-        </select>
-      </div>
-
-      <div class="sim-q">
-        <div class="sim-q-label">Documentation technique <span class="sim-q-art">Art. 11 + Annexe IV</span></div>
-        <div class="sim-q-hint">Dossier technique complet : description du système, architecture, données, performances, limites, mesures de conformité.</div>
-        <select class="sim-select" id="sim-art11">
-          <option value="none">Non — aucune documentation formelle</option>
-          <option value="partial">Partielle — documentation interne basique</option>
-          <option value="done">Oui — dossier technique conforme Annexe IV AI Act</option>
-        </select>
-      </div>
-
-      <div class="sim-q">
-        <div class="sim-q-label">Journalisation et enregistrement des décisions <span class="sim-q-art">Art. 12</span></div>
-        <div class="sim-q-hint">Capacité de journalisation automatique permettant de reconstituer les décisions et de vérifier la conformité a posteriori.</div>
-        <select class="sim-select" id="sim-art12">
-          <option value="none">Non — pas de journalisation IA</option>
-          <option value="partial">Partielle — logs applicatifs basiques</option>
-          <option value="done">Oui — journalisation conforme Art. 12 (horodatage, entrées, sorties, identifiants)</option>
-        </select>
-      </div>
-
-      <div class="sim-q">
-        <div class="sim-q-label">Supervision humaine effective <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="Art. 14 — Supervision humaine (EUR-Lex)">Art. 14</a><span class="legal-ref-ext">↗</span></span></div>
-        <div class="sim-q-hint">Mesures permettant à des personnes physiques de surveiller, comprendre, corriger ou stopper le système en cours de fonctionnement.</div>
-        <select class="sim-select" id="sim-art14">
-          <option value="none">Non — décision entièrement automatisée sans supervision</option>
-          <option value="partial">Partielle — validation humaine disponible mais non systématique</option>
-          <option value="done">Oui — supervision humaine effective et documentée (Art. 14.4)</option>
-        </select>
-      </div>
-
-      <div class="sim-q">
-        <div class="sim-q-label">Transparence envers les déployeurs <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="Art. 13 — Transparence envers les déployeurs (EUR-Lex)">Art. 13</a><span class="legal-ref-ext">↗</span></span></div>
-        <div class="sim-q-hint">Notice d'utilisation claire sur les capacités, limites, performances, conditions d'utilisation prévue.</div>
-        <select class="sim-select" id="sim-art13">
-          <option value="none">Non — aucune notice formelle</option>
-          <option value="partial">Partielle — documentation utilisateur basique</option>
-          <option value="done">Oui — notice conforme Art. 13.3 (capacités, limites, performances, instructions)</option>
-        </select>
-      </div>
-
-      <div class="sim-q">
-        <div class="sim-q-label">Système de gestion de la qualité <span class="sim-q-art"><a href="https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener" class="legal-ref-link" title="Art. 17 — Système de gestion de la qualité (EUR-Lex)">Art. 17</a><span class="legal-ref-ext">↗</span></span></div>
-        <div class="sim-q-hint">Politiques et procédures documentées de conception, test, surveillance post-commercialisation, gestion des incidents.</div>
-        <select class="sim-select" id="sim-art17">
-          <option value="none">Non — pas de SGQ formel</option>
-          <option value="partial">Partielle — ISO 9001 ou équivalent sans volet IA spécifique</option>
-          <option value="done">Oui — SGQ complet incluant l'IA (ou ISO 42001 en cours)</option>
-        </select>
+      <!-- CETTE ÉTAPE POSAIT SEPT QUESTIONS QUE L'AUDIT POSE DÉJÀ.
+           « Avez-vous un système de gestion des risques ? » — l'audit IA Act
+           demande la même chose en cinq points, avec la référence exacte et la
+           preuve attendue. Le client répondait donc deux fois, et les deux
+           réponses pouvaient se contredire sans que rien ne le signale : le
+           simulateur annonçait « conforme » là où l'audit comptait un point
+           non traité. Une seule source, et c'est celle qui demande des preuves. -->
+      <div id="sim-audit-lecture" class="sim-q">
+        <div class="sim-q-hint">Chargement de l'audit…</div>
       </div>
 
       <div class="sim-nav">
