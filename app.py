@@ -11030,6 +11030,9 @@ for route, filename in PAGES_RESERVEES.items():
 # Réservé aux comptes Sentinel : c'est une prestation de conseil.
 
 import juridique  # noqa: E402
+librejustice = getattr(juridique, 'librejustice', None)  # noqa: E402
+
+
 def _jur_client():
     """Le client AUTORISÉ sur le conseil juridique, ou None.
 
@@ -11073,6 +11076,11 @@ def juridique_config():
         'suggestions': juridique.SUGGESTIONS,
         'avertissement': juridique.AVERTISSEMENT,
         'mention_ia': juridique.MENTION_IA,
+        # Le corpus de jurisprudence, DÉCLARÉ et non testé : cette route est
+        # appelée à l'ouverture de la page, elle ne va pas interroger un service
+        # externe à chaque visiteur. /api/juridique/corpus?test=1 le fait sur
+        # demande.
+        'corpus_jurisprudence': (librejustice.etat() if librejustice else None),
     })
 
 
@@ -11121,6 +11129,82 @@ def juridique_controverses():
     return jsonify({'ok': True, 'points': juridique.controverses(ids or None)})
 
 
+def _juridique_jurisprudence(question, profil=None, limite=5):
+    """Décisions du corpus LibreJustice éclairant la question posée.
+
+    MÊME DISCIPLINE QUE `_juridique_extraits`, ET POUR LA MÊME RAISON : un
+    corpus externe momentanément injoignable dégrade la précision d'une analyse,
+    il ne l'empêche pas. Le référentiel des textes suffisait avant que ce
+    connecteur existe et suffit encore sans lui.
+
+    Ce qui est rendu ici est exactement ce que le modèle verra, et exactement ce
+    contre quoi ses citations seront vérifiées ensuite. C'est pourquoi la liste
+    doit être transportée jusqu'à `post_traiter` : la contrôler contre autre
+    chose que ce qui a été montré ne contrôlerait rien."""
+    if librejustice is None:
+        return []
+    try:
+        secteur = (profil or {}).get('secteur') or ''
+        requete = ' '.join(x for x in [question, secteur] if x)[:500]
+        r = librejustice.rechercher(requete, limite=limite)
+        if not r.get('ok'):
+            logger.info('LIBREJUSTICE_INDISPONIBLE: %s', r.get('motif'))
+            return []
+        return r.get('decisions') or []
+    except Exception as exc:
+        logger.info('LIBREJUSTICE_ERREUR: %s', exc)
+        return []
+
+
+@app.route('/api/juridique/jurisprudence', methods=['GET'])
+@rate_limit(limit=20, window=60)
+def juridique_jurisprudence():
+    """Jurisprudence adossée à un point d'interprétation, ou à une question libre.
+
+    Deux usages, une seule route : `?point=<id>` interroge le corpus avec la
+    requête arrêtée pour cette controverse, `?q=<question>` avec celle de
+    l'utilisateur. Le champ `vise` du premier cas n'est pas un ornement : les
+    décisions rendues portent sur la question SOUS-JACENTE — qui répond d'un
+    produit modifié, ce qu'un plafond de responsabilité couvre — et non sur
+    l'article de l'IA Act en cause, sur lequel aucune juridiction ne s'est
+    encore prononcée. Le dire est la différence entre un éclairage et une
+    affirmation fausse."""
+    if not _jur_client():
+        return _jur_refus()
+    if librejustice is None:
+        return jsonify({'ok': False, 'motif': 'connecteur de jurisprudence absent',
+                        'decisions': []})
+    point = (request.args.get('point') or '').strip()
+    question = (request.args.get('q') or '').strip()
+    if point:
+        r = librejustice.pour_controverse(point)
+    elif question:
+        r = librejustice.rechercher(question, limite=6)
+    else:
+        return jsonify({'error': 'Indiquez un point d\'interprétation ou une question.'}), 400
+    r['ok_requete'] = bool(r.get('ok'))
+    r.update({'ok': True, 'source': librejustice.SOURCE,
+              'mention': librejustice.MENTION, 'reserve': librejustice.RESERVE,
+              'couverture': librejustice.COUVERTURE})
+    return jsonify(r)
+
+
+@app.route('/api/juridique/corpus', methods=['GET'])
+@rate_limit(limit=10, window=60)
+def juridique_corpus():
+    """État du connecteur de jurisprudence. `?test=1` interroge réellement le
+    corpus — un état déclaré n'est pas un état constaté, et la distinction est
+    précisément ce qu'un exploitant a besoin de savoir."""
+    if not _jur_client():
+        return _jur_refus()
+    if librejustice is None:
+        return jsonify({'ok': False, 'motif': 'connecteur de jurisprudence absent'})
+    etat = librejustice.etat()
+    if request.args.get('test') in ('1', 'true', 'oui'):
+        etat['essai'] = librejustice.disponible()
+    return jsonify({'ok': True, 'corpus': etat})
+
+
 def _juridique_extraits(question, profil):
     """Extraits de la couche de connaissance Sentinel (base documentaire, veille,
     analyses) pertinents pour la question. Best-effort : une base momentanément
@@ -11161,8 +11245,10 @@ def juridique_analyse():
         textes_ids = ([x['id'] for x in qual['applicables']]
                       + [x['id'] for x in qual['a_verifier']])
     extraits, sources = _juridique_extraits(question, profil)
+    decisions = _juridique_jurisprudence(question, profil)
     user = juridique.prompt_analyse(question, profil=profil, extraits=extraits,
-                                    textes_ids=textes_ids)
+                                    textes_ids=textes_ids,
+                                    jurisprudence=decisions)
     prefere = 'mistral' if data.get('model') == 'mistral' else 'claude'
     ok, reponse, modele = ai_complete([{'role': 'user', 'content': user}],
                                       system=juridique.SYSTEM_JURIDIQUE,
@@ -11171,8 +11257,9 @@ def juridique_analyse():
     if not ok:
         logger.error(f'JURIDIQUE_ANALYSE_ECHEC: {reponse}')
         return jsonify({'error': "Service d'IA momentanément indisponible. Réessayez."}), 503
-    res = juridique.post_traiter(reponse, textes_ids)
-    res.update({'ok': True, 'model': modele, 'sources': sources, 'qualification': qual})
+    res = juridique.post_traiter(reponse, textes_ids, jurisprudence=decisions)
+    res.update({'ok': True, 'model': modele, 'sources': sources, 'qualification': qual,
+                'decisions': decisions})
     return jsonify(res)
 
 
@@ -11491,10 +11578,12 @@ def juridique_arbitrage():
     routage = juridique.router(profil, dossier)
     textes_ids = ([x['id'] for x in routage['qualification']['applicables']]
                   + [x['id'] for x in routage['qualification']['a_verifier']])
+    decisions = _juridique_jurisprudence(objet, profil)
     user = juridique.prompt_arbitrage(
         objet, contexte=contexte,
         extraits="\n\n".join(extraits) if extraits else None,
-        profil=profil, dossier=dossier, textes_ids=textes_ids)
+        profil=profil, dossier=dossier, textes_ids=textes_ids,
+        jurisprudence=decisions)
     ok, reponse, modele = ai_complete([{'role': 'user', 'content': user}],
                                       system=juridique.SYSTEM_ARBITRAGE,
                                       max_tokens=4000, temperature=0.3,
@@ -11502,8 +11591,9 @@ def juridique_arbitrage():
     if not ok:
         logger.error(f'JURIDIQUE_ARBITRAGE_ECHEC: {reponse}')
         return jsonify({'error': "Service d'IA momentanément indisponible. Réessayez."}), 503
-    res = juridique.post_traiter(reponse, textes_ids)
-    res.update({'ok': True, 'model': modele, 'pieces': pieces, 'routage': routage})
+    res = juridique.post_traiter(reponse, textes_ids, jurisprudence=decisions)
+    res.update({'ok': True, 'model': modele, 'pieces': pieces, 'routage': routage,
+                'decisions': decisions})
     return jsonify(res)
 
 

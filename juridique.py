@@ -38,6 +38,17 @@ Règlement (UE) 2024/1689.
 import re
 import unicodedata
 
+# LE CONNECTEUR DE JURISPRUDENCE, S'IL EST LÀ. Ce module est partagé à
+# l'identique entre deux applications et sert aussi de brique isolée : il doit
+# rester importable sans lui. Son absence n'est pas une dégradation silencieuse
+# — elle ramène simplement au comportement antérieur, où AUCUNE décision ne
+# pouvait être citée. L'import ne joint rien : `librejustice` n'ouvre une
+# connexion que lorsqu'on l'interroge.
+try:
+    import librejustice
+except ImportError:  # pragma: no cover — dépend du déploiement, pas du code
+    librejustice = None
+
 # Version du corpus de référence : à incrémenter à chaque mise à jour des textes.
 # Elle est affichée dans les analyses — un client doit pouvoir savoir sur quel
 # état du droit une note a été produite.
@@ -1523,6 +1534,24 @@ def _bloc_referentiel(textes):
     return "\n".join(lignes)
 
 
+def _bloc_jurisprudence(decisions):
+    """Les décisions rapportées, mises sous les yeux du modèle.
+
+    Le connecteur est OPTIONNEL : `juridique.py` est partagé à l'identique entre
+    deux applications, et doit rester importable dans celle qui ne l'embarque
+    pas. Sans lui, il n'y a simplement pas de bloc — donc pas de levée
+    d'interdiction, ce qui est l'état antérieur et un état sûr."""
+    if not decisions or librejustice is None:
+        return ""
+    if isinstance(decisions, str):
+        return decisions
+    vise = None
+    if isinstance(decisions, dict):
+        vise = decisions.get("vise")
+        decisions = decisions.get("decisions") or []
+    return librejustice.bloc_prompt(decisions, vise=vise)
+
+
 def _bloc_controverses(textes_ids):
     c = controverses(textes_ids)
     if not c:
@@ -1538,13 +1567,19 @@ def _bloc_controverses(textes_ids):
     return "\n".join(out)
 
 
-def prompt_analyse(question, profil=None, extraits=None, textes_ids=None):
+def prompt_analyse(question, profil=None, extraits=None, textes_ids=None,
+                   jurisprudence=None):
     """Construit le message utilisateur d'une analyse juridique.
 
     `extraits` : passages issus de la base documentaire (RAG), déjà numérotés.
     `textes_ids` : identifiants du référentiel retenus par la qualification ;
     à défaut, tout le référentiel est autorisé — mais un périmètre restreint
     donne des réponses nettement plus précises.
+    `jurisprudence` : décisions rapportées du corpus LibreJustice pour CETTE
+    question. Leur présence lève, pour elles seules, l'interdiction de citer une
+    décision posée par SYSTEM_JURIDIQUE ; leur absence la laisse entière. La
+    levée est écrite ici et non dans le système précisément pour cela : un
+    message sans décisions ne la porte pas.
     """
     qual = qualifier(profil) if profil else None
     if not textes_ids and qual:
@@ -1569,6 +1604,11 @@ def prompt_analyse(question, profil=None, extraits=None, textes_ids=None):
     bc = _bloc_controverses(textes_ids)
     if bc:
         parties.append(bc)
+        parties.append("")
+
+    bj = _bloc_jurisprudence(jurisprudence)
+    if bj:
+        parties.append(bj)
         parties.append("")
 
     if extraits:
@@ -1717,16 +1757,28 @@ def verifier_citations(reponse, textes_ids=None):
     return {"ok": not suspectes, "suspectes": suspectes, "connues": connues}
 
 
-def post_traiter(reponse, textes_ids=None):
-    """Réponse enrichie : contrôle des citations + avertissements réglementaires."""
+def post_traiter(reponse, textes_ids=None, jurisprudence=None):
+    """Réponse enrichie : contrôle des citations + avertissements réglementaires.
+
+    `jurisprudence` : les décisions effectivement montrées au modèle. Le contrôle
+    des décisions citées n'a de sens que contre cette liste — et il vaut AUSSI
+    quand elle est vide : sans décision rapportée, l'interdiction générale n'a
+    pas été levée, et tout numéro de pourvoi apparaissant dans la réponse est,
+    par construction, inventé."""
     ctrl = verifier_citations(reponse, textes_ids)
-    return {
+    out = {
         "texte": reponse,
         "citations": ctrl,
         "avertissement": AVERTISSEMENT,
         "mention_ia": MENTION_IA,
         "version_referentiel": VERSION_REFERENTIEL,
     }
+    if librejustice is not None:
+        decisions = jurisprudence
+        if isinstance(decisions, dict):
+            decisions = decisions.get("decisions") or []
+        out["jurisprudence"] = librejustice.verifier_jurisprudence(reponse, decisions)
+    return out
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -2213,11 +2265,14 @@ def _bloc_routage(rt):
 
 
 def prompt_arbitrage(objet, contexte=None, extraits=None, profil=None,
-                     dossier=None, textes_ids=None):
+                     dossier=None, textes_ids=None, jurisprudence=None):
     """Construit le message utilisateur d'une note d'arbitrage.
 
     `extraits` : passages des pièces du dossier, déjà numérotés [1], [2]…
     `contexte` : éléments saisis par l'utilisateur et absents des pièces.
+    `jurisprudence` : décisions rapportées du corpus, mêmes règles que pour
+    l'analyse — citables parce qu'elles sont sous les yeux du modèle, et elles
+    seules.
     """
     dossier = dict(dossier or {})
     if objet:
@@ -2248,6 +2303,11 @@ def prompt_arbitrage(objet, contexte=None, extraits=None, profil=None,
     bc = _bloc_controverses(textes_ids)
     if bc:
         p.append(bc)
+        p.append("")
+
+    bj = _bloc_jurisprudence(jurisprudence)
+    if bj:
+        p.append(bj)
         p.append("")
 
     if contexte and str(contexte).strip():
