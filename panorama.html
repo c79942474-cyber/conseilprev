@@ -14,7 +14,16 @@
    a echoue (navigateur sans fetch, requete rejetee) : la page reste correcte
    sans ce bloc, elle est seulement plus lente. */
 (function(){
-  var CIBLES = ["/api/panorama","/api/datacentres","/api/implantation",
+  /* L'URL PRÉCHARGÉE DOIT ÊTRE CELLE QUI SERA DEMANDÉE, AU CARACTÈRE PRÈS.
+     `preAPI` retrouve la promesse par sa clé, qui est l'URL. « /api/implantation »
+     était préchargé nu, et le code qui l'exploite demande
+     « /api/implantation?horizon=2030 » : la clé ne correspondait jamais. Le
+     préchargement partait, sa réponse n'était JAMAIS LUE, et une seconde requête
+     était émise derrière. Un préchargement qui rate sa clé ne ralentit pas la
+     page, il la double.
+     2030 est l'horizon par défaut, côté serveur (`_horizon_demande`) comme côté
+     page (`IMPL_HORIZON`) : les deux URL rendent le même corps. */
+  var CIBLES = ["/api/panorama","/api/datacentres","/api/implantation?horizon=2030",
                 "/api/empreinte-sites","/api/donnees-ouvertes"];
   var CACHE = {};
   if(window.fetch){
@@ -8368,6 +8377,24 @@ function chargerImplantation(){
    diffèrent. On le télécharge une fois, on le garde, et le second aller-retour
    est instantané. Pendant l'attente, la page dit qu'elle attend — un classement
    qui se réordonne sans prévenir donne l'impression d'un bug. */
+/* UNE SEULE REQUÊTE PAR HORIZON, PARTAGÉE PAR TOUS CEUX QUI EN ONT BESOIN.
+   Deux endroits de cette page lisaient le référentiel d'implantation, et chacun
+   émettait sa propre requête : la carte d'implantation ici, la liste des pays
+   du comparateur financier plus bas. Avec le préchargement qui ratait sa clé,
+   cela faisait TROIS appels à `/api/implantation` par ouverture de la page —
+   trois fois la même réponse, assemblée trois fois côté serveur. */
+var _IMPL_PROMESSES = {};
+function implReponse(h){
+  if(!_IMPL_PROMESSES[h]){
+    _IMPL_PROMESSES[h] = preAPI("/api/implantation?horizon=" + h)
+      .then(function(r){ return r.ok ? r.json() : null; });
+    /* Une promesse rejetée qui reste en cache condamnerait tout appel ultérieur
+       à échouer sans même réessayer. */
+    _IMPL_PROMESSES[h].catch(function(){ delete _IMPL_PROMESSES[h]; });
+  }
+  return _IMPL_PROMESSES[h];
+}
+
 function implCharger(h, apres){
   if(IMPL_CACHE_H[h]){
     IMPL = IMPL_CACHE_H[h]; IMPL_HORIZON = h;
@@ -8376,8 +8403,7 @@ function implCharger(h, apres){
   }
   var n = document.getElementById("imp-note");
   if(n) n.textContent = "chargement de l’horizon " + h + "…";
-  preAPI("/api/implantation?horizon=" + h)
-    .then(function(r){ return r.ok ? r.json() : null; })
+  implReponse(h)
     .then(function(d){
       if(!d || !d.ok) throw new Error("indisponible");
       IMPL_CACHE_H[h] = d; IMPL = d; IMPL_HORIZON = h;
@@ -9999,7 +10025,20 @@ var SRC_VERIF = null;
    portait dix-sept entrées quand les moteurs et le registre de vérification en
    déclaraient trente-huit. Une liste à la main ne se trompe pas le jour où on
    l'écrit ; elle se trompe le jour où quelqu'un ajoute une source ailleurs. */
+/* `renderAll()` EST REJOUÉ À L'ARRIVÉE DES DONNÉES EN DIRECT, et il rappelle
+   `renderSources()`. Le garde-fou `unefois` qui protège `reste()` est déclaré
+   DANS `renderAll` : un second `renderAll` repart avec un garde neuf, et cette
+   requête était émise deux fois par ouverture de page. La liste des sources ne
+   dépend pas des données en direct — la relire n'apporte rien.
+   Même idiome que `IMPL_LANCE` quelques milliers de lignes plus haut, qui
+   résout exactement ce problème pour le référentiel d'implantation.
+   Le drapeau est levé AVANT la requête (deux appels rapprochés n'en lancent
+   qu'une) et rabaissé en cas d'échec (un incident réseau ne condamne pas la
+   section pour toute la visite). */
+var SRC_LANCE = false;
 function registreSources(){
+  if(SRC_LANCE) return;
+  SRC_LANCE = true;
   fetch("/api/sources", { credentials: "same-origin" })
     .then(function(r){ return r.json(); })
     .then(function(j){
@@ -10044,6 +10083,9 @@ function registreSources(){
       setHTML("reg-corps", h);
     })
     .catch(function(){
+      /* Un incident réseau ne condamne pas la section pour toute la visite :
+         le prochain rendu pourra réessayer. */
+      SRC_LANCE = false;
       setHTML("reg-note", "registre indisponible");
       setHTML("reg-corps", '<p class="note" style="margin:0">Le registre des sources '
         + "n’a pas répondu. Les sources commentées de la section précédente "
@@ -12503,8 +12545,10 @@ if(window.parent&&window.parent!==window){
   /* Les pays proposés sont ceux du référentiel d'implantation, pas une liste
      écrite à la main : un pays retiré du référentiel doit disparaître d'ici. */
   function chargerPays(){
-    return fetch('/api/implantation', { credentials:'same-origin' })
-      .then(function(r){ return r.json(); })
+    /* MÊME RÉFÉRENTIEL, MÊME REQUÊTE. Cette liste de pays sortait d'un appel
+       distinct à `/api/implantation`, sans horizon — c'est-à-dire exactement la
+       réponse que la carte d'implantation venait de charger. */
+    return implReponse(IMPL_HORIZON)
       .then(function(j){
         var lst = (j && j.pays) || [];
         var box = $('fin-pays');

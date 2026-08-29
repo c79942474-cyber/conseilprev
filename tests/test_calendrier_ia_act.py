@@ -294,3 +294,24 @@ def test_l_article_50_reste_au_2_aout_2026_dans_les_pages():
         "le communiqué n'attache plus l'entrée en application des obligations "
         "de transparence au %s : le Digital Omnibus ne les a pourtant pas "
         "déplacées, et une reprise en masse des dates les emporterait" % ARTICLE_50)
+
+
+def test_le_bandeau_d_accueil_dit_que_c_est_applicable_et_non_que_cela_approche():
+    """Le bandeau annonçait « L'échéance du 2 août 2026 approche » — une date
+    passée. Une échéance dépassée qu'on annonce comme prochaine décrédibilise
+    tout ce qui l'entoure : le lecteur qui connaît le calendrier en déduit que
+    le site n'est pas tenu.
+
+    LE TEXTE EST DOUBLÉ, et le contrôle l'exige : le ruban défile en boucle par
+    duplication du texte. N'en corriger qu'un ferait alterner les deux
+    formulations sous les yeux du visiteur."""
+    accueil = io.open(os.path.join(ICI, 'index.html'), encoding='utf-8').read()
+    assert 'approche' not in accueil or ARTICLE_50 not in accueil.split('approche')[0][-200:], (
+        "le bandeau annonce encore une échéance passée comme prochaine")
+    attendu = ("Depuis le <strong>%s</strong>, les obligations de transparence "
+               "de l'IA Act s'appliquent." % ARTICLE_50)
+    n = accueil.count(attendu)
+    assert n == 2, (
+        "le bandeau doit porter deux fois la même phrase — le ruban défile en "
+        "la dupliquant — et on en compte %d. Une seule moitié corrigée ferait "
+        "alterner deux formulations." % n)
