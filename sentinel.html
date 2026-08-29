@@ -878,6 +878,49 @@ textarea.form-el{min-height:86px;resize:vertical}
 .art-who{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .art-who-tag{font-size:9px;font-family:var(--mono);background:rgba(28,90,138,.08);border:1px solid rgba(28,90,138,.15);color:var(--blue);padding:2px 8px;border-radius:2px}
 .art-official-link{font-size:10px;font-family:var(--mono);color:var(--blue);text-decoration:none;display:inline-flex;align-items:center;gap:4px;margin-top:10px}
+/* ANALYSE APPROFONDIE D'UN ARTICLE. Réservée aux articles qui sont un TEST —
+   conditions cumulatives, exceptions, garanties survivant aux exceptions. La
+   colonne double n'est pas décorative : lire les exceptions AVANT les garanties,
+   l'une sous l'autre, laisse croire qu'une exception dispense des secondes. */
+.art-an{margin-top:18px;border-top:1px solid var(--rule2);padding-top:14px}
+.art-an-h{font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:12px}
+.art-an-bloc{background:var(--bg);border:1px solid var(--rule);border-radius:4px;
+  padding:12px 14px;margin-bottom:10px}
+/* LE TEST EST LA COLONNE VERTÉBRALE DE L'ARTICLE : tout le reste — exceptions,
+   garanties, revue humaine — n'a de sens qu'une fois les trois conditions
+   posées. Il porte donc le seul filet d'accent de la fiche. */
+.art-an-test{border-left:2px solid var(--accent);background:var(--white)}
+.art-an-t{font-size:9px;font-family:var(--mono);letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted2);margin-bottom:8px}
+.art-an-st{font-size:10.5px;font-weight:600;margin-bottom:6px}
+.art-an-st.ok{color:var(--green)}
+.art-an-st.ko{color:var(--accent)}
+.art-an-p{font-size:12px;color:var(--ink2);line-height:1.68;margin:0 0 8px}
+.art-an-cond{margin:0;padding-left:20px}
+.art-an-cond li{font-size:12px;color:var(--ink2);line-height:1.6;padding:4px 0}
+.art-an-cond li::marker{font-family:var(--mono);color:var(--accent);font-size:11px}
+.art-an-l{list-style:none;padding:0;margin:0}
+.art-an-l li{font-size:12px;color:var(--ink2);line-height:1.55;padding:4px 0 4px 15px;
+  position:relative}
+.art-an-l li::before{content:"·";position:absolute;left:3px;color:var(--muted2);
+  font-weight:700}
+.art-an-l.ok li::before{content:"✓";color:var(--green);font-size:10px;left:0}
+.art-an-l.ko li::before{content:"×";color:var(--accent);font-size:11px;left:1px}
+.art-an-l.check li{padding-left:20px;border-bottom:1px solid var(--rule)}
+.art-an-l.check li:last-child{border-bottom:none}
+.art-an-l.check li::before{content:"☐";left:0;color:var(--muted2);font-size:12px}
+.art-an-duo{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:640px){.art-an-duo{grid-template-columns:1fr}}
+.art-an-sanc{background:rgba(184,50,34,.045);border-color:rgba(184,50,34,.2)}
+.art-an-sanc-l{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;margin-bottom:8px}
+.art-an-montant{font-size:16px;font-weight:600;color:var(--accent);
+  font-variant-numeric:tabular-nums}
+.art-an-meta{font-size:10.5px;font-family:var(--mono);color:var(--muted2)}
+.art-an-portee{font-size:12px;color:var(--ink);font-weight:600;margin:10px 0 0}
+.art-an-verif{font-size:11px;color:var(--muted2);font-style:italic;margin:8px 0 0;
+  line-height:1.55}
+.art-an-fin{font-size:12.3px;color:var(--ink);line-height:1.68;border-left:2px solid var(--accent);
+  padding:2px 0 2px 12px;margin-top:4px}
 .art-rag-btn{font-size:10.5px;font-family:var(--mono);color:var(--ink2);background:var(--bg);border:1px solid var(--rule2);border-radius:5px;padding:6px 10px;cursor:pointer;margin-top:10px;display:block;transition:all .15s}
 .art-rag-btn:hover{border-color:var(--accent);color:var(--accent)}
 .art-rag-holder{margin-top:8px}

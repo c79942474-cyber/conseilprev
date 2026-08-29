@@ -1965,8 +1965,79 @@ var ARTICLES = [
       url:'https://eur-lex.europa.eu/eli/reg/2016/679/oj?locale=fr' },
     { num:'Art. 22', title:'Décision individuelle automatisée', status:'actif', who:['deployeur'], sanction:'20M€ ou 4% CA mondial',
       texte:'Droit de ne pas faire l\'objet d\'une décision fondée exclusivement sur un traitement automatisé (y compris le profilage) produisant des effets juridiques ou affectant significativement la personne. 3 exceptions strictes : nécessité contractuelle, autorisation légale, consentement explicite.',
-      obligations:['Identifier tout système IA prenant des décisions à effet juridique ou significatif (crédit, recrutement, assurance)','Garantir une intervention humaine significative et un droit de contestation','Documenter les garanties mises en place (réexamen, explication, contestation)'],
-      url:'https://eur-lex.europa.eu/eli/reg/2016/679/oj?locale=fr' },
+      obligations:['Identifier tout système IA prenant des décisions à effet juridique ou significatif (crédit, recrutement, assurance, fraude, notation client, accès à un service)','Garantir une intervention humaine significative et un droit de contestation','Documenter les garanties mises en place (réexamen, explication, contestation)','Conserver la preuve de chaque revue humaine : sans trace, l\'intervention est réputée absente'],
+      url:'https://eur-lex.europa.eu/eli/reg/2016/679/oj?locale=fr',
+      analyse:{
+        titre:'Décisions automatisées, scoring et intervention humaine',
+        test:{
+          titre:'Les trois conditions cumulatives',
+          intro:'L\'article ne joue que si les trois sont réunies. Il suffit donc qu\'une seule manque pour qu\'il soit écarté — et c\'est exactement là que se joue le contentieux.',
+          conditions:[
+            'Décision fondée EXCLUSIVEMENT sur un traitement automatisé, profilage compris',
+            'Effet juridique, ou effet significatif similaire, pour la personne',
+            'Absence d\'intervention humaine significative'
+          ]},
+        exceptions:{ titre:'Exceptions', items:[
+          'Nécessaire à la conclusion ou à l\'exécution d\'un contrat',
+          'Autorisée par le droit de l\'Union ou d\'un État membre',
+          'Fondée sur le consentement explicite de la personne'
+        ]},
+        garanties:{ titre:'Garanties dues même sous exception', items:[
+          'Droit d\'obtenir une intervention humaine',
+          'Droit d\'exprimer son point de vue',
+          'Droit de contester la décision'
+        ]},
+        humain:{
+          titre:'Ce que « significative » veut dire',
+          insuffisant:{ titre:'Ce qui ne suffit pas', items:[
+            'Validation automatique du résultat',
+            'Revue superficielle, sans examen du dossier',
+            'Absence de compréhension de la logique du score',
+            'Impossibilité de modifier la décision'
+          ]},
+          attendu:{ titre:'Ce qui est attendu', items:[
+            'Un humain compétent et formé pour cet examen',
+            'Accès aux données et aux raisons de la décision',
+            'Pouvoir réel de réexamen',
+            'Possibilité de confirmer, modifier ou annuler',
+            'Traçabilité de la revue humaine'
+          ]}},
+        ancrage:{
+          titre:'Ce que rappelle la sanction Uber',
+          date:'24 août 2026',
+          montant:'824 990 000 €',
+          autorite:'Autorité néerlandaise de protection des données, en coopération avec la CNIL',
+          faits:[
+            'Décisions de désactivation temporaire ou définitive de comptes chauffeurs',
+            'Déclenchées sur suspicion de fraude et sur de faibles notes clients',
+            'Manquement retenu : absence totale d\'intervention humaine dans le processus décisionnel'
+          ],
+          portee:'Une revue humaine purement formelle ne suffit pas.',
+          // LA PROVENANCE SUIT LE CHIFFRE. Un montant de sanction cité sans le
+          // moyen de le retrouver ne se vérifie pas, et c'est précisément le
+          // genre de nombre qu'on recopie de proche en proche jusqu'à ce que
+          // plus personne ne sache d'où il vient.
+          verifier:'Reprendre la référence exacte de la décision au registre de l\'autorité néerlandaise avant de la citer dans un document opposable.'
+        },
+        parallele:{
+          titre:'Le même raisonnement, sur le scoring',
+          texte:'La recommandation CNIL du 7 mai 2026 rappelle que lorsqu\'un score conduit à accepter ou refuser un crédit sans intervention humaine significative, l\'article 22 doit être analysé. Le raisonnement vaut au-delà du crédit : assurance, fraude, notation client, accès à un service.',
+          points:[
+            'Logique du score : peut-on l\'expliquer en langage clair ?',
+            'Rôle réel de l\'analyste : que peut-il changer, et l\'a-t-il déjà fait ?',
+            'Information de la personne : sait-elle qu\'un score la concerne ?',
+            'Droit de contestation : par quel canal, sous quel délai ?',
+            'Preuves de revue humaine : que reste-t-il six mois plus tard ?'
+          ]},
+        checklist:{ titre:'Checklist opérationnelle', items:[
+          'Le scoring oriente-t-il une décision individuelle ?',
+          'Cette décision produit-elle un effet juridique ou significatif ?',
+          'L\'intervention humaine est-elle réelle, compétente et documentée ?',
+          'La personne peut-elle contester et obtenir un réexamen ?',
+          'Conservons-nous les preuves de la logique du dispositif et de la revue humaine ?'
+        ]},
+        conclusion:'L\'enjeu n\'est pas seulement d\'avoir un humain « dans la boucle ». Il faut pouvoir démontrer qu\'il comprend, réexamine et peut modifier la décision.'
+      } },
     { num:'Art. 35', title:'Analyse d\'impact (AIPD)', status:'actif', who:['deployeur'], sanction:'20M€ ou 4% CA mondial',
       texte:'AIPD obligatoire si le traitement présente un risque élevé. Les projets IA impliquant profilage, décision automatisée ou traitement à grande échelle déclenchent quasi systématiquement cette obligation.',
       obligations:['Réaliser une AIPD pour tout système IA à risque élevé pour les droits des personnes','Intégrer les risques spécifiques à l\'IA dans l\'AIPD (biais, opacité, qualité des données)','Articuler l\'AIPD RGPD avec la FRIA de l\'AI Act pour les systèmes à haut risque'],
@@ -2071,6 +2142,81 @@ function artInit(){
   artRender();
 }
 
+/* ══ ANALYSE APPROFONDIE D'UN ARTICLE ══════════════════════════════════════
+   `texte` + `obligations` suffisent à situer un article. Ils ne suffisent pas
+   quand l'article est un TEST — trois conditions cumulatives, des exceptions,
+   des garanties qui survivent aux exceptions, et une notion (« intervention
+   humaine significative ») dont tout dépend et que le texte ne définit pas.
+   Aplatir cela en puces ferait perdre ce qui compte : ce qui est cumulatif, ce
+   qui est alternatif, et ce qui reste dû malgré une exception.
+   Le champ est OPTIONNEL : un article qui ne le porte pas s'affiche comme
+   avant. */
+function artListe(items, classe){
+  return '<ul class="art-an-l'+(classe?' '+classe:'')+'">'
+    + items.map(function(x){ return '<li>'+x+'</li>'; }).join('') + '</ul>';
+}
+
+function artAnalyse(an){
+  if(!an) return '';
+  var h = '<div class="art-an">';
+  h += '<div class="art-an-h">'+an.titre+'</div>';
+
+  if(an.test){
+    h += '<div class="art-an-bloc art-an-test"><div class="art-an-t">'+an.test.titre+'</div>'
+      +  '<p class="art-an-p">'+an.test.intro+'</p>'
+      +  '<ol class="art-an-cond">'
+      +  an.test.conditions.map(function(c){ return '<li>'+c+'</li>'; }).join('')
+      +  '</ol></div>';
+  }
+
+  /* EXCEPTIONS ET GARANTIES CÔTE À CÔTE, ET CE N'EST PAS DE LA MISE EN PAGE.
+     Les lire l'une après l'autre laisse croire qu'une exception dispense des
+     garanties. Elle n'en dispense pas : les trois droits du § 3 restent dus. */
+  if(an.exceptions && an.garanties){
+    h += '<div class="art-an-duo">'
+      +  '<div class="art-an-bloc"><div class="art-an-t">'+an.exceptions.titre+'</div>'
+      +  artListe(an.exceptions.items)+'</div>'
+      +  '<div class="art-an-bloc"><div class="art-an-t">'+an.garanties.titre+'</div>'
+      +  artListe(an.garanties.items, 'ok')+'</div></div>';
+  }
+
+  if(an.humain){
+    h += '<div class="art-an-bloc"><div class="art-an-t">'+an.humain.titre+'</div>'
+      +  '<div class="art-an-duo">'
+      +  '<div><div class="art-an-st ko">'+an.humain.insuffisant.titre+'</div>'
+      +  artListe(an.humain.insuffisant.items, 'ko')+'</div>'
+      +  '<div><div class="art-an-st ok">'+an.humain.attendu.titre+'</div>'
+      +  artListe(an.humain.attendu.items, 'ok')+'</div>'
+      +  '</div></div>';
+  }
+
+  if(an.ancrage){
+    var a = an.ancrage;
+    h += '<div class="art-an-bloc art-an-sanc"><div class="art-an-t">'+a.titre+'</div>'
+      +  '<div class="art-an-sanc-l"><span class="art-an-montant">'+a.montant+'</span>'
+      +  '<span class="art-an-meta">'+a.date+' · '+a.autorite+'</span></div>'
+      +  artListe(a.faits)
+      +  '<p class="art-an-portee">→ '+a.portee+'</p>'
+      +  '<p class="art-an-verif">'+a.verifier+'</p></div>';
+  }
+
+  if(an.parallele){
+    h += '<div class="art-an-bloc"><div class="art-an-t">'+an.parallele.titre+'</div>'
+      +  '<p class="art-an-p">'+an.parallele.texte+'</p>'
+      +  artListe(an.parallele.points)+'</div>';
+  }
+
+  if(an.checklist){
+    h += '<div class="art-an-bloc"><div class="art-an-t">'+an.checklist.titre+'</div>'
+      +  '<ul class="art-an-l check">'
+      +  an.checklist.items.map(function(x){ return '<li>'+x+'</li>'; }).join('')
+      +  '</ul></div>';
+  }
+
+  if(an.conclusion) h += '<div class="art-an-fin">'+an.conclusion+'</div>';
+  return h + '</div>';
+}
+
 function artRender(){
   var container = document.getElementById('art-chapters');
   if(!container) return;
@@ -2118,6 +2264,7 @@ function artRender(){
         +'<div class="art-body-section-title">Obligations pratiques</div>'
         + oblHtml
         +'</div>'
+        + artAnalyse(a.analyse)
         +'<button class="art-rag-btn" data-uid="'+uid+'" data-query="'+(a.num+' '+a.title).replace(/"/g,'&quot;')+'" onclick="artSearchRAG(this.getAttribute(\'data-uid\'),this.getAttribute(\'data-query\'))">🔍 Rechercher dans la base de connaissance</button>'
         +'<div class="art-rag-holder" id="art-rag-'+uid+'" style="display:none"></div>'
         +'<a class="art-official-link" href="'+a.url+'" target="_blank" rel="noopener">↗ Texte officiel EUR-Lex / AI Act EU</a>'
