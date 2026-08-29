@@ -7460,6 +7460,24 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   #p-juridique .ju-srcs span{font-size:11px;background:var(--bg2);border:1px solid var(--rule);
     padding:5px 10px;color:var(--muted)}
   #p-juridique .ju-cnt{font-family:var(--mono);font-size:11px;color:var(--muted2)}
+  /* JURISPRUDENCE RAPPORTÉE. Une liste, pas des pastilles : une décision porte
+     un intitulé long, une date, une formation et parfois son sort en appel —
+     dans le conteneur flex de .ju-srcs, chacune de ces lignes deviendrait un
+     élément flex séparé et la mise en page se disloquerait. */
+  #p-juridique .ju-jur{margin-top:16px;border-top:1px solid var(--rule);padding-top:12px}
+  #p-juridique .ju-jur-t{font-family:var(--mono);font-size:11px;color:var(--muted2);
+    text-transform:uppercase;letter-spacing:.06em;margin-bottom:9px}
+  #p-juridique .ju-jur li{font-size:12.2px;line-height:1.62;color:var(--muted);
+    margin-bottom:9px;list-style:none}
+  #p-juridique .ju-jur ol{margin:0;padding:0}
+  #p-juridique .ju-jur a{color:var(--ink);text-decoration:underline;
+    text-underline-offset:2px}
+  #p-juridique .ju-jur a:hover{color:var(--accent)}
+  #p-juridique .ju-jur .ju-jur-d{font-size:11px;color:var(--muted2);
+    font-family:var(--mono)}
+  #p-juridique .ju-jur .ju-jur-s{font-size:11px;color:var(--accent)}
+  #p-juridique .ju-jur .ju-jur-r{font-size:11px;color:var(--muted2);margin-top:10px;
+    font-style:italic}
   </style>
 
   <span class="eyebrow">Droit du numérique · cyber · IA</span>

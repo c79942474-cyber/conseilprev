@@ -473,16 +473,140 @@ function juCitations(c){
     +"sur la source officielle avant tout usage. Le reste de l'analyse demeure exploitable.</div>";
 }
 
+// LE CONTRÔLE DES DÉCISIONS CITÉES, ET POURQUOI IL EST SÉPARÉ DU PRÉCÉDENT.
+// Une référence de texte inventée se vérifie sur EUR-Lex en trente secondes.
+// Une décision inventée porte une chambre, une date et un numéro de pourvoi de
+// la bonne forme : le lecteur n'a aucun moyen de la distinguer d'une vraie sans
+// aller la chercher. C'est donc l'avertissement le plus utile de la page, et
+// celui qui doit être le plus explicite sur ce qu'il faut faire.
+function juJurisprudence(c){
+  if(!c) return '';
+  if(c.ok){
+    if(!c.montrees) return '';
+    return '<div class="ju-cit ok">✓ Contrôle de la jurisprudence : les décisions '
+      +'citées font partie de celles qui ont été rapportées du corpus et soumises '
+      +"au modèle. Ce contrôle vérifie qu'aucune décision n'a été ajoutée — il ne "
+      +'dit pas ce que chacune juge : lisez-la avant de vous en prévaloir.</div>';
+  }
+  return '<div class="ju-cit ko"><b>⚠ Décision(s) citée(s) hors de la liste fournie</b> — '
+    +(c.suspectes||[]).map(function(s){return juEsc(s.cle);}).join(', ')
+    +". Ces décisions ne font pas partie de celles qui ont été rapportées du "
+    +"corpus : traitez-les comme INEXISTANTES tant que vous ne les avez pas "
+    +"retrouvées vous-même. Une décision inventée a exactement la forme d'une "
+    +"vraie.</div>";
+}
+
+// LES DÉCISIONS EFFECTIVEMENT CONSULTÉES. Les afficher n'est pas un ornement :
+// c'est ce qui rend le contrôle ci-dessus vérifiable par le lecteur, et ce qui
+// lui permet d'aller lire l'arrêt plutôt que de croire ce qu'on lui en dit.
+// LE VOCABULAIRE DU RÉFÉRENTIEL N'EST PAS CELUI DU LECTEUR — et pour la
+// publication, la différence n'est pas cosmétique : « INEDIT_BULLETIN » dit
+// qu'une décision NE FAIT PAS jurisprudence, ce qui est l'information la plus
+// utile de la ligne et celle qu'un sigle en majuscules escamote.
+var JU_PUBLICATION={
+  PUBLIE_BULLETIN:'publiée au Bulletin',
+  PUBLIE_RAPPORT:'publiée au Rapport annuel (portée maximale)',
+  LETTRE_CHAMBRE:'signalée dans la lettre de chambre',
+  COMMUNIQUE:'accompagnée d’un communiqué',
+  INEDIT_BULLETIN:'inédite — ne fait pas jurisprudence',
+  PUBLIE_LEBON:'publiée au Lebon',
+  MENTIONNE_LEBON:'mentionnée aux tables du Lebon',
+  INEDIT_LEBON:'inédite — ne fait pas jurisprudence'
+};
+var JU_SOLUTION={
+  REJET:'rejet', IRRECEVABILITE:'irrecevabilité', DESISTEMENT:'désistement',
+  NON_LIEU_A_STATUER:'non-lieu à statuer', CONFIRMATION:'confirmation',
+  INFIRMATION:'infirmation', INFIRMATION_PARTIELLE:'infirmation partielle',
+  REFORMATION:'réformation', CASSATION:'cassation',
+  CASSATION_PARTIELLE:'cassation partielle', ANNULATION:'annulation',
+  CONFORMITE:'conformité', NON_CONFORMITE:'non-conformité',
+  INELIGIBILITE:'inéligibilité', SATISFACTION_TOTALE:'demande accueillie',
+  SATISFACTION_PARTIELLE:'demande partiellement accueillie', AUTRE:''
+};
+// Un code que ces tables ne connaissent pas est rendu lisible plutôt que
+// masqué : le corpus peut en ajouter, et une valeur inconnue reste une
+// information.
+function juCode(v,table){
+  if(!v) return '';
+  var k=(''+v).trim().toUpperCase();
+  if(Object.prototype.hasOwnProperty.call(table,k)) return table[k];
+  return k.toLowerCase().replace(/_/g,' ');
+}
+
+// « P5.C4 » N'EST PAS UNE FORMATION, C'EST UNE CLÉ. La grammaire est celle du
+// référentiel : des créneaux joints par un point, dans l'ordre où ils se lisent
+// — P5 (pôle 5), SC4 (4e section), C6 (6e chambre), CD (chambre D), C4-7
+// (chambre 4-7), S1 (1re section), LB (section B), Q1-4 (sous-sections 1/4
+// réunies), R3-8 (chambres 3/8 réunies) ; une chambre qu'aucune coordonnée ne
+// situe porte son nom (SOCIALE, CRIMINELLE).
+//
+// UN CRÉNEAU QU'ON NE SAIT PAS LIRE PASSE TEL QUEL. Inventer une lecture pour
+// une forme non documentée produirait une formation qui n'existe pas — sur une
+// décision de justice, c'est pire que de laisser une clé brute.
+function juOrd(n){ return n==='1' ? '1re' : (n+'e'); }
+function juCreneau(c){
+  var m;
+  if((m=/^P(\d+)$/.exec(c))) return 'pôle '+m[1];
+  if((m=/^SC(\d+)$/.exec(c))) return juOrd(m[1])+' section';
+  if((m=/^S(\d+)$/.exec(c))) return juOrd(m[1])+' section';
+  if((m=/^C(\d+)$/.exec(c))) return juOrd(m[1])+' chambre';
+  if((m=/^C(\d+(?:-\d+)+)$/.exec(c))) return 'chambre '+m[1];
+  if((m=/^C([A-Z])$/.exec(c))) return 'chambre '+m[1];
+  if((m=/^L([A-Z])$/.exec(c))) return 'section '+m[1];
+  if((m=/^Q(\d+(?:-\d+)+)$/.exec(c))) return 'sous-sections '+m[1].replace(/-/g,'/')+' réunies';
+  if((m=/^R(\d+(?:-\d+)+)$/.exec(c))) return 'chambres '+m[1].replace(/-/g,'/')+' réunies';
+  if(/^[A-ZÉÈÀÇ]{4,}$/.test(c)) return 'chambre '+c.toLowerCase();
+  return c;
+}
+function juChambre(v){
+  if(!v) return '';
+  return (''+v).trim().split('.').map(juCreneau).join(', ');
+}
+
+function juDecisions(list){
+  if(!list||!list.length) return '';
+  // UNE LISTE, PAS DES PASTILLES. Une décision porte un intitulé long, une
+  // formation, une date et parfois son sort en appel : dans le conteneur flex
+  // des sources, chacune de ces lignes deviendrait un élément flex distinct.
+  var h='<div class="ju-jur"><div class="ju-jur-t">Jurisprudence rapportée du '
+       +'corpus LibreJustice</div><ol>';
+  h+=list.map(function(d,i){
+    var t=juEsc(d.titre||'décision');
+    // L'INTITULÉ ET L'ADRESSE VIENNENT D'UN SERVICE TIERS. juEsc empêche de
+    // sortir de l'attribut, il n'empêche pas « javascript: » d'y être exécuté :
+    // échapper protège du balisage, pas du schéma. On n'ouvre donc que http et
+    // https, et une adresse d'une autre forme s'affiche en texte.
+    var u=(''+(d.url||'')).trim();
+    var sur=/^https?:\/\//i.test(u);
+    var lien=sur?('<a href="'+juEsc(u)+'" target="_blank" rel="noopener noreferrer">'+t+'</a>'):t;
+    var det=[d.date,juChambre(d.chambre),d.numero?('n° '+d.numero):'',
+             juCode(d.publication,JU_PUBLICATION), juCode(d.solution,JU_SOLUTION)]
+      .filter(Boolean).map(juEsc).join(' · ');
+    var s=d.sort?('<br><span class="ju-jur-s">Sort de cette décision : '
+                  +juEsc(d.sort)+'</span>'):'';
+    return '<li>[J'+(i+1)+'] '+lien
+      +(det?('<br><span class="ju-jur-d">'+det+'</span>'):'')+s+'</li>';
+  }).join('');
+  // LA RÉSERVE SUIT LES DÉCISIONS, PAS LES MENTIONS LÉGALES. Une réserve rangée
+  // ailleurs n'accompagne pas ce qu'elle doit accompagner.
+  return h+'</ol><div class="ju-jur-r">Une décision ne vaut que par sa portée : '
+    +'vérifiez la formation, la publication et le sort en appel avant de vous en '
+    +'prévaloir. Une décision non publiée ne fait pas jurisprudence, et une '
+    +'décision cassée ne dit plus rien.</div></div>';
+}
+
 function juRendreAnalyse(cible,j,titre){
   var h='<div class="ju-card">';
   h+='<div class="ju-cnt" style="margin-bottom:12px">'+juEsc(titre)+' · modèle '+juEsc(j.model||'')
     +' · référentiel '+juEsc(j.version_referentiel||'')+'</div>';
   h+=juCitations(j.citations);
+  h+=juJurisprudence(j.jurisprudence);
   h+='<div class="ju-doc">'+juMd(j.texte)+'</div>';
   if(j.sources&&j.sources.length){
     h+='<div class="ju-srcs">'+j.sources.map(function(s){
       return '<span>['+(s.n||'')+'] '+juEsc(s.titre||'Source')+'</span>';}).join('')+'</div>';
   }
+  h+=juDecisions(j.decisions);
   var kind=(cible==='ju-cres')?'contrat':'analyse';
   JUTEXTES[kind]=j.texte||'';
   h+=juBarreExport(kind,
@@ -736,7 +860,8 @@ function juReferentiel(){
         var h=juArbRoutage(j.routage);
         h+='<div class="ju-card"><div class="ju-cnt" style="margin-bottom:12px">Note d\'arbitrage · modèle '
           +juEsc(j.model||'')+' · référentiel '+juEsc(j.version_referentiel||'')+'</div>'
-          +juCitations(j.citations)+'<div class="ju-doc">'+juMd(j.texte)+'</div>';
+          +juCitations(j.citations)+juJurisprudence(j.jurisprudence)
+          +'<div class="ju-doc">'+juMd(j.texte)+'</div>';
         if(j.pieces&&j.pieces.length){
           h+='<div class="ju-srcs">'+j.pieces.map(function(p){
             return '<span>['+(p.n||'')+'] '+juEsc(p.titre)+' — '+juEsc(p.origine)+'</span>';}).join('')+'</div>';
@@ -744,6 +869,7 @@ function juReferentiel(){
           h+='<div class="ju-cit ko" style="margin-top:14px">Aucune pièce n\'a pu être versée au dossier : '
             +'la note repose sur le seul cadre réglementaire. Vérifiez la section « Ce qui manque pour décider ».</div>';
         }
+        h+=juDecisions(j.decisions);
         JUTEXTES['arbitrage']=j.texte||'';
         h+=juBarreExport('arbitrage', objet, j.pieces||[], j.model);
         h+='</div><div class="ju-card"><div class="ju-avert" style="margin:0">'+juEsc(j.avertissement)
