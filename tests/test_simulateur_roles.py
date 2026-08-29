@@ -51,7 +51,13 @@ NODE = shutil.which('node')
 # continuer à passer sur un moteur amputé. C'est exactement ce qu'on leur
 # demande.
 DEBUT = 'function simEtatAudit(numero){'
-FIN = "/* Timeline d'application */"
+# LA BORNE DE FIN A DÛ CHANGER, ELLE AUSSI, ET LA RÈGLE DE BORNES L'A DIT.
+# Elle était le commentaire « Timeline d'application » ; ce commentaire a été
+# remplacé le 29 août 2026 par celui qui explique pourquoi la frise dérive
+# désormais du calendrier consolidé. Quarante et un contrôles sont tombés d'un
+# coup plutôt que de s'exécuter sur une tranche vide. On s'ancre maintenant sur
+# la DÉCLARATION de la fonction, qu'un commentaire réécrit n'emporte pas.
+FIN = "function simTimeline(classif){"
 
 # `window.simRadio = …` s'exécute à la définition ; hors navigateur, `window`
 # n'existe pas. On le stube plutôt que d'exclure ces lignes de la tranche :

@@ -78,10 +78,11 @@ REFERENTIEL = [
             "1er août 2024 — entrée en vigueur",
             "2 février 2025 — pratiques interdites (art. 5) et littératie en IA (art. 4)",
             "2 août 2025 — modèles à usage général (chap. V), gouvernance, sanctions",
-            "2 août 2026 — application générale, dont l'art. 50 (transparence) "
-            "et les systèmes à haut risque de l'annexe III",
-            "2 août 2027 — systèmes à haut risque relevant de l'art. 6(1) "
-            "(IA composant de sécurité d'un produit réglementé)",
+            "2 août 2026 — application générale, dont l'art. 50 (transparence)",
+            "2 décembre 2027 — systèmes à haut risque de l'annexe III "
+            "(date fixée par le Digital Omnibus)",
+            "2 août 2028 — systèmes à haut risque relevant de l'art. 6(1) "
+            "(IA composant de sécurité d'un produit réglementé, annexe I)",
         ],
         "autorite": "Bureau de l'IA (Commission) ; en France, autorités de "
                     "surveillance du marché à désigner",
@@ -770,7 +771,7 @@ def qualifier(profil):
     if ia == "securite":
         retenir("ai-act", "IA assurant une fonction de sécurité d'un produit couvert "
                           "par la législation d'harmonisation de l'annexe I : haut "
-                          "risque au titre de l'art. 6(1), applicable au 2 août 2027.",
+                          "risque au titre de l'art. 6(1), applicable au 2 août 2028.",
                 "certaine")
         retenir("machines", "Une fonction de sécurité assurée par un logiciel ou une IA "
                             "relève également du règlement Machines.", "a_verifier")

@@ -32,7 +32,7 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
 /* ── Jeu de donnees complet (fallback si charge hors iframe / sans message du parent) ──
    Synchronise avec JURS dans sentinel.html (46 juridictions). */
 var GEO = [
-  {n:'Union européenne', c:'EU', r:'EU AI Act — Règlement 2024/1689 (pleinement applicable 2 août 2026)', s:9.2, lat:50.5, lng:15.0},
+  {n:'Union européenne', c:'EU', r:'EU AI Act — Règlement 2024/1689 (transparence art. 50 depuis le 2 août 2026 ; haut risque annexe III au 2 décembre 2027)', s:9.2, lat:50.5, lng:15.0},
   {n:'Allemagne', c:'DE', r:'EU AI Act + loi nationale d application + BSI', s:8.8, lat:51.2, lng:10.4},
   {n:'France', c:'FR', r:'EU AI Act + Stratégie nationale IA + CNIL', s:8.5, lat:46.2, lng:2.2},
   {n:'Corée du Sud', c:'KR', r:'AI Basic Act — en vigueur depuis le 22 janvier 2026', s:8.3, lat:36.0, lng:127.9},

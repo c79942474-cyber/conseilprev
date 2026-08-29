@@ -924,7 +924,7 @@ document.getElementById('tb-date').textContent = new Date().toLocaleDateString('
 });
 
 var JURS = [
-  {n:'01',f:'🇪🇺',c:'EU',name:'Union européenne',reg:'EU AI Act — Règlement 2024/1689 (pleinement applicable 2 août 2026)',s:9.2,maj:'2026-02-03'},
+  {n:'01',f:'🇪🇺',c:'EU',name:'Union européenne',reg:'EU AI Act — Règlement 2024/1689 (transparence art. 50 depuis le 2 août 2026 ; haut risque annexe III au 2 décembre 2027)',s:9.2,maj:'2026-02-03'},
   {n:'02',f:'🇩🇪',c:'DE',name:'Allemagne',reg:'EU AI Act + loi nationale d application + BSI',s:8.8,maj:'2026-02-03'},
   {n:'03',f:'🇫🇷',c:'FR',name:'France',reg:'EU AI Act + Stratégie nationale IA + CNIL',s:8.5,maj:'2026-02-03'},
   {n:'04',f:'🇰🇷',c:'KR',name:'Corée du Sud',reg:'AI Basic Act — en vigueur depuis le 22 janvier 2026',s:8.3,maj:'2026-02-03'},
@@ -2598,17 +2598,45 @@ function simGap(classif){
   return activeObls;
 }
 
-/* Timeline d'application */
+/* ══ LA FRISE DU SIMULATEUR DÉRIVE DU CALENDRIER, ELLE NE LE RECOPIE PLUS ═══
+   DEUX CALENDRIERS SUR LA MÊME PAGE, ET ILS SE CONTREDISAIENT. Le tableau
+   « Calendrier consolidé EU AI Act », en tête du simulateur, portait déjà les
+   dates du Digital Omnibus : annexe III au 2 décembre 2027, annexe I au
+   2 août 2028. Cette fonction, qui rend la frise DES RÉSULTATS quelques
+   centaines de pixels plus bas, portait sa propre liste écrite à la main et
+   annonçait encore le 2 août 2026 pour l'annexe III. Le même écran donnait
+   donc deux réponses à la question « quand ? », à dix-huit mois d'écart.
+
+   Elle se trompait par ailleurs d'annexe : « composants de sécurité
+   (Annexe II) » — l'annexe II liste la législation d'harmonisation, ce sont
+   les produits de l'ANNEXE I qui portent les systèmes à haut risque intégrés.
+
+   PAS DE SECONDE LISTE DE REPLI. Une liste de secours écrite ici recommencerait
+   à diverger le jour où le calendrier changera — c'est très exactement ce qui
+   vient de se produire. Si la source manque, la frise le DIT au lieu d'afficher
+   des dates dont personne ne répond. */
 function simTimeline(classif){
-  var tl = [
-    { date:'2 fév. 2025', tag:'ACTIF', tagCls:'chip-r', text:'Art. 5 — Pratiques interdites applicables. Obligation de littératie IA (Art. 4).' },
-    { date:'2 août 2025', tag:'ACTIF', tagCls:'chip-r', text:'Art. 51-55 — Obligations GPAI et modèles à risque systémique. Régime de sanctions Art. 99.' },
-    { date:'2 août 2026', tag:'A VENIR', tagCls:'chip-o', text:'Art. 6(2) — Systèmes haut risque (Annexe III) : obligations complètes de conformité.' },
-    { date:'2 août 2027', tag:'A VENIR', tagCls:'chip-o', text:'Art. 6(1) — Systèmes haut risque composants de sécurité (Annexe II). Codes de conduite GPAI.' },
-  ];
-  if(classif.level === 'haut') tl[2].urgent = true;
-  if(classif.art5) tl[0].urgent = true;
-  return tl;
+  var source = (typeof window !== 'undefined' && window.AI_ACT_TIMELINE) || null;
+  if(!source || !source.length){
+    return [{ date:'—', tag:'INDISPONIBLE', tagCls:'chip-o',
+              text:'Le calendrier d\'application n\'a pas pu être chargé. Reportez-vous au tableau « Calendrier consolidé EU AI Act » en tête de cette page.' }];
+  }
+  var etiquettes = { passe:['ACTIF','chip-r'], prochain:['PROCHAIN','chip-o'], futur:['A VENIR','chip-o'] };
+  return source.map(function(r){
+    var e = etiquettes[r.statut] || ['A VENIR','chip-o'];
+    var ligne = { date:r.date, tag:e[0], tagCls:e[1],
+                  text:(r.quoi || '') + (r.ref ? ' — ' + r.ref : '') };
+    /* Ce qui est SOULIGNÉ dépend du système analysé : la ligne qui le concerne,
+       et elle seule. Repéré sur le contenu de la ligne, pas sur son rang : un
+       rang change dès qu'une échéance s'ajoute au calendrier. */
+    /* LA SENTINELLE `(?![0-9])` N'EST PAS UN ORNEMENT : « Art. 5 » est un
+       préfixe d'« Art. 50 ». Sans elle, un système relevant d'une pratique
+       interdite soulignait DEUX lignes — la sienne et celle de la
+       transparence — et le lecteur ne savait plus laquelle le concernait. */
+    if(classif.art5 && /Interdictions|Art\. 5(?![0-9])/.test(r.quoi || '')) ligne.urgent = true;
+    if(classif.level === 'haut' && /Annexe III/i.test(r.quoi || '')) ligne.urgent = true;
+    return ligne;
+  });
 }
 
 /* Calcul des sanctions */
@@ -6980,7 +7008,7 @@ function auditApplySectorRelevance(){
 ;/* ── bloc 20/59 ── */
 
 /* ══ FRIA — Fundamental Rights Impact Assessment (Art. 27 EU AI Act) ══ */
-/* Source : Art. 27 Reglement (UE) 2024/1689, applicable a partir du 2 aout 2026 (Art. 113).
+/* Source : Art. 27 Reglement (UE) 2024/1689, applicable a partir du 2 decembre 2027 : l article 27 vise les DEPLOYEURS de systemes a haut risque de l annexe III, et suit donc leur calendrier tel que le Digital Omnibus l a fixe.
    Obligation du DEPLOYEUR (pas du fournisseur), distincte d une DPIA RGPD.
    3 categories de deployeurs concernes (Art. 27(1)) :
    1) Organismes publics deployant un systeme Annexe III (hors infrastructures critiques, point 2)
@@ -7492,7 +7520,7 @@ window.roadmapRenderPage = function(){
     if(eta){
       eta.style.width = d.auditPct + "%";
       var lbl = document.getElementById("road-next-deadline-lbl");
-      if(lbl) lbl.textContent = d.auditPct + "% — échéance 2 août 2026 (Art. 113, systèmes haut risque)";
+      if(lbl) lbl.textContent = d.auditPct + "% — échéance 2 décembre 2027 (Digital Omnibus, haut risque annexe III)";
     }
   });
 };
@@ -8805,7 +8833,7 @@ window.cardsExportPlanifier = function(){
     return '<tr><td>Phase ' + p.n + ' — ' + p.title + '</td><td>' + prog + '%</td><td>' + p.duree + '</td><td>' + p.deliv + '</td></tr>';
   }).join('');
   var body = '<table><tr><th>Phase</th><th>Avancement</th><th>Durée</th><th>Livrables</th></tr>' + rows + '</table>'
-    + '<div class="doc-info">Avancement calculé à partir du Registre IA (' + d.registre.length + ' systèmes) et de l Audit de conformité (' + d.auditDone + '/' + d.auditTotal + ' points). Échéance critique : 2 août 2026 — obligations complètes pour les systèmes haut risque (Art. 6(2), Annexe III).</div>';
+    + '<div class="doc-info">Avancement calculé à partir du Registre IA (' + d.registre.length + ' systèmes) et de l Audit de conformité (' + d.auditDone + '/' + d.auditTotal + ' points). Échéance critique : 2 décembre 2027 — obligations complètes pour les systèmes haut risque (Art. 6(2), Annexe III).</div>';
   cardsExportDoc('Feuille de route priorisée', '③ Planifier · Délais réglementaires', body);
 };
 
@@ -8908,7 +8936,7 @@ window.cardsOpenPlanifier = function(){
   cardsModal("Feuille de route priorisée", "③ Planifier · Délais réglementaires",
     '<p style="font-size:12px;color:var(--muted);margin-bottom:16px">Avancement calculé à partir de votre Registre IA ('+d.registre.length+' systèmes) et de l\'Audit de conformité ('+d.auditDone+'/'+d.auditTotal+' points).</p>'
     + phasesHtml
-    + '<div class="radar-registre-info radar-registre-ok" style="margin-top:14px">📅 Échéance critique : <strong>2 août 2026</strong> — obligations complètes pour les systèmes haut risque (Art. 6(2), Annexe III).</div>',
+    + '<div class="radar-registre-info radar-registre-ok" style="margin-top:14px">📅 Échéance critique : <strong>2 décembre 2027</strong> — obligations complètes pour les systèmes haut risque (Art. 6(2), Annexe III — Digital Omnibus).</div>',
     '<button class="mat-export-btn" style="background:var(--ink);color:#fff" onclick="document.getElementById(\'cards-modal\').classList.remove(\'on\');go(\'roadmap\',null,\'PLANIFICATION\',\'Plan action\')">Ouvrir la Roadmap complète →</button>'
     + '<button class="mat-export-btn" style="background:var(--green);color:#fff" onclick="cardsExportPlanifier()">📄 Télécharger le rapport</button>'
   );
@@ -9148,7 +9176,7 @@ var PAGE_GUIDES = {
     sections: [
       {h:"À quoi sert cette page", t:"Référence structurée des 113 articles du Règlement (UE) 2024/1689. Elle sert à vérifier un texte exact quand une obligation est contestée, en réunion ou face à un prestataire."},
       {h:"Comment l’utiliser", t:"Cherchez par numéro d’article ou par thème. Les articles qui vous concernent dépendent de votre rôle (fournisseur ou déployeur) et de la classe de vos systèmes : commencez par le Simulateur, revenez ici pour le texte."},
-      {h:"À savoir", t:"Toutes les obligations ne sont pas encore applicables. Les pratiques interdites (art. 5) le sont depuis le 2 février 2025, les modèles à usage général depuis le 2 août 2025, le haut risque de l’annexe III au 2 août 2026 et l’annexe I au 2 août 2027."}
+      {h:"À savoir", t:"Toutes les obligations ne sont pas encore applicables. Les pratiques interdites (art. 5) le sont depuis le 2 février 2025, les modèles à usage général depuis le 2 août 2025, le haut risque de l’annexe III au 2 décembre 2027 et l’annexe I au 2 août 2028."}
     ]
   },
   'audit': {
@@ -9544,7 +9572,7 @@ var PAGE_GUIDES = {
     title: "Roadmap conformité",
     sections: [
       {h:"À quoi sert cette page", t:"Plan d action en 4 phases (même méthodologie que l Audit de maturité), avec progression calculée à partir de votre Registre IA et de l Audit IA Act réels — pas des chiffres figés."},
-      {h:"Échéance clé", t:"Le 2 août 2026 marque l entrée en application complète des obligations pour les systèmes à haut risque (Art. 113)."},
+      {h:"Échéance clé", t:"Le 2 décembre 2027 marque l entrée en application des obligations pour les systèmes à haut risque de l annexe III, date fixée par le Digital Omnibus. Les obligations de transparence de l article 50, elles, s appliquent depuis le 2 août 2026."},
       {h:"L’avancement n’est pas déclaratif", t:"Il se déduit de vos données. On ne peut donc pas le faire progresser en cochant : il faut compléter le Registre ou l’Audit."}
     ]
   },
@@ -18168,7 +18196,7 @@ var GUIDED_PATHS = [
       {id:'audit-ia-act', label:'Audit IA Act', action:'Passez en revue les 34 points de contrôle, en marquant chacun conforme / en cours / à traiter.', gain:'Transforme la maturité générale en plan d’action concret, point par point, avec référence légale exacte.', tip:'TPE : traitez d’abord les points P1 (sanctions directes). Grand compte : déléguez des sections entières à des référents métier identifiés.'},
       {id:'matrice', label:'Matrice risques', action:'Positionnez chaque système sur les axes probabilité × impact.', gain:'Vue synthétique pour prioriser : tout ne peut pas être traité en même temps, la matrice tranche objectivement.', tip:'TPE : 1 page suffit pour piloter visuellement vos priorités en comité de direction.'},
       {id:'parties', label:'Parties prenantes', action:'Assignez un Responsable, un Approbateur, un Consulté et un Informé (RACI) pour chaque obligation clé.', gain:'Élimine l’ambiguïté sur qui doit agir — la première cause de retard dans un programme de conformité.', tip:'Grand compte : formalisez avec les directions juridique, IT et métier dès cette étape, pas après.'},
-      {id:'roadmap', label:'Roadmap', action:'Séquencez les actions restantes sur un calendrier avec échéances.', gain:'Donne une trajectoire claire vers l’échéance du 2 août 2026 (obligations haut risque).', tip:'Découpez en jalons trimestriels — un programme sans étapes intermédiaires perd en visibilité après 2-3 mois.'},
+      {id:'roadmap', label:'Roadmap', action:'Séquencez les actions restantes sur un calendrier avec échéances.', gain:'Donne une trajectoire claire vers l’échéance du 2 décembre 2027 (obligations haut risque, annexe III).', tip:'Découpez en jalons trimestriels — un programme sans étapes intermédiaires perd en visibilité après 2-3 mois.'},
       {id:'report', label:'Vue direction', action:'Synthétisez l’avancement global en quelques indicateurs clés.', gain:'Le support prêt à l’emploi pour vos comités de direction ou conseils d’administration.', tip:'Mettez à jour avant chaque comité — un tableau de bord daté perd toute crédibilité.'}
     ]
   },
@@ -18208,7 +18236,7 @@ var GUIDED_PATHS = [
       {id:'carto-uc', label:'Cartographie des cas d\u2019usage IA', action:'Parcourez les 5 \u00e9tapes : ciblez votre secteur et vos processus, s\u00e9lectionnez les cas d\u2019usage \u00e0 potentiel, qualifiez-les, chiffrez le retour attendu et \u00e9valuez votre maturit\u00e9.', gain:'Transforme une intention IA en une liste courte de cas d\u2019usage prioris\u00e9s, chiffr\u00e9s et jug\u00e9s d\u00e9ployables \u2014 la base d\u2019un programme orient\u00e9 valeur m\u00e9tier.', tip:'TPE : concentrez-vous sur 2 \u00e0 3 cas transverses \u00e0 ROI rapide. Grand compte : croisez cette cartographie avec les jalons de conformit\u00e9 AI Act du module RaaS pour lier valeur et conformit\u00e9.'},
             {id:'report', label:'Vue direction', action:'Consultez les indicateurs clés en moins de 2 minutes avant un comité.', gain:'L’état de santé du programme de conformité, sans avoir à interroger vos équipes.', tip:'Demandez à votre directeur de programme de le mettre à jour avant chaque comité de direction.'},
       {id:'sanctions', label:'Calculateur sanctions', action:'Visualisez l’exposition financière maximale en cas de non-conformité.', gain:'L’argument décisif pour prioriser un budget — un chiffre parle plus qu’un rapport de 40 pages.', tip:'Comparez ce chiffre au coût de la mise en conformité — l’arbitrage devient évident.'},
-      {id:'roadmap', label:'Roadmap', action:'Vérifiez les échéances clés et les jalons à venir.', gain:'Anticipez les points de décision à venir au lieu de les découvrir en urgence.', tip:'L’échéance du 2 août 2026 (systèmes haut risque) doit apparaître dans votre agenda de comité, pas seulement dans l’outil.'},
+      {id:'roadmap', label:'Roadmap', action:'Vérifiez les échéances clés et les jalons à venir.', gain:'Anticipez les points de décision à venir au lieu de les découvrir en urgence.', tip:'L’échéance du 2 décembre 2027 (systèmes haut risque, annexe III) doit apparaître dans votre agenda de comité, pas seulement dans l’outil.'},
       {id:'geo', label:'Géopolitique', action:'Consultez le positionnement réglementaire de vos marchés cibles.', gain:'Anticipe un risque souvent négligé : la divergence réglementaire entre zones d’expansion.', tip:'Pertinent surtout si votre entreprise opère ou projette de s’étendre hors UE.'}
     ]
   },
@@ -19520,6 +19548,11 @@ window.go = function(id){
 /* ══ CALENDRIER CONSOLIDÉ EU AI ACT — Art. 113 + Digital Omnibus ══
    Sources : texte officiel Art. 113 Règl.(UE) 2024/1689 (vérifié EUR-Lex),
    et proposition Digital Omnibus 2024 pour les dates 2027-2028. */
+/* EXPOSÉ DÉLIBÉRÉMENT : c'est la SOURCE UNIQUE du calendrier d'application.
+   La frise des résultats du simulateur (`simTimeline`) la lit au lieu de
+   porter sa propre liste — elle en portait une, et les deux se sont mises à
+   se contredire de dix-huit mois sur la même page. Toute nouvelle vue du
+   calendrier doit la lire elle aussi, jamais la recopier. */
 var AI_ACT_TIMELINE = [
   {
     date: "1er août 2024",
@@ -19564,6 +19597,8 @@ var AI_ACT_TIMELINE = [
     ref: "Art. 113(c)"
   }
 ];
+
+window.AI_ACT_TIMELINE = AI_ACT_TIMELINE;
 
 function aiActTimelineRender(){
   var tbody = document.getElementById('ai-act-timeline-body');

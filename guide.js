@@ -47,7 +47,7 @@
     p: "La porte d’entrée de CONSEILPREV : les secteurs d’intervention, les six normes couvertes, les huit risques systémiques traités, et l’accès aux offres Sentinel.",
     s: ["Commencez par les huit risques systémiques : c’est la grille qui explique tout le reste du site.",
       "Passez aux offres Sentinel si vous cherchez l’outil, aux secteurs si vous cherchez la mission.",
-      "Le bandeau du haut rappelle l’échéance du 2 août 2026 — c’est la date qui commande le calendrier de la plupart des organisations."],
+      "Le bandeau du haut rappelle l’échéance du 2 août 2026, celle des obligations de transparence de l’article 50. Le haut risque de l’annexe III, lui, est fixé au 2 décembre 2027 par le Digital Omnibus."],
     k: [["EU AI Act", "Le règlement (UE) 2024/1689. Il classe les systèmes d’IA par niveau de risque et attache des obligations à chaque niveau."],
       ["Sentinel", "La plateforme de conformité. Le site en présente les offres ; la plateforme elle-même se rejoint par la connexion."]],
     l: [["Les formules Sentinel", "/tarifications"], ["Nous écrire", "/support"]]

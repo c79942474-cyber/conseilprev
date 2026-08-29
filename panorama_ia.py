@@ -54,7 +54,7 @@ CLASSES = {
     "interdit":     {"nom": "Pratique interdite (art. 5)", "rang": 4, "couleur": "#7A1B12",
                      "echeance": "2 février 2025 (en vigueur)"},
     "haut_risque":  {"nom": "Haut risque (annexe III / annexe I)", "rang": 3, "couleur": "#B83222",
-                     "echeance": "2 août 2026 (annexe III) · 2 août 2027 (annexe I)"},
+                     "echeance": "2 décembre 2027 (annexe III) · 2 août 2028 (annexe I)"},
     "transparence": {"nom": "Risque de transparence (art. 50)", "rang": 2, "couleur": "#C47C1A",
                      "echeance": "2 août 2026"},
     "minimal":      {"nom": "Risque minimal", "rang": 1, "couleur": "#2D7A47",
