@@ -502,6 +502,18 @@ def test_chaque_requete_dit_ce_qu_elle_vise():
         assert spec.get("requete", "").strip(), "%s n'a pas de requête" % cid
 
 
+def test_la_declaration_ne_porte_aucun_etat_qui_bouge():
+    """L'UNE DES DEUX APPLICATIONS FIGE SA CONFIGURATION PAR PROCESSUS. Y verser
+    « le corpus est écarté » ou « dernière réussite à 7h52 » afficherait pendant
+    des heures un état constaté une seule fois, au démarrage."""
+    d = librejustice.declaration()
+    for volatil in ("motif", "coupe", "derniere_reussite", "outils", "jeton"):
+        assert volatil not in d, (
+            "declaration() porte « %s », qui change en cours d'exécution — figée "
+            "dans une configuration, elle mentira" % volatil)
+    assert d["source"] and d["couverture"] and d["reserve"]
+
+
 def test_pour_controverse_marque_l_analogie(corpus):
     r = librejustice.pour_controverse("plafond-sanctions")
     assert r["ok"], r["motif"]

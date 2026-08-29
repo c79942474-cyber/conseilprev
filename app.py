@@ -11079,8 +11079,8 @@ def juridique_config():
         # Le corpus de jurisprudence, DÉCLARÉ et non testé : cette route est
         # appelée à l'ouverture de la page, elle ne va pas interroger un service
         # externe à chaque visiteur. /api/juridique/corpus?test=1 le fait sur
-        # demande.
-        'corpus_jurisprudence': (librejustice.etat() if librejustice else None),
+        # demande, et rend l'état vivant.
+        'corpus_jurisprudence': (librejustice.declaration() if librejustice else None),
     })
 
 

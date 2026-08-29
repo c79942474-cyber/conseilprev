@@ -268,6 +268,68 @@ def test_aucun_fichier_n_annonce_une_date_perimee_pour_l_annexe_III():
         % '\n  - '.join(fautes))
 
 
+# L'ANGLE MORT DE LA RÈGLE PRÉCÉDENTE, TROUVÉ DANS LE DÉPÔT JUMEAU.
+#
+# La règle ci-dessus retient le qualifiant le PLUS PROCHE, afin d'autoriser les
+# phrases qui OPPOSENT les deux régimes. Confrontée à la formulation qui dormait
+# dans conseilprevcyber — « 2 août 2026 — application générale, dont l'art. 50
+# (transparence) et les systèmes à haut risque de l'annexe III » — elle se tait :
+# « transparence » est plus près de la date que « annexe III ».
+#
+# Or c'est exactement l'énoncé fautif. Ce qui sépare OPPOSER de CONFONDRE ne se
+# lit pas dans la distance mais dans le NOMBRE DE DATES : opposer deux régimes
+# demande deux dates, les confondre consiste à n'en donner qu'une. C'est une
+# propriété, pas une heuristique — et elle ne dépend d'aucune fenêtre.
+
+TOUTE_DATE = re.compile(
+    r'2\s*ao[uû]t\s*202[5-9]|2\s*d[ée]cembre\s*202[5-9]'
+    r'|202[5-9]-08-02|202[5-9]-12-02')
+
+
+def _confond(enonce):
+    """Vrai si l'énoncé donne UNE SEULE date aux deux régimes."""
+    dates = TOUTE_DATE.findall(enonce)
+    if not dates:
+        return False
+    if not (QUALIFIANT.search(enonce) and TRANSPARENCE.search(enonce)):
+        return False
+    return len(set(re.sub(r'\s+', ' ', d) for d in dates)) < 2
+
+
+def test_aucun_jalon_du_referentiel_ne_donne_une_seule_date_aux_deux_regimes():
+    """CETTE RÈGLE PORTE SUR LA VALEUR, ET C'EST TOUT L'INTÉRÊT. Dans le source,
+    le jalon fautif s'écrit en deux chaînes accolées — « … (transparence) » puis
+    « et les systèmes à haut risque de l'annexe III » — et un découpage sur le
+    guillemet les sépare : la règle qui lit le FICHIER ne voit jamais la phrase
+    que le lecteur, lui, voit entière."""
+    import juridique
+    t = juridique.texte('ai-act')
+    assert t, "le texte « ai-act » a disparu du référentiel"
+    fautifs = [j for j in t.get('jalons', []) if _confond(j)]
+    assert not fautifs, (
+        "jalon(s) donnant une seule date à la transparence et au haut risque de "
+        "l'annexe III — seize mois les séparent :\n  - %s" % '\n  - '.join(fautifs))
+
+
+def test_aucun_enonce_ne_donne_une_seule_date_aux_deux_regimes():
+    """La même propriété sur les pages : une date recopiée dans un gabarit se
+    périme comme les autres, et plus discrètement."""
+    fautes = []
+    for nom in sorted(FICHIERS):
+        brut = io.open(os.path.join(ICI, nom), encoding='utf-8', errors='replace').read()
+        s = re.sub(r'<[^>]*>', '', brut) if nom.endswith('.html') else brut
+        for unite in re.split(r'[\n;]|\. ', s):
+            if len(unite) > 400 or not _confond(unite):
+                continue
+            plat = re.sub(r'\s+', ' ', unite).strip()
+            if 'annonçait encore' in plat:
+                continue
+            fautes.append('%s : « %s »' % (nom, plat[:160]))
+    assert not fautes, (
+        "énoncé donnant UNE SEULE date à la transparence et au haut risque de "
+        "l'annexe III :\n  - %s" % '\n  - '.join(fautes))
+
+
 def test_la_date_de_l_annexe_III_est_bien_celle_du_calendrier_partout():
     """L'inverse du contrôle précédent : il refuse les mauvaises dates, celui-ci
     exige que la bonne soit effectivement écrite là où le sujet l'appelle."""

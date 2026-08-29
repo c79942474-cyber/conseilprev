@@ -504,6 +504,24 @@ def lire_texte(url=None, code=None, article=None, date=None):
     return {"ok": ok, "article": res, "motif": motif}
 
 
+def declaration():
+    """Les faits CONSTANTS du connecteur : ce qu'il est, pas comment il va.
+
+    Séparé d'`etat()` pour une raison précise. La configuration d'interface est
+    figée par processus dans l'une des deux applications ; y verser `motif`,
+    `coupe` ou `derniere_reussite` afficherait pendant des heures un état
+    constaté au démarrage. Un état qui bouge ne se met pas dans ce qui ne bouge
+    pas."""
+    return {
+        "actif": ACTIF,
+        "source": SOURCE,
+        "depot": DEPOT,
+        "couverture": COUVERTURE,
+        "reserve": RESERVE,
+        "mention": MENTION,
+    }
+
+
 def etat():
     """Ce que le connecteur peut dire de lui-même, sans rien tenter."""
     return {
