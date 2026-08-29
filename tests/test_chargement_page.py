@@ -162,7 +162,12 @@ def test_lechec_reseau_ne_condamne_pas_la_page():
     coupure d'une seconde condamne tous les appels ultérieurs de la page."""
     code = _sans_commentaires(
         io.open(os.path.join(ICI, "sentinel.page.js"), encoding="utf-8").read())
-    i = code.index("window.sentAuthMoi = function()")
+    # LA SIGNATURE A GAGNÉ UN ARGUMENT (`frais`) le 29 août 2026, pour que le
+    # panneau « Connexion & session » puisse relire l'état courant SANS ouvrir
+    # un second point d'appel vers cette route — ce que la recette voisine
+    # interdit, à juste titre. On s'ancre donc sur l'affectation, pas sur la
+    # liste de paramètres.
+    i = code.index("window.sentAuthMoi = function(")
     corps = code[i:i + 520]
     assert "_sentAuthPromesse = null" in corps, (
         "la mémoire n'est pas vidée en cas d'échec : aucun appel ultérieur ne "

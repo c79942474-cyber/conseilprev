@@ -2777,6 +2777,19 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="sb-item" data-grp="administration" role="button" tabindex="0" id="sb-ia50" onclick="go('ia50',this,'ADMINISTRATION','Transparence IA Act (art. 50)')" title="Registre de transparence de l'article 50 : marquage, etiquetage, exceptions et responsable editorial (reserve a CONSEILPREV)."><span class="sb-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg></span>Transparence IA Act</div>
     <div class="sb-item" data-grp="administration" role="button" tabindex="0" id="sb-rgpd-site" onclick="go('rgpd-site',this,'ADMINISTRATION','RGPD — CONSEILPREV')" title="Tableau de bord de conformite RGPD du site : preuves de consentement, registre des traitements, transferts, droits et rapport d'audit (reserve a CONSEILPREV)."><span class="sb-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12h6M9 16h4M9 8h6"/></svg></span>RGPD — CONSEILPREV</div>
     <div class="sb-item" data-grp="administration" role="button" tabindex="0" onclick="go('clients',this,'ADMINISTRATION','Gestion des clients')" title="Creer et gerer les acces clients externes a Sentinel AI (reserve a CONSEILPREV)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><circle cx="19" cy="8" r="2.5"/><path d="M17.5 21v-1a3 3 0 0 0 .5-1.7"/><path d="M19 14.5a3.5 3.5 0 0 1 3.5 3.5v3"/></svg></span>Gestion des clients</div>
+    <!-- LA SESSION N'AVAIT AUCUN ONGLET, ET C'EST CE QUI A ÉTÉ SIGNALÉ.
+         Sentinel comptait douze rubriques et cinquante-deux onglets, et pas un
+         seul ne parlait du compte. La seule trace de la session était un
+         bouton « Déconnexion » de la barre du haut, entre « Retour Accueil » et
+         « Lancer un audit » — trois boutons de même apparence, dont un seul
+         engage. Et rien nulle part ne permettait de SE CONNECTER : un visiteur
+         dont la session avait expiré n'avait, depuis Sentinel, aucun chemin de
+         retour.
+         La rubrique est en dernier, délibérément : on ne vient pas ici pour
+         gérer son compte, on y passe. Mais elle existe, elle se cherche dans le
+         filtre du menu, et elle se trouve. -->
+    <div class="sb-section" data-grp="compte"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Compte</span></div>
+    <div class="sb-item" data-grp="compte" role="button" tabindex="0" id="sb-compte" onclick="go('compte',this,'COMPTE','Connexion et session')" title="Qui est connecte, sous quelle offre, et comment se connecter ou se deconnecter."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg></span>Connexion &amp; session</div>
   </nav>
   <div class="sb-pager">
     <button class="sb-pager-btn" onclick="pagerGo(-1)" title="Section precedente">‹</button>
@@ -2811,6 +2824,29 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 
 <!-- ══════ PAGES ══════ -->
 <main class="main">
+
+<!-- ══════ COMPTE ══════ -->
+<div class="page" id="p-compte">
+  <span class="eyebrow">Compte</span>
+  <h1 class="page-h">Connexion et <em>session</em></h1>
+  <p class="page-lead">Qui est connecté, sous quelle offre, et par où passer pour se connecter ou se déconnecter. Cette page ne conserve rien : elle lit la session en cours et la donne à voir.</p>
+
+  <div class="tbl-wrap" style="padding:0;margin-bottom:22px">
+    <div class="tbl-head" style="padding:16px 20px 10px">
+      <span class="tbl-title">État de la session</span>
+      <span id="compte-etat-pastille" style="font-size:10px;font-family:var(--mono);color:var(--muted)">lecture…</span>
+    </div>
+    <div id="compte-corps" style="padding:4px 20px 20px">
+      <p style="font-size:12px;color:var(--muted)">Lecture de la session en cours…</p>
+    </div>
+  </div>
+
+  <div id="compte-actions" style="display:flex;gap:10px;flex-wrap:wrap"></div>
+
+  <p style="font-size:11px;color:var(--muted2);font-style:italic;margin-top:18px;padding-top:12px;border-top:1px solid var(--rule)">
+    Se déconnecter ferme la session sur ce navigateur uniquement. Les données du Registre, de l’audit et des analyses restent enregistrées sur le compte.
+  </p>
+</div>
 
 <!-- ══════ APERÇU ══════ -->
 <div class="page on" id="p-apercu">

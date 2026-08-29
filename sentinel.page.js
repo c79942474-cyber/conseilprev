@@ -60,7 +60,18 @@ function _auDomPret(fn, delai){
 }
 
 var _sentAuthPromesse = null;
-window.sentAuthMoi = function(){
+/* UN ARGUMENT, ET UN SEUL POINT D'APPEL. Le panneau « Connexion & session »
+   doit lire l'état COURANT : mémoriser la réponse pour toute la vie de la page
+   la rendrait fausse au moment précis où l'on vient la consulter — éprouvé,
+   cookie retiré, le panneau annonçait encore « session ouverte ».
+   La première correction ouvrait un SECOND `fetch` vers la même route. Une
+   recette l'a refusée, et elle avait raison : cette route porte du travail de
+   fond côté serveur, et sept appelants pour une réponse identique sont
+   précisément ce qui avait été consolidé ici. `frais` demande donc une lecture
+   neuve SANS ajouter de point d'appel — et remplace la mémoire, pour que les
+   appelants suivants voient l'état à jour plutôt que l'ancien. */
+window.sentAuthMoi = function(frais){
+  if(frais) _sentAuthPromesse = null;
   if(!_sentAuthPromesse){
     /* La route rend du JSON valide MÊME en 401 (`{authenticated:false}`) :
        les six appelants d'origine se comportaient donc à l'identique, et les
@@ -9122,6 +9133,14 @@ var PAGE_GUIDES = {
   // Les clés de cette table sont uniques : une clé répétée plus bas
   // écrase silencieusement celle d'ici (littéral d'objet JS), et rien
   // dans la page ne le signale. test_guides_sentinel.py l'interdit.
+  'compte': {
+    title: "Connexion et session",
+    sections: [
+      {h:"À quoi sert cette page", t:"Elle dit qui est connecté, sous quelle offre, et donne les deux seuls chemins qui comptent : se déconnecter, ou se connecter. Sentinel comptait cinquante-deux onglets et pas un ne parlait du compte — la session n’existait que dans un bouton de la barre du haut, entre deux boutons de même apparence."},
+      {h:"Comment l’utiliser", t:"Ouvrez-la quand un module se vide sans raison : Registre sans systèmes, audit sans points, analyses sans historique. Neuf fois sur dix la session a expiré, et cette page vous le dira au lieu de vous laisser conclure que vos données ont disparu."},
+      {h:"Ce qu’elle ne fait pas", t:"Elle ne conserve rien : elle interroge la session à chaque ouverture, parce qu’un état mémorisé serait faux au moment précis où l’on vient le consulter. Et se déconnecter ne ferme la session que sur ce navigateur — le Registre, l’audit et les documents restent attachés au compte."}
+    ]
+  },
   'adoption': {
     title: "Tableau de bord d’adoption",
     sections: [
@@ -19724,3 +19743,90 @@ document.addEventListener('keydown', function(e){
   }
 });
 
+
+
+;/* ── COMPTE : DIRE L'ÉTAT DE LA SESSION, ET DONNER LE CHEMIN ─────────────
+   CE QUI MANQUAIT. Sentinel comptait cinquante-deux onglets et pas un ne
+   parlait du compte. La session n'apparaissait que dans un bouton
+   « Déconnexion » de la barre du haut, entre « Retour Accueil » et « Lancer un
+   audit » — trois boutons de même apparence, dont un seul engage. Et rien
+   nulle part ne permettait de SE CONNECTER : un visiteur dont la session avait
+   expiré n'avait, depuis Sentinel, aucun chemin de retour.
+
+   CETTE PAGE NE CONSERVE RIEN. Elle interroge la session à chaque ouverture et
+   affiche ce qu'elle trouve. Un état de session mémorisé serait faux la
+   première fois qu'il expire — c'est-à-dire au moment précis où on vient le
+   consulter. */
+(function(){
+  'use strict';
+
+  function ligne(cle, valeur){
+    return '<div style="display:flex;justify-content:space-between;gap:16px;padding:8px 0;'
+      + 'border-bottom:1px solid var(--rule);font-size:12.5px">'
+      + '<span style="color:var(--muted)">' + cle + '</span>'
+      + '<span style="color:var(--ink);font-weight:500;text-align:right">' + valeur + '</span></div>';
+  }
+  function bouton(libelle, action, principal, titre){
+    return '<button class="mat-export-btn"' + (principal ? ' style="background:var(--ink);color:#fff"' : '')
+      + ' onclick="' + action + '" title="' + titre + '">' + libelle + '</button>';
+  }
+  var PLANS = { gratuit:'Gratuit', pro:'Pro', entreprise:'Entreprise' };
+
+  window.compteRendre = function(){
+    var corps = document.getElementById('compte-corps');
+    var past = document.getElementById('compte-etat-pastille');
+    var act = document.getElementById('compte-actions');
+    if(!corps) return;
+    /* LA ROUTE REND 401 QUAND LA SESSION EST ABSENTE : ce n'est pas une panne,
+       c'est la réponse. On la traite comme telle plutôt que de laisser la page
+       sur « lecture… » indéfiniment. (Le commentaire nommait ici le raccourci
+       partagé, qu'on n'appelle plus — un commentaire qui désigne du code
+       disparu induit en erreur aussi sûrement qu'une ligne fausse.) */
+    var afficher = function(d){
+      d = d || {};
+      if(d.authenticated){
+        if(past){ past.textContent = 'session ouverte'; past.style.color = 'var(--green)'; }
+        corps.innerHTML =
+            ligne('Compte', d.is_conseilprev ? 'CONSEILPREV — accès administrateur'
+                                             : (d.nom_entreprise || '—'))
+          + (d.email ? ligne('Adresse', d.email) : '')
+          + ligne('Offre', PLANS[d.plan] || d.plan || '—')
+          + ligne('État', 'Connecté sur ce navigateur');
+        if(act) act.innerHTML =
+            bouton('Se déconnecter', 'sentinelLogout()', true,
+                   'Fermer la session sur ce navigateur')
+          + bouton('Changer de compte', "window.location.href='/login'", false,
+                   'Ouvrir la page de connexion pour entrer avec un autre compte');
+      } else {
+        if(past){ past.textContent = 'aucune session'; past.style.color = 'var(--accent)'; }
+        corps.innerHTML =
+            ligne('Compte', 'Non connecté')
+          + ligne('État', 'Les modules qui lisent vos données resteront vides')
+          + '<p style="font-size:12px;color:var(--muted);margin:14px 0 0;line-height:1.6">'
+          + 'Le Registre, l’audit, les analyses et les documents sont rattachés à un compte. '
+          + 'Sans session, Sentinel affiche ses référentiels publics mais rien de ce qui vous appartient.</p>';
+        if(act) act.innerHTML = bouton('Se connecter', "window.location.href='/login'", true,
+                                       'Ouvrir la page de connexion');
+      }
+    };
+    /* LECTURE FRAÎCHE, PAR L'ACCESSEUR PARTAGÉ. `sentAuthMoi()` sans
+       argument rend la réponse mémorisée au chargement — fausse dès que la
+       session expire, c'est-à-dire au moment où l'on vient consulter cette
+       page. `frais` la fait relire. Ce n'est PAS un second point d'appel vers
+       la route : une recette l'interdit, et pour une bonne raison — cette
+       route porte du travail de fond côté serveur, et sept appelants pour une
+       réponse identique sont ce qui avait été consolidé. */
+    if(typeof sentAuthMoi !== 'function'){ afficher({}); return; }
+    sentAuthMoi(true).then(afficher).catch(function(){ afficher({}); });
+  };
+
+  /* Rendue à l'OUVERTURE, pas au chargement de Sentinel : une session lue une
+     fois pour toutes serait fausse dès qu'elle expire — au moment précis où on
+     vient la consulter. */
+  var _origGo = window.go;
+  window.go = function(id){
+    var r = _origGo ? _origGo.apply(this, arguments) : undefined;
+    if(id === 'compte') window.compteRendre();
+    return r;
+  };
+})();
