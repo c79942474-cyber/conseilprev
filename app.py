@@ -1663,6 +1663,7 @@ def api_panorama():
 # ── Centres de donnees europeens ─────────────────────────────────────────
 # Referentiel fige par version (compile puis refute), derivations
 # deterministes : la reponse ne varie pas, elle se met en cache une fois.
+import dcwatch  # noqa: E402
 import datacentres  # noqa: E402
 # La couche régionale vit dans SON module et ne rejoint jamais `SITES` : verser
 # cent trente-neuf sites franciliens dans un référentiel qui en porte
@@ -1672,6 +1673,36 @@ import datacentres  # noqa: E402
 import datacentres_idf  # noqa: E402
 
 _DC_CACHE = {"data": None}
+
+
+# ══════════════════════════════════════════════════════════
+# DCWATCH — DES AGREGATS PUBLIES, PAS UNE BASE REDISTRIBUEE
+#
+# La base DCWatch est sous ODbL 1.0. Son partage a l'identique (art. 4.4)
+# s'attache a toute BASE DERIVEE dont on fait un usage public : verser ses
+# puissances par site dans /api/datacentres obligerait a publier le referentiel
+# fusionne sous ODbL. L'article 4.5.b dit ou s'arrete cette obligation — un
+# TRAVAIL PRODUIT n'est pas une base derivee.
+#
+# Cette route ne rend donc que des agregats, et jamais un enregistrement. Elle
+# porte la mention exigee par l'article 4.3 AVEC les chiffres : une mention
+# rangee ailleurs ne suit pas le chiffre qu'elle doit accompagner.
+# ══════════════════════════════════════════════════════════
+@app.route('/api/dcwatch', methods=['GET'])
+@rate_limit(limit=60, window=60)
+def api_dcwatch():
+    """Agregats DCWatch. `?pays=France` restreint au libelle exact du pays ; la
+    restriction ne descend pas plus bas, une selection plus fine ferait du
+    resultat une extraction et non un agregat."""
+    if not dcwatch.disponible():
+        return jsonify({'ok': False,
+                        'erreur': 'base DCWatch absente du deploiement',
+                        'source': dcwatch.SOURCE}), 503
+    pays = (request.args.get('pays') or '').strip()[:60] or None
+    d = dcwatch.agregats(pays)
+    d['ok'] = True
+    d['couverture'] = dcwatch.couverture()
+    return jsonify(d)
 
 
 @app.route('/api/datacentres', methods=['GET'])
