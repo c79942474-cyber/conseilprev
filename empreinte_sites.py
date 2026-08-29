@@ -191,6 +191,23 @@ LIMITES = [
     "Un projet annoncé qui ne se réalise pas figure au cumul de son pays tant "
     "qu’il n’est pas retiré du référentiel. Le curseur d’horizon permet de "
     "l’écarter de la lecture.",
+    # LE PÉRIMÈTRE QUI N'ÉTAIT PAS DÉCLARÉ. Les trois postes calculés — usage,
+    # fabrication, eau — couvrent le scope 2 et une partie du scope 3 du GHG
+    # Protocol. Le SCOPE 1 n'y est pas, et rien ne le disait : un lecteur qui
+    # rapproche ces chiffres d'un bilan d'entreprise croyait comparer des
+    # totaux comparables. Ce n'est pas un calcul faux, c'est un périmètre tu —
+    # et le taire est ici la seule faute possible, puisque la donnée manquante
+    # ne s'obtient pas sur le site d'un tiers.
+    "SCOPE 1 HORS PÉRIMÈTRE. Ces chiffres couvrent l’électricité consommée "
+    "(scope 2 du GHG Protocol) et le matériel amorti (scope 3). Ils n’incluent "
+    "NI les fuites de fluide frigorigène, NI le carburant des groupes "
+    "électrogènes — les deux postes directs d’un centre de données, et sur un "
+    "site à détente directe la fuite de fluide dépasse régulièrement le "
+    "carburant. Ces valeurs ne s’obtiennent que sur le site lui-même : charge "
+    "en fluide, taux de fuite, volume de gazole. Pour un site tiers observé de "
+    "l’extérieur, elles ne sont pas accessibles et ne sont donc pas estimées. "
+    "Un bilan d’entreprise complet les exige : cette carte ne remplace pas un "
+    "BEGES.",
 ]
 
 
