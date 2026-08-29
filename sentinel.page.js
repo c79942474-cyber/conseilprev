@@ -19671,15 +19671,44 @@ window.sbFiltrer = function(q){
     if(visibles) sec.removeAttribute('hidden');
     else sec.setAttribute('hidden', '');
   });
+  /* ══ UN FILTRE QUI NE TROUVE RIEN NE DOIT PAS SUPPRIMER LA NAVIGATION ══
+     CE QUI S'EST PASSÉ. Le navigateur a rempli ce champ tout seul avec une
+     adresse e-mail. Aucun onglet ne contient d'arobase : tout a été masqué, et
+     la barre latérale est devenue vide — sur TOUTES les pages, puisqu'elle est
+     unique et partagée. Le message « aucun onglet ne correspond » était exact
+     et sans recours : plus rien à cliquer pour s'en sortir.
+
+     Un filtre est une AIDE À TROUVER. Quand il ne trouve rien, il n'a rien à
+     retirer : il le dit, et rend la liste entière. C'est la seule règle qui
+     tienne quel que soit ce qui a rempli le champ — le visiteur, son
+     gestionnaire de mots de passe, ou un collage malheureux. Se défendre du
+     remplissage automatique reste utile, mais ne pas en dépendre est la
+     correction. */
+  if(m && vus === 0){
+    secs.forEach(function(sec){
+      sec.removeAttribute('hidden');
+      var n = sec.nextElementSibling;
+      while(n && !n.classList.contains('sb-section')){
+        if(n.classList.contains('sb-item')) n.removeAttribute('hidden');
+        n = n.nextElementSibling;
+      }
+    });
+  }
+
   var cpt = document.getElementById('sb-filtre-cpt');
   if(cpt){
     /* LE COMPTE EST DÉRIVÉ DE CE QUI VIENT D'ÊTRE MASQUÉ, pas d'un total
        écrit à la main : les deux ne peuvent pas diverger. */
     if(!m) cpt.textContent = '';
-    else if(vus === 0) cpt.textContent = 'aucun onglet ne correspond';
+    else if(vus === 0) cpt.textContent = 'aucun onglet ne correspond — menu complet affiché';
     else cpt.textContent = vus + ' onglet' + (vus > 1 ? 's' : '') + ' sur ' + total;
     cpt.classList.toggle('vide', !!m && vus === 0);
   }
+  /* Une porte de sortie visible, tant qu'un filtre est actif. La croix native
+     de `type="search"` n'existe pas sur tous les navigateurs, et un champ
+     rempli automatiquement ne se remarque pas toujours. */
+  var eff = document.getElementById('sb-filtre-effacer');
+  if(eff) eff.hidden = !m;
 };
 
 /* ENTRÉE ET ESPACE ACTIVENT L'ONGLET. Sans cela, `tabindex` ne ferait que
