@@ -5138,11 +5138,17 @@ def api_match():
 
 
 
-def _chat_contexte_sentinel(question, limite=5):
+def _chat_contexte_sentinel(question, limite=5, federer=False, bilan=None):
     """Couche de connaissance Sentinel pour le chat : retrouve les extraits les
     plus pertinents (base documentaire, veille reglementaire, analyses) et les
     formate en contexte. Retourne (contexte_texte, sources). Silencieux en cas
-    d'erreur : le chat conserve ses moteurs habituels."""
+    d'erreur : le chat conserve ses moteurs habituels.
+
+    `federer` mele la base de CONSEILPREV Cyber a la notre. Il est FAUX par
+    defaut, et c'est voulu : le chat repond en quelques secondes sur des
+    questions courtes, et lui ajouter un aller-retour vers un service externe
+    couterait ce delai a chaque message. La redaction d'un livrable, elle, dure
+    des dizaines de secondes et gagne tout a puiser dans les deux maisons."""
     try:
         mots = _expl_mots(question)
         cadres = _expl_cadres_detectes(question)
@@ -5166,6 +5172,25 @@ def _chat_contexte_sentinel(question, limite=5):
             r['score_final'] = float(r.get('score') or 0.0) * EXPL_SOURCE_POIDS.get(r.get('type'), 0.7)
         res.sort(key=lambda x: -x['score_final'])
         res = [r for r in res if r['score_final'] > 0.12][:limite]
+        # LA BASE SŒUR ENTRE ICI, une fois le classement local arrete. Fusionner
+        # AVANT le filtre de score melangerait deux echelles incomparables — le
+        # seuil 0,12 est calibre sur NOS scores et n'a aucun sens sur les siens.
+        _fed = None
+        if federer:
+            _fed = _federer_sentinel(question, res, limite)
+            if _fed:
+                res = _fed['res']
+            # `bilan` est rempli PLUTOT que rendu : la signature sert deja deux
+            # appelants, et leur ajouter une troisieme valeur de retour pour un
+            # besoin qui n'en concerne qu'un ferait payer le changement au
+            # second sans rien lui apporter.
+            if bilan is not None:
+                bilan.update(_fed['detail'] if _fed else
+                             {'n_local': len(res), 'n_pair': 0, 'pair_ok': False,
+                              'motif': rag_federe.etat()['motif']
+                                       or 'base soeur non configuree'})
+                bilan['mention'] = (_fed['mention'] if _fed else
+                                    rag_federe.mention(bilan))
         if not res:
             return '', []
         LIB = {'document': 'Base documentaire', 'veille': 'Veille reglementaire',
@@ -5173,16 +5198,53 @@ def _chat_contexte_sentinel(question, limite=5):
         blocs = []
         sources = []
         for i, r in enumerate(res, start=1):
+            # LA MAISON D'ORIGINE VOYAGE AVEC L'EXTRAIT. Un passage venu de
+            # CONSEILPREV Cyber est recopie mot pour mot dans un document qui
+            # sort du site : sans cette mention, personne ne peut dire six mois
+            # plus tard d'ou sortait la phrase.
+            etiquette = LIB.get(r.get('type'), r.get('type'))
+            if r.get('base'):
+                etiquette = r['base']
             blocs.append('[%d] (%s - %s)\n%s' % (
-                i, LIB.get(r.get('type'), r.get('type')), str(r.get('titre') or '')[:110],
+                i, etiquette, str(r.get('titre') or '')[:110],
                 str(r.get('extrait') or '')[:600]))
-            sources.append({'n': i, 'type': r.get('type'), 'titre': str(r.get('titre') or '')[:140],
-                            'ref': r.get('ref')})
+            sources.append({'n': i, 'type': r.get('type'),
+                            'titre': str(r.get('titre') or '')[:140],
+                            'base': r.get('base') or '', 'ref': r.get('ref')})
         return '\n\n'.join(blocs), sources
     except Exception:
         return '', []
 
 
+def _federer_sentinel(question, res, limite):
+    """Les extraits de CONSEILPREV Cyber, meles a ceux de Sentinel.
+
+    Rend {res, mention, detail} ou None si la federation n'est pas configuree
+    ou echoue. JAMAIS d'exception : la redaction tenait debout sur une seule
+    base avant ce module et doit y tenir encore."""
+    if not rag_federe.configure():
+        return None
+    try:
+        r = rag_federe.chercher(question, res, k=limite)
+    except Exception as exc:
+        logger.info('RAG_FEDERE_ERREUR: %s', exc)
+        return None
+    if not r['fragments']:
+        return None
+    # Retour au vocabulaire de Sentinel. `type` distingue les fragments venus
+    # d'ailleurs : les libelles locaux (« Base documentaire ») designeraient
+    # sinon une base qui n'est pas la leur.
+    out = []
+    for f in rag_federe.en_forme(r['fragments'], texte='extrait',
+                                 titre='titre', ident='ref'):
+        f['type'] = 'document' if f.get('base') == rag_federe.NOM_LOCAL else 'pair'
+        out.append(f)
+    return {'res': out, 'mention': rag_federe.mention(r),
+            'detail': {'n_local': r['n_local'], 'n_pair': r['n_pair'],
+                       'pair_ok': r['pair_ok'], 'motif': r['motif']}}
+
+
+import rag_federe  # noqa: E402  — la base soeur, melee a la notre
 import minimisation  # noqa: E402
 
 
@@ -11212,10 +11274,16 @@ def _juridique_extraits(question, profil):
     référentiel des textes suffit à produire une réponse utile."""
     try:
         requete = ' '.join(x for x in [question, (profil or {}).get('secteur') or ''] if x)[:500]
-        contexte, sources = _chat_contexte_sentinel(requete, limite=6)
-        return contexte or '', sources or []
+        # LES DEUX BASES, POUR UN LIVRABLE. Une analyse juridique sur la
+        # securite industrielle, un arbitrage sur un contrat d'infogerance : la
+        # matiere est chez CONSEILPREV Cyber, et l'ignorer faisait rediger sur
+        # la moitie de ce que la maison sait.
+        bilan = {}
+        contexte, sources = _chat_contexte_sentinel(requete, limite=6, federer=True,
+                                                    bilan=bilan)
+        return contexte or '', sources or [], bilan
     except Exception:
-        return '', []
+        return '', [], {}
 
 
 @app.route('/api/juridique/analyse', methods=['POST'])
@@ -11244,7 +11312,7 @@ def juridique_analyse():
     if qual:
         textes_ids = ([x['id'] for x in qual['applicables']]
                       + [x['id'] for x in qual['a_verifier']])
-    extraits, sources = _juridique_extraits(question, profil)
+    extraits, sources, bases = _juridique_extraits(question, profil)
     decisions = _juridique_jurisprudence(question, profil)
     user = juridique.prompt_analyse(question, profil=profil, extraits=extraits,
                                     textes_ids=textes_ids,
@@ -11259,7 +11327,11 @@ def juridique_analyse():
         return jsonify({'error': "Service d'IA momentanément indisponible. Réessayez."}), 503
     res = juridique.post_traiter(reponse, textes_ids, jurisprudence=decisions)
     res.update({'ok': True, 'model': modele, 'sources': sources, 'qualification': qual,
-                'decisions': decisions})
+                'decisions': decisions,
+                # SUR QUOI L'ANALYSE A ETE ECRITE. La mention est due meme quand
+                # tout va bien — et surtout quand la base soeur n'a pas repondu :
+                # le document aurait pu etre different.
+                'bases': bases.get('mention'), 'bases_detail': bases or None})
     return jsonify(res)
 
 
@@ -11566,14 +11638,19 @@ def juridique_arbitrage():
     # Sans pièce désignée, la couche de connaissance Sentinel complète — son
     # origine est renvoyée : un extrait retrouvé n'a pas le poids d'une pièce
     # choisie, et la note doit pouvoir le dire.
+    bases = {}
     if not extraits:
-        ctx, srcs = _juridique_extraits(objet, profil)
+        ctx, srcs, bases = _juridique_extraits(objet, profil)
         if ctx:
             extraits.append(ctx)
             for s in (srcs or []):
                 n += 1
                 pieces.append({'n': s.get('n', n), 'titre': s.get('titre') or 'Source',
-                               'origine': 'recherche automatique'})
+                               # L'origine dit desormais QUELLE base : « recherche
+                               # automatique » ne distinguait pas les deux maisons,
+                               # et la note reproduit les extraits mot pour mot.
+                               'origine': ('recherche automatique · ' + s['base'])
+                                          if s.get('base') else 'recherche automatique'})
 
     routage = juridique.router(profil, dossier)
     textes_ids = ([x['id'] for x in routage['qualification']['applicables']]
@@ -11593,7 +11670,8 @@ def juridique_arbitrage():
         return jsonify({'error': "Service d'IA momentanément indisponible. Réessayez."}), 503
     res = juridique.post_traiter(reponse, textes_ids, jurisprudence=decisions)
     res.update({'ok': True, 'model': modele, 'pieces': pieces, 'routage': routage,
-                'decisions': decisions})
+                'decisions': decisions,
+                'bases': bases.get('mention'), 'bases_detail': bases or None})
     return jsonify(res)
 
 
