@@ -3890,7 +3890,19 @@ def auth_admin_login():
             time.sleep(0.05)
             return jsonify({'ok': False, 'error': 'Identifiants incorrects'}), 401
 
-        # Succès — générer une session admin
+        # SUCCES — ET C'EST ICI QUE LA SESSION EST POSEE, ce qui n'etait pas
+        # fait. Cette route verifiait l'adresse et le mot de passe a temps
+        # constant, puis renvoyait un jeton aleatoire SANS RIEN POSER EN
+        # SESSION. L'administrateur repartait donc avec une preuve
+        # d'authentification que le serveur ne reconnaissait nulle part : la
+        # verification etait correcte et sans effet, et les routes qui
+        # s'appuyaient sur ce jeton se contentaient d'en mesurer la longueur.
+        #
+        # Le jeton reste renvoye : le client s'en sert comme marqueur d'etat
+        # d'interface. Il n'autorise plus rien, et aucune route ne le lit.
+        session.clear()
+        session['is_conseilprev'] = True
+        session.permanent = True
         session_token = _make_token()
         logger.info(f'ADMIN_LOGIN_OK {ip}: {email}')
         return jsonify({
@@ -4299,21 +4311,12 @@ def admin_get_candidate():
     ip = limiter.get_ip(request)
     if not limiter.check_soft(ip, limit=30, window=60):
         return jsonify({'ok': False, 'error': 'Rate limit'}), 429
+    refus = admin_session_conseilprev()
+    if refus:
+        return refus
     try:
         d = request.get_json(force=True, silent=True) or {}
-        token = str(d.get('token','')).strip()
         uid   = str(d.get('uid','')).strip()[:30]
-
-        # Vérifier que le token est bien un token admin actif
-        # (dans une implémentation complète, on validerait contre une table de sessions)
-        # Ici : vérifier que ADMIN_PASSWORD est défini (proxy simple)
-        if not ADMIN_PASSWORD:
-            return jsonify({'ok': False, 'error': 'Compte admin non configuré'}), 503
-
-        # En production : valider le token contre une session stockée
-        # Pour l'instant : vérifie que le header contient bien un token non-vide
-        if not token or len(token) < 10:
-            return jsonify({'ok': False, 'error': 'Token invalide'}), 401
 
         logger.info(f'ADMIN_CANDIDATE_ACCESS {ip}: uid={uid}')
         # Retourner une réponse confirmant l'autorisation
@@ -4329,22 +4332,61 @@ def admin_get_candidate():
 
 
 
+def admin_session_conseilprev():
+    """L'administrateur est-il REELLEMENT connecte ?
+
+    CE QUE CETTE FONCTION REMPLACE, ET POURQUOI IL FALLAIT LA REMPLACER. Trois
+    routes d'administration verifiaient leur autorisation ainsi :
+
+        token = request.args.get('token','').strip()
+        if not token or len(token) < 8:
+            abort(401)
+        # Token valide si non-vide et ADMIN_PASSWORD configure
+
+    Le jeton n'etait compare a RIEN. `?token=12345678` passait. La seule chose
+    qui restait entre un inconnu et les CV deposes par les candidats etait de
+    deviner un nom de fichier — et `/api/admin/cv-list`, protegee de la meme
+    facon, donnait la liste complete de ces noms. De l'obscurite, et meme pas :
+    l'obscurite etait servie sur demande.
+
+    Ce que ces trois routes exposent n'est pas un reglage : ce sont des CV,
+    donc des donnees personnelles de personnes qui les ont deposees pour
+    postuler. Le RGPD ne connait pas la « protection par nom de fichier ».
+
+    CE QU'ON MET A LA PLACE : la meme verification que partout ailleurs dans ce
+    fichier — la session, et le drapeau `is_conseilprev` qu'elle porte. Deux
+    portes y menent, toutes deux serieuses : le lien maitre `/auth/<token>`,
+    compare a temps constant a `AUTH_MASTER_TOKEN`, et le formulaire
+    `/api/auth/admin-login`, compare a temps constant a `ADMIN_PASSWORD` et
+    limite a huit tentatives par cinq minutes.
+
+    Rend None si l'acces est accorde, sinon la reponse a renvoyer telle quelle.
+    """
+    client = sentauth_current_client()
+    if client and client.get('is_conseilprev'):
+        return None
+    logger.warning('ADMIN_ROUTE_REFUSEE %s %s', limiter.get_ip(request), request.path)
+    return jsonify({
+        'ok': False,
+        'error': "Acces reserve a l'administrateur CONSEILPREV. Connectez-vous "
+                 "depuis /sourcing, ou par le lien maitre."
+    }), 403
+
+
 @app.route('/api/admin/cv/<path:filename>', methods=['GET','HEAD'])
 def admin_download_cv(filename):
-    """Téléchargement sécurisé de CV — ADMIN UNIQUEMENT.
-    Vérifie le token admin dans le header ou query string avant de servir le fichier."""
+    """Telechargement de CV — ADMINISTRATEUR CONNECTE UNIQUEMENT.
+
+    L'autorisation ne passe plus par un `?token=` place dans l'URL. Outre qu'il
+    n'etait verifie contre rien, un secret dans une URL se retrouve dans les
+    journaux du serveur, dans ceux des intermediaires et dans l'en-tete
+    Referer de la page suivante. Le cookie de session ne voyage pas ainsi."""
     ip = limiter.get_ip(request)
 
-    # ── Vérification token admin ──
-    token = request.args.get('token','').strip() or request.headers.get('X-Admin-Token','').strip()
-    if not ADMIN_PASSWORD:
-        # ADMIN_PASSWORD non configuré sur Render — accès refusé
-        return jsonify({'ok': False, 'error': 'Compte admin non configuré (ADMIN_PASSWORD manquant sur Render)'}), 503
-    if not token or len(token) < 8:
+    refus = admin_session_conseilprev()
+    if refus:
         logger.warning(f'CV_DL_UNAUTH {ip}: {filename}')
-        abort(401)
-    # Token valide si non-vide et ADMIN_PASSWORD configuré
-    # (en production complète : valider contre la session stockée)
+        return refus
 
     # Sécuriser le nom de fichier (pas de path traversal)
     safe = secure_filename(filename)
@@ -4398,13 +4440,14 @@ def admin_download_cv(filename):
 
 @app.route('/api/admin/cv-list', methods=['GET'])
 def admin_cv_list():
-    """Liste tous les CVs disponibles — ADMIN UNIQUEMENT."""
-    ip = limiter.get_ip(request)
-    token = request.args.get('token','').strip()
-    if not ADMIN_PASSWORD:
-        return jsonify({'ok': False, 'error': 'ADMIN_PASSWORD non configuré'}), 503
-    if not token or len(token) < 8:
-        abort(401)
+    """Liste des CV deposes — ADMINISTRATEUR CONNECTE UNIQUEMENT.
+
+    C'est la route qui rendait l'autre exploitable : elle donnait les noms de
+    fichiers exacts, c'est-a-dire la seule chose qui manquait pour telecharger
+    un CV sans autorisation."""
+    refus = admin_session_conseilprev()
+    if refus:
+        return refus
 
     files = []
     if os.path.isdir(UPLOAD_FOLDER):

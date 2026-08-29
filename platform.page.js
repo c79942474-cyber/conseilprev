@@ -706,18 +706,18 @@ function renderMatches(){
 // ── Panier multi-recherches ──
 function requestCV(uid, cvName){
   if(!IS_ADMIN){ return; }
-  var token = '';
-  try{ token = sessionStorage.getItem('cp_token') || ''; }catch(e){}
 
-  if(!token){
-    alert('⚠ Session expirée. Reconnectez-vous via /sourcing → Espace CONSEILPREV');
-    return;
-  }
-
-  var dlUrl = '/api/admin/cv/' + encodeURIComponent(cvName) + '?token=' + encodeURIComponent(token);
+  // LE JETON A DISPARU DE L'URL, ET C'EST LA CORRECTION. Il n'etait compare a
+  // rien cote serveur — n'importe quelle chaine de huit caracteres ouvrait le
+  // telechargement. L'autorisation passe desormais par le cookie de session,
+  // que le navigateur joint de lui-meme a une requete de meme origine. Un
+  // secret dans une URL se retrouve d'ailleurs dans les journaux du serveur,
+  // dans ceux des intermediaires et dans l'en-tete Referer de la page
+  // suivante ; un cookie, non.
+  var dlUrl = '/api/admin/cv/' + encodeURIComponent(cvName);
 
   // Vérifier via fetch JSON si le fichier existe avant de déclencher le DL
-  fetch(dlUrl + '&check=1')
+  fetch(dlUrl + '?check=1', { credentials: 'same-origin' })
     .then(function(r){
       if(r.ok && r.headers.get('Content-Type') && r.headers.get('Content-Type').indexOf('json') < 0){
         // C'est un fichier → déclencher le téléchargement
@@ -774,11 +774,10 @@ function showCvHelp(cvName){
 }
 
 function adminCvList(){
-  // Ouvre la liste de tous les CVs disponibles sur le serveur
+  // Ouvre la liste de tous les CVs disponibles sur le serveur.
+  // Sans jeton : le cookie de session porte l'autorisation.
   if(!IS_ADMIN){ return; }
-  var token = '';
-  try{ token = sessionStorage.getItem('cp_token') || ''; }catch(e){}
-  window.open('/api/admin/cv-list?token=' + encodeURIComponent(token), '_blank');
+  window.open('/api/admin/cv-list', '_blank');
 }
 
 function sendSelectionNotifications(){
