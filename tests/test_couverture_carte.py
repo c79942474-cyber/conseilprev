@@ -195,13 +195,50 @@ def test_chaque_source_a_brancher_dit_ce_qui_lempeche():
         assert len(s["manque"]) > 60
 
 
-def test_dcwatch_est_declaree_avec_sa_licence_non_instruite():
-    """Republier n'est pas consulter. Le module Ile-de-France a deja tranche
-    ainsi pour l'Observatoire de l'Institut Paris Region ; la meme regle vaut
-    ici, et pour la meme raison."""
+def test_dcwatch_porte_sa_licence_et_la_consequence_du_partage_a_l_identique():
+    """LA QUESTION ETAIT PARKEE, ELLE EST TRANCHEE — ET LE NOM DE CE CONTROLE
+    A DU CHANGER AVEC ELLE. Il s'appelait « licence non instruite » et se
+    contentait de trouver le mot « licence » dans le champ `manque` : il
+    passait encore apres qu'on y eut ecrit que la licence EST desormais
+    instruite. Un controle dont l'intitule ment sur ce qu'il garde est pire
+    qu'un controle absent.
+
+    DCWatch est publiee sous ODbL 1.0. Ce qui doit etre ecrit dans le
+    referentiel n'est donc plus « on ne sait pas », mais la consequence : le
+    partage a l'identique de l'article 4.4, qui s'attache a toute base derivee
+    dont on fait un usage public — et servir /api/datacentres a des abonnes en
+    releve. Republier n'est pas consulter : la ligne passe entre PRODUIRE un
+    travail et REDISTRIBUER LA BASE."""
     d = next((s for s in D.SOURCES_A_BRANCHER if s["cle"] == "dcwatch"), None)
     assert d, "DCWatch n'est pas declaree"
-    assert "licence" in d["manque"].lower()
+    # LE NOM, PAS L'URL. Une premiere version cherchait « odbl » n'importe ou
+    # dans le champ : l'adresse « opendatacommons.org/licenses/odbl/1-0/ » le
+    # contient, si bien que remplacer le nom de la licence par « a instruire »
+    # laissait le controle passer. On exige donc que le champ COMMENCE par le
+    # nom de la licence, et porte separement son adresse.
+    lic = (d.get("licence") or "").strip()
+    assert lic.lower().startswith("odbl"), (
+        "le champ `licence` de DCWatch ne commence plus par le nom de la "
+        "licence (« %s ») : la question de la republication redevient ouverte "
+        "sans que rien ne le dise" % lic[:60])
+    assert "opendatacommons.org" in lic, (
+        "la licence est nommee sans son adresse : une licence qu'on ne peut "
+        "pas ouvrir est une affirmation, pas une reference")
+    texte = d["manque"].lower()
+    # LES NUMEROS D'ARTICLES, PAS LE VOCABULAIRE. Une premiere version exigeait
+    # le mot « partage » : le texte porte a la fois « PARTAGER A L'IDENTIQUE »
+    # et « partage a l'identique », si bien qu'effacer l'une des deux formes
+    # laissait le controle passer sur l'autre. Un numero d'article ne se
+    # paraphrase pas, et c'est lui qui decide.
+    for notion, pourquoi in (
+            ("4.4", "l'article qui impose le partage a l'identique"),
+            ("4.6", "celui qui impose la copie lisible par machine"),
+            ("4.3", "celui qui EXEMPTE le travail produit — c'est l'issue"),
+            ("derivee", "c'est la base DERIVEE que l'article 4.4 vise"),
+    ):
+        assert notion in texte, (
+            "le referentiel ne dit plus %s : la decision se reprendra de "
+            "memoire, et de travers" % pourquoi)
     assert "exhaust" in d["reserve"].lower(), (
         "la reserve ne rappelle pas que DCWatch se declare non exhaustive")
 
