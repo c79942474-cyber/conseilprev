@@ -26,12 +26,18 @@ CE QUE CETTE RECETTE ETABLIT, ET POURQUOI C'EST PLUS QU'UN CONTROLE :
      parlementaire compte quinze gigawatts reserves aupres du RTE. Trois stades,
      trois chiffres, aucune addition possible.
 
-CE QU'ELLE NE FAIT PAS, ET LA LIGNE EST CELLE DE L'ODbL. Elle lit la base par
-site — usage INTERNE, article 4.5.c — pour produire un constat, qui est un
-travail produit au sens de l'article 4.3 et porte donc la mention de provenance.
-Elle n'ajoute aucune valeur DCWatch au referentiel servi : verser ces
-estimations dans `datacentres.SITES` en ferait une base derivee, soumise au
-partage a l'identique. La ligne passe entre PRODUIRE et REDISTRIBUER.
+CE QU'ELLE FAIT DE LA BASE, ET OU PASSE LA LIGNE. Elle la lit par site — usage
+INTERNE, article 4.5.c — pour produire un constat, qui est un travail produit au
+sens de l'article 4.3 et porte donc la mention de provenance.
+
+DEPUIS 2026-09, CINQ POINTS SONT PASSES DANS LE REFERENTIEL SERVI. Les cinq
+communes que la carte nommait et qui manquaient y sont entrees avec des
+coordonnees reprises d'ici, faute de tout geocodeur joignable — decision
+explicite, consignee dans `datacentres.LIMITES` avec son risque residuel. Cette
+recette le VERIFIE au lieu de continuer a promettre le contraire : l'emprunt est
+declare ligne par ligne, attribue, et borne a cinq. Verser en revanche les
+ESTIMATIONS par site — puissance, surface, annee — ferait du referentiel une
+base derivee sans discussion possible, et cela n'a pas ete fait.
 
 ET ELLE NE LEVE PAS L'INTERDIT SUR LES MEGAWATTS. Les puissances de la carte
 sont ESTIMEES par mesure de batiment sur imagerie satellite : ce sont des
@@ -223,15 +229,33 @@ if e.get("disponible"):
        "l'article 4.3 l'exige sur tout travail produit")
 
 
-# ── 5. Ce que cette recette n'a PAS fait ───────────────────────────────────
-titre("5. La ligne qui n'est pas franchie")
+# ── 5. Ce qui est passe, ce qui ne passera pas ─────────────────────────────
+titre("5. L'emprunt declare, et la ligne qui tient toujours")
+
+empruntes = [s for s in D.SITES if s.get("point_source")]
+print("  cinq communes ajoutees en 2026-09 : "
+      + ", ".join(sorted(s["ville"] for s in empruntes)))
+ok("l'emprunt est declare ligne par ligne", len(empruntes) == 5,
+   "%d ligne(s) portent point_source — un emprunt tacite serait indefendable"
+   % len(empruntes))
+ok("chaque ligne empruntee porte la mention de provenance",
+   all(D.MENTION_ODBL in (s.get("note") or "") for s in empruntes),
+   "l'article 4.3 veut que la mention accompagne le contenu, pas qu'elle "
+   "attende dans une page voisine")
+ok("la charge servie la porte aussi",
+   D.assemble().get("mention_odbl") == D.MENTION_ODBL,
+   "une mention qui ne sort pas de l'API ne suit pas ce qui est servi")
 
 avec_mw = [s for s in D.SITES if s.get("capacite_mw")]
-ok("aucune puissance DCWatch n'est entree dans le referentiel servi",
-   not avec_mw,
-   "y verser ces estimations en ferait une base derivee, soumise au partage a "
-   "l'identique — et un ordre de grandeur de batiment y passerait pour une "
-   "capacite attestee")
+ok("AUCUNE puissance DCWatch n'est entree, elle", not avec_mw,
+   "seul le point a ete repris : une estimation de batiment par imagerie "
+   "satellite n'est pas une charge informatique, et la verser ici la ferait "
+   "passer pour une capacite attestee")
+extra = [s for s in empruntes
+         if any(s.get(c) for c in ("gabarit", "eau_m3_an", "elec_gwh_an",
+                                   "annee_service", "investissement_meur"))]
+ok("ni surface, ni annee, ni gabarit ne l'ont suivie", not extra,
+   [s["ville"] for s in extra])
 ok("le module public ne rend toujours aucun enregistrement",
    not any(callable(getattr(dcwatch, n, None)) and n in ('sites', 'lignes', 'enregistrements')
            for n in dir(dcwatch)),

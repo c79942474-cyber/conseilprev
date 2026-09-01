@@ -4,7 +4,7 @@ CE QUI A DECLENCHE CE FICHIER. « Les Echos » a publie deux cartes des centres
 de donnees francais, fondees sur le projet DCWatch (Hubblo) : environ trois
 cent cinquante sites, colories par origine geographique de l'operateur
 d'infrastructure, dimensionnes par une puissance estimee en megawatts. Notre
-referentiel en porte trente-trois pour la France, sans aucune puissance.
+referentiel en porte trente-huit pour la France, sans aucune puissance.
 
 L'ECART N'EST PAS UN DEFAUT — c'est une methode differente, et le referentiel
 la documente deja : `capacite_mw` est nul partout, volontairement, parce que
@@ -103,7 +103,7 @@ def test_le_controle_est_branche_sur_sante():
     appelaient `_limite_couverture` directement et ne voyaient rien."""
     vraies = D.LIMITES[:]
     try:
-        D.LIMITES[:] = [x.replace("Treize lignes", "Quarante lignes")
+        D.LIMITES[:] = [x.replace("Dix-huit lignes", "Quarante lignes")
                         for x in vraies]
         pb = D.sante()["problemes"]
         assert any("France" in m for m in pb), (
@@ -123,7 +123,7 @@ def test_le_controle_exige_le_compte_DANS_la_limite_qui_nomme_le_pays():
     try:
         # Une limite qui nomme la France mais avec le MAUVAIS compte doit
         # etre signalee — c'est exactement la derive qu'on veut empecher.
-        D.LIMITES[:] = [x.replace("Treize lignes", "Quarante lignes")
+        D.LIMITES[:] = [x.replace("Dix-huit lignes", "Quarante lignes")
                         for x in vraies]
         maux = D._limite_couverture(D.couverture())
         assert any("France" in m for m in maux), (

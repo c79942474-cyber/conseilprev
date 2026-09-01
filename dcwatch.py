@@ -23,6 +23,20 @@ Un chiffre agrege est un TRAVAIL PRODUIT au sens de l'article 4.3 : il porte la
 mention de provenance, et rien de plus. La ligne passe donc entre PRODUIRE et
 REDISTRIBUER LA BASE — pas entre gratuit et payant, ni entre interne et public.
 
+OU CETTE LIGNE A ETE FRANCHIE, ET DE COMBIEN. En 2026-09, cinq communes que la
+carte publiee nommait manquaient au referentiel de CONSEILPREV ; elles y sont
+entrees avec un POINT GEOGRAPHIQUE repris d'ici, faute de tout geocodeur
+joignable. C'est une decision explicite, pas une derive, et ce module cesserait
+de dire vrai s'il continuait a promettre un referentiel indemne.
+
+Ce qui est passe : cinq couples de coordonnees. Ce qui ne l'est pas : aucune
+puissance, aucune surface, aucune annee, aucun gabarit — `capacite_mw` reste nul
+sur les 254 lignes servies. Les cinq portent `point_source='dcwatch'` et la
+mention de provenance dans leur note ; `datacentres.LIMITES` nomme le risque
+residuel, qui n'est pas tranche ; et une regle borne leur nombre, parce que
+c'est l'ampleur de l'emprunt — non son principe — qui ferait basculer la
+lecture de l'article 4.4.
+
 LE SEUIL DE REGROUPEMENT N'EST PAS UNE PRECAUTION DECORATIVE. Une agregation
 assez fine redevient la base : une moyenne sur UN site est la valeur de ce site.
 Toute ventilation passe donc par `_regrouper`, qui verse dans « autres » toute

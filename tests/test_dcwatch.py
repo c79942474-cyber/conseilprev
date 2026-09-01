@@ -216,12 +216,20 @@ def test_la_reserve_de_methode_suit_les_chiffres():
             "grandeur se lira comme une mesure de consommation" % notion)
 
 
-# ── LE RÉFÉRENTIEL SERVI RESTE INDEMNE ───────────────────────────────────
+# ── LE RÉFÉRENTIEL SERVI NE CONSOMME PAS LA BASE ─────────────────────────
 
 def test_le_referentiel_de_centres_de_donnees_n_importe_rien_de_dcwatch():
     """LA RÈGLE QUI PROTÈGE L'ACTIF. Si `datacentres.py` se mettait à lire ce
-    module, le référentiel servi par /api/datacentres deviendrait une base
-    dérivée, et son partage à l'identique s'imposerait."""
+    module, le référentiel servi par /api/datacentres consommerait la base à
+    chaque appel — et deviendrait dérivé sans que personne ait rien décidé.
+
+    CE CONTRÔLE NE DIT PLUS QUE LE RÉFÉRENTIEL EST « INDEMNE », et son titre a
+    changé avec sa portée. Depuis 2026-09, cinq de ses lignes portent un point
+    repris de cette base, par décision explicite. Un import n'est nécessaire à
+    personne pour recopier cinq coordonnées à la main : cette règle resterait
+    donc verte pendant que ce qu'elle prétendait garder serait entamé. Ce qui
+    borne l'emprunt vit désormais dans `tests/test_cinq_communes.py`, qui
+    compte les lignes empruntées au lieu de les interdire."""
     dc = io.open(os.path.join(ICI, 'datacentres.py'), encoding='utf-8').read()
     arbre = ast.parse(dc)
     importe = [n for n in ast.walk(arbre)
