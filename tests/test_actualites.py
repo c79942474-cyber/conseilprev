@@ -48,6 +48,14 @@ ARTICLES = re.findall(
 # Le registre qui pilote le changement de langue.
 REGISTRE = re.findall(r"\{\s*id:\s*'([\w-]+)'\s*,\s*data:\s*(NA\d*)\s*\}", PAGE)
 
+# LES COMMUNIQUÉS À CONTRÔLER SONT DÉRIVÉS DE LA PAGE, PAS ÉNUMÉRÉS.
+# Ils l'étaient : `[('na','NA'), ('na2','NA2'), ('na3','NA3')]`, écrit à la main.
+# Le quatrième communiqué est entré sans que la règle qui garde l'identité des
+# deux exemplaires français ne le voie — et le cinquième y aurait échappé de
+# même. Une liste figée cesse de décrire la page dès qu'on y ajoute quelque
+# chose, et c'est précisément quand on ajoute qu'on introduit l'écart.
+COMMUNIQUES = REGISTRE
+
 
 def _communique(nom):
     """L'objet JSON d'un communiqué, lu dans le source de la page."""
@@ -71,7 +79,7 @@ def test_la_page_contient_bien_des_communiques():
 
 # ── LES DEUX EXEMPLAIRES DU TEXTE FRANÇAIS ───────────────────────────────
 
-@pytest.mark.parametrize('prefixe,nom', [('na', 'NA'), ('na2', 'NA2'), ('na3', 'NA3')])
+@pytest.mark.parametrize('prefixe,nom', COMMUNIQUES)
 def test_le_francais_du_html_est_celui_du_script(prefixe, nom):
     """LA RÈGLE PRINCIPALE. Le lecteur qui clique EN puis FR doit retrouver
     exactement l'article qu'il avait en arrivant."""
@@ -83,7 +91,7 @@ def test_le_francais_du_html_est_celui_du_script(prefixe, nom):
         "%s : cliquer FR changerait l'article sous les yeux du lecteur" % (prefixe, nom))
 
 
-@pytest.mark.parametrize('nom', ['NA', 'NA2', 'NA3'])
+@pytest.mark.parametrize('nom', [n for _, n in COMMUNIQUES])
 def test_chaque_communique_est_complet_dans_les_trois_langues(nom):
     """Une langue manquante ne lève pas d'erreur : `naSet` retombe sur le
     français. L'utilisateur clique DE, la page reste en français, et rien ne
@@ -96,9 +104,11 @@ def test_chaque_communique_est_complet_dans_les_trois_langues(nom):
             assert valeur, "%s[%s][%s] est vide" % (nom, langue, champ)
 
 
-@pytest.mark.parametrize('nom', ['NA', 'NA2', 'NA3'])
-def test_le_titre_du_html_est_celui_du_script(nom):
-    prefixe = {'NA': 'na', 'NA2': 'na2', 'NA3': 'na3'}[nom]
+@pytest.mark.parametrize('prefixe,nom', COMMUNIQUES)
+def test_le_titre_du_html_est_celui_du_script(prefixe, nom):
+    # LE COUPLE VIENT DU REGISTRE, pas d'une table écrite à côté : c'est le
+    # registre qui fait autorité sur ce qui s'appelle comment, et une table
+    # parallèle aurait dû être tenue à jour à chaque communiqué.
     m = re.search(r'<h2 class="na-title" id="%s-title">(.*?)</h2>' % prefixe, PAGE, re.S)
     assert m, "titre inline introuvable pour %s" % nom
     assert m.group(1).strip() == _communique(nom)['fr']['title'].strip(), (
