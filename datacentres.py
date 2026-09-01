@@ -559,6 +559,18 @@ COUVERTURE_NATIONALE = {
                     "satellite (dimensions des batiments, estimation de puissance), "
                     "croise avec les registres cadastraux et les rapports "
                     "extra-financiers. Declaree NON exhaustive par ses auteurs."),
+        # LA REGLE DE LECTURE DE LA CARTE, ETABLIE ET NON SUPPOSEE. « Environ
+        # trois cent cinquante » ne se retrouve pas en comptant les lignes
+        # francaises de la base — il y en a quatre cent vingt-sept. C'est le
+        # compte des lignes EN EXPLOITATION. La demonstration a ete faite en
+        # rejouant les onze sites que la carte nomme : dix concordent au dixieme
+        # de megawatt pres des que cette regle est appliquee, et le onzieme,
+        # Roubaix, porte l'ecart des doublons de la base. Sans cette regle
+        # ecrite, la prochaine comparaison se ferait sur le mauvais total.
+        "lecture": ("Les sites EN EXPLOITATION seulement. Les projets sont exclus : "
+                    "la base en porte quatre-vingt-cinq pour la France, dont un de "
+                    "cent megawatts a Marseille que la carte publiee ne compte pas."),
+        "verifie_par": "recette_carte_dcwatch.py",
     },
     "DE": {
         "nom": "Allemagne",

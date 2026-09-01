@@ -66,6 +66,18 @@ SEUIL_AGREGAT = 5
 
 _CACHE = None
 
+# L'EXPORT ÉCHAPPE LES APOSTROPHES EN « \, » — soixante-quinze fois dans le
+# fichier, dont vingt-sept sur le libellé de région « Provence-Alpes-Côte
+# d\,Azur », qui ressortait tel quel dans les ventilations servies. La
+# réparation se fait À LA LECTURE, jamais dans le fichier : son empreinte est
+# vérifiée par ATTRIBUTION.md, et corriger la base la rendrait dérivée au sens
+# de l'ODbL. Un agrégat calculé sur une donnée réparée reste un travail produit.
+_ECHAPPEMENT = '\\,'
+
+
+def _reparer(v):
+    return v.replace(_ECHAPPEMENT, "'") if isinstance(v, str) and _ECHAPPEMENT in v else v
+
 
 def _lire():
     """Les enregistrements, en mémoire, une seule fois. PRIVÉ, et il le reste :
@@ -76,8 +88,28 @@ def _lire():
             _CACHE = []
         else:
             with io.open(FICHIER, encoding='utf-8', newline='') as f:
-                _CACHE = list(csv.DictReader(f))
+                _CACHE = [{k: _reparer(v) for k, v in l.items()}
+                          for l in csv.DictReader(f)]
     return _CACHE
+
+
+def _doublons(lignes):
+    """Combien de lignes répètent un couple (nom, commune) déjà vu.
+
+    LA BASE EN CONTIENT, ET TOUS LES TOTAUX LES COMPTENT. Deux bâtiments OVH
+    figurent deux fois : le parc français en exploitation ressort à 342 lignes
+    pour 340 sites distincts, et sa puissance à dix mégawatts près. Ce n'est pas
+    un défaut de notre lecture, et le taire ferait passer un doublon pour un
+    site. On rend le NOMBRE, jamais les noms : un compte est un agrégat, une
+    liste serait la base."""
+    vus, n = set(), 0
+    for l in lignes:
+        cle = ((l.get('name') or '').strip().lower(),
+               (l.get('city_name') or '').strip().lower())
+        if cle in vus:
+            n += 1
+        vus.add(cle)
+    return n
 
 
 def disponible():
@@ -144,11 +176,21 @@ def agregats(pays=None):
     surfaces = [s for s in (_nombre(l.get('total_floor_area_sqm')) for l in lignes) if s]
 
     par_pays, par_etat, par_region = {}, {}, {}
+    par_etat_mw = {}
     for l in lignes:
         for champ, seau in (('country', par_pays), ('progress_step', par_etat),
                             ('region', par_region)):
             cle = (l.get(champ) or '').strip() or 'non renseigné'
             seau[cle] = seau.get(cle, 0) + 1
+        etat = (l.get('progress_step') or '').strip() or 'non renseigné'
+        par_etat_mw[etat] = par_etat_mw.get(etat, 0.0) + (_nombre(l.get('power_total_mw')) or 0.0)
+    # Le seuil vaut ici aussi : une puissance ventilée sur trois sites est
+    # presque leur puissance. Les états sous le seuil sont versés dans « autres ».
+    petits = sum(v for k, v in par_etat_mw.items() if par_etat.get(k, 0) < SEUIL_AGREGAT)
+    par_etat_mw = {k: round(v, 1) for k, v in par_etat_mw.items()
+                   if par_etat.get(k, 0) >= SEUIL_AGREGAT}
+    if petits:
+        par_etat_mw['autres (groupes de moins de %d sites)' % SEUIL_AGREGAT] = round(petits, 1)
 
     puissances_triees = sorted(puissances)
     mediane = None
@@ -175,6 +217,15 @@ def agregats(pays=None):
         'repartition_pays': _regrouper(par_pays),
         'repartition_etat': _regrouper(par_etat),
         'repartition_region': _regrouper(par_region),
+        # SANS CETTE VENTILATION, LE TOTAL DE PUISSANCE SE LIT COMME UN PARC.
+        # En France la base porte 2,2 GW en exploitation et 7,4 GW en projet :
+        # additionner les deux donne un chiffre qui n'existe nulle part, ni
+        # aujourd'hui ni à terme. C'est l'erreur que la carte publiée évite en
+        # ne cartographiant que l'exploitation — encore faut-il pouvoir le
+        # vérifier.
+        'puissance_par_etat_mw': par_etat_mw,
+        # Les doublons de la base, comptés et non tus : voir _doublons.
+        'doublons': _doublons(lignes),
     }
 
 
