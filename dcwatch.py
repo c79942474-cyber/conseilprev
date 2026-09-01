@@ -68,6 +68,21 @@ MENTION = ("Contient des informations de DCWatch, mises à disposition sous "
 SOURCE = "DCWatch (Hubblo) — https://gitlab.com/hubblo/datacenter-watch"
 VERSION = "2026.04.09"
 
+# L'EMPREINTE ENTRE DANS LE CODE, ET CE N'EST PAS UN DETAIL DE RANGEMENT. Elle
+# ne vivait que dans la prose d'ATTRIBUTION.md : rien, au demarrage du service,
+# ne disait si le fichier servi etait encore celui qui a ete instruit.
+#
+# ET SURTOUT, UNE ETIQUETTE DE VERSION NE BOUGE PAS QUAND LA DONNEE BOUGE. Le
+# fichier depose est identique, octet pour octet, a celui de l'etiquette amont
+# 2026.04.09 — mais le HEAD de `main` porte deja trois enregistrements de plus,
+# 341 sites francais en exploitation contre 342, alors que le journal des
+# versions amont affiche toujours 2026.04.09. Se fier au libelle laisserait
+# croire a une base a jour ; seule l'empreinte le dit.
+#
+# `recette_dcwatch_amont.py` compare l'amont a ce depot. Elle ne le remplace
+# jamais toute seule : relever l'etiquette deplacerait des chiffres publies.
+EMPREINTE = "3af6bb6765c17aa7b1d6a4f08d77aa93083fae6d087683ef30c819314df0e1fd"
+
 RESERVE_METHODE = (
     "DCWatch se déclare non exhaustive. Sa puissance est ESTIMÉE par mesure des "
     "dimensions du bâtiment sur imagerie satellite, croisée avec le cadastre et "
@@ -124,6 +139,41 @@ def _doublons(lignes):
             n += 1
         vus.add(cle)
     return n
+
+
+def etat():
+    """Le depot est-il encore celui qui a ete instruit ?
+
+    Relit le fichier et compare son empreinte a `EMPREINTE`. Un depot remplace,
+    tronque ou rafraichi sans decision se voit ici — et sur /api/dcwatch, parce
+    que `couverture()` porte le drapeau.
+
+    NE REND QUE DES SCALAIRES : aucune ligne, aucun nom. La regle qui interdit
+    a ce module de rendre des enregistrements vaut pour lui comme pour les
+    autres."""
+    import dcwatch_import          # sans reseau, comme ce module
+    if not os.path.exists(FICHIER):
+        return {'disponible': False, 'fichier': os.path.basename(FICHIER), 'version': VERSION,
+                'empreinte_attendue': EMPREINTE, 'empreinte_obtenue': None,
+                'empreinte_conforme': False, 'enregistrements': 0,
+                'source': SOURCE, 'mention': MENTION,
+                'dit': 'base absente du deploiement'}
+    with open(FICHIER, 'rb') as f:
+        octets = f.read()
+    v = dcwatch_import.verifier(octets, EMPREINTE)
+    r = dcwatch_import.resume(octets)
+    return {
+        'disponible': True, 'fichier': os.path.basename(FICHIER), 'version': VERSION,
+        'tag': dcwatch_import.TAG,
+        'empreinte_attendue': v['attendue'], 'empreinte_obtenue': v['obtenue'],
+        'empreinte_conforme': v['conforme'],
+        'enregistrements': r['enregistrements'],
+        'octets': r['octets'],
+        'source': SOURCE, 'mention': MENTION,
+        'dit': ('le depot est celui qui a ete instruit' if v['conforme'] else
+                'LE DEPOT A CHANGE : son empreinte ne correspond plus a celle '
+                'qui a ete instruite et documentee dans ATTRIBUTION.md'),
+    }
 
 
 def disponible():
@@ -262,4 +312,8 @@ def couverture():
         'part_renseignee_pct': round(100.0 * renseignes / len(lignes), 1),
         'pays_couverts': len({(l.get('country') or '').strip()
                               for l in lignes if (l.get('country') or '').strip()}),
+        # UN DEPOT REMPLACE DOIT SE VOIR LA OU LES CHIFFRES SONT SERVIS. Sans
+        # ce drapeau, une base rafraichie en silence changerait les agregats
+        # publies sans que rien ne l'annonce.
+        'empreinte_conforme': etat().get('empreinte_conforme'),
     }
