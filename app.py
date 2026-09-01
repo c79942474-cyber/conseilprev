@@ -14257,6 +14257,189 @@ IA50_USAGES_DEFAUT = [
 ]
 
 
+# ── LE CADRE : ce que l'article 50 impose, a qui, et ce qu'il n'impose pas ──
+# Le registre ci-dessus dit ce que la maison FAIT. Il ne dit pas ce que le
+# reglement EXIGE — et sans cela, « EN PLACE » ne se distingue pas d'un zele
+# volontaire. Or l'article 50 cree une transparence CIBLEE : il n'impose pas
+# d'etiqueter tout contenu genere par IA. Confondre l'obligation et
+# l'engagement affaiblit le marquage la ou il est reellement du.
+#
+# Ces trois blocs sont de la DOCTRINE, donc du code. Ils ne vivent pas dans la
+# table `ia50_usages`, qui est editable par l'exploitant : un registre se
+# corrige, le texte du reglement non. Ce que chaque ligne du registre DOIT est
+# calcule depuis ici (ia50_du_pour), jamais recopie dans la ligne — deux
+# exemplaires deriveraient, et c'est celui qu'on oublie qui resterait.
+#
+# Outillage technique ; ne constitue pas un avis juridique.
+
+IA50_QUI = ('fournisseur', 'deployeur', 'modalites')
+
+IA50_PARAGRAPHES = [
+    {'cle': '50.1', 'qui': 'fournisseur',
+     'titre': 'Interaction avec un systeme d\'IA',
+     'impose': 'Les personnes doivent etre informees qu\'elles interagissent avec un '
+               'systeme d\'IA.',
+     'n_impose_pas': 'Rien sur le contenu produit : c\'est l\'interaction qui est signalee, '
+                     'pas ce qui en sort.',
+     'exception': 'Sauf si cela est evident au regard du contexte d\'usage.',
+     'chez_nous': 'Applique : les assistants du site public et le Copilote Sentinel affichent '
+                  'la mention des la premiere interaction.'},
+    {'cle': '50.2', 'qui': 'fournisseur',
+     'titre': 'Marquage lisible par une machine',
+     'impose': 'Les systemes generant du texte, de l\'image, de l\'audio ou de la video '
+               'synthetiques doivent permettre un marquage DETECTABLE PAR UNE MACHINE du '
+               'contenu genere ou manipule.',
+     'n_impose_pas': 'Aucune mention visible : le §2 est un marquage technique, pas un '
+                     'etiquetage a l\'ecran.',
+     'exception': 'Fonction d\'assistance a l\'edition standard, ou absence de modification '
+                  'substantielle des donnees d\'entree.',
+     'chez_nous': 'Applique : proprietes de fichier (ai-generated, reference au 50.2) '
+                  'inserees dans chaque document exporte, et relues a chaque verification.'},
+    {'cle': '50.3', 'qui': 'deployeur',
+     'titre': 'Reconnaissance des emotions, categorisation biometrique',
+     'impose': 'Les personnes exposees a un systeme de reconnaissance des emotions ou de '
+               'categorisation biometrique doivent en etre informees.',
+     'n_impose_pas': 'Ne concerne aucun contenu genere : c\'est l\'exposition au systeme qui '
+                     'declenche l\'information.',
+     'exception': 'Usages autorises a des fins de detection ou de prevention d\'infractions, '
+                  'dans les conditions prevues par le reglement.',
+     'chez_nous': 'SANS OBJET, et c\'est examine, pas oublie : la plateforme n\'exploite aucun '
+                  'systeme de reconnaissance des emotions ni de categorisation biometrique, et '
+                  'ne traite aucune donnee biometrique.'},
+    {'cle': '50.4', 'qui': 'deployeur',
+     'titre': 'Hypertrucages, textes d\'interet public',
+     'impose': 'Les hypertrucages (deepfakes) doivent etre signales comme artificiellement '
+               'generes ou manipules. Les textes publies pour informer le public sur des '
+               'questions d\'interet public doivent l\'etre aussi lorsqu\'ils sont generes ou '
+               'manipules par IA.',
+     'n_impose_pas': 'Ni les contenus internes, ni les livrables remis a un client : la '
+                     'publication au public, et son objet, sont la condition.',
+     'exception': 'Oeuvre manifestement artistique, creative, satirique ou de fiction : '
+                  'transparence allegee, sans nuire a l\'oeuvre. Pour les textes : examen '
+                  'humain ou controle editorial avec une responsabilite editoriale assumee.',
+     'chez_nous': 'Applique : aucun hypertrucage produit ; les actualites du site invoquent '
+                  'l\'exception de controle editorial, publiee et nominative.'},
+    {'cle': '50.5', 'qui': 'modalites',
+     'titre': 'Comment l\'information doit etre donnee',
+     'impose': 'L\'information doit etre claire, distincte et fournie au plus tard lors de la '
+               'premiere interaction ou exposition.',
+     'n_impose_pas': 'Ne cree aucune obligation nouvelle : il regit la forme de celles des '
+                     '§1 a §4 qui jouent deja.',
+     'exception': 'Aucune.',
+     'chez_nous': 'Applique : mentions affichees des l\'ouverture de l\'assistant, et non '
+                  'reportees dans une page de conditions.'},
+]
+
+# Le point cle de la lecture : la transparence de l'article 50 est CIBLEE.
+IA50_POINT_CLE = ('L\'article 50 cree une transparence ciblee. Il n\'impose pas d\'etiqueter '
+                  'tous les contenus « generes par IA » : chaque paragraphe vise une situation '
+                  'precise et un destinataire precis. Ce que la maison fait au-dela est un '
+                  'engagement, pas une obligation — et le dire est ce qui donne sa valeur au '
+                  'marquage la ou il est du.')
+
+# Les verdicts sont une LISTE FERMEE : sans elle, un cas nouveau s'ecrirait avec
+# son propre vocabulaire et la grille cesserait d'etre comparable.
+IA50_VERDICTS = ('oui', 'oui_allege', 'non_en_principe', 'a_verifier')
+
+IA50_CAS = [
+    {'cle': 'chatbot', 'cas': 'Chatbot ou assistant conversationnel',
+     'verdict': 'oui', 'paragraphe': '50.1',
+     'motif': 'Informer l\'utilisateur qu\'il interagit avec une IA, sauf si c\'est evident.',
+     'chez_nous': 'Assistants du site public et Copilote Sentinel : mention des la premiere '
+                  'interaction, mesuree sur les pages reellement servies.'},
+    {'cle': 'video_avatar', 'cas': 'Video publicitaire avec avatar ou voix artificiels',
+     'verdict': 'oui', 'paragraphe': '50.4',
+     'motif': 'Si le contenu constitue un hypertrucage, la nature artificielle doit etre '
+              'signalee.',
+     'chez_nous': 'Aucune production de ce type a ce jour. Si elle survenait, elle releverait '
+                  'du §4 et non d\'un simple bandeau interne.'},
+    {'cle': 'actualite', 'cas': 'Article ou publication d\'actualite generee par IA pour '
+                                'informer le public',
+     'verdict': 'oui', 'paragraphe': '50.4',
+     'motif': 'Transparence requise si le texte est publie pour informer le public sur une '
+              'question d\'interet public.',
+     'chez_nous': 'Page Actualites : exception de controle editorial invoquee, avec une '
+                  'responsabilite editoriale publiee et nominative — l\'exception ne vaut que '
+                  'documentee.'},
+    {'cle': 'oeuvre', 'cas': 'Oeuvre satirique, fiction, creation artistique',
+     'verdict': 'oui_allege', 'paragraphe': '50.4',
+     'motif': 'La transparence peut etre adaptee pour ne pas nuire a l\'experience de '
+              'l\'oeuvre.',
+     'chez_nous': 'Sans objet : la plateforme ne produit pas d\'oeuvre de fiction.'},
+    {'cle': 'powerpoint', 'cas': 'Presentation interne (support de reunion, note de travail)',
+     'verdict': 'non_en_principe', 'paragraphe': 'aucun',
+     'motif': 'L\'article 50 ne cree pas d\'obligation generale de signaler tous les usages '
+              'internes de l\'IA.',
+     'chez_nous': 'Les supports internes ne portent pas de marquage au titre du §50 ; ils '
+                  'peuvent en porter un par choix de gouvernance.'},
+    {'cle': 'livrable_client', 'cas': 'Prestataire qui redige un livrable client avec l\'aide '
+                                      'd\'une IA',
+     'verdict': 'non_en_principe', 'paragraphe': 'aucun',
+     'motif': 'L\'article 50 ne l\'impose pas, en l\'absence d\'hypertrucage ou de texte '
+              'd\'interet public. Le contrat, la bonne foi ou une charte client, eux, peuvent '
+              'l\'exiger.',
+     'chez_nous': 'Les livrables portent une mention visible et un marquage machine : c\'est '
+                  'un ENGAGEMENT de la maison, et il est desormais ecrit comme tel dans les '
+                  'proprietes du fichier — non plus « au titre de l\'article 50 ».'},
+    {'cle': 'support_commercial', 'cas': 'Support commercial, page produit presentant un '
+                                         'service',
+     'verdict': 'a_verifier', 'paragraphe': 'aucun',
+     'motif': 'L\'AI Act ne s\'applique pas toujours, mais d\'autres regles peuvent imposer '
+              'une information loyale.',
+     'chez_nous': 'A examiner page par page : voir le troisieme niveau ci-dessous, notamment '
+                  'le droit de la consommation.'},
+]
+
+# Le troisieme niveau : meme quand l'article 50 ne joue pas, d'autres regles
+# peuvent jouer. Les ignorer conduirait a conclure « rien a faire » d'un
+# « l'AI Act ne s'applique pas » — ce qui est faux.
+IA50_AUTRES_OBLIGATIONS = [
+    {'cle': 'contrat', 'titre': 'Contrat et bonne foi',
+     'points': ['Le contrat peut imposer d\'informer le client de l\'usage d\'une IA.',
+                'Les politiques fournisseurs et chartes client peuvent l\'exiger.',
+                'La bonne foi contractuelle peut justifier une transparence sur l\'usage '
+                'd\'une IA dans certaines prestations.'],
+     'chez_nous': 'Les conditions de vente et la mention portee sur chaque livrable disent '
+                  'l\'usage de l\'IA et la relecture humaine attendue.'},
+    {'cle': 'consommation', 'titre': 'Droit de la consommation',
+     'points': ['Une communication trompeuse sur l\'origine ou la nature d\'une IA peut poser '
+                'difficulte.',
+                'Exemple : faux avis, faux temoignage, personnage artificiel presente comme '
+                'reel.',
+                'Le professionnel doit delivrer une information loyale.'],
+     'chez_nous': 'Aucun avis, temoignage ni personnage genere n\'est publie. Cette ligne '
+                  'existe pour que l\'interdiction reste ecrite, et non supposee.'},
+    {'cle': 'rgpd', 'titre': 'Donnees personnelles (RGPD)',
+     'points': ['Si l\'outil d\'IA traite des donnees personnelles, les personnes doivent en '
+                'etre informees conformement au RGPD.',
+                'En cas de decision automatisee ou de profilage, des exigences specifiques '
+                's\'ajoutent.',
+                'La transparence porte alors sur le TRAITEMENT des donnees, pas seulement sur '
+                'le contenu genere.'],
+     'chez_nous': 'Registre des traitements et politique de confidentialite ; l\'article 22 '
+                  '(decision automatisee) a son propre module.'},
+]
+
+
+def ia50_du_pour(role):
+    """Ce qu'un role DECLARE doit, calcule depuis IA50_PARAGRAPHES.
+
+    Cette fonction ne re-qualifie rien. Savoir si la maison est fournisseur ou
+    deployeur d'un systeme donne est une qualification juridique : elle
+    appartient a l'exploitant, qui la porte et l'assume. Ce qui se calcule, et
+    qui est calcule ici, c'est ce que la qualification ENTRAINE — et donc ce
+    qui, dans le registre, va au-dela de ce qui est du."""
+    r = str(role or '').strip().lower()
+    return {
+        'role': r,
+        'connu': r in IA50_QUI and r != 'modalites',
+        'paragraphes': [p['cle'] for p in IA50_PARAGRAPHES if p['qui'] == r],
+        'modalites': [p['cle'] for p in IA50_PARAGRAPHES if p['qui'] == 'modalites'],
+        'n_impose_pas': [p['cle'] for p in IA50_PARAGRAPHES
+                         if p['qui'] in ('fournisseur', 'deployeur') and p['qui'] != r],
+    }
+
+
 # ══════════════════════════════════════════════════════════
 # GOUVERNANCE IA — comite, circuit de validation, indicateurs
 # La matrice RACI vit dans « Parties prenantes » ; ce module porte ce qu'elle
@@ -14527,16 +14710,33 @@ def _ia50_mesure_documents():
         with zipfile.ZipFile(io.BytesIO(blob)) as z:
             core = z.read('docProps/core.xml').decode('utf-8', 'replace')
         marque = livrables_export.MARQUE_IA in core
-        ref = 'art. 50' in core or '2024/1689' in core
-        if marque and ref:
+        # « art. 50 » en sous-chaine se satisfaisait AUSSI de l'ancienne
+        # redaction « signale comme tel au titre du ... art. 50 » : la mesure
+        # restait verte des deux cotes de la correction, donc elle ne mesurait
+        # pas ce qu'elle annoncait. On exige le paragraphe — le marquage machine
+        # est l'obligation du FOURNISSEUR au titre du 50.2 — et on refuse la
+        # formule qui presentait la mention visible comme une obligation.
+        # Interdire une formule (« au titre de ») aurait teste un jeton, pas une
+        # propriete — et aurait refuse une phrase vraie, puisque le marquage
+        # machine EST du au titre du 50.2. Ce qui doit tenir, c'est le partage :
+        # le paragraphe nomme, le role qui le doit, et la mention visible
+        # annoncee pour ce qu'elle est — un engagement, non une obligation.
+        ref = 'art. 50.2' in core or 'art. 50 par. 2' in core
+        role = 'fournisseur' in core
+        engagement = 'engagement' in core
+        manque = [n for n, v in (('la marque IA', marque), ('le paragraphe 50.2', ref),
+                                 ('le role qui le doit (fournisseur)', role),
+                                 ('la mention visible donnee pour un engagement', engagement))
+                  if not v]
+        if not manque:
             return {'statut': 'conforme',
-                    'preuve': 'document genere a l\'instant : proprietes du fichier '
-                              'portant « ' + livrables_export.MARQUE_IA + ' » et la '
-                              'reference a l\'article 50 (docProps/core.xml lu, pas suppose)'}
+                    'preuve': 'document genere a l\'instant : proprietes du fichier portant '
+                              '« ' + livrables_export.MARQUE_IA + ' », le paragraphe 50.2, le '
+                              'fournisseur qui le doit, et la mention visible donnee pour un '
+                              'engagement (docProps/core.xml lu, pas suppose)'}
         return {'statut': 'non-conforme',
-                'preuve': 'document genere a l\'instant : proprietes SANS '
-                          + ('reference art. 50' if marque else 'marque IA')
-                          + ' — le marquage lisible par machine a disparu'}
+                'preuve': 'document genere a l\'instant : il manque ' + ', '.join(manque)
+                          + ' dans les proprietes du fichier'}
     except Exception as e:
         return {'statut': 'non-mesurable',
                 'preuve': 'generation de controle impossible : ' + str(e)[:120]}
@@ -14557,6 +14757,87 @@ def _ia50_mesure_actualites(page):
             'preuve': 'aucune mention de responsabilite editoriale sur la page Actualites : '
                       'l\'exception de l\'art. 50.4 est invoquee sans etre documentee — '
                       'a defaut, l\'etiquetage s\'impose'}
+
+
+def _ia50_mesure_cadre():
+    """La doctrine se tient-elle ? Cinq paragraphes, chacun avec un destinataire
+    de la liste fermee ; le §3 present ET motive ; sept cas a verdict ferme ;
+    trois autres obligations.
+
+    Un module ecrit pour empecher qu'une declaration se perime doit s'appliquer
+    sa propre regle. Rien n'empeche un paragraphe de disparaitre au detour d'une
+    edition — et c'est en silence que cela se ferait."""
+    manques = []
+    presents = [p.get('cle') for p in IA50_PARAGRAPHES]
+    for c in ('50.1', '50.2', '50.3', '50.4', '50.5'):
+        if c not in presents:
+            manques.append('paragraphe ' + c + ' absent')
+    for p in IA50_PARAGRAPHES:
+        if p.get('qui') not in IA50_QUI:
+            manques.append('paragraphe ' + str(p.get('cle')) + ' sans destinataire connu')
+        for champ in ('impose', 'n_impose_pas', 'chez_nous'):
+            if not str(p.get(champ) or '').strip():
+                manques.append('paragraphe ' + str(p.get('cle')) + ' : « ' + champ + ' » vide')
+    # Le §3 est sans objet ici. Mais une absence non motivee ne se distingue pas
+    # d'un oubli : une qualification non documentee equivaut a une absence de
+    # qualification. On exige donc que la mise hors d'objet soit ecrite.
+    p3 = [p for p in IA50_PARAGRAPHES if p.get('cle') == '50.3']
+    if p3 and 'SANS OBJET' not in str(p3[0].get('chez_nous') or '').upper():
+        manques.append('paragraphe 50.3 : mise hors d\'objet non motivee')
+    if len(IA50_CAS) < 7:
+        manques.append('grille incomplete : ' + str(len(IA50_CAS)) + ' cas sur 7')
+    for c in IA50_CAS:
+        if c.get('verdict') not in IA50_VERDICTS:
+            manques.append('cas « ' + str(c.get('cle')) + ' » : verdict hors liste fermee')
+    if len(IA50_AUTRES_OBLIGATIONS) < 3:
+        manques.append('troisieme niveau incomplet : ' + str(len(IA50_AUTRES_OBLIGATIONS))
+                       + ' obligations sur 3')
+    if manques:
+        return {'statut': 'non-conforme',
+                'preuve': 'cadre incoherent — ' + ' ; '.join(manques[:4])}
+    return {'statut': 'conforme',
+            'preuve': 'cadre relu a l\'instant : 5 paragraphes avec destinataire, §3 motive '
+                      'sans objet, ' + str(len(IA50_CAS)) + ' cas a verdict ferme, '
+                      + str(len(IA50_AUTRES_OBLIGATIONS)) + ' obligations au-dela de l\'AI Act'}
+
+
+def _ia50_mesure_roles(lignes):
+    """Chaque ligne du registre cite-t-elle un paragraphe qui oblige VRAIMENT le
+    role qu'elle declare ?
+
+    Une ligne « deployeur » qui invoque l'art. 50.1 — obligation du fournisseur
+    — se contredit : ou bien la qualification est autre, ou bien la reference
+    l'est. La machine ne tranche pas : qualifier un usage est une decision
+    juridique, elle appartient a l'exploitant. Elle refuse seulement de laisser
+    les deux coexister sans le dire."""
+    if lignes is None:
+        return {'statut': 'non-mesurable', 'preuve': 'registre illisible'}
+    ecarts = []
+    for l in lignes:
+        role = str(l.get('role') or '').strip().lower()
+        du = ia50_du_pour(role)
+        if not du['connu']:
+            ecarts.append('« ' + str(l.get('systeme'))[:40] + ' » : role « ' + role
+                          + ' » inconnu')
+            continue
+        autorises = set(du['paragraphes']) | set(du['modalites'])
+        texte = ' '.join(str(l.get(c) or '') for c in
+                         ('contenu', 'marquage', 'etiquetage', 'exception'))
+        for n in set(_re.findall(r'50\s*(?:\.|par\.|§)\s*([1-5])', texte)):
+            cite = '50.' + n
+            if cite not in autorises:
+                ecarts.append('« ' + str(l.get('systeme'))[:40] + ' » declare « ' + role
+                              + ' » mais invoque l\'art. ' + cite + ', qui oblige le '
+                              + [p['qui'] for p in IA50_PARAGRAPHES
+                                 if p['cle'] == cite][0])
+    if ecarts:
+        return {'statut': 'partiel',
+                'preuve': 'a arbitrer (qualification ou reference, pas les deux) — '
+                          + ' ; '.join(ecarts[:3])
+                          + (' ; +' + str(len(ecarts) - 3) if len(ecarts) > 3 else '')}
+    return {'statut': 'conforme',
+            'preuve': 'chaque ligne du registre n\'invoque que des paragraphes qui obligent '
+                      'le role qu\'elle declare'}
 
 
 # Quelle mesure sert quelle ligne du registre. On rattache par motif sur le nom
@@ -14583,7 +14864,44 @@ _IA50_MESURES = [
      'motif': r'[Aa]ctualites',
      'quoi': 'Responsabilite editoriale publiee (exception art. 50.4)',
      'mesure': lambda: _ia50_mesure_actualites(_ia50_page('actualites.html'))},
+    # Ces deux-la ne servent aucune ligne en particulier : elles mesurent le
+    # cadre lui-meme, et le registre dans son ensemble. D'ou un motif nul —
+    # un motif vide, lui, aurait rattache toutes les lignes a la fois.
+    {'cle': 'cadre',
+     'motif': None, 'portee': 'ensemble',
+     'quoi': 'Le cadre de l\'article 50 est complet et coherent (5 §, 7 cas, 3 niveaux)',
+     'mesure': _ia50_mesure_cadre},
+    {'cle': 'roles',
+     'motif': None, 'portee': 'ensemble', 'registre': True,
+     'quoi': 'Chaque ligne n\'invoque que les paragraphes qui obligent son role',
+     'mesure': _ia50_mesure_roles},
 ]
+
+
+@app.route('/api/ia50/cadre', methods=['GET'])
+def ia50_cadre():
+    """Le CADRE : les cinq paragraphes de l'article 50 et qui chacun oblige, la
+    grille des situations, et les obligations qui subsistent quand l'article 50
+    ne joue pas.
+
+    Le registre voisin dit ce que la maison FAIT ; celui-ci dit ce que le texte
+    EXIGE. Sans les deux, « EN PLACE » ne se distingue pas d'un zele volontaire,
+    et un paragraphe jamais examine ne se distingue pas d'un paragraphe sans
+    objet."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    return jsonify({'ok': True,
+                    'point_cle': IA50_POINT_CLE,
+                    'paragraphes': IA50_PARAGRAPHES,
+                    'cas': IA50_CAS,
+                    'verdicts': list(IA50_VERDICTS),
+                    'autres_obligations': IA50_AUTRES_OBLIGATIONS,
+                    'echeances': IA50_ECHEANCES,
+                    'du': {r: ia50_du_pour(r) for r in ('fournisseur', 'deployeur')},
+                    'note': 'Outillage technique ; ne constitue pas un avis juridique. La '
+                            'qualification fournisseur / deployeur de chaque usage appartient '
+                            'a l\'exploitant : ce module dit ce qu\'elle entraine, il ne la '
+                            'decide pas.'})
 
 
 @app.route('/api/ia50/verification', methods=['GET'])
@@ -14593,10 +14911,22 @@ def ia50_verification():
     case « Conforme » : la mesure et l'attestation restent deux colonnes."""
     if not raas_require_conseilprev():
         return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    # Le registre est lu D'ABORD : une mesure porte sur lui (les roles et les
+    # paragraphes qu'ils invoquent) et ne peut pas etre calculee sans lui.
+    lignes = None
+    try:
+        conn = registre_get_db(); cur = conn.cursor()
+        _ia50_table(cur, conn)
+        cur.execute('SELECT * FROM ia50_usages ORDER BY id')
+        lignes = [dict(r) for r in cur.fetchall()]
+        try: conn.close()
+        except Exception: pass
+    except Exception:
+        lignes = None
     mesures = []
     for m in _IA50_MESURES:
         try:
-            r = m['mesure']()
+            r = m['mesure'](lignes) if m.get('registre') else m['mesure']()
         except Exception as e:
             r = {'statut': 'non-mesurable', 'preuve': 'mesure en erreur : ' + str(e)[:120]}
         mesures.append({'cle': m['cle'], 'quoi': m['quoi'], 'motif': m['motif'],
@@ -14606,15 +14936,9 @@ def ia50_verification():
     # faire remonter en premier.
     contradictions = []
     try:
-        conn = registre_get_db(); cur = conn.cursor()
-        _ia50_table(cur, conn)
-        cur.execute('SELECT * FROM ia50_usages ORDER BY id')
-        lignes = [dict(r) for r in cur.fetchall()]
-        try: conn.close()
-        except Exception: pass
         for m in mesures:
-            for l in lignes:
-                if _re.search(m['motif'], l.get('systeme') or ''):
+            for l in (lignes or []):
+                if m['motif'] and _re.search(m['motif'], l.get('systeme') or ''):
                     m.setdefault('lignes', []).append(l.get('id'))
                     if m['statut'] == 'non-conforme' and l.get('conforme'):
                         contradictions.append({
@@ -14626,6 +14950,7 @@ def ia50_verification():
     non_conformes = [m for m in mesures if m['statut'] == 'non-conforme']
     return jsonify({'ok': True,
                     'mesure_le': datetime.utcnow().isoformat(),
+                    'point_cle': IA50_POINT_CLE,
                     'mesures': mesures,
                     'non_conformes': len(non_conformes),
                     'contradictions': contradictions,
@@ -14675,6 +15000,11 @@ def ia50_usages():
         conn.commit()
     cur.execute('SELECT * FROM ia50_usages ORDER BY id')
     rows = [dict(r) for r in cur.fetchall()]
+    # Ce que chaque ligne DOIT, calcule depuis la doctrine et joint ici — jamais
+    # stocke en base. Le registre est editable, le reglement non : deux
+    # exemplaires deriveraient, et c'est celui qu'on oublie qui resterait.
+    for r in rows:
+        r['du'] = ia50_du_pour(r.get('role'))
     total = len(rows)
     ok = sum(1 for r in rows if r.get('conforme'))
     jours = None
@@ -14686,7 +15016,8 @@ def ia50_usages():
     except Exception: pass
     return jsonify({'ok': True, 'usages': rows, 'total': total, 'conformes': ok,
                     'taux': round(100.0 * ok / max(1, total)),
-                    'jours_avant_echeance': jours, 'echeances': IA50_ECHEANCES})
+                    'jours_avant_echeance': jours, 'echeances': IA50_ECHEANCES,
+                    'point_cle': IA50_POINT_CLE})
 
 
 @app.route('/api/ia50/reset', methods=['POST'])

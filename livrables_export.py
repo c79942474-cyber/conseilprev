@@ -32,11 +32,13 @@ MENTION = ("Brouillon généré avec l'aide de l'IA à partir de la base de conn
 BANDEAU = "Cybersécurité industrielle IT / OT / IIoT"
 
 # Ce module sert désormais deux natures de document, et la différence n'est pas
-# cosmétique. Un brouillon rédigé par un modèle DOIT être signalé comme tel au
-# titre de l'article 50 ; un dossier calculé de façon déterministe à partir d'un
-# référentiel sourcé ne le doit PAS — l'en marquer serait un mensonge dans
-# l'autre sens, et affaiblirait la valeur du marquage là où il compte vraiment.
-# `meta['ia'] = False` bascule les deux mentions, visible et machine.
+# cosmétique. Un brouillon rédigé par un modèle porte un marquage lisible par
+# machine — l'obligation du fournisseur au titre du 50.2 — et une mention
+# visible, qui est un engagement de la maison : l'article 50 n'impose pas à un
+# prestataire d'étiqueter le livrable qu'il rédige avec l'aide d'une IA. Un
+# dossier calculé de façon déterministe ne porte NI l'un ni l'autre : l'en
+# marquer serait un mensonge dans l'autre sens, et affaiblirait le marquage là
+# où il compte vraiment. `meta['ia'] = False` bascule les deux mentions.
 MENTION_CALCUL = ("Document produit par calcul déterministe à partir d'un référentiel "
                   "versionné et sourcé. Aucun modèle de langage n'est intervenu dans "
                   "sa rédaction : chaque valeur porte sa nature et sa source.")
@@ -307,7 +309,27 @@ def _page_field(paragraph):
 # demande un marquage EXPLOITABLE PAR UNE MACHINE : on le place donc dans les
 # propriétés du fichier, qui voyagent avec lui et se lisent sans l'ouvrir.
 MARQUE_IA = "AI-generated"
-MARQUE_REF = "Reglement (UE) 2024/1689, art. 50"
+# Le paragraphe compte. Le 50.2 est l'obligation du FOURNISSEUR : rendre le
+# contenu synthetique detectable par une machine. La mention visible portee sur
+# le document, elle, n'est imposee par aucun paragraphe a un prestataire qui
+# redige un livrable client — c'est un engagement de la maison. Ecrire « au
+# titre de l'article 50 » sur cette mention lui pretait une obligation qui
+# n'existe pas, et affaiblissait le marquage la ou il est reellement du.
+MARQUE_REF = "Reglement (UE) 2024/1689, art. 50.2"
+
+# Les proprietes Word plafonnent a 255 caracteres. Au-dela, python-docx refuse
+# la valeur — et comme les sept proprietes etaient posees dans un seul `try`,
+# le refus emportait EN SILENCE toutes les suivantes, note et auteur compris.
+LIMITE_PROPRIETE = 255
+
+
+def _poser_propriete(cp, champ, valeur):
+    """Une propriete, un essai. Ce qui echoue ici n'emporte pas ses voisines."""
+    try:
+        v = str(valeur or "")
+        setattr(cp, champ, v[:LIMITE_PROPRIETE] if len(v) > LIMITE_PROPRIETE else v)
+    except Exception:
+        pass
 
 
 def _marque_ia(meta):
@@ -337,9 +359,10 @@ def _marque_ia(meta):
                       + (" (" + modele + ")" if modele else ""),
         "mots_cles": "%s; AI-assisted; %s; brouillon-a-valider"
                      % (MARQUE_IA, MARQUE_REF),
-        "note": "Contenu produit avec l'assistance d'un systeme d'intelligence "
-                "artificielle et signale comme tel au titre du %s. "
-                "Brouillon soumis a relecture et validation humaine." % MARQUE_REF,
+        "note": "Contenu produit avec l'assistance d'une IA. Marquage lisible par "
+                "machine appose par CONSEILPREV, fournisseur, au titre du %s. "
+                "La mention visible portee sur le document est un engagement "
+                "CONSEILPREV. Brouillon a relire." % MARQUE_REF,
     }
 
 
@@ -359,13 +382,15 @@ def build_docx(md, meta=None):
     try:
         m = _marque_ia(meta)
         cp = doc.core_properties
-        cp.title = str(meta.get("label") or "Document")
-        cp.subject = m["marque"]
-        cp.category = m["marque"]
-        cp.keywords = m["mots_cles"]
-        cp.comments = m["note"]
-        cp.author = m["producteur"]
-        cp.last_modified_by = m["producteur"]
+        # Une propriété par essai : une valeur refusée ne doit pas faire
+        # disparaître les suivantes sans un mot.
+        _poser_propriete(cp, "title", str(meta.get("label") or "Document"))
+        _poser_propriete(cp, "subject", m["marque"])
+        _poser_propriete(cp, "category", m["marque"])
+        _poser_propriete(cp, "keywords", m["mots_cles"])
+        _poser_propriete(cp, "comments", m["note"])
+        _poser_propriete(cp, "author", m["producteur"])
+        _poser_propriete(cp, "last_modified_by", m["producteur"])
     except Exception:
         # Un marquage qui échoue ne doit pas empêcher la production du document :
         # la mention visible, elle, est toujours présente.

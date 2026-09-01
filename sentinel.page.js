@@ -17085,8 +17085,59 @@ window.ia50AutoToggle = function(){
   }, 30000); }
 };
 
+/* LE CADRE : les cinq paragraphes, la grille des sept situations, et ce qui
+   subsiste quand l'article 50 ne joue pas. Rien n'est ecrit en dur ici : la
+   page rend ce que /api/ia50/cadre sert, pour qu'une correction du cadre soit
+   visible a l'ecran sans qu'on ait a y penser. */
+window.ia50Cadre = function(){
+  var VERDICTS = {
+    'oui':            { texte: 'OUI',              couleur: 'var(--accent)',      fond: 'rgba(200,40,40,.08)' },
+    'oui_allege':     { texte: 'OUI, mais all\u00e9g\u00e9', couleur: '#c98a00',           fond: 'rgba(201,138,0,.10)' },
+    'non_en_principe':{ texte: 'NON en principe',  couleur: 'var(--green,#0E7C7B)', fond: 'rgba(14,124,123,.10)' },
+    'a_verifier':     { texte: '\u00c0 V\u00c9RIFIER',       couleur: '#6B46C1',           fond: 'rgba(107,70,193,.10)' }
+  };
+  var QUI = { 'fournisseur': '#6B46C1', 'deployeur': '#0E7C7B', 'modalites': '#8a8a8a' };
+  return fetch('/api/ia50/cadre', { credentials:'same-origin', cache:'no-store' })
+    .then(function(r){ return r.json(); }).then(function(d){
+      if(!d || !d.ok) return d;
+      var p = document.getElementById('ia50-pointcle');
+      if(p) p.innerHTML = '<strong style="color:var(--ink)">Point cl\u00e9 \u2014 </strong>' + rgpdEsc(d.point_cle);
+      var g = document.getElementById('ia50-paragraphes');
+      if(g) g.innerHTML = (d.paragraphes || []).map(function(x){
+        return '<div style="flex:1;min-width:180px;border:1px solid var(--rule2);border-top:3px solid ' + (QUI[x.qui] || '#8a8a8a') + ';border-radius:8px;padding:9px 10px">'
+          + '<div style="font-size:12px;font-weight:800;color:var(--ink)">Art. ' + rgpdEsc(x.cle) + '</div>'
+          + '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:' + (QUI[x.qui] || '#8a8a8a') + ';margin-bottom:5px">'
+          + (x.qui === 'modalites' ? 'Modalit\u00e9s' : 'Obligation du ' + rgpdEsc(x.qui)) + '</div>'
+          + '<div style="font-size:11px;color:var(--ink);line-height:1.5">' + rgpdEsc(x.impose) + '</div>'
+          + '<div style="font-size:10.5px;color:var(--muted);line-height:1.5;margin-top:5px"><strong>N\u2019impose pas :</strong> ' + rgpdEsc(x.n_impose_pas) + '</div>'
+          + '<div style="font-size:10.5px;color:var(--muted);line-height:1.5;margin-top:4px"><strong>Exception :</strong> ' + rgpdEsc(x.exception) + '</div>'
+          + '<div style="font-size:10.5px;line-height:1.5;margin-top:5px;padding-top:5px;border-top:1px dashed var(--rule2);color:var(--ink)"><strong>Chez nous :</strong> ' + rgpdEsc(x.chez_nous) + '</div>'
+          + '</div>';
+      }).join('');
+      var c = document.getElementById('ia50-cas');
+      if(c) c.innerHTML = rgpdTable(['Situation', 'Transparence due ?', 'Paragraphe', 'Motif', 'Chez nous'],
+        (d.cas || []).map(function(x){
+          var v = VERDICTS[x.verdict] || { texte: rgpdEsc(x.verdict), couleur: 'var(--muted)', fond: 'transparent' };
+          return ['<strong style="color:var(--ink)">' + rgpdEsc(x.cas) + '</strong>',
+            '<span style="display:inline-block;font-size:10px;font-weight:800;padding:2px 7px;border-radius:4px;color:' + v.couleur + ';background:' + v.fond + '">' + v.texte + '</span>',
+            (x.paragraphe === 'aucun' ? '<span style="font-size:10px;color:var(--muted)">aucun</span>' : 'art. ' + rgpdEsc(x.paragraphe)),
+            rgpdEsc(x.motif), rgpdEsc(x.chez_nous)];
+        }));
+      var a = document.getElementById('ia50-autres');
+      if(a) a.innerHTML = (d.autres_obligations || []).map(function(x){
+        return '<div style="border-left:3px solid var(--rule2);padding:2px 0 2px 10px;margin-bottom:8px">'
+          + '<div style="font-size:12px;font-weight:700;color:var(--ink)">' + rgpdEsc(x.titre) + '</div>'
+          + '<ul style="margin:3px 0 3px 16px;padding:0;color:var(--muted);line-height:1.55">'
+          + (x.points || []).map(function(pt){ return '<li>' + rgpdEsc(pt) + '</li>'; }).join('')
+          + '</ul><div style="color:var(--ink)"><strong>Chez nous :</strong> ' + rgpdEsc(x.chez_nous) + '</div></div>';
+      }).join('');
+      return d;
+    }).catch(function(){});
+};
+
 window.ia50Load = function(){
   var verif = ia50Verifier();
+  ia50Cadre();
   ia50AutoToggle();
   fetch('/api/ia50/usages', { credentials:'same-origin' }).then(function(r){ return r.json(); }).then(function(d){
     if(!d || !d.ok) return;
@@ -17117,10 +17168,24 @@ window.ia50Load = function(){
         if(m.statut === 'partiel') return '<span style="font-size:10px;color:#c98a00;font-weight:700" title="' + rgpdEsc(m.preuve) + '">partiel</span>';
         return '<span style="font-size:10px;color:var(--muted)" title="' + rgpdEsc(m.preuve) + '">attestation</span>';
       };
-      box.innerHTML = rgpdTable(['Syst\u00e8me', 'R\u00f4le', 'Contenu', 'Marquage', '\u00c9tiquetage', 'Exception', 'Responsable', 'Mesur\u00e9', 'Conforme', ''],
+      /* Ce que le role declare DOIT. Calcule par le serveur depuis la doctrine
+         et servi avec la ligne : jamais stocke dans la ligne, jamais recopie
+         ici. Deux exemplaires deriveraient, et c'est celui qu'on oublie qui
+         resterait. */
+      var duCol = function(u){
+        var du = u.du || {};
+        var ps = du.paragraphes || [];
+        if(!du.connu) return '<span style="font-size:10px;color:var(--accent);font-weight:700" title="R\u00f4le inconnu du cadre : aucun paragraphe ne peut lui \u00eatre rattach\u00e9.">r\u00f4le inconnu</span>';
+        if(!ps.length) return '<span style="font-size:10px;color:var(--muted)">\u2014</span>';
+        return '<span style="font-size:10px;font-weight:700;color:var(--ink)" title="Ce que ce r\u00f4le doit au titre de l\u2019article 50. Ce que la ligne porte au-del\u00e0 est un engagement, pas une obligation.">art. '
+          + ps.map(rgpdEsc).join(' + ') + '</span><br><span style="font-size:9.5px;color:var(--muted)">+ '
+          + (du.modalites || []).map(rgpdEsc).join(', ') + ' (modalit\u00e9s)</span>';
+      };
+      box.innerHTML = rgpdTable(['Syst\u00e8me', 'R\u00f4le', 'D\u00fb', 'Contenu', 'Marquage', '\u00c9tiquetage', 'Exception', 'Responsable', 'Mesur\u00e9', 'Conforme', ''],
         (d.usages || []).map(function(u){
           return ['<strong style="color:var(--ink)">' + rgpdEsc(u.systeme) + '</strong>',
             '<span style="font-size:10px;font-weight:700;color:' + (u.role === 'fournisseur' ? '#6B46C1' : '#0E7C7B') + '">' + rgpdEsc(u.role) + '</span>',
+            duCol(u),
             rgpdEsc(u.contenu), rgpdEsc(u.marquage), rgpdEsc(u.etiquetage), rgpdEsc(u.exception), rgpdEsc(u.responsable),
             mesCol(u),
             '<input type="checkbox" ' + (u.conforme ? 'checked' : '') + ' onchange="ia50Conforme(' + u.id + ', this.checked)">',
@@ -17150,12 +17215,41 @@ window.ia50Del = function(id){
   if(!confirm('Retirer cet usage du registre ?')) return;
   fetch('/api/ia50/usages/' + id, { method:'DELETE', credentials:'same-origin' }).then(function(){ ia50Load(); }).catch(function(){});
 };
+/* L'ATTESTATION est ce qu'on produit en cas de controle. Elle porte donc le
+   CADRE autant que le registre : sans la colonne « Du », un lecteur exterieur
+   lit un tableau de mesures « EN PLACE » sans pouvoir distinguer celles que le
+   reglement exige de celles que la maison s'impose. Presenter les secondes
+   comme des obligations affaiblit les premieres. */
 window.ia50Rapport = function(){
-  fetch('/api/ia50/usages', { credentials:'same-origin' }).then(function(r){ return r.json(); }).then(function(d){
+  Promise.all([
+    fetch('/api/ia50/usages', { credentials:'same-origin' }).then(function(r){ return r.json(); }),
+    fetch('/api/ia50/cadre', { credentials:'same-origin' }).then(function(r){ return r.json(); }).catch(function(){ return null; })
+  ]).then(function(res){
+    var d = res[0], k = res[1];
     if(!d || !d.ok) return;
     function row(cs){ return '<tr>' + cs.map(function(v){ return '<td style="padding:6px 9px;border-bottom:1px solid #e5e7eb;vertical-align:top">' + v + '</td>'; }).join('') + '</tr>'; }
-    var lignes = (d.usages || []).map(function(u){ return row([u.systeme, u.role, u.contenu, u.marquage, u.etiquetage, u.exception, u.responsable, (u.conforme ? 'Oui' : 'Non')]); }).join('');
+    function du(u){
+      var x = u.du || {};
+      if(!x.connu) return 'r\u00f4le inconnu du cadre';
+      var ps = (x.paragraphes || []);
+      if(!ps.length) return '\u2014';
+      return 'art. ' + ps.join(' + ') + ' (+ ' + (x.modalites || []).join(', ') + ')';
+    }
+    var lignes = (d.usages || []).map(function(u){ return row([u.systeme, u.role, du(u), u.contenu, u.marquage, u.etiquetage, u.exception, u.responsable, (u.conforme ? 'Oui' : 'Non')]); }).join('');
     var ech = (d.echeances || []).map(function(x){ return row([x.date, x.objet]); }).join('');
+    var cadre = '';
+    if(k && k.ok){
+      cadre = '<h2>Ce que l\u2019article 50 impose, et \u00e0 qui</h2>'
+        + '<p class="meta" style="border-left:3px solid #14181f;padding-left:9px">' + k.point_cle + '</p>'
+        + '<table><tr><th>Paragraphe</th><th>Qui</th><th>Impose</th><th>N\u2019impose pas</th><th>Chez nous</th></tr>'
+        + (k.paragraphes || []).map(function(p){
+            return row(['art. ' + p.cle, (p.qui === 'modalites' ? 'modalit\u00e9s' : p.qui), p.impose, p.n_impose_pas, p.chez_nous]);
+          }).join('') + '</table>';
+    } else {
+      cadre = '<h2>Ce que l\u2019article 50 impose, et \u00e0 qui</h2>'
+        + '<p class="meta">Cadre non servi au moment de l\u2019\u00e9dition : cette attestation ne dit donc pas '
+        + 'ce qui est d\u00fb, seulement ce qui est fait. \u00c0 r\u00e9\u00e9diter avant transmission.</p>';
+    }
     var today = new Date().toLocaleDateString('fr-FR');
     var html = '<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>Attestation de transparence \u2014 article 50 \u2014 CONSEILPREV</title>'
       + '<meta name="ai-generated" content="partial"><meta name="ai-disclosure" content="Document produit par la plateforme Sentinel (CONSEILPREV) ; certaines sections peuvent etre generees par IA.">'
@@ -17165,7 +17259,9 @@ window.ia50Rapport = function(){
       + '<div class="meta">\u00c9dit\u00e9 le ' + today + ' \u2014 CONSEILPREV (SARL) \u00b7 SIREN 494 530 157 \u00b7 19 rue Auguste Chabri\u00e8res, 75015 Paris \u00b7 Responsable : Christophe CERF</div>'
       + '<h2>Pr\u00e9paration</h2><div class="big">' + d.taux + ' %</div>'
       + '<div class="meta">' + d.conformes + ' usage(s) conforme(s) sur ' + d.total + ' recens\u00e9(s).</div>'
-      + '<h2>Registre des usages d\u2019IA</h2><table><tr><th>Syst\u00e8me</th><th>R\u00f4le</th><th>Contenu</th><th>Marquage</th><th>\u00c9tiquetage</th><th>Exception</th><th>Responsable</th><th>Conforme</th></tr>' + lignes + '</table>'
+      + cadre
+      + '<h2>Registre des usages d\u2019IA</h2><table><tr><th>Syst\u00e8me</th><th>R\u00f4le</th><th>D\u00fb (art. 50)</th><th>Contenu</th><th>Marquage</th><th>\u00c9tiquetage</th><th>Exception</th><th>Responsable</th><th>Conforme</th></tr>' + lignes + '</table>'
+      + '<p class="meta">La colonne <strong>D\u00fb</strong> est calcul\u00e9e depuis le cadre ci-dessus \u00e0 partir du r\u00f4le d\u00e9clar\u00e9. Ce qu\u2019une ligne porte au-del\u00e0 est un engagement de CONSEILPREV, non une obligation de l\u2019article 50.</p>'
       + '<h2>\u00c9ch\u00e9ances</h2><table><tr><th>Date</th><th>Objet</th></tr>' + ech + '</table>'
       + '<p class="meta">Outillage technique de conformit\u00e9 ; ne constitue pas un avis juridique.</p></body></html>';
     var w = window.open('', '_blank');

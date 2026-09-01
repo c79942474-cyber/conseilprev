@@ -116,10 +116,21 @@ def test_chaque_mesure_trouve_sa_ligne_du_registre_par_defaut():
     """Les mesures se rattachent aux lignes par motif sur le nom du système.
     Si un motif ne matche plus aucune ligne d'IA50_USAGES_DEFAUT, la mesure
     flottera sans ligne — et la colonne « Mesuré » du tableau restera vide
-    sans que rien ne le dise."""
+    sans que rien ne le dise.
+
+    Deux mesures ne servent AUCUNE ligne en particulier : elles portent sur le
+    cadre et sur le registre entier. Elles doivent le DÉCLARER (portee =
+    ensemble) — sinon une mesure qui perdrait son motif s'échapperait de cette
+    règle en silence, ce qui est exactement ce qu'elle empêche."""
     import re
     systemes = [u['systeme'] for u in application.IA50_USAGES_DEFAUT]
     for m in application._IA50_MESURES:
+        if m.get('portee') == 'ensemble':
+            assert m['motif'] is None, ('la mesure %r se dit d\'ensemble mais porte '
+                                        'un motif de rattachement' % m['cle'])
+            continue
+        assert m['motif'], ('la mesure %r n\'a ni motif ni portee declaree : elle ne '
+                            'se rattache a rien' % m['cle'])
         touches = [s for s in systemes if re.search(m['motif'], s)]
         assert touches, ('la mesure %r ne matche aucune ligne du registre '
                          'par defaut' % m['cle'])
