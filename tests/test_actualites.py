@@ -295,3 +295,159 @@ def test_le_communique_reserve_le_statut_du_texte_hors_mention_legale(langue):
             "dans le corps de l'article : le Cloud and AI Development Act y "
             "serait présenté comme du droit applicable, alors qu'il n'est "
             "qu'une proposition de la Commission" % (langue, exigee))
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  LA TYPOGRAPHIE : UN PLANCHER DE LECTURE, ET UNE HIÉRARCHIE
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# POURQUOI CES RÈGLES EXISTENT. La demande était « réduire la taille de police
+# pour gagner de la place », et elle était fondée : la police est le premier
+# levier, elle paie deux fois — les lignes rétrécissent ET il en tient plus par
+# ligne. Mesuré sur les cinq communiqués, elle vaut 9,2 % de la hauteur à elle
+# seule, contre 5,1 % pour l'interligne et moins de 2 % pour chaque marge.
+#
+# MAIS CE LEVIER N'A PAS DE FOND. Rien, dans la page, n'empêchait de le tirer
+# une fois de plus — et la fois suivante, et celle d'après. La suite complète
+# est passée sans broncher sur ce changement : AUCUNE règle ne tenait la
+# typographie des articles. Un « gagner encore un peu de place » aurait amené
+# le corps à 12 px sans que rien ne le signale.
+#
+# CE QU'ELLES NE FONT PAS : figer les valeurs d'aujourd'hui. Une règle qui
+# verrouille « 14 px » interdit de passer à 15 px le jour où l'on décide que
+# c'était trop serré. Elles bornent un PLANCHER et une RELATION, ce qui laisse
+# le réglage libre entre les deux.
+
+_STYLES = "\n".join(re.findall(r"<style[^>]*>(.*?)</style>", PAGE, re.S))
+
+# LES REQUÊTES MÉDIA NE SONT PAS DE LA CASCADE, et les confondre a produit un
+# faux mesuré : `.na-title` est déclaré à 26 px dans la feuille, puis à 22 px
+# sous `@media(max-width:640px)`. Lire « la dernière déclaration » ramenait
+# donc la valeur MOBILE pour juger du rendu de bureau — et une mutation qui
+# ramenait le titre de bureau au niveau de l'intertitre survivait, la règle
+# lisant tranquillement les 22 px du téléphone. Une déclaration conditionnelle
+# se juge dans sa condition, pas dans le flux.
+_MEDIA = re.findall(r"(@media[^{]*)\{((?:[^{}]|\{[^{}]*\})*)\}", _STYLES)
+_BASE = re.sub(r"@media[^{]*\{(?:[^{}]|\{[^{}]*\})*\}", "", _STYLES)
+
+
+def _px(selecteur, propriete="font-size", feuille=None):
+    """La valeur déclarée pour ce sélecteur, lue dans la feuille de la page.
+
+    Lire la feuille plutôt que recopier le nombre est ce qui distingue une
+    règle d'une note : recopié, le nombre cesse de décrire la page au premier
+    changement, et la règle continue de passer en vérifiant sa propre copie.
+    """
+    blocs = re.findall(re.escape(selecteur) + r"\{([^}]*)\}", feuille or _BASE)
+    assert blocs, "sélecteur %r absent de la feuille de la page" % selecteur
+    # LA CASCADE, PAS LA PREMIÈRE OCCURRENCE. Un sélecteur paraît plusieurs
+    # fois dans cette page — `.na-body h4` deux fois, dont une qui ne pose
+    # qu'une couleur. Lire la première déclaration trouvée revenait à lire
+    # un bloc qui ne dit rien de la taille, et la règle tombait en accusant
+    # la feuille d'un manque qui n'existait pas. À spécificité égale, c'est
+    # la DERNIÈRE déclaration qui s'applique : c'est elle qu'il faut lire.
+    valeurs = [re.search(propriete + r":\s*([\d.]+)", b) for b in blocs]
+    valeurs = [v for v in valeurs if v]
+    assert valeurs, "aucun des %d blocs %s ne déclare %s" % (
+        len(blocs), selecteur, propriete)
+    return float(valeurs[-1].group(1))
+
+
+def test_le_texte_suivi_d_un_article_ne_descend_pas_sous_le_plancher():
+    """UN ARTICLE SE LIT EN SUIVI, PAS EN COUP D'ŒIL, et c'est ce qui sépare
+    son corps d'une pastille ou d'un libellé. Sur le fond sombre de ces
+    cartes, sous 14 px la lecture d'un communiqué de cinq mille signes cesse
+    d'être confortable — c'est le plancher, et il vaut pour le corps, pour la
+    citation en exergue, et pour la liste de sources qui se lit elle aussi
+    ligne à ligne.
+
+    Les libellés — la pastille de thème, la mention « sans lien » — sont hors
+    de cette règle À DESSEIN : ils se glancent, ils sont capitalisés et
+    interlettrés, et les tenir au même plancher les ferait grossir sans que
+    personne y gagne.
+    """
+    planchers = [
+        (".na-body p", 14.0, "le corps de l'article"),
+        (".na-body blockquote", 14.0, "la citation en exergue"),
+        (".na-sources li", 12.5, "la liste des sources"),
+    ]
+    trop_petits = ["%s : %s à %.3g px, plancher %.3g px"
+                   % (sel, quoi, _px(sel), mini)
+                   for sel, mini, quoi in planchers if _px(sel) < mini]
+    assert not trop_petits, (
+        "du texte qui se lit en suivi passe sous son plancher de "
+        "lisibilité :\n  " + "\n  ".join(trop_petits))
+
+
+def test_la_hierarchie_typographique_tient_dans_les_deux_sens():
+    """RÉDUIRE UN SEUL ÉTAGE CASSE LA HIÉRARCHIE, et c'est le risque propre à
+    une demande de densité : on descend le corps, on oublie l'intertitre, et
+    le titre de section cesse de se distinguer du paragraphe. La règle borne
+    la RELATION et non les valeurs — chaque étage garde une avance mesurable
+    sur le suivant, quel que soit le réglage retenu.
+    """
+    etages = [("le titre de l'article", _px(".na-title")),
+              ("l'intertitre", _px(".na-body h4")),
+              ("le corps", _px(".na-body p")),
+              ("les sources", _px(".na-sources li"))]
+    for (h, a), (b_, b) in zip(etages, etages[1:]):
+        assert a >= b * 1.06, (
+            "%s (%.3g px) ne se distingue plus de %s (%.3g px) : moins de 6 %% "
+            "d'écart, la hiérarchie ne se voit plus" % (h, a, b_, b))
+
+
+def test_l_interligne_du_corps_reste_au_dessus_de_ce_qu_un_lecteur_impose():
+    """L'INTERLIGNE EST LE SECOND LEVIER, ET LE PLUS TENTANT : il ne se voit
+    pas dans une capture, il rapporte 5 % de hauteur, et il coûte au lecteur
+    exactement là où on ne le mesure pas.
+
+    Le critère 1.4.12 du RGAA/WCAG demande qu'une page reste utilisable quand
+    son lecteur impose un interligne de 1,5. Il porte sur ce que la page doit
+    SUPPORTER, non sur ce qu'elle doit servir — servir au moins cette valeur
+    n'y satisfait donc pas à soi seul, mais descendre en dessous revient à
+    livrer d'emblée moins que ce qu'un lecteur est fondé à réclamer.
+    """
+    lh = _px(".na-body p", "line-height")
+    assert lh >= 1.5, (
+        "l'interligne du corps est tombé à %.3g : sous 1,5, un article long "
+        "sur fond sombre devient pénible, et la page sert d'emblée moins que "
+        "ce qu'un lecteur peut imposer" % lh)
+
+
+def test_les_variantes_mobiles_respectent_les_memes_planchers():
+    """CORRIGER LA LECTURE NE DOIT PAS SUPPRIMER LE CONTRÔLE. En écartant les
+    requêtes média du flux — ce qu'il fallait faire, une déclaration
+    conditionnelle ne se juge pas hors de sa condition — je les ai du même
+    coup sorties de la portée des trois règles précédentes. Un plancher qui
+    ne vaut que sur grand écran ne protège personne : c'est sur téléphone que
+    la place manque, donc c'est là qu'on est tenté de tirer sur le levier.
+
+    Chaque variante est donc jugée DANS sa condition, en repartant des
+    valeurs de base pour tout ce qu'elle ne redéfinit pas.
+    """
+    planchers = {".na-body p": 14.0, ".na-body blockquote": 14.0,
+                 ".na-sources li": 12.5}
+    fautes = []
+    for condition, corps in _MEDIA:
+        for sel, mini in planchers.items():
+            if not re.search(re.escape(sel) + r"\{", corps):
+                continue                      # non redéfini : la base vaut
+            v = _px(sel, feuille=corps)
+            if v < mini:
+                fautes.append("%s : %s à %.3g px, plancher %.3g px"
+                              % (condition.strip(), sel, v, mini))
+        # La hiérarchie titre > intertitre > corps doit tenir aussi ici, en
+        # complétant par les valeurs de base ce que la variante ne dit pas.
+        etages = []
+        for sel in (".na-title", ".na-body h4", ".na-body p"):
+            v = (_px(sel, feuille=corps)
+                 if re.search(re.escape(sel) + r"\{[^}]*font-size", corps)
+                 else _px(sel))
+            etages.append((sel, v))
+        for (h, x), (b_, y) in zip(etages, etages[1:]):
+            if x < y * 1.06:
+                fautes.append("%s : %s (%.3g px) ne se distingue plus de %s "
+                              "(%.3g px)" % (condition.strip(), h, x, b_, y))
+    assert not fautes, (
+        "une variante d'écran sert un texte que la version de bureau "
+        "n'aurait pas le droit de servir :\n  " + "\n  ".join(fautes))
