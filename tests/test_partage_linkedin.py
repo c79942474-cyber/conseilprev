@@ -260,11 +260,17 @@ def test_chaque_communique_porte_son_illustration():
     """Un article sans illustration se voit dans une grille où les autres en
     ont une. La règle compte face aux communiqués RÉELLEMENT lus, jamais face
     à un nombre écrit à la main."""
-    poses = set(re.findall(r'<img src="/illu-(na\d*)\.svg"', PAGE))
+    # L'ANCRE EST LE `<figure>`, PAS LE `<img>` SEUL. Chercher l'image seule
+    # laissait renommer la classe du cadre sans qu'une règle bronche : la
+    # feuille de style cesse alors de s'appliquer — largeur, cadre, proportion
+    # — et l'image s'affiche de travers au milieu de l'article. Mutation
+    # vérifiée, elle survivait.
+    poses = set(re.findall(
+        r'<figure class="na-illu"><img src="/illu-(na\d*)\.svg"', PAGE))
     attendus = {c["id"] for c in P.communiques()}
     assert poses == attendus, (
-        "des communiqués n'ont pas d'illustration, ou l'inverse : %s"
-        % (poses ^ attendus))
+        "des communiqués n'ont pas d'illustration dans un cadre `na-illu`, "
+        "ou l'inverse : %s" % (poses ^ attendus))
 
 
 def test_chaque_illustration_existe_et_est_du_svg_valide():
@@ -288,7 +294,16 @@ def test_l_illustration_ne_double_pas_le_lecteur_d_ecran():
     """`alt=""` ET un <title> dans le SVG : l'un annonce, l'autre se tait. Poser
     les deux ferait entendre deux fois la même chose ; n'en poser aucun
     priverait de la description. C'est un choix, et une règle le tient."""
-    for bloc in re.findall(r'<figure class="na-illu">.*?</figure>', PAGE, re.S):
+    blocs = re.findall(r'<figure class="na-illu">.*?</figure>', PAGE, re.S)
+    # UNE BOUCLE SUR UN ENSEMBLE TROUVÉ EST VRAIE QUAND L'ENSEMBLE RÉTRÉCIT.
+    # Sans ce compte, renommer la classe d'un cadre faisait simplement passer
+    # la boucle sur quatre blocs au lieu de cinq — et la règle restait verte
+    # en ne vérifiant plus l'article abîmé. C'est le défaut que ce dépôt
+    # traque partout ailleurs, et il était ici.
+    assert len(blocs) == len(P.communiques()), (
+        "%d cadre(s) `na-illu` pour %d communiqués : la règle ne vérifierait "
+        "que ceux qu'elle trouve" % (len(blocs), len(P.communiques())))
+    for bloc in blocs:
         assert 'alt=""' in bloc, bloc[:160]
         assert "width=" in bloc and "height=" in bloc, (
             "sans dimensions, la page sursaute pendant le chargement")
@@ -380,7 +395,47 @@ def test_le_registre_general_du_site_recolte_ces_sources():
         "le module des communiqués n'est pas interrogé par le registre général")
     recolte = [x for x in registre_sources.recolter()
                if x["module"] == "actualites_sources"]
-    assert len(recolte) >= 8, (
-        "le registre général ne récolte que %d source(s) des communiqués : "
-        "la structure déclarée n'est peut-être plus celle qu'il sait lire"
-        % len(recolte))
+    assert recolte, ("le registre général ne récolte AUCUNE source des "
+                     "communiqués : la structure déclarée n'est plus celle "
+                     "qu'il sait lire")
+
+
+def test_aucune_source_declaree_ne_disparait_du_registre():
+    """LE COMPTE NE SUFFIT PAS, ET MA PREMIÈRE RÈGLE S'EN CONTENTAIT.
+
+    Elle exigeait « au moins huit » sources récoltées. Dix-sept sont déclarées,
+    quatorze arrivent — l'écart s'explique entièrement par le dédoublonnage :
+    le règlement (UE) 2024/1689 est cité par quatre communiqués sous quatre
+    titres, à la même adresse EUR-Lex, et le lecteur doit le voir UNE fois.
+    Mais un plancher aurait laissé passer la disparition d'une source pour
+    une tout autre raison — un `editeur` oublié, et le filtre du registre
+    l'écarte sans un mot, précisément le silence corrigé dans le récolteur.
+
+    La propriété est donc : CHAQUE source déclarée arrive au registre, OU
+    BIEN sa clef y était déjà prise par une autre source déclarée. Rien
+    d'autre n'est un motif acceptable de disparition.
+    """
+    import registre_sources as RS
+    recolte = {x["lien"] or (x["titre"] + "|" + x["editeur"])
+               for x in RS.recolter() if x["module"] == "actualites_sources"}
+    vues, perdues = set(), []
+    for art, lot in AS.SOURCES_COMMUNIQUES.items():
+        for s in lot:
+            titre = s.get("titre") or s.get("nom")
+            editeur = s.get("editeur") or s.get("organisme") or s.get("auteur")
+            cle = s.get("lien") or s.get("url") or (
+                str(titre) + "|" + str(editeur or "—"))
+            if cle in vues:          # doublon assumé : déjà publié une fois
+                assert cle in recolte, (
+                    "%s : « %s » est un doublon d'une source déclarée, mais "
+                    "l'exemplaire d'origine n'est pas au registre non plus"
+                    % (art, titre))
+                continue
+            vues.add(cle)
+            if cle not in recolte:
+                perdues.append("%s : « %s » (éditeur : %s)"
+                               % (art, titre, editeur or "AUCUN"))
+    assert not perdues, (
+        "%d source(s) déclarée(s) n'arrivent pas au registre général sans "
+        "être des doublons — le récolteur les écarte en silence :\n  %s"
+        % (len(perdues), "\n  ".join(perdues)))
