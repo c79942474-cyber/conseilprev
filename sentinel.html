@@ -2753,6 +2753,11 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="sb-item" data-grp="cartographier" role="button" tabindex="0" onclick="go('shadow-ai',this,'CARTOGRAPHIER','Découverte Shadow AI')" title="Recensez les systemes IA invisibles deja presents dans votre organisation, avant de les classifier."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg></span>Découverte Shadow AI</div>
     <div class="sb-item" data-grp="cartographier" role="button" tabindex="0" onclick="go('simulateur',this,'CARTOGRAPHIER','Simulateur IA Act')" title="Classifiez un systeme IA selon le Reglement EU AI Act avant de l enregistrer au Registre."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>Simulateur IA Act</div>
     <div class="sb-item" data-grp="cartographier" role="button" tabindex="0" onclick="go('registre',this,'CARTOGRAPHIER','Systèmes IA')" title="Registre des systemes IA connecte a une base de donnees reelle (ajout, edition, suppression)."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/></svg></span>Registre IA</div>
+    <!-- LE FINOPS SUIT LE REGISTRE, ET CE VOISINAGE EST L'IDÉE. Il ne tient
+         aucun inventaire à lui : il LIT celui de la conformité. Un second
+         inventaire tenu à part divergerait du premier dans le mois, et c'est
+         celui qu'on oublie de corriger qui reste. -->
+    <div class="sb-item" data-grp="cartographier" role="button" tabindex="0" onclick="go('finops',this,'CARTOGRAPHIER','FinOps IA')" title="Ce que coute le parc declare : couverture, attribution par centre de cout, dimensionnement des modeles et plafonds."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2v20"/><path d="M17 6.5c0-1.9-2.2-3-5-3s-5 1.1-5 3 2.2 2.7 5 3.2 5 1.3 5 3.2-2.2 3-5 3-5-1.1-5-3"/></svg></span>FinOps IA</div>
     <div class="sb-item" data-grp="cartographier" role="button" tabindex="0" onclick="go('maturite',this,'CARTOGRAPHIER','Audit de maturité IA')" title="Audit de maturite IA sectoriel : 8 piliers, questionnaire, KPIs, budget et livrables generes par IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 3 5-6"/></svg></span>Audit de maturité IA</div>
     <div class="sb-section" data-grp="evaluer-le-risque"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3.2 21.5 20H2.5z"/><path d="M12 9.5v4.5M12 17h.01"/></svg><span>Évaluer le risque</span></div>
     <div class="sb-item" data-grp="evaluer-le-risque" role="button" tabindex="0" onclick="go('pan-sia',this,'ÉVALUER LE RISQUE','Panorama IA & centres de données — UE')" title="Les cas d’IA documentés dans l’UE et le parc de centres de données qui les fait tourner, sur la même carte."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 3a14 14 0 010 18M3.6 9h16.8M3.6 15h16.8"/><circle cx="9" cy="9" r="1.4" fill="currentColor"/><circle cx="15" cy="13" r="1.4" fill="currentColor"/></svg></span>Panorama IA &amp; data centres</div>
@@ -4899,6 +4904,42 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   </div>
 </div>
 
+
+<div class="page" id="p-finops">
+  <span class="eyebrow">Cartographier · Coûts</span><h1 class="page-h">FinOps <em>de l’IA</em></h1>
+  <p class="page-lead">Ce que coûte le parc que vous avez déjà déclaré. Cette page ne tient aucun inventaire à elle : elle lit le <strong>registre des systèmes d’IA</strong> — le même que celui de la conformité. L’attribution que le FinOps réclame (propriétaire, service, finalité) y est déjà, et c’est la moitié la plus coûteuse de la démarche.</p>
+
+  <!-- LA COUVERTURE AVANT LES MONTANTS, DANS LE CODE COMME À L'ÉCRAN.
+       Un parc de vingt systèmes dont trois sont instruits produit un total
+       crédible et faux de quatre-vingt-cinq pour cent, et personne ne le voit :
+       un total ne dit pas ce qu'il ignore. Le bandeau de couverture est donc
+       le PREMIER élément du panneau, avant tout chiffre d'argent. -->
+  <div id="fo-couverture" style="border:1px solid var(--rule2);border-left:3px solid var(--accent);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Couverture du chiffrage</div>
+    <div id="fo-couv-chiffre" style="font-size:34px;font-weight:800;color:var(--ink)">—</div>
+    <div id="fo-couv-detail" style="font-size:12.5px;color:var(--muted);margin-top:4px">Chargement…</div>
+  </div>
+
+  <div id="fo-montants" class="mat-grid" style="margin-bottom:16px"></div>
+
+  <h2 class="sec-h">Ce qui n’est pas chiffré, et pourquoi</h2>
+  <p class="muted" style="font-size:12.5px;margin-top:-6px">Un système sans volume déclaré ne coûte pas zéro&nbsp;: personne n’a encore dit ce qu’il consomme. La distinction décide de la lecture du total.</p>
+  <div id="fo-manques"></div>
+
+  <h2 class="sec-h">Attribution</h2>
+  <p class="muted" style="font-size:12.5px;margin-top:-6px">Par centre de coût, par service et par modèle. Un groupe dont aucune ligne n’est instruite reste affiché avec un montant vide&nbsp;: le faire disparaître le ferait lire « ce service ne consomme rien ».</p>
+  <div id="fo-attribution"></div>
+
+  <h2 class="sec-h">Dimensionnement des modèles</h2>
+  <p class="muted" style="font-size:12.5px;margin-top:-6px">Une <strong>heuristique</strong>, jamais un verdict&nbsp;: « ce modèle est trop gros » suppose de connaître la qualité attendue, le taux d’erreur toléré et ce qu’une erreur coûte. L’écart de rang dit où regarder.</p>
+  <div id="fo-dimension"></div>
+
+  <h2 class="sec-h">Plafonds</h2>
+  <div id="fo-plafonds"></div>
+
+  <h2 class="sec-h">Ce que cette page ne sait pas</h2>
+  <div id="fo-limites"></div>
+</div>
 
 <div class="page" id="p-ia50">
   <span class="eyebrow">Administration · IA Act</span><h1 class="page-h">Transparence <em>IA Act (art. 50)</em></h1>

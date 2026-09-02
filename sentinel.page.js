@@ -928,6 +928,7 @@ var PAGE_META = {
     'obs-rd': { section: 'SE TENIR INFORMÉ', label: 'Observatoire R&D IA' },
     'juridique': { section: 'JURIDIQUE', label: 'Conseil juridique assisté' },
     'empreinte': { section: 'EMPREINTE', label: 'Empreinte numérique' },
+    'finops': { section: 'CARTOGRAPHIER', label: 'FinOps IA' },
     'ia50': { section: 'ADMINISTRATION', label: 'Transparence IA Act (art. 50)' },
     'rgpd-site': { section: 'ADMINISTRATION', label: 'RGPD — CONSEILPREV (site et plateforme)' },
     'entreprise': { section: 'ENTREPRISE', label: 'Offre Entreprise' },
@@ -1030,6 +1031,7 @@ function go(id, el, sec, pg) {
   if (id === 'templates' && typeof window.templatesRenderPage === 'function') _apresPeinture(window.templatesRenderPage);
   if (id === 'rgpd-site' && typeof window.rgpdInit === 'function') _apresPeinture(window.rgpdInit);
   if (id === 'training' && typeof window.formCatRender === 'function') _apresPeinture(window.formCatRender);
+  if (id === 'finops' && typeof window.finopsLoad === 'function') _apresPeinture(window.finopsLoad);
   if (id === 'ia50' && typeof window.ia50Load === 'function') _apresPeinture(window.ia50Load);
   if (id === 'empreinte' && typeof window.empInit === 'function') _apresPeinture(window.empInit);
   if (id === 'gouvernance' && typeof window.gouvInit === 'function') _apresPeinture(window.gouvInit);
@@ -9516,6 +9518,14 @@ var PAGE_GUIDES = {
     sections: [
       {h:"À quoi sert cette page", t:"Présente le périmètre de l’offre Entreprise : tout le contenu de l’offre Pro, plus le déploiement à l’échelle d’un groupe, l’intégration à votre système d’information et un accompagnement contractuel dédié."},
       {h:"Comment l’utiliser", t:"Utilisez-la pour cadrer une discussion interne (budget, périmètre, interlocuteurs) avant un échange commercial. Les besoins d’intégration au SI sont le point qui structure le plus le projet : listez-les en amont."}
+    ]
+  },
+  'finops': {
+    title: "FinOps IA",
+    sections: [
+      {h:"À quoi sert cette page", t:"Chiffrer ce que coûte le parc de systèmes d’IA que vous avez déjà déclaré au Registre. Elle ne tient aucun inventaire à elle : l’attribution que le FinOps réclame — propriétaire, service, finalité — est déjà dans le registre de conformité, et c’est la moitié la plus coûteuse de la démarche."},
+      {h:"Comment l’utiliser", t:"Renseignez sur chaque système le modèle employé, l’unité de facturation, les volumes du mois et LEUR SOURCE. La page commence par vous dire quelle part du parc est chiffrable : c’est cette part, et non le montant, qui décide de la lecture du total."},
+      {h:"Limites à connaître", t:"Les montants sont un ordre de grandeur CATALOGUE, calculé sur des tarifs publiés et datés. Un contrat entreprise, une remise au volume, un cache de contexte ou un traitement différé donnent un coût réel différent, parfois d’un ordre de grandeur. Rien ici ne remplace la lecture de votre facture, et rien n’est mesuré : Sentinel ne tourne pas dans vos applications."}
     ]
   },
   'ia50': {
@@ -20229,5 +20239,164 @@ document.addEventListener('keydown', function(e){
     var r = _origGo ? _origGo.apply(this, arguments) : undefined;
     if(id === 'compte') window.compteRendre();
     return r;
+  };
+})();
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FINOPS DE L'IA — le panneau qui montre sa couverture avant ses montants.
+
+   L'ORDRE D'AFFICHAGE EST LA MOITIÉ DE L'HONNÊTETÉ. Un parc de vingt systèmes
+   dont trois sont instruits produit un total crédible et faux de quatre-vingt-
+   cinq pour cent. Le comité qui le lit conclut que l'IA coûte peu, et personne
+   ne le contredit : un total ne dit pas ce qu'il ignore. La couverture est donc
+   peinte AVANT tout chiffre d'argent, et le montant porte sa part.
+
+   RIEN N'EST CALCULÉ ICI. Le serveur rend la couverture, les montants, les
+   motifs de non-instruction et les dépassements ; cette fonction les met en
+   page. Recalculer côté navigateur donnerait un second exemplaire du moteur,
+   et c'est celui qu'on oublie de corriger qui resterait.
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  function ech(t){
+    return String(t == null ? '' : t).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+  function montants(par){
+    if(!par) return '—';
+    return Object.keys(par).sort().map(function(d){
+      return par[d].toLocaleString('fr-FR', {minimumFractionDigits:2,
+                                             maximumFractionDigits:2}) + ' ' + d;
+    }).join(' · ');
+  }
+
+  window.finopsLoad = function(){
+    var couv = document.getElementById('fo-couv-chiffre');
+    if(!couv) return;
+    fetch('/api/finops', {credentials:'same-origin', cache:'no-store'})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(j){
+        if(!j || !j.ok){
+          couv.textContent = '—';
+          document.getElementById('fo-couv-detail').textContent =
+            'Chiffrage indisponible pour le moment.';
+          return;
+        }
+        var c = j.couverture;
+        couv.textContent = c.total ? (c.instruites + ' / ' + c.total) : '0';
+        document.getElementById('fo-couv-detail').innerHTML =
+          c.total
+            ? ('<b>' + Math.round((c.part_instruite || 0) * 100) + ' %</b> du parc '
+               + 'déclaré est chiffrable. ' + (c.non_instruites
+                 ? ('Les ' + c.non_instruites + ' autres ligne(s) ne coûtent pas '
+                    + 'zéro&nbsp;: personne n’a encore dit ce qu’elles consomment.')
+                 : 'Toutes les lignes portent un volume et sa source.'))
+            : 'Aucun système au registre. Le FinOps commence par l’inventaire, '
+              + 'et l’inventaire est le registre.';
+
+        /* LE MONTANT NE SORT PAS SANS SA PART. Les deux vivent dans la même
+           carte : les séparer permettrait de citer l'un sans l'autre, ce qui
+           est exactement l'usage qu'on veut rendre impossible. */
+        var m = j.couts;
+        document.getElementById('fo-montants').innerHTML =
+          '<div class="mat-card"><div class="mat-card-h">Coût mensuel — catalogue</div>'
+          + '<div style="font-size:28px;font-weight:800">'
+          + (m.lisible ? ech(montants(m.mensuel_par_devise)) : 'non instruit')
+          + '</div><div class="muted" style="font-size:12px">'
+          + (m.lisible
+              ? ('sur ' + c.instruites + ' des ' + c.total + ' systèmes déclarés')
+              : 'aucune ligne ne porte à la fois un modèle tarifé, un volume et sa source')
+          + '</div></div>'
+          + '<div class="mat-card"><div class="mat-card-h">Projection annuelle</div>'
+          + '<div style="font-size:28px;font-weight:800">'
+          + (m.lisible ? ech(montants(m.annuel_par_devise)) : 'non instruit')
+          + '</div><div class="muted" style="font-size:12px">le mensuel × 12, '
+          + 'à volume constant — un usage qui croît ne se projette pas ainsi</div></div>'
+          + '<div class="mat-card"><div class="mat-card-h">Tarifs employés</div>'
+          + '<div style="font-size:13px">' + ech(m.tarif_source) + '</div>'
+          + '<div class="muted" style="font-size:12px">relevé il y a '
+          + m.tarif_age_jours + ' jours'
+          + (m.tarif_perime ? ' — <b>à revérifier</b>' : '') + '</div></div>';
+
+        var man = Object.keys(c.motifs || {});
+        document.getElementById('fo-manques').innerHTML = man.length
+          ? ('<table class="tbl"><thead><tr><th>Motif</th><th>Lignes</th></tr></thead><tbody>'
+             + man.map(function(k){
+                 return '<tr><td>' + ech(k) + '</td><td>' + c.motifs[k] + '</td></tr>';
+               }).join('') + '</tbody></table>')
+          : '<p class="muted">Aucune ligne non instruite.</p>';
+
+        var att = [['Centre de coût', j.par_centre_cout],
+                   ['Service', j.par_service],
+                   ['Modèle', j.par_modele]];
+        document.getElementById('fo-attribution').innerHTML = att.map(function(p){
+          var g = p[1].groupes;
+          if(!g.length) return '';
+          return '<h3 class="sub-h">' + ech(p[0]) + '</h3>'
+            + '<table class="tbl"><thead><tr><th>' + ech(p[0]) + '</th>'
+            + '<th>Systèmes</th><th>Chiffrés</th><th>Mensuel</th></tr></thead><tbody>'
+            + g.map(function(x){
+                return '<tr><td>' + ech(x.cle) + '</td><td>' + x.systemes + '</td><td>'
+                  + x.instruites + '</td><td>'
+                  + (x.lisible ? ech(montants(x.mensuel_par_devise)) : '<span class="muted">non instruit</span>')
+                  + '</td></tr>';
+              }).join('') + '</tbody></table>';
+        }).join('');
+
+        var dim = (j.dimensionnement || []).filter(function(d){ return d.instruit; });
+        var aRegarder = dim.filter(function(d){ return d.a_regarder; });
+        document.getElementById('fo-dimension').innerHTML = dim.length
+          ? ('<p class="muted" style="font-size:12.5px">' + aRegarder.length
+             + ' système(s) sur ' + dim.length + ' instruits portent un modèle de deux '
+             + 'rangs au-dessus de la tâche déclarée.</p>'
+             + '<table class="tbl"><thead><tr><th>Système</th><th>Modèle</th>'
+             + '<th>Tâche</th><th>Écart</th><th>Lecture</th></tr></thead><tbody>'
+             + dim.map(function(d){
+                 return '<tr><td>' + ech(d.nom) + '</td><td>' + ech(d.modele)
+                   + '</td><td>' + ech(d.classe_tache) + '</td><td>'
+                   + (d.ecart > 0 ? '+' : '') + d.ecart + '</td><td>'
+                   + ech(d.note) + '</td></tr>';
+               }).join('') + '</tbody></table>')
+          : '<p class="muted">Aucun système ne porte à la fois un modèle connu et '
+            + 'une classe de tâche déclarée. La classe ne se devine pas depuis la '
+            + 'finalité, qui est du texte libre.</p>';
+
+        var dep = j.depassements || {atteints:[], non_verifiables:[]};
+        document.getElementById('fo-plafonds').innerHTML =
+          (dep.non_verifiables.length
+            ? ('<p class="muted" style="font-size:12.5px"><b>' + dep.non_verifiables.length
+               + ' plafond(s) ne peuvent être ni respectés ni dépassés</b> — aucun montant '
+               + 'instruit dans le groupe. Les déclarer « sous le plafond » serait un vert '
+               + 'par ignorance.</p>')
+            : '')
+          + (dep.atteints.length
+            ? ('<table class="tbl"><thead><tr><th>Centre de coût</th><th>Mensuel</th>'
+               + '<th>Plafond</th><th>Part</th></tr></thead><tbody>'
+               + dep.atteints.map(function(a){
+                   return '<tr><td>' + ech(a.cle) + '</td><td>' + a.montant + ' ' + ech(a.devise)
+                     + '</td><td>' + a.plafond + ' ' + ech(a.devise) + '</td><td>'
+                     + (a.depasse ? '<b>' : '') + Math.round((a.part || 0) * 100) + ' %'
+                     + (a.depasse ? ' — dépassé</b>' : '')
+                     + (a.partiel ? ' <span class="muted">(sur une partie du groupe)</span>' : '')
+                     + '</td></tr>';
+                 }).join('') + '</tbody></table>')
+            : '<p class="muted">Aucun plafond n’est posé. Les plafonds se passent à '
+              + '/api/finops par le paramètre <code>seuils</code>, par centre de coût — '
+              + 'un plafond est une décision de comité, révisée à chaque exercice, et '
+              + 'le figer dans une table obligerait à une migration pour changer un nombre.</p>');
+
+        var ar = j.a_renseigner || {};
+        document.getElementById('fo-limites').innerHTML =
+          '<ul style="font-size:13px;line-height:1.6">'
+          + Object.keys(ar).map(function(k){
+              return '<li><b>' + ech(k.replace(/_/g, ' ')) + '</b> — ' + ech(ar[k]) + '</li>';
+            }).join('') + '</ul>'
+          + '<p class="muted" style="font-size:12.5px">' + ech(m.avertissement) + '</p>';
+      })
+      .catch(function(){
+        couv.textContent = '—';
+        document.getElementById('fo-couv-detail').textContent =
+          'Chiffrage injoignable.';
+      });
   };
 })();

@@ -114,7 +114,13 @@ def test_sqlite_refuse_bien_cette_syntaxe():
 def test_les_colonnes_migrees_arrivent_vraiment_sur_sqlite():
     """C'est l'état que le démarrage n'atteignait jamais."""
     attendues = _colonnes_attendues()
-    assert len(attendues) == 10, (
+    # DIX, PUIS DIX-HUIT. Les huit dernières sont celles du FinOps — modèle,
+    # unité de facturation, volumes et leur source, centre de coût, classe de
+    # tâche, leviers. Ce compte n'est pas un décor : c'est la garde qui a fait
+    # tomber une migration écrite en BOUCLE, invisible à la reconstruction de
+    # table, et il demande une décision à chaque colonne ajoutée. Le mettre à
+    # jour EST cette décision.
+    assert len(attendues) == 18, (
         "le nombre de migrations de systemes_ia a changé : %s. Si c'est\n"
         "délibéré, mettez ce compte à jour ; sinon, une migration a disparu."
         % [c for c, _ in attendues])

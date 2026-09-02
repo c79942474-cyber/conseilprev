@@ -42,6 +42,7 @@ reste dans le presse-papier de la mise au point, pas dans la recette.
 import ast
 import io
 import os
+import re
 import sys
 import threading
 import time
@@ -240,14 +241,34 @@ def test_le_survol_reste_le_chemin_le_plus_court():
 def test_aucun_panneau_nattend_un_delai_fixe():
     """LE DÉFAUT. Huit panneaux attendaient 60 ms — ni le moment de la
     peinture, ni une borne supérieure. Sur `ia50`, mesuré à 202 ms, ces
-    soixante millisecondes suffisaient à faire dépasser la barre."""
+    soixante millisecondes suffisaient à faire dépasser la barre.
+
+    LE COMPTEUR ÉTAIT FIGÉ À HUIT, et il a fait tomber cette règle le jour où
+    un NEUVIÈME panneau est arrivé — en annonçant un défaut de délai fixe qui
+    n'existait pas. Ce qu'il gardait était juste : que l'extraction ait bien
+    trouvé quelque chose. Ce qu'il gardait mal était la manière : un nombre
+    qu'il faut mettre à jour à chaque panneau finit par être mis à jour sans
+    qu'on relise ce qu'il protège.
+
+    LA PROPRIÉTÉ, ELLE, NE COMPTE RIEN : aucune initialisation de panneau ne
+    passe par une horloge — ni `setTimeout(…, <nombre>)` — et il en existe au
+    moins une qui passe par `_apresPeinture`, faute de quoi l'extraction aurait
+    trouvé un corps vide et se serait tue."""
     i = JS.index('function go(id, el, sec, pg)')
     corps = JS[i:JS.index('\nfunction ', i + 10)]
-    assert ', 60)' not in corps, (
-        "un panneau attend encore un délai fixe avant de s'initialiser")
-    assert corps.count('_apresPeinture(') == 8, (
-        "les huit initialisations différées ne passent pas toutes par "
-        "_apresPeinture")
+    horloges = re.findall(r"setTimeout\([^;]*?,\s*(\d+)\s*\)", corps)
+    # `navRefresh` est le seul délai admis : il rafraîchit la barre latérale,
+    # il n'initialise aucun panneau. Il est nommé, donc distinguable.
+    horloges_de_panneau = [h for h in re.findall(
+        r"setTimeout\(\s*(?!window\.navRefresh)[^;]*?,\s*\d+\s*\)", corps)]
+    assert not horloges_de_panneau, (
+        "un panneau attend encore un délai fixe avant de s'initialiser : %s"
+        % horloges_de_panneau[:3])
+    assert '_apresPeinture(' in corps, (
+        "aucune initialisation différée ne passe par _apresPeinture : "
+        "l'extraction a-t-elle trouvé le bon corps de fonction ?")
+    assert horloges, (
+        "plus aucun setTimeout dans `go` : la règle ne distingue plus rien")
 
 
 def test_apres_peinture_sexecute_bien_apres_la_peinture():

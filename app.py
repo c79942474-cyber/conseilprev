@@ -9007,6 +9007,53 @@ def registre_init_db():
     registre_ajouter_colonne(cur, 'systemes_ia', 'famille', "TEXT")
     conn.commit()
 
+    # FINOPS — CE QUI MANQUAIT N'ETAIT PAS DE L'ORGANISATION, C'ETAIT DE LA
+    # MESURE. Le registre porte deja l'attribution que le FinOps reclame :
+    # responsable, product owner, service, finalite, famille. C'est la moitie la
+    # plus couteuse de la demarche, celle qui demande de parler a des gens, et
+    # elle est faite. Ce qui manque tient en huit champs, tous DECLARES :
+    #
+    #   . le MODELE. `fournisseur` nomme l'editeur, jamais le modele — et c'est
+    #     le modele qui porte le prix. « Anthropic » ne se chiffre pas ;
+    #     « claude-haiku-4-5 » si.
+    #   . l'UNITE de facturation. Le jeton n'est pas la seule : siege, heure de
+    #     GPU, forfait. Une table de prix au jeton appliquee a un siege donnerait
+    #     un montant sans rapport.
+    #   . les VOLUMES d'entree et de sortie, et LEUR SOURCE. Un chiffre sans
+    #     provenance n'est pas une mesure : console de facturation, export ou
+    #     souvenir de quelqu'un ne se valent pas devant un comite.
+    #   . le CENTRE DE COUT. `service` est une realite d'organigramme, le centre
+    #     de cout une ligne budgetaire — les deux divergent des qu'une equipe
+    #     travaille pour deux budgets, ce qui est le cas ordinaire.
+    #   . la CLASSE DE TACHE. Sans elle, « un gros modele pour une tache simple
+    #     est un gaspillage » reste une maxime : rien ne dit qu'une tache est
+    #     simple. Elle est declaree, jamais devinee depuis la finalite, qui est
+    #     du texte libre.
+    #   . les LEVIERS poses (cache, differe, requete bornee). Declares, jamais
+    #     mesures — ce module ne peut pas savoir si un cache est branche. Ce
+    #     qu'il apporte est la QUESTION posee a chaque ligne.
+    #
+    # AUCUNE VALEUR PAR DEFAUT SUR LES VOLUMES, et c'est la decision qui tient
+    # tout : un `DEFAULT 0` ferait qu'un parc jamais instruit afficherait un
+    # cout mensuel de zero, credible et faux. NULL se lit « personne n'a encore
+    # dit », zero se lit « cela ne coute rien ».
+    # HUIT APPELS LITTERAUX, ET NON UNE BOUCLE. La boucle etait plus courte de
+    # six lignes et INVISIBLE a la recette : elle reconstruit la table en lisant
+    # les appels a `registre_ajouter_colonne` dans ce fichier, avec un nom de
+    # colonne litteral. Une colonne ajoutee par une variable n'existait donc pas
+    # pour elle — la table de recette repartait sans les huit, et l'INSERT
+    # tombait. La regle avait raison : une migration qu'on ne peut pas enumerer
+    # est une migration qu'on ne peut pas verifier.
+    registre_ajouter_colonne(cur, 'systemes_ia', 'modele', "TEXT")
+    registre_ajouter_colonne(cur, 'systemes_ia', 'unite_facturation', "TEXT")
+    registre_ajouter_colonne(cur, 'systemes_ia', 'volume_entree_mois', "TEXT")
+    registre_ajouter_colonne(cur, 'systemes_ia', 'volume_sortie_mois', "TEXT")
+    registre_ajouter_colonne(cur, 'systemes_ia', 'volume_source', "TEXT")
+    registre_ajouter_colonne(cur, 'systemes_ia', 'centre_cout', "TEXT")
+    registre_ajouter_colonne(cur, 'systemes_ia', 'classe_tache', "TEXT")
+    registre_ajouter_colonne(cur, 'systemes_ia', 'leviers', "TEXT")
+    conn.commit()
+
     cur.execute('SELECT COUNT(*) AS n FROM systemes_ia')
     row = cur.fetchone()
     count = row['n'] if isinstance(row, dict) else row[0]
@@ -9240,6 +9287,16 @@ def registre_row_to_dict(row):
         roles_parsed = json.loads(d.get('roles')) if d.get('roles') else []
     except Exception:
         roles_parsed = []
+    # MEME TRAITEMENT QUE `roles`, ET POUR LA MEME RAISON : une liste stockee en
+    # JSON qui remonterait en chaine ferait que `set(leviers)` compterait des
+    # CARACTERES. Le module de FinOps sait lire les deux formes, mais il ne
+    # devrait pas avoir a le savoir.
+    try:
+        leviers_parsed = json.loads(d.get('leviers')) if d.get('leviers') else []
+    except Exception:
+        leviers_parsed = []
+    if not isinstance(leviers_parsed, list):
+        leviers_parsed = []
     return {
         'id': d['id'], 'nom': d['nom'], 'finalite': d['finalite'],
         'secteur': d['secteur'], 'type_systeme': d['type_systeme'],
@@ -9253,7 +9310,15 @@ def registre_row_to_dict(row):
         'personnes_concernees': d.get('personnes_concernees'),
         'transparence_art50': d.get('transparence_art50') or 'a_evaluer',
         'preuves_conformite': d.get('preuves_conformite'),
-        'famille': d.get('famille')
+        'famille': d.get('famille'),
+        'modele': d.get('modele'),
+        'unite_facturation': d.get('unite_facturation'),
+        'volume_entree_mois': d.get('volume_entree_mois'),
+        'volume_sortie_mois': d.get('volume_sortie_mois'),
+        'volume_source': d.get('volume_source'),
+        'centre_cout': d.get('centre_cout'),
+        'classe_tache': d.get('classe_tache'),
+        'leviers': leviers_parsed
     }
 
 @app.route('/api/registre', methods=['GET'])
@@ -9287,6 +9352,9 @@ def registre_create():
     roles_list = data.get('roles') or []
     if not isinstance(roles_list, list):
         roles_list = []
+    leviers_list = data.get('leviers') or []
+    if not isinstance(leviers_list, list):
+        leviers_list = []
     values = (
         nom,
         (data.get('finalite') or '')[:500],
@@ -9307,17 +9375,29 @@ def registre_create():
         (data.get('personnes_concernees') or '')[:500],
         (data.get('transparence_art50') or 'a_evaluer')[:30],
         (data.get('preuves_conformite') or '')[:500],
-        (data.get('famille') or '')[:120]
+        (data.get('famille') or '')[:120],
+        (data.get('modele') or '')[:120],
+        (data.get('unite_facturation') or '')[:40],
+        # LES VOLUMES NE SONT PAS COERCES EN ZERO. `or ''` sur une chaine vide
+        # laisse une chaine vide, que `finops_ia._nombre` rend None — et None
+        # se lit « non instruit ». Ecrire `or 0` ici ferait basculer tout le
+        # parc dans « cela ne coute rien ».
+        (str(data.get('volume_entree_mois') or ''))[:40],
+        (str(data.get('volume_sortie_mois') or ''))[:40],
+        (data.get('volume_source') or '')[:200],
+        (data.get('centre_cout') or '')[:80],
+        (data.get('classe_tache') or '')[:40],
+        json.dumps(leviers_list)[:300]
     )
     if REGISTRE_USE_PG:
         cur.execute('''INSERT INTO systemes_ia
-            (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj, client_id, cycle_vie, product_owner, service, roles, personnes_concernees, transparence_art50, preuves_conformite, famille)
-            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING *''', values)
+            (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj, client_id, cycle_vie, product_owner, service, roles, personnes_concernees, transparence_art50, preuves_conformite, famille, modele, unite_facturation, volume_entree_mois, volume_sortie_mois, volume_source, centre_cout, classe_tache, leviers)
+            VALUES (%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s) RETURNING *''', values)
         row = cur.fetchone()
     else:
         cur.execute('''INSERT INTO systemes_ia
-            (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj, client_id, cycle_vie, product_owner, service, roles, personnes_concernees, transparence_art50, preuves_conformite, famille)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', values)
+            (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj, client_id, cycle_vie, product_owner, service, roles, personnes_concernees, transparence_art50, preuves_conformite, famille, modele, unite_facturation, volume_entree_mois, volume_sortie_mois, volume_source, centre_cout, classe_tache, leviers)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', values)
         new_id = cur.lastrowid
         cur.execute('SELECT * FROM systemes_ia WHERE id=?', (new_id,))
         row = cur.fetchone()
@@ -9335,11 +9415,13 @@ def registre_update(sys_id):
     conn = registre_get_db()
     cur = conn.cursor()
     now = datetime.utcnow().isoformat()
-    fields = ['nom','finalite','secteur','type_systeme','donnees_utilisees','classification','justification','statut_conformite','responsable','fournisseur','cycle_vie','product_owner','service','personnes_concernees','transparence_art50','preuves_conformite','famille']
+    fields = ['nom','finalite','secteur','type_systeme','donnees_utilisees','classification','justification','statut_conformite','responsable','fournisseur','cycle_vie','product_owner','service','personnes_concernees','transparence_art50','preuves_conformite','famille','modele','unite_facturation','volume_entree_mois','volume_sortie_mois','volume_source','centre_cout','classe_tache']
     # Si le cycle de vie passe explicitement a 'revue', on horodate la derniere revue —
     # trace la conformite a l obligation de revue periodique des cas d usage en production.
     derniere_revue_val = now if data.get('cycle_vie') == 'revue' else None
     roles_json = json.dumps(data.get('roles')) if data.get('roles') is not None else None
+    leviers_json = (json.dumps(data.get('leviers'))
+                    if data.get('leviers') is not None else None)
 
     if REGISTRE_USE_PG:
         # COALESCE permet de ne mettre a jour que les champs fournis, en une seule requete
@@ -9356,7 +9438,12 @@ def registre_update(sys_id):
             service=COALESCE(%s,service), roles=COALESCE(%s,roles),
             personnes_concernees=COALESCE(%s,personnes_concernees),
             transparence_art50=COALESCE(%s,transparence_art50),
-            preuves_conformite=COALESCE(%s,preuves_conformite), famille=COALESCE(%s,famille), date_maj=%s
+            preuves_conformite=COALESCE(%s,preuves_conformite), famille=COALESCE(%s,famille),
+            modele=COALESCE(%s,modele), unite_facturation=COALESCE(%s,unite_facturation),
+            volume_entree_mois=COALESCE(%s,volume_entree_mois),
+            volume_sortie_mois=COALESCE(%s,volume_sortie_mois),
+            volume_source=COALESCE(%s,volume_source), centre_cout=COALESCE(%s,centre_cout),
+            classe_tache=COALESCE(%s,classe_tache), leviers=COALESCE(%s,leviers), date_maj=%s
             WHERE id=%s AND client_id=%s RETURNING *''', (
             data.get('nom'), data.get('finalite'), data.get('secteur'), data.get('type_systeme'),
             data.get('donnees_utilisees'), data.get('classification'), data.get('justification'),
@@ -9365,6 +9452,10 @@ def registre_update(sys_id):
             derniere_revue_val,
             data.get('service'), roles_json, data.get('personnes_concernees'),
             data.get('transparence_art50'), data.get('preuves_conformite'), data.get('famille'),
+            data.get('modele'), data.get('unite_facturation'),
+            data.get('volume_entree_mois'), data.get('volume_sortie_mois'),
+            data.get('volume_source'), data.get('centre_cout'),
+            data.get('classe_tache'), leviers_json,
             now, sys_id, client['id']))
         row = cur.fetchone()
         conn.commit()
@@ -9384,14 +9475,21 @@ def registre_update(sys_id):
         score = int(data.get('score_risque', existing_d['score_risque']) or 0)
         derniere_revue_final = derniere_revue_val or existing_d.get('derniere_revue')
         roles_final = roles_json if roles_json is not None else json.dumps(existing_d.get('roles') or [])
+        leviers_final = (leviers_json if leviers_json is not None
+                         else json.dumps(existing_d.get('leviers') or []))
         cur.execute('''UPDATE systemes_ia SET nom=?, finalite=?, secteur=?, type_systeme=?, donnees_utilisees=?,
            classification=?, justification=?, statut_conformite=?, responsable=?, fournisseur=?, score_risque=?,
            cycle_vie=?, product_owner=?, derniere_revue=?,
-           service=?, roles=?, personnes_concernees=?, transparence_art50=?, preuves_conformite=?, famille=?, date_maj=?
+           service=?, roles=?, personnes_concernees=?, transparence_art50=?, preuves_conformite=?, famille=?,
+           modele=?, unite_facturation=?, volume_entree_mois=?, volume_sortie_mois=?,
+           volume_source=?, centre_cout=?, classe_tache=?, leviers=?, date_maj=?
            WHERE id=? AND client_id=?''', (vals['nom'], vals['finalite'], vals['secteur'], vals['type_systeme'], vals['donnees_utilisees'],
             vals['classification'], vals['justification'], vals['statut_conformite'], vals['responsable'], vals['fournisseur'],
             score, vals['cycle_vie'], vals['product_owner'], derniere_revue_final,
             vals['service'], roles_final, vals['personnes_concernees'], vals['transparence_art50'], vals['preuves_conformite'], vals['famille'],
+            vals['modele'], vals['unite_facturation'], vals['volume_entree_mois'],
+            vals['volume_sortie_mois'], vals['volume_source'], vals['centre_cout'],
+            vals['classe_tache'], leviers_final,
             now, sys_id, client['id']))
         conn.commit()
         cur.execute('SELECT * FROM systemes_ia WHERE id=?', (sys_id,))
@@ -9421,6 +9519,68 @@ def registre_delete(sys_id):
         return jsonify({'error': 'Systeme introuvable'}), 404
     schedule_cartographie_report(client['id'], client.get('email') or CONSEILPREV_INTERNAL_EMAIL, client.get('nom_entreprise') or 'CONSEILPREV')
     return jsonify({'deleted': sys_id})
+
+@app.route('/api/finops', methods=['GET'])
+@require_paid_plan
+@rate_limit(limit=60, window=60)
+def finops_etat():
+    """Le FinOps du parc — LU sur le registre, jamais mesure.
+
+    POURQUOI CETTE ROUTE VIT SUR LE REGISTRE ET NON A COTE. Le FinOps demande
+    d'abord une base d'attribution : qui consomme quoi, pour quel objectif, sous
+    quelle responsabilite. C'est exactement ce que le registre de conformite
+    porte deja, et c'est la moitie la plus couteuse de la demarche — celle qui
+    demande de parler a des gens. Un second inventaire, tenu a part, divergerait
+    du premier dans le mois, et c'est celui qu'on oublie de corriger qui reste.
+
+    CE QU'ELLE NE FAIT PAS : mesurer. Aucun jeton n'est compte ici — ce service
+    ne tourne pas dans les applications du client. Les volumes sont DECLARES,
+    avec leur source, et une ligne sans volume ressort « non instruite », jamais
+    a zero euro. La couverture precede les montants dans la reponse comme elle
+    doit les preceder a l'ecran : un total qui tait ce qu'il ignore est un total
+    faux.
+
+    LES SEUILS viennent de la requete et non de la base : un plafond est une
+    decision de comite, revisee a chaque exercice, et le figer dans une table
+    obligerait a une migration pour changer un nombre. Ils sont passes en JSON
+    sur le parametre `seuils`, par centre de cout.
+    """
+    client = sentauth_current_client()
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql(
+        'SELECT * FROM systemes_ia WHERE client_id=%s ORDER BY date_maj DESC',
+        'SELECT * FROM systemes_ia WHERE client_id=? ORDER BY date_maj DESC'
+    ), (client['id'],))
+    rows = cur.fetchall()
+    conn.commit()
+    conn.close()
+    systemes = [registre_row_to_dict(r) for r in rows]
+
+    seuils = {}
+    brut = (request.args.get('seuils') or '').strip()
+    if brut:
+        try:
+            lu = json.loads(brut)
+            if isinstance(lu, dict):
+                seuils = lu
+        except Exception:
+            # UN SEUIL ILLISIBLE NE FAIT PAS TOMBER LA PAGE, ET NE SE TAIT PAS
+            # NON PLUS. Sans le signaler, un comite lirait « aucun depassement »
+            # d'un parametre que le serveur n'a pas compris.
+            return jsonify({'ok': False, 'error': 'seuils_illisibles',
+                            'message': "Le parametre `seuils` n'est pas un objet "
+                                       "JSON : aucun plafond n'a ete applique."}), 400
+
+    import finops_ia
+    etat = finops_ia.etat(systemes, seuils=seuils)
+    etat['ok'] = True
+    etat['classes_tache'] = finops_ia.CLASSES_TACHE
+    etat['unites'] = finops_ia.UNITES
+    etat['leviers'] = finops_ia.LEVIERS
+    etat['modeles_tarifes'] = sorted(finops_ia.TARIFS)
+    return jsonify(etat)
+
 
 @app.route('/api/registre/status', methods=['GET'])
 @require_paid_plan
