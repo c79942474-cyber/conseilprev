@@ -18572,6 +18572,32 @@ document.addEventListener('DOMContentLoaded', function(){ if(window.cartoInit) w
 var DC_MILLESIME = "2026-08-d";
 var GUIDED_PATHS = [
   {
+    id: 'consultant_ia_cadrage',
+    icon: '\U0001F9ED',
+    role: 'Consultant IA \u2014 cadrage et architecture des cas d\u2019usage',
+    pitch: 'Vous transformez un goulot d\u2019\u00e9tranglement op\u00e9rationnel en cas d\u2019usage arbitr\u00e9, puis en syst\u00e8me qui tient en production. Ce parcours suit l\u2019ordre du m\u00e9tier \u2014 id\u00e9ation, cadrage, dossier d\u2019arbitrage, industrialisation \u2014 et dit \u00e0 chaque \u00e9tape ce que Sentinel porte, et ce qu\u2019il ne porte pas.',
+    steps: [
+      /* PHASE 1 — IDEATION & OPPORTUNITES */
+      {id:'carto-uc', label:'Cartographie des cas d\u2019usage IA', action:'Parcourez les 5 \u00e9tapes : secteur et processus, cas d\u2019usage \u00e0 potentiel, qualification, retour attendu, maturit\u00e9. Partez des goulots d\u2019\u00e9tranglement d\u00e9clar\u00e9s par le m\u00e9tier, pas des technologies disponibles.', gain:'Une liste courte de cas d\u2019usage prioris\u00e9s et chiffr\u00e9s, l\u00e0 o\u00f9 l\u2019atelier avait produit une liste longue et plate.', tip:'CE QUE SENTINEL NE PORTE PAS ENCORE, et qui se conduit en atelier : l\u2019arbre de d\u00e9cision d\u2019architecture (mod\u00e8le de fondation, RAG, syst\u00e8me agentique ou ML pr\u00e9dictif classique) et l\u2019estimation des co\u00fbts d\u2019infrastructure \u2014 compute et jetons. Aucun panneau ne les couvre : les rattacher ici serait un renvoi trompeur.'},
+      {id:'pan-sia', label:'Panorama des syst\u00e8mes d\u00e9ploy\u00e9s dans l\u2019UE', action:'Cherchez, dans les cas r\u00e9els recens\u00e9s, ceux qui ressemblent au v\u00f4tre \u2014 et regardez d\u2019abord les ABANDONS.', gain:'Un cas comparable arr\u00eat\u00e9 en production vaut plus, pour un arbitrage, que dix r\u00e9ussites publi\u00e9es par leurs auteurs.', tip:'Notez le stade atteint : POC, pilote, production, abandon. C\u2019est le seul indicateur de faisabilit\u00e9 qui ne vienne pas d\u2019un fournisseur.'},
+      {id:'benchmark', label:'Benchmark sectoriel', action:'Situez la maturit\u00e9 et les priorit\u00e9s du client par rapport \u00e0 son secteur.', gain:'D\u00e9place la discussion de \u00ab\u00a0est-ce faisable\u00a0\u00bb \u00e0 \u00ab\u00a0o\u00f9 en sont ceux qui l\u2019ont fait\u00a0\u00bb.', tip:'Le benchmark n\u2019est pas un objectif : un secteur en retard ne justifie pas de l\u2019\u00eatre, un secteur en avance ne justifie pas d\u2019investir sans cas d\u2019usage.'},
+      /* PHASE 2 — CADRAGE, ARBITRAGE, GO/NO-GO */
+      {id:'simulateur', label:'Simulateur IA Act', action:'Classez chaque cas d\u2019usage retenu AVANT le comit\u00e9 d\u2019engagement, pas apr\u00e8s.', gain:'Un cas d\u2019usage class\u00e9 haut risque change son co\u00fbt et son calendrier : le d\u00e9couvrir apr\u00e8s le PoC co\u00fbte le PoC.', tip:'Faites de cette \u00e9tape un jalon obligatoire du comit\u00e9 d\u2019engagement \u2014 c\u2019est ce que fait le parcours du directeur de programme.'},
+      {id:'maturite', label:'Audit de maturit\u00e9', action:'\u00c9valuez les 8 piliers pour le p\u00e9rim\u00e8tre concern\u00e9, pas pour l\u2019organisation enti\u00e8re.', gain:'S\u00e9pare ce qui bloque le cas d\u2019usage de ce qui bloque l\u2019organisation : deux plans d\u2019action distincts.', tip:'Un cas d\u2019usage \u00e0 fort retour dans une organisation immature ne se livre pas plus vite \u2014 il \u00e9choue plus vite.'},
+      {id:'matrice', label:'Matrice risques', action:'Positionnez les cas d\u2019usage retenus en probabilit\u00e9 \u00d7 impact.', gain:'Le ratio valeur/effort seul ne d\u00e9partage pas deux cas \u00e9quivalents ; le risque, si.', tip:'Un cas d\u2019usage \u00e0 fort retour et \u00e0 fort risque n\u2019est pas \u00e0 \u00e9carter : il est \u00e0 s\u00e9quencer autrement.'},
+      {id:'report', label:'Vue direction', action:'Constituez le dossier d\u2019arbitrage : cas retenus, classification, risques, trajectoire.', gain:'Le support du comit\u00e9 de direction, tir\u00e9 des \u00e9tapes pr\u00e9c\u00e9dentes plut\u00f4t que ressaisi.', tip:'Pr\u00e9sentez une fourchette de co\u00fbts, jamais un chiffre unique : un chiffre unique se conteste, une fourchette se discute.'},
+      /* PHASE 3 — CONCEPTION VERS INDUSTRIALISATION */
+      {id:'registre', label:'Registre IA', action:'Inscrivez le syst\u00e8me d\u00e8s le PoC, avec sa finalit\u00e9, son fournisseur de mod\u00e8le et ses donn\u00e9es.', gain:'Un PoC inscrit au registre se transforme en MVP sans reprise documentaire \u2014 un PoC non inscrit la paie deux fois.', tip:'Renseignez la base l\u00e9gale du traitement d\u00e8s l\u2019inscription : c\u2019est le champ qu\u2019on ne retrouve plus six mois apr\u00e8s.'},
+      {id:'regs', label:'R\u00e9glementations', action:'Lisez les obligations de transparence de l\u2019article 50 si le syst\u00e8me produit du texte, de l\u2019image, de l\u2019audio ou de la vid\u00e9o.', gain:'Le marquage lisible par machine est une obligation du FOURNISSEUR du syst\u00e8me : savoir si vous en \u00eates un d\u00e9cide de ce que vous devez.', tip:'Un assistant b\u00e2ti sur un mod\u00e8le tiers et mis en service sous votre nom peut faire de vous un fournisseur en aval. La qualification se tranche au cadrage, pas \u00e0 la mise en production.'},
+      {id:'fria', label:'\u00c9valuation FRIA', action:'Conduisez l\u2019\u00e9valuation d\u2019impact sur les droits fondamentaux si la classification l\u2019exige (art. 27).', gain:'Documente l\u2019impact humain, que les indicateurs de performance d\u2019un mod\u00e8le ne mesurent jamais.', tip:'Associez un repr\u00e9sentant du m\u00e9tier : l\u2019usage r\u00e9el d\u2019un syst\u00e8me ne se devine pas depuis sa sp\u00e9cification.'},
+      {id:'roadmap', label:'Roadmap', action:'S\u00e9quencez PoC, MVP puis industrialisation, avec les jalons de conformit\u00e9 aux m\u00eames dates.', gain:'\u00c9vite le sch\u00e9ma le plus co\u00fbteux : un MVP techniquement pr\u00eat et r\u00e9glementairement bloqu\u00e9.', tip:'CE QUE SENTINEL NE PORTE PAS ENCORE : les indicateurs de qualit\u00e9 des mod\u00e8les \u2014 pr\u00e9cision, latence, taux d\u2019hallucination pour les LLM et les architectures RAG, explicabilit\u00e9, robustesse. \u00c0 d\u00e9finir et \u00e0 mesurer hors outil, et \u00e0 inscrire comme crit\u00e8res de passage du PoC au MVP.'},
+      /* PHASE 4 — CAPITALISATION */
+      {id:'rag', label:'Base de connaissance', action:'D\u00e9posez les livrables de cadrage, les grilles d\u2019arbitrage et les retours d\u2019exp\u00e9rience.', gain:'La capitalisation d\u2019expertise du cabinet tient l\u00e0 : le deuxi\u00e8me cadrage co\u00fbte moiti\u00e9 moins que le premier \u2014 \u00e0 condition que le premier ait laiss\u00e9 une trace.', tip:'Rangez par famille de cas d\u2019usage plut\u00f4t que par client : c\u2019est ainsi qu\u2019on les recherche.'},
+      {id:'veille', label:'Veille qualifi\u00e9e', action:'Suivez l\u2019analyse d\u2019impact des actualit\u00e9s r\u00e9glementaires sur les syst\u00e8mes du registre.', gain:'Une \u00e9volution anticip\u00e9e est un arbitrage ; d\u00e9couverte tard, c\u2019est une reprise.', tip:'Les \u00e9ch\u00e9ances de l\u2019article 50 \u2014 2 d\u00e9cembre 2026, 2 f\u00e9vrier 2027 \u2014 concernent directement les syst\u00e8mes g\u00e9n\u00e9ratifs.'},
+      {id:'obs-rd', label:'Observatoire R&D IA', action:'Situez les approches retenues par rapport \u00e0 l\u2019\u00e9tat de la recherche.', gain:'Distingue une architecture \u00e9prouv\u00e9e d\u2019une architecture \u00e0 la mode \u2014 la seconde se paie \u00e0 la reprise.', tip:'Utile pour les propositions commerciales : ce qui se publie aujourd\u2019hui se demande dans douze mois.'}
+    ]
+  },
+  {
     id: 'directeur_programme',
     icon: '🎯',
     role: 'Directeur de programme IA Act',
@@ -19012,6 +19038,12 @@ var GP_FAMILLES = [
      supposent un intitulé de poste. */
   { titre: 'Par rôle au sens du règlement',
     ids: ['role_deployeur', 'role_fournisseur'] },
+  /* LA VALEUR AVANT LA CONFORMITE, ET C'EST L'ORDRE DU METIER. Les seize
+     parcours existants partent tous d'une obligation ou d'un poste. Celui-ci
+     part d'un goulot d'etranglement operationnel : c'est la question qu'on
+     pose en premier chez un client, et aucun chemin ne la portait. */
+  { titre: 'Cadrage & valeur des cas d\u2019usage',
+    ids: ['consultant_ia_cadrage'] },
   { titre: 'Gouvernance & IA Act',
     ids: ['directeur_programme', 'grc_senior', 'risk_manager', 'ceo', 'cdo', 'caio'] },
   { titre: 'Protection des données (RGPD)',

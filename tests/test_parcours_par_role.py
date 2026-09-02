@@ -229,3 +229,129 @@ def test_les_panneaux_reintroduits_restent_atteignables(panneau, pourquoi):
     assert panneau in atteints, (
         "le panneau « %s » n'est plus atteint par aucun parcours : %s"
         % (panneau, pourquoi))
+
+
+# ── LE PARCOURS DE CADRAGE, ET CE QU'IL S'INTERDIT DE PROMETTRE ──────────
+#
+# CE QUI A DÉCLENCHÉ CE BLOC. Une offre de cabinet — cadrage stratégique et
+# architecture des cas d'usage IA — décrit un métier qui va de l'idéation à
+# l'industrialisation. Sentinel porte 79 panneaux et n'en a AUCUN pour trois
+# points centraux de ce métier : le choix d'architecture (modèle de fondation,
+# RAG, système agentique, ML prédictif), l'estimation des coûts d'infrastructure
+# (compute et jetons), et les indicateurs de qualité des modèles — précision,
+# latence, taux d'hallucination, explicabilité, robustesse.
+#
+# LA TENTATION ÉTAIT DE LES RATTACHER À UN PANNEAU VOISIN. « Cartographie des
+# cas d'usage » chiffre un retour attendu : on aurait pu y accrocher le business
+# case complet, et « Roadmap » aurait pu passer pour le pilotage PoC → MVP. Un
+# renvoi approximatif ne se voit pas à la lecture ; il se découvre au moment où
+# le lecteur ouvre le panneau et n'y trouve pas ce qu'on lui a annoncé — et il
+# cesse alors de croire les treize autres étapes.
+#
+# Le parcours DIT donc ce qu'il ne porte pas. Ces règles gardent cette phrase :
+# sans elles, la première relecture qui trouve le ton négatif la supprimerait,
+# et le parcours se mettrait à promettre une couverture qu'il n'a pas.
+
+CADRAGE = 'consultant_ia_cadrage'
+
+# Les panneaux fermés aux plans inférieurs. Une étape qui y mène est un cul-de-sac
+# pour tout lecteur qui n'a pas le plan — sans message, puisque le panneau est
+# simplement absent de son menu.
+RESERVES = set(json.loads(
+    __import__('re').search(r'var PLAN_ENTREPRISE_ONLY = (\[[^\]]*\]);', MOTEUR)
+    .group(1).replace("'", '"')))
+
+# LE NOMBRE D'ÉTAPES RÉSERVÉES DÉJÀ CONNUES, ET C'EST UN BUDGET, PAS UN CONSTAT.
+# `role_deployeur` mène à « Transparence IA Act » (art. 50), qui est réservé au
+# plan Entreprise : le contenu est juste — l'article 50.4 EST une obligation du
+# déployeur — mais le lecteur d'un plan inférieur n'atteint pas le panneau.
+# C'était vrai avant ce bloc ; le noter interdit qu'une deuxième s'ajoute sans
+# décision, sans corriger en douce un arbitrage qui n'est pas le nôtre.
+RENVOIS_RESERVES_CONNUS = {('role_deployeur', 'ia50')}
+
+
+def test_le_parcours_de_cadrage_existe_et_suit_l_ordre_du_metier():
+    p = _parcours(CADRAGE)
+    assert len(p['steps']) >= 10, (
+        "le parcours de cadrage est tombé à %d étapes : il ne couvre plus "
+        "l'idéation, l'arbitrage, l'industrialisation et la capitalisation"
+        % len(p['steps']))
+    ids = [e['id'] for e in p['steps']]
+    # L'ORDRE EST LA MOITIÉ DU PARCOURS. Classer un cas d'usage après l'avoir
+    # arbitré, c'est découvrir son coût réglementaire une fois le budget voté.
+    assert ids.index('carto-uc') < ids.index('simulateur'), (
+        "la classification IA Act passe avant la cartographie : le cadrage "
+        "commencerait par la conformité au lieu du besoin métier")
+    assert ids.index('simulateur') < ids.index('report'), (
+        "le dossier d'arbitrage est constitué avant la classification : le "
+        "comité déciderait sans connaître le coût réglementaire")
+    assert ids.index('registre') < ids.index('roadmap')
+
+
+def test_le_parcours_de_cadrage_couvre_les_trois_blocs_de_l_offre():
+    """Idéation et opportunités ; conception vers industrialisation ;
+    développement du cabinet. Un parcours qui perdrait un bloc resterait
+    cohérent à la lecture — c'est pour cela qu'on le vérifie."""
+    t = _texte(_parcours(CADRAGE)).lower()
+    for attendu, bloc in (
+            ("goulot", "idéation : partir des goulots d'étranglement du métier"),
+            ("arbitrage", "business case : le dossier d'arbitrage"),
+            ("poc", "pilotage de la conception à l'industrialisation"),
+            ("mvp", "pilotage : le passage du PoC au MVP"),
+            ("capitalis", "développement du cabinet : la capitalisation d'expertise")):
+        assert attendu in t, "le parcours ne dit plus rien du bloc « %s »" % bloc
+
+
+def test_le_parcours_de_cadrage_nomme_ce_que_sentinel_ne_porte_pas():
+    """LA RÈGLE QUI TIENT L'HONNÊTETÉ DU PARCOURS. Trois points centraux du
+    métier n'ont aucun panneau. Les taire ferait promettre au parcours une
+    couverture qu'il n'a pas ; les rattacher à un panneau voisin serait pire."""
+    p = _parcours(CADRAGE)
+    aveux = [e for e in p['steps'] if 'NE PORTE PAS' in (e.get('tip') or '')]
+    assert len(aveux) >= 2, (
+        "le parcours ne nomme plus ce que Sentinel ne porte pas (%d mention(s)) "
+        "— il promet désormais une couverture complète du métier" % len(aveux))
+    dit = ' '.join(e['tip'] for e in aveux).lower()
+    for manque in ('rag', 'agentique', 'jetons', 'hallucination'):
+        assert manque in dit, (
+            "le manque « %s » n'est plus nommé : le lecteur croira le trouver "
+            "dans un des panneaux du parcours" % manque)
+
+
+def test_le_parcours_de_cadrage_ne_mene_a_aucun_panneau_reserve():
+    """Un panneau fermé au plan du lecteur n'affiche pas de refus : il est
+    absent de son menu, et l'étape ne va nulle part."""
+    culs_de_sac = [e['id'] for e in _parcours(CADRAGE)['steps'] if e['id'] in RESERVES]
+    assert not culs_de_sac, (
+        "le parcours de cadrage mène à un panneau réservé au plan Entreprise : "
+        "%s — le lecteur d'un plan inférieur n'y arrivera pas, sans message"
+        % ', '.join(culs_de_sac))
+
+
+def test_aucun_renvoi_vers_un_panneau_reserve_ne_s_ajoute_sans_decision():
+    """Le budget déclaré : les renvois connus sont nommés, un de plus doit être
+    une décision. Corriger celui qui existe ne nous revient pas — le contenu de
+    l'étape est juste, c'est le plan qui ferme le panneau."""
+    trouves = {(p['id'], e['id']) for p in PARCOURS for e in p['steps']
+               if e['id'] in RESERVES}
+    nouveaux = trouves - RENVOIS_RESERVES_CONNUS
+    assert not nouveaux, (
+        "renvoi(s) neuf(s) vers un panneau réservé : %s"
+        % ', '.join('%s → %s' % c for c in sorted(nouveaux)))
+    disparus = RENVOIS_RESERVES_CONNUS - trouves
+    assert not disparus, (
+        "renvoi(s) réservé(s) corrigé(s) sans mettre à jour la liste : %s — "
+        "une bonne nouvelle, mais la liste doit la refléter"
+        % ', '.join('%s → %s' % c for c in sorted(disparus)))
+
+
+def test_le_parcours_de_cadrage_est_dans_sa_propre_famille():
+    """Il ne part ni d'une obligation ni d'un intitulé de poste, mais d'un
+    goulot d'étranglement opérationnel. Le ranger dans « Gouvernance & IA Act »
+    le ferait chercher par les mauvais lecteurs."""
+    familles = [f for f in FAMILLES if CADRAGE in f['ids']]
+    assert len(familles) == 1, (
+        "le parcours de cadrage est dans %d famille(s)" % len(familles))
+    assert 'adrage' in familles[0]['titre'] or 'aleur' in familles[0]['titre'], (
+        "la famille qui porte le parcours de cadrage s'appelle « %s » : elle ne "
+        "dit plus ce qu'elle range" % familles[0]['titre'])
