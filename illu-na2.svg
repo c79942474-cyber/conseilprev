@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" role="img"
+     aria-labelledby="t2 d2" preserveAspectRatio="xMidYMid meet">
+  <title id="t2">Trois échéances de l'article 50</title>
+  <desc id="d2">Le 2 août 2026 pour la transparence, le 2 décembre 2026 pour les
+  systèmes déjà sur le marché, le 2 février 2027 pour l'interopérabilité du
+  marquage.</desc>
+  <!-- LES TROIS DATES SONT PLACÉES À L'ÉCHELLE DU TEMPS QUI LES SÉPARE, non à
+       intervalle régulier : quatre mois puis deux, c'est ce que dit le texte,
+       et un dessin régulier ferait croire à un rythme qui n'existe pas. -->
+  <path d="M80 168h640" stroke="rgba(240,236,255,.32)" stroke-width="2"/>
+  <g stroke="#e6c65a" stroke-width="2.5">
+    <path d="M140 148v40"/><path d="M470 148v40"/><path d="M636 148v40"/>
+  </g>
+  <circle cx="140" cy="168" r="9" fill="#e6c65a"/>
+  <circle cx="470" cy="168" r="9" fill="none" stroke="#e6c65a" stroke-width="2.5"/>
+  <circle cx="636" cy="168" r="9" fill="none" stroke="#e6c65a" stroke-width="2.5"/>
+  <text x="140" y="132" fill="rgba(240,236,255,.92)" font-family="Georgia,serif"
+        font-size="16" text-anchor="middle">2 août 2026</text>
+  <text x="140" y="212" fill="rgba(240,236,255,.68)" font-family="Georgia,serif"
+        font-size="13" text-anchor="middle">transparence</text>
+  <text x="140" y="230" fill="rgba(240,236,255,.68)" font-family="Georgia,serif"
+        font-size="13" text-anchor="middle">applicable</text>
+  <text x="470" y="132" fill="rgba(240,236,255,.92)" font-family="Georgia,serif"
+        font-size="16" text-anchor="middle">2 décembre 2026</text>
+  <text x="470" y="212" fill="rgba(240,236,255,.68)" font-family="Georgia,serif"
+        font-size="13" text-anchor="middle">fin de la période</text>
+  <text x="470" y="230" fill="rgba(240,236,255,.68)" font-family="Georgia,serif"
+        font-size="13" text-anchor="middle">transitoire</text>
+  <text x="636" y="132" fill="rgba(240,236,255,.92)" font-family="Georgia,serif"
+        font-size="16" text-anchor="middle">2 février 2027</text>
+  <text x="636" y="212" fill="rgba(240,236,255,.68)" font-family="Georgia,serif"
+        font-size="13" text-anchor="middle">interopérabilité</text>
+  <text x="636" y="230" fill="rgba(240,236,255,.68)" font-family="Georgia,serif"
+        font-size="13" text-anchor="middle">du marquage</text>
+  <text x="80" y="266" fill="rgba(240,236,255,.45)" font-family="Georgia,serif"
+        font-size="12" font-style="italic">échelle de temps respectée — quatre mois, puis deux</text>
+</svg>

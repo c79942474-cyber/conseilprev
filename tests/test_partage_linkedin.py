@@ -240,3 +240,147 @@ def test_la_description_de_la_page_decrit_LA_PAGE(client):
     for etranger in ("confidentialit", "donnees personnelles", "cookies"):
         assert etranger not in plat, (
             "la description parle d'une AUTRE page (%s) : %r" % (etranger, desc))
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  5. L'ILLUSTRATION ET LES SOURCES
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# DEUX EXEMPLAIRES DES SOURCES EXISTENT, ET C'EST ASSUMÉ : le module les
+# déclare, la page les affiche. Le lecteur sans JavaScript et le moteur de
+# recherche doivent les trouver DANS le HTML — les servir par une interface les
+# rendrait invisibles aux deux. C'est donc une règle, et elle seule, qui empêche
+# les deux exemplaires de diverger : exactement le procédé déjà employé pour le
+# texte français des communiqués et leur objet JavaScript.
+
+import actualites_sources as AS                                    # noqa: E402
+
+
+def test_chaque_communique_porte_son_illustration():
+    """Un article sans illustration se voit dans une grille où les autres en
+    ont une. La règle compte face aux communiqués RÉELLEMENT lus, jamais face
+    à un nombre écrit à la main."""
+    poses = set(re.findall(r'<img src="/illu-(na\d*)\.svg"', PAGE))
+    attendus = {c["id"] for c in P.communiques()}
+    assert poses == attendus, (
+        "des communiqués n'ont pas d'illustration, ou l'inverse : %s"
+        % (poses ^ attendus))
+
+
+def test_chaque_illustration_existe_et_est_du_svg_valide():
+    """UNE IMAGE QUI NE CHARGE PAS EST PIRE QU'UNE ABSENCE D'IMAGE : elle laisse
+    un cadre vide au milieu de l'article. Le fichier doit exister, s'analyser,
+    et porter son propre titre — c'est lui qu'un lecteur d'écran annonce, et
+    c'est pourquoi l'attribut `alt` est vide côté page."""
+    import xml.dom.minidom
+    for c in P.communiques():
+        chemin = os.path.join(ICI, "illu-%s.svg" % c["id"])
+        assert os.path.exists(chemin), chemin
+        doc = xml.dom.minidom.parse(chemin)          # lève si le XML est cassé
+        assert doc.getElementsByTagName("title"), (
+            "%s n'a pas de <title> : le lecteur d'écran n'annoncera rien, et "
+            "l'alt vide de la page ne compense pas" % chemin)
+        assert doc.getElementsByTagName("desc"), (
+            "%s n'a pas de <desc> : la description longue manque" % chemin)
+
+
+def test_l_illustration_ne_double_pas_le_lecteur_d_ecran():
+    """`alt=""` ET un <title> dans le SVG : l'un annonce, l'autre se tait. Poser
+    les deux ferait entendre deux fois la même chose ; n'en poser aucun
+    priverait de la description. C'est un choix, et une règle le tient."""
+    for bloc in re.findall(r'<figure class="na-illu">.*?</figure>', PAGE, re.S):
+        assert 'alt=""' in bloc, bloc[:160]
+        assert "width=" in bloc and "height=" in bloc, (
+            "sans dimensions, la page sursaute pendant le chargement")
+
+
+def test_chaque_communique_porte_ses_sources_et_ce_sont_CELLES_DU_MODULE():
+    """LA RÈGLE QUI EMPÊCHE LES DEUX EXEMPLAIRES DE DIVERGER. Le module déclare,
+    la page affiche. Un titre corrigé d'un seul côté ferait qu'un lecteur voit
+    une source et que le registre général du site en connaît une autre."""
+    for c in P.communiques():
+        declarees = AS.pour(c["id"])
+        assert declarees, "aucune source déclarée pour %s" % c["id"]
+        i = PAGE.index('<h2 class="na-title" id="%s-title">' % c["id"])
+        fin = PAGE.index("</article>", i)
+        bloc = PAGE[i:fin]
+        assert '<div class="na-sources">' in bloc, (
+            "l'article %s n'affiche aucune source" % c["id"])
+        for src in declarees:
+            assert src["titre"][:40] in bloc, (
+                "la source « %s » est déclarée pour %s et absente de la page"
+                % (src["titre"][:40], c["id"]))
+            if src.get("lien"):
+                assert src["lien"] in bloc, (
+                    "le lien de « %s » n'est pas dans la page" % src["titre"][:40])
+
+
+def test_une_source_sans_lien_le_DIT_au_lieu_de_le_taire():
+    """« Une source qu'on ne peut pas joindre est une intention, pas une
+    source. » La taire donnerait à une bibliographie inutilisable l'apparence
+    du sérieux ; l'annoncer laisse le lecteur juger de ce qu'il pourra
+    vérifier."""
+    sans = [s for lot in AS.SOURCES_COMMUNIQUES.values() for s in lot
+            if not s.get("lien")]
+    assert sans, "plus aucune source sans lien : la règle ne distingue rien"
+    for s in sans:
+        assert s.get("reserve"), (
+            "la source « %s » n'a ni lien ni raison écrite de son absence"
+            % s["titre"][:50])
+    assert PAGE.count('class="na-src-sans"') == len(sans), (
+        "le nombre de mentions « sans lien » de la page (%d) ne correspond pas "
+        "au nombre de sources sans adresse (%d)"
+        % (PAGE.count('class="na-src-sans"'), len(sans)))
+
+
+def test_aucun_lien_de_source_n_est_inventé():
+    """UNE ADRESSE PLAUSIBLE MAIS FAUSSE EST PIRE QU'UNE ABSENCE D'ADRESSE :
+    elle se découvre au moment où quelqu'un cherche à vérifier, c'est-à-dire au
+    moment où la confiance se joue. On ne peut pas ouvrir les pages d'ici — la
+    règle vérifie donc ce qui est vérifiable : une adresse absolue, en HTTPS,
+    sur un domaine nommé."""
+    for lot in AS.SOURCES_COMMUNIQUES.values():
+        for s in lot:
+            lien = s.get("lien")
+            if lien is None:
+                continue
+            assert lien.startswith("https://"), (s["titre"][:40], lien)
+            assert " " not in lien and lien.count("://") == 1, lien
+            hote = lien.split("/")[2]
+            assert "." in hote and not hote.endswith("."), lien
+
+
+def test_la_couverture_des_sources_est_publiee_et_non_lissee():
+    """Le lecteur doit savoir, AVANT de lire, quelle part de la bibliographie
+    il pourra rouvrir. Le module la compte ; la page dit la limite."""
+    couv = AS.couverture()
+    assert couv["total"] == couv["joignables"] + couv["sans_lien"]
+    assert 0 < couv["joignables"] < couv["total"], (
+        "toutes les sources sont dans le même état : la mesure ne distingue "
+        "plus rien — %s" % couv)
+    assert "lien mort serait annoncé comme vivant" in couv["limite"]
+    # LA LIMITE EST PORTÉE PAR CHAQUE BLOC, ET LA RÈGLE LES COMPTE. Vérifier
+    # qu'elle figure QUELQUE PART dans la page laissait passer sa disparition
+    # de quatre articles sur cinq — mutation vérifiée, elle survivait. Un
+    # lecteur lit UN article, pas la page : la mention doit être là où il est.
+    vus = PAGE.count("lien mort serait annoncé comme vivant")
+    attendus = len(P.communiques())
+    assert vus == attendus, (
+        "la limite sur les liens morts figure %d fois pour %d communiqués : "
+        "des articles la taisent" % (vus, attendus))
+
+
+def test_le_registre_general_du_site_recolte_ces_sources():
+    """Un module qui déclare des sources et que le registre général ignore
+    laisse le site affirmer moins qu'il ne tient. Le dictionnaire de listes
+    était ignoré EN SILENCE — la pire des façons de perdre une source."""
+    import registre_sources
+    assert any(m == "actualites_sources"
+               for m, _ in registre_sources.MODULES), (
+        "le module des communiqués n'est pas interrogé par le registre général")
+    recolte = [x for x in registre_sources.recolter()
+               if x["module"] == "actualites_sources"]
+    assert len(recolte) >= 8, (
+        "le registre général ne récolte que %d source(s) des communiqués : "
+        "la structure déclarée n'est peut-être plus celle qu'il sait lire"
+        % len(recolte))

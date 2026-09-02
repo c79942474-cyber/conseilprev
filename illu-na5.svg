@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" role="img"
+     aria-labelledby="t5 d5" preserveAspectRatio="xMidYMid meet">
+  <title id="t5">Ce qui est publié et ce qui ne l'est pas</title>
+  <desc id="d5">Sous une ligne d'eau, le volume déclaré sur site apparaît neuf
+  fois plus petit que le volume consommé en amont pour produire l'électricité.</desc>
+  <!-- LE DESSIN PORTE LE RAPPORT MESURÉ, IL NE L'ILLUSTRE PAS VAGUEMENT :
+       la surface du bloc « amont » vaut environ neuf fois celle du bloc
+       « site », comme l'écart relevé par l'Arcep sur le parc français 2023.
+       Une illustration qui contredirait le texte qu'elle accompagne serait
+       pire qu'une absence d'illustration. -->
+  <defs>
+    <linearGradient id="g5" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3b6ea5" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#1c4066" stop-opacity=".22"/>
+    </linearGradient>
+  </defs>
+  <rect x="60" y="150" width="680" height="118" fill="url(#g5)"/>
+  <path d="M60 150h680" stroke="#e6c65a" stroke-width="2" stroke-dasharray="7 5"/>
+  <text x="66" y="142" fill="#e6c65a" font-family="Georgia,serif" font-size="13"
+        font-style="italic">ligne de déclaration</text>
+  <!-- Au-dessus : ce qu'un centre publie — l'eau du site. -->
+  <rect x="120" y="112" width="66" height="38" rx="3" fill="none"
+        stroke="rgba(240,236,255,.85)" stroke-width="2"/>
+  <text x="153" y="100" fill="rgba(240,236,255,.9)" font-family="Georgia,serif"
+        font-size="15" text-anchor="middle">site</text>
+  <text x="153" y="137" fill="rgba(240,236,255,.75)" font-family="Georgia,serif"
+        font-size="12" text-anchor="middle">681 000 m³</text>
+  <!-- Au-dessous : ce qui manque — l'eau évaporée pour produire l'électricité. -->
+  <rect x="120" y="162" width="198" height="96" rx="3" fill="none"
+        stroke="rgba(240,236,255,.5)" stroke-width="2" stroke-dasharray="4 4"/>
+  <text x="219" y="196" fill="rgba(240,236,255,.85)" font-family="Georgia,serif"
+        font-size="15" text-anchor="middle">amont</text>
+  <text x="219" y="219" fill="rgba(240,236,255,.7)" font-family="Georgia,serif"
+        font-size="12" text-anchor="middle">6 000 000 m³</text>
+  <text x="219" y="243" fill="#e6c65a" font-family="Georgia,serif" font-size="12"
+        text-anchor="middle">× 8,8</text>
+  <!-- L'électricité, cause de l'eau d'amont. -->
+  <path d="M520 96l-30 52h24l-14 46 42-58h-26z" fill="none" stroke="#e6c65a"
+        stroke-width="2" stroke-linejoin="round"/>
+  <path d="M560 132h84M560 152h116M560 172h64" stroke="rgba(240,236,255,.4)"
+        stroke-width="2" stroke-linecap="round"/>
+  <text x="602" y="216" fill="rgba(240,236,255,.6)" font-family="Georgia,serif"
+        font-size="13" text-anchor="middle">1 kWh évapore de l'eau</text>
+  <text x="602" y="236" fill="rgba(240,236,255,.6)" font-family="Georgia,serif"
+        font-size="13" text-anchor="middle">là où il est produit</text>
+</svg>

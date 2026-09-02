@@ -47,6 +47,12 @@ MODULES = (
     ("tendances_dc", "Tendances et prospective"),
     ("moe_dc", "Maîtrise d'œuvre"),
     ("donnees_ouvertes", "Socle de données ouvertes"),
+    # LES COMMUNIQUÉS CITENT DES SOURCES, ET ELLES N'ÉTAIENT NULLE PART. Elles
+    # vivaient en prose dans le corps des articles — « l'Arcep relève », « un
+    # article de recherche de 2021 » — c'est-à-dire hors de portée d'un lecteur
+    # qui veut vérifier, et hors de ce registre. Les déclarer ici les met dans
+    # les deux à la fois.
+    ("actualites_sources", "Communiqués"),
 )
 
 # Les clés sous lesquelles un module peut nommer l'adresse d'une source. Trois
@@ -138,8 +144,22 @@ def recolter():
                 if any(k in v for k in _CLES_TITRE + _CLES_EDITEUR + _CLES_LIEN):
                     lots = [(nom_var, v)]
                 else:
-                    lots = [(nom_var + "." + str(k), x)
-                            for k, x in v.items() if isinstance(x, dict)]
+                    for k, x in v.items():
+                        if isinstance(x, dict):
+                            lots.append((nom_var + "." + str(k), x))
+                        elif isinstance(x, (list, tuple)):
+                            # UN DICTIONNAIRE DE LISTES ÉTAIT IGNORÉ EN SILENCE,
+                            # et c'est le pire des comportements pour un module
+                            # dont toute la raison d'être est qu'une source
+                            # déclarée quelque part paraisse ici. Un module qui
+                            # groupe ses sources par sujet — les communiqués le
+                            # font, un par article — voyait les siennes
+                            # disparaître sans un mot. Deux niveaux suffisent :
+                            # au-delà, la structure n'est plus une déclaration
+                            # de sources mais des données qui y ressemblent.
+                            lots += [(nom_var + "." + str(k) + "[%d]" % i, y)
+                                     for i, y in enumerate(x)
+                                     if isinstance(y, dict)]
             elif isinstance(v, (list, tuple)):
                 lots = [(nom_var + "[%d]" % i, x)
                         for i, x in enumerate(v) if isinstance(x, dict)]
