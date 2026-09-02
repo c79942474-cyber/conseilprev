@@ -5391,7 +5391,22 @@ def sitemap_xml():
     interdit n'y figure pas : deux consignes contraires laissent le moteur
     choisir laquelle suivre."""
     try:
-        xml = seo.plan(PAGES, racine=_APP_DIR)
+        # LES PERMALIENS DE COMMUNIQUES ENTRENT AU PLAN. Ce sont des adresses
+        # servies, indexables et partagees : les taire ferait qu'un moteur ne
+        # connaitrait que la liste, et qu'un lien LinkedIn menerait vers une
+        # page que rien n'a jamais annoncee. Elles pointent toutes le meme
+        # fichier — la date de derniere modification est donc la sienne, ce qui
+        # est vrai : le communique vit dedans.
+        _pages = dict(PAGES)
+        try:
+            import partage
+            for _c in partage.communiques():
+                _pages[_c['chemin']] = partage.PAGE
+        except Exception as _pe:  # noqa: BLE001
+            # Un plan sans les permaliens vaut mieux qu'un plan absent : la
+            # liste reste indexee, et le defaut se lit dans le journal.
+            logger.error(f'SITEMAP_PARTAGE_ERR: {_pe}')
+        xml = seo.plan(_pages, racine=_APP_DIR)
     except Exception as e:  # noqa: BLE001
         logger.error(f'SITEMAP_ERR: {e}')
         return Response('<?xml version="1.0" encoding="UTF-8"?><urlset '
@@ -11058,17 +11073,7 @@ def _page_cache_entry(filename):
         # que les trous. Une seule fois par version de fichier, pas par visite.
         try:
             _route = _ROUTE_DE_FICHIER.get(filename, '/')
-            _html = seo.enrichir(_route, raw.decode('utf-8'))
-            # ET LE CHEMIN DE SORTIE. Dix pages n'en offraient aucun — dont
-            # celle des tarifs. Attirer un visiteur puis le laisser sans rien a
-            # cliquer revient a payer le trajet et fermer la porte.
-            _html = conversion.enrichir(_route, _html)
-            # ET L'EMPREINTE DES FICHIERS QU'ELLE APPELLE. Une session Sentinel
-            # ordinaire redemandait dix-sept fois au serveur la permission de
-            # se servir de fichiers qu'elle avait deja et qui n'avaient pas
-            # change. Une adresse qui porte sa version se garde un an sans
-            # risque. Pose ici, une fois par version de page, jamais par visite.
-            raw = empreintes.marquer(_html).encode('utf-8')
+            raw = _enrichir_page(_route, raw)
         except Exception as _e:  # noqa: BLE001
             logger.error(f'SEO_ENRICH_ERR {filename}: {_e}')
         ent = {
@@ -11079,6 +11084,30 @@ def _page_cache_entry(filename):
         }
         _PAGE_CACHE[filename] = ent
         return ent
+
+
+# LE MEME TRAITEMENT POUR TOUTE PAGE SERVIE, ECRIT UNE FOIS. Il vivait dans le
+# corps de `_page_cache_entry` ; la page d'un communique doit passer par les
+# memes trois etapes, et une seconde copie se serait separee de celle-ci au
+# premier ajout — l'exemplaire oublie servant alors des pages sans canonique,
+# sans chemin de sortie ou sans empreinte, sans que rien ne le dise.
+def _enrichir_page(route, raw):
+    """Balises de partage, chemin de conversion, empreintes des fichiers."""
+    try:
+        _html = seo.enrichir(route, raw.decode('utf-8'))
+        # ET LE CHEMIN DE SORTIE. Dix pages n'en offraient aucun — dont
+        # celle des tarifs. Attirer un visiteur puis le laisser sans rien a
+        # cliquer revient a payer le trajet et fermer la porte.
+        _html = conversion.enrichir(route, _html)
+        # ET L'EMPREINTE DES FICHIERS QU'ELLE APPELLE. Une session Sentinel
+        # ordinaire redemandait dix-sept fois au serveur la permission de se
+        # servir de fichiers qu'elle avait deja et qui n'avaient pas change.
+        # Une adresse qui porte sa version se garde un an sans risque. Pose
+        # ici, une fois par version de page, jamais par visite.
+        return empreintes.marquer(_html).encode('utf-8')
+    except Exception as _e:  # noqa: BLE001
+        logger.error(f'SEO_ENRICH_ERR {route}: {_e}')
+        return raw
 
 def _serve_page_fast(filename, cache_control=None):
     """Sert une page HTML depuis le cache memoire, gzippee si le navigateur
@@ -11131,6 +11160,123 @@ def _serve_page_fast(filename, cache_control=None):
 # obligatoire pour les pages derriere le verrou d'abonnement, gratuit pour les
 # autres.
 _CACHE_PAGES = 'private, no-cache, must-revalidate'
+
+# ── UNE ADRESSE PAR COMMUNIQUE ─────────────────────────────────────────────
+#
+# POURQUOI CETTE ROUTE EXISTE, ET POURQUOI UN BOUTON SEUL N'AURAIT RIEN VALU.
+# LinkedIn ne prend qu'une URL : son point d'entree `share-offsite` ignore
+# `title`, `summary` et `mini` depuis 2021. La carte publiee dans le fil est
+# construite par SON robot, qui va lire la page visee et y chercher ses balises
+# OpenGraph. Un bouton qui pointerait vers /actualites ferait donc que les
+# quatre communiques produisent la MEME carte — meme titre, meme resume, meme
+# lien. Le lecteur qui en partage deux publie deux fois la meme chose.
+#
+# ET CE ROBOT N'EXECUTE PAS DE JAVASCRIPT. Ce qu'il lit est le HTML SERVI :
+# titre et description doivent donc etre poses cote serveur, avant que
+# `seo.enrichir` ne construise les balises a partir d'eux.
+_COMMUNIQUE_CACHE = {}
+_COMMUNIQUE_VERROU = _threading.Lock()
+
+
+def _page_communique(c):
+    """La page d'actualites, servie sous le titre et le resume d'UN communique.
+
+    Le corps ne change pas — c'est la meme page, avec les quatre articles. Seul
+    l'en-tete change, et c'est tout ce que le robot regarde. Le navigateur, lui,
+    recoit un marqueur qui lui fait derouler jusqu'a l'article vise.
+    """
+    import partage
+    st = os.stat(os.path.join(_APP_DIR, partage.PAGE))
+    cle = (c['creneau'], st.st_mtime_ns, st.st_size)
+    ent = _COMMUNIQUE_CACHE.get(c['creneau'])
+    if ent is not None and ent['cle'] == cle:
+        return ent
+    with _COMMUNIQUE_VERROU:
+        ent = _COMMUNIQUE_CACHE.get(c['creneau'])
+        if ent is not None and ent['cle'] == cle:
+            return ent
+        with open(os.path.join(_APP_DIR, partage.PAGE), 'rb') as f:
+            brut = f.read().decode('utf-8')
+        titre = html_module.escape(c['titre'], quote=True)
+        resume = html_module.escape(c['resume'] or '', quote=True)
+        # ON REMPLACE, ON N'AJOUTE PAS. Deux <title> dans une page, c'est le
+        # premier qui gagne chez les uns et le second chez les autres : la carte
+        # dependrait alors du robot qui la lit.
+        brut = _re.sub(r'<title>.*?</title>',
+                      '<title>%s — CONSEILPREV</title>' % titre, brut,
+                      count=1, flags=_re.S)
+        brut = _re.sub(r'<meta name="description" content="[^"]*">',
+                      '<meta name="description" content="%s">' % resume, brut,
+                      count=1)
+        brut = brut.replace('<div class="na-grid" id="na-grid">',
+                            '<div class="na-grid" id="na-grid" data-ouvrir="%s">'
+                            % html_module.escape(c['id'], quote=True), 1)
+        octets = _enrichir_page(c['chemin'], brut.encode('utf-8'))
+        ent = {'cle': cle, 'raw': octets,
+               'gz': gzip.compress(octets, compresslevel=9),
+               'etag': '"na-%s"' % _hashlib.sha256(octets).hexdigest()[:24]}
+        _COMMUNIQUE_CACHE[c['creneau']] = ent
+        return ent
+
+
+@app.route('/actualites/<creneau>')
+@rate_limit(limit=60, window=60)
+def actualites_communique(creneau):
+    """Le permalien d'un communique — celui que le bouton LinkedIn partage.
+
+    UN CRENEAU INCONNU REND 404, IL NE SERT PAS LA PAGE AU HASARD. Servir la
+    liste sous une adresse inventee ferait qu'un lien errone partage sur
+    LinkedIn parait fonctionner, et publierait une carte qui ne correspond a
+    rien de ce que l'auteur croyait envoyer.
+    """
+    import partage
+    c = partage.par_identifiant(creneau)
+    if not c:
+        abort(404)
+    # L'ADRESSE CANONIQUE EST CELLE DU TITRE ACTUEL. Un lien partage il y a six
+    # mois porte l'ancien creneau ; il continue de servir la bonne page — la
+    # resolution ne regarde que le prefixe — et la canonique dit au moteur
+    # laquelle des deux compte.
+    ent = _page_communique(c)
+    if ent['etag'] in (request.headers.get('If-None-Match') or ''):
+        resp = Response(status=304, mimetype='text/html')
+    else:
+        gz = 'gzip' in (request.headers.get('Accept-Encoding') or '').lower()
+        corps = ent['gz'] if gz else ent['raw']
+        resp = Response(corps, mimetype='text/html')
+        if gz:
+            resp.headers['Content-Encoding'] = 'gzip'
+        resp.headers['Content-Length'] = str(len(corps))
+    resp.headers['Vary'] = 'Accept-Encoding'
+    resp.headers['ETag'] = ent['etag']
+    resp.headers['Cache-Control'] = _CACHE_PAGES
+    resp.headers['X-Perf-Cache'] = '1'
+    return resp
+
+
+@app.route('/api/partage/communiques')
+@rate_limit(limit=60, window=60)
+def api_partage_communiques():
+    """Ce que la page a besoin de savoir pour poser ses boutons.
+
+    LA PAGE NE FABRIQUE AUCUNE ADRESSE. Elle est statique : elle ne connait ni
+    le domaine servi, ni la forme du point d'entree LinkedIn. Les deux viennent
+    d'ici, ou ils sont ecrits une fois — un second exemplaire dans le script se
+    separerait du premier au premier changement de domaine, et publierait des
+    liens vers un site qu'on a quitte.
+    """
+    import partage
+    sortie = []
+    for c in partage.communiques():
+        permalien = lien_du_site(c['chemin'])
+        sortie.append({'id': c['id'], 'permalien': permalien,
+                       'linkedin': partage.url_linkedin(permalien),
+                       'titre': c['titre']})
+    return jsonify({'ok': True, 'communiques': sortie,
+                    'note': "LinkedIn ignore tout texte pre-rempli depuis "
+                            "2021 : la carte vient des balises de la page "
+                            "visee, pas de cette adresse."})
+
 
 for route, filename in PAGES.items():
     def make_view(fn):
