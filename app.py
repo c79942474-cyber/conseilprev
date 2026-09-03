@@ -3643,7 +3643,51 @@ import hashlib as _hashlib
 import secrets as _secrets
 import hmac as _hmac
 
-USERS_FILE = os.path.join(os.path.dirname(__file__), 'users_db.json')
+# L'emplacement est surchargeable pour que la recette puisse eprouver
+# l'avertissement de demarrage sans dependre de ce que ce poste-ci
+# contient : une regle qui tombe parce qu'on a lance le site en local
+# une fois est une regle qu'on finit par desactiver.
+USERS_FILE = os.environ.get('SOURCING_USERS_FILE') or os.path.join(
+    os.path.dirname(__file__), 'users_db.json')
+
+# CE FICHIER NE SURVIT PAS À UNE MISE EN LIGNE, ET RIEN NE LE DISAIT.
+#
+# Les comptes de l'espace /sourcing — les seuls que `_load_users` et
+# `_save_users` connaissent — vivent ici, dans un fichier de la racine du
+# service. Render remplace le disque à chaque déploiement, à chaque
+# redémarrage et à chaque réveil d'une instance mise en veille : le fichier
+# repart vide, et TOUS ces comptes disparaissent. Le fichier est d'ailleurs
+# dans `.gitignore`, et aucun disque persistant n'est déclaré dans
+# `render.yaml` — donc il n'est ni versionné ni monté.
+#
+# CE QUE LE VISITEUR VIT PENDANT CE TEMPS. Il crée un compte, reçoit un lien
+# de confirmation valable vingt-quatre heures, clique le lendemain — et lit
+# « Lien invalide ou expiré », parce que le compte n'existe plus. Rien
+# n'échoue visiblement ; personne n'est prévenu.
+#
+# LE REGISTRE, LUI, CRIE DÉJÀ QUAND IL RETOMBE SUR SQLITE (voir
+# REGISTRE_IA plus bas). Le même défaut, sur le même service, restait muet
+# ici. Un défaut nommé au démarrage est un défaut qu'on peut décider de
+# corriger ; un défaut muet se paie en comptes perdus. Le magasin durable de
+# ce service est la table `clients` du registre — celle que l'espace client
+# de /login emploie.
+def _avertir_magasin_sourcing_ephemere():
+    """Dit au demarrage ce que ce magasin ne tient pas. Fonction, et pas
+    trois lignes au fil du module, pour qu'une regle puisse l'EXECUTER : un
+    avertissement qu'on ne peut que relire est un avertissement qu'on croit
+    sur parole."""
+    if os.path.isfile(USERS_FILE):
+        return False
+    logger.warning(
+        "COMPTES /sourcing — %s est absent : tout compte cree ici vit dans un "
+        "fichier que Render remplace a chaque mise en ligne, et repartira donc "
+        "VIDE. L'espace client durable de ce service est /login (table "
+        "`clients` du registre).", USERS_FILE)
+    return True
+
+
+_avertir_magasin_sourcing_ephemere()
+
 # `SESSION_SECRET` a ete retire, et c'etait le plus trompeur des deux : lu,
 # jamais employe, alors que la cle qui signe REELLEMENT les sessions est
 # `FLASK_SECRET_KEY` (voir en tete de fichier). Un exploitant qui definissait
@@ -3784,6 +3828,40 @@ def auth_register():
         if email in users and users[email].get('verified'):
             return jsonify({'ok': False, 'error': 'Un compte existe déjà avec cet email'}), 409
 
+        # UNE INSCRIPTION EN ATTENTE APPARTIENT À CELUI QUI L'A FAITE.
+        #
+        # LE DÉFAUT, JOUÉ AVANT D'ÊTRE CORRIGÉ. La garde ci-dessus ne regardait
+        # que les comptes CONFIRMÉS. Une adresse inscrite mais pas encore
+        # confirmee retombait donc dans le chemin de creation, et le `users[email] = {…}`
+        # plus bas ECRASAIT tout : le mot de passe, le nom, l'entreprise, et le
+        # jeton de confirmation. Un inconnu qui reinscrivait l'adresse d'Alice
+        # remplacait son mot de passe par le sien et TUAIT son lien — Alice
+        # cliquait le sien et lisait « Lien invalide ou expiré », sans que rien
+        # n'ait echoue de son cote. Mesure : prenom « Alice » → « Mallory »,
+        # empreinte du mot de passe remplacee, jeton d'Alice perime.
+        #
+        # CE QU'ON FAIT À LA PLACE, ET POURQUOI CE N'EST PAS UN REFUS SEC. Celui
+        # qui reinscrit son adresse est, presque toujours, celui qui n'a pas
+        # recu le courrier. On lui renvoie donc le lien — mais À L'ADRESSE
+        # INSCRITE, jamais à ce que la requete raconte. Un tiers n'obtient rien :
+        # ni le compte, ni le courrier, ni la moindre indication. Le compte,
+        # lui, n'est pas touche.
+        #
+        # C'est la propriete que l'autre site tient deja (`if store.get(email):
+        # return generic` dans conseilprevcyber/auth.py) : UNE INSCRIPTION
+        # EXISTANTE N'EST JAMAIS RECRITE.
+        if email in users:
+            _pending = users[email]
+            _sent, _ = send_validation_email(
+                email, _pending.get('prenom') or '', _pending.get('verify_token'))
+            logger.info('AUTH_REGISTER_RELANCE %s: %s (email_sent=%s)', ip, email, _sent)
+            return jsonify({
+                'ok': True,
+                'message': "Inscription déjà enregistrée. Le lien de "
+                           "confirmation vient d'être renvoyé à cette adresse.",
+                'email_sent': _sent,
+            })
+
         import datetime
         token = _make_token()
         # Validation stricte de l'email comme clé (pas d'injection possible)
@@ -3813,11 +3891,34 @@ def auth_register():
 
         sent, link = send_validation_email(email, prenom, token)
         logger.info(f'AUTH_REGISTER {ip}: {email} (email_sent={sent})')
+        if not sent:
+            # LE JETON DE CONFIRMATION NE REVIENT PAS DANS LA RÉPONSE.
+            #
+            # Il en revenait un, sous le nom `_dev_link`, « affiché si SMTP non
+            # configuré » — et la page en faisait un lien cliquable. La commodite
+            # de developpement se retournait en production le jour ou l'envoi
+            # cessait de marcher : la confirmation d'adresse ne prouve plus rien
+            # si le serveur remet le jeton a celui qui vient de saisir l'adresse.
+            # N'IMPORTE QUI POUVAIT ALORS INSCRIRE L'ADRESSE D'UN AUTRE ET LA
+            # CONFIRMER LUI-MÊME, dans la meme seconde, sans jamais y acceder.
+            # Le declencheur n'est pas une attaque : une cle Brevo expiree suffit.
+            #
+            # Le lien reste ecrit dans le JOURNAL du serveur (voir
+            # `send_validation_email`), ou seul l'exploitant le lit.
+            logger.error('AUTH_REGISTER_COURRIER_NON_PARTI %s — le compte est cree '
+                         'mais son adresse ne peut pas etre confirmee ; verifiez '
+                         'BREVO_API_KEY ou SMTP_USER/SMTP_PASSWORD', email)
+            return jsonify({
+                'ok': True, 'email_sent': False,
+                'message': "Compte créé, mais l'email de confirmation n'a pas pu "
+                           "partir. Écrivez à christophe.cerf@outlook.com pour "
+                           "faire activer votre accès — inutile de vous "
+                           "réinscrire.",
+            })
         return jsonify({
             'ok': True,
             'message': 'Compte créé. Vérifiez votre email pour valider votre inscription.',
-            'email_sent': sent,
-            '_dev_link': link if not sent else None,  # affiché si SMTP non configuré
+            'email_sent': True,
         })
     except Exception as e:
         logger.error(f'AUTH_REGISTER_ERR {ip}: {e}')
@@ -3873,7 +3974,16 @@ def auth_login():
             return jsonify({'ok': False, 'error': 'Email ou mot de passe incorrect'}), 401
         if not user.get('verified'):
             return jsonify({'ok': False, 'error': 'Compte non validé. Vérifiez votre email.'}), 403
-        # Session token simple (signé)
+        # LE JETON RENDU N'AUTORISE RIEN, ET C'EST À DIRE ICI AUSSI.
+        # La route admin le déclare depuis sa correction ; la route cliente,
+        # qui fait exactement la même chose, ne le disait pas. Vérifié :
+        # `user['session']` n'est relu par AUCUNE route, et `cp_token`, que la
+        # page range dans sessionStorage, n'est renvoyé dans AUCUNE requête.
+        # « Être connecté » sur /sourcing est un état d'interface, pas une
+        # autorisation — la page /platform vers laquelle mène le bouton est
+        # publique. À ne pas confondre avec une session : celle de l'espace
+        # client de ce service est le cookie signé posé par
+        # `/api/sentinel-auth/login`.
         session_token = _make_token()
         import datetime as _dt_
         user['session'] = session_token

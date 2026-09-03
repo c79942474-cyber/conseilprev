@@ -173,10 +173,11 @@ document.getElementById('form-register').addEventListener('submit', function(e){
   .then(function(res){
     btn.disabled = false; btn.textContent = 'Créer mon compte';
     if(res.ok){
-      var extra = res.email_sent
-        ? '📧 Un email de validation vous a été envoyé. Cliquez sur le lien pour activer votre compte.'
-        : '⚠ Compte créé mais l_email de validation n_a pas pu partir (SMTP non configuré). ' + (res._dev_link ? '<a href="'+res._dev_link+'" style="color:#fde68a">Lien de validation direct →</a>' : '');
-      showAuthMsg('reg-msg', res.email_sent?'success':'info', '✓ ' + res.message + '<br>' + extra);
+      // LE SERVEUR DIT LUI-MÊME QUOI FAIRE, et la page ne rajoute plus de
+      // lien. Elle en affichait un — le jeton de confirmation renvoyé dans
+      // la réponse — qui permettait de confirmer une adresse sans y avoir
+      // accès dès que l'envoi de courrier tombait. Voir `auth_register`.
+      showAuthMsg('reg-msg', res.email_sent ? 'success' : 'info', '✓ ' + res.message)
       document.getElementById('form-register').reset();
     } else {
       showAuthMsg('reg-msg','error','⚠ ' + (res.error||'Erreur'));
