@@ -125,117 +125,19 @@ document.addEventListener('contextmenu',function(e){e.preventDefault();});
 ;/* ── bloc 2/5 ── */
 
 // ════════ AUTHENTIFICATION CLIENT ════════
-function switchAuth(mode){
-  document.getElementById('tab-login').classList.toggle('active', mode==='login');
-  document.getElementById('tab-register').classList.toggle('active', mode==='register');
-  document.getElementById('form-login').classList.toggle('show', mode==='login');
-  document.getElementById('form-register').classList.toggle('show', mode==='register');
-}
+/* L'INSCRIPTION ET LA CONNEXION DE CETTE PAGE ONT ÉTÉ RETIRÉES, et le code
+   qui les portait avec elles — un gestionnaire posé sur un formulaire absent
+   lève, et une erreur au chargement emporte tout ce qui suit dans le même
+   fichier.
 
-function checkPwStrength(){
-  var pw = document.getElementById('reg-password').value;
-  function set(id, ok){
-    var el = document.getElementById(id);
-    el.classList.toggle('ok', ok);
-    el.textContent = (ok?'● ':'○ ') + el.textContent.slice(2);
-  }
-  set('r-len', pw.length>=8);
-  set('r-maj', /[A-Z]/.test(pw));
-  set('r-min', /[a-z]/.test(pw));
-  set('r-num', /[0-9]/.test(pw));
-}
+   Ce bloc tenait un SECOND espace client : `/api/auth/register`,
+   `/api/auth/login`, un jeton rangé dans sessionStorage que personne ne
+   relisait, et un magasin de comptes effacé à chaque mise en ligne. Il
+   n'ouvrait rien. Le seul espace client de ce service est /login, et la page
+   y renvoie désormais par un lien.
 
-function showAuthMsg(id, type, text){
-  var el = document.getElementById(id);
-  el.className = 'auth-msg ' + type;
-  el.innerHTML = text;
-}
-
-// Inscription
-document.getElementById('form-register').addEventListener('submit', function(e){
-  e.preventDefault();
-  var consent = document.getElementById('reg-consent');
-  if(!consent.checked){ showAuthMsg('reg-msg','error','⚠ Le consentement RGPD est requis.'); return; }
-  var btn = document.getElementById('reg-btn');
-  btn.disabled = true; btn.textContent = 'Création…';
-  fetch('/api/auth/register', {
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({
-      prenom: document.getElementById('reg-prenom').value.trim(),
-      nom: document.getElementById('reg-nom').value.trim(),
-      entreprise: document.getElementById('reg-entreprise').value.trim(),
-      email: document.getElementById('reg-email').value.trim(),
-      password: document.getElementById('reg-password').value,
-      consent: true
-    })
-  })
-  .then(function(r){ return r.json(); })
-  .then(function(res){
-    btn.disabled = false; btn.textContent = 'Créer mon compte';
-    if(res.ok){
-      // LE SERVEUR DIT LUI-MÊME QUOI FAIRE, et la page ne rajoute plus de
-      // lien. Elle en affichait un — le jeton de confirmation renvoyé dans
-      // la réponse — qui permettait de confirmer une adresse sans y avoir
-      // accès dès que l'envoi de courrier tombait. Voir `auth_register`.
-      showAuthMsg('reg-msg', res.email_sent ? 'success' : 'info', '✓ ' + res.message)
-      document.getElementById('form-register').reset();
-    } else {
-      showAuthMsg('reg-msg','error','⚠ ' + (res.error||'Erreur'));
-    }
-  })
-  .catch(function(){ btn.disabled=false; btn.textContent='Créer mon compte'; showAuthMsg('reg-msg','error','⚠ Erreur réseau'); });
-});
-
-// Connexion
-document.getElementById('form-login').addEventListener('submit', function(e){
-  e.preventDefault();
-  var btn = document.getElementById('login-btn');
-  btn.disabled = true; btn.textContent = 'Connexion…';
-  fetch('/api/auth/login', {
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({
-      email: document.getElementById('login-email').value.trim(),
-      password: document.getElementById('login-password').value
-    })
-  })
-  .then(function(r){ return r.json(); })
-  .then(function(res){
-    btn.disabled = false; btn.textContent = 'Se connecter';
-    if(res.ok){
-      try{ sessionStorage.setItem('cp_user', JSON.stringify(res.user)); sessionStorage.setItem('cp_token', res.token); }catch(e){}
-      showLoggedIn(res.user);
-    } else {
-      showAuthMsg('login-msg','error','⚠ ' + (res.error||'Erreur'));
-    }
-  })
-  .catch(function(){ btn.disabled=false; btn.textContent='Se connecter'; showAuthMsg('login-msg','error','⚠ Erreur réseau'); });
-});
-
-function showLoggedIn(user){
-  var card = document.getElementById('auth-card');
-  card.innerHTML =
-    '<div class="auth-logged">'+
-      '<div class="auth-logged-avatar">'+(user.prenom?user.prenom[0].toUpperCase():'👤')+'</div>'+
-      '<div class="auth-logged-name">Bienvenue, '+user.prenom+' !</div>'+
-      '<div class="auth-logged-email">'+user.email+(user.entreprise?' · '+user.entreprise:'')+'</div>'+
-      '<a href="/platform" class="auth-btn" style="display:inline-block;text-decoration:none;margin-bottom:14px">🚀 Accéder à la plateforme B2B →</a>'+
-      '<div><button class="auth-logout" onclick="logout()">Se déconnecter</button></div>'+
-    '</div>';
-}
-
-function logout(){
-  try{ sessionStorage.removeItem('cp_user'); sessionStorage.removeItem('cp_token'); }catch(e){}
-  location.reload();
-}
-
-// Restaurer la session au chargement
-(function(){
-  try{
-    var u = sessionStorage.getItem('cp_user');
-    if(u){ showLoggedIn(JSON.parse(u)); }
-  }catch(e){}
-})();
-
+   L'ACCÈS ADMINISTRATEUR, plus bas, RESTE : il ne passe pas par ce magasin —
+   il compare à `ADMIN_PASSWORD` et pose une session serveur. */
 
 ;/* ── bloc 3/5 ── */
 

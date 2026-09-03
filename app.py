@@ -3636,370 +3636,75 @@ def sanitize_phone(phone):
 
 
 # ══════════════════════════════════════════════════════════
-# AUTHENTIFICATION CLIENT — Inscription, validation email, login
-# Conforme RGPD : consentement, hash sécurisé, droit à l'effacement
+# ACCÈS ADMINISTRATEUR CONSEILPREV — et rien d'autre
+#
+# CE BLOC PORTAIT UN SECOND ESPACE CLIENT, celui de /sourcing : inscription,
+# validation d'adresse, connexion, effacement, avec son propre magasin de
+# comptes (`users_db.json`) et son propre mot de passe. Il a été retiré.
+#
+# CE QU'IL FAISAIT, MESURÉ AVANT DE DÉCIDER. Il n'ouvrait RIEN : le jeton qu'il
+# rendait n'était relu par aucune route, et la plateforme vers laquelle son
+# bouton menait est publique. Les comptes qu'il gardait vivaient dans un
+# fichier de la racine du service — ni versionné, ni monté sur un disque — que
+# l'hébergeur remplace à chaque déploiement : ils repartaient VIDES, et le lien
+# de confirmation qu'un client recevait pouvait désigner un compte déjà
+# disparu. Il collectait donc une adresse, un mot de passe et un consentement
+# pour un accès qui n'existait pas.
+#
+# DEUX ESPACES CLIENTS SUR UN SITE, C'EST UN ESPACE QUI POURRIT SANS TÉMOIN.
+# Celui de /login est adossé au registre, son parcours est éprouvé de bout en
+# bout, et il porte déjà tout ce que celui-ci prétendait offrir. /sourcing y
+# renvoie désormais par un lien.
+#
+# LES ADRESSES SURVIVENT EN 410, ET C'EST DÉLIBÉRÉ : un courriel de
+# confirmation déjà parti, une page gardée en cache ou un signet doivent
+# recevoir une réponse qui DIT OÙ ALLER, pas un 404 muet.
+#
+# L'ACCÈS ADMINISTRATEUR RESTE, et il n'a jamais dépendu de ce magasin : il
+# compare à `ADMIN_PASSWORD` et pose une session serveur.
 # ══════════════════════════════════════════════════════════
+# `_hashlib` sert au-delà de ce bloc — l'empreinte ETag des communiqués
+# s'en sert (voir `_communique_entry`). Il était importé ici, et le
+# retirer avec l'ancien espace client aurait fait tomber la page d'un
+# communiqué au premier appel, pas au démarrage : une panne qui ne se
+# voit qu'en production.
 import hashlib as _hashlib
 import secrets as _secrets
 import hmac as _hmac
-
-# L'emplacement est surchargeable pour que la recette puisse eprouver
-# l'avertissement de demarrage sans dependre de ce que ce poste-ci
-# contient : une regle qui tombe parce qu'on a lance le site en local
-# une fois est une regle qu'on finit par desactiver.
-USERS_FILE = os.environ.get('SOURCING_USERS_FILE') or os.path.join(
-    os.path.dirname(__file__), 'users_db.json')
-
-# CE FICHIER NE SURVIT PAS À UNE MISE EN LIGNE, ET RIEN NE LE DISAIT.
-#
-# Les comptes de l'espace /sourcing — les seuls que `_load_users` et
-# `_save_users` connaissent — vivent ici, dans un fichier de la racine du
-# service. Render remplace le disque à chaque déploiement, à chaque
-# redémarrage et à chaque réveil d'une instance mise en veille : le fichier
-# repart vide, et TOUS ces comptes disparaissent. Le fichier est d'ailleurs
-# dans `.gitignore`, et aucun disque persistant n'est déclaré dans
-# `render.yaml` — donc il n'est ni versionné ni monté.
-#
-# CE QUE LE VISITEUR VIT PENDANT CE TEMPS. Il crée un compte, reçoit un lien
-# de confirmation valable vingt-quatre heures, clique le lendemain — et lit
-# « Lien invalide ou expiré », parce que le compte n'existe plus. Rien
-# n'échoue visiblement ; personne n'est prévenu.
-#
-# LE REGISTRE, LUI, CRIE DÉJÀ QUAND IL RETOMBE SUR SQLITE (voir
-# REGISTRE_IA plus bas). Le même défaut, sur le même service, restait muet
-# ici. Un défaut nommé au démarrage est un défaut qu'on peut décider de
-# corriger ; un défaut muet se paie en comptes perdus. Le magasin durable de
-# ce service est la table `clients` du registre — celle que l'espace client
-# de /login emploie.
-def _avertir_magasin_sourcing_ephemere():
-    """Dit au demarrage ce que ce magasin ne tient pas. Fonction, et pas
-    trois lignes au fil du module, pour qu'une regle puisse l'EXECUTER : un
-    avertissement qu'on ne peut que relire est un avertissement qu'on croit
-    sur parole."""
-    if os.path.isfile(USERS_FILE):
-        return False
-    logger.warning(
-        "COMPTES /sourcing — %s est absent : tout compte cree ici vit dans un "
-        "fichier que Render remplace a chaque mise en ligne, et repartira donc "
-        "VIDE. L'espace client durable de ce service est /login (table "
-        "`clients` du registre).", USERS_FILE)
-    return True
-
-
-_avertir_magasin_sourcing_ephemere()
-
-# `SESSION_SECRET` a ete retire, et c'etait le plus trompeur des deux : lu,
-# jamais employe, alors que la cle qui signe REELLEMENT les sessions est
-# `FLASK_SECRET_KEY` (voir en tete de fichier). Un exploitant qui definissait
-# `SESSION_SECRET` sur Render pouvait croire ses sessions protegees ; elles ne
-# l'etaient pas, et la vraie variable restait absente.
 
 # ── Administrateur CONSEILPREV (accès réservé, hors flux client) ──
 ADMIN_EMAIL    = os.environ.get('ADMIN_EMAIL', 'christophe.cerf@outlook.com').strip().lower()
 ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', '')  # défini sur Render — JAMAIS en dur
 
-def _load_users():
-    try:
-        if os.path.isfile(USERS_FILE):
-            with open(USERS_FILE, 'r', encoding='utf-8') as f:
-                return json.load(f)
-    except Exception as e:
-        logger.error(f'USERS_LOAD_ERR: {e}')
-    return {}
-
-def _save_users(users):
-    try:
-        with open(USERS_FILE, 'w', encoding='utf-8') as f:
-            json.dump(users, f, ensure_ascii=False, indent=2)
-        return True
-    except Exception as e:
-        logger.error(f'USERS_SAVE_ERR: {e}')
-        return False
-
-def _hash_password(password, salt=None):
-    """PBKDF2-HMAC-SHA256, 200k itérations."""
-    if salt is None:
-        salt = _secrets.token_hex(16)
-    dk = _hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt.encode('utf-8'), 200000)
-    return salt + '$' + dk.hex()
-
-def _verify_password(password, stored):
-    try:
-        salt, _ = stored.split('$', 1)
-        return _hmac.compare_digest(_hash_password(password, salt), stored)
-    except Exception:
-        return False
 
 def _make_token():
     return _secrets.token_urlsafe(32)
 
-def _validate_password_strength(pw):
-    """Min 8 car, 1 maj, 1 min, 1 chiffre."""
-    if len(pw) < 8:
-        return False, 'Le mot de passe doit faire au moins 8 caractères'
-    if not _re.search(r'[A-Z]', pw):
-        return False, 'Au moins une majuscule requise'
-    if not _re.search(r'[a-z]', pw):
-        return False, 'Au moins une minuscule requise'
-    if not _re.search(r'[0-9]', pw):
-        return False, 'Au moins un chiffre requis'
-    return True, 'ok'
 
-def send_validation_email(email, prenom, token):
-    """Envoie l'email de validation de compte."""
-    validate_link = lien_du_site(f'api/auth/verify?token={token}&email={email}')
-    data = {
-        'form_type': 'validation_compte',
-        'prenom': prenom, 'nom': '', 'email': email,
-        'message': f'Lien de validation : {validate_link}',
-        'consent_date': '', 'source_url': '/sourcing',
-    }
-    # Email vers le CLIENT (pas CONSEILPREV) — override du destinataire
-    try:
-        msg = MIMEMultipart('mixed')
-        msg['Subject'] = 'Validez votre compte CONSEILPREV'
-        msg['From'] = MAIL_FROM
-        msg['To'] = email
-        html = f"""<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;background:#f5f0ff;padding:24px">
-<div style="max-width:520px;margin:0 auto;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.1)">
-  <div style="background:linear-gradient(135deg,#6d28d9,#d946ef);padding:28px 32px">
-    <h1 style="color:#fff;font-size:20px;margin:0">Bienvenue chez CONSEILPREV</h1>
-  </div>
-  <div style="padding:32px">
-    <p style="font-size:15px;color:#1a1a2e;line-height:1.7">Bonjour {prenom},</p>
-    <p style="font-size:14px;color:#444;line-height:1.7">Merci de votre inscription à la plateforme Sourcing IA / Data / Cyber. Validez votre adresse email pour activer votre compte :</p>
-    <div style="text-align:center;margin:28px 0">
-      <a href="{validate_link}" style="display:inline-block;background:linear-gradient(135deg,#6d28d9,#d946ef);color:#fff;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px">Valider mon compte</a>
-    </div>
-    <p style="font-size:12px;color:#888;line-height:1.6">Si le bouton ne fonctionne pas, copiez ce lien :<br><span style="color:#6d28d9;word-break:break-all">{validate_link}</span></p>
-    <p style="font-size:11px;color:#aaa;margin-top:24px;line-height:1.6">Ce lien expire dans 24h. Si vous n'êtes pas à l'origine de cette inscription, ignorez cet email. Conformément au RGPD, vous pouvez demander la suppression de vos données à tout moment.</p>
-  </div>
-</div></body></html>"""
-        msg.attach(MIMEText(html, 'html', 'utf-8'))
-        # Utiliser send_email_smart (Brevo API puis SMTP)
-        ok, method = send_email_smart(
-            email, f'{prenom}',
-            'Validez votre compte CONSEILPREV',
-            html,
-            reply_to=MAIL_TO,
-            tags=['validation', 'compte-client']
-        )
-        if ok:
-            logger.info(f'VALIDATION_EMAIL_OK via {method}: {email}')
-            return True, validate_link
-        else:
-            logger.warning(f'VALIDATION_EMAIL_FAIL ({method}): {email} — lien: {validate_link}')
-            return False, validate_link
-    except Exception as e:
-        logger.error(f'VALIDATION_EMAIL_ERR: {e}')
-        return False, validate_link
+_ESPACE_CLIENT_DEPLACE = (
+    "L'espace client de ce service est désormais unique : rendez-vous sur "
+    "/login pour vous connecter ou créer un compte. Aucun compte n'est plus "
+    "créé depuis cette page."
+)
 
 
 @app.route('/api/auth/register', methods=['POST'])
-def auth_register():
-    ip = limiter.get_ip(request)
-    if not limiter.check_soft(ip, limit=20, window=600):
-        return jsonify({'ok': False, 'error': 'Trop de tentatives, réessayez plus tard'}), 429
-    try:
-        d = request.get_json(force=True, silent=True) or {}
-        email   = str(d.get('email','')).strip().lower()[:150]
-        password= str(d.get('password',''))[:128]
-        prenom  = str(d.get('prenom','')).strip()[:80]
-        nom     = str(d.get('nom','')).strip()[:80]
-        entreprise = str(d.get('entreprise','')).strip()[:120]
-        consent = d.get('consent', False)
-
-        # Validations
-        if not _re.match(r'^[^\s@]+@[^\s@]+\.[^\s@]{2,}$', email):
-            return jsonify({'ok': False, 'error': 'Email invalide'}), 400
-        if not prenom or not nom:
-            return jsonify({'ok': False, 'error': 'Prénom et nom requis'}), 400
-        if consent not in (True, 'true', '1', 'on'):
-            return jsonify({'ok': False, 'error': 'Consentement RGPD requis'}), 400
-        ok_pw, msg_pw = _validate_password_strength(password)
-        if not ok_pw:
-            return jsonify({'ok': False, 'error': msg_pw}), 400
-
-        # L'email admin ne peut PAS s'inscrire via le flux client
-        if email == ADMIN_EMAIL:
-            return jsonify({'ok': False, 'error': 'Cet email est réservé. Utilisez l_accès administrateur.'}), 403
-
-        users = _load_users()
-        if email in users and users[email].get('verified'):
-            return jsonify({'ok': False, 'error': 'Un compte existe déjà avec cet email'}), 409
-
-        # UNE INSCRIPTION EN ATTENTE APPARTIENT À CELUI QUI L'A FAITE.
-        #
-        # LE DÉFAUT, JOUÉ AVANT D'ÊTRE CORRIGÉ. La garde ci-dessus ne regardait
-        # que les comptes CONFIRMÉS. Une adresse inscrite mais pas encore
-        # confirmee retombait donc dans le chemin de creation, et le `users[email] = {…}`
-        # plus bas ECRASAIT tout : le mot de passe, le nom, l'entreprise, et le
-        # jeton de confirmation. Un inconnu qui reinscrivait l'adresse d'Alice
-        # remplacait son mot de passe par le sien et TUAIT son lien — Alice
-        # cliquait le sien et lisait « Lien invalide ou expiré », sans que rien
-        # n'ait echoue de son cote. Mesure : prenom « Alice » → « Mallory »,
-        # empreinte du mot de passe remplacee, jeton d'Alice perime.
-        #
-        # CE QU'ON FAIT À LA PLACE, ET POURQUOI CE N'EST PAS UN REFUS SEC. Celui
-        # qui reinscrit son adresse est, presque toujours, celui qui n'a pas
-        # recu le courrier. On lui renvoie donc le lien — mais À L'ADRESSE
-        # INSCRITE, jamais à ce que la requete raconte. Un tiers n'obtient rien :
-        # ni le compte, ni le courrier, ni la moindre indication. Le compte,
-        # lui, n'est pas touche.
-        #
-        # C'est la propriete que l'autre site tient deja (`if store.get(email):
-        # return generic` dans conseilprevcyber/auth.py) : UNE INSCRIPTION
-        # EXISTANTE N'EST JAMAIS RECRITE.
-        if email in users:
-            _pending = users[email]
-            _sent, _ = send_validation_email(
-                email, _pending.get('prenom') or '', _pending.get('verify_token'))
-            logger.info('AUTH_REGISTER_RELANCE %s: %s (email_sent=%s)', ip, email, _sent)
-            return jsonify({
-                'ok': True,
-                'message': "Inscription déjà enregistrée. Le lien de "
-                           "confirmation vient d'être renvoyé à cette adresse.",
-                'email_sent': _sent,
-            })
-
-        import datetime
-        token = _make_token()
-        # Validation stricte de l'email comme clé (pas d'injection possible)
-        if not _re.match(r'^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$', email):
-            return jsonify({'ok': False, 'error': 'Format email invalide'}), 400
-        users[email] = {
-            'email': email,
-            'password': _hash_password(password),
-            'prenom': prenom, 'nom': nom, 'entreprise': entreprise,
-            'verified': False,
-            'verify_token': token,
-            'token_created': time.time(),
-            'consent': True,
-            'consent_date': datetime.datetime.now().isoformat(),
-            'created': datetime.datetime.now().isoformat(),
-            'ip': ip,
-        }
-        _save_users(users)
-
-        # Ajouter le contact dans Brevo CRM (liste clients)
-        BREVO_LISTE_CLIENTS = os.environ.get('BREVO_LISTE_CLIENTS', '')
-        if BREVO_API_KEY:
-            add_contact_to_brevo(
-                email, prenom, nom, entreprise,
-                liste_id=BREVO_LISTE_CLIENTS if BREVO_LISTE_CLIENTS else None
-            )
-
-        sent, link = send_validation_email(email, prenom, token)
-        logger.info(f'AUTH_REGISTER {ip}: {email} (email_sent={sent})')
-        if not sent:
-            # LE JETON DE CONFIRMATION NE REVIENT PAS DANS LA RÉPONSE.
-            #
-            # Il en revenait un, sous le nom `_dev_link`, « affiché si SMTP non
-            # configuré » — et la page en faisait un lien cliquable. La commodite
-            # de developpement se retournait en production le jour ou l'envoi
-            # cessait de marcher : la confirmation d'adresse ne prouve plus rien
-            # si le serveur remet le jeton a celui qui vient de saisir l'adresse.
-            # N'IMPORTE QUI POUVAIT ALORS INSCRIRE L'ADRESSE D'UN AUTRE ET LA
-            # CONFIRMER LUI-MÊME, dans la meme seconde, sans jamais y acceder.
-            # Le declencheur n'est pas une attaque : une cle Brevo expiree suffit.
-            #
-            # Le lien reste ecrit dans le JOURNAL du serveur (voir
-            # `send_validation_email`), ou seul l'exploitant le lit.
-            logger.error('AUTH_REGISTER_COURRIER_NON_PARTI %s — le compte est cree '
-                         'mais son adresse ne peut pas etre confirmee ; verifiez '
-                         'BREVO_API_KEY ou SMTP_USER/SMTP_PASSWORD', email)
-            return jsonify({
-                'ok': True, 'email_sent': False,
-                'message': "Compte créé, mais l'email de confirmation n'a pas pu "
-                           "partir. Écrivez à christophe.cerf@outlook.com pour "
-                           "faire activer votre accès — inutile de vous "
-                           "réinscrire.",
-            })
-        return jsonify({
-            'ok': True,
-            'message': 'Compte créé. Vérifiez votre email pour valider votre inscription.',
-            'email_sent': True,
-        })
-    except Exception as e:
-        logger.error(f'AUTH_REGISTER_ERR {ip}: {e}')
-        return jsonify({'ok': False, 'error': 'Erreur serveur'}), 500
+@app.route('/api/auth/login', methods=['POST'])
+@app.route('/api/auth/delete', methods=['POST'])
+def auth_espace_deplace():
+    """Les trois portes de l'ancien espace client, refermées — en disant où
+    aller. Un refus qui n'indique rien laisse le visiteur réessayer."""
+    logger.info('AUTH_ESPACE_DEPLACE %s %s', limiter.get_ip(request), request.path)
+    return jsonify({'ok': False, 'error': _ESPACE_CLIENT_DEPLACE,
+                    'espace_client': '/login'}), 410
 
 
 @app.route('/api/auth/verify', methods=['GET'])
-def auth_verify():
-    email = request.args.get('email','').strip().lower()
-    token = request.args.get('token','').strip()
-    users = _load_users()
-    user = users.get(email)
-    if not user or user.get('verify_token') != token:
-        return _verify_page(False, 'Lien invalide ou expiré')
-    # Token expire après 24h
-    if time.time() - user.get('token_created', 0) > 86400:
-        return _verify_page(False, 'Lien expiré (24h). Veuillez vous réinscrire.')
-    user['verified'] = True
-    user['verify_token'] = None
-    user['verified_date'] = __import__('datetime').datetime.now().isoformat()
-    _save_users(users)
-    logger.info(f'AUTH_VERIFIED: {email}')
-    return _verify_page(True, 'Votre compte est validé ! Vous pouvez maintenant vous connecter.')
-
-
-def _verify_page(success, message):
-    color = '#22c55e' if success else '#ef4444'
-    icon = '✓' if success else '✗'
-    html = f"""<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"><title>Validation compte</title>
-<style>body{{font-family:-apple-system,sans-serif;background:linear-gradient(180deg,#1e1250,#3b2280);min-height:100vh;display:flex;align-items:center;justify-content:center;margin:0;padding:24px}}
-.box{{background:#fff;border-radius:18px;padding:44px;text-align:center;max-width:420px;box-shadow:0 12px 40px rgba(0,0,0,.3)}}
-.ic{{width:72px;height:72px;border-radius:50%;background:{color}22;border:2px solid {color};color:{color};display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 20px}}
-h1{{font-size:20px;color:#1a1a2e;margin:0 0 10px}}p{{font-size:14px;color:#666;line-height:1.6;margin:0 0 24px}}
-a{{display:inline-block;background:linear-gradient(135deg,#6d28d9,#d946ef);color:#fff;padding:13px 28px;border-radius:10px;text-decoration:none;font-weight:700;font-size:14px}}</style></head>
-<body><div class="box"><div class="ic">{icon}</div><h1>{'Compte validé' if success else 'Échec de validation'}</h1>
-<p>{message}</p><a href="/sourcing">{'Se connecter →' if success else '← Retour'}</a></div></body></html>"""
-    return html
-
-
-@app.route('/api/auth/login', methods=['POST'])
-def auth_login():
-    ip = limiter.get_ip(request)
-    if not limiter.check_soft(ip, limit=10, window=300):
-        return jsonify({'ok': False, 'error': 'Trop de tentatives, réessayez dans 5 min'}), 429
-    try:
-        d = request.get_json(force=True, silent=True) or {}
-        email = str(d.get('email','')).strip().lower()[:150]
-        password = str(d.get('password',''))[:128]
-        users = _load_users()
-        user = users.get(email)
-        if not user or not _verify_password(password, user.get('password','')):
-            return jsonify({'ok': False, 'error': 'Email ou mot de passe incorrect'}), 401
-        if not user.get('verified'):
-            return jsonify({'ok': False, 'error': 'Compte non validé. Vérifiez votre email.'}), 403
-        # LE JETON RENDU N'AUTORISE RIEN, ET C'EST À DIRE ICI AUSSI.
-        # La route admin le déclare depuis sa correction ; la route cliente,
-        # qui fait exactement la même chose, ne le disait pas. Vérifié :
-        # `user['session']` n'est relu par AUCUNE route, et `cp_token`, que la
-        # page range dans sessionStorage, n'est renvoyé dans AUCUNE requête.
-        # « Être connecté » sur /sourcing est un état d'interface, pas une
-        # autorisation — la page /platform vers laquelle mène le bouton est
-        # publique. À ne pas confondre avec une session : celle de l'espace
-        # client de ce service est le cookie signé posé par
-        # `/api/sentinel-auth/login`.
-        session_token = _make_token()
-        import datetime as _dt_
-        user['session'] = session_token
-        user['session_expires'] = (_dt_.datetime.now() + _dt_.timedelta(hours=8)).isoformat()
-        user['last_login'] = __import__('datetime').datetime.now().isoformat()
-        _save_users(users)
-        logger.info(f'AUTH_LOGIN {ip}: {email}')
-        return jsonify({
-            'ok': True, 'token': session_token,
-            'user': {'prenom': user['prenom'], 'nom': user['nom'],
-                     'email': email, 'entreprise': user.get('entreprise','')},
-        })
-    except Exception as e:
-        logger.error(f'AUTH_LOGIN_ERR {ip}: {e}')
-        return jsonify({'ok': False, 'error': 'Erreur serveur'}), 500
-
+def auth_verify_deplace():
+    """Un lien de confirmation déjà envoyé mène ici. Il ne peut plus rien
+    confirmer — le compte qu'il désignait n'existe plus — mais il doit dire
+    quoi faire, et non afficher une erreur nue."""
+    return redirect('/login?espace=unifie', code=302)
 
 
 @app.route('/api/auth/admin-login', methods=['POST'])
@@ -4056,23 +3761,6 @@ def auth_admin_login():
         return jsonify({'ok': False, 'error': 'Erreur serveur'}), 500
 
 
-@app.route('/api/auth/delete', methods=['POST'])
-def auth_delete():
-    """Droit à l'effacement RGPD (Art. 17)."""
-    try:
-        d = request.get_json(force=True, silent=True) or {}
-        email = str(d.get('email','')).strip().lower()
-        password = str(d.get('password',''))
-        users = _load_users()
-        user = users.get(email)
-        if not user or not _verify_password(password, user.get('password','')):
-            return jsonify({'ok': False, 'error': 'Identifiants incorrects'}), 401
-        del users[email]
-        _save_users(users)
-        logger.info(f'AUTH_DELETE: {email}')
-        return jsonify({'ok': True, 'message': 'Compte et données supprimés (RGPD Art. 17)'})
-    except Exception as e:
-        return jsonify({'ok': False, 'error': 'Erreur serveur'}), 500
 
 
 

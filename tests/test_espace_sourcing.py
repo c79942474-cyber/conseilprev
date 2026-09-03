@@ -1,59 +1,41 @@
 # -*- coding: utf-8 -*-
-"""LE SECOND ESPACE CLIENT — celui de /sourcing, qui n'avait aucune règle.
+"""IL N'Y A PLUS QU'UN ESPACE CLIENT SUR CE SITE, ET C'EST LE SUJET.
 
 CE QUI A DÉCLENCHÉ CE FICHIER. Une demande de vérification des inscriptions et
-des connexions des espaces clients, sur les deux sites. Le parcours de /login a
-été joué il y a peu et tient (voir `test_inscription_et_connexion.py`, 31
-règles). Ce site en porte un SECOND, sur /sourcing, avec ses propres routes
-`/api/auth/*`, son propre magasin, son propre mot de passe — et pas une règle.
-Il a donc été joué à son tour, contre l'application qui tourne.
+des connexions des espaces clients. Le parcours de /login a été rejoué et tient
+(voir `test_inscription_et_connexion.py`). Mais ce site en portait un SECOND,
+sur /sourcing, avec ses propres routes `/api/auth/*`, son propre magasin de
+comptes et son propre mot de passe — et pas une règle.
 
-DEUX ESPACES CLIENTS SUR UN SITE, C'EST UN ESPACE QUI POURRIT SANS TÉMOIN.
-C'est ce que la mesure montre : celui qui est éprouvé va bien, celui qui ne
-l'est pas portait quatre défauts dont aucun ne se voit sur une page.
+CE QUE LA MESURE A MONTRÉ, PARCOURS JOUÉ CONTRE L'APPLICATION.
+  · Il n'ouvrait RIEN : le jeton rendu à la connexion n'était relu par aucune
+    route, et la plateforme vers laquelle son bouton menait est publique.
+  · Les comptes vivaient dans `users_db.json`, à la racine du service : ni
+    versionné, ni monté sur un disque. L'hébergeur remplace ce disque à chaque
+    déploiement — ils repartaient VIDES, sans que rien ne le dise.
+  · Une inscription en attente appartenait au dernier venu : la garde ne
+    regardait que les comptes CONFIRMÉS, si bien qu'un inconnu réinscrivant
+    l'adresse d'Alice remplaçait son mot de passe, son nom et son jeton. Alice
+    cliquait SON lien et lisait « Lien invalide ou expiré ».
+  · Le jeton de confirmation revenait dans la réponse (`_dev_link`) dès que
+    l'envoi de courrier tombait : confirmer une adresse ne prouvait plus rien.
 
-PREMIER DÉFAUT — UNE INSCRIPTION EN ATTENTE APPARTENAIT AU DERNIER VENU. La
-garde ne regardait que les comptes CONFIRMÉS : `if email in users and
-users[email].get('verified')`. Une adresse inscrite mais pas encore confirmée
-retombait dans le chemin de création et se faisait écraser. Joué : Alice
-s'inscrit, ne clique pas tout de suite ; un inconnu réinscrit son adresse ;
-prénom « Alice » devient « Mallory », l'empreinte du mot de passe est
-remplacée, et le jeton d'Alice est périmé. Alice clique SON lien et lit « Lien
-invalide ou expiré » — sans que rien n'ait échoué de son côté.
+DEUX ESPACES CLIENTS SUR UN SITE, C'EST UN ESPACE QUI POURRIT SANS TÉMOIN. Le
+premier est éprouvé et va bien ; le second ne l'était pas et portait ces quatre
+défauts, dont aucun ne se voyait sur une page. Il a donc été retiré plutôt que
+réparé : réparer un magasin effacé à chaque mise en ligne aurait été polir ce
+qui disparaît. /sourcing renvoie vers /login.
 
-DEUXIÈME DÉFAUT — LE JETON DE CONFIRMATION REVENAIT DANS LA RÉPONSE. Sous le
-nom `_dev_link`, « affiché si SMTP non configuré », et la page en faisait un
-lien cliquable. Une commodité de développement qui se retourne en production le
-jour où l'envoi tombe : confirmer une adresse ne prouve plus rien si le serveur
-rend le jeton à celui qui vient de la saisir. Le déclencheur n'est pas une
-attaque — une clé Brevo expirée suffit.
-
-TROISIÈME DÉFAUT — LE MAGASIN NE SURVIT PAS À UNE MISE EN LIGNE, ET SE TAISAIT.
-Les comptes vivent dans `users_db.json`, à la racine du service : ni versionné
-(il est dans `.gitignore`), ni monté sur un disque (aucun n'est déclaré dans
-`render.yaml`). Render remplace ce disque à chaque déploiement. Le registre,
-lui, CRIE déjà quand il retombe sur SQLite ; le même défaut, sur le même
-service, restait muet ici.
-
-QUATRIÈME DÉFAUT — « ÊTRE CONNECTÉ » N'ÉTAIT PAS UNE AUTORISATION, sans que
-personne le dise. `user['session']` n'est relu par aucune route ; `cp_token`,
-que la page range dans sessionStorage, n'est renvoyé dans aucune requête. La
-route admin le déclarait depuis sa correction ; la route cliente, qui fait
-exactement la même chose, ne le disait pas.
-
-CE QUE CES RÈGLES NE FONT PAS. Elles ne tranchent pas la question de fond —
-faut-il deux espaces clients sur ce site ? Elles la rendent seulement
-impossible à oublier : le magasin éphémère s'annonce, et le jeton qui n'ouvre
-rien est éprouvé comme n'ouvrant rien.
+CE QUE CES RÈGLES TIENNENT. Qu'il n'en revienne pas un troisième sans qu'on
+s'en aperçoive, que les adresses fermées disent OÙ ALLER plutôt que de se
+taire, et que l'accès administrateur — qui n'a jamais dépendu de ce magasin —
+reste intact.
 """
 
 import ast
 import io
-import json
-import logging
 import os
 import re
-import subprocess
 import sys
 
 import pytest
@@ -68,6 +50,8 @@ import app as application  # noqa: E402
 
 SOURCE = io.open(os.path.join(ICI, 'app.py'), encoding='utf-8').read()
 ARBRE = ast.parse(SOURCE)
+PAGE = io.open(os.path.join(ICI, 'sourcing.html'), encoding='utf-8').read()
+SCRIPT = io.open(os.path.join(ICI, 'sourcing.page.js'), encoding='utf-8').read()
 
 _N = [500]
 
@@ -77,289 +61,142 @@ def _ent():
     return {'X-Forwarded-For': '203.0.113.%d' % (_N[0] % 240 + 2),
             'User-Agent': 'Mozilla/5.0 (recette)',
             'Accept-Language': 'fr-FR,fr;q=0.9',
-            'Accept-Encoding': 'gzip',
+            'Accept-Encoding': 'identity',
             'Accept': 'application/json'}
 
 
-@pytest.fixture
-def magasin(monkeypatch):
-    """Un magasin de comptes propre, en mémoire, rendu à la fin.
+# ═══════════════════════════════════════════════════════════════════════════
+#  UN SEUL MAGASIN DE COMPTES, ET IL EST DANS LE REGISTRE
+# ═══════════════════════════════════════════════════════════════════════════
 
-    En MÉMOIRE et pas sur disque : ces essais créent des comptes, et le fichier
-    réel est celui du poste. Aucune règle ne doit laisser un compte derrière
-    elle."""
-    comptes = {}
-    monkeypatch.setattr(application, '_load_users', lambda: comptes)
-    monkeypatch.setattr(application, '_save_users',
-                        lambda u: comptes.update(u) or True)
-    return comptes
-
-
-@pytest.fixture
-def courriers(monkeypatch):
-    """Ce qui SERAIT parti : destinataire, et le lien qu'il porte."""
-    boite = []
-
-    def _envoi(email, prenom, token):
-        lien = application.lien_du_site(
-            'api/auth/verify?token=%s&email=%s' % (token, email))
-        boite.append({'a': email, 'jeton': token, 'lien': lien})
-        return True, lien
-    monkeypatch.setattr(application, 'send_validation_email', _envoi)
-    return boite
-
-
-def _inscrire(c, email, mdp='Recette2026!ok', prenom='Alice',
-              nom='Martin', entreprise='Alpha'):
-    return c.post('/api/auth/register', headers=_ent(), json={
-        'email': email, 'password': mdp, 'prenom': prenom, 'nom': nom,
-        'entreprise': entreprise, 'consent': True})
-
-
-def _corps(nom):
+def test_aucun_second_magasin_de_comptes_ne_subsiste():
+    """LA PROPRIÉTÉ, PAS LES NOMS. Un second magasin de comptes ne se signale
+    pas : il se remarque le jour où des comptes disparaissent. La règle refuse
+    donc qu'une fonction du module lise ou écrive un fichier de comptes hors du
+    registre — quel que soit le nom qu'on lui donne."""
+    coupables = []
     for n in ast.walk(ARBRE):
-        if isinstance(n, ast.FunctionDef) and n.name == nom:
-            return ast.unparse(n)
-    raise AssertionError('fonction %s introuvable' % nom)
-
-
-# ═══════════════════════════════════════════════════════════════════════════
-#  L'INSCRIPTION EN ATTENTE APPARTIENT À CELUI QUI L'A FAITE
-# ═══════════════════════════════════════════════════════════════════════════
-
-def test_un_tiers_ne_reprend_pas_une_inscription_en_attente(magasin, courriers):
-    """LE PARCOURS D'ALICE, JOUÉ EN ENTIER — c'est la seule façon de voir ce
-    défaut, qui ne se manifeste sur aucune page.
-
-    La règle éprouve les QUATRE choses qu'un tiers pouvait emporter : le nom,
-    l'empreinte du mot de passe, le jeton d'Alice, et in fine l'accès."""
-    c = application.app.test_client()
-    m = 'alice@example.invalid'
-    assert _inscrire(c, m, 'Alice2026!ok', 'Alice', 'Martin', 'Alpha').status_code == 200
-    avant = dict(magasin[m])
-
-    r = _inscrire(c, m, 'Mallory2026!ok', 'Mallory', 'Inconnu', 'Beta')
-    assert r.status_code == 200, r.get_json()
-    apres = magasin[m]
-    assert apres['prenom'] == 'Alice', "le nom d'Alice a été remplacé"
-    assert apres['entreprise'] == 'Alpha'
-    assert apres['password'] == avant['password'], (
-        "le mot de passe d'Alice a été remplacé par celui d'un tiers")
-    assert apres['verify_token'] == avant['verify_token'], (
-        "le lien de confirmation d'Alice a été périmé par un tiers")
-
-    # Et le parcours d'Alice va jusqu'au bout, celui de Mallory nulle part.
-    c.get('/api/auth/verify?email=%s&token=%s' % (m, avant['verify_token']),
-          headers=_ent())
-    assert magasin[m].get('verified') is True
-    assert c.post('/api/auth/login', headers=_ent(),
-                  json={'email': m, 'password': 'Alice2026!ok'}).status_code == 200
-    assert c.post('/api/auth/login', headers=_ent(),
-                  json={'email': m, 'password': 'Mallory2026!ok'}).status_code == 401
-
-
-def test_la_relance_part_a_ladresse_inscrite_et_porte_le_jeton_dorigine(
-        magasin, courriers):
-    """POURQUOI CE N'EST PAS UN REFUS SEC. Celui qui réinscrit son adresse est,
-    presque toujours, celui qui n'a pas reçu le courrier : on lui renvoie le
-    lien. Le tiers, lui, n'obtient rien — le courrier part à L'ADRESSE
-    INSCRITE, et porte le jeton d'origine, pas un neuf."""
-    c = application.app.test_client()
-    m = 'relance@example.invalid'
-    _inscrire(c, m)
-    jeton = magasin[m]['verify_token']
-    courriers.clear()
-
-    # LA SECONDE DEMANDE ÉCRIT L'ADRESSE AUTREMENT — c'est ce qui sépare
-    # « l'adresse inscrite » de « ce que la requête raconte ». Les deux
-    # coïncidaient dans la première version de cette règle, et une relance
-    # qui aurait suivi la saisie brute serait passée inaperçue.
-    _inscrire(c, m.upper(), prenom='Tiers')
-    assert len(courriers) == 1, courriers
-    assert courriers[0]['a'] == m, (
-        "le courrier suit la saisie (%r) au lieu de l'adresse inscrite (%r)"
-        % (courriers[0]['a'], m))
-    assert courriers[0]['jeton'] == jeton, (
-        "la relance a frappé un jeton neuf : le lien déjà reçu serait mort")
-
-
-def test_un_compte_confirme_reste_un_doublon_annonce(magasin, courriers):
-    """L'arbitrage de l'autre espace client de ce site, tenu ici aussi : qui a
-    réellement un compte doit l'apprendre, sinon il réessaiera sans
-    comprendre."""
-    c = application.app.test_client()
-    m = 'confirme@example.invalid'
-    _inscrire(c, m)
-    c.get('/api/auth/verify?email=%s&token=%s' % (m, magasin[m]['verify_token']),
-          headers=_ent())
-    r = _inscrire(c, m, prenom='Tiers')
-    assert r.status_code == 409, r.status_code
-
-
-# ═══════════════════════════════════════════════════════════════════════════
-#  LE JETON DE CONFIRMATION NE REVIENT JAMAIS AU DEMANDEUR
-# ═══════════════════════════════════════════════════════════════════════════
-
-@pytest.mark.parametrize('part', [True, False])
-def test_le_jeton_de_confirmation_ne_revient_pas_dans_la_reponse(
-        magasin, monkeypatch, part):
-    """LES DEUX BRANCHES, PAS SEULEMENT CELLE QUI MARCHE. Le défaut vivait
-    précisément dans la branche d'échec — celle qu'on n'exerce jamais."""
-    lien = [None]
-
-    def _envoi(email, prenom, token):
-        lien[0] = application.lien_du_site(
-            'api/auth/verify?token=%s&email=%s' % (token, email))
-        return part, lien[0]
-    monkeypatch.setattr(application, 'send_validation_email', _envoi)
-
-    c = application.app.test_client()
-    m = 'jeton@example.invalid'
-    r = _inscrire(c, m)
-    corps = r.get_data(as_text=True)
-    jeton = magasin[m]['verify_token']
-    assert jeton not in corps, "le jeton de confirmation est rendu au demandeur"
-    assert lien[0] not in corps
-    assert 'api/auth/verify' not in corps
-    assert '_dev_link' not in corps
-
-
-def test_quand_le_courrier_ne_part_pas_le_refus_dit_quoi_faire(
-        magasin, monkeypatch):
-    """UN MESSAGE QUI CONSTATE UNE PANNE SANS DIRE QUOI FAIRE LAISSE LE
-    VISITEUR SE RÉINSCRIRE EN BOUCLE — et chaque tour lui redit la même chose.
-    La réponse doit nommer un geste que le visiteur peut faire."""
-    monkeypatch.setattr(application, 'send_validation_email',
-                        lambda e, p, t: (False, 'x'))
-    c = application.app.test_client()
-    r = _inscrire(c, 'panne@example.invalid')
-    msg = (r.get_json() or {}).get('message', '')
-    assert r.get_json().get('email_sent') is False
-    assert '@' in msg, "le message n'indique à qui écrire : %r" % msg
-    assert re.search(r'inutile|ne (?:vous )?r[ée]inscri', msg, re.I), (
-        "le message ne dit pas d'arrêter de réessayer : %r" % msg)
-
-
-# ═══════════════════════════════════════════════════════════════════════════
-#  CE QUE LA CONNEXION RÉVÈLE, ET CE QU'ELLE OUVRE
-# ═══════════════════════════════════════════════════════════════════════════
-
-def test_la_connexion_ne_dit_pas_si_ladresse_est_connue(magasin, courriers):
-    """ANTI-ÉNUMÉRATION. Adresse inconnue et adresse connue avec un mauvais mot
-    de passe doivent être INDISCERNABLES — même code, même texte."""
-    c = application.app.test_client()
-    m = 'connue@example.invalid'
-    _inscrire(c, m)
-    faux = {'password': 'MauvaisMotDePasse1!'}
-    a = c.post('/api/auth/login', headers=_ent(), json=dict(email=m, **faux))
-    b = c.post('/api/auth/login', headers=_ent(),
-               json=dict(email='jamais-vue@example.invalid', **faux))
-    assert a.status_code == b.status_code == 401
-    assert a.get_json() == b.get_json(), (a.get_json(), b.get_json())
-
-
-def test_le_jeton_rendu_par_la_connexion_nouvre_pas_lespace_client(
-        magasin, courriers):
-    """« ÊTRE CONNECTÉ » SUR /sourcing EST UN ÉTAT D'INTERFACE, PAS UNE
-    AUTORISATION — et la règle l'éprouve au lieu de le lire. Le jeton rendu ne
-    donne pas la session de l'espace client de ce service, qui est un cookie
-    signé posé par une tout autre route."""
-    c = application.app.test_client()
-    m = 'jetonclient@example.invalid'
-    _inscrire(c, m)
-    c.get('/api/auth/verify?email=%s&token=%s' % (m, magasin[m]['verify_token']),
-          headers=_ent())
-    r = c.post('/api/auth/login', headers=_ent(),
-               json={'email': m, 'password': 'Recette2026!ok'})
-    jeton = (r.get_json() or {}).get('token')
-    assert jeton, r.get_json()
-
-    e = _ent()
-    e['Authorization'] = 'Bearer ' + jeton
-    r = c.get('/api/sentinel-auth/me', headers=e)
-    assert (r.get_json() or {}).get('authenticated') is not True, (
-        "un compte /sourcing ouvre l'espace client de /login")
-    assert c.get('/api/registre', headers=e).status_code == 401
-
-
-def test_aucune_route_ne_lit_le_jeton_range_par_la_connexion():
-    """LA PROPRIÉTÉ, PAS LE MOT. `auth_login` écrit `user['session']` ; si un
-    jour une route se met à le LIRE pour autoriser quelque chose, ce jeton
-    devient une clé — et il est frappé sans être lié à une session serveur.
-    Aucune lecture ailleurs que dans l'écriture elle-même."""
-    ecrit = _corps('auth_login')
-    assert "user['session'] = session_token" in ecrit
-    lecteurs = []
-    for n in ast.walk(ARBRE):
-        if not isinstance(n, ast.FunctionDef) or n.name == 'auth_login':
+        if not isinstance(n, ast.FunctionDef):
             continue
         src = ast.unparse(n)
-        if re.search(r"""\.get\(\s*['"]session['"]\s*\)|\[\s*['"]session['"]\s*\]""", src):
-            lecteurs.append(n.name)
-    assert not lecteurs, (
-        "ce jeton est relu par %s : il autorise donc quelque chose" % lecteurs)
+        if not re.search(r"""open\(|json\.dump|json\.load""", src):
+            continue
+        if re.search(r"""users?_db|USERS_FILE|comptes?\.json|_load_users|_save_users""",
+                     src, re.I):
+            coupables.append(n.name)
+    assert not coupables, (
+        "un magasin de comptes en fichier est revenu : %s" % coupables)
+    for mort in ('_load_users', '_save_users', 'USERS_FILE',
+                 '_hash_password', '_verify_password'):
+        assert not hasattr(application, mort), (
+            "%s existe encore : le second espace client peut renaître" % mort)
+
+
+def test_le_seul_magasin_de_comptes_est_celui_du_registre():
+    """LE TÉMOIN POSITIF, sans lequel la règle précédente serait verte sur un
+    site qui n'aurait plus AUCUN compte. L'espace client de /login s'appuie sur
+    la table `clients` du registre, et il l'interroge."""
+    corps = [ast.unparse(n) for n in ast.walk(ARBRE)
+             if isinstance(n, ast.FunctionDef) and n.name == 'sentauth_login']
+    assert corps and 'FROM clients WHERE email' in corps[0], corps[:1]
 
 
 # ═══════════════════════════════════════════════════════════════════════════
-#  UN MAGASIN QUI NE SURVIT PAS À UNE MISE EN LIGNE LE DIT
+#  LES ADRESSES FERMÉES DISENT OÙ ALLER
 # ═══════════════════════════════════════════════════════════════════════════
 
-def test_le_magasin_ephemere_sannonce_au_demarrage(monkeypatch, caplog):
-    """LA RÈGLE EXÉCUTE L'AVERTISSEMENT au lieu de le relire : un texte présent
-    dans le fichier ne prouve pas qu'il sorte."""
-    monkeypatch.setattr(os.path, 'isfile', lambda p: False)
-    with caplog.at_level(logging.WARNING):
-        assert application._avertir_magasin_sourcing_ephemere() is True
-    dit = ' '.join(r.getMessage() for r in caplog.records)
-    assert 'users_db.json' in dit, dit
-    assert '/login' in dit, "l'avertissement ne dit pas où sont les comptes durables"
+@pytest.mark.parametrize('chemin', ['/api/auth/register', '/api/auth/login',
+                                    '/api/auth/delete'])
+def test_les_anciennes_portes_refusent_en_nommant_lespace_client(chemin):
+    """UN 404 MUET EST LE PIRE DES REFUS ICI : un signet, une page gardée en
+    cache ou un formulaire rejoué doivent apprendre où est passé l'espace
+    client, pas se heurter à rien. 410 dit « c'était là, ce n'est plus là » —
+    et le corps dit où."""
+    c = application.app.test_client()
+    r = c.post(chemin, headers=_ent(),
+               json={'email': 'x@example.invalid', 'password': 'Peu1!importe'})
+    assert r.status_code == 410, (chemin, r.status_code)
+    j = r.get_json() or {}
+    assert j.get('espace_client') == '/login', j
+    assert '/login' in (j.get('error') or ''), j
+    assert j.get('ok') is False
 
 
-def test_lavertissement_part_REELLEMENT_au_demarrage(tmp_path):
-    """LA RÈGLE PRÉCÉDENTE APPELAIT LA FONCTION ELLE-MÊME — et restait donc
-    verte quand l'appel disparaissait du module. Mesuré : la mutation qui
-    retire `_avertir_magasin_sourcing_ephemere()` survit à cinq passages.
-    Une fonction d'avertissement que personne n'appelle n'avertit personne.
-
-    On importe donc le module DANS UN PROCESSUS NEUF, avec un magasin absent,
-    et on regarde ce qui sort."""
-    prog = (
-        "import logging, sys, os\n"
-        "logging.basicConfig(stream=sys.stderr, level=logging.WARNING)\n"
-        "sys.path.insert(0, %r)\n"
-        "os.environ.setdefault('FLASK_SECRET_KEY', 'recette-demarrage')\n"
-        "import app\n"
-        "assert not os.path.isfile(app.USERS_FILE)\n" % ICI)
-    out = subprocess.run(
-        [sys.executable, "-c", prog], capture_output=True, text=True,
-        timeout=300, cwd=str(tmp_path),
-        # LE MAGASIN EST DÉSIGNÉ AILLEURS, dans un dossier vide : sans cela la
-        # règle dirait « conforme » ou « défaillant » selon que ce poste a déjà
-        # servi le site en local. Une règle qui dépend de l'état de la machine
-        # finit désactivée.
-        env=dict(os.environ,
-                 SOURCING_USERS_FILE=str(tmp_path / "comptes_absents.json")))
-    assert out.returncode == 0, out.stderr[-2000:]
-    assert "COMPTES /sourcing" in out.stderr, (
-        "le module ne dit RIEN au demarrage sur un magasin qui ne survit pas "
-        "a une mise en ligne :\n" + out.stderr[-2000:])
+def test_un_lien_de_confirmation_deja_parti_mene_a_lespace_client():
+    """Des courriels portant ce lien sont partis. Ils ne peuvent plus rien
+    confirmer — le compte visé n'existe plus — mais ils ne doivent pas tomber
+    dans le vide."""
+    c = application.app.test_client()
+    r = c.get('/api/auth/verify?email=a@example.invalid&token=zz', headers=_ent())
+    assert r.status_code in (301, 302), r.status_code
+    assert '/login' in (r.headers.get('Location') or ''), r.headers
 
 
-def test_le_magasin_present_ne_declenche_rien(monkeypatch, caplog):
-    """LE TÉMOIN NÉGATIF. Sans lui, une fonction qui avertit TOUJOURS passerait
-    la règle précédente."""
-    monkeypatch.setattr(os.path, 'isfile', lambda p: True)
-    with caplog.at_level(logging.WARNING):
-        assert application._avertir_magasin_sourcing_ephemere() is False
-    assert not [r for r in caplog.records if 'users_db' in r.getMessage()]
+def test_aucune_route_ne_cree_plus_de_compte_hors_du_registre():
+    """LA FERMETURE ÉPROUVÉE PAR SON EFFET : quel que soit le corps envoyé,
+    aucune de ces adresses ne rend un succès."""
+    c = application.app.test_client()
+    for chemin in ('/api/auth/register', '/api/auth/login', '/api/auth/delete'):
+        for corps in ({}, {'email': 'a@example.invalid'},
+                      {'email': 'a@example.invalid', 'password': 'Recette2026!ok',
+                       'prenom': 'A', 'nom': 'B', 'consent': True}):
+            r = c.post(chemin, headers=_ent(), json=corps)
+            assert r.status_code == 410, (chemin, corps, r.status_code)
+            assert (r.get_json() or {}).get('ok') is not True
 
 
-def test_le_magasin_de_sourcing_nest_ni_versionne_ni_monte():
-    """CE QUI REND L'AVERTISSEMENT VRAI. S'il était un jour versionné ou monté
-    sur un disque, l'avertissement deviendrait un mensonge — et c'est une bonne
-    nouvelle qu'il faudrait alors retirer."""
-    ignore = io.open(os.path.join(ICI, '.gitignore'), encoding='utf-8').read()
-    rendu = io.open(os.path.join(ICI, 'render.yaml'), encoding='utf-8').read()
-    assert 'users_db.json' in ignore
-    assert 'mountPath' not in rendu, (
-        "un disque est déclaré : vérifier si les comptes /sourcing y vivent")
+# ═══════════════════════════════════════════════════════════════════════════
+#  L'ACCÈS ADMINISTRATEUR N'A JAMAIS DÉPENDU DE CE MAGASIN
+# ═══════════════════════════════════════════════════════════════════════════
+
+def test_lacces_administrateur_survit_au_retrait():
+    """CE QU'IL NE FAUT PAS EMPORTER AVEC LE RESTE. Cette route partageait le
+    fichier, les fonctions de hachage et le module de l'espace client retiré ;
+    elle ne partageait pas son magasin. Elle répond toujours, et elle refuse
+    toujours."""
+    c = application.app.test_client()
+    r = c.post('/api/auth/admin-login', headers=_ent(),
+               json={'email': 'inconnu@example.invalid', 'password': 'x'})
+    assert r.status_code == 403, r.status_code
+    assert (r.get_json() or {}).get('ok') is False
+
+
+def test_lacces_administrateur_ne_lit_aucun_magasin_de_comptes():
+    corps = [ast.unparse(n) for n in ast.walk(ARBRE)
+             if isinstance(n, ast.FunctionDef) and n.name == 'auth_admin_login']
+    assert corps, "la route d'accès administrateur a disparu"
+    assert 'ADMIN_PASSWORD' in corps[0] and 'compare_digest' in corps[0]
+    assert "session['is_conseilprev'] = True" in corps[0]
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  LA PAGE /sourcing DIT LA VÉRITÉ, ET SON SCRIPT NE TOMBE PAS
+# ═══════════════════════════════════════════════════════════════════════════
+
+def test_la_page_renvoie_vers_lespace_client_et_ne_demande_plus_de_compte():
+    assert 'href="/login"' in PAGE, "la page ne renvoie nulle part"
+    for reste in ('id="form-register"', 'id="form-login"', 'id="reg-password"',
+                  'id="login-password"', 'id="reg-consent"'):
+        assert reste not in PAGE, (
+            "la page demande encore un compte qu'elle ne tient pas : %s" % reste)
+    # Et elle ne réclame plus de mot de passe du tout, hors accès administrateur.
+    champs = re.findall(r'<input[^>]*type="password"[^>]*id="([^"]+)"', PAGE)
+    assert all(i.startswith('admin-') for i in champs), champs
+
+
+def test_le_script_ne_pose_aucun_gestionnaire_sur_un_element_absent():
+    """C'EST LA PANNE QUE LE RETRAIT POUVAIT CAUSER, ET ELLE EST TOTALE : un
+    `getElementById(...).addEventListener` sur un identifiant retiré de la page
+    lève au chargement, et emporte TOUT ce qui suit dans le même fichier — les
+    filtres, le compteur, le reste. La page s'affiche, et plus rien ne
+    fonctionne. Rien ne le signale."""
+    vises = re.findall(r"""getElementById\(\s*['"]([^'"]+)['"]\s*\)\s*\.""", SCRIPT)
+    assert vises, "aucun identifiant visé : la règle ne mesure plus rien"
+    manquants = sorted({i for i in vises if ('id="%s"' % i) not in PAGE})
+    assert not manquants, (
+        "le script s'adresse à des éléments absents de la page : %s" % manquants)
+
+
+def test_le_script_nappelle_plus_les_adresses_fermees():
+    appels = re.findall(r"""fetch\(\s*['"](/api/auth/[^'"]+)['"]""", SCRIPT)
+    assert appels == ['/api/auth/admin-login'], appels
