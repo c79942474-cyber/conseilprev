@@ -839,6 +839,10 @@ MAIL_CC       = os.environ.get('MAIL_CC', 'c79942474@gmail.com')
 # ── Clés API IA ──
 ANTHROPIC_API_KEY = os.environ.get('ANTHROPIC_API_KEY', '')
 MISTRAL_API_KEY   = os.environ.get('MISTRAL_API_KEY', '')
+# Le modèle du relais Claude, fixé ICI et non choisi par l'appelant : laisser le
+# navigateur nommer le modèle revenait à lui laisser choisir le tarif à la ligne.
+# Réglable sans redéploiement de code par CHAT_CLAUDE_MODELE.
+CHAT_CLAUDE_MODELE = os.environ.get('CHAT_CLAUDE_MODELE', 'claude-sonnet-4-6')
 
 UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads_cv')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -5097,6 +5101,13 @@ def chat():
         history  = data.get('history', [])
         if not user_msg or len(user_msg) > 2000:
             return jsonify({"error": "Message invalide"}), 400
+        # L'historique vient du navigateur : rien ne garantissait que c'etait
+        # une liste de dictionnaires. Une chaine, un nombre ou un dictionnaire
+        # levaient plus bas (h.get sur un caractere, ou une tranche impossible)
+        # et finissaient en 500 « Erreur serveur » — un message qui envoie
+        # chercher une panne la ou il n'y a qu'une requete mal formee.
+        if not isinstance(history, list) or not all(isinstance(h, dict) for h in history):
+            return jsonify({"error": "Historique invalide"}), 400
         # Anti-spam message
         is_spam, reason = check_spam(user_msg)
         if is_spam:
@@ -5129,10 +5140,12 @@ def chat():
             system_chat = (MISTRAL_SYSTEM +
                 "\n\nCONNAISSANCE SENTINEL (CONSEILPREV) — extraits issus de la base documentaire, "
                 "de la veille reglementaire et des analyses de la plateforme :\n\n" + contexte +
-                "\n\nPrivilegiez ces extraits lorsqu'ils repondent a la question, et citez-les entre "
-                "crochets, par exemple [1]. N'inventez jamais un article, une date ou un chiffre. "
-                "Si les extraits ne suffisent pas, repondez avec vos connaissances generales en le "
-                "signalant, sans citer de source.")
+                "\n\nPrivilegiez ces extraits lorsqu'ils repondent a la question, mais SANS jamais "
+                "citer leur numero, leur titre ni aucune reference entre crochets : reformulez leur "
+                "contenu dans une reponse fluide, comme si vous le saviez deja. Le visiteur ne doit "
+                "jamais voir qu'une base documentaire existe derriere la reponse. N'inventez jamais "
+                "un article, une date ou un chiffre. Si les extraits ne suffisent pas, repondez avec "
+                "vos connaissances generales en le signalant.")
         ok, reply, model_used, divergence = ai_complete_cross_checked(
             messages, system=system_chat, max_tokens=800, temperature=0.7
         )
@@ -5144,8 +5157,12 @@ def chat():
         # Après caviardage, on renvoie le texte RÉELLEMENT transmis : l'utilisateur
         # doit voir ce qui est parti, et la suite de la conversation doit repartir
         # de cette version — sinon le tour suivant renverrait l'original en clair.
+        # `sources` n'est PAS renvoye : la liste des documents ayant servi a
+        # repondre est un detail d'implementation, et l'envoyer au navigateur
+        # l'exposerait encore (onglet reseau) meme sans etre affichee.
+        # `connaissance` reste : c'est un booleen, il ne nomme aucune source.
         return jsonify({"reply": reply, "model": model_used, "divergence": divergence,
-                        "sources": sources, "connaissance": bool(contexte),
+                        "connaissance": bool(contexte),
                         "envoye": user_msg if mode_min == 'masquer' else None})
     except requests.Timeout:
         return jsonify({"error": "Délai dépassé, réessayez"}), 504
@@ -5372,14 +5389,51 @@ _ROUTE_DE_FICHIER = {f: r for r, f in list(PAGES.items()) + list(PAGES_RESERVEES
 @app.route('/api/chat/claude', methods=['POST'])
 @rate_limit(limit=20, window=60)
 def chat_claude():
-    """Proxy Anthropic Claude pour le chatbot Sentinel AI."""
+    """Proxy Anthropic Claude pour le chatbot Sentinel AI.
+
+    IL ETAIT OUVERT, ET SON JUMEAU NE L'ETAIT PAS. `/api/mistral/proxy` rend le
+    meme service — relayer un moteur en gardant la cle cote serveur — et il est
+    reserve aux clients authentifies, avec ses entrees validees. Celui-ci
+    n'avait qu'un plafond de debit : n'importe qui pouvait poster ses propres
+    `system` et `messages`, choisir son `model`, et faire ecrire Claude aux
+    frais du compte Anthropic du site. Vingt requetes par minute et par
+    adresse, sans compte, c'est une API offerte, pas un chatbot.
+
+    Les seuls appelants sont les pages de `sentinel.page.js`, servies par
+    `/sentinel` qui exige deja une session : le resserrement ne retire l'acces
+    a personne qui l'utilisait.
+
+    LE MODELE N'EST PLUS CHOISI PAR L'APPELANT. Il ne l'a jamais ete en
+    pratique — les deux appelants demandent le meme — et le laisser au client
+    revenait a lui laisser choisir le tarif a la ligne.
+
+    LA SESSION EST VERIFIEE DANS LE CORPS, et non par `@sentinel_login_required`
+    comme son jumeau : ce decorateur est defini un millier de lignes plus bas,
+    et l'appliquer ici leverait au chargement du module. Le nom, lui, se resout
+    a l'appel. La regle qui compte porte sur le COMPORTEMENT — un appelant sans
+    session recoit 401 — et non sur la forme du garde.
+    """
     import os, json as _json
+    if not sentauth_current_client():
+        return jsonify({"error": "Authentification requise."}), 401
     try:
-        data = request.get_json(force=True) or {}
-        model    = data.get('model', 'claude-sonnet-4-6')
-        system   = data.get('system', '')
+        data = request.get_json(silent=True) or {}
+        model    = CHAT_CLAUDE_MODELE
+        system   = str(data.get('system', ''))[:20000]
         messages = data.get('messages', [])
-        max_tok  = min(int(data.get('max_tokens', 550)), 1000)
+        if not isinstance(messages, list) or not messages:
+            return jsonify({"error": "messages requis"}), 400
+        propres = []
+        for m in messages[-12:]:
+            if isinstance(m, dict) and m.get('role') in ('user', 'assistant') and m.get('content'):
+                propres.append({'role': m['role'], 'content': str(m['content'])[:6000]})
+        if not propres:
+            return jsonify({"error": "messages invalides"}), 400
+        messages = propres
+        try:
+            max_tok = max(1, min(int(data.get('max_tokens', 550)), 1000))
+        except (TypeError, ValueError):
+            max_tok = 550
 
         ANTHROPIC_KEY = os.environ.get('ANTHROPIC_API_KEY', '')
         if not ANTHROPIC_KEY:
@@ -5407,7 +5461,11 @@ def chat_claude():
             result = _json.loads(r.read().decode('utf-8'))
         return jsonify(result)
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        # Le message d'exception partait au navigateur : il porte l'URL
+        # appelee, le corps refuse par le fournisseur, parfois le nom d'un
+        # en-tete. Il reste au journal, il ne sort plus.
+        logger.error(f"CHAT_CLAUDE_ERROR: {e}")
+        return jsonify({"error": "Service IA temporairement indisponible"}), 502
 
 
 # ══════════════════════════════════════════════════════════

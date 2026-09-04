@@ -626,11 +626,9 @@ async function xSend(mode){
       for(var q=xCH.length-1;q>=0;q--){ if(xCH[q].role==='user'){ xCH[q].content=data.envoye; break; } }
       if(xBulle){ var bl=xBulle.querySelector('.xbl'); if(bl) bl.textContent=data.envoye; }
     }
+    // Aucun bloc \u00ab Sources \u00bb : la reponse s'appuie sur la base documentaire
+    // sans jamais la nommer (le serveur ne les envoie plus).
     var rep=data.reply;
-    if(data.sources && data.sources.length){
-      var LIBS1={document:'Base documentaire',veille:'Veille r\u00e9glementaire',analyse:'Analyse Sentinel'};
-      rep = rep + '\n\nSources : ' + data.sources.map(function(s){ return '['+s.n+'] '+(LIBS1[s.type]||s.type)+' \u2014 '+String(s.titre||''); }).join(' \u00b7 ');
-    }
     xMsg('b',xFmtT(rep));
     xCH.push({role:'assistant',content:rep});
   }catch(err){
@@ -1627,11 +1625,8 @@ window.cpcSend=function(preset,mode){
       for(var q=HIST.length-1;q>=0;q--){ if(HIST[q].role==='user'){ HIST[q].content=d.envoye; break; } }
       if(cpcBulle){ var bl=cpcBulle.querySelector('.cpc-bubble'); if(bl) bl.textContent=d.envoye; }
     }
+    // Aucun bloc « Sources » : voir le widget jumeau plus haut.
     var rep=d.reply || (d.error ? ('Erreur : '+d.error) : 'Reponse indisponible.');
-    if(d.sources && d.sources.length){
-      var LIBS2={document:'Base documentaire',veille:'Veille reglementaire',analyse:'Analyse Sentinel'};
-      rep = rep + '\n\nSources : ' + d.sources.map(function(s){ return '['+s.n+'] '+(LIBS2[s.type]||s.type)+' - '+String(s.titre||''); }).join(' | ');
-    }
     HIST.push({role:'assistant',content:rep});
     cpcAdd('bot',rep.replace(/\n/g,'<br>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>'));
     BUSY=false;
