@@ -62,6 +62,10 @@ body{font-family:var(--sans);background:var(--bg);color:var(--ink);min-height:10
 .consent-row input{margin-top:3px;flex-shrink:0}
 .consent-row label{font-size:11px;color:var(--ink2);line-height:1.5}
 .consent-row a{color:var(--accent);text-decoration:none}
+/* Mention d'information : rien à cocher, donc pas de case à aligner. */
+.lg-rgpd{font-size:11px;color:var(--ink2);line-height:1.6;margin:0 0 16px}
+.lg-rgpd a{color:var(--accent);text-decoration:none}
+.consent-info{display:block;font-size:11px;color:var(--ink2);line-height:1.6;margin-bottom:20px}
 .btn{width:100%;padding:12px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px;transition:background .15s}
 .btn:hover{background:var(--accent2)}
 .btn:disabled{opacity:.6;cursor:default}
@@ -224,6 +228,20 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
           <label class="label">Adresse email</label>
           <input type="email" id="forgot-email" class="input" placeholder="vous@entreprise.com" required>
         </div>
+        <!-- Information RGPD (art. 13). Ce formulaire ne fait qu'agir sur un
+             compte existant : plutôt que de lui écrire une exemption dans la
+             règle — une exemption se démode et personne ne la relit —, il
+             porte la mention comme les autres. Une exemption de moins vaut
+             mieux qu'un cas particulier de plus. -->
+        <p class="rgpd-mention lg-rgpd">
+          Votre adresse sert uniquement à vous envoyer le lien de
+          réinitialisation et à vérifier l'existence du compte (exécution du
+          contrat, art. 6.1.b RGPD) ; le lien expire, et l'adresse n'est
+          conservée que le temps du compte. Elle ne sert à aucune prospection à
+          ce titre. Droits d'accès, de rectification, d'effacement et
+          d'opposition — voir la
+          <a href="/protection-donnees" target="_blank" rel="noopener">politique de protection des données</a>.
+        </p>
         <button type="submit" class="btn" id="forgot-btn">Envoyer le lien</button>
         <div class="error" id="forgot-error"></div>
         <div class="success" id="forgot-success" style="display:none;font-size:13px;color:var(--green);margin-top:12px;text-align:center;line-height:1.6">✅ Si un compte existe avec cet email, vous recevrez un lien de réinitialisation.</div>
@@ -267,10 +285,16 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
           <span class="captcha-question" id="captcha-question">…</span>
           <input type="number" class="captcha-input" id="captcha-answer-reg" placeholder="?">
         </div>
-        <div class="consent-row">
-          <input type="checkbox" id="rgpd-consent-reg">
-          <label for="rgpd-consent-reg">J'accepte que mes données soient traitées par CONSEILPREV, conformément à la <a href="/protection-donnees" target="_blank">politique de confidentialité</a>.</label>
-        </div>
+      <!-- Information RGPD (art. 13) — la case obligatoire est partie. Elle
+             invoquait le CONSENTEMENT là où créer un compte relève de
+             l'exécution du contrat et des mesures précontractuelles (art. 6.1.b) ;
+             un consentement se retire (art. 7.3), et il aurait alors fallu fermer
+             un compte qu'on a le droit de tenir. Et un consentement exigé pour
+             envoyer n'est pas libre (art. 7.4), donc invalide. Ce qu'il faut ici
+             est une INFORMATION, délivrée au moment de la collecte. -->
+        <p class="consent-row consent-info rgpd-mention">
+          <span>Vos données servent à créer et à tenir votre compte (exécution du contrat et mesures précontractuelles, art. 6.1.b RGPD) et sont conservées le temps du compte, puis trois ans après sa clôture. Votre adresse professionnelle peut servir à vous adresser nos actualités et invitations (intérêt légitime, art. 6.1.f), pendant trois ans au plus à compter de notre dernier contact : vous pouvez vous y opposer à tout moment, sans avoir à vous justifier. Votre mot de passe n'est jamais connu de CONSEILPREV : seule son empreinte est conservée. Droits d'accès, de rectification, d'effacement et d'opposition — voir la <a href="/protection-donnees" target="_blank" rel="noopener">politique de protection des données</a>.</span>
+        </p>
         <button type="submit" class="btn" id="register-btn">Créer mon compte</button>
         <div class="error" id="register-error"></div>
         <div class="success" id="register-success">✅ Compte créé ! Vérifiez votre boîte mail pour confirmer votre adresse email avant de vous connecter.</div>

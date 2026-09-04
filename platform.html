@@ -96,6 +96,9 @@ h1 em{font-style:italic;background:linear-gradient(135deg,#a78bfa,#c084fc,#e879f
 .bf-consent input{width:18px;height:18px;margin-top:2px;accent-color:var(--teal);cursor:pointer;flex-shrink:0}
 .bf-consent-txt{font-size:12px;color:rgba(216,180,254,.78);line-height:1.65}
 .bf-consent-txt a{color:var(--teal);text-decoration:none}
+/* Mention d'information : même cadre, mais rien à cocher — donc pas de
+   curseur pointeur qui promettrait une action. */
+.bf-consent-info{cursor:default;margin:0 0 22px}
 .btn-launch{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#6d28d9,#9d6fe8,#d946ef);color:#fff;padding:14px 32px;border-radius:10px;font-size:15px;font-weight:700;font-family:"DM Sans",sans-serif;border:none;cursor:pointer;box-shadow:0 4px 22px rgba(217,70,239,.4);transition:all .18s}
 .btn-launch:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(217,70,239,.5)}
 .btn-launch:disabled{opacity:.55;cursor:not-allowed;transform:none}
@@ -651,10 +654,24 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
         <textarea class="bf-textarea" id="p-desc" placeholder="Contexte, enjeux, équipe, stack technique, livrables attendus..."></textarea>
       </div>
     </div>
-    <label class="bf-consent" for="bf-consent-cb">
-      <input type="checkbox" id="bf-consent-cb" required>
-      <span class="bf-consent-txt">J'accepte que mes données soient traitées par <strong>CONSEILPREV</strong> pour cette recherche de profil, conformément à la <a href="/protection-donnees" target="_blank">politique de protection des données</a> (Art. 6.1.a RGPD). Confidentialité totale garantie sur vos projets et stratégies SI. <span style="color:#f87171">*</span></span>
-    </label>
+    <!-- Information RGPD (art. 13) — la case obligatoire est partie : elle
+         invoquait le CONSENTEMENT (art. 6.1.a) là où traiter une recherche de
+         profil relève des mesures précontractuelles (art. 6.1.b), et un
+         consentement exigé pour envoyer n'est pas libre (art. 7.4), donc
+         invalide. Ce qu'il faut ici est une INFORMATION. -->
+    <p class="bf-consent bf-consent-info rgpd-mention">
+      <span class="bf-consent-txt">
+        Les informations transmises servent uniquement à traiter votre recherche de
+        profil (mesures précontractuelles, art. 6.1.b RGPD) et sont conservées
+        24 mois au plus. Votre adresse professionnelle peut ensuite servir à vous
+        adresser nos actualités et invitations (intérêt légitime, art. 6.1.f),
+        pendant trois ans au plus à compter de notre dernier contact : vous pouvez
+        vous y opposer à tout moment, sans avoir à vous justifier. Confidentialité
+        totale garantie sur vos projets et stratégies SI. Droits d'accès, de
+        rectification, d'effacement et d'opposition — voir la
+        <a href="/protection-donnees" target="_blank" rel="noopener">politique de protection des données</a>.
+      </span>
+    </p>
     <div style="display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap">
       <button type="button" class="btn-sec" onclick="goStep(1)">← Retour</button>
       <button type="submit" class="btn-launch">🤖 Lancer la recherche IA →</button>

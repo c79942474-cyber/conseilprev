@@ -2913,6 +2913,10 @@ footer{
 .consent-label a{color:var(--teal,#5eead4);text-decoration:none}
 .consent-label a:hover{text-decoration:underline}
 .consent-label .req{color:#f87171;margin-left:3px;font-size:13px}
+/* Mention d'information (art. 13) : même cadre que l'ancien bloc de consentement,
+   mais rien à cocher — donc pas de curseur qui promettrait une action. */
+.consent-info{margin:0 0 18px}
+.consent-info .consent-label{cursor:default}
 
 /* Source select */
 .pf-source label{
@@ -4824,19 +4828,35 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 
 
 
-      <!-- ── Consentement RGPD ── -->
-      <label class="consent-block" for="pf-consent">
-        <input type="checkbox" id="pf-consent" name="consent" required>
+      <!-- ── Information RGPD (art. 13) ──
+           La case « J'accepte que mes données soient traitées », obligatoire pour
+           pouvoir envoyer, cumulait deux défauts : elle invoquait le CONSENTEMENT
+           (art. 6.1.a) là où traiter une demande de contact relève des mesures
+           précontractuelles (art. 6.1.b) — un consentement se retire (art. 7.3),
+           et il aurait fallu effacer une demande qu'on a le droit de conserver ;
+           et un consentement exigé pour envoyer n'est pas libre (art. 7.4), donc
+           invalide. Ce qu'il faut ici est une INFORMATION, pas une case.
+           La prospection qui suit s'appuie sur l'intérêt légitime (art. 6.1.f),
+           annoncé ici avec le droit d'opposition qui en est la contrepartie. -->
+      <p class="consent-block consent-info rgpd-mention">
         <span class="consent-label">
-          J'accepte que mes données soient traitées par <strong>CONSEILPREV</strong> dans le cadre de ma demande de contact, conformément à la <a href="/confidentialite" target="_blank" rel="noopener">politique de confidentialité</a>. Aucune donnée n'est partagée avec des tiers. <span class="req">*</span>
+          Les informations transmises servent uniquement à traiter votre demande
+          (mesures précontractuelles, art. 6.1.b RGPD) et sont conservées 12 mois au
+          plus. Votre adresse professionnelle peut ensuite servir à vous adresser nos
+          actualités et invitations (intérêt légitime, art. 6.1.f),
+          pendant trois ans au plus à compter de notre dernier contact : vous pouvez vous y
+          opposer à tout moment, sans avoir à vous justifier. Aucune donnée n'est
+          partagée avec des tiers. Droits d'accès, de rectification, d'effacement et
+          d'opposition — voir la
+          <a href="/confidentialite" target="_blank" rel="noopener">politique de confidentialité</a>.
           <span class="consent-rgpd-refs">
-            <span class="rgpd-tag">Art. 6.1.a — Consentement</span>
-            <span class="rgpd-tag">Art. 7.1 — Preuve du consentement</span>
+            <span class="rgpd-tag">Art. 6.1.b — Mesures précontractuelles</span>
+            <span class="rgpd-tag">Art. 6.1.f — Intérêt légitime</span>
             <span class="rgpd-tag">Art. 13 — Information</span>
-            <span class="rgpd-tag">Art. 17 — Droit à l'effacement</span>
+            <span class="rgpd-tag">Art. 21 — Opposition</span>
           </span>
         </span>
-      </label>
+      </p>
 
       <!-- ── Submit ── -->
       <button type="submit" class="pbtn">
@@ -5216,11 +5236,23 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
             <input type="email" id="ft-nl-email" class="ft-nl-input" data-i18n-ph="ft.nl.ph" placeholder="Votre email professionnel" required>
             <button type="submit" class="ft-nl-btn" data-i18n="ft.nl.btn">S'inscrire →</button>
           </div>
-          <label class="ft-nl-check">
-            <input type="checkbox" checked>
-            <span data-i18n="ft.nl.check">Recevoir la newsletter hebdomadaire avec les dernières actualités IA &amp; conformité</span>
-          </label>
-          <p class="ft-nl-note" data-i18n="ft.nl.note">Email professionnel requis. Désinscription possible à tout moment.</p>
+          <!-- LA CASE PRÉ-COCHÉE EST PARTIE. Une case cochée d'avance ne
+               recueille aucun consentement : il faut un acte positif de la
+               personne (CJUE, Planet49, C-673/17). Et elle ne servait à rien
+               ici — elle ne faisait que répéter l'objet du formulaire, que
+               remplir et envoyer suffit à demander : c'est l'inscription
+               elle-même qui est l'acte positif.
+               ICI, ET SEULEMENT ICI, LA BASE EST BIEN LE CONSENTEMENT. Ailleurs
+               sur le site la prospection s'appuie sur l'intérêt légitime, parce
+               qu'elle vise une adresse professionnelle recueillie à l'occasion
+               d'une demande. Une lettre d'information ouverte à quiconque peut
+               atteindre l'adresse personnelle d'une personne physique, et
+               l'article L. 34-5 du code des postes et des communications
+               électroniques interdit alors la prospection par courriel « qui
+               n'a pas exprimé préalablement son consentement ». S'inscrire est
+               cet acte ; le dire autrement serait se réclamer d'une base que
+               la loi refuse dans ce cas. -->
+          <p class="ft-nl-note rgpd-mention">Newsletter hebdomadaire : actualités IA et conformité. En vous inscrivant, vous consentez à la recevoir (art. 6.1.a RGPD, art. L. 34-5 CPCE) : ce consentement se retire en un clic dans chaque envoi, ou sur simple demande. Votre adresse ne sert qu'à cet envoi, n'est ni revendue ni cédée, et est conservée jusqu'à votre désinscription. Droits d'accès, de rectification, d'effacement et d'opposition — voir la <a href="/confidentialite">politique de confidentialité</a>.</p>
           <div class="ft-nl-status" id="ft-nl-status"></div>
         </form>
       </div>

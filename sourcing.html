@@ -690,21 +690,25 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
         <label for="sf-profil">Quel profil recherchez-vous ? *</label>
         <textarea class="tf-profil-field" id="sf-profil" rows="3" placeholder="Ex : Data Scientist senior, expérience LLM, connaissance IA Act requise..." required></textarea>
       </div>
-            <!-- Consentement RGPD -->
-      <label class="sf-consent" for="sf-consent-cb">
-        <input type="checkbox" id="sf-consent-cb" required>
-        <span class="sf-consent-txt">
-          J'accepte que mes données soient traitées par <strong>CONSEILPREV</strong>
-          dans le cadre de ma demande de sourcing, conformément à la
-          <a href="/protection-donnees" target="_blank" rel="noopener">politique de protection des données</a>.
-          Conservation : <strong>24 mois</strong> max.&nbsp;<span style="color:#f87171">*</span>
-          <div class="sf-consent-tags">
-            <span class="sf-consent-tag">Art. 6.1.a — Consentement</span>
-            <span class="sf-consent-tag">Art. 7.1 — Preuve</span>
-            <span class="sf-consent-tag">Art. 17 — Effacement</span>
-          </div>
+      <!-- Information RGPD (art. 13) — voir business-developer.html pour le
+           raisonnement : traiter une demande de sourcing relève des mesures
+           précontractuelles, pas du consentement, et un consentement exigé
+           pour envoyer le formulaire n'est pas libre. -->
+      <p class="sf-consent-txt rgpd-mention">
+        Les informations transmises servent uniquement à traiter votre demande
+        (mesures précontractuelles, art. 6.1.b RGPD) et sont conservées 24 mois au
+        plus. Votre adresse professionnelle peut ensuite servir à vous adresser nos
+        actualités et invitations (intérêt légitime, art. 6.1.f),
+        pendant trois ans au plus à compter de notre dernier contact : vous pouvez vous y
+        opposer à tout moment, sans avoir à vous justifier. Droits d'accès, de
+        rectification, d'effacement et d'opposition — voir la
+        <a href="/protection-donnees" target="_blank" rel="noopener">politique de protection des données</a>.
+        <span class="sf-consent-tags">
+          <span class="sf-consent-tag">Art. 6.1.b — Mesures précontractuelles</span>
+          <span class="sf-consent-tag">Art. 6.1.f — Intérêt légitime</span>
+          <span class="sf-consent-tag">Art. 21 — Opposition</span>
         </span>
-      </label>
+      </p>
 
       <button type="submit" class="tf-submit" id="sf-submit">
         <span class="tf-dot"></span>

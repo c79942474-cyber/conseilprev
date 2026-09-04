@@ -97,6 +97,13 @@ label.fl span{color:var(--pf)}
 /* reCAPTCHA notice */
 .recaptcha-note{font-size:11px;color:rgba(212,186,255,.4);line-height:1.6;margin-bottom:18px;font-family:"Space Mono",monospace}
 .recaptcha-note a{color:var(--teal);text-decoration:none}.recaptcha-note a:hover{text-decoration:underline}
+/* Mention d'information RGPD (art. 13) : lisible, pas décorative — c'est
+   l'information légale de la collecte, elle ne se met pas en gris pâle. */
+.sp-rgpd{font-size:12px;color:rgba(216,180,254,.72);line-height:1.7;margin:0 0 18px;
+  background:rgba(216,180,254,.07);border:1px solid rgba(216,180,254,.18);
+  border-radius:10px;padding:14px 16px}
+.sp-rgpd a{color:var(--teal);text-decoration:none}.sp-rgpd a:hover{text-decoration:underline}
+.sp-rgpd .consent-rgpd-refs{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 /* Boutons */
 .btn-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .btn-submit{background:linear-gradient(135deg,#8b5cf6,#d946ef);color:#fff;border:none;padding:13px 28px;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;font-family:"DM Sans",sans-serif;transition:all .18s;box-shadow:0 4px 20px rgba(139,92,246,.4)}
@@ -1483,6 +1490,30 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
         de Google s'appliquent.
       </div>
 
+      <!-- Information RGPD (art. 13) — le formulaire ne demande RIEN à cocher :
+           traiter une demande d'assistance relève des mesures précontractuelles
+           ou de l'exécution du contrat (art. 6.1.b), pas du consentement, et un
+           consentement exigé pour envoyer ne serait pas libre (art. 7.4). La
+           prospection qui peut suivre s'appuie sur l'intérêt légitime (art. 6.1.f),
+           annoncé ici avec le droit d'opposition qui en est la contrepartie. -->
+      <p class="rgpd-mention sp-rgpd">
+        Les informations transmises servent uniquement à traiter votre demande
+        (mesures précontractuelles ou exécution du contrat, art. 6.1.b RGPD) et sont
+        conservées 12 mois au plus après le dernier échange. Votre adresse
+        professionnelle peut ensuite servir à vous adresser nos actualités et
+        invitations (intérêt légitime, art. 6.1.f), pendant trois ans au plus à
+        compter de notre dernier contact : vous pouvez vous y opposer à tout moment,
+        sans avoir à vous justifier. Aucune donnée n'est partagée avec des tiers.
+        Droits d'accès, de rectification, d'effacement et d'opposition — voir la
+        <a href="/confidentialite" target="_blank" rel="noopener">politique de confidentialité</a>.
+        <span class="consent-rgpd-refs">
+          <span class="rgpd-tag">Art. 6.1.b — Mesures précontractuelles</span>
+          <span class="rgpd-tag">Art. 6.1.f — Intérêt légitime</span>
+          <span class="rgpd-tag">Art. 13 — Information</span>
+          <span class="rgpd-tag">Art. 21 — Opposition</span>
+        </span>
+      </p>
+
       <!-- Boutons -->
       <div class="btn-row">
         <button type="submit" class="btn-submit" id="sp-submit">
@@ -1543,7 +1574,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div class="info-card">
       <div class="info-card-title">🔒 Confidentialité</div>
       <div class="info-card-body">
-        Vos données sont traitées conformément au <strong>RGPD</strong>. Aucune donnée partagée avec des tiers. Conservation : 13 mois max. Contact DPO : <a href="mailto:christophe.cerf@outlook.com" style="color:var(--teal)">christophe.cerf@outlook.com</a>
+        Vos données sont traitées conformément au <strong>RGPD</strong>. Aucune donnée partagée avec des tiers. Conservation : 12 mois après le dernier échange ; trois ans au plus pour la prospection, à compter du dernier contact. Contact DPO : <a href="mailto:christophe.cerf@outlook.com" style="color:var(--teal)">christophe.cerf@outlook.com</a>
       </div>
     </div>
     <div class="info-card">

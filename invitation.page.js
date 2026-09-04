@@ -85,11 +85,9 @@ document.getElementById('invitation-form').addEventListener('submit', function(e
     errEl.style.display = 'block';
     return;
   }
-  if(!document.getElementById('rgpd-consent').checked){
-    errEl.textContent = 'Vous devez accepter la politique de confidentialité pour continuer.';
-    errEl.style.display = 'block';
-    return;
-  }
+  // Aucune case à cocher : activer un accès relève de l'exécution du contrat
+  // (art. 6.1.b), et un consentement exigé pour envoyer ne serait pas libre
+  // (art. 7.4). La page porte une mention d'information (art. 13).
 
   btn.disabled = true;
   btn.textContent = 'Activation…';
@@ -99,7 +97,6 @@ document.getElementById('invitation-form').addEventListener('submit', function(e
     body: JSON.stringify({
       token: token,
       password: passwordEl.value,
-      rgpd_consent: document.getElementById('rgpd-consent').checked,
       captcha_answer: document.getElementById('captcha-answer').value
     })
   }).then(function(r){ return r.json().then(function(d){ return {status:r.status, data:d}; }); })

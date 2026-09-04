@@ -60,6 +60,8 @@ body{font-family:var(--sans);background:var(--bg);color:var(--ink);min-height:10
 .consent-row input{margin-top:3px;flex-shrink:0}
 .consent-row label{font-size:11.5px;color:var(--ink2);line-height:1.5}
 .consent-row a{color:var(--accent);text-decoration:none}
+/* Mention d'information : rien à cocher, donc pas de case à aligner. */
+.consent-info{display:block;font-size:11.5px;color:var(--ink2);line-height:1.6;margin-bottom:20px}
 .btn{width:100%;padding:12px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;transition:background .15s}
 .btn:hover{background:var(--accent2)}
 .btn:disabled{opacity:.5;cursor:default}
@@ -225,10 +227,16 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
         <input type="number" class="captcha-input" id="captcha-answer" placeholder="?">
       </div>
 
-      <div class="consent-row">
-        <input type="checkbox" id="rgpd-consent">
-        <label for="rgpd-consent">J'accepte que mes données soient traitées par CONSEILPREV dans le cadre de l'utilisation de Sentinel AI, conformément à la <a href="/protection-donnees" target="_blank">politique de confidentialité</a>.</label>
-      </div>
+      <!-- Information RGPD (art. 13) — la case obligatoire est partie. Elle
+           invoquait le CONSENTEMENT là où activer un accès relève de
+           l'exécution du contrat et des mesures précontractuelles (art. 6.1.b) ;
+           un consentement se retire (art. 7.3), et il aurait alors fallu fermer
+           un compte qu'on a le droit de tenir. Et un consentement exigé pour
+           envoyer n'est pas libre (art. 7.4), donc invalide. Ce qu'il faut ici
+           est une INFORMATION, délivrée au moment de la collecte. -->
+      <p class="consent-row consent-info rgpd-mention">
+        <span>Vos données servent à ouvrir et à tenir votre accès à Sentinel AI (exécution du contrat, art. 6.1.b RGPD) et sont conservées le temps du compte, puis trois ans après sa clôture. Elles ne servent à aucune prospection sans que vous en soyez informé, et ne sont pas cédées. Votre mot de passe n'est jamais connu de CONSEILPREV : seule son empreinte est conservée. Droits d'accès, de rectification, d'effacement et d'opposition — voir la <a href="/protection-donnees" target="_blank" rel="noopener">politique de protection des données</a>.</span>
+      </p>
 
       <button type="submit" class="btn" id="submit-btn">Activer mon compte</button>
       <div class="error" id="error-msg"></div>

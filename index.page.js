@@ -209,23 +209,9 @@ document.addEventListener('DOMContentLoaded',function(){
 // scrollToPoles est attaché via onclick dans le HTML — pas besoin de wrapper
 
 
-function ftNlSubmit(e){
-  e.preventDefault();
-  var email=document.getElementById('ft-nl-email').value.trim();
-  var st=document.getElementById('ft-nl-status');
-  var at=email.indexOf('@');
-  if(at<1||email.indexOf('.',at)<at+2){
-    st.className='ft-nl-status err';
-    st.textContent=LANG==='en'?'Invalid email.':LANG==='de'?'Ungültige E-Mail.':'Email invalide.';
-    return;
-  }
-  var subj=encodeURIComponent('[CONSEILPREV] Newsletter IA');
-  var body=encodeURIComponent('Inscription newsletter:\nEmail: '+email);
-  window.open('mailto:christophe.cerf@outlook.com?subject='+subj+'&body='+body);
-  st.className='ft-nl-status ok';
-  st.textContent=LANG==='en'?'✅ Subscribed! Check your inbox.':LANG==='de'?'✅ Angemeldet!':'✅ Inscription enregistrée !';
-  e.target.reset();
-}
+/* ftNlSubmit vivait ICI en double, à l'identique — la seconde
+   définition écrasait celle-ci en silence. Une seule reste. */
+
 
 
 // ════════════════════════════════════════
@@ -253,7 +239,10 @@ function ftNlSubmit(e){
   var body=encodeURIComponent('Inscription newsletter:\nEmail: '+email);
   window.open('mailto:christophe.cerf@outlook.com?subject='+subj+'&body='+body);
   st.className='ft-nl-status ok';
-  st.textContent=LANG==='en'?'✅ Subscribed! Check your inbox.':LANG==='de'?'✅ Angemeldet!':'✅ Inscription enregistrée !';
+  /* CE MESSAGE MENTAIT. Rien n'est enregistré : on ouvre le client mail
+     du visiteur avec un brouillon. S'il ne l'envoie pas, il n'est
+     inscrit nulle part — et il croyait l'être. */
+  st.textContent=LANG==='en'?'✉️ Draft ready — send it to confirm.':LANG==='de'?'✉️ Entwurf bereit — zum Bestätigen senden.':'✉️ Votre demande est prête — envoyez l’email pour confirmer.';
   e.target.reset();
 }
 
@@ -1420,18 +1409,10 @@ document.addEventListener('keydown', function(e){
   form.addEventListener('submit', function(e){
     e.preventDefault();
 
-    // Consentement
-    var consent = document.getElementById('pf-consent');
-    if(consent && !consent.checked){
-      var block = consent.closest('.consent-block');
-      if(block){
-        block.style.cssText += ';border-color:rgba(248,113,113,.7)!important;background:rgba(239,68,68,.1);';
-        block.scrollIntoView({behavior:'smooth',block:'center'});
-        setTimeout(function(){ block.style.cssText=''; }, 2800);
-      }
-      pfStatus('error','⚠ Veuillez accepter les conditions de traitement de vos données.');
-      return;
-    }
+    // Aucune case de consentement à cocher : traiter une demande de contact
+    // relève des mesures précontractuelles (art. 6.1.b), et un consentement
+    // exigé pour envoyer ne serait pas libre (art. 7.4). Le formulaire porte
+    // une mention d'information (art. 13), pas une condition d'envoi.
 
     // Champs
     var v = function(id){ var e=document.getElementById(id); return e&&e.value?e.value.trim():''; };

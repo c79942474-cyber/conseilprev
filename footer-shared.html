@@ -102,11 +102,16 @@
             <input type="email" id="ft-nl-email" class="ft-nl-input" data-i18n-ph="ft.nl.ph" placeholder="Votre email professionnel" required>
             <button type="submit" class="ft-nl-btn" data-i18n="ft.nl.btn">S'inscrire →</button>
           </div>
-          <label class="ft-nl-check">
-            <input type="checkbox" checked>
-            <span data-i18n="ft.nl.check">Recevoir la newsletter hebdomadaire avec les dernières actualités IA &amp; conformité</span>
-          </label>
-          <p class="ft-nl-note" data-i18n="ft.nl.note">Email professionnel requis. Désinscription possible à tout moment.</p>
+          <!-- LA CASE PRÉ-COCHÉE EST PARTIE, comme dans le pied de page de
+               l'accueil : une case cochée d'avance ne recueille aucun
+               consentement (CJUE, Planet49, C-673/17), et elle ne faisait ici
+               que répéter l'objet du formulaire. C'est l'inscription qui est
+               l'acte positif. La base est bien le consentement — une lettre
+               d'information ouverte à quiconque peut atteindre l'adresse
+               personnelle d'une personne physique, et l'article L. 34-5 du code
+               des postes et des communications électroniques exige alors un
+               consentement préalable, que l'intérêt légitime ne remplace pas. -->
+          <p class="ft-nl-note rgpd-mention">Newsletter hebdomadaire : actualités IA et conformité. En vous inscrivant, vous consentez à la recevoir (art. 6.1.a RGPD, art. L. 34-5 CPCE) : ce consentement se retire en un clic dans chaque envoi, ou sur simple demande. Votre adresse ne sert qu'à cet envoi, n'est ni revendue ni cédée, et est conservée jusqu'à votre désinscription. Droits d'accès, de rectification, d'effacement et d'opposition — voir la <a href="/confidentialite">politique de confidentialité</a>.</p>
           <div class="ft-nl-status" id="ft-nl-status"></div>
         </form>
       </div>

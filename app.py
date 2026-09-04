@@ -8230,7 +8230,6 @@ def sentauth_activate_account():
     data = request.get_json(force=True) or {}
     token = (data.get('token') or '').strip()
     password = data.get('password') or ''
-    rgpd_consent = bool(data.get('rgpd_consent'))
     captcha_answer = data.get('captcha_answer')
 
     if session.get('captcha_token') != token:
@@ -8241,8 +8240,13 @@ def sentauth_activate_account():
     except (ValueError, TypeError):
         return jsonify({'error': 'Réponse de vérification invalide.'}), 400
 
-    if not rgpd_consent:
-        return jsonify({'error': 'Le consentement RGPD est requis pour activer votre compte.'}), 400
+    # AUCUN CONSENTEMENT N'EST EXIGE POUR ACTIVER UN ACCES. Activer un compte
+    # relève de l'exécution du contrat (art. 6.1.b) : le consentement n'est pas
+    # la base, et un consentement exigé pour aller plus loin n'est pas libre
+    # (art. 7.4), donc invalide. La page d'activation porte désormais une
+    # mention d'information (art. 13) au lieu d'une case. La colonne
+    # rgpd_consenti_date reste écrite : elle horodate la remise de cette
+    # information à la collecte, ce qui est la trace réellement due.
 
     ok, msg = sentauth_validate_password_strength(password)
     if not ok:
@@ -8622,7 +8626,6 @@ def sentauth_register():
     nom = (data.get('nom_entreprise') or '').strip()
     email = (data.get('email') or '').strip().lower()
     password = data.get('password') or ''
-    rgpd_consent = bool(data.get('rgpd_consent'))
     captcha_answer = data.get('captcha_answer')
     # Toute inscription publique est forcée au plan Gratuit.
     # Seul CONSEILPREV peut attribuer un plan supérieur via l'interface admin.
@@ -8636,8 +8639,12 @@ def sentauth_register():
 
     if not nom or not email or '@' not in email:
         return jsonify({'error': 'Nom d entreprise et email valide requis.'}), 400
-    if not rgpd_consent:
-        return jsonify({'error': 'Le consentement RGPD est requis pour créer un compte.'}), 400
+    # AUCUN CONSENTEMENT N'EST EXIGE POUR S'INSCRIRE — même raison qu'à
+    # l'activation : créer un compte relève de l'exécution du contrat et des
+    # mesures précontractuelles (art. 6.1.b), pas du consentement, et une case
+    # obligatoire pour s'inscrire n'aurait pas été un consentement libre
+    # (art. 7.4). La page porte la mention d'information (art. 13), et
+    # rgpd_consenti_date horodate sa remise.
 
     ok, msg = sentauth_validate_password_strength(password)
     if not ok:

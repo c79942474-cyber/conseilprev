@@ -177,11 +177,10 @@ document.getElementById('register-form').addEventListener('submit', function(e){
     errEl.style.display = 'block';
     return;
   }
-  if(!document.getElementById('rgpd-consent-reg').checked){
-    errEl.textContent = 'Vous devez accepter la politique de confidentialité pour continuer.';
-    errEl.style.display = 'block';
-    return;
-  }
+  // Aucune case à cocher : créer un compte relève de l'exécution du contrat et
+  // des mesures précontractuelles (art. 6.1.b), et un consentement exigé pour
+  // envoyer ne serait pas libre (art. 7.4). La page porte une mention
+  // d'information (art. 13).
 
   btn.disabled = true; btn.textContent = 'Création…';
 
@@ -191,7 +190,6 @@ document.getElementById('register-form').addEventListener('submit', function(e){
       nom_entreprise: document.getElementById('reg-nom').value.trim(),
       email: document.getElementById('reg-email').value.trim().toLowerCase(),
       password: passwordEl.value,
-      rgpd_consent: document.getElementById('rgpd-consent-reg').checked,
       captcha_answer: document.getElementById('captcha-answer-reg').value,
       plan: REQUESTED_PLAN
     })

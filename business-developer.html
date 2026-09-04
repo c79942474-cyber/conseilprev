@@ -481,18 +481,27 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
       </div>
 
 
-      <!-- ── Consentement RGPD candidature ── -->
-      <label class="af-consent" for="af-consent-cb">
-        <input type="checkbox" id="af-consent-cb" name="consent" required>
-        <span class="af-consent-txt">
-          J'accepte que mes données (dont mon <strong>CV</strong>) soient traitées par <strong>CONSEILPREV</strong> dans le cadre de ma candidature, conformément à la <a href="/protection-donnees" target="_blank" rel="noopener">politique de protection des données</a>. Conservation : <strong>24 mois</strong> max. <span class="req">*</span>
-          <div class="af-consent-tags">
-            <span class="af-consent-tag">Art. 6.1.a — Consentement</span>
-            <span class="af-consent-tag">Art. 7.1 — Preuve</span>
-            <span class="af-consent-tag">Art. 17 — Effacement</span>
-          </div>
+      <!-- ── Information RGPD candidature (art. 13) ──
+           CE N'EST PLUS UNE CASE, ET C'EST LE POINT. Une case « j'accepte que
+           mes données soient traitées », cochée obligatoirement pour pouvoir
+           postuler, cumulait deux défauts : elle invoquait le CONSENTEMENT
+           (art. 6.1.a) là où instruire une candidature relève des mesures
+           précontractuelles (art. 6.1.b) — un consentement se retire, et il
+           aurait fallu détruire un dossier qu'on a le droit de conserver
+           24 mois ; et un consentement exigé pour envoyer n'est pas libre
+           (art. 7.4), donc invalide. Ce qu'il faut ici est une INFORMATION. -->
+      <p class="af-consent-txt rgpd-mention">
+        Les informations et le CV transmis servent uniquement à instruire votre
+        candidature (mesures précontractuelles, art. 6.1.b RGPD) et sont conservés
+        24 mois au plus. Ils ne servent à aucune prospection. Droits d'accès, de
+        rectification, d'effacement et d'opposition — voir la
+        <a href="/protection-donnees" target="_blank" rel="noopener">politique de protection des données</a>.
+        <span class="af-consent-tags">
+          <span class="af-consent-tag">Art. 6.1.b — Mesures précontractuelles</span>
+          <span class="af-consent-tag">Art. 13 — Information</span>
+          <span class="af-consent-tag">Art. 15 à 21 — Droits</span>
         </span>
-      </label>
+      </p>
 
       <button type="submit" class="af-submit" id="af-submit">
         <span class="af-dot"></span>

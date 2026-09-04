@@ -122,14 +122,10 @@ setupSkills('soft-input','soft-wrap',SOFT_SKILLS);
 // ── Soumission brief ──
 document.getElementById('brief-form').addEventListener('submit', function(e){
   e.preventDefault();
-  var consent = document.getElementById('bf-consent-cb');
-  if(!consent.checked){
-    var block = consent.closest('.bf-consent');
-    block.classList.add('error');
-    block.scrollIntoView({behavior:'smooth',block:'center'});
-    setTimeout(function(){ block.classList.remove('error'); }, 2500);
-    return;
-  }
+  // Aucune case de consentement à cocher : une recherche de profil relève des
+  // mesures précontractuelles (art. 6.1.b), et un consentement exigé pour
+  // envoyer ne serait pas libre (art. 7.4). Le formulaire porte une mention
+  // d'information (art. 13), pas une condition d'envoi.
   var required = ['c-prenom','c-nom','c-email','c-entreprise','p-titre','p-domaine','p-contrat','p-tjm','p-lieu'];
   var missing = required.filter(function(id){ return !document.getElementById(id).value.trim(); });
   if(missing.length){
