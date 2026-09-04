@@ -35,7 +35,33 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
+      # CE FICHIER DÉSIGNAIT LA MAUVAISE BASE, ET C'ÉTAIT UN PIÈGE ARMÉ.
+      # Le 27 août 2026 à 9 h 07, une nouvelle base de registre a été créée
+      # (`conseilprevia-registre-db`) et le service a basculé dessus depuis le
+      # tableau de bord — la précédente a cessé d'être écrite six minutes plus
+      # tôt. Ce fichier, lui, continuait de désigner l'ancienne : une
+      # resynchronisation du blueprint aurait rebasculé le service dessus et
+      # fait disparaître d'un coup tout ce qui s'est écrit depuis. Corrigé ici
+      # pour que le fichier dise ce qui EST, et non ce qui était.
       - key: DATABASE_URL
+        fromDatabase:
+          name: conseilprevia-registre-db
+          property: connectionString
+
+      # L'ANCIENNE BASE, EN LECTURE, LE TEMPS DE LA REPRISE.
+      # La base de connaissance de l'assistant — 49 documents et leurs
+      # fragments indexés — est restée sur `conseilprev-registre-db` le jour de
+      # la bascule. L'assistant répond donc en production sans aucun ancrage
+      # documentaire. `outils/reprise_registre.py` recopie ce qui manque, sans
+      # jamais écraser une ligne vivante ; il lui faut l'adresse de la source.
+      #
+      # ELLE PASSE PAR `fromDatabase` ET NON PAR UNE VALEUR ÉCRITE ICI : Render
+      # injecte la chaîne de connexion lui-même, personne ne manipule le mot de
+      # passe, et rien de secret n'entre dans ce dépôt.
+      #
+      # À RETIRER UNE FOIS LA REPRISE FAITE ET VÉRIFIÉE. Une variable qui ouvre
+      # une seconde base n'a pas à survivre au besoin qui l'a créée.
+      - key: REGISTRE_ANCIEN_URL
         fromDatabase:
           name: conseilprev-registre-db
           property: connectionString
@@ -68,8 +94,26 @@ services:
 # pas le service : Render la fixe à la création. L'ajouter à une base en
 # service ne la déplacerait pas et ferait seulement échouer la synchronisation
 # du blueprint sur une propriété immuable.
+# CE BLOC NE DÉCRIVAIT AUCUNE BASE EXISTANTE. Il annonçait
+# `conseilprev-registre-db` avec `databaseName: registre_ia` et
+# `user: conseilprev` — or la base qui porte ce nom a pour base
+# `conseilprev_registre_db` et pour utilisateur
+# `conseilprev_registre_db_user`. Les valeurs déclarées ici étaient celles
+# d'une TROISIÈME base, `conseilprev-registre-db-k8k5`, en Oregon et
+# suspendue. Un blueprint qui décrit une base qui n'est pas celle qu'il nomme
+# est pire qu'un blueprint muet : il donne l'apparence d'une infrastructure
+# décrite.
+#
+# Les deux bases sont donc déclarées telles qu'elles sont, relevées le
+# 4 septembre 2026 dans le tableau de bord.
 databases:
+  - name: conseilprevia-registre-db
+    plan: basic-256mb
+    databaseName: conseilprevia_registre_db
+    user: conseilprevia_registre_db_user
+
+  # Conservée le temps de la reprise, puis à suspendre et à supprimer.
   - name: conseilprev-registre-db
-    plan: free
-    databaseName: registre_ia
-    user: conseilprev
+    plan: basic-256mb
+    databaseName: conseilprev_registre_db
+    user: conseilprev_registre_db_user
