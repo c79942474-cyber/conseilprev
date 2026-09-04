@@ -17,11 +17,30 @@
 # pas se faire depuis ce fichier.
 services:
   - type: web
-    name: conseilprev
+    # LE NOM NE DÉSIGNAIT AUCUN SERVICE VIVANT, ET C'EST CE QUI A FABRIQUÉ LE
+    # DOUBLON. Les services de ce dépôt s'appellent `conseilprevIA`,
+    # `conseilprev-k8k5` et `conseilprevinfo` ; le nom `conseilprev` est celui
+    # d'un CRON JOB. Lors d'une synchronisation, Render ne trouvait donc aucun
+    # service web à adopter sous ce nom, en créait un neuf, et lui accolait un
+    # suffixe aléatoire parce que le nom était déjà pris : c'est ainsi que sont
+    # nés `conseilprev-k8k5` et `conseilprev-registre-db-k8k5`, le 18 juillet
+    # 2026 à une minute d'intervalle. Le service a été suspendu le 4 septembre ;
+    # sans cette correction, la synchronisation suivante en aurait fabriqué un
+    # troisième.
+    name: conseilprevIA
     region: frankfurt
+    plan: standard
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app --worker-class gthread --threads 8 --timeout 90 --keep-alive 5
+    # LA COMMANDE DE DÉMARRAGE EST CELLE QUI TOURNE, pas une variante. Faire
+    # correspondre le nom rend le service ADOPTABLE par une synchronisation —
+    # et un fichier qui déclarerait autre chose que le réel écraserait alors le
+    # réel. Celle-ci était sur le point de le faire : elle omettait
+    # `--workers 2` (le service serait retombé à un seul processus) et fixait
+    # le délai à 90 s au lieu de 120 s. Relevé sur le service le 4 septembre
+    # 2026 ; le `plan: standard` ci-dessus est déclaré pour la même raison, un
+    # plan absent pouvant faire redescendre le service d'un cran.
+    startCommand: gunicorn app:app --worker-class gthread --workers 2 --threads 8 --timeout 120 --keep-alive 5
 
     # LA SONDE DE VIE, ET POURQUOI CE N'EST PAS `/api/health`. `/api/health`
     # est un diagnostic d'exploitant : 3,6 Ko de HTML, qui va vérifier la
@@ -30,6 +49,14 @@ services:
     # en panne pour une clé absente, alors qu'il sert parfaitement les pages.
     # `/health` ne répond qu'à la seule question qui vaut ici : ce processus
     # peut-il encore servir une requête.
+    #
+    # C'EST LA SEULE LIGNE QUI DIFFÈRE VOLONTAIREMENT DU RÉEL, et elle est
+    # signalée plutôt que glissée : le service n'a AUCUNE sonde de vie
+    # configurée à ce jour (relevé du 4 septembre 2026). Une synchronisation en
+    # ajouterait donc une — ce qui est un gain, Render redémarrant alors une
+    # instance qui ne répond plus au lieu de la laisser servir des erreurs.
+    # Tout le reste de ce bloc décrit ce qui tourne ; celle-ci décrit ce qui
+    # devrait tourner, et le dit.
     healthCheckPath: /health
 
     envVars:
