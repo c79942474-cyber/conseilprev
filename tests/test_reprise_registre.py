@@ -231,6 +231,64 @@ def test_l_outil_n_ecrase_jamais_et_ne_supprime_rien():
     assert "DROP " not in OUTIL.upper()
 
 
+# ══════════════════════════════════════════════════════════════════════════
+# 7. LE SCRIPT DE NETTOYAGE — gardé, parce qu'un TRUNCATE ne se rejoue pas
+# ══════════════════════════════════════════════════════════════════════════
+
+NETTOYAGE = io.open(os.path.join(ICI, "outils", "reprise_nettoyer_rag.py"),
+                    encoding="utf-8").read()
+
+
+def test_le_nettoyage_est_a_sec_par_defaut():
+    """Sans `--vider`, il compte et n'écrit rien. Le TRUNCATE doit être gardé
+    par le drapeau — un nettoyage qui agit par défaut est un accident qui
+    attend son heure."""
+    i = NETTOYAGE.index("def main(")
+    corps = NETTOYAGE[i:]
+    assert 'vider = "--vider" in sys.argv' in corps, corps[:200]
+    j = corps.index("TRUNCATE")
+    # Entre le début de main et le TRUNCATE, il y a le garde `if not vider`.
+    assert "if not vider:" in corps[:j], "le TRUNCATE n'est pas gardé par --vider"
+
+
+def test_le_nettoyage_refuse_de_vider_la_source():
+    """La source de la reprise ne doit JAMAIS être vidée — ce serait effacer le
+    corpus qu'on s'apprête à recopier. Le garde compare au nom de l'ancienne
+    base."""
+    assert 'SOURCE_INTERDITE = "conseilprev_registre_db"' in NETTOYAGE, NETTOYAGE[:400]
+    i = NETTOYAGE.index("def main(")
+    corps = NETTOYAGE[i:]
+    assert "== SOURCE_INTERDITE" in corps, corps
+    # Le refus doit précéder tout TRUNCATE.
+    assert corps.index("SOURCE_INTERDITE") < corps.index("TRUNCATE"), corps
+
+
+def test_le_nettoyage_ne_touche_que_les_deux_tables_du_rag():
+    """Il ne doit nommer aucune autre table. Un nettoyage qui déborde de son
+    périmètre est le contraire d'un nettoyage."""
+    assert 'TABLES_RAG = ("rag_chunks", "rag_documents")' in NETTOYAGE, NETTOYAGE[:600]
+    import re as _re
+    # Uniquement le SQL RÉELLEMENT exécuté (cur.execute("TRUNCATE ...")), pas
+    # les mentions du mot dans les commentaires.
+    cibles = _re.findall(r'cur\.execute\("TRUNCATE ([^"]+)"', NETTOYAGE)
+    assert cibles, "aucun TRUNCATE exécuté trouvé"
+    for c in cibles:
+        for mot in c.replace(",", " ").split():
+            if mot in ("RESTART", "IDENTITY", "CASCADE"):
+                continue
+            assert mot in ("rag_chunks", "rag_documents"), (
+                "le TRUNCATE vise autre chose que le RAG : %r" % mot)
+
+
+def test_le_nettoyage_dit_a_quelle_base_il_parle():
+    """Le nom de la base est imprimé avant tout : une erreur d'adresse doit se
+    voir, pas se subir."""
+    i = NETTOYAGE.index("def main(")
+    corps = NETTOYAGE[i:]
+    assert "current_database" in corps, corps[:400]
+    assert corps.index("current_database") < corps.index('cur.execute("TRUNCATE'), corps
+
+
 def test_la_source_n_est_jamais_ecrite():
     """Elle est lue, et c'est tout — la reprise ne doit pas abîmer ce qu'elle
     copie, ni empêcher un second essai."""
