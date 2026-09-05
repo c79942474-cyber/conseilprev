@@ -687,7 +687,7 @@ body.embed .gp-carte{bottom:auto;top:var(--gp-bas,auto)}
 .fin-dos-g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
   gap:12px 18px;align-items:start}
 .fin-dos-g > table,.fin-dos-g > h4,.fin-dos-g > .fin-phases,
-.fin-dos-g > .fin-ecart,.fin-dos-g > .fai{grid-column:1/-1}
+.fin-dos-g > .fin-ecart,.fin-dos-g > .fai,.fin-dos-g > .bc{grid-column:1/-1}
 /* L'AVIS TIENT TOUTE LA LARGEUR — c'est la conclusion, elle se lit d'abord —
    mais SES CONSTATS s'empilaient sur six lignes pleines : le plus long bloc
    du dossier, et celui qu'on parcourt le plus vite. Ils passent en colonnes à
@@ -697,7 +697,13 @@ body.embed .gp-carte{bottom:auto;top:var(--gp-bas,auto)}
 @media (max-width:1100px){.fin-dos-g .fai-c{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:760px){.fin-dos-g .fai-c{grid-template-columns:1fr}}
 @media (max-width:1100px){.fin-dos-g{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:760px){.fin-dos-g{grid-template-columns:1fr}}
+/* `minmax(0,1fr)` ET NON `1fr` — MESURÉ AU TÉLÉPHONE. `1fr` vaut
+   `minmax(auto,1fr)` : la piste refuse alors de descendre sous la largeur
+   minimale de son contenu, et à 390 px le dossier tout entier — l'indice, le
+   verdict, le business case — s'étalait sur 555 à 584 px dans une grille de
+   336. Rien ne le signalait : la page ne défilait pas latéralement, un
+   ancêtre rognait, et la droite des blocs était simplement absente. */
+@media (max-width:760px){.fin-dos-g{grid-template-columns:minmax(0,1fr)}}
 
 /* ── L'assiette du barème, à l'écran avant le calcul ───────────────────── */
 /* JETONS QUI EXISTENT VRAIMENT. Mon premier jet employait --ink2 et --rule2 :
@@ -2667,8 +2673,12 @@ th .fl{font-size:9px;margin-left:3px}
      tableau — parce que c'est la MÊME lecture, faite plus tôt. Un troisième
      langage visuel pour un troisième bloc de la même page ferait croire à
      trois outils, alors qu'il y en a un. */
+  /* `min-width:0` PARCE QUE C'EST UNE CASE DE GRILLE. Sans lui, sa largeur
+     minimale reste celle de son contenu le plus large — le tableau — et la
+     case déborde de la grille au lieu de rétrécir. Mesuré à 390 px : 555 px
+     de bloc dans une grille de 336. */
   .bc{margin:22px 0 0;padding:18px 20px;border:1px solid var(--rule);border-radius:4px;
-    background:var(--white)}
+    background:var(--white);min-width:0}
   .bc-t{margin:0 0 12px;font-size:16px}
   .bc-vide{margin:0;color:var(--ink-3)}
   .bc-kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
@@ -2678,7 +2688,18 @@ th .fl{font-size:9px;margin-left:3px}
   .bc-c .n{font-size:11.5px;color:var(--ink-3);line-height:1.45}
   .bc-eq{margin:12px 0 0;font-size:12.5px;color:var(--ink-3);font-variant-numeric:tabular-nums}
   .bc-fx{margin:8px 0 0;font-size:13px}
-  .bc-tab{width:100%;border-collapse:collapse;margin:14px 0 0;font-size:13px}
+  .bc-tab caption{caption-side:top;text-align:left;font-size:12px;color:var(--ink-3);
+    padding:0 0 6px}
+  .bc-tab th[scope=row]{text-align:left;font-weight:600}
+  /* LE COMPTEUR DU DÉPLIANT. Trois états, distinguables SANS la couleur — le
+     texte porte déjà « 0 / 11 » ; la teinte ne fait que hiérarchiser. */
+  .fin-bc-cpt{display:inline-block;margin-left:8px;padding:1px 8px;border-radius:10px;
+    font-size:11.5px;font-weight:600;white-space:nowrap;border:1px solid var(--rule)}
+  .fin-bc-cpt.vide{color:#8A2B12;border-color:#D8A08C}
+  .fin-bc-cpt.partiel{color:#7A5C00;border-color:#D9C48A}
+  .fin-bc-cpt.plein{color:#1F5C33;border-color:#9AC7AC}
+  .bc-tab-c{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:14px 0 0}
+  .bc-tab{width:100%;border-collapse:collapse;font-size:13px}
   .bc-tab th,.bc-tab td{padding:5px 8px;border-bottom:1px solid var(--rule)}
   .bc-tab .n{text-align:right;font-variant-numeric:tabular-nums}
   .bc-tab tr.neg td{color:#8A2B12}
@@ -3228,7 +3249,8 @@ engagements publics) sont imputés nominativement.</div>
       <details class="fin-plus" id="fin-bc-plus">
         <summary>Business case <span>— la demande, le calendrier électrique, la
         concurrence, le phasage et les risques. Huit tests de viabilité qui
-        rejoignent le MÊME avis GO / NO GO que le chiffrage.</span></summary>
+        rejoignent le MÊME avis GO / NO GO que le chiffrage.</span>
+        <b class="fin-bc-cpt" id="fin-bc-cpt"></b></summary>
         <div class="fin-plus-corps">
           <p class="fin-plus-note">Ces huit tests répondent à ce qu’un
           investisseur demande avant l’enveloppe&nbsp;: <b>la demande
@@ -3271,13 +3293,16 @@ engagements publics) sont imputés nominativement.</div>
             <span class="fin-aide">Les deux n’échouent pas aux mêmes endroits.</span></div>
           <div class="fin-ch"><label for="fin-bc-conc">Capacité concurrente annoncée (MW)</label>
             <input type="number" id="fin-bc-conc" step="1" min="0"
-                   placeholder="annonces, permis, file d’attente">
-            <span class="fin-aide">Aucun acteur n’est nommé ni noté&nbsp;: on compare
-            une capacité annoncée à une demande déclarée.</span></div>
+                   placeholder="annonces et permis">
+            <span class="fin-aide">Annonces publiques, permis délivrés, files
+            d’attente de raccordement. Aucun acteur n’est nommé ni noté&nbsp;: on
+            compare une capacité annoncée à une demande déclarée.</span></div>
           <div class="fin-ch"><label for="fin-bc-dem">Demande attendue sur la zone (MW)</label>
             <input type="number" id="fin-bc-dem" step="1" min="0"
-                   placeholder="étude de marché, avec son émetteur">
-            <span class="fin-aide">C’est le dénominateur du test de concurrence.</span></div>
+                   placeholder="étude de marché">
+            <span class="fin-aide">C’est le dénominateur du test de concurrence.
+            Une étude sans émetteur ni date n’est pas une demande&nbsp;: c’est une
+            opinion.</span></div>
           <div class="fin-ch"><label for="fin-bc-tr">Tranches d’investissement (MW, séparés par des virgules)</label>
             <input type="text" id="fin-bc-tr" placeholder="ex. 8, 12">
             <span class="fin-aide">Sans découpage, l’engagement est réputé d’un seul
@@ -3332,6 +3357,13 @@ engagements publics) sont imputés nominativement.</div>
          chevron ne ferait qu'occuper la place ; celle-ci nomme ce que le bloc
          précédent vient de produire et ce que le suivant va en faire. C'est la
          seule forme de flèche qui informe. -->
+    <div class="fin-fleche" data-vers="etape-business"><span class="fin-fl-a">↓</span>
+      <span class="fin-fl-t"><b>Vous avez une enveloppe. Personne n’a encore
+      demandé si quelqu’un louera.</b> Le business case, sous « Régler le
+      projet », éprouve la demande, le calendrier électrique et le
+      <b>remplissage au point mort</b> — et ses huit constats entrent dans le
+      même verdict GO / NO GO.</span></div>
+
     <div class="fin-fleche" data-vers="etape-moe"><span class="fin-fl-a">↓</span>
       <span class="fin-fl-t"><b>Vous avez une enveloppe et un pays retenu.</b>
       Le bloc suivant en tire le <b>montant des travaux</b> et la <b>part du lot
@@ -5688,8 +5720,17 @@ function finCalculLance(){
 
 var FIN_ETAPES = [
   { cle: "regler", n: 1, nom: "Régler le projet", cible: "fin-form",
-    quoi: "Puissance, gabarit, scénario, calendrier — et les critères d’ingénierie "
-        + "sous « Aller plus loin ».",
+    /* LE FIL NE MENTIONNAIT PAS LE BUSINESS CASE, et ses dix champs vivent
+       dans un dépliant fermé de ce même bloc. Un lecteur qui suit le fil ne
+       pouvait donc pas savoir qu'ils existent — et les huit tests de
+       viabilité revenaient « indéterminés » sans que rien n'explique
+       pourquoi. Un module qu'on n'atteint pas ne vaut pas mieux qu'un module
+       absent, et il coûte plus cher : il donne l'illusion d'une couverture. */
+    quoi: "Puissance, gabarit, scénario, calendrier — les critères d’ingénierie "
+        + "sous « Aller plus loin », et le BUSINESS CASE sous son propre "
+        + "dépliant : prix d’hébergement, puissance contractée, année de "
+        + "puissance ferme. Sans eux, le verdict ne parlera que de "
+        + "construction.",
     /* PAS « une puissance est saisie » — elle l'est d'office, à 100 MW. Mais
        « le lecteur l'a changée », ou « il a lancé le calcul qui la consomme ». */
     fait: function(){ var e = document.getElementById("fin-mw");
@@ -5705,7 +5746,42 @@ var FIN_ETAPES = [
     commande: "#fin-go",
     quoi: "L’enveloppe en fourchette, la DPGF par lot, le coût total et l’échéancier.",
     fait: function(){ return document.querySelectorAll("#fin-res .fin-dos").length > 0; } },
-  { cle: "moe", n: 4, nom: "Chiffrer la maîtrise d’œuvre", cible: "moe-bloc",
+  /* LE BUSINESS CASE VIENT JUSTE APRÈS L'ENVELOPPE, ET AVANT TOUT LE RESTE.
+     Ce n'est pas une préférence de mise en page : le point mort se calcule sur
+     les postes d'exploitation que le calcul précédent vient de produire, et
+     il conditionne la lecture de tout ce qui suit. Des honoraires, un ROCE ou
+     un tableau de pilotage sur un projet dont personne n'a demandé si
+     quelqu'un louerait sont des chiffres justes sur une question qui n'a pas
+     été posée. */
+  { cle: "business", n: 4, nom: "Éprouver le business case", cible: "fin-bc-plus",
+    quoi: "La demande existe-t-elle, le calendrier tient-il face à l’accès à "
+        + "l’électricité, à partir de quel remplissage le site couvre-t-il ses "
+        + "coûts. Huit tests qui entrent dans le MÊME verdict que le chiffrage. "
+        /* OÙ REGARDER, ET NON SEULEMENT QUOI SAISIR. Les dossiers naissent
+           repliés : dire seulement de remplir le formulaire laissait le
+           lecteur devant une étape qui refuse de se cocher, sans indice. */
+        + "Les huit constats s’affichent dans le dossier du pays que vous "
+        + "ouvrez sur la carte, sous l’enveloppe.",
+    /* « FAIT » VEUT DIRE : LE POINT MORT EST SORTI, ET IL A ÉTÉ VU.
+       Deux mesures, et il a fallu les deux.
+
+       La présence du bloc ne suffit pas : il s'affiche aussi quand les
+       projections sont indéterminées, c'est-à-dire quand rien n'a été
+       déclaré. C'est la carte de résultat qui témoigne d'un business case
+       réellement éprouvé.
+
+       ET ELLE NE SUFFIT PAS NON PLUS. Les dossiers naissent REPLIÉS —
+       `hidden` — et ne s'ouvrent qu'au clic sur un pays de la carte. Compter
+       la carte de résultat dans un dossier replié faisait donc franchir
+       l'étape à un lecteur qui n'avait pas vu un seul des huit constats : le
+       fil affichait « Franchie » sur une lecture qui n'avait pas eu lieu.
+       `offsetParent` est nul dans tout sous-arbre replié : c'est la mesure
+       la moins chère de « à l'écran ». */
+    fait: function(){
+      var k = document.querySelectorAll("#fin-res .bc .bc-kpi");
+      for(var i = 0; i < k.length; i++){ if(k[i].offsetParent) return true; }
+      return false; } },
+  { cle: "moe", n: 5, nom: "Chiffrer la maîtrise d’œuvre", cible: "moe-bloc",
     commande: "#moe-go",
     quoi: "Les honoraires, phase par phase et mission par mission, sur le montant "
         + "des travaux du pays retenu.",
@@ -5715,12 +5791,12 @@ var FIN_ETAPES = [
      capital employé, et l'informatique en fait partie quand le même maître
      d'ouvrage la porte. Les lire avant de l'avoir chiffrée donne un ROCE
      surestimé — sur la page même qui décide d'un GO ou d'un NO GO. */
-  { cle: "equipements", n: 5, nom: "Chiffrer les équipements informatiques",
+  { cle: "equipements", n: 6, nom: "Chiffrer les équipements informatiques",
     cible: "s-equipements", commande: "#eq-go",
     quoi: "Le poste que les quatorze lots ne contiennent pas — et qui pèse le "
         + "tiers de l’investissement quand vous le portez.",
     fait: function(){ return !!document.querySelector("#eq-out .eq-tab"); } },
-  { cle: "kpi", n: 6, nom: "Lire la création de valeur", cible: "kpi-bloc",
+  { cle: "kpi", n: 7, nom: "Lire la création de valeur", cible: "kpi-bloc",
     commande: "#kpi-go",
     quoi: "EVA, ROCE, free cash flow : le projet le moins cher n’est pas toujours "
         + "celui qui crée de la valeur.",
@@ -5731,19 +5807,19 @@ var FIN_ETAPES = [
      chiffres, et dans cet ordre : la maturite dit si l'organisation peut
      instruire la decision que ces chiffres preparent, et le pilotage n'a de
      sens qu'une fois qu'on sait ce qu'il est tenable de promettre. */
-  { cle: "maturite", n: 7, nom: "Diagnostiquer la maturité", cible: "s-maturite",
+  { cle: "maturite", n: 8, nom: "Diagnostiquer la maturité", cible: "s-maturite",
     commande: "#mat-go",
     quoi: "L’organisation a-t-elle de quoi instruire cette décision, puis en "
         + "suivre l’exécution ? À poser avant de promettre un tableau de bord.",
     fait: function(){ var o = document.getElementById("mat-out");
                       return !!(o && o.innerHTML && o.innerHTML.length > 200); } },
-  { cle: "pilotage", n: 8, nom: "Armer le pilotage", cible: "s-pilotage",
+  { cle: "pilotage", n: 9, nom: "Armer le pilotage", cible: "s-pilotage",
     commande: "#pil-go",
     quoi: "Seuils, tendances et alertes : où une action est attendue — sans "
         + "crier au loup sur un écart qui tient dans l’incertitude.",
     fait: function(){ var o = document.getElementById("pil-out");
                       return !!(o && o.innerHTML && o.innerHTML.length > 200); } },
-  { cle: "pont", n: 9, nom: "Poursuivre sur l’ingénierie", cible: "fin-ponts",
+  { cle: "pont", n: 10, nom: "Poursuivre sur l’ingénierie", cible: "fin-ponts",
     commande: "[data-pont-go]",
     quoi: "Le bilan énergie-eau-carbone, ou la séquence des pièces — et, sur le "
         + "site d’ingénierie, la suite de la chaîne d’argent : le coût des "
@@ -11107,6 +11183,39 @@ var GP_PROFILS = {
         piege: "L’aéroréfrigérant sec affiche zéro eau SUR SITE tout en consommant "
              + "davantage d’électricité — donc davantage d’eau À LA SOURCE sur un "
              + "réseau thermique. Le poste disparaît du tableau, pas de la réalité." },
+      { sect: "s-finance", ancre: "fin-bc-plus",
+        t: "Le business case — la moitié que le chiffrage ne regarde pas",
+        d: "Les cinq constats d’origine étaient TOUS du côté de l’offre : le "
+         + "budget tient-il, le réseau suivra-t-il, le site sera-t-il "
+         + "conforme. Aucun ne demandait si quelqu’un louera. Dix champs, sous "
+         + "leur propre dépliant, ajoutent huit tests au MÊME verdict — et "
+         + "trois d’entre eux peuvent bloquer à eux seuls.",
+        piege: "Laisser ces champs vides ne rend pas le dossier neutre : il "
+             + "rend huit tests « indéterminés ». Un avis favorable sur un "
+             + "dossier dont la demande n’a pas été déclarée n’est pas un avis "
+             + "favorable, c’est un avis sur autre chose." },
+      { sect: "s-finance", ancre: "fin-bc-prix",
+        t: "Le prix d’hébergement débloque le point mort",
+        d: "C’est le champ le plus structurant de la page. Renseigné, il donne "
+         + "le revenu à pleine charge, le taux de remplissage AU POINT MORT et "
+         + "la marge de sécurité par rapport à ce qui est déjà contracté. "
+         + "Aucun prix n’est embarqué dans ce site : il varie d’un facteur "
+         + "trois entre deux marchés et se négocie contrat par contrat.",
+        piege: "Une marge calculée à pleine charge ne dit rien — tous les "
+             + "projets sont rentables pleins. Ce qui se demande en comité, "
+             + "c’est à partir de quel remplissage le site couvre ses coûts, "
+             + "et de combien on en est loin." },
+      { sect: "s-finance", ancre: "fin-bc-pf",
+        t: "Le calendrier électrique arrête plus de projets que le budget",
+        d: "Deux années à déclarer : celle de la mise en service visée, et "
+         + "celle où la puissance est FERME — c’est-à-dire écrite par le "
+         + "gestionnaire de réseau pour un point de livraison et une puissance "
+         + "donnés. Si la seconde est postérieure à la première, le test est "
+         + "bloquant : un bâtiment livré avant sa puissance porte tous ses "
+         + "coûts fixes et ne produit rien.",
+        piege: "Une estimation d’agence n’est pas une date ferme, et l’écart "
+             + "entre les deux se compte en années. Le délai ne se rattrape "
+             + "pas : il ne dépend pas de vous." },
       { sect: "s-finance", t: "Pourquoi le classement porte sur le coût TOTAL",
         d: "À puissance et gabarit identiques, l’enveloppe d’investissement est la "
          + "même dans tous les pays : aucun indice national de coût n’est appliqué, "
@@ -11145,6 +11254,116 @@ var GP_PROFILS = {
              + "Vérifiez surtout les jalons dont la date est ANNONCÉE et non encore "
              + "publiée au journal officiel — le dossier doit porter la distinction, "
              + "pas la lisser." },
+    ],
+  },
+  /* ── DEUX LECTEURS QUE LES HUIT PROFILS EXISTANTS NE SERVAIENT PAS ──────
+     Investisseur, banque, assurance, climat, eau, faisabilité, enveloppe,
+     analyste : tous regardent le projet DE L'EXTÉRIEUR, pour décider s'ils y
+     entrent. Personne ne regardait depuis la place de celui qui le porte ni de
+     celui qui l'exploitera — c'est-à-dire les deux qui produisent les données
+     que tous les autres réclament. C'est aussi eux que le business case sert
+     directement, et sans eux ce module n'avait pas de lecteur désigné. */
+  porteur: {
+    nom: "Porteur de projet — monter le tour de table",
+    court: "Porteur",
+    quoi: "Préparer le dossier qu'un financeur demandera : ce qui se déclare, "
+        + "ce qui se calcule, et les pièces à commander en phase d'étude "
+        + "faute de quoi elles n'existeront pas à temps.",
+    etapes: [
+      { sect: "s-finance", ancre: "fin-form",
+        t: "Chiffrez d'abord, déclarez ensuite — jamais l'inverse",
+        d: "L'enveloppe se calcule sur la puissance, le gabarit et le pays. "
+         + "Le business case, lui, se calcule SUR l'enveloppe : le point mort "
+         + "a besoin des postes d'exploitation que le chiffrage produit. "
+         + "Déclarer un prix d'hébergement avant d'avoir une enveloppe ne "
+         + "donne rien à confronter.",
+        piege: "Un porteur commence naturellement par son plan d'affaires. "
+             + "Ici l'ordre est inverse, et ce n'est pas une contrainte "
+             + "d'outil : c'est que la rentabilité se juge contre un coût, pas "
+             + "dans l'absolu." },
+      { sect: "s-finance", ancre: "fin-bc-mwc",
+        t: "Contrat signé, lettre d'intention, marque d'intérêt : trois choses",
+        d: "Ne déclarez en « puissance contractée » que les contrats signés et "
+         + "les lettres d'intention fermes. La marque d'intérêt n'engage "
+         + "personne et se distingue à la première question d'un analyste.",
+        piege: "Gonfler ce champ ne trompe que vous : le module confronte ce "
+             + "chiffre au point mort, et c'est l'écart qu'un financeur "
+             + "regardera. Un écart honnête se défend ; un écart découvert ne "
+             + "se défend pas." },
+      { sect: "s-finance", ancre: "fin-bc-tr",
+        t: "Le phasage ne réduit pas le risque — il le rend refusable",
+        d: "Sans découpage déclaré, l'engagement est réputé d'un seul tenant : "
+         + "toute l'enveloppe exposée à une commercialisation qui n'a pas eu "
+         + "lieu. Un découpage dont la PREMIÈRE tranche est couverte par ce "
+         + "qui est déjà contracté change la nature de la conversation.",
+        piege: "Un phasage dont la première tranche est déjà spéculative ne "
+             + "borne rien. Le module le dit, et un financeur le verra." },
+      { sect: "s-finance", ancre: "fin-bc-risq",
+        t: "Un risque assumé et écrit n'est pas un risque oublié",
+        d: "Cinq risques financiers sont listés. Cochez ceux qui sont couverts "
+         + "par une clause ou un contrat. C'est cette distinction — assumé en "
+         + "connaissance de cause, ou pas vu — que cherche un investisseur.",
+        piege: "Ne rien cocher n'est pas neutre : le test ressort "
+             + "« indéterminé », ce qui dit à votre interlocuteur que la "
+             + "question n'a pas été instruite." },
+      { sect: "s-finance", ancre: "kpi-bloc",
+        t: "Les pièces se commandent en phase d'étude, ou pas du tout",
+        d: "Diligence technique, plan de renouvellement chiffré, empreinte "
+         + "MESURÉE, convention de raccordement : ce sont des livrables "
+         + "d'ingénierie. Ils demandent des mois et se préparent pendant les "
+         + "études, pas pendant le tour de table.",
+        piege: "Les découvrir au moment du tour de table, c'est les découvrir "
+             + "trop tard — et arriver devant un comité avec une liste de "
+             + "pièces à produire plutôt qu'un dossier." },
+    ],
+  },
+  exploitant: {
+    nom: "Exploitant — à quel remplissage j'équilibre",
+    court: "Exploitant",
+    quoi: "La seule question qui décide en exploitation : à partir de quel "
+        + "taux de remplissage le site couvre ses coûts, et ce que le pays et "
+        + "le prix de l'électricité y changent.",
+    etapes: [
+      { sect: "s-finance", ancre: "fin-bc-prix",
+        t: "Le point mort, et pourquoi il n'est pas proportionnel",
+        d: "Un site à moitié rempli ne consomme pas la moitié : le froid, "
+         + "l'onduleur et la distribution tournent pour le VOLUME de la salle, "
+         + "pas pour la charge installée. Le calcul sépare donc les coûts "
+         + "fixes des coûts variables, et c'est cette séparation qui décide du "
+         + "résultat.",
+        piege: "Un modèle qui ferait varier toute l'électricité avec le "
+             + "remplissage annoncerait un point mort bien plus bas qu'il "
+             + "n'est. C'est l'erreur la plus flatteuse de l'exercice, et la "
+             + "plus coûteuse." },
+      { sect: "s-finance", ancre: "fin-pays",
+        t: "Le même projet n'a pas le même point mort selon le pays",
+        d: "Comparez deux à six pays : l'enveloppe est identique par "
+         + "construction, mais le prix de l'électricité change les coûts "
+         + "d'exploitation, donc le point mort. L'écart entre pays se compte "
+         + "en dizaines de points de remplissage — pas en pourcents.",
+        piege: "Un point mort au-dessus de cent pour cent veut dire qu'AUCUN "
+             + "remplissage n'équilibre l'exploitation à ce prix : le module "
+             + "le rend bloquant, et ce n'est pas un excès de prudence." },
+      { sect: "s-finance", ancre: "fin-bc-traj",
+        t: "Votre montée en charge, prise telle quelle",
+        d: "Déclarez les mégawatts cumulés année par année : le module en tire "
+         + "l'année où la marge d'exploitation devient positive. Il ne prévoit "
+         + "rien — c'est VOTRE hypothèse de commercialisation, et c'est ce qui "
+         + "permet de la contester ligne par ligne.",
+        piege: "Si la marge ne devient positive sur aucune année déclarée, le "
+             + "module le dit plutôt que de l'arrondir. Ce n'est pas "
+             + "forcément rédhibitoire — mais la trajectoire déclarée ne le "
+             + "montre pas, et c'est ce qu'un lecteur retiendra." },
+      { sect: "s-finance", ancre: "fin-bc-dens",
+        t: "La densité que vos clients demandent décide du bâtiment",
+        d: "Au-delà d'une trentaine de kilowatts par baie, l'air ne suffit "
+         + "plus. Ce n'est pas un supplément de coût : c'est une boucle "
+         + "hydraulique jusqu'à la baie, un plancher repris et une "
+         + "distribution redimensionnée.",
+        piege: "Un site chiffré pour de l'hébergement classique et "
+             + "commercialisé auprès de clients qui demandent du calcul "
+             + "accéléré n'est pas cher : il est hors sujet. Le module rend ce "
+             + "cas BLOQUANT." },
     ],
   },
   analyste: {
@@ -12622,6 +12841,15 @@ if(window.parent&&window.parent!==window){
            risques financiers — il n'en porte aucun. */
         REF_BC = j.business_case || null;
         risquesFormulaire();
+        bcCompteur();
+        /* DÉLÉGATION plutôt qu'un écouteur par champ : les cases de risques
+           sont construites APRÈS, et lier à l'initialisation ne les aurait
+           jamais trouvées — le défaut que ce fichier a déjà commis ailleurs. */
+        var bcz = document.getElementById('fin-bc-plus');
+        if(bcz){
+          bcz.addEventListener('input', bcCompteur);
+          bcz.addEventListener('change', bcCompteur);
+        }
         var g = $('fin-gab');
         g.innerHTML = Object.keys(j.cout_mw).map(function(k){
           var c = j.cout_mw[k];
@@ -12785,6 +13013,38 @@ if(window.parent&&window.parent!==window){
   /* Les risques viennent du RÉFÉRENTIEL, jamais recopiés ici : une liste
      figée dans la page annoncerait cinq risques le jour où le module en
      porterait six, et la phrase resterait crédible. */
+  /* UN DÉPLIANT FERMÉ NE DIT PAS CE QU'IL COÛTE DE NE PAS L'OUVRIR.
+     Dix champs y dorment, et leur absence ne produit pas un dossier neutre :
+     elle produit huit tests « indéterminés ». Le compteur porte donc l'état
+     RÉEL — « 0 sur 10 renseignés » —, visible sans ouvrir, et il change à
+     chaque saisie. C'est la seule façon qu'un lecteur pressé sache qu'il
+     laisse quelque chose derrière lui.
+
+     IL COMPTE CE QUI EST RENSEIGNÉ, PAS CE QUI EST VALIDE. Un compteur qui
+     jugerait la qualité des saisies porterait un avis ; celui-ci porte un
+     fait, et l'avis est rendu plus bas par les huit tests. */
+  function bcCompteur(){
+    var z = document.getElementById('fin-bc-cpt');
+    if(!z) return;
+    var ids = ['fin-bc-mwc', 'fin-bc-prix', 'fin-bc-ms', 'fin-bc-pf',
+               'fin-bc-dens', 'fin-bc-nat', 'fin-bc-conc', 'fin-bc-dem',
+               'fin-bc-tr', 'fin-bc-traj'];
+    var n = 0;
+    ids.forEach(function(i){
+      var e = document.getElementById(i);
+      if(e && String(e.value || '').trim() !== '') n++;
+    });
+    if(document.querySelector('#fin-bc-risq [data-risq]:checked')) n++;
+    var total = ids.length + 1;
+    z.textContent = n + ' / ' + total + ' renseigné' + (n > 1 ? 's' : '');
+    z.className = 'fin-bc-cpt ' + (n === 0 ? 'vide' : (n < total ? 'partiel' : 'plein'));
+    z.title = n === 0
+      ? 'Aucun champ renseigné : les huit tests de viabilité ressortiront '
+        + 'indéterminés, et le verdict ne parlera que de construction.'
+      : n + ' champ(s) sur ' + total + '. Chaque champ absent rend un test '
+        + 'indéterminé plutôt que favorable.';
+  }
+
   function risquesFormulaire(){
     var z = $('fin-bc-risq');
     if(!z || !REF_BC) return;
@@ -13144,19 +13404,27 @@ if(window.parent&&window.parent!==window){
 
       var t = p.trajectoire || {};
       if(t.ok){
-        h += '<table class="bc-tab"><thead><tr><th>Année</th>'
-          + '<th class="n">MW cumulés</th><th class="n">Remplissage</th>'
-          + '<th class="n">Revenu</th><th class="n">Coût</th>'
-          + '<th class="n">Marge</th></tr></thead><tbody>'
+        h += '<div class="bc-tab-c"><table class="bc-tab">'
+          + '<caption>Montée en charge déclarée — revenu, coût et marge '
+          + 'd’exploitation par année, en millions d’euros</caption>'
+          + '<thead><tr><th scope="col">Année</th>'
+          + '<th scope="col" class="n">MW cumulés</th>'
+          + '<th scope="col" class="n">Remplissage</th>'
+          + '<th scope="col" class="n">Revenu</th>'
+          + '<th scope="col" class="n">Coût</th>'
+          + '<th scope="col" class="n">Marge</th></tr></thead><tbody>'
           + t.lignes.map(function(l){
+              /* L'ANNÉE EST L'EN-TÊTE DE SA LIGNE, pas une cellule de plus :
+                 c'est elle qui identifie les cinq nombres qui suivent. */
               return '<tr class="' + (l.marge_meur >= 0 ? 'pos' : 'neg') + '">'
-                + '<td>' + l.annee + '</td><td class="n">' + eur(l.mw_cumules)
+                + '<th scope="row">' + l.annee + '</th>'
+                + '<td class="n">' + eur(l.mw_cumules)
                 + '</td><td class="n">' + Math.round(l.taux * 100) + ' %</td>'
                 + '<td class="n">' + eur(l.revenu_meur) + '</td>'
                 + '<td class="n">' + eur(l.cout_meur) + '</td>'
                 + '<td class="n">' + eur(l.marge_meur) + '</td></tr>';
             }).join('')
-          + '</tbody></table>'
+          + '</tbody></table></div>'
           + '<p class="bc-tr">' + (t.annee_marge_positive
               ? 'Marge d’exploitation positive à partir de l’année <b>'
                 + t.annee_marge_positive + '</b> de la montée en charge déclarée.'

@@ -2645,6 +2645,13 @@ def api_pont_moe():
     lettres plutot que de le faire discretement. Le montant est arrondi a la
     centaine de milliers d'euros, aucune donnee nominative ne voyage, et le
     client voit l'adresse avant de la suivre : ce module ne l'ouvre pas.
+
+    OUVERT, comme son jumeau, et pour la meme raison : le profil technique
+    seul. Son jumeau le declarait, celui-ci ne le disait pas — la meme
+    decision assumee d'un cote et tacite de l'autre. Une ouverture qui ne se
+    declare pas se lit comme un oubli a la relecture, et c'est ainsi qu'on
+    finit soit par la fermer sans savoir ce qu'on casse, soit par ne plus la
+    voir du tout.
     """
     if request.method == 'GET':
         return jsonify({'ok': True, 'referentiel': pont_moe.referentiel()})
@@ -13107,10 +13114,43 @@ def _parcours_ligne(r, avec_hypotheses=False):
 
 
 @app.route('/api/parcours', methods=['GET', 'POST'])
+# LA SEULE ROUTE DE CETTE VUE QUI ECRIT ETAIT LA SEULE SANS CADENCE. Douze
+# routes de la page d'enveloppe portent @rate_limit ; celle-ci ne l'avait pas,
+# et c'est pourtant la seule a inserer en base — jusqu'a 24 Ko par appel, avec
+# un plafond de 60 enregistrements par client. Le plafond borne le STOCK, il ne
+# borne ni le debit d'ecriture ni la charge de la base : un client authentifie
+# pouvait boucler indefiniment sur des insertions et des suppressions.
+#
+# LA CADENCE EST CELLE DES AUTRES ROUTES D'ECRITURE de la page, pas une valeur
+# choisie ici : 30 appels par tranche de 5 minutes, comme le chiffrage. Un
+# lecteur qui enregistre un parcours le fait quelques fois par session.
+@rate_limit(limit=30, window=300)
 def api_parcours():
     cid = _ent_client_id()
     if cid is None:
         return jsonify({'ok': False, 'error': 'Non authentifie'}), 403
+    # L'ORIGINE EST VERIFIEE SUR LES ECRITURES, ET SEULEMENT SUR ELLES.
+    #
+    # CE QUI PROTEGE DEJA, ET POURQUOI CE N'EST PAS SUFFISANT A DECLARER. Le
+    # cookie de session porte SameSite=Lax : le navigateur ne l'envoie pas sur
+    # une requete POST venue d'un autre site, ce qui ferme la falsification de
+    # requete classique. Ce controle-ci ne repare donc pas une porte ouverte —
+    # il rend la protection EXPLICITE a l'endroit ou l'on ecrit, au lieu de la
+    # laisser dependre d'un reglage de cookie qu'une reconfiguration future
+    # pourrait desserrer sans que personne ne fasse le lien.
+    #
+    # UNE ORIGINE ABSENTE EST ACCEPTEE : les clients non-navigateur n'en
+    # envoient pas, et refuser sur l'absence casserait les outils de recette
+    # sans rien fermer — un attaquant qui controle l'en-tete la fournirait.
+    if request.method == 'POST':
+        origine = request.headers.get('Origin', '')
+        if origine:
+            hote = request.host_url.rstrip('/')
+            if not (origine.rstrip('/') == hote
+                    or origine.startswith('http://localhost')
+                    or origine.startswith('http://127.0.0.1')):
+                return jsonify({'ok': False,
+                                'error': "Origine refusee pour une ecriture."}), 403
     conn = registre_get_db(); cur = conn.cursor()
     _parcours_table(cur); conn.commit()
 
