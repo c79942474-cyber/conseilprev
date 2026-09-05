@@ -503,3 +503,135 @@ def test_le_panneau_sentinel_annonce_le_business_case():
     assert "électricité" in chapeau, chapeau
     # Et le dépliant qui explique POURQUOI un devis parfait n'en est pas un.
     assert "tous du côté de l" in corps, corps[:600]
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# 8. LE REVENU NE SE SAISIT PAS DEUX FOIS
+# ══════════════════════════════════════════════════════════════════════════
+# LE BLOC « CRÉATION DE VALEUR » DEMANDE UN REVENU, et le business case en
+# calcule un : c'est la MÊME grandeur. Le laisser ressaisir ferait exister deux
+# revenus pour le même projet — voisins, jamais identiques —, et c'est le plus
+# flatteur des deux qu'on présenterait au comité. Il devient donc une
+# PROPOSITION du menu de provenance, comme les autres : proposé, jamais posé.
+
+import kpi_finance as K  # noqa: E402
+
+
+def test_le_revenu_du_business_case_est_propose_au_bloc_de_valeur():
+    p = K.propositions([700, 900], [20, 30], 10,
+                       {"wacc": 0.08, "is_taux": 0.25},
+                       revenu_business_case={"revenu_meur_an": 33.6,
+                                             "formule": "20 MW × 140 €/kW/mois"})
+    props = p["entrees"]["revenu_meur_an"]["propositions"]
+    assert props, p["entrees"]["revenu_meur_an"]
+    # CETTE RÈGLE ÉPROUVE LA PRÉSENCE ET LA VALEUR, pas la position : celle-ci
+    # a sa propre règle. Deux règles qui affirment la même chose se couvrent
+    # l'une l'autre, et la mutation qui casse la position tombe alors sur la
+    # mauvaise — la règle dédiée cesse de prouver ce qu'elle annonce.
+    repris = [x for x in props if x["origine"] == "business_case"]
+    assert len(repris) == 1, [x["origine"] for x in props]
+    assert repris[0]["valeur"] == 33.6, repris[0]
+    assert "140" in repris[0]["formule"], repris[0]["formule"]
+
+
+def test_il_arrive_en_tete_des_propositions():
+    """L'ORDRE PORTE DU SENS. Les autres propositions sont des SEUILS calculés
+    à rebours — « ce que le projet devrait rapporter » —, celle-ci est ce que
+    le plan d'affaires déclaré rapporte. La mettre après ferait choisir un
+    seuil comme s'il était une prévision."""
+    p = K.propositions([700, 900], [20, 30], 10,
+                       {"wacc": 0.08, "is_taux": 0.25},
+                       revenu_business_case={"revenu_meur_an": 33.6})
+    origines = [x["origine"] for x in p["entrees"]["revenu_meur_an"]["propositions"]]
+    assert origines[0] == "business_case", origines
+    assert "seuil" in origines[1:], origines
+
+
+def test_la_proposition_previent_qu_elle_suppose_le_site_plein():
+    """LE PIÈGE DE CETTE REPRISE. Le revenu du business case est celui de la
+    PLEINE CHARGE ; ces trois indicateurs le supposent atteint. Le reprendre
+    sans regarder le point mort donnerait une création de valeur pour un site
+    qu'on n'a pas encore rempli."""
+    p = K.propositions([700, 900], [20, 30], 10,
+                       {"wacc": 0.08, "is_taux": 0.25},
+                       revenu_business_case={"revenu_meur_an": 33.6})
+    tete = p["entrees"]["revenu_meur_an"]["propositions"][0]
+    assert "point mort" in tete["lecture"], tete["lecture"]
+    assert "PLEINE CHARGE" in tete["lecture"], tete["lecture"]
+
+
+def test_sans_business_case_les_propositions_sont_celles_d_avant():
+    """LA GREFFE N'AJOUTE RIEN QUAND ELLE N'A RIEN À AJOUTER."""
+    p = K.propositions([700, 900], [20, 30], 10,
+                       {"wacc": 0.08, "is_taux": 0.25})
+    origines = [x["origine"]
+                for x in p["entrees"]["revenu_meur_an"]["propositions"]]
+    assert "business_case" not in origines, origines
+
+
+def test_la_page_envoie_le_revenu_et_nomme_sa_provenance():
+    h = _lire("panorama.html")
+    assert "revenu_business_case: revenuBusinessCase()" in h
+    assert "function revenuBusinessCase(" in h
+    # UNE ORIGINE SANS LIBELLÉ s'afficherait en clé technique sous le champ.
+    i = h.index("var KPI_ORIG_NOM = {")
+    assert 'business_case: "business case"' in h[i:i + 400], h[i:i + 400]
+
+
+def test_le_revenu_repris_suit_le_pays_du_dossier_ouvert():
+    """DEUX CHOIX DE PAYS DIVERGERAIENT. `enveloppe()` retient déjà le pays du
+    dossier ouvert ; refaire ce choix ferait porter la création de valeur sur
+    l'enveloppe d'un pays et le revenu d'un autre — dont le prix de
+    l'électricité, donc le coût, donc le point mort ne sont pas les mêmes."""
+    h = _lire("panorama.html")
+    i = h.index("function revenuBusinessCase(")
+    corps = h[i:i + 1400]
+    assert "enveloppe()" in corps, corps[:400]
+    assert "x.pays === e.pays" in corps, corps[:600]
+
+
+def test_la_route_transmet_le_revenu_du_business_case():
+    """LE MAILLON QU'AUCUNE RÈGLE NE TENAIT. Le moteur le propose et la page
+    l'envoie — mais entre les deux, la route peut cesser de le transmettre
+    sans qu'aucune règle ne s'en aperçoive : le module reste juste, la page
+    reste juste, et la proposition disparaît de l'écran.
+
+    Une mutation l'a montré ; la règle passe par la ROUTE, pas par le module.
+    """
+    import app as A
+    A.app.config["TESTING"] = True
+    c = A.app.test_client()
+    with c.session_transaction() as sess:
+        sess["is_conseilprev"] = True
+    r = c.post("/api/kpi-finance", json={
+        "capex_meur": [700, 900], "opex_an_meur": [20, 30], "annees": 10,
+        "hypotheses": {"wacc": 0.08, "is_taux": 0.25},
+        "revenu_business_case": {"revenu_meur_an": 33.6,
+                                 "formule": "20 MW × 140 €/kW/mois"},
+    }, headers={"Origin": "http://localhost"})
+    assert r.status_code == 200, r.status_code
+    props = r.get_json()["propositions"]["entrees"]["revenu_meur_an"]["propositions"]
+    origines = [x["origine"] for x in props]
+    assert "business_case" in origines, origines
+    assert props[0]["valeur"] == 33.6, props[0]
+
+
+def test_la_route_refuse_un_revenu_absurde_sans_tomber():
+    """Une valeur illisible ou hors bornes ne doit pas devenir une proposition
+    — ni faire tomber la réponse entière, qui porte six autres entrées."""
+    import app as A
+    A.app.config["TESTING"] = True
+    c = A.app.test_client()
+    with c.session_transaction() as sess:
+        sess["is_conseilprev"] = True
+    for mauvais in ({"revenu_meur_an": "abc"}, {"revenu_meur_an": -5},
+                    {"revenu_meur_an": 10 ** 9}, "pas un objet"):
+        r = c.post("/api/kpi-finance", json={
+            "capex_meur": [700, 900], "opex_an_meur": [20, 30], "annees": 10,
+            "hypotheses": {"wacc": 0.08, "is_taux": 0.25},
+            "revenu_business_case": mauvais,
+        }, headers={"Origin": "http://localhost"})
+        assert r.status_code == 200, (mauvais, r.status_code)
+        props = (r.get_json()["propositions"]["entrees"]["revenu_meur_an"]
+                 ["propositions"])
+        assert "business_case" not in [x["origine"] for x in props], mauvais

@@ -15094,6 +15094,29 @@ if(window.parent&&window.parent!==window){
     var p = REF && REF.propositions_statiques && REF.propositions_statiques[cle];
     return p || null;
   }
+  /* Le revenu du business case du pays RETENU — celui dont l'enveloppe
+     alimente ces indicateurs. Prendre celui d'un autre pays ferait porter la
+     création de valeur sur un revenu qui n'est pas celui du dossier ouvert :
+     les prix d'électricité diffèrent, donc les coûts, donc le point mort. */
+  function revenuBusinessCase(){
+    /* LE MÊME DOSSIER QUE L'ENVELOPPE, ET PAR LE MÊME CHEMIN. `enveloppe()`
+       choisit déjà le pays retenu — celui dont le dossier est ouvert, à défaut
+       le premier du classement. Refaire ce choix ici le ferait diverger au
+       premier changement : la création de valeur porterait sur l'enveloppe
+       d'un pays et le revenu d'un autre, dont le prix de l'électricité, donc
+       le coût, donc le point mort ne sont pas les mêmes. */
+    var d = window.FIN_DERNIER && window.FIN_DERNIER();
+    var e = enveloppe();
+    if(!d || !d.dossiers || !e) return undefined;
+    var dos = d.dossiers.filter(function(x){ return x.pays === e.pays; })[0];
+    var p = dos && dos.business_case && dos.business_case.projections;
+    if(!p || !p.ok || !p.revenu_plein_meur_an) return undefined;
+    return { revenu_meur_an: p.revenu_plein_meur_an,
+             formule: p.mw + ' MW × ' + p.prix_kw_mois + ' €/kW/mois × '
+                      + p.mois_par_an + ' mois — business case du dossier '
+                      + dos.pays };
+  }
+
   function kpiOrigines(cle){
     var p = KPI_PROP && KPI_PROP.entrees && KPI_PROP.entrees[cle];
     if(p && p.propositions && p.propositions.length) return p.propositions;
@@ -15115,8 +15138,13 @@ if(window.parent&&window.parent!==window){
     return (p && p.refus)
       || ((REF && REF.refus_proposition && REF.refus_proposition[cle]) || null);
   }
+  /* UNE ORIGINE SANS NOM S'AFFICHE EN CLÉ TECHNIQUE sous le champ —
+     « business_case » au lieu de « business case ». Le tableau est le seul
+     endroit où ces libellés existent ; en ajouter une origine sans l'y
+     inscrire produit une étiquette que personne n'a écrite. */
   var KPI_ORIG_NOM = { defaut: "référentiel", enveloppe: "enveloppe",
-                       seuil: "seuil calculé", saisie: "votre saisie" };
+                       seuil: "seuil calculé", saisie: "votre saisie",
+                       business_case: "business case" };
 
   /* Le badge de provenance, posé sous le champ. Il change quand le lecteur
      tape : une valeur modifiée à la main cesse d'être « proposée ». */
@@ -15536,7 +15564,15 @@ if(window.parent&&window.parent!==window){
          offrir qu'une table générique — fausse pour l'étude en cours. */
       body: JSON.stringify({ capex_meur: env.capex, opex_an_meur: env.opex,
                              annees: env.annees, hypotheses: hyp, cibles: cib,
-                             pays: env.pays, pays_compares: env.compares })
+                             pays: env.pays, pays_compares: env.compares,
+                             /* LE REVENU DU BUSINESS CASE, TEL QUE LE BLOC
+                                PRÉCÉDENT L'A RENDU — pas recalculé. Il devient
+                                une PROPOSITION du menu de provenance, en tête
+                                : le lecteur le retient d'un geste au lieu de
+                                retaper un nombre déjà calculé deux blocs plus
+                                haut. Deux saisies du même revenu divergent, et
+                                c'est la plus ancienne qu'on croit. */
+                             revenu_business_case: revenuBusinessCase() })
     }).then(function(r){ return r.json(); }).then(function(j){
       /* LA RÉPONSE PART AU DOSSIER TELLE QUELLE — l'export verse ce que
          l'écran a reçu, jamais un recalcul. */

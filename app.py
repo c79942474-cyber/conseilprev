@@ -2326,8 +2326,24 @@ def api_kpi_finance():
     if not isinstance(_compares, list):
         _compares = []
     _compares = [str(x)[:4] for x in _compares][:12]
+    # LE REVENU DU BUSINESS CASE, S'IL A ETE CALCULE. Il ne se recalcule pas
+    # ici : la page l'envoie tel que le bloc precedent l'a rendu, avec le prix
+    # et la puissance qui l'ont produit. Le recalculer ferait exister deux
+    # revenus pour le meme projet, et c'est celui d'ici qu'on retiendrait —
+    # alors que c'est l'autre qui est affiche.
+    _rev_bc = None
+    _bc = d.get("revenu_business_case")
+    if isinstance(_bc, dict):
+        try:
+            v = float(_bc.get("revenu_meur_an"))
+        except (TypeError, ValueError):
+            v = 0.0
+        if 0 < v < 1e6:
+            _rev_bc = {"revenu_meur_an": v,
+                       "formule": str(_bc.get("formule") or "")[:300]}
     props = kpi_finance.propositions(capex, opex, annees, hyp,
-                                     pays=_pays, pays_compares=_compares)
+                                     pays=_pays, pays_compares=_compares,
+                                     revenu_business_case=_rev_bc)
 
     # LE SEUIL DE REVENU — LA QUESTION QU'ON PEUT REPONDRE AVANT D'AVOIR UN
     # PLAN D'AFFAIRES. Les trois indicateurs exigent sept hypotheses, dont un
