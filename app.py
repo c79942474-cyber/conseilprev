@@ -2013,6 +2013,7 @@ import pont_dc  # noqa: E402  — le lien vers l'etude de durabilite, et son con
 import pont_moe  # noqa: E402  — le lien vers le chiffrage de MOE, et son contrat
 import tendances_dc  # noqa: E402  — chaque dossier porte ses reserves datees
 import faisabilite_dc  # noqa: E402  — conclut sur le chiffrage, ne le refait pas
+import business_case_dc  # noqa: E402  — la demande, que le chiffrage ne regarde pas
 
 _FIN_INTENSITES = {}
 
@@ -2115,10 +2116,21 @@ def _fin_dossier(code, mw, gabarit, scenario, densite_ia, cout_mw, annees, depar
     # de l'avis qu'on retiendrait. Le budget vient de la conception quand le
     # lecteur l'a saisi ; sans lui, l'avis dit qu'il ne peut rien conclure du
     # financement plutot que de conclure quand meme.
+    #
+    # LE BUSINESS CASE SE CALCULE ICI, sur le devis et l'exploitation QUI
+    # VIENNENT D'ETRE PRODUITS. Le faire recalculer par le moteur de business
+    # case ferait exister deux enveloppes pour le meme projet — voisines,
+    # jamais identiques —, et le point mort porterait sur l'une pendant que la
+    # page afficherait l'autre.
+    bc = business_case_dc.etude(
+        mw, devis=devis, exploitation=expl,
+        **{k: C.get(k) for k in business_case_dc.ENTREES})
     verdict = faisabilite_dc.avis(
         devis, budget_meur=C.get("budget_meur"), exploitation=expl,
-        cout_total=cout, trajectoire=traj, conformite=conf)
-    return {"pays": code, "faisabilite": verdict, "contexte": {
+        cout_total=cout, trajectoire=traj, conformite=conf,
+        business_case=bc)
+    return {"pays": code, "faisabilite": verdict, "business_case": bc,
+            "contexte": {
                 "climat": p.get("climat"), "eau": p.get("eau"), "prix": p.get("prix"),
                 "prix_origine": prix_origine, "prix_eur_mwh": list(prix),
                 "intensite_g_kwh": p.get("intensite"),
@@ -2142,6 +2154,13 @@ def api_finance_dc():
     ref = finance_dc.referentiel()
     ref["ok"] = True
     ref["sante"] = finance_dc.sante()
+    # LE BUSINESS CASE VOYAGE AVEC, dans une cle a part. Le formulaire des
+    # risques couverts se construit dessus : servi par un second appel, il
+    # s'afficherait APRES le reste du formulaire, c'est-a-dire au moment ou le
+    # lecteur a deja lance le calcul. Cle distincte et non fusionnee : ce sont
+    # deux modules, et les meler ferait croire que finance_dc porte des
+    # risques financiers.
+    ref["business_case"] = business_case_dc.referentiel()
     return jsonify(ref)
 
 
@@ -2691,7 +2710,26 @@ def api_finance_dc_devis():
             # L'enveloppe budgetaire visee. Facultative : sans elle, l'avis de
             # faisabilite dit qu'il ne peut rien conclure du financement, ce qui
             # vaut mieux que de conclure sans savoir.
-            ('budget_meur', 0.1, 100000.0, "budget d'investissement en M€")):
+            ('budget_meur', 0.1, 100000.0, "budget d'investissement en M€"),
+            # ── LE BUSINESS CASE ─────────────────────────────────────────
+            # Toutes facultatives, toutes bornees, et AUCUNE valeur par defaut :
+            # une absence rend un test indetermine, elle ne le rend pas vert.
+            # Les bornes sont larges a dessein — elles ecartent la faute de
+            # frappe et l'unite confondue, pas le cas atypique.
+            ('mw_commercialises', 0.0, 100000.0,
+             'puissance contractee en MW'),
+            ('prix_kw_mois', 1.0, 5000.0,
+             "prix d'hebergement en € par kW et par mois"),
+            ('annee_mise_en_service', 2020, 2060,
+             'annee de mise en service visee'),
+            ('annee_puissance_ferme', 2020, 2060,
+             'annee de disponibilite ferme de la puissance'),
+            ('capacite_concurrente_mw', 0.0, 1000000.0,
+             'capacite concurrente annoncee en MW'),
+            ('demande_zone_mw', 0.0, 1000000.0,
+             'demande attendue sur la zone en MW'),
+            ('densite_cible_kw_baie', 0.5, 1000.0,
+             'densite cible en kW par baie')):
         v = d.get(cle)
         if v in (None, ''):
             continue
@@ -2703,6 +2741,52 @@ def api_finance_dc_devis():
             return jsonify({'ok': False,
                             'erreur': '%s hors bornes (%s a %s)' % (libelle, mini, maxi)}), 400
         conception[cle] = v
+
+    # LA NATURE DE L'OPERATION, LES TRANCHES ET LES RISQUES COUVERTS.
+    # Trois entrees non numeriques, donc trois validations distinctes — les
+    # faire passer par la boucle ci-dessus aurait demande de tordre celle-ci
+    # pour un cas sur trois, et c'est ainsi qu'une borne finit par ne plus
+    # s'appliquer a personne.
+    nat = d.get('nature_projet')
+    if nat:
+        if str(nat) not in ('greenfield', 'brownfield'):
+            return jsonify({'ok': False,
+                            'erreur': "nature d'operation inconnue"}), 400
+        conception['nature_projet'] = str(nat)
+    for cle, table, libelle in (
+            ('risques_couverts', business_case_dc.RISQUES_CONNUS,
+             'risque couvert'),):
+        v = d.get(cle)
+        if not v:
+            continue
+        if not isinstance(v, list):
+            return jsonify({'ok': False,
+                            'erreur': '%s : liste attendue' % libelle}), 400
+        inconnus = [x for x in v if x not in table]
+        if inconnus:
+            return jsonify({'ok': False, 'erreur': '%s inconnu : %s'
+                            % (libelle, ', '.join(map(str, inconnus[:3])))}), 400
+        conception[cle] = list(v)
+    # LES TRANCHES ET LA TRAJECTOIRE : deux listes de nombres. Une valeur
+    # illisible fait REFUSER la liste entiere plutot que d'etre ignoree — une
+    # tranche silencieusement ecartee fausserait le total sans se signaler.
+    for cle, libelle in (('tranches', 'decoupage en tranches'),
+                         ('trajectoire_mw', 'montee en charge declaree')):
+        v = d.get(cle)
+        if not v:
+            continue
+        if not isinstance(v, list) or len(v) > 40:
+            return jsonify({'ok': False,
+                            'erreur': '%s : liste de nombres attendue' % libelle}), 400
+        try:
+            nombres = [float(x) for x in v]
+        except (TypeError, ValueError):
+            return jsonify({'ok': False,
+                            'erreur': '%s : valeur illisible' % libelle}), 400
+        if any(x < 0 or x > 100000 for x in nombres):
+            return jsonify({'ok': False,
+                            'erreur': '%s : valeur hors bornes' % libelle}), 400
+        conception[cle] = nombres
 
     # L'INDICE DE COUT DE CONSTRUCTION, PAR PAYS. Sans lui, la meme enveloppe
     # sort pour tous les pays compares — ce qui reviendrait a dire que

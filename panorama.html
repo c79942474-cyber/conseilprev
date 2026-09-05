@@ -2662,6 +2662,36 @@ th .fl{font-size:9px;margin-left:3px}
     background:rgba(0,0,0,.16);padding:14px 17px;margin:18px 0 6px}
   .kpi-t{font-size:15px;font-weight:600;margin:0 0 6px}
   .kpi-d{font-size:13px;line-height:1.65;margin:0 0 12px;color:var(--muted,#9fb0c0)}
+  /* ── LE BUSINESS CASE ──────────────────────────────────────────────────
+     Il reprend les formes du bloc de création de valeur — mêmes cartes, même
+     tableau — parce que c'est la MÊME lecture, faite plus tôt. Un troisième
+     langage visuel pour un troisième bloc de la même page ferait croire à
+     trois outils, alors qu'il y en a un. */
+  .bc{margin:22px 0 0;padding:18px 20px;border:1px solid var(--rule);border-radius:4px;
+    background:var(--white)}
+  .bc-t{margin:0 0 12px;font-size:16px}
+  .bc-vide{margin:0;color:var(--ink-3)}
+  .bc-kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+  .bc-c{padding:11px 13px;border:1px solid var(--rule);border-radius:4px}
+  .bc-c .t{font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)}
+  .bc-c .v{font-size:21px;font-weight:700;margin:3px 0 3px;font-variant-numeric:tabular-nums}
+  .bc-c .n{font-size:11.5px;color:var(--ink-3);line-height:1.45}
+  .bc-eq{margin:12px 0 0;font-size:12.5px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+  .bc-fx{margin:8px 0 0;font-size:13px}
+  .bc-tab{width:100%;border-collapse:collapse;margin:14px 0 0;font-size:13px}
+  .bc-tab th,.bc-tab td{padding:5px 8px;border-bottom:1px solid var(--rule)}
+  .bc-tab .n{text-align:right;font-variant-numeric:tabular-nums}
+  .bc-tab tr.neg td{color:#8A2B12}
+  .bc-tab tr.pos td{color:#1F5C33}
+  .bc-tr{margin:8px 0 0;font-size:13px}
+  .bc-res{margin:8px 0 0;font-size:12px;color:var(--ink-3);line-height:1.5;
+    padding-left:11px;border-left:2px solid var(--rule)}
+  .bc-mq{margin:14px 0 0;font-size:13px}
+  .bc-mq>div>div{padding:7px 0;border-bottom:1px solid var(--rule)}
+  .bc-pl{margin:14px 0 0;font-size:12px;font-style:italic;color:var(--ink-3)}
+  .fin-bc-r{display:flex;gap:8px;align-items:flex-start;padding:5px 0;font-size:12.5px;
+    line-height:1.45;cursor:pointer}
+  .fin-bc-r input{flex:0 0 auto;margin-top:3px;width:16px;height:16px}
   .kpi-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));
     gap:11px;margin-bottom:11px}
   .kpi-ch{display:flex;flex-direction:column;gap:4px}
@@ -3179,6 +3209,87 @@ engagements publics) sont imputés nominativement.</div>
             <input type="number" id="fin-ref" step="0.05" min="0" max="1"
                    placeholder="0 à 1 · défaut 0">
             <span class="fin-aide">Indicateur REF au sens d’EN 50600-4-3 et ISO 30134-3.</span></div>
+        </div>
+      </details>
+      <!-- ══ LE BUSINESS CASE — LA MOITIÉ QUE LE CHIFFRAGE NE REGARDE PAS ══
+           CE QUI MANQUAIT. Les cinq constats de l'avis de faisabilité sont
+           TOUS du côté de l'offre : le budget tient-il, le chiffrage est-il
+           complet, le réseau suivra-t-il, le calendrier est-il réaliste, le
+           site sera-t-il conforme. Aucun ne demandait si quelqu'un louera. Un
+           dossier qui répond parfaitement à « pouvons-nous le construire »
+           sans répondre à « quelqu'un le prendra-t-il » n'est pas un business
+           case : c'est un devis.
+
+           TOUT EST FACULTATIF ET RIEN N'A DE VALEUR PAR DÉFAUT. Une donnée
+           absente rend un test INDÉTERMINÉ — elle ne le rend pas vert. Sur ce
+           sujet plus qu'ailleurs, un formulaire pré-rempli deviendrait la
+           réponse : c'est précisément sur la demande qu'un porteur optimiste
+           se trompe, et la deviner à sa place validerait son optimisme. -->
+      <details class="fin-plus" id="fin-bc-plus">
+        <summary>Business case <span>— la demande, le calendrier électrique, la
+        concurrence, le phasage et les risques. Huit tests de viabilité qui
+        rejoignent le MÊME avis GO / NO GO que le chiffrage.</span></summary>
+        <div class="fin-plus-corps">
+          <p class="fin-plus-note">Ces huit tests répondent à ce qu’un
+          investisseur demande avant l’enveloppe&nbsp;: <b>la demande
+          existe-t-elle</b>, <b>le calendrier est-il compatible avec l’accès à
+          l’électricité</b>, <b>les besoins des clients finaux sont-ils
+          anticipés</b>. Ils entrent dans l’avis affiché plus bas, avec les
+          constats du chiffrage — un dossier n’a qu’un verdict. Aucun prix
+          n’est embarqué&nbsp;: sans prix d’hébergement déclaré, le point mort
+          n’est pas calculé, il est dit <b>indéterminé</b>.</p>
+          <div class="fin-ch"><label for="fin-bc-mwc">Puissance déjà contractée (MW)</label>
+            <input type="number" id="fin-bc-mwc" step="0.1" min="0"
+                   placeholder="contrats signés et LOI fermes">
+            <span class="fin-aide">À l’exclusion des marques d’intérêt&nbsp;: ce
+            sont deux choses différentes, et la confusion se paie au premier comité.</span></div>
+          <div class="fin-ch"><label for="fin-bc-prix">Prix d’hébergement (€/kW/mois)</label>
+            <input type="number" id="fin-bc-prix" step="1" min="1" max="5000"
+                   placeholder="grille ou contrats signés">
+            <span class="fin-aide">La donnée la plus structurante&nbsp;: elle
+            débloque revenu, point mort et marge d’un seul coup.</span></div>
+          <div class="fin-ch"><label for="fin-bc-ms">Mise en service visée (année)</label>
+            <input type="number" id="fin-bc-ms" step="1" min="2020" max="2060"
+                   placeholder="planning d’opération">
+            <span class="fin-aide">Confrontée ci-dessous à la date ferme de la puissance.</span></div>
+          <div class="fin-ch"><label for="fin-bc-pf">Puissance FERME en (année)</label>
+            <input type="number" id="fin-bc-pf" step="1" min="2020" max="2060"
+                   placeholder="convention de raccordement">
+            <span class="fin-aide">« Ferme » = écrit par le gestionnaire de réseau.
+            Une estimation d’agence ne vaut pas engagement, et l’écart se compte en années.</span></div>
+          <div class="fin-ch"><label for="fin-bc-dens">Densité demandée (kW/baie)</label>
+            <input type="number" id="fin-bc-dens" step="1" min="0.5" max="1000"
+                   placeholder="cahier des charges client">
+            <span class="fin-aide">Au-delà d’une trentaine, l’air ne suffit plus&nbsp;:
+            ce n’est pas un supplément de coût, c’est un autre bâtiment.</span></div>
+          <div class="fin-ch"><label for="fin-bc-nat">Nature de l’opération</label>
+            <select id="fin-bc-nat">
+              <option value="">— non précisée —</option>
+              <option value="greenfield">Greenfield — partir de zéro</option>
+              <option value="brownfield">Brownfield — transformer l’existant</option>
+            </select>
+            <span class="fin-aide">Les deux n’échouent pas aux mêmes endroits.</span></div>
+          <div class="fin-ch"><label for="fin-bc-conc">Capacité concurrente annoncée (MW)</label>
+            <input type="number" id="fin-bc-conc" step="1" min="0"
+                   placeholder="annonces, permis, file d’attente">
+            <span class="fin-aide">Aucun acteur n’est nommé ni noté&nbsp;: on compare
+            une capacité annoncée à une demande déclarée.</span></div>
+          <div class="fin-ch"><label for="fin-bc-dem">Demande attendue sur la zone (MW)</label>
+            <input type="number" id="fin-bc-dem" step="1" min="0"
+                   placeholder="étude de marché, avec son émetteur">
+            <span class="fin-aide">C’est le dénominateur du test de concurrence.</span></div>
+          <div class="fin-ch"><label for="fin-bc-tr">Tranches d’investissement (MW, séparés par des virgules)</label>
+            <input type="text" id="fin-bc-tr" placeholder="ex. 8, 12">
+            <span class="fin-aide">Sans découpage, l’engagement est réputé d’un seul
+            tenant. Le phasage ne supprime pas le risque&nbsp;: il le rend refusable.</span></div>
+          <div class="fin-ch"><label for="fin-bc-traj">Montée en charge (MW cumulés par année, séparés par des virgules)</label>
+            <input type="text" id="fin-bc-traj" placeholder="ex. 4, 9, 14, 18, 20">
+            <span class="fin-aide">Votre hypothèse de commercialisation&nbsp;: le module
+            la prend telle quelle et en tire l’année de marge positive. Il ne la devine pas.</span></div>
+          <div class="fin-ch" style="grid-column:1/-1"><label>Risques financiers couverts</label>
+            <div class="fin-bc-risq" id="fin-bc-risq"></div>
+            <span class="fin-aide">Un risque assumé et écrit n’est pas un risque
+            oublié&nbsp;— c’est cette distinction que cherche un investisseur.</span></div>
         </div>
       </details>
       <div class="fin-ch"><label for="fin-an">Horizon d’exploitation (ans)</label>
@@ -12480,6 +12591,7 @@ if(window.parent&&window.parent!==window){
    ══════════════════════════════════════════════════════════════════════════ */
 (function(){
   var REF = null, SEL = [], DERNIER = null;
+  var REF_BC = null;   /* le référentiel du business case, servi avec */
   var $ = function(id){ return document.getElementById(id); };
   function eur(x){ return (Math.round(x*10)/10).toLocaleString('fr-FR'); }
   function fourch(a){ return a ? eur(a[0]) + ' – ' + eur(a[1]) : '—'; }
@@ -12505,6 +12617,11 @@ if(window.parent&&window.parent!==window){
       .then(function(j){
         if(!j || !j.ok) throw new Error('référentiel indisponible');
         REF = j;
+        /* LE RÉFÉRENTIEL DU BUSINESS CASE, dans sa propre variable. Le fondre
+           dans REF ferait croire, à la relecture, que finance_dc porte des
+           risques financiers — il n'en porte aucun. */
+        REF_BC = j.business_case || null;
+        risquesFormulaire();
         var g = $('fin-gab');
         g.innerHTML = Object.keys(j.cout_mw).map(function(k){
           var c = j.cout_mw[k];
@@ -12602,15 +12719,81 @@ if(window.parent&&window.parent!==window){
         intensite_contrat: nombreOuRien('fin-intc'),
         part_sans_carbone: nombreOuRien('fin-ref'),
         annees: parseInt($('fin-an').value, 10) || 10,
-        cout_mw: cout })
+        cout_mw: cout,
+        /* LE BUSINESS CASE VOYAGE AVEC LE CHIFFRAGE, dans la même requête.
+           Un second appel produirait un point mort calculé sur une AUTRE
+           exploitation que celle affichée — voisine, jamais identique —, et
+           c'est le chiffre le plus flatteur des deux qu'on retiendrait. */
+        mw_commercialises: nombreOuRien('fin-bc-mwc'),
+        prix_kw_mois: nombreOuRien('fin-bc-prix'),
+        annee_mise_en_service: nombreOuRien('fin-bc-ms'),
+        annee_puissance_ferme: nombreOuRien('fin-bc-pf'),
+        densite_cible_kw_baie: nombreOuRien('fin-bc-dens'),
+        capacite_concurrente_mw: nombreOuRien('fin-bc-conc'),
+        demande_zone_mw: nombreOuRien('fin-bc-dem'),
+        nature_projet: $('fin-bc-nat').value || undefined,
+        tranches: listeNombres('fin-bc-tr'),
+        trajectoire_mw: listeNombres('fin-bc-traj'),
+        risques_couverts: risquesCoches() })
     }).then(function(r){ return r.json(); })
       .then(function(j){
         $('fin-go').disabled = false;
         if(!j || !j.ok){ $('fin-note').textContent = (j && j.erreur) || 'calcul impossible'; return; }
         DERNIER = j; rendre(j); majNote();
       })
-      .catch(function(){ $('fin-go').disabled = false;
-        $('fin-note').textContent = 'service indisponible'; });
+      .catch(function(e){ $('fin-go').disabled = false;
+        /* DEUX PANNES DE NATURES DIFFÉRENTES, ET ELLES SE DISAIENT PAREIL.
+           Ce catch couvre l'appel ET le rendu : une erreur levée dans le
+           rendu — le serveur ayant répondu 200 — s'annonçait « service
+           indisponible », ce qui envoie chercher la panne à l'endroit où
+           elle n'est pas. On distingue les deux, et on laisse l'erreur
+           réelle joignable dans la console plutôt que de l'avaler. */
+        var rendu = e && (e instanceof TypeError || e instanceof ReferenceError);
+        $('fin-note').textContent = rendu
+          ? 'Le calcul a abouti mais son affichage a échoué — le détail est '
+            + 'dans la console du navigateur.'
+          : 'service indisponible';
+        if (window.console && console.error) console.error('enveloppe :', e); });
+  }
+
+  /* UNE LISTE ILLISIBLE EST REFUSÉE ENTIÈRE, pas nettoyée en silence. Une
+     tranche écartée sans le dire fausserait le total du découpage — et le
+     test de phasage conclurait sur une somme qui n'est pas celle qu'on a
+     tapée. Le serveur refuse de la même façon ; ce contrôle-ci évite
+     seulement l'aller-retour. */
+  function listeNombres(id){
+    var v = ($(id) && $(id).value || '').trim();
+    if(!v) return undefined;
+    var out = v.split(/[,;\s]+/).filter(Boolean).map(function(x){
+      return parseFloat(x.replace(',', '.'));
+    });
+    if(out.some(function(n){ return !isFinite(n); })){
+      alert('Liste de nombres attendue, séparés par des virgules — par exemple 8, 12.');
+      return undefined;
+    }
+    return out;
+  }
+
+  function risquesCoches(){
+    var out = [];
+    document.querySelectorAll('#fin-bc-risq [data-risq]:checked').forEach(function(c){
+      out.push(c.getAttribute('data-risq'));
+    });
+    return out.length ? out : undefined;
+  }
+
+  /* Les risques viennent du RÉFÉRENTIEL, jamais recopiés ici : une liste
+     figée dans la page annoncerait cinq risques le jour où le module en
+     porterait six, et la phrase resterait crédible. */
+  function risquesFormulaire(){
+    var z = $('fin-bc-risq');
+    if(!z || !REF_BC) return;
+    z.innerHTML = Object.keys(REF_BC.risques_connus).map(function(k){
+      var r = REF_BC.risques_connus[k];
+      return '<label class="fin-bc-r"><input type="checkbox" data-risq="'
+        + esc(k) + '"><span><b>' + esc(r.nom) + '</b> — sans couverture : '
+        + esc(r.sans) + '</span></label>';
+    }).join('');
   }
 
   function carteRang(x, i, ref){
@@ -12902,6 +13085,114 @@ if(window.parent&&window.parent!==window){
       + 'vérifieraient pas.</span></p>';
   }
 
+  /* ── LE BUSINESS CASE — projections, point mort, ce qui manque ─────────
+     L'ORDRE DES TROIS BLOCS EST DÉLIBÉRÉ : le POINT MORT d'abord, la
+     trajectoire ensuite, ce qui manque en dernier. Une marge calculée à cent
+     pour cent de remplissage ne dit rien — tous les projets sont rentables
+     pleins. Ce qui se demande en comité, c'est à partir de quel remplissage
+     le projet couvre ses coûts, et si ce taux est atteignable au vu de ce qui
+     est déjà contracté.
+
+     LES CONSTATS NE SONT PAS RENDUS ICI. Ils sont déjà dans l'avis
+     ci-dessus, mêlés à ceux du chiffrage : les répéter en ferait une seconde
+     liste, et deux listes du même jugement divergent au premier ajout. */
+  function businessCase(bc){
+    if(!bc) return '';
+    var p = bc.projections || {};
+    var h = '<div class="bc"><h4 class="bc-t">Business case — ce que le '
+      + 'chiffrage ne regarde pas</h4>';
+
+    if(!p.ok){
+      h += '<p class="bc-vide"><b>Projections indéterminées.</b> '
+        + esc(p.message || '') + '</p>';
+    } else {
+      var pm = p.point_mort_taux, tc = p.taux_contracte;
+      h += '<div class="bc-kpi">'
+        + bcCarte('Point mort d’exploitation',
+                  pm == null ? '—' : Math.round(pm * 100) + ' %',
+                  pm == null ? 'Le revenu à pleine charge ne couvre pas les '
+                             + 'coûts variables.'
+                             : 'Soit ' + eur(p.point_mort_mw) + ' MW commercialisés. '
+                             + 'Bornes des coûts : ' + bcPct(p.point_mort_bornes[0])
+                             + ' à ' + bcPct(p.point_mort_bornes[1]) + '.')
+        + bcCarte('Déjà contracté',
+                  tc == null ? '—' : Math.round(tc * 100) + ' %',
+                  tc == null ? 'Puissance contractée non déclarée.'
+                             : (p.marge_de_securite >= 0
+                                ? 'Au-dessus du point mort.'
+                                : 'Sous le point mort de '
+                                  + Math.round(Math.abs(p.marge_de_securite) * 100)
+                                  + ' points.'))
+        + bcCarte('Revenu à pleine charge', eur(p.revenu_plein_meur_an) + ' M€/an',
+                  'À ' + eur(p.prix_kw_mois) + ' €/kW/mois sur '
+                  + p.mois_par_an + ' mois. C’est la MÊME grandeur que le bloc '
+                  + '« Création de valeur » demande plus bas : reportez-la '
+                  + 'plutôt que d’en saisir une autre.')
+        + bcCarte('Marge à pleine charge', eur(p.marge_pleine_meur_an) + ' M€/an',
+                  'Revenu moins exploitation. Ne couvre ni le service de la '
+                  + 'dette ni la rémunération des fonds propres.')
+        + '</div>';
+      h += '<p class="bc-eq">' + esc(p.equation) + '</p>';
+
+      var c = p.couts || {};
+      h += '<p class="bc-fx"><b>Fixe ' + fourch(c.fixe_meur_an) + ' M€/an · '
+        + 'variable ' + fourch(c.variable_meur_an) + ' M€/an.</b> '
+        + 'La séparation décide du point mort : l’électricité n’est pas '
+        + 'entièrement variable — le froid, l’onduleur et la distribution '
+        + 'tournent pour le volume de la salle, pas pour la charge '
+        + 'installée.</p>';
+
+      var t = p.trajectoire || {};
+      if(t.ok){
+        h += '<table class="bc-tab"><thead><tr><th>Année</th>'
+          + '<th class="n">MW cumulés</th><th class="n">Remplissage</th>'
+          + '<th class="n">Revenu</th><th class="n">Coût</th>'
+          + '<th class="n">Marge</th></tr></thead><tbody>'
+          + t.lignes.map(function(l){
+              return '<tr class="' + (l.marge_meur >= 0 ? 'pos' : 'neg') + '">'
+                + '<td>' + l.annee + '</td><td class="n">' + eur(l.mw_cumules)
+                + '</td><td class="n">' + Math.round(l.taux * 100) + ' %</td>'
+                + '<td class="n">' + eur(l.revenu_meur) + '</td>'
+                + '<td class="n">' + eur(l.cout_meur) + '</td>'
+                + '<td class="n">' + eur(l.marge_meur) + '</td></tr>';
+            }).join('')
+          + '</tbody></table>'
+          + '<p class="bc-tr">' + (t.annee_marge_positive
+              ? 'Marge d’exploitation positive à partir de l’année <b>'
+                + t.annee_marge_positive + '</b> de la montée en charge déclarée.'
+              : esc(t.message || '')) + '</p>';
+      } else if(t.message){
+        h += '<p class="bc-tr">' + esc(t.message) + '</p>';
+      }
+      (p.reserves || []).forEach(function(r){
+        h += '<p class="bc-res">' + esc(r) + '</p>';
+      });
+    }
+
+    /* CE QUI MANQUE EST RENDU AVEC CE QUE SON ABSENCE EMPÊCHE. Réclamer
+       « les données manquantes » fait remplir les champs faciles ; nommer le
+       test qu'elles débloquent fait chercher la bonne donnée. */
+    var m = bc.manquantes || [];
+    if(m.length){
+      h += '<details class="bc-mq"><summary>' + m.length + ' donnée(s) non '
+        + 'déclarée(s) — et le test que chacune empêche</summary><div>'
+        + m.map(function(x){
+            return '<div><b>' + esc(x.nom) + '</b><br>' + esc(x.empeche)
+              + '<br><i>Où la trouver : ' + esc(x.ou) + '</i></div>';
+          }).join('') + '</div></details>';
+    }
+    h += '<p class="bc-pl">' + esc(bc.plafond) + '</p></div>';
+    return h;
+  }
+
+  function bcPct(x){ return x == null ? '—' : Math.round(x * 100) + ' %'; }
+
+  function bcCarte(t, v, n){
+    return '<div class="bc-c"><div class="t">' + esc(t) + '</div>'
+      + '<div class="v">' + esc(v) + '</div>'
+      + '<div class="n">' + esc(n) + '</div></div>';
+  }
+
   function avisFaisabilite(f){
     if(!f || !f.avis) return '';
     var a = f.avis;
@@ -12998,6 +13289,7 @@ if(window.parent&&window.parent!==window){
            dit plutôt que de l'inventer. */
         + indiceConstruction(d.devis.indice_construction)
         + avisFaisabilite(d.faisabilite)
+        + businessCase(d.business_case)
         + '<p class="note" style="margin:0 0 8px">Refroidissement retenu : <b>'
         + esc(d.devis.refroidissement.nom)+'</b> (PUE '+d.devis.refroidissement.pue[0]+'–'
         + d.devis.refroidissement.pue[1]+', eau '+esc(d.devis.refroidissement.eau)+') — déduit du climat '

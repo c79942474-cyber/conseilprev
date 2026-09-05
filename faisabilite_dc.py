@@ -24,8 +24,23 @@ plus que le verdict lui-même :
     montant repose sur des postes que le référentiel ne sait pas chiffrer.
     Le plafond honnête d'une faisabilité, c'est « engager les études
     suivantes », jamais « engager les fonds. »
+
+L'AVIS COUVRE DEUX DISCIPLINES, ET UN SEUL VERDICT LES RÉUNIT. Les cinq
+constats d'origine sont TOUS du côté de l'offre : le budget tient-il, le
+chiffrage est-il assez complet, le réseau suivra-t-il, le calendrier est-il
+réaliste, le site sera-t-il conforme. Aucun ne demandait si quelqu'un louera.
+`business_case_dc` fournit les huit constats de la demande — existence de la
+demande, robustesse économique, calendrier contre accès à l'électricité,
+besoins des clients finaux, concurrence, nature de l'opération, phasage,
+risques financiers —, DANS LE MÊME FORMAT, et ils entrent dans la même
+synthèse.
+
+POURQUOI PAS DEUX AVIS SÉPARÉS. Parce qu'ils se contrediraient, et que c'est
+le plus flatteur des deux qu'on présenterait. Un dossier n'a qu'un verdict, et
+un point bloquant reste bloquant qu'il vienne du réseau ou du marché.
 """
 
+import business_case_dc as B
 import finance_dc as F
 
 VERSION = "2026-08-a"
@@ -339,7 +354,7 @@ def _synthese(constats, part_non_chiffree):
 
 
 def avis(devis, budget_meur=None, exploitation=None, cout_total=None,
-         trajectoire=None, conformite=None):
+         trajectoire=None, conformite=None, business_case=None):
     """L'avis SEUL, greffé sur un chiffrage déjà produit.
 
     C'est la porte d'entrée pour l'application, qui a déjà calculé le devis avec
@@ -355,6 +370,22 @@ def avis(devis, budget_meur=None, exploitation=None, cout_total=None,
         _avis_calendrier(trajectoire),
         _avis_conformite(conformite),
     ]
+    # LES CONSTATS DE LA DEMANDE REJOIGNENT LES MÊMES. Ils arrivent déjà au
+    # format — même échelle d'états, même fondement, même « ce qui le
+    # renverserait » — et une règle vérifie que les deux formats n'ont pas
+    # divergé. Les traiter à part aurait produit deux verdicts pour un dossier.
+    #
+    # LEUR ABSENCE NE CHANGE RIEN AU RESTE : un appelant qui ne passe pas de
+    # business case obtient exactement l'avis d'avant, ce qui est la condition
+    # pour que cette greffe n'invalide aucun dossier déjà rendu.
+    bc_constats = list((business_case or {}).get("constats") or [])
+    for c in bc_constats:
+        c = dict(c)
+        c["etat_nom"] = ETATS[c["etat"]]["nom"]
+        c["discipline"] = "business_case"
+        constats.append(c)
+    for c in constats:
+        c.setdefault("discipline", "chiffrage")
     # Le plus grave d'abord : un lecteur pressé lit la première ligne, et c'est
     # celle-là qui doit être le point dur.
     constats.sort(key=lambda c: -ETATS[c["etat"]]["poids"])
@@ -367,7 +398,16 @@ def avis(devis, budget_meur=None, exploitation=None, cout_total=None,
         "avis": _synthese(constats, part),
         "etats": ETATS,
         "budget_meur": budget_meur,
+        "business_case": business_case,
+        # LE COMPTE PAR DISCIPLINE, parce que « huit vigilances » ne dit pas la
+        # même chose selon qu'elles viennent toutes du chiffrage ou toutes du
+        # marché. Le premier cas est un dossier à compléter ; le second est un
+        # projet à reconsidérer.
+        "par_discipline": {
+            d: sum(1 for c in constats if c.get("discipline") == d)
+            for d in ("chiffrage", "business_case")},
         "moteur": F.VERSION,
+        "moteur_business_case": B.VERSION,
     }
 
 
