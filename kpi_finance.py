@@ -652,7 +652,7 @@ def revenus_proposes(capex_meur, opex_an_meur, annees, wacc_pct, is_pct,
 
 
 def propositions(capex_meur=None, opex_an_meur=None, annees=10, hypotheses=None,
-                 pays=None, pays_compares=None):
+                 pays=None, pays_compares=None, revenu_business_case=None):
     """Pour chaque entrée : ce qu'on peut proposer, d'où ça vient, ou pourquoi non.
 
     Rien n'est appliqué ici. Le module PROPOSE et se justifie ; c'est la page
@@ -674,6 +674,32 @@ def propositions(capex_meur=None, opex_an_meur=None, annees=10, hypotheses=None,
             out[cle] = {"propositions": [], "refus": REFUS_PROPOSITION[cle]}
             continue
         if cle == "revenu_meur_an":
+            # LE REVENU DU BUSINESS CASE PASSE EN TÊTE, et il n'est PAS une
+            # seconde source : c'est la même grandeur, déjà calculée deux
+            # blocs plus haut sur un prix au kilowatt que le lecteur a
+            # déclaré. Le laisser ressaisir ici ferait exister deux revenus
+            # pour le même projet — voisins, jamais identiques —, et c'est le
+            # plus flatteur des deux qu'on retiendrait au comité.
+            #
+            # IL EST PROPOSÉ, PAS POSÉ. Comme toutes les autres propositions
+            # de ce module : le lecteur le retient d'un geste, et le badge de
+            # provenance dit d'où il vient. Une valeur poussée d'autorité dans
+            # un formulaire finit par être crue sans être lue.
+            if revenu_business_case:
+                r = revenu_business_case
+                props.append({
+                    "origine": "business_case", "nature": "reprise",
+                    "libelle": "Reprendre le revenu du business case",
+                    "valeur": _f(float(r.get("revenu_meur_an") or 0), 1),
+                    "formule": r.get("formule") or "revenu à pleine charge du "
+                                                   "business case",
+                    "lecture": "C'est le revenu À PLEINE CHARGE. Le business "
+                               "case dit à partir de quel remplissage le site "
+                               "couvre ses coûts ; ces trois indicateurs, eux, "
+                               "le supposent plein. Reprendre ce chiffre sans "
+                               "regarder le point mort donnerait une création "
+                               "de valeur pour un site qu'on n'a pas encore "
+                               "rempli."})
             props.extend(revenus_proposes(
                 capex_meur, opex_an_meur, annees,
                 _num(h.get("wacc")), _num(h.get("is_taux")),

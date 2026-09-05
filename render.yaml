@@ -17,8 +17,36 @@
 # pas se faire depuis ce fichier.
 services:
   - type: web
+    # ⚠ CE QUE J'AI ÉCRIT ICI LE 4 SEPTEMBRE ÉTAIT FAUX, ET LA CORRECTION A
+    # FABRIQUÉ LE DOUBLON QU'ELLE PRÉTENDAIT EMPÊCHER.
+    #
+    # Le raisonnement était : « faire correspondre le nom rend le service
+    # ADOPTABLE par une synchronisation ». C'est inexact. Render n'adopte que
+    # les services DÉJÀ RATTACHÉS à ce blueprint ; un service créé à la main
+    # ne le devient pas parce qu'un fichier porte son nom. `conseilprevIA`
+    # (srv-da7i2jfqj5pc738mmaj0) a été créé le 26 août dans un environnement,
+    # hors blueprint : la synchronisation qui a suivi le renommage n'a donc
+    # rien adopté. Elle a créé, le 4 septembre entre 16 h 19 et 16 h 22 :
+    #
+    #   · `conseilprevia-registre-db-k8k5` — une base NEUVE, en Oregon parce
+    #     qu'aucune région n'est déclarée au bloc `databases` ;
+    #   · `conseilprevIA-k8k5` (srv-dadevu1t0dsc738b4rd0) — un service neuf,
+    #     portant exactement ce fichier : Francfort, plan standard, deux
+    #     workers, sonde /health. Vivant, facturé, et dont le seul trafic est
+    #     la sonde de Render elle-même toutes les cinq secondes.
+    #
+    # LE SEUL POINT FAVORABLE : le doublon a reçu sa PROPRE base. Il n'a donc
+    # rien écrit dans le registre vivant.
+    #
+    # CE FICHIER N'EST PAS LE CORRECTIF. Tant que le blueprint est rattaché à
+    # ce dépôt, toute synchronisation recréera ce qu'il ne peut pas adopter —
+    # quel que soit le nom écrit ici. Le correctif est de DÉTACHER le
+    # blueprint, et de ne garder ce fichier que comme description de
+    # l'infrastructure. C'est une action de tableau de bord, elle ne se fait
+    # pas depuis ici.
+    #
     # LE NOM NE DÉSIGNAIT AUCUN SERVICE VIVANT, ET C'EST CE QUI A FABRIQUÉ LE
-    # DOUBLON. Les services de ce dépôt s'appellent `conseilprevIA`,
+    # PREMIER DOUBLON. Les services de ce dépôt s'appellent `conseilprevIA`,
     # `conseilprev-k8k5` et `conseilprevinfo` ; le nom `conseilprev` est celui
     # d'un CRON JOB. Lors d'une synchronisation, Render ne trouvait donc aucun
     # service web à adopter sous ce nom, en créait un neuf, et lui accolait un
