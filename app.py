@@ -10558,7 +10558,31 @@ def _rag_cle(r):
 
 def _rag_vectoriel(cur, query, limite, filtre_sql='', filtre_params=()):
     """Recherche par le SENS. Rend [] — jamais une exception — si elle est
-    indisponible : c est une moitie de la reponse, pas la reponse."""
+    indisponible : c est une moitie de la reponse, pas la reponse.
+
+    CETTE MOITIE EST INACTIVE, ET C EST DELIBERE. Les vecteurs viennent de
+    `mistral-embed` (d ou la colonne `vector(1024)`), et le service n a pas de
+    cle Mistral. Anthropic ne publie PAS d API d embeddings : `ANTHROPIC_API_KEY`
+    ne peut pas y suppleer — elle sert au chat, pas aux vecteurs.
+
+    Mesure du 6 septembre 2026 : 6 787 fragments, dont 6 787 avec index plein
+    texte (100 %) et 363 avec vecteur (5,3 %). La recherche par les mots couvre
+    donc tout le corpus, et celle par le sens en couvrait 5 % — pire, son
+    `WHERE c.embedding IS NOT NULL` l y CONFINAIT en silence. Zero vecteur est
+    plus honnete que 5 %.
+
+    Ce que la decision impose au reste du code, et que des regles tiennent :
+    la recherche par les mots ne doit JAMAIS dependre d un vecteur, et RIEN ne
+    doit filtrer sur `statut_indexation` — 32 des 45 documents resteront
+    `en_cours` a jamais, dont les onze textes reglementaires (AI Act, RGPD,
+    NIST 800-82, ISO 42001). Un filtre sur ce statut les ferait disparaitre
+    sans le dire.
+
+    Poser une cle Mistral suffirait a rallumer cette moitie : les 363 vecteurs
+    existants restent compatibles. Changer de fournisseur, non — melanger deux
+    espaces d embeddings casse la similarite en silence, et imposerait de
+    detruire ces 363 vecteurs avant de tout revectoriser.
+    """
     if not (RAG_PGVECTOR_AVAILABLE and REGISTRE_USE_PG):
         return []
     try:
