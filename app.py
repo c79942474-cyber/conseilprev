@@ -11396,6 +11396,131 @@ def actualites_communique(creneau):
     return resp
 
 
+import veille_ia  # noqa: E402
+
+# L'adresse du flux amont reste RÉGLABLE sans redéploiement : le jour où le site
+# cyber change de domaine, on ne veut pas un correctif de code pour une chaîne.
+VEILLE_IA_SOURCE = os.environ.get('VEILLE_IA_SOURCE', veille_ia.SOURCE_DEFAUT)
+
+
+def _veille_ia_tables(cur):
+    _pk = 'TEXT PRIMARY KEY'
+    cur.execute('CREATE TABLE IF NOT EXISTS veille_ia (guid ' + _pk + ', '
+                'titre TEXT, lien TEXT, resume TEXT, emetteur TEXT, '
+                'publie TEXT, themes TEXT, recu TEXT)')
+    cur.execute('CREATE TABLE IF NOT EXISTS veille_ia_etat ('
+                'cle TEXT PRIMARY KEY, valeur TEXT)')
+
+
+def _veille_ia_etat(cur, cle):
+    cur.execute(registre_sql('SELECT valeur FROM veille_ia_etat WHERE cle=%s',
+                             'SELECT valeur FROM veille_ia_etat WHERE cle=?'), (cle,))
+    r = cur.fetchone()
+    if not r:
+        return None
+    return (dict(r) if not isinstance(r, dict) else r)['valeur']
+
+
+def veille_ia_rafraichir(cur, maintenant=None, lecteur=None):
+    """Va chercher le flux amont SI la semaine est écoulée. Rend (recus, motif).
+
+    LA CADENCE SE LIT DANS LA BASE, jamais dans une variable de processus : ce
+    service redéploie à chaque commit, et un compteur en mémoire ferait de
+    « toutes les semaines » un « à chaque déploiement ».
+
+    UN FLUX INJOIGNABLE N'EST PAS UNE PANNE DE CETTE PAGE. Le site amont peut
+    être indisponible ou redéployé ; on garde ce qu'on a et on le dit. Et on
+    N'HORODATE PAS un passage qui a échoué — sinon il faudrait attendre une
+    semaine pour réessayer.
+    """
+    maintenant = time.time() if maintenant is None else maintenant
+    _veille_ia_tables(cur)
+    if not veille_ia.est_du(_veille_ia_etat(cur, 'dernier'), maintenant):
+        return 0, 'cadence'
+    try:
+        if lecteur is not None:
+            atom = lecteur(VEILLE_IA_SOURCE)
+        else:
+            rep = requests.get(VEILLE_IA_SOURCE, timeout=12, headers={
+                'User-Agent': 'conseilprevia-veille/1.0 (+https://conseilprevia.onrender.com/actualites)',
+                'Accept': 'application/atom+xml, application/xml;q=0.9'})
+            if not rep.ok:
+                return 0, 'http_%d' % rep.status_code
+            atom = rep.text
+    except Exception as e:                                         # noqa: BLE001
+        logger.warning(f'VEILLE_IA — flux amont injoignable : {e}')
+        return 0, 'injoignable'
+
+    recus = 0
+    for e in veille_ia.entrees(atom):
+        cur.execute(registre_sql(
+            'INSERT INTO veille_ia (guid,titre,lien,resume,emetteur,publie,themes,recu)'
+            ' VALUES (%s,%s,%s,%s,%s,%s,%s,%s) ON CONFLICT (guid) DO NOTHING',
+            'INSERT OR IGNORE INTO veille_ia'
+            ' (guid,titre,lien,resume,emetteur,publie,themes,recu)'
+            ' VALUES (?,?,?,?,?,?,?,?)'),
+            (e['guid'], e['titre'], e['lien'], e['resume'], e['emetteur'],
+             e['publie'], ' · '.join(e['themes']),
+             datetime.utcnow().isoformat()))
+        recus += 1
+    # HORODATÉ APRÈS, et seulement sur un passage qui a abouti.
+    cur.execute(registre_sql(
+        'INSERT INTO veille_ia_etat (cle,valeur) VALUES (%s,%s)'
+        ' ON CONFLICT (cle) DO UPDATE SET valeur=EXCLUDED.valeur',
+        'INSERT OR REPLACE INTO veille_ia_etat (cle,valeur) VALUES (?,?)'),
+        ('dernier', str(maintenant)))
+    return recus, 'ok'
+
+
+def veille_ia_init_db():
+    """Les deux tables sont créées AU DÉMARRAGE, pas seulement à la première
+    visite. Une règle de ce dépôt compte les tables déclarées dans `app.py` et
+    les confronte à celles qui existent réellement dans la base de repli — elle
+    a attrapé ce manque, et elle avait raison : une table que seule une route
+    crée n'existe pas tant que personne n'a visité la page."""
+    conn = registre_get_db()
+    cur = conn.cursor()
+    _veille_ia_tables(cur)
+    conn.commit()
+    conn.close()
+
+
+try:
+    veille_ia_init_db()
+except Exception as _e:                                            # noqa: BLE001
+    logger.error(f"VEILLE_IA — erreur init DB : {_e}")
+
+
+@app.route('/api/veille-ia')
+@rate_limit(limit=60, window=60)
+def api_veille_ia():
+    """La veille « gouvernance de l'IA », lue chez le site cyber.
+
+    CE QUI EST SERVI EST CE QUI EST STOCKÉ, même quand le rafraîchissement a
+    échoué : une liste vide parce que le voisin est momentanément absent serait
+    une perte d'information sans contrepartie. Le motif du dernier passage est
+    rendu avec, pour que la page puisse le dire au lieu de le taire.
+    """
+    conn = registre_get_db()
+    cur = conn.cursor()
+    try:
+        _veille_ia_tables(cur)
+        conn.commit()
+        recus, motif = veille_ia_rafraichir(cur)
+        conn.commit()
+        cur.execute('SELECT titre, lien, resume, emetteur, publie, themes'
+                    ' FROM veille_ia ORDER BY publie DESC LIMIT 12')
+        lignes = [dict(r) if not isinstance(r, dict) else r for r in cur.fetchall()]
+        dernier = _veille_ia_etat(cur, 'dernier')
+    finally:
+        conn.close()
+    return jsonify({'ok': True, 'elements': lignes, 'recus': recus,
+                    'motif': motif, 'dernier': dernier,
+                    'source': VEILLE_IA_SOURCE,
+                    'domaine': veille_ia.DOMAINE_IA,
+                    'intervalle_heures': veille_ia.INTERVALLE_HEURES})
+
+
 @app.route('/api/partage/communiques')
 @rate_limit(limit=60, window=60)
 def api_partage_communiques():

@@ -1222,6 +1222,13 @@ em,.hero-em{
 .na-key{color:#e6c65a;font-weight:700}
 .na-date-key{color:#e6c65a;font-weight:800;border-bottom:1px dotted rgba(230,198,90,.5)}
 .na-fraicheur{margin:0 0 14px;font-size:.86rem;opacity:.78;letter-spacing:.01em}
+.na-veille{margin:0 0 26px;padding:16px 18px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10)}
+.na-veille h2{font-size:1.02rem;margin:0 0 6px}
+.na-veille-note{margin:0 0 10px;font-size:.8rem;opacity:.7}
+.na-veille-l{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.na-veille-l li{font-size:.88rem;line-height:1.45}
+.na-veille-em{font-weight:700;opacity:.85}
+.na-veille-th{font-size:.76rem;opacity:.62;display:block}
 .na-body h4{color:#d4baff}
 </style>
 <style id="anti-debordement">/* incorpore : evite une requete bloquante
@@ -1357,6 +1364,18 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 <div class="con">
   <div class="na-langbar"><button class="na-lang na-lang-on" data-l="fr" onclick="naSet('fr')">FR</button><button class="na-lang" data-l="en" onclick="naSet('en')">EN</button><button class="na-lang" data-l="de" onclick="naSet('de')">DE</button></div>
       <p class="na-fraicheur" id="na-fraicheur" hidden></p>
+
+      <!-- LA VEILLE N'EST PAS DE NOUS, ET LE BLOC LE DIT. Les titres et les
+           chapeaux appartiennent aux éditeurs ; on reprend ce qu'ils mettent
+           eux-mêmes dans leurs flux pour être repris, et chaque élément porte
+           le nom de son émetteur et le lien vers sa publication. Le mélanger
+           aux communiqués de la maison ferait passer l'actualité d'autrui pour
+           notre propos. -->
+      <section class="na-veille" id="na-veille" hidden aria-labelledby="na-veille-t">
+        <h2 id="na-veille-t">Veille — gouvernance de l'IA</h2>
+        <p class="na-veille-note" id="na-veille-note"></p>
+        <ul class="na-veille-l" id="na-veille-l"></ul>
+      </section>
       <div class="na-filters" id="na-filters">
         <button class="na-f on" data-t="" onclick="naFilter('')">Tous les thèmes</button>
         <button class="na-f" data-t="IA Act" onclick="naFilter('IA Act')">IA Act</button>
@@ -1700,6 +1719,58 @@ if(document.readyState === "loading"){ document.addEventListener("DOMContentLoad
   cible.textContent = "Dernier communiqué : " + recent.texte
     + " · " + dates.length + " communiqué" + (dates.length > 1 ? "s" : "") + " publiés";
   cible.hidden = false;
+})();
+</script>
+
+<script>
+/* LA VEILLE EST LUE CHEZ LE SITE CYBER, JAMAIS COLLECTÉE ICI.
+   Le classement — domaine, thèmes — est un travail que le site amont a déjà
+   fait ; le refaire au jugé sur les mots du titre le referait mal.
+
+   RIEN À MONTRER = RIEN D'AFFICHÉ. Un bloc vide, ou un « chargement… » qui ne
+   se résout jamais, promet une section qui n'existe pas. */
+(function(){
+  var sec = document.getElementById("na-veille");
+  if(!sec || !window.fetch) return;
+  function txt(n){ return document.createTextNode(n == null ? "" : String(n)); }
+  fetch("/api/veille-ia", {headers: {"Accept": "application/json"}})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(d){
+      if(!d || !d.elements || !d.elements.length) return;   /* on se tait */
+      var ul = document.getElementById("na-veille-l");
+      d.elements.forEach(function(e){
+        var li = document.createElement("li");
+        var em = document.createElement("span");
+        em.className = "na-veille-em";
+        /* L'ÉMETTEUR D'ABORD : c'est lui qui publie, pas nous. */
+        em.appendChild(txt((e.emetteur || "source") + " — "));
+        li.appendChild(em);
+        if(e.lien){
+          var a = document.createElement("a");
+          a.href = e.lien; a.target = "_blank"; a.rel = "noopener noreferrer";
+          a.appendChild(txt(e.titre));
+          li.appendChild(a);
+        } else {
+          /* SANS LIEN, ON PUBLIE QUAND MÊME : faire disparaître l'actualité
+             priverait le lecteur de l'information ET de la raison de son
+             absence. */
+          li.appendChild(txt(e.titre));
+        }
+        if(e.themes){
+          var th = document.createElement("span");
+          th.className = "na-veille-th";
+          th.appendChild(txt(e.themes));
+          li.appendChild(th);
+        }
+        ul.appendChild(li);
+      });
+      var note = document.getElementById("na-veille-note");
+      note.appendChild(txt("Publications d'autorités et d'organismes, reprises "
+        + "de leurs flux — titres, liens et chapeaux appartiennent à leurs "
+        + "éditeurs. Relevé chaque semaine."));
+      sec.hidden = false;
+    })
+    .catch(function(){ /* le voisin est absent : la page a d'autres choses à montrer */ });
 })();
 </script>
 </body>
