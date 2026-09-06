@@ -802,7 +802,87 @@ def send_email_smart(to_email, to_name, subject, html_content,
     return False, 'saved_locally'
 
 
+# La finalite, nommee UNE SEULE FOIS. Le point de RECUEIL du consentement et le
+# point de VERIFICATION doivent nommer la meme chose : deux libelles voisins
+# produiraient un consentement recueilli pour une finalite et cherche pour une
+# autre — donc jamais trouve, ou pire, trouve a tort.
+CONSENTEMENT_LETTRE_INFORMATION = 'lettre_information'
+
+
+def consentement_lettre_information(email):
+    """Existe-t-il, pour cette adresse, une preuve de consentement a la lettre
+    d information qui n ait pas ete retiree ? Rend (bool, motif).
+
+    LA PREUVE SE LIT DANS LES DONNEES, JAMAIS DANS UN ARGUMENT. Un appelant qui
+    pourrait passer `consentement=True` rendrait cette verification decorative :
+    l article 7.1 du RGPD met la charge de la preuve sur le responsable de
+    traitement, et une preuve qu on s accorde a soi-meme n en est pas une.
+
+    LE MOTIF NOMME CE QUI MANQUE. « aucune preuve » et « consentement retire »
+    n appellent pas le meme geste : la premiere se repare en demandant, la
+    seconde ne se repare pas du tout.
+
+    Les lignes sont lues de la PLUS RECENTE a la plus ancienne, et la premiere
+    qui tranche l emporte : un retrait posterieur a un consentement doit gagner,
+    sinon le retrait ne serait qu un enregistrement decoratif.
+    """
+    em = (email or '').strip().lower()
+    if not em:
+        return False, 'adresse absente'
+    try:
+        conn = registre_get_db(); cur = conn.cursor()
+        _rgpd_table(cur); conn.commit()
+        cur.execute(registre_sql(
+            'SELECT finalites, retrait FROM consent_records'
+            ' WHERE efface=0 AND LOWER(email)=%s ORDER BY id DESC',
+            'SELECT finalites, retrait FROM consent_records'
+            ' WHERE efface=0 AND LOWER(email)=? ORDER BY id DESC'), (em,))
+        lignes = [dict(r) if not isinstance(r, dict) else r for r in cur.fetchall()]
+        try: conn.close()
+        except Exception: pass
+    except Exception as e:                                     # noqa: BLE001
+        # NE PAS ENROLER QUAND ON NE SAIT PAS. Une base injoignable est une
+        # incertitude, et l incertitude se tranche CONTRE le traitement : un
+        # repli permissif enrolerait le jour ou la verification tombe en panne,
+        # c est-a-dire exactement quand personne ne regarde.
+        logger.error(f'CONSENTEMENT_LECTURE_ERR: {e}')
+        return False, 'preuve de consentement illisible'
+    for ligne in lignes:
+        if ligne['retrait']:
+            return False, 'consentement retire'
+        try:
+            finalites = json.loads(ligne['finalites'] or '{}')
+        except Exception:                                      # noqa: BLE001
+            finalites = {}
+        if finalites.get(CONSENTEMENT_LETTRE_INFORMATION):
+            return True, 'ok'
+    return False, 'aucune preuve de consentement a la lettre d information'
+
+
 def add_contact_to_brevo(email, prenom, nom, entreprise='', liste_id=None):
+    """Inscrit une personne dans une liste Brevo — SI ELLE Y A CONSENTI.
+
+    CE QUE LE REGISTRE PROMETTAIT DEJA, ET QUE LE CODE NE FAISAIT PAS. La ligne
+    « Courriels transactionnels et lettre d information » du registre des
+    traitements declare : base « consentement (art. 6.1.a) », destinataire
+    « Brevo (UE) », duree « jusqu au retrait du consentement ». Cette fonction
+    inscrivait sans jamais chercher un consentement ni honorer un retrait — un
+    ecart entre ce que le site declare et ce que le code fait, du genre qui se
+    lit tres mal dans un controle.
+
+    ELLE VA DONC REFUSER POUR TOUT LE MONDE, ET C EST LE CONSTAT, PAS UN BOGUE :
+    aucune finalite `lettre_information` n est aujourd hui recueillie nulle part
+    sur le site. Tant qu un point de recueil n existe pas, personne n a consenti,
+    donc personne ne doit etre inscrit. Refuser est l etat correct.
+
+    L ADRESSE N EST PAS JOURNALISEE. Tracer un refus est utile ; recopier une
+    adresse dans les journaux d un traitement auquel la personne n a pas
+    consenti ajouterait un manquement au lieu d en corriger un (art. 5.1.c).
+    """
+    ok, motif = consentement_lettre_information(email)
+    if not ok:
+        logger.warning(f'BREVO_CONTACT_REFUSE: {motif}')
+        return False, f'consentement_absent: {motif}'
     if not BREVO_API_KEY: return False, 'no_brevo_api_key'
     try:
         payload = {
@@ -815,7 +895,8 @@ def add_contact_to_brevo(email, prenom, nom, entreprise='', liste_id=None):
             headers={'api-key': BREVO_API_KEY, 'Content-Type': 'application/json'},
             json=payload, timeout=15)
         if resp.status_code in (201, 204):
-            logger.info(f'BREVO_CONTACT_OK: {email}')
+            # Pas l adresse dans le journal : voir la docstring (art. 5.1.c).
+            logger.info('BREVO_CONTACT_OK')
             return True, 'ok'
         return False, f'http_{resp.status_code}'
     except Exception as e:
