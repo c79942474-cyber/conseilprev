@@ -175,9 +175,26 @@ def vectoriser(a, executer, limite):
         return attendus, []
 
     if not a.MISTRAL_API_KEY:
+        # MISTRAL_API_KEY absente — ET CE N'EST PAS UN SOUCI.
+        #
+        # DÉFAUT CORRIGÉ APRÈS COUP, constaté sur la base vivante le
+        # 6 septembre 2026 : cette branche rendait un « souci », `main()` en
+        # déduisait « L'INDEXATION EST INCOMPLÈTE » et rendait 1 — sur un
+        # corpus complet au sens de la définition en vigueur. C'était
+        # exactement l'échec permanent que ce fichier dit ailleurs vouloir
+        # éviter : personne ne pouvant le faire disparaître, tout le monde
+        # aurait appris à l'ignorer, y compris le jour d'un vrai échec.
+        #
+        # Un échec d'embeddings EN RESTE un : si la clé est là et que l'appel
+        # échoue, le souci remonte et le code de sortie vaut 1. C'est l'absence
+        # de clé qui est une condition, pas une panne.
+        print("  aucune clé d'embeddings : la recherche par le sens reste éteinte.")
+        print("  Ce n'est pas un échec — c'est l'état décidé : le corpus est "
+              "cherchable")
+        print("  par les mots. Poser MISTRAL_API_KEY suffirait à rallumer "
+              "l'autre moitié.")
         conn.close()
-        return 0, [("(global)", "MISTRAL_API_KEY absente : la vectorisation est "
-                                "impossible. Rien n'a été tenté.")]
+        return 0, []
 
     faits, soucis = 0, []
     for d in docs:
@@ -379,5 +396,26 @@ def main():
     return 0
 
 
+def _fermer_le_pool(a):
+    """Ferme le pool AVANT l'arrêt de l'interpréteur.
+
+    Sans cela, le destructeur de `psycopg_pool` tente de joindre un thread
+    pendant la finalisation et Python imprime un `PythonFinalizationError`
+    « ignoré ». C'est du bruit — il survient après que tout a été écrit et
+    imprimé — mais un outil qui finit sur une trace d'exception donne à lire un
+    échec là où il n'y en a pas, et personne ne devrait avoir à savoir que
+    celle-là ne compte pas.
+    """
+    try:
+        for pool in list(getattr(a, "_REGISTRE_POOLS", {}).values()):
+            pool.close()
+    except Exception:                                          # noqa: BLE001
+        pass          # fermer proprement est un confort, jamais une condition
+
+
 if __name__ == "__main__":
-    sys.exit(main())
+    # La fermeture ne dépend d'AUCUN chemin de sortie : `main()` rend 0 comme 1,
+    # et le bruit du destructeur serait le même dans les deux cas.
+    _sortie = main()
+    _fermer_le_pool(_app())
+    sys.exit(_sortie)

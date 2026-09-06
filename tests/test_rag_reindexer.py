@@ -190,9 +190,56 @@ def test_il_ecarte_un_document_dont_l_original_manque():
     assert "original absent" in corps, corps
 
 
-def test_la_vectorisation_echoue_ferme_sans_cle():
+def test_la_vectorisation_ne_tente_rien_sans_cle():
     """Sans clé, ne rien tenter et le dire — plutôt que d'enchaîner des échecs
     qui ressembleraient à un problème de réseau."""
     corps = _corps("vectoriser")
-    assert "if not a.MISTRAL_API_KEY:" in corps, corps
-    assert "MISTRAL_API_KEY absente" in corps, corps
+    i = corps.index("if not a.MISTRAL_API_KEY:")
+    j = corps.index("rag_get_embeddings")
+    assert i < j, "la clé est vérifiée après le premier appel d'API"
+    # La branche doit SORTIR. Ce qu'elle rend est l'affaire de la règle
+    # suivante : ici on tient seulement qu'aucun appel d'API ne suit.
+    assert re.search(r"\n        return ", corps[i:j]), corps[i:j]
+
+
+def test_l_absence_de_cle_n_est_pas_un_souci():
+    """DÉFAUT CORRIGÉ APRÈS COUP, constaté sur la base vivante le 6 septembre
+    2026. Cette branche rendait un « souci », `main()` en déduisait
+    « L'INDEXATION EST INCOMPLÈTE » et rendait 1 — sur un corpus complet au
+    sens de la définition en vigueur.
+
+    C'était exactement l'échec permanent que ce fichier dit ailleurs vouloir
+    éviter : personne ne pouvant le faire disparaître, tout le monde aurait
+    appris à l'ignorer — y compris le jour d'un vrai échec.
+
+    Un échec d'embeddings EN RESTE un : c'est l'ABSENCE DE CLÉ qui est une
+    condition, pas une panne. La règle mesure donc la liste rendue, pas la
+    prose : le mot « souci » n'apparaîtrait pas de toute façon.
+    """
+    corps = _corps("vectoriser")
+    i = corps.index("if not a.MISTRAL_API_KEY:")
+    j = corps.index("faits, soucis = 0, []")
+    branche = corps[i:j]
+    # Propriété NÉGATIVE, et c'est voulu : que la branche sorte est tenu par
+    # `test_la_vectorisation_ne_tente_rien_sans_cle`. Ici, uniquement le fait
+    # que rien de ce qui sort ne sera compté comme un échec.
+    assert "soucis.append" not in branche, branche
+    assert '("(global)"' not in branche, (
+        "l'absence de clé remonte encore comme un souci : le code de sortie "
+        "vaudrait 1 sur un corpus complet\n%s" % branche)
+
+
+def test_le_pool_est_ferme_sur_tous_les_chemins_de_sortie():
+    """Sans fermeture explicite, le destructeur de `psycopg_pool` imprime un
+    `PythonFinalizationError` « ignoré » après la dernière ligne utile. C'est
+    du bruit, mais un outil qui finit sur une trace donne à lire un échec là où
+    il n'y en a pas. La fermeture doit couvrir `main()` rendant 0 COMME 1 —
+    la placer dans la seule branche de succès ne réglerait que la moitié des
+    cas, et justement pas celle qui inquiète."""
+    fin = OUTIL[OUTIL.index('if __name__ == "__main__":'):]
+    assert "_sortie = main()" in fin, fin
+    assert fin.index("_fermer_le_pool") < fin.index("sys.exit(_sortie)"), fin
+    corps = _corps("main")
+    assert "_fermer_le_pool" not in corps, (
+        "la fermeture est dans main() : elle dépend du chemin de sortie\n%s"
+        % corps[-600:])
