@@ -10471,8 +10471,13 @@ def rag_index_next_batch(doc_id):
 
     def _vecteurs():
         """Combien de fragments portent DEJA un vecteur. Compte relu, jamais
-        deduit d une position de boucle. En SQLite la colonne n existe pas."""
-        if not REGISTRE_USE_PG:
+        deduit d une position de boucle.
+
+        La colonne `embedding` N EXISTE PAS quand pgvector est absent — ni en
+        SQLite, ni meme sur PostgreSQL (voir `rag_init_db`, qui cree alors une
+        table sans elle). L interroger leverait une erreur sur un chemin dont
+        tout le reste fonctionne."""
+        if not (RAG_PGVECTOR_AVAILABLE and REGISTRE_USE_PG):
             return 0
         cur.execute('SELECT count(*) AS n FROM rag_chunks'
                     ' WHERE document_id=%s AND embedding IS NOT NULL', (doc_id,))

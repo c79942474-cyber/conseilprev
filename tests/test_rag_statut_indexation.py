@@ -143,6 +143,19 @@ def test_aucune_position_de_boucle_ne_subsiste_dans_la_route():
             % (vestige, code))
 
 
+def test_le_compte_de_vecteurs_ne_lit_pas_une_colonne_qui_peut_ne_pas_exister():
+    """`embedding` N'EXISTE PAS quand pgvector est absent — ni en SQLite, ni
+    même sur PostgreSQL : `rag_init_db` crée alors une `rag_chunks` sans elle.
+    L'interroger ferait tomber en erreur un chemin dont tout le reste marche.
+    La garde doit donc porter sur pgvector, pas seulement sur le moteur."""
+    code = _code(APP, "rag_index_next_batch")
+    i = code.index("def _vecteurs():")
+    j = code.index("def _rendre(")
+    garde = code[i:j]
+    assert "if not (RAG_PGVECTOR_AVAILABLE and REGISTRE_USE_PG):" in garde, garde
+    assert garde.index("RAG_PGVECTOR_AVAILABLE") < garde.index("embedding IS NOT NULL"), garde
+
+
 # ══════════════════════════════════════════════════════════════════════════
 # 4. UN ÉCHEC S'ARRÊTE ET SE DIT
 # ══════════════════════════════════════════════════════════════════════════
