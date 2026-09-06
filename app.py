@@ -10389,73 +10389,140 @@ def rag_upload():
                       "téléchargement de l original ne sera pas proposé."
                       % (taille // (1024 * 1024), RAG_BLOB_MAX // (1024 * 1024)))}), 201
 
+def rag_statut_document(cur, doc_id):
+    """CE QUE « TERMINE » VEUT DIRE — la definition, en UN SEUL endroit.
+
+    Un document est indexe quand il a des fragments ET que chacun porte son
+    index plein texte : c est exactement ce qui le rend cherchable. Le vecteur
+    est un ENRICHISSEMENT, pas une condition — la moitie semantique est eteinte
+    (voir `_rag_vectoriel`), et 32 des 45 documents n en auront jamais. Exiger
+    un vecteur laisserait 71 % du corpus en « en_cours » a jamais : une alarme
+    que personne ne pourrait eteindre, donc une alarme que tout le monde
+    apprendrait a ignorer.
+
+    LE STATUT SE RELIT DANS LES FRAGMENTS, jamais dans un compteur. C est la
+    correction de fond : la route de depot avancait le sien meme quand les
+    embeddings ECHOUAIENT, et pouvait donc afficher « indexe avec succes » sur
+    un document dont aucun fragment n avait de vecteur.
+
+    En SQLite il n existe PAS de colonne `search_vector` (voir `rag_init_db`) :
+    la propriete ne peut pas y etre mesuree, et un document a fragments y est
+    aussi indexe qu il puisse l etre. On le dit plutot que de rendre un zero
+    qui aurait l air d une mesure.
+
+    Rend (statut, fragments_indexes, fragments_total).
+    """
+    if REGISTRE_USE_PG:
+        cur.execute('SELECT count(*) AS total,'
+                    ' count(*) FILTER (WHERE search_vector IS NULL) AS sans_index'
+                    ' FROM rag_chunks WHERE document_id=%s', (doc_id,))
+    else:
+        cur.execute('SELECT count(*) AS total, 0 AS sans_index'
+                    ' FROM rag_chunks WHERE document_id=?', (doc_id,))
+    r = cur.fetchone()
+    r = dict(r) if not isinstance(r, dict) else r
+    total = r['total'] or 0
+    sans_index = r['sans_index'] or 0
+    fini = (total > 0 and sans_index == 0)
+    return ('termine' if fini else 'en_cours'), total - sans_index, total
+
+
+def rag_ecrire_statut(cur, doc_id):
+    """Recalcule le statut depuis les donnees et l ecrit. Rend le meme triplet."""
+    statut, indexes, total = rag_statut_document(cur, doc_id)
+    cur.execute(registre_sql(
+        'UPDATE rag_documents SET statut_indexation=%s, chunks_indexes=%s WHERE id=%s',
+        'UPDATE rag_documents SET statut_indexation=?, chunks_indexes=? WHERE id=?'),
+        (statut, indexes, doc_id))
+    return statut, indexes, total
+
+
 @app.route('/api/rag/documents/<int:doc_id>/index-next-batch', methods=['POST'])
 @rate_limit(limit=120, window=60)
 @rag_require_access
 def rag_index_next_batch(doc_id):
-    """Traite UN SEUL lot de chunks puis retourne immediatement (quelques secondes max).
-    Le client (frontend) rappelle cet endpoint en boucle jusqu a indexation complete.
-    Architecture 'pull' : aucun thread serveur, donc aucune contention sur le worker
-    Gunicorn unique de cet hebergement."""
-    batch_size = 10
+    """Vectorise UN SEUL lot de fragments puis retourne (quelques secondes max).
+    Le client rappelle cet endpoint tant que `vectorisation` vaut « en_cours ».
+
+    TROIS ROLES QUI ETAIENT CONFONDUS, ET QUI NE LE SONT PLUS. Cette route
+    melangeait le curseur de sa boucle, le compteur affiche et le statut du
+    document, tous trois derives de `max(batch_indexes) + 1` — une POSITION DE
+    BOUCLE. Elle avancait donc a l identique que l appel d embeddings ait
+    reussi ou echoue, et finissait par ecrire « termine » sur un document sans
+    un seul vecteur.
+
+      · le CURSEUR se lit dans les donnees : les fragments qui n ont pas encore
+        de vecteur. Un lot qui echoue ne le fait pas avancer, donc rien n est
+        saute ;
+      · le STATUT vient de `rag_statut_document`, la definition unique ;
+      · l ETAT DE LA VECTORISATION est dit a part, et un echec l ARRETE au lieu
+        de le maquiller : le client s arrete sur autre chose que « en_cours ».
+    """
     conn = registre_get_db()
     cur = conn.cursor()
-    cur.execute(registre_sql(
-        'SELECT chunks_indexes, nb_chunks, statut_indexation FROM rag_documents WHERE id=%s',
-        'SELECT chunks_indexes, nb_chunks, statut_indexation FROM rag_documents WHERE id=?'
-    ), (doc_id,))
-    docrow = cur.fetchone()
-    if not docrow:
+    cur.execute(registre_sql('SELECT id FROM rag_documents WHERE id=%s',
+                             'SELECT id FROM rag_documents WHERE id=?'), (doc_id,))
+    if not cur.fetchone():
         conn.close()
         return jsonify({'error': 'Document introuvable'}), 404
-    d = dict(docrow) if not isinstance(docrow, dict) else docrow
-    already_done = d['chunks_indexes'] or 0
-    total = d['nb_chunks']
 
-    if already_done >= total or d['statut_indexation'] == 'termine':
-        conn.close()
-        return jsonify({'statut': 'termine', 'chunks_indexes': total, 'nb_chunks': total})
-
-    cur.execute(registre_sql(
-        'SELECT chunk_index, chunk_text FROM rag_chunks WHERE document_id=%s AND chunk_index >= %s ORDER BY chunk_index LIMIT %s',
-        'SELECT chunk_index, chunk_text FROM rag_chunks WHERE document_id=? AND chunk_index >= ? ORDER BY chunk_index LIMIT ?'
-    ), (doc_id, already_done, batch_size))
-    rows = cur.fetchall()
-    conn.close()
-
-    if not rows:
-        return jsonify({'statut': 'termine', 'chunks_indexes': total, 'nb_chunks': total})
-
-    batch_texts = [(dict(r) if not isinstance(r, dict) else r)['chunk_text'] for r in rows]
-    batch_indexes = [(dict(r) if not isinstance(r, dict) else r)['chunk_index'] for r in rows]
-
-    embed_ok, embeddings_or_err = rag_get_embeddings(batch_texts)
-
-    conn = registre_get_db()
-    cur = conn.cursor()
-    new_statut = 'en_cours'
-    if embed_ok and embeddings_or_err:
-        for idx, embedding in zip(batch_indexes, embeddings_or_err):
-            cur.execute(registre_sql(
-                'UPDATE rag_chunks SET embedding = %s WHERE document_id = %s AND chunk_index = %s',
-                'UPDATE rag_chunks SET chunk_index = chunk_index WHERE document_id = ? AND chunk_index = ?'
-            ), (embedding, doc_id, idx) if REGISTRE_USE_PG else (doc_id, idx))
-        traites = max(batch_indexes) + 1
-    else:
-        traites = max(batch_indexes) + 1
-        logger.warning(f"RAG — embeddings echoues pour un lot du document {doc_id} : {embeddings_or_err}")
-
-    if traites >= total:
-        new_statut = 'termine'
-
-    cur.execute(registre_sql(
-        'UPDATE rag_documents SET chunks_indexes = %s, statut_indexation = %s WHERE id = %s',
-        'UPDATE rag_documents SET chunks_indexes = ?, statut_indexation = ? WHERE id = ?'
-    ), (traites, new_statut, doc_id))
+    statut, indexes, total = rag_ecrire_statut(cur, doc_id)
     conn.commit()
-    conn.close()
 
-    return jsonify({'statut': new_statut, 'chunks_indexes': traites, 'nb_chunks': total})
+    def _vecteurs():
+        """Combien de fragments portent DEJA un vecteur. Compte relu, jamais
+        deduit d une position de boucle.
+
+        La colonne `embedding` N EXISTE PAS quand pgvector est absent — ni en
+        SQLite, ni meme sur PostgreSQL (voir `rag_init_db`, qui cree alors une
+        table sans elle). L interroger leverait une erreur sur un chemin dont
+        tout le reste fonctionne."""
+        if not (RAG_PGVECTOR_AVAILABLE and REGISTRE_USE_PG):
+            return 0
+        cur.execute('SELECT count(*) AS n FROM rag_chunks'
+                    ' WHERE document_id=%s AND embedding IS NOT NULL', (doc_id,))
+        r = cur.fetchone()
+        r = dict(r) if not isinstance(r, dict) else r
+        return r['n'] or 0
+
+    def _rendre(vectorisation, motif=None):
+        n = _vecteurs()
+        conn.close()
+        return jsonify({'statut': statut, 'chunks_indexes': indexes,
+                        'nb_chunks': total, 'vectorisation': vectorisation,
+                        'vecteurs': n, 'motif': motif})
+
+    # Sans pgvector ou sans cle, il n y a rien a vectoriser : on le DIT, on ne
+    # laisse pas le client tourner soixante fois pour rien.
+    if not (RAG_PGVECTOR_AVAILABLE and REGISTRE_USE_PG):
+        return _rendre('indisponible', 'Le moteur vectoriel n est pas actif.')
+    if not MISTRAL_API_KEY:
+        return _rendre('indisponible',
+                       'Aucune cle d embeddings : la recherche par les mots '
+                       'couvre le document, la recherche par le sens non.')
+
+    cur.execute('SELECT chunk_index, chunk_text FROM rag_chunks'
+                ' WHERE document_id=%s AND embedding IS NULL'
+                ' ORDER BY chunk_index LIMIT 10', (doc_id,))
+    rows = [dict(r) if not isinstance(r, dict) else r for r in cur.fetchall()]
+    if not rows:
+        return _rendre('complete')
+
+    embed_ok, embeddings_or_err = rag_get_embeddings([r['chunk_text'] for r in rows])
+    if not embed_ok:
+        logger.warning(f"RAG — embeddings echoues pour un lot du document {doc_id} : "
+                       f"{embeddings_or_err}")
+        return _rendre('interrompue', 'Les embeddings ont echoue : %s. Le document '
+                                      'reste cherchable par les mots.'
+                       % embeddings_or_err)
+
+    for r, embedding in zip(rows, embeddings_or_err):
+        cur.execute('UPDATE rag_chunks SET embedding = %s'
+                    ' WHERE document_id = %s AND chunk_index = %s',
+                    (embedding, doc_id, r['chunk_index']))
+    statut, indexes, total = rag_ecrire_statut(cur, doc_id)
+    conn.commit()
+    return _rendre('en_cours')
 
 @app.route('/api/rag/documents/<int:doc_id>/status', methods=['GET'])
 @rate_limit(limit=120, window=60)
@@ -10558,7 +10625,31 @@ def _rag_cle(r):
 
 def _rag_vectoriel(cur, query, limite, filtre_sql='', filtre_params=()):
     """Recherche par le SENS. Rend [] — jamais une exception — si elle est
-    indisponible : c est une moitie de la reponse, pas la reponse."""
+    indisponible : c est une moitie de la reponse, pas la reponse.
+
+    CETTE MOITIE EST INACTIVE, ET C EST DELIBERE. Les vecteurs viennent de
+    `mistral-embed` (d ou la colonne `vector(1024)`), et le service n a pas de
+    cle Mistral. Anthropic ne publie PAS d API d embeddings : `ANTHROPIC_API_KEY`
+    ne peut pas y suppleer — elle sert au chat, pas aux vecteurs.
+
+    Mesure du 6 septembre 2026 : 6 787 fragments, dont 6 787 avec index plein
+    texte (100 %) et 363 avec vecteur (5,3 %). La recherche par les mots couvre
+    donc tout le corpus, et celle par le sens en couvrait 5 % — pire, son
+    `WHERE c.embedding IS NOT NULL` l y CONFINAIT en silence. Zero vecteur est
+    plus honnete que 5 %.
+
+    Ce que la decision impose au reste du code, et que des regles tiennent :
+    la recherche par les mots ne doit JAMAIS dependre d un vecteur, et RIEN ne
+    doit filtrer sur `statut_indexation` — 32 des 45 documents resteront
+    `en_cours` a jamais, dont les onze textes reglementaires (AI Act, RGPD,
+    NIST 800-82, ISO 42001). Un filtre sur ce statut les ferait disparaitre
+    sans le dire.
+
+    Poser une cle Mistral suffirait a rallumer cette moitie : les 363 vecteurs
+    existants restent compatibles. Changer de fournisseur, non — melanger deux
+    espaces d embeddings casse la similarite en silence, et imposerait de
+    detruire ces 363 vecteurs avant de tout revectoriser.
+    """
     if not (RAG_PGVECTOR_AVAILABLE and REGISTRE_USE_PG):
         return []
     try:
