@@ -1221,6 +1221,7 @@ em,.hero-em{
 .na-body strong{color:#e6c65a;font-weight:700}
 .na-key{color:#e6c65a;font-weight:700}
 .na-date-key{color:#e6c65a;font-weight:800;border-bottom:1px dotted rgba(230,198,90,.5)}
+.na-fraicheur{margin:0 0 14px;font-size:.86rem;opacity:.78;letter-spacing:.01em}
 .na-body h4{color:#d4baff}
 </style>
 <style id="anti-debordement">/* incorpore : evite une requete bloquante
@@ -1355,6 +1356,7 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 </div>
 <div class="con">
   <div class="na-langbar"><button class="na-lang na-lang-on" data-l="fr" onclick="naSet('fr')">FR</button><button class="na-lang" data-l="en" onclick="naSet('en')">EN</button><button class="na-lang" data-l="de" onclick="naSet('de')">DE</button></div>
+      <p class="na-fraicheur" id="na-fraicheur" hidden></p>
       <div class="na-filters" id="na-filters">
         <button class="na-f on" data-t="" onclick="naFilter('')">Tous les thèmes</button>
         <button class="na-f" data-t="IA Act" onclick="naFilter('IA Act')">IA Act</button>
@@ -1652,5 +1654,53 @@ if(document.readyState === "loading"){ document.addEventListener("DOMContentLoad
 </script>
 <script src="/fleches.js" defer></script>
   <script src="/guide.js" defer></script>
+
+<script>
+/* LA FRAÎCHEUR SE LIT DANS LA PAGE, ELLE NE S'Y RECOPIE PAS.
+   La date de chaque communiqué est déjà dans son en-tête. En écrire une
+   seconde, en haut, produirait deux vérités — et c'est celle qu'on oublie de
+   corriger qui resterait affichée. Le bandeau se calcule donc à partir des
+   articles eux-mêmes, à chaque affichage.
+
+   ON NE PREND PAS LE PREMIER : l'ordre du document n'est pas garanti
+   chronologique, et « le plus haut » n'est pas « le plus récent ». On compare.
+
+   RIEN À AFFICHER = RIEN D'AFFICHÉ. Si aucune date ne se laisse lire, le
+   bandeau reste caché. « Dernier communiqué : — » serait une promesse vide,
+   c'est-à-dire pire que son absence. */
+(function(){
+  var MOIS = {"janvier":0,"février":1,"fevrier":1,"mars":2,"avril":3,"mai":4,
+              "juin":5,"juillet":6,"août":7,"aout":7,"septembre":8,
+              "octobre":9,"novembre":10,"décembre":11,"decembre":11};
+  function lire(txt){
+    /* « 1er septembre » — L'ORDINAL FRANÇAIS DU PREMIER DU MOIS. La page en
+       contient un. Sans le `er` optionnel, cette date-là ne se lisait pas, le
+       bandeau affichait la deuxième plus récente, et RIEN n'aurait signalé
+       l'écart : une date plausible en remplace une autre. Trouvé en confrontant
+       la lecture aux dates réellement présentes, pas en relisant le motif. */
+    var m = /(\d{1,2})(?:er)?\s+([A-Za-zÀ-ÿ]+)\s+(\d{4})/.exec(txt || "");
+    if(!m) return null;
+    var mois = MOIS[m[2].toLowerCase()];
+    if(mois === undefined) return null;
+    var d = new Date(Date.UTC(+m[3], mois, +m[1]));
+    /* LE TEXTE AFFICHÉ EST CELUI QU'ON A TROUVÉ, pas un texte reconstruit à
+       partir des groupes : recomposer perdrait le « er » de « 1er septembre »,
+       et le bandeau écrirait une date que la page n'écrit nulle part. */
+    return isNaN(d.getTime()) ? null : {date: d, texte: m[0]};
+  }
+  var cible = document.getElementById("na-fraicheur");
+  if(!cible) return;
+  var recent = null;
+  var dates = document.querySelectorAll(".na-article [id$='-date']");
+  for(var i = 0; i < dates.length; i++){
+    var lu = lire(dates[i].textContent);
+    if(lu && (!recent || lu.date > recent.date)) recent = lu;
+  }
+  if(!recent) return;                 /* pas de date lisible : on se tait */
+  cible.textContent = "Dernier communiqué : " + recent.texte
+    + " · " + dates.length + " communiqué" + (dates.length > 1 ? "s" : "") + " publiés";
+  cible.hidden = false;
+})();
+</script>
 </body>
 </html>
