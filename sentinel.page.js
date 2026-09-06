@@ -11966,10 +11966,23 @@ window.ragPollIndexation = function(docId, nomFichier, totalChunks){
         var pct = Math.min(100, Math.round(40 + (indexes/total)*60)); /* 40% deja acquis a l upload + 60% pour l indexation */
         if(fillEl) fillEl.style.width = pct + '%';
         if(pctEl) pctEl.textContent = pct + '%';
-        if(labelEl) labelEl.textContent = 'Indexation sémantique… (' + indexes + '/' + total + ' segments)';
+        if(labelEl) labelEl.textContent = 'Vectorisation… (' + (d.vecteurs || 0) + '/' + total + ' segments)';
 
-        if(d.statut === 'termine'){
-          if(labelEl) labelEl.textContent = '✅ "' + nomFichier + '" indexé avec succès';
+        /* LA BOUCLE S'ARRÊTE SUR CE QUE DIT LA VECTORISATION, pas sur un
+           compteur. « en_cours » est le SEUL état qui justifie un tour de
+           plus : « complete » n'a plus rien à faire, « indisponible » ne peut
+           rien faire, « interrompue » a échoué et rappeler ne ferait que
+           répéter l'échec soixante fois. */
+        if(d.vectorisation !== 'en_cours'){
+          var vect = d.vecteurs || 0;
+          /* On ne dit « indexé avec succès » que si c'est vrai. Sans vecteur,
+             le document EST cherchable — par les mots — et le dire ainsi vaut
+             mieux qu'une coche verte qui promet ce qui n'a pas eu lieu. */
+          if(labelEl) labelEl.textContent = (d.statut === 'termine')
+            ? (vect > 0
+                 ? '✅ "' + nomFichier + '" indexé (' + indexes + ' segments, ' + vect + ' vectorisés)'
+                 : '✅ "' + nomFichier + '" indexé — recherche par mots-clés (' + indexes + ' segments)')
+            : '⚠ "' + nomFichier + '" partiellement indexé (' + indexes + '/' + total + ' segments)';
           if(fillEl) fillEl.style.width = '100%';
           if(pctEl) pctEl.textContent = '100%';
           setTimeout(function(){ if(progressEl) progressEl.style.display = 'none'; window.ragRenderList(); }, 800);

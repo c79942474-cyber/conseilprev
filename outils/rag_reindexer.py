@@ -234,25 +234,69 @@ def vectoriser(a, executer, limite):
 
 
 def _statuer(a, cur, doc_id):
-    """LE STATUT EST RECALCULÉ DEPUIS LES DONNÉES, jamais depuis un compteur.
+    """LE STATUT EST RECALCULÉ DEPUIS LES DONNÉES, jamais depuis un compteur —
+    et par LA MÊME fonction que la route de dépôt, jamais par une copie.
 
-    C'est la correction de fond : un document est « termine » s'il ne lui reste
-    aucun fragment sans vecteur — pas parce qu'une boucle a fini de tourner.
+    Cet outil portait sa propre définition de « termine » : un document sans
+    fragment sans vecteur. La route en portait une autre : une boucle arrivée
+    au bout. Deux définitions, donc deux vérités — et la seule façon d'en
+    sortir n'est pas de les accorder aujourd'hui, c'est qu'il n'y en ait plus
+    qu'une. `app.rag_ecrire_statut` est cette définition ; on l'emprunte.
+
+    Ce qu'elle dit depuis le 6 septembre 2026 : un document est indexé quand il
+    a des fragments portant chacun leur index plein texte. Le vecteur est un
+    enrichissement — la moitié sémantique est éteinte, et l'exiger laisserait
+    71 % du corpus en « en_cours » à jamais.
     """
-    cur.execute(a.registre_sql(
-        'SELECT count(*) AS total,'
-        ' count(*) FILTER (WHERE embedding IS NULL) AS manquants'
-        ' FROM rag_chunks WHERE document_id=%s',
-        'SELECT count(*) AS total,'
-        ' count(*) FILTER (WHERE embedding IS NULL) AS manquants'
-        ' FROM rag_chunks WHERE document_id=?'), (doc_id,))
-    r = cur.fetchone()
-    r = dict(r) if not isinstance(r, dict) else r
-    fini = (r['total'] > 0 and r['manquants'] == 0)
-    cur.execute(a.registre_sql(
-        'UPDATE rag_documents SET statut_indexation=%s, chunks_indexes=%s WHERE id=%s',
-        'UPDATE rag_documents SET statut_indexation=?, chunks_indexes=? WHERE id=?'),
-        ('termine' if fini else 'en_cours', r['total'] - r['manquants'], doc_id))
+    a.rag_ecrire_statut(cur, doc_id)
+
+# ══════════════════════════════════════════════════════════════════════════
+# PHASE 3 — LES STATUTS SE RECALENT SUR LA DÉFINITION EN VIGUEUR
+# ══════════════════════════════════════════════════════════════════════════
+
+def recaler_statuts(a, executer):
+    """Réapplique à TOUT le corpus la définition de `rag_statut_document`.
+
+    POURQUOI CETTE PHASE EXISTE. La définition de « termine » a changé le
+    6 septembre 2026 : elle exigeait un vecteur par fragment, elle exige
+    désormais un index plein texte. Changer la règle sans repasser sur les
+    données laisserait 32 documents affichés « en_cours » pour une raison qui
+    n'a plus cours — un écart entre ce que le code dit et ce que la base
+    montre, c'est-à-dire précisément ce qu'on corrige partout ailleurs.
+
+    Elle est aussi RELANÇABLE SANS DOMMAGE : appliquer une définition à des
+    données qui la respectent déjà ne change rien. C'est ce qui la rend sûre à
+    laisser dans le passage normal de l'outil.
+
+    Rend (nombre de statuts changés, soucis).
+    """
+    conn = a.registre_get_db()
+    cur = conn.cursor()
+    cur.execute('SELECT id, nom_fichier, statut_indexation, chunks_indexes'
+                ' FROM rag_documents ORDER BY nom_fichier')
+    docs = [dict(d) if not isinstance(d, dict) else d for d in cur.fetchall()]
+
+    changes = 0
+    for d in docs:
+        statut, indexes, total = a.rag_statut_document(cur, d['id'])
+        if statut == d['statut_indexation'] and indexes == (d['chunks_indexes'] or 0):
+            continue
+        changes += 1
+        print("  %-44s %-9s → %-9s  %d/%d fragment(s) indexé(s)"
+              % (d['nom_fichier'][:44], d['statut_indexation'], statut, indexes, total))
+        if executer:
+            a.rag_ecrire_statut(cur, d['id'])
+
+    if not changes:
+        print("  aucun statut à recaler.")
+    elif executer:
+        conn.commit()
+        print("\n  %d statut(s) recalé(s)." % changes)
+    else:
+        print("\n  %d statut(s) SERAIENT recalés — aucune écriture n'a été faite."
+              % changes)
+    conn.close()
+    return changes, []
 
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -291,8 +335,10 @@ def main():
     n1, s1 = redecouper(a, executer)
     print("\nPHASE 2 — vectorisation des fragments sans vecteur")
     n2, s2 = vectoriser(a, executer, limite)
+    print("\nPHASE 3 — recalage des statuts sur la définition en vigueur")
+    n3, s3 = recaler_statuts(a, executer)
 
-    soucis = s1 + s2
+    soucis = s1 + s2 + s3
     apres = _etat(a)
     print("\n" + "-" * 66)
     print("%-28s %10s %10s" % ("", "avant", "après"))
@@ -303,24 +349,33 @@ def main():
     print("-" * 66)
 
     if not executer:
-        print("\n%d fragment(s) à recréer, %d à vectoriser. "
-              "Relancer avec --executer." % (n1, n2))
+        print("\n%d fragment(s) à recréer, %d à vectoriser, %d statut(s) à recaler. "
+              "Relancer avec --executer." % (n1, n2, n3))
         return 0
 
-    print("\n%d fragment(s) recréés, %d vectorisés." % (n1, n2))
+    print("\n%d fragment(s) recréés, %d vectorisés, %d statut(s) recalés."
+          % (n1, n2, n3))
     if soucis:
         print("\nCE QUI N'A PAS ABOUTI :")
         for nom, motif in soucis:
             print("  · %-42s %s" % (nom[:42], motif))
         print("\nL'INDEXATION EST INCOMPLÈTE. Relancez : l'outil reprend où il s'arrête.")
         return 1
-    if apres['sans_vecteur'] or apres['sans_fragment']:
-        print("\nIl reste %d fragment(s) sans vecteur et %d document(s) sans fragment "
-              "(limite atteinte ?). Relancez pour continuer."
-              % (apres['sans_vecteur'], apres['sans_fragment']))
+    if apres['sans_fragment']:
+        print("\nIl reste %d document(s) sans fragment. Relancez pour continuer."
+              % apres['sans_fragment'])
         return 1
-    print("\nLe corpus est complet : chaque document a ses fragments, "
-          "chaque fragment son vecteur.")
+    # LE VERDICT SUIT LA DÉFINITION EN VIGUEUR, pas l'ancienne. Exiger un
+    # vecteur par fragment ferait rendre 1 à un corpus complet au sens où le
+    # code l'entend depuis le 6 septembre 2026 — un échec permanent que
+    # personne ne pourrait faire disparaître, donc un échec que tout le monde
+    # apprendrait à ignorer.
+    print("\nLe corpus est complet au sens de la définition en vigueur : chaque "
+          "document a ses fragments, chacun portant son index plein texte.")
+    if apres['sans_vecteur']:
+        print("%d fragment(s) n'ont pas de vecteur — la recherche par le sens "
+              "reste éteinte, celle par les mots les couvre tous."
+              % apres['sans_vecteur'])
     return 0
 
 

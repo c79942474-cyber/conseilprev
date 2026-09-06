@@ -68,37 +68,42 @@ def test_le_constat_ne_redecoupe_rien():
 # 2. LE STATUT SE MESURE — la correction de fond
 # ══════════════════════════════════════════════════════════════════════════
 
-def test_le_statut_est_recalcule_depuis_les_donnees():
-    """LE DÉFAUT QU'ON NE REPRODUIT PAS. `rag_index_next_batch` avance son
-    compteur même quand les embeddings ÉCHOUENT, et peut donc marquer
-    « termine » un document dont aucun fragment n'a de vecteur : une
-    indexation ratée qui se déclare finie.
+def test_le_statut_n_est_plus_defini_ici_mais_emprunte():
+    """CETTE RÈGLE EN REMPLACE DEUX, ET LE CHANGEMENT EST DÉLIBÉRÉ.
 
-    Ce que cette règle tient, c'est l'ORIGINE du statut : il se relit dans les
-    fragments eux-mêmes, et dans aucun compteur déjà stocké. La règle lit la
-    requête, pas la prose qui la précède — une règle qui se contenterait de
-    trouver « embedding IS NULL » quelque part dans la fonction resterait verte
-    devant un statut relu dans `nb_chunks`.
+    Jusqu'au 6 septembre 2026, deux règles vivaient ici :
+    `test_le_statut_est_recalcule_depuis_les_donnees` et
+    `test_termine_exige_zero_fragment_sans_vecteur_et_au_moins_un_fragment`.
+    Elles tenaient une définition de « termine » PROPRE À CET OUTIL — un
+    document sans fragment sans vecteur — pendant que la route de dépôt en
+    portait une autre. Deux définitions, donc deux vérités, et rien pour
+    signaler qu'elles divergeaient.
+
+    La décision a été prise de n'en garder qu'UNE, dans `app.rag_statut_document`,
+    et d'y changer le critère : l'index plein texte, pas le vecteur. Les deux
+    propriétés que ces règles tenaient n'ont pas disparu — elles sont tenues
+    là où la définition vit désormais, dans `tests/test_rag_statut_indexation.py` :
+    `test_termine_se_mesure_sur_l_index_plein_texte_et_pas_sur_le_vecteur` et
+    `test_termine_exige_au_moins_un_fragment`.
+
+    Ce qui reste à tenir ICI, c'est que cet outil n'en refabrique pas une
+    troisième : il délègue, et il ne lui reste aucun SQL propre.
     """
     corps = _corps("_statuer")
-    lecture = corps[corps.index("cur.execute("):corps.index("UPDATE rag_documents")]
-    assert "FROM rag_chunks" in lecture, lecture
-    assert "count(*) FILTER (WHERE embedding IS NULL)" in lecture, lecture
-    for compteur in ("nb_chunks", "chunks_indexes"):
-        assert compteur not in lecture, (
-            "le statut se relit dans %s au lieu des fragments : c'est le "
-            "compteur de la route qu'on corrige" % compteur)
-    calcul = corps[corps.index("r = cur.fetchone()"):]
-    assert re.search(r"fini = [^\n]*r\['", calcul), calcul
-    assert "'termine' if fini else 'en_cours'" in calcul, calcul
+    code = corps[corps.index('"""', corps.index('"""') + 3) + 3:]
+    assert "a.rag_ecrire_statut(cur, doc_id)" in code, code
+    assert "SELECT" not in code.upper(), (
+        "_statuer a repris une définition à lui : elle divergera de celle de "
+        "la route, comme la dernière fois\n%s" % code)
 
 
-def test_termine_exige_zero_fragment_sans_vecteur_et_au_moins_un_fragment():
-    """Un document VIDE ne doit pas passer pour indexé : zéro fragment sans
-    vecteur est vrai aussi quand il n'y a aucun fragment du tout."""
-    corps = _corps("_statuer")
-    assert "r['total'] > 0" in corps, corps
-    assert "r['manquants'] == 0" in corps, corps
+def test_le_recalage_applique_la_definition_a_tout_le_corpus():
+    """Changer une définition sans repasser sur les données laisserait 32
+    documents affichés « en_cours » pour une raison qui n'a plus cours — un
+    écart entre ce que le code dit et ce que la base montre."""
+    corps = _corps("recaler_statuts")
+    assert "FROM rag_documents" in corps, corps
+    assert "a.rag_statut_document(cur, d['id'])" in corps, corps
 
 
 # ══════════════════════════════════════════════════════════════════════════
