@@ -49,10 +49,28 @@ CE QUI N'EST PAS ICI, ET POURQUOI
     `finance_dc` refuse déjà pour le coût au mégawatt.
   · AUCUNE MESURE. Ce module ne compte aucun jeton. Il ne peut pas : il ne
     tourne pas dans vos applications.
+
+CE QUE LA VERSION 2026-09-b AJOUTE, ET LE DÉFAUT QU'ELLE CORRIGE
+
+Le module lisait sept champs du registre — à une exception près, exactement les
+champs qui avaient été AJOUTÉS pour lui. Des vingt-trois autres colonnes que le
+registre porte déjà pour la conformité, il ne lisait rien. Conséquence mesurée :
+« aucun volume déclaré » sortait à l'identique pour un système encore en
+CONCEPTION, où l'absence est normale, et pour un système EN PRODUCTION ET CLASSÉ
+HAUT RISQUE, où elle est la première chose à traiter. Le compteur des lacunes
+mélangeait le travail à faire et le travail qui n'existe pas.
+
+Trois fonctions naissent de ce croisement, et aucune ne demande une saisie de
+plus : `cout_par_classification` (le coût par niveau de risque, dans l'ordre du
+règlement et non dans celui des effectifs), `lacunes` (à combler / attendues /
+indéterminées, selon l'étape du cycle de vie) et `angles_morts` (ce qu'aucun des
+deux modules ne voyait seul). `CHAMPS_LUS_AILLEURS` et `CHAMPS_FINOPS` disent, à
+chaque manque, OÙ le champ se déclare — pour renvoyer au bon endroit au lieu de
+redemander ce qui a déjà été donné.
 """
 import datetime
 
-VERSION = "2026-09-a"
+VERSION = "2026-09-b"
 
 # ── LES TARIFS CATALOGUE ───────────────────────────────────────────────────
 # Prix PUBLIÉS, par million de jetons, dans la devise de l'éditeur. Chaque
@@ -506,4 +524,329 @@ def etat(systemes, seuils=None, aujourdhui=None):
                               for s in systemes},
         "depassements": depassements(systemes, seuils or {}, aujourdhui),
         "a_renseigner": A_RENSEIGNER,
+        # ── CE QUE LES AUTRES ANALYSES DE SENTINEL ONT DÉJÀ ÉTABLI ────────
+        # Ces quatre entrées ne demandent aucune saisie de plus : elles
+        # relisent des champs que le registre porte pour la conformité. Elles
+        # sont placées APRÈS les montants dans la structure, et le panneau les
+        # montre AVANT — parce qu'un angle mort décide de la lecture d'un
+        # total, comme la couverture décide de sa validité.
+        "par_classification": cout_par_classification(systemes, aujourdhui),
+        "lacunes": lacunes(systemes, aujourdhui),
+        "angles_morts": angles_morts(systemes, aujourdhui),
+        "champs_lus_ailleurs": CHAMPS_LUS_AILLEURS,
+        "champs_finops": CHAMPS_FINOPS,
+    }
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  CE QUE SENTINEL A DÉJÀ DEMANDÉ — ET QUE CE MODULE CESSE DE REDEMANDER
+#
+#  LE DÉFAUT QUE CE BLOC CORRIGE. Le module lisait SEPT champs du registre :
+#  modèle, unité, les deux volumes, la source, le centre de coût, la classe de
+#  tâche — c'est-à-dire, à une exception près, exactement les champs ajoutés
+#  POUR LUI. Des vingt-trois autres colonnes que le registre porte déjà —
+#  classification au sens du règlement, étape du cycle de vie, rôle, statut de
+#  conformité, fournisseur — il ne lisait rien.
+#
+#  CE QUE CETTE CÉCITÉ COÛTAIT, CONCRÈTEMENT. Une ligne non instruite en sortait
+#  identique à toutes les autres. Or « aucun volume déclaré » sur un système
+#  ENCORE EN CONCEPTION est normal : il ne consomme rien, il n'y a rien à
+#  déclarer. Le même motif sur un système EN PRODUCTION ET CLASSÉ HAUT RISQUE
+#  est une lacune qu'un comité doit traiter en premier. Les deux sortaient dans
+#  le même compteur, et le compteur ne permettait pas de les distinguer.
+#
+#  LE PRINCIPE. Un champ que Sentinel a déjà obtenu ne se redemande pas : il se
+#  LIT. Un champ que Sentinel n'a jamais demandé se demande une fois, à l'endroit
+#  où il a du sens, et le module dit lequel c'est.
+# ═══════════════════════════════════════════════════════════════════════════
+
+#: Les champs que le registre porte pour la CONFORMITÉ, et que le chiffrage lit
+#: sans jamais les redemander. `panneau` est l'identifiant du panneau Sentinel
+#: qui les recueille — il sert au renvoi affiché à côté de chaque manque.
+CHAMPS_LUS_AILLEURS = {
+    "classification": {
+        "panneau": "simulateur",
+        "recueilli_par": "Simulateur IA Act, puis le Registre IA",
+        "apporte": "Le niveau de risque au sens du règlement (UE) 2024/1689. "
+                   "Un euro dépensé sur un système haut risque ne se lit pas "
+                   "comme un euro dépensé sur un système à risque minimal : le "
+                   "premier porte des obligations qui ont, elles aussi, un coût.",
+    },
+    "cycle_vie": {
+        "panneau": "registre",
+        "recueilli_par": "Registre IA — étape du cycle de vie",
+        "apporte": "Ce qui distingue une lacune ATTENDUE d'une lacune À "
+                   "COMBLER. Un système en conception n'a pas de volume parce "
+                   "qu'il ne consomme rien ; un système en production n'en a "
+                   "pas parce que personne ne l'a relevé.",
+    },
+    "fournisseur": {
+        "panneau": "registre",
+        "recueilli_par": "Registre IA — fournisseur / éditeur",
+        "apporte": "De quel éditeur relève la ligne. Quand le modèle n'est pas "
+                   "déclaré, le fournisseur dit au moins CHEZ QUI le tarif est "
+                   "à relever — et si cet éditeur figure ou non dans la table.",
+    },
+    "statut_conformite": {
+        "panneau": "registre",
+        "recueilli_par": "Registre IA — statut de conformité",
+        "apporte": "Ce qui reste à faire porter au budget. Un système en cours "
+                   "de mise en conformité a un coût de conformité à venir, "
+                   "distinct de son coût d'usage.",
+    },
+    "service": {
+        "panneau": "registre",
+        "recueilli_par": "Registre IA — service utilisateur",
+        "apporte": "La base d'attribution métier — déjà tenue pour la "
+                   "conformité, et réemployée telle quelle ici.",
+    },
+    "product_owner": {
+        "panneau": "registre",
+        "recueilli_par": "Registre IA — Product Owner",
+        "apporte": "À qui la question du volume doit être posée. Sans lui, "
+                   "« relever la consommation » n'a pas de destinataire.",
+    },
+}
+
+#: Les champs que le chiffrage a AJOUTÉS au registre, et qu'il faut donc bien
+#: demander une fois. Chacun dit où il se saisit, pour que le panneau renvoie au
+#: bon endroit au lieu de laisser l'utilisateur chercher.
+CHAMPS_FINOPS = {
+    "modele": {"panneau": "registre",
+               "libelle": "Modèle employé",
+               "ou": "Registre IA → fiche du système → « Modèle »"},
+    "unite_facturation": {"panneau": "registre",
+                          "libelle": "Unité de facturation",
+                          "ou": "Registre IA → fiche du système → « Unité de facturation »"},
+    "volume_entree_mois": {"panneau": "registre",
+                           "libelle": "Volume d'entrée du mois",
+                           "ou": "Registre IA → fiche du système → « Volume d'entrée »"},
+    "volume_sortie_mois": {"panneau": "registre",
+                           "libelle": "Volume de sortie du mois",
+                           "ou": "Registre IA → fiche du système → « Volume de sortie »"},
+    "volume_source": {"panneau": "registre",
+                      "libelle": "Provenance du volume",
+                      "ou": "Registre IA → fiche du système → « Source du volume »"},
+    "centre_cout": {"panneau": "registre",
+                    "libelle": "Centre de coût",
+                    "ou": "Registre IA → fiche du système → « Centre de coût »"},
+    "classe_tache": {"panneau": "registre",
+                     "libelle": "Classe de tâche",
+                     "ou": "Registre IA → fiche du système → « Classe de tâche »"},
+    "leviers": {"panneau": "registre",
+                "libelle": "Leviers d'optimisation posés",
+                "ou": "Registre IA → fiche du système → « Leviers »"},
+}
+
+
+# ── LE VOCABULAIRE DU REGISTRE, REPRIS SANS ÊTRE RÉINVENTÉ ────────────────
+# Ces valeurs sont celles du formulaire du Registre IA. Les recopier ici est un
+# risque de dérive assumé et BORNÉ : `_verifier_vocabulaire()` échoue à l'import
+# si une valeur inconnue traverse, et le test `test_finops_ia` compare cette
+# table au formulaire servi. Une classification qu'on ne reconnaît pas n'est
+# jamais rangée en silence dans « à évaluer » : elle ressort telle quelle.
+
+CLASSIFICATION_IA_ACT = [
+    {"cle": "inacceptable", "libelle": "Pratique interdite (art. 5)", "rang": 0,
+     "lecture": "Le coût n'est pas le sujet : une pratique interdite se "
+                "retire, elle ne s'optimise pas. Le montant est affiché parce "
+                "que le taire ferait disparaître la ligne du tableau."},
+    {"cle": "haut", "libelle": "Haut risque", "rang": 1,
+     "lecture": "Le coût d'usage n'est qu'une part du coût réel : la gestion "
+                "des risques, la documentation technique, la journalisation et "
+                "l'évaluation de conformité en portent une autre, que ce "
+                "module ne chiffre pas."},
+    {"cle": "limite", "libelle": "Risque limité (transparence)", "rang": 2,
+     "lecture": "S'y ajoute le coût du marquage et de l'information des "
+                "personnes, hors du périmètre de ce module."},
+    {"cle": "minimal", "libelle": "Risque minimal", "rang": 3,
+     "lecture": "Le coût d'usage est ici l'essentiel du coût."},
+    {"cle": "a_evaluer", "libelle": "À évaluer", "rang": 4,
+     "lecture": "La classification n'est pas faite. Le montant se lit, le "
+                "risque non — et c'est le second qui commande le premier."},
+]
+
+CYCLE_VIE = [
+    {"cle": "conception", "libelle": "① Conception", "en_service": False},
+    {"cle": "developpement", "libelle": "② Développement", "en_service": False},
+    {"cle": "pre_production", "libelle": "③ Pré-production", "en_service": False},
+    {"cle": "production", "libelle": "④ Production", "en_service": True},
+    {"cle": "revue", "libelle": "⑤ Revue périodique", "en_service": True},
+]
+
+_CLASSIF = {c["cle"]: c for c in CLASSIFICATION_IA_ACT}
+_CYCLE = {c["cle"]: c for c in CYCLE_VIE}
+
+
+def _verifier_vocabulaire():
+    """Le référentiel se contredit-il ? Contrôlé à l'import, comme ailleurs.
+
+    C'est le seul moment où l'incohérence est encore gratuite : plus tard elle
+    sort à l'écran, et à l'écran on la croit."""
+    rangs = [c["rang"] for c in CLASSIFICATION_IA_ACT]
+    if sorted(rangs) != list(range(len(CLASSIFICATION_IA_ACT))):
+        raise ValueError("CLASSIFICATION_IA_ACT : les rangs doivent être une "
+                         "suite 0..n sans trou ni doublon — ils décident de "
+                         "l'ordre d'affichage, et un doublon rendrait cet "
+                         "ordre dépendant du hasard du tri")
+    if not any(c["en_service"] for c in CYCLE_VIE):
+        raise ValueError("CYCLE_VIE : aucune étape n'est « en service » — "
+                         "`lacunes()` ne pourrait alors qualifier aucune "
+                         "lacune, et rendrait tout normal")
+    for cle, p in CHAMPS_LUS_AILLEURS.items():
+        if not p.get("panneau"):
+            raise ValueError("CHAMPS_LUS_AILLEURS[%r] : sans panneau, le "
+                             "renvoi affiché ne mène nulle part" % cle)
+
+
+_verifier_vocabulaire()
+
+
+def cout_par_classification(systemes, aujourdhui=None):
+    """Le coût réparti par niveau de risque au sens du règlement.
+
+    L'ORDRE N'EST PAS CELUI DES EFFECTIFS. `attribution()` trie par nombre de
+    systèmes, ce qui est juste pour un service et faux ici : un unique système
+    haut risque doit se lire AVANT quinze systèmes à risque minimal. Le tri suit
+    donc le rang réglementaire, et un niveau absent du parc n'est pas affiché —
+    inventer une ligne à zéro pour « inacceptable » suggérerait qu'on a cherché
+    et trouvé zéro, alors qu'on n'a rien classé du tout.
+
+    UNE VALEUR HORS VOCABULAIRE N'EST PAS RANGÉE DANS « À ÉVALUER ». Elle sort
+    sous son propre nom, avec `connu: False` : la ranger silencieusement ferait
+    disparaître une donnée abîmée dans un compteur d'apparence saine.
+    """
+    par = attribution(systemes, "classification", aujourdhui)
+    groupes = []
+    for g in par["groupes"]:
+        ref = _CLASSIF.get(g["cle"])
+        groupes.append(dict(
+            g,
+            connu=bool(ref),
+            libelle=(ref["libelle"] if ref else g["cle"]),
+            lecture=(ref["lecture"] if ref else
+                     "Valeur absente du vocabulaire du registre : elle n'est "
+                     "pas rangée d'office dans « à évaluer », parce qu'une "
+                     "donnée abîmée doit rester visible."),
+            rang=(ref["rang"] if ref else len(CLASSIFICATION_IA_ACT)),
+        ))
+    groupes.sort(key=lambda g: (g["rang"], g["cle"]))
+    return {"champ": "classification", "groupes": groupes,
+            "source": CHAMPS_LUS_AILLEURS["classification"]["recueilli_par"]}
+
+
+def lacunes(systemes, aujourdhui=None):
+    """Les lignes non chiffrées, SÉPARÉES selon qu'elles devaient l'être.
+
+    LE PARTAGE QUE FAIT CETTE FONCTION EST TOUT SON OBJET. Sans lui, un parc de
+    vingt systèmes dont douze sont encore en conception affiche « 8 lignes non
+    instruites » comme un reproche — et le comité part relancer douze équipes
+    qui n'ont rien à déclarer. Avec lui, il lit « 3 systèmes EN SERVICE dont
+    personne n'a relevé la consommation », qui est le vrai travail.
+
+    `a_combler` : en service (production ou revue), donc consommant réellement.
+    `attendues`  : pas encore en service — l'absence de volume y est normale.
+    `indeterminees` : étape du cycle de vie non déclarée. NI l'une NI l'autre :
+        les compter avec les attendues rendrait le parc plus propre qu'il n'est,
+        les compter avec les lacunes accuserait sans savoir.
+    """
+    a_combler, attendues, indeterminees = [], [], []
+    for s in systemes:
+        ligne = cout_ligne(s, aujourdhui)
+        if ligne["instruit"]:
+            continue
+        etape = (s.get("cycle_vie") or "").strip()
+        ref = _CYCLE.get(etape)
+        classif = (s.get("classification") or "").strip()
+        item = {
+            "id": s.get("id"), "nom": s.get("nom"), "motif": ligne["motif"],
+            "cycle_vie": etape or None,
+            "cycle_vie_libelle": (ref["libelle"] if ref else None),
+            "classification": classif or None,
+            "classification_libelle": (_CLASSIF[classif]["libelle"]
+                                       if classif in _CLASSIF else None),
+            "fournisseur": (s.get("fournisseur") or "").strip() or None,
+            "product_owner": (s.get("product_owner") or "").strip() or None,
+        }
+        if ref is None:
+            item["pourquoi"] = ("étape du cycle de vie non déclarée : on ne "
+                                "peut pas dire si ce système consomme déjà")
+            indeterminees.append(item)
+        elif ref["en_service"]:
+            item["pourquoi"] = ("ce système est %s : il consomme, et personne "
+                                "n'a encore dit combien" % ref["libelle"])
+            a_combler.append(item)
+        else:
+            item["pourquoi"] = ("ce système est %s : l'absence de volume y est "
+                                "normale, pas une lacune" % ref["libelle"])
+            attendues.append(item)
+    return {
+        "a_combler": a_combler,
+        "attendues": attendues,
+        "indeterminees": indeterminees,
+        "source_cycle_vie": CHAMPS_LUS_AILLEURS["cycle_vie"]["recueilli_par"],
+    }
+
+
+def angles_morts(systemes, aujourdhui=None):
+    """Les croisements qu'un comité doit lire AVANT les totaux.
+
+    CE NE SONT PAS DES ALERTES DE PLUS. Chacun naît du croisement de deux
+    champs qui, pris séparément, ne disent rien : une ligne non chiffrée est
+    banale, un système haut risque est banal — un système haut risque EN SERVICE
+    et non chiffré ne l'est pas. C'est précisément ce que ni le registre seul,
+    ni le chiffrage seul, ne pouvaient voir.
+
+    AUCUN DE CES CONSTATS N'EST UN VERDICT. Ils désignent où regarder ; ce qu'il
+    faut en conclure demande de connaître le contrat, l'usage réel et la qualité
+    attendue — trois choses absentes d'ici.
+    """
+    lac = lacunes(systemes, aujourdhui)
+    en_service = {str(x["id"]): x for x in lac["a_combler"]}
+
+    haut_non_chiffre = [x for x in lac["a_combler"] + lac["indeterminees"]
+                        if x["classification"] == "haut"]
+
+    interdits = []
+    for s in systemes:
+        if (s.get("classification") or "").strip() == "inacceptable":
+            l = cout_ligne(s, aujourdhui)
+            interdits.append({"id": s.get("id"), "nom": s.get("nom"),
+                              "montant": l["montant"], "devise": l["devise"],
+                              "instruit": l["instruit"]})
+
+    # Un fournisseur nommé mais pas de modèle : le tarif est relevable, il n'est
+    # pas relevé. Le distinguer de « rien de déclaré » évite d'envoyer chercher
+    # une information que quelqu'un a déjà donnée à moitié.
+    fournisseur_sans_modele = []
+    for s in systemes:
+        f = (s.get("fournisseur") or "").strip()
+        if f and not (s.get("modele") or "").strip():
+            fournisseur_sans_modele.append({
+                "id": s.get("id"), "nom": s.get("nom"), "fournisseur": f,
+                "en_service": str(s.get("id")) in en_service,
+            })
+
+    return {
+        "haut_risque_non_chiffre": {
+            "lignes": haut_non_chiffre,
+            "lecture": "Un système classé haut risque dont le coût n'est pas "
+                       "connu est le pire des deux mondes : il porte les "
+                       "obligations les plus lourdes du règlement, et son "
+                       "budget n'est pas instruit. C'est la première ligne à "
+                       "traiter, avant tout arbitrage de plafond.",
+        },
+        "pratiques_interdites": {
+            "lignes": interdits,
+            "lecture": "Une pratique interdite par l'article 5 ne s'optimise "
+                       "pas : elle se retire. Le montant figure ici pour que "
+                       "la ligne ne disparaisse pas du tableau, jamais pour "
+                       "être arbitré.",
+        },
+        "fournisseur_sans_modele": {
+            "lignes": fournisseur_sans_modele,
+            "lecture": "Le fournisseur est déclaré, le modèle non : le tarif "
+                       "est relevable chez un éditeur nommé. C'est la lacune "
+                       "la moins coûteuse à combler du lot.",
+        },
     }

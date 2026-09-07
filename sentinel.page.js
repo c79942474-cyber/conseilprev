@@ -20299,6 +20299,17 @@ document.addEventListener('keydown', function(e){
     }).join(' · ');
   }
 
+  /* UN SEUL FORMATEUR POUR TOUS LES MONTANTS DU PANNEAU. Sans lui, « 53,25 »
+     et « 49.5 » se côtoyaient dans la même page : `montants()` formate à la
+     française les totaux par devise, tandis que les montants ligne à ligne
+     sortaient bruts de JSON. Le lecteur croit alors à deux précisions
+     différentes là où il n'y a qu'une inconstance d'écriture. */
+  function unMontant(m, d){
+    if(m == null) return '—';
+    var par = {}; par[d || ''] = m;
+    return montants(par);
+  }
+
   window.finopsLoad = function(){
     var couv = document.getElementById('fo-couv-chiffre');
     if(!couv) return;
@@ -20347,13 +20358,155 @@ document.addEventListener('keydown', function(e){
           + m.tarif_age_jours + ' jours'
           + (m.tarif_perime ? ' — <b>à revérifier</b>' : '') + '</div></div>';
 
-        var man = Object.keys(c.motifs || {});
-        document.getElementById('fo-manques').innerHTML = man.length
-          ? ('<table class="tbl"><thead><tr><th>Motif</th><th>Lignes</th></tr></thead><tbody>'
-             + man.map(function(k){
-                 return '<tr><td>' + ech(k) + '</td><td>' + c.motifs[k] + '</td></tr>';
+
+        /* ══ LES ANGLES MORTS ═══════════════════════════════════════════════
+           CE QUE CE BLOC RÉPARE. Le panneau lisait sept clés des quinze que
+           /api/finops rend. Les huit autres — dont les leviers manquants,
+           calculés pour CHAQUE système — étaient produites par le serveur,
+           transmises sur le réseau, et jetées par le navigateur. Aucune erreur
+           ne le signalait : une clé non lue ne lève rien, elle disparaît.
+
+           Un angle mort naît du CROISEMENT de deux champs qui, seuls, ne
+           disent rien. Il n'est jamais un verdict : ce qu'il faut en conclure
+           demande de connaître le contrat, l'usage réel et la qualité
+           attendue — trois choses absentes d'ici. */
+        var am = j.angles_morts || {};
+        function bloc(o, titre, couleur, ligneHtml){
+          var n = ((o || {}).lignes || []).length;
+          if(!n) return '';
+          return '<div style="border:1px solid var(--rule2);border-left:3px solid '
+            + couleur + ';border-radius:10px;padding:12px 14px;background:var(--white);margin-bottom:10px">'
+            + '<div style="font-weight:700;font-size:13px;color:var(--ink)">' + ech(titre)
+            + ' <span style="color:' + couleur + '">· ' + n + '</span></div>'
+            + '<div class="muted" style="font-size:11.5px;margin:4px 0 8px">' + ech(o.lecture) + '</div>'
+            + '<ul style="font-size:12.5px;line-height:1.6;margin:0;padding-left:18px">'
+            + o.lignes.map(ligneHtml).join('') + '</ul></div>';
+        }
+        document.getElementById('fo-angles').innerHTML =
+            bloc(am.pratiques_interdites, 'Pratiques interdites (art. 5)', 'var(--accent)',
+                 function(x){ return '<li><b>' + ech(x.nom) + '</b> — '
+                   + (x.instruit ? (ech(unMontant(x.montant, x.devise)) + ' par mois')
+                                 : 'montant non instruit') + '</li>'; })
+          + bloc(am.haut_risque_non_chiffre, 'Haut risque, et coût inconnu', 'var(--amber)',
+                 function(x){ return '<li><b>' + ech(x.nom) + '</b> — ' + ech(x.pourquoi)
+                   + (x.product_owner ? ' <span class="muted">(à demander à ' + ech(x.product_owner) + ')</span>' : '')
+                   + '</li>'; })
+          + bloc(am.fournisseur_sans_modele, 'Fournisseur nommé, modèle non déclaré', 'var(--blue)',
+                 function(x){ return '<li><b>' + ech(x.nom) + '</b> — fournisseur « '
+                   + ech(x.fournisseur) + ' »'
+                   + (x.en_service ? ', <b>en service</b>' : '') + '</li>'; });
+
+        /* Le coût par niveau de risque — la classification vient du Simulateur
+           IA Act et du Registre, elle n'est pas redemandée. Une valeur hors
+           vocabulaire garde son nom au lieu d'être rangée dans « à évaluer » :
+           une donnée abîmée doit rester visible. */
+        var pc = j.par_classification || {groupes:[]};
+        document.getElementById('fo-classification').innerHTML = pc.groupes.length
+          ? ('<table class="tbl"><thead><tr><th>Niveau de risque</th><th>Systèmes</th>'
+             + '<th>Chiffrés</th><th>Mensuel</th><th>Comment le lire</th></tr></thead><tbody>'
+             + pc.groupes.map(function(g){
+                 return '<tr><td>' + ech(g.libelle)
+                   + (g.connu ? '' : ' <span class="muted">(hors vocabulaire)</span>')
+                   + '</td><td>' + g.systemes + '</td><td>' + g.instruites + '</td><td>'
+                   + (g.lisible ? ech(montants(g.mensuel_par_devise))
+                                : '<span class="muted">non instruit</span>')
+                   + '</td><td style="font-size:11.5px">' + ech(g.lecture) + '</td></tr>';
+               }).join('') + '</tbody></table>'
+             + '<p class="muted" style="font-size:11.5px">Classification lue chez&nbsp;: '
+             + ech(pc.source) + '.</p>')
+          : '<p class="muted">Aucun système au registre — il n’y a rien à classer.</p>';
+
+        /* Le détail ligne à ligne : la FORMULE chiffrée et la PROVENANCE du
+           volume. Les deux étaient calculées par le moteur et n'apparaissaient
+           nulle part ; un montant dont on ne peut pas dire d'où vient le
+           volume n'est pas opposable en comité. */
+        var lignes = (c.lignes || []);
+        document.getElementById('fo-lignes').innerHTML = lignes.length
+          ? ('<table class="tbl"><thead><tr><th>Système</th><th>Modèle</th><th>Mensuel</th>'
+             + '<th>Calcul</th><th>Provenance du volume</th></tr></thead><tbody>'
+             + lignes.map(function(l){
+                 return '<tr><td>' + ech(l.nom) + '</td><td>'
+                   + (l.modele ? ech(l.modele) : '<span class="muted">—</span>') + '</td><td>'
+                   + (l.instruit ? ech(unMontant(l.montant, l.devise))
+                                 : '<span class="muted">non instruit</span>')
+                   + '</td><td style="font-size:11.5px">'
+                   + (l.instruit ? ech(l.formule) : ech(l.motif)) + '</td><td style="font-size:11.5px">'
+                   + (l.source_volume ? ech(l.source_volume) : '<span class="muted">—</span>')
+                   + '</td></tr>';
                }).join('') + '</tbody></table>')
-          : '<p class="muted">Aucune ligne non instruite.</p>';
+          : '<p class="muted">Aucun système au registre.</p>';
+        /* ══ LES LACUNES, QUALIFIÉES PAR L'ÉTAPE DU CYCLE DE VIE ═══════════
+           LE DÉFAUT CORRIGÉ ICI. Le tableau comptait les motifs sans regarder
+           À QUI ils s'appliquaient. « Aucun volume déclaré » sortait à
+           l'identique pour un système encore en CONCEPTION — où l'absence est
+           normale, il ne consomme rien — et pour un système EN PRODUCTION, où
+           elle est le travail à faire. Un parc de vingt systèmes dont douze
+           sont en conception affichait « 8 lignes non instruites » comme un
+           reproche, et le comité partait relancer douze équipes qui n'avaient
+           rien à déclarer.
+
+           L'étape du cycle de vie est déjà au registre, pour l'article 25 du
+           RGPD. Elle n'est pas redemandée : elle est lue. */
+        var lac = j.lacunes || {a_combler:[], attendues:[], indeterminees:[]};
+        function listeLacunes(items, titre, couleur, note){
+          if(!items.length) return '';
+          return '<div style="border-left:3px solid ' + couleur + ';padding:2px 0 2px 12px;margin-bottom:12px">'
+            + '<div style="font-weight:700;font-size:12.5px;color:var(--ink)">' + ech(titre)
+            + ' · ' + items.length + '</div>'
+            + '<div class="muted" style="font-size:11.5px;margin-bottom:5px">' + ech(note) + '</div>'
+            + '<table class="tbl"><thead><tr><th>Système</th><th>Étape</th><th>Ce qui manque</th>'
+            + '<th>Pourquoi c’est ainsi</th></tr></thead><tbody>'
+            + items.map(function(x){
+                return '<tr><td>' + ech(x.nom) + '</td><td>'
+                  + (x.cycle_vie_libelle ? ech(x.cycle_vie_libelle) : '<span class="muted">non déclarée</span>')
+                  + '</td><td>' + ech(x.motif) + '</td><td style="font-size:11.5px">'
+                  + ech(x.pourquoi) + '</td></tr>';
+              }).join('') + '</tbody></table></div>';
+        }
+        var manquesHtml =
+            listeLacunes(lac.a_combler, 'À combler — ces systèmes sont en service', 'var(--accent)',
+              'Ils consomment, et personne n’a encore dit combien. C’est le seul lot sur lequel il y a du travail.')
+          + listeLacunes(lac.indeterminees, 'Indéterminées — étape du cycle de vie non déclarée', 'var(--amber)',
+              'Ni l’un ni l’autre : les ranger avec les lacunes accuserait sans savoir, les ranger avec les normales rendrait le parc plus propre qu’il n’est.')
+          + listeLacunes(lac.attendues, 'Normales — pas encore en service', 'var(--blue)',
+              'Un système en conception n’a pas de volume parce qu’il ne consomme rien. Rien à relancer ici.');
+        var man = Object.keys(c.motifs || {});
+        document.getElementById('fo-manques').innerHTML =
+          (manquesHtml || '<p class="muted">Aucune ligne non instruite.</p>')
+          + (man.length
+             ? ('<details style="margin-top:6px"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">Le compte par motif, tous cycles de vie confondus</summary>'
+                + '<table class="tbl"><thead><tr><th>Motif</th><th>Lignes</th></tr></thead><tbody>'
+                + man.map(function(k){
+                    return '<tr><td>' + ech(k) + '</td><td>' + c.motifs[k] + '</td></tr>';
+                  }).join('') + '</tbody></table></details>')
+             : '')
+          + '<p class="muted" style="font-size:11.5px">Étape du cycle de vie lue chez&nbsp;: '
+          + ech(lac.source_cycle_vie) + '.</p>';
+
+        /* ══ LES LEVIERS — CALCULÉS DEPUIS TOUJOURS, AFFICHÉS NULLE PART ═══
+           `etat()` rendait `leviers_manquants` pour chaque système, et le
+           panneau ne lisait pas la clé. La question posée à chaque ligne était
+           donc payée et perdue. Le libellé de chaque levier vient de la route
+           (`j.leviers`) : le recopier ici ferait diverger l'écran du moteur. */
+        var lm = j.leviers_manquants || {};
+        var refLev = j.leviers || {};
+        var lignesLev = lignes.filter(function(l){ return (lm[String(l.id)] || []).length; });
+        var totalLev = Object.keys(refLev).length;
+        document.getElementById('fo-leviers').innerHTML = totalLev
+          ? ((lignesLev.length
+              ? ('<table class="tbl"><thead><tr><th>Système</th><th>Posés</th>'
+                 + '<th>Leviers non déclarés</th></tr></thead><tbody>'
+                 + lignesLev.map(function(l){
+                     var abs = lm[String(l.id)] || [];
+                     return '<tr><td>' + ech(l.nom) + '</td><td>'
+                       + (totalLev - abs.length) + ' / ' + totalLev + '</td><td>'
+                       + abs.map(function(k){
+                           return ech(refLev[k] || k); }).join(' · ')
+                       + '</td></tr>';
+                   }).join('') + '</tbody></table>')
+              : '<p class="muted">Tous les leviers sont déclarés sur toutes les lignes.</p>')
+             + '<p class="muted" style="font-size:11.5px">Une case cochée dit qu’un levier est <em>déclaré</em>, jamais qu’il est <em>branché</em> : cette page ne peut pas le vérifier.</p>')
+          : '<p class="muted">Aucun levier au référentiel.</p>';
 
         var att = [['Centre de coût', j.par_centre_cout],
                    ['Service', j.par_service],
@@ -20402,8 +20555,8 @@ document.addEventListener('keydown', function(e){
             ? ('<table class="tbl"><thead><tr><th>Centre de coût</th><th>Mensuel</th>'
                + '<th>Plafond</th><th>Part</th></tr></thead><tbody>'
                + dep.atteints.map(function(a){
-                   return '<tr><td>' + ech(a.cle) + '</td><td>' + a.montant + ' ' + ech(a.devise)
-                     + '</td><td>' + a.plafond + ' ' + ech(a.devise) + '</td><td>'
+                   return '<tr><td>' + ech(a.cle) + '</td><td>' + ech(unMontant(a.montant, a.devise))
+                     + '</td><td>' + ech(unMontant(a.plafond, a.devise)) + '</td><td>'
                      + (a.depasse ? '<b>' : '') + Math.round((a.part || 0) * 100) + ' %'
                      + (a.depasse ? ' — dépassé</b>' : '')
                      + (a.partiel ? ' <span class="muted">(sur une partie du groupe)</span>' : '')
@@ -20414,13 +20567,68 @@ document.addEventListener('keydown', function(e){
               + 'un plafond est une décision de comité, révisée à chaque exercice, et '
               + 'le figer dans une table obligerait à une migration pour changer un nombre.</p>');
 
+
+        /* ══ LE VOCABULAIRE DÉCLARABLE ═════════════════════════════════════
+           Trois référentiels — unités de facturation, classes de tâche,
+           modèles tarifés — étaient servis par la route et lus par personne.
+           Or ce sont EUX qui rendent les six champs remplissables : sans la
+           liste des modèles tarifés, « aucun tarif relevé pour X » n'apprend
+           pas quels modèles en portent un. Ils sont lus depuis la réponse et
+           jamais recopiés : une liste recopiée dérive du moteur, et c'est
+           l'écran qu'on croit. */
+        function defs(titre, obj, note){
+          var ks = Object.keys(obj || {});
+          if(!ks.length) return '';
+          return '<div style="margin-bottom:10px"><div style="font-weight:700;font-size:12.5px;color:var(--ink)">'
+            + ech(titre) + '</div>'
+            + (note ? '<div class="muted" style="font-size:11.5px">' + ech(note) + '</div>' : '')
+            + '<ul style="font-size:12.5px;line-height:1.6;margin:4px 0 0;padding-left:18px">'
+            + ks.map(function(k){
+                var v = obj[k];
+                var lib = (v && v.libelle) ? v.libelle : v;
+                return '<li><code>' + ech(k) + '</code> — ' + ech(lib) + '</li>';
+              }).join('') + '</ul></div>';
+        }
+        var mods = j.modeles_tarifes || [];
+        var champs = j.champs_finops || {};
+        var ailleurs = j.champs_lus_ailleurs || {};
+        document.getElementById('fo-vocabulaire').innerHTML =
+            defs('Unités de facturation reconnues', j.unites,
+                 'Seule la facturation au jeton est chiffrable par une table de prix au jeton. Les autres sont RECONNUES et NON CHIFFRÉES : c’est une lacune déclarée, pas un zéro.')
+          + defs('Classes de tâche', j.classes_tache,
+                 'Déclarée par qui connaît le cas d’usage. Elle ne se devine pas depuis la finalité, qui est du texte libre et dirait n’importe quoi.')
+          + (mods.length
+             ? ('<div style="margin-bottom:10px"><div style="font-weight:700;font-size:12.5px;color:var(--ink)">Modèles dont le tarif est relevé</div>'
+                + '<div class="muted" style="font-size:11.5px">Les autres éditeurs ne sont pas absents par oubli&nbsp;: inventer leur prix donnerait une table plus large et moins vraie.</div>'
+                + '<div style="font-size:12.5px;margin-top:4px">'
+                + mods.map(function(m){ return '<code>' + ech(m) + '</code>'; }).join(' · ')
+                + '</div></div>')
+             : '')
+          + '<details style="margin-top:4px"><summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--ink);padding:4px 0">Où chaque champ se saisit, et lesquels Sentinel a déjà obtenus</summary>'
+          + '<table class="tbl"><thead><tr><th>Champ</th><th>Où le saisir</th></tr></thead><tbody>'
+          + Object.keys(champs).map(function(k){
+              return '<tr><td>' + ech(champs[k].libelle) + '</td><td>' + ech(champs[k].ou) + '</td></tr>';
+            }).join('') + '</tbody></table>'
+          + '<div style="font-weight:700;font-size:12.5px;color:var(--ink);margin-top:10px">Ce que cette page NE redemande pas</div>'
+          + '<table class="tbl"><thead><tr><th>Champ</th><th>Déjà recueilli par</th><th>Ce qu’il apporte au chiffrage</th></tr></thead><tbody>'
+          + Object.keys(ailleurs).map(function(k){
+              return '<tr><td><code>' + ech(k) + '</code></td><td>' + ech(ailleurs[k].recueilli_par)
+                + '</td><td style="font-size:11.5px">' + ech(ailleurs[k].apporte) + '</td></tr>';
+            }).join('') + '</tbody></table></details>';
+
         var ar = j.a_renseigner || {};
         document.getElementById('fo-limites').innerHTML =
           '<ul style="font-size:13px;line-height:1.6">'
           + Object.keys(ar).map(function(k){
               return '<li><b>' + ech(k.replace(/_/g, ' ')) + '</b> — ' + ech(ar[k]) + '</li>';
             }).join('') + '</ul>'
-          + '<p class="muted" style="font-size:12.5px">' + ech(m.avertissement) + '</p>';
+          + '<p class="muted" style="font-size:12.5px">' + ech(m.avertissement) + '</p>'
+          /* La version du moteur est affichée parce qu'une règle EXIGE que
+             chaque clé servie par /api/finops soit lue par le panneau, sans
+             liste d'exemptions. Une exemption est une dette qui ne se voit
+             plus au bout d'un mois ; une ligne de plus se voit tout de suite,
+             et dit au lecteur quel calcul a produit ce qu'il regarde. */
+          + '<p class="muted" style="font-size:11.5px">Moteur FinOps ' + ech(j.version) + '.</p>';
       })
       .catch(function(){
         couv.textContent = '—';

@@ -4938,11 +4938,33 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
     <div id="fo-couv-detail" style="font-size:12.5px;color:var(--muted);margin-top:4px">Chargement…</div>
   </div>
 
+  <!-- LES ANGLES MORTS AVANT LES MONTANTS, POUR LA MÊME RAISON QUE LA
+       COUVERTURE. Un angle mort naît du CROISEMENT de deux champs qui, pris
+       séparément, ne disent rien : une ligne non chiffrée est banale, un
+       système haut risque est banal — un système haut risque en service et
+       non chiffré ne l'est pas. Ni le registre seul, ni le chiffrage seul ne
+       pouvaient le voir ; c'est ce que la lecture croisée apporte, et c'est
+       ce qu'un comité doit lire en premier. Le bloc disparaît quand il est
+       vide : un encadré vide finit par ne plus être lu. -->
+  <div id="fo-angles" style="margin-bottom:16px"></div>
+
   <div id="fo-montants" class="mat-grid" style="margin-bottom:16px"></div>
+
+  <h2 class="sec-h">Le coût par niveau de risque</h2>
+  <p class="muted" style="font-size:12.5px;margin-top:-6px">La classification vient du <strong>Simulateur IA&nbsp;Act</strong> et du <strong>Registre IA</strong>&nbsp;: elle n’est pas redemandée ici. L’ordre suit le règlement, jamais les effectifs — un seul système haut risque se lit avant quinze systèmes à risque minimal.</p>
+  <div id="fo-classification"></div>
+
+  <h2 class="sec-h">Le détail, ligne à ligne</h2>
+  <p class="muted" style="font-size:12.5px;margin-top:-6px">Chaque montant porte <strong>sa formule chiffrée</strong> et <strong>la provenance du volume</strong>. Un montant dont on ne peut pas dire d’où vient le volume n’est pas opposable en comité.</p>
+  <div id="fo-lignes"></div>
 
   <h2 class="sec-h">Ce qui n’est pas chiffré, et pourquoi</h2>
   <p class="muted" style="font-size:12.5px;margin-top:-6px">Un système sans volume déclaré ne coûte pas zéro&nbsp;: personne n’a encore dit ce qu’il consomme. La distinction décide de la lecture du total.</p>
   <div id="fo-manques"></div>
+
+  <h2 class="sec-h">Leviers d’optimisation</h2>
+  <p class="muted" style="font-size:12.5px;margin-top:-6px"><strong>Déclarés, jamais mesurés</strong>&nbsp;: cette page ne peut pas savoir si un cache est réellement branché. Ce qu’elle apporte est la question posée à chaque ligne — une case jamais cochée sur vingt lignes se voit, l’absence de la question ne se voit pas.</p>
+  <div id="fo-leviers"></div>
 
   <h2 class="sec-h">Attribution</h2>
   <p class="muted" style="font-size:12.5px;margin-top:-6px">Par centre de coût, par service et par modèle. Un groupe dont aucune ligne n’est instruite reste affiché avec un montant vide&nbsp;: le faire disparaître le ferait lire « ce service ne consomme rien ».</p>
@@ -4954,6 +4976,10 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 
   <h2 class="sec-h">Plafonds</h2>
   <div id="fo-plafonds"></div>
+
+  <h2 class="sec-h">Ce qui se déclare, et où</h2>
+  <p class="muted" style="font-size:12.5px;margin-top:-6px">Les valeurs acceptées, servies par le moteur et non recopiées ici — sans quoi l’écran et le code dériveraient, et c’est l’écran qu’on croirait.</p>
+  <div id="fo-vocabulaire"></div>
 
   <h2 class="sec-h">Ce que cette page ne sait pas</h2>
   <div id="fo-limites"></div>

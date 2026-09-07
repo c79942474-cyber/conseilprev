@@ -517,3 +517,466 @@ def test_le_panneau_dit_que_le_non_instruit_n_est_pas_un_zero():
     bloc = _bloc_du_panneau()
     assert "ne coûtent pas" in bloc and "zéro" in bloc
     assert "non instruit" in bloc
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  10. CE QUE SENTINEL A DÉJÀ DÉCLARÉ — ET QUE LE CHIFFRAGE CESSE D'IGNORER
+#
+#  LE DÉFAUT MESURÉ LE 7 SEPTEMBRE 2026. Le moteur lisait sept champs du
+#  registre : à une exception près, exactement ceux qui avaient été AJOUTÉS
+#  pour lui. Des vingt-trois autres colonnes que le registre porte pour la
+#  conformité, il ne lisait rien. Conséquence : « aucun volume déclaré »
+#  sortait à l'identique pour un système en CONCEPTION, où l'absence est
+#  normale, et pour un système EN PRODUCTION CLASSÉ HAUT RISQUE, où elle est
+#  la première chose à traiter.
+#
+#  CES RÈGLES MESURENT LE PARTAGE, pas la présence des fonctions. Une règle
+#  qui vérifierait que `lacunes()` existe serait verte le jour où elle
+#  rangerait tout dans le même seau.
+# ═══════════════════════════════════════════════════════════════════════════
+
+NU = dict(nom="Sans rien")            # ni modèle, ni unité, ni volume
+
+
+def test_LE_PARTAGE_une_lacune_en_conception_ne_se_lit_pas_comme_une_en_service():
+    """LA RÈGLE CENTRALE DU CROISEMENT. Deux systèmes également non chiffrés,
+    au même motif, doivent sortir dans DEUX seaux différents — parce que l'un
+    consomme et l'autre pas. Les mélanger envoie un comité relancer des équipes
+    qui n'ont rien à déclarer, et lui fait manquer celles qui ont quelque chose.
+
+    La règle compare les DEUX seaux : vérifier seulement que `a_combler`
+    contient le bon système laisserait passer une implémentation qui met tout
+    le monde partout."""
+    lac = F.lacunes([
+        _sys(id=1, nom="En service", cycle_vie="production"),
+        _sys(id=2, nom="En conception", cycle_vie="conception"),
+    ])
+    assert [x["nom"] for x in lac["a_combler"]] == ["En service"]
+    assert [x["nom"] for x in lac["attendues"]] == ["En conception"]
+    # Et le motif est LE MÊME des deux côtés : c'est bien le cycle de vie qui
+    # a fait le partage, et non deux lacunes de natures différentes.
+    assert lac["a_combler"][0]["motif"] == lac["attendues"][0]["motif"]
+
+
+def test_une_etape_du_cycle_de_vie_non_declaree_n_est_ni_normale_ni_une_lacune():
+    """La ranger avec les lacunes accuserait sans savoir ; la ranger avec les
+    normales rendrait le parc plus propre qu'il n'est. Le troisième seau est le
+    seul honnête, et il doit rester non vide quand il le mérite."""
+    lac = F.lacunes([_sys(id=1, nom="Sans étape")])
+    assert not lac["a_combler"] and not lac["attendues"]
+    assert [x["nom"] for x in lac["indeterminees"]] == ["Sans étape"]
+    assert "ne peut pas dire" in lac["indeterminees"][0]["pourquoi"]
+
+
+def test_une_ligne_chiffree_ne_figure_dans_aucun_seau_de_lacune():
+    """Sans quoi le compteur des lacunes grossirait avec le parc instruit —
+    et la seule information qu'il porte disparaîtrait dans le bruit."""
+    lac = F.lacunes([dict(COMPLET, cycle_vie="production")])
+    assert not (lac["a_combler"] + lac["attendues"] + lac["indeterminees"])
+
+
+def test_le_cout_par_risque_suit_l_ordre_du_reglement_et_non_les_effectifs():
+    """`attribution()` trie par nombre de systèmes — juste pour un service,
+    faux ici : un unique système haut risque doit se lire AVANT quinze systèmes
+    à risque minimal. Le parc de la règle est construit pour que le tri par
+    effectifs donne l'ordre INVERSE du bon ; sans cela elle serait verte quel
+    que soit le tri."""
+    parc = [_sys(id=1, nom="Le seul haut risque", classification="haut")]
+    parc += [_sys(id=10 + i, nom="Minimal %d" % i, classification="minimal")
+             for i in range(15)]
+    groupes = F.cout_par_classification(parc)["groupes"]
+    assert [g["cle"] for g in groupes] == ["haut", "minimal"], (
+        "le tri suit les effectifs : quinze systèmes à risque minimal passent "
+        "devant le seul système haut risque du parc")
+
+
+def test_une_classification_hors_vocabulaire_garde_son_nom():
+    """La ranger d'office dans « à évaluer » ferait disparaître une donnée
+    abîmée dans un compteur d'apparence saine — et personne ne la corrigerait,
+    puisque plus personne ne la verrait."""
+    g = F.cout_par_classification([_sys(id=1, classification="bizarre")])["groupes"]
+    assert [x["cle"] for x in g] == ["bizarre"]
+    assert g[0]["connu"] is False
+    assert g[0]["libelle"] == "bizarre"
+
+
+def test_un_niveau_de_risque_absent_du_parc_n_est_pas_invente_a_zero():
+    """Une ligne « inacceptable : 0 » suggérerait qu'on a cherché et trouvé
+    zéro. On n'a rien classé du tout, et les deux ne se valent pas."""
+    cles = [g["cle"] for g in
+            F.cout_par_classification([_sys(id=1, classification="minimal")])["groupes"]]
+    assert cles == ["minimal"]
+
+
+# ── LES ANGLES MORTS : LE CROISEMENT, PAS LA SOMME DE DEUX ALERTES ────────
+
+def test_un_systeme_haut_risque_ET_non_chiffre_ET_en_service_remonte_seul():
+    """C'est le croisement qui fait l'information. La règle pose trois systèmes
+    dont chacun porte DEUX des trois traits, et un seul les porte tous : une
+    implémentation qui remonterait « tout ce qui est haut risque » ou « tout ce
+    qui n'est pas chiffré » échouerait ici."""
+    parc = [
+        _sys(id=1, nom="Les trois traits", classification="haut", cycle_vie="production"),
+        dict(COMPLET, id=2, nom="Haut risque mais chiffré",
+             classification="haut", cycle_vie="production"),
+        _sys(id=3, nom="Non chiffré mais minimal",
+             classification="minimal", cycle_vie="production"),
+    ]
+    noms = [x["nom"] for x in
+            F.angles_morts(parc)["haut_risque_non_chiffre"]["lignes"]]
+    assert noms == ["Les trois traits"], noms
+
+
+def test_une_pratique_interdite_est_montree_mais_jamais_proposee_a_l_arbitrage():
+    """Article 5 : elle se retire, elle ne s'optimise pas. Le montant figure
+    pour que la ligne ne disparaisse pas du tableau — la taire la ferait
+    oublier, l'arbitrer la légitimerait."""
+    a = F.angles_morts([dict(COMPLET, id=1, nom="À retirer",
+                             classification="inacceptable")])
+    interdites = a["pratiques_interdites"]
+    assert [x["nom"] for x in interdites["lignes"]] == ["À retirer"]
+    assert interdites["lignes"][0]["montant"] is not None
+    assert "se retire" in interdites["lecture"]
+    assert "jamais pour être arbitré" in interdites["lecture"]
+
+
+def test_un_fournisseur_nomme_sans_modele_se_distingue_de_rien_du_tout():
+    """« Le tarif est relevable chez un éditeur nommé » n'appelle pas le même
+    geste que « personne n'a rien dit ». Envoyer chercher une information que
+    quelqu'un a déjà donnée à moitié fait perdre le lot le moins coûteux à
+    combler."""
+    lignes = F.angles_morts([
+        _sys(id=1, nom="Fournisseur connu", fournisseur="Éditeur X"),
+        _sys(id=2, nom="Rien du tout"),
+    ])["fournisseur_sans_modele"]["lignes"]
+    assert [x["nom"] for x in lignes] == ["Fournisseur connu"]
+    assert lignes[0]["fournisseur"] == "Éditeur X"
+
+
+def test_un_angle_mort_ne_rend_jamais_un_verdict():
+    """Ils désignent où regarder. Conclure demanderait de connaître le contrat,
+    l'usage réel et la qualité attendue — trois choses absentes d'ici. La règle
+    interdit le vocabulaire de la sentence dans les lectures servies."""
+    for bloc in F.angles_morts([dict(COMPLET, classification="haut")]).values():
+        texte = bloc["lecture"].lower()
+        for verdict in ("il faut supprimer", "trop cher", "gaspillage",
+                        "vous devez", "non conforme"):
+            assert verdict not in texte, (verdict, bloc["lecture"])
+
+
+# ── LE VOCABULAIRE NE DÉRIVE PAS DU FORMULAIRE QUI LE REMPLIT ─────────────
+
+def test_le_vocabulaire_est_celui_du_formulaire_du_registre():
+    """LA SEULE FAÇON DE RENDRE LA RECOPIE SÛRE. `CLASSIFICATION_IA_ACT` et
+    `CYCLE_VIE` reprennent les valeurs du formulaire du Registre IA. Une valeur
+    renommée d'un seul côté ne lèverait aucune erreur : elle sortirait
+    simplement « hors vocabulaire » pour tout le parc, et le tableau resterait
+    d'apparence normale. La règle compare les deux listes."""
+    for champ, table in (("classification", F.CLASSIFICATION_IA_ACT),
+                         ("cycle_vie", F.CYCLE_VIE)):
+        m = re.search(r'sel\("%s",\[(.*?)\]\)' % champ, MOTEUR, re.S)
+        assert m, "les options de « %s » sont introuvables au formulaire" % champ
+        au_formulaire = set(re.findall(r'v:"(\w+)"', m.group(1)))
+        chez_nous = {c["cle"] for c in table}
+        assert chez_nous == au_formulaire, (
+            "« %s » : le moteur connaît %s, le formulaire propose %s"
+            % (champ, sorted(chez_nous), sorted(au_formulaire)))
+
+
+def test_un_champ_deja_recueilli_n_est_jamais_redemande():
+    """C'est la demande, mot pour mot : « obtenir des données d'entrée fiables
+    et DÉJÀ DÉCLARÉES ». Un champ présent dans les deux tables serait un champ
+    que Sentinel a obtenu et redemande."""
+    doublons = set(F.CHAMPS_LUS_AILLEURS) & set(F.CHAMPS_FINOPS)
+    assert not doublons, doublons
+
+
+def test_chaque_champ_dit_ou_il_se_saisit():
+    """Sans cela le panneau annonce un manque sans dire où le combler, et
+    l'utilisateur cherche. Une lacune qu'on ne sait pas où réparer reste."""
+    for cle, p in F.CHAMPS_FINOPS.items():
+        assert p["ou"].strip() and p["libelle"].strip(), cle
+    for cle, p in F.CHAMPS_LUS_AILLEURS.items():
+        assert p["recueilli_par"].strip() and p["apporte"].strip(), cle
+
+
+@pytest.mark.parametrize("casse", ["rangs", "service"])
+def test_le_referentiel_refuse_de_se_charger_s_il_se_contredit(monkeypatch, casse):
+    """Contrôlé à l'import : c'est le seul moment où l'incohérence est encore
+    gratuite. Plus tard elle sort à l'écran, et à l'écran on la croit."""
+    if casse == "rangs":
+        double = [dict(c, rang=1) for c in F.CLASSIFICATION_IA_ACT]
+        monkeypatch.setattr(F, "CLASSIFICATION_IA_ACT", double)
+    else:
+        monkeypatch.setattr(F, "CYCLE_VIE",
+                            [dict(c, en_service=False) for c in F.CYCLE_VIE])
+    with pytest.raises(ValueError):
+        F._verifier_vocabulaire()
+
+
+def test_l_etat_porte_les_croisements_et_les_deux_tables_de_provenance():
+    e = F.etat([dict(COMPLET, classification="haut", cycle_vie="production")])
+    for cle in ("par_classification", "lacunes", "angles_morts",
+                "champs_lus_ailleurs", "champs_finops"):
+        assert cle in e, cle
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  11. LE PANNEAU EST EXÉCUTÉ, PAS LU
+#
+#  POURQUOI CE HARNAIS EXISTE. Le relevé du 7 septembre 2026 : /api/finops
+#  servait QUINZE clés, le panneau en lisait SEPT. `leviers_manquants` —
+#  calculé pour chaque système du parc — était produit par le serveur, transmis
+#  sur le réseau, et jeté par le navigateur. Rien ne le signalait : une clé non
+#  lue ne lève aucune erreur, elle disparaît. Les trois référentiels que la
+#  route ajoutait EXPRÈS pour le panneau (unités, classes de tâche, modèles
+#  tarifés) subissaient le même sort.
+#
+#  UNE RÈGLE QUI CHERCHERAIT « leviers_manquants » DANS LA SOURCE serait verte
+#  le jour où le nom figurerait dans un commentaire. Le panneau est donc
+#  EXÉCUTÉ sous node, sur la sortie RÉELLE du moteur, et ce sont les zones
+#  peintes qu'on mesure.
+# ═══════════════════════════════════════════════════════════════════════════
+
+import json                                                        # noqa: E402
+import shutil                                                      # noqa: E402
+import subprocess                                                  # noqa: E402
+import tempfile                                                    # noqa: E402
+
+NODE = shutil.which("node")
+
+#: Un parc construit pour que CHAQUE zone du panneau ait quelque chose à peindre
+#: — et pour qu'aucune ne puisse se remplir par accident. Un parc entièrement
+#: instruit rendrait les lacunes vides, et une règle sur une zone vide passe.
+PARC_DE_RECETTE = [
+    {"id": 1, "nom": "Assistant support", "modele": "claude-sonnet-5",
+     "unite_facturation": "jetons", "volume_entree_mois": 12_000_000,
+     "volume_sortie_mois": 900_000,
+     "volume_source": "console de facturation, relevé du 31 août",
+     "classification": "limite", "cycle_vie": "production", "service": "Support",
+     "centre_cout": "CC-410", "classe_tache": "redaction", "leviers": ["cache"],
+     "product_owner": "Responsable support"},
+    {"id": 2, "nom": "Scoring crédit", "classification": "haut",
+     "cycle_vie": "production", "fournisseur": "Éditeur X", "service": "Finance",
+     "centre_cout": "CC-200", "product_owner": "Responsable risques"},
+    {"id": 3, "nom": "Maquette RH", "classification": "a_evaluer",
+     "cycle_vie": "conception", "service": "RH", "centre_cout": "CC-100"},
+    {"id": 4, "nom": "Tri de CV", "classification": "inacceptable",
+     "cycle_vie": "revue", "modele": "claude-opus-5",
+     "unite_facturation": "jetons", "volume_entree_mois": 500_000,
+     "volume_sortie_mois": 50_000, "volume_source": "export mensuel",
+     "centre_cout": "CC-100"},
+    {"id": 5, "nom": "Chatbot interne", "unite_facturation": "sieges",
+     "service": "IT"},
+]
+
+_HARNAIS = r"""
+const fs = require('fs');
+const src = fs.readFileSync(process.argv[2], 'utf8');
+const fin = src.indexOf('window.finopsLoad = function()');
+const deb = src.lastIndexOf('(function(){', fin);
+const iife = src.slice(deb, src.indexOf('\n})();', fin) + 6);
+const ids = JSON.parse(process.argv[4]);
+const zones = {};
+ids.forEach(function(id){ zones[id] = {id:id, innerHTML:'', textContent:''}; });
+global.window = {};
+global.document = { getElementById: function(id){ return zones[id] || null; } };
+const reponse = JSON.parse(fs.readFileSync(process.argv[3], 'utf8'));
+global.fetch = function(){
+  return Promise.resolve({ ok:true, json: function(){ return Promise.resolve(reponse); } });
+};
+eval(iife);
+window.finopsLoad();
+setTimeout(function(){
+  const sortie = {};
+  ids.forEach(function(id){ sortie[id] = zones[id].innerHTML || zones[id].textContent || ''; });
+  process.stdout.write(JSON.stringify(sortie));
+}, 40);
+"""
+
+#: Le seul élément du panneau qui porte un identifiant SANS être peint : c'est
+#: le cadre qui entoure le chiffre de couverture et son détail, tous deux peints
+#: séparément. L'exemption est unique, nommée et motivée — une liste
+#: d'exemptions qui s'allonge est une règle qui s'éteint.
+CADRES_NON_PEINTS = {"fo-couverture"}
+
+
+def _ids_du_balisage():
+    """Tous les identifiants « fo- » que la page déclare."""
+    i = PAGE.index('id="p-finops"')
+    bloc = PAGE[i:PAGE.index('<div class="page"', i + 10)]
+    return sorted(set(re.findall(r'id="(fo-[a-z-]+)"', bloc)))
+
+
+def _zones_du_panneau():
+    """Celles que le panneau doit remplir : le balisage moins les cadres."""
+    return [z for z in _ids_du_balisage() if z not in CADRES_NON_PEINTS]
+
+
+def _reponse_de_la_route():
+    """La sortie RÉELLE du moteur, augmentée comme la route l'augmente.
+
+    Fabriquer un faux JSON ici ferait mesurer le panneau contre une réponse qui
+    n'existe pas : le jour où le moteur renommerait une clé, la règle resterait
+    verte et l'écran deviendrait blanc."""
+    etat = F.etat(PARC_DE_RECETTE,
+                  seuils={"CC-410": {"plafond": 30, "devise": "USD"},
+                          "CC-200": {"plafond": 500, "devise": "USD"}})
+    etat["ok"] = True
+    etat["classes_tache"] = F.CLASSES_TACHE
+    etat["unites"] = F.UNITES
+    etat["leviers"] = F.LEVIERS
+    etat["modeles_tarifes"] = sorted(F.TARIFS)
+    return etat
+
+
+def _peindre():
+    if not NODE:
+        pytest.skip("node absent : le panneau ne peut pas être exécuté")
+    zones = _zones_du_panneau()
+    with tempfile.TemporaryDirectory() as d:
+        rep = os.path.join(d, "reponse.json")
+        harnais = os.path.join(d, "harnais.js")
+        io.open(rep, "w", encoding="utf-8").write(
+            json.dumps(_reponse_de_la_route(), ensure_ascii=False))
+        io.open(harnais, "w", encoding="utf-8").write(_HARNAIS)
+        r = subprocess.run(
+            [NODE, harnais, os.path.join(ICI, "sentinel.page.js"), rep,
+             json.dumps(zones)],
+            capture_output=True, text=True, timeout=90)
+    if r.returncode != 0:
+        pytest.fail("le panneau ne s'exécute pas :\n%s" % (r.stderr or "")[-1500:])
+    return json.loads(r.stdout)
+
+
+def _texte(html_):
+    """Le texte vu par le lecteur : sans balises, entités rendues.
+
+    Comparer sur le HTML brut ferait passer une règle grâce à un nom de classe
+    ou un attribut `title` — c'est-à-dire pour une raison sans rapport avec ce
+    qu'elle prétend mesurer."""
+    import html as _h
+    return re.sub(r"\s+", " ", _h.unescape(re.sub(r"<[^>]+>", " ", html_)))
+
+
+def test_LE_DEFAUT_MESURE_le_panneau_ne_laisse_tomber_aucune_cle_servie():
+    """QUINZE CLÉS SERVIES, SEPT LUES. La règle énumère ce que la route rend et
+    exige que chacune soit lue — sans liste d'exemptions : une exemption est une
+    dette qui cesse de se voir au bout d'un mois."""
+    bloc = _bloc_du_panneau()
+    non_lues = sorted(k for k in _reponse_de_la_route() if k not in bloc)
+    assert not non_lues, (
+        "le serveur calcule et transmet ces clés, le panneau ne les lit pas : "
+        "%s" % non_lues)
+
+
+def test_toutes_les_zones_du_panneau_sont_peintes():
+    """Une zone présente au balisage et jamais remplie est un trou blanc dans
+    la page — et il ne lève rien.
+
+    LA RÈGLE NE POSE AUCUN SEUIL DE LONGUEUR. Un premier jet exigeait vingt
+    caractères, et faisait tomber `fo-couv-chiffre` qui contient légitimement
+    « 2 / 5 ». Un seuil inventé mesure la générosité de son auteur, pas le
+    rendu : ce qui se mesure ici est qu'une zone a été ÉCRITE, puisqu'elles
+    partent toutes vides."""
+    peint = _peindre()
+    vides = sorted(z for z, h in peint.items() if not h.strip())
+    assert not vides, "zones restées vides après exécution : %s" % vides
+
+
+def test_aucun_identifiant_du_balisage_n_est_orphelin():
+    """L'autre moitié du même défaut : une zone AJOUTÉE À LA PAGE que le
+    panneau n'adresse jamais. Elle ne lève rien non plus — elle reste
+    simplement blanche à l'écran, et seule une relecture attentive la voit."""
+    bloc = _bloc_du_panneau()
+    orphelins = sorted(z for z in _ids_du_balisage()
+                       if z not in CADRES_NON_PEINTS and z not in bloc)
+    assert not orphelins, (
+        "ces zones existent dans la page et le panneau ne les remplit "
+        "jamais : %s" % orphelins)
+
+
+def test_les_leviers_manquants_sont_peints_avec_le_libelle_du_MOTEUR():
+    """La clé était jetée. Le libellé vient de `j.leviers`, servi par la route :
+    le recopier dans le panneau ferait diverger l'écran du moteur, et c'est
+    l'écran qu'on croit. Le parc de recette pose UN levier sur cinq systèmes ;
+    les trois autres doivent donc apparaître, nommés."""
+    peint = _peindre()["fo-leviers"]
+    # LA LIGNE DU SYSTÈME, PAS LE TABLEAU. Un premier jet cherchait « cache »
+    # dans tout le tableau et tombait : quatre autres systèmes ne posent AUCUN
+    # levier, « cache » y figure donc à bon droit. La règle échouait pour une
+    # raison sans rapport avec ce qu'elle prétendait mesurer.
+    lignes = [_texte(r) for r in peint.split("<tr>") if "Assistant support" in r]
+    assert len(lignes) == 1, "la ligne du système instruit est introuvable"
+    ligne = lignes[0]
+    for cle in F.LEVIERS:
+        if cle == "cache":
+            continue
+        assert F.LEVIERS[cle] in ligne, (
+            "le levier « %s » manque à la ligne alors qu'il n'y est pas "
+            "déclaré" % cle)
+    assert F.LEVIERS["cache"] not in ligne, (
+        "un levier POSÉ sur ce système est présenté comme manquant : le "
+        "panneau affiche le référentiel au lieu de l'écart")
+    assert "1 / 4" in ligne, "le compte des leviers posés est faux ou absent"
+
+
+def test_chaque_montant_porte_sa_formule_et_la_provenance_de_son_volume():
+    """Un montant dont on ne peut pas dire d'où vient le volume n'est pas
+    opposable en comité. Les deux étaient calculés par le moteur et
+    n'apparaissaient nulle part."""
+    lu = _texte(_peindre()["fo-lignes"])
+    assert "console de facturation, relevé du 31 août" in lu, (
+        "la provenance du volume n'est pas peinte")
+    assert "jetons d'entrée / 1e6" in lu, "la formule chiffrée n'est pas peinte"
+    # Et une ligne NON instruite dit son motif à la place — sans quoi la colonne
+    # serait vide et se lirait « rien à dire ».
+    assert "unité de facturation non déclarée" in lu
+
+
+def test_les_lacunes_peintes_separent_le_travail_a_faire_du_reste():
+    """C'est le partage, vu du lecteur. Le parc de recette porte un système en
+    service non chiffré et un système en conception : les deux mentions doivent
+    apparaître, et la seconde doit dire que ce n'est PAS une lacune."""
+    lu = _texte(_peindre()["fo-manques"])
+    assert "Scoring crédit" in lu and "Maquette RH" in lu
+    assert "en service" in lu.lower()
+    assert "n’est pas une lacune" in lu or "pas une lacune" in lu
+
+
+def test_tous_les_montants_peints_sont_ecrits_a_la_francaise():
+    """« 53,25 » et « 49.5 » se côtoyaient dans la même page : le lecteur croit
+    à deux précisions différentes là où il n'y a qu'une inconstance d'écriture.
+    La règle cherche un séparateur décimal anglo-saxon dans le TEXTE peint —
+    les formules, qui citent les tarifs du moteur (« × 3.0 »), sont écartées
+    parce qu'elles reproduisent le calcul et non un montant."""
+    peint = _peindre()
+    for zone in ("fo-montants", "fo-lignes", "fo-angles", "fo-plafonds",
+                 "fo-classification", "fo-attribution"):
+        lu = _texte(peint[zone])
+        lu = re.sub(r"\([^)]*jetons[^)]*\)", " ", lu)      # les formules
+        fautes = re.findall(r"\d+\.\d+\s*(?:USD|EUR)", lu)
+        assert not fautes, "%s écrit des montants au point décimal : %s" % (
+            zone, fautes)
+
+
+def test_les_angles_morts_sont_peints_AVANT_les_montants():
+    """Même raison que la couverture : un angle mort décide de la lecture d'un
+    total. La règle lit la position dans le balisage, pas une intention."""
+    i = PAGE.index('id="p-finops"')
+    bloc = PAGE[i:PAGE.index('<div class="page"', i + 10)]
+    assert bloc.index('id="fo-angles"') < bloc.index('id="fo-montants"')
+
+
+def test_le_vocabulaire_declarable_est_peint_depuis_la_reponse():
+    """Sans les modèles tarifés à l'écran, « aucun tarif relevé pour X »
+    n'apprend pas quels modèles en portent un — le lecteur reste devant une
+    lacune qu'il ne sait pas combler."""
+    lu = _texte(_peindre()["fo-vocabulaire"])
+    for modele in sorted(F.TARIFS):
+        assert modele in lu, modele
+    for unite in F.UNITES:
+        assert unite in lu, unite
+    # Et les champs déjà recueillis ailleurs sont nommés avec leur origine :
+    # c'est ce qui dit au lecteur qu'on ne les lui redemande pas.
+    assert "Registre IA" in lu and "Simulateur IA Act" in lu
