@@ -9648,6 +9648,36 @@ def finops_etat():
     return jsonify(etat)
 
 
+@app.route('/api/secteurs-nace', methods=['GET'])
+@rate_limit(limit=60, window=60)
+@reserve_abonne_api
+def api_secteurs_nace():
+    """Les vingt-deux sections de la NACE Rev. 2.1, et ce que Sentinel en couvre.
+
+    POURQUOI CETTE ROUTE EXISTE. L'audit de maturite propose HUIT profils
+    releves. Ce sont des profils, pas une nomenclature : une cooperative
+    agricole, un distributeur, un bailleur ou une universite n'y trouvent pas
+    leur activite et doivent choisir « le moins faux ». La NACE est le
+    classement que porte tout extrait d'immatriculation europeen ; l'y adosser
+    permet de designer son activite par le classement qu'on connait deja.
+
+    CE QU'ELLE NE FAIT PAS. Inventer un profil pour les treize sections que les
+    huit profils ne couvrent pas. La reponse porte donc une COUVERTURE, comme
+    le FinOps porte la sienne : vingt-deux sections proposees dont neuf
+    seulement ont un profil releve. La taire donnerait vingt-deux entrees
+    d'apparence equivalente.
+
+    LA RESERVE SUR LA TRADUCTION EST SERVIE AVEC LE RESTE. Les intitules
+    francais sont une traduction de travail : la version francaise du reglement
+    n'a pas pu etre consultee. Un intitule traduit presente comme officiel est
+    l'erreur qu'on ne repere plus jamais.
+    """
+    import secteurs_nace
+    etat = secteurs_nace.etat()
+    etat['ok'] = True
+    return jsonify(etat)
+
+
 @app.route('/api/registre/status', methods=['GET'])
 @require_paid_plan
 @rate_limit(limit=30, window=60)

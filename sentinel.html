@@ -3531,6 +3531,27 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   <h1 class="page-h">Audit de <em>maturité IA</em></h1>
   <p class="page-lead">Évaluation structurée selon les 8 piliers de l'EU AI Act, déclinée par secteur d'activité. Analyse, scoring, plan d'action et livrables téléchargeables.</p>
 
+  <!-- LE CLASSEMENT INTERNATIONAL AVANT LES HUIT PROFILS.
+       Les huit boutons ci-dessous sont des profils RELEVÉS : chacun porte ses
+       systèmes typiques, ses régimes applicables et un point de départ sur les
+       huit piliers. Ce sont des profils, pas une nomenclature — une coopérative
+       agricole, un distributeur, un bailleur ou une université n'y trouvent pas
+       leur activité et doivent choisir « le moins faux ».
+       La NACE est le classement que porte tout extrait d'immatriculation
+       européen. Y adosser le choix permet de désigner son activité par le
+       classement qu'on connaît déjà — et le module dit alors, sans détour, si
+       Sentinel a un profil relevé pour cette section ou non. -->
+  <div id="mat-nace" style="border:1px solid var(--rule2);border-left:3px solid var(--blue);border-radius:10px;padding:12px 14px;background:var(--white);margin-bottom:12px">
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <label for="mat-nace-select" style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Votre activité au classement européen</label>
+      <select id="mat-nace-select" class="reg-input" style="flex:1;min-width:260px;max-width:640px;font-size:12.5px" onchange="naceChoisir(this.value)">
+        <option value="">Chargement de la nomenclature…</option>
+      </select>
+    </div>
+    <div id="mat-nace-reponse" style="font-size:12px;color:var(--ink);margin-top:8px"></div>
+    <div id="mat-nace-source" class="muted" style="font-size:11px;margin-top:6px"></div>
+  </div>
+
   <div class="mat-sector-bar" id="mat-sector-bar"></div>
   <div style="text-align:right;margin-bottom:8px"><button class="mat-export-btn" style="background:#1C5A8A;color:#fff" onclick="histoSaveMaturite()" title="Enregistrer cet audit de maturite dans l historique persistant et tracable (RGPD).">💾 Enregistrer dans l’historique</button></div>
   <div id="mat-content"></div>

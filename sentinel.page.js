@@ -1032,6 +1032,7 @@ function go(id, el, sec, pg) {
   if (id === 'rgpd-site' && typeof window.rgpdInit === 'function') _apresPeinture(window.rgpdInit);
   if (id === 'training' && typeof window.formCatRender === 'function') _apresPeinture(window.formCatRender);
   if (id === 'finops' && typeof window.finopsLoad === 'function') _apresPeinture(window.finopsLoad);
+  if (id === 'maturite' && typeof window.naceCharger === 'function') _apresPeinture(window.naceCharger);
   if (id === 'ia50' && typeof window.ia50Load === 'function') _apresPeinture(window.ia50Load);
   if (id === 'empreinte' && typeof window.empInit === 'function') _apresPeinture(window.empInit);
   if (id === 'gouvernance' && typeof window.gouvInit === 'function') _apresPeinture(window.gouvInit);
@@ -20285,6 +20286,126 @@ document.addEventListener('keydown', function(e){
    page. Recalculer côté navigateur donnerait un second exemplaire du moteur,
    et c'est celui qu'on oublie de corriger qui resterait.
    ═══════════════════════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════════════════
+   LE CLASSEMENT EUROPÉEN DES ACTIVITÉS — NACE Rév. 2.1
+
+   POURQUOI CE BLOC. `MAT_SECTORS` porte huit profils RELEVÉS. Ce sont des
+   profils, pas une nomenclature : une coopérative agricole, un distributeur,
+   un bailleur social ou une université n'y trouvent pas leur activité, et
+   choisissent « le moins faux » — un choix silencieux dont l'audit garde
+   ensuite la trace sans que personne ne sache qu'il a été fait.
+
+   CE QUE CE BLOC NE FAIT PAS. Inventer treize profils pour les treize
+   sections que les huit ne couvrent pas. Une section sans profil relevé le
+   DIT, et l'audit y démarre sans point de départ sectoriel — ce qui est
+   exact : les huit piliers et le questionnaire, eux, ne dépendent pas du
+   secteur. Fabriquer un socle donnerait vingt-deux entrées d'apparence
+   homogène dont neuf seraient relevées et treize devinées, sans que rien à
+   l'écran ne les distingue.
+
+   RIEN N'EST RECOPIÉ ICI. Les intitulés, la couverture, la source et la
+   réserve sur la traduction viennent de /api/secteurs-nace. Une nomenclature
+   recopiée dans le navigateur dérive du module le jour d'une révision — et
+   c'est l'écran qu'on croit.
+   ══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  function ech(t){
+    return String(t == null ? '' : t).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  window.__nace = null;
+
+  window.naceCharger = function(){
+    var sel = document.getElementById('mat-nace-select');
+    if(!sel || sel.dataset.charge) return;
+    fetch('/api/secteurs-nace', {credentials:'same-origin', cache:'no-store'})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(j){
+        if(!j || !j.ok){
+          sel.innerHTML = '<option value="">Nomenclature indisponible</option>';
+          return;
+        }
+        window.__nace = j;
+        sel.dataset.charge = '1';
+        /* L'ÉTIQUETTE DIT DÈS LA LISTE si la section porte un profil relevé.
+           Le découvrir après le choix ferait porter au client une déception
+           que la liste pouvait lui épargner. */
+        sel.innerHTML = '<option value="">— Section d’activité (NACE Rév. 2.1) —</option>'
+          + j.sections.map(function(s){
+              return '<option value="' + ech(s.code) + '">' + ech(s.code) + ' — '
+                + ech(s.intitule)
+                + (s.profils.length ? '' : '  (aucun profil relevé)')
+                + '</option>';
+            }).join('');
+        var c = j.couverture;
+        document.getElementById('mat-nace-source').innerHTML =
+          ech(j.source.revision) + ', ' + ech(j.source.acte) + ' — '
+          + '<a href="' + ech(j.source.url) + '" target="_blank" rel="noopener">'
+          + ech(j.source.celex) + '</a>, applicable depuis le '
+          + ech(j.source.applicable_depuis) + '. '
+          + '<b>' + c.avec_profil + ' des ' + c.total + ' sections</b> portent un '
+          + 'profil sectoriel relevé dans Sentinel ; les ' + c.sans_profil
+          + ' autres sont proposées sans socle de départ, et le disent. '
+          + '<em>' + ech(j.source.reserve) + '</em>';
+      })
+      .catch(function(){
+        sel.innerHTML = '<option value="">Nomenclature injoignable</option>';
+      });
+  };
+
+  window.naceChoisir = function(code){
+    var zone = document.getElementById('mat-nace-reponse');
+    var j = window.__nace;
+    if(!zone || !j) return;
+    if(!code){ zone.innerHTML = ''; return; }
+    var s = j.sections.filter(function(x){ return x.code === code; })[0];
+    if(!s){ zone.innerHTML = ''; return; }
+
+    var html = '<div><b>' + ech(s.code) + ' — ' + ech(s.intitule) + '</b>'
+      + ' <span class="muted" style="font-size:11px">(intitulé officiel&nbsp;: '
+      + ech(s.intitule_officiel) + ')</span></div>';
+
+    if(s.deplacement_rev2){
+      /* La lettre a changé de sens entre les deux révisions. Le taire
+         laisserait un lecteur qui connaît la Rév. 2 croire à une erreur. */
+      html += '<div class="muted" style="font-size:11px;margin-top:4px">⇄ '
+        + ech(s.deplacement_rev2) + '</div>';
+    }
+
+    if(s.profils.length){
+      html += '<div style="margin-top:8px">Sentinel porte un profil relevé pour '
+        + 'cette section&nbsp;:</div><div style="margin-top:5px">'
+        + s.profils.map(function(k){
+            var p = (window.MAT_SECTORS || {})[k];
+            var lib = p ? (p.icon + ' ' + p.label) : k;
+            return '<button class="mat-sector-btn" onclick="matSelect(\'' + ech(k)
+              + '\')" title="Ouvrir l’audit sur ce profil sectoriel">' + ech(lib)
+              + '</button>';
+          }).join(' ') + '</div>'
+        + s.profils.map(function(k){
+            var n = (j.profils_sentinel[k] || {}).note;
+            return n ? ('<div class="muted" style="font-size:11px;margin-top:4px">'
+                        + ech(n) + '</div>') : '';
+          }).join('');
+    } else {
+      /* AUCUN PROFIL DE REPLI N'EST CHOISI À LA PLACE DU CLIENT. « Le moins
+         faux » est un arbitrage qui lui appartient : le faire ici, en silence,
+         donnerait un audit assis sur un secteur qu'il n'a pas choisi. */
+      html += '<div style="margin-top:8px;border-left:3px solid var(--amber);'
+        + 'padding-left:10px">' + ech(s.motif) + '</div>'
+        + '<div class="muted" style="font-size:11px;margin-top:6px">Ce qu’il '
+        + 'faudrait pour établir un profil de cette section&nbsp;:</div>'
+        + '<ul class="muted" style="font-size:11px;line-height:1.55;margin:3px 0 0;padding-left:18px">'
+        + Object.keys(j.a_renseigner).map(function(k){
+            return '<li>' + ech(j.a_renseigner[k]) + '</li>';
+          }).join('') + '</ul>';
+    }
+    zone.innerHTML = html;
+  };
+})();
+
 (function(){
   function ech(t){
     return String(t == null ? '' : t).replace(/[&<>"']/g, function(c){
