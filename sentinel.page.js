@@ -19156,10 +19156,133 @@ window.panParcoursClimat    = function(){ panParcours('climat'); };
 window.panParcoursEau       = function(){ panParcours('eau'); };
 window.panParcoursAnalyste  = function(){ panParcours('analyste'); };
 
+/* ══════════════════════════════════════════════════════════════════════════
+   L'AVANCEMENT D'UN PARCOURS — MESURÉ, PAS DÉDUIT
+
+   LE DÉFAUT QUE CE BLOC CORRIGE. Le bandeau peignait ses pastilles ainsi :
+   « k < i » devient `done`. Autrement dit, TOUT CE QUI PRÉCÈDE L'ÉTAPE
+   COURANTE était marqué fait — qu'on y soit passé ou non. Ouvrir directement
+   l'étape 5 d'un parcours de six colorait quatre étapes jamais vues. Rien ne
+   levait : l'affichage était cohérent, et faux. C'est la version visuelle du
+   défaut poursuivi partout ailleurs — une chose qui passe pour une raison sans
+   rapport avec ce qu'elle prétend.
+
+   CE QUI EST MESURÉ. Une étape est VUE quand `guidedStartStep` y a réellement
+   conduit. Rien d'autre n'est déduit : ni depuis l'index, ni depuis le temps
+   passé, ni depuis le fait d'avoir ouvert le panneau par le menu — arriver sur
+   une page par un autre chemin ne fait pas avancer un parcours qu'on ne suit
+   pas.
+
+   CE QUE LE VERT SIGNIFIE, ET CE QU'IL NE SIGNIFIE PAS. Il signifie que toutes
+   les étapes ont été OUVERTES. Il ne signifie pas que le travail de chacune a
+   été fait — Sentinel ne peut pas le mesurer, et un vert qui laisserait croire
+   le contraire vaudrait moins que pas de vert du tout. La réserve est écrite à
+   l'écran, sous la barre, et non seulement ici.
+
+   LA CLÉ D'UNE ÉTAPE EST « rang:identifiant », PAS L'UN DES DEUX. L'index seul
+   ferait qu'un parcours réordonné hériterait de l'avancement de l'ancien ordre.
+   L'identifiant seul confondrait deux étapes qui mènent au même panneau — il y
+   en a. Le couple perd l'avancement d'une étape modifiée, ce qui est le
+   comportement juste : on ne sait plus si elle a été vue, donc on ne le dit
+   pas.
+   ══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  var CLE = 'cpParcoursVues';
+
+  function lire(){
+    /* Le stockage peut être refusé (navigation privée, réglage) ou vidé. On le
+       tente, et l'avancement repart à zéro plutôt que de faire tomber la page :
+       un parcours sans mémoire reste un parcours. */
+    try { return JSON.parse(localStorage.getItem(CLE)) || {}; }
+    catch(e){ return {}; }
+  }
+  function ecrire(o){
+    try { localStorage.setItem(CLE, JSON.stringify(o)); } catch(e){}
+  }
+
+  function cleEtape(i, step){ return i + ':' + ((step && step.id) || ''); }
+
+  window.parcoursNoter = function(pathId, i){
+    var path = (typeof guidedFindPath === 'function') ? guidedFindPath(pathId) : null;
+    if(!path || !path.steps || !path.steps[i]) return;
+    var tout = lire();
+    var vues = tout[pathId] || [];
+    var k = cleEtape(i, path.steps[i]);
+    if(vues.indexOf(k) < 0){ vues.push(k); tout[pathId] = vues; ecrire(tout); }
+  };
+
+  window.parcoursVues = function(pathId){
+    return (lire()[pathId] || []);
+  };
+
+  window.parcoursEtapeVue = function(path, i){
+    if(!path || !path.steps || !path.steps[i]) return false;
+    return parcoursVues(path.id).indexOf(cleEtape(i, path.steps[i])) >= 0;
+  };
+
+  window.parcoursEtat = function(path){
+    /* UN SEUL ENDROIT CALCULE L'ÉTAT. Le bandeau, la carte et la liste des
+       rôles l'appellent tous les trois ; trois calculs séparés divergeraient au
+       premier changement, et c'est celui qu'on regarde le moins qu'on oublierait
+       de corriger. */
+    var total = (path && path.steps ? path.steps.length : 0);
+    if(!total) return {total:0, vues:0, part:0, statut:'neuf', libelle:'—', puce:''};
+    var vues = 0;
+    for(var i = 0; i < total; i++){ if(parcoursEtapeVue(path, i)) vues++; }
+    var statut = vues === 0 ? 'neuf' : (vues >= total ? 'fini' : 'cours');
+    return {
+      total: total, vues: vues,
+      part: Math.round((vues / total) * 100),
+      statut: statut,
+      puce: statut === 'fini' ? '✓' : (statut === 'cours' ? '●' : '○'),
+      libelle: statut === 'fini' ? 'Parcouru en entier'
+             : (statut === 'cours' ? 'En cours' : 'Pas commencé')
+    };
+  };
+
+  /* LA RÉSERVE, ÉCRITE UNE FOIS ET AFFICHÉE PARTOUT OÙ LE VERT APPARAÎT. */
+  window.PARCOURS_RESERVE =
+    'Le vert dit que chaque étape a été ouverte — pas que le travail de chacune '
+    + 'a été fait. Sentinel ne peut pas mesurer le second.';
+
+  window.parcoursBarre = function(e){
+    return '<div class="gp-barre ' + e.statut + '"><i style="width:' + e.part + '%"></i></div>'
+      + '<div class="gp-compte">' + e.vues + ' / ' + e.total + ' étape'
+      + (e.total > 1 ? 's' : '') + ' ouverte' + (e.vues > 1 ? 's' : '') + '</div>';
+  };
+
+  window.parcoursPastille = function(e){
+    return '<span class="gp-etat ' + e.statut + '" title="' + e.libelle + '">'
+      + e.puce + ' ' + e.libelle + '</span>';
+  };
+
+  window.parcoursOublier = function(pathId){
+    var tout = lire();
+    if(pathId){ delete tout[pathId]; } else { tout = {}; }
+    ecrire(tout);
+    if(typeof guidedRenderBanner === 'function') guidedRenderBanner();
+    var sel = document.getElementById('guided-paths-select');
+    if(sel && sel.value && typeof guidedPathsRenderSelected === 'function'){
+      guidedPathsRenderSelected(sel.value);
+    }
+    if(typeof sbRolesRemplir === 'function') sbRolesRemplir();
+  };
+})();
+
 function gpOption(p){
+  /* LE CHOIX DU RÔLE DIT DÉJÀ OÙ L'ON EN EST. Sans cela, un client qui revient
+     doit ouvrir chaque parcours pour retrouver celui qu'il avait commencé. Une
+     option HTML n'accepte pas de mise en forme : l'état passe donc par la puce
+     — « ✓ » terminé, « ● » en cours — qui se lit sans couleur, ce qui vaut
+     mieux sur une échelle vert/bleu. */
   var n = (p.steps || []).length;
-  return '<option value="' + p.id + '">' + p.icon + ' ' + p.role
-       + (n ? ' · ' + n + ' étapes' : '') + '</option>';
+  var e = (typeof parcoursEtat === 'function') ? parcoursEtat(p) : null;
+  var suffixe = n ? ' · ' + n + ' étapes' : '';
+  if(e && e.vues){
+    suffixe += (e.statut === 'fini') ? ' · ✓ terminé'
+                                     : ' · ● ' + e.vues + '/' + e.total + ' vues';
+  }
+  return '<option value="' + p.id + '">' + p.icon + ' ' + p.role + suffixe + '</option>';
 }
 
 window.gpOptions = function(vide){
@@ -19182,7 +19305,19 @@ window.gpOptions = function(vide){
 window.sbRolesRemplir = function(){
   var sel = document.getElementById('sb-role');
   if(!sel || typeof GUIDED_PATHS === 'undefined') return;
+  /* LA SÉLECTION SURVIT À LA RECONSTRUCTION. Les options portent désormais
+     l'avancement, donc la liste est refaite à chaque étape franchie —
+     `innerHTML =` remet alors la valeur à vide, et le rôle en cours disparaît
+     de la barre latérale au moment précis où on le suit. Le rôle actif fait
+     foi ; à défaut, la valeur d'avant la reconstruction. */
+  var avant = sel.value;
   sel.innerHTML = gpOptions('— Votre rôle —');
+  var voulu = (window.__activeGuided && window.__activeGuided.pathId) || avant || '';
+  if(voulu){
+    for(var i = 0; i < sel.options.length; i++){
+      if(sel.options[i].value === voulu){ sel.value = voulu; break; }
+    }
+  }
 };
 
 window.sbRoleChoisi = function(id){
@@ -19263,10 +19398,22 @@ function guidedFiche(s){
 }
 
 function guidedPathCard(path){
+  /* L'AVANCEMENT SE VOIT SUR LA CARTE, ET PAS SEULEMENT DANS LE BANDEAU. Le
+     bandeau ne vit que pendant qu'on suit le parcours ; la carte est ce qu'on
+     rouvre trois jours plus tard, et c'est là qu'il faut savoir où l'on en
+     était. Chaque étape porte donc si elle a été ouverte, et le bouton dit
+     « Revenir » plutôt que « Aller » — un libellé qui ment sur ce qui s'est
+     passé use la confiance dans le reste. */
+  var e = (typeof parcoursEtat === 'function') ? parcoursEtat(path)
+                                               : {total:0, vues:0, part:0, statut:'neuf'};
   var stepsHtml = path.steps.map(function(s, i){
-    return '<div class="guided-step">'
-      + '<div class="guided-step-top"><span class="guided-step-num">'+(i+1)+'</span><div class="guided-step-label">'+s.label+'</div>'
-      + '<button class="guided-step-go" onclick="guidedStartStep(\''+path.id+'\','+i+')">Aller à cette page →</button></div>'
+    var vue = (typeof parcoursEtapeVue === 'function') && parcoursEtapeVue(path, i);
+    return '<div class="guided-step' + (vue ? ' vue' : '') + '">'
+      + '<div class="guided-step-top"><span class="guided-step-num" title="'
+      + (vue ? 'Étape déjà ouverte' : 'Étape jamais ouverte') + '">'
+      + (vue ? '✓' : (i+1)) + '</span><div class="guided-step-label">'+s.label+'</div>'
+      + '<button class="guided-step-go" onclick="guidedStartStep(\''+path.id+'\','+i+')">'
+      + (vue ? 'Revenir à cette page →' : 'Aller à cette page →') + '</button></div>'
       + '<div class="guided-step-detail"><strong>À faire :</strong> '+s.action+'</div>'
       + '<div class="guided-step-detail"><strong>Ce que vous y gagnez :</strong> '+s.gain+'</div>'
       + (s.tip ? '<div class="guided-step-tip">💡 '+s.tip+'</div>' : '')
@@ -19274,8 +19421,24 @@ function guidedPathCard(path){
       + '</div>';
   }).join('<div class="guided-step-arrow">↓</div>');
 
+  var avancement = '<div style="margin-top:10px">'
+    + (typeof parcoursPastille === 'function' ? parcoursPastille(e) : '')
+    + (typeof parcoursBarre === 'function' ? parcoursBarre(e) : '')
+    /* LA RÉSERVE ACCOMPAGNE LE VERT PARTOUT OÙ IL APPARAÎT. Un vert non
+       qualifié se lit « c'est fait » ; ici il ne veut dire que « tout a été
+       ouvert », et la différence est celle entre un parcours suivi et un
+       travail accompli. */
+    + (e.statut === 'fini' && window.PARCOURS_RESERVE
+        ? '<div class="gp-reserve">' + window.PARCOURS_RESERVE + '</div>' : '')
+    + (e.vues ? '<button class="guided-step-go" style="margin-top:6px" '
+                + 'onclick="parcoursOublier(\''+path.id+'\')" '
+                + 'title="Effacer l’avancement enregistré pour ce parcours">'
+                + 'Repartir de zéro</button>' : '')
+    + '</div>';
+
   return '<div class="guided-path-card">'
-    + '<div class="guided-path-head"><span class="guided-path-icon">'+path.icon+'</span><div><div class="guided-path-role">'+path.role+'</div><div class="guided-path-pitch">'+path.pitch+'</div></div></div>'
+    + '<div class="guided-path-head"><span class="guided-path-icon">'+path.icon+'</span><div><div class="guided-path-role">'+path.role+'</div><div class="guided-path-pitch">'+path.pitch+'</div>'
+    + avancement + '</div></div>'
     + '<div class="guided-steps-wrap">' + stepsHtml + '</div>'
     + '</div>';
 }
@@ -19292,11 +19455,20 @@ window.guidedStartStep = function(pathId, i){
   var path = guidedFindPath(pathId);
   if(!path || !path.steps[i]) return;
   window.__activeGuided = { pathId: pathId, i: i };
+  /* LE PASSAGE EST NOTÉ ICI, ET NULLE PART AILLEURS. C'est le seul endroit du
+     fichier où un parcours conduit réellement quelque part ; noter en amont
+     (au clic) compterait une étape qu'un `return` peut encore refuser, noter
+     en aval (à la peinture du panneau) compterait une arrivée par le menu. */
+  if(typeof parcoursNoter === 'function') parcoursNoter(pathId, i);
   guidedPathsClose();
   var step = path.steps[i];
   if(step.go && typeof window[step.go] === 'function'){ window[step.go](); }
   else { go(step.id); }
   guidedRenderBanner();
+  /* La liste latérale porte l'avancement : sans ce rafraîchissement elle
+     afficherait « 2/6 vues » jusqu'au prochain rechargement de la page, et le
+     compteur mentirait d'autant plus longtemps qu'on suit le parcours. */
+  if(typeof sbRolesRemplir === 'function') sbRolesRemplir();
 };
 
 window.monParcoursStart = function(){
@@ -19447,12 +19619,28 @@ window.guidedRenderBanner = function(){
   var prev = i > 0 ? path.steps[i-1] : null;
   var next = i < n-1 ? path.steps[i+1] : null;
   function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  /* LES PASTILLES SE LISENT SUR LES ÉTAPES RÉELLEMENT OUVERTES.
+     Avant : « k < i » devenait `done` — tout ce qui précède l'étape courante
+     était marqué fait, qu'on y soit passé ou non. Ouvrir directement l'étape 5
+     d'un parcours de six colorait quatre étapes jamais vues, sans qu'aucune
+     erreur ne le signale. */
+  var e = (typeof parcoursEtat === 'function') ? parcoursEtat(path)
+                                               : {total:n, vues:0, part:0, statut:'neuf'};
   var dots = '';
-  for(var k=0;k<n;k++){ dots += '<span class="gb-dot'+(k===i?' on':(k<i?' done':''))+'"></span>'; }
+  for(var k=0;k<n;k++){
+    var vue = (typeof parcoursEtapeVue === 'function') && parcoursEtapeVue(path, k);
+    dots += '<span class="gb-dot'+(k===i?' on':(vue?' done':''))+'"></span>';
+  }
+  var etiquette = (e.statut === 'fini') ? 'Parcours terminé' : 'Parcours en cours';
   var html = '<div class="gb-left">'
-    + '<span class="gb-live" title="Parcours en cours"><span class="gb-live-dot"></span><span class="gb-live-txt">Parcours en cours</span></span>'
+    + '<span class="gb-live" title="'+etiquette+'"><span class="gb-live-dot"></span><span class="gb-live-txt">'+etiquette+'</span></span>'
     + '<button class="gb-role" onclick="guidedReopen(\''+g.pathId+'\')" title="Revenir au parcours complet">'+esc(path.icon)+' '+esc(path.role)+'</button>'
-    + '<div class="gb-prog"><span class="gb-step">\u00c9tape '+(i+1)+' / '+n+' \u00b7 '+esc(step.label)+'</span><span class="gb-dots">'+dots+'</span></div>'
+    + '<div class="gb-prog"><span class="gb-step">\u00c9tape '+(i+1)+' / '+n+' \u00b7 '+esc(step.label)+'</span>'
+    + '<span class="gb-dots">'+dots+'</span>'
+    + '<div class="gb-barre'+(e.statut === 'fini' ? ' fini' : '')+'" role="progressbar" '
+    + 'aria-valuenow="'+e.vues+'" aria-valuemin="0" aria-valuemax="'+e.total+'" '
+    + 'aria-label="'+e.vues+' des '+e.total+' \u00e9tapes ouvertes"><i style="width:'+e.part+'%"></i></div>'
+    + '</div>'
     + '</div>'
     + '<div class="gb-actions">';
   if(prev) html += '<button class="gb-btn" onclick="guidedStartStep(\''+g.pathId+'\','+(i-1)+')" title="'+esc(prev.label)+'">\u2190 Pr\u00e9c\u00e9dent</button>';

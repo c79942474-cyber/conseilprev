@@ -1120,6 +1120,39 @@ textarea.form-el{min-height:86px;resize:vertical}
   .gs-cle{padding-top:6px}}
 .guided-step-arrow{text-align:center;color:var(--rule2);font-size:13px;padding:2px 0}
 
+/* ══ L'AVANCEMENT D'UN PARCOURS — VERT QUAND IL EST FINI, BLEU EN COURS ══
+   CE QUE LA COULEUR DIT, ET CE QU'ELLE NE DIT PAS. Vert signifie que TOUTES
+   les étapes ont été OUVERTES ; il ne signifie pas que le travail de chacune a
+   été fait — Sentinel ne peut pas le mesurer, et prétendre le contraire
+   donnerait un vert qui rassure à tort. C'est écrit à l'écran, pas seulement
+   ici.
+   LES DEUX ÉTATS SE DISTINGUENT AUTREMENT QUE PAR LA TEINTE : la puce porte un
+   « ✓ » quand c'est fini et un « ● » quand c'est en cours, et la barre porte
+   son compte en toutes lettres. Un lecteur daltonien lit la même chose que les
+   autres — sur une échelle vert/bleu, qui est précisément celle que la
+   deutéranopie confond. */
+.gp-etat{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-family:var(--mono);font-weight:700;
+         border-radius:20px;padding:2px 9px;white-space:nowrap}
+.gp-etat.fini{background:rgba(45,122,71,.12);color:var(--green);border:1px solid rgba(45,122,71,.4)}
+.gp-etat.cours{background:rgba(28,90,138,.10);color:var(--blue);border:1px solid rgba(28,90,138,.35)}
+.gp-etat.neuf{background:var(--bg);color:var(--muted);border:1px solid var(--rule2)}
+.gp-barre{height:6px;border-radius:3px;background:var(--rule);overflow:hidden;margin:6px 0 2px}
+.gp-barre>i{display:block;height:100%;border-radius:3px;transition:width .35s ease}
+.gp-barre.fini>i{background:var(--green)}
+.gp-barre.cours>i{background:var(--blue)}
+.gp-barre.neuf>i{background:var(--rule2)}
+.gp-compte{font-size:10.5px;font-family:var(--mono);color:var(--muted)}
+.gp-reserve{font-size:10.5px;color:var(--muted);line-height:1.5;margin-top:4px}
+/* Une étape déjà ouverte se distingue sans changer de taille : la bordure et
+   la puce suffisent, un fond plein ferait sauter la lecture d'une étape à
+   l'autre. */
+.guided-step.vue{border-color:rgba(45,122,71,.45)}
+.guided-step.vue .guided-step-num{background:rgba(45,122,71,.12);border-color:rgba(45,122,71,.45);color:var(--green)}
+/* La barre du bandeau vit sur fond sombre : elle a sa propre paire. */
+.guided-banner .gb-barre{height:5px;border-radius:3px;background:rgba(255,255,255,.22);overflow:hidden;width:130px}
+.guided-banner .gb-barre>i{display:block;height:100%;border-radius:3px;background:var(--accent);transition:width .35s ease}
+.guided-banner .gb-barre.fini>i{background:#6FCF8B}
+
 .mat-modal{position:fixed;inset:0;z-index:10020;background:rgba(28,28,28,.55);display:none;align-items:center;justify-content:center;padding:20px}
 .mat-modal.on{display:flex}
 .mat-modal-box{background:var(--white);border-radius:8px;width:100%;max-width:760px;max-height:88vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3)}
