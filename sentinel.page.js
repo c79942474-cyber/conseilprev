@@ -9525,8 +9525,10 @@ var PAGE_GUIDES = {
     title: "FinOps IA",
     sections: [
       {h:"À quoi sert cette page", t:"Chiffrer ce que coûte le parc de systèmes d’IA que vous avez déjà déclaré au Registre. Elle ne tient aucun inventaire à elle : l’attribution que le FinOps réclame — propriétaire, service, finalité — est déjà dans le registre de conformité, et c’est la moitié la plus coûteuse de la démarche."},
-      {h:"Comment l’utiliser", t:"Renseignez sur chaque système le modèle employé, l’unité de facturation, les volumes du mois et LEUR SOURCE. La page commence par vous dire quelle part du parc est chiffrable : c’est cette part, et non le montant, qui décide de la lecture du total."},
-      {h:"Limites à connaître", t:"Les montants sont un ordre de grandeur CATALOGUE, calculé sur des tarifs publiés et datés. Un contrat entreprise, une remise au volume, un cache de contexte ou un traitement différé donnent un coût réel différent, parfois d’un ordre de grandeur. Rien ici ne remplace la lecture de votre facture, et rien n’est mesuré : Sentinel ne tourne pas dans vos applications."}
+      {h:"Comment l’utiliser", t:"Renseignez sur chaque système le modèle employé, l’unité de facturation, les volumes du mois et LEUR SOURCE. Huit champs, et huit seulement : tout le reste — le service, le propriétaire, le niveau de risque, l’étape du cycle de vie — est déjà au Registre, et cette page le LIT au lieu de vous le redemander."},
+      {h:"Par où commencer : les angles morts", t:"Le premier bloc de la page ne montre aucun montant. Il croise deux choses que ni le registre ni le chiffrage ne voient seuls : un système classé HAUT RISQUE, en service, et dont personne n’a dit ce qu’il consomme. C’est la première ligne à traiter, avant tout arbitrage de plafond — un système qui porte les obligations les plus lourdes du règlement et dont le budget n’est pas instruit est le pire des deux mondes."},
+      {h:"« Non chiffré » ne veut pas dire « en retard »", t:"Les lacunes sont séparées selon l’étape du cycle de vie déclarée au Registre. Un système EN CONCEPTION n’a pas de volume parce qu’il ne consomme rien : ce n’est pas une lacune. Un système EN PRODUCTION n’en a pas parce que personne ne l’a relevé : c’en est une. Sans ce partage, un parc de vingt systèmes dont douze sont en conception affiche huit lignes « manquantes » comme un reproche, et l’on part relancer douze équipes qui n’ont rien à déclarer."},
+      {h:"Limites à connaître", t:"Les montants sont un ordre de grandeur CATALOGUE, calculé sur des tarifs publiés et datés. Un contrat entreprise, une remise au volume, un cache de contexte ou un traitement différé donnent un coût réel différent, parfois d’un ordre de grandeur. Rien ici ne remplace la lecture de votre facture, et rien n’est mesuré : Sentinel ne tourne pas dans vos applications. Les leviers d’optimisation sont DÉCLARÉS, jamais vérifiés — une case cochée dit qu’un cache existe, pas qu’il est branché."}
     ]
   },
   'ia50': {
@@ -9730,7 +9732,9 @@ var PAGE_GUIDES = {
     title: "Audit de maturité IA",
     sections: [
       {h:"À quoi sert cette page", t:"Évalue votre conformité sur les 8 piliers de l EU AI Act (Explicabilité, Contrôlabilité, Transparence, Sûreté, Équité, Gouvernance, Confidentialité, Robustesse), par secteur."},
-      {h:"Comment l utiliser", t:"1) Sélectionnez votre secteur en haut. 2) Répondez au questionnaire de 16 questions — les scores se recalculent en temps réel. 3) Générez les 6 livrables IA (registre, manuel de gouvernance, rapport, formation, outils, plan de maintenance) ou les 4 guides de procédure d audit, avec vos propres données si besoin."},
+      {h:"Comment l utiliser", t:"1) Désignez votre activité dans le classement européen NACE, en haut de page — c’est celui que porte votre extrait d’immatriculation. Sentinel vous renvoie alors vers le profil sectoriel relevé qui la couvre, s’il en existe un. 2) Répondez au questionnaire de 16 questions — les scores se recalculent en temps réel. 3) Générez les 6 livrables IA (registre, manuel de gouvernance, rapport, formation, outils, plan de maintenance) ou les 4 guides de procédure d audit, avec vos propres données si besoin."},
+      {h:"Neuf sections sur vingt-deux ont un profil relevé", t:"La nomenclature NACE Rév. 2.1 compte vingt-deux sections. Huit profils sectoriels sont relevés ici — télécom, énergie, santé, finance, industrie, transport, informatique, public — et ils couvrent neuf sections. Les treize autres sont proposées SANS socle de départ, sans budget de référence et sans spécificités réglementaires, et elles le disent dès la liste. Inventer ces valeurs donnerait vingt-deux entrées d’apparence homogène dont neuf seraient observées et treize devinées, sans que rien ne les distingue. L’audit reste utilisable dans tous les cas : les huit piliers et le questionnaire ne dépendent pas du secteur."},
+      {h:"Si vous connaissez l’ancienne nomenclature", t:"La révision 2.1 s’applique depuis le 1er janvier 2025 et redistribue les lettres à partir de G. La finance est passée de K à L, l’informatique et les télécommunications occupent désormais K, l’enseignement Q, la santé R, et une section V a été créée. Chaque section affiche ce que sa lettre désignait avant : devant « L — activités financières », un lecteur qui connaît la révision 2 croirait autrement à une erreur."},
       {h:"Astuce", t:"Le budget et les KPIs détaillés sont accessibles via les cartes dédiées, sans surcharger la page principale."},
       {h:"Elle alimente les formations", t:"Le Hub Training calcule votre progression à partir de vos scores par pilier. Un audit passé au jugé désigne donc les mauvaises formations."}
     ]
@@ -19342,7 +19346,19 @@ window.guidedPathsOpen = function(){
   modal.innerHTML = '<div class="mat-modal-card" style="max-width:760px;max-height:84vh;overflow-y:auto">'
     + '<div class="mat-modal-head"><div><div class="mat-modal-eyebrow">Onboarding</div><div class="mat-modal-title">Parcours guidés par profil</div></div>'
     + '<button class="mat-modal-close" onclick="guidedPathsClose()">×</button></div>'
-    + '<p style="font-size:12.5px;color:var(--muted);margin:0 0 16px;line-height:1.6">Sélectionnez votre rôle pour un enchaînement recommandé des pages — pertinent aussi bien pour une TPE qu’un grand compte, le niveau de détail s’adapte à votre contexte.</p>'
+    + '<p style="font-size:12.5px;color:var(--muted);margin:0 0 10px;line-height:1.6">Sélectionnez votre rôle pour un enchaînement recommandé des pages — pertinent aussi bien pour une TPE qu’un grand compte, le niveau de détail s’adapte à votre contexte.</p>'
+    /* LE GUIDE DE LECTURE DES COULEURS VIT ICI, au-dessus de la liste, et non
+       dans une aide séparée : c'est le seul endroit où l'on voit les trois
+       états côte à côte, donc le seul où l'explication répond à une question
+       qu'on se pose. Elle dit aussi ce que le vert NE dit pas — sans quoi il
+       se lirait « c'est fait », ce que Sentinel ne peut pas mesurer. */
+    + '<p style="font-size:11.5px;color:var(--muted);margin:0 0 16px;line-height:1.6;'
+    + 'border-left:3px solid var(--rule2);padding-left:10px">'
+    + '<b>Où vous en êtes.</b> Chaque parcours porte son avancement, et la liste ci-dessous le rappelle : '
+    + '<b>✓ terminé</b> quand toutes les étapes ont été ouvertes, <b>●</b> suivi du compte quand il reste des étapes à voir, rien quand il n’a pas été commencé. '
+    + 'L’avancement est conservé dans ce navigateur et survit à un rechargement ; il ne quitte jamais votre poste. '
+    + 'Une étape ne compte que si ce parcours vous y a conduit — ouvrir la même page par le menu ne fait pas avancer un parcours que vous ne suivez pas. '
+    + 'Et le vert dit que chaque étape a été <em>ouverte</em>, pas que son travail a été <em>fait</em> : Sentinel ne peut pas mesurer le second, et un vert qui le laisserait croire vaudrait moins que pas de vert du tout.</p>'
     + '<select id="guided-paths-select" class="guided-paths-select" onchange="guidedPathsRenderSelected(this.value)">' + options + '</select>'
     + '<div class="guided-mp-row"><span>\u2014 ou \u2014</span></div>'+ '<button class="guided-mp-btn" onclick="guidedPathsClose();monParcoursBuilder()">\ud83e\udded Cr\u00e9er mon parcours chiffr\u00e9 (\u00e0 partir de mes cas d\u2019usage)</button>'
     + '<div id="guided-paths-list"></div>'
@@ -20880,7 +20896,7 @@ document.addEventListener('keydown', function(e){
         /* ══ LE VOCABULAIRE DÉCLARABLE ═════════════════════════════════════
            Trois référentiels — unités de facturation, classes de tâche,
            modèles tarifés — étaient servis par la route et lus par personne.
-           Or ce sont EUX qui rendent les six champs remplissables : sans la
+           Or ce sont EUX qui rendent les huit champs remplissables : sans la
            liste des modèles tarifés, « aucun tarif relevé pour X » n'apprend
            pas quels modèles en portent un. Ils sont lus depuis la réponse et
            jamais recopiés : une liste recopiée dérive du moteur, et c'est

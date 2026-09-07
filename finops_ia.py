@@ -11,9 +11,12 @@ demande de parler à des gens. Elle est faite.
 
 CE QUI MANQUAIT N'ÉTAIT PAS DE L'ORGANISATION, C'ÉTAIT DE LA MESURE. Le
 registre nomme le FOURNISSEUR, jamais le MODÈLE ; il nomme le SERVICE, jamais
-la ligne budgétaire ; et il ne porte aucun volume. Six champs comblent cela —
+la ligne budgétaire ; et il ne porte aucun volume. Huit champs comblent cela —
 et aucun d'eux n'est calculé : ils sont déclarés par celui qui lit sa console
-de facturation.
+de facturation. (Cette phrase annonçait SIX depuis l'origine ; le registre en a
+reçu huit, `CHAMPS_FINOPS` en déclare huit, et une règle compare désormais le
+nombre écrit ici à celui de la table — un compte de prose ne se vérifie pas
+tout seul.)
 
 LA RÈGLE QUI TIENT TOUT LE MODULE
 
