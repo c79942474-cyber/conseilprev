@@ -19251,8 +19251,15 @@ window.panParcoursAnalyste  = function(){ panParcours('analyste'); };
 
   window.parcoursBarre = function(e){
     return '<div class="gp-barre ' + e.statut + '"><i style="width:' + e.part + '%"></i></div>'
+      /* LES DEUX ACCORDS SUIVENT LE MÊME NOMBRE. Un premier jet accordait
+         « étape » sur le total et « ouverte » sur les vues : à zéro vue, la
+         barre affichait « 0 / 15 étapes ouverte » — un pluriel et un
+         singulier dans le même groupe. La tournure « N / M étapes ouvertes »
+         qualifie le groupe des M étapes, pas le compte N : les deux mots
+         s'accordent donc sur M. Vu à l'écran, pas dans le code. */
       + '<div class="gp-compte">' + e.vues + ' / ' + e.total + ' étape'
-      + (e.total > 1 ? 's' : '') + ' ouverte' + (e.vues > 1 ? 's' : '') + '</div>';
+      + (e.total > 1 ? 's' : '') + ' ouverte' + (e.total > 1 ? 's' : '')
+      + '</div>';
   };
 
   window.parcoursPastille = function(e){

@@ -262,8 +262,34 @@ def test_les_deux_etats_se_lisent_SANS_COULEUR():
     cours, fini = _texte(r["cours"]), _texte(r["fini"])
     assert "●" in cours and "En cours" in cours
     assert "✓" in fini and "Parcouru en entier" in fini
-    assert re.search(r"1 / \d+ étapes? ouverte", cours), cours[:200]
-    assert re.search(r"(\d+) / \1 étapes? ouvertes", fini), fini[:200]
+    assert re.search(r"1 / \d+ étapes ouvertes", cours), cours[:200]
+    assert re.search(r"(\d+) / \1 étapes ouvertes", fini), fini[:200]
+
+
+def test_LE_COMPTE_S_ACCORDE_MEME_A_ZERO_ETAPE_OUVERTE():
+    """VU À L'ÉCRAN, PAS DANS LE CODE. Un premier jet accordait « étape » sur
+    le total et « ouverte » sur les vues : à zéro vue, la barre affichait
+    « 0 / 15 étapes ouverte » — un pluriel et un singulier dans le même
+    groupe. La tournure qualifie le groupe des M étapes, pas le compte N.
+
+    La règle éprouve les trois cas où l'accord peut se tromper : zéro vue, une
+    seule vue, et toutes vues."""
+    r = _executer("""
+      out.zero = guidedPathCard(P);
+      guidedStartStep(P.id, 0);
+      out.une = guidedPathCard(P);
+      for (var i = 0; i < P.steps.length; i++) guidedStartStep(P.id, i);
+      out.toutes = guidedPathCard(P);
+    """)
+    for cas in ("zero", "une", "toutes"):
+        compte = _texte(r[cas])
+        m = re.search(r"(\d+) / (\d+) (étapes?) (ouvertes?)", compte)
+        assert m, "le compte est illisible dans le cas « %s »" % cas
+        total = int(m.group(2))
+        attendu = "s" if total > 1 else ""
+        assert m.group(3) == "étape" + attendu and m.group(4) == "ouverte" + attendu, (
+            "cas « %s » : « %s » — les deux mots ne s'accordent pas sur le "
+            "même nombre" % (cas, m.group(0)))
 
 
 def test_la_barre_porte_son_role_et_ses_bornes_pour_un_lecteur_d_ecran():
@@ -434,5 +460,72 @@ def test_les_styles_des_trois_etats_existent_et_se_distinguent():
         assert classe in PAGE, classe
     fini = re.search(r"\.gp-etat\.fini\{([^}]+)\}", PAGE).group(1)
     cours = re.search(r"\.gp-etat\.cours\{([^}]+)\}", PAGE).group(1)
-    assert "--green" in fini and "--blue" in cours
     assert fini != cours
+    # LE FOND EST LU SÉPARÉMENT DE LA BORDURE. Un premier jet cherchait la
+    # teinte n'importe où dans la règle : la mutation qui grisait le FOND
+    # survivait, parce que la bordure gardait le vert. On mesure donc la
+    # déclaration qui porte la couleur du bloc.
+    assert _fond(fini) == (45, 122, 71), (
+        "le fond de la pastille terminée n'est plus le vert de la palette : %s"
+        % (_fond(fini),))
+    assert _fond(cours) == (28, 90, 138), (
+        "le fond de la pastille en cours n'est plus le bleu de la palette : %s"
+        % (_fond(cours),))
+
+
+def _fond(regle_css):
+    """La teinte de la déclaration `background`, et elle seule."""
+    m = re.search(r"background:rgba?\((\d+),\s*(\d+),\s*(\d+)", regle_css)
+    return tuple(int(m.group(i)) for i in (1, 2, 3)) if m else None
+
+
+def _alpha(regle_css):
+    m = re.search(r"background:rgba\(\d+,\s*\d+,\s*\d+,\s*(\.?\d+)", regle_css)
+    return float(m.group(1)) if m else 1.0
+
+
+def _contraste(texte, fond):
+    """Le rapport de contraste WCAG entre deux couleurs sRGB."""
+    def lin(c):
+        c /= 255.0
+        return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
+    def lum(rgb):
+        r, v, b = [lin(x) for x in rgb]
+        return 0.2126 * r + 0.7152 * v + 0.0722 * b
+    a, b = lum(texte), lum(fond)
+    return (max(a, b) + 0.05) / (min(a, b) + 0.05)
+
+
+def test_LE_TEXTE_DES_PASTILLES_ATTEINT_LE_SEUIL_AA():
+    """MESURÉ, PAS SUPPOSÉ. `--green` (#2D7A47) sur son propre fond à 12 %
+    donne 4,49:1 — UN CENTIÈME sous le seuil AA du petit texte, et la pastille
+    est en 10,5 px. Le défaut a été trouvé en calculant le rapport après la
+    vérification en navigateur, pas en le regardant : à l'œil, 4,49 et 4,86
+    sont indiscernables. La règle recalcule depuis la feuille, de sorte qu'un
+    changement de teinte ne puisse pas repasser sous le seuil en silence."""
+    SEUIL = 4.5
+    for classe in ("fini", "cours", "neuf"):
+        regle = re.search(r"\.gp-etat\.%s\{([^}]+)\}" % classe, PAGE).group(1)
+        m = re.search(r"color:(#[0-9A-Fa-f]{6}|var\(--\w+\))", regle)
+        assert m, classe
+        couleur = m.group(1)
+        if couleur.startswith("var("):
+            # « neuf » emploie --muted sur --bg, deux valeurs de la palette dont
+            # le contraste est déjà tenu par test_atmosphere. Les deux pastilles
+            # colorées, elles, doivent porter une valeur littérale : leur fond
+            # est une composition, et aucune règle ne la mesurerait autrement.
+            assert classe == "neuf", (
+                "%s : la couleur du texte passe par une variable — son "
+                "contraste changerait avec la palette sans que rien ne le "
+                "mesure" % classe)
+            continue
+        texte = tuple(int(couleur[i:i + 2], 16) for i in (1, 3, 5))
+        # LE FOND EST CELUI QUE LA RÈGLE DÉCLARE, pas celui qu'on suppose. Le
+        # supposer laissait passer une mutation qui changeait le fond : le
+        # rapport était recalculé contre une couleur qui n'était plus à l'écran.
+        teinte, alpha = _fond(regle), _alpha(regle)
+        fond = tuple(round(teinte[i] * alpha + 255 * (1 - alpha)) for i in range(3))
+        r = _contraste(texte, fond)
+        assert r >= SEUIL, (
+            "pastille « %s » : %.2f:1 sur son fond %s, sous le seuil AA de "
+            "%.1f:1 pour du texte de 10,5 px" % (classe, r, fond, SEUIL))

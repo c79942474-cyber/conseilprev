@@ -1133,8 +1133,18 @@ textarea.form-el{min-height:86px;resize:vertical}
    deutéranopie confond. */
 .gp-etat{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-family:var(--mono);font-weight:700;
          border-radius:20px;padding:2px 9px;white-space:nowrap}
-.gp-etat.fini{background:rgba(45,122,71,.12);color:var(--green);border:1px solid rgba(45,122,71,.4)}
-.gp-etat.cours{background:rgba(28,90,138,.10);color:var(--blue);border:1px solid rgba(28,90,138,.35)}
+/* LE VERT DU TEXTE EST UN CRAN PLUS SOMBRE QUE --green, ET C'EST MESURÉ.
+   `--green` (#2D7A47) sur son propre fond à 12 % donne 4,49:1 — un centième
+   sous le seuil AA du petit texte (4,5:1), et la pastille est en 10,5 px.
+   #2B7443 donne 4,86:1 sans que l'œil distingue les deux verts. Le FOND et la
+   BORDURE gardent --green : ce qui doit passer le seuil est le texte. */
+.gp-etat.fini{background:rgba(45,122,71,.12);color:#2B7443;border:1px solid rgba(45,122,71,.4)}
+/* Le bleu est écrit en clair pour la même raison que le vert : la règle de
+   contraste recalcule le rapport depuis la feuille, et elle ne peut pas le
+   faire à travers une variable. Ici il vaut 6,26:1 — confortablement au-dessus
+   du seuil ; l'écrire en clair sert à ce qu'un changement de palette ne puisse
+   pas l'y faire passer en dessous sans que rien ne le mesure. */
+.gp-etat.cours{background:rgba(28,90,138,.10);color:#1C5A8A;border:1px solid rgba(28,90,138,.35)}
 .gp-etat.neuf{background:var(--bg);color:var(--muted);border:1px solid var(--rule2)}
 .gp-barre{height:6px;border-radius:3px;background:var(--rule);overflow:hidden;margin:6px 0 2px}
 .gp-barre>i{display:block;height:100%;border-radius:3px;transition:width .35s ease}
@@ -1147,7 +1157,7 @@ textarea.form-el{min-height:86px;resize:vertical}
    la puce suffisent, un fond plein ferait sauter la lecture d'une étape à
    l'autre. */
 .guided-step.vue{border-color:rgba(45,122,71,.45)}
-.guided-step.vue .guided-step-num{background:rgba(45,122,71,.12);border-color:rgba(45,122,71,.45);color:var(--green)}
+.guided-step.vue .guided-step-num{background:rgba(45,122,71,.12);border-color:rgba(45,122,71,.45);color:#2B7443}
 /* La barre du bandeau vit sur fond sombre : elle a sa propre paire. */
 .guided-banner .gb-barre{height:5px;border-radius:3px;background:rgba(255,255,255,.22);overflow:hidden;width:130px}
 .guided-banner .gb-barre>i{display:block;height:100%;border-radius:3px;background:var(--accent);transition:width .35s ease}
