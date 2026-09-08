@@ -2801,6 +2801,14 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
          inventaire tenu à part divergerait du premier dans le mois, et c'est
          celui qu'on oublie de corriger qui reste. -->
     <div class="sb-item" data-grp="cartographier" role="button" tabindex="0" onclick="go('finops',this,'CARTOGRAPHIER','FinOps IA')" title="Ce que coute le parc declare : couverture, attribution par centre de cout, dimensionnement des modeles et plafonds."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2v20"/><path d="M17 6.5c0-1.9-2.2-3-5-3s-5 1.1-5 3 2.2 2.7 5 3.2 5 1.3 5 3.2-2.2 3-5 3-5-1.1-5-3"/></svg></span>FinOps IA</div>
+    <!-- TROIS PANNEAUX PORTENT LE MOT « EMPREINTE », ET CE N'EST PAS UN
+         DOUBLON : « empreinte » mesure ce que CONSEILPREV consomme lui-même,
+         relevé appel par appel ; « empreinte-parc » pèse les ÉQUIPEMENTS d'un
+         centre de données ; celui-ci lit le REGISTRE DES SYSTÈMES D'IA du
+         client — déclaré, jamais mesuré. Il est rangé à côté du FinOps parce
+         qu'il lit le même inventaire : le même volume déclaré donne le coût
+         divisé par un tarif, et l'énergie multiplié par des Wh. -->
+    <div class="sb-item" data-grp="cartographier" role="button" tabindex="0" onclick="go('empreinte-ia',this,'CARTOGRAPHIER','Empreinte IA du parc')" title="Ce que pese le parc d'IA declare au registre : couverture d'abord, puis electricite, CO2e, energie primaire et eau, et les trajectoires 2030."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3a6 6 0 0 0-6 6c0 4 6 12 6 12s6-8 6-12a6 6 0 0 0-6-6z"/><path d="M9.5 12.5l2 2 3.5-4"/></svg></span>Empreinte IA du parc</div>
     <div class="sb-item" data-grp="cartographier" role="button" tabindex="0" onclick="go('maturite',this,'CARTOGRAPHIER','Audit de maturité IA')" title="Audit de maturite IA sectoriel : 8 piliers, questionnaire, KPIs, budget et livrables generes par IA."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 3 5-6"/></svg></span>Audit de maturité IA</div>
     <div class="sb-section" data-grp="evaluer-le-risque"><svg class="sb-sec-ic" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3.2 21.5 20H2.5z"/><path d="M12 9.5v4.5M12 17h.01"/></svg><span>Évaluer le risque</span></div>
     <div class="sb-item" data-grp="evaluer-le-risque" role="button" tabindex="0" onclick="go('pan-sia',this,'ÉVALUER LE RISQUE','Panorama IA & centres de données — UE')" title="Les cas d’IA documentés dans l’UE et le parc de centres de données qui les fait tourner, sur la même carte."><span class="sb-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 3a14 14 0 010 18M3.6 9h16.8M3.6 15h16.8"/><circle cx="9" cy="9" r="1.4" fill="currentColor"/><circle cx="15" cy="13" r="1.4" fill="currentColor"/></svg></span>Panorama IA &amp; data centres</div>
@@ -5048,6 +5056,69 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   <h2 class="sec-h">Ce que cette page ne sait pas</h2>
   <div id="fo-limites"></div>
 </div>
+
+<div class="page" id="p-empreinte-ia">
+  <span class="eyebrow">Cartographier · Empreinte</span><h1 class="page-h">Empreinte IA <em>du parc déclaré</em></h1>
+  <p class="page-lead">Ce que pèse le parc de systèmes d’IA que vous avez déjà déclaré au <strong>Registre</strong>. Cette page ne tient aucun inventaire à elle&nbsp;: le même volume déclaré donne le coût quand on le divise par un tarif, et l’énergie quand on le multiplie par des wattheures par millier de jetons. Un second inventaire, tenu à côté, divergerait du premier dans le mois.</p>
+
+  <div style="border:1px solid var(--rule2);border-left:3px solid var(--accent);border-radius:10px;padding:12px 14px;background:var(--white);margin-bottom:16px;font-size:11.5px;color:var(--muted);line-height:1.6">
+    <strong style="color:var(--ink)">Déclaré, jamais mesuré.</strong> Aucun fournisseur ne publie la consommation réelle d’une requête. Les volumes viennent de votre registre, les facteurs portent leur source et leur nature, et rien n’est estimé à votre place. N’en tirez ni allégation de neutralité ni émissions évitées.
+  </div>
+
+  <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px">
+    <label style="font-size:11.5px;color:var(--muted)">Mix électrique&nbsp;
+      <select id="ei-pays" onchange="empIaLoad()" style="font-size:11.5px;padding:4px 8px;border:1px solid var(--rule2);border-radius:5px">
+        <option value="FR" selected>France</option><option value="DE">Allemagne</option>
+        <option value="US">États-Unis</option><option value="EU">Union européenne</option></select></label>
+    <label style="font-size:11.5px;color:var(--muted)">Horizon&nbsp;
+      <select id="ei-horizon" onchange="empIaLoad()" style="font-size:11.5px;padding:4px 8px;border:1px solid var(--rule2);border-radius:5px">
+        <option value="2030" selected>2030</option><option value="2035">2035</option></select></label>
+    <button class="mat-export-btn" style="margin-left:auto" onclick="empIaExport()">Exporter CSV</button>
+  </div>
+
+  <!-- LA COUVERTURE AVANT LES TOTAUX, DANS LE CODE COMME À L'ÉCRAN. Un total
+       qui tait ce qu'il ignore est un total faux : il ne compte que ce qu'on
+       lui a donné, et un parc à moitié déclaré paraîtrait deux fois plus
+       sobre qu'il n'est. C'est la même raison qu'au FinOps, et c'est pour
+       cela que ce bloc est le PREMIER du panneau, avant tout chiffre. -->
+  <div id="ei-couverture" style="border:1px solid var(--rule2);border-left:3px solid var(--accent);border-radius:10px;padding:14px 16px;background:var(--white);margin-bottom:16px">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Couverture de l’étude</div>
+    <div id="ei-couv-chiffre" style="font-size:34px;font-weight:800;color:var(--ink)">—</div>
+    <div id="ei-couv-detail" style="font-size:12.5px;color:var(--muted);margin-top:4px">Chargement…</div>
+  </div>
+
+  <!-- LE PÉRIMÈTRE INCOMPLET EST NOMMÉ, PAS DÉDUIT. L'hébergement vaut 0,15 Wh
+       PAR REQUÊTE ; un parc facturé au jeton déclare des jetons, et le nombre
+       d'appels est inconnu. Sans cette liste, un lecteur croirait la méthode
+       C appliquée partout. Le bloc disparaît quand il est vide : un encadré
+       vide finit par ne plus être lu. -->
+  <div id="ei-perimetre" style="margin-bottom:16px"></div>
+
+  <h2 class="sec-h">Les indicateurs servis, et celui qui ne l’est pas</h2>
+  <p class="muted" style="font-size:12.5px;margin-top:-6px">Un indicateur absent est <strong>déclaré absent</strong>, avec ce qu’il faudrait pour l’établir. Le remplir d’un nombre sans auteur serait pire que de ne rien afficher.</p>
+  <div id="ei-indicateurs" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-bottom:16px"></div>
+
+  <h2 class="sec-h">Le détail, système par système</h2>
+  <p class="muted" style="font-size:12.5px;margin-top:-6px">L’<strong>inférence</strong> et l’<strong>ajustement fin</strong> sont rendus séparément. Les mêler ferait disparaître le terme qui, sur un parc qui affine ses modèles, est souvent le plus lourd.</p>
+  <div id="ei-lignes" style="overflow-x:auto;margin-bottom:16px"></div>
+
+  <h2 class="sec-h">Trajectoires à l’horizon</h2>
+  <p class="muted" style="font-size:12.5px;margin-top:-6px" id="ei-scen-source">—</p>
+  <div id="ei-trajectoires" style="overflow-x:auto;margin-bottom:10px"></div>
+  <div id="ei-leviers" style="margin-bottom:16px"></div>
+
+  <h2 class="sec-h">Ce qu’il faut déclarer pour compter un ajustement fin</h2>
+  <p class="muted" style="font-size:12.5px;margin-top:-6px">Ces champs se saisissent sur la fiche du système, au <strong>Registre</strong>. Aucun n’est deviné&nbsp;: une campagne d’ajustement ne s’estime pas depuis un volume d’usage.</p>
+  <div id="ei-a-declarer" style="margin-bottom:16px"></div>
+
+  <h2 class="sec-h">Les facteurs, et d’où ils viennent</h2>
+  <p class="muted" style="font-size:12.5px;margin-top:-6px">Servis par le moteur, jamais recopiés ici — sans quoi l’écran et le code dériveraient, et c’est l’écran qu’on croirait. Chacun porte sa <strong>nature</strong>&nbsp;: texte réglementaire, relevé, ou hypothèse du cabinet.</p>
+  <div id="ei-facteurs" style="margin-bottom:16px"></div>
+
+  <h2 class="sec-h">Ce que cette page ne sait pas</h2>
+  <div id="ei-limites" style="font-size:12px;color:var(--muted);line-height:1.65"></div>
+</div>
+
 
 <div class="page" id="p-ia50">
   <span class="eyebrow">Administration · IA Act</span><h1 class="page-h">Transparence <em>IA Act (art. 50)</em></h1>

@@ -178,6 +178,11 @@ ATTENDUS = {
     "enveloppe": ["dc_implantation", "dc_financement"],
     "empreinte": ["dc_energie", "dc_reporting"],
     "empreinte-parc": ["dc_energie"],
+    # LE PANNEAU LIT LE REGISTRE, DONC IL SUIT LE CDO qui le tient, et le
+    # reporting extra-financier qui devra citer ses quatre indicateurs. Le
+    # mettre ailleurs aurait fait un module que personne dont c'est le métier
+    # ne rencontre.
+    "empreinte-ia": ["cdo", "dc_reporting"],
     "evals": ["grc_senior"],
     "comp": ["dc_implantation"],
 }

@@ -929,6 +929,7 @@ var PAGE_META = {
     'juridique': { section: 'JURIDIQUE', label: 'Conseil juridique assisté' },
     'empreinte': { section: 'EMPREINTE', label: 'Empreinte numérique' },
     'finops': { section: 'CARTOGRAPHIER', label: 'FinOps IA' },
+  'empreinte-ia': { section: 'CARTOGRAPHIER', label: 'Empreinte IA du parc' },
     'ia50': { section: 'ADMINISTRATION', label: 'Transparence IA Act (art. 50)' },
     'rgpd-site': { section: 'ADMINISTRATION', label: 'RGPD — CONSEILPREV (site et plateforme)' },
     'entreprise': { section: 'ENTREPRISE', label: 'Offre Entreprise' },
@@ -1032,6 +1033,7 @@ function go(id, el, sec, pg) {
   if (id === 'rgpd-site' && typeof window.rgpdInit === 'function') _apresPeinture(window.rgpdInit);
   if (id === 'training' && typeof window.formCatRender === 'function') _apresPeinture(window.formCatRender);
   if (id === 'finops' && typeof window.finopsLoad === 'function') _apresPeinture(window.finopsLoad);
+  if (id === 'empreinte-ia' && typeof window.empIaLoad === 'function') _apresPeinture(window.empIaLoad);
   if (id === 'maturite' && typeof window.naceCharger === 'function') _apresPeinture(window.naceCharger);
   if (id === 'ia50' && typeof window.ia50Load === 'function') _apresPeinture(window.ia50Load);
   if (id === 'empreinte' && typeof window.empInit === 'function') _apresPeinture(window.empInit);
@@ -9529,6 +9531,17 @@ var PAGE_GUIDES = {
       {h:"Par où commencer : les angles morts", t:"Le premier bloc de la page ne montre aucun montant. Il croise deux choses que ni le registre ni le chiffrage ne voient seuls : un système classé HAUT RISQUE, en service, et dont personne n’a dit ce qu’il consomme. C’est la première ligne à traiter, avant tout arbitrage de plafond — un système qui porte les obligations les plus lourdes du règlement et dont le budget n’est pas instruit est le pire des deux mondes."},
       {h:"« Non chiffré » ne veut pas dire « en retard »", t:"Les lacunes sont séparées selon l’étape du cycle de vie déclarée au Registre. Un système EN CONCEPTION n’a pas de volume parce qu’il ne consomme rien : ce n’est pas une lacune. Un système EN PRODUCTION n’en a pas parce que personne ne l’a relevé : c’en est une. Sans ce partage, un parc de vingt systèmes dont douze sont en conception affiche huit lignes « manquantes » comme un reproche, et l’on part relancer douze équipes qui n’ont rien à déclarer."},
       {h:"Limites à connaître", t:"Les montants sont un ordre de grandeur CATALOGUE, calculé sur des tarifs publiés et datés. Un contrat entreprise, une remise au volume, un cache de contexte ou un traitement différé donnent un coût réel différent, parfois d’un ordre de grandeur. Rien ici ne remplace la lecture de votre facture, et rien n’est mesuré : Sentinel ne tourne pas dans vos applications. Les leviers d’optimisation sont DÉCLARÉS, jamais vérifiés — une case cochée dit qu’un cache existe, pas qu’il est branché."}
+    ]
+  },
+  'empreinte-ia': {
+    title: "Empreinte IA du parc",
+    sections: [
+      {h:"À quoi sert cette page", t:"Peser le parc de systèmes d’IA que vous avez déjà déclaré au Registre : électricité, émissions, énergie primaire et eau, puis les trajectoires à l’horizon. Le même volume déclaré sert au FinOps et à l’empreinte — divisé par un tarif d’un côté, multiplié par des wattheures de l’autre. C’est pourquoi il n’y a qu’un inventaire."},
+      {h:"Par où commencer : la couverture", t:"Le premier bloc ne montre aucun total. Un parc de vingt systèmes dont trois sont déclarés produit un chiffre crédible et faux, et rien ne le signale : un total ne dit pas ce qu’il ignore. Lisez la couverture, relancez les déclarations manquantes, et seulement ensuite les indicateurs."},
+      {h:"Pourquoi certains systèmes n’ont pas d’hébergement compté", t:"Le terme d’hébergement vaut 0,15 Wh PAR REQUÊTE. Un système facturé au jeton déclare des jetons : le nombre d’appels est inconnu, et le déduire d’une longueur de réponse moyenne ferait entrer dans votre livrable un chiffre que personne n’a déclaré. Ces systèmes sont NOMMÉS plutôt que comblés. Pour les compter entièrement, déclarez l’unité de facturation « requêtes » quand c’est le cas."},
+      {h:"L’ajustement fin est à part, et c’est délibéré", t:"Sur un parc qui affine ses modèles, l’entraînement d’ajustement est souvent le poste le plus lourd — et il ne s’estime pas depuis un volume d’usage. Cinq champs sont à déclarer sur la fiche du système ; tant qu’il en manque un, la ligne reste incomplète et le dit, au lieu d’être complétée par défaut."},
+      {h:"Les trajectoires ne sont pas un référentiel", t:"Les cinq scénarios sont des repères du cabinet : des choix de milieu de plage, pas une norme. Le plan d’adoption de votre organisation les remplace. Attention au levier du mix électrique : il ne change RIEN à l’électricité consommée ni à l’énergie primaire, il déplace seulement les émissions. Le confondre avec un gain d’efficacité est l’erreur la plus commune."},
+      {h:"Limites à connaître", t:"Rien n’est mesuré : Sentinel ne tourne pas dans vos applications. L’indicateur « ressources » (épuisement abiotique) n’est pas servi, et la page le déclare avec ce qu’il faudrait pour l’établir. L’eau est un ordre de grandeur à ±40 %. Le coefficient d’énergie primaire porte trois réserves, lisibles au bloc des facteurs."}
     ]
   },
   'ia50': {
@@ -18710,6 +18723,10 @@ var GUIDED_PATHS = [
             {id:'registre', label:'Registre IA', action:'Documentez précisément les jeux de données utilisés par chaque système IA.', gain:'Rend visible une dépendance souvent mal cartographiée : qui utilise quelles données, et pour quoi.', tip:'TPE : commencez par vos 2-3 systèmes les plus critiques en volume de données traitées.'},
       {id:'maturite', label:'Audit de maturité', action:'Concentrez-vous sur le pilier Confidentialité & Sécurité — où en êtes-vous réellement ?', gain:'Objective un sujet souvent évalué de façon optimiste en interne sans grille de lecture externe.', tip:'Croisez ce résultat avec un audit technique de vos pipelines de données si le score est faible.'},
       {id:'rag', label:'Base de connaissance', action:'Centralisez la documentation data (schémas, politiques de qualité, data lineage).', gain:'Un point de référence unique, accessible aux équipes data ET conformité sans duplication.', tip:'Grand compte : structurez par domaine de données plutôt que par système IA pour rester cohérent avec votre organisation data existante.'},
+      {id:'empreinte-ia', label:'Empreinte IA du parc — ce que ça pèse',
+       action:'Lisez le même inventaire sous l’angle physique : électricité, émissions, énergie primaire et eau, puis les trajectoires à l’horizon.',
+       gain:'Le volume que vous venez de déclarer pour le coût sert aussi à l’empreinte — divisé par un tarif d’un côté, multiplié par des wattheures de l’autre. Aucun second inventaire à tenir.',
+       tip:'Les systèmes facturés au jeton sortent avec un hébergement NON compté, et la page les nomme : le nombre de requêtes est inconnu, et le déduire ferait entrer un chiffre que personne n’a déclaré.'},
       {id:'finops', label:'FinOps de l’IA — ce que ça coûte à l’usage', action:'Rapprochez chaque système inscrit au registre de son volume déclaré, et lisez le coût qui en découle, poste par poste.', gain:'La dépense réelle par système, calculée sur un volume que vous avez déclaré — jamais estimée à votre place.', tip:'Regardez la COUVERTURE avant les montants : un coût calculé sur trois systèmes déclarés parmi douze n’est pas un budget, c’est un échantillon.'},
       {id:'veille', label:'Veille qualifiée', action:'Suivez les évolutions réglementaires touchant spécifiquement la gouvernance des données d’entraînement.', gain:'Anticipe les obligations à venir sur la provenance et les droits d’auteur des données (Art. 53).', tip:'Particulièrement critique si vous entraînez ou fine-tunez des modèles en interne.'}
     ]
@@ -18941,6 +18958,14 @@ var GUIDED_PATHS = [
        calcul: "Aucun calcul nouveau : on LIT la nature de chaque valeur. « Classe » répond à « de quel ordre est un campus de ce type ? », jamais à « combien consomme ce site ? ».",
        livrable: "Export CSV des cas filtrés, et fiches site portant la nature de chaque valeur.",
        ia: "Aucun modèle. La nature de chaque valeur est posée par le référentiel, pas déduite à la volée."},
+      {id:'empreinte-ia', label:'L’empreinte du parc d’IA, avec sa couverture',
+       action:'Lisez les quatre indicateurs servis — électricité, émissions, énergie primaire, eau — et relevez la part du parc réellement déclarée avant de citer un total.',
+       gain:'Des chiffres dont la couverture est écrite à côté : c’est la première chose qu’un commissaire demandera, avant la valeur elle-même.',
+       tip:'Le cinquième indicateur — l’épuisement des ressources — est déclaré ABSENT avec ce qu’il faudrait pour l’établir. Ne le remplacez pas par un ordre de grandeur trouvé ailleurs : un indicateur ACV sans facteur sourcé est un nombre sans auteur.',
+       sources: ["Registre des systèmes d’IA du client — volumes DÉCLARÉS, jamais mesurés", "Facteurs servis par le moteur avec leur nature : texte réglementaire, relevé, ou hypothèse du cabinet"],
+       calcul: "Trois méthodes sur les mêmes volumes déclarés ; l’ajustement fin est amorti et totalisé SÉPARÉMENT de l’inférence.",
+       livrable: "Export CSV ligne à ligne, portant pour chaque système l’état de sa déclaration.",
+       ia: "Aucun modèle. Tout est calculé côté serveur."},
       {id:'templates', label:'Constituer le dossier de preuve',
        action:'Rassemblez sources, millésimes, hypothèses et méthodes de calcul.',
        gain:'La traçabilité exigée en vérification — chaque chiffre remonte à sa source primaire.',
@@ -20967,5 +20992,318 @@ document.addEventListener('keydown', function(e){
         document.getElementById('fo-couv-detail').textContent =
           'Chiffrage injoignable.';
       });
+  };
+})();
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   EMPREINTE IA DU PARC — la couverture d'abord, les totaux ensuite.
+
+   CE PANNEAU NE RECOPIE AUCUN CHIFFRE. Les facteurs, leur source, leur
+   nature, les champs à déclarer, l'origine des scénarios et les leviers sont
+   SERVIS par /api/empreinte/parc. Recopier ici ne serait-ce qu'un libellé
+   ferait dériver l'écran du code — et c'est l'écran qu'on croirait.
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  function ech(t){
+    return String(t == null ? '' : t).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  /* UN SEUL FORMATEUR POUR TOUT LE PANNEAU, à la française. Sans lui,
+     « 4 492,80 » et « 4492.8 » se côtoient dans la même page et le lecteur
+     croit à deux précisions différentes là où il n'y a qu'une inconstance
+     d'écriture. `null` sort « — » : une absence de déclaration n'est pas un
+     zéro, et l'écrire « 0 » se lirait « cela ne consomme rien ». */
+  function nb(v, dec){
+    if(v == null || isNaN(v)) return '—';
+    return Number(v).toLocaleString('fr-FR', {minimumFractionDigits: dec == null ? 0 : dec,
+                                              maximumFractionDigits: dec == null ? 0 : dec});
+  }
+  function pct(v){ return v == null ? '—' : nb(v * 100, 0) + ' %'; }
+
+  /* LES WATTHEURES ARRIVENT EN Wh ET S'AFFICHENT EN kWh, ET LA DIVISION EST
+     LE SEUL ENDROIT OÙ L'ABSENCE POUVAIT SE PERDRE. La première version
+     écrivait un ternaire `x == null ? '—' : nb(x / 1000, 1)` à chaque appel :
+     six gardes pour une seule règle, et `nb()` — la vraie garde — n'était
+     jamais atteinte. Une mutation qui lui faisait rendre zéro survivait donc
+     sans rien casser à l'écran. Une seule porte, et elle passe par `nb()`. */
+  function kilo(v, dec){ return nb(v == null ? null : v / 1000.0, dec); }
+
+  /* LA VALEUR D'UN FACTEUR N'A PAS DE PRÉCISION FIXE : 1,9 pour l'énergie
+     primaire, 30 pour la fabrication, 0,06 pour le réseau. Un `nb(v, 1)`
+     écrirait « 30,0 » et « 0,1 » — le second est faux. Ce formateur garde la
+     précision naturelle du nombre et la met à la française. Il existe parce
+     que la vérification en navigateur a montré « 1.9 » à l'écran, avec un
+     point, au milieu d'une page qui écrit partout ailleurs à la française. */
+  function nbLibre(v){
+    if(v == null || v === '' || isNaN(v)) return String(v == null ? '—' : v);
+    return Number(v).toLocaleString('fr-FR', {maximumFractionDigits: 6});
+  }
+
+  var DERNIER = null;   /* la dernière réponse, pour l'export */
+
+  window.empIaLoad = function(){
+    var socle = document.getElementById('ei-couv-chiffre');
+    if(!socle) return;
+    var pays = (document.getElementById('ei-pays') || {}).value || 'FR';
+    var hz = (document.getElementById('ei-horizon') || {}).value || '2030';
+    fetch('/api/empreinte/parc?pays=' + encodeURIComponent(pays)
+          + '&horizon=' + encodeURIComponent(hz),
+          {credentials:'same-origin', cache:'no-store'})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(j){
+        if(!j || !j.ok){
+          socle.textContent = '—';
+          document.getElementById('ei-couv-detail').textContent =
+            'Étude indisponible pour le moment.';
+          return;
+        }
+        DERNIER = j;
+        peindreCouverture(j);
+        peindrePerimetre(j);
+        peindreIndicateurs(j);
+        peindreLignes(j);
+        peindreTrajectoires(j);
+        peindreADeclarer(j);
+        peindreFacteurs(j);
+        peindreLimites(j);
+      })
+      .catch(function(){
+        socle.textContent = '—';
+        document.getElementById('ei-couv-detail').textContent =
+          'Étude indisponible pour le moment.';
+      });
+  };
+
+  function peindreCouverture(j){
+    var c = j.couverture;
+    document.getElementById('ei-couv-chiffre').textContent =
+      c.systemes ? (c.chiffrable + ' / ' + c.systemes) : '0';
+    var t = c.systemes
+      ? ('<strong>' + pct(c.part) + '</strong> du parc porte un volume déclaré. '
+         + 'Les totaux ci-dessous ne comptent QUE ces systèmes.')
+      : 'Aucun système au registre : rien à peser tant que le parc n’est pas inscrit.';
+    if(c.volume_manquant && c.volume_manquant.length)
+      t += '<br><span style="color:var(--amber,#b45309)">Sans volume déclaré&nbsp;: </span>'
+         + c.volume_manquant.map(ech).join(', ')
+         + ' — <em>non instruit</em>, ce qui n’est pas la même chose que zéro.';
+    if(c.ajustement_incomplet && c.ajustement_incomplet.length)
+      t += '<br>Ajustement fin incomplet&nbsp;: ' + c.ajustement_incomplet.map(ech).join(', ') + '.';
+    document.getElementById('ei-couv-detail').innerHTML = t;
+  }
+
+  /* LE BLOC DISPARAÎT QUAND IL EST VIDE. Un encadré vide finit par ne plus
+     être lu, et celui-ci doit se voir le jour où il se remplit. */
+  function peindrePerimetre(j){
+    var z = document.getElementById('ei-perimetre');
+    var l = j.hebergement_non_derivable || [];
+    if(!l.length){ z.innerHTML = ''; return; }
+    z.innerHTML = '<div style="border:1px solid var(--rule2);border-left:3px solid var(--amber,#b45309);'
+      + 'border-radius:10px;padding:12px 14px;background:var(--white);font-size:12px;line-height:1.6">'
+      + '<strong>Périmètre incomplet sur ' + l.length + ' système' + (l.length > 1 ? 's' : '')
+      + '&nbsp;:</strong> ' + l.map(ech).join(', ')
+      + '.<br><span class="muted">Le terme d’hébergement vaut 0,15 Wh par REQUÊTE. '
+      + 'Ces systèmes déclarent des jetons&nbsp;: le nombre d’appels est inconnu, et le déduire '
+      + 'd’une longueur de réponse moyenne ferait entrer un chiffre que personne n’a déclaré. '
+      + 'Leur méthode C ne porte donc que la majoration de fabrication. Déclarez l’unité de '
+      + 'facturation « requêtes » là où c’est le cas pour les compter entièrement.</span></div>';
+  }
+
+  function peindreIndicateurs(j){
+    var t = j.total_mois || {};
+    /* CHAQUE CARTE PORTE SA VALEUR *ET* LE MOIS QU'ELLE COUVRE. Un nombre sans
+       période n'est pas opposable, et « 7 855 g » se lit annuel aussi
+       facilement que mensuel. */
+    var val = {electricite: [kilo(t.wh, 1)], ges: [kilo(t.g_co2, 2)],
+               eau: [nb(t.eau_m3, 3)], energie_primaire: [nb(t.mj, 0)]};
+    document.getElementById('ei-indicateurs').innerHTML =
+      (j.indicateurs || []).map(function(i){
+        var servi = i.servi && val[i.cle];
+        var corps = servi
+          ? ('<div style="font-size:26px;font-weight:800;color:var(--ink)">'
+             + val[i.cle][0] + '</div>'
+             + '<div style="font-size:11px;color:var(--muted)">' + ech(i.unite) + ' par mois</div>')
+          : ('<div style="font-size:15px;font-weight:700;color:var(--amber,#b45309);margin:4px 0">Non servi</div>'
+             + '<div style="font-size:11px;color:var(--muted);line-height:1.5">' + ech(i.manque) + '</div>');
+        return '<div style="border:1px solid var(--rule2);border-radius:10px;padding:14px 16px;'
+          + 'background:var(--white)' + (servi ? '' : ';border-left:3px solid var(--amber,#b45309)') + '">'
+          + '<div style="font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">'
+          + ech(i.libelle) + '</div>' + corps + '</div>';
+      }).join('');
+  }
+
+  function peindreLignes(j){
+    var lg = j.lignes || [];
+    if(!lg.length){
+      document.getElementById('ei-lignes').innerHTML =
+        '<div class="muted" style="font-size:12px">Aucun système au registre.</div>';
+      return;
+    }
+    var h = '<table style="width:100%;border-collapse:collapse;font-size:12px">'
+      + '<thead><tr style="text-align:left;border-bottom:1px solid var(--rule2)">'
+      + '<th style="padding:6px 8px">Système</th><th style="padding:6px 8px">Inférence — kWh/mois</th>'
+      + '<th style="padding:6px 8px">Inférence — kg CO₂e/mois</th>'
+      + '<th style="padding:6px 8px">Ajustement fin — kg CO₂e/mois</th>'
+      + '<th style="padding:6px 8px">État</th></tr></thead><tbody>';
+    lg.forEach(function(l){
+      var m = l.inference || {}, f = l.ajustement_fin || {};
+      var etat = [];
+      if(m.nature !== 'declare') etat.push(ech(m.motif || 'non instruit'));
+      /* CE QUI MANQUE EST NOMMÉ CHAMP PAR CHAMP. « Incomplet » tout seul
+         renvoie l'utilisateur chercher quoi ; la liste lui dit quoi saisir. */
+      if(f.nature !== 'declare' && f.manquants && f.manquants.length)
+        etat.push('ajustement fin — à déclarer&nbsp;: ' + f.manquants.map(ech).join(', '));
+      if(m.nature === 'declare' && !m.hebergement_derive)
+        etat.push('hébergement non dérivable');
+      if(m.nature === 'declare' && m.profil_connu === false)
+        etat.push('profil de modèle inconnu — classe moyenne retenue');
+      h += '<tr style="border-bottom:1px solid var(--rule2)">'
+        + '<td style="padding:6px 8px"><strong>' + ech(l.nom) + '</strong></td>'
+        + '<td style="padding:6px 8px;font-variant-numeric:tabular-nums">'
+        + kilo(m.wh, 1) + '</td>'
+        + '<td style="padding:6px 8px;font-variant-numeric:tabular-nums">'
+        + kilo(m.g_co2, 2) + '</td>'
+        + '<td style="padding:6px 8px;font-variant-numeric:tabular-nums">'
+        + kilo(f.g_co2_mois, 2) + '</td>'
+        + '<td style="padding:6px 8px;color:var(--muted)">' + (etat.join(' · ') || '—') + '</td></tr>';
+    });
+    /* LES DEUX POSTES SONT TOTALISÉS SÉPARÉMENT, PUIS ADDITIONNÉS. Une seule
+       ligne de total ferait disparaître l'ajustement fin dans l'inférence. */
+    var im = j.inference_mois || {}, fm = j.ajustement_fin_mois || {}, tm = j.total_mois || {};
+    h += '</tbody><tfoot>'
+      + '<tr style="border-top:2px solid var(--rule2)"><td style="padding:6px 8px">Inférence</td>'
+      + '<td style="padding:6px 8px;font-variant-numeric:tabular-nums">' + kilo(im.wh, 1) + '</td>'
+      + '<td style="padding:6px 8px;font-variant-numeric:tabular-nums">' + kilo(im.g_co2, 2) + '</td>'
+      + '<td style="padding:6px 8px">—</td><td></td></tr>'
+      + '<tr><td style="padding:6px 8px">Ajustement fin, amorti</td>'
+      + '<td style="padding:6px 8px;font-variant-numeric:tabular-nums">' + kilo(fm.wh, 1) + '</td>'
+      + '<td style="padding:6px 8px">—</td>'
+      + '<td style="padding:6px 8px;font-variant-numeric:tabular-nums">' + kilo(fm.g_co2, 2) + '</td><td></td></tr>'
+      + '<tr style="font-weight:700;border-top:1px solid var(--rule2)"><td style="padding:6px 8px">Total du parc</td>'
+      + '<td style="padding:6px 8px;font-variant-numeric:tabular-nums">' + kilo(tm.wh, 1) + '</td>'
+      + '<td colspan="2" style="padding:6px 8px;font-variant-numeric:tabular-nums">'
+      + kilo(tm.g_co2, 2) + '</td><td></td></tr>'
+      + '</tfoot></table>';
+    document.getElementById('ei-lignes').innerHTML = h;
+  }
+
+  function peindreTrajectoires(j){
+    document.getElementById('ei-scen-source').textContent = j.scenarios_source || '';
+    var tr = j.trajectoires || [];
+    if(!tr.length){
+      document.getElementById('ei-trajectoires').innerHTML =
+        '<div class="muted" style="font-size:12px">Aucune trajectoire : la base annuelle est nulle '
+        + 'tant qu’aucun volume n’est déclaré. Une projection assise sur zéro resterait à zéro, '
+        + 'ce qui se lirait comme un parc sobre.</div>';
+    } else {
+      var annees = tr[0].points.map(function(p){ return p.annee; });
+      var h = '<table style="width:100%;border-collapse:collapse;font-size:12px">'
+        + '<thead><tr style="text-align:left;border-bottom:1px solid var(--rule2)">'
+        + '<th style="padding:6px 8px">Scénario</th>'
+        + annees.map(function(a){ return '<th style="padding:6px 8px">' + a + '</th>'; }).join('')
+        + '<th style="padding:6px 8px">× base</th></tr></thead><tbody>';
+      tr.forEach(function(t){
+        h += '<tr style="border-bottom:1px solid var(--rule2)">'
+          + '<td style="padding:6px 8px"><strong>' + ech(t.nom) + '</strong>'
+          + '<div class="muted" style="font-size:11px">' + ech(t.lecture) + '</div></td>'
+          + t.points.map(function(p){
+              return '<td style="padding:6px 8px;font-variant-numeric:tabular-nums">'
+                + nb(p.valeur, 1) + '</td>'; }).join('')
+          + '<td style="padding:6px 8px;font-variant-numeric:tabular-nums">'
+          + nb(t.multiple, 2) + '</td></tr>';
+      });
+      h += '</tbody></table><div class="muted" style="font-size:11px;margin-top:6px">'
+        + 'En kg CO₂ éq. par an. Base ' + nb(j.base_annuelle_kg, 1)
+        + ' kg — inférence ET ajustement fin annualisés, jamais l’inférence seule.</div>';
+      document.getElementById('ei-trajectoires').innerHTML = h;
+    }
+    document.getElementById('ei-leviers').innerHTML =
+      '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:10px">'
+      + (j.leviers_2030 || []).map(function(l){
+          return '<div style="border:1px solid var(--rule2);border-radius:8px;padding:10px 12px;'
+            + 'background:var(--white);font-size:11.5px;line-height:1.55">'
+            + '<div style="font-weight:700;color:var(--ink)">' + ech(l.nom) + '</div>'
+            + '<div class="muted" style="font-size:10.5px;text-transform:uppercase;letter-spacing:.05em">'
+            + 'agit sur ' + ech(l.agit_sur) + '</div>'
+            + '<div style="margin-top:4px">' + ech(l.quoi) + '</div>'
+            + '<div class="muted" style="margin-top:4px">' + ech(l.porte) + '</div></div>';
+        }).join('') + '</div>';
+  }
+
+  function peindreADeclarer(j){
+    var d = j.a_declarer_ajustement_fin || {};
+    document.getElementById('ei-a-declarer').innerHTML =
+      '<ul style="font-size:12px;line-height:1.65;margin:0;padding-left:18px">'
+      + Object.keys(d).map(function(k){
+          return '<li><code style="font-size:11px">' + ech(k) + '</code> — ' + ech(d[k]) + '</li>';
+        }).join('') + '</ul>';
+  }
+
+  function peindreFacteurs(j){
+    var f = j.facteurs || {};
+    document.getElementById('ei-facteurs').innerHTML =
+      Object.keys(f).map(function(k){
+        var x = f[k];
+        var h = '<div style="border:1px solid var(--rule2);border-radius:8px;padding:10px 12px;'
+          + 'background:var(--white);font-size:11.5px;line-height:1.6;margin-bottom:8px">'
+          + '<div><strong>' + ech(x.libelle || k) + '</strong> — '
+          + '<span style="font-variant-numeric:tabular-nums">' + ech(nbLibre(x.valeur)) + '</span> '
+          + ech(x.unite || '') + '</div>'
+          + '<div class="muted">' + ech(x.source) + ' · <em>' + ech(x.nature) + '</em>'
+          + (x.date ? ' · ' + ech(x.date) : '') + '</div>';
+        /* LES RÉSERVES ET LE POINT OUVERT SONT SERVIS, PAS RÉSUMÉS. Un
+           coefficient réglementaire cité sans ses limites d'emploi est cité
+           faux. */
+        if(x.reserve) h += '<div class="muted" style="margin-top:4px">Réserves&nbsp;: ' + ech(x.reserve) + '</div>';
+        if(x.point_ouvert) h += '<div style="margin-top:4px;color:var(--amber,#b45309)">Point ouvert&nbsp;: '
+          + ech(x.point_ouvert) + '</div>';
+        if(x.url) h += '<div style="margin-top:4px"><a href="' + ech(x.url)
+          + '" target="_blank" rel="noopener noreferrer">Texte source</a></div>';
+        return h + '</div>';
+      }).join('');
+  }
+
+  function peindreLimites(j){
+    var e = j.etat_module || {};
+    var h = 'Version du moteur ' + ech(j.version) + '. Mix retenu&nbsp;: ' + ech(j.pays)
+      + ', ' + nb(j.intensite, 1) + ' g CO₂/kWh (' + ech(j.source_intensite) + ')'
+      + ' ; hébergement ' + nb(j.intensite_hebergement, 1) + ' g CO₂/kWh ('
+      + ech(j.source_intensite_hebergement) + ').';
+    /* UNE VALEUR SUBSTITUÉE PAR L'ENVIRONNEMENT EST SIGNALÉE. Sans cela, la
+       page citerait un règlement européen pour une valeur qui n'en vient
+       plus. */
+    if(e.substitues && e.substitues.length)
+      h += '<br><span style="color:var(--amber,#b45309)">Facteur(s) substitué(s) par configuration, '
+        + 'et donc NON tirés de leur source affichée&nbsp;: ' + e.substitues.map(ech).join(', ')
+        + '.</span>';
+    h += '<br>Rien n’est mesuré : Sentinel ne tourne pas dans vos applications. Les volumes viennent '
+      + 'de votre registre, et un système que personne n’y a inscrit ne pèse rien ici — ce qui ne '
+      + 'veut pas dire qu’il ne consomme pas.';
+    document.getElementById('ei-limites').innerHTML = h;
+  }
+
+  /* L'EXPORT REPART DE LA DERNIÈRE RÉPONSE, JAMAIS DU TABLEAU PEINT. Relire le
+     DOM rendrait l'export dépendant du formatage d'affichage — et « 4 492,80 »
+     avec son espace fine ne se recharge dans aucun tableur. */
+  window.empIaExport = function(){
+    if(!DERNIER){ return; }
+    var l = ['systeme;inference_kwh_mois;inference_kg_co2_mois;ajustement_kg_co2_mois;etat'];
+    (DERNIER.lignes || []).forEach(function(x){
+      var m = x.inference || {}, f = x.ajustement_fin || {};
+      l.push([String(x.nom).replace(/;/g, ','),
+              m.wh == null ? '' : (m.wh / 1000.0).toFixed(3),
+              m.g_co2 == null ? '' : (m.g_co2 / 1000.0).toFixed(3),
+              f.g_co2_mois == null ? '' : (f.g_co2_mois / 1000.0).toFixed(3),
+              m.nature === 'declare' ? (m.hebergement_derive ? 'complet' : 'hebergement non derivable')
+                                     : String(m.motif || 'non instruit')].join(';'));
+    });
+    var b = new Blob(['\ufeff' + l.join('\n')], {type:'text/csv;charset=utf-8'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(b);
+    a.download = 'empreinte-ia-parc.csv';
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a); URL.revokeObjectURL(a.href);
   };
 })();
