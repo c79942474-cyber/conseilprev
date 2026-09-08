@@ -3023,6 +3023,10 @@ import export_observatoire  # noqa: E402
 import seo  # noqa: E402
 import conversion  # noqa: E402
 import empreintes  # noqa: E402
+# Les facteurs d'empreinte de l'IA, leurs sources et les trois methodes :
+# module PARTAGE A L'IDENTIQUE avec conseilprevcyber, tenu par une regle
+# dans les deux suites.
+import empreinte_ia  # noqa: E402
 
 
 # ══════════════════════════════════════════════════════════
@@ -16150,14 +16154,22 @@ def formations_inscriptions_admin():
 
 EMP_METHODO_VERSION = '1.0'
 
-# Energie par millier de jetons de sortie (Wh) : (basse, centrale, haute).
-# Ordres de grandeur issus des travaux publies (Google, Mistral AI, ML.ENERGY,
-# EcoLogits). Parametrables : ces valeurs doivent etre revues periodiquement.
-EMP_WH_1K = {
-    'petit':  (0.05, 0.30, 0.80),
-    'moyen':  (0.30, 1.50, 4.00),
-    'grand':  (1.00, 4.00, 12.00),
-}
+# ══════════════════════════════════════════════════════════════════════════
+# LES FACTEURS NE SONT PLUS ICI — ILS SONT DANS empreinte_ia
+# ══════════════════════════════════════════════════════════════════════════
+# CE QUI ÉTAIT LE DOUBLON, ET CE QU'IL COÛTAIT. Ces constantes vivaient dans ce
+# fichier de douze mille lignes : un PUE par modèle, une intensité par pays, une
+# majoration de fabrication, un kWh/Go. Le site cyber, lui, publie PUE, WUE,
+# carbone incorporé et eau avec formule, source et incertitude. Deux jeux de
+# facteurs pour la même physique, dans deux dépôts, sans rien qui les compare —
+# et aucun des deux n'était testable seul : ici, il fallait importer une
+# application Flask complète pour lire un nombre.
+#
+# Ils sont maintenant dans un module partagé, qui porte pour chaque facteur sa
+# source, sa nature et sa date de révision, et qui refuse de se charger sans
+# elles. Les noms ci-dessous restent : trente points de ce fichier les lisent,
+# et les renommer aurait mêlé un déplacement à une réécriture.
+EMP_WH_1K = empreinte_ia.WH_1K_JETONS
 
 # Intensite carbone par defaut (gCO2eq/kWh, approche cycle de vie).
 # France : ordre de grandeur ADEME / Base Empreinte. A ajuster si besoin.
@@ -16313,35 +16325,21 @@ def _emp_intensite_hebergement():
     return EMP_INTENSITE_DEFAUT.get(str(EMP_PAYS_HEBERGEMENT).upper(), 380.0), 'Facteur moyen pays'
 
 
-# Methode C : impacts incorpores (fabrication du materiel) exprimes en
-# pourcentage ajoute aux emissions d'usage (approche Boavizta simplifiee).
-try:
-    EMP_FABRICATION_PCT = float(os.environ.get('EMPREINTE_FABRICATION_PCT', '30'))
-except (TypeError, ValueError):
-    EMP_FABRICATION_PCT = 30.0
-
-# Methode C : hebergement (Wh par requete HTTP servie) et reseau / terminal.
-EMP_HEBERGEMENT_WH_REQ = 0.15      # Wh par requete servie (instance + PUE)
-EMP_RESEAU_KWH_GO = 0.06           # kWh par gigaoctet transfere
+# Methode C : impacts incorpores, hebergement et reseau — lus dans le module
+# partage, ou ils portent leur source et leur nature.
+EMP_FABRICATION_PCT = empreinte_ia.FACTEURS['fabrication_pct']['valeur']
+EMP_HEBERGEMENT_WH_REQ = empreinte_ia.FACTEURS['hebergement_wh_req']['valeur']
+EMP_RESEAU_KWH_GO = empreinte_ia.FACTEURS['reseau_kwh_go']['valeur']
 EMP_TERMINAL_W = 15.0              # puissance moyenne d'un terminal (W)
 EMP_TERMINAL_S_PAR_PAGE = 25.0     # duree d'exposition moyenne par page (s)
 EMP_PAYS_HEBERGEMENT = os.environ.get('EMPREINTE_PAYS_HEBERGEMENT', 'DE')  # Render Francfort
 
 # Profils de modeles : classe energetique, pays du centre de donnees, PUE.
-EMP_MODELES = [
-    ('claude',        {'classe': 'grand', 'pays': 'US', 'pue': 1.20, 'fournisseur': 'Anthropic'}),
-    ('mistral-large', {'classe': 'grand', 'pays': 'FR', 'pue': 1.15, 'fournisseur': 'Mistral AI'}),
-    ('mistral-embed', {'classe': 'petit', 'pays': 'FR', 'pue': 1.15, 'fournisseur': 'Mistral AI'}),
-    ('mistral',       {'classe': 'moyen', 'pays': 'FR', 'pue': 1.15, 'fournisseur': 'Mistral AI'}),
-]
+EMP_MODELES = empreinte_ia.PROFILS_MODELE
 
 
 def _emp_profil(modele):
-    m = str(modele or '').lower()
-    for cle, prof in EMP_MODELES:
-        if cle in m:
-            return prof
-    return {'classe': 'moyen', 'pays': 'EU', 'pue': 1.20, 'fournisseur': 'Autre'}
+    return empreinte_ia.profil(modele)
 
 
 _EMP_INT_CACHE = {'ts': 0.0, 'val': None, 'src': ''}
@@ -16394,40 +16392,21 @@ def _emp_intensite(pays):
 
 
 def _emp_calc(modele, tokens_out, latence_ms):
-    """Calcule l'empreinte d'une requete de modele selon les trois methodes."""
-    prof = _emp_profil(modele)
-    bas, central, haut = EMP_WH_1K.get(prof['classe'], EMP_WH_1K['moyen'])
-    k = max(0.0, float(tokens_out or 0)) / 1000.0
+    """L'empreinte d'une requete, selon les trois methodes.
+
+    LE CALCUL EST DANS empreinte_ia ; CETTE FONCTION NE FAIT QUE RESOUDRE LES
+    INTENSITES. C'est le partage qui rend le module testable : un moteur qui
+    interroge RTE au milieu de son arithmetique ne se teste pas, il se moque.
+    Ici, on releve — avec cache et tache de fond — puis on passe."""
+    prof = empreinte_ia.profil(modele)
     intensite, source = _emp_intensite(prof['pays'])
     fixe = EMP_INTENSITE_DEFAUT.get(str(prof['pays']).upper(), 250.0)
-
-    # Methode A : facteur central, intensite fixe, sans PUE ni fabrication.
-    wh_a = central * k
-    g_a = wh_a / 1000.0 * fixe
-
-    # Methode B : PUE applique, intensite temps reel, fourchette.
-    pue = float(prof.get('pue') or 1.2)
-    wh_b = central * k * pue
-    wh_b_min = bas * k * pue
-    wh_b_max = haut * k * pue
-    g_b = wh_b / 1000.0 * intensite
-    g_b_min = wh_b_min / 1000.0 * intensite
-    g_b_max = wh_b_max / 1000.0 * intensite
-
-    # Methode C : B + impacts incorpores + hebergement de la requete.
-    wh_c = wh_b + EMP_HEBERGEMENT_WH_REQ
-    fab = 1.0 + max(0.0, EMP_FABRICATION_PCT) / 100.0
     int_heb, _src_heb = _emp_intensite_hebergement()
-    g_heb = EMP_HEBERGEMENT_WH_REQ / 1000.0 * int_heb
-    g_c = g_b * fab + g_heb
-    g_c_min = g_b_min * fab + g_heb
-    g_c_max = g_b_max * fab + g_heb
-
-    return {'classe': prof['classe'], 'pays': prof['pays'], 'fournisseur': prof['fournisseur'],
-            'intensite': intensite, 'source_intensite': source,
-            'wh_a': wh_a, 'g_a': g_a,
-            'wh_b': wh_b, 'g_b': g_b, 'g_b_min': g_b_min, 'g_b_max': g_b_max,
-            'wh_c': wh_c, 'g_c': g_c, 'g_c_min': g_c_min, 'g_c_max': g_c_max}
+    r = empreinte_ia.inference(modele, tokens_out, intensite, int_heb,
+                               intensite_fixe=fixe)
+    r['intensite'] = intensite
+    r['source_intensite'] = source
+    return r
 
 
 def _emp_tables(cur, conn):
