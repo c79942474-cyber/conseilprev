@@ -114,19 +114,26 @@ def test_sqlite_refuse_bien_cette_syntaxe():
 def test_les_colonnes_migrees_arrivent_vraiment_sur_sqlite():
     """C'est l'état que le démarrage n'atteignait jamais."""
     attendues = _colonnes_attendues()
-    # DIX, PUIS DIX-HUIT. Les huit dernières sont celles du FinOps — modèle,
-    # unité de facturation, volumes et leur source, centre de coût, classe de
-    # tâche, leviers. Ce compte n'est pas un décor : c'est la garde qui a fait
-    # tomber une migration écrite en BOUCLE, invisible à la reconstruction de
-    # table, et il demande une décision à chaque colonne ajoutée. Le mettre à
-    # jour EST cette décision.
-    assert len(attendues) == 18, (
+    # DIX, PUIS DIX-HUIT, PUIS DIX-NEUF. Les huit du FinOps — modèle, unité de
+    # facturation, volumes et leur source, centre de coût, classe de tâche,
+    # leviers. La dix-neuvième est `ajustement_fin` : ce qu'un client DÉCLARE
+    # de son entraînement d'ajustement (heures d'accélérateur, nombre, PUE,
+    # durée d'amortissement, mois d'usage), que rien ne permet d'estimer et que
+    # `empreinte_ia.ajustement_fin` refuse de compléter. Ce compte n'est pas un
+    # décor : c'est la garde qui a fait tomber une migration écrite en BOUCLE,
+    # invisible à la reconstruction de table, et il demande une décision à
+    # chaque colonne ajoutée. Le mettre à jour EST cette décision.
+    assert len(attendues) == 19, (
         "le nombre de migrations de systemes_ia a changé : %s. Si c'est\n"
         "délibéré, mettez ce compte à jour ; sinon, une migration a disparu."
         % [c for c, _ in attendues])
     assert 'famille' in [c for c, _ in attendues], (
         "la colonne `famille` n'est plus migrée : la documentation commune à\n"
         "une famille de systèmes voisins n'a plus où se ranger")
+    assert 'ajustement_fin' in [c for c, _ in attendues], (
+        "la colonne `ajustement_fin` n'est plus migrée : la déclaration\n"
+        "d'ajustement d'un client n'a plus où se ranger, et le parc\n"
+        "paraîtrait couvert en ignorant un poste qu'il ne peut pas estimer")
     c = _table_sqlite(sqlite3.connect(':memory:'))
     ajouter = _migrer(moteur_pg=False)
     cur = c.cursor()

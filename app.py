@@ -9122,6 +9122,13 @@ def registre_init_db():
     registre_ajouter_colonne(cur, 'systemes_ia', 'centre_cout', "TEXT")
     registre_ajouter_colonne(cur, 'systemes_ia', 'classe_tache', "TEXT")
     registre_ajouter_colonne(cur, 'systemes_ia', 'leviers', "TEXT")
+    # UNE COLONNE, ET NON CINQ. L'ajustement fin est une declaration structuree
+    # — heures, nombre, puissance, PUE, amortissement —, et le registre porte
+    # deja « roles » et « leviers » de cette facon. Cinq colonnes auraient
+    # multiplie par cinq les points de couture (INSERT, UPDATE, serialisation,
+    # recette), chacun dedouble entre PostgreSQL et SQLite, pour une valeur qui
+    # se lit et s'ecrit toujours d'un bloc.
+    registre_ajouter_colonne(cur, 'systemes_ia', 'ajustement_fin', "TEXT")
     conn.commit()
 
     cur.execute('SELECT COUNT(*) AS n FROM systemes_ia')
@@ -9367,6 +9374,16 @@ def registre_row_to_dict(row):
         leviers_parsed = []
     if not isinstance(leviers_parsed, list):
         leviers_parsed = []
+    # L'AJUSTEMENT FIN EST RENDU EN DICTIONNAIRE, JAMAIS EN CHAINE. Le moteur
+    # d'empreinte attend `s['ajustement_fin']` comme un objet, et une chaine y
+    # passerait pour une declaration vide : la campagne d'entrainement
+    # disparaitrait du bilan sans que rien ne le signale.
+    try:
+        fin_parsed = json.loads(d.get('ajustement_fin')) if d.get('ajustement_fin') else {}
+    except Exception:
+        fin_parsed = {}
+    if not isinstance(fin_parsed, dict):
+        fin_parsed = {}
     return {
         'id': d['id'], 'nom': d['nom'], 'finalite': d['finalite'],
         'secteur': d['secteur'], 'type_systeme': d['type_systeme'],
@@ -9388,7 +9405,8 @@ def registre_row_to_dict(row):
         'volume_source': d.get('volume_source'),
         'centre_cout': d.get('centre_cout'),
         'classe_tache': d.get('classe_tache'),
-        'leviers': leviers_parsed
+        'leviers': leviers_parsed,
+        'ajustement_fin': fin_parsed
     }
 
 @app.route('/api/registre', methods=['GET'])
@@ -9457,17 +9475,18 @@ def registre_create():
         (data.get('volume_source') or '')[:200],
         (data.get('centre_cout') or '')[:80],
         (data.get('classe_tache') or '')[:40],
-        json.dumps(leviers_list)[:300]
+        json.dumps(leviers_list)[:300],
+        _registre_ajustement_fin(data.get('ajustement_fin'))
     )
     if REGISTRE_USE_PG:
         cur.execute('''INSERT INTO systemes_ia
-            (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj, client_id, cycle_vie, product_owner, service, roles, personnes_concernees, transparence_art50, preuves_conformite, famille, modele, unite_facturation, volume_entree_mois, volume_sortie_mois, volume_source, centre_cout, classe_tache, leviers)
-            VALUES (%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s) RETURNING *''', values)
+            (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj, client_id, cycle_vie, product_owner, service, roles, personnes_concernees, transparence_art50, preuves_conformite, famille, modele, unite_facturation, volume_entree_mois, volume_sortie_mois, volume_source, centre_cout, classe_tache, leviers, ajustement_fin)
+            VALUES (%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s,%%s) RETURNING *''', values)
         row = cur.fetchone()
     else:
         cur.execute('''INSERT INTO systemes_ia
-            (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj, client_id, cycle_vie, product_owner, service, roles, personnes_concernees, transparence_art50, preuves_conformite, famille, modele, unite_facturation, volume_entree_mois, volume_sortie_mois, volume_source, centre_cout, classe_tache, leviers)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', values)
+            (nom, finalite, secteur, type_systeme, donnees_utilisees, classification, justification, statut_conformite, score_risque, responsable, fournisseur, date_creation, date_maj, client_id, cycle_vie, product_owner, service, roles, personnes_concernees, transparence_art50, preuves_conformite, famille, modele, unite_facturation, volume_entree_mois, volume_sortie_mois, volume_source, centre_cout, classe_tache, leviers, ajustement_fin)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', values)
         new_id = cur.lastrowid
         cur.execute('SELECT * FROM systemes_ia WHERE id=?', (new_id,))
         row = cur.fetchone()
@@ -9475,6 +9494,33 @@ def registre_create():
     conn.close()
     schedule_cartographie_report(client['id'], client.get('email') or CONSEILPREV_INTERNAL_EMAIL, client.get('nom_entreprise') or 'CONSEILPREV')
     return jsonify({'systeme': registre_row_to_dict(row)}), 201
+
+def _registre_ajustement_fin(brut):
+    """La declaration d'ajustement fin, normalisee avant d'entrer en base.
+
+    CE QUI EST REFUSE ICI, ET POURQUOI. Le registre ne stocke que les cinq
+    champs que `empreinte_ia.A_DECLARER_FIN` enumere, convertis en nombres.
+    Tout le reste est ecarte : une declaration qui accepterait des cles
+    arbitraires ferait entrer dans le registre — donc dans un livrable — des
+    donnees que personne n'a specifiees et qu'aucune regle ne mesure.
+
+    ET UNE DECLARATION VIDE RESTE VIDE. Elle n'est pas completee par des
+    valeurs par defaut : `couverture()` compte alors le systeme comme non
+    declare, ce qui est exact. Boucher les trous ici ferait disparaitre le
+    manque du releve de couverture."""
+    if not isinstance(brut, dict):
+        return ''
+    propre = {}
+    for cle in empreinte_ia.A_DECLARER_FIN:
+        v = brut.get(cle)
+        if v in (None, ''):
+            continue
+        try:
+            propre[cle] = float(v)
+        except (TypeError, ValueError):
+            continue
+    return json.dumps(propre)[:300] if propre else ''
+
 
 @app.route('/api/registre/<int:sys_id>', methods=['PUT'])
 @require_paid_plan
@@ -9492,6 +9538,11 @@ def registre_update(sys_id):
     roles_json = json.dumps(data.get('roles')) if data.get('roles') is not None else None
     leviers_json = (json.dumps(data.get('leviers'))
                     if data.get('leviers') is not None else None)
+    # NORMALISE COMME A LA CREATION, ET PAS AUTREMENT. Deux chemins d'ecriture
+    # qui ne filtrent pas pareil, c'est un registre dont le contenu depend de la
+    # facon dont il a ete rempli.
+    fin_json = (_registre_ajustement_fin(data.get('ajustement_fin'))
+                if data.get('ajustement_fin') is not None else None)
 
     if REGISTRE_USE_PG:
         # COALESCE permet de ne mettre a jour que les champs fournis, en une seule requete
@@ -9513,7 +9564,8 @@ def registre_update(sys_id):
             volume_entree_mois=COALESCE(%s,volume_entree_mois),
             volume_sortie_mois=COALESCE(%s,volume_sortie_mois),
             volume_source=COALESCE(%s,volume_source), centre_cout=COALESCE(%s,centre_cout),
-            classe_tache=COALESCE(%s,classe_tache), leviers=COALESCE(%s,leviers), date_maj=%s
+            classe_tache=COALESCE(%s,classe_tache), leviers=COALESCE(%s,leviers),
+            ajustement_fin=COALESCE(%s,ajustement_fin), date_maj=%s
             WHERE id=%s AND client_id=%s RETURNING *''', (
             data.get('nom'), data.get('finalite'), data.get('secteur'), data.get('type_systeme'),
             data.get('donnees_utilisees'), data.get('classification'), data.get('justification'),
@@ -9525,7 +9577,7 @@ def registre_update(sys_id):
             data.get('modele'), data.get('unite_facturation'),
             data.get('volume_entree_mois'), data.get('volume_sortie_mois'),
             data.get('volume_source'), data.get('centre_cout'),
-            data.get('classe_tache'), leviers_json,
+            data.get('classe_tache'), leviers_json, fin_json,
             now, sys_id, client['id']))
         row = cur.fetchone()
         conn.commit()
@@ -9547,19 +9599,22 @@ def registre_update(sys_id):
         roles_final = roles_json if roles_json is not None else json.dumps(existing_d.get('roles') or [])
         leviers_final = (leviers_json if leviers_json is not None
                          else json.dumps(existing_d.get('leviers') or []))
+        fin_final = (fin_json if fin_json is not None
+                     else _registre_ajustement_fin(existing_d.get('ajustement_fin')))
         cur.execute('''UPDATE systemes_ia SET nom=?, finalite=?, secteur=?, type_systeme=?, donnees_utilisees=?,
            classification=?, justification=?, statut_conformite=?, responsable=?, fournisseur=?, score_risque=?,
            cycle_vie=?, product_owner=?, derniere_revue=?,
            service=?, roles=?, personnes_concernees=?, transparence_art50=?, preuves_conformite=?, famille=?,
            modele=?, unite_facturation=?, volume_entree_mois=?, volume_sortie_mois=?,
-           volume_source=?, centre_cout=?, classe_tache=?, leviers=?, date_maj=?
+           volume_source=?, centre_cout=?, classe_tache=?, leviers=?,
+           ajustement_fin=?, date_maj=?
            WHERE id=? AND client_id=?''', (vals['nom'], vals['finalite'], vals['secteur'], vals['type_systeme'], vals['donnees_utilisees'],
             vals['classification'], vals['justification'], vals['statut_conformite'], vals['responsable'], vals['fournisseur'],
             score, vals['cycle_vie'], vals['product_owner'], derniere_revue_final,
             vals['service'], roles_final, vals['personnes_concernees'], vals['transparence_art50'], vals['preuves_conformite'], vals['famille'],
             vals['modele'], vals['unite_facturation'], vals['volume_entree_mois'],
             vals['volume_sortie_mois'], vals['volume_source'], vals['centre_cout'],
-            vals['classe_tache'], leviers_final,
+            vals['classe_tache'], leviers_final, fin_final,
             now, sys_id, client['id']))
         conn.commit()
         cur.execute('SELECT * FROM systemes_ia WHERE id=?', (sys_id,))
@@ -9649,6 +9704,65 @@ def finops_etat():
     etat['unites'] = finops_ia.UNITES
     etat['leviers'] = finops_ia.LEVIERS
     etat['modeles_tarifes'] = sorted(finops_ia.TARIFS)
+    return jsonify(etat)
+
+
+@app.route('/api/empreinte/parc', methods=['GET'])
+@require_paid_plan
+@rate_limit(limit=60, window=60)
+def empreinte_parc():
+    """L'empreinte environnementale du parc d'IA — LUE sur le registre.
+
+    POURQUOI CETTE ROUTE VIT SUR LE REGISTRE, COMME LE FINOPS. L'empreinte d'un
+    parc d'IA est un attribut de son INVENTAIRE : quel systeme, quel modele,
+    quel volume, sous quelle responsabilite. C'est exactement ce que le registre
+    porte deja, et c'est la moitie la plus couteuse de la demarche. Le meme
+    volume declare donne le cout quand on le divise par un tarif, et l'energie
+    quand on le multiplie par des Wh par millier de jetons. Un second
+    inventaire, tenu a cote, divergerait du premier dans le mois.
+
+    CE QU'ELLE NE FAIT PAS : mesurer. Aucun fournisseur ne publie la
+    consommation reelle d'une requete. Les volumes sont DECLARES, les facteurs
+    portent leur source et leur nature, et la couverture precede les totaux dans
+    la reponse comme elle doit les preceder a l'ecran.
+
+    LES INTENSITES CARBONE VIENNENT D'ICI, PAS DU MODULE. Le releve temps reel
+    a un cache et une tache de fond ; un moteur de calcul qui interroge le
+    reseau au milieu de son arithmetique ne se teste pas.
+    """
+    client = sentauth_current_client()
+    conn = registre_get_db()
+    cur = conn.cursor()
+    cur.execute(registre_sql(
+        'SELECT * FROM systemes_ia WHERE client_id=%s ORDER BY date_maj DESC',
+        'SELECT * FROM systemes_ia WHERE client_id=? ORDER BY date_maj DESC'
+    ), (client['id'],))
+    rows = cur.fetchall()
+    conn.commit()
+    conn.close()
+    systemes = [registre_row_to_dict(r) for r in rows]
+
+    pays = (request.args.get('pays') or 'FR').upper()[:2]
+    intensite, source = _emp_intensite(pays)
+    int_heb, source_heb = _emp_intensite_hebergement()
+    try:
+        horizon = int(request.args.get('horizon') or 2030)
+    except (TypeError, ValueError):
+        horizon = 2030
+    depuis = datetime.utcnow().year
+
+    etat = empreinte_ia.parc(systemes, intensite, int_heb, pays_eau=pays,
+                             horizon=horizon, depuis=depuis)
+    etat.update({
+        'ok': True, 'version': empreinte_ia.VERSION,
+        'pays': pays, 'intensite': intensite, 'source_intensite': source,
+        'intensite_hebergement': int_heb, 'source_intensite_hebergement': source_heb,
+        'facteurs': empreinte_ia.FACTEURS,
+        'a_declarer_ajustement_fin': empreinte_ia.A_DECLARER_FIN,
+        'scenarios_source': empreinte_ia.SCENARIOS_SOURCE,
+        'leviers_2030': empreinte_ia.LEVIERS_2030,
+        'etat_module': empreinte_ia.etat(),
+    })
     return jsonify(etat)
 
 
