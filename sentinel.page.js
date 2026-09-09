@@ -18679,6 +18679,10 @@ var GUIDED_PATHS = [
     role: 'Risk Manager',
     pitch: 'Vous quantifiez ce qui reste flou pour les autres — l’exposition réelle, en risque et en euros.',
     steps: [
+      {id:'maturite', label:'Le socle, avant d’estimer une probabilité',
+       action:'Passez l’audit de maturité et retenez les piliers les plus bas — données, sécurité, industrialisation.',
+       gain:'La probabilité de défaillance que vous porterez dans la matrice cesse d’être une intuition : elle s’appuie sur un socle mesuré.',
+       tip:'Un pilier faible ne devient un risque que croisé avec un usage critique. C’est l’étape suivante qui fait ce croisement, pas celle-ci.'},
       {id:'matrice', label:'Matrice risques', action:'Positionnez chaque système selon sa probabilité de défaillance et son impact potentiel.', gain:'Une vue synthétique immédiatement lisible par la direction, sans jargon technique.', tip:'Mettez à jour à chaque changement significatif de système, pas seulement une fois par an.'},
       {id:'radar', label:'Radar des risques', action:'Comparez votre profil sur 6 dimensions (gouvernance, sécurité, droits fondamentaux…) à la moyenne du secteur.', gain:'Situe objectivement votre exposition par rapport à vos pairs — utile pour argumenter un budget de mise en conformité.', tip:'Le radar seul ne suffit pas : croisez-le toujours avec le détail FRIA pour les systèmes à haut risque.'},
       {id:'fria', label:'Évaluation FRIA', action:'Évaluez l’impact sur les droits fondamentaux pour chaque système concerné par l’Art. 27.', gain:'Documente formellement un risque souvent sous-estimé : l’impact humain, pas seulement technique.', tip:'Impliquez systématiquement un représentant métier — un risk manager seul manque le contexte d’usage réel.'},
@@ -18694,6 +18698,14 @@ var GUIDED_PATHS = [
     steps: [
       {id:'carto-uc', label:'Cartographie des cas d\u2019usage IA', action:'Parcourez les 5 \u00e9tapes : ciblez votre secteur et vos processus, s\u00e9lectionnez les cas d\u2019usage \u00e0 potentiel, qualifiez-les, chiffrez le retour attendu et \u00e9valuez votre maturit\u00e9.', gain:'Transforme une intention IA en une liste courte de cas d\u2019usage prioris\u00e9s, chiffr\u00e9s et jug\u00e9s d\u00e9ployables \u2014 la base d\u2019un programme orient\u00e9 valeur m\u00e9tier.', tip:'TPE : concentrez-vous sur 2 \u00e0 3 cas transverses \u00e0 ROI rapide. Grand compte : croisez cette cartographie avec les jalons de conformit\u00e9 AI Act du module RaaS pour lier valeur et conformit\u00e9.'},
             {id:'report', label:'Vue direction', action:'Consultez les indicateurs clés en moins de 2 minutes avant un comité.', gain:'L’état de santé du programme de conformité, sans avoir à interroger vos équipes.', tip:'Demandez à votre directeur de programme de le mettre à jour avant chaque comité de direction.'},
+      {id:'registre', label:'Ce que nous employons — et ce que nous ignorons employer',
+       action:'Ne remplissez pas le registre : LISEZ sa couverture. Combien de systèmes sont inscrits, combien portent un responsable, combien un volume déclaré.',
+       gain:'La seule question de gouvernance que personne d’autre ne pose : savons-nous ce que nous faisons tourner ? Un parc à moitié inscrit rend faux tout ce qui en découle.',
+       tip:'Un taux de couverture bas n’est pas un reproche aux équipes : c’est un arbitrage de moyens, et il se traite à votre niveau.'},
+      {id:'finops', label:'Ce que le parc coûte, sur des volumes déclarés',
+       action:'Lisez la couverture, puis le coût par centre de coût et par service.',
+       gain:'Le montant que vous arbitrez, calculé sur ce que vos équipes ont déclaré — jamais estimé à votre place.',
+       tip:'L’empreinte environnementale du même parc se lit dans le parcours « RSE / reporting extra-financier », qui rend compte devant vous : elle n’est pas reprise ici pour ne pas dédoubler la même mesure.'},
       {id:'sanctions', label:'Calculateur sanctions', action:'Visualisez l’exposition financière maximale en cas de non-conformité.', gain:'L’argument décisif pour prioriser un budget — un chiffre parle plus qu’un rapport de 40 pages.', tip:'Comparez ce chiffre au coût de la mise en conformité — l’arbitrage devient évident.'},
       {id:'roadmap', label:'Roadmap', action:'Vérifiez les échéances clés et les jalons à venir.', gain:'Anticipez les points de décision à venir au lieu de les découvrir en urgence.', tip:'L’échéance du 2 décembre 2027 (systèmes haut risque, annexe III) doit apparaître dans votre agenda de comité, pas seulement dans l’outil.'},
       {id:'apercu', label:'L’état mondial de la régulation', action:'Lisez la synthèse éditoriale des risques réglementaires et géopolitiques, avant d’entrer dans le détail d’un pays.', gain:'Le cadre général dans lequel s’inscrivent vos marchés — sans lui, une fiche pays se lit comme une contrainte isolée.', tip:'Lisez-la AVANT les fiches : l’ordre inverse fait prendre une particularité nationale pour une tendance mondiale.'},
@@ -18748,6 +18760,110 @@ var GUIDED_PATHS = [
     ]
   }
 ,
+  /* ══════════════════════════════════════════════════════════════════════
+     TROIS LECTEURS QUI N'AVAIENT PAS DE CHEMIN
+     ══════════════════════════════════════════════════════════════════════
+     LE RELEVÉ QUI LES A FAIT ÉCRIRE. Le FinOps n'était atteint que par le CDO
+     et le CAIO — ni l'un ni l'autre ne vote le budget. L'Empreinte IA n'était
+     atteinte que par le CDO et le reporting des centres de données — une
+     entreprise qui emploie de l'IA sans posséder de centre n'avait aucun
+     chemin. Et l'Audit de maturité était traversé quatre fois, jamais comme
+     POINT DE DÉPART, alors que c'est la première question d'une DSI.
+
+     CE QUI LES RÉUNIT, ET CE QUI LES SÉPARE. Les trois lisent le MÊME
+     inventaire : le Registre des systèmes d'IA. Le même volume déclaré donne
+     le coût divisé par un tarif, et l'énergie multiplié par des wattheures.
+     Mais ils ne posent pas la même question — combien ça coûte, combien ça
+     pèse, sommes-nous capables de le tenir — et c'est pourquoi ce sont trois
+     chemins et non un seul avec trois embranchements. */
+  {
+    id: 'daf_cout_ia',
+    icon: '\uD83D\uDCB6',
+    role: 'DAF / contrôle de gestion — ce que l’IA coûte',
+    pitch: 'Vous arbitrez un budget d’IA sans avoir la main sur les consoles qui le consomment. Ce parcours part de ce qui est DÉCLARÉ, jamais d’une estimation faite à votre place.',
+    steps: [
+      {id:'registre', label:'L’inventaire d’abord — sans lui, aucun montant',
+       action:'Recensez les systèmes d’IA en service, et pour chacun le modèle employé, l’unité de facturation, les volumes du mois ET LEUR SOURCE.',
+       gain:'Un chiffrage assis sur une déclaration que quelqu’un signe, plutôt que sur une moyenne de marché. C’est la moitié la plus coûteuse de la démarche, et elle sert aussi à l’empreinte.',
+       tip:'« Volume source » n’est pas un champ décoratif : un montant dont on ne peut pas dire d’où vient le volume n’est pas opposable en comité.'},
+      {id:'finops', label:'Le coût du parc, poste par poste',
+       action:'Lisez la COUVERTURE avant tout montant, puis le coût par système, par centre de coût et par service.',
+       gain:'La dépense réelle par système, calculée sur vos volumes — et la part du parc qui reste non instruite, dite en toutes lettres.',
+       tip:'Un coût calculé sur trois systèmes déclarés parmi douze n’est pas un budget, c’est un échantillon. Traitez la couverture avant d’arbitrer.'},
+      {id:'matrice', label:'Le risque, en euros et non en couleurs',
+       action:'Croisez la dépense avec l’exposition : un système coûteux à faible risque et un système modeste à haut risque n’appellent pas le même arbitrage.',
+       gain:'Un ordre de priorité qui tient devant un comité, parce qu’il ne repose ni sur le seul montant ni sur la seule criticité.',
+       tip:'Le montant ne classe pas à lui seul : c’est le croisement qui décide, et c’est lui qu’on vous demandera de justifier.'},
+      {id:'adoption', label:'Ce qui est payé et ce qui est employé',
+       action:'Rapprochez la dépense du taux d’usage réel : part d’équipe qui s’en sert, temps rendu, abandon à quatre-vingt-dix jours.',
+       gain:'La question qu’aucun tableau de coûts ne pose seul — un poste stable dont l’usage s’effondre est un renouvellement à refuser.',
+       tip:'Les valeurs d’adoption sont DÉCLARÉES, pas mesurées dans vos applications : elles valent ce que vaut la remontée terrain.'},
+      {id:'report', label:'Le dossier d’arbitrage',
+       action:'Constituez la pièce qui part en comité : périmètre, couverture, méthode, montants et ce qui n’est pas chiffré.',
+       gain:'Un document qui porte ses propres réserves — c’est ce qui le rend défendable, pas ce qui l’affaiblit.',
+       tip:'Joignez toujours la couverture au montant. Un total sans son périmètre se retourne contre celui qui le présente.'}
+    ]
+  },
+  {
+    id: 'rse_empreinte_ia',
+    icon: '\uD83C\uDF31',
+    role: 'RSE / reporting extra-financier — ce que l’IA pèse',
+    pitch: 'Vous devez rendre compte de l’empreinte d’un usage d’IA que vous n’exploitez pas vous-même. Ce parcours donne quatre indicateurs, leur couverture, et nomme le cinquième qui n’est pas servi.',
+    steps: [
+      {id:'registre', label:'Déclarer le périmètre avant de le peser',
+       action:'Inscrivez les systèmes d’IA à inclure, avec leur modèle, leurs volumes, et l’ajustement fin lorsqu’une campagne d’entraînement a eu lieu.',
+       gain:'Un périmètre écrit, opposable, et le même que celui du chiffrage financier — deux inventaires tenus à côté divergeraient dans le mois.',
+       tip:'L’ajustement fin demande cinq champs et ne s’estime pas : tant qu’il en manque un, la ligne reste incomplète et le dit, au lieu d’être comblée.'},
+      {id:'empreinte-ia', label:'Les quatre indicateurs, et celui qui manque',
+       action:'Lisez la couverture, puis l’électricité, les émissions, l’énergie primaire et l’eau ; enfin les trajectoires à l’horizon.',
+       gain:'Des valeurs dont chacune porte sa source et sa nature — texte réglementaire, relevé, ou hypothèse du cabinet.',
+       tip:'L’épuisement des ressources est déclaré ABSENT avec ce qu’il faudrait pour l’établir. Ne le remplacez pas par un ordre de grandeur trouvé ailleurs : un indicateur ACV sans facteur sourcé est un nombre sans auteur.'},
+      {id:'empreinte', label:'Distinguer votre empreinte de celle de vos outils',
+       action:'Comparez ce que pèse votre parc déclaré et ce que pèse la plateforme elle-même, mesurée appel par appel.',
+       gain:'La frontière que les rapports confondent le plus souvent : ce que vous consommez, et ce que consomme le service que vous employez.',
+       tip:'Ne les additionnez pas sans le dire : les périmètres diffèrent, et un auditeur vérifie d’abord cette ligne-là.'},
+      {id:'templates', label:'Le dossier de preuve',
+       action:'Rassemblez facteurs, millésimes, réserves d’emploi et méthodes — chaque chiffre doit remonter à sa source primaire.',
+       gain:'La traçabilité exigée en vérification, constituée au fil de l’eau plutôt que reconstituée sous contrainte.',
+       tip:'Le coefficient d’énergie primaire porte trois réserves et un point ouvert : recopiez-les, ne les résumez pas.'},
+      {id:'report', label:'Publier ce qui est établi, et seulement cela',
+       action:'Rédigez le volet environnemental en portant la couverture à côté de chaque total.',
+       gain:'Un rapport qui résiste à la question « sur quel périmètre ? », posée systématiquement.',
+       tip:'N’écrivez ni neutralité ni émissions évitées : la réglementation européenne sur les allégations environnementales s’y intéresse de près.'}
+    ]
+  },
+  {
+    id: 'dsi_socle_ia',
+    icon: '\uD83E\uDDF1',
+    role: 'DSI — le socle avant l’échelle',
+    pitch: 'Avant de savoir ce que l’IA coûte ou pèse, la question est de savoir si l’on est capable de la tenir. Ce parcours part de la maturité, pas de l’inventaire.',
+    steps: [
+      {id:'maturite', label:'Où en est réellement le socle',
+       action:'Passez l’audit sur les piliers données, compétences, infrastructure et organisation, en retenant votre section d’activité.',
+       gain:'Une grille de lecture extérieure sur un sujet que l’on évalue toujours avec optimisme en interne.',
+       tip:'Aucun socle sectoriel n’est choisi à votre place : c’est un arbitrage qui vous appartient, et la page le dit quand il manque.'},
+      {id:'rag', label:'La documentation, au même endroit pour tout le monde',
+       action:'Centralisez schémas, politiques de qualité et procédures d’exploitation dans la base de connaissance.',
+       gain:'Un point de référence unique pour les équipes techniques ET conformité — sans duplication, donc sans divergence.',
+       tip:'Structurez par domaine plutôt que par système : l’organisation survit aux systèmes.'},
+      {id:'ingenierie', label:'L’assistance au développement, sous règle',
+       action:'Fixez le périmètre du code assisté, les données qui peuvent sortir, et le marquage de ce qui est généré.',
+       gain:'Trois décisions qui, prises tard, se paient en reprise de code et en incertitude sur la propriété.',
+       tip:'Le marquage n’est pas une formalité : il conditionne ce que vous pourrez affirmer plus tard sur l’origine du code.'},
+      {id:'equipe', label:'Les compétences disponibles, et les manques',
+       action:'Cartographiez ce dont vous disposez réellement en interne : exploitation, données, référent conformité.',
+       gain:'Les goulots d’étranglement identifiés avant qu’ils ne bloquent une mise en production.',
+       tip:'Un référent polyvalent peut suffire au démarrage — à condition que son rôle soit écrit, pas supposé.'},
+      {id:'registre', label:'Inscrire ce qui tourne déjà',
+       action:'Recensez les systèmes en service, y compris ceux qui sont arrivés sans passer par vous.',
+       gain:'L’inventaire dont dépendent le chiffrage et l’empreinte — et la fin des systèmes que personne ne revendique.',
+       tip:'Un système absent du registre ne coûte rien et ne pèse rien dans les tableaux, ce qui ne veut pas dire qu’il est sans effet.'},
+      {id:'finops', label:'Ce que le socle coûte à l’usage',
+       action:'Lisez le coût une fois l’inventaire tenu, et regardez le dimensionnement des modèles.',
+       gain:'Le lien entre les choix techniques et la facture, sur des volumes que vous avez déclarés.',
+       tip:'Le dimensionnement est une heuristique, jamais un verdict : « ce modèle est trop gros » suppose de connaître la qualité attendue et ce qu’une erreur coûte.'}
+    ]
+  },
   {
     id: 'rgpd_conformite_init', icon: '\ud83d\udee1\ufe0f', role: 'Conformité RGPD — mise en place',
     pitch: 'Vous prenez la conformité RGPD à zéro. Ce parcours déroule le cycle complet, du registre jusqu\u2019à l\u2019indice de conformité.',
@@ -18958,6 +19074,14 @@ var GUIDED_PATHS = [
        calcul: "Aucun calcul nouveau : on LIT la nature de chaque valeur. « Classe » répond à « de quel ordre est un campus de ce type ? », jamais à « combien consomme ce site ? ».",
        livrable: "Export CSV des cas filtrés, et fiches site portant la nature de chaque valeur.",
        ia: "Aucun modèle. La nature de chaque valeur est posée par le référentiel, pas déduite à la volée."},
+      {id:'registre', label:'Inscrire les systèmes d’IA avant d’en peser un seul',
+       action:'Recensez au Registre les systèmes que vous comptez inclure au reporting, avec leur modèle, leur unité de facturation et leur volume du mois.',
+       gain:'L’étape suivante LIT ce registre : sans lui, elle affiche une couverture nulle et aucun chiffre. C’est le même inventaire qui sert au coût et à l’empreinte — un seul à tenir.',
+       tip:'Déclarez l’unité de facturation « requêtes » là où c’est le cas : les systèmes facturés au jeton sortiront avec un hébergement non compté, et le reporting devra le dire.',
+       sources: ["Registre des systèmes d’IA du client — saisi par vous, jamais collecté"],
+       calcul: "Aucun calcul : c’est la déclaration d’inventaire dont tout le reste dépend.",
+       livrable: "Registre exportable, et la couverture qui en découle.",
+       ia: "Aucun modèle."},
       {id:'empreinte-ia', label:'L’empreinte du parc d’IA, avec sa couverture',
        action:'Lisez les quatre indicateurs servis — électricité, émissions, énergie primaire, eau — et relevez la part du parc réellement déclarée avant de citer un total.',
        gain:'Des chiffres dont la couverture est écrite à côté : c’est la première chose qu’un commissaire demandera, avant la valeur elle-même.',
@@ -19113,6 +19237,11 @@ var GP_FAMILLES = [
      pose en premier chez un client, et aucun chemin ne la portait. */
   { titre: 'Cadrage & valeur des cas d\u2019usage',
     ids: ['consultant_ia_cadrage'] },
+  /* LES TROIS LISENT LE MÊME INVENTAIRE, ET C'EST CE QUI EN FAIT UNE FAMILLE.
+     Ni une obligation ni un organigramme : une ressource commune — le Registre
+     des systèmes d'IA — lue sous trois angles qui ne se remplacent pas. */
+  { titre: 'Coût, empreinte et socle du parc d\u2019IA',
+    ids: ['daf_cout_ia', 'rse_empreinte_ia', 'dsi_socle_ia'] },
   { titre: 'Gouvernance & IA Act',
     ids: ['directeur_programme', 'grc_senior', 'risk_manager', 'ceo', 'cdo', 'caio'] },
   { titre: 'Protection des données (RGPD)',
