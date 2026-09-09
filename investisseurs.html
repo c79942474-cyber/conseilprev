@@ -10,10 +10,33 @@
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap"></noscript>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--pm:#8b5cf6;--pl:#b48af7;--pp:#d4baff;--pf:#d946ef;--teal:#5eead4;--wh:#f8f4ff;--mu:rgba(212,186,255,.52);--bdr:rgba(180,138,247,.18);--blue:#6366f1;--amber:#f0b429}
+:root{--pm:#8b5cf6;--pl:#b48af7;--pp:#d4baff;--pf:#ef9ffb;--teal:#5eead4;--wh:#f8f4ff;--mu:#b9a6d8;--bdr:rgba(180,138,247,.18);--blue:#6366f1;--amber:#f0b429}
+/* ── LA LISIBILITÉ SUR UNE PHOTO ─────────────────────────────────────────
+   LE DÉFAUT MESURÉ. Le fond de page est une PHOTO — `hero-bg.jpg`, dont la
+   luminance médiane vaut 0,385 et dont les pointes montent à 0,98. À 30 %
+   d'opacité et avec des panneaux transparents à 95 %, le texte se retrouvait
+   posé sur l'image : 4,24:1 pour le corps sur les zones claires, et 2,29:1
+   pour les explications grises. En dessous du seuil AA, et illisible à l'œil.
+
+   CE QUI LE CORRIGE, ET DANS QUEL ORDRE.
+   1. La photo recule à 16 % — ce qui sauve le titre, le chapeau et les
+      onglets, qui ne sont dans AUCUN panneau et n'ont donc rien d'autre.
+   2. Les panneaux deviennent un SOL et non un voile : rgba(20,13,51,.88).
+      Sous une photo dont on ne maîtrise pas les pixels, seule l'opacité tient.
+   3. Le gris cesse d'être une transparence. `--mu` valait
+      rgba(212,186,255,.52) : une couleur à 52 % laisse passer ce qu'il y a
+      dessous, donc la photo. Elle devient une couleur pleine.
+
+   4. LE SUR-TITRE CHANGE DE MAGENTA. #d946ef ne tenait que 3,57:1 hors
+      panneau — une couleur saturée est sombre, quel que soit son éclat perçu.
+      #ef9ffb monte à 6,49:1 et reste du même magenta.
+
+   MESURÉ APRÈS, SUR LA PIRE ZONE DE LA PHOTO : corps 10,06:1, titre 15,89:1,
+   gris 7,80:1, chapeau hors panneau 7,22:1. `tests/test_investisseurs_lisible.py`
+   recalcule ces valeurs depuis la feuille et depuis l'image elle-même. */
 html{scroll-behavior:smooth}
 body{font-family:"DM Sans",sans-serif;background:linear-gradient(160deg,#0d0825,#110a2e,#0e0820);color:var(--wh);min-height:100vh}
-body::before{content:"";position:fixed;inset:0;background-image:url("/hero-bg.jpg");background-size:cover;background-position:center 55%;background-attachment:fixed;opacity:.30;z-index:-2;pointer-events:none}
+body::before{content:"";position:fixed;inset:0;background-image:url("/hero-bg.jpg");background-size:cover;background-position:center 55%;background-attachment:fixed;opacity:.16;z-index:-2;pointer-events:none}
 nav{position:sticky;top:0;z-index:100;background:rgba(10,6,32,.93);backdrop-filter:blur(24px);border-bottom:1px solid var(--bdr);padding:13px 28px;display:flex;align-items:center;gap:14px}
 nav .lg{font-family:"Cormorant Garamond",serif;font-size:21px;font-weight:700;letter-spacing:.02em;color:var(--wh);text-decoration:none}
 nav .lg span{color:var(--pf)}
@@ -34,7 +57,7 @@ h1{font-family:"Cormorant Garamond",serif;font-size:clamp(30px,5vw,46px);font-we
 .panneau{padding-top:28px}
 .panneau[hidden]{display:none}
 
-.bloc{background:rgba(139,92,246,.05);border:1px solid var(--bdr);border-radius:12px;padding:20px 22px;margin-bottom:16px}
+.bloc{background:rgba(20,13,51,.88);border:1px solid var(--bdr);border-radius:12px;padding:20px 22px;margin-bottom:16px}
 .bloc h2{font-family:"Cormorant Garamond",serif;font-size:23px;font-weight:600;margin-bottom:9px}
 .bloc h3{font-size:14px;font-weight:500;color:var(--teal);margin:16px 0 6px;letter-spacing:.01em}
 .bloc p{font-size:14px;line-height:1.72;color:var(--pp);margin-bottom:10px;max-width:74ch}
@@ -47,13 +70,13 @@ h1{font-family:"Cormorant Garamond",serif;font-size:clamp(30px,5vw,46px);font-we
 .docs{list-style:none;display:grid;gap:9px;margin-top:6px}
 .docs li{display:flex;gap:11px;align-items:baseline;font-size:14px;line-height:1.6}
 .docs .quoi{color:var(--mu);font-size:12.5px}
-.reserve{border-left:3px solid var(--amber);background:rgba(240,180,41,.07);padding:14px 16px;border-radius:0 8px 8px 0;margin-bottom:16px}
+.reserve{border-left:3px solid var(--amber);background:rgba(28,19,40,.90);padding:14px 16px;border-radius:0 8px 8px 0;margin-bottom:16px}
 .reserve p{font-size:13.5px;line-height:1.68;color:var(--pp);margin-bottom:8px;max-width:74ch}
 .reserve p:last-child{margin-bottom:0}
 .reserve b{color:var(--wh)}
 .src{font-family:"Space Mono",monospace;font-size:11px;line-height:1.6;color:var(--mu);margin-top:12px}
 .src a{color:var(--mu);border-bottom-color:rgba(212,186,255,.2)}
-.ft-mini{border-top:1px solid var(--bdr);padding:16px 28px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;font-size:12px;color:var(--mu)}
+.ft-mini{background:rgba(20,13,51,.88);border-top:1px solid var(--bdr);padding:16px 28px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;font-size:12px;color:var(--mu)}
 .ft-mini a{color:var(--pp);text-decoration:none}
 @media (max-width:620px){.fiche{grid-template-columns:1fr;gap:2px 0}.fiche dd{margin-bottom:9px}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
