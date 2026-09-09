@@ -20754,14 +20754,60 @@ document.addEventListener('keydown', function(e){
       + (encart ? '<b>' + ech(encart) + '</b> ' : '') + ech(note) + '</div></div>';
   }
 
-  window.naceRepeindre = function(){ if(NACE_CODE) window.naceChoisir(NACE_CODE); };
+  /* LE PEINTRE ET LE GESTE SONT SÉPARÉS, ET C'EST STRUCTUREL. `matSelect`
+     repeint ce bloc pour que les deux rangées s'accordent ; si le peintre
+     appelait `matSelect` à son tour, on aurait une boucle infinie dès le
+     premier choix. `peindre` ne fait que dessiner ; `naceChoisir`, appelé par
+     le seul geste du client sur la liste, dessine PUIS applique. */
+  window.naceRepeindre = function(){ if(NACE_CODE) peindre(NACE_CODE); };
+
+  /* LA RANGÉE DES HUIT SE REPLIE QUAND LA SECTION A DÉCIDÉ, et pas avant.
+     Tant qu'aucune activité n'est déclarée, elle est le SEUL moyen de choisir
+     un profil : la fermer d'office priverait de commande celui qui arrive sur
+     la page. Une fois la section connue et le profil appliqué, elle n'est
+     plus qu'un recours — et deux commandes également visibles pour une seule
+     décision, c'est ce qui faisait lire deux fois les mêmes boutons. */
+  function replierLesHuit(replier){
+    var d = document.getElementById('mat-secteurs-repli');
+    if(d) d.open = !replier;
+  }
+
+  //: Le ou les profils que la section désigne, du plus au moins direct.
+  function candidats(s){
+    var princ = s.principaux || [], part = s.partiels || [];
+    return princ.length ? princ : part;
+  }
 
   window.naceChoisir = function(code){
+    NACE_CODE = code || '';
+    peindre(code);
+    if(!code) return;
+    var j = window.__nace;
+    var s = j && j.sections.filter(function(x){ return x.code === code; })[0];
+    if(!s) return;
+    /* LA SÉLECTION SUIT LA DÉCLARATION QUAND ELLE NE DEMANDE AUCUN ARBITRAGE.
+       Le client vient de dire « mon activité est C » ; le profil de C est
+       « Industrie ». L'appliquer n'est pas choisir « le moins faux » à sa
+       place — c'est la conséquence directe de ce qu'il a déclaré. Sans cela,
+       l'écran annonçait sa section au-dessus d'un audit resté sur le profil
+       par défaut, et il fallait re-cliquer pour les accorder.
+
+       DEUX CAS OÙ L'ON S'ABSTIENT, et ce sont les seuls : la section K
+       désigne DEUX profils principaux (édition logicielle et télécoms) —
+       trancher serait arbitrer ; et quatorze sections n'en désignent aucun,
+       ce que `secteurs_nace` refuse explicitement de combler. */
+    var c = candidats(s);
+    if(c.length !== 1){ replierLesHuit(false); return; }
+    replierLesHuit(true);
+    var courant = window.matSecteurCourant ? window.matSecteurCourant() : null;
+    if(c[0].cle !== courant && window.matSelect) window.matSelect(c[0].cle);
+  };
+
+  function peindre(code){
     var zone = document.getElementById('mat-nace-reponse');
     var j = window.__nace;
     if(!zone || !j) return;
-    NACE_CODE = code || '';
-    if(!code){ zone.innerHTML = ''; return; }
+    if(!code){ zone.innerHTML = ''; replierLesHuit(false); return; }
     var s = j.sections.filter(function(x){ return x.code === code; })[0];
     if(!s){ zone.innerHTML = ''; return; }
     var courant = window.matSecteurCourant ? window.matSecteurCourant() : null;
@@ -20786,9 +20832,13 @@ document.addEventListener('keydown', function(e){
          cocher « Télécom » : les équipementiers réseau relèvent bien de C,
          mais « Télécom » n'est pas le profil de l'industrie manufacturière. */
       if(princ.length){
-        html += '<div style="margin-top:10px;font-size:12px"><b>Profil'
-          + (princ.length > 1 ? 's' : '') + ' principal'
-          + (princ.length > 1 ? 'aux' : '') + ' de cette section</b></div>'
+        /* « principal » NE SE PLURALISE PAS EN AJOUTANT « aux ». La première
+           version concaténait les deux et écrivait « Profils principalaux »
+           dès qu'une section en désignait deux — visible en recette sur la
+           section K. Les deux formes sont écrites en toutes lettres. */
+        html += '<div style="margin-top:10px;font-size:12px"><b>'
+          + (princ.length > 1 ? 'Profils principaux' : 'Profil principal')
+          + ' de cette section</b></div>'
           + princ.map(function(x){ return bouton(x.cle, x.note, '', courant); }).join('');
       }
       if(part.length){

@@ -3609,8 +3609,10 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
        avec le même dessin et la même action, sans qu'aucun libellé n'explique
        qu'il s'agit du même bouton. Le titre rend la relation lisible : au-
        dessus une recommandation motivée, ici le choix complet. -->
-  <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Ou choisir directement parmi les huit profils relevés</div>
-  <div class="mat-sector-bar" id="mat-sector-bar"></div>
+  <details id="mat-secteurs-repli" open>
+    <summary style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;cursor:pointer">Ou choisir directement parmi les huit profils relevés</summary>
+    <div class="mat-sector-bar" id="mat-sector-bar"></div>
+  </details>
   <div style="text-align:right;margin-bottom:8px"><button class="mat-export-btn" style="background:#1C5A8A;color:#fff" onclick="histoSaveMaturite()" title="Enregistrer cet audit de maturite dans l historique persistant et tracable (RGPD).">💾 Enregistrer dans l’historique</button></div>
   <div id="mat-content"></div>
 </div>

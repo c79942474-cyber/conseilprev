@@ -159,17 +159,55 @@ var ecrit = '';
 var zone = {set innerHTML(v){ ecrit = v; }, get innerHTML(){ return ecrit; }};
 var document = {getElementById: function(id){
   return id === 'mat-nace-reponse' ? zone : null; }};
-var window = {MAT_SECTORS: %s, matSecteurCourant: function(){ return %s; }};
+var choisis = [];
+var replis = [];
+var window = {MAT_SECTORS: %s, matSecteurCourant: function(){ return %s; },
+              matSelect: function(k){ choisis.push(k); }};
+document.getElementById = (function(vrai){
+  return function(id){
+    if(id === 'mat-secteurs-repli')
+      return {set open(v){ replis.push(v); }, get open(){ return true; }};
+    return vrai(id);
+  };
+})(document.getElementById);
 %s
 window.__nace = {sections: [%s], a_renseigner: {x: 'y'}};
 window.naceChoisir(%s);
-console.log(JSON.stringify({html: ecrit}));
+console.log(JSON.stringify({html: ecrit, choisis: choisis, replis: replis}));
 """ % (json.dumps({k: {"icon": "•", "label": k.upper()}
                    for k in N.PROFILS_SENTINEL}),
        json.dumps(courant), _peintre(), json.dumps(section), json.dumps(code))
     r = subprocess.run(["node", "-e", code_js], capture_output=True, text=True)
     assert r.returncode == 0, "peintre inévaluable : %s" % r.stderr[-800:]
     return json.loads(r.stdout)["html"]
+
+
+def _geste(code, courant, section):
+    """LE GESTE DU CLIENT, pas le simple repeint. `naceChoisir` est ce que la
+    liste déroulante appelle ; c'est la seule porte qui a le droit d'appliquer
+    un profil. Le harnais rend ce qui a été CHOISI, pour mesurer quand."""
+    code_js = """
+var ecrit = '';
+var zone = {set innerHTML(v){ ecrit = v; }, get innerHTML(){ return ecrit; }};
+var choisis = [];
+var replis = [];
+var document = {getElementById: function(id){
+  if(id === 'mat-nace-reponse') return zone;
+  if(id === 'mat-secteurs-repli')
+    return {set open(v){ replis.push(v); }, get open(){ return true; }};
+  return null; }};
+var window = {MAT_SECTORS: %s, matSecteurCourant: function(){ return %s; },
+              matSelect: function(k){ choisis.push(k); }};
+%s
+window.__nace = {sections: [%s], a_renseigner: {x: 'y'}};
+window.naceChoisir(%s);
+console.log(JSON.stringify({html: ecrit, choisis: choisis, replis: replis}));
+""" % (json.dumps({k: {"icon": "\u2022", "label": k.upper()}
+                   for k in N.PROFILS_SENTINEL}),
+       json.dumps(courant), _peintre(), json.dumps(section), json.dumps(code))
+    r = subprocess.run(["node", "-e", code_js], capture_output=True, text=True)
+    assert r.returncode == 0, "peintre inévaluable : %s" % r.stderr[-800:]
+    return json.loads(r.stdout)
 
 
 def _section(code):
@@ -202,6 +240,19 @@ def test_un_profil_etranger_a_la_section_est_SIGNALE():
         "un profil qui relève bien de la section est signalé à tort")
 
 
+def test_le_pluriel_de_PROFIL_PRINCIPAL_est_ecrit_correctement():
+    """RELEVÉ EN RECETTE SUR LA SECTION K, qui désigne deux profils : l'écran
+    affichait « Profils principalaux ». Le pluriel était fabriqué en collant
+    « aux » à « principal ». Une seule section sur vingt-deux le déclenche —
+    c'est exactement le genre de faute qu'on ne voit qu'en exécutant."""
+    deux = _peindre("K", None, _section("K"))
+    assert "principaux" in deux and "principalaux" not in deux, deux[:400]
+    un = _peindre("C", None, _section("C"))
+    assert "Profil principal de cette section" in un, un[:400]
+    assert "Profils" not in un.split("de cette section")[0], (
+        "le singulier porte une marque de pluriel")
+
+
 def test_le_profil_principal_est_peint_AVANT_les_tranches():
     """L'ordre est la moitié du message : montrer « Télécom » avant
     « Industrie » pour la section C invite à cocher le mauvais."""
@@ -229,19 +280,74 @@ def test_une_section_sans_profil_explique_au_lieu_de_rester_vide():
         "un bloc du peintre est masqué en ligne : émis, mais illisible")
 
 
-def test_le_profil_n_est_JAMAIS_change_d_office():
-    """LA RÈGLE QUI TIENT L'ARBITRAGE DU MODULE. « Le moins faux » appartient
-    au client. Un `matSelect` appelé depuis le peintre le choisirait à sa
-    place, en silence, et l'audit démarrerait sur un secteur qu'il n'a pas
-    retenu — ce que `secteurs_nace` refuse explicitement de faire."""
-    d = JS.index("window.naceChoisir = function(code){")
-    f = JS.index("\n    zone.innerHTML = html;\n  };", d)
+def test_LE_PEINTRE_ne_choisit_jamais_de_profil():
+    """LA MOITIÉ DE LA GARDE QUI NE BOUGE PAS. `matSelect` repeint le bloc
+    NACE pour que les deux rangées s'accordent ; si le peintre appliquait un
+    profil à son tour, la première sélection partirait en boucle infinie. Le
+    peintre DESSINE, il n'applique pas."""
+    d = JS.index("  function peindre(code){")
+    f = JS.index("\n    zone.innerHTML = html;\n  }", d)
     corps = JS[d:f]
     appels = re.findall(r"matSelect\([^)]*\)", corps)
     # Seuls les `onclick` en attendent un : ce sont des gestes de l'utilisateur.
     assert not [a for a in appels if "\\'" not in a], (
-        "le peintre appelle matSelect en dehors d'un onclick : il choisit le "
-        "profil à la place du client — %s" % appels)
+        "le peintre applique un profil : la repeinture boucle, et le choix se "
+        "fait sans geste du client — %s" % appels)
+
+
+def test_le_profil_SUIT_la_section_quand_elle_n_en_designe_qu_UN():
+    """CE QUE CETTE RÈGLE A REMPLACÉ, ET POURQUOI. La version précédente
+    interdisait TOUT appel à `matSelect` hors d'un clic, au motif que « le
+    moins faux » appartient au client. Le motif était juste, sa portée trop
+    large : appliquer l'UNIQUE profil qu'une section désigne n'est pas choisir
+    à la place du client, c'est la conséquence directe de ce qu'il vient de
+    déclarer. L'écran annonçait sinon « votre activité : C » au-dessus d'un
+    audit resté sur le profil par défaut, et il fallait re-cliquer.
+
+    LA RÈGLE MESURE DONC LE *QUAND*, pas le *si* — en exécutant les trois cas."""
+    # UN SEUL CANDIDAT → le profil suit.
+    r = _geste("C", "telecom", _section("C"))
+    assert r["choisis"] == ["industrie"], (
+        "la section C désigne « industrie » et un seul profil : il devait être "
+        "appliqué, or %s" % r["choisis"])
+    # DÉJÀ LE BON → on n'applique pas deux fois, ce qui relancerait le calcul.
+    r = _geste("C", "industrie", _section("C"))
+    assert r["choisis"] == [], (
+        "le profil déjà en vigueur est ré-appliqué : les réponses seraient "
+        "réinitialisées sans raison")
+
+
+@pytest.mark.parametrize("code,pourquoi", [
+    ("K", "deux profils principaux — édition logicielle et télécoms : "
+          "trancher serait arbitrer"),
+    ("A", "aucun profil relevé — c'est ce que le module refuse de combler"),
+])
+def test_le_profil_n_est_PAS_change_quand_la_section_n_est_pas_univoque(code, pourquoi):
+    """LES DEUX CAS OÙ L'ABSTENTION TIENT, et ce sont les seuls. Sans témoin
+    négatif, la règle précédente se contenterait d'un `matSelect` appelé
+    toujours — et l'audit démarrerait sur un secteur que personne n'a retenu."""
+    r = _geste(code, "telecom", _section(code))
+    assert r["choisis"] == [], (
+        "section %s : un profil a été appliqué alors que %s — %s"
+        % (code, pourquoi, r["choisis"]))
+
+
+def test_la_rangee_des_huit_se_replie_QUAND_la_section_a_decide():
+    """Tant qu'aucune activité n'est déclarée, la rangée est le SEUL moyen de
+    choisir : la fermer d'office priverait de commande celui qui arrive. Une
+    fois la section connue et le profil appliqué, elle n'est plus qu'un
+    recours — et deux commandes également visibles pour une seule décision,
+    c'est ce qui faisait lire deux fois les mêmes boutons."""
+    # `replis` ENREGISTRE `open`, PAS « replié » — les deux sont inverses, et
+    # ma première version comparait au mauvais sens : elle réclamait True là
+    # où replier pose open=false. Une règle qui se trompe de polarité échoue
+    # sur du code juste, ou pire, passe sur du code faux.
+    assert _geste("C", "telecom", _section("C"))["replis"] == [False], (
+        "la rangée reste OUVERTE alors que la section a décidé")
+    for code in ("K", "A"):
+        assert _geste(code, "telecom", _section(code))["replis"] == [True], (
+            "section %s : la rangée se replie alors que le choix reste à "
+            "faire — le client perdrait sa seule commande" % code)
 
 
 # ══════════════════════════════════════════════════════════════════════════
