@@ -68,7 +68,12 @@ def test_une_section_separe_ses_profils_PRINCIPAUX_de_ses_tranches():
     r = N.choisir("C")
     assert [x["cle"] for x in r["principaux"]] == ["industrie"], r["principaux"]
     partiels = {x["cle"]: x["principale"] for x in r["partiels"]}
-    assert partiels == {"sante": "R", "telecom": "K", "transport": "H"}, partiels
+    # « agro » S'AJOUTE AUX TROIS, ET C'EST DÉLIBÉRÉ : l'annexe II de NIS2 ne
+    # vise pas la production primaire mais bien la transformation alimentaire
+    # INDUSTRIELLE, qui se range en C. Le profil a donc A pour section
+    # principale et C pour tranche — exactement la convention des trois autres.
+    assert partiels == {"agro": "A", "sante": "R",
+                        "telecom": "K", "transport": "H"}, partiels
     # LES DEUX ENSEMBLES SONT DISJOINTS ET COUVRENT TOUT : sans quoi un profil
     # disparaîtrait de l'écran, ou y figurerait deux fois.
     for code in [s["code"] for s in N.SECTIONS]:
@@ -265,11 +270,14 @@ def test_le_profil_principal_est_peint_AVANT_les_tranches():
     assert "Principalement en K" in html and "Principalement en H" in html, html[-500:]
 
 
-def test_une_section_sans_profil_explique_au_lieu_de_rester_vide():
-    """Les treize sections sans profil relevé sont la moitié de la
-    nomenclature. Un bloc vide y serait pire qu'un refus."""
+def test_une_section_a_socle_de_cadre_explique_au_lieu_de_rester_vide():
+    """LA RÈGLE A SUIVI UN CHANGEMENT D'ÉTAT DE FAIT, et le motif est écrit ici.
+    Elle visait les treize sections SANS PROFIL — plus de la moitié de la
+    nomenclature — dont l'écran devait dire pourquoi il ne proposait rien. Ces
+    treize ont désormais un profil ; ce qu'il reste à expliquer est que leur
+    socle n'est pas calibré. Un bloc vide y serait toujours pire qu'un refus."""
     html = _peindre("A", None, _section("A"))
-    assert "aucun profil sectoriel n" in html, html[:300]
+    assert "socle" in html, html[:300]
     assert "<li>" in html, "ce qu'il faudrait pour l'établir n'est plus listé"
     # ÉMIS NE VEUT PAS DIRE LU. Le harnais node n'applique aucune feuille de
     # style : une liste masquée en `display:none` lui paraît présente, alors
@@ -317,19 +325,57 @@ def test_le_profil_SUIT_la_section_quand_elle_n_en_designe_qu_UN():
         "réinitialisées sans raison")
 
 
-@pytest.mark.parametrize("code,pourquoi", [
-    ("K", "deux profils principaux — édition logicielle et télécoms : "
-          "trancher serait arbitrer"),
-    ("A", "aucun profil relevé — c'est ce que le module refuse de combler"),
-])
-def test_le_profil_n_est_PAS_change_quand_la_section_n_est_pas_univoque(code, pourquoi):
-    """LES DEUX CAS OÙ L'ABSTENTION TIENT, et ce sont les seuls. Sans témoin
-    négatif, la règle précédente se contenterait d'un `matSelect` appelé
-    toujours — et l'audit démarrerait sur un secteur que personne n'a retenu."""
-    r = _geste(code, "telecom", _section(code))
+def test_l_arbitrage_ENTRE_CANDIDATS_reste_au_client():
+    """L'ABSTENTION S'EST RÉDUITE À UN SEUL CAS, ET C'EST LE BON — le motif est
+    écrit ici parce que la règle vient de perdre la moitié de son périmètre.
+
+    ELLE COUVRAIT DEUX CAS. Le premier tient toujours : la section K désigne
+    l'édition logicielle ET les télécoms, et trancher entre elles serait
+    arbitrer à la place du client. Le second — « aucun profil relevé » — a
+    disparu avec le défaut qu'il abritait : une section sans profil laissait
+    l'audit sur le SECTEUR PRÉCÉDENT. S'abstenir n'y était pas neutre, c'était
+    laisser en place l'audit d'un autre métier.
+
+    CE QUI EST MESURÉ ICI : quand le profil courant est DÉJÀ l'un des candidats
+    de la section, on n'y touche pas. Le client a choisi, on ne rechoisit pas
+    pour lui."""
+    # K désigne « it » et « telecom ». Le courant est « telecom » : il est
+    # parmi les candidats, donc rien ne bouge.
+    r = _geste("K", "telecom", _section("K"))
     assert r["choisis"] == [], (
-        "section %s : un profil a été appliqué alors que %s — %s"
-        % (code, pourquoi, r["choisis"]))
+        "un profil a été appliqué alors que le courant était déjà candidat : %s"
+        % (r["choisis"],))
+
+
+def test_LE_DEFAUT_CORRIGE_l_audit_ne_reste_JAMAIS_sur_un_secteur_etranger():
+    """LE DÉFAUT QUE CE LOT CORRIGE, MESURÉ SUR LES VINGT-DEUX SECTIONS.
+
+    Un client en construction choisissait F, lisait « aucun profil relevé » —
+    et l'audit affiché juste en dessous restait celui des télécoms : ses
+    systèmes, ses régimes, son budget. Rien ne le démentait. Treize sections
+    sur vingt-deux étaient dans ce cas.
+
+    LA RÈGLE PARCOURT TOUTE LA NOMENCLATURE plutôt que deux cas choisis : c'est
+    la seule forme qui attrape la quatorzième section le jour où elle arrive.
+    """
+    etranger = []
+    for s in N.SECTIONS:
+        code = s["code"]
+        candidats = [x["cle"] for x in N.choisir(code)["principaux"]] + \
+                    [x["cle"] for x in N.choisir(code)["partiels"]]
+        assert candidats, "section %s sans aucun candidat" % code
+        # On part d'un profil qui n'est PAS candidat de la section, pour que
+        # l'abstention se voie si elle a lieu.
+        depart = "telecom" if "telecom" not in candidats else "energie"
+        if depart in candidats:
+            continue
+        r = _geste(code, depart, _section(code))
+        applique = r["choisis"][-1] if r["choisis"] else depart
+        if applique not in candidats:
+            etranger.append((code, applique))
+    assert not etranger, (
+        "l'audit reste sur un profil étranger à la section choisie : %r"
+        % (etranger,))
 
 
 def test_la_rangee_des_huit_se_replie_QUAND_la_section_a_decide():
@@ -342,12 +388,17 @@ def test_la_rangee_des_huit_se_replie_QUAND_la_section_a_decide():
     # ma première version comparait au mauvais sens : elle réclamait True là
     # où replier pose open=false. Une règle qui se trompe de polarité échoue
     # sur du code juste, ou pire, passe sur du code faux.
-    assert _geste("C", "telecom", _section("C"))["replis"] == [False], (
-        "la rangée reste OUVERTE alors que la section a décidé")
-    for code in ("K", "A"):
-        assert _geste(code, "telecom", _section(code))["replis"] == [True], (
-            "section %s : la rangée se replie alors que le choix reste à "
-            "faire — le client perdrait sa seule commande" % code)
+    for code in ("C", "A"):
+        # « A » A CHANGÉ DE CAMP, et c'est la conséquence directe du lot : elle
+        # désignait zéro profil, elle en désigne un seul. Une section qui a
+        # décidé n'a plus besoin de la rangée.
+        assert _geste(code, "telecom", _section(code))["replis"] == [False], (
+            "section %s : la rangée reste OUVERTE alors que la section a "
+            "décidé" % code)
+    # K reste le cas où la rangée SERT : deux candidats, l'arbitrage au client.
+    assert _geste("K", "telecom", _section("K"))["replis"] == [True], (
+        "la rangée se replie alors que le choix reste à faire — le client "
+        "perdrait sa seule commande")
 
 
 # ══════════════════════════════════════════════════════════════════════════

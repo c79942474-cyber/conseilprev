@@ -216,31 +216,96 @@ def _parcourir(objet, cle=None):
         yield cle, objet
 
 
-def test_LE_POINT_QUI_DECIDE_aucune_section_sans_profil_n_en_recoit_un():
-    """Fabriquer un socle de piliers, un budget et une durée pour les treize
-    sections non couvertes donnerait vingt-deux entrées d'apparence homogène
-    dont neuf seraient relevées et treize devinées — et rien, à l'écran, ne
-    permettrait de les distinguer. La règle exige que ces treize sortent
-    VIDES de profil, et qu'elles disent pourquoi."""
+def _profils_de_l_audit():
+    """MAT_SECTORS tel que l'audit le porte, décodé.
+
+    LE PREMIER JET DÉCOUPAIT jusqu'au dernier `}` du bloc et emportait le code
+    qui suit — `json.loads` levait « Extra data ». Le découpage se fait donc
+    exactement comme dans la page : de l'affectation au `};` qui la ferme.
+    """
+    d = MOTEUR.index("var MAT_SECTORS = ")
+    f = MOTEUR.index("};", d) + 1
+    profils = json.loads(MOTEUR[d + len("var MAT_SECTORS = "):f])
+    assert len(profils) == len(N.PROFILS_SENTINEL), (
+        "l'extracteur n'a pas pris le bloc entier : %d profils lus pour %d "
+        "déclarés" % (len(profils), len(N.PROFILS_SENTINEL)))
+    return profils
+
+
+def test_LE_POINT_QUI_DECIDE_aucun_profil_de_cadre_ne_porte_de_chiffre():
+    """CETTE RÈGLE A CHANGÉ DE LETTRE ET GARDÉ SON INTENTION — le motif est
+    écrit ici parce qu'un changement d'attente non expliqué se lit comme un
+    relâchement.
+
+    ELLE DISAIT : « treize sections doivent sortir VIDES de profil ». Elle
+    protégeait contre la fabrication d'un socle, d'un budget et d'une durée
+    pour des secteurs non observés. Mais sa lettre avait un coût qu'on n'avait
+    pas vu : une section sans profil laissait l'audit affiché sur le SECTEUR
+    PRÉCÉDENT. Un client en construction lisait l'audit des télécoms — ses
+    systèmes, ses régimes, son budget — sans que rien ne le démente. Ne rien
+    proposer n'était donc pas neutre : c'était laisser en place quelque chose
+    de faux.
+
+    ELLE DIT MAINTENANT, et c'est plus exigeant : un profil ne porte un socle,
+    un budget ou une durée QUE s'il se déclare relevé. Les vingt-deux sections
+    reçoivent un profil ; les treize dont seul le RÉGIME est lu dans les textes
+    portent `socle: "cadre"`, un socle vide et aucun chiffre. L'ancienne lettre
+    ne couvrait que treize sections ; celle-ci couvre les vingt et un profils,
+    y compris ceux qu'on ajoutera après.
+    """
     c = N.couverture()
-    assert c["total"] == 22 and c["avec_profil"] == 9 and c["sans_profil"] == 13
-    for code in c["codes_sans_profil"]:
+    assert c["total"] == 22 and c["sans_profil"] == 0, (
+        "une section sans profil laisserait l'audit sur le secteur précédent")
+    assert len(c["profils_releves"]) == 8 and len(c["profils_cadre"]) == 13
+    for code in c["codes_socle_cadre"]:
         r = N.choisir(code)
-        assert r["profils"] == [], code
-        assert r["motif"] and "aucun profil" in r["motif"], code
-        # LA RÈGLE MESURE LES CLÉS ET LES VALEURS, PAS LES MOTS. Un premier jet
-        # cherchait « budget » dans le JSON entier et tombait sur la PROSE qui
-        # explique qu'il n'y en a pas — une règle rouge pour une raison sans
-        # rapport avec ce qu'elle prétendait mesurer. Ce qui se mesure est
-        # qu'aucune clé de profil n'existe, et qu'AUCUN NOMBRE ne traverse :
-        # un socle, un budget ou une durée inventés seraient forcément
-        # numériques.
+        assert r["profils"], code
+        assert r["socle"] == "cadre", code
+        assert r["motif"] and "socle" in r["motif"], code
+        # LA RÈGLE MESURE LES VALEURS, PAS LES MOTS. Un premier jet cherchait
+        # « budget » dans le JSON entier et tombait sur la PROSE qui explique
+        # qu'il n'y en a pas — une règle rouge pour une raison sans rapport
+        # avec ce qu'elle prétendait mesurer. Ce qui se mesure est qu'aucun
+        # NOMBRE ne traverse : un socle, un budget ou une durée inventés
+        # seraient forcément numériques.
         for cle, valeur in _parcourir(r):
-            assert cle not in ("pillars", "budget", "duree", "specifics",
-                               "systems", "regs"), (code, cle)
             assert not isinstance(valeur, (int, float)) or isinstance(valeur, bool), (
-                "%s : la section porte une valeur chiffrée (%s = %r) alors "
-                "qu'aucun profil n'est relevé pour elle" % (code, cle, valeur))
+                "%s : la section porte une valeur chiffrée (%s = %r) alors que "
+                "son socle n'est pas relevé" % (code, cle, valeur))
+
+
+def test_LE_SOCLE_DECLARE_ICI_est_CELUI_QUE_L_AUDIT_PORTE():
+    """DEUX DÉCLARATIONS, UNE SEULE VÉRITÉ. Le module dit quels profils sont
+    relevés ; l'audit, écrit en JavaScript, le dit aussi. Si les deux
+    divergeaient, l'écran afficherait un budget pour un profil que le module
+    annonce sans socle — ou tairait le budget d'un profil relevé. Aucune des
+    deux erreurs ne lèverait quoi que ce soit."""
+    vus = {c: p.get("socle") for c, p in _profils_de_l_audit().items()}
+    ecarts = {k: (p["socle"], vus.get(k)) for k, p in N.PROFILS_SENTINEL.items()
+              if vus.get(k) != p["socle"]}
+    assert not ecarts, "socle divergent (module, audit) : %r" % ecarts
+
+
+def test_un_profil_de_cadre_NE_PORTE_NI_socle_NI_budget_NI_duree():
+    """C'est le versant exécutable de la règle qui décide : elle mesure ici la
+    STRUCTURE SERVIE, pas la déclaration. Un profil qui se dit « cadre » tout
+    en portant un budget donnerait à l'écran un montant que rien ne fonde."""
+    profils = _profils_de_l_audit()
+    for cle, prof in profils.items():
+        if prof.get("socle") != "cadre":
+            continue
+        assert prof["pillars"] == {}, cle
+        assert prof["budget"] is None, cle
+        assert prof["duree"] is None, cle
+    # ET LE TÉMOIN INVERSE : sans lui, la règle passerait tout aussi bien si
+    # PLUS AUCUN profil n'était relevé — c'est-à-dire si le socle disparaissait
+    # partout.
+    releves = [c for c, p in profils.items() if p.get("socle") == "releve"]
+    assert releves, "plus aucun profil relevé : la règle ne mesurerait plus rien"
+    for cle in releves:
+        assert profils[cle]["pillars"], cle
+        assert isinstance(profils[cle]["budget"], (int, float)), cle
+        assert isinstance(profils[cle]["duree"], (int, float)), cle
 
 
 def test_une_section_sans_profil_ne_recoit_pas_un_repli_choisi_a_sa_place():
@@ -378,10 +443,17 @@ setTimeout(function(){
 """
 
 
-def _peindre():
+def _peindre(etat=None):
+    """Le sélecteur, peint par le VRAI code, sur l'état qu'on lui donne.
+
+    L'ÉTAT EST INJECTABLE PARCE QU'UN NOMBRE JUSTE NE PROUVE RIEN. Une règle
+    qui vérifiait « 9 d'entre elles » passait aussi bien sur un « 9 » écrit en
+    dur dans la page : la couverture réelle valait neuf, et la règle citait le
+    même chiffre. Peindre une couverture DIFFÉRENTE est le seul moyen de voir
+    si le nombre affiché la suit."""
     if not NODE:
         pytest.skip("node absent : le sélecteur ne peut pas être exécuté")
-    etat = N.etat()
+    etat = etat if etat is not None else N.etat()
     etat["ok"] = True
     faux_profils = {k: {"icon": "•", "label": k.upper()} for k in N.PROFILS_SENTINEL}
     with tempfile.TemporaryDirectory() as d:
@@ -410,22 +482,35 @@ def test_les_vingt_deux_sections_sont_proposees_a_l_ecran():
         assert s["intitule"] in lu, s["code"]
 
 
-def test_la_liste_dit_DES_LA_LISTE_qu_une_section_n_a_pas_de_profil():
-    """Le découvrir après le choix ferait porter au client une déception que la
-    liste pouvait lui épargner. La règle compte : treize mentions, ni plus ni
-    moins — un « (aucun profil relevé)» sur toutes les lignes passerait un
-    contrôle de simple présence."""
+def test_la_liste_dit_DES_LA_LISTE_ce_que_la_section_ne_porte_pas():
+    """CE QUE LA LISTE SIGNALE A CHANGÉ AVEC L'ÉTAT DE FAIT — le motif est écrit
+    ici pour qu'on ne lise pas ce changement comme un relâchement. Elle
+    marquait « (aucun profil relevé) » sur les treize sections qui n'en avaient
+    aucun ; les vingt-deux en ont un désormais. Ce qui reste à signaler DÈS LA
+    LISTE, et qui est la vraie information, est que le socle de treize d'entre
+    elles n'est pas calibré.
+
+    LE COMPTE EXACT EST CE QUI FAIT LA RÈGLE : une mention posée sur toutes les
+    lignes passerait un contrôle de simple présence, et une mention posée sur
+    aucune aussi bien, si l'on ne comptait pas."""
     peint = _peindre()
-    assert peint["liste"].count("aucun profil relevé") == 13
+    attendu = len(N.couverture()["codes_socle_cadre"])
+    assert attendu == 13
+    assert peint["liste"].count("socle non calibré") == attendu
+    # ET LE TÉMOIN INVERSE : les sections à socle relevé n'en portent aucune.
+    assert peint["liste"].count("aucun profil relevé") == 0
 
 
-def test_LE_DEFAUT_VU_EN_EXECUTANT_une_section_sans_profil_dit_pourquoi():
+def test_LE_DEFAUT_VU_EN_EXECUTANT_une_section_a_socle_de_cadre_dit_pourquoi():
     """Un premier jet construisait la liste servie à part de `choisir()`, sans
-    `motif` : l'écran peignait, pour ces treize sections, un bloc d'explication
-    VIDE — exactement l'information qui manquait le plus. La structure était
-    juste, l'écran muet, et rien ne le signalait."""
+    `motif` : l'écran peignait un bloc d'explication VIDE — exactement
+    l'information qui manquait le plus. La structure était juste, l'écran muet,
+    et rien ne le signalait. La règle mesure donc le TEXTE PEINT.
+
+    CE QU'ELLE EXIGE A SUIVI L'ÉTAT DE FAIT : l'écran ne dit plus « aucun
+    profil », il dit ce que le profil porte et ce qu'il ne porte pas."""
     lu = _texte(_peindre()["sans"])
-    assert "aucun profil sectoriel n'est relevé" in lu
+    assert "socle" in lu, "l'écran ne dit pas que le socle n'est pas calibré"
     assert "ne dépendent pas du secteur" in lu, (
         "l'écran ne dit pas que l'audit reste utilisable — le lecteur croit "
         "être devant une impasse")
@@ -447,10 +532,36 @@ def test_l_ecran_porte_la_source_la_couverture_et_la_reserve():
     équivalente, et une traduction sans réserve se prend pour un texte
     officiel."""
     lu = _texte(_peindre()["source"])
+    c = N.couverture()
     assert N.SOURCE["celex"] in lu
     assert N.SOURCE["revision"] in lu
-    assert "9 des 22 sections" in lu
+    # LA COUVERTURE ANNONCÉE EST CELLE QUE LE MODULE MESURE, jamais un nombre
+    # recopié : « 9 des 22 » a survécu deux mois à un référentiel qui en
+    # comptait autre chose, parce que la règle citait le même chiffre en dur.
+    assert "%d sections" % c["total"] in lu
+    assert "%d d’entre elles" % len(c["codes_socle_releve"]) in lu
+    assert "%d autres" % len(c["codes_socle_cadre"]) in lu
     assert "traduction de travail" in lu
+
+
+def test_la_couverture_affichee_SUIT_la_couverture_et_n_est_pas_recopiee():
+    """LE DÉFAUT QUE CETTE RÈGLE EXISTE POUR ATTRAPER. La règle précédente
+    compare le texte peint aux nombres du module — et un nombre écrit EN DUR
+    dans la page les satisfait tous, tant qu'il tombe juste. C'est arrivé : une
+    mutation qui remplaçait `c.codes_socle_releve.length` par « 9 » a survécu,
+    parce que la couverture réelle valait justement neuf.
+
+    LA SEULE MESURE QUI TIENT est de peindre une couverture DIFFÉRENTE et de
+    voir si l'affichage la suit."""
+    etat = N.etat()
+    faux = dict(etat["couverture"],
+                total=17,
+                codes_socle_releve=["A", "B", "C", "D"],
+                codes_socle_cadre=["E", "F", "G", "H", "I", "J", "K"])
+    lu = _texte(_peindre(dict(etat, couverture=faux))["source"])
+    assert "17 sections" in lu, lu[:400]
+    assert "4 d’entre elles" in lu, lu[:400]
+    assert "7 autres" in lu, lu[:400]
 
 
 def test_un_choix_vide_efface_la_reponse_au_lieu_de_la_laisser():

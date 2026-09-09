@@ -158,13 +158,20 @@ def test_le_guide_maturite_annonce_la_couverture_MESUREE_des_sections():
     n'existent pas."""
     c = N.couverture()
     g = _guide("maturite")
-    for nombre, quoi in ((c["total"], "sections"),
-                         (c["avec_profil"], "sections couvertes"),
-                         (c["sans_profil"], "sections sans profil")):
+    # LES NOMBRES ONT CHANGÉ AVEC LA DISTINCTION QU'ILS PORTENT, et le motif est
+    # écrit ici. « sections sans profil » valait 13 et vaut 0 : la question
+    # n'est plus si une section est couverte — elles le sont toutes — mais si
+    # son socle est relevé. Un `_dit(g, 0)` ne mesurerait plus rien : le guide
+    # doit annoncer les nombres qui DÉCIDENT de ce que le lecteur attend.
+    for nombre, quoi in ((c["total"], "sections de la nomenclature"),
+                         (len(c["codes_socle_releve"]), "sections à socle relevé"),
+                         (len(c["codes_socle_cadre"]), "sections à socle de cadre"),
+                         (len(c["profils_releves"]), "profils relevés"),
+                         (len(N.PROFILS_SENTINEL), "profils au total")):
         assert _dit(g, nombre), (
             "le guide de l'audit n'annonce pas %d %s" % (nombre, quoi))
-    assert _dit(g, len(N.PROFILS_SENTINEL)), (
-        "le guide n'annonce pas les %d profils relevés" % len(N.PROFILS_SENTINEL))
+    assert c["sans_profil"] == 0, (
+        "une section sans profil laisserait l'audit sur le secteur précédent")
 
 
 def test_le_guide_maturite_dit_la_revision_et_sa_date():

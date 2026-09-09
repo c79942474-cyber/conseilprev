@@ -4106,10 +4106,14 @@ _auDomPret(function(){
 (function(){
 'use strict';
 
-var MAT_SECTORS = {"telecom": {"label": "Télécom", "icon": "📶", "desc": "Opérateurs, équipementiers réseau, fournisseurs de services de communication.", "systems": ["Chatbots service client", "Maintenance prédictive réseau", "Analyse de données réseau (QoS)", "Détection de fraude", "Optimisation allocation spectre"], "regs": ["EU AI Act", "RGPD", "NIS2", "ePrivacy", "ETSI", "3GPP"], "pillars": {"explicabilite": 2, "controlabilite": 3, "transparence": 2, "surete": 3, "equite": 2, "gouvernance": 2, "confidentialite": 4, "robustesse": 3}, "specifics": [{"t": "Données sensibles", "d": "Protection renforcée des données clients (RGPD, ePrivacy). Chiffrement des communications et des métadonnées de connexion."}, {"t": "Résilience des infrastructures", "d": "Sécurité des réseaux (NIS2) et continuité de service. Tests de robustesse des systèmes IA critiques (maintenance prédictive)."}, {"t": "IA générative et chatbots", "d": "Contrôle des réponses (éviter désinformation, biais). Transparence sur les données utilisées (historique des conversations)."}, {"t": "Conformité client", "d": "Respect des engagements contractuels (SLA, RGPD). Gestion des réclamations liées à l'IA (erreurs de facturation automatisée)."}, {"t": "Réglementations internationales", "d": "Alignement avec les normes locales (ex. lois chinoises sur la cybersécurité pour les filiales asiatiques)."}], "budget": 430000, "duree": 24}, "energie": {"label": "Énergie / Utilities", "icon": "⚡", "desc": "Production, transport et distribution d'énergie, opérateurs de réseaux électriques et gaziers.", "systems": ["Prévision de demande énergétique", "Maintenance prédictive turbines/réseaux", "Optimisation smart grid", "Détection d'anomalies SCADA", "Trading énergétique algorithmique"], "regs": ["EU AI Act", "RGPD", "NIS2", "Directive CER", "IEC 62443"], "pillars": {"explicabilite": 2, "controlabilite": 3, "transparence": 2, "surete": 4, "equite": 2, "gouvernance": 3, "confidentialite": 3, "robustesse": 4}, "specifics": [{"t": "Infrastructures critiques", "d": "Systèmes IA classés haut risque (Annexe III) — gestion du trafic, distribution d'eau/gaz/électricité. Conformité NIS2 et directive CER (résilience des entités critiques)."}, {"t": "Sûreté industrielle (OT/SCADA)", "d": "Sécurité des systèmes de contrôle industriel. Tests de robustesse face aux cyberattaques et défaillances. IEC 62443."}, {"t": "Continuité de service", "d": "Tolérance zéro aux interruptions. Supervision humaine effective (Art. 14) sur les décisions automatisées de délestage ou répartition."}, {"t": "Trading et marchés", "d": "Algorithmes de trading énergétique : explicabilité des décisions, prévention de la manipulation de marché (REMIT)."}], "budget": 480000, "duree": 26}, "sante": {"label": "Santé / Médical", "icon": "🩺", "desc": "Hôpitaux, cliniques, laboratoires, éditeurs de dispositifs médicaux et de logiciels de santé.", "systems": ["Aide au diagnostic (imagerie)", "Prédiction de risque patient", "Triage automatisé", "Optimisation parcours de soins", "Analyse de dossiers médicaux"], "regs": ["EU AI Act", "RGPD", "MDR/IVDR", "Règlement dispositifs médicaux", "HDS"], "pillars": {"explicabilite": 2, "controlabilite": 2, "transparence": 2, "surete": 3, "equite": 2, "gouvernance": 2, "confidentialite": 3, "robustesse": 3}, "specifics": [{"t": "Systèmes haut risque (Annexe III + MDR)", "d": "Double régime : EU AI Act + Règlement dispositifs médicaux (MDR/IVDR). Évaluation de conformité par organisme notifié obligatoire."}, {"t": "Données de santé (catégorie spéciale)", "d": "Données sensibles RGPD Art. 9. Hébergement HDS (Hébergeur de Données de Santé) certifié obligatoire en France."}, {"t": "Explicabilité clinique", "d": "Les praticiens doivent comprendre et pouvoir contester les recommandations IA. Supervision humaine renforcée (Art. 14) sur toute décision médicale."}, {"t": "Équité et biais", "d": "Prévention des biais discriminatoires (genre, origine, âge) dans les modèles de diagnostic ou de triage. Représentativité des données d'entraînement."}], "budget": 520000, "duree": 28}, "finance": {"label": "Finance / Banque / Assurance", "icon": "🏦", "desc": "Banques, assureurs, sociétés de gestion, fintechs et établissements de paiement.", "systems": ["Scoring crédit automatisé", "Détection de fraude", "Lutte anti-blanchiment (AML)", "Trading algorithmique", "Tarification assurance", "Robo-advisors"], "regs": ["EU AI Act", "RGPD", "DORA", "NIS2", "ACPR", "MiFID II"], "pillars": {"explicabilite": 2, "controlabilite": 3, "transparence": 2, "surete": 3, "equite": 1, "gouvernance": 3, "confidentialite": 3, "robustesse": 3}, "specifics": [{"t": "Décisions individuelles (Annexe III)", "d": "Scoring crédit et tarification = haut risque. Droit d'opposition aux décisions automatisées (RGPD Art. 22). Obligation d'explication des refus."}, {"t": "Résilience opérationnelle (DORA)", "d": "Règlement DORA applicable depuis janvier 2025. Tests de résilience, gestion des risques liés aux prestataires TIC tiers, signalement d'incidents."}, {"t": "Équité et non-discrimination", "d": "Risque majeur de biais dans le scoring (origine, genre, code postal). Surveillance ACPR. Documentation des variables et de leur justification."}, {"t": "Lutte anti-fraude et AML", "d": "Équilibre entre détection efficace et minimisation des faux positifs. Traçabilité des alertes pour les régulateurs (TRACFIN, ACPR)."}], "budget": 550000, "duree": 28}, "industrie": {"label": "Industrie / Manufacturing", "icon": "🏭", "desc": "Industrie manufacturière, automobile, aéronautique, chimie et biens d'équipement.", "systems": ["Maintenance prédictive", "Contrôle qualité par vision", "Optimisation de production", "Robotique collaborative", "Jumeaux numériques"], "regs": ["EU AI Act", "RGPD", "NIS2", "Directive Machines", "ISO 9001"], "pillars": {"explicabilite": 3, "controlabilite": 3, "transparence": 3, "surete": 3, "equite": 3, "gouvernance": 2, "confidentialite": 3, "robustesse": 3}, "specifics": [{"t": "Composants de sécurité (Annexe I)", "d": "IA intégrée à des machines = haut risque sous Directive Machines. Évaluation de conformité avant mise sur le marché. Marquage CE."}, {"t": "Sécurité au travail", "d": "Robotique collaborative et systèmes de vision : prévention des accidents. Supervision humaine et arrêt d'urgence (Art. 14)."}, {"t": "Robustesse opérationnelle", "d": "Tolérance aux entrées erronées, dérives capteurs, conditions dégradées. Tests en conditions réelles avant déploiement (Art. 9)."}, {"t": "Propriété intellectuelle", "d": "Protection des modèles et des jeux de données industriels. Confidentialité des procédés (secret des affaires)."}], "budget": 410000, "duree": 24}, "transport": {"label": "Transport / Mobilité", "icon": "🚇", "desc": "Transport ferroviaire, aérien, routier, logistique et constructeurs automobiles.", "systems": ["Conduite assistée / autonome", "Optimisation logistique", "Maintenance prédictive flotte", "Gestion du trafic", "Détection de fatigue conducteur"], "regs": ["EU AI Act", "RGPD", "NIS2", "Règlement véhicules", "EASA"], "pillars": {"explicabilite": 2, "controlabilite": 2, "transparence": 2, "surete": 2, "equite": 3, "gouvernance": 2, "confidentialite": 3, "robustesse": 2}, "specifics": [{"t": "Systèmes critiques de sécurité", "d": "Conduite autonome et gestion du trafic = haut risque. Robustesse et sûreté maximales. Homologation sectorielle (EASA aérien, UNECE automobile)."}, {"t": "Supervision humaine", "d": "Capacité de reprise en main immédiate. Surveillance de la vigilance de l'opérateur. Boîte noire et journalisation (Art. 12)."}, {"t": "Robustesse environnementale", "d": "Fonctionnement fiable en conditions variables (météo, luminosité, signalisation dégradée). Tests adversariaux obligatoires."}, {"t": "Données de géolocalisation", "d": "Protection des données de déplacement (RGPD). Minimisation et anonymisation des traces de mobilité."}], "budget": 490000, "duree": 26}, "it": {"label": "IT / Tech / SaaS", "icon": "💻", "desc": "Éditeurs de logiciels, fournisseurs cloud, ESN, startups tech et plateformes numériques.", "systems": ["Modèles GPAI / LLM", "Copilotes de code", "Modération de contenu", "Recommandation", "Cybersécurité par IA", "Assistants conversationnels"], "regs": ["EU AI Act", "RGPD", "NIS2", "DSA", "ISO 42001", "ISO 27001"], "pillars": {"explicabilite": 3, "controlabilite": 3, "transparence": 3, "surete": 3, "equite": 3, "gouvernance": 3, "confidentialite": 3, "robustesse": 3}, "specifics": [{"t": "Modèles GPAI (Art. 51-55)", "d": "Fournisseurs de modèles de fondation : documentation technique, résumé d'entraînement, politique de droits d'auteur. Seuil 10^25 FLOPs pour risque systémique."}, {"t": "Transparence (Art. 50)", "d": "Marquage des contenus générés (watermarking). Information des utilisateurs qu'ils interagissent avec une IA. Détection des deepfakes."}, {"t": "Modération et DSA", "d": "Plateformes : articulation EU AI Act / Digital Services Act. Transparence des systèmes de recommandation et de modération."}, {"t": "Sécurité by design", "d": "Protection contre les attaques adversariales, prompt injection, exfiltration de données. ISO 27001 et ISO 42001."}], "budget": 380000, "duree": 22}, "public": {"label": "Secteur public / Administration", "icon": "🏛", "desc": "Administrations centrales et territoriales, organismes publics, collectivités.", "systems": ["Attribution d'aides sociales", "Détection de fraude fiscale", "Traitement de demandes citoyennes", "Vidéosurveillance algorithmique", "Aide à la décision juridique"], "regs": ["EU AI Act", "RGPD", "NIS2", "Référentiel CNIL", "RGAA"], "pillars": {"explicabilite": 1, "controlabilite": 2, "transparence": 1, "surete": 2, "equite": 1, "gouvernance": 2, "confidentialite": 2, "robustesse": 2}, "specifics": [{"t": "Services essentiels (Annexe III)", "d": "Attribution d'aides, services publics essentiels = haut risque. Transparence renforcée envers les citoyens. Droit au recours."}, {"t": "Équité et égalité de traitement", "d": "Risque majeur de discrimination dans l'accès aux droits. Documentation exhaustive des critères. Contrôle CNIL et Défenseur des droits."}, {"t": "Transparence démocratique", "d": "Obligation d'information des citoyens sur l'usage de l'IA. Publication des analyses d'impact. Explicabilité des décisions administratives."}, {"t": "Vidéosurveillance", "d": "Encadrement strict (Art. 5 sur l'identification biométrique). Bases légales spécifiques requises. Proportionnalité."}], "budget": 460000, "duree": 26}};
+var MAT_SECTORS = {"telecom": {"label": "Télécom", "icon": "📶", "desc": "Opérateurs, équipementiers réseau, fournisseurs de services de communication.", "systems": ["Chatbots service client", "Maintenance prédictive réseau", "Analyse de données réseau (QoS)", "Détection de fraude", "Optimisation allocation spectre"], "regs": ["EU AI Act", "RGPD", "NIS2", "ePrivacy", "ETSI", "3GPP"], "pillars": {"explicabilite": 2, "controlabilite": 3, "transparence": 2, "surete": 3, "equite": 2, "gouvernance": 2, "confidentialite": 4, "robustesse": 3}, "specifics": [{"t": "Données sensibles", "d": "Protection renforcée des données clients (RGPD, ePrivacy). Chiffrement des communications et des métadonnées de connexion."}, {"t": "Résilience des infrastructures", "d": "Sécurité des réseaux (NIS2) et continuité de service. Tests de robustesse des systèmes IA critiques (maintenance prédictive)."}, {"t": "IA générative et chatbots", "d": "Contrôle des réponses (éviter désinformation, biais). Transparence sur les données utilisées (historique des conversations)."}, {"t": "Conformité client", "d": "Respect des engagements contractuels (SLA, RGPD). Gestion des réclamations liées à l'IA (erreurs de facturation automatisée)."}, {"t": "Réglementations internationales", "d": "Alignement avec les normes locales (ex. lois chinoises sur la cybersécurité pour les filiales asiatiques)."}], "budget": 430000, "duree": 24, "socle": "releve"}, "energie": {"label": "Énergie / Utilities", "icon": "⚡", "desc": "Production, transport et distribution d'énergie, opérateurs de réseaux électriques et gaziers.", "systems": ["Prévision de demande énergétique", "Maintenance prédictive turbines/réseaux", "Optimisation smart grid", "Détection d'anomalies SCADA", "Trading énergétique algorithmique"], "regs": ["EU AI Act", "RGPD", "NIS2", "Directive CER", "IEC 62443"], "pillars": {"explicabilite": 2, "controlabilite": 3, "transparence": 2, "surete": 4, "equite": 2, "gouvernance": 3, "confidentialite": 3, "robustesse": 4}, "specifics": [{"t": "Infrastructures critiques", "d": "Systèmes IA classés haut risque (Annexe III) — gestion du trafic, distribution d'eau/gaz/électricité. Conformité NIS2 et directive CER (résilience des entités critiques)."}, {"t": "Sûreté industrielle (OT/SCADA)", "d": "Sécurité des systèmes de contrôle industriel. Tests de robustesse face aux cyberattaques et défaillances. IEC 62443."}, {"t": "Continuité de service", "d": "Tolérance zéro aux interruptions. Supervision humaine effective (Art. 14) sur les décisions automatisées de délestage ou répartition."}, {"t": "Trading et marchés", "d": "Algorithmes de trading énergétique : explicabilité des décisions, prévention de la manipulation de marché (REMIT)."}], "budget": 480000, "duree": 26, "socle": "releve"}, "sante": {"label": "Santé / Médical", "icon": "🩺", "desc": "Hôpitaux, cliniques, laboratoires, éditeurs de dispositifs médicaux et de logiciels de santé.", "systems": ["Aide au diagnostic (imagerie)", "Prédiction de risque patient", "Triage automatisé", "Optimisation parcours de soins", "Analyse de dossiers médicaux"], "regs": ["EU AI Act", "RGPD", "MDR/IVDR", "Règlement dispositifs médicaux", "HDS"], "pillars": {"explicabilite": 2, "controlabilite": 2, "transparence": 2, "surete": 3, "equite": 2, "gouvernance": 2, "confidentialite": 3, "robustesse": 3}, "specifics": [{"t": "Systèmes haut risque (Annexe III + MDR)", "d": "Double régime : EU AI Act + Règlement dispositifs médicaux (MDR/IVDR). Évaluation de conformité par organisme notifié obligatoire."}, {"t": "Données de santé (catégorie spéciale)", "d": "Données sensibles RGPD Art. 9. Hébergement HDS (Hébergeur de Données de Santé) certifié obligatoire en France."}, {"t": "Explicabilité clinique", "d": "Les praticiens doivent comprendre et pouvoir contester les recommandations IA. Supervision humaine renforcée (Art. 14) sur toute décision médicale."}, {"t": "Équité et biais", "d": "Prévention des biais discriminatoires (genre, origine, âge) dans les modèles de diagnostic ou de triage. Représentativité des données d'entraînement."}], "budget": 520000, "duree": 28, "socle": "releve"}, "finance": {"label": "Finance / Banque / Assurance", "icon": "🏦", "desc": "Banques, assureurs, sociétés de gestion, fintechs et établissements de paiement.", "systems": ["Scoring crédit automatisé", "Détection de fraude", "Lutte anti-blanchiment (AML)", "Trading algorithmique", "Tarification assurance", "Robo-advisors"], "regs": ["EU AI Act", "RGPD", "DORA", "NIS2", "ACPR", "MiFID II"], "pillars": {"explicabilite": 2, "controlabilite": 3, "transparence": 2, "surete": 3, "equite": 1, "gouvernance": 3, "confidentialite": 3, "robustesse": 3}, "specifics": [{"t": "Décisions individuelles (Annexe III)", "d": "Scoring crédit et tarification = haut risque. Droit d'opposition aux décisions automatisées (RGPD Art. 22). Obligation d'explication des refus."}, {"t": "Résilience opérationnelle (DORA)", "d": "Règlement DORA applicable depuis janvier 2025. Tests de résilience, gestion des risques liés aux prestataires TIC tiers, signalement d'incidents."}, {"t": "Équité et non-discrimination", "d": "Risque majeur de biais dans le scoring (origine, genre, code postal). Surveillance ACPR. Documentation des variables et de leur justification."}, {"t": "Lutte anti-fraude et AML", "d": "Équilibre entre détection efficace et minimisation des faux positifs. Traçabilité des alertes pour les régulateurs (TRACFIN, ACPR)."}], "budget": 550000, "duree": 28, "socle": "releve"}, "industrie": {"label": "Industrie / Manufacturing", "icon": "🏭", "desc": "Industrie manufacturière, automobile, aéronautique, chimie et biens d'équipement.", "systems": ["Maintenance prédictive", "Contrôle qualité par vision", "Optimisation de production", "Robotique collaborative", "Jumeaux numériques"], "regs": ["EU AI Act", "RGPD", "NIS2", "Directive Machines", "ISO 9001"], "pillars": {"explicabilite": 3, "controlabilite": 3, "transparence": 3, "surete": 3, "equite": 3, "gouvernance": 2, "confidentialite": 3, "robustesse": 3}, "specifics": [{"t": "Composants de sécurité (Annexe I)", "d": "IA intégrée à des machines = haut risque sous Directive Machines. Évaluation de conformité avant mise sur le marché. Marquage CE."}, {"t": "Sécurité au travail", "d": "Robotique collaborative et systèmes de vision : prévention des accidents. Supervision humaine et arrêt d'urgence (Art. 14)."}, {"t": "Robustesse opérationnelle", "d": "Tolérance aux entrées erronées, dérives capteurs, conditions dégradées. Tests en conditions réelles avant déploiement (Art. 9)."}, {"t": "Propriété intellectuelle", "d": "Protection des modèles et des jeux de données industriels. Confidentialité des procédés (secret des affaires)."}], "budget": 410000, "duree": 24, "socle": "releve"}, "transport": {"label": "Transport / Mobilité", "icon": "🚇", "desc": "Transport ferroviaire, aérien, routier, logistique et constructeurs automobiles.", "systems": ["Conduite assistée / autonome", "Optimisation logistique", "Maintenance prédictive flotte", "Gestion du trafic", "Détection de fatigue conducteur"], "regs": ["EU AI Act", "RGPD", "NIS2", "Règlement véhicules", "EASA"], "pillars": {"explicabilite": 2, "controlabilite": 2, "transparence": 2, "surete": 2, "equite": 3, "gouvernance": 2, "confidentialite": 3, "robustesse": 2}, "specifics": [{"t": "Systèmes critiques de sécurité", "d": "Conduite autonome et gestion du trafic = haut risque. Robustesse et sûreté maximales. Homologation sectorielle (EASA aérien, UNECE automobile)."}, {"t": "Supervision humaine", "d": "Capacité de reprise en main immédiate. Surveillance de la vigilance de l'opérateur. Boîte noire et journalisation (Art. 12)."}, {"t": "Robustesse environnementale", "d": "Fonctionnement fiable en conditions variables (météo, luminosité, signalisation dégradée). Tests adversariaux obligatoires."}, {"t": "Données de géolocalisation", "d": "Protection des données de déplacement (RGPD). Minimisation et anonymisation des traces de mobilité."}], "budget": 490000, "duree": 26, "socle": "releve"}, "it": {"label": "IT / Tech / SaaS", "icon": "💻", "desc": "Éditeurs de logiciels, fournisseurs cloud, ESN, startups tech et plateformes numériques.", "systems": ["Modèles GPAI / LLM", "Copilotes de code", "Modération de contenu", "Recommandation", "Cybersécurité par IA", "Assistants conversationnels"], "regs": ["EU AI Act", "RGPD", "NIS2", "DSA", "ISO 42001", "ISO 27001"], "pillars": {"explicabilite": 3, "controlabilite": 3, "transparence": 3, "surete": 3, "equite": 3, "gouvernance": 3, "confidentialite": 3, "robustesse": 3}, "specifics": [{"t": "Modèles GPAI (Art. 51-55)", "d": "Fournisseurs de modèles de fondation : documentation technique, résumé d'entraînement, politique de droits d'auteur. Seuil 10^25 FLOPs pour risque systémique."}, {"t": "Transparence (Art. 50)", "d": "Marquage des contenus générés (watermarking). Information des utilisateurs qu'ils interagissent avec une IA. Détection des deepfakes."}, {"t": "Modération et DSA", "d": "Plateformes : articulation EU AI Act / Digital Services Act. Transparence des systèmes de recommandation et de modération."}, {"t": "Sécurité by design", "d": "Protection contre les attaques adversariales, prompt injection, exfiltration de données. ISO 27001 et ISO 42001."}], "budget": 380000, "duree": 22, "socle": "releve"}, "public": {"label": "Secteur public / Administration", "icon": "🏛", "desc": "Administrations centrales et territoriales, organismes publics, collectivités.", "systems": ["Attribution d'aides sociales", "Détection de fraude fiscale", "Traitement de demandes citoyennes", "Vidéosurveillance algorithmique", "Aide à la décision juridique"], "regs": ["EU AI Act", "RGPD", "NIS2", "Référentiel CNIL", "RGAA"], "pillars": {"explicabilite": 1, "controlabilite": 2, "transparence": 1, "surete": 2, "equite": 1, "gouvernance": 2, "confidentialite": 2, "robustesse": 2}, "specifics": [{"t": "Services essentiels (Annexe III)", "d": "Attribution d'aides, services publics essentiels = haut risque. Transparence renforcée envers les citoyens. Droit au recours."}, {"t": "Équité et égalité de traitement", "d": "Risque majeur de discrimination dans l'accès aux droits. Documentation exhaustive des critères. Contrôle CNIL et Défenseur des droits."}, {"t": "Transparence démocratique", "d": "Obligation d'information des citoyens sur l'usage de l'IA. Publication des analyses d'impact. Explicabilité des décisions administratives."}, {"t": "Vidéosurveillance", "d": "Encadrement strict (Art. 5 sur l'identification biométrique). Bases légales spécifiques requises. Proportionnalité."}], "budget": 460000, "duree": 26, "socle": "releve"}, "agro": {"label": "Agriculture, agroalimentaire, forêt et pêche", "icon": "🌾", "desc": "Exploitations agricoles, coopératives, industries de transformation alimentaire, sylviculture et pêche.", "systems": ["Prévision de rendement", "Détection de maladies par imagerie", "Pilotage d'irrigation et d'intrants", "Tri et calibrage automatisés", "Traçabilité de lots"], "regs": ["EU AI Act", "RGPD", "Règlement 178/2002", "NIS2 (transformation industrielle)", "CSRD"], "pillars": {}, "specifics": [{"t": "NIS2 n'atteint PAS la production primaire", "d": "L'annexe II, point 4 vise la distribution EN GROS et la production ou transformation INDUSTRIELLES de denrées alimentaires. Une exploitation n'y est pas ; une usine de transformation ou un négoce de gros y est. La frontière se lit dans le texte, elle ne se devine pas."}, {"t": "Traçabilité (règlement 178/2002)", "d": "L'obligation de retracer un lot en amont et en aval s'impose quel que soit l'outil. Un système d'IA qui décide d'un déclassement doit laisser une trace reconstituable."}, {"t": "Aucun usage listé à l'annexe III", "d": "Les usages agricoles courants ne figurent dans aucun des huit domaines à haut risque. Restent le régime général et l'article 50 dès qu'un contenu est généré."}, {"t": "Données des saisonniers", "d": "Suivi de productivité et pointage automatisés : RGPD, et annexe III point 4 dès qu'il y a évaluation des performances."}], "budget": null, "duree": null, "socle": "cadre"}, "extractif": {"label": "Industries extractives et matières premières", "icon": "⛏", "desc": "Extraction minière, carrières, exploitation pétrolière et gazière, première transformation de matières premières.", "systems": ["Prospection géophysique assistée", "Maintenance prédictive d'équipements lourds", "Sécurité de site par vision", "Optimisation d'extraction", "Surveillance environnementale"], "regs": ["EU AI Act", "RGPD", "Règlement 2023/1230 (machines)", "Directive 2006/21/CE (déchets d'extraction)", "NIS2 (raffinage, stockage)"], "pillars": {}, "specifics": [{"t": "L'extraction n'est pas nommée ; le pétrole et le gaz le sont", "d": "Aucune des deux annexes NIS2 ne vise l'extraction en tant que telle. Mais l'annexe I, point 1 c) et d) nomme les exploitants d'installations de production, de raffinage, de traitement, de stockage et de transport de pétrole et de gaz : une entreprise intégrée bascule par cette porte-là."}, {"t": "Composants de sécurité de machines", "d": "Une IA intégrée à un équipement d'extraction relève de l'annexe I de l'IA Act via le règlement Machines : évaluation de conformité avant mise sur le marché."}, {"t": "Sécurité des personnes en milieu confiné", "d": "Détection de présence et d'atmosphère : la défaillance se paie en vies. Contrôle humain effectif (art. 14) et arrêt d'urgence indépendant du système."}, {"t": "Surveillance environnementale opposable", "d": "Les mesures produites servent de preuve devant l'administration. Un modèle qui les corrige doit dire qu'il les corrige."}, {"t": "Aucun domaine de l'annexe III ne vise l'extraction", "d": "Les huit domaines à haut risque — biométrie, infrastructures critiques, éducation, emploi, services essentiels, répression, migration, justice — n'atteignent pas l'extraction en tant que telle. Deux portes restent : l'annexe I par le règlement Machines pour l'IA embarquée, et l'annexe III, point 4 dès qu'on évalue les performances d'un opérateur."}], "budget": null, "duree": null, "socle": "cadre"}, "construction": {"label": "Construction et BTP", "icon": "🏗", "desc": "Entreprises générales, second œuvre, travaux publics, maîtrise d'œuvre d'exécution.", "systems": ["Détection de risques sur chantier par vision", "Estimation de coûts", "Planification et ordonnancement", "Conception assistée (BIM)", "Contrôle qualité d'ouvrage"], "regs": ["EU AI Act", "RGPD", "Règlement 2023/1230 (machines)", "Règlement 305/2011 (produits de construction)", "Directive 92/57/CEE (chantiers)"], "pillars": {}, "specifics": [{"t": "Aucune annexe NIS2 ne nomme la construction", "d": "Ni l'annexe I ni l'annexe II. Une entreprise de BTP n'est pas entité essentielle ou importante de ce fait — elle peut l'être par une autre de ses activités, jamais par celle-ci."}, {"t": "L'engin devient le point d'entrée", "d": "Une IA embarquée dans une machine de chantier relève de l'annexe I de l'IA Act via le règlement Machines. C'est le véhicule réglementaire le plus probable pour ce secteur."}, {"t": "La vision sur chantier filme des travailleurs", "d": "La détection de port d'EPI observe des personnes identifiables en continu. RGPD, information des représentants du personnel — et annexe III point 4 dès que les images servent à évaluer un comportement."}, {"t": "L'estimation engage l'offre", "d": "Un chiffrage produit par un modèle et remis dans une offre engage l'entreprise. La traçabilité du calcul n'est pas une commodité, c'est la pièce du litige."}], "budget": null, "duree": null, "socle": "cadre"}, "commerce": {"label": "Commerce de gros et de détail", "icon": "🛒", "desc": "Distribution, négoce, commerce de détail physique et en ligne, places de marché.", "systems": ["Recommandation de produits", "Prévision de demande", "Tarification dynamique", "Détection de fraude au paiement", "Gestion de stock et de réapprovisionnement"], "regs": ["EU AI Act", "RGPD", "NIS2", "DSA", "Directive 2019/2161 (omnibus)", "Règlement P2B 2019/1150"], "pillars": {}, "specifics": [{"t": "NIS2 atteint le commerce par DEUX portes nommées", "d": "L'annexe II, point 4 pour la distribution en gros de denrées alimentaires ; l'annexe II, point 6 pour les fournisseurs de places de marché en ligne. Un détaillant hors alimentaire et sans place de marché n'est atteint par aucune des deux."}, {"t": "La tarification personnalisée doit être signalée", "d": "La directive 2019/2161 impose d'informer le consommateur lorsque le prix affiché est personnalisé par un traitement automatisé. C'est une obligation d'affichage, pas de gouvernance interne."}, {"t": "Le crédit à la consommation bascule en haut risque", "d": "L'annexe III, point 5 b) vise l'évaluation de solvabilité et la note de crédit — sauf détection de fraude, expressément exclue. Un enseigne qui accorde un paiement en plusieurs fois y entre."}, {"t": "Recommandation et modération sous DSA", "d": "Transparence des systèmes de recommandation pour les plateformes ; l'articulation avec l'IA Act se joue sur la même interface."}], "budget": null, "duree": null, "socle": "cadre"}, "hotellerie": {"label": "Hôtellerie, restauration et tourisme", "icon": "🏨", "desc": "Hôtels, restauration commerciale et collective, agences de voyage, exploitants de sites touristiques.", "systems": ["Tarification dynamique", "Prévision d'occupation", "Assistant de réservation", "Relation client et avis", "Planification des équipes"], "regs": ["EU AI Act", "RGPD", "Règlement 178/2002", "Directive 2015/2302 (voyages à forfait)", "Directive 2019/2161"], "pillars": {}, "specifics": [{"t": "La restauration n'est pas dans NIS2", "d": "L'annexe II, point 4 vise le gros et la transformation industrielle : un restaurant ou une cuisine centrale de collectivité qui sert directement n'y entre pas."}, {"t": "La planification automatisée des équipes", "d": "Attribuer des services selon le comportement ou les caractéristiques d'un salarié relève de l'annexe III, point 4. Un planificateur qui optimise sur la seule productivité y est ; un qui applique un roulement fixe ne l'est pas."}, {"t": "La reconnaissance faciale à l'accueil", "d": "Identification biométrique à distance : annexe III, point 1, et l'article 5 en interdit plusieurs usages. La commodité d'un enregistrement sans clé ne justifie pas ce régime."}, {"t": "L'avis client généré", "d": "Une réponse rédigée par un modèle et publiée sous le nom de l'établissement relève de l'article 50 dès qu'elle peut passer pour humaine."}], "budget": null, "duree": null, "socle": "cadre"}, "immobilier": {"label": "Immobilier et gestion d'actifs bâtis", "icon": "🏢", "desc": "Administration de biens, transaction, foncières, bailleurs sociaux et privés, syndics.", "systems": ["Estimation automatisée de valeur", "Sélection de dossiers locataires", "Prévision de charges", "Maintenance prédictive du bâti", "Prospection et scoring de portefeuille"], "regs": ["EU AI Act", "RGPD", "Directive 2010/31/UE (performance énergétique)", "Loi Hoguet", "Droit de la non-discrimination"], "pillars": {}, "specifics": [{"t": "Ni NIS2, ni l'annexe III — et c'est à dire", "d": "La sélection de locataires n'est listée nulle part comme haut risque. L'absence de classement ne vaut pas absence d'obligation : l'article 22 du RGPD et l'interdiction de discrimination s'appliquent pleinement, et ce sont eux qui mordent ici."}, {"t": "Le critère caché est le vrai risque", "d": "Un modèle entraîné sur des décisions passées reproduit les refus passés. Code postal, nom, type de contrat : la documentation des variables et de leur justification est la seule défense."}, {"t": "L'estimation engage la responsabilité professionnelle", "d": "Un avis de valeur produit par un modèle et remis à un client reste l'avis du professionnel. La loi Hoguet ne connaît pas d'exonération algorithmique."}, {"t": "Le bâtiment instrumenté observe des occupants", "d": "Capteurs de présence et de consommation dans des logements : données personnelles, minimisation, et information des occupants."}], "budget": null, "duree": null, "socle": "cadre"}, "conseil": {"label": "Services professionnels, scientifiques et techniques", "icon": "📐", "desc": "Conseil, ingénierie, bureaux d'études, professions juridiques et comptables, recherche et développement.", "systems": ["Recherche documentaire assistée", "Rédaction et synthèse assistées", "Analyse de contrats", "Modélisation et calcul d'ingénierie", "Assistance à la R&D"], "regs": ["EU AI Act", "RGPD", "NIS2 (organismes de recherche)", "Secret professionnel", "Déontologies ordinales"], "pillars": {}, "specifics": [{"t": "NIS2 atteint la section par la recherche", "d": "L'annexe II, point 7 nomme les « organismes de recherche ». Un bureau d'études qui n'en est pas un n'est pas atteint par cette voie ; un centre de R&D l'est."}, {"t": "Livrer un système à un client fait de vous son fournisseur", "d": "L'article 25 transfère les obligations du fournisseur à qui met un système à haut risque sur le marché sous son propre nom, ou le modifie substantiellement. Un intégrateur devient fournisseur sans l'avoir voulu."}, {"t": "Le dossier client envoyé à un modèle tiers", "d": "Secret professionnel et confidentialité contractuelle ne s'arrêtent pas à l'API. La question n'est pas si le modèle est bon, mais où va la pièce."}, {"t": "L'analyse juridique assistée", "d": "L'annexe III, point 8 a) vise les systèmes utilisés PAR les autorités judiciaires. Le conseil au client n'y est pas — mais la même sortie, versée au débat, engage le professionnel."}], "budget": null, "duree": null, "socle": "cadre"}, "services_support": {"label": "Services administratifs et de soutien", "icon": "🧾", "desc": "Travail temporaire et agences d'emploi, centres de relation client, sécurité privée, propreté, services aux entreprises.", "systems": ["Tri et classement de candidatures", "Appariement mission / intérimaire", "Planification et affectation", "Assistance en centre de contact", "Surveillance de sites"], "regs": ["EU AI Act", "RGPD", "NIS2 (services postaux et d'expédition)", "Directive 2008/104/CE (travail intérimaire)", "Code du travail"], "pillars": {}, "specifics": [{"t": "L'annexe III, point 4 vise cette section de plein fouet", "d": "Elle nomme le recrutement et la sélection, la publication d'offres ciblées, l'analyse et le filtrage des candidatures, l'évaluation des candidats — puis l'attribution de tâches sur le comportement et le suivi des performances. Une agence d'emploi ou une entreprise de travail temporaire exerce précisément ces actes : c'est le secteur le plus directement atteint des treize."}, {"t": "Le candidat écarté doit pouvoir le savoir", "d": "Information, droit à l'explication, contrôle humain effectif : un filtrage automatisé qui ne laisse aucune trace du motif est indéfendable, et le sera devant le juge avant de l'être devant le régulateur."}, {"t": "NIS2 par l'expédition", "d": "L'annexe II, point 1 nomme les prestataires de services postaux, y compris d'expédition. Une activité logistique de la section bascule par là."}, {"t": "La surveillance de site filme des tiers", "d": "Vidéoprotection assistée : hors identification biométrique, on reste en RGPD ; dès qu'on catégorise sur des attributs sensibles, on entre à l'annexe III, point 1 b)."}], "budget": null, "duree": null, "socle": "cadre"}, "education": {"label": "Enseignement et formation", "icon": "🎓", "desc": "Établissements scolaires et supérieurs, organismes de formation professionnelle, écoles privées, plateformes d'apprentissage.", "systems": ["Aide à l'admission et à l'affectation", "Évaluation automatisée des acquis", "Orientation et recommandation de parcours", "Surveillance d'examens à distance", "Tutorat adaptatif"], "regs": ["EU AI Act", "RGPD", "Code de l'éducation", "RGAA", "Qualiopi"], "pillars": {}, "specifics": [{"t": "Les QUATRE usages de l'annexe III, point 3", "d": "Déterminer l'accès, l'admission ou l'affectation ; évaluer les acquis d'apprentissage ; évaluer le niveau d'enseignement qu'une personne pourra atteindre ; surveiller et détecter des comportements interdits lors d'examens. Le point vise « tous les niveaux ». Un établissement qui fait l'un des quatre est déployeur d'un système à haut risque."}, {"t": "La télésurveillance d'examen cumule deux régimes", "d": "Haut risque par le point 3 d), et biométrie par le point 1 si elle identifie ou infère un état. Le cumul appelle une analyse d'impact, pas une case cochée."}, {"t": "Des données de mineurs, souvent", "d": "Base légale, durée de conservation, information des représentants légaux. Un score d'orientation conservé plusieurs années suit l'élève bien au-delà de son utilité."}, {"t": "L'évaluation automatisée doit rester contestable", "d": "Contrôle humain effectif (art. 14) : une note produite par un modèle et non révisable par un enseignant n'est pas conforme."}, {"t": "NIS2 ne nomme pas l'enseignement — sauf par la recherche", "d": "Ni l'annexe I ni l'annexe II ne visent les établissements d'enseignement. Mais l'annexe II, point 7 nomme les « organismes de recherche » : l'unité de recherche d'une université y entre, son activité d'enseignement non. La frontière passe à l'intérieur de l'établissement."}], "budget": null, "duree": null, "socle": "cadre"}, "culture": {"label": "Arts, sport, médias et loisirs", "icon": "🎭", "desc": "Production culturelle, édition et audiovisuel, clubs et équipements sportifs, parcs et loisirs, plateformes de contenus.", "systems": ["Recommandation de contenus", "Génération de visuels et de textes", "Modération de contenus", "Billetterie et tarification dynamique", "Analyse d'audience et de performance sportive"], "regs": ["EU AI Act (art. 50)", "RGPD", "DSA", "Directive 2019/790 (droit d'auteur)", "NIS2 (réseaux sociaux)"], "pillars": {}, "specifics": [{"t": "L'article 50 est le régime principal du secteur", "d": "Marquage des contenus générés ou manipulés, information de l'utilisateur qui dialogue avec une IA, signalement des hypertrucages. C'est une obligation de transparence, pas de haut risque — et c'est elle qui s'applique le plus souvent ici."}, {"t": "Fouille de textes et de données", "d": "L'article 4 de la directive 2019/790 admet la fouille sauf réserve expresse du titulaire. Entraîner ou affiner sur un catalogue suppose de vérifier cette réserve, œuvre par œuvre s'il le faut."}, {"t": "La biométrie en enceinte sportive", "d": "Reconnaissance faciale à l'accès : annexe III, point 1, et l'article 5 en interdit plusieurs formes. L'expérimentation ne vaut pas autorisation."}, {"t": "NIS2 n'atteint que les réseaux sociaux", "d": "L'annexe II, point 6 nomme les fournisseurs de plateformes de services de réseaux sociaux. Un théâtre, un club ou un éditeur n'y sont pas."}], "budget": null, "duree": null, "socle": "cadre"}, "proximite": {"label": "Autres services et vie associative", "icon": "🤝", "desc": "Associations, organisations professionnelles et syndicales, réparation, services personnels, activités cultuelles.", "systems": ["Prise de rendez-vous et accueil", "Relation adhérents et donateurs", "Appariement de bénévoles", "Prévision d'activité", "Assistance conversationnelle"], "regs": ["EU AI Act", "RGPD", "Loi du 1er juillet 1901", "Code du travail"], "pillars": {}, "specifics": [{"t": "Aucune annexe NIS2 ne nomme la section", "d": "Ni l'annexe I ni l'annexe II. Le régime applicable est celui de l'IA Act en général, plus l'article 50 dès qu'un contenu est généré."}, {"t": "Agir POUR une autorité publique change le régime", "d": "Une association qui instruit l'éligibilité à une prestation sociale essentielle pour le compte d'une collectivité entre à l'annexe III, point 5 a) — qui vise les systèmes utilisés « par les autorités publiques ou en leur nom ». La délégation ne dilue pas l'obligation, elle la déplace."}, {"t": "Les données d'adhérents peuvent être sensibles", "d": "Appartenance syndicale, convictions religieuses ou philosophiques : catégories particulières de l'article 9 du RGPD. Un ciblage de campagne construit dessus demande une base spécifique."}, {"t": "Des moyens sans direction des systèmes d'information", "d": "La conformité doit tenir sans équipe dédiée : registre tenu à la main, fournisseur unique, revue annuelle. Un dispositif calibré pour un grand compte ne sera pas appliqué."}], "budget": null, "duree": null, "socle": "cadre"}, "services_personne": {"label": "Services à la personne et particuliers employeurs", "icon": "🏡", "desc": "Mandataires et plateformes de services à la personne, aide à domicile, garde d'enfants, téléassistance.", "systems": ["Appariement intervenant / bénéficiaire", "Planification de tournées", "Téléassistance et détection de chute", "Gestion de la paie mandataire", "Évaluation des besoins"], "regs": ["EU AI Act", "RGPD", "Code du travail (particulier employeur)", "Code de l'action sociale et des familles", "Convention collective SAP"], "pillars": {}, "specifics": [{"t": "La section désigne des MÉNAGES : l'entité auditable est ailleurs", "d": "La section U vise les ménages en tant qu'employeurs. Un particulier n'est pas l'objet d'un audit de gouvernance de l'IA. L'entité qui l'est, c'est le mandataire, la plateforme ou le service prestataire qui opère les systèmes pour son compte."}, {"t": "L'appariement et la planification touchent l'annexe III, point 4", "d": "Dès qu'ils attribuent des missions sur le comportement ou les caractéristiques d'un intervenant, ou qu'ils suivent ses performances. Une tournée optimisée sur le seul temps de trajet n'y est pas ; une tournée optimisée sur une note de l'intervenant y est."}, {"t": "Évaluer l'éligibilité pour un département", "d": "Instruire une aide sociale — APA, PCH — pour le compte d'une collectivité fait entrer à l'annexe III, point 5 a). Le point vise expressément l'évaluation d'éligibilité et l'octroi, la réduction ou le retrait des prestations."}, {"t": "La téléassistance produit des données de santé", "d": "Détection de chute, capteurs de présence au domicile : article 9 du RGPD, et hébergement certifié dès que la donnée devient une donnée de santé."}, {"t": "NIS2 ne nomme ni les ménages ni les services à la personne", "d": "Aucune des deux annexes ne les vise. La seule voie qui reste ouverte est indirecte : un opérateur qui exploite un service de téléassistance adossé à une infrastructure numérique relève de l'annexe I, point 8 par cette infrastructure-là, jamais par son activité d'aide à domicile."}], "budget": null, "duree": null, "socle": "cadre"}, "international": {"label": "Organisations internationales et extraterritoriales", "icon": "🌐", "desc": "Institutions et organes de l'Union, organisations intergouvernementales, représentations diplomatiques et consulaires.", "systems": ["Traduction automatique", "Analyse documentaire et de dossiers", "Appariement de candidatures", "Assistance conversationnelle", "Veille et synthèse"], "regs": ["EU AI Act (art. 2)", "Règlement (UE) 2018/1725", "Accords de siège", "Immunités et privilèges"], "pillars": {}, "specifics": [{"t": "L'IA Act nomme expressément les organes de l'Union", "d": "L'annexe III les cite aux points 6 et 7 — « les institutions, organes et organismes de l'Union, ou en leur nom ». Ils ne sont pas hors champ : ils y sont désignés."}, {"t": "Le RGPD ne s'applique pas aux organes de l'Union — un autre texte oui", "d": "C'est le règlement (UE) 2018/1725 qui tient ce rôle pour les institutions, organes et organismes de l'Union, sous le contrôle du CEPD. Appliquer le RGPD par habitude, c'est viser le mauvais texte."}, {"t": "NIS2 ne les vise pas", "d": "L'annexe I, point 10 nomme l'administration publique des États membres, centrale et régionale. Une organisation intergouvernementale n'y est pas."}, {"t": "L'immunité ne remonte pas la chaîne", "d": "Les privilèges d'une organisation ne dispensent pas ses fournisseurs établis dans l'Union de leurs propres obligations. La conformité se traite au contrat."}], "budget": null, "duree": null, "socle": "cadre"}};
 var MAT_PILLARS = [{"id": "explicabilite", "label": "Explicabilité", "desc": "Comprendre et évaluer les réponses du système."}, {"id": "controlabilite", "label": "Contrôlabilité", "desc": "Disposer de mécanismes pour surveiller et orienter le comportement des systèmes d'IA."}, {"id": "transparence", "label": "Transparence", "desc": "Permettre aux parties prenantes de faire des choix éclairés concernant leur engagement dans un système d'IA."}, {"id": "surete", "label": "Sûreté", "desc": "Prévention des réponses nuisibles et des utilisations abusives du système."}, {"id": "equite", "label": "Équité", "desc": "Prise en compte des impacts sur les différents groupes de parties prenantes."}, {"id": "gouvernance", "label": "Gouvernance", "desc": "Intégrer les meilleures pratiques dans la chaîne d'approvisionnement de l'IA, y compris fournisseurs et sous-traitants."}, {"id": "confidentialite", "label": "Confidentialité & Sécurité", "desc": "Obtenir, utiliser et protéger correctement les données et les modèles."}, {"id": "robustesse", "label": "Robustesse & Véracité", "desc": "Obtenir des réponses correctes du système, même en cas d'entrées erronées ou contradictoires."}];
 var MAT_CUR = "telecom";
 window.MAT_SECTORS = MAT_SECTORS;
+/* EXPOSÉE PARCE QUE D'AUTRES BLOCS LISENT LE SOCLE — le comparatif
+   sectoriel, notamment. Une seconde porte écrite ailleurs redonnerait
+   les zéros que celle-ci existe pour empêcher. */
+window.matSocle = function(s){ return matSocle(s); };
 window.MAT_PILLARS = MAT_PILLARS;
 window.matGetCur = function(){ return MAT_CUR; };
 
@@ -4157,9 +4161,51 @@ var MAT_KPIS = [
   {cat:"Transparence", val:"100%", name:"Systèmes IA avec documentation complète", tool:"Registre IA"}
 ];
 
+/* ══ LE SOCLE : RELEVÉ, OU SEULEMENT ENCADRÉ ══
+   UNE SEULE PORTE DE LECTURE, et c'est le point. Vingt endroits lisent
+   `pillars`, `budget` et `duree`. Si chacun inventait son propre repli, un
+   profil non calibré afficherait 0,0 ici, « null semaines » là et un montant
+   NaN ailleurs — trois mensonges différents pour un seul manque.
+
+   CE QUE LA DISTINCTION RECOUVRE. Les huit profils relevés portent un point de
+   départ observé sur des organisations du secteur, et un budget issu de
+   missions réelles. Les treize autres portent un RÉGIME lu dans les textes —
+   annexe III de l'IA Act, annexes I et II de NIS2 — et rien d'autre. Le régime
+   se lit ; le socle s'observe. Leur donner un chiffre par analogie produirait
+   exactement ce que `secteurs_nace.A_RENSEIGNER` interdit : une note fabriquée
+   que rien à l'écran ne distinguerait d'une note observée.
+
+   L'AUDIT RESTE ENTIER pour un profil de cadre : les huit piliers, le
+   questionnaire, les phases et les livrables ne dépendent pas du secteur. Ce
+   qui manque est le point de départ — et le client le remplit lui-même en
+   répondant, ce qui vaut mieux qu'un socle emprunté à un autre métier. */
+/* La moyenne du socle RELEVÉ. Sur un socle vide elle n'existe pas : rendre 0
+   ferait lire « maturité nulle » là où l'on ne sait simplement pas. */
+function matMoyenneSocle(soc){
+  var k = Object.keys(soc.pillars);
+  return k.length ? k.reduce(function(a,c){ return a + soc.pillars[c]; }, 0) / k.length : 0;
+}
+
+function matSocle(s){
+  var releve = !!(s && s.socle === "releve");
+  return {
+    calibre: releve,
+    pillars: (releve && s && s.pillars) ? s.pillars : {},
+    budget: releve ? s.budget : null,
+    duree: releve ? s.duree : null,
+    mention: releve ? "" :
+      "Régime relevé dans les textes ; socle, budget et durée non calibrés " +
+      "pour ce secteur. Vos réponses au questionnaire tiennent lieu de point " +
+      "de départ."
+  };
+}
+
 /* Budget de référence (adapté par secteur via multiplicateur) */
 function matBudget(sectorBudget){
   var ref = 430000;
+  /* SANS BUDGET RELEVÉ, AUCUNE LIGNE. Diviser par une absence rendait NaN sur
+     dix postes — un tableau de coûts entièrement faux, et d'apparence normale. */
+  if(sectorBudget === null || sectorBudget === undefined || !isFinite(sectorBudget)) return [];
   var k = sectorBudget / ref;
   return [
     {poste:"Ressources humaines", detail:"1 Directeur de Programme (6 mois)", cost:Math.round(90000*k), resp:"CONSEILPREV"},
@@ -4311,7 +4357,8 @@ function matRender(){
     confidentialite: "CONFIDENTIALITE & SECURITE (Art. 15, 10). Protection des donnees et des modeles. On evalue : les mesures de cybersecurite contre les attaques adversariales, la protection RGPD et la minimisation des donnees personnelles.",
     robustesse: "ROBUSTESSE & VERACITE (Art. 15, 9). Exactitude des reponses meme face a des entrees erronees. On evalue : le niveau d exactitude mesure et documente, la resilience aux erreurs et conditions degradees, les tests adversariaux."
   };
-  var avg = (window.matGlobalScore ? window.matGlobalScore(MAT_CUR) : (Object.keys(s.pillars).reduce(function(a,k){return a+s.pillars[k];},0)/8)).toFixed(1);
+  var soc = matSocle(s);
+  var avg = (window.matGlobalScore ? window.matGlobalScore(MAT_CUR) : matMoyenneSocle(soc)).toFixed(1);
 
   /* Barre secteurs */
   var bar = document.getElementById("mat-sector-bar");
@@ -4336,6 +4383,24 @@ function matRender(){
     + '<div class="mat-hero-score"><div class="mat-hero-score-val">'+avg+'</div><div class="mat-hero-score-lbl">Maturité / 5'+tip("Score global de maturite IA, moyenne des 8 piliers evalues selon le Reglement (UE) 2024/1689. Echelle : 1 Initial, 2 Emergent, 3 Defini, 4 Maitrise, 5 Optimise. Calcule a partir de vos reponses au questionnaire.")+'</div></div>'
     + '</div></div>';
 
+  /* CE QUE CE PROFIL PORTE, ET CE QU'IL NE PORTE PAS.
+     Sans cette bande, un profil de cadre ressemble trait pour trait à un
+     profil relevé : même mise en page, même score, mêmes phases. La seule
+     différence — d'où vient le point de départ — serait invisible. */
+  if(!soc.calibre){
+    html += '<div class="mat-socle-cadre" id="mat-socle-mention">'
+      + '<b>Régime relevé, socle non calibré.</b> '
+      + 'Les régimes ci-dessous sont établis par lecture des textes — annexe III '
+      + 'du règlement (UE) 2024/1689, annexes I et II de la directive (UE) 2022/2555. '
+      + 'Le point de départ sur les huit piliers, le budget et la durée viennent '
+      + 'd\'observations et de missions réelles : ils ne sont pas établis pour ce '
+      + 'secteur, et ne sont donc pas affichés. '
+      + '<b>L\'audit reste entier</b> : les huit piliers, le questionnaire, les '
+      + 'quatre phases et les livrables ne dépendent pas du secteur — ce sont vos '
+      + 'réponses qui font le point de départ.'
+      + '</div>';
+  }
+
   /* Export bar */
   html += '<div class="mat-export-bar">'
     + '<button class="mat-export-btn mat-export-pdf" onclick="matExportPDF()" title="Telecharger la synthese de l audit de maturite au format PDF.">↓ Rapport PDF</button>'
@@ -4352,7 +4417,7 @@ function matRender(){
 
   /* Scores dynamiques issus du questionnaire (ou profil de reference) */
   if(window.matInitAnswers) window.matInitAnswers(MAT_CUR);
-  function curPillarScore(pid){ return window.matPillarScore ? window.matPillarScore(MAT_CUR, pid) : (s.pillars[pid]||0); }
+  function curPillarScore(pid){ return window.matPillarScore ? window.matPillarScore(MAT_CUR, pid) : (soc.pillars[pid]||0); }
   var dynPillars = {};
   MAT_PILLARS.forEach(function(p){ dynPillars[p.id] = curPillarScore(p.id); });
 
@@ -4419,7 +4484,9 @@ function matRender(){
 
   /* Phases / calendrier */
   html += '<div class="mat-section"><div class="mat-section-h">Plan d\'action — 4 phases'+tip("Programme de mise en conformite en 4 phases : Diagnostic, Conception du cadre de gouvernance, Deploiement operationnel, Maintenance continue. Methodologie CONSEILPREV.")+'</div>'
-    + '<div class="mat-section-sub">Programme de mise en conformité sur '+s.duree+' semaines environ.</div>'
+    + '<div class="mat-section-sub">'+(soc.calibre
+        ? 'Programme de mise en conformité sur '+soc.duree+' semaines environ.'
+        : 'Les quatre phases ne dépendent pas du secteur. La durée, si — et elle n\'est pas calibrée ici.')+'</div>'
     + '<div class="mat-phase-grid">';
   MAT_PHASES.forEach(function(p){
     html += '<div class="mat-phase"><div class="mat-phase-num">'+p.n+'</div><div class="mat-phase-body">'
@@ -4511,8 +4578,10 @@ window.matExportWord = function(){
 
 function matBuildReportHTML(forPrint){
   var s = MAT_SECTORS[MAT_CUR];
-  var avg = (Object.keys(s.pillars).reduce(function(a,k){return a+s.pillars[k];},0)/8).toFixed(1);
-  var budget = matBudget(s.budget);
+  var soc = matSocle(s);
+  var avg = (window.matGlobalScore ? window.matGlobalScore(MAT_CUR)
+                                   : matMoyenneSocle(soc)).toFixed(1);
+  var budget = matBudget(soc.budget);
   var total = budget.reduce(function(a,b){return a+b.cost;},0);
   var today = new Date().toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"});
 
@@ -4546,7 +4615,8 @@ function matBuildReportHTML(forPrint){
   /* 8 piliers */
   h += '<h2>8 piliers de l\'audit de maturite IA</h2>';
   MAT_PILLARS.forEach(function(p){
-    var v = s.pillars[p.id]||0;
+    var v = window.matPillarScore ? window.matPillarScore(MAT_CUR, p.id)
+                                  : (soc.pillars[p.id]||0);
     h += '<div class="pill"><strong>'+p.label+' : '+v+'/5</strong> &mdash; '+p.desc+'</div>';
   });
 
@@ -5401,8 +5471,14 @@ var ROLE_DATA = {
 /* Construit le budget detaille pour un secteur */
 function buildDetailedBudget(sectorKey){
   var s = window.MAT_SECTORS[sectorKey];
-  var k = s.budget / 430000; /* facteur sectoriel */
-  var dureeMois = Math.round(s.duree / 4.33); /* semaines -> mois */
+  var soc = matSocle(s);
+  /* PAS DE BUDGET RELEVÉ, PAS DE SYNTHÈSE. Le facteur sectoriel divise par une
+     référence : sur une absence il rendait NaN, et NaN se propageait en
+     silence jusqu'au coût total, au TJM moyen et au coût mensuel. Un tableau
+     entièrement faux qui ne lève aucune erreur est pire que pas de tableau. */
+  if(!soc.calibre) return null;
+  var k = soc.budget / 430000; /* facteur sectoriel */
+  var dureeMois = Math.round(soc.duree / 4.33); /* semaines -> mois */
 
   /* Cout structurel = ressources humaines (jours x TJM ajuste) */
   var rh = [];
@@ -5451,7 +5527,7 @@ function buildDetailedBudget(sectorKey){
   var joursTotal = rh.reduce(function(a,b){return a+b.jours;},0);
 
   return {
-    sector:s.label, dureeMois:dureeMois, dureeSemaines:s.duree,
+    sector:s.label, dureeMois:dureeMois, dureeSemaines:soc.duree,
     rh:rh, totalRH:totalRH,
     structurel:structurel, totalStruct:totalStruct,
     operationnel:operationnel, totalOp:totalOp,
@@ -5500,6 +5576,29 @@ window.matOpenBudget = function(){
   var sectorKey = window.matGetCur();
   var b = buildDetailedBudget(sectorKey);
   var modal = ensureModal("mat-budget-modal");
+
+  /* SANS SOCLE RELEVÉ, LA MODALE DIT POURQUOI plutôt que de rendre un tableau.
+     Sans ce garde-fou elle levait sur `b.sector` : un bouton qui ne fait rien
+     et une erreur en console — le lecteur en conclut que l'outil est cassé,
+     alors que la seule chose vraie à dire est qu'on n'a pas ce chiffre-là. */
+  if(!b){
+    var sc = window.MAT_SECTORS[sectorKey] || {};
+    modal.innerHTML = '<div class="mat-modal-box">'
+      + '<div class="mat-modal-head"><div>'
+      + '<div class="mat-modal-eyebrow">Budget prévisionnel · '+(sc.label||sectorKey)+'</div>'
+      + '<div class="mat-modal-title">Aucun budget relevé pour ce secteur</div></div>'
+      + '<button class="mat-modal-close" onclick="matCloseModal(\'mat-budget-modal\')" title="Fermer cette fenêtre">×</button>'
+      + '</div><div class="mat-modal-body"><p>'
+      + 'Les budgets affichés pour les autres secteurs viennent de missions réelles. '
+      + 'Pour celui-ci, le régime réglementaire a été relevé dans les textes, mais '
+      + 'aucune mission n\'a encore fourni de budget ni de durée. Les extrapoler '
+      + 'produirait un chiffre d\'apparence précise sans rien derrière.'
+      + '</p><p>Les quatre phases, les livrables et le questionnaire restent applicables : '
+      + 'ils ne dépendent pas du secteur.</p></div></div>';
+    modal.classList.add("on");
+    window.__matBudget = null;
+    return;
+  }
 
   var html = '<div class="mat-modal-box mat-modal-wide">'
     + '<div class="mat-modal-head">'
@@ -7961,16 +8060,25 @@ window.benchmarkRenderPage = function(){
     var rows = Object.keys(window.MAT_SECTORS).map(function(k){
       var sec = window.MAT_SECTORS[k];
       var data = scoreFor(sec.label);
-      var maturityAvg = (Object.keys(sec.pillars).reduce(function(a,p){ return a+sec.pillars[p]; },0) / 8) * 20; /* /5 -> % */
-      return {label: sec.icon+" "+sec.label, you: data ? data.conformPct : null, avg: Math.round(maturityAvg), count: data?data.count:0};
+      /* COMPARER À UNE RÉFÉRENCE QUI N'EXISTE PAS DONNE 0 %, et 0 % se lit
+         « ce secteur est au plus bas » au lieu de « on n'a pas relevé ce
+         secteur ». Les profils de cadre n'ont donc pas de barre : ils ont un
+         tiret, qui ne se confond avec aucune valeur. */
+      var soc = window.matSocle ? window.matSocle(sec) : {calibre:true, pillars:sec.pillars||{}};
+      var cles = Object.keys(soc.pillars);
+      var maturityAvg = (soc.calibre && cles.length)
+        ? (cles.reduce(function(a,p){ return a+soc.pillars[p]; },0) / cles.length) * 20  /* /5 -> % */
+        : null;
+      return {label: sec.icon+" "+sec.label, you: data ? data.conformPct : null,
+              avg: maturityAvg === null ? null : Math.round(maturityAvg), count: data?data.count:0};
     });
 
     holder.innerHTML = rows.map(function(r){
-      var diff = r.you !== null ? (r.you - r.avg) : null;
+      var diff = (r.you !== null && r.avg !== null) ? (r.you - r.avg) : null;
       var diffTxt = diff !== null ? (diff>=0?'+':'')+diff+' pts' : '—';
       var diffColor = diff !== null ? (diff>=0?'var(--green)':'var(--accent)') : 'var(--muted2)';
       return '<div class="bench-row"><div class="bench-sector">'+r.label+(r.you!==null?' <span style="font-size:9px;font-family:var(--mono);color:var(--accent)">● VOUS ('+r.count+' syst.)</span>':'')+'</div>'
-        + '<div class="bench-score">'+r.avg+'%</div>'
+        + '<div class="bench-score">'+(r.avg === null ? '<span title="Socle non relevé pour ce secteur : aucune référence à comparer.">—</span>' : r.avg+'%')+'</div>'
         + '<div class="bench-bar-wrap">'+(r.you!==null?'<div class="bench-track"><div class="bench-fill bench-fill-you" style="width:'+r.you+'%"></div></div><span class="bench-you">vous '+r.you+'%</span>':'<span style="font-size:10px;color:var(--muted2)">Aucun système enregistré</span>')
         + '<div class="bench-track"><div class="bench-fill bench-fill-avg" style="width:'+r.avg+'%"></div></div></div>'
         + '<div><span style="font-family:var(--mono);font-size:10px;color:'+diffColor+'">'+diffTxt+'</span></div></div>';
@@ -9759,7 +9867,7 @@ var PAGE_GUIDES = {
     sections: [
       {h:"À quoi sert cette page", t:"Évalue votre conformité sur les 8 piliers de l EU AI Act (Explicabilité, Contrôlabilité, Transparence, Sûreté, Équité, Gouvernance, Confidentialité, Robustesse), par secteur."},
       {h:"Comment l utiliser", t:"1) Désignez votre activité dans le classement européen NACE, en haut de page — c’est celui que porte votre extrait d’immatriculation. Sentinel vous renvoie alors vers le profil sectoriel relevé qui la couvre, s’il en existe un. 2) Répondez au questionnaire de 16 questions — les scores se recalculent en temps réel. 3) Générez les 6 livrables IA (registre, manuel de gouvernance, rapport, formation, outils, plan de maintenance) ou les 4 guides de procédure d audit, avec vos propres données si besoin."},
-      {h:"Neuf sections sur vingt-deux ont un profil relevé", t:"La nomenclature NACE Rév. 2.1 compte vingt-deux sections. Huit profils sectoriels sont relevés ici — télécom, énergie, santé, finance, industrie, transport, informatique, public — et ils couvrent neuf sections. Les treize autres sont proposées SANS socle de départ, sans budget de référence et sans spécificités réglementaires, et elles le disent dès la liste. Inventer ces valeurs donnerait vingt-deux entrées d’apparence homogène dont neuf seraient observées et treize devinées, sans que rien ne les distingue. L’audit reste utilisable dans tous les cas : les huit piliers et le questionnaire ne dépendent pas du secteur."},
+      {h:"Les 22 sections ont un profil ; 9 d’entre elles ont un socle relevé", t:"La nomenclature NACE Rév. 2.1 compte 22 sections, et 21 profils sectoriels les couvrent toutes. La distinction qui compte n’est plus « couvert ou non », elle est ailleurs : 8 profils portent un socle RELEVÉ — point de départ observé sur des organisations du secteur, budget et durée issus de missions réelles — et ils couvrent 9 sections. Les 13 autres portent un RÉGIME lu dans les textes (annexe III du règlement (UE) 2024/1689, annexes I et II de la directive (UE) 2022/2555) mais aucun socle, aucun budget, aucune durée, et le disent dès la liste comme sur la fiche. Auparavant ces 13 sections n’avaient AUCUN profil, et l’audit affiché restait alors celui du secteur précédent : un client en construction lisait l’audit des télécoms sans que rien ne le démente. L’audit reste entier dans tous les cas : les 8 piliers, le questionnaire, les 4 phases et les livrables ne dépendent pas du secteur — ce sont vos réponses qui font le point de départ."},
       {h:"Si vous connaissez l’ancienne nomenclature", t:"La révision 2.1 s’applique depuis le 1er janvier 2025 et redistribue les lettres à partir de G. La finance est passée de K à L, l’informatique et les télécommunications occupent désormais K, l’enseignement Q, la santé R, et une section V a été créée. Chaque section affiche ce que sa lettre désignait avant : devant « L — activités financières », un lecteur qui connaît la révision 2 croirait autrement à une erreur."},
       {h:"Astuce", t:"Le budget et les KPIs détaillés sont accessibles via les cartes dédiées, sans surcharger la page principale."},
       {h:"Elle alimente les formations", t:"Le Hub Training calcule votre progression à partir de vos scores par pilier. Un audit passé au jugé désigne donc les mauvaises formations."}
@@ -20714,7 +20822,12 @@ document.addEventListener('keydown', function(e){
           + j.sections.map(function(s){
               return '<option value="' + ech(s.code) + '">' + ech(s.code) + ' — '
                 + ech(s.intitule)
-                + (s.profils.length ? '' : '  (aucun profil relevé)')
+                /* LA MENTION A CHANGÉ AVEC L'ÉTAT DE FAIT. Elle disait
+                   « aucun profil relevé » quand treize sections n'en avaient
+                   aucun. Les vingt-deux en ont un désormais ; ce qui distingue
+                   encore, et qui doit se lire DÈS LA LISTE, est que le socle de
+                   treize d'entre elles n'est pas calibré. */
+                + (s.socle === 'cadre' ? '  (socle non calibré)' : '')
                 + '</option>';
             }).join('');
         var c = j.couverture;
@@ -20723,9 +20836,12 @@ document.addEventListener('keydown', function(e){
           + '<a href="' + ech(j.source.url) + '" target="_blank" rel="noopener">'
           + ech(j.source.celex) + '</a>, applicable depuis le '
           + ech(j.source.applicable_depuis) + '. '
-          + '<b>' + c.avec_profil + ' des ' + c.total + ' sections</b> portent un '
-          + 'profil sectoriel relevé dans Sentinel ; les ' + c.sans_profil
-          + ' autres sont proposées sans socle de départ, et le disent. '
+          + 'Les <b>' + c.total + ' sections</b> désignent un profil sectoriel. '
+          + '<b>' + c.codes_socle_releve.length + ' d’entre elles</b> portent un '
+          + 'socle relevé — point de départ observé, budget et durée issus de '
+          + 'missions réelles ; les ' + c.codes_socle_cadre.length + ' autres '
+          + 'portent un régime lu dans les textes et le disent, sans socle ni '
+          + 'budget. '
           + '<em>' + ech(j.source.reserve) + '</em>';
       })
       .catch(function(){
@@ -20785,22 +20901,28 @@ document.addEventListener('keydown', function(e){
     var j = window.__nace;
     var s = j && j.sections.filter(function(x){ return x.code === code; })[0];
     if(!s) return;
-    /* LA SÉLECTION SUIT LA DÉCLARATION QUAND ELLE NE DEMANDE AUCUN ARBITRAGE.
-       Le client vient de dire « mon activité est C » ; le profil de C est
-       « Industrie ». L'appliquer n'est pas choisir « le moins faux » à sa
-       place — c'est la conséquence directe de ce qu'il a déclaré. Sans cela,
-       l'écran annonçait sa section au-dessus d'un audit resté sur le profil
-       par défaut, et il fallait re-cliquer pour les accorder.
+    /* L'AUDIT AFFICHÉ APPARTIENT TOUJOURS À LA SECTION DÉCLARÉE.
+       C'était le défaut, et il était grave : treize sections sur vingt-deux
+       n'avaient aucun profil, l'écran annonçait « aucun profil relevé » — et
+       l'audit affiché juste en dessous restait celui du secteur précédent.
+       Un client en construction lisait, sans le savoir, l'audit des télécoms :
+       ses systèmes, ses régimes, son budget. Rien ne le démentait.
 
-       DEUX CAS OÙ L'ON S'ABSTIENT, et ce sont les seuls : la section K
-       désigne DEUX profils principaux (édition logicielle et télécoms) —
-       trancher serait arbitrer ; et quatorze sections n'en désignent aucun,
-       ce que `secteurs_nace` refuse explicitement de combler. */
+       LA RÈGLE EST DEVENUE SIMPLE. Les vingt-deux sections désignent au moins
+       un profil. Si le profil courant n'est pas parmi ceux de la section, on
+       applique le premier : l'audit cesse d'appartenir à un autre métier. Le
+       client garde la main entre les candidats quand il y en a plusieurs —
+       K désigne l'édition logicielle ET les télécoms, et trancher entre elles
+       resterait un arbitrage. Mais il ne reste plus jamais AILLEURS.
+
+       LA RANGÉE NE SE REPLIE QUE SUR UN CANDIDAT UNIQUE : avec plusieurs, elle
+       est précisément ce qui permet de choisir. */
     var c = candidats(s);
-    if(c.length !== 1){ replierLesHuit(false); return; }
-    replierLesHuit(true);
+    if(!c.length){ replierLesHuit(false); return; }
+    replierLesHuit(c.length === 1);
     var courant = window.matSecteurCourant ? window.matSecteurCourant() : null;
-    if(c[0].cle !== courant && window.matSelect) window.matSelect(c[0].cle);
+    var deja = c.some(function(x){ return x.cle === courant; });
+    if(!deja && window.matSelect) window.matSelect(c[0].cle);
   };
 
   function peindre(code){
@@ -20825,6 +20947,22 @@ document.addEventListener('keydown', function(e){
 
     var princ = s.principaux || [];
     var part = s.partiels || [];
+
+    /* CE QUE LE PROFIL DE CETTE SECTION PORTE, DIT AVANT LES BOUTONS.
+       Sans cela, la section F propose « Construction » exactement comme la
+       section D propose « Énergie » — et rien ne distingue un profil observé
+       d'un profil dont seul le régime est lu. */
+    if(s.socle === 'cadre'){
+      html += '<div style="margin-top:8px;border-left:3px solid var(--amber);'
+        + 'padding-left:10px;font-size:11.5px;line-height:1.55">'
+        + ech(s.motif || '') + '</div>'
+        + '<div class="muted" style="font-size:11px;margin-top:6px">Ce qu’il '
+        + 'faudrait pour calibrer le socle de cette section&nbsp;:</div>'
+        + '<ul class="muted" style="font-size:11px;line-height:1.55;margin:3px 0 0;padding-left:18px">'
+        + Object.keys(j.a_renseigner).map(function(k){
+            return '<li>' + ech(j.a_renseigner[k]) + '</li>';
+          }).join('') + '</ul>';
+    }
 
     if(princ.length || part.length){
       /* LE PROFIL PRINCIPAL D'ABORD, ET SEUL DANS SON BLOC. Présenter les
@@ -20866,17 +21004,13 @@ document.addEventListener('keydown', function(e){
           + 'choisissez ci-dessus si vous voulez qu’il le soit.</div>';
       }
     } else {
-      /* AUCUN PROFIL DE REPLI N'EST CHOISI À LA PLACE DU CLIENT. « Le moins
-         faux » est un arbitrage qui lui appartient : le faire ici, en silence,
-         donnerait un audit assis sur un secteur qu'il n'a pas choisi. */
+      /* PLUS AUCUNE SECTION N'ARRIVE ICI, et la branche reste quand même.
+         Si une section future se retrouvait sans profil, la faire tomber en
+         silence rendrait un bloc vide sous son intitulé — et l'audit resterait
+         sur le secteur précédent, ce qui est exactement le défaut corrigé. */
       html += '<div style="margin-top:8px;border-left:3px solid var(--amber);'
-        + 'padding-left:10px">' + ech(s.motif) + '</div>'
-        + '<div class="muted" style="font-size:11px;margin-top:6px">Ce qu’il '
-        + 'faudrait pour établir un profil de cette section&nbsp;:</div>'
-        + '<ul class="muted" style="font-size:11px;line-height:1.55;margin:3px 0 0;padding-left:18px">'
-        + Object.keys(j.a_renseigner).map(function(k){
-            return '<li>' + ech(j.a_renseigner[k]) + '</li>';
-          }).join('') + '</ul>';
+        + 'padding-left:10px">Aucun profil ne couvre cette section&nbsp;: '
+        + 'l’audit affiché n’est pas le sien. ' + ech(s.motif || '') + '</div>';
     }
     zone.innerHTML = html;
   };

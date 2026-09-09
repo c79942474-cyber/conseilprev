@@ -179,32 +179,159 @@ DEPLACEMENTS_DEPUIS_REV2 = {
 # contrôle d'import et une règle du dépôt comparent les deux listes.
 PROFILS_SENTINEL = {
     "telecom":   {"sections": ["K", "C"],
+                  "socle": "releve",
                   "note": "Les opérateurs et fournisseurs de services relèvent "
                           "de K ; les équipementiers réseau, qui fabriquent, "
                           "de C."},
     "energie":   {"sections": ["D", "E"],
+                  "socle": "releve",
                   "note": "L'électricité et le gaz relèvent de D ; l'eau, "
                           "l'assainissement et les déchets de E."},
     "sante":     {"sections": ["R", "C", "K"],
+                  "socle": "releve",
                   "note": "Les établissements de soins relèvent de R ; les "
                           "fabricants de dispositifs médicaux de C ; les "
                           "éditeurs de logiciels de santé de K."},
     "finance":   {"sections": ["L"],
+                  "socle": "releve",
                   "note": "Banques, assureurs, gestion et paiement relèvent "
                           "tous de L — qui était K avant la révision 2.1."},
     "industrie": {"sections": ["C"],
+                  "socle": "releve",
                   "note": "L'ensemble de l'industrie manufacturière."},
     "transport": {"sections": ["H", "C"],
+                  "socle": "releve",
                   "note": "L'exploitation et la logistique relèvent de H ; les "
                           "constructeurs de véhicules de C."},
     "it":        {"sections": ["K", "J"],
+                  "socle": "releve",
                   "note": "L'édition de logiciels, le cloud et les services "
                           "numériques relèvent de K ; les plateformes de "
                           "contenus de J."},
     "public":    {"sections": ["P"],
+                  "socle": "releve",
                   "note": "Administrations centrales, territoriales et "
                           "organismes publics."},
+
+    # ── LES TREIZE PROFILS DE CADRE ────────────────────────────────────────
+    #
+    # POURQUOI ILS EXISTENT. Treize sections sur vingt-deux n'avaient AUCUN
+    # profil. Un client en construction, en commerce ou dans l'enseignement
+    # choisissait sa section, lisait « aucun profil relevé » — et l'audit
+    # affiché en dessous restait celui du secteur précédent. Il lisait donc un
+    # audit qui n'était pas le sien, sans que rien ne le dise.
+    #
+    # CE QU'ILS PORTENT, ET CE QU'ILS NE PORTENT PAS. Le régime applicable se
+    # LIT : l'annexe III de l'IA Act et les annexes I et II de NIS2 nomment des
+    # secteurs, et parfois des divisions NACE. Le socle des piliers, le budget
+    # et la durée ne se lisent nulle part — ils viennent d'observations et de
+    # missions réelles. Ces treize profils sont donc RELEVÉS SUR LE RÉGIME et
+    # NON CALIBRÉS SUR LE SOCLE : côté audit ils portent `socle: "cadre"`, et
+    # l'écran le dit au lieu d'afficher un chiffre.
+    #
+    # CE QUE LA LECTURE ÉTABLIT COMME ABSENT est écrit dans les profils au même
+    # titre que ce qu'elle établit comme présent. « Aucune annexe NIS2 ne nomme
+    # la construction » est un résultat, pas un trou.
+
+    "agro":      {"sections": ["A", "C"],
+                  "socle": "cadre",
+                  "note": "La production primaire, la sylviculture et la pêche "
+                          "relèvent de A ; la transformation alimentaire "
+                          "industrielle, que NIS2 vise, de C."},
+    "extractif": {"sections": ["B"],
+                  "socle": "cadre",
+                  "note": "Extraction minière, carrières, pétrole et gaz. NIS2 "
+                          "ne nomme pas l'extraction, mais bien le raffinage "
+                          "et le stockage (annexe I, point 1)."},
+    "construction": {"sections": ["F"],
+                  "socle": "cadre",
+                  "note": "Le BTP dans son ensemble. Aucune des deux annexes "
+                          "NIS2 ne le nomme ; l'IA embarquée dans un engin "
+                          "passe par le règlement Machines."},
+    "commerce":  {"sections": ["G"],
+                  "socle": "cadre",
+                  "note": "Gros, détail et places de marché. NIS2 l'atteint "
+                          "par deux portes nommées : le gros alimentaire "
+                          "(annexe II, 4) et les places de marché (II, 6)."},
+    "hotellerie": {"sections": ["I"],
+                  "socle": "cadre",
+                  "note": "Hôtellerie, restauration et agences de voyage. La "
+                          "restauration servant directement reste hors de "
+                          "l'annexe II de NIS2, qui vise le gros."},
+    "immobilier": {"sections": ["M"],
+                  "socle": "cadre",
+                  "note": "Transaction, gestion et foncières. Ni NIS2 ni "
+                          "l'annexe III ne la nomment — ce sont le RGPD et la "
+                          "non-discrimination qui mordent ici."},
+    "conseil":   {"sections": ["N"],
+                  "socle": "cadre",
+                  "note": "Conseil, ingénierie, professions réglementées et "
+                          "R&D. NIS2 l'atteint par les « organismes de "
+                          "recherche » (annexe II, point 7)."},
+    "services_support": {"sections": ["O"],
+                  "socle": "cadre",
+                  "note": "Intérim, agences d'emploi, centres de contact et "
+                          "sécurité privée. L'annexe III, point 4 vise "
+                          "directement le recrutement et la sélection."},
+    "education": {"sections": ["Q"],
+                  "socle": "cadre",
+                  "note": "Scolaire, supérieur et formation professionnelle. "
+                          "L'annexe III, point 3 couvre les quatre usages, à "
+                          "tous les niveaux."},
+    "culture":   {"sections": ["S", "J"],
+                  "socle": "cadre",
+                  "note": "Spectacle, sport et loisirs relèvent de S ; "
+                          "l'édition, l'audiovisuel et les plateformes de "
+                          "contenus de J."},
+    "proximite": {"sections": ["T"],
+                  "socle": "cadre",
+                  "note": "Associations, organisations professionnelles, "
+                          "réparation et services personnels. Aucune annexe "
+                          "NIS2 ne les nomme."},
+    "services_personne": {"sections": ["U"],
+                  "socle": "cadre",
+                  "note": "La section vise les MÉNAGES employeurs : l'entité "
+                          "auditable n'est pas le particulier mais le "
+                          "mandataire ou la plateforme qui opère pour lui."},
+    "international": {"sections": ["V"],
+                  "socle": "cadre",
+                  "note": "Institutions de l'Union, organisations "
+                          "intergouvernementales et représentations. Le "
+                          "règlement 2018/1725 y tient lieu de RGPD."},
 }
+
+#: Les textes LUS pour établir les régimes des profils de cadre. Consignés ici
+#: parce qu'une lecture qu'on ne peut pas refaire n'est pas une lecture : la
+#: date de version compte autant que la référence — l'annexe III a été modifiée
+#: par le règlement (UE) 2026/1744, et une lecture d'avant serait fausse.
+SOURCES_REGIMES = [
+    {"acte": "Règlement (UE) 2024/1689 (règlement sur l'intelligence "
+             "artificielle), annexe III — systèmes d'IA à haut risque",
+     "celex": "02024R1689-20260727",
+     "version_lue": "consolidée au 27/07/2026, après le règlement (UE) 2026/1744",
+     "consulte_le": "2026-09-09",
+     "retenu": "Les huit domaines. Les points 3 (éducation et formation "
+               "professionnelle) et 4 (emploi, gestion de la main-d'œuvre) "
+               "ancrent à eux seuls deux des treize profils."},
+    {"acte": "Directive (UE) 2022/2555 (SRI 2), annexe I — secteurs "
+             "hautement critiques",
+     "celex": "02022L2555-20221227",
+     "version_lue": "en vigueur au 27/12/2022",
+     "consulte_le": "2026-09-09",
+     "retenu": "Énergie, transports, bancaire, marchés financiers, santé, eau "
+               "potable, eaux usées, infrastructure numérique, services TIC "
+               "interentreprises, administration publique, espace."},
+    {"acte": "Directive (UE) 2022/2555 (SRI 2), annexe II — autres secteurs "
+             "critiques",
+     "celex": "02022L2555-20221227",
+     "version_lue": "en vigueur au 27/12/2022",
+     "consulte_le": "2026-09-09",
+     "retenu": "Postal, déchets, chimie, denrées alimentaires (gros et "
+               "transformation INDUSTRIELLE), fabrication (divisions NACE 26 à "
+               "30, expressément citées), fournisseurs numériques, organismes "
+               "de recherche. C'est la seule des trois annexes qui renvoie à "
+               "la NACE par ses divisions."},
+]
 
 #: Ce qu'il faudrait pour qu'une section sans profil en reçoive un. Écrit ici
 #: plutôt que promis ailleurs : c'est la seule forme qui survit à l'oubli.
@@ -254,6 +381,13 @@ def _verifier():
     for cle, p in PROFILS_SENTINEL.items():
         if not p["sections"]:
             raise ValueError("profil %s : aucune section déclarée" % cle)
+        if p.get("socle") not in ("releve", "cadre"):
+            raise ValueError(
+                "profil %s : socle « %r » — attendu « releve » (observé sur "
+                "des organisations du secteur) ou « cadre » (régime lu dans "
+                "les textes, socle non calibré). Un profil sans socle déclaré "
+                "serait lu comme relevé par défaut, ce qui est exactement "
+                "l'erreur à éviter." % (cle, p.get("socle")))
         for code in p["sections"]:
             if code not in _PAR_CODE:
                 raise ValueError(
@@ -277,14 +411,27 @@ def profils_de(code):
 
 
 def couverture():
-    """Quelles sections un profil relevé couvre, et lesquelles non.
+    """Ce que chaque section reçoit — et jusqu'où.
 
-    C'EST LE CHIFFRE QUI DÉCIDE DE LA LECTURE DU SÉLECTEUR, comme la couverture
-    décide de celle d'un total FinOps. Vingt-deux sections proposées dont neuf
-    seulement portent un profil relevé : le taire donnerait vingt-deux entrées
-    d'apparence équivalente."""
+    LA DISTINCTION A CHANGÉ DE NATURE, et le chiffre avec elle. Elle opposait
+    « couvert » à « non couvert » : neuf sections avaient un profil, treize
+    n'avaient rien. Ce partage n'existe plus — les vingt-deux sont couvertes.
+    Il a été remplacé par un partage plus juste et plus exigeant : le RÉGIME se
+    lit dans les textes, le SOCLE s'observe sur des organisations.
+
+    POURQUOI CE N'EST PAS UN ASSOUPLISSEMENT. L'ancien état laissait treize
+    sections sans profil — et l'audit affiché restait alors celui du secteur
+    précédent, sans que rien ne le dise. Un client en construction lisait
+    l'audit des télécoms. Nommer le régime de sa section et dire que le socle
+    n'est pas calibré est plus honnête que de ne rien nommer du tout.
+
+    C'EST TOUJOURS LE CHIFFRE QUI DÉCIDE DE LA LECTURE DU SÉLECTEUR : taire que
+    treize profils sur vingt et un n'ont pas de socle observé donnerait vingt et
+    une entrées d'apparence équivalente."""
     couvertes = sorted({c for p in PROFILS_SENTINEL.values()
                         for c in p["sections"]})
+    releves = sorted({c for p in PROFILS_SENTINEL.values()
+                      if p["socle"] == "releve" for c in p["sections"]})
     return {
         "total": len(SECTIONS),
         "avec_profil": len(couvertes),
@@ -292,16 +439,35 @@ def couverture():
         "codes_avec_profil": couvertes,
         "codes_sans_profil": [s["code"] for s in SECTIONS
                               if s["code"] not in couvertes],
+        # Le partage qui décide désormais de ce que l'écran affiche.
+        "profils": len(PROFILS_SENTINEL),
+        "profils_releves": sorted(k for k, p in PROFILS_SENTINEL.items()
+                                  if p["socle"] == "releve"),
+        "profils_cadre": sorted(k for k, p in PROFILS_SENTINEL.items()
+                                if p["socle"] == "cadre"),
+        "codes_socle_releve": releves,
+        "codes_socle_cadre": [s["code"] for s in SECTIONS
+                              if s["code"] not in releves],
     }
 
 
 def choisir(code):
-    """Ce que Sentinel a pour cette section — profil relevé, ou rien de relevé.
+    """Ce que Sentinel a pour cette section — et jusqu'où il l'a.
 
-    LA SORTIE EST LA MÊME DANS LES DEUX CAS, et c'est voulu : un appelant qui
-    ne lirait que `profils` doit tomber sur une liste vide, jamais sur un
-    profil de repli choisi à sa place. « Le moins faux » est un choix qui
-    appartient au client, pas à ce module.
+    LES VINGT-DEUX SECTIONS DÉSIGNENT DÉSORMAIS UN PROFIL. Auparavant treize
+    n'en désignaient aucun, et l'écran laissait alors l'audit sur le secteur
+    d'avant : un client en construction lisait l'audit des télécoms, avec ses
+    systèmes, ses régimes et son budget, sans que rien ne le démente. Ne rien
+    proposer n'était pas neutre — c'était laisser en place quelque chose de
+    faux.
+
+    CE QUI N'A PAS CHANGÉ : « le moins faux » reste un choix qui appartient au
+    client. Quand une section désigne plusieurs profils, ce module les rend
+    tous et n'en élit aucun. Ce qui a changé est qu'elle en désigne toujours
+    au moins un.
+
+    `socle` VOYAGE AVEC CHAQUE PROFIL. Sans lui, un profil dont seul le régime
+    est relevé se lirait exactement comme un profil observé.
     """
     s = section(code)
     if not s:
@@ -330,17 +496,27 @@ def choisir(code):
         # désynchronisent au premier tri fait d'un seul côté, et l'écran
         # attribue alors la note d'un profil à un autre sans que rien ne le
         # signale.
-        "principaux": [{"cle": k, "note": PROFILS_SENTINEL[k]["note"]}
+        "principaux": [{"cle": k, "note": PROFILS_SENTINEL[k]["note"],
+                        "socle": PROFILS_SENTINEL[k]["socle"]}
                        for k in principaux],
         "partiels": [{"cle": k, "note": PROFILS_SENTINEL[k]["note"],
+                      "socle": PROFILS_SENTINEL[k]["socle"],
                       "principale": PROFILS_SENTINEL[k]["sections"][0]}
                      for k in partiels],
-        "motif": None if profils else (
-            "aucun profil sectoriel n'est relevé pour cette section. L'audit "
-            "reste utilisable : les huit piliers et le questionnaire ne "
-            "dépendent pas du secteur. Ce qui manque est le point de départ, "
-            "les spécificités réglementaires du secteur et les repères de "
-            "budget — et ces trois-là ne s'extrapolent pas."),
+        # LE MOTIF DIT CE QUI MANQUE ENCORE, jamais qu'il n'y a rien. Un profil
+        # de cadre porte un régime lu dans les textes ; ce qu'il ne porte pas
+        # est le point de départ, le budget et la durée — et ces trois-là ne
+        # s'extrapolent pas, c'est écrit dans A_RENSEIGNER.
+        "motif": None if any(PROFILS_SENTINEL[k]["socle"] == "releve"
+                             for k in profils) else (
+            "le régime de cette section est relevé — les textes la nomment, ou "
+            "disent qu'ils ne la nomment pas — mais son socle ne l'est pas. "
+            "L'audit reste entier : les huit piliers, le questionnaire, les "
+            "quatre phases et les livrables ne dépendent pas du secteur. Ce "
+            "qui manque est le point de départ, le budget et la durée, qui "
+            "viennent d'observations et de missions réelles."),
+        "socle": ("releve" if any(PROFILS_SENTINEL[k]["socle"] == "releve"
+                                  for k in profils) else "cadre"),
         "deplacement_rev2": DEPLACEMENTS_DEPUIS_REV2.get(s["code"]),
     }
 
@@ -350,6 +526,7 @@ def _a_plat(code):
     r = choisir(code)
     return dict(r["section"], profils=r["profils"], notes=r["notes"],
                 principaux=r.get("principaux", []), partiels=r.get("partiels", []),
+                socle=r.get("socle"),
                 motif=r["motif"], deplacement_rev2=r["deplacement_rev2"])
 
 
