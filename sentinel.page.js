@@ -4473,7 +4473,20 @@ function matRender(){
 }
 
 window.matRadar = matRadar;
-window.matSelect = function(k){ MAT_CUR = k; if(window.matInitAnswers) window.matInitAnswers(k); matRender(); if(window.matRefreshScores) setTimeout(window.matRefreshScores, 30); window.scrollTo({top:0,behavior:"smooth"}); };
+/* LE SECTEUR EN COURS SE LIT, IL NE SE MODIFIE PAS D'AILLEURS. `MAT_CUR` est
+   une variable de ce fichier : le bloc NACE, écrit dans une autre fonction
+   anonyme, ne pouvait donc PAS savoir quel profil était en vigueur — il
+   peignait ses boutons sans état actif, et l'écran affichait « votre activité :
+   C » au-dessus d'un audit tournant sur Télécom, sans rien qui relie les deux.
+   Un accesseur en lecture seule suffit ; exposer la variable elle-même
+   ouvrirait une seconde porte d'écriture à côté de `matSelect`. */
+window.matSecteurCourant = function(){ return MAT_CUR; };
+window.matSelect = function(k){ MAT_CUR = k; if(window.matInitAnswers) window.matInitAnswers(k); matRender(); if(window.matRefreshScores) setTimeout(window.matRefreshScores, 30);
+  /* LE BLOC NACE SUIT LE CHOIX. Sans ce rappel, les deux rangées de boutons
+     affichaient des états contradictoires : le sélecteur marquait le profil
+     retenu, la proposition NACE restait muette. */
+  if(window.naceRepeindre) window.naceRepeindre();
+  window.scrollTo({top:0,behavior:"smooth"}); };
 
 /* ── Export PDF ── */
 window.matExportPDF = function(){
@@ -20720,13 +20733,38 @@ document.addEventListener('keydown', function(e){
       });
   };
 
+  //: La dernière section choisie, pour pouvoir repeindre après un changement
+  //  de secteur sans redemander à l'utilisateur ce qu'il a déjà dit.
+  var NACE_CODE = '';
+
+  /* UN BOUTON, SA NOTE, ET SON ÉTAT. Les trois ensemble, parce que séparés ils
+     mentent : quatre boutons suivis de quatre notes ne disent pas laquelle va
+     avec lequel, et un bouton sans état actif laisse croire que rien n'est
+     choisi alors que l'audit tourne déjà sur un profil. */
+  function bouton(cle, note, encart, courant){
+    var p = (window.MAT_SECTORS || {})[cle];
+    var lib = p ? (p.icon + ' ' + p.label) : cle;
+    var actif = (cle === courant);
+    return '<div style="display:flex;gap:10px;align-items:flex-start;margin-top:6px;flex-wrap:wrap">'
+      + '<button class="mat-sector-btn' + (actif ? ' on' : '') + '"'
+      + ' aria-pressed="' + (actif ? 'true' : 'false') + '"'
+      + ' onclick="matSelect(\'' + ech(cle) + '\')"'
+      + ' title="Faire porter l’audit sur ce profil sectoriel">' + ech(lib) + '</button>'
+      + '<div class="muted" style="font-size:11px;line-height:1.55;flex:1;min-width:200px">'
+      + (encart ? '<b>' + ech(encart) + '</b> ' : '') + ech(note) + '</div></div>';
+  }
+
+  window.naceRepeindre = function(){ if(NACE_CODE) window.naceChoisir(NACE_CODE); };
+
   window.naceChoisir = function(code){
     var zone = document.getElementById('mat-nace-reponse');
     var j = window.__nace;
     if(!zone || !j) return;
+    NACE_CODE = code || '';
     if(!code){ zone.innerHTML = ''; return; }
     var s = j.sections.filter(function(x){ return x.code === code; })[0];
     if(!s){ zone.innerHTML = ''; return; }
+    var courant = window.matSecteurCourant ? window.matSecteurCourant() : null;
 
     var html = '<div><b>' + ech(s.code) + ' — ' + ech(s.intitule) + '</b>'
       + ' <span class="muted" style="font-size:11px">(intitulé officiel&nbsp;: '
@@ -20739,21 +20777,44 @@ document.addEventListener('keydown', function(e){
         + ech(s.deplacement_rev2) + '</div>';
     }
 
-    if(s.profils.length){
-      html += '<div style="margin-top:8px">Sentinel porte un profil relevé pour '
-        + 'cette section&nbsp;:</div><div style="margin-top:5px">'
-        + s.profils.map(function(k){
-            var p = (window.MAT_SECTORS || {})[k];
-            var lib = p ? (p.icon + ' ' + p.label) : k;
-            return '<button class="mat-sector-btn" onclick="matSelect(\'' + ech(k)
-              + '\')" title="Ouvrir l’audit sur ce profil sectoriel">' + ech(lib)
-              + '</button>';
-          }).join(' ') + '</div>'
-        + s.profils.map(function(k){
-            var n = (j.profils_sentinel[k] || {}).note;
-            return n ? ('<div class="muted" style="font-size:11px;margin-top:4px">'
-                        + ech(n) + '</div>') : '';
-          }).join('');
+    var princ = s.principaux || [];
+    var part = s.partiels || [];
+
+    if(princ.length || part.length){
+      /* LE PROFIL PRINCIPAL D'ABORD, ET SEUL DANS SON BLOC. Présenter les
+         quatre profils de la section C en pairs invitait un industriel à
+         cocher « Télécom » : les équipementiers réseau relèvent bien de C,
+         mais « Télécom » n'est pas le profil de l'industrie manufacturière. */
+      if(princ.length){
+        html += '<div style="margin-top:10px;font-size:12px"><b>Profil'
+          + (princ.length > 1 ? 's' : '') + ' principal'
+          + (princ.length > 1 ? 'aux' : '') + ' de cette section</b></div>'
+          + princ.map(function(x){ return bouton(x.cle, x.note, '', courant); }).join('');
+      }
+      if(part.length){
+        html += '<div style="margin-top:12px;font-size:12px"><b>Une partie '
+          + 'seulement de cette section relève de&nbsp;:</b>'
+          + '<span class="muted"> ces profils ont leur activité principale '
+          + 'ailleurs.</span></div>'
+          + part.map(function(x){
+              return bouton(x.cle, x.note, 'Principalement en ' + x.principale + '.',
+                            courant); }).join('');
+      }
+      /* LE DÉSACCORD EST NOMMÉ, JAMAIS CORRIGÉ D'OFFICE. L'audit démarre sur
+         un profil par défaut ; si le client désigne ensuite une section dont
+         ce profil ne relève pas, l'écran affichait les deux sans les relier.
+         Changer son profil à sa place serait pire : c'est le choix que ce
+         module refuse explicitement de faire. On le dit, il tranche. */
+      var dedans = princ.concat(part).some(function(x){ return x.cle === courant; });
+      if(courant && !dedans){
+        var pc = (window.MAT_SECTORS || {})[courant];
+        html += '<div style="margin-top:12px;border-left:3px solid var(--amber);'
+          + 'padding-left:10px;font-size:11.5px;line-height:1.55">'
+          + 'L’audit tourne actuellement sur le profil <b>'
+          + ech(pc ? pc.label : courant) + '</b>, qui ne relève pas de la '
+          + 'section ' + ech(s.code) + '. Il n’a pas été changé pour vous&nbsp;: '
+          + 'choisissez ci-dessus si vous voulez qu’il le soit.</div>';
+      }
     } else {
       /* AUCUN PROFIL DE REPLI N'EST CHOISI À LA PLACE DU CLIENT. « Le moins
          faux » est un arbitrage qui lui appartient : le faire ici, en silence,

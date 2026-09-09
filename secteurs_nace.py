@@ -63,7 +63,7 @@ SOURCE = {
     "applicable_depuis": "2025-01-01",
     "consulte_le": "2026-09-07",
     "version_consultee": "anglaise",
-    "reserve": "Les intitulés officiels reproduits ci-dessous sont ceux de la "
+    "reserve": "Les intitulés officiels reproduits ici sont ceux de la "
                "version ANGLAISE de l'annexe. Les intitulés français sont une "
                "traduction de travail faite ici, non une reprise de la version "
                "française du règlement, qui n'a pas pu être consultée. "
@@ -310,12 +310,31 @@ def choisir(code):
                 "motif": "cette lettre ne désigne aucune section de la NACE "
                          "Rév. 2.1, qui va de A à V"}
     profils = profils_de(s["code"])
+    # ── LA HIÉRARCHIE ÉTAIT DANS LES DONNÉES, MAIS SEULEMENT COMME UN ORDRE ──
+    # `sections[0]` est la section PRINCIPALE d'un profil : celle où l'essentiel
+    # de son activité se range. Les suivantes sont des tranches — les
+    # équipementiers réseau relèvent de C, mais « Télécom » n'est pas le profil
+    # de l'industrie manufacturière. Les huit profils respectent cette
+    # convention, et les notes la disent en prose ; RIEN ne la garantissait. La
+    # rendre explicite est ce qui empêche l'écran de présenter quatre profils
+    # en pairs pour la section C, et d'inviter un industriel à cocher Télécom.
+    principaux = [k for k in profils if PROFILS_SENTINEL[k]["sections"][0] == s["code"]]
+    partiels = [k for k in profils if k not in principaux]
     return {
         "connu": True,
         "code": s["code"],
         "section": s,
         "profils": profils,
         "notes": [PROFILS_SENTINEL[p]["note"] for p in profils],
+        # LA NOTE VOYAGE AVEC SON PROFIL. Deux listes parallèles se
+        # désynchronisent au premier tri fait d'un seul côté, et l'écran
+        # attribue alors la note d'un profil à un autre sans que rien ne le
+        # signale.
+        "principaux": [{"cle": k, "note": PROFILS_SENTINEL[k]["note"]}
+                       for k in principaux],
+        "partiels": [{"cle": k, "note": PROFILS_SENTINEL[k]["note"],
+                      "principale": PROFILS_SENTINEL[k]["sections"][0]}
+                     for k in partiels],
         "motif": None if profils else (
             "aucun profil sectoriel n'est relevé pour cette section. L'audit "
             "reste utilisable : les huit piliers et le questionnaire ne "
@@ -330,6 +349,7 @@ def _a_plat(code):
     """Une section, telle que le sélecteur la lit : à plat, motif compris."""
     r = choisir(code)
     return dict(r["section"], profils=r["profils"], notes=r["notes"],
+                principaux=r.get("principaux", []), partiels=r.get("partiels", []),
                 motif=r["motif"], deplacement_rev2=r["deplacement_rev2"])
 
 
