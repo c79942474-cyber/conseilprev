@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Investisseurs — CONSEILPREV</title>
+<meta name="description" content="Relations avec les investisseurs, informations financières et documents de gouvernance de CONSEILPREV / ERSIA IA Management. Identité au registre, comptes déposés au greffe, documents publiés.">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" media="print" onload="this.media='all';this.onload=null" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap"></noscript>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--pm:#8b5cf6;--pl:#b48af7;--pp:#d4baff;--pf:#d946ef;--teal:#5eead4;--wh:#f8f4ff;--mu:rgba(212,186,255,.52);--bdr:rgba(180,138,247,.18);--blue:#6366f1;--amber:#f0b429}
+html{scroll-behavior:smooth}
+body{font-family:"DM Sans",sans-serif;background:linear-gradient(160deg,#0d0825,#110a2e,#0e0820);color:var(--wh);min-height:100vh}
+body::before{content:"";position:fixed;inset:0;background-image:url("/hero-bg.jpg");background-size:cover;background-position:center 55%;background-attachment:fixed;opacity:.30;z-index:-2;pointer-events:none}
+nav{position:sticky;top:0;z-index:100;background:rgba(10,6,32,.93);backdrop-filter:blur(24px);border-bottom:1px solid var(--bdr);padding:13px 28px;display:flex;align-items:center;gap:14px}
+nav .lg{font-family:"Cormorant Garamond",serif;font-size:21px;font-weight:700;letter-spacing:.02em;color:var(--wh);text-decoration:none}
+nav .lg span{color:var(--pf)}
+nav .rt{margin-left:auto;font-size:13px}
+nav .rt a{color:var(--pp);text-decoration:none}
+nav .rt a:hover{color:var(--wh)}
+main{max-width:1000px;margin:0 auto;padding:40px 24px 70px}
+.eyebrow{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--pf)}
+h1{font-family:"Cormorant Garamond",serif;font-size:clamp(30px,5vw,46px);font-weight:700;line-height:1.12;margin:8px 0 14px;text-wrap:balance}
+.chapo{font-size:15px;line-height:1.7;color:var(--pp);max-width:66ch}
+
+/* ── ONGLETS ──────────────────────────────────────────────────────────── */
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:30px 0 0;border-bottom:1px solid var(--bdr);padding-bottom:0}
+.tab{appearance:none;background:none;border:0;border-bottom:2px solid transparent;color:var(--mu);font-family:"DM Sans",sans-serif;font-size:14px;font-weight:500;padding:11px 15px;cursor:pointer;transition:color .18s,border-color .18s}
+.tab:hover{color:var(--pp)}
+.tab[aria-selected="true"]{color:var(--wh);border-bottom-color:var(--pf)}
+.tab:focus-visible{outline:2px solid var(--pf);outline-offset:2px;border-radius:4px 4px 0 0}
+.panneau{padding-top:28px}
+.panneau[hidden]{display:none}
+
+.bloc{background:rgba(139,92,246,.05);border:1px solid var(--bdr);border-radius:12px;padding:20px 22px;margin-bottom:16px}
+.bloc h2{font-family:"Cormorant Garamond",serif;font-size:23px;font-weight:600;margin-bottom:9px}
+.bloc h3{font-size:14px;font-weight:500;color:var(--teal);margin:16px 0 6px;letter-spacing:.01em}
+.bloc p{font-size:14px;line-height:1.72;color:var(--pp);margin-bottom:10px;max-width:74ch}
+.bloc p:last-child{margin-bottom:0}
+.bloc a{color:var(--teal);text-decoration:none;border-bottom:1px solid rgba(94,234,212,.3)}
+.bloc a:hover{color:var(--wh);border-bottom-color:var(--wh)}
+.fiche{list-style:none;display:grid;grid-template-columns:auto 1fr;gap:7px 18px;font-size:14px;margin:4px 0 0}
+.fiche dt{color:var(--mu);font-family:"Space Mono",monospace;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;padding-top:2px}
+.fiche dd{color:var(--wh)}
+.docs{list-style:none;display:grid;gap:9px;margin-top:6px}
+.docs li{display:flex;gap:11px;align-items:baseline;font-size:14px;line-height:1.6}
+.docs .quoi{color:var(--mu);font-size:12.5px}
+.reserve{border-left:3px solid var(--amber);background:rgba(240,180,41,.07);padding:14px 16px;border-radius:0 8px 8px 0;margin-bottom:16px}
+.reserve p{font-size:13.5px;line-height:1.68;color:var(--pp);margin-bottom:8px;max-width:74ch}
+.reserve p:last-child{margin-bottom:0}
+.reserve b{color:var(--wh)}
+.src{font-family:"Space Mono",monospace;font-size:11px;line-height:1.6;color:var(--mu);margin-top:12px}
+.src a{color:var(--mu);border-bottom-color:rgba(212,186,255,.2)}
+.ft-mini{border-top:1px solid var(--bdr);padding:16px 28px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;font-size:12px;color:var(--mu)}
+.ft-mini a{color:var(--pp);text-decoration:none}
+@media (max-width:620px){.fiche{grid-template-columns:1fr;gap:2px 0}.fiche dd{margin-bottom:9px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="lg" href="/">CONSEIL<span>PREV</span></a>
+  <span class="rt"><a href="/">← Retour au site</a></span>
+</nav>
+
+<main>
+  <div class="eyebrow">Investisseurs</div>
+  <h1>Ce que nous publions, et où se lisent les chiffres</h1>
+  <p class="chapo">CONSEILPREV est une société non cotée. Cette page ne publie donc pas de communiqué de
+    résultats : elle donne l'identité au registre, le point de contact, et le chemin exact vers les
+    documents qui font foi — ceux déposés au greffe, pas ceux réécrits sur un site.</p>
+
+  <div class="tabs" role="tablist" aria-label="Rubriques investisseurs">
+    <button class="tab" id="tab-relations"   role="tab" aria-controls="p-relations"   aria-selected="true"  data-onglet="relations">Relations avec les investisseurs</button>
+    <button class="tab" id="tab-financier"   role="tab" aria-controls="p-financier"   aria-selected="false" data-onglet="financier">Informations financières</button>
+    <button class="tab" id="tab-gouvernance" role="tab" aria-controls="p-gouvernance" aria-selected="false" data-onglet="gouvernance">Documents de gouvernance</button>
+  </div>
+
+  <!-- ══ RELATIONS ══════════════════════════════════════════════════════ -->
+  <section class="panneau" id="p-relations" role="tabpanel" aria-labelledby="tab-relations" tabindex="0">
+    <div class="bloc">
+      <h2>Un interlocuteur, pas un formulaire</h2>
+      <p>Les demandes d'investisseurs, de partenaires financiers et d'analystes sont traitées
+        directement par la gérance. Il n'y a pas de service dédié : l'entreprise est de taille
+        réduite, et le dire vaut mieux que de simuler une organisation qui n'existe pas.</p>
+      <dl class="fiche">
+        <dt>Contact</dt><dd><a href="mailto:christophe.cerf@outlook.com">christophe.cerf@outlook.com</a></dd>
+        <dt>Objet</dt><dd>Mentionner « Investisseurs » pour que la demande soit orientée</dd>
+        <dt>Langues</dt><dd>Français, anglais</dd>
+      </dl>
+    </div>
+
+    <div class="bloc">
+      <h2>Ce qui est communiqué sur demande</h2>
+      <p>Les éléments ci-dessous ne sont pas publiés sur ce site parce qu'ils ne s'adressent pas au
+        public. Ils sont transmis à une contrepartie identifiée, sous accord de confidentialité :</p>
+      <ul class="docs">
+        <li><span>▸</span><span>Comptes annuels dans leur intégralité <span class="quoi">— y compris lorsque le dépôt au greffe est assorti d'une déclaration de confidentialité</span></span></li>
+        <li><span>▸</span><span>Rapport de gestion <span class="quoi">— tenu à disposition de toute personne qui en fait la demande (art. L. 232-22 du code de commerce)</span></span></li>
+        <li><span>▸</span><span>Statuts à jour et extrait Kbis</span></li>
+        <li><span>▸</span><span>Présentation de l'activité et du portefeuille de missions <span class="quoi">— anonymisée pour les missions sous accord de confidentialité</span></span></li>
+      </ul>
+    </div>
+
+    <div class="reserve">
+      <p><b>Cette page n'est pas une offre.</b> Elle ne constitue ni une offre au public de titres
+        financiers, ni une sollicitation d'investissement, ni un document d'information au sens de la
+        réglementation des marchés. Aucun titre de la société n'est admis aux négociations sur une
+        plateforme de marché.</p>
+      <p>Aucune donnée prévisionnelle, projection de résultat ou valorisation ne figure sur cette
+        page. Un chiffre publié ici serait invérifiable&nbsp;; les comptes déposés, eux, le sont.</p>
+    </div>
+  </section>
+
+  <!-- ══ INFORMATIONS FINANCIÈRES ══════════════════════════════════════ -->
+  <section class="panneau" id="p-financier" role="tabpanel" aria-labelledby="tab-financier" tabindex="0" hidden>
+    <div class="bloc">
+      <h2>L'identité au registre</h2>
+      <p>Ces éléments sont ceux du registre du commerce et des sociétés. Ils figurent également aux
+        <a href="/mentions-legales">mentions légales</a>, qui en sont la source&nbsp;; s'ils
+        divergeaient, ce sont les mentions légales qui feraient foi.</p>
+      <dl class="fiche">
+        <dt>Dénomination</dt><dd>Conseilprev</dd>
+        <dt>Forme</dt><dd>Société à responsabilité limitée (SARL)</dd>
+        <dt>RCS</dt><dd id="inv-rcs">Paris 494 530 157</dd>
+        <dt>Capital social</dt><dd id="inv-capital">8.000 euros</dd>
+        <dt>Siège social</dt><dd>19 rue Auguste Chabrières, 75015 Paris</dd>
+      </dl>
+    </div>
+
+    <div class="bloc">
+      <h2>Où se lisent les comptes</h2>
+      <p>Toute société à responsabilité limitée dépose ses comptes annuels au greffe du tribunal,
+        pour être annexés au registre du commerce et des sociétés, dans le mois suivant leur
+        approbation — deux mois en cas de dépôt par voie électronique
+        <span class="quoi">(art. L. 232-22, I, du code de commerce)</span>. Ce dépôt est la source
+        opposable&nbsp;: il est daté, signé et consultable par un tiers.</p>
+      <h3>Consulter</h3>
+      <ul class="docs">
+        <li><span>▸</span><span>Registre national des entreprises et données du RCS — <a href="https://data.inpi.fr" target="_blank" rel="noopener">data.inpi.fr</a> <span class="quoi">(rechercher par le numéro 494 530 157)</span></span></li>
+        <li><span>▸</span><span>Annonces légales et modifications statutaires — <a href="https://www.bodacc.fr" target="_blank" rel="noopener">bodacc.fr</a></span></li>
+      </ul>
+    </div>
+
+    <div class="reserve">
+      <p><b>Un dépôt peut être confidentiel — et ne l'est pas pour un investisseur.</b> Les sociétés
+        répondant à la définition des micro-entreprises peuvent déclarer que les comptes annuels
+        qu'elles déposent ne seront pas rendus publics&nbsp;; les petites entreprises peuvent demander
+        que le compte de résultat ne le soit pas
+        <span class="quoi">(art. L. 232-25 du code de commerce)</span>.</p>
+      <p>Le même article règle la suite, et c'est le point qui compte ici&nbsp;: <b>les personnes
+        morales qui financent ou investissent, directement ou indirectement, dans les entreprises ont
+        accès à l'intégralité des comptes</b> — de même que les autorités judiciaires et
+        administratives et la Banque de France. Une déclaration de confidentialité ne ferme donc pas
+        la porte à un investisseur&nbsp;: elle la ferme au public.</p>
+      <p><b>Ce que cette page ne publie pas.</b> Chiffre d'affaires, résultat, trésorerie,
+        prévisionnel, valorisation. Non par réserve, mais parce qu'un chiffre porté sur un site n'est
+        adossé à rien&nbsp;: il n'est ni daté, ni déposé, ni opposable. Les comptes déposés le sont.</p>
+      <p class="src">Textes lus dans leur version en vigueur au 9 septembre 2026 —
+        <a href="https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000048535223" target="_blank" rel="noopener">art. L. 232-22</a>
+        (en vigueur depuis le 1<sup>er</sup> janvier 2025) et
+        <a href="https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000038611013" target="_blank" rel="noopener">art. L. 232-25</a>
+        (en vigueur depuis le 24 mai 2019).</p>
+    </div>
+  </section>
+
+  <!-- ══ DOCUMENTS DE GOUVERNANCE ══════════════════════════════════════ -->
+  <section class="panneau" id="p-gouvernance" role="tabpanel" aria-labelledby="tab-gouvernance" tabindex="0" hidden>
+    <div class="bloc">
+      <h2>Les documents publiés</h2>
+      <p>Ceux-ci sont en ligne, à leur adresse, et opposables tels qu'ils y figurent. Ils sont datés
+        de leur dernière mise à jour.</p>
+      <ul class="docs">
+        <li><span>▸</span><span><a href="/mentions-legales">Mentions légales</a> <span class="quoi">— identité de l'éditeur, hébergement, propriété intellectuelle</span></span></li>
+        <li><span>▸</span><span><a href="/cgv">Conditions générales de vente</a> <span class="quoi">— périmètre contractuel, prix, exécution, résiliation</span></span></li>
+        <li><span>▸</span><span><a href="/confidentialite">Politique de confidentialité</a> <span class="quoi">— traitements, bases légales, durées, droits</span></span></li>
+        <li><span>▸</span><span><a href="/protection-donnees">Protection des données</a> <span class="quoi">— mesures techniques et organisationnelles</span></span></li>
+        <li><span>▸</span><span><a href="/dsa">Conformité au règlement sur les services numériques</a> <span class="quoi">— DSA, règlement (UE) 2022/2065</span></span></li>
+        <li><span>▸</span><span><a href="/accessibility">Accessibilité</a> <span class="quoi">— état de conformité et points ouverts</span></span></li>
+      </ul>
+    </div>
+
+    <div class="bloc">
+      <h2>Comment la société est dirigée</h2>
+      <p>Conseilprev est une SARL. La direction est assurée par la gérance&nbsp;; les décisions
+        relevant des associés sont prises en assemblée ou par décision de l'associé unique, selon les
+        statuts. Cette forme ne comporte <b>ni conseil d'administration, ni conseil de surveillance,
+        ni comité d'audit</b> — les nommer ici serait décrire une société qui n'est pas celle-ci.</p>
+      <p>La société n'étant pas cotée et ne relevant d'aucun marché réglementé, elle n'effectue aucun
+        dépôt auprès d'une autorité de marché — ni auprès de l'AMF en France, ni auprès de la SEC aux
+        États-Unis.</p>
+    </div>
+
+    <div class="reserve">
+      <p><b>Ce qui n'est pas publié, et pourquoi.</b> Statuts, procès-verbaux d'assemblée, registre
+        des mouvements de titres et répartition du capital ne figurent pas sur ce site&nbsp;: ce sont
+        des documents sociaux, communiqués à une contrepartie identifiée, non au public. Les statuts
+        à jour s'obtiennent par ailleurs auprès du greffe, qui en est le dépositaire.</p>
+    </div>
+  </section>
+</main>
+
+<div class="ft-mini">
+  <span>© 2025 CONSEILPREV · ERSIA IA Management · <a href="/mentions-legales">Mentions légales</a> · <a href="/cgv">CGV</a></span>
+  <a href="/">← Retour au site</a>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var ONGLETS = ['relations', 'financier', 'gouvernance'];
+
+  function montrer(cle, deplacerLeFocus){
+    if(ONGLETS.indexOf(cle) === -1) cle = ONGLETS[0];
+    ONGLETS.forEach(function(o){
+      var bouton = document.getElementById('tab-' + o);
+      var panneau = document.getElementById('p-' + o);
+      if(!bouton || !panneau) return;
+      var actif = (o === cle);
+      bouton.setAttribute('aria-selected', actif ? 'true' : 'false');
+      /* LE PANNEAU SE CACHE AVEC `hidden`, PAS AVEC UNE CLASSE. Une classe qui
+         pose display:none laisse l'attribut mentir aux technologies
+         d'assistance : le panneau reste dans l'arbre d'accessibilite alors
+         qu'il n'est plus lisible. */
+      panneau.hidden = !actif;
+    });
+    if(deplacerLeFocus){
+      var b = document.getElementById('tab-' + cle);
+      if(b) b.focus();
+    }
+  }
+
+  /* L'ANCRE DECIDE DE L'ONGLET OUVERT.
+     Le pied de page porte trois entrees distinctes — « Relations avec les
+     investisseurs », « Informations financieres », « Documents de gouvernance ».
+     Sans cette lecture, les trois ouvriraient le meme onglet et deux d'entre
+     elles mentiraient sur leur destination. */
+  function depuisAncre(){
+    /* LA CLE PART TELLE QUELLE : `montrer` est la SEULE porte, et c'est elle
+       qui ramene une cle inconnue au premier onglet. Normaliser ici aussi
+       faisait deux gardes pour un seul risque — et le jour ou l'on retire
+       celui de `montrer`, l'autre couvre l'oubli sans que rien ne le dise.
+       Une mutation qui supprimait le garde-fou a survecu pour cette raison. */
+    montrer((location.hash || '').replace('#', ''), false);
+  }
+
+  document.querySelectorAll('.tab').forEach(function(b){
+    b.addEventListener('click', function(){
+      var cle = b.dataset.onglet;
+      montrer(cle, false);
+      /* L'ADRESSE SUIT L'ONGLET, pour qu'un lien copie rouvre le meme. */
+      if(history.replaceState) history.replaceState(null, '', '#' + cle);
+      else location.hash = cle;
+    });
+    /* LES FLECHES PARCOURENT LA RANGEE (motif ARIA des onglets) : sans elles,
+       un utilisateur au clavier doit tabuler a travers chaque bouton. */
+    b.addEventListener('keydown', function(e){
+      var i = ONGLETS.indexOf(b.dataset.onglet);
+      var j = e.key === 'ArrowRight' ? i + 1 : e.key === 'ArrowLeft' ? i - 1
+            : e.key === 'Home' ? 0 : e.key === 'End' ? ONGLETS.length - 1 : -1;
+      if(j === -1) return;
+      e.preventDefault();
+      var cle = ONGLETS[(j + ONGLETS.length) % ONGLETS.length];
+      montrer(cle, true);
+      if(history.replaceState) history.replaceState(null, '', '#' + cle);
+    });
+  });
+
+  window.addEventListener('hashchange', depuisAncre);
+  depuisAncre();
+})();
+</script>
+<div id="shared-footer-placeholder"></div>
+<script src="/footer-loader.js"></script>
+<script src="/fleches.js" defer></script>
+<script src="/guide.js" defer></script>
+</body>
+</html>

@@ -5529,6 +5529,7 @@ PAGES = {
     '/empreinte':         'empreinte.html',
     '/tarifications':     'tarifications.html',
     '/dsa':               'dsa.html',
+    '/investisseurs':     'investisseurs.html',
     '/team':              'team.html',
     '/careers':           'careers.html',
     '/ressources':        'ressources.html',

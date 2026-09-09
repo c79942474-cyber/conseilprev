@@ -275,6 +275,18 @@
     l: [["Protection des données", "/protection-donnees"], ["Support", "/support"]]
   };
 
+  GUIDES["/investisseurs"] = {
+    t: "Investisseurs",
+    p: "Trois onglets : le point de contact, l’identité au registre avec le chemin vers les comptes déposés, et les documents de gouvernance publiés. Conseilprev est une SARL non cotée — la page ne publie donc aucun communiqué de résultats.",
+    s: ["Chaque entrée du pied de page ouvre SON onglet : le lien « Informations financières » ne vous dépose pas sur l’accueil de la rubrique.",
+      "Si vous cherchez un chiffre, il n’est pas ici et c’est délibéré : l’onglet financier donne l’adresse du registre où les comptes déposés se consultent, eux datés et opposables.",
+      "Les documents de gouvernance sont ceux qui existent et sont en ligne. Ce qui n’est pas publié est nommé, avec le motif."],
+    k: [["Comptes déposés au greffe", "Toute SARL les dépose dans le mois suivant leur approbation, deux mois par voie électronique (art. L. 232-22 du code de commerce). Ce dépôt est la source opposable — un chiffre porté sur un site ne l’est pas."],
+      ["Dépôt confidentiel", "Une micro-entreprise peut déclarer que ses comptes déposés ne seront pas rendus publics (art. L. 232-25). La même disposition ouvre l’intégralité des comptes aux personnes morales qui financent ou investissent : la confidentialité vise le public, pas l’investisseur."],
+      ["Ni conseil d’administration, ni dépôt SEC", "La forme SARL n’en comporte pas, et la société ne relève d’aucun marché réglementé. La page le dit plutôt que de laisser chercher."]],
+    l: [["Mentions légales", "/mentions-legales"], ["Conditions générales", "/cgv"], ["Protection des données", "/protection-donnees"]]
+  };
+
   /* ── LES QUATRE ÉTUDES ─────────────────────────────────────────────────
      Elles sont réservées aux abonnés, et ce sont les documents les plus
      denses des deux sites. Un lecteur qui y arrive sans guide cherche
