@@ -5526,6 +5526,7 @@ PAGES = {
     '/confidentialite':   'confidentialite.html',
     '/actualites':        'actualites.html',
     '/formations':        'formations.html',
+    '/formation':         'formation.html',
     '/empreinte':         'empreinte.html',
     '/tarifications':     'tarifications.html',
     '/dsa':               'dsa.html',

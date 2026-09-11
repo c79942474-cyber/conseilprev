@@ -94,6 +94,17 @@
     l: [["Nous écrire", "/support"], ["Les formules Sentinel", "/tarifications"]]
   };
 
+  GUIDES["/formation"] = {
+    t: "Réserver une formation IA",
+    p: "La réservation de l’offre « Angles morts de la conformité IA », sur site : quatre sujets au choix, une séance de 4 h par semaine jusqu’en mars 2027, la première offerte puis 800 € HT.",
+    s: ["Choisissez d’abord un sujet parmi les quatre, puis une date libre dans le calendrier : une seule séance est possible par créneau, et un même sujet ne se réserve qu’une fois.",
+      "Renseignez le SIRET de votre entreprise : c’est lui qui décompte la séance offerte — une par entreprise, et non par personne.",
+      "La première séance est confirmée d’emblée ; une séance payante est enregistrée, puis facturée. Le tarif est décidé côté serveur, jamais saisi ici."],
+    k: [["Première séance offerte", "Une seule fois par entreprise, sur l’un des quatre sujets. Les séances suivantes sont à 800 € HT chacune, TVA en sus."],
+      ["Paiement en ligne", "Pas encore disponible : une séance payante donne lieu à une facture. Le prix affiché n’est jamais prélevé sans elle."]],
+    l: [["Le catalogue complet", "/formations"], ["Nous écrire", "/support"]]
+  };
+
   GUIDES["/empreinte"] = {
     t: "Notre empreinte numérique",
     p: "Ce que pèsent le site, la plateforme Sentinel et les modèles de langage utilisés, mesuré à partir de l’usage réel — méthode publiée, sources ouvertes, incertitudes affichées.",

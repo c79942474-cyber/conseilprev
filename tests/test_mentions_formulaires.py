@@ -149,8 +149,11 @@ COLLECTEURS = [(f, i, c) for (f, i, c) in TOUS if _collecte(c)]
 # devient un geste délibéré, daté et motivé ici même.
 #
 # Relevé du 4 septembre 2026 : 13 formulaires, dont 11 collectent.
-PLANCHER_FORMULAIRES = 13
-PLANCHER_COLLECTEURS = 11
+# Relevé du 11 septembre 2026 : +1 des deux côtés — formation.html porte le
+# formulaire d'inscription aux « Formations conformité IA » (collecteur). Le
+# plancher suit la hausse : 14 formulaires, dont 12 collectent.
+PLANCHER_FORMULAIRES = 14
+PLANCHER_COLLECTEURS = 12
 
 
 def test_le_releve_trouve_bien_des_formulaires():

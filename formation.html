@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Réserver une formation IA — CONSEILPREV</title>
+<meta name="description" content="Réservez votre séance de formation « Angles morts de la conformité IA », sur site : quatre sujets au choix, une séance de 4 h par semaine jusqu'en mars 2027, la première gratuite puis 800 € HT.">
+<!-- Polices NON BLOQUANTES : media="print" charge sans bloquer le premier rendu ;
+     onload rebascule sur "all". La page s'affiche aussitôt en polices système. -->
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" media="print" onload="this.media='all';this.onload=null" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap"></noscript>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0620;--bg2:#120830;--pm:#8b5cf6;--pl:#b48af7;--pp:#d4baff;
+  --pf:#d946ef;--teal:#5eead4;--wh:#f8f4ff;--mu:rgba(212,186,255,.52);
+  --bdr:rgba(180,138,247,.18);--card:rgba(139,92,246,.06);
+  --gold:#fbbf24;--ok:#4ade80
+}
+html{scroll-behavior:smooth}
+body{font-family:"DM Sans",sans-serif;background:linear-gradient(160deg,#0d0825,#110a2e,#0e0820);color:var(--wh);min-height:100vh;overflow-x:hidden}
+#blob-canvas{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.blob{position:absolute;border-radius:50%;filter:blur(60px);mix-blend-mode:screen}
+#blob1{width:520px;height:520px;background:radial-gradient(circle at 40% 40%,#7c3aed,#4f46e5 40%,transparent 70%);opacity:.42;top:2%;left:4%}
+#blob2{width:420px;height:420px;background:radial-gradient(circle at 55% 45%,#db2777,#be185d 35%,transparent 75%);opacity:.34;top:48%;right:6%}
+#read-progress{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,#6366f1,#8b5cf6,#d946ef);z-index:10001}
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(10,6,32,.93);backdrop-filter:blur(24px);border-bottom:1px solid var(--bdr);padding:13px 28px;display:flex;align-items:center;gap:12px}
+.nav-logo{font-family:"Cormorant Garamond",serif;font-size:18px;font-weight:700;text-decoration:none;color:var(--wh);margin-right:auto}.nav-logo span{color:var(--pl)}
+.nav-back{font-size:12px;color:var(--mu);text-decoration:none;font-family:"Space Mono",monospace;transition:color .18s}.nav-back:hover{color:var(--wh)}
+.nav-cta{background:linear-gradient(135deg,#8b5cf6,#d946ef);color:#fff;padding:8px 18px;border-radius:7px;font-size:13px;text-decoration:none;font-weight:600}
+/* HERO */
+.hero{padding:52px 24px 26px;text-align:center;position:relative}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(139,92,246,.2),transparent 65%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);border-radius:100px;padding:6px 18px;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;color:var(--pp);margin-bottom:16px;text-transform:uppercase}
+.bdot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+h1{font-family:"Cormorant Garamond",serif;font-size:clamp(30px,5vw,54px);font-weight:700;line-height:1.05;margin-bottom:12px;position:relative;text-wrap:balance}
+h1 em{font-style:italic;background:linear-gradient(135deg,#818cf8,#c084fc,#e879f9);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:15px;color:var(--pp);max-width:560px;margin:0 auto;line-height:1.7;position:relative}
+/* LAYOUT */
+.con{max-width:900px;margin:0 auto;padding:0 20px}
+.step{margin:30px 0}
+.step-head{display:flex;align-items:baseline;gap:12px;margin-bottom:16px}
+.step-num{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:rgba(139,92,246,.2);border:1px solid rgba(180,138,247,.4);display:flex;align-items:center;justify-content:center;font-family:"Space Mono",monospace;font-size:13px;color:var(--pl);font-weight:700}
+.step-title{font-family:"Cormorant Garamond",serif;font-size:24px;font-weight:700;color:var(--wh)}
+.step-hint{font-size:12px;color:var(--mu);font-family:"Space Mono",monospace;margin-left:auto;text-align:right}
+/* OFFRE BANNER */
+.offre{background:linear-gradient(135deg,rgba(139,92,246,.12),rgba(217,70,239,.08));border:1px solid rgba(180,138,247,.28);border-radius:16px;padding:22px 26px;margin:8px 0 6px;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between}
+.offre-facts{display:flex;flex-wrap:wrap;gap:22px}
+.offre-fact{display:flex;flex-direction:column;gap:2px}
+.offre-fact .k{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);font-family:"Space Mono",monospace}
+.offre-fact .v{font-size:14px;color:var(--wh);font-weight:500}
+.offre-price{text-align:right;font-size:13px;color:var(--pp);line-height:1.55}
+.offre-price strong{color:var(--gold)}
+/* CARTES SUJETS */
+.subj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(max-width:620px){.subj-grid{grid-template-columns:1fr}}
+.subj{position:relative;text-align:left;background:rgba(139,92,246,.06);border:1px solid rgba(180,138,247,.2);border-radius:14px;padding:20px 20px 18px;cursor:pointer;transition:border-color .18s,background .18s,transform .18s;font-family:inherit;color:inherit;width:100%}
+.subj:hover{border-color:rgba(217,70,239,.45);background:rgba(139,92,246,.12);transform:translateY(-2px)}
+.subj.sel{border-color:var(--teal);background:rgba(94,234,212,.1);box-shadow:0 0 0 1px var(--teal) inset}
+.subj-num{position:absolute;top:14px;right:16px;font-family:"Space Mono",monospace;font-size:11px;color:var(--mu)}
+.subj-tick{position:absolute;top:12px;right:14px;color:var(--teal);font-size:16px;display:none}
+.subj.sel .subj-tick{display:block}.subj.sel .subj-num{display:none}
+.subj-title{font-family:"Cormorant Garamond",serif;font-size:19px;font-weight:700;color:var(--wh);margin-bottom:6px;padding-right:26px}
+.subj-resume{font-size:12.5px;color:var(--pp);line-height:1.6}
+/* CALENDRIER */
+#cal-status{font-size:12.5px;color:var(--mu);padding:16px 0}
+.cal-month{margin-bottom:18px}
+.cal-month-h{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--pl);margin-bottom:9px;border-bottom:1px solid var(--bdr);padding-bottom:6px}
+.cal-row{display:flex;flex-wrap:wrap;gap:8px}
+.cr-chip{font-family:inherit;color:var(--wh);background:rgba(139,92,246,.07);border:1px solid rgba(180,138,247,.22);border-radius:10px;padding:9px 12px;cursor:pointer;text-align:center;min-width:96px;transition:border-color .16s,background .16s,transform .16s}
+.cr-chip:hover:not(.pris){border-color:rgba(217,70,239,.5);background:rgba(139,92,246,.15);transform:translateY(-1px)}
+.cr-chip.sel{border-color:var(--teal);background:rgba(94,234,212,.12);box-shadow:0 0 0 1px var(--teal) inset}
+.cr-chip .cr-jour{display:block;font-size:10px;color:var(--mu);font-family:"Space Mono",monospace;text-transform:capitalize}
+.cr-chip .cr-date{display:block;font-size:14px;font-weight:600;margin-top:1px}
+.cr-chip.pris{opacity:.4;cursor:not-allowed;text-decoration:line-through}
+.cr-chip .cr-etat{display:block;font-size:9px;color:var(--pf);margin-top:2px;font-family:"Space Mono",monospace}
+/* FORMULAIRE */
+.form-wrap{background:rgba(139,92,246,.06);border:1px solid rgba(180,138,247,.18);border-radius:16px;padding:30px 34px;margin-bottom:14px}
+@media(max-width:600px){.form-wrap{padding:20px 16px}}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+@media(max-width:580px){.frow{grid-template-columns:1fr}}
+.fgroup{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+label.fl{font-size:12px;color:var(--pp);font-family:"Space Mono",monospace;letter-spacing:.04em}
+label.fl span{color:var(--pf)}
+.finput,.fselect,.ftextarea{width:100%;padding:11px 14px;background:rgba(255,255,255,.05);border:1px solid rgba(180,138,247,.2);border-radius:8px;color:var(--wh);font-size:13px;font-family:"DM Sans",sans-serif;outline:none;transition:border-color .18s,box-shadow .18s;-webkit-user-select:text!important;user-select:text!important}
+.finput:focus,.fselect:focus,.ftextarea:focus{border-color:rgba(217,70,239,.5);box-shadow:0 0 0 3px rgba(139,92,246,.15)}
+.finput::placeholder,.ftextarea::placeholder{color:rgba(212,186,255,.35)}
+.fselect{cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23b48af7' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+.fselect option{background:#120830;color:var(--wh)}
+.ftextarea{resize:vertical;min-height:96px;line-height:1.6}
+.phone-wrap{display:flex;gap:8px}.phone-prefix{width:96px;flex-shrink:0}.phone-num{flex:1}
+.field-note{font-size:11px;color:var(--mu);font-family:"Space Mono",monospace;margin-top:2px}
+/* Récap du choix, au-dessus du formulaire */
+.recap{display:flex;flex-wrap:wrap;gap:10px 26px;background:rgba(94,234,212,.06);border:1px solid rgba(94,234,212,.22);border-radius:12px;padding:14px 18px;margin-bottom:22px;font-size:13px}
+.recap .k{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);font-family:"Space Mono",monospace;display:block}
+.recap .v{color:var(--wh);font-weight:500}
+.recap .tarif{color:var(--gold);font-weight:600}
+.recap.incomplet{background:rgba(139,92,246,.05);border-color:var(--bdr)}
+.recap .todo{color:var(--pp)}
+/* Mention d'information RGPD (art. 13) — lisible, pas décorative. */
+.fo-rgpd{font-size:12px;color:rgba(216,180,254,.74);line-height:1.7;margin:4px 0 18px;background:rgba(216,180,254,.07);border:1px solid rgba(216,180,254,.18);border-radius:10px;padding:14px 16px}
+.fo-rgpd a{color:var(--teal);text-decoration:none}.fo-rgpd a:hover{text-decoration:underline}
+.fo-rgpd .consent-rgpd-refs{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.rgpd-tag{font-family:"Space Mono",monospace;font-size:10px;color:var(--pp);background:rgba(139,92,246,.14);border:1px solid rgba(180,138,247,.28);border-radius:6px;padding:3px 8px}
+/* Boutons */
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn-submit{background:linear-gradient(135deg,#8b5cf6,#d946ef);color:#fff;border:none;padding:14px 30px;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;font-family:"DM Sans",sans-serif;transition:all .18s;box-shadow:0 4px 20px rgba(139,92,246,.4)}
+.btn-submit:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(217,70,239,.5)}
+.btn-submit:disabled{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-reset{background:rgba(255,255,255,.06);border:1px solid rgba(180,138,247,.25);color:var(--mu);padding:14px 22px;border-radius:9px;font-size:14px;cursor:pointer;font-family:"DM Sans",sans-serif;transition:all .18s}
+.btn-reset:hover{border-color:var(--pl);color:var(--pp)}
+/* Status */
+.form-status{padding:12px 16px;border-radius:8px;font-size:13px;margin-top:14px;display:none;line-height:1.55}
+.form-status.ok{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#4ade80;display:block}
+.form-status.err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#f87171;display:block}
+/* Confirmation */
+#confirm{display:none;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.3);border-radius:16px;padding:30px 34px;margin:8px 0 30px}
+#confirm h2{font-family:"Cormorant Garamond",serif;font-size:26px;color:var(--ok);margin-bottom:10px}
+#confirm .c-line{font-size:14px;color:var(--wh);line-height:1.7;margin-bottom:6px}
+#confirm .c-line strong{color:var(--pp)}
+#confirm .c-note{font-size:12.5px;color:var(--pp);margin-top:12px;line-height:1.65}
+#confirm .btn-reset{margin-top:18px}
+/* Info pratique */
+.info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;padding:8px 0 40px}
+@media(max-width:600px){.info-grid{grid-template-columns:1fr}}
+.info-card{background:rgba(139,92,246,.05);border:1px solid rgba(180,138,247,.15);border-radius:12px;padding:18px 20px}
+.info-card-title{font-size:13px;font-weight:600;color:var(--pp);margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.info-card-body{font-size:12px;color:var(--mu);line-height:1.75}.info-card-body strong{color:var(--wh)}
+</style>
+</head>
+<body>
+<div id="blob-canvas" aria-hidden="true">
+  <div class="blob" id="blob1"></div>
+  <div class="blob" id="blob2"></div>
+</div>
+<div id="read-progress" aria-hidden="true"></div>
+
+<nav>
+  <a href="/" class="nav-logo">CONSEIL<span>PREV</span></a>
+  <a href="/formations" class="nav-back">← Catalogue des formations</a>
+  <a href="#inscription" class="nav-cta">Réserver</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge"><span class="bdot"></span> Formation sur site · conformité IA</div>
+  <h1>Angles morts de la <em>conformité IA</em></h1>
+  <p class="hero-sub" id="hero-sub">Gouverner les systèmes d'IA et les agents dans vos centres de données — une séance de 4 h, dans vos locaux.</p>
+</section>
+
+<main class="con" id="main-content">
+
+  <!-- OFFRE : les faits, et la règle de tarif -->
+  <div class="offre" id="offre">
+    <div class="offre-facts">
+      <div class="offre-fact"><span class="k">Format</span><span class="v" id="of-modalite">Sur site — en présentiel</span></div>
+      <div class="offre-fact"><span class="k">Durée</span><span class="v" id="of-duree">4 heures</span></div>
+      <div class="offre-fact"><span class="k">Rythme</span><span class="v">1 séance / semaine</span></div>
+      <div class="offre-fact"><span class="k">Sujets au choix</span><span class="v" id="of-nb">4</span></div>
+    </div>
+    <div class="offre-price" id="of-price">
+      <strong>1<sup>re</sup> séance offerte</strong>, sur site.<br>
+      Les suivantes : <strong>800&nbsp;€ HT</strong> chacune.
+    </div>
+  </div>
+
+  <!-- ÉTAPE 1 — le sujet -->
+  <section class="step" id="etape-sujet">
+    <div class="step-head">
+      <span class="step-num">1</span>
+      <span class="step-title">Choisissez votre sujet</span>
+      <span class="step-hint">Un sujet par séance</span>
+    </div>
+    <div class="subj-grid" id="subj-grid" role="listbox" aria-label="Sujets de formation">
+      <div id="subj-loading" style="grid-column:1/-1;color:var(--mu);font-size:13px;padding:10px 0">Chargement des sujets…</div>
+    </div>
+  </section>
+
+  <!-- ÉTAPE 2 — la date -->
+  <section class="step" id="etape-date">
+    <div class="step-head">
+      <span class="step-num">2</span>
+      <span class="step-title">Choisissez votre date</span>
+      <span class="step-hint" id="cal-libres"></span>
+    </div>
+    <div id="cal-status">Chargement du calendrier…</div>
+    <div id="cal-grid"></div>
+  </section>
+
+  <!-- ÉTAPE 3 — l'inscription -->
+  <section class="step" id="inscription">
+    <div class="step-head">
+      <span class="step-num">3</span>
+      <span class="step-title">Vos coordonnées</span>
+    </div>
+
+    <!-- Récapitulatif du choix, tenu à jour -->
+    <div class="recap incomplet" id="recap">
+      <div><span class="k">Sujet</span><span class="v todo" id="rc-sujet">à choisir (étape 1)</span></div>
+      <div><span class="k">Séance</span><span class="v todo" id="rc-date">à choisir (étape 2)</span></div>
+      <div><span class="k">Tarif indicatif</span><span class="v tarif" id="rc-tarif">1<sup>re</sup> gratuite · sinon 800 € HT</span></div>
+    </div>
+
+    <div class="form-wrap">
+      <form id="formation-form" autocomplete="on" onsubmit="return submitFormation(event)">
+        <div class="frow">
+          <div class="fgroup">
+            <label class="fl" for="fo-prenom">Prénom <span>*</span></label>
+            <input class="finput" type="text" id="fo-prenom" name="prenom" placeholder="Alex" required autocomplete="given-name">
+          </div>
+          <div class="fgroup">
+            <label class="fl" for="fo-nom">Nom <span>*</span></label>
+            <input class="finput" type="text" id="fo-nom" name="nom" placeholder="Durand" required autocomplete="family-name">
+          </div>
+        </div>
+
+        <div class="frow">
+          <div class="fgroup">
+            <label class="fl" for="fo-email">Adresse électronique professionnelle <span>*</span></label>
+            <input class="finput" type="email" id="fo-email" name="email" placeholder="alex.durand@entreprise.fr" required autocomplete="email">
+          </div>
+          <div class="fgroup">
+            <label class="fl" for="fo-phone">Téléphone</label>
+            <div class="phone-wrap">
+              <select class="fselect phone-prefix" id="fo-prefix" aria-label="Indicatif téléphonique">
+                <option value="+33">🇫🇷 +33</option>
+                <option value="+32">🇧🇪 +32</option>
+                <option value="+41">🇨🇭 +41</option>
+                <option value="+352">🇱🇺 +352</option>
+                <option value="+49">🇩🇪 +49</option>
+                <option value="+44">🇬🇧 +44</option>
+              </select>
+              <input class="finput phone-num" type="tel" id="fo-phone" name="telephone" placeholder="6 00 00 00 00" autocomplete="tel">
+            </div>
+          </div>
+        </div>
+
+        <div class="frow">
+          <div class="fgroup">
+            <label class="fl" for="fo-entreprise">Entreprise <span>*</span></label>
+            <input class="finput" type="text" id="fo-entreprise" name="entreprise" placeholder="Votre société" required autocomplete="organization">
+          </div>
+          <div class="fgroup">
+            <label class="fl" for="fo-siret">SIRET</label>
+            <input class="finput" type="text" id="fo-siret" name="siret" placeholder="123 456 789 00012" inputmode="numeric" autocomplete="off">
+            <span class="field-note">Sert à décompter la séance offerte par entreprise.</span>
+          </div>
+        </div>
+
+        <div class="fgroup">
+          <label class="fl" for="fo-fonction">Fonction</label>
+          <input class="finput" type="text" id="fo-fonction" name="fonction" placeholder="DSI, RSSI, DPO, chef de projet…" autocomplete="organization-title">
+        </div>
+
+        <div class="fgroup">
+          <label class="fl" for="fo-message">Précisions (facultatif)</label>
+          <textarea class="ftextarea" id="fo-message" name="message" placeholder="Contexte, nombre de participants prévus, contraintes de date dans la semaine choisie…" rows="4"></textarea>
+        </div>
+
+        <!-- Information RGPD (art. 13) — le formulaire ne demande RIEN à cocher :
+             instruire une inscription et organiser la séance relèvent des mesures
+             précontractuelles ou de l'exécution du contrat (art. 6.1.b), pas du
+             consentement, et un consentement exigé pour envoyer ne serait pas
+             libre (art. 7.4). Aucune prospection n'est adossée à ce formulaire. -->
+        <p class="rgpd-mention fo-rgpd">
+          Les informations transmises servent à instruire votre inscription à la
+          formation et à organiser la séance retenue (mesures précontractuelles ou
+          exécution du contrat, art. 6.1.b RGPD). Elles sont conservées 24 mois après
+          la dernière séance, puis effacées. Aucune donnée n'est partagée avec des
+          tiers autres que nos sous-traitants d'envoi de courriel et d'hébergement.
+          Droits d'accès, de rectification, d'effacement et d'opposition — voir la
+          <a href="/confidentialite" target="_blank" rel="noopener">politique de confidentialité</a>.
+          <span class="consent-rgpd-refs">
+            <span class="rgpd-tag">Art. 6.1.b — Mesures précontractuelles</span>
+            <span class="rgpd-tag">Art. 13 — Information</span>
+            <span class="rgpd-tag">Art. 15 à 21 — Vos droits</span>
+          </span>
+        </p>
+
+        <div class="btn-row">
+          <button type="submit" class="btn-submit" id="fo-submit">
+            <span id="fo-btn-txt">Réserver ma séance</span>
+          </button>
+          <button type="button" class="btn-reset" onclick="resetFormation()">Réinitialiser</button>
+        </div>
+
+        <div class="form-status" id="fo-status" role="status" aria-live="polite"></div>
+      </form>
+    </div>
+  </section>
+
+  <!-- CONFIRMATION (masquée jusqu'au succès) -->
+  <section id="confirm" aria-live="polite">
+    <h2 id="cf-titre">Réservation enregistrée</h2>
+    <p class="c-line"><strong>Sujet :</strong> <span id="cf-sujet"></span></p>
+    <p class="c-line"><strong>Séance :</strong> <span id="cf-creneau"></span> — dans vos locaux</p>
+    <p class="c-line"><strong>Tarif :</strong> <span id="cf-tarif"></span></p>
+    <p class="c-note" id="cf-note"></p>
+    <button type="button" class="btn-reset" onclick="resetFormation(true)">Réserver une autre séance</button>
+  </section>
+
+  <!-- INFOS PRATIQUES -->
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-card-title">🎓 Une séance = un sujet</div>
+      <div class="info-card-body">Chaque séance porte sur <strong>l'un des quatre sujets</strong>. Votre <strong>première</strong> est offerte, sur site ; les suivantes sont à <strong>800&nbsp;€ HT</strong>. Le décompte se fait par entreprise (SIRET).</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-title">🗓️ Comment ça marche</div>
+      <div class="info-card-body">Une séance de 4 h par semaine, jusqu'en <strong>mars 2027</strong>. Vous choisissez la semaine ; le jour exact se cale ensuite avec vous. La séance gratuite est <strong>confirmée d'emblée</strong> ; une séance payante donne lieu à une facture (le paiement en ligne arrive bientôt).</div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+(function(){
+  "use strict";
+  var REF = null;                 // le référentiel servi par le serveur
+  var state = { sujet:null, creneau:null };
+  var MOIS = ["janvier","février","mars","avril","mai","juin","juillet","août",
+              "septembre","octobre","novembre","décembre"];
+
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+
+  // ── Barre de progression de lecture ──
+  window.addEventListener('scroll', function(){
+    var p = document.getElementById('read-progress');
+    if(!p) return;
+    var s = window.scrollY, t = document.body.scrollHeight - window.innerHeight;
+    p.style.width = (t>0 ? Math.round(s/t*100) : 0) + '%';
+  }, {passive:true});
+
+  // ── Chargement du référentiel (offre + sujets + calendrier + tarif) ──
+  function charger(){
+    fetch('/api/formation/referentiel', {headers:{'Accept':'application/json'}})
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if(!d || !d.ok){ throw new Error('referentiel'); }
+        REF = d;
+        rendreOffre(d);
+        rendreSujets(d.sujets || []);
+        rendreCalendrier(d.creneaux || [], d.creneaux_libres);
+      })
+      .catch(function(){
+        var sl = document.getElementById('subj-loading');
+        if(sl) sl.textContent = "Le catalogue n'a pas pu être chargé. Réessayez dans un instant, ou écrivez-nous.";
+        document.getElementById('cal-status').textContent =
+          "Le calendrier n'a pas pu être chargé. Réessayez dans un instant.";
+      });
+  }
+
+  function rendreOffre(d){
+    var o = d.offre || {}, t = d.tarif || {};
+    if(o.modalite) document.getElementById('of-modalite').textContent = o.modalite;
+    if(o.duree_h)  document.getElementById('of-duree').textContent = o.duree_h + ' heures';
+    if(t.nb_sujets) document.getElementById('of-nb').textContent = t.nb_sujets;
+    if(o.sous_titre) document.getElementById('hero-sub').textContent =
+      o.sous_titre + " — une séance de " + (o.duree_h||4) + " h, dans vos locaux.";
+  }
+
+  function rendreSujets(sujets){
+    var g = document.getElementById('subj-grid');
+    g.innerHTML = '';
+    sujets.forEach(function(s){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'subj';
+      b.setAttribute('role','option');
+      b.setAttribute('aria-selected','false');
+      b.dataset.cle = s.cle;
+      b.innerHTML =
+        '<span class="subj-num">0'+ esc(s.num) +'</span>'+
+        '<span class="subj-tick" aria-hidden="true">✓</span>'+
+        '<div class="subj-title">'+ esc(s.titre) +'</div>'+
+        '<div class="subj-resume">'+ esc(s.resume) +'</div>';
+      b.addEventListener('click', function(){ choisirSujet(s, b); });
+      g.appendChild(b);
+    });
+  }
+
+  function choisirSujet(s, el){
+    state.sujet = s;
+    var tous = document.querySelectorAll('.subj');
+    for(var i=0;i<tous.length;i++){
+      tous[i].classList.remove('sel');
+      tous[i].setAttribute('aria-selected','false');
+    }
+    el.classList.add('sel');
+    el.setAttribute('aria-selected','true');
+    majRecap();
+  }
+
+  function rendreCalendrier(creneaux, libres){
+    var st = document.getElementById('cal-status');
+    var grid = document.getElementById('cal-grid');
+    grid.innerHTML = '';
+    if(!creneaux.length){
+      st.textContent = "Aucune date n'est ouverte à la réservation pour le moment.";
+      return;
+    }
+    st.style.display = 'none';
+    document.getElementById('cal-libres').textContent =
+      (libres!=null?libres:creneaux.filter(function(c){return c.libre;}).length) + ' date(s) libre(s)';
+
+    // Regrouper par mois (clé AAAA-MM), dans l'ordre du calendrier.
+    var ordre = [], parMois = {};
+    creneaux.forEach(function(c){
+      var cle = (c.date||'').slice(0,7);
+      if(!parMois[cle]){ parMois[cle] = []; ordre.push(cle); }
+      parMois[cle].push(c);
+    });
+    ordre.forEach(function(cle){
+      var an = cle.slice(0,4), mo = parseInt(cle.slice(5,7),10)-1;
+      var bloc = document.createElement('div'); bloc.className = 'cal-month';
+      var h = document.createElement('div'); h.className = 'cal-month-h';
+      h.textContent = (MOIS[mo]||'') + ' ' + an;
+      bloc.appendChild(h);
+      var row = document.createElement('div'); row.className = 'cal-row';
+      parMois[cle].forEach(function(c){
+        var jour = (c.libelle||'').split(' ')[0] || c.jour || '';
+        var num = c.date ? parseInt(c.date.slice(8,10),10) : '';
+        var chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'cr-chip' + (c.libre ? '' : ' pris');
+        chip.dataset.date = c.date;
+        chip.innerHTML =
+          '<span class="cr-jour">'+ esc(jour) +'</span>'+
+          '<span class="cr-date">'+ esc(num) +'</span>'+
+          (c.libre ? '' : '<span class="cr-etat">réservé</span>');
+        if(c.libre){
+          chip.setAttribute('aria-label', 'Réserver le ' + (c.libelle||c.date));
+          chip.addEventListener('click', function(){ choisirDate(c, chip); });
+        }else{
+          chip.disabled = true;
+          chip.setAttribute('aria-label', (c.libelle||c.date) + ' — déjà réservé');
+        }
+        row.appendChild(chip);
+      });
+      bloc.appendChild(row);
+      grid.appendChild(bloc);
+    });
+  }
+
+  function choisirDate(c, el){
+    state.creneau = c;
+    var tous = document.querySelectorAll('.cr-chip');
+    for(var i=0;i<tous.length;i++) tous[i].classList.remove('sel');
+    el.classList.add('sel');
+    majRecap();
+  }
+
+  function majRecap(){
+    var recap = document.getElementById('recap');
+    var s = document.getElementById('rc-sujet'), d = document.getElementById('rc-date');
+    if(state.sujet){ s.textContent = state.sujet.titre; s.classList.remove('todo'); }
+    else { s.textContent = 'à choisir (étape 1)'; s.classList.add('todo'); }
+    if(state.creneau){ d.textContent = state.creneau.libelle; d.classList.remove('todo'); }
+    else { d.textContent = 'à choisir (étape 2)'; d.classList.add('todo'); }
+    recap.classList.toggle('incomplet', !(state.sujet && state.creneau));
+  }
+
+  // ── Soumission : le serveur décide du prix, jamais le client ──
+  window.submitFormation = function(e){
+    e.preventDefault();
+    var status = document.getElementById('fo-status');
+    var btn = document.getElementById('fo-submit');
+    var btnTxt = document.getElementById('fo-btn-txt');
+    function erreur(m){ status.className = 'form-status err'; status.textContent = '⚠ ' + m; }
+
+    if(!state.sujet){ erreur("Choisissez d'abord un sujet (étape 1)."); return false; }
+    if(!state.creneau){ erreur("Choisissez une date (étape 2)."); return false; }
+
+    var prenom = document.getElementById('fo-prenom').value.trim();
+    var nom = document.getElementById('fo-nom').value.trim();
+    var email = document.getElementById('fo-email').value.trim();
+    var entreprise = document.getElementById('fo-entreprise').value.trim();
+    var prefix = document.getElementById('fo-prefix').value;
+    var phone = document.getElementById('fo-phone').value.trim();
+    var siret = document.getElementById('fo-siret').value.trim();
+    var fonction = document.getElementById('fo-fonction').value.trim();
+    var message = document.getElementById('fo-message').value.trim();
+
+    if(!prenom || !nom || !email || !entreprise){
+      erreur("Prénom, nom, adresse électronique et entreprise sont requis."); return false;
+    }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+      erreur("Adresse électronique invalide."); return false;
+    }
+
+    btn.disabled = true; btnTxt.textContent = 'Envoi en cours…';
+    status.className = 'form-status'; status.textContent = '';
+
+    fetch('/api/formation/inscription', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body: JSON.stringify({
+        sujet: state.sujet.cle,
+        creneau: state.creneau.date,
+        prenom: prenom, nom: nom, email: email, entreprise: entreprise,
+        telephone: phone ? (prefix + ' ' + phone) : '',
+        siret: siret, fonction: fonction, message: message
+      })
+    })
+    .then(function(r){ return r.json().then(function(j){ return {code:r.status, j:j}; }); })
+    .then(function(res){
+      btn.disabled = false; btnTxt.textContent = 'Réserver ma séance';
+      var j = res.j || {};
+      if(res.code === 200 && j.ok){
+        afficherConfirmation(j);
+      }else{
+        erreur(j.error || "La réservation n'a pas pu être enregistrée. Réessayez.");
+        // Un créneau pris entre-temps : rafraîchir le calendrier.
+        if(res.code === 409){ charger(); state.creneau = null; majRecap(); }
+      }
+    })
+    .catch(function(){
+      btn.disabled = false; btnTxt.textContent = 'Réserver ma séance';
+      erreur("Le réseau a coupé. Votre réservation n'a pas été envoyée — réessayez.");
+    });
+    return false;
+  };
+
+  function afficherConfirmation(j){
+    document.getElementById('etape-sujet').style.display = 'none';
+    document.getElementById('etape-date').style.display = 'none';
+    document.getElementById('inscription').style.display = 'none';
+    document.getElementById('offre').style.display = 'none';
+    document.getElementById('cf-titre').textContent =
+      j.gratuit ? 'Séance confirmée — elle est offerte' : 'Réservation enregistrée';
+    document.getElementById('cf-sujet').textContent = j.sujet || (state.sujet && state.sujet.titre) || '';
+    document.getElementById('cf-creneau').textContent = j.creneau || (state.creneau && state.creneau.libelle) || '';
+    document.getElementById('cf-tarif').textContent =
+      j.gratuit ? 'Gratuite — première séance sur site'
+                : ((j.montant_cents/100).toLocaleString('fr-FR') + ' € HT'
+                   + (j.ttc_cents ? ' (' + (j.ttc_cents/100).toLocaleString('fr-FR') + ' € TTC)' : ''));
+    document.getElementById('cf-note').textContent =
+      j.message || "Vous recevez un accusé par courriel.";
+    var c = document.getElementById('confirm'); c.style.display = 'block';
+    c.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  window.resetFormation = function(rouvrir){
+    document.getElementById('formation-form').reset();
+    state.sujet = null; state.creneau = null;
+    var sel = document.querySelectorAll('.subj.sel, .cr-chip.sel');
+    for(var i=0;i<sel.length;i++) sel[i].classList.remove('sel');
+    var st = document.getElementById('fo-status'); st.className = 'form-status'; st.textContent = '';
+    majRecap();
+    if(rouvrir){
+      document.getElementById('confirm').style.display = 'none';
+      document.getElementById('offre').style.display = '';
+      document.getElementById('etape-sujet').style.display = '';
+      document.getElementById('etape-date').style.display = '';
+      document.getElementById('inscription').style.display = '';
+      charger();  // recalcule les disponibilités
+      document.getElementById('etape-sujet').scrollIntoView({behavior:'smooth'});
+    }
+  };
+
+  // ── Démarrage (script en fin de body : le DOM est prêt) ──
+  charger();
+
+  // ── Protection légère anti-copie (les champs restent utilisables) ──
+  function estChamp(t){ return t==='INPUT' || t==='TEXTAREA' || t==='SELECT'; }
+  document.addEventListener('contextmenu', function(e){ if(!estChamp(e.target.tagName)) e.preventDefault(); });
+  document.addEventListener('selectstart', function(e){ if(!estChamp(e.target.tagName)) e.preventDefault(); });
+})();
+</script>
+
+<div id="shared-footer-placeholder"></div>
+<script src="/footer-loader.js"></script>
+<script src="/fleches.js" defer></script>
+<script src="/guide.js" defer></script>
+</body>
+</html>
