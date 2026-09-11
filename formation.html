@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Réserver une formation IA — CONSEILPREV</title>
-<meta name="description" content="Réservez votre séance de formation « Angles morts de la conformité IA », sur site : quatre sujets au choix, une séance de 4 h par semaine jusqu'en mars 2027, la première gratuite puis 800 € HT.">
+<meta name="description" content="Réservez votre séance de formation « Angles morts de la conformité IA », sur votre site en Île-de-France : quatre sujets au choix, une séance de 4 h par semaine jusqu'en mars 2027, la première gratuite puis 800 € HT.">
 <!-- Polices NON BLOQUANTES : media="print" charge sans bloquer le premier rendu ;
      onload rebascule sur "all". La page s'affiche aussitôt en polices système. -->
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -95,6 +95,18 @@ label.fl span{color:var(--pf)}
 /* Honeypot : hors écran, jamais visible ni tabulable pour un humain */
 .hp-field{position:absolute!important;left:-9999px!important;top:auto;width:1px;height:1px;overflow:hidden}
 .field-note{font-size:11px;color:var(--mu);font-family:"Space Mono",monospace;margin-top:2px}
+/* BULLES D'INFO — même convention que le reste du site (classe .ent-tip,
+   texte dans data-tip), mais atteignables AU CLAVIER : `:focus` autant que
+   `:hover`, la pastille portant tabindex="0".
+   LE SÉLECTEUR PORTE « .fl » À DESSEIN : `label.fl span` (la marque rose du
+   champ requis) est plus spécifique que `.ent-tip` seul et repeindrait la
+   pastille. On remet aussi letter-spacing et text-transform à zéro : la bulle
+   hérite sinon de l'espacement du libellé et devient illisible. */
+.fl .ent-tip{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;border:1px solid rgba(180,138,247,.45);color:var(--pp);font-size:10px;font-style:italic;font-weight:700;font-family:Georgia,serif;cursor:help;position:relative;margin-left:6px;vertical-align:middle;background:transparent}
+.fl .ent-tip:hover,.fl .ent-tip:focus{color:#1a0b2e;background:var(--pl);border-color:var(--pl);outline:none}
+.step-title .ent-tip{margin-left:8px;font-size:11px;width:17px;height:17px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid rgba(180,138,247,.45);color:var(--pp);font-family:Georgia,serif;font-style:italic;font-weight:700;cursor:help;position:relative;vertical-align:middle}
+.step-title .ent-tip:hover,.step-title .ent-tip:focus{color:#1a0b2e;background:var(--pl);border-color:var(--pl);outline:none}
+.ent-tip:hover::after,.ent-tip:focus::after{content:attr(data-tip);position:absolute;left:50%;bottom:150%;transform:translateX(-50%);background:#1b0f33;color:var(--wh);border:1px solid rgba(180,138,247,.45);font-size:11.5px;font-weight:400;font-style:normal;line-height:1.5;padding:9px 11px;border-radius:8px;width:250px;max-width:72vw;z-index:60;box-shadow:0 8px 24px rgba(0,0,0,.45);white-space:normal;text-align:left;pointer-events:none;letter-spacing:0;text-transform:none;font-family:"DM Sans",sans-serif}
 /* Récap du choix, au-dessus du formulaire */
 .recap{display:flex;flex-wrap:wrap;gap:10px 26px;background:rgba(94,234,212,.06);border:1px solid rgba(94,234,212,.22);border-radius:12px;padding:14px 18px;margin-bottom:22px;font-size:13px}
 .recap .k{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);font-family:"Space Mono",monospace;display:block}
@@ -181,7 +193,7 @@ label.fl span{color:var(--pf)}
   <section class="step" id="etape-sujet">
     <div class="step-head">
       <span class="step-num">1</span>
-      <span class="step-title">Choisissez votre sujet</span>
+      <span class="step-title">Choisissez votre sujet<span class="ent-tip" tabindex="0" role="note" aria-label="Une séance porte sur UN sujet. Vous pourrez réserver les autres ensuite : la première séance est offerte, les suivantes sont à 800 € HT." data-tip="Une séance porte sur UN sujet. Vous pourrez réserver les autres ensuite : la première séance est offerte, les suivantes sont à 800 € HT.">i</span></span>
       <span class="step-hint">Un sujet par séance</span>
     </div>
     <div class="subj-grid" id="subj-grid" role="listbox" aria-label="Sujets de formation">
@@ -193,7 +205,7 @@ label.fl span{color:var(--pf)}
   <section class="step" id="etape-date">
     <div class="step-head">
       <span class="step-num">2</span>
-      <span class="step-title">Choisissez votre date</span>
+      <span class="step-title">Choisissez votre date<span class="ent-tip" tabindex="0" role="note" aria-label="Une seule séance par semaine : une date déjà retenue n'est plus proposée. Vous choisissez la semaine ; le jour exact se cale ensuite avec vous." data-tip="Une seule séance par semaine : une date déjà retenue n'est plus proposée. Vous choisissez la semaine ; le jour exact se cale ensuite avec vous.">i</span></span>
       <span class="step-hint" id="cal-libres"></span>
     </div>
     <div id="cal-status">Chargement du calendrier…</div>
@@ -225,22 +237,22 @@ label.fl span{color:var(--pf)}
         </div>
         <div class="frow">
           <div class="fgroup">
-            <label class="fl" for="fo-prenom">Prénom <span>*</span></label>
+            <label class="fl" for="fo-prenom">Prénom <span>*</span><span class="ent-tip" tabindex="0" role="note" aria-label="Le prénom de la personne qui suivra la séance — il figure sur l'attestation de présence." data-tip="Le prénom de la personne qui suivra la séance — il figure sur l'attestation de présence.">i</span></label>
             <input class="finput" type="text" id="fo-prenom" name="prenom" placeholder="Alex" required autocomplete="given-name">
           </div>
           <div class="fgroup">
-            <label class="fl" for="fo-nom">Nom <span>*</span></label>
+            <label class="fl" for="fo-nom">Nom <span>*</span><span class="ent-tip" tabindex="0" role="note" aria-label="Le nom de la personne inscrite, tel qu'il doit apparaître sur l'attestation." data-tip="Le nom de la personne inscrite, tel qu'il doit apparaître sur l'attestation.">i</span></label>
             <input class="finput" type="text" id="fo-nom" name="nom" placeholder="Durand" required autocomplete="family-name">
           </div>
         </div>
 
         <div class="frow">
           <div class="fgroup">
-            <label class="fl" for="fo-email">Adresse électronique professionnelle <span>*</span></label>
+            <label class="fl" for="fo-email">Adresse électronique professionnelle <span>*</span><span class="ent-tip" tabindex="0" role="note" aria-label="C'est là qu'arrivent la confirmation, la facture le cas échéant, et les rappels à 2 semaines puis 1 semaine de la séance." data-tip="C'est là qu'arrivent la confirmation, la facture le cas échéant, et les rappels à 2 semaines puis 1 semaine de la séance.">i</span></label>
             <input class="finput" type="email" id="fo-email" name="email" placeholder="alex.durand@entreprise.fr" required autocomplete="email">
           </div>
           <div class="fgroup">
-            <label class="fl" for="fo-phone">Téléphone <span>*</span></label>
+            <label class="fl" for="fo-phone">Téléphone <span>*</span><span class="ent-tip" tabindex="0" role="note" aria-label="Un numéro joignable le jour de la séance, pour vous prévenir d'un imprévu. Au moins six chiffres." data-tip="Un numéro joignable le jour de la séance, pour vous prévenir d'un imprévu. Au moins six chiffres.">i</span></label>
             <div class="phone-wrap">
               <select class="fselect phone-prefix" id="fo-prefix" aria-label="Indicatif téléphonique">
                 <option value="+33">🇫🇷 +33</option>
@@ -257,29 +269,29 @@ label.fl span{color:var(--pf)}
 
         <div class="frow">
           <div class="fgroup">
-            <label class="fl" for="fo-entreprise">Entreprise <span>*</span></label>
+            <label class="fl" for="fo-entreprise">Entreprise <span>*</span><span class="ent-tip" tabindex="0" role="note" aria-label="La société qui accueille la séance. La séance offerte se compte PAR ENTREPRISE, pas par personne." data-tip="La société qui accueille la séance. La séance offerte se compte PAR ENTREPRISE, pas par personne.">i</span></label>
             <input class="finput" type="text" id="fo-entreprise" name="entreprise" placeholder="Votre société" required autocomplete="organization">
           </div>
           <div class="fgroup">
-            <label class="fl" for="fo-siret">SIRET</label>
+            <label class="fl" for="fo-siret">SIRET<span class="ent-tip" tabindex="0" role="note" aria-label="Facultatif mais recommandé : il identifie l'entreprise de façon sûre pour décompter la séance offerte, même si les inscrits changent d'adresse." data-tip="Facultatif mais recommandé : il identifie l'entreprise de façon sûre pour décompter la séance offerte, même si les inscrits changent d'adresse.">i</span></label>
             <input class="finput" type="text" id="fo-siret" name="siret" placeholder="123 456 789 00012" inputmode="numeric" autocomplete="off">
             <span class="field-note">Sert à décompter la séance offerte par entreprise.</span>
           </div>
         </div>
 
         <div class="fgroup">
-          <label class="fl" for="fo-lieu">Lieu de la formation (sur site) <span>*</span></label>
+          <label class="fl" for="fo-lieu">Lieu de la formation (sur site) <span>*</span><span class="ent-tip" tabindex="0" role="note" aria-label="La séance se tient EN ÎLE-DE-FRANCE, sur VOTRE site : indiquez l'adresse exacte du lieu d'accueil (bâtiment, étage, salle si vous la connaissez). Hors Île-de-France, écrivez-nous avant de réserver." data-tip="La séance se tient EN ÎLE-DE-FRANCE, sur VOTRE site : indiquez l'adresse exacte du lieu d'accueil (bâtiment, étage, salle si vous la connaissez). Hors Île-de-France, écrivez-nous avant de réserver.">i</span></label>
           <input class="finput" type="text" id="fo-lieu" name="lieu" placeholder="Adresse du site où se tiendra la séance" required autocomplete="street-address">
-          <span class="field-note">La séance se tient dans vos locaux : indiquez l'adresse du site.</span>
+          <span class="field-note">Séance <strong>en Île-de-France</strong>, dans vos locaux : indiquez l'adresse du site.</span>
         </div>
 
         <div class="fgroup">
-          <label class="fl" for="fo-fonction">Fonction</label>
+          <label class="fl" for="fo-fonction">Fonction<span class="ent-tip" tabindex="0" role="note" aria-label="Votre rôle (DSI, RSSI, DPO, chef de projet…) : il nous aide à calibrer les exemples de la séance." data-tip="Votre rôle (DSI, RSSI, DPO, chef de projet…) : il nous aide à calibrer les exemples de la séance.">i</span></label>
           <input class="finput" type="text" id="fo-fonction" name="fonction" placeholder="DSI, RSSI, DPO, chef de projet…" autocomplete="organization-title">
         </div>
 
         <div class="fgroup">
-          <label class="fl" for="fo-message">Précisions (facultatif)</label>
+          <label class="fl" for="fo-message">Précisions (facultatif)<span class="ent-tip" tabindex="0" role="note" aria-label="Contexte, nombre de participants prévus, contraintes d'horaire dans la semaine choisie — tout ce qui aide à préparer la séance." data-tip="Contexte, nombre de participants prévus, contraintes d'horaire dans la semaine choisie — tout ce qui aide à préparer la séance.">i</span></label>
           <textarea class="ftextarea" id="fo-message" name="message" placeholder="Contexte, nombre de participants prévus, contraintes de date dans la semaine choisie…" rows="4"></textarea>
         </div>
 
@@ -333,7 +345,7 @@ label.fl span{color:var(--pf)}
     </div>
     <div class="info-card">
       <div class="info-card-title">🗓️ Comment ça marche</div>
-      <div class="info-card-body">Une séance de 4 h par semaine, jusqu'en <strong>mars 2027</strong>. Vous choisissez la semaine ; le jour exact se cale ensuite avec vous. La séance gratuite est <strong>confirmée d'emblée</strong> ; une séance payante donne lieu à une facture (le paiement en ligne arrive bientôt).</div>
+      <div class="info-card-body">Une séance de 4 h par semaine, jusqu'en <strong>mars 2027</strong>, <strong>en Île-de-France, sur votre site</strong>. Vous choisissez la semaine ; le jour exact se cale ensuite avec vous. La séance offerte est <strong>confirmée d'emblée</strong> ; une séance payante est confirmée une fois réglée — paiement en ligne sécurisé, ou facture. Vous recevez ensuite un rappel à <strong>2 semaines</strong> puis à <strong>1 semaine</strong> de la séance.</div>
     </div>
   </div>
 

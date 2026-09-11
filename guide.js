@@ -96,12 +96,15 @@
 
   GUIDES["/formation"] = {
     t: "Réserver une formation IA",
-    p: "La réservation de l’offre « Angles morts de la conformité IA », sur site : quatre sujets au choix, une séance de 4 h par semaine jusqu’en mars 2027, la première offerte puis 800 € HT.",
+    p: "La réservation de l’offre « Angles morts de la conformité IA » : quatre sujets au choix, une séance de 4 h par semaine jusqu’en mars 2027, sur VOTRE site et en Île-de-France, la première offerte puis 800 € HT.",
     s: ["Choisissez d’abord un sujet parmi les quatre, puis une date libre dans le calendrier : une seule séance est possible par créneau, et un même sujet ne se réserve qu’une fois.",
+      "Six champs sont exigés pour réserver : prénom, nom, adresse électronique, téléphone, entreprise, et le lieu de la séance — l’adresse de votre site, en Île-de-France.",
       "Renseignez le SIRET de votre entreprise : c’est lui qui décompte la séance offerte — une par entreprise, et non par personne.",
-      "La première séance est confirmée d’emblée ; une séance payante est enregistrée, puis facturée. Le tarif est décidé côté serveur, jamais saisi ici."],
+      "La séance offerte est confirmée d’emblée ; une séance payante l’est une fois réglée. Le tarif est décidé côté serveur, jamais saisi ici.",
+      "Chaque pastille « i » posée contre un champ dit ce qu’on en attend, et pourquoi : survolez-la, ou atteignez-la au clavier par tabulation."],
     k: [["Première séance offerte", "Une seule fois par entreprise, sur l’un des quatre sujets. Les séances suivantes sont à 800 € HT chacune, TVA en sus."],
-      ["Paiement en ligne", "Pas encore disponible : une séance payante donne lieu à une facture. Le prix affiché n’est jamais prélevé sans elle."]],
+      ["Zone d’intervention", "Le formateur se déplace en Île-de-France uniquement, sur le site du client. Hors de cette zone, écrivez-nous AVANT de réserver : le formulaire ne le vérifie pas à votre place."],
+      ["Rappels", "Une fois la séance confirmée, un rappel part à deux semaines puis à une semaine de la date, à vous comme à CONSEILPREV."]],
     l: [["Le catalogue complet", "/formations"], ["Nous écrire", "/support"]]
   };
 

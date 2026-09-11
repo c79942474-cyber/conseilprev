@@ -9966,7 +9966,9 @@ var PAGE_GUIDES = {
     sections: [
       {h:"À quoi sert cette page", t:"4 modules de formation dont la progression est calculée depuis vos scores réels de l Audit de maturité IA (un pilier faible = formation prioritaire)."},
       {h:"Comment l utiliser", t:"Cliquez un module pour ouvrir sa fiche complète : objectifs, programme détaillé, articles couverts, quiz et certification visée."},
-      {h:"L’audit décide du programme", t:"Un audit bâclé désigne les mauvaises formations. Si l’ordre proposé vous surprend, c’est l’audit qu’il faut reprendre, pas la liste."}
+      {h:"L’audit décide du programme", t:"Un audit bâclé désigne les mauvaises formations. Si l’ordre proposé vous surprend, c’est l’audit qu’il faut reprendre, pas la liste."},
+      {h:"« Angles morts de la conformité IA » — réservable en ligne", t:"Le cadre qui pulse en tête de page ouvre une offre DISTINCTE du catalogue : quatre sujets (gouvernance IA, gouvernance agentique, sécurité de l’IA, ingénierie de projet), une séance de 4 h par semaine jusqu’en mars 2027, SUR VOTRE SITE et en Île-de-France. La première séance est offerte, les trois suivantes sont à 800 € HT. Sujet et date se choisissent en ligne sur /formation."},
+      {h:"Ce que la réservation ne vérifie pas", t:"Elle ne contrôle pas que l’adresse saisie est bien en Île-de-France : hors de cette zone, écrivez avant de réserver. Elle ne retient qu’UNE séance par créneau, et un même sujet une seule fois par entreprise — le SIRET, et non le courriel, décompte la séance offerte."}
     ]
   },
   espace: {

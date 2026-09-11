@@ -54,11 +54,20 @@ SUJETS = [
 NB_SUJETS = len(SUJETS)
 _CLES_SUJETS = {s["cle"] for s in SUJETS}
 
+# OÙ LA SÉANCE SE TIENT, DIT UNE FOIS. Le formateur se déplace SUR LE SITE DU
+# CLIENT, et seulement en Île-de-France : c'est une limite de l'offre, pas un
+# détail d'affichage. Un client de Bordeaux qui réserve sans le savoir découvre
+# le refus après coup — d'où la mention partout où l'on demande le lieu. La page
+# lit cette valeur dans le référentiel ; les textes qui la recopient ailleurs
+# sont tenus par une règle.
+ZONE = "Île-de-France"
+
 OFFRE = {
     "titre": "Angles morts de la conformité IA",
     "sous_titre": "Gouverner les systèmes d'IA et les agents dans vos centres "
                   "de données",
-    "modalite": "Sur site — session en présentiel dans vos locaux",
+    "modalite": "Sur site, en %s — dans vos locaux" % ZONE,
+    "zone": ZONE,
     "duree_h": 4,
 }
 
@@ -220,6 +229,10 @@ def _verifier():
                 pb.append("sujet incomplet : %r" % s.get("cle"))
     if not (0 < JOUR_SEANCE < 7 or JOUR_SEANCE == 0):
         pb.append("jour de séance hors semaine")
+    # La zone est une LIMITE de l'offre : si la modalité cessait de la dire, le
+    # client ne l'apprendrait qu'après avoir réservé.
+    if ZONE not in OFFRE["modalite"]:
+        pb.append("la modalité ne dit plus où la séance se tient (%s)" % ZONE)
     if TARIF_HT_CENTS <= 0:
         pb.append("tarif HT non positif")
     # La gratuité doit être exactement la première, et le tarif exactement au-

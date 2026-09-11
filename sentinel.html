@@ -3547,10 +3547,27 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 
 <!-- TRAINING -->
 <div class="page" id="p-training"><span class="eyebrow">Hub Training</span><h1 class="page-h">Formations conformité <em>IA</em></h1><p class="page-lead">Modules certifiants — progression calculée à partir de vos scores réels de l Audit de maturité IA par pilier.</p>
-  <a href="/formation" style="display:block;text-decoration:none;color:inherit;margin:6px 0 26px;padding:22px 26px;border-radius:16px;border:1px solid rgba(184,50,34,.35);background:linear-gradient(135deg,rgba(184,50,34,.09),rgba(184,50,34,.03))">
-    <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:8px">Nouveau · Réservation en ligne · Sur site</div>
+  <!-- LE CADRE QUI SE SIGNALE. L'offre est nouvelle et réservable : sans un
+       appel visuel, elle se noie dans un bloc déjà dense. Le halo pulse
+       lentement (1,8 s) — un battement, pas un clignotement stroboscopique.
+       CE QUI EST RENDU À QUI LE DEMANDE : sous `prefers-reduced-motion`,
+       l'animation s'arrête et le contour reste vif. Un mouvement qu'on ne peut
+       pas faire cesser est une gêne, pas une mise en valeur. -->
+  <style id="formation-eclat-css">
+  @keyframes formation-eclat{
+    0%,100%{border-color:rgba(184,50,34,.40);box-shadow:0 0 0 0 rgba(184,50,34,.30),0 0 10px rgba(184,50,34,.15)}
+    50%    {border-color:rgba(184,50,34,1);  box-shadow:0 0 0 7px rgba(184,50,34,0),  0 0 26px rgba(184,50,34,.55)}
+  }
+  .formation-eclat{border:2px solid rgba(184,50,34,.40);animation:formation-eclat 1.8s ease-in-out infinite}
+  .formation-eclat:hover{animation-play-state:paused;border-color:rgba(184,50,34,1)}
+  @media (prefers-reduced-motion: reduce){
+    .formation-eclat{animation:none;border-color:rgba(184,50,34,.95);box-shadow:0 0 18px rgba(184,50,34,.35)}
+  }
+  </style>
+  <a href="/formation" class="formation-eclat" style="display:block;text-decoration:none;color:inherit;margin:6px 0 26px;padding:22px 26px;border-radius:16px;background:linear-gradient(135deg,rgba(184,50,34,.09),rgba(184,50,34,.03))">
+    <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:8px">Nouveau · Réservation en ligne · Sur site en Île-de-France</div>
     <div style="font-size:20px;font-weight:700;color:var(--ink);margin-bottom:6px">Angles morts de la conformité IA</div>
-    <div style="font-size:13px;color:var(--muted);line-height:1.6;max-width:640px">Quatre sujets au choix — gouvernance IA, gouvernance agentique, sécurité de l'IA, ingénierie de projet. Une séance de 4 h par semaine, dans vos locaux, jusqu'en mars 2027. <strong style="color:var(--ink)">La première séance est offerte</strong> ; les suivantes sont à <strong style="color:var(--ink)">800 € HT</strong>.</div>
+    <div style="font-size:13px;color:var(--muted);line-height:1.6;max-width:640px">Quatre sujets au choix — gouvernance IA, gouvernance agentique, sécurité de l'IA, ingénierie de projet. Une séance de 4 h par semaine, <strong style="color:var(--ink)">sur votre site, en Île-de-France</strong>, jusqu'en mars 2027. <strong style="color:var(--ink)">La première séance est offerte</strong> ; les suivantes sont à <strong style="color:var(--ink)">800 € HT</strong>.</div>
     <div style="margin-top:12px;font-size:13px;font-weight:600;color:var(--accent)">Choisir un sujet et réserver une date →</div>
   </a>
   <div class="training-grid" id="training-grid"></div>

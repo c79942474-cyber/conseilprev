@@ -198,6 +198,88 @@ def test_la_page_marque_requis_les_six_champs_exiges():
         assert "required" in m.group(0), "%s n'est pas marqué requis" % champ
 
 
+# ══════════════════════════════════════════════════════════════════════════
+# La zone d'intervention, et les bulles d'info
+# ══════════════════════════════════════════════════════════════════════════
+def _autour_du_lieu():
+    """La fenêtre qui entoure le champ du lieu : son libellé (bulle comprise) et
+    sa note. On mesure LÀ, et non « quelque part dans la page » — une première
+    version cherchait la zone n'importe où, et la trouvait dans une carte
+    d'information à l'autre bout : elle restait verte alors que le champ, lui,
+    n'annonçait plus rien."""
+    i = PAGE.index('id="fo-lieu"')
+    return PAGE[max(0, i - 800):i + 500]
+
+
+def test_la_modalite_du_module_porte_la_zone():
+    """LA SOURCE. La page affiche la modalité servie par le référentiel : c'est
+    elle qui doit dire où la séance se tient. Une garde au chargement du module
+    refuse déjà une modalité qui l'aurait perdue — cette règle en est le pendant
+    lisible."""
+    assert F.ZONE in F.OFFRE["modalite"], (
+        "la modalité du module ne dit plus la zone (%s)" % F.ZONE)
+
+
+def test_la_bulle_du_lieu_annonce_la_zone():
+    """LA BULLE DEMANDÉE : au moment de saisir le lieu, le client apprend que la
+    séance se tient en Île-de-France, sur SON site."""
+    m = re.search(r'<label[^>]*for="fo-lieu"[^>]*>(.*?)</label>', PAGE, re.S)
+    assert m, "libellé du lieu introuvable"
+    tip = re.search(r'data-tip="([^"]*)"', m.group(1))
+    assert tip, "le champ du lieu n'a pas de bulle"
+    assert F.ZONE in tip.group(1), (
+        "la bulle du lieu n'annonce pas la zone (%s)" % F.ZONE)
+
+
+def test_la_zone_reste_visible_sans_survol_pres_du_champ():
+    """UNE INFORMATION CACHÉE DERRIÈRE UN SURVOL N'EXISTE PAS AU DOIGT. La zone
+    est une limite de l'offre : elle doit rester lisible à côté du champ, hors
+    de tout attribut de bulle, sur un écran tactile comme ailleurs."""
+    fenetre = _autour_du_lieu()
+    visible = re.sub(r'data-tip="[^"]*"', '', fenetre)
+    visible = re.sub(r'aria-label="[^"]*"', '', visible)
+    assert F.ZONE in visible, (
+        "près du champ du lieu, la zone (%s) n'apparaît que dans une bulle : "
+        "elle est invisible sur un écran tactile" % F.ZONE)
+
+
+def test_chaque_champ_du_formulaire_porte_sa_bulle():
+    """Les pastilles « i » expliquent ce qu'on attend de chaque champ. Une seule
+    oubliée, et c'est le champ le moins évident qui reste sans explication."""
+    for champ in ("fo-prenom", "fo-nom", "fo-email", "fo-phone", "fo-entreprise",
+                  "fo-siret", "fo-lieu", "fo-fonction", "fo-message"):
+        m = re.search(r'<label[^>]*for="%s"[^>]*>(.*?)</label>' % champ, PAGE, re.S)
+        assert m, "libellé de %s introuvable" % champ
+        assert 'class="ent-tip"' in m.group(1) and "data-tip=" in m.group(1), (
+            "le champ %s n'a pas de bulle d'info" % champ)
+
+
+def test_les_bulles_sont_atteignables_au_clavier():
+    """Une bulle qui ne s'ouvre qu'au survol exclut qui navigue au clavier. La
+    pastille est focalisable, et la règle d'affichage répond aussi à `:focus`."""
+    for m in re.finditer(r'<span class="ent-tip"[^>]*>', PAGE):
+        assert 'tabindex="0"' in m.group(0), "une pastille n'est pas focalisable"
+    assert ".ent-tip:focus::after" in PAGE, (
+        "la bulle ne s'ouvre pas au focus clavier")
+
+
+def test_le_cadre_de_sentinel_pulse_et_sait_s_arreter():
+    """Le cadre « Angles morts » se signale par une pulsation. CE QUI COMPTE
+    AUTANT : qu'elle CESSE pour qui demande moins de mouvement — une animation
+    qu'on ne peut pas arrêter est une gêne, pas une mise en valeur."""
+    i = SENTINEL.index('id="p-training"')
+    bloc = SENTINEL[i:i + 6000]
+    assert "@keyframes formation-eclat" in bloc, "le cadre ne pulse plus"
+    assert 'class="formation-eclat"' in bloc, "la bannière ne porte plus l'animation"
+    j = bloc.index("@keyframes formation-eclat")
+    regles = bloc[j:j + 1400]
+    assert "prefers-reduced-motion" in regles, (
+        "aucun repli pour qui demande moins de mouvement")
+    repli = regles[regles.index("prefers-reduced-motion"):]
+    assert "animation:none" in repli, (
+        "le repli ne coupe pas l'animation")
+
+
 def test_le_honeypot_est_hors_ecran():
     """Le leurre ne doit pas se voir : un humain qui le remplirait serait refusé
     à tort. Il est sorti de l'écran, pas simplement masqué."""
