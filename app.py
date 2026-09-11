@@ -14265,6 +14265,9 @@ RGPD_TRAITEMENTS = [
     {'id': 8, 'nom': 'Base de connaissance (RAG)', 'finalite': 'Analyse documentaire de conformite pour le client',
      'base': 'Contrat (art. 6.1.b)', 'donnees': 'Documents deposes par le client',
      'duree': 'Duree du compte ; suppression a la demande', 'destinataires': 'Render (UE) ; Mistral embeddings (UE)'},
+    {'id': 9, 'nom': 'Reservations aux formations conformite IA', 'finalite': 'Inscription et organisation des seances de formation sur site',
+     'base': 'Mesures precontractuelles / contrat (art. 6.1.b)', 'donnees': 'Identite, coordonnees, entreprise, SIRET, sujet et creneau choisis',
+     'duree': '24 mois apres la derniere seance', 'destinataires': 'CONSEILPREV ; Brevo (courriels, UE) ; Render/PostgreSQL (Francfort, UE)'},
 ]
 
 RGPD_TRANSFERTS = [
@@ -16253,6 +16256,204 @@ def formations_inscriptions_admin():
     except Exception: pass
     return jsonify({'ok': True, 'inscriptions': rows})
 
+
+# ══════════════════════════════════════════════════════════
+# FORMATIONS CONFORMITE IA — l'offre a quatre sujets, reservable en ligne
+# Publique : le client reserve sans compte, a l'adresse i-aes.eu/formation. Une
+# seance de 4 h par semaine jusqu'a fin mars 2027, premiere seance gratuite sur
+# site puis 800 EUR HT. Le calendrier et le tarif viennent de formations_ia
+# (pur, teste) ; ici vit ce qui touche la base : la disponibilite (UNE seance
+# par creneau, le formateur ne se dedouble pas) et la reservation, avec sa
+# preuve d'information et sa notification. Le paiement en ligne se branchera le
+# jour ou Stripe sera configure ; d'ici la, la seance payante est ENREGISTREE
+# et facturee hors ligne, exactement comme le catalogue existant sait deja le
+# faire quand Stripe manque.
+# ══════════════════════════════════════════════════════════
+import formations_ia
+
+
+def _formation_ia_table(cur, conn):
+    _pk = 'SERIAL PRIMARY KEY' if REGISTRE_USE_PG else 'INTEGER PRIMARY KEY AUTOINCREMENT'
+    cur.execute('CREATE TABLE IF NOT EXISTS formation_ia_resa (id ' + _pk + ', '
+                'sujet TEXT, date_creneau TEXT, nom TEXT, prenom TEXT, email TEXT, '
+                'entreprise TEXT, siret TEXT, telephone TEXT, fonction TEXT, message TEXT, '
+                'cle_client TEXT, rang INTEGER, montant_cents INTEGER, gratuit INTEGER, '
+                'statut TEXT, created_at TEXT)')
+    conn.commit()
+
+
+def _formation_ia_cle_client(siret, email):
+    """La cle qui compte le rang d'un client : son SIRET (chiffres seuls, 9 au
+    moins), a defaut son courriel. C'est elle, et elle seule, qui decide de la
+    gratuite de la premiere seance — deux inscriptions du meme SIRET ne
+    rejouent pas la gratuite, quel que soit le courriel saisi."""
+    s = ''.join(ch for ch in (siret or '') if ch.isdigit())
+    if len(s) >= 9:
+        return 'siret:' + s
+    return 'email:' + (email or '').strip().lower()
+
+
+@app.route('/api/formation/referentiel', methods=['GET'])
+def formation_ia_referentiel():
+    """L'offre, les sujets, le calendrier (creneaux LIBRES marques) et la regle
+    de tarif. Public : le client la consulte sans compte. La disponibilite est
+    calculee ici parce qu'elle depend des reservations, que le module pur ne
+    connait pas — une seule seance par creneau."""
+    ref = formations_ia.referentiel(datetime.utcnow().date())
+    conn = registre_get_db(); cur = conn.cursor()
+    _formation_ia_table(cur, conn)
+    cur.execute("SELECT date_creneau FROM formation_ia_resa WHERE statut != 'annulee'")
+    pris = {dict(r).get('date_creneau') for r in cur.fetchall()}
+    try: conn.close()
+    except Exception: pass
+    for c in ref['creneaux']:
+        c['libre'] = c['date'] not in pris
+    ref['creneaux_libres'] = sum(1 for c in ref['creneaux'] if c['libre'])
+    ref['ok'] = True
+    return jsonify(ref)
+
+
+@app.route('/api/formation/inscription', methods=['POST'])
+@rate_limit(limit=8, window=300)
+def formation_ia_inscription():
+    """Reserver une seance : sujet + creneau + coordonnees. PUBLIC, donc durci —
+    limite de debit, controle d'origine, entrees assainies, et RIEN de ce que le
+    client affirme sur le prix n'est cru : le rang et le tarif sont recalcules
+    ici. Une seance par creneau (409 si pris) ; un sujet une seule fois par
+    client (409 si deja inscrit). La premiere seance du client est confirmee
+    d'emblee ; les suivantes sont enregistrees en attente de facture."""
+    # CONTROLE D'ORIGINE — defense en profondeur sur une ecriture publique. Une
+    # origine absente est acceptee (client non-navigateur) ; une origine d'un
+    # autre site est refusee.
+    origine = (request.headers.get('Origin') or '').rstrip('/')
+    if origine:
+        hote = request.host_url.rstrip('/')
+        if origine != hote and 'localhost' not in origine and '127.0.0.1' not in origine:
+            return jsonify({'ok': False, 'error': 'Origine non autorisee.'}), 403
+
+    d = request.get_json(silent=True) or {}
+    sujet_cle = sanitize_input(d.get('sujet') or '', 40)
+    date_creneau = sanitize_input(d.get('creneau') or d.get('date') or '', 10)
+    nom = sanitize_input(d.get('nom') or '', 100)
+    prenom = sanitize_input(d.get('prenom') or '', 100)
+    email = sanitize_email(d.get('email') or '')
+    entreprise = sanitize_input(d.get('entreprise') or '', 150)
+    siret = sanitize_input(d.get('siret') or '', 20)
+    telephone = sanitize_phone(d.get('telephone') or '')
+    fonction = sanitize_input(d.get('fonction') or '', 120)
+    message = sanitize_input(d.get('message') or '', 1000, allow_newlines=True)
+
+    su = formations_ia.sujet(sujet_cle)
+    if not su:
+        return jsonify({'ok': False, 'error': 'Sujet de formation inconnu.'}), 400
+    if not nom or not prenom or not email or not entreprise:
+        return jsonify({'ok': False, 'error': 'Nom, prenom, adresse electronique '
+                        'et entreprise sont requis.'}), 400
+    # LE CRENEAU EST VALIDE CONTRE LE CALENDRIER RECALCULE ICI, jamais contre ce
+    # que le client envoie : une date passee, hors campagne ou fabriquee est
+    # refusee a la source.
+    cal = {c['date'] for c in formations_ia.creneaux(datetime.utcnow().date())}
+    if date_creneau not in cal:
+        return jsonify({'ok': False, 'error': 'Ce creneau n est pas ouvert a la '
+                        'reservation.'}), 400
+
+    cle = _formation_ia_cle_client(siret, email)
+    conn = registre_get_db(); cur = conn.cursor()
+    _formation_ia_table(cur, conn)
+    # UNE SEANCE PAR CRENEAU (le formateur ne se dedouble pas).
+    cur.execute(registre_sql("SELECT COUNT(*) AS n FROM formation_ia_resa WHERE date_creneau=%s AND statut != 'annulee'",
+                             "SELECT COUNT(*) AS n FROM formation_ia_resa WHERE date_creneau=? AND statut != 'annulee'"),
+                (date_creneau,))
+    if int(dict(cur.fetchone()).get('n', 0) or 0) > 0:
+        try: conn.close()
+        except Exception: pass
+        return jsonify({'ok': False, 'error': 'Ce creneau vient d etre reserve. '
+                        'Choisissez-en un autre.'}), 409
+    # UN SUJET UNE SEULE FOIS PAR CLIENT — quatre sujets, la premiere gratuite
+    # puis trois payantes : se reinscrire au meme sujet n'a pas de sens et
+    # fausserait le rang.
+    cur.execute(registre_sql("SELECT COUNT(*) AS n FROM formation_ia_resa WHERE cle_client=%s AND sujet=%s AND statut != 'annulee'",
+                             "SELECT COUNT(*) AS n FROM formation_ia_resa WHERE cle_client=? AND sujet=? AND statut != 'annulee'"),
+                (cle, sujet_cle))
+    if int(dict(cur.fetchone()).get('n', 0) or 0) > 0:
+        try: conn.close()
+        except Exception: pass
+        return jsonify({'ok': False, 'error': 'Vous etes deja inscrit a ce sujet.'}), 409
+    # LE RANG : combien de seances non annulees ce client a deja. Il decide du
+    # tarif, et le tarif est recalcule cote serveur — jamais recu du client.
+    cur.execute(registre_sql("SELECT COUNT(*) AS n FROM formation_ia_resa WHERE cle_client=%s AND statut != 'annulee'",
+                             "SELECT COUNT(*) AS n FROM formation_ia_resa WHERE cle_client=? AND statut != 'annulee'"),
+                (cle,))
+    rang = int(dict(cur.fetchone()).get('n', 0) or 0)
+    t = formations_ia.tarif(rang)
+    montant = int(t['ht_cents'])
+    gratuit = 1 if t['gratuit'] else 0
+    # La gratuite se confirme d'emblee (rien a encaisser) ; la payante attend sa
+    # facture, faute de paiement en ligne configure.
+    statut = 'confirmee' if t['gratuit'] else 'devis'
+    cur.execute(registre_sql(
+        'INSERT INTO formation_ia_resa (sujet, date_creneau, nom, prenom, email, entreprise, siret, '
+        'telephone, fonction, message, cle_client, rang, montant_cents, gratuit, statut, created_at) '
+        'VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
+        'INSERT INTO formation_ia_resa (sujet, date_creneau, nom, prenom, email, entreprise, siret, '
+        'telephone, fonction, message, cle_client, rang, montant_cents, gratuit, statut, created_at) '
+        'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)'),
+        (sujet_cle, date_creneau, nom, prenom, email, entreprise, siret, telephone, fonction,
+         message, cle, rang, montant, gratuit, statut, datetime.utcnow().isoformat()))
+    conn.commit()
+    try: conn.close()
+    except Exception: pass
+
+    creneau_lib = next((c['libelle'] for c in formations_ia.creneaux(datetime.utcnow().date())
+                        if c['date'] == date_creneau), date_creneau)
+    prix_txt = 'gratuite (premiere seance sur site)' if t['gratuit'] else '800 EUR HT'
+    try:
+        send_email_smart(CONSEILPREV_INTERNAL_EMAIL, 'CONSEILPREV',
+                         'Reservation formation : ' + su['titre'],
+                         '<p>Nouvelle reservation « Formations conformite IA ».</p>'
+                         '<p><strong>%s</strong> — %s<br>%s %s — %s<br>%s / %s'
+                         '<br>SIRET : %s<br>Seance : %s (%s)</p><p>%s</p>'
+                         % (su['titre'], prix_txt, prenom, nom, entreprise, email,
+                            telephone, siret or '(non fourni)', creneau_lib, statut, message or ''),
+                         tags=['formation-ia'])
+    except Exception:
+        pass
+    try:
+        send_email_smart(email, prenom + ' ' + nom,
+                         'Votre reservation — ' + su['titre'],
+                         '<p>Bonjour,</p><p>Nous avons bien recu votre reservation pour la formation '
+                         '<strong>%s</strong>, seance du %s, dans vos locaux.</p><p>%s</p>'
+                         '<p>L equipe CONSEILPREV</p>'
+                         % (su['titre'], creneau_lib,
+                            ('Cette premiere seance est offerte : elle vous est confirmee.'
+                             if t['gratuit'] else
+                             'Tarif : 800 EUR HT. Une facture vous parviendra pour finaliser '
+                             'la reservation ; le paiement en ligne sera bientot disponible.')),
+                         tags=['formation-ia-accuse'])
+    except Exception:
+        pass
+    return jsonify({'ok': True, 'gratuit': bool(t['gratuit']), 'statut': statut,
+                    'montant_cents': montant, 'ttc_cents': int(t['ttc_cents']),
+                    'sujet': su['titre'], 'creneau': creneau_lib,
+                    'message': ('Votre premiere seance, offerte, est confirmee. '
+                                'Vous recevez un accuse par courriel.'
+                                if t['gratuit'] else
+                                'Reservation enregistree (800 EUR HT). Une facture vous '
+                                'parviendra pour la finaliser ; CONSEILPREV vous recontacte.')})
+
+
+@app.route('/api/formation/inscriptions', methods=['GET'])
+def formation_ia_inscriptions_admin():
+    """Les reservations « Formations conformite IA » (CONSEILPREV)."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    conn = registre_get_db(); cur = conn.cursor()
+    _formation_ia_table(cur, conn)
+    cur.execute('SELECT * FROM formation_ia_resa ORDER BY id DESC LIMIT 300')
+    rows = [dict(r) for r in cur.fetchall()]
+    try: conn.close()
+    except Exception: pass
+    return jsonify({'ok': True, 'inscriptions': rows})
 
 
 # ══════════════════════════════════════════════════════════
