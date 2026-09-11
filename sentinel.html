@@ -2348,6 +2348,28 @@ textarea.form-el{min-height:86px;resize:vertical}
 .mp-syn-note{margin-top:12px;padding:10px 12px;background:var(--bg2);border:1px solid var(--rule2);border-radius:8px;font-size:11.5px;color:var(--muted2)}
 
 /* ══ VEILLE REGLEMENTAIRE IA ══ */
+/* ══ LE BANDEAU DU SUIVI LÉGISLATIF EUROPÉEN ══════════════════════════════
+   LES COULEURS SONT MESURÉES, PAS CHOISIES. Le fond est un voile d'--accent
+   à 6 % sur blanc (#FBF3F2) : --ink y tient 15,58:1, --muted 6,12:1 et
+   --accent lui-même 5,46:1 — tous très au-dessus du plancher AA. La pastille
+   pleine porte du blanc sur --accent : 5,97:1.
+   LE BANDEAU EST UN LIEN ENTIER, pas un pavé avec un lien dedans : la cible
+   de clic fait toute la largeur, et le focus clavier se voit. */
+.lawtrack{display:flex;align-items:flex-start;gap:12px;margin:0 0 20px;
+  padding:13px 16px;background:rgba(184,50,34,.06);border:1px solid var(--rule);
+  border-left:3px solid var(--accent);border-radius:10px;
+  text-decoration:none;color:var(--ink);transition:.15s}
+.lawtrack:hover{background:rgba(184,50,34,.10);border-left-color:var(--accent)}
+.lawtrack:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.lawtrack-tag{flex:0 0 auto;font-family:var(--mono);font-size:10px;
+  letter-spacing:.06em;background:var(--accent);color:#fff;border-radius:3px;
+  padding:3px 7px;margin-top:1px}
+.lawtrack-txt{flex:1 1 auto;font-size:13px;line-height:1.65;color:var(--muted)}
+.lawtrack-txt strong{color:var(--ink)}
+.lawtrack-dom{font-family:var(--mono);font-size:11.5px;color:var(--accent)}
+.lawtrack-sub{display:block;margin-top:3px;font-size:11.5px;color:var(--muted)}
+.lawtrack-go{flex:0 0 auto;color:var(--accent);font-size:15px;margin-top:1px}
+@media (max-width:560px){.lawtrack{flex-wrap:wrap}}
 .veille-panel{margin:8px 0 24px;padding:14px 16px;background:var(--white);border:1px solid var(--rule2);border-radius:12px}
 .veille-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px}
 .veille-head-t{font-size:13.5px;font-weight:700;color:var(--ink)}
@@ -3438,6 +3460,31 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
 <div class="page" id="p-regs">
   <span class="eyebrow">Conformité · EU AI Act</span><h1 class="page-h">Réglementations</h1>
   <p class="page-lead">Textes officiels et obligations article par article — Règlement (UE) 2024/1689.</p>
+
+  <!-- ══ LE SUIVI LÉGISLATIF DE L'UNION, EN HAUT DE LA PAGE ══════════════
+       CE QUE CE BANDEAU DIT, ET CE QU'IL NE DIT PAS. Il nomme l'outil et son
+       domaine — law-tracker.europa.eu, donc le domaine des institutions de
+       l'Union — et il s'arrête là. Ce module n'a pas pu joindre le site pour
+       vérifier ce qu'il annonce de lui-même ; décrire son périmètre sur la
+       foi de son nom aurait été une affirmation non vérifiée, dans une page
+       dont tout le propos est de renvoyer aux textes officiels.
+
+       IL EST EN TÊTE ET NON DANS LA LISTE DES SOURCES : cette page part du
+       Règlement 2024/1689, c'est-à-dire d'un texte ADOPTÉ. Ce qui est encore
+       en procédure n'y figure nulle part, et c'est précisément l'angle mort
+       qu'un suivi législatif comble. Le mettre en bas reviendrait à le
+       proposer à qui a déjà fini de lire. -->
+  <a class="lawtrack" href="https://law-tracker.europa.eu/homepage?lang=fr"
+     target="_blank" rel="noopener noreferrer">
+    <span class="lawtrack-tag">2026</span>
+    <span class="lawtrack-txt">
+      <strong>EU Law Tracker</strong> — le suivi de la législation de l'Union,
+      sur <span class="lawtrack-dom">law-tracker.europa.eu</span>.
+      <span class="lawtrack-sub">Cette page traite du Règlement (UE) 2024/1689,
+      déjà adopté&nbsp;; ce qui est encore en procédure se suit là-bas.</span>
+    </span>
+    <span class="lawtrack-go" aria-hidden="true">↗</span>
+  </a>
 
   <section class="veille-panel"><div class="veille-head"><div class="veille-head-t">Veille — actualité de la réglementation IA</div><div class="veille-head-r"><span class="veille-updated" id="veille-upd-regs"></span><button class="veille-refresh" onclick="veilleRefresh()" title="Forcer le rafraîchissement">↻ Actualiser</button></div></div><div class="veille-list" id="veille-regs"><div class="veille-loading">Chargement de la veille…</div></div><div class="veille-foot">Flux publics agrégés · mise à jour automatique. Estimations et actualités à vérifier aux sources officielles.</div></section>
 
