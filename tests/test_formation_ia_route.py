@@ -57,7 +57,8 @@ def _resa(client, sujet, creneau, siret=SIRET_TEST, email="essai@ex.fr",
           entreprise="ESSAI SAS"):
     return client.post("/api/formation/inscription", json={
         "sujet": sujet, "creneau": creneau, "nom": "Durand", "prenom": "Alex",
-        "email": email, "entreprise": entreprise, "siret": siret})
+        "email": email, "entreprise": entreprise, "siret": siret,
+        "telephone": "+33 6 12 34 56 78", "lieu": "12 rue d'Essai, 75000 Paris"})
 
 
 def test_le_referentiel_est_public_et_complet(client):
@@ -129,3 +130,69 @@ def test_la_cle_client_prefere_le_SIRET_puis_le_courriel():
     assert A._formation_ia_cle_client("900 000 000", "a@ex.fr") == "siret:900000000"
     assert A._formation_ia_cle_client("12345", "A@Ex.FR") == "email:a@ex.fr"
     assert A._formation_ia_cle_client("", "  Jean@Ex.fr ") == "email:jean@ex.fr"
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# Le durcissement : six champs exigés, et un leurre anti-robot
+# ══════════════════════════════════════════════════════════════════════════
+def _compter():
+    conn = A.registre_get_db(); cur = conn.cursor()
+    cur.execute("SELECT COUNT(*) AS n FROM formation_ia_resa")
+    n = int(dict(cur.fetchone()).get("n", 0) or 0)
+    try: conn.close()
+    except Exception: pass
+    return n
+
+
+def _sans(client, cr, **retire):
+    """Une inscription complète, moins les champs nommés — pour éprouver que
+    chacun est bien EXIGÉ à la source."""
+    corps = {"sujet": "gouvernance-ia", "creneau": cr[-1], "nom": "Durand",
+             "prenom": "Alex", "email": "essai@ex.fr", "entreprise": "ESSAI SAS",
+             "telephone": "+33 6 12 34 56 78", "lieu": "12 rue d'Essai, Paris"}
+    for k in retire:
+        corps.pop(k, None)
+    corps.update({k: v for k, v in retire.items() if v is not None})
+    return client.post("/api/formation/inscription", json=corps)
+
+
+def test_le_telephone_est_desormais_requis(client):
+    """« rendre obligatoire … numéro de téléphone » : sans lui, on refuse."""
+    assert _sans(client, _creneaux(), telephone=None).status_code == 400
+
+
+def test_le_lieu_de_formation_est_desormais_requis(client):
+    """« … et lieu de formation client » : la séance est sur site, l'adresse
+    est due pour l'organiser."""
+    assert _sans(client, _creneaux(), lieu=None).status_code == 400
+
+
+def test_un_telephone_sans_assez_de_chiffres_est_refuse(client):
+    """Un téléphone n'est pas qu'un champ non vide : « --- » n'appelle personne.
+    Au moins six chiffres."""
+    assert _sans(client, _creneaux(), telephone="-- ()").status_code == 400
+
+
+def test_le_honeypot_refuse_un_robot_sans_rien_ecrire(client):
+    """Le champ leurre, invisible pour un humain, rempli par un robot : la
+    requête est refusée AVANT toute écriture."""
+    cr = _creneaux()
+    r = _sans(client, cr, website="http://spam.example")
+    assert r.status_code == 400
+    assert _compter() == 0, "le honeypot a laissé une ligne s'écrire"
+
+
+def test_une_inscription_complete_conserve_le_lieu(client):
+    """Le versant positif : quand tout est fourni, la réservation passe et le
+    lieu est conservé — c'est lui qui part dans la notification interne."""
+    cr = _creneaux()
+    assert _resa(client, "gouvernance-ia", cr[-1]).status_code == 200
+    conn = A.registre_get_db(); cur = conn.cursor()
+    cur.execute(A.registre_sql(
+        "SELECT lieu FROM formation_ia_resa WHERE cle_client=%s ORDER BY id DESC",
+        "SELECT lieu FROM formation_ia_resa WHERE cle_client=? ORDER BY id DESC"),
+        ("siret:" + SIRET_TEST,))
+    lieu = dict(cur.fetchone()).get("lieu")
+    try: conn.close()
+    except Exception: pass
+    assert lieu and "Essai" in lieu

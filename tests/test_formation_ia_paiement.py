@@ -90,7 +90,8 @@ def _creneaux():
 def _resa(client, sujet, creneau, siret=SIRET_P, email="pay@ex.fr"):
     return client.post("/api/formation/inscription", json={
         "sujet": sujet, "creneau": creneau, "nom": "Payeur", "prenom": "Alex",
-        "email": email, "entreprise": "PAYE SAS", "siret": siret})
+        "email": email, "entreprise": "PAYE SAS", "siret": siret,
+        "telephone": "+33 6 12 34 56 78", "lieu": "9 av. du Test, 75000 Paris"})
 
 
 def test_la_seance_gratuite_ne_touche_jamais_stripe(client, monkeypatch):
@@ -138,6 +139,7 @@ def test_le_montant_stripe_ne_vient_pas_du_client(client, monkeypatch):
     client.post("/api/formation/inscription", json={
         "sujet": "securite-ia", "creneau": cr[-2], "nom": "Payeur", "prenom": "Alex",
         "email": "pay@ex.fr", "entreprise": "PAYE SAS", "siret": SIRET_P,
+        "telephone": "+33 6 12 34 56 78", "lieu": "9 av. du Test, 75000 Paris",
         "montant_cents": 1, "ht_cents": 1, "prix": 1, "gratuit": True})
     assert created, "aucune session de paiement ouverte"
     assert created[0]["line_items"][0]["price_data"]["unit_amount"] == F.TARIF_HT_CENTS

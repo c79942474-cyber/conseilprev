@@ -92,6 +92,8 @@ label.fl span{color:var(--pf)}
 .fselect option{background:#120830;color:var(--wh)}
 .ftextarea{resize:vertical;min-height:96px;line-height:1.6}
 .phone-wrap{display:flex;gap:8px}.phone-prefix{width:96px;flex-shrink:0}.phone-num{flex:1}
+/* Honeypot : hors écran, jamais visible ni tabulable pour un humain */
+.hp-field{position:absolute!important;left:-9999px!important;top:auto;width:1px;height:1px;overflow:hidden}
 .field-note{font-size:11px;color:var(--mu);font-family:"Space Mono",monospace;margin-top:2px}
 /* Récap du choix, au-dessus du formulaire */
 .recap{display:flex;flex-wrap:wrap;gap:10px 26px;background:rgba(94,234,212,.06);border:1px solid rgba(94,234,212,.22);border-radius:12px;padding:14px 18px;margin-bottom:22px;font-size:13px}
@@ -214,6 +216,13 @@ label.fl span{color:var(--pf)}
 
     <div class="form-wrap">
       <form id="formation-form" autocomplete="on" onsubmit="return submitFormation(event)">
+        <!-- Anti-robot : champ leurre, hors écran et hors tabulation. Un humain
+             ne le voit pas et ne le remplit pas ; un robot oui, et se signale.
+             Rempli, le serveur refuse la requête. -->
+        <div class="hp-field" aria-hidden="true">
+          <label for="fo-website">Ne pas remplir ce champ</label>
+          <input type="text" id="fo-website" name="website" tabindex="-1" autocomplete="off">
+        </div>
         <div class="frow">
           <div class="fgroup">
             <label class="fl" for="fo-prenom">Prénom <span>*</span></label>
@@ -231,7 +240,7 @@ label.fl span{color:var(--pf)}
             <input class="finput" type="email" id="fo-email" name="email" placeholder="alex.durand@entreprise.fr" required autocomplete="email">
           </div>
           <div class="fgroup">
-            <label class="fl" for="fo-phone">Téléphone</label>
+            <label class="fl" for="fo-phone">Téléphone <span>*</span></label>
             <div class="phone-wrap">
               <select class="fselect phone-prefix" id="fo-prefix" aria-label="Indicatif téléphonique">
                 <option value="+33">🇫🇷 +33</option>
@@ -241,7 +250,7 @@ label.fl span{color:var(--pf)}
                 <option value="+49">🇩🇪 +49</option>
                 <option value="+44">🇬🇧 +44</option>
               </select>
-              <input class="finput phone-num" type="tel" id="fo-phone" name="telephone" placeholder="6 00 00 00 00" autocomplete="tel">
+              <input class="finput phone-num" type="tel" id="fo-phone" name="telephone" placeholder="6 00 00 00 00" required autocomplete="tel">
             </div>
           </div>
         </div>
@@ -256,6 +265,12 @@ label.fl span{color:var(--pf)}
             <input class="finput" type="text" id="fo-siret" name="siret" placeholder="123 456 789 00012" inputmode="numeric" autocomplete="off">
             <span class="field-note">Sert à décompter la séance offerte par entreprise.</span>
           </div>
+        </div>
+
+        <div class="fgroup">
+          <label class="fl" for="fo-lieu">Lieu de la formation (sur site) <span>*</span></label>
+          <input class="finput" type="text" id="fo-lieu" name="lieu" placeholder="Adresse du site où se tiendra la séance" required autocomplete="street-address">
+          <span class="field-note">La séance se tient dans vos locaux : indiquez l'adresse du site.</span>
         </div>
 
         <div class="fgroup">
@@ -491,13 +506,19 @@ label.fl span{color:var(--pf)}
     var phone = document.getElementById('fo-phone').value.trim();
     var siret = document.getElementById('fo-siret').value.trim();
     var fonction = document.getElementById('fo-fonction').value.trim();
+    var lieu = document.getElementById('fo-lieu').value.trim();
     var message = document.getElementById('fo-message').value.trim();
+    var website = document.getElementById('fo-website').value;  // honeypot
 
-    if(!prenom || !nom || !email || !entreprise){
-      erreur("Prénom, nom, adresse électronique et entreprise sont requis."); return false;
+    if(!prenom || !nom || !email || !entreprise || !phone || !lieu){
+      erreur("Prénom, nom, adresse électronique, téléphone, entreprise et lieu de la formation sont requis.");
+      return false;
     }
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
       erreur("Adresse électronique invalide."); return false;
+    }
+    if((phone.replace(/\D/g,'')).length < 6){
+      erreur("Numéro de téléphone invalide."); return false;
     }
 
     btn.disabled = true; btnTxt.textContent = 'Envoi en cours…';
@@ -511,7 +532,8 @@ label.fl span{color:var(--pf)}
         creneau: state.creneau.date,
         prenom: prenom, nom: nom, email: email, entreprise: entreprise,
         telephone: phone ? (prefix + ' ' + phone) : '',
-        siret: siret, fonction: fonction, message: message
+        siret: siret, fonction: fonction, lieu: lieu, message: message,
+        website: website
       })
     })
     .then(function(r){ return r.json().then(function(j){ return {code:r.status, j:j}; }); })

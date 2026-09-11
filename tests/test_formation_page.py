@@ -174,3 +174,34 @@ def test_sentinel_conduit_a_la_page_formation():
     bloc = SENTINEL[i:i + 4000]
     assert 'href="/formation"' in bloc, (
         "le bloc p-training ne conduit pas à /formation")
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# Le durcissement, vu de la page
+# ══════════════════════════════════════════════════════════════════════════
+def test_le_corps_poste_porte_le_lieu_et_le_honeypot():
+    """Le lieu (sur site) et le champ leurre partent au serveur : sans eux, le
+    serveur ne pourrait ni exiger le lieu ni démasquer un robot."""
+    cles = _cles_postees()
+    assert "lieu" in cles, "le lieu de formation n'est pas envoyé au serveur"
+    assert "website" in cles, "le champ leurre anti-robot n'est pas envoyé au serveur"
+
+
+def test_la_page_marque_requis_les_six_champs_exiges():
+    """Prénom, nom, adresse électronique, téléphone, entreprise, lieu : chacun
+    porte `required` dans sa balise. Le serveur les exige de toute façon ; la
+    page ne doit pas laisser croire qu'ils sont facultatifs."""
+    for champ in ("fo-prenom", "fo-nom", "fo-email", "fo-phone",
+                  "fo-entreprise", "fo-lieu"):
+        m = re.search(r'<input[^>]*id="%s"[^>]*>' % champ, PAGE)
+        assert m, "champ %s introuvable" % champ
+        assert "required" in m.group(0), "%s n'est pas marqué requis" % champ
+
+
+def test_le_honeypot_est_hors_ecran():
+    """Le leurre ne doit pas se voir : un humain qui le remplirait serait refusé
+    à tort. Il est sorti de l'écran, pas simplement masqué."""
+    assert 'name="website"' in PAGE
+    m = re.search(r'\.hp-field\{([^}]*)\}', PAGE)
+    assert m and ("-9999px" in m.group(1) or "clip" in m.group(1)), (
+        "le champ leurre n'est pas mis hors écran")

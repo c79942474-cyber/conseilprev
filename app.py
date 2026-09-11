@@ -12616,6 +12616,7 @@ AUTO_MAJ_LENT = int(os.environ.get('AUTO_MAJ_LENT', '21600'))       # referentie
 # jour : il est remplace par son edition suivante, a une date que son editeur
 # choisit et que personne ici ne controle.
 AUTO_MAJ_HEBDO = int(os.environ.get('AUTO_MAJ_HEBDO', '604800'))    # 7 jours
+AUTO_MAJ_RELANCES = int(os.environ.get('AUTO_MAJ_RELANCES', '86400'))  # 1 jour — relances formation
 
 _AUTO_ETAT = {'demarre': None, 'cycles': 0, 'dernier': None,
               'rapide': {}, 'lent': {}, 'hebdo': {}, 'erreurs': []}
@@ -12708,6 +12709,21 @@ def _auto_hebdo():
         _auto_note('hebdo', 'peremption', False, e)
 
 
+def _auto_relances():
+    """Les relances J-14 et J-7 des formations reservees, une fois par jour.
+
+    IDEMPOTENT PAR CONSTRUCTION, et c'est indispensable : cette boucle tourne
+    dans CHAQUE worker. `_formation_ia_relances(..., envoyer=True)` reclame
+    chaque relance par une mise a jour gardee avant de l'envoyer — un seul worker
+    l'emporte, une seule relance part."""
+    try:
+        envoyees = _formation_ia_relances(datetime.utcnow().date(), envoyer=True)
+        _auto_note('hebdo', 'relances_formation', True,
+                   '%d relance(s) envoyee(s)' % len(envoyees))
+    except Exception as e:                                     # noqa: BLE001
+        _auto_note('hebdo', 'relances_formation', False, e)
+
+
 def _auto_boucle():
     import time as _t
     # 60 s, et non 20 : sur un hebergement modeste, le premier cycle ne doit
@@ -12720,6 +12736,9 @@ def _auto_boucle():
     # peremption doit exister des le demarrage. L'attendre une semaine
     # laisserait la page annoncer un etat qu'elle ne connait pas encore.
     prochain_hebdo = 0.0
+    # Les relances partent au premier cycle aussi : une seance a J-10 le jour
+    # d'un deploiement ne doit pas attendre demain sa relance.
+    prochain_relances = 0.0
     while True:
         debut = _t.time()
         try:
@@ -12730,6 +12749,9 @@ def _auto_boucle():
             if debut >= prochain_hebdo:
                 _auto_hebdo()
                 prochain_hebdo = debut + AUTO_MAJ_HEBDO
+            if debut >= prochain_relances:
+                _auto_relances()
+                prochain_relances = debut + AUTO_MAJ_RELANCES
             _AUTO_ETAT['cycles'] += 1
             _AUTO_ETAT['dernier'] = datetime.utcnow().isoformat()
         except Exception as e:                                 # noqa: BLE001
@@ -14273,7 +14295,7 @@ RGPD_TRAITEMENTS = [
      'base': 'Contrat (art. 6.1.b)', 'donnees': 'Documents deposes par le client',
      'duree': 'Duree du compte ; suppression a la demande', 'destinataires': 'Render (UE) ; Mistral embeddings (UE)'},
     {'id': 9, 'nom': 'Reservations aux formations conformite IA', 'finalite': 'Inscription et organisation des seances de formation sur site',
-     'base': 'Mesures precontractuelles / contrat (art. 6.1.b)', 'donnees': 'Identite, coordonnees, entreprise, SIRET, sujet et creneau choisis',
+     'base': 'Mesures precontractuelles / contrat (art. 6.1.b)', 'donnees': 'Identite, coordonnees (dont telephone), entreprise, SIRET, lieu de la formation, sujet et creneau choisis',
      'duree': '24 mois apres la derniere seance', 'destinataires': 'CONSEILPREV ; Brevo (courriels, UE) ; Render/PostgreSQL (Francfort, UE) ; Stripe (paiement des seances payantes)'},
 ]
 
@@ -16283,18 +16305,22 @@ def _formation_ia_table(cur, conn):
     _pk = 'SERIAL PRIMARY KEY' if REGISTRE_USE_PG else 'INTEGER PRIMARY KEY AUTOINCREMENT'
     cur.execute('CREATE TABLE IF NOT EXISTS formation_ia_resa (id ' + _pk + ', '
                 'sujet TEXT, date_creneau TEXT, nom TEXT, prenom TEXT, email TEXT, '
-                'entreprise TEXT, siret TEXT, telephone TEXT, fonction TEXT, message TEXT, '
+                'entreprise TEXT, siret TEXT, telephone TEXT, fonction TEXT, lieu TEXT, message TEXT, '
                 'cle_client TEXT, rang INTEGER, montant_cents INTEGER, gratuit INTEGER, '
-                'statut TEXT, stripe_session_id TEXT, created_at TEXT)')
+                'statut TEXT, stripe_session_id TEXT, relance_14_at TEXT, relance_7_at TEXT, '
+                'created_at TEXT)')
     conn.commit()
-    # Migration : la table a d'abord existe sans la colonne du paiement en ligne.
-    # ADD COLUMN echoue une fois la colonne presente — d'ou le repli silencieux.
-    try:
-        cur.execute('ALTER TABLE formation_ia_resa ADD COLUMN stripe_session_id TEXT')
-        conn.commit()
-    except Exception:
-        try: conn.rollback()
-        except Exception: pass
+    # Migrations : la table a existe sans ces colonnes (paiement en ligne, lieu
+    # sur site, relances J-14/J-7). ADD COLUMN echoue une fois la colonne
+    # presente — d'ou le repli silencieux, colonne par colonne.
+    for _col in ('stripe_session_id TEXT', 'lieu TEXT',
+                 'relance_14_at TEXT', 'relance_7_at TEXT'):
+        try:
+            cur.execute('ALTER TABLE formation_ia_resa ADD COLUMN ' + _col)
+            conn.commit()
+        except Exception:
+            try: conn.rollback()
+            except Exception: pass
 
 
 def _formation_ia_cle_client(siret, email):
@@ -16358,6 +16384,131 @@ def _formation_ia_confirmer_paiement(resa_id):
         pass
 
 
+# Les deux relances, et leur FENETRE. « 2 semaines avant » se declenche quand il
+# reste entre 8 et 14 jours ; « 1 semaine avant », entre 1 et 7 jours. Les deux
+# fenetres sont disjointes : une seance ne recoit jamais les deux le meme jour.
+FORMATION_RELANCES = (
+    (14, 'relance_14_at', 7, 14, 'dans deux semaines'),
+    (7,  'relance_7_at',  0, 7,  'dans une semaine'),
+)
+
+
+def _formation_ia_reclamer(cur, conn, colonne, resa_id, ref_iso):
+    """RECLAME une relance avant de l'envoyer, et dit si la reclamation a pris.
+
+    POURQUOI CE N'EST PAS UN LUXE. La boucle de fond tourne dans CHAQUE worker.
+    Deux workers peuvent relever la meme relance due au meme instant — le releve
+    ne verrouille rien. La mise a jour, elle, ne touche la ligne QUE si la
+    colonne est encore vide : le premier la date et obtient une ligne modifiee,
+    le second en obtient zero et n'envoie pas. C'est la base qui arbitre, pas
+    l'ordonnancement des fils.
+
+    `colonne` est une valeur CONTROLEE (l'une des deux de FORMATION_RELANCES),
+    jamais une entree client : son interpolation dans le SQL est sans risque.
+    """
+    cur.execute(registre_sql(
+        'UPDATE formation_ia_resa SET %s=%%s WHERE id=%%s AND (%s IS NULL OR %s=\'\')'
+        % (colonne, colonne, colonne),
+        'UPDATE formation_ia_resa SET %s=? WHERE id=? AND (%s IS NULL OR %s=\'\')'
+        % (colonne, colonne, colonne)),
+        (ref_iso, resa_id))
+    conn.commit()
+    return cur.rowcount == 1
+
+
+def _formation_ia_relances(ref_date, envoyer=False):
+    """Les relances dues a une date de reference. DETERMINISTE : `ref_date` est
+    un ARGUMENT (la date du jour en production, une date fixe en recette) — on ne
+    lit jamais l'horloge ici.
+
+    On ne relance que les seances CONFIRMEES : la gratuite l'est d'emblee, la
+    payante une fois payee. Un devis ou une attente de paiement ne recoit rien.
+
+    `envoyer=False` RELEVE seulement les relances dues, sans rien envoyer ni
+    ecrire (previsualisation). `envoyer=True` RECLAME chaque relance par une mise
+    a jour gardee (la colonne passe de vide a datee, et rowcount dit si c'est
+    nous qui l'avons reclamee) AVANT d'envoyer : la boucle tournant dans chaque
+    worker, une seule relance part."""
+    ref = formations_ia._lire_date(ref_date)
+    if ref is None:
+        return []
+    conn = registre_get_db(); cur = conn.cursor()
+    _formation_ia_table(cur, conn)
+    cur.execute("SELECT * FROM formation_ia_resa WHERE statut IN ('confirmee','payee')")
+    lignes = [dict(r) for r in cur.fetchall()]
+    dues = []
+    for r in lignes:
+        d = formations_ia._lire_date(r.get('date_creneau'))
+        if d is None:
+            continue
+        jours = (d - ref).days
+        for etiquette, colonne, bas, haut, _txt in FORMATION_RELANCES:
+            if bas < jours <= haut and not (r.get(colonne) or ''):
+                dues.append({'id': r['id'], 'quand': 'j%d' % etiquette,
+                             'colonne': colonne, 'jours': jours,
+                             'email': r.get('email'), 'prenom': r.get('prenom'),
+                             'nom': r.get('nom'), 'entreprise': r.get('entreprise'),
+                             'sujet': r.get('sujet'), 'date_creneau': r.get('date_creneau'),
+                             'lieu': r.get('lieu')})
+    if not envoyer:
+        try: conn.close()
+        except Exception: pass
+        return dues
+    envoyees, ref_iso = [], ref.isoformat()
+    for x in dues:
+        if not _formation_ia_reclamer(cur, conn, x['colonne'], x['id'], ref_iso):
+            continue        # un autre worker a deja reclame cette relance
+        _formation_ia_envoyer_relance(x)
+        envoyees.append(x)
+    try: conn.close()
+    except Exception: pass
+    return envoyees
+
+
+def _formation_ia_envoyer_relance(x):
+    """La relance, au CLIENT ET a CONSEILPREV — les deux, comme demande."""
+    su = formations_ia.sujet(x.get('sujet') or '')
+    titre = su['titre'] if su else 'Formation conformite IA'
+    creneau_lib = next((c['libelle'] for c in formations_ia.creneaux(datetime.utcnow().date())
+                        if c['date'] == x.get('date_creneau')), x.get('date_creneau'))
+    quand = 'dans deux semaines' if x['quand'] == 'j14' else 'dans une semaine'
+    lieu = x.get('lieu') or 'vos locaux'
+    try:
+        send_email_smart(x.get('email'), (x.get('prenom') or '') + ' ' + (x.get('nom') or ''),
+                         'Rappel — votre formation %s (%s)' % (titre, quand),
+                         '<p>Bonjour,</p><p>Petit rappel : votre seance de formation '
+                         '<strong>%s</strong> a lieu <strong>%s</strong>, le %s, a %s.</p>'
+                         '<p>Repondez a ce courriel pour toute question ou changement.</p>'
+                         '<p>A tres bientot,<br>L equipe CONSEILPREV</p>'
+                         % (titre, quand, creneau_lib, lieu),
+                         tags=['formation-ia-relance'])
+    except Exception:
+        pass
+    try:
+        send_email_smart(CONSEILPREV_INTERNAL_EMAIL, 'CONSEILPREV',
+                         'Relance %s : %s' % (quand, titre),
+                         '<p>Relance <strong>%s</strong> envoyee au client.</p>'
+                         '<p>%s %s (%s) — %s<br>Seance : %s<br>Lieu : %s</p>'
+                         % (quand, x.get('prenom'), x.get('nom'), x.get('email'),
+                            x.get('entreprise'), creneau_lib, lieu),
+                         tags=['formation-ia-relance'])
+    except Exception:
+        pass
+
+
+@app.route('/api/formation/relances', methods=['GET', 'POST'])
+def formation_ia_relances_route():
+    """Les relances de formation, pour CONSEILPREV. GET previsualise (ce qui
+    partirait aujourd'hui, sans rien envoyer) ; POST declenche l'envoi maintenant
+    — un filet manuel en plus du passage quotidien automatique."""
+    if not raas_require_conseilprev():
+        return jsonify({'ok': False, 'error': 'Reserve a CONSEILPREV'}), 403
+    envoyer = request.method == 'POST'
+    res = _formation_ia_relances(datetime.utcnow().date(), envoyer=envoyer)
+    cle = 'envoyees' if envoyer else 'a_envoyer'
+    return jsonify({'ok': True, cle: res, 'n': len(res)})
+
+
 @app.route('/api/formation/referentiel', methods=['GET'])
 def formation_ia_referentiel():
     """L'offre, les sujets, le calendrier (creneaux LIBRES marques) et la regle
@@ -16406,14 +16557,27 @@ def formation_ia_inscription():
     siret = sanitize_input(d.get('siret') or '', 20)
     telephone = sanitize_phone(d.get('telephone') or '')
     fonction = sanitize_input(d.get('fonction') or '', 120)
+    lieu = sanitize_input(d.get('lieu') or '', 200)
     message = sanitize_input(d.get('message') or '', 1000, allow_newlines=True)
+
+    # HONEYPOT ANTI-ROBOT. Ce champ est cache pour un humain : il ne le voit pas
+    # et ne le remplit pas. Un robot qui remplit tous les champs le remplit
+    # aussi — et se signale. Rempli, on refuse a la source, sans rien ecrire.
+    if (d.get('website') or d.get('url_site') or '').strip():
+        return jsonify({'ok': False, 'error': 'Requete refusee.'}), 400
 
     su = formations_ia.sujet(sujet_cle)
     if not su:
         return jsonify({'ok': False, 'error': 'Sujet de formation inconnu.'}), 400
-    if not nom or not prenom or not email or not entreprise:
-        return jsonify({'ok': False, 'error': 'Nom, prenom, adresse electronique '
-                        'et entreprise sont requis.'}), 400
+    # LES SIX CHAMPS EXIGES POUR RESERVER — cote serveur, jamais sur la seule
+    # parole de la page : prenom, nom, adresse electronique (format valide, sinon
+    # sanitize_email a rendu None), telephone (au moins six chiffres, pour ecarter
+    # les tirets seuls), entreprise et lieu de la formation sur site.
+    tel_chiffres = _re.sub(r'\D', '', telephone or '')
+    if (not nom or not prenom or not email or not entreprise or not lieu
+            or len(tel_chiffres) < 6):
+        return jsonify({'ok': False, 'error': 'Prenom, nom, adresse electronique, '
+                        'telephone, entreprise et lieu de la formation sont requis.'}), 400
     # LE CRENEAU EST VALIDE CONTRE LE CALENDRIER RECALCULE ICI, jamais contre ce
     # que le client envoie : une date passee, hors campagne ou fabriquee est
     # refusee a la source.
@@ -16463,13 +16627,13 @@ def formation_ia_inscription():
     statut = 'confirmee' if t['gratuit'] else ('en_attente_paiement' if veut_stripe else 'devis')
     cur.execute(registre_sql(
         'INSERT INTO formation_ia_resa (sujet, date_creneau, nom, prenom, email, entreprise, siret, '
-        'telephone, fonction, message, cle_client, rang, montant_cents, gratuit, statut, created_at) '
-        'VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
+        'telephone, fonction, lieu, message, cle_client, rang, montant_cents, gratuit, statut, created_at) '
+        'VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
         'INSERT INTO formation_ia_resa (sujet, date_creneau, nom, prenom, email, entreprise, siret, '
-        'telephone, fonction, message, cle_client, rang, montant_cents, gratuit, statut, created_at) '
-        'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)'),
+        'telephone, fonction, lieu, message, cle_client, rang, montant_cents, gratuit, statut, created_at) '
+        'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)'),
         (sujet_cle, date_creneau, nom, prenom, email, entreprise, siret, telephone, fonction,
-         message, cle, rang, montant, gratuit, statut, datetime.utcnow().isoformat()))
+         lieu, message, cle, rang, montant, gratuit, statut, datetime.utcnow().isoformat()))
     conn.commit()
     try:
         cur.execute('SELECT MAX(id) AS id FROM formation_ia_resa')
@@ -16487,9 +16651,10 @@ def formation_ia_inscription():
                          'Reservation formation : ' + su['titre'],
                          '<p>Nouvelle reservation « Formations conformite IA ».</p>'
                          '<p><strong>%s</strong> — %s<br>%s %s — %s<br>%s / %s'
-                         '<br>SIRET : %s<br>Seance : %s (%s)</p><p>%s</p>'
+                         '<br>SIRET : %s<br>Lieu : %s<br>Seance : %s (%s)</p><p>%s</p>'
                          % (su['titre'], prix_txt, prenom, nom, entreprise, email,
-                            telephone, siret or '(non fourni)', creneau_lib, statut, message or ''),
+                            telephone, siret or '(non fourni)', lieu, creneau_lib, statut,
+                            message or ''),
                          tags=['formation-ia'])
     except Exception:
         pass
