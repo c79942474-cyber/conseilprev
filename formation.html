@@ -123,6 +123,11 @@ label.fl span{color:var(--pf)}
 #confirm .c-line strong{color:var(--pp)}
 #confirm .c-note{font-size:12.5px;color:var(--pp);margin-top:12px;line-height:1.65}
 #confirm .btn-reset{margin-top:18px}
+/* Retour depuis le paiement */
+#retour-paiement{border-radius:14px;padding:18px 22px;margin:18px 0 6px;font-size:14px;line-height:1.6}
+#retour-paiement.ok{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:#4ade80}
+#retour-paiement.annule{background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.3);color:var(--gold)}
+#retour-paiement strong{color:var(--wh)}
 /* Info pratique */
 .info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;padding:8px 0 40px}
 @media(max-width:600px){.info-grid{grid-template-columns:1fr}}
@@ -152,6 +157,9 @@ label.fl span{color:var(--pf)}
 </section>
 
 <main class="con" id="main-content">
+
+  <!-- Retour depuis le paiement Stripe (?paiement=ok|annule) -->
+  <div id="retour-paiement" role="status" aria-live="polite" hidden></div>
 
   <!-- OFFRE : les faits, et la règle de tarif -->
   <div class="offre" id="offre">
@@ -511,6 +519,9 @@ label.fl span{color:var(--pf)}
       btn.disabled = false; btnTxt.textContent = 'Réserver ma séance';
       var j = res.j || {};
       if(res.code === 200 && j.ok){
+        // Séance payante avec paiement en ligne : le serveur a ouvert une
+        // session Stripe et renvoie son adresse — on y conduit le client.
+        if(j.url){ btnTxt.textContent = 'Redirection…'; window.location.href = j.url; return; }
         afficherConfirmation(j);
       }else{
         erreur(j.error || "La réservation n'a pas pu être enregistrée. Réessayez.");
@@ -561,6 +572,24 @@ label.fl span{color:var(--pf)}
       document.getElementById('etape-sujet').scrollIntoView({behavior:'smooth'});
     }
   };
+
+  // ── Retour depuis Stripe (?paiement=ok|annule) ──
+  // Le paiement est confirmé côté serveur par le webhook Stripe ; ce bandeau
+  // n'est que le retour visible pour le client.
+  (function retourPaiement(){
+    var q = (location.search || '');
+    var el = document.getElementById('retour-paiement');
+    if(!el) return;
+    if(q.indexOf('paiement=ok') > -1){
+      el.className = 'ok';
+      el.innerHTML = '<strong>Paiement reçu.</strong> Votre séance est confirmée — vous recevez un accusé par courriel. Merci !';
+      el.hidden = false;
+    }else if(q.indexOf('paiement=annule') > -1){
+      el.className = 'annule';
+      el.innerHTML = '<strong>Paiement interrompu.</strong> Votre réservation n’a pas été finalisée. Vous pouvez la reprendre ci-dessous, ou nous écrire.';
+      el.hidden = false;
+    }
+  })();
 
   // ── Démarrage (script en fin de body : le DOM est prêt) ──
   charger();

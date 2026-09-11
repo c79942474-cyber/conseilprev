@@ -7311,10 +7311,16 @@ def stripe_webhook():
         obj = (evt.get('data') or {}).get('object') or {}
         meta = obj.get('metadata') or {}
         if etype == 'checkout.session.completed':
-            # Reservation d'une formation : confirmer et notifier.
+            # Reservation d'une formation du catalogue : confirmer et notifier.
             if meta.get('type') == 'formation':
                 try:
                     _form_confirmer_paiement(int(meta.get('inscription_id')))
+                except Exception:
+                    pass
+            # Reservation « Formations conformite IA » (offre a quatre sujets).
+            if meta.get('type') == 'formation-ia':
+                try:
+                    _formation_ia_confirmer_paiement(int(meta.get('resa_id')))
                 except Exception:
                     pass
             cid = meta.get('client_id') or obj.get('client_reference_id')
@@ -14268,7 +14274,7 @@ RGPD_TRAITEMENTS = [
      'duree': 'Duree du compte ; suppression a la demande', 'destinataires': 'Render (UE) ; Mistral embeddings (UE)'},
     {'id': 9, 'nom': 'Reservations aux formations conformite IA', 'finalite': 'Inscription et organisation des seances de formation sur site',
      'base': 'Mesures precontractuelles / contrat (art. 6.1.b)', 'donnees': 'Identite, coordonnees, entreprise, SIRET, sujet et creneau choisis',
-     'duree': '24 mois apres la derniere seance', 'destinataires': 'CONSEILPREV ; Brevo (courriels, UE) ; Render/PostgreSQL (Francfort, UE)'},
+     'duree': '24 mois apres la derniere seance', 'destinataires': 'CONSEILPREV ; Brevo (courriels, UE) ; Render/PostgreSQL (Francfort, UE) ; Stripe (paiement des seances payantes)'},
 ]
 
 RGPD_TRANSFERTS = [
@@ -16279,8 +16285,16 @@ def _formation_ia_table(cur, conn):
                 'sujet TEXT, date_creneau TEXT, nom TEXT, prenom TEXT, email TEXT, '
                 'entreprise TEXT, siret TEXT, telephone TEXT, fonction TEXT, message TEXT, '
                 'cle_client TEXT, rang INTEGER, montant_cents INTEGER, gratuit INTEGER, '
-                'statut TEXT, created_at TEXT)')
+                'statut TEXT, stripe_session_id TEXT, created_at TEXT)')
     conn.commit()
+    # Migration : la table a d'abord existe sans la colonne du paiement en ligne.
+    # ADD COLUMN echoue une fois la colonne presente — d'ou le repli silencieux.
+    try:
+        cur.execute('ALTER TABLE formation_ia_resa ADD COLUMN stripe_session_id TEXT')
+        conn.commit()
+    except Exception:
+        try: conn.rollback()
+        except Exception: pass
 
 
 def _formation_ia_cle_client(siret, email):
@@ -16292,6 +16306,56 @@ def _formation_ia_cle_client(siret, email):
     if len(s) >= 9:
         return 'siret:' + s
     return 'email:' + (email or '').strip().lower()
+
+
+def _formation_ia_confirmer_paiement(resa_id):
+    """Une seance payante encaissee : la passer en « payee » et notifier. Appele
+    par le webhook Stripe sur « checkout.session.completed ». IDEMPOTENT — une
+    notification Stripe peut arriver deux fois, et une seance deja payee ne se
+    reconfirme pas."""
+    conn = registre_get_db(); cur = conn.cursor()
+    _formation_ia_table(cur, conn)
+    cur.execute(registre_sql('SELECT * FROM formation_ia_resa WHERE id=%s',
+                             'SELECT * FROM formation_ia_resa WHERE id=?'), (resa_id,))
+    row = cur.fetchone()
+    if not row:
+        try: conn.close()
+        except Exception: pass
+        return
+    r = dict(row)
+    if r.get('statut') == 'payee':
+        try: conn.close()
+        except Exception: pass
+        return
+    cur.execute(registre_sql("UPDATE formation_ia_resa SET statut='payee' WHERE id=%s",
+                             "UPDATE formation_ia_resa SET statut='payee' WHERE id=?"), (resa_id,))
+    conn.commit()
+    try: conn.close()
+    except Exception: pass
+    su = formations_ia.sujet(r.get('sujet') or '')
+    titre = su['titre'] if su else 'Formation conformite IA'
+    creneau_lib = next((c['libelle'] for c in formations_ia.creneaux(datetime.utcnow().date())
+                        if c['date'] == r.get('date_creneau')), r.get('date_creneau'))
+    try:
+        send_email_smart(r.get('email'), (r.get('prenom') or '') + ' ' + (r.get('nom') or ''),
+                         'Reservation confirmee — ' + titre,
+                         '<p>Bonjour,</p><p>Votre paiement a bien ete recu : votre seance de '
+                         'formation <strong>%s</strong> du %s, dans vos locaux, est '
+                         '<strong>confirmee</strong>.</p><p>L equipe CONSEILPREV</p>'
+                         % (titre, creneau_lib),
+                         tags=['formation-ia-payee'])
+    except Exception:
+        pass
+    try:
+        send_email_smart(CONSEILPREV_INTERNAL_EMAIL, 'CONSEILPREV',
+                         'Formation IA payee : ' + titre,
+                         '<p>Seance payee et confirmee.</p><p>%s %s (%s) — %s<br>%.2f EUR HT<br>'
+                         'Seance : %s</p>'
+                         % (r.get('prenom'), r.get('nom'), r.get('email'), r.get('entreprise'),
+                            (r.get('montant_cents') or 0) / 100.0, creneau_lib),
+                         tags=['formation-ia-payee'])
+    except Exception:
+        pass
 
 
 @app.route('/api/formation/referentiel', methods=['GET'])
@@ -16389,9 +16453,14 @@ def formation_ia_inscription():
     t = formations_ia.tarif(rang)
     montant = int(t['ht_cents'])
     gratuit = 1 if t['gratuit'] else 0
-    # La gratuite se confirme d'emblee (rien a encaisser) ; la payante attend sa
-    # facture, faute de paiement en ligne configure.
-    statut = 'confirmee' if t['gratuit'] else 'devis'
+    # TROIS SORTS, DECIDES ICI ET NON PAR LE CLIENT. La gratuite se confirme
+    # d'emblee (rien a encaisser). Une seance payante ouvre un paiement en ligne
+    # SI Stripe est configure — le creneau est alors retenu « en attente de
+    # paiement » ; sinon elle reste un devis, facture hors ligne, exactement
+    # comme le catalogue existant sait deja le faire quand Stripe manque.
+    secret = os.environ.get('STRIPE_SECRET_KEY')
+    veut_stripe = (not t['gratuit']) and bool(secret)
+    statut = 'confirmee' if t['gratuit'] else ('en_attente_paiement' if veut_stripe else 'devis')
     cur.execute(registre_sql(
         'INSERT INTO formation_ia_resa (sujet, date_creneau, nom, prenom, email, entreprise, siret, '
         'telephone, fonction, message, cle_client, rang, montant_cents, gratuit, statut, created_at) '
@@ -16402,6 +16471,11 @@ def formation_ia_inscription():
         (sujet_cle, date_creneau, nom, prenom, email, entreprise, siret, telephone, fonction,
          message, cle, rang, montant, gratuit, statut, datetime.utcnow().isoformat()))
     conn.commit()
+    try:
+        cur.execute('SELECT MAX(id) AS id FROM formation_ia_resa')
+        resa_id = int(dict(cur.fetchone()).get('id') or 0)
+    except Exception:
+        resa_id = 0
     try: conn.close()
     except Exception: pass
 
@@ -16419,21 +16493,80 @@ def formation_ia_inscription():
                          tags=['formation-ia'])
     except Exception:
         pass
+    if t['gratuit']:
+        accuse = 'Cette premiere seance est offerte : elle vous est confirmee.'
+    elif veut_stripe:
+        accuse = ('Tarif : 800 EUR HT. Vous allez etre redirige vers le paiement '
+                  'securise ; votre place est confirmee des le paiement recu.')
+    else:
+        accuse = ('Tarif : 800 EUR HT. Une facture vous parviendra pour finaliser '
+                  'la reservation .')
     try:
         send_email_smart(email, prenom + ' ' + nom,
                          'Votre reservation — ' + su['titre'],
                          '<p>Bonjour,</p><p>Nous avons bien recu votre reservation pour la formation '
                          '<strong>%s</strong>, seance du %s, dans vos locaux.</p><p>%s</p>'
                          '<p>L equipe CONSEILPREV</p>'
-                         % (su['titre'], creneau_lib,
-                            ('Cette premiere seance est offerte : elle vous est confirmee.'
-                             if t['gratuit'] else
-                             'Tarif : 800 EUR HT. Une facture vous parviendra pour finaliser '
-                             'la reservation ; le paiement en ligne sera bientot disponible.')),
+                         % (su['titre'], creneau_lib, accuse),
                          tags=['formation-ia-accuse'])
     except Exception:
         pass
-    return jsonify({'ok': True, 'gratuit': bool(t['gratuit']), 'statut': statut,
+
+    # ── PAIEMENT EN LIGNE (flux B : price_data en ligne, mode paiement) ──
+    # LE PRIX N'EST JAMAIS RECOPIE : il vient de formations_ia.tarif(rang), la
+    # meme source que l'affichage. Avec un taux de TVA Stripe, on preleve le HT
+    # et Stripe detaille la TVA ; sans taux, on preleve le TTC calcule par le
+    # module. Rien de ce que le client a envoye sur le prix n'entre ici.
+    if veut_stripe:
+        try:
+            import stripe
+            stripe.api_key = secret
+            stripe.max_network_retries = 0
+            base = request.url_root.rstrip('/')
+            taux = _form_tax_rate(stripe)
+            ligne = {'price_data': {'currency': 'eur',
+                                    'product_data': {'name': 'Formation — ' + su['titre'],
+                                                     'description': 'Seance sur site du ' + creneau_lib},
+                                    'unit_amount': (int(t['ht_cents']) if taux else int(t['ttc_cents']))},
+                     'quantity': 1}
+            if taux:
+                ligne['tax_rates'] = [taux]
+            sk = stripe.checkout.Session.create(
+                mode='payment',
+                line_items=[ligne],
+                customer_email=email,
+                client_reference_id=str(resa_id),
+                metadata={'type': 'formation-ia', 'resa_id': str(resa_id)},
+                success_url=base + '/formation?paiement=ok',
+                cancel_url=base + '/formation?paiement=annule')
+            conn2 = registre_get_db(); cur2 = conn2.cursor()
+            cur2.execute(registre_sql('UPDATE formation_ia_resa SET stripe_session_id=%s WHERE id=%s',
+                                      'UPDATE formation_ia_resa SET stripe_session_id=? WHERE id=?'),
+                         (sk.get('id') if isinstance(sk, dict) else getattr(sk, 'id', None), resa_id))
+            conn2.commit()
+            try: conn2.close()
+            except Exception: pass
+            url = sk.get('url') if isinstance(sk, dict) else getattr(sk, 'url', None)
+            return jsonify({'ok': True, 'gratuit': False, 'paiement': True, 'url': url,
+                            'statut': 'en_attente_paiement', 'montant_cents': montant,
+                            'ttc_cents': int(t['ttc_cents']), 'sujet': su['titre'],
+                            'creneau': creneau_lib,
+                            'message': 'Redirection vers le paiement securise…'})
+        except Exception:
+            # ECHEC STRIPE : la reservation ne se perd pas, elle retombe en devis.
+            try:
+                conn3 = registre_get_db(); cur3 = conn3.cursor()
+                cur3.execute(registre_sql("UPDATE formation_ia_resa SET statut='devis' WHERE id=%s",
+                                          "UPDATE formation_ia_resa SET statut='devis' WHERE id=?"),
+                             (resa_id,))
+                conn3.commit()
+                try: conn3.close()
+                except Exception: pass
+            except Exception:
+                pass
+            statut = 'devis'
+
+    return jsonify({'ok': True, 'gratuit': bool(t['gratuit']), 'paiement': False, 'statut': statut,
                     'montant_cents': montant, 'ttc_cents': int(t['ttc_cents']),
                     'sujet': su['titre'], 'creneau': creneau_lib,
                     'message': ('Votre premiere seance, offerte, est confirmee. '
