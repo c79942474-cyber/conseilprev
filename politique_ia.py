@@ -41,6 +41,7 @@ règle le mesure.
    faux, et le motif.
 """
 import datetime as _dt
+import re
 
 VERSION = "2026-09-a"
 
@@ -52,17 +53,19 @@ REVISION_MOIS = 12
 
 
 # ── LES DONNÉES DE CONSEILPREV ─────────────────────────────────────────────
-# LE SIRET N'Y EST PAS, ET C'EST DÉLIBÉRÉ. Deux valeurs circulent dans la base
-# documentaire du cabinet — l'une sur les états financiers, l'autre sur une
-# fiche d'identité qui se déclare elle-même « à compléter » — et elles ne
-# concordent pas. Une politique de gouvernance n'a besoin d'aucun SIRET pour
-# être valable ; y porter le mauvais des deux aurait introduit une erreur
-# gratuite dans un document signé. Le SIREN, lui, est certain.
+# LE SIRET A ÉTÉ ABSENT D'ABORD, PUIS TRANCHÉ. Deux valeurs circulaient dans la
+# base documentaire du cabinet — l'une sur les états financiers, l'autre sur
+# une fiche d'identité qui se déclare elle-même « à compléter » — et les DEUX
+# passaient la clé de contrôle : le calcul ne pouvait pas départager. Plutôt
+# que d'en tirer une au sort dans un document signé, la question a été posée ;
+# le gérant a tranché le 12/09/2026. La cohérence SIREN/SIRET est vérifiée à
+# l'import, pour ce qu'elle vaut — un garde-fou de frappe, pas une preuve.
 ORGANISME = {
     "nom": "CONSEILPREV",
     "forme": "SARL",
     "capital": "8 000 €",
     "siren": "494 530 157",
+    "siret": "494 530 157 00036",
     "tva": "FR 24 494 530 157",
     "adresse": "19 rue Auguste Chabrières, 75015 Paris",
     "representant": "Christophe Cerf",
@@ -246,8 +249,12 @@ def _vocabulaire(variante, entree, cadre):
         o = ORGANISME
         return {
             "org": o["nom"],
-            "identite": "%s, %s au capital de %s, SIREN %s, %s" % (
-                o["nom"], o["forme"], o["capital"], o["siren"], o["adresse"]),
+            # LE SIRET PLUTÔT QUE LE SIREN SEUL : le SIRET désigne
+            # l'ÉTABLISSEMENT, et une politique s'applique à un lieu où des
+            # gens travaillent, pas à une personne morale abstraite. Il porte
+            # le SIREN en préfixe, donc rien n'est perdu.
+            "identite": "%s, %s au capital de %s, SIRET %s, %s" % (
+                o["nom"], o["forme"], o["capital"], o["siret"], o["adresse"]),
             "responsable": "%s, %s" % (o["representant"], o["qualite"]),
             "inventaire_resp": "%s, %s" % (o["representant"], o["qualite"]),
             "dpo": "%s, %s" % (o["representant"], o["qualite"]),
@@ -716,6 +723,28 @@ def politique(variante="conseilprev", entree=None, cadre=None):
 def _verifier():
     """Ce qui doit être vrai au chargement, sinon le module refuse de servir."""
     pb = []
+
+    # LE SIRET PORTE SON SIREN ET SA CLÉ. Ce n'est pas une preuve d'existence
+    # — les deux valeurs qui circulaient passaient toutes deux la clé — mais
+    # une faute de frappe sur quatorze chiffres ne se voit pas à l'œil, et
+    # celle-ci part dans un document signé.
+    _siren = re.sub(r"\D", "", ORGANISME["siren"])
+    _siret = re.sub(r"\D", "", ORGANISME["siret"])
+    if len(_siret) != 14:
+        pb.append("SIRET %s : %d chiffres au lieu de 14" % (_siret, len(_siret)))
+    elif not _siret.startswith(_siren):
+        pb.append("SIRET %s : ne commence pas par le SIREN %s" % (_siret, _siren))
+    else:
+        _t, _d = 0, False
+        for _c in reversed(_siret):
+            _n = int(_c)
+            if _d:
+                _n = _n * 2 - (9 if _n * 2 > 9 else 0)
+            _t += _n
+            _d = not _d
+        if _t % 10:
+            pb.append("SIRET %s : clé de contrôle fausse" % _siret)
+
     for cle in ("ue", "qc"):
         manques = [k for k in CADRES["ue"] if k not in CADRES[cle]]
         if manques:

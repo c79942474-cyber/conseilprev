@@ -152,19 +152,38 @@ def test_le_modele_vierge_ne_porte_aucune_donnee_de_conseilprev(docs):
     # remettre un document anonyme. Le premier essai confondait les deux et
     # accusait le document d'une fuite qui était une signature.
     corps = _norm(docs["modele"]["doc"]["markdown"])
-    interdits = [P.ORGANISME["siren"], P.ORGANISME["tva"],
-                 P.ORGANISME["adresse"], P.ORGANISME["courriel"],
-                 P.ORGANISME["telephone"], P.ORGANISME["representant"],
-                 P.ORGANISME["capital"], P.ORGANISME["nom"]]
-    fuites = [x for x in interdits if _norm(x) in corps]
+
+    # ELLE LIT `ORGANISME`, ELLE NE RECOPIE PAS SES CLÉS. La version d'origine
+    # énumérait huit champs à la main : le jour où le SIRET a été ajouté au
+    # cabinet, la règle est restée verte SANS LE VÉRIFIER — une fuite neuve
+    # serait passée en silence, et c'est le pire moment pour qu'une règle
+    # cesse de mesurer. Toute clé ajoutée ci-après est couverte d'office.
+    #
+    # LES TOLÉRANCES SONT NOMMÉES, JAMAIS IMPLICITES. Une valeur générique
+    # (« SARL », « Gérant ») pourrait un jour figurer légitimement dans un
+    # modèle vierge. Aucune ne le fait aujourd'hui — mesuré, les douze sont
+    # absentes — donc la liste est vide. Si l'une venait à apparaître, cette
+    # règle tomberait et quelqu'un devrait décider, ce qui est le bon geste.
+    TOLEREES = ()
+    interdits = {k: v for k, v in P.ORGANISME.items()
+                 if k not in TOLEREES and str(v).strip()}
+    fuites = {k: v for k, v in interdits.items() if _norm(v) in corps}
     assert not fuites, ("le CORPS du modèle vierge porte des données du "
                         "cabinet : %r" % fuites)
+    assert len(interdits) >= 10, (
+        "ORGANISME a maigri : la règle ne surveille plus que %d champ(s)"
+        % len(interdits))
     # Et dans le PDF, ce qui ne figure sur AUCUN en-tête ne doit pas non plus
     # s'y trouver : un SIREN ou une TVA n'a rien à faire sur un papier à
     # en-tête, donc sa présence ne pourrait venir que du corps.
     t = docs["modele"]["texte"]
-    dures = [P.ORGANISME["siren"], P.ORGANISME["tva"], P.ORGANISME["capital"],
-             P.ORGANISME["representant"]]
+    # CE QU'UN PAPIER À EN-TÊTE NE PORTE JAMAIS. Un en-tête donne un nom, une
+    # adresse, un contact ; il ne donne ni SIREN, ni SIRET, ni TVA, ni capital.
+    # Leur présence dans le PDF ne pourrait donc venir que du corps.
+    JAMAIS_SUR_UN_ENTETE = ("siren", "siret", "tva", "capital")
+    dures = [P.ORGANISME[k] for k in JAMAIS_SUR_UN_ENTETE if P.ORGANISME.get(k)]
+    assert len(dures) == len(JAMAIS_SUR_UN_ENTETE), (
+        "un champ surveillé a disparu d'ORGANISME : %r" % (dures,))
     assert not [x for x in dures if _norm(x) in t], (
         "le PDF du modèle porte une donnée qui ne peut venir que du corps")
 
@@ -375,3 +394,59 @@ def test_le_document_annonce_une_revision_douze_mois_apres_son_entree(docs):
         assert ecart == P.REVISION_MOIS, (
             "le document annonce une révision à %d mois, la politique en "
             "promet %d" % (ecart, P.REVISION_MOIS))
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  LE SIRET — TRANCHÉ PAR DÉCLARATION, VÉRIFIÉ PAR LE CALCUL
+# ═══════════════════════════════════════════════════════════════════════════
+
+def test_le_siret_porte_le_siren_et_passe_sa_cle():
+    """Une faute de frappe sur quatorze chiffres part dans un document signé.
+
+    CE QUE CETTE RÈGLE NE DIT PAS : que le numéro existe. Les DEUX valeurs qui
+    circulaient pour ce cabinet passaient la clé — c'est bien un garde-fou de
+    frappe, pas une vérification d'identité, et c'est pourquoi la question a
+    été posée au gérant plutôt que tranchée par le calcul.
+    """
+    siren = re.sub(r"\D", "", P.ORGANISME["siren"])
+    siret = re.sub(r"\D", "", P.ORGANISME["siret"])
+    assert len(siret) == 14, siret
+    assert siret.startswith(siren), (siret, siren)
+    total, double = 0, False
+    for c in reversed(siret):
+        n = int(c)
+        if double:
+            n = n * 2 - (9 if n * 2 > 9 else 0)
+        total += n
+        double = not double
+    assert total % 10 == 0, "clé de contrôle fausse : %s" % siret
+
+
+def test_un_siret_incoherent_empeche_le_module_de_servir():
+    """LE TÉMOIN NÉGATIF. Sans lui, la garde pourrait ne rien vérifier et la
+    règle ci-dessus resterait verte — elle ne mesure que la valeur, pas le
+    contrôle."""
+    vrai = P.ORGANISME["siret"]
+    for faux in ("494 530 157 00037",     # clé fausse
+                 "123 456 789 00014",     # autre SIREN
+                 "494 530 157 0003"):     # treize chiffres
+        P.ORGANISME["siret"] = faux
+        try:
+            # `RuntimeError` et non `AssertionError` : c'est ce que la garde
+            # lève réellement — mesuré, pas supposé. Écrire l'autre aurait
+            # fait passer la règle pour verte le jour où la garde disparaît.
+            with pytest.raises(RuntimeError) as leve:
+                P._verifier()
+            assert "SIRET" in str(leve.value), (
+                "la garde lève, mais pas à cause du SIRET : %s" % leve.value)
+        finally:
+            P.ORGANISME["siret"] = vrai
+    P._verifier()
+
+
+def test_le_document_du_cabinet_s_identifie_par_son_ETABLISSEMENT(docs):
+    """Le SIRET désigne un lieu où des gens travaillent ; le SIREN, une
+    personne morale. Une politique s'applique au premier."""
+    t = docs["conseilprev"]["texte"]
+    assert _norm(P.ORGANISME["siret"]) in t, (
+        "le SIRET ne figure pas dans le document du cabinet")
