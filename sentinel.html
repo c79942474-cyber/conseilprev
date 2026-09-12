@@ -2370,6 +2370,28 @@ textarea.form-el{min-height:86px;resize:vertical}
 .lawtrack-sub{display:block;margin-top:3px;font-size:11.5px;color:var(--muted)}
 .lawtrack-go{flex:0 0 auto;color:var(--accent);font-size:15px;margin-top:1px}
 @media (max-width:560px){.lawtrack{flex-wrap:wrap}}
+/* ══ LE BLOC DE TÉLÉCHARGEMENT DE LA POLITIQUE ════════════════════════════
+   Deux cartes de même poids : aucune des deux n'est « la bonne » — le lecteur
+   prend celle qui correspond à sa situation. Les mettre en avant l'une sur
+   l'autre orienterait un choix qui ne nous appartient pas. */
+.polia{margin:0 0 24px;padding:16px 18px;background:var(--white);
+  border:1px solid var(--rule);border-left:3px solid var(--accent);
+  border-radius:12px}
+.polia-t{font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.polia-p{margin:0 0 14px;font-size:13px;line-height:1.65;color:var(--muted)}
+.polia-g{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.polia-c{border:1px solid var(--rule);border-radius:10px;padding:12px 14px}
+.polia-c>b{display:block;font-size:13.5px;color:var(--ink);margin-bottom:5px}
+.polia-c>span{display:block;font-size:12px;line-height:1.6;color:var(--muted)}
+.polia-l{margin-top:10px}
+.polia-l a{display:inline-block;margin-right:8px;padding:5px 13px;
+  border:1px solid var(--accent);border-radius:4px;color:var(--accent);
+  text-decoration:none;font-family:var(--mono);font-size:11px;
+  letter-spacing:.04em}
+.polia-l a:hover,.polia-l a:focus-visible{background:var(--accent);color:#fff}
+.polia-n{margin:13px 0 0;font-size:11.5px;line-height:1.6;color:var(--muted)}
+@media (max-width:620px){.polia-g{grid-template-columns:1fr}}
 .veille-panel{margin:8px 0 24px;padding:14px 16px;background:var(--white);border:1px solid var(--rule2);border-radius:12px}
 .veille-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px}
 .veille-head-t{font-size:13.5px;font-weight:700;color:var(--ink)}
@@ -3697,6 +3719,50 @@ a[href^="mailto:"], .cc-val, .contact-val { overflow-wrap: anywhere; }
   <p class="page-lead">Qui décide, ce qu’il a le droit de trancher, et par quel chemin passe un nouvel usage
     <b>avant</b> d’exister. La matrice RACI détaillée reste dans <a href="#" onclick="go('parties',null,'TRAITER &amp; GOUVERNER','Parties prenantes');return false">Parties prenantes</a> :
     ce module ne la duplique pas, il l’applique.</p>
+
+  <!-- ══ LA POLITIQUE ÉCRITE, À PRENDRE ═══════════════════════════════════
+       UN DOCUMENT QU'ON NE TROUVE PAS N'EXISTE PAS. Ce module décrit qui
+       décide et par quel chemin ; la politique écrite est ce qui rend cette
+       description opposable. Les deux vont ensemble, donc elles sont au même
+       endroit.
+
+       DEUX DOCUMENTS, ET LA DIFFÉRENCE EST DITE. Celui de CONSEILPREV est
+       rempli — c'est ce que le cabinet s'applique à lui-même, publié parce
+       qu'on ne demande pas à un client une transparence qu'on ne pratique
+       pas. Le second est le même, vidé, à compléter. -->
+  <div class="polia">
+    <div class="polia-t">Politique de gouvernance de l'IA — à télécharger</div>
+    <p class="polia-p">Seize sections : inventaire des systèmes, évaluation
+      des risques, règles d'usage, vérification avant livrable, supervision
+      humaine, agents, fournisseurs, transparence, incidents. Deux versions.</p>
+    <div class="polia-g">
+      <div class="polia-c">
+        <b>Celle de CONSEILPREV</b>
+        <span>Remplie. Ce que le cabinet s'applique à lui-même : son
+          inventaire réel, ses trois systèmes génératifs — et les trois
+          moteurs déterministes qu'il refuse d'y ranger.</span>
+        <span class="polia-l">
+          <a href="/api/politique-ia/conseilprev.pdf">PDF</a>
+          <a href="/api/politique-ia/conseilprev.docx">Word</a>
+        </span>
+      </div>
+      <div class="polia-c">
+        <b>Le modèle à compléter</b>
+        <span>Vierge. Les champs entre crochets sont à remplir. Une annexe
+          donne la correspondance entre les références françaises et
+          européennes et leurs équivalents québécois.</span>
+        <span class="polia-l">
+          <a href="/api/politique-ia/modele.pdf">PDF</a>
+          <a href="/api/politique-ia/modele.docx">Word</a>
+        </span>
+      </div>
+    </div>
+    <p class="polia-n">Ces documents sont produits par calcul déterministe à
+      partir d'un référentiel versionné : aucun modèle de langage n'intervient
+      dans leur rédaction, et leurs propriétés de fichier le déclarent. Ils ne
+      valent pas conseil juridique — la politique d'une organisation se lit au
+      regard de ses contrats et du droit qui lui est applicable.</p>
+  </div>
 
   <div class="kpi-row" id="gouv-kpis"></div>
 

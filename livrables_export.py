@@ -104,6 +104,28 @@ def _blocks(md):
             out.append(("hr", None))
             i += 1
             continue
+        # BLOC INSÉCABLE : « :::ensemble » … « ::: ».
+        #
+        # POURQUOI IL A FALLU L'AJOUTER. Un encadré de fin de document — celui
+        # qui porte un calendrier réglementaire — s'est retrouvé COUPÉ entre
+        # deux pages : trois lignes en bas de l'avant-dernière, la fin en haut
+        # de la dernière. Mesuré sur le PDF produit, pas supposé. Un avertissement
+        # scindé perd la moitié de sa force, et personne ne relit un PDF de sept
+        # pages pour s'en apercevoir.
+        #
+        # CE N'EST PAS UN SAUT DE PAGE. Un saut forcerait le bloc en HAUT de la
+        # page suivante même quand il tenait là où il était, et laisserait un
+        # blanc au milieu du document. Ici le bloc reste où il est s'il tient,
+        # et bascule ENTIER s'il ne tient pas.
+        if re.match(r"^\s*:::\s*ensemble\s*$", ln):
+            i += 1
+            dedans = []
+            while i < n and not re.match(r"^\s*:::\s*$", lines[i]):
+                dedans.append(lines[i])
+                i += 1
+            i += 1                      # la ligne de fermeture
+            out.append(("ensemble", _blocks("\n".join(dedans))))
+            continue
         # FIGURE : `![légende](fig:CLE)`. L'image elle-même n'est PAS dans le
         # Markdown — elle arrive par `meta["figures"]`, en octets PNG. Un
         # document qui porterait ses cartes en base64 au milieu du texte
@@ -146,6 +168,37 @@ def _blocks(md):
             para.append(lines[i])
             i += 1
         out.append(("p", " ".join(para)))
+    return out
+
+
+def _aplatir(md):
+    """Les blocs, avec le bloc insécable encadré de deux sentinelles.
+
+    POURQUOI DES SENTINELLES PLUTÔT QU'UNE RÉCURSION. Les deux moteurs — Word
+    et PDF — rendent chaque type de bloc dans une longue boucle. Appeler cette
+    boucle sur elle-même aurait supposé d'en extraire le corps en fonction, et
+    de réindenter deux cents lignes éprouvées pour un besoin qui en demande
+    quinze. Les sentinelles laissent la boucle intacte : elle gagne deux
+    branches en tête, et rien d'autre ne bouge.
+    """
+    out = []
+    for kind, payload in _blocks(md):
+        if kind == "ensemble":
+            # LA SENTINELLE PORTE LE TEXTE DU BLOC, pas seulement un drapeau :
+            # le moteur PDF en mesure la hauteur avec SA métrique de police
+            # avant de décider s'il tient. Une estimation au nombre de
+            # caractères se serait trompée sur un titre en corps 11.
+            brut = []
+            for k2, p2 in payload:
+                if k2 in ("h1", "h2", "h3", "p"):
+                    brut.append(str(p2))
+                elif k2 in ("ul", "ol"):
+                    brut.extend(str(x) for x in (p2 or []))
+            out.append(("ens_debut", "\n".join(brut)))
+            out.extend(payload)
+            out.append(("ens_fin", None))
+        else:
+            out.append((kind, payload))
     return out
 
 
@@ -447,7 +500,21 @@ def build_docx(md, meta=None):
         doc.add_paragraph().paragraph_format.space_after = Pt(0)
 
     # --- Corps ---
-    for kind, payload in _blocks(md):
+    # WORD N'A PAS DE « BLOC INSÉCABLE », IL A `keep_with_next`. On le pose sur
+    # chaque paragraphe du bloc SAUF le dernier : posé aussi sur le dernier, il
+    # collerait l'encadré au paragraphe d'après — c'est-à-dire l'inverse de ce
+    # qu'on veut quand le bloc ferme le document.
+    _ens_debut_idx = None
+    for kind, payload in _aplatir(md):
+        if kind == "ens_debut":
+            _ens_debut_idx = len(doc.paragraphs)
+            continue
+        if kind == "ens_fin":
+            if _ens_debut_idx is not None:
+                for par in doc.paragraphs[_ens_debut_idx:-1]:
+                    par.paragraph_format.keep_with_next = True
+            _ens_debut_idx = None
+            continue
         if kind in ("h1", "h2", "h3"):
             level = {"h1": 0, "h2": 1, "h3": 2}[kind]
             heading = doc.add_heading(level=level)
@@ -717,7 +784,36 @@ def build_pdf(md, meta=None):
         pdf.ln(2)
 
     # --- Corps ---
-    for kind, payload in _blocks(md):
+    # LE CONTEXTE INSÉCABLE EST OUVERT ET FERMÉ À LA MAIN, pour la raison dite
+    # dans `_aplatir`. Il est gardé dans une variable : `with` ne sait pas
+    # s'étendre sur plusieurs tours de boucle. Si fpdf ne l'offre pas — version
+    # ancienne —, on rend normalement plutôt que de refuser le document : un
+    # encadré coupé vaut mieux qu'un export en panne.
+    for kind, payload in _aplatir(md):
+        if kind == "ens_debut":
+            # ON MESURE, PUIS ON DÉCIDE. `pdf.unbreakable()` aurait été l'outil
+            # évident ; il lève « Using get_y() inside an unbreakable() code
+            # block is error-prone » parce que l'en-tête de page de ce document
+            # lit get_y() pour poser son filet. Mesuré, pas supposé : la
+            # tentative est dans l'historique.
+            #
+            # `dry_run` rend les lignes SANS écrire : la hauteur obtenue est
+            # celle que le texte occupera vraiment, pas une estimation au
+            # nombre de caractères.
+            try:
+                pdf.set_font("Helvetica", "", 9.5)
+                lignes = pdf.multi_cell(pdf.epw, 5, _pdf_txt(payload or ""),
+                                        dry_run=True, output="LINES")
+                besoin = 5 * (len(lignes) + 2)      # + le titre et l'air
+                reste = pdf.h - pdf.b_margin - pdf.get_y()
+                if besoin > reste:
+                    pdf.add_page()
+            except Exception:
+                pass                                 # un encadré coupé vaut
+                                                     # mieux qu'un export en panne
+            continue
+        if kind == "ens_fin":
+            continue
         if kind in ("h1", "h2", "h3"):
             size, lh = {"h1": (16, 8), "h2": (13, 7), "h3": (11, 6)}[kind]
             pdf.ln(2 if kind == "h1" else 1)

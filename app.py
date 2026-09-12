@@ -12209,6 +12209,45 @@ def juridique_export():
                       as_attachment=True, mimetype=mimetype)
 
 
+@app.route('/api/politique-ia/<variante>.<fmt>', methods=['GET'])
+@rate_limit(limit=30, window=60)
+def politique_ia_export(variante, fmt):
+    """La politique de gouvernance de l'IA — celle du cabinet, ou le modèle vierge.
+
+    OUVERTE SANS COMPTE, ET C'EST LE POINT. Le modèle vierge n'a de valeur que
+    si un prospect peut le prendre sans s'inscrire ; et la politique du cabinet
+    est un document que CONSEILPREV assume publiquement — la cacher derrière
+    une porte reviendrait à demander aux clients une transparence qu'on ne
+    s'applique pas. Aucune des deux ne contient de donnée personnelle de tiers.
+
+    LA DATE D'ENTRÉE EN VIGUEUR EST CELLE DU JOUR, et elle est PASSÉE au
+    module plutôt que lue par lui : le module reste pur, et deux appels le
+    même jour rendent le même document.
+    """
+    import io as _bio
+    from datetime import date as _date
+    import politique_ia as _pol
+    import livrables_export as _lx
+    if variante not in ('conseilprev', 'modele') or fmt not in ('pdf', 'docx'):
+        return jsonify({'error': 'Document inconnu.'}), 404
+    doc = _pol.politique(variante, entree=_date.today())
+    try:
+        if fmt == 'pdf':
+            blob = _lx.build_pdf(doc['markdown'], doc['meta'])
+            mimetype = 'application/pdf'
+        else:
+            blob = _lx.build_docx(doc['markdown'], doc['meta'])
+            mimetype = ('application/vnd.openxmlformats-officedocument'
+                        '.wordprocessingml.document')
+    except Exception as exc:
+        logger.error(f'POLITIQUE_IA_EXPORT_ERR: {exc}')
+        return jsonify({'error': 'La mise en page a échoué.'}), 500
+    from flask import send_file as _sf
+    return _sf(_bio.BytesIO(blob),
+               download_name=doc['fichier'] + '.' + fmt,
+               as_attachment=True, mimetype=mimetype)
+
+
 @app.route('/api/juridique/instances', methods=['GET'])
 @rate_limit(limit=30, window=60)
 def juridique_instances():
