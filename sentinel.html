@@ -2355,20 +2355,54 @@ textarea.form-el{min-height:86px;resize:vertical}
    pleine porte du blanc sur --accent : 5,97:1.
    LE BANDEAU EST UN LIEN ENTIER, pas un pavé avec un lien dedans : la cible
    de clic fait toute la largeur, et le focus clavier se voit. */
+/* LE CADRE QUI RESPIRE, BLEU PUIS VERT.
+   POURQUOI IL CHANGE DE COULEUR PLUTÔT QUE DE S'ÉTEINDRE. Un contour qui
+   s'efface à mi-cycle laisse le bandeau NU la moitié du temps : on aurait un
+   clignotant, pas un encadrement. Ici les deux extrêmes sont pleinement
+   opaques — c'est la TEINTE qui parcourt le bleu et le vert, et le halo qui
+   respire autour. Le cadre est donc visible en permanence.
+
+   POURQUOI IL SORT DE LA PALETTE DU SITE. Tout Sentinel est en terre cuite ;
+   ce bandeau renvoie AILLEURS, vers un service de l'Union. Lui donner une
+   couleur étrangère à la maison dit cela avant qu'on ait lu la ligne — c'est
+   le seul bloc de la page qui n'appartient pas au site.
+
+   2,4 s : une respiration, pas un stroboscope. Le survol la met en pause.
+
+   LE MOUVEMENT N'EST PAS LE SEUL PORTEUR. Bleu et vert se distinguent mal
+   pour une part des lecteurs ; le halo varie donc AUSSI en étendue et en
+   intensité, et sous `prefers-reduced-motion` le cadre garde les DEUX
+   couleurs en même temps — bordure bleue, anneau vert. Ce qui est demandé
+   ici tient sans animation.
+
+   LES ENCRES SONT MESURÉES SUR LE FOND COMPOSÉ, pas supposées : sur le voile
+   bleu à 7 % sur blanc, --ink tient 15,40:1, --muted 6,04:1, le bleu 5,39:1
+   et le vert 4,85:1 ; la pastille porte du blanc sur le bleu à 5,97:1. */
+@keyframes lawtrack-veille{
+  0%,100%{border-color:#1565B0;
+          box-shadow:0 0 0 0 rgba(21,101,176,.40),0 0 11px rgba(21,101,176,.18)}
+  50%    {border-color:#117A4C;
+          box-shadow:0 0 0 6px rgba(17,122,76,0),0 0 26px rgba(17,122,76,.42)}
+}
 .lawtrack{display:flex;align-items:flex-start;gap:12px;margin:0 0 20px;
-  padding:13px 16px;background:rgba(184,50,34,.06);border:1px solid var(--rule);
-  border-left:3px solid var(--accent);border-radius:10px;
-  text-decoration:none;color:var(--ink);transition:.15s}
-.lawtrack:hover{background:rgba(184,50,34,.10);border-left-color:var(--accent)}
-.lawtrack:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  padding:12px 15px;background:rgba(21,101,176,.07);
+  border:2px solid #1565B0;border-radius:10px;
+  text-decoration:none;color:var(--ink);transition:background .15s;
+  animation:lawtrack-veille 2.4s ease-in-out infinite}
+.lawtrack:hover{background:rgba(21,101,176,.12);animation-play-state:paused}
+.lawtrack:focus-visible{outline:2px solid #117A4C;outline-offset:3px}
+@media (prefers-reduced-motion:reduce){
+  .lawtrack{animation:none;border-color:#1565B0;
+    box-shadow:0 0 0 2px rgba(17,122,76,.55),0 0 16px rgba(21,101,176,.22)}
+}
 .lawtrack-tag{flex:0 0 auto;font-family:var(--mono);font-size:10px;
-  letter-spacing:.06em;background:var(--accent);color:#fff;border-radius:3px;
+  letter-spacing:.06em;background:#1565B0;color:#fff;border-radius:3px;
   padding:3px 7px;margin-top:1px}
 .lawtrack-txt{flex:1 1 auto;font-size:13px;line-height:1.65;color:var(--muted)}
 .lawtrack-txt strong{color:var(--ink)}
-.lawtrack-dom{font-family:var(--mono);font-size:11.5px;color:var(--accent)}
+.lawtrack-dom{font-family:var(--mono);font-size:11.5px;color:#1565B0}
 .lawtrack-sub{display:block;margin-top:3px;font-size:11.5px;color:var(--muted)}
-.lawtrack-go{flex:0 0 auto;color:var(--accent);font-size:15px;margin-top:1px}
+.lawtrack-go{flex:0 0 auto;color:#117A4C;font-size:15px;margin-top:1px}
 @media (max-width:560px){.lawtrack{flex-wrap:wrap}}
 /* ══ LE BLOC DE TÉLÉCHARGEMENT DE LA POLITIQUE ════════════════════════════
    Deux cartes de même poids : aucune des deux n'est « la bonne » — le lecteur
