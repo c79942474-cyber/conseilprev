@@ -130,6 +130,58 @@ label.fl span{color:var(--pf)}
 .form-status{padding:12px 16px;border-radius:8px;font-size:13px;margin-top:14px;display:none;line-height:1.55}
 .form-status.ok{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#4ade80;display:block}
 .form-status.err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#f87171;display:block}
+/* ── LE PANIER : une ligne par formation, sa date, et celle qui est offerte ──
+   La ligne tient sur UNE rangée tant qu'il y a la place, et s'empile sous
+   720 px : un sélecteur de date écrasé à 90 px ne se lit pas. */
+#panier{margin:6px 0 16px}
+.note-vide{font-size:12.5px;color:var(--mu);margin:4px 0 0}
+.pan-ligne{display:flex;gap:12px;align-items:center;flex-wrap:wrap;
+  padding:12px 14px;margin-bottom:9px;border:1px solid var(--bdr);
+  border-radius:11px;background:var(--card)}
+.pan-ligne.offerte{border-color:rgba(74,222,128,.42);background:rgba(34,197,94,.07)}
+.pan-num{flex:0 0 auto;font-family:ui-monospace,monospace;font-size:11px;
+  color:var(--pp);opacity:.75}
+.pan-titre{flex:1 1 190px;min-width:0;font-size:13.5px;color:var(--wh)}
+.pan-date{flex:1 1 240px;min-width:0;font:inherit;font-size:12.5px;
+  padding:7px 9px;border-radius:8px;border:1px solid var(--bdr);
+  background:rgba(10,6,32,.6);color:var(--wh)}
+.pan-off{flex:0 0 auto;display:flex;align-items:center;gap:6px;
+  font-size:12px;color:var(--pp);cursor:pointer}
+.pan-x{flex:0 0 auto;padding:4px 9px;border-radius:7px;border:1px solid var(--bdr);
+  background:transparent;color:var(--mu);font-size:12px;cursor:pointer}
+.pan-x:hover,.pan-x:focus-visible{color:var(--wh);border-color:var(--pl)}
+@media(max-width:720px){.pan-titre,.pan-date{flex:1 1 100%}}
+/* L'agenda complet passe en dépliant : la date se choisit désormais ligne par
+   ligne, et déployer soixante pastilles au-dessus du panier le repousserait
+   hors de l'écran. */
+.cal-det{margin:4px 0 8px}
+.cal-det>summary{cursor:pointer;font-size:12.5px;color:var(--pp);padding:6px 0}
+/* Le récapitulatif chiffré */
+.rc-total{display:flex;justify-content:space-between;align-items:baseline;
+  gap:12px;margin-top:10px;padding-top:10px;border-top:1px solid var(--bdr)}
+.rc-note{font-size:12px;color:var(--mu);line-height:1.7;margin-top:8px}
+.rc-l{display:flex;justify-content:space-between;gap:12px;padding:3px 0;
+  font-size:13px;color:var(--wh)}
+.rc-l .o{color:var(--ok)}
+/* Ce qui est remis */
+.sup-liste{list-style:none;padding:0;margin:6px 0 0}
+.sup-liste li{padding:9px 0;border-top:1px solid var(--bdr);font-size:13px;
+  color:var(--wh);line-height:1.65}
+.sup-liste li:first-child{border-top:0}
+.sup-liste .nat{display:inline-block;margin-left:8px;padding:1px 8px;
+  border-radius:20px;font-family:ui-monospace,monospace;font-size:9.5px;
+  letter-spacing:.05em;text-transform:uppercase;border:1px solid var(--bdr);
+  color:var(--mu)}
+.sup-liste .nat.perso{color:var(--teal);border-color:rgba(94,234,212,.4)}
+.sup-liste .det{display:block;font-size:12px;color:var(--mu);margin-top:3px}
+.sup-part{margin-top:12px;font-size:12.5px;color:var(--pp);line-height:1.7}
+/* Annulation */
+#etape-annul .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.annul-regle{font-size:12.5px;color:var(--gold);line-height:1.7;margin-top:8px}
+.btn-annul{padding:10px 18px;border-radius:9px;border:1px solid rgba(239,68,68,.45);
+  background:rgba(239,68,68,.12);color:#f87171;font-size:13px;cursor:pointer}
+.btn-annul-non{padding:10px 18px;border-radius:9px;border:1px solid var(--bdr);
+  background:transparent;color:var(--pp);font-size:13px;cursor:pointer}
 /* Confirmation */
 #confirm{display:none;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.3);border-radius:16px;padding:30px 34px;margin:8px 0 30px}
 #confirm h2{font-family:"Cormorant Garamond",serif;font-size:26px;color:var(--ok);margin-bottom:10px}
@@ -184,17 +236,38 @@ label.fl span{color:var(--pf)}
       <div class="offre-fact"><span class="k">Sujets au choix</span><span class="v" id="of-nb">4</span></div>
     </div>
     <div class="offre-price" id="of-price">
-      <strong>1<sup>re</sup> séance offerte</strong>, sur site.<br>
-      Les suivantes : <strong>800&nbsp;€ HT</strong> chacune.
+      <strong>Une séance offerte</strong>, celle que vous choisissez.<br>
+      Les autres : <strong>800&nbsp;€ HT</strong> chacune.
+      <span class="ent-tip" id="tip-annul" tabindex="0" role="note"
+            aria-label="Chargement de la règle d'annulation…"
+            data-tip="Chargement de la règle d'annulation…">i</span>
     </div>
   </div>
+
+  <!-- ANNULATION. Le lien du courriel ouvre CETTE page avec le jeton ; rien
+       n'est annulé tant que le bouton n'est pas pressé. Un lien qui annulerait
+       en s'ouvrant serait déclenché par le premier anti-virus qui inspecte les
+       liens du message — un piège posé à son propre client. -->
+  <section class="step" id="etape-annul" hidden>
+    <div class="step-head">
+      <span class="step-num">✕</span>
+      <span class="step-title">Annuler une séance</span>
+    </div>
+    <p id="annul-txt">Vous êtes sur le point d'annuler une séance réservée.</p>
+    <p class="annul-regle" id="annul-regle"></p>
+    <div class="actions">
+      <button type="button" class="btn-annul" id="annul-go">Confirmer l'annulation</button>
+      <button type="button" class="btn-annul-non" id="annul-non">Ne rien annuler</button>
+    </div>
+    <p class="form-status" id="annul-status"></p>
+  </section>
 
   <!-- ÉTAPE 1 — le sujet -->
   <section class="step" id="etape-sujet">
     <div class="step-head">
       <span class="step-num">1</span>
-      <span class="step-title">Choisissez votre sujet<span class="ent-tip" tabindex="0" role="note" aria-label="Une séance porte sur UN sujet. Vous pourrez réserver les autres ensuite : la première séance est offerte, les suivantes sont à 800 € HT." data-tip="Une séance porte sur UN sujet. Vous pourrez réserver les autres ensuite : la première séance est offerte, les suivantes sont à 800 € HT.">i</span></span>
-      <span class="step-hint">Un sujet par séance</span>
+      <span class="step-title">Choisissez vos formations<span class="ent-tip" tabindex="0" role="note" aria-label="De une à quatre formations, chacune sur sa propre date. Une séance porte sur un sujet et dure une demi-journée ; un sujet ne se suit pas deux fois." data-tip="De une à quatre formations, chacune sur sa propre date. Une séance porte sur un sujet et dure une demi-journée ; un sujet ne se suit pas deux fois.">i</span></span>
+      <span class="step-hint" id="subj-hint">1 à 4 — cliquez pour ajouter ou retirer</span>
     </div>
     <div class="subj-grid" id="subj-grid" role="listbox" aria-label="Sujets de formation">
       <div id="subj-loading" style="grid-column:1/-1;color:var(--mu);font-size:13px;padding:10px 0">Chargement des sujets…</div>
@@ -205,11 +278,35 @@ label.fl span{color:var(--pf)}
   <section class="step" id="etape-date">
     <div class="step-head">
       <span class="step-num">2</span>
-      <span class="step-title">Choisissez votre date<span class="ent-tip" tabindex="0" role="note" aria-label="Une seule séance par semaine : une date déjà retenue n'est plus proposée. Vous choisissez la semaine ; le jour exact se cale ensuite avec vous." data-tip="Une seule séance par semaine : une date déjà retenue n'est plus proposée. Vous choisissez la semaine ; le jour exact se cale ensuite avec vous.">i</span></span>
+      <span class="step-title">Une date par formation<span class="ent-tip" tabindex="0" role="note" aria-label="Une seule séance par semaine : une date déjà retenue n'est plus proposée. Deux de vos formations ne peuvent pas tomber le même jour. Vous choisissez la semaine ; le jour exact se cale ensuite avec vous." data-tip="Une seule séance par semaine : une date déjà retenue n'est plus proposée. Deux de vos formations ne peuvent pas tomber le même jour. Vous choisissez la semaine ; le jour exact se cale ensuite avec vous.">i</span></span>
       <span class="step-hint" id="cal-libres"></span>
     </div>
+    <!-- UNE LIGNE PAR FORMATION CHOISIE. La liste déroulante porte les dates
+         LIBRES, et le bouton radio désigne celle qui est offerte : sans ce
+         geste, la gratuité tomberait sur la première de la liste — c'est
+         exactement le défaut qu'on corrige. -->
+    <div id="panier" aria-live="polite">
+      <p class="note-vide" id="panier-vide">Choisissez d'abord une formation
+        ci-dessus : sa date se règle ici.</p>
+    </div>
     <div id="cal-status">Chargement du calendrier…</div>
-    <div id="cal-grid"></div>
+    <details class="cal-det" id="cal-det">
+      <summary>Voir tout l'agenda</summary>
+      <div id="cal-grid"></div>
+    </details>
+  </section>
+
+  <!-- CE QUI EST REMIS. Annoncer « support personnalisé » sans dire ce qui
+       l'est réellement est la promesse la plus facile à démentir le jour de la
+       séance : chaque élément porte donc sa nature, standard ou personnalisé. -->
+  <section class="step" id="etape-support">
+    <div class="step-head">
+      <span class="step-num">✦</span>
+      <span class="step-title" id="sup-titre">Le support de workshop</span>
+      <span class="step-hint" id="sup-remise"></span>
+    </div>
+    <ul class="sup-liste" id="sup-liste"></ul>
+    <p class="sup-part" id="sup-part"></p>
   </section>
 
   <!-- ÉTAPE 3 — l'inscription -->
@@ -220,10 +317,14 @@ label.fl span{color:var(--pf)}
     </div>
 
     <!-- Récapitulatif du choix, tenu à jour -->
-    <div class="recap incomplet" id="recap">
-      <div><span class="k">Sujet</span><span class="v todo" id="rc-sujet">à choisir (étape 1)</span></div>
-      <div><span class="k">Séance</span><span class="v todo" id="rc-date">à choisir (étape 2)</span></div>
-      <div><span class="k">Tarif indicatif</span><span class="v tarif" id="rc-tarif">1<sup>re</sup> gratuite · sinon 800 € HT</span></div>
+    <!-- LE TOTAL VIENT DU SERVEUR, jamais d'un calcul fait ici. La page ne
+         sait pas si ce client a déjà consommé sa séance offerte — cela se lit
+         en base. Un total calculé au navigateur afficherait donc 1 600 € à qui
+         en doit 2 400, et l'écart se découvrirait à la caisse. -->
+    <div class="recap incomplet" id="recap" aria-live="polite">
+      <div id="rc-lignes"><span class="v todo">Aucune formation choisie (étape 1).</span></div>
+      <div class="rc-total"><span class="k">Total</span><span class="v tarif" id="rc-total">—</span></div>
+      <div class="rc-note" id="rc-note"></div>
     </div>
 
     <div class="form-wrap">
@@ -290,6 +391,18 @@ label.fl span{color:var(--pf)}
           <input class="finput" type="text" id="fo-fonction" name="fonction" placeholder="DSI, RSSI, DPO, chef de projet…" autocomplete="organization-title">
         </div>
 
+        <!-- LE TYPE DE CLIENT COMMANDE LES ÉTUDES DE CAS PRÉSENTÉES. Un
+             exploitant de salle et un éditeur de logiciel n'ont pas les mêmes
+             angles morts ; leur montrer les mêmes cas fait perdre la moitié de
+             la séance à traduire. -->
+        <div class="fgroup">
+          <label class="fl" for="fo-profil">Votre profil<span class="ent-tip" tabindex="0" role="note" aria-label="Il décide des études de cas présentées pendant la séance. Sans profil indiqué, les cas se choisissent avec vous au cadrage." data-tip="Il décide des études de cas présentées pendant la séance. Sans profil indiqué, les cas se choisissent avec vous au cadrage.">i</span></label>
+          <select class="finput" id="fo-profil" name="profil">
+            <option value="">À préciser au cadrage</option>
+          </select>
+          <span class="field-note" id="fo-profil-cas">Il décide des études de cas présentées.</span>
+        </div>
+
         <div class="fgroup">
           <label class="fl" for="fo-message">Précisions (facultatif)<span class="ent-tip" tabindex="0" role="note" aria-label="Contexte, nombre de participants prévus, contraintes d'horaire dans la semaine choisie — tout ce qui aide à préparer la séance." data-tip="Contexte, nombre de participants prévus, contraintes d'horaire dans la semaine choisie — tout ce qui aide à préparer la séance.">i</span></label>
           <textarea class="ftextarea" id="fo-message" name="message" placeholder="Contexte, nombre de participants prévus, contraintes de date dans la semaine choisie…" rows="4"></textarea>
@@ -330,10 +443,10 @@ label.fl span{color:var(--pf)}
   <!-- CONFIRMATION (masquée jusqu'au succès) -->
   <section id="confirm" aria-live="polite">
     <h2 id="cf-titre">Réservation enregistrée</h2>
-    <p class="c-line"><strong>Sujet :</strong> <span id="cf-sujet"></span></p>
-    <p class="c-line"><strong>Séance :</strong> <span id="cf-creneau"></span> — dans vos locaux</p>
-    <p class="c-line"><strong>Tarif :</strong> <span id="cf-tarif"></span></p>
+    <div id="cf-seances"></div>
+    <p class="c-line"><strong>Total :</strong> <span id="cf-tarif"></span></p>
     <p class="c-note" id="cf-note"></p>
+    <p class="c-note" id="cf-annul"></p>
     <button type="button" class="btn-reset" onclick="resetFormation(true)">Réserver une autre séance</button>
   </section>
 
@@ -355,7 +468,10 @@ label.fl span{color:var(--pf)}
 (function(){
   "use strict";
   var REF = null;                 // le référentiel servi par le serveur
-  var state = { sujet:null, creneau:null };
+  /* L'ÉTAT DE LA PAGE. `panier` : une entrée par formation choisie, avec sa
+     date. `gratuit` : la clé de celle qui est offerte — un CHOIX, plus un rang
+     subi. `devis` : ce que le SERVEUR a chiffré, jamais un calcul fait ici. */
+  var state = { ref:{}, panier:{}, gratuit:null, devis:null };
   var MOIS = ["janvier","février","mars","avril","mai","juin","juillet","août",
               "septembre","octobre","novembre","décembre"];
 
@@ -377,9 +493,14 @@ label.fl span{color:var(--pf)}
       .then(function(d){
         if(!d || !d.ok){ throw new Error('referentiel'); }
         REF = d;
+        state.ref = d || {};
         rendreOffre(d);
         rendreSujets(d.sujets || []);
         rendreCalendrier(d.creneaux || [], d.creneaux_libres);
+        rendreSupport(d.support);
+        rendreProfils(d.profils || []);
+        rendreAnnulation(d.annulation);
+        majRecap();
       })
       .catch(function(){
         var sl = document.getElementById('subj-loading');
@@ -398,6 +519,73 @@ label.fl span{color:var(--pf)}
       o.sous_titre + " — une séance de " + (o.duree_h||4) + " h, dans vos locaux.";
   }
 
+  /* CE QUI EST REMIS, ET CE QUI EST PERSONNALISÉ. La nature de chaque élément
+     vient du référentiel : annoncer « support personnalisé » sans dire ce qui
+     l'est réellement est la promesse la plus facile à démentir le jour de la
+     séance. */
+  function rendreSupport(sup){
+    if(!sup) return;
+    var t = document.getElementById('sup-titre');
+    if(t && sup.titre) t.textContent = sup.titre;
+    var r = document.getElementById('sup-remise');
+    if(r && sup.remise) r.textContent = sup.remise;
+    var ul = document.getElementById('sup-liste');
+    if(ul) ul.innerHTML = (sup.elements||[]).map(function(e){
+      var perso = (e.nature === 'personnalise');
+      return '<li>'+ esc(e.quoi)
+        + '<span class="nat'+ (perso ? ' perso' : '') +'">'
+        + (perso ? 'personnalisé' : 'standard') +'</span>'
+        + '<span class="det">'+ esc(e.detail||'') +'</span></li>';
+    }).join('');
+    var p = document.getElementById('sup-part');
+    if(p && sup.participants) p.textContent = sup.participants;
+  }
+
+  /* LE PROFIL COMMANDE LES ÉTUDES DE CAS. La liste vient du référentiel : la
+     recopier ici la ferait diverger le jour où un profil s'ajoute. */
+  function rendreProfils(profils){
+    var sl = document.getElementById('fo-profil');
+    if(!sl) return;
+    profils.forEach(function(p){
+      var o = document.createElement('option');
+      o.value = p.cle; o.textContent = p.titre;
+      o.dataset.cas = p.cas || '';
+      sl.appendChild(o);
+    });
+    sl.addEventListener('change', function(){
+      var o = sl.options[sl.selectedIndex];
+      var n = document.getElementById('fo-profil-cas');
+      if(n) n.textContent = (o && o.dataset.cas)
+        ? 'Cas présentés : ' + o.dataset.cas
+        : 'Il décide des études de cas présentées.';
+    });
+  }
+
+  /* LA RÈGLE D'ANNULATION EST LUE, JAMAIS RECOPIÉE. Sept jours écrits ici et
+     sept dans le module finiraient par diverger, et c'est le texte que le
+     client a lu qui l'engage. */
+  function rendreAnnulation(a){
+    if(!a) return;
+    var tip = document.getElementById('tip-annul');
+    if(tip){
+      tip.setAttribute('aria-label', a.infobulle);
+      tip.setAttribute('data-tip', a.infobulle);
+    }
+    var r = document.getElementById('annul-regle');
+    if(r) r.textContent = a.payante + ' ' + a.libre;
+  }
+
+  /* ── LE PANIER : de une à quatre formations, chacune sa date ──────────────
+     CE QUI A CHANGÉ, ET POURQUOI CE N'EST PAS UN CONFORT. Réserver une séance
+     à la fois faisait retomber la gratuité sur la PREMIÈRE réservée, quelle
+     qu'elle soit : qui voulait la gouvernance agentique offerte devait la
+     réserver en premier, et l'apprendre après coup. Le panier rend ce choix
+     explicite, sur une ligne, avec un bouton radio.
+
+     LE TOTAL N'EST PAS CALCULÉ ICI. La page ne sait pas si ce client a déjà
+     consommé sa séance offerte — cela se lit en base. Le devis vient donc du
+     serveur, du MÊME appel que celui qui facturera. */
+
   function rendreSujets(sujets){
     var g = document.getElementById('subj-grid');
     g.innerHTML = '';
@@ -413,21 +601,108 @@ label.fl span{color:var(--pf)}
         '<span class="subj-tick" aria-hidden="true">✓</span>'+
         '<div class="subj-title">'+ esc(s.titre) +'</div>'+
         '<div class="subj-resume">'+ esc(s.resume) +'</div>';
-      b.addEventListener('click', function(){ choisirSujet(s, b); });
+      b.addEventListener('click', function(){ basculerSujet(s); });
       g.appendChild(b);
+    });
+    majSujets();
+  }
+
+  function basculerSujet(s){
+    if(state.panier[s.cle]){
+      delete state.panier[s.cle];
+      if(state.gratuit === s.cle) state.gratuit = null;
+    }else{
+      var n = Object.keys(state.panier).length;
+      var max = (state.ref.bornes && state.ref.bornes.max) || 4;
+      if(n >= max){
+        etat("Quatre formations au maximum : il y a quatre sujets, et un sujet "
+             + "ne se suit pas deux fois.");
+        return;
+      }
+      state.panier[s.cle] = { sujet:s, date:null };
+      /* SANS CHOIX EXPLICITE, LA PREMIÈRE EST OFFERTE — jamais aucune. Laisser
+         la gratuité tomber faute d'avoir coché ferait payer une séance
+         annoncée offerte. Le serveur applique la même règle. */
+      if(!state.gratuit) state.gratuit = s.cle;
+    }
+    etat('');
+    majSujets(); rendrePanier(); majCalendrier(); majDevis();
+  }
+
+  function majSujets(){
+    var tous = document.querySelectorAll('.subj');
+    for(var i=0;i<tous.length;i++){
+      var pris = !!state.panier[tous[i].dataset.cle];
+      tous[i].classList.toggle('sel', pris);
+      tous[i].setAttribute('aria-selected', pris ? 'true' : 'false');
+    }
+    var h = document.getElementById('subj-hint');
+    var n = Object.keys(state.panier).length;
+    if(h) h.textContent = n ? (n + ' formation(s) choisie(s) sur 4')
+                            : '1 à 4 — cliquez pour ajouter ou retirer';
+  }
+
+  /* LES DATES OFFERTES À UNE LIGNE SONT CELLES QUI SONT LIBRES AU CALENDRIER,
+     MOINS CELLES QUE VOUS AVEZ DÉJÀ POSÉES AILLEURS. Deux de vos formations le
+     même jour est impossible — vous ne pouvez pas être dans deux salles à la
+     fois, et le serveur refuserait le panier entier au dernier geste. */
+  function datesPour(cle){
+    var prises = {};
+    Object.keys(state.panier).forEach(function(k){
+      if(k !== cle && state.panier[k].date) prises[state.panier[k].date] = 1;
+    });
+    return (state.ref.creneaux || []).filter(function(c){
+      return c.libre && !prises[c.date];
     });
   }
 
-  function choisirSujet(s, el){
-    state.sujet = s;
-    var tous = document.querySelectorAll('.subj');
-    for(var i=0;i<tous.length;i++){
-      tous[i].classList.remove('sel');
-      tous[i].setAttribute('aria-selected','false');
+  function rendrePanier(){
+    var z = document.getElementById('panier');
+    if(!z) return;
+    var cles = Object.keys(state.panier);
+    if(!cles.length){
+      z.innerHTML = '<p class="note-vide" id="panier-vide">Choisissez d\'abord '
+        + 'une formation ci-dessus : sa date se règle ici.</p>';
+      return;
     }
-    el.classList.add('sel');
-    el.setAttribute('aria-selected','true');
-    majRecap();
+    var h = '';
+    cles.forEach(function(cle){
+      var e = state.panier[cle], off = (state.gratuit === cle);
+      h += '<div class="pan-ligne'+ (off ? ' offerte' : '') +'" data-cle="'+ esc(cle) +'">'
+        + '<span class="pan-num">0'+ esc(e.sujet.num) +'</span>'
+        + '<span class="pan-titre">'+ esc(e.sujet.titre) +'</span>'
+        + '<select class="pan-date" data-date-pour="'+ esc(cle) +'" '
+        + 'aria-label="Date de la séance « '+ esc(e.sujet.titre) +' »">'
+        + '<option value="">Choisir une date…</option>';
+      datesPour(cle).forEach(function(c){
+        h += '<option value="'+ esc(c.date) +'"'+ (e.date === c.date ? ' selected' : '')
+          + '>'+ esc(c.libelle) +'</option>';
+      });
+      h += '</select>'
+        + '<label class="pan-off"><input type="radio" name="pan-gratuit" '
+        + 'value="'+ esc(cle) +'"'+ (off ? ' checked' : '') +'> offerte</label>'
+        + '<button type="button" class="pan-x" data-retirer="'+ esc(cle) +'" '
+        + 'aria-label="Retirer « '+ esc(e.sujet.titre) +' »">retirer</button>'
+        + '</div>';
+    });
+    z.innerHTML = h;
+    z.querySelectorAll('[data-date-pour]').forEach(function(sl){
+      sl.addEventListener('change', function(){
+        state.panier[sl.dataset.datePour].date = sl.value || null;
+        rendrePanier(); majCalendrier(); majRecap();
+      });
+    });
+    z.querySelectorAll('input[name="pan-gratuit"]').forEach(function(r){
+      r.addEventListener('change', function(){
+        if(r.checked){ state.gratuit = r.value; rendrePanier(); majDevis(); }
+      });
+    });
+    z.querySelectorAll('[data-retirer]').forEach(function(b){
+      b.addEventListener('click', function(){
+        var s = state.panier[b.dataset.retirer];
+        if(s) basculerSujet(s.sujet);
+      });
+    });
   }
 
   function rendreCalendrier(creneaux, libres){
@@ -468,8 +743,9 @@ label.fl span{color:var(--pf)}
           '<span class="cr-date">'+ esc(num) +'</span>'+
           (c.libre ? '' : '<span class="cr-etat">réservé</span>');
         if(c.libre){
-          chip.setAttribute('aria-label', 'Réserver le ' + (c.libelle||c.date));
-          chip.addEventListener('click', function(){ choisirDate(c, chip); });
+          chip.setAttribute('aria-label', 'Poser le ' + (c.libelle||c.date)
+            + ' sur la première formation sans date');
+          chip.addEventListener('click', function(){ poserDate(c); });
         }else{
           chip.disabled = true;
           chip.setAttribute('aria-label', (c.libelle||c.date) + ' — déjà réservé');
@@ -479,24 +755,122 @@ label.fl span{color:var(--pf)}
       bloc.appendChild(row);
       grid.appendChild(bloc);
     });
+    majCalendrier();
   }
 
-  function choisirDate(c, el){
-    state.creneau = c;
-    var tous = document.querySelectorAll('.cr-chip');
-    for(var i=0;i<tous.length;i++) tous[i].classList.remove('sel');
-    el.classList.add('sel');
-    majRecap();
+  /* L'AGENDA RESTE UTILISABLE, mais il ne CHOISIT plus : il pose la date sur la
+     première formation qui n'en a pas. Sans panier, il le dit au lieu de ne
+     rien faire — un clic sans effet se relit comme une panne. */
+  function poserDate(c){
+    var cles = Object.keys(state.panier);
+    if(!cles.length){ etat("Choisissez d'abord une formation (étape 1)."); return; }
+    var vide = null;
+    for(var i=0;i<cles.length;i++){ if(!state.panier[cles[i]].date){ vide = cles[i]; break; } }
+    if(!vide){ etat("Vos formations ont toutes une date. Changez-en une dans sa liste."); return; }
+    var deja = cles.some(function(k){ return state.panier[k].date === c.date; });
+    if(deja){ etat("Cette date est déjà posée sur une autre de vos formations."); return; }
+    etat('');
+    state.panier[vide].date = c.date;
+    rendrePanier(); majCalendrier(); majRecap();
+  }
+
+  function majCalendrier(){
+    var mien = {};
+    Object.keys(state.panier).forEach(function(k){
+      if(state.panier[k].date) mien[state.panier[k].date] = state.panier[k].sujet.num;
+    });
+    document.querySelectorAll('.cr-chip').forEach(function(ch){
+      ch.classList.toggle('sel', !!mien[ch.dataset.date]);
+    });
+  }
+
+  function etat(m){
+    var st = document.getElementById('fo-status');
+    if(!st) return;
+    if(!m){ st.className = 'form-status'; st.textContent = ''; return; }
+    st.className = 'form-status err'; st.textContent = '⚠ ' + m;
+  }
+
+  /* ── LE DEVIS VIENT DU SERVEUR ────────────────────────────────────────────
+     Il est redemandé quand le panier change, quand la séance offerte change,
+     et quand le SIRET ou le courriel changent — ce sont eux qui décident si la
+     gratuité est encore disponible. Temporisé : cocher et décocher quatre
+     sujets ne doit pas lancer quatre appels. */
+  ['fo-email','fo-siret'].forEach(function(id){
+    document.addEventListener('DOMContentLoaded', function(){
+      var el = document.getElementById(id);
+      /* LE SIRET ET LE COURRIEL DÉCIDENT DE LA GRATUITÉ : un client déjà venu
+         n'a plus de séance offerte. Le total doit donc suivre la saisie, pas
+         rester figé sur l'hypothèse « nouveau client ». */
+      if(el) el.addEventListener('change', function(){ majDevis(); });
+    });
+  });
+
+  var _tDevis = null;
+  function majDevis(){
+    clearTimeout(_tDevis);
+    _tDevis = setTimeout(function(){
+      var cles = Object.keys(state.panier);
+      if(!cles.length){ state.devis = null; majRecap(); return; }
+      fetch('/api/formation/devis', {
+        method:'POST',
+        headers:{'Content-Type':'application/json','Accept':'application/json'},
+        body: JSON.stringify({
+          sujets: cles, gratuit: state.gratuit || '',
+          email: (document.getElementById('fo-email')||{}).value || '',
+          siret: (document.getElementById('fo-siret')||{}).value || ''
+        })
+      })
+      .then(function(r){ return r.json(); })
+      .then(function(j){ state.devis = j; majRecap(); })
+      .catch(function(){ state.devis = null; majRecap(); });
+    }, 260);
   }
 
   function majRecap(){
     var recap = document.getElementById('recap');
-    var s = document.getElementById('rc-sujet'), d = document.getElementById('rc-date');
-    if(state.sujet){ s.textContent = state.sujet.titre; s.classList.remove('todo'); }
-    else { s.textContent = 'à choisir (étape 1)'; s.classList.add('todo'); }
-    if(state.creneau){ d.textContent = state.creneau.libelle; d.classList.remove('todo'); }
-    else { d.textContent = 'à choisir (étape 2)'; d.classList.add('todo'); }
-    recap.classList.toggle('incomplet', !(state.sujet && state.creneau));
+    var zl = document.getElementById('rc-lignes');
+    var zt = document.getElementById('rc-total');
+    var zn = document.getElementById('rc-note');
+    var cles = Object.keys(state.panier);
+    if(!cles.length){
+      zl.innerHTML = '<span class="v todo">Aucune formation choisie (étape 1).</span>';
+      zt.textContent = '—'; zn.textContent = '';
+      recap.classList.add('incomplet');
+      return;
+    }
+    var dev = state.devis, par = {};
+    if(dev && dev.ok) (dev.lignes||[]).forEach(function(l){ par[l.cle] = l; });
+    var h = '', sansDate = 0;
+    cles.forEach(function(cle){
+      var e = state.panier[cle], l = par[cle];
+      if(!e.date) sansDate++;
+      h += '<div class="rc-l"><span>'+ esc(e.sujet.titre) +' — '
+        + (e.date ? esc(libelleDe(e.date)) : '<em>date à choisir</em>')
+        + '</span><span class="'+ (l && l.gratuit ? 'o' : '') +'">'
+        + (l ? esc(l.libelle) : '…') +'</span></div>';
+    });
+    zl.innerHTML = h;
+    if(dev && dev.ok){
+      zt.innerHTML = dev.ht_cents
+        ? '<strong>'+ (dev.ht_cents/100).toLocaleString('fr-FR') +' € HT</strong> '
+          + '<span style="opacity:.7">(' + (dev.ttc_cents/100).toLocaleString('fr-FR')
+          + ' € TTC)</span>'
+        : '<strong>Aucun montant</strong> — séance offerte';
+    }else{
+      zt.textContent = (dev && dev.message) ? dev.message : '…';
+    }
+    var notes = [];
+    if(dev && dev.message) notes.push(dev.message);
+    if(sansDate) notes.push(sansDate + ' formation(s) sans date : réglez-les à l\'étape 2.');
+    if(state.ref.annulation) notes.push(state.ref.annulation.payante);
+    zn.textContent = notes.join(' ');
+    recap.classList.toggle('incomplet', sansDate > 0 || !(dev && dev.ok));
+  }
+
+  function libelleDe(d){
+    var c = (state.ref.creneaux||[]).filter(function(x){ return x.date === d; })[0];
+    return c ? c.libelle : d;
   }
 
   // ── Soumission : le serveur décide du prix, jamais le client ──
@@ -507,8 +881,13 @@ label.fl span{color:var(--pf)}
     var btnTxt = document.getElementById('fo-btn-txt');
     function erreur(m){ status.className = 'form-status err'; status.textContent = '⚠ ' + m; }
 
-    if(!state.sujet){ erreur("Choisissez d'abord un sujet (étape 1)."); return false; }
-    if(!state.creneau){ erreur("Choisissez une date (étape 2)."); return false; }
+    var cles = Object.keys(state.panier);
+    if(!cles.length){ erreur("Choisissez d'abord une formation (étape 1)."); return false; }
+    var sansDate = cles.filter(function(k){ return !state.panier[k].date; });
+    if(sansDate.length){
+      erreur(sansDate.length + " formation(s) sans date : réglez-les à l'étape 2.");
+      return false;
+    }
 
     var prenom = document.getElementById('fo-prenom').value.trim();
     var nom = document.getElementById('fo-nom').value.trim();
@@ -540,8 +919,11 @@ label.fl span{color:var(--pf)}
       method:'POST',
       headers:{'Content-Type':'application/json','Accept':'application/json'},
       body: JSON.stringify({
-        sujet: state.sujet.cle,
-        creneau: state.creneau.date,
+        seances: cles.map(function(k){
+          return { sujet:k, creneau: state.panier[k].date };
+        }),
+        gratuit: state.gratuit || '',
+        profil: (document.getElementById('fo-profil')||{}).value || '',
         prenom: prenom, nom: nom, email: email, entreprise: entreprise,
         telephone: phone ? (prefix + ' ' + phone) : '',
         siret: siret, fonction: fonction, lieu: lieu, message: message,
@@ -560,7 +942,8 @@ label.fl span{color:var(--pf)}
       }else{
         erreur(j.error || "La réservation n'a pas pu être enregistrée. Réessayez.");
         // Un créneau pris entre-temps : rafraîchir le calendrier.
-        if(res.code === 409){ charger(); state.creneau = null; majRecap(); }
+        // Une date prise entre-temps : rafraichir le calendrier et le panier.
+        if(res.code === 409){ charger(); rendrePanier(); majRecap(); }
       }
     })
     .catch(function(){
@@ -575,27 +958,41 @@ label.fl span{color:var(--pf)}
     document.getElementById('etape-date').style.display = 'none';
     document.getElementById('inscription').style.display = 'none';
     document.getElementById('offre').style.display = 'none';
+    var seances = j.seances || [];
+    var dev = j.devis || {};
     document.getElementById('cf-titre').textContent =
-      j.gratuit ? 'Séance confirmée — elle est offerte' : 'Réservation enregistrée';
-    document.getElementById('cf-sujet').textContent = j.sujet || (state.sujet && state.sujet.titre) || '';
-    document.getElementById('cf-creneau').textContent = j.creneau || (state.creneau && state.creneau.libelle) || '';
+      dev.nb_payantes ? 'Réservation enregistrée'
+                      : 'Séance confirmée — elle est offerte';
+    /* CHAQUE SÉANCE PORTE SON LIEN D'ANNULATION, à l'écran comme dans le
+       courriel. Ne le mettre que dans le courriel ferait chercher un message
+       qui n'est pas encore arrivé. */
+    document.getElementById('cf-seances').innerHTML = seances.map(function(x){
+      return '<p class="c-line"><strong>'+ esc(x.titre) +'</strong> — '
+        + esc(x.libelle) +' — '
+        + (x.gratuit ? 'offerte'
+                     : (x.ht_cents/100).toLocaleString('fr-FR') + ' € HT')
+        + ' · <a href="'+ esc(x.annulation_url) +'">annuler cette séance</a></p>';
+    }).join('');
     document.getElementById('cf-tarif').textContent =
-      j.gratuit ? 'Gratuite — première séance sur site'
-                : ((j.montant_cents/100).toLocaleString('fr-FR') + ' € HT'
-                   + (j.ttc_cents ? ' (' + (j.ttc_cents/100).toLocaleString('fr-FR') + ' € TTC)' : ''));
+      dev.ht_cents ? ((dev.ht_cents/100).toLocaleString('fr-FR') + ' € HT'
+                      + (dev.ttc_cents ? ' (' + (dev.ttc_cents/100).toLocaleString('fr-FR') + ' € TTC)' : ''))
+                   : 'Aucun montant — séance offerte';
     document.getElementById('cf-note').textContent =
       j.message || "Vous recevez un accusé par courriel.";
+    var a = j.annulation || state.ref.annulation;
+    document.getElementById('cf-annul').textContent =
+      a ? (a.payante + ' ' + a.libre) : '';
     var c = document.getElementById('confirm'); c.style.display = 'block';
     c.scrollIntoView({behavior:'smooth', block:'start'});
   }
 
   window.resetFormation = function(rouvrir){
     document.getElementById('formation-form').reset();
-    state.sujet = null; state.creneau = null;
+    state.panier = {}; state.gratuit = null; state.devis = null;
     var sel = document.querySelectorAll('.subj.sel, .cr-chip.sel');
     for(var i=0;i<sel.length;i++) sel[i].classList.remove('sel');
     var st = document.getElementById('fo-status'); st.className = 'form-status'; st.textContent = '';
-    majRecap();
+    majSujets(); rendrePanier(); majRecap();
     if(rouvrir){
       document.getElementById('confirm').style.display = 'none';
       document.getElementById('offre').style.display = '';
@@ -606,6 +1003,52 @@ label.fl span{color:var(--pf)}
       document.getElementById('etape-sujet').scrollIntoView({behavior:'smooth'});
     }
   };
+
+  /* ── ANNULATION : le lien du courriel ouvre la page, le BOUTON annule ──────
+     Rien n'est écrit tant que le client n'a pas confirmé. Un lien qui annulerait
+     en s'ouvrant serait déclenché par le premier anti-virus qui inspecte les
+     liens du message — et la séance serait perdue sans que personne n'ait
+     cliqué. L'écriture demande donc un POST explicite. */
+  (function annulation(){
+    var m = (location.search || '').match(/[?&]annuler=([A-Za-z0-9_-]{16,})/);
+    var sec = document.getElementById('etape-annul');
+    if(!m || !sec) return;
+    var jeton = m[1];
+    sec.hidden = false;
+    sec.scrollIntoView({behavior:'smooth'});
+    var st = document.getElementById('annul-status');
+    var go = document.getElementById('annul-go');
+    var non = document.getElementById('annul-non');
+    function dire(cls, txt){ st.className = 'form-status ' + cls; st.textContent = txt; }
+    non.addEventListener('click', function(){
+      sec.hidden = true;
+      history.replaceState(null, '', location.pathname);
+    });
+    go.addEventListener('click', function(){
+      go.disabled = true; dire('', '');
+      fetch('/api/formation/annulation', {
+        method:'POST',
+        headers:{'Content-Type':'application/json','Accept':'application/json'},
+        body: JSON.stringify({ jeton: jeton })
+      })
+      .then(function(r){ return r.json().then(function(j){ return {code:r.status, j:j}; }); })
+      .then(function(res){
+        var j = res.j || {};
+        if(res.code === 200 && j.ok){
+          dire('ok', '✓ ' + (j.message || 'Séance annulée.'));
+          go.style.display = 'none';
+          charger();  // le créneau libéré redevient réservable
+        }else{
+          go.disabled = false;
+          dire('err', '⚠ ' + (j.message || j.error || "L'annulation n'a pas pu être enregistrée."));
+        }
+      })
+      .catch(function(){
+        go.disabled = false;
+        dire('err', "⚠ Réseau indisponible. Réessayez dans un instant.");
+      });
+    });
+  })();
 
   // ── Retour depuis Stripe (?paiement=ok|annule) ──
   // Le paiement est confirmé côté serveur par le webhook Stripe ; ce bandeau

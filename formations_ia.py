@@ -198,6 +198,228 @@ def regle_tarifaire():
 
 
 # ═══════════════════════════════════════════════════════════════════════════
+#  3 bis. LE DEVIS — de 1 à 4 séances d'un coup, et la gratuité CHOISIE
+# ═══════════════════════════════════════════════════════════════════════════
+# CE QUI CHANGE, ET POURQUOI CE N'EST PAS UN DÉTAIL. `tarif(rang)` fait payer
+# selon l'ORDRE de réservation : la première séance réservée est offerte, quelle
+# qu'elle soit. Un client qui veut la gouvernance agentique offerte devait donc
+# la réserver EN PREMIER, et l'apprendre après coup. La gratuité devient un
+# choix explicite, dit au moment de réserver.
+#
+# LA RÈGLE ANNONCÉE NE BOUGE PAS : une séance offerte par client, pas une par
+# commande. Un client qui a déjà consommé la sienne ne la retrouve pas en
+# repassant commande — c'est la base qui le sait, et elle le dit au devis par
+# `gratuite_disponible`. Rien de ce que le navigateur affirme là-dessus n'est
+# cru.
+MIN_SEANCES = 1
+#: QUATRE, ET CE N'EST PAS UN NOMBRE ROND : c'est le nombre de sujets, et un
+#: sujet ne se suit pas deux fois. Le plafond se déduit du catalogue au lieu
+#: d'être écrit à côté de lui, où les deux divergeraient.
+MAX_SEANCES = NB_SUJETS
+
+
+def devis(sujets, gratuit=None, gratuite_disponible=True):
+    """Ce que coûte un panier de 1 à %d séances, ligne par ligne.
+
+    `sujets` : les clés choisies. `gratuit` : la clé de celle que le client veut
+    offerte. `gratuite_disponible` : False si ce client a DÉJÀ consommé la
+    sienne — décidé par la base, jamais par le navigateur.
+
+    Rend toujours un dict. En cas de refus, `ok` est faux et `message` dit
+    pourquoi en toutes lettres : un devis qui échoue en silence ferait réserver
+    à l'aveugle.
+    """ % MAX_SEANCES
+    cles = [str(x or "").strip() for x in (sujets or []) if str(x or "").strip()]
+
+    def _refus(code, message):
+        return {"ok": False, "error": code, "message": message, "lignes": [],
+                "nb": 0, "ht_cents": 0, "tva_pct": TVA_PCT, "ttc_cents": 0,
+                "gratuite": None}
+
+    if len(cles) < MIN_SEANCES:
+        return _refus("aucune_seance",
+                      "Choisissez au moins une formation.")
+    if len(cles) > MAX_SEANCES:
+        return _refus("trop_de_seances",
+                      "Quatre formations au maximum : il y a quatre sujets, et "
+                      "un sujet ne se suit pas deux fois.")
+    if len(set(cles)) != len(cles):
+        return _refus("sujet_en_double",
+                      "Le même sujet est choisi deux fois.")
+    inconnus = [c for c in cles if c not in _CLES_SUJETS]
+    if inconnus:
+        return _refus("sujet_inconnu",
+                      "Sujet de formation inconnu : %s." % ", ".join(inconnus))
+
+    # LA GRATUITE PORTE SUR UNE SÉANCE DU PANIER, jamais sur une autre. Un
+    # client qui désignerait un sujet qu'il ne réserve pas obtiendrait sinon une
+    # remise sur rien — et la ligne offerte serait introuvable à l'écran.
+    choisi = str(gratuit or "").strip() or None
+    note = None
+    if not gratuite_disponible:
+        if choisi:
+            note = ("Votre séance offerte a déjà été utilisée : toutes les "
+                    "séances de cette commande sont au tarif.")
+        choisi = None
+    elif choisi and choisi not in cles:
+        return _refus("gratuite_hors_panier",
+                      "La séance offerte doit être l'une de celles que vous "
+                      "réservez.")
+    elif not choisi:
+        # SANS CHOIX, ON OFFRE LA PREMIÈRE — jamais aucune. Laisser la gratuité
+        # tomber faute d'avoir coché ferait payer une séance annoncée offerte.
+        choisi = cles[0]
+        note = ("Aucune séance n'était désignée : la première de la liste est "
+                "offerte.")
+
+    lignes, ht = [], 0
+    for cle in cles:
+        s = sujet(cle)
+        offerte = (cle == choisi)
+        pu = 0 if offerte else TARIF_HT_CENTS
+        ht += pu
+        lignes.append({
+            "cle": cle, "titre": s["titre"], "num": s["num"],
+            "gratuit": offerte, "ht_cents": pu, "ttc_cents": _ttc(pu),
+            "libelle": ("Offerte — séance sur site" if offerte
+                        else "%d € HT" % (TARIF_HT_CENTS // 100)),
+        })
+    return {"ok": True, "error": None, "message": note, "lignes": lignes,
+            "nb": len(lignes), "gratuite": choisi,
+            "ht_cents": ht, "tva_pct": TVA_PCT, "ttc_cents": _ttc(ht),
+            "nb_payantes": sum(1 for l in lignes if not l["gratuit"])}
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  3 ter. L'ANNULATION — libre au-delà de sept jours, due en deçà
+# ═══════════════════════════════════════════════════════════════════════════
+# POURQUOI UN DÉLAI, ET POURQUOI SEPT JOURS. Le formateur se déplace sur le
+# site du client et bloque une demi-journée ; le créneau refusé à un autre
+# client ne se revend pas la veille. Sept jours est le délai annoncé — il est
+# écrit ICI une seule fois, et l'infobulle de la page le lit au lieu de le
+# recopier : deux textes qui énoncent le même délai finissent par le dire
+# différemment, et c'est celui que le client a lu qui l'engage.
+ANNULATION_JOURS = 7
+
+
+def regle_annulation():
+    """Le délai et ce qu'il emporte, dit une fois pour toutes les surfaces."""
+    return {
+        "jours": ANNULATION_JOURS,
+        "titre": "Annulation",
+        "payante": "Toute formation payante annulée moins de %d jours avant la "
+                   "date prévue est due et sera facturée." % ANNULATION_JOURS,
+        "libre": "Au-delà de ce délai, l'annulation est libre et sans frais : "
+                 "le lien figure dans votre courriel de confirmation.",
+        "offerte": "Une séance offerte n'est jamais facturée, même annulée "
+                   "tardivement — prévenez-nous tout de même, le formateur se "
+                   "déplace.",
+        "infobulle": "Toute formation payante annulée moins de %d jours avant "
+                     "la date prévue est due et sera facturée. Au-delà, "
+                     "l'annulation est libre et sans frais." % ANNULATION_JOURS,
+    }
+
+
+def annulable(date_creneau, aujourdhui):
+    """(possible, motif) — l'annulation est libre à SEPT JOURS OU PLUS.
+
+    « Moins de sept jours avant » est ce qui est facturé : à exactement sept
+    jours, l'annulation passe encore. La borne est ici, et nulle part ailleurs.
+    """
+    d = _lire_date(date_creneau)
+    a = _lire_date(aujourdhui)
+    if d is None or a is None:
+        return False, "Date de séance illisible."
+    reste = (d - a).days
+    if reste < 0:
+        return False, "Cette séance a déjà eu lieu."
+    if reste < ANNULATION_JOURS:
+        return False, ("Il reste %d jour(s) avant la séance : moins de %d. "
+                       "Une séance payante annulée maintenant reste due."
+                       % (reste, ANNULATION_JOURS))
+    return True, ("Annulation libre : %d jour(s) avant la séance, soit %d ou "
+                  "plus." % (reste, ANNULATION_JOURS))
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  3 quater. CE QUI EST REMIS, ET CE QUI EST PERSONNALISÉ
+# ═══════════════════════════════════════════════════════════════════════════
+# CE BLOC DIT L'OFFRE, PAS UNE PROMESSE DE PLUS. Chaque élément porte s'il est
+# STANDARD (le même pour tous) ou PERSONNALISÉ (établi sur le contexte du
+# client). Annoncer « support personnalisé » sans dire ce qui l'est
+# réellement est la promesse la plus facile à démentir le jour de la séance.
+SUPPORT = {
+    "titre": "Le support de workshop",
+    "remise": "Remis à chaque participant, au format PDF, à l'issue de la "
+              "séance.",
+    "elements": [
+        {"quoi": "Le déroulé du workshop et les planches projetées",
+         "nature": "standard",
+         "detail": "Le socle du sujet, identique d'une séance à l'autre : "
+                   "c'est ce qui rend la formation comparable d'un client à "
+                   "l'autre."},
+        {"quoi": "Les modèles de travail — registre, grille de qualification, "
+                 "trame de contrôle",
+         "nature": "personnalise",
+         "detail": "Pré-remplis avec VOS systèmes et votre vocabulaire, à "
+                   "partir de ce que vous transmettez avant la séance. Un "
+                   "modèle vide se referme le soir même."},
+        {"quoi": "Le relevé des décisions prises pendant la séance",
+         "nature": "personnalise",
+         "detail": "Ce que vous avez arbitré, qui le porte et pour quand — "
+                   "écrit pendant la séance, pas reconstitué après."},
+    ],
+    "participants": "Sans limite de participants : la séance se tient dans vos "
+                    "locaux, vous y conviez qui vous voulez.",
+}
+
+#: LES ÉTUDES DE CAS SUIVENT LE TYPE DE CLIENT. Un exploitant de centre de
+#: données et un éditeur de logiciel n'ont pas les mêmes angles morts ; leur
+#: présenter les mêmes cas fait perdre la moitié de la séance à traduire.
+PROFILS = [
+    {"cle": "exploitant", "titre": "Exploitant de centre de données",
+     "cas": "Supervision d'une salle, contrats d'infogérance, chaîne "
+            "d'astreinte et traçabilité des interventions automatisées."},
+    {"cle": "porteur", "titre": "Porteur de projet ou maître d'ouvrage",
+     "cas": "Cadrage amont, allotissement, pièces de marché et clauses qui "
+            "engagent le titulaire sur l'IA embarquée."},
+    {"cle": "utilisateur", "titre": "Entreprise utilisatrice (DSI, RSSI, DPO)",
+     "cas": "Registre des systèmes, qualification par niveau de risque, "
+            "arbitrage entre usage métier et exposition."},
+    {"cle": "editeur", "titre": "Éditeur ou intégrateur",
+     "cas": "Obligations du fournisseur, documentation technique, "
+            "transparence due à l'utilisateur en aval."},
+]
+_CLES_PROFILS = {p["cle"] for p in PROFILS}
+
+
+def profil(cle):
+    for p in PROFILS:
+        if p["cle"] == cle:
+            return p
+    return None
+
+
+def etudes_de_cas(profil_cle):
+    """Les cas présentés pour ce type de client, et ce qui reste à cadrer.
+
+    UN PROFIL INCONNU NE REND PAS UNE LISTE VIDE : il rend tous les angles, en
+    disant que le choix se fera au cadrage. Rendre vide ferait croire qu'aucun
+    cas n'est présenté.
+    """
+    p = profil(profil_cle)
+    if p:
+        return {"profil": p["cle"], "titre": p["titre"], "cas": p["cas"],
+                "choisi": True,
+                "note": "Les cas présentés sont ceux de ce profil ; ils se "
+                        "précisent avec vous avant la séance."}
+    return {"profil": None, "titre": None,
+            "cas": " · ".join(x["cas"] for x in PROFILS), "choisi": False,
+            "note": "Sans profil indiqué, les cas se choisissent avec vous au "
+                    "cadrage, parmi les quatre familles ci-dessus."}
+
+
+# ═══════════════════════════════════════════════════════════════════════════
 #  4. LE RÉFÉRENTIEL SERVI À LA PAGE
 # ═══════════════════════════════════════════════════════════════════════════
 
@@ -210,6 +432,13 @@ def referentiel(depuis):
         "sujets": SUJETS,
         "creneaux": creneaux(depuis),
         "tarif": regle_tarifaire(),
+        # LES BORNES DU PANIER SONT SERVIES, JAMAIS RECOPIÉES DANS LA PAGE.
+        # Un écran qui laisserait cocher cinq sujets se ferait refuser au
+        # dernier geste, après la saisie de toutes les coordonnées.
+        "bornes": {"min": MIN_SEANCES, "max": MAX_SEANCES},
+        "annulation": regle_annulation(),
+        "support": SUPPORT,
+        "profils": PROFILS,
     }
 
 
@@ -242,6 +471,40 @@ def _verifier():
         pb.append("la première séance n'est pas gratuite")
     if tarif(1)["gratuit"] or tarif(1)["ht_cents"] != TARIF_HT_CENTS:
         pb.append("la deuxième séance n'est pas au tarif plein")
+    # LE PLAFOND DU PANIER SUIT LE CATALOGUE. Un plafond plus haut que le
+    # nombre de sujets promettrait une cinquième séance qui n'existe pas ;
+    # plus bas, il interdirait un sujet qu'on vend.
+    if MAX_SEANCES != NB_SUJETS:
+        pb.append("le plafond du panier (%d) ne suit pas le catalogue (%d)"
+                  % (MAX_SEANCES, NB_SUJETS))
+    if MIN_SEANCES < 1:
+        pb.append("le plancher du panier est inférieur à une séance")
+    # LE DÉLAI D'ANNULATION EST ÉCRIT DANS SON PROPRE TEXTE. Un jour changé
+    # d'un côté et pas de l'autre engagerait le client sur le mauvais.
+    _ra = regle_annulation()
+    if str(ANNULATION_JOURS) not in _ra["payante"]:
+        pb.append("la règle d'annulation ne dit pas son propre délai")
+    if str(ANNULATION_JOURS) not in _ra["infobulle"]:
+        pb.append("l'infobulle d'annulation ne dit pas son propre délai")
+    # CHAQUE PROFIL PORTE SES CAS. Un profil sans cas se choisirait à l'écran
+    # pour ne rien changer à la séance.
+    if len(_CLES_PROFILS) != len(PROFILS):
+        pb.append("clés de profils en double")
+    for p in PROFILS:
+        for champ in ("cle", "titre", "cas"):
+            if not str(p.get(champ, "")).strip():
+                pb.append("profil incomplet : %r" % p.get("cle"))
+    # LE SUPPORT DIT CE QUI EST PERSONNALISÉ, ET IL Y A DE QUOI. Un support
+    # entièrement standard annoncé « personnalisable » est la promesse la plus
+    # facile à démentir le jour de la séance.
+    _nat = {e.get("nature") for e in SUPPORT.get("elements", [])}
+    if "personnalise" not in _nat:
+        pb.append("le support n'a aucun élément personnalisé")
+    if "standard" not in _nat:
+        pb.append("le support n'a aucun élément standard — rien n'est comparable")
+    for e in SUPPORT.get("elements", []):
+        if e.get("nature") not in ("standard", "personnalise"):
+            pb.append("élément de support sans nature déclarée : %r" % e.get("quoi"))
     return pb
 
 
@@ -255,4 +518,6 @@ def sante():
     return {"module": "formations_ia", "version": VERSION,
             "sujets": NB_SUJETS, "tarif_ht_cents": TARIF_HT_CENTS,
             "tva_pct": TVA_PCT, "fin_campagne": FIN_CAMPAGNE.isoformat(),
+            "seances_max": MAX_SEANCES, "annulation_jours": ANNULATION_JOURS,
+            "profils": len(PROFILS),
             "problemes": _verifier()}

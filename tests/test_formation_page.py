@@ -30,6 +30,7 @@ silence.
 import io
 import os
 import re
+import re as _re
 
 import pytest
 
@@ -50,9 +51,21 @@ def _corps_inscription():
     ce qu'il lit ensuite dans la réponse (où « montant_cents » figure à bon
     droit)."""
     i = PAGE.index("/api/formation/inscription")
-    j = PAGE.index("JSON.stringify({", i) + len("JSON.stringify({")
-    k = PAGE.index("})", j)
-    return PAGE[j:k]
+    j = PAGE.index("JSON.stringify({", i) + len("JSON.stringify({") - 1
+    # LES ACCOLADES SE COMPTENT. S'arrêter au premier « }) » a suffi tant que le
+    # corps était plat ; depuis que les séances y sont une liste d'objets, cette
+    # borne tombe AU MILIEU du corps et le relevé ne voit plus que trois clés.
+    # Une règle qui lit un tiers de ce qu'elle croit mesurer est verte pour rien.
+    prof, k = 0, j
+    while k < len(PAGE):
+        if PAGE[k] == "{":
+            prof += 1
+        elif PAGE[k] == "}":
+            prof -= 1
+            if prof == 0:
+                break
+        k += 1
+    return PAGE[j + 1:k]
 
 
 def _cles_postees():
@@ -108,13 +121,28 @@ def test_le_client_n_envoie_aucun_prix():
     """Le tarif est décidé au serveur (rang → gratuit puis 800 € HT). Une clé
     de prix dans le corps posté serait une porte pour le fixer soi-même : le
     serveur l'ignore déjà, mais la laisser écrite est un piège pour la suite."""
-    interdits = ("montant", "prix", "ht_cents", "ttc", "tarif", "gratuit",
+    interdits = ("montant", "prix", "ht_cents", "ttc", "tarif",
                  "rang", "amount", "price")
     cles = {c.lower() for c in _cles_postees()}
     fautes = sorted(c for c in cles if any(m in c for m in interdits))
     assert not fautes, (
         "le corps posté contient une clé de PRIX (%s) : le tarif ne doit jamais "
         "venir du client, il se décide au serveur." % ", ".join(fautes))
+    # « GRATUIT » N'EST PLUS INTERDIT, ET CE N'EST PAS UN RELÂCHEMENT.
+    # Il ne porte plus un prix mais la CLÉ DU SUJET que le client veut offert —
+    # le serveur décide seul s'il reste une séance offerte à donner, et refuse
+    # une clé qui n'est pas dans le panier. Ce qui reste interdit, c'est qu'il
+    # porte un MONTANT ou un booléen : « gratuit: true » serait la porte que
+    # cette règle ferme depuis le début.
+    m = _re.search(r"\bgratuit\s*:\s*([^,\n]+)", _corps_inscription())
+    assert m, "la séance offerte n'est plus désignée dans le corps posté"
+    valeur = m.group(1).strip()
+    assert "state.gratuit" in valeur, (
+        "« gratuit » n'envoie pas la clé du sujet choisi mais : %s" % valeur)
+    for interdit in ("true", "false", "1", "0"):
+        assert not valeur.startswith(interdit), (
+            "« gratuit » porte un booléen ou un nombre (%s) : ce serait au "
+            "client de décider du prix." % valeur)
 
 
 def test_la_confirmation_lit_la_decision_du_serveur():
@@ -122,9 +150,21 @@ def test_la_confirmation_lit_la_decision_du_serveur():
     (gratuit, montant), non d'un prix recomposé côté page."""
     i = PAGE.index("function afficherConfirmation(")
     corps = PAGE[i:PAGE.index("\n  }", i)]
-    assert "j.gratuit" in corps, "la confirmation ne lit pas la gratuité décidée au serveur"
-    assert "j.montant_cents" in corps, (
-        "la confirmation ne lit pas le montant décidé au serveur")
+    # CE QUI A CHANGÉ : la réponse porte désormais un DEVIS et une liste de
+    # séances, parce qu'on en réserve jusqu'à quatre. La règle suit la forme,
+    # pas l'inverse — mais elle exige toujours la même chose : chaque montant
+    # affiché vient du serveur.
+    assert "j.seances" in corps, "la confirmation ne lit pas les séances réservées"
+    assert "j.devis" in corps or "dev." in corps, (
+        "la confirmation ne lit pas le devis décidé au serveur")
+    assert "ht_cents" in corps, "la confirmation n'affiche aucun montant du serveur"
+    # ET ELLE N'EN RECOMPOSE AUCUN. Un tarif écrit ici survivrait à un
+    # changement de prix, et la page annoncerait un montant que le serveur ne
+    # pratique plus.
+    for ecrit in ("800", "TARIF", "* 1.2", "tva_pct *"):
+        assert ecrit not in corps, (
+            "la confirmation recompose un prix (« %s ») au lieu de lire celui "
+            "du serveur" % ecrit)
 
 
 # ══════════════════════════════════════════════════════════════════════════
