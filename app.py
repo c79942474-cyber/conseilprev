@@ -18294,6 +18294,39 @@ def _emp_after_request(resp):
     return resp
 
 
+# ══════════════════════════════════════════════════════════════════════════
+#  LA TABLE DES FORMATIONS EST OUVERTE AU DEMARRAGE, PAS A LA PREMIERE VISITE
+# ══════════════════════════════════════════════════════════════════════════
+# UNE MIGRATION QUI ATTEND UN VISITEUR N'EST PAS APPLIQUEE — ELLE EST ESPEREE.
+# `_formation_ia_table` porte les migrations de la table ET le rattrapage des
+# jetons, et elle n'etait appelee que depuis les routes. Sur le deploiement du
+# 13 septembre, mesure faite : l'application etait en ligne, le correctif
+# dedans, et la reservation n° 1 toujours sans jeton — parce que personne
+# n'avait encore ouvert /formation. Le correctif etait livre sans etre applique.
+#
+# APPELEE ICI, elle tourne une fois par processus, au chargement, comme
+# `registre_init_db()` juste au-dessus. Le rattrapage lit avant d'ecrire : sur
+# une base deja saine, cela coute un SELECT par demarrage et rien d'autre.
+#
+# DEUX TRAVAILLEURS QUI DEMARRENT ENSEMBLE peuvent reprendre la meme ligne et y
+# poser deux jetons differents ; le dernier gagne, et c'est sans consequence :
+# une ligne rattrapee n'a JAMAIS eu de lien envoye par courriel — c'est
+# precisement pour cela qu'elle est rattrapee.
+#
+# ET CELA NE DOIT JAMAIS EMPECHER L'APPLICATION DE DEMARRER. Une base
+# injoignable au chargement rendrait le site entier indisponible pour une
+# migration de formation : on note, et on continue.
+try:
+    _fcx = registre_get_db(); _fcu = _fcx.cursor()
+    _formation_ia_table(_fcu, _fcx)
+    try: _fcx.close()
+    except Exception: pass
+except Exception as _e:
+    logger.warning('FORMATION_IA — table non ouverte au demarrage (%s) ; '
+                   'les migrations et le rattrapage des jetons se feront '
+                   'a la premiere requete.', _e)
+
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=False, host='0.0.0.0', port=port)

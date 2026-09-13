@@ -28,6 +28,7 @@ import io
 import json
 import os
 import subprocess
+import sys
 
 import pytest
 
@@ -297,6 +298,33 @@ def test_la_page_non_plus_n_ecrit_pas_d_ancre_vide():
     assert 'href=""' not in out["sans"], "la page écrit une ancre vide"
     assert "<a " not in out["sans"]
     assert "CONSEILPREV" in out["sans"]
+
+
+def test_le_DEMARRAGE_applique_le_rattrapage_sans_attendre_une_visite(client):
+    """Une migration qui attend un visiteur n'est pas appliquée : elle est
+    espérée.
+
+    MESURÉ EN PRODUCTION LE 13 SEPTEMBRE, et c'est ce qui a motivé cette règle.
+    Le correctif était déployé, l'application en ligne — et la réservation n° 1
+    toujours sans jeton, parce que `_formation_ia_table` n'était appelée que
+    depuis les routes et que personne n'avait encore ouvert /formation.
+
+    ON MESURE LE DÉMARRAGE LUI-MÊME : un processus neuf importe `app` et ne fait
+    RIEN d'autre — aucune requête, aucun appel à la migration. C'est au retour
+    qu'on regarde la base."""
+    if A.REGISTRE_USE_PG:
+        pytest.skip("mesure écrite pour le registre SQLite")
+    rid = _ligne_ancienne(jeton=None)
+    assert [r for r in _jetons_en_base() if r["id"] == rid][0]["jeton"] is None
+
+    r = subprocess.run([sys.executable, "-c", "import app"], cwd=RACINE,
+                       capture_output=True, text=True,
+                       env=dict(os.environ, PYTHONDONTWRITEBYTECODE="1"))
+    assert r.returncode == 0, r.stderr[-2000:]
+
+    apres = [x for x in _jetons_en_base() if x["id"] == rid][0]["jeton"]
+    assert apres and len(apres) >= A._FORMATION_IA_JETON_MIN, \
+        "le démarrage n'applique pas le rattrapage : il attend une visite"
 
 
 def test_aucune_reservation_du_registre_ne_reste_sans_jeton(client):
