@@ -199,3 +199,96 @@ def test_le_webhook_confirme_la_seance_payee(client, monkeypatch):
     try: conn.close()
     except Exception: pass
     assert statut == "payee", "le webhook n'a pas confirmé la séance payée (statut=%s)" % statut
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  CE QUI PART RÉELLEMENT À LA CAISSE, pour un panier de PLUSIEURS séances
+# ══════════════════════════════════════════════════════════════════════════
+#  RIEN NE LE MESURAIT. Les règles ci-dessus éprouvent une séance à la fois,
+#  posée par l'ancien envoi. Depuis que le panier accepte jusqu'à quatre
+#  formations en un geste, c'est le NOMBRE de lignes envoyées à Stripe et leur
+#  somme qui décident de ce qui est prélevé — et personne ne les regardait.
+def _panier(client, n, siret, email, gratuit=None):
+    cr = _creneaux()
+    cles = [s["cle"] for s in F.SUJETS][:n]
+    return client.post("/api/formation/inscription", json={
+        "seances": [{"sujet": c, "creneau": cr[i]} for i, c in enumerate(cles)],
+        "gratuit": gratuit or "",
+        "nom": "Payeur", "prenom": "Alex", "email": email,
+        "entreprise": "PAYE SAS", "siret": siret,
+        "telephone": "+33 6 12 34 56 78", "lieu": "9 av. du Test, 75000 Paris"})
+
+
+def _lignes_stripe(created):
+    assert len(created) == 1, "il faut UNE session pour la commande : %d" % len(created)
+    return created[0]["line_items"]
+
+
+@pytest.mark.parametrize("n,attendu", [(1, 0), (2, 1), (3, 2), (4, 3)])
+def test_la_caisse_reçoit_UNE_ligne_par_seance_PAYANTE_et_pas_une_de_plus(
+        client, monkeypatch, n, attendu):
+    """LA RÈGLE QUE LE CABINET A DEMANDÉE, MESURÉE LÀ OÙ L'ARGENT PASSE : la
+    première formation choisie est offerte, les suivantes sont au tarif. Une
+    seule séance n'ouvre donc aucun paiement ; quatre en ouvrent un de trois
+    lignes.
+
+    ON LIT LES LIGNES ENVOYÉES À STRIPE, pas le devis. Le devis peut être juste
+    pendant que la caisse facture autre chose — c'est exactement le genre
+    d'écart qui ne se découvre qu'au relevé bancaire."""
+    created = []
+    monkeypatch.setitem(sys.modules, "stripe", _fake_stripe(created))
+    monkeypatch.setenv("STRIPE_SECRET_KEY", "sk_test_x")
+    j = _panier(client, n, "9000002%02d" % n, "p%d@ex.fr" % n).get_json()
+    assert j["ok"], j
+    if not attendu:
+        assert created == [], "une commande sans séance payante a ouvert un paiement"
+        return
+    items = _lignes_stripe(created)
+    assert len(items) == attendu, (
+        "%d séance(s) choisie(s) : %d ligne(s) facturée(s) au lieu de %d — %s"
+        % (n, len(items), attendu,
+           [x["price_data"]["product_data"]["name"] for x in items]))
+    # ET CHAQUE LIGNE EST AU TARIF DU MODULE, jamais à un montant recopié.
+    for it in items:
+        assert it["price_data"]["unit_amount"] == F.TARIF_HT_CENTS, it
+        assert it["quantity"] == 1, it
+
+
+def test_la_seance_OFFERTE_n_apparait_JAMAIS_dans_les_lignes_facturees(
+        client, monkeypatch):
+    """La désigner autrement que par son prix : on prend la TROISIÈME comme
+    offerte, et on vérifie qu'elle est absente de la caisse. Une règle qui
+    n'éprouverait que la première serait verte sur un code qui saute
+    systématiquement la ligne 1."""
+    created = []
+    monkeypatch.setitem(sys.modules, "stripe", _fake_stripe(created))
+    monkeypatch.setenv("STRIPE_SECRET_KEY", "sk_test_x")
+    cles = [s["cle"] for s in F.SUJETS]
+    j = _panier(client, 4, "900000299", "p99@ex.fr", gratuit=cles[2]).get_json()
+    assert j["ok"] and j["devis"]["gratuite"] == cles[2], j["devis"]
+    noms = [x["price_data"]["product_data"]["name"] for x in _lignes_stripe(created)]
+    offert = F.sujet(cles[2])["titre"]
+    assert len(noms) == 3, noms
+    assert not any(offert in x for x in noms), (
+        "la séance offerte « %s » est facturée : %s" % (offert, noms))
+    # Et les trois autres y sont bien, chacune une fois.
+    for k in (0, 1, 3):
+        t = F.sujet(cles[k])["titre"]
+        assert sum(1 for x in noms if t in x) == 1, (t, noms)
+
+
+def test_la_somme_facturee_est_CELLE_du_devis_et_non_une_autre(client, monkeypatch):
+    """DEUX CALCULS DU MÊME MONTANT DIVERGENT le jour où l'un des deux change ;
+    c'est celui qui est prélevé qui a raison, et on ne le sait qu'après. On
+    additionne donc ce que Stripe reçoit et on le confronte au devis rendu au
+    client — le même objet que la page affiche."""
+    created = []
+    monkeypatch.setitem(sys.modules, "stripe", _fake_stripe(created))
+    monkeypatch.setenv("STRIPE_SECRET_KEY", "sk_test_x")
+    j = _panier(client, 4, "900000288", "p88@ex.fr").get_json()
+    total = sum(x["price_data"]["unit_amount"] * x["quantity"]
+                for x in _lignes_stripe(created))
+    assert total == j["devis"]["ht_cents"], (
+        "la caisse prélève %d c, le devis annonce %d c"
+        % (total, j["devis"]["ht_cents"]))
+    assert total == 3 * F.TARIF_HT_CENTS, total

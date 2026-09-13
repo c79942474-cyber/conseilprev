@@ -888,3 +888,143 @@ def test_la_page_annonce_le_bareme_SANS_le_recopier():
         assert chiffre not in sans_css, (
             "le barème est recopié dans la page (« %s ») au lieu d'être lu"
             % chiffre)
+
+
+# ══════════════════════════════════════════════════════════════════════════
+#  CE QUI CONSOMME LA GRATUITÉ — et ce qui ne la consomme pas
+# ══════════════════════════════════════════════════════════════════════════
+def _gratuite_de(client, siret=SIRET_A, email="a@ex.fr"):
+    """Ce que le serveur répond quand on lui demande le prix d'UNE séance.
+    C'est la seule façon honnête de lire la disponibilité de la gratuité : on
+    la LIT sur le devis, on ne la déduit pas d'un compte refait ici."""
+    r = client.post("/api/formation/devis",
+                    json={"sujets": [TOUS[0]], "siret": siret, "email": email})
+    j = r.get_json()
+    return bool(j.get("lignes") and j["lignes"][0]["gratuit"])
+
+
+def test_une_seance_PAYEE_ne_consomme_PAS_la_gratuite(client):
+    """LE DÉFAUT MESURÉ SUR LE REGISTRE DE PRODUCTION, le 13 septembre.
+
+    Le compte demandait « combien de réservations non annulées ce client
+    a-t-il ? » et s'en servait pour décider de la gratuité. Il répondait donc
+    OUI à un client qui n'avait jamais reçu de séance offerte mais avait
+    réservé des séances PAYANTES — et le prix affiché cessait d'être celui que
+    la page annonce. Relevé : compteur à 3, séances réellement offertes 1.
+
+    La question posée est désormais celle qu'on croyait poser : « ce client
+    a-t-il DÉJÀ REÇU une séance offerte ? »
+
+    ON FABRIQUE LE CAS SANS LE SIMULER : une commande de deux séances laisse
+    une offerte et une payante ; on annule l'offerte. Restent des séances
+    PAYÉES, et rien d'autre. La gratuité doit revenir."""
+    cre = _creneaux()
+    _poster(client, [(TOUS[0], cre[0]), (TOUS[1], cre[1])])
+    lg = _lignes()
+    offerte = [x for x in lg if int(x["gratuit"] or 0)]
+    payantes = [x for x in lg if not int(x["gratuit"] or 0)]
+    assert len(offerte) == 1 and len(payantes) == 1, lg
+    assert not _gratuite_de(client), (
+        "témoin : tant que la séance offerte est là, la gratuité est consommée")
+    # On annule l'OFFERTE. Il ne reste que du payant.
+    assert client.post("/api/formation/annulation",
+                       json={"jeton": offerte[0]["jeton"]}).get_json()["ok"]
+    restant = [x for x in _lignes() if x["statut"] != "annulee"]
+    assert restant and all(not int(x["gratuit"] or 0) for x in restant), restant
+    assert _gratuite_de(client), (
+        "une séance PAYÉE consomme encore la gratuité : %s" % restant)
+
+
+def test_un_panier_ABANDONNE_ne_consomme_PAS_la_gratuite(client):
+    """CE QUI EST ARRIVÉ AU CABINET, ET C'EST LE PIRE DES DEUX CAS. Un panier
+    laissé à la caisse reste « en attente de paiement » — il ne devient jamais
+    « annulée » tout seul, il cesse seulement de tenir son créneau. Compté
+    comme une réservation, il privait DÉFINITIVEMENT le client de sa gratuité
+    pour un paiement qui n'a jamais eu lieu."""
+    cre = _creneaux()
+    conn = A.registre_get_db(); cur = conn.cursor()
+    A._formation_ia_table(cur, conn)
+    cur.execute(A.registre_sql(
+        "INSERT INTO formation_ia_resa (sujet, date_creneau, email, siret, cle_client, "
+        "montant_cents, gratuit, statut, created_at) VALUES (%s,%s,%s,%s,%s,%s,0,"
+        "'en_attente_paiement',%s)",
+        "INSERT INTO formation_ia_resa (sujet, date_creneau, email, siret, cle_client, "
+        "montant_cents, gratuit, statut, created_at) VALUES (?,?,?,?,?,?,0,"
+        "'en_attente_paiement',?)"),
+        (TOUS[2], cre[3], "a@ex.fr", SIRET_A,
+         A._formation_ia_cle_client(SIRET_A, "a@ex.fr"), 80000,
+         datetime.datetime.utcnow().isoformat()))
+    conn.commit(); conn.close()
+    assert _gratuite_de(client), (
+        "un panier abandonné consomme encore la gratuité")
+
+
+def test_une_seance_OFFERTE_la_consomme_bel_et_bien(client):
+    """LE TÉMOIN NÉGATIF, ET IL EST INDISPENSABLE. Sans lui, la correction
+    serait satisfaite par un compte qui ne compte plus rien — c'est-à-dire par
+    une gratuité offerte à chaque commande, ce qui n'est pas la règle."""
+    _poster(client, [(TOUS[0], _creneaux()[0])])
+    lg = _lignes()
+    assert len(lg) == 1 and int(lg[0]["gratuit"] or 0) == 1, lg
+    assert not _gratuite_de(client), (
+        "la séance offerte ne consomme plus la gratuité : elle serait "
+        "rejouable à chaque commande")
+
+
+def test_le_RANG_compte_toutes_les_seances_et_la_GRATUITE_les_offertes(client):
+    """DEUX NOMBRES, DEUX QUESTIONS, ET C'EST LEUR CONFUSION QUI A COÛTÉ. Le
+    rang dit « la Nᵉ séance de ce client » — une information d'exploitation.
+    La gratuité dit « en a-t-il déjà reçu une offerte ». Un seul compteur
+    servait aux deux ; il répondait juste à la première question et faux à la
+    seconde."""
+    cre = _creneaux()
+    _poster(client, [(TOUS[0], cre[0]), (TOUS[1], cre[1])])
+    rangs = sorted(int(x["rang"] or 0) for x in _lignes())
+    assert rangs == [0, 1], (
+        "le rang ne compte plus les séances dans l'ordre : %s" % rangs)
+
+
+# ── ET LA MÊME QUESTION POSÉE À L'AUTRE ROUTE ─────────────────────────────
+#  LE TROU QU'UNE MUTATION A OUVERT. Les quatre règles ci-dessus lisent la
+#  route DEVIS — le prix AFFICHÉ. Deux routes décident pourtant de la
+#  gratuité : celle qui affiche, et celle qui ÉCRIT. Mesuré : une mutation de
+#  la seconde laissait les quatre vertes. Le prix montré et le prix facturé
+#  peuvent donc diverger sans que rien ne lève, et c'est précisément l'écart
+#  qui ne se découvre qu'au relevé bancaire.
+def _offerte_en_base(client, siret=SIRET_A, email="a@ex.fr", sujet=None, creneau=None):
+    """Ce que la route d'INSCRIPTION écrit réellement : la ligne posée est-elle
+    offerte ? On lit la base, pas la réponse."""
+    cre = creneau or _creneaux()[3]
+    s = sujet or TOUS[3]
+    _poster(client, [(s, cre)], siret=siret, email=email)
+    lg = [x for x in _lignes() if x["sujet"] == s and x["date_creneau"] == cre]
+    assert lg, "la réservation n'a pas été écrite"
+    return int(lg[-1]["gratuit"] or 0) == 1
+
+
+def test_ce_qui_est_ECRIT_suit_la_meme_regle_que_ce_qui_est_AFFICHE(client):
+    """Les deux routes répondent à la même question et doivent répondre pareil.
+    On les interroge sur le MÊME état, dans les deux sens : gratuité encore
+    disponible, puis consommée."""
+    assert _gratuite_de(client) is True, "témoin : le client est neuf"
+    assert _offerte_en_base(client) is True, (
+        "le devis annonce la gratuité, l'inscription écrit une séance payante")
+    # Maintenant qu'une séance OFFERTE existe, les deux doivent la refuser.
+    assert _gratuite_de(client) is False
+    assert _offerte_en_base(client, sujet=TOUS[0], creneau=_creneaux()[4]) is False, (
+        "l'inscription rejoue la gratuité que le devis refuse")
+
+
+def test_l_inscription_aussi_ignore_les_seances_PAYEES_et_les_paniers_abandonnes(client):
+    """LE CAS DU CABINET, ÉPROUVÉ SUR LA ROUTE QUI ÉCRIT. Une séance payante et
+    un panier abandonné ne doivent pas priver de la gratuité la commande
+    suivante — sinon la ligne écrite est facturée alors que la page annonçait
+    une séance offerte."""
+    cre = _creneaux()
+    _poster(client, [(TOUS[0], cre[0]), (TOUS[1], cre[1])])
+    offerte = [x for x in _lignes() if int(x["gratuit"] or 0)][0]
+    assert client.post("/api/formation/annulation",
+                       json={"jeton": offerte["jeton"]}).get_json()["ok"]
+    # Reste une séance PAYÉE, non annulée. La suivante doit être offerte.
+    assert _offerte_en_base(client, sujet=TOUS[2], creneau=cre[2]) is True, (
+        "une séance payante prive encore la commande suivante de sa gratuité")

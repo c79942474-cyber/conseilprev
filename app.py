@@ -16729,14 +16729,25 @@ def formation_ia_devis():
     # LA GRATUITE RESTE UNE AFFAIRE DE BASE. Sans identite exploitable, on
     # suppose le client NOUVEAU — c est le cas le plus frequent, et supposer
     # l inverse afficherait un prix trop haut a qui n a jamais reserve.
+    #
+    # CE QUI CONSOMME LA GRATUITE, C EST UNE SEANCE OFFERTE — PAS UNE
+    # RESERVATION. Le compte portait sur TOUTES les lignes non annulees : une
+    # seance PAYEE, et meme un panier abandonne reste en attente de paiement,
+    # consommaient la gratuite d un client qui n avait pourtant jamais recu sa
+    # seance offerte. Mesure du registre de production le 13 septembre :
+    # compteur a 3, seances reellement offertes 1 — et la gratuite bloquee
+    # pour une raison que rien n expliquait au client.
+    #
+    # La question posee est desormais celle qu on croyait poser : « ce client
+    # a-t-il DEJA RECU une seance offerte ? »
     dispo = True
     if email or siret:
         try:
             conn = registre_get_db(); cur = conn.cursor()
             _formation_ia_table(cur, conn)
             cle = _formation_ia_cle_client(siret, email)
-            cur.execute(registre_sql("SELECT COUNT(*) AS n FROM formation_ia_resa WHERE cle_client=%s AND statut != 'annulee'",
-                                     "SELECT COUNT(*) AS n FROM formation_ia_resa WHERE cle_client=? AND statut != 'annulee'"),
+            cur.execute(registre_sql("SELECT COUNT(*) AS n FROM formation_ia_resa WHERE cle_client=%s AND gratuit=1 AND statut != 'annulee'",
+                                     "SELECT COUNT(*) AS n FROM formation_ia_resa WHERE cle_client=? AND gratuit=1 AND statut != 'annulee'"),
                         (cle,))
             dispo = int(dict(cur.fetchone()).get('n', 0) or 0) == 0
             try: conn.close()
@@ -16854,15 +16865,29 @@ def formation_ia_inscription():
         except Exception: pass
 
     # LA GRATUITE EST DECIDEE PAR LA BASE, JAMAIS PAR LE NAVIGATEUR. Une seance
-    # offerte PAR CLIENT, pas une par commande : un client qui a deja consomme
-    # la sienne ne la retrouve pas en repassant commande.
+    # offerte PAR CLIENT, pas une par commande : un client qui a deja recu la
+    # sienne ne la retrouve pas en repassant commande.
+    #
+    # DEUX COMPTES, ET C EST TOUT L OBJET DE LA CORRECTION. Un seul servait aux
+    # deux usages : le RANG de la seance dans l historique du client, et la
+    # disponibilite de sa gratuite. Confondus, ils faisaient consommer la
+    # gratuite par une seance PAYEE — ou par un panier abandonne, reste en
+    # attente de paiement. Un client qui reservait deux seances payantes
+    # perdait une gratuite qu il n avait jamais recue.
+    #
+    #   · `deja`     — combien de seances ce client a deja : c est un RANG.
+    #   · `offertes` — combien lui ont ete OFFERTES : c est la gratuite.
     cur.execute(registre_sql("SELECT COUNT(*) AS n FROM formation_ia_resa WHERE cle_client=%s AND statut != 'annulee'",
                              "SELECT COUNT(*) AS n FROM formation_ia_resa WHERE cle_client=? AND statut != 'annulee'"),
                 (cle,))
     deja = int(dict(cur.fetchone()).get('n', 0) or 0)
+    cur.execute(registre_sql("SELECT COUNT(*) AS n FROM formation_ia_resa WHERE cle_client=%s AND gratuit=1 AND statut != 'annulee'",
+                             "SELECT COUNT(*) AS n FROM formation_ia_resa WHERE cle_client=? AND gratuit=1 AND statut != 'annulee'"),
+                (cle,))
+    offertes = int(dict(cur.fetchone()).get('n', 0) or 0)
     dev = formations_ia.devis([x['sujet'] for x in seances],
                               gratuit=gratuit_choisi or None,
-                              gratuite_disponible=(deja == 0))
+                              gratuite_disponible=(offertes == 0))
     if not dev['ok']:
         _ferme()
         return jsonify({'ok': False, 'error': dev['message']}), 400
