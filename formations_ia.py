@@ -302,43 +302,144 @@ def devis(sujets, gratuit=None, gratuite_disponible=True):
 ANNULATION_JOURS = 7
 
 
+#: LE PAIEMENT EST IMMÉDIAT, ET C'EST LUI QUI RETIENT LA PLACE. Une séance
+#: payante n'est pas « réservée puis facturée » : elle est réglée au moment de
+#: la réservation. Ce n'est pas un détail d'encaissement — c'est ce qui fait
+#: qu'un créneau annoncé libre l'est vraiment, au lieu d'être bloqué par une
+#: intention de réserver que personne n'a honorée.
+PAIEMENT_IMMEDIAT = True
+
+#: COMBIEN DE TEMPS UNE PLACE NON RÉGLÉE TIENT LE CRÉNEAU. Le client part vers
+#: la caisse ; s'il n'y va pas, le créneau doit redevenir libre. Sans ce délai,
+#: un panier abandonné bloquerait une date jusqu'à la fin de la campagne — et
+#: personne ne le saurait, puisque l'écran la montrerait simplement « prise ».
+RETENUE_MINUTES = 60
+
+#: CE QUI EST RENDU QUAND ON ANNULE À TEMPS. La moitié du montant réglé, TVA
+#: comprise — 50 % de 960 € TTC, soit 480 €. Le pourcentage est écrit ici une
+#: seule fois ; les montants, eux, se DÉRIVENT du tarif et du taux de TVA. Les
+#: recopier ferait vivre « 480 € » dans la page longtemps après un changement
+#: de taux.
+REMBOURSEMENT_PCT = 50
+
+
+def remboursement(ttc_cents, jours_restants):
+    """Ce qui est rendu sur une séance PAYÉE, selon le moment de l'annulation.
+
+    À SEPT JOURS OU PLUS : la moitié du montant réglé, TVA comprise. En deçà :
+    rien — la place a été retenue, le formateur a bloqué la demi-journée, et le
+    créneau refusé à un autre client ne se revend pas la veille.
+
+    Rend toujours un dict, même quand il n'y a rien à rendre : un appelant qui
+    doit distinguer « zéro » de « pas calculé » n'a pas à deviner.
+    """
+    try:
+        ttc = max(int(ttc_cents or 0), 0)
+    except (TypeError, ValueError):
+        ttc = 0
+    try:
+        reste = int(jours_restants)
+    except (TypeError, ValueError):
+        reste = -1
+    if ttc <= 0:
+        return {"pct": 0, "cents": 0, "du": False,
+                "motif": "Cette séance n'a rien coûté : il n'y a rien à rendre."}
+    if reste < ANNULATION_JOURS:
+        return {"pct": 0, "cents": 0, "du": False,
+                "motif": "Annulation à moins de %d jours : aucun remboursement "
+                         "n'est prévu." % ANNULATION_JOURS}
+    # L'ARRONDI PENCHE DU CÔTÉ DU CLIENT, ET C'EST DÉLIBÉRÉ. Tronquer ferait
+    # rendre un centime de moins à chaque fois, toujours dans le même sens.
+    # `round` de Python n'irait pas mieux : il arrondit au PAIR — 0,5 donne 0 —
+    # si bien qu'une demi-unité serait perdue par celui qui a payé. On ajoute
+    # donc un demi avant de tronquer : à égalité, c'est le client qui gagne le
+    # centime. Sur les montants réels (960 € → 480 €) rien ne se joue là ; ce
+    # qui se joue, c'est de savoir dans quel sens on penche quand ça arrive.
+    return {"pct": REMBOURSEMENT_PCT,
+            "cents": int(ttc * REMBOURSEMENT_PCT / 100.0 + 0.5),
+            "du": True,
+            "motif": "Annulation à %d jours ou plus : %d %% du montant réglé "
+                     "vous sont rendus." % (ANNULATION_JOURS, REMBOURSEMENT_PCT)}
+
+
+def _eur(cents):
+    """Un montant en euros, sans décimale quand il n'en a pas besoin."""
+    if cents % 100 == 0:
+        return "%d €" % (cents // 100)
+    return ("%.2f €" % (cents / 100.0)).replace(".", ",")
+
+
 def regle_annulation():
-    """Le délai et ce qu'il emporte, dit une fois pour toutes les surfaces."""
+    """Le délai, le barème et ce qu'ils emportent — dits une fois pour toutes
+    les surfaces. Les montants se dérivent du tarif ; aucun n'est recopié."""
+    ttc = _ttc(TARIF_HT_CENTS)
+    rendu = remboursement(ttc, ANNULATION_JOURS)
     return {
         "jours": ANNULATION_JOURS,
         "titre": "Annulation",
-        "payante": "Toute formation payante annulée moins de %d jours avant la "
-                   "date prévue est due et sera facturée." % ANNULATION_JOURS,
-        "libre": "Au-delà de ce délai, l'annulation est libre et sans frais : "
-                 "le lien figure dans votre courriel de confirmation.",
-        "offerte": "Une séance offerte n'est jamais facturée, même annulée "
-                   "tardivement — prévenez-nous tout de même, le formateur se "
-                   "déplace.",
-        "infobulle": "Toute formation payante annulée moins de %d jours avant "
-                     "la date prévue est due et sera facturée. Au-delà, "
-                     "l'annulation est libre et sans frais." % ANNULATION_JOURS,
+        "pct": REMBOURSEMENT_PCT,
+        "ttc_cents": ttc,
+        "rendu_cents": rendu["cents"],
+        "paiement": "Une formation payante se règle au moment de la "
+                    "réservation : c'est le paiement qui retient la place.",
+        "avant": "Annulée %d jours ou plus avant la date, elle est remboursée "
+                 "automatiquement à hauteur de %d %% du montant réglé — soit "
+                 "%s sur %s."
+                 % (ANNULATION_JOURS, REMBOURSEMENT_PCT,
+                    _eur(rendu["cents"]), _eur(ttc)),
+        "apres": "Annulée moins de %d jours avant la date, aucun remboursement "
+                 "n'est prévu." % ANNULATION_JOURS,
+        "offerte": "Une séance offerte n'a rien coûté : il n'y a rien à rendre "
+                   "— prévenez-nous tout de même, le formateur se déplace.",
+        "infobulle": "Une formation payante se règle à la réservation. Annulée "
+                     "%d jours ou plus avant la date, %d %% du montant réglé "
+                     "sont remboursés automatiquement (%s sur %s) ; en deçà, "
+                     "aucun remboursement n'est prévu."
+                     % (ANNULATION_JOURS, REMBOURSEMENT_PCT,
+                        _eur(rendu["cents"]), _eur(ttc)),
     }
 
 
-def annulable(date_creneau, aujourdhui):
-    """(possible, motif) — l'annulation est libre à SEPT JOURS OU PLUS.
+def jours_avant(date_creneau, aujourdhui):
+    """Combien de jours séparent le jour donné de la séance. None si illisible.
 
-    « Moins de sept jours avant » est ce qui est facturé : à exactement sept
-    jours, l'annulation passe encore. La borne est ici, et nulle part ailleurs.
+    UNE SEULE LECTURE DE L'ÉCART, partagée par l'annulation et le barème de
+    remboursement : les calculer chacun de son côté les ferait diverger d'un
+    jour, et c'est le client qui paierait la différence.
     """
     d = _lire_date(date_creneau)
     a = _lire_date(aujourdhui)
     if d is None or a is None:
+        return None
+    return (d - a).days
+
+
+def annulable(date_creneau, aujourdhui):
+    """(possible, motif) — annuler est possible tant que la séance n'a pas eu
+    lieu ; c'est le REMBOURSEMENT qui dépend du délai.
+
+    CE QUI A CHANGÉ, ET POURQUOI. Tant que la séance se réglait après coup,
+    refuser l'annulation tardive évitait de transformer un clic en huit cents
+    euros d'engagement. Le paiement étant désormais encaissé à la réservation,
+    annuler tard ne crée plus de dette : cela renonce au remboursement. Le
+    danger n'est plus le même, et le refus n'a plus lieu d'être — il gardait un
+    créneau bloqué sur une séance que personne ne viendrait suivre.
+
+    LA BORNE RESTE CELLE DU BARÈME : « moins de sept jours avant » est ce qui
+    n'est pas remboursé ; à exactement sept jours, le remboursement est dû.
+    """
+    reste = jours_avant(date_creneau, aujourdhui)
+    if reste is None:
         return False, "Date de séance illisible."
-    reste = (d - a).days
     if reste < 0:
         return False, "Cette séance a déjà eu lieu."
     if reste < ANNULATION_JOURS:
-        return False, ("Il reste %d jour(s) avant la séance : moins de %d. "
-                       "Une séance payante annulée maintenant reste due."
-                       % (reste, ANNULATION_JOURS))
-    return True, ("Annulation libre : %d jour(s) avant la séance, soit %d ou "
-                  "plus." % (reste, ANNULATION_JOURS))
+        return True, ("Il reste %d jour(s) avant la séance : moins de %d. "
+                      "Aucun remboursement n'est prévu."
+                      % (reste, ANNULATION_JOURS))
+    return True, ("Annulation à %d jour(s) de la séance, soit %d ou plus : "
+                  "%d %% du montant réglé sont remboursés."
+                  % (reste, ANNULATION_JOURS, REMBOURSEMENT_PCT))
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -482,10 +583,35 @@ def _verifier():
     # LE DÉLAI D'ANNULATION EST ÉCRIT DANS SON PROPRE TEXTE. Un jour changé
     # d'un côté et pas de l'autre engagerait le client sur le mauvais.
     _ra = regle_annulation()
-    if str(ANNULATION_JOURS) not in _ra["payante"]:
-        pb.append("la règle d'annulation ne dit pas son propre délai")
-    if str(ANNULATION_JOURS) not in _ra["infobulle"]:
-        pb.append("l'infobulle d'annulation ne dit pas son propre délai")
+    for _ch in ("avant", "apres", "infobulle"):
+        if str(ANNULATION_JOURS) not in _ra[_ch]:
+            pb.append("« %s » ne dit pas le délai d'annulation" % _ch)
+    if str(REMBOURSEMENT_PCT) not in _ra["infobulle"]:
+        pb.append("l'infobulle ne dit pas le taux de remboursement")
+    # LE TARIF ANNONCÉ AU CLIENT EST 960 € TTC, ET LA MOITIÉ FAIT 480 €. Ces
+    # deux montants se DÉRIVENT du tarif HT et du taux de TVA ; si un jour le
+    # taux change, ils cessent de valoir ce qui a été annoncé — et il vaut
+    # mieux que le module refuse de charger que de rembourser un autre montant
+    # sous le même libellé.
+    _ttc_annonce, _rendu_annonce = 96000, 48000
+    if _ttc(TARIF_HT_CENTS) != _ttc_annonce:
+        pb.append("le tarif TTC dérivé (%d c) n'est plus celui annoncé (%d c) : "
+                  "reprenez l'annonce avant de changer le taux"
+                  % (_ttc(TARIF_HT_CENTS), _ttc_annonce))
+    if remboursement(_ttc_annonce, ANNULATION_JOURS)["cents"] != _rendu_annonce:
+        pb.append("le remboursement dérivé n'est plus la moitié annoncée")
+    # LA BORNE DU BARÈME EST CELLE DE L'ANNULATION, des deux côtés. Un jour
+    # d'écart entre les deux ferait promettre un remboursement que le calcul
+    # refuserait — ou l'inverse.
+    if remboursement(_ttc_annonce, ANNULATION_JOURS - 1)["du"]:
+        pb.append("un remboursement est dû en deçà du délai")
+    if not remboursement(_ttc_annonce, ANNULATION_JOURS)["du"]:
+        pb.append("aucun remboursement n'est dû au délai exact")
+    if not PAIEMENT_IMMEDIAT:
+        pb.append("le paiement n'est plus immédiat : le barème de remboursement "
+                  "n'a alors plus d'objet, il n'y a rien à rendre")
+    if RETENUE_MINUTES <= 0:
+        pb.append("une place non réglée ne tiendrait le créneau aucun instant")
     # CHAQUE PROFIL PORTE SES CAS. Un profil sans cas se choisirait à l'écran
     # pour ne rien changer à la séance.
     if len(_CLES_PROFILS) != len(PROFILS):

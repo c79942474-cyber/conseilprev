@@ -7320,7 +7320,14 @@ def stripe_webhook():
             # Reservation « Formations conformite IA » (offre a quatre sujets).
             if meta.get('type') == 'formation-ia':
                 try:
-                    _formation_ia_confirmer_paiement(int(meta.get('resa_id')))
+                    # LA COMMANDE, PAS LA LIGNE. Une session Stripe regle
+                    # JUSQU'A QUATRE seances ; ne confirmer que la premiere
+                    # laisserait les trois autres « en attente de paiement »
+                    # alors qu'elles sont reglees — et, a l'annulation, sans
+                    # remboursement parce qu'on les croirait impayees.
+                    _formation_ia_confirmer_paiement(
+                        commande=meta.get('commande'),
+                        resa_id=meta.get('resa_id'))
                 except Exception:
                     pass
             cid = meta.get('client_id') or obj.get('client_reference_id')
@@ -16348,6 +16355,8 @@ def _formation_ia_table(cur, conn):
                 'cle_client TEXT, rang INTEGER, montant_cents INTEGER, gratuit INTEGER, '
                 'statut TEXT, stripe_session_id TEXT, relance_14_at TEXT, relance_7_at TEXT, '
                 'jeton TEXT, commande TEXT, profil TEXT, annule_le TEXT, annule_motif TEXT, '
+                'paye_le TEXT, paye_ttc_cents INTEGER, rembourse_cents INTEGER, '
+                'refund_id TEXT, remboursement_du INTEGER, '
                 'created_at TEXT)')
     conn.commit()
     # Migrations : la table a existe sans ces colonnes (paiement en ligne, lieu
@@ -16361,7 +16370,10 @@ def _formation_ia_table(cur, conn):
     for _col in ('stripe_session_id TEXT', 'lieu TEXT',
                  'relance_14_at TEXT', 'relance_7_at TEXT',
                  'jeton TEXT', 'commande TEXT', 'profil TEXT',
-                 'annule_le TEXT', 'annule_motif TEXT'):
+                 'annule_le TEXT', 'annule_motif TEXT',
+                 'paye_le TEXT', 'paye_ttc_cents INTEGER',
+                 'rembourse_cents INTEGER', 'refund_id TEXT',
+                 'remboursement_du INTEGER'):
         try:
             cur.execute('ALTER TABLE formation_ia_resa ADD COLUMN ' + _col)
             conn.commit()
@@ -16389,54 +16401,128 @@ def _formation_ia_jeton():
     return _secrets.token_urlsafe(24)
 
 
-def _formation_ia_confirmer_paiement(resa_id):
-    """Une seance payante encaissee : la passer en « payee » et notifier. Appele
-    par le webhook Stripe sur « checkout.session.completed ». IDEMPOTENT — une
-    notification Stripe peut arriver deux fois, et une seance deja payee ne se
-    reconfirme pas."""
+def _formation_ia_tient_le_creneau():
+    """La condition SQL « cette ligne occupe le creneau », et son parametre.
+
+    UNE PLACE NON REGLEE NE TIENT PAS INDEFINIMENT. Le paiement est immediat et
+    c'est LUI qui retient la place : le client part vers la caisse, et s'il n'y
+    va pas, le creneau doit redevenir libre. Sans ce delai, un panier abandonne
+    bloquerait une date jusqu'a la fin de la campagne — et l'ecran la montrerait
+    simplement « prise », sans que personne sache pourquoi ni puisse la rendre.
+
+    UNE SEULE DEFINITION, PARTAGEE PAR LE CALENDRIER ET PAR LA RESERVATION.
+    Deux conditions ecrites separement divergent : le calendrier annoncerait
+    libre un creneau que la reservation refuserait, ou l'inverse.
+    """
+    limite = (datetime.utcnow()
+              - timedelta(minutes=formations_ia.RETENUE_MINUTES)).isoformat()
+    ph = '%s' if REGISTRE_USE_PG else '?'
+    return ("statut != 'annulee' AND NOT (statut = 'en_attente_paiement' "
+            "AND COALESCE(created_at, '') < " + ph + ")", limite)
+
+
+def _formation_ia_confirmer_paiement(commande=None, resa_id=None):
+    """Une commande encaissee : passer TOUTES ses seances en « payee », noter
+    ce qui a ete regle, et notifier une seule fois.
+
+    LA COMMANDE, PAS LA LIGNE. Une session Stripe regle jusqu'a QUATRE seances.
+    Ne confirmer que la premiere laisserait les trois autres « en attente de
+    paiement » alors qu'elles sont reglees — et, le jour d'une annulation, sans
+    remboursement, parce qu'on les croirait impayees. `resa_id` reste accepte
+    pour les sessions ouvertes avant ce changement : une notification Stripe
+    peut arriver longtemps apres.
+
+    CE QUI EST NOTE, ET POURQUOI. `paye_ttc_cents` porte ce que le client a
+    REELLEMENT regle sur cette seance. Le remboursement s'en deduira : le
+    recalculer plus tard a partir du tarif du jour rendrait un autre montant
+    que celui encaisse le jour ou le tarif aura change.
+
+    IDEMPOTENT — une notification Stripe peut arriver deux fois, et une seance
+    deja payee ne se reconfirme pas.
+    """
     conn = registre_get_db(); cur = conn.cursor()
     _formation_ia_table(cur, conn)
-    cur.execute(registre_sql('SELECT * FROM formation_ia_resa WHERE id=%s',
-                             'SELECT * FROM formation_ia_resa WHERE id=?'), (resa_id,))
-    row = cur.fetchone()
-    if not row:
+    if commande:
+        cur.execute(registre_sql('SELECT * FROM formation_ia_resa WHERE commande=%s ORDER BY id ASC',
+                                 'SELECT * FROM formation_ia_resa WHERE commande=? ORDER BY id ASC'),
+                    (commande,))
+    else:
+        cur.execute(registre_sql('SELECT * FROM formation_ia_resa WHERE id=%s',
+                                 'SELECT * FROM formation_ia_resa WHERE id=?'),
+                    (int(resa_id or 0),))
+    lignes = [dict(r) for r in cur.fetchall()]
+    # LES SEANCES OFFERTES NE SONT PAS « PAYEES » : elles n'ont rien coute, et
+    # les marquer ainsi ferait croire a un remboursement possible.
+    a_payer = [r for r in lignes
+               if not int(r.get('gratuit') or 0) and r.get('statut') != 'payee']
+    if not a_payer:
         try: conn.close()
         except Exception: pass
         return
-    r = dict(row)
-    if r.get('statut') == 'payee':
-        try: conn.close()
-        except Exception: pass
-        return
-    cur.execute(registre_sql("UPDATE formation_ia_resa SET statut='payee' WHERE id=%s",
-                             "UPDATE formation_ia_resa SET statut='payee' WHERE id=?"), (resa_id,))
+    horo = datetime.utcnow().isoformat()
+    tva = formations_ia.TVA_PCT
+    for r in a_payer:
+        ht = int(r.get('montant_cents') or 0)
+        ttc = int(round(ht * (100 + tva) / 100.0))
+        cur.execute(registre_sql(
+            "UPDATE formation_ia_resa SET statut='payee', paye_le=%s, paye_ttc_cents=%s "
+            "WHERE id=%s AND statut != 'payee'",
+            "UPDATE formation_ia_resa SET statut='payee', paye_le=?, paye_ttc_cents=? "
+            "WHERE id=? AND statut != 'payee'"), (horo, ttc, r.get('id')))
     conn.commit()
     try: conn.close()
     except Exception: pass
-    su = formations_ia.sujet(r.get('sujet') or '')
-    titre = su['titre'] if su else 'Formation conformite IA'
-    creneau_lib = next((c['libelle'] for c in formations_ia.creneaux(datetime.utcnow().date())
-                        if c['date'] == r.get('date_creneau')), r.get('date_creneau'))
+
+    prem = a_payer[0]
+    cal = {c['date']: c['libelle']
+           for c in formations_ia.creneaux(datetime.utcnow().date()
+                                           - timedelta(days=400))}
+    total_ttc = sum(int(round(int(r.get('montant_cents') or 0)
+                             * (100 + tva) / 100.0)) for r in a_payer)
+    lignes_html = ''.join(
+        '<li><strong>%s</strong> — %s</li>'
+        % ((formations_ia.sujet(r.get('sujet')) or {}).get('titre') or r.get('sujet'),
+           cal.get(r.get('date_creneau'), r.get('date_creneau')))
+        for r in a_payer)
+    ann = formations_ia.regle_annulation()
     try:
-        send_email_smart(r.get('email'), (r.get('prenom') or '') + ' ' + (r.get('nom') or ''),
-                         'Reservation confirmee — ' + titre,
-                         '<p>Bonjour,</p><p>Votre paiement a bien ete recu : votre seance de '
-                         'formation <strong>%s</strong> du %s, dans vos locaux, est '
-                         '<strong>confirmee</strong>.</p><p>L equipe CONSEILPREV</p>'
-                         % (titre, creneau_lib),
+        send_email_smart(prem.get('email'),
+                         (prem.get('prenom') or '') + ' ' + (prem.get('nom') or ''),
+                         'Réservation confirmée — %d séance(s)' % len(a_payer),
+                         '<p>Bonjour,</p><p>Votre paiement a bien été reçu : vos '
+                         'places sont <strong>confirmées</strong>.</p><ul>%s</ul>'
+                         '<p>Total réglé : %.2f € TTC.</p><p>%s %s</p>'
+                         '<p>L’équipe CONSEILPREV</p>'
+                         % (lignes_html, total_ttc / 100.0, ann['avant'], ann['apres']),
                          tags=['formation-ia-payee'])
     except Exception:
         pass
     try:
         send_email_smart(CONSEILPREV_INTERNAL_EMAIL, 'CONSEILPREV',
-                         'Formation IA payee : ' + titre,
-                         '<p>Seance payee et confirmee.</p><p>%s %s (%s) — %s<br>%.2f EUR HT<br>'
-                         'Seance : %s</p>'
-                         % (r.get('prenom'), r.get('nom'), r.get('email'), r.get('entreprise'),
-                            (r.get('montant_cents') or 0) / 100.0, creneau_lib),
+                         'Formation IA payée : %d séance(s)' % len(a_payer),
+                         '<p>Commande réglée.</p><p>%s %s (%s) — %s</p><ul>%s</ul>'
+                         '<p>Total : %.2f € TTC</p>'
+                         % (prem.get('prenom'), prem.get('nom'), prem.get('email'),
+                            prem.get('entreprise'), lignes_html, total_ttc / 100.0),
                          tags=['formation-ia-payee'])
     except Exception:
         pass
+
+
+# LE STATUT, EN FRANCAIS. La colonne porte des identifiants techniques ; les
+# recopier dans un courriel fait lire « payee » a un humain. Le libelle est
+# rendu ici, une seule fois, pour tous les envois.
+FORMATION_STATUT_LIBELLE = {
+    'devis': 'devis (non réglée)',
+    'en_attente_paiement': 'en attente de paiement',
+    'confirmee': 'confirmée',
+    'payee': 'réglée',
+    'annulee': 'annulée',
+}
+
+
+def _formation_ia_statut_libelle(code):
+    return FORMATION_STATUT_LIBELLE.get((code or '').strip(), '(inconnu)')
 
 
 # Les deux relances, et leur FENETRE. « 2 semaines avant » se declenche quand il
@@ -16531,10 +16617,10 @@ def _formation_ia_envoyer_relance(x):
     try:
         send_email_smart(x.get('email'), (x.get('prenom') or '') + ' ' + (x.get('nom') or ''),
                          'Rappel — votre formation %s (%s)' % (titre, quand),
-                         '<p>Bonjour,</p><p>Petit rappel : votre seance de formation '
-                         '<strong>%s</strong> a lieu <strong>%s</strong>, le %s, a %s.</p>'
-                         '<p>Repondez a ce courriel pour toute question ou changement.</p>'
-                         '<p>A tres bientot,<br>L equipe CONSEILPREV</p>'
+                         '<p>Bonjour,</p><p>Petit rappel : votre séance de formation '
+                         '<strong>%s</strong> a lieu <strong>%s</strong>, le %s, à %s.</p>'
+                         '<p>Répondez à ce courriel pour toute question ou changement.</p>'
+                         '<p>À très bientôt,<br>L’équipe CONSEILPREV</p>'
                          % (titre, quand, creneau_lib, lieu),
                          tags=['formation-ia-relance'])
     except Exception:
@@ -16542,8 +16628,8 @@ def _formation_ia_envoyer_relance(x):
     try:
         send_email_smart(CONSEILPREV_INTERNAL_EMAIL, 'CONSEILPREV',
                          'Relance %s : %s' % (quand, titre),
-                         '<p>Relance <strong>%s</strong> envoyee au client.</p>'
-                         '<p>%s %s (%s) — %s<br>Seance : %s<br>Lieu : %s</p>'
+                         '<p>Relance <strong>%s</strong> envoyée au client.</p>'
+                         '<p>%s %s (%s) — %s<br>Séance : %s<br>Lieu : %s</p>'
                          % (quand, x.get('prenom'), x.get('nom'), x.get('email'),
                             x.get('entreprise'), creneau_lib, lieu),
                          tags=['formation-ia-relance'])
@@ -16573,7 +16659,8 @@ def formation_ia_referentiel():
     ref = formations_ia.referentiel(datetime.utcnow().date())
     conn = registre_get_db(); cur = conn.cursor()
     _formation_ia_table(cur, conn)
-    cur.execute("SELECT date_creneau FROM formation_ia_resa WHERE statut != 'annulee'")
+    _cond, _lim = _formation_ia_tient_le_creneau()
+    cur.execute('SELECT date_creneau FROM formation_ia_resa WHERE ' + _cond, (_lim,))
     pris = {dict(r).get('date_creneau') for r in cur.fetchall()}
     try: conn.close()
     except Exception: pass
@@ -16749,14 +16836,14 @@ def formation_ia_inscription():
            for c in formations_ia.creneaux(datetime.utcnow().date())}
     for x in seances:
         if x['creneau'] not in cal:
-            return jsonify({'ok': False, 'error': 'La date du %s n est pas ouverte '
-                            'a la reservation.' % (x['creneau'] or '(vide)')}), 400
+            return jsonify({'ok': False, 'error': 'La date du %s n’est pas ouverte '
+                            'à la réservation.' % (x['creneau'] or '(vide)')}), 400
     # DEUX SEANCES A LA MEME DATE SONT IMPOSSIBLES : le formateur ne se
     # dedouble pas, et le client ne peut pas suivre deux sujets en meme temps.
     dates = [x['creneau'] for x in seances]
     if len(set(dates)) != len(dates):
-        return jsonify({'ok': False, 'error': 'Deux formations sont posees sur la '
-                        'meme date. Chaque seance occupe une demi-journee.'}), 400
+        return jsonify({'ok': False, 'error': 'Deux formations sont posées sur la '
+                        'même date. Chaque séance occupe une demi-journée.'}), 400
 
     cle = _formation_ia_cle_client(siret, email)
     conn = registre_get_db(); cur = conn.cursor()
@@ -16784,21 +16871,23 @@ def formation_ia_inscription():
     # SEULE FOIS PAR CLIENT. Les deux sont verifies AVANT la premiere ecriture :
     # ecrire deux seances puis refuser la troisieme laisserait un panier a
     # moitie reserve, et le client ne saurait pas laquelle est prise.
+    _cond, _lim = _formation_ia_tient_le_creneau()
     for x in seances:
-        cur.execute(registre_sql("SELECT COUNT(*) AS n FROM formation_ia_resa WHERE date_creneau=%s AND statut != 'annulee'",
-                                 "SELECT COUNT(*) AS n FROM formation_ia_resa WHERE date_creneau=? AND statut != 'annulee'"),
-                    (x['creneau'],))
+        cur.execute(registre_sql(
+            'SELECT COUNT(*) AS n FROM formation_ia_resa WHERE date_creneau=%s AND ' + _cond,
+            'SELECT COUNT(*) AS n FROM formation_ia_resa WHERE date_creneau=? AND ' + _cond),
+            (x['creneau'], _lim))
         if int(dict(cur.fetchone()).get('n', 0) or 0) > 0:
             _ferme()
-            return jsonify({'ok': False, 'error': 'La date du %s vient d etre '
-                            'reservee. Choisissez-en une autre.'
+            return jsonify({'ok': False, 'error': 'La date du %s vient d’être '
+                            'réservée. Choisissez-en une autre.'
                             % cal[x['creneau']]}), 409
         cur.execute(registre_sql("SELECT COUNT(*) AS n FROM formation_ia_resa WHERE cle_client=%s AND sujet=%s AND statut != 'annulee'",
                                  "SELECT COUNT(*) AS n FROM formation_ia_resa WHERE cle_client=? AND sujet=? AND statut != 'annulee'"),
                     (cle, x['sujet']))
         if int(dict(cur.fetchone()).get('n', 0) or 0) > 0:
             _ferme()
-            return jsonify({'ok': False, 'error': 'Vous etes deja inscrit au sujet '
+            return jsonify({'ok': False, 'error': 'Vous êtes déjà inscrit au sujet '
                             '« %s ».' % formations_ia.sujet(x['sujet'])['titre']}), 409
 
     # TROIS SORTS, DECIDES ICI ET NON PAR LE CLIENT. Une seance offerte se
@@ -16854,45 +16943,45 @@ def formation_ia_inscription():
 
     lignes_html = ''.join(
         '<li><strong>%s</strong> — %s — %s<br>'
-        '<a href="%s">Annuler cette seance</a></li>'
+        '<a href="%s">Annuler cette séance</a></li>'
         % (x['titre'], x['libelle'],
            'offerte' if x['gratuit'] else '%d EUR HT' % (x['ht_cents'] // 100),
            x['annulation_url'])
         for x in recap)
-    total_txt = ('aucun montant — seance offerte' if not dev['ht_cents']
+    total_txt = ('aucun montant — séance offerte' if not dev['ht_cents']
                  else '%d EUR HT (%d EUR TTC)'
                       % (dev['ht_cents'] // 100, dev['ttc_cents'] // 100))
 
     try:
         send_email_smart(CONSEILPREV_INTERNAL_EMAIL, 'CONSEILPREV',
-                         'Reservation formation : %d seance(s)' % len(recap),
-                         '<p>Nouvelle reservation « Formations conformite IA ».</p>'
+                         'Réservation formation : %d séance(s)' % len(recap),
+                         '<p>Nouvelle réservation « Formations conformité IA ».</p>'
                          '<p>%s %s — %s<br>%s / %s<br>SIRET : %s<br>Lieu : %s<br>'
                          'Profil : %s</p><ul>%s</ul><p>Total : %s</p><p>%s</p>'
                          % (prenom, nom, entreprise, email, telephone,
                             siret or '(non fourni)', lieu,
-                            cas.get('titre') or '(non precise)', lignes_html,
+                            cas.get('titre') or '(non précisé)', lignes_html,
                             total_txt, message or ''),
                          tags=['formation-ia'])
     except Exception:
         pass
 
     if not dev['nb_payantes']:
-        accuse = 'Cette seance est offerte : elle vous est confirmee.'
+        accuse = 'Cette séance est offerte : elle vous est confirmée.'
     elif veut_stripe:
-        accuse = ('Total : %s. Vous allez etre redirige vers le paiement securise ; '
-                  'vos places sont confirmees des le paiement recu.' % total_txt)
+        accuse = ('Total : %s. Vous allez être redirigé vers le paiement sécurisé ; '
+                  'vos places sont confirmées dès le paiement reçu.' % total_txt)
     else:
         accuse = ('Total : %s. Une facture vous parviendra pour finaliser la '
-                  'reservation.' % total_txt)
+                  'réservation.' % total_txt)
     try:
         send_email_smart(email, prenom + ' ' + nom,
-                         'Votre reservation — %d seance(s)' % len(recap),
-                         '<p>Bonjour,</p><p>Nous avons bien recu votre reservation, '
+                         'Votre réservation — %d séance(s)' % len(recap),
+                         '<p>Bonjour,</p><p>Nous avons bien reçu votre réservation, '
                          'dans vos locaux :</p><ul>%s</ul><p>%s</p>'
                          '<p><strong>%s</strong> %s %s</p>'
-                         '<p>Support de workshop remis a chaque participant. %s</p>'
-                         '<p>L equipe CONSEILPREV</p>'
+                         '<p>Support de workshop remis à chaque participant. %s</p>'
+                         '<p>L’équipe CONSEILPREV</p>'
                          % (lignes_html, accuse, ann['titre'], ann['payante'],
                             ann['libre'], formations_ia.SUPPORT['participants']),
                          tags=['formation-ia-accuse'])
@@ -16915,7 +17004,7 @@ def formation_ia_inscription():
                     continue
                 li = {'price_data': {'currency': 'eur',
                                      'product_data': {'name': 'Formation — ' + x['titre'],
-                                                      'description': 'Seance sur site du ' + x['libelle']},
+                                                      'description': 'Séance sur site du ' + x['libelle']},
                                      'unit_amount': (int(x['ht_cents']) if taux
                                                      else int(round(x['ht_cents'] * (100 + dev['tva_pct']) / 100.0)))},
                       'quantity': 1}
@@ -16968,11 +17057,78 @@ def formation_ia_inscription():
                     seances=recap, devis=dev, etudes_de_cas=cas,
                     annulation=ann,
                     statut=(recap[0]['statut'] if recap else 'devis'),
-                    message=('Votre seance, offerte, est confirmee. Vous recevez '
-                                'un accuse par courriel.' if not dev['nb_payantes'] else
-                                'Reservation enregistree (%s). Une facture vous '
+                    message=('Votre séance, offerte, est confirmée. Vous recevez '
+                                'un accusé par courriel.' if not dev['nb_payantes'] else
+                                'Réservation enregistrée (%s). Une facture vous '
                                 'parviendra pour la finaliser ; CONSEILPREV vous '
                                 'recontacte.' % total_txt)))
+
+
+def _formation_ia_suite_annulation(etait_payee, rb, rembourse, du):
+    """Ce qu'on dit au client sur l'argent — et JAMAIS « rembourse » quand rien
+    n'est parti. Annoncer un virement qui n'a pas eu lieu se decouvre au releve
+    bancaire, quinze jours plus tard, et c'est alors CONSEILPREV qui a menti."""
+    if not etait_payee:
+        return "Cette séance n'avait pas été réglée : il n'y a rien à rendre."
+    if not rb['du']:
+        return rb['motif']
+    if rembourse > 0:
+        return ("Remboursement de %.2f € (%d %% du montant réglé) émis : "
+                "il apparaît sous quelques jours sur le moyen de paiement "
+                "utilisé." % (rembourse / 100.0, rb['pct']))
+    return ("Un remboursement de %.2f € (%d %% du montant réglé) vous est dû. "
+            "Il n'a PAS pu être émis automatiquement : CONSEILPREV le traite à "
+            "la main et vous recontacte." % (du / 100.0, rb['pct']))
+
+
+def _formation_ia_rembourser(r, cents, jeton):
+    """Emettre le remboursement chez Stripe. Rend (rembourse, refund_id, du).
+
+    CE QUI EST NOTE EST CE QUI S'EST PASSE. Si le remboursement part, on note
+    ce qui est parti et la reference Stripe. S'il ne part pas — cle absente,
+    session introuvable, reseau coupe — on note ce qui reste DU, et personne
+    n'annonce au client un virement qui n'existe pas.
+
+    LE MONTANT N'EST JAMAIS RECALCULE ICI : il arrive deja decide par
+    `formations_ia.remboursement`, sur ce qui a ete reellement regle.
+    """
+    secret = os.environ.get('STRIPE_SECRET_KEY')
+    sid = r.get('stripe_session_id')
+    rembourse, refund_id, du = 0, None, int(cents)
+    if secret and sid:
+        try:
+            import stripe
+            stripe.api_key = secret
+            stripe.max_network_retries = 0
+            sess = stripe.checkout.Session.retrieve(sid)
+            pi = (sess.get('payment_intent') if isinstance(sess, dict)
+                  else getattr(sess, 'payment_intent', None))
+            if pi:
+                # LA CLE D'IDEMPOTENCE EST LE JETON DE LA SEANCE : deux appels
+                # pour la meme seance ne font qu'UN remboursement chez Stripe,
+                # meme si le reseau a coupe entre les deux.
+                ref = stripe.Refund.create(
+                    payment_intent=pi, amount=int(cents),
+                    idempotency_key='formation-ia-rb-' + str(jeton)[:48])
+                refund_id = (ref.get('id') if isinstance(ref, dict)
+                             else getattr(ref, 'id', None))
+                rembourse, du = int(cents), 0
+        except Exception:
+            app.logger.exception('remboursement formation IA')
+    try:
+        conn = registre_get_db(); cur = conn.cursor()
+        cur.execute(registre_sql(
+            'UPDATE formation_ia_resa SET rembourse_cents=%s, refund_id=%s, '
+            'remboursement_du=%s WHERE jeton=%s',
+            'UPDATE formation_ia_resa SET rembourse_cents=?, refund_id=?, '
+            'remboursement_du=? WHERE jeton=?'),
+            (rembourse, refund_id, du, jeton))
+        conn.commit()
+        try: conn.close()
+        except Exception: pass
+    except Exception:
+        pass
+    return rembourse, refund_id, du
 
 
 @app.route('/api/formation/annulation', methods=['POST'])
@@ -17010,7 +17166,7 @@ def formation_ia_annulation():
     d = request.get_json(silent=True) or {}
     jeton = sanitize_input(d.get('jeton') or '', 80)
     if not jeton or len(jeton) < 16:
-        return jsonify({'ok': False, 'error': 'Lien d annulation invalide.'}), 400
+        return jsonify({'ok': False, 'error': 'Lien d’annulation invalide.'}), 400
 
     conn = registre_get_db(); cur = conn.cursor()
     _formation_ia_table(cur, conn)
@@ -17028,8 +17184,8 @@ def formation_ia_annulation():
         # LE REFUS NE DIT PAS SI LE JETON A EXISTE. Distinguer « inconnu » de
         # « deja servi » donnerait a qui essaie des jetons au hasard un signal
         # sur ceux qui existent.
-        return jsonify({'ok': False, 'error': 'Ce lien d annulation est inconnu '
-                        'ou n est plus valable.'}), 404
+        return jsonify({'ok': False, 'error': 'Ce lien d’annulation est inconnu '
+                        'ou n’est plus valable.'}), 404
     r = dict(r)
     ann = formations_ia.regle_annulation()
     su = formations_ia.sujet(r.get('sujet')) or {'titre': r.get('sujet')}
@@ -17043,57 +17199,75 @@ def formation_ia_annulation():
         # panne. La seance est annulee, on le redit.
         return jsonify({'ok': True, 'deja': True, 'statut': 'annulee',
                         'sujet': su['titre'], 'creneau': libelle,
-                        'message': 'Cette seance etait deja annulee.'})
+                        'message': 'Cette séance était déjà annulée.'})
 
     possible, motif = formations_ia.annulable(r.get('date_creneau'),
                                               datetime.utcnow().date())
     if not possible:
+        # SEULE UNE SEANCE DEJA TENUE NE S'ANNULE PLUS. Le delai ne refuse
+        # plus l'annulation — il decide du REMBOURSEMENT.
         _ferme()
-        gratuite = bool(r.get('gratuit'))
-        return jsonify({'ok': False, 'error': motif,
-                        'delai_depasse': True, 'jours': ann['jours'],
-                        'gratuit': gratuite, 'sujet': su['titre'],
-                        'creneau': libelle,
-                        'message': (ann['offerte'] if gratuite else ann['payante'])
-                        + ' Ecrivez a CONSEILPREV : seul un echange peut '
-                          'arbitrer ce cas.'}), 409
+        return jsonify({'ok': False, 'error': motif, 'sujet': su['titre'],
+                        'creneau': libelle, 'message': motif}), 409
+
+    # CE QUI SERA RENDU, CALCULE AVANT D'ECRIRE. Le montant vient de ce qui a
+    # ete REELLEMENT regle sur cette seance, note le jour du paiement — le
+    # recalculer sur le tarif du jour rendrait un autre montant que celui
+    # encaisse, le jour ou le tarif changera.
+    etait_payee = (r.get('statut') or '') == 'payee'
+    tva = formations_ia.TVA_PCT
+    paye_ttc = int(r.get('paye_ttc_cents') or 0)
+    if etait_payee and paye_ttc <= 0:
+        paye_ttc = int(round(int(r.get('montant_cents') or 0) * (100 + tva) / 100.0))
+    reste = formations_ia.jours_avant(r.get('date_creneau'),
+                                      datetime.utcnow().date())
+    rb = formations_ia.remboursement(paye_ttc if etait_payee else 0, reste)
 
     horo = datetime.utcnow().isoformat()
     # L'ECRITURE EST CONDITIONNELLE : deux clics simultanes sur le meme lien
-    # n'annulent qu'une fois, et le second voit qu'il n'a rien change.
+    # n'annulent qu'une fois, et le second voit qu'il n'a rien change. C'est
+    # AUSSI ce qui garantit qu'un remboursement ne part pas deux fois.
     cur.execute(registre_sql(
         "UPDATE formation_ia_resa SET statut='annulee', annule_le=%s, annule_motif=%s "
         "WHERE jeton=%s AND statut != 'annulee'",
         "UPDATE formation_ia_resa SET statut='annulee', annule_le=?, annule_motif=? "
         "WHERE jeton=? AND statut != 'annulee'"),
         (horo, motif, jeton))
+    change = getattr(cur, 'rowcount', 1)
     conn.commit()
     _ferme()
+    if change == 0:
+        # Quelqu'un d'autre vient d'annuler la meme seance : on ne rembourse
+        # pas une seconde fois.
+        return jsonify({'ok': True, 'deja': True, 'statut': 'annulee',
+                        'sujet': su['titre'], 'creneau': libelle,
+                        'message': 'Cette séance était déjà annulée.'})
 
-    etait_payee = (r.get('statut') or '') == 'payee'
-    suite = ('Cette seance etait reglee : le remboursement n est pas automatique, '
-             'CONSEILPREV vous recontacte.' if etait_payee
-             else 'Rien ne vous sera facture.')
+    rembourse, refund_id, du = 0, None, 0
+    if rb['du'] and rb['cents'] > 0:
+        rembourse, refund_id, du = _formation_ia_rembourser(
+            r, rb['cents'], jeton)
+    suite = _formation_ia_suite_annulation(etait_payee, rb, rembourse, du)
     try:
         send_email_smart(r.get('email') or '',
                          '%s %s' % (r.get('prenom') or '', r.get('nom') or ''),
-                         'Annulation confirmee — ' + su['titre'],
-                         '<p>Bonjour,</p><p>Votre seance <strong>%s</strong> du %s '
-                         'est annulee.</p><p>%s</p><p>Le creneau est libere : vous '
-                         'pouvez en reserver un autre sur la page Formation.</p>'
-                         '<p>L equipe CONSEILPREV</p>'
+                         'Annulation confirmée — ' + su['titre'],
+                         '<p>Bonjour,</p><p>Votre séance <strong>%s</strong> du %s '
+                         'est annulée.</p><p>%s</p><p>Le créneau est libéré : vous '
+                         'pouvez en réserver un autre sur la page Formation.</p>'
+                         '<p>L’équipe CONSEILPREV</p>'
                          % (su['titre'], libelle, suite),
                          tags=['formation-ia-annulation'])
     except Exception:
         pass
     try:
         send_email_smart(CONSEILPREV_INTERNAL_EMAIL, 'CONSEILPREV',
-                         'Annulation formation : ' + su['titre'],
-                         '<p>%s %s (%s) annule la seance <strong>%s</strong> du %s.</p>'
+                         'Annulation formation — ' + su['titre'],
+                         '<p>%s %s (%s) annule la séance <strong>%s</strong> du %s.</p>'
                          '<p>%s</p><p>Statut avant annulation : %s. %s</p>'
                          % (r.get('prenom') or '', r.get('nom') or '',
                             r.get('entreprise') or '', su['titre'], libelle,
-                            motif, r.get('statut') or '(inconnu)', suite),
+                            motif, _formation_ia_statut_libelle(r.get('statut')), suite),
                          tags=['formation-ia-annulation'])
     except Exception:
         pass
@@ -17101,7 +17275,12 @@ def formation_ia_annulation():
     return jsonify({'ok': True, 'deja': False, 'statut': 'annulee',
                     'sujet': su['titre'], 'creneau': libelle, 'motif': motif,
                     'etait_payee': etait_payee,
-                    'message': 'Seance annulee. %s Le creneau est libere.' % suite})
+                    'paye_ttc_cents': paye_ttc,
+                    'remboursement': {'pct': rb['pct'], 'attendu_cents': rb['cents'],
+                                      'rembourse_cents': rembourse,
+                                      'du_cents': du, 'refund_id': refund_id,
+                                      'motif': rb['motif']},
+                    'message': 'Séance annulée. %s Le créneau est libéré.' % suite})
 
 
 @app.route('/api/formation/inscriptions', methods=['GET'])

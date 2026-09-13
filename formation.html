@@ -237,7 +237,8 @@ label.fl span{color:var(--pf)}
     </div>
     <div class="offre-price" id="of-price">
       <strong>Une séance offerte</strong>, celle que vous choisissez.<br>
-      Les autres : <strong>800&nbsp;€ HT</strong> chacune.
+      Les autres : <strong>800&nbsp;€ HT</strong> chacune.<br>
+      <span id="of-paiement"></span>
       <span class="ent-tip" id="tip-annul" tabindex="0" role="note"
             aria-label="Chargement de la règle d'annulation…"
             data-tip="Chargement de la règle d'annulation…">i</span>
@@ -571,8 +572,14 @@ label.fl span{color:var(--pf)}
       tip.setAttribute('aria-label', a.infobulle);
       tip.setAttribute('data-tip', a.infobulle);
     }
+    var op = document.getElementById('of-paiement');
+    if(op) op.textContent = a.paiement;
     var r = document.getElementById('annul-regle');
-    if(r) r.textContent = a.payante + ' ' + a.libre;
+    /* LES TROIS PHRASES, DANS L'ORDRE OÙ ELLES ENGAGENT : ce qui a été réglé,
+       ce qui est rendu si l'on annule à temps, ce qui ne l'est pas sinon.
+       Toutes viennent du module — les recopier ici les ferait diverger du
+       calcul qui, lui, rembourse. */
+    if(r) r.textContent = a.paiement + ' ' + a.avant + ' ' + a.apres;
   }
 
   /* ── LE PANIER : de une à quatre formations, chacune sa date ──────────────
@@ -863,7 +870,7 @@ label.fl span{color:var(--pf)}
     var notes = [];
     if(dev && dev.message) notes.push(dev.message);
     if(sansDate) notes.push(sansDate + ' formation(s) sans date : réglez-les à l\'étape 2.');
-    if(state.ref.annulation) notes.push(state.ref.annulation.payante);
+    if(state.ref.annulation) notes.push(state.ref.annulation.paiement);
     zn.textContent = notes.join(' ');
     recap.classList.toggle('incomplet', sansDate > 0 || !(dev && dev.ok));
   }
@@ -981,7 +988,7 @@ label.fl span{color:var(--pf)}
       j.message || "Vous recevez un accusé par courriel.";
     var a = j.annulation || state.ref.annulation;
     document.getElementById('cf-annul').textContent =
-      a ? (a.payante + ' ' + a.libre) : '';
+      a ? (a.paiement + ' ' + a.avant + ' ' + a.apres) : '';
     var c = document.getElementById('confirm'); c.style.display = 'block';
     c.scrollIntoView({behavior:'smooth', block:'start'});
   }
@@ -1035,6 +1042,10 @@ label.fl span{color:var(--pf)}
       .then(function(res){
         var j = res.j || {};
         if(res.code === 200 && j.ok){
+          /* CE QUI EST DIT EST CE QUI S'EST PASSÉ. Le serveur distingue un
+             remboursement ÉMIS d'un remboursement DÛ : annoncer un virement
+             qui n'a pas eu lieu se découvre au relevé bancaire, quinze jours
+             plus tard, et c'est alors CONSEILPREV qui a menti. */
           dire('ok', '✓ ' + (j.message || 'Séance annulée.'));
           go.style.display = 'none';
           charger();  // le créneau libéré redevient réservable
