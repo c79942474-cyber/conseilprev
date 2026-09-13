@@ -16380,6 +16380,64 @@ def _formation_ia_table(cur, conn):
         except Exception:
             try: conn.rollback()
             except Exception: pass
+    _formation_ia_rattraper_jetons(cur, conn)
+
+
+def _formation_ia_rattraper_jetons(cur, conn):
+    """CHAQUE RESERVATION PORTE UN JETON — Y COMPRIS CELLES D'AVANT LA COLONNE.
+
+    Ajouter `jeton` a la table ne suffisait pas : les lignes deja posees
+    restaient a NULL, et leur proprietaire n'avait AUCUN moyen d'annuler. Le
+    jeton est la seule preuve qu'un client sans compte possede sur sa
+    reservation : sans lui, la seule porte est un courriel a CONSEILPREV.
+
+    Mesure du registre de production le 13 septembre : la reservation n° 1,
+    seance du 22 septembre, jeton NULL. Son courriel de confirmation lui avait
+    pourtant promis « Annuler cette seance » sur un lien vide.
+
+    LE RATTRAPAGE EST PAR LIGNE, JAMAIS EN LOT. Un meme jeton pose sur deux
+    reservations ferait annuler la seance d'un autre — c'est precisement ce que
+    l'imprevisibilite du jeton sert a empecher.
+
+    ON LIT AVANT D'ECRIRE, ET LE PLUS SOUVENT ON N'ECRIT PAS. Cette fonction est
+    appelee a chaque ouverture de la table : un UPDATE inconditionnel y ferait
+    une ecriture par requete, pour rien, et changerait les jetons deja poses.
+    """
+    try:
+        cur.execute('SELECT id FROM formation_ia_resa '
+                    'WHERE jeton IS NULL OR length(jeton) < %d'
+                    % _FORMATION_IA_JETON_MIN)
+        manquants = [dict(r)['id'] for r in cur.fetchall()]
+    except Exception:
+        try: conn.rollback()
+        except Exception: pass
+        return 0
+    for _id in manquants:
+        cur.execute(registre_sql('UPDATE formation_ia_resa SET jeton=%s WHERE id=%s',
+                                 'UPDATE formation_ia_resa SET jeton=? WHERE id=?'),
+                    (_formation_ia_jeton(), _id))
+    if manquants:
+        conn.commit()
+    return len(manquants)
+
+
+def _formation_ia_lien_annulation(base, jeton):
+    """Le lien d'annulation — ou RIEN, jamais un lien vide.
+
+    Le courriel de confirmation ecrivait « Annuler cette seance » sur
+    base + '/formation?annuler=' + '' des que le jeton manquait : un lien qui
+    s'ouvre, qui ne peut pas aboutir — la route refuse tout jeton de moins de
+    seize signes — et qui laisse le client croire qu'il a annule. Un lien mort
+    sur une promesse d'annulation coute plus cher qu'une absence de lien.
+
+    La borne des seize signes est celle que la route d'annulation applique :
+    l'ecrire des deux cotes les ferait diverger, et c'est le client qui paierait
+    l'ecart. Elle est donc lue au meme endroit que la reponse.
+    """
+    j = (jeton or '').strip()
+    if len(j) < _FORMATION_IA_JETON_MIN:
+        return ''
+    return base + '/formation?annuler=' + j
 
 
 def _formation_ia_cle_client(siret, email):
@@ -16391,6 +16449,15 @@ def _formation_ia_cle_client(siret, email):
     if len(s) >= 9:
         return 'siret:' + s
     return 'email:' + (email or '').strip().lower()
+
+
+# LA LONGUEUR MINIMALE D'UN JETON, ECRITE UNE FOIS. Trois endroits s'en
+# servent : la route d'annulation qui refuse en deca, le constructeur de lien
+# qui refuse d'ecrire une adresse morte, et le rattrapage qui decide quelles
+# lignes sont a reprendre. Recopiee trois fois, elle aurait fini par diverger —
+# et un jeton juge valide d'un cote, refuse de l'autre, est un client qui clique
+# sur « Annuler » et voit une erreur.
+_FORMATION_IA_JETON_MIN = 16
 
 
 def _formation_ia_jeton():
@@ -16963,15 +17030,16 @@ def formation_ia_inscription():
             'creneau': r['date_creneau'], 'libelle': cal.get(r['date_creneau'], r['date_creneau']),
             'gratuit': bool(r['gratuit']), 'ht_cents': int(r['montant_cents'] or 0),
             'statut': r['statut'],
-            'annulation_url': base + '/formation?annuler=' + (r['jeton'] or ''),
+            'annulation_url': _formation_ia_lien_annulation(base, r['jeton']),
         })
 
     lignes_html = ''.join(
-        '<li><strong>%s</strong> — %s — %s<br>'
-        '<a href="%s">Annuler cette séance</a></li>'
+        '<li><strong>%s</strong> — %s — %s<br>%s</li>'
         % (x['titre'], x['libelle'],
            'offerte' if x['gratuit'] else '%d EUR HT' % (x['ht_cents'] // 100),
-           x['annulation_url'])
+           ('<a href="%s">Annuler cette séance</a>' % x['annulation_url']
+            if x['annulation_url'] else
+            'Pour annuler cette séance, écrivez à CONSEILPREV.'))
         for x in recap)
     total_txt = ('aucun montant — séance offerte' if not dev['ht_cents']
                  else '%d EUR HT (%d EUR TTC)'
@@ -17190,7 +17258,7 @@ def formation_ia_annulation():
 
     d = request.get_json(silent=True) or {}
     jeton = sanitize_input(d.get('jeton') or '', 80)
-    if not jeton or len(jeton) < 16:
+    if not jeton or len(jeton) < _FORMATION_IA_JETON_MIN:
         return jsonify({'ok': False, 'error': 'Lien d’annulation invalide.'}), 400
 
     conn = registre_get_db(); cur = conn.cursor()

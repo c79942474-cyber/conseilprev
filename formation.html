@@ -978,7 +978,13 @@ label.fl span{color:var(--pf)}
         + esc(x.libelle) +' — '
         + (x.gratuit ? 'offerte'
                      : (x.ht_cents/100).toLocaleString('fr-FR') + ' € HT')
-        + ' · <a href="'+ esc(x.annulation_url) +'">annuler cette séance</a></p>';
+        /* UN LIEN VIDE NE S'ECRIT PAS. href="" recharge la page : le client
+           croit avoir annule, et rien n'est annule. Sans jeton exploitable,
+           le serveur rend annulation_url vide, et on dit quoi faire. */
+        + ' · ' + (x.annulation_url
+             ? '<a href="'+ esc(x.annulation_url) +'">annuler cette séance</a>'
+             : 'pour annuler, écrivez à CONSEILPREV')
+        + '</p>';
     }).join('');
     document.getElementById('cf-tarif').textContent =
       dev.ht_cents ? ((dev.ht_cents/100).toLocaleString('fr-FR') + ' € HT'
