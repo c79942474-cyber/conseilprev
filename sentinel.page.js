@@ -19281,6 +19281,135 @@ var GUIDED_PATHS = [
     ]
   },
 
+  /* ══ PAR RÔLE D'EXPLOITANT — celui qui fait tourner le site ══════════════
+     LES CINQ PARCOURS CI-DESSUS SONT RANGÉS PAR QUESTION : implantation,
+     énergie, financement, reporting, IA hébergée. C'est l'ordre du projet, et
+     il sert celui qui conduit un projet. Il ne sert PAS celui qui arrive en
+     se demandant « qu'est-ce que cette plateforme fait pour MOI » — un
+     responsable d'exploitation, une direction commerciale, une direction des
+     ressources humaines. Ces trois-là repartaient sans avoir trouvé de porte,
+     alors que trois à cinq panneaux les concernent chacun.
+
+     CE QUI A DÉCIDÉ DE LA LISTE. Un relevé de la population qui exploite les
+     centres de données — les rôles qui décident du recrutement et de la
+     formation dans un exploitant : exploitation de site, direction de
+     l'exploitation, ingénierie et technique de site, direction générale,
+     direction de programme, direction des systèmes d'information, direction
+     commerciale et développement, direction des ressources humaines et de la
+     formation. Huit rôles, et c'est la table GP_ROLES_EXPLOITANT plus bas qui
+     dit ce que chacun trouve ici.
+
+     TROIS PARCOURS NEUFS, PAS HUIT. Quatre de ces rôles avaient déjà leur
+     chemin — la direction générale par `ceo`, la direction des systèmes
+     d'information par `dsi_socle_ia`, la direction de programme par
+     `dc_implantation`, l'exploitation de site par `dc_energie`. En écrire des
+     doublons sous un autre nom aurait allongé la liste sans rien ajouter.
+
+     LE QUATRIÈME A ÉTÉ ÉCRIT, PUIS RETIRÉ, et c'est la mesure qui l'a décidé.
+     Un parcours « exploitation de site » avait été composé — situer le site,
+     peser son empreinte, garder la trace, sortir les pièces. Comparé au
+     catalogue, il reprenait QUATRE de ses cinq étapes à `dc_energie`, qui
+     existait déjà et fait exactement cela. Un titre neuf sur un chemin connu
+     n'apprend rien à personne : la table ci-dessous renvoie donc ce rôle vers
+     `dc_energie`, et une recette refuse désormais tout parcours dont plus de
+     la moitié des étapes se retrouvent dans un seul autre. Le huitième — l'ingénieur ou le technicien
+     d'exploitation — n'a AUCUN panneau derrière lui : Sentinel ne porte ni
+     GTB, ni DCIM, ni gamme de maintenance. Lui fabriquer un parcours à partir
+     de panneaux de gouvernance serait le promener. La table le dit, et ne lui
+     invente pas de porte. */
+  {
+    id: 'dc_direction_exploitation',
+    icon: '\uD83E\uDDED',
+    role: 'Direction de l’exploitation — arbitrer sur un parc, pas sur un site',
+    pitch: 'Vous ne conduisez pas un site, vous arbitrez entre plusieurs. Ce parcours enchaîne ce que le parc pèse, ce que la réglementation lui demandera, ce que la prochaine extension coûtera, et ce que vos équipes emploient réellement de ce qui a été déployé.',
+    steps: [
+      {id:'empreinte-parc', label:'Le parc, d’abord — pas le site témoin',
+       action:'Lisez l’empreinte du parc recensé dans son ensemble, puis descendez sur les sites qui s’écartent de la moyenne.',
+       gain:'Les deux ou trois sites qui font le résultat — un parc se pilote par ses queues de distribution, pas par sa moyenne.',
+       tip:'La moyenne d’un parc hétérogène ne désigne aucun site réel. Un arbitrage pris dessus finit par porter sur une installation qui n’existe pas.'},
+      {id:'veille', label:'Ce qui bouge sous vos déclarations',
+       action:'Suivez l’analyse d’impact des évolutions réglementaires sur les obligations qui vous concernent.',
+       gain:'Une échéance anticipée est un arbitrage ; découverte tard, c’est une reprise de dossier en urgence.',
+       tip:'Regardez d’abord ce qui change le PÉRIMÈTRE de déclaration — un seuil qui descend fait entrer des sites qui n’étaient pas concernés, et c’est plus coûteux qu’un indicateur de plus.'},
+      {id:'enveloppe', label:'Ce que coûte le mètre carré suivant',
+       action:'Chiffrez l’extension ou le site neuf : enveloppe, décomposition par lot, comparaison entre pays.',
+       gain:'Le coût d’une capacité supplémentaire opposé à ce qu’elle rapporte — et le cas où il vaut mieux densifier l’existant.',
+       tip:'Éprouvez la demande AVANT l’enveloppe : une capacité chiffrée au centime sur une demande supposée reste une capacité supposée.'},
+      {id:'adoption', label:'Ce que les équipes emploient vraiment',
+       action:'Regardez l’écart entre ce qui a été déployé et ce qui est ouvert — un outil conforme que personne n’ouvre ne produit rien.',
+       gain:'La moitié du sujet que les indicateurs de conformité ne voient pas : l’usage réel.',
+       tip:'Un usage déclaré n’est pas un usage observé. La question à poser en revue n’est pas « l’avez-vous adopté » mais « montrez-moi la dernière fois ».'},
+      {id:'report', label:'Ce qui remonte au comité',
+       action:'Constituez la vue direction à partir des étapes précédentes plutôt qu’en ressaisissant.',
+       gain:'Un support dont chaque chiffre est traçable jusqu’au calcul qui l’a produit.',
+       tip:'Présentez une fourchette plutôt qu’un chiffre unique : un chiffre unique se conteste, une fourchette se discute.'}
+    ]
+  },
+  {
+    id: 'dc_developpement_commercial',
+    icon: '\uD83E\uDD1D',
+    role: 'Direction commerciale & développement — où est le marché, et ce qu’il coûte',
+    pitch: 'Vous devez dire où aller, avec quel argument, et à quel prix. Ce parcours part du marché réel — ce qui est effectivement déployé — puis descend jusqu’au dossier de décision chiffré.',
+    steps: [
+      {id:'pan-sia', label:'Le marché réel, pas le marché annoncé',
+       action:'Parcourez les centres de données et les systèmes d’IA effectivement recensés : pays, gabarits, stades atteints.',
+       gain:'Ce qui est en service, par opposition à ce qui est annoncé en communiqué — et l’écart entre les deux est l’information commerciale.',
+       tip:'Regardez aussi les projets ARRÊTÉS. Un site abandonné en cours de permis renseigne mieux sur une géographie que dix inaugurations.'},
+      {id:'geo', label:'Les blocs réglementaires et leurs frictions',
+       action:'Situez les tensions normatives : ce qui converge, ce qui diverge, et où un projet se heurte à une exigence locale.',
+       gain:'De quoi éviter la promesse commerciale qu’un cadre national rendra intenable douze mois plus tard.',
+       tip:'Une divergence normative est rarement un obstacle définitif : c’est un coût et un délai. La question utile est de combien, pas de savoir si.'},
+      {id:'comp', label:'Mettre quatre juridictions en regard',
+       action:'Comparez jusqu’à quatre cadres nationaux sur les dimensions qui décident de votre offre.',
+       gain:'Un argumentaire d’implantation opposable, au lieu d’une préférence justifiée après coup.',
+       tip:'Choisissez les dimensions AVANT de regarder le résultat. Les choisir après revient à construire la comparaison qui donne la réponse qu’on avait déjà.'},
+      {id:'benchmark', label:'Où en sont ceux à qui vous vendez',
+       action:'Situez la maturité du secteur de votre prospect par rapport à ses pairs.',
+       gain:'Déplace la conversation de « faut-il le faire » à « où en sont ceux qui l’ont fait » — et c’est la seule des deux qui se conclut.',
+       tip:'Un secteur en retard ne justifie pas de l’être ; un secteur en avance ne justifie pas d’investir sans cas d’usage. Le benchmark situe, il ne décide pas.'},
+      {id:'enveloppe', label:'Le dossier de décision, chiffré',
+       action:'Chiffrez l’opération jusqu’à la décision GO / NO GO, avec la décomposition par lot.',
+       gain:'Une proposition qui porte ses hypothèses et se défend en comité d’investissement, pas seulement en réunion commerciale.',
+       tip:'Un chiffre unique se conteste, une fourchette se discute. Portez les hypothèses avec le montant, sinon c’est le montant seul qu’on retiendra — et c’est lui qu’on vous opposera.'},
+      {id:'templates', label:'Ce que vous laissez au prospect',
+       action:'Prenez les modèles de documentation qui correspondent à ce que vous venez d’établir, plutôt que de refaire une présentation.',
+       gain:'Une pièce qui survit à la réunion : c’est elle qui circulera en interne chez le prospect, quand vous n’y serez plus.',
+       tip:'CE QUE SENTINEL NE PORTE PAS : votre tunnel commercial, vos comptes, vos contrats. La plateforme produit l’argument, le chiffre et la pièce ; le suivi d’affaire reste dans votre outil de gestion de la relation client.'}
+    ]
+  },
+  {
+    id: 'dc_competences_ia',
+    icon: '\uD83C\uDF93',
+    role: 'Ressources humaines, formation & développement des compétences',
+    pitch: 'Vous devez faire monter des équipes sur des outils d’intelligence artificielle qu’elles connaissent de nom. Ce parcours part de ce que l’organisation sait faire aujourd’hui, pas de ce qu’elle voudrait annoncer — puis va jusqu’à qui répond de quoi.',
+    steps: [
+      {id:'maturite', label:'Ce que l’organisation sait faire, mesuré',
+       action:'Passez l’audit de maturité sur les piliers compétences, gouvernance et organisation, pour le périmètre concerné et non pour l’entreprise entière.',
+       gain:'Une base de départ chiffrée, à reprendre dans six mois — c’est l’écart entre deux mesures qui prouve qu’un plan de formation a servi.',
+       tip:'Faites coter par ceux qui exploitent, pas par ceux qui pilotent. Un score obtenu en atelier de direction mesure l’optimisme de la direction.'},
+      {id:'training', label:'Les modules, accrochés aux scores réels',
+       action:'Ouvrez les formations : leur progression se calcule à partir de vos scores d’audit par pilier, et non d’un catalogue générique.',
+       gain:'Un plan de montée en compétence qui part des manques constatés, au lieu du catalogue que tout le monde suit dans le même ordre.',
+       tip:'CE QUE CES MODULES COUVRENT, ET CE QU’ILS NE COUVRENT PAS : ils portent sur la conformité et la gouvernance de l’IA. Ils ne remplacent aucune formation technique d’exploitation — électricité, refroidissement, courants faibles, sûreté. Ces compétences-là se forment ailleurs, et c’est précisément là que le manque est le plus vif dans la profession.'},
+      {id:'adoption', label:'Formé n’est pas adopté',
+       action:'Regardez l’écart entre les personnes formées et les outils réellement ouverts.',
+       gain:'Le seul indicateur qui distingue un plan de formation exécuté d’un plan de formation efficace.',
+       tip:'Un écart qui persiste après formation ne se corrige pas par une formation de plus : il désigne un outil mal placé dans le travail réel, ou un droit d’accès qui n’a jamais été ouvert.'},
+      {id:'parties', label:'Qui répond de quoi',
+       action:'Posez le RACI des rôles liés à l’IA : qui décide, qui exécute, qui est consulté, qui est informé.',
+       gain:'La fin des compétences « portées par tout le monde », c’est-à-dire par personne.',
+       tip:'Un référent polyvalent suffit au démarrage — à condition que son rôle soit ÉCRIT. Un rôle supposé disparaît au premier départ.'},
+      {id:'equipe', label:'Les rôles, ouverts dans l’outil',
+       action:'Assignez réellement les accès aux personnes du RACI, et constatez ceux qui restent non attribués.',
+       gain:'Le passage du tableau au dispositif : un rôle sans titulaire dans l’outil se voit, un rôle sans titulaire dans un document ne se voit pas.',
+       tip:'Les rôles non attribués sont le vrai plan de recrutement : ils disent ce qui manque, en langage de poste et non de compétence.'},
+      {id:'rag', label:'Où le matériel de formation se range',
+       action:'Déposez les supports, les procédures et les comptes rendus d’exercice dans la base de connaissance, rangés par compétence et non par session.',
+       gain:'La deuxième promotion coûte la moitié de la première — à condition que la première ait laissé une trace ailleurs que dans la mémoire du formateur.',
+       tip:'Rangez par compétence, pas par date ni par intervenant : c’est par compétence qu’on cherche, et un classement chronologique devient illisible à la troisième année.'}
+    ]
+  },
+
   /* ══ LES DEUX PARCOURS QUI SUIVENT LA TAXONOMIE DU RÈGLEMENT ═════════════
      Les seize parcours précédents suivent des MÉTIERS — directeur de
      programme, DPO, risk manager. C'est utile, et ce n'est pas la façon dont
@@ -19370,7 +19499,62 @@ var GP_FAMILLES = [
   { titre: 'Protection des données (RGPD)',
     ids: ['dpo', 'rgpd_conformite_init', 'rgpd_registre', 'rgpd_nouveau', 'rgpd_controle'] },
   { titre: 'Centres de données',
-    ids: ['dc_implantation', 'dc_energie', 'dc_financement', 'dc_reporting', 'dc_ia_hebergee'] }
+    ids: ['dc_implantation', 'dc_energie', 'dc_financement', 'dc_reporting', 'dc_ia_hebergee'] },
+  /* UNE FAMILLE À PART, ET NON CINQ ENTRÉES DE PLUS DANS LA PRÉCÉDENTE. Les
+     cinq parcours ci-dessus sont rangés par QUESTION — implanter, financer,
+     déclarer. Ceux-ci le sont par RÔLE : un lecteur cherche l'un OU l'autre,
+     jamais les deux dans la même liste, et mélanger les deux tris fait une
+     liste de dix où l'on ne trouve plus rien. */
+  { titre: 'Exploiter un centre de données — par rôle',
+    ids: ['dc_direction_exploitation', 'dc_developpement_commercial',
+          'dc_competences_ia'] }
+];
+
+
+/* ══ LES HUIT RÔLES D'UN EXPLOITANT, ET LA PORTE DE CHACUN ═════════════════
+   POURQUOI CETTE TABLE EXISTE. Quatre parcours neufs ont été écrits pour des
+   rôles d'exploitant de centre de données. Quatre autres rôles de la même
+   population n'en ont pas reçu — et la raison n'est pas la même pour tous :
+   trois étaient DÉJÀ servis par un parcours existant, le quatrième n'a
+   derrière lui AUCUN panneau de cette plateforme.
+
+   CE QU'ELLE ÉVITE. Sans elle, ces quatre absences se lisent toutes de la même
+   façon : un oubli. On rouvre le sujet dans six mois, on écrit un parcours
+   « direction générale » qui double `ceo`, et on fabrique pour l'ingénieur
+   d'exploitation un chemin de panneaux de gouvernance qui ne le concernent
+   pas. Une absence motivée vaut mieux qu'une absence muette.
+
+   `porte: null` N'EST PAS UN TROU, C'EST UNE DÉCISION. Sentinel ne porte ni
+   gestion technique du bâtiment, ni DCIM, ni gamme de maintenance, ni plan de
+   charge d'équipe. Le rôle qui vit dans ces outils-là n'a rien à lire ici, et
+   lui ouvrir une porte qui donne sur la gouvernance de l'IA serait un renvoi
+   trompeur — le défaut que ce fichier combat partout ailleurs.
+
+   Une recette compare cette table au catalogue : un `porte` qui nomme un
+   parcours disparu, ou un parcours de la famille « par rôle » qu'aucune ligne
+   ne revendique, fait tomber la règle. */
+var GP_ROLES_EXPLOITANT = [
+  { role: 'Responsable d’exploitation de site',
+    porte: 'dc_energie',
+    motif: 'déjà servi : « Énergie, eau et climat du parc » situe le site, le p\u00e8se sur tout son cycle et sort les pi\u00e8ces \u2014 c\u2019est le parcours de l\u2019exploitant, sous un titre qui ne le disait pas' },
+  { role: 'Direction de l’exploitation',
+    porte: 'dc_direction_exploitation', motif: 'parcours écrit pour lui' },
+  { role: 'Direction commerciale & développement',
+    porte: 'dc_developpement_commercial', motif: 'parcours écrit pour lui' },
+  { role: 'Ressources humaines, formation & développement des compétences',
+    porte: 'dc_competences_ia', motif: 'parcours écrit pour lui' },
+  { role: 'Direction générale',
+    porte: 'ceo',
+    motif: 'déjà servi : le parcours direction générale couvre l’arbitrage et la vue direction' },
+  { role: 'Direction de programme / de projet',
+    porte: 'dc_implantation',
+    motif: 'déjà servi : l’implantation d’un centre de données EST le parcours de programme' },
+  { role: 'Direction des systèmes d’information et de la technologie',
+    porte: 'dsi_socle_ia',
+    motif: 'déjà servi : le socle avant l’échelle part de la maturité, pas de l’inventaire' },
+  { role: 'Ingénieur ou technicien d’exploitation de site',
+    porte: null,
+    motif: 'AUCUNE porte, et c’est constaté : Sentinel ne porte ni GTB, ni DCIM, ni gamme de maintenance. Ses compétences se forment et s’outillent ailleurs. Lui composer un parcours à partir des panneaux de gouvernance serait le promener.' }
 ];
 
 /* ══════════════════════════════════════════════════════════════════════════
